@@ -2,106 +2,53 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4097C4EF9
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 11:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED947C4D86
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 10:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjJKJat (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Oct 2023 05:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S1343913AbjJKIrz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Oct 2023 04:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbjJKJas (ORCPT
+        with ESMTP id S230256AbjJKIrz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Oct 2023 05:30:48 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EDA91;
-        Wed, 11 Oct 2023 02:30:47 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id E49215C0405;
-        Wed, 11 Oct 2023 05:30:46 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 11 Oct 2023 05:30:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1697016646; x=1697103046; bh=My
-        dUnUPnqP4XgOECsshcETx4T1rbtS5G02GTgyxloFc=; b=mR63FrpGWOxiA39bji
-        bL87POz/TU+oMIgdhC3BK7mten8GzqVq52WEAqA+B6YcFX91pfOwTwbK37r95Hh8
-        gFB4czJU64Tzgc8/0g38dQRMffuOwGH34XF825OBlX8BJrIrpFPStsTaK2fBYBFb
-        99SEeS76pskMXyf4JUubM/76GRmy/iRG3QZlUCnK+0RslQAxfpNecw3xI8RIV+VQ
-        DmXNEja3/6CumagKfAdxTXYMWsJ1dWKxPy1/nWgv0+qitSCGb0IgGFMeJVvlM+Ov
-        +b+lRMuazAQ2JX7kQtwHdE7cPThlLQEAPmHnf14X/zTBDdhb0lIEoeL455dcJlwD
-        Bd0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1697016646; x=1697103046; bh=MydUnUPnqP4Xg
-        OECsshcETx4T1rbtS5G02GTgyxloFc=; b=aAdpurWhi7zXAIQm4DOLBW1tUAkyE
-        BeXzteePaZRGMjQcsE+uFqK6IdI7k9WBxW4HSsoYiX4gIEd1X6TtkTHQkM0cHNwF
-        P2QRxVM5pEwKpWAojF8RCqscPqo7NaYKVJXoJ6sMae7BiXSBAnambeI839AZzLW9
-        37cBqeqnPxlgx05Y5zK5NbAYADks8ka4ckff8sXfabXitD1hTM3m56qnkBOXsl9P
-        N1q2/3mk3fu2tNyau6padx2H2Gpy6wbfeKV+pSpJQ8xRibwpuXdH6gUFcBuxa6VK
-        zbomiTpxU76dA8b2ktJ4+9p4NUQXwgJi8C+LBfscH040I1NMnHeMGF5/w==
-X-ME-Sender: <xms:RWsmZcWYRcc5bVYCJgHMljeVekRBQUXx0bK7R7LMrSKcXPYAt9RLIw>
-    <xme:RWsmZQkmdVOtIGPmYvR3UJfe2DR6drxpQwZnrSP0GCQYaXyRHd6tpAYdki44OkBsI
-    6q3VE0fQI0R3ugPadE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrheekgddugecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RWsmZQaguZ4L-9eHOW4iZOWUHxiQf6OcjyTYrLw-RVo3RKt6kpljdQ>
-    <xmx:RWsmZbXyOVkoK7A1DQ_KlTQj0ImogMiD-a2jyCtNjKtQJdiStbVjJA>
-    <xmx:RWsmZWm52v4WVDlloYrZITw4qh6QHXlNOhlgRWIgLycm9PMjeGZI3Q>
-    <xmx:RmsmZU2gZ8ZTHa8PLabbUfn3SI5NQ-zWu8H9Jv7AGOfoo0h6zYWD8A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A62E6B60089; Wed, 11 Oct 2023 05:30:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1019-ged83ad8595-fm-20231002.001-ged83ad85
+        Wed, 11 Oct 2023 04:47:55 -0400
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F33B99C;
+        Wed, 11 Oct 2023 01:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Message-ID:Date:MIME-Version:From:Subject:
+        Content-Type; bh=z/u3FDFmAn4HYmmU69zyXVjoUFijdECuZcVLA9K/leA=;
+        b=Hj2+hwGAkRKBrUZq+D7Xh/XAXb03GSrEYoyhQfOykvzpuF9VN05LXo9cjTBLEO
+        vhhKhtLCfWWtsjlgO7slr6RSvTKhuYyJRGSNDCHc9amvWx1J5k69OgcnC1hQD1I2
+        GJASx/s0gTkS9R91EkUJlhcTs3Z/s5o7LeJCozAIZ9CFo=
+Received: from [172.20.10.2] (unknown [39.144.139.13])
+        by zwqz-smtp-mta-g0-2 (Coremail) with SMTP id _____wDn916kXSZl6IAFAQ--.44147S3;
+        Wed, 11 Oct 2023 16:32:37 +0800 (CST)
+Message-ID: <bef5a084-9a6c-daaf-dad9-89cb5fc32bf9@163.com>
+Date:   Fri, 28 Aug 2043 01:17:41 +0800
 MIME-Version: 1.0
-Message-Id: <fe7cf585-622a-420e-8138-10de1cbca511@app.fastmail.com>
-In-Reply-To: <2023101137-fester-rerun-5c39@gregkh>
-References: <20231010224928.2296997-1-peter.griffin@linaro.org>
- <20231010224928.2296997-9-peter.griffin@linaro.org>
- <2023101111-banknote-satin-1f77@gregkh>
- <a6c57156-d3a5-4524-8ef8-6f27cf0a2c97@linaro.org>
- <2023101137-fester-rerun-5c39@gregkh>
-Date:   Wed, 11 Oct 2023 11:30:25 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Tudor Ambarus" <tudor.ambarus@linaro.org>
-Cc:     "Peter Griffin" <peter.griffin@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Tomasz Figa" <tomasz.figa@gmail.com>,
-        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, "Olof Johansson" <olof@lixom.net>,
-        "Chanwoo Choi" <cw00.choi@samsung.com>, andre.draszik@linaro.org,
-        semen.protsenko@linaro.org, saravanak@google.com,
-        "William McVicker" <willmcvicker@google.com>, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, kernel-team@android.com,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 08/20] dt-bindings: serial: samsung: Add google-gs101-uart
- compatible
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To:     linux-watchdog@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Wu, Xing Tong" <XingTong.Wu@siemens.com>, jan.kiszka@siemens.com,
+        tobias.schaffner@siemens.com, cedric.hombourger@siemens.com,
+        gerd.haeussler.ext@siemens.com
+From:   "xingtong.wu" <xingtong_wu@163.com>
+Subject: wdat_wdt: Problem with WDAT using shared registers
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: _____wDn916kXSZl6IAFAQ--.44147S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uw47Zw1DAFWkury3Cw13twb_yoW8Wr45pa
+        y5CFWjkrWvgr48uF4UXw1UCayrWFW7J3yayr4xA34Y9FWYkFWF9F9IyF1Fq3WDJr97WF1Y
+        9ryDtr1fA3yDAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jPWrJUUUUU=
+X-Originating-IP: [39.144.139.13]
+X-CM-SenderInfo: p0lqw35rqjs4rx6rljoofrz/1tbiOwcG0GC5nyLT8gAAsv
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_DATE_IN_FUTURE_Q_PLUS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,57 +56,43 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 11, 2023, at 10:57, Greg KH wrote:
-> On Wed, Oct 11, 2023 at 09:49:07AM +0100, Tudor Ambarus wrote:
->> On 10/11/23 08:48, Greg KH wrote:
->> > On Tue, Oct 10, 2023 at 11:49:16PM +0100, Peter Griffin wrote:
->> >> Add dedicated google-gs101-uart compatible to the dt-schema for
->> >> representing uart of the Google Tensor gs101 SoC.
->> >>
->> >> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
->> >> ---
->> >>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
->> >>  1 file changed, 2 insertions(+)
->> >>
->> >>      oneOf:
->> >>        - items:
->> >> +          - const: google,gs101-uart
->> >>            - const: samsung,exynosautov9-uart
->> >>            - const: samsung,exynos850-uart
->> >>        - enum:
->> >>            - apple,s5l-uart
->> >>            - axis,artpec8-uart
->> >> +          - google,gs101-uart
->> > 
->> > These shouldn't be needed, just declare the device as the same as what
->> 
->> We should have SoC specific compatibles so that any further quirks or
->> incompatibilities can be easily addressed.
->
-> "further" work on quirks or incompatibilities can be added when they are
-> found and needed.  We don't add stuff for no good reason to the kernel.
->
->> It's not only the IP itself
->> that can differ, it's also the integration of the IP into the final
->> product that could have an influence on the behavior.
->
-> This is for the Pixel 6, a device that is no longer even shipping.  The
-> "final product" is long stable, so this should not be an issue.
+Hi
 
-The driver does have soc specific settings for each compatible
-string, in this case it looks like it overrides the FIFO size
-based on driver specific data and the order in which the
-ports are probed [1]. I don't understand why the driver does
-this, but my impression is that if we wanted to change it to no
-longer rely on that data, we'd also need a new compatible
-string.
+I want to use the wdat_wdt to support a watchdog of SIONCT (a multi-function device
+(mfd)), and I register instructions for wdat_wdt in BIOS, it need registers 0x2e-0x2f
+to access the watchdog, then register 0x2e-0x2f will be forever occupied by platform
+device wdat_wdt, see the code: https://elixir.bootlin.com/linux/v6.6-rc5/source/drivers/acpi/acpi_watchdog.c#L180
 
-Ideally, the actual compatible list in the DTB lists both the
-specific implementation (google,gs101-uart) in order to allow
-such hacks if needed, and a more generic string (e.g. 
-"samsung,exynos850-uart" for an older device that is entirely
-compatible) in order to not actually need driver changes.
+but the 0x2e-0x2f are special, they are used for a multi-function device --SIONCT, the
+device have many pins can not only support features for watchdog, but also other
+features like leds, fans, temperature monitor... there are drivers for these pins, e.g.
+gpio-f7188x, nct6775, w83627hf... these driver use the shared register 0x2e-0x2f. 
 
-      Arnd
+So the issue happened, the wdat_wdt occupied the shared register 0x2e-0x2f, then
+the other driver can not load.
 
-[1] https://lore.kernel.org/linux-arm-kernel/20231010224928.2296997-17-peter.griffin@linaro.org/
+Here is the msg I collected from my device:
+
+root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# cat /proc/ioports 
+0000-0cf7 : PCI Bus 0000:00
+  0000-001f : dma1
+  0020-0021 : pic1
+  002e-002e : wdat_wdt
+  002f-002f : wdat_wdt
+
+It will cause other SIONCT drivers can not load, e.g.
+root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# modprobe gpio-f7188x
+modprobe: ERROR: could not insert 'gpio_f7188x': No such device
+
+And dmesg info is:
+[  213.559168] gpio-f7188xI/O address 0x002e already in use
+
+Same reason for other drivers:
+root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# modprobe nct6775
+modprobe: ERROR: could not insert 'nct6775': No such device
+
+Do you have any idea for the wdat_wdt to add support for multi-function device?
+
+BRS
+Xing Tong Wu
+
