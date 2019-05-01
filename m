@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AFB10DC8
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 May 2019 22:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA6710DCE
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 May 2019 22:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbfEAUKN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 May 2019 16:10:13 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:36742 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726077AbfEAUKM (ORCPT
+        id S1726088AbfEAUND (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 May 2019 16:13:03 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:46074 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbfEAUND (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 May 2019 16:10:12 -0400
-Received: by mail-ot1-f65.google.com with SMTP id b18so98794otq.3;
-        Wed, 01 May 2019 13:10:12 -0700 (PDT)
+        Wed, 1 May 2019 16:13:03 -0400
+Received: by mail-ot1-f66.google.com with SMTP id a10so58049otl.12;
+        Wed, 01 May 2019 13:13:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Li1WCYAdhD2QkMcE4ruPAS6fhCxmScJLOyEkxKVVobU=;
-        b=Y1NJ0Z13ozOJpjCrpF35pfhMGlyD2vOOIvljemWguUt/AzW9/c0oK8G+zletYrXAlJ
-         fI+4bCa2gFCoG8TBrpym5BubCwE7dmkhpZIFOLyjf1S70UmS0MXpz4TxrYluSNm9n/V1
-         17Xl0qJ2GP8l/52zsx96xJhyOl11gJ+ZEVaRso3j3iAY2GV3/MNlIedEiOo4Pr/9q0YP
-         /6AmA95yFRP8sJjws1UhLTW9fRkGu/GxqkT3OCRVBxSqk93khWZKDKm1aPm3nwtdcSQT
-         u3zVkD5akN7RYLZlQINQdhzgfKxPBpWa84fy3TuFhjydc5S2RyKKNpAIEXm3Ec1YRmIZ
-         /qlQ==
-X-Gm-Message-State: APjAAAU0JwWy0EOsch9V7lQ78Y8m0n1TMuUuEYGhvuHTlaHAc7kys4gi
-        C6Gv1eoDPcYyEypzjfMKoFvIpaU=
-X-Google-Smtp-Source: APXvYqyd/tRgzRRtNvYE+Ndpu5/eEiN+nwsOv+vpJslnGlpkbWEws5Vx8h9SHYzmsSInIENUj5oIxg==
-X-Received: by 2002:a9d:61c6:: with SMTP id h6mr9873837otk.316.1556741411946;
-        Wed, 01 May 2019 13:10:11 -0700 (PDT)
+        bh=Jd1WFvY6vXO7XfCF+c2Cho4laj+45+LGc52UGSOL454=;
+        b=OaiLNVA0XK4vSFhc243yEWEVfMLqZgB+0NWmQz7zOwDblwkEISp/Zbhd8QxLKPY75O
+         XZWrVl4k1xh8zemdx1be2GXWhVAH6dqS18jbBWxEAz0sSrdMnV11VfYQMt0NjX4/DpoI
+         3P4qg1VJ/u9ndC3UKwXo5oMTg/2kRlScbe3ifaLmd2tVfXUztB0gla1hvICM+3quj1mL
+         AsszzwzzWJkgC4MC56jPsOSYI0ZjVxqswKKAaPwvr/boCzQ1YXi7+FStIXj9nC/g3x3+
+         s8JL9tTBE8GtSyKTop4r80RGVYTYwsv9DKwn1hHkdo50wl3lQfqS/ND+/jOfuRex72Zy
+         YgkQ==
+X-Gm-Message-State: APjAAAWRmys428K9sMjCvx9j+6Hw8pkIsvtl6Ts8QkkWx1cbM5jhgqQD
+        WcJW4NmiUO/S9Xyxy8lYdQ==
+X-Google-Smtp-Source: APXvYqxADl/71OMLKkk8hcK2ifMcCTcMNV9ChiXtbLjzAeL1AP7BH1TBc0wF1XoqAnVF8KKqFTYPeg==
+X-Received: by 2002:a9d:19ed:: with SMTP id k100mr8627234otk.214.1556741582508;
+        Wed, 01 May 2019 13:13:02 -0700 (PDT)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id d78sm5529492oib.15.2019.05.01.13.10.11
+        by smtp.gmail.com with ESMTPSA id h24sm15854390otr.39.2019.05.01.13.13.00
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 01 May 2019 13:10:11 -0700 (PDT)
-Date:   Wed, 1 May 2019 15:10:10 -0500
+        Wed, 01 May 2019 13:13:01 -0700 (PDT)
+Date:   Wed, 1 May 2019 15:13:00 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Anson Huang <anson.huang@nxp.com>
 Cc:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
@@ -54,52 +54,33 @@ Cc:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH V2 1/4] dt-bindings: fsl: scu: add watchdog binding
-Message-ID: <20190501201010.GA7249@bogus>
+Subject: Re: [PATCH V2 4/4] dt-bindings: watchdog: remove i.MX system
+ controller watchdog
+Message-ID: <20190501201300.GA13176@bogus>
 References: <1556421727-7401-1-git-send-email-Anson.Huang@nxp.com>
+ <1556421727-7401-4-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1556421727-7401-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1556421727-7401-4-git-send-email-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, Apr 28, 2019 at 03:27:00AM +0000, Anson Huang wrote:
-> i.MX system controller watchdog has pretimeout function which
-> depends on i.MX SCU driver, so watchdog DT node needs to be
-> subnode of SCU, this patch adds i.MX system controller watchdog
-> binding to SCU binding doc.
+On Sun, Apr 28, 2019 at 03:27:17AM +0000, Anson Huang wrote:
+> i.MX system controller watchdog now depends on SCU driver, so it
+> needs to be subnode of SCU node in DT, binding doc is moved to
+> fsl,scu.txt as well.
 > 
 > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 > ---
 > New patch.
 > ---
->  .../devicetree/bindings/arm/freescale/fsl,scu.txt         | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> index 5d7dbab..1b56557 100644
-> --- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> +++ b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> @@ -133,6 +133,16 @@ RTC bindings based on SCU Message Protocol
->  Required properties:
->  - compatible: should be "fsl,imx8qxp-sc-rtc";
->  
-> +Watchdog bindings based on SCU Message Protocol
-> +------------------------------------------------------------
-> +
-> +Required properties:
-> +- compatible: should be:
-> +              "fsl,imx8qxp-sc-wdt"
-> +              followed by "fsl,imx-sc-wdt";
-> +Optional properties:
-> +- timeout-sec: contains the watchdog timeout in seconds.
+>  .../bindings/watchdog/fsl-imx-sc-wdt.txt           | 24 ----------------------
+>  1 file changed, 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx-sc-wdt.txt
 
-This should be the time to reset the system, but the subject talks about 
-the pre-timeout which I guess is just an interrupt. If it is pre-timeout 
-you want add a new property and don't abuse the existing one.
-
-Rob
+This should probably just be part of patch 1 to be clear you are moving 
+things.
