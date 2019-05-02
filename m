@@ -2,132 +2,122 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 077E8122E6
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 May 2019 21:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1672012319
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 May 2019 22:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbfEBTuy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 2 May 2019 15:50:54 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42318 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbfEBTuy (ORCPT
+        id S1726164AbfEBUV1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 May 2019 16:21:27 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:42284 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfEBUV1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 2 May 2019 15:50:54 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id A84AF28423D
-Received: by earth.universe (Postfix, from userid 1000)
-        id 65A1B3C0D1B; Thu,  2 May 2019 21:50:49 +0200 (CEST)
-Date:   Thu, 2 May 2019 21:50:49 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Lee Jones <lee.jones@linaro.org>,
+        Thu, 2 May 2019 16:21:27 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 13so1366027pfw.9;
+        Thu, 02 May 2019 13:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RSVFzqBrNoAzGByRQNnOze9LicthP1Zxl3KzGO68CDM=;
+        b=HWx4202fdM6hgHbbQQbOCTOFjQO3TLGOtDwId2KDBlfH30aSG/7brUcfjmpDaWYqT3
+         eFlgZC4UaIEyH1W/TgpcMokl72eG7heORhYTf5hLq3ddjpfaKH3a4bA9cXPngFWefwbD
+         URW+U2ak3/2ADVYe9ubwMHSaEQxkDOhNvKCaE8Cxb6qSVI8iibrMAU+Rp1Rxloc+12o8
+         NCvWGlpklHsKLBmvGLQQkz5AVpU2fi/9Fj/ZClx+PCIIcS8eB5/aP4bherxMBuYxUvx5
+         gZkTz7eOCUMwO5KoGiKkFOpSITwMrVFd3nfoIvWTp2NSBdRFqruHZu4vLWgGoccWkG14
+         g3xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RSVFzqBrNoAzGByRQNnOze9LicthP1Zxl3KzGO68CDM=;
+        b=eh3ZQSyAAa0HkZsU614MZ5T42eHllwJkE2VYo/Y3MF/bYfEBl35QsALAXQ5uxbeDqq
+         UkpJRNZDFm1C4f7ECD4xNEtNnYVgnIONrlWrtQwEsdI6v11cwQ1rNQ2UZZvMX4nd4S41
+         mPOV6DZsGXYPt/H/Pw/MbnVpMRtuAdksY5FQP3G1MgQE5zlfAowTwfRSuxtslhsvLRvv
+         CtM3CeKWoNEgwWzHMot01KqEs8rcueHkgpofwzNrId/LINQguf1YLhBSh/t/IbBqz+RB
+         HNbbo8ljIWbNnPTW9PydjKw0QeX29mssWmsmD1v9NHAhiniA4w0EmvYdm9GYIhzNtEQy
+         yJ0g==
+X-Gm-Message-State: APjAAAXCrpGgmgvG1Y0JaCtRa/Lw3N5frEAnmO4vqrDI8/kLoQB7WTbC
+        uiPBX/Rj9VvCQyJYsDXKtIolDePi
+X-Google-Smtp-Source: APXvYqyqxBdfissQiYlYy8sXzM14Kk6vmbI9ypGeaWGJkrP5xZhgv3S/pXhmaX20NrsLpXPiyu8UeQ==
+X-Received: by 2002:a63:d908:: with SMTP id r8mr6061828pgg.268.1556828485710;
+        Thu, 02 May 2019 13:21:25 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 15sm20555pfy.88.2019.05.02.13.21.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 13:21:24 -0700 (PDT)
+Date:   Thu, 2 May 2019 13:21:22 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ludovic Barre <ludovic.Barre@st.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        heikki.haikola@fi.rohmeurope.com, mikko.mutanen@fi.rohmeurope.com
-Subject: Re: [PATCH v14 7/8] power: supply: Initial support for ROHM BD70528
- PMIC charger block
-Message-ID: <20190502195049.brysexbyyq7khtr4@earth.universe>
-References: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
- <eece016c86483d55befab1a06fb299c9d6d17134.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH V2 1/3] watchdog: stm32: update to
+ devm_watchdog_register_device
+Message-ID: <20190502202122.GA27894@roeck-us.net>
+References: <1556806126-15890-1-git-send-email-ludovic.Barre@st.com>
+ <1556806126-15890-2-git-send-email-ludovic.Barre@st.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bhukgbujt2wxql42"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eece016c86483d55befab1a06fb299c9d6d17134.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <1556806126-15890-2-git-send-email-ludovic.Barre@st.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Thu, May 02, 2019 at 04:08:44PM +0200, Ludovic Barre wrote:
+> From: Ludovic Barre <ludovic.barre@st.com>
+> 
+> This patch updates to devm_watchdog_register_device interface
+> 
+Not that easy. See below.
 
---bhukgbujt2wxql42
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+A more complete solution is at
+https://patchwork.kernel.org/patch/10894355
 
-Hi,
+I have a total of three patches for this driver pending for
+the next kernel release. Maybe it would make sense to (re-)
+start this series from there after the next commit window
+closes.
 
-On Thu, May 02, 2019 at 12:17:12PM +0300, Matti Vaittinen wrote:
-> ROHM BD70528 PMIC includes battery charger block. Support charger
-> staus queries and doing few basic settings like input current limit
-> and charging current.
->=20
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Guenter
 
-Please only add Acked-by when you receive one, especially when you
-do not implement all requested changes :)
+> Signed-off-by: Ludovic Barre <ludovic.barre@st.com>
+> ---
+>  drivers/watchdog/stm32_iwdg.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+> index e00e3b3..e191bd8 100644
+> --- a/drivers/watchdog/stm32_iwdg.c
+> +++ b/drivers/watchdog/stm32_iwdg.c
+> @@ -243,7 +243,7 @@ static int stm32_iwdg_probe(struct platform_device *pdev)
+>  		dev_warn(&pdev->dev,
+>  			 "unable to set timeout value, using default\n");
+>  
+> -	ret = watchdog_register_device(wdd);
+> +	ret = devm_watchdog_register_device(&pdev->dev, wdd);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "failed to register watchdog device\n");
+>  		goto err;
+> @@ -263,7 +263,6 @@ static int stm32_iwdg_remove(struct platform_device *pdev)
+>  {
+>  	struct stm32_iwdg *wdt = platform_get_drvdata(pdev);
+>  
+> -	watchdog_unregister_device(&wdt->wdd);
+>  	clk_disable_unprepare(wdt->clk_lsi);
+>  	clk_disable_unprepare(wdt->clk_pclk);
 
-[...]
+This disables the clock while the watchdog is still registered
+and running. That is not a good idea.
 
-> +static int bd70528_get_irqs(struct platform_device *pdev,
-> +			    struct bd70528_psy *bdpsy)
-> +{
-> +	int irq, i, ret;
-> +	unsigned int mask;
-> +	const struct irq_name_pair bd70528_chg_irqs[] =3D {
-> +		{ .n =3D "bd70528-bat-ov-res", .h =3D BD_IRQ_HND(BAT_OV_RES) },
-> +		{ .n =3D "bd70528-bat-ov-det", .h =3D BD_IRQ_HND(BAT_OV_DET) },
-> +		{ .n =3D "bd70528-bat-dead", .h =3D BD_IRQ_HND(DBAT_DET) },
-> +		{ .n =3D "bd70528-bat-warmed", .h =3D BD_IRQ_HND(COLD_RES) },
-> +		{ .n =3D "bd70528-bat-cold", .h =3D BD_IRQ_HND(COLD_DET) },
-> +		{ .n =3D "bd70528-bat-cooled", .h =3D BD_IRQ_HND(HOT_RES) },
-> +		{ .n =3D "bd70528-bat-hot", .h =3D BD_IRQ_HND(HOT_DET) },
-> +		{ .n =3D "bd70528-chg-tshd", .h =3D BD_IRQ_HND(CHG_TSD) },
-> +		{ .n =3D "bd70528-bat-removed", .h =3D BD_IRQ_HND(BAT_RMV) },
-> +		{ .n =3D "bd70528-bat-detected", .h =3D BD_IRQ_HND(BAT_DET) },
-> +		{ .n =3D "bd70528-dcin2-ov-res", .h =3D BD_IRQ_HND(DCIN2_OV_RES) },
-> +		{ .n =3D "bd70528-dcin2-ov-det", .h =3D BD_IRQ_HND(DCIN2_OV_DET) },
-> +		{ .n =3D "bd70528-dcin2-removed", .h =3D BD_IRQ_HND(DCIN2_RMV) },
-> +		{ .n =3D "bd70528-dcin2-detected", .h =3D BD_IRQ_HND(DCIN2_DET) },
-> +		{ .n =3D "bd70528-dcin1-removed", .h =3D BD_IRQ_HND(DCIN1_RMV) },
-> +		{ .n =3D "bd70528-dcin1-detected", .h =3D BD_IRQ_HND(DCIN1_DET) },
-> +	};
-
-Please also make it static. That will move the whole thing to
-read-only (because of const) data section. This improves the
-security and the required cpu time at the same time (no need
-to copy values to the stack).
-
-But this can be changed later, so no need to block the whole
-patchset just because of this. If Lee wants to merge this for
-5.2, that would be fine with me. But please add it directly in
-a new patch revision if the patch does not make it into 5.2.
-
--- Sebastian
-
---bhukgbujt2wxql42
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlzLShUACgkQ2O7X88g7
-+pqErhAAgZNXEYhrDHkaaYDwxjL4Ch28ycvgjE9+HjCig5co2F2nW25/cQPj3IeQ
-KLwc3hAAy0RzDKTc72fMtg//7b8L21Dzj4Qz4pHmQ3vhOETyAvwt3mOK8kiCSh9F
-MlrJ7vtUSnOo3S/QGiBCQ6gjTzrkyYWYtJAK3UabGbwagf9t8bKAUquWNbwFbvuu
-0Q2L++Z8eX4O0b8sbLJ5YxCx9eib2j3W6C2CNHUFG+WLjLom4IskqYq3Y7KELQ4U
-1YQbFUI5p+WFnxZU0uklYPEBfMCRBXd4iG2XBc8c/KBMkeQKOlXkURqUl7lmNT9u
-jgdqBpp0qgOlmJE7YsJTFjgyuwWR/BWLpE9QMKxBR1Ua94G6HRnoNiveq2qty18b
-s6G53YnvJsjI2y0cnP0+wACEKBATa33dUCLDABsKlyXl1jSdeE8csDM3XZ/SMNxZ
-CWayrYggYz3nk9y1bnJK3bkyVNAKaDRlNOA+kezZGAPUdcojFJOWin45Vkm5CFma
-t9SNRSBFArbG/9x/iOcETTVE+Hb7w5czGr+D41vJd/OUM/oE+sCt4ylIi4PA6a/y
-IF5fC7XzuTspKeoLuUo7WWght3JjD5+aGZ5OF6GKOSn7sdn0N2D53CdXp482U+jv
-a3ojwbXAqujhOIZhw5WYMfXjMyfKvhoPjjSIbk+NNRt8ksWKMc8=
-=CJv+
------END PGP SIGNATURE-----
-
---bhukgbujt2wxql42--
+>  
+> -- 
+> 2.7.4
+> 
