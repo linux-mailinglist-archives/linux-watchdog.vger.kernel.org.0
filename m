@@ -2,97 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D2A12889
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2019 09:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421E912960
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2019 09:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725809AbfECHQT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 May 2019 03:16:19 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:42936 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbfECHQT (ORCPT
+        id S1725793AbfECH7D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 May 2019 03:59:03 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:31868 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725775AbfECH7D (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 May 2019 03:16:19 -0400
-Received: by mail-lf1-f65.google.com with SMTP id w23so3685362lfc.9
-        for <linux-watchdog@vger.kernel.org>; Fri, 03 May 2019 00:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rtSbGYmKklFW+DrwkU0C+VxMVLVuu2pUhj66Een1PGY=;
-        b=B9RPr9e5dWYYhfvLP6A/hH+KrXtO/Yez0gb/5L0LdyKb8z8MZhdeHeOt+yi2UNKxXX
-         kqhFr7Ga99BGfpc+a7PON1hZXY4Ke+EL0MrvbB7dteYDQWAsBcmhEJ18AHotXv2HHwvf
-         komU/gZlAC7p1nBwxEhrNanbFdWzVS7fMkxqZYXV4NNNER5XUhDvqqrg89GlUsrbC9/D
-         4CA9xMlkTkFFYb1aVaVqqM/PSMm01raoSSns+BYDEleFwFzhtuVKCTIBCc/I5EIMtaw6
-         O/utJQ8G1FP22BHM9I2VTN84Si0h+UUECdvX4JD7wVp96wfqesqzdaujEMuf6dNutDQo
-         5AjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rtSbGYmKklFW+DrwkU0C+VxMVLVuu2pUhj66Een1PGY=;
-        b=R+wtv+sAx5oaSN2Q11PuQDqDFPsR5IMsXIYJO1/PWKEVwzAB9Ty0cPYDq7tWmbJtK9
-         +5fYJRhQk1U8MZHkQMtxfiBp1uJyVVDHc+7N2Z9+93rQ9c72TKxGrYW/Y9eAaNcg7Hf4
-         Uj3x0LcK2/eymvd6Bf1+AWBXcVvdJjAxnWrBcj6s91W0fYd7p4sEv9+PTlgglXp8CLba
-         6NQ6KzHy8MoGdSlzISNk6JlcT3VNTErywVUxkoJWwNOFbPVrfavMnNHve7kpPh6i/fk1
-         qy1vh7LFyXYBcKTRQHfvWdPuFX7QxtAyYLwWlxlFft7REJ0YxNRowDsBhGhdCSWBdW9C
-         YGuw==
-X-Gm-Message-State: APjAAAX7ZTxRyUEYn+FvIkwLdKsjoPXa11WqF3e9OrdcsSn954gcrF4z
-        BEuH5i/V9A0cjnXMZfya3w94t4INOmtEYtODf2WnNWbbiQI=
-X-Google-Smtp-Source: APXvYqzJk0GUKle7WEk7r+TX6j6b6Koid9bqgPMCDj802pdYnmzrB/eWrxxyZQDNpWxQCQ3SCkyms1KNQoSQ8MdZwSE=
-X-Received: by 2002:a19:f001:: with SMTP id p1mr4474778lfc.27.1556867777010;
- Fri, 03 May 2019 00:16:17 -0700 (PDT)
+        Fri, 3 May 2019 03:59:03 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x437wN7I012786;
+        Fri, 3 May 2019 09:58:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=t609rofuUjW2NaRBXFT3b4myx0XAd7PIRxpvzFY38QQ=;
+ b=DVHzpus37rY9JnLDJSXa/PljnopKkvOOCeWw6Quita8INxNmef1CzUgFEqXWnlT3uiis
+ CB93ldPnYWNUARNN5GQnw8QEwTHKUcpR7HEqpx2jbC9W8VR7WddSEVW8ogweLzgqxu5F
+ KKM7sAlBEvByGX0cJz2fRssR7ydbq+iPz1hvCzbRrsk4Bj7fv7gpk6FOJjMdZS5CxW4c
+ dLxVQOxaSCo+5kbKP0J0g9NUXDN4IZCT3oqiAU4RDATlsSinClsIravJHEi6kNShKnHt
+ Q8rZ9p7FrN95/uEdTSbnyu+DjIv/x6e7dufFvkRupdP4TumB5nNXoEoairloIAV6OhXi Ng== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2s6xhbn0v7-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 03 May 2019 09:58:34 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3810231;
+        Fri,  3 May 2019 07:58:33 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag6node1.st.com [10.75.127.16])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0BD3D142E;
+        Fri,  3 May 2019 07:58:33 +0000 (GMT)
+Received: from [10.48.0.237] (10.75.127.47) by SFHDAG6NODE1.st.com
+ (10.75.127.16) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 3 May
+ 2019 09:58:32 +0200
+Subject: Re: [PATCH V2 1/3] watchdog: stm32: update to
+ devm_watchdog_register_device
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <1556806126-15890-1-git-send-email-ludovic.Barre@st.com>
+ <1556806126-15890-2-git-send-email-ludovic.Barre@st.com>
+ <20190502202122.GA27894@roeck-us.net>
+From:   Ludovic BARRE <ludovic.barre@st.com>
+Message-ID: <f649441e-b3fe-134d-9dea-ac7140fb2d9d@st.com>
+Date:   Fri, 3 May 2019 09:58:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <20190415202501.941196-1-arnd@arndb.de> <2424c672-e3fb-4c32-4c24-fafc59d03a96@uclinux.org>
-In-Reply-To: <2424c672-e3fb-4c32-4c24-fafc59d03a96@uclinux.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 3 May 2019 08:16:05 +0100
-Message-ID: <CACRpkdaJ+2bub_nDp9=5b4kyKjWDnOGKscWg3KsEVixDpk8rzA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] ARM: ks8695: watchdog: stop using mach/*.h
-To:     Greg Ungerer <gerg@uclinux.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190502202122.GA27894@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG6NODE1.st.com
+ (10.75.127.16)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-03_03:,,
+ signatures=0
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, May 3, 2019 at 8:02 AM Greg Ungerer <gerg@uclinux.org> wrote:
+hi Guenter
 
-> I dug out some old ks8695 based hardware to try this out.
-> I had a lot of trouble getting anything modern working on it.
-> In the end I still don't have a reliable test bed to test this properly.
+On 5/2/19 10:21 PM, Guenter Roeck wrote:
+> On Thu, May 02, 2019 at 04:08:44PM +0200, Ludovic Barre wrote:
+>> From: Ludovic Barre <ludovic.barre@st.com>
+>>
+>> This patch updates to devm_watchdog_register_device interface
+>>
+> Not that easy. See below.
+> 
+> A more complete solution is at
+> https://patchwork.kernel.org/patch/10894355
+> 
+> I have a total of three patches for this driver pending for
+> the next kernel release. Maybe it would make sense to (re-)
+> start this series from there after the next commit window
+> closes.
+> 
 
-What is usually used by old ARMv4 systems is OpenWrt or
-OpenEmbedded. Those is the only build systems that reliably
-produce a userspace for these things now, and it is also the
-appropriate size for this kind of systems.
+I used the repository defined in MAINTAINERS file
+git://www.linux-watchdog.org/linux-watchdog.git
+but there is no next branch.
 
-> Ultimately though I am left wondering if the ks8695 support in the
-> kernel is useful to anyone the way it is at the moment. With a minimal
-> kernel configuration I can boot up to a shell - but the system is
-> really unreliable if you try to interactively use it. I don't think
-> it is the hardware - it seems to run reliably with the old code
-> it has running from flash on it. I am only testing the new kernel,
-> running with the existing user space root filesystem on it (which
-> dates from 2004 :-)
+Today, I see your kernel.org repository
+https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/
 
-Personally I think it is a bad sign that this subarch and boards do
-not have active OpenWrt support, they are routers after all (right?)
-and any active use of networking equipment should use a recent
-userspace as well, given all the security bugs that popped up over
-the years.
+And I see your next branch, so I will use it.
 
-With IXP4xx, Gemini and EP93xx we have found active users and
-companies selling the chips and reference designs and even
-recommending it for new products (!) at times.  If this is not the
-case with KS8695 and no hobbyists are willing to submit it
-to OpenWrt and modernize it to use device tree I think it should be
-deleted from the kernel.
+Regards,
+Ludo
 
-Yours,
-Linus Walleij
+> Guenter
+> 
+>> Signed-off-by: Ludovic Barre <ludovic.barre@st.com>
+>> ---
+>>   drivers/watchdog/stm32_iwdg.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+>> index e00e3b3..e191bd8 100644
+>> --- a/drivers/watchdog/stm32_iwdg.c
+>> +++ b/drivers/watchdog/stm32_iwdg.c
+>> @@ -243,7 +243,7 @@ static int stm32_iwdg_probe(struct platform_device *pdev)
+>>   		dev_warn(&pdev->dev,
+>>   			 "unable to set timeout value, using default\n");
+>>   
+>> -	ret = watchdog_register_device(wdd);
+>> +	ret = devm_watchdog_register_device(&pdev->dev, wdd);
+>>   	if (ret) {
+>>   		dev_err(&pdev->dev, "failed to register watchdog device\n");
+>>   		goto err;
+>> @@ -263,7 +263,6 @@ static int stm32_iwdg_remove(struct platform_device *pdev)
+>>   {
+>>   	struct stm32_iwdg *wdt = platform_get_drvdata(pdev);
+>>   
+>> -	watchdog_unregister_device(&wdt->wdd);
+>>   	clk_disable_unprepare(wdt->clk_lsi);
+>>   	clk_disable_unprepare(wdt->clk_pclk);
+> 
+> This disables the clock while the watchdog is still registered
+> and running. That is not a good idea.
+> 
+>>   
+>> -- 
+>> 2.7.4
+>>
