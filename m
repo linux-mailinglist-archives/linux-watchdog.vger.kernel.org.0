@@ -2,209 +2,105 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FF115744
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 May 2019 03:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620D516DD9
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 May 2019 01:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbfEGB2n (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 May 2019 21:28:43 -0400
-Received: from mail-eopbgr80070.outbound.protection.outlook.com ([40.107.8.70]:62336
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726450AbfEGB2n (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 May 2019 21:28:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=54/FlCurW15BSMk7Gar9wAQsu+ticy+6F9OZ5t8rnl0=;
- b=DJ8YWiEkQZAsGMmof59WtbPwS5GJbzhk47K5zr/ZbI1fhbQ9LZ2CRED3cxG+5/aZv8B95ylamamlW+zbBbe9kJlUojpBEJ6IqhAE+HnR6MDCaBCBlAtgoePhlEfSc2mmhSWAdnjBjCK6Aw9Tk4wElt53AUdX1z8sxGHzFb9CWkY=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3721.eurprd04.prod.outlook.com (52.134.67.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.12; Tue, 7 May 2019 01:28:26 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::e8ca:4f6b:e43:c170]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::e8ca:4f6b:e43:c170%3]) with mapi id 15.20.1856.012; Tue, 7 May 2019
- 01:28:26 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: [PATCH V4 3/3] watchdog: imx_sc: Add pretimeout support
-Thread-Topic: [PATCH V4 3/3] watchdog: imx_sc: Add pretimeout support
-Thread-Index: AQHVBHQpa5JP0ZHgW0eqFKg4Rv7umw==
-Date:   Tue, 7 May 2019 01:28:23 +0000
-Message-ID: <1557192198-19640-3-git-send-email-Anson.Huang@nxp.com>
-References: <1557192198-19640-1-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1557192198-19640-1-git-send-email-Anson.Huang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.7.4
-x-clientproxiedby: HK0PR03CA0084.apcprd03.prod.outlook.com
- (2603:1096:203:72::24) To DB3PR0402MB3916.eurprd04.prod.outlook.com
- (2603:10a6:8:10::18)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 716b5302-a5a0-42bb-e020-08d6d28b4bcd
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3721;
-x-ms-traffictypediagnostic: DB3PR0402MB3721:
-x-microsoft-antispam-prvs: <DB3PR0402MB3721E9D0C59A291179980A47F5310@DB3PR0402MB3721.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2331;
-x-forefront-prvs: 0030839EEE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(366004)(39860400002)(136003)(396003)(376002)(189003)(199004)(316002)(7416002)(4326008)(2501003)(6512007)(14454004)(2906002)(6116002)(81156014)(36756003)(3846002)(305945005)(7736002)(66066001)(2201001)(53936002)(50226002)(8936002)(8676002)(5660300002)(11346002)(486006)(476003)(99286004)(110136005)(2616005)(86362001)(6436002)(26005)(102836004)(6486002)(14444005)(256004)(76176011)(186003)(52116002)(68736007)(6666004)(25786009)(446003)(64756008)(71190400001)(71200400001)(478600001)(73956011)(6506007)(386003)(81166006)(66446008)(66476007)(66946007)(66556008)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3721;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: x4c5IcLvOUtyQau/CxRx2fdnXCOgl3/gbDgGLnMudoe0SjKZLcJM95KwpznkmlhHhOVZ5i6QuxKU43B/LL/bBirAfWkIJd3EaoVLKzyFYuz9/O/twlv1Mugj47cY3fc+z10OOU8S+vekYShx+GQb1b5MEfg6kzNVmSRTJXnG7fLMndnxFNsgY6vfgKc7lXNCpNcTrqVNSUS5Rvpsq0Lc2/ek84Q8MfMP176bQhVlVdmCeXdL5mbjH9MbYZA0haUSBd/X2/vRmG2Legw+X3Hqx5jWZ4zd/mQrfY+A4uU98qAPF8Ayu13bWcCVcZLUJYNP6BuRYmjKkFqxK9yXJFO0s8DlRZRB+/BkwEoZyW9TdT0URBVRz1T0Sy9beP1YIBeKSydCQu/EvM72vsw7jo3HotHezly9CFCNlMTBNWKXp0o=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726329AbfEGXdL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 May 2019 19:33:11 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:41258 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfEGXdK (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 7 May 2019 19:33:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=NLj2ytq46fXnI4+cInwB5swQNkX42I39nDMgwRNz0Qk=; b=QO2hqxAIl2hQgrnyizCkacwbr
+        K+A3fwnShNQBoG7oAWhy6+JgsyxExQZQVjB8m7Hp8HQ84c/N00+Gj6ZYQlGWkHeAQ6dVnH+zU4Ktg
+        EUO67WZyULuMFz8bVzUtMUHYYlKRbi8xyC98Kr/wDOcMdKbQhOvp/eWtXjs6zjAX8nlHyzmCkT2wo
+        4bZLLrc6pDoS1BPxkDlUgCmdcZO2MX9ZlXezrlHF2jmHe+jWoOhGhvdLN5pa9Z9XGEJqC5rPETZvf
+        bu0FFlkxUeIcz6hHupVVqYaSWILrH+tZKWKjfYE39hmG0+DOqjYh/yVWzKkuUoIYxn3QLnJDEagLs
+        MLqMkpWYw==;
+Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hO9a7-0005QY-Rp; Tue, 07 May 2019 23:33:07 +0000
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Cc:     Vladimir Zapolskiy <vladimir_zapolskiy@mentor.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] watchdog: fix watchdog_pretimeout.c build error when no
+ default gov. is set
+Message-ID: <ec5a2b04-2649-e527-bcfd-4e708808e681@infradead.org>
+Date:   Tue, 7 May 2019 16:33:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 716b5302-a5a0-42bb-e020-08d6d28b4bcd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 May 2019 01:28:23.8167
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3721
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-aS5NWCBzeXN0ZW0gY29udHJvbGxlciB3YXRjaGRvZyBjYW4gc3VwcG9ydCBwcmV0aW1lb3V0IElS
-UQ0KdmlhIGdlbmVyYWwgU0NVIE1VIElSUSwgaXQgZGVwZW5kcyBvbiBJTVhfU0NVIGFuZCBkcml2
-ZXIgTVVTVA0KYmUgcHJvYmVkIGFmdGVyIFNDVSBJUEMgcmVhZHksIHRoZW4gZW5hYmxlIGNvcnJl
-c3BvbmRpbmcgU0NVDQpJUlEgZ3JvdXAgYW5kIHJlZ2lzdGVyIFNDVSBJUlEgbm90aWZpZXIsIHdo
-ZW4gd2F0Y2hkb2cgcHJldGltZW91dA0KSVJRIGZpcmVzLCBTQ1UgTVUgSVJRIHdpbGwgYmUgaGFu
-ZGxlZCBhbmQgd2F0Y2hkb2cgcHJldGltZW91dA0Kbm90aWZpZXIgd2lsbCBiZSBjYWxsZWQgdG8g
-aGFuZGxlIHRoZSBldmVudC4NCg0KU2lnbmVkLW9mZi1ieTogQW5zb24gSHVhbmcgPEFuc29uLkh1
-YW5nQG54cC5jb20+DQotLS0NCkNoYW5nZXMgc2luY2UgVjM6DQoJLSB1c2UgZGV2bV9hZGRfYWN0
-aW9uX29yX3Jlc2V0IGluc3RlYWQgb2YgZGV2bV9hZGRfYWN0aW9uIHRvIG1ha2Ugc3VyZSBhY3Rp
-b24gaXMgdGFrZW4gaWYNCgkgIGFkZCBhY3Rpb24gZmFpbGVkOw0KCS0gb25seSBlbmFibGUgcHJl
-dGltZW91dCBmdW5jdGlvbiBpZiBldmVyeXRoaW5nIHN1Y2Nlc3MsIGluY2x1ZGluZyBpcnEgZ3Jv
-dXAgZW5hYmxlZCwgaXJxDQoJICBub3RpZmllciByZWdpc3RlciBhbmQgYWRkIGFjdGlvbi4NCi0t
-LQ0KIGRyaXZlcnMvd2F0Y2hkb2cvS2NvbmZpZyAgICAgIHwgICAxICsNCiBkcml2ZXJzL3dhdGNo
-ZG9nL2lteF9zY193ZHQuYyB8IDExNiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-Ky0tLS0tLS0NCiAyIGZpbGVzIGNoYW5nZWQsIDk4IGluc2VydGlvbnMoKyksIDE5IGRlbGV0aW9u
-cygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy93YXRjaGRvZy9LY29uZmlnIGIvZHJpdmVycy93
-YXRjaGRvZy9LY29uZmlnDQppbmRleCBmNDU3OTkyLi41NDUzODU1IDEwMDY0NA0KLS0tIGEvZHJp
-dmVycy93YXRjaGRvZy9LY29uZmlnDQorKysgYi9kcml2ZXJzL3dhdGNoZG9nL0tjb25maWcNCkBA
-IC03MTAsNiArNzEwLDcgQEAgY29uZmlnIElNWDJfV0RUDQogY29uZmlnIElNWF9TQ19XRFQNCiAJ
-dHJpc3RhdGUgIklNWCBTQyBXYXRjaGRvZyINCiAJZGVwZW5kcyBvbiBIQVZFX0FSTV9TTUNDQw0K
-KwlkZXBlbmRzIG9uIElNWF9TQ1UNCiAJc2VsZWN0IFdBVENIRE9HX0NPUkUNCiAJaGVscA0KIAkg
-IFRoaXMgaXMgdGhlIGRyaXZlciBmb3IgdGhlIHN5c3RlbSBjb250cm9sbGVyIHdhdGNoZG9nDQpk
-aWZmIC0tZ2l0IGEvZHJpdmVycy93YXRjaGRvZy9pbXhfc2Nfd2R0LmMgYi9kcml2ZXJzL3dhdGNo
-ZG9nL2lteF9zY193ZHQuYw0KaW5kZXggNDk4NDhiNi4uNmVjYzAzZiAxMDA2NDQNCi0tLSBhL2Ry
-aXZlcnMvd2F0Y2hkb2cvaW14X3NjX3dkdC5jDQorKysgYi9kcml2ZXJzL3dhdGNoZG9nL2lteF9z
-Y193ZHQuYw0KQEAgLTQsNiArNCw3IEBADQogICovDQogDQogI2luY2x1ZGUgPGxpbnV4L2FybS1z
-bWNjYy5oPg0KKyNpbmNsdWRlIDxsaW51eC9maXJtd2FyZS9pbXgvc2NpLmg+DQogI2luY2x1ZGUg
-PGxpbnV4L2lvLmg+DQogI2luY2x1ZGUgPGxpbnV4L2luaXQuaD4NCiAjaW5jbHVkZSA8bGludXgv
-a2VybmVsLmg+DQpAQCAtMzMsMTEgKzM0LDE5IEBADQogDQogI2RlZmluZSBTQ19USU1FUl9XRE9H
-X0FDVElPTl9QQVJUSVRJT04JMA0KIA0KKyNkZWZpbmUgU0NfSVJRX1dET0cJCQkxDQorI2RlZmlu
-ZSBTQ19JUlFfR1JPVVBfV0RPRwkJMQ0KKw0KIHN0YXRpYyBib29sIG5vd2F5b3V0ID0gV0FUQ0hE
-T0dfTk9XQVlPVVQ7DQogbW9kdWxlX3BhcmFtKG5vd2F5b3V0LCBib29sLCAwMDAwKTsNCiBNT0RV
-TEVfUEFSTV9ERVNDKG5vd2F5b3V0LCAiV2F0Y2hkb2cgY2Fubm90IGJlIHN0b3BwZWQgb25jZSBz
-dGFydGVkIChkZWZhdWx0PSINCiAJCSBfX01PRFVMRV9TVFJJTkcoV0FUQ0hET0dfTk9XQVlPVVQp
-ICIpIik7DQogDQorc3RydWN0IGlteF9zY193ZHRfZGV2aWNlIHsNCisJc3RydWN0IHdhdGNoZG9n
-X2RldmljZSB3ZGQ7DQorCXN0cnVjdCBub3RpZmllcl9ibG9jayB3ZHRfbm90aWZpZXI7DQorfTsN
-CisNCiBzdGF0aWMgaW50IGlteF9zY193ZHRfcGluZyhzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3
-ZG9nKQ0KIHsNCiAJc3RydWN0IGFybV9zbWNjY19yZXMgcmVzOw0KQEAgLTg1LDI0ICs5NCw2NiBA
-QCBzdGF0aWMgaW50IGlteF9zY193ZHRfc2V0X3RpbWVvdXQoc3RydWN0IHdhdGNoZG9nX2Rldmlj
-ZSAqd2RvZywNCiAJcmV0dXJuIHJlcy5hMCA/IC1FQUNDRVMgOiAwOw0KIH0NCiANCitzdGF0aWMg
-aW50IGlteF9zY193ZHRfc2V0X3ByZXRpbWVvdXQoc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2Rv
-ZywNCisJCQkJICAgICB1bnNpZ25lZCBpbnQgcHJldGltZW91dCkNCit7DQorCXN0cnVjdCBhcm1f
-c21jY2NfcmVzIHJlczsNCisNCisJYXJtX3NtY2NjX3NtYyhJTVhfU0lQX1RJTUVSLCBJTVhfU0lQ
-X1RJTUVSX1NFVF9QUkVUSU1FX1dET0csDQorCQkgICAgICBwcmV0aW1lb3V0ICogMTAwMCwgMCwg
-MCwgMCwgMCwgMCwgJnJlcyk7DQorCWlmIChyZXMuYTApDQorCQlyZXR1cm4gLUVBQ0NFUzsNCisN
-CisJd2RvZy0+cHJldGltZW91dCA9IHByZXRpbWVvdXQ7DQorDQorCXJldHVybiAwOw0KK30NCisN
-CitzdGF0aWMgaW50IGlteF9zY193ZHRfbm90aWZ5KHN0cnVjdCBub3RpZmllcl9ibG9jayAqbmIs
-DQorCQkJICAgICB1bnNpZ25lZCBsb25nIGV2ZW50LCB2b2lkICpncm91cCkNCit7DQorCXN0cnVj
-dCBpbXhfc2Nfd2R0X2RldmljZSAqaW14X3NjX3dkZCA9DQorCQkJCSBjb250YWluZXJfb2YobmIs
-DQorCQkJCQkgICAgICBzdHJ1Y3QgaW14X3NjX3dkdF9kZXZpY2UsDQorCQkJCQkgICAgICB3ZHRf
-bm90aWZpZXIpOw0KKw0KKwlpZiAoZXZlbnQgJiBTQ19JUlFfV0RPRyAmJg0KKwkgICAgKih1OCAq
-KWdyb3VwID09IFNDX0lSUV9HUk9VUF9XRE9HKQ0KKwkJd2F0Y2hkb2dfbm90aWZ5X3ByZXRpbWVv
-dXQoJmlteF9zY193ZGQtPndkZCk7DQorDQorCXJldHVybiAwOw0KK30NCisNCitzdGF0aWMgdm9p
-ZCBpbXhfc2Nfd2R0X2FjdGlvbih2b2lkICpkYXRhKQ0KK3sNCisJc3RydWN0IG5vdGlmaWVyX2Js
-b2NrICp3ZHRfbm90aWZpZXIgPSBkYXRhOw0KKw0KKwlpbXhfc2N1X2lycV91bnJlZ2lzdGVyX25v
-dGlmaWVyKHdkdF9ub3RpZmllcik7DQorCWlteF9zY3VfaXJxX2dyb3VwX2VuYWJsZShTQ19JUlFf
-R1JPVVBfV0RPRywNCisJCQkJIFNDX0lSUV9XRE9HLA0KKwkJCQkgZmFsc2UpOw0KK30NCisNCiBz
-dGF0aWMgY29uc3Qgc3RydWN0IHdhdGNoZG9nX29wcyBpbXhfc2Nfd2R0X29wcyA9IHsNCiAJLm93
-bmVyID0gVEhJU19NT0RVTEUsDQogCS5zdGFydCA9IGlteF9zY193ZHRfc3RhcnQsDQogCS5zdG9w
-ICA9IGlteF9zY193ZHRfc3RvcCwNCiAJLnBpbmcgID0gaW14X3NjX3dkdF9waW5nLA0KIAkuc2V0
-X3RpbWVvdXQgPSBpbXhfc2Nfd2R0X3NldF90aW1lb3V0LA0KKwkuc2V0X3ByZXRpbWVvdXQgPSBp
-bXhfc2Nfd2R0X3NldF9wcmV0aW1lb3V0LA0KIH07DQogDQotc3RhdGljIGNvbnN0IHN0cnVjdCB3
-YXRjaGRvZ19pbmZvIGlteF9zY193ZHRfaW5mbyA9IHsNCitzdGF0aWMgc3RydWN0IHdhdGNoZG9n
-X2luZm8gaW14X3NjX3dkdF9pbmZvID0gew0KIAkuaWRlbnRpdHkJPSAiaS5NWCBTQyB3YXRjaGRv
-ZyB0aW1lciIsDQogCS5vcHRpb25zCT0gV0RJT0ZfU0VUVElNRU9VVCB8IFdESU9GX0tFRVBBTElW
-RVBJTkcgfA0KLQkJCSAgV0RJT0ZfTUFHSUNDTE9TRSB8IFdESU9GX1BSRVRJTUVPVVQsDQorCQkJ
-ICBXRElPRl9NQUdJQ0NMT1NFLA0KIH07DQogDQogc3RhdGljIGludCBpbXhfc2Nfd2R0X3Byb2Jl
-KHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQogew0KKwlzdHJ1Y3QgaW14X3NjX3dkdF9k
-ZXZpY2UgKmlteF9zY193ZGQ7DQorCXN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkb2c7DQogCXN0
-cnVjdCBkZXZpY2UgKmRldiA9ICZwZGV2LT5kZXY7DQotCXN0cnVjdCB3YXRjaGRvZ19kZXZpY2Ug
-KmlteF9zY193ZGQ7DQogCWludCByZXQ7DQogDQogCWlteF9zY193ZGQgPSBkZXZtX2t6YWxsb2Mo
-ZGV2LCBzaXplb2YoKmlteF9zY193ZGQpLCBHRlBfS0VSTkVMKTsNCkBAIC0xMTEsNDIgKzE2Miw2
-OSBAQCBzdGF0aWMgaW50IGlteF9zY193ZHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAq
-cGRldikNCiANCiAJcGxhdGZvcm1fc2V0X2RydmRhdGEocGRldiwgaW14X3NjX3dkZCk7DQogDQot
-CWlteF9zY193ZGQtPmluZm8gPSAmaW14X3NjX3dkdF9pbmZvOw0KLQlpbXhfc2Nfd2RkLT5vcHMg
-PSAmaW14X3NjX3dkdF9vcHM7DQotCWlteF9zY193ZGQtPm1pbl90aW1lb3V0ID0gMTsNCi0JaW14
-X3NjX3dkZC0+bWF4X3RpbWVvdXQgPSBNQVhfVElNRU9VVDsNCi0JaW14X3NjX3dkZC0+cGFyZW50
-ID0gZGV2Ow0KLQlpbXhfc2Nfd2RkLT50aW1lb3V0ID0gREVGQVVMVF9USU1FT1VUOw0KKwl3ZG9n
-ID0gJmlteF9zY193ZGQtPndkZDsNCisJd2RvZy0+aW5mbyA9ICZpbXhfc2Nfd2R0X2luZm87DQor
-CXdkb2ctPm9wcyA9ICZpbXhfc2Nfd2R0X29wczsNCisJd2RvZy0+bWluX3RpbWVvdXQgPSAxOw0K
-Kwl3ZG9nLT5tYXhfdGltZW91dCA9IE1BWF9USU1FT1VUOw0KKwl3ZG9nLT5wYXJlbnQgPSBkZXY7
-DQorCXdkb2ctPnRpbWVvdXQgPSBERUZBVUxUX1RJTUVPVVQ7DQogDQotCXdhdGNoZG9nX2luaXRf
-dGltZW91dChpbXhfc2Nfd2RkLCAwLCBkZXYpOw0KLQl3YXRjaGRvZ19zdG9wX29uX3JlYm9vdChp
-bXhfc2Nfd2RkKTsNCi0Jd2F0Y2hkb2dfc3RvcF9vbl91bnJlZ2lzdGVyKGlteF9zY193ZGQpOw0K
-Kwl3YXRjaGRvZ19pbml0X3RpbWVvdXQod2RvZywgMCwgZGV2KTsNCisJd2F0Y2hkb2dfc3RvcF9v
-bl9yZWJvb3Qod2RvZyk7DQorCXdhdGNoZG9nX3N0b3Bfb25fdW5yZWdpc3Rlcih3ZG9nKTsNCiAN
-Ci0JcmV0ID0gZGV2bV93YXRjaGRvZ19yZWdpc3Rlcl9kZXZpY2UoZGV2LCBpbXhfc2Nfd2RkKTsN
-CisJcmV0ID0gZGV2bV93YXRjaGRvZ19yZWdpc3Rlcl9kZXZpY2UoZGV2LCB3ZG9nKTsNCiAJaWYg
-KHJldCkgew0KIAkJZGV2X2VycihkZXYsICJGYWlsZWQgdG8gcmVnaXN0ZXIgd2F0Y2hkb2cgZGV2
-aWNlXG4iKTsNCiAJCXJldHVybiByZXQ7DQogCX0NCiANCisJcmV0ID0gaW14X3NjdV9pcnFfZ3Jv
-dXBfZW5hYmxlKFNDX0lSUV9HUk9VUF9XRE9HLA0KKwkJCQkgICAgICAgU0NfSVJRX1dET0csDQor
-CQkJCSAgICAgICB0cnVlKTsNCisJaWYgKHJldCkgew0KKwkJZGV2X3dhcm4oZGV2LCAiRW5hYmxl
-IGlycSBmYWlsZWQsIHByZXRpbWVvdXQgTk9UIHN1cHBvcnRlZFxuIik7DQorCQlyZXR1cm4gMDsN
-CisJfQ0KKw0KKwlpbXhfc2Nfd2RkLT53ZHRfbm90aWZpZXIubm90aWZpZXJfY2FsbCA9IGlteF9z
-Y193ZHRfbm90aWZ5Ow0KKwlyZXQgPSBpbXhfc2N1X2lycV9yZWdpc3Rlcl9ub3RpZmllcigmaW14
-X3NjX3dkZC0+d2R0X25vdGlmaWVyKTsNCisJaWYgKHJldCkgew0KKwkJaW14X3NjdV9pcnFfZ3Jv
-dXBfZW5hYmxlKFNDX0lSUV9HUk9VUF9XRE9HLA0KKwkJCQkJIFNDX0lSUV9XRE9HLA0KKwkJCQkJ
-IGZhbHNlKTsNCisJCWRldl93YXJuKGRldiwNCisJCQkgIlJlZ2lzdGVyIGlycSBub3RpZmllciBm
-YWlsZWQsIHByZXRpbWVvdXQgTk9UIHN1cHBvcnRlZFxuIik7DQorCQlyZXR1cm4gMDsNCisJfQ0K
-Kw0KKwlyZXQgPSBkZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQoZGV2LCBpbXhfc2Nfd2R0X2FjdGlv
-biwNCisJCQkJICAgICAgICZpbXhfc2Nfd2RkLT53ZHRfbm90aWZpZXIpOw0KKwlpZiAoIXJldCkN
-CisJCWlteF9zY193ZHRfaW5mby5vcHRpb25zIHw9IFdESU9GX1BSRVRJTUVPVVQ7DQorCWVsc2UN
-CisJCWRldl93YXJuKGRldiwgIkFkZCBhY3Rpb24gZmFpbGVkLCBwcmV0aW1lb3V0IE5PVCBzdXBw
-b3J0ZWRcbiIpOw0KKw0KIAlyZXR1cm4gMDsNCiB9DQogDQogc3RhdGljIGludCBfX21heWJlX3Vu
-dXNlZCBpbXhfc2Nfd2R0X3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KIHsNCi0Jc3RydWN0
-IHdhdGNoZG9nX2RldmljZSAqaW14X3NjX3dkZCA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KKwlz
-dHJ1Y3QgaW14X3NjX3dkdF9kZXZpY2UgKmlteF9zY193ZGQgPSBkZXZfZ2V0X2RydmRhdGEoZGV2
-KTsNCiANCi0JaWYgKHdhdGNoZG9nX2FjdGl2ZShpbXhfc2Nfd2RkKSkNCi0JCWlteF9zY193ZHRf
-c3RvcChpbXhfc2Nfd2RkKTsNCisJaWYgKHdhdGNoZG9nX2FjdGl2ZSgmaW14X3NjX3dkZC0+d2Rk
-KSkNCisJCWlteF9zY193ZHRfc3RvcCgmaW14X3NjX3dkZC0+d2RkKTsNCiANCiAJcmV0dXJuIDA7
-DQogfQ0KIA0KIHN0YXRpYyBpbnQgX19tYXliZV91bnVzZWQgaW14X3NjX3dkdF9yZXN1bWUoc3Ry
-dWN0IGRldmljZSAqZGV2KQ0KIHsNCi0Jc3RydWN0IHdhdGNoZG9nX2RldmljZSAqaW14X3NjX3dk
-ZCA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KKwlzdHJ1Y3QgaW14X3NjX3dkdF9kZXZpY2UgKmlt
-eF9zY193ZGQgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCiANCi0JaWYgKHdhdGNoZG9nX2FjdGl2
-ZShpbXhfc2Nfd2RkKSkNCi0JCWlteF9zY193ZHRfc3RhcnQoaW14X3NjX3dkZCk7DQorCWlmICh3
-YXRjaGRvZ19hY3RpdmUoJmlteF9zY193ZGQtPndkZCkpDQorCQlpbXhfc2Nfd2R0X3N0YXJ0KCZp
-bXhfc2Nfd2RkLT53ZGQpOw0KIA0KIAlyZXR1cm4gMDsNCiB9DQotLSANCjIuNy40DQoNCg==
+From: Randy Dunlap <rdunlap@infradead.org>
+
+Fix build error when
+CONFIG_WATCHDOG_PRETIMEOUT_GOV=y
+# CONFIG_WATCHDOG_PRETIMEOUT_GOV_NOOP is not set
+# CONFIG_WATCHDOG_PRETIMEOUT_GOV_PANIC is not set
+
+Fixes this build error:
+
+../drivers/watchdog/watchdog_pretimeout.c: In function ‘watchdog_register_governor’:
+../drivers/watchdog/watchdog_pretimeout.c:139:26: error: ‘WATCHDOG_PRETIMEOUT_DEFAULT_GOV’ undeclared (first use in this function)
+  if (!strncmp(gov->name, WATCHDOG_PRETIMEOUT_DEFAULT_GOV,
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Vladimir Zapolskiy <vladimir_zapolskiy@mentor.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-watchdog@vger.kernel.org
+---
+Found in linux-next but applies to mainline.
+
+ drivers/watchdog/watchdog_pretimeout.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+--- linux-next-20190507.orig/drivers/watchdog/watchdog_pretimeout.c
++++ linux-next-20190507/drivers/watchdog/watchdog_pretimeout.c
+@@ -118,7 +118,6 @@ EXPORT_SYMBOL_GPL(watchdog_notify_pretim
+ 
+ int watchdog_register_governor(struct watchdog_governor *gov)
+ {
+-	struct watchdog_pretimeout *p;
+ 	struct governor_priv *priv;
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+@@ -136,8 +135,11 @@ int watchdog_register_governor(struct wa
+ 	priv->gov = gov;
+ 	list_add(&priv->entry, &governor_list);
+ 
++#if defined(WATCHDOG_PRETIMEOUT_DEFAULT_GOV)
+ 	if (!strncmp(gov->name, WATCHDOG_PRETIMEOUT_DEFAULT_GOV,
+ 		     WATCHDOG_GOV_NAME_MAXLEN)) {
++		struct watchdog_pretimeout *p;
++
+ 		spin_lock_irq(&pretimeout_lock);
+ 		default_gov = gov;
+ 
+@@ -146,6 +148,7 @@ int watchdog_register_governor(struct wa
+ 				p->wdd->gov = default_gov;
+ 		spin_unlock_irq(&pretimeout_lock);
+ 	}
++#endif
+ 
+ 	mutex_unlock(&governor_lock);
+ 
+
+
