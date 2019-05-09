@@ -2,92 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F7618641
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 May 2019 09:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D25EA192E1
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 May 2019 21:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbfEIHi3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 9 May 2019 03:38:29 -0400
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:36112 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725991AbfEIHi3 (ORCPT
+        id S1726721AbfEITZO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 9 May 2019 15:25:14 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46441 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726683AbfEITZN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 9 May 2019 03:38:29 -0400
-Received: by mail-vk1-f193.google.com with SMTP id d74so359117vka.3;
-        Thu, 09 May 2019 00:38:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RFFtFtnGCiEoABcKzwA6B0N/JB84yDVwmoWMMtkiI/I=;
-        b=eaFYPa9Gbu2mKRpyeZyYyUM3/KtOdnoanSl9sjA4ZQkTsCHoXEk5O3k3AranQgrX9U
-         sIx/0CnRd+kAG7MMv2vUq8U6Hu83iO1STnGtxyQpSXCXjWTGEaLMcK0cLJl0nxjldRMI
-         VuLqjsld2FK4/EiOEfjoiLTD7D/udBt3lBNiiXM06T/PWp3LxwQS6jb8kCMyrYAAbMQ1
-         zcMpE073LI8LA0+kUh2IE0w6ocPAB3qkkVDTZ7vL+5qm4HfyHkteBfnsSv6OGfdhzsGb
-         cAGAfKW3G+1YS8ipu06Nr/LCsSZL8n/wwdwREUslcBA0rQPlXXAwD3wcnuN8vNRg4JJ/
-         zYpg==
-X-Gm-Message-State: APjAAAXQId43jJeUaC+vI+6fajANyBpt0JnBZXQeeJqE20ojBqqJ5VV6
-        XNPhMCYf9Fpq4vkJyvP4qM8pYxcG5g2dj1EjHW0wOxQh
-X-Google-Smtp-Source: APXvYqy8hEQZsTLJzSM1aW7xVNJq5avq36M4SD72JyUpbX85mzGfZfCi74GMMghpGHG2qiotH4HPGiy/i/CZKaE34Ps=
-X-Received: by 2002:a1f:b297:: with SMTP id b145mr855213vkf.74.1557387508454;
- Thu, 09 May 2019 00:38:28 -0700 (PDT)
+        Thu, 9 May 2019 15:25:13 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hOofH-00022h-NH; Thu, 09 May 2019 21:25:11 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1hOofH-0007UA-0k; Thu, 09 May 2019 21:25:11 +0200
+Date:   Thu, 9 May 2019 21:25:10 +0200
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: What to set in struct watchdog_device::bootstatus?
+Message-ID: <20190509192510.m6o7d63u7e4fs22h@pengutronix.de>
+References: <20190208105230.g33nxiu4r6uqech3@pengutronix.de>
+ <f9ec94d7-8365-e733-81ff-34c501cce89a@roeck-us.net>
+ <20190220201408.gcgsg43uonwc4ucs@pengutronix.de>
 MIME-Version: 1.0
-References: <20190415105201.2078-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20190415105201.2078-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 May 2019 09:38:16 +0200
-Message-ID: <CAMuHMdUxBaO0xw3EyW4nT=wXsJsJLphFH0FoFYZi2EO2fx=r1w@mail.gmail.com>
-Subject: Re: [RFC PATCH] watchdog: renesas_wdt: support handover from bootloader
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190220201408.gcgsg43uonwc4ucs@pengutronix.de>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wolfram,
+Hello Guenter,
 
-On Mon, Apr 15, 2019 at 12:52 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Support an already running watchdog by checking its enable bit and set
-> up the status accordingly before registering the device.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->
-> This patch was tested using a Renesas Salvator XS board (R-Car M3N). It works.
-> However, there is a small window where the watchdog clock is disabled, namely
-> after the MSSR clock driver initializes it until RuntimePM of the watchdog
-> driver takes over. If the system hangs in this window, bad luck. So, I'd think
-> it makes sense to have this clock either always-on or to keep the state which
-> came from the firmware. Geert, what do you think?
+On Wed, Feb 20, 2019 at 09:14:08PM +0100, Uwe Kleine-König wrote:
+> In a custom kernel patch stack I found a patch that uses (apart from
+> WDIOF_CARDRESET also) WDIOF_POWERUNDER and WDIOF_EXTERN1 to
+> differentiate the different reset causes. Now that you told using this
+> is wrong, I wonder how these are supposed to be used instead; and there
+> are a few more that according to
+> Documentation/watchdog/watchdog-kernel-api.txt might be used to set
+> bootstatus. Are these a relic? What do these signal?
 
-The MSSR clock driver does not disable the clock. The clock's core
-clk_disable_unused() does, which is a late initcall.
-So if the handover code calls rwdt_start() before that (i.e. no deferred
-probing happens), the clock would never be disabled.
+I'm still interested in an answer here. While it is currently not
+possible to "fix" the custom kernel as some other software that is
+already shipping depends on this. Still I'd like to know the details
+here to maybe suggest an alternative for the longterm future.
 
-Note that pm_runtime_put() in rwdt_probe() queues a power down request,
-but as it is not the _sync variant, it is delayed by some time, so
-probably it would never happen if rwdt_start() is called by the handover
-code in probe.
+> IMHO there is a patch opportunity waiting to improve the documenation
+> :-) Or maybe even change watchdog_get_status() to ensure that only
+> WDIOF_CARDRESET, WDIOF_MAGICCLOSE and WDIOF_KEEPALIVEPING can be set?
 
-Now, if we would mark the clock always-on (CLK_IS_CRITICAL),
-we can never disable it, even if the wdt is not used or the driver is
-not compiled-in.
-
-I don't think there's a way to mark a clock as "keep the state which
-came from the firmware", CLK_IS_CRITICAL enables the clock in
-__clk_core_init().
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Best regards
+Uwe
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
