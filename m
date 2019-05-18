@@ -2,28 +2,28 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BB32252C
-	for <lists+linux-watchdog@lfdr.de>; Sat, 18 May 2019 23:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D5F2252D
+	for <lists+linux-watchdog@lfdr.de>; Sat, 18 May 2019 23:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729678AbfERV20 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 18 May 2019 17:28:26 -0400
-Received: from sauhun.de ([88.99.104.3]:35850 "EHLO pokefinder.org"
+        id S1729692AbfERV21 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 18 May 2019 17:28:27 -0400
+Received: from sauhun.de ([88.99.104.3]:35834 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729671AbfERV20 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        id S1729687AbfERV20 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
         Sat, 18 May 2019 17:28:26 -0400
 Received: from localhost (p5486CE4C.dip0.t-ipconnect.de [84.134.206.76])
-        by pokefinder.org (Postfix) with ESMTPSA id 057E22C353A;
+        by pokefinder.org (Postfix) with ESMTPSA id 8902F2C3559;
         Sat, 18 May 2019 23:28:25 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-watchdog@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 32/46] watchdog: pnx4008_wdt: drop warning after registering device
-Date:   Sat, 18 May 2019 23:27:47 +0200
-Message-Id: <20190518212801.31010-33-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 33/46] watchdog: qcom-wdt: drop warning after registering device
+Date:   Sat, 18 May 2019 23:27:48 +0200
+Message-Id: <20190518212801.31010-34-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190518212801.31010-1-wsa+renesas@sang-engineering.com>
 References: <20190518212801.31010-1-wsa+renesas@sang-engineering.com>
@@ -38,25 +38,25 @@ The core will print out details now.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/watchdog/pnx4008_wdt.c | 4 +---
+ drivers/watchdog/qcom-wdt.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/watchdog/pnx4008_wdt.c b/drivers/watchdog/pnx4008_wdt.c
-index d9e03544aeae..124b1c66dc29 100644
---- a/drivers/watchdog/pnx4008_wdt.c
-+++ b/drivers/watchdog/pnx4008_wdt.c
-@@ -221,10 +221,8 @@ static int pnx4008_wdt_probe(struct platform_device *pdev)
- 		set_bit(WDOG_HW_RUNNING, &pnx4008_wdd.status);
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index 6d29c33b1316..aa750d8e5045 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -232,10 +232,8 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 	watchdog_init_timeout(&wdt->wdd, 0, dev);
  
- 	ret = devm_watchdog_register_device(dev, &pnx4008_wdd);
--	if (ret < 0) {
--		dev_err(dev, "cannot register watchdog device\n");
-+	if (ret < 0)
+ 	ret = devm_watchdog_register_device(dev, &wdt->wdd);
+-	if (ret) {
+-		dev_err(dev, "failed to register watchdog\n");
++	if (ret)
  		return ret;
 -	}
  
- 	dev_info(dev, "heartbeat %d sec\n", pnx4008_wdd.timeout);
- 
+ 	platform_set_drvdata(pdev, wdt);
+ 	return 0;
 -- 
 2.19.1
 
