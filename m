@@ -2,18 +2,18 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C10D62251C
+	by mail.lfdr.de (Postfix) with ESMTP id CEBC52251D
 	for <lists+linux-watchdog@lfdr.de>; Sat, 18 May 2019 23:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729618AbfERV2S (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        id S1729619AbfERV2S (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
         Sat, 18 May 2019 17:28:18 -0400
-Received: from sauhun.de ([88.99.104.3]:35850 "EHLO pokefinder.org"
+Received: from sauhun.de ([88.99.104.3]:35826 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729597AbfERV2R (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 18 May 2019 17:28:17 -0400
+        id S1729535AbfERV2S (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 18 May 2019 17:28:18 -0400
 Received: from localhost (p5486CE4C.dip0.t-ipconnect.de [84.134.206.76])
-        by pokefinder.org (Postfix) with ESMTPSA id 818D32C0963;
-        Sat, 18 May 2019 23:28:16 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id 103BF2C2356;
+        Sat, 18 May 2019 23:28:17 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-watchdog@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -24,9 +24,9 @@ Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>
-Subject: [PATCH 16/46] watchdog: imx2_wdt: drop warning after registering device
-Date:   Sat, 18 May 2019 23:27:31 +0200
-Message-Id: <20190518212801.31010-17-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 17/46] watchdog: imx_sc_wdt: drop warning after registering device
+Date:   Sat, 18 May 2019 23:27:32 +0200
+Message-Id: <20190518212801.31010-18-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190518212801.31010-1-wsa+renesas@sang-engineering.com>
 References: <20190518212801.31010-1-wsa+renesas@sang-engineering.com>
@@ -41,25 +41,28 @@ The core will print out details now.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/watchdog/imx2_wdt.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/watchdog/imx_sc_wdt.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
-index a606005dd65f..32af3974e6bb 100644
---- a/drivers/watchdog/imx2_wdt.c
-+++ b/drivers/watchdog/imx2_wdt.c
-@@ -316,10 +316,8 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
- 	regmap_write(wdev->regmap, IMX2_WDT_WMCR, 0);
+diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
+index 49848b66186c..847aa1c3b5c2 100644
+--- a/drivers/watchdog/imx_sc_wdt.c
++++ b/drivers/watchdog/imx_sc_wdt.c
+@@ -122,13 +122,7 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
+ 	watchdog_stop_on_reboot(imx_sc_wdd);
+ 	watchdog_stop_on_unregister(imx_sc_wdd);
  
- 	ret = watchdog_register_device(wdog);
+-	ret = devm_watchdog_register_device(dev, imx_sc_wdd);
 -	if (ret) {
--		dev_err(&pdev->dev, "cannot register watchdog device\n");
-+	if (ret)
- 		goto disable_clk;
+-		dev_err(dev, "Failed to register watchdog device\n");
+-		return ret;
 -	}
+-
+-	return 0;
++	return devm_watchdog_register_device(dev, imx_sc_wdd);
+ }
  
- 	dev_info(&pdev->dev, "timeout %d sec (nowayout=%d)\n",
- 		 wdog->timeout, nowayout);
+ static int __maybe_unused imx_sc_wdt_suspend(struct device *dev)
 -- 
 2.19.1
 
