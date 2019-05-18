@@ -2,26 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6792250A
+	by mail.lfdr.de (Postfix) with ESMTP id 346BC2250B
 	for <lists+linux-watchdog@lfdr.de>; Sat, 18 May 2019 23:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727600AbfERV2L (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        id S1728435AbfERV2L (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
         Sat, 18 May 2019 17:28:11 -0400
-Received: from sauhun.de ([88.99.104.3]:35780 "EHLO pokefinder.org"
+Received: from sauhun.de ([88.99.104.3]:35782 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728435AbfERV2K (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 18 May 2019 17:28:10 -0400
+        id S1729196AbfERV2L (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 18 May 2019 17:28:11 -0400
 Received: from localhost (p5486CE4C.dip0.t-ipconnect.de [84.134.206.76])
-        by pokefinder.org (Postfix) with ESMTPSA id 135652C059D;
+        by pokefinder.org (Postfix) with ESMTPSA id 9442C2C05C1;
         Sat, 18 May 2019 23:28:09 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-watchdog@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 02/46] watchdog: let core print error message when registering device fails
-Date:   Sat, 18 May 2019 23:27:17 +0200
-Message-Id: <20190518212801.31010-3-wsa+renesas@sang-engineering.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Subject: [PATCH 03/46] watchdog: aspeed_wdt: drop warning after registering device
+Date:   Sat, 18 May 2019 23:27:18 +0200
+Message-Id: <20190518212801.31010-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <20190518212801.31010-1-wsa+renesas@sang-engineering.com>
 References: <20190518212801.31010-1-wsa+renesas@sang-engineering.com>
@@ -32,40 +33,32 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-So we can remove boilerplate code from drivers.
+The core will print out details now.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/watchdog/watchdog_core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/watchdog/aspeed_wdt.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-index 9fd096af0cc5..cf3247224a6e 100644
---- a/drivers/watchdog/watchdog_core.c
-+++ b/drivers/watchdog/watchdog_core.c
-@@ -264,6 +264,7 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+index 34117745c65f..3ad2558a6de0 100644
+--- a/drivers/watchdog/aspeed_wdt.c
++++ b/drivers/watchdog/aspeed_wdt.c
+@@ -313,13 +313,7 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+ 	if (status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY)
+ 		wdt->wdd.bootstatus = WDIOF_CARDRESET;
  
- int watchdog_register_device(struct watchdog_device *wdd)
- {
-+	const char *dev_str;
- 	int ret = 0;
- 
- 	mutex_lock(&wtd_deferred_reg_mutex);
-@@ -272,6 +273,14 @@ int watchdog_register_device(struct watchdog_device *wdd)
- 	else
- 		watchdog_deferred_registration_add(wdd);
- 	mutex_unlock(&wtd_deferred_reg_mutex);
-+
-+	if (ret) {
-+		dev_str = wdd->parent ? dev_name(wdd->parent) :
-+			  (const char *)wdd->info->identity;
-+		pr_err("%s: failed to register watchdog device (err = %d)\n",
-+			dev_str, ret);
-+	}
-+
- 	return ret;
+-	ret = devm_watchdog_register_device(dev, &wdt->wdd);
+-	if (ret) {
+-		dev_err(dev, "failed to register\n");
+-		return ret;
+-	}
+-
+-	return 0;
++	return devm_watchdog_register_device(dev, &wdt->wdd);
  }
- EXPORT_SYMBOL_GPL(watchdog_register_device);
+ 
+ static struct platform_driver aspeed_watchdog_driver = {
 -- 
 2.19.1
 
