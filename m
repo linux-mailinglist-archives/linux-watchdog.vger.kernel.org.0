@@ -2,114 +2,113 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E878C23AAE
-	for <lists+linux-watchdog@lfdr.de>; Mon, 20 May 2019 16:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F18623B59
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 May 2019 16:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730566AbfETOoI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 20 May 2019 10:44:08 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:45975 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729847AbfETOoH (ORCPT
+        id S1731245AbfETO5W convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 May 2019 10:57:22 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:46424 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730351AbfETO5V (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 20 May 2019 10:44:07 -0400
-X-Originating-IP: 90.88.22.185
-Received: from localhost (aaubervilliers-681-1-80-185.w90-88.abo.wanadoo.fr [90.88.22.185])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id F0B831BF216;
-        Mon, 20 May 2019 14:44:04 +0000 (UTC)
-Date:   Mon, 20 May 2019 16:44:04 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 20 May 2019 10:57:21 -0400
+Received: by mail-ed1-f66.google.com with SMTP id f37so24258152edb.13;
+        Mon, 20 May 2019 07:57:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+tTKrGaZbZAWn5dajRxbdafRjHqzlUJiRVVSR6xwRss=;
+        b=dAP55o4sap/ep1EL2VRkswg8vqjB94gaDu6x4YlfB0lVTEq28FYy5+7U7Il8+nttW3
+         KjnDwDZPzU+MNZAZ0bvkL7buMlZCcsT/F0uTytmwjm+GB6spN5869OeZI7UyaTO9wJZH
+         SsL+yotjsb15EIenBv6upKRapq7G9o07APH2ebO4wf4coK15jmdJ00hcVns7TX2f1hSF
+         sGndOPiRluN2E8lDLrkB0JgeXKs8LCS1jTZX+rTORzgrCqvIbwH16R8p9gWcNoBgD6jQ
+         ScKOSghsdo+LdOjJBOaY1PstAXD0lypl4KSiNM36lgya3waVTzabAt4EOdyvsEzlK+hv
+         ozoQ==
+X-Gm-Message-State: APjAAAVvlEiaOW40EyDIYdOE48j4xyXGnZh1VkWLkFnxc5gbqXGDrBDc
+        NdvimJp3ZGCnXT+6KqZ0CYE172/g5WQ=
+X-Google-Smtp-Source: APXvYqwYUltTtgEaV/LPP1or7X7oyVvUT72UbUlSiW5yHKeCauyoECqqWOVIjNg8uYwe3UGiQR55cw==
+X-Received: by 2002:a50:9056:: with SMTP id z22mr76319431edz.72.1558364239098;
+        Mon, 20 May 2019 07:57:19 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id hb11sm3161651ejb.43.2019.05.20.07.57.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 May 2019 07:57:17 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 198so13641380wme.3;
+        Mon, 20 May 2019 07:57:16 -0700 (PDT)
+X-Received: by 2002:a1c:80c3:: with SMTP id b186mr12164236wmd.43.1558364236763;
+ Mon, 20 May 2019 07:57:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190518152355.11134-1-peron.clem@gmail.com> <20190518152355.11134-3-peron.clem@gmail.com>
+ <20190520073652.itk452vrpnicta5v@flea> <CAJiuCceEL9xH45P6Gj99YTir_1tkyraf5HefDNfm9p+UtdLs8w@mail.gmail.com>
+ <20190520144404.zprbuqt3d7uuxgr2@flea>
+In-Reply-To: <20190520144404.zprbuqt3d7uuxgr2@flea>
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Mon, 20 May 2019 22:57:04 +0800
+X-Gmail-Original-Message-ID: <CAGb2v65P1tne+-FuJ-tLTRMaPdBPYd9eJS+rS5TXaAULNCLBZg@mail.gmail.com>
+Message-ID: <CAGb2v65P1tne+-FuJ-tLTRMaPdBPYd9eJS+rS5TXaAULNCLBZg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] arm64: dts: allwinner: h6: add watchdog node
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>, linux-watchdog@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
         devicetree <devicetree@vger.kernel.org>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/4] arm64: dts: allwinner: h6: add watchdog node
-Message-ID: <20190520144404.zprbuqt3d7uuxgr2@flea>
-References: <20190518152355.11134-1-peron.clem@gmail.com>
- <20190518152355.11134-3-peron.clem@gmail.com>
- <20190520073652.itk452vrpnicta5v@flea>
- <CAJiuCceEL9xH45P6Gj99YTir_1tkyraf5HefDNfm9p+UtdLs8w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ilnq5ytbw3qmunv6"
-Content-Disposition: inline
-In-Reply-To: <CAJiuCceEL9xH45P6Gj99YTir_1tkyraf5HefDNfm9p+UtdLs8w@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
---ilnq5ytbw3qmunv6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, May 20, 2019 at 10:21:40AM +0200, Cl=E9ment P=E9ron wrote:
-> Hi,
+On Mon, May 20, 2019 at 10:44 PM Maxime Ripard
+<maxime.ripard@bootlin.com> wrote:
 >
-> On Mon, 20 May 2019 at 09:36, Maxime Ripard <maxime.ripard@bootlin.com> w=
-rote:
+> On Mon, May 20, 2019 at 10:21:40AM +0200, Clément Péron wrote:
+> > Hi,
 > >
-> > On Sat, May 18, 2019 at 05:23:53PM +0200, Cl=E9ment P=E9ron wrote:
-> > > Allwinner H6 has a watchog node which seems broken
-> > > on some boards.
+> > On Mon, 20 May 2019 at 09:36, Maxime Ripard <maxime.ripard@bootlin.com> wrote:
 > > >
-> > > Test has been performed on several boards.
+> > > On Sat, May 18, 2019 at 05:23:53PM +0200, Clément Péron wrote:
+> > > > Allwinner H6 has a watchog node which seems broken
+> > > > on some boards.
+> > > >
+> > > > Test has been performed on several boards.
+> > > >
+> > > > Chen-Yu Tsai boards:
+> > > > Pine H64 - H6448BA 7782 => OK
+> > > > OrangePi Lite 2 - H8068BA 61C2 => KO
+> > > >
+> > > > Martin Ayotte boards:
+> > > > Pine H64 - H8069BA 6892 => OK
+> > > > OrangePi 3 - HA047BA 69W2 => KO
+> > > > OrangePi One Plus - H7310BA 6842 => KO
+> > > > OrangePi Lite2 - H6448BA 6662 => KO
+> > > >
+> > > > Clément Péron board:
+> > > > Beelink GS1 - H7309BA 6842 => KO
+> > > >
+> > > > As it seems not fixable for now, declare the node
+> > > > but leave it disable with a comment.
+> > > >
+> > > > Signed-off-by: Clément Péron <peron.clem@gmail.com>
 > > >
-> > > Chen-Yu Tsai boards:
-> > > Pine H64 - H6448BA 7782 =3D> OK
-> > > OrangePi Lite 2 - H8068BA 61C2 =3D> KO
-> > >
-> > > Martin Ayotte boards:
-> > > Pine H64 - H8069BA 6892 =3D> OK
-> > > OrangePi 3 - HA047BA 69W2 =3D> KO
-> > > OrangePi One Plus - H7310BA 6842 =3D> KO
-> > > OrangePi Lite2 - H6448BA 6662 =3D> KO
-> > >
-> > > Cl=E9ment P=E9ron board:
-> > > Beelink GS1 - H7309BA 6842 =3D> KO
-> > >
-> > > As it seems not fixable for now, declare the node
-> > > but leave it disable with a comment.
-> > >
-> > > Signed-off-by: Cl=E9ment P=E9ron <peron.clem@gmail.com>
+> > > If it doesn't work most boards, then why do we need to merge that
+> > > patch in the first place?
 > >
-> > If it doesn't work most boards, then why do we need to merge that
-> > patch in the first place?
+> > My personnal opinion, is that having the IP declared and disabled with
+> > a comment saying "it's broken on some boards" in the device-tree is
+> > better than not having at all.
+> >
+> > This will explicit say "the IP exist but don't use it!".
+> > Maybe some people with a functionnal board would like to explicitly
+> > use it on their dts.
 >
-> My personnal opinion, is that having the IP declared and disabled with
-> a comment saying "it's broken on some boards" in the device-tree is
-> better than not having at all.
->
-> This will explicit say "the IP exist but don't use it!".
-> Maybe some people with a functionnal board would like to explicitly
-> use it on their dts.
+> Yeah, that makes sense. Chen-Yu, any opinion on the matter?
 
-Yeah, that makes sense. Chen-Yu, any opinion on the matter?
-
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---ilnq5ytbw3qmunv6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXOK9NAAKCRDj7w1vZxhR
-xTPcAP41As2dmsqJWuZDGwrGeXjz5+67O+gfyWMVpwNTjBfB3wD+LDkh8o3xUFs7
-x5b2IjWeOW15lbD6dJpdtyxuRX4coQg=
-=178x
------END PGP SIGNATURE-----
-
---ilnq5ytbw3qmunv6--
+Works for me.
