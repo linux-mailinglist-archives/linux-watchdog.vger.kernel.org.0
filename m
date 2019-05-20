@@ -2,97 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85711229DD
-	for <lists+linux-watchdog@lfdr.de>; Mon, 20 May 2019 04:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809D822D34
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 May 2019 09:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726901AbfETCOO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 19 May 2019 22:14:14 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40867 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbfETCON (ORCPT
+        id S1726940AbfETHff (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 May 2019 03:35:35 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:34727 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725983AbfETHff (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 19 May 2019 22:14:13 -0400
-Received: by mail-ot1-f65.google.com with SMTP id u11so11572126otq.7
-        for <linux-watchdog@vger.kernel.org>; Sun, 19 May 2019 19:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gv1D31tXAQjneU99Xjed5n2o+0M0UwCTvXDe48ANWo8=;
-        b=j12qC/12lzbrvDNlCECnp9rJbNfbSY0WTGBK9mYxlpBG0zKbhA2eE3db6CQ8moH6iD
-         WEYEm0aqsKGUyJRk9yhgp0EjzyLeTVGJLvhvcf+5uu8KINjRr+tl6FPMsvOzhR+Fn1VM
-         0uBBc6HCM0FDuOqIqFKz6VeaV81VFyRH0nzQk5q9ZR0qJarOghA/G7/joZgZTkuvu+xQ
-         vI7XvS29Lnf0c5/KsgN5Mt9EI2OI+DV7UZYacL83QnN2I8jCkEGUFuZisrgyuQXlrKpc
-         uQF8cMWXTAaKGs37/oFk8r/EN9ZcebqzCO3L13zbfHREow36LreA9zr85/5si5zLzjq3
-         36HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gv1D31tXAQjneU99Xjed5n2o+0M0UwCTvXDe48ANWo8=;
-        b=iRL7wucOGQ8xNJCMpZJG30t5JLH8HkW0XDQwkBSxhPnGC6I9FfB6pEt26Hx14THT60
-         1BQLry4nthbBsmjS9fr6AMaWfyQR986Eimw13zwbQAxga3Je4RrMfHx6ywkWWkFZ6A33
-         DJ719mck8qRHaXZlWgcceOe7FsR36YAN3bHNPYZlAZ/Ov9yzKsIQqVJkmuQNetskxIhq
-         EWtcR895v5bk6D0Ip0ObMQY+iFF7BZALGJHzCQujhBoLLTyxYejIAG/H4ok6owGe1GhC
-         nl1nhxrl+szoBsfqfUyJMHXy4VeygqQMVUiaFDMXwzRkKscDu9S6pVVfs49T6qnpwP32
-         w8Tg==
-X-Gm-Message-State: APjAAAXmh/db7pyE4hWp9hvhFb2n6RSOKHFaRxQdaf5tam1wk4xd634l
-        AZihQ58qgzfKkmWh3+qRGQTMDkscV8i6bySMhTcZpg==
-X-Google-Smtp-Source: APXvYqzNFXg9RV1CPihRYM/Igc+TvKudhTU2MOwOVTB26UhfFrAXHJNSL1MUYhmNzGIRn51Yo0AZYFrEu6mulJkGPvM=
-X-Received: by 2002:a9d:5c06:: with SMTP id o6mr10298926otk.123.1558318452983;
- Sun, 19 May 2019 19:14:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190518212801.31010-1-wsa+renesas@sang-engineering.com> <20190518212801.31010-40-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20190518212801.31010-40-wsa+renesas@sang-engineering.com>
-From:   Baolin Wang <baolin.wang@linaro.org>
-Date:   Mon, 20 May 2019 10:14:01 +0800
-Message-ID: <CAMz4ku+GLR3Z7TG0UQYh1sDEL4bzXjs9EpEVGeH_kERqUD131A@mail.gmail.com>
-Subject: Re: [PATCH 39/46] watchdog: sprd_wdt: drop warning after registering device
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 20 May 2019 03:35:35 -0400
+X-Originating-IP: 90.88.22.185
+Received: from localhost (aaubervilliers-681-1-80-185.w90-88.abo.wanadoo.fr [90.88.22.185])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id DBAD224000E;
+        Mon, 20 May 2019 07:35:29 +0000 (UTC)
+Date:   Mon, 20 May 2019 09:35:29 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] dt-bindings: watchdog: add Allwinner H6 watchdog
+Message-ID: <20190520073529.nxptfbibexrqyzfi@flea>
+References: <20190518152355.11134-1-peron.clem@gmail.com>
+ <20190518152355.11134-2-peron.clem@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vfqfe4etmgwkzfrf"
+Content-Disposition: inline
+In-Reply-To: <20190518152355.11134-2-peron.clem@gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wolfram,
 
-On Sun, 19 May 2019 at 05:28, Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
+--vfqfe4etmgwkzfrf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, May 18, 2019 at 05:23:52PM +0200, Cl=E9ment P=E9ron wrote:
+> Allwinner H6 has a similar watchdog as the A64 which is already
+> a compatible of the A31.
 >
-> The core will print out details now.
+> This commit sort the lines and add the H6 compatible.
 >
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Thanks.
-Reviewed-by: Baolin Wang <baolin.wang@linaro.org>
-
+> Signed-off-by: Cl=E9ment P=E9ron <peron.clem@gmail.com>
 > ---
->  drivers/watchdog/sprd_wdt.c | 1 -
->  1 file changed, 1 deletion(-)
+>  .../devicetree/bindings/watchdog/sunxi-wdt.txt         | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
-> index 14874e9b207b..b049981de3f3 100644
-> --- a/drivers/watchdog/sprd_wdt.c
-> +++ b/drivers/watchdog/sprd_wdt.c
-> @@ -328,7 +328,6 @@ static int sprd_wdt_probe(struct platform_device *pdev)
->         ret = devm_watchdog_register_device(dev, &wdt->wdd);
->         if (ret) {
->                 sprd_wdt_disable(wdt);
-> -               dev_err(dev, "failed to register watchdog\n");
->                 return ret;
->         }
->         platform_set_drvdata(pdev, wdt);
-> --
-> 2.19.1
+> diff --git a/Documentation/devicetree/bindings/watchdog/sunxi-wdt.txt b/D=
+ocumentation/devicetree/bindings/watchdog/sunxi-wdt.txt
+> index 46055254e8dd..f4810f8ad1c5 100644
+> --- a/Documentation/devicetree/bindings/watchdog/sunxi-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/sunxi-wdt.txt
+> @@ -3,10 +3,12 @@ Allwinner SoCs Watchdog timer
+>  Required properties:
 >
+>  - compatible : should be one of
+> -	"allwinner,sun4i-a10-wdt"
+> -	"allwinner,sun6i-a31-wdt"
+> -	"allwinner,sun50i-a64-wdt","allwinner,sun6i-a31-wdt"
+> -	"allwinner,suniv-f1c100s-wdt", "allwinner,sun4i-a10-wdt"
 
+That sorting was kind of intentional
 
--- 
-Baolin Wang
-Best Regards
+> +	- "allwinner,sun4i-a10-wdt"
+> +	- "allwinner,sun50i-a64-wdt","allwinner,sun6i-a31-wdt"
+> +	- "allwinner,sun50i-h6-wdt","allwinner,sun50i-a64-wdt",
+> +	  "allwinner,sun6i-a31-wdt"
+
+Is there a reason to keep the A64 compatible?
+
+Thanks,
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--vfqfe4etmgwkzfrf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXOJYwQAKCRDj7w1vZxhR
+xXf6AP44cA+X4inPt5m68fMkXQhL5OKxaZuNzsYSfVYbEOvP8QEA4EEwKgv3Sny9
+0nDVY1voirnIU5xZoN2wii6g2sl5kgc=
+=tx0L
+-----END PGP SIGNATURE-----
+
+--vfqfe4etmgwkzfrf--
