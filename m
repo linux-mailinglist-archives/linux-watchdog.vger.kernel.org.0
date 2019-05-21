@@ -2,101 +2,133 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8396024EE5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 May 2019 14:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCBE2549A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 21 May 2019 17:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbfEUMYa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 May 2019 08:24:30 -0400
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:54890 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726740AbfEUMY3 (ORCPT
+        id S1728935AbfEUPxn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 21 May 2019 11:53:43 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:42800 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727969AbfEUPxd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 May 2019 08:24:29 -0400
-X-AuditID: c0a8fbf4-501ff700000014c1-05-5ce3edfb5f31
-Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 81.5F.05313.BFDE3EC5; Tue, 21 May 2019 14:24:27 +0200 (CEST)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
- 14.03.0439.000; Tue, 21 May 2019 14:24:21 +0200
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "Haikola, Heikki" <Heikki.Haikola@fi.rohmeurope.com>,
-        "Okada, Koki" <Koki.Okada@fi.rohmeurope.com>
-Subject: Re: [PATCH v14 0/8] support ROHM BD70528 PMIC
-Thread-Topic: [PATCH v14 0/8] support ROHM BD70528 PMIC
-Thread-Index: AQHVAMcZ2S9oIqrnW0ecnOWL7FvEJaZ1ZiIAgAALIoCAAAvhAA==
-Date:   Tue, 21 May 2019 12:24:20 +0000
-Message-ID: <ee483dcc519f89ee5413832833bc61e9a32c315f.camel@fi.rohmeurope.com>
-References: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
-         <3a78cc77499d5027f527be51a7c40f6c5d70338c.camel@fi.rohmeurope.com>
-         <20190521114149.GG3274@piout.net>
-In-Reply-To: <20190521114149.GG3274@piout.net>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AAC4464FFDE1E446A5B4B52FFE129B7F@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        Tue, 21 May 2019 11:53:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1558454010; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=r1Dp4uuhmo7lgnj7+O9kBAJP9eIUmY611ADs6zhWI5w=;
+        b=CKuOJ1qTrDaIipRX830HNqH96QeAJ6lzn9Gi88QEmd2JAG81quHT8tzSJL60hlEjR2T/vf
+        Aob/tbuDy/Si5c7cWzZgxaIRd7e1u91BTaD0CJtcJvbbqm+iC5/SS5Sle85V/klWB9NEud
+        mOy03C+fg2jgZgUEnOlYb2v4zWBHSWE=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     od@zcrc.me, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 1/4] watchdog: jz4740: Use register names from <linux/mfd/ingenic-tcu.h>
+Date:   Tue, 21 May 2019 17:53:10 +0200
+Message-Id: <20190521155313.19326-1-paul@crapouillou.net>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUwTdxjH97v3IjePAvIbviRc4h/TCIOQ8YshyjQkt5gsJEQTt2Z4yEmb
-        0ZdcWwPjD6tRFHwJEoyzKTAMbAh1tZ1LhIECQ9LBMmUog4zN1FYJTkADarQNesep8Nd97/k+
-        n+f7XPIcg+sXqFTGZHFIskUs46k4orct6t8SnQkbPplsI1DLyF0aHZ/9gUYLDUMEOheKUKhp
-        4E8S3Xt2E6Dnd05gqD72I4aenvqPRD83xQAa7fJQaP70AECDHXcoNP7TdRpFmv/AUOvfIxjy
-        tAYJNDKUj471DNBoccxPoOFfHSg8vYjnrRG8jV4gzI0fo4VGb6XQ6f6XFgLt1ZQwOdZNCZe8
-        XlLofOGihfONLzFhPrChIO7LVbnFouNgoanUkrFt3yrjzOhrYLumK2++MUe7wHe6GqBjIJcN
-        Ixef4DUgjtFzYwD+X/uc1F6CAIZaYlgNYBiKy4U1E7QKJHE7YeOtKkLtwblnOjhWO0WoRiL3
-        KbzZdYPQmnLgL8FJXNM74F9NEUzVBLcR+l8NLvWw3Bfw1YPA22QfgHdvt5KqoePS4ZPZ2SUN
-        uPWw2jW7BONcCgw8fEFqa3OwpfsWrulkOB1efFvnYc/LEKEujXMfQ19XhobmwbPn6ihNp8H6
-        kyFa2yEB/n4hQtSCNe4VCe5l2r2Cdq+g3Svo7wHZDqBZNJWVig4pM12WnOmy1WhWHvut5gDQ
-        7mbhGnjd/3k/4BjAx7PRybBBT4oH7RXmfvARg/HJ7OkMpfRhsbWkwijajUWys0yy9wPI4HwS
-        Ozx036BnS8SKbyXZ+s5ayxB8Chvt6jPoOTX5G0mySfI7dx3D8JAllFvVJ8hSqVR+wFTmWLYx
-        RqcOj0tNskuWEkkWnQ5jkXouRXblXlQrXsm98ljBWbtNNCtVDR0Cm5nei6EGnJnpm2rA9YTF
-        apFSU1haTeLUVqPT8j7oEUhRvjeRnVMHxSu/0vs5j5QITIlYTy9FOMRlK9UFCp2b9qzOD7io
-        rZf27D7i+cC/yxfLT9+4LphtGgk11111tE3oY5m5qLX8a5+r5bNKT96++q/Sooln/MlXmoK3
-        6+Ztv90LLxbXHs6SKvNz+L3hgkP7Ozyk7XFWe1rH5aebKzsKd1Z1JhgWCrb46q/mZE/tHc0+
-        XzV99P7E9up/6s6c4Am7UczchMt28Q1YkxBbBwQAAA==
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGVsbG8gQWxleGFuZHJlLA0KDQpPbiBUdWUsIDIwMTktMDUtMjEgYXQgMTM6NDEgKzAyMDAsIEFs
-ZXhhbmRyZSBCZWxsb25pIHdyb3RlOg0KPiBPbiAyMS8wNS8yMDE5IDExOjAxOjUzKzAwMDAsIFZh
-aXR0aW5lbiwgTWF0dGkgd3JvdGU6DQo+ID4gSGVsbG8gQWxsLA0KPiA+IA0KPiA+IE9uIFRodSwg
-MjAxOS0wNS0wMiBhdCAxMjoxMSArMDMwMCwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPiA+ID4g
-UGF0Y2ggc2VyaWVzIGludHJvZHVjaW5nIHN1cHBvcnQgZm9yIFJPSE0gQkQ3MDUyOCBQTUlDDQo+
-ID4gPiANCj4gPiANCj4gPiBKdXN0IHRob3VnaHQgSSdkIGFzayBpZiB0aGVyZSdzIGFueSBjaGFu
-Y2VzIHRvIGdldCB0aGlzIHNlcmllcyBpbg0KPiA+IDUuMj8NCj4gPiBJdCBzZWVtcyB0byBtZSB0
-aGUgV0RUIHBhcnQgKHBhdGNoIDgpIHdhcyBhbHJlYWR5IG1lcmdlZCBpbiBidXQNCj4gPiByZXN0
-IG9mDQo+ID4gdGhlIHBhdGNoZXMgc2VlbSB0byBiZSBpbiBsaW1ibyBzb21ld2hlcmUgOikNCj4g
-PiANCj4gPiBJIGd1ZXNzIG1vc3Qgb2YgdGhlIHBhdGNoZXMgaGF2ZSByZWxldmFudCBhY2tzIC0g
-c28gd29uZGVyIGlmIHRoZQ0KPiA+IHJlc3QNCj4gPiBjYW4gZ28gdGhyb3VnaCBMZWUncyB0cmVl
-PyBJIGFkbWl0IEkgYW0gZ2V0dGluZyBzbGlnaHRseSBpbXBhdGllbnQNCj4gPiAtDQo+ID4gc29y
-cnkgZm9yIHRoYXQgOl0NCj4gPiANCj4gDQo+IE5vcGUsIHRoZSA1LjIgbWVyZ2Ugd2luZG93cyBp
-cyBjbG9zZWQuIFRoaXMgd2lsbCBoYXZlIHRvIHdhaXQgZm9yDQo+IDUuMy4NCg0KT2gsIHRoYXQn
-cyB1bmZvcnR1bmF0ZSA6KCBUaGFua3MgZm9yIHRoZSByZXBseSB0aG91Z2guDQoNCkJlc3QgUmVn
-YXJkcw0KCU1hdHRpIFZhaXR0aW5lbg0KDQo=
+Use the macros from <linux/mfd/ingenic-tcu.h> instead of declaring our
+own.
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/watchdog/jz4740_wdt.c | 39 ++++++++++++++---------------------
+ 1 file changed, 16 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/watchdog/jz4740_wdt.c b/drivers/watchdog/jz4740_wdt.c
+index d1bc7cbd4f2b..51be321c775a 100644
+--- a/drivers/watchdog/jz4740_wdt.c
++++ b/drivers/watchdog/jz4740_wdt.c
+@@ -13,6 +13,7 @@
+  *
+  */
+ 
++#include <linux/mfd/ingenic-tcu.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/types.h>
+@@ -28,23 +29,16 @@
+ 
+ #include <asm/mach-jz4740/timer.h>
+ 
+-#define JZ_REG_WDT_TIMER_DATA     0x0
+-#define JZ_REG_WDT_COUNTER_ENABLE 0x4
+-#define JZ_REG_WDT_TIMER_COUNTER  0x8
+-#define JZ_REG_WDT_TIMER_CONTROL  0xC
+-
+ #define JZ_WDT_CLOCK_PCLK 0x1
+ #define JZ_WDT_CLOCK_RTC  0x2
+ #define JZ_WDT_CLOCK_EXT  0x4
+ 
+-#define JZ_WDT_CLOCK_DIV_SHIFT   3
+-
+-#define JZ_WDT_CLOCK_DIV_1    (0 << JZ_WDT_CLOCK_DIV_SHIFT)
+-#define JZ_WDT_CLOCK_DIV_4    (1 << JZ_WDT_CLOCK_DIV_SHIFT)
+-#define JZ_WDT_CLOCK_DIV_16   (2 << JZ_WDT_CLOCK_DIV_SHIFT)
+-#define JZ_WDT_CLOCK_DIV_64   (3 << JZ_WDT_CLOCK_DIV_SHIFT)
+-#define JZ_WDT_CLOCK_DIV_256  (4 << JZ_WDT_CLOCK_DIV_SHIFT)
+-#define JZ_WDT_CLOCK_DIV_1024 (5 << JZ_WDT_CLOCK_DIV_SHIFT)
++#define JZ_WDT_CLOCK_DIV_1    (0 << TCU_TCSR_PRESCALE_LSB)
++#define JZ_WDT_CLOCK_DIV_4    (1 << TCU_TCSR_PRESCALE_LSB)
++#define JZ_WDT_CLOCK_DIV_16   (2 << TCU_TCSR_PRESCALE_LSB)
++#define JZ_WDT_CLOCK_DIV_64   (3 << TCU_TCSR_PRESCALE_LSB)
++#define JZ_WDT_CLOCK_DIV_256  (4 << TCU_TCSR_PRESCALE_LSB)
++#define JZ_WDT_CLOCK_DIV_1024 (5 << TCU_TCSR_PRESCALE_LSB)
+ 
+ #define DEFAULT_HEARTBEAT 5
+ #define MAX_HEARTBEAT     2048
+@@ -72,7 +66,7 @@ static int jz4740_wdt_ping(struct watchdog_device *wdt_dev)
+ {
+ 	struct jz4740_wdt_drvdata *drvdata = watchdog_get_drvdata(wdt_dev);
+ 
+-	writew(0x0, drvdata->base + JZ_REG_WDT_TIMER_COUNTER);
++	writew(0x0, drvdata->base + TCU_REG_WDT_TCNT);
+ 	return 0;
+ }
+ 
+@@ -95,18 +89,17 @@ static int jz4740_wdt_set_timeout(struct watchdog_device *wdt_dev,
+ 			break;
+ 		}
+ 		timeout_value >>= 2;
+-		clock_div += (1 << JZ_WDT_CLOCK_DIV_SHIFT);
++		clock_div += (1 << TCU_TCSR_PRESCALE_LSB);
+ 	}
+ 
+-	writeb(0x0, drvdata->base + JZ_REG_WDT_COUNTER_ENABLE);
+-	writew(clock_div, drvdata->base + JZ_REG_WDT_TIMER_CONTROL);
++	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
++	writew(clock_div, drvdata->base + TCU_REG_WDT_TCSR);
+ 
+-	writew((u16)timeout_value, drvdata->base + JZ_REG_WDT_TIMER_DATA);
+-	writew(0x0, drvdata->base + JZ_REG_WDT_TIMER_COUNTER);
+-	writew(clock_div | JZ_WDT_CLOCK_RTC,
+-		drvdata->base + JZ_REG_WDT_TIMER_CONTROL);
++	writew((u16)timeout_value, drvdata->base + TCU_REG_WDT_TDR);
++	writew(0x0, drvdata->base + TCU_REG_WDT_TCNT);
++	writew(clock_div | JZ_WDT_CLOCK_RTC, drvdata->base + TCU_REG_WDT_TCSR);
+ 
+-	writeb(0x1, drvdata->base + JZ_REG_WDT_COUNTER_ENABLE);
++	writeb(0x1, drvdata->base + TCU_REG_WDT_TCER);
+ 
+ 	wdt_dev->timeout = new_timeout;
+ 	return 0;
+@@ -124,7 +117,7 @@ static int jz4740_wdt_stop(struct watchdog_device *wdt_dev)
+ {
+ 	struct jz4740_wdt_drvdata *drvdata = watchdog_get_drvdata(wdt_dev);
+ 
+-	writeb(0x0, drvdata->base + JZ_REG_WDT_COUNTER_ENABLE);
++	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
+ 	jz4740_timer_disable_watchdog();
+ 
+ 	return 0;
+-- 
+2.21.0.593.g511ec345e18
+
