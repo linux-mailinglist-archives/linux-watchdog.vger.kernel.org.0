@@ -2,91 +2,102 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA69B267AD
-	for <lists+linux-watchdog@lfdr.de>; Wed, 22 May 2019 18:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429B9267D6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 22 May 2019 18:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729576AbfEVQFN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 22 May 2019 12:05:13 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:36331 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728466AbfEVQFM (ORCPT
+        id S1729947AbfEVQPj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 22 May 2019 12:15:39 -0400
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:43527 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729576AbfEVQPj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 22 May 2019 12:05:12 -0400
-Received: by mail-it1-f196.google.com with SMTP id e184so3924390ite.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 22 May 2019 09:05:12 -0700 (PDT)
+        Wed, 22 May 2019 12:15:39 -0400
+Received: by mail-yb1-f196.google.com with SMTP id n145so1065079ybg.10;
+        Wed, 22 May 2019 09:15:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UZDtvNEOvSwuMjHI5KzvxkwkCTAXNowd/akXRUiEjPc=;
-        b=rHEmR6eMD1fFR3Iqp7ckgLJYdxddyomN+1x9vj5+TKvFxhwZ1nOZ3wUOSfowaN3Tpi
-         dMVx9LVneaIzQUDUI9267Tq5N0f5P/s9FR4zlyTV86ZmAmHRgA5nOZsIas9ngIFoyOb1
-         z3Zv6nbPBCsC1H8H9+S8zgp14G0OcY/cyU6Re/7yt7um1tGrCkd9MRxsX7ePO/7uN7O/
-         go8ZowYF7L6FpjDgc8EZgTytcB3nPYaVcC0cXD1wQwQ4JqFXF3ru28tVz0QzoC2BLD81
-         RvTXXvGCYTviDWpIEq3cJBtELL/C1Y8PjiI2r0ezLb0ZkxMt2Z9B2sQn2JXANB2GWqma
-         5Jcg==
+         :cc:content-transfer-encoding;
+        bh=H2QOYmtrbMv2RwSsZzKZlIgE2lZOebGHxtRTWGwCUK8=;
+        b=TsIh23HRLdI8hEqPtQ30fFSZzK3/A1tyuR7wi8bJAddsbCkyN0GMgWgPVR3rgKILCq
+         FrjrSON1dGlThNxb6/6otMCvetSODgQPtK+wCIUhqMULhi+c8WlRIZmlkJ0P+HcMxQ8u
+         7yPysCT0YucMkd14fGXTR2A7RsGbxmWl/6v+RXwx++xvoi7fJRqw6R9i/QHjVz9JM1Jo
+         Q1Qlo/bOw4egn1BpoPLWvnMrKgLZ9NEiLUWJNYq/Hj2xcoWn3Q2P8krIEgqDVbCR0vtm
+         ArAa3hmhxNyAeVNo3DWT2VcBqjFu3i1zmzbnIZkNrRlh0EMNdQuROjTN9nfPKbOQ4oNO
+         DeeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UZDtvNEOvSwuMjHI5KzvxkwkCTAXNowd/akXRUiEjPc=;
-        b=l7IMXCyJd5cDdpHCcH2xK8rbxpQuU4Msq1kRfYoZ/fMU4hE8nTv+6/IMAmE9zcaCfB
-         WR47ptmqZ9BNq6BtCd7NjY466RW6DcamQ9pnQ4/U0NrC/v42id0ODwTDQUVJbXSgiQ6U
-         VNNDzDZqxdqne4lDqVgcRV9tcw/lPSUTtLHMsUTIQ5CH7Jveui+aW0xSg8fX090Rzx8w
-         ZbNwFNATBUcoMM0pEzKdRm6HdtkYUoVJ2vcqJdhSt9T+NvuLRruSIuwQTXyMGrbZRZi1
-         ssWkyYHHVQCwxOpuezTV6uQx9tYQObGMB8W2WbeuN34HYUmc8IxWP+wETs01ePwCQJET
-         vUZA==
-X-Gm-Message-State: APjAAAVRjI4PGFi7rLnLHDeaXfLWNzs0Tfhjzs+QNc+ZirrNygCg7dlj
-        cEZzHTtJxJsuh1Jxkxvf/ffgEOiJkISrkGGie6oTT3Vu1tY=
-X-Google-Smtp-Source: APXvYqyE2jKHhADNgJQhb/SVAG0u6q8dtsvQBM3YEDBGzlHv1eFcHb4nMXvnH8PnPxhLxE0G7CRIwwXQatKivCVVTDQ=
-X-Received: by 2002:a02:b47:: with SMTP id 68mr14413329jad.66.1558541112341;
- Wed, 22 May 2019 09:05:12 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=H2QOYmtrbMv2RwSsZzKZlIgE2lZOebGHxtRTWGwCUK8=;
+        b=Qi3y8e5hcaBOpW/ZPT5d35OlBGA8YAhnnRZiBDYrTV4Li3wmH35jBiXAIo+Y7tBW8X
+         1kiZ8zKzdVyEpdKNfqDm12e6eEMD1ocSDNHeK04M9pncR7b/ugY0zQjsoixqDvyPbnmw
+         HiSseIlfn//zb77d3YQ7v+T3qxv8y9YXIIV00MmQHwbCDeHfXMNu24yQ4JY4EROdDHIm
+         6J+I3jGvdfbnEa6xC0x1l6x7h+nn6Q7EnCdTMYHUfPxGIa2buClkUac4tblNpnnKOuxP
+         d600gnv3lsXl8Movzr15k7nOnx3pMbJCcnPXKT3z5pVTB9Wn57cklE++TNdlN+rgpULN
+         6Tnw==
+X-Gm-Message-State: APjAAAVzfr7qsZ5uHBbuTD+pLy5xSTTU/G0OJa3z1WZBIC+PkuMMRAZH
+        INUal63bVuVPd8O7AZeZ/BK6BojjQ/idJevMLtU=
+X-Google-Smtp-Source: APXvYqyPQIgHEnxdgVx+UouRSudO6JPKLPIolrSmSVfkcCwrLtqxxyhpQn1v2Hu8mH5g9waksx4+zTXkVOk8H8NtNxI=
+X-Received: by 2002:a25:ae22:: with SMTP id a34mr6825427ybj.438.1558541737775;
+ Wed, 22 May 2019 09:15:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190518212801.31010-1-wsa+renesas@sang-engineering.com> <20190518212801.31010-33-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20190518212801.31010-33-wsa+renesas@sang-engineering.com>
-From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
-Date:   Wed, 22 May 2019 12:04:59 -0400
-Message-ID: <CA+rxa6ofN21fXk0y3=aTJonG1DOBOk0hC_8abSkWVLWWB+5bfw@mail.gmail.com>
-Subject: Re: [PATCH 32/46] watchdog: pnx4008_wdt: drop warning after
- registering device
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-watchdog@vger.kernel.org, Vladimir Zapolskiy <vz@mleia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
+References: <20190521160330.28402-1-peron.clem@gmail.com> <20190521160330.28402-4-peron.clem@gmail.com>
+ <20190522103243.mmrfato5p2mhtf4j@flea>
+In-Reply-To: <20190522103243.mmrfato5p2mhtf4j@flea>
+From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date:   Wed, 22 May 2019 18:15:26 +0200
+Message-ID: <CAJiuCcdaZVLQyupEf8HPaUySakufXXAhzundo6VeyQaAyZ8Trw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] dt-bindings: watchdog: add Allwinner H6 r_watchdog
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-watchdog@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
+Hi Maxime,
 
-On Sat, May 18, 2019 at 5:28 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
+On Wed, 22 May 2019 at 12:32, Maxime Ripard <maxime.ripard@bootlin.com> wro=
+te:
 >
-> The core will print out details now.
+> On Tue, May 21, 2019 at 06:03:28PM +0200, Cl=C3=A9ment P=C3=A9ron wrote:
+> > Allwinner H6 has a second watchdog on the r-blocks which is
+> > compatible with the A31.
+> >
+> > This commit add the H6 compatible for the r_watchdog.
+> >
+> > Signed-off-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
 >
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/watchdog/pnx4008_wdt.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> Unless you have some evidence that the two blocks are different, then
+> you should just reuse the same one.
+
+I have no evidence it's different nor identical, it's not documented
+in the user manual.
+I thought it would better to have separate bindings in case there is a
+difference.
+Than don't have and find later that we have to introduce one.
+
+But as you prefer.
+
+Regards,
+Cl=C3=A9ment
+
+
+
 >
-> diff --git a/drivers/watchdog/pnx4008_wdt.c b/drivers/watchdog/pnx4008_wdt.c
-> index d9e03544aeae..124b1c66dc29 100644
-> --- a/drivers/watchdog/pnx4008_wdt.c
-> +++ b/drivers/watchdog/pnx4008_wdt.c
-> @@ -221,10 +221,8 @@ static int pnx4008_wdt_probe(struct platform_device *pdev)
->                 set_bit(WDOG_HW_RUNNING, &pnx4008_wdd.status);
->
->         ret = devm_watchdog_register_device(dev, &pnx4008_wdd);
-> -       if (ret < 0) {
-> -               dev_err(dev, "cannot register watchdog device\n");
-> +       if (ret < 0)
->                 return ret;
-> -       }
->
->         dev_info(dev, "heartbeat %d sec\n", pnx4008_wdd.timeout);
+> Maxime
 >
 > --
-> 2.19.1
->
+> Maxime Ripard, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
