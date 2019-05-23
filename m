@@ -2,100 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A1327BBB
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 May 2019 13:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047D027D64
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 May 2019 14:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730519AbfEWL0U (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 May 2019 07:26:20 -0400
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:35223 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730323AbfEWL0U (ORCPT
+        id S1729430AbfEWM5V (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 May 2019 08:57:21 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:45715 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbfEWM5U (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 May 2019 07:26:20 -0400
-Received: by mail-vk1-f195.google.com with SMTP id k1so1275313vkb.2;
-        Thu, 23 May 2019 04:26:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9M1Q/18bMOxXAFcUWm9FFtZY2S5AMqHXp/QrrMgUcKU=;
-        b=ImLy1icdjwE4xL016rCAxUwXAF2zyKmYysWInYd+m6GtKX0dJZaPkslubYCtuWaZoc
-         MEmsIAt116O3vee4A5bhUYyNzF2ofGjmEm+aJAzyqao1WyEhhEkqopE4Mkw1F9P976Hp
-         KZooUEWTkTOPex0Q48WW6kJZ1Q0ts/AzVclCp6uFXTwpgMzBIYMQucMr9CzDdY9tQNey
-         askItGzxRe7zRxFqZCyC9YrEEVTrnP9OI580B5BHBxraNr64JH7oSIRQ1Pu3x8gnZj9p
-         zs6yiTOU6An8DzeM/4H9QK4C3XQvqMRR9aoxeAlRh/k6pM3FxCpfUW2zqx9R4zbWCKwH
-         kknw==
-X-Gm-Message-State: APjAAAXT56X/+k1NnweBO2Q3akDnCCJ4SnMDMgMym+53K4JFAdCDriJa
-        c1jqKbHhSJq7c8hYMclwaaFVaxooUdV04Kzz+5w=
-X-Google-Smtp-Source: APXvYqyNDKWfLtKYBG3qX16musbNBl1CNetH5JO5LOVb5jxSLa0nL5ANb2p1QHKOkgim8WcmdOTBAFKgSMCuVEr143o=
-X-Received: by 2002:a1f:62c7:: with SMTP id w190mr1308273vkb.72.1558610779191;
- Thu, 23 May 2019 04:26:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <1558603778-20848-1-git-send-email-na-hoan@jinso.co.jp> <20190523110451.GA3979@kunai>
-In-Reply-To: <20190523110451.GA3979@kunai>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 May 2019 13:26:07 +0200
-Message-ID: <CAMuHMdVMzMUM08aRWH=Sx+hmO7Woiqz-QmZ-Rrzk2wtExw=XsA@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: renesas_wdt: Fix interrupt enable for timer
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Nguyen An Hoan <na-hoan@jinso.co.jp>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Thu, 23 May 2019 08:57:20 -0400
+X-Originating-IP: 90.88.22.185
+Received: from localhost (aaubervilliers-681-1-80-185.w90-88.abo.wanadoo.fr [90.88.22.185])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id CD843C0010;
+        Thu, 23 May 2019 12:57:16 +0000 (UTC)
+Date:   Thu, 23 May 2019 14:57:16 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        =?UTF-8?B?56iy5ZCJ?= <h-inayoshi@jinso.co.jp>,
-        =?UTF-8?B?44Kr44Kq44O744O044Kh44Oz44O744OJ44Oz?= 
-        <cv-dong@jinso.co.jp>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-watchdog@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 3/5] dt-bindings: watchdog: add Allwinner H6 r_watchdog
+Message-ID: <20190523125716.g4euwplfsvw4vqzl@flea>
+References: <20190521160330.28402-1-peron.clem@gmail.com>
+ <20190521160330.28402-4-peron.clem@gmail.com>
+ <20190522103243.mmrfato5p2mhtf4j@flea>
+ <CAJiuCcdaZVLQyupEf8HPaUySakufXXAhzundo6VeyQaAyZ8Trw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wdtcxmlg6dhvhpqj"
+Content-Disposition: inline
+In-Reply-To: <CAJiuCcdaZVLQyupEf8HPaUySakufXXAhzundo6VeyQaAyZ8Trw@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wolfram,
 
-On Thu, May 23, 2019 at 1:04 PM Wolfram Sang <wsa@the-dreams.de> wrote:
-> On Thu, May 23, 2019 at 06:29:37PM +0900, Nguyen An Hoan wrote:
-> > From: Hoan Nguyen An <na-hoan@jinso.co.jp>
-> >
-> > Fix setting for bit WOVFE of RWTCSRA. Keep it enable follow hardware document.
+--wdtcxmlg6dhvhpqj
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >       rwdt_write(priv, 0, RWTCSRB);
-> >
-> >       while (readb_relaxed(priv->base + RWTCSRA) & RWTCSRA_WRFLG)
-> >               cpu_relax();
-> > -
-> > -     rwdt_write(priv, priv->cks | RWTCSRA_TME, RWTCSRA);
-> > +     /* Enable interrupt and timer */
-> > +     rwdt_write(priv, val | RWTCSRA_WOVFE | RWTCSRA_TME, RWTCSRA);
+On Wed, May 22, 2019 at 06:15:26PM +0200, Cl=E9ment P=E9ron wrote:
+> Hi Maxime,
 >
-> What is the use of enabling an interrupt without having an interrupt
-> handler?
+> On Wed, 22 May 2019 at 12:32, Maxime Ripard <maxime.ripard@bootlin.com> w=
+rote:
+> >
+> > On Tue, May 21, 2019 at 06:03:28PM +0200, Cl=E9ment P=E9ron wrote:
+> > > Allwinner H6 has a second watchdog on the r-blocks which is
+> > > compatible with the A31.
+> > >
+> > > This commit add the H6 compatible for the r_watchdog.
+> > >
+> > > Signed-off-by: Cl=E9ment P=E9ron <peron.clem@gmail.com>
+> >
+> > Unless you have some evidence that the two blocks are different, then
+> > you should just reuse the same one.
+>
+> I have no evidence it's different nor identical, it's not documented
+> in the user manual.
+> I thought it would better to have separate bindings in case there is a
+> difference.
+> Than don't have and find later that we have to introduce one.
 
-Exactly.
+It's a tradeoff. Pushing your logic to the limit, we would have a
+compatible for each controller embedded in an SoC.
 
-> (And I never understood why there is an interrupt for an
-> overflowing watchdog. We won't have time to serve it, or am I
-> overlooking something obvious?)
+This would be unmaintainable, and slightly useless since that case is
+very unlikely.
 
-I guess it (the hardware, not the Linux watchdog driver) might be used
-as a generic timer? Or the interrupt may signal the RT core that the
-application cores have been restarted?
+However, having differences between SoCs is quite common, hence why we
+have different compatibles for each SoC.
 
-But in the context of (the current) Linux watchdog driver, this doesn't
-make much sense.
+Maxime
 
-Gr{oetje,eeting}s,
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-                        Geert
+--wdtcxmlg6dhvhpqj
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXOaYrAAKCRDj7w1vZxhR
+xUPnAPsGJnjqxtkcj8BFHo1UbY6rBrhE114RafzPUtXuJD8o4QEAmWfFGwayxZZ0
+63T2ZEyt/CbXZE9fTnSFpRsi3BkzQA4=
+=Frvc
+-----END PGP SIGNATURE-----
+
+--wdtcxmlg6dhvhpqj--
