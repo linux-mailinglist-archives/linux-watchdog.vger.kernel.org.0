@@ -2,135 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A1027934
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 May 2019 11:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F2F27B4D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 May 2019 13:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727434AbfEWJ3x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 May 2019 05:29:53 -0400
-Received: from www3345.sakura.ne.jp ([49.212.235.55]:10903 "EHLO
-        www3345.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726309AbfEWJ3w (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 May 2019 05:29:52 -0400
-Received: from fsav405.sakura.ne.jp (fsav405.sakura.ne.jp [133.242.250.104])
-        by www3345.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x4N9TooG043808;
-        Thu, 23 May 2019 18:29:50 +0900 (JST)
-        (envelope-from na-hoan@jinso.co.jp)
-Received: from www3345.sakura.ne.jp (49.212.235.55)
- by fsav405.sakura.ne.jp (F-Secure/fsigk_smtp/530/fsav405.sakura.ne.jp);
- Thu, 23 May 2019 18:29:50 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/530/fsav405.sakura.ne.jp)
-Received: from localhost (p14010-ipadfx41marunouchi.tokyo.ocn.ne.jp [61.118.107.10])
-        (authenticated bits=0)
-        by www3345.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id x4N9Ti5e043748
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 23 May 2019 18:29:50 +0900 (JST)
-        (envelope-from na-hoan@jinso.co.jp)
-From:   Nguyen An Hoan <na-hoan@jinso.co.jp>
-To:     linux-renesas-soc@vger.kernel.org, geert+renesas@glider.be,
+        id S1728109AbfEWLEz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 May 2019 07:04:55 -0400
+Received: from sauhun.de ([88.99.104.3]:53208 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726429AbfEWLEy (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 23 May 2019 07:04:54 -0400
+Received: from localhost (p54B333B6.dip0.t-ipconnect.de [84.179.51.182])
+        by pokefinder.org (Postfix) with ESMTPSA id D0CC12C0398;
+        Thu, 23 May 2019 13:04:51 +0200 (CEST)
+Date:   Thu, 23 May 2019 13:04:51 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Nguyen An Hoan <na-hoan@jinso.co.jp>
+Cc:     linux-renesas-soc@vger.kernel.org, geert+renesas@glider.be,
         linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, wsa+renesas@sang-engineering.com
-Cc:     kuninori.morimoto.gx@renesas.com, yoshihiro.shimoda.uh@renesas.com,
+        linux@roeck-us.net, wsa+renesas@sang-engineering.com,
+        kuninori.morimoto.gx@renesas.com, yoshihiro.shimoda.uh@renesas.com,
         h-inayoshi@jinso.co.jp, cv-dong@jinso.co.jp
-Subject: [PATCH] watchdog: renesas_wdt: Use 'dev' instead of dereferencing it repeatedly
-Date:   Thu, 23 May 2019 18:29:38 +0900
-Message-Id: <1558603778-20848-2-git-send-email-na-hoan@jinso.co.jp>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1558603778-20848-1-git-send-email-na-hoan@jinso.co.jp>
+Subject: Re: [PATCH] watchdog: renesas_wdt: Fix interrupt enable for timer
+Message-ID: <20190523110451.GA3979@kunai>
 References: <1558603778-20848-1-git-send-email-na-hoan@jinso.co.jp>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tKW2IUtsqtDRztdT"
+Content-Disposition: inline
+In-Reply-To: <1558603778-20848-1-git-send-email-na-hoan@jinso.co.jp>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Hoan Nguyen An <na-hoan@jinso.co.jp>
 
-Add helper variable dev = &pdev->dev
+--tKW2IUtsqtDRztdT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Hoan Nguyen An <na-hoan@jinso.co.jp>
----
- drivers/watchdog/renesas_wdt.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+Hi,
 
-diff --git a/drivers/watchdog/renesas_wdt.c b/drivers/watchdog/renesas_wdt.c
-index 565dbc1..d8ac229 100644
---- a/drivers/watchdog/renesas_wdt.c
-+++ b/drivers/watchdog/renesas_wdt.c
-@@ -175,15 +175,16 @@ static inline bool rwdt_blacklisted(struct device *dev) { return false; }
- 
- static int rwdt_probe(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
- 	struct rwdt_priv *priv;
- 	struct clk *clk;
- 	unsigned long clks_per_sec;
- 	int ret, i;
- 
--	if (rwdt_blacklisted(&pdev->dev))
-+	if (rwdt_blacklisted(dev))
- 		return -ENODEV;
- 
--	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
- 
-@@ -191,16 +192,16 @@ static int rwdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
- 
--	clk = devm_clk_get(&pdev->dev, NULL);
-+	clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
- 
--	pm_runtime_enable(&pdev->dev);
--	pm_runtime_get_sync(&pdev->dev);
-+	pm_runtime_enable(dev);
-+	pm_runtime_get_sync(dev);
- 	priv->clk_rate = clk_get_rate(clk);
- 	priv->wdev.bootstatus = (readb_relaxed(priv->base + RWTCSRA) &
- 				RWTCSRA_WOVF) ? WDIOF_CARDRESET : 0;
--	pm_runtime_put(&pdev->dev);
-+	pm_runtime_put(dev);
- 
- 	if (!priv->clk_rate) {
- 		ret = -ENOENT;
-@@ -216,14 +217,14 @@ static int rwdt_probe(struct platform_device *pdev)
- 	}
- 
- 	if (i < 0) {
--		dev_err(&pdev->dev, "Can't find suitable clock divider\n");
-+		dev_err(dev, "Can't find suitable clock divider\n");
- 		ret = -ERANGE;
- 		goto out_pm_disable;
- 	}
- 
- 	priv->wdev.info = &rwdt_ident;
- 	priv->wdev.ops = &rwdt_ops;
--	priv->wdev.parent = &pdev->dev;
-+	priv->wdev.parent = dev;
- 	priv->wdev.min_timeout = 1;
- 	priv->wdev.max_timeout = DIV_BY_CLKS_PER_SEC(priv, 65536);
- 	priv->wdev.timeout = min(priv->wdev.max_timeout, RWDT_DEFAULT_TIMEOUT);
-@@ -235,7 +236,7 @@ static int rwdt_probe(struct platform_device *pdev)
- 	watchdog_stop_on_unregister(&priv->wdev);
- 
- 	/* This overrides the default timeout only if DT configuration was found */
--	watchdog_init_timeout(&priv->wdev, 0, &pdev->dev);
-+	watchdog_init_timeout(&priv->wdev, 0, dev);
- 
- 	ret = watchdog_register_device(&priv->wdev);
- 	if (ret < 0)
-@@ -244,7 +245,7 @@ static int rwdt_probe(struct platform_device *pdev)
- 	return 0;
- 
-  out_pm_disable:
--	pm_runtime_disable(&pdev->dev);
-+	pm_runtime_disable(dev);
- 	return ret;
- }
- 
--- 
-2.7.4
+On Thu, May 23, 2019 at 06:29:37PM +0900, Nguyen An Hoan wrote:
+> From: Hoan Nguyen An <na-hoan@jinso.co.jp>
+>=20
+> Fix setting for bit WOVFE of RWTCSRA. Keep it enable follow hardware docu=
+ment.
 
+Hmm, I can't find it in the docs. Which version of the documentation do
+you use?
+
+
+> -	rwdt_write(priv, priv->cks, RWTCSRA);
+> +	val |=3D priv->cks;
+> +	rwdt_write(priv, val, RWTCSRA);
+
+Have you tested this successfully? According to the docs, CKS bits are
+all 1 by default. So, your |=3D operation should be a NOP and we can't
+select a CKS value anymore if I am not mistaken.
+
+>  	rwdt_write(priv, 0, RWTCSRB);
+> =20
+>  	while (readb_relaxed(priv->base + RWTCSRA) & RWTCSRA_WRFLG)
+>  		cpu_relax();
+> -
+> -	rwdt_write(priv, priv->cks | RWTCSRA_TME, RWTCSRA);
+> +	/* Enable interrupt and timer */
+> +	rwdt_write(priv, val | RWTCSRA_WOVFE | RWTCSRA_TME, RWTCSRA);
+
+What is the use of enabling an interrupt without having an interrupt
+handler? (And I never understood why there is an interrupt for an
+overflowing watchdog. We won't have time to serve it, or am I
+overlooking something obvious?)
+
+Kind regards,
+
+   Wolfram
+
+
+--tKW2IUtsqtDRztdT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzmfk8ACgkQFA3kzBSg
+Kbavhg//fYTO7jvzinLCh+cVNLmhCpeufWNaUmCKaAAfFWsjbPaPMqqAzem6yOLB
+RFWoaucO/TW+s0/s/xrdDD5OGawk9AKgr5m8224cUPUvddvJHkOCRKaMjOP97d32
+hTyHrSmtwNpZdbbGHUj7e1nzGddSuCEr3ztTcqQ5vmyC3JEHGYgzC7ik/p7M2PV2
+W1d4ZgaOzRkK/VV8D0iU2CjLkSIGj6cNpqswyw7VcblImLNZxMOAxD+I9zWwLCZa
+z0vahSdRQaIaHtcxwbjh9owdUMQ8URagSmf3hHzXexH4dHamEHMT4tIvh9QgQKrV
+3H00biv+Ib8KwbgnaHLJGm9BKMBEgQHYr+Jud9qvbFjNVkKspU+M+wtIwHXDqxXP
+cdiXes9nSMEoOxjo5GA42lufMCi3pInwTqU9viVYzxJRkP8huAuaA0/Wuq4g3tlk
+QoWTsKdHOaVlddgptSnDvI1O5SjT3TTsTBhkLpYNW+wAqoH3498CB0dsFwTt5Fl8
+FIJjitct1jIC8rCgLKTI5xt5tlyl4GN+0F8Fy1d0YgJ/+uGdT4iDczuDdfCTWp9V
+juW7j3nH2NwMohYvduyxqYdmxuDpLUByK8UqYj6tv21z/sGlzssnaAosq1vRrKUH
+op+PsDnh21ESq0WTkyKED2cS4nP0oSfC/AjLfvZKqZ/Wdo7gj0c=
+=D6oR
+-----END PGP SIGNATURE-----
+
+--tKW2IUtsqtDRztdT--
