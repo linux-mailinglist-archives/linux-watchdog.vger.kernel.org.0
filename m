@@ -2,95 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B46FF280A2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 May 2019 17:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9558028E84
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 May 2019 03:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730994AbfEWPLC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 May 2019 11:11:02 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:32932 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730951AbfEWPLB (ORCPT
+        id S1731632AbfEXBOj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 May 2019 21:14:39 -0400
+Received: from www3345.sakura.ne.jp ([49.212.235.55]:26206 "EHLO
+        www3345.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731608AbfEXBOj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 May 2019 11:11:01 -0400
-Received: by mail-wr1-f68.google.com with SMTP id d9so6722323wrx.0;
-        Thu, 23 May 2019 08:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9wwz+xfCsHkHpcqUvXeTMqGEu53cQ0RDs4iESG7T3CQ=;
-        b=oLDDUfny5GtdyO+VUAmKEqF0H9jggBBicRo3ExIGe7XhbAMOFPWQmKFj8k8jbGzVK3
-         +vu/jtK1kcZxpAKsSlNtOXKE25fxw5yoSPHmVUkx3CHQDdllbYQwj4Mq0CMq5C/0/mDr
-         86jjGYEWvwLnW4k2LzY4dAbGh2AN26BqQsXRAhPn5qTWog50oKgs4aItEc6cLFiyLRol
-         uFuC0uMs1VsVLUFiciLx8JAxuFVE/kFeqAegOGsK9hUV82gwIlhk8+lOy0qiL5F/Msvz
-         ohCfn2iEqXyYH1cZA/MjMMCBTjhE4gH3wZHG6FZBQZnh8TBWIpXPxxYBMEymrwOZ2dAN
-         j8dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9wwz+xfCsHkHpcqUvXeTMqGEu53cQ0RDs4iESG7T3CQ=;
-        b=Vq4w/Mc62D15ZJfAoZmbmw9P87P5bifDY+ZbEIC+qo16lkm44FaieDeutiqDl4+iJX
-         FhFMMUlx1aWHHiXkFEVtLofqSJ8Cpd1wR8Ls8cm9XadTUWj9K59GOxGf1H4UgktKwFAZ
-         JJW7LRiEthBWIO6sGC0EwuKzRIVtioyHe8ZUT1M0NkKC6kUBXeed/1bmlCvlxD+LI5AW
-         E3TS26PBPM2+LT8oyCvlAf7Lv0yMg5drL2O/PHneplf3PMYdXZQu+2N4v4Gcx/hWj2LT
-         Y4dFpn0EVkYXWmGis8LQsvSF9gjhfehKgCwqIaxE7albBnExQo8tPPYyg6sQ1RADQEhD
-         xWgw==
-X-Gm-Message-State: APjAAAXwcaV5L4A8+f70fJwAJuXyqqSroJPj5qrsLTN31ACYj1EUPHyX
-        ZGx81N7/YX6Q0mx4Lpb9FPE=
-X-Google-Smtp-Source: APXvYqwpqFOtLIWfs3xJWCqQCSaru3enfRBsUpAknbkIYOU0UUgbvZX0ZeO7EK5SZbkov/7ukjHJYQ==
-X-Received: by 2002:adf:ce8e:: with SMTP id r14mr46914850wrn.289.1558624260438;
-        Thu, 23 May 2019 08:11:00 -0700 (PDT)
-Received: from localhost.localdomain (18.189-60-37.rdns.acropolistelecom.net. [37.60.189.18])
-        by smtp.gmail.com with ESMTPSA id q15sm11436324wrr.19.2019.05.23.08.10.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 May 2019 08:10:59 -0700 (PDT)
-From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Subject: [PATCH v5 4/4] arm64: defconfig: enable sunxi watchdog
-Date:   Thu, 23 May 2019 17:10:50 +0200
-Message-Id: <20190523151050.27302-5-peron.clem@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190523151050.27302-1-peron.clem@gmail.com>
-References: <20190523151050.27302-1-peron.clem@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Thu, 23 May 2019 21:14:39 -0400
+Received: from fsav405.sakura.ne.jp (fsav405.sakura.ne.jp [133.242.250.104])
+        by www3345.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x4O1DuIj002595;
+        Fri, 24 May 2019 10:13:56 +0900 (JST)
+        (envelope-from na-hoan@jinso.co.jp)
+Received: from www3345.sakura.ne.jp (49.212.235.55)
+ by fsav405.sakura.ne.jp (F-Secure/fsigk_smtp/530/fsav405.sakura.ne.jp);
+ Fri, 24 May 2019 10:13:55 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/530/fsav405.sakura.ne.jp)
+Received: from nat.cybozu.com (nat.cybozu.com [103.79.14.78])
+        (authenticated bits=0)
+        by www3345.sakura.ne.jp (8.15.2/8.15.2) with ESMTPA id x4O1DtGR002590;
+        Fri, 24 May 2019 10:13:55 +0900 (JST)
+        (envelope-from na-hoan@jinso.co.jp)
+Date:   Fri, 24 May 2019 10:13:55 +0900
+From:   =?ISO-2022-JP?B?IhskQiUwJSclcyEmJSIlcyEmJVslISVzGyhCIg==?= 
+        <na-hoan@jinso.co.jp>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     linux-renesas-soc@vger.kernel.org, geert+renesas@glider.be,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, wsa+renesas@sang-engineering.com,
+        kuninori.morimoto.gx@renesas.com, yoshihiro.shimoda.uh@renesas.com,
+        h-inayoshi@jinso.co.jp, cv-dong@jinso.co.jp
+Message-ID: <155866043594663500007f86@nat.cybozu.com>
+References: <20190523110451.GA3979@kunai>
+In-Reply-To: <20190523110451.GA3979@kunai>
+Subject: Re: [PATCH] watchdog: renesas_wdt: Fix interrupt enable for timer
+X-Mailer: Cybozu Office 10.8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-2022-JP
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The SUNXI_WATCHDOG option is required to make the
-watchdog available on Allwinner H6.
+Dear Wolfram-san
+Dear Geert- san
 
-Enable this option as a module.
+Thank you very much
+Wolfram Sang wrote:
+> Hi,
+> 
+> On Thu, May 23, 2019 at 06:29:37PM +0900, Nguyen An Hoan wrote:
+> > From: Hoan Nguyen An <na-hoan@jinso.co.jp>
+> > 
+> > Fix setting for bit WOVFE of RWTCSRA. Keep it enable follow hardware document.
+> 
+> Hmm, I can't find it in the docs. Which version of the documentation do
+> you use?
+> 
+> 
+> > -	rwdt_write(priv, priv->cks, RWTCSRA);
+> > +	val |= priv->cks;
+> > +	rwdt_write(priv, val, RWTCSRA);
+> 
+> Have you tested this successfully? According to the docs, CKS bits are
+> all 1 by default. So, your |= operation should be a NOP and we can't
+> select a CKS value anymore if I am not mistaken.
+> 
+I tested and can confirm WOVFE was be disable by command 
+rwdt_write(priv, priv->cks, RWTCSRA);
+I don't understand why this bit is turned off but the watchdog can still reset, but 
+according to the document it will be 1.
 
-Signed-off-by: Clément Péron <peron.clem@gmail.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+> >  	rwdt_write(priv, 0, RWTCSRB);
+> >  
+> >  	while (readb_relaxed(priv->base + RWTCSRA) & RWTCSRA_WRFLG)
+> >  		cpu_relax();
+> > -
+> > -	rwdt_write(priv, priv->cks | RWTCSRA_TME, RWTCSRA);
+> > +	/* Enable interrupt and timer */
+> > +	rwdt_write(priv, val | RWTCSRA_WOVFE | RWTCSRA_TME, RWTCSRA);
+> 
+> What is the use of enabling an interrupt without having an interrupt
+> handler? (And I never understood why there is an interrupt for an
+> overflowing watchdog. We won't have time to serve it, or am I
+> overlooking something obvious?)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 4d583514258c..fc51dd4decb1 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -420,6 +420,7 @@ CONFIG_UNIPHIER_THERMAL=y
- CONFIG_WATCHDOG=y
- CONFIG_ARM_SP805_WATCHDOG=y
- CONFIG_S3C2410_WATCHDOG=y
-+CONFIG_SUNXI_WATCHDOG=m
- CONFIG_IMX2_WDT=y
- CONFIG_MESON_GXBB_WATCHDOG=m
- CONFIG_MESON_WATCHDOG=m
--- 
-2.20.1
+I have added the interrupt node to dtsi and created the interrupt handler to successfully handle the Secure watchdog Gen2, but this is not documented.  With Gen 3, I am also thinking whether it is necessary or not.  Thank you!!!
+With Gen3, after reset by WDT, then restart will have an interrupt when probe timer(), but we can do this no reset, after this,  timer operate normally. 
+Problaly this patch should RFC
 
+Thank you for your helps!!!
+
+
+> 
+> Kind regards,
+> 
+>    Wolfram
+> 
