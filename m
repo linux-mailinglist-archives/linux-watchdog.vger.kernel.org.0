@@ -2,87 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BB129967
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 May 2019 15:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A5F2A0BF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 May 2019 23:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403894AbfEXNwk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 24 May 2019 09:52:40 -0400
-Received: from sauhun.de ([88.99.104.3]:35754 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403843AbfEXNwk (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 24 May 2019 09:52:40 -0400
-Received: from localhost (p5486CF38.dip0.t-ipconnect.de [84.134.207.56])
-        by pokefinder.org (Postfix) with ESMTPSA id 1746D2C018F;
-        Fri, 24 May 2019 15:52:38 +0200 (CEST)
-Date:   Fri, 24 May 2019 15:52:37 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH] watchdog: renesas_wdt: support handover from
- bootloader
-Message-ID: <20190524135237.GC15892@kunai>
-References: <20190415105201.2078-1-wsa+renesas@sang-engineering.com>
+        id S2404352AbfEXV4A (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 24 May 2019 17:56:00 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:40580 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404259AbfEXV4A (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 24 May 2019 17:56:00 -0400
+Received: by mail-ot1-f67.google.com with SMTP id u11so10005466otq.7;
+        Fri, 24 May 2019 14:56:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=rzmGBtS7uiLRgw/6pyzECaIphdLrdhzZOh5FaNXwiJI=;
+        b=Te/unnYMzeuErFTY9v16S3rIZPqNeEnH9lGHuDfHg4gs/fFhudsoG5DxmvKf+Hs5wr
+         Mo3+UP6Hf1ZAd3gDVYEDFiMqlxu8CB6oo2L884rkl66T5b4mvIsxD89etP9R7mnsdlzN
+         /FZzR57X6rZp+NSL4VzvszLumj/sy9767ryPvXXMzG5sCye8uKLVW3SZo4+yO/o6d2Yc
+         QAOkjcVAhyHdPRxmrB/7Z5s/GyU3t3iIWbZVFlpEdYsw7zBjyzEPm1/HqHf/L76zfBSs
+         kjRo5ogE5+T48Uep6UEBQ+DpFLZOz42S2712xQZ7Rx2FLRBG+kQccqvdSPwIuRO16SYQ
+         70/Q==
+X-Gm-Message-State: APjAAAW1DlVtn0eS1PJ73RbMd4VJOwpFAYPGpo5j0tgbQ+gueYblMTDw
+        0/+2HoGA05l0y0xImK/uCj3MwD8=
+X-Google-Smtp-Source: APXvYqyCJiUto5HfEn+a7kKZSGr9NjKSLt9LpOJbgGJtDGcUpjszm71EQRQThbLn9a3jeJS/KxFfsA==
+X-Received: by 2002:a9d:70d2:: with SMTP id w18mr35402otj.289.1558734959743;
+        Fri, 24 May 2019 14:55:59 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id k139sm1480211oib.11.2019.05.24.14.55.59
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 24 May 2019 14:55:59 -0700 (PDT)
+Date:   Fri, 24 May 2019 16:55:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: watchdog: add Allwinner H6 watchdog
+Message-ID: <20190524215558.GA14313@bogus>
+References: <20190523151050.27302-1-peron.clem@gmail.com>
+ <20190523151050.27302-2-peron.clem@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mvpLiMfbWzRoNl4x"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190415105201.2078-1-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190523151050.27302-2-peron.clem@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Thu, 23 May 2019 17:10:47 +0200, =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= wrote:
+> Allwinner H6 has a similar watchdog as the A64 which is already
+> a compatible of the A31.
+> 
+> This commit add the H6 compatible.
+> 
+> Signed-off-by: Clément Péron <peron.clem@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/watchdog/sunxi-wdt.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
---mvpLiMfbWzRoNl4x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Apr 15, 2019 at 12:52:01PM +0200, Wolfram Sang wrote:
-> Support an already running watchdog by checking its enable bit and set
-> up the status accordingly before registering the device.
->=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-After second thought, I am getting confused a little. If the WDT is
-already running then
-
-a) before this patch: after successful probe, RPM will disable the
-clock until userspace opens the watchdog device
-
-b) after this patch: during probe, our default timeout will be
-programmed and because of WDOG_HW_RUNNING, the core will generate pings
-until userspace opens the watchdog device.
-
-So, b) will protect from a crashing kernel (no pings anymore) but not
-=66rom something like missing rootfs, or?
-
-The usecase I had in mind ("give the kernel <x> seconds to boot into
-working userspace") seems to be achieved by loading the WDT driver as a
-module then, I guess?
-
-
---mvpLiMfbWzRoNl4x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlzn9yEACgkQFA3kzBSg
-KbaoxxAAmNzBr8nIyVpn4VwsM+e96vdFObgJ4pbSmrHNVlf11gMTd1Db21Fqxpjn
-4uMiX8v/ArbG334+6aVj+qlJ5rD1nwuRsnchQzOgMbDkSL1kH3+e2Rc3cSwqu8A/
-WKf1Fgr0w8AQxEDZLYKFigOLL8uAaC6gV+g/pNg5AUPXSaqu2DIqXYBn+vvUNy1k
-PH9T52wwM6MLvlfj/LfBJ7vYqknzoj8CvSybIxqnVS5jtILzGtnmGNxXqxtbNoQp
-LTdoDbcFDbIPvE7nRR8XhjFIuoWCYY6Cy7byw/6WXE9sFDF9B7K8ml3zdeiYDp0i
-UOrggMJsXbomDjq0qVI3zmsaTB5qQDW1LCD0nD8yDnVmZOO7WItsh2zfefUP1Avd
-ivPvcR5/XSNPq+5JgnSAGhK4ha9CHsHG/6raS/Zwjeka2DF82mgWUGV+7qGtzumY
-Ldvo50/7CDoaWS9Md5oBHyrEGX/tugnU3Mtv+0jbziu5UKzMiuhbQ0OhwZqjgKGk
-Rvny6OOg4/pCeYOm3kJfhEc0CysxKcY+2NveP8azZc+pRsKEWvCtYLG1cRo5QSID
-ul3U8ICiTOYuwU8yBPbLfJgqJOCGRUgU4Vhkp18CfLXRy4/kkt1F2AW8kPambG2H
-INYmYJ56tk+Z9U1QAKx57H+SXM6TCTcXHdocnEzUGdSf0jIXCMg=
-=bUm+
------END PGP SIGNATURE-----
-
---mvpLiMfbWzRoNl4x--
+Reviewed-by: Rob Herring <robh@kernel.org>
