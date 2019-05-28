@@ -2,166 +2,135 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED592CE42
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 May 2019 20:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A49F2CF70
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 May 2019 21:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727606AbfE1SMC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 May 2019 14:12:02 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:40556 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726576AbfE1SMC (ORCPT
+        id S1726937AbfE1T1F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 May 2019 15:27:05 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:35247 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726453AbfE1T1F (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 May 2019 14:12:02 -0400
-Received: by mail-pg1-f196.google.com with SMTP id d30so11452964pgm.7;
-        Tue, 28 May 2019 11:12:01 -0700 (PDT)
+        Tue, 28 May 2019 15:27:05 -0400
+Received: by mail-pg1-f193.google.com with SMTP id t1so11581106pgc.2;
+        Tue, 28 May 2019 12:27:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=hUt8K2ypPhLBPyqRkbVgCT5Vpp9C4WLcDfaVJUOjOYM=;
-        b=OmpDdEZ6RfUnjERd1c2l+Xy+OCAuXduB3U4/ShhUh/d3vyh5kBbayCjKoUx7CyWVM+
-         mZegsapNYWPSCKExQWlzvncImyXL1u7gTl5UzRaPvkPfyYBkS1+Km9Ac3wj/IQ0INru8
-         FS3Np2qwf7PzeGFaCm44t4+OeaaJXiHKTcUclPeLoPSd2nTKq0X34MUBfrzJXP0E06VY
-         8tVms7ALs/1VN1wDI/omFipbLuBzkh2WkVgPwBAyiRrvEPyyGvN90xm8rnEA0u+WBcOj
-         UYWt1BTBYQypy3r7JfTE0yLgD+WVmOmrmN833eFIHBKOpl7B4DLqV8Ef3XE5x3EKsuuY
-         7WGQ==
+        bh=Xe88rAERhIcClUtIYYLdUcTXLi7UODZokIaGblwAr7s=;
+        b=CoUGc1riuI5y7RU6MLiZ4kGMYmyME4qYlStwlZfualUUcgGd6Vmrm0jvToE9vzKTke
+         ej8UwnRgUxxbsw2Vj3bbYkrIzfeP1PbgJmUvqIldgsPusgD5gQfOf+mVLU/4fqWueDcw
+         RqhteZ6ZzWuLJw0mYLV4Cr2gAxKkhCy4OKx/ay9v9eb0Mh3FZuz12501mgQnInOTSQGo
+         4tpr2/MK6B4d2cjwgZ5JlwO0iIwsVf2RasJHHVDndAvVPA+ftH9rBjCezfWg+i59J7Tn
+         V5o/i3Ec6I2OvpegKRc1jDPwSncc9KMvv+nRvYci/5Lctl9FEQNB02M6C1hDZb4caYNR
+         ePDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hUt8K2ypPhLBPyqRkbVgCT5Vpp9C4WLcDfaVJUOjOYM=;
-        b=PMyAO+g3KH6wcizI+IjVyny+wB+IHtaJesPJEfzQBflgjrmJFzHXwoBqCDDP7MKXmL
-         YhtSzGhghJyn5olEutEeI0Y/UcGqPl+nT2H5wavoWO3ovv3RccGW6y25tQvm/bktoMQG
-         eqX8t3LSQur7CobWXoFpbLFmd2VtFhV5iV8aXoFI6l9Fu6L7/R7ZA1dGkzD3pU/5Aek4
-         s9KJgJZQkaWKPDnDUg+JtTjcy2lXRu9utSA6jhHRvVgDuRu1ilI9d/SVriGT28CnCBEb
-         GbxaUyLLKCl7X1l5tYK6kIUaCE0UyGGyOKeyO0rSPYZb5PlRcY7hFb3IF30iIvupE0xL
-         X54g==
-X-Gm-Message-State: APjAAAXQk9GrQeeS0T3nzBsr1I0CpKmTxk0WG+9ks1k70vUxCZ8y3n92
-        jrWEjLMo50IwGUOUwjxEmv2FqOs4
-X-Google-Smtp-Source: APXvYqzs5SR6oz1qrAugWunCBCp7FxevcBYiDqb0OMKzufFY7VwPhkbVzW4sE+3BmgUfDbwgwdeuBA==
-X-Received: by 2002:a63:4f07:: with SMTP id d7mr82977335pgb.77.1559067121435;
-        Tue, 28 May 2019 11:12:01 -0700 (PDT)
+        bh=Xe88rAERhIcClUtIYYLdUcTXLi7UODZokIaGblwAr7s=;
+        b=LavCMdxinMh60CmaNMxjBM+x3RYnGyfglO6lVSzLlFSQN9Rfwe5Ykpm0u3E5jIM7+X
+         5q5Nrypmt+oMJ0r+hUjrEsu0IqAu263HlF2CIK7r9LtRzdoEXMzuMgvO3qR/1hVxdSbv
+         JGJwA9fRC6aG9ye9qxsX0btErpanuXRtuIxKT3Usj3bQHxCsin4VTlXHN5zKzKh+9p/E
+         RBLa4QomzGV2SzO9GvfNqXUCv/EhqpjyjVjE9B5bXdQoWYquGM3uItA5u2FOgLupbE7M
+         NO1RJZUnXHzMJOe26LMOp5/qRiAMCgpCEV/lWUadPQuj0ZYIlcqS4tdzbpwiTDEfa64O
+         wMZg==
+X-Gm-Message-State: APjAAAXO7lkrLtimxiz9xoUNimJNn/+qk7LovhZm/b3R2eV6VQ0WtAV+
+        Mn92DCKPxCt043cRG2IeWdBC/0tT
+X-Google-Smtp-Source: APXvYqx8tCWj7JEqV7YpDaDKH+lUnilfA4UH8oEOmJynC2Hy4jABa6MkhlAIj4La3KLQqQGw8XEL8g==
+X-Received: by 2002:a62:386:: with SMTP id 128mr121183450pfd.10.1559071624383;
+        Tue, 28 May 2019 12:27:04 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k27sm21020742pfh.147.2019.05.28.11.12.00
+        by smtp.gmail.com with ESMTPSA id l1sm16345613pgi.91.2019.05.28.12.27.02
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 11:12:00 -0700 (PDT)
-Date:   Tue, 28 May 2019 11:11:59 -0700
+        Tue, 28 May 2019 12:27:03 -0700 (PDT)
+Date:   Tue, 28 May 2019 12:27:02 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>, od@zcrc.me,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] watchdog: jz4740: Use register names from
- <linux/mfd/ingenic-tcu.h>
-Message-ID: <20190528181159.GA24853@roeck-us.net>
+Subject: Re: [PATCH 2/4] watchdog: jz4740: Avoid starting watchdog in
+ set_timeout
+Message-ID: <20190528192702.GB24853@roeck-us.net>
 References: <20190521155313.19326-1-paul@crapouillou.net>
+ <20190521155313.19326-2-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190521155313.19326-1-paul@crapouillou.net>
+In-Reply-To: <20190521155313.19326-2-paul@crapouillou.net>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, May 21, 2019 at 05:53:10PM +0200, Paul Cercueil wrote:
-> Use the macros from <linux/mfd/ingenic-tcu.h> instead of declaring our
-> own.
+On Tue, May 21, 2019 at 05:53:11PM +0200, Paul Cercueil wrote:
+> Previously the jz4740_wdt_set_timeout() function was starting the timer
+> unconditionally, even if it was stopped when that function was entered.
+> 
+> Now, the timer will be restarted only if it was already running before
+> this function is called.
 > 
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+
+Comment inline, but not worth a respin (and I don't have a good idea how to
+improve it).
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/jz4740_wdt.c | 39 ++++++++++++++---------------------
->  1 file changed, 16 insertions(+), 23 deletions(-)
+>  drivers/watchdog/jz4740_wdt.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/watchdog/jz4740_wdt.c b/drivers/watchdog/jz4740_wdt.c
-> index d1bc7cbd4f2b..51be321c775a 100644
+> index 51be321c775a..f970a7a53084 100644
 > --- a/drivers/watchdog/jz4740_wdt.c
 > +++ b/drivers/watchdog/jz4740_wdt.c
-> @@ -13,6 +13,7 @@
->   *
->   */
+> @@ -77,6 +77,7 @@ static int jz4740_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>  	unsigned int rtc_clk_rate;
+>  	unsigned int timeout_value;
+>  	unsigned short clock_div = JZ_WDT_CLOCK_DIV_1;
+> +	u8 tcer;
 >  
-> +#include <linux/mfd/ingenic-tcu.h>
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
->  #include <linux/types.h>
-> @@ -28,23 +29,16 @@
+>  	rtc_clk_rate = clk_get_rate(drvdata->rtc_clk);
 >  
->  #include <asm/mach-jz4740/timer.h>
->  
-> -#define JZ_REG_WDT_TIMER_DATA     0x0
-> -#define JZ_REG_WDT_COUNTER_ENABLE 0x4
-> -#define JZ_REG_WDT_TIMER_COUNTER  0x8
-> -#define JZ_REG_WDT_TIMER_CONTROL  0xC
-> -
->  #define JZ_WDT_CLOCK_PCLK 0x1
->  #define JZ_WDT_CLOCK_RTC  0x2
->  #define JZ_WDT_CLOCK_EXT  0x4
->  
-> -#define JZ_WDT_CLOCK_DIV_SHIFT   3
-> -
-> -#define JZ_WDT_CLOCK_DIV_1    (0 << JZ_WDT_CLOCK_DIV_SHIFT)
-> -#define JZ_WDT_CLOCK_DIV_4    (1 << JZ_WDT_CLOCK_DIV_SHIFT)
-> -#define JZ_WDT_CLOCK_DIV_16   (2 << JZ_WDT_CLOCK_DIV_SHIFT)
-> -#define JZ_WDT_CLOCK_DIV_64   (3 << JZ_WDT_CLOCK_DIV_SHIFT)
-> -#define JZ_WDT_CLOCK_DIV_256  (4 << JZ_WDT_CLOCK_DIV_SHIFT)
-> -#define JZ_WDT_CLOCK_DIV_1024 (5 << JZ_WDT_CLOCK_DIV_SHIFT)
-> +#define JZ_WDT_CLOCK_DIV_1    (0 << TCU_TCSR_PRESCALE_LSB)
-> +#define JZ_WDT_CLOCK_DIV_4    (1 << TCU_TCSR_PRESCALE_LSB)
-> +#define JZ_WDT_CLOCK_DIV_16   (2 << TCU_TCSR_PRESCALE_LSB)
-> +#define JZ_WDT_CLOCK_DIV_64   (3 << TCU_TCSR_PRESCALE_LSB)
-> +#define JZ_WDT_CLOCK_DIV_256  (4 << TCU_TCSR_PRESCALE_LSB)
-> +#define JZ_WDT_CLOCK_DIV_1024 (5 << TCU_TCSR_PRESCALE_LSB)
->  
->  #define DEFAULT_HEARTBEAT 5
->  #define MAX_HEARTBEAT     2048
-> @@ -72,7 +66,7 @@ static int jz4740_wdt_ping(struct watchdog_device *wdt_dev)
->  {
->  	struct jz4740_wdt_drvdata *drvdata = watchdog_get_drvdata(wdt_dev);
->  
-> -	writew(0x0, drvdata->base + JZ_REG_WDT_TIMER_COUNTER);
-> +	writew(0x0, drvdata->base + TCU_REG_WDT_TCNT);
->  	return 0;
->  }
->  
-> @@ -95,18 +89,17 @@ static int jz4740_wdt_set_timeout(struct watchdog_device *wdt_dev,
->  			break;
->  		}
->  		timeout_value >>= 2;
-> -		clock_div += (1 << JZ_WDT_CLOCK_DIV_SHIFT);
-> +		clock_div += (1 << TCU_TCSR_PRESCALE_LSB);
+> @@ -92,6 +93,7 @@ static int jz4740_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>  		clock_div += (1 << TCU_TCSR_PRESCALE_LSB);
 >  	}
 >  
-> -	writeb(0x0, drvdata->base + JZ_REG_WDT_COUNTER_ENABLE);
-> -	writew(clock_div, drvdata->base + JZ_REG_WDT_TIMER_CONTROL);
-> +	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
-> +	writew(clock_div, drvdata->base + TCU_REG_WDT_TCSR);
+> +	tcer = readb(drvdata->base + TCU_REG_WDT_TCER);
+>  	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
+>  	writew(clock_div, drvdata->base + TCU_REG_WDT_TCSR);
 >  
-> -	writew((u16)timeout_value, drvdata->base + JZ_REG_WDT_TIMER_DATA);
-> -	writew(0x0, drvdata->base + JZ_REG_WDT_TIMER_COUNTER);
-> -	writew(clock_div | JZ_WDT_CLOCK_RTC,
-> -		drvdata->base + JZ_REG_WDT_TIMER_CONTROL);
-> +	writew((u16)timeout_value, drvdata->base + TCU_REG_WDT_TDR);
-> +	writew(0x0, drvdata->base + TCU_REG_WDT_TCNT);
-> +	writew(clock_div | JZ_WDT_CLOCK_RTC, drvdata->base + TCU_REG_WDT_TCSR);
+> @@ -99,7 +101,7 @@ static int jz4740_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>  	writew(0x0, drvdata->base + TCU_REG_WDT_TCNT);
+>  	writew(clock_div | JZ_WDT_CLOCK_RTC, drvdata->base + TCU_REG_WDT_TCSR);
 >  
-> -	writeb(0x1, drvdata->base + JZ_REG_WDT_COUNTER_ENABLE);
-> +	writeb(0x1, drvdata->base + TCU_REG_WDT_TCER);
+> -	writeb(0x1, drvdata->base + TCU_REG_WDT_TCER);
+> +	writeb(tcer & TCU_WDT_TCER_TCEN, drvdata->base + TCU_REG_WDT_TCER);
+
+This unnecessarily writes 0 if the timer is not running.
+
 >  
 >  	wdt_dev->timeout = new_timeout;
 >  	return 0;
-> @@ -124,7 +117,7 @@ static int jz4740_wdt_stop(struct watchdog_device *wdt_dev)
->  {
->  	struct jz4740_wdt_drvdata *drvdata = watchdog_get_drvdata(wdt_dev);
+> @@ -107,8 +109,11 @@ static int jz4740_wdt_set_timeout(struct watchdog_device *wdt_dev,
 >  
-> -	writeb(0x0, drvdata->base + JZ_REG_WDT_COUNTER_ENABLE);
-> +	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
->  	jz4740_timer_disable_watchdog();
+>  static int jz4740_wdt_start(struct watchdog_device *wdt_dev)
+>  {
+> +	struct jz4740_wdt_drvdata *drvdata = watchdog_get_drvdata(wdt_dev);
+> +
+>  	jz4740_timer_enable_watchdog();
+>  	jz4740_wdt_set_timeout(wdt_dev, wdt_dev->timeout);
+> +	writeb(TCU_WDT_TCER_TCEN, drvdata->base + TCU_REG_WDT_TCER);
+
+This unnecessarily enables the timer even if it is already enabled (that should not
+happen, but does if the watchdog is already running at boot).
+
 >  
 >  	return 0;
+>  }
 > -- 
 > 2.21.0.593.g511ec345e18
 > 
