@@ -2,101 +2,135 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 524252CF99
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 May 2019 21:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23BD31C25
+	for <lists+linux-watchdog@lfdr.de>; Sat,  1 Jun 2019 15:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbfE1Thb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 May 2019 15:37:31 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41585 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726492AbfE1Thb (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 May 2019 15:37:31 -0400
-Received: by mail-pg1-f194.google.com with SMTP id z3so6969714pgp.8;
-        Tue, 28 May 2019 12:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aKMw0jpMSDE1hzsk49QyAKgqiMvWHfkv6ygCDAosNH4=;
-        b=uFegaMLssf2rbiFIb8NzkeR+NSvXGcyYrsDsE0CJucxzneR+uANXvl81orClsVsRHa
-         Bi7A+BegE1khio4eba9KbYXCJOztP/H5JAJNCZnfLykPsEMyaJtGju6xSHXqPeJc8Thh
-         Ru61skC0bkpO1cSfbq4pBBjzH4XJiFUhcWjgT4iu6WAvnNE9ZUykextFlcI1huwGG7n8
-         5ZkD1ZkgZNwc6eoY+bAjgL8BBlwX8jDmq8QcQLLkMwTiN7LM5z1Cbig6IIcCaM7sUIqh
-         gYnk8hmiOJmKP6bsuicNZRuzEKOni9YKo0oJNGBhph5QZUfP8tfr4yaEuEoTV4++lHIl
-         Fqcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aKMw0jpMSDE1hzsk49QyAKgqiMvWHfkv6ygCDAosNH4=;
-        b=YxjWtxCGeh8zxjgVEkesnf5sYt17IZNGLceSDty1AwXg4x1UVDhih7PYIh7NuAN7s9
-         +8IAxzWP2xNRNNNzsJ0vxMazyrujQW4Pjb67LgMrHQi4zdUGp34rF5cu207fwDK/RZM+
-         8YYzialbJ1rnpaUizp0MRawqQ9ApnnwNtsGzJlOf2Z6O7DGMBLX8UByi/HD2vh17aoDb
-         Pp5Ax0kMq0O3u+9ta2xizWMCfVqzUPylj06LhKuWsbtIYA0jRpR8LsaUt28os+uY4r5W
-         ZbFzikvAjdIZuXu/rwJOrFc89/2e4DxtJPUaRHUfjsaybxqeuKv+b+GgTPAKSY7ssp6o
-         xsSQ==
-X-Gm-Message-State: APjAAAXoS9ErsmBZY31AclMHn8j/rZvhV1ZfbTjr13r9rL3/yIv47/QD
-        FvTH70xMdGjKblJysdIl1iY6ZjWz
-X-Google-Smtp-Source: APXvYqxTaLr9KDWr1Byq1MFmx5+WoIFTiWeza4qn9qIABx+JPHksIU0nXUkvNneFVZ3Mat7IbTUhBQ==
-X-Received: by 2002:a63:d70b:: with SMTP id d11mr132454763pgg.178.1559072250766;
-        Tue, 28 May 2019 12:37:30 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 184sm16791852pfa.48.2019.05.28.12.37.29
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 12:37:29 -0700 (PDT)
-Date:   Tue, 28 May 2019 12:37:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>, od@zcrc.me,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] watchdog: jz4740: Switch to SPDX license identifier
-Message-ID: <20190528193729.GD24853@roeck-us.net>
-References: <20190521155313.19326-1-paul@crapouillou.net>
- <20190521155313.19326-4-paul@crapouillou.net>
+        id S1727184AbfFANTX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 1 Jun 2019 09:19:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46526 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728184AbfFANTX (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 1 Jun 2019 09:19:23 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 317BD2725F;
+        Sat,  1 Jun 2019 13:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559395161;
+        bh=wZ6tuDrRkPrM+Vcz63gxvzc04Ec8yGwcjLpW6W+50Cs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=m1mwd+EeP+X+tG7D4B6+WjcldxfGcVhvGG4YcM/z3j42JdAjldTEecBYHu2n3yh2w
+         vQnT9pB3j5tlpEXa+MoF34knNwvZcrqMiiGJ6QPgHFcqaWZ3vh3sGGrm9CqwfDoIXc
+         vonTblkVtcLhvdsIasD9Ml0ybFJwTevWwhxMV8W4=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 073/186] watchdog: Use depends instead of select for pretimeout governors
+Date:   Sat,  1 Jun 2019 09:14:49 -0400
+Message-Id: <20190601131653.24205-73-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190601131653.24205-1-sashal@kernel.org>
+References: <20190601131653.24205-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190521155313.19326-4-paul@crapouillou.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, May 21, 2019 at 05:53:13PM +0200, Paul Cercueil wrote:
-> Use a SPDX license identifier instead of a wall of text.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+From: Guenter Roeck <linux@roeck-us.net>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+[ Upstream commit f627ac0e12cd2736e60b9f5782ecec1d97251f77 ]
 
-> ---
->  drivers/watchdog/jz4740_wdt.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/drivers/watchdog/jz4740_wdt.c b/drivers/watchdog/jz4740_wdt.c
-> index f970a7a53084..c5b369152e70 100644
-> --- a/drivers/watchdog/jz4740_wdt.c
-> +++ b/drivers/watchdog/jz4740_wdt.c
-> @@ -1,16 +1,7 @@
-> +// SPDX-License-Identifier: GPL-2.0+
->  /*
->   *  Copyright (C) 2010, Paul Cercueil <paul@crapouillou.net>
->   *  JZ4740 Watchdog driver
-> - *
-> - *  This program is free software; you can redistribute it and/or modify it
-> - *  under  the terms of the GNU General  Public License as published by the
-> - *  Free Software Foundation;  either version 2 of the License, or (at your
-> - *  option) any later version.
-> - *
-> - *  You should have received a copy of the GNU General Public License along
-> - *  with this program; if not, write to the Free Software Foundation, Inc.,
-> - *  675 Mass Ave, Cambridge, MA 02139, USA.
-> - *
->   */
->  
->  #include <linux/mfd/ingenic-tcu.h>
-> -- 
-> 2.21.0.593.g511ec345e18
-> 
+Watchdog pretimeout governors were enabled from the default governor
+selection using "select". As a result, the default governor was always
+built into the kernel, even if no watchdog driver was loaded. By using
+"depends on" instead of "select", we are in better control, and the
+governors can all be built as modules. At the same time, set the default
+configuration option for pretimeout governors to match WATCHDOG_CORE
+(meaning all pretimeout governors are by default enabled if pretimeout
+support is enabled).
+
+The practical impact of this change is minimal. Previously, selecting
+a default governor automatically enabled that governor. Now, a default
+governor can only be selected if that governor has been enabled.
+Consequently, the order of governor selection is now reversed: The
+governor selection is now first, followed by default governor selection.
+
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/watchdog/Kconfig | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 242eea8596373..1d3b4bfbbc4d8 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -2033,6 +2033,20 @@ config WATCHDOG_PRETIMEOUT_GOV
+ 
+ if WATCHDOG_PRETIMEOUT_GOV
+ 
++config WATCHDOG_PRETIMEOUT_GOV_NOOP
++	tristate "Noop watchdog pretimeout governor"
++	default WATCHDOG_CORE
++	help
++	  Noop watchdog pretimeout governor, only an informational
++	  message is added to kernel log buffer.
++
++config WATCHDOG_PRETIMEOUT_GOV_PANIC
++	tristate "Panic watchdog pretimeout governor"
++	default WATCHDOG_CORE
++	help
++	  Panic watchdog pretimeout governor, on watchdog pretimeout
++	  event put the kernel into panic.
++
+ choice
+ 	prompt "Default Watchdog Pretimeout Governor"
+ 	default WATCHDOG_PRETIMEOUT_DEFAULT_GOV_PANIC
+@@ -2043,7 +2057,7 @@ choice
+ 
+ config WATCHDOG_PRETIMEOUT_DEFAULT_GOV_NOOP
+ 	bool "noop"
+-	select WATCHDOG_PRETIMEOUT_GOV_NOOP
++	depends on WATCHDOG_PRETIMEOUT_GOV_NOOP
+ 	help
+ 	  Use noop watchdog pretimeout governor by default. If noop
+ 	  governor is selected by a user, write a short message to
+@@ -2051,7 +2065,7 @@ config WATCHDOG_PRETIMEOUT_DEFAULT_GOV_NOOP
+ 
+ config WATCHDOG_PRETIMEOUT_DEFAULT_GOV_PANIC
+ 	bool "panic"
+-	select WATCHDOG_PRETIMEOUT_GOV_PANIC
++	depends on WATCHDOG_PRETIMEOUT_GOV_PANIC
+ 	help
+ 	  Use panic watchdog pretimeout governor by default, if
+ 	  a watchdog pretimeout event happens, consider that
+@@ -2059,18 +2073,6 @@ config WATCHDOG_PRETIMEOUT_DEFAULT_GOV_PANIC
+ 
+ endchoice
+ 
+-config WATCHDOG_PRETIMEOUT_GOV_NOOP
+-	tristate "Noop watchdog pretimeout governor"
+-	help
+-	  Noop watchdog pretimeout governor, only an informational
+-	  message is added to kernel log buffer.
+-
+-config WATCHDOG_PRETIMEOUT_GOV_PANIC
+-	tristate "Panic watchdog pretimeout governor"
+-	help
+-	  Panic watchdog pretimeout governor, on watchdog pretimeout
+-	  event put the kernel into panic.
+-
+ endif # WATCHDOG_PRETIMEOUT_GOV
+ 
+ endif # WATCHDOG
+-- 
+2.20.1
+
