@@ -2,152 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEF1334D7
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Jun 2019 18:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59101342A4
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Jun 2019 11:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbfFCQXa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 3 Jun 2019 12:23:30 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:35670 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727162AbfFCQXa (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 3 Jun 2019 12:23:30 -0400
-Received: by mail-lj1-f193.google.com with SMTP id h11so16851413ljb.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 03 Jun 2019 09:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=n/cV/sVRlbUOo7FHenLjAJ9QBv6k5clmgCApf8xm7Pk=;
-        b=TYUrm50t4FfyqocOab488anoZ/p22Pq8r1lSVO3LkeQCxVoymxN/DHITnK01ydQLPK
-         UM4MpxiyIsKv6UplPMaBe8+BfY8U7oeptIzVOPt3hBAam1zfnXIKXbvcV/Sx7UtAgEbZ
-         PMFJm+YLyRJ1tpaCEEmD/3/8vTzOL6K8O4Ceji5wzctve+670ra0dPBzL+kp2+QTllsy
-         oEUAlgOBvkDFfAlXwcVnJaJJwt9BKL6hGBCgTbtkZSp+gxiOywtMxytMG1YjyL+94+Tg
-         WAu/1/Sgxi7PwV1I1ZSUk/wSY8SQx+e8B01n1DoFdW8kCIDEud/M+wOJ5zEcZq0ZFHzA
-         /OIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=n/cV/sVRlbUOo7FHenLjAJ9QBv6k5clmgCApf8xm7Pk=;
-        b=kQ2HI+Py7Sjuih/VzmeDoCwVgy5IuXKeD+FxLG+sZWyKp864oQ/+QCMqGLqpMx8rR6
-         AYDOF8tdXUKtg+EXBMQ/543p13fjeGrmyrkti7YjDjkxOk3Q68VFeyD/kROMUn0V5P6q
-         FcMK5uVeAMCmUS0P3PPp6qIiS90w9utDchHbbQtyRl61YGIYgUw0pb1KCh0CmPxii8eY
-         np7jzrxlA/v2Y+BOMAED8tgMtYMatd/FjsWf/IwnUXULIpciChL+193CLFEL1liCJfeR
-         BCBVceRrgnRG/J2n9fDDBFqx6b/g54ytHILVb8b8MmdQEWSEvLK5NPjbmMk8OdWWEipo
-         svMA==
-X-Gm-Message-State: APjAAAVZgU7VzXY/bRQ/E1GS7oDoETDse00sqEZupGaxDD3VFFgTDqjZ
-        qO81Hv4NqP5rNLIsNb11NQ5kWg==
-X-Google-Smtp-Source: APXvYqzJShOEiF2qfsDNhzKzUYClff2WG6xsLkpEzyCIUZzc89YV5zSludYA++2vD+Pw2E55IB8v1w==
-X-Received: by 2002:a2e:8954:: with SMTP id b20mr14492777ljk.10.1559579008755;
-        Mon, 03 Jun 2019 09:23:28 -0700 (PDT)
-Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
-        by smtp.gmail.com with ESMTPSA id d2sm3183876ljc.84.2019.06.03.09.23.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 03 Jun 2019 09:23:27 -0700 (PDT)
-Date:   Mon, 3 Jun 2019 18:23:26 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2] watchdog: renesas_wdt: Add a few cycles delay
-Message-ID: <20190603162326.GB2960@bigcity.dyn.berto.se>
-References: <1559558161-31244-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        id S1727038AbfFDJGf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Jun 2019 05:06:35 -0400
+Received: from mail-eopbgr30062.outbound.protection.outlook.com ([40.107.3.62]:54496
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727033AbfFDJGe (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 4 Jun 2019 05:06:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6uNPxmYFIOIIV+VBRJ1Y41oLlIBoV6G13kNU0BZbpj4=;
+ b=IotSr3Tia4Ds1dHIRbm2oOVTuY8anbmc4RjrIinQr0zFvIgipxRL9mcPRqXVQeyMrNW/bdJE/i3k6YEUIUS6GQXfHxdj9NrMf/quEPJJKvlOQmCfyxGs2S+Hn09GxqpkDdLLZb/2L5tHifO4Q+fPhaqw6ZIZ/EGsEwepoGDpRQg=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3723.eurprd04.prod.outlook.com (52.134.72.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.12; Tue, 4 Jun 2019 09:06:28 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::5835:e874:bd94:fec]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::5835:e874:bd94:fec%5]) with mapi id 15.20.1943.018; Tue, 4 Jun 2019
+ 09:06:28 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH RESEND V4 2/3] arm64: dts: imx8qxp: Move watchdog node
+ into scu node
+Thread-Topic: [PATCH RESEND V4 2/3] arm64: dts: imx8qxp: Move watchdog node
+ into scu node
+Thread-Index: AQHVCKrxek0Xatu7SEyE08ZoyZ0h7KaLV72w
+Date:   Tue, 4 Jun 2019 09:06:28 +0000
+Message-ID: <DB3PR0402MB39162F3811484D90546B4CC2F5150@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <1557655528-12816-1-git-send-email-Anson.Huang@nxp.com>
+ <1557655528-12816-2-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1557655528-12816-2-git-send-email-Anson.Huang@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [119.31.174.68]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dbab2455-9e5b-45cb-ffc2-08d6e8cbede3
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3723;
+x-ms-traffictypediagnostic: DB3PR0402MB3723:
+x-microsoft-antispam-prvs: <DB3PR0402MB3723941990C3EBC54480B5FBF5150@DB3PR0402MB3723.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2657;
+x-forefront-prvs: 0058ABBBC7
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(39860400002)(396003)(136003)(346002)(376002)(13464003)(189003)(199004)(186003)(2201001)(2501003)(6506007)(53546011)(102836004)(316002)(26005)(110136005)(6246003)(86362001)(256004)(478600001)(55016002)(53936002)(7416002)(76116006)(11346002)(446003)(68736007)(6436002)(9686003)(66446008)(66556008)(66476007)(66946007)(73956011)(64756008)(3846002)(66066001)(52536014)(5660300002)(71190400001)(229853002)(33656002)(476003)(6116002)(71200400001)(44832011)(76176011)(8676002)(25786009)(7696005)(74316002)(81156014)(99286004)(4326008)(7736002)(8936002)(2906002)(305945005)(486006)(81166006)(14454004)(32563001)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3723;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: W/J5pFkoTqq6PAbsMjsZVlo0Xgbq93u0w1T9trf07gkC5N+J+tT+YL99mFPnzCr68369DtWx6xAu5udjHHdZggj0kB890c00Ea/S0Woj4N8Y1nJZapL9TK1FQBWmQ9qX+bUFHMAADy5Zy0O4I0tM+hoSaoGMS/72zJzrAKoTl1MIha2DI1Azq1TGekdkQGG2jwvVY21lXGfi/qxWCwxIXLAgtJ7mP74l/a4qFEPT5jxgWZbj5Ef7y+uSE3WuriczVz/hE+2J8dNZ72fbAXFqMQsjDnmxDQCjmLRmrian6F8KPNsrgVOk4sYCoG91IzFq3DNCIZt/w6YPkzfa0sEIfgOCdyo7QTTl9DPKXOuEeqV20WCMrFHsM7BPWm44XLsDwZ7Oc4lds72PymW0HTr8zf5ABi95zDD5e6CTdaiN6ZA=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1559558161-31244-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbab2455-9e5b-45cb-ffc2-08d6e8cbede3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jun 2019 09:06:28.5012
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: anson.huang@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3723
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Shimoda-san,
-
-Thanks for your work.
-
-On 2019-06-03 19:36:01 +0900, Yoshihiro Shimoda wrote:
-> According to the hardware manual of R-Car Gen2 and Gen3,
-> software should wait a few RLCK cycles as following:
->  - Delay 2 cycles before setting watchdog counter.
->  - Delay 3 cycles before disabling module clock.
-> 
-> So, this patch adds such delays.
-> 
-> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Small nit bellow, with or without that addressed.
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
-> ---
->  Changes from v1 (https://patchwork.kernel.org/patch/10972641/):
->  - Change formula to improve accuracy.
->  - Add Geert-san's Reviewed-by.
-> 
->  drivers/watchdog/renesas_wdt.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/watchdog/renesas_wdt.c b/drivers/watchdog/renesas_wdt.c
-> index 565dbc1..525a1fe 100644
-> --- a/drivers/watchdog/renesas_wdt.c
-> +++ b/drivers/watchdog/renesas_wdt.c
-> @@ -7,6 +7,7 @@
->   */
->  #include <linux/bitops.h>
->  #include <linux/clk.h>
-> +#include <linux/delay.h>
->  #include <linux/io.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> @@ -70,6 +71,15 @@ static int rwdt_init_timeout(struct watchdog_device *wdev)
->  	return 0;
->  }
->  
-> +static void rwdt_wait(struct rwdt_priv *priv, unsigned int cycles)
-> +{
-> +	unsigned long delays;
-
-Could this be unsigned int? It would still fit for a cycles number 
-around 2000 and this change use 2 and 3 cycles.
-
-> +
-> +	delays = DIV_ROUND_UP(cycles * 1000000, priv->clk_rate);
-> +
-> +	usleep_range(delays, 2 * delays);
-> +}
-> +
->  static int rwdt_start(struct watchdog_device *wdev)
->  {
->  	struct rwdt_priv *priv = watchdog_get_drvdata(wdev);
-> @@ -80,6 +90,8 @@ static int rwdt_start(struct watchdog_device *wdev)
->  	/* Stop the timer before we modify any register */
->  	val = readb_relaxed(priv->base + RWTCSRA) & ~RWTCSRA_TME;
->  	rwdt_write(priv, val, RWTCSRA);
-> +	/* Delay 2 cycles before setting watchdog counter */
-> +	rwdt_wait(priv, 2);
->  
->  	rwdt_init_timeout(wdev);
->  	rwdt_write(priv, priv->cks, RWTCSRA);
-> @@ -98,6 +110,8 @@ static int rwdt_stop(struct watchdog_device *wdev)
->  	struct rwdt_priv *priv = watchdog_get_drvdata(wdev);
->  
->  	rwdt_write(priv, priv->cks, RWTCSRA);
-> +	/* Delay 3 cycles before disabling module clock */
-> +	rwdt_wait(priv, 3);
->  	pm_runtime_put(wdev->parent);
->  
->  	return 0;
-> -- 
-> 2.7.4
-> 
-
--- 
-Regards,
-Niklas Söderlund
+SGksIFNoYXduDQoJVGhlIGRyaXZlciBhbmQgYmluZGluZyBkb2MgYXJlIGFscmVhZHkgcmV2aWV3
+ZWQgYW5kIHdhaXRpbmcgZm9yIERUIHBhdGNoLCB3aWxsIHlvdSBoZWxwIHJldmlldyB0aGlzIERU
+IHBhdGNoPw0KDQpUaGFua3MsDQpBbnNvbg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0t
+DQo+IEZyb206IEFuc29uIEh1YW5nDQo+IFNlbnQ6IFN1bmRheSwgTWF5IDEyLCAyMDE5IDY6MTEg
+UE0NCj4gVG86IHJvYmgrZHRAa2VybmVsLm9yZzsgbWFyay5ydXRsYW5kQGFybS5jb207IHdpbUBs
+aW51eC13YXRjaGRvZy5vcmc7DQo+IGxpbnV4QHJvZWNrLXVzLm5ldDsgc2hhd25ndW9Aa2VybmVs
+Lm9yZzsgcy5oYXVlckBwZW5ndXRyb25peC5kZTsNCj4ga2VybmVsQHBlbmd1dHJvbml4LmRlOyBm
+ZXN0ZXZhbUBnbWFpbC5jb207IEFpc2hlbmcgRG9uZw0KPiA8YWlzaGVuZy5kb25nQG54cC5jb20+
+OyB1bGYuaGFuc3NvbkBsaW5hcm8ub3JnOyBEYW5pZWwgQmFsdXRhDQo+IDxkYW5pZWwuYmFsdXRh
+QG54cC5jb20+OyBQZW5nIEZhbiA8cGVuZy5mYW5AbnhwLmNvbT47DQo+IGRldmljZXRyZWVAdmdl
+ci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4gd2F0
+Y2hkb2dAdmdlci5rZXJuZWwub3JnOyBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5v
+cmcNCj4gQ2M6IGRsLWxpbnV4LWlteCA8bGludXgtaW14QG54cC5jb20+DQo+IFN1YmplY3Q6IFtQ
+QVRDSCBSRVNFTkQgVjQgMi8zXSBhcm02NDogZHRzOiBpbXg4cXhwOiBNb3ZlIHdhdGNoZG9nIG5v
+ZGUNCj4gaW50byBzY3Ugbm9kZQ0KPiANCj4gaS5NWCBzeXN0ZW0gY29udHJvbGxlciB3YXRjaGRv
+ZyBoYXMgcHJldGltZW91dCBmdW5jdGlvbiB3aGljaCBkZXBlbmRzIG9uDQo+IGkuTVggU0NVIGRy
+aXZlciwgc28gaXQgc2hvdWxkIGJlIGEgc3Vibm9kZSBvZiBTQ1UuDQo+IA0KPiBTaWduZWQtb2Zm
+LWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gLS0tDQo+IE5vIGNoYW5n
+ZSwganVzdCByZXNlbmQgcGF0Y2ggd2l0aCBjb3JyZWN0IGVuY29kaW5nLg0KPiAtLS0NCj4gIGFy
+Y2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2lteDhxeHAuZHRzaSB8IDEwICsrKysrLS0tLS0N
+Cj4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pDQo+IA0K
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OHF4cC5kdHNp
+DQo+IGIvYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OHF4cC5kdHNpDQo+IGluZGV4
+IDA2ODNlZTIuLmIxN2MyMmUgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtNjQvYm9vdC9kdHMvZnJl
+ZXNjYWxlL2lteDhxeHAuZHRzaQ0KPiArKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2Fs
+ZS9pbXg4cXhwLmR0c2kNCj4gQEAgLTE0OSw2ICsxNDksMTEgQEANCj4gIAkJcnRjOiBydGMgew0K
+PiAgCQkJY29tcGF0aWJsZSA9ICJmc2wsaW14OHF4cC1zYy1ydGMiOw0KPiAgCQl9Ow0KPiArDQo+
+ICsJCXdhdGNoZG9nIHsNCj4gKwkJCWNvbXBhdGlibGUgPSAiZnNsLGlteDhxeHAtc2Mtd2R0Iiwg
+ImZzbCxpbXgtc2Mtd2R0IjsNCj4gKwkJCXRpbWVvdXQtc2VjID0gPDYwPjsNCj4gKwkJfTsNCj4g
+IAl9Ow0KPiANCj4gIAl0aW1lciB7DQo+IEBAIC01MTcsOSArNTIyLDQgQEANCj4gIAkJCXBvd2Vy
+LWRvbWFpbnMgPSA8JnBkIElNWF9TQ19SX0dQSU9fNz47DQo+ICAJCX07DQo+ICAJfTsNCj4gLQ0K
+PiAtCXdhdGNoZG9nIHsNCj4gLQkJY29tcGF0aWJsZSA9ICJmc2wsaW14OHF4cC1zYy13ZHQiLCAi
+ZnNsLGlteC1zYy13ZHQiOw0KPiAtCQl0aW1lb3V0LXNlYyA9IDw2MD47DQo+IC0JfTsNCj4gIH07
+DQo+IC0tDQo+IDIuNy40DQoNCg==
