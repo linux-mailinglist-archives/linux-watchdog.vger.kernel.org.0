@@ -2,82 +2,127 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EE73562A
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jun 2019 07:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D2F3567F
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jun 2019 08:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbfFEFVa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 5 Jun 2019 01:21:30 -0400
-Received: from mail-eopbgr1400091.outbound.protection.outlook.com ([40.107.140.91]:50164
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725268AbfFEFV3 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 5 Jun 2019 01:21:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C+P1rUhPdpWbH6AehaxnQYdh0gbds2lu8ypgDyvLquI=;
- b=MJeI1UVYVOZhqQm8HOSVwAGERl/29IjwN2YNHmRgPhL94Fv/Ff4aWKhRdcgFTQacSYRBj0MSIuL9npjG8XMT8r7MnYQ7YWdjTIn4Eqhc5VaroFWh0Mc9xxr/ooCAKXq/30G3Nz1iFvgh6xI0v0dxuUYb5n/r0T3mLke3Y1PccV8=
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com (52.134.247.150) by
- OSAPR01MB3187.jpnprd01.prod.outlook.com (52.134.248.210) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Wed, 5 Jun 2019 05:21:25 +0000
-Received: from OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::19ad:b6ce:a287:dc85]) by OSAPR01MB3089.jpnprd01.prod.outlook.com
- ([fe80::19ad:b6ce:a287:dc85%7]) with mapi id 15.20.1943.018; Wed, 5 Jun 2019
- 05:21:25 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        id S1726532AbfFEGAW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 5 Jun 2019 02:00:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726086AbfFEGAW (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 5 Jun 2019 02:00:22 -0400
+Received: from dragon (li1264-180.members.linode.com [45.79.165.180])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ABB3F2075B;
+        Wed,  5 Jun 2019 06:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559714421;
+        bh=su8k6bM1KzrD1rvDqDrPDiZKbk24uNLXNFln/Ozpo1M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JXHukabfHuZjrkXdPv62iMvyXZv1uWJ520l8/EWOms4QMQ2e/n7ostXn3475SbRLP
+         SSCxjYxJGlvRXmj5oKOkx9dRu/BPE7kYHnUhCASi7bXfYV213sJXcLXZaWX9jCTbMP
+         btHR7IFw0S5FmRIBmPdSkwdAT+hL73VDPMDHUb/g=
+Date:   Wed, 5 Jun 2019 14:00:02 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>
-CC:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH] watchdog: renesas_wdt: Add a few cycles delay
-Thread-Topic: [PATCH] watchdog: renesas_wdt: Add a few cycles delay
-Thread-Index: AQHVG1zI8ElkBbHmPUyC2M5jmUFab6aMhgVQ
-Date:   Wed, 5 Jun 2019 05:21:24 +0000
-Message-ID: <OSAPR01MB308977BC79D432867DB23CB8D8160@OSAPR01MB3089.jpnprd01.prod.outlook.com>
-References: <1559711040-29779-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-In-Reply-To: <1559711040-29779-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [118.238.235.108]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 11077d7a-e259-4c21-e574-08d6e975a79a
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB3187;
-x-ms-traffictypediagnostic: OSAPR01MB3187:
-x-microsoft-antispam-prvs: <OSAPR01MB31874676A2F0ED436269634DD8160@OSAPR01MB3187.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3968;
-x-forefront-prvs: 00594E8DBA
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(376002)(136003)(366004)(39860400002)(199004)(189003)(316002)(2501003)(66476007)(66946007)(3846002)(66066001)(76116006)(102836004)(25786009)(66446008)(68736007)(486006)(64756008)(2201001)(66556008)(7736002)(52536014)(256004)(6116002)(6246003)(73956011)(86362001)(71200400001)(71190400001)(110136005)(5660300002)(74316002)(53546011)(33656002)(8936002)(305945005)(54906003)(55016002)(478600001)(6436002)(2906002)(6506007)(229853002)(8676002)(81166006)(26005)(4326008)(186003)(9686003)(53936002)(81156014)(14454004)(7696005)(476003)(446003)(99286004)(76176011)(558084003)(11346002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB3187;H:OSAPR01MB3089.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: kWMP+k/ESuIb1cLKcytuii8ZswBZYxGqqMrmZx5rmLc41ix5T1LFN76sVtHMVIsB3jccXo2DQchTy4k/HurvhIR7X3ed0AJFPFhQLBIJbBXoulL3w1GJaKabuOG/yKAu4kVkwogW5XhBRSDHfMxpswN+Fu5tfy4r9WdxnNTqfrDJqkISRhVChOrvpKXybpgCL9dm5T/oW9ucGZDuajK/7wlYvdmAhfFEXACXC6Kv4W+696m4p6I2jZOfuA5eLpa70oze3jFx0nf/tXK7cGKv9O8mIh0y6tQQi7n6vmWoyAjio38wueKCFGwshgSfp38AyLU/FSx/EfCMxHTqxNUKaXgKamhSFOESORwbMGid8tbT4DYpqexla3s+KSUH0iAh+gwVFx91KGYyaE+PO8KmsYiXYrxAfmnptb0rgY1YSHc=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH RESEND V4 2/3] arm64: dts: imx8qxp: Move watchdog node
+ into scu node
+Message-ID: <20190605060000.GA29853@dragon>
+References: <1557655528-12816-1-git-send-email-Anson.Huang@nxp.com>
+ <1557655528-12816-2-git-send-email-Anson.Huang@nxp.com>
+ <DB3PR0402MB39162F3811484D90546B4CC2F5150@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11077d7a-e259-4c21-e574-08d6e975a79a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2019 05:21:24.9457
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yoshihiro.shimoda.uh@renesas.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB3187
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB3PR0402MB39162F3811484D90546B4CC2F5150@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-PiBGcm9tOiBZb3NoaWhpcm8gU2hpbW9kYSwgU2VudDogV2VkbmVzZGF5LCBKdW5lIDUsIDIwMTkg
-MjowNCBQTQ0KPiBTdWJqZWN0OiBbUEFUQ0hdIHdhdGNoZG9nOiByZW5lc2FzX3dkdDogQWRkIGEg
-ZmV3IGN5Y2xlcyBkZWxheQ0KDQpPb3BzLCBJIHNob3VsZCBoYXZlIHN1Ym1pdHRlZCBhcyAiUEFU
-Q0ggdjMiIG9uIHRoZSBzdWJqZWN0Li4uDQoNCkJlc3QgcmVnYXJkcywNCllvc2hpaGlybyBTaGlt
-b2RhDQoNCg==
+On Tue, Jun 04, 2019 at 09:06:28AM +0000, Anson Huang wrote:
+> Hi, Shawn
+> 	The driver and binding doc are already reviewed and waiting for DT patch, will you help review this DT patch?
+
+I'm fine with it.  Should I just pick this patch up, or is there any
+dependency we need to handle?
+
+Shawn
+
+> 
+> Thanks,
+> Anson
+> 
+> > -----Original Message-----
+> > From: Anson Huang
+> > Sent: Sunday, May 12, 2019 6:11 PM
+> > To: robh+dt@kernel.org; mark.rutland@arm.com; wim@linux-watchdog.org;
+> > linux@roeck-us.net; shawnguo@kernel.org; s.hauer@pengutronix.de;
+> > kernel@pengutronix.de; festevam@gmail.com; Aisheng Dong
+> > <aisheng.dong@nxp.com>; ulf.hansson@linaro.org; Daniel Baluta
+> > <daniel.baluta@nxp.com>; Peng Fan <peng.fan@nxp.com>;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> > watchdog@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+> > Cc: dl-linux-imx <linux-imx@nxp.com>
+> > Subject: [PATCH RESEND V4 2/3] arm64: dts: imx8qxp: Move watchdog node
+> > into scu node
+> > 
+> > i.MX system controller watchdog has pretimeout function which depends on
+> > i.MX SCU driver, so it should be a subnode of SCU.
+> > 
+> > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> > ---
+> > No change, just resend patch with correct encoding.
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> > b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> > index 0683ee2..b17c22e 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> > @@ -149,6 +149,11 @@
+> >  		rtc: rtc {
+> >  			compatible = "fsl,imx8qxp-sc-rtc";
+> >  		};
+> > +
+> > +		watchdog {
+> > +			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
+> > +			timeout-sec = <60>;
+> > +		};
+> >  	};
+> > 
+> >  	timer {
+> > @@ -517,9 +522,4 @@
+> >  			power-domains = <&pd IMX_SC_R_GPIO_7>;
+> >  		};
+> >  	};
+> > -
+> > -	watchdog {
+> > -		compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
+> > -		timeout-sec = <60>;
+> > -	};
+> >  };
+> > --
+> > 2.7.4
+> 
