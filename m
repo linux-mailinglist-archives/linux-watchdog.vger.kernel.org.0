@@ -2,157 +2,98 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E42839479
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jun 2019 20:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C82396F3
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jun 2019 22:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731652AbfFGSj3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 Jun 2019 14:39:29 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35898 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731537AbfFGSj3 (ORCPT
+        id S1729921AbfFGUlO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 7 Jun 2019 16:41:14 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36766 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729584AbfFGUlO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 Jun 2019 14:39:29 -0400
-Received: by mail-pg1-f195.google.com with SMTP id a3so1599331pgb.3;
-        Fri, 07 Jun 2019 11:39:28 -0700 (PDT)
+        Fri, 7 Jun 2019 16:41:14 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d21so1255426plr.3;
+        Fri, 07 Jun 2019 13:41:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=JbalNf71xDP2Vajkb3fOdGewExTTQMZgzOLkaA1msfw=;
-        b=cwiJjKBwmZhXgm2bXeff6YplRv8jbTi2t8ZcdtNQLplfx94ThLXnsrulDUDLcCzWnF
-         mz9jC50KaxosD2/5SsqdgDAk2PfLackvbSYVO7goOJMCp3VqlXKYzS0ps2bIQKb0RYDs
-         yEzBxa9aKDUjnP1ccP1MdIoKMRByRNCMgP/q/gk1OKNuqyCj1LFpt/QQ9UYVqpiRTxF6
-         4tjT0UcmAPDwuXnY4IiNRJ7GEunlBBcC+B2eei6NwoHWraegiS6WkhjRSwei7a32c4Ud
-         psPFAtSClAIpps3RvGFqsEt/IPp+oORRpTILqjDDMEmZNPF8h87IZDJuq6k1NBiiy2cV
-         s2rQ==
+        bh=ixc2M8woGOIxggbQrFACrPoIu4K++6YKpcQPW8eDSFw=;
+        b=Pbx3lnAm6yRtx72O4losBkUP536cTibHA0OroXdLMJbYHOeTNX+T4zeDQu6HUVs7Pg
+         Qjsnyckoa/CQmlV2Z8SKZeGXOzNbpnrmsXyX7Wu3oKi03XogaQR6CAlC5/hcsaQL6YlS
+         ZPDsWOR61oDTzNOkIuJHfvm3yyxAM1eir0GPXNOAtC69fK1EumxyXW8QJPwswQ3Og8UC
+         OSM5yVM5uxsqMp1lu7Z0F1W00Ra8CHnnKXsWH/1oFTzm0vSC2ws7fdvPa1xZcg+k9uP0
+         ge8cqWHIORk20tnQeBiUQvHh9iWTyQ22Ky7OXVU000893ntmOO616eSdxVQz2TSW44GV
+         OF6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JbalNf71xDP2Vajkb3fOdGewExTTQMZgzOLkaA1msfw=;
-        b=FaiYDh2awyBQPTeJJH9ukFPBTIO6CX7LdfvkPb4i2FFtXv1t0Xtdqfo/WQywQNpT4S
-         eTEq/Y8vJ4QoiMreBhxZOjOPsEzhN4Ce2RqvwXQo+N8s14yZ+sQz7wLziik53KtYfzqQ
-         JuaqdepnDkTKAzLPxVDA8q2oNpI+8S1iCh/h3Ypl/ykr0Fb8Tct6IJJhM68kZfHYWhgD
-         FQ0L6KavwxwA36m9vvEBkkyohMz5cw6q97do2+KLJBWEyp9TK9qWZYtY6S/T+kpWkqPx
-         LvNN57VQ9ac1BKmXV2aJpwL25fifMPbTy+tCBvSL9fPcNecM4/Y907Movtrdb/q8dncT
-         vUxQ==
-X-Gm-Message-State: APjAAAXMiTqEdSx+zFNnYOJyVNdxyNmEbHYfqDgM/vO+SoZBZk/HfwtP
-        XTlDLSGTkcoYXb7GfgEeSLw=
-X-Google-Smtp-Source: APXvYqx+paVFyqGNPvaMn5cBSnsM91qEGclwUWeNHKtVSvHG7CdSPrHZeraEZX3V6XfaGy3gHqJwDg==
-X-Received: by 2002:a17:90a:2008:: with SMTP id n8mr7280526pjc.4.1559932768138;
-        Fri, 07 Jun 2019 11:39:28 -0700 (PDT)
+        bh=ixc2M8woGOIxggbQrFACrPoIu4K++6YKpcQPW8eDSFw=;
+        b=nSdxglxwmAXn+p5kONvkGlny9S+PV9dW/NyCp4SJNk9nxAggLjrkpWO+Wn5pVVxPVO
+         vMB26Dfrt+/LxA/vCk8I2SmbvHvHCBi5viSdzu+nMreDmY5SwxNrz+5J92YJaYwivisd
+         R9hVzD05+MSuGjHKYmAinNDwjNTClgK7LYHLVwV4W61hZZO8SEXfO3DVHi2nJyIV5E1D
+         ivUCm7Kg7P0ZUgp6yzrQoM7KRf0cMZeSJBlkDiZttvIHx4TRugU7DO4io3v7zoGtr3DT
+         wouZ9w50RhIUN4exf4h1I+3ffCoz8mFy7a5oZPdzk2D7bYNHMt7qNqVg3PVaw8ro/crv
+         0gUg==
+X-Gm-Message-State: APjAAAW23VyUozjvj8q7gdYab28/CB7xdxzR7OSGDgSuObH0/MgbPeRM
+        kSb0cqFGNcPx2p6BT5n0IOoDP3qm
+X-Google-Smtp-Source: APXvYqxQHytqxDxJENMDlRhRcU267VAuufr2xj1Q2aEpPT582KBNbtCm0XCmkt3kps5uEox0V0Mufw==
+X-Received: by 2002:a17:902:728b:: with SMTP id d11mr28359477pll.78.1559940073691;
+        Fri, 07 Jun 2019 13:41:13 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z18sm2856958pfa.101.2019.06.07.11.39.27
+        by smtp.gmail.com with ESMTPSA id l8sm3412182pgb.76.2019.06.07.13.41.12
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 07 Jun 2019 11:39:27 -0700 (PDT)
-Date:   Fri, 7 Jun 2019 11:39:26 -0700
+        Fri, 07 Jun 2019 13:41:12 -0700 (PDT)
+Date:   Fri, 7 Jun 2019 13:41:11 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Esben Haabendal <esben@haabendal.dk>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Rasmus Villemoes <Rasmus.Villemoes@prevas.se>
-Subject: Re: [PATCH v10 2/3] watchdog: introduce CONFIG_WATCHDOG_OPEN_TIMEOUT
-Message-ID: <20190607183926.GC32475@roeck-us.net>
-References: <20190605140628.618-1-rasmus.villemoes@prevas.dk>
- <20190605140628.618-3-rasmus.villemoes@prevas.dk>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [RFC PATCH] watchdog: renesas_wdt: support handover from
+ bootloader
+Message-ID: <20190607204111.GA19123@roeck-us.net>
+References: <20190415105201.2078-1-wsa+renesas@sang-engineering.com>
+ <20190524135237.GC15892@kunai>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190605140628.618-3-rasmus.villemoes@prevas.dk>
+In-Reply-To: <20190524135237.GC15892@kunai>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 02:06:43PM +0000, Rasmus Villemoes wrote:
-> This allows setting a default value for the watchdog.open_timeout
-> commandline parameter via Kconfig.
+On Fri, May 24, 2019 at 03:52:37PM +0200, Wolfram Sang wrote:
+> On Mon, Apr 15, 2019 at 12:52:01PM +0200, Wolfram Sang wrote:
+> > Support an already running watchdog by checking its enable bit and set
+> > up the status accordingly before registering the device.
+> > 
+> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > 
-> Some BSPs allow remote updating of the kernel image and root file
-> system, but updating the bootloader requires physical access. Hence, if
-> one has a firmware update that requires relaxing the
-> watchdog.open_timeout a little, the value used must be baked into the
-> kernel image itself and cannot come from the u-boot environment via the
-> kernel command line.
+> After second thought, I am getting confused a little. If the WDT is
+> already running then
 > 
-> Being able to set the initial value in .config doesn't change the fact
-> that the value on the command line, if present, takes precedence, and is
-> of course immensely useful for development purposes while one has
-> console acccess, as well as usable in the cases where one can make a
-> permanent update of the kernel command line.
+> a) before this patch: after successful probe, RPM will disable the
+> clock until userspace opens the watchdog device
 > 
-> Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+> b) after this patch: during probe, our default timeout will be
+> programmed and because of WDOG_HW_RUNNING, the core will generate pings
+> until userspace opens the watchdog device.
+> 
+> So, b) will protect from a crashing kernel (no pings anymore) but not
+> from something like missing rootfs, or?
+> 
+> The usecase I had in mind ("give the kernel <x> seconds to boot into
+> working userspace") seems to be achieved by loading the WDT driver as a
+> module then, I guess?
+> 
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Would
+https://lore.kernel.org/linux-watchdog/20190605140628.618-1-rasmus.villemoes@prevas.dk/
 
-> ---
->  Documentation/watchdog/watchdog-parameters.txt | 8 ++++----
->  drivers/watchdog/Kconfig                       | 9 +++++++++
->  drivers/watchdog/watchdog_dev.c                | 5 +++--
->  3 files changed, 16 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/watchdog/watchdog-parameters.txt b/Documentation/watchdog/watchdog-parameters.txt
-> index 32d3606caa65..ec919dc895ff 100644
-> --- a/Documentation/watchdog/watchdog-parameters.txt
-> +++ b/Documentation/watchdog/watchdog-parameters.txt
-> @@ -11,10 +11,10 @@ modules.
->  The watchdog core parameter watchdog.open_timeout is the maximum time,
->  in seconds, for which the watchdog framework will take care of pinging
->  a running hardware watchdog until userspace opens the corresponding
-> -/dev/watchdogN device. A value of 0 (the default) means an infinite
-> -timeout. Setting this to a non-zero value can be useful to ensure that
-> -either userspace comes up properly, or the board gets reset and allows
-> -fallback logic in the bootloader to try something else.
-> +/dev/watchdogN device. A value of 0 means an infinite timeout. Setting
-> +this to a non-zero value can be useful to ensure that either userspace
-> +comes up properly, or the board gets reset and allows fallback logic
-> +in the bootloader to try something else.
->  
->  
->  -------------------------------------------------
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index ffe754539f5a..a8bd621e12f8 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -58,6 +58,15 @@ config WATCHDOG_HANDLE_BOOT_ENABLED
->  	  the watchdog on its own. Thus if your userspace does not start fast
->  	  enough your device will reboot.
->  
-> +config WATCHDOG_OPEN_TIMEOUT
-> +	int "Timeout value for opening watchdog device"
-> +	default 0
-> +	help
-> +	  The maximum time, in seconds, for which the watchdog framework takes
-> +	  care of pinging a hardware watchdog.  A value of 0 means infinite. The
-> +	  value set here can be overridden by the commandline parameter
-> +	  "watchdog.open_timeout".
-> +
->  config WATCHDOG_SYSFS
->  	bool "Read different watchdog information through sysfs"
->  	help
-> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index e4b51db48f0e..334b810db2cf 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -88,7 +88,7 @@ static struct kthread_worker *watchdog_kworker;
->  static bool handle_boot_enabled =
->  	IS_ENABLED(CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED);
->  
-> -static unsigned open_timeout;
-> +static unsigned open_timeout = CONFIG_WATCHDOG_OPEN_TIMEOUT;
->  
->  static bool watchdog_past_open_deadline(struct watchdog_core_data *data)
->  {
-> @@ -1214,4 +1214,5 @@ MODULE_PARM_DESC(handle_boot_enabled,
->  
->  module_param(open_timeout, uint, 0644);
->  MODULE_PARM_DESC(open_timeout,
-> -	"Maximum time (in seconds, 0 means infinity) for userspace to take over a running watchdog (default=0)");
-> +	"Maximum time (in seconds, 0 means infinity) for userspace to take over a running watchdog (default="
-> +	__MODULE_STRING(CONFIG_WATCHDOG_OPEN_TIMEOUT) ")");
+solve your use case ?
+
+Guenter
