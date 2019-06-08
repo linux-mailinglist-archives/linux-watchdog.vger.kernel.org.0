@@ -2,89 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AA23971C
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jun 2019 22:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0375F39B92
+	for <lists+linux-watchdog@lfdr.de>; Sat,  8 Jun 2019 09:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729640AbfFGUzr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 Jun 2019 16:55:47 -0400
-Received: from sauhun.de ([88.99.104.3]:45984 "EHLO pokefinder.org"
+        id S1726836AbfFHHvs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 8 Jun 2019 03:51:48 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:60844 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729891AbfFGUzr (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 Jun 2019 16:55:47 -0400
-Received: from localhost (p5486CE26.dip0.t-ipconnect.de [84.134.206.38])
-        by pokefinder.org (Postfix) with ESMTPSA id 4742B3E43BA;
-        Fri,  7 Jun 2019 22:55:44 +0200 (CEST)
-Date:   Fri, 7 Jun 2019 22:55:43 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [RFC PATCH] watchdog: renesas_wdt: support handover from
- bootloader
-Message-ID: <20190607205543.GA957@kunai>
-References: <20190415105201.2078-1-wsa+renesas@sang-engineering.com>
- <20190524135237.GC15892@kunai>
- <20190607204111.GA19123@roeck-us.net>
+        id S1726700AbfFHHvs (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 8 Jun 2019 03:51:48 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 45LWnF1CmBz9v162;
+        Sat,  8 Jun 2019 09:51:45 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=lSyF+ktH; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id jcVg9OjwFRFl; Sat,  8 Jun 2019 09:51:45 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 45LWnF00Dnz9v0tx;
+        Sat,  8 Jun 2019 09:51:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1559980305; bh=f3XQg0S0tVNIvajavdwOdzIVoAQI/mHI+P6rO41trUE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=lSyF+ktHFuNuRrUbgTbgHUB5jXAoRAScVnhiLml29E6EsYgj0b/a1CK+31q4HWaIY
+         E+QZ6p3qN3S2y0QcSGywuliz6m90XQM4RWK4iiJqCAT/rvzpJNI73p44N1jU09kV07
+         RlmV42GCsFzpUoPX3ckN9x7nO/Kp4TwaVZzGa6tI=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id EF5058B792;
+        Sat,  8 Jun 2019 09:51:45 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 6hOE7BMvbzJt; Sat,  8 Jun 2019 09:51:45 +0200 (CEST)
+Received: from PO15451 (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5E36F8B78B;
+        Sat,  8 Jun 2019 09:51:45 +0200 (CEST)
+Subject: Re: [PATCH v2 4/4] watchdog: jz4740: Make probe function
+ __init_or_module
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     od@zcrc.me, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190607162429.17915-1-paul@crapouillou.net>
+ <20190607162429.17915-5-paul@crapouillou.net>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <0dc0fd0a-54fc-5d70-af78-1874b5ece418@c-s.fr>
+Date:   Sat, 8 Jun 2019 09:51:45 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IJpNTDwzlM2Ie8A6"
-Content-Disposition: inline
-In-Reply-To: <20190607204111.GA19123@roeck-us.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190607162429.17915-5-paul@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hi Paul,
 
---IJpNTDwzlM2Ie8A6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Le 07/06/2019 à 18:24, Paul Cercueil a écrit :
+> This allows the probe function to be dropped after the kernel finished
+> its initialization, in the case where the driver was not compiled as a
+> module.
 
+I'm not sure that's what  __init_or_module flag does.
 
-> > The usecase I had in mind ("give the kernel <x> seconds to boot into
-> > working userspace") seems to be achieved by loading the WDT driver as a
-> > module then, I guess?
-> >=20
->=20
-> Would
-> https://lore.kernel.org/linux-watchdog/20190605140628.618-1-rasmus.villem=
-oes@prevas.dk/
->=20
-> solve your use case ?
+As far as I understand, this flag makes the function being dropped only 
+when the kernel is built without modules support, ie without 
+CONFIG_MODULES. See 
+https://elixir.bootlin.com/linux/latest/source/include/linux/module.h#L145
 
-Yes, it would. Thanks for the pointer! I missed the
-"handle_boot_enabled" parameter, too, for some reason. I think this
-could also be enough for some scenarios.
+In addition, I'm not sure you can simply define a probe function as 
+__init. What if someone tries to unbind and rebind the device through 
+sysfs for instance ?
 
-As a result, it seems it makes sense to respin my patch, and test it
-with "handle_boot_enabled" and the patch series you were pointing out.
+It seems there is a special function called __platform_driver_probe() 
+for registering devices when the probe function is to be in __init, see 
+https://elixir.bootlin.com/linux/latest/source/drivers/base/platform.c#L684
 
-I'll try to get this done within the next two weeks.
+Christophe
 
-Thanks again!
-
-
---IJpNTDwzlM2Ie8A6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz6z0sACgkQFA3kzBSg
-Kbb0ORAApbdwUuNxLYlPqM5NrLK6vdEx54x7pDnRCWlbPStNHyYXe/KeP+67kcJt
-Zixh6h6IxD7oMCGtL/KClaJszIDx5wt8L6kqt2yiF+Kj1c7M4cPLrbVvGVoF8IDf
-Ywc5IbVcIlwet1Kp6fxMSNuKKetVldjG5r+/iIFGb6YmvPCzJ0iHR7XqI1MO3Z2j
-aH5rmwMaXLziDom4Ee6hHhbNXLdDdSKUTRLW0eo7p09DHR1fgqhDPiIniwaTnW2T
-sVjsFKYokRq7vlixG7YPVF9zZvYgrQFltcCOE4vaZ868WOmHth9nf94hwzY0yYYI
-88OJS+noWzmDoc0g58Uvbp7/O0DJpfApl+BnIjooxOAn5rCatmHnR3KY+kITYPeH
-UBL9Ga0WRt/cEDmCTXAXFG+PmmlJIzW+RE1QskvOycJQ9r43zQ49Uu7/dLUTLlsm
-4UwF3TltkCaZH3O+3jrectA+c7+N+deU+pWuEaVtn1vsAcH9qHeBBqTcraffndfb
-SLiSqVqYPuv3qUGNUKO5kF9Jt+o2oP8R60FMQlhDNUe8AHAnugaw2XWXHnwAr+00
-OFWBHqCndMER+QlTkzMQn3uEWoevwrYOZtFUsvLctzaMFCORO4++D9vR7eW3MoDl
-SHgEWC3Q0qJCMr81ckul04cPsKSA+L84dXWUSygHbZAoCxIbME4=
-=VafG
------END PGP SIGNATURE-----
-
---IJpNTDwzlM2Ie8A6--
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+> 
+> Notes:
+>      v2: New patch
+> 
+>   drivers/watchdog/jz4740_wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/jz4740_wdt.c b/drivers/watchdog/jz4740_wdt.c
+> index 7519d80c5d05..2061788c1939 100644
+> --- a/drivers/watchdog/jz4740_wdt.c
+> +++ b/drivers/watchdog/jz4740_wdt.c
+> @@ -157,7 +157,7 @@ static const struct of_device_id jz4740_wdt_of_matches[] = {
+>   MODULE_DEVICE_TABLE(of, jz4740_wdt_of_matches);
+>   #endif
+>   
+> -static int jz4740_wdt_probe(struct platform_device *pdev)
+> +static int __init_or_module jz4740_wdt_probe(struct platform_device *pdev)
+>   {
+>   	struct device *dev = &pdev->dev;
+>   	struct jz4740_wdt_drvdata *drvdata;
+> 
