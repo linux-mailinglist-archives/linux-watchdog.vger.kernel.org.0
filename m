@@ -2,137 +2,149 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A891B42A2C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Jun 2019 17:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1348142AD9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Jun 2019 17:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407148AbfFLPCM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Jun 2019 11:02:12 -0400
-Received: from mail-eopbgr690135.outbound.protection.outlook.com ([40.107.69.135]:28719
-        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2407156AbfFLPCM (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Jun 2019 11:02:12 -0400
+        id S2405336AbfFLPYO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Jun 2019 11:24:14 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:39218 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727967AbfFLPYO (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 12 Jun 2019 11:24:14 -0400
+Received: by mail-pf1-f195.google.com with SMTP id j2so9866033pfe.6;
+        Wed, 12 Jun 2019 08:24:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aampusa.onmicrosoft.com; s=selector2-aampusa-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sY91n2gfH7ELNe0tEiB3wb8cFi0Ou6TTCX3TC4csU8g=;
- b=MjnrJWbgYaLdZOJ/0j9RBsmgiXzc7vJI8VODsHv+4b5Kl7vo7BuwcPi25BL6EVMlu1DC7e6WBoUMQif/PJ1lDnOHITWWc6ItMhB9L3JAA8ohNKQ8WtKG5UCQV9euO9T+aww3Hmqd0X1beSsCDKQHVp9US3TjxNwtedP7xPP6ZNg=
-Received: from BL0PR07MB4115.namprd07.prod.outlook.com (52.132.10.149) by
- BL0PR07MB5555.namprd07.prod.outlook.com (20.177.242.138) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.15; Wed, 12 Jun 2019 15:02:06 +0000
-Received: from BL0PR07MB4115.namprd07.prod.outlook.com
- ([fe80::f064:5129:63c6:d3e]) by BL0PR07MB4115.namprd07.prod.outlook.com
- ([fe80::f064:5129:63c6:d3e%6]) with mapi id 15.20.1965.017; Wed, 12 Jun 2019
- 15:02:06 +0000
-From:   Ken Sloat <KSloat@aampglobal.com>
-To:     "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>
-CC:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Fj8w7JFwxSiJmuLmJTCqCfMeiQ/Z4xIXLViQMCuR7R8=;
+        b=BueqaEpqE3yTy8qRAlT1y+RnLGUPcAfbZ9U8bwaVmBNE8GA58uNSFoDwn5ZbqCJbX0
+         dhX/kgshtQdziUqhbWq22zptY56mz9uS5anM+Rn/VXWeqjHrFhNzy/wnwxQ/pG67aHyU
+         tcXvwqgFhx/q0Gp6TAzEfmL+bj5yBzm1bqEjJpqOnIwJTGpQBiXBJLocPKX96O+RRpgP
+         ypgQVGAe753s05t2Pqka0ytbu0xKxS9J6ARXTnYHrEgoDiioqolJ5qf6G59h+4HGU8Zc
+         YyeF+lZ7kdW6IsLrvH/DS4vt0vjxN/To3DkR4P4jPsxpgtXdH8TA99gYLsHjKC4GJ35p
+         WyAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Fj8w7JFwxSiJmuLmJTCqCfMeiQ/Z4xIXLViQMCuR7R8=;
+        b=SJNHZEpB0vbNs4KiCRt1N45C6rysaXgW3SV6bT4unOQ9OXTOEPu+Gm5lKvQv3zwx5J
+         C9RLSrK+Uqr02kktpF+pFX/MaA9Iw+WZjTbIFMAdXYbKlv2X+4NgPcbAO483LgdeoHLx
+         YrPD02UUFCEQUTvrDR7VhoP/LArwpLs3uZNc3a7A+nkxM1S4sieqeV1HNdR01dtX+JvF
+         ++DXvNj2467z/Z6ACu9+WdVhrySjuFZ3/r3csPxuGUD5kul3MDfIkw3tYm+3wfGylOBY
+         VHLxwJB18Qp9oXj7aRdM7UriNy0O5n59aJZt+8MqaW5EHyDBhLoEZJyni/wF6uRnyyVp
+         J+ig==
+X-Gm-Message-State: APjAAAXauOR7nNY9v6uTa4hV1Jr1OUrTuOZ/fi6hrZyg7JLvEkS1m7FY
+        IYRPdDeXR7xhyWE5BecYXh8wK1T6
+X-Google-Smtp-Source: APXvYqwKlVFqfb3mgwvUK2av74PQnxpr/vAe172n2dcNuwwZhDxNLFcfKnU0R2L+6vNbVlyJyRB2gw==
+X-Received: by 2002:a63:4d08:: with SMTP id a8mr9743550pgb.329.1560353053032;
+        Wed, 12 Jun 2019 08:24:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z3sm223990pjn.16.2019.06.12.08.24.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 12 Jun 2019 08:24:11 -0700 (PDT)
+Subject: Re: [PATCH v1 1/1] watchdog: atmel: atmel-sama5d4-wdt: Disable
+ watchdog on system suspend
+To:     Ken Sloat <KSloat@aampglobal.com>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>
+Cc:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
         "ludovic.desroches@microchip.com" <ludovic.desroches@microchip.com>,
         "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        Ken Sloat <KSloat@aampglobal.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 1/1] watchdog: atmel: atmel-sama5d4-wdt: Disable watchdog
- on system suspend
-Thread-Topic: [PATCH v1 1/1] watchdog: atmel: atmel-sama5d4-wdt: Disable
- watchdog on system suspend
-Thread-Index: AQHVIS/MMKNdMTqzC02O6HgdHPA8iA==
-Date:   Wed, 12 Jun 2019 15:02:05 +0000
-Message-ID: <20190612150154.16778-1-ksloat@aampglobal.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [100.3.71.115]
-x-clientproxiedby: BN6PR11CA0065.namprd11.prod.outlook.com
- (2603:10b6:404:f7::27) To BL0PR07MB4115.namprd07.prod.outlook.com
- (2603:10b6:207:4c::21)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=KSloat@aampglobal.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.17.1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 74876760-2732-4621-1172-08d6ef46eedb
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BL0PR07MB5555;
-x-ms-traffictypediagnostic: BL0PR07MB5555:
-x-microsoft-antispam-prvs: <BL0PR07MB55551D75AC67AD69AECE387FADEC0@BL0PR07MB5555.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2958;
-x-forefront-prvs: 0066D63CE6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39850400004)(136003)(366004)(346002)(396003)(376002)(189003)(199004)(2616005)(50226002)(80792005)(25786009)(73956011)(6916009)(186003)(86362001)(6506007)(486006)(15650500001)(478600001)(54906003)(476003)(386003)(4326008)(53936002)(256004)(102836004)(26005)(1076003)(66946007)(66476007)(66556008)(64756008)(66446008)(14444005)(5660300002)(72206003)(8676002)(2351001)(6436002)(6512007)(68736007)(52116002)(66066001)(3846002)(36756003)(99286004)(316002)(305945005)(8936002)(2906002)(7736002)(71200400001)(5640700003)(14454004)(6486002)(81166006)(2501003)(71190400001)(81156014)(6116002);DIR:OUT;SFP:1102;SCL:1;SRVR:BL0PR07MB5555;H:BL0PR07MB4115.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: aampglobal.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 3aG4yUbVaHbPcLxmuKXLGisxqILGlaVSpGI3cHHHE6phpkoCF8XAQrc0YUffq6/OLusB/IvbC4Ytip9BK2EFsEVkhxMdhd3ZGxz661xs+dzUS/uxk6k6Dc3xTOnpXeeIlbYr4Z6wexxYratFYuHIrggd2W6tHZ3gDcwexyabWJ3FVnPhVaz/x0FgkSYY73Yup1xE0ncs3fm8UjN132dypByDgGech3g7zHFdadZ0fGfE/v/xGjeoAfSXSYEZQUb34m3PC1FQUEsqiIudskfSiztGKWyTteGpMkB8MCrrDcM37yyJ8LyUBIQljRWuEgV3PWZVHdwn7TaVMrV89cNUGfdokjKaOn+Zds0xSBHq+yJ5rB4hpqFYMySxZJkHK22BS4jgqzeGtqKj8Gh2nru1frJjiGQgnp/cuKDP/pzsgvQ=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+References: <20190612150154.16778-1-ksloat@aampglobal.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <8af0794a-327d-7144-609f-0c56422e92ec@roeck-us.net>
+Date:   Wed, 12 Jun 2019 08:24:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: aampglobal.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74876760-2732-4621-1172-08d6ef46eedb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2019 15:02:06.2951
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e20e3a66-8b9e-46e9-b859-cb654c1ec6ea
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ken.sloat@aampglobal.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR07MB5555
-X-MS-Exchange-CrossPremises-AuthAs: Internal
-X-MS-Exchange-CrossPremises-AuthMechanism: 06
-X-MS-Exchange-CrossPremises-AuthSource: BL0PR07MB4115.namprd07.prod.outlook.com
-X-MS-Exchange-CrossPremises-TransportTrafficType: Email
-X-MS-Exchange-CrossPremises-TransportTrafficSubType: 
-X-MS-Exchange-CrossPremises-SCL: 1
-X-MS-Exchange-CrossPremises-mapi-admin-submission: 
-X-MS-Exchange-CrossPremises-messagesource: StoreDriver
-X-MS-Exchange-CrossPremises-BCC: 
-X-MS-Exchange-CrossPremises-originalclientipaddress: 100.3.71.115
-X-MS-Exchange-CrossPremises-transporttraffictype: Email
-X-MS-Exchange-CrossPremises-transporttrafficsubtype: 
-X-MS-Exchange-CrossPremises-antispam-scancontext: DIR:Originating;SFV:NSPM;SKIP:0;
-X-MS-Exchange-CrossPremises-processed-by-journaling: Journal Agent
-X-OrganizationHeadersPreserved: BL0PR07MB5555.namprd07.prod.outlook.com
+In-Reply-To: <20190612150154.16778-1-ksloat@aampglobal.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-RnJvbTogS2VuIFNsb2F0IDxrc2xvYXRAYWFtcGdsb2JhbC5jb20+DQoNCkN1cnJlbnRseSwgdGhl
-IGF0bWVsLXNhbWE1ZDQtd2R0IGNvbnRpbnVlcyB0byBydW4gYWZ0ZXIgc3lzdGVtIHN1c3BlbmQu
-DQpVbmxlc3MgdGhlIHN5c3RlbSByZXN1bWVzIHdpdGhpbiB0aGUgd2F0Y2hkb2cgdGltZW91dCBw
-ZXJpb2Qgc28gdGhlDQp1c2Vyc3BhY2UgY2FuIGtpY2sgaXQsIHRoZSBzeXN0ZW0gd2lsbCBiZSBy
-ZXNldC4gVGhpcyBjaGFuZ2UgZGlzYWJsZXMNCnRoZSB3YXRjaGRvZyBvbiBzdXNwZW5kIGlmIGl0
-IGlzIGFjdGl2ZSBhbmQgcmUtZW5hYmxlcyBvbiByZXN1bWUuIFRoZXNlDQphY3Rpb25zIG9jY3Vy
-IGR1cmluZyB0aGUgbGF0ZSBhbmQgZWFybHkgcGhhc2VzIG9mIHN1c3BlbmQgYW5kIHJlc3VtZQ0K
-cmVzcGVjdGl2ZWx5IHRvIG1pbmltaXplIGNoYW5jZXMgd2hlcmUgYSBsb2NrIGNvdWxkIG9jY3Vy
-IHdoaWxlIHRoZQ0Kd2F0Y2hkb2cgaXMgZGlzYWJsZWQuDQoNClNpZ25lZC1vZmYtYnk6IEtlbiBT
-bG9hdCA8a3Nsb2F0QGFhbXBnbG9iYWwuY29tPg0KLS0tDQogZHJpdmVycy93YXRjaGRvZy9zYW1h
-NWQ0X3dkdC5jIHwgMzEgKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLQ0KIDEgZmlsZSBj
-aGFuZ2VkLCAyOSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy93YXRjaGRvZy9zYW1hNWQ0X3dkdC5jIGIvZHJpdmVycy93YXRjaGRvZy9zYW1hNWQ0
-X3dkdC5jDQppbmRleCAxMTE2OTUyMjNhYWUuLjg0ZWI0ZGIyMzk5MyAxMDA2NDQNCi0tLSBhL2Ry
-aXZlcnMvd2F0Y2hkb2cvc2FtYTVkNF93ZHQuYw0KKysrIGIvZHJpdmVycy93YXRjaGRvZy9zYW1h
-NWQ0X3dkdC5jDQpAQCAtMjgwLDYgKzI4MCwxOCBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2Rl
-dmljZV9pZCBzYW1hNWQ0X3dkdF9vZl9tYXRjaFtdID0gew0KIE1PRFVMRV9ERVZJQ0VfVEFCTEUo
-b2YsIHNhbWE1ZDRfd2R0X29mX21hdGNoKTsNCiANCiAjaWZkZWYgQ09ORklHX1BNX1NMRUVQDQor
-c3RhdGljIGludCBzYW1hNWQ0X3dkdF9zdXNwZW5kX2xhdGUoc3RydWN0IGRldmljZSAqZGV2KQ0K
-K3sNCisJc3RydWN0IHNhbWE1ZDRfd2R0ICp3ZHQ7DQorDQorCXdkdCA9IGRldl9nZXRfZHJ2ZGF0
-YShkZXYpOw0KKw0KKwlpZiAod2F0Y2hkb2dfYWN0aXZlKCZ3ZHQtPndkZCkpDQorCQlzYW1hNWQ0
-X3dkdF9zdG9wKCZ3ZHQtPndkZCk7DQorDQorCXJldHVybiAwOw0KK30NCisNCiBzdGF0aWMgaW50
-IHNhbWE1ZDRfd2R0X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQogew0KIAlzdHJ1Y3Qgc2Ft
-YTVkNF93ZHQgKndkdCA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KQEAgLTI5MywxMCArMzA1LDI1
-IEBAIHN0YXRpYyBpbnQgc2FtYTVkNF93ZHRfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCiAN
-CiAJcmV0dXJuIDA7DQogfQ0KKw0KK3N0YXRpYyBpbnQgc2FtYTVkNF93ZHRfcmVzdW1lX2Vhcmx5
-KHN0cnVjdCBkZXZpY2UgKmRldikNCit7DQorCXN0cnVjdCBzYW1hNWQ0X3dkdCAqd2R0Ow0KKw0K
-Kwl3ZHQgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCisNCisJaWYgKHdhdGNoZG9nX2FjdGl2ZSgm
-d2R0LT53ZGQpKQ0KKwkJc2FtYTVkNF93ZHRfc3RhcnQoJndkdC0+d2RkKTsNCisNCisJcmV0dXJu
-IDA7DQorfQ0KICNlbmRpZg0KIA0KLXN0YXRpYyBTSU1QTEVfREVWX1BNX09QUyhzYW1hNWQ0X3dk
-dF9wbV9vcHMsIE5VTEwsDQotCQkJIHNhbWE1ZDRfd2R0X3Jlc3VtZSk7DQorc3RhdGljIGNvbnN0
-IHN0cnVjdCBkZXZfcG1fb3BzIHNhbWE1ZDRfd2R0X3BtX29wcyA9IHsNCisJU0VUX1NZU1RFTV9T
-TEVFUF9QTV9PUFMoTlVMTCwgc2FtYTVkNF93ZHRfcmVzdW1lKQ0KKwlTRVRfTEFURV9TWVNURU1f
-U0xFRVBfUE1fT1BTKHNhbWE1ZDRfd2R0X3N1c3BlbmRfbGF0ZSwNCisJCQlzYW1hNWQ0X3dkdF9y
-ZXN1bWVfZWFybHkpDQorfTsNCiANCiBzdGF0aWMgc3RydWN0IHBsYXRmb3JtX2RyaXZlciBzYW1h
-NWQ0X3dkdF9kcml2ZXIgPSB7DQogCS5wcm9iZQkJPSBzYW1hNWQ0X3dkdF9wcm9iZSwNCi0tIA0K
-Mi4xNy4xDQoNCg==
+On 6/12/19 8:02 AM, Ken Sloat wrote:
+> From: Ken Sloat <ksloat@aampglobal.com>
+> 
+> Currently, the atmel-sama5d4-wdt continues to run after system suspend.
+> Unless the system resumes within the watchdog timeout period so the
+> userspace can kick it, the system will be reset. This change disables
+> the watchdog on suspend if it is active and re-enables on resume. These
+> actions occur during the late and early phases of suspend and resume
+> respectively to minimize chances where a lock could occur while the
+> watchdog is disabled.
+> 
+> Signed-off-by: Ken Sloat <ksloat@aampglobal.com>
+> ---
+>   drivers/watchdog/sama5d4_wdt.c | 31 +++++++++++++++++++++++++++++--
+>   1 file changed, 29 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sama5d4_wdt.c b/drivers/watchdog/sama5d4_wdt.c
+> index 111695223aae..84eb4db23993 100644
+> --- a/drivers/watchdog/sama5d4_wdt.c
+> +++ b/drivers/watchdog/sama5d4_wdt.c
+> @@ -280,6 +280,18 @@ static const struct of_device_id sama5d4_wdt_of_match[] = {
+>   MODULE_DEVICE_TABLE(of, sama5d4_wdt_of_match);
+>   
+>   #ifdef CONFIG_PM_SLEEP
+> +static int sama5d4_wdt_suspend_late(struct device *dev)
+> +{
+> +	struct sama5d4_wdt *wdt;
+> +
+> +	wdt = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&wdt->wdd))
+> +		sama5d4_wdt_stop(&wdt->wdd);
+> +
+> +	return 0;
+> +}
+> +
+>   static int sama5d4_wdt_resume(struct device *dev)
+>   {
+>   	struct sama5d4_wdt *wdt = dev_get_drvdata(dev);
+> @@ -293,10 +305,25 @@ static int sama5d4_wdt_resume(struct device *dev)
+>   
+>   	return 0;
+>   }
+> +
+> +static int sama5d4_wdt_resume_early(struct device *dev)
+> +{
+> +	struct sama5d4_wdt *wdt;
+> +
+> +	wdt = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&wdt->wdd))
+> +		sama5d4_wdt_start(&wdt->wdd);
+> +
+> +	return 0;
+> +}
+>   #endif
+>   
+> -static SIMPLE_DEV_PM_OPS(sama5d4_wdt_pm_ops, NULL,
+> -			 sama5d4_wdt_resume);
+> +static const struct dev_pm_ops sama5d4_wdt_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(NULL, sama5d4_wdt_resume)
+> +	SET_LATE_SYSTEM_SLEEP_PM_OPS(sama5d4_wdt_suspend_late,
+> +			sama5d4_wdt_resume_early)
+
+I don't think you need both sama5d4_wdt_resume()
+and sama5d4_wdt_resume_early().
+
+Guenter
+
+> +};
+>   
+>   static struct platform_driver sama5d4_wdt_driver = {
+>   	.probe		= sama5d4_wdt_probe,
+> 
+
