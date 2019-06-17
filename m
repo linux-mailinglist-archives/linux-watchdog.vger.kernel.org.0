@@ -2,54 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C3B47E06
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jun 2019 11:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BC2484B0
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jun 2019 15:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727847AbfFQJOK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Jun 2019 05:14:10 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:36796 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726753AbfFQJOK (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Jun 2019 05:14:10 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id C4E6525AED3;
-        Mon, 17 Jun 2019 19:14:07 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id C1B9994024A; Mon, 17 Jun 2019 11:14:05 +0200 (CEST)
-From:   Simon Horman <horms+renesas@verge.net.au>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Simon Horman <horms+renesas@verge.net.au>
-Subject: [PATCH] dt-bindings: watchdog: Rename bindings documentation file
-Date:   Mon, 17 Jun 2019 11:09:53 +0200
-Message-Id: <20190617090953.8770-1-horms+renesas@verge.net.au>
-X-Mailer: git-send-email 2.11.0
+        id S1727949AbfFQN5N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Jun 2019 09:57:13 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:42401 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725995AbfFQN5N (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 17 Jun 2019 09:57:13 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 3FB1A19CF77;
+        Mon, 17 Jun 2019 13:57:08 +0000 (UTC)
+Received: from ws.net.home (unknown [10.40.205.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0AC206136A;
+        Mon, 17 Jun 2019 13:57:05 +0000 (UTC)
+Date:   Mon, 17 Jun 2019 15:57:03 +0200
+From:   Karel Zak <kzak@redhat.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@iguana.be>, linux-watchdog@vger.kernel.org
+Subject: Re: RFE: export watchdog features and version by /sys
+Message-ID: <20190617135703.l3pzb3ndzhqxhflq@ws.net.home>
+References: <20190606100131.2xgrs5cmtnj4hjyb@ws.net.home>
+ <20190606171304.GA313@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190606171304.GA313@roeck-us.net>
+User-Agent: NeoMutt/20180716-1584-710bcd
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Mon, 17 Jun 2019 13:57:13 +0000 (UTC)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-For consistency with the naming of (most) other documentation files for DT
-bindings for Renesas IP blocks rename the Renesas WDT documentation file
-from renesas-wdt.txt to renesas,wdt.txt.
+On Thu, Jun 06, 2019 at 10:13:04AM -0700, Guenter Roeck wrote:
+> On Thu, Jun 06, 2019 at 12:01:31PM +0200, Karel Zak wrote:
+> > 
+> >  Hi,
+> > 
+> >  I'd like to improve wdctl(8) to read watchdog info from /sys, but I
+> >  found that sysfs does not provide all information like ioctl API.
+> > 
+> >  Unfortunately, there is no way how from /sys get info about supported
+> >  watchdog features and firmware version. This info is accessible only 
+> >  by WDIOC_GETSUPPORT ioclt (struct watchdog_info->options and
+> >  watchdog_info->firmware_version).
+> > 
+> >  It would be nice to have "options" and "firmware_version" also in in
+> >  sysfs. Please :-)
+> > 
+> 
+> Makes sense. Care to submit patches implementing it ?
 
-Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
----
- .../devicetree/bindings/watchdog/{renesas-wdt.txt => renesas,wdt.txt}     | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename Documentation/devicetree/bindings/watchdog/{renesas-wdt.txt => renesas,wdt.txt} (100%)
+Frankly, although it seems like relatively simple task it would be
+better if some kernel developer will do it :-) 
 
-diff --git a/Documentation/devicetree/bindings/watchdog/renesas-wdt.txt b/Documentation/devicetree/bindings/watchdog/renesas,wdt.txt
-similarity index 100%
-rename from Documentation/devicetree/bindings/watchdog/renesas-wdt.txt
-rename to Documentation/devicetree/bindings/watchdog/renesas,wdt.txt
+> We would have to resolve the conflict against the existing
+> firmware_version attribute provided by ziirave_wdt.
+
+Hmm, maybe use "version" as a filename for the attribute.
+
+    Karel
+
 -- 
-2.11.0
-
+ Karel Zak  <kzak@redhat.com>
+ http://karelzak.blogspot.com
