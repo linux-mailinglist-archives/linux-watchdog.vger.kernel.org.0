@@ -2,297 +2,288 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC0259B17
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jun 2019 14:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D5D59B27
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jun 2019 14:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbfF1MbH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Jun 2019 08:31:07 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:39868 "EHLO
+        id S1727397AbfF1Mb3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Jun 2019 08:31:29 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:39646 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727188AbfF1Mas (ORCPT
+        with ESMTP id S1727128AbfF1Maq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Jun 2019 08:30:48 -0400
+        Fri, 28 Jun 2019 08:30:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
-        To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HNTqLR7YTpiCGsfcYzZ23NBv7IuWobNYT8gokGCe3wo=; b=jOK9yEioolCXopD1Wq607Z9fR/
-        HdMohOTqYZUqXwti9GCkq6A/d0XRGI45pI0UuIi32KZf8+8qIJi/BsB/AXDe18qx+EYe0Kb3wSpax
-        BC4JBaEQFMDtp2rNHNAnVRNUlknvpaqomnsjSBYvbRksF4hQ8rk5FWq7VHR0xaVHdGiXcLi1mhWOL
-        7W1t49Fu8buHnGzEJsAmMVi6F8H7jPn2lzXVU6ILBj0+0XL7flg8ydZvEIxgxJvmRKTD407ivUgCs
-        DzquqTFZLZPqC91AwCHE5X0N6bEReQ7mAXvdb4/R1QTVyQNWjSXZTkOmieePIKqiGiHsO2c6fu0nx
-        yzEbLWYg==;
+        bh=V/HBcP10AaKg9f7QXCB/xlHhS75hL4oliVjFK2WwiWw=; b=DJ/WCxxkcrYW8G3KYkrHJnkf2P
+        jVRL0+UHsVSIf8VtGu+GJ+NK1gVs4f5L9BvDhdSkrkObRcuIcNwh2ckXwuFieia/rKgL36WvMuY9Z
+        nT6Huh3yl0ut6x0Rf6Y6sz2cdaYXiy4rO0wROl5LruZdy9aIj8Om8dOt6vWBqldhQ8ZRGOC88ma64
+        OFQp1WxYj3pk+dzTAvSUbFUgAbYZl7CWLsPeAzeYBMiW0VyvKiQQYnT4iHs9pYsGgFzLfwMG6XVwm
+        MePcBZkCo2f+oz0eiS7lY82L4KICcgRa9NnZD/K3rytV4FuomrWxv11teHb5arzgZjfDBfeN8hU6i
+        gjFHMc4Q==;
 Received: from [186.213.242.156] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hgq1U-00055N-Fq; Fri, 28 Jun 2019 12:30:36 +0000
+        id 1hgq1W-00054w-6k; Fri, 28 Jun 2019 12:30:38 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hgq1S-0005SM-DP; Fri, 28 Jun 2019 09:30:34 -0300
+        id 1hgq1S-0005Tu-Ta; Fri, 28 Jun 2019 09:30:34 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Harry Wei <harryxiyou@gmail.com>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        kexec@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sh@vger.kernel.org
-Subject: [PATCH 18/39] docs: admin-guide: add kdump documentation into it
-Date:   Fri, 28 Jun 2019 09:30:11 -0300
-Message-Id: <654e7591c044632c06257e0f069a52c0bb993554.1561724493.git.mchehab+samsung@kernel.org>
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, live-patching@vger.kernel.org,
+        netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH 37/39] docs: adds some directories to the main documentation index
+Date:   Fri, 28 Jun 2019 09:30:30 -0300
+Message-Id: <b26fc645cb2c81fe88ab13616c65664d2c3cead5.1561724493.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1561724493.git.mchehab+samsung@kernel.org>
 References: <cover.1561724493.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The Kdump documentation describes procedures with admins use
-in order to solve issues on their systems.
+The contents of those directories were orphaned at the documentation
+body.
+
+While those directories could likely be moved to be inside some guide,
+I'm opting to just adding their indexes to the main one, removing the
+:orphan: and adding the SPDX header.
+
+For the drivers, the rationale is that the documentation contains
+a mix of Kernelspace, uAPI and admin-guide. So, better to keep them on
+separate directories, as we've be doing with similar subsystem-specific
+docs that were not split yet.
+
+For the others, well... I'm too lazy to do the move. Also, it
+seems to make sense to keep at least some of those at the main
+dir (like kbuild, for example). In any case, a latter patch
+could do the move.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/admin-guide/bug-hunting.rst            | 4 ++--
- Documentation/admin-guide/index.rst                  | 1 +
- Documentation/{ => admin-guide}/kdump/gdbmacros.txt  | 0
- Documentation/{ => admin-guide}/kdump/index.rst      | 1 -
- Documentation/{ => admin-guide}/kdump/kdump.rst      | 0
- Documentation/{ => admin-guide}/kdump/vmcoreinfo.rst | 0
- Documentation/admin-guide/kernel-parameters.txt      | 6 +++---
- Documentation/powerpc/firmware-assisted-dump.rst     | 2 +-
- Documentation/translations/zh_CN/oops-tracing.txt    | 4 ++--
- Documentation/watchdog/hpwdt.rst                     | 2 +-
- MAINTAINERS                                          | 2 +-
- arch/arm/Kconfig                                     | 2 +-
- arch/arm64/Kconfig                                   | 2 +-
- arch/sh/Kconfig                                      | 2 +-
- arch/x86/Kconfig                                     | 4 ++--
- 15 files changed, 16 insertions(+), 16 deletions(-)
- rename Documentation/{ => admin-guide}/kdump/gdbmacros.txt (100%)
- rename Documentation/{ => admin-guide}/kdump/index.rst (97%)
- rename Documentation/{ => admin-guide}/kdump/kdump.rst (100%)
- rename Documentation/{ => admin-guide}/kdump/vmcoreinfo.rst (100%)
+ Documentation/cdrom/index.rst           |  2 +-
+ Documentation/fault-injection/index.rst |  2 +-
+ Documentation/fb/index.rst              |  2 +-
+ Documentation/fpga/index.rst            |  2 +-
+ Documentation/ide/index.rst             |  2 +-
+ Documentation/index.rst                 | 14 ++++++++++++++
+ Documentation/kbuild/index.rst          |  2 +-
+ Documentation/livepatch/index.rst       |  2 +-
+ Documentation/netlabel/index.rst        |  2 +-
+ Documentation/pcmcia/index.rst          |  2 +-
+ Documentation/power/index.rst           |  2 +-
+ Documentation/target/index.rst          |  2 +-
+ Documentation/timers/index.rst          |  2 +-
+ Documentation/watchdog/index.rst        |  2 +-
+ 14 files changed, 27 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/admin-guide/bug-hunting.rst b/Documentation/admin-guide/bug-hunting.rst
-index b761aa2a51d2..44b8a4edd348 100644
---- a/Documentation/admin-guide/bug-hunting.rst
-+++ b/Documentation/admin-guide/bug-hunting.rst
-@@ -90,9 +90,9 @@ the disk is not available then you have three options:
-     run a null modem to a second machine and capture the output there
-     using your favourite communication program.  Minicom works well.
- 
--(3) Use Kdump (see Documentation/kdump/kdump.rst),
-+(3) Use Kdump (see Documentation/admin-guide/kdump/kdump.rst),
-     extract the kernel ring buffer from old memory with using dmesg
--    gdbmacro in Documentation/kdump/gdbmacros.txt.
-+    gdbmacro in Documentation/admin-guide/kdump/gdbmacros.txt.
- 
- Finding the bug's location
- --------------------------
-diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
-index 9899b78dbe50..65e821a03aca 100644
---- a/Documentation/admin-guide/index.rst
-+++ b/Documentation/admin-guide/index.rst
-@@ -39,6 +39,7 @@ problems and bugs in particular.
-    ramoops
-    dynamic-debug-howto
-    init
-+   kdump/index
-    perf/index
- 
- This is the beginning of a section with information of interest to
-diff --git a/Documentation/kdump/gdbmacros.txt b/Documentation/admin-guide/kdump/gdbmacros.txt
-similarity index 100%
-rename from Documentation/kdump/gdbmacros.txt
-rename to Documentation/admin-guide/kdump/gdbmacros.txt
-diff --git a/Documentation/kdump/index.rst b/Documentation/admin-guide/kdump/index.rst
-similarity index 97%
-rename from Documentation/kdump/index.rst
-rename to Documentation/admin-guide/kdump/index.rst
-index 2b17fcf6867a..8e2ebd0383cd 100644
---- a/Documentation/kdump/index.rst
-+++ b/Documentation/admin-guide/kdump/index.rst
-@@ -1,4 +1,3 @@
+diff --git a/Documentation/cdrom/index.rst b/Documentation/cdrom/index.rst
+index efbd5d111825..338ad5f94e7c 100644
+--- a/Documentation/cdrom/index.rst
++++ b/Documentation/cdrom/index.rst
+@@ -1,4 +1,4 @@
 -:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- ================================================================
- Documentation for Kdump - The kexec-based Crash Dumping Solution
-diff --git a/Documentation/kdump/kdump.rst b/Documentation/admin-guide/kdump/kdump.rst
-similarity index 100%
-rename from Documentation/kdump/kdump.rst
-rename to Documentation/admin-guide/kdump/kdump.rst
-diff --git a/Documentation/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-similarity index 100%
-rename from Documentation/kdump/vmcoreinfo.rst
-rename to Documentation/admin-guide/kdump/vmcoreinfo.rst
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index e38b96d061f4..9b535c0e22f3 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -708,14 +708,14 @@
- 			[KNL, x86_64] select a region under 4G first, and
- 			fall back to reserve region above 4G when '@offset'
- 			hasn't been specified.
--			See Documentation/kdump/kdump.rst for further details.
-+			See Documentation/admin-guide/kdump/kdump.rst for further details.
+ =====
+ cdrom
+diff --git a/Documentation/fault-injection/index.rst b/Documentation/fault-injection/index.rst
+index 92b5639ed07a..8408a8a91b34 100644
+--- a/Documentation/fault-injection/index.rst
++++ b/Documentation/fault-injection/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- 	crashkernel=range1:size1[,range2:size2,...][@offset]
- 			[KNL] Same as above, but depends on the memory
- 			in the running system. The syntax of range is
- 			start-[end] where start and end are both
- 			a memory unit (amount[KMG]). See also
--			Documentation/kdump/kdump.rst for an example.
-+			Documentation/admin-guide/kdump/kdump.rst for an example.
+ ===============
+ fault-injection
+diff --git a/Documentation/fb/index.rst b/Documentation/fb/index.rst
+index d47313714635..baf02393d8ee 100644
+--- a/Documentation/fb/index.rst
++++ b/Documentation/fb/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- 	crashkernel=size[KMG],high
- 			[KNL, x86_64] range could be above 4G. Allow kernel
-@@ -1207,7 +1207,7 @@
- 			Specifies physical address of start of kernel core
- 			image elf header and optionally the size. Generally
- 			kexec loader will pass this option to capture kernel.
--			See Documentation/kdump/kdump.rst for details.
-+			See Documentation/admin-guide/kdump/kdump.rst for details.
+ ============
+ Frame Buffer
+diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
+index 2c87d1ea084f..f80f95667ca2 100644
+--- a/Documentation/fpga/index.rst
++++ b/Documentation/fpga/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- 	enable_mtrr_cleanup [X86]
- 			The kernel tries to adjust MTRR layout from continuous
-diff --git a/Documentation/powerpc/firmware-assisted-dump.rst b/Documentation/powerpc/firmware-assisted-dump.rst
-index d7fa7c35dd12..9ca12830a48e 100644
---- a/Documentation/powerpc/firmware-assisted-dump.rst
-+++ b/Documentation/powerpc/firmware-assisted-dump.rst
-@@ -61,7 +61,7 @@ as follows:
-          the default calculated size. Use this option if default
-          boot memory size is not sufficient for second kernel to
-          boot successfully. For syntax of crashkernel= parameter,
--         refer to Documentation/kdump/kdump.rst. If any offset is
-+         refer to Documentation/admin-guide/kdump/kdump.rst. If any offset is
-          provided in crashkernel= parameter, it will be ignored
-          as fadump uses a predefined offset to reserve memory
-          for boot memory dump preservation in case of a crash.
-diff --git a/Documentation/translations/zh_CN/oops-tracing.txt b/Documentation/translations/zh_CN/oops-tracing.txt
-index 368ddd05b304..c5f3bda7abcb 100644
---- a/Documentation/translations/zh_CN/oops-tracing.txt
-+++ b/Documentation/translations/zh_CN/oops-tracing.txt
-@@ -53,8 +53,8 @@ cat /proc/kmsg > file， 然而你必须介入中止传输， kmsg是一个“
- （2）用串口终端启动（请参看Documentation/admin-guide/serial-console.rst），运行一个null
- modem到另一台机器并用你喜欢的通讯工具获取输出。Minicom工作地很好。
+ ====
+ fpga
+diff --git a/Documentation/ide/index.rst b/Documentation/ide/index.rst
+index 45bc12d3957f..813dfe611a31 100644
+--- a/Documentation/ide/index.rst
++++ b/Documentation/ide/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
--（3）使用Kdump（请参看Documentation/kdump/kdump.rst），
--使用在Documentation/kdump/gdbmacros.txt中定义的dmesg gdb宏，从旧的内存中提取内核
-+（3）使用Kdump（请参看Documentation/admin-guide/kdump/kdump.rst），
-+使用在Documentation/admin-guide/kdump/gdbmacros.txt中定义的dmesg gdb宏，从旧的内存中提取内核
- 环形缓冲区。
+ ==================================
+ Integrated Drive Electronics (IDE)
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index e69d2fde7735..075c732501a2 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -35,6 +35,7 @@ trying to get it to work optimally on a given system.
+    :maxdepth: 2
  
- 完整信息
-diff --git a/Documentation/watchdog/hpwdt.rst b/Documentation/watchdog/hpwdt.rst
-index 94a96371113e..49c647dba8aa 100644
---- a/Documentation/watchdog/hpwdt.rst
-+++ b/Documentation/watchdog/hpwdt.rst
-@@ -59,7 +59,7 @@ Last reviewed: 08/20/2018
-  and loop forever.  This is generally not what a watchdog user wants.
+    admin-guide/index
++   kbuild/index
  
-  For those wishing to learn more please see:
--	Documentation/kdump/kdump.rst
-+	Documentation/admin-guide/kdump/kdump.rst
- 	Documentation/admin-guide/kernel-parameters.txt (panic=)
- 	Your Linux Distribution specific documentation.
+ Firmware-related documentation
+ ------------------------------
+@@ -77,6 +78,9 @@ merged much easier.
+    kernel-hacking/index
+    trace/index
+    maintainer/index
++   fault-injection/index
++   livepatch/index
++
  
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d35ff73f718a..4c622a19ab7d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8622,7 +8622,7 @@ R:	Vivek Goyal <vgoyal@redhat.com>
- L:	kexec@lists.infradead.org
- W:	http://lse.sourceforge.net/kdump/
- S:	Maintained
--F:	Documentation/kdump/
-+F:	Documentation/admin-guide/kdump/
+ Kernel API documentation
+ ------------------------
+@@ -94,12 +98,22 @@ needed).
+    core-api/index
+    accounting/index
+    block/index
++   cdrom/index
++   ide/index
++   fb/index
++   fpga/index
+    hid/index
+    iio/index
+    infiniband/index
+    leds/index
+    media/index
++   netlabel/index
+    networking/index
++   pcmcia/index
++   power/index
++   target/index
++   timers/index
++   watchdog/index
+    input/index
+    hwmon/index
+    gpu/index
+diff --git a/Documentation/kbuild/index.rst b/Documentation/kbuild/index.rst
+index 42d4cbe4460c..e323a3f2cc81 100644
+--- a/Documentation/kbuild/index.rst
++++ b/Documentation/kbuild/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- KEENE FM RADIO TRANSMITTER DRIVER
- M:	Hans Verkuil <hverkuil@xs4all.nl>
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 8bf8985ec667..d5bd4350fcbd 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -2025,7 +2025,7 @@ config CRASH_DUMP
- 	  kdump/kexec. The crash dump kernel must be compiled to a
- 	  memory address not used by the main kernel
+ ===================
+ Kernel Build System
+diff --git a/Documentation/livepatch/index.rst b/Documentation/livepatch/index.rst
+index edd291d51847..17674a9e21b2 100644
+--- a/Documentation/livepatch/index.rst
++++ b/Documentation/livepatch/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
--	  For more details see Documentation/kdump/kdump.rst
-+	  For more details see Documentation/admin-guide/kdump/kdump.rst
+ ===================
+ Kernel Livepatching
+diff --git a/Documentation/netlabel/index.rst b/Documentation/netlabel/index.rst
+index 47f1e0e5acd1..984e1b191b12 100644
+--- a/Documentation/netlabel/index.rst
++++ b/Documentation/netlabel/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- config AUTO_ZRELADDR
- 	bool "Auto calculation of the decompressed kernel image address"
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index accb045997c6..e1ea69994e0f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -997,7 +997,7 @@ config CRASH_DUMP
- 	  reserved region and then later executed after a crash by
- 	  kdump/kexec.
+ ========
+ NetLabel
+diff --git a/Documentation/pcmcia/index.rst b/Documentation/pcmcia/index.rst
+index 779c8527109e..7ae1f62fca14 100644
+--- a/Documentation/pcmcia/index.rst
++++ b/Documentation/pcmcia/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
--	  For more details see Documentation/kdump/kdump.rst
-+	  For more details see Documentation/admin-guide/kdump/kdump.rst
+ ======
+ pcmcia
+diff --git a/Documentation/power/index.rst b/Documentation/power/index.rst
+index 20415f21e48a..002e42745263 100644
+--- a/Documentation/power/index.rst
++++ b/Documentation/power/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- config XEN_DOM0
- 	def_bool y
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 31a7d12db705..c2858ac6a46a 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -626,7 +626,7 @@ config CRASH_DUMP
- 	  to a memory address not used by the main kernel using
- 	  PHYSICAL_START.
+ ================
+ Power Management
+diff --git a/Documentation/target/index.rst b/Documentation/target/index.rst
+index b68f48982392..4b24f81f747e 100644
+--- a/Documentation/target/index.rst
++++ b/Documentation/target/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
--	  For more details see Documentation/kdump/kdump.rst
-+	  For more details see Documentation/admin-guide/kdump/kdump.rst
+ ==================
+ TCM Virtual Device
+diff --git a/Documentation/timers/index.rst b/Documentation/timers/index.rst
+index 91f6f8263c48..df510ad0c989 100644
+--- a/Documentation/timers/index.rst
++++ b/Documentation/timers/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- config KEXEC_JUMP
- 	bool "kexec jump (EXPERIMENTAL)"
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index c9d59ca5e3ac..489fd833b980 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2057,7 +2057,7 @@ config CRASH_DUMP
- 	  to a memory address not used by the main kernel or BIOS using
- 	  PHYSICAL_START, or it must be built as a relocatable image
- 	  (CONFIG_RELOCATABLE=y).
--	  For more details see Documentation/kdump/kdump.rst
-+	  For more details see Documentation/admin-guide/kdump/kdump.rst
+ ======
+ timers
+diff --git a/Documentation/watchdog/index.rst b/Documentation/watchdog/index.rst
+index 33a0de631e84..c177645081d8 100644
+--- a/Documentation/watchdog/index.rst
++++ b/Documentation/watchdog/index.rst
+@@ -1,4 +1,4 @@
+-:orphan:
++.. SPDX-License-Identifier: GPL-2.0
  
- config KEXEC_JUMP
- 	bool "kexec jump"
-@@ -2094,7 +2094,7 @@ config PHYSICAL_START
- 	  the reserved region.  In other words, it can be set based on
- 	  the "X" value as specified in the "crashkernel=YM@XM"
- 	  command line boot parameter passed to the panic-ed
--	  kernel. Please take a look at Documentation/kdump/kdump.rst
-+	  kernel. Please take a look at Documentation/admin-guide/kdump/kdump.rst
- 	  for more details about crash dumps.
- 
- 	  Usage of bzImage for capturing the crash dump is recommended as
+ ======================
+ Linux Watchdog Support
 -- 
 2.21.0
 
