@@ -2,181 +2,137 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A491159C1E
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jun 2019 14:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5B55D0E2
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Jul 2019 15:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbfF1MzS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Jun 2019 08:55:18 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:35897 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726660AbfF1MzR (ORCPT
+        id S1726908AbfGBNkk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 2 Jul 2019 09:40:40 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:34431 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727035AbfGBNkk (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Jun 2019 08:55:17 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190628125514euoutp014edf00165e92c79c70efc940b797771c~sXf2Vz_jf3234532345euoutp013;
-        Fri, 28 Jun 2019 12:55:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190628125514euoutp014edf00165e92c79c70efc940b797771c~sXf2Vz_jf3234532345euoutp013
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561726514;
-        bh=GrXQNTXN4I9JHpQIL9zEkPq5zel3LSoEW3EB5ycEB2s=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Ng/LpVIzRsZ7uGyNkWHy/60hDS9y3MXaKxN/pLMXMT/Bss+fscGXO4sT151M0V6LW
-         QnUUmI4ALzkM6LrKmpH2V91CL0TahcMQc1lrHnHJeNV17Pp51zvLwJ2S4ssCIqcPRr
-         XOw/LyfRj5xsOxagZmKVtqZMHmRvG41kFNIfuAHc=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190628125514eucas1p1fd4db9f4161cfcae44ce131fc32d78ff~sXf19jycg2330223302eucas1p1v;
-        Fri, 28 Jun 2019 12:55:14 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 60.05.04298.13E061D5; Fri, 28
-        Jun 2019 13:55:13 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190628125513eucas1p149cf5397774d31921b4eee030d2d8500~sXf1JHVEo3050330503eucas1p1G;
-        Fri, 28 Jun 2019 12:55:13 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190628125512eusmtrp1f2e2177567d58a7c6fc5cb876c1efe21~sXf06je0q1299212992eusmtrp1O;
-        Fri, 28 Jun 2019 12:55:12 +0000 (GMT)
-X-AuditID: cbfec7f2-f13ff700000010ca-72-5d160e310d01
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2E.CA.04146.03E061D5; Fri, 28
-        Jun 2019 13:55:12 +0100 (BST)
-Received: from [106.120.51.71] (unknown [106.120.51.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190628125511eusmtip2334885dcd96bf89cc8f0faa1cb1e303f~sXfzmDhKC0126701267eusmtip2m;
-        Fri, 28 Jun 2019 12:55:11 +0000 (GMT)
-Subject: Re: [PATCH 37/39] docs: adds some directories to the main
- documentation index
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, live-patching@vger.kernel.org,
-        netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-watchdog@vger.kernel.org
-From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Message-ID: <a89ef0db-211c-1880-e60c-dc599b36feb7@samsung.com>
-Date:   Fri, 28 Jun 2019 14:55:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
+        Tue, 2 Jul 2019 09:40:40 -0400
+Received: by mail-pg1-f193.google.com with SMTP id p10so7723544pgn.1;
+        Tue, 02 Jul 2019 06:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TG01TGISb1yaWBogYU6mOa7ow9eBYHJfFmPCCNfkb5M=;
+        b=smcXrkSUJ7rZrYSKdhGuS234aAc2L4NUovI+9Jh5zaHdqd8Lc2ZLImzROrsYAaRluZ
+         hjRjyDZ3IuV7aW2oLPDRhlT38+mFZAoimJPMrL9oa9sI79lrXWiJhK33ucc9HEBRdT/3
+         wdMiB+8W7xVE0UCW2Ajunyn0LUBpXKOI8yf2edhyqZLuAhq70tUNf9tzJkuTa9LSuZii
+         NO9TRqdLZs30F408XkvP507HQaEXLvPDl/OgiA/W15XNKKlgshlaov5KrWLW2T74Wn/y
+         QD7stJDgihpq5zUOuhv0mOX2d14sa3fhvO4BiXEJElF9tk3/FNx3FQU1YOe/RJQPWKuQ
+         /W0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TG01TGISb1yaWBogYU6mOa7ow9eBYHJfFmPCCNfkb5M=;
+        b=g3W9XBt4B/xAwqnXHFNkMxePezPNRYvzDURcvBNkVWgD10JAQEJmY/eNSpB7zZCqBy
+         K+Xzos7QBBDFQ58PHlTEShaT6Z8LT7OKk59tIZPx2Hms8IlMpIsKa3P9q4+XJuuzOnYM
+         cZX/4HbPU0yCiiuFvcwIlIa2iFYm8vAEbuCPcFRD95/dxqclcZIDW5mN5OXx5GUAgM7L
+         cEmyu/r1mSx3wB3FAG/mUtrcEBRa9U5px1rQIvJQNcwQEpYFVcyKrTcDyg/4rpXxF/ix
+         uN2D+QT/lA3lzY5ObdaWHFZ3XkVRBDdJc0d38TVJ8Kn9rhc8sb/1yr/tohz2giilivEA
+         LvZA==
+X-Gm-Message-State: APjAAAUIa+kRQO/eJ7gThfVHu6WhJOxhZHqLIE1UAznxq2djQPIgOufG
+        Mj5hRtJIbGhqRcv+19o9f9c=
+X-Google-Smtp-Source: APXvYqywgKjj5HcP6LGVDjHKN+eHEzwJaObV/i9U5epabyKIF9WYhMzD1XH0fJ4ei3TIuE7aNAwsyg==
+X-Received: by 2002:a63:4105:: with SMTP id o5mr31798673pga.308.1562074838556;
+        Tue, 02 Jul 2019 06:40:38 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a3sm17913917pfi.63.2019.07.02.06.40.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 02 Jul 2019 06:40:38 -0700 (PDT)
+Date:   Tue, 2 Jul 2019 06:40:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ken Sloat <KSloat@aampglobal.com>
+Cc:     "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "ludovic.desroches@microchip.com" <ludovic.desroches@microchip.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] watchdog: atmel: atmel-sama5d4-wdt: Disable
+ watchdog on system suspend
+Message-ID: <20190702134037.GA23223@roeck-us.net>
+References: <20190614125310.29458-1-ksloat@aampglobal.com>
 MIME-Version: 1.0
-In-Reply-To: <b26fc645cb2c81fe88ab13616c65664d2c3cead5.1561724493.git.mchehab+samsung@kernel.org>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TbUxTZxTee796qRavlcE7YRqbOZVkCnMuZ36NJcu8WWJCjGaLjGDVOzDQ
-        anqpU7dkuPBZOnQyQ6hMwA8ooNAVggXEdWhbFKyTrwFaWCqLQlIRK9vcFKW9NePfc97nec55
-        zklellROMYvZfdpMQadVZ6gYOdXsfOp+Jz48MjnO54iDCXs+gjrPMQbG7HkIym5lU9A3PcnA
-        sCsHQUljLQP2p50ITD+2E1CZe46CzqJHNHhL/5aB0+Yl4FmrjYDe1jIG/N9fQ1D4u42BR0Yv
-        A4P1V2RQkT0rHqvsJqD71xEGql0zBHjMgwRMPi4gwHbjDAnlR7dAZXcSOCsi4c6JEgo8NxwM
-        vLg3TUN3Vw8NOed9BDRaT5Jwb3yGhPYRP0pYzjfVDBH8by3z+BaTR8Y3mmP5s5fHCb73pp63
-        1hYw/EO3W8bXXLhA86OFLoI/W1RM857cjfzUn8MUf7H9AeInr/QzfFN/HpUYuVO+ca+Qse+g
-        oFuzeZc8bWDkLnOgPvxQ07VSlIXG5QbEsph7DztdjAHJWSVnRvi8LQcZUNhs8QThbG+I8CNs
-        f36fChABg3f6JCER1Qg/6x8JFT6Es9oMREC1iPsct/tdwVYR3Pv4utsRbEVyZjnus1iZAMFw
-        6/EPebVBkYLbjP+q66UDmOKW46vmJ8H312cbjTottKRZiK+XjgVjhHFqbGm2BDUkF4WHx8oJ
-        CS/Fl3xlZGAY5txh2PrCwki5P8Y/TxpDeBGecDXJJByDu4qNlGSoR/h5/oOQ+xLC1cUzIccG
-        fNV1mw6cjORW4YbWNdL1PsLe776QYDge9C2UMoTjE80lpPSswPm5SqnH29hS9SpNDDa01JDH
-        kco0ZzPTnG1Mc7Yx/T+2AlG1KErQi5pUQYzXCl+tFtUaUa9NXb1nv8aKZj9C14zrsQ1N9+zu
-        QByLVPMV/8yPTFbS6oPiYU0HwiypilC84Y5IVir2qg8fEXT7U3T6DEHsQNEspYpSfP3aH0lK
-        LlWdKaQLwgFB94ol2LDFWShae5NOO5Ikq4J3V/z06b9Lb0/E9C375uK2hzvyKrVl8nl6cUG5
-        55fEUwkNsdF1H9hHp/xbfY5vNVXpQ5syNp26ZVnXdvqzO+v6MpfVpXBrV705evytgi93e7Ya
-        h6jeDwdSEnYuaXD0VGyLK7q/stCY0ro91TxwbAl39ND6zk/aEv+rTl+posQ0dXwsqRPVLwFc
-        V6c/BAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0yTVxiAPd+tpVvNZ0U4AzO2JmYGY7Ug9oUgarZlJ7qo0T9kjGjFz2Kk
-        revXEi/ZohnX4mVOCWnDBogECnijTIsRqFWpl1oNeIPRLqldYiWKjrGFBNlKGxP+PXnf5znJ
-        SV4prSjnUqR7DGbBZNCWKDkZc2/GG1y+cn5S4crQOw28dFch6Aic4CDsrkRQ/6CMgUeT4xyM
-        eMsR1DnbOXBP3UZgP91LQVPFWQZuH3/DQsj2rwQGXCEKpq+6KBi6Ws/BxLGbCGqeujh4czTE
-        wbPzfRJoLIvK4SYfBb7rQQ5avTMUBNqeUTD+VzUFrrtnaGg48hU0+QpgoDEJfv+5joHA3Vsc
-        /Pd8kgXfvUEWylteUeDsqqXheWSGht7gBFq3hHQ7hinysOcD0mMPSIizLZ00X4tQZOi+hXS1
-        V3Pktd8vIY7OTpb8UeOlSPPxUywJVOSSt3+OMORc7wtExvsec6T7cSWzJekbVa7JaDELnxQb
-        RfMaZYEaMlTqbFBlrMpWqTM1hTkZWcoVebm7hJI9pYJpRd4OVfGT4Ci37/z8/d03begwisis
-        KEGK+VU4NFlLWZFMquBbEO7zldFWJI0uFmPvhdK4sxBPP7FycWcM4arhLsnsYiGfj3snvGiW
-        E/nV+I7/Vkyi+U4Z7q9zS+LFi2jR8wsza3F8Dj5Z2R4r5Hwe/qdjiJ1lhl+Cb7T9HZsvir7q
-        G29j4s4CfMcWjnECr8UXL1+MOTT/GZ7+dZCOczIeCTdQcU7DV17V0z8hhX1Obp+T2Ock9jlJ
-        I2LaUaJgEfU6vahWiVq9aDHoVEVGfReKnuDlgSmnCw1e2uZBvBQpP5Q3ypIKFay2VDyg9yAs
-        pZWJ8o/8iYUK+S7tgYOCybjdZCkRRA/Kin7uJJ2yqMgYPWiDebs6S62BbLUmU5O5GpTJ8ir+
-        +rcKXqc1C3sFYZ9get9R0oSUwyh5mH3KTKUZ0z3XPs1yr2leN+/jo+sP5m5eLCdLjwymOmq+
-        eLTpzIndG1ULfjgkidTd77SNtTglX6Y/WMsWdFTrUn/bWSF/2O8Yae1/t9xtHW7J9+SMVjmV
-        59ytjilD+OuNNvx9td0478eI45LuuyvBDa+DwWJ/Q9qy0VTaXFu09XMlIxZr1em0SdT+Dxpi
-        Ik6YAwAA
-X-CMS-MailID: 20190628125513eucas1p149cf5397774d31921b4eee030d2d8500
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190628123051epcas3p35e0cb4a5a1159dac19bde504ae21b0f3
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190628123051epcas3p35e0cb4a5a1159dac19bde504ae21b0f3
-References: <cover.1561724493.git.mchehab+samsung@kernel.org>
-        <CGME20190628123051epcas3p35e0cb4a5a1159dac19bde504ae21b0f3@epcas3p3.samsung.com>
-        <b26fc645cb2c81fe88ab13616c65664d2c3cead5.1561724493.git.mchehab+samsung@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190614125310.29458-1-ksloat@aampglobal.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Fri, Jun 14, 2019 at 12:53:22PM +0000, Ken Sloat wrote:
+> From: Ken Sloat <ksloat@aampglobal.com>
+> 
+> Currently, the atmel-sama5d4-wdt continues to run after system suspend.
+> Unless the system resumes within the watchdog timeout period so the
+> userspace can kick it, the system will be reset. This change disables
+> the watchdog on suspend if it is active and re-enables on resume. These
+> actions occur during the late and early phases of suspend and resume
+> respectively to minimize chances where a lock could occur while the
+> watchdog is disabled.
+> 
+> Signed-off-by: Ken Sloat <ksloat@aampglobal.com>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-On 6/28/19 2:30 PM, Mauro Carvalho Chehab wrote:
-> The contents of those directories were orphaned at the documentation
-> body.
-> 
-> While those directories could likely be moved to be inside some guide,
-> I'm opting to just adding their indexes to the main one, removing the
-> :orphan: and adding the SPDX header.
-> 
-> For the drivers, the rationale is that the documentation contains
-> a mix of Kernelspace, uAPI and admin-guide. So, better to keep them on
-> separate directories, as we've be doing with similar subsystem-specific
-> docs that were not split yet.
-> 
-> For the others, well... I'm too lazy to do the move. Also, it
-> seems to make sense to keep at least some of those at the main
-> dir (like kbuild, for example). In any case, a latter patch
-> could do the move.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-
-Acked-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  Documentation/cdrom/index.rst           |  2 +-
->  Documentation/fault-injection/index.rst |  2 +-
->  Documentation/fb/index.rst              |  2 +-
->  Documentation/fpga/index.rst            |  2 +-
->  Documentation/ide/index.rst             |  2 +-
->  Documentation/index.rst                 | 14 ++++++++++++++
->  Documentation/kbuild/index.rst          |  2 +-
->  Documentation/livepatch/index.rst       |  2 +-
->  Documentation/netlabel/index.rst        |  2 +-
->  Documentation/pcmcia/index.rst          |  2 +-
->  Documentation/power/index.rst           |  2 +-
->  Documentation/target/index.rst          |  2 +-
->  Documentation/timers/index.rst          |  2 +-
->  Documentation/watchdog/index.rst        |  2 +-
->  14 files changed, 27 insertions(+), 13 deletions(-)
-Best regards,
---
-Bartlomiej Zolnierkiewicz
-Samsung R&D Institute Poland
-Samsung Electronics
+>  Changes in v2:
+>  -Consolidate resume and resume early statements.
+> 
+>  drivers/watchdog/sama5d4_wdt.c | 21 ++++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sama5d4_wdt.c b/drivers/watchdog/sama5d4_wdt.c
+> index 111695223aae..0d123f8cbcc6 100644
+> --- a/drivers/watchdog/sama5d4_wdt.c
+> +++ b/drivers/watchdog/sama5d4_wdt.c
+> @@ -280,7 +280,17 @@ static const struct of_device_id sama5d4_wdt_of_match[] = {
+>  MODULE_DEVICE_TABLE(of, sama5d4_wdt_of_match);
+>  
+>  #ifdef CONFIG_PM_SLEEP
+> -static int sama5d4_wdt_resume(struct device *dev)
+> +static int sama5d4_wdt_suspend_late(struct device *dev)
+> +{
+> +	struct sama5d4_wdt *wdt = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&wdt->wdd))
+> +		sama5d4_wdt_stop(&wdt->wdd);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sama5d4_wdt_resume_early(struct device *dev)
+>  {
+>  	struct sama5d4_wdt *wdt = dev_get_drvdata(dev);
+>  
+> @@ -291,12 +301,17 @@ static int sama5d4_wdt_resume(struct device *dev)
+>  	 */
+>  	sama5d4_wdt_init(wdt);
+>  
+> +	if (watchdog_active(&wdt->wdd))
+> +		sama5d4_wdt_start(&wdt->wdd);
+> +
+>  	return 0;
+>  }
+>  #endif
+>  
+> -static SIMPLE_DEV_PM_OPS(sama5d4_wdt_pm_ops, NULL,
+> -			 sama5d4_wdt_resume);
+> +static const struct dev_pm_ops sama5d4_wdt_pm_ops = {
+> +	SET_LATE_SYSTEM_SLEEP_PM_OPS(sama5d4_wdt_suspend_late,
+> +			sama5d4_wdt_resume_early)
+> +};
+>  
+>  static struct platform_driver sama5d4_wdt_driver = {
+>  	.probe		= sama5d4_wdt_probe,
