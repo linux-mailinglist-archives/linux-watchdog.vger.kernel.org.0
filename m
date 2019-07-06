@@ -2,145 +2,136 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE0160588
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Jul 2019 13:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47E261093
+	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Jul 2019 13:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbfGELq0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 5 Jul 2019 07:46:26 -0400
-Received: from mail-eopbgr150055.outbound.protection.outlook.com ([40.107.15.55]:29927
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727609AbfGELqZ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 5 Jul 2019 07:46:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZR6FRZXAQuDPlH1cBhx5w0i7Uy56UvledOjFXT9by2o=;
- b=uv47vAEjz2/Z6xga9trjYhJkjEbStw5QDa8tAni6ZvHCWmaBCj3Gh3LPe0IXnygNp5K2GM/t8M8d5CNIHx3GrSAZ7WEu0jQl+z0MnvMHf4c7L+P89dybonyaS3goVh91lMbEGqa1G5WsIFan4KxLqU3FnO7+xGukaBiJtqDkrQg=
-Received: from AM0PR06MB4066.eurprd06.prod.outlook.com (52.133.60.17) by
- AM0PR06MB5891.eurprd06.prod.outlook.com (20.178.112.28) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.19; Fri, 5 Jul 2019 11:46:04 +0000
-Received: from AM0PR06MB4066.eurprd06.prod.outlook.com
- ([fe80::141f:c11a:799e:97f9]) by AM0PR06MB4066.eurprd06.prod.outlook.com
- ([fe80::141f:c11a:799e:97f9%7]) with mapi id 15.20.2052.010; Fri, 5 Jul 2019
- 11:46:04 +0000
-From:   Melin Tomas <tomas.melin@vaisala.com>
-To:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>
-CC:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Melin Tomas <tomas.melin@vaisala.com>
-Subject: [PATCH v2 4/4] watchdog: cadence_wdt: Support all available prescaler
- values
-Thread-Topic: [PATCH v2 4/4] watchdog: cadence_wdt: Support all available
- prescaler values
-Thread-Index: AQHVMyc5XfCsE+9knUOMmMD97S+BMw==
-Date:   Fri, 5 Jul 2019 11:46:04 +0000
-Message-ID: <20190705114522.42565-5-tomas.melin@vaisala.com>
-References: <20190705114522.42565-1-tomas.melin@vaisala.com>
-In-Reply-To: <20190705114522.42565-1-tomas.melin@vaisala.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR0901CA0051.eurprd09.prod.outlook.com
- (2603:10a6:3:45::19) To AM0PR06MB4066.eurprd06.prod.outlook.com
- (2603:10a6:208:b8::17)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=tomas.melin@vaisala.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.17.2
-x-originating-ip: [193.143.230.131]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ac173b10-eada-4bdc-82e0-08d7013e5c44
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR06MB5891;
-x-ms-traffictypediagnostic: AM0PR06MB5891:
-x-microsoft-antispam-prvs: <AM0PR06MB58915D06B3625DBF2B13BA0DFDF50@AM0PR06MB5891.eurprd06.prod.outlook.com>
-x-tenant-id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
-x-ms-oob-tlc-oobclassifiers: OLM:2582;
-x-forefront-prvs: 008960E8EC
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(136003)(346002)(376002)(39850400004)(366004)(199004)(189003)(52116002)(53936002)(6512007)(6436002)(66066001)(6506007)(25786009)(386003)(6486002)(478600001)(3846002)(6116002)(2501003)(68736007)(50226002)(76176011)(99286004)(107886003)(36756003)(26005)(316002)(4326008)(102836004)(54906003)(110136005)(186003)(71190400001)(71200400001)(5660300002)(2906002)(7736002)(305945005)(476003)(446003)(11346002)(2616005)(1076003)(8936002)(66476007)(66556008)(64756008)(66446008)(86362001)(8676002)(256004)(486006)(73956011)(66946007)(81166006)(14454004)(81156014);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR06MB5891;H:AM0PR06MB4066.eurprd06.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: vaisala.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: c1HHGDu1b0ZdGzTR20qnJWz9J7VeHWVxayXSzyZ6tiYDDWeJQXwttK7NG/PkTjBGAS48Mg2ktcGcevZ4+Gb/sH0nUCAMgsGeyik/EIRwnBe7jxYbB4NPnrRAAX/LFun1Ljk15kP1vmzpHa4bEI0VrJoyry/Ecwb2edwidy6bvuMueFuH6vCZl55BZrDTZIJbiUivd11XSYWFYwx7wFr9shRYDrufBhFrCxBz/J75GBaO5+1vWDI42aEtil6g31C9ZXpBwGKCyUvj0esTPrbwNjX1Y6Ai9boQ6/14yivC5Gs3SQT7ZQrnmX111k4USjpcTpfLVg+Af3V2f8GJgUE85UhWhtOwcC2/4vBg9wuIIVxVfjaFliN121c4PMiGn71cACmVVbMdscBZznI+HNA8Fms7M/4tmcgnQ82JdsicfIE=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726199AbfGFLq4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 6 Jul 2019 07:46:56 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:43480 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbfGFLqz (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 6 Jul 2019 07:46:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=j6y676QYR/iHJJ649Hu4pguKBc+26wcukAE46ESMMlo=; b=dOTYigO14yG8pQxnEPFBC19DX
+        /Ww8mAJLwcfe1SJqp/NylfCiIiI9REBU4NBiWe4dYMw9xdQP6lV0y+pUltL/gztWxW7BxkiF1kRXE
+        w6XA7g9pa5LjIsiEu0S8st2kB2gzhI15q6uEUzs4XQgoqkyabISla1WvfKEt7LUVcsysRFNZryzy2
+        Vt4rLjvEjd+OfhIGQpJR1++ZVceLUOM/+IRXvzm2znfchAZwwCauZYISTmjywQAOsgIR2YmU3+vzt
+        0KvSoXLLqm4bOXutzWmOhE1jpX4jFMrPYVTRcXNwmtfs/ro27ahj9vrDH17GltUK57PchaGmotAd6
+        Zh3YctvFg==;
+Received: from 177.205.70.5.dynamic.adsl.gvt.net.br ([177.205.70.5] helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hjj9S-0002M7-Qh; Sat, 06 Jul 2019 11:46:47 +0000
+Date:   Sat, 6 Jul 2019 08:46:38 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Dave Young <dyoung@redhat.com>
+Cc:     Alex Shi <alex.shi@linux.alibaba.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Harry Wei <harryxiyou@gmail.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        kexec@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sh@vger.kernel.org
+Subject: Re: [PATCH 18/39] docs: admin-guide: add kdump documentation into
+ it
+Message-ID: <20190706084638.7dc875f2@coco.lan>
+In-Reply-To: <20190705055904.GB2790@localhost.localdomain>
+References: <cover.1561724493.git.mchehab+samsung@kernel.org>
+        <654e7591c044632c06257e0f069a52c0bb993554.1561724493.git.mchehab+samsung@kernel.org>
+        <6911b74c-848f-0060-3db5-b5d7e8061cb5@linux.alibaba.com>
+        <20190705055904.GB2790@localhost.localdomain>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: vaisala.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac173b10-eada-4bdc-82e0-08d7013e5c44
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2019 11:46:04.5547
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tomas.melin@vaisala.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR06MB5891
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Cadence watchdog HW supports prescaler values of
-8, 64, 512 and 4096.
+Em Fri, 5 Jul 2019 13:59:04 +0800
+Dave Young <dyoung@redhat.com> escreveu:
 
-Add support to select prescaler values of 8 and 64 for lower
-input clock frequencies.
+> On 07/05/19 at 11:43am, Alex Shi wrote:
+> >=20
+> >=20
+> > =E5=9C=A8 2019/6/28 =E4=B8=8B=E5=8D=888:30, Mauro Carvalho Chehab =E5=
+=86=99=E9=81=93: =20
+> > > The Kdump documentation describes procedures with admins use
+> > > in order to solve issues on their systems.
+> > >=20
+> > > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> > > ---
+> > >  Documentation/admin-guide/bug-hunting.rst            | 4 ++--
+> > >  Documentation/admin-guide/index.rst                  | 1 +
+> > >  Documentation/{ =3D> admin-guide}/kdump/gdbmacros.txt  | 0
+> > >  Documentation/{ =3D> admin-guide}/kdump/index.rst      | 1 -
+> > >  Documentation/{ =3D> admin-guide}/kdump/kdump.rst      | 0
+> > >  Documentation/{ =3D> admin-guide}/kdump/vmcoreinfo.rst | 0 =20
+> >=20
+> > I am not sure if it's convenience for people to have more levels in doc=
+s.
+> >=20
+> > But I guess, move archs into a Documentation/arch/ dir should be fine. =
+like Documentation/arch/{x86,arm,arm64,ia64,m68k,s390,powerpc,...} =20
+>=20
+> Alex, moving kdump to admin-guide sounds reasonable to me.  I also agree
+> with you for those arch dependent files can be moved to
+> Documentation/arch/, maybe you are talking about some other patches in
+> the series for the arch/?=20
 
-Prescaler value is selected to keep timeout resolution of 1 second.
-For clock frequencies below 32kHz, 1 second resolution does
-no longer hold, thereby returning an error.
+Alex,
 
-Signed-off-by: Tomas Melin <tomas.melin@vaisala.com>
----
- drivers/watchdog/cadence_wdt.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+It makes sense for me to have a Documentation/arch directory, and place
+the arch-specific docs over there.
 
-diff --git a/drivers/watchdog/cadence_wdt.c b/drivers/watchdog/cadence_wdt.=
-c
-index 4657800d9d8e..39109b5721c1 100644
---- a/drivers/watchdog/cadence_wdt.c
-+++ b/drivers/watchdog/cadence_wdt.c
-@@ -33,16 +33,17 @@
- #define CDNS_WDT_COUNTER_VALUE_DIVISOR 0x1000
-=20
- /* Clock prescaler value and selection */
-+#define CDNS_WDT_PRESCALE_8	8
- #define CDNS_WDT_PRESCALE_64	64
- #define CDNS_WDT_PRESCALE_512	512
- #define CDNS_WDT_PRESCALE_4096	4096
-+#define CDNS_WDT_PRESCALE_SELECT_8	0
- #define CDNS_WDT_PRESCALE_SELECT_64	1
- #define CDNS_WDT_PRESCALE_SELECT_512	2
- #define CDNS_WDT_PRESCALE_SELECT_4096	3
-=20
--/* Input clock frequency */
--#define CDNS_WDT_CLK_10MHZ	10000000
--#define CDNS_WDT_CLK_75MHZ	75000000
-+/* Base input clock frequency */
-+#define CDNS_WDT_CLK_32KHZ 32768
-=20
- /* Counter maximum value */
- #define CDNS_WDT_COUNTER_MAX 0xFFF
-@@ -304,7 +305,16 @@ static int cdns_wdt_probe(struct platform_device *pdev=
-)
- 	}
-=20
- 	clock_f =3D clk_get_rate(wdt->clk);
--	if (clock_f <=3D CDNS_WDT_CLK_75MHZ) {
-+	if (clock_f < CDNS_WDT_CLK_32KHZ) {
-+		dev_err(&pdev->dev, "cannot find suitable clock prescaler\n");
-+		return -ERANGE;
-+	} else if (clock_f <=3D CDNS_WDT_CLK_32KHZ * CDNS_WDT_PRESCALE_8) {
-+		wdt->prescaler =3D CDNS_WDT_PRESCALE_8;
-+		wdt->ctrl_clksel =3D CDNS_WDT_PRESCALE_SELECT_8;
-+	} else if (clock_f <=3D CDNS_WDT_CLK_32KHZ * CDNS_WDT_PRESCALE_64) {
-+		wdt->prescaler =3D CDNS_WDT_PRESCALE_64;
-+		wdt->ctrl_clksel =3D CDNS_WDT_PRESCALE_SELECT_64;
-+	} else if (clock_f <=3D CDNS_WDT_CLK_32KHZ * CDNS_WDT_PRESCALE_512) {
- 		wdt->prescaler =3D CDNS_WDT_PRESCALE_512;
- 		wdt->ctrl_clksel =3D CDNS_WDT_PRESCALE_SELECT_512;
- 	} else {
---=20
-2.17.2
+There's actually a technical advantage on doing that: Sphinx is dumb
+with regards to PDF/LaTeX output: it requires all top documents to be
+listed at Documentation/conf.py, under this var:
 
+	latex_documents =3D [
+		...
+	]
+
+As it creates one runtime Makefile at Documentation/output per listed
+document there. So, the more we group such documents, the less merge
+conflicts we'll have at Documentation/conf.py.
+
+Btw, there's a [TECH TOPIC] proposal for KS/2019 meant to discuss=20
+Documentation.
+
+I suspect we could discuss the pros/cons of doing such change there.
+
+My personal view is that we should keep the Documentation/ root dir as
+clean as possible as a long term goal.
+
+On the other hand, it makes the path bigger and harder to rename.
+
+On a side note, last time we discussed documentation at KS I remember
+I proposed to shortcut "Documentation/" to just "docs/". The consensus
+on that time were to keep the big name. I still think that a shorter
+one could help people to remind where documentation will be located.
+
+Thanks,
+Mauro
