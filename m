@@ -2,180 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A184663D18
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Jul 2019 23:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598EF64361
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Jul 2019 10:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbfGIVHQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Jul 2019 17:07:16 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34945 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbfGIVHP (ORCPT
+        id S1727459AbfGJIJn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 10 Jul 2019 04:09:43 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:47013 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726097AbfGJIJn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Jul 2019 17:07:15 -0400
-Received: by mail-pf1-f193.google.com with SMTP id u14so8705572pfn.2
-        for <linux-watchdog@vger.kernel.org>; Tue, 09 Jul 2019 14:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oECLyXb9cwHzKCOR02xJuvQa3mAgpByK4x+p21WktpI=;
-        b=LkWd4dTqNTrlTsv0v/J42pr17roxKt9IZThcSmBmRmgnGFA2lMjLRUaGmexZytG/z2
-         2OERS6ICwnTRfwKRBrn9LYAWnQGrTHPiWdvoNNqu94ODjHIFdgwtXPCjaJE2MfhNGvpb
-         PdLsLLE5UmgQxT984qA9EamiQzYSKGMDCppkgBWzQqfZ8Vzg8m9xcuPAJGMU91XkqPvZ
-         gt+mU+OHKlfACatAh1aCXEhatH+oOS+4gnf2Wa2iEnX+cf8kZSDMYjk/+F4JNLPIroSv
-         7d+de7Xt3kLz2QR65UKhJB/N+LAjSw+M1IRLxMP4EY96tDSzp6TJdD0riTvgDhE20pKl
-         +2nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oECLyXb9cwHzKCOR02xJuvQa3mAgpByK4x+p21WktpI=;
-        b=dDpcKJhqJgPuQFz1SmxkblnD/FuT7ADbn//o5U3JcYaHVLoq60Gr5Raqw+gDSk1WZ7
-         CR95B1L6YSXbAmIh2kYpbopHqp1gGx9WfYMS+q2Cw7UXhUyzN9NvQEFUIpxUAfIJ7E1f
-         6TRVZ6kTTnWEVjPhOJ4snoQrBaCRXJqegovu1eAvPCJ/38oaH+1L2oPwZkonTsuCsWKc
-         uyTbsuiNQ3ZJsdF3rYgJajX0qEK+ZUGzWXxI+fUKxWMveaS12bwWQGnTteJPAB3DY8i5
-         imc4MYRolbzASgV2b/alQLFIk1Wb6hVQpl3R+eC0qbxIk8qGaK+Uo5aZDRcxSz2Xt4BM
-         vVCw==
-X-Gm-Message-State: APjAAAVLuzyoMeWJb7R73nQioGVP7K2uF1yQrhJzYRz6Y7OtlbQKw6dV
-        zLC7O5bRk5yMRqLoePhpSDbv2td1
-X-Google-Smtp-Source: APXvYqxpECgK4G17v0n6DrC/Z70WCfM5GWQv6dcBoZP1cLEgn6lYY7kuGqw8X597It/f096BEWYdEA==
-X-Received: by 2002:a17:90a:db42:: with SMTP id u2mr2388356pjx.48.1562706434823;
-        Tue, 09 Jul 2019 14:07:14 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s43sm53984pjb.10.2019.07.09.14.07.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Jul 2019 14:07:14 -0700 (PDT)
-Date:   Tue, 9 Jul 2019 14:07:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Melin Tomas <tomas.melin@vaisala.com>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v3 4/4] watchdog: cadence_wdt: Support all available
- prescaler values
-Message-ID: <20190709210713.GB29377@roeck-us.net>
-References: <20190709200801.42313-1-tomas.melin@vaisala.com>
- <20190709200801.42313-5-tomas.melin@vaisala.com>
- <20190709202113.GD27937@roeck-us.net>
- <4cc8b578-07f1-f0ec-1150-e0db9e47107c@vaisala.com>
+        Wed, 10 Jul 2019 04:09:43 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MvazO-1ibIbl3YHu-00sfRH; Wed, 10 Jul 2019 10:09:07 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Baruch Siach <baruch@tkos.co.il>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: digicolor_wdt: drop unused variable
+Date:   Wed, 10 Jul 2019 10:08:57 +0200
+Message-Id: <20190710080904.317599-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cc8b578-07f1-f0ec-1150-e0db9e47107c@vaisala.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:mZ/4FmETA2N1iae5b2XmeS50rziApGWR+vb3D9a2WJ7k0ERculc
+ ghh1DBVjPjlVFmFiUNa5WGCPIuQYF8zGQL06OabeHJT646KmHfuARB9U/YUq3soLwSLVPtg
+ 9VHbUI1gwlvlsDfDXGb3IZeiVPPBG5wRPphlG/ypn8e2103N1Cm84rMXw5kCpLby0IdT3Yp
+ zEqBRLn0YPMkI6bTSJZfQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mLuOMZv1Qn4=:XbQMW6B70avtrAIu/4Zx94
+ kMkzCWYXuEqlLAzEpoMJt8Su4mBtp3ADnOk1w3r1rMCFH1hZL+xhjYtaVcgyVDtIQCpDFHFBQ
+ 8xjIgGJuRTfFFD9EYq3ZLAR4m8+4Vx8CerfachcGURZHoKlPmNZ6pMlQpeVwZvEAndUr8WtQY
+ tqDOzeRm5MWuyjsbpKaM72yfb3wHpQCtZc5W6xKAEnBfRR3zM1pQouIxOwwxmGzH/DD/cvW8g
+ xk9tjcqFrKCT1l4kVPX4uPnU0XozJhgbtM3vGi92CnnsIwreZu7OiyNC39BuhpIRxCgCBlYIL
+ FeNP5Vtx5qEjYdQepOT76T1x/2NprVJIZf4J+vIWJVE8AHSzYR/wI07GIqgSIMo6uWWAeOECj
+ 9ZvSFCG3zVOdkSf0LW1Iam/rAc7fBxz620T9oKduPZvsou2PSf1splv+U0f3qJTsWi4YHhio/
+ VXLn47cikQ7oc4oYkQ+J9rNsdTwfi/IfqPRqgQ6Rpnwt0nJhQPgIJ3djJiYamtB711EuwCvk6
+ P7NVDy+NE2MW8RH0015N65kNS7I34PgIzcTlPwkiiYroQmzKCmySaaj7+vVOnaETIGAKv9ezx
+ Mq3E/SYMR5kq2Ap+/0dh8YaLI5sbeNTck/CMRq1om/Ay7VYuc+px6aenndWwuPo6oDcsm2hQX
+ KxnwtDtsAS6KUDlUtw0glRF9Y6lv3Rn/jQF0pDUCs4Gv3wIw8eMzI5nLxFm4OScnZeoUHeoE7
+ Hqnuc6nHCDOjM0qnUGountlPKdAx6WDxjg6AbQ==
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jul 09, 2019 at 08:49:20PM +0000, Melin Tomas wrote:
-> On 7/9/19 11:21 PM, Guenter Roeck wrote:
-> 
-> > On Tue, Jul 09, 2019 at 08:09:06PM +0000, Melin Tomas wrote:
-> >> Cadence watchdog HW supports prescaler values of
-> >> 8, 64, 512 and 4096.
-> >>
-> >> Add support to select prescaler values of 8 and 64 for lower
-> >> input clock frequencies.
-> >>
-> >> Prescaler value is selected to keep timeout resolution of 1 second.
-> >> For clock frequencies below 32kHz, 1 second resolution does
-> >> no longer hold, thereby returning an error.
-> >>
-> > I think I am missing something. Why was this valid/supported up to now,
-> > and if it was, why is it no longer possible to support it ?
-> 
-> This driver hasn't really supported smaller input clock frequencies. The 
-> watchdog
-> 
-> can be driven from an internal clock with rather high frequency, which
-> 
-> I think is the default setting. So typically, one might not even use the 
-> smaller prescalers.
-> 
-> >
-> > I am also a bit confused about the logic. With a slower clock, I would
-> > expect that the timeouts are getting larger, not smaller. Can you explain ?
-> 
-> Yes, that is correct. So with a 32kHz clock using smallest available 
-> prescaler,
-> 
-> we get 1 second resolution (and 1 second as smallest timeout).
-> 
-> With an even slower clock than that, we would end up with granularity
-> 
-> and smallest value larger than 1 second.
-> 
+The last cleanup patch left behind an unused variable
+that should have been removed as well:
 
-Ah, we are talking about the _smallest_ timeout and about resolution.
-But that is no reason to declare the clock invalid. Just set the minimum
-to the actual minimum.  There is no reason to reject slow clocks entirely,
-even if the granularity is in the multi-second range. The only caveat,
-if granularity is more than one second, is that the set_timeout function
-must select and report the actual timeout.
+drivers/watchdog/digicolor_wdt.c:121:6: error: unused variable 'ret' [-Werror,-Wunused-variable]
 
-Thanks,
-Guenter
+Fixes: cdad26977e3f ("watchdog: digicolor_wdt: drop warning after registering device")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/watchdog/digicolor_wdt.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> 
-> Thanks,
-> 
-> Tomas
-> 
-> >
-> >> Signed-off-by: Tomas Melin <tomas.melin@vaisala.com>
-> >> ---
-> >>   drivers/watchdog/cadence_wdt.c | 21 +++++++++++++++------
-> >>   1 file changed, 15 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/drivers/watchdog/cadence_wdt.c b/drivers/watchdog/cadence_wdt.c
-> >> index 0bdb275d904a..037faf557f9d 100644
-> >> --- a/drivers/watchdog/cadence_wdt.c
-> >> +++ b/drivers/watchdog/cadence_wdt.c
-> >> @@ -33,16 +33,17 @@
-> >>   #define CDNS_WDT_COUNTER_VALUE_DIVISOR 0x1000
-> >>   
-> >>   /* Clock prescaler value and selection */
-> >> +#define CDNS_WDT_PRESCALE_8	8
-> >>   #define CDNS_WDT_PRESCALE_64	64
-> >>   #define CDNS_WDT_PRESCALE_512	512
-> >>   #define CDNS_WDT_PRESCALE_4096	4096
-> >> +#define CDNS_WDT_PRESCALE_SELECT_8	0
-> >>   #define CDNS_WDT_PRESCALE_SELECT_64	1
-> >>   #define CDNS_WDT_PRESCALE_SELECT_512	2
-> >>   #define CDNS_WDT_PRESCALE_SELECT_4096	3
-> >>   
-> >> -/* Input clock frequency */
-> >> -#define CDNS_WDT_CLK_10MHZ	10000000
-> >> -#define CDNS_WDT_CLK_75MHZ	75000000
-> >> +/* Base input clock frequency */
-> >> +#define CDNS_WDT_CLK_32KHZ 32768
-> >                               ^ Please use a tab here
-> >
-> >>   
-> >>   /* Counter maximum value */
-> >>   #define CDNS_WDT_COUNTER_MAX 0xFFF
-> >> @@ -318,10 +319,18 @@ static int cdns_wdt_probe(struct platform_device *pdev)
-> >>   		return ret;
-> >>   
-> >>   	clock_f = clk_get_rate(wdt->clk);
-> >> -	if (clock_f == 0) {
-> >> -		dev_err(dev, "invalid clock frequency, (f=%lu)\n", clock_f);
-> >> +	if (clock_f < CDNS_WDT_CLK_32KHZ) {
-> >> +		dev_err(dev,
-> >> +			"cannot find suitable clock prescaler, (f=%lu)\n",
-> >> +			clock_f);
-> >>   		return -EINVAL;
-> >> -	} else if (clock_f <= CDNS_WDT_CLK_75MHZ) {
-> >> +	} else if (clock_f <= CDNS_WDT_CLK_32KHZ * CDNS_WDT_PRESCALE_8) {
-> >> +		wdt->prescaler = CDNS_WDT_PRESCALE_8;
-> >> +		wdt->ctrl_clksel = CDNS_WDT_PRESCALE_SELECT_8;
-> >> +	} else if (clock_f <= CDNS_WDT_CLK_32KHZ * CDNS_WDT_PRESCALE_64) {
-> >> +		wdt->prescaler = CDNS_WDT_PRESCALE_64;
-> >> +		wdt->ctrl_clksel = CDNS_WDT_PRESCALE_SELECT_64;
-> >> +	} else if (clock_f <= CDNS_WDT_CLK_32KHZ * CDNS_WDT_PRESCALE_512) {
-> >>   		wdt->prescaler = CDNS_WDT_PRESCALE_512;
-> >>   		wdt->ctrl_clksel = CDNS_WDT_PRESCALE_SELECT_512;
-> >>   	} else {
-> >> -- 
-> >> 2.17.2
-> >>
+diff --git a/drivers/watchdog/digicolor_wdt.c b/drivers/watchdog/digicolor_wdt.c
+index 33cda95bd238..073d37867f47 100644
+--- a/drivers/watchdog/digicolor_wdt.c
++++ b/drivers/watchdog/digicolor_wdt.c
+@@ -118,7 +118,6 @@ static int dc_wdt_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct dc_wdt *wdt;
+-	int ret;
+ 
+ 	wdt = devm_kzalloc(dev, sizeof(struct dc_wdt), GFP_KERNEL);
+ 	if (!wdt)
+-- 
+2.20.0
+
