@@ -2,107 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6377E70293
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2019 16:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F2E70448
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2019 17:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbfGVOoY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 22 Jul 2019 10:44:24 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:42849 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726084AbfGVOoY (ORCPT
+        id S1727247AbfGVPpy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 22 Jul 2019 11:45:54 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36068 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727123AbfGVPpy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 22 Jul 2019 10:44:24 -0400
-Received: by mail-qt1-f193.google.com with SMTP id h18so38753716qtm.9;
-        Mon, 22 Jul 2019 07:44:23 -0700 (PDT)
+        Mon, 22 Jul 2019 11:45:54 -0400
+Received: by mail-pf1-f196.google.com with SMTP id r7so17567317pfl.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 22 Jul 2019 08:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=hobcJdQLeiCT2hAJw+JhWd+Cs3DiiolJ1ezHfZQe+y4=;
+        b=h+X3Bs4vlf9FFmu29u0Zwc10ThfWAyA2hMlDZrIOZcbdNfcqx56krzq8PAPjLLt3gH
+         kH9ED5S+G5+dcd5F3fOYBxypRMekIMUJMarLpj6gKgOqWyZGFpE9CaXoPrJeg1/2WTSL
+         r8xnvf7+jy9g6O+VJQbcBTMfKMcPlUUR632lF8Mw/RCgNwXOkcSk01eBI/v7bIQjVVMF
+         349nIAoabZJ7hXz0ufUNwvG360Wwa0YlIrZpoS4MyQWQN+MdFQf4e7R05MeI/habhKOf
+         7JKuqN1xDfMnhg9v4BO/EQkdoMibUDhPprnPenr0Q+nEq+ikCkqgtARQk5Z8Yw5jGb9w
+         rl2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=81AiTjgcr+8mwqG5ADbTHsr21uDJPCLJa70/ct/bcjM=;
-        b=QYBXb4+hRgH21kAiS56bAy9YCv5+0zP4yDqWq2zGSAYPK8zwCuvT8fO9QdkqvjQz+g
-         hRiQeaUQkvK+u1qxhXNGPYRzLYMEL87413nZ3FOXqSQZGcI6oB+YMnK/YhHje0eQ/FHY
-         /JoIL7XhxZTafwciB97TT9FwQ9kmlBQSD4jdX+9L/mO0BMYrPTZ1CeLvmqaacPLn5w4j
-         BuUbw3ZHMEY8syqQBZ+FOlComyxBbA6qcjX7YTaiHRx4G9sqmKy5IYjuwkbCe8RWef4p
-         Y/PbmYRY+XoYym9AD/elvvg6vg7+h7vxYktQM0meF17NC55XY6WK5tsHZEwC3tH/KFQG
-         Svtg==
-X-Gm-Message-State: APjAAAX9WXh50RteF9wuXcS8ykAlNXjMtD+B/vhednu5xBMdQqKg8O0b
-        1GGcnFw2SRvrzg9qmk+aWjJ8gJ90C47uRfNoBEk=
-X-Google-Smtp-Source: APXvYqxaPxahPpsd+f/e2N1hLvn+NlsWWWq9cW2deYXM49rjFloV4WlsOLyToo2CiUPq30T5CLiBuUUzmLDJwt9ja4w=
-X-Received: by 2002:aed:3363:: with SMTP id u90mr50010402qtd.7.1563806663345;
- Mon, 22 Jul 2019 07:44:23 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=hobcJdQLeiCT2hAJw+JhWd+Cs3DiiolJ1ezHfZQe+y4=;
+        b=png6XSHPcviS63/P6mvSCujTaOCUhwg8hsNGQ3YOmV+rpwORRld9qYLYRZ0CKNat9k
+         zgy7C2OCwqmXn4d5D9bz4uqvtnNGa6iOaIsydiE+5L2xKMLTBcwr2SNuGTAI+ufz4wZ7
+         ZbXaPyYRxmPnONmvSrYtVQqETLWx1btL4LhpdHWYUhdXMwrzzk+4JRL3S2FNZzZUCXIE
+         Js+lqPWaadX4h6bgZ8h905WoYJz1c6YCP53d8ypVcADdXbSKa8kPUovp4VS7DWAO7prF
+         kKp909/KbRHx/IIwoV2BmAN1o5u/QzHZeyqm802lDhGKeXURmUpkos1nqOHsAU+das3G
+         r2Xg==
+X-Gm-Message-State: APjAAAU1SXawwJW9MI2FRz1c0FDc8EN5kTp8rPSkk8/GNOuAy5fy6AyP
+        z7s/TdVYyxBOPq45bQtvZm4772Qu
+X-Google-Smtp-Source: APXvYqxBwsoXWhMjDBqlq2Mlm8KRnB5nHMd5pIukPcVFpay+pzmBURvqn4l8lHI5P013M4wcWR25yQ==
+X-Received: by 2002:a63:2148:: with SMTP id s8mr70621985pgm.336.1563810353084;
+        Mon, 22 Jul 2019 08:45:53 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z13sm32103499pfa.94.2019.07.22.08.45.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jul 2019 08:45:51 -0700 (PDT)
+Date:   Mon, 22 Jul 2019 08:45:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Valentin =?utf-8?B?VmlkacSH?= <vvidic@valentin-vidic.from.hr>
+Cc:     linux-watchdog@vger.kernel.org
+Subject: Re: iTCO_wdt on Intel NUC
+Message-ID: <20190722154549.GA5166@roeck-us.net>
+References: <20190721203047.3jd6slko6guz52fl@valentin-vidic.from.hr>
+ <d2f78a10-df19-9922-565d-b0ed6fcacb67@roeck-us.net>
+ <20190722045557.tndjp4hnpngvlaql@valentin-vidic.from.hr>
 MIME-Version: 1.0
-References: <20190415202501.941196-1-arnd@arndb.de> <2424c672-e3fb-4c32-4c24-fafc59d03a96@uclinux.org>
- <CACRpkdaJ+2bub_nDp9=5b4kyKjWDnOGKscWg3KsEVixDpk8rzA@mail.gmail.com>
- <20190503170613.GA1783@roeck-us.net> <d8d81aca-722d-8b5f-cd5f-30cc3e4e407b@kernel.org>
-In-Reply-To: <d8d81aca-722d-8b5f-cd5f-30cc3e4e407b@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 22 Jul 2019 16:44:06 +0200
-Message-ID: <CAK8P3a0StV==jMq1L9k91qEsvRD1Cw2FB1V25wr1AQqzmjsTVw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] ARM: ks8695: watchdog: stop using mach/*.h
-To:     Greg Ungerer <gerg@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        arm-soc <arm@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190722045557.tndjp4hnpngvlaql@valentin-vidic.from.hr>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, May 4, 2019 at 4:27 PM Greg Ungerer <gerg@kernel.org> wrote:
-> On 4/5/19 3:06 am, Guenter Roeck wrote:
-> > On Fri, May 03, 2019 at 08:16:05AM +0100, Linus Walleij wrote:
-> >> On Fri, May 3, 2019 at 8:02 AM Greg Ungerer <gerg@uclinux.org> wrote:
-> >>> Ultimately though I am left wondering if the ks8695 support in the
-> >>> kernel is useful to anyone the way it is at the moment. With a minimal
-> >>> kernel configuration I can boot up to a shell - but the system is
-> >>> really unreliable if you try to interactively use it. I don't think
-> >>> it is the hardware - it seems to run reliably with the old code
-> >>> it has running from flash on it. I am only testing the new kernel,
-> >>> running with the existing user space root filesystem on it (which
-> >>> dates from 2004 :-)
-> >>
-> >> Personally I think it is a bad sign that this subarch and boards do
-> >> not have active OpenWrt support, they are routers after all (right?)
-> >> and any active use of networking equipment should use a recent
-> >> userspace as well, given all the security bugs that popped up over
-> >> the years.
+On Mon, Jul 22, 2019 at 06:55:57AM +0200, Valentin Vidić wrote:
+> On Sun, Jul 21, 2019 at 05:05:17PM -0700, Guenter Roeck wrote:
+> > Most likely the memory region is reserved/used by something else. /proc/iomem
+> > might show you.
+> 
+> The output is a bit strange since it mentions iTCO_wdt for that address range:
+> 
+> [    9.377397] iTCO_wdt iTCO_wdt: can't request region for resource [mem 0x00c5fffc-0x00c5ffff]
+> 
+> 00000000-00000fff : Reserved
+> 00001000-0009efff : System RAM
+> 0009f000-000fffff : Reserved
+>   000a0000-000bffff : PCI Bus 0000:00
+>   000e0000-000e3fff : PCI Bus 0000:00
+>   000e4000-000e7fff : PCI Bus 0000:00
+>   000e8000-000ebfff : PCI Bus 0000:00
+>   000ec000-000effff : PCI Bus 0000:00
+>   000f0000-000fffff : System ROM
+> 00100000-6f8d8017 : System RAM
+>   00c5fffc-00c5ffff : iTCO_wdt
+> 6f8d8018-6f8e8e57 : System RAM
+> 6f8e8e58-79d52fff : System RAM
+> 79d53000-7a1bdfff : Reserved
+> 7a1be000-7a23afff : ACPI Tables
+> 7a23b000-7a2ebfff : ACPI Non-volatile Storage
+> 7a2ec000-7ac0dfff : Reserved
+> 7ac0e000-7ac0efff : System RAM
+> 7ac0f000-7fffffff : Reserved
+>   7c000000-7fffffff : Graphics Stolen Memory
+> 
 
-Looking around on the internet, I found that Micrel at some point
-had their own openwrt fork for ks8695, but I can't find a copy
-any more, as the micrel.com domain is no longer used after the
-acquisition by Microchip.
+Weird. Is iTCO_wdt instantiated twice ?
 
-https://wikidevi.com/wiki/Micrel has a list of devices based on
-ks8695, and it seems that most of these are rather memory
-limited, which is a problem for recent openwrt builds.
+I have no idea how to proceed, sorry.
 
-Only two of the 17 listed devices have the absolute minimum of 4MB
-flash and 32MB RAM for openwrt, two more have 8/32 and one
-or two have 4/64, but all these configurations are too limited for the
-web U/I now.
-
-> >> With IXP4xx, Gemini and EP93xx we have found active users and
-> >> companies selling the chips and reference designs and even
-> >> recommending it for new products (!) at times.  If this is not the
-> >> case with KS8695 and no hobbyists are willing to submit it
-> >> to OpenWrt and modernize it to use device tree I think it should be
-> >> deleted from the kernel.
-> >>
-> >
-> > That may be the best approach if indeed no one is using it,
-> > much less maintaining it.
->
-> Well, I for one don't really use it any more. So I don't have a lot
-> of motivation to maintain it any longer.
-
-I came across my patches while rebasing my backlog to 5.3-rc1.
-
-Should I save the (very small) trouble of sending them out again
-and just remove the platform then?
-
-      Arnd
+Guenter
