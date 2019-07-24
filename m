@@ -2,72 +2,50 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3991C72FE9
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Jul 2019 15:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5527334E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Jul 2019 18:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726508AbfGXN1H (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Jul 2019 09:27:07 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43920 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726087AbfGXN1G (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Jul 2019 09:27:06 -0400
-Received: by mail-pf1-f194.google.com with SMTP id i189so20966653pfg.10
-        for <linux-watchdog@vger.kernel.org>; Wed, 24 Jul 2019 06:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YEQQZWioa33txIPdqClkWYdcnfq4wgpMLSf+4rJhcnE=;
-        b=bGiSyfWofIWgY1CxliZvGsL20MT4ejEuNWUTJYth2Wxr4NW5cvcWoPIl+e6ZTjHKHg
-         /Y/YueTKLEY7qvcOP7aSnGYQaX52IczEcpX0rvh7oTNihRDBq1ghvNUNwep2xM3F6fO3
-         qiz07b6IpNtIGdG7GqxctY1veeylIgkh/sUk1jGDk0506P2jrL/1GZcES+FESc4vdkcR
-         RQGsMurJWd+iFJtzaDECDfWnRCAHEoDYNuLiX2EuYOQZZ4kkGOCvI60/JXoN2MW+8YT0
-         9O9L7+b7qLCkaaTR33NcY6PkTokxMp9DpKVDydu8Xa6iCG37SAf+qqBwFUJoqCdXh17j
-         Regw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YEQQZWioa33txIPdqClkWYdcnfq4wgpMLSf+4rJhcnE=;
-        b=pdjWukNdra7o/0LhVh7Kjzzb1HlWoufSsMPUQT5nop43ksQrw6uf6nTqBeJaZYu4sj
-         APu8T5ZAs0npROmRp7bBvwvQWe8zluP3o6rHV2YSZDu49CPkt8+KWP6ag3CaslhCibDd
-         H8zMPZvzB1HEt7cgeJPkukiFcIzbJeP6cwRnKRXMKOSJA3yFmBScIImf+PlvMxNpHkbG
-         crfLuNlAaZShcRrHUItQCNBJh8lb1KEbCtvj8CGwDdt8oefp0MH/Fl5Pf8FPaZzRSAvH
-         xNOJ0c64zCRqkBHPw34uV0cmVaNXqhsbdOz9G2acdrUc6lkS0q36gobDeydQ62lRG99O
-         uZpQ==
-X-Gm-Message-State: APjAAAVESGLW/bl8UizxISaXGPnde57Y8VJ5WesCTO6zMvLsgMrpo6NY
-        YzMB0waoAooDivjhV5Kv6xU=
-X-Google-Smtp-Source: APXvYqzW3LoFUBG/OZZZc0l5JIfFi58YkOwcHqkBqYeQDgOS/k/DBFTFp2nHdNBnFQNhWWOsp/2+pw==
-X-Received: by 2002:a17:90a:7148:: with SMTP id g8mr20829907pjs.51.1563974826084;
-        Wed, 24 Jul 2019 06:27:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 85sm47944322pfv.130.2019.07.24.06.27.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Jul 2019 06:27:04 -0700 (PDT)
-Subject: Re: watchdog: iTCO_wdt: failed to load
+        id S1726220AbfGXQGF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 24 Jul 2019 12:06:05 -0400
+Received: from mga07.intel.com ([134.134.136.100]:32218 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726099AbfGXQGF (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 24 Jul 2019 12:06:05 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Jul 2019 09:06:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,303,1559545200"; 
+   d="scan'208";a="181148522"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga002.jf.intel.com with ESMTP; 24 Jul 2019 09:06:02 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hqJmD-0001x6-M8; Wed, 24 Jul 2019 19:06:01 +0300
+Date:   Wed, 24 Jul 2019 19:06:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Vignesh Raman <vignesh.raman.in@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com,
-        rajneesh.bhardwaj@linux.intel.com
+        mika.westerberg@linux.intel.com
+Cc:     linux-watchdog@vger.kernel.org, rajneesh.bhardwaj@linux.intel.com
+Subject: Re: watchdog: iTCO_wdt: failed to load
+Message-ID: <20190724160601.GA9224@smile.fi.intel.com>
 References: <CAH3OF53GqY-h+9woZS_8Kx671PCiCFjVbaFQ_gs30ZXMWxUO8g@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <97817286-92ae-cd13-4cc1-7a0355140414@roeck-us.net>
-Date:   Wed, 24 Jul 2019 06:27:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <CAH3OF53GqY-h+9woZS_8Kx671PCiCFjVbaFQ_gs30ZXMWxUO8g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/24/19 12:34 AM, Vignesh Raman wrote:
++Cc: Mika, who is supporting watchdog driver(s).
+
+On Wed, Jul 24, 2019 at 01:04:45PM +0530, Vignesh Raman wrote:
 > Hi,
 > 
 > I'm seeing an issue where the iTCO_wdt module doesn't load with the below error,
@@ -149,14 +127,13 @@ On 7/24/19 12:34 AM, Vignesh Raman wrote:
 > 2. Could the hardware watchdog not triggering a reset (timeleft value
 > not getting updated) could be a hardware problem?
 > 
+> Thanks.
+> 
+> Regards,
+> Vignesh
 
-What is the output of /proc/iomem, what PCI devices does it have, and what are
-the ACPI devices ? Reason for asking is that I don't immediately see the ACPI
-or PCI devices associated with above patch in your dmesg. If not, the patch
-might actually cause the watchdog in your system not to work.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Also, did this ever work in your system ? If it did work, did the failure
-start after a kernel update or after a BIOS update ?
 
-Thanks,
-Guenter
