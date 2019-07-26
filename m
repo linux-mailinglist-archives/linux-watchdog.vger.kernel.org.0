@@ -2,112 +2,286 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C4874F00
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Jul 2019 15:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13B1764D2
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jul 2019 13:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389731AbfGYNSS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 Jul 2019 09:18:18 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:39558 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389452AbfGYNSS (ORCPT
+        id S1726646AbfGZLs2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 Jul 2019 07:48:28 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:48918 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726386AbfGZLs2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 Jul 2019 09:18:18 -0400
-Received: by mail-oi1-f193.google.com with SMTP id m202so37638257oig.6
-        for <linux-watchdog@vger.kernel.org>; Thu, 25 Jul 2019 06:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Yos3RCeDKRYJA/LJZzIa9p6sY8vYb6dMFCeeTFnjrnE=;
-        b=RcHjhO/D3R0jAiLfCv/5TA9qpc6l0xbUQpFry6mFlNXSNwgOY4wadpj0/RkLdKLs+Y
-         2CmjPzHYDF04IHGuhNn2QaF2ZH7XxOCKP39C4lj2PHRKyfcWDVEp+AlOMj7psj5RFkww
-         nZzR5jS6VvCqb6XX73vQDeF6bHY63/I396ZlSdRwSWOzzJkki4HYgKAtpKpstX8K9494
-         xXofC3BO8EYVilDHb0yBOWwxxiExpjrVy26nqvRlzGUFNH/EKfJSxSFcVianDFbJ2lDP
-         1VzmmwjIzvvFII+YaRXX7Oi3lB+d95fQBGSfIqEEp0FZ9JkG785kpRNJRNdcLqZLd5t2
-         JHvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Yos3RCeDKRYJA/LJZzIa9p6sY8vYb6dMFCeeTFnjrnE=;
-        b=HKhe3bbNc7Mu+t8Z5VFdKM23sgEUzow8MsRAufsylUwUNiQyQbLnr6SGmvI2KGwxWT
-         ddDbVBV3UfwwcnQ0dylZ8GCRjJc5wNrftGzcLe96vDvrnmh89CpWqfXmQLd9kKInnb5H
-         CrrUo8Wbl1kR35Qpf15CcYHi6fTh+2SQ4oQEc9eEweZBSKpaSjp51lD9o7rxm1xg8l0N
-         pxgESszCQzFNMoPpKs0Rxy99Y+NUXmNK08evkh1RhDG1fnbr9dKCFsWlxBUtPLl0CIeo
-         y3MpwETPVyaS2q8jDRszheSE8V3Jm/4MsSfZ0Z2mnUkbhOkSh2d6Ix1KZZKirObeaSGD
-         2a7w==
-X-Gm-Message-State: APjAAAUoynPeXVsURalNboSGbEQTYsY8EG8DHsLHJpDmeGCbrmF3RB66
-        uBvreNVZCCPgoTVmpmQPzqf/qg7V
-X-Google-Smtp-Source: APXvYqy8VLQS0JufP+4NM1GV1kv2D/dRu6pUb+l4nQD+TYZsTE5wzRKulqrTT1+beNfUxll603pgoQ==
-X-Received: by 2002:a63:9e54:: with SMTP id r20mr51840309pgo.64.1564060236004;
-        Thu, 25 Jul 2019 06:10:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 23sm53778963pfn.176.2019.07.25.06.10.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jul 2019 06:10:34 -0700 (PDT)
-Subject: Re: watchdog: iTCO_wdt: failed to load
-To:     Vignesh Raman <vignesh.raman.in@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        rajneesh.bhardwaj@linux.intel.com, mika.westerberg@linux.intel.com
-References: <CAH3OF53GqY-h+9woZS_8Kx671PCiCFjVbaFQ_gs30ZXMWxUO8g@mail.gmail.com>
- <97817286-92ae-cd13-4cc1-7a0355140414@roeck-us.net>
- <CAH3OF53G3bHfxpGVLHKns9k-QBAUroiqvkcdQ4d+gOmsLvaN6w@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e1f4f561-ba33-b9ce-66db-c67cb260ecdf@roeck-us.net>
-Date:   Thu, 25 Jul 2019 06:10:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 26 Jul 2019 07:48:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
+        To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=bqXTk9cfjmpDzB1IkFMuceuI5x6lsUr/bZmC2zCRyT8=; b=aXkPCthzPcW+abXaQtzmMoIg92
+        DvJjK/+NmjEBuD6QG0igW53oWsB+KWUhGSd9IUqc0Qx62DWBXw0JS1GPP+HVECkZwFresgzZ3BXYd
+        BlXvn9iU0bQHeOspSDcIhI7eTYRBtQu12kPhk5Yq1UXseC3zj41yNU1P+O5zXu23DmyVtghIG6pNv
+        B6QA8ZndI1sQtVdt+WIjRtebZuz8DfyyGp+QNT6tACSNr4PgHFfupimLAwlyxT73kK6vfV+tlHA+u
+        zOst9LO0+4WSX5oNILxHdwS4l73IvkJvJGCd5nxiixUpjUIjUkmghmBAY9Nr/8e0XHfgNPCcnDFcC
+        OrS3TD8g==;
+Received: from [179.95.31.157] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hqyh9-0003BZ-4S; Fri, 26 Jul 2019 11:47:31 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hqyh6-0000tq-VT; Fri, 26 Jul 2019 08:47:28 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
+        Don Brace <don.brace@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        rcu@vger.kernel.org, linux-doc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-i2c@vger.kernel.org, esc.storagedev@microsemi.com,
+        linux-scsi@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
+Subject: [PATCH 1/7] docs: fix broken doc references due to renames
+Date:   Fri, 26 Jul 2019 08:47:21 -0300
+Message-Id: <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1564140865.git.mchehab+samsung@kernel.org>
+References: <cover.1564140865.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAH3OF53G3bHfxpGVLHKns9k-QBAUroiqvkcdQ4d+gOmsLvaN6w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/24/19 10:12 PM, Vignesh Raman wrote:
-> Hi Guenter,
-> 
-> On Wed, Jul 24, 2019 at 6:57 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> What is the output of /proc/iomem, what PCI devices does it have, and what are
->> the ACPI devices ? Reason for asking is that I don't immediately see the ACPI
->> or PCI devices associated with above patch in your dmesg. If not, the patch
->> might actually cause the watchdog in your system not to work.
-> 
-> /proc/iomem  - http://paste.debian.net/1092996/
+Some files got renamed but probably due to some merge conflicts,
+a few references still point to the old locations.
 
-Here is your problem:
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C part
+Reviewed-by: Jerry Hoemann <jerry.hoemann@hpe.com> # hpwdt.rst
+---
+ Documentation/RCU/rculist_nulls.txt                   |  2 +-
+ Documentation/devicetree/bindings/arm/idle-states.txt |  2 +-
+ Documentation/locking/spinlocks.rst                   |  4 ++--
+ Documentation/memory-barriers.txt                     |  2 +-
+ Documentation/translations/ko_KR/memory-barriers.txt  |  2 +-
+ Documentation/watchdog/hpwdt.rst                      |  2 +-
+ MAINTAINERS                                           | 10 +++++-----
+ drivers/gpu/drm/drm_modes.c                           |  2 +-
+ drivers/i2c/busses/i2c-nvidia-gpu.c                   |  2 +-
+ drivers/scsi/hpsa.c                                   |  4 ++--
+ 10 files changed, 16 insertions(+), 16 deletions(-)
 
-00100000-5e431017 : System RAM
-   00c5fffc-00c5ffff : iTCO_wdt
-
-The address range requested by the watchdog is marked by the BIOS as system memory.
-
-The patch referenced below tries to address a different problem and does not apply
-to your system.
-
-Guenter
-
-> PCI devices  - http://paste.debian.net/1092997/
-> ACPI devices - http://paste.debian.net/1093003/
-> 
->> Also, did this ever work in your system ? If it did work, did the failure
->> start after a kernel update or after a BIOS update ?
-> 
-> The hardware watchdog has never worked in the system. Without the
-> patch https://lore.kernel.org/patchwork/patch/770990/ the probe error
-> is seen,
-> [    3.828440] iTCO_wdt iTCO_wdt: can't request region for resource
-> [mem 0x00c5fffc-0x00c5ffff]
-> [    3.828803] iTCO_wdt: probe of iTCO_wdt failed with error -16
-> 
-> With the patch the module loads fine, but the hardware watchdog does not work.
-> 
-> Regards,
-> Vignesh
-> 
+diff --git a/Documentation/RCU/rculist_nulls.txt b/Documentation/RCU/rculist_nulls.txt
+index 8151f0195f76..23f115dc87cf 100644
+--- a/Documentation/RCU/rculist_nulls.txt
++++ b/Documentation/RCU/rculist_nulls.txt
+@@ -1,7 +1,7 @@
+ Using hlist_nulls to protect read-mostly linked lists and
+ objects using SLAB_TYPESAFE_BY_RCU allocations.
+ 
+-Please read the basics in Documentation/RCU/listRCU.txt
++Please read the basics in Documentation/RCU/listRCU.rst
+ 
+ Using special makers (called 'nulls') is a convenient way
+ to solve following problem :
+diff --git a/Documentation/devicetree/bindings/arm/idle-states.txt b/Documentation/devicetree/bindings/arm/idle-states.txt
+index 326f29b270ad..2d325bed37e5 100644
+--- a/Documentation/devicetree/bindings/arm/idle-states.txt
++++ b/Documentation/devicetree/bindings/arm/idle-states.txt
+@@ -703,4 +703,4 @@ cpus {
+     https://www.devicetree.org/specifications/
+ 
+ [6] ARM Linux Kernel documentation - Booting AArch64 Linux
+-    Documentation/arm64/booting.txt
++    Documentation/arm64/booting.rst
+diff --git a/Documentation/locking/spinlocks.rst b/Documentation/locking/spinlocks.rst
+index 098107fb7d86..e93ec6645238 100644
+--- a/Documentation/locking/spinlocks.rst
++++ b/Documentation/locking/spinlocks.rst
+@@ -82,7 +82,7 @@ itself.  The read lock allows many concurrent readers.  Anything that
+ **changes** the list will have to get the write lock.
+ 
+    NOTE! RCU is better for list traversal, but requires careful
+-   attention to design detail (see Documentation/RCU/listRCU.txt).
++   attention to design detail (see Documentation/RCU/listRCU.rst).
+ 
+ Also, you cannot "upgrade" a read-lock to a write-lock, so if you at _any_
+ time need to do any changes (even if you don't do it every time), you have
+@@ -90,7 +90,7 @@ to get the write-lock at the very beginning.
+ 
+    NOTE! We are working hard to remove reader-writer spinlocks in most
+    cases, so please don't add a new one without consensus.  (Instead, see
+-   Documentation/RCU/rcu.txt for complete information.)
++   Documentation/RCU/rcu.rst for complete information.)
+ 
+ ----
+ 
+diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+index 045bb8148fe9..1adbb8a371c7 100644
+--- a/Documentation/memory-barriers.txt
++++ b/Documentation/memory-barriers.txt
+@@ -548,7 +548,7 @@ There are certain things that the Linux kernel memory barriers do not guarantee:
+ 
+ 	[*] For information on bus mastering DMA and coherency please read:
+ 
+-	    Documentation/PCI/pci.rst
++	    Documentation/driver-api/pci/pci.rst
+ 	    Documentation/DMA-API-HOWTO.txt
+ 	    Documentation/DMA-API.txt
+ 
+diff --git a/Documentation/translations/ko_KR/memory-barriers.txt b/Documentation/translations/ko_KR/memory-barriers.txt
+index a33c2a536542..2774624ee843 100644
+--- a/Documentation/translations/ko_KR/memory-barriers.txt
++++ b/Documentation/translations/ko_KR/memory-barriers.txt
+@@ -569,7 +569,7 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
+ 
+ 	[*] 버스 마스터링 DMA 와 일관성에 대해서는 다음을 참고하시기 바랍니다:
+ 
+-	    Documentation/PCI/pci.rst
++	    Documentation/driver-api/pci/pci.rst
+ 	    Documentation/DMA-API-HOWTO.txt
+ 	    Documentation/DMA-API.txt
+ 
+diff --git a/Documentation/watchdog/hpwdt.rst b/Documentation/watchdog/hpwdt.rst
+index c165d92cfd12..c824cd7f6e32 100644
+--- a/Documentation/watchdog/hpwdt.rst
++++ b/Documentation/watchdog/hpwdt.rst
+@@ -63,7 +63,7 @@ Last reviewed: 08/20/2018
+  and loop forever.  This is generally not what a watchdog user wants.
+ 
+  For those wishing to learn more please see:
+-	Documentation/kdump/kdump.rst
++	Documentation/admin-guide/kdump/kdump.rst
+ 	Documentation/admin-guide/kernel-parameters.txt (panic=)
+ 	Your Linux Distribution specific documentation.
+ 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4e2a525e22c0..51bdbd230174 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -899,7 +899,7 @@ L:	linux-iio@vger.kernel.org
+ W:	http://ez.analog.com/community/linux-device-drivers
+ S:	Supported
+ F:	drivers/iio/adc/ad7124.c
+-F:	Documentation/devicetree/bindings/iio/adc/adi,ad7124.txt
++F:	Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml
+ 
+ ANALOG DEVICES INC AD7606 DRIVER
+ M:	Stefan Popa <stefan.popa@analog.com>
+@@ -4190,7 +4190,7 @@ M:	Jens Axboe <axboe@kernel.dk>
+ L:	cgroups@vger.kernel.org
+ L:	linux-block@vger.kernel.org
+ T:	git git://git.kernel.dk/linux-block
+-F:	Documentation/cgroup-v1/blkio-controller.rst
++F:	Documentation/admin-guide/cgroup-v1/blkio-controller.rst
+ F:	block/blk-cgroup.c
+ F:	include/linux/blk-cgroup.h
+ F:	block/blk-throttle.c
+@@ -6317,7 +6317,7 @@ FLEXTIMER FTM-QUADDEC DRIVER
+ M:	Patrick Havelange <patrick.havelange@essensium.com>
+ L:	linux-iio@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/ABI/testing/sysfs-bus-counter-ftm-quadddec
++F:	Documentation/ABI/testing/sysfs-bus-counter-ftm-quaddec
+ F:	Documentation/devicetree/bindings/counter/ftm-quaddec.txt
+ F:	drivers/counter/ftm-quaddec.c
+ 
+@@ -6856,7 +6856,7 @@ R:	Sagi Shahar <sagis@google.com>
+ R:	Jon Olson <jonolson@google.com>
+ L:	netdev@vger.kernel.org
+ S:	Supported
+-F:	Documentation/networking/device_drivers/google/gve.txt
++F:	Documentation/networking/device_drivers/google/gve.rst
+ F:	drivers/net/ethernet/google
+ 
+ GPD POCKET FAN DRIVER
+@@ -12137,7 +12137,7 @@ M:	Thomas Hellstrom <thellstrom@vmware.com>
+ M:	"VMware, Inc." <pv-drivers@vmware.com>
+ L:	virtualization@lists.linux-foundation.org
+ S:	Supported
+-F:	Documentation/virt/paravirt_ops.txt
++F:	Documentation/virt/paravirt_ops.rst
+ F:	arch/*/kernel/paravirt*
+ F:	arch/*/include/asm/paravirt*.h
+ F:	include/linux/hypervisor.h
+diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+index 74a5739df506..80fcd5dc1558 100644
+--- a/drivers/gpu/drm/drm_modes.c
++++ b/drivers/gpu/drm/drm_modes.c
+@@ -1686,7 +1686,7 @@ static int drm_mode_parse_cmdline_options(char *str, size_t len,
+  *
+  * Additionals options can be provided following the mode, using a comma to
+  * separate each option. Valid options can be found in
+- * Documentation/fb/modedb.txt.
++ * Documentation/fb/modedb.rst.
+  *
+  * The intermediate drm_cmdline_mode structure is required to store additional
+  * options from the command line modline like the force-enable/disable flag.
+diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
+index cfc76b5de726..5a1235fd86bb 100644
+--- a/drivers/i2c/busses/i2c-nvidia-gpu.c
++++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
+@@ -364,7 +364,7 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
+ /*
+  * We need gpu_i2c_suspend() even if it is stub, for runtime pm to work
+  * correctly. Without it, lspci shows runtime pm status as "D0" for the card.
+- * Documentation/power/pci.txt also insists for driver to provide this.
++ * Documentation/power/pci.rst also insists for driver to provide this.
+  */
+ static __maybe_unused int gpu_i2c_suspend(struct device *dev)
+ {
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index 43a6b5350775..eaf6177ac9ee 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -7798,7 +7798,7 @@ static void hpsa_free_pci_init(struct ctlr_info *h)
+ 	hpsa_disable_interrupt_mode(h);		/* pci_init 2 */
+ 	/*
+ 	 * call pci_disable_device before pci_release_regions per
+-	 * Documentation/PCI/pci.rst
++	 * Documentation/driver-api/pci/pci.rst
+ 	 */
+ 	pci_disable_device(h->pdev);		/* pci_init 1 */
+ 	pci_release_regions(h->pdev);		/* pci_init 2 */
+@@ -7881,7 +7881,7 @@ static int hpsa_pci_init(struct ctlr_info *h)
+ clean1:
+ 	/*
+ 	 * call pci_disable_device before pci_release_regions per
+-	 * Documentation/PCI/pci.rst
++	 * Documentation/driver-api/pci/pci.rst
+ 	 */
+ 	pci_disable_device(h->pdev);
+ 	pci_release_regions(h->pdev);
+-- 
+2.21.0
 
