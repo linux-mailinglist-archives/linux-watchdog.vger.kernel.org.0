@@ -2,75 +2,84 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EFA78E28
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Jul 2019 16:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E343678E75
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Jul 2019 16:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbfG2OiS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Jul 2019 10:38:18 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39075 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbfG2OiS (ORCPT
+        id S1727034AbfG2OyR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Jul 2019 10:54:17 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:42809 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbfG2OyQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Jul 2019 10:38:18 -0400
-Received: by mail-pf1-f193.google.com with SMTP id f17so24152494pfn.6
-        for <linux-watchdog@vger.kernel.org>; Mon, 29 Jul 2019 07:38:18 -0700 (PDT)
+        Mon, 29 Jul 2019 10:54:16 -0400
+Received: by mail-pl1-f195.google.com with SMTP id ay6so27649780plb.9
+        for <linux-watchdog@vger.kernel.org>; Mon, 29 Jul 2019 07:54:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:user-agent:mime-version;
-        bh=jgxvekQ4OFyINZM7yp2FV+Kc3k2vAwxr39Z0I5y5cgM=;
-        b=GQfND9RnH9LXrR2BrBpnQVHNe8csnGNuoebnxEa6dtdqZM6moDqw1VyJ1jKK4T0WAk
-         Yx49eTuGAcdSSNG5EYLLQ3zeETD0UpX4vECR0csbebPD55XOTSwV+TaD8VygPJUZzGlr
-         6WusL1kC0y3U2IQwS/NMfle+4BRvEtlpuy63E1uf1Zi+o2XtPSVK2wKDzCQmIGsRbWZY
-         eC8fur+03v4i3O0/bA2H5VVaibvBbisk4ikPz8VidvJ13CRAZjgSOWoRl5Nl3pIf0Qe3
-         VWkIKZ8f6c26iSKBN7cNbUaAvv1LGXRpRej5gbKX+bM69FoDgz7AWdbUfkraRJ8sFbrX
-         rsGA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PQhBByzuy3iaGCOOp5JoWEdJ2mYOzAZdOq7+FjOGIy0=;
+        b=fhwJAXwDChgtpX1frMvvBWD46wv9WBz/Gpf8iFAmrgPb38EsjEyYS34nAVpdnBbNNd
+         mueuJRXMI9uSEeIWGmoTSxawvfgJ1B9qBBODUXTHMuIeejbFF1DuH01C/6nJQaFa+VJ+
+         XaXub5SUCNYVxTml4No/mGzEgjO3ShfZuGqy9Cx2B8XBgwVUMlgsK8ozWDBAG2x2WkM6
+         OGFqbeA6B21c5eWHjw/SCCKzwlBeP5F+ZdSDfPtwaVHPRFbMqhaZaR6Fj+mjirsLcgx7
+         Ty7vqxiqhgJgVZSMt2oOK5olNDIjxl2htCw0AW5XEKkMbpqT39RtGFqcJILl8uPr+Ecc
+         2SqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:user-agent
-         :mime-version;
-        bh=jgxvekQ4OFyINZM7yp2FV+Kc3k2vAwxr39Z0I5y5cgM=;
-        b=M2EyW1CF4NMrSxTumTa4Y0sekkokMHB6sevpE0BaIIIzgpNPBJktzoqUOjmr+f6nId
-         LoUyXn8rv+KEdmOOt5PTPuEn9Wh18Aq8nxJ5Bs60hkVP/aCNolw7A4zVq7OddIXDYQCJ
-         PeKtvMWnI5Xl/PIiA2KGogrBO+hrwhnUM8Cahb5+R1KxV68+N3wuHesSdPNB4mt+W+Ur
-         MUqEDKWYSgKzpatMO+VQ//XYULIkJGuVMQdGcZJMRDoZ292bBbnpvxipZtIFkjCPrNuJ
-         T3OSYCM/eEtbXhqdSG/LC102MUJzho6HPwVwdDAGlP2xqwpilBcDEBKx7K73SIURcQF8
-         49Hg==
-X-Gm-Message-State: APjAAAVpz7UPoBEVk/p36DpEPhaJI4JjNsI3O2WsBZISGl2u88tZq531
-        rqeHuvLt9mqElDXyayEGFRpILgIi3mw=
-X-Google-Smtp-Source: APXvYqxRPyiayJXt+L7ZLqfBpuWzW+0U1QaXoGpgL/vKyUljI3KQNLtW4t6LfhhSukoIlDUtcY1IXw==
-X-Received: by 2002:a17:90a:d998:: with SMTP id d24mr84938635pjv.89.1564411097845;
-        Mon, 29 Jul 2019 07:38:17 -0700 (PDT)
-Received: from mbalantz-desktop (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
-        by smtp.gmail.com with ESMTPSA id m4sm74300375pgs.71.2019.07.29.07.38.17
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 07:38:17 -0700 (PDT)
-From:   Mark Balantzyan <mbalant3@gmail.com>
-X-Google-Original-From: Mark Balantzyan <mbalantz@mbalantz-desktop>
-Date:   Mon, 29 Jul 2019 07:38:12 -0700 (PDT)
-To:     linux@roeck-us.net
-cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
-Subject: Question about pc87413_wdt.ko
-Message-ID: <alpine.DEB.2.21.1907290727580.33358@mbalantz-desktop>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PQhBByzuy3iaGCOOp5JoWEdJ2mYOzAZdOq7+FjOGIy0=;
+        b=kJkOOxxmEN6VuL+A2xDktL2JqILpKgCVj/z/ZNy4By3DN75Dzr22bhSN+bDhLYlKyB
+         CvTuEasEnYtWraGAEhVhwPMA2gpvKryNj5bL3xBwetyFu4CBv3XN4rgV+YqfygJwqgHM
+         V1Il7LhcOR4ahJ9XxE6JINApni3O2c7ciC9RxiyfUaAky2b4+YyXSkS+I60QDK2JIJ89
+         zvgp5PcDWDl/b3iYcRm92yFByO+t4uMBZRwDBaLSVasKO1VlkcMYRxHIn6DOIycaFpsl
+         rHTFUyDP0GyzbHTfrp8iO/moicrCWwbj3v9CC2jQAACYAhVpfTUvTMeZmm6WlfqiWJHE
+         s01Q==
+X-Gm-Message-State: APjAAAV9eSX5M8AHedJ39RXdEOEAx2EpcIjYmYxtHybkFF5IkbYJKqSv
+        4MWaww2HPFAyt+rymRHVnt+pt/kl
+X-Google-Smtp-Source: APXvYqwG2Oo5KDZH7P94O9Lca0CxUfAwMgHM4i6m5Wk6pu6R58YLvzqj8DmAVRI8W2pw2fA3VP+kJw==
+X-Received: by 2002:a17:902:9349:: with SMTP id g9mr108728758plp.262.1564412056147;
+        Mon, 29 Jul 2019 07:54:16 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u1sm58280849pgi.28.2019.07.29.07.54.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 07:54:15 -0700 (PDT)
+Date:   Mon, 29 Jul 2019 07:54:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mark Balantzyan <mbalant3@gmail.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
+Subject: Re: Question about pc87413_wdt.ko
+Message-ID: <20190729145413.GA21261@roeck-us.net>
+References: <alpine.DEB.2.21.1907290727580.33358@mbalantz-desktop>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1907290727580.33358@mbalantz-desktop>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter,
+On Mon, Jul 29, 2019 at 07:38:12AM -0700, Mark Balantzyan wrote:
+> Hi Guenter,
+> 
+> My name is Mark, we corresponded in the recent past concerning a different
+> kernel module.
+> 
+> I would just like to ask a question about pc87413_wdt.ko. In pc87413_wdt.c,
+> the function pc87413_init() calls pc87413_swc_base_addr() and swc_base_addr
+> gets assigned to. But pc87413_open() calls pc87413_refresh() which has
+> spinlocks around swc_base_addr. There may be a use before initialization, so
+> spinlocks get in the way. Is there a case possible where a bug/race
+> condition may be occurring here? Or is there a hardware synchronization
+> somewhere?
+> 
+Yes, the misc device should only be created after all resources are in place.
+Question though is if that really matters, ie if anyone is still using the
+driver. If so, I'd rather see the driver converted to use the watchdog 
+subsystem.
 
-My name is Mark, we corresponded in the recent past concerning a different 
-kernel module.
-
-I would just like to ask a question about pc87413_wdt.ko. In 
-pc87413_wdt.c, the function pc87413_init() calls pc87413_swc_base_addr() 
-and swc_base_addr gets assigned to. But pc87413_open() calls pc87413_refresh() 
-which has spinlocks around swc_base_addr. There may be a use before 
-initialization, so spinlocks get in the way. Is there a case possible 
-where a bug/race condition may be occurring here? Or is there a hardware 
-synchronization somewhere?
-
-Thank you,
-Mark
+Thanks,
+Guenter
