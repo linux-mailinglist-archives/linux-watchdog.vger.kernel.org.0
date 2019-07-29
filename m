@@ -2,60 +2,64 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DDA79148
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Jul 2019 18:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAE179246
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Jul 2019 19:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726327AbfG2Qnv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Jul 2019 12:43:51 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35112 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726825AbfG2Qnv (ORCPT
+        id S1727724AbfG2RmD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Jul 2019 13:42:03 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43279 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727455AbfG2RmC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Jul 2019 12:43:51 -0400
-Received: by mail-pf1-f196.google.com with SMTP id u14so28339118pfn.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 29 Jul 2019 09:43:50 -0700 (PDT)
+        Mon, 29 Jul 2019 13:42:02 -0400
+Received: by mail-pg1-f195.google.com with SMTP id r22so1014062pgk.10;
+        Mon, 29 Jul 2019 10:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GTxqOtx/tULQyH+zO3Bz0gEKEdO5gP/P6N04rGxbcPI=;
-        b=PHC2FXYu2saZhEvftEBHC72CB1sBvN3g2hGFT2XM8a3oViVN66MvcLKC6N9rWOAkJ+
-         NRIgvA6YNK8FD/3xcIQx2vHRPbwcoVP4SKP8jGWsHDxpftaDIX3YRiEvqARs8ebbAfZb
-         0bfNOsXZJzfkDV4KRrAtBb5S6Tv01axWsa/Hc=
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jmWNPGpEcvuFfjA7r1BLpL3AftzHhOFH91ce922Egwo=;
+        b=J/tqT3H5cx9WqZXshDXgmxLfI/J9u8mXHN+RbBi3G/USyhRIrKoP6kA7LqP3TSBmNX
+         gT1DNyziLGUyJS6chh9Cr//ADNoLdQYuyRqHnkHz823ph4iHUVCMr7ujqfO3XtPvQdt7
+         J5DRkiT3wUMeNDa2UDgt+kqTfA88CPlLLB/p3xMxJOLPgq/Fw12EN/lfZs7Od4L8TId1
+         cPq8ZaJI7e3wsQKShJoeZwFxFyUR7HvMyMkIb0u9fNB1furRWoUx5fvtiBVJEuIgZw+a
+         nUYgGkLK9UEck8Vx9SnsEYhq2RmT0ABTVMb3auh59wXby9wnB1ShH2rO1dLStW/mphH+
+         OYJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GTxqOtx/tULQyH+zO3Bz0gEKEdO5gP/P6N04rGxbcPI=;
-        b=uU0E16VhRVaw6wnV5JePXpsTdNiQHiAaYpgnvgm8aG57q5NGg+8sgJv59PzuCsd5g7
-         tgM3YArafPhSAGyAJx6zhB5uC3L0cqTdo47cpWP1Rte8WAZ9ulVVGHxbHoKipKGAGh1F
-         w5EVVIF8/ufFAQOAQ9N2JtTr11BCmPaGU81EAQYq4ZfkP8RzND5wYbvBpEv2in7EvWz/
-         JzwZv6QJ6vZl+m74LLldENPji2VqcuTaLdNHKRGU5gcR60CZkJXn+BwoYtCoYdg5r3rK
-         jBuWpggQZKRzdceVy1iJS9u91mQ2GQh0/diZHYpWeB4LWIRRfifN7HSSIZbCUAYOjCCp
-         WmjA==
-X-Gm-Message-State: APjAAAU7WCm6c7kN557RRaVdFDFb5qI807gU68a+F8LwbEyNbZwbQdRC
-        x6Cg9VrhxUmDTpO/eZ9koGsgZA==
-X-Google-Smtp-Source: APXvYqwY+cdKqt/jiGYWCzxUKnexFNPVOjkqUZM2+zcOxvIsY1mNeS37X+qQARmwQd5Rya5w/9CdCA==
-X-Received: by 2002:a17:90a:a613:: with SMTP id c19mr115416417pjq.17.1564418630555;
-        Mon, 29 Jul 2019 09:43:50 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h9sm57029156pgh.51.2019.07.29.09.43.49
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Jul 2019 09:43:49 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 09:43:48 -0700
-From:   Kees Cook <keescook@chromium.org>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jmWNPGpEcvuFfjA7r1BLpL3AftzHhOFH91ce922Egwo=;
+        b=tjYkQgDFSVcFUNfRvCikIRqGKwQOKLwi5ea18GDYynnKEVGG1Vckf0Yx1+kx7k7KRk
+         ONPlmid7fUhn5gyDLRWn7lzzVGCGr/q05qzGIX/vpsniDPi5Q+V08+fpChc2RWGWJl66
+         eQsIwfO4+9tDrJb75NEFguLU1tByPVIj/BIeq+jLC4UAGYvNqJ0+VqpzjQwz1cslyZIk
+         81ftOMiB9kBPjxg7XhrwMVjxEyMpdQGadYXft0E0Km92VAnsIEzxGBTJEC7cauQJSYWc
+         GxZ2dB3egIAB95G0654Bvedna7uJyXKENnYONBX1ieThwZ0DgmYXQqbWr0znDOFGNXEj
+         phXQ==
+X-Gm-Message-State: APjAAAUngeTgjUOqokXrhfj2Q2EZvkSIWnzq1YGNmouFwdrrjbWFQ5CD
+        lhu24cVvx46WJlYzEtM+Z/s=
+X-Google-Smtp-Source: APXvYqx7h55NrKFBAwOGgl/iS1bKTiyfGmCSpIw+Llin8keB0UvG/7XqCrgCuvhQeLr217HUIqljNQ==
+X-Received: by 2002:a17:90a:5207:: with SMTP id v7mr108694829pjh.127.1564422122230;
+        Mon, 29 Jul 2019 10:42:02 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v63sm64782707pfv.174.2019.07.29.10.42.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 10:42:01 -0700 (PDT)
+Date:   Mon, 29 Jul 2019 10:42:00 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>
 Subject: Re: [PATCH] watchdog: Mark expected switch fall-throughs
-Message-ID: <201907290943.28A73DF@keescook>
+Message-ID: <20190729174200.GB32556@roeck-us.net>
 References: <20190729151033.GA10143@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20190729151033.GA10143@embeddedor>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
@@ -78,9 +82,7 @@ On Mon, Jul 29, 2019 at 10:10:33AM -0500, Gustavo A. R. Silva wrote:
 > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
 > Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--Kees
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
 >  drivers/watchdog/ar7_wdt.c | 1 +
@@ -142,6 +144,3 @@ Reviewed-by: Kees Cook <keescook@chromium.org>
 > -- 
 > 2.22.0
 > 
-
--- 
-Kees Cook
