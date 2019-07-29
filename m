@@ -2,107 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC8679C90
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jul 2019 00:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17A879CA8
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jul 2019 01:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728856AbfG2WyK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Jul 2019 18:54:10 -0400
-Received: from gateway20.websitewelcome.com ([192.185.64.36]:25370 "EHLO
-        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727091AbfG2WyJ (ORCPT
+        id S1729214AbfG2XRT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Jul 2019 19:17:19 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34616 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727808AbfG2XRS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Jul 2019 18:54:09 -0400
-X-Greylist: delayed 1327 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 18:54:09 EDT
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 87126400C4347
-        for <linux-watchdog@vger.kernel.org>; Mon, 29 Jul 2019 16:28:32 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id sEBVh1iR92qH7sEBVh44dw; Mon, 29 Jul 2019 17:32:01 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=U+MiMokElKXt1Zcv5kXgnFXUTyae9u7kMKIll4+YD80=; b=onFCZisnfdsGB4dYOjYaXKf/DG
-        ejekSGTTTDarJNMXVv41cRWwCOP3IK/d72aqxTsMlb8QtgrbSU5ogZB7mqUrb3cckVSLgILHokxU9
-        nHCVfUk2TLmUPDEDK8waPSvGmy77JCw9jQNo17NUqpzsQbf8GuIdbO893dHpi/7ILa5JjUaFK/4hs
-        IIfH8wRJs545F2wGJ9XP6gJ0VMRQdvVzdgMvH16vsbq9LD8egKmODKw3xcs5ZOKTamfOZHwGGN/G9
-        GrSrpioy/PPkqb/gkWlwSlFlo1TFTNEqq51dkJ/Oc5/LG0fFiqui8Xwnq6lbLKVEgR7r3FJmsBMfX
-        12XRE/DA==;
-Received: from [187.192.11.120] (port=60874 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hsEBU-00275O-6C; Mon, 29 Jul 2019 17:32:00 -0500
-Date:   Mon, 29 Jul 2019 17:31:59 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH] watchdog: wdt977: Mark expected switch fall-through
-Message-ID: <20190729223159.GA20878@embeddedor>
+        Mon, 29 Jul 2019 19:17:18 -0400
+Received: by mail-pf1-f194.google.com with SMTP id b13so28780635pfo.1;
+        Mon, 29 Jul 2019 16:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:user-agent:mime-version;
+        bh=HkvpmCkG29rEHPrHCBOe6aKoWAycz1XEexqcjeDcdw0=;
+        b=pjDbaGaEu6f6htLBarESNWV0XibD04cP4IdPhDf0Kd4YQEdCnZ6+8Ih4oP3jqc0WgY
+         GFBzOrRNjW2kdCTSxzP/QxIfU0l0GECDQbNtlbHSa0J/V9bF+0vVpiKq76adecHvq8cT
+         LKm+JKuBGFl6j2d6CR4mu4Dsp00tM0AIrr+TGMUwkUFUwVcy5WwWu10zXzZHL56wLvYp
+         PtJtuOdhiGxjh1RSK/EIxRE8O7y59gRzHYpFHC5mr09fSjH1xfEtZ7g7kaERnecq7ThI
+         3eqYZCggXWR+nJ73a8+bvS+iyRx4fosOuuYbydvbQnjIvf6isSHSNyPhyk97aFlKWNY9
+         4w1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:user-agent
+         :mime-version;
+        bh=HkvpmCkG29rEHPrHCBOe6aKoWAycz1XEexqcjeDcdw0=;
+        b=QcXGPw70Ivs3rP3mdp979WfmwNSOoK74EGMlOhrjYKzKgRYn3SEgYBTsOcfl6HcHLi
+         NSo5bnnu9s30RXnZDSCLTPg1HT/JyGASJKgEHxXHH+bIlsdK8C0xYnVzxIjHc5D4Pu+d
+         G4vQTgtDQp31MGNW9AWVFbZXhMOjzPKoPQDruHWQUXKj+/EbBE0j57pTwZjYaYxEU/Li
+         tF+XQYKmFIBGJGjCPdVz1luXAhL76u2clLsbe8p7yMNtiCFNB87onZsNNkcW0lB7n82S
+         7TKFL9YjrWfc0PezPAywTn32AnlkwsPfnmMF/SS5RlxQ8kLpcHNKfp9WV6ikKs8vofgF
+         UomQ==
+X-Gm-Message-State: APjAAAWRgsR+ekbyIiqIR6/DBvWHVMIdmXYgbcxm+YzFPywYg9zt4QDJ
+        nMISG1WKPosdPl+CTb/UDbsXp3cHuGQ=
+X-Google-Smtp-Source: APXvYqw6+yOtblHBgQxn3JfKFEtOKOBUJpPai1ssy1HkZSX62MVXQG8r3yc1RStOnI1hHSyUbDMEtg==
+X-Received: by 2002:a17:90a:20c6:: with SMTP id f64mr115255942pjg.57.1564442238289;
+        Mon, 29 Jul 2019 16:17:18 -0700 (PDT)
+Received: from mbalantz-desktop (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
+        by smtp.gmail.com with ESMTPSA id z4sm52280088pgp.80.2019.07.29.16.17.17
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 29 Jul 2019 16:17:17 -0700 (PDT)
+From:   Mark Balantzyan <mbalant3@gmail.com>
+X-Google-Original-From: Mark Balantzyan <mbalantz@mbalantz-desktop>
+Date:   Mon, 29 Jul 2019 16:17:13 -0700 (PDT)
+To:     linux@roeck-us.net
+cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org
+Subject: Re: [PATCH] watchdog device drivers:pc87413_wdt: Rewriting of
+ pc87413_wdt driver to utilize common watchdog interface (fwd)
+Message-ID: <alpine.DEB.2.21.1907291614270.2893@mbalantz-desktop>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.192.11.120
-X-Source-L: No
-X-Exim-ID: 1hsEBU-00275O-6C
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.11.120]:60874
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 29
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: multipart/mixed; boundary="8323329-1879500136-1564442237=:2893"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Mark switch cases where we are expecting to fall through.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This patch fixes the following warning (Building: arm):
+--8323329-1879500136-1564442237=:2893
+Content-Type: text/plain; CHARSET=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-drivers/watchdog/wdt977.c: In function ‘wdt977_ioctl’:
-  LD [M]  drivers/media/platform/vicodec/vicodec.o
-drivers/watchdog/wdt977.c:400:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
-   wdt977_keepalive();
-   ^~~~~~~~~~~~~~~~~~
-drivers/watchdog/wdt977.c:403:2: note: here
-  case WDIOC_GETTIMEOUT:
-  ^~~~
 
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/watchdog/wdt977.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/wdt977.c b/drivers/watchdog/wdt977.c
-index 567005d7598e..5c52c73e1839 100644
---- a/drivers/watchdog/wdt977.c
-+++ b/drivers/watchdog/wdt977.c
-@@ -398,7 +398,7 @@ static long wdt977_ioctl(struct file *file, unsigned int cmd,
- 			return -EINVAL;
- 
- 		wdt977_keepalive();
--		/* Fall */
-+		/* Fall through */
- 
- 	case WDIOC_GETTIMEOUT:
- 		return put_user(timeout, uarg.i);
--- 
-2.22.0
+---------- Forwarded message ----------
+Hi all, sorry for the duplicate message Guenter, wanted to be sure my
+message is transferred:
 
+Thank you for your reply, Guenter! Sorry there were issues applying the
+patch, I used git format-patch to produce the patch and pasted the main
+contents into a plaintext email client so I thought it would work..
+
+May I please request clarification on which functions are no longer needed?
+
+Sorry about forgetting about that last misc_deregister(). Will do more
+tests, if that’s alright with you.
+
+In effect, may it be best to start the watchdog from the “init” function?
+
+Thank you,
+Mark
+--8323329-1879500136-1564442237=:2893--
