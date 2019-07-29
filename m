@@ -2,128 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DC378C34
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Jul 2019 15:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EFA78E28
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Jul 2019 16:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727868AbfG2NCz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Jul 2019 09:02:55 -0400
-Received: from icp-osb-irony-out3.external.iinet.net.au ([203.59.1.153]:13992
-        "EHLO icp-osb-irony-out3.external.iinet.net.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726674AbfG2NCy (ORCPT
+        id S1726478AbfG2OiS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Jul 2019 10:38:18 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:39075 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbfG2OiS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Jul 2019 09:02:54 -0400
-X-Greylist: delayed 558 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 09:02:53 EDT
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2AWAAAF6z5d/zXSMGcNWRkBAQEBAQE?=
- =?us-ascii?q?BAQEBAQEHAQEBAQEBgWeDBIEuhB6RZQEBAQEBBoEJCCWDZIV+kRoJAQEBAQE?=
- =?us-ascii?q?BAQEBKwwBAYRAAoMPOBMBAwEBAQQBAQEBBQGFUjmFVgEBAQECASMVQQULCw0?=
- =?us-ascii?q?LAgImAgJXBg0GAgEBgx4BgXYFHqsccYEyGoQZARRAQIMxgUiBDCiBY4oUeIE?=
- =?us-ascii?q?HgTgMgl8+gmEEgTiDMoJYBIxFggSGL5V/CYIchluNMwYbgxuKMgOKPpQpXJI?=
- =?us-ascii?q?bgXkzGggoCDuCOAEBMgmGKoRZhgxgjBmCUgEB?=
-X-IPAS-Result: =?us-ascii?q?A2AWAAAF6z5d/zXSMGcNWRkBAQEBAQEBAQEBAQEHAQEBA?=
- =?us-ascii?q?QEBgWeDBIEuhB6RZQEBAQEBBoEJCCWDZIV+kRoJAQEBAQEBAQEBKwwBAYRAA?=
- =?us-ascii?q?oMPOBMBAwEBAQQBAQEBBQGFUjmFVgEBAQECASMVQQULCw0LAgImAgJXBg0GA?=
- =?us-ascii?q?gEBgx4BgXYFHqsccYEyGoQZARRAQIMxgUiBDCiBY4oUeIEHgTgMgl8+gmEEg?=
- =?us-ascii?q?TiDMoJYBIxFggSGL5V/CYIchluNMwYbgxuKMgOKPpQpXJIbgXkzGggoCDuCO?=
- =?us-ascii?q?AEBMgmGKoRZhgxgjBmCUgEB?=
-X-IronPort-AV: E=Sophos;i="5.64,322,1559491200"; 
-   d="scan'208";a="200466061"
-Received: from unknown (HELO [10.44.0.193]) ([103.48.210.53])
-  by icp-osb-irony-out3.iinet.net.au with ESMTP; 29 Jul 2019 20:53:32 +0800
-Subject: Re: [PATCH 1/6] ARM: ks8695: watchdog: stop using mach/*.h
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        arm-soc <arm@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-References: <20190415202501.941196-1-arnd@arndb.de>
- <2424c672-e3fb-4c32-4c24-fafc59d03a96@uclinux.org>
- <CACRpkdaJ+2bub_nDp9=5b4kyKjWDnOGKscWg3KsEVixDpk8rzA@mail.gmail.com>
- <20190503170613.GA1783@roeck-us.net>
- <d8d81aca-722d-8b5f-cd5f-30cc3e4e407b@kernel.org>
- <CAK8P3a0StV==jMq1L9k91qEsvRD1Cw2FB1V25wr1AQqzmjsTVw@mail.gmail.com>
-From:   Greg Ungerer <gerg@kernel.org>
-Message-ID: <2bc41895-d4f9-896c-0726-0b2862fcbf25@kernel.org>
-Date:   Mon, 29 Jul 2019 22:53:30 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 29 Jul 2019 10:38:18 -0400
+Received: by mail-pf1-f193.google.com with SMTP id f17so24152494pfn.6
+        for <linux-watchdog@vger.kernel.org>; Mon, 29 Jul 2019 07:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:user-agent:mime-version;
+        bh=jgxvekQ4OFyINZM7yp2FV+Kc3k2vAwxr39Z0I5y5cgM=;
+        b=GQfND9RnH9LXrR2BrBpnQVHNe8csnGNuoebnxEa6dtdqZM6moDqw1VyJ1jKK4T0WAk
+         Yx49eTuGAcdSSNG5EYLLQ3zeETD0UpX4vECR0csbebPD55XOTSwV+TaD8VygPJUZzGlr
+         6WusL1kC0y3U2IQwS/NMfle+4BRvEtlpuy63E1uf1Zi+o2XtPSVK2wKDzCQmIGsRbWZY
+         eC8fur+03v4i3O0/bA2H5VVaibvBbisk4ikPz8VidvJ13CRAZjgSOWoRl5Nl3pIf0Qe3
+         VWkIKZ8f6c26iSKBN7cNbUaAvv1LGXRpRej5gbKX+bM69FoDgz7AWdbUfkraRJ8sFbrX
+         rsGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:user-agent
+         :mime-version;
+        bh=jgxvekQ4OFyINZM7yp2FV+Kc3k2vAwxr39Z0I5y5cgM=;
+        b=M2EyW1CF4NMrSxTumTa4Y0sekkokMHB6sevpE0BaIIIzgpNPBJktzoqUOjmr+f6nId
+         LoUyXn8rv+KEdmOOt5PTPuEn9Wh18Aq8nxJ5Bs60hkVP/aCNolw7A4zVq7OddIXDYQCJ
+         PeKtvMWnI5Xl/PIiA2KGogrBO+hrwhnUM8Cahb5+R1KxV68+N3wuHesSdPNB4mt+W+Ur
+         MUqEDKWYSgKzpatMO+VQ//XYULIkJGuVMQdGcZJMRDoZ292bBbnpvxipZtIFkjCPrNuJ
+         T3OSYCM/eEtbXhqdSG/LC102MUJzho6HPwVwdDAGlP2xqwpilBcDEBKx7K73SIURcQF8
+         49Hg==
+X-Gm-Message-State: APjAAAVpz7UPoBEVk/p36DpEPhaJI4JjNsI3O2WsBZISGl2u88tZq531
+        rqeHuvLt9mqElDXyayEGFRpILgIi3mw=
+X-Google-Smtp-Source: APXvYqxRPyiayJXt+L7ZLqfBpuWzW+0U1QaXoGpgL/vKyUljI3KQNLtW4t6LfhhSukoIlDUtcY1IXw==
+X-Received: by 2002:a17:90a:d998:: with SMTP id d24mr84938635pjv.89.1564411097845;
+        Mon, 29 Jul 2019 07:38:17 -0700 (PDT)
+Received: from mbalantz-desktop (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
+        by smtp.gmail.com with ESMTPSA id m4sm74300375pgs.71.2019.07.29.07.38.17
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 29 Jul 2019 07:38:17 -0700 (PDT)
+From:   Mark Balantzyan <mbalant3@gmail.com>
+X-Google-Original-From: Mark Balantzyan <mbalantz@mbalantz-desktop>
+Date:   Mon, 29 Jul 2019 07:38:12 -0700 (PDT)
+To:     linux@roeck-us.net
+cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
+Subject: Question about pc87413_wdt.ko
+Message-ID: <alpine.DEB.2.21.1907290727580.33358@mbalantz-desktop>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a0StV==jMq1L9k91qEsvRD1Cw2FB1V25wr1AQqzmjsTVw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; format=flowed; charset=US-ASCII
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Arnd,
+Hi Guenter,
 
-On 23/7/19 12:44 am, Arnd Bergmann wrote:
-> On Sat, May 4, 2019 at 4:27 PM Greg Ungerer <gerg@kernel.org> wrote:
->> On 4/5/19 3:06 am, Guenter Roeck wrote:
->>> On Fri, May 03, 2019 at 08:16:05AM +0100, Linus Walleij wrote:
->>>> On Fri, May 3, 2019 at 8:02 AM Greg Ungerer <gerg@uclinux.org> wrote:
->>>>> Ultimately though I am left wondering if the ks8695 support in the
->>>>> kernel is useful to anyone the way it is at the moment. With a minimal
->>>>> kernel configuration I can boot up to a shell - but the system is
->>>>> really unreliable if you try to interactively use it. I don't think
->>>>> it is the hardware - it seems to run reliably with the old code
->>>>> it has running from flash on it. I am only testing the new kernel,
->>>>> running with the existing user space root filesystem on it (which
->>>>> dates from 2004 :-)
->>>>
->>>> Personally I think it is a bad sign that this subarch and boards do
->>>> not have active OpenWrt support, they are routers after all (right?)
->>>> and any active use of networking equipment should use a recent
->>>> userspace as well, given all the security bugs that popped up over
->>>> the years.
-> 
-> Looking around on the internet, I found that Micrel at some point
-> had their own openwrt fork for ks8695, but I can't find a copy
-> any more, as the micrel.com domain is no longer used after the
-> acquisition by Microchip.
+My name is Mark, we corresponded in the recent past concerning a different 
+kernel module.
 
-I build it with uClinux-dist, https://sourceforge.net/projects/uclinux/files/uClinux%20Stable/.
-And again I can build for it, it just doesn't currently work
-in any sort of reasonable way. So I get the impression it
-hasn't worked for a while and nobody has noticed.
+I would just like to ask a question about pc87413_wdt.ko. In 
+pc87413_wdt.c, the function pc87413_init() calls pc87413_swc_base_addr() 
+and swc_base_addr gets assigned to. But pc87413_open() calls pc87413_refresh() 
+which has spinlocks around swc_base_addr. There may be a use before 
+initialization, so spinlocks get in the way. Is there a case possible 
+where a bug/race condition may be occurring here? Or is there a hardware 
+synchronization somewhere?
 
-
-> https://wikidevi.com/wiki/Micrel has a list of devices based on
-> ks8695, and it seems that most of these are rather memory
-> limited, which is a problem for recent openwrt builds.
-> 
-> Only two of the 17 listed devices have the absolute minimum of 4MB
-> flash and 32MB RAM for openwrt, two more have 8/32 and one
-> or two have 4/64, but all these configurations are too limited for the
-> web U/I now.
-
-
->>>> With IXP4xx, Gemini and EP93xx we have found active users and
->>>> companies selling the chips and reference designs and even
->>>> recommending it for new products (!) at times.  If this is not the
->>>> case with KS8695 and no hobbyists are willing to submit it
->>>> to OpenWrt and modernize it to use device tree I think it should be
->>>> deleted from the kernel.
->>>>
->>>
->>> That may be the best approach if indeed no one is using it,
->>> much less maintaining it.
->>
->> Well, I for one don't really use it any more. So I don't have a lot
->> of motivation to maintain it any longer.
-> 
-> I came across my patches while rebasing my backlog to 5.3-rc1.
-> 
-> Should I save the (very small) trouble of sending them out again
-> and just remove the platform then?
-
-At this time I have no issue with removing it.
-
-Regards
-Greg
-
+Thank you,
+Mark
