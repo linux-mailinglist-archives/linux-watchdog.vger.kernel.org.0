@@ -2,77 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 817DA79E90
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jul 2019 04:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F5479EA9
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jul 2019 04:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730359AbfG3CVi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Jul 2019 22:21:38 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:44289 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729020AbfG3CVi (ORCPT
+        id S1730931AbfG3C2R (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Jul 2019 22:28:17 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36606 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730904AbfG3C2R (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Jul 2019 22:21:38 -0400
-Received: by mail-pg1-f194.google.com with SMTP id i18so29199335pgl.11;
-        Mon, 29 Jul 2019 19:21:38 -0700 (PDT)
+        Mon, 29 Jul 2019 22:28:17 -0400
+Received: by mail-pg1-f195.google.com with SMTP id l21so29206498pgm.3;
+        Mon, 29 Jul 2019 19:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=0MOGeuua5cDgk1wyC8caLbfQOiznE0pJ1lOBP7T+nyQ=;
-        b=afk/T4FZVHCkLSM8QM6uwClRhAGo4uj5u76cdwhohU0BjXIz+etBByLUd199bvLGZy
-         MUnl6g7vMha0S0+Ys5j2BTAtxyWmr7BzGAzy9ABU3qKfzNe6LiI7kN3p+oWwh+Mv0CvK
-         pfCJ/forSbJk2e5flf8AZ7O2eb/fssFTc9ljkjPWDpolPCsoWmLnASEK0G3a4NOpcQ90
-         WF1TdmXRPPNKvRY47lwYpI5Fy7PCsOmw0Ha05PA07025uBVjQ9JjDJ6HGPC1OKPjHh2g
-         IAmLRBOcJxJjp2fXGA4CVlDljs9IcWwKMA/d1q51EgcvLxbc5JxQKhzOij+IGO5IUFp6
-         NIVA==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fNGwib2V1mqGjrer2INZMFU62Am+9JjUwbZIzd/7DQs=;
+        b=VHP2dn7kLttqlcQBbERJLzIpkJyi/GGl6JZXheY4z6ViliFFZGF1YsP70IT8YxG2Sf
+         p9hvGgEjQdcGxViu1toHSIhZAr8RryAh0qZR4gjQyCpo8bLRggC0LQPLsT/3kImGj8jS
+         xtqgHprYYAcr/n6tE51UU7RAY32nDxwwdhMthHUvio/MUljMmBBcPFGv4yrpNnmGISS2
+         9mxWqvIuxmlr5HuqQGzgdpkbMpLAL1QJ/+mdnno+Buf/KcBqIEB9EoYtjmyK/k0T31ZG
+         vOs3jV/GKWdxpKYM3cMafKtF6kIWNxBgOocL0zRrKz2P7W12XXcOzm8Ori5hNO/UQeuo
+         UrVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=0MOGeuua5cDgk1wyC8caLbfQOiznE0pJ1lOBP7T+nyQ=;
-        b=VtIDF4sgL77nyvP9Pg1tKOj+Mrs70ftOn09LnvBYj2n0rMMG4G7kzg68QV9oDiOXnr
-         bkslwoap3LQrEyyO6KQ6ni3RojkGgUA2mhUqmSu7BBhU5l73LpnM3tDv3GiKdKr3zTgS
-         2GFbxvR0fmxXZmbF9A9kgF6mxFjX5Nqriqft6yMaQyZbyZxfiN0ZNtsdIBzEB+6QOuhi
-         gyOrgmH2Gmb2DuljxKZue5PzqEvRdiHI1hPvIGu3WRVcevx9OeoXNnOnpvWTwENfn/++
-         zHS8FfmGPKiisIiSg1CzzJ21Uc+JYAZdsWvztRWqupJRko6Xfak6atgxmHusPwkMslBR
-         Igbw==
-X-Gm-Message-State: APjAAAUs7zeXfBjoV0ugZI3EGy+EKoExVvP1WRoSPpoGG56/fE1u2Fqn
-        iN4ebHsCiHcfWygP0No0i2M=
-X-Google-Smtp-Source: APXvYqzmHNiAf2mn+7lldUmTRjWDG/BtWOcSnyVMvKF79mbdzG1o8SibKedPpOXVp/snpkVbjxKOyg==
-X-Received: by 2002:a17:90b:8cd:: with SMTP id ds13mr109026438pjb.141.1564453297954;
-        Mon, 29 Jul 2019 19:21:37 -0700 (PDT)
-Received: from mbalantz-desktop (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
-        by smtp.gmail.com with ESMTPSA id x9sm39958232pgp.75.2019.07.29.19.21.37
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 19:21:37 -0700 (PDT)
-From:   Mark Balantzyan <mbalant3@gmail.com>
-X-Google-Original-From: Mark Balantzyan <mbalantz@mbalantz-desktop>
-Date:   Mon, 29 Jul 2019 19:21:33 -0700 (PDT)
-To:     Guenter Roeck <linux@roeck-us.net>
-cc:     Mark Balantzyan <mbalant3@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org
-Subject: Re: [PATCH] watchdog device drivers:pc87413_wdt: Rewriting of
- pc87413_wdt driver to utilize common watchdog interface (fwd)
-In-Reply-To: <c28680b5-d262-97ae-5bdc-5cce9169e2da@roeck-us.net>
-Message-ID: <alpine.DEB.2.21.1907291917540.67851@mbalantz-desktop>
-References: <alpine.DEB.2.21.1907291614270.2893@mbalantz-desktop> <8e159e06-023e-6e20-ced5-3a645c0a1242@roeck-us.net> <alpine.DEB.2.21.1907291732130.20898@mbalantz-desktop> <c28680b5-d262-97ae-5bdc-5cce9169e2da@roeck-us.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fNGwib2V1mqGjrer2INZMFU62Am+9JjUwbZIzd/7DQs=;
+        b=fZc2QSejNL+TmXx447Kg+BiHZ+kwI2jW0Qn3jIHpCGWwQStZgd5ERSh7//iJu7dakX
+         1SIqvH1CmpQwAbepA/P0LcNj2G7VwyBMBb2prc+0gkJMCIVv77wsYzTa5/NopmC4PHEF
+         2uAq0mOkN/BdLP5e0+iEJPlHrTaJOY1Tf/Q0HrHarsUZqO+Hdnmv1ayB16D5emiU3s07
+         J5DNjPyAIfFZcMyW42kVBGJtQIeWhRa2lXtkRPIw0KlG/BZaQ8+LLDXLTcLf4H1oIERW
+         xMXNls4pTbN8Wx+bLqZnD1GXUionkwoG3qz3weY8gtqIGMJyLB9NK0z1KpSIEWZYWRWp
+         QPeQ==
+X-Gm-Message-State: APjAAAUvUV5NSv4QBaKs46BAAPGwchXPIBxslQqyAjjtluBaxwNb6mrS
+        QEM/Oxr4OkB6yxCy8mC6ohU=
+X-Google-Smtp-Source: APXvYqzeiAYdhr/rw1pXY7OYt51obI4XjCJd8Go2H7K0GEaVOTuuC77QX0O0du1/EGcgt4hPupgKcg==
+X-Received: by 2002:a62:8f91:: with SMTP id n139mr40422399pfd.48.1564453696557;
+        Mon, 29 Jul 2019 19:28:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c70sm8609400pfb.36.2019.07.29.19.28.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 19:28:15 -0700 (PDT)
+Subject: Re: [PATCH 4/4] watchdog device drivers:pc87413_wdt: Continuing
+ revision of conversion of pc87413_wdt to use common watchdog interface,
+ removed undeclared identifiers
+To:     Mark Balantzyan <mbalant3@gmail.com>
+Cc:     wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, andrianov@ispras.ru
+References: <20190730021540.66579-1-mbalant3@gmail.com>
+ <20190730021540.66579-4-mbalant3@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <8a47df2f-834f-19d6-c316-0e02c6666e73@roeck-us.net>
+Date:   Mon, 29 Jul 2019 19:28:14 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
+In-Reply-To: <20190730021540.66579-4-mbalant3@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi all, Guenter,
+On 7/29/19 7:15 PM, Mark Balantzyan wrote:
+> There is a potential for the variable swc_base_addr in the call chain of the
+> driver initialization function (init) to be used before initialization. This
+> brought up the need for, by rewriting the driver to use the common watchdog
+> interface, ensuring to have all resources in place. This patch addresses this
+> need by rewriting into common watchdog interface utilization for the driver.
+> 
+> Signed-off-by: Mark Balantzyan <mbalant3@gmail.com>
+> 
+> ---
+>   drivers/watchdog/pc87413_wdt.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
+> index bc6c4e19..6863145a 100644
+> --- a/drivers/watchdog/pc87413_wdt.c
+> +++ b/drivers/watchdog/pc87413_wdt.c
+> @@ -370,7 +370,6 @@ reboot_unreg:
+>   static void __exit pc87413_exit(void)
+>   {
+>   	watchdog_unregister_device(&pc87413wdt_wdd);
+> -	unregister_reboot_notifier(&pc87413_notifier);
 
-Sure, it'd be great to work on ib700, doing both, if we may. I feel it's 
-worth a shot in case somebody out there has the hardware to test the 
-pc87413_wdt driver, though I'm doing my best building the individual 
-module and checking for compilation errors (as best I can).
+This needs to be in patch 2.
 
-I just sent off via git send-email a quad-chain of patches for the driver.
-
-Thanks + regards,
-Mark
+>   	release_region(swc_base_addr, 0x20);
+>   
+>   	pr_info("watchdog component driver removed\n");
+> 
 
