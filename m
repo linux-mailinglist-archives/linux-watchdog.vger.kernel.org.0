@@ -2,152 +2,84 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EFC7D03A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 23:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FE37D190
+	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Aug 2019 00:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728404AbfGaVoJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 Jul 2019 17:44:09 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41738 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727865AbfGaVoJ (ORCPT
+        id S1730380AbfGaWxp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Jul 2019 18:53:45 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:54532 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726232AbfGaWxo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 Jul 2019 17:44:09 -0400
-Received: by mail-pg1-f193.google.com with SMTP id x15so22374844pgg.8;
-        Wed, 31 Jul 2019 14:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jn/EGBbztfB2nGvB0KvRf41V3AgA32Rgpcwkg+wJJdw=;
-        b=Tpf1ZYN6dxGT7LbxLDYCZq2pQ9Hs8TZqu7+tmNtndlF1+MIpTvyg9fxI1c+guJYnXN
-         bvsth9Jhi77KaezQ3fFmI1M/2pYixCG08CFPhvE6zcmOfmspU9QWDOhXOdPqGEvG69P+
-         gjkESVFUxvzYkzpwNzN2AFJYx7c4I4EgZN+Ckxd+sHSKYZLoPE4h2GPAyQZ1K4l1L1ut
-         LCJc5WYCo7ueqtEg6P8IjicIvJCihpbwV3/TvSLhb1C/XMP5JWpZo7DCQp5wR3mpYiEs
-         f3wB0adDQnMIOBmREKZCIu815WClAaFhrqhJOSzd5Z1NTiTpxF5DP20c613U9BsLzH/C
-         qJhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jn/EGBbztfB2nGvB0KvRf41V3AgA32Rgpcwkg+wJJdw=;
-        b=ZgBCecsnMlJyYBf8usnQLEwsYJVKkqTVZNS8ea5g2jR8c2DsuuvB5mibQ5jtE1zgK2
-         XCJSO8RzWUr+faecbI2CiejpEuok0AudDCD/VghTl0NcJvjSC+X4urgNuX43zSueV54b
-         gg60uBDPjUGuQ15v4UHau1IDDNsw15UqF4cbU6Qha8xRY2TdaaE+z19OUZ63GxVUKk5N
-         Z6ibphBUngnd+kD4H7GsJvf/HI1dVHgTG+NdtserKAWm8H0Q4tQ6E0n+gEsTCAIxBGbC
-         yRU+4N1vJWW+RTok0WynLoJoZHJBJx8pM44bJHN+lC8s4sw1GZQeZTOirfdcAa3V2MwN
-         2ZdA==
-X-Gm-Message-State: APjAAAWqTn9hOLEK8ebuiU8r2b6o8ymzexVKL0w6vzdidkLQAraO3fTS
-        qzaxix7zkAVekKf447GflKY=
-X-Google-Smtp-Source: APXvYqxKze3DlyqHNRFRHMuQIg68+neA9sN4BNlDBGl3ktMWftwQkun4coZLvc6NgHEymbCq7wtbIw==
-X-Received: by 2002:a65:4b8b:: with SMTP id t11mr115174559pgq.130.1564609448743;
-        Wed, 31 Jul 2019 14:44:08 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l4sm70895918pff.50.2019.07.31.14.44.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 31 Jul 2019 14:44:08 -0700 (PDT)
-Date:   Wed, 31 Jul 2019 14:44:07 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, Chris Healy <cphealy@gmail.com>,
-        Rick Ramstetter <rick@anteaterllc.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] watchdog: ziirave_wdt: Log bootloader/firmware info
- during probe
-Message-ID: <20190731214407.GD17277@roeck-us.net>
-References: <20190731174252.18041-1-andrew.smirnov@gmail.com>
- <20190731174252.18041-6-andrew.smirnov@gmail.com>
+        Wed, 31 Jul 2019 18:53:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ATvYdNztPV3VRoATCZ+XXKdGjFdgKnY+Oq7E+6cYRLw=; b=aLWTKr5D4Rlk7ktmm3LE29Dbo
+        /taejBAF/fXWYBc+QVYYMIDzXl057wk3SyDWKz4hs+4iwydnV48UnmAg/XzlUTXhwOUIdnYrHWh0/
+        TWYVtv1avZ0FLXQm3YUQU2tYjr44orLV+M/V+ZhoQV3bDFScKO/OTTOMFAIaPnogFjiuG8ThozLND
+        tdsnZMyYD3CGn1c5rBlIGRDrN4R282d8kjN05QVoIfOD2Inz1RIm/eToT6V6qRWJPSqewWytQAGLm
+        OzOBhKPMd4feDMZu+M5tm5g0jqYDFq2FqDS8oZmuSAXX+PkFIlzTyr+EM50T1csY0ZV1uPbDrJsnc
+        F5zemaCyA==;
+Received: from shell.armlinux.org.uk ([2002:4e20:1eda:1:5054:ff:fe00:4ec]:46960)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1hsxT5-0005ur-J6; Wed, 31 Jul 2019 23:53:11 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1hsxSy-0003Z5-38; Wed, 31 Jul 2019 23:53:04 +0100
+Date:   Wed, 31 Jul 2019 23:53:04 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
+Message-ID: <20190731225303.GC1330@shell.armlinux.org.uk>
+References: <20190731195713.3150463-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190731174252.18041-6-andrew.smirnov@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190731195713.3150463-1-arnd@arndb.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 10:42:52AM -0700, Andrey Smirnov wrote:
-> Log bootloader/firmware info during probe. This information is
-> available via sysfs already, but it's really helpful to have this in
-> kernel log during startup as well.
-> 
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> Cc: Chris Healy <cphealy@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rick Ramstetter <rick@anteaterllc.com>
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+On Wed, Jul 31, 2019 at 09:56:42PM +0200, Arnd Bergmann wrote:
+> For dove, the patches are basically what I had proposed back in
+> 2015 when all other ARMv6/ARMv7 machines became part of a single
+> kernel build. I don't know what the state is mach-dove support is,
+> compared to the DT based support in mach-mvebu for the same
+> hardware. If they are functionally the same, we could also just
+> remove mach-dove rather than applying my patches.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Well, the good news is that I'm down to a small board support file
+for the Dove Cubox now - but the bad news is, that there's still a
+board support file necessary to support everything the Dove SoC has
+to offer.
 
-> ---
->  drivers/watchdog/ziirave_wdt.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/watchdog/ziirave_wdt.c b/drivers/watchdog/ziirave_wdt.c
-> index 33c8d2eadada..84ba8820ac86 100644
-> --- a/drivers/watchdog/ziirave_wdt.c
-> +++ b/drivers/watchdog/ziirave_wdt.c
-> @@ -68,6 +68,9 @@ static char *ziirave_reasons[] = {"power cycle", "hw watchdog", NULL, NULL,
->  #define ZIIRAVE_CMD_JUMP_TO_BOOTLOADER		0x0c
->  #define ZIIRAVE_CMD_DOWNLOAD_PACKET		0x0e
->  
-> +#define ZIIRAVE_FW_VERSION_FMT	"02.%02u.%02u"
-> +#define ZIIRAVE_BL_VERSION_FMT	"01.%02u.%02u"
-> +
->  struct ziirave_wdt_rev {
->  	unsigned char major;
->  	unsigned char minor;
-> @@ -482,7 +485,7 @@ static ssize_t ziirave_wdt_sysfs_show_firm(struct device *dev,
->  	if (ret)
->  		return ret;
->  
-> -	ret = sprintf(buf, "02.%02u.%02u", w_priv->firmware_rev.major,
-> +	ret = sprintf(buf, ZIIRAVE_FW_VERSION_FMT, w_priv->firmware_rev.major,
->  		      w_priv->firmware_rev.minor);
->  
->  	mutex_unlock(&w_priv->sysfs_mutex);
-> @@ -505,7 +508,7 @@ static ssize_t ziirave_wdt_sysfs_show_boot(struct device *dev,
->  	if (ret)
->  		return ret;
->  
-> -	ret = sprintf(buf, "01.%02u.%02u", w_priv->bootloader_rev.major,
-> +	ret = sprintf(buf, ZIIRAVE_BL_VERSION_FMT, w_priv->bootloader_rev.major,
->  		      w_priv->bootloader_rev.minor);
->  
->  	mutex_unlock(&w_priv->sysfs_mutex);
-> @@ -572,7 +575,8 @@ static ssize_t ziirave_wdt_sysfs_store_firm(struct device *dev,
->  		goto unlock_mutex;
->  	}
->  
-> -	dev_info(&client->dev, "Firmware updated to version 02.%02u.%02u\n",
-> +	dev_info(&client->dev,
-> +		 "Firmware updated to version " ZIIRAVE_FW_VERSION_FMT "\n",
->  		 w_priv->firmware_rev.major, w_priv->firmware_rev.minor);
->  
->  	/* Restore the watchdog timeout */
-> @@ -706,6 +710,10 @@ static int ziirave_wdt_probe(struct i2c_client *client,
->  		return ret;
->  	}
->  
-> +	dev_info(&client->dev,
-> +		 "Firmware version: " ZIIRAVE_FW_VERSION_FMT "\n",
-> +		 w_priv->firmware_rev.major, w_priv->firmware_rev.minor);
-> +
->  	ret = ziirave_wdt_revision(client, &w_priv->bootloader_rev,
->  				   ZIIRAVE_WDT_BOOT_VER_MAJOR);
->  	if (ret) {
-> @@ -713,6 +721,10 @@ static int ziirave_wdt_probe(struct i2c_client *client,
->  		return ret;
->  	}
->  
-> +	dev_info(&client->dev,
-> +		 "Bootloader version: " ZIIRAVE_BL_VERSION_FMT "\n",
-> +		 w_priv->bootloader_rev.major, w_priv->bootloader_rev.minor);
-> +
->  	w_priv->reset_reason = i2c_smbus_read_byte_data(client,
->  						ZIIRAVE_WDT_RESET_REASON);
->  	if (w_priv->reset_reason < 0) {
-> -- 
-> 2.21.0
-> 
+Even for a DT based Dove Cubox, I'm still using mach-dove, but it
+may be possible to drop most of mach-dove now.  Without spending a
+lot of time digging through it, it's impossible to really know.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
