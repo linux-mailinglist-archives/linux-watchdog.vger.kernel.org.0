@@ -2,87 +2,87 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CEE7C9D5
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 19:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89E87CABC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 19:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728844AbfGaREc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 Jul 2019 13:04:32 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37442 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726514AbfGaREc (ORCPT
+        id S1727850AbfGaRnA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Jul 2019 13:43:00 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46589 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727571AbfGaRm7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 Jul 2019 13:04:32 -0400
-Received: by mail-pl1-f195.google.com with SMTP id b3so30785135plr.4;
-        Wed, 31 Jul 2019 10:04:31 -0700 (PDT)
+        Wed, 31 Jul 2019 13:42:59 -0400
+Received: by mail-pg1-f195.google.com with SMTP id k189so13356664pgk.13;
+        Wed, 31 Jul 2019 10:42:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=02uZUKd556myZ+F9DbZFuNYIVZOabJKu9/VOGEOym5U=;
-        b=dIae7+Igo3ltQMb7FnEbyeio8IyM1uNgubphIg4B+0bi4A7FXCd+qPbZuPLFUcVnqZ
-         Tqyb69AUklajqvqq9g8fyvbVW05oBVhwtoIraiBzfXQAqm2XWQvZv41Q5E900YSWSKuh
-         Bw2rdB02zsc4MT9LtcYUw4AJB+DCF6NovXIZuudmV/z7JKKXNMc6PwVlmKl3XYGKhkU6
-         b3bgtIdJhdNow0Va46Tpd5TcjTDh+ptQ0OWDXMRMOL/kU5U4JWMCfeJ50p1Jl5xI+J2L
-         sHq1INFZgEyJyTN81rp2+3VFuqlgkqjI7JxMTYD4DEqyjbVJIl9N/kfiQjxq7/COaMcC
-         kZgA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Cbyckh733zLn1k1KQNdqh7wE649sTzAEf7Zo27dCO9o=;
+        b=Jf1DCaJW8x+CqvK5dK/oe6T/tEBnNjjoHaS6Avg/5nrZ7lnqPw+SLoTaf+oV3NKePM
+         n/0ITNvE2NeMBsgUDLZ+V3WCNertUHwXh+F/wmGzsoBtnV4UOwyht+yCaNW3xTT7vPNL
+         nprz7JaRptMhEvs56d4Y0ktKlLBfB0Ikb56p/ucPFRYWddbWyYZqL7HkDfOWkU99ZTEu
+         TcwP8RNXr6VWDi11URP9yOBYxUIHxzaGvznHzUin9xkrUFnZtEM3NSjgLcFlKZk+EsE7
+         eX6d+NmjkJbZwDVvsNMPO8YdWCahYFIUXlhlggzX/1zZqj6hmFMu6+nhX2BU5iMQmhoC
+         Q3sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=02uZUKd556myZ+F9DbZFuNYIVZOabJKu9/VOGEOym5U=;
-        b=BAkPj9302L9uYkBjytOaeFebzOgqHjbaVfiaBqO1RoEd+NkoLOaZ+6Dstwi1OLq4MH
-         402jDQx+1JPlHI94ZuPzymbB0/FlF0P2UX89B2Ltgc4h0ASP364rH1F5ihgAjhsWQ4zx
-         1DYL138OVsXeDTO5TqCENdLxeT9fVTGXdkBd+EYP33fzqygC59/Gk+4l3gcPlRLfN5AZ
-         Cxb6vv+uLTxyRC3gQRDybCFF0TLSyQmA6mTtjWE9D14z1qnAYp+raKqki6B1MGDQK/Sv
-         q2hh9xZVrUYNjEs2Ps3SpF59JiLHXG2XJ8SwaBSnBcl+DIAwlzySGBejXPFGT1r7v8IK
-         e1KQ==
-X-Gm-Message-State: APjAAAXI/DHm9uW61gjZ+M9OoPNClsJeR1x6ScQhAdBl5X7gJMkbvmiN
-        yTi96P/dIKLDVDVTTyZc0jU=
-X-Google-Smtp-Source: APXvYqwGsj0ZGlniKBN07CjFyqECjuTrRu/I0JtIHH8wCdnVnF2MiO69+EFwTXNWPSE7NiazPmCDbA==
-X-Received: by 2002:a17:902:112c:: with SMTP id d41mr110771356pla.33.1564592671257;
-        Wed, 31 Jul 2019 10:04:31 -0700 (PDT)
-Received: from mbalantz-desktop (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
-        by smtp.gmail.com with ESMTPSA id x7sm4800350pga.0.2019.07.31.10.04.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Cbyckh733zLn1k1KQNdqh7wE649sTzAEf7Zo27dCO9o=;
+        b=fWIJgzjqED9zc4cJZ4nYCjhdyEmp/ifczzNjbudbrLXFYBO29wh/9D57tfC+8+8ui7
+         c0WT0QSEULnBiDlOLqCmJjhMpacnzqqSkX2HCuopJ20OtJE7qhyDSEEqKSveK4zDAm1h
+         b1kDiNqAlWVVqd0hc3b3JO5nEjjkRKCP+flhyCcaFxb2K7w6zIyiWNZ+tJWHBg1YdqOf
+         9KZIX3L7CCpsCTD8plMZAcLZSrRUh31F/DQPdlfnHIGTGxiVEKuJwsHIP5l6zNRX5IOO
+         fHNGcWXpFbHUrbADJ8nAc3UeEjzWi4L06lB5lVO7pLOuKaWu+n65WNiYGG6tt6hj4qWN
+         6ung==
+X-Gm-Message-State: APjAAAUOh9t92mnsQZRj5njK1Zf5ek8dj2ihjKrT/+eV4GO/b2diPRc/
+        79qFuo1KfuhSWg8voPhOEndK2BK8
+X-Google-Smtp-Source: APXvYqxdqHqvtynEU7yEnDIrijIctPi9FrUx6AMyMOZ85UVTMWrO/hZXpwZJYxX/Rd1+zUiH6EvUGg==
+X-Received: by 2002:aa7:91cc:: with SMTP id z12mr48569536pfa.76.1564594978845;
+        Wed, 31 Jul 2019 10:42:58 -0700 (PDT)
+Received: from localhost.localdomain ([2607:fb90:4ad:5a0b:2aff:6e0f:8973:5a26])
+        by smtp.gmail.com with ESMTPSA id k8sm65941259pgm.14.2019.07.31.10.42.57
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 31 Jul 2019 10:04:30 -0700 (PDT)
-From:   Mark Balantzyan <mbalant3@gmail.com>
-X-Google-Original-From: Mark Balantzyan <mbalantz@mbalantz-desktop>
-Date:   Wed, 31 Jul 2019 10:04:26 -0700 (PDT)
-To:     Guenter Roeck <linux@roeck-us.net>
-cc:     Mark Balantzyan <mbalant3@gmail.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pavel Andrianov <andrianov@ispras.ru>
-Subject: Re: [PATCH] watchdog:alim1535_wdt: Fix data race in ali_settimer()
- concerning ali_timeout_bits variable.
-In-Reply-To: <20190731164337.GA13646@roeck-us.net>
-Message-ID: <alpine.DEB.2.21.1907310949440.37824@mbalantz-desktop>
-References: <20190718155238.3066-1-mbalant3@gmail.com> <20190718163458.GA18125@roeck-us.net> <alpine.DEB.2.21.1907310911120.29703@mbalantz-desktop> <20190731164337.GA13646@roeck-us.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 31 Jul 2019 10:42:58 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rick Ramstetter <rick@anteaterllc.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] Ziirave_wdt driver fixes
+Date:   Wed, 31 Jul 2019 10:42:47 -0700
+Message-Id: <20190731174252.18041-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-My employer (and yes, I am working for the Linux Foundation) has me 
-working on analysing race condition warnings in the Linux kernel. They 
-have a driver verification project running under the umbrella of the ELISA 
-project involved in the research, investigation, experimentation, and 
-establishment of linux kernel verification measures and tools.
+Everyone,
 
-I actually do have assigned to me coaches and/or mentors that I have been 
-corresponding with. They are aware of what is going on and are being cc'd 
-to (most of) our emails.
+This series contains various fixes/improvements for ziirave_wdt
+driver. Hopefully each commit is self-explanatory.
 
-pc87413_wdt was detected by our race condition analysis tool as having 
-warning. Even outside this work we've been doing, I've been trying to apply
-the reasoning of the race condition analysis tool to different kernel modules,
-as part of my menteeship.
+Feedback is welcome!
 
-I hope you can respect that this is a process primarily for learning and 
-experimentation. I'm sorry if I'm creating too much work for you at once. 
-If so, let me know and I'll try to spread it out.
+Thanks,
+Andrey Smirnov
 
-Thank you,
-Mark
+Andrey Smirnov (5):
+  watchdog: ziirave_wdt: Add missing newline
+  watchdog: ziirave_wdt: Be verbose about errors in probe()
+  watchdog: ziirave_wdt: Be more verbose during firmware update
+  watchdog: ziirave_wdt: Don't bail out on unexpected timeout value
+  watchdog: ziirave_wdt: Log bootloader/firmware info during probe
+
+ drivers/watchdog/ziirave_wdt.c | 74 +++++++++++++++++++++++-----------
+ 1 file changed, 51 insertions(+), 23 deletions(-)
+
+-- 
+2.21.0
+
