@@ -2,545 +2,134 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C057CB05
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 19:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FB27CB85
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 20:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730116AbfGaRxc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 Jul 2019 13:53:32 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38757 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730115AbfGaRxc (ORCPT
+        id S1726268AbfGaSJl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Jul 2019 14:09:41 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36686 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726125AbfGaSJl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 Jul 2019 13:53:32 -0400
-Received: by mail-pf1-f194.google.com with SMTP id y15so32300148pfn.5;
-        Wed, 31 Jul 2019 10:53:31 -0700 (PDT)
+        Wed, 31 Jul 2019 14:09:41 -0400
+Received: by mail-pg1-f195.google.com with SMTP id l21so32437364pgm.3;
+        Wed, 31 Jul 2019 11:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=d3JxTH1nSs2O2a2eP+fn4Cl1h5E5SkRgeqWbojZ9ZC0=;
-        b=nxuxx/XWyPVsQLlDFvqzYIb1FiRj590zspQSQCOQT/OptZomD93m0QFYhHUZnK1IMa
-         fvfQQINn2R0bW8sSKOHuBC649w7urZDXI07FJgn0b+HvXHLkmCWPAdIZE/WUKfVIzjAk
-         QF7TONZ/rZ9dvnpKqwj9I/UdoW03EqGd7br1U5MrLO/69AQ/RSKV0zYuh5n25oryWSDt
-         VkTE+JTVVbflVNki2rTDP/qwnfvkHO9Xo4j+8ria9iwiA25hwuoJL1E7jqTAk9YkILJ8
-         d8XdFlnuGq96ShEqsKOSeSA7/oBBcfsGVuWLyMNW6ctbKVYTgUPkB6Aav9Cqzzh6e5Wg
-         U8Cg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KKXrcjq5aKywCjPq+oMoki6xU2F/WPYtQ8SZIYkDkr8=;
+        b=fFcZHoKChnx7sEYX7xmn9Zpu1zg08dZAFMzIxgCNf7DRQFUmoOrySjKb+3BT3V9RxI
+         +YEdwTnFeMg0T8RmfOR20dK5hPBjb3BW1qwKRe84INXXGKPW+GR8c14+YYh7UfGQ86TN
+         Ia85W+y28aOzPTLVOqlcfzH9miK4beobT55qUVw3S1MjXTVLZrdgPftPDU/JG98v2DYD
+         JgdzrFIYO7ty7cF18VeYaxUDzo6HPHVKgHmz8gfNYnh0gh51QbBqDU5zv8ukgl8ePVvZ
+         HlY3Fj5fvgZXK3vZJVjzJFaWx05HHSJx3h4q7rLq5Q3aef37Vr3HZ8EVWQP7XdtDsXav
+         6cJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=d3JxTH1nSs2O2a2eP+fn4Cl1h5E5SkRgeqWbojZ9ZC0=;
-        b=WKSFuMDVbIEoNMiLYNayY2cFuC0iflQBpYx6oPASbHvNCkrKDBbChEcrzYTLJT2qf5
-         Wd3rVcpJyHQC0sczxQAmernDu6qN60Sb2uNkiI6YL+nzAjDiaIIZj2f00iDKYhWtbXNX
-         ADKN+hZNujz3TWXn9iJ4S2FoQNmbdux7SGb97BzXWZAdMlfBfkWMR4jv/HapqdtHtAiN
-         7JMHO/NYzaCA1ZXOm1IlfEKKY3VAVdK+WBDHW8POFfPlrGC+t7TdF+nJyQQVnVSvSoP0
-         ybXX6NnTVzuuywmO60SGXn/atNwGSFWdAQ1nv3gqYt9lVxoftVIvtgPhfSFk/hjoJpQq
-         FO9g==
-X-Gm-Message-State: APjAAAVc/88kBJIYZ4CdmRHFXMCNQoi8nwkLgbN8VBdd0KL1b9leM/eo
-        x3bQD+mJ6DH+WCf94cNbpKc=
-X-Google-Smtp-Source: APXvYqy+DaVruJutrI6ckCZ0ClSprVCqsLjq4Vjpz/m1S+zaQOUUAQV12eCkTiy9BZOuDfsVOBxd3Q==
-X-Received: by 2002:a63:2c02:: with SMTP id s2mr7463456pgs.343.1564595610811;
-        Wed, 31 Jul 2019 10:53:30 -0700 (PDT)
-Received: from localhost.localdomain (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
-        by smtp.gmail.com with ESMTPSA id s6sm107585720pfs.122.2019.07.31.10.53.29
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 31 Jul 2019 10:53:30 -0700 (PDT)
-From:   Mark Balantzyan <mbalant3@gmail.com>
-To:     linux@roeck-us.net
-Cc:     wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, andrianov@ispras.ru,
-        Mark Balantzyan <mbalant3@gmail.com>
-Subject: [PATCH v4] watchdog: pc87413: Rewriting of pc87413_wdt driver to use watchdog subsystem
-Date:   Wed, 31 Jul 2019 10:53:24 -0700
-Message-Id: <20190731175324.75679-1-mbalant3@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KKXrcjq5aKywCjPq+oMoki6xU2F/WPYtQ8SZIYkDkr8=;
+        b=pWgp13CFIfJ8UknZYez2Sw2XU7lCczXdq8Xvr/ojfi6hu+wEDZdd9jhblcXpCHv0J7
+         D4obVwScBSRGVNwW/vt/lE/MVDcEch82fYwkXvcSOUjNiSQVSOSm66GD14AbzBxLC7sv
+         OdaNspfj/jzyHmZ9d+YAf51auO65EGsWo4UdlKTrtb6mHqbMTq4XeVynB+0DKs+dy/TV
+         1cUQSydT3pCN6LsXjGe63Y73st4ZYffTysARNuyyJmfy8axDzElIHLFBTtmaHk3j1bcb
+         X2SXbYJ+DTiv6/zLEr5IcizuBW9XdNamVWBj3pjUxosiw+FWK+PEbIo1h8H3forDCE7K
+         Sbfg==
+X-Gm-Message-State: APjAAAXWsq1bh5JXZ+MgvEl7l9bjXZ+giVMbAlD+2ovbMSQUxRtniJhR
+        wiypy6nu2+RpFz6G4mlBBJ3daiS7
+X-Google-Smtp-Source: APXvYqzDj5id5ZL3LNA7XmAXyi3YxrX1t4G5MF+rqSp4G2xF7vmxaRDeJK1xl/eTbveModMchLaMpg==
+X-Received: by 2002:a62:64d4:: with SMTP id y203mr48384136pfb.91.1564596580586;
+        Wed, 31 Jul 2019 11:09:40 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q22sm63180246pgh.49.2019.07.31.11.09.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 31 Jul 2019 11:09:39 -0700 (PDT)
+Date:   Wed, 31 Jul 2019 11:09:38 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, Chris Healy <cphealy@gmail.com>,
+        Rick Ramstetter <rick@anteaterllc.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] watchdog: ziirave_wdt: Don't bail out on unexpected
+ timeout value
+Message-ID: <20190731180938.GA3885@roeck-us.net>
+References: <20190731174252.18041-1-andrew.smirnov@gmail.com>
+ <20190731174252.18041-5-andrew.smirnov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190731174252.18041-5-andrew.smirnov@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This patch rewrites the pc87413_wdt driver to use the watchdog subsystem. In
-doing so, it also addresses a potential race condition owing from the
-swc_base_addr variable being used before being set.
+On Wed, Jul 31, 2019 at 10:42:51AM -0700, Andrey Smirnov wrote:
+> Reprogramming bootloader on watchdog MCU will result in reported
+> default timeout value of "0". That in turn will be unnecesarily
 
-Signed-off-by: Mark Balantzyan <mbalant3@gmail.com>
+unnecessarily
 
----
- drivers/watchdog/Kconfig       |   1 +
- drivers/watchdog/pc87413_wdt.c | 346 ++++++---------------------------
- 2 files changed, 60 insertions(+), 287 deletions(-)
+> rejected by the driver as invalid device (-ENODEV). Simplify probe to
+> just read stored timeout value, clamp it to an acceptable range and
+> program the value unconditionally to fix the above.
+> 
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Cc: Chris Healy <cphealy@gmail.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Rick Ramstetter <rick@anteaterllc.com>
+> Cc: linux-watchdog@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  drivers/watchdog/ziirave_wdt.c | 22 +++++++++-------------
+>  1 file changed, 9 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/watchdog/ziirave_wdt.c b/drivers/watchdog/ziirave_wdt.c
+> index 89ce6982ba53..33c8d2eadada 100644
+> --- a/drivers/watchdog/ziirave_wdt.c
+> +++ b/drivers/watchdog/ziirave_wdt.c
+> @@ -667,22 +667,18 @@ static int ziirave_wdt_probe(struct i2c_client *client,
+>  			return val;
+>  		}
+>  
+> -		if (val < ZIIRAVE_TIMEOUT_MIN)
+> -			return -ENODEV;
+> -
+> -		w_priv->wdd.timeout = val;
+> -	} else {
+> -		ret = ziirave_wdt_set_timeout(&w_priv->wdd,
+> -					      w_priv->wdd.timeout);
+> -		if (ret) {
+> -			dev_err(&client->dev, "Failed to set timeout\n");
+> -			return ret;
+> -		}
+> +		w_priv->wdd.timeout = clamp(val, ZIIRAVE_TIMEOUT_MIN,
+> +					    ZIIRAVE_TIMEOUT_MAX);
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 9af07fd9..84a7326d 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1166,6 +1166,7 @@ config SCx200_WDT
- 
- config PC87413_WDT
- 	tristate "NS PC87413 watchdog"
-+	select WATCHDOG_CORE
- 	depends on X86
- 	---help---
- 	  This is the driver for the hardware watchdog on the PC87413 chipset
-diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
-index 06a892e3..1aa39c43 100644
---- a/drivers/watchdog/pc87413_wdt.c
-+++ b/drivers/watchdog/pc87413_wdt.c
-@@ -22,15 +22,9 @@
- 
- #include <linux/module.h>
- #include <linux/types.h>
--#include <linux/miscdevice.h>
- #include <linux/watchdog.h>
- #include <linux/ioport.h>
- #include <linux/delay.h>
--#include <linux/notifier.h>
--#include <linux/fs.h>
--#include <linux/reboot.h>
--#include <linux/init.h>
--#include <linux/spinlock.h>
- #include <linux/moduleparam.h>
- #include <linux/io.h>
- #include <linux/uaccess.h>
-@@ -59,14 +53,9 @@ static int io = IO_DEFAULT;
- static int swc_base_addr = -1;
- 
- static int timeout = DEFAULT_TIMEOUT;	/* timeout value */
--static unsigned long timer_enabled;	/* is the timer enabled? */
--
--static char expect_close;		/* is the close expected? */
--
--static DEFINE_SPINLOCK(io_lock);	/* to guard us from io races */
--
- static bool nowayout = WATCHDOG_NOWAYOUT;
- 
- /* -- Low level function ----------------------------------------*/
- 
- /* Select pins for Watchdog output */
-@@ -149,8 +138,6 @@ static inline void pc87413_swc_bank3(void)
- #endif
- }
- 
--/* Set watchdog timeout to x minutes */
--
- static inline void pc87413_programm_wdto(char pc87413_time)
- {
- 	/* Step 5: Programm WDTO, Twd. */
-@@ -160,6 +147,19 @@ static inline void pc87413_programm_wdto(char pc87413_time)
- #endif
- }
- 
-+/* Set watchdog timeout to x minutes */
-+
-+static int pc87413_set_timeout(struct watchdog_device *wdd, unsigned int t)
-+{
-+	/* Step 5: Program watchdog timeout */
-+
-+	wdd->min_timeout = 1;
-+	wdd->max_timeout = 60;
-+
-+	wdd->timeout = t;
-+	return 0;
-+}
-+
- /* Enable WDEN */
- 
- static inline void pc87413_enable_wden(void)
-@@ -216,281 +216,62 @@ static inline void pc87413_disable_sw_wd_trg(void)
- 
- /* -- Higher level functions ------------------------------------*/
- 
--/* Enable the watchdog */
-+/* Enable/start the watchdog */
- 
--static void pc87413_enable(void)
-+static int pc87413_start(struct watchdog_device *wdd)
- {
--	spin_lock(&io_lock);
--
- 	pc87413_swc_bank3();
--	pc87413_programm_wdto(timeout);
-+	pc87413_set_timeout(wdd, wdd->timeout);
- 	pc87413_enable_wden();
- 	pc87413_enable_sw_wd_tren();
- 	pc87413_enable_sw_wd_trg();
--
--	spin_unlock(&io_lock);
-+	return 0;
- }
- 
--/* Disable the watchdog */
-+/* Disable/stop the watchdog */
- 
--static void pc87413_disable(void)
-+static int pc87413_stop(struct watchdog_device *wdd)
- {
--	spin_lock(&io_lock);
--
- 	pc87413_swc_bank3();
- 	pc87413_disable_sw_wd_tren();
- 	pc87413_disable_sw_wd_trg();
- 	pc87413_programm_wdto(0);
--
--	spin_unlock(&io_lock);
-+	pc87413_set_timeout(wdd, wdd->timeout);
-+	return 0;
- }
- 
--/* Refresh the watchdog */
-+/* Refresh/keepalive the watchdog */
- 
--static void pc87413_refresh(void)
-+static int pc87413_keepalive(struct watchdog_device *wdd)
- {
--	spin_lock(&io_lock);
--
- 	pc87413_swc_bank3();
- 	pc87413_disable_sw_wd_tren();
- 	pc87413_disable_sw_wd_trg();
--	pc87413_programm_wdto(timeout);
-+	pc87413_set_timeout(wdd, wdd->timeout);
- 	pc87413_enable_wden();
- 	pc87413_enable_sw_wd_tren();
- 	pc87413_enable_sw_wd_trg();
--
--	spin_unlock(&io_lock);
--}
--
--/* -- File operations -------------------------------------------*/
--
--/**
-- *	pc87413_open:
-- *	@inode: inode of device
-- *	@file: file handle to device
-- *
-- */
--
--static int pc87413_open(struct inode *inode, struct file *file)
--{
--	/* /dev/watchdog can only be opened once */
--
--	if (test_and_set_bit(0, &timer_enabled))
--		return -EBUSY;
--
--	if (nowayout)
--		__module_get(THIS_MODULE);
--
--	/* Reload and activate timer */
--	pc87413_refresh();
--
--	pr_info("Watchdog enabled. Timeout set to %d minute(s).\n", timeout);
--
--	return nonseekable_open(inode, file);
--}
--
--/**
-- *	pc87413_release:
-- *	@inode: inode to board
-- *	@file: file handle to board
-- *
-- *	The watchdog has a configurable API. There is a religious dispute
-- *	between people who want their watchdog to be able to shut down and
-- *	those who want to be sure if the watchdog manager dies the machine
-- *	reboots. In the former case we disable the counters, in the latter
-- *	case you have to open it again very soon.
-- */
--
--static int pc87413_release(struct inode *inode, struct file *file)
--{
--	/* Shut off the timer. */
--
--	if (expect_close == 42) {
--		pc87413_disable();
--		pr_info("Watchdog disabled, sleeping again...\n");
--	} else {
--		pr_crit("Unexpected close, not stopping watchdog!\n");
--		pc87413_refresh();
--	}
--	clear_bit(0, &timer_enabled);
--	expect_close = 0;
- 	return 0;
- }
- 
--/**
-- *	pc87413_status:
-- *
-- *      return, if the watchdog is enabled (timeout is set...)
-- */
--
--
--static int pc87413_status(void)
--{
--	  return 0; /* currently not supported */
--}
--
--/**
-- *	pc87413_write:
-- *	@file: file handle to the watchdog
-- *	@data: data buffer to write
-- *	@len: length in bytes
-- *	@ppos: pointer to the position to write. No seeks allowed
-- *
-- *	A write to a watchdog device is defined as a keepalive signal. Any
-- *	write of data will do, as we we don't define content meaning.
-- */
--
--static ssize_t pc87413_write(struct file *file, const char __user *data,
--			     size_t len, loff_t *ppos)
--{
--	/* See if we got the magic character 'V' and reload the timer */
--	if (len) {
--		if (!nowayout) {
--			size_t i;
--
--			/* reset expect flag */
--			expect_close = 0;
--
--			/* scan to see whether or not we got the
--			   magic character */
--			for (i = 0; i != len; i++) {
--				char c;
--				if (get_user(c, data + i))
--					return -EFAULT;
--				if (c == 'V')
--					expect_close = 42;
--			}
--		}
--
--		/* someone wrote to us, we should reload the timer */
--		pc87413_refresh();
--	}
--	return len;
--}
--
--/**
-- *	pc87413_ioctl:
-- *	@file: file handle to the device
-- *	@cmd: watchdog command
-- *	@arg: argument pointer
-- *
-- *	The watchdog API defines a common set of functions for all watchdogs
-- *	according to their available features. We only actually usefully support
-- *	querying capabilities and current status.
-- */
--
--static long pc87413_ioctl(struct file *file, unsigned int cmd,
--						unsigned long arg)
--{
--	int new_timeout;
--
--	union {
--		struct watchdog_info __user *ident;
--		int __user *i;
--	} uarg;
--
--	static const struct watchdog_info ident = {
--		.options          = WDIOF_KEEPALIVEPING |
--				    WDIOF_SETTIMEOUT |
--				    WDIOF_MAGICCLOSE,
--		.firmware_version = 1,
--		.identity         = "PC87413(HF/F) watchdog",
--	};
--
--	uarg.i = (int __user *)arg;
--
--	switch (cmd) {
--	case WDIOC_GETSUPPORT:
--		return copy_to_user(uarg.ident, &ident,
--					sizeof(ident)) ? -EFAULT : 0;
--	case WDIOC_GETSTATUS:
--		return put_user(pc87413_status(), uarg.i);
--	case WDIOC_GETBOOTSTATUS:
--		return put_user(0, uarg.i);
--	case WDIOC_SETOPTIONS:
--	{
--		int options, retval = -EINVAL;
--		if (get_user(options, uarg.i))
--			return -EFAULT;
--		if (options & WDIOS_DISABLECARD) {
--			pc87413_disable();
--			retval = 0;
--		}
--		if (options & WDIOS_ENABLECARD) {
--			pc87413_enable();
--			retval = 0;
--		}
--		return retval;
--	}
--	case WDIOC_KEEPALIVE:
--		pc87413_refresh();
--#ifdef DEBUG
--		pr_info(DPFX "keepalive\n");
--#endif
--		return 0;
--	case WDIOC_SETTIMEOUT:
--		if (get_user(new_timeout, uarg.i))
--			return -EFAULT;
--		/* the API states this is given in secs */
--		new_timeout /= 60;
--		if (new_timeout < 0 || new_timeout > MAX_TIMEOUT)
--			return -EINVAL;
--		timeout = new_timeout;
--		pc87413_refresh();
--		/* fall through and return the new timeout... */
--	case WDIOC_GETTIMEOUT:
--		new_timeout = timeout * 60;
--		return put_user(new_timeout, uarg.i);
--	default:
--		return -ENOTTY;
--	}
--}
--
--/* -- Notifier funtions -----------------------------------------*/
--
--/**
-- *	notify_sys:
-- *	@this: our notifier block
-- *	@code: the event being reported
-- *	@unused: unused
-- *
-- *	Our notifier is called on system shutdowns. We want to turn the card
-- *	off at reboot otherwise the machine will reboot again during memory
-- *	test or worse yet during the following fsck. This would suck, in fact
-- *	trust me - if it happens it does suck.
-- */
--
--static int pc87413_notify_sys(struct notifier_block *this,
--			      unsigned long code,
--			      void *unused)
--{
--	if (code == SYS_DOWN || code == SYS_HALT)
--		/* Turn the card off */
--		pc87413_disable();
--	return NOTIFY_DONE;
--}
- 
- /* -- Module's structures ---------------------------------------*/
- 
--static const struct file_operations pc87413_fops = {
--	.owner		= THIS_MODULE,
--	.llseek		= no_llseek,
--	.write		= pc87413_write,
--	.unlocked_ioctl	= pc87413_ioctl,
--	.open		= pc87413_open,
--	.release	= pc87413_release,
--};
- 
--static struct notifier_block pc87413_notifier = {
--	.notifier_call  = pc87413_notify_sys,
-+static struct watchdog_ops pc87413wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = pc87413_start,
-+	.stop = pc87413_stop,
-+	.ping = pc87413_keepalive,
-+	.set_timeout = pc87413_set_timeout,
- };
- 
--static struct miscdevice pc87413_miscdev = {
--	.minor          = WATCHDOG_MINOR,
--	.name           = "watchdog",
--	.fops           = &pc87413_fops,
-+static struct watchdog_device pc87413wdt_wdd = {
-+	.ops = &pc87413wdt_ops,
-+	.status = WATCHDOG_NOWAYOUT_INIT_STATUS,
- };
- 
- /* -- Module init functions -------------------------------------*/
- 
- /**
-@@ -498,50 +279,49 @@ static struct miscdevice pc87413_miscdev = {
-  *
-  *	Set up the WDT watchdog board. All we have to do is grab the
-  *	resources we require and bitch if anyone beat us to them.
-- *	The open() function will actually kick the board off.
-  */
- 
- static int __init pc87413_init(void)
- {
- 	int ret;
- 
--	pr_info("Version " VERSION " at io 0x%X\n",
--							WDT_INDEX_IO_PORT);
-+	pr_info("Version " VERSION " at io 0x%X\n", WDT_INDEX_IO_PORT);
-+
-+	pc87413_select_wdt_out();
-+	pc87413_enable_swc();
-+	pc87413_get_swc_base_addr();
- 
- 	if (!request_muxed_region(io, 2, MODNAME))
- 		return -EBUSY;
-+
-+	if (!request_region(swc_base_addr, 0x20, MODNAME)) {
-+		pr_err("cannot request SWC region at 0x%x\n", swc_base_addr);
-+		ret = -EBUSY;
-+	}
-+
-+	watchdog_stop_on_reboot(&pc87413wdt_wdd);
-+
-+	watchdog_init_timeout(&pc87413wdt_wdd, timeout, NULL);
-+
-+	watchdog_set_nowayout(&pc87413wdt_wdd, nowayout);
- 
--	ret = register_reboot_notifier(&pc87413_notifier);
--	if (ret != 0)
--		pr_err("cannot register reboot notifier (err=%d)\n", ret);
-+	ret = watchdog_register_device(&pc87413wdt_wdd);
- 
--	ret = misc_register(&pc87413_miscdev);
- 	if (ret != 0) {
--		pr_err("cannot register miscdev on minor=%d (err=%d)\n",
--		       WATCHDOG_MINOR, ret);
- 		goto reboot_unreg;
- 	}
--	pr_info("initialized. timeout=%d min\n", timeout);
- 
--	pc87413_select_wdt_out();
--	pc87413_enable_swc();
--	pc87413_get_swc_base_addr();
--
--	if (!request_region(swc_base_addr, 0x20, MODNAME)) {
--		pr_err("cannot request SWC region at 0x%x\n", swc_base_addr);
--		ret = -EBUSY;
--		goto misc_unreg;
-+	if (ret == -EBUSY) {
-+		goto watchdog_unreg;
- 	}
- 
--	pc87413_enable();
--
- 	release_region(io, 2);
- 	return 0;
--
--misc_unreg:
--	misc_deregister(&pc87413_miscdev);
- reboot_unreg:
--	unregister_reboot_notifier(&pc87413_notifier);
-+	release_region(io, 2);
-+	return ret;
-+watchdog_unreg:
-+	watchdog_unregister_device(&pc87413wdt_wdd);
- 	release_region(io, 2);
- 	return ret;
- }
-@@ -558,14 +338,7 @@ reboot_unreg:
- 
- static void __exit pc87413_exit(void)
- {
--	/* Stop the timer before we leave */
--	if (!nowayout) {
--		pc87413_disable();
--		pr_info("Watchdog disabled\n");
--	}
--
--	misc_deregister(&pc87413_miscdev);
--	unregister_reboot_notifier(&pc87413_notifier);
-+	watchdog_unregister_device(&pc87413wdt_wdd);
- 	release_region(swc_base_addr, 0x20);
- 
- 	pr_info("watchdog component driver removed\n");
-@@ -592,4 +365,3 @@ module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout,
- 		"Watchdog cannot be stopped once started (default="
- 				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
--
--- 
-2.17.1
+Are you sure ? Effectively that will set the timeout to the minimum,
+ie three seconds. It might be better to define and set some default.
+Your call, of course.
 
+Thanks,
+Guenter
+
+> +	}
+>  
+> -		dev_info(&client->dev, "Timeout set to %ds\n",
+> -			 w_priv->wdd.timeout);
+> +	ret = ziirave_wdt_set_timeout(&w_priv->wdd, w_priv->wdd.timeout);
+> +	if (ret) {
+> +		dev_err(&client->dev, "Failed to set timeout\n");
+> +		return ret;
+>  	}
+>  
+> +	dev_info(&client->dev, "Timeout set to %ds\n", w_priv->wdd.timeout);
+> +
+>  	watchdog_set_nowayout(&w_priv->wdd, nowayout);
+>  
+>  	i2c_set_clientdata(client, w_priv);
+> -- 
+> 2.21.0
+> 
