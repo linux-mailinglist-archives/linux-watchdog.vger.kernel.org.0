@@ -2,55 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA177CAD8
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 19:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C057CB05
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 19:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbfGaRsM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 Jul 2019 13:48:12 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34432 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbfGaRsM (ORCPT
+        id S1730116AbfGaRxc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Jul 2019 13:53:32 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38757 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730115AbfGaRxc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 Jul 2019 13:48:12 -0400
-Received: by mail-pf1-f195.google.com with SMTP id b13so32284637pfo.1;
-        Wed, 31 Jul 2019 10:48:11 -0700 (PDT)
+        Wed, 31 Jul 2019 13:53:32 -0400
+Received: by mail-pf1-f194.google.com with SMTP id y15so32300148pfn.5;
+        Wed, 31 Jul 2019 10:53:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=jDGO1woWf6TzJd1r+1pgzEDGXj/Ruk8MVAk9JRe9Bys=;
-        b=aeVbdqK5bX8+9Sm7amXJ3JUprCXFfZ2BNR7yw+ALrgoYF2qYBAgWt2yofL8zNl8dsP
-         pbyhcSxI5bYSO0qEth0tukWFkfhqcmFuluImnXCHpUIPM+c1soDvd1dentkWmnv96ahT
-         /ndt/g1KwmWj58NHbMns5vyoB2IgSMzgwRlQjuVTFyFBNfq7Q0MOXC9YkGb3J6o61IJW
-         8iBOlDWmSDjzJIn4me9+4rN2GXxHkto8oENXxb4Z3Z/5lrxmKJKdPdNl3msKrrVnLGaW
-         CfQiu12fj7AR5J18vmJeAiuAiphzFE4NlWDFirqrDjF4PlHpMZSvOCItcOJPGvDXlYWu
-         F8lA==
+        bh=d3JxTH1nSs2O2a2eP+fn4Cl1h5E5SkRgeqWbojZ9ZC0=;
+        b=nxuxx/XWyPVsQLlDFvqzYIb1FiRj590zspQSQCOQT/OptZomD93m0QFYhHUZnK1IMa
+         fvfQQINn2R0bW8sSKOHuBC649w7urZDXI07FJgn0b+HvXHLkmCWPAdIZE/WUKfVIzjAk
+         QF7TONZ/rZ9dvnpKqwj9I/UdoW03EqGd7br1U5MrLO/69AQ/RSKV0zYuh5n25oryWSDt
+         VkTE+JTVVbflVNki2rTDP/qwnfvkHO9Xo4j+8ria9iwiA25hwuoJL1E7jqTAk9YkILJ8
+         d8XdFlnuGq96ShEqsKOSeSA7/oBBcfsGVuWLyMNW6ctbKVYTgUPkB6Aav9Cqzzh6e5Wg
+         U8Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=jDGO1woWf6TzJd1r+1pgzEDGXj/Ruk8MVAk9JRe9Bys=;
-        b=hmb8ZxXvIQLxfoW4zJRnIS+cF1nDT9Qa8s9C9x6wIoGX+Rtrv4D4bdj7kOSYKgp7q8
-         mSczkSOwi4/QLgwZyDIFu1dniVEvHmkafTl91xPHS5aiB+aaiFYnEVL3yawEKKMVZ/JG
-         E6uPI+QcEdX1Wp3a7UdsUX26XJaO5UxR/xGBDDRmcZNCAA6XCKnn1U8BFB2KjZV4Ygvs
-         ryB2MUNvvv5NnEsY4sih/YFZFYODVPDkLW+C1Ga+YxV2YOMJlBi/QnC8UwQ/bKPQyAvl
-         N5QHi3hgPy0+uqSRccZnW7duyTztCq5rjb7Qhy/USLlFG1oQEW+d+aCAW7twVOP6ZmOm
-         XvDA==
-X-Gm-Message-State: APjAAAUslwa5Bo2zvri78XksQq3Hm2zn4B7T1LNWRmndO6hFTpEml0my
-        zM8/qqfM93Zsz4k89SQ5oEY=
-X-Google-Smtp-Source: APXvYqwe4R6ZBm0h9mXF8hUG79xp0vRCPKBj4w1vxJh27oZCeajgrM9uwuNj+yVZvxxaolf9K+PPGg==
-X-Received: by 2002:a17:90a:8a91:: with SMTP id x17mr4120582pjn.95.1564595291311;
-        Wed, 31 Jul 2019 10:48:11 -0700 (PDT)
+        bh=d3JxTH1nSs2O2a2eP+fn4Cl1h5E5SkRgeqWbojZ9ZC0=;
+        b=WKSFuMDVbIEoNMiLYNayY2cFuC0iflQBpYx6oPASbHvNCkrKDBbChEcrzYTLJT2qf5
+         Wd3rVcpJyHQC0sczxQAmernDu6qN60Sb2uNkiI6YL+nzAjDiaIIZj2f00iDKYhWtbXNX
+         ADKN+hZNujz3TWXn9iJ4S2FoQNmbdux7SGb97BzXWZAdMlfBfkWMR4jv/HapqdtHtAiN
+         7JMHO/NYzaCA1ZXOm1IlfEKKY3VAVdK+WBDHW8POFfPlrGC+t7TdF+nJyQQVnVSvSoP0
+         ybXX6NnTVzuuywmO60SGXn/atNwGSFWdAQ1nv3gqYt9lVxoftVIvtgPhfSFk/hjoJpQq
+         FO9g==
+X-Gm-Message-State: APjAAAVc/88kBJIYZ4CdmRHFXMCNQoi8nwkLgbN8VBdd0KL1b9leM/eo
+        x3bQD+mJ6DH+WCf94cNbpKc=
+X-Google-Smtp-Source: APXvYqy+DaVruJutrI6ckCZ0ClSprVCqsLjq4Vjpz/m1S+zaQOUUAQV12eCkTiy9BZOuDfsVOBxd3Q==
+X-Received: by 2002:a63:2c02:: with SMTP id s2mr7463456pgs.343.1564595610811;
+        Wed, 31 Jul 2019 10:53:30 -0700 (PDT)
 Received: from localhost.localdomain (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
-        by smtp.gmail.com with ESMTPSA id j12sm60585842pff.4.2019.07.31.10.48.10
+        by smtp.gmail.com with ESMTPSA id s6sm107585720pfs.122.2019.07.31.10.53.29
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 31 Jul 2019 10:48:10 -0700 (PDT)
+        Wed, 31 Jul 2019 10:53:30 -0700 (PDT)
 From:   Mark Balantzyan <mbalant3@gmail.com>
 To:     linux@roeck-us.net
 Cc:     wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org, andrianov@ispras.ru,
         Mark Balantzyan <mbalant3@gmail.com>
 Subject: [PATCH v4] watchdog: pc87413: Rewriting of pc87413_wdt driver to use watchdog subsystem
-Date:   Wed, 31 Jul 2019 10:48:04 -0700
-Message-Id: <20190731174804.74018-1-mbalant3@gmail.com>
+Date:   Wed, 31 Jul 2019 10:53:24 -0700
+Message-Id: <20190731175324.75679-1-mbalant3@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
@@ -112,7 +112,6 @@ index 06a892e3..1aa39c43 100644
 -
  static bool nowayout = WATCHDOG_NOWAYOUT;
  
-+
  /* -- Low level function ----------------------------------------*/
  
  /* Select pins for Watchdog output */
@@ -133,11 +132,11 @@ index 06a892e3..1aa39c43 100644
 +
 +static int pc87413_set_timeout(struct watchdog_device *wdd, unsigned int t)
 +{
-+	/* Step 5: Programm watchdog timeout */
++	/* Step 5: Program watchdog timeout */
 +
-+	wdd->min_timeout = 1;	
++	wdd->min_timeout = 1;
 +	wdd->max_timeout = 60;
-+	
++
 +	wdd->timeout = t;
 +	return 0;
 +}
@@ -159,7 +158,7 @@ index 06a892e3..1aa39c43 100644
 -
  	pc87413_swc_bank3();
 -	pc87413_programm_wdto(timeout);
-+	pc87413_set_timeout(wdd,wdd->timeout);
++	pc87413_set_timeout(wdd, wdd->timeout);
  	pc87413_enable_wden();
  	pc87413_enable_sw_wd_tren();
  	pc87413_enable_sw_wd_trg();
@@ -182,7 +181,7 @@ index 06a892e3..1aa39c43 100644
  	pc87413_programm_wdto(0);
 -
 -	spin_unlock(&io_lock);
-+	pc87413_set_timeout(wdd,wdd->timeout);
++	pc87413_set_timeout(wdd, wdd->timeout);
 +	return 0;
  }
  
@@ -198,7 +197,7 @@ index 06a892e3..1aa39c43 100644
  	pc87413_disable_sw_wd_tren();
  	pc87413_disable_sw_wd_trg();
 -	pc87413_programm_wdto(timeout);
-+	pc87413_set_timeout(wdd,wdd->timeout);
++	pc87413_set_timeout(wdd, wdd->timeout);
  	pc87413_enable_wden();
  	pc87413_enable_sw_wd_tren();
  	pc87413_enable_sw_wd_trg();
@@ -428,10 +427,10 @@ index 06a892e3..1aa39c43 100644
 -static struct notifier_block pc87413_notifier = {
 -	.notifier_call  = pc87413_notify_sys,
 +static struct watchdog_ops pc87413wdt_ops = {
-+       	.owner = THIS_MODULE,
-+       	.start = pc87413_start,
-+       	.stop = pc87413_stop,
-+       	.ping = pc87413_keepalive,
++	.owner = THIS_MODULE,
++	.start = pc87413_start,
++	.stop = pc87413_stop,
++	.ping = pc87413_keepalive,
 +	.set_timeout = pc87413_set_timeout,
  };
  
@@ -440,11 +439,10 @@ index 06a892e3..1aa39c43 100644
 -	.name           = "watchdog",
 -	.fops           = &pc87413_fops,
 +static struct watchdog_device pc87413wdt_wdd = {
-+       	.ops = &pc87413wdt_ops,
++	.ops = &pc87413wdt_ops,
 +	.status = WATCHDOG_NOWAYOUT_INIT_STATUS,
  };
  
-+
  /* -- Module init functions -------------------------------------*/
  
  /**
@@ -465,21 +463,21 @@ index 06a892e3..1aa39c43 100644
 +
 +	pc87413_select_wdt_out();
 +	pc87413_enable_swc();
-+	pc87413_get_swc_base_addr();	
++	pc87413_get_swc_base_addr();
  
  	if (!request_muxed_region(io, 2, MODNAME))
  		return -EBUSY;
-+	
++
 +	if (!request_region(swc_base_addr, 0x20, MODNAME)) {
 +		pr_err("cannot request SWC region at 0x%x\n", swc_base_addr);
 +		ret = -EBUSY;
 +	}
 +
 +	watchdog_stop_on_reboot(&pc87413wdt_wdd);
-+	
-+	watchdog_init_timeout(&pc87413wdt_wdd, timeout, NULL);	
-+	
-+	watchdog_set_nowayout(&pc87413wdt_wdd,nowayout);
++
++	watchdog_init_timeout(&pc87413wdt_wdd, timeout, NULL);
++
++	watchdog_set_nowayout(&pc87413wdt_wdd, nowayout);
  
 -	ret = register_reboot_notifier(&pc87413_notifier);
 -	if (ret != 0)
@@ -503,7 +501,7 @@ index 06a892e3..1aa39c43 100644
 -		ret = -EBUSY;
 -		goto misc_unreg;
 +	if (ret == -EBUSY) {
-+		goto watchdog_unreg;	
++		goto watchdog_unreg;
  	}
  
 -	pc87413_enable();
