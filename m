@@ -2,102 +2,160 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AAF67CCB6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 21:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC3A7CD4D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 21:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729459AbfGaTYO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 Jul 2019 15:24:14 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38643 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbfGaTYN (ORCPT
+        id S1726812AbfGaT6L (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Jul 2019 15:58:11 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:37177 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728336AbfGaT6K (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 Jul 2019 15:24:13 -0400
-Received: by mail-pf1-f194.google.com with SMTP id y15so32422325pfn.5;
-        Wed, 31 Jul 2019 12:24:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XH0pJb+BmHDMlg3LN2C00aPw3aAxQ3SWi54ovBfgsFI=;
-        b=EyQrNpMTLGRwFJ4VkM6blKgTwhRlfj23LgEim255LUHYCYfiMoi6st1mS16619rQrq
-         IxTFOd8Dh8y9UknRLll7cWkWXYInosAa49o71KF7n913vBlJzoEvbB6Nt5NzOr8tTDlV
-         0zJrzmbWwnL3KDJk5oARea60OaB7sI7zzJbIIQyo4H4ONir3HDanBrTqvDevwHCHy/Gl
-         GkUkoA2Hg3tFJ5/vqCjnOXGAP5YkfLv9z/TN32nUGSBPj+2HPCDbA2uGQE9EuLIBSxon
-         NicejhhyXRL21Ps2eW+nDCGOYzjBeLJgpLoHcH8f3TdxZZwLWS9gLRFrKNiq/nMtsxA9
-         xw8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XH0pJb+BmHDMlg3LN2C00aPw3aAxQ3SWi54ovBfgsFI=;
-        b=pSMueICJC3WkEAIRueszoWxZ6JvaEXyTkrSAjJyuuZPK49w25dg9rTsbFuWvUWQmoO
-         HjaZdpQBY5wS5y/uOIdUh7387eb84CKQfebcMdFka/rjVY+4dX6LHDreNEBdOP4Z8CJC
-         c5fS1WbNxub5m/hXAAvChZ+D4zXP2RLtN3t7Hlk11lNuKTyRbJbWp+9CS6KCwC5LH5r2
-         +ubpalmZEw6Eiz9CvkXKYjSwyJrMvF4ZSOu7wlgPb/XoJmXxzYh9r+i3YMB0PIsNQ/Eo
-         bqoedBG6/2VMvrWpXjtFYLSxi9BYZrQdwLOu6MeAz100WWpMWhrME0tJX+IAeQXic6NZ
-         sM3w==
-X-Gm-Message-State: APjAAAX15W6HrRm/JuJyE655hBUMGWijd88zLmwsZcx7E0uDbhCumFsk
-        G0vdAyDjyN8h2rAJEUYr8PY=
-X-Google-Smtp-Source: APXvYqy67NwdfHuaYaIeCBVta5YDtxpw1Gd/SFDET9J+E1vBRX7SzwEbgdpdtF6LWFHI/NH81wLnEA==
-X-Received: by 2002:a62:b615:: with SMTP id j21mr47775389pff.190.1564601053206;
-        Wed, 31 Jul 2019 12:24:13 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a12sm3078158pje.3.2019.07.31.12.24.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 31 Jul 2019 12:24:12 -0700 (PDT)
-Date:   Wed, 31 Jul 2019 12:24:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mark Balantzyan <mbalant3@gmail.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pavel Andrianov <andrianov@ispras.ru>
-Subject: Re: [PATCH] watchdog:alim1535_wdt: Fix data race in ali_settimer()
- concerning ali_timeout_bits variable.
-Message-ID: <20190731192410.GA4935@roeck-us.net>
-References: <20190718155238.3066-1-mbalant3@gmail.com>
- <20190718163458.GA18125@roeck-us.net>
- <alpine.DEB.2.21.1907310911120.29703@mbalantz-desktop>
- <20190731164337.GA13646@roeck-us.net>
- <alpine.DEB.2.21.1907311118190.81695@mbalantz-desktop>
+        Wed, 31 Jul 2019 15:58:10 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1N5CMP-1iJtxV2cYX-0119Cu; Wed, 31 Jul 2019 21:57:28 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
+Date:   Wed, 31 Jul 2019 21:56:42 +0200
+Message-Id: <20190731195713.3150463-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.1907311118190.81695@mbalantz-desktop>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:1DhJgllZnoaEPYGs1RPUPXgQ/oF4uTuXo6cjjEDlbbMgcBjoaAv
+ /4Gqy5waGt8kWlKhcISqSvbWy0PqMUozbeltyk8i/JLnrBG/MVV5i1YTE1nD7PThG9QNAmS
+ 9iyG0heOlxZNdw6cfYwcabbQ4ypVIGuPXXQgozREfFxzQ2zdx45uahc4xbAtdP9o5sKxvCC
+ QICiay/kY46x1cxToEO+Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mD1LaNfCPok=:FewDXWtPUyzX3X8MXpV7JW
+ LaqXUelWhb8EMKM9tjVsXF3uv3rGnLUQLTL3SIhUo5xti4RrQb4v+7ZE9yZYkDT/kQUFglWBF
+ lvLzinWKjjV6sSbqWJx4qfC9UWznfZPTYFC0lU7lQvUiwKDJFULnI39CJPnfNf8oV1md80F+/
+ hRIBJf7UroozZKWXZBvCj6qhyUyZ/FiHCNNW2NDEdbLHw+RzE7exwMnGT1w0lIBEpoAGv2Dr0
+ PBNGV7aQ6xzA0jg4iovZdBo/K95EQQ01IeAqK8r5l+nAyvyv2QvsAJQ14dqS5qi25TZ1HWgbW
+ y4QfqDfSHyPqf/ou/tBXJfUqNTtkEHqRHevOyCywjUO6/+vmF0vXcTWkvwaAm4sGIptdKDXWf
+ vtBI71SeOlShLuGqMsOjWNfuDgHE1L/lu7MthTfzB10WFgxJcNmRo4s9WeGLQ70M32rGTuxj0
+ fSYfbzci3w+xK0+XnbveZhY0YH1dlePkcvm5RcBHfqcDSZeaxvZOEWZuQBdL5qA+OiCoOBHN/
+ TXPne5Yf1BBWIvVnrwfM04RWKmQCqibG92YYGeZ5RbfG0SnyxVH9lpvMOdClQg6oaUfXe5PDO
+ i0ClE84DAfmzelDecUQRNORb73/EiNmERpGmA3zwXKqxfIyWnfZ2quBv5cM9S7o9G+R4W+KSC
+ gcyOjCbSLMmxXz5/jt8neKqYJ0JYW7vreycPeVeKJaw2+fgZVKgvFFPHKu2AnGnd6ZR49ZNAT
+ gfRkW3tCbcUDHer3OPC2tLmSu8Ryf7Wm0PaGnw==
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Mark,
+I revisited some older patches here, getting two of the remaining
+ARM platforms to build with ARCH_MULTIPLATFORM like most others do.
 
-On Wed, Jul 31, 2019 at 11:23:19AM -0700, Mark Balantzyan wrote:
-> Hi Guenter, all,
-> 
-> It's alright if you still don't wish to review my patch on alim1535_wdt, but
-> my employer and I, using our race condition analysis tool, detected it to
-> contain a race condition warning. I believe any possible issues could be
-> resolved if it were rewritten to use the watchdog subsystem as you've
-> previously stated.
-> 
-> Now, I don't wish to bother you too much, but it seems I forgot to work
-> mainly with my assigned mentor prior to submitting patches..sorry. So, after
-> I have worked on rewriting the alim1535 driver into common watchdog
-> subsystem with my mentor, may I submit it to you then?
-> 
+In case of lpc32xx, I created a new set of patches, which seemed
+easier than digging out what I did for an older release many
+years ago.
 
-Similar to pc87413, this driver very likely has zero users left, there
-won't be any hardware to test the patch, and we won't be able to accept
-such a patch because it wasn't tested.
+For dove, the patches are basically what I had proposed back in
+2015 when all other ARMv6/ARMv7 machines became part of a single
+kernel build. I don't know what the state is mach-dove support is,
+compared to the DT based support in mach-mvebu for the same
+hardware. If they are functionally the same, we could also just
+remove mach-dove rather than applying my patches.
 
-On top of that, the only race condition I can see in that driver is in
-ali_settimer(), between ali_timeout_bits and timeout. Yet, that is not
-really a race condition because the driver can only be opened once,
-and thus there is no means for two threads entering ali_settimer()
-at the same time.
+I also created patches to remove the w90x900 and ks8695 platforms
+that seem to have lost their last users a few years ago.
+I will post them separately, but plan to apply them in the same
+branch for linux-5.4 if there are no objections.
 
-I don't really understand this focus on fixing theoretic/irrelevant
-race conditions in drivers which no one uses anymore. Maybe someone
-can enlighten me ?
+      Arnd
 
-Thanks,
-Guenter
+Arnd Bergmann (14):
+  usb: ohci-nxp: enable compile-testing
+  usb: udc: lpc32xx: allow compile-testing
+  watchdog: pnx4008_wdt: allow compile-testing
+  serial: lpc32xx_hs: allow compile-testing
+  gpio: lpc32xx: allow building on non-lpc32xx targets
+  net: lpc-enet: factor out iram access
+  net: lpc-enet: move phy setup into platform code
+  net: lpc-enet: allow compile testing
+  serial: lpc32xx: allow compile testing
+  ARM: lpc32xx: clean up header files
+  ARM: lpc32xx: allow multiplatform build
+  ARM: dove: clean up mach/*.h headers
+  ARM: orion/mvebu: unify debug-ll virtual addresses
+  ARM: dove: multiplatform support
+
+ arch/arm/Kconfig                              | 33 +---------
+ arch/arm/Kconfig.debug                        |  5 +-
+ arch/arm/configs/dove_defconfig               |  2 +
+ arch/arm/configs/lpc32xx_defconfig            |  1 +
+ arch/arm/mach-dove/Kconfig                    | 16 +++--
+ arch/arm/mach-dove/Makefile                   |  2 +
+ .../{include/mach => }/bridge-regs.h          |  4 +-
+ arch/arm/mach-dove/cm-a510.c                  |  3 +-
+ arch/arm/mach-dove/common.c                   |  4 +-
+ arch/arm/mach-dove/dove-db-setup.c            |  2 +-
+ arch/arm/mach-dove/{include/mach => }/dove.h  | 14 ++---
+ arch/arm/mach-dove/include/mach/hardware.h    | 19 ------
+ arch/arm/mach-dove/include/mach/uncompress.h  | 36 -----------
+ arch/arm/mach-dove/irq.c                      |  5 +-
+ arch/arm/mach-dove/{include/mach => }/irqs.h  |  2 -
+ arch/arm/mach-dove/mpp.c                      |  2 +-
+ arch/arm/mach-dove/pcie.c                     |  4 +-
+ arch/arm/mach-dove/{include/mach => }/pm.h    |  4 +-
+ arch/arm/mach-lpc32xx/Kconfig                 | 11 ++++
+ arch/arm/mach-lpc32xx/common.c                | 24 +++++--
+ arch/arm/mach-lpc32xx/common.h                |  1 -
+ arch/arm/mach-lpc32xx/include/mach/board.h    | 15 -----
+ .../mach-lpc32xx/include/mach/entry-macro.S   | 28 ---------
+ arch/arm/mach-lpc32xx/include/mach/hardware.h | 25 --------
+ .../mach-lpc32xx/include/mach/uncompress.h    | 50 ---------------
+ .../{include/mach/platform.h => lpc32xx.h}    | 18 +++++-
+ arch/arm/mach-lpc32xx/pm.c                    |  3 +-
+ arch/arm/mach-lpc32xx/serial.c                | 33 +++++++++-
+ arch/arm/mach-lpc32xx/suspend.S               |  3 +-
+ arch/arm/mach-mv78xx0/mv78xx0.h               |  4 +-
+ arch/arm/mach-orion5x/orion5x.h               |  4 +-
+ drivers/gpio/Kconfig                          |  8 +++
+ drivers/gpio/Makefile                         |  2 +-
+ drivers/gpio/gpio-lpc32xx.c                   | 63 ++++++++++++-------
+ drivers/net/ethernet/nxp/Kconfig              |  2 +-
+ drivers/net/ethernet/nxp/lpc_eth.c            | 30 +++------
+ drivers/tty/serial/Kconfig                    |  3 +-
+ drivers/tty/serial/lpc32xx_hs.c               | 37 ++---------
+ drivers/usb/gadget/udc/Kconfig                |  3 +-
+ drivers/usb/gadget/udc/lpc32xx_udc.c          |  2 -
+ drivers/usb/host/Kconfig                      |  3 +-
+ drivers/usb/host/ohci-nxp.c                   | 25 +++++---
+ drivers/watchdog/Kconfig                      |  2 +-
+ drivers/watchdog/pnx4008_wdt.c                |  1 -
+ include/linux/soc/nxp/lpc32xx-misc.h          | 33 ++++++++++
+ 45 files changed, 246 insertions(+), 345 deletions(-)
+ rename arch/arm/mach-dove/{include/mach => }/bridge-regs.h (96%)
+ rename arch/arm/mach-dove/{include/mach => }/dove.h (95%)
+ delete mode 100644 arch/arm/mach-dove/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-dove/include/mach/uncompress.h
+ rename arch/arm/mach-dove/{include/mach => }/irqs.h (98%)
+ rename arch/arm/mach-dove/{include/mach => }/pm.h (97%)
+ create mode 100644 arch/arm/mach-lpc32xx/Kconfig
+ delete mode 100644 arch/arm/mach-lpc32xx/include/mach/board.h
+ delete mode 100644 arch/arm/mach-lpc32xx/include/mach/entry-macro.S
+ delete mode 100644 arch/arm/mach-lpc32xx/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-lpc32xx/include/mach/uncompress.h
+ rename arch/arm/mach-lpc32xx/{include/mach/platform.h => lpc32xx.h} (98%)
+ create mode 100644 include/linux/soc/nxp/lpc32xx-misc.h
+
+-- 
+2.20.0
+
