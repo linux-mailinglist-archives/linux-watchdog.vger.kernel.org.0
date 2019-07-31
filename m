@@ -2,92 +2,87 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2657C907
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 18:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CEE7C9D5
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 19:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728984AbfGaQnq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 Jul 2019 12:43:46 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42780 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730341AbfGaQnj (ORCPT
+        id S1728844AbfGaREc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Jul 2019 13:04:32 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37442 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbfGaREc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 Jul 2019 12:43:39 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q10so32169391pff.9;
-        Wed, 31 Jul 2019 09:43:39 -0700 (PDT)
+        Wed, 31 Jul 2019 13:04:32 -0400
+Received: by mail-pl1-f195.google.com with SMTP id b3so30785135plr.4;
+        Wed, 31 Jul 2019 10:04:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dUNFdN6DiR2HTjlajr62FaV7YbxRxOVNxB6akEc8IzE=;
-        b=UfFD539jtnd9rBd5++QIiFVmMCS0rGi6TFi1zWK5nZuTAnnvEwRNOj7s9+86h4FbBj
-         QhAY/KT2h68/eDOKtL4NlhZlWqxt95qCGTS0weQB+7akD6ForW1gKMtrLSS6vTwNSH4s
-         rn6vT2sCVaxqsmP2ofzGAOeDBHxDN+EpU1s7OUSArTAkgUPE6FP76WbBd/ifFMSwC4wE
-         1OaSCXm2h2nv613AZYGYSRRKHarNOtJUG9z08d+v+3zf0osz+jexaFzocMRoMy5e/mkf
-         6qG6GDoOmZhDgHuVD0Wwm7ku1CLBmxetAFtD4qToemQjt6SZkv/OXnk/FGRNSMJRKgg4
-         iguA==
+        h=from:date:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=02uZUKd556myZ+F9DbZFuNYIVZOabJKu9/VOGEOym5U=;
+        b=dIae7+Igo3ltQMb7FnEbyeio8IyM1uNgubphIg4B+0bi4A7FXCd+qPbZuPLFUcVnqZ
+         Tqyb69AUklajqvqq9g8fyvbVW05oBVhwtoIraiBzfXQAqm2XWQvZv41Q5E900YSWSKuh
+         Bw2rdB02zsc4MT9LtcYUw4AJB+DCF6NovXIZuudmV/z7JKKXNMc6PwVlmKl3XYGKhkU6
+         b3bgtIdJhdNow0Va46Tpd5TcjTDh+ptQ0OWDXMRMOL/kU5U4JWMCfeJ50p1Jl5xI+J2L
+         sHq1INFZgEyJyTN81rp2+3VFuqlgkqjI7JxMTYD4DEqyjbVJIl9N/kfiQjxq7/COaMcC
+         kZgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dUNFdN6DiR2HTjlajr62FaV7YbxRxOVNxB6akEc8IzE=;
-        b=SwYQMgQaewh5F4EsvLPP8KkJ4ArW3XICRHRBArGxl59u+e7+Q13NlIIq8fGIyr5ozP
-         goOg9KI2T7B1WjPQUA/MMF3FqvsEaC69bkcTBm+6yWzEuamn8Rd9jr5LxPML2zSDU+ej
-         X5HD+X2Z+OZeAbOnomjtBe+GDsY3NIDRff76WGz85CZXt4gjsP/NzrmW6RolUakFAUiY
-         0/eruJ20njA/bVjNU7L1F99Ub9ZhRP55+8x9AD+8vAZ5Dcjsp1FzApW9veADZM3bMi9+
-         p6B0L8bStrNYb9l9LOrTSpoPHncMkb0yf00iEZyZfMxGNqykGzzR5AN4S9UzU7lucMvj
-         BCNQ==
-X-Gm-Message-State: APjAAAWTXlPYE7/KrH9L5THu0H2R08iBbD+yrPsenncezYi0xRrxvIsL
-        YJWLGp1j5xSbXjS10sz4X2eykwAi
-X-Google-Smtp-Source: APXvYqz7MUmHiRgps8HbXXSoRlnaZ02BToAVxnsFBRbRnKGvRA4JqpH/FlawNwLG0rijMXSUo+R4aQ==
-X-Received: by 2002:a62:be0c:: with SMTP id l12mr48704886pff.224.1564591418785;
-        Wed, 31 Jul 2019 09:43:38 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 23sm72981420pfn.176.2019.07.31.09.43.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 31 Jul 2019 09:43:38 -0700 (PDT)
-Date:   Wed, 31 Jul 2019 09:43:37 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mark Balantzyan <mbalant3@gmail.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pavel Andrianov <andrianov@ispras.ru>
+        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=02uZUKd556myZ+F9DbZFuNYIVZOabJKu9/VOGEOym5U=;
+        b=BAkPj9302L9uYkBjytOaeFebzOgqHjbaVfiaBqO1RoEd+NkoLOaZ+6Dstwi1OLq4MH
+         402jDQx+1JPlHI94ZuPzymbB0/FlF0P2UX89B2Ltgc4h0ASP364rH1F5ihgAjhsWQ4zx
+         1DYL138OVsXeDTO5TqCENdLxeT9fVTGXdkBd+EYP33fzqygC59/Gk+4l3gcPlRLfN5AZ
+         Cxb6vv+uLTxyRC3gQRDybCFF0TLSyQmA6mTtjWE9D14z1qnAYp+raKqki6B1MGDQK/Sv
+         q2hh9xZVrUYNjEs2Ps3SpF59JiLHXG2XJ8SwaBSnBcl+DIAwlzySGBejXPFGT1r7v8IK
+         e1KQ==
+X-Gm-Message-State: APjAAAXI/DHm9uW61gjZ+M9OoPNClsJeR1x6ScQhAdBl5X7gJMkbvmiN
+        yTi96P/dIKLDVDVTTyZc0jU=
+X-Google-Smtp-Source: APXvYqwGsj0ZGlniKBN07CjFyqECjuTrRu/I0JtIHH8wCdnVnF2MiO69+EFwTXNWPSE7NiazPmCDbA==
+X-Received: by 2002:a17:902:112c:: with SMTP id d41mr110771356pla.33.1564592671257;
+        Wed, 31 Jul 2019 10:04:31 -0700 (PDT)
+Received: from mbalantz-desktop (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
+        by smtp.gmail.com with ESMTPSA id x7sm4800350pga.0.2019.07.31.10.04.30
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 31 Jul 2019 10:04:30 -0700 (PDT)
+From:   Mark Balantzyan <mbalant3@gmail.com>
+X-Google-Original-From: Mark Balantzyan <mbalantz@mbalantz-desktop>
+Date:   Wed, 31 Jul 2019 10:04:26 -0700 (PDT)
+To:     Guenter Roeck <linux@roeck-us.net>
+cc:     Mark Balantzyan <mbalant3@gmail.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Andrianov <andrianov@ispras.ru>
 Subject: Re: [PATCH] watchdog:alim1535_wdt: Fix data race in ali_settimer()
  concerning ali_timeout_bits variable.
-Message-ID: <20190731164337.GA13646@roeck-us.net>
-References: <20190718155238.3066-1-mbalant3@gmail.com>
- <20190718163458.GA18125@roeck-us.net>
- <alpine.DEB.2.21.1907310911120.29703@mbalantz-desktop>
+In-Reply-To: <20190731164337.GA13646@roeck-us.net>
+Message-ID: <alpine.DEB.2.21.1907310949440.37824@mbalantz-desktop>
+References: <20190718155238.3066-1-mbalant3@gmail.com> <20190718163458.GA18125@roeck-us.net> <alpine.DEB.2.21.1907310911120.29703@mbalantz-desktop> <20190731164337.GA13646@roeck-us.net>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.1907310911120.29703@mbalantz-desktop>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; format=flowed; charset=US-ASCII
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Mark,
+My employer (and yes, I am working for the Linux Foundation) has me 
+working on analysing race condition warnings in the Linux kernel. They 
+have a driver verification project running under the umbrella of the ELISA 
+project involved in the research, investigation, experimentation, and 
+establishment of linux kernel verification measures and tools.
 
-On Wed, Jul 31, 2019 at 09:17:13AM -0700, Mark Balantzyan wrote:
-> Hi Guenter,
-> 
-> If it's not too much too ask, I also propose to rewrite alim1535_wdt to use
-> the watchdog subsystem as I believe we are making progress toward the
-> similar end in pc87413_wdt, as my evaluation ends in some weeks.
-> 
+I actually do have assigned to me coaches and/or mentors that I have been 
+corresponding with. They are aware of what is going on and are being cc'd 
+to (most of) our emails.
 
-Please, no. We still have ways to go with that one driver, and we'll be
-stuck with a patch which I can't accept because of lack of testing.
-I (and you) really need to talk to your evaluators why they ask you
-to make those changes. This is highly inappropriate. The Linux kernel
-is not an feasible target for such an evaluation. This is setting
-you up for failure, and it is a waste of both your and my time.
+pc87413_wdt was detected by our race condition analysis tool as having 
+warning. Even outside this work we've been doing, I've been trying to apply
+the reasoning of the race condition analysis tool to different kernel modules,
+as part of my menteeship.
 
-Are you really working for or on belalf of the Linux Foundation ?
-They should know better. And if Google is involved, I am embarassed
-for my employer.  If they really want people to do work like this,
-they should also provide reviewers and coaching staff. They should
-most definitely not expect kernel maintainers to do it for them.
+I hope you can respect that this is a process primarily for learning and 
+experimentation. I'm sorry if I'm creating too much work for you at once. 
+If so, let me know and I'll try to spread it out.
 
-Thanks,
-Guenter
+Thank you,
+Mark
