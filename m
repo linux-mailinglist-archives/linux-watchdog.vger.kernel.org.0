@@ -2,19 +2,19 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E9B7CD69
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 21:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B2D7CD74
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jul 2019 22:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729527AbfGaT7Z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 Jul 2019 15:59:25 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:44131 "EHLO
+        id S1729729AbfGaUAI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Jul 2019 16:00:08 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:34817 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbfGaT7Z (ORCPT
+        with ESMTP id S1725793AbfGaUAI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 Jul 2019 15:59:25 -0400
+        Wed, 31 Jul 2019 16:00:08 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1M60HD-1hzmMa1S2t-007WQU; Wed, 31 Jul 2019 21:58:51 +0200
+ 1Mo6WJ-1ihbS32Skt-00pgri; Wed, 31 Jul 2019 21:59:24 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
         Vladimir Zapolskiy <vz@mleia.com>,
@@ -22,42 +22,41 @@ To:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
         Russell King <linux@armlinux.org.uk>,
         Gregory Clement <gregory.clement@bootlin.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
 Cc:     Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 03/14] watchdog: pnx4008_wdt: allow compile-testing
-Date:   Wed, 31 Jul 2019 21:56:45 +0200
-Message-Id: <20190731195713.3150463-4-arnd@arndb.de>
+        Guenter Roeck <linux@roeck-us.net>, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: [PATCH 04/14] serial: lpc32xx_hs: allow compile-testing
+Date:   Wed, 31 Jul 2019 21:56:46 +0200
+Message-Id: <20190731195713.3150463-5-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20190731195713.3150463-1-arnd@arndb.de>
 References: <20190731195713.3150463-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:9yUamtnf2TIEri8xToHi2HP0bNeq2o/bMYTbPMW/vg0ZGIzRlVZ
- urODGWophHwj2kamStrDk3IZ7zSpCTCX5t4sMnfLpIcxs9wmaHvSSDo+bNqZzwGdy5UYYR9
- e0Y4xZ9D2FHcXdSkv/oCMKk2yUHxFcbeBUTKPhHw7pX66dppRRr1TufSUvH+5QEVggfcs8Z
- 6oMvoTmm1FtZK8+0oW/wg==
+X-Provags-ID: V03:K1:FgQXWHBg8JwiLqFUWJflxqSabbAP8JCw6bQWgIJ0su4bbGS+nRK
+ 0kUqcrfqJfWTc10p+TkInneDvk18LhtSmF5HyllYlbCgM6NIe2ax1LYFHpLJUPtftTqVfHY
+ LT8kDYequkxI5Lbi1wDejhDPoHyerdsb7xvK8eoFciT5n0YokYA8TO/pNPuR18xFg1KR67C
+ ohO68gbXz9QjaHkKemAWQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:klU/jRvYVso=:PV42qGK6cAWld/OjjZOFZ1
- zGMpHnObvYTQrIpVxVh6vZz9g4QDbJfZyHjqGV0KF05shbnRpDiouYuKEl+7RdTrLXQfq6OUE
- 3iGxoYpQ3HBCtxT3DWbqWWLjzoj7ATK7zwEPmUzqzrqjdRYzJszfhNAkX2yI5YVG3GmeBz7yz
- 9RDZV4vuOZy22/0qG81uXna7kipOrx0kN2s5FikkKplOevEqJ5tLa4h47HbmthkC8KXX7zbgY
- pV8i3+EJvVZRSaDGhptWUul3T1jBR2b7BO9BWPZmbjlxSVhOASs7lsyj+eHcuceoXxIJkpoby
- 7jns4DopRRhHvLL9wlR9ZhyFDkRbdO10LDreatLj5aTesK9vI3kXEjSfxlHluovG3Sm6QKYRF
- SsmRaoxRh7iE87EyMCkT62zLke0BDT/e7RQv10/x5qVYHLOpOHtZfMVaeh4dcS60FyguGq1Fd
- 3ZzSA/0jVKSDYqdV5txFh/RZ4uwjHFxMsqS451Oz7732M9uDtqR/CDUNN+MlQKcXzJwbAGxMp
- dN/OymhwlkaxUFRN1E+sGRFvkVQ9MSPkAOc6KurE8C1j+ohNT7WqJgapbfcUiNpDiXpiDxUyg
- OGFd2tSeUG/ZzHAGSoQjoTxD08FMp+mpwJN3uF+xl+fiNsAqYJ3JEC4ZzIkQYYCsZHSoOrZhj
- +/i+eKY1tw950RZ1mXRqF+97hNuHJvmGGLacoaAjuOdNIxSHQXg065UQavatOfy/ovlux6y0Y
- LxMR5+Bjw4qB9h6YFWvXSUmP198oby4rMT3eBg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9zXs2NceyDg=:N9NkeMAe628aOvT2TIb/xb
+ PWR1SJ+Jn/xnW7MzNM80nxT0HFhj0IH9hRJO7YpP3nO1nzkVmMIuBW8MfuEjzvna4yYuw/NrN
+ Xdgphu9Ry1EE8S2qqTWWjhUDz545qonpnL1oJEOm/Hr5xdROH7H2WeLZJpQCtnxVxQ8Wh5hqY
+ nU5h7ie3lhbyDKd1IWAhOejvlfNepdIKHF1pDyXuAnlgQUVMople/U1mBLmt0NoxdvF/6Mcer
+ 8tH++YghoErbfk2yDkMI2HYS3ZeTBZRbPO2ZX3iDLbDarWtrQvzDqEVMyG8Y6EUmP0b4qyFjN
+ PwLeOGDMs4lB0+cFHs97ILEblNeqmOzk14Ox/7D0BPmUuVaxPFJuCwl6Uh4bTDBi8TlEtcnsF
+ qKLNzlhsV4qv+KM3IKY+XI8kOnePo6K95sFf+QHEEqVuX8oAp63/X9aVVWFpNTIHW6Va2GEm5
+ rWdpIHl6eOJoB+r3wgOJizmqDyGRWK5+D7E47X3Bac211kWk2upDTiYsqftygCXSHNH6sKjd1
+ AQJoQbtKh20u9ADOyh9GW2ko1Az6jrllCmcnPqt1XDs9uHtH/ygJG0Gn7GWFngWKjOpGMOcj0
+ CGy7SaTzt3GuiyKDn9gHxUEXhOjsb4aCnEX5bWyLhHzocWJcLWujmLb48VzchIKZJgwZWu7lf
+ UkS5FB881G9+x8p0cLogi/HR4km/FxXNvseAnDybpGdJN33PMpOBWTcW0/y9Clg0W5ImRhw22
+ ktX8KghGubpyC+mg1c2YtkHDcs3NhemMbCnviw==
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
@@ -69,35 +68,37 @@ used here at all, so remove the line and allow CONFIG_COMPILE_TEST.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/watchdog/Kconfig       | 2 +-
- drivers/watchdog/pnx4008_wdt.c | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ drivers/tty/serial/Kconfig      | 3 ++-
+ drivers/tty/serial/lpc32xx_hs.c | 2 --
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 8188963a405b..a45f9e3e442b 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -551,7 +551,7 @@ config OMAP_WATCHDOG
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 3083dbae35f7..518aac902e4b 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -739,7 +739,8 @@ config SERIAL_PNX8XXX_CONSOLE
  
- config PNX4008_WATCHDOG
- 	tristate "LPC32XX Watchdog"
--	depends on ARCH_LPC32XX
+ config SERIAL_HS_LPC32XX
+ 	tristate "LPC32XX high speed serial port support"
+-	depends on ARCH_LPC32XX && OF
 +	depends on ARCH_LPC32XX || COMPILE_TEST
- 	select WATCHDOG_CORE
++	depends on OF
+ 	select SERIAL_CORE
  	help
- 	  Say Y here if to include support for the watchdog timer
-diff --git a/drivers/watchdog/pnx4008_wdt.c b/drivers/watchdog/pnx4008_wdt.c
-index 7b446b696f2b..e0ea133c1690 100644
---- a/drivers/watchdog/pnx4008_wdt.c
-+++ b/drivers/watchdog/pnx4008_wdt.c
-@@ -30,7 +30,6 @@
+ 	  Support for the LPC32XX high speed serial ports (up to 900kbps).
+diff --git a/drivers/tty/serial/lpc32xx_hs.c b/drivers/tty/serial/lpc32xx_hs.c
+index f4e27d0ad947..7f14cd8fac47 100644
+--- a/drivers/tty/serial/lpc32xx_hs.c
++++ b/drivers/tty/serial/lpc32xx_hs.c
+@@ -25,8 +25,6 @@
+ #include <linux/irq.h>
+ #include <linux/gpio.h>
  #include <linux/of.h>
- #include <linux/delay.h>
- #include <linux/reboot.h>
+-#include <mach/platform.h>
 -#include <mach/hardware.h>
  
- /* WatchDog Timer - Chapter 23 Page 207 */
- 
+ /*
+  * High Speed UART register offsets
 -- 
 2.20.0
 
