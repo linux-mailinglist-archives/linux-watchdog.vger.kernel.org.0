@@ -2,92 +2,129 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB837D65B
-	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Aug 2019 09:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3075F7DCE9
+	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Aug 2019 15:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729954AbfHAHdk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 1 Aug 2019 03:33:40 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:43253 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbfHAHdk (ORCPT
+        id S1730541AbfHAN4u (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 1 Aug 2019 09:56:50 -0400
+Received: from mail-wm1-f53.google.com ([209.85.128.53]:36252 "EHLO
+        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730522AbfHAN4u (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 1 Aug 2019 03:33:40 -0400
-Received: by mail-qk1-f194.google.com with SMTP id m14so25541015qka.10;
-        Thu, 01 Aug 2019 00:33:39 -0700 (PDT)
+        Thu, 1 Aug 2019 09:56:50 -0400
+Received: by mail-wm1-f53.google.com with SMTP id g67so59191223wme.1
+        for <linux-watchdog@vger.kernel.org>; Thu, 01 Aug 2019 06:56:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lIm81eDhukyw6fbCl/+3h+QPFrHXYcRhnM9vCZm0FBU=;
+        b=13O0vL5DX2cs4dd++hzfRHv1CPifo+nEBZIfEK/xPAm8LBOTVk9bmKI2ZMbRTH1Qny
+         gGc5Etb+oieTHOJzEcqzxWDGO6QQqX8ZqANnbyLDBv2TvisCVoaDgG+Sk1kHTmon4u7p
+         23GDtno64u2hTvVK4IASbns2pDTl99MQ9lBi+m6sVEXUkUpyjOdGM2BNfLvVc5T/fqbP
+         9RYMi1RBDw8zjzxwomGDcNw8yXfmP3fnwqKgmxCfWTSa6c7Ru6292ZJe91J3mLvVO1do
+         1LdLqXyr4MpjfSurQz0trb5nuP2J9ZMxqd5XwmuOpZpWwQRuERRQeyL/kh7Wen7RuCof
+         AwZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uzHxuqP9bTvMw7JBQ/Id5Vam5w5HBpX0XWumLmps/F8=;
-        b=a2zwqHyjT8P+fvFrSFEOJ3Z1sbAqdsA2LP5g/lQoCinOhcUXP7sYyD11Wo60055Sut
-         EunN2tSpc0ixremLnzzmIt3Q/qJEdxpJOHqgoZN6hk2YXuU0hrwP6WXeY1m/k4fzlw/F
-         +DIAGrpnBnVrtnL/kZDuiTI4DfCNnBPgeElRwS5SUEhge1RgQokuqsUmM6YgBys7va57
-         0X5Qle87sSRyXQ1OHv94ddtqARdJfTvcugTjTHNEVyIXhFxD0vcdTfm2AeZAhoSldzI9
-         NhNMtU7wkxW9e+CZ/LJN7wg1gKdPv+knC0RL0DPFUGkegJO5xF733jO3d8GxGCYgsGF9
-         kU3A==
-X-Gm-Message-State: APjAAAU8B+qBWNdUE6ia99zmQpQswSTH9EbLvTEXCtYa2Y/Mc46yDQ5x
-        0If5aJq5SFXeVKQU8sxPUArwBNtG6CMFeWVzE8c=
-X-Google-Smtp-Source: APXvYqyMeJ9LlJMXE9rDAXSa0/HHTUU6jsIhO5Y0qQu+ABh/obgCJKyAqVIsLutAY+sl9DXQqRxphmZCeAPnr5ENpd8=
-X-Received: by 2002:a37:5f45:: with SMTP id t66mr84886325qkb.286.1564644819429;
- Thu, 01 Aug 2019 00:33:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lIm81eDhukyw6fbCl/+3h+QPFrHXYcRhnM9vCZm0FBU=;
+        b=C/MBKBG/bPdsh4bJd1qukmIU92iX4b0rXHmnYxmNtx8AkJNanvjI/7UZ41H32dR86Z
+         4bfkn4luuOJ7CJfRCeV/XBb0NdBl6iwfTWKX/p0jYWrlwLu3bjqk1d3gODM8mxW/Sxoe
+         zpr+w2mFe+f8hCrLJJkLtJgJFFwKHbKQKpasrdj+Zojq3D0UHBJyZ0LC0445/sOUGvDE
+         92C/z6wnCHyS3v7rBs2CV/pw04n5TJvDoEwruw7Rx2XiY0tj9WsxkADlABzD/2QJDdOw
+         GuTPAV/MUDw7hTbVC7h1O3DumPrMpEpS4l+gSHbgpOd7JzOAoTv98s6gBJQ15QOM4yhk
+         uf8w==
+X-Gm-Message-State: APjAAAV3yHtpqqpJU7nYTq/aFW08YEPnDHJMECnVYpn7odJvMk5PzYQi
+        6AErlyO5z+25c5CTOjjsZa7Nfg==
+X-Google-Smtp-Source: APXvYqz463HiGivdjA4sUX+UrCKICPNW2Wd+t3590qMCqsuXMkM9GjxeAukrBa4PObzWj+jGQXbYjg==
+X-Received: by 2002:a1c:ef0c:: with SMTP id n12mr111159574wmh.132.1564667808166;
+        Thu, 01 Aug 2019 06:56:48 -0700 (PDT)
+Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id u6sm69659952wml.9.2019.08.01.06.56.47
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 01 Aug 2019 06:56:47 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     robh+dt@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        jassisinghbrar@gmail.com, kishon@ti.com, p.zabel@pengutronix.de
+Subject: [RFC 0/9] dt-bindings: first tentative of conversion to yaml format
+Date:   Thu,  1 Aug 2019 15:56:35 +0200
+Message-Id: <20190801135644.12843-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20190731195713.3150463-1-arnd@arndb.de> <20190731225303.GC1330@shell.armlinux.org.uk>
-In-Reply-To: <20190731225303.GC1330@shell.armlinux.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 1 Aug 2019 09:33:23 +0200
-Message-ID: <CAK8P3a1Lgbz9RwVaOgNq=--gwvEG70tUi67XwsswjgnXAX6EhA@mail.gmail.com>
-Subject: Re: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     soc@kernel.org, Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Aug 1, 2019 at 12:53 AM Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
->
-> On Wed, Jul 31, 2019 at 09:56:42PM +0200, Arnd Bergmann wrote:
-> > For dove, the patches are basically what I had proposed back in
-> > 2015 when all other ARMv6/ARMv7 machines became part of a single
-> > kernel build. I don't know what the state is mach-dove support is,
-> > compared to the DT based support in mach-mvebu for the same
-> > hardware. If they are functionally the same, we could also just
-> > remove mach-dove rather than applying my patches.
->
-> Well, the good news is that I'm down to a small board support file
-> for the Dove Cubox now - but the bad news is, that there's still a
-> board support file necessary to support everything the Dove SoC has
-> to offer.
->
-> Even for a DT based Dove Cubox, I'm still using mach-dove, but it
-> may be possible to drop most of mach-dove now.  Without spending a
-> lot of time digging through it, it's impossible to really know.
+This is a first tentative to convert some of the simplest Amlogic
+dt-bindings to the yaml format.
 
-Ok, so we won't remove it then, but I'd like to merge my patches to
-at least get away from the special case of requiring a separate kernel
-image for it.
+All have been tested using :
+$ make ARCH=arm64 dtbs_check
 
-Can you try if applying patches 12 and 14 from my series causes
-problems for you? (it may be easier to apply the entire set
-or pull from [1] to avoid rebase conflicts).
+Issues with the amlogic arm64 DTs has already been identified thanks
+to the validation scripts. The DT fixes will be pushed once these yaml
+bindings are acked.
 
-     Arnd
+Neil Armstrong (9):
+  dt-bindings: mailbox: meson-mhu: convert to yaml
+  dt-bindings: rng: amlogic,meson-rng: convert to yaml
+  dt-bindings: spi: meson: convert to yaml
+  dt-bindings: reset: amlogic,meson-reset: convert to yaml
+  dt-bindings: arm: amlogic: amlogic,meson-gx-ao-secure: convert to yaml
+  dt-bindings: phy: meson-g12a-usb2-phy: convert to yaml
+  dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml
+  dt-bindings: serial: meson-uart: convert to yaml
+  dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
 
-[1] kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git mach-cleanup-5.4
+ .../amlogic/amlogic,meson-gx-ao-secure.txt    | 28 -------
+ .../amlogic/amlogic,meson-gx-ao-secure.yaml   | 42 +++++++++++
+ .../devicetree/bindings/mailbox/meson-mhu.txt | 34 ---------
+ .../bindings/mailbox/meson-mhu.yaml           | 53 +++++++++++++
+ .../bindings/phy/meson-g12a-usb2-phy.txt      | 22 ------
+ .../bindings/phy/meson-g12a-usb2-phy.yaml     | 67 +++++++++++++++++
+ .../bindings/phy/meson-g12a-usb3-pcie-phy.txt | 22 ------
+ .../phy/meson-g12a-usb3-pcie-phy.yaml         | 61 +++++++++++++++
+ .../bindings/reset/amlogic,meson-reset.txt    | 19 -----
+ .../bindings/reset/amlogic,meson-reset.yaml   | 40 ++++++++++
+ .../bindings/rng/amlogic,meson-rng.txt        | 21 ------
+ .../bindings/rng/amlogic,meson-rng.yaml       | 37 +++++++++
+ .../bindings/serial/amlogic,meson-uart.txt    | 38 ----------
+ .../bindings/serial/amlogic,meson-uart.yaml   | 75 +++++++++++++++++++
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 74 ++++++++++++++++++
+ .../bindings/spi/amlogic,meson6-spifc.yaml    | 57 ++++++++++++++
+ .../devicetree/bindings/spi/spi-meson.txt     | 55 --------------
+ .../bindings/watchdog/meson-gxbb-wdt.txt      | 16 ----
+ .../bindings/watchdog/meson-gxbb-wdt.yaml     | 37 +++++++++
+ 19 files changed, 543 insertions(+), 255 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.txt
+ create mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.txt
+ create mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-meson.txt
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.yaml
+
+-- 
+2.22.0
+
