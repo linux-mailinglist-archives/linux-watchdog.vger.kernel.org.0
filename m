@@ -2,61 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3075F7DCE9
-	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Aug 2019 15:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1067DCF8
+	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Aug 2019 15:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730541AbfHAN4u (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 1 Aug 2019 09:56:50 -0400
-Received: from mail-wm1-f53.google.com ([209.85.128.53]:36252 "EHLO
-        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730522AbfHAN4u (ORCPT
+        id S1730683AbfHAN44 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 1 Aug 2019 09:56:56 -0400
+Received: from mail-wm1-f50.google.com ([209.85.128.50]:51003 "EHLO
+        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730664AbfHAN44 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 1 Aug 2019 09:56:50 -0400
-Received: by mail-wm1-f53.google.com with SMTP id g67so59191223wme.1
-        for <linux-watchdog@vger.kernel.org>; Thu, 01 Aug 2019 06:56:49 -0700 (PDT)
+        Thu, 1 Aug 2019 09:56:56 -0400
+Received: by mail-wm1-f50.google.com with SMTP id v15so64777646wml.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 01 Aug 2019 06:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lIm81eDhukyw6fbCl/+3h+QPFrHXYcRhnM9vCZm0FBU=;
-        b=13O0vL5DX2cs4dd++hzfRHv1CPifo+nEBZIfEK/xPAm8LBOTVk9bmKI2ZMbRTH1Qny
-         gGc5Etb+oieTHOJzEcqzxWDGO6QQqX8ZqANnbyLDBv2TvisCVoaDgG+Sk1kHTmon4u7p
-         23GDtno64u2hTvVK4IASbns2pDTl99MQ9lBi+m6sVEXUkUpyjOdGM2BNfLvVc5T/fqbP
-         9RYMi1RBDw8zjzxwomGDcNw8yXfmP3fnwqKgmxCfWTSa6c7Ru6292ZJe91J3mLvVO1do
-         1LdLqXyr4MpjfSurQz0trb5nuP2J9ZMxqd5XwmuOpZpWwQRuERRQeyL/kh7Wen7RuCof
-         AwZA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jQX65Is1Wqm0IPrwb1sLBW/ZNzd7xz+BApuzmHkBw2E=;
+        b=iqTpK417HOmjCLppiN1pgsqLIb9hmFuQloL3t5z3tQacHlwVBnyZjq837feg2G8e5l
+         hgGomxSa+NJ42noHa95qsb/NJkaC8CtXH+fHXapFJ4fbZus8ScjbmUkX1qDf8lKmaY2D
+         Irued+5Zc64kUahQOreQUNK0Cbq0cW7KAgPKbAa3Kf7Ugp4c6c8YiyDD51G51hnaJW9/
+         nSHwr/rxIZ5sn8NG78s/VuwSOtPpoZDPa//gy7Dyq3hiyBfrbg7Vg0G4KN8kkM7B4B8q
+         SpDl23KDdKS3WmGuZK3WEOcmfmTt/AQ6dTf7Ad/mUF3jBu/cpkL8JP5pwMRPzqma7n0g
+         FDSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lIm81eDhukyw6fbCl/+3h+QPFrHXYcRhnM9vCZm0FBU=;
-        b=C/MBKBG/bPdsh4bJd1qukmIU92iX4b0rXHmnYxmNtx8AkJNanvjI/7UZ41H32dR86Z
-         4bfkn4luuOJ7CJfRCeV/XBb0NdBl6iwfTWKX/p0jYWrlwLu3bjqk1d3gODM8mxW/Sxoe
-         zpr+w2mFe+f8hCrLJJkLtJgJFFwKHbKQKpasrdj+Zojq3D0UHBJyZ0LC0445/sOUGvDE
-         92C/z6wnCHyS3v7rBs2CV/pw04n5TJvDoEwruw7Rx2XiY0tj9WsxkADlABzD/2QJDdOw
-         GuTPAV/MUDw7hTbVC7h1O3DumPrMpEpS4l+gSHbgpOd7JzOAoTv98s6gBJQ15QOM4yhk
-         uf8w==
-X-Gm-Message-State: APjAAAV3yHtpqqpJU7nYTq/aFW08YEPnDHJMECnVYpn7odJvMk5PzYQi
-        6AErlyO5z+25c5CTOjjsZa7Nfg==
-X-Google-Smtp-Source: APXvYqz463HiGivdjA4sUX+UrCKICPNW2Wd+t3590qMCqsuXMkM9GjxeAukrBa4PObzWj+jGQXbYjg==
-X-Received: by 2002:a1c:ef0c:: with SMTP id n12mr111159574wmh.132.1564667808166;
-        Thu, 01 Aug 2019 06:56:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jQX65Is1Wqm0IPrwb1sLBW/ZNzd7xz+BApuzmHkBw2E=;
+        b=bfCDpIRQBtJKD6rW0Kd4G7QRETnGcAiMahprz+zyk/Yx8vqm0ewADT4PVJoxy/3Nxy
+         liTtoUNDQImUpvPt51sj7NjE7yE30Y7Joj9gYKsqKcu2oqaP7P5vZsA0n7WHlnXCsbL1
+         yW20Zpxu/SsK8pbUQNtn8SnZodbTpaTfnLFRB0gvPK0toYKQUOUn9ukWro17neimYiBU
+         n+/MDSiO+uWpzcIwQoVWDKrXoVJPyILYhseKhjio4/Q7pmSp1IWPNAWt1XCYd58XLZNs
+         GmMKJJ9RRXnGIkJpsNaF9kW+zUADuc3XxQe6+buDjCNKCBZICdONk48LUO6WaqzcWRR8
+         R38Q==
+X-Gm-Message-State: APjAAAWDnp4GkekeUDBcxYiZIkMnxCHG58PyXm4QIabiPYnV9x19qaM6
+        yKmiHuTwS/o+XO3a1nvf9CK//A==
+X-Google-Smtp-Source: APXvYqzGt2wbFLB67ZHPqMVrxGoErn2xr4WR71TxtiUp8m3r2ThDxZfQes8q9+8MpGjIMYB4CWR0lw==
+X-Received: by 2002:a1c:ab06:: with SMTP id u6mr114504816wme.125.1564667814377;
+        Thu, 01 Aug 2019 06:56:54 -0700 (PDT)
 Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id u6sm69659952wml.9.2019.08.01.06.56.47
+        by smtp.gmail.com with ESMTPSA id u6sm69659952wml.9.2019.08.01.06.56.53
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 06:56:47 -0700 (PDT)
+        Thu, 01 Aug 2019 06:56:53 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     robh+dt@kernel.org
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        jassisinghbrar@gmail.com, kishon@ti.com, p.zabel@pengutronix.de
-Subject: [RFC 0/9] dt-bindings: first tentative of conversion to yaml format
-Date:   Thu,  1 Aug 2019 15:56:35 +0200
-Message-Id: <20190801135644.12843-1-narmstrong@baylibre.com>
+        linux-amlogic@lists.infradead.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [RFC 9/9] dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
+Date:   Thu,  1 Aug 2019 15:56:44 +0200
+Message-Id: <20190801135644.12843-10-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190801135644.12843-1-narmstrong@baylibre.com>
+References: <20190801135644.12843-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
@@ -64,67 +63,79 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This is a first tentative to convert some of the simplest Amlogic
-dt-bindings to the yaml format.
-
-All have been tested using :
-$ make ARCH=arm64 dtbs_check
-
-Issues with the amlogic arm64 DTs has already been identified thanks
-to the validation scripts. The DT fixes will be pushed once these yaml
-bindings are acked.
-
-Neil Armstrong (9):
-  dt-bindings: mailbox: meson-mhu: convert to yaml
-  dt-bindings: rng: amlogic,meson-rng: convert to yaml
-  dt-bindings: spi: meson: convert to yaml
-  dt-bindings: reset: amlogic,meson-reset: convert to yaml
-  dt-bindings: arm: amlogic: amlogic,meson-gx-ao-secure: convert to yaml
-  dt-bindings: phy: meson-g12a-usb2-phy: convert to yaml
-  dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml
-  dt-bindings: serial: meson-uart: convert to yaml
-  dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
-
- .../amlogic/amlogic,meson-gx-ao-secure.txt    | 28 -------
- .../amlogic/amlogic,meson-gx-ao-secure.yaml   | 42 +++++++++++
- .../devicetree/bindings/mailbox/meson-mhu.txt | 34 ---------
- .../bindings/mailbox/meson-mhu.yaml           | 53 +++++++++++++
- .../bindings/phy/meson-g12a-usb2-phy.txt      | 22 ------
- .../bindings/phy/meson-g12a-usb2-phy.yaml     | 67 +++++++++++++++++
- .../bindings/phy/meson-g12a-usb3-pcie-phy.txt | 22 ------
- .../phy/meson-g12a-usb3-pcie-phy.yaml         | 61 +++++++++++++++
- .../bindings/reset/amlogic,meson-reset.txt    | 19 -----
- .../bindings/reset/amlogic,meson-reset.yaml   | 40 ++++++++++
- .../bindings/rng/amlogic,meson-rng.txt        | 21 ------
- .../bindings/rng/amlogic,meson-rng.yaml       | 37 +++++++++
- .../bindings/serial/amlogic,meson-uart.txt    | 38 ----------
- .../bindings/serial/amlogic,meson-uart.yaml   | 75 +++++++++++++++++++
- .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 74 ++++++++++++++++++
- .../bindings/spi/amlogic,meson6-spifc.yaml    | 57 ++++++++++++++
- .../devicetree/bindings/spi/spi-meson.txt     | 55 --------------
- .../bindings/watchdog/meson-gxbb-wdt.txt      | 16 ----
- .../bindings/watchdog/meson-gxbb-wdt.yaml     | 37 +++++++++
- 19 files changed, 543 insertions(+), 255 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.txt
- create mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
- delete mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.txt
- create mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.yaml
- delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
- create mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.yaml
- delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
- create mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.yaml
- delete mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.txt
- create mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.yaml
- delete mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.txt
- create mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.yaml
- delete mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt
- create mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-meson.txt
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ .../bindings/watchdog/meson-gxbb-wdt.txt      | 16 --------
+ .../bindings/watchdog/meson-gxbb-wdt.yaml     | 37 +++++++++++++++++++
+ 2 files changed, 37 insertions(+), 16 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
  create mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.yaml
 
+diff --git a/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt b/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
+deleted file mode 100644
+index c7fe36fa739c..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Meson GXBB SoCs Watchdog timer
+-
+-Required properties:
+-
+-- compatible : should be "amlogic,meson-gxbb-wdt"
+-- reg : Specifies base physical address and size of the registers.
+-- clocks : Should be a phandle to the Watchdog clock source, for GXBB the xtal
+-	   is the default clock source.
+-
+-Example:
+-
+-wdt: watchdog@98d0 {
+-	compatible = "amlogic,meson-gxbb-wdt";
+-	reg = <0 0x98d0 0x0 0x10>;
+-	clocks = <&xtal>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.yaml b/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.yaml
+new file mode 100644
+index 000000000000..111377bb9860
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2019 BayLibre, SAS
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/watchdog/meson-gxbb-wdt.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Meson GXBB SoCs Watchdog timer
++
++maintainers:
++  - Neil Armstrong <narmstrong@baylibre.com>
++
++properties:
++  compatible:
++    enum:
++      - amlogic,meson-gxbb-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++    description:
++      A phandle to the clock of this PHY
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++examples:
++  - |
++    watchdog@98d0 {
++          compatible = "amlogic,meson-gxbb-wdt";
++          reg = <0x98d0 0x10>;
++          clocks = <&xtal>;
++    };
 -- 
 2.22.0
 
