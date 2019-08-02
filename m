@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A47F7EAAB
-	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Aug 2019 05:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D637EAAE
+	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Aug 2019 05:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729669AbfHBDZb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 1 Aug 2019 23:25:31 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:42568 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729012AbfHBDZa (ORCPT
+        id S1726164AbfHBD1C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 1 Aug 2019 23:27:02 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39778 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbfHBD1C (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 1 Aug 2019 23:25:30 -0400
-Received: by mail-pl1-f194.google.com with SMTP id ay6so33118022plb.9;
-        Thu, 01 Aug 2019 20:25:30 -0700 (PDT)
+        Thu, 1 Aug 2019 23:27:02 -0400
+Received: by mail-pf1-f194.google.com with SMTP id f17so31251585pfn.6;
+        Thu, 01 Aug 2019 20:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
         bh=UYEB0BQIRVXD1XNZ3rz266XuYRNpewSe3Y3JR+XnCb0=;
-        b=LsD/Qt4+9BLTxeZuEdDmcOdlHqRKlXhdAUYcO8Kwzaffz4hBGG6OyHKJSO8p1e0nqy
-         fJYiWg3lIBYlE/zRzM+y9jFzEzs/BF7Fv967/bpC0heUlEFNK7QOIPsQ4DnB0UqpPgao
-         k3BQlOaE8K2mEq3Ob6cy7glPQkOQGU34v/9funRor6wQZOXtGc8hirSROBQ2D3xsTvMp
-         1EgGJujeP+jTs1it4L1MyQYNx4ZtECjTe4ddVK+fxjc3hVLk+p3WRqG4v4w4c81V/iIB
-         0o2OB+U9PJDl2i9i5UTSI+fqrn4h1oourcJqRJBGuLxjPZUAf7+I0KuTd+MtGDBAw49g
-         sAqQ==
+        b=tmy6r/qAs/4Rh+KuaZgod9BdN45qo4sHOWRFJ+vOnEi/PHqSjHqRKrohpDEklpemxN
+         Fn4lTrjIhriz5BJg632bg0uU3+VEytMcLfY86+oG4/ZN4D4JA1bChgW4I5XGUzq3Lgay
+         wXDh69vTjTOmoCyzxfMN0id9+umKhbnQ3100XFbZYP5F6jwbOmkT+0UKxKj6sxK55+4n
+         RGTGECu6fKkjW3q1HDsKSWP1bLb40z164ZKBoJJJza8ajt43dP25nW2gS3R+xwrnaYLY
+         2Va/+a4YvqijeCffXSnCke/DUMGPC/6wGuBOLBy3DWyX9RQvBJc8vdj07JCkr8kcCoaE
+         1FYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
         bh=UYEB0BQIRVXD1XNZ3rz266XuYRNpewSe3Y3JR+XnCb0=;
-        b=qlPGyPbYQDXAk7NJ1RG54ENm8pcZygT5xXdNxZtL3H/8m3wuBsO7jdOMYmWi4pnLZi
-         WxKsAoAka91Pvp5Jd7ot6BvFmjzU125ubNRJ/RaVEEU2ChM+pCxY+mrZDvc8/jVytgyO
-         sHAC7j0eM7wYxZqoX5imG5RQl0LhvynImFZZBjoO5JGrTFqrwAafO3r9Keb3LTy6kNSA
-         0uNN9dsFhd1i+wmTqVgRQcgfhZvZIytPuevS3EndKLD38iVStLJoKDfUWmH1TcAQRdcz
-         SK/SzEVsGxyLMJFNujEhaLUeg6tYJRnteE+CvjVJV+k2TUgpgHqeyfOAU7NySjQLsUcc
-         ut1Q==
-X-Gm-Message-State: APjAAAWjd1OXVGEnIQC+Wdvqd5JmdrqdAulxRlRcu/6OEmCg0+tZY5iM
-        yPGaKQSM8NqnekiqWxkeSrA=
-X-Google-Smtp-Source: APXvYqx2Xz5tNT1hPYzngdpmDM5eLZq3s0pCnzZyr6Pst5bjVAy5kk6rY0V489F7bHE5YpfDokGUvw==
-X-Received: by 2002:a17:902:ac85:: with SMTP id h5mr130559599plr.198.1564716329613;
-        Thu, 01 Aug 2019 20:25:29 -0700 (PDT)
+        b=ja+0CEAKY1qWRoI1MImsFrAj2SUsEzJOyXMfiAeVRi8R8r0ZHZUhQwpHIVNCtxUGAQ
+         DzrkJWFgkn0odCUArgiOAPBLj+oM4PIT/JHN1DLT6aU8EQ5CRMPkO3+6mBGey41n8ALh
+         wLekpSot/JR4HnNx8b/An7WUwmUExiO6hI7UEl6xtbL7LOdaTB1Ricg5jlnnnG7GzsX3
+         eBljt6dhX2DzNvrnll7Qp9gpfvk3lAASYmXjC7Yfauw2m9gmYhXmcLmlAxfhb0zjLNSf
+         RCpbmgR5AdqOSV3bdZRg7Cb0OEGGcrdLVaJ6q1YNNddtWtPaeHOxqs4k0B3CJzQSMCjd
+         e6VA==
+X-Gm-Message-State: APjAAAXhxoOuofA71djSFgIk4ceSUCBNX1yvM9h+W4bnwOPT0JRZ8Vfj
+        8ogZo03ZPmoFl3PkLjQBmhc=
+X-Google-Smtp-Source: APXvYqw76khEL7mAaD50ApE1mUPldiHZF7suK8fm36ykBpJCBnsXjd6AHAJOXDwTiaTenUbHG/AVpA==
+X-Received: by 2002:a62:7990:: with SMTP id u138mr54890003pfc.191.1564716421654;
+        Thu, 01 Aug 2019 20:27:01 -0700 (PDT)
 Received: from localhost.localdomain (d206-116-172-62.bchsia.telus.net. [206.116.172.62])
-        by smtp.gmail.com with ESMTPSA id t9sm70553759pgj.89.2019.08.01.20.25.28
+        by smtp.gmail.com with ESMTPSA id p7sm80683003pfp.131.2019.08.01.20.27.00
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 20:25:29 -0700 (PDT)
+        Thu, 01 Aug 2019 20:27:01 -0700 (PDT)
 From:   Mark Balantzyan <mbalant3@gmail.com>
 To:     linux@roeck-us.net
 Cc:     mbalant3@gmail.com, wim@linux-watchdog.org,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Rewriting of alim1535 to use watchdog subsystem
-Date:   Thu,  1 Aug 2019 20:25:23 -0700
-Message-Id: <20190802032523.53513-1-mbalant3@gmail.com>
+Subject: [PATCH v4] watchdog: alim1535: Rewriting of alim1535 to use watchdog subsystem
+Date:   Thu,  1 Aug 2019 20:26:55 -0700
+Message-Id: <20190802032655.54758-1-mbalant3@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
