@@ -2,128 +2,134 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 227EF81429
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Aug 2019 10:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D366818B2
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Aug 2019 14:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727856AbfHEI2A (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Aug 2019 04:28:00 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:35309 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726659AbfHEI2A (ORCPT
+        id S1728674AbfHEMD3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Aug 2019 08:03:29 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34203 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727349AbfHEMD2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Aug 2019 04:28:00 -0400
-Received: by mail-ot1-f66.google.com with SMTP id j19so7775654otq.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 05 Aug 2019 01:27:59 -0700 (PDT)
+        Mon, 5 Aug 2019 08:03:28 -0400
+Received: by mail-wr1-f66.google.com with SMTP id 31so84176788wrm.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 05 Aug 2019 05:03:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qvG85uu+23wc3aOz56jKz9zl98RKrlFXnI9v0RdgYHY=;
-        b=gn0LHf8ENoBGwjVAUPWk1trAn5THo247jg8e6zjlOG+W0AiNseHCflLSx/XH7Kcfy9
-         2wSOMmbwOPfMbBjkX6M2RQupJ/NbQ7i1OeZV4x0b7UaMTogOPcjGAh2WD4/Wzn3oFz+S
-         s68do0KW/i5W4PVQKdwoTVYuoajMggDI1ujveZBBQeM1XkbfxbcpVORGDNzhN6D90l0s
-         nchBa36BsovaPAw4h8M0gY9GSFJmJ6RPIM5M8O2TBp8svyqdG+/Z77FGfO1gxNobnwjE
-         Hl6bo1835l7C2TEp1ARt072yPf+OHySWwJSl6kUR7uAp3M2jEwLs21KSIEzQgcwZEeFx
-         EIwg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=25vkHl8TD36SDkWAHJSebVeUcYzajPzPyvWuGyvsAhE=;
+        b=YsSmtNhPFyHUW78r8S8MLbZSVSttppTiKSHIpoTXSYeR5QcxdpBE3Ufjq7uEYjXEgI
+         dmPita3jsLeyX+7v624q99DrW+MmNpmWYsEAhy89ozWnEx7jAS7THW7DoJIvKpHLU4Nz
+         9aFASsRrlhEZoc2qAjHVR99E+wveNzGFLrFxWo3EKEAk2bNQp8yreK7u4jhnjkQAuZfa
+         XWPp8sUcX0TsIg8hykvT+yfFktlIFBGwJluuut+8sWQHkWbrYWSxUl2wwgOseujOmnAW
+         4CqAO3UiS22yAK6aVqzOSY60m2gG31BbRwJ4Pq51qzxLNJAVlt43AJ2iVFH8qg/vO1PP
+         0Wmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qvG85uu+23wc3aOz56jKz9zl98RKrlFXnI9v0RdgYHY=;
-        b=a9ofa6SUMIzGDalkjlg0OlsIysE9PXCimOmhysTTLerDVu7zjwi5MGUXFcN9eQOgRi
-         cxt/i/YsncfvV1AvW2o46ZnLG5PI1ZltNSvudJpcvtr0YkSDjTpnj1GXb44G0/QmqdbV
-         /9uiUfdcRR0GtY6ZtvyjIN4gq9QwhLFx/TbpB1f9QKDvsK+TPBTuIIu7+yNgQeNGI93x
-         wr11nF8Ib1P7GT48J95gIFB4J82l7pP/sGwmkmNnj4wzh6N+hayrHzFirk3HwYUJHYdV
-         856y40BhGfQC+2FkQmPseCoT0OHgvciJE780+x34A7F518b7d2glEQ6JmBSj5LogslmO
-         cSIA==
-X-Gm-Message-State: APjAAAU+hScRrzarIeJUf/SSovJFMDzQ1plPvFPz9FbUyfnA+w+gBkbS
-        u1ppmUIArLu9Omo2WTOWAr/rCXh8rHFUUXHAvjpcOQ==
-X-Google-Smtp-Source: APXvYqyHiFzcWgwMSYIdyYbnaCWSjRwGweIT3RKPv1xwORdpLKUPWaLHXzDYxYbuZLEk4t8xeoYAy31E8HbSzjuIfD4=
-X-Received: by 2002:a9d:2969:: with SMTP id d96mr115002880otb.85.1564993679131;
- Mon, 05 Aug 2019 01:27:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=25vkHl8TD36SDkWAHJSebVeUcYzajPzPyvWuGyvsAhE=;
+        b=UsdZGVxCLTHClhhLcpjGNrBRXsQHUR1wsUz6AnmlSX93pb5qs7UbKJXsn86s2gLbed
+         nWmAzLx2gd9herKTOVfE6eUQ5147t6QLnzYUNnmrh5uvA4M4nSU9TYWSdNnIdQ5H8YZr
+         YOT4WOKPZreqShpKML3Rtf7oo7k98qj3G8kCz6WSiPIyBeXLJJgGrUlw6ArIfBdH1J49
+         MICH+uPwMvpqLQuinJCSr/kHRWh9GaDgeuMMjaQuSstPBy7poHYSpyZum0aiOksdiXPY
+         HQr2NFgQ4DTxe8g+q6T0xRYv5R2spppvBKiBv5B9oWNrYyM002ZJr4fjFZNFWWTOziKO
+         eDwQ==
+X-Gm-Message-State: APjAAAVR4BIcjQTCNjrMehKRelxFhXfpXLHbyPmzpA5Oz7ppK8Jj+YZi
+        S7dj6nVn7p27TO2Zh7LV2n/LsA==
+X-Google-Smtp-Source: APXvYqzWNv12kSRQOLPMH0DQ/Rtt60lADy18oRMLOjwk/7REfS0XxZobWQLA74rD/m007PEBCxIPPQ==
+X-Received: by 2002:a05:6000:1148:: with SMTP id d8mr4777553wrx.354.1565006605620;
+        Mon, 05 Aug 2019 05:03:25 -0700 (PDT)
+Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id x6sm88683668wrt.63.2019.08.05.05.03.24
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 05 Aug 2019 05:03:25 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     robh+dt@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        jassisinghbrar@gmail.com, kishon@ti.com, p.zabel@pengutronix.de
+Subject: [RFCv2 0/9] dt-bindings: first tentative of conversion to yaml format
+Date:   Mon,  5 Aug 2019 14:03:11 +0200
+Message-Id: <20190805120320.32282-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-6-arnd@arndb.de>
- <CAMpxmJWFfT_vrDas2fzW5tnxskk9kmgHQpGnGQ-_C20UaS_jhA@mail.gmail.com> <CAK8P3a3KpKvRKXY72toE_5eAp4ER_Mre0GX3guwGeQgsY2HX+g@mail.gmail.com>
-In-Reply-To: <CAK8P3a3KpKvRKXY72toE_5eAp4ER_Mre0GX3guwGeQgsY2HX+g@mail.gmail.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Mon, 5 Aug 2019 10:27:48 +0200
-Message-ID: <CAMpxmJUdSnp0QNwWB0rJ1opFrYs9R2KSVS64Tz8X5GDYAJYLpg@mail.gmail.com>
-Subject: Re: [PATCH 05/14] gpio: lpc32xx: allow building on non-lpc32xx targets
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     soc@kernel.org, arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-serial@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-pt., 2 sie 2019 o 13:20 Arnd Bergmann <arnd@arndb.de> napisa=C5=82(a):
->
-> On Fri, Aug 2, 2019 at 9:10 AM Bartosz Golaszewski
-> <bgolaszewski@baylibre.com> wrote:
-> > > -#include <mach/hardware.h>
-> > > -#include <mach/platform.h>
-> > > +#define _GPREG(x)                              (x)
-> >
-> > What purpose does this macro serve?
-> >
-> > >
-> > >  #define LPC32XX_GPIO_P3_INP_STATE              _GPREG(0x000)
-> > >  #define LPC32XX_GPIO_P3_OUTP_SET               _GPREG(0x004)
->
-> In the existing code base, this macro converts a register offset to
-> an __iomem pointer for a gpio register. I changed the definition of the
-> macro here to keep the number of changes down, but I it's just
-> as easy to remove it if you prefer.
+This is a first tentative to convert some of the simplest Amlogic
+dt-bindings to the yaml format.
 
-Could you just add a comment so that it's clear at first glance?
+All have been tested using :
+$ make ARCH=arm64 dtbs_check
 
->
-> > > @@ -167,14 +166,26 @@ struct lpc32xx_gpio_chip {
-> > >         struct gpio_regs        *gpio_grp;
-> > >  };
-> > >
-> > > +void __iomem *gpio_reg_base;
-> >
-> > Any reason why this can't be made part of struct lpc32xx_gpio_chip?
->
-> It could be, but it's the same for each instance, and not known until
-> probe() time, so the same pointer would need to be copied into each
-> instance that is otherwise read-only.
->
-> Let me know if you'd prefer me to rework these two things or leave
-> them as they are.
+Issues with the amlogic arm64 DTs has already been identified thanks
+to the validation scripts. The DT fixes will be pushed once these yaml
+bindings are acked.
 
-I would prefer not to have global state in the driver, let's just
-store the pointer in the data passed to gpiochip_add_data().
+Changes since rfc v1:
+- Fixed bindings according to Rob's comments
+- Added commit log
+- renamed yaml files using amlogic prefix
 
-Bart
+Neil Armstrong (9):
+  dt-bindings: mailbox: meson-mhu: convert to yaml
+  dt-bindings: rng: amlogic,meson-rng: convert to yaml
+  dt-bindings: spi: meson: convert to yaml
+  dt-bindings: reset: amlogic,meson-reset: convert to yaml
+  dt-bindings: arm: amlogic: amlogic,meson-gx-ao-secure: convert to yaml
+  dt-bindings: phy: meson-g12a-usb2-phy: convert to yaml
+  dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml
+  dt-bindings: serial: meson-uart: convert to yaml
+  dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
 
->
-> > > +static inline u32 gpreg_read(unsigned long offset)
-> >
-> > Here and elsewhere: could you please keep the lpc32xx_gpio prefix for
-> > all symbols?
->
-> Sure.
->
->       Arnd
+ .../amlogic/amlogic,meson-gx-ao-secure.txt    | 28 -------
+ .../amlogic/amlogic,meson-gx-ao-secure.yaml   | 52 +++++++++++++
+ .../mailbox/amlogic,meson-gxbb-mhu.yaml       | 53 ++++++++++++++
+ .../devicetree/bindings/mailbox/meson-mhu.txt | 34 ---------
+ .../phy/amlogic,meson-g12a-usb2-phy.yaml      | 63 ++++++++++++++++
+ .../phy/amlogic,meson-g12a-usb3-pcie-phy.yaml | 57 +++++++++++++++
+ .../bindings/phy/meson-g12a-usb2-phy.txt      | 22 ------
+ .../bindings/phy/meson-g12a-usb3-pcie-phy.txt | 22 ------
+ .../bindings/reset/amlogic,meson-reset.txt    | 19 -----
+ .../bindings/reset/amlogic,meson-reset.yaml   | 37 ++++++++++
+ .../bindings/rng/amlogic,meson-rng.txt        | 21 ------
+ .../bindings/rng/amlogic,meson-rng.yaml       | 37 ++++++++++
+ .../bindings/serial/amlogic,meson-uart.txt    | 38 ----------
+ .../bindings/serial/amlogic,meson-uart.yaml   | 73 +++++++++++++++++++
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 67 +++++++++++++++++
+ .../bindings/spi/amlogic,meson6-spifc.yaml    | 53 ++++++++++++++
+ .../devicetree/bindings/spi/spi-meson.txt     | 55 --------------
+ .../watchdog/amlogic,meson-gxbb-wdt.yaml      | 37 ++++++++++
+ .../bindings/watchdog/meson-gxbb-wdt.txt      | 16 ----
+ 19 files changed, 529 insertions(+), 255 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+ create mode 100644 Documentation/devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mailbox/meson-mhu.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb3-pcie-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
+ delete mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.txt
+ create mode 100644 Documentation/devicetree/bindings/rng/amlogic,meson-rng.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson6-spifc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-meson.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
+
+-- 
+2.22.0
+
