@@ -2,19 +2,19 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A04DD88408
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Aug 2019 22:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D756883E9
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Aug 2019 22:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728312AbfHIU25 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 9 Aug 2019 16:28:57 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:40777 "EHLO
+        id S1728680AbfHIU3F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 9 Aug 2019 16:29:05 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:56971 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726557AbfHIU24 (ORCPT
+        with ESMTP id S1728556AbfHIU3E (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 9 Aug 2019 16:28:56 -0400
+        Fri, 9 Aug 2019 16:29:04 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue009 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MiJhW-1iZ4UU3SoY-00fOaA; Fri, 09 Aug 2019 22:28:28 +0200
+ 1M26iv-1htiWo404n-002Ur7; Fri, 09 Aug 2019 22:28:36 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     soc@kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -23,272 +23,261 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Jonathan Corbet <corbet@lwn.net>,
         linux-watchdog@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 04/16] watchdog: remove ks8695 driver
-Date:   Fri,  9 Aug 2019 22:27:32 +0200
-Message-Id: <20190809202749.742267-5-arnd@arndb.de>
+Subject: [PATCH 06/16] watchdog: remove w90x900 driver
+Date:   Fri,  9 Aug 2019 22:27:34 +0200
+Message-Id: <20190809202749.742267-7-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
 In-Reply-To: <20190809202749.742267-1-arnd@arndb.de>
 References: <20190809202749.742267-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:/xUJ0urBROFGs9psZRmzii/x6kcPUzVYJxl3kP276+fX5WTKDQJ
- AEr5kjNrQllMr6Z7NrWzUAosq4zoo17U5hXEHU1wpbNBF/FzqZG5NpMpn5LmfTvS/oHwrSC
- SPivcPSIrBUD3Wt8JtE7FjLsqknJiLKaxARHJY18MFfhys5Pi20FKvPXIZaoXZvjWMEWqsn
- y86kNTdsiTwj2mtVjJDZw==
+X-Provags-ID: V03:K1:4aZZJ0adOC4gNbJNr72QyItZi8IyivyiRyv6tRpgrjVP+CGv1cv
+ 2uO0jATNpCZk/ogPQlZbBKnYr7D679/NRP4wiAo9nJm0x+zBB9ZkQLJxTFOurIoJW5a0MIS
+ 1bCLvs+82yAUazyFXUIpU1JraDmICYVRBTLPZ4XUa9MJlL+plsL1ZJdU35WHbBHKKLouJg+
+ c/buwbH2Oi1MOTjKiLOWQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5F3GSB/6Nc0=:0OfCFRE5YMaF7NC0TBIXLU
- yk6ETYg8YqB8FGy11h7Y7L//B6f4+goRdrik/F0V+bk2DatX85QQd1DlyqCc96+UiFGNwBS09
- Qv7z6vjR890ibcchOcnmadBVZwSeVZZecL1nP/dE2FKDZyzUnngL0NFlMS+70zsMTqejaGjXI
- ob413DTJ7ukWeWZoRr9XQm4BpR0Z5okW6FQTFQYFnIDBeUoGV9olG6F67BZJc1er/W0GThp8e
- XXcBv+2HMkW40pV9DNFpARsx/Hkd+2g6rJ1WRiEpPfssyi/QQGZRt/yYPaqjWbv4brrZricO6
- LmPEXGI/nZQ8ZBfoWM0y74zwS76J42av57ifvnBX047rWSB66X+a1NRNKhS8S1m+HFiZU6Ipj
- XxxbRiv1mf5oyRPGuybzhvh5ZLYZIUbC33ryujyvR2dpz5GGdPIRbaS+K4CDGhmzGfkbmbWJw
- zXO1836RFCCdJnYKli0kYcVkQ6W+5gg3jmihOj0GINi46YolfvGpxjEoTFfGAFMrKFRzg2/Bt
- 2C7SB49uCVUFbPjRiFfWM31aJDzk/xqYJ7ggWMhMtL7JQ+MVLkBKssvFPynYos9VEeWdV5hhA
- ofdgyBI6o2R8VV6BBdJU869DdteYXhWNJx6xtRuhs2IljiuS2jJv0b3y4Sp21qR55wqH7PsIJ
- cYiASF9Jr6JhBiZ1SPtml20vBsMSx2jWu0hvpDRvxA7eobSIDfE2GoB/WCkkwHVzD5bl+WbCf
- QxWYyqW/tuMzAmZTlvB6KDUvTckS6Ma3M+KXOg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TIiZUlyO4KI=:xMX0wJO46U8BafJBRrX1L/
+ euv754YHVVFavyBFIjjId75wTHZUlzd/xcQYQCKFrHI8HwI2Nk+1VpMHwpiidDMsbIuqGFsms
+ Gbe1hSoKiA+0Fo3+LncljjMgrxOBRV0Ee9XIuaCTs62/o6RlJ2r/RyukzmfwnLGrpzHMBL4vu
+ VeyCLPVbYwashUqOhk1KawscikvyHW8z8cDuNgejY9/grpcG/VxVeYWrAnWIu/cOUK8WP+TvN
+ mkwLcp39r8KWQei7FGv6LUGupcRhy0wqdGcwZLCkr9TnjjjeX5h9gOCGjIDnmS3mRxOW9l5cS
+ IypKV4hU+8kRNEJhrtPR3yZCJPBxFUeFRP6sn7X2AtR7mPzdHCkxMSd2q3+4vWMxyUGUdB2W7
+ Q7Sn6zljTYK/7tzoy7oAl4fa558Fjhk0ZRfv+jNscYRLNCsLcc14msVQGzn53FPDAFx8mKaqH
+ YC3vCTFUL1Dj+2kIyVDVVqUHGIdUZGmhhrFJrBJRZ3oGRqfj4PUS/JJCvwMUMaDMgM7PKwT7V
+ oU+m1EgG+kwXLGu4GzIfFNa0C01nVGxrN9WJx40RCLHPF0GZwgXzVzXKSDpxMLlLdz6jRl31b
+ fZoU/APAHpv8T1/y82xau+xvtPQNqA7P4jajDxMjm2/tsaER8yUbmKsje0gdPhyawgStqSDI/
+ 0jiCJt/8db5+bQywyof9SDTRsioCZS92yVX+G0YSm6PgBS17tYHVQdCsiS8IluwcvvKmUal23
+ 8X9iTCz5GpwIeTKgwkAe5yGk86NM1D2m4HCn8g==
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The platform is getting removed, so there are no remaining
-users of this driver.
+The ARM w90x900 platform is getting removed, so this driver is obsolete
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- .../watchdog/watchdog-parameters.rst          |   9 -
- drivers/watchdog/Kconfig                      |   7 -
+ .../watchdog/watchdog-parameters.rst          |  10 -
+ drivers/watchdog/Kconfig                      |   9 -
  drivers/watchdog/Makefile                     |   1 -
- drivers/watchdog/ks8695_wdt.c                 | 319 ------------------
- 4 files changed, 336 deletions(-)
- delete mode 100644 drivers/watchdog/ks8695_wdt.c
+ drivers/watchdog/nuc900_wdt.c                 | 302 ------------------
+ 4 files changed, 322 deletions(-)
+ delete mode 100644 drivers/watchdog/nuc900_wdt.c
 
 diff --git a/Documentation/watchdog/watchdog-parameters.rst b/Documentation/watchdog/watchdog-parameters.rst
-index a3985cc5aeda..226aba56f704 100644
+index 226aba56f704..223c99361a30 100644
 --- a/Documentation/watchdog/watchdog-parameters.rst
 +++ b/Documentation/watchdog/watchdog-parameters.rst
-@@ -301,15 +301,6 @@ ixp4xx_wdt:
+@@ -366,16 +366,6 @@ nic7018_wdt:
  
  -------------------------------------------------
  
--ks8695_wdt:
--    wdt_time:
--	Watchdog time in seconds. (default=5)
+-nuc900_wdt:
+-    heartbeat:
+-	Watchdog heartbeats in seconds.
+-	(default = 15)
 -    nowayout:
 -	Watchdog cannot be stopped once started
 -	(default=kernel config parameter)
 -
 --------------------------------------------------
 -
- machzwd:
-     nowayout:
- 	Watchdog cannot be stopped once started
+ omap_wdt:
+     timer_margin:
+ 	initial watchdog timeout (in seconds)
 diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 8188963a405b..e631f1ae303a 100644
+index e631f1ae303a..0e64f501ef30 100644
 --- a/drivers/watchdog/Kconfig
 +++ b/drivers/watchdog/Kconfig
-@@ -477,13 +477,6 @@ config IXP4XX_WATCHDOG
+@@ -655,15 +655,6 @@ config STMP3XXX_RTC_WATCHDOG
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called stmp3xxx_rtc_wdt.
  
- 	  Say N if you are unsure.
- 
--config KS8695_WATCHDOG
--	tristate "KS8695 watchdog"
--	depends on ARCH_KS8695
+-config NUC900_WATCHDOG
+-	tristate "Nuvoton NUC900 watchdog"
+-	depends on ARCH_W90X900 || COMPILE_TEST
 -	help
--	  Watchdog timer embedded into KS8695 processor. This will reboot your
--	  system when the timeout is reached.
+-	  Say Y here if to include support for the watchdog timer
+-	  for the Nuvoton NUC900 series SoCs.
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called nuc900_wdt.
 -
- config HAVE_S3C2410_WATCHDOG
- 	bool
- 	help
+ config TS4800_WATCHDOG
+ 	tristate "TS-4800 Watchdog"
+ 	depends on HAS_IOMEM && OF
 diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 7caa920e7e60..85f55ec76f8d 100644
+index 85f55ec76f8d..b5a0aed537af 100644
 --- a/drivers/watchdog/Makefile
 +++ b/drivers/watchdog/Makefile
-@@ -49,7 +49,6 @@ obj-$(CONFIG_21285_WATCHDOG) += wdt285.o
- obj-$(CONFIG_977_WATCHDOG) += wdt977.o
- obj-$(CONFIG_FTWDT010_WATCHDOG) += ftwdt010_wdt.o
- obj-$(CONFIG_IXP4XX_WATCHDOG) += ixp4xx_wdt.o
--obj-$(CONFIG_KS8695_WATCHDOG) += ks8695_wdt.o
- obj-$(CONFIG_S3C2410_WATCHDOG) += s3c2410_wdt.o
- obj-$(CONFIG_SA1100_WATCHDOG) += sa1100_wdt.o
- obj-$(CONFIG_SAMA5D4_WATCHDOG) += sama5d4_wdt.o
-diff --git a/drivers/watchdog/ks8695_wdt.c b/drivers/watchdog/ks8695_wdt.c
+@@ -63,7 +63,6 @@ obj-$(CONFIG_RN5T618_WATCHDOG) += rn5t618_wdt.o
+ obj-$(CONFIG_COH901327_WATCHDOG) += coh901327_wdt.o
+ obj-$(CONFIG_NPCM7XX_WATCHDOG) += npcm_wdt.o
+ obj-$(CONFIG_STMP3XXX_RTC_WATCHDOG) += stmp3xxx_rtc_wdt.o
+-obj-$(CONFIG_NUC900_WATCHDOG) += nuc900_wdt.o
+ obj-$(CONFIG_TS4800_WATCHDOG) += ts4800_wdt.o
+ obj-$(CONFIG_TS72XX_WATCHDOG) += ts72xx_wdt.o
+ obj-$(CONFIG_IMX2_WDT) += imx2_wdt.o
+diff --git a/drivers/watchdog/nuc900_wdt.c b/drivers/watchdog/nuc900_wdt.c
 deleted file mode 100644
-index 1550ce3c5702..000000000000
---- a/drivers/watchdog/ks8695_wdt.c
+index db124cebe838..000000000000
+--- a/drivers/watchdog/nuc900_wdt.c
 +++ /dev/null
-@@ -1,319 +0,0 @@
+@@ -1,302 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-only
 -/*
-- * Watchdog driver for Kendin/Micrel KS8695.
+- * Copyright (c) 2009 Nuvoton technology corporation.
 - *
-- * (C) 2007 Andrew Victor
+- * Wan ZongShun <mcuos.com@gmail.com>
 - */
--
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 -
 -#include <linux/bitops.h>
 -#include <linux/errno.h>
 -#include <linux/fs.h>
--#include <linux/init.h>
+-#include <linux/io.h>
+-#include <linux/clk.h>
 -#include <linux/kernel.h>
 -#include <linux/miscdevice.h>
 -#include <linux/module.h>
 -#include <linux/moduleparam.h>
 -#include <linux/platform_device.h>
+-#include <linux/slab.h>
+-#include <linux/interrupt.h>
 -#include <linux/types.h>
 -#include <linux/watchdog.h>
--#include <linux/io.h>
 -#include <linux/uaccess.h>
--#include <mach/hardware.h>
 -
--#define KS8695_TMR_OFFSET	(0xF0000 + 0xE400)
--#define KS8695_TMR_VA		(KS8695_IO_VA + KS8695_TMR_OFFSET)
--
+-#define REG_WTCR		0x1c
+-#define WTCLK			(0x01 << 10)
+-#define WTE			(0x01 << 7)	/*wdt enable*/
+-#define WTIS			(0x03 << 4)
+-#define WTIF			(0x01 << 3)
+-#define WTRF			(0x01 << 2)
+-#define WTRE			(0x01 << 1)
+-#define WTR			(0x01 << 0)
 -/*
-- * Timer registers
+- * The watchdog time interval can be calculated via following formula:
+- * WTIS		real time interval (formula)
+- * 0x00		((2^ 14 ) * ((external crystal freq) / 256))seconds
+- * 0x01		((2^ 16 ) * ((external crystal freq) / 256))seconds
+- * 0x02		((2^ 18 ) * ((external crystal freq) / 256))seconds
+- * 0x03		((2^ 20 ) * ((external crystal freq) / 256))seconds
+- *
+- * The external crystal freq is 15Mhz in the nuc900 evaluation board.
+- * So 0x00 = +-0.28 seconds, 0x01 = +-1.12 seconds, 0x02 = +-4.48 seconds,
+- * 0x03 = +- 16.92 seconds..
 - */
--#define KS8695_TMCON		(0x00)		/* Timer Control Register */
--#define KS8695_T0TC		(0x08)		/* Timer 0 Timeout Count Register */
--#define TMCON_T0EN		(1 << 0)	/* Timer 0 Enable */
+-#define WDT_HW_TIMEOUT		0x02
+-#define WDT_TIMEOUT		(HZ/2)
+-#define WDT_HEARTBEAT		15
 -
--/* Timer0 Timeout Counter Register */
--#define T0TC_WATCHDOG		(0xff)		/* Enable watchdog mode */
+-static int heartbeat = WDT_HEARTBEAT;
+-module_param(heartbeat, int, 0);
+-MODULE_PARM_DESC(heartbeat, "Watchdog heartbeats in seconds. "
+-	"(default = " __MODULE_STRING(WDT_HEARTBEAT) ")");
 -
--#define WDT_DEFAULT_TIME	5	/* seconds */
--#define WDT_MAX_TIME		171	/* seconds */
--
--static int wdt_time = WDT_DEFAULT_TIME;
 -static bool nowayout = WATCHDOG_NOWAYOUT;
--
--module_param(wdt_time, int, 0);
--MODULE_PARM_DESC(wdt_time, "Watchdog time in seconds. (default="
--					__MODULE_STRING(WDT_DEFAULT_TIME) ")");
--
--#ifdef CONFIG_WATCHDOG_NOWAYOUT
 -module_param(nowayout, bool, 0);
--MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
--				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
--#endif
+-MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started "
+-	"(default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 -
+-struct nuc900_wdt {
+-	struct clk	 *wdt_clock;
+-	struct platform_device *pdev;
+-	void __iomem	 *wdt_base;
+-	char		 expect_close;
+-	struct timer_list timer;
+-	spinlock_t       wdt_lock;
+-	unsigned long next_heartbeat;
+-};
 -
--static unsigned long ks8695wdt_busy;
--static DEFINE_SPINLOCK(ks8695_lock);
+-static unsigned long nuc900wdt_busy;
+-static struct nuc900_wdt *nuc900_wdt;
 -
--/* ......................................................................... */
--
--/*
-- * Disable the watchdog.
-- */
--static inline void ks8695_wdt_stop(void)
+-static inline void nuc900_wdt_keepalive(void)
 -{
--	unsigned long tmcon;
+-	unsigned int val;
 -
--	spin_lock(&ks8695_lock);
--	/* disable timer0 */
--	tmcon = __raw_readl(KS8695_TMR_VA + KS8695_TMCON);
--	__raw_writel(tmcon & ~TMCON_T0EN, KS8695_TMR_VA + KS8695_TMCON);
--	spin_unlock(&ks8695_lock);
+-	spin_lock(&nuc900_wdt->wdt_lock);
+-
+-	val = __raw_readl(nuc900_wdt->wdt_base + REG_WTCR);
+-	val |= (WTR | WTIF);
+-	__raw_writel(val, nuc900_wdt->wdt_base + REG_WTCR);
+-
+-	spin_unlock(&nuc900_wdt->wdt_lock);
 -}
 -
--/*
-- * Enable and reset the watchdog.
-- */
--static inline void ks8695_wdt_start(void)
+-static inline void nuc900_wdt_start(void)
 -{
--	unsigned long tmcon;
--	unsigned long tval = wdt_time * KS8695_CLOCK_RATE;
+-	unsigned int val;
 -
--	spin_lock(&ks8695_lock);
--	/* disable timer0 */
--	tmcon = __raw_readl(KS8695_TMR_VA + KS8695_TMCON);
--	__raw_writel(tmcon & ~TMCON_T0EN, KS8695_TMR_VA + KS8695_TMCON);
+-	spin_lock(&nuc900_wdt->wdt_lock);
 -
--	/* program timer0 */
--	__raw_writel(tval | T0TC_WATCHDOG, KS8695_TMR_VA + KS8695_T0TC);
+-	val = __raw_readl(nuc900_wdt->wdt_base + REG_WTCR);
+-	val |= (WTRE | WTE | WTR | WTCLK | WTIF);
+-	val &= ~WTIS;
+-	val |= (WDT_HW_TIMEOUT << 0x04);
+-	__raw_writel(val, nuc900_wdt->wdt_base + REG_WTCR);
 -
--	/* re-enable timer0 */
--	tmcon = __raw_readl(KS8695_TMR_VA + KS8695_TMCON);
--	__raw_writel(tmcon | TMCON_T0EN, KS8695_TMR_VA + KS8695_TMCON);
--	spin_unlock(&ks8695_lock);
+-	spin_unlock(&nuc900_wdt->wdt_lock);
+-
+-	nuc900_wdt->next_heartbeat = jiffies + heartbeat * HZ;
+-	mod_timer(&nuc900_wdt->timer, jiffies + WDT_TIMEOUT);
 -}
 -
--/*
-- * Reload the watchdog timer.  (ie, pat the watchdog)
-- */
--static inline void ks8695_wdt_reload(void)
+-static inline void nuc900_wdt_stop(void)
 -{
--	unsigned long tmcon;
+-	unsigned int val;
 -
--	spin_lock(&ks8695_lock);
--	/* disable, then re-enable timer0 */
--	tmcon = __raw_readl(KS8695_TMR_VA + KS8695_TMCON);
--	__raw_writel(tmcon & ~TMCON_T0EN, KS8695_TMR_VA + KS8695_TMCON);
--	__raw_writel(tmcon | TMCON_T0EN, KS8695_TMR_VA + KS8695_TMCON);
--	spin_unlock(&ks8695_lock);
+-	del_timer(&nuc900_wdt->timer);
+-
+-	spin_lock(&nuc900_wdt->wdt_lock);
+-
+-	val = __raw_readl(nuc900_wdt->wdt_base + REG_WTCR);
+-	val &= ~WTE;
+-	__raw_writel(val, nuc900_wdt->wdt_base + REG_WTCR);
+-
+-	spin_unlock(&nuc900_wdt->wdt_lock);
 -}
 -
--/*
-- * Change the watchdog time interval.
-- */
--static int ks8695_wdt_settimeout(int new_time)
+-static inline void nuc900_wdt_ping(void)
 -{
--	/*
--	 * All counting occurs at KS8695_CLOCK_RATE / 128 = 0.256 Hz
--	 *
--	 * Since WDV is a 16-bit counter, the maximum period is
--	 * 65536 / 0.256 = 256 seconds.
--	 */
--	if ((new_time <= 0) || (new_time > WDT_MAX_TIME))
--		return -EINVAL;
--
--	/* Set new watchdog time. It will be used when
--	   ks8695_wdt_start() is called. */
--	wdt_time = new_time;
--	return 0;
+-	nuc900_wdt->next_heartbeat = jiffies + heartbeat * HZ;
 -}
 -
--/* ......................................................................... */
--
--/*
-- * Watchdog device is opened, and watchdog starts running.
-- */
--static int ks8695_wdt_open(struct inode *inode, struct file *file)
+-static int nuc900_wdt_open(struct inode *inode, struct file *file)
 -{
--	if (test_and_set_bit(0, &ks8695wdt_busy))
+-
+-	if (test_and_set_bit(0, &nuc900wdt_busy))
 -		return -EBUSY;
 -
--	ks8695_wdt_start();
+-	nuc900_wdt_start();
+-
 -	return stream_open(inode, file);
 -}
 -
--/*
-- * Close the watchdog device.
-- * If CONFIG_WATCHDOG_NOWAYOUT is NOT defined then the watchdog is also
-- *  disabled.
-- */
--static int ks8695_wdt_close(struct inode *inode, struct file *file)
+-static int nuc900_wdt_close(struct inode *inode, struct file *file)
 -{
--	/* Disable the watchdog when file is closed */
--	if (!nowayout)
--		ks8695_wdt_stop();
--	clear_bit(0, &ks8695wdt_busy);
+-	if (nuc900_wdt->expect_close == 42)
+-		nuc900_wdt_stop();
+-	else {
+-		dev_crit(&nuc900_wdt->pdev->dev,
+-			"Unexpected close, not stopping watchdog!\n");
+-		nuc900_wdt_ping();
+-	}
+-
+-	nuc900_wdt->expect_close = 0;
+-	clear_bit(0, &nuc900wdt_busy);
 -	return 0;
 -}
 -
--static const struct watchdog_info ks8695_wdt_info = {
--	.identity	= "ks8695 watchdog",
--	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
+-static const struct watchdog_info nuc900_wdt_info = {
+-	.identity	= "nuc900 watchdog",
+-	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
+-						WDIOF_MAGICCLOSE,
 -};
 -
--/*
-- * Handle commands from user-space.
-- */
--static long ks8695_wdt_ioctl(struct file *file, unsigned int cmd,
--							unsigned long arg)
+-static long nuc900_wdt_ioctl(struct file *file,
+-					unsigned int cmd, unsigned long arg)
 -{
 -	void __user *argp = (void __user *)arg;
 -	int __user *p = argp;
@@ -296,150 +285,146 @@ index 1550ce3c5702..000000000000
 -
 -	switch (cmd) {
 -	case WDIOC_GETSUPPORT:
--		return copy_to_user(argp, &ks8695_wdt_info,
--					sizeof(ks8695_wdt_info)) ? -EFAULT : 0;
+-		return copy_to_user(argp, &nuc900_wdt_info,
+-				sizeof(nuc900_wdt_info)) ? -EFAULT : 0;
 -	case WDIOC_GETSTATUS:
 -	case WDIOC_GETBOOTSTATUS:
 -		return put_user(0, p);
--	case WDIOC_SETOPTIONS:
--		if (get_user(new_value, p))
--			return -EFAULT;
--		if (new_value & WDIOS_DISABLECARD)
--			ks8695_wdt_stop();
--		if (new_value & WDIOS_ENABLECARD)
--			ks8695_wdt_start();
--		return 0;
+-
 -	case WDIOC_KEEPALIVE:
--		ks8695_wdt_reload();	/* pat the watchdog */
+-		nuc900_wdt_ping();
 -		return 0;
+-
 -	case WDIOC_SETTIMEOUT:
 -		if (get_user(new_value, p))
 -			return -EFAULT;
--		if (ks8695_wdt_settimeout(new_value))
--			return -EINVAL;
--		/* Enable new time value */
--		ks8695_wdt_start();
--		/* Return current value */
--		return put_user(wdt_time, p);
+-
+-		heartbeat = new_value;
+-		nuc900_wdt_ping();
+-
+-		return put_user(new_value, p);
 -	case WDIOC_GETTIMEOUT:
--		return put_user(wdt_time, p);
+-		return put_user(heartbeat, p);
 -	default:
 -		return -ENOTTY;
 -	}
 -}
 -
--/*
-- * Pat the watchdog whenever device is written to.
-- */
--static ssize_t ks8695_wdt_write(struct file *file, const char *data,
+-static ssize_t nuc900_wdt_write(struct file *file, const char __user *data,
 -						size_t len, loff_t *ppos)
 -{
--	ks8695_wdt_reload();		/* pat the watchdog */
+-	if (!len)
+-		return 0;
+-
+-	/* Scan for magic character */
+-	if (!nowayout) {
+-		size_t i;
+-
+-		nuc900_wdt->expect_close = 0;
+-
+-		for (i = 0; i < len; i++) {
+-			char c;
+-			if (get_user(c, data + i))
+-				return -EFAULT;
+-			if (c == 'V') {
+-				nuc900_wdt->expect_close = 42;
+-				break;
+-			}
+-		}
+-	}
+-
+-	nuc900_wdt_ping();
 -	return len;
 -}
 -
--/* ......................................................................... */
+-static void nuc900_wdt_timer_ping(struct timer_list *unused)
+-{
+-	if (time_before(jiffies, nuc900_wdt->next_heartbeat)) {
+-		nuc900_wdt_keepalive();
+-		mod_timer(&nuc900_wdt->timer, jiffies + WDT_TIMEOUT);
+-	} else
+-		dev_warn(&nuc900_wdt->pdev->dev, "Will reset the machine !\n");
+-}
 -
--static const struct file_operations ks8695wdt_fops = {
+-static const struct file_operations nuc900wdt_fops = {
 -	.owner		= THIS_MODULE,
 -	.llseek		= no_llseek,
--	.unlocked_ioctl	= ks8695_wdt_ioctl,
--	.open		= ks8695_wdt_open,
--	.release	= ks8695_wdt_close,
--	.write		= ks8695_wdt_write,
+-	.unlocked_ioctl	= nuc900_wdt_ioctl,
+-	.open		= nuc900_wdt_open,
+-	.release	= nuc900_wdt_close,
+-	.write		= nuc900_wdt_write,
 -};
 -
--static struct miscdevice ks8695wdt_miscdev = {
+-static struct miscdevice nuc900wdt_miscdev = {
 -	.minor		= WATCHDOG_MINOR,
 -	.name		= "watchdog",
--	.fops		= &ks8695wdt_fops,
+-	.fops		= &nuc900wdt_fops,
 -};
 -
--static int ks8695wdt_probe(struct platform_device *pdev)
+-static int nuc900wdt_probe(struct platform_device *pdev)
 -{
--	int res;
+-	int ret = 0;
 -
--	if (ks8695wdt_miscdev.parent)
--		return -EBUSY;
--	ks8695wdt_miscdev.parent = &pdev->dev;
+-	nuc900_wdt = devm_kzalloc(&pdev->dev, sizeof(*nuc900_wdt),
+-				GFP_KERNEL);
+-	if (!nuc900_wdt)
+-		return -ENOMEM;
 -
--	res = misc_register(&ks8695wdt_miscdev);
--	if (res)
--		return res;
+-	nuc900_wdt->pdev = pdev;
 -
--	pr_info("KS8695 Watchdog Timer enabled (%d seconds%s)\n",
--		wdt_time, nowayout ? ", nowayout" : "");
+-	spin_lock_init(&nuc900_wdt->wdt_lock);
+-
+-	nuc900_wdt->wdt_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(nuc900_wdt->wdt_base))
+-		return PTR_ERR(nuc900_wdt->wdt_base);
+-
+-	nuc900_wdt->wdt_clock = devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(nuc900_wdt->wdt_clock)) {
+-		dev_err(&pdev->dev, "failed to find watchdog clock source\n");
+-		return PTR_ERR(nuc900_wdt->wdt_clock);
+-	}
+-
+-	clk_enable(nuc900_wdt->wdt_clock);
+-
+-	timer_setup(&nuc900_wdt->timer, nuc900_wdt_timer_ping, 0);
+-
+-	ret = misc_register(&nuc900wdt_miscdev);
+-	if (ret) {
+-		dev_err(&pdev->dev, "err register miscdev on minor=%d (%d)\n",
+-			WATCHDOG_MINOR, ret);
+-		goto err_clk;
+-	}
+-
+-	return 0;
+-
+-err_clk:
+-	clk_disable(nuc900_wdt->wdt_clock);
+-	return ret;
+-}
+-
+-static int nuc900wdt_remove(struct platform_device *pdev)
+-{
+-	misc_deregister(&nuc900wdt_miscdev);
+-
+-	clk_disable(nuc900_wdt->wdt_clock);
+-
 -	return 0;
 -}
 -
--static int ks8695wdt_remove(struct platform_device *pdev)
--{
--	misc_deregister(&ks8695wdt_miscdev);
--	ks8695wdt_miscdev.parent = NULL;
--
--	return 0;
--}
--
--static void ks8695wdt_shutdown(struct platform_device *pdev)
--{
--	ks8695_wdt_stop();
--}
--
--#ifdef CONFIG_PM
--
--static int ks8695wdt_suspend(struct platform_device *pdev, pm_message_t message)
--{
--	ks8695_wdt_stop();
--	return 0;
--}
--
--static int ks8695wdt_resume(struct platform_device *pdev)
--{
--	if (ks8695wdt_busy)
--		ks8695_wdt_start();
--	return 0;
--}
--
--#else
--#define ks8695wdt_suspend NULL
--#define ks8695wdt_resume	NULL
--#endif
--
--static struct platform_driver ks8695wdt_driver = {
--	.probe		= ks8695wdt_probe,
--	.remove		= ks8695wdt_remove,
--	.shutdown	= ks8695wdt_shutdown,
--	.suspend	= ks8695wdt_suspend,
--	.resume		= ks8695wdt_resume,
+-static struct platform_driver nuc900wdt_driver = {
+-	.probe		= nuc900wdt_probe,
+-	.remove		= nuc900wdt_remove,
 -	.driver		= {
--		.name	= "ks8695_wdt",
+-		.name	= "nuc900-wdt",
 -	},
 -};
 -
--static int __init ks8695_wdt_init(void)
--{
--	/* Check that the heartbeat value is within range;
--	   if not reset to the default */
--	if (ks8695_wdt_settimeout(wdt_time)) {
--		ks8695_wdt_settimeout(WDT_DEFAULT_TIME);
--		pr_info("ks8695_wdt: wdt_time value must be 1 <= wdt_time <= %i"
--					", using %d\n", wdt_time, WDT_MAX_TIME);
--	}
--	return platform_driver_register(&ks8695wdt_driver);
--}
+-module_platform_driver(nuc900wdt_driver);
 -
--static void __exit ks8695_wdt_exit(void)
--{
--	platform_driver_unregister(&ks8695wdt_driver);
--}
--
--module_init(ks8695_wdt_init);
--module_exit(ks8695_wdt_exit);
--
--MODULE_AUTHOR("Andrew Victor");
--MODULE_DESCRIPTION("Watchdog driver for KS8695");
+-MODULE_AUTHOR("Wan ZongShun <mcuos.com@gmail.com>");
+-MODULE_DESCRIPTION("Watchdog driver for NUC900");
 -MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:ks8695_wdt");
+-MODULE_ALIAS("platform:nuc900-wdt");
 -- 
 2.20.0
 
