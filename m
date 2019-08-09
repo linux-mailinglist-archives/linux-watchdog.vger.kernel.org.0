@@ -2,147 +2,80 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A725E85D58
-	for <lists+linux-watchdog@lfdr.de>; Thu,  8 Aug 2019 10:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EFC8732A
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Aug 2019 09:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731364AbfHHIvv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 8 Aug 2019 04:51:51 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35232 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731550AbfHHIvv (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 8 Aug 2019 04:51:51 -0400
-Received: by mail-wm1-f67.google.com with SMTP id l2so1588595wmg.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 08 Aug 2019 01:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=x4bXtEWTaRCFx8YfX85ELnedQT6Jwcsnd8GE4lw4kXo=;
-        b=085HPgPDQ0N5PTt53cQWFodc9dxIUFjGs+st4Q2qtb+nGm/5Af05U4Yx9B9cewCCud
-         JKPEk0gvFur0u7DpSraYsjcBaq3SbePLfLgomfjRuLEm0pias7afDstgDZGmcCaMljEP
-         yGhtdOBwlRAS6ll8OWzoWqBT1gq9DPC2f2uwtfzpJKehETZqBbtQwKdt2r8Rp8R3keCy
-         Am4fvyistL5qnOv8I6NlrMUq8i67kX74Dn2PhxXrmsEvDjO8i9IA9yI804ojl77jrkMp
-         QxZMQGJfcK0WMQYoZ3OgS1k45KWtMiFbnkWdJINPnhkSqFpw4nUTZNpUD6hluhZUEMCg
-         uLqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=x4bXtEWTaRCFx8YfX85ELnedQT6Jwcsnd8GE4lw4kXo=;
-        b=d/dfA3JrIbwuPKCzIn8FafnIyfIoHHfNsclqpWStsoVVSYP9f9z8GFBWrxm1z2G8dF
-         Q+G/3ob2X1UkI7jqvIGhDKceQI48B8/2X+JkMDhH6sfhtVvEjCZkp+tDIMdzfShsaztO
-         0ySqTwgbsmqIZXrT27INQUox1ZXpBU9EpFJ8e+wtnZvGkq+Eo283kfnizd0d5KECBKhA
-         7cJmUu31fC0uS4RAo+TO200/yyZI3aY6bjyW1KVXbJQVYEgyhhOQo59MXlbQsEx0UE3V
-         mgncTbIpfy31hYhyFK3ToJCoFMS00OG+KE/aMlfOWPEUQkEOMe84jKZ/lYVIy+ASemH/
-         bvBg==
-X-Gm-Message-State: APjAAAX4RfKnhlvkvrMHU0Uq1QpMVnGxJNTezeNGRKA3MoXv5UxqDApT
-        nMghd0lY+mkN+g02MKud5nyHEg==
-X-Google-Smtp-Source: APXvYqzAOom3OF14Yxh8TWXbG4DY8j5GejfsQ9NTKdZAyaXdE18kUaBOcC7YBG8YJKoUPv99y3WXfQ==
-X-Received: by 2002:a1c:7e85:: with SMTP id z127mr3125738wmc.95.1565254308991;
-        Thu, 08 Aug 2019 01:51:48 -0700 (PDT)
-Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id i66sm3360031wmi.11.2019.08.08.01.51.48
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 08 Aug 2019 01:51:48 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     robh+dt@kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 9/9] dt-bindings: watchdog: meson-gxbb-wdt: convert to yaml
-Date:   Thu,  8 Aug 2019 10:51:39 +0200
-Message-Id: <20190808085139.21438-10-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190808085139.21438-1-narmstrong@baylibre.com>
-References: <20190808085139.21438-1-narmstrong@baylibre.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2405711AbfHIHhJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 9 Aug 2019 03:37:09 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:59678 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405697AbfHIHhJ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 9 Aug 2019 03:37:09 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BAAB01A036E;
+        Fri,  9 Aug 2019 09:37:07 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7143D1A015F;
+        Fri,  9 Aug 2019 09:36:59 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 849E54030D;
+        Fri,  9 Aug 2019 15:36:49 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux@armlinux.org.uk,
+        otavio@ossystems.com.br, leonard.crestez@nxp.com,
+        schnitzeltony@gmail.com, u.kleine-koenig@pengutronix.de,
+        jan.tuerk@emtrion.com, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH 1/4] dt-bindings: watchdog: Add i.MX7ULP bindings
+Date:   Fri,  9 Aug 2019 15:13:59 +0800
+Message-Id: <1565334842-28161-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Now that we have the DT validation in place, let's convert the device tree
-bindings for the Amlogic GXBB Watchdog timer over to a YAML schemas.
+Add the watchdog bindings for Freescale i.MX7ULP.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 ---
- .../watchdog/amlogic,meson-gxbb-wdt.yaml      | 37 +++++++++++++++++++
- .../bindings/watchdog/meson-gxbb-wdt.txt      | 16 --------
- 2 files changed, 37 insertions(+), 16 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
+ .../bindings/watchdog/fsl-imx7ulp-wdt.txt          | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
 
-diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
 new file mode 100644
-index 000000000000..d7352f709b37
+index 0000000..d83fc5c
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
-@@ -0,0 +1,37 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2019 BayLibre, SAS
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/watchdog/amlogic,meson-gxbb-wdt.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
+@@ -0,0 +1,22 @@
++* Freescale i.MX7ULP Watchdog Timer (WDT) Controller
 +
-+title: Meson GXBB SoCs Watchdog timer
++Required properties:
++- compatible : Should be "fsl,imx7ulp-wdt"
++- reg : Should contain WDT registers location and length
++- interrupts : Should contain WDT interrupt
++- clocks: Should contain a phandle pointing to the gated peripheral clock.
 +
-+maintainers:
-+  - Neil Armstrong <narmstrong@baylibre.com>
++Optional properties:
++- timeout-sec : Contains the watchdog timeout in seconds
 +
-+properties:
-+  compatible:
-+    enum:
-+      - amlogic,meson-gxbb-wdt
++Examples:
 +
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+    description:
-+      A phandle to the clock of this PHY
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+examples:
-+  - |
-+    watchdog@98d0 {
-+          compatible = "amlogic,meson-gxbb-wdt";
-+          reg = <0x98d0 0x10>;
-+          clocks = <&xtal>;
-+    };
-diff --git a/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt b/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
-deleted file mode 100644
-index c7fe36fa739c..000000000000
---- a/Documentation/devicetree/bindings/watchdog/meson-gxbb-wdt.txt
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Meson GXBB SoCs Watchdog timer
--
--Required properties:
--
--- compatible : should be "amlogic,meson-gxbb-wdt"
--- reg : Specifies base physical address and size of the registers.
--- clocks : Should be a phandle to the Watchdog clock source, for GXBB the xtal
--	   is the default clock source.
--
--Example:
--
--wdt: watchdog@98d0 {
--	compatible = "amlogic,meson-gxbb-wdt";
--	reg = <0 0x98d0 0x0 0x10>;
--	clocks = <&xtal>;
--};
++wdog1: wdog@403d0000 {
++	compatible = "fsl,imx7ulp-wdt";
++	reg = <0x403d0000 0x10000>;
++	interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
++	clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
++	assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
++	assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
++	timeout-sec = <40>;
++};
 -- 
-2.22.0
+2.7.4
 
