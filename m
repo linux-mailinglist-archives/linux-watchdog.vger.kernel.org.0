@@ -2,250 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 597E087A66
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Aug 2019 14:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6473687C7E
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Aug 2019 16:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406558AbfHIMp6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 9 Aug 2019 08:45:58 -0400
-Received: from mga12.intel.com ([192.55.52.136]:64792 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726091AbfHIMp6 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 9 Aug 2019 08:45:58 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Aug 2019 05:45:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,364,1559545200"; 
-   d="scan'208";a="350482340"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 09 Aug 2019 05:45:54 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id F26E5A80; Fri,  9 Aug 2019 15:45:53 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@the-dreams.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH 2/2] i2c: i801: Use iTCO version 6 in Cannon Lake PCH and beyond
-Date:   Fri,  9 Aug 2019 15:45:53 +0300
-Message-Id: <20190809124553.67012-3-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190809124553.67012-1-mika.westerberg@linux.intel.com>
-References: <20190809124553.67012-1-mika.westerberg@linux.intel.com>
+        id S1726358AbfHIOTC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 9 Aug 2019 10:19:02 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:41937 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726342AbfHIOTB (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 9 Aug 2019 10:19:01 -0400
+Received: by mail-qk1-f194.google.com with SMTP id g17so1058726qkk.8;
+        Fri, 09 Aug 2019 07:19:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TEfOzDxFX7gDpnqMzrlBGrH3Syt9gXqMdj4yqEybIZo=;
+        b=QXHfe+5F2OOhd2CElNQM4DMdlNJ4IJl8fINRHiW3jKlocffCMbvetrzZAqZj73zlmj
+         KWvFoVIYkOHvDj1DaYKbfsuCvroIUYFb3KL+M9mkFDlElbx/WQrXDrEmoD9TEU4aBY4V
+         KOYSTDW4jBYl1Q1ouhbunaHKhuxt1uFwhly4aynTDR3/pFoatrZAGcllqAX3imwjf7rg
+         Zvptpq+bditHfN3KQpZl7biqacUzCNzWVHXcWNc47zgDNuTW5Ddvc7FolbuGOSKoYWHe
+         U95f/JthiUb4jQ8Awib8m4ByohBD8ZbF9S/ymEA2OIxhbWwKX69SfaGeAtETxlf7AIPX
+         4bTg==
+X-Gm-Message-State: APjAAAULwbc9OKX1TGlOPd/2K493GXivn5Vz3PzAouoEWlMHdClUpahm
+        1/NNzHwi7xx3joyV/qXpaBZpTVA/KRvGrriqZOs=
+X-Google-Smtp-Source: APXvYqwdOIIhs7aYJbryOrEuz/1xQSAZBUfsTj7jxd0qGAmaTDwXDUSNUG1kGVNfZ5fjxOBFSW0skDDZmykp0YbSLSg=
+X-Received: by 2002:a37:984:: with SMTP id 126mr12380366qkj.3.1565360340175;
+ Fri, 09 Aug 2019 07:19:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190731195713.3150463-1-arnd@arndb.de> <20190731195713.3150463-6-arnd@arndb.de>
+ <CAMpxmJWFfT_vrDas2fzW5tnxskk9kmgHQpGnGQ-_C20UaS_jhA@mail.gmail.com>
+ <CAK8P3a3KpKvRKXY72toE_5eAp4ER_Mre0GX3guwGeQgsY2HX+g@mail.gmail.com> <CAMpxmJUdSnp0QNwWB0rJ1opFrYs9R2KSVS64Tz8X5GDYAJYLpg@mail.gmail.com>
+In-Reply-To: <CAMpxmJUdSnp0QNwWB0rJ1opFrYs9R2KSVS64Tz8X5GDYAJYLpg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 9 Aug 2019 16:18:43 +0200
+Message-ID: <CAK8P3a1NT_yoP39y52oJTMsFCb96-bRyuMm=+5HPPsxyq0fJDA@mail.gmail.com>
+Subject: Re: [PATCH 05/14] gpio: lpc32xx: allow building on non-lpc32xx targets
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     soc@kernel.org, arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, linux-serial@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Intel Cannon Lake PCH moved the NO_REBOOT bit to reside as part of the
-TCO registers instead so update the i2c-i801 driver so that for Cannon
-Lake and beyond register platform device for iTCO using version 6. The
-affected PCHs are Cannon Lake, Cedar Fork, Comet Lake, Elkhart Lake and
-Ice Lake.
+On Mon, Aug 5, 2019 at 10:28 AM Bartosz Golaszewski
+<bgolaszewski@baylibre.com> wrote:
+>
+> pt., 2 sie 2019 o 13:20 Arnd Bergmann <arnd@arndb.de> napisał(a):
+> >
+> > On Fri, Aug 2, 2019 at 9:10 AM Bartosz Golaszewski
+> > <bgolaszewski@baylibre.com> wrote:
+> > > > -#include <mach/hardware.h>
+> > > > -#include <mach/platform.h>
+> > > > +#define _GPREG(x)                              (x)
+> > >
+> > > What purpose does this macro serve?
+> > >
+> > > >
+> > > >  #define LPC32XX_GPIO_P3_INP_STATE              _GPREG(0x000)
+> > > >  #define LPC32XX_GPIO_P3_OUTP_SET               _GPREG(0x004)
+> >
+> > In the existing code base, this macro converts a register offset to
+> > an __iomem pointer for a gpio register. I changed the definition of the
+> > macro here to keep the number of changes down, but I it's just
+> > as easy to remove it if you prefer.
+>
+> Could you just add a comment so that it's clear at first glance?
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/i2c/busses/i2c-i801.c | 138 +++++++++++++++++++++-------------
- 1 file changed, 86 insertions(+), 52 deletions(-)
+I ended up removing the macro. With the change to keep the reg_base as
+a struct member, this ends up being a relatively small change, and it's
+more straightforward that way.
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index f2956936c3f2..6918406d00a5 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -292,7 +292,8 @@ struct i801_priv {
- #define FEATURE_HOST_NOTIFY	BIT(5)
- /* Not really a feature, but it's convenient to handle it as such */
- #define FEATURE_IDF		BIT(15)
--#define FEATURE_TCO		BIT(16)
-+#define FEATURE_TCO_SPT		BIT(16)
-+#define FEATURE_TCO_CNL		BIT(17)
- 
- static const char *i801_feature_names[] = {
- 	"SMBus PEC",
-@@ -1491,57 +1492,37 @@ static inline unsigned int i801_get_adapter_class(struct i801_priv *priv)
- }
- #endif
- 
--static const struct itco_wdt_platform_data tco_platform_data = {
-+static const struct itco_wdt_platform_data cnl_tco_platform_data = {
-+	.name = "Intel PCH",
-+	.version = 6,
-+};
-+
-+static struct platform_device *
-+i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
-+		 struct resource *tco_res)
-+{
-+	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
-+					tco_res, 2, &cnl_tco_platform_data,
-+					sizeof(cnl_tco_platform_data));
-+}
-+
-+static const struct itco_wdt_platform_data spt_tco_platform_data = {
- 	.name = "Intel PCH",
- 	.version = 4,
- };
- 
- static DEFINE_SPINLOCK(p2sb_spinlock);
- 
--static void i801_add_tco(struct i801_priv *priv)
-+static struct platform_device *
-+i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
-+		 struct resource *tco_res)
- {
--	struct pci_dev *pci_dev = priv->pci_dev;
--	struct resource tco_res[3], *res;
--	struct platform_device *pdev;
-+	struct resource *res;
- 	unsigned int devfn;
--	u32 tco_base, tco_ctl;
--	u32 base_addr, ctrl_val;
- 	u64 base64_addr;
-+	u32 base_addr;
- 	u8 hidden;
- 
--	if (!(priv->features & FEATURE_TCO))
--		return;
--
--	pci_read_config_dword(pci_dev, TCOBASE, &tco_base);
--	pci_read_config_dword(pci_dev, TCOCTL, &tco_ctl);
--	if (!(tco_ctl & TCOCTL_EN))
--		return;
--
--	memset(tco_res, 0, sizeof(tco_res));
--
--	res = &tco_res[ICH_RES_IO_TCO];
--	res->start = tco_base & ~1;
--	res->end = res->start + 32 - 1;
--	res->flags = IORESOURCE_IO;
--
--	/*
--	 * Power Management registers.
--	 */
--	devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 2);
--	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPIBASE, &base_addr);
--
--	res = &tco_res[ICH_RES_IO_SMI];
--	res->start = (base_addr & ~1) + ACPIBASE_SMI_OFF;
--	res->end = res->start + 3;
--	res->flags = IORESOURCE_IO;
--
--	/*
--	 * Enable the ACPI I/O space.
--	 */
--	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPICTRL, &ctrl_val);
--	ctrl_val |= ACPICTRL_EN;
--	pci_bus_write_config_dword(pci_dev->bus, devfn, ACPICTRL, ctrl_val);
--
- 	/*
- 	 * We must access the NO_REBOOT bit over the Primary to Sideband
- 	 * bridge (P2SB). The BIOS prevents the P2SB device from being
-@@ -1577,15 +1558,58 @@ static void i801_add_tco(struct i801_priv *priv)
- 	res->end = res->start + 3;
- 	res->flags = IORESOURCE_MEM;
- 
--	pdev = platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
--						 tco_res, 3, &tco_platform_data,
--						 sizeof(tco_platform_data));
--	if (IS_ERR(pdev)) {
--		dev_warn(&pci_dev->dev, "failed to create iTCO device\n");
-+	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
-+					tco_res, 3, &spt_tco_platform_data,
-+					sizeof(spt_tco_platform_data));
-+}
-+
-+static void i801_add_tco(struct i801_priv *priv)
-+{
-+	u32 base_addr, tco_base, tco_ctl, ctrl_val;
-+	struct pci_dev *pci_dev = priv->pci_dev;
-+	struct resource tco_res[3], *res;
-+	unsigned int devfn;
-+
-+	if (!(priv->features & (FEATURE_TCO_SPT | FEATURE_TCO_CNL)))
- 		return;
--	}
- 
--	priv->tco_pdev = pdev;
-+	pci_read_config_dword(pci_dev, TCOBASE, &tco_base);
-+	pci_read_config_dword(pci_dev, TCOCTL, &tco_ctl);
-+	if (!(tco_ctl & TCOCTL_EN))
-+		return;
-+
-+	memset(tco_res, 0, sizeof(tco_res));
-+
-+	res = &tco_res[ICH_RES_IO_TCO];
-+	res->start = tco_base & ~1;
-+	res->end = res->start + 32 - 1;
-+	res->flags = IORESOURCE_IO;
-+
-+	/*
-+	 * Power Management registers.
-+	 */
-+	devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 2);
-+	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPIBASE, &base_addr);
-+
-+	res = &tco_res[ICH_RES_IO_SMI];
-+	res->start = (base_addr & ~1) + ACPIBASE_SMI_OFF;
-+	res->end = res->start + 3;
-+	res->flags = IORESOURCE_IO;
-+
-+	/*
-+	 * Enable the ACPI I/O space.
-+	 */
-+	pci_bus_read_config_dword(pci_dev->bus, devfn, ACPICTRL, &ctrl_val);
-+	ctrl_val |= ACPICTRL_EN;
-+	pci_bus_write_config_dword(pci_dev->bus, devfn, ACPICTRL, ctrl_val);
-+
-+	if (priv->features & FEATURE_TCO_CNL)
-+		priv->tco_pdev = i801_add_tco_cnl(priv, pci_dev, tco_res);
-+	else
-+		priv->tco_pdev = i801_add_tco_spt(priv, pci_dev, tco_res);
-+
-+	if (IS_ERR(priv->tco_pdev))
-+		dev_warn(&pci_dev->dev, "failed to create iTCO device\n");
- }
- 
- #ifdef CONFIG_ACPI
-@@ -1695,13 +1719,23 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	switch (dev->device) {
- 	case PCI_DEVICE_ID_INTEL_SUNRISEPOINT_H_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_SUNRISEPOINT_LP_SMBUS:
--	case PCI_DEVICE_ID_INTEL_CANNONLAKE_H_SMBUS:
--	case PCI_DEVICE_ID_INTEL_CANNONLAKE_LP_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_LEWISBURG_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_LEWISBURG_SSKU_SMBUS:
--	case PCI_DEVICE_ID_INTEL_CDF_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_DNV_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_KABYLAKE_PCH_H_SMBUS:
-+		priv->features |= FEATURE_I2C_BLOCK_READ;
-+		priv->features |= FEATURE_IRQ;
-+		priv->features |= FEATURE_SMBUS_PEC;
-+		priv->features |= FEATURE_BLOCK_BUFFER;
-+		/* If we have ACPI based watchdog use that instead */
-+		if (!acpi_has_watchdog())
-+			priv->features |= FEATURE_TCO_SPT;
-+		priv->features |= FEATURE_HOST_NOTIFY;
-+		break;
-+
-+	case PCI_DEVICE_ID_INTEL_CANNONLAKE_H_SMBUS:
-+	case PCI_DEVICE_ID_INTEL_CANNONLAKE_LP_SMBUS:
-+	case PCI_DEVICE_ID_INTEL_CDF_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_ICELAKE_LP_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS:
- 	case PCI_DEVICE_ID_INTEL_ELKHART_LAKE_SMBUS:
-@@ -1713,7 +1747,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		priv->features |= FEATURE_BLOCK_BUFFER;
- 		/* If we have ACPI based watchdog use that instead */
- 		if (!acpi_has_watchdog())
--			priv->features |= FEATURE_TCO;
-+			priv->features |= FEATURE_TCO_CNL;
- 		priv->features |= FEATURE_HOST_NOTIFY;
- 		break;
- 
--- 
-2.20.1
+> > > > @@ -167,14 +166,26 @@ struct lpc32xx_gpio_chip {
+> > > >         struct gpio_regs        *gpio_grp;
+> > > >  };
+> > > >
+> > > > +void __iomem *gpio_reg_base;
+> > >
+> > > Any reason why this can't be made part of struct lpc32xx_gpio_chip?
+> >
+> > It could be, but it's the same for each instance, and not known until
+> > probe() time, so the same pointer would need to be copied into each
+> > instance that is otherwise read-only.
+> >
+> > Let me know if you'd prefer me to rework these two things or leave
+> > them as they are.
+>
+> I would prefer not to have global state in the driver, let's just
+> store the pointer in the data passed to gpiochip_add_data().
 
+Ok, done.
+
+       Arnd
