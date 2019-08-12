@@ -2,103 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F7089FB6
-	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Aug 2019 15:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F4E8A7FE
+	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Aug 2019 22:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728878AbfHLNaM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 12 Aug 2019 09:30:12 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:42516 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728812AbfHLNaM (ORCPT
+        id S1727259AbfHLUJU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 12 Aug 2019 16:09:20 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44065 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727163AbfHLUJT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 12 Aug 2019 09:30:12 -0400
-Received: by mail-pl1-f196.google.com with SMTP id ay6so47932290plb.9;
-        Mon, 12 Aug 2019 06:30:12 -0700 (PDT)
+        Mon, 12 Aug 2019 16:09:19 -0400
+Received: by mail-pg1-f196.google.com with SMTP id i18so50038306pgl.11;
+        Mon, 12 Aug 2019 13:09:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LzmsQjTfCAGfzgibtgJwWGGyOUUejcSfXVXPD/fec0Q=;
-        b=amI4Hi4DT6040meOqfNQLY2WyBYscAzRYwN6NIwGbgHq5vJuPvt+GjCO+OqaZbS5+n
-         VVRYwOqdCv125crYWfUlXLIkcpJyFTzEn+cOmfGegKjmOQiKXSQdHODgyXXfUqGLN3WB
-         KmB8ODgHLEy6fGHVju3bNibRry7jW2hRVi0tPH8nR4gPHY7wEbh80/DMsTpSJRG32aNu
-         s8i/zn/do1aJfY2rnIdINvOmhe+NdjskEzgNgJJ43pnhTRzW3TcNfGejpmvRGHZSiQ+1
-         X2estHNsOoeeEddAwvLDkmejJmzYZH6W8tsj0/6N6PT1f18MhXmQeJfLGUfTMWpVY5sz
-         jNqQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yOH/l5VVvJ/APoIXtS0hIUc7Vo2Yr/xD5KyQELauzII=;
+        b=XX0k60SJVYFMwhme2eoW7vD8EvkYFZZG+X9lU6zXyUtUZuG5mVHw1ivvPE5BrhiLQF
+         zWbh1ttxqa9Szc9aDj7z5dya7qXDvUaeHogMA0399grseuPZw45d+BlWKPjJBkOG7LOE
+         YJxOUTK7IsiYm46g8qzTENaQh9t+lNro36SOAEqZtRpptYhrd4FDnKywBNFIhyRRB2KC
+         Q4SCwM7OFSAuIL71TeaNHi/ngP5Ek8gRZrGFk3SkivJKbxW46QjqbSJCQ1ElrJ2khXry
+         R2dGod6iE40klxkd2o9jMVlUM08gGrstf/ygXY7iIe5E99G0iB3Lxf1AIjp0VwPef/kQ
+         4/aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=LzmsQjTfCAGfzgibtgJwWGGyOUUejcSfXVXPD/fec0Q=;
-        b=LJkI0cfAoH6hjLm9SyPZVPXSusb1wgUXxpDvAae2DTzrVY/bK8cxwg8nH851YtIl4Y
-         U5vr7vMqyANu4gK/4lzNjFNVpk1nlB2WGT++f3ATywYVMbfd8ZVxXhr7bJL+/vHa0Ru5
-         Mtac12Ib8GRMZhvUbSTOjSNmXbp+lPW0T4DPBzQCnQAu7+vKUEku8KlWDPttQzy9q4Lh
-         ztN7L1l+OO7sTykE7OauxYU+PPxESX/BIBgIJbr5oAxQNEdZKs1mQUGSwa2fKQmhkXRm
-         pkXqjaZjELPvo8GIeGriY47kfRNI32SAju/pN7iRcIeHhkCgpWZW5PFdvKr54e208KMh
-         Dvxw==
-X-Gm-Message-State: APjAAAXldsqDSnPOfY3ev5t9/TZWO8lS5Uy9bGJp7G6O0Pv+T2HYjz1B
-        QlAHsjs5Bb36Ct5ZJG+7j50=
-X-Google-Smtp-Source: APXvYqzopTD9eHQVPq9aezbMoLuvpwalDJYSit6Z18zj7hBJORCL//WTJigjX27R5vaD8/VkptKZXg==
-X-Received: by 2002:a17:902:d917:: with SMTP id c23mr32901603plz.248.1565616612021;
-        Mon, 12 Aug 2019 06:30:12 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v138sm120654857pfc.15.2019.08.12.06.30.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Aug 2019 06:30:11 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: imx_sc: Remove unnecessary error log
-To:     Anson.Huang@nxp.com, wim@linux-watchdog.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-References: <20190812084434.13316-1-Anson.Huang@nxp.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <611fe8c6-f907-d022-3484-ff53b2bd4331@roeck-us.net>
-Date:   Mon, 12 Aug 2019 06:30:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        bh=yOH/l5VVvJ/APoIXtS0hIUc7Vo2Yr/xD5KyQELauzII=;
+        b=HbxIy+lZIgVmn7RJcJKFuhKrCPMFA5AEleeN/gFbU66znLZV+JcS/zaRxi0hOAV+IE
+         7pBaxKNz82duQgImRqj8a3Qk20HL5LlHxFxcDwIzY5Gj/A6+yKKf7dfMBT5JlQBgzr28
+         7U1WjZcUZZIv3WnKQuHmm67h8lxIeKEaadlfNHil5VT9dNx8o8iuad5O7Z902SE4DnXE
+         Z5rtCpKoAAcg8oQUh7ozVdpxZPlx4BZsY22V7WqESidGQ+Rpdnn3biHJgdWOc3UdBE76
+         65jeJPaxdOFlbaD/kTSyaMIZYDcaWRqDh65I+CjCaW+Jr+EXeTnbYWTCdHdHJ+hSr3yr
+         tmdg==
+X-Gm-Message-State: APjAAAW920XoQhNuHzEyhoMXd664AA5uTPNdjXILBa19ZOWmrUP7NSHg
+        VZjP2RBHXXYLleUk95uhdlq3oiN5
+X-Google-Smtp-Source: APXvYqy+ttPNWHPaIQC74fCoo/FvLmQkdG4FrGYx7ZNwGDjSyLhE0tsTeIOksDbVJ69S4ood9SAF4Q==
+X-Received: by 2002:a17:90a:bf92:: with SMTP id d18mr975798pjs.128.1565640558858;
+        Mon, 12 Aug 2019 13:09:18 -0700 (PDT)
+Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
+        by smtp.gmail.com with ESMTPSA id n26sm110286451pfa.83.2019.08.12.13.09.17
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 12 Aug 2019 13:09:18 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rick Ramstetter <rick@anteaterllc.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/22] Ziirave_wdt driver fixes
+Date:   Mon, 12 Aug 2019 13:08:44 -0700
+Message-Id: <20190812200906.31344-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <20190812084434.13316-1-Anson.Huang@nxp.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/12/19 1:44 AM, Anson.Huang@nxp.com wrote:
-> From: Anson Huang <Anson.Huang@nxp.com>
-> 
-> An error message is already displayed by watchdog_register_device()
-> when failed, so no need to have error log again for failure of
-> calling devm_watchdog_register_device().
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Everyone,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This series contains various fixes/improvements for ziirave_wdt
+driver. Hopefully each commit is self-explanatory.
 
-> ---
->   drivers/watchdog/imx_sc_wdt.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
-> index 78eaaf7..9260475 100644
-> --- a/drivers/watchdog/imx_sc_wdt.c
-> +++ b/drivers/watchdog/imx_sc_wdt.c
-> @@ -175,11 +175,8 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
->   	watchdog_stop_on_unregister(wdog);
->   
->   	ret = devm_watchdog_register_device(dev, wdog);
-> -
-> - 	if (ret) {
-> - 		dev_err(dev, "Failed to register watchdog device\n");
-> +	if (ret)
->    		return ret;
-> - 	}
->    
->   	ret = imx_scu_irq_group_enable(SC_IRQ_GROUP_WDOG,
->   				       SC_IRQ_WDOG,
-> 
+Feedback is welcome!
+
+Thanks,
+Andrey Smirnov
+
+Changes since [v1]:
+
+    - Collected Reviewied-by from Guenter
+
+    - Added two more error messages to "watchdog: ziirave_wdt: Be more
+      verbose during firmware update" (Guenter, I kept your
+      Reviewied-by there since that change seemed trivial enough)
+
+    - "watchdog: ziirave_wdt: Don't bail out on unexpected timeout
+      value" changed to select a default timeout of 30 seconds if read
+      out timeout value is out of valid range
+
+    - Additional fixes I wrote while working with watchdog firmware
+      added to the series
+
+
+Andrey Smirnov (22):
+  watchdog: ziirave_wdt: Add missing newline
+  watchdog: ziirave_wdt: Be verbose about errors in probe()
+  watchdog: ziirave_wdt: Be more verbose during firmware update
+  watchdog: ziirave_wdt: Don't bail out on unexpected timeout value
+  watchdog: ziirave_wdt: Log bootloader/firmware info during probe
+  watchdog: ziirave_wdt: Simplify ziirave_firm_write_pkt()
+  watchdog: ziirave_wdt: Check packet length only once
+  watchdog: ziirave_wdt: Skip zeros when calculating checksum
+  watchdog: ziirave_wdt: Fix incorrect use of ARRAY_SIZE
+  watchdog: ziirave_wdt: Zero out only what's necessary
+  watchdog: ziirave_wdt: Make use of put_unaligned_le16
+  watchdog: ziirave_wdt: Don't check if ihex record length is zero
+  watchdog: ziirave_wdt: Don't read out more than 'len' firmware bytes
+  watchdog: ziirave_wdt: Don't try to program readonly flash
+  watchdog: ziirave_wdt: Fix misleading error message
+  watchdog: ziirave_wdt: Fix JUMP_TO_BOOTLOADER payload
+  watchdog: ziirave_wdt: Fix DOWNLOAD_END payload
+  watchdog: ziirave_wdt: Fix RESET_PROCESSOR payload
+  watchdog: ziirave_wdt: Drop status polling code
+  watchdog: ziirave_wdt: Fix DOWNLOAD_START payload
+  watchdog: ziirave_wdt: Drop ziirave_firm_write_block_data()
+  watchdog: ziirave_wdt: Update checked I2C functionality mask
+
+ drivers/watchdog/ziirave_wdt.c | 351 ++++++++++++++++-----------------
+ 1 file changed, 173 insertions(+), 178 deletions(-)
+
+-- 
+2.21.0
 
