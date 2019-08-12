@@ -2,49 +2,49 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 070CD8A81B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Aug 2019 22:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289F58A819
+	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Aug 2019 22:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727825AbfHLUJp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        id S1727828AbfHLUJp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
         Mon, 12 Aug 2019 16:09:45 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42790 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727819AbfHLUJo (ORCPT
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35062 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727496AbfHLUJp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 12 Aug 2019 16:09:44 -0400
-Received: by mail-pg1-f196.google.com with SMTP id t132so50030737pgb.9;
-        Mon, 12 Aug 2019 13:09:44 -0700 (PDT)
+        Mon, 12 Aug 2019 16:09:45 -0400
+Received: by mail-pl1-f195.google.com with SMTP id w24so48288655plp.2;
+        Mon, 12 Aug 2019 13:09:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Y/3NpRbAXSpks6ZVOUgLBx0/AW1xab8Pj1LqMmAn7qo=;
-        b=cJgAvxwGq/F1fGo6TMU9j0IylL76YLy2x522a6bJVRDKi+sykIKq48UoG6VLM+mYOY
-         IaIxesN6lg3pQ46pvA68CocEE49WGIya5aQTsA0c5qqBOthtBeupSqwWFiBZUKZ7257Y
-         3ZNv+5ywPSRpiQ/lB6Mqi1go+N+fZkEForZbaZQ7q5Ku5zQwdEbQBP7QJEFo9U/jD0wK
-         DCMLVGYv2bYkkKUobJzeK1cJFdKK34c+atOZ4qtO/zA8wLz0LiyDXO/YlQ8dWlo4rLx6
-         KuqT4/iYymHjpxT3AWZLYA1WYSDL7l//sPngo38Js843laHeZIeuLnNwCQuMHu8xAv56
-         Nlsw==
+        bh=RxWEj5XMwOhp9jEr2BxVYNQrB7abAMc2i7oVzlWuaws=;
+        b=WD2YxYTpoBV1JC+G2nKak6sdXHA3qCJi8wJA+7zeuD5M9aSSf2wmtsl7QzQ+A5qvkc
+         xO0ZSxarhAiHUXECiVGFUAC1TlEbB/a7xbmV5Nn0pJeUW9Uma32kSsnMmusKqax0mScI
+         CrRBdipJJkm4hbLzXtIOBikrtq1qpHct/m4rSH9b1wprYKGw1MFzEOPtiCenFBYIBD5A
+         sPDnypOwlfaaAt6FarR544rmqr1l9Y6YFOsHUMQNlgKhgJfv5MVDrlpuZvLpuWkJeCx2
+         BwJu1LCwCtT0JjhYyqQG0RynzwzRSNYOh+Jl7oNKCBynZyo/RqTrwYguMaM25ZiOGXqG
+         hYzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Y/3NpRbAXSpks6ZVOUgLBx0/AW1xab8Pj1LqMmAn7qo=;
-        b=CT/Uys/Qm6GdWloQTOOypXn/HdPQLx7GSa0VeninVn+Xhd/dEMoh6LR5tjQiZtdZx8
-         APVwwfQ7M1ViTBQCZIeJp+wT6zHFdBhHLmiBIMzRhUhKRVzxA2B9XzSAYIqR6pIhEHXb
-         q8+K57HAGdLUDRwYAI/YRSLfU8K8XxPLtwscAMyrrqPH/+LWv1uvIwsB1H5tdOkP3zga
-         8zE1xxP2Xg3ZVjL9zA30/DkAJPDUOElMUvwzFp8+4X1a5dcrTOiHhMP/locBFkWPSiOY
-         cryZ6eEoYKregjPs54XFMJzivk3bq5KzfPfC1NnJ3V/v1NFcEyHxlxPRwtyEYdHyjl0a
-         VJ0A==
-X-Gm-Message-State: APjAAAVos5lqU30rG3RvWxpUoccgaJVsm4mcpvu/bU6p+XsaL/4c/1BH
-        VGvDSs8wvT5PTnVeyAY37zIdJ+L7
-X-Google-Smtp-Source: APXvYqzIJEo6XNER7IickBgoo+WdjfCIkgTxZCbeOfkljfSLpaPoSt0L/fKA8CgG8R2YuKBmC7wfJQ==
-X-Received: by 2002:a17:90a:c24e:: with SMTP id d14mr919163pjx.129.1565640583255;
-        Mon, 12 Aug 2019 13:09:43 -0700 (PDT)
+        bh=RxWEj5XMwOhp9jEr2BxVYNQrB7abAMc2i7oVzlWuaws=;
+        b=fm3AD7giNxJh+Totymbx/nJLxkNhxKJpWxpCkD4Uwezv9MEKpKMs4MWCW3P1zX/rIe
+         7YTiZZG1ndUm5pNzTHQvc7yOi41cH2qiEO61OCHxn8DBStiNkgBrYlcFRTp2omdKn7xa
+         L3iChPsypmuU7+0HbTG0W7RwpdhAHKb/az7DCIPSPQSBE1MX1emUq8CoFi/+HE5oiZK+
+         MPr2FEoIegBE/7qjq21guz4wwZbUJiuN6cGV6rR9Teq/3IS/etUydWsmUwFUxQqxC+C7
+         AEG0ITmIHr7AetrfVAYJHYsi6SaPoGMg8TpgHNMYQGIamG4hdseojIXumM57frTH/NrQ
+         r5SA==
+X-Gm-Message-State: APjAAAXHBfuU5A2VrMkX0/fjj2QZ/T6jZjmJ1hAdxSYzBFDBQCxAVPMZ
+        td3Yi72JvHcwTVmMFeQ9DS1LP0G7
+X-Google-Smtp-Source: APXvYqzkSsXZeoXM7L24AckIu+2acToD1OycG49Ca+NmMtt6Bk0QCXvBSoK2nsomtXYmVCPZ71OIfw==
+X-Received: by 2002:a17:902:100a:: with SMTP id b10mr33728350pla.338.1565640584405;
+        Mon, 12 Aug 2019 13:09:44 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id n26sm110286451pfa.83.2019.08.12.13.09.41
+        by smtp.gmail.com with ESMTPSA id n26sm110286451pfa.83.2019.08.12.13.09.43
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 12 Aug 2019 13:09:42 -0700 (PDT)
+        Mon, 12 Aug 2019 13:09:43 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-watchdog@vger.kernel.org
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -52,9 +52,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Rick Ramstetter <rick@anteaterllc.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 19/22] watchdog: ziirave_wdt: Drop status polling code
-Date:   Mon, 12 Aug 2019 13:09:03 -0700
-Message-Id: <20190812200906.31344-20-andrew.smirnov@gmail.com>
+Subject: [PATCH v2 20/22] watchdog: ziirave_wdt: Fix DOWNLOAD_START payload
+Date:   Mon, 12 Aug 2019 13:09:04 -0700
+Message-Id: <20190812200906.31344-21-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190812200906.31344-1-andrew.smirnov@gmail.com>
 References: <20190812200906.31344-1-andrew.smirnov@gmail.com>
@@ -65,12 +65,17 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Bootloader firmware doesn't implement DOWNLOAD_START or
-DOWNLOAD_PACKET in a non-blocking way. It will stretch the clock of
-the first status byte read until the operation is complete. Polling
-for the status is not really necessary since it will always succed on
-the first try. Replace polling code with a simple single byte read to
-simplify things.
+Bootloader firmware expects the following traffic for DOWNLOAD_END:
+
+S Addr Wr [A] 0x10 [A] P
+
+using ziirave_firm_write_byte() will result in
+
+S Addr Wr [A] 0x10 [A] 0x01 [A] 0x01 [A] P
+
+which happens to work because firmware will ignore any extra bytes
+sent. Fix this by converting the code to use i2c_smbus_write_byte()
+instead.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Cc: Chris Healy <cphealy@gmail.com>
@@ -79,66 +84,47 @@ Cc: Rick Ramstetter <rick@anteaterllc.com>
 Cc: linux-watchdog@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/watchdog/ziirave_wdt.c | 28 +++++++---------------------
- 1 file changed, 7 insertions(+), 21 deletions(-)
+ drivers/watchdog/ziirave_wdt.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/watchdog/ziirave_wdt.c b/drivers/watchdog/ziirave_wdt.c
-index 92df27350e41..681f65349779 100644
+index 681f65349779..ed69fa82e09c 100644
 --- a/drivers/watchdog/ziirave_wdt.c
 +++ b/drivers/watchdog/ziirave_wdt.c
-@@ -57,11 +57,6 @@ static char *ziirave_reasons[] = {"power cycle", "hw watchdog", NULL, NULL,
- 
- /* Received and ready for next Download packet. */
- #define ZIIRAVE_FIRM_DOWNLOAD_ACK	1
--/* Currently writing to flash. Retry Download status in a moment! */
--#define ZIIRAVE_FIRM_DOWNLOAD_BUSY	2
--
--/* Wait for ACK timeout in ms */
--#define ZIIRAVE_FIRM_WAIT_FOR_ACK_TIMEOUT	50
- 
- /* Firmware commands */
- #define ZIIRAVE_CMD_DOWNLOAD_START		0x10
-@@ -175,25 +170,16 @@ static unsigned int ziirave_wdt_get_timeleft(struct watchdog_device *wdd)
+@@ -217,13 +217,6 @@ static int ziirave_firm_write_block_data(struct watchdog_device *wdd,
  	return ret;
  }
  
--static int ziirave_firm_wait_for_ack(struct watchdog_device *wdd)
-+static int ziirave_firm_read_ack(struct watchdog_device *wdd)
+-static int ziirave_firm_write_byte(struct watchdog_device *wdd, u8 command,
+-				   u8 byte, bool wait_for_ack)
+-{
+-	return ziirave_firm_write_block_data(wdd, command, 1, &byte,
+-					     wait_for_ack);
+-}
+-
+ static bool ziirave_firm_addr_readonly(u32 addr)
  {
- 	struct i2c_client *client = to_i2c_client(wdd->parent);
- 	int ret;
--	unsigned long timeout;
--
--	timeout = jiffies + msecs_to_jiffies(ZIIRAVE_FIRM_WAIT_FOR_ACK_TIMEOUT);
--	do {
--		if (time_after(jiffies, timeout))
--			return -ETIMEDOUT;
+ 	return addr < ZIIRAVE_FIRM_FLASH_MEMORY_START ||
+@@ -375,12 +368,18 @@ static int ziirave_firm_upload(struct watchdog_device *wdd,
  
--		usleep_range(5000, 10000);
--
--		ret = i2c_smbus_read_byte(client);
--		if (ret < 0) {
--			dev_err(&client->dev, "Failed to read byte\n");
--			return ret;
--		}
--	} while (ret == ZIIRAVE_FIRM_DOWNLOAD_BUSY);
-+	ret = i2c_smbus_read_byte(client);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "Failed to read status byte\n");
-+		return ret;
-+	}
+ 	msleep(500);
  
- 	return ret == ZIIRAVE_FIRM_DOWNLOAD_ACK ? 0 : -EIO;
- }
-@@ -226,7 +212,7 @@ static int ziirave_firm_write_block_data(struct watchdog_device *wdd,
+-	ret = ziirave_firm_write_byte(wdd, ZIIRAVE_CMD_DOWNLOAD_START, 1, true);
++	ret = i2c_smbus_write_byte(client, ZIIRAVE_CMD_DOWNLOAD_START);
+ 	if (ret) {
+ 		dev_err(&client->dev, "Failed to start download\n");
+ 		return ret;
  	}
  
- 	if (wait_for_ack)
--		ret = ziirave_firm_wait_for_ack(wdd);
-+		ret = ziirave_firm_read_ack(wdd);
++	ret = ziirave_firm_read_ack(wdd);
++	if (ret) {
++		dev_err(&client->dev, "No ACK for start download\n");
++		return ret;
++	}
++
+ 	msleep(500);
  
- 	return ret;
- }
+ 	for (rec = (void *)fw->data; rec; rec = ihex_next_binrec(rec)) {
 -- 
 2.21.0
 
