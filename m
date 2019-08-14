@@ -2,233 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6341E8DF2D
-	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Aug 2019 22:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB2D8DF39
+	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Aug 2019 22:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729813AbfHNUpn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 14 Aug 2019 16:45:43 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:55885 "EHLO
+        id S1729865AbfHNUqE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 14 Aug 2019 16:46:04 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:35369 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725895AbfHNUpn (ORCPT
+        with ESMTP id S1725895AbfHNUqD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 14 Aug 2019 16:45:43 -0400
+        Wed, 14 Aug 2019 16:46:03 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MJmbB-1hiokV3nNB-00K75E; Wed, 14 Aug 2019 22:43:31 +0200
+ 1N3bnP-1iPFzy0qGp-010ZeU; Wed, 14 Aug 2019 22:45:41 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, davem@davemloft.net,
-        axboe@kernel.dk, linux-block@vger.kernel.org, minyard@acm.org,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        alexandre.belloni@bootlin.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, dgilbert@interlog.com, jslaby@suse.com,
-        wim@linux-watchdog.org, tytso@mit.edu, adilger.kernel@dilger.ca,
-        jaegeuk@kernel.org, rpeterso@redhat.com, agruenba@redhat.com,
-        mikulas@artax.karlin.mff.cuni.cz, konishi.ryusuke@gmail.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        darrick.wong@oracle.com, linux-xfs@vger.kernel.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-ppp@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, ecryptfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
-        ocfs2-devel@oss.oracle.com
-Subject: [PATCH v5 00/18] compat_ioctl.c removal, part 2/3 
-Date:   Wed, 14 Aug 2019 22:42:27 +0200
-Message-Id: <20190814204259.120942-1-arnd@arndb.de>
+        linux-fsdevel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-watchdog@vger.kernel.org
+Subject: [PATCH v5 05/18] watchdog: cpwd: use generic compat_ptr_ioctl
+Date:   Wed, 14 Aug 2019 22:42:32 +0200
+Message-Id: <20190814204259.120942-6-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20190814204259.120942-1-arnd@arndb.de>
+References: <20190814204259.120942-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:xGnsbJFEb5cp5VgCCKba17rABY8rw5YpFHVSp9sUcOzQSe+UXGP
- EfEYa61AjTCAHzUWX6wv2lDU7UbSUWqI2oz4Izzo8ktMHBlxmH8NVFj4hnZmHzHR9j3PmnD
- FdXT0A0EWAS6WaUuOwbDeG9tdQjqBuRZe/Qa9Z37r+1tBtsxN6SEXAY5fO0COcyHnB4qqcA
- G33rmG1j8a0kHXtMGaC3A==
+X-Provags-ID: V03:K1:3a4T0+6d97+aohDNW/FtRRy0OL3GUoodnLsBOLxtmzvxYHD4nsU
+ luMbWfHIl5BcsdlVHGK5m+/bWCtSjslqMmO0AuL6u0+1oNKgoWMdj1Eld5ELQNoNlyNLQKC
+ zVp2goGJq19LaFW42VqCYrhFLWr2I7j5Uvog04XNttVJ4FfNpg241HZlZYV2vGqzh939Tw+
+ yopb/D3+LbbYSDvFLqrsA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lZeESLReWcA=:o8v1Y+WXV56E6iMJG8Ogif
- 2FqbIgZz9Cf28eQxkb1FeOSJmjwIDMMG6qZymgcdySt/904oRKzRXaxzdToNS9eKtscmO3Pqe
- /FgBQD2UqihLwK3P/Pddn1urtJAP8i4lHDXy2HhE2jK8dPb6o36J+yFC20qjDEZ2PrwGmI4P+
- eCWYNuv25DY/1Lti33SSmno2KcNiHGryG0RZ4MxsltqQfXdWyvsKej7eST7IWNiMWKhvjyU37
- hE4nHYkj/tcVvmbwEjgJuruEJRODw6lCU7hWqw9twzGmBAmy8QMD8J//vGUTZ4q5+VzF9VhjQ
- bG82fyrhMmJKoue644MCK3h+10nGq6fpc0+zn8mYx07fSdSIGFWt2VJ2pxnSCWgeITy6Ere97
- sRmxqZNBv/e8jpN7Uc0JBjNzz9yYdvbFlJfGeIc2ao4vxcJORGyxhpoqAIRlQzpHC31QgNZum
- edQsMV2appVThHuGv1ov/A9jLW2kPA47ZPWpCcXW+dzl4v7v86+29DJTNjj3mVImCRQNSuJS4
- cAtYqWH6jHUAOn8v98eCWJv3t830ah1HbsJkf7tJ7ckvhUNIWDFHYDwgsfXjt098IoD2AtXor
- PgWxV3iIYDq+x9Wym9Nl2f8rz27kROMPDKgPXeM8TeWHxiZbHQgKAuei5tzhS7HSjk0UKFYhp
- 9Oh+W+y+k0I/NRheX6o+PUjcCpNRjNPLHuD9piLtJmz92aChC6F/e9SyB7FzdHKmmf4IcD77K
- 7HYEjW+U1QhnWXZOIuSxIrYkaKmPv6aeBud5fA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:83dwGx/HYvo=:APkpK2EDgzEki9/bZwgwND
+ A99E1l5pNDtDf3RPKP4Ek2PjpdG5dN8qa5s732xBWIBGtLLil+F3mi9BrGnk8BOr9cCwNHqPS
+ K1STEn4T9rgarD9uHPla+WlYSqjGQfUsKRAsArAzLpMxwLmzQvcXoEN00hoKeNmI2cD3b/LB0
+ iP6v/6qP71QTVl5CZn89I3iQqWnXMzn8mV65/SgHEtd1YpcovXZcrFoHYEF43a82cHVBuOM+B
+ /71RlU0gi9/MqjY+K0nCPfipm8V136v/wsdNIpFSlg6hCF167yal5lGIs1f0VhzViizQ9dvQP
+ Lp35ipf5J4D7GXOVWCJ2JCoXFjgbsuEPclPOLydazGxwIV2WwugQz2qpI3Qk5trLSFT28cEji
+ 2PjSRFu1XXJ+bpN4f4io4BtXjRcy2JQrSPxWQZ2ULD1eZ1j53AB72dVM+gLNeRGpxNWEw5NNY
+ Ef67jpDJqbJGUti0VXjlM0D8eO4VJPyVoNsy/iCeC3mAR5Hh2cEe5IWcE6k8/I1PwGM25yana
+ hcZwAn7lCxBOxJyKqMBKSkI9vEC4CKHQweMQDL/s4xIEoe3gku1JxxDoV+xiqLEpD5CqMn9zY
+ ag1QjS8r421e+NCHyYH0jXUBTk5uqYnD/AKbJ279d7pkaVThbeP5BZ0wTRc4Q4mcRwyxe27Ag
+ QhRNIAb+KVw2vAIn8ivYxpAJneBOdH7O2R9tdP2zLMoUPDLLIsy4DLPPUzvPkAZjkF0shMFCq
+ 4+/bk3paNofJmv0FMYM7UXA366Ajon2TEW5vGg==
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This is a follow-up to part 1/3 that I posted after -rc2.
-I hope these are still largely uncontroversial changes, and
-I would like to get them into linux-5.4.
+The cpwd_compat_ioctl() contains a bogus mutex that dates
+back to a leftover BKL instance.
 
-Part 1 was in
+Simplify the implementation by using the new compat_ptr_ioctl()
+helper function that will do the right thing for all calls
+here.
 
-https://lore.kernel.org/lkml/CAPcyv4i_nHzV155RcgnAQ189aq2Lfd2g8pA1D5NbZqo9E_u+Dw@mail.gmail.com/
+Note that WIOCSTART/WIOCSTOP don't take any arguments, so
+the compat_ptr() conversion is not needed here, but it also
+doesn't hurt.
 
-Part 3 will be one kernel release after part 2 is merged,
-as that still needs a little extra work.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/watchdog/cpwd.c | 25 +------------------------
+ 1 file changed, 1 insertion(+), 24 deletions(-)
 
-The entire series is available at
-
-git://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git compat_ioctl
-
-      Arnd
-
-Al Viro (2):
-  compat_ioctl: unify copy-in of ppp filters
-  compat_ioctl: move PPPIOCSCOMPRESS to ppp_generic
-
-Arnd Bergmann (16):
-  xfs: compat_ioctl: use compat_ptr()
-  xfs: compat_ioctl: add missing conversions
-  gfs2: add compat_ioctl support
-  fs: compat_ioctl: move FITRIM emulation into file systems
-  watchdog: cpwd: use generic compat_ptr_ioctl
-  compat_ioctl: move WDIOC handling into wdt drivers
-  compat_ioctl: reimplement SG_IO handling
-  af_unix: add compat_ioctl support
-  compat_ioctl: handle SIOCOUTQNSD
-  compat_ioctl: move SIOCOUTQ out of compat_ioctl.c
-  tty: handle compat PPP ioctls
-  compat_ioctl: handle PPPIOCGIDLE for 64-bit time_t
-  compat_ioctl: ppp: move simple commands into ppp_generic.c
-  compat_ioctl: move SG_GET_REQUEST_TABLE handling
-  pktcdvd: add compat_ioctl handler
-  scsi: sd: enable compat ioctls for sed-opal
-
- Documentation/networking/ppp_generic.txt  |   2 +
- arch/powerpc/platforms/52xx/mpc52xx_gpt.c |   1 +
- arch/um/drivers/harddog_kern.c            |   1 +
- block/scsi_ioctl.c                        | 132 ++++++++-
- drivers/block/pktcdvd.c                   |  25 ++
- drivers/char/ipmi/ipmi_watchdog.c         |   1 +
- drivers/hwmon/fschmd.c                    |   1 +
- drivers/net/ppp/ppp_generic.c             | 245 ++++++++++-----
- drivers/rtc/rtc-ds1374.c                  |   1 +
- drivers/scsi/sd.c                         |  14 +-
- drivers/scsi/sg.c                         |  59 +++-
- drivers/tty/tty_io.c                      |   5 +
- drivers/watchdog/acquirewdt.c             |   1 +
- drivers/watchdog/advantechwdt.c           |   1 +
- drivers/watchdog/alim1535_wdt.c           |   1 +
- drivers/watchdog/alim7101_wdt.c           |   1 +
- drivers/watchdog/ar7_wdt.c                |   1 +
- drivers/watchdog/at91rm9200_wdt.c         |   1 +
- drivers/watchdog/ath79_wdt.c              |   1 +
- drivers/watchdog/bcm63xx_wdt.c            |   1 +
- drivers/watchdog/cpu5wdt.c                |   1 +
- drivers/watchdog/cpwd.c                   |  25 +-
- drivers/watchdog/eurotechwdt.c            |   1 +
- drivers/watchdog/f71808e_wdt.c            |   1 +
- drivers/watchdog/gef_wdt.c                |   1 +
- drivers/watchdog/geodewdt.c               |   1 +
- drivers/watchdog/ib700wdt.c               |   1 +
- drivers/watchdog/ibmasr.c                 |   1 +
- drivers/watchdog/indydog.c                |   1 +
- drivers/watchdog/intel_scu_watchdog.c     |   1 +
- drivers/watchdog/iop_wdt.c                |   1 +
- drivers/watchdog/it8712f_wdt.c            |   1 +
- drivers/watchdog/ixp4xx_wdt.c             |   1 +
- drivers/watchdog/ks8695_wdt.c             |   1 +
- drivers/watchdog/m54xx_wdt.c              |   1 +
- drivers/watchdog/machzwd.c                |   1 +
- drivers/watchdog/mixcomwd.c               |   1 +
- drivers/watchdog/mtx-1_wdt.c              |   1 +
- drivers/watchdog/mv64x60_wdt.c            |   1 +
- drivers/watchdog/nuc900_wdt.c             |   1 +
- drivers/watchdog/nv_tco.c                 |   1 +
- drivers/watchdog/pc87413_wdt.c            |   1 +
- drivers/watchdog/pcwd.c                   |   1 +
- drivers/watchdog/pcwd_pci.c               |   1 +
- drivers/watchdog/pcwd_usb.c               |   1 +
- drivers/watchdog/pika_wdt.c               |   1 +
- drivers/watchdog/pnx833x_wdt.c            |   1 +
- drivers/watchdog/rc32434_wdt.c            |   1 +
- drivers/watchdog/rdc321x_wdt.c            |   1 +
- drivers/watchdog/riowd.c                  |   1 +
- drivers/watchdog/sa1100_wdt.c             |   1 +
- drivers/watchdog/sb_wdog.c                |   1 +
- drivers/watchdog/sbc60xxwdt.c             |   1 +
- drivers/watchdog/sbc7240_wdt.c            |   1 +
- drivers/watchdog/sbc_epx_c3.c             |   1 +
- drivers/watchdog/sbc_fitpc2_wdt.c         |   1 +
- drivers/watchdog/sc1200wdt.c              |   1 +
- drivers/watchdog/sc520_wdt.c              |   1 +
- drivers/watchdog/sch311x_wdt.c            |   1 +
- drivers/watchdog/scx200_wdt.c             |   1 +
- drivers/watchdog/smsc37b787_wdt.c         |   1 +
- drivers/watchdog/w83877f_wdt.c            |   1 +
- drivers/watchdog/w83977f_wdt.c            |   1 +
- drivers/watchdog/wafer5823wdt.c           |   1 +
- drivers/watchdog/watchdog_dev.c           |   1 +
- drivers/watchdog/wdrtas.c                 |   1 +
- drivers/watchdog/wdt.c                    |   1 +
- drivers/watchdog/wdt285.c                 |   1 +
- drivers/watchdog/wdt977.c                 |   1 +
- drivers/watchdog/wdt_pci.c                |   1 +
- fs/compat_ioctl.c                         | 346 +---------------------
- fs/ecryptfs/file.c                        |   1 +
- fs/ext4/ioctl.c                           |   1 +
- fs/f2fs/file.c                            |   1 +
- fs/gfs2/file.c                            |  24 ++
- fs/hpfs/dir.c                             |   1 +
- fs/hpfs/file.c                            |   1 +
- fs/nilfs2/ioctl.c                         |   1 +
- fs/ocfs2/ioctl.c                          |   1 +
- fs/xfs/xfs_ioctl32.c                      |  11 +-
- include/linux/blkdev.h                    |   2 +
- include/uapi/linux/ppp-ioctl.h            |   2 +
- include/uapi/linux/ppp_defs.h             |  14 +
- lib/iov_iter.c                            |   1 +
- net/socket.c                              |   3 +
- net/unix/af_unix.c                        |  19 ++
- 86 files changed, 526 insertions(+), 472 deletions(-)
-
+diff --git a/drivers/watchdog/cpwd.c b/drivers/watchdog/cpwd.c
+index b973b31179df..9393be584e72 100644
+--- a/drivers/watchdog/cpwd.c
++++ b/drivers/watchdog/cpwd.c
+@@ -473,29 +473,6 @@ static long cpwd_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	return 0;
+ }
+ 
+-static long cpwd_compat_ioctl(struct file *file, unsigned int cmd,
+-			      unsigned long arg)
+-{
+-	int rval = -ENOIOCTLCMD;
+-
+-	switch (cmd) {
+-	/* solaris ioctls are specific to this driver */
+-	case WIOCSTART:
+-	case WIOCSTOP:
+-	case WIOCGSTAT:
+-		mutex_lock(&cpwd_mutex);
+-		rval = cpwd_ioctl(file, cmd, arg);
+-		mutex_unlock(&cpwd_mutex);
+-		break;
+-
+-	/* everything else is handled by the generic compat layer */
+-	default:
+-		break;
+-	}
+-
+-	return rval;
+-}
+-
+ static ssize_t cpwd_write(struct file *file, const char __user *buf,
+ 			  size_t count, loff_t *ppos)
+ {
+@@ -520,7 +497,7 @@ static ssize_t cpwd_read(struct file *file, char __user *buffer,
+ static const struct file_operations cpwd_fops = {
+ 	.owner =		THIS_MODULE,
+ 	.unlocked_ioctl =	cpwd_ioctl,
+-	.compat_ioctl =		cpwd_compat_ioctl,
++	.compat_ioctl =		compat_ptr_ioctl,
+ 	.open =			cpwd_open,
+ 	.write =		cpwd_write,
+ 	.read =			cpwd_read,
 -- 
 2.20.0
 
-Cc: davem@davemloft.net
-Cc: axboe@kernel.dk
-Cc: linux-block@vger.kernel.org
-Cc: minyard@acm.org
-Cc: gregkh@linuxfoundation.org
-Cc: linux@roeck-us.net
-Cc: alexandre.belloni@bootlin.com
-Cc: jejb@linux.ibm.com
-Cc: martin.petersen@oracle.com
-Cc: dgilbert@interlog.com
-Cc: jslaby@suse.com
-Cc: wim@linux-watchdog.org
-Cc: viro@zeniv.linux.org.uk
-Cc: tytso@mit.edu
-Cc: adilger.kernel@dilger.ca
-Cc: jaegeuk@kernel.org
-Cc: rpeterso@redhat.com
-Cc: agruenba@redhat.com
-Cc: mikulas@artax.karlin.mff.cuni.cz
-Cc: konishi.ryusuke@gmail.com
-Cc: jlbec@evilplan.org
-Cc: joseph.qi@linux.alibaba.com
-Cc: darrick.wong@oracle.com
-Cc: linux-xfs@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: openipmi-developer@lists.sourceforge.net
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-ppp@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-scsi@vger.kernel.org
-Cc: linux-watchdog@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org
-Cc: ecryptfs@vger.kernel.org
-Cc: linux-ext4@vger.kernel.org
-Cc: linux-f2fs-devel@lists.sourceforge.net
-Cc: cluster-devel@redhat.com
-Cc: linux-nilfs@vger.kernel.org
-Cc: ocfs2-devel@oss.oracle.com
