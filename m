@@ -2,110 +2,233 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A99CC8D4D3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Aug 2019 15:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6341E8DF2D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Aug 2019 22:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727691AbfHNNey (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 14 Aug 2019 09:34:54 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43668 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727671AbfHNNex (ORCPT
+        id S1729813AbfHNUpn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 14 Aug 2019 16:45:43 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:55885 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725895AbfHNUpn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 14 Aug 2019 09:34:53 -0400
-Received: by mail-pf1-f193.google.com with SMTP id v12so5801578pfn.10;
-        Wed, 14 Aug 2019 06:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JMyzMSPAcHkH4e9Zgxpof5TsVyqF5zI/ain9gEP5KKg=;
-        b=JANoGq/Sww+FYuUSnkZYkyk2pyEXMjgZkfwGwrwBbO25y3Is1s9yhfytEr+aT9Rv9g
-         XOsO78b4jMadUYsrUHUZe9lHTU0SGMn2v9alqFOZfPXo4I3OE5TIS+Ho0clyAU++tcvw
-         TU894hwi1enOdiGrQJpZhAs3V6LkUk4Du3+OUlDb9ooZOBoQIBfI1iueTfY3ZpFi9Rjl
-         g+3d8kCJ5B1fszVNj7RjdYUwQ0FnXVeF6o8PCQOUcXUZoDVfWzsu8rZivBk4CniBTZA5
-         0DG9OKL/ERpBwyLcAAqiPFL2rCyW1e88yeezAD3KvmOmlFMZa9LMhtjIVRg47y9kffNK
-         p9eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JMyzMSPAcHkH4e9Zgxpof5TsVyqF5zI/ain9gEP5KKg=;
-        b=tc1dy4u3iiALk2JS2mjhkgjmnYchqnOI38J0geR03jifj2rQfEfB7rp4bpSBn7svjK
-         fkQBqGozh951jPvEXLoBAAKhKYJEPiCSX+y8vsHqetKCyrgS0a5oYuCtGGcEfcUQXdGW
-         wcsIiLHzCTwpKrZh7qF0Vq5gVvLwTOF1tS7H1kTIy3wkXiVfeKjC3tkjZxp8y3ApBPxk
-         wYxUMKpdoZU7DNSWraIZK1fP1skdPtS3lsWCNELTJwnfHYSfUmD88XA8wqPXrRhtZK14
-         PCRmykRjkv2I1ai6QAQS1ofv7HodWNmxqWp6a2TS7aIgMP7urs/gSR8iwIIs9nsy9JNn
-         p8lQ==
-X-Gm-Message-State: APjAAAV/x9MywZcyqLUxnBS1BtQImfOTSAe4n4CzKNDYOxV/Bb54H0lo
-        2ogm9oSCDTN+9Rb5IgIbp28=
-X-Google-Smtp-Source: APXvYqz3Eue1lfZwbLHRIa4ZSakfMHxEq793gzh4tnValCkgylIVL0/7HCK2CiDDz8AanlIut3XnUA==
-X-Received: by 2002:a62:f208:: with SMTP id m8mr11983926pfh.108.1565789693257;
-        Wed, 14 Aug 2019 06:34:53 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ce7sm4731271pjb.16.2019.08.14.06.34.51
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Aug 2019 06:34:51 -0700 (PDT)
-Date:   Wed, 14 Aug 2019 06:34:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        a.zummo@towertech.it, wim@linux-watchdog.org,
-        u.kleine-koenig@pengutronix.de, bth@kamstrup.com
-Subject: Re: [PATCH v2 4/5] rtc: pcf2127: add watchdog feature support
-Message-ID: <20190814133450.GA32629@roeck-us.net>
-References: <20190813153600.12406-1-bruno.thomsen@gmail.com>
- <20190813153600.12406-5-bruno.thomsen@gmail.com>
- <20190813161908.GA7857@roeck-us.net>
- <CAH+2xPDA4Ja_6Sgo0-Ak8KC5RKgE2E8CKyWargYaJMu52o_aoA@mail.gmail.com>
+        Wed, 14 Aug 2019 16:45:43 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MJmbB-1hiokV3nNB-00K75E; Wed, 14 Aug 2019 22:43:31 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, davem@davemloft.net,
+        axboe@kernel.dk, linux-block@vger.kernel.org, minyard@acm.org,
+        gregkh@linuxfoundation.org, linux@roeck-us.net,
+        alexandre.belloni@bootlin.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, dgilbert@interlog.com, jslaby@suse.com,
+        wim@linux-watchdog.org, tytso@mit.edu, adilger.kernel@dilger.ca,
+        jaegeuk@kernel.org, rpeterso@redhat.com, agruenba@redhat.com,
+        mikulas@artax.karlin.mff.cuni.cz, konishi.ryusuke@gmail.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        darrick.wong@oracle.com, linux-xfs@vger.kernel.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-ppp@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, ecryptfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        ocfs2-devel@oss.oracle.com
+Subject: [PATCH v5 00/18] compat_ioctl.c removal, part 2/3 
+Date:   Wed, 14 Aug 2019 22:42:27 +0200
+Message-Id: <20190814204259.120942-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH+2xPDA4Ja_6Sgo0-Ak8KC5RKgE2E8CKyWargYaJMu52o_aoA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:xGnsbJFEb5cp5VgCCKba17rABY8rw5YpFHVSp9sUcOzQSe+UXGP
+ EfEYa61AjTCAHzUWX6wv2lDU7UbSUWqI2oz4Izzo8ktMHBlxmH8NVFj4hnZmHzHR9j3PmnD
+ FdXT0A0EWAS6WaUuOwbDeG9tdQjqBuRZe/Qa9Z37r+1tBtsxN6SEXAY5fO0COcyHnB4qqcA
+ G33rmG1j8a0kHXtMGaC3A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lZeESLReWcA=:o8v1Y+WXV56E6iMJG8Ogif
+ 2FqbIgZz9Cf28eQxkb1FeOSJmjwIDMMG6qZymgcdySt/904oRKzRXaxzdToNS9eKtscmO3Pqe
+ /FgBQD2UqihLwK3P/Pddn1urtJAP8i4lHDXy2HhE2jK8dPb6o36J+yFC20qjDEZ2PrwGmI4P+
+ eCWYNuv25DY/1Lti33SSmno2KcNiHGryG0RZ4MxsltqQfXdWyvsKej7eST7IWNiMWKhvjyU37
+ hE4nHYkj/tcVvmbwEjgJuruEJRODw6lCU7hWqw9twzGmBAmy8QMD8J//vGUTZ4q5+VzF9VhjQ
+ bG82fyrhMmJKoue644MCK3h+10nGq6fpc0+zn8mYx07fSdSIGFWt2VJ2pxnSCWgeITy6Ere97
+ sRmxqZNBv/e8jpN7Uc0JBjNzz9yYdvbFlJfGeIc2ao4vxcJORGyxhpoqAIRlQzpHC31QgNZum
+ edQsMV2appVThHuGv1ov/A9jLW2kPA47ZPWpCcXW+dzl4v7v86+29DJTNjj3mVImCRQNSuJS4
+ cAtYqWH6jHUAOn8v98eCWJv3t830ah1HbsJkf7tJ7ckvhUNIWDFHYDwgsfXjt098IoD2AtXor
+ PgWxV3iIYDq+x9Wym9Nl2f8rz27kROMPDKgPXeM8TeWHxiZbHQgKAuei5tzhS7HSjk0UKFYhp
+ 9Oh+W+y+k0I/NRheX6o+PUjcCpNRjNPLHuD9piLtJmz92aChC6F/e9SyB7FzdHKmmf4IcD77K
+ 7HYEjW+U1QhnWXZOIuSxIrYkaKmPv6aeBud5fA==
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 03:25:55PM +0200, Bruno Thomsen wrote:
-> Hi Guenter
-> 
-> Thanks for the quick review.
-> 
-> Den tir. 13. aug. 2019 kl. 18.19 skrev Guenter Roeck <linux@roeck-us.net>:
-> >
-> > On Tue, Aug 13, 2019 at 05:35:59PM +0200, Bruno Thomsen wrote:
-> > > +static int pcf2127_wdt_start(struct watchdog_device *wdd)
-> > > +{
-> > > +     dev_info(wdd->parent, "watchdog enabled\n");
-> > > +
-> > > +     return pcf2127_wdt_ping(wdd);
-> > > +}
-> > > +
-> > > +static int pcf2127_wdt_stop(struct watchdog_device *wdd)
-> > > +{
-> > > +     struct pcf2127 *pcf2127 = watchdog_get_drvdata(wdd);
-> > > +
-> > > +     dev_info(wdd->parent, "watchdog disabled\n");
-> > > +
-> >
-> > There is a lot of noise in this driver. Please reconsider.
-> 
-> Would it be better if I remove the following lines:
-> 
-> dev_info(wdd->parent, "watchdog enabled\n");
-> dev_info(wdd->parent, "watchdog disabled\n");
-> dev_err(dev, "%s: watchdog registering failed\n", __func__);
-> 
-> and change this line to a dev_dbg():
-> 
-> dev_info(wdd->parent, "new watchdog timeout: %is (old: %is)\n",
->          new_timeout, wdd->timeout);
-> 
-> ?
-> 
-Yes.
+This is a follow-up to part 1/3 that I posted after -rc2.
+I hope these are still largely uncontroversial changes, and
+I would like to get them into linux-5.4.
 
-Thanks,
-Guenter
+Part 1 was in
+
+https://lore.kernel.org/lkml/CAPcyv4i_nHzV155RcgnAQ189aq2Lfd2g8pA1D5NbZqo9E_u+Dw@mail.gmail.com/
+
+Part 3 will be one kernel release after part 2 is merged,
+as that still needs a little extra work.
+
+The entire series is available at
+
+git://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git compat_ioctl
+
+      Arnd
+
+Al Viro (2):
+  compat_ioctl: unify copy-in of ppp filters
+  compat_ioctl: move PPPIOCSCOMPRESS to ppp_generic
+
+Arnd Bergmann (16):
+  xfs: compat_ioctl: use compat_ptr()
+  xfs: compat_ioctl: add missing conversions
+  gfs2: add compat_ioctl support
+  fs: compat_ioctl: move FITRIM emulation into file systems
+  watchdog: cpwd: use generic compat_ptr_ioctl
+  compat_ioctl: move WDIOC handling into wdt drivers
+  compat_ioctl: reimplement SG_IO handling
+  af_unix: add compat_ioctl support
+  compat_ioctl: handle SIOCOUTQNSD
+  compat_ioctl: move SIOCOUTQ out of compat_ioctl.c
+  tty: handle compat PPP ioctls
+  compat_ioctl: handle PPPIOCGIDLE for 64-bit time_t
+  compat_ioctl: ppp: move simple commands into ppp_generic.c
+  compat_ioctl: move SG_GET_REQUEST_TABLE handling
+  pktcdvd: add compat_ioctl handler
+  scsi: sd: enable compat ioctls for sed-opal
+
+ Documentation/networking/ppp_generic.txt  |   2 +
+ arch/powerpc/platforms/52xx/mpc52xx_gpt.c |   1 +
+ arch/um/drivers/harddog_kern.c            |   1 +
+ block/scsi_ioctl.c                        | 132 ++++++++-
+ drivers/block/pktcdvd.c                   |  25 ++
+ drivers/char/ipmi/ipmi_watchdog.c         |   1 +
+ drivers/hwmon/fschmd.c                    |   1 +
+ drivers/net/ppp/ppp_generic.c             | 245 ++++++++++-----
+ drivers/rtc/rtc-ds1374.c                  |   1 +
+ drivers/scsi/sd.c                         |  14 +-
+ drivers/scsi/sg.c                         |  59 +++-
+ drivers/tty/tty_io.c                      |   5 +
+ drivers/watchdog/acquirewdt.c             |   1 +
+ drivers/watchdog/advantechwdt.c           |   1 +
+ drivers/watchdog/alim1535_wdt.c           |   1 +
+ drivers/watchdog/alim7101_wdt.c           |   1 +
+ drivers/watchdog/ar7_wdt.c                |   1 +
+ drivers/watchdog/at91rm9200_wdt.c         |   1 +
+ drivers/watchdog/ath79_wdt.c              |   1 +
+ drivers/watchdog/bcm63xx_wdt.c            |   1 +
+ drivers/watchdog/cpu5wdt.c                |   1 +
+ drivers/watchdog/cpwd.c                   |  25 +-
+ drivers/watchdog/eurotechwdt.c            |   1 +
+ drivers/watchdog/f71808e_wdt.c            |   1 +
+ drivers/watchdog/gef_wdt.c                |   1 +
+ drivers/watchdog/geodewdt.c               |   1 +
+ drivers/watchdog/ib700wdt.c               |   1 +
+ drivers/watchdog/ibmasr.c                 |   1 +
+ drivers/watchdog/indydog.c                |   1 +
+ drivers/watchdog/intel_scu_watchdog.c     |   1 +
+ drivers/watchdog/iop_wdt.c                |   1 +
+ drivers/watchdog/it8712f_wdt.c            |   1 +
+ drivers/watchdog/ixp4xx_wdt.c             |   1 +
+ drivers/watchdog/ks8695_wdt.c             |   1 +
+ drivers/watchdog/m54xx_wdt.c              |   1 +
+ drivers/watchdog/machzwd.c                |   1 +
+ drivers/watchdog/mixcomwd.c               |   1 +
+ drivers/watchdog/mtx-1_wdt.c              |   1 +
+ drivers/watchdog/mv64x60_wdt.c            |   1 +
+ drivers/watchdog/nuc900_wdt.c             |   1 +
+ drivers/watchdog/nv_tco.c                 |   1 +
+ drivers/watchdog/pc87413_wdt.c            |   1 +
+ drivers/watchdog/pcwd.c                   |   1 +
+ drivers/watchdog/pcwd_pci.c               |   1 +
+ drivers/watchdog/pcwd_usb.c               |   1 +
+ drivers/watchdog/pika_wdt.c               |   1 +
+ drivers/watchdog/pnx833x_wdt.c            |   1 +
+ drivers/watchdog/rc32434_wdt.c            |   1 +
+ drivers/watchdog/rdc321x_wdt.c            |   1 +
+ drivers/watchdog/riowd.c                  |   1 +
+ drivers/watchdog/sa1100_wdt.c             |   1 +
+ drivers/watchdog/sb_wdog.c                |   1 +
+ drivers/watchdog/sbc60xxwdt.c             |   1 +
+ drivers/watchdog/sbc7240_wdt.c            |   1 +
+ drivers/watchdog/sbc_epx_c3.c             |   1 +
+ drivers/watchdog/sbc_fitpc2_wdt.c         |   1 +
+ drivers/watchdog/sc1200wdt.c              |   1 +
+ drivers/watchdog/sc520_wdt.c              |   1 +
+ drivers/watchdog/sch311x_wdt.c            |   1 +
+ drivers/watchdog/scx200_wdt.c             |   1 +
+ drivers/watchdog/smsc37b787_wdt.c         |   1 +
+ drivers/watchdog/w83877f_wdt.c            |   1 +
+ drivers/watchdog/w83977f_wdt.c            |   1 +
+ drivers/watchdog/wafer5823wdt.c           |   1 +
+ drivers/watchdog/watchdog_dev.c           |   1 +
+ drivers/watchdog/wdrtas.c                 |   1 +
+ drivers/watchdog/wdt.c                    |   1 +
+ drivers/watchdog/wdt285.c                 |   1 +
+ drivers/watchdog/wdt977.c                 |   1 +
+ drivers/watchdog/wdt_pci.c                |   1 +
+ fs/compat_ioctl.c                         | 346 +---------------------
+ fs/ecryptfs/file.c                        |   1 +
+ fs/ext4/ioctl.c                           |   1 +
+ fs/f2fs/file.c                            |   1 +
+ fs/gfs2/file.c                            |  24 ++
+ fs/hpfs/dir.c                             |   1 +
+ fs/hpfs/file.c                            |   1 +
+ fs/nilfs2/ioctl.c                         |   1 +
+ fs/ocfs2/ioctl.c                          |   1 +
+ fs/xfs/xfs_ioctl32.c                      |  11 +-
+ include/linux/blkdev.h                    |   2 +
+ include/uapi/linux/ppp-ioctl.h            |   2 +
+ include/uapi/linux/ppp_defs.h             |  14 +
+ lib/iov_iter.c                            |   1 +
+ net/socket.c                              |   3 +
+ net/unix/af_unix.c                        |  19 ++
+ 86 files changed, 526 insertions(+), 472 deletions(-)
+
+-- 
+2.20.0
+
+Cc: davem@davemloft.net
+Cc: axboe@kernel.dk
+Cc: linux-block@vger.kernel.org
+Cc: minyard@acm.org
+Cc: gregkh@linuxfoundation.org
+Cc: linux@roeck-us.net
+Cc: alexandre.belloni@bootlin.com
+Cc: jejb@linux.ibm.com
+Cc: martin.petersen@oracle.com
+Cc: dgilbert@interlog.com
+Cc: jslaby@suse.com
+Cc: wim@linux-watchdog.org
+Cc: viro@zeniv.linux.org.uk
+Cc: tytso@mit.edu
+Cc: adilger.kernel@dilger.ca
+Cc: jaegeuk@kernel.org
+Cc: rpeterso@redhat.com
+Cc: agruenba@redhat.com
+Cc: mikulas@artax.karlin.mff.cuni.cz
+Cc: konishi.ryusuke@gmail.com
+Cc: jlbec@evilplan.org
+Cc: joseph.qi@linux.alibaba.com
+Cc: darrick.wong@oracle.com
+Cc: linux-xfs@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: openipmi-developer@lists.sourceforge.net
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-ppp@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-watchdog@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: ecryptfs@vger.kernel.org
+Cc: linux-ext4@vger.kernel.org
+Cc: linux-f2fs-devel@lists.sourceforge.net
+Cc: cluster-devel@redhat.com
+Cc: linux-nilfs@vger.kernel.org
+Cc: ocfs2-devel@oss.oracle.com
