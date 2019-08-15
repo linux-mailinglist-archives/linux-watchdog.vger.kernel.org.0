@@ -2,87 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F088E06C
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Aug 2019 00:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79398EC75
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Aug 2019 15:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729949AbfHNWOW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 14 Aug 2019 18:14:22 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:34285 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729916AbfHNWOV (ORCPT
+        id S1732038AbfHONLn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 15 Aug 2019 09:11:43 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:37150 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731282AbfHONLn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 14 Aug 2019 18:14:21 -0400
-Received: by mail-qt1-f193.google.com with SMTP id q4so405351qtp.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 14 Aug 2019 15:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
-        b=l5PC+4msT+R1VOq1FIInu61dIh2STHPN9aSBt/Y5M3n644FfA169IT6wzP+sfbruwG
-         5vHd8QNfmmF7FOlV1OW4+1ls9+argQAW0MZ9696kjqRFjMtNiRxkPVvom8CpuMz6+P3J
-         lvnykAE+N5ClLjt8+21Oenlj55mmWn47h6bOufTUj3iAyACG+cL0ImoQgj5m6u3w1/lr
-         fVPm9fs++0X3Li7mpOQ13No26+jYpH9OobXYps5GGnrfpp0Xq6qTsPtsJRMHzlRsuSi2
-         Q5RuPSHMeFGhG1MzboDTj+tp2IBpQDy9TN5wUYjWC528WeGARQxpLHz2F9meUvIkEvkQ
-         sSPA==
+        Thu, 15 Aug 2019 09:11:43 -0400
+Received: by mail-qt1-f195.google.com with SMTP id y26so2251139qto.4;
+        Thu, 15 Aug 2019 06:11:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
-        b=OUW2vx0Xa5Oj11PxEk/rx8VbvYv4qOA1D1pqGrZv8enLhAQG366pV50FaWtrkV0fLM
-         s6vSqZuInnsL6oEpCzmseHZB+ptqYQ1MsvFSEKzpmPUcf1rsUeuq4EbeDmmio9NOCTSA
-         6hV9F5b4rgpoheDPnTIN0nMYAyceZTV7lfcIOc9qBxPFkj8kep5BC74PmIeGO1ebxerI
-         8YowBooju6ohnlbjWFbLYnlWJk2RiBVAsbVrr1IHbNRTlcqe1MBpcxotCsv9hdR/Voej
-         2K/qJDYbeRhKgZFSe2Ze663oLsotKiVOtCmA1H7oC7zNPa6DCLvsVo1TOWCeLvd+1UrS
-         7Jog==
-X-Gm-Message-State: APjAAAVpknrBHNqfeER3cNHeOMxRtcRWcvMJYMbYd1b5jVGoXJNO19xr
-        IdmxlLNMjxF8/pon3WbtrVHLHvpcm9a/uFMUP68=
-X-Google-Smtp-Source: APXvYqwvEwq36YC/YcFdGthiFQqEswOUmu8y33AXL4ty34gsygcaTEjmhvj04/dFUfa1vFoE719aJcDSjuFoUwkSVes=
-X-Received: by 2002:aed:3826:: with SMTP id j35mr1333309qte.54.1565820860049;
- Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Oj5UE2LGVcMS9SysCoBFopHSBvRpgrX1g7nT1W4Cv9s=;
+        b=HmHrpfoylIv+xenX+ud7+vckyYDAz7lESPt20PyQy2YEInPQleZa1NVmH0x4CfYiBJ
+         JXW7Hl0Ra0lW+jouPOonVpIg8RvjwGgENSVMn351rtO0nD5SsJqrsAcNSeWu/VqzrnXX
+         ElBk6PwCa12NBNyZiaKQECiegQ1dDbulhdA4XZJd5ElX8WlaW43i0ZjbuGEgorzggdZx
+         HVgsGhDqkmwVpcvSSntpkMagxMhhIhJoaq6e81Vz+jeRtwMYoJ4Fn2FVvVcNIZ03ySAT
+         fwdWqTd3IjVxa/LeZgJVcrxfao45oXHsYq3Tv5zKnSQWED52q9jBCcbzyManuc5vU6tk
+         2s/Q==
+X-Gm-Message-State: APjAAAWHpTUJLk1TW3XlkPOlsBoewZwdFvYWLwRVRkD4eOrfOI8oLzgj
+        vn+GtPPpgIXLfr246yq4GX/Sw/QE7ADJfz7Te4k=
+X-Google-Smtp-Source: APXvYqxABsAyr+BlU4FYBzPP5E1lu5hNr5RQd0ASTCcdU5s/TSRX7ngTvmZ5zwiRax3ZP5e4wh7pQOi1eFXPhhKeyw0=
+X-Received: by 2002:ad4:53cb:: with SMTP id k11mr3085440qvv.93.1565874701634;
+ Thu, 15 Aug 2019 06:11:41 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Wed, 14 Aug 2019 15:14:19
- -0700 (PDT)
-Reply-To: Katerinejones19@gmail.com
-From:   "MS. MARYANNA B. THOMASON" <westernunion.benin982@gmail.com>
-Date:   Wed, 14 Aug 2019 23:14:19 +0100
-Message-ID: <CAP=nHB+U+By16HzeUHiDfPT5KNtemGam6gniZhL2s7_itZ3F8w@mail.gmail.com>
-Subject: TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
- THIS ATM CARD
-To:     undisclosed-recipients:;
+References: <20190731195713.3150463-1-arnd@arndb.de> <20190731225303.GC1330@shell.armlinux.org.uk>
+ <CAK8P3a1Lgbz9RwVaOgNq=--gwvEG70tUi67XwsswjgnXAX6EhA@mail.gmail.com>
+In-Reply-To: <CAK8P3a1Lgbz9RwVaOgNq=--gwvEG70tUi67XwsswjgnXAX6EhA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 15 Aug 2019 15:11:25 +0200
+Message-ID: <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com>
+Subject: Re: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-ATTN DEAR PARCEL BENEFICIARY.
+On Thu, Aug 1, 2019 at 9:33 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Aug 1, 2019 at 12:53 AM Russell King - ARM Linux admin
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Jul 31, 2019 at 09:56:42PM +0200, Arnd Bergmann wrote:
+> > > For dove, the patches are basically what I had proposed back in
+> > > 2015 when all other ARMv6/ARMv7 machines became part of a single
+> > > kernel build. I don't know what the state is mach-dove support is,
+> > > compared to the DT based support in mach-mvebu for the same
+> > > hardware. If they are functionally the same, we could also just
+> > > remove mach-dove rather than applying my patches.
+> >
+> > Well, the good news is that I'm down to a small board support file
+> > for the Dove Cubox now - but the bad news is, that there's still a
+> > board support file necessary to support everything the Dove SoC has
+> > to offer.
+> >
+> > Even for a DT based Dove Cubox, I'm still using mach-dove, but it
+> > may be possible to drop most of mach-dove now.  Without spending a
+> > lot of time digging through it, it's impossible to really know.
+>
+> Ok, so we won't remove it then, but I'd like to merge my patches to
+> at least get away from the special case of requiring a separate kernel
+> image for it.
+>
+> Can you try if applying patches 12 and 14 from my series causes
+> problems for you? (it may be easier to apply the entire set
+> or pull from [1] to avoid rebase conflicts).
 
-I AM CATHY JONES,DIPLOMATIC AGENT ASIGNED ON THE DELIVERY OF YOUR ATM
-CARD THROUGH MS. MARYANNA B. THOMASON, DHL MANAGEMENT DIRECTOR NEW
-YORK.
-TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
-THIS ATM CARD, So before i deliver I want you to send me.
-official diplomatic agent delivery fee sum of $150.00 us
- only. I am here at JFK Airport,Florida. USA
+I applied patches 12 and 13 into the soc tree now. There are some
+other pending multiplatform conversions (iop32x, ep93xx, lpc32xx,
+omap1), but it looks like none of those will be complete for 5.4.
 
-SEND THIS FEE BY WESTERN UNION OR MONEY WITH RECEIVER'S NAME AND ADDRESS BELOW.
+I now expect that we can get most of the preparation into 5.4,
+and maybe move them all over together in 5.5 after some more
+testing. If someone finds a problem with the one of the
+preparation steps, that we can revert the individual patches
+more easily.
 
-RECEIVER'S NAME-----------------ERROL PRINGLE
-ADDRESS----------------3500 OLD DENTON RD APT 208; CARROLLTON, TEXAS 75007
-COUNTRY----------------USA
-AMOUNT--------------------$150.00 ONLY
-TEST QUESTION----------------WHO IS THE CREATOR
-ANSWER------------------GOD
- meanwhile this $150.00 is required by the Custom Service,USA Homeland
-Security,for protection of your delivery, it will make the ATM CARD
-and funds worth $15.8MILLION US DOLLARS secure, Beleiev me, this is my
-word, remark my word,you will receive your delivery from me, Mrs.
-Cathy Jones once you send this only $150.00 today.
-I WAIT ON YOUR PAYMENT CONFIRMATION, ONCE I GOT YOUR PAYMENT, I WILL
-FINALLY ARRIVE TO YOUR NEAREST ADDRESS. today
-THANKS AND MAY GOD BLESS  YOU
-CATHY JONES,DIPLOMATIC AGENT
-EMAIL; katerinejones19@gmail.com
-CALL OR TEXT ME, DIPLOMATIC AGENT MS. CATHY JONES
-Phone Number; (408) 650-6103,
+      Arnd
