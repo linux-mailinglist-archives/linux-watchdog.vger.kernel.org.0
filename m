@@ -2,105 +2,82 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 886EA8F2D8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Aug 2019 20:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8C58F2ED
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Aug 2019 20:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731138AbfHOSKN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 15 Aug 2019 14:10:13 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44804 "EHLO
+        id S1731211AbfHOSMP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 15 Aug 2019 14:12:15 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:39050 "EHLO
         mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729366AbfHOSKM (ORCPT
+        with ESMTP id S1730474AbfHOSMP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 15 Aug 2019 14:10:12 -0400
-Received: by mail-pg1-f196.google.com with SMTP id i18so1616416pgl.11;
-        Thu, 15 Aug 2019 11:10:12 -0700 (PDT)
+        Thu, 15 Aug 2019 14:12:15 -0400
+Received: by mail-pg1-f196.google.com with SMTP id u17so1632290pgi.6;
+        Thu, 15 Aug 2019 11:12:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=YGZciRmFKywos7phtHka3BMLOjJ5GD0teHhlJqhmVkk=;
-        b=refM5sSMD7XaWN2cBYtXuBqQL++UFaQwWAlfDTzJPByqFlruWjmG6Yh089jW7TdpbD
-         NrxNm0s2FZstcIYgXU/1OVsLWK+FGl/oYQP7+rTaMZkVBgGR23anbQo8oXgra9wTo9FE
-         j2SPBqMOEPNcKZuxqfPe/Pg1VNQm0EO34QutZQTrQlKL2cYjCOVrLe8Oxo+zJZteOQlu
-         B8hMLNBQEAo1UHIr3ABYn9iPuYxpRN+b0Z+J5xpbw/J0aCqSamjWusXlwPIWC+3YINI7
-         nT835bJJdCLvSjcjCqTDzc+ntlidStA5Dl6+CgzdON8g1MYQ6qhhFDs0HvmQv88M+BJb
-         dCaw==
+        bh=n9tUkG7lD8HBZBIfJu4sHWhJeh6vg7iC3im3UhLYB78=;
+        b=GWy0WOuF1yD+p7ShPnwB9tU5z2eta0obVE2c5a2C066QeGhwW48ZdMnzHSPRJKoe8d
+         bajI7UKzxlBpoF/5H7WbgVtUpuoTr+6E1Zkeu6O5DGIWQ3aayNSDDpfarITDEJjAg4sN
+         r/UHUb02gg9rKLcN6+pwFdQczJYFKX+6WBsarS0K4coff0Nybr9BIP63KN6gNZoCczuP
+         SgPdZJthkEGEhRMVjEzM0s3XMVY8BGwkPJcDAvoxpxS2pkTpaLt77FKBNdc96dxqyeO8
+         DvftPVphIa6BfyA6TzUuEUDblNXBjE+ux4H/+yt7rJpN32Ti3s1V/V6m7wkS2DcNFLTb
+         oL0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YGZciRmFKywos7phtHka3BMLOjJ5GD0teHhlJqhmVkk=;
-        b=TAK2zbsMzphSzYHz0H+jiKefk9nQKLojQnv4w2oyYEe9IVnsv354JFR9RuqHQ0oMi4
-         VQTQa57wU3hGBoM/IEoFWeBxu4mAr8acyuAqgMG/NBMEEw2c3zDpBm020QPkxixO0aVH
-         mLP5/NMFXxSsEMBzEJVX2zGlrizflC6RWasibeQJHy2UrJ+GoGd+TwZn0XC7QaSkYowt
-         hydSrYVAui5rOYlArGaUrnv+3gENtC5Etf3+v2aQWrWPmUXLZg4rFYLKnCnkka/vhW8+
-         JY/kY3kxJPN/dQ5UIcMKejxj60WjTpazOn8A/n49jEPjZy7aRzF9ysJpT+Em3lrLOlvA
-         NR6w==
-X-Gm-Message-State: APjAAAV6j9qQDjQtnH/jr9u1i4Nfj209bB1zZ38L3bQDW6zGIsDifbnJ
-        EqZeVTw88JRFV32515soid0=
-X-Google-Smtp-Source: APXvYqxIDdyy6by/HwcLogs24nzI99cv+AM8Nkc5yJYlPuae0cwXsF1pvVTorAHFvjBOwQbrOwQiZw==
-X-Received: by 2002:a62:38d7:: with SMTP id f206mr6797850pfa.102.1565892612133;
-        Thu, 15 Aug 2019 11:10:12 -0700 (PDT)
+        bh=n9tUkG7lD8HBZBIfJu4sHWhJeh6vg7iC3im3UhLYB78=;
+        b=RVkv3sm1luQTagjKz5lv3OKIeDQzuvW2OGYfMWuLUZlGIM7tb+4CaHBvVJbat8ugMC
+         sOOUe/vtmieUIFiSoNLGritXM0ofboCaeWhQhHmCmYOsQnTDHkOkz2+AJrKM/+3Ql9YT
+         xgNDM8MBiPbk4BI4dv1UwPcJfhuucTiXHjq+MihRH6GMIsszUnr5kQDl2DWDtQEVv7G0
+         RInBCWQr7Qj4ttPK5oxFF2koAdiBBS8uooAdvGjc90OdxI/x0WH7su25xQy4Y3CTFVwe
+         bFSIOen08F7ZjFevdLmM3aAoA5q8a7js95u5fajym98QnjnRQXH1Qq9Ls7yN3cxSXFAS
+         TRNA==
+X-Gm-Message-State: APjAAAVK4zheUq/DDYF9Qcxu+r2wh9+NTVZwIE/Yc435lJNlfYFKBMzd
+        bvQVga56bMIXQoh8YQYaie8=
+X-Google-Smtp-Source: APXvYqy3ZsrSdpCRks8cJhp/ftXr7OVvrV+UaVSt653H/GnIWE4REvYlquujbaMe2nfOmJKlPj9+tw==
+X-Received: by 2002:a62:7912:: with SMTP id u18mr7060592pfc.254.1565892735146;
+        Thu, 15 Aug 2019 11:12:15 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n98sm1927437pjc.26.2019.08.15.11.10.11
+        by smtp.gmail.com with ESMTPSA id j1sm2558476pgl.12.2019.08.15.11.12.14
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Aug 2019 11:10:11 -0700 (PDT)
-Date:   Thu, 15 Aug 2019 11:10:10 -0700
+        Thu, 15 Aug 2019 11:12:14 -0700 (PDT)
+Date:   Thu, 15 Aug 2019 11:12:13 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 06/18] compat_ioctl: move WDIOC handling into wdt
- drivers
-Message-ID: <20190815181010.GA28580@roeck-us.net>
-References: <20190814204259.120942-1-arnd@arndb.de>
- <20190814205245.121691-1-arnd@arndb.de>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, Chris Healy <cphealy@gmail.com>,
+        Rick Ramstetter <rick@anteaterllc.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 04/22] watchdog: ziirave_wdt: Don't bail out on
+ unexpected timeout value
+Message-ID: <20190815181213.GA14388@roeck-us.net>
+References: <20190812200906.31344-1-andrew.smirnov@gmail.com>
+ <20190812200906.31344-5-andrew.smirnov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190814205245.121691-1-arnd@arndb.de>
+In-Reply-To: <20190812200906.31344-5-andrew.smirnov@gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 10:49:18PM +0200, Arnd Bergmann wrote:
-> All watchdog drivers implement the same set of ioctl commands, and
-> fortunately all of them are compatible between 32-bit and 64-bit
-> architectures.
+On Mon, Aug 12, 2019 at 01:08:48PM -0700, Andrey Smirnov wrote:
+> Reprogramming bootloader on watchdog MCU will result in reported
+> default timeout value of "0". That in turn will be unnecessarily
+> rejected by the driver as invalid device (-ENODEV). Simplify probe to
+> read stored timeout value, set it to a sane default if it is bogus,
+> and then program that value unconditionally.
 > 
-> Modern drivers always go through drivers/watchdog/wdt.c as an abstraction
-> layer, but older ones implement their own file_operations on a character
-> device for this.
-> 
-> Move the handling from fs/compat_ioctl.c into the individual drivers.
-> 
-> Note that most of the legacy drivers will never be used on 64-bit
-> hardware, because they are for an old 32-bit SoC implementation, but
-> doing them all at once is safer than trying to guess which ones do
-> or do not need the compat_ioctl handling.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Cc: Chris Healy <cphealy@gmail.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Rick Ramstetter <rick@anteaterllc.com>
+> Cc: linux-watchdog@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-This patch doesn't seem to have a useful base (or at least git says so).
-It does not apply to mainline nor to my own watchdog-next branch.
-I assume you plan to apply the entire series together. Please not
-that there will be conflicts against watchdog-next when you do so.
-
-Guenter
