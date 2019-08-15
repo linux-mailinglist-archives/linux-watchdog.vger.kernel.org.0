@@ -2,79 +2,134 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4617A8F349
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Aug 2019 20:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3988E8F373
+	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Aug 2019 20:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731524AbfHOSZV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 15 Aug 2019 14:25:21 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44421 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729121AbfHOSZV (ORCPT
+        id S1730405AbfHOScU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 15 Aug 2019 14:32:20 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39759 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729204AbfHOScT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 15 Aug 2019 14:25:21 -0400
-Received: by mail-pf1-f194.google.com with SMTP id c81so1714667pfc.11;
-        Thu, 15 Aug 2019 11:25:21 -0700 (PDT)
+        Thu, 15 Aug 2019 14:32:19 -0400
+Received: by mail-oi1-f195.google.com with SMTP id 16so2950593oiq.6;
+        Thu, 15 Aug 2019 11:32:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=W4m3rE5B+AHcZq7DzeAqUZniPaJlnky3nP6c268vYOA=;
-        b=Ce7YxNAVpnCMGds1pqkvERXdI+89LbBYksdxZo4d6juBrMvHLbeXmQnE2KdQ+Kffa/
-         eiayrpIqL0FVcv4JhPG/cUX5kRdMioO4UeS3if1NN6AoldQxlys009GFbzMPH/t56kKN
-         lN8W3FsgCFlICyn4ZMxdYdbnzW1XSB4dsi62DdorO21qwxsYdQsQQ650NUz6H5mXPq3b
-         t5zfeGtg+dGGaTNJ7EXIhlb/VHorbeUL14wtPtsQWETPn309LpQueh9HTEdDgnd4wVzN
-         kejx+q29de+F/JnuEmWD2VQdIjrEwiCV9ZBsuToX0vKha9EzN1lTjxD/KJ8cyTiWtgqF
-         Cl8Q==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zr7m4pwTZtuvjpeiIC/jYJKmr4TJLJV4XhMln9ZPv+4=;
+        b=QhoIDVYdejOyWyiUAfCz1XWolONEWbCa4OOpGFtUQnKIGhnLyEC0/WGR5DefUSe1mR
+         i3zN3r2Q/fvJSZDwrKzaRdvzv43fsSPU0X21BNHiS2Yqh+NKiqKBv6Ii+RH2I3llRllE
+         byC/IWheGYP6LEWHOEThfHTWTKIJJf+uR547l94H3w3AmvHSXHgGTk25MdOCZrvH2vOm
+         xHVEnRuf1yAPoEGvBmZTWcabaDcqGkwohIXbc60Uis39tG3aq01SVHfE16g3nGRTQp5j
+         fFt/E1AjMR0bRMXf2g86K2ujhMJd+JgLRDunGS64polTLVj9Z+V7jNNFV0rN5tUK+OI4
+         jJgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=W4m3rE5B+AHcZq7DzeAqUZniPaJlnky3nP6c268vYOA=;
-        b=OKnrLTfZS4h46ry8m0PKQ64JauJp94UbAtSWRlvYyHDVcObUrJsqhScMb/Gp31xrE8
-         TsijOv1jglJBnA53dN6TF4xNMeG84TMTk0gEErAI0Q3qMNJWFITythcenbu05xPQSzMb
-         VUMo6CjVKBlShpmSJdQLnsGwLeoaiZtijlqmehhNTLhrHs6wsFkeE8yk5QEiuil37NN8
-         TRVFpMr/nGQ0mnYK9fSuVqWqbZ+3OyCt3PZsghs2JZji3qkXESdKDCowzbjFm2ntI1qk
-         Am8O00xTyu5/Mwn1TyG7naojueDVo/2iWWayIAdFw+4sr9SPKGwoM4opD6+RHkZ3wEF4
-         bS0w==
-X-Gm-Message-State: APjAAAUsV6Q1JhO0stfx5ZW+UGMOMp0JtHiG3fRSMhaJm94kX97l5A9a
-        JzU+bExIZXFfXuEhH2SLiPI=
-X-Google-Smtp-Source: APXvYqxsI+7/1KzQos22UcOs8uQRNrftaPqclP/JY+jheIxKGH2TeIv5ZI3UlZ918rzbUD1+vNAufA==
-X-Received: by 2002:aa7:9882:: with SMTP id r2mr6881723pfl.146.1565893520784;
-        Thu, 15 Aug 2019 11:25:20 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k5sm1907062pjl.32.2019.08.15.11.25.20
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zr7m4pwTZtuvjpeiIC/jYJKmr4TJLJV4XhMln9ZPv+4=;
+        b=mRk2Py5RXG0x+J5XW4uglBrbSbg6w7YZi9/0oskyu+QClR6NckM6uY+xh2RN9tNWJ4
+         DaHoU2lYVR26VuTzaL3knj6gqIip/Xh0/rpMTlLomiNGSAbRQrdl0GndLZrfb/7UJvjt
+         6Cy3GdAJnMlFfikMepXq8IQFDANqXU2nL2r/sE5OW/bHhBLLZmRvcfLq/Q1hd//5y9Fy
+         0T98Y2UP4Fah1loE5P+WsmiTQzjfrJq8IPrZNP3N4tmWg3IHTaW3gQFlLXEqvBIPnr6n
+         jXfeSnyPNYa/VGlxxC/2wzZbQ2V86zsROBQaS4TnCvqq7b/DkVq5UkPGy6iAaKYqAt8Y
+         MPVg==
+X-Gm-Message-State: APjAAAWM64D/q3FyD9DFamwKmlbXeV5/T+islOhyNL3i9ObIGMKzjwhz
+        LQKUOHVK54i4UoyKlXNPT+Jvu0NiI5Q=
+X-Google-Smtp-Source: APXvYqyUNRL91dzBCJhtveiCufmLdZI/X5yNhmzj2dzOWTVqlPUlee32crL4pNFIQyUM9g4pdq2Yow==
+X-Received: by 2002:a05:6808:49a:: with SMTP id z26mr2630733oid.177.1565893938759;
+        Thu, 15 Aug 2019 11:32:18 -0700 (PDT)
+Received: from [10.15.211.16] ([74.51.240.241])
+        by smtp.gmail.com with ESMTPSA id t81sm686205oie.48.2019.08.15.11.32.17
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Aug 2019 11:25:20 -0700 (PDT)
-Date:   Thu, 15 Aug 2019 11:25:19 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, Chris Healy <cphealy@gmail.com>,
-        Rick Ramstetter <rick@anteaterllc.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 22/22] watchdog: ziirave_wdt: Update checked I2C
- functionality mask
-Message-ID: <20190815182519.GR14388@roeck-us.net>
-References: <20190812200906.31344-1-andrew.smirnov@gmail.com>
- <20190812200906.31344-23-andrew.smirnov@gmail.com>
+        Thu, 15 Aug 2019 11:32:18 -0700 (PDT)
+Subject: Re: [PATCH 00/14] ARM: move lpc32xx and dove to multiplatform
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-serial@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+References: <20190731195713.3150463-1-arnd@arndb.de>
+ <20190731225303.GC1330@shell.armlinux.org.uk>
+ <CAK8P3a1Lgbz9RwVaOgNq=--gwvEG70tUi67XwsswjgnXAX6EhA@mail.gmail.com>
+ <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com>
+From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
+Message-ID: <b43c3d60-b675-442c-c549-25530cfbffe3@gmail.com>
+Date:   Thu, 15 Aug 2019 14:32:15 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190812200906.31344-23-andrew.smirnov@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <CAK8P3a0=GrjM_HOBgqy5V3pOsA6w1EDOtEQO9dZG2Cw+-2niaw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 01:09:06PM -0700, Andrey Smirnov wrote:
-> Update checked I2C functionality mask to reflect all of the SMBus
-> primitives used by this driver.
-> 
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> Cc: Chris Healy <cphealy@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rick Ramstetter <rick@anteaterllc.com>
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+Hi Arnd,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 8/15/19 9:11 AM, Arnd Bergmann wrote:
+> On Thu, Aug 1, 2019 at 9:33 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> On Thu, Aug 1, 2019 at 12:53 AM Russell King - ARM Linux admin
+>> <linux@armlinux.org.uk> wrote:
+>>>
+>>> On Wed, Jul 31, 2019 at 09:56:42PM +0200, Arnd Bergmann wrote:
+>>>> For dove, the patches are basically what I had proposed back in
+>>>> 2015 when all other ARMv6/ARMv7 machines became part of a single
+>>>> kernel build. I don't know what the state is mach-dove support is,
+>>>> compared to the DT based support in mach-mvebu for the same
+>>>> hardware. If they are functionally the same, we could also just
+>>>> remove mach-dove rather than applying my patches.
+>>>
+>>> Well, the good news is that I'm down to a small board support file
+>>> for the Dove Cubox now - but the bad news is, that there's still a
+>>> board support file necessary to support everything the Dove SoC has
+>>> to offer.
+>>>
+>>> Even for a DT based Dove Cubox, I'm still using mach-dove, but it
+>>> may be possible to drop most of mach-dove now.  Without spending a
+>>> lot of time digging through it, it's impossible to really know.
+>>
+>> Ok, so we won't remove it then, but I'd like to merge my patches to
+>> at least get away from the special case of requiring a separate kernel
+>> image for it.
+>>
+>> Can you try if applying patches 12 and 14 from my series causes
+>> problems for you? (it may be easier to apply the entire set
+>> or pull from [1] to avoid rebase conflicts).
+> 
+> I applied patches 12 and 13 into the soc tree now. There are some
+> other pending multiplatform conversions (iop32x, ep93xx, lpc32xx,
+> omap1), but it looks like none of those will be complete for 5.4.
+
+I think the patchset (v2) for the LPC32xx is ready for 5.4
+([PATCH v2 00/13] v2: ARM: move lpc32xx to multiplatform)
+ >
+> I now expect that we can get most of the preparation into 5.4,
+> and maybe move them all over together in 5.5 after some more
+> testing. If someone finds a problem with the one of the
+> preparation steps, that we can revert the individual patches
+> more easily.
+> 
+>        Arnd
+> 
+Sylvain
