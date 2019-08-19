@@ -2,95 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA8494BC9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Aug 2019 19:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839A694BE8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Aug 2019 19:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727917AbfHSReB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Aug 2019 13:34:01 -0400
-Received: from sauhun.de ([88.99.104.3]:53846 "EHLO pokefinder.org"
+        id S1726987AbfHSRon (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Aug 2019 13:44:43 -0400
+Received: from sauhun.de ([88.99.104.3]:53934 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726987AbfHSReB (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Aug 2019 13:34:01 -0400
+        id S1726959AbfHSRon (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 19 Aug 2019 13:44:43 -0400
 Received: from localhost (p54B3355A.dip0.t-ipconnect.de [84.179.53.90])
-        by pokefinder.org (Postfix) with ESMTPSA id 7D3B12C2868;
-        Mon, 19 Aug 2019 19:33:59 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id A30EE2C2868;
+        Mon, 19 Aug 2019 19:44:41 +0200 (CEST)
+Date:   Mon, 19 Aug 2019 19:44:41 +0200
 From:   Wolfram Sang <wsa@the-dreams.de>
 To:     linux-watchdog@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH v2] watchdog: renesas_wdt: support handover from bootloader
-Date:   Mon, 19 Aug 2019 19:33:46 +0200
-Message-Id: <20190819173346.4019-1-wsa@the-dreams.de>
-X-Mailer: git-send-email 2.20.1
+Subject: Re: [PATCH v2] watchdog: renesas_wdt: support handover from
+ bootloader
+Message-ID: <20190819174441.GA3793@ninjato>
+References: <20190819173346.4019-1-wsa@the-dreams.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
+Content-Disposition: inline
+In-Reply-To: <20190819173346.4019-1-wsa@the-dreams.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Support an already running watchdog by checking its enable bit and set
-up the status accordingly before registering the device.
+--u3/rZRmxL6MmkK24
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
 
-Change since v1:
+> After all these discussions, the patch became quite simple again :/
+> Still, thanks for all the discussions to make sure we didn't overlook
+> clock handling.
 
-* removed custom code to handle RPM refcnt. The watchdog core does it
-  already.
+Except for the probe error path, sigh... v3 coming up.
 
-Tested again on a Renesas Salvator-XS (R-Car M3N) with and without the
-'open_timeout' command line parameter.
 
-After all these discussions, the patch became quite simple again :/
-Still, thanks for all the discussions to make sure we didn't overlook
-clock handling.
+--u3/rZRmxL6MmkK24
+Content-Type: application/pgp-signature; name="signature.asc"
 
- drivers/watchdog/renesas_wdt.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/watchdog/renesas_wdt.c b/drivers/watchdog/renesas_wdt.c
-index 00662a8e039c..47fce4de0110 100644
---- a/drivers/watchdog/renesas_wdt.c
-+++ b/drivers/watchdog/renesas_wdt.c
-@@ -194,6 +194,7 @@ static int rwdt_probe(struct platform_device *pdev)
- 	struct clk *clk;
- 	unsigned long clks_per_sec;
- 	int ret, i;
-+	u8 csra;
- 
- 	if (rwdt_blacklisted(dev))
- 		return -ENODEV;
-@@ -213,8 +214,8 @@ static int rwdt_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 	priv->clk_rate = clk_get_rate(clk);
--	priv->wdev.bootstatus = (readb_relaxed(priv->base + RWTCSRA) &
--				RWTCSRA_WOVF) ? WDIOF_CARDRESET : 0;
-+	csra = readb_relaxed(priv->base + RWTCSRA);
-+	priv->wdev.bootstatus = csra & RWTCSRA_WOVF ? WDIOF_CARDRESET : 0;
- 	pm_runtime_put(dev);
- 
- 	if (!priv->clk_rate) {
-@@ -252,6 +253,13 @@ static int rwdt_probe(struct platform_device *pdev)
- 	/* This overrides the default timeout only if DT configuration was found */
- 	watchdog_init_timeout(&priv->wdev, 0, dev);
- 
-+	/* Check if FW enabled the watchdog */
-+	if (csra & RWTCSRA_TME) {
-+		/* Ensure properly initialized dividers */
-+		rwdt_start(&priv->wdev);
-+		set_bit(WDOG_HW_RUNNING, &priv->wdev.status);
-+	}
-+
- 	ret = watchdog_register_device(&priv->wdev);
- 	if (ret < 0)
- 		goto out_pm_disable;
--- 
-2.20.1
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1a4AUACgkQFA3kzBSg
+KbanPRAAqFD22fnOZRneBj5DYMqlP0MxStSlEAIKUiGHbjc7zWbtClxNRIpqsVPC
+Rwf4rCMrNYIw//9mRxLSGM8DP2Y+ikHw7gsl5dcxxAKHqYbd4FfUzldzXJyMdlsh
+pYdLXZjwLBg15beZ7Kxb2wqhsWXm0AA6LjYmn+4tAc5Dn9y1fXnJGoLotM7nAzdQ
+ll7PkNXBUOCq6dWTIt54WN5CPWx5AH8w+CbiieqNk5HFrF9x0ixGyCzJciE2ceKP
+oqVdFN8fI1O+NDh6nerBihBA/9SAghSIeRHv28dPK+h9iY9mCxXbyFL6kv/RkB5T
+2J2wucv2JnNlQd1VHc+f0CF3WxlKSCJ4nL7m0oV+Ag02n13OdbbHisp8M8bhYkGG
+GEsR9XFkLxfMnPY0d7QlfN/NEFUSt0F8P5HsYFKQ7/2vUX5BhQ8eoUCfFY9g/P77
+ADfkaP/mzSqkF7iITI05scUffoTdQtGgDwsTC5HtGcjR2KHFr/EsThvHdgppJC8s
+hpsW9RP5DdaSUrFNoeaecSlD7U7peAs3wnd+I3hA8ujHTUdtf1HL9B/Kpr/GuZED
+OSLHrC8iEQdf7ofWrwlFyhL/ef+f+j7xtUdin56Z6R/Ifo7sgJPqdxUXXnvkdHFm
+uhNcevwjuOCHVjdALH3MUxKDIFmdrN6kdJU5B1NNQQ9hcjwymFc=
+=rKgn
+-----END PGP SIGNATURE-----
 
+--u3/rZRmxL6MmkK24--
