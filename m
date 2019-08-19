@@ -2,61 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA1594F21
+	by mail.lfdr.de (Postfix) with ESMTP id 2068294F22
 	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Aug 2019 22:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727971AbfHSUhR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        id S1728193AbfHSUhR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
         Mon, 19 Aug 2019 16:37:17 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:45965 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727769AbfHSUhQ (ORCPT
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40408 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728177AbfHSUhR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Aug 2019 16:37:16 -0400
-Received: by mail-oi1-f193.google.com with SMTP id v12so2355506oic.12
-        for <linux-watchdog@vger.kernel.org>; Mon, 19 Aug 2019 13:37:15 -0700 (PDT)
+        Mon, 19 Aug 2019 16:37:17 -0400
+Received: by mail-oi1-f195.google.com with SMTP id h21so2364719oie.7
+        for <linux-watchdog@vger.kernel.org>; Mon, 19 Aug 2019 13:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :reply-to;
-        bh=QhoBQQ6l9oUi8mNhEv5RMMIQeW5JDhE0xlxpkZyDFS4=;
-        b=L8JavJtTgse9YOJRhbFCvvX6TxHvPuJRzUBPp3OPVUeEgXvgcntj7jl7PaFeRhzZ6/
-         6QnWk3W/yjzVutHi0HSyL7huQhitbO96Cyve2nIA+t0IOu8fS1nXE4d93zJFQnLZAipY
-         /iT6fvl5w4PwRI5Ok7A8VKbUbes3QSx1brlpn0+EGJ3U38+FY3ilNxx2JrIn1q3t5YCS
-         ym9M0/J9Ay+osWIbzlX7RpJJxWMgzkYhcD/t7fqKbPzpzj2OiNjCCfnmRrdtvYiBUpAj
-         ohIxo1+jCIWKsLwzywQtua6WwW34jpQaYZhJvlbEPMidmq+ODZa2/U76E0SCV81VQ8Oh
-         q5Cg==
+        bh=ahYWgNn4ghDOFq3tmvRr1AkEjevCgPd/PVakoGoQrig=;
+        b=iuTWR0ozAmPLu+zaANXoa0Kfu/rP0lzX+D/LQspkM9w6485DPEZsfqEHOqf36CXHRl
+         28zJ/m5kf7s6J6smK+jNzWg6jgX19Nz1D1kKc+Z/kNRk9obn28o8OXzl5fkBqTXQIkXv
+         LTo4hztcLFIIiR1XCRBuupRK+omBjwzxT8iV/DAp3yiEKO0R/njHCJWmvDUopGRyae9b
+         8y2R7w9sTmEzLFaBzMWzpwiN35ODlvftxhN74oCuVeYLsmu+nfWecvv/AMrmoCsCIXxh
+         Ez+yLagxW4x0j++/3yEa0AHcaVibwZmWBy68KRlAROBV3FtmRDRWhxoh9IQwlRuVR+Q1
+         lEzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:reply-to;
-        bh=QhoBQQ6l9oUi8mNhEv5RMMIQeW5JDhE0xlxpkZyDFS4=;
-        b=ERabBBZyQ6GLgQff193E9npr9bGAbGOx6oYIcaz9GRpFGvIVUiGhLjetyw825PSS6t
-         Hy8lIoNI8ybM+Uq6eAuvlpwht0Qx17wxCEuMr0tdgl5697iBLp77opv7Ki6xlU2Yq1+B
-         zCFHNgFrC7NnWqjuno+LBNvK0v3MDSpVhifRcRT8e5yT7NLahE8autnfV+BQ8972PMl3
-         sHNVu0qOTDVy33y4dIF7Tcyziq9mIIj7YA5/RYf0Qdjk07H8CqhJNdhGMn3lXBV1Ella
-         GJMHtCMQumU3a50G5smmT38pNGMJLAS9LpjjygBWwmh0BTLbHHxX0n2+y7UfUxw5ZfzV
-         eQbw==
-X-Gm-Message-State: APjAAAUwHQZW3+jEOatLDZbmtkF6VVXRopNohhL8yk+rTRx48W1iKlLP
-        FciF40LKIfp1KZMn9x7bhA==
-X-Google-Smtp-Source: APXvYqySq8xAc/CbPL0q1q/EHBG+E0EwI1s2eJFmWnC6zwwo+Zujiqiq+h2pm/62uFVowCQRx89AjQ==
-X-Received: by 2002:aca:5e06:: with SMTP id s6mr15037232oib.171.1566247034896;
-        Mon, 19 Aug 2019 13:37:14 -0700 (PDT)
+        bh=ahYWgNn4ghDOFq3tmvRr1AkEjevCgPd/PVakoGoQrig=;
+        b=MRYRUI2XXAQtYjYFAtDt1QbKQSqL098vBN6SkCi1+zH1K8EsS/AiwOwRxjvJoJHe1Z
+         sbVQoCMgolQu9KcKIKnVBdkWpsw7mrLs5L6tIPkjrky+T3vKWh6gyGT2KeaDbwRQHwfs
+         m7F5d9HVkUeJn1SHpCtnHE5JQQwNynt/WHR6ii7AaEb8Ant7NVKQIAqpR9ode3lGQXSx
+         U6NlpMYfJ6/wa58+teZXDyjsYVOroK6gCv0YX0eYmkH7SEz4GCuBXuTzw8lKQrZJAFrM
+         hLKqEXZeCVIasb8znLW2j2XhHvBQbAKVSZVqAEOyCPxQk6XQInazQz6aewWVYMIDelbA
+         SQFQ==
+X-Gm-Message-State: APjAAAVGTkZz0Ne8vanDZvAO0sUVnuWs3RwJrmTX1Uj74PtKnuUrZ0hp
+        gpn3rVhhzIMJXIVwP7gE2A==
+X-Google-Smtp-Source: APXvYqwaqWVrtX6M0k9UKLOcEjflh2bf83FT0E0Sju2UR4QDm2RCoCYkt7wmS4nIQfDayV56sdgYZg==
+X-Received: by 2002:aca:2109:: with SMTP id 9mr15087198oiz.59.1566247036216;
+        Mon, 19 Aug 2019 13:37:16 -0700 (PDT)
 Received: from serve.minyard.net ([47.184.134.43])
-        by smtp.gmail.com with ESMTPSA id 13sm5886029otv.14.2019.08.19.13.37.14
+        by smtp.gmail.com with ESMTPSA id s24sm5971025otd.81.2019.08.19.13.37.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 13:37:14 -0700 (PDT)
+        Mon, 19 Aug 2019 13:37:15 -0700 (PDT)
 Received: from t430.minyard.net (t430m.minyard.net [192.168.27.3])
-        by serve.minyard.net (Postfix) with ESMTPA id 145B41800D5;
+        by serve.minyard.net (Postfix) with ESMTPA id 25A2A1805A8;
         Mon, 19 Aug 2019 20:37:14 +0000 (UTC)
 Received: by t430.minyard.net (Postfix, from userid 1000)
-        id E4F5D30232A; Mon, 19 Aug 2019 15:37:13 -0500 (CDT)
+        id 0B6C2302506; Mon, 19 Aug 2019 15:37:14 -0500 (CDT)
 From:   minyard@acm.org
 To:     linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc:     Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 02/12] watchdog: Add the ability to provide data to read
-Date:   Mon, 19 Aug 2019 15:37:01 -0500
-Message-Id: <20190819203711.32599-3-minyard@acm.org>
+Subject: [PATCH 03/12] watchdog: Add a pretimeout governor to provide read data
+Date:   Mon, 19 Aug 2019 15:37:02 -0500
+Message-Id: <20190819203711.32599-4-minyard@acm.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190819203711.32599-1-minyard@acm.org>
 References: <20190819203711.32599-1-minyard@acm.org>
@@ -71,189 +71,130 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Corey Minyard <cminyard@mvista.com>
 
-This is for the read data pretimeout governor.
+When a pretimeout occurs, provide a byte of data on the watchdog
+device.
 
 Signed-off-by: Corey Minyard <cminyard@mvista.com>
 ---
- drivers/watchdog/watchdog_core.c |   3 +
- drivers/watchdog/watchdog_dev.c  | 113 +++++++++++++++++++++++++++++++
- include/linux/watchdog.h         |   5 ++
- 3 files changed, 121 insertions(+)
+ drivers/watchdog/Kconfig                | 16 +++++++++
+ drivers/watchdog/Makefile               |  1 +
+ drivers/watchdog/pretimeout_read_data.c | 47 +++++++++++++++++++++++++
+ drivers/watchdog/watchdog_pretimeout.h  |  2 ++
+ 4 files changed, 66 insertions(+)
+ create mode 100644 drivers/watchdog/pretimeout_read_data.c
 
-diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-index 21e8085b848b..80149ac229fc 100644
---- a/drivers/watchdog/watchdog_core.c
-+++ b/drivers/watchdog/watchdog_core.c
-@@ -216,6 +216,9 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
- 		return id;
- 	wdd->id = id;
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 8188963a405b..3578b7bc863c 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -105,6 +105,14 @@ config WATCHDOG_PRETIMEOUT_GOV_PANIC
+ 	  Panic watchdog pretimeout governor, on watchdog pretimeout
+ 	  event put the kernel into panic.
  
-+	spin_lock_init(&wdd->readlock);
-+	init_waitqueue_head(&wdd->read_q);
++config WATCHDOG_PRETIMEOUT_GOV_READ_DATA
++	tristate "Read data watchdog pretimeout governor"
++	depends on WATCHDOG_CORE
++	default WATCHDOG_CORE
++	help
++	  Read data watchdog pretimeout governor, on watchdog pretimeout
++	  event provide a byte of data on the watchdog device.
 +
- 	ret = watchdog_dev_register(wdd);
- 	if (ret) {
- 		ida_simple_remove(&watchdog_ida, id);
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index dbd2ad4c9294..8e8304607a8c 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -44,6 +44,8 @@
- #include <linux/types.h>	/* For standard types (like size_t) */
- #include <linux/watchdog.h>	/* For watchdog specific items */
- #include <linux/uaccess.h>	/* For copy_to_user/put_user/... */
-+#include <linux/poll.h>		/* For poll_table/... */
-+#include <linux/sched/signal.h>	/* For signal_pending */
+ choice
+ 	prompt "Default Watchdog Pretimeout Governor"
+ 	default WATCHDOG_PRETIMEOUT_DEFAULT_GOV_PANIC
+@@ -129,6 +137,14 @@ config WATCHDOG_PRETIMEOUT_DEFAULT_GOV_PANIC
+ 	  a watchdog pretimeout event happens, consider that
+ 	  a watchdog feeder is dead and reboot is unavoidable.
  
- #include <uapi/linux/sched/types.h>	/* For struct sched_param */
++config WATCHDOG_PRETIMEOUT_DEFAULT_GOV_READ_DATA
++	bool "read_data"
++	depends on WATCHDOG_PRETIMEOUT_GOV_READ_DATA
++	help
++	  Use read data watchdog pretimeout governor by default, if
++	  a watchdog pretimeout event happens, provide a byte of read
++	  data on the watchdog device.
++
+ endchoice
  
-@@ -929,12 +931,120 @@ static int watchdog_release(struct inode *inode, struct file *file)
- 	return 0;
- }
+ endif # WATCHDOG_PRETIMEOUT_GOV
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 7caa920e7e60..9cfe4ad32dc4 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -12,6 +12,7 @@ watchdog-$(CONFIG_WATCHDOG_PRETIMEOUT_GOV)	+= watchdog_pretimeout.o
  
-+static ssize_t watchdog_read(struct file *file,
-+			     char        __user *buf,
-+			     size_t      count,
-+			     loff_t      *ppos)
+ obj-$(CONFIG_WATCHDOG_PRETIMEOUT_GOV_NOOP)	+= pretimeout_noop.o
+ obj-$(CONFIG_WATCHDOG_PRETIMEOUT_GOV_PANIC)	+= pretimeout_panic.o
++obj-$(CONFIG_WATCHDOG_PRETIMEOUT_GOV_READ_DATA)	+= pretimeout_read_data.o
+ 
+ # Only one watchdog can succeed. We probe the ISA/PCI/USB based
+ # watchdog-cards first, then the architecture specific watchdog
+diff --git a/drivers/watchdog/pretimeout_read_data.c b/drivers/watchdog/pretimeout_read_data.c
+new file mode 100644
+index 000000000000..197e9d692044
+--- /dev/null
++++ b/drivers/watchdog/pretimeout_read_data.c
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2019 MontaVista Software, LLC
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/fs.h>
++#include <linux/watchdog.h>
++
++#include "watchdog_pretimeout.h"
++
++/**
++ * pretimeout_read_data - Cause a read to return on the watchdog device.
++ * @wdd - watchdog_device
++ */
++static void pretimeout_read_data(struct watchdog_device *wdd)
 +{
-+	struct watchdog_core_data *wd_data = file->private_data;
-+	struct watchdog_device *wdd;
-+	int err = 0;
-+	wait_queue_entry_t wait;
-+	char dummy = 1;
++	unsigned long flags;
 +
-+	if (count <= 0)
-+		return 0;
-+
-+	mutex_lock(&wd_data->lock);
-+
-+	wdd = wd_data->wdd;
-+	if (!wdd)
-+		goto done;
-+
-+	/*
-+	 * Reading returns if the pretimeout has gone off, and it only does
-+	 * it once per pretimeout.
-+	 */
-+	spin_lock_irq(&wdd->readlock);
-+	while (!wdd->data_to_read) {
-+		if (file->f_flags & O_NONBLOCK) {
-+			err = -EAGAIN;
-+			goto out;
-+		}
-+
-+		init_waitqueue_entry(&wait, current);
-+		add_wait_queue(&wdd->read_q, &wait);
-+		set_current_state(TASK_INTERRUPTIBLE);
-+		spin_unlock_irq(&wdd->readlock);
-+		schedule();
-+		spin_lock_irq(&wdd->readlock);
-+		remove_wait_queue(&wdd->read_q, &wait);
-+
-+		if (signal_pending(current)) {
-+			err = -ERESTARTSYS;
-+			goto out;
-+		}
-+	}
-+	dummy = wdd->data_to_read;
-+	wdd->data_to_read = 0;
-+
-+ out:
-+	spin_unlock_irq(&wdd->readlock);
-+
-+	if (err == 0) {
-+		if (copy_to_user(buf, &dummy, 1))
-+			err = -EFAULT;
-+		else
-+			err = 1;
-+	}
-+
-+ done:
-+	mutex_unlock(&wd_data->lock);
-+
-+	return err;
++	spin_lock_irqsave(&wdd->readlock, flags);
++	wdd->data_to_read = 1;
++	wake_up_interruptible(&wdd->read_q);
++	kill_fasync(&wdd->fasync_q, SIGIO, POLL_IN);
++	spin_unlock_irqrestore(&wdd->readlock, flags);
 +}
 +
-+static __poll_t watchdog_poll(struct file *file, poll_table *wait)
++static struct watchdog_governor watchdog_gov_read_data = {
++	.name		= "read_data",
++	.pretimeout	= pretimeout_read_data,
++};
++
++static int __init watchdog_gov_read_data_register(void)
 +{
-+	struct watchdog_core_data *wd_data = file->private_data;
-+	struct watchdog_device *wdd;
-+	__poll_t mask = 0;
-+
-+	mutex_lock(&wd_data->lock);
-+
-+	wdd = wd_data->wdd;
-+	if (!wdd)
-+		goto done;
-+
-+	poll_wait(file, &wdd->read_q, wait);
-+
-+	spin_lock_irq(&wdd->readlock);
-+	if (wdd->data_to_read)
-+		mask |= (EPOLLIN | EPOLLRDNORM);
-+	spin_unlock_irq(&wdd->readlock);
-+
-+done:
-+	mutex_unlock(&wd_data->lock);
-+	return mask;
++	return watchdog_register_governor(&watchdog_gov_read_data);
 +}
 +
-+static int watchdog_fasync(int fd, struct file *file, int on)
++static void __exit watchdog_gov_read_data_unregister(void)
 +{
-+	struct watchdog_core_data *wd_data = file->private_data;
-+	struct watchdog_device *wdd;
-+	int err = -ENODEV;
-+
-+	mutex_lock(&wd_data->lock);
-+
-+	wdd = wd_data->wdd;
-+	if (!wdd)
-+		goto done;
-+
-+	err = fasync_helper(fd, file, on, &wdd->fasync_q);
-+done:
-+	mutex_unlock(&wd_data->lock);
-+	return err;
++	watchdog_unregister_governor(&watchdog_gov_read_data);
 +}
++module_init(watchdog_gov_read_data_register);
++module_exit(watchdog_gov_read_data_unregister);
 +
- static const struct file_operations watchdog_fops = {
- 	.owner		= THIS_MODULE,
- 	.write		= watchdog_write,
- 	.unlocked_ioctl	= watchdog_ioctl,
- 	.open		= watchdog_open,
- 	.release	= watchdog_release,
-+	.read		= watchdog_read,
-+	.poll		= watchdog_poll,
-+	.fasync		= watchdog_fasync,
- };
++MODULE_AUTHOR("Corey Minyard <cminyard@mvista.com>");
++MODULE_DESCRIPTION("Read data watchdog pretimeout governor");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/watchdog/watchdog_pretimeout.h b/drivers/watchdog/watchdog_pretimeout.h
+index a3f1abc68839..819517ed0138 100644
+--- a/drivers/watchdog/watchdog_pretimeout.h
++++ b/drivers/watchdog/watchdog_pretimeout.h
+@@ -28,6 +28,8 @@ int watchdog_pretimeout_governor_set(struct watchdog_device *wdd,
+ #define WATCHDOG_PRETIMEOUT_DEFAULT_GOV		"noop"
+ #elif IS_ENABLED(CONFIG_WATCHDOG_PRETIMEOUT_DEFAULT_GOV_PANIC)
+ #define WATCHDOG_PRETIMEOUT_DEFAULT_GOV		"panic"
++#elif IS_ENABLED(CONFIG_WATCHDOG_PRETIMEOUT_DEFAULT_GOV_READ_DATA)
++#define WATCHDOG_PRETIMEOUT_DEFAULT_GOV		"read_data"
+ #endif
  
- static struct miscdevice watchdog_miscdev = {
-@@ -970,6 +1080,9 @@ static int watchdog_cdev_register(struct watchdog_device *wdd, dev_t devno)
- 	if (IS_ERR_OR_NULL(watchdog_kworker))
- 		return -ENODEV;
- 
-+	spin_lock_init(&wdd->readlock);
-+	init_waitqueue_head(&wdd->read_q);
-+
- 	kthread_init_work(&wd_data->work, watchdog_ping_work);
- 	hrtimer_init(&wd_data->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	wd_data->timer.function = watchdog_timer_expired;
-diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-index 417d9f37077a..e34501a822f0 100644
---- a/include/linux/watchdog.h
-+++ b/include/linux/watchdog.h
-@@ -117,6 +117,11 @@ struct watchdog_device {
- #define WDOG_HW_RUNNING		3	/* True if HW watchdog running */
- #define WDOG_STOP_ON_UNREGISTER	4	/* Should be stopped on unregister */
- 	struct list_head deferred;
-+
-+	spinlock_t readlock;
-+	bool data_to_read;
-+	struct wait_queue_head read_q;
-+	struct fasync_struct *fasync_q;
- };
- 
- #define WATCHDOG_NOWAYOUT		IS_BUILTIN(CONFIG_WATCHDOG_NOWAYOUT)
+ #else
 -- 
 2.17.1
 
