@@ -2,170 +2,106 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6F591920
-	for <lists+linux-watchdog@lfdr.de>; Sun, 18 Aug 2019 21:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7038191A6B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Aug 2019 02:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbfHRTAd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 18 Aug 2019 15:00:33 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43921 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbfHRTAd (ORCPT
+        id S1726211AbfHSAQQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 18 Aug 2019 20:16:16 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:56243 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726186AbfHSAQQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 18 Aug 2019 15:00:33 -0400
-Received: by mail-pg1-f195.google.com with SMTP id k3so5588796pgb.10;
-        Sun, 18 Aug 2019 12:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mFXULAn7ELutBem8f4viP3aSr6X1LYAUc/zcz1ZhBSI=;
-        b=VSGvMj31C1ExOp9gVidC1e0eiiRZBHzrtjqDwPg77P6r0cOVTrQX3yfoZk/zCH78ga
-         RRszMzlVpOw9eEY7mM45BMSGG5dw0CUhR6drMlqTzPLry5h26pByGQv63ETMcKekaViW
-         ocCHRbe9IgDKifJcql/tDQfA1GYSKZFPS/8uQg4F6XWRctmuEBcsUxF0QVMjd566AvUO
-         XYr+/CTSQjPBmLrQmg1XDBhdBDph3ZfHQTV8cglfZgY5fsLvO49mLwH0KH4TcSuH8IGt
-         uFxls9dFu5m4h/vfyC8hRBDAwqNKNbLAOt9gn0Y+FWiA+BdAZeiCQKdHKvEFD5id0mAd
-         s6RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mFXULAn7ELutBem8f4viP3aSr6X1LYAUc/zcz1ZhBSI=;
-        b=npRYn4ZNa3vS/8yA6Angclzm3SezUv/a3G2k0RxrlUoeUNRJKjR7ziFbgaP5K853gi
-         VAAI/MuVHLARjrvn6hYT6MTd0akHR2zXGCAwRMaL82OLi1kZNNKtPhAbqYXUCCJlZIQW
-         gpKq6KBP5LQqluGBmIJ0zd4eomS2XrCnjXkKojasf+SquR7kWzxY38vaSW5Gdfq7X2iV
-         Q9qQRNvNgEdL5lg4hYWW1nzlwh8ZjLz3dNNH3D5x7yJCTp8/Rrxkflvdqhv0I9Wxi0XA
-         RFq57ff0G3A24u1Ku7GBLpaxbrdWGG26ZaskLE/ugRXSQYlMkP6+/32NnNQS0bs4+kvG
-         q1LQ==
-X-Gm-Message-State: APjAAAUrFqjj2XshVPUtUtQ3F+tuhtgnhvS2P/m9Xj5gqPMvLd8HDarK
-        urvS4aKAnmdIOWjTjsPPt7xPicDJ
-X-Google-Smtp-Source: APXvYqyEzykMz+CQXmFeC70LG5pnlYh7XYrhhSr2pllQisQCbCjf3PSy0nrlOnx69GxhtiLFkROvmw==
-X-Received: by 2002:a63:b555:: with SMTP id u21mr17004499pgo.222.1566154832462;
-        Sun, 18 Aug 2019 12:00:32 -0700 (PDT)
-Received: from server.roeck-us.net (108-223-40-66.lightspeed.sntcca.sbcglobal.net. [108.223.40.66])
-        by smtp.gmail.com with ESMTPSA id u24sm12587674pgk.31.2019.08.18.12.00.30
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 18 Aug 2019 12:00:31 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: renesas_wdt: support handover from bootloader
-To:     Wolfram Sang <wsa@the-dreams.de>, linux-watchdog@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <20190818180007.2258-1-wsa@the-dreams.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <7d1611dd-4f9f-6385-8454-22edf778d6e5@roeck-us.net>
-Date:   Sun, 18 Aug 2019 12:00:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190818180007.2258-1-wsa@the-dreams.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Sun, 18 Aug 2019 20:16:16 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3A75F2067B;
+        Sun, 18 Aug 2019 20:16:15 -0400 (EDT)
+Received: from imap2 ([10.202.2.52])
+  by compute4.internal (MEProxy); Sun, 18 Aug 2019 20:16:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm3; bh=o2Y1ru/g1rfm03mCKVr9rWJkvfhNUkl
+        tmb3ZwidhSuY=; b=psSHkY+5FWcPlcoDP+crqOmhYIIE8nGc8bCYtjYjios5y/w
+        6kpcrAwDzIt3ZfWCNdOHKL7MC1S0y9ebXNiNn+pWBlsVwaR6DkEORgcJkEmTED1n
+        Pt68Z9fH3J8+bd709iDFoVB58eotO0+NJn7qhsmydELYOPb9DovxPH1dqOn8j/WN
+        8lsTOJ33B2XEemBSngwvI/w38kRcwliUfzMGTAgrtre2iO54b/pWUFpQOLRAg2As
+        GrVVeRxhdbRdZ4SRbBPF8sU8V7EHwiLjtCX0XT8AtsJcSxdTrRLIMqRb9Ep/9Rk4
+        JfYOuQqYwyL1lj9PeF/NQh0okM/0+VgTx0hLRsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=o2Y1ru
+        /g1rfm03mCKVr9rWJkvfhNUkltmb3ZwidhSuY=; b=isN5gHRCsKr9HVk+MlmwTl
+        V73aHgQn1EnDRgQGL13nbYwwYw3GdCWpOZVeyhbRQ2lgdPBVCAbl6HAmxH8dPSW6
+        WNc0WASRKpdwk0YfOQf103A51O6dO4iQ/HEq5pxDd94abbnxB/JZUXqW+eB6NrK0
+        ICtF1uEPykbon6S11LPYCaFtD7ufEVUShCETGorqgFgYeMSMIaiVyVHXenRqjywQ
+        5azfaBUwdp5c6Sv43DiVIciB+Ikw5LrC8XkwNqi5D44Hta2jsPQR3z7l58MN/iDE
+        VZNS8Xq61KliTn6t+leJgz4SUNDWCjPR6r+moPdx/hlZPxAXL5frChHkyL2mLh2A
+        ==
+X-ME-Sender: <xms:TepZXca803avgHkIwbyggRpX9e_hA74psYMUjL1hkBmM0AbA01GdoA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudefkedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpegrnhgurhgvfiesrghjrdhiugdrrghunecuvehluhhsthgv
+    rhfuihiivgeptd
+X-ME-Proxy: <xmx:TepZXeKUDBEIbqj2u9y6mEzGBqWgi0vyY-O9F4cDqRZ7_JrLerfgYQ>
+    <xmx:TepZXYtQKv-sQ0iBQm9mD3JhHlEKJUEETtL7yoYSxOJnPk7FEbqxEQ>
+    <xmx:TepZXSUCo_rcAzLiaxKVYGJXAzxVoqzOkIE2TC7t1CTQnZ8YuF7oyw>
+    <xmx:T-pZXZkjnesKGK3SeR7_DYnqN2_-qcnmYDZcyy7JhDdMLCA8H1F01w>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6330BE00A3; Sun, 18 Aug 2019 20:16:13 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.1.6-869-g2d94aad-fmstable-20190814v1
+Mime-Version: 1.0
+Message-Id: <efbc1e57-5c5e-4ff4-af94-d18b017d64ab@www.fastmail.com>
+In-Reply-To: <20190816160347.23393-2-joel@jms.id.au>
+References: <20190816160347.23393-1-joel@jms.id.au>
+ <20190816160347.23393-2-joel@jms.id.au>
+Date:   Mon, 19 Aug 2019 09:46:46 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Joel Stanley" <joel@jms.id.au>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Rob Herring" <robh+dt@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        "Ryan Chen" <ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add ast2600 compatible
+Content-Type: text/plain
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/18/19 11:00 AM, Wolfram Sang wrote:
-> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+
+On Sat, 17 Aug 2019, at 01:34, Joel Stanley wrote:
+> This adds a compatible for the ast2600, a new ASPEED SoC.
 > 
-> Support an already running watchdog by checking its enable bit and set
-> up the status accordingly before registering the device. Introduce a new
-> flag to remember all this to keep RPM calls balanced.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+
 > ---
+>  Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Changes since RFC:
+> diff --git a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt 
+> b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
+> index c5077a1f5cb3..d78d4a8fb868 100644
+> --- a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
+> @@ -4,6 +4,7 @@ Required properties:
+>   - compatible: must be one of:
+>  	- "aspeed,ast2400-wdt"
+>  	- "aspeed,ast2500-wdt"
+> +	- "aspeed,ast2600-wdt"
+>  
+>   - reg: physical base address of the controller and length of memory mapped
+>     region
+> -- 
+> 2.23.0.rc1
 > 
-> * Geert ensured that the module clock for the RWDT will stay active
->    during the boot process because clock will only be stopped at the end
->    of init if there is no refcnt for this clk.
-> 
-> * So, we make sure to have a refcnt when FW enabled the wdog. Once the
->    first call to open comes, we "transfer" the refcnt to that call.
->    (Is that the correct behaviour? I think it is a tad better than to
->     place the balancing RPM call in remove, but I am open here)
-> 
-> * Tested with "open_timeout" kernel parameter. System can now reboot
->    if userspace hasn't taken over the watchdog with <n> seconds.
-> 
-> 
->   drivers/watchdog/renesas_wdt.c | 20 +++++++++++++++++---
->   1 file changed, 17 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/watchdog/renesas_wdt.c b/drivers/watchdog/renesas_wdt.c
-> index 00662a8e039c..11cef69f329b 100644
-> --- a/drivers/watchdog/renesas_wdt.c
-> +++ b/drivers/watchdog/renesas_wdt.c
-> @@ -50,6 +50,7 @@ struct rwdt_priv {
->   	struct watchdog_device wdev;
->   	unsigned long clk_rate;
->   	u8 cks;
-> +	bool started_by_fw;
->   };
->   
->   static void rwdt_write(struct rwdt_priv *priv, u32 val, unsigned int reg)
-> @@ -85,7 +86,11 @@ static int rwdt_start(struct watchdog_device *wdev)
->   	struct rwdt_priv *priv = watchdog_get_drvdata(wdev);
->   	u8 val;
->   
-> -	pm_runtime_get_sync(wdev->parent);
-> +	if (priv->started_by_fw)
-> +		/* we already called this function and RPM is active */
-> +		priv->started_by_fw = false;
-
-If the HW watchdog is running, the start function should not be called
-on open. It would be called after the watchdog was stopped and is then
-started again. With that, opening the watchdog the first time would not
-call this function, and started_by_fw would remain true. Closing it would
-then stopp the watchdog and call pm_runtime_put(). The next open() would
-hit the above case, and not call pm_runtime_get_sync(). pm would then be
-out of sync.
-
-What am I missing ?
-
-Guenter
-
-> +	else
-> +		pm_runtime_get_sync(wdev->parent);
->   
->   	/* Stop the timer before we modify any register */
->   	val = readb_relaxed(priv->base + RWTCSRA) & ~RWTCSRA_TME;
-> @@ -194,6 +199,7 @@ static int rwdt_probe(struct platform_device *pdev)
->   	struct clk *clk;
->   	unsigned long clks_per_sec;
->   	int ret, i;
-> +	u8 csra;
->   
->   	if (rwdt_blacklisted(dev))
->   		return -ENODEV;
-> @@ -213,8 +219,8 @@ static int rwdt_probe(struct platform_device *pdev)
->   	pm_runtime_enable(dev);
->   	pm_runtime_get_sync(dev);
->   	priv->clk_rate = clk_get_rate(clk);
-> -	priv->wdev.bootstatus = (readb_relaxed(priv->base + RWTCSRA) &
-> -				RWTCSRA_WOVF) ? WDIOF_CARDRESET : 0;
-> +	csra = readb_relaxed(priv->base + RWTCSRA);
-> +	priv->wdev.bootstatus = csra & RWTCSRA_WOVF ? WDIOF_CARDRESET : 0;
->   	pm_runtime_put(dev);
->   
->   	if (!priv->clk_rate) {
-> @@ -252,6 +258,14 @@ static int rwdt_probe(struct platform_device *pdev)
->   	/* This overrides the default timeout only if DT configuration was found */
->   	watchdog_init_timeout(&priv->wdev, 0, dev);
->   
-> +	/* Check if FW enabled the watchdog */
-> +	if (csra & RWTCSRA_TME) {
-> +		/* Ensure properly initialized dividers */
-> +		rwdt_start(&priv->wdev);
-> +		set_bit(WDOG_HW_RUNNING, &priv->wdev.status);
-> +		priv->started_by_fw = true;
-> +	}
-> +
->   	ret = watchdog_register_device(&priv->wdev);
->   	if (ret < 0)
->   		goto out_pm_disable;
-> 
-
+>
