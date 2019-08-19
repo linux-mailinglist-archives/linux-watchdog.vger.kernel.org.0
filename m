@@ -2,50 +2,50 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E0E95023
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Aug 2019 23:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D42E95057
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Aug 2019 23:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728349AbfHSVuc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Aug 2019 17:50:32 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36090 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728014AbfHSVuc (ORCPT
+        id S1728305AbfHSV7B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Aug 2019 17:59:01 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:46325 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728283AbfHSV7B (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Aug 2019 17:50:32 -0400
-Received: by mail-pf1-f193.google.com with SMTP id w2so1972468pfi.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 19 Aug 2019 14:50:31 -0700 (PDT)
+        Mon, 19 Aug 2019 17:59:01 -0400
+Received: by mail-pl1-f193.google.com with SMTP id c2so1602140plz.13
+        for <linux-watchdog@vger.kernel.org>; Mon, 19 Aug 2019 14:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=cP/ac5cZ4K+/t/B6GlVwoLyef5ZlBax8BXgk/iev8EI=;
-        b=mO5qqnl5sw2Y9Tks5UQaeNYgz7RNWuDjGPr7iSoZmVF12ZQXHQ4gxLDB7oxitcklYH
-         24oSYlQWhgmad1BWVYr+x4c723zXSYF32eXh6Wz4vtc7j8lBpCVHsaMkqBha6pdQ9C7+
-         QnWH/x8oNBEfc3yYHWEcw1aJMJf9D/jatLFspRNsbHUSygU4fFX0XH6pOSWsTwl2lyHE
-         dpU0+6BX3eskgFZRaTPAtJMU37F57/p/3D7ufWcpmoF3brBZhWznLHVjHABqDiSy0RDI
-         X/+eHQ3hvT31HkS7ICa1KZnVl2zWMPszUnCSnUlFY6fx2vItVqJyNvqVqwnOpLC1FkwU
-         VIBw==
+        bh=UDw4RSH2uiScTNXTCVu+N4HvP1GQklcJWeqvKbLhyto=;
+        b=Rfu8VrzDF51qrs62E5L3Ii6Izur3k101JLNG+26M0S/5yMWLQSIPkcM+2FUn3AfUtW
+         0LuD9llr4eqHJcXj+YfJH+tD3p0tB42Nl2ze+tZeB6idLNGOvn3Q4rHIgn9FPTde1Ir5
+         6F1zP3TxB4xzq6kavnP9mZnmnVPkh8h3E+QXrIpOofNO4wJQGc85Pq/OMB2iCggTZVpi
+         NyG8qEFLpvotDvem4O1rWQ2pigYzRfLYhHf9gXXE6pPPGKSBS/l97aVUttPGsGESXJhU
+         WxFRUzp/ZvHMIEacQRfxTBmJ/B8iwH65OPWODGwV6mADMxAcN0inpHmD1gJsZfLKK8+G
+         HuiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cP/ac5cZ4K+/t/B6GlVwoLyef5ZlBax8BXgk/iev8EI=;
-        b=sk/C8QEipWFKBe7cltp5bZAh6ou0NJ/zfm9vWLHT/nN8k43G5q1pGufov/FBR4os2O
-         EyZD69dtr9g08TSOjqoB2pMeeGWMjzCcGwC/gIZ/5vOP9SPmuuiv8tzAJM1fdV4SxciE
-         RX5lbHjiqc1QDsbNujydlsrDQ1HPtxpcmZSefqtVVfVlG8JZ/Qwni464v309NWfqXm9s
-         SE3qJMKdld1c50B4hbUzOkijqYW/1duy53Io/yyFrWDtlLatqdFV12sEMFv8829p54VV
-         470aZhgh90ZZNZV2ABjV3jZyHh3Ms+Xq2t3GWKonbKxK6esu1NzAA16tYUyufgxchgt8
-         0WPg==
-X-Gm-Message-State: APjAAAUuXZY1OMSkpPZGTjiKob/RfGpF9fntjroNuq8vE6ai7v8CnSkc
-        Ud5vbs6bfMl4Bas7hHjRh/8=
-X-Google-Smtp-Source: APXvYqzUJmMBTyfe65RTCoiKxvhNghc/MVJ6A9oRJgL/KZxXbGGWCnnRWEykFoN/UcxLaH6G7lBkZw==
-X-Received: by 2002:a17:90a:240e:: with SMTP id h14mr24044782pje.9.1566251431592;
-        Mon, 19 Aug 2019 14:50:31 -0700 (PDT)
+        bh=UDw4RSH2uiScTNXTCVu+N4HvP1GQklcJWeqvKbLhyto=;
+        b=rH/mpB0YIYHd5Lfogt4+VRIeRLOtmUsFjd3f0bUkD59WZjePHdyqH+46NR5AbEa/kq
+         euVL6fSpktqHms6JWi2kyEJsFWMHEamNhB3Cp4inpKRL9neZ43OLIm+4kM6qMlhNtsdM
+         zjoiYJE113jOxmYtqoAm9pMNqSv4MeA8XuqAiXj4nIweCnpLFvr4xTo9HH9z3yNdV8BQ
+         XxnT9zzKiJg+ULCQVZzYvyhVcOm7f8TW85N3X8bOo6+gGcmWUVR9pVLaqndmJ79Yg3oD
+         h3L6kGFiCMdKzQ/w7EDo3u+WueGi5ziabUue7538CUzuyZ6EQKZbDmsxoktqjymF2ChC
+         Xxlg==
+X-Gm-Message-State: APjAAAWXshO5l+ZM1eaAn/dNyNF6FXdiVDmYx4xXWpqO3xEp9DXTv0Nx
+        XBoIGQZBVe1V3GVahqDRI3OzP5Dq
+X-Google-Smtp-Source: APXvYqwT7nm/IXlSFzia9/FG1XhNYoGsS4T+HclEI148hnqzKHJ+MivigRztqofPJRJaDGA6fOg10A==
+X-Received: by 2002:a17:902:5a1:: with SMTP id f30mr25252372plf.64.1566251940330;
+        Mon, 19 Aug 2019 14:59:00 -0700 (PDT)
 Received: from localhost (108-223-40-66.lightspeed.sntcca.sbcglobal.net. [108.223.40.66])
-        by smtp.gmail.com with ESMTPSA id s7sm12855356pjn.28.2019.08.19.14.50.30
+        by smtp.gmail.com with ESMTPSA id g2sm14695354pfm.32.2019.08.19.14.58.59
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 14:50:31 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 14:50:30 -0700
+        Mon, 19 Aug 2019 14:58:59 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 14:58:58 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Convert@minyard.net, the@minyard.net, IPMI@minyard.net,
         watchdog@minyard.net, to@minyard.net, standard@minyard.net,
@@ -53,213 +53,269 @@ To:     Convert@minyard.net, the@minyard.net, IPMI@minyard.net,
 Cc:     linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Corey Minyard <cminyard@mvista.com>
-Subject: Re: [PATCH 02/12] watchdog: Add the ability to provide data to read
-Message-ID: <20190819215029.GA7092@roeck-us.net>
+Subject: Re: [PATCH 08/12] watchdog: Add the ability to set the action of a
+ timeout
+Message-ID: <20190819215858.GB7517@roeck-us.net>
 References: <20190819203711.32599-1-minyard@acm.org>
- <20190819203711.32599-3-minyard@acm.org>
+ <20190819203711.32599-9-minyard@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190819203711.32599-3-minyard@acm.org>
+In-Reply-To: <20190819203711.32599-9-minyard@acm.org>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 03:37:01PM -0500, minyard@acm.org wrote:
+On Mon, Aug 19, 2019 at 03:37:07PM -0500, minyard@acm.org wrote:
 > From: Corey Minyard <cminyard@mvista.com>
 > 
-> This is for the read data pretimeout governor.
+> Add a way to tell the watchdog what to do on a timeout and on
+> a pretimeout.  This is to support the IPMI watchdog's ability
+> to do this.
 > 
+> Signed-off-by: Corey Minyard <cminyard@mvista.com>
+> ---
+>  Documentation/watchdog/watchdog-api.rst | 40 ++++++++++++
+>  drivers/watchdog/watchdog_dev.c         | 82 +++++++++++++++++++++++++
+>  include/linux/watchdog.h                |  4 ++
+>  include/uapi/linux/watchdog.h           | 14 +++++
+>  4 files changed, 140 insertions(+)
+> 
+> diff --git a/Documentation/watchdog/watchdog-api.rst b/Documentation/watchdog/watchdog-api.rst
+> index c6c1e9fa9f73..927be9e56b5d 100644
+> --- a/Documentation/watchdog/watchdog-api.rst
+> +++ b/Documentation/watchdog/watchdog-api.rst
+> @@ -112,6 +112,24 @@ current timeout using the GETTIMEOUT ioctl::
+>      ioctl(fd, WDIOC_GETTIMEOUT, &timeout);
+>      printf("The timeout was is %d seconds\n", timeout);
+>  
+> +Actions
+> +=======
+> +
+> +Some watchdog timers can perform different actions when they time out.
+> +Most will only reset.  The values are::
+> +
+> +    WDIOA_RESET - Reset the system
+> +    WDIOA_POWER_OFF - Power off the system
+> +    WDIOA_POWER_CYCLE - Power off the system then power it back on
+> +
+> +The value can be set::
+> +
+> +    ioctl(fd, WDIOC_SETACTION, &action);
+> +
+> +and queried::
+> +
+> +    ioctl(fd, WDIOC_GETACTION, &action);
+> +
+>  Pretimeouts
+>  ===========
+>  
+> @@ -137,6 +155,28 @@ There is also a get function for getting the pretimeout::
+>  
+>  Not all watchdog drivers will support a pretimeout.
+>  
+> +Preactions
+> +==========
+> +
+> +Like actions some watchdog timers can perform different actions when
+> +they pretimeout.  The values are::
+> +
+> +    WDIOP_NONE - Don't do anything on a pretimeout
+> +    WDIOP_NMI - Issue an NMI
+> +    WDIOP_SMI - Issue a system management interrupt
+> +    WDIOP_INTERRUPT - Issue a normal interrupt
+> +
+> +The value can be set::
+> +
+> +    ioctl(fd, WDIOC_SETPREACTION, &preaction);
+> +
+> +and queried::
+> +
+> +    ioctl(fd, WDIOC_GETPREACTION, &preaction);
+> +
+> +Note that the pretimeout governor that reads data is not compatible with
+> +the NMI preaction.  The NMI preaction can only do nothing or panic.
+> +
 
-I am missing an explanation how this is useful and necessary,
-and what problem it solves that can not be solved differently.
-For my part I don't immediately see the benefits.
+I find this quite confusing. We would now have this ioctl, and then we
+have the pretimeout sysfs attributes which are also supposed to set
+pretimeout actions. This will require a bit more discussion for a
+more concise and less confusing interface/API/ABI.
 
 Guenter
 
-> Signed-off-by: Corey Minyard <cminyard@mvista.com>
-> ---
->  drivers/watchdog/watchdog_core.c |   3 +
->  drivers/watchdog/watchdog_dev.c  | 113 +++++++++++++++++++++++++++++++
->  include/linux/watchdog.h         |   5 ++
->  3 files changed, 121 insertions(+)
-> 
-> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-> index 21e8085b848b..80149ac229fc 100644
-> --- a/drivers/watchdog/watchdog_core.c
-> +++ b/drivers/watchdog/watchdog_core.c
-> @@ -216,6 +216,9 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
->  		return id;
->  	wdd->id = id;
+>  Get the number of seconds before reboot
+>  =======================================
 >  
-> +	spin_lock_init(&wdd->readlock);
-> +	init_waitqueue_head(&wdd->read_q);
-> +
->  	ret = watchdog_dev_register(wdd);
->  	if (ret) {
->  		ida_simple_remove(&watchdog_ida, id);
 > diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index dbd2ad4c9294..8e8304607a8c 100644
+> index 8e8304607a8c..0e70f510a491 100644
 > --- a/drivers/watchdog/watchdog_dev.c
 > +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -44,6 +44,8 @@
->  #include <linux/types.h>	/* For standard types (like size_t) */
->  #include <linux/watchdog.h>	/* For watchdog specific items */
->  #include <linux/uaccess.h>	/* For copy_to_user/put_user/... */
-> +#include <linux/poll.h>		/* For poll_table/... */
-> +#include <linux/sched/signal.h>	/* For signal_pending */
->  
->  #include <uapi/linux/sched/types.h>	/* For struct sched_param */
->  
-> @@ -929,12 +931,120 @@ static int watchdog_release(struct inode *inode, struct file *file)
->  	return 0;
+> @@ -423,6 +423,48 @@ static int watchdog_set_pretimeout(struct watchdog_device *wdd,
+>  	return err;
 >  }
 >  
-> +static ssize_t watchdog_read(struct file *file,
-> +			     char        __user *buf,
-> +			     size_t      count,
-> +			     loff_t      *ppos)
+> +/*
+> + *	watchdog_set_action: set the action the watchdog performs.
+> + *	@wdd: the watchdog device to set the timeout for
+> + *	@action: The action, one of WDIOA_xxx
+> + *
+> + *	The caller must hold wd_data->lock.
+> + */
+> +
+> +static int watchdog_set_action(struct watchdog_device *wdd,
+> +			       unsigned int action)
 > +{
-> +	struct watchdog_core_data *wd_data = file->private_data;
-> +	struct watchdog_device *wdd;
 > +	int err = 0;
-> +	wait_queue_entry_t wait;
-> +	char dummy = 1;
 > +
-> +	if (count <= 0)
-> +		return 0;
+> +	if (wdd->ops->set_action)
+> +		err = wdd->ops->set_action(wdd, action);
+> +	else if (action != WDIOA_RESET)
+> +		err = -EINVAL;
 > +
-> +	mutex_lock(&wd_data->lock);
+> +	return err;
+> +}
 > +
-> +	wdd = wd_data->wdd;
-> +	if (!wdd)
-> +		goto done;
+> +/*
+> + *	watchdog_set_preaction: set the action the watchdog pretimeout performs.
+> + *	@wdd: the watchdog device to set the timeout for
+> + *	@action: The action, one of WDIOP_xxx
+> + *
+> + *	The caller must hold wd_data->lock.
+> + */
 > +
-> +	/*
-> +	 * Reading returns if the pretimeout has gone off, and it only does
-> +	 * it once per pretimeout.
-> +	 */
-> +	spin_lock_irq(&wdd->readlock);
-> +	while (!wdd->data_to_read) {
-> +		if (file->f_flags & O_NONBLOCK) {
-> +			err = -EAGAIN;
-> +			goto out;
-> +		}
+> +static int watchdog_set_preaction(struct watchdog_device *wdd,
+> +				  unsigned int action)
+> +{
+> +	int err;
 > +
-> +		init_waitqueue_entry(&wait, current);
-> +		add_wait_queue(&wdd->read_q, &wait);
-> +		set_current_state(TASK_INTERRUPTIBLE);
-> +		spin_unlock_irq(&wdd->readlock);
-> +		schedule();
-> +		spin_lock_irq(&wdd->readlock);
-> +		remove_wait_queue(&wdd->read_q, &wait);
+> +	if (wdd->ops->set_preaction)
+> +		err = wdd->ops->set_preaction(wdd, action);
+> +	else
+> +		err = -EOPNOTSUPP;
 > +
-> +		if (signal_pending(current)) {
-> +			err = -ERESTARTSYS;
-> +			goto out;
-> +		}
-> +	}
-> +	dummy = wdd->data_to_read;
-> +	wdd->data_to_read = 0;
+> +	return err;
+> +}
 > +
-> + out:
-> +	spin_unlock_irq(&wdd->readlock);
+>  /*
+>   *	watchdog_get_timeleft: wrapper to get the time left before a reboot
+>   *	@wdd: the watchdog device to get the remaining time from
+> @@ -516,6 +558,24 @@ static ssize_t pretimeout_show(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RO(pretimeout);
+>  
+> +static ssize_t action_show(struct device *dev,
+> +			   struct device_attribute *attr, char *buf)
+> +{
+> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
 > +
-> +	if (err == 0) {
-> +		if (copy_to_user(buf, &dummy, 1))
+> +	return sprintf(buf, "%u\n", wdd->action);
+> +}
+> +static DEVICE_ATTR_RO(action);
+> +
+> +static ssize_t preaction_show(struct device *dev,
+> +			      struct device_attribute *attr, char *buf)
+> +{
+> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
+> +
+> +	return sprintf(buf, "%u\n", wdd->preaction);
+> +}
+> +static DEVICE_ATTR_RO(preaction);
+> +
+>  static ssize_t identity_show(struct device *dev, struct device_attribute *attr,
+>  				char *buf)
+>  {
+> @@ -592,6 +652,8 @@ static struct attribute *wdt_attrs[] = {
+>  	&dev_attr_identity.attr,
+>  	&dev_attr_timeout.attr,
+>  	&dev_attr_pretimeout.attr,
+> +	&dev_attr_action.attr,
+> +	&dev_attr_preaction.attr,
+>  	&dev_attr_timeleft.attr,
+>  	&dev_attr_bootstatus.attr,
+>  	&dev_attr_status.attr,
+> @@ -784,6 +846,26 @@ static long watchdog_ioctl(struct file *file, unsigned int cmd,
+>  	case WDIOC_GETPRETIMEOUT:
+>  		err = put_user(wdd->pretimeout, p);
+>  		break;
+> +	case WDIOC_SETACTION:
+> +		if (get_user(val, p)) {
 > +			err = -EFAULT;
-> +		else
-> +			err = 1;
-> +	}
-> +
-> + done:
-> +	mutex_unlock(&wd_data->lock);
-> +
-> +	return err;
-> +}
-> +
-> +static __poll_t watchdog_poll(struct file *file, poll_table *wait)
-> +{
-> +	struct watchdog_core_data *wd_data = file->private_data;
-> +	struct watchdog_device *wdd;
-> +	__poll_t mask = 0;
-> +
-> +	mutex_lock(&wd_data->lock);
-> +
-> +	wdd = wd_data->wdd;
-> +	if (!wdd)
-> +		goto done;
-> +
-> +	poll_wait(file, &wdd->read_q, wait);
-> +
-> +	spin_lock_irq(&wdd->readlock);
-> +	if (wdd->data_to_read)
-> +		mask |= (EPOLLIN | EPOLLRDNORM);
-> +	spin_unlock_irq(&wdd->readlock);
-> +
-> +done:
-> +	mutex_unlock(&wd_data->lock);
-> +	return mask;
-> +}
-> +
-> +static int watchdog_fasync(int fd, struct file *file, int on)
-> +{
-> +	struct watchdog_core_data *wd_data = file->private_data;
-> +	struct watchdog_device *wdd;
-> +	int err = -ENODEV;
-> +
-> +	mutex_lock(&wd_data->lock);
-> +
-> +	wdd = wd_data->wdd;
-> +	if (!wdd)
-> +		goto done;
-> +
-> +	err = fasync_helper(fd, file, on, &wdd->fasync_q);
-> +done:
-> +	mutex_unlock(&wd_data->lock);
-> +	return err;
-> +}
-> +
->  static const struct file_operations watchdog_fops = {
->  	.owner		= THIS_MODULE,
->  	.write		= watchdog_write,
->  	.unlocked_ioctl	= watchdog_ioctl,
->  	.open		= watchdog_open,
->  	.release	= watchdog_release,
-> +	.read		= watchdog_read,
-> +	.poll		= watchdog_poll,
-> +	.fasync		= watchdog_fasync,
->  };
->  
->  static struct miscdevice watchdog_miscdev = {
-> @@ -970,6 +1080,9 @@ static int watchdog_cdev_register(struct watchdog_device *wdd, dev_t devno)
->  	if (IS_ERR_OR_NULL(watchdog_kworker))
->  		return -ENODEV;
->  
-> +	spin_lock_init(&wdd->readlock);
-> +	init_waitqueue_head(&wdd->read_q);
-> +
->  	kthread_init_work(&wd_data->work, watchdog_ping_work);
->  	hrtimer_init(&wd_data->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->  	wd_data->timer.function = watchdog_timer_expired;
+> +			break;
+> +		}
+> +		err = watchdog_set_action(wdd, val);
+> +		break;
+> +	case WDIOC_GETACTION:
+> +		err = put_user(wdd->action, p);
+> +		break;
+> +	case WDIOC_SETPREACTION:
+> +		if (get_user(val, p)) {
+> +			err = -EFAULT;
+> +			break;
+> +		}
+> +		err = watchdog_set_preaction(wdd, val);
+> +		break;
+> +	case WDIOC_GETPREACTION:
+> +		err = put_user(wdd->preaction, p);
+> +		break;
+>  	default:
+>  		err = -ENOTTY;
+>  		break;
 > diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-> index 417d9f37077a..e34501a822f0 100644
+> index e34501a822f0..d4644994106e 100644
 > --- a/include/linux/watchdog.h
 > +++ b/include/linux/watchdog.h
-> @@ -117,6 +117,11 @@ struct watchdog_device {
->  #define WDOG_HW_RUNNING		3	/* True if HW watchdog running */
->  #define WDOG_STOP_ON_UNREGISTER	4	/* Should be stopped on unregister */
->  	struct list_head deferred;
-> +
-> +	spinlock_t readlock;
-> +	bool data_to_read;
-> +	struct wait_queue_head read_q;
-> +	struct fasync_struct *fasync_q;
+> @@ -53,6 +53,8 @@ struct watchdog_ops {
+>  	unsigned int (*get_timeleft)(struct watchdog_device *);
+>  	int (*restart)(struct watchdog_device *, unsigned long, void *);
+>  	long (*ioctl)(struct watchdog_device *, unsigned int, unsigned long);
+> +	int (*set_action)(struct watchdog_device *wdd, unsigned int val);
+> +	int (*set_preaction)(struct watchdog_device *wdd, unsigned int val);
 >  };
 >  
->  #define WATCHDOG_NOWAYOUT		IS_BUILTIN(CONFIG_WATCHDOG_NOWAYOUT)
+>  /** struct watchdog_device - The structure that defines a watchdog device
+> @@ -101,6 +103,8 @@ struct watchdog_device {
+>  	unsigned int bootstatus;
+>  	unsigned int timeout;
+>  	unsigned int pretimeout;
+> +	unsigned int action;
+> +	unsigned int preaction;
+>  	unsigned int min_timeout;
+>  	unsigned int max_timeout;
+>  	unsigned int min_hw_heartbeat_ms;
+> diff --git a/include/uapi/linux/watchdog.h b/include/uapi/linux/watchdog.h
+> index b15cde5c9054..bf13cf25f9e0 100644
+> --- a/include/uapi/linux/watchdog.h
+> +++ b/include/uapi/linux/watchdog.h
+> @@ -32,6 +32,10 @@ struct watchdog_info {
+>  #define	WDIOC_SETPRETIMEOUT	_IOWR(WATCHDOG_IOCTL_BASE, 8, int)
+>  #define	WDIOC_GETPRETIMEOUT	_IOR(WATCHDOG_IOCTL_BASE, 9, int)
+>  #define	WDIOC_GETTIMELEFT	_IOR(WATCHDOG_IOCTL_BASE, 10, int)
+> +#define	WDIOC_SETACTION		_IOWR(WATCHDOG_IOCTL_BASE, 11, int)
+> +#define	WDIOC_GETACTION		_IOR(WATCHDOG_IOCTL_BASE, 12, int)
+> +#define	WDIOC_SETPREACTION	_IOWR(WATCHDOG_IOCTL_BASE, 13, int)
+> +#define	WDIOC_GETPREACTION	_IOR(WATCHDOG_IOCTL_BASE, 14, int)
+>  
+>  #define	WDIOF_UNKNOWN		-1	/* Unknown flag error */
+>  #define	WDIOS_UNKNOWN		-1	/* Unknown status error */
+> @@ -54,5 +58,15 @@ struct watchdog_info {
+>  #define	WDIOS_ENABLECARD	0x0002	/* Turn on the watchdog timer */
+>  #define	WDIOS_TEMPPANIC		0x0004	/* Kernel panic on temperature trip */
+>  
+> +/* Actions for WDIOC_xxxACTION ioctls. */
+> +#define WDIOA_RESET		0	/* Reset the system. */
+> +#define WDIOA_POWER_OFF		1	/* Power off the system. */
+> +#define WDIOA_POWER_CYCLE	2	/* Power cycle the system. */
+> +
+> +/* Actions for WDIOC_xxxPREACTION ioctls. */
+> +#define WDIOP_NONE		0	/* Do nothing. */
+> +#define WDIOP_NMI		1	/* Issue an NMI. */
+> +#define WDIOP_SMI		2	/* Issue a system management irq. */
+> +#define WDIOP_INTERRUPT		3	/* Issue a normal irq. */
+>  
+>  #endif /* _UAPI_LINUX_WATCHDOG_H */
 > -- 
 > 2.17.1
 > 
