@@ -2,108 +2,167 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 632C096552
-	for <lists+linux-watchdog@lfdr.de>; Tue, 20 Aug 2019 17:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47834965B6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 20 Aug 2019 17:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730654AbfHTPuN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 20 Aug 2019 11:50:13 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44581 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729820AbfHTPuN (ORCPT
+        id S1730349AbfHTP6N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 20 Aug 2019 11:58:13 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:37846 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726981AbfHTP6N (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 20 Aug 2019 11:50:13 -0400
-Received: by mail-pf1-f194.google.com with SMTP id c81so3623023pfc.11;
-        Tue, 20 Aug 2019 08:50:12 -0700 (PDT)
+        Tue, 20 Aug 2019 11:58:13 -0400
+Received: by mail-ot1-f67.google.com with SMTP id f17so5502630otq.4
+        for <linux-watchdog@vger.kernel.org>; Tue, 20 Aug 2019 08:58:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=mvista-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=lYiV05ocruj81X/Vth9fboH+MCkm6RCCkzLgC1xVrmw=;
-        b=fNasBHccmJLzP/62U4MV9sBWbQm7OW+UP4o3L47p/QOfrEwB12oFGN1SUeDNxTesTG
-         oFVXAGPB/0yKLhB93KvtK39OGt91m5yjXxqiOI+Ne/g4PgiHtP6CnP+emNtm0S5AvRms
-         wgLB3LlUTYNcu+oBWwl0mANSxbB8JPDz87T+ueLDw0vAvDTOpKYRKCXog9R0fmkLFIPi
-         xzQou+UdcpRw5UdaAiachGeHx8UiMO5DSO/+NrOHHqD3BqcTTUABMqZt3SgFTXKwTSba
-         S8dz/yisSiv/DmwTMJJoBD3YdQ0WsmL+fLh8i0MgTfW7wG4rpT5ju3QIDkhGNtSNHAG1
-         7vmg==
+        bh=0CtjLq8n6Fpgt3HyHCymg1B3+QDmeJ+5G6DC/G6V8Lg=;
+        b=p1+khCBSUMF4QUSGTRisX3sYqcUwHQ1JR1R/EhDqCsu5ap3vWz6WppLuHyF6566BTF
+         596fsUmUt/5UEP7P+wO9G85V3+JUrvsrY3fNYeAiCW9h5jskyeB0XTuhjW2RunJGerNA
+         DG3/X9vq3iN7MwwLeJovgZlXN/V+TLk4hKemuvF0hoqjsXySv33oBL+TTNyJhuxdixJh
+         4Sc3E2BlmRraFQSUdAup+HEso23oOIS49wOno3ZPEwrA2WxdF71CpjD530KZhuViAdZE
+         +IfUjiPOMmzMPnvxuvo9g1HPfjTeAwBPvmhnYNB0KLD77XfjQZwo4HXNkvLT42yhZP2f
+         nm2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lYiV05ocruj81X/Vth9fboH+MCkm6RCCkzLgC1xVrmw=;
-        b=r8kTu+ocQIORktg5m+Py1UDWIdyXI5959ethvRI9YaRJK5jaOwJGaCvEoCARv/OLvs
-         qpsmhjrd6l4zrVaZUtdhRqwQ8VOgYt6gz9lkAgiodX08+Wg3rZgJcirIifShd+L1L6r9
-         mFBaLbNUR53fceZJHOpZeML3TMjttkKQduldRqxmy/NhY1ohKq4u4zMdkrNbcdISpe0v
-         IG0QGPPeA7WAIVy5mbG1kAAuORIWhcH0Lt0zVEijJ3w64mrtOC/bCdnQb4bQVsK1gDX3
-         BWGmiWzNRDygnGfE2xhvb6UQEZOG4iapq9cToESqPzfiXiGnA9hZZbvdp/G0YgKouHO4
-         HzRA==
-X-Gm-Message-State: APjAAAX+y0op+vrIdmwj09jiS68aW4l5q/XMPaqyiyFPK4UjTZAls6g0
-        X5J8i1uEUSrt00pU3R8Tz+4=
-X-Google-Smtp-Source: APXvYqzcVZHhyB9DOXrMXzkr2BAV66JOb9oS1kaW6MbhIGd5s+OPyrNHhQiJmgISgBG2USF+eV4rvg==
-X-Received: by 2002:a62:f204:: with SMTP id m4mr31653953pfh.7.1566316212404;
-        Tue, 20 Aug 2019 08:50:12 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a6sm399723pjv.30.2019.08.20.08.50.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Aug 2019 08:50:11 -0700 (PDT)
-Date:   Tue, 20 Aug 2019 08:50:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Subject: Re: [PATCH v2 2/2] watchdog: aspeed: Add support for AST2600
-Message-ID: <20190820155010.GA20408@roeck-us.net>
-References: <20190819051738.17370-1-joel@jms.id.au>
- <20190819051738.17370-3-joel@jms.id.au>
+        bh=0CtjLq8n6Fpgt3HyHCymg1B3+QDmeJ+5G6DC/G6V8Lg=;
+        b=Tokf2EwcvucarwCXyH8PIY4J6Xi2gwcCh+QlMVPbn0tGP/CR2piuY/UzhGa8B9JXX5
+         3Vxtp0ZFZLOcv2Y8PqAkGT/71c+4SfOqVwAEYX0xFuIR+9Wt0BE9AwtYAOigPwndTwsQ
+         6H4YxKh2nW7SDOtWX3n1XQ71vOIg4WnCfJahGBZDo75CeOQqrrmqOmFtzLIyBVMTZywo
+         y/LQa5FaHFAll/kdqjwSIom6CpELWqa5MErv0JW0lqUdsGIV3biv+62K60APeAoW4w7u
+         O29GQ5ZMU3MI27J6OqB9ZVxJcjW5AQjhP0G1Rd+vbXVOvRo9ydqKHS/Z5W6FhhjqD6zW
+         WyhQ==
+X-Gm-Message-State: APjAAAXbBF7UiOi8HgjN0+OV+/DxrL4pKobdDFiX7HhFYkowfPvbF+Pq
+        9SQS4QeNM42mH2TYpXoYJMOaZw==
+X-Google-Smtp-Source: APXvYqyuCmzoNsanc261R/VbN0R8pfbw7KLaaDjnMobV9MYHuuicVRSCYP894PttY0UBozF6WwIg2Q==
+X-Received: by 2002:a05:6830:144d:: with SMTP id w13mr23749627otp.85.1566316691351;
+        Tue, 20 Aug 2019 08:58:11 -0700 (PDT)
+Received: from minyard.net ([47.184.134.43])
+        by smtp.gmail.com with ESMTPSA id z26sm5000855oih.16.2019.08.20.08.58.10
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 20 Aug 2019 08:58:10 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 10:58:09 -0500
+From:   Corey Minyard <cminyard@mvista.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jerry Hoemann <jerry.hoemann@hpe.com>, Convert@minyard.net,
+        the@minyard.net, IPMI@minyard.net, watchdog@minyard.net,
+        to@minyard.net, standard@minyard.net, interface@minyard.net,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH 02/12] watchdog: Add the ability to provide data to read
+Message-ID: <20190820155808.GQ445@minyard.net>
+Reply-To: cminyard@mvista.com
+References: <20190819203711.32599-1-minyard@acm.org>
+ <20190819203711.32599-3-minyard@acm.org>
+ <20190819224345.GB8869@roeck-us.net>
+ <20190820002309.GI445@minyard.net>
+ <20190820010946.GF25435@anatevka.americas.hpqcorp.net>
+ <20190820121243.GO445@minyard.net>
+ <fa50d921-8d40-6bf8-00f3-b46d9468829a@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190819051738.17370-3-joel@jms.id.au>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <fa50d921-8d40-6bf8-00f3-b46d9468829a@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 02:47:38PM +0930, Joel Stanley wrote:
-> From: Ryan Chen <ryan_chen@aspeedtech.com>
-> 
-> The ast2600 can be supported by the same code as the ast2500.
-> 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+On Tue, Aug 20, 2019 at 06:53:40AM -0700, Guenter Roeck wrote:
+> On 8/20/19 5:12 AM, Corey Minyard wrote:
+> > On Mon, Aug 19, 2019 at 07:09:46PM -0600, Jerry Hoemann wrote:
+> > > On Mon, Aug 19, 2019 at 07:23:09PM -0500, Corey Minyard wrote:
+> > > > On Mon, Aug 19, 2019 at 03:43:45PM -0700, Guenter Roeck wrote:
+> > > > > On Mon, Aug 19, 2019 at 03:37:01PM -0500, minyard@acm.org wrote:
+> > > > > > From: Corey Minyard <cminyard@mvista.com>
+> > > > > > 
+> > > > > > This is for the read data pretimeout governor.
+> > > > > > 
+> > > > > > Signed-off-by: Corey Minyard <cminyard@mvista.com>
+> > > > > 
+> > > > > On further thought, I think it would be a bad idea to add this
+> > > > > functionality: It changes the userspace ABI for accessing the watchdog
+> > > > > device. Today, when a watchdog device is opened, it does not provide
+> > > > > read data, it does not hang, and returns immediately. A "cat" from it
+> > > > > is an easy and quick means to test if a watchdog works.
+> > > > 
+> > > > Umm, why would a "cat" from a watchdog tell you if a watchdog works?
+> > > 
+> > > cat /dev/watchdog starts the watchdog running.
+> > > 
+> > > Then one can do useful things like monitor /sys/class/watchdog/watchdogN and see
+> > > time ticking down, etc..,
+> > > 
+> > > echo V > /dev/watchdog stops the watchdog assuming driver supports WDIOF_MAGICCLOSE.
+> > > 
+> > > So I can test without having to reboot.
+> > > 
+> > > One can't test magic close with the proposed change as /dev/watchdog
+> > > is exclusive open.
+> > 
+> > Sure you can:
+> > 
+> > # echo "" >/dev/watchdog0
+> > [   92.390649] watchdog: watchdog0: watchdog did not stop!
+> > # sleep 2
+> > # cat /sys/class/watchdog/watchdog0/timeleft
+> > 8
+> > # echo "V" >/dev/watchdog0
+> > 
+> > Works just fine.  But I can make it so that reading returns an error
+> > unless the governor is the read one.
+> > 
+> > The question is if this is required to transfer the IPMI watchdog
+> > over to the standard interface.  It currently has this function,
+> > do we do an API change to move it over?
+> > 
+> Having to change the standard watchdog API to accommodate a non-standard driver
+> is most definitely not the right approach. If it was, anyone could use it to
+> force standard API/ABI changes. Just implement driver X outside its subsystem
+> and then claim you need to change the subsystem to accommodate it.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I'm not advocating anything of the sort.  I think it can be done in
+a way that keeps the API the same unless you enable a new pretimeout
+governor.  I would not suggest that the API be changed, and I should
+have handled that in the original design.
 
-> ---
-> v2:
->  Reuse ast2500 config structure
-> ---
->  drivers/watchdog/aspeed_wdt.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-> index cc71861e033a..5b64bc2e8788 100644
-> --- a/drivers/watchdog/aspeed_wdt.c
-> +++ b/drivers/watchdog/aspeed_wdt.c
-> @@ -34,6 +34,7 @@ static const struct aspeed_wdt_config ast2500_config = {
->  static const struct of_device_id aspeed_wdt_of_table[] = {
->  	{ .compatible = "aspeed,ast2400-wdt", .data = &ast2400_config },
->  	{ .compatible = "aspeed,ast2500-wdt", .data = &ast2500_config },
-> +	{ .compatible = "aspeed,ast2600-wdt", .data = &ast2500_config },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
-> @@ -259,7 +260,8 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
->  		set_bit(WDOG_HW_RUNNING, &wdt->wdd.status);
->  	}
->  
-> -	if (of_device_is_compatible(np, "aspeed,ast2500-wdt")) {
-> +	if ((of_device_is_compatible(np, "aspeed,ast2500-wdt")) ||
-> +		(of_device_is_compatible(np, "aspeed,ast2600-wdt"))) {
->  		u32 reg = readl(wdt->base + WDT_RESET_WIDTH);
->  
->  		reg &= config->ext_pulse_width_mask;
+> On a side note, a standard watchdog driver can implement its own ioctl functions.
+
+I am aware of that, but you can't provide read data on a file descriptor
+through that interface.  The actions and preactions could be done that
+way, but that seemed a more general function that could benefit other
+drivers. 
+
+The function to provide read data might be useful, I don't know, but
+it could be used with any driver that did a normal interrupt pretimeout.
+I can't remember why it was originally done.  I vaguely remember someone
+asking for it, but that was 17 years ago.
+
+It could just be left out and added back if someone complains.  That's
+not very friendly since it's an API change, but then we would know if
+anyone was using it.
+
+-corey
+
+> 
+> Guenter
+> 
+> > -corey
+> > 
+> > > 
+> > > 
+> > > 
+> > > 
+> > > -- 
+> > > 
+> > > -----------------------------------------------------------------------------
+> > > Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
+> > > -----------------------------------------------------------------------------
+> > 
+> 
