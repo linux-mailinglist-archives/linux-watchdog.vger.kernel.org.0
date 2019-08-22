@@ -2,179 +2,294 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1919825F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Aug 2019 20:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672E698995
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Aug 2019 04:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727874AbfHUSKM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 21 Aug 2019 14:10:12 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:35747 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727822AbfHUSKM (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 21 Aug 2019 14:10:12 -0400
-Received: by mail-pl1-f196.google.com with SMTP id gn20so1755307plb.2;
-        Wed, 21 Aug 2019 11:10:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=BRaE3rjeT8FCEq2Zbhrcwzz/PytLOULw+1k5/xkFYgY=;
-        b=fw2gO6TC8tNLS0jC+pLn1ymEqa+6Ggr3tFsCMDsJFC3AdAQD7uyifHENer7jG+2UUJ
-         ocONF3pHy7Z8RN9i1YQb2yGYVRkp2UbPS4r74gmmmzwc7h8NIp3aUIW3N9N3s90+4rWy
-         JSptEtCHiSGU85fm6dw+A3PLYMgwU5O04BGuEcBm+x5pNGG2MYIFFyRwMn/5zwDHiV3A
-         Cz6pHDAWf04QiXkyXp9A+yp9tqVBtTZMM0zN7V6Oid9atVKXC8NZyO9ggtSOSbB11SXx
-         M00zwElWK5r1FQ4PhG1wyNHSPurcUwKL9ugCvQAcWfcpwJ12BCQ1dLTLf3chKJquE+VN
-         OGLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=BRaE3rjeT8FCEq2Zbhrcwzz/PytLOULw+1k5/xkFYgY=;
-        b=bNxk7HNfhHiQRhaCp2d0DUylGjqHQ9bu+DZFbKjTzStLv3jYOCjt/D3chf7n81x6ra
-         PLLO/7ywlS8Y+aIGnYeXUtrpLMgm7Z7TiHvGlshbPUrbyBts6TNs0r/3JKu08SEENpmi
-         jZvjGoQRmsZlhc8c3DvHCmuie3a4gANBJM3es/khp9sUPrdTtL2iiyLICQ+abnyOZSPS
-         zYqTSuj4IbXsrc/0hOUR6Eg6vvv06V+KuC1lnQNdJViQ2bjKjV553an/2xE0CAGptbOe
-         r7E1ksmQNVZDPuECZfXweZbus6vbyE/vIDUzCOsOYLU+lUeW/7/TF3TtHTBZbNAmJyfL
-         xyXA==
-X-Gm-Message-State: APjAAAVNoQUhzVbIZAM+2F2VeG+13k+lxN+GGWRwS6PudUylLEOj+bEy
-        MHiddNagvYQCNHPrc3pROUrm+cerxMU=
-X-Google-Smtp-Source: APXvYqw7jrvERpK0TvcG5LufdB/a+fUB8Dtj+XOTHWONJ/0UKlGLuryo1MgZMuVh02WFzQekc1vi3w==
-X-Received: by 2002:a17:902:9a41:: with SMTP id x1mr18562143plv.88.1566411010884;
-        Wed, 21 Aug 2019 11:10:10 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l4sm23809086pff.50.2019.08.21.11.10.09
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 21 Aug 2019 11:10:10 -0700 (PDT)
-Date:   Wed, 21 Aug 2019 11:10:09 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexander Amelkin <a.amelkin@yadro.com>
-Cc:     Ivan Mikhaylov <i.mikhaylov@yadro.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] watchdog/aspeed: add support for dual boot
-Message-ID: <20190821181008.GB15127@roeck-us.net>
-References: <1f2cd155057e5ab0cdb20a9a11614bbb09bb49ad.camel@yadro.com>
- <20190821163220.GA11547@roeck-us.net>
- <9e7fe5cc-ba1b-b8b6-69c5-c3c6cf508a36@yadro.com>
+        id S1728964AbfHVCoX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 21 Aug 2019 22:44:23 -0400
+Received: from mail-eopbgr10081.outbound.protection.outlook.com ([40.107.1.81]:2272
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726998AbfHVCoW (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 21 Aug 2019 22:44:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z4IIaHdglxP7AaKmYJ5TA8KS4u1cne1oeoLGPAnfwif76Y7D8UpP55+22Frkh/A6Jd30cbsfsRNL0xqXW+8Q56yZNoQ/itzbSl07f96WxteSRm3ZYYA7l9ObVIsi23eZ5NIri19PmqzKiyY1ueb3dHn7Nb4TlbpuXAdo1i4p2hb0bbKkvmvmvO95eeu4ttKYiw6XdPvB9riY5GaJptCoQBKB7V2+lFLFmUNtiNkcNkbLlUDCcUqQNMEQLK1/zsNeIlvCcNxFO0bFaD3hHatHkt8ohyiZuq78emt0sn529ZTyPnOtzOZ8GxPva9K/sQQK59pr8HVtMRxxTUPXCsmPiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rpIXhoniv0nFGY0SDdvEj2Z5xLkpvTcjoXYdLfJpzMo=;
+ b=hGNx8+9Qhjy2gfkXhLIfuM5304GaO81dAlphA9c5zVsUAAp8fpIebr2ZeYZZz07psQpllRNNrgHBSb+w0Bim61C358SjKYZr1WYMdQgUHsVQ0ejyByVEV0Y1Lv/BSx8ySB3Q479QJBQk0PMoQDrcPOVHNZJ+5tbeyo2LNx/cFU6fCdMIbXjRIOWUgOtU8ZUH0FHpXrPPIcjt01iubT51ZVKf7ks45IYRqGiwLkNvioHz0OyJBF5iSM8QO0tD3LdRb6hELSXDvgrWzWcSJaL78YKtxVBcTHOcJOHVU+5oiAU5ABfJkjV7l2HhLX4qG/YcIpbiyxvr0Dkj7mFxloONaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rpIXhoniv0nFGY0SDdvEj2Z5xLkpvTcjoXYdLfJpzMo=;
+ b=BlGZQK+f1s6z5OMIVy7ZsvPY/VXvzEXHDWbfCxg01H/HBSlczx6RBjoq3RyUCcQiyHqVqSJlAFotYzwuvIT270jTzgqYhVlpvPzb8ezSNm71lyH3j5s2RQKz2kNdY1OyflfF2WhNS1ORPCyiVFL63px1B+j/wU4goyqeFBBrXoE=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3643.eurprd04.prod.outlook.com (52.134.66.153) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2178.18; Thu, 22 Aug 2019 02:44:14 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::7cdf:bddc:212c:f77e]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::7cdf:bddc:212c:f77e%4]) with mapi id 15.20.2178.020; Thu, 22 Aug 2019
+ 02:44:14 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "otavio@ossystems.com.br" <otavio@ossystems.com.br>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        "schnitzeltony@gmail.com" <schnitzeltony@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "jan.tuerk@emtrion.com" <jan.tuerk@emtrion.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V3 2/4] watchdog: Add i.MX7ULP watchdog support
+Thread-Topic: [PATCH V3 2/4] watchdog: Add i.MX7ULP watchdog support
+Thread-Index: AQHVV8flFE81ox6lbkO7il6sJocNbacFpcWAgADOJfA=
+Date:   Thu, 22 Aug 2019 02:44:14 +0000
+Message-ID: <DB3PR0402MB39164B25757FF8718929A3DBF5A50@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <1566353278-1884-1-git-send-email-Anson.Huang@nxp.com>
+ <1566353278-1884-2-git-send-email-Anson.Huang@nxp.com>
+ <20190821141355.GA10463@roeck-us.net>
+In-Reply-To: <20190821141355.GA10463@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 78436b15-91cb-4b02-95cc-08d726aa9ea4
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3643;
+x-ms-traffictypediagnostic: DB3PR0402MB3643:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB3PR0402MB36436C5599129BBA2176D616F5A50@DB3PR0402MB3643.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 01371B902F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(189003)(199004)(14444005)(256004)(9686003)(26005)(54906003)(186003)(316002)(55016002)(52536014)(5660300002)(33656002)(86362001)(102836004)(99286004)(30864003)(7696005)(6916009)(25786009)(53936002)(76176011)(229853002)(3846002)(6506007)(478600001)(4326008)(6116002)(66446008)(64756008)(66556008)(66476007)(6436002)(2906002)(14454004)(476003)(7736002)(11346002)(66946007)(305945005)(44832011)(7416002)(81156014)(71190400001)(71200400001)(8936002)(66066001)(486006)(81166006)(76116006)(6246003)(8676002)(446003)(74316002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3643;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: dkWfc6wiY978nzHDTCJwAYcBBvKUTuByD0tTuUYDPcv9uB2hp9ibp4480G9VnkJtBpzFIvBnCz8jSaJA4wl9CceTnTdG/LJMf4diYTlJPe5FMt/p9LYZClfHd6mntF8XT6y39IopwZVyVwX7Huc3aX+X5v0affYOX0VrsbPEmrcOtea3WigJ/EkeURxgxvYF3NuZunDfx2RuLivutOkulnTM2wk+v5E13rWDuxoi7mWyKfyi/psezrWcxluXOvwr04GjJX2+8KI+871CTlg1vl/TBfPPKr/mk5/a9IgD2ingyScbL2GJ/zJdMS9Djxr+PR8+xlqUrTUJKpZY+4qWfVeTLgrw+4YBaoQ2ZZPj8HGD/Pem/cLC+R+4ewQfH8a1XPfKzBNgVODMnSkhXYntcnkamqVvM/+vONUfR/GrcLk=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e7fe5cc-ba1b-b8b6-69c5-c3c6cf508a36@yadro.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78436b15-91cb-4b02-95cc-08d726aa9ea4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2019 02:44:14.3337
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UVDxsqVkHyE3X5cTntcegB4CFQdmEMoz7eIaX76S8yutAE/woYYJ3yrdLS4NvHAcBfOrF6tlm+T7gyTfDNtMOA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3643
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 08:42:24PM +0300, Alexander Amelkin wrote:
-> 21.08.2019 19:32, Guenter Roeck wrote:
-> > On Wed, Aug 21, 2019 at 06:57:43PM +0300, Ivan Mikhaylov wrote:
-> >> Set WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION into WDT_CLEAR_TIMEOUT_STATUS
-> >> to clear out boot code source and re-enable access to the primary SPI flash
-> >> chip while booted via wdt2 from the alternate chip.
-> >>
-> >> AST2400 datasheet says:
-> >> "In the 2nd flash booting mode, all the address mapping to CS0# would be
-> >> re-directed to CS1#. And CS0# is not accessable under this mode. To access
-> >> CS0#, firmware should clear the 2nd boot mode register in the WDT2 status
-> >> register WDT30.bit[1]."
-> > Is there reason to not do this automatically when loading the module
-> > in alt-boot mode ? What means does userspace have to determine if CS0
-> > or CS1 is active at any given time ? If there is reason to ever have CS1
-> > active instead of CS0, what means would userspace have to enable it ?
-> 
-> Yes, there is. The driver is loaded long before the filesystems are mounted. The filesystems, in the event of alternate/recovery boot, need to be mounted from the same chip that the kernel was booted. For one reason because the main chip at CS0 is most probably corrupt. If you clear that bit when driver is loaded, your software will not know that and will try to mount the wrong filesystems. The whole idea of ASPEED's switching chipselects is to have identical firmware in both chips, without the need to process the alternate boot state in any way except for indicating a successful boot and restoring access to CS0 when needed.
-> 
-> The userspace can read bootstatus sysfs node to determine if an alternate boot has occured.
-> 
-> With ASPEED, CS1 is activated automatically by wdt2 when system fails to boot from the primary flash chip (at CS0) and disable the watchdog to indicate a successful boot. When that happens, both CS0 and CS1 controls  get routed in hardware to CS1 line, making the primary flash chip inaccessible. Depending on the architecture of the user-space software, it may choose to re-enable access to the primary chip via CS0 at different times. There must be a way to do so.
-> 
-So by activating cs0, userspace would essentially pull its own root file system
-from underneath itself ?
-
-> > If userspace can not really determine if CS1 or CS0 is active, all it could
-> > ever do was to enable CS0 to be in a deterministic state. If so, it doesn't
-> > make sense to ever have CS1 active, and re-enabling CS0 could be automatic.
-> >
-> > Similar, if CS1 can ever be enabled, there is no means for userspace to ensure
-> > that some other application did not re-enable CS0 while it believes that CS1
-> > is enabled. If there is no means for userspace to enable CS1, it can never be
-> > sure what is enabled (because some other entity may have enabled CS0 while
-> > userspace just thought that CS1 is still enabled). Again, the only means
-> > to guarantee a well defined state would be to explicitly enable CS0 and provive
-> > no means to enable CS1. Again, this could be done during boot, not requiring
-> > an explicit request from userspace.
-> 
-> Please understand that activation of CS1 in place of CS0 is NOT a software choice!
-> 
-> 
-> >> +	if (unlikely(!wdt))
-> >> +		return -ENODEV;
-> >> +
-> > How would this ever happen, and how / where is drvdata set to NULL ?
-> 
-> This is purely for robustness. Seeing a pointer obtained via a function accessed without first checking it for validity makes me nervous.
-> 
-This is not how kernel code is commonly written.
-Sure, we could add similar checks to each sysfs access code in the kernel,
-blowing up its size significantly. I do not see a point of this.
-
-> This code most probably adds nothing at the assembly level.
-> 
-That seems quite unlikely. Please demonstrate.
-
-> >
-> >> +	writel(WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION,
-> >> +			wdt->base + WDT_CLEAR_TIMEOUT_STATUS);
-> >> +	wdt->wdd.bootstatus |= WDIOF_EXTERN1;
-> > The variable reflects the _boot status_. It should not change after booting.
-> Is there any documentation that dictates that? All I could find is
-> 
-> "bootstatus: status of the device after booting". That doesn't look to me like it absolutely can not change to reflect the updated status (that is, to reflect that the originally set up alternate CS routing has been reset to normal).
-> 
-You choose to interpret "after booting" in a kind of novel way,
-which I find a bit disturbing. I am not really sure how else to
-describe "boot status" in a way that does not permit such
-reinterpratation of the term.
-
-On top of that, how specifically would "WDIOF_EXTERN1" reflect
-what you claim it does ? Not only you are hijacking bootstatus9
-(which is supposed to describe the reason for a reboot), you
-are also hijacking WDIOF_EXTERN1. That seems highly arbitrary
-to me, and is not really how an API/ABI should be used.
-
-Guenter
-
-> If you absolutely disallow that, I think we could make 'access_cs0' readable instead, so it could report the current state of the boot code selection bit. Reverted, I suppose. That way 'access_cs0' would report 1 after 1 has been written to it (it wouldn't be possible to write a zero).
-> 
-> > @@ -223,6 +248,9 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
-> >  
-> >  	wdt->ctrl = WDT_CTRL_1MHZ_CLK;
-> >  
-> > +	if (of_property_read_bool(np, "aspeed,alt-boot"))
-> > +		wdt->wdd.groups = bswitch_groups;
-> > +
-> > Why does this have to be separate to the existing evaluation of
-> > aspeed,alt-boot, and why does the existing code not work ?
-> >
-> > Also, is it guaranteed that this does not interfer with existing
-> > support for alt-boot ?
-> 
-> I think Ivan will comment on this.
-> 
-> With best regards,
-> Alexander Amelkin,
-> BIOS/BMC Team Lead, YADRO
-> https://yadro.com
-> 
-> 
-
-
-
+SGksIEd1ZW50ZXINCg0KPiBPbiBUdWUsIEF1ZyAyMCwgMjAxOSBhdCAxMDowNzo1NlBNIC0wNDAw
+LCBBbnNvbiBIdWFuZyB3cm90ZToNCj4gPiBUaGUgaS5NWDdVTFAgV2F0Y2hkb2cgVGltZXIgKFdE
+T0cpIG1vZHVsZSBpcyBhbiBpbmRlcGVuZGVudCB0aW1lcg0KPiB0aGF0DQo+ID4gaXMgYXZhaWxh
+YmxlIGZvciBzeXN0ZW0gdXNlLg0KPiA+IEl0IHByb3ZpZGVzIGEgc2FmZXR5IGZlYXR1cmUgdG8g
+ZW5zdXJlIHRoYXQgc29mdHdhcmUgaXMgZXhlY3V0aW5nIGFzDQo+ID4gcGxhbm5lZCBhbmQgdGhh
+dCB0aGUgQ1BVIGlzIG5vdCBzdHVjayBpbiBhbiBpbmZpbml0ZSBsb29wIG9yIGV4ZWN1dGluZw0K
+PiA+IHVuaW50ZW5kZWQgY29kZS4gSWYgdGhlIFdET0cgbW9kdWxlIGlzIG5vdCBzZXJ2aWNlZA0K
+PiA+IChyZWZyZXNoZWQpIHdpdGhpbiBhIGNlcnRhaW4gcGVyaW9kLCBpdCByZXNldHMgdGhlIE1D
+VS4NCj4gPg0KPiA+IEFkZCBkcml2ZXIgc3VwcG9ydCBmb3IgaS5NWDdVTFAgd2F0Y2hkb2cuDQo+
+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4N
+Cj4gPiAtLS0NCj4gPiBDaGFuZ2VzIHNpbmNlIFYyOg0KPiA+IAktIGFkZCBkZXZtX2FkZF9hY3Rp
+b25fb3JfcmVzZXQgdG8gZGlzYWJsZSBjbGsgZm9yIHJlbW92ZSBhY3Rpb24uDQo+ID4gLS0tDQo+
+ID4gIGRyaXZlcnMvd2F0Y2hkb2cvS2NvbmZpZyAgICAgICB8ICAxMyArKysNCj4gPiAgZHJpdmVy
+cy93YXRjaGRvZy9NYWtlZmlsZSAgICAgIHwgICAxICsNCj4gPiAgZHJpdmVycy93YXRjaGRvZy9p
+bXg3dWxwX3dkdC5jIHwgMjQ2DQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysNCj4gPiAgMyBmaWxlcyBjaGFuZ2VkLCAyNjAgaW5zZXJ0aW9ucygrKQ0KPiA+ICBj
+cmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy93YXRjaGRvZy9pbXg3dWxwX3dkdC5jDQo+ID4NCj4g
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy93YXRjaGRvZy9LY29uZmlnIGIvZHJpdmVycy93YXRjaGRv
+Zy9LY29uZmlnIGluZGV4DQo+ID4gYThmNWM4MS4uZDY4ZTViNSAxMDA2NDQNCj4gPiAtLS0gYS9k
+cml2ZXJzL3dhdGNoZG9nL0tjb25maWcNCj4gPiArKysgYi9kcml2ZXJzL3dhdGNoZG9nL0tjb25m
+aWcNCj4gPiBAQCAtNzI0LDYgKzcyNCwxOSBAQCBjb25maWcgSU1YX1NDX1dEVA0KPiA+ICAJICBU
+byBjb21waWxlIHRoaXMgZHJpdmVyIGFzIGEgbW9kdWxlLCBjaG9vc2UgTSBoZXJlOiB0aGUNCj4g
+PiAgCSAgbW9kdWxlIHdpbGwgYmUgY2FsbGVkIGlteF9zY193ZHQuDQo+ID4NCj4gPiArY29uZmln
+IElNWDdVTFBfV0RUDQo+ID4gKwl0cmlzdGF0ZSAiSU1YN1VMUCBXYXRjaGRvZyINCj4gPiArCWRl
+cGVuZHMgb24gQVJDSF9NWEMgfHwgQ09NUElMRV9URVNUDQo+ID4gKwlzZWxlY3QgV0FUQ0hET0df
+Q09SRQ0KPiA+ICsJaGVscA0KPiA+ICsJICBUaGlzIGlzIHRoZSBkcml2ZXIgZm9yIHRoZSBoYXJk
+d2FyZSB3YXRjaGRvZyBvbiB0aGUgRnJlZXNjYWxlDQo+ID4gKwkgIElNWDdVTFAgYW5kIGxhdGVy
+IHByb2Nlc3NvcnMuIElmIHlvdSBoYXZlIG9uZSBvZiB0aGVzZQ0KPiA+ICsJICBwcm9jZXNzb3Jz
+IGFuZCB3aXNoIHRvIGhhdmUgd2F0Y2hkb2cgc3VwcG9ydCBlbmFibGVkLA0KPiA+ICsJICBzYXkg
+WSwgb3RoZXJ3aXNlIHNheSBOLg0KPiA+ICsNCj4gPiArCSAgVG8gY29tcGlsZSB0aGlzIGRyaXZl
+ciBhcyBhIG1vZHVsZSwgY2hvb3NlIE0gaGVyZTogdGhlDQo+ID4gKwkgIG1vZHVsZSB3aWxsIGJl
+IGNhbGxlZCBpbXg3dWxwX3dkdC4NCj4gPiArDQo+ID4gIGNvbmZpZyBVWDUwMF9XQVRDSERPRw0K
+PiA+ICAJdHJpc3RhdGUgIlNULUVyaWNzc29uIFV4NTAwIHdhdGNoZG9nIg0KPiA+ICAJZGVwZW5k
+cyBvbiBNRkRfREI4NTAwX1BSQ01VDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hkb2cv
+TWFrZWZpbGUgYi9kcml2ZXJzL3dhdGNoZG9nL01ha2VmaWxlDQo+ID4gaW5kZXggYjVhMGFlZC4u
+MmVlMzUyYiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3dhdGNoZG9nL01ha2VmaWxlDQo+ID4g
+KysrIGIvZHJpdmVycy93YXRjaGRvZy9NYWtlZmlsZQ0KPiA+IEBAIC02Nyw2ICs2Nyw3IEBAIG9i
+ai0kKENPTkZJR19UUzQ4MDBfV0FUQ0hET0cpICs9IHRzNDgwMF93ZHQubw0KPiA+ICBvYmotJChD
+T05GSUdfVFM3MlhYX1dBVENIRE9HKSArPSB0czcyeHhfd2R0Lm8NCj4gPiAgb2JqLSQoQ09ORklH
+X0lNWDJfV0RUKSArPSBpbXgyX3dkdC5vDQo+ID4gIG9iai0kKENPTkZJR19JTVhfU0NfV0RUKSAr
+PSBpbXhfc2Nfd2R0Lm8NCj4gPiArb2JqLSQoQ09ORklHX0lNWDdVTFBfV0RUKSArPSBpbXg3dWxw
+X3dkdC5vDQo+ID4gIG9iai0kKENPTkZJR19VWDUwMF9XQVRDSERPRykgKz0gdXg1MDBfd2R0Lm8N
+Cj4gPiAgb2JqLSQoQ09ORklHX1JFVFVfV0FUQ0hET0cpICs9IHJldHVfd2R0Lm8NCj4gPiAgb2Jq
+LSQoQ09ORklHX0JDTTI4MzVfV0RUKSArPSBiY20yODM1X3dkdC5vIGRpZmYgLS1naXQNCj4gPiBh
+L2RyaXZlcnMvd2F0Y2hkb2cvaW14N3VscF93ZHQuYyBiL2RyaXZlcnMvd2F0Y2hkb2cvaW14N3Vs
+cF93ZHQuYw0KPiBuZXcNCj4gPiBmaWxlIG1vZGUgMTAwNjQ0IGluZGV4IDAwMDAwMDAuLjVkMzc5
+NTcNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvZHJpdmVycy93YXRjaGRvZy9pbXg3dWxw
+X3dkdC5jDQo+ID4gQEAgLTAsMCArMSwyNDYgQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50
+aWZpZXI6IEdQTC0yLjANCj4gPiArLyoNCj4gPiArICogQ29weXJpZ2h0IDIwMTkgTlhQLg0KPiA+
+ICsgKi8NCj4gPiArDQo+ID4gKyNpbmNsdWRlIDxsaW51eC9jbGsuaD4NCj4gPiArI2luY2x1ZGUg
+PGxpbnV4L2luaXQuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQo+ID4gKyNpbmNsdWRl
+IDxsaW51eC9rZXJuZWwuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L21vZHVsZS5oPg0KPiA+ICsj
+aW5jbHVkZSA8bGludXgvb2YuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L3BsYXRmb3JtX2Rldmlj
+ZS5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvcmVib290Lmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51
+eC93YXRjaGRvZy5oPg0KPiA+ICsNCj4gPiArI2RlZmluZSBXRE9HX0NTCQkJMHgwDQo+ID4gKyNk
+ZWZpbmUgV0RPR19DU19DTUQzMkVOCQlCSVQoMTMpDQo+ID4gKyNkZWZpbmUgV0RPR19DU19VTEsJ
+CUJJVCgxMSkNCj4gPiArI2RlZmluZSBXRE9HX0NTX1JDUwkJQklUKDEwKQ0KPiA+ICsjZGVmaW5l
+IFdET0dfQ1NfRU4JCUJJVCg3KQ0KPiA+ICsjZGVmaW5lIFdET0dfQ1NfVVBEQVRFCQlCSVQoNSkN
+Cj4gPiArDQo+ID4gKyNkZWZpbmUgV0RPR19DTlQJMHg0DQo+ID4gKyNkZWZpbmUgV0RPR19UT1ZB
+TAkweDgNCj4gPiArDQo+ID4gKyNkZWZpbmUgUkVGUkVTSF9TRVEwCTB4QTYwMg0KPiA+ICsjZGVm
+aW5lIFJFRlJFU0hfU0VRMQkweEI0ODANCj4gPiArI2RlZmluZSBSRUZSRVNICQkoKFJFRlJFU0hf
+U0VRMSA8PCAxNikgfCBSRUZSRVNIX1NFUTApDQo+ID4gKw0KPiA+ICsjZGVmaW5lIFVOTE9DS19T
+RVEwCTB4QzUyMA0KPiA+ICsjZGVmaW5lIFVOTE9DS19TRVExCTB4RDkyOA0KPiA+ICsjZGVmaW5l
+IFVOTE9DSwkJKChVTkxPQ0tfU0VRMSA8PCAxNikgfCBVTkxPQ0tfU0VRMCkNCj4gPiArDQo+ID4g
+KyNkZWZpbmUgREVGQVVMVF9USU1FT1VUCTYwDQo+ID4gKyNkZWZpbmUgTUFYX1RJTUVPVVQJMTI4
+DQo+ID4gKw0KPiA+ICtzdGF0aWMgYm9vbCBub3dheW91dCA9IFdBVENIRE9HX05PV0FZT1VUOw0K
+PiBtb2R1bGVfcGFyYW0obm93YXlvdXQsDQo+ID4gK2Jvb2wsIDAwMDApOyBNT0RVTEVfUEFSTV9E
+RVNDKG5vd2F5b3V0LCAiV2F0Y2hkb2cgY2Fubm90IGJlDQo+IHN0b3BwZWQNCj4gPiArb25jZSBz
+dGFydGVkIChkZWZhdWx0PSINCj4gPiArCQkgX19NT0RVTEVfU1RSSU5HKFdBVENIRE9HX05PV0FZ
+T1VUKSAiKSIpOw0KPiA+ICsNCj4gPiArc3RydWN0IGlteDd1bHBfd2R0X2RldmljZSB7DQo+ID4g
+KwlzdHJ1Y3Qgbm90aWZpZXJfYmxvY2sgcmVzdGFydF9oYW5kbGVyOw0KPiA+ICsJc3RydWN0IHdh
+dGNoZG9nX2RldmljZSB3ZGQ7DQo+ID4gKwl2b2lkIF9faW9tZW0gKmJhc2U7DQo+ID4gKwlzdHJ1
+Y3QgY2xrICpjbGs7DQo+ID4gKwlpbnQgcmF0ZTsNCj4gPiArfTsNCj4gPiArDQo+ID4gK3N0YXRp
+YyBpbmxpbmUgdm9pZCBpbXg3dWxwX3dkdF9lbmFibGUodm9pZCBfX2lvbWVtICpiYXNlLCBib29s
+DQo+ID4gK2VuYWJsZSkgew0KPiA+ICsJdTMyIHZhbCA9IHJlYWRsKGJhc2UgKyBXRE9HX0NTKTsN
+Cj4gPiArDQo+ID4gKwl3cml0ZWwoVU5MT0NLLCBiYXNlICsgV0RPR19DTlQpOw0KPiA+ICsJaWYg
+KGVuYWJsZSkNCj4gPiArCQl3cml0ZWwodmFsIHwgV0RPR19DU19FTiwgYmFzZSArIFdET0dfQ1Mp
+Ow0KPiA+ICsJZWxzZQ0KPiA+ICsJCXdyaXRlbCh2YWwgJiB+V0RPR19DU19FTiwgYmFzZSArIFdE
+T0dfQ1MpOyB9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW5saW5lIGJvb2wgaW14N3VscF93ZHRfaXNf
+ZW5hYmxlZCh2b2lkIF9faW9tZW0gKmJhc2UpIHsNCj4gPiArCXUzMiB2YWwgPSByZWFkbChiYXNl
+ICsgV0RPR19DUyk7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIHZhbCAmIFdET0dfQ1NfRU47DQo+ID4g
+K30NCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgaW14N3VscF93ZHRfcGluZyhzdHJ1Y3Qgd2F0Y2hk
+b2dfZGV2aWNlICp3ZG9nKSB7DQo+ID4gKwlzdHJ1Y3QgaW14N3VscF93ZHRfZGV2aWNlICp3ZHQg
+PSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSh3ZG9nKTsNCj4gPiArDQo+ID4gKwl3cml0ZWwoUkVGUkVT
+SCwgd2R0LT5iYXNlICsgV0RPR19DTlQpOw0KPiA+ICsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9
+DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IGlteDd1bHBfd2R0X3N0YXJ0KHN0cnVjdCB3YXRjaGRv
+Z19kZXZpY2UgKndkb2cpIHsNCj4gPiArCXN0cnVjdCBpbXg3dWxwX3dkdF9kZXZpY2UgKndkdCA9
+IHdhdGNoZG9nX2dldF9kcnZkYXRhKHdkb2cpOw0KPiA+ICsNCj4gPiArCWlteDd1bHBfd2R0X2Vu
+YWJsZSh3ZHQtPmJhc2UsIHRydWUpOw0KPiA+ICsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+
+ID4gKw0KPiA+ICtzdGF0aWMgaW50IGlteDd1bHBfd2R0X3N0b3Aoc3RydWN0IHdhdGNoZG9nX2Rl
+dmljZSAqd2RvZykgew0KPiA+ICsJc3RydWN0IGlteDd1bHBfd2R0X2RldmljZSAqd2R0ID0gd2F0
+Y2hkb2dfZ2V0X2RydmRhdGEod2RvZyk7DQo+ID4gKw0KPiA+ICsJaW14N3VscF93ZHRfZW5hYmxl
+KHdkdC0+YmFzZSwgZmFsc2UpOw0KPiA+ICsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+ID4g
+Kw0KPiA+ICtzdGF0aWMgaW50IGlteDd1bHBfd2R0X3NldF90aW1lb3V0KHN0cnVjdCB3YXRjaGRv
+Z19kZXZpY2UgKndkb2csDQo+ID4gKwkJCQkgICB1bnNpZ25lZCBpbnQgdGltZW91dCkNCj4gPiAr
+ew0KPiA+ICsJc3RydWN0IGlteDd1bHBfd2R0X2RldmljZSAqd2R0ID0gd2F0Y2hkb2dfZ2V0X2Ry
+dmRhdGEod2RvZyk7DQo+ID4gKwl1MzIgdmFsID0gd2R0LT5yYXRlICogdGltZW91dDsNCj4gPiAr
+DQo+ID4gKwl3cml0ZWwoVU5MT0NLLCB3ZHQtPmJhc2UgKyBXRE9HX0NOVCk7DQo+ID4gKwl3cml0
+ZWwodmFsLCB3ZHQtPmJhc2UgKyBXRE9HX1RPVkFMKTsNCj4gPiArDQo+ID4gKwl3ZG9nLT50aW1l
+b3V0ID0gdGltZW91dDsNCj4gPiArDQo+ID4gKwlyZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4g
+PiArc3RhdGljIGNvbnN0IHN0cnVjdCB3YXRjaGRvZ19vcHMgaW14N3VscF93ZHRfb3BzID0gew0K
+PiA+ICsJLm93bmVyID0gVEhJU19NT0RVTEUsDQo+ID4gKwkuc3RhcnQgPSBpbXg3dWxwX3dkdF9z
+dGFydCwNCj4gPiArCS5zdG9wICA9IGlteDd1bHBfd2R0X3N0b3AsDQo+ID4gKwkucGluZyAgPSBp
+bXg3dWxwX3dkdF9waW5nLA0KPiA+ICsJLnNldF90aW1lb3V0ID0gaW14N3VscF93ZHRfc2V0X3Rp
+bWVvdXQsIH07DQo+ID4gKw0KPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IHdhdGNoZG9nX2luZm8g
+aW14N3VscF93ZHRfaW5mbyA9IHsNCj4gPiArCS5pZGVudGl0eSA9ICJpLk1YN1VMUCB3YXRjaGRv
+ZyB0aW1lciIsDQo+ID4gKwkub3B0aW9ucyAgPSBXRElPRl9TRVRUSU1FT1VUIHwgV0RJT0ZfS0VF
+UEFMSVZFUElORyB8DQo+ID4gKwkJICAgIFdESU9GX01BR0lDQ0xPU0UsDQo+ID4gK307DQo+ID4g
+Kw0KPiA+ICtzdGF0aWMgaW5saW5lIHZvaWQgaW14N3VscF93ZHRfaW5pdCh2b2lkIF9faW9tZW0g
+KmJhc2UsIHVuc2lnbmVkIGludA0KPiA+ICt0aW1lb3V0KSB7DQo+ID4gKwl1MzIgdmFsOw0KPiA+
+ICsNCj4gPiArCS8qIHVubG9jayB0aGUgd2RvZyBmb3IgcmVjb25maWd1cmF0aW9uICovDQo+ID4g
+Kwl3cml0ZWxfcmVsYXhlZChVTkxPQ0tfU0VRMCwgYmFzZSArIFdET0dfQ05UKTsNCj4gPiArCXdy
+aXRlbF9yZWxheGVkKFVOTE9DS19TRVExLCBiYXNlICsgV0RPR19DTlQpOw0KPiA+ICsNCj4gPiAr
+CS8qIHNldCBhbiBpbml0aWFsIHRpbWVvdXQgdmFsdWUgaW4gVE9WQUwgKi8NCj4gPiArCXdyaXRl
+bCh0aW1lb3V0LCBiYXNlICsgV0RPR19UT1ZBTCk7DQo+ID4gKwkvKiBlbmFibGUgMzJiaXQgY29t
+bWFuZCBzZXF1ZW5jZSBhbmQgcmVjb25maWd1cmUgKi8NCj4gPiArCXZhbCA9IEJJVCgxMykgfCBC
+SVQoOCkgfCBCSVQoNSk7DQo+ID4gKwl3cml0ZWwodmFsLCBiYXNlICsgV0RPR19DUyk7DQo+ID4g
+K30NCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lkIGlteDd1bHBfd2R0X2FjdGlvbih2b2lkICpkYXRh
+KSB7DQo+ID4gKwlzdHJ1Y3QgaW14N3VscF93ZHRfZGV2aWNlICppbXg3dWxwX3dkdCA9IGRhdGE7
+DQo+ID4gKw0KPiA+ICsJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKGlteDd1bHBfd2R0LT5jbGspOw0K
+PiANCj4gSWYgeW91IGhhZCBwYXNzZWQgaW14N3VscF93ZHQtPmNsayBhcyBwYXJhbWV0ZXIsIHRo
+ZSBkZXJlZmVyZW5jZSBoZXJlDQo+IHdvdWxkIG5vdCBiZSBuZWNlc3NhcnkuDQoNCll1cCwgSSB0
+aG91Z2h0IHdlIG1heSBuZWVkIG90aGVyIGRhdGEgbGF0ZXIsIHNvIEkganVzdCBwYXNzZWQgd2hv
+bGUgc3RydWN0dXJlLg0KSSBhZ3JlZSB3aXRoIHlvdXIgaWRlYSwgZm9yIG5vdywgd2UgT05MWSBu
+ZWVkIHRoZSBjbGssIHNvIEkgd2lsbCBPTkxZIHBhc3MgdGhlIGNsaw0KdG8gc2F2ZSB0aGUgZGVy
+ZWZlcmVuY2Ugb3BlcmF0aW9uLiBXaWxsIHNlbmQgb3V0IFY0Lg0KDQo+IA0KPiA+ICt9DQo+ID4g
+Kw0KPiA+ICtzdGF0aWMgaW50IGlteDd1bHBfd2R0X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZp
+Y2UgKnBkZXYpIHsNCj4gPiArCXN0cnVjdCBpbXg3dWxwX3dkdF9kZXZpY2UgKmlteDd1bHBfd2R0
+Ow0KPiA+ICsJc3RydWN0IGRldmljZSAqZGV2ID0gJnBkZXYtPmRldjsNCj4gPiArCXN0cnVjdCB3
+YXRjaGRvZ19kZXZpY2UgKndkb2c7DQo+ID4gKwlpbnQgcmV0Ow0KPiA+ICsNCj4gPiArCWlteDd1
+bHBfd2R0ID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9mKCppbXg3dWxwX3dkdCksDQo+IEdGUF9L
+RVJORUwpOw0KPiA+ICsJaWYgKCFpbXg3dWxwX3dkdCkNCj4gPiArCQlyZXR1cm4gLUVOT01FTTsN
+Cj4gPiArDQo+ID4gKwlwbGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBpbXg3dWxwX3dkdCk7DQo+
+ID4gKw0KPiA+ICsJaW14N3VscF93ZHQtPmJhc2UgPSBkZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVz
+b3VyY2UocGRldiwgMCk7DQo+ID4gKwlpZiAoSVNfRVJSKGlteDd1bHBfd2R0LT5iYXNlKSkNCj4g
+PiArCQlyZXR1cm4gUFRSX0VSUihpbXg3dWxwX3dkdC0+YmFzZSk7DQo+ID4gKw0KPiA+ICsJaW14
+N3VscF93ZHQtPmNsayA9IGRldm1fY2xrX2dldChkZXYsIE5VTEwpOw0KPiA+ICsJaWYgKElTX0VS
+UihpbXg3dWxwX3dkdC0+Y2xrKSkgew0KPiA+ICsJCWRldl9lcnIoZGV2LCAiRmFpbGVkIHRvIGdl
+dCB3YXRjaGRvZyBjbG9ja1xuIik7DQo+ID4gKwkJcmV0dXJuIFBUUl9FUlIoaW14N3VscF93ZHQt
+PmNsayk7DQo+ID4gKwl9DQo+ID4gKw0KPiA+ICsJcmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxlKGlt
+eDd1bHBfd2R0LT5jbGspOw0KPiA+ICsJaWYgKHJldCkNCj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+
+ICsNCj4gPiArCXJldCA9IGRldm1fYWRkX2FjdGlvbl9vcl9yZXNldChkZXYsIGlteDd1bHBfd2R0
+X2FjdGlvbiwNCj4gaW14N3VscF93ZHQpOw0KPiA+ICsJaWYgKHJldCkNCj4gPiArCQlyZXR1cm4g
+cmV0Ow0KPiA+ICsNCj4gPiArCWlteDd1bHBfd2R0LT5yYXRlID0gMTAwMDsNCj4gDQo+IEkgZm9y
+Z290IHRvIGFzayAoc29ycnksIEkgaGFkIG5vdGljZWQsIGJ1dCBJIGd1ZXNzIEkgZm9yZ290KS4N
+Cj4gDQo+IFdoeSBub3QgY2xrX2dldF9yYXRlKCkgPyBJZiB0aGUgY2xvY2sgcmF0ZSBpcyBmaXhl
+ZCwgd2h5IGJvdGhlciB3aXRoIGEgJ3JhdGUnDQo+IHZhcmlhYmxlID8gWW91IGNvdWxkIHVzZSBh
+IGNvbnN0YW50IGluc3RlYWQgd2hlcmVldmVyIGl0IGlzIHVzZWQuDQoNCk9LLCB0aGUgY2xvY2sg
+cmF0ZSBpcyBmaXhlZCBvbiA3VUxQLCBJIHdpbGwgdXNlIGEgY29uc3RhbnQgaW5zdGVhZCBvZiB0
+aGUgdmFyaWFibGUuDQoNClRoYW5rcywNCkFuc29uDQoNCj4gDQo+IFRoYW5rcw0KPiBHdWVudGVy
+DQo+IA0KPiA+ICsJd2RvZyA9ICZpbXg3dWxwX3dkdC0+d2RkOw0KPiA+ICsJd2RvZy0+aW5mbyA9
+ICZpbXg3dWxwX3dkdF9pbmZvOw0KPiA+ICsJd2RvZy0+b3BzID0gJmlteDd1bHBfd2R0X29wczsN
+Cj4gPiArCXdkb2ctPm1pbl90aW1lb3V0ID0gMTsNCj4gPiArCXdkb2ctPm1heF90aW1lb3V0ID0g
+TUFYX1RJTUVPVVQ7DQo+ID4gKwl3ZG9nLT5wYXJlbnQgPSBkZXY7DQo+ID4gKwl3ZG9nLT50aW1l
+b3V0ID0gREVGQVVMVF9USU1FT1VUOw0KPiA+ICsNCj4gPiArCXdhdGNoZG9nX2luaXRfdGltZW91
+dCh3ZG9nLCAwLCBkZXYpOw0KPiA+ICsJd2F0Y2hkb2dfc3RvcF9vbl9yZWJvb3Qod2RvZyk7DQo+
+ID4gKwl3YXRjaGRvZ19zdG9wX29uX3VucmVnaXN0ZXIod2RvZyk7DQo+ID4gKwl3YXRjaGRvZ19z
+ZXRfZHJ2ZGF0YSh3ZG9nLCBpbXg3dWxwX3dkdCk7DQo+ID4gKwlpbXg3dWxwX3dkdF9pbml0KGlt
+eDd1bHBfd2R0LT5iYXNlLCB3ZG9nLT50aW1lb3V0ICoNCj4gPiAraW14N3VscF93ZHQtPnJhdGUp
+Ow0KPiA+ICsNCj4gPiArCXJldHVybiBkZXZtX3dhdGNoZG9nX3JlZ2lzdGVyX2RldmljZShkZXYs
+IHdkb2cpOyB9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IF9fbWF5YmVfdW51c2VkIGlteDd1bHBf
+d2R0X3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KSB7DQo+ID4gKwlzdHJ1Y3QgaW14N3VscF93
+ZHRfZGV2aWNlICppbXg3dWxwX3dkdCA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPiA+ICsNCj4g
+PiArCWlmICh3YXRjaGRvZ19hY3RpdmUoJmlteDd1bHBfd2R0LT53ZGQpKQ0KPiA+ICsJCWlteDd1
+bHBfd2R0X3N0b3AoJmlteDd1bHBfd2R0LT53ZGQpOw0KPiA+ICsNCj4gPiArCWNsa19kaXNhYmxl
+X3VucHJlcGFyZShpbXg3dWxwX3dkdC0+Y2xrKTsNCj4gPiArDQo+ID4gKwlyZXR1cm4gMDsNCj4g
+PiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBfX21heWJlX3VudXNlZCBpbXg3dWxwX3dkdF9y
+ZXN1bWUoc3RydWN0IGRldmljZSAqZGV2KSB7DQo+ID4gKwlzdHJ1Y3QgaW14N3VscF93ZHRfZGV2
+aWNlICppbXg3dWxwX3dkdCA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPiA+ICsJdTMyIHRpbWVv
+dXQgPSBpbXg3dWxwX3dkdC0+d2RkLnRpbWVvdXQgKiBpbXg3dWxwX3dkdC0+cmF0ZTsNCj4gPiAr
+CWludCByZXQ7DQo+ID4gKw0KPiA+ICsJcmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxlKGlteDd1bHBf
+d2R0LT5jbGspOw0KPiA+ICsJaWYgKHJldCkNCj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+ICsNCj4g
+PiArCWlmIChpbXg3dWxwX3dkdF9pc19lbmFibGVkKGlteDd1bHBfd2R0LT5iYXNlKSkNCj4gPiAr
+CQlpbXg3dWxwX3dkdF9pbml0KGlteDd1bHBfd2R0LT5iYXNlLCB0aW1lb3V0KTsNCj4gPiArDQo+
+ID4gKwlpZiAod2F0Y2hkb2dfYWN0aXZlKCZpbXg3dWxwX3dkdC0+d2RkKSkNCj4gPiArCQlpbXg3
+dWxwX3dkdF9zdGFydCgmaW14N3VscF93ZHQtPndkZCk7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIDA7
+DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBTSU1QTEVfREVWX1BNX09QUyhpbXg3dWxwX3dk
+dF9wbV9vcHMsDQo+IGlteDd1bHBfd2R0X3N1c3BlbmQsDQo+ID4gKwkJCSBpbXg3dWxwX3dkdF9y
+ZXN1bWUpOw0KPiA+ICsNCj4gPiArc3RhdGljIGNvbnN0IHN0cnVjdCBvZl9kZXZpY2VfaWQgaW14
+N3VscF93ZHRfZHRfaWRzW10gPSB7DQo+ID4gKwl7IC5jb21wYXRpYmxlID0gImZzbCxpbXg3dWxw
+LXdkdCIsIH0sDQo+ID4gKwl7IC8qIHNlbnRpbmVsICovIH0NCj4gPiArfTsNCj4gPiArTU9EVUxF
+X0RFVklDRV9UQUJMRShvZiwgaW14N3VscF93ZHRfZHRfaWRzKTsNCj4gPiArDQo+ID4gK3N0YXRp
+YyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyIGlteDd1bHBfd2R0X2RyaXZlciA9IHsNCj4gPiArCS5w
+cm9iZQkJPSBpbXg3dWxwX3dkdF9wcm9iZSwNCj4gPiArCS5kcml2ZXIJCT0gew0KPiA+ICsJCS5u
+YW1lCT0gImlteDd1bHAtd2R0IiwNCj4gPiArCQkucG0JPSAmaW14N3VscF93ZHRfcG1fb3BzLA0K
+PiA+ICsJCS5vZl9tYXRjaF90YWJsZSA9IGlteDd1bHBfd2R0X2R0X2lkcywNCj4gPiArCX0sDQo+
+ID4gK307DQo+ID4gK21vZHVsZV9wbGF0Zm9ybV9kcml2ZXIoaW14N3VscF93ZHRfZHJpdmVyKTsN
+Cj4gPiArDQo+ID4gK01PRFVMRV9BVVRIT1IoIkFuc29uIEh1YW5nIDxBbnNvbi5IdWFuZ0BueHAu
+Y29tPiIpOw0KPiA+ICtNT0RVTEVfREVTQ1JJUFRJT04oIkZyZWVzY2FsZSBpLk1YN1VMUCB3YXRj
+aGRvZyBkcml2ZXIiKTsNCj4gPiArTU9EVUxFX0xJQ0VOU0UoIkdQTCB2MiIpOw0KPiA+IC0tDQo+
+ID4gMi43LjQNCj4gPg0K
