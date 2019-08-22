@@ -2,115 +2,92 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B9098EF8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Aug 2019 11:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB07E993DD
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Aug 2019 14:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727807AbfHVJPZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 22 Aug 2019 05:15:25 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:48588 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725793AbfHVJPZ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 22 Aug 2019 05:15:25 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 1EAAA411F9;
-        Thu, 22 Aug 2019 09:15:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-transfer-encoding:mime-version:user-agent:content-type
-        :content-type:organization:references:in-reply-to:date:date:from
-        :from:subject:subject:message-id:received:received:received; s=
-        mta-01; t=1566465322; x=1568279723; bh=xp4rY3o0M1wxzRezMXTNY4/zZ
-        Y+MCsy/eXZ7EF9Njsg=; b=Q+bcAN9BSsRThV9GpNDHrHQDoMM1IB3j9QOV2i2sX
-        rBBn3ufrgMs7oc2FFll6f/+BoXeUG5KN7w8LxDgEvXgQ1nVAytmlaimve+VXjWpN
-        KmozJuWXEWlOsrHz6y0DxBk5hAOmqQYrVHtQCUtAsJ5Cw3excV/RTCIUQKSp9j1d
-        FA=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id r3TcHeHOiQDd; Thu, 22 Aug 2019 12:15:22 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 4877541240;
-        Thu, 22 Aug 2019 12:15:20 +0300 (MSK)
-Received: from localhost.localdomain (172.17.15.69) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Thu, 22 Aug 2019 12:15:20 +0300
-Message-ID: <a022c0590f0fbf22cc8476b5ef3f1c22746429ac.camel@yadro.com>
-Subject: Re: [PATCH 3/3] watchdog/aspeed: add support for dual boot
-From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        "Alexander Amelkin" <a.amelkin@yadro.com>
-Date:   Thu, 22 Aug 2019 12:15:20 +0300
-In-Reply-To: <20190821163220.GA11547@roeck-us.net>
-References: <1f2cd155057e5ab0cdb20a9a11614bbb09bb49ad.camel@yadro.com>
-         <20190821163220.GA11547@roeck-us.net>
-Organization: YADRO
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        id S2387685AbfHVMeT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 22 Aug 2019 08:34:19 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:36220 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387692AbfHVMeM (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 22 Aug 2019 08:34:12 -0400
+Received: by mail-lf1-f67.google.com with SMTP id j17so4412902lfp.3
+        for <linux-watchdog@vger.kernel.org>; Thu, 22 Aug 2019 05:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=qQwouDogyXJvS+YAsG7u3jI4chdOO2iCwbnUv4qV7/t3H0mpAnkar5BQ6W4yzvm3w4
+         MFy7lbM3I35ux+N13OWQLqMSp+JYBfamJOBS4Rv9YtwGFbdx/1nZ3P/IH2tA3AOy5PjU
+         kwMZko6qlgHP0UHJGHFvzgceOWtw4tjNefrQZ96MP6AChhfKt94B36gjTZhv6W5d2u3q
+         XLX/JEQ53zQai3qewoG2X6xDeNJ4HOzQU6TV4Cb4zGt4uQQf5AD05mnaufLgjsYbqLh0
+         X5GVMmJW05ufNL+28p6nLz0lCjVsZITmyIS1mIvW9/VAX3eTcLMat0TkK0bawj8l1wal
+         unaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=WgZP12nNAr6WcF7Mf7Tluz1B6Hw7jwYJcEcfoKGYdTgpBcD1F6SLVIQCq3CdP9ReqA
+         w1fcG3R7zMBeQV7RlJbwEugyyjOLEM2W30gDoSDKbLk9maeewTbcTgJw1fs69dqd8X58
+         Hhe1NNI5i610bZrUaUbrSwEbN2Wlml8VU/zLoExaPz2auWVWcrV+xrWm816ih4MpygEn
+         CG9HwstHIjf8fyJ0aYOt6zXMLHa51x7N8qcLyppDACRMzrqxs//Admfrv4/QqjKbvIGo
+         4v9VZhb+WrMBkbT1dzwIb591qL6vs1m94lLEhNU0EGBmoZRI8fBmmplYzhCA8gXnqZOj
+         Gvrw==
+X-Gm-Message-State: APjAAAUW7OsRhTjQAjAxXey/YFEqYoArrdShQHX0T0GExajjR5bZ85Px
+        Ahbh0s/RP9gbOsQSrekoZvdrtTipK/6E4t7lPXA=
+X-Google-Smtp-Source: APXvYqyvt2RXzV9cZsTsiBwjcFFEoyd1HLlAwIQQPxXOemblWJ85A0QXgz94gt7tcllsT417ikCMvXpOU1ZxhrqMZqI=
+X-Received: by 2002:ac2:42c3:: with SMTP id n3mr13722899lfl.117.1566477250738;
+ Thu, 22 Aug 2019 05:34:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.17.15.69]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:34:10
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:34:10 +0000
+Message-ID: <CAN-_bTZ04fanuBw0m=mWQFHTKscwdYgns3LR19ZdaFDanOVNGQ@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 2019-08-21 at 09:32 -0700, Guenter Roeck wrote:
-> 
-> > +	writel(WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION,
-> > +			wdt->base + WDT_CLEAR_TIMEOUT_STATUS);
-> > +	wdt->wdd.bootstatus |= WDIOF_EXTERN1;
-> 
-> The variable reflects the _boot status_. It should not change after booting.
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-Okay, then perhaps may we set 'status' handler for watchdog device and check 
-'status' file? Right now 'bootstatus' and 'status' are same because there is no
-handler for 'status'.
-
-> > +
-> > +	return size;
-> > +}
-> > +static DEVICE_ATTR_WO(access_cs0);
-> > +
-> > +static struct attribute *bswitch_attrs[] = {
-> > +	&dev_attr_access_cs0.attr,
-> > +	NULL
-> > +};
-> > +ATTRIBUTE_GROUPS(bswitch);
-> > +
-> >  static const struct watchdog_ops aspeed_wdt_ops = {
-> >  	.start		= aspeed_wdt_start,
-> >  	.stop		= aspeed_wdt_stop,
-> > @@ -223,6 +248,9 @@ static int aspeed_wdt_probe(struct platform_device
-> > *pdev)
-> >  
-> >  	wdt->ctrl = WDT_CTRL_1MHZ_CLK;
-> >  
-> > +	if (of_property_read_bool(np, "aspeed,alt-boot"))
-> > +		wdt->wdd.groups = bswitch_groups;
-> > +
-> Why does this have to be separate to the existing evaluation of
-> aspeed,alt-boot, and why does the existing code not work ?
-> 
-> Also, is it guaranteed that this does not interfer with existing
-> support for alt-boot ?
-
-It doesn't, it just provides for ast2400 switch to cs0 at side 1(cs1). Problem
-is that only one flash chip(side 1/cs1) is accessible on alternate boot, there
-is citation from the documentation in commit body. So if by some reason side 0
-is corrupted, need to switch into alternate boot to cs1, do the load from it,
-drop that bit to make side 0 accessible and do the flash of first side. On
-ast2500/2600 this problem is solved already, in alternate boot there both flash
-chips are present. It's additional requirement for alternate boot on ast2400, to
-make the possibility to access at all side 0 flash chip after we boot to the
-alternate side.
-
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
