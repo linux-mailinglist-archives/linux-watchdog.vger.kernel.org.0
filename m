@@ -2,92 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB07E993DD
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Aug 2019 14:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5940A994BE
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Aug 2019 15:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387685AbfHVMeT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 22 Aug 2019 08:34:19 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:36220 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387692AbfHVMeM (ORCPT
+        id S1732323AbfHVNTv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 22 Aug 2019 09:19:51 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51764 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730621AbfHVNTv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 22 Aug 2019 08:34:12 -0400
-Received: by mail-lf1-f67.google.com with SMTP id j17so4412902lfp.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 22 Aug 2019 05:34:11 -0700 (PDT)
+        Thu, 22 Aug 2019 09:19:51 -0400
+Received: by mail-wm1-f68.google.com with SMTP id k1so5626645wmi.1;
+        Thu, 22 Aug 2019 06:19:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=qQwouDogyXJvS+YAsG7u3jI4chdOO2iCwbnUv4qV7/t3H0mpAnkar5BQ6W4yzvm3w4
-         MFy7lbM3I35ux+N13OWQLqMSp+JYBfamJOBS4Rv9YtwGFbdx/1nZ3P/IH2tA3AOy5PjU
-         kwMZko6qlgHP0UHJGHFvzgceOWtw4tjNefrQZ96MP6AChhfKt94B36gjTZhv6W5d2u3q
-         XLX/JEQ53zQai3qewoG2X6xDeNJ4HOzQU6TV4Cb4zGt4uQQf5AD05mnaufLgjsYbqLh0
-         X5GVMmJW05ufNL+28p6nLz0lCjVsZITmyIS1mIvW9/VAX3eTcLMat0TkK0bawj8l1wal
-         unaQ==
+        bh=ddD9APKRjXleO36Xs3naLTEd/IAvAOuyDBxcB3/l6RE=;
+        b=KW7054+XQ7ewqXyjahG/huCwZ5HAssdkIt/hab63CWZoC89MOHcnpHYU0X6yODmlp2
+         N380G9NR9JjrEVP1ZgimWq4Q0rRsGqorTbhC8dvY4qDfIN51DzOaSOhYII3sL7E2de0T
+         obwNVydsqICf5LBE5EFU4kwA9GrUK+BRYBJJuKJmzteXtGYwKSma1n2JCTNicJNIg8pk
+         8pDY5R6VtLcx1kp4RCjZ8x00qflilBvrs4OEXBzpN2xr7yG60Y0GLo4hgbtIO/API7PU
+         iDJXMaKAt6LfI7rNtS/RAp61B00gemAcyDPfelr/4q15SCpiTUSAq/0bmfOBKXrg/ji7
+         V1pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=WgZP12nNAr6WcF7Mf7Tluz1B6Hw7jwYJcEcfoKGYdTgpBcD1F6SLVIQCq3CdP9ReqA
-         w1fcG3R7zMBeQV7RlJbwEugyyjOLEM2W30gDoSDKbLk9maeewTbcTgJw1fs69dqd8X58
-         Hhe1NNI5i610bZrUaUbrSwEbN2Wlml8VU/zLoExaPz2auWVWcrV+xrWm816ih4MpygEn
-         CG9HwstHIjf8fyJ0aYOt6zXMLHa51x7N8qcLyppDACRMzrqxs//Admfrv4/QqjKbvIGo
-         4v9VZhb+WrMBkbT1dzwIb591qL6vs1m94lLEhNU0EGBmoZRI8fBmmplYzhCA8gXnqZOj
-         Gvrw==
-X-Gm-Message-State: APjAAAUW7OsRhTjQAjAxXey/YFEqYoArrdShQHX0T0GExajjR5bZ85Px
-        Ahbh0s/RP9gbOsQSrekoZvdrtTipK/6E4t7lPXA=
-X-Google-Smtp-Source: APXvYqyvt2RXzV9cZsTsiBwjcFFEoyd1HLlAwIQQPxXOemblWJ85A0QXgz94gt7tcllsT417ikCMvXpOU1ZxhrqMZqI=
-X-Received: by 2002:ac2:42c3:: with SMTP id n3mr13722899lfl.117.1566477250738;
- Thu, 22 Aug 2019 05:34:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ddD9APKRjXleO36Xs3naLTEd/IAvAOuyDBxcB3/l6RE=;
+        b=Gc033YMTfIrukOQ2kqkdblva1igAA9lBhk5vmnSfLUKpc/oZtIKj5ykhuxD7rvzWQ/
+         1+UCFo+zzOUXMJtnMQAggoWeTOmgYgAktiRa2xrvXRbhhUKYG/rv0pMyEv7OIQlkYI70
+         TlcVUQiOOESgmtuiv2UYW4ifXDs6/OXcw8nGt/wsndAdG5UqNLN3j1g+dGLZNm4ygcvk
+         7sPWIbLpqq7Ex/qxj12s3zL6ZjnT30VyCvK0P0t1ip6769tajm4UEZ0sb5y66sdg6CWj
+         5a0qa1ofAn23No4RH6KvZVnp1mnnegQUjn1n8LyIII1S9qRBoXC2suCBlY2xIQshQYzy
+         rAEw==
+X-Gm-Message-State: APjAAAWynQ5nnca31zCNLIQpdMP5VA0ZYZQPt0AF9RgBOANEvJG0CU8G
+        Ftznmnc6G2fBx9YvgP6VcIP+n5JghrV76w==
+X-Google-Smtp-Source: APXvYqxZL7YUSunqPC7/AS91BwMbMyqOjmZhe4tKxkizMwfLl2FJD+RCl/trAs1BIYNzqeHrD8BP8A==
+X-Received: by 2002:a1c:9a95:: with SMTP id c143mr6364700wme.2.1566479989188;
+        Thu, 22 Aug 2019 06:19:49 -0700 (PDT)
+Received: from localhost.localdomain (3e6b1cc1.rev.stofanet.dk. [62.107.28.193])
+        by smtp.googlemail.com with ESMTPSA id d19sm34644045wrb.7.2019.08.22.06.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2019 06:19:48 -0700 (PDT)
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+To:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        u.kleine-koenig@pengutronix.de, bth@kamstrup.com,
+        bruno.thomsen@gmail.com
+Subject: [PATCH v3 1/5] rtc: pcf2127: convert to devm_rtc_allocate_device
+Date:   Thu, 22 Aug 2019 15:19:32 +0200
+Message-Id: <20190822131936.18772-1-bruno.thomsen@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:34:10
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
-Date:   Thu, 22 Aug 2019 12:34:10 +0000
-Message-ID: <CAN-_bTZ04fanuBw0m=mWQFHTKscwdYgns3LR19ZdaFDanOVNGQ@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+This allows further improvement of the driver.
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+---
+v3: no change.
+v2: no change.
+
+ drivers/rtc/rtc-pcf2127.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 8632f58fed43..58eb96506e4b 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -237,11 +237,12 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 
+ 	dev_set_drvdata(dev, pcf2127);
+ 
+-	pcf2127->rtc = devm_rtc_device_register(dev, name, &pcf2127_rtc_ops,
+-						THIS_MODULE);
++	pcf2127->rtc = devm_rtc_allocate_device(dev);
+ 	if (IS_ERR(pcf2127->rtc))
+ 		return PTR_ERR(pcf2127->rtc);
+ 
++	pcf2127->rtc->ops = &pcf2127_rtc_ops;
++
+ 	if (has_nvmem) {
+ 		struct nvmem_config nvmem_cfg = {
+ 			.priv = pcf2127,
+@@ -253,7 +254,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 		ret = rtc_nvmem_register(pcf2127->rtc, &nvmem_cfg);
+ 	}
+ 
+-	return ret;
++	return rtc_register_device(pcf2127->rtc);
+ }
+ 
+ #ifdef CONFIG_OF
+-- 
+2.21.0
+
