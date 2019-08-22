@@ -2,281 +2,133 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D9D994C7
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Aug 2019 15:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBED99592
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Aug 2019 15:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732317AbfHVNT6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 22 Aug 2019 09:19:58 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38996 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730621AbfHVNT5 (ORCPT
+        id S1731792AbfHVNzc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 22 Aug 2019 09:55:32 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45462 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731791AbfHVNzb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 22 Aug 2019 09:19:57 -0400
-Received: by mail-wr1-f67.google.com with SMTP id t16so5409962wra.6;
-        Thu, 22 Aug 2019 06:19:55 -0700 (PDT)
+        Thu, 22 Aug 2019 09:55:31 -0400
+Received: by mail-pf1-f195.google.com with SMTP id w26so4002695pfq.12;
+        Thu, 22 Aug 2019 06:55:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8YzNQFejHcUxRGGGHyCklNkZB6Rv3yiFGAIZAAgoOvo=;
-        b=mz61uVpt8xGUHMFran+MeTmkZJ/zLONa/gyVZgB8L52h4b7TPpGRYbRqnCl00O6maa
-         eyydiWuT3agYR9sF+a+BCQtXGlFEVOhazQV0+QWP0WRQ5Oekt6hCjlNj3mtw/gleVBNC
-         DRAUMmu8XNtqqxHklRBJwcPXWa3pxQ2VVU68EvNJQCHkEOm2MPOWBHM7+kvNATZJU5CW
-         jGAdYR01jtiWbvLUcUR1i8w+aNomi2l0KcvJfMCc0PJ7pTpS0oImsEShBSQB5vEK8wP3
-         qxDOOrDe5vB8I2PpPyig5TRsvTH+L8nowPrS6dHyZ+c7J1yFqNMh+jdwgrDyZ1g5vw44
-         GlUw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pVS9WjZ8RWCSBv6JVW5/oNJDRTIjY7tJwBPEyclsS3s=;
+        b=IHwJHSCrZqwuxLg+z9PPuWxBtzeGhgAcD9jbCyNf7SVvnbEYEC7sAULbMT2EfPFyng
+         9Gu6yf9O1eH34wTMSQkb3aF/w9vUZKZHXAqzau1Zs48p0Q9w0ZJI90Qx/i2B92E2BH/m
+         aPAxH9UWBwnGkUXLyHcpJqvRw8GzmYZGDYi07ux6OMSttTDL7fSOevIObEPBOiGEM6Cq
+         G7suHv7mIKdp15Tk4i8uRrjOH5Oh3qtPH6lxCTvPOo1Ti9O4Nlhzcj1x+Luj6OEiPDFV
+         2suCvr6o6JxtVothsXeejOPG1tN3DA4OWAOosJkqclGKmUrtEx/0h4IHi/gdwB5Sz17U
+         ECmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8YzNQFejHcUxRGGGHyCklNkZB6Rv3yiFGAIZAAgoOvo=;
-        b=SK795YVYQf1ct5X0OPKhW9zhJfkWcfjqdDNqW4GcnVf5CHS3htKfu61oH7V9zvIYcI
-         qmsHirOtYWdGYamYark4+mrO0zTCer0jyYYvbklFB+VM5LSQbA8fo7HjUCkuIL8eZ7wx
-         31RuMD4GqczLk18XDf6wvq38YT8rkUq3Vxshj5QhnAlEdw6ZhGvuYGoDG5BGTRVbkhhL
-         xEvlaXLCcV3tVQQf38Vofyo5lgffItjmVBB+ZqmssKc5lWOtKGq7JfJPs3B/+n/yZVMi
-         wv+uF4LNTpR7a2DS9pqK1WrCnll+7cMQ5acnQvdbn7bJEvVOlqFmVyWj4TCrJnV17Ut0
-         VpGw==
-X-Gm-Message-State: APjAAAWDoC/Hc3uq5C7YB5bC06uVdhNMHzqSjEzMNGj1liRvYUEXI866
-        PwrGUcDLa9PnHg5yJa6BDHp4w+M2BNGDAA==
-X-Google-Smtp-Source: APXvYqxawesr4/ade+dpooRHdXcn2CsBAKF3KJyVQYDgaaGxsU6+RvY7bGpd4JW/n7klWZONGMKUuQ==
-X-Received: by 2002:adf:fe12:: with SMTP id n18mr47027619wrr.105.1566479994040;
-        Thu, 22 Aug 2019 06:19:54 -0700 (PDT)
-Received: from localhost.localdomain (3e6b1cc1.rev.stofanet.dk. [62.107.28.193])
-        by smtp.googlemail.com with ESMTPSA id d19sm34644045wrb.7.2019.08.22.06.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 06:19:53 -0700 (PDT)
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-To:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        u.kleine-koenig@pengutronix.de, bth@kamstrup.com,
-        bruno.thomsen@gmail.com
-Subject: [PATCH v3 5/5] rtc: pcf2127: add tamper detection support
-Date:   Thu, 22 Aug 2019 15:19:36 +0200
-Message-Id: <20190822131936.18772-5-bruno.thomsen@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190822131936.18772-1-bruno.thomsen@gmail.com>
-References: <20190822131936.18772-1-bruno.thomsen@gmail.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pVS9WjZ8RWCSBv6JVW5/oNJDRTIjY7tJwBPEyclsS3s=;
+        b=SVVgVowX6RSQTGaQwwESKMQaM7XEWr4fKTKfihw4XdCEMF5O0p01Q9cF8vNd5O9ACL
+         KNw9lj5Q8MqTMPuur5sxwybJlcHhe7YKY25+LMA7b/+UUe/fFQLNAhth2q+3gjIptfGs
+         8A6L5erM4/LVKYEIK+sSmzgr6Mg/r1ewgCuk7rU+p70kEcjo/okGEOJtqaoSbkpblKul
+         BXPUNaQutprbHZMyhFatZYRJGAwGcMO4/23WJadF8JM7eUP8k4KqjkMSgs8WElp8Qgto
+         +JzzPU7LRih7dyieo7Rreyb9LLrANS7NI1+0eSGEtn5iyCluw7cd1cc6dl4lfIhb+Fz+
+         0Fng==
+X-Gm-Message-State: APjAAAUNrembRxZLJCaCWO1mnzN57VxvN7zkeqlTt9yIOh3tYB8Kr+vH
+        vA6xuKWFVkxrBWiHrcPbXVg=
+X-Google-Smtp-Source: APXvYqzUGuZQ6dNDWJuoxeDgwfknlEuPoT5poRPywocRNFuXhtyT1qaDxcSK+l4Xj7UZ6pJX7sV9IQ==
+X-Received: by 2002:a17:90a:bd0b:: with SMTP id y11mr5304283pjr.141.1566482130453;
+        Thu, 22 Aug 2019 06:55:30 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e13sm33247202pfl.130.2019.08.22.06.55.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 22 Aug 2019 06:55:29 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 06:55:28 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ivan Mikhaylov <i.mikhaylov@yadro.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Alexander Amelkin <a.amelkin@yadro.com>
+Subject: Re: [PATCH 3/3] watchdog/aspeed: add support for dual boot
+Message-ID: <20190822135528.GB8144@roeck-us.net>
+References: <1f2cd155057e5ab0cdb20a9a11614bbb09bb49ad.camel@yadro.com>
+ <20190821163220.GA11547@roeck-us.net>
+ <a022c0590f0fbf22cc8476b5ef3f1c22746429ac.camel@yadro.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a022c0590f0fbf22cc8476b5ef3f1c22746429ac.camel@yadro.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add support for integrated tamper detection function in both PCF2127 and
-PCF2129 chips. This patch implements the feature by adding an additional
-timestamp0 file to sysfs device path. This file contains seconds since
-epoch, if an event occurred, or is empty, if none occurred.
-Interface should match ISL1208 and RV3028 RTC drivers.
+On Thu, Aug 22, 2019 at 12:15:20PM +0300, Ivan Mikhaylov wrote:
+> On Wed, 2019-08-21 at 09:32 -0700, Guenter Roeck wrote:
+> > 
+> > > +	writel(WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION,
+> > > +			wdt->base + WDT_CLEAR_TIMEOUT_STATUS);
+> > > +	wdt->wdd.bootstatus |= WDIOF_EXTERN1;
+> > 
+> > The variable reflects the _boot status_. It should not change after booting.
+> 
+> Okay, then perhaps may we set 'status' handler for watchdog device and check 
+> 'status' file? Right now 'bootstatus' and 'status' are same because there is no
+> handler for 'status'.
+> 
 
-Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
----
-v3: no change.
-v2: call pcf2127_wdt_active_ping after CTRL2 register read.
-    add dev_dbg() trace in timestamp0_show().
-    minor regmap dev_err() text update in pcf2127_probe().
+You would still have to redefine one of the status bits to mean something
+driver specific. You would also still have two different flags to read
+and control cs0 - to read the status, you would read an ioctl (or the
+status sysfs attribute), to write it you would write into access_cs0.
 
- drivers/rtc/rtc-pcf2127.c | 160 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 160 insertions(+)
+I guess I must be missing something. What is the problem with using
+access_cs0 for both ?
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 8d6eda455d81..3ec87d320766 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -25,11 +25,18 @@
- 
- /* Control register 1 */
- #define PCF2127_REG_CTRL1		0x00
-+#define PCF2127_BIT_CTRL1_TSF1			BIT(4)
- /* Control register 2 */
- #define PCF2127_REG_CTRL2		0x01
-+#define PCF2127_BIT_CTRL2_TSIE			BIT(2)
-+#define PCF2127_BIT_CTRL2_TSF2			BIT(5)
- /* Control register 3 */
- #define PCF2127_REG_CTRL3		0x02
-+#define PCF2127_BIT_CTRL3_BLIE			BIT(0)
-+#define PCF2127_BIT_CTRL3_BIE			BIT(1)
- #define PCF2127_BIT_CTRL3_BLF			BIT(2)
-+#define PCF2127_BIT_CTRL3_BF			BIT(3)
-+#define PCF2127_BIT_CTRL3_BTSE			BIT(4)
- /* Time and date registers */
- #define PCF2127_REG_SC			0x03
- #define PCF2127_BIT_SC_OSF			BIT(7)
-@@ -46,6 +53,16 @@
- #define PCF2127_BIT_WD_CTL_CD0			BIT(6)
- #define PCF2127_BIT_WD_CTL_CD1			BIT(7)
- #define PCF2127_REG_WD_VAL		0x11
-+/* Tamper timestamp registers */
-+#define PCF2127_REG_TS_CTRL		0x12
-+#define PCF2127_BIT_TS_CTRL_TSOFF		BIT(6)
-+#define PCF2127_BIT_TS_CTRL_TSM			BIT(7)
-+#define PCF2127_REG_TS_SC		0x13
-+#define PCF2127_REG_TS_MN		0x14
-+#define PCF2127_REG_TS_HR		0x15
-+#define PCF2127_REG_TS_DM		0x16
-+#define PCF2127_REG_TS_MO		0x17
-+#define PCF2127_REG_TS_YR		0x18
- /*
-  * RAM registers
-  * PCF2127 has 512 bytes general-purpose static RAM (SRAM) that is
-@@ -305,6 +322,97 @@ static const struct watchdog_ops pcf2127_watchdog_ops = {
- 	.set_timeout = pcf2127_wdt_set_timeout,
- };
- 
-+/* sysfs interface */
-+
-+static ssize_t timestamp0_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
-+	int ret;
-+
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-+				 PCF2127_BIT_CTRL1_TSF1, 0);
-+	if (ret) {
-+		dev_err(dev, "%s: update ctrl1 ret=%d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-+				 PCF2127_BIT_CTRL2_TSF2, 0);
-+	if (ret) {
-+		dev_err(dev, "%s: update ctrl2 ret=%d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+};
-+
-+static ssize_t timestamp0_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
-+	struct rtc_time tm;
-+	int ret;
-+	unsigned char data[25];
-+
-+	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL1, data,
-+			       sizeof(data));
-+	if (ret) {
-+		dev_err(dev, "%s: read error ret=%d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(dev,
-+		"%s: raw data is cr1=%02x, cr2=%02x, cr3=%02x, ts_sc=%02x, "
-+		"ts_mn=%02x, ts_hr=%02x, ts_dm=%02x, ts_mo=%02x, ts_yr=%02x\n",
-+		__func__, data[PCF2127_REG_CTRL1], data[PCF2127_REG_CTRL2],
-+		data[PCF2127_REG_CTRL3], data[PCF2127_REG_TS_SC],
-+		data[PCF2127_REG_TS_MN], data[PCF2127_REG_TS_HR],
-+		data[PCF2127_REG_TS_DM], data[PCF2127_REG_TS_MO],
-+		data[PCF2127_REG_TS_YR]);
-+
-+	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-+	if (ret)
-+		return ret;
-+
-+	if (!(data[PCF2127_REG_CTRL1] & PCF2127_BIT_CTRL1_TSF1) &&
-+	    !(data[PCF2127_REG_CTRL2] & PCF2127_BIT_CTRL2_TSF2))
-+		return 0;
-+
-+	tm.tm_sec = bcd2bin(data[PCF2127_REG_TS_SC] & 0x7F);
-+	tm.tm_min = bcd2bin(data[PCF2127_REG_TS_MN] & 0x7F);
-+	tm.tm_hour = bcd2bin(data[PCF2127_REG_TS_HR] & 0x3F);
-+	tm.tm_mday = bcd2bin(data[PCF2127_REG_TS_DM] & 0x3F);
-+	/* TS_MO register (month) value range: 1-12 */
-+	tm.tm_mon = bcd2bin(data[PCF2127_REG_TS_MO] & 0x1F) - 1;
-+	tm.tm_year = bcd2bin(data[PCF2127_REG_TS_YR]);
-+	if (tm.tm_year < 70)
-+		tm.tm_year += 100; /* assume we are in 1970...2069 */
-+
-+	ret = rtc_valid_tm(&tm);
-+	if (ret)
-+		return ret;
-+
-+	return sprintf(buf, "%llu\n",
-+		       (unsigned long long)rtc_tm_to_time64(&tm));
-+};
-+
-+static DEVICE_ATTR_RW(timestamp0);
-+
-+static struct attribute *pcf2127_attrs[] = {
-+	&dev_attr_timestamp0.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group pcf2127_attr_group = {
-+	.attrs	= pcf2127_attrs,
-+};
-+
- static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 			const char *name, bool has_nvmem)
- {
-@@ -371,6 +479,58 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * Disable battery low/switch-over timestamp and interrupts.
-+	 * Clear battery interrupt flags which can block new trigger events.
-+	 * Note: This is the default chip behaviour but added to ensure
-+	 * correct tamper timestamp and interrupt function.
-+	 */
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-+				 PCF2127_BIT_CTRL3_BTSE |
-+				 PCF2127_BIT_CTRL3_BF |
-+				 PCF2127_BIT_CTRL3_BIE |
-+				 PCF2127_BIT_CTRL3_BLIE, 0);
-+	if (ret) {
-+		dev_err(dev, "%s: interrupt config (ctrl3) failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Enable timestamp function and store timestamp of first trigger
-+	 * event until TSF1 and TFS2 interrupt flags are cleared.
-+	 */
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_TS_CTRL,
-+				 PCF2127_BIT_TS_CTRL_TSOFF |
-+				 PCF2127_BIT_TS_CTRL_TSM,
-+				 PCF2127_BIT_TS_CTRL_TSM);
-+	if (ret) {
-+		dev_err(dev, "%s: tamper detection config (ts_ctrl) failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Enable interrupt generation when TSF1 or TSF2 timestamp flags
-+	 * are set. Interrupt signal is an open-drain output and can be
-+	 * left floating if unused.
-+	 */
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-+				 PCF2127_BIT_CTRL2_TSIE,
-+				 PCF2127_BIT_CTRL2_TSIE);
-+	if (ret) {
-+		dev_err(dev, "%s: tamper detection config (ctrl2) failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
-+	ret = rtc_add_group(pcf2127->rtc, &pcf2127_attr_group);
-+	if (ret) {
-+		dev_err(dev, "%s: tamper sysfs registering failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
- 	return rtc_register_device(pcf2127->rtc);
- }
- 
--- 
-2.21.0
+Guenter
 
+> > > +
+> > > +	return size;
+> > > +}
+> > > +static DEVICE_ATTR_WO(access_cs0);
+> > > +
+> > > +static struct attribute *bswitch_attrs[] = {
+> > > +	&dev_attr_access_cs0.attr,
+> > > +	NULL
+> > > +};
+> > > +ATTRIBUTE_GROUPS(bswitch);
+> > > +
+> > >  static const struct watchdog_ops aspeed_wdt_ops = {
+> > >  	.start		= aspeed_wdt_start,
+> > >  	.stop		= aspeed_wdt_stop,
+> > > @@ -223,6 +248,9 @@ static int aspeed_wdt_probe(struct platform_device
+> > > *pdev)
+> > >  
+> > >  	wdt->ctrl = WDT_CTRL_1MHZ_CLK;
+> > >  
+> > > +	if (of_property_read_bool(np, "aspeed,alt-boot"))
+> > > +		wdt->wdd.groups = bswitch_groups;
+> > > +
+> > Why does this have to be separate to the existing evaluation of
+> > aspeed,alt-boot, and why does the existing code not work ?
+> > 
+> > Also, is it guaranteed that this does not interfer with existing
+> > support for alt-boot ?
+> 
+> It doesn't, it just provides for ast2400 switch to cs0 at side 1(cs1). Problem
+> is that only one flash chip(side 1/cs1) is accessible on alternate boot, there
+> is citation from the documentation in commit body. So if by some reason side 0
+> is corrupted, need to switch into alternate boot to cs1, do the load from it,
+> drop that bit to make side 0 accessible and do the flash of first side. On
+> ast2500/2600 this problem is solved already, in alternate boot there both flash
+> chips are present. It's additional requirement for alternate boot on ast2400, to
+> make the possibility to access at all side 0 flash chip after we boot to the
+> alternate side.
+> 
