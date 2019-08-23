@@ -2,60 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C68C9A230
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Aug 2019 23:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC2A9AB59
+	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Aug 2019 11:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388346AbfHVV3D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 22 Aug 2019 17:29:03 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:37161 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730242AbfHVV3C (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 22 Aug 2019 17:29:02 -0400
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5DCB3100002;
-        Thu, 22 Aug 2019 21:29:00 +0000 (UTC)
-Date:   Thu, 22 Aug 2019 23:29:00 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        a.zummo@towertech.it, wim@linux-watchdog.org, linux@roeck-us.net,
-        u.kleine-koenig@pengutronix.de, bth@kamstrup.com
-Subject: Re: [PATCH v3 5/5] rtc: pcf2127: add tamper detection support
-Message-ID: <20190822212900.GK27031@piout.net>
-References: <20190822131936.18772-1-bruno.thomsen@gmail.com>
- <20190822131936.18772-5-bruno.thomsen@gmail.com>
+        id S1726961AbfHWJbJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 23 Aug 2019 05:31:09 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:52434 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726956AbfHWJbJ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 23 Aug 2019 05:31:09 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 1912A42ED0;
+        Fri, 23 Aug 2019 09:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-transfer-encoding:mime-version:user-agent:content-type
+        :content-type:organization:date:date:from:from:subject:subject
+        :message-id:received:received:received; s=mta-01; t=1566552667;
+         x=1568367068; bh=pOc3KLiQCgqwQcr8n6hsHD5m1EFrOU7bcNFQtatabT8=; b=
+        XFGFXjhvly2dvECGwAtaNq2hu4GomB0gNYXEl8WFxz/2uBQ2dw7AIS7yfQFKjSO4
+        Q4D2fVhENmP25ABODLTd/K6gIRb5pu8aSwZPaL92PSsgOeVpxJpDqO/mOAvyZbl8
+        +A7YIHFayyiFTEFO8EFo4Ce4lIyWMjiV4WOT4VBPFqw=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id BK7UGQ-a1HdK; Fri, 23 Aug 2019 12:31:07 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id EB8E842ED6;
+        Fri, 23 Aug 2019 12:31:04 +0300 (MSK)
+Received: from localhost.localdomain (172.17.15.69) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Fri, 23 Aug 2019 12:31:04 +0300
+Message-ID: <b79f8d93f67998783c4fd937eac1a488a46c2c9e.camel@yadro.com>
+Subject: [PATCH v1 0/3] add dual-boot support
+From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+CC:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        "Alexander Amelkin" <a.amelkin@yadro.com>,
+        <openbmc@lists.ozlabs.org>
+Date:   Fri, 23 Aug 2019 12:31:03 +0300
+Organization: YADRO
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190822131936.18772-5-bruno.thomsen@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.17.15.69]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 22/08/2019 15:19:36+0200, Bruno Thomsen wrote:
-> Add support for integrated tamper detection function in both PCF2127 and
-> PCF2129 chips. This patch implements the feature by adding an additional
-> timestamp0 file to sysfs device path. This file contains seconds since
-> epoch, if an event occurred, or is empty, if none occurred.
-> Interface should match ISL1208 and RV3028 RTC drivers.
-> 
-> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-> ---
-> v3: no change.
-> v2: call pcf2127_wdt_active_ping after CTRL2 register read.
->     add dev_dbg() trace in timestamp0_show().
->     minor regmap dev_err() text update in pcf2127_probe().
-> 
->  drivers/rtc/rtc-pcf2127.c | 160 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 160 insertions(+)
-> 
-Applied, thanks.
+ASPEED SoCs support dual-boot feature for SPI Flash.
+When strapped appropriately, the SoC starts wdt2 (/dev/watchdog1)
+and if within a minute it is not disabled, it goes off and reboots
+the SoC from an alternate SPI Flash chip by changing CS0 controls
+to actually drive CS1 line.
+
+When booted from alternate chip, in order to access the main chip
+at CS0, the user must reset the appropriate bit in the watchdog
+hardware. There is no interface that would allow to do that from
+an embedded firmware startup script.
+
+This commit implements support for that feature:
+
+* Enable 'alt-boot' option for wdt2
+
+* Enable secondary SPI flash chip
+
+* Make it possible to get access to the primary SPI flash chip at CS0
+  after booting from the alternate chip at CS1. A sysfs interface is added
+  to provide an easy way for embedded firmware startup scripts to clear
+  the chip select bit to gain access to the primary flash chip in order
+  to allow for recovery of its contents.
+
+Ivan Mikhaylov (3):
+  vesnin: add wdt2 section with alt-boot option
+  vesnin: add secondary SPI flash chip
+  watchdog/aspeed: add support for dual boot
+
+ arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts | 12 +++++++++
+ drivers/watchdog/aspeed_wdt.c               | 30 +++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
+
+
