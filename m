@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1459F0D1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Aug 2019 18:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B6A9F0DF
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Aug 2019 18:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727306AbfH0Qyv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 27 Aug 2019 12:54:51 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:39936 "EHLO mta-01.yadro.com"
+        id S1730495AbfH0QzJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 27 Aug 2019 12:55:09 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:39974 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726871AbfH0Qyv (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 27 Aug 2019 12:54:51 -0400
+        id S1730360AbfH0Qyw (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 27 Aug 2019 12:54:52 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 83D5541240;
-        Tue, 27 Aug 2019 16:54:49 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 3DAF842ECC;
+        Tue, 27 Aug 2019 16:54:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from
-        :received:received:received; s=mta-01; t=1566924888; x=
-        1568739289; bh=Z6gOnxcpev6cYIQbp+Z/8lEArpM2TigF6DeTVeb0yng=; b=w
-        IZvuPAhtKbGrDL5vI541Byi3k4t/VVG8qlxhkPunYd0WpeJ8YxjKh1Narniy9dem
-        gqxvb8gdhzrAWRek8M10GRCU9wiYNGyMn2DQ21BrZI8oZAWk2gdgqmLrIW9AJJmJ
-        2D6x5oUQ08DHixWWLaLfZfSOqALYiYTykR4ioyqonI=
+        :references:in-reply-to:x-mailer:message-id:date:date:subject
+        :subject:from:from:received:received:received; s=mta-01; t=
+        1566924890; x=1568739291; bh=mEhEh6gAJzPJESzZ96RxoI02+oLNMejWhrw
+        LDGL5SN0=; b=OGEgskoNln7egAIhfiLrKN4P/S1HDpgt9khkLFP9deDZ+M+EpmP
+        FAfFqOUuQj+WiQSd9GGIDO8rn2ys5gdlP+p3+vitx9bA360ixxE93qWpf5cXojEn
+        buwT0/VlsDmHom5zuXGU7tFz3JxC6iL30O1RP31P3MpgERUmaCB13SXc=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id DLqQlwXm_mOd; Tue, 27 Aug 2019 19:54:48 +0300 (MSK)
+        with ESMTP id 2d4klrJHhy_p; Tue, 27 Aug 2019 19:54:50 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id B8B3041209;
-        Tue, 27 Aug 2019 19:54:47 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id F1B6741209;
+        Tue, 27 Aug 2019 19:54:49 +0300 (MSK)
 Received: from localhost.dev.yadro.com (172.17.15.69) by
  T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Tue, 27 Aug 2019 19:54:47 +0300
+ 15.1.669.32; Tue, 27 Aug 2019 19:54:49 +0300
 From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
@@ -47,10 +47,12 @@ CC:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
         Mark Rutland <mark.rutland@arm.com>,
         <devicetree@vger.kernel.org>,
         Ivan Mikhaylov <i.mikhaylov@yadro.com>
-Subject: [PATCH v3 0/4] add dual-boot support
-Date:   Tue, 27 Aug 2019 19:54:22 +0300
-Message-ID: <20190827165426.17037-1-i.mikhaylov@yadro.com>
+Subject: [PATCH v3 1/4] vesnin: add wdt2 section with alt-boot option
+Date:   Tue, 27 Aug 2019 19:54:23 +0300
+Message-ID: <20190827165426.17037-2-i.mikhaylov@yadro.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190827165426.17037-1-i.mikhaylov@yadro.com>
+References: <20190827165426.17037-1-i.mikhaylov@yadro.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -62,40 +64,25 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-ASPEED SoCs support dual-boot feature for SPI Flash.
-When strapped appropriately, the SoC starts wdt2 (/dev/watchdog1)
-and if within a minute it is not disabled, it goes off and reboots
-the SoC from an alternate SPI Flash chip by changing CS0 controls
-to actually drive CS1 line.
+Adds wdt2 section with 'alt-boot' option into dts for vesnin.
 
-When booted from alternate chip, in order to access the main chip
-at CS0, the user must reset the appropriate bit in the watchdog
-hardware. There is no interface that would allow to do that from
-an embedded firmware startup script.
+Signed-off-by: Ivan Mikhaylov <i.mikhaylov@yadro.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-This commit implements support for that feature:
-
-* Enable 'alt-boot' option for wdt2
-
-* Enable secondary SPI flash chip
-
-* Make it possible to get access to the primary SPI flash chip at CS0
-  after booting from the alternate chip at CS1. A sysfs interface is added
-  to provide an easy way for embedded firmware startup scripts to clear
-  the chip select bit to gain access to the primary flash chip in order
-  to allow for recovery of its contents.
-
-Ivan Mikhaylov (4):
-  vesnin: add wdt2 section with alt-boot option
-  vesnin: add secondary SPI flash chip
-  watchdog/aspeed: add support for dual boot
-  aspeed/watchdog: Add access_cs0 option for alt-boot
-
- .../ABI/testing/sysfs-class-watchdog          | 34 ++++++++++
- arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts   | 12 ++++
- drivers/watchdog/aspeed_wdt.c                 | 65 ++++++++++++++++++-
- 3 files changed, 110 insertions(+), 1 deletion(-)
-
+diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts b/arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts
+index 0b9e29c3212e..2ee26c86a32e 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts
+@@ -222,3 +222,7 @@
+ &vuart {
+ 	status = "okay";
+ };
++
++&wdt2 {
++	aspeed,alt-boot;
++};
 -- 
 2.20.1
 
