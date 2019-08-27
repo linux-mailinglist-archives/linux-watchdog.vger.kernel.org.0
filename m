@@ -2,91 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 510B89F167
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Aug 2019 19:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A51919F3C7
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Aug 2019 22:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbfH0RVy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 27 Aug 2019 13:21:54 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34355 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbfH0RVy (ORCPT
+        id S1730621AbfH0UI6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 27 Aug 2019 16:08:58 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:35410 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727484AbfH0UI5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 27 Aug 2019 13:21:54 -0400
-Received: by mail-pf1-f193.google.com with SMTP id b24so14568222pfp.1;
-        Tue, 27 Aug 2019 10:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zRigP/msiQiDSPdu4zbzx+Q8x/ih7vzlwsY6a8Wz66s=;
-        b=Iauj4YMDxlI7eSu/g9BPoFQBxpnhpWIfR4fBeRCtD1F+hz08fDxiccP5oYfoAH7en3
-         bTcbEs/SFVl9UkpYreup9INiGKmMuerTPULnaBtTUygkNG0nbaoMSyflf3ERPTRpMLSP
-         VVfD+4qV6SHX/L8+KcYbfan27OAC0eVHgWPrr/r0ugUUblmgOSBvN3t+cz0PmxOiN277
-         /+gewSrztdybZcF91zFblvsW6WTD/D8pBvNHBm5DD8inJL4925TLHvKitxges+MpkKYc
-         rwXDYio+g1DLNHBP7uCu8EKOZZXsGRXU1BcmPBdX4Q+FJZwICl99e6kCKvcIJY5YU3qd
-         Rtbw==
+        Tue, 27 Aug 2019 16:08:57 -0400
+Received: by mail-oi1-f195.google.com with SMTP id a127so272523oii.2;
+        Tue, 27 Aug 2019 13:08:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zRigP/msiQiDSPdu4zbzx+Q8x/ih7vzlwsY6a8Wz66s=;
-        b=hkp2eQlu60tzcBkxatjrNNtwK+TrpCa2aK415tZ30MKn59tGf21BGygsVcCiFSamac
-         MkW53iYqlt6XYe1Fo4r0zS1DDJEQwKUZ2K95RrDI7VsBXn3hWuFfs1DdA7S6b4xQWio+
-         IhuO2uEK1faXA4FjMjFRVP1eNhJIQl69G89lQ6ZfPRKIdVLCE609t/RILrql7W2hxph7
-         0+PTv04qlJhkP6DiQG+/Sk7JAPoAwJdfPyMxXBl6Zm9tL/yo/bVvLGo2MtbZ6oy0XkTP
-         gVfzxREdAMLWlVkt42ffyL8kY44k3RutlG6NRsWaKoOhUKg1PZW/5JSgNq4UsuIAuNFP
-         S9Ow==
-X-Gm-Message-State: APjAAAUPEuIj3opf5bjlhdomoLwCBj4TdvxliK6XJ0EnIQloqj69xJ84
-        xm4T7SoqaJUCffho1V3cOK7zEx66
-X-Google-Smtp-Source: APXvYqyKRhppJ/qA2UBq6ZMaVWHjlMRhLmiVaZLdW9FTrJ4pwB3mo84sMTVDrIA1/lMdfAUIYt8F0A==
-X-Received: by 2002:a62:4ed1:: with SMTP id c200mr27207401pfb.218.1566926513664;
-        Tue, 27 Aug 2019 10:21:53 -0700 (PDT)
-Received: from localhost (108-223-40-66.lightspeed.sntcca.sbcglobal.net. [108.223.40.66])
-        by smtp.gmail.com with ESMTPSA id 6sm15692223pfa.7.2019.08.27.10.21.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Aug 2019 10:21:53 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 10:21:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ivan Mikhaylov <i.mikhaylov@yadro.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Alexander Amelkin <a.amelkin@yadro.com>,
-        openbmc@lists.ozlabs.org, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] watchdog/aspeed: add support for dual boot
-Message-ID: <20190827172151.GA31588@roeck-us.net>
-References: <20190827165426.17037-1-i.mikhaylov@yadro.com>
- <20190827165426.17037-4-i.mikhaylov@yadro.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Ng/ondwrrnfBxKPNMtYoFquttD4noee2/m3ndHQDx/0=;
+        b=Ib0+i8CMaAbtL7/7qIyHGy4Ferr4vHLU0YpAYTrdWf5gzpQy6TdLnJ1CYOpQ+U3X8e
+         zQRAo7Lnbe6KNhW8Iu6LahuZD2lcBVIzAY/7scmnGyG05Y0Xg30wPUPTMZ3iiuYti1WS
+         5UYn+6vvNxxYmQxqZm4YjOBoDi1jA7EHadn1JmI4OzmvYdq7TxqkElpXjNNkgPFf83au
+         lNo3bSh0zrcoUZOzewiaVFgSCXt1hEeGfp30f/0KLqIxsWOCTNuo8LGRSLq+TJvEKhUp
+         pttukgkE7opZtSEZAy6B8/CkCqGvPf8aAN2SF64jPM+Mf1K7+9oJHmsNJIdF6Bex2oRW
+         GUJw==
+X-Gm-Message-State: APjAAAXPXh0x97zhAhKoMLqFLB9+RMtkxYpen9sSTTpFDPJgj2957EHK
+        fFKQgaVUPPdaIVAaiv7DMA==
+X-Google-Smtp-Source: APXvYqzzs9eWBhou0aG3BlVhbCRM/HDy6khsII/8Kx06DMoap2M/MFjtTc2tykVoa1mrUGNt8UVn6A==
+X-Received: by 2002:aca:3388:: with SMTP id z130mr329140oiz.81.1566936536648;
+        Tue, 27 Aug 2019 13:08:56 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l16sm135580otq.42.2019.08.27.13.08.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 13:08:56 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 15:08:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, mark.rutland@arm.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux@armlinux.org.uk, otavio@ossystems.com.br,
+        leonard.crestez@nxp.com, schnitzeltony@gmail.com,
+        u.kleine-koenig@pengutronix.de, jan.tuerk@emtrion.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH V4 1/4] dt-bindings: watchdog: Add i.MX7ULP bindings
+Message-ID: <20190827200855.GA5260@bogus>
+References: <1566441463-11911-1-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190827165426.17037-4-i.mikhaylov@yadro.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <1566441463-11911-1-git-send-email-Anson.Huang@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 07:54:25PM +0300, Ivan Mikhaylov wrote:
-> Set WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION into WDT_CLEAR_TIMEOUT_STATUS
-> to clear out boot code source and re-enable access to the primary SPI flash
-> chip while booted via wdt2 from the alternate chip.
+On Wed, Aug 21, 2019 at 10:37:40PM -0400, Anson Huang wrote:
+> Add the watchdog bindings for Freescale i.MX7ULP.
 > 
-> AST2400 datasheet says:
-> "In the 2nd flash booting mode, all the address mapping to CS0# would be
-> re-directed to CS1#. And CS0# is not accessable under this mode. To access
-> CS0#, firmware should clear the 2nd boot mode register in the WDT2 status
-> register WDT30.bit[1]."
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+> No changes.
+> ---
+>  .../bindings/watchdog/fsl-imx7ulp-wdt.txt          | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
 > 
-> Signed-off-by: Ivan Mikhaylov <i.mikhaylov@yadro.com>
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
+> new file mode 100644
+> index 0000000..d83fc5c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
+> @@ -0,0 +1,22 @@
+> +* Freescale i.MX7ULP Watchdog Timer (WDT) Controller
+> +
+> +Required properties:
+> +- compatible : Should be "fsl,imx7ulp-wdt"
+> +- reg : Should contain WDT registers location and length
+> +- interrupts : Should contain WDT interrupt
+> +- clocks: Should contain a phandle pointing to the gated peripheral clock.
+> +
+> +Optional properties:
+> +- timeout-sec : Contains the watchdog timeout in seconds
+> +
+> +Examples:
+> +
+> +wdog1: wdog@403d0000 {
 
-Please run "checkpatch --strict" on this patch and fix the reported problems
-(I _did_ ask for proper multi-line aligment before, but there are a couple
-of other issues as well).
+watchdog@...
 
-Thanks,
-Guenter
+With that,
+
+Reviewed-by: Rob Herring <rohb@kernel.org>
+
+> +	compatible = "fsl,imx7ulp-wdt";
+> +	reg = <0x403d0000 0x10000>;
+> +	interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
+> +	clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+> +	assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+> +	assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
+> +	timeout-sec = <40>;
+> +};
+> -- 
+> 2.7.4
+> 
