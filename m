@@ -2,72 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E989F0AF
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Aug 2019 18:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1459F0D1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Aug 2019 18:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729616AbfH0Qty (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 27 Aug 2019 12:49:54 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:35450 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727064AbfH0Qty (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 27 Aug 2019 12:49:54 -0400
-Received: by mail-oi1-f194.google.com with SMTP id a127so15504961oii.2;
-        Tue, 27 Aug 2019 09:49:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7MPppvQzuTQRt9BznXwjvzO0Ebod4s5AerzRU45JZms=;
-        b=rvC1pskTXwtYW8fj3q+q005Rgql8EfcBrkhHXuakFU+XOUPy1iirA4duu3dYGidFkr
-         E8Frn2tMUZgDrOPJeJwQIdv9bXb8QyxI0ZCE8+Q5Y/yijKg71h+h6IHME3YfXH2oU0Yp
-         LWTh9sADj5Nz9zoctYoOx09LObrzjehMKWzeuZeYN0cmWjfJ+PcS5G2Afzwhambm29bn
-         0zqzucmv/xJkRrz+AxN8KXbYgGbE9OQGp6TJsbYRjeCc02hzvFB+skOsAvRGH7Zot2ow
-         Hg5rb12iEw7ZibCtjj9Oor2ZN5Dm8PfCzSaG2Ok838cc+D9rRC51udeCox3T04TAIBlc
-         im1A==
-X-Gm-Message-State: APjAAAWsRoznJxqx6PCpGTYOQ0+fbrDUV/k4l8FV6odLUPfctn0udf84
-        7gwjK4ghn2bnmZEJSQFx8w==
-X-Google-Smtp-Source: APXvYqxdvM5S16bwNgKtmD/8gpKaMVejRbwknzUDZRxkGiPYP4MSJdQYjH2zGFN+sh6d3qXNd4ffoQ==
-X-Received: by 2002:aca:ec87:: with SMTP id k129mr16354304oih.80.1566924593136;
-        Tue, 27 Aug 2019 09:49:53 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id f21sm5435626otq.7.2019.08.27.09.49.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 09:49:52 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 11:49:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: Add ast2600 compatible
-Message-ID: <20190827164952.GA24417@bogus>
-References: <20190819051738.17370-1-joel@jms.id.au>
- <20190819051738.17370-2-joel@jms.id.au>
+        id S1727306AbfH0Qyv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 27 Aug 2019 12:54:51 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:39936 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726871AbfH0Qyv (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 27 Aug 2019 12:54:51 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 83D5541240;
+        Tue, 27 Aug 2019 16:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1566924888; x=
+        1568739289; bh=Z6gOnxcpev6cYIQbp+Z/8lEArpM2TigF6DeTVeb0yng=; b=w
+        IZvuPAhtKbGrDL5vI541Byi3k4t/VVG8qlxhkPunYd0WpeJ8YxjKh1Narniy9dem
+        gqxvb8gdhzrAWRek8M10GRCU9wiYNGyMn2DQ21BrZI8oZAWk2gdgqmLrIW9AJJmJ
+        2D6x5oUQ08DHixWWLaLfZfSOqALYiYTykR4ioyqonI=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id DLqQlwXm_mOd; Tue, 27 Aug 2019 19:54:48 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id B8B3041209;
+        Tue, 27 Aug 2019 19:54:47 +0300 (MSK)
+Received: from localhost.dev.yadro.com (172.17.15.69) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Tue, 27 Aug 2019 19:54:47 +0300
+From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+CC:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        Alexander Amelkin <a.amelkin@yadro.com>,
+        <openbmc@lists.ozlabs.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <devicetree@vger.kernel.org>,
+        Ivan Mikhaylov <i.mikhaylov@yadro.com>
+Subject: [PATCH v3 0/4] add dual-boot support
+Date:   Tue, 27 Aug 2019 19:54:22 +0300
+Message-ID: <20190827165426.17037-1-i.mikhaylov@yadro.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190819051738.17370-2-joel@jms.id.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.17.15.69]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 19 Aug 2019 14:47:37 +0930, Joel Stanley wrote:
-> This adds a compatible for the ast2600, a new ASPEED SoC.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-> ---
-> v2:
->  - Add Andrew's r-b
-> ---
->  Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+ASPEED SoCs support dual-boot feature for SPI Flash.
+When strapped appropriately, the SoC starts wdt2 (/dev/watchdog1)
+and if within a minute it is not disabled, it goes off and reboots
+the SoC from an alternate SPI Flash chip by changing CS0 controls
+to actually drive CS1 line.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+When booted from alternate chip, in order to access the main chip
+at CS0, the user must reset the appropriate bit in the watchdog
+hardware. There is no interface that would allow to do that from
+an embedded firmware startup script.
+
+This commit implements support for that feature:
+
+* Enable 'alt-boot' option for wdt2
+
+* Enable secondary SPI flash chip
+
+* Make it possible to get access to the primary SPI flash chip at CS0
+  after booting from the alternate chip at CS1. A sysfs interface is added
+  to provide an easy way for embedded firmware startup scripts to clear
+  the chip select bit to gain access to the primary flash chip in order
+  to allow for recovery of its contents.
+
+Ivan Mikhaylov (4):
+  vesnin: add wdt2 section with alt-boot option
+  vesnin: add secondary SPI flash chip
+  watchdog/aspeed: add support for dual boot
+  aspeed/watchdog: Add access_cs0 option for alt-boot
+
+ .../ABI/testing/sysfs-class-watchdog          | 34 ++++++++++
+ arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts   | 12 ++++
+ drivers/watchdog/aspeed_wdt.c                 | 65 ++++++++++++++++++-
+ 3 files changed, 110 insertions(+), 1 deletion(-)
+
+-- 
+2.20.1
+
