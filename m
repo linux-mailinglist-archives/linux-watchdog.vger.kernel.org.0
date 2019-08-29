@@ -2,134 +2,243 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 094C1A2894
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2019 23:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21AB0A2939
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2019 23:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726894AbfH2VC3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 29 Aug 2019 17:02:29 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:36483 "EHLO
+        id S1728116AbfH2Vwd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 29 Aug 2019 17:52:33 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:36628 "EHLO
         gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726661AbfH2VC3 (ORCPT
+        with ESMTP id S1728111AbfH2Vwd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 29 Aug 2019 17:02:29 -0400
+        Thu, 29 Aug 2019 17:52:33 -0400
 Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D1E09886BF;
-        Fri, 30 Aug 2019 09:02:24 +1200 (NZST)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D8D7780719;
+        Fri, 30 Aug 2019 09:52:28 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1567112544;
-        bh=ql4eAyFpTO1/R9hTDFeHyRmLW3TAmuspz5BHfGH8Z+s=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=jR1bJ33G9iResNdgrM0wh25WYR2a6wQU6XbHA8z70AtR1VeZa9aXr9hOOjed5A8uz
-         kyM5Lc9S5qDLuCF+PvGggltAWKEHoCO/HXlY9AwWTYPJ/nCkfdwSaEwFetMQs6OfXs
-         a8YSH74hUtwGbYko5AiHPmRqrw1BjaLnoADrm0xt3l6+XMkE0wscL4Q5KxSYG0bAvg
-         SaClHUtKjW+lNBJ3AJXIhXXs+9CzcKtdYJi4goAgtpjYV1pIkUDtir4EZMNh2eDBAJ
-         gTXG68KZud5TJVwzUz9mdaj0rpulOvwrDN2eMqH8EbiBnyMONYxmaqVn2iExwag6Qc
-         VOLusX6N8OL1g==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5d683d600001>; Fri, 30 Aug 2019 09:02:24 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1156.6; Fri, 30 Aug 2019 09:02:24 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1156.000; Fri, 30 Aug 2019 09:02:24 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v5] watchdog: orion_wdt: use timer1 as a pretimeout
-Thread-Topic: [PATCH v5] watchdog: orion_wdt: use timer1 as a pretimeout
-Thread-Index: AQHVXkbaBpCG00oUu0GMeMzmwHIzWacRSbgAgACKq4A=
-Date:   Thu, 29 Aug 2019 21:02:23 +0000
-Message-ID: <7ca9461424f81f396e139991a9b72d5f0fa3572c.camel@alliedtelesis.co.nz>
-References: <20190829085042.30886-1-chris.packham@alliedtelesis.co.nz>
-         <eb3c9f1b-5a60-cb36-8cc5-6a83bf9678ba@roeck-us.net>
-In-Reply-To: <eb3c9f1b-5a60-cb36-8cc5-6a83bf9678ba@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [2001:df5:b000:22:3129:5b1d:dda7:5c4b]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C6F9A7DDD7C1054E8CCEFD8F7B5AF634@atlnz.lc>
-Content-Transfer-Encoding: base64
+        s=mail181024; t=1567115548;
+        bh=igW2Ks2efuhxj+CLPFiKe1nMvLY5OJpsKarMZTuKmBo=;
+        h=From:To:Cc:Subject:Date;
+        b=saB6woctGoUhDsGmNwQLhuOGOBNOB7Ko40dEPgraJ06bq9Xw4KCAiZZaieLupumvx
+         OZ+y1FMKw1vkagcSN3xTn/TzDNxySKzKL9u45URKJhT7k+I85dph2xdTTXotO4sRaa
+         GQl+3d3T2cyiWPPLaZoHL1me80aj7omfF3qva4jTXzo0vXbR405WtwLUhbqaCB8lVh
+         M1izqPHeaxjGMU3X2ApFBJQYiDcVTAPgk4f8c/pzFgfqVlsxyVfH6QBozO+rTWun1Z
+         JIQrVB4hCwu1tMG8EK7/WmOnMNx9hCPPBS/CADzRJdJH452ZI/QoIU8fYgsKjd4NRI
+         1OT6Qv5RIbdJQ==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5d68491c0000>; Fri, 30 Aug 2019 09:52:28 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id AAC7913EECA;
+        Fri, 30 Aug 2019 09:52:31 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 9BA412819B1; Fri, 30 Aug 2019 09:52:28 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v6] watchdog: orion_wdt: use timer1 as a pretimeout
+Date:   Fri, 30 Aug 2019 09:52:24 +1200
+Message-Id: <20190829215224.27956-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-T24gVGh1LCAyMDE5LTA4LTI5IGF0IDA1OjQ2IC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
-PiBPbiA4LzI5LzE5IDE6NTAgQU0sIENocmlzIFBhY2toYW0gd3JvdGU6DQo+ID4gVGhlIG9yaW9u
-IHdhdGNoZG9nIGNhbiBlaXRoZXIgcmVzZXQgdGhlIENQVSBvciBnZW5lcmF0ZSBhbiBpbnRlcnJ1
-cHQuDQo+ID4gVGhlIGludGVycnVwdCB3b3VsZCBiZSB1c2VmdWwgZm9yIGRlYnVnZ2luZyBhcyBp
-dCBwcm92aWRlcyBwYW5pYygpDQo+ID4gb3V0cHV0IGFib3V0IHRoZSB3YXRjaGRvZyBleHBpcnks
-IGhvd2V2ZXIgaWYgdGhlIGludGVycnVwdCBpcyB1c2VkIHRoZQ0KPiA+IHdhdGNoZG9nIGNhbid0
-IHJlc2V0IHRoZSBDUFUgaW4gdGhlIGV2ZW50IG9mIGJlaW5nIHN0dWNrIGluIGEgbG9vcCB3aXRo
-DQo+ID4gaW50ZXJydXB0cyBkaXNhYmxlZCBvciBpZiB0aGUgQ1BVIGlzIHByZXZlbnRlZCBmcm9t
-IGFjY2Vzc2luZyBtZW1vcnkNCj4gPiAoZS5nLiBhbiB1bnRlcm1pbmF0ZWQgRE1BKS4NCj4gPiAN
-Cj4gPiBUaGUgQXJtYWRhIFNvQ3MgaGF2ZSBzcGFyZSB0aW1lcnMgdGhhdCBhcmVuJ3QgY3VycmVu
-dGx5IHVzZWQgYnkgdGhlDQo+ID4gTGludXgga2VybmVsLiBXZSBjYW4gdXNlIHRpbWVyMSB0byBw
-cm92aWRlIGEgcHJlLXRpbWVvdXQgYWhlYWQgb2YgdGhlDQo+ID4gd2F0Y2hkb2cgdGltZXIgYW5k
-IHByb3ZpZGUgdGhlIHBvc3NpYmlsaXR5IG9mIGdhdGhlcmluZyBkZWJ1ZyBiZWZvcmUgdGhlDQo+
-ID4gcmVzZXQgdHJpZ2dlcnMuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hh
-bSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KDQo8c25pcD4NCg0KPiA+IEBA
-IC0yNzcsNyArMjkxLDcgQEAgc3RhdGljIGludCBvcmlvbl9zdG9wKHN0cnVjdCB3YXRjaGRvZ19k
-ZXZpY2UgKndkdF9kZXYpDQo+ID4gICBzdGF0aWMgaW50IGFybWFkYTM3NV9zdG9wKHN0cnVjdCB3
-YXRjaGRvZ19kZXZpY2UgKndkdF9kZXYpDQo+ID4gICB7DQo+ID4gICAJc3RydWN0IG9yaW9uX3dh
-dGNoZG9nICpkZXYgPSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSh3ZHRfZGV2KTsNCj4gPiAtCXUzMiBy
-ZWc7DQo+ID4gKwl1MzIgcmVnLCBtYXNrOw0KPiA+ICAgDQo+ID4gICAJLyogRGlzYWJsZSByZXNl
-dCBvbiB3YXRjaGRvZyAqLw0KPiA+ICAgCWF0b21pY19pb19tb2RpZnkoZGV2LT5yc3RvdXRfbWFz
-aywgZGV2LT5kYXRhLT5yc3RvdXRfbWFza19iaXQsDQo+ID4gQEAgLTI4Nyw3ICszMDEsMTAgQEAg
-c3RhdGljIGludCBhcm1hZGEzNzVfc3RvcChzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3ZHRfZGV2
-KQ0KPiA+ICAgCXdyaXRlbChyZWcsIGRldi0+cnN0b3V0KTsNCj4gPiAgIA0KPiA+ICAgCS8qIERp
-c2FibGUgd2F0Y2hkb2cgdGltZXIgKi8NCj4gPiAtCWF0b21pY19pb19tb2RpZnkoZGV2LT5yZWcg
-KyBUSU1FUl9DVFJMLCBkZXYtPmRhdGEtPndkdF9lbmFibGVfYml0LCAwKTsNCj4gPiArCW1hc2sg
-PSBkZXYtPmRhdGEtPndkdF9lbmFibGVfYml0Ow0KPiA+ICsJaWYgKHdkdF9kZXYtPmluZm8tPm9w
-dGlvbnMgJiBXRElPRl9QUkVUSU1FT1VUKQ0KPiA+ICsJCW1hc2sgJj0gflRJTUVSMV9FTkFCTEVf
-QklUOw0KPiANCj4gU29ycnksIEkgYW0gbG9zdC4gV2h5ICY9IGFuZCB+ID8NCg0KQmxhbWUgbGF0
-ZSBuaWdodCBjb2RpbmcuDQoNCkkgc2F3IHRoZSBsaW5lcyBhYm92ZSB3aXRoICdyZWcgJj0gfmRl
-di0+ZGF0YS0+cnN0b3V0X2VuYWJsZV9iaXQnIGFuZA0Kd2l0aG91dCB0aGUgcmVxdWlzaXRlIGxl
-dmVsIG9mIGNhZmZpbmUgaW4gbXkgc3lzdGVtIG15IGJyYWluIHNhaWQgInlvdQ0KbmVlZCB0byBj
-bGVhciB0aGF0IGJpdCIuIFdoaWNoIGlzIGV4YWN0bHkgd2hhdCB0aGUgYXRvbWljX2lvX21vZGlm
-eSgpDQpiZWxvdyB3b3VsZCBkbyBpZiBJIGFjdHVhbGx5IGdhdmUgaXQgdGhlIHJpZ2h0IG1hc2su
-DQoNCj4gR3VlbnRlcg0KPiANCj4gPiArCWF0b21pY19pb19tb2RpZnkoZGV2LT5yZWcgKyBUSU1F
-Ul9DVFJMLCBtYXNrLCAwKTsNCj4gPiAgIA0KPiA+ICAgCXJldHVybiAwOw0KPiA+ICAgfQ0KPiA+
-IEBAIC0zNDksNyArMzY2LDcgQEAgc3RhdGljIHVuc2lnbmVkIGludCBvcmlvbl93ZHRfZ2V0X3Rp
-bWVsZWZ0KHN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkdF9kZXYpDQo+ID4gICAJcmV0dXJuIHJl
-YWRsKGRldi0+cmVnICsgZGV2LT5kYXRhLT53ZHRfY291bnRlcl9vZmZzZXQpIC8gZGV2LT5jbGtf
-cmF0ZTsNCj4gPiAgIH0NCj4gPiAgIA0KPiA+IC1zdGF0aWMgY29uc3Qgc3RydWN0IHdhdGNoZG9n
-X2luZm8gb3Jpb25fd2R0X2luZm8gPSB7DQo+ID4gK3N0YXRpYyBzdHJ1Y3Qgd2F0Y2hkb2dfaW5m
-byBvcmlvbl93ZHRfaW5mbyA9IHsNCj4gPiAgIAkub3B0aW9ucyA9IFdESU9GX1NFVFRJTUVPVVQg
-fCBXRElPRl9LRUVQQUxJVkVQSU5HIHwgV0RJT0ZfTUFHSUNDTE9TRSwNCj4gPiAgIAkuaWRlbnRp
-dHkgPSAiT3Jpb24gV2F0Y2hkb2ciLA0KPiA+ICAgfTsNCj4gPiBAQCAtMzY4LDYgKzM4NSwxNiBA
-QCBzdGF0aWMgaXJxcmV0dXJuX3Qgb3Jpb25fd2R0X2lycShpbnQgaXJxLCB2b2lkICpkZXZpZCkN
-Cj4gPiAgIAlyZXR1cm4gSVJRX0hBTkRMRUQ7DQo+ID4gICB9DQo+ID4gICANCj4gPiArc3RhdGlj
-IGlycXJldHVybl90IG9yaW9uX3dkdF9wcmVfaXJxKGludCBpcnEsIHZvaWQgKmRldmlkKQ0KPiA+
-ICt7DQo+ID4gKwlzdHJ1Y3Qgb3Jpb25fd2F0Y2hkb2cgKmRldiA9IGRldmlkOw0KPiA+ICsNCj4g
-PiArCWF0b21pY19pb19tb2RpZnkoZGV2LT5yZWcgKyBUSU1FUl9BMzcwX1NUQVRVUywNCj4gPiAr
-CQkJIFRJTUVSMV9TVEFUVVNfQklULCAwKTsNCj4gPiArCXdhdGNoZG9nX25vdGlmeV9wcmV0aW1l
-b3V0KCZkZXYtPndkdCk7DQo+ID4gKwlyZXR1cm4gSVJRX0hBTkRMRUQ7DQo+ID4gK30NCj4gPiAr
-DQo+ID4gICAvKg0KPiA+ICAgICogVGhlIG9yaWdpbmFsIGRldmljZXRyZWUgYmluZGluZyBmb3Ig
-dGhpcyBkcml2ZXIgc3BlY2lmaWVkIG9ubHkNCj4gPiAgICAqIG9uZSBtZW1vcnkgcmVzb3VyY2Us
-IHNvIGluIG9yZGVyIHRvIGtlZXAgRFQgYmFja3dhcmRzIGNvbXBhdGliaWxpdHkNCj4gPiBAQCAt
-NTg5LDYgKzYxNiwxOCBAQCBzdGF0aWMgaW50IG9yaW9uX3dkdF9wcm9iZShzdHJ1Y3QgcGxhdGZv
-cm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAgCQl9DQo+ID4gICAJfQ0KPiA+ICAgDQoNCkknbGwgYWRk
-IGEgY29tbWVudCBhYm92ZSB0aGUgZmlyc3QgcGxhdGZvcm1fZ2V0X2lycSgpIGFib3V0DQppbnRl
-bnRpb25hbGx5IG5vdCBoYW5kbGluZyBFUFJPQkVfREVGRVIuIEFuZCBhIGNvbW1lbnQgaGVyZSBh
-Ym91dCB0aGUNCjJuZCBpbnRlcnJ1cHQgYmVpbmcgb3B0aW9uYWwuDQoNCj4gPiArCWlycSA9IHBs
-YXRmb3JtX2dldF9pcnEocGRldiwgMSk7DQo+ID4gKwlpZiAoaXJxID4gMCkgew0KPiA+ICsJCW9y
-aW9uX3dkdF9pbmZvLm9wdGlvbnMgfD0gV0RJT0ZfUFJFVElNRU9VVDsNCj4gPiArCQlyZXQgPSBk
-ZXZtX3JlcXVlc3RfaXJxKCZwZGV2LT5kZXYsIGlycSwgb3Jpb25fd2R0X3ByZV9pcnEsDQo+ID4g
-KwkJCQkgICAgICAgMCwgcGRldi0+bmFtZSwgZGV2KTsNCj4gPiArCQlpZiAocmV0IDwgMCkgew0K
-PiA+ICsJCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJmYWlsZWQgdG8gcmVxdWVzdCBJUlFcbiIpOw0K
-PiA+ICsJCQlnb3RvIGRpc2FibGVfY2xrOw0KPiA+ICsJCX0NCj4gPiArCX0NCj4gPiArDQo+ID4g
-Kw0KPiA+ICAgCXdhdGNoZG9nX3NldF9ub3dheW91dCgmZGV2LT53ZHQsIG5vd2F5b3V0KTsNCj4g
-PiAgIAlyZXQgPSB3YXRjaGRvZ19yZWdpc3Rlcl9kZXZpY2UoJmRldi0+d2R0KTsNCj4gPiAgIAlp
-ZiAocmV0KQ0KPiA+IA0KPiANCj4gDQo=
+The orion watchdog can either reset the CPU or generate an interrupt.
+The interrupt would be useful for debugging as it provides panic()
+output about the watchdog expiry, however if the interrupt is used the
+watchdog can't reset the CPU in the event of being stuck in a loop with
+interrupts disabled or if the CPU is prevented from accessing memory
+(e.g. an unterminated DMA).
+
+The Armada SoCs have spare timers that aren't currently used by the
+Linux kernel. We can use timer1 to provide a pre-timeout ahead of the
+watchdog timer and provide the possibility of gathering debug before the
+reset triggers.
+
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+Changes in v6:
+- Fix bitwise operation in armada375_stop()
+- Add comment about 2nd interrupt being optional
+Changes in v5:
+- Group bit values with register addresses
+- Address review comments from Gunter
+Changes in v3:
+- rebase against linux/master
+Changes in v2:
+- apply changes to armada-38x only
+
+ drivers/watchdog/orion_wdt.c | 66 +++++++++++++++++++++++++++++-------
+ 1 file changed, 53 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
+index cdb0d174c5e2..1cccf8eb1c5d 100644
+--- a/drivers/watchdog/orion_wdt.c
++++ b/drivers/watchdog/orion_wdt.c
+@@ -35,7 +35,15 @@
+  * Watchdog timer block registers.
+  */
+ #define TIMER_CTRL		0x0000
+-#define TIMER_A370_STATUS	0x04
++#define TIMER1_FIXED_ENABLE_BIT	BIT(12)
++#define WDT_AXP_FIXED_ENABLE_BIT BIT(10)
++#define TIMER1_ENABLE_BIT	BIT(2)
++
++#define TIMER_A370_STATUS	0x0004
++#define WDT_A370_EXPIRED	BIT(31)
++#define TIMER1_STATUS_BIT	BIT(8)
++
++#define TIMER1_VAL_OFF		0x001c
+=20
+ #define WDT_MAX_CYCLE_COUNT	0xffffffff
+=20
+@@ -43,9 +51,6 @@
+ #define WDT_A370_RATIO_SHIFT	5
+ #define WDT_A370_RATIO		(1 << WDT_A370_RATIO_SHIFT)
+=20
+-#define WDT_AXP_FIXED_ENABLE_BIT BIT(10)
+-#define WDT_A370_EXPIRED	BIT(31)
+-
+ static bool nowayout =3D WATCHDOG_NOWAYOUT;
+ static int heartbeat =3D -1;		/* module parameter (seconds) */
+=20
+@@ -158,6 +163,7 @@ static int armadaxp_wdt_clock_init(struct platform_de=
+vice *pdev,
+ 				   struct orion_watchdog *dev)
+ {
+ 	int ret;
++	u32 val;
+=20
+ 	dev->clk =3D of_clk_get_by_name(pdev->dev.of_node, "fixed");
+ 	if (IS_ERR(dev->clk))
+@@ -168,10 +174,9 @@ static int armadaxp_wdt_clock_init(struct platform_d=
+evice *pdev,
+ 		return ret;
+ 	}
+=20
+-	/* Enable the fixed watchdog clock input */
+-	atomic_io_modify(dev->reg + TIMER_CTRL,
+-			 WDT_AXP_FIXED_ENABLE_BIT,
+-			 WDT_AXP_FIXED_ENABLE_BIT);
++	/* Fix the wdt and timer1 clock freqency to 25MHz */
++	val =3D WDT_AXP_FIXED_ENABLE_BIT | TIMER1_FIXED_ENABLE_BIT;
++	atomic_io_modify(dev->reg + TIMER_CTRL, val, val);
+=20
+ 	dev->clk_rate =3D clk_get_rate(dev->clk);
+ 	return 0;
+@@ -183,6 +188,10 @@ static int orion_wdt_ping(struct watchdog_device *wd=
+t_dev)
+ 	/* Reload watchdog duration */
+ 	writel(dev->clk_rate * wdt_dev->timeout,
+ 	       dev->reg + dev->data->wdt_counter_offset);
++	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
++		writel(dev->clk_rate * (wdt_dev->timeout - wdt_dev->pretimeout),
++		       dev->reg + TIMER1_VAL_OFF);
++
+ 	return 0;
+ }
+=20
+@@ -194,13 +203,18 @@ static int armada375_start(struct watchdog_device *=
+wdt_dev)
+ 	/* Set watchdog duration */
+ 	writel(dev->clk_rate * wdt_dev->timeout,
+ 	       dev->reg + dev->data->wdt_counter_offset);
++	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
++		writel(dev->clk_rate * (wdt_dev->timeout - wdt_dev->pretimeout),
++		       dev->reg + TIMER1_VAL_OFF);
+=20
+ 	/* Clear the watchdog expiration bit */
+ 	atomic_io_modify(dev->reg + TIMER_A370_STATUS, WDT_A370_EXPIRED, 0);
+=20
+ 	/* Enable watchdog timer */
+-	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit,
+-						dev->data->wdt_enable_bit);
++	reg =3D dev->data->wdt_enable_bit;
++	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
++		reg |=3D TIMER1_ENABLE_BIT;
++	atomic_io_modify(dev->reg + TIMER_CTRL, reg, reg);
+=20
+ 	/* Enable reset on watchdog */
+ 	reg =3D readl(dev->rstout);
+@@ -277,7 +291,7 @@ static int orion_stop(struct watchdog_device *wdt_dev=
+)
+ static int armada375_stop(struct watchdog_device *wdt_dev)
+ {
+ 	struct orion_watchdog *dev =3D watchdog_get_drvdata(wdt_dev);
+-	u32 reg;
++	u32 reg, mask;
+=20
+ 	/* Disable reset on watchdog */
+ 	atomic_io_modify(dev->rstout_mask, dev->data->rstout_mask_bit,
+@@ -287,7 +301,10 @@ static int armada375_stop(struct watchdog_device *wd=
+t_dev)
+ 	writel(reg, dev->rstout);
+=20
+ 	/* Disable watchdog timer */
+-	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit, 0);
++	mask =3D dev->data->wdt_enable_bit;
++	if (wdt_dev->info->options & WDIOF_PRETIMEOUT)
++		mask |=3D TIMER1_ENABLE_BIT;
++	atomic_io_modify(dev->reg + TIMER_CTRL, mask, 0);
+=20
+ 	return 0;
+ }
+@@ -349,7 +366,7 @@ static unsigned int orion_wdt_get_timeleft(struct wat=
+chdog_device *wdt_dev)
+ 	return readl(dev->reg + dev->data->wdt_counter_offset) / dev->clk_rate;
+ }
+=20
+-static const struct watchdog_info orion_wdt_info =3D {
++static struct watchdog_info orion_wdt_info =3D {
+ 	.options =3D WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+ 	.identity =3D "Orion Watchdog",
+ };
+@@ -368,6 +385,16 @@ static irqreturn_t orion_wdt_irq(int irq, void *devi=
+d)
+ 	return IRQ_HANDLED;
+ }
+=20
++static irqreturn_t orion_wdt_pre_irq(int irq, void *devid)
++{
++	struct orion_watchdog *dev =3D devid;
++
++	atomic_io_modify(dev->reg + TIMER_A370_STATUS,
++			 TIMER1_STATUS_BIT, 0);
++	watchdog_notify_pretimeout(&dev->wdt);
++	return IRQ_HANDLED;
++}
++
+ /*
+  * The original devicetree binding for this driver specified only
+  * one memory resource, so in order to keep DT backwards compatibility
+@@ -589,6 +616,19 @@ static int orion_wdt_probe(struct platform_device *p=
+dev)
+ 		}
+ 	}
+=20
++	/* Optional 2nd interrupt for pretimeout */
++	irq =3D platform_get_irq(pdev, 1);
++	if (irq > 0) {
++		orion_wdt_info.options |=3D WDIOF_PRETIMEOUT;
++		ret =3D devm_request_irq(&pdev->dev, irq, orion_wdt_pre_irq,
++				       0, pdev->name, dev);
++		if (ret < 0) {
++			dev_err(&pdev->dev, "failed to request IRQ\n");
++			goto disable_clk;
++		}
++	}
++
++
+ 	watchdog_set_nowayout(&dev->wdt, nowayout);
+ 	ret =3D watchdog_register_device(&dev->wdt);
+ 	if (ret)
+--=20
+2.23.0
+
