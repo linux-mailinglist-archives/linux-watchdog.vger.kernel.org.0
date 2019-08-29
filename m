@@ -2,227 +2,239 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF92A10A5
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2019 07:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B33A141B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2019 10:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725847AbfH2FGB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 29 Aug 2019 01:06:01 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:35409 "EHLO
+        id S1726283AbfH2Iux (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 29 Aug 2019 04:50:53 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:35918 "EHLO
         gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725855AbfH2FGB (ORCPT
+        with ESMTP id S1726070AbfH2Iuw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 29 Aug 2019 01:06:01 -0400
+        Thu, 29 Aug 2019 04:50:52 -0400
 Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 72933886BF;
-        Thu, 29 Aug 2019 17:05:57 +1200 (NZST)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BDAC380719;
+        Thu, 29 Aug 2019 20:50:47 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1567055157;
-        bh=osVzjbonVsm30CN/Hl6pj+qX8eOAMSk2nsZUgU0msE8=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=tVnaHqgvAjRiPaZsy3XoD1VbXqr8bMhU5kdQW+K3vx1eP35MXR0LGEcjBDIanaonu
-         RbGI3dDXBx+0CsBfmQoGZwuH2UhcP0836UeqZ9BgP8o6/h/FPVRrI0x3Ki2IvJ4vmY
-         VuPkiyQXxStldNcmDxSDCxS4MBWOhsm4xp/ha0JDmGEeL1u3F1Q/xv7CPghIbVb/aH
-         PNl7ghEcwfUt++UNCtQY3/6GA2LQNHUdEPpPMDtGNKU/7p8zC90VEovjuaMGtOGhaP
-         bBK8aiuFEqvvfCE4pzaIB95aiwz20N4Ja+oWVUGjKYvrVlBjvkp8J30aFq9aAkZ1s5
-         xnHnkiPWyMiig==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5d675d350000>; Thu, 29 Aug 2019 17:05:57 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1156.6; Thu, 29 Aug 2019 17:05:56 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1156.000; Thu, 29 Aug 2019 17:05:56 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v4] watchdog: orion_wdt: use timer1 as a pretimeout
-Thread-Topic: [PATCH v4] watchdog: orion_wdt: use timer1 as a pretimeout
-Thread-Index: AQHVXgyXRqaUkimqXUieGkREsn6t56cQw9OAgAAFyYA=
-Date:   Thu, 29 Aug 2019 05:05:56 +0000
-Message-ID: <6da9aaef9d1dab3436dc9204edf94ef0782dde00.camel@alliedtelesis.co.nz>
-References: <20190829015340.25323-1-chris.packham@alliedtelesis.co.nz>
-         <40a379bd-030a-26b1-47e1-ad805c2353f6@roeck-us.net>
-In-Reply-To: <40a379bd-030a-26b1-47e1-ad805c2353f6@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [2001:df5:b000:22:9506:60cc:7942:27b0]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <464F27DD225676408CA6ED7E6FF7A0A2@atlnz.lc>
-Content-Transfer-Encoding: base64
+        s=mail181024; t=1567068647;
+        bh=dZkJRwlgxjfTFhLsL2/dHbG5QomSoc8bDAoyd48XHpk=;
+        h=From:To:Cc:Subject:Date;
+        b=QIAYzJuLuylFfsdubAJucG9Adgj+eZlTbpzOFIGJsks1a8093r7wqynDhWTE99/ry
+         jPnKhs47ROehHdy2iEVHLfUHhVJG8AgctUb/9vMyuhO6jz8ZGG5Id1dqN2kzNubtv2
+         1RZ7pAVUw6vFkFFdVJO/jKL7aVadFauld+qKZajDpyrR/KfB5Cbfy9xbYQuOTgxE26
+         gS9bVmCNuPRkKlZJJEeSfadHfW+ATvzbtlf7by4MYCg3o+LXCql0RaZvAjoutWBcit
+         a87Ghv4YAWJWQZb2XkLKYcdb0KziK7eWvRTcv7/3ENOxPMjKrbhuxwXF6wTxmJsoTa
+         bvW/LBj9VZlZw==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5d6791e50000>; Thu, 29 Aug 2019 20:50:45 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id C287D13EED5;
+        Thu, 29 Aug 2019 20:50:48 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id BCDC92819B1; Thu, 29 Aug 2019 20:50:45 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v5] watchdog: orion_wdt: use timer1 as a pretimeout
+Date:   Thu, 29 Aug 2019 20:50:42 +1200
+Message-Id: <20190829085042.30886-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-T24gV2VkLCAyMDE5LTA4LTI4IGF0IDIxOjQ1IC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
-PiBPbiA4LzI4LzE5IDY6NTMgUE0sIENocmlzIFBhY2toYW0gd3JvdGU6DQo+ID4gVGhlIG9yaW9u
-IHdhdGNoZG9nIGNhbiBlaXRoZXIgcmVzZXQgdGhlIENQVSBvciBnZW5lcmF0ZSBhbiBpbnRlcnJ1
-cHQuDQo+ID4gVGhlIGludGVycnVwdCB3b3VsZCBiZSB1c2VmdWwgZm9yIGRlYnVnZ2luZyBhcyBp
-dCBwcm92aWRlcyBwYW5pYygpDQo+ID4gb3V0cHV0IGFib3V0IHRoZSB3YXRjaGRvZyBleHBpcnks
-IGhvd2V2ZXIgaWYgdGhlIGludGVycnVwdCBpcyB1c2VkIHRoZQ0KPiA+IHdhdGNoZG9nIGNhbid0
-IHJlc2V0IHRoZSBDUFUgaW4gdGhlIGV2ZW50IG9mIGJlaW5nIHN0dWNrIGluIGEgbG9vcCB3aXRo
-DQo+ID4gaW50ZXJydXB0cyBkaXNhYmxlZCBvciBpZiB0aGUgQ1BVIGlzIHByZXZlbnRlZCBmcm9t
-IGFjY2Vzc2luZyBtZW1vcnkNCj4gPiAoZS5nLiBhbiB1bnRlcm1pbmF0ZWQgRE1BKS4NCj4gPiAN
-Cj4gPiBUaGUgQXJtYWRhIFNvQ3MgaGF2ZSBzcGFyZSB0aW1lcnMgdGhhdCBhcmVuJ3QgY3VycmVu
-dGx5IHVzZWQgYnkgdGhlDQo+ID4gTGludXgga2VybmVsLiBXZSBjYW4gdXNlIHRpbWVyMSB0byBw
-cm92aWRlIGEgcHJlLXRpbWVvdXQgYWhlYWQgb2YgdGhlDQo+ID4gd2F0Y2hkb2cgdGltZXIgYW5k
-IHByb3ZpZGUgdGhlIHBvc3NpYmlsaXR5IG9mIGdhdGhlcmluZyBkZWJ1ZyBiZWZvcmUgdGhlDQo+
-ID4gcmVzZXQgdHJpZ2dlcnMuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hh
-bSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPiA+IC0tLQ0KPiA+IA0KPiA+
-IFRoaXMgd2FzIHN1Ym1pdHRlZCBwcmV2aW91c2x5WzFdLCB0aGUgb3RoZXIgcGF0Y2hlcyB0d28g
-ZnJvbSB0aGUgc2VyaWVzIGhhdmUNCj4gPiBiZWVuIHBpY2tlZCB1cCBidXQgdGhpcyBvbmUgc2Vl
-bXMgdG8gaGF2ZSBmYWxsZW4gdGhyb3VnaCB0aGUgZ2Fwcy4NCj4gPiANCj4gDQo+IEkgaGFkIG1h
-cmtlZCBpdCBhcyAidW5kZXIgcmV2aWV3IiBidXQgSSBkb24ndCByZWNhbGwgd2h5LiBNYXliZSBp
-dCB3YXMgYmVjYXVzZQ0KPiBpdCBkZXBlbmRlZCBvbiB0aGUgb3RoZXIgcGF0Y2hlcywgYnV0IEkg
-ZG9uJ3QgcmVjYWxsLCBhbmQgSSBkaWRuJ3Qga2VlcCB0cmFjaw0KPiBvZiB0aG9zZSBwYXRjaGVz
-IGVpdGhlci4gU29ycnkgZm9yIHRoYXQuDQo+IA0KDQpObyBwcm9ibGVtLiBJIHRoaW5rIGl0IHdh
-cyByZWxhdGVkIHRvIGRpc2N1c3Npb25zIGFyb3VuZCB0aGUgb3RoZXINCnBhdGNoZXMuIEkgaGFk
-IG1lYW50IHRvIGZvbGxvdyB1cCBlYXJsaWVyLg0KDQo+ID4gQ2hhbmdlcyBpbiB2MzoNCj4gPiAt
-IHJlYmFzZSBhZ2FpbnN0IGxpbnV4L21hc3Rlcg0KPiA+IENoYW5nZXMgaW4gdjI6DQo+ID4gLSBh
-cHBseSBjaGFuZ2VzIHRvIGFybWFkYS0zOHggb25seQ0KPiA+IA0KPiA+IFsxXSAtIGh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2xpbnV4LXdhdGNoZG9nLzIwMTkwMzA1MjAxOTI0LjE0ODUzLTQtY2hy
-aXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Lw0KPiA+IA0KPiA+ICAgZHJpdmVycy93YXRj
-aGRvZy9vcmlvbl93ZHQuYyB8IDU5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0t
-LQ0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDUwIGluc2VydGlvbnMoKyksIDkgZGVsZXRpb25zKC0p
-DQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hkb2cvb3Jpb25fd2R0LmMgYi9k
-cml2ZXJzL3dhdGNoZG9nL29yaW9uX3dkdC5jDQo+ID4gaW5kZXggY2RiMGQxNzRjNWUyLi5mMmU5
-MGJmZDcxODYgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy9vcmlvbl93ZHQuYw0K
-PiA+ICsrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvb3Jpb25fd2R0LmMNCj4gPiBAQCAtNDYsNiArNDYs
-MTEgQEANCj4gPiAgICNkZWZpbmUgV0RUX0FYUF9GSVhFRF9FTkFCTEVfQklUIEJJVCgxMCkNCj4g
-PiAgICNkZWZpbmUgV0RUX0EzNzBfRVhQSVJFRAlCSVQoMzEpDQo+ID4gICANCj4gPiArI2RlZmlu
-ZSBUSU1FUjFfVkFMX09GRgkJMHgwMDFjDQo+ID4gKyNkZWZpbmUgVElNRVIxX0VOQUJMRV9CSVQJ
-QklUKDIpDQo+ID4gKyNkZWZpbmUgVElNRVIxX0ZJWEVEX0VOQUJMRV9CSVQJQklUKDEyKQ0KPiA+
-ICsjZGVmaW5lIFRJTUVSMV9TVEFUVVNfQklUCUJJVCg4KQ0KPiA+ICsNCj4gDQo+IEl0IHdvdWxk
-IGJlIGJldHRlciB0byBncm91cCB0aGUgYml0cyBhc3NvY2lhdGVkIHdpdGggYSBzaW5nbGUgcmVn
-aXN0ZXIgdG9nZXRoZXIuDQo+IFRoZSBiaXRzIGFib3ZlIGFyZSBub3QgYXNzb2NpYXRlZCB3aXRo
-IFRJTUVSMV9WQUxfT0ZGLCB5ZXQgdGhlIGdyb3VwaW5nIHN1Z2dlc3RzDQo+IHRoYXQgdGhpcyBt
-YXkgYmUgdGhlIGNhc2UuDQoNCldpbGwgZml4Lg0KDQo+IA0KPiA+ICAgc3RhdGljIGJvb2wgbm93
-YXlvdXQgPSBXQVRDSERPR19OT1dBWU9VVDsNCj4gPiAgIHN0YXRpYyBpbnQgaGVhcnRiZWF0ID0g
-LTE7CQkvKiBtb2R1bGUgcGFyYW1ldGVyIChzZWNvbmRzKSAqLw0KPiA+ICAgDQo+ID4gQEAgLTE1
-OCw2ICsxNjMsNyBAQCBzdGF0aWMgaW50IGFybWFkYXhwX3dkdF9jbG9ja19pbml0KHN0cnVjdCBw
-bGF0Zm9ybV9kZXZpY2UgKnBkZXYsDQo+ID4gICAJCQkJICAgc3RydWN0IG9yaW9uX3dhdGNoZG9n
-ICpkZXYpDQo+ID4gICB7DQo+ID4gICAJaW50IHJldDsNCj4gPiArCXUzMiB2YWw7DQo+ID4gICAN
-Cj4gPiAgIAlkZXYtPmNsayA9IG9mX2Nsa19nZXRfYnlfbmFtZShwZGV2LT5kZXYub2Zfbm9kZSwg
-ImZpeGVkIik7DQo+ID4gICAJaWYgKElTX0VSUihkZXYtPmNsaykpDQo+ID4gQEAgLTE2OSwzOCAr
-MTc1LDQ4IEBAIHN0YXRpYyBpbnQgYXJtYWRheHBfd2R0X2Nsb2NrX2luaXQoc3RydWN0IHBsYXRm
-b3JtX2RldmljZSAqcGRldiwNCj4gPiAgIAl9DQo+ID4gICANCj4gPiAgIAkvKiBFbmFibGUgdGhl
-IGZpeGVkIHdhdGNoZG9nIGNsb2NrIGlucHV0ICovDQo+ID4gLQlhdG9taWNfaW9fbW9kaWZ5KGRl
-di0+cmVnICsgVElNRVJfQ1RSTCwNCj4gPiAtCQkJIFdEVF9BWFBfRklYRURfRU5BQkxFX0JJVCwN
-Cj4gPiAtCQkJIFdEVF9BWFBfRklYRURfRU5BQkxFX0JJVCk7DQo+ID4gKwl2YWwgPSBXRFRfQVhQ
-X0ZJWEVEX0VOQUJMRV9CSVQgfCBUSU1FUjFfRklYRURfRU5BQkxFX0JJVDsNCj4gDQo+IFRoaXMg
-YWx3YXlzIHNldHMgVElNRVIxX0ZJWEVEX0VOQUJMRV9CSVQsIGJ1dCBsYXRlciB0aGUgZW5hYmxl
-IGJpdCBpcyBzZXQNCj4gb25seSBjb25kaXRpb25hbGx5LiBJIGRvbid0IGtub3cgd2hhdCBpcyBj
-b3JyZWN0LCBidXQgdGhpcyBhc2tzIGZvciBhIGNvbW1lbnQuDQoNClRoZSBmaXhlZCBwYXJ0IGlz
-IHNhZmUgdG8gc2V0LiBJdCBqdXN0IG1lYW5zIHRoYXQgdGhlIHJhdGUgaXMgY29uc3RhbnQuDQpJ
-J2xsIGFkZCBhIGNvbW1lbnQuDQoNCj4gDQo+ID4gKwlhdG9taWNfaW9fbW9kaWZ5KGRldi0+cmVn
-ICsgVElNRVJfQ1RSTCwgdmFsLCB2YWwpOw0KPiA+ICAgDQo+ID4gICAJZGV2LT5jbGtfcmF0ZSA9
-IGNsa19nZXRfcmF0ZShkZXYtPmNsayk7DQo+ID4gKw0KPiANCj4gV2UgY2FuIG9ubHkgaG9wZSB3
-ZSB3b24ndCBzZWUgYW5vdGhlciBwYXRjaCB0d28gZGF5cyBmcm9tIG5vdyB3aGVyZSBzb21lb25l
-DQo+IHJlbW92ZXMgdGhpcyBhZGRlZCBsaW5lLg0KPiANCj4gSSBjYW4gdW5kZXJzdGFuZCBzdWNo
-IGNoYW5nZXMgaWYgdGhleSBmaXggYSBjaGVja3BhdGNoIGlzc3VlLA0KPiBidXQgb3RoZXJ3aXNl
-IHBsZWFzZSByZWZyYWluIGZyb20gd2hpdGVzcGFjZSBjaGFuZ2VzLg0KDQpJIHRoaW5rIGl0IHdh
-cyB0byBhcHBlYXNlIGNoZWNrcGF0Y2gsIHRoZSBvbmUgYmVsb3cgY2VydGFpbmx5IHdhcy4gSWYN
-Cml0J3Mgbm90IG5lZWRlZCBmb3IgY2hlY2twYXRjaCBJJ2xsIGRyb3AgaXQgaW4gdGhlIG5leHQg
-dmVyc2lvbi4NCg0KPiANCj4gPiAgIAlyZXR1cm4gMDsNCj4gPiAgIH0NCj4gPiAgIA0KPiA+ICAg
-c3RhdGljIGludCBvcmlvbl93ZHRfcGluZyhzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3ZHRfZGV2
-KQ0KPiA+ICAgew0KPiA+ICAgCXN0cnVjdCBvcmlvbl93YXRjaGRvZyAqZGV2ID0gd2F0Y2hkb2df
-Z2V0X2RydmRhdGEod2R0X2Rldik7DQo+ID4gKw0KPiA+ICAgCS8qIFJlbG9hZCB3YXRjaGRvZyBk
-dXJhdGlvbiAqLw0KPiA+ICAgCXdyaXRlbChkZXYtPmNsa19yYXRlICogd2R0X2Rldi0+dGltZW91
-dCwNCj4gPiAgIAkgICAgICAgZGV2LT5yZWcgKyBkZXYtPmRhdGEtPndkdF9jb3VudGVyX29mZnNl
-dCk7DQo+ID4gKwlpZiAoZGV2LT53ZHQuaW5mby0+b3B0aW9ucyAmIFdESU9GX1BSRVRJTUVPVVQp
-DQo+ID4gKwkJd3JpdGVsKGRldi0+Y2xrX3JhdGUgKiAod2R0X2Rldi0+dGltZW91dCAtIHdkdF9k
-ZXYtPnByZXRpbWVvdXQpLA0KPiA+ICsJCSAgICAgICBkZXYtPnJlZyArIFRJTUVSMV9WQUxfT0ZG
-KTsNCj4gPiArDQo+ID4gICAJcmV0dXJuIDA7DQo+ID4gICB9DQo+ID4gICANCj4gPiAgIHN0YXRp
-YyBpbnQgYXJtYWRhMzc1X3N0YXJ0KHN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkdF9kZXYpDQo+
-ID4gICB7DQo+ID4gICAJc3RydWN0IG9yaW9uX3dhdGNoZG9nICpkZXYgPSB3YXRjaGRvZ19nZXRf
-ZHJ2ZGF0YSh3ZHRfZGV2KTsNCj4gPiAtCXUzMiByZWc7DQo+ID4gKwl1MzIgcmVnLCB2YWw7DQo+
-ID4gICANCj4gDQo+IElzIHRoZSBzZWNvbmQgdmFyaWFibGUgaGVyZSBhbmQgYmVsb3cgcmVhbGx5
-IG5lY2Vzc2FyeSA/DQo+IA0KDQpObyBJIGNhbiB1c2UgcmVnLg0KDQo+ID4gICAJLyogU2V0IHdh
-dGNoZG9nIGR1cmF0aW9uICovDQo+ID4gICAJd3JpdGVsKGRldi0+Y2xrX3JhdGUgKiB3ZHRfZGV2
-LT50aW1lb3V0LA0KPiA+ICAgCSAgICAgICBkZXYtPnJlZyArIGRldi0+ZGF0YS0+d2R0X2NvdW50
-ZXJfb2Zmc2V0KTsNCj4gPiArCWlmIChkZXYtPndkdC5pbmZvLT5vcHRpb25zICYgV0RJT0ZfUFJF
-VElNRU9VVCkNCj4gPiArCQl3cml0ZWwoZGV2LT5jbGtfcmF0ZSAqICh3ZHRfZGV2LT50aW1lb3V0
-IC0gd2R0X2Rldi0+cHJldGltZW91dCksDQo+ID4gKwkJICAgICAgIGRldi0+cmVnICsgVElNRVIx
-X1ZBTF9PRkYpOw0KPiA+ICAgDQo+ID4gICAJLyogQ2xlYXIgdGhlIHdhdGNoZG9nIGV4cGlyYXRp
-b24gYml0ICovDQo+ID4gICAJYXRvbWljX2lvX21vZGlmeShkZXYtPnJlZyArIFRJTUVSX0EzNzBf
-U1RBVFVTLCBXRFRfQTM3MF9FWFBJUkVELCAwKTsNCj4gPiAgIA0KPiA+ICAgCS8qIEVuYWJsZSB3
-YXRjaGRvZyB0aW1lciAqLw0KPiA+IC0JYXRvbWljX2lvX21vZGlmeShkZXYtPnJlZyArIFRJTUVS
-X0NUUkwsIGRldi0+ZGF0YS0+d2R0X2VuYWJsZV9iaXQsDQo+ID4gLQkJCQkJCWRldi0+ZGF0YS0+
-d2R0X2VuYWJsZV9iaXQpOw0KPiA+ICsJdmFsID0gZGV2LT5kYXRhLT53ZHRfZW5hYmxlX2JpdDsN
-Cj4gPiArCWlmIChkZXYtPndkdC5pbmZvLT5vcHRpb25zICYgV0RJT0ZfUFJFVElNRU9VVCkNCj4g
-PiArCQl2YWwgfD0gVElNRVIxX0VOQUJMRV9CSVQ7DQo+ID4gKwlhdG9taWNfaW9fbW9kaWZ5KGRl
-di0+cmVnICsgVElNRVJfQ1RSTCwgdmFsLCB2YWwpOw0KPiA+ICAgDQo+ID4gICAJLyogRW5hYmxl
-IHJlc2V0IG9uIHdhdGNoZG9nICovDQo+ID4gICAJcmVnID0gcmVhZGwoZGV2LT5yc3RvdXQpOw0K
-PiA+IEBAIC0yNzcsNyArMjkzLDcgQEAgc3RhdGljIGludCBvcmlvbl9zdG9wKHN0cnVjdCB3YXRj
-aGRvZ19kZXZpY2UgKndkdF9kZXYpDQo+ID4gICBzdGF0aWMgaW50IGFybWFkYTM3NV9zdG9wKHN0
-cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkdF9kZXYpDQo+ID4gICB7DQo+ID4gICAJc3RydWN0IG9y
-aW9uX3dhdGNoZG9nICpkZXYgPSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSh3ZHRfZGV2KTsNCj4gPiAt
-CXUzMiByZWc7DQo+ID4gKwl1MzIgcmVnLCBtYXNrOw0KPiA+ICAgDQo+ID4gICAJLyogRGlzYWJs
-ZSByZXNldCBvbiB3YXRjaGRvZyAqLw0KPiA+ICAgCWF0b21pY19pb19tb2RpZnkoZGV2LT5yc3Rv
-dXRfbWFzaywgZGV2LT5kYXRhLT5yc3RvdXRfbWFza19iaXQsDQo+ID4gQEAgLTI4Nyw3ICszMDMs
-MTAgQEAgc3RhdGljIGludCBhcm1hZGEzNzVfc3RvcChzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3
-ZHRfZGV2KQ0KPiA+ICAgCXdyaXRlbChyZWcsIGRldi0+cnN0b3V0KTsNCj4gPiAgIA0KPiA+ICAg
-CS8qIERpc2FibGUgd2F0Y2hkb2cgdGltZXIgKi8NCj4gPiAtCWF0b21pY19pb19tb2RpZnkoZGV2
-LT5yZWcgKyBUSU1FUl9DVFJMLCBkZXYtPmRhdGEtPndkdF9lbmFibGVfYml0LCAwKTsNCj4gPiAr
-CW1hc2sgPSBkZXYtPmRhdGEtPndkdF9lbmFibGVfYml0Ow0KPiA+ICsJaWYgKHdkdF9kZXYtPmlu
-Zm8tPm9wdGlvbnMgJiBXRElPRl9QUkVUSU1FT1VUKQ0KPiA+ICsJCW1hc2sgKz0gVElNRVIxX0VO
-QUJMRV9CSVQ7DQo+IA0KPiBGV0lXLCArPSBpcyBhIGJpdCB1bnVzdWFsIGZvciBhIG1hc2suIElz
-IGl0IGd1YXJhbnRlZWQgdGhhdA0KPiB0aGUgYml0IGlzIG5ldmVyIGFscmVhZHkgc2V0ID8gQW55
-IHNwZWNpYWwgcmVhc29uIGZvciB1c2luZyArPQ0KPiBpbnN0ZWFkIG9mIHw9IGhlcmUsIGJ1dCBu
-b3QgYWJvdmUgPw0KPiANCg0KSSBoYXZlIG5vIGlkZWEgd2h5IG9uIGVhcnRoIEkgdXNlZCArPSwg
-c2xpcCBvZiB0aGUga2V5Ym9hcmQgcGVyaGFwcywgfD0NCmlzIG9idmlvdXNseSB0aGUgY29ycmVj
-dCB0aGluZyB0byB1c2UuDQoNCj4gPiArCWF0b21pY19pb19tb2RpZnkoZGV2LT5yZWcgKyBUSU1F
-Ul9DVFJMLCBtYXNrLCAwKTsNCj4gPiAgIA0KPiA+ICAgCXJldHVybiAwOw0KPiA+ICAgfQ0KPiA+
-IEBAIC0zNDksNyArMzY4LDcgQEAgc3RhdGljIHVuc2lnbmVkIGludCBvcmlvbl93ZHRfZ2V0X3Rp
-bWVsZWZ0KHN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkdF9kZXYpDQo+ID4gICAJcmV0dXJuIHJl
-YWRsKGRldi0+cmVnICsgZGV2LT5kYXRhLT53ZHRfY291bnRlcl9vZmZzZXQpIC8gZGV2LT5jbGtf
-cmF0ZTsNCj4gPiAgIH0NCj4gPiAgIA0KPiA+IC1zdGF0aWMgY29uc3Qgc3RydWN0IHdhdGNoZG9n
-X2luZm8gb3Jpb25fd2R0X2luZm8gPSB7DQo+ID4gK3N0YXRpYyBzdHJ1Y3Qgd2F0Y2hkb2dfaW5m
-byBvcmlvbl93ZHRfaW5mbyA9IHsNCj4gPiAgIAkub3B0aW9ucyA9IFdESU9GX1NFVFRJTUVPVVQg
-fCBXRElPRl9LRUVQQUxJVkVQSU5HIHwgV0RJT0ZfTUFHSUNDTE9TRSwNCj4gPiAgIAkuaWRlbnRp
-dHkgPSAiT3Jpb24gV2F0Y2hkb2ciLA0KPiA+ICAgfTsNCj4gPiBAQCAtMzY4LDYgKzM4NywxNiBA
-QCBzdGF0aWMgaXJxcmV0dXJuX3Qgb3Jpb25fd2R0X2lycShpbnQgaXJxLCB2b2lkICpkZXZpZCkN
-Cj4gPiAgIAlyZXR1cm4gSVJRX0hBTkRMRUQ7DQo+ID4gICB9DQo+ID4gICANCj4gPiArc3RhdGlj
-IGlycXJldHVybl90IG9yaW9uX3dkdF9wcmVfaXJxKGludCBpcnEsIHZvaWQgKmRldmlkKQ0KPiA+
-ICt7DQo+ID4gKwlzdHJ1Y3Qgb3Jpb25fd2F0Y2hkb2cgKmRldiA9IGRldmlkOw0KPiA+ICsNCj4g
-PiArCWF0b21pY19pb19tb2RpZnkoZGV2LT5yZWcgKyBUSU1FUl9BMzcwX1NUQVRVUywNCj4gPiAr
-CQkJIFRJTUVSMV9TVEFUVVNfQklULCAwKTsNCj4gPiArCXdhdGNoZG9nX25vdGlmeV9wcmV0aW1l
-b3V0KCZkZXYtPndkdCk7DQo+ID4gKwlyZXR1cm4gSVJRX0hBTkRMRUQ7DQo+ID4gK30NCj4gPiAr
-DQo+ID4gICAvKg0KPiA+ICAgICogVGhlIG9yaWdpbmFsIGRldmljZXRyZWUgYmluZGluZyBmb3Ig
-dGhpcyBkcml2ZXIgc3BlY2lmaWVkIG9ubHkNCj4gPiAgICAqIG9uZSBtZW1vcnkgcmVzb3VyY2Us
-IHNvIGluIG9yZGVyIHRvIGtlZXAgRFQgYmFja3dhcmRzIGNvbXBhdGliaWxpdHkNCj4gPiBAQCAt
-NTg5LDYgKzYxOCwxOCBAQCBzdGF0aWMgaW50IG9yaW9uX3dkdF9wcm9iZShzdHJ1Y3QgcGxhdGZv
-cm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAgCQl9DQo+ID4gICAJfQ0KPiA+ICAgDQo+ID4gKwlpcnEg
-PSBwbGF0Zm9ybV9nZXRfaXJxKHBkZXYsIDEpOw0KPiANCj4gcGxhdGZvcm1fZ2V0X2lycSgpIG1h
-eSByZXR1cm4gLUVQUk9CRV9ERUZFUi4gQXJlIHlvdSBzdXJlIHlvdSB3YW50IHRvIGlnbm9yZQ0K
-PiB0aGUgaW50ZXJydXB0IChhbmQgdGh1cyBkaXNhYmxlIHRoZSBwcmV0aW1lb3V0KSBpZiB0aGF0
-IGlzIHRoZSBjYXNlID8NCj4gDQoNCkluIGFueSBjdXJyZW50IHN5c3RlbSB0aGF0IHVzZXMgdGhp
-cyBkcml2ZXIgSSBjYW4ndCBpbWFnaW5lIGEgY2FzZQ0Kd2hlcmUgd2Ugd291bGQgc2VlIC1FUFJP
-QkVfREVGRVIgaGVyZSBhbmQgbm90IGZvciB0aGUgaW5kZXggMCBpbnRlcnJ1cHQNCmFib3ZlLiBB
-bmQgZXZlbiB0aGVuIHRoZXNlIGFyZSBTb0MgaW50ZXJydXB0IHNvdXJjZXMgc28gaXQncyB1bmxp
-a2VseQ0KdGhhdCB0aGV5IHdvdWxkIGJlIGRlZmVycmVkLg0KDQpJIGRvIG5lZWQgdG8gaGFuZGxl
-IHRoZSBjYXNlIHdoZXJlIHRoZSAybmQgaXJxIGlzIG5vdCBwcm92aWRlZCAod2hpY2gNCmlzIHdo
-YXQgSSB3YXMgZ29pbmcgZm9yIGhlcmUpLiBJTUhPIEkgdGhpbmsgaXQncyBiZXR0ZXIgdG8gZ2V0
-IG9uIHdpdGgNCnRoaW5ncyByYXRoZXIgdGhhbiBkZWZlcnJpbmcgdGhlIGVudGlyZSBkcml2ZXIg
-cHJvYmUganVzdCBiZWNhdXNlIGFuDQpvcHRpb25hbCBmZWF0dXJlIGlzbid0IHJlYWR5IGZvciB1
-c2UuIEJ1dCBpZiB5b3Ugd2FudCBtZSB0byBoYW5kbGUNCi1FUFJPQkVfREVGRVIgaGVyZSBJIHdp
-bGwuDQoNCj4gPiArCWlmIChpcnEgPiAwKSB7DQo+ID4gKwkJb3Jpb25fd2R0X2luZm8ub3B0aW9u
-cyB8PSBXRElPRl9QUkVUSU1FT1VUOw0KPiA+ICsJCXJldCA9IGRldm1fcmVxdWVzdF9pcnEoJnBk
-ZXYtPmRldiwgaXJxLCBvcmlvbl93ZHRfcHJlX2lycSwNCj4gPiArCQkJCSAgICAgICAwLCBwZGV2
-LT5uYW1lLCBkZXYpOw0KPiA+ICsJCWlmIChyZXQgPCAwKSB7DQo+ID4gKwkJCWRldl9lcnIoJnBk
-ZXYtPmRldiwgImZhaWxlZCB0byByZXF1ZXN0IElSUVxuIik7DQo+ID4gKwkJCWdvdG8gZGlzYWJs
-ZV9jbGs7DQo+ID4gKwkJfQ0KPiA+ICsJfQ0KPiA+ICsNCj4gPiArDQo+ID4gICAJd2F0Y2hkb2df
-c2V0X25vd2F5b3V0KCZkZXYtPndkdCwgbm93YXlvdXQpOw0KPiA+ICAgCXJldCA9IHdhdGNoZG9n
-X3JlZ2lzdGVyX2RldmljZSgmZGV2LT53ZHQpOw0KPiA+ICAgCWlmIChyZXQpDQo+ID4gDQo+IA0K
-PiANCg==
+The orion watchdog can either reset the CPU or generate an interrupt.
+The interrupt would be useful for debugging as it provides panic()
+output about the watchdog expiry, however if the interrupt is used the
+watchdog can't reset the CPU in the event of being stuck in a loop with
+interrupts disabled or if the CPU is prevented from accessing memory
+(e.g. an unterminated DMA).
+
+The Armada SoCs have spare timers that aren't currently used by the
+Linux kernel. We can use timer1 to provide a pre-timeout ahead of the
+watchdog timer and provide the possibility of gathering debug before the
+reset triggers.
+
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+Changes in v5:
+- Group bit values with register addresses
+- Address review comments from Gunter
+Changes in v4:
+- rebase against linux/master
+Changes in v2:
+- apply changes to armada-38x only
+
+ drivers/watchdog/orion_wdt.c | 65 ++++++++++++++++++++++++++++--------
+ 1 file changed, 52 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
+index cdb0d174c5e2..5a23cb448ed5 100644
+--- a/drivers/watchdog/orion_wdt.c
++++ b/drivers/watchdog/orion_wdt.c
+@@ -35,7 +35,15 @@
+  * Watchdog timer block registers.
+  */
+ #define TIMER_CTRL		0x0000
+-#define TIMER_A370_STATUS	0x04
++#define TIMER1_FIXED_ENABLE_BIT	BIT(12)
++#define WDT_AXP_FIXED_ENABLE_BIT BIT(10)
++#define TIMER1_ENABLE_BIT	BIT(2)
++
++#define TIMER_A370_STATUS	0x0004
++#define WDT_A370_EXPIRED	BIT(31)
++#define TIMER1_STATUS_BIT	BIT(8)
++
++#define TIMER1_VAL_OFF		0x001c
+=20
+ #define WDT_MAX_CYCLE_COUNT	0xffffffff
+=20
+@@ -43,9 +51,6 @@
+ #define WDT_A370_RATIO_SHIFT	5
+ #define WDT_A370_RATIO		(1 << WDT_A370_RATIO_SHIFT)
+=20
+-#define WDT_AXP_FIXED_ENABLE_BIT BIT(10)
+-#define WDT_A370_EXPIRED	BIT(31)
+-
+ static bool nowayout =3D WATCHDOG_NOWAYOUT;
+ static int heartbeat =3D -1;		/* module parameter (seconds) */
+=20
+@@ -158,6 +163,7 @@ static int armadaxp_wdt_clock_init(struct platform_de=
+vice *pdev,
+ 				   struct orion_watchdog *dev)
+ {
+ 	int ret;
++	u32 val;
+=20
+ 	dev->clk =3D of_clk_get_by_name(pdev->dev.of_node, "fixed");
+ 	if (IS_ERR(dev->clk))
+@@ -168,10 +174,9 @@ static int armadaxp_wdt_clock_init(struct platform_d=
+evice *pdev,
+ 		return ret;
+ 	}
+=20
+-	/* Enable the fixed watchdog clock input */
+-	atomic_io_modify(dev->reg + TIMER_CTRL,
+-			 WDT_AXP_FIXED_ENABLE_BIT,
+-			 WDT_AXP_FIXED_ENABLE_BIT);
++	/* Fix the wdt and timer1 clock freqency to 25MHz */
++	val =3D WDT_AXP_FIXED_ENABLE_BIT | TIMER1_FIXED_ENABLE_BIT;
++	atomic_io_modify(dev->reg + TIMER_CTRL, val, val);
+=20
+ 	dev->clk_rate =3D clk_get_rate(dev->clk);
+ 	return 0;
+@@ -183,6 +188,10 @@ static int orion_wdt_ping(struct watchdog_device *wd=
+t_dev)
+ 	/* Reload watchdog duration */
+ 	writel(dev->clk_rate * wdt_dev->timeout,
+ 	       dev->reg + dev->data->wdt_counter_offset);
++	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
++		writel(dev->clk_rate * (wdt_dev->timeout - wdt_dev->pretimeout),
++		       dev->reg + TIMER1_VAL_OFF);
++
+ 	return 0;
+ }
+=20
+@@ -194,13 +203,18 @@ static int armada375_start(struct watchdog_device *=
+wdt_dev)
+ 	/* Set watchdog duration */
+ 	writel(dev->clk_rate * wdt_dev->timeout,
+ 	       dev->reg + dev->data->wdt_counter_offset);
++	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
++		writel(dev->clk_rate * (wdt_dev->timeout - wdt_dev->pretimeout),
++		       dev->reg + TIMER1_VAL_OFF);
+=20
+ 	/* Clear the watchdog expiration bit */
+ 	atomic_io_modify(dev->reg + TIMER_A370_STATUS, WDT_A370_EXPIRED, 0);
+=20
+ 	/* Enable watchdog timer */
+-	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit,
+-						dev->data->wdt_enable_bit);
++	reg =3D dev->data->wdt_enable_bit;
++	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
++		reg |=3D TIMER1_ENABLE_BIT;
++	atomic_io_modify(dev->reg + TIMER_CTRL, reg, reg);
+=20
+ 	/* Enable reset on watchdog */
+ 	reg =3D readl(dev->rstout);
+@@ -277,7 +291,7 @@ static int orion_stop(struct watchdog_device *wdt_dev=
+)
+ static int armada375_stop(struct watchdog_device *wdt_dev)
+ {
+ 	struct orion_watchdog *dev =3D watchdog_get_drvdata(wdt_dev);
+-	u32 reg;
++	u32 reg, mask;
+=20
+ 	/* Disable reset on watchdog */
+ 	atomic_io_modify(dev->rstout_mask, dev->data->rstout_mask_bit,
+@@ -287,7 +301,10 @@ static int armada375_stop(struct watchdog_device *wd=
+t_dev)
+ 	writel(reg, dev->rstout);
+=20
+ 	/* Disable watchdog timer */
+-	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit, 0);
++	mask =3D dev->data->wdt_enable_bit;
++	if (wdt_dev->info->options & WDIOF_PRETIMEOUT)
++		mask &=3D ~TIMER1_ENABLE_BIT;
++	atomic_io_modify(dev->reg + TIMER_CTRL, mask, 0);
+=20
+ 	return 0;
+ }
+@@ -349,7 +366,7 @@ static unsigned int orion_wdt_get_timeleft(struct wat=
+chdog_device *wdt_dev)
+ 	return readl(dev->reg + dev->data->wdt_counter_offset) / dev->clk_rate;
+ }
+=20
+-static const struct watchdog_info orion_wdt_info =3D {
++static struct watchdog_info orion_wdt_info =3D {
+ 	.options =3D WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+ 	.identity =3D "Orion Watchdog",
+ };
+@@ -368,6 +385,16 @@ static irqreturn_t orion_wdt_irq(int irq, void *devi=
+d)
+ 	return IRQ_HANDLED;
+ }
+=20
++static irqreturn_t orion_wdt_pre_irq(int irq, void *devid)
++{
++	struct orion_watchdog *dev =3D devid;
++
++	atomic_io_modify(dev->reg + TIMER_A370_STATUS,
++			 TIMER1_STATUS_BIT, 0);
++	watchdog_notify_pretimeout(&dev->wdt);
++	return IRQ_HANDLED;
++}
++
+ /*
+  * The original devicetree binding for this driver specified only
+  * one memory resource, so in order to keep DT backwards compatibility
+@@ -589,6 +616,18 @@ static int orion_wdt_probe(struct platform_device *p=
+dev)
+ 		}
+ 	}
+=20
++	irq =3D platform_get_irq(pdev, 1);
++	if (irq > 0) {
++		orion_wdt_info.options |=3D WDIOF_PRETIMEOUT;
++		ret =3D devm_request_irq(&pdev->dev, irq, orion_wdt_pre_irq,
++				       0, pdev->name, dev);
++		if (ret < 0) {
++			dev_err(&pdev->dev, "failed to request IRQ\n");
++			goto disable_clk;
++		}
++	}
++
++
+ 	watchdog_set_nowayout(&dev->wdt, nowayout);
+ 	ret =3D watchdog_register_device(&dev->wdt);
+ 	if (ret)
+--=20
+2.23.0
+
