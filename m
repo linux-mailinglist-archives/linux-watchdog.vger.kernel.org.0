@@ -2,384 +2,251 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D3DA3C9D
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2019 18:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2969BA3CB0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2019 18:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbfH3Qv7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 30 Aug 2019 12:51:59 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39525 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727883AbfH3Qv6 (ORCPT
+        id S1728086AbfH3QzX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 30 Aug 2019 12:55:23 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:47065 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726183AbfH3QzX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 30 Aug 2019 12:51:58 -0400
-Received: by mail-pl1-f193.google.com with SMTP id az1so2647659plb.6;
-        Fri, 30 Aug 2019 09:51:58 -0700 (PDT)
+        Fri, 30 Aug 2019 12:55:23 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q139so4979122pfc.13;
+        Fri, 30 Aug 2019 09:55:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=mMD+lg73sdOXnlPASfMHfOl4xLpAPWC1SY8D0lvg1qM=;
-        b=t7v0MIgL3Khi5vuTsiB300N1hiwDjrYGc3B6MGi9pKmrqjRK0TGHEB47FdJCldSlFT
-         LjIUFkdR7Ln3hLyM5PbI/ULFnpskVA0VJcgjnjuYhn+n6+RZvEcojH0dUBNQz0kTudHZ
-         eaEx4JT1NaE7DLTtQE/iWB1o8pZDqNVoraF9lwBVSZwk9hIeTtzd7vbFFxzbPlcIATtK
-         ySMSDxhZiwgMbB9mtROE6tKCwWAYCEzkadINX9RXK046SdF2MBbikiNFYW1tHtLpJdKM
-         BTJv91ttajETIhj/Qo6iRy8wutCzXB7CDj0vpu9WkWGSJOHgBZEZ/jv3dbO38gMmuLNz
-         reSw==
+        bh=uxhSDhOFMCtubNyqUSOxE1i/AaCpvCejOjblYk0TE1E=;
+        b=ucYHlmIQfMOy4rBebqky9ZNDpR87gqWM7fE4aE8DaWQgigF+tmGjNm/AG6Nz6ZlIFq
+         rF5yyv0LKP8/4ZMZ1P4UB9JFKVU+rLlIOqNARIqg39zQO3bgauo6lQEp+7CQAmHb+QZM
+         j6KXhBhUb7QEYEr8bKfusnBMuNLIKK659KjTWZ79xJvE/OQOELIpJV1dblpQioe1oM59
+         03XtJbrMHObR7CjgirQPfFQgckq+wk94Glnl/B4PNkSzEUrJAxTSUYPh8dNQqbmBIkgp
+         dDznOZspm7/PTFB0xW2ezYSfLyXXfOA5rt536PH6WLgiD60two8J6KhCpUif4F7CGfpO
+         YzQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mMD+lg73sdOXnlPASfMHfOl4xLpAPWC1SY8D0lvg1qM=;
-        b=ERaEKs2s3xFnb9AHSrCgxbm9TLVPjmRyfBJSjpx9nmBOZUrHNlzs93Z0ZdeVCyzlnz
-         j+3KukrS2mvQT3EJyzzvkqsgnRDFsQPKJy9HSO8ug/3RanmW8VD2Yt+e5uZ7kHOoe799
-         nGSJXC1u9oamDX4SdEFLfolXzXZzkupIxDzl6UiBhFgliGTMqRfB39kJvMLUHAg0wMNN
-         PSq0N+PRCbIH0hM+ko5gt2oMHjkBiX4PHWUjy6TeDe2cAk4pBtSN0m5iC27E2CZfl24v
-         YU0pkUv6D/Rt2X/ZgCEkvX1XZe8eDl+qKT8XIae5tnMoqAwXuIQ9oVngNcOLe9JlIqfS
-         vCNQ==
-X-Gm-Message-State: APjAAAXC7RblK3B7MAaNDKBOZLW9HvJX4PkGt2mzIvgb9lrjrBEltxar
-        QGAx/uRllIGHMBXJYv8zDj4=
-X-Google-Smtp-Source: APXvYqym3wnxsfQuqnH7P8HqI98A6ccKrwluCv6BFQx8kswh5Yt8huuSndVEkTrMJFUF8jgRsWcIpQ==
-X-Received: by 2002:a17:902:f301:: with SMTP id gb1mr16281158plb.249.1567183917853;
-        Fri, 30 Aug 2019 09:51:57 -0700 (PDT)
+        bh=uxhSDhOFMCtubNyqUSOxE1i/AaCpvCejOjblYk0TE1E=;
+        b=kzQyWZtMFolz13NZcDfqWxQF6QE/bvbXUO4J7n3WyDoO4XLY9WDqa8uR8g6Owsmb5O
+         Ygn0R0T20pHx7RAXflBbm4zPfLuIo3Sqb8maWyGW2UnLctlGDo5eMEGcx3XIb3CqonVx
+         FItdMop8lW7VifEslzSkH/qKgb7zpWDjIBTuMha79lcYCqOLY6LyjYQY9RHhuDgfSP4l
+         Q89SyxZB4PUYlNcse2sehVMMxxtGw7z+Ky2SX5Beg+csJxDdyz28PZZ3eMfoHcb92TzJ
+         HLbd1rVe42E+Hc0CRQowLs5jwG+wwP3nXw6ZjS014+nAQD+FkW+GWjqu4DU79dGuRjDG
+         ZJgQ==
+X-Gm-Message-State: APjAAAV5amG47B1TC6gmD/PLTIorZAsbFIDf/6wZCoTdF59U5U75dwT8
+        3PZ1zC6/knj6vNoHPKLx05A=
+X-Google-Smtp-Source: APXvYqxEaDWsI/ocIUa/2mS17VU15m5rm/xcWpj4LHQlHr3vB0hgd5hstROn+FXtTQOU+U7oIwNHmg==
+X-Received: by 2002:a63:2447:: with SMTP id k68mr13985260pgk.219.1567184122078;
+        Fri, 30 Aug 2019 09:55:22 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z19sm5464963pgv.35.2019.08.30.09.51.57
+        by smtp.gmail.com with ESMTPSA id o130sm11001167pfg.171.2019.08.30.09.55.21
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 30 Aug 2019 09:51:57 -0700 (PDT)
-Date:   Fri, 30 Aug 2019 09:51:56 -0700
+        Fri, 30 Aug 2019 09:55:21 -0700 (PDT)
+Date:   Fri, 30 Aug 2019 09:55:20 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux@armlinux.org.uk, otavio@ossystems.com.br,
-        leonard.crestez@nxp.com, u.kleine-koenig@pengutronix.de,
-        schnitzeltony@gmail.com, jan.tuerk@emtrion.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linux-imx@nxp.com
-Subject: Re: [PATCH V5 2/4] watchdog: Add i.MX7ULP watchdog support
-Message-ID: <20190830165156.GH7911@roeck-us.net>
-References: <1566999303-18795-1-git-send-email-Anson.Huang@nxp.com>
- <1566999303-18795-2-git-send-email-Anson.Huang@nxp.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] watchdog: orion_wdt: use timer1 as a pretimeout
+Message-ID: <20190830165520.GJ7911@roeck-us.net>
+References: <20190829215224.27956-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1566999303-18795-2-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <20190829215224.27956-1-chris.packham@alliedtelesis.co.nz>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 09:35:01AM -0400, Anson Huang wrote:
-> The i.MX7ULP Watchdog Timer (WDOG) module is an independent timer
-> that is available for system use.
-> It provides a safety feature to ensure that software is executing
-> as planned and that the CPU is not stuck in an infinite loop or
-> executing unintended code. If the WDOG module is not serviced
-> (refreshed) within a certain period, it resets the MCU.
+On Fri, Aug 30, 2019 at 09:52:24AM +1200, Chris Packham wrote:
+> The orion watchdog can either reset the CPU or generate an interrupt.
+> The interrupt would be useful for debugging as it provides panic()
+> output about the watchdog expiry, however if the interrupt is used the
+> watchdog can't reset the CPU in the event of being stuck in a loop with
+> interrupts disabled or if the CPU is prevented from accessing memory
+> (e.g. an unterminated DMA).
 > 
-> Add driver support for i.MX7ULP watchdog.
+> The Armada SoCs have spare timers that aren't currently used by the
+> Linux kernel. We can use timer1 to provide a pre-timeout ahead of the
+> watchdog timer and provide the possibility of gathering debug before the
+> reset triggers.
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-
-For the record:
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> No changes.
-> ---
->  drivers/watchdog/Kconfig       |  13 +++
->  drivers/watchdog/Makefile      |   1 +
->  drivers/watchdog/imx7ulp_wdt.c | 243 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 257 insertions(+)
->  create mode 100644 drivers/watchdog/imx7ulp_wdt.c
+> Changes in v6:
+> - Fix bitwise operation in armada375_stop()
+> - Add comment about 2nd interrupt being optional
+> Changes in v5:
+> - Group bit values with register addresses
+> - Address review comments from Gunter
+> Changes in v3:
+> - rebase against linux/master
+> Changes in v2:
+> - apply changes to armada-38x only
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index a8f5c81..d68e5b5 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -724,6 +724,19 @@ config IMX_SC_WDT
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called imx_sc_wdt.
+>  drivers/watchdog/orion_wdt.c | 66 +++++++++++++++++++++++++++++-------
+>  1 file changed, 53 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
+> index cdb0d174c5e2..1cccf8eb1c5d 100644
+> --- a/drivers/watchdog/orion_wdt.c
+> +++ b/drivers/watchdog/orion_wdt.c
+> @@ -35,7 +35,15 @@
+>   * Watchdog timer block registers.
+>   */
+>  #define TIMER_CTRL		0x0000
+> -#define TIMER_A370_STATUS	0x04
+> +#define TIMER1_FIXED_ENABLE_BIT	BIT(12)
+> +#define WDT_AXP_FIXED_ENABLE_BIT BIT(10)
+> +#define TIMER1_ENABLE_BIT	BIT(2)
+> +
+> +#define TIMER_A370_STATUS	0x0004
+> +#define WDT_A370_EXPIRED	BIT(31)
+> +#define TIMER1_STATUS_BIT	BIT(8)
+> +
+> +#define TIMER1_VAL_OFF		0x001c
 >  
-> +config IMX7ULP_WDT
-> +	tristate "IMX7ULP Watchdog"
-> +	depends on ARCH_MXC || COMPILE_TEST
-> +	select WATCHDOG_CORE
-> +	help
-> +	  This is the driver for the hardware watchdog on the Freescale
-> +	  IMX7ULP and later processors. If you have one of these
-> +	  processors and wish to have watchdog support enabled,
-> +	  say Y, otherwise say N.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called imx7ulp_wdt.
-> +
->  config UX500_WATCHDOG
->  	tristate "ST-Ericsson Ux500 watchdog"
->  	depends on MFD_DB8500_PRCMU
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index b5a0aed..2ee352b 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -67,6 +67,7 @@ obj-$(CONFIG_TS4800_WATCHDOG) += ts4800_wdt.o
->  obj-$(CONFIG_TS72XX_WATCHDOG) += ts72xx_wdt.o
->  obj-$(CONFIG_IMX2_WDT) += imx2_wdt.o
->  obj-$(CONFIG_IMX_SC_WDT) += imx_sc_wdt.o
-> +obj-$(CONFIG_IMX7ULP_WDT) += imx7ulp_wdt.o
->  obj-$(CONFIG_UX500_WATCHDOG) += ux500_wdt.o
->  obj-$(CONFIG_RETU_WATCHDOG) += retu_wdt.o
->  obj-$(CONFIG_BCM2835_WDT) += bcm2835_wdt.o
-> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
-> new file mode 100644
-> index 0000000..5ce5102
-> --- /dev/null
-> +++ b/drivers/watchdog/imx7ulp_wdt.c
-> @@ -0,0 +1,243 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2019 NXP.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reboot.h>
-> +#include <linux/watchdog.h>
-> +
-> +#define WDOG_CS			0x0
-> +#define WDOG_CS_CMD32EN		BIT(13)
-> +#define WDOG_CS_ULK		BIT(11)
-> +#define WDOG_CS_RCS		BIT(10)
-> +#define WDOG_CS_EN		BIT(7)
-> +#define WDOG_CS_UPDATE		BIT(5)
-> +
-> +#define WDOG_CNT	0x4
-> +#define WDOG_TOVAL	0x8
-> +
-> +#define REFRESH_SEQ0	0xA602
-> +#define REFRESH_SEQ1	0xB480
-> +#define REFRESH		((REFRESH_SEQ1 << 16) | REFRESH_SEQ0)
-> +
-> +#define UNLOCK_SEQ0	0xC520
-> +#define UNLOCK_SEQ1	0xD928
-> +#define UNLOCK		((UNLOCK_SEQ1 << 16) | UNLOCK_SEQ0)
-> +
-> +#define DEFAULT_TIMEOUT	60
-> +#define MAX_TIMEOUT	128
-> +#define WDOG_CLOCK_RATE	1000
-> +
-> +static bool nowayout = WATCHDOG_NOWAYOUT;
-> +module_param(nowayout, bool, 0000);
-> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> +
-> +struct imx7ulp_wdt_device {
-> +	struct notifier_block restart_handler;
-> +	struct watchdog_device wdd;
-> +	void __iomem *base;
-> +	struct clk *clk;
-> +};
-> +
-> +static inline void imx7ulp_wdt_enable(void __iomem *base, bool enable)
-> +{
-> +	u32 val = readl(base + WDOG_CS);
-> +
-> +	writel(UNLOCK, base + WDOG_CNT);
-> +	if (enable)
-> +		writel(val | WDOG_CS_EN, base + WDOG_CS);
-> +	else
-> +		writel(val & ~WDOG_CS_EN, base + WDOG_CS);
-> +}
-> +
-> +static inline bool imx7ulp_wdt_is_enabled(void __iomem *base)
-> +{
-> +	u32 val = readl(base + WDOG_CS);
-> +
-> +	return val & WDOG_CS_EN;
-> +}
-> +
-> +static int imx7ulp_wdt_ping(struct watchdog_device *wdog)
-> +{
-> +	struct imx7ulp_wdt_device *wdt = watchdog_get_drvdata(wdog);
-> +
-> +	writel(REFRESH, wdt->base + WDOG_CNT);
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx7ulp_wdt_start(struct watchdog_device *wdog)
-> +{
-> +	struct imx7ulp_wdt_device *wdt = watchdog_get_drvdata(wdog);
-> +
-> +	imx7ulp_wdt_enable(wdt->base, true);
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx7ulp_wdt_stop(struct watchdog_device *wdog)
-> +{
-> +	struct imx7ulp_wdt_device *wdt = watchdog_get_drvdata(wdog);
-> +
-> +	imx7ulp_wdt_enable(wdt->base, false);
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx7ulp_wdt_set_timeout(struct watchdog_device *wdog,
-> +				   unsigned int timeout)
-> +{
-> +	struct imx7ulp_wdt_device *wdt = watchdog_get_drvdata(wdog);
-> +	u32 val = WDOG_CLOCK_RATE * timeout;
-> +
-> +	writel(UNLOCK, wdt->base + WDOG_CNT);
-> +	writel(val, wdt->base + WDOG_TOVAL);
-> +
-> +	wdog->timeout = timeout;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct watchdog_ops imx7ulp_wdt_ops = {
-> +	.owner = THIS_MODULE,
-> +	.start = imx7ulp_wdt_start,
-> +	.stop  = imx7ulp_wdt_stop,
-> +	.ping  = imx7ulp_wdt_ping,
-> +	.set_timeout = imx7ulp_wdt_set_timeout,
-> +};
-> +
-> +static const struct watchdog_info imx7ulp_wdt_info = {
-> +	.identity = "i.MX7ULP watchdog timer",
-> +	.options  = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
-> +		    WDIOF_MAGICCLOSE,
-> +};
-> +
-> +static inline void imx7ulp_wdt_init(void __iomem *base, unsigned int timeout)
-> +{
+>  #define WDT_MAX_CYCLE_COUNT	0xffffffff
+>  
+> @@ -43,9 +51,6 @@
+>  #define WDT_A370_RATIO_SHIFT	5
+>  #define WDT_A370_RATIO		(1 << WDT_A370_RATIO_SHIFT)
+>  
+> -#define WDT_AXP_FIXED_ENABLE_BIT BIT(10)
+> -#define WDT_A370_EXPIRED	BIT(31)
+> -
+>  static bool nowayout = WATCHDOG_NOWAYOUT;
+>  static int heartbeat = -1;		/* module parameter (seconds) */
+>  
+> @@ -158,6 +163,7 @@ static int armadaxp_wdt_clock_init(struct platform_device *pdev,
+>  				   struct orion_watchdog *dev)
+>  {
+>  	int ret;
 > +	u32 val;
+>  
+>  	dev->clk = of_clk_get_by_name(pdev->dev.of_node, "fixed");
+>  	if (IS_ERR(dev->clk))
+> @@ -168,10 +174,9 @@ static int armadaxp_wdt_clock_init(struct platform_device *pdev,
+>  		return ret;
+>  	}
+>  
+> -	/* Enable the fixed watchdog clock input */
+> -	atomic_io_modify(dev->reg + TIMER_CTRL,
+> -			 WDT_AXP_FIXED_ENABLE_BIT,
+> -			 WDT_AXP_FIXED_ENABLE_BIT);
+> +	/* Fix the wdt and timer1 clock freqency to 25MHz */
+> +	val = WDT_AXP_FIXED_ENABLE_BIT | TIMER1_FIXED_ENABLE_BIT;
+> +	atomic_io_modify(dev->reg + TIMER_CTRL, val, val);
+>  
+>  	dev->clk_rate = clk_get_rate(dev->clk);
+>  	return 0;
+> @@ -183,6 +188,10 @@ static int orion_wdt_ping(struct watchdog_device *wdt_dev)
+>  	/* Reload watchdog duration */
+>  	writel(dev->clk_rate * wdt_dev->timeout,
+>  	       dev->reg + dev->data->wdt_counter_offset);
+> +	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
+> +		writel(dev->clk_rate * (wdt_dev->timeout - wdt_dev->pretimeout),
+> +		       dev->reg + TIMER1_VAL_OFF);
 > +
-> +	/* unlock the wdog for reconfiguration */
-> +	writel_relaxed(UNLOCK_SEQ0, base + WDOG_CNT);
-> +	writel_relaxed(UNLOCK_SEQ1, base + WDOG_CNT);
+>  	return 0;
+>  }
+>  
+> @@ -194,13 +203,18 @@ static int armada375_start(struct watchdog_device *wdt_dev)
+>  	/* Set watchdog duration */
+>  	writel(dev->clk_rate * wdt_dev->timeout,
+>  	       dev->reg + dev->data->wdt_counter_offset);
+> +	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
+> +		writel(dev->clk_rate * (wdt_dev->timeout - wdt_dev->pretimeout),
+> +		       dev->reg + TIMER1_VAL_OFF);
+>  
+>  	/* Clear the watchdog expiration bit */
+>  	atomic_io_modify(dev->reg + TIMER_A370_STATUS, WDT_A370_EXPIRED, 0);
+>  
+>  	/* Enable watchdog timer */
+> -	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit,
+> -						dev->data->wdt_enable_bit);
+> +	reg = dev->data->wdt_enable_bit;
+> +	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
+> +		reg |= TIMER1_ENABLE_BIT;
+> +	atomic_io_modify(dev->reg + TIMER_CTRL, reg, reg);
+>  
+>  	/* Enable reset on watchdog */
+>  	reg = readl(dev->rstout);
+> @@ -277,7 +291,7 @@ static int orion_stop(struct watchdog_device *wdt_dev)
+>  static int armada375_stop(struct watchdog_device *wdt_dev)
+>  {
+>  	struct orion_watchdog *dev = watchdog_get_drvdata(wdt_dev);
+> -	u32 reg;
+> +	u32 reg, mask;
+>  
+>  	/* Disable reset on watchdog */
+>  	atomic_io_modify(dev->rstout_mask, dev->data->rstout_mask_bit,
+> @@ -287,7 +301,10 @@ static int armada375_stop(struct watchdog_device *wdt_dev)
+>  	writel(reg, dev->rstout);
+>  
+>  	/* Disable watchdog timer */
+> -	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit, 0);
+> +	mask = dev->data->wdt_enable_bit;
+> +	if (wdt_dev->info->options & WDIOF_PRETIMEOUT)
+> +		mask |= TIMER1_ENABLE_BIT;
+> +	atomic_io_modify(dev->reg + TIMER_CTRL, mask, 0);
+>  
+>  	return 0;
+>  }
+> @@ -349,7 +366,7 @@ static unsigned int orion_wdt_get_timeleft(struct watchdog_device *wdt_dev)
+>  	return readl(dev->reg + dev->data->wdt_counter_offset) / dev->clk_rate;
+>  }
+>  
+> -static const struct watchdog_info orion_wdt_info = {
+> +static struct watchdog_info orion_wdt_info = {
+>  	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+>  	.identity = "Orion Watchdog",
+>  };
+> @@ -368,6 +385,16 @@ static irqreturn_t orion_wdt_irq(int irq, void *devid)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +static irqreturn_t orion_wdt_pre_irq(int irq, void *devid)
+> +{
+> +	struct orion_watchdog *dev = devid;
 > +
-> +	/* set an initial timeout value in TOVAL */
-> +	writel(timeout, base + WDOG_TOVAL);
-> +	/* enable 32bit command sequence and reconfigure */
-> +	val = BIT(13) | BIT(8) | BIT(5);
-> +	writel(val, base + WDOG_CS);
+> +	atomic_io_modify(dev->reg + TIMER_A370_STATUS,
+> +			 TIMER1_STATUS_BIT, 0);
+> +	watchdog_notify_pretimeout(&dev->wdt);
+> +	return IRQ_HANDLED;
 > +}
 > +
-> +static void imx7ulp_wdt_action(void *data)
-> +{
-> +	clk_disable_unprepare(data);
-> +}
-> +
-> +static int imx7ulp_wdt_probe(struct platform_device *pdev)
-> +{
-> +	struct imx7ulp_wdt_device *imx7ulp_wdt;
-> +	struct device *dev = &pdev->dev;
-> +	struct watchdog_device *wdog;
-> +	int ret;
-> +
-> +	imx7ulp_wdt = devm_kzalloc(dev, sizeof(*imx7ulp_wdt), GFP_KERNEL);
-> +	if (!imx7ulp_wdt)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, imx7ulp_wdt);
-> +
-> +	imx7ulp_wdt->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(imx7ulp_wdt->base))
-> +		return PTR_ERR(imx7ulp_wdt->base);
-> +
-> +	imx7ulp_wdt->clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(imx7ulp_wdt->clk)) {
-> +		dev_err(dev, "Failed to get watchdog clock\n");
-> +		return PTR_ERR(imx7ulp_wdt->clk);
+>  /*
+>   * The original devicetree binding for this driver specified only
+>   * one memory resource, so in order to keep DT backwards compatibility
+> @@ -589,6 +616,19 @@ static int orion_wdt_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +	/* Optional 2nd interrupt for pretimeout */
+> +	irq = platform_get_irq(pdev, 1);
+> +	if (irq > 0) {
+> +		orion_wdt_info.options |= WDIOF_PRETIMEOUT;
+> +		ret = devm_request_irq(&pdev->dev, irq, orion_wdt_pre_irq,
+> +				       0, pdev->name, dev);
+> +		if (ret < 0) {
+> +			dev_err(&pdev->dev, "failed to request IRQ\n");
+> +			goto disable_clk;
+> +		}
 > +	}
 > +
-> +	ret = clk_prepare_enable(imx7ulp_wdt->clk);
-> +	if (ret)
-> +		return ret;
 > +
-> +	ret = devm_add_action_or_reset(dev, imx7ulp_wdt_action, imx7ulp_wdt->clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	wdog = &imx7ulp_wdt->wdd;
-> +	wdog->info = &imx7ulp_wdt_info;
-> +	wdog->ops = &imx7ulp_wdt_ops;
-> +	wdog->min_timeout = 1;
-> +	wdog->max_timeout = MAX_TIMEOUT;
-> +	wdog->parent = dev;
-> +	wdog->timeout = DEFAULT_TIMEOUT;
-> +
-> +	watchdog_init_timeout(wdog, 0, dev);
-> +	watchdog_stop_on_reboot(wdog);
-> +	watchdog_stop_on_unregister(wdog);
-> +	watchdog_set_drvdata(wdog, imx7ulp_wdt);
-> +	imx7ulp_wdt_init(imx7ulp_wdt->base, wdog->timeout * WDOG_CLOCK_RATE);
-> +
-> +	return devm_watchdog_register_device(dev, wdog);
-> +}
-> +
-> +static int __maybe_unused imx7ulp_wdt_suspend(struct device *dev)
-> +{
-> +	struct imx7ulp_wdt_device *imx7ulp_wdt = dev_get_drvdata(dev);
-> +
-> +	if (watchdog_active(&imx7ulp_wdt->wdd))
-> +		imx7ulp_wdt_stop(&imx7ulp_wdt->wdd);
-> +
-> +	clk_disable_unprepare(imx7ulp_wdt->clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused imx7ulp_wdt_resume(struct device *dev)
-> +{
-> +	struct imx7ulp_wdt_device *imx7ulp_wdt = dev_get_drvdata(dev);
-> +	u32 timeout = imx7ulp_wdt->wdd.timeout * WDOG_CLOCK_RATE;
-> +	int ret;
-> +
-> +	ret = clk_prepare_enable(imx7ulp_wdt->clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (imx7ulp_wdt_is_enabled(imx7ulp_wdt->base))
-> +		imx7ulp_wdt_init(imx7ulp_wdt->base, timeout);
-> +
-> +	if (watchdog_active(&imx7ulp_wdt->wdd))
-> +		imx7ulp_wdt_start(&imx7ulp_wdt->wdd);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(imx7ulp_wdt_pm_ops, imx7ulp_wdt_suspend,
-> +			 imx7ulp_wdt_resume);
-> +
-> +static const struct of_device_id imx7ulp_wdt_dt_ids[] = {
-> +	{ .compatible = "fsl,imx7ulp-wdt", },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, imx7ulp_wdt_dt_ids);
-> +
-> +static struct platform_driver imx7ulp_wdt_driver = {
-> +	.probe		= imx7ulp_wdt_probe,
-> +	.driver		= {
-> +		.name	= "imx7ulp-wdt",
-> +		.pm	= &imx7ulp_wdt_pm_ops,
-> +		.of_match_table = imx7ulp_wdt_dt_ids,
-> +	},
-> +};
-> +module_platform_driver(imx7ulp_wdt_driver);
-> +
-> +MODULE_AUTHOR("Anson Huang <Anson.Huang@nxp.com>");
-> +MODULE_DESCRIPTION("Freescale i.MX7ULP watchdog driver");
-> +MODULE_LICENSE("GPL v2");
+>  	watchdog_set_nowayout(&dev->wdt, nowayout);
+>  	ret = watchdog_register_device(&dev->wdt);
+>  	if (ret)
 > -- 
-> 2.7.4
+> 2.23.0
 > 
