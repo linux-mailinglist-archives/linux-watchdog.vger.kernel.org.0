@@ -2,78 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E64A71F3
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Sep 2019 19:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACADA7C7F
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Sep 2019 09:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729894AbfICRui (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 Sep 2019 13:50:38 -0400
-Received: from sauhun.de ([88.99.104.3]:56536 "EHLO pokefinder.org"
+        id S1728787AbfIDHQo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 4 Sep 2019 03:16:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728864AbfICRui (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 Sep 2019 13:50:38 -0400
-Received: from localhost (p54B3348D.dip0.t-ipconnect.de [84.179.52.141])
-        by pokefinder.org (Postfix) with ESMTPSA id 9A3702C4F33;
-        Tue,  3 Sep 2019 19:50:36 +0200 (CEST)
-Date:   Tue, 3 Sep 2019 19:50:36 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
+        id S1727787AbfIDHQo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 4 Sep 2019 03:16:44 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9F4972339D;
+        Wed,  4 Sep 2019 07:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567581403;
+        bh=f8EZZerqx22BqB3RzsXbmB/o3MYtSOE4T3XPD3UXaF4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zOH9JjFruJCTTp6kIevTzvliq7OO6RNlAwGbxMUKh1HPeKn6iGeK7F5qysATWd/MA
+         1mb63cLoc7GFYiZaVbE4/QFb6uqSKTiUUfrZIN+fcJN00gJCbVebCy7ZfVliaTw2fX
+         C1F/6C8502bHkcoajUicecgDdGdYoCHK8gGfazwg=
+Date:   Wed, 4 Sep 2019 09:16:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, jeyu@kernel.org, joel@joelfernandes.org,
+        lucas.de.marchi@gmail.com, maco@android.com, sspatil@google.com,
+        will@kernel.org, yamada.masahiro@socionext.com,
+        linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] i2c: i801: Use iTCO version 6 in Cannon Lake PCH
- and beyond
-Message-ID: <20190903175036.GD2171@ninjato>
-References: <20190831142402.49736-1-mika.westerberg@linux.intel.com>
- <20190831142402.49736-3-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v4 09/12] docs: Add documentation for Symbol Namespaces
+Message-ID: <20190904071641.GD18791@kroah.com>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190903150638.242049-1-maennich@google.com>
+ <20190903150638.242049-10-maennich@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kvUQC+jR9YzypDnK"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190831142402.49736-3-mika.westerberg@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190903150638.242049-10-maennich@google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Tue, Sep 03, 2019 at 04:06:35PM +0100, Matthias Maennich wrote:
+> Describe using Symbol Namespaces from a perspective of a user. I.e.
+> module authors or subsystem maintainers.
+> 
+> Signed-off-by: Matthias Maennich <maennich@google.com>
 
---kvUQC+jR9YzypDnK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Nice, it's good to have stuff to point people at.
 
-On Sat, Aug 31, 2019 at 05:24:02PM +0300, Mika Westerberg wrote:
-> Intel Cannon Lake PCH moved the NO_REBOOT bit to reside as part of the
-> TCO registers instead so update the i2c-i801 driver so that for Cannon
-> Lake and beyond register platform device for iTCO using version 6. The
-> affected PCHs are Cannon Lake, Cedar Fork, Comet Lake, Elkhart Lake and
-> Ice Lake.
->=20
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-
-Applied to for-next, thanks!
-
-
---kvUQC+jR9YzypDnK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1up+wACgkQFA3kzBSg
-KbaHXw//YNwUSIxnFNZGqgkpGaj/Jw2jt5eX49fje+jqLqOTGRdJ/Xfq15BZX5kD
-KyI9mBTn6AQUU5ajtKKpgwq7CmeouTrV7wLCqS2gBmUgMHwqPGmrk/P8RfzNfU9J
-XWFMjMMfxNFjy6JkAZravkfymQ7Ul8UqdBpCUEOPwhjbFcxVxC2cvs/jMlGZ2C/P
-tF9cl4HYOZr+P5Wp5d3D45VzMcKuhDAx19ud1BOccStFAfyXUMwrqHkQJF+g7GmY
-zbUXYPJbF6ifLl6o0WL8nvW9TLhNIqgrSTqtQ9J16dzB3RESclKr7njZmU1boZyn
-WUKoCsmln38uPLos4vQfmXSsDMNFhEx/iHVi2E0QBFvJNrmP1qksWpFw3/ZImBRO
-MDp66gW5ZRQPAzzQidb+DCDzwauptxq1EyF4a6SI/WIa/McanWfSh2EqwRUS3GJV
-qN3b9NI+C2cV+6Tgisyycfm3hPFRmVh2DjlXxPg68tY38E9kAREg++qlaU9s8ZW/
-NEEYp0yve5ns7tlQ2dTZw47zWpxjhzTYF0qnVlbUmOGbKfdw4znddrhRuD4xM198
-3CYcO0uztw9lLzl+QH6lZWQKgJPyljfiyQ0HP5RTFQy+2IV15iH7A0OPSIUeYaZa
-QGcpYBM3+0Bbs1zG7No/OkRSoJOF+PgBrzhB2XZ0eGzY9HMVu50=
-=JoWH
------END PGP SIGNATURE-----
-
---kvUQC+jR9YzypDnK--
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
