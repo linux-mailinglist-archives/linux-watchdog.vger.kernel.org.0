@@ -2,58 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D65AAA8E
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Sep 2019 20:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0365AAAA8
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Sep 2019 20:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403807AbfIESHL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Sep 2019 14:07:11 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:39882 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391212AbfIESHL (ORCPT
+        id S2388441AbfIESNE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Sep 2019 14:13:04 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:45634 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726810AbfIESNE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Sep 2019 14:07:11 -0400
-Received: by mail-wm1-f67.google.com with SMTP id q12so4170628wmj.4
-        for <linux-watchdog@vger.kernel.org>; Thu, 05 Sep 2019 11:07:09 -0700 (PDT)
+        Thu, 5 Sep 2019 14:13:04 -0400
+Received: by mail-wr1-f67.google.com with SMTP id l16so3818288wrv.12
+        for <linux-watchdog@vger.kernel.org>; Thu, 05 Sep 2019 11:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=eQx8LFwZEFLFHsOp6JVQ136wPiDCvxTvsHmYT44VyoI=;
-        b=ZJv5I+4JMEy7c+i65ipPMvQ3ao0PJLdsjSW4Z4AWhUpYsQn1x9l2q+DA2kgvlqskbs
-         xLjtUbzbvYq++1MekuMRihek+riXpl52V1TWEUQHNWw5fcyJbg3mau2uczjDdozYuSv2
-         L5RcmY7Q0Ebn1f25EOGmJoKJAs62svd2/xDJ5vcFAj/ymSlfZkFlSabdaw/vZotgq7Fp
-         G2/o1GHwx09jjoQ09hfMEkWRaUHmGwWR9TBsMOLF5Nwzvk2iwbZztrISJUjBGQwNyC8Q
-         M9dW8HVPRMRmdYQW+D0ynq6IF4SuuLsWm8ZhAcRKVF5FUb8gaJqmaQKr/JNUiwQFOuXJ
-         wFxQ==
+        b=eVM7TV5SOQ6FWjx9D+/wdXDdUZvKjsK3uwzSWmGCt3y5Xl6OGfFQk+D7+mqdwdMoQS
+         lxypCMfFn+mxeQcySxr9XZbygsD9Vc9WQuhN6U1CTlHCJzA1ygCiCGOHhhcjAIbjcKGF
+         AedqpmHiO+FVSlkuSiYDMxruocmwTLaw12KGRsEViDxdw3gTccgUAxMQkR93DwRrzp/1
+         hhFAupdfJxpjlOBdODCLFyFdMF1/Pi4V3RMxehfuAHgtaDq+E8kwGGmyP5IpuzB4vVut
+         r9FeuBdmERwmVt1aOsBrqcPqdejkhT2uIiN0TcyFRHDXHP4G2XjnABm9s5WuQIBZYTtv
+         zGmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=eQx8LFwZEFLFHsOp6JVQ136wPiDCvxTvsHmYT44VyoI=;
-        b=caFoJ4rAPbXb4q0bmYhMSg04UFTRdB5DC7YmugxBg+dxyXp8V2mfe95TOO/pLMAkl9
-         D6SEQgu3fj7lfqFCoUZYZ5INsfzkWRkRRYwIJBGQBDLSeTeEzYxLsdzoZfgt9LD/5twy
-         iQpF3XXB9aSLqxaowCTl4I3e9Q/GtuZvpdVNg4/cZIrRHWHHK6ltXxdetRXRd78nsGb3
-         36cpygkP5qJXly29trdmbBKV/GEeJ9uHjgyMAO0RRt62psmq9jridxgrc345fH6WYVdF
-         GKH1fHYPpa29Kn25jgUbvgj8CS9cim1Ms6zbOoIuXVyJq8cQ2+t3ZD07qIk7xg1rhKCD
-         OiCQ==
-X-Gm-Message-State: APjAAAWgIBWF/q+xsiiA1d7Sb+aPXLKOmkAP28nR1LH1hxvq5OozZUE8
-        43ikwN/eCH/XfVXEFMG94wYEdQ==
-X-Google-Smtp-Source: APXvYqyoCJP+hufbel7IHFFpjOBVJKMRMRdizMAZ2CDtvCYnOSibtyDdCrMfZO7qr75g028g9qUGcw==
-X-Received: by 2002:a05:600c:214c:: with SMTP id v12mr4002689wml.28.1567706828344;
-        Thu, 05 Sep 2019 11:07:08 -0700 (PDT)
+        b=OTiSPJTZlEVLze6FYjj6ICgaNUqGchykEkABZt0UB45Xg1+GIXxVLH1v75wtm2IvVc
+         6hWiipERTiR33d5xS9ma8Z3AAwMsJZmlfBVkYPs4zy7z/1nFLLV0KJtDHGFSB+T9O5eI
+         MA/WfxW9gZeBPxM092BHczbFfnD7j/e1dvIVVkloF7HMWep0az5Vv/fSM/rxgZxp5Z4y
+         D2gV8cxrGT9bC1/eVYpH7E5HHhYvarvqQcDSaQnXGAvlYhwOeXJTeULhY3xA+gg06QdS
+         SecJP9K475G7q0Gwe6ifeC0pEoLQd+ZyXpchmWPXUKGXFfRf2gPBteiz0RZVQYRZQLLf
+         vgnA==
+X-Gm-Message-State: APjAAAU8+69+XvXJbLENxQkNhAuCliJicPVlClojygILRNJ+Qp1xbwvC
+        h76fPlXvinIQ7AOBFDUO14Pc3A==
+X-Google-Smtp-Source: APXvYqzpr0bFIpXcmfHGs4sIrFHm6dNvdMik+ugY86ATlE+okNXm7Ke46M/YG3EhgL/hDPoRwHyY7A==
+X-Received: by 2002:a5d:5402:: with SMTP id g2mr4031639wrv.291.1567707181379;
+        Thu, 05 Sep 2019 11:13:01 -0700 (PDT)
 Received: from localhost.localdomain (124.red-83-36-179.dynamicip.rima-tde.net. [83.36.179.124])
-        by smtp.gmail.com with ESMTPSA id h12sm3238489wrp.51.2019.09.05.11.07.07
+        by smtp.gmail.com with ESMTPSA id w8sm8783173wmc.1.2019.09.05.11.13.00
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 05 Sep 2019 11:07:07 -0700 (PDT)
+        Thu, 05 Sep 2019 11:13:00 -0700 (PDT)
 From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
 To:     jorge.ramirez-ortiz@linaro.org, agross@kernel.org,
         wim@linux-watchdog.org, linux@roeck-us.net,
         bjorn.andersson@linaro.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject:  
-Date:   Thu,  5 Sep 2019 20:07:05 +0200
-Message-Id: <20190905180705.30910-1-jorge.ramirez-ortiz@linaro.org>
+Subject: [PATCH v2] watchdog: qcom: support pre-timeout when the bark irq is available
+Date:   Thu,  5 Sep 2019 20:12:57 +0200
+Message-Id: <20190905181257.31949-1-jorge.ramirez-ortiz@linaro.org>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
