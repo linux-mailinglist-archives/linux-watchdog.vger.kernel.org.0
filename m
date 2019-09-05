@@ -2,106 +2,158 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 984AFAA6FC
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Sep 2019 17:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7082DAA8D1
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Sep 2019 18:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732541AbfIEPIo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Sep 2019 11:08:44 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45699 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732147AbfIEPIo (ORCPT
+        id S1726462AbfIEQVl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Sep 2019 12:21:41 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46629 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726263AbfIEQVl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Sep 2019 11:08:44 -0400
-Received: by mail-pf1-f194.google.com with SMTP id y72so1919254pfb.12;
-        Thu, 05 Sep 2019 08:08:44 -0700 (PDT)
+        Thu, 5 Sep 2019 12:21:41 -0400
+Received: by mail-wr1-f65.google.com with SMTP id h7so3483074wrt.13
+        for <linux-watchdog@vger.kernel.org>; Thu, 05 Sep 2019 09:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LB6xSBfuSinZAMV9aZFPQIN9CvwHLjeqldm8lg5+A+Y=;
-        b=sAZJDoPXIbsX6QlILVophZ3Bq/anEIraDsVmTx3AukE6/pGhp7fYUtWiiU1kS1OP8p
-         dEBvDbtNfKtJAfS5JP3HGcfdtHwxW2Y3AY9IUf6NF63ZbOv3Upl2bOH0PnKgHGVr0STS
-         7+G1WP6DcE9RJ50xVxTNrS7P0ILJUWTpPJ8i9qpIIfo+DuCNp/Ecy7CMjsOXm3jwoiG8
-         JW5PP90uSM5hGN1uLoq/9IN6VEHV2eI2d26qGMBQtLZS4mWfC4fQuO+AVObMdgD867qc
-         YzOh+ch+V65CcQbzeHMe7wfDHQnm3niS9XxozCdKS2ehwyp7oFy+jvy5NrS4bEs/zzel
-         3mXw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+9iLVBaa77JA8FyvG+ioZMPXcw60MqtuvgoQBEbIVQs=;
+        b=IiMddi9XvQ+WhSZ/tO/2VdQVWHIifwCGUsJHL8xdl+HVbJw73QtadzdFxVoc7b8lCt
+         LfpjaOnqC/L+IcJ/9IYr9kUTYkluemZQtJWpEoN3DIs4YDXXShm1Ugmyxok55XqovOJM
+         IHqSdYIMkcB/X2NcnFtomsciSyvLxMQLI1zs9XTp7OnCecrOezcZHl3w7XaNEA7v0hGU
+         HmlhGS+QkdpfWDYKJD2blpohVRa7Y0r+964nsxfNGlzvFvszzjkSAyRaE8UJrsMoC3uP
+         XXYkRFe+njHAhSI7FKiWqFybTT9CJRsbmfhrryUXS/EieDGxrghx8pHrlaC1rWnn8SVr
+         q3Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LB6xSBfuSinZAMV9aZFPQIN9CvwHLjeqldm8lg5+A+Y=;
-        b=uY16QGJMLPdG3KwbxJgU5UbALdENiyM5DDJeP1oC1KJR1NAMudTe0dkRs+xC64ykN0
-         nG3yoVZyus0Kn4YRChn4fyHJZBMisXUOqhnilGqoAtgJgzgaivhrh9GDTOSKYoxetyzZ
-         GPcgoFjwT+okxSUfK2ZqPpMXwA0ToiP7VyYpaxPJr9nUV/ExAYHhnIPzkrBDkj2weTnL
-         yqPacn+halAYJyziYzCvgTzGz/pyPM8jKRWpWpQqgw97ZFtMnPc9Es9PGpA1tz0hAAHh
-         y5V9mdg1J0/4DXoxhQlecm+zCkm7DIDcrORxbyKyya+h+BSOcnm3gyMqRH8fjU8CkqFr
-         fiCA==
-X-Gm-Message-State: APjAAAUdEUAJwPLWIblImHSpIHyQsoJA9qKPqQC6gs8CactPY2cOb5nd
-        jXvRG/f4QwuVNoge1dtjeS8=
-X-Google-Smtp-Source: APXvYqzqkGvx3UcZXiDT5spOETXK6s5o3oXyFaN70PjXaqGaH2s7389q6JxbkaQZHonn8smeEqxCvw==
-X-Received: by 2002:a63:3281:: with SMTP id y123mr3510207pgy.72.1567696123943;
-        Thu, 05 Sep 2019 08:08:43 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f62sm3746676pfg.74.2019.09.05.08.08.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Sep 2019 08:08:43 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 08:08:42 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Oliver Graute <oliver.graute@kococonnector.com>
-Cc:     "oliver.graute@gmail.com" <oliver.graute@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v2] watchdog: imx_sc: this patch just fixes whitespaces
-Message-ID: <20190905150842.GB18080@roeck-us.net>
-References: <20190905143644.20952-1-oliver.graute@kococonnector.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+9iLVBaa77JA8FyvG+ioZMPXcw60MqtuvgoQBEbIVQs=;
+        b=tXpBNHZteUkzfdPIrrld01/xOYl98ad9cJiKpv1Fl3dyP7SCZHTcYUY5dermjLwU6L
+         kvsYlW7OwUSmAfC54GFCVM5XIkPP/Ta69AxMewIAHUUcP0aVMyEB6Jyra3hu/B0iRhoO
+         Gr6IXCEeQp/ZyY4TnO61uFHZV5/XEcCAurQLSFQwr0xuuj47643+yjFqTvP93T5GwEI9
+         dEWfp/lhiFRdeWHWGbj9EzJdaOi523HuHsM5SV+B55Uz0Wng77B28ACJPmBUxJytnTyX
+         qDLk+k/BOUnk208GAqbFdXvuWjqnJtBzaikkz1d03lmk8OYv6hJXhwbQC1d78jJMuJQ1
+         m6KQ==
+X-Gm-Message-State: APjAAAXB1zoBp+x7Kgfdux0nGbojuVkR/l3RE4TbqusFdDOrmIOez5BW
+        eosIkJyscdc9tAvufZ+riOASjA==
+X-Google-Smtp-Source: APXvYqxbB0DIJUksWhec8m1//rRloZbcmMNo09mRdk1QtT2YzBbOxuggDjgDCCiFlgO4AyooKsqU7g==
+X-Received: by 2002:a5d:4a81:: with SMTP id o1mr3143492wrq.328.1567700499515;
+        Thu, 05 Sep 2019 09:21:39 -0700 (PDT)
+Received: from localhost.localdomain (124.red-83-36-179.dynamicip.rima-tde.net. [83.36.179.124])
+        by smtp.gmail.com with ESMTPSA id i73sm4183550wmg.33.2019.09.05.09.21.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 05 Sep 2019 09:21:38 -0700 (PDT)
+From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+To:     jorge.ramirez-ortiz@linaro.org, agross@kernel.org,
+        wim@linux-watchdog.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org
+Subject: [PATCH] watchdog: qcom: add support for the bark interrupt
+Date:   Thu,  5 Sep 2019 18:21:35 +0200
+Message-Id: <20190905162135.2618-1-jorge.ramirez-ortiz@linaro.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190905143644.20952-1-oliver.graute@kococonnector.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 02:36:49PM +0000, Oliver Graute wrote:
-> Fix only whitespace errors in imx_sc_wdt_probe()
-> 
-> Signed-off-by: Oliver Graute <oliver.graute@kococonnector.com>
+Use the bark interrupt to notify the bark event. Since the bark and bite
+timeouts are identical, increase the bite timeout by one second so
+that the bark event can be logged to the console.
 
-Ah, there are indeed extra spaces in these lines.
+Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+---
+ drivers/watchdog/qcom-wdt.c | 42 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 39 insertions(+), 3 deletions(-)
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index 7be7f87be28f..5eaf92084b93 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -10,6 +10,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/watchdog.h>
+ #include <linux/of_device.h>
++#include <linux/interrupt.h>
+ 
+ enum wdt_reg {
+ 	WDT_RST,
+@@ -41,6 +42,8 @@ struct qcom_wdt {
+ 	unsigned long		rate;
+ 	void __iomem		*base;
+ 	const u32		*layout;
++	unsigned int		irq;
++	const struct device	*dev;
+ };
+ 
+ static void __iomem *wdt_addr(struct qcom_wdt *wdt, enum wdt_reg reg)
+@@ -54,15 +57,37 @@ struct qcom_wdt *to_qcom_wdt(struct watchdog_device *wdd)
+ 	return container_of(wdd, struct qcom_wdt, wdd);
+ }
+ 
++static inline int qcom_wdt_enable(struct qcom_wdt *wdt)
++{
++	if (wdt->irq < 0)
++		return 1;
++
++	/* enable timeout with interrupt */
++	return 3;
++}
++
++static irqreturn_t qcom_wdt_irq(int irq, void *cookie)
++{
++	struct qcom_wdt *wdt =  (struct qcom_wdt *) cookie;
++
++	dev_warn(wdt->dev, "barking, one second countdown to reset\n");
++
++	return IRQ_HANDLED;
++}
++
+ static int qcom_wdt_start(struct watchdog_device *wdd)
+ {
+ 	struct qcom_wdt *wdt = to_qcom_wdt(wdd);
++	unsigned int bark, bite;
++
++	bark = wdd->timeout;
++	bite = wdt->irq < 0 ? bark : bark + 1;
+ 
+ 	writel(0, wdt_addr(wdt, WDT_EN));
+ 	writel(1, wdt_addr(wdt, WDT_RST));
+-	writel(wdd->timeout * wdt->rate, wdt_addr(wdt, WDT_BARK_TIME));
+-	writel(wdd->timeout * wdt->rate, wdt_addr(wdt, WDT_BITE_TIME));
+-	writel(1, wdt_addr(wdt, WDT_EN));
++	writel(bark * wdt->rate, wdt_addr(wdt, WDT_BARK_TIME));
++	writel(bite * wdt->rate, wdt_addr(wdt, WDT_BITE_TIME));
++	writel(qcom_wdt_enable(wdt), wdt_addr(wdt, WDT_EN));
+ 	return 0;
+ }
+ 
+@@ -210,10 +235,21 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 	wdt->wdd.max_timeout = 0x10000000U / wdt->rate;
+ 	wdt->wdd.parent = dev;
+ 	wdt->layout = regs;
++	wdt->dev = &pdev->dev;
+ 
+ 	if (readl(wdt_addr(wdt, WDT_STS)) & 1)
+ 		wdt->wdd.bootstatus = WDIOF_CARDRESET;
+ 
++	wdt->irq = platform_get_irq(pdev, 0);
++	if (wdt->irq >= 0) {
++		ret = devm_request_irq(&pdev->dev, wdt->irq, qcom_wdt_irq,
++				       IRQF_TRIGGER_RISING, "wdog_bark", wdt);
++		if (ret) {
++			dev_err(&pdev->dev, "failed to request irq\n");
++			return ret;
++		}
++	}
++
+ 	/*
+ 	 * If 'timeout-sec' unspecified in devicetree, assume a 30 second
+ 	 * default, unless the max timeout is less than 30 seconds, then use
+-- 
+2.23.0
 
-> ---
->  drivers/watchdog/imx_sc_wdt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
-> index 9260475439eb..7ea5cf54e94a 100644
-> --- a/drivers/watchdog/imx_sc_wdt.c
-> +++ b/drivers/watchdog/imx_sc_wdt.c
-> @@ -176,8 +176,8 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
->  
->  	ret = devm_watchdog_register_device(dev, wdog);
->  	if (ret)
-> - 		return ret;
-> - 
-> +		return ret;
-> +
->  	ret = imx_scu_irq_group_enable(SC_IRQ_GROUP_WDOG,
->  				       SC_IRQ_WDOG,
->  				       true);
-> -- 
-> 2.17.1
-> 
