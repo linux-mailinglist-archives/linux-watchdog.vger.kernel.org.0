@@ -2,60 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29372AC170
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Sep 2019 22:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0040AC1B1
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Sep 2019 22:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731976AbfIFUbC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Sep 2019 16:31:02 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41625 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392704AbfIFUbB (ORCPT
+        id S1728590AbfIFUyS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 6 Sep 2019 16:54:18 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:55760 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730042AbfIFUyR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Sep 2019 16:31:01 -0400
-Received: by mail-wr1-f68.google.com with SMTP id h7so6832514wrw.8
-        for <linux-watchdog@vger.kernel.org>; Fri, 06 Sep 2019 13:31:00 -0700 (PDT)
+        Fri, 6 Sep 2019 16:54:17 -0400
+Received: by mail-wm1-f66.google.com with SMTP id g207so7789003wmg.5
+        for <linux-watchdog@vger.kernel.org>; Fri, 06 Sep 2019 13:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DSA+TZh6EFNutVoqp+yeNCXRU52ohS+l6sFwi4Vq/+4=;
-        b=n+D8yGsxYXEEMK1jJ/ysdmtsbtc662AikRKLEAI9XjZGCMzjmhYhwOaRkSO/sU0X/O
-         vcl14UlaTsYSUWdM0IwhAw1P6V2Rs1hLqS0F5h8M9m1e8xreTdJiQ7cCdYMkSRQF5X6a
-         f7IZbgOYv8qjxRrhwx4d6CaGD4KiWNpSvLeXZQn7PkIkBN5Oo6G4BGFUyu0zOToxyuD4
-         NdPsXzskMlxdq66gCPoo0qfeKEvxJMu03RiQxiAD+SUvMFU668e5hdkwo9MhAlkV2N/D
-         2bauUat5BFh2guV3vQhaGduzVJ3csYtu+7e6qB58dO56MctI+qjqGttjIv4zxVCkOF0f
-         IBvQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y9iZd0ALlBtpvj30ArgRGZaBRGe1rTkTBEtd4b0i1Vc=;
+        b=btK5FQnLBlm6g7F416aGcrBn6jKUVra0FTu/DzgotZjZZuNDjoag8X+yBz0OLsKp6g
+         Dq0RNsj2G7PfChBamSp11AcXANSgZLr7jxrx9kU6qpb1k3bpucpdf1T1h3RS1T+vBWsX
+         GgAM1IG11ZZgh7Jkt5RnbO/uixzBtCrnMFg6A5nLkUyLBfuGRt+PzpF9KYtRBx65nrSf
+         NruggiKMgiaX+ZtQeHwrIhQi0SweCAzo45ox8Z0bHnv6tcIktZ4vX/le4+SmtgWxIDuV
+         A8fhK0Tos5nt8AvqRRiWJcFnrJcw3avzHgC+mJmpgsq+jOxpZbmCgHCwGQtRKzX7Lvbk
+         fLrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DSA+TZh6EFNutVoqp+yeNCXRU52ohS+l6sFwi4Vq/+4=;
-        b=YLRAbH6o+C8v3CJpt+cFYsRDQm03XO7qU1M30LphuNak5Mpt3bxDXHWwws3p1REibn
-         wGKB+RBHyw3gObLBjvYfsUUjdfFXjPA2IjfRanmazOUz6H0OmwexQs/YPQwbXUAeDuqw
-         AonvVx2vXftDzbrz5pDfz34K3YRof28v6GAX8hMDeZTmVzXBtjQGJLJxLPO2nbzpqf1V
-         uWXljbv980X+62p1xB2Uqm9dZZEd2342rcHFR10tINuFuyx+1L5eGUAyZD+6iN8Oq20F
-         1jSwUzjxUxS73c/pvrjUDmxiDIuegipaAv1EPAce3Rl3gTkqJxXO8mpiy+lyT98/6ZEr
-         otzA==
-X-Gm-Message-State: APjAAAV/9PUjTgqOkVTZ7oHkD7Kqwele4Yfp+Ws+M0f8VtiTbQ7dctWR
-        Zap7/5JkiDZJ3HiTL6acQCO1zA==
-X-Google-Smtp-Source: APXvYqz4cAB6gd73DDi1KUZAD7ymLG7prdMzq54Mw0AS8Y5qQR1SGriwe/Mlb0xSHbPsf31iH1QpYg==
-X-Received: by 2002:adf:e947:: with SMTP id m7mr9119067wrn.178.1567801859429;
-        Fri, 06 Sep 2019 13:30:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y9iZd0ALlBtpvj30ArgRGZaBRGe1rTkTBEtd4b0i1Vc=;
+        b=h5uNbZ4mT6AABXX7bOhd9NMccxlehKz6mDwXrufqSst/VTsOo59HPMt8byv3ubyQCC
+         e0spLbt1j3fyjYr3YTbgFM/MmqWEjfgWLqbfTaQiLofePaxno+ry9Q0RPw0/hGJnvVUL
+         7JMTzZyXJ9lTdtwbAkJ1LPQXClVZPEjZVJOwx76r6dx4M0Ry5c/QAb6n4IAqPxqAEPwM
+         Or4wE9feTKyJ5RwAiSAJMni8N4Oig8uNrxh8uaV4jBifjvrGl5B+/Ng8YRBZFODeudbr
+         yhVsNfhbDbvnqNU8L/8dEVf4bdGEeKVg7jYEUz+iOvzqdbhpgfnLjM6Ux9Ku1JMDknMs
+         7nQQ==
+X-Gm-Message-State: APjAAAUwQKvzHtcmKVoa+kyhRIVGC3m1XwX5WObMHpGf2d7H7BWi+iBK
+        faklWe5ZaudBbWXPneLprtqpAw==
+X-Google-Smtp-Source: APXvYqyg2YEhEjYWydK83Ag5waDnG5m0XCWk7plAWFXr9llFtUEHf6PI9Pb+1bqi64S6ZcbbChrJKA==
+X-Received: by 2002:a1c:a713:: with SMTP id q19mr9335213wme.127.1567803255262;
+        Fri, 06 Sep 2019 13:54:15 -0700 (PDT)
 Received: from localhost.localdomain (124.red-83-36-179.dynamicip.rima-tde.net. [83.36.179.124])
-        by smtp.gmail.com with ESMTPSA id t13sm13330734wra.70.2019.09.06.13.30.58
+        by smtp.gmail.com with ESMTPSA id q5sm317416wmq.3.2019.09.06.13.54.14
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 06 Sep 2019 13:30:58 -0700 (PDT)
+        Fri, 06 Sep 2019 13:54:14 -0700 (PDT)
 From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-To:     jorge.ramirez-ortiz@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org
-Subject: [PATCH 2/2] watchdog: pm8916_wdt: fix missing include
-Date:   Fri,  6 Sep 2019 22:30:54 +0200
-Message-Id: <20190906203054.26725-2-jorge.ramirez-ortiz@linaro.org>
+To:     jorge.ramirez-ortiz@linaro.org, bjorn.andersson@linaro.org,
+        linux@roeck-us.net, wim@linux-watchdog.org, agross@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] qcom_wdt bark irq support
+Date:   Fri,  6 Sep 2019 22:54:09 +0200
+Message-Id: <20190906205411.31666-1-jorge.ramirez-ortiz@linaro.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190906203054.26725-1-jorge.ramirez-ortiz@linaro.org>
-References: <20190906203054.26725-1-jorge.ramirez-ortiz@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
@@ -63,27 +61,42 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-As per Documentation/process/submit-checklist.rst, when using  a
-facility #include the file that defines/declares  that facility.
+Support pre-timeout when the bark irq is avaible.
 
-Don't depend on other header files pulling in ones that you use.
+This is the fifth version of the patchset addressing all the review
+issues to date:
 
-Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
----
- drivers/watchdog/pm8916_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+ v5:
+    include linux/bits.h
+    pretimeout only enables IRQs if value != 0
+    remove unnecessary subtract operation
+    add clarity to the conditional in the probe function
+    revert the irq registration changes
+        
+ v4:
+    remove unnecessary include and private variable
+    provide macro for WDT EN register values
+    use pretimeout as per its API intent
+    handle EPROBE_DEFER on get_irq
+    modify the irq registration as per pm8916_wdt
+    
+ v3
+    remove unecessary variable from the driver's private storage
+ 
+ v2:
+     register the pre-timeout notifier.
 
-diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
-index cb5304c26ac3..b8d9df0f96f7 100644
---- a/drivers/watchdog/pm8916_wdt.c
-+++ b/drivers/watchdog/pm8916_wdt.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/bitops.h>
-+#include <linux/bits.h>
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
+With the second patch in the set, I took the oportunity to do some
+cleanup in the same code base removing an unnecesary variable from the
+driver's private storage.
+
+Jorge Ramirez-Ortiz (2):
+  watchdog: qcom: support pre-timeout when the bark irq is available
+  watchdog: qcom: remove unnecessary variable from private storage
+
+ drivers/watchdog/qcom-wdt.c | 85 +++++++++++++++++++++++++++++++------
+ 1 file changed, 72 insertions(+), 13 deletions(-)
+
 -- 
 2.23.0
 
