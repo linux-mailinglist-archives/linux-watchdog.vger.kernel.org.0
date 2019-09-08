@@ -2,64 +2,64 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3E0AD114
-	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Sep 2019 00:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735BFAD118
+	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Sep 2019 00:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731096AbfIHWuE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 8 Sep 2019 18:50:04 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43264 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726080AbfIHWuD (ORCPT
+        id S1731155AbfIHWyL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 8 Sep 2019 18:54:11 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:41098 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731040AbfIHWyL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 8 Sep 2019 18:50:03 -0400
-Received: by mail-pl1-f193.google.com with SMTP id 4so5685875pld.10;
-        Sun, 08 Sep 2019 15:50:03 -0700 (PDT)
+        Sun, 8 Sep 2019 18:54:11 -0400
+Received: by mail-pg1-f195.google.com with SMTP id x15so6675419pgg.8;
+        Sun, 08 Sep 2019 15:54:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Zc4prSozmeKbnSZHIJYYrGC0uThZMJbf0rfXZs2gRuc=;
-        b=rx5BVXilh5x+kRjvZQh4DX2UbjJADGeTe+BbUZf3e/u7923mLTg6caRcqiN3UvOE2E
-         fEuFrooLdkvU/ng5z/9pz4gCQUQNB1OM7GU2OJD9xx73TeFPEikdxK0wWsJJkpuUfd+X
-         Ytwfb21T7dxFAmUnYpSA0Fihc3P4nfKtwECUh5vGW/jj8l95XFHP0BqQfNRiD0pTxtON
-         N0moGlCrc9A3MwXO/12MTW9fLFBfLdp3kWJdhHAccu08L+37hzN4IJ4leXKxt9n6y3gq
-         k3Hali75459nzgvRWstOIznk5jLyjwCR7cHPSI2zeSrd9CPtp0J8ohdlxgOqz9VlrbEM
-         FQYg==
+        bh=Z0iRHKmBiQinItAoOCV7Xvfd0DCa69kHaha34GlOuj0=;
+        b=bny6LTGIHPRrJwBt5jhBkz4wzOU1vAha1VqqWgPVQT033BrFy2fDtuQ2EzpLnwbOF1
+         u35Uv+uBX1K9EUOieN7EdMkQ5n9G//jgX5TLRMw+l+R7toxtJp1RXvtqnm5wYze4W1Jk
+         NGFHGGDWWpsoTRk/3XgDkD8D7HMMPZLvDLGsY8lGNeCEEhpWt7Cahf5IfypYMPGD57vq
+         +AQbkBn7Oh/D4XA6+sNXs5CTu+AY7rwxltvUXfxRsn3+Y2T4z4v9O713SpYemDyYqLil
+         35aIpIju3u+ugcAaDXdQ4/X1tANHmDMI4CJJCfkOOUn7d3zN4BMhFhQD2wZuAHzvqn0K
+         /7IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Zc4prSozmeKbnSZHIJYYrGC0uThZMJbf0rfXZs2gRuc=;
-        b=cZwl0WEkRbYa2AFPyxWdBFPZjhPginoX9IrUOhgAOKDcH3FDMnVmYQuYNiMxnBOOQz
-         +fC9RxOS1kDpNMmh+8rZ2DiBhBgGHpAkwjrhu7vBBobg/zV6mPeUoGzWLUVjKbTKsxaD
-         tPsivvsbgopzgRiom4TfSdKjVbhYi6OqCrppef/+q7ERmxo7MVvBkKoAgyqHsb4VKzBP
-         J2uMNK4AmWZIxHJoveWvRMAL4xulUyLv5iRA3NGWR0Vif91wdd9OdAx9narSo86ADZZ8
-         QQH8rOPZXgG9bJcORMCrYBjCXFHE5F6U4g3xXNH44Ofo3ZPS3lsKFxNAmOga1T9p0KnJ
-         EtRQ==
-X-Gm-Message-State: APjAAAXV8jtf+8rFoA91qUNI29d7WFN9vwRDzJ9Z3QBiI9kI3UUPI0VG
-        m1mKIrB/YTd5WvJ9YDTmsdo=
-X-Google-Smtp-Source: APXvYqyZWgMeXD5bZSjMytAriy55BnkPYNQ96x2udTDsuxlkXo33O6MVK1Rx9/86s1TQ7FGSLD7ANw==
-X-Received: by 2002:a17:902:8a81:: with SMTP id p1mr20477142plo.71.1567983002858;
-        Sun, 08 Sep 2019 15:50:02 -0700 (PDT)
+        bh=Z0iRHKmBiQinItAoOCV7Xvfd0DCa69kHaha34GlOuj0=;
+        b=ljCRzf++zKkE5dML4X072vhTsFexIMSt6+dAyZo19Zids0N5+0FOeix/bkLzbreLpF
+         TmB66bg38Y7MF2HJFflquI9WjhZ65KdyRv7/Okoyqo56denmELuwc8G0+fUFxh3FXoo1
+         v6UR3LGpibr/oMElqMFtFzRYNEoSp71p/J7aaIwXhpbyvqbx6N8OpSsUBanCdRvcsbAp
+         FhO6YrpTcqewLiLiO6H5QyaaRePb9eZtfjG789+hNmtOMcu1j2G2mHVhQtf7Em2qOELu
+         S5yL8IkzIIuNgLr6hgf6ScWvU51OFsjVtdLFonyhrYkdb8zzdZP0RiaQZZSHiE52C6tg
+         jfIg==
+X-Gm-Message-State: APjAAAWxvTzluzaCH00v5fbv6xkgEc7LWAq08qwUzwqwUHPwRN5ETpLk
+        SriObO6UeT+SK/MBkvmiwfbIg0eh
+X-Google-Smtp-Source: APXvYqxsowHN4lJTdDkAxGwi+22TzZUhytrgtNf8CHWTBgfa+l+sd8xnHMZkWBzb5zOuq7jFQEiewQ==
+X-Received: by 2002:a62:76d1:: with SMTP id r200mr23938758pfc.27.1567983249347;
+        Sun, 08 Sep 2019 15:54:09 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l72sm24380246pjb.7.2019.09.08.15.50.01
+        by smtp.gmail.com with ESMTPSA id 30sm17871611pjk.25.2019.09.08.15.54.08
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 08 Sep 2019 15:50:01 -0700 (PDT)
-Subject: Re: [PATCH 1/2] watchdog: pm8916_wdt: fix pretimeout registration
- flow
+        Sun, 08 Sep 2019 15:54:08 -0700 (PDT)
+Subject: Re: [PATCH 2/2] watchdog: pm8916_wdt: fix missing include
 To:     Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
         wim@linux-watchdog.org
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, Loic Poulain <loic.poulain@linaro.org>
+        bjorn.andersson@linaro.org
 References: <20190906203054.26725-1-jorge.ramirez-ortiz@linaro.org>
+ <20190906203054.26725-2-jorge.ramirez-ortiz@linaro.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <4231aab1-c538-a14f-cea1-ceb28781c7bb@roeck-us.net>
-Date:   Sun, 8 Sep 2019 15:50:00 -0700
+Message-ID: <50a36f88-ab09-44a1-db69-b4fa66e73534@roeck-us.net>
+Date:   Sun, 8 Sep 2019 15:54:07 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190906203054.26725-1-jorge.ramirez-ortiz@linaro.org>
+In-Reply-To: <20190906203054.26725-2-jorge.ramirez-ortiz@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -69,65 +69,34 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 9/6/19 1:30 PM, Jorge Ramirez-Ortiz wrote:
-> When an IRQ is present in the dts, the probe function shall fail if
-> the interrupt can not be registered.
+> As per Documentation/process/submit-checklist.rst, when using  a
+> facility #include the file that defines/declares  that facility.
+> 
+> Don't depend on other header files pulling in ones that you use.
 > 
 
-The author intended differently, and did not want registration to fail
-in this situation, following the logic that it is better to have a
-standard watchdog without pretimeout than no watchdog at all.
-
-Copying the author; I am not inclined to accept such a change without
-input from the driver author.
-
-Similar, for the deferred probe, we'll need to know from the driver author
-if this is a concern. In general it is, but there are cases where
--EPROBE_DEFFER is never returned in practice (eg for some SoC watchdog
-drivers).
+Correct, but then also don't include header files you don't use.
+In this case, the include of linux/bitops.h is no longer necessary
+if linux/bits.h is included since the driver doesn't really use bit
+operations, only bit masks.
 
 Guenter
 
-> The probe function shall also be retried if getting the irq is being
-> deferred.
-> 
 > Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
 > ---
->   drivers/watchdog/pm8916_wdt.c | 16 ++++++++++++----
->   1 file changed, 12 insertions(+), 4 deletions(-)
+>   drivers/watchdog/pm8916_wdt.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
 > diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
-> index 2d3652004e39..cb5304c26ac3 100644
+> index cb5304c26ac3..b8d9df0f96f7 100644
 > --- a/drivers/watchdog/pm8916_wdt.c
 > +++ b/drivers/watchdog/pm8916_wdt.c
-> @@ -163,9 +163,18 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
->   
->   	irq = platform_get_irq(pdev, 0);
->   	if (irq > 0) {
-> -		if (devm_request_irq(dev, irq, pm8916_wdt_isr, 0, "pm8916_wdt",
-> -				     wdt))
-> -			irq = 0;
-> +		err = devm_request_irq(dev, irq, pm8916_wdt_isr, 0,
-> +				       "pm8916_wdt", wdt);
-> +		if (err)
-> +			return err;
-> +
-> +		wdt->wdev.info = &pm8916_wdt_pt_ident;
-> +
-> +	} else {
-> +		if (irq == -EPROBE_DEFER)
-> +			return -EPROBE_DEFER;
-> +
-> +		wdt->wdev.info = &pm8916_wdt_ident;
->   	}
->   
->   	/* Configure watchdog to hard-reset mode */
-> @@ -177,7 +186,6 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
->   		return err;
->   	}
->   
-> -	wdt->wdev.info = (irq > 0) ? &pm8916_wdt_pt_ident : &pm8916_wdt_ident,
->   	wdt->wdev.ops = &pm8916_wdt_ops,
->   	wdt->wdev.parent = dev;
->   	wdt->wdev.min_timeout = PM8916_WDT_MIN_TIMEOUT;
+> @@ -1,5 +1,6 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   #include <linux/bitops.h>
+> +#include <linux/bits.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
 > 
 
