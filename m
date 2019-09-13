@@ -2,120 +2,155 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB21B1DDF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Sep 2019 14:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F3CB2228
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Sep 2019 16:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729686AbfIMMwe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 13 Sep 2019 08:52:34 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33474 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729558AbfIMMwe (ORCPT
+        id S1730694AbfIMOgR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 13 Sep 2019 10:36:17 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:43671 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730683AbfIMOgR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 13 Sep 2019 08:52:34 -0400
-Received: by mail-pl1-f196.google.com with SMTP id t11so13206987plo.0;
-        Fri, 13 Sep 2019 05:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=BlZu7IMkJJ2x30qqdls5PsoF2ZWD58HPtmFSp7MDs2k=;
-        b=kFdb5zkOXd5y0cnDElxLxkNkj3H/77rTt5mQnZ3elYPwnT8P8Hrd1EjosCLZtj4tP4
-         2xNHXUfkpFJ3ZcDloXG2fql3zkhJSdqI0QymoBDm7N2p1o6VM4L/NHT0CtpKSOHbe573
-         pB7oc5a3csyZjGfckA5BXuo6BN1eAVtpQCWzMiiZIYncpPAUJ1wvtJlNTcJQh5gNt1n7
-         QuqR5wgtG8iqQv+kmkyvn9NrDb8FbGlHopTaBS5OYaUzKLd5RT/G2RWPkQqhFr14Q/el
-         hDwqsH2o4FltSZyafQcpRDOn/fksXbmOQERM6uUWDg6tfyHMpvFsEWLCgceYS/eENozt
-         SNqQ==
+        Fri, 13 Sep 2019 10:36:17 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t84so2781748oih.10;
+        Fri, 13 Sep 2019 07:36:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BlZu7IMkJJ2x30qqdls5PsoF2ZWD58HPtmFSp7MDs2k=;
-        b=fTca09TUuq9+AYfu1bG9yOKuxDxje1PLlvEcgTkwxVNd8EdOU3kVvO6NeWYO5K5PtG
-         euhakeY5fX8FYmEhyHujYeC4bSPAoZX0NNgo3yTfOH10lIJd33vJeUmwPlWjwxxgJWri
-         yO6y9d3rGSOEMScogz9q+qX2XpyuScEJHySnnY3w1rLJqLlex3Pd0kWWDpGBhfStPRnb
-         qinazLwoPOW3pEhO/3ao+BIIIRx8VIaqEVl2nhT6Ek6gckpMRB5aWnuOB0n1u7rExMxx
-         Ab1mKG6nwjkmi3imHRcQezK6zgBdOqfCEHi3szS/c4QR3cecGQM3y9hvBwLDMy9mgm5W
-         39HQ==
-X-Gm-Message-State: APjAAAXw0dvlRQ5ah0OJiUJ+1s2DEgMkop7fQuDH+GxVe8h5BZXh1hqK
-        i6r4A3eypoTng5Hb6CGsFzppKtCw
-X-Google-Smtp-Source: APXvYqwjmvmY8Afq7+jugXxpufBl19WoXMLG/Ft2zLNI/Q6l3LDqBmerh51C6Xa3uhKbuQixlLkMSg==
-X-Received: by 2002:a17:902:aa48:: with SMTP id c8mr49143964plr.330.1568379152495;
-        Fri, 13 Sep 2019 05:52:32 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g12sm6707212pfb.97.2019.09.13.05.52.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 13 Sep 2019 05:52:31 -0700 (PDT)
-Date:   Fri, 13 Sep 2019 05:52:30 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org
-Subject: Re: [PATCH 1/2] watchdog: pm8916_wdt: fix pretimeout registration
- flow
-Message-ID: <20190913125230.GA18629@roeck-us.net>
-References: <20190906203054.26725-1-jorge.ramirez-ortiz@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IZweNP6pGhkpCVRU4pHgxO7MjDpvq1eLjI7vhm5/kwY=;
+        b=VrVJ/QiL0oJazuvOOhvuEjxR3poSR7UE2Abaaqo65I944WigLPINq+FdC4TFouu1kS
+         pY6kl/3Jta0kOAm2DHGZ04ZafjhChVhhD1yX8Df5wOu7fwT26ooDSsRSIFCD4hobJLAd
+         hfYEHHQ5jRPOgOm4uAw5zNmGEsBhiPDBxxwnhIOGu4YJ+Wy7QGIZ/RMcIqU9gQ7nNk3e
+         E9vyifCEg4dp2rZTOVVuBGSPekV8SD/XyesPKrGmsWKiJoDU4dgfF8de2s1g/xGzccSJ
+         bK7UL0X3wl9l4wUYqDOsLt/f1rJuNs0Ra+uVGvGU8sdWY8DV6AaJqXIaVp1wzAiFZcqq
+         T3Eg==
+X-Gm-Message-State: APjAAAWr9/hNqScBpVhrOqFyh0nd3qWUb/eekCPzoQbwWJeh9mw0bBcd
+        E7JfTppLB2kE4yRq7mOAbA==
+X-Google-Smtp-Source: APXvYqxFO5cMX7VpsHLxNDMF4sPgkaqT/8XHmi68R3Ufb4qy9ll4kmCyy5XLZJXtKcoCrTHmfxEZOg==
+X-Received: by 2002:aca:4ccd:: with SMTP id z196mr3508195oia.46.1568385376414;
+        Fri, 13 Sep 2019 07:36:16 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id b67sm962221oii.21.2019.09.13.07.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2019 07:36:15 -0700 (PDT)
+Date:   Fri, 13 Sep 2019 15:36:15 +0100
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Convert Samsung SoC watchdog
+ bindings to json-schema
+Message-ID: <20190912170145.GA17889@bogus>
+References: <20190907144541.16949-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190906203054.26725-1-jorge.ramirez-ortiz@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190907144541.16949-1-krzk@kernel.org>
+X-Mutt-References: <20190907144541.16949-1-krzk@kernel.org>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Sep 06, 2019 at 10:30:53PM +0200, Jorge Ramirez-Ortiz wrote:
-> When an IRQ is present in the dts, the probe function shall fail if
-> the interrupt can not be registered.
+On Sat, Sep 07, 2019 at 04:45:40PM +0200, Krzysztof Kozlowski wrote:
+> Convert Samsung S3C/S5P/Exynos watchdog bindings to DT schema format
+> using json-schema.
 > 
-> The probe function shall also be retried if getting the irq is being
-> deferred.
-> 
-> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-with nitpick below.
-
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  drivers/watchdog/pm8916_wdt.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
+>  .../bindings/watchdog/samsung-wdt.txt         | 35 ----------
+>  .../bindings/watchdog/samsung-wdt.yaml        | 69 +++++++++++++++++++
+>  2 files changed, 69 insertions(+), 35 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/samsung-wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+
+
+> diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+> new file mode 100644
+> index 000000000000..39f1ca3bc4db
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/samsung-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Samsung SoC Watchdog Timer Controller
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzk@kernel.org>
+> +
+> +description: |+
+> +  The Samsung's Watchdog controller is used for resuming system operation
+> +  after a preset amount of time during which the WDT reset event has not
+> +  occurred.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - samsung,s3c2410-wdt                   # for S3C2410
+> +      - samsung,s3c6410-wdt                   # for S3C6410, S5PV210 and Exynos4
+> +      - samsung,exynos5250-wdt                # for Exynos5250
+> +      - samsung,exynos5420-wdt                # for Exynos5420
+> +      - samsung,exynos7-wdt                   # for Exynos7
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  samsung,syscon-phandle:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +    description:
+> +      Phandle to the PMU system controller node (in case of Exynos5250
+> +      and Exynos5420).
+> +
+> +  timeout-sec:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Watchdog timeout in seconds.
+
+We need a common schema for this and the node name.
+
+Also note that anything with a unit suffix already has a type 
+definition, so we don't really need to define it again.
+
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - reg
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - samsung,exynos5250-wdt
+> +              - samsung,exynos5420-wdt
+> +    then:
+> +      required:
+> +        - samsung,syscon-phandle
+> +
+> +examples:
+> +  - |
+> +    watchdog@101d0000 {
+> +      compatible = "samsung,exynos5250-wdt";
+> +      reg = <0x101D0000 0x100>;
+> +      interrupts = <0 42 0>;
+> +      clocks = <&clock 336>;
+> +      clock-names = "watchdog";
+> +      samsung,syscon-phandle = <&pmu_syscon>;
+> +    };
+> -- 
+> 2.17.1
 > 
-> diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
-> index 2d3652004e39..cb5304c26ac3 100644
-> --- a/drivers/watchdog/pm8916_wdt.c
-> +++ b/drivers/watchdog/pm8916_wdt.c
-> @@ -163,9 +163,18 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
->  
->  	irq = platform_get_irq(pdev, 0);
->  	if (irq > 0) {
-> -		if (devm_request_irq(dev, irq, pm8916_wdt_isr, 0, "pm8916_wdt",
-> -				     wdt))
-> -			irq = 0;
-> +		err = devm_request_irq(dev, irq, pm8916_wdt_isr, 0,
-> +				       "pm8916_wdt", wdt);
-> +		if (err)
-> +			return err;
-> +
-> +		wdt->wdev.info = &pm8916_wdt_pt_ident;
-> +
 
-Unnecessary empty line.
-
-> +	} else {
-> +		if (irq == -EPROBE_DEFER)
-> +			return -EPROBE_DEFER;
-> +
-> +		wdt->wdev.info = &pm8916_wdt_ident;
->  	}
->  
->  	/* Configure watchdog to hard-reset mode */
-> @@ -177,7 +186,6 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
->  		return err;
->  	}
->  
-> -	wdt->wdev.info = (irq > 0) ? &pm8916_wdt_pt_ident : &pm8916_wdt_ident,
->  	wdt->wdev.ops = &pm8916_wdt_ops,
->  	wdt->wdev.parent = dev;
->  	wdt->wdev.min_timeout = PM8916_WDT_MIN_TIMEOUT;
