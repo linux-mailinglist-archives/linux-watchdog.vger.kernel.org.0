@@ -2,67 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FEEB2251
-	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Sep 2019 16:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7434AB4A6D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Sep 2019 11:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729275AbfIMOg7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 13 Sep 2019 10:36:59 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:37259 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730708AbfIMOgS (ORCPT
+        id S1727443AbfIQJZh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 17 Sep 2019 05:25:37 -0400
+Received: from mail.11d03.mspz7.gob.ec ([190.214.23.250]:50532 "EHLO
+        mail.11d03.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727229AbfIQJZh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 13 Sep 2019 10:36:18 -0400
-Received: by mail-ot1-f68.google.com with SMTP id s28so29685090otd.4;
-        Fri, 13 Sep 2019 07:36:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:subject:references
-         :in-reply-to:cc:cc:to;
-        bh=XB3b5/CCYXXkmaN1QiIRHjRix0H3JE/gVYbnuNK8lOE=;
-        b=YlI8Te4/zvKurHMtoHnIU/+QFGaqxyHYzBxDs5U/Ei7lG2VAuJhyCm5WWi9a/kB8gt
-         eNuH0oDlqTs5+tsBHKM9OnGWDLQIY4xBTJnj2PfOS85alXeVI12V0uL6udEkBv2BEK6C
-         Mszag5jiHaVjWtZt8P16OTlRvHtLVA/zcLTMX4X/Xq7CIN4IP+Vug6yK2+V9dqg2u7/V
-         7BX5sh92uHZjGN3uwGKzOsZwUJPeLcr7B0sZ015Wth+6PwJgP1xHirC6O86S1dGaVJMn
-         ji4EbPSmXgkOQSSp118hBvB3YqbiVehxGiTg5AywyRqTY+4O2opQhyxCyFsZQBotyqB7
-         mEkQ==
-X-Gm-Message-State: APjAAAV5ZkRjtijCSaajKGP53JIEC4/v4Oo6vli87O87HgRiF7kkkLVs
-        UrAdFCAVaT86sEyQh3i8HQ==
-X-Google-Smtp-Source: APXvYqyqPy7uITdq8aJVLYBLO1471Gvd+4ls8DvEb5HG9rjVWlRGnlaVBO1+OyBMjlBUbBpRiDoeaA==
-X-Received: by 2002:a05:6830:1641:: with SMTP id h1mr18873912otr.346.1568385377538;
-        Fri, 13 Sep 2019 07:36:17 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w201sm1035813oie.44.2019.09.13.07.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2019 07:36:17 -0700 (PDT)
-Message-ID: <5d7ba961.1c69fb81.d2fcd.6ff4@mx.google.com>
-Date:   Fri, 13 Sep 2019 15:36:16 +0100
-From:   Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 2/2] dt-bindings: watchdog: Add missing clocks requirement in Samsung SoC watchdog
-References: <20190907144541.16949-1-krzk@kernel.org> <20190907144541.16949-2-krzk@kernel.org>
-In-Reply-To: <20190907144541.16949-2-krzk@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
+        Tue, 17 Sep 2019 05:25:37 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id 2DC254062CD29;
+        Mon, 16 Sep 2019 23:39:55 -0500 (-05)
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id pR3Yxiz9wx_V; Mon, 16 Sep 2019 23:39:54 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id F00E84062CD34;
+        Mon, 16 Sep 2019 23:39:53 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 11d03.mspz7.gob.ec
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1WPTXPJEJ7y3; Mon, 16 Sep 2019 23:39:53 -0500 (-05)
+Received: from [10.33.79.142] (unknown [105.4.0.133])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTPSA id 3628C4062CD30;
+        Mon, 16 Sep 2019 23:39:43 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
+To:     Recipients <vicenta.sinche@11d03.mspz7.gob.ec>
+From:   ''Tayeb souami'' <vicenta.sinche@11d03.mspz7.gob.ec>
+Date:   Tue, 17 Sep 2019 06:39:34 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20190917043944.3628C4062CD30@mail.11d03.mspz7.gob.ec>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat,  7 Sep 2019 16:45:41 +0200, Krzysztof Kozlowski wrote:
-> The Samsung SoC watchdog driver always required providing a clock
-> (either through platform data or from DT).  However when bindings were
-> added in commit 9487a9cc7140 ("watchdog: s3c2410: Add support for device
-> tree based probe"), they missed the requirement of clock.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  .../devicetree/bindings/watchdog/samsung-wdt.yaml          | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
+Lieber Freund,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
 
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+
+Das ist dein Spendencode: [TS530342018]
+
+Antworten Sie mit dem SPENDE-CODE an diese 
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
