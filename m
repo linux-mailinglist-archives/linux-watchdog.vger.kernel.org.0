@@ -2,127 +2,134 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A5EB6239
-	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2019 13:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318BBB64EB
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2019 15:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730083AbfIRL0o (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 18 Sep 2019 07:26:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38788 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730065AbfIRL0o (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 18 Sep 2019 07:26:44 -0400
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3D18321924;
-        Wed, 18 Sep 2019 11:26:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568806002;
-        bh=3pmcbb5IGNv6UVVCEUYcu4A9L8uAUcH4rxuI8B/12LY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LjbE/Ir0aZZYCh9MO2PZBxyrtu7b0gHWAfhLJPjbNBGxiwaxl9qv8RDXxU2iq/Zmp
-         mYFteaCPua5j4OI0VN17o4QHyaRlwYo+LqCULMvbMsM9wwMMXPft5Nm/jEEl5ZYu91
-         S6mVIjlDvjE2hZMUuyADh002Fyk1Ew2hFSj60fF8=
-Received: by mail-lj1-f169.google.com with SMTP id m7so6163528lji.2;
-        Wed, 18 Sep 2019 04:26:42 -0700 (PDT)
-X-Gm-Message-State: APjAAAU/lWS08tv0DxuGxB2rAwEObyPiD+o4wZVo4cMyiegmkkG/MAgw
-        MIv+Ovku5T93HHEg9arIfPUAlg5S0g6AzGKMCp0=
-X-Google-Smtp-Source: APXvYqxLQFwGNOEyIWCb1AqfUIXqxWQhby8CiTgWvnzCEPxUQnhdtdDF3pzXyGJO5Yg7Zv4E9iuuS9SzIFnvci+Qqe4=
-X-Received: by 2002:a2e:9608:: with SMTP id v8mr1979111ljh.40.1568806000442;
- Wed, 18 Sep 2019 04:26:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190907144541.16949-1-krzk@kernel.org> <20190912170145.GA17889@bogus>
-In-Reply-To: <20190912170145.GA17889@bogus>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 18 Sep 2019 13:26:29 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfsUw-+yRc=GF+t=1pE7D3dF_wpRUwZpmfLnRbDyEmKeQ@mail.gmail.com>
-Message-ID: <CAJKOXPfsUw-+yRc=GF+t=1pE7D3dF_wpRUwZpmfLnRbDyEmKeQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Convert Samsung SoC watchdog
- bindings to json-schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726382AbfIRNnW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 18 Sep 2019 09:43:22 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:35352 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbfIRNnW (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 18 Sep 2019 09:43:22 -0400
+Received: by mail-wr1-f68.google.com with SMTP id v8so7018534wrt.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 18 Sep 2019 06:43:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=F79il8OJykD/T/5Dw7H2ORLmM/g8D3l6gapwGa7fuso=;
+        b=jlepJpzG4Befo2hPBAb0DuXwpOR8ibqZEsaNGblPViCGmUVzEe8fAooSaNSs3cD+7s
+         VScmiorThQTnQrMGqkJXmvRZubdeSY/FCzUqG2vv2mUJ3vcl6ZuuQ4q0Y9gCER69eMSY
+         0DOtox4SFH2JJl9YMaUz86hLHh7AM73v2DTyG8v5PQfavZUodVctRktzu5Q6DmFqdXqG
+         St0aLdDjOJmcTrmswb4Fb7BYnqmLMqpB2T/OLfHTJ2lamENNbhS/BFa5+jUO4pyk2dJL
+         RYZ2mKGmAGlu9XDMctyrnHIFW/Q1NwfTa8I2yOVqY6Ca1iqoeBLI3AEz30aTMl+E7veZ
+         1ZkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=F79il8OJykD/T/5Dw7H2ORLmM/g8D3l6gapwGa7fuso=;
+        b=HRYRZljCYukIf0AmudyD1Drm/JPkpnu4EwPIGVxNSQS8Ow2V3WA2nqDrEowg6tEdTU
+         1bjZLcsnJM0WEDQiRUJYCjEi7z4L84W7WWHE67q06W3Z6uadDkEwLTZUwSlrUu1rmSSp
+         xjFJFcPSHp73qZ0cKV874cCmVpAukeusp3rjD7qowPz6QGw20HbMtjpXoGBNVilNR5Lr
+         fkAZuYzRVldAZ2IdlOt1gc5oqP/+2a2VXe4VqIKMtMQlz2H4rl7Y7Q8YI5eYdO2Pb+Sz
+         RvXtJJKfOz6zLrGkM7X2z61oJF20QrmFK15HvYmwIgCAuYDOk7+/Xlbj+T/tLYSylFFU
+         /qjg==
+X-Gm-Message-State: APjAAAUyCVpLy2i2QRr9tvYOThPzrWqusSBj5rVByirZxsx0UJFT734p
+        X2ZQwKJWsfTmnblWi9v2wa0ZtvmIeeE=
+X-Google-Smtp-Source: APXvYqzy+d/wwrdIIIbVWoP4/fSkQljv+xR5eQdzRoMdHWihqgM0RmODFqGFIrrrJuh1HmUtBrrAdA==
+X-Received: by 2002:adf:e546:: with SMTP id z6mr3090133wrm.113.1568814199966;
+        Wed, 18 Sep 2019 06:43:19 -0700 (PDT)
+Received: from linux-code.mgc.mentorg.com (nat-sch.mentorg.com. [139.181.36.34])
+        by smtp.gmail.com with ESMTPSA id y3sm4971076wrw.83.2019.09.18.06.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Sep 2019 06:43:19 -0700 (PDT)
+From:   Srikanth_Krishnakar <skrishnakar@gmail.com>
+X-Google-Original-From: Srikanth_Krishnakar <Srikanth_Krishnakar@mentor.com>
+To:     linux-watchdog@vger.kernel.org, linux@roeck-us.net,
+        wim@linux-watchdog.org
+Cc:     Cedric_Hombourger@mentor.com, Srikanth_Krishnakar@mentor.com
+Subject: [PATCH] watchdog: w83627hf_wdt: Support NCT6116D
+Date:   Wed, 18 Sep 2019 19:12:15 +0530
+Message-Id: <20190918134215.3036-1-Srikanth_Krishnakar@mentor.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 13 Sep 2019 at 16:36, Rob Herring <robh@kernel.org> wrote:
->
-> On Sat, Sep 07, 2019 at 04:45:40PM +0200, Krzysztof Kozlowski wrote:
-> > Convert Samsung S3C/S5P/Exynos watchdog bindings to DT schema format
-> > using json-schema.
-> >
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > ---
-> >  .../bindings/watchdog/samsung-wdt.txt         | 35 ----------
-> >  .../bindings/watchdog/samsung-wdt.yaml        | 69 +++++++++++++++++++
-> >  2 files changed, 69 insertions(+), 35 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/watchdog/samsung-wdt.txt
-> >  create mode 100644 Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
->
->
-> > diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-> > new file mode 100644
-> > index 000000000000..39f1ca3bc4db
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-> > @@ -0,0 +1,69 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/watchdog/samsung-wdt.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Samsung SoC Watchdog Timer Controller
-> > +
-> > +maintainers:
-> > +  - Krzysztof Kozlowski <krzk@kernel.org>
-> > +
-> > +description: |+
-> > +  The Samsung's Watchdog controller is used for resuming system operation
-> > +  after a preset amount of time during which the WDT reset event has not
-> > +  occurred.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - samsung,s3c2410-wdt                   # for S3C2410
-> > +      - samsung,s3c6410-wdt                   # for S3C6410, S5PV210 and Exynos4
-> > +      - samsung,exynos5250-wdt                # for Exynos5250
-> > +      - samsung,exynos5420-wdt                # for Exynos5420
-> > +      - samsung,exynos7-wdt                   # for Exynos7
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  samsung,syscon-phandle:
-> > +    $ref: '/schemas/types.yaml#/definitions/phandle'
-> > +    description:
-> > +      Phandle to the PMU system controller node (in case of Exynos5250
-> > +      and Exynos5420).
-> > +
-> > +  timeout-sec:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      Watchdog timeout in seconds.
->
-> We need a common schema for this and the node name.
+From: Srikanth Krishnakar <Srikanth_Krishnakar@mentor.com>
 
-Common schema in dt-schema or in Linux kernel bindings? If the latter,
-I can add it.
+The watchdog controller on NCT6116D is compatible with NCT6102D.
+Extend the support to enable SuperIO based NCT6116D watchdog device.
 
-> Also note that anything with a unit suffix already has a type
-> definition, so we don't really need to define it again.
+Signed-off-by: Srikanth Krishnakar <Srikanth_Krishnakar@mentor.com>
+---
+ drivers/watchdog/Kconfig        |  1 +
+ drivers/watchdog/w83627hf_wdt.c | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-Right.
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index a45f9e3e442b..4affadda5185 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1488,6 +1488,7 @@ config W83627HF_WDT
+ 		NCT6791
+ 		NCT6792
+ 		NCT6102D/04D/06D
++		NCT6116D
+ 
+ 	  This watchdog simply watches your kernel to make sure it doesn't
+ 	  freeze, and if it does, it reboots your computer after a certain
+diff --git a/drivers/watchdog/w83627hf_wdt.c b/drivers/watchdog/w83627hf_wdt.c
+index 38b31e9947aa..fdf533fe0bb2 100644
+--- a/drivers/watchdog/w83627hf_wdt.c
++++ b/drivers/watchdog/w83627hf_wdt.c
+@@ -49,7 +49,7 @@ static int wdt_cfg_leave = 0xAA;/* key to lock configuration space */
+ enum chips { w83627hf, w83627s, w83697hf, w83697ug, w83637hf, w83627thf,
+ 	     w83687thf, w83627ehf, w83627dhg, w83627uhg, w83667hg, w83627dhg_p,
+ 	     w83667hg_b, nct6775, nct6776, nct6779, nct6791, nct6792, nct6793,
+-	     nct6795, nct6796, nct6102 };
++	     nct6795, nct6796, nct6102, nct6116 };
+ 
+ static int timeout;			/* in seconds */
+ module_param(timeout, int, 0);
+@@ -94,6 +94,7 @@ MODULE_PARM_DESC(early_disable, "Disable watchdog at boot time (default=0)");
+ #define NCT6775_ID		0xb4
+ #define NCT6776_ID		0xc3
+ #define NCT6102_ID		0xc4
++#define NCT6116_ID		0xd2
+ #define NCT6779_ID		0xc5
+ #define NCT6791_ID		0xc8
+ #define NCT6792_ID		0xc9
+@@ -211,6 +212,7 @@ static int w83627hf_init(struct watchdog_device *wdog, enum chips chip)
+ 	case nct6795:
+ 	case nct6796:
+ 	case nct6102:
++	case nct6116:
+ 		/*
+ 		 * These chips have a fixed WDTO# output pin (W83627UHG),
+ 		 * or support more than one WDTO# output pin.
+@@ -417,6 +419,12 @@ static int wdt_find(int addr)
+ 		cr_wdt_control = NCT6102D_WDT_CONTROL;
+ 		cr_wdt_csr = NCT6102D_WDT_CSR;
+ 		break;
++	case NCT6116_ID:
++		ret = nct6102;
++		cr_wdt_timeout = NCT6102D_WDT_TIMEOUT;
++		cr_wdt_control = NCT6102D_WDT_CONTROL;
++		cr_wdt_csr = NCT6102D_WDT_CSR;
++		break;
+ 	case 0xff:
+ 		ret = -ENODEV;
+ 		break;
+@@ -482,6 +490,7 @@ static int __init wdt_init(void)
+ 		"NCT6795",
+ 		"NCT6796",
+ 		"NCT6102",
++		"NCT6116",
+ 	};
+ 
+ 	/* Apply system-specific quirks */
+-- 
+2.17.1
 
-Best regards,
-Krzysztof
