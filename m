@@ -2,143 +2,162 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F010B67B1
-	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2019 18:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB9EB6932
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2019 19:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbfIRQFd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 18 Sep 2019 12:05:33 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36280 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725899AbfIRQFd (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 18 Sep 2019 12:05:33 -0400
-Received: by mail-wr1-f67.google.com with SMTP id y19so35864wrd.3
-        for <linux-watchdog@vger.kernel.org>; Wed, 18 Sep 2019 09:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2x6v+F5GWK7Qkzp3BfJ/Q7vobP5WbouDHIFboXOXisk=;
-        b=CWKmvTDi/pb2q3VVM9eWIyNneZp79S0lkD0LMHmwrrYrsZfRE547SAyEf2/BX3Ftq6
-         PFPuyxbQZ1gYyMtPUv5vVqktq0ai3dQvWq2HHs9OFNgk8CiAFfottLHUSQzAmWQhDFUv
-         x6SE4YTr/6KOK3RnKZVgMS79NrjA0F/Esj3VMbIFHSGLEoKoVBbmaFXLb4roWybxNsXr
-         pkibYwWZW4+D6CZ/S6C+DMOg/mqRS/Z5E17efXdvn8ayP2Gv1R83RkQWJhcRJnVU1Qo+
-         hA21f1XhJDAxti0DiU7EBv/9kB07JtGVXOLBk5DAXn/gKGoTDSA+IL784CjlFPgbqO1L
-         vJHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=2x6v+F5GWK7Qkzp3BfJ/Q7vobP5WbouDHIFboXOXisk=;
-        b=fwaxc2YhdE1we+iS6/8CtQNa1TBI9GBlpBbLeujmoa9zuvuzaAhzlrLcvO7tFyejAC
-         9isuS5HqbFRnL/nUFEy1Mv5sW1TrnQcWpG5dU0O8/ez35hkMg7YH4fUdOIQ9OQVrutUa
-         kS6qlNiWGyll3e8fRwuwieMWULX8qzVlhKnoPkO769qmY7k7SCj6jCJvIuTuzLVRKWVl
-         n2zTpoqLHVvMDY3dVVQMXUgq/ndokO8BHJmE2dkC98dxeF0azBJn4yRVZw4J4t9G8Y9M
-         txwcVl+//+yq07tbULpB4ipPos2x7bwHzrmlunPLfWoIQ50hLXuX4vIUeyx9Ey6YZ19t
-         iJ+A==
-X-Gm-Message-State: APjAAAUQKhZ+GrQKHVRV0KaSf6/thwmm0PCfTp9gKk2OUl5Ns6l1sFhm
-        PhyIqXOmeLQWu/YtvWmfthBtTYRMwMc=
-X-Google-Smtp-Source: APXvYqxZFC/tNVuCRCoZOoHAtvjwDb0KQBF60YOxCkNiLi7KlUN7moogLennaElePyRhJCmEgFJN8A==
-X-Received: by 2002:a5d:6a09:: with SMTP id m9mr3640568wru.12.1568822730544;
-        Wed, 18 Sep 2019 09:05:30 -0700 (PDT)
-Received: from linux-code.mgc.mentorg.com (nat-sch.mentorg.com. [139.181.36.34])
-        by smtp.gmail.com with ESMTPSA id s13sm3396377wmc.28.2019.09.18.09.05.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Sep 2019 09:05:29 -0700 (PDT)
-From:   Srikanth Krishnakar <skrishnakar@gmail.com>
-X-Google-Original-From: Srikanth Krishnakar <Srikanth_Krishnakar@mentor.com>
-To:     linux-watchdog@vger.kernel.org, linux@roeck-us.net
-Cc:     Cedric_Hombourger@mentor.com, Srikanth_Krishnakar@mentor.com
-Subject: [PATCH v2] watchdog: w83627hf_wdt: Support NCT6116D
-Date:   Wed, 18 Sep 2019 21:34:58 +0530
-Message-Id: <20190918160458.10108-1-Srikanth_Krishnakar@mentor.com>
+        id S1731459AbfIRRcP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 18 Sep 2019 13:32:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42352 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729042AbfIRRcP (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 18 Sep 2019 13:32:15 -0400
+Received: from localhost.localdomain (unknown [194.230.155.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6680A208C0;
+        Wed, 18 Sep 2019 17:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568827933;
+        bh=1TixgpnrbW74TJpZIMBN4jvpzcDubcE9UumV31l30Nk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OzltOak1RI4M1f9eGUSNpFq39Ro2X4jHeAfIiXyq0c34FJmpbNaEv7Cjcemb0poM9
+         uE04q4mDU1LrkMk30mY4EX+LhD7KA8S6J8COMeBcIJZj56YzKZ7ZEf8xMUBTP+sWFK
+         ojyxY9o/4DOqaRfganDMdAi+8phtDnFnChg4e0II=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v2 1/8] dt-bindings: rng: exynos4-rng: Convert Exynos PRNG bindings to json-schema
+Date:   Wed, 18 Sep 2019 19:31:34 +0200
+Message-Id: <20190918173141.4314-1-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190918145729.GA15471@roeck-us.net>
-References: <20190918145729.GA15471@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The watchdog controller on NCT6116D is compatible with NCT6102D.
-Extend the support to enable SuperIO based NCT6116D watchdog device.
+Convert Samsung Exynos Pseudo Random Number Generator bindings to DT
+schema format using json-schema.
 
-Tested on Siemens SIMATIC IPC-527G.
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Signed-off-by: Srikanth Krishnakar <Srikanth_Krishnakar@mentor.com>
 ---
 
-Thanks for the catch Guenter!
+Changes since v1:
+1. Indent example with four spaces (more readable).
+---
+ .../bindings/rng/samsung,exynos4-rng.txt      | 19 ---------
+ .../bindings/rng/samsung,exynos4-rng.yaml     | 41 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 42 insertions(+), 20 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rng/samsung,exynos4-rng.txt
+ create mode 100644 Documentation/devicetree/bindings/rng/samsung,exynos4-rng.yaml
 
-That was not intentional. Fixed the typo of return ID. I could have 
-merged return ID of 6116 into 6102D but that would display 6102D as
-SuperIO Initialized in bootlog.
-
- drivers/watchdog/Kconfig        |  1 +
- drivers/watchdog/w83627hf_wdt.c | 11 ++++++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index a45f9e3e442b..4affadda5185 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1488,6 +1488,7 @@ config W83627HF_WDT
- 		NCT6791
- 		NCT6792
- 		NCT6102D/04D/06D
-+		NCT6116D
+diff --git a/Documentation/devicetree/bindings/rng/samsung,exynos4-rng.txt b/Documentation/devicetree/bindings/rng/samsung,exynos4-rng.txt
+deleted file mode 100644
+index a13fbdb4bd88..000000000000
+--- a/Documentation/devicetree/bindings/rng/samsung,exynos4-rng.txt
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Exynos Pseudo Random Number Generator
+-
+-Required properties:
+-
+-- compatible  : One of:
+-                - "samsung,exynos4-rng" for Exynos4210 and Exynos4412
+-                - "samsung,exynos5250-prng" for Exynos5250+
+-- reg         : Specifies base physical address and size of the registers map.
+-- clocks      : Phandle to clock-controller plus clock-specifier pair.
+-- clock-names : "secss" as a clock name.
+-
+-Example:
+-
+-	rng@10830400 {
+-		compatible = "samsung,exynos4-rng";
+-		reg = <0x10830400 0x200>;
+-		clocks = <&clock CLK_SSS>;
+-		clock-names = "secss";
+-	};
+diff --git a/Documentation/devicetree/bindings/rng/samsung,exynos4-rng.yaml b/Documentation/devicetree/bindings/rng/samsung,exynos4-rng.yaml
+new file mode 100644
+index 000000000000..2d075d6c87b6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rng/samsung,exynos4-rng.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rng/samsung,exynos4-rng.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Samsung Exynos SoC Pseudo Random Number Generator
++
++maintainers:
++  - Krzysztof Kozlowski <krzk@kernel.org>
++
++properties:
++  compatible:
++    enum:
++      - samsung,exynos4-rng                   # for Exynos4210 and Exynos4412
++      - samsung,exynos5250-prng               # for Exynos5250+
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: secss
++
++required:
++  - compatible
++  - reg
++  - clock-names
++  - clocks
++
++examples:
++  - |
++    rng@10830400 {
++        compatible = "samsung,exynos4-rng";
++        reg = <0x10830400 0x200>;
++        clocks = <&clock 255>; // CLK_SSS
++        clock-names = "secss";
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 00969a90f94c..9cec4494b9a8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14181,7 +14181,7 @@ L:	linux-crypto@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
+ F:	drivers/crypto/exynos-rng.c
+-F:	Documentation/devicetree/bindings/rng/samsung,exynos4-rng.txt
++F:	Documentation/devicetree/bindings/rng/samsung,exynos4-rng.yaml
  
- 	  This watchdog simply watches your kernel to make sure it doesn't
- 	  freeze, and if it does, it reboots your computer after a certain
-diff --git a/drivers/watchdog/w83627hf_wdt.c b/drivers/watchdog/w83627hf_wdt.c
-index 38b31e9947aa..56a4a4030ca9 100644
---- a/drivers/watchdog/w83627hf_wdt.c
-+++ b/drivers/watchdog/w83627hf_wdt.c
-@@ -49,7 +49,7 @@ static int wdt_cfg_leave = 0xAA;/* key to lock configuration space */
- enum chips { w83627hf, w83627s, w83697hf, w83697ug, w83637hf, w83627thf,
- 	     w83687thf, w83627ehf, w83627dhg, w83627uhg, w83667hg, w83627dhg_p,
- 	     w83667hg_b, nct6775, nct6776, nct6779, nct6791, nct6792, nct6793,
--	     nct6795, nct6796, nct6102 };
-+	     nct6795, nct6796, nct6102, nct6116 };
- 
- static int timeout;			/* in seconds */
- module_param(timeout, int, 0);
-@@ -94,6 +94,7 @@ MODULE_PARM_DESC(early_disable, "Disable watchdog at boot time (default=0)");
- #define NCT6775_ID		0xb4
- #define NCT6776_ID		0xc3
- #define NCT6102_ID		0xc4
-+#define NCT6116_ID		0xd2
- #define NCT6779_ID		0xc5
- #define NCT6791_ID		0xc8
- #define NCT6792_ID		0xc9
-@@ -211,6 +212,7 @@ static int w83627hf_init(struct watchdog_device *wdog, enum chips chip)
- 	case nct6795:
- 	case nct6796:
- 	case nct6102:
-+	case nct6116:
- 		/*
- 		 * These chips have a fixed WDTO# output pin (W83627UHG),
- 		 * or support more than one WDTO# output pin.
-@@ -417,6 +419,12 @@ static int wdt_find(int addr)
- 		cr_wdt_control = NCT6102D_WDT_CONTROL;
- 		cr_wdt_csr = NCT6102D_WDT_CSR;
- 		break;
-+	case NCT6116_ID:
-+		ret = nct6116;
-+		cr_wdt_timeout = NCT6102D_WDT_TIMEOUT;
-+		cr_wdt_control = NCT6102D_WDT_CONTROL;
-+		cr_wdt_csr = NCT6102D_WDT_CSR;
-+		break;
- 	case 0xff:
- 		ret = -ENODEV;
- 		break;
-@@ -482,6 +490,7 @@ static int __init wdt_init(void)
- 		"NCT6795",
- 		"NCT6796",
- 		"NCT6102",
-+		"NCT6116",
- 	};
- 
- 	/* Apply system-specific quirks */
+ SAMSUNG EXYNOS TRUE RANDOM NUMBER GENERATOR (TRNG) DRIVER
+ M:	Łukasz Stelmach <l.stelmach@samsung.com>
 -- 
 2.17.1
 
