@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3E9B9531
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2019 18:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C02B9537
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2019 18:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405397AbfITQVk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 20 Sep 2019 12:21:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40018 "EHLO mail.kernel.org"
+        id S2405443AbfITQVn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 20 Sep 2019 12:21:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405393AbfITQVk (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 20 Sep 2019 12:21:40 -0400
+        id S2405433AbfITQVn (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 20 Sep 2019 12:21:43 -0400
 Received: from localhost.localdomain (unknown [194.230.155.145])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD0C921835;
-        Fri, 20 Sep 2019 16:21:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0D4BB218AE;
+        Fri, 20 Sep 2019 16:21:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568996499;
-        bh=v/zuTY1CTu5pjJWBeLdx5nTGCDOWK5lV4Zyj61Aiqc8=;
+        s=default; t=1568996502;
+        bh=lj7T3kTvphhZDzZZ9VayMSkoBtQCOWfhYBk4KfxHg50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Byi0omnX5o2Qp0B6SzzhVdu6PlbwMX3v0dgJ1MqC72BVGsehtYXYjZXHdYcRGg/JK
-         99OOpaD+dGT4BIlJSZHTJ+52+mZAyntx2bl0nbD/hLKuZgTywL5kGZNSJR4dB94iPP
-         FQzjfxQyaMZ2TXKtmRnpQT185uFjy62anyBL4uzM=
+        b=wW63Fcj6lhiCHAAQ3qQvBNpuB524I5PssySEdWtT/9BPu39PT+9aqVD3ijxpxk9FJ
+         98Y0pifE0or9ZRF4g8VvjzXa096CeFEweNiXIkCcXZeCBm9X3LXkexu6CpmpHRI/F5
+         fHwSsEgKU3FXPynRyLmUQ4/miqcvEhVzkMhkA4SY=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -33,9 +33,9 @@ To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 2/3] dt-bindings: watchdog: Add missing clocks requirement in Samsung SoC watchdog
-Date:   Fri, 20 Sep 2019 18:21:23 +0200
-Message-Id: <20190920162124.7036-2-krzk@kernel.org>
+Subject: [PATCH v2 3/3] dt-bindings: watchdog: meson-gxbb-wdt: Include generic watchdog bindings
+Date:   Fri, 20 Sep 2019 18:21:24 +0200
+Message-Id: <20190920162124.7036-3-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190920162124.7036-1-krzk@kernel.org>
 References: <20190920162124.7036-1-krzk@kernel.org>
@@ -44,50 +44,28 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The Samsung SoC watchdog driver always required providing a clock
-(either through platform data or from DT).  However when bindings were
-added in commit 9487a9cc7140 ("watchdog: s3c2410: Add support for device
-tree based probe"), they missed the requirement of clock.
+Include generic watchdog DT schema bindings in Amlogic GXBB Watchdog
+bindings.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
-
 ---
+ .../devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml   | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Changes since v1:
-1. Indent example with four spaces (more readable),
-2. Add also missing required entries for clocks.
----
- .../devicetree/bindings/watchdog/samsung-wdt.yaml        | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-index 5a3a3cec8e20..2fa40d8864b2 100644
---- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-@@ -26,6 +26,13 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+index d7352f709b37..4ddae6feef3b 100644
+--- a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+@@ -10,6 +10,9 @@ title: Meson GXBB SoCs Watchdog timer
+ maintainers:
+   - Neil Armstrong <narmstrong@baylibre.com>
  
-+  clocks:
-+    maxItems: 1
++allOf:
++  - $ref: watchdog.yaml#
 +
-+  clock-names:
-+    items:
-+      - const: watchdog
-+
-   interrupts:
-     maxItems: 1
- 
-@@ -37,6 +44,8 @@ properties:
- 
- required:
-   - compatible
-+  - clocks
-+  - clock-names
-   - interrupts
-   - reg
- 
+ properties:
+   compatible:
+     enum:
 -- 
 2.17.1
 
