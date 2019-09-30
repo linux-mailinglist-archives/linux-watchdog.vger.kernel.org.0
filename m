@@ -2,99 +2,93 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C3DC219D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2019 15:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F8AC21A6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2019 15:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730769AbfI3NQA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 30 Sep 2019 09:16:00 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:45051 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726314AbfI3NP7 (ORCPT
+        id S1731079AbfI3NRP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 30 Sep 2019 09:17:15 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:43373 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbfI3NRP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 30 Sep 2019 09:15:59 -0400
-Received: by mail-pg1-f194.google.com with SMTP id i14so7366949pgt.11
-        for <linux-watchdog@vger.kernel.org>; Mon, 30 Sep 2019 06:15:59 -0700 (PDT)
+        Mon, 30 Sep 2019 09:17:15 -0400
+Received: by mail-pl1-f195.google.com with SMTP id f21so3897157plj.10;
+        Mon, 30 Sep 2019 06:17:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Krhzp/kdhG9uLjXBqRYQH27rCwUAa2H9/rRLKFXm9R8=;
-        b=VYb1ka4/PxVoGkPHjmDuBJsrVWbSwmvn7YLvgNSi1T9B363nBLYV0+0FPnSfn0Ai9F
-         QI92GHhqj9sJ+QAL4A1utu7rISIMr9rXg0qtdK8kf635nxNABtNvcKHvFBkOy6nKsHOn
-         cmYOkARvR2GwNH3zfKYJv0MnbCPSkrpq7Qdfab7DfELf9acnQMOflpDi7tl6HIe1VCjl
-         QKaMC23nmYOufVI9275JLDrPRaLPDUeEoUu2uhN/qQQCbCC0b+kUay7Cb3tlhfs0uIKx
-         mjSciL+oHB7QLskbDgPZ5A1zUgdKk8k8v2YMLm2uT7zYt2alCuzaUt4JghRgPCaWZh9T
-         B5pQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=B4ggzzzVRq7D1/IrWYPZsS6mZyXtJfN7dDcsMNzyKxY=;
+        b=mDQBmKq29AbFtd1CnyEwPK/vZbkcZ7/cSi4rUC6VX2Xyd+TWXE5t9hFSNvgcrmaqCq
+         VjVJcQ8YShs3drchBpCCG2mvNK6A54mf9pPaKx7McgcZKAuXJths5euUNspk26l42Ymr
+         vVmSDhM/rUSnkKNnkHRLZkB2V2I1WcD56J5cYGVwnw0XW9i85pi4rzQ9UCH4IDx/iVR6
+         Bh+gXAywLHOb6x+tev6zVykr2xJrqTXZgES8LI6FxYY3c19qiXffhQzIXVDgl9+8ASEz
+         6cqGUpVMhENeeEiLbb8thoTzdBdwQ2BMUB/qlkx6YbXPS4bZTZQU8BZd1q6sgsqWIipF
+         dTtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Krhzp/kdhG9uLjXBqRYQH27rCwUAa2H9/rRLKFXm9R8=;
-        b=iCeTSY4d3L/VQJWQMqzralBrfscyvbPK6snTlXxkfXxKpGMXkM0gtW8wsjQPpwUWn8
-         EDh5JkTEKm05/D7my/+QeuFJuuf1qFdeahZHrqWbV5XMNFlGSwQlpls/lQpNPvkmUjIK
-         bzK+i/e0Ilq/pvAqbQGJ/H8NrkZbJPFbvJr351iO7TbP94Rvinto5sxc6FDP5+SdIup+
-         1BSxK+zhAZ/XB7IyMtngiEuDNQofiiehURe0AW95EnvvHT86ui1M6zfMSQ9GevAyMTVg
-         aJ4BDrNzmnXm7tEImuDwgPj4Nx2uyOfjeV7SZpqNJmYD5Q2l0AWigfnXQs18dtkdM1Es
-         8d7A==
-X-Gm-Message-State: APjAAAVZ3voMU+o3zzen5nqvXQWnxfnI34HveM1GGUvQg78u/PToa/28
-        zK4sxLoi1wOKH+KvCeXPWU7Xflyu
-X-Google-Smtp-Source: APXvYqwTq7GNmmdo48O83MFY2j/I+zEN3h/jgAOUIu+0mhcXUDci6RaLCbuxxlRgMSUCXpLZb+aVMA==
-X-Received: by 2002:a17:90a:d106:: with SMTP id l6mr26995990pju.85.1569849359110;
-        Mon, 30 Sep 2019 06:15:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y7sm13229296pgj.35.2019.09.30.06.15.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Sep 2019 06:15:58 -0700 (PDT)
-Subject: Re: [PATCH v1] watchdog: intel-mid_wdt: Add WATCHDOG_NOWAYOUT support
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Razvan Becheriu <razvan.becheriu@qualitance.com>,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Ferry Toth <fntoth@gmail.com>
-References: <20190924143116.69823-1-andriy.shevchenko@linux.intel.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=B4ggzzzVRq7D1/IrWYPZsS6mZyXtJfN7dDcsMNzyKxY=;
+        b=RtVsBVbyyUBjbgUdMpnoO5H9ZAJc1hbElGF5vctb/yWrdsqX7ItClKROqwILyWQxxU
+         6+1CQ8EgWGwbRseHndy2FAeruRu9GrLgWFiUByTO+e/AOku8iG7K0Y9xftdUiox/oDqd
+         O3jk7lPRBIQi7Le9tbsTGz4oFYYVW4082bvjBXAhiWBeHTwiA3r+RisGKn/8PcUI8ivz
+         kdaKD9jTf6/JOf7iudXvSC2TOcimfU5yppwcjfeqdfRFiLW4k7msl/+8pLRUDBhqvWqs
+         tZPBEE2tgRjX1xx6Ep1hqvwQ9aenmoUArJX7E/dnpvd9wg0DqWLOIKlFgMxzLCmj5XpB
+         Sp8A==
+X-Gm-Message-State: APjAAAVJ6Ra1t4ZsrqgYu4zG0ErVK5Q4llRb7tiHlT99mxWobCxZLRAP
+        k6V1bXiBFO3KDXBOQhqAsh8=
+X-Google-Smtp-Source: APXvYqyORv2gkjwW7rfZFXwSfREuRsSvclviOWTEAU/DB8OGnqKhjK89jVUVsDBYC2vqB77YvAkwqw==
+X-Received: by 2002:a17:902:d685:: with SMTP id v5mr19638281ply.15.1569849434796;
+        Mon, 30 Sep 2019 06:17:14 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bx18sm11615970pjb.26.2019.09.30.06.17.13
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 30 Sep 2019 06:17:14 -0700 (PDT)
+Date:   Mon, 30 Sep 2019 06:17:13 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <643ee5fc-a682-38bc-b92c-aee47913152e@roeck-us.net>
-Date:   Mon, 30 Sep 2019 06:15:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     wim@linux-watchdog.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH 1/3] watchdog: imx2_wdt: Remove unnecessary blank line
+Message-ID: <20190930131713.GA29750@roeck-us.net>
+References: <1569308828-8320-1-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20190924143116.69823-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1569308828-8320-1-git-send-email-Anson.Huang@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 9/24/19 7:31 AM, Andy Shevchenko wrote:
-> Normally, the watchdog is disabled when /dev/watchdog is closed, but if
-> CONFIG_WATCHDOG_NOWAYOUT is defined, then it means that the watchdog should
-> remain enabled. So we should keep it enabled if CONFIG_WATCHDOG_NOWAYOUT
-> is defined.
+On Tue, Sep 24, 2019 at 03:07:06PM +0800, Anson Huang wrote:
+> Remove unnecessary blank line.
 > 
-> Reported-by: Razvan Becheriu <razvan.becheriu@qualitance.com>
-> Cc: Ferry Toth <fntoth@gmail.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/watchdog/intel-mid_wdt.c | 1 +
->   1 file changed, 1 insertion(+)
+>  drivers/watchdog/imx2_wdt.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/intel-mid_wdt.c b/drivers/watchdog/intel-mid_wdt.c
-> index 2cdbd37c700c..470213abfd3d 100644
-> --- a/drivers/watchdog/intel-mid_wdt.c
-> +++ b/drivers/watchdog/intel-mid_wdt.c
-> @@ -134,6 +134,7 @@ static int mid_wdt_probe(struct platform_device *pdev)
->   	wdt_dev->timeout = MID_WDT_DEFAULT_TIMEOUT;
->   	wdt_dev->parent = dev;
->   
-> +	watchdog_set_nowayout(wdt_dev, WATCHDOG_NOWAYOUT);
->   	watchdog_set_drvdata(wdt_dev, dev);
->   
->   	ret = devm_request_irq(dev, pdata->irq, mid_wdt_irq,
+> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> index 8d019a9..6711b4e 100644
+> --- a/drivers/watchdog/imx2_wdt.c
+> +++ b/drivers/watchdog/imx2_wdt.c
+> @@ -72,7 +72,6 @@ module_param(nowayout, bool, 0);
+>  MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+>  				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>  
+> -
+>  static unsigned timeout;
+>  module_param(timeout, uint, 0);
+>  MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default="
+> -- 
+> 2.7.4
 > 
-
