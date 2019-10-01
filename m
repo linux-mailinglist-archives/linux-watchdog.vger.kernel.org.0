@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4C1C3C8D
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Oct 2019 18:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25032C3C34
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Oct 2019 18:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732735AbfJAQn2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 1 Oct 2019 12:43:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55494 "EHLO mail.kernel.org"
+        id S2387427AbfJAQod (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 1 Oct 2019 12:44:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56786 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732678AbfJAQnZ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:43:25 -0400
+        id S2389860AbfJAQod (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 1 Oct 2019 12:44:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D4734222CC;
-        Tue,  1 Oct 2019 16:43:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0D9F221855;
+        Tue,  1 Oct 2019 16:44:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948204;
-        bh=gSx/kE23fzHUe4o9lTlqP2NnAB1nJWy1UhDsuCg7TD8=;
+        s=default; t=1569948272;
+        bh=gT/n4oqc6OGEqUUO2qysr1qAGttbCYzxG2DAiUEliRU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AYCsRSSCYwGaMQx1tXI95eY9fCHdSl8zQA66vcMJnv9A8zg7IFojIL2T99r58mB/y
-         1+wJXnfko6FM03D2aE8ewrF8CJSopXi8xM28vCIuxFxSP42Rg5wRxhsfRl56X3TnHY
-         yHI+95qpdo7nZR9cUEKTyEGnKLaVLT/SoDes+fIk=
+        b=wfUud0q3IzpEK800OsiY63wNhA2+5IE1qeBqbZ78AVkozXaLkW1581sVHv2KurdQU
+         9V0vvoVO7GezVAL+/n7PEoP7n0YQxaxy7MIkmnWZxEPoB9MNKiGftYzoCDexH1fdYJ
+         wEou2rTa4zix7GGLOIZ1UkG59kOiwnhAiIfltD7s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ryan Chen <ryan_chen@aspeedtech.com>,
@@ -30,12 +30,12 @@ Cc:     Ryan Chen <ryan_chen@aspeedtech.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 11/43] watchdog: aspeed: Add support for AST2600
-Date:   Tue,  1 Oct 2019 12:42:39 -0400
-Message-Id: <20191001164311.15993-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 08/29] watchdog: aspeed: Add support for AST2600
+Date:   Tue,  1 Oct 2019 12:44:02 -0400
+Message-Id: <20191001164423.16406-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001164311.15993-1-sashal@kernel.org>
-References: <20191001164311.15993-1-sashal@kernel.org>
+In-Reply-To: <20191001164423.16406-1-sashal@kernel.org>
+References: <20191001164423.16406-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,7 +63,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index 1abe4d021fd27..ffde179a9bb2c 100644
+index fd91007b4e41b..cee7334b2a000 100644
 --- a/drivers/watchdog/aspeed_wdt.c
 +++ b/drivers/watchdog/aspeed_wdt.c
 @@ -38,6 +38,7 @@ static const struct aspeed_wdt_config ast2500_config = {
@@ -74,7 +74,7 @@ index 1abe4d021fd27..ffde179a9bb2c 100644
  	{ },
  };
  MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
-@@ -264,7 +265,8 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+@@ -257,7 +258,8 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
  		set_bit(WDOG_HW_RUNNING, &wdt->wdd.status);
  	}
  
