@@ -2,296 +2,520 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B7AC86F5
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Oct 2019 13:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0B6C8969
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Oct 2019 15:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbfJBLIC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Oct 2019 07:08:02 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:36107 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726325AbfJBLIB (ORCPT
+        id S1727201AbfJBNQU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Oct 2019 09:16:20 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33653 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726295AbfJBNQU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Oct 2019 07:08:01 -0400
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Eugen.Hristev@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Eugen.Hristev@microchip.com";
-  x-sender="Eugen.Hristev@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Eugen.Hristev@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: oOQfZez7gL0osqW6PWf2jWVFDtQHp765g7eqqRv74LRcYXd/YCGTkS2pB7zo32X4xmRTM0Vg4I
- UDqDeEzpcAyYTOvOlGaMqG51dRoFu88k9SYKA2GKgIxKogWdIYpqUnTXIQ3pjLVjIIcA7g1l/U
- u/ZnbN/OtrGHnlzkCncHs+5Kp0yEn3DthPLK3o30jj8ejLvTyXeyJUAMsgqV8yAgBGhNcPSGcX
- Q+qdzIV/gt0B9U5u8M9m98WLULfA7rWpK4k736tgm0EVyVVM2Yxg31hb44kr/vEdCjlVSE8/N7
- hJM=
-X-IronPort-AV: E=Sophos;i="5.64,574,1559545200"; 
-   d="scan'208";a="51164848"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Oct 2019 04:08:00 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 2 Oct 2019 04:07:59 -0700
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
- Transport; Wed, 2 Oct 2019 04:08:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eAwG6RsDQx0PNySRa3lg5VzCdKqwydWVFuCvvaWIXu/Tt81NEC8KWdTSVnUHBG3ozKa2yOfvnL6kM3YvScClpNyZOBbS1YWQKQp6H0KFr5x709bIzsi118W4xS3vOlaqcuMjxSN7O1S89OILLHgvG5YDh2XcuPQ71fPjEvUNlYLHwKb5U9b0hw0G3z9BLSvQPuedhXSx/ndKx+KFXhu5emrMpVVb3vkqM8NbEbVtrbVHDCnsPbRI/ItZuY5l3rJHv0JfIcySx+DUbxnOmpGJj6inlCqRgO6gMFDwVMKfFmPwakwaDLgOz0n9M0oqzpQnZIOfk4/puBsZhrZGGjlDHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nQVAKd8f71YjVL0/Sc+dwo/DLcILNXS41S1pN51R4as=;
- b=jy7HXt0fPfQ+jrZWWmtsAwXtqhCDTXi0Z9xhSmLXQvA//b0lTyTS3+Ut71pnlbjP9HdVHqUKA6hdhoLoae0X8Qs00JWDrHsct5UQGxXAI+UAgxInm/8NyWMk53X6xzHHjYVT5UtovvPU2GkHP5Ny2lt5jlmT+W+WfInqzL8H68U+5REoO7aJS6T7ToorHB1z+10TNES1ufbVVUIZd1Vhj8A3Bg9OwEJ0DJz/30H2Xe2wCQcqcfEjg5OYLgND6GDPZAuziXX0Mzsyhsh/XP99SZ3WGNuK/tC9Qe62ZZD+b7V4s+hbT21nCCel5dpePL50Rud9MMlHDmawSWDohhb4DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Wed, 2 Oct 2019 09:16:20 -0400
+Received: by mail-pg1-f196.google.com with SMTP id q1so3795958pgb.0;
+        Wed, 02 Oct 2019 06:16:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nQVAKd8f71YjVL0/Sc+dwo/DLcILNXS41S1pN51R4as=;
- b=heOJtX+JR6wuv2HVLL8456zQLmgwDlcwIxoLsiVwFLTPYKR0GI1VL6mFopEppnD0CuXarH75iunT20Ve6iM8LNluPDTfuftpzk53ueO3D3EBR+7/Bm3TKmr2YMeRTLjCDLiOL+joxMZGqiapxZ0OSEILuVSkvDKm6GZW25C9FMw=
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
- DM5PR11MB1994.namprd11.prod.outlook.com (10.168.105.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Wed, 2 Oct 2019 11:07:59 +0000
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::b125:76c1:c9b1:34f4]) by DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::b125:76c1:c9b1:34f4%10]) with mapi id 15.20.2305.023; Wed, 2 Oct 2019
- 11:07:59 +0000
-From:   <Eugen.Hristev@microchip.com>
-To:     <alexandre.belloni@bootlin.com>
-CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Nicolas.Ferre@microchip.com>
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3CUsLIsKbGdG0KHeXolj2ApfEkLfBLIL89EPwz47LBg=;
+        b=kZz/cXy3HOMYWu5uKTc8H2St6zNLehqBrr2J7z2o7Jf0/GXueP+Cr48w7j17pw+ikv
+         t9SLZ/TbP4DleqwcOu3qpGwCpz0Xh85WPAEm1+C9tz3AbCkV+1TI2Iydin7+sIjrEYRt
+         iSVPBigeU0K7wtWEJw3XaLWD4f+FenYILGlNYvV0stN+r6gz+Y9F7hLV+tCGTEtssXOP
+         OIBiboIU05fJeI2h9NgiYbCZJblkBLCJGquaL45FWSKw0OGJHGf3+LYEWZwSHmcYHuMG
+         J/i5LECnDFc+ButnHA4qN30VGi2kF+dZuhTeU9kTDPBksF9o1HVNV2Cg5i7FZ7R4nLiy
+         JsFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3CUsLIsKbGdG0KHeXolj2ApfEkLfBLIL89EPwz47LBg=;
+        b=JEnqvX62OoZ68t46OVtiCRBtSU/UfmicOZq71PpGQhKPE+tkacc/iFIUEq0WYspxab
+         B0m2Ruro/XttS/7em1Nul37oKnshVfRDHHCzvlRun1pt1MCqa6+RB1MMti/48lbfS1lC
+         ONfPFVV6LswqLEZVjEZOPOFnHlge5Sjx9e298O2ZRkNOEbUQacfnRwjI9xIwTPsPqDgg
+         7CHJMyptE+bYNJZeN5BlpNVfJ2pNS4+6bRvpHT/qiVB+PrNJ97pclTeo9v8Zl+OiN4jt
+         frFCOT614Bchz+g57f+kznNT4YlUhLEeF8JeHPCYeAuPzFn2mdfrwI7H80Ax47O1kxnx
+         Rtww==
+X-Gm-Message-State: APjAAAWGmwIH44bL6ISmDRrX2c7Kj58EBlt58z7qXqdoPQldd41C1QQZ
+        NrIWLBKspQ4t9ADxer8Jm28=
+X-Google-Smtp-Source: APXvYqzUL+39QvgmgJXtc4bYT/+VvVpNHE/ysaLJ/opIQx6c04Xd9qM/v4aUkUDSnQ/lQDWGbJxDKA==
+X-Received: by 2002:a63:c645:: with SMTP id x5mr3742780pgg.425.1570022179001;
+        Wed, 02 Oct 2019 06:16:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b3sm5072266pjp.13.2019.10.02.06.16.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 02 Oct 2019 06:16:17 -0700 (PDT)
 Subject: Re: [PATCH 2/3] watchdog: sam9x60_wdt: introduce sam9x60 watchdog
  timer driver
-Thread-Topic: [PATCH 2/3] watchdog: sam9x60_wdt: introduce sam9x60 watchdog
- timer driver
-Thread-Index: AQHVePP1mVCAVHNqYEKA4n6lujXEMadHJRSAgAAKu4A=
-Date:   Wed, 2 Oct 2019 11:07:58 +0000
-Message-ID: <41dc5cc8-4ce3-62ee-132f-e8117190b850@microchip.com>
+To:     Eugen.Hristev@microchip.com, wim@linux-watchdog.org,
+        robh+dt@kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.or
+Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com
 References: <1570001371-8174-1-git-send-email-eugen.hristev@microchip.com>
  <1570001371-8174-2-git-send-email-eugen.hristev@microchip.com>
- <20191002102343.GL4106@piout.net>
-In-Reply-To: <20191002102343.GL4106@piout.net>
-Accept-Language: en-US, ro-RO
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: VI1PR0501CA0009.eurprd05.prod.outlook.com
- (2603:10a6:800:92::19) To DM5PR11MB1242.namprd11.prod.outlook.com
- (2603:10b6:3:14::8)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tagtoolbar-keys: D20191002140219962
-x-originating-ip: [94.177.32.156]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 85933053-0e87-40ce-2c31-08d74728c86f
-x-ms-traffictypediagnostic: DM5PR11MB1994:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM5PR11MB1994DDD2E3F42DABB47416DCE89C0@DM5PR11MB1994.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2331;
-x-forefront-prvs: 0178184651
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(39860400002)(396003)(346002)(376002)(199004)(189003)(26005)(486006)(3846002)(476003)(25786009)(5660300002)(6116002)(11346002)(76176011)(446003)(186003)(102836004)(99286004)(4326008)(2616005)(66946007)(14454004)(36756003)(52116002)(386003)(53546011)(6506007)(478600001)(66446008)(86362001)(2906002)(64756008)(66556008)(66476007)(54906003)(305945005)(7736002)(107886003)(6486002)(6512007)(31686004)(229853002)(6436002)(316002)(6916009)(71200400001)(31696002)(8936002)(71190400001)(8676002)(81156014)(6246003)(81166006)(66066001)(14444005)(256004);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1994;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: d5utXEF6fjAf0THJo48WVbut5mU6TEJqh3h08fkBlGczECGgeGLK5wssYSvgu3VImunUHX3hK2ShuDIKtuRe+mt9PFT08FE25yVgH0Y5zFUgnElXVZS60VaqiFhRUDhO3TYY6apT2j+uD5v4tbk9LA9ntxjh6FqPcDo35KoGZgkIKCRK2b4MXnvq0e//agLvTDRXxOzaH8YWBkSZyXu9ZLfgDjnBgBCvmciRQ/eFegvqqxoa9XTXb9t2uFZJPfzAUXQVZRWIXc6S6b5s02nyAl9u8nB5CPVZb0uVlU5ubFrkvIQ3Pi6RxXJP4dUnQD9qOppYfvHCdorXMCj8wjpaQoBSKGQM9fksx3oOzp3xZam+mmI/jN5tww0GTGEiwBvl1BdSLyGrGXTKMQyuv2fydYwla29J752e4ltKevONafM=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DD8BAB5E16639445A6C662787A1A0435@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <e58a3ab5-69bc-cad3-5faa-ed00ff7906c7@roeck-us.net>
+Date:   Wed, 2 Oct 2019 06:16:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85933053-0e87-40ce-2c31-08d74728c86f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 11:07:58.9144
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wTwrlDMwXfmbIhp8is+a9Fhqtq6PMkiTRkGNhnaci48kYUrxWqL6sCKefpLStCsmpOBuXGrBwKmT23FX2j5AeS0hwtor+ULxTPBEEkWmzqQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1994
+In-Reply-To: <1570001371-8174-2-git-send-email-eugen.hristev@microchip.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-DQoNCk9uIDAyLjEwLjIwMTkgMTM6MjMsIEFsZXhhbmRyZSBCZWxsb25pIHdyb3RlOg0KDQo+IEhp
-LA0KPiANCj4gT24gMDIvMTAvMjAxOSAwNzozNToyNiswMDAwLCBFdWdlbi5IcmlzdGV2QG1pY3Jv
-Y2hpcC5jb20gd3JvdGU6DQo+PiArc3RhdGljIHZvaWQgd2R0X3dyaXRlKHN0cnVjdCBzYW05eDYw
-X3dkdCAqd2R0LCB1MzIgZmllbGQsIHUzMiB2YWwpDQo+PiArew0KPj4gKwkvKg0KPj4gKwkgKiBX
-RFRfQ1IgYW5kIFdEVF9NUiBtdXN0IG5vdCBiZSBtb2RpZmllZCB3aXRoaW4gdGhyZWUgc2xvdyBj
-bG9jaw0KPj4gKwkgKiBwZXJpb2RzIGZvbGxvd2luZyBhIHJlc3RhcnQgb2YgdGhlIHdhdGNoZG9n
-IHBlcmZvcm1lZCBieSBhIHdyaXRlDQo+PiArCSAqIGFjY2VzcyBpbiBXRFRfQ1IuDQo+PiArCSAq
-Lw0KPj4gKwl3aGlsZSAodGltZV9iZWZvcmUoamlmZmllcywgd2R0LT5sYXN0X3BpbmcgKyBXRFRf
-REVMQVkpKQ0KPj4gKwkJdXNsZWVwX3JhbmdlKDMwLCAxMjUpOw0KPj4gKwl3cml0ZWxfcmVsYXhl
-ZCh2YWwsIHdkdC0+cmVnX2Jhc2UgKyBmaWVsZCk7DQo+PiArCXdkdC0+bGFzdF9waW5nID0gamlm
-ZmllczsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIHZvaWQgd2R0X3dyaXRlX25vc2xlZXAoc3Ry
-dWN0IHNhbTl4NjBfd2R0ICp3ZHQsIHUzMiBmaWVsZCwgdTMyIHZhbCkNCj4+ICt7DQo+PiArCWlm
-ICh0aW1lX2JlZm9yZShqaWZmaWVzLCB3ZHQtPmxhc3RfcGluZyArIFdEVF9ERUxBWSkpDQo+PiAr
-CQl1c2xlZXBfcmFuZ2UoMTIzLCAyNTApOw0KPiANCj4gU28geW91IGhhdmUgYSBfbm9zbGVlcCBm
-dW5jdGlvbiB0aGF0IGRvZXMgc2xlZXA/DQo+IA0KPj4gKwl3cml0ZWxfcmVsYXhlZCh2YWwsIHdk
-dC0+cmVnX2Jhc2UgKyBmaWVsZCk7DQo+PiArCXdkdC0+bGFzdF9waW5nID0gamlmZmllczsNCj4+
-ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBzYW05eDYwX3dkdF9zdGFydChzdHJ1Y3Qgd2F0Y2hk
-b2dfZGV2aWNlICp3ZGQpDQo+PiArew0KPj4gKwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdCA9IHdh
-dGNoZG9nX2dldF9kcnZkYXRhKHdkZCk7DQo+PiArDQo+PiArCXdkdC0+bXIgJj0gfkFUOTFfV0RU
-X1dERElTOw0KPj4gKwl3ZHRfd3JpdGUod2R0LCBBVDkxX1dEVF9NUiwgd2R0LT5tcik7DQo+PiAr
-CXdkdF93cml0ZV9ub3NsZWVwKHdkdCwgQVQ5MV9XRFRfSUVSLCB3ZHQtPmlyKTsNCj4gDQo+IEkg
-ZG9uJ3QgdGhpbmsgQVQ5MV9XRFRfSUVSIG5lZWRzIHRvIGJlIHByb3RlY3RlZCwgeW91IGNhbiBw
-cm9iYWJseSB3cml0ZQ0KPiBpdCBkaXJlY3RseS4gQWxzbywgeW91IGNlcnRhaW5seSBuZWVkIHRv
-IGRvIHRoYXQgYmVmb3JlIHN0YXJ0aW5nIHRoZQ0KPiB3YXRjaGRvZyB0byBhdm9pZCByYWNlIGNv
-bmRpdGlvbnMuDQo+IA0KPj4gKw0KPj4gKwlyZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiArc3Rh
-dGljIGludCBzYW05eDYwX3dkdF9zdG9wKHN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkZCkNCj4+
-ICt7DQo+PiArCXN0cnVjdCBzYW05eDYwX3dkdCAqd2R0ID0gd2F0Y2hkb2dfZ2V0X2RydmRhdGEo
-d2RkKTsNCj4+ICsNCj4+ICsJd2R0LT5tciB8PSBBVDkxX1dEVF9XRERJUzsNCj4+ICsJd2R0X3dy
-aXRlKHdkdCwgQVQ5MV9XRFRfTVIsIHdkdC0+bXIpOw0KPj4gKwl3ZHRfd3JpdGVfbm9zbGVlcCh3
-ZHQsIEFUOTFfV0RUX0lEUiwgd2R0LT5pcik7DQo+PiArDQo+IA0KPiBJIGRvbid0IHRoaW5rIEFU
-OTFfV0RUX0lEUiBuZWVkcyB0byBiZSBwcm90ZWN0ZWQuDQo+IA0KPj4gKwlyZXR1cm4gMDsNCj4+
-ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBzYW05eDYwX3dkdF9waW5nKHN0cnVjdCB3YXRjaGRv
-Z19kZXZpY2UgKndkZCkNCj4+ICt7DQo+PiArCXN0cnVjdCBzYW05eDYwX3dkdCAqd2R0ID0gd2F0
-Y2hkb2dfZ2V0X2RydmRhdGEod2RkKTsNCj4+ICsNCj4+ICsJd2R0X3dyaXRlKHdkdCwgQVQ5MV9X
-RFRfQ1IsIEFUOTFfV0RUX0tFWSB8IEFUOTFfV0RUX1dEUlNUVCk7DQo+PiArDQo+PiArCXJldHVy
-biAwOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgaW50IHNhbTl4NjBfd2R0X3NldF90aW1lb3V0
-KHN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkZCwNCj4+ICsJCQkJICAgdW5zaWduZWQgaW50IHRp
-bWVvdXQpDQo+PiArew0KPj4gKwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdCA9IHdhdGNoZG9nX2dl
-dF9kcnZkYXRhKHdkZCk7DQo+PiArDQo+PiArCXdkdF93cml0ZSh3ZHQsIEFUOTFfV0RUX1dMUiwN
-Cj4+ICsJCSAgQVQ5MV9XRFRfU0VUX0NPVU5URVIoV0RUX1NFQzJUSUNLUyh0aW1lb3V0KSkpOw0K
-Pj4gKw0KPiANCj4gSSBkb24ndCB0aGluayBBVDkxX1dEVF9XTFIgbmVlZHMgdG8gYmUgcHJvdGVj
-dGVkLg0KPiANCj4+ICsJd2RkLT50aW1lb3V0ID0gdGltZW91dDsNCj4+ICsNCj4+ICsJcmV0dXJu
-IDA7DQo+PiArfQ0KPj4gKw0KPj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgd2F0Y2hkb2dfaW5mbyBz
-YW05eDYwX3dkdF9pbmZvID0gew0KPj4gKwkub3B0aW9ucyA9IFdESU9GX1NFVFRJTUVPVVQgfCBX
-RElPRl9NQUdJQ0NMT1NFIHwgV0RJT0ZfS0VFUEFMSVZFUElORywNCj4+ICsJLmlkZW50aXR5ID0g
-Ik1pY3JvY2hpcCBTQU05WDYwIFdhdGNoZG9nIiwNCj4+ICt9Ow0KPj4gKw0KPj4gK3N0YXRpYyBj
-b25zdCBzdHJ1Y3Qgd2F0Y2hkb2dfb3BzIHNhbTl4NjBfd2R0X29wcyA9IHsNCj4+ICsJLm93bmVy
-ID0gVEhJU19NT0RVTEUsDQo+PiArCS5zdGFydCA9IHNhbTl4NjBfd2R0X3N0YXJ0LA0KPj4gKwku
-c3RvcCA9IHNhbTl4NjBfd2R0X3N0b3AsDQo+PiArCS5waW5nID0gc2FtOXg2MF93ZHRfcGluZywN
-Cj4+ICsJLnNldF90aW1lb3V0ID0gc2FtOXg2MF93ZHRfc2V0X3RpbWVvdXQsDQo+PiArfTsNCj4+
-ICsNCj4+ICtzdGF0aWMgaXJxcmV0dXJuX3Qgc2FtOXg2MF93ZHRfaXJxX2hhbmRsZXIoaW50IGly
-cSwgdm9pZCAqZGV2X2lkKQ0KPj4gK3sNCj4+ICsJc3RydWN0IHNhbTl4NjBfd2R0ICp3ZHQgPSBw
-bGF0Zm9ybV9nZXRfZHJ2ZGF0YShkZXZfaWQpOw0KPj4gKw0KPj4gKwlpZiAod2R0X3JlYWQod2R0
-LCBBVDkxX1dEVF9JU1IpKSB7DQo+PiArCQlwcl9jcml0KCJNaWNyb2NoaXAgV2F0Y2hkb2cgU29m
-dHdhcmUgUmVzZXRcbiIpOw0KPj4gKwkJZW1lcmdlbmN5X3Jlc3RhcnQoKTsNCj4+ICsJCXByX2Ny
-aXQoIlJlYm9vdCBkaWRuJ3Qgc3VjY2VlZFxuIik7DQo+PiArCX0NCj4gDQo+IEknbSBub3QgcmVh
-bGx5IGNvbnZpbmNlZCBieSB0aGUgc29mdHdhcmUgcmVzdGFydCB1c2UgY2FzZSBidXQgSSBndWVz
-cyBpdA0KPiBpcyB0byBiZSBhYmxlIHRvIHNodXQgZG93biB3aGlsZSBzdGlsbCBmbHVzaGluZyBk
-YXRhIHRvIHRoZSBzdG9yYWdlLg0KPiBUaGlzIHdvdWxkIG5vdCBwcm90ZWN0IGFnYWluc3Qga2Vy
-bmVsIGlzc3VlcyB0aGVuLg0KDQpIaSBBbGV4YW5kcmUsDQoNClRoYXQncyBjb3JyZWN0LiBJdCBp
-cyB0byBkbyBhIHNvZnR3YXJlIHNodXRkb3duIGluc3RlYWQgb2YgaGFyZCByZWJvb3QgDQpieSBo
-YXJkd2FyZS4gSXQgaGFzIGl0O3MgdXNlIGNhc2VzLCBzbyBJIHByZXNlcnZlZCB0aGUgc2FtZSBs
-ZXZlbCBvZiANCmZ1bmN0aW9uYWxpdHkgYXMgaW4gc2FtYTVkNF93ZHQNCg0KPiANCj4+ICsNCj4+
-ICsJcmV0dXJuIElSUV9IQU5ETEVEOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgaW50IG9mX3Nh
-bTl4NjBfd2R0X2luaXQoc3RydWN0IGRldmljZV9ub2RlICpucCwgc3RydWN0IHNhbTl4NjBfd2R0
-ICp3ZHQpDQo+PiArew0KPj4gKwljb25zdCBjaGFyICp0bXA7DQo+PiArDQo+PiArCXdkdC0+bXIg
-PSBBVDkxX1dEVF9XRERJUzsNCj4+ICsNCj4+ICsJaWYgKCFvZl9wcm9wZXJ0eV9yZWFkX3N0cmlu
-ZyhucCwgImF0bWVsLHdhdGNoZG9nLXR5cGUiLCAmdG1wKSAmJg0KPj4gKwkgICAgIXN0cmNtcCh0
-bXAsICJzb2Z0d2FyZSIpKQ0KPj4gKwkJd2R0LT5pciA9IEFUOTFfV0RUX1BFUklOVDsNCj4+ICsJ
-ZWxzZQ0KPj4gKwkJd2R0LT5tciB8PSBBVDkxX1dEVF9QRVJJT0RSU1Q7DQo+PiArDQo+PiArCWlm
-IChvZl9wcm9wZXJ0eV9yZWFkX2Jvb2wobnAsICJhdG1lbCxpZGxlLWhhbHQiKSkNCj4+ICsJCXdk
-dC0+bXIgfD0gQVQ5MV9XRFRfV0RJRExFSExUOw0KPj4gKw0KPj4gKwlpZiAob2ZfcHJvcGVydHlf
-cmVhZF9ib29sKG5wLCAiYXRtZWwsZGJnLWhhbHQiKSkNCj4+ICsJCXdkdC0+bXIgfD0gQVQ5MV9X
-RFRfV0REQkdITFQ7DQo+PiArDQo+PiArCXJldHVybiAwOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0
-aWMgaW50IHNhbTl4NjBfd2R0X2luaXQoc3RydWN0IHNhbTl4NjBfd2R0ICp3ZHQpDQo+PiArew0K
-Pj4gKwl1MzIgcmVnOw0KPj4gKwkvKg0KPj4gKwkgKiBXaGVuIGJvb3RpbmcgYW5kIHJlc3VtaW5n
-LCB0aGUgYm9vdGxvYWRlciBtYXkgaGF2ZSBjaGFuZ2VkIHRoZQ0KPj4gKwkgKiB3YXRjaGRvZyBj
-b25maWd1cmF0aW9uLg0KPj4gKwkgKiBJZiB0aGUgd2F0Y2hkb2cgaXMgYWxyZWFkeSBydW5uaW5n
-LCB3ZSBjYW4gc2FmZWx5IHVwZGF0ZSBpdC4NCj4+ICsJICogRWxzZSwgd2UgaGF2ZSB0byBkaXNh
-YmxlIGl0IHByb3Blcmx5Lg0KPj4gKwkgKi8NCj4+ICsJaWYgKHdkdF9lbmFibGVkKSB7DQo+PiAr
-CQl3ZHRfd3JpdGVfbm9zbGVlcCh3ZHQsIEFUOTFfV0RUX01SLCB3ZHQtPm1yKTsNCj4+ICsJCXdk
-dF93cml0ZV9ub3NsZWVwKHdkdCwgQVQ5MV9XRFRfSUVSLCB3ZHQtPmlyKTsNCj4+ICsJCXdkdF93
-cml0ZSh3ZHQsIEFUOTFfV0RUX1dMUiwNCj4+ICsJCQkgIEFUOTFfV0RUX1NFVF9DT1VOVEVSKFdE
-VF9TRUMyVElDS1MoV0RUX0RFRkFVTFRfVElNRU9VVCkpKTsNCj4+ICsNCj4+ICsJfSBlbHNlIHsN
-Cj4+ICsJCXJlZyA9IHdkdF9yZWFkKHdkdCwgQVQ5MV9XRFRfTVIpOw0KPj4gKwkJaWYgKCEocmVn
-ICYgQVQ5MV9XRFRfV0RESVMpKQ0KPj4gKwkJCXdkdF93cml0ZV9ub3NsZWVwKHdkdCwgQVQ5MV9X
-RFRfTVIsDQo+PiArCQkJCQkgIHJlZyB8IEFUOTFfV0RUX1dERElTKTsNCj4+ICsJfQ0KPj4gKwly
-ZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBzYW05eDYwX3dkdF9wcm9iZShz
-dHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPj4gK3sNCj4+ICsJc3RydWN0IHdhdGNoZG9n
-X2RldmljZSAqd2RkOw0KPj4gKwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdDsNCj4+ICsJc3RydWN0
-IHJlc291cmNlICpyZXM7DQo+PiArCXZvaWQgX19pb21lbSAqcmVnczsNCj4+ICsJdTMyIGlycSA9
-IDA7DQo+PiArCWludCByZXQ7DQo+PiArDQo+PiArCXdkdCA9IGRldm1fa3phbGxvYygmcGRldi0+
-ZGV2LCBzaXplb2YoKndkdCksIEdGUF9LRVJORUwpOw0KPj4gKwlpZiAoIXdkdCkNCj4+ICsJCXJl
-dHVybiAtRU5PTUVNOw0KPj4gKw0KPj4gKwl3ZGQgPSAmd2R0LT53ZGQ7DQo+PiArCXdkZC0+dGlt
-ZW91dCA9IFdEVF9ERUZBVUxUX1RJTUVPVVQ7DQo+PiArCXdkZC0+aW5mbyA9ICZzYW05eDYwX3dk
-dF9pbmZvOw0KPj4gKwl3ZGQtPm9wcyA9ICZzYW05eDYwX3dkdF9vcHM7DQo+PiArCXdkZC0+bWlu
-X3RpbWVvdXQgPSBNSU5fV0RUX1RJTUVPVVQ7DQo+PiArCXdkZC0+bWF4X3RpbWVvdXQgPSBNQVhf
-V0RUX1RJTUVPVVQ7DQo+PiArCXdkdC0+bGFzdF9waW5nID0gamlmZmllczsNCj4+ICsNCj4+ICsJ
-d2F0Y2hkb2dfc2V0X2RydmRhdGEod2RkLCB3ZHQpOw0KPj4gKw0KPj4gKwlyZXMgPSBwbGF0Zm9y
-bV9nZXRfcmVzb3VyY2UocGRldiwgSU9SRVNPVVJDRV9NRU0sIDApOw0KPj4gKwlyZWdzID0gZGV2
-bV9pb3JlbWFwX3Jlc291cmNlKCZwZGV2LT5kZXYsIHJlcyk7DQo+PiArCWlmIChJU19FUlIocmVn
-cykpDQo+PiArCQlyZXR1cm4gUFRSX0VSUihyZWdzKTsNCj4+ICsNCj4+ICsJd2R0LT5yZWdfYmFz
-ZSA9IHJlZ3M7DQo+PiArDQo+PiArCWlycSA9IGlycV9vZl9wYXJzZV9hbmRfbWFwKHBkZXYtPmRl
-di5vZl9ub2RlLCAwKTsNCj4+ICsJaWYgKCFpcnEpDQo+PiArCQlkZXZfd2FybigmcGRldi0+ZGV2
-LCAiZmFpbGVkIHRvIGdldCBJUlEgZnJvbSBEVFxuIik7DQo+PiArDQo+PiArCXJldCA9IG9mX3Nh
-bTl4NjBfd2R0X2luaXQocGRldi0+ZGV2Lm9mX25vZGUsIHdkdCk7DQo+PiArCWlmIChyZXQpDQo+
-PiArCQlyZXR1cm4gcmV0Ow0KPj4gKw0KPj4gKwlpZiAoKHdkdC0+aXIgJiBBVDkxX1dEVF9QRVJJ
-TlQpICYmIGlycSkgew0KPj4gKwkJcmV0ID0gZGV2bV9yZXF1ZXN0X2lycSgmcGRldi0+ZGV2LCBp
-cnEsIHNhbTl4NjBfd2R0X2lycV9oYW5kbGVyLA0KPj4gKwkJCQkgICAgICAgSVJRRl9TSEFSRUQg
-fCBJUlFGX0lSUVBPTEwgfA0KPj4gKwkJCQkgICAgICAgSVJRRl9OT19TVVNQRU5ELCBwZGV2LT5u
-YW1lLCBwZGV2KTsNCj4+ICsJCWlmIChyZXQpIHsNCj4+ICsJCQlkZXZfZXJyKCZwZGV2LT5kZXYs
-DQo+PiArCQkJCSJjYW5ub3QgcmVnaXN0ZXIgaW50ZXJydXB0IGhhbmRsZXJcbiIpOw0KPj4gKwkJ
-CXJldHVybiByZXQ7DQo+PiArCQl9DQo+PiArCX0NCj4+ICsNCj4+ICsJd2F0Y2hkb2dfaW5pdF90
-aW1lb3V0KHdkZCwgd2R0X3RpbWVvdXQsICZwZGV2LT5kZXYpOw0KPj4gKw0KPj4gKwlyZXQgPSBz
-YW05eDYwX3dkdF9pbml0KHdkdCk7DQo+PiArCWlmIChyZXQpDQo+PiArCQlyZXR1cm4gcmV0Ow0K
-Pj4gKw0KPj4gKwl3YXRjaGRvZ19zZXRfbm93YXlvdXQod2RkLCBub3dheW91dCk7DQo+PiArDQo+
-PiArCXJldCA9IHdhdGNoZG9nX3JlZ2lzdGVyX2RldmljZSh3ZGQpOw0KPj4gKwlpZiAocmV0KSB7
-DQo+PiArCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJmYWlsZWQgdG8gcmVnaXN0ZXIgd2F0Y2hkb2cg
-ZGV2aWNlXG4iKTsNCj4+ICsJCXJldHVybiByZXQ7DQo+PiArCX0NCj4+ICsNCj4+ICsJcGxhdGZv
-cm1fc2V0X2RydmRhdGEocGRldiwgd2R0KTsNCj4+ICsNCj4+ICsJZGV2X2luZm8oJnBkZXYtPmRl
-diwgImluaXRpYWxpemVkICh0aW1lb3V0ID0gJWQgc2VjLCBub3dheW91dCA9ICVkKVxuIiwNCj4+
-ICsJCSB3ZGQtPnRpbWVvdXQsIG5vd2F5b3V0KTsNCj4+ICsNCj4+ICsJcmV0dXJuIDA7DQo+PiAr
-fQ0KPj4gKw0KPj4gK3N0YXRpYyBpbnQgc2FtOXg2MF93ZHRfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9y
-bV9kZXZpY2UgKnBkZXYpDQo+PiArew0KPj4gKwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdCA9IHBs
-YXRmb3JtX2dldF9kcnZkYXRhKHBkZXYpOw0KPj4gKw0KPj4gKwlzYW05eDYwX3dkdF9zdG9wKCZ3
-ZHQtPndkZCk7DQo+PiArDQo+PiArCXdhdGNoZG9nX3VucmVnaXN0ZXJfZGV2aWNlKCZ3ZHQtPndk
-ZCk7DQo+PiArDQo+PiArCXJldHVybiAwOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgY29uc3Qg
-c3RydWN0IG9mX2RldmljZV9pZCBzYW05eDYwX3dkdF9vZl9tYXRjaFtdID0gew0KPj4gKwl7IC5j
-b21wYXRpYmxlID0gIm1pY3JvY2hpcCxzYW05eDYwLXdkdCIsIH0sDQo+PiArCXsgfQ0KPj4gK307
-DQo+PiArTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgc2FtOXg2MF93ZHRfb2ZfbWF0Y2gpOw0KPj4g
-Kw0KPj4gKyNpZmRlZiBDT05GSUdfUE1fU0xFRVANCj4gDQo+IE1vc3Qgb2YgdGhlIGxvZ2ljIGhh
-cyBiZWVuIGNvcHkvcGFzdGVkIGZyb20gc2FtYTVkNF93ZHQuYyBhbmQgdGhpcw0KPiBhbHJlYWR5
-IG1pc3Mgc29tZSBpbXByb3ZlbWVudCB0aGF0IGhhdmUgYmVlbiBtYWRlIGJldHdlZW4gdGhlIHRp
-bWUgeW91DQo+IGNvcGllZCBpdCBhbmQgbm93Lg0KDQpJIHdpbGwgZml4IGFjY29yZGluZ2x5LiBB
-cyBJIHNhaWQgaW4gdGhlIGNvbW1pdCBtZXNzYWdlLCBzYW1hNWQ0X3dkdCBpcyANCnVzZWQgYXMg
-YSBzdGFydGluZyBwb2ludCBzbyB5ZXMsIGFsbCB0aGUgZnVuY3Rpb25hbGl0eSBpcyB0aGUgc2Ft
-ZSwgDQpleGNlcHQgdGhlIGFjdHVhbCBoYXJkd2FyZSBpbnRlcmFjdGlvbi4NCg0KPiANCj4gQXJl
-IHlvdSBzdXJlIGJvdGggZHJpdmVycyBzaG91bGRuJ3QgYmUgbWVyZ2VkPyBJIGZlZWwgbGlrZSB0
-aGlzIHdpbGwgYmUgYQ0KPiBtYWludGVuYW5jZSBoZWxsIGlmIHdlIGRvbid0IGRvIHRoYXQgbm93
-Lg0KDQpJdCBjb3VsZCBiZSBtZXJnZWQsIGJ1dCB3ZSBzaG91bGQgZG8gc28gPw0KQ291bGQgaGF2
-ZSB0d28gY29tcGF0aWJsZXMsIHdpdGggcGxhdGZvcm0gZGF0YSwgc2VsZWN0YWJsZSwgYW5kIHdp
-dGggDQpkaWZmZXJlbnQgZnVuY3Rpb25zLCB0aGF0IGNhbiBiZSBzZWxlY3RlZC4uIGVpdGhlciB0
-aGlzIG9yIHRoYXQuDQpZb3UgdGhpbmsgdGhhdCdzIGEgYmV0dGVyIHdheSB0byBoYW5kbGUgdGhp
-cyBuZXcgSVAgYmxvY2sgPw0KSSB3b3VsZCBsaWtlIHRvIGF2b2lkIGhhdmluZyBhIGJpZyBkcml2
-ZXIgY292ZXJpbmcgbXVsdGlwbGUgZGlmZmVyZW50IA0KaGFyZHdhcmUgcGllY2VzLCBidXQgdGhh
-dCdzIGp1c3QgbXkgcHJlZmVyZW5jZS4gSSBjYW4gcmV3b3JrIHRoaXMgaW50byBhIA0Kc2luZ2xl
-IGRyaXZlciBpZiBpdCdzIGJldHRlciB0aGF0IHdheS4NCg0KRXVnZW4NCg0KPiANCj4+ICtzdGF0
-aWMgaW50IHNhbTl4NjBfd2R0X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+PiArew0KPj4g
-KwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdCA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPj4gKw0K
-Pj4gKwkvKg0KPj4gKwkgKiBGSVhNRTogd3JpdGluZyBNUiBhbHNvIHBpbmdzIHRoZSB3YXRjaGRv
-ZyB3aGljaCBtYXkgbm90IGJlIGRlc2lyZWQuDQo+PiArCSAqIFRoaXMgc2hvdWxkIG9ubHkgYmUg
-ZG9uZSB3aGVuIHRoZSByZWdpc3RlcnMgYXJlIGxvc3Qgb24gc3VzcGVuZCBidXQNCj4+ICsJICog
-dGhlcmUgaXMgbm8gd2F5IHRvIGdldCB0aGlzIGluZm9ybWF0aW9uIHJpZ2h0IG5vdy4NCj4+ICsJ
-ICovDQo+PiArCXNhbTl4NjBfd2R0X2luaXQod2R0KTsNCj4+ICsNCj4+ICsJcmV0dXJuIDA7DQo+
-PiArfQ0KPj4gKyNlbmRpZg0KPj4gKw0KPj4gK3N0YXRpYyBTSU1QTEVfREVWX1BNX09QUyhzYW05
-eDYwX3dkdF9wbV9vcHMsIE5VTEwsDQo+PiArCQkJIHNhbTl4NjBfd2R0X3Jlc3VtZSk7DQo+PiAr
-DQo+PiArc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgc2FtOXg2MF93ZHRfZHJpdmVyID0g
-ew0KPj4gKwkucHJvYmUJCT0gc2FtOXg2MF93ZHRfcHJvYmUsDQo+PiArCS5yZW1vdmUJCT0gc2Ft
-OXg2MF93ZHRfcmVtb3ZlLA0KPj4gKwkuZHJpdmVyCQk9IHsNCj4+ICsJCS5uYW1lCT0gInNhbTl4
-NjBfd2R0IiwNCj4+ICsJCS5wbQk9ICZzYW05eDYwX3dkdF9wbV9vcHMsDQo+PiArCQkub2ZfbWF0
-Y2hfdGFibGUgPSBzYW05eDYwX3dkdF9vZl9tYXRjaCwNCj4+ICsJfQ0KPj4gK307DQo+PiArbW9k
-dWxlX3BsYXRmb3JtX2RyaXZlcihzYW05eDYwX3dkdF9kcml2ZXIpOw0KPj4gKw0KPj4gK01PRFVM
-RV9BVVRIT1IoIkV1Z2VuIEhyaXN0ZXYiKTsNCj4+ICtNT0RVTEVfREVTQ1JJUFRJT04oIk1pY3Jv
-Y2hpcCBTQU05WDYwIFdhdGNoZG9nIFRpbWVyIGRyaXZlciIpOw0KPj4gK01PRFVMRV9MSUNFTlNF
-KCJHUEwgdjIiKTsNCj4+IC0tIA0KPj4gMi43LjQNCj4+DQo+IA0K
+On 10/2/19 12:35 AM, Eugen.Hristev@microchip.com wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
+> 
+> This is the driver for SAM9X60 watchdog timer.
+> The offered functionality is the same as sama5d4_wdt.
+> The difference comes in register map, way to configure the timeout and
+> interrupts.
+> Developed starting from sama5d4_wdt.c
+> 
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> ---
+>   drivers/watchdog/Kconfig       |   9 ++
+>   drivers/watchdog/Makefile      |   1 +
+>   drivers/watchdog/sam9x60_wdt.c | 335 +++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 345 insertions(+)
+>   create mode 100644 drivers/watchdog/sam9x60_wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 58e7c10..3562e26 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -416,6 +416,15 @@ config SAMA5D4_WATCHDOG
+>   	  Its Watchdog Timer Mode Register can be written more than once.
+>   	  This will reboot your system when the timeout is reached.
+>   
+> +config SAM9X60_WATCHDOG
+> +	tristate "Microchip SAM9X60 Watchdog Timer"
+> +	depends on ARCH_AT91 || COMPILE_TEST
+
+depends on HAS_IOMEM
+
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Microchip SAM9X60 watchdog timer is embedded into SAM9X60 chips.
+> +	  Its Watchdog Timer Mode Register can be written more than once.
+> +	  This will reboot your system when the timeout is reached.
+> +
+>   config CADENCE_WATCHDOG
+>   	tristate "Cadence Watchdog Timer"
+>   	depends on HAS_IOMEM
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 2ee352b..93ba599 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -52,6 +52,7 @@ obj-$(CONFIG_IXP4XX_WATCHDOG) += ixp4xx_wdt.o
+>   obj-$(CONFIG_S3C2410_WATCHDOG) += s3c2410_wdt.o
+>   obj-$(CONFIG_SA1100_WATCHDOG) += sa1100_wdt.o
+>   obj-$(CONFIG_SAMA5D4_WATCHDOG) += sama5d4_wdt.o
+> +obj-$(CONFIG_SAM9X60_WATCHDOG) += sam9x60_wdt.o
+>   obj-$(CONFIG_DW_WATCHDOG) += dw_wdt.o
+>   obj-$(CONFIG_EP93XX_WATCHDOG) += ep93xx_wdt.o
+>   obj-$(CONFIG_PNX4008_WATCHDOG) += pnx4008_wdt.o
+> diff --git a/drivers/watchdog/sam9x60_wdt.c b/drivers/watchdog/sam9x60_wdt.c
+> new file mode 100644
+> index 00000000..f612230
+> --- /dev/null
+> +++ b/drivers/watchdog/sam9x60_wdt.c
+> @@ -0,0 +1,335 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for Microchip SAM9X60 Watchdog Timer
+> + *
+> + * Copyright (C) 2019 Microchip Technology, Inc.
+> + * Author: Eugen Hristev <eugen.hristev@microchip.com>
+> + *
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define AT91_WDT_CR		0x00			/* Watchdog Control Register */
+> +#define		AT91_WDT_WDRSTT		BIT(0)		/* Restart */
+> +#define		AT91_WDT_KEY		(0xa5 << 24)		/* KEY Password */
+> +
+> +#define AT91_WDT_MR		0x04			/* Watchdog Mode Register */
+> +#define		AT91_WDT_PERIODRST	BIT(4)		/* Period Reset */
+> +#define		AT91_WDT_RPTHRST	BIT(5)		/* Minimum Restart Period */
+> +#define		AT91_WDT_WDDIS		BIT(12)		/* Disable */
+> +#define		AT91_WDT_WDDBGHLT	BIT(28)		/* Debug Halt */
+> +#define		AT91_WDT_WDIDLEHLT	BIT(29)		/* Idle Halt */
+> +
+> +#define AT91_WDT_VR		0x08			/* Watchdog Timer Value Register */
+> +
+> +#define AT91_WDT_WLR		0x0c
+> +#define		AT91_WDT_COUNTER	(0xfff << 0)		/* Watchdog Period Value */
+> +#define		AT91_WDT_SET_COUNTER(x)	((x) & AT91_WDT_COUNTER)
+> +
+> +#define AT91_WDT_IER		0x14			/* Interrupt Enable Register */
+> +#define		AT91_WDT_PERINT		BIT(0)		/* Period Interrupt Enable */
+> +#define AT91_WDT_IDR		0x18			/* Interrupt Disable Register */
+> +#define AT91_WDT_ISR		0x1c			/* Interrupt Status Register */
+> +
+> +/* minimum and maximum watchdog timeout, in seconds */
+> +#define MIN_WDT_TIMEOUT		1
+> +#define MAX_WDT_TIMEOUT		16
+> +#define WDT_DEFAULT_TIMEOUT	MAX_WDT_TIMEOUT
+> +
+> +#define WDT_SEC2TICKS(s)	((s) ? (((s) << 8) - 1) : 0)
+> +
+> +struct sam9x60_wdt {
+> +	struct watchdog_device	wdd;
+> +	void __iomem		*reg_base;
+> +	u32			mr;
+> +	u32			ir;
+> +	unsigned long		last_ping;
+> +};
+> +
+> +static int wdt_timeout;
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +
+> +module_param(wdt_timeout, int, 0);
+> +MODULE_PARM_DESC(wdt_timeout,
+> +		 "Watchdog timeout in seconds. (default = "
+> +		 __MODULE_STRING(WDT_DEFAULT_TIMEOUT) ")");
+> +
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout,
+> +		 "Watchdog cannot be stopped once started (default="
+> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> +
+> +#define wdt_enabled (!(wdt->mr & AT91_WDT_WDDIS))
+
+Please no use in variables in macros without referencing them in the argument.
+
+> +
+> +#define wdt_read(wdt, field) \
+> +	readl_relaxed((wdt)->reg_base + (field))
+> +
+> +/* 4 slow clock periods is 4/32768 = 122.07us*/
+> +#define WDT_DELAY	usecs_to_jiffies(123)
+> +
+> +static void wdt_write(struct sam9x60_wdt *wdt, u32 field, u32 val)
+> +{
+> +	/*
+> +	 * WDT_CR and WDT_MR must not be modified within three slow clock
+> +	 * periods following a restart of the watchdog performed by a write
+> +	 * access in WDT_CR.
+> +	 */
+> +	while (time_before(jiffies, wdt->last_ping + WDT_DELAY))
+> +		usleep_range(30, 125);
+> +	writel_relaxed(val, wdt->reg_base + field);
+> +	wdt->last_ping = jiffies;
+> +}
+> +
+> +static void wdt_write_nosleep(struct sam9x60_wdt *wdt, u32 field, u32 val)
+> +{
+> +	if (time_before(jiffies, wdt->last_ping + WDT_DELAY))
+
+WDT_DELAY is most likely 1 under all circumstances. If the last access was just before
+a tick, this won't guarantee that really 123 uS expired.
+
+In situations like this, I would suggest not to rely on jiffies related functions.
+If the last access time is stored based on ktime_get(), the remaining time in
+us can be calculated using ktime_us_delta(). Then just sleep (or delay in case
+of nosleep) for that amount of microseconds.
+
+Also, I don't see why this second function would be necessary.
+A single function with an if() should be sufficient.
+
+	ktime_t delta = WDT_DELAY_US - ktime_us_delta(ktime_get(), wdt->last_ping);
+
+	if (delta > 0)
+		usleep_range(delta, delta * 2);
+	writel_relaxed(val, wdt->reg_base + field);
+	wdt->last_ping = ktime_get();
+
+> +		usleep_range(123, 250);
+> +	writel_relaxed(val, wdt->reg_base + field);
+> +	wdt->last_ping = jiffies;
+> +}
+> +
+> +static int sam9x60_wdt_start(struct watchdog_device *wdd)
+> +{
+> +	struct sam9x60_wdt *wdt = watchdog_get_drvdata(wdd);
+> +
+> +	wdt->mr &= ~AT91_WDT_WDDIS;
+> +	wdt_write(wdt, AT91_WDT_MR, wdt->mr);
+> +	wdt_write_nosleep(wdt, AT91_WDT_IER, wdt->ir);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sam9x60_wdt_stop(struct watchdog_device *wdd)
+> +{
+> +	struct sam9x60_wdt *wdt = watchdog_get_drvdata(wdd);
+> +
+> +	wdt->mr |= AT91_WDT_WDDIS;
+> +	wdt_write(wdt, AT91_WDT_MR, wdt->mr);
+> +	wdt_write_nosleep(wdt, AT91_WDT_IDR, wdt->ir);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sam9x60_wdt_ping(struct watchdog_device *wdd)
+> +{
+> +	struct sam9x60_wdt *wdt = watchdog_get_drvdata(wdd);
+> +
+> +	wdt_write(wdt, AT91_WDT_CR, AT91_WDT_KEY | AT91_WDT_WDRSTT);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sam9x60_wdt_set_timeout(struct watchdog_device *wdd,
+> +				   unsigned int timeout)
+> +{
+> +	struct sam9x60_wdt *wdt = watchdog_get_drvdata(wdd);
+> +
+> +	wdt_write(wdt, AT91_WDT_WLR,
+> +		  AT91_WDT_SET_COUNTER(WDT_SEC2TICKS(timeout)));
+> +
+> +	wdd->timeout = timeout;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct watchdog_info sam9x60_wdt_info = {
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
+> +	.identity = "Microchip SAM9X60 Watchdog",
+> +};
+> +
+> +static const struct watchdog_ops sam9x60_wdt_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = sam9x60_wdt_start,
+> +	.stop = sam9x60_wdt_stop,
+> +	.ping = sam9x60_wdt_ping,
+> +	.set_timeout = sam9x60_wdt_set_timeout,
+> +};
+> +
+> +static irqreturn_t sam9x60_wdt_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct sam9x60_wdt *wdt = platform_get_drvdata(dev_id);
+> +
+> +	if (wdt_read(wdt, AT91_WDT_ISR)) {
+> +		pr_crit("Microchip Watchdog Software Reset\n");
+> +		emergency_restart();
+> +		pr_crit("Reboot didn't succeed\n");
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int of_sam9x60_wdt_init(struct device_node *np, struct sam9x60_wdt *wdt)
+> +{
+> +	const char *tmp;
+> +
+> +	wdt->mr = AT91_WDT_WDDIS;
+> +
+> +	if (!of_property_read_string(np, "atmel,watchdog-type", &tmp) &&
+> +	    !strcmp(tmp, "software"))
+> +		wdt->ir = AT91_WDT_PERINT;
+> +	else
+> +		wdt->mr |= AT91_WDT_PERIODRST;
+> +
+> +	if (of_property_read_bool(np, "atmel,idle-halt"))
+> +		wdt->mr |= AT91_WDT_WDIDLEHLT;
+> +
+> +	if (of_property_read_bool(np, "atmel,dbg-halt"))
+> +		wdt->mr |= AT91_WDT_WDDBGHLT;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sam9x60_wdt_init(struct sam9x60_wdt *wdt)
+> +{
+> +	u32 reg;
+> +	/*
+> +	 * When booting and resuming, the bootloader may have changed the
+> +	 * watchdog configuration.
+> +	 * If the watchdog is already running, we can safely update it.
+> +	 * Else, we have to disable it properly.
+> +	 */
+> +	if (wdt_enabled) {
+> +		wdt_write_nosleep(wdt, AT91_WDT_MR, wdt->mr);
+> +		wdt_write_nosleep(wdt, AT91_WDT_IER, wdt->ir);
+> +		wdt_write(wdt, AT91_WDT_WLR,
+> +			  AT91_WDT_SET_COUNTER(WDT_SEC2TICKS(WDT_DEFAULT_TIMEOUT)));
+> +
+> +	} else {
+> +		reg = wdt_read(wdt, AT91_WDT_MR);
+> +		if (!(reg & AT91_WDT_WDDIS))
+> +			wdt_write_nosleep(wdt, AT91_WDT_MR,
+> +					  reg | AT91_WDT_WDDIS);
+> +	}
+
+If the watchdog may be running at boot time, the watchdog core
+should be informed about it.
+
+> +	return 0;
+> +}
+> +
+> +static int sam9x60_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct watchdog_device *wdd;
+> +	struct sam9x60_wdt *wdt;
+> +	struct resource *res;
+> +	void __iomem *regs;
+> +	u32 irq = 0;
+
+Unnecessary initialization.
+
+> +	int ret;
+> +
+> +	wdt = devm_kzalloc(&pdev->dev, sizeof(*wdt), GFP_KERNEL);
+> +	if (!wdt)
+> +		return -ENOMEM;
+> +
+> +	wdd = &wdt->wdd;
+> +	wdd->timeout = WDT_DEFAULT_TIMEOUT;
+> +	wdd->info = &sam9x60_wdt_info;
+> +	wdd->ops = &sam9x60_wdt_ops;
+> +	wdd->min_timeout = MIN_WDT_TIMEOUT;
+> +	wdd->max_timeout = MAX_WDT_TIMEOUT;
+> +	wdt->last_ping = jiffies;
+> +
+> +	watchdog_set_drvdata(wdd, wdt);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	regs = devm_ioremap_resource(&pdev->dev, res);
+
+devm_platform_ioremap_resource()
+
+> +	if (IS_ERR(regs))
+> +		return PTR_ERR(regs);
+> +
+> +	wdt->reg_base = regs;
+> +
+> +	irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
+> +	if (!irq)
+> +		dev_warn(&pdev->dev, "failed to get IRQ from DT\n");
+> +
+
+The interrupt property is optional. Not providing it does not warrant a warning.
+
+> +	ret = of_sam9x60_wdt_init(pdev->dev.of_node, wdt);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if ((wdt->ir & AT91_WDT_PERINT) && irq) {
+
+... even more so if it isn't actually used in some cases. irq_of_parse_and_map()
+should probably only be called in the first place if AT91_WDT_PERINT is set.
+
+> +		ret = devm_request_irq(&pdev->dev, irq, sam9x60_wdt_irq_handler,
+> +				       IRQF_SHARED | IRQF_IRQPOLL |
+> +				       IRQF_NO_SUSPEND, pdev->name, pdev);
+> +		if (ret) {
+> +			dev_err(&pdev->dev,
+> +				"cannot register interrupt handler\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	watchdog_init_timeout(wdd, wdt_timeout, &pdev->dev);
+> +
+> +	ret = sam9x60_wdt_init(wdt);
+> +	if (ret)
+> +		return ret;
+> +
+> +	watchdog_set_nowayout(wdd, nowayout);
+> +
+> +	ret = watchdog_register_device(wdd);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "failed to register watchdog device\n");
+> +		return ret;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, wdt);
+> +
+> +	dev_info(&pdev->dev, "initialized (timeout = %d sec, nowayout = %d)\n",
+> +		 wdd->timeout, nowayout);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sam9x60_wdt_remove(struct platform_device *pdev)
+> +{
+> +	struct sam9x60_wdt *wdt = platform_get_drvdata(pdev);
+> +
+> +	sam9x60_wdt_stop(&wdt->wdd);
+> +
+
+Please use watchdog_stop_on_unregister() instead.
+
+> +	watchdog_unregister_device(&wdt->wdd);
+> +
+
+Please use devm_watchdog_register_device() and drop the remove function.
+
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sam9x60_wdt_of_match[] = {
+> +	{ .compatible = "microchip,sam9x60-wdt", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sam9x60_wdt_of_match);
+> +
+> +#ifdef CONFIG_PM_SLEEP
+
+Please use __maybe_unused
+
+> +static int sam9x60_wdt_resume(struct device *dev)
+> +{
+> +	struct sam9x60_wdt *wdt = dev_get_drvdata(dev);
+> +
+> +	/*
+> +	 * FIXME: writing MR also pings the watchdog which may not be desired.
+> +	 * This should only be done when the registers are lost on suspend but
+> +	 * there is no way to get this information right now.
+> +	 */
+
+This seems wrong. The bootloader may have stopped the watchdog in the
+suspend/resume cycle. This does not properly re-initialize it.
+
+Also, is there really no need to stop the watchdog on suspend ?
+
+> +	sam9x60_wdt_init(wdt);
+> +
+> +	return 0;
+> +}
+> +#endif
+> +
+> +static SIMPLE_DEV_PM_OPS(sam9x60_wdt_pm_ops, NULL,
+> +			 sam9x60_wdt_resume);
+> +
+> +static struct platform_driver sam9x60_wdt_driver = {
+> +	.probe		= sam9x60_wdt_probe,
+> +	.remove		= sam9x60_wdt_remove,
+> +	.driver		= {
+> +		.name	= "sam9x60_wdt",
+> +		.pm	= &sam9x60_wdt_pm_ops,
+> +		.of_match_table = sam9x60_wdt_of_match,
+> +	}
+> +};
+> +module_platform_driver(sam9x60_wdt_driver);
+> +
+> +MODULE_AUTHOR("Eugen Hristev");
+> +MODULE_DESCRIPTION("Microchip SAM9X60 Watchdog Timer driver");
+> +MODULE_LICENSE("GPL v2");
+> 
+
