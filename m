@@ -2,334 +2,296 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D1EC4B52
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Oct 2019 12:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B7AC86F5
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Oct 2019 13:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727453AbfJBKYG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Oct 2019 06:24:06 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:60805 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbfJBKYG (ORCPT
+        id S1728073AbfJBLIC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Oct 2019 07:08:02 -0400
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:36107 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726325AbfJBLIB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Oct 2019 06:24:06 -0400
-Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id E04EC200017;
-        Wed,  2 Oct 2019 10:23:55 +0000 (UTC)
-Date:   Wed, 2 Oct 2019 12:23:55 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Eugen.Hristev@microchip.com
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Nicolas.Ferre@microchip.com
+        Wed, 2 Oct 2019 07:08:01 -0400
+Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
+  Eugen.Hristev@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="Eugen.Hristev@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa2.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: oOQfZez7gL0osqW6PWf2jWVFDtQHp765g7eqqRv74LRcYXd/YCGTkS2pB7zo32X4xmRTM0Vg4I
+ UDqDeEzpcAyYTOvOlGaMqG51dRoFu88k9SYKA2GKgIxKogWdIYpqUnTXIQ3pjLVjIIcA7g1l/U
+ u/ZnbN/OtrGHnlzkCncHs+5Kp0yEn3DthPLK3o30jj8ejLvTyXeyJUAMsgqV8yAgBGhNcPSGcX
+ Q+qdzIV/gt0B9U5u8M9m98WLULfA7rWpK4k736tgm0EVyVVM2Yxg31hb44kr/vEdCjlVSE8/N7
+ hJM=
+X-IronPort-AV: E=Sophos;i="5.64,574,1559545200"; 
+   d="scan'208";a="51164848"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Oct 2019 04:08:00 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 2 Oct 2019 04:07:59 -0700
+Received: from NAM05-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Wed, 2 Oct 2019 04:08:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eAwG6RsDQx0PNySRa3lg5VzCdKqwydWVFuCvvaWIXu/Tt81NEC8KWdTSVnUHBG3ozKa2yOfvnL6kM3YvScClpNyZOBbS1YWQKQp6H0KFr5x709bIzsi118W4xS3vOlaqcuMjxSN7O1S89OILLHgvG5YDh2XcuPQ71fPjEvUNlYLHwKb5U9b0hw0G3z9BLSvQPuedhXSx/ndKx+KFXhu5emrMpVVb3vkqM8NbEbVtrbVHDCnsPbRI/ItZuY5l3rJHv0JfIcySx+DUbxnOmpGJj6inlCqRgO6gMFDwVMKfFmPwakwaDLgOz0n9M0oqzpQnZIOfk4/puBsZhrZGGjlDHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nQVAKd8f71YjVL0/Sc+dwo/DLcILNXS41S1pN51R4as=;
+ b=jy7HXt0fPfQ+jrZWWmtsAwXtqhCDTXi0Z9xhSmLXQvA//b0lTyTS3+Ut71pnlbjP9HdVHqUKA6hdhoLoae0X8Qs00JWDrHsct5UQGxXAI+UAgxInm/8NyWMk53X6xzHHjYVT5UtovvPU2GkHP5Ny2lt5jlmT+W+WfInqzL8H68U+5REoO7aJS6T7ToorHB1z+10TNES1ufbVVUIZd1Vhj8A3Bg9OwEJ0DJz/30H2Xe2wCQcqcfEjg5OYLgND6GDPZAuziXX0Mzsyhsh/XP99SZ3WGNuK/tC9Qe62ZZD+b7V4s+hbT21nCCel5dpePL50Rud9MMlHDmawSWDohhb4DA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nQVAKd8f71YjVL0/Sc+dwo/DLcILNXS41S1pN51R4as=;
+ b=heOJtX+JR6wuv2HVLL8456zQLmgwDlcwIxoLsiVwFLTPYKR0GI1VL6mFopEppnD0CuXarH75iunT20Ve6iM8LNluPDTfuftpzk53ueO3D3EBR+7/Bm3TKmr2YMeRTLjCDLiOL+joxMZGqiapxZ0OSEILuVSkvDKm6GZW25C9FMw=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB1994.namprd11.prod.outlook.com (10.168.105.10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2305.20; Wed, 2 Oct 2019 11:07:59 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::b125:76c1:c9b1:34f4]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::b125:76c1:c9b1:34f4%10]) with mapi id 15.20.2305.023; Wed, 2 Oct 2019
+ 11:07:59 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <alexandre.belloni@bootlin.com>
+CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Nicolas.Ferre@microchip.com>
 Subject: Re: [PATCH 2/3] watchdog: sam9x60_wdt: introduce sam9x60 watchdog
  timer driver
-Message-ID: <20191002102343.GL4106@piout.net>
+Thread-Topic: [PATCH 2/3] watchdog: sam9x60_wdt: introduce sam9x60 watchdog
+ timer driver
+Thread-Index: AQHVePP1mVCAVHNqYEKA4n6lujXEMadHJRSAgAAKu4A=
+Date:   Wed, 2 Oct 2019 11:07:58 +0000
+Message-ID: <41dc5cc8-4ce3-62ee-132f-e8117190b850@microchip.com>
 References: <1570001371-8174-1-git-send-email-eugen.hristev@microchip.com>
  <1570001371-8174-2-git-send-email-eugen.hristev@microchip.com>
+ <20191002102343.GL4106@piout.net>
+In-Reply-To: <20191002102343.GL4106@piout.net>
+Accept-Language: en-US, ro-RO
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: VI1PR0501CA0009.eurprd05.prod.outlook.com
+ (2603:10a6:800:92::19) To DM5PR11MB1242.namprd11.prod.outlook.com
+ (2603:10b6:3:14::8)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tagtoolbar-keys: D20191002140219962
+x-originating-ip: [94.177.32.156]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 85933053-0e87-40ce-2c31-08d74728c86f
+x-ms-traffictypediagnostic: DM5PR11MB1994:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR11MB1994DDD2E3F42DABB47416DCE89C0@DM5PR11MB1994.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2331;
+x-forefront-prvs: 0178184651
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(39860400002)(396003)(346002)(376002)(199004)(189003)(26005)(486006)(3846002)(476003)(25786009)(5660300002)(6116002)(11346002)(76176011)(446003)(186003)(102836004)(99286004)(4326008)(2616005)(66946007)(14454004)(36756003)(52116002)(386003)(53546011)(6506007)(478600001)(66446008)(86362001)(2906002)(64756008)(66556008)(66476007)(54906003)(305945005)(7736002)(107886003)(6486002)(6512007)(31686004)(229853002)(6436002)(316002)(6916009)(71200400001)(31696002)(8936002)(71190400001)(8676002)(81156014)(6246003)(81166006)(66066001)(14444005)(256004);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1994;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: d5utXEF6fjAf0THJo48WVbut5mU6TEJqh3h08fkBlGczECGgeGLK5wssYSvgu3VImunUHX3hK2ShuDIKtuRe+mt9PFT08FE25yVgH0Y5zFUgnElXVZS60VaqiFhRUDhO3TYY6apT2j+uD5v4tbk9LA9ntxjh6FqPcDo35KoGZgkIKCRK2b4MXnvq0e//agLvTDRXxOzaH8YWBkSZyXu9ZLfgDjnBgBCvmciRQ/eFegvqqxoa9XTXb9t2uFZJPfzAUXQVZRWIXc6S6b5s02nyAl9u8nB5CPVZb0uVlU5ubFrkvIQ3Pi6RxXJP4dUnQD9qOppYfvHCdorXMCj8wjpaQoBSKGQM9fksx3oOzp3xZam+mmI/jN5tww0GTGEiwBvl1BdSLyGrGXTKMQyuv2fydYwla29J752e4ltKevONafM=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DD8BAB5E16639445A6C662787A1A0435@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570001371-8174-2-git-send-email-eugen.hristev@microchip.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85933053-0e87-40ce-2c31-08d74728c86f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 11:07:58.9144
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wTwrlDMwXfmbIhp8is+a9Fhqtq6PMkiTRkGNhnaci48kYUrxWqL6sCKefpLStCsmpOBuXGrBwKmT23FX2j5AeS0hwtor+ULxTPBEEkWmzqQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1994
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
-
-On 02/10/2019 07:35:26+0000, Eugen.Hristev@microchip.com wrote:
-> +static void wdt_write(struct sam9x60_wdt *wdt, u32 field, u32 val)
-> +{
-> +	/*
-> +	 * WDT_CR and WDT_MR must not be modified within three slow clock
-> +	 * periods following a restart of the watchdog performed by a write
-> +	 * access in WDT_CR.
-> +	 */
-> +	while (time_before(jiffies, wdt->last_ping + WDT_DELAY))
-> +		usleep_range(30, 125);
-> +	writel_relaxed(val, wdt->reg_base + field);
-> +	wdt->last_ping = jiffies;
-> +}
-> +
-> +static void wdt_write_nosleep(struct sam9x60_wdt *wdt, u32 field, u32 val)
-> +{
-> +	if (time_before(jiffies, wdt->last_ping + WDT_DELAY))
-> +		usleep_range(123, 250);
-
-So you have a _nosleep function that does sleep?
-
-> +	writel_relaxed(val, wdt->reg_base + field);
-> +	wdt->last_ping = jiffies;
-> +}
-> +
-> +static int sam9x60_wdt_start(struct watchdog_device *wdd)
-> +{
-> +	struct sam9x60_wdt *wdt = watchdog_get_drvdata(wdd);
-> +
-> +	wdt->mr &= ~AT91_WDT_WDDIS;
-> +	wdt_write(wdt, AT91_WDT_MR, wdt->mr);
-> +	wdt_write_nosleep(wdt, AT91_WDT_IER, wdt->ir);
-
-I don't think AT91_WDT_IER needs to be protected, you can probably write
-it directly. Also, you certainly need to do that before starting the
-watchdog to avoid race conditions.
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int sam9x60_wdt_stop(struct watchdog_device *wdd)
-> +{
-> +	struct sam9x60_wdt *wdt = watchdog_get_drvdata(wdd);
-> +
-> +	wdt->mr |= AT91_WDT_WDDIS;
-> +	wdt_write(wdt, AT91_WDT_MR, wdt->mr);
-> +	wdt_write_nosleep(wdt, AT91_WDT_IDR, wdt->ir);
-> +
-
-I don't think AT91_WDT_IDR needs to be protected.
-
-> +	return 0;
-> +}
-> +
-> +static int sam9x60_wdt_ping(struct watchdog_device *wdd)
-> +{
-> +	struct sam9x60_wdt *wdt = watchdog_get_drvdata(wdd);
-> +
-> +	wdt_write(wdt, AT91_WDT_CR, AT91_WDT_KEY | AT91_WDT_WDRSTT);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sam9x60_wdt_set_timeout(struct watchdog_device *wdd,
-> +				   unsigned int timeout)
-> +{
-> +	struct sam9x60_wdt *wdt = watchdog_get_drvdata(wdd);
-> +
-> +	wdt_write(wdt, AT91_WDT_WLR,
-> +		  AT91_WDT_SET_COUNTER(WDT_SEC2TICKS(timeout)));
-> +
-
-I don't think AT91_WDT_WLR needs to be protected.
-
-> +	wdd->timeout = timeout;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct watchdog_info sam9x60_wdt_info = {
-> +	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
-> +	.identity = "Microchip SAM9X60 Watchdog",
-> +};
-> +
-> +static const struct watchdog_ops sam9x60_wdt_ops = {
-> +	.owner = THIS_MODULE,
-> +	.start = sam9x60_wdt_start,
-> +	.stop = sam9x60_wdt_stop,
-> +	.ping = sam9x60_wdt_ping,
-> +	.set_timeout = sam9x60_wdt_set_timeout,
-> +};
-> +
-> +static irqreturn_t sam9x60_wdt_irq_handler(int irq, void *dev_id)
-> +{
-> +	struct sam9x60_wdt *wdt = platform_get_drvdata(dev_id);
-> +
-> +	if (wdt_read(wdt, AT91_WDT_ISR)) {
-> +		pr_crit("Microchip Watchdog Software Reset\n");
-> +		emergency_restart();
-> +		pr_crit("Reboot didn't succeed\n");
-> +	}
-
-I'm not really convinced by the software restart use case but I guess it
-is to be able to shut down while still flushing data to the storage.
-This would not protect against kernel issues then.
-
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int of_sam9x60_wdt_init(struct device_node *np, struct sam9x60_wdt *wdt)
-> +{
-> +	const char *tmp;
-> +
-> +	wdt->mr = AT91_WDT_WDDIS;
-> +
-> +	if (!of_property_read_string(np, "atmel,watchdog-type", &tmp) &&
-> +	    !strcmp(tmp, "software"))
-> +		wdt->ir = AT91_WDT_PERINT;
-> +	else
-> +		wdt->mr |= AT91_WDT_PERIODRST;
-> +
-> +	if (of_property_read_bool(np, "atmel,idle-halt"))
-> +		wdt->mr |= AT91_WDT_WDIDLEHLT;
-> +
-> +	if (of_property_read_bool(np, "atmel,dbg-halt"))
-> +		wdt->mr |= AT91_WDT_WDDBGHLT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int sam9x60_wdt_init(struct sam9x60_wdt *wdt)
-> +{
-> +	u32 reg;
-> +	/*
-> +	 * When booting and resuming, the bootloader may have changed the
-> +	 * watchdog configuration.
-> +	 * If the watchdog is already running, we can safely update it.
-> +	 * Else, we have to disable it properly.
-> +	 */
-> +	if (wdt_enabled) {
-> +		wdt_write_nosleep(wdt, AT91_WDT_MR, wdt->mr);
-> +		wdt_write_nosleep(wdt, AT91_WDT_IER, wdt->ir);
-> +		wdt_write(wdt, AT91_WDT_WLR,
-> +			  AT91_WDT_SET_COUNTER(WDT_SEC2TICKS(WDT_DEFAULT_TIMEOUT)));
-> +
-> +	} else {
-> +		reg = wdt_read(wdt, AT91_WDT_MR);
-> +		if (!(reg & AT91_WDT_WDDIS))
-> +			wdt_write_nosleep(wdt, AT91_WDT_MR,
-> +					  reg | AT91_WDT_WDDIS);
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int sam9x60_wdt_probe(struct platform_device *pdev)
-> +{
-> +	struct watchdog_device *wdd;
-> +	struct sam9x60_wdt *wdt;
-> +	struct resource *res;
-> +	void __iomem *regs;
-> +	u32 irq = 0;
-> +	int ret;
-> +
-> +	wdt = devm_kzalloc(&pdev->dev, sizeof(*wdt), GFP_KERNEL);
-> +	if (!wdt)
-> +		return -ENOMEM;
-> +
-> +	wdd = &wdt->wdd;
-> +	wdd->timeout = WDT_DEFAULT_TIMEOUT;
-> +	wdd->info = &sam9x60_wdt_info;
-> +	wdd->ops = &sam9x60_wdt_ops;
-> +	wdd->min_timeout = MIN_WDT_TIMEOUT;
-> +	wdd->max_timeout = MAX_WDT_TIMEOUT;
-> +	wdt->last_ping = jiffies;
-> +
-> +	watchdog_set_drvdata(wdd, wdt);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	regs = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(regs))
-> +		return PTR_ERR(regs);
-> +
-> +	wdt->reg_base = regs;
-> +
-> +	irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
-> +	if (!irq)
-> +		dev_warn(&pdev->dev, "failed to get IRQ from DT\n");
-> +
-> +	ret = of_sam9x60_wdt_init(pdev->dev.of_node, wdt);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if ((wdt->ir & AT91_WDT_PERINT) && irq) {
-> +		ret = devm_request_irq(&pdev->dev, irq, sam9x60_wdt_irq_handler,
-> +				       IRQF_SHARED | IRQF_IRQPOLL |
-> +				       IRQF_NO_SUSPEND, pdev->name, pdev);
-> +		if (ret) {
-> +			dev_err(&pdev->dev,
-> +				"cannot register interrupt handler\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	watchdog_init_timeout(wdd, wdt_timeout, &pdev->dev);
-> +
-> +	ret = sam9x60_wdt_init(wdt);
-> +	if (ret)
-> +		return ret;
-> +
-> +	watchdog_set_nowayout(wdd, nowayout);
-> +
-> +	ret = watchdog_register_device(wdd);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "failed to register watchdog device\n");
-> +		return ret;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, wdt);
-> +
-> +	dev_info(&pdev->dev, "initialized (timeout = %d sec, nowayout = %d)\n",
-> +		 wdd->timeout, nowayout);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sam9x60_wdt_remove(struct platform_device *pdev)
-> +{
-> +	struct sam9x60_wdt *wdt = platform_get_drvdata(pdev);
-> +
-> +	sam9x60_wdt_stop(&wdt->wdd);
-> +
-> +	watchdog_unregister_device(&wdt->wdd);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id sam9x60_wdt_of_match[] = {
-> +	{ .compatible = "microchip,sam9x60-wdt", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, sam9x60_wdt_of_match);
-> +
-> +#ifdef CONFIG_PM_SLEEP
-
-Most of the logic has been copy/pasted from sama5d4_wdt.c and this
-already miss some improvement that have been made between the time you
-copied it and now.
-
-Are you sure both drivers shouldn't be merged? I feel like this will be a
-maintenance hell if we don't do that now.
-
-> +static int sam9x60_wdt_resume(struct device *dev)
-> +{
-> +	struct sam9x60_wdt *wdt = dev_get_drvdata(dev);
-> +
-> +	/*
-> +	 * FIXME: writing MR also pings the watchdog which may not be desired.
-> +	 * This should only be done when the registers are lost on suspend but
-> +	 * there is no way to get this information right now.
-> +	 */
-> +	sam9x60_wdt_init(wdt);
-> +
-> +	return 0;
-> +}
-> +#endif
-> +
-> +static SIMPLE_DEV_PM_OPS(sam9x60_wdt_pm_ops, NULL,
-> +			 sam9x60_wdt_resume);
-> +
-> +static struct platform_driver sam9x60_wdt_driver = {
-> +	.probe		= sam9x60_wdt_probe,
-> +	.remove		= sam9x60_wdt_remove,
-> +	.driver		= {
-> +		.name	= "sam9x60_wdt",
-> +		.pm	= &sam9x60_wdt_pm_ops,
-> +		.of_match_table = sam9x60_wdt_of_match,
-> +	}
-> +};
-> +module_platform_driver(sam9x60_wdt_driver);
-> +
-> +MODULE_AUTHOR("Eugen Hristev");
-> +MODULE_DESCRIPTION("Microchip SAM9X60 Watchdog Timer driver");
-> +MODULE_LICENSE("GPL v2");
-> -- 
-> 2.7.4
-> 
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+DQoNCk9uIDAyLjEwLjIwMTkgMTM6MjMsIEFsZXhhbmRyZSBCZWxsb25pIHdyb3RlOg0KDQo+IEhp
+LA0KPiANCj4gT24gMDIvMTAvMjAxOSAwNzozNToyNiswMDAwLCBFdWdlbi5IcmlzdGV2QG1pY3Jv
+Y2hpcC5jb20gd3JvdGU6DQo+PiArc3RhdGljIHZvaWQgd2R0X3dyaXRlKHN0cnVjdCBzYW05eDYw
+X3dkdCAqd2R0LCB1MzIgZmllbGQsIHUzMiB2YWwpDQo+PiArew0KPj4gKwkvKg0KPj4gKwkgKiBX
+RFRfQ1IgYW5kIFdEVF9NUiBtdXN0IG5vdCBiZSBtb2RpZmllZCB3aXRoaW4gdGhyZWUgc2xvdyBj
+bG9jaw0KPj4gKwkgKiBwZXJpb2RzIGZvbGxvd2luZyBhIHJlc3RhcnQgb2YgdGhlIHdhdGNoZG9n
+IHBlcmZvcm1lZCBieSBhIHdyaXRlDQo+PiArCSAqIGFjY2VzcyBpbiBXRFRfQ1IuDQo+PiArCSAq
+Lw0KPj4gKwl3aGlsZSAodGltZV9iZWZvcmUoamlmZmllcywgd2R0LT5sYXN0X3BpbmcgKyBXRFRf
+REVMQVkpKQ0KPj4gKwkJdXNsZWVwX3JhbmdlKDMwLCAxMjUpOw0KPj4gKwl3cml0ZWxfcmVsYXhl
+ZCh2YWwsIHdkdC0+cmVnX2Jhc2UgKyBmaWVsZCk7DQo+PiArCXdkdC0+bGFzdF9waW5nID0gamlm
+ZmllczsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIHZvaWQgd2R0X3dyaXRlX25vc2xlZXAoc3Ry
+dWN0IHNhbTl4NjBfd2R0ICp3ZHQsIHUzMiBmaWVsZCwgdTMyIHZhbCkNCj4+ICt7DQo+PiArCWlm
+ICh0aW1lX2JlZm9yZShqaWZmaWVzLCB3ZHQtPmxhc3RfcGluZyArIFdEVF9ERUxBWSkpDQo+PiAr
+CQl1c2xlZXBfcmFuZ2UoMTIzLCAyNTApOw0KPiANCj4gU28geW91IGhhdmUgYSBfbm9zbGVlcCBm
+dW5jdGlvbiB0aGF0IGRvZXMgc2xlZXA/DQo+IA0KPj4gKwl3cml0ZWxfcmVsYXhlZCh2YWwsIHdk
+dC0+cmVnX2Jhc2UgKyBmaWVsZCk7DQo+PiArCXdkdC0+bGFzdF9waW5nID0gamlmZmllczsNCj4+
+ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBzYW05eDYwX3dkdF9zdGFydChzdHJ1Y3Qgd2F0Y2hk
+b2dfZGV2aWNlICp3ZGQpDQo+PiArew0KPj4gKwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdCA9IHdh
+dGNoZG9nX2dldF9kcnZkYXRhKHdkZCk7DQo+PiArDQo+PiArCXdkdC0+bXIgJj0gfkFUOTFfV0RU
+X1dERElTOw0KPj4gKwl3ZHRfd3JpdGUod2R0LCBBVDkxX1dEVF9NUiwgd2R0LT5tcik7DQo+PiAr
+CXdkdF93cml0ZV9ub3NsZWVwKHdkdCwgQVQ5MV9XRFRfSUVSLCB3ZHQtPmlyKTsNCj4gDQo+IEkg
+ZG9uJ3QgdGhpbmsgQVQ5MV9XRFRfSUVSIG5lZWRzIHRvIGJlIHByb3RlY3RlZCwgeW91IGNhbiBw
+cm9iYWJseSB3cml0ZQ0KPiBpdCBkaXJlY3RseS4gQWxzbywgeW91IGNlcnRhaW5seSBuZWVkIHRv
+IGRvIHRoYXQgYmVmb3JlIHN0YXJ0aW5nIHRoZQ0KPiB3YXRjaGRvZyB0byBhdm9pZCByYWNlIGNv
+bmRpdGlvbnMuDQo+IA0KPj4gKw0KPj4gKwlyZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiArc3Rh
+dGljIGludCBzYW05eDYwX3dkdF9zdG9wKHN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkZCkNCj4+
+ICt7DQo+PiArCXN0cnVjdCBzYW05eDYwX3dkdCAqd2R0ID0gd2F0Y2hkb2dfZ2V0X2RydmRhdGEo
+d2RkKTsNCj4+ICsNCj4+ICsJd2R0LT5tciB8PSBBVDkxX1dEVF9XRERJUzsNCj4+ICsJd2R0X3dy
+aXRlKHdkdCwgQVQ5MV9XRFRfTVIsIHdkdC0+bXIpOw0KPj4gKwl3ZHRfd3JpdGVfbm9zbGVlcCh3
+ZHQsIEFUOTFfV0RUX0lEUiwgd2R0LT5pcik7DQo+PiArDQo+IA0KPiBJIGRvbid0IHRoaW5rIEFU
+OTFfV0RUX0lEUiBuZWVkcyB0byBiZSBwcm90ZWN0ZWQuDQo+IA0KPj4gKwlyZXR1cm4gMDsNCj4+
+ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBzYW05eDYwX3dkdF9waW5nKHN0cnVjdCB3YXRjaGRv
+Z19kZXZpY2UgKndkZCkNCj4+ICt7DQo+PiArCXN0cnVjdCBzYW05eDYwX3dkdCAqd2R0ID0gd2F0
+Y2hkb2dfZ2V0X2RydmRhdGEod2RkKTsNCj4+ICsNCj4+ICsJd2R0X3dyaXRlKHdkdCwgQVQ5MV9X
+RFRfQ1IsIEFUOTFfV0RUX0tFWSB8IEFUOTFfV0RUX1dEUlNUVCk7DQo+PiArDQo+PiArCXJldHVy
+biAwOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgaW50IHNhbTl4NjBfd2R0X3NldF90aW1lb3V0
+KHN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkZCwNCj4+ICsJCQkJICAgdW5zaWduZWQgaW50IHRp
+bWVvdXQpDQo+PiArew0KPj4gKwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdCA9IHdhdGNoZG9nX2dl
+dF9kcnZkYXRhKHdkZCk7DQo+PiArDQo+PiArCXdkdF93cml0ZSh3ZHQsIEFUOTFfV0RUX1dMUiwN
+Cj4+ICsJCSAgQVQ5MV9XRFRfU0VUX0NPVU5URVIoV0RUX1NFQzJUSUNLUyh0aW1lb3V0KSkpOw0K
+Pj4gKw0KPiANCj4gSSBkb24ndCB0aGluayBBVDkxX1dEVF9XTFIgbmVlZHMgdG8gYmUgcHJvdGVj
+dGVkLg0KPiANCj4+ICsJd2RkLT50aW1lb3V0ID0gdGltZW91dDsNCj4+ICsNCj4+ICsJcmV0dXJu
+IDA7DQo+PiArfQ0KPj4gKw0KPj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgd2F0Y2hkb2dfaW5mbyBz
+YW05eDYwX3dkdF9pbmZvID0gew0KPj4gKwkub3B0aW9ucyA9IFdESU9GX1NFVFRJTUVPVVQgfCBX
+RElPRl9NQUdJQ0NMT1NFIHwgV0RJT0ZfS0VFUEFMSVZFUElORywNCj4+ICsJLmlkZW50aXR5ID0g
+Ik1pY3JvY2hpcCBTQU05WDYwIFdhdGNoZG9nIiwNCj4+ICt9Ow0KPj4gKw0KPj4gK3N0YXRpYyBj
+b25zdCBzdHJ1Y3Qgd2F0Y2hkb2dfb3BzIHNhbTl4NjBfd2R0X29wcyA9IHsNCj4+ICsJLm93bmVy
+ID0gVEhJU19NT0RVTEUsDQo+PiArCS5zdGFydCA9IHNhbTl4NjBfd2R0X3N0YXJ0LA0KPj4gKwku
+c3RvcCA9IHNhbTl4NjBfd2R0X3N0b3AsDQo+PiArCS5waW5nID0gc2FtOXg2MF93ZHRfcGluZywN
+Cj4+ICsJLnNldF90aW1lb3V0ID0gc2FtOXg2MF93ZHRfc2V0X3RpbWVvdXQsDQo+PiArfTsNCj4+
+ICsNCj4+ICtzdGF0aWMgaXJxcmV0dXJuX3Qgc2FtOXg2MF93ZHRfaXJxX2hhbmRsZXIoaW50IGly
+cSwgdm9pZCAqZGV2X2lkKQ0KPj4gK3sNCj4+ICsJc3RydWN0IHNhbTl4NjBfd2R0ICp3ZHQgPSBw
+bGF0Zm9ybV9nZXRfZHJ2ZGF0YShkZXZfaWQpOw0KPj4gKw0KPj4gKwlpZiAod2R0X3JlYWQod2R0
+LCBBVDkxX1dEVF9JU1IpKSB7DQo+PiArCQlwcl9jcml0KCJNaWNyb2NoaXAgV2F0Y2hkb2cgU29m
+dHdhcmUgUmVzZXRcbiIpOw0KPj4gKwkJZW1lcmdlbmN5X3Jlc3RhcnQoKTsNCj4+ICsJCXByX2Ny
+aXQoIlJlYm9vdCBkaWRuJ3Qgc3VjY2VlZFxuIik7DQo+PiArCX0NCj4gDQo+IEknbSBub3QgcmVh
+bGx5IGNvbnZpbmNlZCBieSB0aGUgc29mdHdhcmUgcmVzdGFydCB1c2UgY2FzZSBidXQgSSBndWVz
+cyBpdA0KPiBpcyB0byBiZSBhYmxlIHRvIHNodXQgZG93biB3aGlsZSBzdGlsbCBmbHVzaGluZyBk
+YXRhIHRvIHRoZSBzdG9yYWdlLg0KPiBUaGlzIHdvdWxkIG5vdCBwcm90ZWN0IGFnYWluc3Qga2Vy
+bmVsIGlzc3VlcyB0aGVuLg0KDQpIaSBBbGV4YW5kcmUsDQoNClRoYXQncyBjb3JyZWN0LiBJdCBp
+cyB0byBkbyBhIHNvZnR3YXJlIHNodXRkb3duIGluc3RlYWQgb2YgaGFyZCByZWJvb3QgDQpieSBo
+YXJkd2FyZS4gSXQgaGFzIGl0O3MgdXNlIGNhc2VzLCBzbyBJIHByZXNlcnZlZCB0aGUgc2FtZSBs
+ZXZlbCBvZiANCmZ1bmN0aW9uYWxpdHkgYXMgaW4gc2FtYTVkNF93ZHQNCg0KPiANCj4+ICsNCj4+
+ICsJcmV0dXJuIElSUV9IQU5ETEVEOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgaW50IG9mX3Nh
+bTl4NjBfd2R0X2luaXQoc3RydWN0IGRldmljZV9ub2RlICpucCwgc3RydWN0IHNhbTl4NjBfd2R0
+ICp3ZHQpDQo+PiArew0KPj4gKwljb25zdCBjaGFyICp0bXA7DQo+PiArDQo+PiArCXdkdC0+bXIg
+PSBBVDkxX1dEVF9XRERJUzsNCj4+ICsNCj4+ICsJaWYgKCFvZl9wcm9wZXJ0eV9yZWFkX3N0cmlu
+ZyhucCwgImF0bWVsLHdhdGNoZG9nLXR5cGUiLCAmdG1wKSAmJg0KPj4gKwkgICAgIXN0cmNtcCh0
+bXAsICJzb2Z0d2FyZSIpKQ0KPj4gKwkJd2R0LT5pciA9IEFUOTFfV0RUX1BFUklOVDsNCj4+ICsJ
+ZWxzZQ0KPj4gKwkJd2R0LT5tciB8PSBBVDkxX1dEVF9QRVJJT0RSU1Q7DQo+PiArDQo+PiArCWlm
+IChvZl9wcm9wZXJ0eV9yZWFkX2Jvb2wobnAsICJhdG1lbCxpZGxlLWhhbHQiKSkNCj4+ICsJCXdk
+dC0+bXIgfD0gQVQ5MV9XRFRfV0RJRExFSExUOw0KPj4gKw0KPj4gKwlpZiAob2ZfcHJvcGVydHlf
+cmVhZF9ib29sKG5wLCAiYXRtZWwsZGJnLWhhbHQiKSkNCj4+ICsJCXdkdC0+bXIgfD0gQVQ5MV9X
+RFRfV0REQkdITFQ7DQo+PiArDQo+PiArCXJldHVybiAwOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0
+aWMgaW50IHNhbTl4NjBfd2R0X2luaXQoc3RydWN0IHNhbTl4NjBfd2R0ICp3ZHQpDQo+PiArew0K
+Pj4gKwl1MzIgcmVnOw0KPj4gKwkvKg0KPj4gKwkgKiBXaGVuIGJvb3RpbmcgYW5kIHJlc3VtaW5n
+LCB0aGUgYm9vdGxvYWRlciBtYXkgaGF2ZSBjaGFuZ2VkIHRoZQ0KPj4gKwkgKiB3YXRjaGRvZyBj
+b25maWd1cmF0aW9uLg0KPj4gKwkgKiBJZiB0aGUgd2F0Y2hkb2cgaXMgYWxyZWFkeSBydW5uaW5n
+LCB3ZSBjYW4gc2FmZWx5IHVwZGF0ZSBpdC4NCj4+ICsJICogRWxzZSwgd2UgaGF2ZSB0byBkaXNh
+YmxlIGl0IHByb3Blcmx5Lg0KPj4gKwkgKi8NCj4+ICsJaWYgKHdkdF9lbmFibGVkKSB7DQo+PiAr
+CQl3ZHRfd3JpdGVfbm9zbGVlcCh3ZHQsIEFUOTFfV0RUX01SLCB3ZHQtPm1yKTsNCj4+ICsJCXdk
+dF93cml0ZV9ub3NsZWVwKHdkdCwgQVQ5MV9XRFRfSUVSLCB3ZHQtPmlyKTsNCj4+ICsJCXdkdF93
+cml0ZSh3ZHQsIEFUOTFfV0RUX1dMUiwNCj4+ICsJCQkgIEFUOTFfV0RUX1NFVF9DT1VOVEVSKFdE
+VF9TRUMyVElDS1MoV0RUX0RFRkFVTFRfVElNRU9VVCkpKTsNCj4+ICsNCj4+ICsJfSBlbHNlIHsN
+Cj4+ICsJCXJlZyA9IHdkdF9yZWFkKHdkdCwgQVQ5MV9XRFRfTVIpOw0KPj4gKwkJaWYgKCEocmVn
+ICYgQVQ5MV9XRFRfV0RESVMpKQ0KPj4gKwkJCXdkdF93cml0ZV9ub3NsZWVwKHdkdCwgQVQ5MV9X
+RFRfTVIsDQo+PiArCQkJCQkgIHJlZyB8IEFUOTFfV0RUX1dERElTKTsNCj4+ICsJfQ0KPj4gKwly
+ZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBzYW05eDYwX3dkdF9wcm9iZShz
+dHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPj4gK3sNCj4+ICsJc3RydWN0IHdhdGNoZG9n
+X2RldmljZSAqd2RkOw0KPj4gKwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdDsNCj4+ICsJc3RydWN0
+IHJlc291cmNlICpyZXM7DQo+PiArCXZvaWQgX19pb21lbSAqcmVnczsNCj4+ICsJdTMyIGlycSA9
+IDA7DQo+PiArCWludCByZXQ7DQo+PiArDQo+PiArCXdkdCA9IGRldm1fa3phbGxvYygmcGRldi0+
+ZGV2LCBzaXplb2YoKndkdCksIEdGUF9LRVJORUwpOw0KPj4gKwlpZiAoIXdkdCkNCj4+ICsJCXJl
+dHVybiAtRU5PTUVNOw0KPj4gKw0KPj4gKwl3ZGQgPSAmd2R0LT53ZGQ7DQo+PiArCXdkZC0+dGlt
+ZW91dCA9IFdEVF9ERUZBVUxUX1RJTUVPVVQ7DQo+PiArCXdkZC0+aW5mbyA9ICZzYW05eDYwX3dk
+dF9pbmZvOw0KPj4gKwl3ZGQtPm9wcyA9ICZzYW05eDYwX3dkdF9vcHM7DQo+PiArCXdkZC0+bWlu
+X3RpbWVvdXQgPSBNSU5fV0RUX1RJTUVPVVQ7DQo+PiArCXdkZC0+bWF4X3RpbWVvdXQgPSBNQVhf
+V0RUX1RJTUVPVVQ7DQo+PiArCXdkdC0+bGFzdF9waW5nID0gamlmZmllczsNCj4+ICsNCj4+ICsJ
+d2F0Y2hkb2dfc2V0X2RydmRhdGEod2RkLCB3ZHQpOw0KPj4gKw0KPj4gKwlyZXMgPSBwbGF0Zm9y
+bV9nZXRfcmVzb3VyY2UocGRldiwgSU9SRVNPVVJDRV9NRU0sIDApOw0KPj4gKwlyZWdzID0gZGV2
+bV9pb3JlbWFwX3Jlc291cmNlKCZwZGV2LT5kZXYsIHJlcyk7DQo+PiArCWlmIChJU19FUlIocmVn
+cykpDQo+PiArCQlyZXR1cm4gUFRSX0VSUihyZWdzKTsNCj4+ICsNCj4+ICsJd2R0LT5yZWdfYmFz
+ZSA9IHJlZ3M7DQo+PiArDQo+PiArCWlycSA9IGlycV9vZl9wYXJzZV9hbmRfbWFwKHBkZXYtPmRl
+di5vZl9ub2RlLCAwKTsNCj4+ICsJaWYgKCFpcnEpDQo+PiArCQlkZXZfd2FybigmcGRldi0+ZGV2
+LCAiZmFpbGVkIHRvIGdldCBJUlEgZnJvbSBEVFxuIik7DQo+PiArDQo+PiArCXJldCA9IG9mX3Nh
+bTl4NjBfd2R0X2luaXQocGRldi0+ZGV2Lm9mX25vZGUsIHdkdCk7DQo+PiArCWlmIChyZXQpDQo+
+PiArCQlyZXR1cm4gcmV0Ow0KPj4gKw0KPj4gKwlpZiAoKHdkdC0+aXIgJiBBVDkxX1dEVF9QRVJJ
+TlQpICYmIGlycSkgew0KPj4gKwkJcmV0ID0gZGV2bV9yZXF1ZXN0X2lycSgmcGRldi0+ZGV2LCBp
+cnEsIHNhbTl4NjBfd2R0X2lycV9oYW5kbGVyLA0KPj4gKwkJCQkgICAgICAgSVJRRl9TSEFSRUQg
+fCBJUlFGX0lSUVBPTEwgfA0KPj4gKwkJCQkgICAgICAgSVJRRl9OT19TVVNQRU5ELCBwZGV2LT5u
+YW1lLCBwZGV2KTsNCj4+ICsJCWlmIChyZXQpIHsNCj4+ICsJCQlkZXZfZXJyKCZwZGV2LT5kZXYs
+DQo+PiArCQkJCSJjYW5ub3QgcmVnaXN0ZXIgaW50ZXJydXB0IGhhbmRsZXJcbiIpOw0KPj4gKwkJ
+CXJldHVybiByZXQ7DQo+PiArCQl9DQo+PiArCX0NCj4+ICsNCj4+ICsJd2F0Y2hkb2dfaW5pdF90
+aW1lb3V0KHdkZCwgd2R0X3RpbWVvdXQsICZwZGV2LT5kZXYpOw0KPj4gKw0KPj4gKwlyZXQgPSBz
+YW05eDYwX3dkdF9pbml0KHdkdCk7DQo+PiArCWlmIChyZXQpDQo+PiArCQlyZXR1cm4gcmV0Ow0K
+Pj4gKw0KPj4gKwl3YXRjaGRvZ19zZXRfbm93YXlvdXQod2RkLCBub3dheW91dCk7DQo+PiArDQo+
+PiArCXJldCA9IHdhdGNoZG9nX3JlZ2lzdGVyX2RldmljZSh3ZGQpOw0KPj4gKwlpZiAocmV0KSB7
+DQo+PiArCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJmYWlsZWQgdG8gcmVnaXN0ZXIgd2F0Y2hkb2cg
+ZGV2aWNlXG4iKTsNCj4+ICsJCXJldHVybiByZXQ7DQo+PiArCX0NCj4+ICsNCj4+ICsJcGxhdGZv
+cm1fc2V0X2RydmRhdGEocGRldiwgd2R0KTsNCj4+ICsNCj4+ICsJZGV2X2luZm8oJnBkZXYtPmRl
+diwgImluaXRpYWxpemVkICh0aW1lb3V0ID0gJWQgc2VjLCBub3dheW91dCA9ICVkKVxuIiwNCj4+
+ICsJCSB3ZGQtPnRpbWVvdXQsIG5vd2F5b3V0KTsNCj4+ICsNCj4+ICsJcmV0dXJuIDA7DQo+PiAr
+fQ0KPj4gKw0KPj4gK3N0YXRpYyBpbnQgc2FtOXg2MF93ZHRfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9y
+bV9kZXZpY2UgKnBkZXYpDQo+PiArew0KPj4gKwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdCA9IHBs
+YXRmb3JtX2dldF9kcnZkYXRhKHBkZXYpOw0KPj4gKw0KPj4gKwlzYW05eDYwX3dkdF9zdG9wKCZ3
+ZHQtPndkZCk7DQo+PiArDQo+PiArCXdhdGNoZG9nX3VucmVnaXN0ZXJfZGV2aWNlKCZ3ZHQtPndk
+ZCk7DQo+PiArDQo+PiArCXJldHVybiAwOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgY29uc3Qg
+c3RydWN0IG9mX2RldmljZV9pZCBzYW05eDYwX3dkdF9vZl9tYXRjaFtdID0gew0KPj4gKwl7IC5j
+b21wYXRpYmxlID0gIm1pY3JvY2hpcCxzYW05eDYwLXdkdCIsIH0sDQo+PiArCXsgfQ0KPj4gK307
+DQo+PiArTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgc2FtOXg2MF93ZHRfb2ZfbWF0Y2gpOw0KPj4g
+Kw0KPj4gKyNpZmRlZiBDT05GSUdfUE1fU0xFRVANCj4gDQo+IE1vc3Qgb2YgdGhlIGxvZ2ljIGhh
+cyBiZWVuIGNvcHkvcGFzdGVkIGZyb20gc2FtYTVkNF93ZHQuYyBhbmQgdGhpcw0KPiBhbHJlYWR5
+IG1pc3Mgc29tZSBpbXByb3ZlbWVudCB0aGF0IGhhdmUgYmVlbiBtYWRlIGJldHdlZW4gdGhlIHRp
+bWUgeW91DQo+IGNvcGllZCBpdCBhbmQgbm93Lg0KDQpJIHdpbGwgZml4IGFjY29yZGluZ2x5LiBB
+cyBJIHNhaWQgaW4gdGhlIGNvbW1pdCBtZXNzYWdlLCBzYW1hNWQ0X3dkdCBpcyANCnVzZWQgYXMg
+YSBzdGFydGluZyBwb2ludCBzbyB5ZXMsIGFsbCB0aGUgZnVuY3Rpb25hbGl0eSBpcyB0aGUgc2Ft
+ZSwgDQpleGNlcHQgdGhlIGFjdHVhbCBoYXJkd2FyZSBpbnRlcmFjdGlvbi4NCg0KPiANCj4gQXJl
+IHlvdSBzdXJlIGJvdGggZHJpdmVycyBzaG91bGRuJ3QgYmUgbWVyZ2VkPyBJIGZlZWwgbGlrZSB0
+aGlzIHdpbGwgYmUgYQ0KPiBtYWludGVuYW5jZSBoZWxsIGlmIHdlIGRvbid0IGRvIHRoYXQgbm93
+Lg0KDQpJdCBjb3VsZCBiZSBtZXJnZWQsIGJ1dCB3ZSBzaG91bGQgZG8gc28gPw0KQ291bGQgaGF2
+ZSB0d28gY29tcGF0aWJsZXMsIHdpdGggcGxhdGZvcm0gZGF0YSwgc2VsZWN0YWJsZSwgYW5kIHdp
+dGggDQpkaWZmZXJlbnQgZnVuY3Rpb25zLCB0aGF0IGNhbiBiZSBzZWxlY3RlZC4uIGVpdGhlciB0
+aGlzIG9yIHRoYXQuDQpZb3UgdGhpbmsgdGhhdCdzIGEgYmV0dGVyIHdheSB0byBoYW5kbGUgdGhp
+cyBuZXcgSVAgYmxvY2sgPw0KSSB3b3VsZCBsaWtlIHRvIGF2b2lkIGhhdmluZyBhIGJpZyBkcml2
+ZXIgY292ZXJpbmcgbXVsdGlwbGUgZGlmZmVyZW50IA0KaGFyZHdhcmUgcGllY2VzLCBidXQgdGhh
+dCdzIGp1c3QgbXkgcHJlZmVyZW5jZS4gSSBjYW4gcmV3b3JrIHRoaXMgaW50byBhIA0Kc2luZ2xl
+IGRyaXZlciBpZiBpdCdzIGJldHRlciB0aGF0IHdheS4NCg0KRXVnZW4NCg0KPiANCj4+ICtzdGF0
+aWMgaW50IHNhbTl4NjBfd2R0X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+PiArew0KPj4g
+KwlzdHJ1Y3Qgc2FtOXg2MF93ZHQgKndkdCA9IGRldl9nZXRfZHJ2ZGF0YShkZXYpOw0KPj4gKw0K
+Pj4gKwkvKg0KPj4gKwkgKiBGSVhNRTogd3JpdGluZyBNUiBhbHNvIHBpbmdzIHRoZSB3YXRjaGRv
+ZyB3aGljaCBtYXkgbm90IGJlIGRlc2lyZWQuDQo+PiArCSAqIFRoaXMgc2hvdWxkIG9ubHkgYmUg
+ZG9uZSB3aGVuIHRoZSByZWdpc3RlcnMgYXJlIGxvc3Qgb24gc3VzcGVuZCBidXQNCj4+ICsJICog
+dGhlcmUgaXMgbm8gd2F5IHRvIGdldCB0aGlzIGluZm9ybWF0aW9uIHJpZ2h0IG5vdy4NCj4+ICsJ
+ICovDQo+PiArCXNhbTl4NjBfd2R0X2luaXQod2R0KTsNCj4+ICsNCj4+ICsJcmV0dXJuIDA7DQo+
+PiArfQ0KPj4gKyNlbmRpZg0KPj4gKw0KPj4gK3N0YXRpYyBTSU1QTEVfREVWX1BNX09QUyhzYW05
+eDYwX3dkdF9wbV9vcHMsIE5VTEwsDQo+PiArCQkJIHNhbTl4NjBfd2R0X3Jlc3VtZSk7DQo+PiAr
+DQo+PiArc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgc2FtOXg2MF93ZHRfZHJpdmVyID0g
+ew0KPj4gKwkucHJvYmUJCT0gc2FtOXg2MF93ZHRfcHJvYmUsDQo+PiArCS5yZW1vdmUJCT0gc2Ft
+OXg2MF93ZHRfcmVtb3ZlLA0KPj4gKwkuZHJpdmVyCQk9IHsNCj4+ICsJCS5uYW1lCT0gInNhbTl4
+NjBfd2R0IiwNCj4+ICsJCS5wbQk9ICZzYW05eDYwX3dkdF9wbV9vcHMsDQo+PiArCQkub2ZfbWF0
+Y2hfdGFibGUgPSBzYW05eDYwX3dkdF9vZl9tYXRjaCwNCj4+ICsJfQ0KPj4gK307DQo+PiArbW9k
+dWxlX3BsYXRmb3JtX2RyaXZlcihzYW05eDYwX3dkdF9kcml2ZXIpOw0KPj4gKw0KPj4gK01PRFVM
+RV9BVVRIT1IoIkV1Z2VuIEhyaXN0ZXYiKTsNCj4+ICtNT0RVTEVfREVTQ1JJUFRJT04oIk1pY3Jv
+Y2hpcCBTQU05WDYwIFdhdGNoZG9nIFRpbWVyIGRyaXZlciIpOw0KPj4gK01PRFVMRV9MSUNFTlNF
+KCJHUEwgdjIiKTsNCj4+IC0tIA0KPj4gMi43LjQNCj4+DQo+IA0K
