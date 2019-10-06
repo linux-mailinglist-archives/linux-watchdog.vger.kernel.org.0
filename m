@@ -2,109 +2,143 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D00F7CBB57
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2019 15:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D5ACCFCD
+	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Oct 2019 11:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388181AbfJDNMX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 4 Oct 2019 09:12:23 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45464 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387917AbfJDNMX (ORCPT
+        id S1726379AbfJFJHW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 6 Oct 2019 05:07:22 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:45093 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726293AbfJFJHV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 4 Oct 2019 09:12:23 -0400
-Received: by mail-pf1-f193.google.com with SMTP id y72so3856015pfb.12;
-        Fri, 04 Oct 2019 06:12:22 -0700 (PDT)
+        Sun, 6 Oct 2019 05:07:21 -0400
+Received: by mail-ed1-f66.google.com with SMTP id h33so9664778edh.12;
+        Sun, 06 Oct 2019 02:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZUiox1R0hROdY9yZCRzopfRKb7Hpw5iaEBfomVYH688=;
-        b=Tkv5tyzstWxtAX48sv4MmTvBh/2aoOmbHQ4GWe3DDeEUh50Mu+CVc0XZnkyvxPeyZT
-         cv6SYzd1IkCbX5mhcjecpCkMXi3KAcWXx7iNZs0iX5qWTsmcYjIJe9MZeEg8LY2bFYEq
-         bqLR286u7JXrKHuteFWWBKTXqNtVnFmGWTPtZmvOLXs2uFZSrLuiIaGjShhdvVNZGAwc
-         Qj6+nqlrOc/NCWXMAaiVnNvg9mSr+c7vzl2D7rEjigosye6r5rITcHsQvMcoIr2NJ3dK
-         x+hP2Ce6iQ9h3gZV5DGObP4VZG09W9zJXvUz5CdSLIadPaFmag5HwtSfIFs5lS/LzmYy
-         RpKw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LdLmw3jyu9VpLL7rNNOoIJG1aiZHneRVRzCW/lfPaZE=;
+        b=CSzpzytaFsbzYH1PIqCUYlvwYCdvZVfevBS2bX2i7r7pGE/nhCdIndR+VRS66LHa/V
+         cMvGGCf3uzS2EOB0C764z3q9cin8ozp5UZkOez/4dFngkZxaX6SCM/bRQuZtSOSCTWix
+         QFcx9svyIiJIdCddKe7vhse+gP7jsa8guDWGQVkElq1VqiPmdy9uZdyfPzPIWVuuAMup
+         Cz0+iSqTWY+CUBm3Bt/SIBqeZhJ9bdE3NkceaSOmeiNY40Uj4YF7JK4wm6qu+ew1k8hm
+         eXlSbKlPBOGzkCvKi0hFja1eg65sh2qvvaE+pP/QlEcNecNldYzC2c4yKTgY7Kvg7R6K
+         RmYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZUiox1R0hROdY9yZCRzopfRKb7Hpw5iaEBfomVYH688=;
-        b=BVjk3zNiU4gYFTNnpS/CduQS9HFQVUpVTjGgoBpwwigt+Z0DRGvTUudPDQRXMvg1Uu
-         7vb3JlzUvgRJrunSCL2l6DBYHmigp7/kf/7pKjmozY8N2UsjDFKNX8DB0ag8VxgvOWk5
-         K9nUnmb+frw26ryPmRx0h5+j6rUSFNzR5j3B1icLUFHtHCfEQmDThgdba6/KqRNHv5OA
-         61I3FPbvwDNXMHOGk1HI6dLSLfy9qcsYbUx3KZZV2c8GCxFGGH6cRZx6ksPpFr1Flu1C
-         ebOAp7neJhEMLGZsb+DACICQx80leVQArlLIbmhdUBnn74gbSw5kYsWSpL50hqtKsD6T
-         sucw==
-X-Gm-Message-State: APjAAAWgBrVMSkykea1UY2Lgbmz7eveYscpEWEbd1gKi42vXKsAXSqCX
-        A/gkMyD/+jFAtbOr3NNe0Ic=
-X-Google-Smtp-Source: APXvYqzlaXM5fjESQSK7RC4J4zjj6oZfbuc5mLrgPIL+rCnBhELyYRT4+WOBbnOQG2sxTANj+gZfnA==
-X-Received: by 2002:a17:90b:946:: with SMTP id dw6mr16904660pjb.48.1570194742398;
-        Fri, 04 Oct 2019 06:12:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k15sm6194435pfa.65.2019.10.04.06.12.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Oct 2019 06:12:21 -0700 (PDT)
-Subject: Re: [PATCH 1/7] dt-bindings: watchdog: renesas-wdt: Document r8a774b1
- support
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Simon Horman <horms@verge.net.au>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>, xu_shunji@hoperun.com
-References: <1570178133-21532-1-git-send-email-fabrizio.castro@bp.renesas.com>
- <1570178133-21532-2-git-send-email-fabrizio.castro@bp.renesas.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <eabf732e-33ba-8011-2cbc-f1df1f6dadb3@roeck-us.net>
-Date:   Fri, 4 Oct 2019 06:12:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LdLmw3jyu9VpLL7rNNOoIJG1aiZHneRVRzCW/lfPaZE=;
+        b=mk66wuI+VpfL9edjmgYHDNSe8Zk8LJ031T1mRaQJpZbZz6vfuOuGHqFt1v8nh+BA15
+         ama2J3v8YqYTtx86nxCBu7aaKqkgraEH+1c2hUnfy7erFP6kEdRiu9nlS+MwuOFdOHBQ
+         1aUZgQKdMfFbBhBDOXmADQyCMLyIC0WmREVZI3DGVFdtkYSFdWwkCwS93Fnew4LhXZQX
+         0bYYrVkdUzBkymatcybeAz8uhGSTY1Fjvh9q936D453hvWoJ1Vb+1rxQ5lZYcQh0/alQ
+         jtRy+dqvx+fz2FD91N7bgD6d1IW9MLAS+UiAPx3UJmrtn0K3IRMXmjQbnuE/yp+pQP9E
+         7dzw==
+X-Gm-Message-State: APjAAAXzpd67a6WbEwB2jLfeWDqkOOVbZp4uIV7jYhqMLvf8R3mcPGwE
+        TvxhoQC5sQhj8xxlx/hv6t30FtK9JikfGa5TmG/9Mg==
+X-Google-Smtp-Source: APXvYqxu7TIbKAQcHIe0HsB1B9NxDGUSu1ICwJMDCpt9K+IdcTqN7xxz3YkK/LkRXGk2QiJsaUl0ZCGnnT1+r2ecI58=
+X-Received: by 2002:a50:ac0d:: with SMTP id v13mr23495378edc.189.1570352840015;
+ Sun, 06 Oct 2019 02:07:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1570178133-21532-2-git-send-email-fabrizio.castro@bp.renesas.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20191003124849.117888-1-martin@geanix.com> <20191003133351.118538-1-martin@geanix.com>
+In-Reply-To: <20191003133351.118538-1-martin@geanix.com>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Sun, 6 Oct 2019 11:07:03 +0200
+Message-ID: <CAH+2xPAtxcxd1xXuCmHc25X-Ai2_w-5rxZrgYbavjAzntMxX-Q@mail.gmail.com>
+Subject: Re: [PATCHv2] rtc: pcf2127: handle boot-enabled watchdog feature
+To:     =?UTF-8?Q?Martin_Hundeb=C3=B8ll?= <martin@geanix.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/4/19 1:35 AM, Fabrizio Castro wrote:
-> RZ/G2N (a.k.a. R8A774B1) watchdog implementation is compatible
-> with R-Car Gen3, therefore add the relevant documentation.
-> 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+Hi Martin,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+Den tor. 3. okt. 2019 kl. 15.33 skrev Martin Hundeb=C3=B8ll <martin@geanix.=
+com>:
+>
+> Linux should handle when the pcf2127 watchdog feature is enabled by the
+> bootloader. This is done by checking the watchdog timer value during
+> init, and set the WDOG_HW_RUNNING flag if the value differs from zero.
+>
+> Signed-off-by: Martin Hundeb=C3=B8ll <martin@geanix.com>
 > ---
->   Documentation/devicetree/bindings/watchdog/renesas,wdt.txt | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.txt b/Documentation/devicetree/bindings/watchdog/renesas,wdt.txt
-> index 9f365c1..a5bf04d 100644
-> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.txt
-> @@ -10,6 +10,7 @@ Required properties:
->   		 - "renesas,r8a7745-wdt" (RZ/G1E)
->   		 - "renesas,r8a77470-wdt" (RZ/G1C)
->   		 - "renesas,r8a774a1-wdt" (RZ/G2M)
-> +		 - "renesas,r8a774b1-wdt" (RZ/G2N)
->   		 - "renesas,r8a774c0-wdt" (RZ/G2E)
->   	         - "renesas,r8a7790-wdt" (R-Car H2)
->   	         - "renesas,r8a7791-wdt" (R-Car M2-W)
-> 
+>
+> Change since v1:
+>  * remove setting of WDOG_HW_RUNNING in pcf2127_wdt_start()
+>
+>  drivers/rtc/rtc-pcf2127.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index cb3472f..4229915 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -420,6 +420,7 @@ static int pcf2127_probe(struct device *dev, struct r=
+egmap *regmap,
+>                         const char *name, bool has_nvmem)
+>  {
+>         struct pcf2127 *pcf2127;
+> +       u32 wdd_timeout;
+>         int ret =3D 0;
+>
+>         dev_dbg(dev, "%s\n", __func__);
+> @@ -462,7 +463,6 @@ static int pcf2127_probe(struct device *dev, struct r=
+egmap *regmap,
+>         /*
+>          * Watchdog timer enabled and reset pin /RST activated when timed=
+ out.
+>          * Select 1Hz clock source for watchdog timer.
+> -        * Timer is not started until WD_VAL is loaded with a valid value=
+.
 
+Your patch does not change the fact that the watchdog timer is first
+started after loading a
+valid value into WD_VAL register. This driver can be used perfectly
+fine without enabling the
+watchdog feature from userspace. If someone chooses to reboot without
+stopping the watchdog
+it is of course expected to still run on next boot (e.g. device probe).
+
+> +       /* Test if watchdog timer is started by bootloader */
+> +       ret =3D regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_tim=
+eout);
+> +       if (ret) {
+> +               dev_err(dev, "%s: watchdog value (wd_wal) failed\n", __fu=
+nc__);
+> +               return ret;
+> +       }
+> +
+> +       if (wdd_timeout)
+> +               set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
+> +
+
+I do not agree that this should be the default setting as
+WDOG_HW_RUNNING bit causes
+watchdog core to kick watchdog until userland takes over, e.g. you
+have just broken the
+chain-of-monitoring in the embedded Linux device:
+
+Hardware watchdog -> systemd -> daemon(s) / application(s)
+
+At this point in time you only know that u-boot / barebox can load and
+start the kernel with
+a device tree blob.
+
+What if mounting of rootfs fails?
+What if systemd fails to start?
+
+When doing a reboot due to ex. firmware upgrade, systemd will keep
+kicking the watchdog
+until the last sec before restart handler is called and the hardware
+watchdog should not be
+touched before systemd is in control of the system again.
+
+Bruno
