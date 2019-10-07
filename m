@@ -2,102 +2,84 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A88FCDFA1
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Oct 2019 12:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08079CE064
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Oct 2019 13:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727411AbfJGKuQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 7 Oct 2019 06:50:16 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:41058 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727334AbfJGKuQ (ORCPT
+        id S1727793AbfJGL1N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 7 Oct 2019 07:27:13 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35252 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727416AbfJGL1N (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 7 Oct 2019 06:50:16 -0400
-Received: by mail-ed1-f68.google.com with SMTP id f20so11912089edv.8;
-        Mon, 07 Oct 2019 03:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ppOuKjPO6i7wx6h4LdveUxhi4iywh8qVdyaLhYSD7Vo=;
-        b=F/RVNSeCdl2fHRXmCNIzkmNFNVR2+5sk5xZ1bqYRpirFbUc+KqoaxcOiLfyD85dDxi
-         isBk7gNaYClOYKf3cYWTRVMImZIj4MKmvI5dkmsMjeKVUAB38tCaRw4soWTzMeIVXVUA
-         yUHW68eSLIp6pgGravs/ZF/tUu7qOFvSrY/Csw7SVrJHgbgdo8wczrz1IiL3GDD3F2so
-         qmuxIgQWohXWNhfEuaSVMtNX0oRPZP1pvn7Oiwgrogrdb2G65Eco0bfjDfcRab5ndBPN
-         YSVTASAHFTsy14RWCTSkcaksNSm/IQuGpgRylTeMUtRX3mGp0YeRNp+CGFjuj7ZlhbRu
-         n97A==
+        Mon, 7 Oct 2019 07:27:13 -0400
+Received: by mail-ot1-f67.google.com with SMTP id z6so10636621otb.2;
+        Mon, 07 Oct 2019 04:27:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ppOuKjPO6i7wx6h4LdveUxhi4iywh8qVdyaLhYSD7Vo=;
-        b=rbYka8YPgAIDc6h2kxTMiHT/jXBJMimxN07ksWNXy2khos0g93QLni+h4/KW+9PHfh
-         KiLyJl5wndXOClJUKPz3JMjzrF1r3UR1aHXcAni3jYdWeUGOwxrx2mq8leofmej3UTN0
-         Wk2O5Bcwy/CYA+3EmJtJtJrii90Z6Nl8at01e7HQKHAe+T69W2XIMixpOPH0+V6JFHk4
-         m22Fb0zjMtyHIL/wVmkiq4DaWBWdAJMn4QYS14TqyTY1aHu/2AqK3cXAEqBA8v09iOO/
-         Pb+YNUjFXox27fbI+hRD3TLA/Lcdtf74GsPrzawmtHNn2jTftSwDxBH+7oOxm2GSBe+p
-         ZVAw==
-X-Gm-Message-State: APjAAAVdq5SvFCMELzaxNH8xOBjpZxmLgmFgZtyc17KOKCV0N5fl+fb6
-        N/geJOVVrsIa9YKCn8T/8MLqbE+Pwqi8jvXoJbdiciY3
-X-Google-Smtp-Source: APXvYqwTs4bBgFhuFeZmzNvC9Bls3dbgARfOfLKclE4MJnkbtrgeTeZkGs8ZcAfIQSLNSgIhujqFixcyAMrILfQp0ow=
-X-Received: by 2002:a17:906:7687:: with SMTP id o7mr23349972ejm.213.1570445412878;
- Mon, 07 Oct 2019 03:50:12 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=pRO/TI+2U+Mnp2n0LB3QUA+ksdxnhCB7M1sKuDwnBI8=;
+        b=kBd+eM3Zz0OEq0Jsx6D65Q0dPMbvIiytCFWLnpssrMkibLBmfLOpCjF6moavqDlkL/
+         +t8BgH02ORlxrg6M825hTpr6HZ9Y/7vwXMXhNUz6WGeDNRljQxizlDFioPk8ybW+YPuJ
+         XZq9yom2hSMKL1I4FGtOknYUEGMHJwmmd0V9KPMvB2ddNtFUVy4GP9M7hUfWMQYATda8
+         seN6GbZlR4G5LOZJT4VwoZ+YO+JWke/v3MnbWx1xjk04pFLg2tOlzssLpOm732NSpTb5
+         0wali9lN/a9gb+uKbzWvC0sd2GiJdRCiYuD5xPfaJhlMQAsOxqidB43NZSzi5GTVJpKM
+         ASkA==
+X-Gm-Message-State: APjAAAVIHB0eIYtCWc/c8AL9MNgOvoniYCFGKKwNCkmYMuZXOZ/8m+sr
+        0MXZKDiGnITL5HqV+Sw4HNLTD26z2DVvXw14rrA=
+X-Google-Smtp-Source: APXvYqxnu6U8S63dLV1lsHdXGQHef3F61XQEi70QpWOo4C33hmoMZwQPDD+rVz9AbxsCo4FSDAIrRYl9MD9JctgODeY=
+X-Received: by 2002:a9d:404d:: with SMTP id o13mr11205526oti.39.1570447632006;
+ Mon, 07 Oct 2019 04:27:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191003124849.117888-1-martin@geanix.com> <20191003133351.118538-1-martin@geanix.com>
- <CAH+2xPAtxcxd1xXuCmHc25X-Ai2_w-5rxZrgYbavjAzntMxX-Q@mail.gmail.com>
- <f741d1bd-bcde-d1e1-09b7-98bb6a30db33@roeck-us.net> <CC1D25DB-F95B-4110-809C-E8BE1493CDB7@geanix.com>
- <403595f7-99b4-142d-b4ff-7c574a3974fa@roeck-us.net>
-In-Reply-To: <403595f7-99b4-142d-b4ff-7c574a3974fa@roeck-us.net>
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Mon, 7 Oct 2019 12:49:56 +0200
-Message-ID: <CAH+2xPDkezVexmJRcuMmZ-vFbmw6CjDn3k4_SUNw_FNzy93AgQ@mail.gmail.com>
-Subject: Re: [PATCHv2] rtc: pcf2127: handle boot-enabled watchdog feature
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     =?UTF-8?Q?Martin_Hundeb=C3=B8ll?= <martin@geanix.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <1570178133-21532-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570178133-21532-3-git-send-email-fabrizio.castro@bp.renesas.com>
+In-Reply-To: <1570178133-21532-3-git-send-email-fabrizio.castro@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 7 Oct 2019 13:27:00 +0200
+Message-ID: <CAMuHMdW+FAYwuV876Y_BkHoSMtmV=0zUTU_cU1PGhX6zorqbwg@mail.gmail.com>
+Subject: Re: [PATCH 2/7] dt-bindings: spi: sh-msiof: Add r8a774b1 support
+To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Simon Horman <horms@verge.net.au>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>, xu_shunji@hoperun.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter & Martin
-
-Den s=C3=B8n. 6. okt. 2019 kl. 18.19 skrev Guenter Roeck <linux@roeck-us.ne=
-t>:
-> >>
-> >> This should not be decided on driver level. The intended means to
-> >> enforce
-> >> an initial timeout would be to set CONFIG_WATCHDOG_OPEN_TIMEOUT, or to
-> >> use
-> >> the open_timeout kernel parameter.
-> >
-> > That, and WATCHDOG_HANDLE_BOOT_ENABLED
-> >
+On Fri, Oct 4, 2019 at 10:35 AM Fabrizio Castro
+<fabrizio.castro@bp.renesas.com> wrote:
+> Document RZ/G2N (R8A774B1) SoC bindings.
 >
-> To clarify: If WATCHDOG_HANDLE_BOOT_ENABLED is disabled, the watchdog cor=
-e
-> does not ping the watchdog on its own, and Bruno's argument does not appl=
-y
-> in the first place.
+> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
 
-Thanks for clarifying.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-When reading the WDOG_HW_RUNNING bit description in kernel api [1]
-documentation around line 247 you don't get the impression that the behavio=
-r
-can be modified by 2 Kconfig options and 1 runtime option. Maybe add an
-additional note?
+Gr{oetje,eeting}s,
 
-I am overall okay with the change, but I have a few extra comments.
+                        Geert
 
-If the dev_err message is kept there is a typo in register name: wd_val.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-The variable name wdd_timeout is a bit misleading as the register does not
-contain the initial timeout value but a countdown value, ex. wdd_value.
-
-Bruno
-
-[1] Documentation/watchdog/watchdog-kernel-api.rst
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
