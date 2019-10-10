@@ -2,115 +2,98 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDBBD2E78
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2019 18:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D5CD3352
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2019 23:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbfJJQUC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Oct 2019 12:20:02 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44476 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726184AbfJJQUC (ORCPT
+        id S1727202AbfJJVXt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 10 Oct 2019 17:23:49 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:36811 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725867AbfJJVXs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Oct 2019 12:20:02 -0400
-Received: by mail-pg1-f193.google.com with SMTP id u12so3971599pgb.11;
-        Thu, 10 Oct 2019 09:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WOI17RVGbI/w51ir7nAk3XroLrQM2mN4WZvCvlZ8MNU=;
-        b=e0DCp3yNn0FtATTxbmW5vF8GxiAtc+QPlcqLOWf+CGuY9BNBNpMCpjx8z/sh3CA/Km
-         g5Fp7m8mhwvJt9S2DaLOlkHRSy8LIawmIQ888gUHOKmdlwo0yTdzJjo/pCyxVUCQ2VW+
-         qvsBoyVdUZbRMDKI806TJc4pv8h1LqWfhUocaLCxCv04h7Kr1/kCv+sxv3hOzANnXWj9
-         OGr7khGQhkIUNNm8zSPo8aC0ox2R+1PxpzP3T0CWkB94M2GQ/uVYwMxvHp+RpvE1s0pq
-         Is3RiXDMFUSnOxjUGgFdx4bUnS8xgWCNhHhuV6oikNbgH/CxqutSOueFNREdKT42890X
-         jDWA==
+        Thu, 10 Oct 2019 17:23:48 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 67so6196697oto.3;
+        Thu, 10 Oct 2019 14:23:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WOI17RVGbI/w51ir7nAk3XroLrQM2mN4WZvCvlZ8MNU=;
-        b=jhauw9psoZXgKJTWV0KKSOpmbj7ubAKOeRE+Rs9+BhN4gIY/gxxy36qrxeBtoW5CKY
-         SeL7fmhR9mTswWgERKGoZvvgYrJKQxzLghNPWY1IVGPPH/YtsBnQ+yRtLpomPcZMqvln
-         h2oi+gEdCg7OEZpbxbs4lD6dd14izEBUjqyOVUbuVUONt98tWRWznDTYiP7RumQHsIlV
-         6OV+NdI+laUt5S4gfYsbWA+kPbNUT/9j879s/JGYOfTbm4B+UKj2X0tvxz4U2iHGEdcG
-         nVRvKwpYP7EUz/v0kThL3vooBvbRfrGOhNj+/2yxHXKen1AjvHZEVFns/Bb2MmRABpag
-         w3iw==
-X-Gm-Message-State: APjAAAU7ovspD56KucTEUx5R92AwO/UOht4fb8LDlLOfo1A5bILGRnS2
-        8hCJ1zuJMzSe1ehzhqo8avIYECbc
-X-Google-Smtp-Source: APXvYqzepYAA7e2pZPdfvzZSVSsHjXDmo+jiyyY3NneGZ8E3oU70oI0UQBisr7KutWK4BlZxXm24eQ==
-X-Received: by 2002:a17:90a:9a92:: with SMTP id e18mr12506055pjp.87.1570724401424;
-        Thu, 10 Oct 2019 09:20:01 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j128sm6653385pfg.51.2019.10.10.09.19.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 10 Oct 2019 09:19:59 -0700 (PDT)
-Date:   Thu, 10 Oct 2019 09:19:58 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8fsaLFcYDAROH9HBoKC5Vafqp1MCH4HA/pJSglSZ4co=;
+        b=bKjELxGNAZN7UBGTFrZEAnN7TuoetlHlelmVWf9GsyR5amJTLlVS5UmG4om4QBlfoc
+         uZ7XzRvahamKbuTFPmhWzLU7vIPRpfFPqStqvLBY1D3CmnMztcUhcx7I+QUlJU8I+k2D
+         EMAUiHjg0tfdNM9GuQq1c/HawnH9s/2bOYZ8q2gJ++E0fBI/QpKIJ/2aFwhkkUel1kXG
+         V2O2TJLIhHwjwmm4czN8yNjLFoPXpIB3hFE81KHMTYstsW9Es6cLx1+CaN8Hr41uSP7T
+         O5/5AdyHOn+2540VlVk+KBQHidUyrcYKPAosq9dnhgi9B8aK9GxYZZQucHtX8EHHPUl9
+         7NVg==
+X-Gm-Message-State: APjAAAWE4pp2C/Gyu/UbUgqwLHAdIXjVNL2ivp/Z3RmJEaQ78dy6yT2e
+        nFhOVvTEcgLL7otfuWRw4w==
+X-Google-Smtp-Source: APXvYqyIyxVe/QML8xBJW19srjEWY1fzMm01BIPfEyxogOHEBtnRrO0q0z3M7piA63qkH2laitZG7g==
+X-Received: by 2002:a05:6830:13d8:: with SMTP id e24mr9348918otq.42.1570742627232;
+        Thu, 10 Oct 2019 14:23:47 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v132sm2027358oif.34.2019.10.10.14.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2019 14:23:46 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 16:23:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] wdt: bd70528: Trivial function documentation fix
-Message-ID: <20191010161958.GA22086@roeck-us.net>
-References: <20191010060733.GA9979@localhost.localdomain>
+        Guenter Roeck <linux@roeck-us.net>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2 4/8] dt-bindings: memory-controllers: Convert Samsung
+ Exynos SROM bindings to json-schema
+Message-ID: <20191010212346.GA7896@bogus>
+References: <20190918173141.4314-1-krzk@kernel.org>
+ <20190918173141.4314-4-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191010060733.GA9979@localhost.localdomain>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190918173141.4314-4-krzk@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 09:07:33AM +0300, Matti Vaittinen wrote:
-> The function documentation for the exported  ROHM BD70528 WDG control
-> functions used old argument names. Fix the names.
+On Wed, 18 Sep 2019 19:31:37 +0200, Krzysztof Kozlowski wrote:
+> Convert Samsung Exynos SROM controller bindings to DT schema format
+> using json-schema.
 > 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> 
 > ---
->  drivers/watchdog/bd70528_wdt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/watchdog/bd70528_wdt.c b/drivers/watchdog/bd70528_wdt.c
-> index b0152fef4fc7..439f9920978a 100644
-> --- a/drivers/watchdog/bd70528_wdt.c
-> +++ b/drivers/watchdog/bd70528_wdt.c
-> @@ -97,7 +97,7 @@ EXPORT_SYMBOL(bd70528_wdt_set);
->  /**
->   * bd70528_wdt_lock - take WDT lock
->   *
-> - * @bd70528:	device data for the PMIC instance we want to operate on
-> + * @data:	device data for the PMIC instance we want to operate on
->   *
->   * Lock WDT for arming/disarming in order to avoid race condition caused
->   * by WDT state changes initiated by WDT and RTC drivers.
-> @@ -114,7 +114,7 @@ EXPORT_SYMBOL(bd70528_wdt_lock);
->  /**
->   * bd70528_wdt_unlock - unlock WDT lock
->   *
-> - * @bd70528:	device data for the PMIC instance we want to operate on
-> + * @data:	device data for the PMIC instance we want to operate on
->   *
->   * Unlock WDT lock which has previously been taken by call to
->   * bd70528_wdt_lock.
-> -- 
-> 2.21.0
+> Changes since v1:
+> 1. Indent example with four spaces (more readable),
+> 2. Split examples into two,
+> 3. Fix pattern for subnode name,
+> 4. Remove checks for #address-cells-ranges-#size-cells,
+> 5. Add "additionalProperties" so the wrongly named subnodes would be
+>    matched.
+> ---
+>  .../memory-controllers/exynos-srom.txt        |  79 -----------
+>  .../memory-controllers/exynos-srom.yaml       | 128 ++++++++++++++++++
+>  2 files changed, 128 insertions(+), 79 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/memory-controllers/exynos-srom.txt
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml
 > 
-> 
-> -- 
-> Matti Vaittinen, Linux device drivers
-> ROHM Semiconductors, Finland SWDC
-> Kiviharjunlenkki 1E
-> 90220 OULU
-> FINLAND
-> 
-> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-> Simon says - in Latin please.
-> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-> Thanks to Simon Glass for the translation =] 
+
+Applied, thanks.
+
+Rob
