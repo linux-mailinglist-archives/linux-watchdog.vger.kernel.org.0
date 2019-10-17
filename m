@@ -2,80 +2,168 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B50D8032
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Oct 2019 21:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F58DAC82
+	for <lists+linux-watchdog@lfdr.de>; Thu, 17 Oct 2019 14:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732158AbfJOTZm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 15 Oct 2019 15:25:42 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:45908 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731968AbfJOTZl (ORCPT
+        id S1727673AbfJQMmp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 17 Oct 2019 08:42:45 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:22586 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726214AbfJQMmp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 15 Oct 2019 15:25:41 -0400
-Received: by mail-ot1-f67.google.com with SMTP id 41so17979879oti.12;
-        Tue, 15 Oct 2019 12:25:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SGcPWV+a3flesjj4mbDC6c0zlcD6MWrmIaFVWNKrxv8=;
-        b=RbCZ51114p98bZDl1nBqp70LCGm/OWBxOpeLQlX34680N69zPq1N5yuJDNt1yYhiVZ
-         1ebrJ9tMa8EQVoIwcz5mWfu17qy6LYtR+pGpwIoWWbHqBP2DIQJ5QBdN7l264LryIPTD
-         4tv1jyT2aLDaoGWXO+8Flk71Aw3OJXpKI6kHV16m2sIVrukRdsHfIzjGuQZfs0fNNsrm
-         mKktOQ9LerVQH4Zs3EGfDkV7rDKO0fr9aYW1vBG3ra5ihhG7CSi4L7wcD/tBl6QawF2+
-         K69QTaJavfLWJdLyqM83YWhxHifnzIzDpsIUvM9I2beNRkAJv0f/ISjII7FtRD2H+KZy
-         NbNg==
-X-Gm-Message-State: APjAAAUdFi7YwuEMMV5ABMl/3hMvIn59/zT4ImTckQtWVVZWOIjG+G5f
-        gpKpusIHPjEt/nBffVfArQ==
-X-Google-Smtp-Source: APXvYqwzb/cAnrXU5arNN28F0oXmazdVgAUawVvNKIfx6DNM+H5v1g+C5k2gwX/8EP5dl/+KZVzOOg==
-X-Received: by 2002:a05:6830:45b:: with SMTP id d27mr7145687otc.367.1571167540551;
-        Tue, 15 Oct 2019 12:25:40 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 13sm6309372oij.25.2019.10.15.12.25.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 12:25:39 -0700 (PDT)
-Date:   Tue, 15 Oct 2019 14:25:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Simon Horman <horms@verge.net.au>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>, xu_shunji@hoperun.com
-Subject: Re: [PATCH 3/7] dt-bindings: PCI: rcar: Add device tree support for
- r8a774b1
-Message-ID: <20191015192539.GA1694@bogus>
-References: <1570178133-21532-1-git-send-email-fabrizio.castro@bp.renesas.com>
- <1570178133-21532-4-git-send-email-fabrizio.castro@bp.renesas.com>
+        Thu, 17 Oct 2019 08:42:45 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9HCfBaw021784;
+        Thu, 17 Oct 2019 14:42:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=L26QXalVQR9HzDI3UJ1eXufxROWoddqJ9iUBDb8vL5I=;
+ b=V1qAI/AZc8ULJzhq8rHQoCKUBO4QKrCmM+Tds8x0tAjcOGhCYNT6xlel6P3uOLpsS44M
+ pj79D+qYzGG4je4AZbY9LPDKuDuUP2SwVsNA0L6MVKgAFbCvVvSf2XQAQ6U2mQPOOwo0
+ L+MKHi3atsGEWE71HnO/s8Zquh8eGx6b/c4C0v83kl5n7VNZ4Cimu+/eK7I0BYkgvtiH
+ w++len1Su7YNIAxZNCmCz649vwJGEP3Emlyg2EFkU3jxMUZx9wXYqJxnOJ0eDOEcbKmx
+ xOWIuL9U5/l79s3uf/kjye0pNHKfMUHWyYLNwAUYkeK3qT/g67/Icj/f/3dAmL6fua7O uw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2vk4kxbu5b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Oct 2019 14:42:06 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0C6D510002A;
+        Thu, 17 Oct 2019 14:42:06 +0200 (CEST)
+Received: from Webmail-eu.st.com (Safex1hubcas24.st.com [10.75.90.94])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EEED32B5663;
+        Thu, 17 Oct 2019 14:42:05 +0200 (CEST)
+Received: from SAFEX1HUBCAS22.st.com (10.75.90.93) by Safex1hubcas24.st.com
+ (10.75.90.94) with Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 17 Oct
+ 2019 14:42:05 +0200
+Received: from localhost (10.201.20.122) by Webmail-ga.st.com (10.75.90.48)
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 17 Oct 2019 14:42:04
+ +0200
+From:   Benjamin Gaignard <benjamin.gaignard@st.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <alexandre.torgue@st.com>
+CC:     <linux-watchdog@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: [PATCH] dt-bindings: watchdog: Convert stm32 watchdog bindings to json-schema
+Date:   Thu, 17 Oct 2019 14:41:59 +0200
+Message-ID: <20191017124159.13869-1-benjamin.gaignard@st.com>
+X-Mailer: git-send-email 2.15.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570178133-21532-4-git-send-email-fabrizio.castro@bp.renesas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.122]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-17_04:2019-10-17,2019-10-17 signatures=0
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri,  4 Oct 2019 09:35:29 +0100, Fabrizio Castro wrote:
-> Add PCIe support for the RZ/G2N (a.k.a. R8A774B1).
-> 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/pci/rcar-pci.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Convert the STM32 watchdog binding to DT schema format using json-schema
 
-Applied, thanks.
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+---
+ .../devicetree/bindings/watchdog/st,stm32-iwdg.txt | 26 -----------
+ .../bindings/watchdog/st,stm32-iwdg.yaml           | 54 ++++++++++++++++++++++
+ 2 files changed, 54 insertions(+), 26 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
 
-Rob
+diff --git a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
+deleted file mode 100644
+index d8f4430b0a13..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
++++ /dev/null
+@@ -1,26 +0,0 @@
+-STM32 Independent WatchDoG (IWDG)
+----------------------------------
+-
+-Required properties:
+-- compatible: Should be either:
+-  - "st,stm32-iwdg"
+-  - "st,stm32mp1-iwdg"
+-- reg: Physical base address and length of the registers set for the device
+-- clocks: Reference to the clock entry lsi. Additional pclk clock entry
+-  is required only for st,stm32mp1-iwdg.
+-- clock-names: Name of the clocks used.
+-  "lsi" for st,stm32-iwdg
+-  "lsi", "pclk" for st,stm32mp1-iwdg
+-
+-Optional Properties:
+-- timeout-sec: Watchdog timeout value in seconds.
+-
+-Example:
+-
+-iwdg: watchdog@40003000 {
+-	compatible = "st,stm32-iwdg";
+-	reg = <0x40003000 0x400>;
+-	clocks = <&clk_lsi>;
+-	clock-names = "lsi";
+-	timeout-sec = <32>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+new file mode 100644
+index 000000000000..edec96d53e6b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/st,stm32-iwdg.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics STM32 Independent WatchDoG (IWDG) bindings
++
++maintainers:
++  - Yannick Fertre <yannick.fertre@st.com>
++
++allOf: 
++  - $ref: "watchdog.yaml#"
++
++properties:
++  compatible:
++    enum:
++      - st,stm32-iwdg
++      - st,stm32mp1-iwdg
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Low speed clock
++      - description: Optional peripheral clock
++    minItems: 1
++    maxItems: 2
++
++  clock-names:
++    items:
++      enums: [ lsi, pclk ]
++    minItems: 1
++    maxItems: 2
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++examples:
++  - |
++    #include <dt-bindings/clock/stm32mp1-clks.h>
++    watchdog@5a002000 {
++      compatible = "st,stm32mp1-iwdg";
++      reg = <0x5a002000 0x400>;
++      clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
++      clock-names = "pclk", "lsi";
++      timeout-sec = <32>;
++    };
++
++...
+-- 
+2.15.0
+
