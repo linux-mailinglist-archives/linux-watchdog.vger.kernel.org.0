@@ -2,74 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1662EDBED3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Oct 2019 09:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350EADBFFA
+	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Oct 2019 10:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504854AbfJRHwE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 18 Oct 2019 03:52:04 -0400
-Received: from schoolmoda.ru ([88.200.194.99]:46925 "EHLO usrv.lan"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2504842AbfJRHwD (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 18 Oct 2019 03:52:03 -0400
-X-Greylist: delayed 39699 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Oct 2019 03:52:00 EDT
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by usrv.lan (Postfix) with SMTP id CD5A8186483;
-        Thu, 17 Oct 2019 17:04:04 +0400 (MSD)
-Received: from [198.17.148.166] by 127.0.0.1 id <2762529-44226>; Thu, 17 Oct 2019 18:01:58 +0500
-Message-ID: <l3$5ik52xv$r2-1rj4y0y$w4$u$mc@dfnci.ez6>
-From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-To:     linux-uvc-devel@lists.berlios.de
-Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
-Date:   Thu, 17 Oct 19 18:01:58 GMT
-X-Mailer: Microsoft Outlook Express 5.00.2919.6700
+        id S2406807AbfJRIdp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 18 Oct 2019 04:33:45 -0400
+Received: from mail-sz.amlogic.com ([211.162.65.117]:35600 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387458AbfJRIdp (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 18 Oct 2019 04:33:45 -0400
+Received: from droid12-sz.software.amlogic (10.28.8.22) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Fri, 18 Oct 2019
+ 16:33:53 +0800
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+CC:     Xingyu Chen <xingyu.chen@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 0/4] add meson secure watchdog driver
+Date:   Fri, 18 Oct 2019 16:33:37 +0800
+Message-ID: <1571387622-35132-1-git-send-email-xingyu.chen@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="EFA7_FB09FAD2"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain
+X-Originating-IP: [10.28.8.22]
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+The watchdog controller on the Meson-A/C series SoCs is moved to secure world,
+We have to call SMC instruction to trap the ATF for watchdog operation. These
+operations are different from previous SoCs, so we introduce a new watchdog
+driver to support this kind of SoCs.
 
---EFA7_FB09FAD2
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Changes since v1 at [0]:
+- add a new dependency in Kconfig
+- simplify/add the return operation
+- remove useless ping operation when setting the timeout
+- fix some return values
+- fix the license statement
 
-Dear Sir / Madam
+[0]:https://lore.kernel.org/linux-amlogic/1570874721-36077-1-git-send-email-xingyu.chen@amlogic.com
 
+Xingyu Chen (4):
+  firmware: meson_sm: add new SMC ID support for accessing secure
+    watchdog
+  dt-bindings: watchdog: add new binding for meson secure watchdog
+  watchdog: add meson secure watchdog driver
+  arm64: dts: a1: add secure watchdog controller
 
+ .../bindings/watchdog/amlogic,meson-sec-wdt.yaml   |  34 ++++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |   6 +
+ drivers/firmware/meson/meson_sm.c                  |   1 +
+ drivers/watchdog/Kconfig                           |  17 ++
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/meson_sec_wdt.c                   | 187 +++++++++++++++++++++
+ include/linux/firmware/meson/meson_sm.h            |   1 +
+ 7 files changed, 247 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
+ create mode 100644 drivers/watchdog/meson_sec_wdt.c
 
-Since ever we left your country back to Canada , we have gotten Government=
- approval and we have been busying planning for the less privilege Childre=
-n projects.
-
-We are planning to release first batch of the funds $2,990,000.00 within 1=
-4 days for building an estate for motherless children in your city.
-
-I want you to use my mother;s company name to register this charity projec=
-t in your country after receiving the project funds.
-
-It must be registered as { Bayraktar Group Homeless Children Ltd }.
-
-
-Can you handle and supervise this big project ?
-Can you manager all the workers as a senior supervisor ?
-We want to be sure you can handle it before we proceed with this project.
-
-
-Please call me if you want to hear from us + 1-917 580 4919.
-Please can you manage such project please Kindly reply for further details=
-.
-
-Your full names-----------
-
-
-
-Ekrem Bayraktar.
-Bayraktar Shipping Group
-
---EFA7_FB09FAD2--
+-- 
+2.7.4
 
