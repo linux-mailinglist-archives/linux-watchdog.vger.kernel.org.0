@@ -2,133 +2,152 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3C7DE8CF
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Oct 2019 11:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D09DEDC6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Oct 2019 15:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbfJUJ7Q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 21 Oct 2019 05:59:16 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:35561 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727949AbfJUJ7Q (ORCPT
+        id S1728976AbfJUNiF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Oct 2019 09:38:05 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34793 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728083AbfJUNiF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 21 Oct 2019 05:59:16 -0400
-Received: by mail-ua1-f66.google.com with SMTP id n41so3619492uae.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 21 Oct 2019 02:59:14 -0700 (PDT)
+        Mon, 21 Oct 2019 09:38:05 -0400
+Received: by mail-pg1-f194.google.com with SMTP id k20so7859379pgi.1;
+        Mon, 21 Oct 2019 06:38:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pdHS5iTjhH216W3OQmstavgIx2TJJX3EShTQ+j4ScZ4=;
-        b=A+lOYOm+Xr9/QoAPbGmRqhJkdtF0Lqe8WUL4ACj5RU0nNNF8swHXxJ1znB4G8Os5Ny
-         GFNaGZ/ejdu+ewHfdHOPCmruyouYE59ddCzoE/xVdTrwx+9jDUvHxy7BDp9wIDVdNxfI
-         /6ZVUUwI4YOYuKQGiiojp4zvyT6amzLfph0exWZKznf04jiM3DxdRAExfvqYeyeqcqdD
-         +jHYiIvYbVFtFjJ+6C1ZbvLjFHV0Oba7w+6LuMl93+fW5xmlBomtFj1iieYNFONPPx+n
-         GuW5fPipC9llariB4WKqkEzYSA5LiCXyADKzbRoQItF2MbOokfHyNH6+nW64EQTg2+/Q
-         SDPg==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=b1PZ6SOJ7OdDQt8+lVytXILJGAVRFkgpcJ5+dAG12fw=;
+        b=LB+tV9MYjiaR8vrVT25ivC09xXjhdonxNFWid2hDBLzWPHw3/GK/90NtR4BjlhHJxx
+         DGa7cp7EM16xC3BDXNfXntsX2rMAAGvvjN3/e+U83apLVZDuDF/OzNXLLdaZoyehtx3H
+         ckLQZbuyW37o5YO58jyRWIiQxLr6gil8Ea/E5NjS/W+SxICC2p7Mk+sVhzSdTyvM1h1y
+         zTP9SxbdSvdtjwVAF1Yo+4wrGLf4j0bImlu1nLV6MxrJPuTYkRV9xrQUMnfmg6SW5W+Q
+         Ajm+6jkPOjljf1SybFLdxWn1S7hzIzXMO0dWanbUnst1OAvPkRkIFdupDgeEm0ZhZ7TQ
+         2OvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pdHS5iTjhH216W3OQmstavgIx2TJJX3EShTQ+j4ScZ4=;
-        b=MqSNqiY+pwRM5+VJhey52pG+/i/xMjCNbB/u2qNaWn0/QxZoh8RVBfRA9GGlfPEYhZ
-         q9dHAPCK0uME2F9zwq/JlV9J4/Wb6w6bBF2Nq6gHXzC/OkGg0hfoFdwpURmGZ3LuXfYv
-         9bmOIRqCmnfqHWpIv/H7g/xk3epbh6WRRt+o/knabWlY+efJInfxErhbPxtsH8DWITkV
-         olblI6RLdb8je6DzkfibXmBQMBU/2Q3bgA+1C/EhZnGLkZYu/XcAE4NCGGeruXaXU1nS
-         V6W9XlBDyKDeGsjvVIJXB8LTkD5powSUrsFyvUOfH82cSgOui5zt5znMr7xhoKu5sbuW
-         6XTg==
-X-Gm-Message-State: APjAAAVyGGvL5BnMUEiKyNz+6idwhTrvS6CJc0JPUgoqfZNmuck2sUv5
-        9M75qGKsPBMeeAoRu0qqJjHIVRqZg0CUSCT/3T/eaQ==
-X-Google-Smtp-Source: APXvYqyX35z25w9uC+afBeqWkMX+7aKojU6riMDxod1s9TtFAaRTKL1Dky4gIujxC0cprlM32BbtJAeRhAkOs/Lhxl0=
-X-Received: by 2002:ab0:5a97:: with SMTP id w23mr2075364uae.129.1571651953620;
- Mon, 21 Oct 2019 02:59:13 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=b1PZ6SOJ7OdDQt8+lVytXILJGAVRFkgpcJ5+dAG12fw=;
+        b=irR+GoIisnh62PssvmOGV5IhEH046Ohu8P5UIobgz3bAOv1IF06Xp97K0pcc9Z+JCR
+         dZntZQ71pAUixAKZd/ZLf0dOG9ZrRgDlRlDe2skumBIsYSYbCGY3JnPiiP2sSmhGGOvI
+         IyPJVZXbqrIU7/Yqbfote5hnPRNyEQj0cJmO/0hVyzcfesh7aOF9Wdc/m9SwDsTE8P+o
+         BMVDCTdn13AHkleJlr+G35FZlapo4hy3VULRlo4bxunMcK8H1V4OQx32Dn4WDDsBAQ6H
+         BnZ+Y3M0e+1FrbkBrTUbN+ZoMdgda6F0+7UQ2A8uJXOgOaRvBlBn3SQjxXqjp/QSHeqM
+         YrfA==
+X-Gm-Message-State: APjAAAWkCW+xkajmRMatBa166jXOsGAGpt7kS/eDpDVNzJO0RxueMJiz
+        x2iX7YVkTZG6IEwvgjCh6HafQK2L
+X-Google-Smtp-Source: APXvYqx6UmiUNJ8OsgobEge2zBLNBqpn+JDBOATMHXfa+4BF+S0SfCYz4R9XSX0QOoH8TvkXgpov4w==
+X-Received: by 2002:a17:90a:8048:: with SMTP id e8mr30110326pjw.0.1571665083089;
+        Mon, 21 Oct 2019 06:38:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m12sm5595043pjk.13.2019.10.21.06.38.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Oct 2019 06:38:01 -0700 (PDT)
+Subject: Re: [PATCH v2 3/4] watchdog: add meson secure watchdog driver
+To:     Xingyu Chen <xingyu.chen@amlogic.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>, linux-watchdog@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1571387622-35132-1-git-send-email-xingyu.chen@amlogic.com>
+ <1571387622-35132-4-git-send-email-xingyu.chen@amlogic.com>
+ <7397f6db-1dc8-3abd-41ff-2e47323c7ffa@roeck-us.net>
+ <bfc892af-1cd3-1437-75b2-5ba2b7913284@amlogic.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <bd5ed275-4ae4-4163-b585-23fbead9833f@roeck-us.net>
+Date:   Mon, 21 Oct 2019 06:38:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-5-arnd@arndb.de>
-In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 21 Oct 2019 11:58:37 +0200
-Message-ID: <CAPDyKFqHoPOPAA_0WpxQUjBTXJ-5BfMbcNXhFNr7rv3RObsgow@mail.gmail.com>
-Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <bfc892af-1cd3-1437-75b2-5ba2b7913284@amlogic.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 18 Oct 2019 at 17:43, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> The mach/hardware.h is included in lots of places, and it provides
-> three different things on pxa:
->
-> - the cpu_is_pxa* macros
-> - an indirect inclusion of mach/addr-map.h
-> - the __REG() and io_pv2() helper macros
->
-> Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
-> headers, then change all the files that use mach/hardware.h to
-> include the exact set of those three headers that they actually
-> need, allowing for further more targeted cleanup.
->
-> linux/soc/pxa/cpu.h can remain permanently exported and is now in
-> a global location along with similar headers. pxa-regs.h and
-> addr-map.h are only used in a very small number of drivers now
-> and can be moved to arch/arm/mach-pxa/ directly when those drivers
-> are to pass the necessary data as resources.
->
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On 10/21/19 1:03 AM, Xingyu Chen wrote:
+> Hi, Guenter
+> 
+> On 2019/10/21 0:56, Guenter Roeck wrote:
+>> On 10/18/19 1:33 AM, Xingyu Chen wrote:
+>>> The watchdog controller on the Meson-A/C series SoCs is moved to secure
+>>> world, watchdog operation needs to be done in secure EL3 mode via ATF,
+>>> Non-secure world can call SMC instruction to trap to AFT for watchdog
+>>> operation.
+>>>
+>>> Signed-off-by: Xingyu Chen <xingyu.chen@amlogic.com>
+>>> ---
+>>>   drivers/watchdog/Kconfig         |  17 ++++
+>>>   drivers/watchdog/Makefile        |   1 +
+>>>   drivers/watchdog/meson_sec_wdt.c | 187 +++++++++++++++++++++++++++++++++++++++
+>>>   3 files changed, 205 insertions(+)
+>>>   create mode 100644 drivers/watchdog/meson_sec_wdt.c
+>>>
+>>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>>> index 58e7c10..e84be42 100644
+>>> --- a/drivers/watchdog/Kconfig
+>>> +++ b/drivers/watchdog/Kconfig
+>>> @@ -826,6 +826,23 @@ config MESON_GXBB_WATCHDOG
+>>>         To compile this driver as a module, choose M here: the
+>>>         module will be called meson_gxbb_wdt.
+>>> +config MESON_SEC_WATCHDOG
+>>> +    tristate "Amlogic Meson Secure watchdog support"
+>>> +    depends on MESON_SM
+>>> +    depends on ARCH_MESON || COMPILE_TEST
+>>
+>> This dependency is pointless. MESON_SM already depends on ARCH_MESON,
+>> thus specifying "COMPILE_TEST" here adds no value but only
+>> creates confusion.
+> Thanks for your analysis, perhaps i should remove the line below.
+> - depends on ARCH_MESON || COMPILE_TEST
+> 
+> Is it ok to modify code above like this ?
 
-[...]
+Yes.
+[ ... ]
 
-For the mmc part:
+>>> +static unsigned int meson_sec_wdt_get_timeleft(struct watchdog_device *wdt_dev)
+>>> +{
+>>> +    int ret;
+>>> +    unsigned int timeleft;
+>>> +    struct meson_sec_wdt *data = watchdog_get_drvdata(wdt_dev);
+>>> +
+>>> +    ret = meson_sm_call(data->fw, SM_WATCHDOG_OPS, &timeleft,
+>>> +                MESON_SIP_WDT_GETTIMELEFT, 0, 0, 0, 0);
+>>> +
+>>> +    if (ret)
+>>> +        return ret;
+>>
+>> Meh, that doesn't work. I just realized that the return type is unsigned,
+>> so returning a negative error code is pointless. Guess we'll have to
+>> live with returning 0 in this case after all. I wonder if we should
+>> fix the API and return an integer (with negative error code), but that
+>> is a different question.
+> Thanks for your review.
+> 
+> IMO, if returning an integer, and the value which copy to user buf should be formatted with %d instead of %u (see timeleft_show), it will cause the max value of timeleft is reduced from 4294967295 to 2147483647. but i'am not sure whether it will bring risk.
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+Not that it matters right now, but I don't think that limiting 'timeleft'
+reporting to 2147483647 seconds, or ~68 years, would cause any risk.
+It would just be a large patch changing several drivers all at once,
+that is all.
+
+> 
+> So i also think returning 0 may be better in this case.
+
+Yes, please do that.
+
+Thanks,
+Guenter
