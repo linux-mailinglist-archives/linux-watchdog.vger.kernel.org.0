@@ -2,128 +2,143 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F42DF292
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Oct 2019 18:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3EDDFD2C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Oct 2019 07:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727211AbfJUQMo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 21 Oct 2019 12:12:44 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:33538 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726289AbfJUQMn (ORCPT
+        id S1726024AbfJVFtL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Oct 2019 01:49:11 -0400
+Received: from mail-sz.amlogic.com ([211.162.65.117]:9380 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725788AbfJVFtL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 21 Oct 2019 12:12:43 -0400
-Received: by mail-pg1-f193.google.com with SMTP id i76so8107024pgc.0;
-        Mon, 21 Oct 2019 09:12:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=/dL9nLuK//vgQyX5Tc3It+b5p3m0IezAp1ZjZvVIvrg=;
-        b=YBfXwwUKf7dakUvfxv+rUEpoRtKWbXyXzyTfWnn2/IDrjdpQpxROPAtJcJVSm/lSN7
-         k88v4hiCNKo6qjaN+6IZOpjgnjWim+9rzYfBj5yCC9/Zw3qGOtYJ98cdzTi3csyY72yH
-         TQ5lcRjFESz2VWnAluDd10rO0Z2Pgl4vtJ999C9UFXwfcItZJ0IGnWpKQepOr7GPIczF
-         HgpxIo5i5b7NMtMHHB+tygqs+q9qqIGO2hx2sINxmrQTwRisSoAOOHYR9ho4TpH9ZauJ
-         SPgfSmT1Sb3Ywp+5ZzbQhm3TaBrOIzW7rgd5OgBDuQrhplxqLZuVFr1o1CrdpFKpN1bi
-         97Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=/dL9nLuK//vgQyX5Tc3It+b5p3m0IezAp1ZjZvVIvrg=;
-        b=pYlrO1bf8oTxT8jiHV9ZYn71GM4K9k9Mwwg1TT52HpKaAbwt7ggDAUDRi1k5ud6WOr
-         no1YIWv7tac3jKrWgjf2G5H/X7UwVLwTZYdrayaMB7z/gzvCdHPl/aJkm+qyDNCbesRH
-         TK9Evh4+Ubbvqe/LZ0ziFaDOOxiM4emxoE+ctR+eArvH2usOm6wPWihQY7TzH/1D6hLZ
-         OWhloDiZBGM353NsUyc85co2xaBfgssvyFnK0VuOcUAau6Uv/20+70M9Q47HrfK7Uh23
-         cklHCf0QBo4SxTJrkcdoRpEiwsWwyEIVgIlHBK2HBAL81G0VEjiMDNqLdEPuRF7LcE6M
-         RHQQ==
-X-Gm-Message-State: APjAAAWWycfFwWSb0UIfNWGq3T70TY92i2rh3mr8UD9+PM40LD7GNnsC
-        KXkUuZfoaMYNnpU5BJF6Cso=
-X-Google-Smtp-Source: APXvYqwUvkny6Awzbacc3lubZcUHkXPgxlD3v+5dRnon48R2bTj1aPfiuUkBE4TVJkeyKRuVbDnSuQ==
-X-Received: by 2002:a17:90a:1b28:: with SMTP id q37mr30079122pjq.91.1571674362763;
-        Mon, 21 Oct 2019 09:12:42 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 62sm15795256pfg.164.2019.10.21.09.12.40
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 21 Oct 2019 09:12:41 -0700 (PDT)
-Date:   Mon, 21 Oct 2019 09:12:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Bruno Thomsen <bruno.thomsen@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCHv3] rtc: pcf2127: handle boot-enabled watchdog feature
-Message-ID: <20191021161239.GA17104@roeck-us.net>
-References: <20191003133351.118538-1-martin@geanix.com>
- <20191021080838.2789-1-martin@geanix.com>
+        Tue, 22 Oct 2019 01:49:11 -0400
+Received: from [10.28.19.63] (10.28.19.63) by mail-sz.amlogic.com (10.28.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 22 Oct
+ 2019 13:49:20 +0800
+Subject: Re: [PATCH v2 3/4] watchdog: add meson secure watchdog driver
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1571387622-35132-1-git-send-email-xingyu.chen@amlogic.com>
+ <1571387622-35132-4-git-send-email-xingyu.chen@amlogic.com>
+ <7397f6db-1dc8-3abd-41ff-2e47323c7ffa@roeck-us.net>
+ <bfc892af-1cd3-1437-75b2-5ba2b7913284@amlogic.com>
+ <bd5ed275-4ae4-4163-b585-23fbead9833f@roeck-us.net>
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+Message-ID: <1b841195-cf76-7128-9569-5c2b0d39c1c1@amlogic.com>
+Date:   Tue, 22 Oct 2019 13:49:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <bd5ed275-4ae4-4163-b585-23fbead9833f@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191021080838.2789-1-martin@geanix.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.28.19.63]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 10:08:38AM +0200, Martin Hundeb�ll wrote:
-> Linux should handle when the pcf2127 watchdog feature is enabled by the
-> bootloader. This is done by checking the watchdog timer value during
-> init, and set the WDOG_HW_RUNNING flag if the value differs from zero.
-> 
-> Signed-off-by: Martin Hundeb�ll <martin@geanix.com>
+Hi, Guenter
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+On 2019/10/21 21:38, Guenter Roeck wrote:
+> On 10/21/19 1:03 AM, Xingyu Chen wrote:
+>> Hi, Guenter
+>>
+>> On 2019/10/21 0:56, Guenter Roeck wrote:
+>>> On 10/18/19 1:33 AM, Xingyu Chen wrote:
+>>>> The watchdog controller on the Meson-A/C series SoCs is moved to secure
+>>>> world, watchdog operation needs to be done in secure EL3 mode via ATF,
+>>>> Non-secure world can call SMC instruction to trap to AFT for watchdog
+>>>> operation.
+>>>>
+>>>> Signed-off-by: Xingyu Chen <xingyu.chen@amlogic.com>
+>>>> ---
+>>>>   drivers/watchdog/Kconfig         |  17 ++++
+>>>>   drivers/watchdog/Makefile        |   1 +
+>>>>   drivers/watchdog/meson_sec_wdt.c | 187 
+>>>> +++++++++++++++++++++++++++++++++++++++
+>>>>   3 files changed, 205 insertions(+)
+>>>>   create mode 100644 drivers/watchdog/meson_sec_wdt.c
+>>>>
+>>>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>>>> index 58e7c10..e84be42 100644
+>>>> --- a/drivers/watchdog/Kconfig
+>>>> +++ b/drivers/watchdog/Kconfig
+>>>> @@ -826,6 +826,23 @@ config MESON_GXBB_WATCHDOG
+>>>>         To compile this driver as a module, choose M here: the
+>>>>         module will be called meson_gxbb_wdt.
+>>>> +config MESON_SEC_WATCHDOG
+>>>> +    tristate "Amlogic Meson Secure watchdog support"
+>>>> +    depends on MESON_SM
+>>>> +    depends on ARCH_MESON || COMPILE_TEST
+>>>
+>>> This dependency is pointless. MESON_SM already depends on ARCH_MESON,
+>>> thus specifying "COMPILE_TEST" here adds no value but only
+>>> creates confusion.
+>> Thanks for your analysis, perhaps i should remove the line below.
+>> - depends on ARCH_MESON || COMPILE_TEST
+>>
+>> Is it ok to modify code above like this ?
+> 
+> Yes.
+Thanks, fix it in next version.
 
-> ---
+> [ ... ]
 > 
-> Change since v2:
->  * remove logging in case of error
+>>>> +static unsigned int meson_sec_wdt_get_timeleft(struct 
+>>>> watchdog_device *wdt_dev)
+>>>> +{
+>>>> +    int ret;
+>>>> +    unsigned int timeleft;
+>>>> +    struct meson_sec_wdt *data = watchdog_get_drvdata(wdt_dev);
+>>>> +
+>>>> +    ret = meson_sm_call(data->fw, SM_WATCHDOG_OPS, Thanks&timeleft,
+>>>> +                MESON_SIP_WDT_GETTIMELEFT, 0, 0, 0, 0);
+>>>> +
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>
+>>> Meh, that doesn't work. I just realized that the return type is 
+>>> unsigned,
+>>> so returning a negative error code is pointless. Guess we'll have to
+>>> live with returning 0 in this case after all. I wonder if we should
+>>> fix the API and return an integer (with negative error code), but that
+>>> is a different question.
+>> Thanks for your review.
+>>
+>> IMO, if returning an integer, and the value which copy to user buf 
+>> should be formatted with %d instead of %u (see timeleft_show), it will 
+>> cause the max value of timeleft is reduced from 4294967295 to 
+>> 2147483647. but i'am not sure whether it will bring risk.
 > 
-> Change since v1:
->  * remove setting of WDOG_HW_RUNNING in pcf2127_wdt_start()
+> Not that it matters right now, but I don't think that limiting 'timeleft'
+> reporting to 2147483647 seconds, or ~68 years, would cause any risk.
+> It would just be a large patch changing several drivers all at once,
+> that is all.
 > 
->  drivers/rtc/rtc-pcf2127.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>>
+>> So i also think returning 0 may be better in this case.
 > 
-> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index 02b069c..ba5baac 100644
-> --- a/drivers/rtc/rtc-pcf2127.c
-> +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -417,6 +417,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->  			const char *name, bool has_nvmem)
->  {
->  	struct pcf2127 *pcf2127;
-> +	u32 wdd_timeout;
->  	int ret = 0;
->  
->  	dev_dbg(dev, "%s\n", __func__);
-> @@ -459,7 +460,6 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->  	/*
->  	 * Watchdog timer enabled and reset pin /RST activated when timed out.
->  	 * Select 1Hz clock source for watchdog timer.
-> -	 * Timer is not started until WD_VAL is loaded with a valid value.
->  	 * Note: Countdown timer disabled and not available.
->  	 */
->  	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_WD_CTL,
-> @@ -475,6 +475,14 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->  		return ret;
->  	}
->  
-> +	/* Test if watchdog timer is started by bootloader */
-> +	ret = regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_timeout);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (wdd_timeout)
-> +		set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
-> +
->  #ifdef CONFIG_WATCHDOG
->  	ret = devm_watchdog_register_device(dev, &pcf2127->wdd);
->  	if (ret)
-> -- 
-> 2.7.4
+> Yes, please do that.
+Thanks, fix it in next version.
+> 
+> Thanks,
+> Guenter
+> 
+> .
 > 
