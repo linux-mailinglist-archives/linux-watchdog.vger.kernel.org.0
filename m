@@ -2,93 +2,86 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCF1E3A25
-	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2019 19:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDC7E3D8E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2019 22:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503829AbfJXRet (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 24 Oct 2019 13:34:49 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:32973 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503819AbfJXRes (ORCPT
+        id S1728461AbfJXUuG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 24 Oct 2019 16:50:06 -0400
+Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:53273 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727331AbfJXUuG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 24 Oct 2019 13:34:48 -0400
-Received: by mail-pl1-f195.google.com with SMTP id y8so3686972plk.0;
-        Thu, 24 Oct 2019 10:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4xAH5O7ZmGTGh/7bz/H2A/raubLFZFEOmbd1GQrCgUg=;
-        b=XiIsTe0NN2X+NUlLdwWwmfzTywIeIZOpqjqet92yDH0L1tvipqmrxvMcpAakVniyIr
-         vhSBR+w7W3qHfRxWD1nWUGgfCGAulGqtbVmxo66PSToWXkCOXzLJbJwyNULRMcwXOvJP
-         PERyVI0dmTNcfBNhY0azGglCG/0+byVVCwLQ1QOHXH/cygX5SWzpGwYRYiYDP38A14xn
-         keZ1PDpIE5ijMvNeMY+UrG0ILxXieladffE9iQsS9y3r+ngmBxobIdVJ1aGtrfpU3lbe
-         TAitqoWC4v8YpEFWSL5bHMSj9S3B7S6EmOWCDQfGpKv3VDNbDuqYWtRT2q7isjuOr8Mg
-         iNxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4xAH5O7ZmGTGh/7bz/H2A/raubLFZFEOmbd1GQrCgUg=;
-        b=rZT2amhe2eTTPBV0FBTYdd3VwP3uMR7ZwT9nTqPPyoeqFB4g8fUgAj+Vpvt7pBg4NS
-         8u//k2mem1dBDXqLKKMt3NJfsyNTo2sTg6aIb/8C4aY9STqGXm4OdESSh1ibBRXT4t86
-         ljtj7Pe+9082R21Ju0mKpEvvfGxRBYhSN2PdFOgTt5oaWdqTnfirPF+A3yP4LxTiher3
-         dOohW2ZvDPf0MTUre+4WulxHA8IkeY/oLp8lQIAoHhiavO5yfArrayvRKDEbhH/gbo6j
-         cG3gx4IWrPAeV4Ww2hj08/GCJO9TDf96YI2NnT+bjA++xk7GSNqGCrUOPFrfBOhEYKtJ
-         D6vQ==
-X-Gm-Message-State: APjAAAUoPw+/KSatUEbXdPHKrHWqNC8qbyTDCj8z2u5DAlSPg+eFDNrZ
-        Ls/Yp7/LRoG1b/6wiAsKN98l+p9w
-X-Google-Smtp-Source: APXvYqwugV0LLLMtrWu8L2CZrijCdJYYJeNq2E9wIJSg50BwD9FkI1TfNcFoy2Vmlh3NS+Lg8t7nwA==
-X-Received: by 2002:a17:902:7c03:: with SMTP id x3mr17367584pll.171.1571938486568;
-        Thu, 24 Oct 2019 10:34:46 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s3sm2704619pjq.32.2019.10.24.10.34.44
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 24 Oct 2019 10:34:45 -0700 (PDT)
-Date:   Thu, 24 Oct 2019 10:34:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH trivial] watchdog: wdat_wdt: Spelling
- s/configrable/configurable/
-Message-ID: <20191024173444.GA27754@roeck-us.net>
-References: <20191024152856.30788-1-geert+renesas@glider.be>
+        Thu, 24 Oct 2019 16:50:06 -0400
+Received: from belgarion ([90.76.41.223])
+        by mwinf5d87 with ME
+        id HYps210044otT8A03Ypz5w; Thu, 24 Oct 2019 22:50:03 +0200
+X-ME-Helo: belgarion
+X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
+X-ME-Date: Thu, 24 Oct 2019 22:50:03 +0200
+X-ME-IP: 90.76.41.223
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        "open list\:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
+References: <20191018154052.1276506-1-arnd@arndb.de>
+        <87v9slg9k5.fsf@belgarion.home>
+        <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
+        <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
+        <87r239f2g8.fsf@belgarion.home>
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Thu, 24 Oct 2019 22:49:51 +0200
+In-Reply-To: <87r239f2g8.fsf@belgarion.home> (Robert Jarzmik's message of
+        "Sat, 19 Oct 2019 12:35:03 +0200")
+Message-ID: <87eez1rhqo.fsf@belgarion.home>
+User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191024152856.30788-1-geert+renesas@glider.be>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 05:28:56PM +0200, Geert Uytterhoeven wrote:
-> Fix misspelling of "configurable".
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Robert Jarzmik <robert.jarzmik@free.fr> writes:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>>> I've now pushed it to
+>>>
+>>> git://git.kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git
+>>> pxa-multiplatform
+>>
+>> Sorry for the duplication, I had some problems with email configuration
+>> so my reply got rejected, let's see if it goes through this time.
+> I have it now, thanks, I'll test and review as soon as I can.
+>
+> Cheers.
 
-> ---
->  drivers/watchdog/wdat_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-> index e7cf41aa26c3bbfc..b069349b52f55f92 100644
-> --- a/drivers/watchdog/wdat_wdt.c
-> +++ b/drivers/watchdog/wdat_wdt.c
-> @@ -202,7 +202,7 @@ static int wdat_wdt_enable_reboot(struct wdat_wdt *wdat)
->  	 * WDAT specification says that the watchdog is required to reboot
->  	 * the system when it fires. However, it also states that it is
->  	 * recommeded to make it configurable through hardware register. We
-> -	 * enable reboot now if it is configrable, just in case.
-> +	 * enable reboot now if it is configurable, just in case.
->  	 */
->  	ret = wdat_wdt_run_action(wdat, ACPI_WDAT_SET_REBOOT, 0, NULL);
->  	if (ret && ret != -EOPNOTSUPP) {
-> -- 
-> 2.17.1
-> 
+Ok Arnd, I have a preliminary test report.
+
+I tested only the pxa27x (mioa701), which happens to have a lot of drivers, and
+only the platform_data flavor (ie. no device-tree test yet). Apart a panic in
+the regulator framework (which is a known issue [1]), your version seems
+equivalent so far in terms of runtime to Linux 5.4-rc3).
+
+The sound and RTC seem broken, but not by you ...
+
+I'll continue the test onwards for pxa3xx and pxa2xx when I'll gather a bit of
+time, and try to review as well the mach-pxa part.
+
+Cheers.
+
+-- 
+Robert
+
+[1] https://lore.kernel.org/patchwork/patch/1130436/
