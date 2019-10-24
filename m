@@ -2,69 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C060E220E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Oct 2019 19:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3050FE36B1
+	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2019 17:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731941AbfJWRrh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 23 Oct 2019 13:47:37 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:38668 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730513AbfJWRrg (ORCPT
+        id S2503211AbfJXPa7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 24 Oct 2019 11:30:59 -0400
+Received: from michel.telenet-ops.be ([195.130.137.88]:43630 "EHLO
+        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503214AbfJXP27 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 23 Oct 2019 13:47:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1571852843; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n2YxJuEgeum48XOf8+NOF4s4gfxtGM+tvTtwbCujb0E=;
-        b=wM7lI1FgaKyh76bG9Ww+hKrY1LJdZa77wh81VQWYjUAV5hBPf57jMfsS1miWOxYk6XeMm9
-        XWhcRuwEHjLZiW987ljqJdrP7JX95TPMiRDQ7yhoS09VQdUs2AdnJ9XWpmzn292P5wr+nw
-        O4d0hx9FAQnxdel5rdG/8W/u22Ays/w=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
+        Thu, 24 Oct 2019 11:28:59 -0400
+Received: from ramsan ([84.195.182.253])
+        by michel.telenet-ops.be with bizsmtp
+        id HTUx2100K5USYZQ06TUxvK; Thu, 24 Oct 2019 17:28:58 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iNf2n-00078T-LC; Thu, 24 Oct 2019 17:28:57 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iNf2n-00081J-Jb; Thu, 24 Oct 2019 17:28:57 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jiri Kosina <trivial@kernel.org>
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        od@zcrc.me, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 3/3] watchdog: jz4740: Drop dependency on MACH_JZ47xx
-Date:   Wed, 23 Oct 2019 19:47:14 +0200
-Message-Id: <20191023174714.14362-3-paul@crapouillou.net>
-In-Reply-To: <20191023174714.14362-1-paul@crapouillou.net>
-References: <20191023174714.14362-1-paul@crapouillou.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH trivial] watchdog: wdat_wdt: Spelling s/configrable/configurable/
+Date:   Thu, 24 Oct 2019 17:28:56 +0200
+Message-Id: <20191024152856.30788-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Depending on MACH_JZ47xx prevent us from creating a generic kernel that
-works on more than one MIPS board. Instead, we just depend on MIPS being
-set.
+Fix misspelling of "configurable".
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-
-Notes:
-    v2: Rebase on top of 5.4-rc4
-
- drivers/watchdog/Kconfig | 2 +-
+ drivers/watchdog/wdat_wdt.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index dbef995856bf..fd4844f0a8f3 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1641,7 +1641,7 @@ config INDYDOG
- 
- config JZ4740_WDT
- 	tristate "Ingenic jz4740 SoC hardware watchdog"
--	depends on MACH_JZ4740 || MACH_JZ4780
-+	depends on MIPS
- 	depends on COMMON_CLK
- 	select WATCHDOG_CORE
- 	select MFD_SYSCON
+diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+index e7cf41aa26c3bbfc..b069349b52f55f92 100644
+--- a/drivers/watchdog/wdat_wdt.c
++++ b/drivers/watchdog/wdat_wdt.c
+@@ -202,7 +202,7 @@ static int wdat_wdt_enable_reboot(struct wdat_wdt *wdat)
+ 	 * WDAT specification says that the watchdog is required to reboot
+ 	 * the system when it fires. However, it also states that it is
+ 	 * recommeded to make it configurable through hardware register. We
+-	 * enable reboot now if it is configrable, just in case.
++	 * enable reboot now if it is configurable, just in case.
+ 	 */
+ 	ret = wdat_wdt_run_action(wdat, ACPI_WDAT_SET_REBOOT, 0, NULL);
+ 	if (ret && ret != -EOPNOTSUPP) {
 -- 
-2.23.0
+2.17.1
 
