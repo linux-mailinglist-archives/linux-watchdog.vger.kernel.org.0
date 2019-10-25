@@ -2,86 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDC7E3D8E
-	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2019 22:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 377A9E435E
+	for <lists+linux-watchdog@lfdr.de>; Fri, 25 Oct 2019 08:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728461AbfJXUuG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 24 Oct 2019 16:50:06 -0400
-Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:53273 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727331AbfJXUuG (ORCPT
+        id S2404617AbfJYGNL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 25 Oct 2019 02:13:11 -0400
+Received: from mail-sz.amlogic.com ([211.162.65.117]:39195 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404602AbfJYGNK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 24 Oct 2019 16:50:06 -0400
-Received: from belgarion ([90.76.41.223])
-        by mwinf5d87 with ME
-        id HYps210044otT8A03Ypz5w; Thu, 24 Oct 2019 22:50:03 +0200
-X-ME-Helo: belgarion
-X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Thu, 24 Oct 2019 22:50:03 +0200
-X-ME-IP: 90.76.41.223
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        "open list\:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
-References: <20191018154052.1276506-1-arnd@arndb.de>
-        <87v9slg9k5.fsf@belgarion.home>
-        <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
-        <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
-        <87r239f2g8.fsf@belgarion.home>
-X-URL:  http://belgarath.falguerolles.org/
-Date:   Thu, 24 Oct 2019 22:49:51 +0200
-In-Reply-To: <87r239f2g8.fsf@belgarion.home> (Robert Jarzmik's message of
-        "Sat, 19 Oct 2019 12:35:03 +0200")
-Message-ID: <87eez1rhqo.fsf@belgarion.home>
-User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+        Fri, 25 Oct 2019 02:13:10 -0400
+Received: from droid12-sz.software.amlogic (10.28.8.22) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Fri, 25 Oct 2019
+ 14:13:20 +0800
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+CC:     Xingyu Chen <xingyu.chen@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v3 0/4] add meson secure watchdog driver
+Date:   Fri, 25 Oct 2019 14:13:00 +0800
+Message-ID: <1571983984-11771-1-git-send-email-xingyu.chen@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
+X-Originating-IP: [10.28.8.22]
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Robert Jarzmik <robert.jarzmik@free.fr> writes:
+The watchdog controller on the Meson-A/C series SoCs is moved to secure world,
+We have to call SMC instruction to trap the ATF for watchdog operation. These
+operations are different from previous SoCs, so we introduce a new watchdog
+driver to support this kind of SoCs.
 
->>> I've now pushed it to
->>>
->>> git://git.kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git
->>> pxa-multiplatform
->>
->> Sorry for the duplication, I had some problems with email configuration
->> so my reply got rejected, let's see if it goes through this time.
-> I have it now, thanks, I'll test and review as soon as I can.
->
-> Cheers.
+Changes since v2 at [1]:
+- remove useless dependency in Kconfig
+- return zero when getting left time value fails
 
-Ok Arnd, I have a preliminary test report.
+Changes since v1 at [0]:
+- add a new dependency in Kconfig
+- simplify/add the return operation
+- remove useless ping operation when setting the timeout
+- fix some return values
+- fix the license statement
 
-I tested only the pxa27x (mioa701), which happens to have a lot of drivers, and
-only the platform_data flavor (ie. no device-tree test yet). Apart a panic in
-the regulator framework (which is a known issue [1]), your version seems
-equivalent so far in terms of runtime to Linux 5.4-rc3).
+[0]:https://lore.kernel.org/linux-amlogic/1570874721-36077-1-git-send-email-xingyu.chen@amlogic.com
+[1]:https://lore.kernel.org/linux-amlogic/1571387622-35132-1-git-send-email-xingyu.chen@amlogic.com
 
-The sound and RTC seem broken, but not by you ...
+Xingyu Chen (4):
+  firmware: meson_sm: add new SMC ID support for accessing secure
+    watchdog
+  dt-bindings: watchdog: add new binding for meson secure watchdog
+  watchdog: add meson secure watchdog driver
+  arm64: dts: a1: add secure watchdog controller
 
-I'll continue the test onwards for pxa3xx and pxa2xx when I'll gather a bit of
-time, and try to review as well the mach-pxa part.
-
-Cheers.
+ .../bindings/watchdog/amlogic,meson-sec-wdt.yaml   |  34 ++++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |   6 +
+ drivers/firmware/meson/meson_sm.c                  |   1 +
+ drivers/watchdog/Kconfig                           |  16 ++
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/meson_sec_wdt.c                   | 187 +++++++++++++++++++++
+ include/linux/firmware/meson/meson_sm.h            |   1 +
+ 7 files changed, 246 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
+ create mode 100644 drivers/watchdog/meson_sec_wdt.c
 
 -- 
-Robert
+2.7.4
 
-[1] https://lore.kernel.org/patchwork/patch/1130436/
