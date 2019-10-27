@@ -2,74 +2,92 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CA9E55E9
-	for <lists+linux-watchdog@lfdr.de>; Fri, 25 Oct 2019 23:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7CEE6031
+	for <lists+linux-watchdog@lfdr.de>; Sun, 27 Oct 2019 03:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbfJYVdg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 25 Oct 2019 17:33:36 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:44317 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbfJYVdg (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 25 Oct 2019 17:33:36 -0400
-Received: by mail-oi1-f194.google.com with SMTP id s71so2530383oih.11;
-        Fri, 25 Oct 2019 14:33:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:content-language
-         :user-agent;
-        bh=YVOI5BksXqXVDYjh4ZHfhwaKBf7oo5QOi6Ea1fnvZZA=;
-        b=joRYFP9buimVYGbL4DeMgOM9yzLWMV5TFSeuGNLBXIC+KBLtdo7RcgNkb3F2T9h/Cb
-         +ay4L+iWFU1fXZoXR6TmNGNcCKfGyiVz2/16USRdkFwHANMrGhHiVZWXXkkhzrglk2bB
-         8Cj2u8VqDzwH6044NyMN194qgVJdPhAxVfOl0j5R9gM7b6pUOmT0KSoALlYhrqaLiiCN
-         w5JOrNB1AvuqzrAp7W6qvmkBW5tvNW3yRToH5CgkA8id2Ue7ha92yP2kQ139HjsWoIpY
-         uDlbWxGlZTgOSIEZqgdGST9Tr31YrE8guEFPT1IagKKDuAqxEHFiq3D749QZ3nQf6vNp
-         tZUA==
-X-Gm-Message-State: APjAAAXarS3it9Y35/V3vR6YS60j/eQ0PH5xnI9+8hAcOcJJLk4XywQK
-        zxVBvf4SW+7ekUgxdgBGbg==
-X-Google-Smtp-Source: APXvYqxYjwJxn6QbHvgIuZeN2Tf1vqbH+R6KZFoYsxBwWvCaHLGlk2Yy19NAAb3evbHiPlC//+mPmQ==
-X-Received: by 2002:aca:c457:: with SMTP id u84mr4804204oif.35.1572039215372;
-        Fri, 25 Oct 2019 14:33:35 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t12sm1116390otq.61.2019.10.25.14.33.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 14:33:34 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 16:33:34 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Eugen.Hristev@microchip.com
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eugen.Hristev@microchip.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: sama5d4_wdt: add
-  microchip,sam9x60-wdt compatible
-Message-ID: <20191025213334.GA23280@bogus>
-References: <1571648890-15140-1-git-send-email-eugen.hristev@microchip.com>
+        id S1726548AbfJ0CEp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 26 Oct 2019 22:04:45 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51512 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726525AbfJ0CEo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 26 Oct 2019 22:04:44 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 969B5ABA0;
+        Sun, 27 Oct 2019 02:04:42 +0000 (UTC)
+Subject: Re: [PATCH v2 1/8] dt-bindings: watchdog: realtek: Convert RTD119x to
+ schema
+From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
+To:     Rob Herring <robh@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-realtek-soc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20191020040817.16882-1-afaerber@suse.de>
+ <20191020040817.16882-2-afaerber@suse.de> <20191025211638.GA28819@bogus>
+ <aeb0d0ed-5649-9035-c753-39e8a1511c9d@suse.de>
+Organization: SUSE Software Solutions Germany GmbH
+Message-ID: <7fff9d25-e24a-c73e-b14f-12c66607fe3a@suse.de>
+Date:   Sun, 27 Oct 2019 03:04:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1571648890-15140-1-git-send-email-eugen.hristev@microchip.com>
+In-Reply-To: <aeb0d0ed-5649-9035-c753-39e8a1511c9d@suse.de>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 21 Oct 2019 09:14:05 +0000, <Eugen.Hristev@microchip.com> wrote:
+Am 25.10.19 um 23:24 schrieb Andreas Färber:
+> Am 25.10.19 um 23:16 schrieb Rob Herring:
+>> On Sun, Oct 20, 2019 at 06:08:10AM +0200, Andreas Färber wrote:
+>>> +properties:
+>>> +  compatible:
+>>> +    oneOf:
+>>> +      - const: realtek,rtd1295-watchdog
+>>
+>> You can drop the 'oneOf' here unless you're planning to add another 
+>> entry with 2 compatible strings.
 > 
-> From: Eugen Hristev <eugen.hristev@microchip.com>
+> It's a preparation for adding rtd1195-watchdog when needed, to make
+> future diffs smaller. There's also RTD1395 and RTD1619 to be tested.
 > 
-> The Atmel sama5d4_wdt needs to be compatible with microchip,sam9x60-wdt
-> The sama5d4_wdt driver is updated to work with both hardware blocks
-> (sama5d4/sama5d2 and sam9x60 based blocks)
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
->  Documentation/devicetree/bindings/watchdog/atmel-sama5d4-wdt.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+>> With that,
+>>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Self-NAK.
+
+The example doesn't pass dt_binding_check: It doesn't like the tabs
+retained from the original binding. Replacing them with four spaces
+makes it pass. Will post a v3.
+
+As for the compatibles, currently in the rtd1195.dtsi patch I'm reusing
+"realtek,rtd1295-watchdog", to avoid a dependency on the watchdog tree.
+
+Long-term that's kind of ugly as it uses a later model number.
+That leaves us with two alternatives:
+
+a) "realtek,rtd1195-watchdog", "realtek,rtd1295-watchdog" - this
+requires oneOf. Allows to distinguish between RTD1195 and RTD1295 while
+remaining compatible with the current driver.
+
+b) "realtek,rtd1195-watchdog" - requires the driver change now and
+requires the binding to be merged before I can use it in the DT but
+doesn't need oneOf here.
+
+Guenter, any preference here?
+
+Thanks,
+Andreas
+
+-- 
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 Nürnberg, Germany
+GF: Felix Imendörffer
+HRB 36809 (AG Nürnberg)
