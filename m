@@ -2,92 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7CEE6031
-	for <lists+linux-watchdog@lfdr.de>; Sun, 27 Oct 2019 03:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C45E6E4B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2019 09:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbfJ0CEp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 26 Oct 2019 22:04:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51512 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726525AbfJ0CEo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 26 Oct 2019 22:04:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 969B5ABA0;
-        Sun, 27 Oct 2019 02:04:42 +0000 (UTC)
-Subject: Re: [PATCH v2 1/8] dt-bindings: watchdog: realtek: Convert RTD119x to
- schema
-From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
-To:     Rob Herring <robh@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-realtek-soc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20191020040817.16882-1-afaerber@suse.de>
- <20191020040817.16882-2-afaerber@suse.de> <20191025211638.GA28819@bogus>
- <aeb0d0ed-5649-9035-c753-39e8a1511c9d@suse.de>
-Organization: SUSE Software Solutions Germany GmbH
-Message-ID: <7fff9d25-e24a-c73e-b14f-12c66607fe3a@suse.de>
-Date:   Sun, 27 Oct 2019 03:04:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1731826AbfJ1IfH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Oct 2019 04:35:07 -0400
+Received: from mail-sz.amlogic.com ([211.162.65.117]:29231 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728941AbfJ1IfH (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 28 Oct 2019 04:35:07 -0400
+Received: from [10.28.19.135] (10.28.19.135) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Mon, 28 Oct
+ 2019 16:35:18 +0800
+Subject: Re: [PATCH v3 2/4] dt-bindings: watchdog: add new binding for meson
+ secure watchdog
+To:     Rob Herring <robh@kernel.org>
+CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <1571983984-11771-1-git-send-email-xingyu.chen@amlogic.com>
+ <1571983984-11771-3-git-send-email-xingyu.chen@amlogic.com>
+ <20191025203030.GA28391@bogus>
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+Message-ID: <1914e315-3cb7-9251-f871-0024e0e4f68b@amlogic.com>
+Date:   Mon, 28 Oct 2019 16:35:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <aeb0d0ed-5649-9035-c753-39e8a1511c9d@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20191025203030.GA28391@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.28.19.135]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am 25.10.19 um 23:24 schrieb Andreas Färber:
-> Am 25.10.19 um 23:16 schrieb Rob Herring:
->> On Sun, Oct 20, 2019 at 06:08:10AM +0200, Andreas Färber wrote:
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - const: realtek,rtd1295-watchdog
+Hi, Rob
+
+On 2019/10/26 4:30, Rob Herring wrote:
+> On Fri, Oct 25, 2019 at 02:13:02PM +0800, Xingyu Chen wrote:
+>> The binding targets the Meson-A/C series compatible SoCs, in which the
+>> watchdog registers are in secure world.
 >>
->> You can drop the 'oneOf' here unless you're planning to add another 
->> entry with 2 compatible strings.
-> 
-> It's a preparation for adding rtd1195-watchdog when needed, to make
-> future diffs smaller. There's also RTD1395 and RTD1619 to be tested.
-> 
->> With that,
+>> Signed-off-by: Xingyu Chen <xingyu.chen@amlogic.com>
+>> ---
+>>   .../bindings/watchdog/amlogic,meson-sec-wdt.yaml   | 34 ++++++++++++++++++++++
+>>   1 file changed, 34 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
 >>
->> Reviewed-by: Rob Herring <robh@kernel.org>
+>> diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
+>> new file mode 100644
+>> index 00000000..0bbc807
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
+>> @@ -0,0 +1,34 @@
+>> +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>> +# Copyright (c) 2019 Amlogic, Inc
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-wdt.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: Amlogic Meson Secure Watchdog Timer
+>> +
+>> +maintainers:
+>> +  - Xingyu Chen <xingyu.chen@amlogic.com>
+>> +
+>> +description: |+
+>> +  Secure Watchdog Timer used in Meson-A/C series Compatible SoCs
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - amlogic,meson-sec-wdt
+> 
+> If there are no other properties, then you don't need this. Just have
+> the secure firmware driver instantiate the watchdog.
+I'am very sorry i don't understand how to initialize the watchdog driver 
+if the compatible property is removed, Could you give me more 
+suggestions or examples ？ Thank you very much.
 
-Self-NAK.
-
-The example doesn't pass dt_binding_check: It doesn't like the tabs
-retained from the original binding. Replacing them with four spaces
-makes it pass. Will post a v3.
-
-As for the compatibles, currently in the rtd1195.dtsi patch I'm reusing
-"realtek,rtd1295-watchdog", to avoid a dependency on the watchdog tree.
-
-Long-term that's kind of ugly as it uses a later model number.
-That leaves us with two alternatives:
-
-a) "realtek,rtd1195-watchdog", "realtek,rtd1295-watchdog" - this
-requires oneOf. Allows to distinguish between RTD1195 and RTD1295 while
-remaining compatible with the current driver.
-
-b) "realtek,rtd1195-watchdog" - requires the driver change now and
-requires the binding to be merged before I can use it in the DT but
-doesn't need oneOf here.
-
-Guenter, any preference here?
-
-Thanks,
-Andreas
-
--- 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 Nürnberg, Germany
-GF: Felix Imendörffer
-HRB 36809 (AG Nürnberg)
+> 
+>> +
+>> +  secure-monitor:
+>> +    description: phandle to the secure-monitor node
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +
+>> +required:
+>> +  - compatible
+>> +  - secure-monitor
+>> +
+>> +examples:
+>> +  - |
+>> +    watchdog {
+>> +          compatible = "amlogic,meson-sec-wdt";
+>> +          secure-monitor = <&sm>;
+>> +    };
+>> -- 
+>> 2.7.4
+>>
+> 
+> .
+> 
