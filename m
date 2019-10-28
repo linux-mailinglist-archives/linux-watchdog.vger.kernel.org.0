@@ -2,36 +2,32 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 385B0E6EDB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2019 10:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 047C5E7912
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2019 20:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387758AbfJ1JS1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Oct 2019 05:18:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35882 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727664AbfJ1JS1 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Oct 2019 05:18:27 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A1F3B20717;
-        Mon, 28 Oct 2019 09:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572254305;
-        bh=Y0pjFTnEi7fofZFVzScrzdhMzlM8KuUwtUfFJMd6jEM=;
-        h=In-Reply-To:References:Cc:From:Subject:To:Date:From;
-        b=RgzxngTnQ5mhx9Hl2fC158gkHbjFpCK1xE9h+M1GjeCZxXb6MUInbliEaxAObjuqL
-         wSQcKENaW7bda+XlQFMQ4kSrY/CYQhZIb7yuVvXU8ecOVokkeGpi3FpJqjni84Zghu
-         HHQWsB9WCGlUQTC7Hz+Y655Ladb2jywc3qV2avTY=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de>
-References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-5-arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        id S1730022AbfJ1TO1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Oct 2019 15:14:27 -0400
+Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:42308 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730062AbfJ1TO0 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 28 Oct 2019 15:14:26 -0400
+Received: from belgarion ([90.55.204.252])
+        by mwinf5d17 with ME
+        id K7EJ2100B5TFNlm037EJ4o; Mon, 28 Oct 2019 20:14:24 +0100
+X-ME-Helo: belgarion
+X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
+X-ME-Date: Mon, 28 Oct 2019 20:14:24 +0100
+X-ME-IP: 90.55.204.252
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@arm.linux.org.uk>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
         Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Jacek Anaszewski <jacek.anaszewski@gmail.com>,
@@ -48,64 +44,82 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
         alsa-devel@alsa-project.org
-From:   Stephen Boyd <sboyd@kernel.org>
 Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
-To:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-User-Agent: alot/0.8.1
-Date:   Mon, 28 Oct 2019 02:18:24 -0700
-Message-Id: <20191028091825.A1F3B20717@mail.kernel.org>
+References: <20191018154052.1276506-1-arnd@arndb.de>
+        <20191018154201.1276638-5-arnd@arndb.de>
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Mon, 28 Oct 2019 20:14:18 +0100
+In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de> (Arnd Bergmann's message
+        of "Fri, 18 Oct 2019 17:41:20 +0200")
+Message-ID: <87d0egof79.fsf@belgarion.home>
+User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Quoting Arnd Bergmann (2019-10-18 08:41:20)
+Arnd Bergmann <arnd@arndb.de> writes:
+
 > The mach/hardware.h is included in lots of places, and it provides
 > three different things on pxa:
->=20
+>
 > - the cpu_is_pxa* macros
 > - an indirect inclusion of mach/addr-map.h
 > - the __REG() and io_pv2() helper macros
->=20
+>
 > Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
 > headers, then change all the files that use mach/hardware.h to
 > include the exact set of those three headers that they actually
 > need, allowing for further more targeted cleanup.
->=20
+>
 > linux/soc/pxa/cpu.h can remain permanently exported and is now in
 > a global location along with similar headers. pxa-regs.h and
 > addr-map.h are only used in a very small number of drivers now
 > and can be moved to arch/arm/mach-pxa/ directly when those drivers
 > are to pass the necessary data as resources.
->=20
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+For the pxa part, that looks fine to me.
+I'd like to focus a bit of Russell's attention to the sa11xx part (reminder in
+[1]), and more specifically :
 
+ - the change to drivers/pcmcia/soc_common.c
+ - the change to drivers/pcmcia/sa1111_generic.c
+
+I must admit my knowledge of PCMCIA is relatively poor, and even if the patch
+looks harmless, one never knows if Assebet will ever by same after ...
+
+Cheers.
+
+--
+Robert
+
+[1] Extract of the patch for Russell's scrutiny
+> diff --git a/drivers/pcmcia/sa1111_generic.c b/drivers/pcmcia/sa1111_generic.c
+> index 11783410223b..2f556fa37c43 100644
+> --- a/drivers/pcmcia/sa1111_generic.c
+> +++ b/drivers/pcmcia/sa1111_generic.c
+> @@ -17,7 +17,6 @@
+>  
+>  #include <pcmcia/ss.h>
+>  
+> -#include <mach/hardware.h>
+>  #include <asm/hardware/sa1111.h>
+>  #include <asm/mach-types.h>
+>  #include <asm/irq.h>
+... zip ...
+
+> diff --git a/drivers/pcmcia/soc_common.c b/drivers/pcmcia/soc_common.c
+> index 3a8c84bb174d..9276a628473d 100644
+> --- a/drivers/pcmcia/soc_common.c
+> +++ b/drivers/pcmcia/soc_common.c
+> @@ -47,8 +47,6 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/timer.h>
+>  
+> -#include <mach/hardware.h>
+> -
+>  #include "soc_common.h"
+>  
+>  static irqreturn_t soc_common_pcmcia_interrupt(int irq, void *dev);
