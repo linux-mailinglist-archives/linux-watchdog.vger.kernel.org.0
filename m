@@ -2,124 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 047C5E7912
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2019 20:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9418E892B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2019 14:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730022AbfJ1TO1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Oct 2019 15:14:27 -0400
-Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:42308 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730062AbfJ1TO0 (ORCPT
+        id S2388105AbfJ2NQF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 29 Oct 2019 09:16:05 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34737 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732534AbfJ2NQE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Oct 2019 15:14:26 -0400
-Received: from belgarion ([90.55.204.252])
-        by mwinf5d17 with ME
-        id K7EJ2100B5TFNlm037EJ4o; Mon, 28 Oct 2019 20:14:24 +0100
-X-ME-Helo: belgarion
-X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Mon, 28 Oct 2019 20:14:24 +0100
-X-ME-IP: 90.55.204.252
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@arm.linux.org.uk>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
-References: <20191018154052.1276506-1-arnd@arndb.de>
-        <20191018154201.1276638-5-arnd@arndb.de>
-X-URL:  http://belgarath.falguerolles.org/
-Date:   Mon, 28 Oct 2019 20:14:18 +0100
-In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de> (Arnd Bergmann's message
-        of "Fri, 18 Oct 2019 17:41:20 +0200")
-Message-ID: <87d0egof79.fsf@belgarion.home>
-User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+        Tue, 29 Oct 2019 09:16:04 -0400
+Received: by mail-pf1-f194.google.com with SMTP id b128so9584953pfa.1;
+        Tue, 29 Oct 2019 06:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rDAR1qdS022RvDkmF/JnXqxkZXLKSYyvZ7xcekyeQEQ=;
+        b=eFGkqYc9CHYLgbmA3fBDUR1b/S/CZSuonfyOXIMsqiMhbvkZHuIooxlXyn0gs9U7VL
+         R+F0FX1Onv2Lp04JJ+tfAH4Oe1iwhW2HIyHFzIQTjhfK+Ual3E5OKVEwDpIN4ZllRZT4
+         valJ+V1d+e3oYEm+Le38OCeDKuPzD5w3j01+dfPvRltNESEOodVpZz9GJ/ouQjOEzrJ7
+         fqzkKjZgN6849koIqlr5cODaGYOa2NUipVjGP1B6mx2i64HP9bjAx63zUTjDTsaFlFWb
+         p637UTy1OKl9fFRCOvHOYrB/x9N23wr/ZMNH42opv72gVaBXqwlYpfYBVeyVIyE5+1dY
+         8GRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rDAR1qdS022RvDkmF/JnXqxkZXLKSYyvZ7xcekyeQEQ=;
+        b=BSWAuYofDcGW5ittNNrVmjS3uldIou/25RNswg1t5Yr62cK6W1qQxhL5bXzvRrWBg4
+         Eoo2qOgpy3jkv3+oiDMmmI6YDY0VV/bzANfBIoPmkFyOUT+w0TJbUQz3Qg2rjogmhFQd
+         KE41DKjpqTfz5SuxSV6AONwLyTt1+L3ZYehohZdJZlV2A/ErxTMDkckziGHYRyR4Tfe6
+         wgVAPutFO/vErDiymRmNAD4fU/jm+mHNIeZdNsNwvlqMca1Ux7Nv42ta2c9OJWY+b+nU
+         lqBwFuFtDtdAYg5boERpn2r/dBWeGHGtEYMmlfX1bXAGdg0n6nayJbLqwx2P5Z0ptVgB
+         dGEA==
+X-Gm-Message-State: APjAAAUcCQMx87le8uZfefbyF+8BKIaql0Ja590HLR1NPB9pdD4POkMR
+        qkzZzjnuJNdzycIuJyekxruv+WqU
+X-Google-Smtp-Source: APXvYqwk+TvBib/ARH05rzylFT0CcwN0b5rW/UeVrjgST/fD4Hn45Ia/UxXDOz4CLpn9Rqlnwb2VZA==
+X-Received: by 2002:a63:234c:: with SMTP id u12mr10783800pgm.384.1572354964074;
+        Tue, 29 Oct 2019 06:16:04 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 16sm10728832pfc.21.2019.10.29.06.16.03
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 29 Oct 2019 06:16:03 -0700 (PDT)
+Date:   Tue, 29 Oct 2019 06:16:02 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eugen.Hristev@microchip.com
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: sama5d4_wdt: add
+ microchip,sam9x60-wdt compatible
+Message-ID: <20191029131602.GA8372@roeck-us.net>
+References: <1571648890-15140-1-git-send-email-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1571648890-15140-1-git-send-email-eugen.hristev@microchip.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Arnd Bergmann <arnd@arndb.de> writes:
+On Mon, Oct 21, 2019 at 09:14:05AM +0000, Eugen.Hristev@microchip.com wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
+> 
+> The Atmel sama5d4_wdt needs to be compatible with microchip,sam9x60-wdt
+> The sama5d4_wdt driver is updated to work with both hardware blocks
+> (sama5d4/sama5d2 and sam9x60 based blocks)
+> 
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-> The mach/hardware.h is included in lots of places, and it provides
-> three different things on pxa:
->
-> - the cpu_is_pxa* macros
-> - an indirect inclusion of mach/addr-map.h
-> - the __REG() and io_pv2() helper macros
->
-> Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
-> headers, then change all the files that use mach/hardware.h to
-> include the exact set of those three headers that they actually
-> need, allowing for further more targeted cleanup.
->
-> linux/soc/pxa/cpu.h can remain permanently exported and is now in
-> a global location along with similar headers. pxa-regs.h and
-> addr-map.h are only used in a very small number of drivers now
-> and can be moved to arch/arm/mach-pxa/ directly when those drivers
-> are to pass the necessary data as resources.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-For the pxa part, that looks fine to me.
-I'd like to focus a bit of Russell's attention to the sa11xx part (reminder in
-[1]), and more specifically :
-
- - the change to drivers/pcmcia/soc_common.c
- - the change to drivers/pcmcia/sa1111_generic.c
-
-I must admit my knowledge of PCMCIA is relatively poor, and even if the patch
-looks harmless, one never knows if Assebet will ever by same after ...
-
-Cheers.
-
---
-Robert
-
-[1] Extract of the patch for Russell's scrutiny
-> diff --git a/drivers/pcmcia/sa1111_generic.c b/drivers/pcmcia/sa1111_generic.c
-> index 11783410223b..2f556fa37c43 100644
-> --- a/drivers/pcmcia/sa1111_generic.c
-> +++ b/drivers/pcmcia/sa1111_generic.c
-> @@ -17,7 +17,6 @@
+> ---
+>  Documentation/devicetree/bindings/watchdog/atmel-sama5d4-wdt.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/atmel-sama5d4-wdt.txt b/Documentation/devicetree/bindings/watchdog/atmel-sama5d4-wdt.txt
+> index 4fec1e3..44727fc 100644
+> --- a/Documentation/devicetree/bindings/watchdog/atmel-sama5d4-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/atmel-sama5d4-wdt.txt
+> @@ -1,7 +1,7 @@
+>  * Atmel SAMA5D4 Watchdog Timer (WDT) Controller
 >  
->  #include <pcmcia/ss.h>
+>  Required properties:
+> -- compatible: "atmel,sama5d4-wdt"
+> +- compatible: "atmel,sama5d4-wdt" or "microchip,sam9x60-wdt"
+>  - reg: base physical address and length of memory mapped region.
 >  
-> -#include <mach/hardware.h>
->  #include <asm/hardware/sa1111.h>
->  #include <asm/mach-types.h>
->  #include <asm/irq.h>
-... zip ...
-
-> diff --git a/drivers/pcmcia/soc_common.c b/drivers/pcmcia/soc_common.c
-> index 3a8c84bb174d..9276a628473d 100644
-> --- a/drivers/pcmcia/soc_common.c
-> +++ b/drivers/pcmcia/soc_common.c
-> @@ -47,8 +47,6 @@
->  #include <linux/spinlock.h>
->  #include <linux/timer.h>
->  
-> -#include <mach/hardware.h>
-> -
->  #include "soc_common.h"
->  
->  static irqreturn_t soc_common_pcmcia_interrupt(int irq, void *dev);
+>  Optional properties:
