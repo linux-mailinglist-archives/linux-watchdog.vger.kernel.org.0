@@ -2,120 +2,133 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B69D4EE1DA
-	for <lists+linux-watchdog@lfdr.de>; Mon,  4 Nov 2019 15:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9023CEFD25
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2019 13:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728595AbfKDOGx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 4 Nov 2019 09:06:53 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44836 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727891AbfKDOGx (ORCPT
+        id S2387833AbfKEMbb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 5 Nov 2019 07:31:31 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:38061 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387744AbfKEMbb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 4 Nov 2019 09:06:53 -0500
-Received: by mail-pg1-f193.google.com with SMTP id f19so2264118pgk.11
-        for <linux-watchdog@vger.kernel.org>; Mon, 04 Nov 2019 06:06:53 -0800 (PST)
+        Tue, 5 Nov 2019 07:31:31 -0500
+Received: by mail-lf1-f68.google.com with SMTP id q28so15013502lfa.5
+        for <linux-watchdog@vger.kernel.org>; Tue, 05 Nov 2019 04:31:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RGW49HjDzn59G0MLzMGyU/ftGwguAnOdp0WLFmM854Q=;
-        b=G9S0PCZ/ZKCZmSmrnUyHm0X3w3sq+RPMFwtL/1YZ6guAsO0p/+Zyrz67Obn5DAyBIB
-         qNRic8MDGcN+F0TV+kfeWFMD3TtEAX4bW7jvpvM/R1kPhj2urG+v6GHgAlqRr1PPYncC
-         vZB+UP6xO8FGg0S3KN2HOdwABHxbZgarFcVQTBj8gLSJonGf5WwR9m3jzgd4vAp4wqBZ
-         f4I6YJ4CkYlWw+TEWLsDQ3rEik3cNiYeN1s3f+493036XKr6OS9X+M8nYcDxXKf2TwQ4
-         FmZyNlOqzjCKueMRf5WhejX5DBY4NlQdkcv3Nqp6ELKgjH0YZe+i8r/qZRph8KBZBiMI
-         0FNA==
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kMRRzBdYGAmjCi84Oik+o1hEPde0vMlLbqwfzhBep3Y=;
+        b=TLkHehXCoUaUGstiwdj8fjVlz9gpUtcPChFOwjxmUtGkFfOi0uQ7WwBFH9q99o2YaS
+         RyO+Ddp4ujrXZoIKDYOx4TOi+TqY9Mu5qkwdw83/3cvXoJW63WcWkgO+D01XxbKUhkNa
+         HyqFjL7lLvZ6HfbuTZdSE0DCCBUUTUCRDluvU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RGW49HjDzn59G0MLzMGyU/ftGwguAnOdp0WLFmM854Q=;
-        b=UAtriA4P44uvK9vfSA9ZODu+Hgra5b6Vyr1dC1Fsk/IVV+Sas/TGah5/2VDUE2x5Yg
-         5Q1fUlxBBekfmxgSrjb57g0+r/es7OIq9uWcFdY4jZnCd9U2tzTeLGQ2+fus4WvYFOW8
-         4oqmlHpfCib3G6sQ+J1QJIJVZ2uVw9m8ahXXM//a22sN+DLG2x+HX5fSQ9PFewqJERdz
-         iOsJ2J45nboEm/pnAjACatwq93KhoNUsLWmSVL24mcX2ZrfDZe+YRAvtTTgrCa64I0CR
-         1zetxesG8RsyFbFupv79cENJ2tF+iLOirbvQ/XHFgly29b4W74bOVF4vBApjXQ6K97SP
-         qGDA==
-X-Gm-Message-State: APjAAAWzeQXOD0g3pq95ImDdDJprZCi7waJevpNUIlloOTJBZ+4DlRJf
-        flmvwtSx79orVJxzT+s83v0=
-X-Google-Smtp-Source: APXvYqzMb79B1tUvwAzfY0qgTnTLtKEW9B5il5J73aMTs+Cq1uWQApytFdo2YaQMuo0CBpypnqbASA==
-X-Received: by 2002:a62:2a14:: with SMTP id q20mr28115963pfq.148.1572876412707;
-        Mon, 04 Nov 2019 06:06:52 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z18sm19033717pfq.182.2019.11.04.06.06.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 04 Nov 2019 06:06:47 -0800 (PST)
-Subject: Re: [PATCH 1/5] watchdog: imx7ulp: Fix reboot hang
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        Yongcai Huang <Anson.Huang@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sascha Hauer <kernel@pengutronix.de>
-References: <20191029174037.25381-1-festevam@gmail.com>
- <20191102153631.GA5514@roeck-us.net>
- <CAOMZO5AvCHo6pOfX32Bz-r8AjmbuqFWc5YUho9S1Gz8Tdo2SBA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <69c3f4b9-6ca5-f44d-0ebc-d6fac368ec45@roeck-us.net>
-Date:   Mon, 4 Nov 2019 06:06:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        bh=kMRRzBdYGAmjCi84Oik+o1hEPde0vMlLbqwfzhBep3Y=;
+        b=qnMOjmf+Ri/2ToWHVKHsrhOEvg4Nc9nUpuL3wb2AxVrGxZjEJR4icvzDo7aIfnVer4
+         NtOve9LN5ibxKBcSk4rgdzBQlnQmKp8yxWIvij6AaKi4+ndzdd6PkBzldJJpGJ8LbT+U
+         95p10P9LgFPB9NhgRHtgYxchxY12KqFKUxBo7mY0NcwqKuHdKNNZYX5dDotuoR27/ySx
+         bCQAb+jcYEf8gaMv4LARTrcO/W8cP2eZlKWYT1ijXpWj7JxTmKQpQXBrimQIa3vDIdP4
+         6p1CwygjQvY+3XefrIEgYlN5oJY0lG1CaWDS9ziKAnuRnpt6Fw11DY4+SC3n7fxPBNWF
+         7ZqQ==
+X-Gm-Message-State: APjAAAUZG+jRZHiYOuZWUr/YRpwNjWBRZe+n6LtQMLdSA8rU2D4tHdm9
+        lhH7MEP7UYMqg2N1ITFtiLwHoA==
+X-Google-Smtp-Source: APXvYqz7pTQrY6+PNDzgbHOOx5ljSHLg2gy/5/9BxlS/JkI4le74b5m9Xs7646wgzBUgM1YLYIcswA==
+X-Received: by 2002:ac2:4856:: with SMTP id 22mr19654061lfy.131.1572957089421;
+        Tue, 05 Nov 2019 04:31:29 -0800 (PST)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id i128sm10953245lfd.6.2019.11.05.04.31.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2019 04:31:28 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH] watchdog: make nowayout sysfs file writable
+Date:   Tue,  5 Nov 2019 13:31:25 +0100
+Message-Id: <20191105123125.25985-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <CAOMZO5AvCHo6pOfX32Bz-r8AjmbuqFWc5YUho9S1Gz8Tdo2SBA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/4/19 5:45 AM, Fabio Estevam wrote:
-> Hi Guenter,
-> 
-> On Sat, Nov 2, 2019 at 12:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On Tue, Oct 29, 2019 at 02:40:33PM -0300, Fabio Estevam wrote:
->>> The following hang is observed when a 'reboot' command is issued:
->>>
->>> # reboot
->>> # Stopping network: OK
->>> Stopping klogd: OK
->>> Stopping syslogd: OK
->>> umount: devtmpfs busy - remounted read-only
->>> [    8.612079] EXT4-fs (mmcblk0p2): re-mounted. Opts: (null)
->>> The system is going down NOW!
->>> Sent SIGTERM to all processes
->>> Sent SIGKILL to all processes
->>> Requesting system reboot
->>> [   10.694753] reboot: Restarting system
->>> [   11.699008] Reboot failed -- System halted
->>>
->>> Fix this problem by adding a .restart ops member.
->>>
->>> Fixes: 41b630f41bf7 ("watchdog: Add i.MX7ULP watchdog support")
->>> Signed-off-by: Fabio Estevam <festevam@gmail.com>
->>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->>
->> However, just to be sure: This registers the watchdog based restart handler
->> as restart handler of last resort. I assume this on purpose, I just want
->> to make sure it is intentional since it is not explicitly mentioned in
->> the commit message.
-> 
-> To be honest, I thought that registering the restart handler was mandatory.
-> 
-Maybe I should have said "there is no call to watchdog_set_restart_priority()".
+It can be useful to delay setting the nowayout feature for a watchdog
+device. Moreover, not every driver (notably gpio_wdt) implements a
+nowayout module parameter/otherwise respects CONFIG_WATCHDOG_NOWAYOUT,
+and modifying those drivers carries a risk of causing a regression for
+someone who has two watchdog devices, sets CONFIG_WATCHDOG_NOWAYOUT
+and somehow relies on the gpio_wdt driver being ignorant of
+that (i.e., allowing one to gracefully close a gpio_wdt but not the
+other watchdog in the system).
 
-> By the way, I have just noticed that even though this patch fixes the
-> reboot on a imx7ulp evk board, it does not work on a imx7ulp com
-> board.
-> 
-> I will debug this, so please discard this patch for now. The other
-> ones of this series should be fine to apply.
-> 
+So instead, simply make the nowayout sysfs file writable. Obviously,
+setting nowayout is a one-way street.
 
-Thanks for the update.
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ .../ABI/testing/sysfs-class-watchdog          |  9 ++++++--
+ drivers/watchdog/watchdog_dev.c               | 22 ++++++++++++++++++-
+ 2 files changed, 28 insertions(+), 3 deletions(-)
 
-Guenter
+diff --git a/Documentation/ABI/testing/sysfs-class-watchdog b/Documentation/ABI/testing/sysfs-class-watchdog
+index 675f9b537661..9860a8b2ba75 100644
+--- a/Documentation/ABI/testing/sysfs-class-watchdog
++++ b/Documentation/ABI/testing/sysfs-class-watchdog
+@@ -17,8 +17,13 @@ What:		/sys/class/watchdog/watchdogn/nowayout
+ Date:		August 2015
+ Contact:	Wim Van Sebroeck <wim@iguana.be>
+ Description:
+-		It is a read only file. While reading, it gives '1' if that
+-		device supports nowayout feature else, it gives '0'.
++		It is a read/write file. While reading, it gives '1'
++		if the device has the nowayout feature set, otherwise
++		it gives '0'. Writing a '1' to the file enables the
++		nowayout feature. Once set, the nowayout feature
++		cannot be disabled, so writing a '0' either has no
++		effect (if the feature was already disabled) or
++		results in a permission error.
+ 
+ What:		/sys/class/watchdog/watchdogn/state
+ Date:		August 2015
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index dbd2ad4c9294..0c478b8f8d5a 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -452,7 +452,27 @@ static ssize_t nowayout_show(struct device *dev, struct device_attribute *attr,
+ 
+ 	return sprintf(buf, "%d\n", !!test_bit(WDOG_NO_WAY_OUT, &wdd->status));
+ }
+-static DEVICE_ATTR_RO(nowayout);
++
++static ssize_t nowayout_store(struct device *dev, struct device_attribute *attr,
++				const char *buf, size_t len)
++{
++	struct watchdog_device *wdd = dev_get_drvdata(dev);
++	unsigned int value, current;
++	int ret;
++
++	ret = kstrtouint(buf, 0, &value);
++	if (ret)
++		return ret;
++	if (value > 1)
++		return -EINVAL;
++	current = !!test_bit(WDOG_NO_WAY_OUT, &wdd->status);
++	/* nowayout cannot be disabled once set */
++	if (current && !value)
++		return -EPERM;
++	watchdog_set_nowayout(wdd, value);
++	return len;
++}
++static DEVICE_ATTR_RW(nowayout);
+ 
+ static ssize_t status_show(struct device *dev, struct device_attribute *attr,
+ 				char *buf)
+-- 
+2.23.0
+
