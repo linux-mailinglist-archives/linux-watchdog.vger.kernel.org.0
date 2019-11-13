@@ -2,35 +2,37 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAF9FA09C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Nov 2019 02:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AF0FA609
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Nov 2019 03:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727678AbfKMBvU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 12 Nov 2019 20:51:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38924 "EHLO mail.kernel.org"
+        id S1729372AbfKMC0W (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 12 Nov 2019 21:26:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38752 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727779AbfKMBvT (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:51:19 -0500
+        id S1727751AbfKMBvQ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 12 Nov 2019 20:51:16 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7D63E222D4;
-        Wed, 13 Nov 2019 01:51:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C048322459;
+        Wed, 13 Nov 2019 01:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573609879;
-        bh=yW1ZY926CRyEvYL8nf0PNItB9Msvnl5KBJPysHlwXVc=;
+        s=default; t=1573609875;
+        bh=aR+7IWwqhRZDLaMIVikkwQEGC9EKDQlI50+mJ7hE0ok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uyQxyfauK8YFL9FdQajucZiMkbY4WwMDYbsbUD0T5JynZvQ1PXXnoKTp1lPjGvFJG
-         XgWVGUEBkffIfpO30OkegnGbd2d3qrNUX738KmOVs8k/CEOjGyd8JPejXELvJbicy7
-         9+Zi6vxHHj7Fqkpg4i4M0/hSsOTmczaZ18hm6hwc=
+        b=iMxKPJstolRhWnDb2BhXxagKYrFQblG9CsKxqlOaqwOZt+5hyda3r1NQcxgrcyfkw
+         L0xO62tdcnXe20T5qlwOkN9dKA/Bp7uu8c0rzWkeCM+3t5+chBsRWP5jx3MtP18Mjf
+         qCrPbnUkmCjwjtrN1a8UZOCa/YaZBAhPsmUYA0pw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 041/209] watchdog: w83627hf_wdt: Support NCT6796D, NCT6797D, NCT6798D
-Date:   Tue, 12 Nov 2019 20:47:37 -0500
-Message-Id: <20191113015025.9685-41-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 038/209] watchdog: core: fix null pointer dereference when releasing cdev
+Date:   Tue, 12 Nov 2019 20:47:34 -0500
+Message-Id: <20191113015025.9685-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
 References: <20191113015025.9685-1-sashal@kernel.org>
@@ -43,67 +45,50 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[ Upstream commit 57cbf0e3a0fd48e5ad8f3884562e8dde4827c1c8 ]
+[ Upstream commit 953b9dd7725bad55a922a35e75bff7bebf7b9978 ]
 
-The watchdog controller on NCT6796D, NCT6797D, and NCT6798D is compatible
-with the wtachdog controller on other Nuvoton chips.
+watchdog_stop() calls watchdog_update_worker() which needs a valid
+wdd->wd_data pointer. So, when unregistering the cdev, clear the
+pointers after we call watchdog_stop(), not before.
 
+Fixes: bb292ac1c602 ("watchdog: Introduce watchdog_stop_on_unregister helper")
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/w83627hf_wdt.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/watchdog/watchdog_dev.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/watchdog/w83627hf_wdt.c b/drivers/watchdog/w83627hf_wdt.c
-index 7817836bff554..4b9365d4de7a9 100644
---- a/drivers/watchdog/w83627hf_wdt.c
-+++ b/drivers/watchdog/w83627hf_wdt.c
-@@ -50,7 +50,7 @@ static int cr_wdt_csr;		/* WDT control & status register */
- enum chips { w83627hf, w83627s, w83697hf, w83697ug, w83637hf, w83627thf,
- 	     w83687thf, w83627ehf, w83627dhg, w83627uhg, w83667hg, w83627dhg_p,
- 	     w83667hg_b, nct6775, nct6776, nct6779, nct6791, nct6792, nct6793,
--	     nct6795, nct6102 };
-+	     nct6795, nct6796, nct6102 };
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index ffbdc4642ea55..f6c24b22b37c0 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -1019,16 +1019,16 @@ static void watchdog_cdev_unregister(struct watchdog_device *wdd)
+ 		old_wd_data = NULL;
+ 	}
  
- static int timeout;			/* in seconds */
- module_param(timeout, int, 0);
-@@ -100,6 +100,7 @@ MODULE_PARM_DESC(early_disable, "Disable watchdog at boot time (default=0)");
- #define NCT6792_ID		0xc9
- #define NCT6793_ID		0xd1
- #define NCT6795_ID		0xd3
-+#define NCT6796_ID		0xd4	/* also NCT9697D, NCT9698D */
+-	mutex_lock(&wd_data->lock);
+-	wd_data->wdd = NULL;
+-	wdd->wd_data = NULL;
+-	mutex_unlock(&wd_data->lock);
+-
+ 	if (watchdog_active(wdd) &&
+ 	    test_bit(WDOG_STOP_ON_UNREGISTER, &wdd->status)) {
+ 		watchdog_stop(wdd);
+ 	}
  
- #define W83627HF_WDT_TIMEOUT	0xf6
- #define W83697HF_WDT_TIMEOUT	0xf4
-@@ -209,6 +210,7 @@ static int w83627hf_init(struct watchdog_device *wdog, enum chips chip)
- 	case nct6792:
- 	case nct6793:
- 	case nct6795:
-+	case nct6796:
- 	case nct6102:
- 		/*
- 		 * These chips have a fixed WDTO# output pin (W83627UHG),
-@@ -407,6 +409,9 @@ static int wdt_find(int addr)
- 	case NCT6795_ID:
- 		ret = nct6795;
- 		break;
-+	case NCT6796_ID:
-+		ret = nct6796;
-+		break;
- 	case NCT6102_ID:
- 		ret = nct6102;
- 		cr_wdt_timeout = NCT6102D_WDT_TIMEOUT;
-@@ -450,6 +455,7 @@ static int __init wdt_init(void)
- 		"NCT6792",
- 		"NCT6793",
- 		"NCT6795",
-+		"NCT6796",
- 		"NCT6102",
- 	};
++	mutex_lock(&wd_data->lock);
++	wd_data->wdd = NULL;
++	wdd->wd_data = NULL;
++	mutex_unlock(&wd_data->lock);
++
+ 	hrtimer_cancel(&wd_data->timer);
+ 	kthread_cancel_work_sync(&wd_data->work);
  
 -- 
 2.20.1
