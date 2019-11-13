@@ -2,109 +2,229 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD35FA43D
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Nov 2019 03:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30908FAC78
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Nov 2019 10:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728908AbfKMCPZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 12 Nov 2019 21:15:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49614 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729610AbfKMB4w (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:56:52 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 231102246A;
-        Wed, 13 Nov 2019 01:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610211;
-        bh=yW1ZY926CRyEvYL8nf0PNItB9Msvnl5KBJPysHlwXVc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DGhGPPoKyZiA+J4nJpk5AT520bvSZXAnFBWGuw7YtdNzzJu4ZZtgll/9eVAWlEhf1
-         6Voms9YNTz5EN/OWOaNu5lR+6lUISbYs9cFbWBLEnc27TBinZYGG5qYPg7qAmMRFfo
-         9bFUQdA3FZiZJVH74RftB2CGh/cXrXNhpD6uid24=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 021/115] watchdog: w83627hf_wdt: Support NCT6796D, NCT6797D, NCT6798D
-Date:   Tue, 12 Nov 2019 20:54:48 -0500
-Message-Id: <20191113015622.11592-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113015622.11592-1-sashal@kernel.org>
-References: <20191113015622.11592-1-sashal@kernel.org>
+        id S1726138AbfKMJAB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 13 Nov 2019 04:00:01 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:38610 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725996AbfKMJAB (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 13 Nov 2019 04:00:01 -0500
+Received: by mail-qk1-f193.google.com with SMTP id e2so1054261qkn.5
+        for <linux-watchdog@vger.kernel.org>; Wed, 13 Nov 2019 01:00:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zriSzR1A7PY8VkXg8BzENfmEpX+OltCL/F/xWpeuul4=;
+        b=my0U+qCLomIt6E1rAcdLE1Id6S8BuETSIIYtZIcmh2johk6LY+sQR3OjPubPjNOZQ8
+         6NQNnX9pWKlZ9SNfJx5VIdEc09EjWpcwRbHBiPDehzm8+sJMUnGQ74CAgqKMhdkC/VH4
+         b1XyxWzrZDwZ3bRb95XyDevdiw+hY/azHEjwrCyWCCuwB1vT2kWfJyP39J6X9zDbTJ+s
+         CYquB2V7jcS3H3bMbcuOynmxubakIWY2jmDQ+nt1XaAS4CB5W/aCDQFC1jMbCliAN/ZG
+         07AFzKV3bl6HOxccM/iSQ8WklrCXO932AMgXydPNhtOyLKIA29nq16WU2NALw4A/rO+I
+         ck+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zriSzR1A7PY8VkXg8BzENfmEpX+OltCL/F/xWpeuul4=;
+        b=ANkSqdaVHjlAL9CA3cAaqxv1XArdQyL427o2fkIGGvuB/dbDbT02f+O9nFKik4QARj
+         gYgBMI9vBEEOHeswyHTUfcyQiP8jIIcgLpZQpooBAdrRjyADCYcZG6xqV17s8rdf1wbt
+         EIDhbZPlK9mgpHsfdo8rHwWfYzOIx6ZD4JNfBluMBbIIMOuoFwgt8N7Iq5M8eYPGyugf
+         RgXLeNNYSGyZKmjcyj2zSFn0il4Mxv4UKPJfMlKfZ+S7YsjIDvVWtfH20xZjUzyIIb2v
+         t+uNjLfrSQIxwh87NItY4ioRQJzc69fZVeEG9tyl6epZJgbL4HOB8trs/PJ2h3uZiTjV
+         v5lQ==
+X-Gm-Message-State: APjAAAVVywJpwICr+v7mNb2YM1MnCraf/x2Z8Kt29vF1JS67GDxYOwTc
+        olrlg6QRPCZVpM+Ed+CRpCVyBhq1mkGbzX/b55T85Q==
+X-Google-Smtp-Source: APXvYqwsCmN6s9RnJjvaofrXiIJk06TaVDlS+MgGGZe8uV9Y2XokAVivNi+UmgCV28MIMFtKMGxwIn9ktjfr5qd7u6s=
+X-Received: by 2002:ae9:e885:: with SMTP id a127mr1321564qkg.427.1573635599889;
+ Wed, 13 Nov 2019 00:59:59 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20191017124159.13869-1-benjamin.gaignard@st.com>
+ <63f96a2f-78c0-21ae-781b-e52068f57103@st.com> <6597f899-f049-02dc-de59-07a0f23a88b8@st.com>
+ <d0c1af15-a647-8d80-81c9-fc07b926856c@roeck-us.net>
+In-Reply-To: <d0c1af15-a647-8d80-81c9-fc07b926856c@roeck-us.net>
+From:   Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Date:   Wed, 13 Nov 2019 09:59:48 +0100
+Message-ID: <CA+M3ks633VNnc9UPDVq9w68pc3EPcff69UxvsggfUvtRCUJwVw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: watchdog: Convert stm32 watchdog bindings to json-schema
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Benjamin GAIGNARD <benjamin.gaignard@st.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+Le jeu. 17 oct. 2019 =C3=A0 15:31, Guenter Roeck <linux@roeck-us.net> a =C3=
+=A9crit :
+>
+> On 10/17/19 6:17 AM, Benjamin GAIGNARD wrote:
+> >
+> > On 10/17/19 3:06 PM, Alexandre Torgue wrote:
+> >> Hi Benjamin
+> >>
+> >> On 10/17/19 2:41 PM, Benjamin Gaignard wrote:
+> >>> Convert the STM32 watchdog binding to DT schema format using json-sch=
+ema
+> >>>
+> >>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> >>> ---
+> >>>    .../devicetree/bindings/watchdog/st,stm32-iwdg.txt | 26 ----------=
+-
+> >>>    .../bindings/watchdog/st,stm32-iwdg.yaml           | 54
+> >>> ++++++++++++++++++++++
+> >>>    2 files changed, 54 insertions(+), 26 deletions(-)
+> >>>    delete mode 100644
+> >>> Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
+> >>>    create mode 100644
+> >>> Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+> >>>
+> >>> diff --git
+> >>> a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
+> >>> b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
+> >>> deleted file mode 100644
+> >>> index d8f4430b0a13..000000000000
+> >>> --- a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
+> >>> +++ /dev/null
+> >>> @@ -1,26 +0,0 @@
+> >>> -STM32 Independent WatchDoG (IWDG)
+> >>> ----------------------------------
+> >>> -
+> >>> -Required properties:
+> >>> -- compatible: Should be either:
+> >>> -  - "st,stm32-iwdg"
+> >>> -  - "st,stm32mp1-iwdg"
+> >>> -- reg: Physical base address and length of the registers set for the
+> >>> device
+> >>> -- clocks: Reference to the clock entry lsi. Additional pclk clock en=
+try
+> >>> -  is required only for st,stm32mp1-iwdg.
+> >>> -- clock-names: Name of the clocks used.
+> >>> -  "lsi" for st,stm32-iwdg
+> >>> -  "lsi", "pclk" for st,stm32mp1-iwdg
+> >>> -
+> >>> -Optional Properties:
+> >>> -- timeout-sec: Watchdog timeout value in seconds.
+> >>> -
+> >>> -Example:
+> >>> -
+> >>> -iwdg: watchdog@40003000 {
+> >>> -    compatible =3D "st,stm32-iwdg";
+> >>> -    reg =3D <0x40003000 0x400>;
+> >>> -    clocks =3D <&clk_lsi>;
+> >>> -    clock-names =3D "lsi";
+> >>> -    timeout-sec =3D <32>;
+> >>> -};
+> >>> diff --git
+> >>> a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+> >>> b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..edec96d53e6b
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+> >>> @@ -0,0 +1,54 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/watchdog/st,stm32-iwdg.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: STMicroelectronics STM32 Independent WatchDoG (IWDG) bindings
+> >>> +
+> >>> +maintainers:
+> >>> +  - Yannick Fertre <yannick.fertre@st.com>
+> >>
+> >> Yannick is still working on this driver ?
+> >
+> > That is a good question.
+> >
+> > Rob, can we use the STM32 dedicated mailing list address for this
+> > mainteners field ?
+> >
+> > maintainers:
+> >
+> > - linux STM32 <linux-stm32@st-md-mailman.stormreply.com>
+> >
+>
+>
+> I'd rather wonder who is going to maintain this secondary distributed
+> maintainers list, but I guess that is a different question.
+>
 
-[ Upstream commit 57cbf0e3a0fd48e5ad8f3884562e8dde4827c1c8 ]
+Gentle ping to reviewers on this patch.
 
-The watchdog controller on NCT6796D, NCT6797D, and NCT6798D is compatible
-with the wtachdog controller on other Nuvoton chips.
+Thanks,
+Benjamin
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/watchdog/w83627hf_wdt.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/watchdog/w83627hf_wdt.c b/drivers/watchdog/w83627hf_wdt.c
-index 7817836bff554..4b9365d4de7a9 100644
---- a/drivers/watchdog/w83627hf_wdt.c
-+++ b/drivers/watchdog/w83627hf_wdt.c
-@@ -50,7 +50,7 @@ static int cr_wdt_csr;		/* WDT control & status register */
- enum chips { w83627hf, w83627s, w83697hf, w83697ug, w83637hf, w83627thf,
- 	     w83687thf, w83627ehf, w83627dhg, w83627uhg, w83667hg, w83627dhg_p,
- 	     w83667hg_b, nct6775, nct6776, nct6779, nct6791, nct6792, nct6793,
--	     nct6795, nct6102 };
-+	     nct6795, nct6796, nct6102 };
- 
- static int timeout;			/* in seconds */
- module_param(timeout, int, 0);
-@@ -100,6 +100,7 @@ MODULE_PARM_DESC(early_disable, "Disable watchdog at boot time (default=0)");
- #define NCT6792_ID		0xc9
- #define NCT6793_ID		0xd1
- #define NCT6795_ID		0xd3
-+#define NCT6796_ID		0xd4	/* also NCT9697D, NCT9698D */
- 
- #define W83627HF_WDT_TIMEOUT	0xf6
- #define W83697HF_WDT_TIMEOUT	0xf4
-@@ -209,6 +210,7 @@ static int w83627hf_init(struct watchdog_device *wdog, enum chips chip)
- 	case nct6792:
- 	case nct6793:
- 	case nct6795:
-+	case nct6796:
- 	case nct6102:
- 		/*
- 		 * These chips have a fixed WDTO# output pin (W83627UHG),
-@@ -407,6 +409,9 @@ static int wdt_find(int addr)
- 	case NCT6795_ID:
- 		ret = nct6795;
- 		break;
-+	case NCT6796_ID:
-+		ret = nct6796;
-+		break;
- 	case NCT6102_ID:
- 		ret = nct6102;
- 		cr_wdt_timeout = NCT6102D_WDT_TIMEOUT;
-@@ -450,6 +455,7 @@ static int __init wdt_init(void)
- 		"NCT6792",
- 		"NCT6793",
- 		"NCT6795",
-+		"NCT6796",
- 		"NCT6102",
- 	};
- 
--- 
-2.20.1
-
+> Guenter
+>
+> > Regards,
+> >
+> > Benjamin
+> >
+> >>
+> >>> +
+> >>> +allOf:
+> >>> +  - $ref: "watchdog.yaml#"
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - st,stm32-iwdg
+> >>> +      - st,stm32mp1-iwdg
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  clocks:
+> >>> +    items:
+> >>> +      - description: Low speed clock
+> >>> +      - description: Optional peripheral clock
+> >>> +    minItems: 1
+> >>> +    maxItems: 2
+> >>> +
+> >>> +  clock-names:
+> >>> +    items:
+> >>> +      enums: [ lsi, pclk ]
+> >>> +    minItems: 1
+> >>> +    maxItems: 2
+> >>> +
+> >>> +required:
+> >>> +  - compatible
+> >>> +  - reg
+> >>> +  - clocks
+> >>> +  - clock-names
+> >>> +
+> >>> +examples:
+> >>> +  - |
+> >>> +    #include <dt-bindings/clock/stm32mp1-clks.h>
+> >>> +    watchdog@5a002000 {
+> >>> +      compatible =3D "st,stm32mp1-iwdg";
+> >>> +      reg =3D <0x5a002000 0x400>;
+> >>> +      clocks =3D <&rcc IWDG2>, <&rcc CK_LSI>;
+> >>> +      clock-names =3D "pclk", "lsi";
+> >>> +      timeout-sec =3D <32>;
+> >>> +    };
+> >>> +
+> >>> +...
+> >> >
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
