@@ -2,131 +2,262 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9696FF2B3
-	for <lists+linux-watchdog@lfdr.de>; Sat, 16 Nov 2019 17:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7222FF474
+	for <lists+linux-watchdog@lfdr.de>; Sat, 16 Nov 2019 18:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728914AbfKPQU4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 16 Nov 2019 11:20:56 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33654 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729652AbfKPQUx (ORCPT
+        id S1727579AbfKPRvC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 16 Nov 2019 12:51:02 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:47022 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727532AbfKPRvB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 16 Nov 2019 11:20:53 -0500
-Received: by mail-pg1-f194.google.com with SMTP id h27so7430030pgn.0;
-        Sat, 16 Nov 2019 08:20:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3ThCOn+QwgspJ3kxAATKe5mgdC4dFBHT7/R2+FrM5uE=;
-        b=Ydq+ryFHXyCcCndRf0G9/AN0hFrn0rS9hynpb848hB82abgjXFz2z4BqEgRkNB9xXP
-         Ob7eqFO/Xq8K6kEL6fRe6Hc1dPEmOsQRmAby1ZRPGsNckUFgRusxiNKgizyKLm02Yxjq
-         iQwbo5HmHuT/iIlj/nGvHRgATRwG8PzwQpp0yT0WfqBlMhOiEclEC/gpEKQr52HlAJZ3
-         +Hq9I4na89H0lpGnirkHvAUIEole4l1UnFUE12jNCVFWEulvMT1wPRyjvOOacmaPnuwd
-         DXyYCwz/a9FToDYFTJJODt3VvIsxakpbROqhhyc3I4RJph+XpkV7wfGv1JhfTbzdFX/j
-         GidA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3ThCOn+QwgspJ3kxAATKe5mgdC4dFBHT7/R2+FrM5uE=;
-        b=fZDHWvAmusrKa6WejNPXltzVdQ0uhgWrTvtjOIdT3wZWGYtH94SyiAu91vS/IqGtxa
-         bHymMpu2ou12vp1dGhL3Zeu3mj4IyoPom8WybMNH/O4pjZ6Xwk9t1kduCa1O22sk7Mi8
-         P2fsmclwThL3Fcb3Lz7cUSst+nvYuUwccmFc4k7WKpkUCURSC2xsylVMPaD6NhemEbTU
-         fa70C3+CmVk1vXIUB4B+b81UDJQ4IcPHVG3S3W+f8u9CiV8yJJqCG2v9aNPwv56ANqar
-         mDuw3k+Pl5luirfgtRnUnGbliOcGVG+tza4ZuNFoQaxeplSP7W68GRG8/QHAucTV6s57
-         NiGw==
-X-Gm-Message-State: APjAAAVy5qQn63u/k+a7qU/yz3VCdfgeyi8PyOTeooGlplbIgukbGWvz
-        BxenY1BTgdqu+p7QsQe54HZmwer3
-X-Google-Smtp-Source: APXvYqw8+YtA13X+2DcbFCm2WNiq/03l8qtmNPUJkbuUIVpNhKs1oVxFoW7yPNZWmSTRPhkaZHB4YA==
-X-Received: by 2002:a63:e70f:: with SMTP id b15mr22797805pgi.116.1573921252799;
-        Sat, 16 Nov 2019 08:20:52 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id em16sm12577766pjb.21.2019.11.16.08.20.51
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 16 Nov 2019 08:20:52 -0800 (PST)
-Date:   Sat, 16 Nov 2019 08:20:51 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugen.Hristev@microchip.com
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nicolas.Ferre@microchip.com, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] watchdog: sama5d4_wdt: addition of sam9x60
- compatible watchdog
-Message-ID: <20191116162051.GA23056@roeck-us.net>
-References: <1573806579-7981-1-git-send-email-eugen.hristev@microchip.com>
- <1573806579-7981-3-git-send-email-eugen.hristev@microchip.com>
+        Sat, 16 Nov 2019 12:51:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1573926659; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FRWQ/fXo5t1wv9SzvepviIDnjYcOVgkgSPX8UFl2H6s=;
+        b=pX1odAgpr3wBWpKK/fzoJzvb/Fm8x96HARhU8hDGnPF7yvWVQprkobueR+IydgE7fMkmqZ
+        e531wmimSQ2VrBuFjwB1nwYJm9+O5lZKv6XUe8YeZhth7NnnjgbBMwLoamz8+TdXxnB9+a
+        pKGKpbYrc6RYLL1tLM7/Nj2Wz2ib8pU=
+Date:   Sat, 16 Nov 2019 18:50:53 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 1/3] watchdog: jz4740: Use WDT clock provided by TCU
+ driver
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        od@zcrc.me, Mathieu Malaterre <malat@debian.org>,
+        Artur Rojek <contact@artur-rojek.eu>
+Message-Id: <1573926653.3.0@crapouillou.net>
+In-Reply-To: <20191023174714.14362-1-paul@crapouillou.net>
+References: <20191023174714.14362-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1573806579-7981-3-git-send-email-eugen.hristev@microchip.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Nov 15, 2019 at 08:30:18AM +0000, Eugen.Hristev@microchip.com wrote:
-> From: Eugen Hristev <eugen.hristev@microchip.com>
-> 
-> Add support for SAM9X60 WDT into sama5d4_wdt.
-> This means that this driver gets a flag inside the data struct
-> that represents the sam9x60 support.
-> This flag differentiates between the two hardware blocks, and is set
-> according to the compatible of the driver instantiation.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Hi Guenter,
+
+I noticed you already acked all the patches in the V1 but expected them=20
+to go through the MIPS tree; could you take them into your tree instead?
+
+Cheers,
+-Paul
+
+
+Le mer., oct. 23, 2019 at 19:47, Paul Cercueil <paul@crapouillou.net> a=20
+=E9crit :
+> Instead of requesting the "ext" clock and handling the watchdog clock
+> divider and gating in the watchdog driver, we now request and use the
+> "wdt" clock that is supplied by the ingenic-timer "TCU" driver.
+>=20
+> The major benefit is that the watchdog's clock rate and parent can now
+> be specified from within devicetree, instead of hardcoded in the=20
+> driver.
+>=20
+> Also, this driver won't poke anymore into the TCU registers to
+> enable/disable the clock, as this is now handled by the TCU driver.
+>=20
+> On the bad side, we break the ABI with devicetree - as we now request=20
+> a
+> different clock. In this very specific case it is still okay, as every
+> Ingenic JZ47xx-based board out there compile the devicetree within the
+> kernel; so it's still time to push breaking changes, in order to get a
+> clean devicetree that won't break once it musn't.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Tested-by: Mathieu Malaterre <malat@debian.org>
+> Tested-by: Artur Rojek <contact@artur-rojek.eu>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > ---
-> Changes in v4:
-> - check compatible with different of_ function
-> - call irq parse and map only if need_irq
-> - changed tabbing in struct defintion
-> 
-> Changes in v3:
-> - changed need_irq to bool, instead of a single bit variable.
-> - the platform data config struct is gone now, changed to a pointer to a bool
-> to have the sam9x60_support as 'true', pointing to a static bool with true value.
-> Can have a better solution than this ?
-> - the specific sam9x60_support flag is assigned at probe time, corresponding
-> to the flag value in .data
-> 
->  drivers/watchdog/at91sam9_wdt.h |  14 ++++++
->  drivers/watchdog/sama5d4_wdt.c  | 109 +++++++++++++++++++++++++++++++---------
->  2 files changed, 98 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/watchdog/at91sam9_wdt.h b/drivers/watchdog/at91sam9_wdt.h
-> index abfe34d..4b3bd1d 100644
-> --- a/drivers/watchdog/at91sam9_wdt.h
-> +++ b/drivers/watchdog/at91sam9_wdt.h
-> @@ -24,7 +24,10 @@
->  #define AT91_WDT_MR		0x04			/* Watchdog Mode Register */
->  #define  AT91_WDT_WDV		(0xfffUL << 0)		/* Counter Value */
->  #define  AT91_WDT_SET_WDV(x)	((x) & AT91_WDT_WDV)
-> +#define  AT91_SAM9X60_PERIODRST	BIT(4)		/* Period Reset */
-> +#define  AT91_SAM9X60_RPTHRST	BIT(5)		/* Minimum Restart Period */
->  #define  AT91_WDT_WDFIEN	BIT(12)		/* Fault Interrupt Enable */
-> +#define  AT91_SAM9X60_WDDIS	BIT(12)		/* Watchdog Disable */
->  #define  AT91_WDT_WDRSTEN	BIT(13)		/* Reset Processor */
->  #define  AT91_WDT_WDRPROC	BIT(14)		/* Timer Restart */
->  #define  AT91_WDT_WDDIS		BIT(15)		/* Watchdog Disable */
-> @@ -37,4 +40,15 @@
->  #define  AT91_WDT_WDUNF		BIT(0)		/* Watchdog Underflow */
->  #define  AT91_WDT_WDERR		BIT(1)		/* Watchdog Error */
->  
-> +#define AT91_SAM9X60_VR		0x08			/* Watchdog Timer Value Register */
+>=20
+> Notes:
+>     v2: Rebase on top of 5.4-rc4
+>=20
+>  drivers/watchdog/Kconfig      |  1 +
+>  drivers/watchdog/jz4740_wdt.c | 75=20
+> ++++++++++++++---------------------
+>  2 files changed, 31 insertions(+), 45 deletions(-)
+>=20
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 58e7c100b6ad..6421187769cf 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1642,6 +1642,7 @@ config INDYDOG
+>  config JZ4740_WDT
+>  	tristate "Ingenic jz4740 SoC hardware watchdog"
+>  	depends on MACH_JZ4740 || MACH_JZ4780
+> +	depends on COMMON_CLK
+>  	select WATCHDOG_CORE
+>  	help
+>  	  Hardware driver for the built-in watchdog timer on Ingenic jz4740=20
+> SoCs.
+> diff --git a/drivers/watchdog/jz4740_wdt.c=20
+> b/drivers/watchdog/jz4740_wdt.c
+> index c6052ae54f32..72920f09f4a7 100644
+> --- a/drivers/watchdog/jz4740_wdt.c
+> +++ b/drivers/watchdog/jz4740_wdt.c
+> @@ -18,19 +18,6 @@
+>  #include <linux/err.h>
+>  #include <linux/of.h>
+>=20
+> -#include <asm/mach-jz4740/timer.h>
+> -
+> -#define JZ_WDT_CLOCK_PCLK 0x1
+> -#define JZ_WDT_CLOCK_RTC  0x2
+> -#define JZ_WDT_CLOCK_EXT  0x4
+> -
+> -#define JZ_WDT_CLOCK_DIV_1    (0 << TCU_TCSR_PRESCALE_LSB)
+> -#define JZ_WDT_CLOCK_DIV_4    (1 << TCU_TCSR_PRESCALE_LSB)
+> -#define JZ_WDT_CLOCK_DIV_16   (2 << TCU_TCSR_PRESCALE_LSB)
+> -#define JZ_WDT_CLOCK_DIV_64   (3 << TCU_TCSR_PRESCALE_LSB)
+> -#define JZ_WDT_CLOCK_DIV_256  (4 << TCU_TCSR_PRESCALE_LSB)
+> -#define JZ_WDT_CLOCK_DIV_1024 (5 << TCU_TCSR_PRESCALE_LSB)
+> -
+>  #define DEFAULT_HEARTBEAT 5
+>  #define MAX_HEARTBEAT     2048
+>=20
+> @@ -50,7 +37,8 @@ MODULE_PARM_DESC(heartbeat,
+>  struct jz4740_wdt_drvdata {
+>  	struct watchdog_device wdt;
+>  	void __iomem *base;
+> -	struct clk *rtc_clk;
+> +	struct clk *clk;
+> +	unsigned long clk_rate;
+>  };
+>=20
+>  static int jz4740_wdt_ping(struct watchdog_device *wdt_dev)
+> @@ -65,32 +53,14 @@ static int jz4740_wdt_set_timeout(struct=20
+> watchdog_device *wdt_dev,
+>  				    unsigned int new_timeout)
+>  {
+>  	struct jz4740_wdt_drvdata *drvdata =3D watchdog_get_drvdata(wdt_dev);
+> -	unsigned int rtc_clk_rate;
+> -	unsigned int timeout_value;
+> -	unsigned short clock_div =3D JZ_WDT_CLOCK_DIV_1;
+> +	u16 timeout_value =3D (u16)(drvdata->clk_rate * new_timeout);
+>  	u8 tcer;
+>=20
+> -	rtc_clk_rate =3D clk_get_rate(drvdata->rtc_clk);
+> -
+> -	timeout_value =3D rtc_clk_rate * new_timeout;
+> -	while (timeout_value > 0xffff) {
+> -		if (clock_div =3D=3D JZ_WDT_CLOCK_DIV_1024) {
+> -			/* Requested timeout too high;
+> -			* use highest possible value. */
+> -			timeout_value =3D 0xffff;
+> -			break;
+> -		}
+> -		timeout_value >>=3D 2;
+> -		clock_div +=3D (1 << TCU_TCSR_PRESCALE_LSB);
+> -	}
+> -
+>  	tcer =3D readb(drvdata->base + TCU_REG_WDT_TCER);
+>  	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
+> -	writew(clock_div, drvdata->base + TCU_REG_WDT_TCSR);
+>=20
+>  	writew((u16)timeout_value, drvdata->base + TCU_REG_WDT_TDR);
+>  	writew(0x0, drvdata->base + TCU_REG_WDT_TCNT);
+> -	writew(clock_div | JZ_WDT_CLOCK_RTC, drvdata->base +=20
+> TCU_REG_WDT_TCSR);
+>=20
+>  	if (tcer & TCU_WDT_TCER_TCEN)
+>  		writeb(TCU_WDT_TCER_TCEN, drvdata->base + TCU_REG_WDT_TCER);
+> @@ -102,11 +72,15 @@ static int jz4740_wdt_set_timeout(struct=20
+> watchdog_device *wdt_dev,
+>  static int jz4740_wdt_start(struct watchdog_device *wdt_dev)
+>  {
+>  	struct jz4740_wdt_drvdata *drvdata =3D watchdog_get_drvdata(wdt_dev);
+> +	int ret;
+>  	u8 tcer;
+>=20
+> +	ret =3D clk_prepare_enable(drvdata->clk);
+> +	if (ret)
+> +		return ret;
 > +
-> +#define AT91_SAM9X60_WLR		0x0c
-> +#define  AT91_SAM9X60_COUNTER	(0xfffUL << 0)		/* Watchdog Period Value */
-> +#define  AT91_SAM9X60_SET_COUNTER(x)	((x) & AT91_SAM9X60_COUNTER)
+>  	tcer =3D readb(drvdata->base + TCU_REG_WDT_TCER);
+>=20
+> -	jz4740_timer_enable_watchdog();
+>  	jz4740_wdt_set_timeout(wdt_dev, wdt_dev->timeout);
+>=20
+>  	/* Start watchdog if it wasn't started already */
+> @@ -121,7 +95,7 @@ static int jz4740_wdt_stop(struct watchdog_device=20
+> *wdt_dev)
+>  	struct jz4740_wdt_drvdata *drvdata =3D watchdog_get_drvdata(wdt_dev);
+>=20
+>  	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
+> -	jz4740_timer_disable_watchdog();
+> +	clk_disable_unprepare(drvdata->clk);
+>=20
+>  	return 0;
+>  }
+> @@ -162,21 +136,38 @@ static int jz4740_wdt_probe(struct=20
+> platform_device *pdev)
+>  	struct device *dev =3D &pdev->dev;
+>  	struct jz4740_wdt_drvdata *drvdata;
+>  	struct watchdog_device *jz4740_wdt;
+> +	long rate;
+> +	int ret;
+>=20
+>  	drvdata =3D devm_kzalloc(dev, sizeof(struct jz4740_wdt_drvdata),
+>  			       GFP_KERNEL);
+>  	if (!drvdata)
+>  		return -ENOMEM;
+>=20
+> -	if (heartbeat < 1 || heartbeat > MAX_HEARTBEAT)
+> -		heartbeat =3D DEFAULT_HEARTBEAT;
+> +	drvdata->clk =3D devm_clk_get(&pdev->dev, "wdt");
+> +	if (IS_ERR(drvdata->clk)) {
+> +		dev_err(&pdev->dev, "cannot find WDT clock\n");
+> +		return PTR_ERR(drvdata->clk);
+> +	}
 > +
-> +#define AT91_SAM9X60_IER		0x14		/* Interrupt Enable Register */
-> +#define  AT91_SAM9X60_PERINT		BIT(0)		/* Period Interrupt Enable */
-> +#define AT91_SAM9X60_IDR		0x18		/* Interrupt Disable Register */
-> +#define AT91_SAM9X60_ISR		0x1c		/* Interrupt Status Register */
+> +	/* Set smallest clock possible */
+> +	rate =3D clk_round_rate(drvdata->clk, 1);
+> +	if (rate < 0)
+> +		return rate;
 > +
+> +	ret =3D clk_set_rate(drvdata->clk, rate);
+> +	if (ret)
+> +		return ret;
+>=20
+> +	drvdata->clk_rate =3D rate;
+>  	jz4740_wdt =3D &drvdata->wdt;
+>  	jz4740_wdt->info =3D &jz4740_wdt_info;
+>  	jz4740_wdt->ops =3D &jz4740_wdt_ops;
+> -	jz4740_wdt->timeout =3D heartbeat;
+>  	jz4740_wdt->min_timeout =3D 1;
+> -	jz4740_wdt->max_timeout =3D MAX_HEARTBEAT;
+> +	jz4740_wdt->max_timeout =3D 0xffff / rate;
+> +	jz4740_wdt->timeout =3D clamp(heartbeat,
+> +				    jz4740_wdt->min_timeout,
+> +				    jz4740_wdt->max_timeout);
+>  	jz4740_wdt->parent =3D dev;
+>  	watchdog_set_nowayout(jz4740_wdt, nowayout);
+>  	watchdog_set_drvdata(jz4740_wdt, drvdata);
+> @@ -185,12 +176,6 @@ static int jz4740_wdt_probe(struct=20
+> platform_device *pdev)
+>  	if (IS_ERR(drvdata->base))
+>  		return PTR_ERR(drvdata->base);
+>=20
+> -	drvdata->rtc_clk =3D devm_clk_get(dev, "rtc");
+> -	if (IS_ERR(drvdata->rtc_clk)) {
+> -		dev_err(dev, "cannot find RTC clock\n");
+> -		return PTR_ERR(drvdata->rtc_clk);
+> -	}
+> -
+>  	return devm_watchdog_register_device(dev, &drvdata->wdt);
+>  }
+>=20
+> --
+> 2.23.0
+>=20
 
-Lots of line-too-long checkpatch warnings. Please avoid.
+=
 
-Thanks,
-Guenter
