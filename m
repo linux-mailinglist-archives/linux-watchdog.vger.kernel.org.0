@@ -2,262 +2,121 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7222FF474
-	for <lists+linux-watchdog@lfdr.de>; Sat, 16 Nov 2019 18:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8108AFF4C1
+	for <lists+linux-watchdog@lfdr.de>; Sat, 16 Nov 2019 19:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727579AbfKPRvC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 16 Nov 2019 12:51:02 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:47022 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727532AbfKPRvB (ORCPT
+        id S1727601AbfKPSfA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 16 Nov 2019 13:35:00 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:32968 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726632AbfKPSfA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 16 Nov 2019 12:51:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1573926659; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FRWQ/fXo5t1wv9SzvepviIDnjYcOVgkgSPX8UFl2H6s=;
-        b=pX1odAgpr3wBWpKK/fzoJzvb/Fm8x96HARhU8hDGnPF7yvWVQprkobueR+IydgE7fMkmqZ
-        e531wmimSQ2VrBuFjwB1nwYJm9+O5lZKv6XUe8YeZhth7NnnjgbBMwLoamz8+TdXxnB9+a
-        pKGKpbYrc6RYLL1tLM7/Nj2Wz2ib8pU=
-Date:   Sat, 16 Nov 2019 18:50:53 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 1/3] watchdog: jz4740: Use WDT clock provided by TCU
- driver
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        od@zcrc.me, Mathieu Malaterre <malat@debian.org>,
-        Artur Rojek <contact@artur-rojek.eu>
-Message-Id: <1573926653.3.0@crapouillou.net>
-In-Reply-To: <20191023174714.14362-1-paul@crapouillou.net>
-References: <20191023174714.14362-1-paul@crapouillou.net>
+        Sat, 16 Nov 2019 13:35:00 -0500
+Received: by mail-ot1-f68.google.com with SMTP id u13so10935271ote.0;
+        Sat, 16 Nov 2019 10:35:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TauIVFq9myp8ieU5XDbC8SrqOKGttflVYf6grCInZi8=;
+        b=FsoSYe6TRvBl3hIf89z9nWZ2BBO9FMPaMbYlweu+WFm1Rj+/lH7KSUIGtIIXLbdn0T
+         dkbEzSN54tkREdIJ8pi6zUfi0Y0dJ9xVbWM6GOhrn9GdSbmjePuTeQ6VLLV5ve+OfaQa
+         dkt9a6o7IEJRKtHupNpopAZXF3Dl1brjIy8Hu0Y8Z7VPOr+aIXA3PHu3nhXXvESBAYGh
+         lyiWCEKhuamENwV5YRvdRk4X2t/r9JlEf1pMrmiYrYKGPJglxWic5jAdCMjEvRYM00k/
+         xkRJH1uAp6DscsYVAuYE9vuLsmfGioydQnYAasGDjYPBmm4gQVuFxGPl+mHWI/lel5r0
+         8DMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TauIVFq9myp8ieU5XDbC8SrqOKGttflVYf6grCInZi8=;
+        b=ViTlSOFshzoynbPik6bDEkVkMnp01p+MeekVKJ+n/7h6OH8BWIYBAezZYYHY8qDJt5
+         3KkNfCpYNpj/zOWg+XBimdNRHmEXWb6Wntrfj7ICbIlPFHrWP152BUeHBV7ZBDteB+jn
+         7zt21oHjyPgTpRY4vlHPzOIYy4Ee/YI7CxbuPYHJThKowVHp92hgPeGUeUNEJGPecz4Q
+         fV0bJYasaaVlWXfZzSPsuBDM6DqX67Jd9ETPpAgHccfoKq5WmWAnJiw2mw49cMrg2n3s
+         hgkA18t9Ftlrn/OLmd3po2gOJwTpGWUYEqMCfhjxpm43Wc1LX/JoKLdsDmXhwH21oL/F
+         lzlw==
+X-Gm-Message-State: APjAAAXA+Sx17j4j25YM2umVlNHVDFRMrNq2bAx0L4RONC1+yEXET0EB
+        5cnL97Dr3wtZCwa0549VwcNWb/L0lkpjBreWv4iY90fVLbQ=
+X-Google-Smtp-Source: APXvYqxK8IdHCHg5hbwHWcsfdUht1uScQ4Flo0b7XW4V7m/3gT66g1MnRCDfy22v0eDLgjiQYyUc8rsqK3vQOXJR310=
+X-Received: by 2002:a9d:7314:: with SMTP id e20mr16615654otk.273.1573929299439;
+ Sat, 16 Nov 2019 10:34:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+References: <CAHhAz+h6SuGKWn0qNqsCdNjDks_vHuJW-KfiQja_b3x8x=vq_A@mail.gmail.com>
+ <0d5c20b1-6b0f-430b-17b0-d3624062020d@roeck-us.net> <CAHhAz+iSXZSY012-jNx_wmNmgx_UiHZ4rjxkCUcHk3CjLc9gDg@mail.gmail.com>
+ <e5b24949-5215-9d3d-ca45-cab221d4f58a@roeck-us.net>
+In-Reply-To: <e5b24949-5215-9d3d-ca45-cab221d4f58a@roeck-us.net>
+From:   Muni Sekhar <munisekharrms@gmail.com>
+Date:   Sun, 17 Nov 2019 00:04:47 +0530
+Message-ID: <CAHhAz+i83WoGyNwF_sjN+rVH812Nvm=U8ddbv-gWuNbD05HPdg@mail.gmail.com>
+Subject: Re: watchdog: how to enable?
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-pci@vger.kernel.org,
+        wim@linux-watchdog.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter,
+On Sat, Nov 16, 2019 at 9:31 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 11/15/19 7:03 PM, Muni Sekhar wrote:
+> [ ... ]
+> >>
+> >> Another possibility, of course, might be to enable a hardware watchdog
+> >> in your system (assuming it supports one). I personally would not trus=
+t
+> >> the NMI watchdog because to detect a system hang, after all, there are
+> >> situations where even NMIs no longer work.
+> >
+> >>From dmesg , Is it possible to know whether my system supports
+> > hardware watchdog or not?
+> > I assume that my system supports the hardware watchdog , then how to
+> > enable the hardware watchdog to debug the system freeze issues?
+> >
+>
+> Hardware watchdog support really depends on the board type. Most PC
+> mainboards support a watchdog in the Super-IO chip, but on some it is
+> not wired correctly. On embedded boards it is often built into the SoC.
+> The easiest way to see if you have a watchdog would be to check for the
+> existence of /dev/watchdog. However, on a PC that would most likely
+> not be there because the necessary module is not auto-loaded.
+> If you tell us your board type, or better the Super-IO chip on the board,
+> we might be able to help.
 
-I noticed you already acked all the patches in the V1 but expected them=20
-to go through the MIPS tree; could you take them into your tree instead?
+I=E2=80=99m having two same configuration systems, in one system I installe=
+d
+the Vanilla kernel and I see the /dev/watchdog and /dev/watchdog0
+nodes. In other system I=E2=80=99m running with ubuntu distribution kernel,
+but I don=E2=80=99t see any watchdog device node. So it looks like I need t=
+o
+manually load the kernel module in distro kernel. Is there a way to
+know what is the corresponding kernel module for  /dev/watchdog node?
 
-Cheers,
--Paul
+# ls -l /dev/watchdog*
+crw------- 1 root root  10, 130 Nov 15 17:15 /dev/watchdog
+crw------- 1 root root 248,   0 Nov 15 17:15 /dev/watchdog0
+
+# ps -ax | grep watchdog
+  678 ?        S      0:00 [watchdogd]
+
+Regarding Super-IO chip, how to find out the Super-IO chip model?
+
+>
+> Note though that this won't help to debug the problem. A hardware
+> watchdog resets the system. It helps to recover, but it is not intended
+> to help with debugging.
+How do I use the hardware watchdog to reset my system when system is
+frozen? It helps me to collect the crashdump and finally helps me to
+find the root cause for the system frozen issue.
+
+>
+> Guenter
 
 
-Le mer., oct. 23, 2019 at 19:47, Paul Cercueil <paul@crapouillou.net> a=20
-=E9crit :
-> Instead of requesting the "ext" clock and handling the watchdog clock
-> divider and gating in the watchdog driver, we now request and use the
-> "wdt" clock that is supplied by the ingenic-timer "TCU" driver.
->=20
-> The major benefit is that the watchdog's clock rate and parent can now
-> be specified from within devicetree, instead of hardcoded in the=20
-> driver.
->=20
-> Also, this driver won't poke anymore into the TCU registers to
-> enable/disable the clock, as this is now handled by the TCU driver.
->=20
-> On the bad side, we break the ABI with devicetree - as we now request=20
-> a
-> different clock. In this very specific case it is still okay, as every
-> Ingenic JZ47xx-based board out there compile the devicetree within the
-> kernel; so it's still time to push breaking changes, in order to get a
-> clean devicetree that won't break once it musn't.
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Tested-by: Mathieu Malaterre <malat@debian.org>
-> Tested-by: Artur Rojek <contact@artur-rojek.eu>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->=20
-> Notes:
->     v2: Rebase on top of 5.4-rc4
->=20
->  drivers/watchdog/Kconfig      |  1 +
->  drivers/watchdog/jz4740_wdt.c | 75=20
-> ++++++++++++++---------------------
->  2 files changed, 31 insertions(+), 45 deletions(-)
->=20
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 58e7c100b6ad..6421187769cf 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1642,6 +1642,7 @@ config INDYDOG
->  config JZ4740_WDT
->  	tristate "Ingenic jz4740 SoC hardware watchdog"
->  	depends on MACH_JZ4740 || MACH_JZ4780
-> +	depends on COMMON_CLK
->  	select WATCHDOG_CORE
->  	help
->  	  Hardware driver for the built-in watchdog timer on Ingenic jz4740=20
-> SoCs.
-> diff --git a/drivers/watchdog/jz4740_wdt.c=20
-> b/drivers/watchdog/jz4740_wdt.c
-> index c6052ae54f32..72920f09f4a7 100644
-> --- a/drivers/watchdog/jz4740_wdt.c
-> +++ b/drivers/watchdog/jz4740_wdt.c
-> @@ -18,19 +18,6 @@
->  #include <linux/err.h>
->  #include <linux/of.h>
->=20
-> -#include <asm/mach-jz4740/timer.h>
-> -
-> -#define JZ_WDT_CLOCK_PCLK 0x1
-> -#define JZ_WDT_CLOCK_RTC  0x2
-> -#define JZ_WDT_CLOCK_EXT  0x4
-> -
-> -#define JZ_WDT_CLOCK_DIV_1    (0 << TCU_TCSR_PRESCALE_LSB)
-> -#define JZ_WDT_CLOCK_DIV_4    (1 << TCU_TCSR_PRESCALE_LSB)
-> -#define JZ_WDT_CLOCK_DIV_16   (2 << TCU_TCSR_PRESCALE_LSB)
-> -#define JZ_WDT_CLOCK_DIV_64   (3 << TCU_TCSR_PRESCALE_LSB)
-> -#define JZ_WDT_CLOCK_DIV_256  (4 << TCU_TCSR_PRESCALE_LSB)
-> -#define JZ_WDT_CLOCK_DIV_1024 (5 << TCU_TCSR_PRESCALE_LSB)
-> -
->  #define DEFAULT_HEARTBEAT 5
->  #define MAX_HEARTBEAT     2048
->=20
-> @@ -50,7 +37,8 @@ MODULE_PARM_DESC(heartbeat,
->  struct jz4740_wdt_drvdata {
->  	struct watchdog_device wdt;
->  	void __iomem *base;
-> -	struct clk *rtc_clk;
-> +	struct clk *clk;
-> +	unsigned long clk_rate;
->  };
->=20
->  static int jz4740_wdt_ping(struct watchdog_device *wdt_dev)
-> @@ -65,32 +53,14 @@ static int jz4740_wdt_set_timeout(struct=20
-> watchdog_device *wdt_dev,
->  				    unsigned int new_timeout)
->  {
->  	struct jz4740_wdt_drvdata *drvdata =3D watchdog_get_drvdata(wdt_dev);
-> -	unsigned int rtc_clk_rate;
-> -	unsigned int timeout_value;
-> -	unsigned short clock_div =3D JZ_WDT_CLOCK_DIV_1;
-> +	u16 timeout_value =3D (u16)(drvdata->clk_rate * new_timeout);
->  	u8 tcer;
->=20
-> -	rtc_clk_rate =3D clk_get_rate(drvdata->rtc_clk);
-> -
-> -	timeout_value =3D rtc_clk_rate * new_timeout;
-> -	while (timeout_value > 0xffff) {
-> -		if (clock_div =3D=3D JZ_WDT_CLOCK_DIV_1024) {
-> -			/* Requested timeout too high;
-> -			* use highest possible value. */
-> -			timeout_value =3D 0xffff;
-> -			break;
-> -		}
-> -		timeout_value >>=3D 2;
-> -		clock_div +=3D (1 << TCU_TCSR_PRESCALE_LSB);
-> -	}
-> -
->  	tcer =3D readb(drvdata->base + TCU_REG_WDT_TCER);
->  	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
-> -	writew(clock_div, drvdata->base + TCU_REG_WDT_TCSR);
->=20
->  	writew((u16)timeout_value, drvdata->base + TCU_REG_WDT_TDR);
->  	writew(0x0, drvdata->base + TCU_REG_WDT_TCNT);
-> -	writew(clock_div | JZ_WDT_CLOCK_RTC, drvdata->base +=20
-> TCU_REG_WDT_TCSR);
->=20
->  	if (tcer & TCU_WDT_TCER_TCEN)
->  		writeb(TCU_WDT_TCER_TCEN, drvdata->base + TCU_REG_WDT_TCER);
-> @@ -102,11 +72,15 @@ static int jz4740_wdt_set_timeout(struct=20
-> watchdog_device *wdt_dev,
->  static int jz4740_wdt_start(struct watchdog_device *wdt_dev)
->  {
->  	struct jz4740_wdt_drvdata *drvdata =3D watchdog_get_drvdata(wdt_dev);
-> +	int ret;
->  	u8 tcer;
->=20
-> +	ret =3D clk_prepare_enable(drvdata->clk);
-> +	if (ret)
-> +		return ret;
-> +
->  	tcer =3D readb(drvdata->base + TCU_REG_WDT_TCER);
->=20
-> -	jz4740_timer_enable_watchdog();
->  	jz4740_wdt_set_timeout(wdt_dev, wdt_dev->timeout);
->=20
->  	/* Start watchdog if it wasn't started already */
-> @@ -121,7 +95,7 @@ static int jz4740_wdt_stop(struct watchdog_device=20
-> *wdt_dev)
->  	struct jz4740_wdt_drvdata *drvdata =3D watchdog_get_drvdata(wdt_dev);
->=20
->  	writeb(0x0, drvdata->base + TCU_REG_WDT_TCER);
-> -	jz4740_timer_disable_watchdog();
-> +	clk_disable_unprepare(drvdata->clk);
->=20
->  	return 0;
->  }
-> @@ -162,21 +136,38 @@ static int jz4740_wdt_probe(struct=20
-> platform_device *pdev)
->  	struct device *dev =3D &pdev->dev;
->  	struct jz4740_wdt_drvdata *drvdata;
->  	struct watchdog_device *jz4740_wdt;
-> +	long rate;
-> +	int ret;
->=20
->  	drvdata =3D devm_kzalloc(dev, sizeof(struct jz4740_wdt_drvdata),
->  			       GFP_KERNEL);
->  	if (!drvdata)
->  		return -ENOMEM;
->=20
-> -	if (heartbeat < 1 || heartbeat > MAX_HEARTBEAT)
-> -		heartbeat =3D DEFAULT_HEARTBEAT;
-> +	drvdata->clk =3D devm_clk_get(&pdev->dev, "wdt");
-> +	if (IS_ERR(drvdata->clk)) {
-> +		dev_err(&pdev->dev, "cannot find WDT clock\n");
-> +		return PTR_ERR(drvdata->clk);
-> +	}
-> +
-> +	/* Set smallest clock possible */
-> +	rate =3D clk_round_rate(drvdata->clk, 1);
-> +	if (rate < 0)
-> +		return rate;
-> +
-> +	ret =3D clk_set_rate(drvdata->clk, rate);
-> +	if (ret)
-> +		return ret;
->=20
-> +	drvdata->clk_rate =3D rate;
->  	jz4740_wdt =3D &drvdata->wdt;
->  	jz4740_wdt->info =3D &jz4740_wdt_info;
->  	jz4740_wdt->ops =3D &jz4740_wdt_ops;
-> -	jz4740_wdt->timeout =3D heartbeat;
->  	jz4740_wdt->min_timeout =3D 1;
-> -	jz4740_wdt->max_timeout =3D MAX_HEARTBEAT;
-> +	jz4740_wdt->max_timeout =3D 0xffff / rate;
-> +	jz4740_wdt->timeout =3D clamp(heartbeat,
-> +				    jz4740_wdt->min_timeout,
-> +				    jz4740_wdt->max_timeout);
->  	jz4740_wdt->parent =3D dev;
->  	watchdog_set_nowayout(jz4740_wdt, nowayout);
->  	watchdog_set_drvdata(jz4740_wdt, drvdata);
-> @@ -185,12 +176,6 @@ static int jz4740_wdt_probe(struct=20
-> platform_device *pdev)
->  	if (IS_ERR(drvdata->base))
->  		return PTR_ERR(drvdata->base);
->=20
-> -	drvdata->rtc_clk =3D devm_clk_get(dev, "rtc");
-> -	if (IS_ERR(drvdata->rtc_clk)) {
-> -		dev_err(dev, "cannot find RTC clock\n");
-> -		return PTR_ERR(drvdata->rtc_clk);
-> -	}
-> -
->  	return devm_watchdog_register_device(dev, &drvdata->wdt);
->  }
->=20
-> --
-> 2.23.0
->=20
 
-=
-
+--=20
+Thanks,
+Sekhar
