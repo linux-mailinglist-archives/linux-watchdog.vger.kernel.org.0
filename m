@@ -2,160 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F94FEA52
-	for <lists+linux-watchdog@lfdr.de>; Sat, 16 Nov 2019 04:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884A6FEFE4
+	for <lists+linux-watchdog@lfdr.de>; Sat, 16 Nov 2019 17:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727181AbfKPDDZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 15 Nov 2019 22:03:25 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:33846 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726743AbfKPDDY (ORCPT
+        id S1728872AbfKPQBp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 16 Nov 2019 11:01:45 -0500
+Received: from mail-pf1-f176.google.com ([209.85.210.176]:38921 "EHLO
+        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731665AbfKPQBh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 15 Nov 2019 22:03:24 -0500
-Received: by mail-ot1-f65.google.com with SMTP id 5so9782683otk.1;
-        Fri, 15 Nov 2019 19:03:24 -0800 (PST)
+        Sat, 16 Nov 2019 11:01:37 -0500
+Received: by mail-pf1-f176.google.com with SMTP id x28so8136899pfo.6;
+        Sat, 16 Nov 2019 08:01:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+PKkfyo30L01h9oQ5rnPd8gcgGv49l0ZSJaKPx8vEoE=;
-        b=Bleoc43et0DzOAt+JkT60HD6Brzb9ykgPO16OxB7nuNmNSqgTnbXFE5aUpU7zqi8J7
-         E1SBqBJXTevQAs4NTG8wo0BZNekBKlEow83Z5a1l04XcmzILjCdv9OAb/jNpKpj5dFB7
-         mLkX1TYmWg9fFmkH/qhWuBz4MHMkW+8BGXVdRmX2xnrgZ2b8c1dXNMYKH61ehtufhFcu
-         zpSCD2mE9+9LJE8xeym64TsPv0Labowkx3piIbTg3tKb6OPhdzgd2ijJDISUnkBN/09L
-         +piTIoCQwW7fPQEpao5emzml0Rc4Hn3blegQ249aZ5kq/glnigB60u0phs9MLhTLPLtX
-         qcjA==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ImMHYp4zTlOUHYAqsqImkf8coYQfcp0IIx0sbh2J3bw=;
+        b=SAsKMweYXW0CCqvNkzFbjLnjCqujIpHB2VzDgxC6936OxxZlIjOZAvekgWC4vv9CJb
+         or+5CRAMBxvnTIZ+/R2OrPLuPJiZKRKxVUNWewKwm/TPwiZwgjP7f6Lo3bK7+p5YuERP
+         vAJEg9Y78IK0J8I0qN3NXDDgNDxRt0aBxYJ1pIKrzVMsi84HfucHlztiwzZiaKE74ftl
+         2RMHPkrIRzLHue+EjgMlOVy4HVSGwLTHNXIgXdRCQ5q7mgWRvWwesvr0pnN2doypF3a/
+         DdAJbVQ/tdocF5VulM93T3r8/VKC7Oxq6Kd850mmeHPwEaPDXkz/8NpKJaJmctyq0xNZ
+         /yWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+PKkfyo30L01h9oQ5rnPd8gcgGv49l0ZSJaKPx8vEoE=;
-        b=mQumZuWz7q0aTFyfOUKZToXCLS3uR/dh85TTlsFd6cjQQGVwYsYEzw66m2GLrloQLR
-         K2SW6mAWKZvzCBv1nsRO4Zx5ZJZmTiPFxCYD+ZuqdU4bENkcUgRcCfgQH8gvNWqfH36+
-         uoTUG+OSScQgo2YzG7496PdoECKo+sfs74vMJYt2MYGfj6KM5zTV791SRSUynLNPJWfv
-         qAWzMgn5cGixka3RUrtVKVnBCm4TZpLvtWqTlyynY5TvT7AZGS/4QtdiOOShRhBGmJL3
-         0yxNnWsthUYdjmm4/rWPH01IsHiR3W+4cxbodpd0Yyxgyh5sEXRuIFVK6/oYeRwfXitA
-         KXzA==
-X-Gm-Message-State: APjAAAXFYYolPb5LMUcgEOBGJhxCL8cWlSDTBx0SVNN4FV5qTuPAdIRT
-        buKbPKonqb8oE9RHc4AFk1OF8q9y5k50PWqzi8lNRdbBvJaqUQ==
-X-Google-Smtp-Source: APXvYqxN9QwTQS59vEiVHgDbHSYVDvuqlbJ33mTDJZkd55qzg0DRqjh/VJhYCN1W0AhxFwNHxHxrRX6Bny+TXmEqyC8=
-X-Received: by 2002:a9d:7588:: with SMTP id s8mr3064399otk.300.1573873403960;
- Fri, 15 Nov 2019 19:03:23 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHhAz+h6SuGKWn0qNqsCdNjDks_vHuJW-KfiQja_b3x8x=vq_A@mail.gmail.com>
- <0d5c20b1-6b0f-430b-17b0-d3624062020d@roeck-us.net>
-In-Reply-To: <0d5c20b1-6b0f-430b-17b0-d3624062020d@roeck-us.net>
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Sat, 16 Nov 2019 08:33:12 +0530
-Message-ID: <CAHhAz+iSXZSY012-jNx_wmNmgx_UiHZ4rjxkCUcHk3CjLc9gDg@mail.gmail.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ImMHYp4zTlOUHYAqsqImkf8coYQfcp0IIx0sbh2J3bw=;
+        b=Nhx3onMGXemR4ip3yAw4QUUSG/EDQaG2zCtFvMf52qL7LlVDMynbxkmb1o4xHQVR84
+         7JfDcy56J8ts2rJrwoNKq2naYo5A6UYsmDlZUlJbMA4qChJsE1O9BpmzkYziqUWsNSnV
+         ArrUPDa3deCUdm6W/xzuteKmbGSTv2JyHrXpYmWXTzAgDqVeNfrlFg47F5hgYu7GcL08
+         Twj1qU/y3Em+g9xxoLTLzjQESrXUPmnBr5k8tYpJqePlC7KSzTyAJYpHbtW+6hX6V5CK
+         w77jdc8ppfOoC4cAE7E+/0hDtP/FRHp1/9kJO/9E23I+O9ghJKT1UtkLy7RuPm/j03B/
+         Ax7A==
+X-Gm-Message-State: APjAAAUf6+qldNteV+GBNMvJairEojyX4i2KSyzQPmEOSUSAo43JpbKn
+        f8FVXalatzfaA/KAXN0z2HI=
+X-Google-Smtp-Source: APXvYqzyJg08yhSqb2Fi0yAPx4xYveG1rHUfokzUkXpSa+mg1Y1pmVoa49gBm/3xJzZlH4PWsYl5BQ==
+X-Received: by 2002:aa7:980c:: with SMTP id e12mr24474265pfl.165.1573920096947;
+        Sat, 16 Nov 2019 08:01:36 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x21sm13814389pfi.122.2019.11.16.08.01.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 16 Nov 2019 08:01:36 -0800 (PST)
 Subject: Re: watchdog: how to enable?
-To:     Guenter Roeck <linux@roeck-us.net>
+To:     Muni Sekhar <munisekharrms@gmail.com>
 Cc:     linux-watchdog@vger.kernel.org, linux-pci@vger.kernel.org,
         wim@linux-watchdog.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <CAHhAz+h6SuGKWn0qNqsCdNjDks_vHuJW-KfiQja_b3x8x=vq_A@mail.gmail.com>
+ <0d5c20b1-6b0f-430b-17b0-d3624062020d@roeck-us.net>
+ <CAHhAz+iSXZSY012-jNx_wmNmgx_UiHZ4rjxkCUcHk3CjLc9gDg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <e5b24949-5215-9d3d-ca45-cab221d4f58a@roeck-us.net>
+Date:   Sat, 16 Nov 2019 08:01:35 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAHhAz+iSXZSY012-jNx_wmNmgx_UiHZ4rjxkCUcHk3CjLc9gDg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Nov 16, 2019 at 6:34 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 11/15/19 4:35 PM, Muni Sekhar wrote:
-> > [ Please keep me in CC as I'm not subscribed to the list]
-> >
-> > Hi All,
-> >
-> > My kernel is built with the following options:
-> >
-> > $ cat /boot/config-5.0.1 | grep NO_HZ
-> > CONFIG_NO_HZ_COMMON=3Dy
-> > CONFIG_NO_HZ_IDLE=3Dy
-> > # CONFIG_NO_HZ_FULL is not set
-> > CONFIG_NO_HZ=3Dy
-> > CONFIG_RCU_FAST_NO_HZ=3Dy
-> >
-> > I booted with watchdog enabled(nmi_watchdog=3D1) as given below:
-> >
-> > BOOT_IMAGE=3D/boot/vmlinuz-5.0.1
-> > root=3DUUID=3Df65454ae-3f1d-4b9e-b4be-74a29becbe1e ro debug
-> > ignore_loglevel console=3DttyUSB0,115200 console=3Dtty0 console=3Dtty1
-> > console=3DttyS2,115200 memmap=3D1M!1023M nmi_watchdog=3D1
-> > crashkernel=3D384M-:128M
-> >
-> > When the system is frozen or the kernel is locked up(I noticed that in
-> > this state kernel is not responding for ALT-SysRq-<command key>) but
-> > watchdog is not triggered. So I want to understand how to enable the
-> > watchdog timer and how to verify the basic watchdog functionality
-> > behavior?
-> >  > Any pointers on this will be greatly appreciated.
-> >
-> Sorry, I do not have an answer. Please note that you are talking about
-> the NMI watchdog, which is completely unrelated to hardware watchdogs
-> and not handled by the watchdog subsystem. I would suggest to send
-> your question to the Linux kernel mailing list and clearly state
-> that you are talking about the NMI watchdog.
->
-> Please note that, for the NMI watchdog to do anything, you must have
-> CONFIG_HARDLOCKUP_DETECTOR enabled in your kernel configuration. I don't
-> know what if anything the configuration options you listed above have
-> to do with the NMI watchdog.
+On 11/15/19 7:03 PM, Muni Sekhar wrote:
+[ ... ]
+>>
+>> Another possibility, of course, might be to enable a hardware watchdog
+>> in your system (assuming it supports one). I personally would not trust
+>> the NMI watchdog because to detect a system hang, after all, there are
+>> situations where even NMIs no longer work.
+> 
+>>From dmesg , Is it possible to know whether my system supports
+> hardware watchdog or not?
+> I assume that my system supports the hardware watchdog , then how to
+> enable the hardware watchdog to debug the system freeze issues?
+> 
 
-Thank you for your response. I enabled hard\soft\lockup detector
-config options. My kernel is built with the following .config options:
+Hardware watchdog support really depends on the board type. Most PC
+mainboards support a watchdog in the Super-IO chip, but on some it is
+not wired correctly. On embedded boards it is often built into the SoC.
+The easiest way to see if you have a watchdog would be to check for the
+existence of /dev/watchdog. However, on a PC that would most likely
+not be there because the necessary module is not auto-loaded.
+If you tell us your board type, or better the Super-IO chip on the board,
+we might be able to help.
 
-CONFIG_HAVE_HARDLOCKUP_DETECTOR_PERF=3Dy
-CONFIG_HARDLOCKUP_DETECTOR_PERF=3Dy
-CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=3Dy
-CONFIG_HARDLOCKUP_DETECTOR=3Dy
-CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=3Dy
-CONFIG_BOOTPARAM_HARDLOCKUP_PANIC_VALUE=3D1
-CONFIG_SOFTLOCKUP_DETECTOR=3Dy
-CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=3Dy
-CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=3D1
+Note though that this won't help to debug the problem. A hardware
+watchdog resets the system. It helps to recover, but it is not intended
+to help with debugging.
 
-Also I enabled the following stuff in /proc/sys/ directory.
-
-kernel.softlockup_panic =3D 1
-kernel.hardlockup_panic =3D 1
-kernel.unknown_nmi_panic =3D 1
-kernel.softlockup_all_cpu_backtrace =3D 1
-kernel.hardlockup_all_cpu_backtrace =3D 1
-kernel.panic =3D 3
-kernel.panic_on_io_nmi =3D 1
-kernel.panic_on_oops =3D 1
-kernel.panic_on_stackoverflow =3D 1
-kernel.panic_on_unrecovered_nmi =3D 1
-kernel.panic_on_rcu_stall =3D 1
-kernel.panic_print =3D 31
-kernel.sysrq=3D0x1FF
-
-
-The https://www.kernel.org/doc/Documentation/lockup-watchdogs.txt
-Says =E2=80=9CBy default, the watchdog runs on all online cores.  However, =
-on a
-kernel configured with NO_HZ_FULL, by default the watchdog runs only
-on the housekeeping cores, not the cores specified in the "nohz_full"
-boot argument.=E2=80=9D, so I just mentioned my kernel CONFIG_NO_HZ* option=
-s.
-
->
-> Another possibility, of course, might be to enable a hardware watchdog
-> in your system (assuming it supports one). I personally would not trust
-> the NMI watchdog because to detect a system hang, after all, there are
-> situations where even NMIs no longer work.
-
-From dmesg , Is it possible to know whether my system supports
-hardware watchdog or not?
-I assume that my system supports the hardware watchdog , then how to
-enable the hardware watchdog to debug the system freeze issues?
-
-
->
-> Guenter
-
-
-
---=20
-Thanks,
-Sekhar
+Guenter
