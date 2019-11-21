@@ -2,172 +2,176 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D852B104E3E
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Nov 2019 09:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC1B104F83
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Nov 2019 10:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbfKUInx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 21 Nov 2019 03:43:53 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:46634 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726165AbfKUInx (ORCPT
+        id S1726132AbfKUJpN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 21 Nov 2019 04:45:13 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46563 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726014AbfKUJpN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 21 Nov 2019 03:43:53 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAL8ggaE025989;
-        Thu, 21 Nov 2019 09:43:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=GwWBHQ9N4yig6Dd7KbgCOG6gB1C+OQALGmmDk+pmewM=;
- b=BuQcLUSpXyNlazcUbw/2qq1STEtvc9EVxz3578cIOrRiF7FaZNl22wur2C0JSlbMs++k
- rUacF6+CS6E+wgGwiE4IMuUj4dWlGh5oWbNlf2XZ0AjPW7N/g8IPE7kUuH7wL7kE2hv9
- c1s6MsW+gL3BZ5nmp9wspcig3wx1n31U8GjTw+fv/G/+qTt51Z23tndGIwrgBsboyh88
- hJXutr759jifbXnE1kw0jDYwBOI+GGaZcY7UJhFREHwzj9NSBrVvU2UWFTAfIfwRhPD9
- 1/UYGw47HZJOZg42z+1H7KJQzwjCVP8c4V6hZ4pmxFi4LtSOI6QWqn5RlnQqKB7/5USp 0A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2wa9uvjg7g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Nov 2019 09:43:22 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DCD8B100038;
-        Thu, 21 Nov 2019 09:43:20 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C2A4F2B05DD;
-        Thu, 21 Nov 2019 09:43:20 +0100 (CET)
-Received: from localhost (10.75.127.49) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 21 Nov 2019 09:43:20
- +0100
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <alexandre.torgue@st.com>
-CC:     <linux-watchdog@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v2] dt-bindings: watchdog: Convert stm32 watchdog bindings to json-schema
-Date:   Thu, 21 Nov 2019 09:43:16 +0100
-Message-ID: <20191121084316.13839-1-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
+        Thu, 21 Nov 2019 04:45:13 -0500
+Received: by mail-pl1-f196.google.com with SMTP id l4so1301422plt.13;
+        Thu, 21 Nov 2019 01:45:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6ASxIbDgZPzjpEeQAS60aSTYiSJ47wEPcbtoAyJxV1I=;
+        b=bEbUF9lMdvlVPkRLX3v5XpRyzMUUn4lP7if0rzHhSFjhwTinaGQxOK9/69n/VhuLKY
+         /SzI5l+Y7om7EUR7OlEg8Eqipiep8zQdCr4XSNPdVMpasCwdsIFAVp1giqgiz/khmNVv
+         fl5iRQJSl99NJjFoMmCVoNAQR22F5iynNI6mnyhXCDzSTOcjb8TVnpozcuiv3ac9EgQM
+         Ux451YOdfd9zDUFD/dKNikmlO61Bv6D2BxEQcJY7kU0AejFGgKBUzjm3b5Z1y+nHtm9/
+         SJdIS1dfPT8Vv7T7LiMZwZZJ04kVWd3mhURMeXoIAyt8iQ/k89ASbZmd004/DxlBXag7
+         gGkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6ASxIbDgZPzjpEeQAS60aSTYiSJ47wEPcbtoAyJxV1I=;
+        b=FGrst/8y6kKOE0hs/N31rfoo/d5YJmjj8aACJ3bjAzCKPQIqZE1BuCHQNexWWDr8nN
+         UoGt2MmuoidtbKNZah66KlFhtwreYJlsR2WsfIVie+d3lkWRl96MZ22Os4zHzRfS39Ol
+         QWID9Eg+POPk8e+65Le8a3mmt67RMp1YKxc+rOLNI9xRWoCJYGs1Jk/W0uLY5Idmw0SW
+         iMAQLgKjxtA+79TbJs88rZKZP5oKwTzetzoLYhlfUugSw0NdDjwMN7c6JaWP4YI8LY43
+         QMvFiID7PHojzJ0mxC1P5NufbU5mc2K/fbLqg1xf0pSklPeRSiTdCzsVKZ/q1P+2zaz+
+         2A3Q==
+X-Gm-Message-State: APjAAAUe9QZqMOpKM5FKP15yUiCNbpjn7gwT/6fCdLp5p3KikEFECkxT
+        UJGMn4ehSOr4lkAIllWPCmUzXpBw
+X-Google-Smtp-Source: APXvYqz2pCtYH4yADufGtyDF3nMKzWAlEbR9Vq7cut3R0CBn8yhtcpgMNMollgpDpo8dyXBDHtiovg==
+X-Received: by 2002:a17:902:9344:: with SMTP id g4mr8062166plp.16.1574329511726;
+        Thu, 21 Nov 2019 01:45:11 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o16sm2292208pjp.23.2019.11.21.01.45.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Nov 2019 01:45:10 -0800 (PST)
+Subject: Re: [PATCH] watchdog: make DesignWare watchdog allow users to set
+ bigger timeout value
+To:     "Wang, Peng 1. (NSB - CN/Hangzhou)" <peng.1.wang@nokia-sbell.com>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <13477f08400047c1b32030b2680a4241@nokia-sbell.com>
+ <20191120171512.GA28255@roeck-us.net>
+ <9128f42a3e4347f2adfccb8aa2833e2e@nokia-sbell.com>
+ <b0fcaae6-c9da-f551-5af4-ff112b08e851@roeck-us.net>
+ <2ba1cd4773c84ce28512aacde17034ed@nokia-sbell.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <685f5142-06a9-062d-b6d9-1d522c3923f8@roeck-us.net>
+Date:   Thu, 21 Nov 2019 01:45:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG7NODE2.st.com (10.75.127.20) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-21_01:2019-11-20,2019-11-21 signatures=0
+In-Reply-To: <2ba1cd4773c84ce28512aacde17034ed@nokia-sbell.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert the STM32 watchdog binding to DT schema format using json-schema
+On 11/21/19 12:07 AM, Wang, Peng 1. (NSB - CN/Hangzhou) wrote:
+> Actually, this function is used by watchdog_dev.c, the timeout value in wdd is already modified there.
+> but yes, you are right, decide the actual timeout value here is more reasonable. :)
+> 
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
-changes in version 2:
-- remove trailer space
-- add Christophe in the maintainers list
-  
- .../devicetree/bindings/watchdog/st,stm32-iwdg.txt | 26 ----------
- .../bindings/watchdog/st,stm32-iwdg.yaml           | 55 ++++++++++++++++++++++
- 2 files changed, 55 insertions(+), 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+Please avoid top-posting.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
-deleted file mode 100644
-index d8f4430b0a13..000000000000
---- a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--STM32 Independent WatchDoG (IWDG)
-----------------------------------
--
--Required properties:
--- compatible: Should be either:
--  - "st,stm32-iwdg"
--  - "st,stm32mp1-iwdg"
--- reg: Physical base address and length of the registers set for the device
--- clocks: Reference to the clock entry lsi. Additional pclk clock entry
--  is required only for st,stm32mp1-iwdg.
--- clock-names: Name of the clocks used.
--  "lsi" for st,stm32-iwdg
--  "lsi", "pclk" for st,stm32mp1-iwdg
--
--Optional Properties:
--- timeout-sec: Watchdog timeout value in seconds.
--
--Example:
--
--iwdg: watchdog@40003000 {
--	compatible = "st,stm32-iwdg";
--	reg = <0x40003000 0x400>;
--	clocks = <&clk_lsi>;
--	clock-names = "lsi";
--	timeout-sec = <32>;
--};
-diff --git a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
-new file mode 100644
-index 000000000000..975b697930a4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
-@@ -0,0 +1,55 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/st,stm32-iwdg.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STM32 Independent WatchDoG (IWDG) bindings
-+
-+maintainers:
-+  - Yannick Fertre <yannick.fertre@st.com>
-+  - Christophe Roullier <christophe.roullier@st.com>
-+
-+allOf:
-+  - $ref: "watchdog.yaml#"
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stm32-iwdg
-+      - st,stm32mp1-iwdg
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Low speed clock
-+      - description: Optional peripheral clock
-+    minItems: 1
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      enums: [ lsi, pclk ]
-+    minItems: 1
-+    maxItems: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/stm32mp1-clks.h>
-+    watchdog@5a002000 {
-+      compatible = "st,stm32mp1-iwdg";
-+      reg = <0x5a002000 0x400>;
-+      clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
-+      clock-names = "pclk", "lsi";
-+      timeout-sec = <32>;
-+    };
-+
-+...
--- 
-2.15.0
+watchdog_dev.c only sets wdd->timeout if there is no driver function
+to set it.
+
+Guenter
+
+> thanks,
+> Peng Wang
+> -----Original Message-----
+> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter Roeck
+> Sent: Thursday, November 21, 2019 11:41 AM
+> To: Wang, Peng 1. (NSB - CN/Hangzhou) <peng.1.wang@nokia-sbell.com>
+> Cc: wim@linux-watchdog.org; linux-watchdog@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] watchdog: make DesignWare watchdog allow users to set bigger timeout value
+> 
+> On 11/20/19 5:29 PM, Wang, Peng 1. (NSB - CN/Hangzhou) wrote:
+>> Hi Guenter,
+>>
+>> Thank you for your time.
+>> - I will remove the unnecessary {}
+>> - wdd->max_hw_heartbeat_ms is the max timeout value which HW can support, this value is limited according to the input clock, say. It only supports 20 seconds, if users requires to set timeout to be say. 60 seconds, the watchdog device driver 'watchdog_dev.c' checks if wdd->timeout is bigger than wdd->max_hw_heartbeat_ms, if yes, watchdog_dev.c feeds the watchdog by a worker queue itself to help to feed the watchdog before 60 seconds elapse. Here the issue of dw_wdt.c is that, the original codes update wdd->timeout to the value which HW can support, which means if users requires 60 seconds to be the timeout, then dw_wdt.c updates the timeout value to 20 seconds, this makes the "feeding helper" mechanism in watchdog_dev.c not take effect. That's why I add this check.
+>>
+> 
+> Yes, I understand you need a check. What I am saying is that the check is wrong.
+> 
+> You need something like
+> 
+> 	if (top_s > DW_WDT_MAX_TOP)
+> 		wdt->timeout = top_s;
+> 	else
+> 		wdt->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
+> 
+> Guenter
+> 
+>> Thanks,
+>> Peng Wang
+>>
+>> -----Original Message-----
+>> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter
+>> Roeck
+>> Sent: Thursday, November 21, 2019 1:15 AM
+>> To: Wang, Peng 1. (NSB - CN/Hangzhou) <peng.1.wang@nokia-sbell.com>
+>> Cc: wim@linux-watchdog.org; linux-watchdog@vger.kernel.org;
+>> linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH] watchdog: make DesignWare watchdog allow users to
+>> set bigger timeout value
+>>
+>> On Wed, Nov 20, 2019 at 10:07:57AM +0000, Wang, Peng 1. (NSB - CN/Hangzhou) wrote:
+>>>   From 1d051b7c081083751dc0bab97d3ab9efbba0f4a7 Mon Sep 17 00:00:00
+>>> 2001
+>>> From: Peng Wang <peng.1.wang@nokia-sbell.com>
+>>> Date: Wed, 20 Nov 2019 15:12:59 +0800
+>>> Subject: [PATCH] watchdog: make DesignWare watchdog allow users to
+>>> set bigger  timeout value
+>>>
+>>> watchdog_dev.c provides means to allow users to set bigger timeout
+>>> value than HW can support, make DesignWare watchdog align with this.
+>>>
+>>> Signed-off-by: Peng Wang <peng.1.wang@nokia-sbell.com>
+>>> ---
+>>>    drivers/watchdog/dw_wdt.c | 11 +++++++++--
+>>>    1 file changed, 9 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+>>> index fef7c61..8911e5e 100644
+>>> --- a/drivers/watchdog/dw_wdt.c
+>>> +++ b/drivers/watchdog/dw_wdt.c
+>>> @@ -113,8 +113,15 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
+>>>    	 */
+>>>    	writel(top_val | top_val << WDOG_TIMEOUT_RANGE_TOPINIT_SHIFT,
+>>>    	       dw_wdt->regs + WDOG_TIMEOUT_RANGE_REG_OFFSET);
+>>> -
+>>> -	wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
+>>> +
+>>> +    /*
+>>> +     * In case users set bigger timeout value than HW can support,
+>>> +     * kernel(watchdog_dev.c) helps to feed watchdog before
+>>> +     * wdd->timeout
+>>> +     */
+>>> +    if ( wdd->timeout * 1000 <= wdd->max_hw_heartbeat_ms ) {
+>>> +	    wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
+>>> +    }
+>>
+>> { } is unnecessary here. Also, the above code compares the _old_ timeout againt the maximum supported timeout, which doesn't look correct.
+>>
+>> Thanks,
+>> Guenter
+>>
+>>>    
+>>>    	return 0;
+>>>    }
+>>> --
+>>> 1.8.3.1
+>>>
+>>
+> 
 
