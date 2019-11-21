@@ -2,114 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4639104FD2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Nov 2019 10:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CF6105097
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Nov 2019 11:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726342AbfKUJ4D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 21 Nov 2019 04:56:03 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38950 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbfKUJ4D (ORCPT
+        id S1726014AbfKUKfS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 21 Nov 2019 05:35:18 -0500
+Received: from cnshjsmin05.app.nokia-sbell.com ([116.246.26.45]:56124 "EHLO
+        cnshjsmin05.nokia-sbell.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726613AbfKUKfS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 21 Nov 2019 04:56:03 -0500
-Received: by mail-pg1-f195.google.com with SMTP id b126so1327687pga.6;
-        Thu, 21 Nov 2019 01:56:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FzoSL4YP+wGhKXl+dqpfFhOcKj1KTUkz/Dcb+UIksRo=;
-        b=gkLUSRZ57R42ncaj1Bx/kvu7relx6lzvV5Xn0I6r0sBxURtE1G5TWry9NP/BMT8BNF
-         3S+kDKmnBj/WuPhqh4ANh59+4wGbZvZfPCDdxdkO2mA4AyMc11Od74bt54Q0vHa20hAb
-         zG2o/zMVd3//A5wOPM5jlulk4BK2f/GZ7TqIQGxuug6XxqqlHWfQ5pY81l55QICfHn84
-         EU+fOSNb+9V2NoPd8j3VsqHCJJJmbukdakcn6WNjQeh+05V10vd/ek9g0ao/+K9XZI4I
-         8eLZrAhFe91mPLk6ze4v3kLC7ZPeaLSKrpVnAsWOEszlazVf4AV5l4FRqhozEpHn3QsP
-         0W8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FzoSL4YP+wGhKXl+dqpfFhOcKj1KTUkz/Dcb+UIksRo=;
-        b=e7GlTYIvfdO1AdeSpAfI2B1t4Pmmju8aI34nqNqYpFVb8EGRVLmypCbS2Cshh4xy5/
-         derJijXIGR4gAEpzH05mVe7k2UskTIynBfrfeLmufrtcQZv1cMa7Xf2G+93WQHCl7Ike
-         JcKJGewueSZtG+cIGRJbPTFw6QG1arLPVaDTXZ1m/wMDAs+JU3Ig/XjraLC+aznOAusO
-         hNVeHIrf5k7VKnGGV+ezSjWkFafIvXYzhufwRu8YGplAkiO4isoz/kUu5VOSp+BGGJPU
-         3beNE+CJjwRIbQU/8ysohcNts1ScpBDTdOfOHxDOF2yEJEe49FHWwfzuHHMHGLuuwdUP
-         atXQ==
-X-Gm-Message-State: APjAAAVzii1EuhpqAb5tgwVr7DOgpiCjvoTEdrNbzdJbYmafpecqOxGV
-        H6egTqdcAu0W4DfSU8XxQPAwVq62
-X-Google-Smtp-Source: APXvYqyb4umAwUrsdD0WCRtfuTBglwOyAN46dhme08ZiqWXDp3YaUcs4wdsgRn0piCBPqPDoEcCseA==
-X-Received: by 2002:aa7:9a96:: with SMTP id w22mr10066954pfi.162.1574330161967;
-        Thu, 21 Nov 2019 01:56:01 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c2sm2614445pfn.55.2019.11.21.01.56.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Nov 2019 01:56:01 -0800 (PST)
-Subject: Re: [PATCH] watchdog: make DesignWare watchdog allow users to set
- bigger timeout value
-To:     "Wang, Peng 1. (NSB - CN/Hangzhou)" <peng.1.wang@nokia-sbell.com>,
-        Guenter Roeck <groeck7@gmail.com>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        Thu, 21 Nov 2019 05:35:18 -0500
+X-AuditID: ac18929d-483ff700000014de-52-5dd668616efd
+Received: from CNSHPPEXCH1604.nsn-intra.net (Unknown_Domain [135.251.51.104])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by cnshjsmin05.nokia-sbell.com (Symantec Messaging Gateway) with SMTP id 24.6B.05342.16866DD5; Thu, 21 Nov 2019 18:35:13 +0800 (HKT)
+Received: from CNSHPPEXCH1601.nsn-intra.net (135.251.51.101) by
+ CNSHPPEXCH1604.nsn-intra.net (135.251.51.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 21 Nov 2019 18:35:13 +0800
+Received: from CNSHPPEXCH1601.nsn-intra.net ([135.251.51.101]) by
+ CNSHPPEXCH1601.nsn-intra.net ([135.251.51.101]) with mapi id 15.01.1713.007;
+ Thu, 21 Nov 2019 18:35:13 +0800
+From:   "Wang, Peng 1. (NSB - CN/Hangzhou)" <peng.1.wang@nokia-sbell.com>
+To:     Guenter Roeck <groeck7@gmail.com>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <4468f40ed5f5413ab27825bbcc611d65@nokia-sbell.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d31883d3-7f5b-545c-cc64-beb3848dbe7d@roeck-us.net>
-Date:   Thu, 21 Nov 2019 01:56:00 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <4468f40ed5f5413ab27825bbcc611d65@nokia-sbell.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Subject: [PATCH v2] watchdog: make DesignWare watchdog allow users to set
+ bigger timeout value
+Thread-Topic: [PATCH v2] watchdog: make DesignWare watchdog allow users to set
+ bigger timeout value
+Thread-Index: AdWgVy1kREB4bw5dQ4u+4ZEezt20uw==
+Date:   Thu, 21 Nov 2019 10:35:12 +0000
+Message-ID: <dc8ce91610dd4860858bfe92f104d74a@nokia-sbell.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [135.251.51.115]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmkeLIzCtJLcpLzFFi42Jp/22coZuYcS3W4G+XiMW+zutMFpd3zWGz
+        uLFuH7vF45f/mB1YPHbOusvusXLNGlaPz5vkApijuGxSUnMyy1KL9O0SuDKOHlnFVnBGoGLL
+        IfMGxikCXYycHBICJhLLf39h7GLk4hASOMQkcfTbMXYI5y+jxIZ1J5ghnE2MEvP2vWcBaWET
+        cJdo2rSODcQWEVCV2LdjJVgRs8BuRom5jW/AioQFEiQu7mxngihKlfg24QCUrScxY/MmsBoW
+        oObOczfABvEK2EnsPDqHGcRmFJCVmPboPlg9s4C4xK0n85kgbhWQWLLnPDOELSrx8vE/1i5G
+        DiBbSaJvAxOIySygKbF+lz5Ep6LElO6H7BDTBSVOznzCMoFRZBaSobMQOmYh6ZiFpGMBI8sq
+        RunkvOKMrOLczDwDU728/OzMRN3ipNScHL3k/NxNjMCoWSMxae4Oxs7O+EOMAhyMSjy8GRpX
+        Y4VYE8uKK3MPMUpwMCuJ8O65fiVWiDclsbIqtSg/vqg0J7X4EKM0B4uSOG/L5IWxQgLpiSWp
+        2ampBalFMFkmDk6pBsYV7UZX7y9YKnL7Ksexl4c2Hq7ncBbUiWh04feqnV62RaCr5OqWsvXP
+        b3b9CT0axpw/rWZBJuf7rb9WWsiXP9r+X+j57KD9Gyecz3p77HqV8M5P9mwm33glgrb1yv+c
+        Ozej407/s/y1E+PVz0mVvV/HuddpwgcdB9eDDYorY73nrFEWbnYzP2ivxFKckWioxVxUnAgA
+        M7xmhJYCAAA=
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/21/19 12:21 AM, Wang, Peng 1. (NSB - CN/Hangzhou) wrote:
->>From d21d084122d08816454a1e338f0946a9da1f81e3 Mon Sep 17 00:00:00 2001
-> From: Peng Wang <peng.1.wang@nokia-sbell.com>
-> Date: Wed, 20 Nov 2019 15:12:59 +0800
-> Subject: [PATCH] watchdog: make DesignWare watchdog allow users to set bigger
->   timeout value
-> 
-> watchdog_dev.c provides means to allow users to set bigger timeout value
-> than HW can support, make DesignWare watchdog align with this.
-> 
-> Signed-off-by: Peng Wang <peng.1.wang@nokia-sbell.com>
-> ---
-
-Please version your patches, and add a change log here.
-
->   drivers/watchdog/dw_wdt.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index fef7c61..f1a431c 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -114,7 +114,15 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
->   	writel(top_val | top_val << WDOG_TIMEOUT_RANGE_TOPINIT_SHIFT,
->   	       dw_wdt->regs + WDOG_TIMEOUT_RANGE_REG_OFFSET);
->   
-> -	wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
-> +	/*
-> +	 * In case users set bigger timeout value than HW can support,
-> +	 * kernel(watchdog_dev.c) helps to feed watchdog before
-> +	 * wdd->timeout
-
-No, before wdd->max_hw_heartbeat_ms.
-
-> +	 */
-> +	if ( top_s * 1000 <= wdd->max_hw_heartbeat_ms )
-> +		wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
-> +	else
-> +		wdd->timeout = top_s;
->   
->   	return 0;
->   }
-> 
-
+RnJvbSBhYWJhYTRiNzA5YmQ0NTFlNTY2YzkwNmU4ZDFkY2E0OGY5MmY5YjEyIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQ0KRnJvbTogUGVuZyBXYW5nIDxwZW5nLjEud2FuZ0Bub2tpYS1zYmVsbC5j
+b20+DQpEYXRlOiBXZWQsIDIwIE5vdiAyMDE5IDE1OjEyOjU5ICswODAwDQpTdWJqZWN0OiBbUEFU
+Q0hdIHdhdGNoZG9nOiBtYWtlIERlc2lnbldhcmUgd2F0Y2hkb2cgYWxsb3cgdXNlcnMgdG8gc2V0
+IGJpZ2dlcg0KIHRpbWVvdXQgdmFsdWUNCg0Kd2F0Y2hkb2dfZGV2LmMgcHJvdmlkZXMgbWVhbnMg
+dG8gYWxsb3cgdXNlcnMgdG8gc2V0IGJpZ2dlciB0aW1lb3V0IHZhbHVlDQp0aGFuIEhXIGNhbiBz
+dXBwb3J0LCBtYWtlIERlc2lnbldhcmUgd2F0Y2hkb2cgYWxpZ24gd2l0aCB0aGlzLg0KDQotLS0N
+Cg0KdjIgLT4gdjE6DQogICAgICAgLSB1c2UgdG9wX3MgdG8gY29tcGFyZSB3aXRoIHdkZC0+bWF4
+X2h3X2hlYXJ0YmVhdF9tcw0KICAgICAgIC0gdXBkYXRlIHdkZC0+dGltZW91dCBpbiBjYXNlIGl0
+J3MgZ3JlYXRlciB0aGFuIEhXIHN1cHBvcnRzDQogICAgICAgLSBmaXggY29tbWVudHMgZXJyb3IN
+Cg0KdjE6IGluaXRpYWwgdmVyc2lvbg0KDQpTaWduZWQtb2ZmLWJ5OiBQZW5nIFdhbmcgPHBlbmcu
+MS53YW5nQG5va2lhLXNiZWxsLmNvbT4NCi0tLQ0KIGRyaXZlcnMvd2F0Y2hkb2cvZHdfd2R0LmMg
+fCAxMCArKysrKysrKystDQogMSBmaWxlIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
+dGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy93YXRjaGRvZy9kd193ZHQuYyBiL2RyaXZl
+cnMvd2F0Y2hkb2cvZHdfd2R0LmMNCmluZGV4IGZlZjdjNjEuLjEyYzExNmUgMTAwNjQ0DQotLS0g
+YS9kcml2ZXJzL3dhdGNoZG9nL2R3X3dkdC5jDQorKysgYi9kcml2ZXJzL3dhdGNoZG9nL2R3X3dk
+dC5jDQpAQCAtMTE0LDcgKzExNCwxNSBAQCBzdGF0aWMgaW50IGR3X3dkdF9zZXRfdGltZW91dChz
+dHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3ZGQsIHVuc2lnbmVkIGludCB0b3BfcykNCiAJd3JpdGVs
+KHRvcF92YWwgfCB0b3BfdmFsIDw8IFdET0dfVElNRU9VVF9SQU5HRV9UT1BJTklUX1NISUZULA0K
+IAkgICAgICAgZHdfd2R0LT5yZWdzICsgV0RPR19USU1FT1VUX1JBTkdFX1JFR19PRkZTRVQpOw0K
+IA0KLQl3ZGQtPnRpbWVvdXQgPSBkd193ZHRfdG9wX2luX3NlY29uZHMoZHdfd2R0LCB0b3BfdmFs
+KTsNCisJLyoNCisJICogSW4gY2FzZSB1c2VycyBzZXQgYmlnZ2VyIHRpbWVvdXQgdmFsdWUgdGhh
+biBIVyBjYW4gc3VwcG9ydCwNCisJICoga2VybmVsKHdhdGNoZG9nX2Rldi5jKSBoZWxwcyB0byBm
+ZWVkIHdhdGNoZG9nIGJlZm9yZSANCisJICogd2RkLT5tYXhfaHdfaGVhcnRiZWF0X21zDQorCSAq
+Lw0KKwlpZiAoIHRvcF9zICogMTAwMCA8PSB3ZGQtPm1heF9od19oZWFydGJlYXRfbXMgKQ0KKwkJ
+d2RkLT50aW1lb3V0ID0gZHdfd2R0X3RvcF9pbl9zZWNvbmRzKGR3X3dkdCwgdG9wX3ZhbCk7DQor
+CWVsc2UNCisJCXdkZC0+dGltZW91dCA9IHRvcF9zOw0KIA0KIAlyZXR1cm4gMDsNCiB9DQotLSAN
+CjEuOC4zLjENCg0K
