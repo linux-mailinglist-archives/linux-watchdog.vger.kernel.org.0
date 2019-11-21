@@ -2,67 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DDD104FAF
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Nov 2019 10:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4639104FD2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Nov 2019 10:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbfKUJxj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 21 Nov 2019 04:53:39 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34179 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726132AbfKUJxj (ORCPT
+        id S1726342AbfKUJ4D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 21 Nov 2019 04:56:03 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:38950 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbfKUJ4D (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 21 Nov 2019 04:53:39 -0500
-Received: by mail-pf1-f194.google.com with SMTP id n13so1414857pff.1;
-        Thu, 21 Nov 2019 01:53:38 -0800 (PST)
+        Thu, 21 Nov 2019 04:56:03 -0500
+Received: by mail-pg1-f195.google.com with SMTP id b126so1327687pga.6;
+        Thu, 21 Nov 2019 01:56:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=24Z96VAL0Kc1Ory+ij+teunstFq8Wsss9gha+iAZp1A=;
-        b=SxVFKQkA5BaDYF5mJppd2hlZ80wgUKapnXzXhrBilpXnOlr/xCwU7vE//ig32zOceT
-         XtkpMORvWROG5o5fl2D0BxBXRGBggHSUcpa95yRaTuABLqdLLXrzbyKJaQ56WlmFBceL
-         xMPA2xpH+pkOrZSCtgbJISkyeOH56yfseOr377m00McqQbJObdmbdGgXfByGUef1uekX
-         dGxqugCdAm2UnNFD7svyX4IVhZ40X7dISw1a+6mYfDxmD55B1fcPuW1OmCzbZDTpphNo
-         Xq6lm2EXq6CMlY4Zp4SNk/A0YnWCV2Q6/dn3UCeQG0veNqkGUAsErHvJGaqxws4Y6xYW
-         /bYg==
+        bh=FzoSL4YP+wGhKXl+dqpfFhOcKj1KTUkz/Dcb+UIksRo=;
+        b=gkLUSRZ57R42ncaj1Bx/kvu7relx6lzvV5Xn0I6r0sBxURtE1G5TWry9NP/BMT8BNF
+         3S+kDKmnBj/WuPhqh4ANh59+4wGbZvZfPCDdxdkO2mA4AyMc11Od74bt54Q0vHa20hAb
+         zG2o/zMVd3//A5wOPM5jlulk4BK2f/GZ7TqIQGxuug6XxqqlHWfQ5pY81l55QICfHn84
+         EU+fOSNb+9V2NoPd8j3VsqHCJJJmbukdakcn6WNjQeh+05V10vd/ek9g0ao/+K9XZI4I
+         8eLZrAhFe91mPLk6ze4v3kLC7ZPeaLSKrpVnAsWOEszlazVf4AV5l4FRqhozEpHn3QsP
+         0W8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=24Z96VAL0Kc1Ory+ij+teunstFq8Wsss9gha+iAZp1A=;
-        b=AGbFZa9djw9Z8QqKQ1JWTmV+wjqkaJdbCt6ijv2/QI5Hp8sxfT+IMogCWd0v8wHwzr
-         eeuzk08QSU0DzYUeFaButNXE0pw2qGFLPyFmdvJu7RKGRoG2O/VxiNUld9lMaO9BzBwK
-         7aAXxD2/zn2thfBoZVRc1hw9fp7JucGNV6wgbdiiNpUyAvop6xU6qd6ZjYNGxN/ZJ0cE
-         KViLek0cvbuyUUSE5ForAsmU84ginjLwmQC5AhRecTyuopHw1zgj1dj4uGsG2UffOAVy
-         /jd9Cwjjo8/Qwky79BOjU1MwxsEQN2y0OBu/+1V2dZ9BC0dcBR6thfp+3WFGtbH3nl8X
-         7gpA==
-X-Gm-Message-State: APjAAAXawnDI3bM0c7UBeABW/YYJZeYDIhrTAVzmxr1flhmXtuo37v2w
-        QOg50LnxxySfYPsfgBiyuw9JI/Cx
-X-Google-Smtp-Source: APXvYqyQQtJCGLeNZ9QIHYtWJHPoYAV8WyiiJMmXgLDMcQgxIw+iZZPKs0Mi17aWOTVD3zHS2LO3Lg==
-X-Received: by 2002:a62:174b:: with SMTP id 72mr8853102pfx.179.1574330017805;
-        Thu, 21 Nov 2019 01:53:37 -0800 (PST)
+        bh=FzoSL4YP+wGhKXl+dqpfFhOcKj1KTUkz/Dcb+UIksRo=;
+        b=e7GlTYIvfdO1AdeSpAfI2B1t4Pmmju8aI34nqNqYpFVb8EGRVLmypCbS2Cshh4xy5/
+         derJijXIGR4gAEpzH05mVe7k2UskTIynBfrfeLmufrtcQZv1cMa7Xf2G+93WQHCl7Ike
+         JcKJGewueSZtG+cIGRJbPTFw6QG1arLPVaDTXZ1m/wMDAs+JU3Ig/XjraLC+aznOAusO
+         hNVeHIrf5k7VKnGGV+ezSjWkFafIvXYzhufwRu8YGplAkiO4isoz/kUu5VOSp+BGGJPU
+         3beNE+CJjwRIbQU/8ysohcNts1ScpBDTdOfOHxDOF2yEJEe49FHWwfzuHHMHGLuuwdUP
+         atXQ==
+X-Gm-Message-State: APjAAAVzii1EuhpqAb5tgwVr7DOgpiCjvoTEdrNbzdJbYmafpecqOxGV
+        H6egTqdcAu0W4DfSU8XxQPAwVq62
+X-Google-Smtp-Source: APXvYqyb4umAwUrsdD0WCRtfuTBglwOyAN46dhme08ZiqWXDp3YaUcs4wdsgRn0piCBPqPDoEcCseA==
+X-Received: by 2002:aa7:9a96:: with SMTP id w22mr10066954pfi.162.1574330161967;
+        Thu, 21 Nov 2019 01:56:01 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e17sm2655360pfh.121.2019.11.21.01.53.36
+        by smtp.gmail.com with ESMTPSA id c2sm2614445pfn.55.2019.11.21.01.56.00
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Nov 2019 01:53:36 -0800 (PST)
-Subject: Re: [PATCH 1/1] drivers: watchdog: stm32_iwdg: set WDOG_HW_RUNNING at
- probe
-To:     Christophe Roullier <christophe.roullier@st.com>,
-        wim@linux-watchdog.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20191121082813.29267-1-christophe.roullier@st.com>
- <20191121082813.29267-2-christophe.roullier@st.com>
+        Thu, 21 Nov 2019 01:56:01 -0800 (PST)
+Subject: Re: [PATCH] watchdog: make DesignWare watchdog allow users to set
+ bigger timeout value
+To:     "Wang, Peng 1. (NSB - CN/Hangzhou)" <peng.1.wang@nokia-sbell.com>,
+        Guenter Roeck <groeck7@gmail.com>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <4468f40ed5f5413ab27825bbcc611d65@nokia-sbell.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <ce10681c-8fa3-0fa6-3509-376a2f37aec9@roeck-us.net>
-Date:   Thu, 21 Nov 2019 01:53:35 -0800
+Message-ID: <d31883d3-7f5b-545c-cc64-beb3848dbe7d@roeck-us.net>
+Date:   Thu, 21 Nov 2019 01:56:00 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191121082813.29267-2-christophe.roullier@st.com>
+In-Reply-To: <4468f40ed5f5413ab27825bbcc611d65@nokia-sbell.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -71,140 +69,47 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/21/19 12:28 AM, Christophe Roullier wrote:
-> If the watchdog hardware is already enabled during the boot process,
-> when the Linux watchdog driver loads, it should reset the watchdog and
-> tell the watchdog framework. As a result, ping can be generated from
-> the watchdog framework (if CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is set),
-> until the userspace watchdog daemon takes over control
+On 11/21/19 12:21 AM, Wang, Peng 1. (NSB - CN/Hangzhou) wrote:
+>>From d21d084122d08816454a1e338f0946a9da1f81e3 Mon Sep 17 00:00:00 2001
+> From: Peng Wang <peng.1.wang@nokia-sbell.com>
+> Date: Wed, 20 Nov 2019 15:12:59 +0800
+> Subject: [PATCH] watchdog: make DesignWare watchdog allow users to set bigger
+>   timeout value
 > 
-
-This is not what the code is doing. It sets the WDOG_HW_RUNNING flag
-unconditionally, no matter if the watchdog is already running or not.
-It also changes the semantic of the rest of the code, as well as
-functionality. The code in start_timeout no longer waits, and the ping
-code explicitly (re-)enables the watchdog.
-
-If you want an option to start the watchdog at probe time unconditionally,
-please add a module parameter to do it. Otherwise you'll need to check if
-it is indeed enabled before setting WDOG_HW_RUNNING, and in that case it
-should not be necessary to re-enable it. It should also not be necessary
-to split the start function.
-
-Thanks,
-Guenter
-
-> Fixes:4332d113c66a ("watchdog: Add STM32 IWDG driver")
-> Signed-off-by: Christophe Roullier <christophe.roullier@st.com>
+> watchdog_dev.c provides means to allow users to set bigger timeout value
+> than HW can support, make DesignWare watchdog align with this.
+> 
+> Signed-off-by: Peng Wang <peng.1.wang@nokia-sbell.com>
 > ---
->   drivers/watchdog/stm32_iwdg.c | 57 ++++++++++++++++++++++++-----------
->   1 file changed, 40 insertions(+), 17 deletions(-)
+
+Please version your patches, and add a change log here.
+
+>   drivers/watchdog/dw_wdt.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
-> index a3a329011a06..2b3be3b1c15b 100644
-> --- a/drivers/watchdog/stm32_iwdg.c
-> +++ b/drivers/watchdog/stm32_iwdg.c
-> @@ -87,8 +87,23 @@ static inline void reg_write(void __iomem *base, u32 reg, u32 val)
->   static int stm32_iwdg_start(struct watchdog_device *wdd)
->   {
->   	struct stm32_iwdg *wdt = watchdog_get_drvdata(wdd);
-> -	u32 tout, presc, iwdg_rlr, iwdg_pr, iwdg_sr;
-> -	int ret;
-> +
-> +	dev_dbg(wdd->parent, "%s\n", __func__);
-> +
-> +	/*  Start the watchdog */
-> +	reg_write(wdt->regs, IWDG_KR, KR_KEY_ENABLE);
-> +
-> +	/* reload watchdog */
-> +	reg_write(wdt->regs, IWDG_KR, KR_KEY_RELOAD);
-> +
-> +	set_bit(WDOG_HW_RUNNING, &wdd->status);
-> +	return 0;
-> +}
-> +
-> +static int stm32_iwdg_setprescaler(struct watchdog_device *wdd)
-> +{
-> +	struct stm32_iwdg *wdt = watchdog_get_drvdata(wdd);
-> +	u32 tout, presc, iwdg_rlr, iwdg_pr;
+> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+> index fef7c61..f1a431c 100644
+> --- a/drivers/watchdog/dw_wdt.c
+> +++ b/drivers/watchdog/dw_wdt.c
+> @@ -114,7 +114,15 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
+>   	writel(top_val | top_val << WDOG_TIMEOUT_RANGE_TOPINIT_SHIFT,
+>   	       dw_wdt->regs + WDOG_TIMEOUT_RANGE_REG_OFFSET);
 >   
->   	dev_dbg(wdd->parent, "%s\n", __func__);
->   
-> @@ -108,19 +123,6 @@ static int stm32_iwdg_start(struct watchdog_device *wdd)
->   	/* set prescaler & reload registers */
->   	reg_write(wdt->regs, IWDG_PR, iwdg_pr);
->   	reg_write(wdt->regs, IWDG_RLR, iwdg_rlr);
-> -	reg_write(wdt->regs, IWDG_KR, KR_KEY_ENABLE);
-> -
-> -	/* wait for the registers to be updated (max 100ms) */
-> -	ret = readl_relaxed_poll_timeout(wdt->regs + IWDG_SR, iwdg_sr,
-> -					 !(iwdg_sr & (SR_PVU | SR_RVU)),
-> -					 SLEEP_US, TIMEOUT_US);
-> -	if (ret) {
-> -		dev_err(wdd->parent, "Fail to set prescaler, reload regs\n");
-> -		return ret;
-> -	}
-> -
-> -	/* reload watchdog */
-> -	reg_write(wdt->regs, IWDG_KR, KR_KEY_RELOAD);
+> -	wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
+> +	/*
+> +	 * In case users set bigger timeout value than HW can support,
+> +	 * kernel(watchdog_dev.c) helps to feed watchdog before
+> +	 * wdd->timeout
+
+No, before wdd->max_hw_heartbeat_ms.
+
+> +	 */
+> +	if ( top_s * 1000 <= wdd->max_hw_heartbeat_ms )
+> +		wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
+> +	else
+> +		wdd->timeout = top_s;
 >   
 >   	return 0;
 >   }
-> @@ -131,6 +133,9 @@ static int stm32_iwdg_ping(struct watchdog_device *wdd)
->   
->   	dev_dbg(wdd->parent, "%s\n", __func__);
->   
-> +	/*  Start the watchdog */
-> +	reg_write(wdt->regs, IWDG_KR, KR_KEY_ENABLE);
-> +
->   	/* reload watchdog */
->   	reg_write(wdt->regs, IWDG_KR, KR_KEY_RELOAD);
->   
-> @@ -140,12 +145,21 @@ static int stm32_iwdg_ping(struct watchdog_device *wdd)
->   static int stm32_iwdg_set_timeout(struct watchdog_device *wdd,
->   				  unsigned int timeout)
->   {
-> +	int ret;
-> +
->   	dev_dbg(wdd->parent, "%s timeout: %d sec\n", __func__, timeout);
->   
->   	wdd->timeout = timeout;
->   
-> -	if (watchdog_active(wdd))
-> -		return stm32_iwdg_start(wdd);
-> +	if (watchdog_active(wdd)) {
-> +		ret = stm32_iwdg_setprescaler(wdd);
-> +		if (ret) {
-> +			dev_err(wdd->parent, "failed to set prescaler\n");
-> +			return ret;
-> +		} else {
-> +			return stm32_iwdg_start(wdd);
-> +		}
-> +	}
->   
->   	return 0;
->   }
-> @@ -262,12 +276,21 @@ static int stm32_iwdg_probe(struct platform_device *pdev)
->   	watchdog_set_nowayout(wdd, WATCHDOG_NOWAYOUT);
->   	watchdog_init_timeout(wdd, 0, dev);
->   
-> +	/* Make sure the watchdog is serviced */
-> +	set_bit(WDOG_HW_RUNNING, &wdd->status);
-> +
->   	ret = devm_watchdog_register_device(dev, wdd);
->   	if (ret)
->   		return ret;
->   
->   	platform_set_drvdata(pdev, wdt);
->   
-> +	ret = stm32_iwdg_setprescaler(wdd);
-> +	if (ret) {
-> +		dev_err(dev, "failed to set prescaler\n");
-> +		return ret;
-> +	}
-> +
->   	return 0;
->   }
->   
 > 
 
