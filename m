@@ -2,127 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2329710479B
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Nov 2019 01:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA442104811
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Nov 2019 02:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfKUAge (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Nov 2019 19:36:34 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44919 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726573AbfKUAge (ORCPT
+        id S1725904AbfKUB3x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 20 Nov 2019 20:29:53 -0500
+Received: from cnshjsmin05.app.nokia-sbell.com ([116.246.26.45]:46910 "EHLO
+        cnshjsmin05.nokia-sbell.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725819AbfKUB3w (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Nov 2019 19:36:34 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q26so669104pfn.11;
-        Wed, 20 Nov 2019 16:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=smBw2eSn7Wp6DrTkKu9yGmpFd55bs+SJ4cWsLvwYGXE=;
-        b=ryg+BN4y7EBIVMsofGNAq5juHnPPshbmSN1na0SOHB2c8Mhdix1jEoG/26zGLqY2LF
-         yERmeUFFkY874jEZPjrXdbbaokgCgWe2flqYt64wJaeAkpQcIIA6CkS6OYTun1h5H8Bd
-         wY8U5GgirFmA8w4xzqIKTkE1VTdSvhvvES7BF9nYvbW8r7itusBgfT8nrgVMEZp/1a1p
-         KwhIXXqJYibgXK61dVCBNwLq+8HMk86KUiyJ7sL1dOwOWTUdpaV6xUUhba/lmujVjlkY
-         78Krz6DDYDKXuv1XYT68RnnsJSHlpIN/6vmMqChLHeVJ2GTz0CzFzxVWOUxraZEjz1hg
-         sWfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=smBw2eSn7Wp6DrTkKu9yGmpFd55bs+SJ4cWsLvwYGXE=;
-        b=KyFJI1j/O1aWVhBEE4D7S2gu8lfno8/tC/iscNwm/3RwlyZrTKY8no57Tpj7AAUMWI
-         nO6Ia53vrBpZBxjdICnqQqnebLjUqgwVmLKakCpRcbUK1jyMXI5G+CDNTdGTGyCMr9rB
-         tsZESFg7j1Q+dArLq5Fkxf93TUBb31DQDa/jVd6Z/PfzxpFyjcKzkdpkKBBNcVIxiwhz
-         6JLFfQOPX87EEOHrhe94L2LRTQGbfiK+cA4WT5557yrCuH6qBxTnBubYWVEVWx2T/Hm0
-         CJBCAJ9JpMDJgKpZN7Y4uFFfFxr0kCTx33zyEdsNEE3Z+8fxYxGgFRO0+CCIT81JB01P
-         NTYQ==
-X-Gm-Message-State: APjAAAU3VZQXz7yU3JTEE/6Y6lTrUhxhZw7gTa3BSVIosifEfZCjYcD7
-        qEMyYW5Uo9XHX0/lLXUOhYQ=
-X-Google-Smtp-Source: APXvYqwggVMXLJ0YMoRGcJX+V0U2VVPPBgEBy+EYa20Y3sfv68nS805W6coHI3CeMdeYxB4DXP4zTg==
-X-Received: by 2002:a63:33ca:: with SMTP id z193mr5871639pgz.83.1574296593382;
-        Wed, 20 Nov 2019 16:36:33 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r24sm410551pgu.36.2019.11.20.16.36.31
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 Nov 2019 16:36:32 -0800 (PST)
-Date:   Wed, 20 Nov 2019 16:36:30 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Laura Abbott <labbott@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Lennert Buytenhek <kernel@wantstofly.org>
-Subject: Re: [PATCH] watchdog: Remove iop_wdt
-Message-ID: <20191121003630.GA1530@roeck-us.net>
-References: <20191118220432.1611-1-labbott@redhat.com>
- <29e94219-22ca-c873-7209-64d1c357fe5c@roeck-us.net>
- <CAK8P3a0=3J3WHTKU7sPvd37VEwg3wOuZ5S2-xXtNYEcSQhWyHw@mail.gmail.com>
- <4f283ab6-0f3c-60e9-cfd1-29d10d978986@roeck-us.net>
- <20191120100341.GK25745@shell.armlinux.org.uk>
- <CAK8P3a2N+aDgFz75dFJy3Me9FPdyDSyPaa29FngLjfXX3MzfvA@mail.gmail.com>
- <20191120103054.GM25745@shell.armlinux.org.uk>
- <20191120230518.GA28840@roeck-us.net>
- <20191120235652.GW25745@shell.armlinux.org.uk>
+        Wed, 20 Nov 2019 20:29:52 -0500
+X-AuditID: ac18929d-483ff700000014de-de-5dd5e88875a1
+Received: from CNSHPPEXCH1606.nsn-intra.net (Unknown_Domain [135.251.51.106])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by cnshjsmin05.nokia-sbell.com (Symantec Messaging Gateway) with SMTP id E1.24.05342.888E5DD5; Thu, 21 Nov 2019 09:29:44 +0800 (HKT)
+Received: from CNSHPPEXCH1601.nsn-intra.net (135.251.51.101) by
+ CNSHPPEXCH1606.nsn-intra.net (135.251.51.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 21 Nov 2019 09:29:44 +0800
+Received: from CNSHPPEXCH1601.nsn-intra.net ([135.251.51.101]) by
+ CNSHPPEXCH1601.nsn-intra.net ([135.251.51.101]) with mapi id 15.01.1713.007;
+ Thu, 21 Nov 2019 09:29:44 +0800
+From:   "Wang, Peng 1. (NSB - CN/Hangzhou)" <peng.1.wang@nokia-sbell.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] watchdog: make DesignWare watchdog allow users to set
+ bigger timeout value
+Thread-Topic: [PATCH] watchdog: make DesignWare watchdog allow users to set
+ bigger timeout value
+Thread-Index: AdWfimD0awmuxWORQi2dTd1MQDV31P//8UQA//7z6PA=
+Date:   Thu, 21 Nov 2019 01:29:44 +0000
+Message-ID: <9128f42a3e4347f2adfccb8aa2833e2e@nokia-sbell.com>
+References: <13477f08400047c1b32030b2680a4241@nokia-sbell.com>
+ <20191120171512.GA28255@roeck-us.net>
+In-Reply-To: <20191120171512.GA28255@roeck-us.net>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [135.251.51.115]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191120235652.GW25745@shell.armlinux.org.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDIsWRmVeSWpSXmKPExsXS/ts4S7fjxdVYg6/fdC0u75rDZnFj3T52
+        iycLzzBZPH75j9mBxWPlmjWsHju/N7B7fN4kF8AcxWWTkpqTWZZapG+XwJXxr2cCS8Fj8YrF
+        y5qZGhiXCncxcnJICJhIPHv7lgXEFhI4xCTxZ5lWFyMXkP2XUWLnldNsEM4mRokrW7+xg1Sx
+        CbhLNG1axwZiiwioSTSfagErYhbYzSgxt/EN2ChhgUSJ6y/OM0EUJUncePifBcK2kvj86zpY
+        M4uAqsSsW4+BhnJw8ArYSXTdNIC4Ik3i9qteRhCbU8BI4urEnWBjGAVkJaY9ug9mMwuIS9x6
+        Mp8J4gMBiSV7zjND2KISLx//YwUZKSGgJNG3AapcR2LB7k9sELa2xLKFr8HKeQUEJU7OfMIy
+        gVFsFpKps5C0zELSMgtJywJGllWM0sl5xRlZxbmZeQamenn52ZmJusVJqTk5esn5uZsYgXG2
+        RmLS3B2MnZ3xhxgFOBiVeHgzNK7GCrEmlhVX5h5ilOBgVhLh3XP9SqwQb0piZVVqUX58UWlO
+        avEhRmkOFiVx3pbJC2OFBNITS1KzU1MLUotgskwcnFINjFaf7lw7uuci1125AOWbU69X1Hvv
+        nCOusUi47turuI0OTMUGJcseuSfI7XZQWRfWumhFa5bmTe6KPa7pjj1fr/6xt200X/jtl9Ps
+        zTyHSx5//1ffxvBNZ4ZdyI4GhQdNRsIS2U0bDAUm7ViyIbffymvDxZ0t0uvspq/62CeiuTHF
+        zlS9rqKOQ4mlOCPRUIu5qDgRAAFHRbOvAgAA
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Nov 20, 2019 at 11:56:52PM +0000, Russell King - ARM Linux admin wrote:
-> On Wed, Nov 20, 2019 at 03:05:18PM -0800, Guenter Roeck wrote:
-> > On Wed, Nov 20, 2019 at 10:30:54AM +0000, Russell King - ARM Linux admin wrote:
-> > > On Wed, Nov 20, 2019 at 11:15:01AM +0100, Arnd Bergmann wrote:
-> > > > On Wed, Nov 20, 2019 at 11:03 AM Russell King - ARM Linux admin
-> > > > <linux@armlinux.org.uk> wrote:
-> > > > > On Tue, Nov 19, 2019 at 06:29:09AM -0800, Guenter Roeck wrote:
-> > > > > > On 11/19/19 1:40 AM, Arnd Bergmann wrote:
-> > > > > > > On Tue, Nov 19, 2019 at 3:08 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > > > > > On 11/18/19 2:04 PM, Laura Abbott wrote:
-> > > > > >
-> > > > > > Good point, especially since apparently no one cared for five years.
-> > > > >
-> > > > > Doesn't mean that there aren't interested parties.  I still have
-> > > > > IOP32x hardware running here in the form of a N2100 (my firewall)
-> > > > > and it seems that I never noticed this option disappearing until
-> > > > > now...
-> > > > 
-> > > > It's not that it was ever there for IOP32x: the driver was introduced in 2007
-> > > > and was available for IOP32x but failed to compile for it until 2014 when
-> > > > I sent the patch to disable the driver in all configurations that
-> > > > failed to build.
-> > > 
-> > > Well:
-> > > 
-> > > systems/n2100/boot/config-3.11.5+:CONFIG_IOP_WATCHDOG=m
-> > > systems/n2100/boot/config-3.12.6+:CONFIG_IOP_WATCHDOG=m
-> > > systems/n2100/boot/config-3.9.5+:CONFIG_IOP_WATCHDOG=m
-> > > 
-> > > -rw-rw-r-- 1 rmk rmk 5284 Dec 30  2013 systems/n2100/lib/modules/3.12.6+/kernel/drivers/watchdog/iop_wdt.ko
-> > > -rw-rw-r-- 1 rmk rmk 5276 Dec 20  2013 systems/n2100/lib/modules/3.9.5+/kernel/drivers/watchdog/iop_wdt.ko
-> > > 
-> > > It seems I've been carrying a patch to comment out the troublesome code:
-> > > 
-> > > -       write_wdtsr(IOP13XX_WDTCR_IB_RESET);
-> > > +//     write_wdtsr(IOP13XX_WDTCR_IB_RESET);
-> > > 
-> > > in my stable tree since 2015.
-> > 
-> > Do you have plans to update that kernel to mainline ?
-> > If yes, a patch to make the driver (and I guess everything else that broke
-> > since 3.12) work would be helpful.
+Hi Guenter, 
+
+Thank you for your time.
+- I will remove the unnecessary {}
+- wdd->max_hw_heartbeat_ms is the max timeout value which HW can support, this value is limited according to the input clock, say. It only supports 20 seconds, if users requires to set timeout to be say. 60 seconds, the watchdog device driver 'watchdog_dev.c' checks if wdd->timeout is bigger than wdd->max_hw_heartbeat_ms, if yes, watchdog_dev.c feeds the watchdog by a worker queue itself to help to feed the watchdog before 60 seconds elapse. Here the issue of dw_wdt.c is that, the original codes update wdd->timeout to the value which HW can support, which means if users requires 60 seconds to be the timeout, then dw_wdt.c updates the timeout value to 20 seconds, this makes the "feeding helper" mechanism in watchdog_dev.c not take effect. That's why I add this check.
+
+Thanks,
+Peng Wang
+
+-----Original Message-----
+From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter Roeck
+Sent: Thursday, November 21, 2019 1:15 AM
+To: Wang, Peng 1. (NSB - CN/Hangzhou) <peng.1.wang@nokia-sbell.com>
+Cc: wim@linux-watchdog.org; linux-watchdog@vger.kernel.org; linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: make DesignWare watchdog allow users to set bigger timeout value
+
+On Wed, Nov 20, 2019 at 10:07:57AM +0000, Wang, Peng 1. (NSB - CN/Hangzhou) wrote:
+> From 1d051b7c081083751dc0bab97d3ab9efbba0f4a7 Mon Sep 17 00:00:00 2001
+> From: Peng Wang <peng.1.wang@nokia-sbell.com>
+> Date: Wed, 20 Nov 2019 15:12:59 +0800
+> Subject: [PATCH] watchdog: make DesignWare watchdog allow users to set 
+> bigger  timeout value
 > 
-> It's a currently running 4.19.xx stable kernel, but as a result of the
-> patch to the Kconfig file, without the watchdog which I hadn't realised
-> until I saw this thread.  Is that mainline enough?
+> watchdog_dev.c provides means to allow users to set bigger timeout 
+> value than HW can support, make DesignWare watchdog align with this.
 > 
-Yes. Can you send me a patch with the above fix and the necessary Kconfig
-change ?
+> Signed-off-by: Peng Wang <peng.1.wang@nokia-sbell.com>
+> ---
+>  drivers/watchdog/dw_wdt.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c 
+> index fef7c61..8911e5e 100644
+> --- a/drivers/watchdog/dw_wdt.c
+> +++ b/drivers/watchdog/dw_wdt.c
+> @@ -113,8 +113,15 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
+>  	 */
+>  	writel(top_val | top_val << WDOG_TIMEOUT_RANGE_TOPINIT_SHIFT,
+>  	       dw_wdt->regs + WDOG_TIMEOUT_RANGE_REG_OFFSET);
+> -
+> -	wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
+> +    
+> +    /*
+> +     * In case users set bigger timeout value than HW can support,
+> +     * kernel(watchdog_dev.c) helps to feed watchdog before 
+> +     * wdd->timeout
+> +     */
+> +    if ( wdd->timeout * 1000 <= wdd->max_hw_heartbeat_ms ) {
+> +	    wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
+> +    }
+
+{ } is unnecessary here. Also, the above code compares the _old_ timeout againt the maximum supported timeout, which doesn't look correct.
 
 Thanks,
 Guenter
+
+>  
+>  	return 0;
+>  }
+> --
+> 1.8.3.1
+> 
