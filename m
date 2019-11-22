@@ -2,130 +2,134 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC6210604F
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Nov 2019 06:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C68A7106812
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Nov 2019 09:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726554AbfKVFiu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Nov 2019 00:38:50 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:38560 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfKVFiu (ORCPT
+        id S1727445AbfKVIZ1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Nov 2019 03:25:27 -0500
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:35050 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727422AbfKVIZX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:38:50 -0500
-Received: by mail-pj1-f68.google.com with SMTP id f7so2571488pjw.5;
-        Thu, 21 Nov 2019 21:38:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=8dvSdtqu6VrgOIk7nTpyJSf73Tmmywkq2XApZ/zllzc=;
-        b=EaW6nMbB1mOof5a3IlyBBXHvxW8PED1/Or4QY1TwmjN8VpPwdYEWZ0HE+Q0OilJT3y
-         WBSl3pT4KsVj77SaZh9PH8+5K889vJb+hDm553b4JPJmx4nHg3clpTHHm7J9VOowdo4D
-         /qXR8SPHlqW389eh3qqDQV6P7WjEHgZ/62/aSoR7JjI39X9jMsZOqNueCUAcG5B4syfR
-         ODEb0riAbPJbr9SrFGt2w0t3zS0EeTJa3b+sgAV2eLxQk2+PcYH6Z8M6oPISod6hXJ7J
-         sCkEyxxG5MkugPGFSJdJQLnEfmhWpLSSzCFqibmovpnIMt7zCqhq2pD9xlFfPBPxF23u
-         XBXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=8dvSdtqu6VrgOIk7nTpyJSf73Tmmywkq2XApZ/zllzc=;
-        b=A2+ppskKO4+sHhKVaV4vEL58b6VBSpeYxAJI3wrMbgnBYKXbzTPiIJFsIe4O9RvdrO
-         f62loP5yVp/PefMb0MpbJ7nz4GrRqyUU8bwsltkG7rA80nxT9Z46IHGDW0YSHJQtnu1L
-         RowJ+s3G4rbqQ7oy8kOqzoe/05MgEh1IJ2UUbGR/qqu4OMagS+Gr0frBHLwu2yo2jc90
-         2eSImE6YC3gkQ3v9liyo3DocAQzpi4j3sLAdAc8exi4MTt1qFREmPo8ydLJg1gKlIPGz
-         CRQkK8vz1n2MtEdHGSPi/47wPgy/wVnOrqtpy6Nk9Cp+HFqm3v3DusneWzndBqNxLhQf
-         bKtw==
-X-Gm-Message-State: APjAAAUZvIme9TG+TsvRZK/3HlWmsvgRbhFskjY2E3+vyjrq+kGIi22u
-        KMrsqxjpymTBK7/Vw2T19y94hISj
-X-Google-Smtp-Source: APXvYqxqyvqbkhGAU6fdMSAquhZz1M7mkoymP0Y7QWhxl9QYqwhhUBPdfTpaSUnZASPyAt9xkbdQ7Q==
-X-Received: by 2002:a17:90a:d204:: with SMTP id o4mr15832121pju.40.1574401129319;
-        Thu, 21 Nov 2019 21:38:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j4sm1323616pjf.25.2019.11.21.21.38.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Nov 2019 21:38:48 -0800 (PST)
-Subject: Re: [PATCH v2] watchdog: make DesignWare watchdog allow users to set
- bigger timeout value
-To:     "Wang, Peng 1. (NSB - CN/Hangzhou)" <peng.1.wang@nokia-sbell.com>,
-        Guenter Roeck <groeck7@gmail.com>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <dc8ce91610dd4860858bfe92f104d74a@nokia-sbell.com>
-From:   Guenter Roeck <guenter@roeck-us.net>
-Message-ID: <2b2a1beb-d735-210c-847a-e3211f9efeca@roeck-us.net>
-Date:   Thu, 21 Nov 2019 21:38:47 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Fri, 22 Nov 2019 03:25:23 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAM8Ca4X024404;
+        Fri, 22 Nov 2019 09:24:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=7YG8hMLBlcZH9okyAWH+GnK29WW6bCIlSdmP8Pj50xc=;
+ b=uY2pBRUENT6U808IvNJJEG1i+oGTu0K6UkQAwayp/bbNLUqHRt9u83Jqvaf1v6+JQ1wX
+ ZzasUcvdG1WuL2QXjKyxjm4ZHPunMVyUzigvdsys15VzAg1s+wEXi79EcXcey5j4w8kZ
+ kRZlk3OFfdvyix+IwF9Q2LP1kuMrqpbkfeBH8vesx0GA4qf+apH7eBthFt/oEkb0Jepd
+ S3uGBnUyRC1OBGWU1fXyLh84+FanVB/Fads5+NlEGbvQH+OqHO6LNcfI1zE+g3/qNqXE
+ uTvLcGCdf1FyCHLE848tYP3K0BzCoMkFGw9DYq6zcyOtc9ZinZl1a09RUBSnEmVNuHqA tQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2wa9ujfmpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Nov 2019 09:24:48 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9B356100034;
+        Fri, 22 Nov 2019 09:24:47 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8B3552AD9F3;
+        Fri, 22 Nov 2019 09:24:47 +0100 (CET)
+Received: from localhost (10.75.127.45) by SFHDAG5NODE3.st.com (10.75.127.15)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 22 Nov 2019 09:24:46
+ +0100
+From:   Christophe Roullier <christophe.roullier@st.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>
+CC:     <linux-watchdog@vger.kernel.org>, <christophe.roullier@st.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v2 1/1] drivers: watchdog: stm32_iwdg: set WDOG_HW_RUNNING at probe
+Date:   Fri, 22 Nov 2019 09:24:42 +0100
+Message-ID: <20191122082442.21695-1-christophe.roullier@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <dc8ce91610dd4860858bfe92f104d74a@nokia-sbell.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG5NODE3.st.com
+ (10.75.127.15)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-21_07:2019-11-21,2019-11-21 signatures=0
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/21/19 2:35 AM, Wang, Peng 1. (NSB - CN/Hangzhou) wrote:
->  From aabaa4b709bd451e566c906e8d1dca48f92f9b12 Mon Sep 17 00:00:00 2001
-> From: Peng Wang <peng.1.wang@nokia-sbell.com>
-> Date: Wed, 20 Nov 2019 15:12:59 +0800
-> Subject: [PATCH] watchdog: make DesignWare watchdog allow users to set bigger
->   timeout value
->
-> watchdog_dev.c provides means to allow users to set bigger timeout value
-> than HW can support, make DesignWare watchdog align with this.
->
-> ---
->
-> v2 -> v1:
->         - use top_s to compare with wdd->max_hw_heartbeat_ms
->         - update wdd->timeout in case it's greater than HW supports
->         - fix comments error
->
-> v1: initial version
->
-> Signed-off-by: Peng Wang <peng.1.wang@nokia-sbell.com>
+If the watchdog hardware is already enabled during the boot process,
+when the Linux watchdog driver loads, it should start/reset the watchdog
+and tell the watchdog framework. As a result, ping can be generated from
+the watchdog framework (if CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is set),
+until the userspace watchdog daemon takes over control
 
-Sigh. I should have paid closer attention. Signed-off-by: has to be ahead of ---,
+Fixes:4332d113c66a ("watchdog: Add STM32 IWDG driver")
 
-and the change log after it. The above format messes up everything.
-
-Also, please run checkpatch and fix the problems it reports.
-
-Sorry for not noticing it earlier. Please fix the problems and resubmit.
+Signed-off-by: Christophe Roullier <christophe.roullier@st.com>
+---
+Changes since v1:
+According to Guenter
+I follow the guidance from intel-mid_wdt.c
+and I added test to check if CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is set
+because we need to be flexible (depends on customer config, but watchdog
+not always start by bootloader (Uboot, ..))
+I've tested some config and it is working as expected:
+Watchdog enable in Uboot + HANDLE_BOOT_ENABLE is not set + daemon watchdog in userland ON ==> No reset IWDG2
+Watchdog enable in Uboot + HANDLE_BOOT_ENABLE is not set ==> Reset IWDG2
+Watchdog enable in Uboot + HANDLE_BOOT_ENABLE=y ==> No reset IWDG2
+Watchdog enable in Uboot + HANDLE_BOOT_ENABLE=y + daemon watchdog in userland ON puis OFF ==> Reset IWDG2
+Watchdog disable in Uboot + HANDLE_BOOT_ENABLE is not set ==> No reset IWDG2
+Watchdog disable in Uboot + HANDLE_BOOT_ENABLE=y ==> No reset IWDG2
+Watchdog disable in Uboot + HANDLE_BOOT_ENABLE=y + daemon watchdog in userland ON ==> No reset IWDG2
+Watchdog disable in Uboot + HANDLE_BOOT_ENABLE=y + daemon watchdog in userland ON puis OFF ==> Reset IWDG2
 
 Thanks,
+Christophe
 
-Guenter
+ drivers/watchdog/stm32_iwdg.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-> ---
->   drivers/watchdog/dw_wdt.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index fef7c61..12c116e 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -114,7 +114,15 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
->   	writel(top_val | top_val << WDOG_TIMEOUT_RANGE_TOPINIT_SHIFT,
->   	       dw_wdt->regs + WDOG_TIMEOUT_RANGE_REG_OFFSET);
->   
-> -	wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
-> +	/*
-> +	 * In case users set bigger timeout value than HW can support,
-> +	 * kernel(watchdog_dev.c) helps to feed watchdog before
-> +	 * wdd->max_hw_heartbeat_ms
-> +	 */
-> +	if ( top_s * 1000 <= wdd->max_hw_heartbeat_ms )
-> +		wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
-> +	else
-> +		wdd->timeout = top_s;
->   
->   	return 0;
->   }
-
+diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+index a3a329011a06..7f454a6e17ba 100644
+--- a/drivers/watchdog/stm32_iwdg.c
++++ b/drivers/watchdog/stm32_iwdg.c
+@@ -50,6 +50,9 @@
+ #define TIMEOUT_US	100000
+ #define SLEEP_US	1000
+ 
++static bool handle_boot_enabled =
++	IS_ENABLED(CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED);
++
+ struct stm32_iwdg_data {
+ 	bool has_pclk;
+ 	u32 max_prescaler;
+@@ -262,6 +265,24 @@ static int stm32_iwdg_probe(struct platform_device *pdev)
+ 	watchdog_set_nowayout(wdd, WATCHDOG_NOWAYOUT);
+ 	watchdog_init_timeout(wdd, 0, dev);
+ 
++	/*
++	 * In case of CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is set
++	 * (Means U-Boot/bootloaders leaves the watchdog running)
++	 * When we get here we should make a decision to prevent
++	 * any side effects before user space daemon will take care of it.
++	 * The best option, taking into consideration that there is no
++	 * way to read values back from hardware, is to enforce watchdog
++	 * being run with deterministic values.
++	 */
++	if (handle_boot_enabled) {
++		ret = stm32_iwdg_start(wdd);
++		if (ret)
++			return ret;
++
++		/* Make sure the watchdog is serviced */
++		set_bit(WDOG_HW_RUNNING, &wdd->status);
++	}
++
+ 	ret = devm_watchdog_register_device(dev, wdd);
+ 	if (ret)
+ 		return ret;
+-- 
+2.17.1
 
