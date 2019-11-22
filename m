@@ -2,166 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA3A107286
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Nov 2019 13:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46601072EE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Nov 2019 14:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727090AbfKVMyt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Nov 2019 07:54:49 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:34061 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727008AbfKVMys (ORCPT
+        id S1726568AbfKVNPl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Nov 2019 08:15:41 -0500
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:40738 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726548AbfKVNPk (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Nov 2019 07:54:48 -0500
-Received: by mail-ot1-f65.google.com with SMTP id w11so6097210ote.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 22 Nov 2019 04:54:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=j95HJ+nW6cJV5FbqnwQq2oUU5AzggiyFmjXhPsXGGkA=;
-        b=KeHQ7CuY1RiuGSNN9lSXKXlmkvEL7Qn3cjnjc70Pe/6CR2+WrnYQgx9m5VMLNIh11O
-         SiipFXxlSFRaMckkisT6Gjvi0Ycf2C1LtS6/w4Dxpd5sayx6GPVIreZlKNq/8TUx1EID
-         g7jN0TJnY71FbfothIHM4aK7/nZpSifSdTC/fgk78P51AkyblzwJWH7i5k69OafW3iCJ
-         ov/Rz+3a9Ef5E0n8jihXEbKgXlgb/ltvwkVCMOXn5V5zk8GEevksjY5OmVCffM+I4TVA
-         75dkI4vxahIrTQeJTiwYmfUey00X9CgUHs6tWT0G3JUq9xYvBBD5a729bkPL5pXQA4Oo
-         EOCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=j95HJ+nW6cJV5FbqnwQq2oUU5AzggiyFmjXhPsXGGkA=;
-        b=VFvzhiqqHNP6HjZjvGTPQayCSA1y13W4/kHpZwVOfWia1c53kldNdMYhegcOHluVIo
-         xw2aZRlRTbaSSpusHo+ANrnlbqeALomSkF7qVMZ8C1pbLpNgSSYDlPN9Bj/wPaL2umPE
-         mDoDNu+T/Hsh5K1+p1oPp1T8d7roLZhfOI45TgNbCijpJ9245SmmpExt93Cs6ILqZHk/
-         Rg+MPDcxfv7QEKFM1hUjCkZ8cQzWEYTQcke2/eOwdaiukZcNmDoEtOQnxJocgTYknSQv
-         nsTIF0zNIU12COidlEmjPiwh8f4n/hvj3WUlagMQ0QDrWaaNqX/Poe1Nne0hrPf2jdRV
-         APIQ==
-X-Gm-Message-State: APjAAAVogU5X+AUMmzxYf7NSwOPYixUSQfSFypgjzJ5XjJfSlTRjP7q/
-        P1Ua4sxCfL2JOEV0FB8rJTTXRYN9BH9bOOwkoxY28TXQpEo=
-X-Google-Smtp-Source: APXvYqzQ6zX4zZtb6UoV9LagLBMvZRMTDYTNcBOvl1shgQqQe6GivRK+HlB4l2bu70h/KBSdrlNY7XAMaSPhqzCbgIQ=
-X-Received: by 2002:a05:6830:d5:: with SMTP id x21mr10970391oto.310.1574427287719;
- Fri, 22 Nov 2019 04:54:47 -0800 (PST)
+        Fri, 22 Nov 2019 08:15:40 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAMDC3Zm016600;
+        Fri, 22 Nov 2019 14:15:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=fsOHhYzNXWXB343toBErYF3JFgQsNuXPAR+dwnBzdGI=;
+ b=0FAzw4EA1OF5EXTJYHgyEdlBJ+LLlYEYsIyl5Rpius2KHdsBDYFutFMljQDvgXJZSBcj
+ WZ9BAnGc+kgpN9AZ/bPRixPvdI5VSary5czGFV3YJUMTE1Oonh02vPb8liPPJoWl0s+C
+ xxymM2nU/9hGpRmrPFJlU3I/+ZnWslsGi0NGcF4q/gfT1qWlje1uLUzI83Wi8Cwn7DPN
+ u8IhapLtXx2vJ96YYGv9YPRk9zEIuTiX55Zv9Yu5BDBh2a2uTYsaJBEo+ZptplgNeAJe
+ Cjnkv8jKvex5+laaI3PUbz+6K3f0QgMrisiDLjZFyHlsozMOANwcjPsQKmPidJ3zP6qT Ag== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2wa9ujgx69-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Nov 2019 14:15:08 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E875110002A;
+        Fri, 22 Nov 2019 14:15:07 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D1A902BE244;
+        Fri, 22 Nov 2019 14:15:07 +0100 (CET)
+Received: from SFHDAG5NODE3.st.com (10.75.127.15) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 22 Nov
+ 2019 14:15:07 +0100
+Received: from SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47]) by
+ SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47%20]) with mapi id
+ 15.00.1473.003; Fri, 22 Nov 2019 14:15:07 +0100
+From:   Christophe ROULLIER <christophe.roullier@st.com>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [Linux-stm32] [PATCH v2 1/1] drivers: watchdog: stm32_iwdg: set
+ WDOG_HW_RUNNING at probe
+Thread-Topic: [Linux-stm32] [PATCH v2 1/1] drivers: watchdog: stm32_iwdg: set
+ WDOG_HW_RUNNING at probe
+Thread-Index: AQHVoQ5NhIxTjK/sUU24wk/cKk90B6eW7F6AgAAucQA=
+Date:   Fri, 22 Nov 2019 13:15:07 +0000
+Message-ID: <70c319bd-866c-5305-e535-ead663652c5f@st.com>
+References: <20191122082442.21695-1-christophe.roullier@st.com>
+ <ea80ec65-8621-453c-4d5b-af38d8afeb70@pengutronix.de>
+In-Reply-To: <ea80ec65-8621-453c-4d5b-af38d8afeb70@pengutronix.de>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.45]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <199B8515659CB941A78B6E41A371D31C@st.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CAHhAz+h6SuGKWn0qNqsCdNjDks_vHuJW-KfiQja_b3x8x=vq_A@mail.gmail.com>
- <20191118143838.GA29359@google.com> <CAHhAz+j7v-Utpir8wyCVORv_fthdLLg_spR_G+8TjBBSyJa6wA@mail.gmail.com>
- <f28024de-bfad-5f3e-6332-aebfa48991a8@roeck-us.net>
-In-Reply-To: <f28024de-bfad-5f3e-6332-aebfa48991a8@roeck-us.net>
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Fri, 22 Nov 2019 18:24:36 +0530
-Message-ID: <CAHhAz+jtq84Va9arE5EXB9w7XgYj4CNU-dCudvpjRaaYf1JT4g@mail.gmail.com>
-Subject: Re: watchdog: how to enable?
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-watchdog@vger.kernel.org,
-        wim@linux-watchdog.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-22_02:2019-11-21,2019-11-22 signatures=0
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 4:29 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 11/18/19 7:09 AM, Muni Sekhar wrote:
-> > On Mon, Nov 18, 2019 at 8:08 PM Bjorn Helgaas <helgaas@kernel.org> wrot=
-e:
-> >>
-> >> [-cc linux-pci (nothing here is PCI-specific)]
-> >>
-> >> On Sat, Nov 16, 2019 at 06:05:05AM +0530, Muni Sekhar wrote:
-> >>> My kernel is built with the following options:
-> >>>
-> >>> $ cat /boot/config-5.0.1 | grep NO_HZ
-> >>> CONFIG_NO_HZ_COMMON=3Dy
-> >>> CONFIG_NO_HZ_IDLE=3Dy
-> >>> # CONFIG_NO_HZ_FULL is not set
-> >>> CONFIG_NO_HZ=3Dy
-> >>> CONFIG_RCU_FAST_NO_HZ=3Dy
-> >>>
-> >>> I booted with watchdog enabled(nmi_watchdog=3D1) as given below:
-> >>>
-> >>> BOOT_IMAGE=3D/boot/vmlinuz-5.0.1
-> >>> root=3DUUID=3Df65454ae-3f1d-4b9e-b4be-74a29becbe1e ro debug
-> >>> ignore_loglevel console=3DttyUSB0,115200 console=3Dtty0 console=3Dtty=
-1
-> >>> console=3DttyS2,115200 memmap=3D1M!1023M nmi_watchdog=3D1
-> >>> crashkernel=3D384M-:128M
-> >>>
-> >>> When the system is frozen or the kernel is locked up(I noticed that i=
-n
-> >>> this state kernel is not responding for ALT-SysRq-<command key>) but
-> >>> watchdog is not triggered. So I want to understand how to enable the
-> >>> watchdog timer and how to verify the basic watchdog functionality
-> >>> behavior?
-> >>
-> >> I don't know much about the watchdog, but I assume you've found these
-> >> already?
-> >>
-> >>    Documentation/admin-guide/lockup-watchdogs.rst
-> >>    Documentation/admin-guide/sysctl/kernel.rst
-> >>
-> >> Do you have CONFIG_HAVE_NMI_WATCHDOG=3Dy?  (See arch/Kconfig)
-> >
-> > I don=E2=80=99t have CONFIG_HAVE_NMI_WATCHDOG in kernel .config file.
-> >
->
-> That would mean you don't have NMI in the first place. What is your
-> architecture ?
-
-My system has =E2=80=9CIntel(R) Atom(TM) CPU  E3845=E2=80=9D processor and =
-running
-=E2=80=98uname -m=E2=80=99 gives x86_64.
-
-/proc/interrupts gives the below statistics for NMI:
-
-$ cat /proc/interrupts | grep NMI
- NMI:       4207       4167        125   Non-maskable interrupts
-
-
->
-> Guenter
->
-> > $cat /boot/config-5.0.1 | grep CONFIG_HAVE_NMI_WATCHDOG
-> >
-> > But tried to enable CONFIG_HAVE_NMI_WATCHDOG via menuconfig, but could
-> > not able to find it. What is the role of CONFIG_HAVE_NMI_WATCHDOG?
-> >
-> > Symbol: HAVE_NMI_WATCHDOG [=3Dn]
-> >
-> >                                              =E2=94=82
-> >    =E2=94=82 Type  : bool
-> >
-> >                                                  =E2=94=82
-> >    =E2=94=82   Defined at arch/Kconfig:339
-> >
-> >                                                  =E2=94=82
-> >    =E2=94=82   Depends on: HAVE_NMI [=3Dy]
-> >
-> >                                                  =E2=94=82
-> >    =E2=94=82   Selected by [n]:
-> >
-> >                                                  =E2=94=82
-> >    =E2=94=82   - HAVE_HARDLOCKUP_DETECTOR_ARCH [=3Dn]
-> >
-> >
-> >    =E2=94=82 Symbol: HAVE_HARDLOCKUP_DETECTOR_ARCH [=3Dn]
-> >
-> >                                                  =E2=94=82
-> >    =E2=94=82 Type  : bool
-> >
-> >                                                  =E2=94=82
-> >    =E2=94=82   Defined at arch/Kconfig:346
-> >
-> >                                                  =E2=94=82
-> >    =E2=94=82   Selects: HAVE_NMI_WATCHDOG [=3Dn]
-> >
-> >
-> >
-> >
-> >
->
-
-
---=20
-Thanks,
-Sekhar
+DQpPbiAxMS8yMi8xOSAxMToyOCBBTSwgQWhtYWQgRmF0b3VtIHdyb3RlOg0KPiBIZWxsbyBDaHJp
+c3RvcGhlLA0KPg0KPiBPbiAxMS8yMi8xOSA5OjI0IEFNLCBDaHJpc3RvcGhlIFJvdWxsaWVyIHdy
+b3RlOg0KPj4gKwkvKg0KPj4gKwkgKiBJbiBjYXNlIG9mIENPTkZJR19XQVRDSERPR19IQU5ETEVf
+Qk9PVF9FTkFCTEVEIGlzIHNldA0KPj4gKwkgKiAoTWVhbnMgVS1Cb290L2Jvb3Rsb2FkZXJzIGxl
+YXZlcyB0aGUgd2F0Y2hkb2cgcnVubmluZykNCj4+ICsJICogV2hlbiB3ZSBnZXQgaGVyZSB3ZSBz
+aG91bGQgbWFrZSBhIGRlY2lzaW9uIHRvIHByZXZlbnQNCj4+ICsJICogYW55IHNpZGUgZWZmZWN0
+cyBiZWZvcmUgdXNlciBzcGFjZSBkYWVtb24gd2lsbCB0YWtlIGNhcmUgb2YgaXQuDQo+PiArCSAq
+IFRoZSBiZXN0IG9wdGlvbiwgdGFraW5nIGludG8gY29uc2lkZXJhdGlvbiB0aGF0IHRoZXJlIGlz
+IG5vDQo+PiArCSAqIHdheSB0byByZWFkIHZhbHVlcyBiYWNrIGZyb20gaGFyZHdhcmUsIGlzIHRv
+IGVuZm9yY2Ugd2F0Y2hkb2cNCj4+ICsJICogYmVpbmcgcnVuIHdpdGggZGV0ZXJtaW5pc3RpYyB2
+YWx1ZXMuDQo+IFdoYXQgYWJvdXQgdGhlICJPTkY6IFdhdGNoZG9nIGVuYWJsZSBzdGF0dXMgYml0
+IiBpbiB0aGUgSVdER19TUiByZWdpc3Rlcj8NCj4NCj4gQ2hlZXJzDQo+IEFobWFkDQo+DQpIaSwN
+Cg0KVGhhbmtzIEFobWFkIGZvciB5b3VyIGZlZWRiYWNrLCBpdCBpcyBhIG1pc3Rha2UgaW4gb3Vy
+IHJlZiBtYW51YWwuIFRoaXMgDQpiaXQgaXMgbm90IHByZXNlbnQNCg0KaW4gb3VyIGl3ZGcgSVAs
+IHdlIHdpbGwgdXBkYXRlIG91ciBkb2N1bWVudGF0aW9uIGFjY29yZGluZ2x5Lg0KDQpSZWdhcmRz
+LA0KDQpDaHJpc3RvcGhlDQo=
