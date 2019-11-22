@@ -2,370 +2,130 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B282B105FF4
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Nov 2019 06:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC6210604F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Nov 2019 06:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbfKVF3F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Nov 2019 00:29:05 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46731 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726620AbfKVF3F (ORCPT
+        id S1726554AbfKVFiu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Nov 2019 00:38:50 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:38560 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbfKVFiu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:29:05 -0500
-Received: by mail-pg1-f194.google.com with SMTP id r18so2772389pgu.13;
-        Thu, 21 Nov 2019 21:29:04 -0800 (PST)
+        Fri, 22 Nov 2019 00:38:50 -0500
+Received: by mail-pj1-f68.google.com with SMTP id f7so2571488pjw.5;
+        Thu, 21 Nov 2019 21:38:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LxWfYlOsK8SYuCtxV6P8f0iEPY1doejcu7wglQtrsMQ=;
-        b=ID1NL/6jXGNb7H8u6u7jSBgvc9YUktaocc9XZPnyoA7iGpYGGhCm75mqvq1iZvVXLL
-         sCReSkgBfW0JT0L0QDIuhiWPGyfF6CrcLTumGwy76XaGDGKSnZly9Dmc1NhmuO16Q4ps
-         IzwWwGTpR7N+3iEmQthLSprBphik4x9wTdyg1FxswQizZ0YyCBZs+CZ+K2U1K/RVx3Eg
-         4xvslP4XZhyAh09cpHB03mu9j64de9dDkBIcmYyOmDoJtlW+tIo6dCWY7h/zYtew7p0k
-         W626te5X6yzAUlGI76VucgTldRIKuWqKbLH+LGsKs1tASWB8Tj4ndGvT0KljMV6zarsD
-         GNYA==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=8dvSdtqu6VrgOIk7nTpyJSf73Tmmywkq2XApZ/zllzc=;
+        b=EaW6nMbB1mOof5a3IlyBBXHvxW8PED1/Or4QY1TwmjN8VpPwdYEWZ0HE+Q0OilJT3y
+         WBSl3pT4KsVj77SaZh9PH8+5K889vJb+hDm553b4JPJmx4nHg3clpTHHm7J9VOowdo4D
+         /qXR8SPHlqW389eh3qqDQV6P7WjEHgZ/62/aSoR7JjI39X9jMsZOqNueCUAcG5B4syfR
+         ODEb0riAbPJbr9SrFGt2w0t3zS0EeTJa3b+sgAV2eLxQk2+PcYH6Z8M6oPISod6hXJ7J
+         sCkEyxxG5MkugPGFSJdJQLnEfmhWpLSSzCFqibmovpnIMt7zCqhq2pD9xlFfPBPxF23u
+         XBXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LxWfYlOsK8SYuCtxV6P8f0iEPY1doejcu7wglQtrsMQ=;
-        b=KP7JdcAKg8l3Aq9hkcMDZuPOwPW0LLpLuX3f98gHSHKdITQblV9F14eRJZtuWbMo4j
-         YQXvc6i5wIxbs8LuIEA+Vjc0wBCKtcXTsVmzJMQO5ETq4QvO4t14qr/U8fCmEv1re+aF
-         /U+keJ+YLu0vrngp3WsZYPSTSf0WFMvSEIwYvqmhrJwt+VfP0VvDh8Qem/hesy1oFAHp
-         S9UWSpn5oUp5Ynk2nxQHkaRmmav/2/6QazqZA/MOCTU63PIsTu+esN0lUZEprmhDwWJh
-         QE8KSqhG0ss8AdTKc9gYUrtXJAoY4iWx9+Y3iACzQ2MAXL2yJvIZqueXlRdzp2BNPP9y
-         yXzw==
-X-Gm-Message-State: APjAAAVAu517PHtTfN9oi/65x0xMHEQsjSSM/c3JjgX3YBsPSat4UwgW
-        4ZLIzxFSit3I3mrPoQPkhoM=
-X-Google-Smtp-Source: APXvYqzmb7a7ElSTnBjmtfRBznEKvm9KiSrunoPdv7DgVFzYK64p9/Ee0wQmJ5exyNsLP+OD2biuNA==
-X-Received: by 2002:a62:545:: with SMTP id 66mr15158430pff.1.1574400543790;
-        Thu, 21 Nov 2019 21:29:03 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y22sm5349584pfn.6.2019.11.21.21.29.02
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 21 Nov 2019 21:29:03 -0800 (PST)
-Date:   Thu, 21 Nov 2019 21:29:02 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugen.Hristev@microchip.com
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nicolas.Ferre@microchip.com, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] watchdog: sama5d4_wdt: addition of sam9x60
- compatible watchdog
-Message-ID: <20191122052902.GA21879@roeck-us.net>
-References: <1574067012-18559-1-git-send-email-eugen.hristev@microchip.com>
- <1574067012-18559-3-git-send-email-eugen.hristev@microchip.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=8dvSdtqu6VrgOIk7nTpyJSf73Tmmywkq2XApZ/zllzc=;
+        b=A2+ppskKO4+sHhKVaV4vEL58b6VBSpeYxAJI3wrMbgnBYKXbzTPiIJFsIe4O9RvdrO
+         f62loP5yVp/PefMb0MpbJ7nz4GrRqyUU8bwsltkG7rA80nxT9Z46IHGDW0YSHJQtnu1L
+         RowJ+s3G4rbqQ7oy8kOqzoe/05MgEh1IJ2UUbGR/qqu4OMagS+Gr0frBHLwu2yo2jc90
+         2eSImE6YC3gkQ3v9liyo3DocAQzpi4j3sLAdAc8exi4MTt1qFREmPo8ydLJg1gKlIPGz
+         CRQkK8vz1n2MtEdHGSPi/47wPgy/wVnOrqtpy6Nk9Cp+HFqm3v3DusneWzndBqNxLhQf
+         bKtw==
+X-Gm-Message-State: APjAAAUZvIme9TG+TsvRZK/3HlWmsvgRbhFskjY2E3+vyjrq+kGIi22u
+        KMrsqxjpymTBK7/Vw2T19y94hISj
+X-Google-Smtp-Source: APXvYqxqyvqbkhGAU6fdMSAquhZz1M7mkoymP0Y7QWhxl9QYqwhhUBPdfTpaSUnZASPyAt9xkbdQ7Q==
+X-Received: by 2002:a17:90a:d204:: with SMTP id o4mr15832121pju.40.1574401129319;
+        Thu, 21 Nov 2019 21:38:49 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j4sm1323616pjf.25.2019.11.21.21.38.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Nov 2019 21:38:48 -0800 (PST)
+Subject: Re: [PATCH v2] watchdog: make DesignWare watchdog allow users to set
+ bigger timeout value
+To:     "Wang, Peng 1. (NSB - CN/Hangzhou)" <peng.1.wang@nokia-sbell.com>,
+        Guenter Roeck <groeck7@gmail.com>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <dc8ce91610dd4860858bfe92f104d74a@nokia-sbell.com>
+From:   Guenter Roeck <guenter@roeck-us.net>
+Message-ID: <2b2a1beb-d735-210c-847a-e3211f9efeca@roeck-us.net>
+Date:   Thu, 21 Nov 2019 21:38:47 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1574067012-18559-3-git-send-email-eugen.hristev@microchip.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <dc8ce91610dd4860858bfe92f104d74a@nokia-sbell.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 08:50:36AM +0000, Eugen.Hristev@microchip.com wrote:
-> From: Eugen Hristev <eugen.hristev@microchip.com>
-> 
-> Add support for SAM9X60 WDT into sama5d4_wdt.
-> This means that this driver gets a flag inside the data struct
-> that represents the sam9x60 support.
-> This flag differentiates between the two hardware blocks, and is set
-> according to the compatible of the driver instantiation.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+On 11/21/19 2:35 AM, Wang, Peng 1. (NSB - CN/Hangzhou) wrote:
+>  From aabaa4b709bd451e566c906e8d1dca48f92f9b12 Mon Sep 17 00:00:00 2001
+> From: Peng Wang <peng.1.wang@nokia-sbell.com>
+> Date: Wed, 20 Nov 2019 15:12:59 +0800
+> Subject: [PATCH] watchdog: make DesignWare watchdog allow users to set bigger
+>   timeout value
+>
+> watchdog_dev.c provides means to allow users to set bigger timeout value
+> than HW can support, make DesignWare watchdog align with this.
+>
+> ---
+>
+> v2 -> v1:
+>         - use top_s to compare with wdd->max_hw_heartbeat_ms
+>         - update wdd->timeout in case it's greater than HW supports
+>         - fix comments error
+>
+> v1: initial version
+>
+> Signed-off-by: Peng Wang <peng.1.wang@nokia-sbell.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Sigh. I should have paid closer attention. Signed-off-by: has to be ahead of ---,
+
+and the change log after it. The above format messes up everything.
+
+Also, please run checkpatch and fix the problems it reports.
+
+Sorry for not noticing it earlier. Please fix the problems and resubmit.
+
+Thanks,
+
+Guenter
 
 > ---
-> Changes in v5:
-> - Fixed checkpatch issues for excessive long lines in header file
-> 
-> Changes in v4:
-> - check compatible with different of_ function
-> - call irq parse and map only if need_irq
-> - changed tabbing in struct defintion
-> 
-> Changes in v3:
-> - changed need_irq to bool, instead of a single bit variable.
-> - the platform data config struct is gone now, changed to a pointer to a bool
-> to have the sam9x60_support as 'true', pointing to a static bool with true value.
-> Can have a better solution than this ?
-> - the specific sam9x60_support flag is assigned at probe time, corresponding
-> to the flag value in .data
-> 
->  drivers/watchdog/at91sam9_wdt.h |  21 ++++++++
->  drivers/watchdog/sama5d4_wdt.c  | 109 +++++++++++++++++++++++++++++++---------
->  2 files changed, 105 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/watchdog/at91sam9_wdt.h b/drivers/watchdog/at91sam9_wdt.h
-> index abfe34d..298d545 100644
-> --- a/drivers/watchdog/at91sam9_wdt.h
-> +++ b/drivers/watchdog/at91sam9_wdt.h
-> @@ -24,7 +24,10 @@
->  #define AT91_WDT_MR		0x04			/* Watchdog Mode Register */
->  #define  AT91_WDT_WDV		(0xfffUL << 0)		/* Counter Value */
->  #define  AT91_WDT_SET_WDV(x)	((x) & AT91_WDT_WDV)
-> +#define  AT91_SAM9X60_PERIODRST	BIT(4)		/* Period Reset */
-> +#define  AT91_SAM9X60_RPTHRST	BIT(5)		/* Minimum Restart Period */
->  #define  AT91_WDT_WDFIEN	BIT(12)		/* Fault Interrupt Enable */
-> +#define  AT91_SAM9X60_WDDIS	BIT(12)		/* Watchdog Disable */
->  #define  AT91_WDT_WDRSTEN	BIT(13)		/* Reset Processor */
->  #define  AT91_WDT_WDRPROC	BIT(14)		/* Timer Restart */
->  #define  AT91_WDT_WDDIS		BIT(15)		/* Watchdog Disable */
-> @@ -37,4 +40,22 @@
->  #define  AT91_WDT_WDUNF		BIT(0)		/* Watchdog Underflow */
->  #define  AT91_WDT_WDERR		BIT(1)		/* Watchdog Error */
->  
-> +/* Watchdog Timer Value Register */
-> +#define AT91_SAM9X60_VR		0x08
-> +
-> +/* Watchdog Window Level Register */
-> +#define AT91_SAM9X60_WLR	0x0c
-> +/* Watchdog Period Value */
-> +#define  AT91_SAM9X60_COUNTER	(0xfffUL << 0)
-> +#define  AT91_SAM9X60_SET_COUNTER(x)	((x) & AT91_SAM9X60_COUNTER)
-> +
-> +/* Interrupt Enable Register */
-> +#define AT91_SAM9X60_IER	0x14
-> +/* Period Interrupt Enable */
-> +#define  AT91_SAM9X60_PERINT	BIT(0)
-> +/* Interrupt Disable Register */
-> +#define AT91_SAM9X60_IDR	0x18
-> +/* Interrupt Status Register */
-> +#define AT91_SAM9X60_ISR	0x1c
-> +
->  #endif
-> diff --git a/drivers/watchdog/sama5d4_wdt.c b/drivers/watchdog/sama5d4_wdt.c
-> index d193a60..e5d11d6 100644
-> --- a/drivers/watchdog/sama5d4_wdt.c
-> +++ b/drivers/watchdog/sama5d4_wdt.c
-> @@ -2,7 +2,7 @@
->  /*
->   * Driver for Atmel SAMA5D4 Watchdog Timer
->   *
-> - * Copyright (C) 2015 Atmel Corporation
-> + * Copyright (C) 2015-2019 Microchip Technology Inc. and its subsidiaries
->   */
->  
->  #include <linux/delay.h>
-> @@ -11,6 +11,7 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/of_irq.h>
->  #include <linux/platform_device.h>
->  #include <linux/reboot.h>
-> @@ -29,7 +30,10 @@ struct sama5d4_wdt {
->  	struct watchdog_device	wdd;
->  	void __iomem		*reg_base;
->  	u32			mr;
-> +	u32			ir;
->  	unsigned long		last_ping;
-> +	bool			need_irq;
-> +	bool			sam9x60_support;
->  };
->  
->  static int wdt_timeout;
-> @@ -78,7 +82,12 @@ static int sama5d4_wdt_start(struct watchdog_device *wdd)
->  {
->  	struct sama5d4_wdt *wdt = watchdog_get_drvdata(wdd);
->  
-> -	wdt->mr &= ~AT91_WDT_WDDIS;
-> +	if (wdt->sam9x60_support) {
-> +		writel_relaxed(wdt->ir, wdt->reg_base + AT91_SAM9X60_IER);
-> +		wdt->mr &= ~AT91_SAM9X60_WDDIS;
-> +	} else {
-> +		wdt->mr &= ~AT91_WDT_WDDIS;
-> +	}
->  	wdt_write(wdt, AT91_WDT_MR, wdt->mr);
->  
->  	return 0;
-> @@ -88,7 +97,12 @@ static int sama5d4_wdt_stop(struct watchdog_device *wdd)
->  {
->  	struct sama5d4_wdt *wdt = watchdog_get_drvdata(wdd);
->  
-> -	wdt->mr |= AT91_WDT_WDDIS;
-> +	if (wdt->sam9x60_support) {
-> +		writel_relaxed(wdt->ir, wdt->reg_base + AT91_SAM9X60_IDR);
-> +		wdt->mr |= AT91_SAM9X60_WDDIS;
-> +	} else {
-> +		wdt->mr |= AT91_WDT_WDDIS;
-> +	}
->  	wdt_write(wdt, AT91_WDT_MR, wdt->mr);
->  
->  	return 0;
-> @@ -109,6 +123,14 @@ static int sama5d4_wdt_set_timeout(struct watchdog_device *wdd,
->  	struct sama5d4_wdt *wdt = watchdog_get_drvdata(wdd);
->  	u32 value = WDT_SEC2TICKS(timeout);
->  
-> +	if (wdt->sam9x60_support) {
-> +		wdt_write(wdt, AT91_SAM9X60_WLR,
-> +			  AT91_SAM9X60_SET_COUNTER(value));
-> +
-> +		wdd->timeout = timeout;
-> +		return 0;
-> +	}
-> +
->  	wdt->mr &= ~AT91_WDT_WDV;
->  	wdt->mr |= AT91_WDT_SET_WDV(value);
->  
-> @@ -143,8 +165,14 @@ static const struct watchdog_ops sama5d4_wdt_ops = {
->  static irqreturn_t sama5d4_wdt_irq_handler(int irq, void *dev_id)
->  {
->  	struct sama5d4_wdt *wdt = platform_get_drvdata(dev_id);
-> +	u32 reg;
->  
-> -	if (wdt_read(wdt, AT91_WDT_SR)) {
-> +	if (wdt->sam9x60_support)
-> +		reg = wdt_read(wdt, AT91_SAM9X60_ISR);
+>   drivers/watchdog/dw_wdt.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+> index fef7c61..12c116e 100644
+> --- a/drivers/watchdog/dw_wdt.c
+> +++ b/drivers/watchdog/dw_wdt.c
+> @@ -114,7 +114,15 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
+>   	writel(top_val | top_val << WDOG_TIMEOUT_RANGE_TOPINIT_SHIFT,
+>   	       dw_wdt->regs + WDOG_TIMEOUT_RANGE_REG_OFFSET);
+>   
+> -	wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
+> +	/*
+> +	 * In case users set bigger timeout value than HW can support,
+> +	 * kernel(watchdog_dev.c) helps to feed watchdog before
+> +	 * wdd->max_hw_heartbeat_ms
+> +	 */
+> +	if ( top_s * 1000 <= wdd->max_hw_heartbeat_ms )
+> +		wdd->timeout = dw_wdt_top_in_seconds(dw_wdt, top_val);
 > +	else
-> +		reg = wdt_read(wdt, AT91_WDT_SR);
-> +
-> +	if (reg) {
->  		pr_crit("Atmel Watchdog Software Reset\n");
->  		emergency_restart();
->  		pr_crit("Reboot didn't succeed\n");
-> @@ -157,13 +185,14 @@ static int of_sama5d4_wdt_init(struct device_node *np, struct sama5d4_wdt *wdt)
->  {
->  	const char *tmp;
->  
-> -	wdt->mr = AT91_WDT_WDDIS;
-> +	if (wdt->sam9x60_support)
-> +		wdt->mr = AT91_SAM9X60_WDDIS;
-> +	else
-> +		wdt->mr = AT91_WDT_WDDIS;
->  
->  	if (!of_property_read_string(np, "atmel,watchdog-type", &tmp) &&
->  	    !strcmp(tmp, "software"))
-> -		wdt->mr |= AT91_WDT_WDFIEN;
-> -	else
-> -		wdt->mr |= AT91_WDT_WDRSTEN;
-> +		wdt->need_irq = true;
->  
->  	if (of_property_read_bool(np, "atmel,idle-halt"))
->  		wdt->mr |= AT91_WDT_WDIDLEHLT;
-> @@ -176,21 +205,46 @@ static int of_sama5d4_wdt_init(struct device_node *np, struct sama5d4_wdt *wdt)
->  
->  static int sama5d4_wdt_init(struct sama5d4_wdt *wdt)
->  {
-> -	u32 reg;
-> +	u32 reg, val;
-> +
-> +	val = WDT_SEC2TICKS(WDT_DEFAULT_TIMEOUT);
->  	/*
->  	 * When booting and resuming, the bootloader may have changed the
->  	 * watchdog configuration.
->  	 * If the watchdog is already running, we can safely update it.
->  	 * Else, we have to disable it properly.
->  	 */
-> -	if (wdt_enabled) {
-> -		wdt_write_nosleep(wdt, AT91_WDT_MR, wdt->mr);
-> -	} else {
-> +	if (!wdt_enabled) {
->  		reg = wdt_read(wdt, AT91_WDT_MR);
-> -		if (!(reg & AT91_WDT_WDDIS))
-> +		if (wdt->sam9x60_support && (!(reg & AT91_SAM9X60_WDDIS)))
-> +			wdt_write_nosleep(wdt, AT91_WDT_MR,
-> +					  reg | AT91_SAM9X60_WDDIS);
-> +		else if (!wdt->sam9x60_support &&
-> +			 (!(reg & AT91_WDT_WDDIS)))
->  			wdt_write_nosleep(wdt, AT91_WDT_MR,
->  					  reg | AT91_WDT_WDDIS);
->  	}
-> +
-> +	if (wdt->sam9x60_support) {
-> +		if (wdt->need_irq)
-> +			wdt->ir = AT91_SAM9X60_PERINT;
-> +		else
-> +			wdt->mr |= AT91_SAM9X60_PERIODRST;
-> +
-> +		wdt_write(wdt, AT91_SAM9X60_IER, wdt->ir);
-> +		wdt_write(wdt, AT91_SAM9X60_WLR, AT91_SAM9X60_SET_COUNTER(val));
-> +	} else {
-> +		wdt->mr |= AT91_WDT_SET_WDD(WDT_SEC2TICKS(MAX_WDT_TIMEOUT));
-> +		wdt->mr |= AT91_WDT_SET_WDV(val);
-> +
-> +		if (wdt->need_irq)
-> +			wdt->mr |= AT91_WDT_WDFIEN;
-> +		else
-> +			wdt->mr |= AT91_WDT_WDRSTEN;
-> +	}
-> +
-> +	wdt_write_nosleep(wdt, AT91_WDT_MR, wdt->mr);
-> +
->  	return 0;
->  }
->  
-> @@ -201,7 +255,6 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
->  	struct sama5d4_wdt *wdt;
->  	void __iomem *regs;
->  	u32 irq = 0;
-> -	u32 timeout;
->  	int ret;
->  
->  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-> @@ -215,6 +268,8 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
->  	wdd->min_timeout = MIN_WDT_TIMEOUT;
->  	wdd->max_timeout = MAX_WDT_TIMEOUT;
->  	wdt->last_ping = jiffies;
-> +	wdt->sam9x60_support = of_device_is_compatible(dev->of_node,
-> +						       "microchip,sam9x60-wdt");
->  
->  	watchdog_set_drvdata(wdd, wdt);
->  
-> @@ -224,15 +279,19 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
->  
->  	wdt->reg_base = regs;
->  
-> -	irq = irq_of_parse_and_map(dev->of_node, 0);
-> -	if (!irq)
-> -		dev_warn(dev, "failed to get IRQ from DT\n");
-> -
->  	ret = of_sama5d4_wdt_init(dev->of_node, wdt);
->  	if (ret)
->  		return ret;
->  
-> -	if ((wdt->mr & AT91_WDT_WDFIEN) && irq) {
-> +	if (wdt->need_irq) {
-> +		irq = irq_of_parse_and_map(dev->of_node, 0);
-> +		if (!irq) {
-> +			dev_warn(dev, "failed to get IRQ from DT\n");
-> +			wdt->need_irq = false;
-> +		}
-> +	}
-> +
-> +	if (wdt->need_irq) {
->  		ret = devm_request_irq(dev, irq, sama5d4_wdt_irq_handler,
->  				       IRQF_SHARED | IRQF_IRQPOLL |
->  				       IRQF_NO_SUSPEND, pdev->name, pdev);
-> @@ -244,11 +303,6 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
->  
->  	watchdog_init_timeout(wdd, wdt_timeout, dev);
->  
-> -	timeout = WDT_SEC2TICKS(wdd->timeout);
-> -
-> -	wdt->mr |= AT91_WDT_SET_WDD(WDT_SEC2TICKS(MAX_WDT_TIMEOUT));
-> -	wdt->mr |= AT91_WDT_SET_WDV(timeout);
-> -
->  	ret = sama5d4_wdt_init(wdt);
->  	if (ret)
->  		return ret;
-> @@ -269,7 +323,12 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id sama5d4_wdt_of_match[] = {
-> -	{ .compatible = "atmel,sama5d4-wdt", },
-> +	{
-> +		.compatible = "atmel,sama5d4-wdt",
-> +	},
-> +	{
-> +		.compatible = "microchip,sam9x60-wdt",
-> +	},
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, sama5d4_wdt_of_match);
+> +		wdd->timeout = top_s;
+>   
+>   	return 0;
+>   }
+
+
