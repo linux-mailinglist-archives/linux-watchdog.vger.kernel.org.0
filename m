@@ -2,150 +2,166 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7247107019
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Nov 2019 12:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA3A107286
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Nov 2019 13:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729559AbfKVKpw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Nov 2019 05:45:52 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:44312 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729552AbfKVKpw (ORCPT
+        id S1727090AbfKVMyt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Nov 2019 07:54:49 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34061 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727008AbfKVMys (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Nov 2019 05:45:52 -0500
-Received: by mail-pj1-f66.google.com with SMTP id w8so2881090pjh.11;
-        Fri, 22 Nov 2019 02:45:51 -0800 (PST)
+        Fri, 22 Nov 2019 07:54:48 -0500
+Received: by mail-ot1-f65.google.com with SMTP id w11so6097210ote.1
+        for <linux-watchdog@vger.kernel.org>; Fri, 22 Nov 2019 04:54:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2io4k/iq1gwW+3Ml4L4lOh1AzuywwhhqM/bGXIM0Dfg=;
-        b=iMZkNX+PGvb23ecBpYgNQRQUaO8mtr3kGqYmRlTO9CWrFfM75lItHURi2rzgm9oq06
-         r28HwxF0sYxRLtuBx3lJzz/TC+/bz8eCPuZ/ic524dTjXYTJNjf/L+nTapgjLmDUPrOC
-         DZ+zu/haiL/BnkGR6wysoLGx+ryVj+yvLXp9c9D2g0G9Nwb04yo8tz1miD1VSBJumtBT
-         vrDTl+2KIi2z3IMnGVfGcRjyYWPSjzLXOZqJ0+oVcxXjQ3wU7PnczHv5xratdBBiKuEN
-         1hjBUbZXIBl+zHucz+0MXvvyK4a5w5vEJ1zQE48XNOTY84kQb5L8NgiAuCM47y35qCse
-         h/tA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=j95HJ+nW6cJV5FbqnwQq2oUU5AzggiyFmjXhPsXGGkA=;
+        b=KeHQ7CuY1RiuGSNN9lSXKXlmkvEL7Qn3cjnjc70Pe/6CR2+WrnYQgx9m5VMLNIh11O
+         SiipFXxlSFRaMckkisT6Gjvi0Ycf2C1LtS6/w4Dxpd5sayx6GPVIreZlKNq/8TUx1EID
+         g7jN0TJnY71FbfothIHM4aK7/nZpSifSdTC/fgk78P51AkyblzwJWH7i5k69OafW3iCJ
+         ov/Rz+3a9Ef5E0n8jihXEbKgXlgb/ltvwkVCMOXn5V5zk8GEevksjY5OmVCffM+I4TVA
+         75dkI4vxahIrTQeJTiwYmfUey00X9CgUHs6tWT0G3JUq9xYvBBD5a729bkPL5pXQA4Oo
+         EOCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2io4k/iq1gwW+3Ml4L4lOh1AzuywwhhqM/bGXIM0Dfg=;
-        b=ePnGGQIjy7mBioz6iOCRG6PjYtqZOMzroipTHdiHr8F7hCPmL/38KfWqSHAYSCXqUv
-         8xn8C7YYDdl5GA2Nmc5q+zxpm7JeqpWGQVWS8WBJbdAuXTU+CCVK+epvt21SB/QLlDTE
-         rXe5HptLJKHQ1wKebS9rMbT2AYTKVlM2hxPg4S85tibtfJNO4CveY/f4aWrJnWGpwgYN
-         Ccss1PbaTEPuMGRktlJO7PZ0aZVFn1JBHS/qVdqJdeDGlTJ1FQztNezT9o13Aty33Nt4
-         2LuTrO8pVYywEmolAqT2M/3JQJr19E0Eb2q8/YNwNqN2lyfhTRyP/8Y5O9kEYXxYc7G9
-         CUzQ==
-X-Gm-Message-State: APjAAAWe4pshzyO0yPNnHb5uR8dfvhUf5niUaLFRl77lsJiSrILscW6H
-        zaOXJtTCkReh7rfU6HiKLn4=
-X-Google-Smtp-Source: APXvYqxNbupSKQWXBXy0M3HLAZgGsZHVaATRyTWbQLfH0dXjq7jJ7Ve2vFUF3xJ5pA3CN94az8rCuw==
-X-Received: by 2002:a17:902:d211:: with SMTP id t17mr7562415ply.141.1574419551426;
-        Fri, 22 Nov 2019 02:45:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v16sm2714213pje.1.2019.11.22.02.45.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Nov 2019 02:45:50 -0800 (PST)
-Subject: Re: [PATCH v2 1/1] drivers: watchdog: stm32_iwdg: set WDOG_HW_RUNNING
- at probe
-To:     Christophe Roullier <christophe.roullier@st.com>,
-        wim@linux-watchdog.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20191122082442.21695-1-christophe.roullier@st.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <ffa20f2f-1ca2-9d8f-6594-33b906cbb74a@roeck-us.net>
-Date:   Fri, 22 Nov 2019 02:45:49 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=j95HJ+nW6cJV5FbqnwQq2oUU5AzggiyFmjXhPsXGGkA=;
+        b=VFvzhiqqHNP6HjZjvGTPQayCSA1y13W4/kHpZwVOfWia1c53kldNdMYhegcOHluVIo
+         xw2aZRlRTbaSSpusHo+ANrnlbqeALomSkF7qVMZ8C1pbLpNgSSYDlPN9Bj/wPaL2umPE
+         mDoDNu+T/Hsh5K1+p1oPp1T8d7roLZhfOI45TgNbCijpJ9245SmmpExt93Cs6ILqZHk/
+         Rg+MPDcxfv7QEKFM1hUjCkZ8cQzWEYTQcke2/eOwdaiukZcNmDoEtOQnxJocgTYknSQv
+         nsTIF0zNIU12COidlEmjPiwh8f4n/hvj3WUlagMQ0QDrWaaNqX/Poe1Nne0hrPf2jdRV
+         APIQ==
+X-Gm-Message-State: APjAAAVogU5X+AUMmzxYf7NSwOPYixUSQfSFypgjzJ5XjJfSlTRjP7q/
+        P1Ua4sxCfL2JOEV0FB8rJTTXRYN9BH9bOOwkoxY28TXQpEo=
+X-Google-Smtp-Source: APXvYqzQ6zX4zZtb6UoV9LagLBMvZRMTDYTNcBOvl1shgQqQe6GivRK+HlB4l2bu70h/KBSdrlNY7XAMaSPhqzCbgIQ=
+X-Received: by 2002:a05:6830:d5:: with SMTP id x21mr10970391oto.310.1574427287719;
+ Fri, 22 Nov 2019 04:54:47 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191122082442.21695-1-christophe.roullier@st.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAHhAz+h6SuGKWn0qNqsCdNjDks_vHuJW-KfiQja_b3x8x=vq_A@mail.gmail.com>
+ <20191118143838.GA29359@google.com> <CAHhAz+j7v-Utpir8wyCVORv_fthdLLg_spR_G+8TjBBSyJa6wA@mail.gmail.com>
+ <f28024de-bfad-5f3e-6332-aebfa48991a8@roeck-us.net>
+In-Reply-To: <f28024de-bfad-5f3e-6332-aebfa48991a8@roeck-us.net>
+From:   Muni Sekhar <munisekharrms@gmail.com>
+Date:   Fri, 22 Nov 2019 18:24:36 +0530
+Message-ID: <CAHhAz+jtq84Va9arE5EXB9w7XgYj4CNU-dCudvpjRaaYf1JT4g@mail.gmail.com>
+Subject: Re: watchdog: how to enable?
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/22/19 12:24 AM, Christophe Roullier wrote:
-> If the watchdog hardware is already enabled during the boot process,
-> when the Linux watchdog driver loads, it should start/reset the watchdog
-> and tell the watchdog framework. As a result, ping can be generated from
-> the watchdog framework (if CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is set),
-> until the userspace watchdog daemon takes over control
-> 
-> Fixes:4332d113c66a ("watchdog: Add STM32 IWDG driver")
-> 
-> Signed-off-by: Christophe Roullier <christophe.roullier@st.com>
-> ---
-> Changes since v1:
-> According to Guenter
-> I follow the guidance from intel-mid_wdt.c
-> and I added test to check if CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is set
-> because we need to be flexible (depends on customer config, but watchdog
-> not always start by bootloader (Uboot, ..))
-> I've tested some config and it is working as expected:
-> Watchdog enable in Uboot + HANDLE_BOOT_ENABLE is not set + daemon watchdog in userland ON ==> No reset IWDG2
-> Watchdog enable in Uboot + HANDLE_BOOT_ENABLE is not set ==> Reset IWDG2
-> Watchdog enable in Uboot + HANDLE_BOOT_ENABLE=y ==> No reset IWDG2
-> Watchdog enable in Uboot + HANDLE_BOOT_ENABLE=y + daemon watchdog in userland ON puis OFF ==> Reset IWDG2
-> Watchdog disable in Uboot + HANDLE_BOOT_ENABLE is not set ==> No reset IWDG2
-> Watchdog disable in Uboot + HANDLE_BOOT_ENABLE=y ==> No reset IWDG2
-> Watchdog disable in Uboot + HANDLE_BOOT_ENABLE=y + daemon watchdog in userland ON ==> No reset IWDG2
-> Watchdog disable in Uboot + HANDLE_BOOT_ENABLE=y + daemon watchdog in userland ON puis OFF ==> Reset IWDG2
-> 
-> Thanks,
-> Christophe
-> 
->   drivers/watchdog/stm32_iwdg.c | 21 +++++++++++++++++++++
->   1 file changed, 21 insertions(+)
-> 
-> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
-> index a3a329011a06..7f454a6e17ba 100644
-> --- a/drivers/watchdog/stm32_iwdg.c
-> +++ b/drivers/watchdog/stm32_iwdg.c
-> @@ -50,6 +50,9 @@
->   #define TIMEOUT_US	100000
->   #define SLEEP_US	1000
->   
-> +static bool handle_boot_enabled =
-> +	IS_ENABLED(CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED);
-> +
->   struct stm32_iwdg_data {
->   	bool has_pclk;
->   	u32 max_prescaler;
-> @@ -262,6 +265,24 @@ static int stm32_iwdg_probe(struct platform_device *pdev)
->   	watchdog_set_nowayout(wdd, WATCHDOG_NOWAYOUT);
->   	watchdog_init_timeout(wdd, 0, dev);
->   
-> +	/*
-> +	 * In case of CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is set
-> +	 * (Means U-Boot/bootloaders leaves the watchdog running)
-> +	 * When we get here we should make a decision to prevent
-> +	 * any side effects before user space daemon will take care of it.
-> +	 * The best option, taking into consideration that there is no
-> +	 * way to read values back from hardware, is to enforce watchdog
-> +	 * being run with deterministic values.
-> +	 */
-> +	if (handle_boot_enabled) {
+On Fri, Nov 22, 2019 at 4:29 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 11/18/19 7:09 AM, Muni Sekhar wrote:
+> > On Mon, Nov 18, 2019 at 8:08 PM Bjorn Helgaas <helgaas@kernel.org> wrot=
+e:
+> >>
+> >> [-cc linux-pci (nothing here is PCI-specific)]
+> >>
+> >> On Sat, Nov 16, 2019 at 06:05:05AM +0530, Muni Sekhar wrote:
+> >>> My kernel is built with the following options:
+> >>>
+> >>> $ cat /boot/config-5.0.1 | grep NO_HZ
+> >>> CONFIG_NO_HZ_COMMON=3Dy
+> >>> CONFIG_NO_HZ_IDLE=3Dy
+> >>> # CONFIG_NO_HZ_FULL is not set
+> >>> CONFIG_NO_HZ=3Dy
+> >>> CONFIG_RCU_FAST_NO_HZ=3Dy
+> >>>
+> >>> I booted with watchdog enabled(nmi_watchdog=3D1) as given below:
+> >>>
+> >>> BOOT_IMAGE=3D/boot/vmlinuz-5.0.1
+> >>> root=3DUUID=3Df65454ae-3f1d-4b9e-b4be-74a29becbe1e ro debug
+> >>> ignore_loglevel console=3DttyUSB0,115200 console=3Dtty0 console=3Dtty=
+1
+> >>> console=3DttyS2,115200 memmap=3D1M!1023M nmi_watchdog=3D1
+> >>> crashkernel=3D384M-:128M
+> >>>
+> >>> When the system is frozen or the kernel is locked up(I noticed that i=
+n
+> >>> this state kernel is not responding for ALT-SysRq-<command key>) but
+> >>> watchdog is not triggered. So I want to understand how to enable the
+> >>> watchdog timer and how to verify the basic watchdog functionality
+> >>> behavior?
+> >>
+> >> I don't know much about the watchdog, but I assume you've found these
+> >> already?
+> >>
+> >>    Documentation/admin-guide/lockup-watchdogs.rst
+> >>    Documentation/admin-guide/sysctl/kernel.rst
+> >>
+> >> Do you have CONFIG_HAVE_NMI_WATCHDOG=3Dy?  (See arch/Kconfig)
+> >
+> > I don=E2=80=99t have CONFIG_HAVE_NMI_WATCHDOG in kernel .config file.
+> >
+>
+> That would mean you don't have NMI in the first place. What is your
+> architecture ?
 
-You don't need that variable. Just use
-	if (IS_ENABLED(CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED)) {
-directly.
+My system has =E2=80=9CIntel(R) Atom(TM) CPU  E3845=E2=80=9D processor and =
+running
+=E2=80=98uname -m=E2=80=99 gives x86_64.
 
-> +		ret = stm32_iwdg_start(wdd);
-> +		if (ret)
-> +			return ret;
-> +
-> +		/* Make sure the watchdog is serviced */
-> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
-> +	}
-> +
->   	ret = devm_watchdog_register_device(dev, wdd);
->   	if (ret)
->   		return ret;
-> 
+/proc/interrupts gives the below statistics for NMI:
 
+$ cat /proc/interrupts | grep NMI
+ NMI:       4207       4167        125   Non-maskable interrupts
+
+
+>
+> Guenter
+>
+> > $cat /boot/config-5.0.1 | grep CONFIG_HAVE_NMI_WATCHDOG
+> >
+> > But tried to enable CONFIG_HAVE_NMI_WATCHDOG via menuconfig, but could
+> > not able to find it. What is the role of CONFIG_HAVE_NMI_WATCHDOG?
+> >
+> > Symbol: HAVE_NMI_WATCHDOG [=3Dn]
+> >
+> >                                              =E2=94=82
+> >    =E2=94=82 Type  : bool
+> >
+> >                                                  =E2=94=82
+> >    =E2=94=82   Defined at arch/Kconfig:339
+> >
+> >                                                  =E2=94=82
+> >    =E2=94=82   Depends on: HAVE_NMI [=3Dy]
+> >
+> >                                                  =E2=94=82
+> >    =E2=94=82   Selected by [n]:
+> >
+> >                                                  =E2=94=82
+> >    =E2=94=82   - HAVE_HARDLOCKUP_DETECTOR_ARCH [=3Dn]
+> >
+> >
+> >    =E2=94=82 Symbol: HAVE_HARDLOCKUP_DETECTOR_ARCH [=3Dn]
+> >
+> >                                                  =E2=94=82
+> >    =E2=94=82 Type  : bool
+> >
+> >                                                  =E2=94=82
+> >    =E2=94=82   Defined at arch/Kconfig:346
+> >
+> >                                                  =E2=94=82
+> >    =E2=94=82   Selects: HAVE_NMI_WATCHDOG [=3Dn]
+> >
+> >
+> >
+> >
+> >
+>
+
+
+--=20
+Thanks,
+Sekhar
