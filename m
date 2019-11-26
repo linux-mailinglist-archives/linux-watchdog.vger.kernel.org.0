@@ -2,86 +2,112 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E521098D1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Nov 2019 06:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB9E109DBC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Nov 2019 13:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727413AbfKZFfC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Nov 2019 00:35:02 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56934 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727379AbfKZFfC (ORCPT
+        id S1727725AbfKZMSq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Nov 2019 07:18:46 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36489 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727615AbfKZMSp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Nov 2019 00:35:02 -0500
-X-UUID: 6538519289be4a80823965c00f1f7dfa-20191126
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PTHlyvPT7+DKctsDgzzDOzGrtWUVdvF9uAmdUpUUCzI=;
-        b=mj2lbBLvkictvFSSj+JAgzHcQAc4bXK2h+Ln6vu27+lO41QJPsV5dmm+cnyQd0MGxR5vvilDM1cbmzvlhVQQSk5Mfs40q71MwdvBPexx59/WypM7JnpUQ3y+9Ug/4Bz3bWa2a6X/DHAAp3hZ7ZPe1+qor5um8q2b7nAun44O/Co=;
-X-UUID: 6538519289be4a80823965c00f1f7dfa-20191126
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <freddy.hsin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 787183843; Tue, 26 Nov 2019 13:34:55 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 26 Nov 2019 13:34:42 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 26 Nov 2019 13:34:35 +0800
-From:   <freddy.hsin@mediatek.com>
-To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <matthias.bgg@gmail.com>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <devicetree@vger.kernel.org>
-CC:     <Chang-An.Chen@mediatek.com>, <wsd_upstream@mediatek.com>,
-        Freddy Hsin <freddy.hsin@mediatek.com>
-Subject: [PATCH v1 4/4] dt-binding: power: reset: Add documentation for MTK RGU (Reset Gernation Unit) reboot driver
-Date:   Tue, 26 Nov 2019 13:34:50 +0800
-Message-ID: <1574746490-625-5-git-send-email-freddy.hsin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1574746490-625-1-git-send-email-freddy.hsin@mediatek.com>
+        Tue, 26 Nov 2019 07:18:45 -0500
+Received: by mail-ot1-f65.google.com with SMTP id f10so15700345oto.3;
+        Tue, 26 Nov 2019 04:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GPjIoPKAdBU2rhij0XkCzvo+ahx+quTsSMqV7wK7Go4=;
+        b=kXH19YTYWBb/zAuzTG2D+tFgg9MZ74NGM3I9FEiCDfBIv4BipMdk0YtT7FQh0nx5du
+         5PsAvauJPiHo77O5deZ5/3NbsAg0+Gdmezpq8R3AStdJGmuATFgOVZok7YMKr9sqs8bm
+         HXUzJ+zkd2cmITUiWpjDt4aoRMoDG4XqMfmhVeppEEFlKLejOy8ykHb+qo0LUaA7+U1s
+         M+CvJ/EWC9H+Teu1OtUwbORx5axg9qB3wN8xa2iq7JvgnMsGc/itO705yS1BuWj/YNDJ
+         OhokstKZZ0/DL6vn1/DLgvxJ0tVhmUCiFP8sb881PmusrfoU0XCHQQcFCCDncHkUSvLB
+         UDxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GPjIoPKAdBU2rhij0XkCzvo+ahx+quTsSMqV7wK7Go4=;
+        b=OuiOdAB3QuTdKju8C9ULQ6Piio2kcFmVMxD6n7Yvns2JJzt7in5FBI2Y8plKeYIIXZ
+         D0lZbe7JERm35e83Zga8YWm9bDLUyaKVt+Dd5ZYcfA8zIjdhLSnDSDhEWrq5ktxZLSFT
+         WjAP/akxXkeAW/rP8wLy5Askc4rAyynt9QCRH04hT1CNCg+MYlnU5e2x5kx46a5v5fqj
+         sYJ4qanj9Stt1lxG2y8bmZ5Ptb1wl34zlkSQOa8Ko5UeEd4yGp5SXanpyY8rniW5XaMy
+         sv0WDlh+Ph9qmPwf360ahrzFyDoZguRJ1RfvDw1tpOukZux3+dyNTAD5rYQkY5cHGLSP
+         Uo8w==
+X-Gm-Message-State: APjAAAWYGWGsaGqoUdZ1dkbbiCvgjitPsMCe/NGo2asnyhY9aFaPExID
+        PNSchz1T/WbkiwUk2GSa9sc=
+X-Google-Smtp-Source: APXvYqz/ELJmUcs3pP92+oVmdlJk7E+Dzm6ctuvIFTGCxQmgLgtcI9qH8dxQ7s2bJR6TaZ355x0psQ==
+X-Received: by 2002:a9d:470f:: with SMTP id a15mr24541053otf.290.1574770724780;
+        Tue, 26 Nov 2019 04:18:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j8sm3567921otj.42.2019.11.26.04.18.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Nov 2019 04:18:43 -0800 (PST)
+Subject: Re: [PATCH v1 2/4] watchdog: populate reboot mode node in toprgu node
+ of MTK RGU (Reset Generation Unit)
+To:     freddy.hsin@mediatek.com, sre@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        matthias.bgg@gmail.com, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, devicetree@vger.kernel.org
+Cc:     Chang-An.Chen@mediatek.com, wsd_upstream@mediatek.com
 References: <1574746490-625-1-git-send-email-freddy.hsin@mediatek.com>
+ <1574746490-625-3-git-send-email-freddy.hsin@mediatek.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <ca66e52e-df80-388e-3018-7bf35aef5f43@roeck-us.net>
+Date:   Tue, 26 Nov 2019 04:18:41 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <1574746490-625-3-git-send-email-freddy.hsin@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-RnJvbTogRnJlZGR5IEhzaW4gPGZyZWRkeS5oc2luQG1lZGlhdGVrLmNvbT4NCg0KQWRkIGRvY3Vt
-ZW50YXRpb24gZm9yIE1USyBSR1UgKFJlc2V0IEdlbmVyYXRpb24gVW5pdCkgcmVib290IGRyaXZl
-ci4NCg0KU2lnbmVkLW9mZi1ieTogRnJlZGR5IEhzaW4gPGZyZWRkeS5oc2luQG1lZGlhdGVrLmNv
-bT4NCi0tLQ0KIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3Jlc2V0L210ay1yZWJvb3Qu
-dHh0IHwgICAzMCArKysrKysrKysrKysrKysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCAzMCBpbnNl
-cnRpb25zKCspDQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy9wb3dlci9yZXNldC9tdGstcmVib290LnR4dA0KDQpkaWZmIC0tZ2l0IGEvRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3Jlc2V0L210ay1yZWJvb3QudHh0IGIv
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3Jlc2V0L210ay1yZWJvb3Qu
-dHh0DQpuZXcgZmlsZSBtb2RlIDEwMDY0NA0KaW5kZXggMDAwMDAwMC4uNzA4ZDM1MQ0KLS0tIC9k
-ZXYvbnVsbA0KKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3Jl
-c2V0L210ay1yZWJvb3QudHh0DQpAQCAtMCwwICsxLDMwIEBADQorR2VuZXJpYyBNVEsgUkdVIG1h
-cHBlZCByZWdpc3RlciByZXNldCBkcml2ZXINCisNCitUaGlzIGlzIGEgcmVzZXQgZHJpdmVyIHVz
-aW5nIHRvcHJndSB0byBtYXAgaXRzIG5vbi12b2xhdGlsZSByZWdpc3Rlci4NCitUaGUgcmVzZXQg
-aXMgZ2VuZXJhbGx5IHBlcmZvcm1lZCB3aXRoIGEgd3JpdGUgdG8gdGhlIG5vbi12b2xhdGlsZSBy
-ZWdpc3Rlcg0KK2RlZmluZWQgYnkgdGhlIHJlZ2lzdGVyIG1hcCBwb2ludGVkIGJ5IHRvcHJndSBy
-ZWZlcmVuY2UgcGx1cyB0aGUgb2Zmc2V0DQord2l0aCB0aGUgbWFzayBkZWZpbmVkIGluIHRoZSBy
-ZWJvb3QtbW9kZSBub2RlLg0KKw0KK1JlcXVpcmVkIHByb3BlcnRpZXM6DQorLSBjb21wYXRpYmxl
-OiBzaG91bGQgY29udGFpbiAidG9wcmd1LXJlYm9vdC1tb2RlIg0KKy0gcmVnbWFwOiB0aGlzIGlz
-IHBoYW5kbGUgdG8gdGhlIHJlZ2lzdGVyIG1hcCBub2RlDQorLSBvZmZzZXQ6IG9mZnNldCBpbiB0
-aGUgcmVnaXN0ZXIgbWFwIGZvciB0aGUgcmVib290LW1vZGUgcmVnaXN0ZXIgKGluIGJ5dGVzKQ0K
-Ky0gbWFzazogdGhlIHJlc2V0IHZhbHVlIHdyaXR0ZW4gdG8gdGhlIHJlYm9vdCByZWdpc3RlciAo
-MzIgYml0IGFjY2VzcykNCisNCitFeGFtcGxlczoNCisJcmVib290LW1vZGUgew0KKwkgICBjb21w
-YXRpYmxlID0gInRvcHJndS1yZWJvb3QtbW9kZSI7DQorCSAgIHJlZ21hcCA9IDwmdG9wcmd1PjsN
-CisJICAgb2Zmc2V0ID0gPDB4MjQ+Ow0KKwkgICBtYXNrID0gPDB4Rj47DQorCX07DQorDQorT3B0
-aW9uYWwgcHJvcGVydGllcyAtIHJlYm9vdCBtb2RlIHZhbHVlIHRoYXQgd2lsbCBrZWVwIGluIHRv
-cHJndSBub25yc3QgUkc6DQorLSBtb2RlLWNoYXJnZXIgPSA8Qk9PVF9DSEFSR0VSPjsNCistIG1v
-ZGUtcmVjb3ZlcnkgPSA8Qk9PVF9SRUNPVkVSWT47DQorLSBtb2RlLWJvb3Rsb2FkZXIgPSA8Qk9P
-VF9CT09UTE9BREVSPjsNCistIG1vZGUtZG0tdmVyaXR5LWRldi1jb3JydXB0ID0gPEJPT1RfRE1f
-VkVSSVRZPjsNCistIG1vZGUta3BvYyA9IDxCT09UX0tQT0M+Ow0KKy0gbW9kZS1kZHItcmVzZXJ2
-ZSA9IDxCT09UX0REUl9SU1ZEPjsNCistIG1vZGUtbWV0YSA9IDxCT09UX01FVEE+Ow0KKy0gbW9k
-ZS1ycG1icGsgPSA8Qk9PVF9SUE1CUEs+Ow0KLS0gDQoxLjcuOS41DQo=
+On 11/25/19 9:34 PM, freddy.hsin@mediatek.com wrote:
+> From: Freddy Hsin <freddy.hsin@mediatek.com>
+> 
+> of_platform_population should be added in the probe function of
+> toprgu driver, or the reboot mode driver will not be probed
+> 
+> Signed-off-by: Freddy Hsin <freddy.hsin@mediatek.com>
+> ---
+>   drivers/watchdog/mtk_wdt.c |    3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index 9c3d003..2fb2614 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -20,6 +20,7 @@
+>   #include <linux/types.h>
+>   #include <linux/watchdog.h>
+>   #include <linux/delay.h>
+> +#include <linux/of_platform.h>
+>   
+>   #define WDT_MAX_TIMEOUT		31
+>   #define WDT_MIN_TIMEOUT		1
+> @@ -167,6 +168,8 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+>   	if (IS_ERR(mtk_wdt->wdt_base))
+>   		return PTR_ERR(mtk_wdt->wdt_base);
+>   
+> +	of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
+> +
+
+This seems just wrong. Such a driver should not be a child of the watchdog driver.
+
+Guenter
+
+>   	mtk_wdt->wdt_dev.info = &mtk_wdt_info;
+>   	mtk_wdt->wdt_dev.ops = &mtk_wdt_ops;
+>   	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
+> 
 
