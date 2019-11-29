@@ -2,128 +2,87 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E62E210CE03
-	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Nov 2019 18:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A80E10D772
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Nov 2019 15:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726608AbfK1RmA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 28 Nov 2019 12:42:00 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:39126 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726612AbfK1RmA (ORCPT
+        id S1726903AbfK2Ovm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Nov 2019 09:51:42 -0500
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:44320 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726893AbfK2Ovm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 28 Nov 2019 12:42:00 -0500
-Received: by mail-ot1-f68.google.com with SMTP id 77so1570643oty.6
-        for <linux-watchdog@vger.kernel.org>; Thu, 28 Nov 2019 09:41:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xu/9Hp9YE79V3gEOl+iOuZxTKMv0URI3ITMz34Tl5nQ=;
-        b=X4Y0WJAjvRH/eGd5CdIZW+PFeJccSU4UGI9NNKoBZFTGrDcekjwt80wbKoJsIE1ebe
-         o+j582DQs2mkhx+vTTrW8bP6d2WknT9HDpY3uJW2oR4fSNdXu4XUe5EPToVAsOef7j1/
-         h+qbdULl2XUV+8E3PRnDs4h0k1qtZnIH6ETgEo3eJ1UD16Ood7I2xzSWU9eN+UMJ4VdV
-         Yc03mbpiNDF7aqL1vhnEJnB/IQFRGa0+A5hZ6w0ukH0auqusRVOL+EMlSzz3OQCp8kgk
-         ANzMAsJTo1ZdT7sThKhAaMz4r3ChlD9U3d7QFBdLI0Jk+2kWqNVC2Eooq5hNj9f4MIuO
-         6VKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xu/9Hp9YE79V3gEOl+iOuZxTKMv0URI3ITMz34Tl5nQ=;
-        b=kKafhcTCzhN/TL49HoJukqbWEnkRkEOD11LN7XbYYqkwRQXVQH/t12SWSpvAXFAfHY
-         wHq68LGt5a5fVFQHpjT2jCAkaw8JmlRulXHrD9kF39BjnNM6HugleJ+CapSTjsj5ptdd
-         r//BAgBFQTrnXVF8+rlt4p3QF7dkrStDALWaaFLBhgvPOfTaD/Yc09cyMWGuo+Oj8oec
-         WqLCaJUZTAgu/u2b8V3euMsZmQyNaLjCMpgKzHs8m+pIJSEyY405E96J4ZLbJk4xRAzJ
-         rYokA2zs7s0M/wpR6Y47W8vPpSNPyG1e764pqt6gyBYuuVP+KjKALqQX9wAwCgmjQ9iY
-         rwPA==
-X-Gm-Message-State: APjAAAWuF1lfzl4zQlJ2++rS9jTzXChoC2HKj6YVDMJXYoC+8DPssswa
-        nu2/VSifvPVcUwLISkhFDOazKKOf
-X-Google-Smtp-Source: APXvYqyds+2OpV/xx9YQJlUjgY1C38Aremt6pszL0ofZCPpKa9yKP1RwL4x/owfGMGt3sSAkODGyJw==
-X-Received: by 2002:a9d:22a8:: with SMTP id y37mr8063409ota.359.1574962919649;
-        Thu, 28 Nov 2019 09:41:59 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n5sm6271236otl.15.2019.11.28.09.41.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 28 Nov 2019 09:41:59 -0800 (PST)
-Subject: Re: [PATCH] watchdog: da9062: add power management ops
-To:     Marco Felsch <m.felsch@pengutronix.de>,
-        support.opensource@diasemi.com, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, kernel@pengutronix.de
-References: <20191128171931.22563-1-m.felsch@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f8f7721e-5ad3-ee3d-55e6-69544438884b@roeck-us.net>
-Date:   Thu, 28 Nov 2019 09:41:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Fri, 29 Nov 2019 09:51:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SJ9+mVcb0FVCH3tflyvA1BCDDhSJAg3+doDeYiOE7oc=; b=QxLKCeWPrCo0vdBPG+oXPdic3U
+        nb2zQxU8Kdw/1qQqxVVkwExjto3L2a2ZXnM9mVZD4AI7TyZ/XIFgt6RpIxwTZnhFkT7+ew6yZMaVD
+        LR/MqUNusHFqUvImaV+ALGkHruTaMxblSRufRCMPGvdEtKMQUYL65x0bPWFacQ3YsmQTOl3ztgPF6
+        SGJLCANCAmMx+iRcXZ37U1pO1nuVl20GFlGeMWmVtYDqExfrZxJjJm9GuwMcTD9x6W9XrulJ54NGl
+        zsyHNDG3Uc0HWlQVbTJ85CfYv5R4kbSxe5haU3BfVjhGWm+MW4IPZgHezmsji0OijHV8B9cRcw4jZ
+        0kVTcDgg==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([2002:4e20:1eda:1:222:68ff:fe15:37dd]:33428 helo=rmk-PC.armlinux.org.uk)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1iahcP-0007eY-Bc; Fri, 29 Nov 2019 14:51:37 +0000
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1iahcN-0000AT-Co; Fri, 29 Nov 2019 14:51:35 +0000
+From:   Russell King <rmk+kernel@armlinux.org.uk>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org
+Subject: [PATCH] watchdog: orion: fix platform_get_irq() complaints
 MIME-Version: 1.0
-In-Reply-To: <20191128171931.22563-1-m.felsch@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1iahcN-0000AT-Co@rmk-PC.armlinux.org.uk>
+Date:   Fri, 29 Nov 2019 14:51:35 +0000
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/28/19 9:19 AM, Marco Felsch wrote:
-> Disable the watchdog during suspend if it is enabled and re-enable it on
-> resume. So we can sleep without the interruptions.
-> 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Fix:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+orion_wdt f1020300.watchdog: IRQ index 1 not found
 
-> ---
->   drivers/watchdog/da9062_wdt.c | 25 +++++++++++++++++++++++++
->   1 file changed, 25 insertions(+)
-> 
-> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-> index e149e66a6ea9..2a1e7de25b71 100644
-> --- a/drivers/watchdog/da9062_wdt.c
-> +++ b/drivers/watchdog/da9062_wdt.c
-> @@ -212,6 +212,7 @@ static int da9062_wdt_probe(struct platform_device *pdev)
->   	watchdog_set_restart_priority(&wdt->wdtdev, 128);
->   
->   	watchdog_set_drvdata(&wdt->wdtdev, wdt);
-> +	dev_set_drvdata(dev, &wdt->wdtdev);
->   
->   	ret = devm_watchdog_register_device(dev, &wdt->wdtdev);
->   	if (ret < 0)
-> @@ -220,10 +221,34 @@ static int da9062_wdt_probe(struct platform_device *pdev)
->   	return da9062_wdt_ping(&wdt->wdtdev);
->   }
->   
-> +static int __maybe_unused da9062_wdt_suspend(struct device *dev)
-> +{
-> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
-> +
-> +	if (watchdog_active(wdd))
-> +		return da9062_wdt_stop(wdd);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused da9062_wdt_resume(struct device *dev)
-> +{
-> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
-> +
-> +	if (watchdog_active(wdd))
-> +		return da9062_wdt_start(wdd);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(da9062_wdt_pm_ops,
-> +			 da9062_wdt_suspend, da9062_wdt_resume);
-> +
->   static struct platform_driver da9062_wdt_driver = {
->   	.probe = da9062_wdt_probe,
->   	.driver = {
->   		.name = "da9062-watchdog",
-> +		.pm = &da9062_wdt_pm_ops,
->   		.of_match_table = da9062_compatible_id_table,
->   	},
->   };
-> 
+which is caused by platform_get_irq() now complaining when optional
+IRQs are not found.  Neither interrupt for orion is required, so
+make them both optional.
+
+Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
+---
+ drivers/watchdog/orion_wdt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
+index 1cccf8eb1c5d..8e6dfe76f9c9 100644
+--- a/drivers/watchdog/orion_wdt.c
++++ b/drivers/watchdog/orion_wdt.c
+@@ -602,7 +602,7 @@ static int orion_wdt_probe(struct platform_device *pdev)
+ 		set_bit(WDOG_HW_RUNNING, &dev->wdt.status);
+ 
+ 	/* Request the IRQ only after the watchdog is disabled */
+-	irq = platform_get_irq(pdev, 0);
++	irq = platform_get_irq_optional(pdev, 0);
+ 	if (irq > 0) {
+ 		/*
+ 		 * Not all supported platforms specify an interrupt for the
+@@ -617,7 +617,7 @@ static int orion_wdt_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* Optional 2nd interrupt for pretimeout */
+-	irq = platform_get_irq(pdev, 1);
++	irq = platform_get_irq_optional(pdev, 1);
+ 	if (irq > 0) {
+ 		orion_wdt_info.options |= WDIOF_PRETIMEOUT;
+ 		ret = devm_request_irq(&pdev->dev, irq, orion_wdt_pre_irq,
+-- 
+2.20.1
 
