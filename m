@@ -2,135 +2,87 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C93D11B69B
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2019 17:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA33A11B897
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2019 17:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731447AbfLKQBl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Dec 2019 11:01:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36792 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731411AbfLKPNY (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:13:24 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1574E24656;
-        Wed, 11 Dec 2019 15:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576077204;
-        bh=Ur/viyuBEyZ5mqbdrZIIH5xEqPh/48fUizwmkULdx4o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xaFJuEPcATQr3gajjFdK81T2jXtUe/ZD+k2Z0IwMHQDaLbRTYTcOIpv3XfDTykEj9
-         q3tfUDXjFbnIByX5sz9X2/QF743gd5dQOYV26PUqffvcC4DbAJUOGhoept9HbpIyaU
-         i0IinKA4rMKJ6ba8TsLurhL1+H60LdBzwR2d1QhA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Julia Cartwright <julia@ni.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Tim Sander <tim@krieglstein.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 086/134] watchdog: prevent deferral of watchdogd wakeup on RT
-Date:   Wed, 11 Dec 2019 10:11:02 -0500
-Message-Id: <20191211151150.19073-86-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191211151150.19073-1-sashal@kernel.org>
-References: <20191211151150.19073-1-sashal@kernel.org>
+        id S1730134AbfLKQWz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Dec 2019 11:22:55 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:24794 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730219AbfLKQWz (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 11 Dec 2019 11:22:55 -0500
+X-UUID: 73e49ec7508844cf8842576d5af10895-20191212
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=iimza8cqkvrV1lF7V0mYtKiaYJScHBfp3AjzMCxE4gQ=;
+        b=CTpH30TN4MmOSrnL9IVid5HNqTGghWnqq9dsYcUVwkjXzAKx1Z1fdk6SNy1brspl32QzavMWw+uizFf1w2kxZvnngpm24ZChzD7x8oKBSL6b6wgHHlMeuj6+wcLVXvtLhESq9N2kdimZYolQ9BaDoLgPdEpd8KQID1dvWKZu/Hc=;
+X-UUID: 73e49ec7508844cf8842576d5af10895-20191212
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 792463200; Thu, 12 Dec 2019 00:22:49 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 12 Dec 2019 00:22:23 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 12 Dec 2019 00:22:06 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <yong.liang@mediatek.com>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <p.zabel@pengutronix.de>,
+        <matthias.bgg@gmail.com>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>
+CC:     <yingjoe.chen@mediatek.com>, <sboyd@kernel.org>
+Subject: [PATCH v6 0/2] ASoC: mt8183: fix audio playback slowly after playback
+Date:   Thu, 12 Dec 2019 00:22:34 +0800
+Message-ID: <1576081356-18298-1-git-send-email-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Julia Cartwright <julia@ni.com>
-
-[ Upstream commit a19f89335f4bda3d77d991c96583e3e51856acbb ]
-
-When PREEMPT_RT is enabled, all hrtimer expiry functions are
-deferred for execution into the context of ksoftirqd unless otherwise
-annotated.
-
-Deferring the expiry of the hrtimer used by the watchdog core, however,
-is a waste, as the callback does nothing but queue a kthread work item
-and wakeup watchdogd.
-
-It's worst then that, too: the deferral through ksoftirqd also means
-that for correct behavior a user must adjust the scheduling parameters
-of both watchdogd _and_ ksoftirqd, which is unnecessary and has other
-side effects (like causing unrelated expiry functions to execute at
-potentially elevated priority).
-
-Instead, mark the hrtimer used by the watchdog core as being _HARD to
-allow it's execution directly from hardirq context.  The work done in
-this expiry function is well-bounded and minimal.
-
-A user still must adjust the scheduling parameters of the watchdogd
-to be correct w.r.t. their application needs.
-
-Link: https://lkml.kernel.org/r/0e02d8327aeca344096c246713033887bc490dd7.1538089180.git.julia@ni.com
-Cc: Guenter Roeck <linux@roeck-us.net>
-Reported-and-tested-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Reported-by: Tim Sander <tim@krieglstein.org>
-Signed-off-by: Julia Cartwright <julia@ni.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-[bigeasy: use only HRTIMER_MODE_REL_HARD]
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20191105144506.clyadjbvnn7b7b2m@linutronix.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/watchdog/watchdog_dev.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index dbd2ad4c92948..d3acc0a7256ca 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -158,7 +158,8 @@ static inline void watchdog_update_worker(struct watchdog_device *wdd)
- 		ktime_t t = watchdog_next_keepalive(wdd);
- 
- 		if (t > 0)
--			hrtimer_start(&wd_data->timer, t, HRTIMER_MODE_REL);
-+			hrtimer_start(&wd_data->timer, t,
-+				      HRTIMER_MODE_REL_HARD);
- 	} else {
- 		hrtimer_cancel(&wd_data->timer);
- 	}
-@@ -177,7 +178,7 @@ static int __watchdog_ping(struct watchdog_device *wdd)
- 	if (ktime_after(earliest_keepalive, now)) {
- 		hrtimer_start(&wd_data->timer,
- 			      ktime_sub(earliest_keepalive, now),
--			      HRTIMER_MODE_REL);
-+			      HRTIMER_MODE_REL_HARD);
- 		return 0;
- 	}
- 
-@@ -971,7 +972,7 @@ static int watchdog_cdev_register(struct watchdog_device *wdd, dev_t devno)
- 		return -ENODEV;
- 
- 	kthread_init_work(&wd_data->work, watchdog_ping_work);
--	hrtimer_init(&wd_data->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-+	hrtimer_init(&wd_data->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_HARD);
- 	wd_data->timer.function = watchdog_timer_expired;
- 
- 	if (wdd->id == 0) {
-@@ -1019,7 +1020,8 @@ static int watchdog_cdev_register(struct watchdog_device *wdd, dev_t devno)
- 		__module_get(wdd->ops->owner);
- 		kref_get(&wd_data->kref);
- 		if (handle_boot_enabled)
--			hrtimer_start(&wd_data->timer, 0, HRTIMER_MODE_REL);
-+			hrtimer_start(&wd_data->timer, 0,
-+				      HRTIMER_MODE_REL_HARD);
- 		else
- 			pr_info("watchdog%d running and kernel based pre-userspace handler disabled\n",
- 				wdd->id);
--- 
-2.20.1
+RnJvbTogInlvbmcubGlhbmciIDx5b25nLmxpYW5nQG1lZGlhdGVrLmNvbT4NCg0KVGhpcyBzZXJp
+ZXMgcGF0Y2hlcyBhZGQgcmVzZXQgY29udHJvbGxlciBmb3IgTVQ4MTgzLCBhbmQgYXVkaW8gd2ls
+bCB1c2UgaXQgaW4gDQptYWNoaW5lIGRyaXZlciBkdXJpbmcgYm9vdHVwLCB0aGV5IGRlcGVuZCBv
+biB0aGUgZm9yLW5leHQuDQoNCnY2IGNoYW5nZXM6DQoJMS4gU2ltcGxpZnkgdG9wcnVnX3Jlc2V0
+X2Fzc2VydCgpICYgdG9wcnVnX3Jlc2V0X2RlYXNzZXJ0KCkuDQoJMi4gQWRkIG1lbWJlcnMgZm9y
+IG10MjcxMl9kYXRhICYgbXQ4MTgzX2RhdGEuDQoNCnY1IGNoYW5nZXM6DQoJMS4gQWRkIFNpZ25l
+ZC1vZmYtYnkgdGFnIGFuZCBSZXZpZXdlZC1ieSB0YWcuDQoNCnY0IGNoYW5nZXM6DQoJMS4gRml4
+ZWQgd3Jvbmcgc2lnbmVkLW9mZiBhcyBjb3JyZWN0IG1haWwgc3VmZml4Lg0KCTIuIEZpeGVkIHBh
+dGNoIHN1YmplY3QgdGhhdCBhZGQgcGF0Y2ggdmVyc2lvbi4NCg0KdjMgY2hhbmdlczoNCgkxLiBo
+dHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMTY0MjgzLyBhbmQgDQoJICAgaHR0
+cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8xMTE2NDMwNS8gaGFzIGJlZW4gbWVyZ2Vk
+Lg0KCTIuIENoYW5nZSB0aGUgbmFtZSBvZiBtdGtfd2R0X2NvbXBhdGlibGUgdG8gbXRrX3dkdF9k
+YXRhLg0KCTMuIFJlbW92ZSB0b3ByZ3VfcmVzZXQgc3RydWN0IGFuZCB1c2UgbXRrX3dkdF9kZXYg
+aW5zdGVhZC4NCgk0LiBHZXQgdGhlIHZhbHVlIG9mIHN3X3JzdF9udW0gZnJvbSAuaCBmaWxlLg0K
+CTUuIEFkZGRkIG10MjcxMi1yZXNldHMuaCBmb3IgbXQyNzEyLg0KCTYuIEltcHJvdmUgY29tbWl0
+IG1lc3NhZ2UuDQoNCnYyIGNoYW5nZXM6DQoJMS4gcmVtb3ZlICJXSVAiIHRoYXQgaW4gdGhlIHRp
+dGxlIG9mIHBhdGNoZXMNCgkyLiBhZGQgaHlwZXIgbGluayBmb3IgdGhlIHBhdGNoIHRoYXQgZGVw
+ZW5kcyBvbg0KCTMuIHBhdGNod29yayBsaXN0Og0KCQlodHRwczovL3BhdGNod29yay5rZXJuZWwu
+b3JnL2NvdmVyLzExMTY0Mjg1Lw0KCQlodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNo
+LzExMTY0Mjk1Lw0KCQlodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMTY0Mjk5
+Lw0KCQlodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMTY0MjgzLw0KCQlodHRw
+czovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMTY0MzA1Lw0KDQp2MSBjaGFuZ2VzOg0K
+CTEuIHBhdGNod29yayBsaXN0Og0KCQlodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL2NvdmVy
+LzExMTY0MTczLw0KCQlodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMTY0MTgx
+Lw0KCQlodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMTY0MTg1Lw0KCQlodHRw
+czovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMTY0MTg3Lw0KCQlodHRwczovL3BhdGNo
+d29yay5rZXJuZWwub3JnL3BhdGNoLzExMTY0MTc1Lw0KDQp5b25nLmxpYW5nICgyKToNCiAgYXJt
+NjQ6IGR0czogbXQ4MTgzOiBBZGQgcmVzZXQtY2VsbHMgaW4gaW5mcmFjZmcNCiAgY2xrOiByZXNl
+dDogTW9kaWZ5IHJlc2V0LWNvbnRyb2xsZXIgZHJpdmVyDQoNCiAuLi4vZGV2aWNldHJlZS9iaW5k
+aW5ncy93YXRjaGRvZy9tdGstd2R0LnR4dCAgfCAgMTAgKy0NCiBkcml2ZXJzL3dhdGNoZG9nL0tj
+b25maWcgICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKw0KIGRyaXZlcnMvd2F0Y2hkb2cvbXRr
+X3dkdC5jICAgICAgICAgICAgICAgICAgICB8IDEwOSArKysrKysrKysrKysrKysrKy0NCiAuLi4v
+cmVzZXQtY29udHJvbGxlci9tdDI3MTItcmVzZXRzLmggICAgICAgICAgfCAgMjIgKysrKw0KIC4u
+Li9yZXNldC1jb250cm9sbGVyL210ODE4My1yZXNldHMuaCAgICAgICAgICB8ICAxNyArKysNCiA1
+IGZpbGVzIGNoYW5nZWQsIDE1NSBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0LWNvbnRyb2xsZXIvbXQyNzEy
+LXJlc2V0cy5oDQoNCi0tIA0KMi4xOC4wDQo=
 
