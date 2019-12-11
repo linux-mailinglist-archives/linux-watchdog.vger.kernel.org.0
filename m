@@ -2,150 +2,202 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5534B11B898
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2019 17:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EE211B912
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2019 17:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730505AbfLKQW5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Dec 2019 11:22:57 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:2565 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729118AbfLKQW4 (ORCPT
+        id S1730779AbfLKQpF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Dec 2019 11:45:05 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:55755 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730315AbfLKQpF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Dec 2019 11:22:56 -0500
-X-UUID: b8cee362e4d44ea598e1b5b0f8e49d2e-20191212
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=BhFStqHINugZXLbNdVW+BFM4oGLuOot6pcNXv0LqlEM=;
-        b=efP68Y8YJbnvPVFkYyQSUBATOnmWXEvoTZoafSrK9Emc4eiwQLqpFNtgpzXsZSXwnYIhqf/MeICwGX0pzkceUnOr71bi6W20iC+eLc0S9CbM1njAIEgzSDQ62D1lEKPEeqMa+VOgcGD8m+okcfRM7FOyzO48PoKWoNcAzKDf3Zo=;
-X-UUID: b8cee362e4d44ea598e1b5b0f8e49d2e-20191212
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 880074018; Thu, 12 Dec 2019 00:22:51 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 12 Dec 2019 00:22:25 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 12 Dec 2019 00:22:14 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <yong.liang@mediatek.com>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <p.zabel@pengutronix.de>,
-        <matthias.bgg@gmail.com>, <linux-watchdog@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     <yingjoe.chen@mediatek.com>, <sboyd@kernel.org>
-Subject: [PATCH v6 2/2] watchdog: mtk_wdt: mt8183: Add reset controller
-Date:   Thu, 12 Dec 2019 00:22:36 +0800
-Message-ID: <1576081356-18298-3-git-send-email-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1576081356-18298-1-git-send-email-jiaxin.yu@mediatek.com>
+        Wed, 11 Dec 2019 11:45:05 -0500
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1if56e-0003fN-Rr; Wed, 11 Dec 2019 17:44:56 +0100
+Message-ID: <fe8b8b2aac6d92a1d7ffc32ea012db9898ab6857.camel@pengutronix.de>
+Subject: Re: [PATCH v6 2/2] watchdog: mtk_wdt: mt8183: Add reset controller
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, yong.liang@mediatek.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, matthias.bgg@gmail.com,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     yingjoe.chen@mediatek.com, sboyd@kernel.org
+Date:   Wed, 11 Dec 2019 17:44:55 +0100
+In-Reply-To: <1576081356-18298-3-git-send-email-jiaxin.yu@mediatek.com>
 References: <1576081356-18298-1-git-send-email-jiaxin.yu@mediatek.com>
+         <1576081356-18298-3-git-send-email-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-RnJvbTogInlvbmcubGlhbmciIDx5b25nLmxpYW5nQG1lZGlhdGVrLmNvbT4NCg0KQWRkIHJlc2V0
-IGNvbnRyb2xsZXIgQVBJIGluIHdhdGNoZG9nIGRyaXZlci4NCkJlc2lkZXMgd2F0Y2hkb2csIE1U
-SyB0b3ByZ3UgbW9kdWxlIGFsc2EgcHJvdmlkZSBzdWItc3lzdGVtIChlZywgYXVkaW8sDQpjYW1l
-cmEsIGNvZGVjIGFuZCBjb25uZWN0aXZpdHkpIHNvZnR3YXJlIHJlc2V0IGZ1bmN0aW9uYWxpdHku
-DQoNClNpZ25lZC1vZmYtYnk6IHlvbmcubGlhbmcgPHlvbmcubGlhbmdAbWVkaWF0ZWsuY29tPg0K
-LS0tDQogZHJpdmVycy93YXRjaGRvZy9LY29uZmlnICAgfCAgIDEgKw0KIGRyaXZlcnMvd2F0Y2hk
-b2cvbXRrX3dkdC5jIHwgMTA5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0N
-CiAyIGZpbGVzIGNoYW5nZWQsIDEwOSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRp
-ZmYgLS1naXQgYS9kcml2ZXJzL3dhdGNoZG9nL0tjb25maWcgYi9kcml2ZXJzL3dhdGNoZG9nL0tj
-b25maWcNCmluZGV4IDJlMDdjYWFiOWRiMi4uNjI5MjQ5ZmU1MzA1IDEwMDY0NA0KLS0tIGEvZHJp
-dmVycy93YXRjaGRvZy9LY29uZmlnDQorKysgYi9kcml2ZXJzL3dhdGNoZG9nL0tjb25maWcNCkBA
-IC03MTcsNiArNzE3LDcgQEAgY29uZmlnIE1FRElBVEVLX1dBVENIRE9HDQogCXRyaXN0YXRlICJN
-ZWRpYXRlayBTb0NzIHdhdGNoZG9nIHN1cHBvcnQiDQogCWRlcGVuZHMgb24gQVJDSF9NRURJQVRF
-SyB8fCBDT01QSUxFX1RFU1QNCiAJc2VsZWN0IFdBVENIRE9HX0NPUkUNCisJc2VsZWN0IFJFU0VU
-X0NPTlRST0xMRVINCiAJaGVscA0KIAkgIFNheSBZIGhlcmUgdG8gaW5jbHVkZSBzdXBwb3J0IGZv
-ciB0aGUgd2F0Y2hkb2cgdGltZXINCiAJICBpbiBNZWRpYXRlayBTb0NzLg0KZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5jIGIvZHJpdmVycy93YXRjaGRvZy9tdGtfd2R0LmMN
-CmluZGV4IDljM2QwMDMzMjYwZC4uNjY3MzgwMDMxZGZkIDEwMDY0NA0KLS0tIGEvZHJpdmVycy93
-YXRjaGRvZy9tdGtfd2R0LmMNCisrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5jDQpAQCAt
-OSw2ICs5LDkgQEANCiAgKiBCYXNlZCBvbiBzdW54aV93ZHQuYw0KICAqLw0KIA0KKyNpbmNsdWRl
-IDxkdC1iaW5kaW5ncy9yZXNldC1jb250cm9sbGVyL210MjcxMi1yZXNldHMuaD4NCisjaW5jbHVk
-ZSA8ZHQtYmluZGluZ3MvcmVzZXQtY29udHJvbGxlci9tdDgxODMtcmVzZXRzLmg+DQorI2luY2x1
-ZGUgPGxpbnV4L2RlbGF5Lmg+DQogI2luY2x1ZGUgPGxpbnV4L2Vyci5oPg0KICNpbmNsdWRlIDxs
-aW51eC9pbml0Lmg+DQogI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQpAQCAtMTYsMTAgKzE5LDEyIEBA
-DQogI2luY2x1ZGUgPGxpbnV4L21vZHVsZS5oPg0KICNpbmNsdWRlIDxsaW51eC9tb2R1bGVwYXJh
-bS5oPg0KICNpbmNsdWRlIDxsaW51eC9vZi5oPg0KKyNpbmNsdWRlIDxsaW51eC9vZl9kZXZpY2Uu
-aD4NCiAjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQorI2luY2x1ZGUgPGxpbnV4
-L3Jlc2V0LWNvbnRyb2xsZXIuaD4NCisjaW5jbHVkZSA8bGludXgvc2xhYi5oPg0KICNpbmNsdWRl
-IDxsaW51eC90eXBlcy5oPg0KICNpbmNsdWRlIDxsaW51eC93YXRjaGRvZy5oPg0KLSNpbmNsdWRl
-IDxsaW51eC9kZWxheS5oPg0KIA0KICNkZWZpbmUgV0RUX01BWF9USU1FT1VUCQkzMQ0KICNkZWZp
-bmUgV0RUX01JTl9USU1FT1VUCQkxDQpAQCAtNDQsNiArNDksOSBAQA0KICNkZWZpbmUgV0RUX1NX
-UlNUCQkweDE0DQogI2RlZmluZSBXRFRfU1dSU1RfS0VZCQkweDEyMDkNCiANCisjZGVmaW5lIFdE
-VF9TV1NZU1JTVAkJMHgxOFUNCisjZGVmaW5lIFdEVF9TV1NZU19SU1RfS0VZCTB4ODgwMDAwMDAN
-CisNCiAjZGVmaW5lIERSVl9OQU1FCQkibXRrLXdkdCINCiAjZGVmaW5lIERSVl9WRVJTSU9OCQki
-MS4wIg0KIA0KQEAgLTUzLDggKzYxLDk3IEBAIHN0YXRpYyB1bnNpZ25lZCBpbnQgdGltZW91dDsN
-CiBzdHJ1Y3QgbXRrX3dkdF9kZXYgew0KIAlzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlIHdkdF9kZXY7
-DQogCXZvaWQgX19pb21lbSAqd2R0X2Jhc2U7DQorCXNwaW5sb2NrX3QgbG9jazsgLyogcHJvdGVj
-dHMgV0RUX1NXU1lTUlNUIHJlZyAqLw0KKwlzdHJ1Y3QgcmVzZXRfY29udHJvbGxlcl9kZXYgcmNk
-ZXY7DQorfTsNCisNCitzdHJ1Y3QgbXRrX3dkdF9kYXRhIHsNCisJaW50IGluZnJhY2ZnX3N3X3Jz
-dF9udW07DQorCWludCB0b3ByZ3Vfc3dfcnN0X251bTsNCit9Ow0KKw0KK3N0YXRpYyBjb25zdCBz
-dHJ1Y3QgbXRrX3dkdF9kYXRhIG10MjcxMl9kYXRhID0gew0KKwkudG9wcmd1X3N3X3JzdF9udW0g
-PSBNVDI3MTJfVE9QUkdVX1NXX1JTVF9OVU0sDQorfTsNCisNCitzdGF0aWMgY29uc3Qgc3RydWN0
-IG10a193ZHRfZGF0YSBtdDgxODNfZGF0YSA9IHsNCisJLmluZnJhY2ZnX3N3X3JzdF9udW0gPSBN
-VDgxODNfSU5GUkFDRkdfU1dfUlNUX05VTSwNCisJLnRvcHJndV9zd19yc3RfbnVtID0gTVQ4MTgz
-X1RPUFJHVV9TV19SU1RfTlVNLA0KK307DQorDQorc3RhdGljIGludCB0b3ByZ3VfcmVzZXRfdXBk
-YXRlKHN0cnVjdCByZXNldF9jb250cm9sbGVyX2RldiAqcmNkZXYsDQorCQkJICAgICAgIHVuc2ln
-bmVkIGxvbmcgaWQsIGJvb2wgYXNzZXJ0KQ0KK3sNCisJdW5zaWduZWQgaW50IHRtcDsNCisJdW5z
-aWduZWQgbG9uZyBmbGFnczsNCisNCisJc3RydWN0IG10a193ZHRfZGV2ICpkYXRhID0NCisJCSBj
-b250YWluZXJfb2YocmNkZXYsIHN0cnVjdCBtdGtfd2R0X2RldiwgcmNkZXYpOw0KKw0KKwlzcGlu
-X2xvY2tfaXJxc2F2ZSgmZGF0YS0+bG9jaywgZmxhZ3MpOw0KKw0KKwl0bXAgPSByZWFkbChkYXRh
-LT53ZHRfYmFzZSArIFdEVF9TV1NZU1JTVCk7DQorCWlmIChhc3NlcnQpDQorCQl0bXAgfD0gQklU
-KGlkKTsNCisJZWxzZQ0KKwkJdG1wICY9IH5CSVQoaWQpOw0KKwl0bXAgfD0gV0RUX1NXU1lTX1JT
-VF9LRVk7DQorCXdyaXRlbCh0bXAsIGRhdGEtPndkdF9iYXNlICsgV0RUX1NXU1lTUlNUKTsNCisN
-CisJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZGF0YS0+bG9jaywgZmxhZ3MpOw0KKw0KKwlyZXR1
-cm4gMDsNCit9DQorDQorc3RhdGljIGludCB0b3ByZ3VfcmVzZXRfYXNzZXJ0KHN0cnVjdCByZXNl
-dF9jb250cm9sbGVyX2RldiAqcmNkZXYsDQorCQkJICAgICAgIHVuc2lnbmVkIGxvbmcgaWQpDQor
-ew0KKwlyZXR1cm4gdG9wcmd1X3Jlc2V0X3VwZGF0ZShyY2RldiwgaWQsIHRydWUpOw0KK30NCisN
-CitzdGF0aWMgaW50IHRvcHJndV9yZXNldF9kZWFzc2VydChzdHJ1Y3QgcmVzZXRfY29udHJvbGxl
-cl9kZXYgKnJjZGV2LA0KKwkJCQkgdW5zaWduZWQgbG9uZyBpZCkNCit7DQorCXJldHVybiB0b3By
-Z3VfcmVzZXRfdXBkYXRlKHJjZGV2LCBpZCwgZmFsc2UpOw0KK30NCisNCitzdGF0aWMgaW50IHRv
-cHJndV9yZXNldChzdHJ1Y3QgcmVzZXRfY29udHJvbGxlcl9kZXYgKnJjZGV2LA0KKwkJCXVuc2ln
-bmVkIGxvbmcgaWQpDQorew0KKwlpbnQgcmV0Ow0KKw0KKwlyZXQgPSB0b3ByZ3VfcmVzZXRfYXNz
-ZXJ0KHJjZGV2LCBpZCk7DQorCWlmIChyZXQpDQorCQlyZXR1cm4gcmV0Ow0KKw0KKwlyZXR1cm4g
-dG9wcmd1X3Jlc2V0X2RlYXNzZXJ0KHJjZGV2LCBpZCk7DQorfQ0KKw0KK3N0YXRpYyBjb25zdCBz
-dHJ1Y3QgcmVzZXRfY29udHJvbF9vcHMgdG9wcmd1X3Jlc2V0X29wcyA9IHsNCisJLmFzc2VydCA9
-IHRvcHJndV9yZXNldF9hc3NlcnQsDQorCS5kZWFzc2VydCA9IHRvcHJndV9yZXNldF9kZWFzc2Vy
-dCwNCisJLnJlc2V0ID0gdG9wcmd1X3Jlc2V0LA0KIH07DQogDQorc3RhdGljIGludCB0b3ByZ3Vf
-cmVnaXN0ZXJfcmVzZXRfY29udHJvbGxlcihzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2LA0K
-KwkJCQkJICAgIGludCByc3RfbnVtKQ0KK3sNCisJaW50IHJldDsNCisJc3RydWN0IG10a193ZHRf
-ZGV2ICptdGtfd2R0ID0gcGxhdGZvcm1fZ2V0X2RydmRhdGEocGRldik7DQorDQorCXNwaW5fbG9j
-a19pbml0KCZtdGtfd2R0LT5sb2NrKTsNCisNCisJbXRrX3dkdC0+cmNkZXYub3duZXIgPSBUSElT
-X01PRFVMRTsNCisJbXRrX3dkdC0+cmNkZXYubnJfcmVzZXRzID0gcnN0X251bTsNCisJbXRrX3dk
-dC0+cmNkZXYub3BzID0gJnRvcHJndV9yZXNldF9vcHM7DQorCW10a193ZHQtPnJjZGV2Lm9mX25v
-ZGUgPSBwZGV2LT5kZXYub2Zfbm9kZTsNCisJcmV0ID0gZGV2bV9yZXNldF9jb250cm9sbGVyX3Jl
-Z2lzdGVyKCZwZGV2LT5kZXYsICZtdGtfd2R0LT5yY2Rldik7DQorCWlmIChyZXQgIT0gMCkNCisJ
-CWRldl9lcnIoJnBkZXYtPmRldiwNCisJCQkiY291bGRuJ3QgcmVnaXN0ZXIgd2R0IHJlc2V0IGNv
-bnRyb2xsZXI6ICVkXG4iLCByZXQpOw0KKwlyZXR1cm4gcmV0Ow0KK30NCisNCiBzdGF0aWMgaW50
-IG10a193ZHRfcmVzdGFydChzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3ZHRfZGV2LA0KIAkJCSAg
-IHVuc2lnbmVkIGxvbmcgYWN0aW9uLCB2b2lkICpkYXRhKQ0KIHsNCkBAIC0xNTUsNiArMjUyLDcg
-QEAgc3RhdGljIGludCBtdGtfd2R0X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYp
-DQogew0KIAlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2Ow0KIAlzdHJ1Y3QgbXRrX3dk
-dF9kZXYgKm10a193ZHQ7DQorCXN0cnVjdCBtdGtfd2R0X2RhdGEgKndkdF9kYXRhOw0KIAlpbnQg
-ZXJyOw0KIA0KIAltdGtfd2R0ID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9mKCptdGtfd2R0KSwg
-R0ZQX0tFUk5FTCk7DQpAQCAtMTkwLDYgKzI4OCwxMyBAQCBzdGF0aWMgaW50IG10a193ZHRfcHJv
-YmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCiAJZGV2X2luZm8oZGV2LCAiV2F0Y2hk
-b2cgZW5hYmxlZCAodGltZW91dD0lZCBzZWMsIG5vd2F5b3V0PSVkKVxuIiwNCiAJCSBtdGtfd2R0
-LT53ZHRfZGV2LnRpbWVvdXQsIG5vd2F5b3V0KTsNCiANCisJd2R0X2RhdGEgPSAoc3RydWN0IG10
-a193ZHRfZGF0YSAqKW9mX2RldmljZV9nZXRfbWF0Y2hfZGF0YShkZXYpOw0KKwlpZiAod2R0X2Rh
-dGEpIHsNCisJCWVyciA9IHRvcHJndV9yZWdpc3Rlcl9yZXNldF9jb250cm9sbGVyKHBkZXYsDQor
-CQkJCQkJICAgICAgIHdkdF9kYXRhLT50b3ByZ3Vfc3dfcnN0X251bSk7DQorCQlpZiAoZXJyKQ0K
-KwkJCXJldHVybiBlcnI7DQorCX0NCiAJcmV0dXJuIDA7DQogfQ0KIA0KQEAgLTIxOCw3ICszMjMs
-OSBAQCBzdGF0aWMgaW50IG10a193ZHRfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCiAjZW5k
-aWYNCiANCiBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBtdGtfd2R0X2R0X2lkc1td
-ID0gew0KKwl7IC5jb21wYXRpYmxlID0gIm1lZGlhdGVrLG10MjcxMi13ZHQiLCAuZGF0YSA9ICZt
-dDI3MTJfZGF0YSB9LA0KIAl7IC5jb21wYXRpYmxlID0gIm1lZGlhdGVrLG10NjU4OS13ZHQiIH0s
-DQorCXsgLmNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTgzLXdkdCIsIC5kYXRhID0gJm10ODE4
-M19kYXRhIH0sDQogCXsgLyogc2VudGluZWwgKi8gfQ0KIH07DQogTU9EVUxFX0RFVklDRV9UQUJM
-RShvZiwgbXRrX3dkdF9kdF9pZHMpOw0KLS0gDQoyLjE4LjANCg==
+Hi,
+
+On Thu, 2019-12-12 at 00:22 +0800, Jiaxin Yu wrote:
+> From: "yong.liang" <yong.liang@mediatek.com>
+> 
+> Add reset controller API in watchdog driver.
+> Besides watchdog, MTK toprgu module alsa provide sub-system (eg, audio,
+> camera, codec and connectivity) software reset functionality.
+
+Do any of the listed sub-systems use the reset_control_reset()
+functionality? Is there no delay requirement between assert and
+deassert? Otherwise it would be safer not to implement the .reset()
+operation at all.
+
+> 
+> Signed-off-by: yong.liang <yong.liang@mediatek.com>
+> ---
+>  drivers/watchdog/Kconfig   |   1 +
+>  drivers/watchdog/mtk_wdt.c | 109 ++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 109 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 2e07caab9db2..629249fe5305 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -717,6 +717,7 @@ config MEDIATEK_WATCHDOG
+>  	tristate "Mediatek SoCs watchdog support"
+>  	depends on ARCH_MEDIATEK || COMPILE_TEST
+>  	select WATCHDOG_CORE
+> +	select RESET_CONTROLLER
+>  	help
+>  	  Say Y here to include support for the watchdog timer
+>  	  in Mediatek SoCs.
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index 9c3d0033260d..667380031dfd 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -9,6 +9,9 @@
+>   * Based on sunxi_wdt.c
+>   */
+>  
+> +#include <dt-bindings/reset-controller/mt2712-resets.h>
+> +#include <dt-bindings/reset-controller/mt8183-resets.h>
+> +#include <linux/delay.h>
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+> @@ -16,10 +19,12 @@
+>  #include <linux/module.h>
+>  #include <linux/moduleparam.h>
+>  #include <linux/of.h>
+> +#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/slab.h>
+
+What is this required for?
+
+>  #include <linux/types.h>
+>  #include <linux/watchdog.h>
+> -#include <linux/delay.h>
+>
+>  #define WDT_MAX_TIMEOUT		31
+>  #define WDT_MIN_TIMEOUT		1
+> @@ -44,6 +49,9 @@
+>  #define WDT_SWRST		0x14
+>  #define WDT_SWRST_KEY		0x1209
+>  
+> +#define WDT_SWSYSRST		0x18U
+> +#define WDT_SWSYS_RST_KEY	0x88000000
+> +
+>  #define DRV_NAME		"mtk-wdt"
+>  #define DRV_VERSION		"1.0"
+>  
+> @@ -53,8 +61,97 @@ static unsigned int timeout;
+>  struct mtk_wdt_dev {
+>  	struct watchdog_device wdt_dev;
+>  	void __iomem *wdt_base;
+> +	spinlock_t lock; /* protects WDT_SWSYSRST reg */
+> +	struct reset_controller_dev rcdev;
+> +};
+> +
+> +struct mtk_wdt_data {
+> +	int infracfg_sw_rst_num;
+
+This is not used at all, better remove it.
+
+> +	int toprgu_sw_rst_num;
+> +};
+> +
+> +static const struct mtk_wdt_data mt2712_data = {
+> +	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
+> +};
+> +
+> +static const struct mtk_wdt_data mt8183_data = {
+> +	.infracfg_sw_rst_num = MT8183_INFRACFG_SW_RST_NUM,
+
+Same as above.
+
+> +	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
+> +};
+> +
+> +static int toprgu_reset_update(struct reset_controller_dev *rcdev,
+> +			       unsigned long id, bool assert)
+> +{
+> +	unsigned int tmp;
+> +	unsigned long flags;
+> +
+
+This empty line can be removed.
+
+> +	struct mtk_wdt_dev *data =
+> +		 container_of(rcdev, struct mtk_wdt_dev, rcdev);
+> +
+> +	spin_lock_irqsave(&data->lock, flags);
+> +
+> +	tmp = readl(data->wdt_base + WDT_SWSYSRST);
+> +	if (assert)
+> +		tmp |= BIT(id);
+> +	else
+> +		tmp &= ~BIT(id);
+> +	tmp |= WDT_SWSYS_RST_KEY;
+> +	writel(tmp, data->wdt_base + WDT_SWSYSRST);
+> +
+> +	spin_unlock_irqrestore(&data->lock, flags);
+> +
+> +	return 0;
+> +}
+> +
+> +static int toprgu_reset_assert(struct reset_controller_dev *rcdev,
+> +			       unsigned long id)
+> +{
+> +	return toprgu_reset_update(rcdev, id, true);
+> +}
+> +
+> +static int toprgu_reset_deassert(struct reset_controller_dev *rcdev,
+> +				 unsigned long id)
+> +{
+> +	return toprgu_reset_update(rcdev, id, false);
+> +}
+> +
+> +static int toprgu_reset(struct reset_controller_dev *rcdev,
+> +			unsigned long id)
+> +{
+> +	int ret;
+> +
+> +	ret = toprgu_reset_assert(rcdev, id);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return toprgu_reset_deassert(rcdev, id);
+> +}
+
+As mentioned above, is this needed? Does this work for all modules?
+Only implement this if you are sure both are true.
+
+regards
+Philipp
 
