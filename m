@@ -2,202 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EE211B912
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2019 17:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F3A11BEC2
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2019 22:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730779AbfLKQpF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Dec 2019 11:45:05 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:55755 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730315AbfLKQpF (ORCPT
+        id S1726368AbfLKVCK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Dec 2019 16:02:10 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42173 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726345AbfLKVCK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Dec 2019 11:45:05 -0500
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1if56e-0003fN-Rr; Wed, 11 Dec 2019 17:44:56 +0100
-Message-ID: <fe8b8b2aac6d92a1d7ffc32ea012db9898ab6857.camel@pengutronix.de>
-Subject: Re: [PATCH v6 2/2] watchdog: mtk_wdt: mt8183: Add reset controller
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, yong.liang@mediatek.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, matthias.bgg@gmail.com,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     yingjoe.chen@mediatek.com, sboyd@kernel.org
-Date:   Wed, 11 Dec 2019 17:44:55 +0100
-In-Reply-To: <1576081356-18298-3-git-send-email-jiaxin.yu@mediatek.com>
-References: <1576081356-18298-1-git-send-email-jiaxin.yu@mediatek.com>
-         <1576081356-18298-3-git-send-email-jiaxin.yu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+        Wed, 11 Dec 2019 16:02:10 -0500
+Received: by mail-pf1-f196.google.com with SMTP id 4so2394655pfz.9;
+        Wed, 11 Dec 2019 13:02:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=7E14QxAHzYNC4GmkN5reu67hALT2jTvj+71Kr2N6+eQ=;
+        b=axb460upQpz59c56OH4vGMUnI4s4s2e101BW1FG/Ij2bVEXAq8sBfznuA/SA5BtC4s
+         4Td8h1WWYUyn6jk2BQBqaKkPbyGjqlPzTI4qAcJ9ul1JGuLVEcJO6KnrtirJkm+SYDcG
+         BtPExYIHVQiX63Vwp6CNyK5j1P73A6HFxh1UlrxmI4NEssXHVzM3rgKK2G9y7PTzkmLs
+         K9Hz/K1WuuFVKdba8eNKPTf6VhH1oML6HBEUVN0U1akSiphFv8QjQfSMxBlkLCa5M6Q4
+         d8MYjDuEZxoby3hh55zL+QM2BquHvpqszcSAcoVT8L4GX0f9UANrYE+wyAiO7bnxTVzO
+         bd2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7E14QxAHzYNC4GmkN5reu67hALT2jTvj+71Kr2N6+eQ=;
+        b=i5dDpYDrS1hLMQP58hulv1W/ccrju4KkQvtFFIJZfR7E7OtnZdtlxN8WxHHkLZ8qLh
+         DSp8zkgGJzlge5coh4n6v3RWFSwERns15ZL5WxTV1rn58Wvzk+7ZUYb90TIQU9L5pJjl
+         QXGTtYIPCDKFSN8KBQoDOIs21YLj79U2c71+fV2p73amD29ryw+n9EVdJYO9wP5MVNYY
+         e267tWjQcl1MuviLpFtTCip2TujpKMHzAviXkf130aoQk6wU8HrKkl/oihpIU3uepiyl
+         GON2g4zzrxXGvMLlJ6StitcEqTQWOxM5AxHO2fsZlraA3jRav1LG0XZkPLftKdpfyXcI
+         uaIg==
+X-Gm-Message-State: APjAAAXyGGhyNdWXuh+asVhNkcA6Fh/K7Q+cerYXgRy3srvF3wg84TIA
+        nDEfhjruFiM9Lvgi8vuWiAqTPw0N
+X-Google-Smtp-Source: APXvYqyzRrhsJeenZG2Yhmg722+CAiYjJ0iRustdp5ib5FF222IQ+zrvs0oS2RR49alvqc++r4CkyQ==
+X-Received: by 2002:a63:ed4a:: with SMTP id m10mr5713033pgk.99.1576098128984;
+        Wed, 11 Dec 2019 13:02:08 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id g19sm4062137pfh.134.2019.12.11.13.02.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2019 13:02:08 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-mips@linux-mips.org, Paul Burton <paulburton@kernel.org>,
+        Denis Efremov <efremov@linux.com>
+Subject: [PATCH 0/2] watchdog: mtx-1: Relax build dependencies
+Date:   Wed, 11 Dec 2019 13:02:02 -0800
+Message-Id: <20191211210204.31579-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+Hi Wim, Guenter,
 
-On Thu, 2019-12-12 at 00:22 +0800, Jiaxin Yu wrote:
-> From: "yong.liang" <yong.liang@mediatek.com>
-> 
-> Add reset controller API in watchdog driver.
-> Besides watchdog, MTK toprgu module alsa provide sub-system (eg, audio,
-> camera, codec and connectivity) software reset functionality.
+This came up with Denis trying to fix a MIPS-related build failure:
 
-Do any of the listed sub-systems use the reset_control_reset()
-functionality? Is there no delay requirement between assert and
-deassert? Otherwise it would be safer not to implement the .reset()
-operation at all.
+https://lore.kernel.org/linux-mips/20191210172739.27131-1-efremov@linux.com/
 
-> 
-> Signed-off-by: yong.liang <yong.liang@mediatek.com>
-> ---
->  drivers/watchdog/Kconfig   |   1 +
->  drivers/watchdog/mtk_wdt.c | 109 ++++++++++++++++++++++++++++++++++++-
->  2 files changed, 109 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 2e07caab9db2..629249fe5305 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -717,6 +717,7 @@ config MEDIATEK_WATCHDOG
->  	tristate "Mediatek SoCs watchdog support"
->  	depends on ARCH_MEDIATEK || COMPILE_TEST
->  	select WATCHDOG_CORE
-> +	select RESET_CONTROLLER
->  	help
->  	  Say Y here to include support for the watchdog timer
->  	  in Mediatek SoCs.
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index 9c3d0033260d..667380031dfd 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -9,6 +9,9 @@
->   * Based on sunxi_wdt.c
->   */
->  
-> +#include <dt-bindings/reset-controller/mt2712-resets.h>
-> +#include <dt-bindings/reset-controller/mt8183-resets.h>
-> +#include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/init.h>
->  #include <linux/io.h>
-> @@ -16,10 +19,12 @@
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/slab.h>
+Florian Fainelli (2):
+  watchdog: mtx-1: Drop au1000.h header inclusion
+  watchdog: Relax dependencies for CONFIG_WDT_MTX1
 
-What is this required for?
+ drivers/watchdog/Kconfig     | 2 +-
+ drivers/watchdog/mtx-1_wdt.c | 2 --
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
->  #include <linux/types.h>
->  #include <linux/watchdog.h>
-> -#include <linux/delay.h>
->
->  #define WDT_MAX_TIMEOUT		31
->  #define WDT_MIN_TIMEOUT		1
-> @@ -44,6 +49,9 @@
->  #define WDT_SWRST		0x14
->  #define WDT_SWRST_KEY		0x1209
->  
-> +#define WDT_SWSYSRST		0x18U
-> +#define WDT_SWSYS_RST_KEY	0x88000000
-> +
->  #define DRV_NAME		"mtk-wdt"
->  #define DRV_VERSION		"1.0"
->  
-> @@ -53,8 +61,97 @@ static unsigned int timeout;
->  struct mtk_wdt_dev {
->  	struct watchdog_device wdt_dev;
->  	void __iomem *wdt_base;
-> +	spinlock_t lock; /* protects WDT_SWSYSRST reg */
-> +	struct reset_controller_dev rcdev;
-> +};
-> +
-> +struct mtk_wdt_data {
-> +	int infracfg_sw_rst_num;
-
-This is not used at all, better remove it.
-
-> +	int toprgu_sw_rst_num;
-> +};
-> +
-> +static const struct mtk_wdt_data mt2712_data = {
-> +	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
-> +};
-> +
-> +static const struct mtk_wdt_data mt8183_data = {
-> +	.infracfg_sw_rst_num = MT8183_INFRACFG_SW_RST_NUM,
-
-Same as above.
-
-> +	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
-> +};
-> +
-> +static int toprgu_reset_update(struct reset_controller_dev *rcdev,
-> +			       unsigned long id, bool assert)
-> +{
-> +	unsigned int tmp;
-> +	unsigned long flags;
-> +
-
-This empty line can be removed.
-
-> +	struct mtk_wdt_dev *data =
-> +		 container_of(rcdev, struct mtk_wdt_dev, rcdev);
-> +
-> +	spin_lock_irqsave(&data->lock, flags);
-> +
-> +	tmp = readl(data->wdt_base + WDT_SWSYSRST);
-> +	if (assert)
-> +		tmp |= BIT(id);
-> +	else
-> +		tmp &= ~BIT(id);
-> +	tmp |= WDT_SWSYS_RST_KEY;
-> +	writel(tmp, data->wdt_base + WDT_SWSYSRST);
-> +
-> +	spin_unlock_irqrestore(&data->lock, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +static int toprgu_reset_assert(struct reset_controller_dev *rcdev,
-> +			       unsigned long id)
-> +{
-> +	return toprgu_reset_update(rcdev, id, true);
-> +}
-> +
-> +static int toprgu_reset_deassert(struct reset_controller_dev *rcdev,
-> +				 unsigned long id)
-> +{
-> +	return toprgu_reset_update(rcdev, id, false);
-> +}
-> +
-> +static int toprgu_reset(struct reset_controller_dev *rcdev,
-> +			unsigned long id)
-> +{
-> +	int ret;
-> +
-> +	ret = toprgu_reset_assert(rcdev, id);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return toprgu_reset_deassert(rcdev, id);
-> +}
-
-As mentioned above, is this needed? Does this work for all modules?
-Only implement this if you are sure both are true.
-
-regards
-Philipp
+-- 
+2.17.1
 
