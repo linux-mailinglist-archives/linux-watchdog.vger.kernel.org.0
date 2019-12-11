@@ -2,47 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F3A11BEC2
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2019 22:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA68211BEC6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2019 22:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbfLKVCK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Dec 2019 16:02:10 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42173 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726345AbfLKVCK (ORCPT
+        id S1726771AbfLKVCL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Dec 2019 16:02:11 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44572 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726345AbfLKVCL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Dec 2019 16:02:10 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 4so2394655pfz.9;
-        Wed, 11 Dec 2019 13:02:09 -0800 (PST)
+        Wed, 11 Dec 2019 16:02:11 -0500
+Received: by mail-pf1-f194.google.com with SMTP id d199so2389671pfd.11;
+        Wed, 11 Dec 2019 13:02:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=7E14QxAHzYNC4GmkN5reu67hALT2jTvj+71Kr2N6+eQ=;
-        b=axb460upQpz59c56OH4vGMUnI4s4s2e101BW1FG/Ij2bVEXAq8sBfznuA/SA5BtC4s
-         4Td8h1WWYUyn6jk2BQBqaKkPbyGjqlPzTI4qAcJ9ul1JGuLVEcJO6KnrtirJkm+SYDcG
-         BtPExYIHVQiX63Vwp6CNyK5j1P73A6HFxh1UlrxmI4NEssXHVzM3rgKK2G9y7PTzkmLs
-         K9Hz/K1WuuFVKdba8eNKPTf6VhH1oML6HBEUVN0U1akSiphFv8QjQfSMxBlkLCa5M6Q4
-         d8MYjDuEZxoby3hh55zL+QM2BquHvpqszcSAcoVT8L4GX0f9UANrYE+wyAiO7bnxTVzO
-         bd2w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=3OhBkMI3t3DWSX3k7D+r5JxYn0BJD2ICRypnq2eXkR0=;
+        b=P0P1tS1T3NzwhVl8ZF5LJwPyhvw9yGhEEvxjhk0lzERnuFw2U8FfN7Y8QBU98CS5FC
+         /fuI/tXT0blh59eEfaBMhxgMfeCH6ThCLgzhzBKRZswCzx7ySCF3pT92C3hBksy4A5Ac
+         ANqvwHTLzIpnJNTqN7up4PA8jjPzk+tD87UZtn3AGa1cjuFEjB7UB480e6a+AF20D+vb
+         OFFkC/ocfj81d1eKNMy2CI7MS4WUGGVKj+/BXmJXR4n8oM6iUcHYZMROsDl+HbJeoLlr
+         AUEi6chsM9yaZuJ9aZ26LjlHQi6gFmybFQphtrWpSEx0x/V0A5HWtXp4OFpIAIWhWL3f
+         qtMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=7E14QxAHzYNC4GmkN5reu67hALT2jTvj+71Kr2N6+eQ=;
-        b=i5dDpYDrS1hLMQP58hulv1W/ccrju4KkQvtFFIJZfR7E7OtnZdtlxN8WxHHkLZ8qLh
-         DSp8zkgGJzlge5coh4n6v3RWFSwERns15ZL5WxTV1rn58Wvzk+7ZUYb90TIQU9L5pJjl
-         QXGTtYIPCDKFSN8KBQoDOIs21YLj79U2c71+fV2p73amD29ryw+n9EVdJYO9wP5MVNYY
-         e267tWjQcl1MuviLpFtTCip2TujpKMHzAviXkf130aoQk6wU8HrKkl/oihpIU3uepiyl
-         GON2g4zzrxXGvMLlJ6StitcEqTQWOxM5AxHO2fsZlraA3jRav1LG0XZkPLftKdpfyXcI
-         uaIg==
-X-Gm-Message-State: APjAAAXyGGhyNdWXuh+asVhNkcA6Fh/K7Q+cerYXgRy3srvF3wg84TIA
-        nDEfhjruFiM9Lvgi8vuWiAqTPw0N
-X-Google-Smtp-Source: APXvYqyzRrhsJeenZG2Yhmg722+CAiYjJ0iRustdp5ib5FF222IQ+zrvs0oS2RR49alvqc++r4CkyQ==
-X-Received: by 2002:a63:ed4a:: with SMTP id m10mr5713033pgk.99.1576098128984;
-        Wed, 11 Dec 2019 13:02:08 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=3OhBkMI3t3DWSX3k7D+r5JxYn0BJD2ICRypnq2eXkR0=;
+        b=bU9SO6d0ot2xHecc2movB3eMabJdq8Bk6G1uDA02UfvKjC/Q3kHlfdMnTTSc5z9vv/
+         cOktjoTRZvGJk6V1NyJTBUYB4OdwYPYn9f6zqTs1KuX5BKaEuo0aYd9kCi6MZfE2w6/n
+         22ZZSVpqzBYI1/PJKRigPqAc7cbCeKNWTnAW67czrmVF24QN/bxvzHBVeuiFmeQsRBNS
+         hK+Vre4BzSmCjEmfRWvH0Q7rKlZUTqWb3lE58u1Aj/Sbkgt5S7/bHfz3kPMyKFV12jL2
+         4A4PnUUk2dMoeK4ZDFvBKaTGauAu7vYI4lfjkBSNUBJ/E59/EhXIOUcCtOTStc5JGp1L
+         h9vw==
+X-Gm-Message-State: APjAAAX4MsZz1LOdSYsdJkI9HUEHLDP0tMmLJnhOJc+oliiBmbdXLVrF
+        IglNRYOH5tGZg2jVJihkwQrVFxbd
+X-Google-Smtp-Source: APXvYqxF7uajY/k2sjYOpwbigBP1VPQ6hkyHaUQQRhNvPJVuVLBqSKNCYo4JdRr8VytSCzFajcg3Ag==
+X-Received: by 2002:a63:30c:: with SMTP id 12mr6401250pgd.276.1576098130113;
+        Wed, 11 Dec 2019 13:02:10 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g19sm4062137pfh.134.2019.12.11.13.02.08
+        by smtp.gmail.com with ESMTPSA id g19sm4062137pfh.134.2019.12.11.13.02.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 13:02:08 -0800 (PST)
+        Wed, 11 Dec 2019 13:02:09 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-watchdog@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -51,29 +52,40 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-kernel@vger.kernel.org (open list),
         linux-mips@linux-mips.org, Paul Burton <paulburton@kernel.org>,
         Denis Efremov <efremov@linux.com>
-Subject: [PATCH 0/2] watchdog: mtx-1: Relax build dependencies
-Date:   Wed, 11 Dec 2019 13:02:02 -0800
-Message-Id: <20191211210204.31579-1-f.fainelli@gmail.com>
+Subject: [PATCH 1/2] watchdog: mtx-1: Drop au1000.h header inclusion
+Date:   Wed, 11 Dec 2019 13:02:03 -0800
+Message-Id: <20191211210204.31579-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191211210204.31579-1-f.fainelli@gmail.com>
+References: <20191211210204.31579-1-f.fainelli@gmail.com>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wim, Guenter,
+Including au1000.h from the machine specific header directory prevents
+this driver from being built on any other platforms (MIPS included).
+Since we do not use any definitions, drop it.
 
-This came up with Denis trying to fix a MIPS-related build failure:
-
-https://lore.kernel.org/linux-mips/20191210172739.27131-1-efremov@linux.com/
-
-Florian Fainelli (2):
-  watchdog: mtx-1: Drop au1000.h header inclusion
-  watchdog: Relax dependencies for CONFIG_WDT_MTX1
-
- drivers/watchdog/Kconfig     | 2 +-
+Reported-by: Denis Efremov <efremov@linux.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
  drivers/watchdog/mtx-1_wdt.c | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ 1 file changed, 2 deletions(-)
 
+diff --git a/drivers/watchdog/mtx-1_wdt.c b/drivers/watchdog/mtx-1_wdt.c
+index 25a92857b217..aeca22f7450e 100644
+--- a/drivers/watchdog/mtx-1_wdt.c
++++ b/drivers/watchdog/mtx-1_wdt.c
+@@ -41,8 +41,6 @@
+ #include <linux/uaccess.h>
+ #include <linux/gpio/consumer.h>
+ 
+-#include <asm/mach-au1x00/au1000.h>
+-
+ #define MTX1_WDT_INTERVAL	(5 * HZ)
+ 
+ static int ticks = 100 * HZ;
 -- 
 2.17.1
 
