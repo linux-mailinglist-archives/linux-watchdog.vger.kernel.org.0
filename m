@@ -2,16 +2,16 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7303A11CCF3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2019 13:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C725711CCF9
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2019 13:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729159AbfLLMUJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 12 Dec 2019 07:20:09 -0500
+        id S1729194AbfLLMUM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 12 Dec 2019 07:20:12 -0500
 Received: from mail-sz.amlogic.com ([211.162.65.117]:53857 "EHLO
         mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729179AbfLLMUI (ORCPT
+        with ESMTP id S1729118AbfLLMUL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 12 Dec 2019 07:20:08 -0500
+        Thu, 12 Dec 2019 07:20:11 -0500
 Received: from droid12-sz.software.amlogic (10.28.8.22) by mail-sz.amlogic.com
  (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Thu, 12 Dec 2019
  20:20:37 +0800
@@ -29,10 +29,10 @@ CC:     Xingyu Chen <xingyu.chen@amlogic.com>,
         <linux-watchdog@vger.kernel.org>,
         <linux-amlogic@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 1/4] firmware: meson_sm: add new SMC ID support for accessing secure watchdog
-Date:   Thu, 12 Dec 2019 20:19:44 +0800
-Message-ID: <1576153187-28378-2-git-send-email-xingyu.chen@amlogic.com>
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v5 2/4] dt-bindings: watchdog: add new binding for meson secure watchdog
+Date:   Thu, 12 Dec 2019 20:19:45 +0800
+Message-ID: <1576153187-28378-3-git-send-email-xingyu.chen@amlogic.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1576153187-28378-1-git-send-email-xingyu.chen@amlogic.com>
 References: <1576153187-28378-1-git-send-email-xingyu.chen@amlogic.com>
@@ -44,39 +44,56 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The new SMC ID is used to access secure registers by meson secure
-watchdog driver.
+The binding targets the Meson-A/C series compatible SoCs, in which the
+watchdog registers are in secure world.
 
 Signed-off-by: Xingyu Chen <xingyu.chen@amlogic.com>
 ---
- drivers/firmware/meson/meson_sm.c       | 1 +
- include/linux/firmware/meson/meson_sm.h | 1 +
- 2 files changed, 2 insertions(+)
+ .../bindings/watchdog/amlogic,meson-sec-wdt.yaml   | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
 
-diff --git a/drivers/firmware/meson/meson_sm.c b/drivers/firmware/meson/meson_sm.c
-index 1d5b4d7..8cdd405 100644
---- a/drivers/firmware/meson/meson_sm.c
-+++ b/drivers/firmware/meson/meson_sm.c
-@@ -44,6 +44,7 @@ static const struct meson_sm_chip gxbb_chip = {
- 		CMD(SM_EFUSE_WRITE,	0x82000031),
- 		CMD(SM_EFUSE_USER_MAX,	0x82000033),
- 		CMD(SM_GET_CHIP_ID,	0x82000044),
-+		CMD(SM_A1_WATCHDOG_OPS,	0x82000086),
- 		{ /* sentinel */ },
- 	},
- };
-diff --git a/include/linux/firmware/meson/meson_sm.h b/include/linux/firmware/meson/meson_sm.h
-index 6669e2a..9ef1524 100644
---- a/include/linux/firmware/meson/meson_sm.h
-+++ b/include/linux/firmware/meson/meson_sm.h
-@@ -12,6 +12,7 @@ enum {
- 	SM_EFUSE_WRITE,
- 	SM_EFUSE_USER_MAX,
- 	SM_GET_CHIP_ID,
-+	SM_A1_WATCHDOG_OPS,
- };
- 
- struct meson_sm_firmware;
+diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
+new file mode 100644
+index 00000000..c0ff2ec
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++# Copyright (c) 2019 Amlogic, Inc
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-wdt.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Amlogic Meson Secure Watchdog Timer
++
++maintainers:
++  - Xingyu Chen <xingyu.chen@amlogic.com>
++
++description: |+
++  Secure Watchdog Timer used in Meson-A/C series Compatible SoCs
++
++properties:
++  compatible:
++    enum:
++      - amlogic,meson-sec-wdt
++
++  timeout-sec:
++    minimum: 1
++    maximum: 65
++    description:
++      Watchdog timeout values (in seconds)
++
++required:
++  - compatible
++
++examples:
++  - |
++    watchdog {
++          compatible = "amlogic,meson-sec-wdt";
++          timeout-sec = <60>;
++    };
 -- 
 2.7.4
 
