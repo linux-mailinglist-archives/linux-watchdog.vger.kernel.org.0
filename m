@@ -2,59 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB03111C3E6
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2019 04:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA70B11C434
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2019 04:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727524AbfLLDic (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Dec 2019 22:38:32 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39934 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726638AbfLLDib (ORCPT
+        id S1727605AbfLLDlW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Dec 2019 22:41:22 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:36895 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727741AbfLLDlR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Dec 2019 22:38:31 -0500
-Received: by mail-pg1-f193.google.com with SMTP id b137so406633pga.6;
-        Wed, 11 Dec 2019 19:38:31 -0800 (PST)
+        Wed, 11 Dec 2019 22:41:17 -0500
+Received: by mail-pl1-f193.google.com with SMTP id c23so434460plz.4;
+        Wed, 11 Dec 2019 19:41:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZRyM8vqFAeXNEEkflUNLvEoDK86LaNGE46fG0ac6og0=;
-        b=UXP+XXKOa/c94TpkEggFBROby717qqBC4K8QVM4BLHn6vfAJASo2EmI8X4EtkuApkE
-         in1BujpkqXqeo45TonWoC/BFfDsTxNPZMOeu6YrnI/JiiAJ57xlo8G6NYl7e9KO66LwA
-         VBaToGjj8tkvsDHm1xDD7Azn/tg1RquPR3wdLs7aSmgLF8IV06v5FV+wEobN1LdYDZvI
-         UWdQWW6G5fy9pXhob2ZXd/9NVpdBntqmgGc7PNhLIdCHRpPMgnC/tMowc2fF3Dvmh52Q
-         vCOb7iDr5Mxv/khg4hA1V/XR6Ghaauv2LbYi4iXSU6+O7X6IMtcIsU9yT0JvjDdWuzpa
-         7XGw==
+        bh=4j/BNKRlewbTZY6Tn+4kCkBB0v/Ns2SFq09MYMQcabY=;
+        b=lpgyiScdwTkvwVVhmm1sEW8ByjXMAc6FSQb0Y9Cuz25nbr6sKbLClZj9ZtK7jffWCb
+         6zisIJome+lcE3gbVZc1Mc5pSTeAYZYuEbR6+gNfbHEuc8FfjmxCkad8cH377O2A/tu1
+         MOwwCCRcdn9++q/kF2wPsdGKQSJ2dXAjqYMZq584W0mdMWtw7aw/WSJAWW192dHLA/WX
+         UGOiiqL9dBNhhjS7EomR2u+g9hywhn06SQRnrtAGVQ3ufERNYypT8uDTmkQnz12HN5xZ
+         vH7nq92R6dvquTb25QIPxB3+jKaN2fj/T0A2vNn8672ycX0yHmdoR/ET8sqRckUqzpl/
+         4KZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=ZRyM8vqFAeXNEEkflUNLvEoDK86LaNGE46fG0ac6og0=;
-        b=Pq/0CpIjD5q/9r6rPZnmxwb0OmHv4+QIJMDb/Lt89aqEPt0l38i3N+DHVNAZKEgcBb
-         K+96zNv3hpDXUqKi9q+n8a6a6wKtZ3Y8yiK3QhPQv3NHPzEQfglsTuPvM7DlFdno2BFg
-         9zTnu3UydvjT/0FXlGRLKZxJh/X8+laK00182Tvi0inIPlLTTa1JisRSxzKlrKK25sx6
-         wGYsdrZ5gbZ4fNyWAikuwXYqtAGooD2BXDygBXTOKPYT8l2xRCgx6fZFRVeQ/xebO8SA
-         MQFzohwRSgFLAxQ0mTpmWxtx3WB11vWdHKRj0V77TCK5OnkfpufezwTCorjy6AXUzdXH
-         zhXg==
-X-Gm-Message-State: APjAAAUXmHIQmRfWS1iIvC1miK2JnNSQcnnnnDUY9f/rU0WJvQikk2Rf
-        dTGMJBOsC6h2qV0VAwB1j14=
-X-Google-Smtp-Source: APXvYqx1JwoWiU0d6Vk8gb9OfVJ6bvzaIUQPjw34Lg2vajFDQ3vCrVmqIK88C1KR7yoHMs88XN1Etw==
-X-Received: by 2002:a62:33c6:: with SMTP id z189mr7617287pfz.246.1576121910704;
-        Wed, 11 Dec 2019 19:38:30 -0800 (PST)
+        bh=4j/BNKRlewbTZY6Tn+4kCkBB0v/Ns2SFq09MYMQcabY=;
+        b=WYJbco6pW2g3q4mL2xN0uGnyFlouhbQPAmUaId9wRSlmxdUl51XUFkKPyB4c0usGn2
+         CQVuYWR2cXDljeCJSctQ+cCpjfb9TmscOqEDNHlAhG8+x+aHd1dZUA43uSRDwepk4JTU
+         0yDS7P/rpdnWdZ0bC+OJp+tF+xw5BaDqMfI7FhD4kIaQGl/TcdDeeTeRNMHkGQFCwksy
+         hXK/7ZDBIQ4imbIk0au8caQk2oEYoxbYphF2uTdhQpHsLVeFhi4f9k3BcoFo9TWMcKyW
+         VlRNI7iVFowaSsoMenyjhLk+LyHMNidijJbXX7MHlR3l0felFThXP86Xc7zos1phuCi4
+         mC7g==
+X-Gm-Message-State: APjAAAVDXzz2S7WuHq3TQxxlkgNzWxEPcaFPj7yfbY4v6iVMBAQJDDv/
+        J8Zx4DZ1wosWxA8tgiHisw+pgLUA
+X-Google-Smtp-Source: APXvYqxEwGg2thh6NMzq1q4wPI2YTANpsvANqOzYXfitskldBlXcUU8xQ+a4OrJ6hR2BSu8f2hJZzw==
+X-Received: by 2002:a17:902:8f85:: with SMTP id z5mr7232663plo.43.1576122077030;
+        Wed, 11 Dec 2019 19:41:17 -0800 (PST)
 Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id b4sm4956339pfd.18.2019.12.11.19.38.29
+        by smtp.gmail.com with ESMTPSA id z10sm4690022pfa.184.2019.12.11.19.41.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Dec 2019 19:38:30 -0800 (PST)
-Subject: Re: [PATCH 1/2] watchdog: mtx-1: Drop au1000.h header inclusion
-To:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+        Wed, 11 Dec 2019 19:41:16 -0800 (PST)
+Subject: Re: [PATCH 0/2] watchdog: mtx-1: Relax build dependencies
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Denis Efremov <efremov@linux.com>,
+        linux-watchdog@vger.kernel.org
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         open list <linux-kernel@vger.kernel.org>,
-        linux-mips@linux-mips.org, Paul Burton <paulburton@kernel.org>,
-        Denis Efremov <efremov@linux.com>
+        linux-mips@linux-mips.org, Paul Burton <paulburton@kernel.org>
 References: <20191211210204.31579-1-f.fainelli@gmail.com>
- <20191211210204.31579-2-f.fainelli@gmail.com>
- <21b7be75-db61-3b14-c57c-04af0b78b347@roeck-us.net>
+ <1a3eb533-b273-f903-ccaf-fdeaea9da51a@linux.com>
+ <87f90857-633f-2437-4a26-a3b3dd7ea7c7@roeck-us.net>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; keydata=
  mQGiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -110,12 +111,12 @@ Autocrypt: addr=f.fainelli@gmail.com; keydata=
  caxTGgc5zzQHeX67eMzrGomG3ZnIxmd1sAbgvJUDaD2GrYlulfwGWwWyTNbWRvMighVdPkSF
  6XFgQaosWxkV0OELLy2N485YrTr2Uq64VKyxpncLh50e2RnyAJ9qfUATKC9NgZjRvBztfqy4
  a9BQwACgnzGuH1BVeT2J0Ra+ZYgkx7DaPR0=
-Message-ID: <3fdc99fa-f75c-33d4-e1c4-ec8ad185e2cd@gmail.com>
-Date:   Wed, 11 Dec 2019 19:38:29 -0800
+Message-ID: <a2d8109b-44cf-3d22-0c0d-cf766afe2e70@gmail.com>
+Date:   Wed, 11 Dec 2019 19:41:16 -0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <21b7be75-db61-3b14-c57c-04af0b78b347@roeck-us.net>
+In-Reply-To: <87f90857-633f-2437-4a26-a3b3dd7ea7c7@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -126,50 +127,29 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
 
-On 12/11/2019 5:35 PM, Guenter Roeck wrote:
-> On 12/11/19 1:02 PM, Florian Fainelli wrote:
->> Including au1000.h from the machine specific header directory prevents
->> this driver from being built on any other platforms (MIPS included).
->> Since we do not use any definitions, drop it.
+On 12/11/2019 5:39 PM, Guenter Roeck wrote:
+> On 12/11/19 3:46 PM, Denis Efremov wrote:
+>> Hi,
 >>
->> Reported-by: Denis Efremov <efremov@linux.com>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>   drivers/watchdog/mtx-1_wdt.c | 2 --
->>   1 file changed, 2 deletions(-)
+>> Thanks for the fix.
+>> I tested the compilation with these patches.
+>> You can add my:
+>> Tested-by: Denis Efremov <efremov@linux.com>
 >>
->> diff --git a/drivers/watchdog/mtx-1_wdt.c b/drivers/watchdog/mtx-1_wdt.c
->> index 25a92857b217..aeca22f7450e 100644
->> --- a/drivers/watchdog/mtx-1_wdt.c
->> +++ b/drivers/watchdog/mtx-1_wdt.c
->> @@ -41,8 +41,6 @@
->>   #include <linux/uaccess.h>
->>   #include <linux/gpio/consumer.h>
->>   -#include <asm/mach-au1x00/au1000.h>
->> -
->>   #define MTX1_WDT_INTERVAL    (5 * HZ)
->>     static int ticks = 100 * HZ;
+>> Look like this error could be fixed the same way:
+>> In file included from drivers/watchdog/ar7_wdt.c:29:
+>> ./arch/mips/include/asm/mach-ar7/ar7.h: In function ‘ar7_is_titan’:
+>> ./arch/mips/include/asm/mach-ar7/ar7.h:111:24: error: implicit
+>> declaration of function ‘KSEG1ADDR’; did you mean ‘CKSEG1ADDR’?
+>> [-Werror=implicit-function-declaration]
 >>
 > 
-> Given that this is nothing but yet another gpio watchdog driver, I'd
-> personally rather have it merged with gpio_wdt.c. On a higher level,
-> cleaning up old-style watchdog drivers, without converting them to
-> using the watchdog core, is a waste of time.
+> This is yet another old-style watchdog driver which should be left alone
+> unless it has a bug that needs to be fixed. Really, if anyone out there
+> is still using this driver, converting it to use the watchdog core
+> would make much more sense.
 
-If that makes you feel any better, I was not planning on going further
-than that, and yes, removing this driver and using gpio_wdt.c would be
-the way to go, this driver greatly predates gpio_wdt.c and I have since
-then not had access to my MTX-1 platforms which is why this did not
-happen. We can attempt a "blind conversion" without testing, but what
-good would that make, not sure.
-
-> 
-> Wim, should we make it a policy to reject patches into old-style drivers
-> unless they fix a real bug ? It is getting a pain to have to review those
-> patches.
-> 
-> Thanks,
-> Guenter
-
+AR7 is still largely available, so we might be able to get some people
+within the OpenWrt community to give a watchdog modernization patch a try.
 -- 
 Florian
