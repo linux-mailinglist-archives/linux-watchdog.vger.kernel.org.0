@@ -2,95 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C55A11D7A7
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2019 21:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A55E411DE59
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Dec 2019 07:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730749AbfLLUFq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 12 Dec 2019 15:05:46 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:41912 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730703AbfLLUFq (ORCPT
+        id S1725468AbfLMGys (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 13 Dec 2019 01:54:48 -0500
+Received: from m228-5.mailgun.net ([159.135.228.5]:32377 "EHLO
+        m228-5.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725385AbfLMGys (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 12 Dec 2019 15:05:46 -0500
-Received: by mail-ot1-f68.google.com with SMTP id r27so3268157otc.8;
-        Thu, 12 Dec 2019 12:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=437EO4ykMGZ70j4wdecX6upxaV7ChyHqB8vxhf7BSCU=;
-        b=E8Z+ULO8qgHol6Rsi27z38zqVd4Xbc69LcKOkoFJGjXc3bmNgWG2BjcxceM3WYQcaE
-         0KTVJu9KLALvHSqBEHOFect79UpcXnATI2AEuL4PE3CGlT7M5TOp1+Tj7ARIChSG0soK
-         52pRTSCXoU7TW26gajeHDZG5GZ515idA3tF6dPKasIPPd/PIrSj6++yhlQzy3OToSOZs
-         wkx9d66oFG7yGe3U/Hm4ibJywLk8HSryYKpEXlNm8d2ZWxcvNb3U4FvqZdH8k3L643vY
-         hn+LHgt1lFtDNUfQKxkep4qyRWKZXeg7bpRpK2fnx/I6QxfHB7IdgeCEIfGcYOSjBDJQ
-         Suag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=437EO4ykMGZ70j4wdecX6upxaV7ChyHqB8vxhf7BSCU=;
-        b=Y9J+hHYv0rBDFXI40IWg5QEw9/yFTDg0Hfd+HEP18RxxkZhhuamsQe+20HcwQyWtQ0
-         kT83bqK2JAmS832wI9dIYD5nKdpIUrVpGBEQhJ1eVJhbq4GLXZlDL2F2TlUnrdSkKt8W
-         Wnk9HqP5u//tMwwQ21qe/gPJyg0Nvy2WxUqHNU6Fm3lSwoaxgPBWZFSH7zRWuhOJAOxV
-         I9jTXyhzO4AzS1IUZxCRs4zuzD3Ab328PsWhpFmb8EoMWohMitLgllOpXrt1dyb/TN06
-         3/FlbvVMbh0JFj19GPLmxltVS+jrCdVAuITq4sDzzYadIT4MDj42dj+35PH0LNARm4Uy
-         EYow==
-X-Gm-Message-State: APjAAAWqU+2gVHUO2M8vgpjUND2v0+xMVL606hhT0nHxszIZvtnoWhEr
-        acPQh2FCtIU4VEYVIr5msyTyyZ5y55KvqbMOiCg=
-X-Google-Smtp-Source: APXvYqzNrNV1NDqP8CepWCfv6Hd8n0AT4q6WjL/e97tNxNuu2sXH1BK40ukL5qB/y5FaxInRXC3FHM5D/HKulk5FNlo=
-X-Received: by 2002:a9d:7342:: with SMTP id l2mr10117519otk.98.1576181145181;
- Thu, 12 Dec 2019 12:05:45 -0800 (PST)
-MIME-Version: 1.0
-References: <1576153187-28378-1-git-send-email-xingyu.chen@amlogic.com> <1576153187-28378-3-git-send-email-xingyu.chen@amlogic.com>
-In-Reply-To: <1576153187-28378-3-git-send-email-xingyu.chen@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 12 Dec 2019 21:05:34 +0100
-Message-ID: <CAFBinCBHLqgPExPsVaSWdSOr0Oj-jeYa4Z82U-pJ=fS+D1wGnA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] dt-bindings: watchdog: add new binding for meson
- secure watchdog
-To:     Xingyu Chen <xingyu.chen@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Fri, 13 Dec 2019 01:54:48 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Dec 2019 01:54:47 EST
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1576220087; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=rsQgQXaQSRf07rNlF+2nEQlC5ph1o6pOgKqbbRi4Scw=; b=IeLY8/gDReInXUrv4l/2HWDsZFmJaqBncbLL0JuIsM8Muj5Ac4gzLAgS+iIhzwCdOZdIAR5q
+ /1hHOpj8dphoKOxKo6wLdCqejEkoFO9i+UH97VC9cnX8rRqucLVPPhlwX5vksxPMXP/mBX/l
+ DyxK+ByghGvD1WUMRSjFzxWXdUc=
+X-Mailgun-Sending-Ip: 159.135.228.5
+X-Mailgun-Sid: WyJmNTk5OSIsICJsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5df33488.7f19e803cb58-smtp-out-n01;
+ Fri, 13 Dec 2019 06:49:44 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6D643C447A0; Fri, 13 Dec 2019 06:49:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: saiprakash.ranjan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 60FC6C433CB;
+        Fri, 13 Dec 2019 06:49:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 60FC6C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=saiprakash.ranjan@codeaurora.org
+From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Qianggui Song <qianggui.song@amlogic.com>,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        linux-kernel@vger.kernel.org, Jian Hu <jian.hu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+        Stephen Boyd <swboyd@chromium.org>,
+        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        linux-watchdog@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Subject: [PATCH] watchdog: qcom: Use platform_get_irq_optional() for bark irq
+Date:   Fri, 13 Dec 2019 12:19:34 +0530
+Message-Id: <20191213064934.4112-1-saiprakash.ranjan@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Xingyu and Rob,
+platform_get_irq() prints an error message when the interrupt
+is not available. So on platforms where bark interrupt is
+not specified, following error message is observed on SDM845.
 
-On Thu, Dec 12, 2019 at 1:20 PM Xingyu Chen <xingyu.chen@amlogic.com> wrote:
-[...]
-> +examples:
-> +  - |
-> +    watchdog {
-> +          compatible = "amlogic,meson-sec-wdt";
-> +          timeout-sec = <60>;
-> +    };
-in v3 of this patch Rob commented that there shouldn't be an OF node
-if there are no additional properties
-with timeout-sec there's now an additional property so my
-understanding is that it's fine to have an OF node
+[    2.975888] qcom_wdt 17980000.watchdog: IRQ index 0 not found
 
-what I don't understand yet is where this node should be placed.
-is it supposed to be a child node of the secure monitor node (for
-which we already have a binding here:
-Documentation/devicetree/bindings/firmware/meson/meson_sm.txt) or
-where else would we place it inside the .dts?
+This is also seen on SC7180, SM8150 SoCs as well.
+Fix this by using platform_get_irq_optional() instead.
 
+Fixes: 36375491a4395654 ("watchdog: qcom: support pre-timeout when the bark irq is available")
+Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+---
+ drivers/watchdog/qcom-wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Martin
-
-
-[0] https://patchwork.kernel.org/patch/11211399/
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index a494543d3ae1..eb47fe5ed280 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -246,7 +246,7 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* check if there is pretimeout support */
+-	irq = platform_get_irq(pdev, 0);
++	irq = platform_get_irq_optional(pdev, 0);
+ 	if (irq > 0) {
+ 		ret = devm_request_irq(dev, irq, qcom_wdt_isr,
+ 				       IRQF_TRIGGER_RISING,
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
