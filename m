@@ -2,116 +2,87 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A13120731
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2019 14:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00C012100D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2019 17:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727849AbfLPNaM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 16 Dec 2019 08:30:12 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:35324 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727763AbfLPNaM (ORCPT
+        id S1726681AbfLPQtA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 16 Dec 2019 11:49:00 -0500
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:38933 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726591AbfLPQtA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 16 Dec 2019 08:30:12 -0500
-Received: by mail-pj1-f65.google.com with SMTP id w23so2992713pjd.2;
-        Mon, 16 Dec 2019 05:30:12 -0800 (PST)
+        Mon, 16 Dec 2019 11:49:00 -0500
+Received: by mail-pg1-f173.google.com with SMTP id b137so4032579pga.6
+        for <linux-watchdog@vger.kernel.org>; Mon, 16 Dec 2019 08:48:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=c6k2uM/4KQBTBeEC+JGE88itWoiZaxFzfzDFaOUPwN4=;
-        b=WU2LMml9ybURvvoAkKn84Ls2pu5xuXxxs5xMy9YIAIuH+QpEBES7Fx3AEg2Awx0eZC
-         eOP9lj+obKAHaeQTG8x7AKkZRmJVsKhTCrmDoU+lTu4fD7hbjbbB0TDh8anWmiR4NE8Q
-         0vRnJFCI88IlQ/i2lgF5OkFvvmdA4xSVQw46d82pfn1UYopKvLJdYUDFZEOie4D29ofs
-         jhr83+VsoL5WyjrRsBkdTtIISTH1IF0nFzXfQYAZkctwUem7bQamJ24XBDBIj+xvPmhA
-         AGv5C2QbcM9PBGJxMstdHAuE0iPKFOisBpolMprqccxSmygVz+ynNZOFYWIQiWOsIKW0
-         X9QQ==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:to:from:cc:user-agent:date;
+        bh=g0u6MYVXB1r8q7tLRy3ssmuddCpp1ygE+qNfEAR+tzs=;
+        b=GkO3p/N3v9DaMjY7s3JJKqo9ZYMrAiq7NezoyL1jtHl6rflpR5LpxodzDPOS8dZeg5
+         QtHOw6SaEFGm0JM8ZeTFp+c9CyZE3latVdmMaNlabZHZwEDIGKnqD4/f4WVZ92UEe6V0
+         JLkYF7c7oqGbJsZ4js+mM2KbizqOYu/UwJGSo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=c6k2uM/4KQBTBeEC+JGE88itWoiZaxFzfzDFaOUPwN4=;
-        b=elD5O4Z7FQ4hGHLyDNuTWJH3MA1bZd96RVOwgDO9dL2L6UuzsZ6mjGZJuICjGl/Loy
-         GyUPcmwBIr8uW0shDph5qvfanTHKh8/lOmslXzZx1ZU6bGPziq3y/m21TCHMhdoPuYmP
-         t7n6T9CHf9JuEfwhtrnhzLoulwcMoirdzI1x0bFdtlaLYLRDtrfKh38b/Sqn2Yu8noRX
-         UwgFbwKCfX8Xv/8K9nBXwyyFLATgXCJs33IwQjD2sXnH6LSpP7mLJDSVHB/k6MPWX5Pk
-         B1DlgtDGJtRjFDHFaiR5xQufLvFaKnrmLM/3733ECMxDOSYFjTqn7JT5QAHhlsKpJk6x
-         /C2w==
-X-Gm-Message-State: APjAAAVbaOrV3ZStzPTmW/8n4PvLr5AnYsA4l9v6vlYUlffrNcQnXsUi
-        ZkbJkCmAiIu7iejuU8o2+bE=
-X-Google-Smtp-Source: APXvYqyJ6TZHpyv2Kz7CGI3OHria7rp9vvxislgxfsCZuO3kdTuBGJfZKrdme0Kw7m9+Qlmwh7TBjw==
-X-Received: by 2002:a17:902:d915:: with SMTP id c21mr15807890plz.295.1576503011717;
-        Mon, 16 Dec 2019 05:30:11 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 13sm5365907pfi.78.2019.12.16.05.30.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2019 05:30:10 -0800 (PST)
-Subject: Re: [PATCH v5 2/4] dt-bindings: watchdog: add new binding for meson
- secure watchdog
-To:     Xingyu Chen <xingyu.chen@amlogic.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Qianggui Song <qianggui.song@amlogic.com>,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        linux-kernel@vger.kernel.org, Jian Hu <jian.hu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>
-References: <1576153187-28378-1-git-send-email-xingyu.chen@amlogic.com>
- <1576153187-28378-3-git-send-email-xingyu.chen@amlogic.com>
- <CAFBinCBHLqgPExPsVaSWdSOr0Oj-jeYa4Z82U-pJ=fS+D1wGnA@mail.gmail.com>
- <f7b0afe7-e317-2422-de7e-878837f9f238@amlogic.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <a8f5ab1d-264c-5b2c-e72b-3774b9f44c22@roeck-us.net>
-Date:   Mon, 16 Dec 2019 05:30:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:to:from:cc
+         :user-agent:date;
+        bh=g0u6MYVXB1r8q7tLRy3ssmuddCpp1ygE+qNfEAR+tzs=;
+        b=cJYwpk6bW1wgJUForsN5l5wFCuN7MmkZS5S4RSNz4qRzEUUgyROqUIO2dmg9xnx26d
+         oPRq2fVAXRrQXY++vLrpj7+mS4ticRyeqekho2UjdtDeJCOC2bcsagbXp4yI6JSKfOjJ
+         /GTr/kAekY5wi/x1NqVtT6VdmDayksD4zFT/ixzcnoO4SRECJxOvpJpUKAgw4B/qZmYU
+         d7Ou9OnaBU+F5v0lsnOOjao48zcWOXs3EGfV3/a7uAWRJkHtIASe7OrNExru7oVAz3UP
+         AWBoHJSUAIS+gFDYsYbY+r9tL6IRASJ+7KmHPDObu0n0oNrpL3hHiAbLRBwlIVFe1SSB
+         Cfyw==
+X-Gm-Message-State: APjAAAUyo5+Qu7KRhLogMLJxlxPI6oJMqyVYj2hjugdy2A1jmlziIuMH
+        s8NG74xBL2VhF7FbBmk9xgSIVg==
+X-Google-Smtp-Source: APXvYqxCcxTpMnkRTvpz5cLBjNYbPUx15IUg+xR6p8uH9udpwIzZK5vvkm1iTdzAgUHQrgxw+yGwzQ==
+X-Received: by 2002:a65:66d7:: with SMTP id c23mr19824054pgw.40.1576514939270;
+        Mon, 16 Dec 2019 08:48:59 -0800 (PST)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id d24sm23769672pfq.75.2019.12.16.08.48.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2019 08:48:57 -0800 (PST)
+Message-ID: <5df7b579.1c69fb81.c9187.3f3a@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <f7b0afe7-e317-2422-de7e-878837f9f238@amlogic.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191213064934.4112-1-saiprakash.ranjan@codeaurora.org>
+References: <20191213064934.4112-1-saiprakash.ranjan@codeaurora.org>
+Subject: Re: [PATCH] watchdog: qcom: Use platform_get_irq_optional() for bark irq
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        linux-watchdog@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+User-Agent: alot/0.8.1
+Date:   Mon, 16 Dec 2019 08:48:56 -0800
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12/15/19 10:03 PM, Xingyu Chen wrote:
-> Hi, Martin
-> 
-> Sorry for the late reply.
-> 
-> On 2019/12/13 4:05, Martin Blumenstingl wrote:
->> Hi Xingyu and Rob,
->>
->> On Thu, Dec 12, 2019 at 1:20 PM Xingyu Chen <xingyu.chen@amlogic.com> wrote:
->> [...]
->>> +examples:
->>> +  - |
->>> +    watchdog {
->>> +          compatible = "amlogic,meson-sec-wdt";
->>> +          timeout-sec = <60>;
->>> +    };
->> in v3 of this patch Rob commented that there shouldn't be an OF node
->> if there are no additional properties
->> with timeout-sec there's now an additional property so my
->> understanding is that it's fine to have an OF node
-> Your understanding is correct.
->>
->> what I don't understand yet is where this node should be placed.
->> is it supposed to be a child node of the secure monitor node (for
->> which we already have a binding here:
->> Documentation/devicetree/bindings/firmware/meson/meson_sm.txt) or
->> where else would we place it inside the .dts?
-> IMO,  Although the watchdog node need to reference the meson_sm node, there is no
-> bus-like dependencies between the devices which the two nodes corresponding to.
-> so i think that the watchdog node as child node of meson_sm maybe not appropriate.
+Quoting Sai Prakash Ranjan (2019-12-12 22:49:34)
+> platform_get_irq() prints an error message when the interrupt
+> is not available. So on platforms where bark interrupt is
+> not specified, following error message is observed on SDM845.
+>=20
+> [    2.975888] qcom_wdt 17980000.watchdog: IRQ index 0 not found
+>=20
+> This is also seen on SC7180, SM8150 SoCs as well.
+> Fix this by using platform_get_irq_optional() instead.
+>=20
+> Fixes: 36375491a4395654 ("watchdog: qcom: support pre-timeout when the ba=
+rk irq is available")
+> Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> ---
 
-The watchdog driver needs the meson SM's dt node, and it depends on the existence
-of that node. That seems enough of a relationship to warrant having it as child note.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-Guenter
