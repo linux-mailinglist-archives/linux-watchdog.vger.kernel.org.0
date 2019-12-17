@@ -2,87 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D00C012100D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2019 17:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E089123142
+	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Dec 2019 17:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbfLPQtA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 16 Dec 2019 11:49:00 -0500
-Received: from mail-pg1-f173.google.com ([209.85.215.173]:38933 "EHLO
-        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbfLPQtA (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 16 Dec 2019 11:49:00 -0500
-Received: by mail-pg1-f173.google.com with SMTP id b137so4032579pga.6
-        for <linux-watchdog@vger.kernel.org>; Mon, 16 Dec 2019 08:48:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:to:from:cc:user-agent:date;
-        bh=g0u6MYVXB1r8q7tLRy3ssmuddCpp1ygE+qNfEAR+tzs=;
-        b=GkO3p/N3v9DaMjY7s3JJKqo9ZYMrAiq7NezoyL1jtHl6rflpR5LpxodzDPOS8dZeg5
-         QtHOw6SaEFGm0JM8ZeTFp+c9CyZE3latVdmMaNlabZHZwEDIGKnqD4/f4WVZ92UEe6V0
-         JLkYF7c7oqGbJsZ4js+mM2KbizqOYu/UwJGSo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:to:from:cc
-         :user-agent:date;
-        bh=g0u6MYVXB1r8q7tLRy3ssmuddCpp1ygE+qNfEAR+tzs=;
-        b=cJYwpk6bW1wgJUForsN5l5wFCuN7MmkZS5S4RSNz4qRzEUUgyROqUIO2dmg9xnx26d
-         oPRq2fVAXRrQXY++vLrpj7+mS4ticRyeqekho2UjdtDeJCOC2bcsagbXp4yI6JSKfOjJ
-         /GTr/kAekY5wi/x1NqVtT6VdmDayksD4zFT/ixzcnoO4SRECJxOvpJpUKAgw4B/qZmYU
-         d7Ou9OnaBU+F5v0lsnOOjao48zcWOXs3EGfV3/a7uAWRJkHtIASe7OrNExru7oVAz3UP
-         AWBoHJSUAIS+gFDYsYbY+r9tL6IRASJ+7KmHPDObu0n0oNrpL3hHiAbLRBwlIVFe1SSB
-         Cfyw==
-X-Gm-Message-State: APjAAAUyo5+Qu7KRhLogMLJxlxPI6oJMqyVYj2hjugdy2A1jmlziIuMH
-        s8NG74xBL2VhF7FbBmk9xgSIVg==
-X-Google-Smtp-Source: APXvYqxCcxTpMnkRTvpz5cLBjNYbPUx15IUg+xR6p8uH9udpwIzZK5vvkm1iTdzAgUHQrgxw+yGwzQ==
-X-Received: by 2002:a65:66d7:: with SMTP id c23mr19824054pgw.40.1576514939270;
-        Mon, 16 Dec 2019 08:48:59 -0800 (PST)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id d24sm23769672pfq.75.2019.12.16.08.48.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 08:48:57 -0800 (PST)
-Message-ID: <5df7b579.1c69fb81.c9187.3f3a@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191213064934.4112-1-saiprakash.ranjan@codeaurora.org>
-References: <20191213064934.4112-1-saiprakash.ranjan@codeaurora.org>
-Subject: Re: [PATCH] watchdog: qcom: Use platform_get_irq_optional() for bark irq
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S1728162AbfLQQOM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 17 Dec 2019 11:14:12 -0500
+Received: from sauhun.de ([88.99.104.3]:54336 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726858AbfLQQOM (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 17 Dec 2019 11:14:12 -0500
+Received: from localhost (p54B330AA.dip0.t-ipconnect.de [84.179.48.170])
+        by pokefinder.org (Postfix) with ESMTPSA id 694742C06A5;
+        Tue, 17 Dec 2019 17:14:10 +0100 (CET)
+Date:   Tue, 17 Dec 2019 17:14:10 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        linux-watchdog@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-User-Agent: alot/0.8.1
-Date:   Mon, 16 Dec 2019 08:48:56 -0800
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: watchdog: renesas-wdt: Document r8a77961
+ support
+Message-ID: <20191217161410.GE14061@ninjato>
+References: <20191205134751.6928-1-geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mR8QP4gmHujQHb1c"
+Content-Disposition: inline
+In-Reply-To: <20191205134751.6928-1-geert+renesas@glider.be>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Quoting Sai Prakash Ranjan (2019-12-12 22:49:34)
-> platform_get_irq() prints an error message when the interrupt
-> is not available. So on platforms where bark interrupt is
-> not specified, following error message is observed on SDM845.
->=20
-> [    2.975888] qcom_wdt 17980000.watchdog: IRQ index 0 not found
->=20
-> This is also seen on SC7180, SM8150 SoCs as well.
-> Fix this by using platform_get_irq_optional() instead.
->=20
-> Fixes: 36375491a4395654 ("watchdog: qcom: support pre-timeout when the ba=
-rk irq is available")
-> Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-> ---
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+--mR8QP4gmHujQHb1c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Dec 05, 2019 at 02:47:51PM +0100, Geert Uytterhoeven wrote:
+> Document support for the Watchdog Timer in the Renesas R-Car M3-W+
+> (R8A77961) SoC.
+>=20
+> No driver update is needed.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+
+--mR8QP4gmHujQHb1c
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl34/tEACgkQFA3kzBSg
+KbZM9Q//UNnF9l2ZCPRcTVEtC6zTo9ZH6YXtWDH9JXXnqaP2/ohMAdQ7qpv3q5kQ
+HZazX2a+641bjiDiJ+lEft6Oit4LfcI811466in8Cs43f/F9pSQCb0JeRq42HVau
+uf7ZCW7jMe2d/dZVcCWzx+KUsKV4vSlFdhIySUJOXLPCaUq0mUcFWf6fNdlMuJWT
+jmvR030rsi51fc0H7ees3fAH5i/tDs4JuWiGrsFxDbqUPUE7DXSr87l9jl/AB+Jv
+EVIQnXOz0kbtf9EFi/QQuBfmFrt8onYmLICPGI2QSZskDI7ytShxKslhIHY6spzU
+O6O6kGIYNT3DaisrJEnqGk9nEzxpOWZ20y8u/Xq5vajkgMMLEILbmjecH+MM4eKj
+t3+urZwV44GwCOf4Mhz0RHPFi/nXyz/mCNPtviN+uaD0ihFMUzZ6gAXxeyGQ31r1
+ZWthkJICfWHueBkZnHbh5niYpc6GcBgQhKjqQHF+iSDBqxnJ9DLgD+NNn8vZiLKB
+CZHFSko6JVH3AEk/icVhIGG6sv1KR4asUv3/GlgS1lCWJDIgI/98tKF/oUntemj6
++8elvtColf0fC2GTRvGxsaCbvvKJvodfyugEib4SMSG0SDqRiUWZnIjY0lBciAsp
+Xhgk8dTxpYBIZdIC11wwE1Q3GOAYYZk60FeStmSXIBGteWjJlSg=
+=l4M/
+-----END PGP SIGNATURE-----
+
+--mR8QP4gmHujQHb1c--
