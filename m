@@ -2,95 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D8A124B2A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Dec 2019 16:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E74B12506C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Dec 2019 19:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727216AbfLRPOI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 18 Dec 2019 10:14:08 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:40875 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727297AbfLRPOF (ORCPT
+        id S1726939AbfLRSPB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 18 Dec 2019 13:15:01 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:42774 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727341AbfLRSPB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 18 Dec 2019 10:14:05 -0500
-Received: by mail-qk1-f194.google.com with SMTP id c17so1818176qkg.7
-        for <linux-watchdog@vger.kernel.org>; Wed, 18 Dec 2019 07:14:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=RfaUJbE64AqObBUWyZFAX00yFzfv+PMQBeMlfEbyOTSSIZSlP9dNPzblRe9C4/Xp5G
-         OOrfzjlEIPRCszaxaclLviha/Gl6J+8MNE2wJIlQr3g8uWJn+m5NNx6dyOIWXJDzHKAu
-         CFfw6ayoPSChbR+RAE0+B68G/pEf5o1uZqam8GCW/DM3JVJn1rrKg09G5nyaA4x8K46C
-         DidFmOGbhUnnebgzWtKvL2IYqcm0dJ4hRYsroJX5h4wZl5ygcdMBOrPylnEG0iZgtaC4
-         tctA6UVKTV1ZO7eaOpJeM3zJ9lY8Otzi6Az77Sm1wv6CYLTS/yvcKPbBaIHIL7wY9gk+
-         23sQ==
+        Wed, 18 Dec 2019 13:15:01 -0500
+Received: by mail-ot1-f65.google.com with SMTP id 66so3531021otd.9;
+        Wed, 18 Dec 2019 10:15:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=di56sc0VJTg6Eg7DgWv9x9rHy/cxdRp96EPInBLl5EWuFDZ9NoqAY+k6f02JufB4eG
-         cwK+QdBI7KIsjU5MIooV6n33e5f5xN7PHsFwFjAyMyyKrpMAMGH9CzlngnFLzi1k3nXe
-         +mpQDcPhHXbVPU7qcgzS1sgcRZjGX/rThlTpeQtJjNxj/gjiMK55Yj+0OU7RXf37lgFI
-         0d7lJ9fArVkuQhwgdE0VU1mahelY2DNMCxO2Gb1GWQ7VMDoDOeYo2Dz98pJVlE53Hw0g
-         tHiwPf7fParwlBhVHYnSmiaHGcWWlmrAQj/kMEPwb0x/eRtHd4SAcBYBDOIOgnysPlKh
-         kp6A==
-X-Gm-Message-State: APjAAAUTcY4bicHv2Y/9OxehsIaXs2N91jQS/Im8TU9LPoFJU8Nkf7IV
-        QyOK07QcRrN+8FcLvFpaltROFK2+keygPQaxUCMp6f4=
-X-Google-Smtp-Source: APXvYqyIz9CrpHcrXivylieLEiE1VxRyGUw+E9DXz6VIYz+kYlOCef915g/qsmML8+OoqrwbsBK3G0eW6o6RBALrF/E=
-X-Received: by 2002:a05:6638:950:: with SMTP id f16mr2789501jad.107.1576682043767;
- Wed, 18 Dec 2019 07:14:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Joaw7/XAOOveu1GS58tOvSo24yLU2Vq2eez0hj0oxxI=;
+        b=InUP9nsTzmlFIiCN6b86zG4A/PqSGnWE91tsI4HBG8weXa20RWogHEHuFT9aJyg+ZE
+         XYiv20AA3iNiiPXWqzkzBg9wx0DmnNiNToZBmuCD3VbUzomLl5h+1hjVHtWkJyB5frxK
+         iu3wMZTOo59yobdKUuWVgz8msIM7Ls1x0dFjCp4qzCZz5qwTGeSIDEtMJPbnbvb/GMae
+         4RVSaJwf3dU+bi/JzPVNqNTXi4HXM9JweK63VfC+1GF8TfLiClPgV54Hhk5gmC/IRwVY
+         GEjVKLPqsP2xv2BLuYYHFb9l4BL6wpCrJTJOReqWt2xWHdaGag9PqYgi5p8S+NQeaQtz
+         QwGg==
+X-Gm-Message-State: APjAAAWFIJb6O/YL2g3/zlqb1qn4yN/m14/7DbcQkevbqND/vhWcLqfM
+        RiYqBo8+FIsqixrJl13IfQ==
+X-Google-Smtp-Source: APXvYqyoQd/upD6YD3POKyWidARuJplw8nUXBR63avEydvr3JAGmT9UWeuqxABxXovlfVreAUCvwWA==
+X-Received: by 2002:a9d:5e9a:: with SMTP id f26mr3967611otl.307.1576692895673;
+        Wed, 18 Dec 2019 10:14:55 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id t196sm802325oie.11.2019.12.18.10.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 10:14:55 -0800 (PST)
+Date:   Wed, 18 Dec 2019 12:14:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     yong.liang@mediatek.com, wim@linux-watchdog.org,
+        linux@roeck-us.net, p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        sboyd@kernel.org, yingjoe.chen@mediatek.com
+Subject: Re: [PATCH v6 1/2] dt-bindings: mediatek: mt8183: Add #reset-cells
+Message-ID: <20191218181454.GA15293@bogus>
+References: <1576081356-18298-1-git-send-email-jiaxin.yu@mediatek.com>
+ <1576081356-18298-2-git-send-email-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-Received: by 2002:a02:6603:0:0:0:0:0 with HTTP; Wed, 18 Dec 2019 07:14:03
- -0800 (PST)
-Reply-To: dhl.expresscourier102156@outlook.fr
-From:   "MS. MARYANNA B. THOMASON" <info.zennitbankplcnigerian@gmail.com>
-Date:   Wed, 18 Dec 2019 16:14:03 +0100
-Message-ID: <CABHzvr=Pq7-TqhY8TPvFCsr+5-DhDQy=XOg-TM13qqbFWeemfQ@mail.gmail.com>
-Subject: =?UTF-8?Q?Urgent_delivery_Notification_of_your_ATM_MASTER_CARD?=
-        =?UTF-8?Q?_Amount=2C=2415=2E800=E2=80=99000=E2=80=9900=2C?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1576081356-18298-2-git-send-email-jiaxin.yu@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Attn Dear.
+On Thu, 12 Dec 2019 00:22:35 +0800, Jiaxin Yu wrote:
+> From: "yong.liang" <yong.liang@mediatek.com>
+> 
+> Add #reset-cells property and update example
+> 
+> Signed-off-by: yong.liang <yong.liang@mediatek.com>
+> ---
+>  .../devicetree/bindings/watchdog/mtk-wdt.txt  | 10 ++++++---
+>  .../reset-controller/mt2712-resets.h          | 22 +++++++++++++++++++
+>  .../reset-controller/mt8183-resets.h          | 17 ++++++++++++++
+>  3 files changed, 46 insertions(+), 3 deletions(-)
+>  create mode 100644 include/dt-bindings/reset-controller/mt2712-resets.h
+> 
 
-Urgent delivery Notification of your ATM MASTER CARD, Dhl-Benin is
-ready for delivery of your ATM Master card worth $15.800=E2=80=99000=E2=80=
-=9900, as
-approved this morning, Date, 18/12/2019. Through the Intruction from
-INTERNATIONAL MONETARY FUNDS, I.M.F official Directors.
-
-REGISTRATION NO :EG58945
-PARCEL NUMBER: 140479
-Delivery Schuleded now,
-Finally all we required from you is your ATM Card Proccessing Delivery
-fees $19.00 only which you must send to this DHL service to enable us
-dispatch the parcel to your destination today.
-
-Here is our receiving payment details.
-You are advised to send it Via Money Gram Service.
-
-Receiver's Name--------Alan Ude
-Country-------Benin Republic.
-City/ Address--------Cotonou
-Test Question--------In God
-Answer-------We Trust
-Amount------------$US19.00 only
-Mtcn-------------
-Sender's Name-------
-
-Your delivery  ATM card worth $15.800=E2=80=99000=E2=80=9900,
-Is Due for delivery to your address today upon confirmation of
-required fee from you asap.
-
-Call us on this phone number for any inquiry. +229 62819378
-Awaiting your urgent response.
-
-MS. MARYANNA B. THOMASON, Shipment director, DHL Express
-Courier Company-Benin
+Reviewed-by: Rob Herring <robh@kernel.org>
