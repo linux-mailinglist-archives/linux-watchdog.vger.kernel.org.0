@@ -2,77 +2,141 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E089123142
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Dec 2019 17:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C6B124077
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Dec 2019 08:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728162AbfLQQOM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 17 Dec 2019 11:14:12 -0500
-Received: from sauhun.de ([88.99.104.3]:54336 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726858AbfLQQOM (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 17 Dec 2019 11:14:12 -0500
-Received: from localhost (p54B330AA.dip0.t-ipconnect.de [84.179.48.170])
-        by pokefinder.org (Postfix) with ESMTPSA id 694742C06A5;
-        Tue, 17 Dec 2019 17:14:10 +0100 (CET)
-Date:   Tue, 17 Dec 2019 17:14:10 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: renesas-wdt: Document r8a77961
- support
-Message-ID: <20191217161410.GE14061@ninjato>
-References: <20191205134751.6928-1-geert+renesas@glider.be>
+        id S1726682AbfLRHhp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 18 Dec 2019 02:37:45 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:15512 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726710AbfLRHho (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 18 Dec 2019 02:37:44 -0500
+Received: from [10.28.19.135] (10.28.19.135) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Wed, 18 Dec
+ 2019 15:37:49 +0800
+Subject: Re: [PATCH v5 2/4] dt-bindings: watchdog: add new binding for meson
+ secure watchdog
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        <linux-kernel@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        Jerome Brunet <jbrunet@baylibre.com>
+References: <1576153187-28378-1-git-send-email-xingyu.chen@amlogic.com>
+ <1576153187-28378-3-git-send-email-xingyu.chen@amlogic.com>
+ <CAFBinCBHLqgPExPsVaSWdSOr0Oj-jeYa4Z82U-pJ=fS+D1wGnA@mail.gmail.com>
+ <f7b0afe7-e317-2422-de7e-878837f9f238@amlogic.com>
+ <a8f5ab1d-264c-5b2c-e72b-3774b9f44c22@roeck-us.net>
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+Message-ID: <1da513d7-20e1-726a-dcc4-952cbfbbe63a@amlogic.com>
+Date:   Wed, 18 Dec 2019 15:37:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mR8QP4gmHujQHb1c"
-Content-Disposition: inline
-In-Reply-To: <20191205134751.6928-1-geert+renesas@glider.be>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <a8f5ab1d-264c-5b2c-e72b-3774b9f44c22@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+X-Originating-IP: [10.28.19.135]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hi, Guenter Martin
 
---mR8QP4gmHujQHb1c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2019/12/16 21:30, Guenter Roeck wrote:
+> On 12/15/19 10:03 PM, Xingyu Chen wrote:
+>> Hi, Martin
+>>
+>> Sorry for the late reply.
+>>
+>> On 2019/12/13 4:05, Martin Blumenstingl wrote:
+>>> Hi Xingyu and Rob,
+>>>
+>>> On Thu, Dec 12, 2019 at 1:20 PM Xingyu Chen 
+>>> <xingyu.chen@amlogic.com> wrote:
+>>> [...]
+>>>> +examples:
+>>>> +  - |
+>>>> +    watchdog {
+>>>> +          compatible = "amlogic,meson-sec-wdt";
+>>>> +          timeout-sec = <60>;
+>>>> +    };
+>>> in v3 of this patch Rob commented that there shouldn't be an OF node
+>>> if there are no additional properties
+>>> with timeout-sec there's now an additional property so my
+>>> understanding is that it's fine to have an OF node
+>> Your understanding is correct.
+>>>
+>>> what I don't understand yet is where this node should be placed.
+>>> is it supposed to be a child node of the secure monitor node (for
+>>> which we already have a binding here:
+>>> Documentation/devicetree/bindings/firmware/meson/meson_sm.txt) or
+>>> where else would we place it inside the .dts?
+>> IMO,  Although the watchdog node need to reference the meson_sm node, 
+>> there is no
+>> bus-like dependencies between the devices which the two nodes 
+>> corresponding to.
+>> so i think that the watchdog node as child node of meson_sm maybe not 
+>> appropriate.
+>
+> The watchdog driver needs the meson SM's dt node, and it depends on 
+> the existence
+> of that node. That seems enough of a relationship to warrant having it 
+> as child note.
+Thanks for your reply, if i take the wdt node as child of secure monitor 
+(sm), how should
+i register or find the wdt device ?
 
-On Thu, Dec 05, 2019 at 02:47:51PM +0100, Geert Uytterhoeven wrote:
-> Document support for the Watchdog Timer in the Renesas R-Car M3-W+
-> (R8A77961) SoC.
->=20
-> No driver update is needed.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+I only think of the following three methods :
+1). update the sm driver，and scan&register wdt device when the sm driver 
+probes(It is like i2c), but there
+are too many changes involved.
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+2). add "simple-bus" key string to compatible of sm node, and it will 
+make the child node is registered as
+platform device, but it seems that the key string is not match current 
+scene.
 
+secure-monitor {
+     compatible = "amlogic,meson-gxbb-sm",  "simple-bus";
 
---mR8QP4gmHujQHb1c
-Content-Type: application/pgp-signature; name="signature.asc"
+     watchdog {
+         compatible = "amlogic,meson-sec-wdt";
+         timeout-sec = <60>;
+     }
+}
 
------BEGIN PGP SIGNATURE-----
+3).  don't register device, and find directly the watchdog node by using 
+the of_* API in watchdog
+driver (Eg: linux-4.x/drivers/tee/optee/core.c)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl34/tEACgkQFA3kzBSg
-KbZM9Q//UNnF9l2ZCPRcTVEtC6zTo9ZH6YXtWDH9JXXnqaP2/ohMAdQ7qpv3q5kQ
-HZazX2a+641bjiDiJ+lEft6Oit4LfcI811466in8Cs43f/F9pSQCb0JeRq42HVau
-uf7ZCW7jMe2d/dZVcCWzx+KUsKV4vSlFdhIySUJOXLPCaUq0mUcFWf6fNdlMuJWT
-jmvR030rsi51fc0H7ees3fAH5i/tDs4JuWiGrsFxDbqUPUE7DXSr87l9jl/AB+Jv
-EVIQnXOz0kbtf9EFi/QQuBfmFrt8onYmLICPGI2QSZskDI7ytShxKslhIHY6spzU
-O6O6kGIYNT3DaisrJEnqGk9nEzxpOWZ20y8u/Xq5vajkgMMLEILbmjecH+MM4eKj
-t3+urZwV44GwCOf4Mhz0RHPFi/nXyz/mCNPtviN+uaD0ihFMUzZ6gAXxeyGQ31r1
-ZWthkJICfWHueBkZnHbh5niYpc6GcBgQhKjqQHF+iSDBqxnJ9DLgD+NNn8vZiLKB
-CZHFSko6JVH3AEk/icVhIGG6sv1KR4asUv3/GlgS1lCWJDIgI/98tKF/oUntemj6
-+8elvtColf0fC2GTRvGxsaCbvvKJvodfyugEib4SMSG0SDqRiUWZnIjY0lBciAsp
-Xhgk8dTxpYBIZdIC11wwE1Q3GOAYYZk60FeStmSXIBGteWjJlSg=
-=l4M/
------END PGP SIGNATURE-----
+secure-monitor {
+     compatible = "amlogic,meson-gxbb-sm";
 
---mR8QP4gmHujQHb1c--
+     watchdog {
+         compatible = "amlogic,meson-sec-wdt";
+         timeout-sec = <60>;
+     }
+}
+
+The method 3 looks better for me, do you have a better suggestion ? Thanks
+
+BR
+>
+> Guenter
+>
+> .
+>
