@@ -2,151 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D06E1259AC
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Dec 2019 03:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C1412661E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Dec 2019 16:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726824AbfLSCua (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 18 Dec 2019 21:50:30 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:54507 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726463AbfLSCua (ORCPT
+        id S1726797AbfLSPvF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 19 Dec 2019 10:51:05 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:44361 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726779AbfLSPvE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 18 Dec 2019 21:50:30 -0500
-Received: from [10.28.19.135] (10.28.19.135) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 19 Dec
- 2019 10:51:04 +0800
-Subject: Re: [PATCH v5 2/4] dt-bindings: watchdog: add new binding for meson
- secure watchdog
-To:     Rob Herring <robh@kernel.org>
-CC:     Guenter Roeck <linux@roeck-us.net>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Qianggui Song <qianggui.song@amlogic.com>,
-        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        <linux-kernel@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        Jerome Brunet <jbrunet@baylibre.com>
-References: <1576153187-28378-1-git-send-email-xingyu.chen@amlogic.com>
- <1576153187-28378-3-git-send-email-xingyu.chen@amlogic.com>
- <CAFBinCBHLqgPExPsVaSWdSOr0Oj-jeYa4Z82U-pJ=fS+D1wGnA@mail.gmail.com>
- <f7b0afe7-e317-2422-de7e-878837f9f238@amlogic.com>
- <a8f5ab1d-264c-5b2c-e72b-3774b9f44c22@roeck-us.net>
- <1da513d7-20e1-726a-dcc4-952cbfbbe63a@amlogic.com>
- <20191218203404.GA2451@bogus>
-From:   Xingyu Chen <xingyu.chen@amlogic.com>
-Message-ID: <2d762720-cb08-e72a-06e5-4096e211e34b@amlogic.com>
-Date:   Thu, 19 Dec 2019 10:51:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        Thu, 19 Dec 2019 10:51:04 -0500
+Received: by mail-ot1-f67.google.com with SMTP id h9so5154806otj.11;
+        Thu, 19 Dec 2019 07:51:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ci18yO6S0a6TgITq8YqQaAsiIr5weNY4GfvU653cx3c=;
+        b=VC+Y+hcako2fcT9ROIo94NgIzt6kQEChyV60kQWUD2Zi6PvdthjF5BsCC9b2vYHsHu
+         dge7eDe4tva+JtUP0/XpsH6taJD58UHoU1JaQDNiTHupH+PVd0NX/DaOAVylzOX6Hjsi
+         KWX7SNCMPSUk+mriTL3gj8/2LAMsmThC+c015x+VQAutDFlNWwUUfcgreLwB65mauU0t
+         hECB5dkDc+wtng3ZepCyacFecMpjACogy2wuo2ne8d7yzxjvrkfvlKt7n6/h4QKIMLm0
+         Q51LaVSGEylJwAPn7GcuAO/jB5pAKZqaB/l51137nN8dOVWBtpRPjhtMLxC0zoNMwyon
+         77pQ==
+X-Gm-Message-State: APjAAAXynfYFbWB8RzFHq++2ZjeQk+Jf8Y1xR32fsje/XPxRwcWFedGR
+        mKhjMp+huFsr4wxSMXS+wQ==
+X-Google-Smtp-Source: APXvYqxBitxJErG8fqxh+172fCWcJiax2apTWgRol/iP7/vlCUvpXo+dEXMMyBU3q5UoTCa+0/Od8A==
+X-Received: by 2002:a9d:7a8f:: with SMTP id l15mr9106619otn.109.1576770664003;
+        Thu, 19 Dec 2019 07:51:04 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l1sm2092339oic.22.2019.12.19.07.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2019 07:51:03 -0800 (PST)
+Date:   Thu, 19 Dec 2019 09:51:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, mark.rutland@arm.com,
+        alexandre.torgue@st.com, linux-watchdog@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: watchdog: Convert stm32 watchdog
+ bindings to json-schema
+Message-ID: <20191219155102.GA26498@bogus>
+References: <20191121084316.13839-1-benjamin.gaignard@st.com>
 MIME-Version: 1.0
-In-Reply-To: <20191218203404.GA2451@bogus>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
-X-Originating-IP: [10.28.19.135]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191121084316.13839-1-benjamin.gaignard@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi, Rob
-
-On 2019/12/19 4:34, Rob Herring wrote:
-> On Wed, Dec 18, 2019 at 03:37:49PM +0800, Xingyu Chen wrote:
->> Hi, Guenter Martin
->>
->> On 2019/12/16 21:30, Guenter Roeck wrote:
->>> On 12/15/19 10:03 PM, Xingyu Chen wrote:
->>>> Hi, Martin
->>>>
->>>> Sorry for the late reply.
->>>>
->>>> On 2019/12/13 4:05, Martin Blumenstingl wrote:
->>>>> Hi Xingyu and Rob,
->>>>>
->>>>> On Thu, Dec 12, 2019 at 1:20 PM Xingyu Chen
->>>>> <xingyu.chen@amlogic.com> wrote:
->>>>> [...]
->>>>>> +examples:
->>>>>> +  - |
->>>>>> +    watchdog {
->>>>>> +          compatible = "amlogic,meson-sec-wdt";
->>>>>> +          timeout-sec = <60>;
->>>>>> +    };
->>>>> in v3 of this patch Rob commented that there shouldn't be an OF node
->>>>> if there are no additional properties
->>>>> with timeout-sec there's now an additional property so my
->>>>> understanding is that it's fine to have an OF node
->>>> Your understanding is correct.
->>>>> what I don't understand yet is where this node should be placed.
->>>>> is it supposed to be a child node of the secure monitor node (for
->>>>> which we already have a binding here:
->>>>> Documentation/devicetree/bindings/firmware/meson/meson_sm.txt) or
->>>>> where else would we place it inside the .dts?
->>>> IMO,  Although the watchdog node need to reference the meson_sm
->>>> node, there is no
->>>> bus-like dependencies between the devices which the two nodes
->>>> corresponding to.
->>>> so i think that the watchdog node as child node of meson_sm maybe
->>>> not appropriate.
->>> The watchdog driver needs the meson SM's dt node, and it depends on the
->>> existence
->>> of that node. That seems enough of a relationship to warrant having it
->>> as child note.
->> Thanks for your reply, if i take the wdt node as child of secure monitor
->> (sm), how should
->> i register or find the wdt device ?
->>
->> I only think of the following three methods :
->> 1). update the sm driver，and scan&register wdt device when the sm driver
->> probes(It is like i2c), but there
->> are too many changes involved.
-> Just add of_platform_default_populate() call and clean-up calls. That's
-> not what I'd call 'too many changes'.
-Thanks for your guidance.
->
+On Thu, Nov 21, 2019 at 09:43:16AM +0100, Benjamin Gaignard wrote:
+> Convert the STM32 watchdog binding to DT schema format using json-schema
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> ---
+> changes in version 2:
+> - remove trailer space
+> - add Christophe in the maintainers list
 >   
->> 2). add "simple-bus" key string to compatible of sm node, and it will make
->> the child node is registered as
->> platform device, but it seems that the key string is not match current
->> scene.
-> You previously said it's not a bus...
->
->> secure-monitor {
->>      compatible = "amlogic,meson-gxbb-sm",  "simple-bus";
->>
->>      watchdog {
->>          compatible = "amlogic,meson-sec-wdt";
->>          timeout-sec = <60>;
->>      }
->> }
->>
->> 3).  don't register device, and find directly the watchdog node by using the
->> of_* API in watchdog
->> driver (Eg: linux-4.x/drivers/tee/optee/core.c)
->>
->> secure-monitor {
->>      compatible = "amlogic,meson-gxbb-sm";
->>
->>      watchdog {
->>          compatible = "amlogic,meson-sec-wdt";
->>          timeout-sec = <60>;
->>      }
->> }
->>
->> The method 3 looks better for me, do you have a better suggestion ? Thanks
->>
->> BR
->>> Guenter
->>>
->>> .
->>>
-> .
->
+>  .../devicetree/bindings/watchdog/st,stm32-iwdg.txt | 26 ----------
+>  .../bindings/watchdog/st,stm32-iwdg.yaml           | 55 ++++++++++++++++++++++
+>  2 files changed, 55 insertions(+), 26 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+
+Fixed up a typo with 'enums' and applied.
+
+Rob
