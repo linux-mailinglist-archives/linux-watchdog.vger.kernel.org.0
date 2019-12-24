@@ -2,51 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AAD129222
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Dec 2019 08:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99576129F93
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Dec 2019 10:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725867AbfLWHNh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 Dec 2019 02:13:37 -0500
-Received: from mail.sysgo.com ([176.9.12.79]:53700 "EHLO mail.sysgo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725810AbfLWHNh (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 Dec 2019 02:13:37 -0500
-From:   David Engraf <david.engraf@sysgo.com>
-To:     linux@roeck-us.net, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Engraf <david.engraf@sysgo.com>
-Subject: [PATCH RESEND] watchdog: max77620_wdt: fix potential build errors
-Date:   Mon, 23 Dec 2019 08:13:11 +0100
-Message-Id: <20191223071311.5650-1-david.engraf@sysgo.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <7325c440-aa55-92ce-ec74-b420fd90a24b@roeck-us.net>
-References: <7325c440-aa55-92ce-ec74-b420fd90a24b@roeck-us.net>
+        id S1726258AbfLXJEo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 24 Dec 2019 04:04:44 -0500
+Received: from mail-qv1-f68.google.com ([209.85.219.68]:38350 "EHLO
+        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726225AbfLXJEj (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 24 Dec 2019 04:04:39 -0500
+Received: by mail-qv1-f68.google.com with SMTP id t6so7277559qvs.5
+        for <linux-watchdog@vger.kernel.org>; Tue, 24 Dec 2019 01:04:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=T+/t7noVmCnipzpx0EipiuoSs8D3VSnUxNHRKwid9CC0wiDbW+X/7ifkYeunyqedwQ
+         BGdMrKiSqKnqF0r8Ye2KwFtk0h3GLL39TxNb3CHAu3bXzv5AN/Kgu5ag8P+iBs/MQlQV
+         uiWtOeIaQkWcLsKNf6KZJnk5gu30Oe2Wb5W5ckfQ5559XhNTvEvyadD8dkI5XOU8pCG3
+         aEK2B3iE+wm7bJkjfR7s8BrUNiVlj+YT1q1jfY76M++ddXl3Ujhw972TMvRh6ukNAwlj
+         XJqSDAmeFoGE6A8arcoUtdb2DZEBYbduX+OXcqMJa9a6fPb761KxhkI0pSMZmZbjw+/9
+         dW5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=D+r1547h32TD1u960Us+Y+MKWM8Fp+GkZWgko5NuledF/ey6ep18Tvvc46Ubae3x+u
+         7zAqTH2f3vRh26SBG2I3kx+/WRREk1XZwIm16s9hua9TCiDzWkf+7/s7IK5RJ6FBnUeT
+         Z9lTS6BDTqO6Ih/jJ8QtgCtRRxKHwjfxilqPhPLMSQiq0gg/TTt0SoUcwO9ftMGDSAyy
+         4PXOTvIjKjnFD7wXjiHSnZeeQRCNoDLUB21etOkebsE1BOqr+HYyie5h3N9O6H8CScAa
+         YLsq6jEDGnzjUnCj+GSmPZpwfRSEI+50sIhc6zYo8Isgcj0oPedjVl60bTMx8cYrhcNs
+         bO7A==
+X-Gm-Message-State: APjAAAXRZjvLUzmcmCFVVaokLUUwBv82ce6+s6aL6zFPmcod3IZj1DyV
+        Tw8JqdIf90HxXDlOJdICDyai/JO9poXlNEgDUkU=
+X-Google-Smtp-Source: APXvYqxVGVmKHh36H3FtCwgzZ5FU95JoblzpuCw5SoZ9RS/aHnMUAQsP+TIBYVHkaxqYCJ5qeKl56QyyoiPTbeZ5we0=
+X-Received: by 2002:a0c:fac7:: with SMTP id p7mr27888544qvo.46.1577178276846;
+ Tue, 24 Dec 2019 01:04:36 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 01:04:36
+ -0800 (PST)
+Reply-To: bethnatividad9@gmail.com
+From:   Beth Nat <anthonymoore105@gmail.com>
+Date:   Tue, 24 Dec 2019 09:04:36 +0000
+Message-ID: <CAKqrdYCodJzPTTHz6kph8Sgthe6xHddAUidHBCggQaKHYA7ZUw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-max77620_wdt uses watchdog core functions. Enable CONFIG_WATCHDOG_CORE
-to fix potential build errors.
-
-Signed-off-by: David Engraf <david.engraf@sysgo.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/watchdog/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 58e7c100b6ad..c9cc34f4e541 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -687,6 +687,7 @@ config MAX63XX_WATCHDOG
- config MAX77620_WATCHDOG
- 	tristate "Maxim Max77620 Watchdog Timer"
- 	depends on MFD_MAX77620 || COMPILE_TEST
-+	select WATCHDOG_CORE
- 	help
- 	 This is the driver for the Max77620 watchdog timer.
- 	 Say 'Y' here to enable the watchdog timer support for
--- 
-2.17.1
-
+How are you today my dear? i saw your profile and it interests me, i
+am a Military nurse from USA. Can we be friend? I want to know more
+about you.
