@@ -2,143 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCF912B36E
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Dec 2019 10:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E01612E5E0
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Jan 2020 12:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726857AbfL0JGA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Dec 2019 04:06:00 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:17938 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726495AbfL0JGA (ORCPT
+        id S1728232AbgABL4h (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Jan 2020 06:56:37 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47391 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728205AbgABL4h (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Dec 2019 04:06:00 -0500
-X-UUID: 344832fee3074a219458965a6f191b5e-20191227
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=QXD1kl9Eu+Eq78WG0AJdM2CXyVFW/bQeIIWr1UnaH7o=;
-        b=fK6pEAJ787qFSPakHIZtcuHoteUL36TxcM9SHuLLJUuPYCtEACjnqYxdAVLZ0b088PFVZs9jticFa6bAnWP7Wxk80DfaTXOJnzXUIuyHB+SGRjPaPKggpCL0ZMYvbTxzppsg8qLeawpyVdcxyGTckMRcwp0hlnEyF+2Y1KoCDqM=;
-X-UUID: 344832fee3074a219458965a6f191b5e-20191227
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1386314719; Fri, 27 Dec 2019 17:05:53 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 27 Dec 2019 17:05:10 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 27 Dec 2019 17:05:19 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <yong.liang@mediatek.com>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <p.zabel@pengutronix.de>,
-        <matthias.bgg@gmail.com>, <linux-watchdog@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <chang-an.chen@mediatek.com>, <freddy.hsin@mediatek.com>
-CC:     <yingjoe.chen@mediatek.com>, <sboyd@kernel.org>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH v7 2/2] watchdog: mtk_wdt: mt8183: Add reset controller
-Date:   Fri, 27 Dec 2019 17:04:54 +0800
-Message-ID: <1577437494-738-3-git-send-email-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1577437494-738-1-git-send-email-jiaxin.yu@mediatek.com>
+        Thu, 2 Jan 2020 06:56:37 -0500
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1imz5Z-0002We-MF; Thu, 02 Jan 2020 12:56:29 +0100
+Message-ID: <f3a5ccdc211b5d94b1901e72cfc2ef57d4107054.camel@pengutronix.de>
+Subject: Re: [PATCH v7 1/2] dt-bindings: mediatek: mt8183: Add #reset-cells
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, yong.liang@mediatek.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, matthias.bgg@gmail.com,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        chang-an.chen@mediatek.com, freddy.hsin@mediatek.com
+Cc:     yingjoe.chen@mediatek.com, sboyd@kernel.org
+Date:   Thu, 02 Jan 2020 12:56:27 +0100
+In-Reply-To: <1577437494-738-2-git-send-email-jiaxin.yu@mediatek.com>
 References: <1577437494-738-1-git-send-email-jiaxin.yu@mediatek.com>
+         <1577437494-738-2-git-send-email-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-QWRkIHJlc2V0IGNvbnRyb2xsZXIgQVBJIGluIHdhdGNoZG9nIGRyaXZlci4NCkJlc2lkZXMgd2F0
-Y2hkb2csIE1USyB0b3ByZ3UgbW9kdWxlIGFsc2EgcHJvdmlkZSBzdWItc3lzdGVtIChlZywgYXVk
-aW8sDQpjYW1lcmEsIGNvZGVjIGFuZCBjb25uZWN0aXZpdHkpIHNvZnR3YXJlIHJlc2V0IGZ1bmN0
-aW9uYWxpdHkuDQoNClNpZ25lZC1vZmYtYnk6IHlvbmcubGlhbmcgPHlvbmcubGlhbmdAbWVkaWF0
-ZWsuY29tPg0KU2lnbmVkLW9mZi1ieTogSmlheGluIFl1IDxqaWF4aW4ueXVAbWVkaWF0ZWsuY29t
-Pg0KUmV2aWV3ZWQtYnk6IFlpbmdqb2UgQ2hlbiA8eWluZ2pvZS5jaGVuQG1lZGlhdGVrLmNvbT4N
-Ci0tLQ0KIGRyaXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5jIHwgMTA1ICsrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKy0NCiAxIGZpbGUgY2hhbmdlZCwgMTA0IGluc2VydGlvbnMoKyks
-IDEgZGVsZXRpb24oLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5j
-IGIvZHJpdmVycy93YXRjaGRvZy9tdGtfd2R0LmMNCmluZGV4IDljM2QwMDMzMjYwZC4uYzFiYzE5
-YWI2MjhlIDEwMDY0NA0KLS0tIGEvZHJpdmVycy93YXRjaGRvZy9tdGtfd2R0LmMNCisrKyBiL2Ry
-aXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5jDQpAQCAtOSw2ICs5LDkgQEANCiAgKiBCYXNlZCBvbiBz
-dW54aV93ZHQuYw0KICAqLw0KIA0KKyNpbmNsdWRlIDxkdC1iaW5kaW5ncy9yZXNldC1jb250cm9s
-bGVyL210MjcxMi1yZXNldHMuaD4NCisjaW5jbHVkZSA8ZHQtYmluZGluZ3MvcmVzZXQtY29udHJv
-bGxlci9tdDgxODMtcmVzZXRzLmg+DQorI2luY2x1ZGUgPGxpbnV4L2RlbGF5Lmg+DQogI2luY2x1
-ZGUgPGxpbnV4L2Vyci5oPg0KICNpbmNsdWRlIDxsaW51eC9pbml0Lmg+DQogI2luY2x1ZGUgPGxp
-bnV4L2lvLmg+DQpAQCAtMTYsMTAgKzE5LDExIEBADQogI2luY2x1ZGUgPGxpbnV4L21vZHVsZS5o
-Pg0KICNpbmNsdWRlIDxsaW51eC9tb2R1bGVwYXJhbS5oPg0KICNpbmNsdWRlIDxsaW51eC9vZi5o
-Pg0KKyNpbmNsdWRlIDxsaW51eC9vZl9kZXZpY2UuaD4NCiAjaW5jbHVkZSA8bGludXgvcGxhdGZv
-cm1fZGV2aWNlLmg+DQorI2luY2x1ZGUgPGxpbnV4L3Jlc2V0LWNvbnRyb2xsZXIuaD4NCiAjaW5j
-bHVkZSA8bGludXgvdHlwZXMuaD4NCiAjaW5jbHVkZSA8bGludXgvd2F0Y2hkb2cuaD4NCi0jaW5j
-bHVkZSA8bGludXgvZGVsYXkuaD4NCiANCiAjZGVmaW5lIFdEVF9NQVhfVElNRU9VVAkJMzENCiAj
-ZGVmaW5lIFdEVF9NSU5fVElNRU9VVAkJMQ0KQEAgLTQ0LDYgKzQ4LDkgQEANCiAjZGVmaW5lIFdE
-VF9TV1JTVAkJMHgxNA0KICNkZWZpbmUgV0RUX1NXUlNUX0tFWQkJMHgxMjA5DQogDQorI2RlZmlu
-ZSBXRFRfU1dTWVNSU1QJCTB4MThVDQorI2RlZmluZSBXRFRfU1dTWVNfUlNUX0tFWQkweDg4MDAw
-MDAwDQorDQogI2RlZmluZSBEUlZfTkFNRQkJIm10ay13ZHQiDQogI2RlZmluZSBEUlZfVkVSU0lP
-TgkJIjEuMCINCiANCkBAIC01Myw4ICs2MCw5NCBAQCBzdGF0aWMgdW5zaWduZWQgaW50IHRpbWVv
-dXQ7DQogc3RydWN0IG10a193ZHRfZGV2IHsNCiAJc3RydWN0IHdhdGNoZG9nX2RldmljZSB3ZHRf
-ZGV2Ow0KIAl2b2lkIF9faW9tZW0gKndkdF9iYXNlOw0KKwlzcGlubG9ja190IGxvY2s7IC8qIHBy
-b3RlY3RzIFdEVF9TV1NZU1JTVCByZWcgKi8NCisJc3RydWN0IHJlc2V0X2NvbnRyb2xsZXJfZGV2
-IHJjZGV2Ow0KK307DQorDQorc3RydWN0IG10a193ZHRfZGF0YSB7DQorCWludCB0b3ByZ3Vfc3df
-cnN0X251bTsNCiB9Ow0KIA0KK3N0YXRpYyBjb25zdCBzdHJ1Y3QgbXRrX3dkdF9kYXRhIG10Mjcx
-Ml9kYXRhID0gew0KKwkudG9wcmd1X3N3X3JzdF9udW0gPSBNVDI3MTJfVE9QUkdVX1NXX1JTVF9O
-VU0sDQorfTsNCisNCitzdGF0aWMgY29uc3Qgc3RydWN0IG10a193ZHRfZGF0YSBtdDgxODNfZGF0
-YSA9IHsNCisJLnRvcHJndV9zd19yc3RfbnVtID0gTVQ4MTgzX1RPUFJHVV9TV19SU1RfTlVNLA0K
-K307DQorDQorc3RhdGljIGludCB0b3ByZ3VfcmVzZXRfdXBkYXRlKHN0cnVjdCByZXNldF9jb250
-cm9sbGVyX2RldiAqcmNkZXYsDQorCQkJICAgICAgIHVuc2lnbmVkIGxvbmcgaWQsIGJvb2wgYXNz
-ZXJ0KQ0KK3sNCisJdW5zaWduZWQgaW50IHRtcDsNCisJdW5zaWduZWQgbG9uZyBmbGFnczsNCisJ
-c3RydWN0IG10a193ZHRfZGV2ICpkYXRhID0NCisJCSBjb250YWluZXJfb2YocmNkZXYsIHN0cnVj
-dCBtdGtfd2R0X2RldiwgcmNkZXYpOw0KKw0KKwlzcGluX2xvY2tfaXJxc2F2ZSgmZGF0YS0+bG9j
-aywgZmxhZ3MpOw0KKw0KKwl0bXAgPSByZWFkbChkYXRhLT53ZHRfYmFzZSArIFdEVF9TV1NZU1JT
-VCk7DQorCWlmIChhc3NlcnQpDQorCQl0bXAgfD0gQklUKGlkKTsNCisJZWxzZQ0KKwkJdG1wICY9
-IH5CSVQoaWQpOw0KKwl0bXAgfD0gV0RUX1NXU1lTX1JTVF9LRVk7DQorCXdyaXRlbCh0bXAsIGRh
-dGEtPndkdF9iYXNlICsgV0RUX1NXU1lTUlNUKTsNCisNCisJc3Bpbl91bmxvY2tfaXJxcmVzdG9y
-ZSgmZGF0YS0+bG9jaywgZmxhZ3MpOw0KKw0KKwlyZXR1cm4gMDsNCit9DQorDQorc3RhdGljIGlu
-dCB0b3ByZ3VfcmVzZXRfYXNzZXJ0KHN0cnVjdCByZXNldF9jb250cm9sbGVyX2RldiAqcmNkZXYs
-DQorCQkJICAgICAgIHVuc2lnbmVkIGxvbmcgaWQpDQorew0KKwlyZXR1cm4gdG9wcmd1X3Jlc2V0
-X3VwZGF0ZShyY2RldiwgaWQsIHRydWUpOw0KK30NCisNCitzdGF0aWMgaW50IHRvcHJndV9yZXNl
-dF9kZWFzc2VydChzdHJ1Y3QgcmVzZXRfY29udHJvbGxlcl9kZXYgKnJjZGV2LA0KKwkJCQkgdW5z
-aWduZWQgbG9uZyBpZCkNCit7DQorCXJldHVybiB0b3ByZ3VfcmVzZXRfdXBkYXRlKHJjZGV2LCBp
-ZCwgZmFsc2UpOw0KK30NCisNCitzdGF0aWMgaW50IHRvcHJndV9yZXNldChzdHJ1Y3QgcmVzZXRf
-Y29udHJvbGxlcl9kZXYgKnJjZGV2LA0KKwkJCXVuc2lnbmVkIGxvbmcgaWQpDQorew0KKwlpbnQg
-cmV0Ow0KKw0KKwlyZXQgPSB0b3ByZ3VfcmVzZXRfYXNzZXJ0KHJjZGV2LCBpZCk7DQorCWlmIChy
-ZXQpDQorCQlyZXR1cm4gcmV0Ow0KKw0KKwlyZXR1cm4gdG9wcmd1X3Jlc2V0X2RlYXNzZXJ0KHJj
-ZGV2LCBpZCk7DQorfQ0KKw0KK3N0YXRpYyBjb25zdCBzdHJ1Y3QgcmVzZXRfY29udHJvbF9vcHMg
-dG9wcmd1X3Jlc2V0X29wcyA9IHsNCisJLmFzc2VydCA9IHRvcHJndV9yZXNldF9hc3NlcnQsDQor
-CS5kZWFzc2VydCA9IHRvcHJndV9yZXNldF9kZWFzc2VydCwNCisJLnJlc2V0ID0gdG9wcmd1X3Jl
-c2V0LA0KK307DQorDQorc3RhdGljIGludCB0b3ByZ3VfcmVnaXN0ZXJfcmVzZXRfY29udHJvbGxl
-cihzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2LA0KKwkJCQkJICAgIGludCByc3RfbnVtKQ0K
-K3sNCisJaW50IHJldDsNCisJc3RydWN0IG10a193ZHRfZGV2ICptdGtfd2R0ID0gcGxhdGZvcm1f
-Z2V0X2RydmRhdGEocGRldik7DQorDQorCXNwaW5fbG9ja19pbml0KCZtdGtfd2R0LT5sb2NrKTsN
-CisNCisJbXRrX3dkdC0+cmNkZXYub3duZXIgPSBUSElTX01PRFVMRTsNCisJbXRrX3dkdC0+cmNk
-ZXYubnJfcmVzZXRzID0gcnN0X251bTsNCisJbXRrX3dkdC0+cmNkZXYub3BzID0gJnRvcHJndV9y
-ZXNldF9vcHM7DQorCW10a193ZHQtPnJjZGV2Lm9mX25vZGUgPSBwZGV2LT5kZXYub2Zfbm9kZTsN
-CisJcmV0ID0gZGV2bV9yZXNldF9jb250cm9sbGVyX3JlZ2lzdGVyKCZwZGV2LT5kZXYsICZtdGtf
-d2R0LT5yY2Rldik7DQorCWlmIChyZXQgIT0gMCkNCisJCWRldl9lcnIoJnBkZXYtPmRldiwNCisJ
-CQkiY291bGRuJ3QgcmVnaXN0ZXIgd2R0IHJlc2V0IGNvbnRyb2xsZXI6ICVkXG4iLCByZXQpOw0K
-KwlyZXR1cm4gcmV0Ow0KK30NCisNCiBzdGF0aWMgaW50IG10a193ZHRfcmVzdGFydChzdHJ1Y3Qg
-d2F0Y2hkb2dfZGV2aWNlICp3ZHRfZGV2LA0KIAkJCSAgIHVuc2lnbmVkIGxvbmcgYWN0aW9uLCB2
-b2lkICpkYXRhKQ0KIHsNCkBAIC0xNTUsNiArMjQ4LDcgQEAgc3RhdGljIGludCBtdGtfd2R0X3By
-b2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQogew0KIAlzdHJ1Y3QgZGV2aWNlICpk
-ZXYgPSAmcGRldi0+ZGV2Ow0KIAlzdHJ1Y3QgbXRrX3dkdF9kZXYgKm10a193ZHQ7DQorCXN0cnVj
-dCBtdGtfd2R0X2RhdGEgKndkdF9kYXRhOw0KIAlpbnQgZXJyOw0KIA0KIAltdGtfd2R0ID0gZGV2
-bV9remFsbG9jKGRldiwgc2l6ZW9mKCptdGtfd2R0KSwgR0ZQX0tFUk5FTCk7DQpAQCAtMTkwLDYg
-KzI4NCwxMyBAQCBzdGF0aWMgaW50IG10a193ZHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rldmlj
-ZSAqcGRldikNCiAJZGV2X2luZm8oZGV2LCAiV2F0Y2hkb2cgZW5hYmxlZCAodGltZW91dD0lZCBz
-ZWMsIG5vd2F5b3V0PSVkKVxuIiwNCiAJCSBtdGtfd2R0LT53ZHRfZGV2LnRpbWVvdXQsIG5vd2F5
-b3V0KTsNCiANCisJd2R0X2RhdGEgPSAoc3RydWN0IG10a193ZHRfZGF0YSAqKW9mX2RldmljZV9n
-ZXRfbWF0Y2hfZGF0YShkZXYpOw0KKwlpZiAod2R0X2RhdGEpIHsNCisJCWVyciA9IHRvcHJndV9y
-ZWdpc3Rlcl9yZXNldF9jb250cm9sbGVyKHBkZXYsDQorCQkJCQkJICAgICAgIHdkdF9kYXRhLT50
-b3ByZ3Vfc3dfcnN0X251bSk7DQorCQlpZiAoZXJyKQ0KKwkJCXJldHVybiBlcnI7DQorCX0NCiAJ
-cmV0dXJuIDA7DQogfQ0KIA0KQEAgLTIxOCw3ICszMTksOSBAQCBzdGF0aWMgaW50IG10a193ZHRf
-cmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCiAjZW5kaWYNCiANCiBzdGF0aWMgY29uc3Qgc3Ry
-dWN0IG9mX2RldmljZV9pZCBtdGtfd2R0X2R0X2lkc1tdID0gew0KKwl7IC5jb21wYXRpYmxlID0g
-Im1lZGlhdGVrLG10MjcxMi13ZHQiLCAuZGF0YSA9ICZtdDI3MTJfZGF0YSB9LA0KIAl7IC5jb21w
-YXRpYmxlID0gIm1lZGlhdGVrLG10NjU4OS13ZHQiIH0sDQorCXsgLmNvbXBhdGlibGUgPSAibWVk
-aWF0ZWssbXQ4MTgzLXdkdCIsIC5kYXRhID0gJm10ODE4M19kYXRhIH0sDQogCXsgLyogc2VudGlu
-ZWwgKi8gfQ0KIH07DQogTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgbXRrX3dkdF9kdF9pZHMpOw0K
-LS0gDQoyLjE4LjANCg==
+On Fri, 2019-12-27 at 17:04 +0800, Jiaxin Yu wrote:
+> Add #reset-cells property and update example
+> 
+> Signed-off-by: yong.liang <yong.liang@mediatek.com>
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+
+to be merged together with patch 2.
+
+regards
+Philipp
 
