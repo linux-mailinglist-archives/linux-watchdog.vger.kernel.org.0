@@ -2,101 +2,142 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C03012FDAD
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Jan 2020 21:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F78012FE9D
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Jan 2020 23:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728783AbgACUUK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Jan 2020 15:20:10 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:40756 "EHLO
+        id S1728813AbgACWM7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Jan 2020 17:12:59 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:41935 "EHLO
         mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728767AbgACUUK (ORCPT
+        with ESMTP id S1728549AbgACWM7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Jan 2020 15:20:10 -0500
-Received: by mail-io1-f65.google.com with SMTP id x1so42455905iop.7
-        for <linux-watchdog@vger.kernel.org>; Fri, 03 Jan 2020 12:20:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=JHYDNcOHsw5Vg59sFwNh4MhnXNKJfQKDhV3JhQemZ8O0wjy4NOClQJHVO9/XZY1B2e
-         7N2r8FlVbF9YCIZf1O8PJKqvP+J732CrXrgkZLQFQD6r8xa5PmtrOPXurr4eE1D10/dY
-         mFNu91hy8xJJRta6mrMYIQyNs0OE0ozgPWJvUT4Jmr91vUmPG9p04hCqKp3daJ6nspkN
-         ZTnUyt7jeaXiRVZmI5OCw3hnhqJr3CafoKv3hfbaHkDpeu4215n4LA4JUWv5RDO6VsPp
-         wo4bmuxUPsJ+VBxSxq4NIVVGqRtUU4TTV0YA8c6/GhqTjpJxCcyOyITBnIawjrG3MRiM
-         hUyw==
+        Fri, 3 Jan 2020 17:12:59 -0500
+Received: by mail-io1-f65.google.com with SMTP id c16so39281649ioo.8
+        for <linux-watchdog@vger.kernel.org>; Fri, 03 Jan 2020 14:12:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=gFufRLrRYS8ZDr4SnfZCLSpn2T2hCx+e0cVAwrOozHxJ3JXBQB5kYylLVHxrKavGWq
-         rban4lMDjb1sMhBFrB79bu2HRynYSu2Agkq2ggtNYtIubVykU4gNNMc9wHoJc7I3zBJ4
-         YHUs1DHwOjgdsS5SI+PFQK4NYw0WHXDDTgrVUBw4DtfiHV0b1NzTKgKbWTBOJkDlKalS
-         OhlkdNraCCen+hGIYuspeWKrBWHCWaosUgCandOAqHUc0Eo6qLeKW1nOLNtWXjqe1FT1
-         0rUh25Irns5zGYGU4Vn9paU0puqOw4wAzMajADiAGxCdhzjwA/gXzgQCTMnH9ED5Lf0+
-         DL0w==
-X-Gm-Message-State: APjAAAW0H4YV/ccDM6Tw3rMIkpS/Dek5LocoGorlTY+Ct5E94lpBq+Hv
-        I4BCQ6Q3r+CF9338PtivMima0L0MsTBSijLOSolGb3Iuqqg=
-X-Google-Smtp-Source: APXvYqzazOZ1eDGwLjA5b5joJwHBsXYUc3xk3mwbut9BpsYKwbpZffl6B/gnfGOg4rASQDOizOWq9gQ5QJjCh6l6GTs=
-X-Received: by 2002:a37:4141:: with SMTP id o62mr70745354qka.282.1578082808591;
- Fri, 03 Jan 2020 12:20:08 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DgfHDc2ugqDl3Ojv+ZQfPSfnGXvjjxOAehbizu1AkF0=;
+        b=lq/3qZ/ef5Jrlevp6mX3ggW/4zazd3xQ87np0J8eDrYdW70gVUoHPHhcp0/aohQoQ8
+         kcPn2uSGsgF0jS1DzA8y7icQHe8jzBYiOHbqJWd1vOMykOOGtXxh54YTEy6C+rqljb4T
+         5vhqlnXoq/2sLODvcVlhtj+Pv1Pvt3OlK/XEZi4W1eI7LXas+5iHkv1AZ9xqI3UceNWJ
+         1c2l7Aotd0MYbJmlCuyeolGxdFCW33JtMWvdhbUuRQvGC6Rfbc5qvdfXAW32Uzlz2IJ4
+         /q6dZoZENzkcxBB5324pMfMPAxJCWliRVg0hd6IjbE66TMVn4VFTuP1AZ/kNtUgU8Szq
+         BjMw==
+X-Gm-Message-State: APjAAAX35y+QQJEBBBZ0Xt1q4cH+A3S7A/VFFkDjyQVTHmrQOP70jdd3
+        TnezjKIQMNlJ2QLqnzYwGYFPwh8=
+X-Google-Smtp-Source: APXvYqzpVxR/TsEnyariwF+GMiZjzTs/hA2z/JGF1jw1TbMgii/5P2YttHJ0lgSPD5eu9RYeCYtzUw==
+X-Received: by 2002:a5d:964e:: with SMTP id d14mr58961614ios.193.1578089578011;
+        Fri, 03 Jan 2020 14:12:58 -0800 (PST)
+Received: from rob-hp-laptop ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id f7sm15086421ioo.27.2020.01.03.14.12.55
+        for <linux-watchdog@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jan 2020 14:12:56 -0800 (PST)
+Received: from rob (uid 1000)
+        (envelope-from rob@rob-hp-laptop)
+        id 2219a5
+        by rob-hp-laptop (DragonFly Mail Agent v0.11);
+        Fri, 03 Jan 2020 15:12:55 -0700
+Date:   Fri, 3 Jan 2020 15:12:55 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     yong.liang@mediatek.com, wim@linux-watchdog.org,
+        linux@roeck-us.net, p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        chang-an.chen@mediatek.com, freddy.hsin@mediatek.com,
+        yingjoe.chen@mediatek.com, sboyd@kernel.org
+Subject: Re: [PATCH 1/2] [PATCH v8 1/2] dt-bindings: mediatek: mt8183: Add
+ #reset-cells
+Message-ID: <20200103221255.GA1427@bogus>
+References: <1578044245-26939-1-git-send-email-jiaxin.yu@mediatek.com>
+ <1578044245-26939-2-git-send-email-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:20:08 -0800 (PST)
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 3 Jan 2020 21:20:08 +0100
-Message-ID: <CAP=nHBJWiJ9KpSSbF4jP9u5UiU5d_kGjSUyPYDmdB2x1uiJFMw@mail.gmail.com>
-Subject: I promise you must be happy today, God has uplifted you and your
- family ok
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1578044245-26939-2-git-send-email-jiaxin.yu@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dear Friend
+On Fri, Jan 03, 2020 at 05:37:24PM +0800, Jiaxin Yu wrote:
+> Add #reset-cells property and update example
+> 
+> Change-Id: If3f4f0170d417819facff1fd0a0e5e3c6cc9944d
 
-i hope all is well with you,if so, glory be to God almighty. I'm very
-happy to inform you, about my success in getting payment funds under
-the cooperation of a new partner from United States of
-America.Presently I am in uk for investment projects with my own share
-of the total sum. I didn't forget your past efforts. IMF finally
-approved your compensation payment funds this morning by prepaid (ATM)
-Debit card of US$12,500.000.00Million Dollars, Since you not received
-this payment yet, I was not certified
-but it is not your fault and not my fault, I hold nothing against
-you.than bank official whom has been detaining the transfer in the
-bank, trying to claim your funds by themselves.
+Drop this.
 
-Therefore, in appreciation of your effort I have raised an
-International prepaid (ATM) Debit card of US$12,500.000.00 in your
-favor as compensation to you.
+> Signed-off-by: yong.liang <yong.liang@mediatek.com>
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> ---
+>  .../reset-controller/mt2712-resets.h          | 22 +++++++++++++++++++
+>  .../reset-controller/mt8183-resets.h          | 17 ++++++++++++++
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 include/dt-bindings/reset-controller/mt2712-resets.h
 
-Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
-on His  e-mail Address (mikebenz550@aol.com
+What happened to the binding doc change?
 
-ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
-the money is in Prepaid (ATM) Debit card, not cash, so you need to
-send to him,
-your full name
-address  where the prepaid (ATM) Debit card will be delivered to you,
-including your cell phone number. Finally, I left explicit
-instructions with him, on how to send the (ATM CARD) to you.
-
-The Prepaid (ATM) Debit card, will be send to you through my
-Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
-my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
-Below is his contact information:
-
-NAME : MIKE BENZ
-EMAIL ADDRESS: mikebenz550@aol.com
-Text Him, (256) 284-4886
-
-Request for Delivery of the Prepaid (ATM) Debit card  to you today.
-Note, please I have paid for the whole service fees for you, so the
-only money you will send to my Diplomatic Agent Mr. Mike Benz is
-$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
-ok.
-Let me know once you receive this Card at your address.
-Best regards,
-Rev.Dr, George Adadar
+> 
+> diff --git a/include/dt-bindings/reset-controller/mt2712-resets.h b/include/dt-bindings/reset-controller/mt2712-resets.h
+> new file mode 100644
+> index 000000000000..9e7ee762f076
+> --- /dev/null
+> +++ b/include/dt-bindings/reset-controller/mt2712-resets.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2019 MediaTek Inc.
+> + * Author: Yong Liang <yong.liang@mediatek.com>
+> + */
+> +
+> +#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT2712
+> +#define _DT_BINDINGS_RESET_CONTROLLER_MT2712
+> +
+> +#define MT2712_TOPRGU_INFRA_SW_RST				0
+> +#define MT2712_TOPRGU_MM_SW_RST					1
+> +#define MT2712_TOPRGU_MFG_SW_RST				2
+> +#define MT2712_TOPRGU_VENC_SW_RST				3
+> +#define MT2712_TOPRGU_VDEC_SW_RST				4
+> +#define MT2712_TOPRGU_IMG_SW_RST				5
+> +#define MT2712_TOPRGU_INFRA_AO_SW_RST				8
+> +#define MT2712_TOPRGU_USB_SW_RST				9
+> +#define MT2712_TOPRGU_APMIXED_SW_RST				10
+> +
+> +#define MT2712_TOPRGU_SW_RST_NUM				11
+> +
+> +#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT2712 */
+> diff --git a/include/dt-bindings/reset-controller/mt8183-resets.h b/include/dt-bindings/reset-controller/mt8183-resets.h
+> index 8804e34ebdd4..a1bbd41e0d12 100644
+> --- a/include/dt-bindings/reset-controller/mt8183-resets.h
+> +++ b/include/dt-bindings/reset-controller/mt8183-resets.h
+> @@ -78,4 +78,21 @@
+>  #define MT8183_INFRACFG_AO_I2C7_SW_RST				126
+>  #define MT8183_INFRACFG_AO_I2C8_SW_RST				127
+>  
+> +#define MT8183_INFRACFG_SW_RST_NUM				128
+> +
+> +#define MT8183_TOPRGU_MM_SW_RST					1
+> +#define MT8183_TOPRGU_MFG_SW_RST				2
+> +#define MT8183_TOPRGU_VENC_SW_RST				3
+> +#define MT8183_TOPRGU_VDEC_SW_RST				4
+> +#define MT8183_TOPRGU_IMG_SW_RST				5
+> +#define MT8183_TOPRGU_MD_SW_RST					7
+> +#define MT8183_TOPRGU_CONN_SW_RST				9
+> +#define MT8183_TOPRGU_CONN_MCU_SW_RST				12
+> +#define MT8183_TOPRGU_IPU0_SW_RST				14
+> +#define MT8183_TOPRGU_IPU1_SW_RST				15
+> +#define MT8183_TOPRGU_AUDIO_SW_RST				17
+> +#define MT8183_TOPRGU_CAMSYS_SW_RST				18
+> +
+> +#define MT8183_TOPRGU_SW_RST_NUM				19
+> +
+>  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8183 */
+> -- 
+> 2.18.0
