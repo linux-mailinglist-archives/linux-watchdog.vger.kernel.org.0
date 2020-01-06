@@ -2,146 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C237C130C08
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jan 2020 03:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08066130C6B
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jan 2020 04:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727340AbgAFCWj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 5 Jan 2020 21:22:39 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:32884 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727278AbgAFCWi (ORCPT
+        id S1727450AbgAFDLu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 5 Jan 2020 22:11:50 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:42063 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727307AbgAFDLs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 5 Jan 2020 21:22:38 -0500
-Received: by mail-pf1-f194.google.com with SMTP id z16so26256055pfk.0;
-        Sun, 05 Jan 2020 18:22:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ipcsI+jZ4hrMnV7t9N2jVs66amx0u2G0uIwSlpjDd4Y=;
-        b=lPDci3wOl0yBaSZhnSt8JF1e1tCFoPAb4SE1gSvn6yb8TH4Qf2eBJIevhzA4jJ9kQT
-         jXw8T+0T3DMv9vCc2d3KtMCh0cO0Fh3AtQ1mQp9HnN/WUU9k/IdOqfebWK3ki2Q8kU9A
-         0vSiiZnGpAU22FAwvbSz30yaL+XhXV/sC2lPOgMXd/5FUrKk2Rv2WM/IE6luBBwj6F/Z
-         7T7Q8MrIX9nWS6DUTuRfhnWMeVdWUdb8jFSOYhvdy+lFddRukrLhwFNVoj+Cbm+s5OSp
-         8RzUEI23DO/jQmdHBuFs7xSyPCkTupn1Z1TeuBWqkz7VO3ghWsUkOECPzQHZlnUQi9cb
-         Ar6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ipcsI+jZ4hrMnV7t9N2jVs66amx0u2G0uIwSlpjDd4Y=;
-        b=HYv1hBLq10RYm2LWE5rZh2CihTyn0dCuifN/4m5rriCzvsdPs1eRK1yF6jAbEZipeb
-         J35sXVaggq6/6xxE57zbkveSU/HrLDbiL2ybwyda4DfdiqbMoYSTg0hW5ibTq/vUJKjC
-         0qhm5on26KYeiywb02pLa5vyQ8Eav059sCTJQaxN8j+9SJBy87VEgYIK35L4u4cfUPZW
-         DWcHbZy6nHjXGRzI3Crx9F3R93HXCwhEEcpx5G230ugIuXlM0Yo1Nx+G6FjPpRcwaqtx
-         MK4GD13UflYdNBUnNiV0YRYnAAwS1OqTlu7bLmGNhPpKgm9sijmFtRnVolh2BpOsGN31
-         kDGg==
-X-Gm-Message-State: APjAAAU5hNmAx2PiOr+GerKwvz10AvPG7/ELu7unEdi9YKAQLeBDZeac
-        K1IyAA7cZ+IUabnUfve/BtQ=
-X-Google-Smtp-Source: APXvYqz1BDCSkSXVrUu4zC2a82wSvLK/YKFS/9RPAe5p+u2Z0wTdw9lddOQIFWy8lwM33vK+qK2FoA==
-X-Received: by 2002:a62:e509:: with SMTP id n9mr4122196pff.159.1578277358154;
-        Sun, 05 Jan 2020 18:22:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q22sm77320323pfg.170.2020.01.05.18.22.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jan 2020 18:22:37 -0800 (PST)
-Subject: Re: [PATCH v9 1/2] dt-bindings: mediatek: mt8183: Add #reset-cells
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, yong.liang@mediatek.com,
-        wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        matthias.bgg@gmail.com, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        chang-an.chen@mediatek.com, freddy.hsin@mediatek.com
-Cc:     yingjoe.chen@mediatek.com, sboyd@kernel.org
-References: <1578241301-14618-1-git-send-email-jiaxin.yu@mediatek.com>
- <1578241301-14618-2-git-send-email-jiaxin.yu@mediatek.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <04f9dbd7-4d96-cdbf-0bb2-9c34e8d84dc9@roeck-us.net>
-Date:   Sun, 5 Jan 2020 18:22:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Sun, 5 Jan 2020 22:11:48 -0500
+X-UUID: c26b29309ad14b9193f661be21e3c913-20200106
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=FkRY1My5B1PgeoXnFrF+vl3WKqPtlLa4QVmoHWkPs14=;
+        b=iSPTjDMIJMRUyFqIE7jZmzRFLimKF9ejLzJ56s8gVdc2Hl9NCe10o+CNeje9EZ5duhPfKMuihaKP930lH4yTE6lWK1QMdDnrGT4Q/FU0I7d4/JUdNLI2ho9zA+xUNoWE5VISSp5Ub6ndnbT5WEql2Ct247F9G57YGz7ZJXxVjxw=;
+X-UUID: c26b29309ad14b9193f661be21e3c913-20200106
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 374970942; Mon, 06 Jan 2020 11:11:41 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 6 Jan 2020 11:11:11 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 6 Jan 2020 11:10:10 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <yong.liang@mediatek.com>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <p.zabel@pengutronix.de>,
+        <matthias.bgg@gmail.com>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <chang-an.chen@mediatek.com>, <freddy.hsin@mediatek.com>
+CC:     <yingjoe.chen@mediatek.com>, <sboyd@kernel.org>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [PATCH v10 0/2] ASoC: mt8183: fix audio playback slowly after playback
+Date:   Mon, 6 Jan 2020 11:11:34 +0800
+Message-ID: <1578280296-18946-1-git-send-email-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-In-Reply-To: <1578241301-14618-2-git-send-email-jiaxin.yu@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 1/5/20 8:21 AM, Jiaxin Yu wrote:
-> Add #reset-cells property and update example
-> 
-> Signed-off-by: yong.liang <yong.liang@mediatek.com>
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> ---
->   .../reset-controller/mt2712-resets.h          | 22 +++++++++++++++++++
->   .../reset-controller/mt8183-resets.h          | 17 ++++++++++++++
->   2 files changed, 39 insertions(+)
->   create mode 100644 include/dt-bindings/reset-controller/mt2712-resets.h
-> 
-
-Repeating Rob's question from v8: What happened to the bindings document ?
-
-Guenter
-
-> diff --git a/include/dt-bindings/reset-controller/mt2712-resets.h b/include/dt-bindings/reset-controller/mt2712-resets.h
-> new file mode 100644
-> index 000000000000..9e7ee762f076
-> --- /dev/null
-> +++ b/include/dt-bindings/reset-controller/mt2712-resets.h
-> @@ -0,0 +1,22 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2019 MediaTek Inc.
-> + * Author: Yong Liang <yong.liang@mediatek.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT2712
-> +#define _DT_BINDINGS_RESET_CONTROLLER_MT2712
-> +
-> +#define MT2712_TOPRGU_INFRA_SW_RST				0
-> +#define MT2712_TOPRGU_MM_SW_RST					1
-> +#define MT2712_TOPRGU_MFG_SW_RST				2
-> +#define MT2712_TOPRGU_VENC_SW_RST				3
-> +#define MT2712_TOPRGU_VDEC_SW_RST				4
-> +#define MT2712_TOPRGU_IMG_SW_RST				5
-> +#define MT2712_TOPRGU_INFRA_AO_SW_RST				8
-> +#define MT2712_TOPRGU_USB_SW_RST				9
-> +#define MT2712_TOPRGU_APMIXED_SW_RST				10
-> +
-> +#define MT2712_TOPRGU_SW_RST_NUM				11
-> +
-> +#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT2712 */
-> diff --git a/include/dt-bindings/reset-controller/mt8183-resets.h b/include/dt-bindings/reset-controller/mt8183-resets.h
-> index 8804e34ebdd4..a1bbd41e0d12 100644
-> --- a/include/dt-bindings/reset-controller/mt8183-resets.h
-> +++ b/include/dt-bindings/reset-controller/mt8183-resets.h
-> @@ -78,4 +78,21 @@
->   #define MT8183_INFRACFG_AO_I2C7_SW_RST				126
->   #define MT8183_INFRACFG_AO_I2C8_SW_RST				127
->   
-> +#define MT8183_INFRACFG_SW_RST_NUM				128
-> +
-> +#define MT8183_TOPRGU_MM_SW_RST					1
-> +#define MT8183_TOPRGU_MFG_SW_RST				2
-> +#define MT8183_TOPRGU_VENC_SW_RST				3
-> +#define MT8183_TOPRGU_VDEC_SW_RST				4
-> +#define MT8183_TOPRGU_IMG_SW_RST				5
-> +#define MT8183_TOPRGU_MD_SW_RST					7
-> +#define MT8183_TOPRGU_CONN_SW_RST				9
-> +#define MT8183_TOPRGU_CONN_MCU_SW_RST				12
-> +#define MT8183_TOPRGU_IPU0_SW_RST				14
-> +#define MT8183_TOPRGU_IPU1_SW_RST				15
-> +#define MT8183_TOPRGU_AUDIO_SW_RST				17
-> +#define MT8183_TOPRGU_CAMSYS_SW_RST				18
-> +
-> +#define MT8183_TOPRGU_SW_RST_NUM				19
-> +
->   #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8183 */
-> 
+VGhpcyBzZXJpZXMgcGF0Y2hlcyBhZGQgcmVzZXQgY29udHJvbGxlciBmb3IgTVQ4MTgzLCBhbmQg
+YXVkaW8gd2lsbCB1c2UgaXQgaW4gDQptYWNoaW5lIGRyaXZlciBkdXJpbmcgYm9vdHVwLCB0aGV5
+IGRlcGVuZCBvbiB0aGUgZm9yLW5leHQuDQoNCnYxMCBjaGFuZ2VzOg0KCTEuIE1vZGlmeSBtdGst
+d2R0LnR4dCBkdC1iaW5kaW5ncy4NCg0KdjkgY2hhbmdlczoNCgkxLiBSZW1vdmUgQ2hhbmdlLUlk
+Lg0KDQp2OCBjaGFuZ2VzOg0KCTEuIERlbGV0ZSBjYXN0OiAoc3RydWN0IG10a193ZHRfZGF0YSAq
+KQ0KDQp2NyBjaGFuZ2VzOg0KCTEuIERlbGV0ZSBubyB1c2UgY29kZS4NCg0KdjYgY2hhbmdlczoN
+CgkxLiBTaW1wbGlmeSB0b3BydWdfcmVzZXRfYXNzZXJ0KCkgJiB0b3BydWdfcmVzZXRfZGVhc3Nl
+cnQoKS4NCgkyLiBBZGQgbWVtYmVycyBmb3IgbXQyNzEyX2RhdGEgJiBtdDgxODNfZGF0YS4NCg0K
+djUgY2hhbmdlczoNCgkxLiBBZGQgU2lnbmVkLW9mZi1ieSB0YWcgYW5kIFJldmlld2VkLWJ5IHRh
+Zy4NCg0KdjQgY2hhbmdlczoNCgkxLiBGaXhlZCB3cm9uZyBzaWduZWQtb2ZmIGFzIGNvcnJlY3Qg
+bWFpbCBzdWZmaXguDQoJMi4gRml4ZWQgcGF0Y2ggc3ViamVjdCB0aGF0IGFkZCBwYXRjaCB2ZXJz
+aW9uLg0KDQp2MyBjaGFuZ2VzOg0KCTEuIGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0
+Y2gvMTExNjQyODMvIGFuZCANCgkgICBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNo
+LzExMTY0MzA1LyBoYXMgYmVlbiBtZXJnZWQuDQoJMi4gQ2hhbmdlIHRoZSBuYW1lIG9mIG10a193
+ZHRfY29tcGF0aWJsZSB0byBtdGtfd2R0X2RhdGEuDQoJMy4gUmVtb3ZlIHRvcHJndV9yZXNldCBz
+dHJ1Y3QgYW5kIHVzZSBtdGtfd2R0X2RldiBpbnN0ZWFkLg0KCTQuIEdldCB0aGUgdmFsdWUgb2Yg
+c3dfcnN0X251bSBmcm9tIC5oIGZpbGUuDQoJNS4gQWRkZGQgbXQyNzEyLXJlc2V0cy5oIGZvciBt
+dDI3MTIuDQoJNi4gSW1wcm92ZSBjb21taXQgbWVzc2FnZS4NCg0KdjIgY2hhbmdlczoNCgkxLiBy
+ZW1vdmUgIldJUCIgdGhhdCBpbiB0aGUgdGl0bGUgb2YgcGF0Y2hlcw0KCTIuIGFkZCBoeXBlciBs
+aW5rIGZvciB0aGUgcGF0Y2ggdGhhdCBkZXBlbmRzIG9uDQoJMy4gcGF0Y2h3b3JrIGxpc3Q6DQoJ
+CWh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvY292ZXIvMTExNjQyODUvDQoJCWh0dHBzOi8v
+cGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0Y2gvMTExNjQyOTUvDQoJCWh0dHBzOi8vcGF0Y2h3b3Jr
+Lmtlcm5lbC5vcmcvcGF0Y2gvMTExNjQyOTkvDQoJCWh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5v
+cmcvcGF0Y2gvMTExNjQyODMvDQoJCWh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0Y2gv
+MTExNjQzMDUvDQoNCnYxIGNoYW5nZXM6DQoJMS4gcGF0Y2h3b3JrIGxpc3Q6DQoJCWh0dHBzOi8v
+cGF0Y2h3b3JrLmtlcm5lbC5vcmcvY292ZXIvMTExNjQxNzMvDQoJCWh0dHBzOi8vcGF0Y2h3b3Jr
+Lmtlcm5lbC5vcmcvcGF0Y2gvMTExNjQxODEvDQoJCWh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5v
+cmcvcGF0Y2gvMTExNjQxODUvDQoJCWh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0Y2gv
+MTExNjQxODcvDQoJCWh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0Y2gvMTExNjQxNzUv
+DQoNCkppYXhpbiBZdSAoMik6DQogIGR0LWJpbmRpbmdzOiBtZWRpYXRlazogbXQ4MTgzOiBBZGQg
+I3Jlc2V0LWNlbGxzDQogIHdhdGNoZG9nOiBtdGtfd2R0OiBtdDgxODM6IEFkZCByZXNldCBjb250
+cm9sbGVyDQoNCiAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9tdGstd2R0LnR4dCAg
+fCAgMTAgKy0NCiBkcml2ZXJzL3dhdGNoZG9nL210a193ZHQuYyAgICAgICAgICAgICAgICAgICAg
+fCAxMDUgKysrKysrKysrKysrKysrKystDQogLi4uL3Jlc2V0LWNvbnRyb2xsZXIvbXQyNzEyLXJl
+c2V0cy5oICAgICAgICAgIHwgIDIyICsrKysNCiAuLi4vcmVzZXQtY29udHJvbGxlci9tdDgxODMt
+cmVzZXRzLmggICAgICAgICAgfCAgMTcgKysrDQogNCBmaWxlcyBjaGFuZ2VkLCAxNTAgaW5zZXJ0
+aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCiBjcmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVkZS9kdC1i
+aW5kaW5ncy9yZXNldC1jb250cm9sbGVyL210MjcxMi1yZXNldHMuaA0KDQotLSANCjIuMTguMA0K
 
