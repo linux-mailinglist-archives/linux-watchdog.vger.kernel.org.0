@@ -2,54 +2,64 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C6E1327FF
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jan 2020 14:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CE5132A7B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jan 2020 16:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728110AbgAGNod (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jan 2020 08:44:33 -0500
-Received: from mail-front2.tctwest.net ([67.215.21.198]:60586 "EHLO
-        mail.tctwest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728109AbgAGNod (ORCPT
+        id S1728344AbgAGPvc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jan 2020 10:51:32 -0500
+Received: from unsecure-smtp.soverin.net ([94.130.159.241]:45154 "EHLO
+        g02sm02.soverin.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727994AbgAGPvc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jan 2020 08:44:33 -0500
-X-Greylist: delayed 4376 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Jan 2020 08:44:33 EST
-Received: (qmail 11747 invoked from network); 7 Jan 2020 12:12:14 -0000
-Received: from localhost (HELO mail.tctwest.net) (mikelmoser@tctwest.net@127.0.0.1)
-        by magicmail-front2.tctwest.net with SMTP
-        (f05572d4-3146-11ea-8e74-005056ad0036); Tue, 07 Jan 2020 05:12:14 -0700
-Received: from unknown ([104.143.84.27])
-        (SquirrelMail authenticated user mikelmoser@tctwest.net)
-        by mail.tctwest.net with HTTP;
-        Tue, 7 Jan 2020 05:12:14 -0700
-Message-ID: <7f54d3ee764278b38bce32a1eaf76da1.squirrel@mail.tctwest.net>
-Date:   Tue, 7 Jan 2020 05:12:14 -0700
-Subject: Job Offer!
-From:   "Yokohama Rubber Co., Ltd" <info@info.net>
-Reply-To: tadanagu@yahoo.com
-User-Agent: SquirrelMail/1.4.15
+        Tue, 7 Jan 2020 10:51:32 -0500
+Received: from soverin.net by soverin.net
+From:   Jack Mitchell <ml@embed.me.uk>
+Cc:     ml@embed.me.uk, Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: dw_wdt: ping watchdog to reset countdown before start
+Date:   Tue,  7 Jan 2020 15:43:54 +0000
+Message-Id: <20200107154354.277648-1-ml@embed.me.uk>
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Priority: 3 (Normal)
-Importance: Normal
-X-MagicMail-OS: MagicMail 3.0-Devel
-X-MagicMail-UUID: f05572d4-3146-11ea-8e74-005056ad0036
-X-MagicMail-Authenticated: mikelmoser@tctwest.net
-X-MagicMail-SourceIP: 127.0.0.1
-X-MagicMail-RegexMatch: 2
-X-MagicMail-EnvelopeFrom: <info@info.net>
+X-Virus-Scanned: clamav-milter 0.99.2 at g02sm02
+X-Virus-Status: Clean
+Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Good Day,
-Our Company Yokohama Rubber Company is interested in Employing your
-Services in Payment Collections from CANADA/USA Customers as a part time
-job for you which entitles you 20% and other benefits you will make from
-the part time offer. If you know you are interest and ready to work with
-us.kindly reply to: tadanagu@yahoo.com
-Your Sincerely
-Ms. Lisa Arashiro
+Currently on an rk3288 SoC when trying to use the watchdog the SoC will
+instantly reset. This is due to the watchdog countdown counter being set
+to its initial value of 0x0. Reset the watchdog counter before start in
+order to correctly start the countdown timer from the right position.
+
+Signed-off-by: Jack Mitchell <ml@embed.me.uk>
+---
+ drivers/watchdog/dw_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+index fef7c61f5555..cf59204556f9 100644
+--- a/drivers/watchdog/dw_wdt.c
++++ b/drivers/watchdog/dw_wdt.c
+@@ -135,6 +135,7 @@ static int dw_wdt_start(struct watchdog_device *wdd)
+ 	struct dw_wdt *dw_wdt = to_dw_wdt(wdd);
+ 
+ 	dw_wdt_set_timeout(wdd, wdd->timeout);
++	dw_wdt_ping(&dw_wdt->wdd);
+ 	dw_wdt_arm_system_reset(dw_wdt);
+ 
+ 	return 0;
+@@ -257,7 +258,6 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
+ 		ret = -EINVAL;
+ 		goto out_disable_clk;
+ 	}
+-
+ 	dw_wdt->rst = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
+ 	if (IS_ERR(dw_wdt->rst)) {
+ 		ret = PTR_ERR(dw_wdt->rst);
+-- 
+2.24.1
 
