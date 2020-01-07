@@ -2,25 +2,24 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D84E3132A72
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jan 2020 16:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26966132A7D
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jan 2020 16:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728292AbgAGPvF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jan 2020 10:51:05 -0500
-Received: from unsecure-smtp.soverin.net ([94.130.159.241]:34241 "EHLO
+        id S1728189AbgAGPwF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jan 2020 10:52:05 -0500
+Received: from unsecure-smtp.soverin.net ([94.130.159.241]:44119 "EHLO
         g02sm02.soverin.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727994AbgAGPvE (ORCPT
+        with ESMTP id S1727994AbgAGPwF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jan 2020 10:51:04 -0500
-X-Greylist: delayed 386 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Jan 2020 10:51:03 EST
+        Tue, 7 Jan 2020 10:52:05 -0500
 Received: from soverin.net by soverin.net
 From:   Jack Mitchell <ml@embed.me.uk>
 Cc:     ml@embed.me.uk, Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] watchdog: dw_wdt: ping watchdog to reset countdown before start
-Date:   Tue,  7 Jan 2020 15:50:53 +0000
-Message-Id: <20200107155054.278444-1-ml@embed.me.uk>
+Subject: [PATCH v2] watchdog: dw_wdt: ping watchdog to reset countdown before start
+Date:   Tue,  7 Jan 2020 15:51:55 +0000
+Message-Id: <20200107155155.278521-1-ml@embed.me.uk>
 MIME-Version: 1.0
 X-Virus-Scanned: clamav-milter 0.99.2 at g02sm02
 X-Virus-Status: Clean
