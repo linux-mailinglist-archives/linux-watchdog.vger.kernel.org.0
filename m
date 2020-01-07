@@ -2,62 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B45FC131B1F
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jan 2020 23:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C6E1327FF
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jan 2020 14:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbgAFWPE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Jan 2020 17:15:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45038 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726695AbgAFWPD (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Jan 2020 17:15:03 -0500
-Subject: Re: [GIT PULL REQUEST] watchdog - v5.5 Fixes
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578348903;
-        bh=TnEaDztOveaVafNetBAdDi2KyjKQIqroNQxDV4UbRoo=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=jmctnd85I6wo4oIeuHr2illemr9+drW+Aczpn5gFOqoZrys2uFgGBrITACl4699Vg
-         ziNXOha5U5hU7r2NvZfsS5Jjdt1KRiMnbMZabPHgBHPC2RO7hRgo6BVKLEvLBrazpz
-         1OfRGYpAVZs9bOkWQPXaZg93+aNCJkmQVdPIm7WY=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200106191234.GA1443@www.linux-watchdog.org>
-References: <20200106191234.GA1443@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200106191234.GA1443@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git
- tags/linux-watchdog-5.5-fixes
-X-PR-Tracked-Commit-Id: dcbce5fbcc69bf2553f650004aad44bf390eca73
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: baf4dc829574ed9dd8ba33cda0536a50f28937de
-Message-Id: <157834890321.24185.18184775319609247372.pr-tracker-bot@kernel.org>
-Date:   Mon, 06 Jan 2020 22:15:03 +0000
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        David Engraf <david.engraf@sysgo.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Srikanth Krishnakar <skrishnakar@gmail.com>,
-        YueHaibing <yuehaibing@huawei.com>
+        id S1728110AbgAGNod (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jan 2020 08:44:33 -0500
+Received: from mail-front2.tctwest.net ([67.215.21.198]:60586 "EHLO
+        mail.tctwest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728109AbgAGNod (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 7 Jan 2020 08:44:33 -0500
+X-Greylist: delayed 4376 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Jan 2020 08:44:33 EST
+Received: (qmail 11747 invoked from network); 7 Jan 2020 12:12:14 -0000
+Received: from localhost (HELO mail.tctwest.net) (mikelmoser@tctwest.net@127.0.0.1)
+        by magicmail-front2.tctwest.net with SMTP
+        (f05572d4-3146-11ea-8e74-005056ad0036); Tue, 07 Jan 2020 05:12:14 -0700
+Received: from unknown ([104.143.84.27])
+        (SquirrelMail authenticated user mikelmoser@tctwest.net)
+        by mail.tctwest.net with HTTP;
+        Tue, 7 Jan 2020 05:12:14 -0700
+Message-ID: <7f54d3ee764278b38bce32a1eaf76da1.squirrel@mail.tctwest.net>
+Date:   Tue, 7 Jan 2020 05:12:14 -0700
+Subject: Job Offer!
+From:   "Yokohama Rubber Co., Ltd" <info@info.net>
+Reply-To: tadanagu@yahoo.com
+User-Agent: SquirrelMail/1.4.15
+MIME-Version: 1.0
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Priority: 3 (Normal)
+Importance: Normal
+X-MagicMail-OS: MagicMail 3.0-Devel
+X-MagicMail-UUID: f05572d4-3146-11ea-8e74-005056ad0036
+X-MagicMail-Authenticated: mikelmoser@tctwest.net
+X-MagicMail-SourceIP: 127.0.0.1
+X-MagicMail-RegexMatch: 2
+X-MagicMail-EnvelopeFrom: <info@info.net>
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The pull request you sent on Mon, 6 Jan 2020 20:12:34 +0100:
+Good Day,
+Our Company Yokohama Rubber Company is interested in Employing your
+Services in Payment Collections from CANADA/USA Customers as a part time
+job for you which entitles you 20% and other benefits you will make from
+the part time offer. If you know you are interest and ready to work with
+us.kindly reply to: tadanagu@yahoo.com
+Your Sincerely
+Ms. Lisa Arashiro
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.5-fixes
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/baf4dc829574ed9dd8ba33cda0536a50f28937de
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
