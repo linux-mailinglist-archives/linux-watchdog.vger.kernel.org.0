@@ -2,24 +2,25 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CE5132A7B
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jan 2020 16:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84E3132A72
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jan 2020 16:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728344AbgAGPvc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jan 2020 10:51:32 -0500
-Received: from unsecure-smtp.soverin.net ([94.130.159.241]:45154 "EHLO
+        id S1728292AbgAGPvF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jan 2020 10:51:05 -0500
+Received: from unsecure-smtp.soverin.net ([94.130.159.241]:34241 "EHLO
         g02sm02.soverin.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727994AbgAGPvc (ORCPT
+        with ESMTP id S1727994AbgAGPvE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jan 2020 10:51:32 -0500
+        Tue, 7 Jan 2020 10:51:04 -0500
+X-Greylist: delayed 386 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Jan 2020 10:51:03 EST
 Received: from soverin.net by soverin.net
 From:   Jack Mitchell <ml@embed.me.uk>
 Cc:     ml@embed.me.uk, Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [PATCH] watchdog: dw_wdt: ping watchdog to reset countdown before start
-Date:   Tue,  7 Jan 2020 15:43:54 +0000
-Message-Id: <20200107154354.277648-1-ml@embed.me.uk>
+Date:   Tue,  7 Jan 2020 15:50:53 +0000
+Message-Id: <20200107155054.278444-1-ml@embed.me.uk>
 MIME-Version: 1.0
 X-Virus-Scanned: clamav-milter 0.99.2 at g02sm02
 X-Virus-Status: Clean
@@ -37,11 +38,11 @@ order to correctly start the countdown timer from the right position.
 
 Signed-off-by: Jack Mitchell <ml@embed.me.uk>
 ---
- drivers/watchdog/dw_wdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/watchdog/dw_wdt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-index fef7c61f5555..cf59204556f9 100644
+index fef7c61f5555..4a902d015bc2 100644
 --- a/drivers/watchdog/dw_wdt.c
 +++ b/drivers/watchdog/dw_wdt.c
 @@ -135,6 +135,7 @@ static int dw_wdt_start(struct watchdog_device *wdd)
@@ -52,14 +53,6 @@ index fef7c61f5555..cf59204556f9 100644
  	dw_wdt_arm_system_reset(dw_wdt);
  
  	return 0;
-@@ -257,7 +258,6 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
- 		ret = -EINVAL;
- 		goto out_disable_clk;
- 	}
--
- 	dw_wdt->rst = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
- 	if (IS_ERR(dw_wdt->rst)) {
- 		ret = PTR_ERR(dw_wdt->rst);
 -- 
 2.24.1
 
