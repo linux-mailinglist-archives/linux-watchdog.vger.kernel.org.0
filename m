@@ -2,49 +2,49 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7552133DAC
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jan 2020 09:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30742133DB7
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jan 2020 09:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbgAHI4h (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Jan 2020 03:56:37 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:40202 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbgAHI4g (ORCPT
+        id S1727091AbgAHI5j (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Jan 2020 03:57:39 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:43285 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727089AbgAHI5j (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Jan 2020 03:56:36 -0500
-Received: by mail-qt1-f194.google.com with SMTP id v25so351902qto.7
-        for <linux-watchdog@vger.kernel.org>; Wed, 08 Jan 2020 00:56:36 -0800 (PST)
+        Wed, 8 Jan 2020 03:57:39 -0500
+Received: by mail-qk1-f196.google.com with SMTP id t129so1937617qke.10
+        for <linux-watchdog@vger.kernel.org>; Wed, 08 Jan 2020 00:57:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=23UaZlNsApqhumDDLUOyVqHmZXSwjOyNRAB7ikWfhfk=;
-        b=dt29E8cPCpwAonKSxaiv3VaP8BgaW6t7bbMQkQnM0D3acz6OORwBCcouS6gD45iHNu
-         GoPZetsVGj8l0OnJGPxqVSmqzq56aVUI+0uLD7j+Gg9OKKkLy6E736TS9AFewSX5PE6+
-         AOSxXDvApaNRuUXWC+iSUIvKTYYK+4hSDeiCc=
+        bh=txHGvTmn6wHXPp2oQOJpqKQj8noXhF4VbGKRGRI9/tU=;
+        b=Fmu2+rMdGH01pAOFv9xENu9HKyrQuitINAws5ePHXdMU3xruGlysnG5rLwZfvug1bU
+         dvirjyp/LKV7X2OHq9BL2qNsJ1a4/Y5qFIHU4vq3gZwbU8TZRVu/ba5u0Xzk3Ec5Q0Ds
+         WW27qghCc4Qi/QUT/ch/sBr5K/mGcq3oOsx10=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=23UaZlNsApqhumDDLUOyVqHmZXSwjOyNRAB7ikWfhfk=;
-        b=Ve1PEGsAc6RfNX9iKFPW6ql5SFMPfDVpGiVyORR0BzSlgSuY+JTjLN8SnXhjYxusfO
-         JQcahtH9iYXvUOdVnGOhi63RzT1dnmxtUH9dg5C6qJSpW+MmJYn48OyBQI5pvM/OuSCs
-         ca+hzLoYvmBoW6Ecb3Zga+laeBTHq0tP4MQ9VFmZBmBll9mRxmddm+/y1GdoRoIMbtlt
-         IqOhNgVHgtReSnmFtK2RZ9wdLxXEraKO9hPaMB21ZQIuQUPnD/BlYBRDUvrvZ17pWSkU
-         S6tdEQtK+Qt+7aRWsTPetBhwSWBHTKMCgvxfEGVhinz+v/VQClNv1wXKXzPIXpN5tO+T
-         rVMA==
-X-Gm-Message-State: APjAAAVdeWPvaKYnkHNfR48dVDdkKeiWu6UXHWx0TPLfgW2Wm8oJhWiN
-        FHlNXry+53oOCodV8ybz4qeUB+GFcRCuU8CrFpDrqQ==
-X-Google-Smtp-Source: APXvYqwLdC1bnpk+yFSSUDDZwVNj0SEXt8iwYqeuRY98reHyPr1olVJxIKDeEhuHBiSIek43xvF7qoUS3R03lEt//CI=
-X-Received: by 2002:ac8:3946:: with SMTP id t6mr2632345qtb.278.1578473795857;
- Wed, 08 Jan 2020 00:56:35 -0800 (PST)
+        bh=txHGvTmn6wHXPp2oQOJpqKQj8noXhF4VbGKRGRI9/tU=;
+        b=jQux2jRMLIQy0JlbIFCuGY4uTRF1aJh4e3UXjWgpR3yL1lPva2ZKrEEnMtDVtU98y7
+         IhCffGmNdLhPXR0G3MMoNRn++AI/LWmtGi1k0ZL/jkPXaCoAkZfTzX+olzUnuIEfpwn7
+         c7AATcEjvO5FVrhNyx03aoK1JJHenc1o3QW3+9qPzEpcyTpf9FlUi98MSDAXKtpSG9R/
+         YWMvINXJziRr+hEfsMy1sCKee9A/6alY4cj0vqAjk4NQwxa/irucz30bk73D0G+LLLkF
+         EasVCb6AcOJucPHsLDICLhpP2rqc5+5xLZG6J0LpYUyGjbjJvbNdWwQf09GRSKE/ZSNx
+         mjfQ==
+X-Gm-Message-State: APjAAAWds6fPoGQgHmOf0xLTgyoXflrUEkjwsZVqRc1mOp30bunRnuE3
+        UTBFOn88peUsUX8rjZv3liFClA/SFbQe3Kr+JXSk0A==
+X-Google-Smtp-Source: APXvYqyxg+WXfWADIYH7mp/FamID6msEFLooGtjXHNkGMJ3b/HHH7fES5RiF7qjZJrTUVIs9ZocSgYGBXQI6iIPX6GE=
+X-Received: by 2002:ae9:f003:: with SMTP id l3mr3269467qkg.457.1578473858520;
+ Wed, 08 Jan 2020 00:57:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20191227141405.3396-1-yong.liang@mediatek.com> <20191227141405.3396-2-yong.liang@mediatek.com>
-In-Reply-To: <20191227141405.3396-2-yong.liang@mediatek.com>
+References: <20191227141405.3396-1-yong.liang@mediatek.com> <20191227141405.3396-3-yong.liang@mediatek.com>
+In-Reply-To: <20191227141405.3396-3-yong.liang@mediatek.com>
 From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Wed, 8 Jan 2020 16:56:25 +0800
-Message-ID: <CANMq1KD=jAPn4Y7zQZrsg9FB7Cq6tNX0R8OF4qX21Sjy2=0Naw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] amr64: dts: modify mt8183.dtsi
+Date:   Wed, 8 Jan 2020 16:57:27 +0800
+Message-ID: <CANMq1KBaE0OimRaa2tiQQYS2irsaNQR_7O8RCWYMpTGnnYNYEg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: mt8183: Add watchdog dt-binding
 To:     Yong Liang <yong.liang@mediatek.com>
 Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
@@ -61,21 +61,38 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-minor nit, s/amr64/arm64/ in the commit title.
+Looks trivial.
 
-On Fri, Dec 27, 2019 at 10:15 PM Yong Liang <yong.liang@mediatek.com> wrote:
+On Fri, Dec 27, 2019 at 10:25 PM Yong Liang <yong.liang@mediatek.com> wrote:
 >
 > From: "yong.liang" <yong.liang@mediatek.com>
 >
-> 1. Include mt8183-reset.h and add reset-cells in infracfg
-> in dtsi file
-> 2. Add watchdog device node
+> This patch add watchdog binding documentation for
+> watchdog on MTK Socs.
 >
 > Signed-off-by: yong.liang <yong.liang@mediatek.com>
 
-Tested-by: Nicolas Boichat <drinkcat@chromium.org>
+Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
 
 > ---
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> [snip]
+>  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> index fd380eb28df5..3ee625d0812f 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> @@ -9,6 +9,7 @@ Required properties:
+>         "mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for MT7622
+>         "mediatek,mt7623-wdt", "mediatek,mt6589-wdt": for MT7623
+>         "mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for MT7629
+> +       "mediatek,mt8183-wdt", "mediatek,mt6589-wdt": for MT8183
+>         "mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
+>
+>  - reg : Specifies base physical address and size of the registers.
+> --
+> 2.18.0
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
