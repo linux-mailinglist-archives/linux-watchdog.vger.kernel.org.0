@@ -2,79 +2,80 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A81132FF3
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jan 2020 20:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7552133DAC
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jan 2020 09:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728671AbgAGTyY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jan 2020 14:54:24 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:41178 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728640AbgAGTyW (ORCPT
+        id S1727112AbgAHI4h (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Jan 2020 03:56:37 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:40202 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726921AbgAHI4g (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jan 2020 14:54:22 -0500
-Received: by mail-ed1-f67.google.com with SMTP id c26so605801eds.8
-        for <linux-watchdog@vger.kernel.org>; Tue, 07 Jan 2020 11:54:21 -0800 (PST)
+        Wed, 8 Jan 2020 03:56:36 -0500
+Received: by mail-qt1-f194.google.com with SMTP id v25so351902qto.7
+        for <linux-watchdog@vger.kernel.org>; Wed, 08 Jan 2020 00:56:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
-        b=rePy6dvW+ZH47h+1V5ZzhOdHt3hyIpKxcBqRG6Yxugb8Ug55qYyaTQK4+wINdwq55f
-         jyS7yVvOQ5iMzNISAd+yiqtmzzFVbayzDS39QWeF/dmepISKDIrC01/Pyd16Jkxknswo
-         ZxY/mmXagT/Q6hX/41m7OLd2SMfr8CZO7Ci1IzWbi02KR9YYzIjtqbyhfstjO3po9RzC
-         tRdf7rgiUAYJtfRgzdFxSV7Qq5Jehd/t/PYuqt0rxIFlDCGzailtByweOtMj5bqBnwVk
-         IjZK4uPjcTNDDRooC9FKrWtSPPIiz9LQ6akzqbAN2ioBe4cx30eADGCJ98dfGgAz0k84
-         86YA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=23UaZlNsApqhumDDLUOyVqHmZXSwjOyNRAB7ikWfhfk=;
+        b=dt29E8cPCpwAonKSxaiv3VaP8BgaW6t7bbMQkQnM0D3acz6OORwBCcouS6gD45iHNu
+         GoPZetsVGj8l0OnJGPxqVSmqzq56aVUI+0uLD7j+Gg9OKKkLy6E736TS9AFewSX5PE6+
+         AOSxXDvApaNRuUXWC+iSUIvKTYYK+4hSDeiCc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
-        b=GkffecT/8DrZ9xtwLF4oUuVsZ61BwA/jFv2A9UNWdss3I4OLmym2hpb7aDBHwGuelt
-         11hu/zLm2O8W4Pn0H0NaYAsii/rsx2iB/jdwj71pDfA5BxQoPd8Uv4IJa5QtUGntDUJC
-         9e0vlvxvIkl6p3ct3lgON+uJq0GnRPoLT5WBGS3NkDdmBlNAtzE3fJPCf5Z8s9VLN0/E
-         oB/1iUwbJaecQyszcUscNyn3BwFt18h5phJ8LfZYIxgUwPjsOsrR6uCrzXH+Fu9s7jYk
-         WMwbxLC6z1yKyw127kljLK7n4+hlxzYsoCZdo5C8FxdSSvbH8/J9OamxPACOOzzqHIy3
-         ITJg==
-X-Gm-Message-State: APjAAAUgTOxV0kp1Z/5/64BjfCL8lfAjHsZxYs4hAjJimY1giDPR8Xsi
-        +JCY9BVhYK6iGgevjxTqsG5yDifHdXq5+Cj/7uE=
-X-Google-Smtp-Source: APXvYqx1uh7JY9TsleWmDC3UVv1ETHY9DfduKRb8/JpOu+/AEBPnllkLYgtKF65Y7XFrgtyDYVY72zE2SUwJXZDirUk=
-X-Received: by 2002:a17:906:2894:: with SMTP id o20mr1108577ejd.199.1578426859045;
- Tue, 07 Jan 2020 11:54:19 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=23UaZlNsApqhumDDLUOyVqHmZXSwjOyNRAB7ikWfhfk=;
+        b=Ve1PEGsAc6RfNX9iKFPW6ql5SFMPfDVpGiVyORR0BzSlgSuY+JTjLN8SnXhjYxusfO
+         JQcahtH9iYXvUOdVnGOhi63RzT1dnmxtUH9dg5C6qJSpW+MmJYn48OyBQI5pvM/OuSCs
+         ca+hzLoYvmBoW6Ecb3Zga+laeBTHq0tP4MQ9VFmZBmBll9mRxmddm+/y1GdoRoIMbtlt
+         IqOhNgVHgtReSnmFtK2RZ9wdLxXEraKO9hPaMB21ZQIuQUPnD/BlYBRDUvrvZ17pWSkU
+         S6tdEQtK+Qt+7aRWsTPetBhwSWBHTKMCgvxfEGVhinz+v/VQClNv1wXKXzPIXpN5tO+T
+         rVMA==
+X-Gm-Message-State: APjAAAVdeWPvaKYnkHNfR48dVDdkKeiWu6UXHWx0TPLfgW2Wm8oJhWiN
+        FHlNXry+53oOCodV8ybz4qeUB+GFcRCuU8CrFpDrqQ==
+X-Google-Smtp-Source: APXvYqwLdC1bnpk+yFSSUDDZwVNj0SEXt8iwYqeuRY98reHyPr1olVJxIKDeEhuHBiSIek43xvF7qoUS3R03lEt//CI=
+X-Received: by 2002:ac8:3946:: with SMTP id t6mr2632345qtb.278.1578473795857;
+ Wed, 08 Jan 2020 00:56:35 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:54:18
- -0800 (PST)
-Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
-From:   "Dr. William Johnson" <currency1000000@gmail.com>
-Date:   Tue, 7 Jan 2020 20:54:18 +0100
-Message-ID: <CAPqfnSFyOwF0m-QsrOdcFV_PCC3TSBr=YQHoQHvH0baKHfeF6Q@mail.gmail.com>
-Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
- worth $15.8Million US DOLLARS now.
-To:     undisclosed-recipients:;
+References: <20191227141405.3396-1-yong.liang@mediatek.com> <20191227141405.3396-2-yong.liang@mediatek.com>
+In-Reply-To: <20191227141405.3396-2-yong.liang@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Wed, 8 Jan 2020 16:56:25 +0800
+Message-ID: <CANMq1KD=jAPn4Y7zQZrsg9FB7Cq6tNX0R8OF4qX21Sjy2=0Naw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] amr64: dts: modify mt8183.dtsi
+To:     Yong Liang <yong.liang@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux-watchdog@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-ATTN Dear Beneficiary.
-Goodnews
-I have Registered your Prepaid ATM Master Card
-worth $15.800,000.00 US DOLLARS Courier company asigned to deliver it
-to you today.
-So contact Dhl office New York to receive your Prepaid ATM Master Card
-worth $15.8Million US DOLLARS now.
-Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
-Email. dhlexpresscouriercompany.nyusa@gmail.com
-Call the office +(202) 890-8752
-Rec-Confirmed your mailing address to the office as I listed below.
-Your Full Name--------------
-House Address-----------
-Your working Phone Number----------------
-ID copy-------------------------
-Sex-----------------------------
-Note,delivery fee to your address is only $50.00. send it to this
-company urgent on itunes card today so that DHL will deliver this
-Prepaid ATM Master Card to you today according to our finally
-agreement.
-Thanks for coperations,
-Dr. William Johnson
+minor nit, s/amr64/arm64/ in the commit title.
+
+On Fri, Dec 27, 2019 at 10:15 PM Yong Liang <yong.liang@mediatek.com> wrote:
+>
+> From: "yong.liang" <yong.liang@mediatek.com>
+>
+> 1. Include mt8183-reset.h and add reset-cells in infracfg
+> in dtsi file
+> 2. Add watchdog device node
+>
+> Signed-off-by: yong.liang <yong.liang@mediatek.com>
+
+Tested-by: Nicolas Boichat <drinkcat@chromium.org>
+
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> [snip]
