@@ -2,171 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D26A138D73
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2020 10:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDCC138D77
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2020 10:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgAMJNM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jan 2020 04:13:12 -0500
-Received: from mailgw02.mediatek.com ([1.203.163.81]:45538 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726277AbgAMJNM (ORCPT
+        id S1725954AbgAMJPe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jan 2020 04:15:34 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:50273 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725878AbgAMJPe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jan 2020 04:13:12 -0500
-X-UUID: e9ae8e593eaf4fbe878ed6859cea4a3c-20200113
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=03EqN3IpDnYeVpvM1ObMsu1BpXwziE5X5TdFsnPY33Q=;
-        b=ezmMER8TvMpJHbek6FFuMM7i8A56A4U3tGXsBA/IV8Qjj+SvxHtmgQXNDolhqm9tkt2tOLzSdLGDoITgvHjubptDC9jzT3kkbHhZtWa/nuGrBAzPB14xN2k5DDX/kS6Nv8cApHTZvqwQCEDjlkcqWjL4Y/yGeJzKOr4TOlMZFH8=;
-X-UUID: e9ae8e593eaf4fbe878ed6859cea4a3c-20200113
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <yong.liang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 231635423; Mon, 13 Jan 2020 17:12:56 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 13 Jan
- 2020 17:11:42 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 13 Jan 2020 17:12:16 +0800
-Message-ID: <1578906770.20923.22.camel@mhfsdcap03>
-Subject: Re: [PATCH v11 1/3] dt-bindings: mediatek: mt8183: Add #reset-cells
-From:   Yong Liang <yong.liang@mediatek.com>
-To:     Nicolas Boichat <drinkcat@chromium.org>
-CC:     Jiaxin Yu =?UTF-8?Q?=28=E4=BF=9E=E5=AE=B6=E9=91=AB=29?= 
-        <Jiaxin.Yu@mediatek.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Chang-An Chen =?UTF-8?Q?=28=E9=99=B3=E6=98=B6=E5=AE=89=29?= 
-        <Chang-An.Chen@mediatek.com>,
-        Freddy Hsin =?UTF-8?Q?=28=E8=BE=9B=E6=81=92=E8=B1=90=29?= 
-        <Freddy.Hsin@mediatek.com>,
-        Yingjoe Chen =?UTF-8?Q?=28=E9=99=B3=E8=8B=B1=E6=B4=B2=29?= 
-        <Yingjoe.Chen@mediatek.com>, Stephen Boyd <sboyd@kernel.org>
-Date:   Mon, 13 Jan 2020 17:12:50 +0800
-In-Reply-To: <CANMq1KBNuJDEn57d0ysc2XG0ezWEvJ2Pm88YihDiSZJ=-E=W9g@mail.gmail.com>
-References: <1578639862-14480-1-git-send-email-jiaxin.yu@mediatek.com>
-         <1578639862-14480-2-git-send-email-jiaxin.yu@mediatek.com>
-         <CANMq1KBNuJDEn57d0ysc2XG0ezWEvJ2Pm88YihDiSZJ=-E=W9g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        Mon, 13 Jan 2020 04:15:34 -0500
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1iqvop-0000XT-6m; Mon, 13 Jan 2020 10:15:31 +0100
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1iqvoo-0001dm-4X; Mon, 13 Jan 2020 10:15:30 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     support.opensource@diasemi.com, linux@roeck-us.net,
+        contact@stefanchrist.eu, Adam.Thomson.Opensource@diasemi.com
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] watchdog: da9062: make restart handler atomic safe
+Date:   Mon, 13 Jan 2020 10:15:21 +0100
+Message-Id: <20200113091521.5754-1-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: DF2A40E9DBFE98B116BEB7409F16A843F2BF153D6F6462540D4A00352B2557502000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTAxLTEzIGF0IDE0OjEwICswODAwLCBOaWNvbGFzIEJvaWNoYXQgd3JvdGU6
-DQo+IEppYXhpbiwNCj4gDQo+IE9uIEZyaSwgSmFuIDEwLCAyMDIwIGF0IDM6MDQgUE0gSmlheGlu
-IFl1IDxqaWF4aW4ueXVAbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPg0KPiA+IEFkZCAjcmVzZXQt
-Y2VsbHMgcHJvcGVydHkgYW5kIHVwZGF0ZSBleGFtcGxlDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
-OiB5b25nLmxpYW5nIDx5b25nLmxpYW5nQG1lZGlhdGVrLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBKaWF4aW4gWXUgPGppYXhpbi55dUBtZWRpYXRlay5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6IFlp
-bmdqb2UgQ2hlbiA8eWluZ2pvZS5jaGVuQG1lZGlhdGVrLmNvbT4NCj4gPiBSZXZpZXdlZC1ieTog
-UGhpbGlwcCBaYWJlbCA8cC56YWJlbEBwZW5ndXRyb25peC5kZT4NCj4gPiBSZXZpZXdlZC1ieTog
-Um9iIEhlcnJpbmcgPHJvYmhAa2VybmVsLm9yZz4NCj4gPiBSZXZpZXdlZC1ieTogR3VlbnRlciBS
-b2VjayA8Z3JvZWNrN0BnbWFpbC5jb20+DQo+IA0KPiBGcm9tIHByZXZpb3VzIGZlZWRiYWNrDQo+
-IChodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMzE4Njg3LyMyMzA4NjIxMSks
-IGl0IHNlZW1zIGxpa2UNCj4gd2UgbG9zdCB0cmFjayBvZiB3aGljaCBleGFjdCB2ZXJzaW9uIGhh
-ZCB0aGUgUmV2aWV3ZWQtQnksIHNvIEknZCBqdXN0DQo+IGRyb3AgYWxsIHRob3NlIHRhZ3MgYW5k
-IGxldCBwZW9wbGUgcmV2aWV3IGFnYWluLg0KPiANCiAgTmVlZCBJIGRvIHNvbWV0aW5nPw0KPiA+
-IC0tLQ0KPiANCj4gSXQgd291bGQgaGF2ZSBiZWVuIG5pY2UgdG8gbWVudGlvbiB0aGF0IHRoaXMg
-cGF0Y2ggZGVwZW5kcyBvbg0KPiBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzEx
-MzExMjQxLyAoYXMgeW91ciBleGFtcGxlIG1ha2VzDQo+IHVzZSBvZiBpdCBiZWxvdykuDQoNCiAg
-Q2FuIEkgZHJvcCB0aGUgbXRrLXdkdC50eHQgb2YNCmh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5v
-cmcvcGF0Y2gvMTEzMTEyNDEvPw0KICBBbmQgSSB3YW50IGFkZCA4MTgzIGluIG10ay13ZHQudHh0
-IGluIHRoaXMgcGF0Y2guDQo+ID4gIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210
-ay13ZHQudHh0ICB8IDEwICsrKysrKy0tLQ0KPiA+ICAuLi4vcmVzZXQtY29udHJvbGxlci9tdDI3
-MTItcmVzZXRzLmggICAgICAgICAgfCAyMiArKysrKysrKysrKysrKysrKysrDQo+ID4gIC4uLi9y
-ZXNldC1jb250cm9sbGVyL210ODE4My1yZXNldHMuaCAgICAgICAgICB8IDE3ICsrKysrKysrKysr
-KysrDQo+ID4gIDMgZmlsZXMgY2hhbmdlZCwgNDYgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMo
-LSkNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGluY2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQtY29u
-dHJvbGxlci9tdDI3MTItcmVzZXRzLmgNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0
-aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQgYi9Eb2N1bWVudGF0
-aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQNCj4gPiBpbmRleCA5
-MjE4MWI2NDhmNTIuLjVhNzZhYzI2MmY4ZCAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQNCj4gPiArKysgYi9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQNCj4gPiBA
-QCAtNCw2ICs0LDcgQEAgUmVxdWlyZWQgcHJvcGVydGllczoNCj4gPg0KPiA+ICAtIGNvbXBhdGli
-bGUgc2hvdWxkIGNvbnRhaW46DQo+ID4gICAgICAgICAibWVkaWF0ZWssbXQyNzAxLXdkdCIsICJt
-ZWRpYXRlayxtdDY1ODktd2R0IjogZm9yIE1UMjcwMQ0KPiA+ICsgICAgICAgIm1lZGlhdGVrLG10
-MjcxMi13ZHQiLCAibWVkaWF0ZWssbXQ2NTg5LXdkdCI6IGZvciBNVDI3MTINCj4gDQo+IFBsZWFz
-ZSBzZXBhcmF0ZSB0aGlzIGFzIGFub3RoZXIgcGF0Y2guDQogIFNvIEkgY2FuIHNlbmQgbXRrLXdk
-dC5jKE1UMjcxMikgYW5kIG10MjcxMi1yZXNldHMuaCBpbiBvbmUgcGF0Y2ggYW5kDQpzZW5kIG10
-ay13ZHQuYyhNVDgxODMpIGFuZCBtdDgxODMtcmVzZXRzLmggaW4gYW5vdGhlciBwYXRjaD8NCj4g
-DQo+ID4gICAgICAgICAibWVkaWF0ZWssbXQ2NTg5LXdkdCI6IGZvciBNVDY1ODkNCj4gPiAgICAg
-ICAgICJtZWRpYXRlayxtdDY3OTctd2R0IiwgIm1lZGlhdGVrLG10NjU4OS13ZHQiOiBmb3IgTVQ2
-Nzk3DQo+ID4gICAgICAgICAibWVkaWF0ZWssbXQ3NjIyLXdkdCIsICJtZWRpYXRlayxtdDY1ODkt
-d2R0IjogZm9yIE1UNzYyMg0KPiA+IEBAIC0xNCwxMSArMTUsMTQgQEAgUmVxdWlyZWQgcHJvcGVy
-dGllczoNCj4gPg0KPiA+ICBPcHRpb25hbCBwcm9wZXJ0aWVzOg0KPiA+ICAtIHRpbWVvdXQtc2Vj
-OiBjb250YWlucyB0aGUgd2F0Y2hkb2cgdGltZW91dCBpbiBzZWNvbmRzLg0KPiA+ICstICNyZXNl
-dC1jZWxsczogU2hvdWxkIGJlIDEuDQo+ID4NCj4gPiAgRXhhbXBsZToNCj4gPg0KPiA+IC13ZHQ6
-IHdhdGNoZG9nQDEwMDAwMDAwIHsNCj4gPiAtICAgICAgIGNvbXBhdGlibGUgPSAibWVkaWF0ZWss
-bXQ2NTg5LXdkdCI7DQo+ID4gLSAgICAgICByZWcgPSA8MHgxMDAwMDAwMCAweDE4PjsNCj4gPiAr
-d2F0Y2hkb2c6IHdhdGNoZG9nQDEwMDA3MDAwIHsNCj4gPiArICAgICAgIGNvbXBhdGlibGUgPSAi
-bWVkaWF0ZWssbXQ4MTgzLXdkdCIsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIm1lZGlhdGVr
-LG10NjU4OS13ZHQiOw0KPiA+ICsgICAgICAgcmVnID0gPDAgMHgxMDAwNzAwMCAwIDB4MTAwPjsN
-Cj4gPiAgICAgICAgIHRpbWVvdXQtc2VjID0gPDEwPjsNCj4gPiArICAgICAgICNyZXNldC1jZWxs
-cyA9IDwxPjsNCj4gPiAgfTsNCj4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kdC1iaW5kaW5ncy9y
-ZXNldC1jb250cm9sbGVyL210MjcxMi1yZXNldHMuaCBiL2luY2x1ZGUvZHQtYmluZGluZ3MvcmVz
-ZXQtY29udHJvbGxlci9tdDI3MTItcmVzZXRzLmgNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0K
-PiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uOWU3ZWU3NjJmMDc2DQo+ID4gLS0tIC9kZXYvbnVsbA0K
-PiA+ICsrKyBiL2luY2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQtY29udHJvbGxlci9tdDI3MTItcmVz
-ZXRzLmgNCj4gPiBAQCAtMCwwICsxLDIyIEBADQo+ID4gKy8qIFNQRFgtTGljZW5zZS1JZGVudGlm
-aWVyOiBHUEwtMi4wICovDQo+ID4gKy8qDQo+ID4gKyAqIENvcHlyaWdodCAoYykgMjAxOSBNZWRp
-YVRlayBJbmMuDQo+ID4gKyAqIEF1dGhvcjogWW9uZyBMaWFuZyA8eW9uZy5saWFuZ0BtZWRpYXRl
-ay5jb20+DQo+ID4gKyAqLw0KPiA+ICsNCj4gPiArI2lmbmRlZiBfRFRfQklORElOR1NfUkVTRVRf
-Q09OVFJPTExFUl9NVDI3MTINCj4gPiArI2RlZmluZSBfRFRfQklORElOR1NfUkVTRVRfQ09OVFJP
-TExFUl9NVDI3MTINCj4gPiArDQo+ID4gKyNkZWZpbmUgTVQyNzEyX1RPUFJHVV9JTkZSQV9TV19S
-U1QgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDANCj4gPiArI2RlZmluZSBNVDI3MTJfVE9Q
-UkdVX01NX1NXX1JTVCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxDQo+
-ID4gKyNkZWZpbmUgTVQyNzEyX1RPUFJHVV9NRkdfU1dfUlNUICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIDINCj4gPiArI2RlZmluZSBNVDI3MTJfVE9QUkdVX1ZFTkNfU1dfUlNUICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgMw0KPiA+ICsjZGVmaW5lIE1UMjcxMl9UT1BSR1VfVkRF
-Q19TV19SU1QgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA0DQo+ID4gKyNkZWZpbmUgTVQy
-NzEyX1RPUFJHVV9JTUdfU1dfUlNUICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDUNCj4g
-PiArI2RlZmluZSBNVDI3MTJfVE9QUkdVX0lORlJBX0FPX1NXX1JTVCAgICAgICAgICAgICAgICAg
-ICAgICAgICAgOA0KPiA+ICsjZGVmaW5lIE1UMjcxMl9UT1BSR1VfVVNCX1NXX1JTVCAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICA5DQo+ID4gKyNkZWZpbmUgTVQyNzEyX1RPUFJHVV9BUE1J
-WEVEX1NXX1JTVCAgICAgICAgICAgICAgICAgICAgICAgICAgIDEwDQo+ID4gKw0KPiA+ICsjZGVm
-aW5lIE1UMjcxMl9UT1BSR1VfU1dfUlNUX05VTSAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAxMQ0KPiA+ICsNCj4gPiArI2VuZGlmICAvKiBfRFRfQklORElOR1NfUkVTRVRfQ09OVFJPTExF
-Ul9NVDI3MTIgKi8NCj4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kdC1iaW5kaW5ncy9yZXNldC1j
-b250cm9sbGVyL210ODE4My1yZXNldHMuaCBiL2luY2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQtY29u
-dHJvbGxlci9tdDgxODMtcmVzZXRzLmgNCj4gPiBpbmRleCA4ODA0ZTM0ZWJkZDQuLmExYmJkNDFl
-MGQxMiAxMDA2NDQNCj4gPiAtLS0gYS9pbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0LWNvbnRyb2xs
-ZXIvbXQ4MTgzLXJlc2V0cy5oDQo+ID4gKysrIGIvaW5jbHVkZS9kdC1iaW5kaW5ncy9yZXNldC1j
-b250cm9sbGVyL210ODE4My1yZXNldHMuaA0KPiA+IEBAIC03OCw0ICs3OCwyMSBAQA0KPiA+ICAj
-ZGVmaW5lIE1UODE4M19JTkZSQUNGR19BT19JMkM3X1NXX1JTVCAgICAgICAgICAgICAgICAgICAg
-ICAgICAxMjYNCj4gPiAgI2RlZmluZSBNVDgxODNfSU5GUkFDRkdfQU9fSTJDOF9TV19SU1QgICAg
-ICAgICAgICAgICAgICAgICAgICAgMTI3DQo+ID4NCj4gPiArI2RlZmluZSBNVDgxODNfSU5GUkFD
-RkdfU1dfUlNUX05VTSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMTI4DQo+ID4gKw0KPiA+
-ICsjZGVmaW5lIE1UODE4M19UT1BSR1VfTU1fU1dfUlNUICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIDENCj4gPiArI2RlZmluZSBNVDgxODNfVE9QUkdVX01GR19TV19SU1Qg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMg0KPiA+ICsjZGVmaW5lIE1UODE4M19UT1BS
-R1VfVkVOQ19TV19SU1QgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAzDQo+ID4gKyNkZWZp
-bmUgTVQ4MTgzX1RPUFJHVV9WREVDX1NXX1JTVCAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IDQNCj4gPiArI2RlZmluZSBNVDgxODNfVE9QUkdVX0lNR19TV19SU1QgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgNQ0KPiA+ICsjZGVmaW5lIE1UODE4M19UT1BSR1VfTURfU1dfUlNUICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDcNCj4gPiArI2RlZmluZSBNVDgx
-ODNfVE9QUkdVX0NPTk5fU1dfUlNUICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOQ0KPiA+
-ICsjZGVmaW5lIE1UODE4M19UT1BSR1VfQ09OTl9NQ1VfU1dfUlNUICAgICAgICAgICAgICAgICAg
-ICAgICAgICAxMg0KPiA+ICsjZGVmaW5lIE1UODE4M19UT1BSR1VfSVBVMF9TV19SU1QgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAxNA0KPiA+ICsjZGVmaW5lIE1UODE4M19UT1BSR1VfSVBV
-MV9TV19SU1QgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxNQ0KPiA+ICsjZGVmaW5lIE1U
-ODE4M19UT1BSR1VfQVVESU9fU1dfUlNUICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxNw0K
-PiA+ICsjZGVmaW5lIE1UODE4M19UT1BSR1VfQ0FNU1lTX1NXX1JTVCAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAxOA0KPiA+ICsNCj4gPiArI2RlZmluZSBNVDgxODNfVE9QUkdVX1NXX1JTVF9O
-VU0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMTkNCj4gPiArDQo+ID4gICNlbmRpZiAg
-LyogX0RUX0JJTkRJTkdTX1JFU0VUX0NPTlRST0xMRVJfTVQ4MTgzICovDQo+ID4gLS0NCj4gPiAy
-LjE4LjANCg0K
+The restart handler is executed during the shutdown phase which is
+atomic/irq-less. The i2c framework supports atomic transfers since
+commit 63b96983a5dd ("i2c: core: introduce callbacks for atomic
+transfers") but unfortunately the regmap framework doesn't support it
+yet. Hard coding the i2c stuff can be done without worries since the
+DA9062 is an i2c-only device.
+
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+---
+Hi,
+
+This patch is based on Stefan Lengfeld's RFC Patch [1].
+
+[1] https://patchwork.ozlabs.org/patch/1085942/
+---
+ drivers/watchdog/da9062_wdt.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
+index c9b9d6394525..84c5a0a455b2 100644
+--- a/drivers/watchdog/da9062_wdt.c
++++ b/drivers/watchdog/da9062_wdt.c
+@@ -11,6 +11,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/uaccess.h>
+ #include <linux/slab.h>
++#include <linux/i2c.h>
+ #include <linux/delay.h>
+ #include <linux/jiffies.h>
+ #include <linux/mfd/da9062/registers.h>
+@@ -149,12 +150,18 @@ static int da9062_wdt_restart(struct watchdog_device *wdd, unsigned long action,
+ 			      void *data)
+ {
+ 	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
++	struct i2c_client *client = to_i2c_client(wdt->hw->dev);
++	u8 buf[] = {DA9062AA_CONTROL_F, DA9062AA_SHUTDOWN_MASK};
++	struct i2c_msg msg = {
++		.addr = client->addr,
++		.flags = 0,
++		.len = sizeof(buf),
++		.buf = buf,
++	};
+ 	int ret;
+ 
+-	ret = regmap_write(wdt->hw->regmap,
+-			   DA9062AA_CONTROL_F,
+-			   DA9062AA_SHUTDOWN_MASK);
+-	if (ret)
++	ret = i2c_transfer(client->adapter, &msg, 1);
++	if (ret < 0)
+ 		dev_alert(wdt->hw->dev, "Failed to shutdown (err = %d)\n",
+ 			  ret);
+ 
+-- 
+2.20.1
 
