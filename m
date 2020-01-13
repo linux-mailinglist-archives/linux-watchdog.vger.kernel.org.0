@@ -2,73 +2,184 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 364F1138B56
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2020 06:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4579138BA8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2020 07:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387615AbgAMFwj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jan 2020 00:52:39 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:46161 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387525AbgAMFwj (ORCPT
+        id S1725909AbgAMGKj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jan 2020 01:10:39 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:43016 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726480AbgAMGKj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jan 2020 00:52:39 -0500
-Received: by mail-oi1-f194.google.com with SMTP id 13so7164713oij.13
-        for <linux-watchdog@vger.kernel.org>; Sun, 12 Jan 2020 21:52:38 -0800 (PST)
+        Mon, 13 Jan 2020 01:10:39 -0500
+Received: by mail-qv1-f66.google.com with SMTP id p2so3528110qvo.10
+        for <linux-watchdog@vger.kernel.org>; Sun, 12 Jan 2020 22:10:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=MaFAR6FR5toOKNJiEvYgCYPSHBGxfYmCPV6emkC7SrII/5AmIWDAmjw+8MGyn64q68
-         9CsgcE1hGtq75I6+9hwFmyBssVlHG8xOr3te5U8HrnTcKEJc+7juFT9oooRvWt1+45DG
-         RPV96DxfwDihu0rCNOFyxk2ERywYRaBSesCO/LOAkwlbgAvaSG/6DM8RXOy3mUhyHVeM
-         sujmVe6N/DFa+La31T34jj9TMU+/zoHchXnntqs/45nixai6zXFC/Dj/ie9ONUNDdCBl
-         wLYFSBTuGG/E+CveKQ3ZD2EjJiiPHbBj9j2S1uTteq+3hmhBlvSgfLgtMc/1Q9R0Qp/9
-         wN7g==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7DfRwJTOPvTtWVkT74WE0+0Wv9fnsKAGouTb1Izq89A=;
+        b=Qatwxt+OoQ71OqIjEakHG18BOGUTpja+9P/RSKDnHwYK9mlMKhnsjaJ4Qe78pwcKjA
+         EUHvEFOX4TtEYQGZXQ0Nrtq2IaqhIOos4xgXVC9FNe4Vmd1R/eL/TNIr1ZBdkzqw+QC4
+         hkfY5cWW6CUPnnIq7Y57SsJYESMlI6UHhEQ5Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=ke8Uzmr94OPuCxs26i1mvBJIo6eCgKOAs6vT+GoeQb81xCh/b4pegQ2kAI4uF7BnN+
-         wNGgL/vy4e03o2YvbZG3s1uGs+hbmqzxEIQApMcLmGpRhPvYtQt7QvQn1UaJKPRFv2KC
-         CXemY00rHyqz4WQuuX85pbw8VrUevT0voXIYPLKPCOXZch75qO6invS6y92GxLpDQ3TP
-         sZzPriI4SzQp+j7iUTrKE7Gg0I16FPNlE9ZBRzOonSxh+AsaiAL6Vq7ddkdt0PKe/CR1
-         TkyXNuZEm6whskfjxkN2PgEni3x+GmdqHch3Md9yUOAqFzCK2p5vWuTa60PcqHP71OS5
-         t+mQ==
-X-Gm-Message-State: APjAAAXgTefG3lVMLOthCM3g7SsCH8OUpX4HkClmxyDAgSX/zEqc5arC
-        8yDgDDcs+0p8qe00EsOKWe7AeJCjVEU4z52DSY8=
-X-Google-Smtp-Source: APXvYqxpLuvGBSXJi0LygFRWySu0TKIxqhta6upKSXVoj+SD3HVRl3hBir1/mczgV9iZ7wN0WQE0dauBJq3F3sofYg0=
-X-Received: by 2002:a54:4f04:: with SMTP id e4mr10830211oiy.111.1578894758224;
- Sun, 12 Jan 2020 21:52:38 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7DfRwJTOPvTtWVkT74WE0+0Wv9fnsKAGouTb1Izq89A=;
+        b=RXiMxIPeCLmohWY66bxyDmKeyxxs3rCwCfc3N9aAg4UBAPq/wjbGrdguoVCWmrzo/7
+         BDxyPw8hyh0OGYA7N6G/wA02Pdghz/698Lrjlqy2WmdALWAMa3NWRtbWlcNKyZp0bJ2r
+         oJaSbdH3BxWrVq1AyEmU7kBXsjifl/AAnyWB5cVEDQsOZ0Ky1uqu44pasJvt/oSe1nvJ
+         QlYRRTYce5uOMIA/N+rXSda8RQBFOAsHudonbCuNmT+00f3mX9Th+AWGkuR3iuZBhfCq
+         F/qAtUvb+D0rOGNVSk3PKYw2PM4EnlDUEpIhN+2JaCHa0m8lLFvZJHowZo7DYKkU3ZGb
+         +UKw==
+X-Gm-Message-State: APjAAAUjEMgo2AwEwLJ0c3ALH4mdZnSZG4hcKvTT6eZkBkASqf7/WdX5
+        tQu6/b6NLXJTYkUoGYtZsuep8R9jNPJHqva0mSyh6A==
+X-Google-Smtp-Source: APXvYqzNnf0+5zf15VXfHELZbqC0F4Qy+EwQSLKu7IESG3soghZ70PDiWBmTa+q/Q8H2Xj5h4riou90hhvsdIXG1nTo=
+X-Received: by 2002:a0c:f703:: with SMTP id w3mr14287635qvn.6.1578895837978;
+ Sun, 12 Jan 2020 22:10:37 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:37
- -0800 (PST)
-Reply-To: rickschaech@gmail.com
-From:   Rick Schaech <cathben72@gmail.com>
-Date:   Mon, 13 Jan 2020 01:52:37 -0400
-Message-ID: <CAEcBxO=DoZZeZuHjVOxQpB8CM4fADYg6sCQVLkjP+qQwsNEH9A@mail.gmail.com>
-Subject: I wait for your swift response,
-To:     undisclosed-recipients:;
+References: <1578639862-14480-1-git-send-email-jiaxin.yu@mediatek.com> <1578639862-14480-2-git-send-email-jiaxin.yu@mediatek.com>
+In-Reply-To: <1578639862-14480-2-git-send-email-jiaxin.yu@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Mon, 13 Jan 2020 14:10:27 +0800
+Message-ID: <CANMq1KBNuJDEn57d0ysc2XG0ezWEvJ2Pm88YihDiSZJ=-E=W9g@mail.gmail.com>
+Subject: Re: [PATCH v11 1/3] dt-bindings: mediatek: mt8183: Add #reset-cells
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     Yong Liang <yong.liang@mediatek.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-watchdog@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        chang-an.chen@mediatek.com, freddy.hsin@mediatek.com,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        Stephen Boyd <sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
-know we have not meet each other before but sometimes in life God have
-a reason of bringing two people from two different countries together
-as business partners or life partners.
+Jiaxin,
 
-My dear friend, I have the sum of 15.7 Million USD i wish to put in
-your name due to the death of my late client who died several years
-ago as his next of kin column still remain blank. Though the internet
-medium is highly abuse these days but am assuring you that this
-transaction is legitimate and I am contacting you that we may have a
-deal, note for your cooperation and collaboration 40% of the sum will
-be for you while the other 60% will be for me as well. I wait for your
-swift response for more details. please forward your response to my
-personal E-mail: rickschaech@gmail.com
+On Fri, Jan 10, 2020 at 3:04 PM Jiaxin Yu <jiaxin.yu@mediatek.com> wrote:
+>
+> Add #reset-cells property and update example
+>
+> Signed-off-by: yong.liang <yong.liang@mediatek.com>
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Guenter Roeck <groeck7@gmail.com>
 
-Yours sincerely,
-Rick Schaech.
+From previous feedback
+(https://patchwork.kernel.org/patch/11318687/#23086211), it seems like
+we lost track of which exact version had the Reviewed-By, so I'd just
+drop all those tags and let people review again.
+
+> ---
+
+It would have been nice to mention that this patch depends on
+https://patchwork.kernel.org/patch/11311241/ (as your example makes
+use of it below).
+
+>  .../devicetree/bindings/watchdog/mtk-wdt.txt  | 10 ++++++---
+>  .../reset-controller/mt2712-resets.h          | 22 +++++++++++++++++++
+>  .../reset-controller/mt8183-resets.h          | 17 ++++++++++++++
+>  3 files changed, 46 insertions(+), 3 deletions(-)
+>  create mode 100644 include/dt-bindings/reset-controller/mt2712-resets.h
+>
+> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> index 92181b648f52..5a76ac262f8d 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> @@ -4,6 +4,7 @@ Required properties:
+>
+>  - compatible should contain:
+>         "mediatek,mt2701-wdt", "mediatek,mt6589-wdt": for MT2701
+> +       "mediatek,mt2712-wdt", "mediatek,mt6589-wdt": for MT2712
+
+Please separate this as another patch.
+
+>         "mediatek,mt6589-wdt": for MT6589
+>         "mediatek,mt6797-wdt", "mediatek,mt6589-wdt": for MT6797
+>         "mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for MT7622
+> @@ -14,11 +15,14 @@ Required properties:
+>
+>  Optional properties:
+>  - timeout-sec: contains the watchdog timeout in seconds.
+> +- #reset-cells: Should be 1.
+>
+>  Example:
+>
+> -wdt: watchdog@10000000 {
+> -       compatible = "mediatek,mt6589-wdt";
+> -       reg = <0x10000000 0x18>;
+> +watchdog: watchdog@10007000 {
+> +       compatible = "mediatek,mt8183-wdt",
+> +                    "mediatek,mt6589-wdt";
+> +       reg = <0 0x10007000 0 0x100>;
+>         timeout-sec = <10>;
+> +       #reset-cells = <1>;
+>  };
+> diff --git a/include/dt-bindings/reset-controller/mt2712-resets.h b/include/dt-bindings/reset-controller/mt2712-resets.h
+> new file mode 100644
+> index 000000000000..9e7ee762f076
+> --- /dev/null
+> +++ b/include/dt-bindings/reset-controller/mt2712-resets.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2019 MediaTek Inc.
+> + * Author: Yong Liang <yong.liang@mediatek.com>
+> + */
+> +
+> +#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT2712
+> +#define _DT_BINDINGS_RESET_CONTROLLER_MT2712
+> +
+> +#define MT2712_TOPRGU_INFRA_SW_RST                             0
+> +#define MT2712_TOPRGU_MM_SW_RST                                        1
+> +#define MT2712_TOPRGU_MFG_SW_RST                               2
+> +#define MT2712_TOPRGU_VENC_SW_RST                              3
+> +#define MT2712_TOPRGU_VDEC_SW_RST                              4
+> +#define MT2712_TOPRGU_IMG_SW_RST                               5
+> +#define MT2712_TOPRGU_INFRA_AO_SW_RST                          8
+> +#define MT2712_TOPRGU_USB_SW_RST                               9
+> +#define MT2712_TOPRGU_APMIXED_SW_RST                           10
+> +
+> +#define MT2712_TOPRGU_SW_RST_NUM                               11
+> +
+> +#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT2712 */
+> diff --git a/include/dt-bindings/reset-controller/mt8183-resets.h b/include/dt-bindings/reset-controller/mt8183-resets.h
+> index 8804e34ebdd4..a1bbd41e0d12 100644
+> --- a/include/dt-bindings/reset-controller/mt8183-resets.h
+> +++ b/include/dt-bindings/reset-controller/mt8183-resets.h
+> @@ -78,4 +78,21 @@
+>  #define MT8183_INFRACFG_AO_I2C7_SW_RST                         126
+>  #define MT8183_INFRACFG_AO_I2C8_SW_RST                         127
+>
+> +#define MT8183_INFRACFG_SW_RST_NUM                             128
+> +
+> +#define MT8183_TOPRGU_MM_SW_RST                                        1
+> +#define MT8183_TOPRGU_MFG_SW_RST                               2
+> +#define MT8183_TOPRGU_VENC_SW_RST                              3
+> +#define MT8183_TOPRGU_VDEC_SW_RST                              4
+> +#define MT8183_TOPRGU_IMG_SW_RST                               5
+> +#define MT8183_TOPRGU_MD_SW_RST                                        7
+> +#define MT8183_TOPRGU_CONN_SW_RST                              9
+> +#define MT8183_TOPRGU_CONN_MCU_SW_RST                          12
+> +#define MT8183_TOPRGU_IPU0_SW_RST                              14
+> +#define MT8183_TOPRGU_IPU1_SW_RST                              15
+> +#define MT8183_TOPRGU_AUDIO_SW_RST                             17
+> +#define MT8183_TOPRGU_CAMSYS_SW_RST                            18
+> +
+> +#define MT8183_TOPRGU_SW_RST_NUM                               19
+> +
+>  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8183 */
+> --
+> 2.18.0
