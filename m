@@ -2,128 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E92139AB8
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2020 21:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7706A13A00C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2020 04:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726530AbgAMU2N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jan 2020 15:28:13 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39539 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726488AbgAMU2M (ORCPT
+        id S1729308AbgANDpe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jan 2020 22:45:34 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:56845 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729335AbgANDpe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jan 2020 15:28:12 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q10so5413929pfs.6;
-        Mon, 13 Jan 2020 12:28:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RRhPxYtI12WE5buq2I+zvusZGT++RtYK4QcGcmE99jI=;
-        b=WPcIaPi6hE90GSQqZ1OfQnwK3DNiEiNTF3Nv6MgLAm5epDAsMm9DKxVKjcruunecCU
-         wPQZCf1w0P2qQIW1gXwQpbpEaWNjE1MoKP13aB94rzpPpWjQjxglIfzvHpW6Y7VpzTZ9
-         17yvLWttMTPV/KZXBdmTn7bpbVJ0gOdGJBUI4xRUN+JI5cfSNCco6bAmESU0QEjRfNk/
-         IP/AhGl/EJPssg4zCIus8KYQRlnp4HIEhvMtrDl44NjIAMd54QAUHSJmorbkVB6rlgaY
-         6d1rYH1gKgGMU/yn3nw/6N76mwP7eHstrzr8fwD2DThSDvWLPJ3yypDVgCKIBIpU0J/v
-         zx6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RRhPxYtI12WE5buq2I+zvusZGT++RtYK4QcGcmE99jI=;
-        b=sQlIDp+h/g+ahTX6seUTQ9Gywehf3tJo/LR7arwHFHmxljTcu6Dbp9Ho0NUWDwLbbC
-         RwFV0kh1Mwr/MaqohR4xm06/m6h2BKtYEnMToB4pnmyYRGt5Bi+CRWrOhkC+eY7qEHbl
-         IoxnkgN9U8AcSnc7GICjQHe92XhXWulyiBc27FQMxpfvJWJCdB7/Ru4WdqvSGZYFBMrb
-         N7Z+/PGb11CgEgiuuvlN9bKeyX7C+1DUxftksInoTIb1MWp13LqBuR8r+bBiBBGXa+7S
-         QBgV7lGK8++RbpkPQbxS6Z+QrhC9DBa2KYO8Bd73S+M+A7EfZVlLNFk6HlhQ5OCF/E79
-         3T4g==
-X-Gm-Message-State: APjAAAUt7lKQz/aN/2EUlTlOC9bq61FrpFWxpLdFOThELblr+mXGkGBY
-        7wQNGmr4yFBn6IgQGfPX0hIBhu2C
-X-Google-Smtp-Source: APXvYqxUixEYeLuRAI5UDbxecGt6gjWhPqKiZc26gUjE7oCDhz4EXXH1fKvuTON6xFeAPWg7kD3W6g==
-X-Received: by 2002:a63:3cb:: with SMTP id 194mr23342069pgd.123.1578947292040;
-        Mon, 13 Jan 2020 12:28:12 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c1sm15461800pfa.51.2020.01.13.12.28.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 Jan 2020 12:28:10 -0800 (PST)
-Date:   Mon, 13 Jan 2020 12:28:09 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     support.opensource@diasemi.com, contact@stefanchrist.eu,
-        Adam.Thomson.Opensource@diasemi.com,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] watchdog: da9062: make restart handler atomic safe
-Message-ID: <20200113202809.GA21484@roeck-us.net>
-References: <20200113091521.5754-1-m.felsch@pengutronix.de>
+        Mon, 13 Jan 2020 22:45:34 -0500
+Received: from droid12-sz.software.amlogic (10.28.8.22) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Tue, 14 Jan 2020
+ 11:45:58 +0800
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+CC:     Xingyu Chen <xingyu.chen@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v6 0/5] add meson secure watchdog driver
+Date:   Tue, 14 Jan 2020 11:45:22 +0800
+Message-ID: <1578973527-4759-1-git-send-email-xingyu.chen@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200113091521.5754-1-m.felsch@pengutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-Originating-IP: [10.28.8.22]
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 10:15:21AM +0100, Marco Felsch wrote:
-> The restart handler is executed during the shutdown phase which is
-> atomic/irq-less. The i2c framework supports atomic transfers since
-> commit 63b96983a5dd ("i2c: core: introduce callbacks for atomic
-> transfers") but unfortunately the regmap framework doesn't support it
-> yet. Hard coding the i2c stuff can be done without worries since the
-> DA9062 is an i2c-only device.
-> 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> ---
-> Hi,
-> 
-> This patch is based on Stefan Lengfeld's RFC Patch [1].
-> 
-> [1] https://patchwork.ozlabs.org/patch/1085942/
-> ---
->  drivers/watchdog/da9062_wdt.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-> index c9b9d6394525..84c5a0a455b2 100644
-> --- a/drivers/watchdog/da9062_wdt.c
-> +++ b/drivers/watchdog/da9062_wdt.c
-> @@ -11,6 +11,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/uaccess.h>
->  #include <linux/slab.h>
-> +#include <linux/i2c.h>
->  #include <linux/delay.h>
->  #include <linux/jiffies.h>
->  #include <linux/mfd/da9062/registers.h>
-> @@ -149,12 +150,18 @@ static int da9062_wdt_restart(struct watchdog_device *wdd, unsigned long action,
->  			      void *data)
->  {
->  	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
-> +	struct i2c_client *client = to_i2c_client(wdt->hw->dev);
-> +	u8 buf[] = {DA9062AA_CONTROL_F, DA9062AA_SHUTDOWN_MASK};
-> +	struct i2c_msg msg = {
-> +		.addr = client->addr,
-> +		.flags = 0,
-> +		.len = sizeof(buf),
-> +		.buf = buf,
-> +	};
->  	int ret;
->  
-> -	ret = regmap_write(wdt->hw->regmap,
-> -			   DA9062AA_CONTROL_F,
-> -			   DA9062AA_SHUTDOWN_MASK);
-> -	if (ret)
-> +	ret = i2c_transfer(client->adapter, &msg, 1);
+The watchdog controller on the Meson-A/C series SoCs is moved to secure world,
+We have to call SMC instruction to trap the ATF for watchdog operation. These
+operations are different from previous SoCs, so we introduce a new watchdog
+driver to support this kind of SoCs.
 
-Why not i2c_smbus_write_byte_data() ? I don't immediately see the difference.
+Changes since v5 at [4]:
+- take the wdt node as child node of secure-monitor
+- update dt-binding description
+- invoke of_platform_default_populate() instantiate wdt device according to Rob's suggestion at [5]
+- find the secure-monitor node through the wdt parent node instead of of_find_compatible_node()
+- add Guenter's Reviewed-by
 
-Guenter
+Changes since v4 at [3]:
+- add watchdog node in dts, and introduce a new optional property "timeout-sec"
+- add dt-binding for meson secure watchdog
+- instantiate wdt device through dts node instead of platform_device_register_simple()
 
-> +	if (ret < 0)
->  		dev_alert(wdt->hw->dev, "Failed to shutdown (err = %d)\n",
->  			  ret);
->  
-> -- 
-> 2.20.1
-> 
+Changes since v3 at [2]:
+- add SM_A1_ prefix for WATCHDOG_OPS
+- remove phandle to secure-monitor node
+- remove watchdog node from dts, and register wdt device by platform_device_register_simple()
+- remove dt-binding for meson secure watchdog
+- use the msec as unit of timeout parameter which is passed to fw side
+
+Changes since v2 at [1]:
+- remove useless dependency in Kconfig
+- return zero when getting left time value fails
+
+Changes since v1 at [0]:
+- add a new dependency in Kconfig
+- simplify/add the return operation
+- remove useless ping operation when setting the timeout
+- fix some return values
+- fix the license statement
+
+[0]:https://lore.kernel.org/linux-amlogic/1570874721-36077-1-git-send-email-xingyu.chen@amlogic.com
+[1]:https://lore.kernel.org/linux-amlogic/1571387622-35132-1-git-send-email-xingyu.chen@amlogic.com
+[2]:https://lore.kernel.org/linux-amlogic/1571983984-11771-1-git-send-email-xingyu.chen@amlogic.com
+[3]:https://lore.kernel.org/linux-amlogic/1574685218-31164-1-git-send-email-xingyu.chen@amlogic.com
+[4]:https://lore.kernel.org/linux-amlogic/1576153187-28378-1-git-send-email-xingyu.chen@amlogic.com
+[5]:https://patchwork.kernel.org/patch/11288017
+
+Xingyu Chen (5):
+  firmware: meson_sm: add new SMC ID support for accessing secure
+    watchdog
+  firmware: meson_sm: populate platform device based on the child node
+  dt-bindings: watchdog: add new binding for meson secure watchdog
+  watchdog: add meson secure watchdog driver
+  arm64: dts: a1: add secure watchdog controller
+
+ .../bindings/watchdog/amlogic,meson-sec-wdt.yaml   |  40 +++++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |   6 +
+ drivers/firmware/meson/meson_sm.c                  |   3 +
+ drivers/watchdog/Kconfig                           |  16 ++
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/meson_sec_wdt.c                   | 185 +++++++++++++++++++++
+ include/linux/firmware/meson/meson_sm.h            |   1 +
+ 7 files changed, 252 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson-sec-wdt.yaml
+ create mode 100644 drivers/watchdog/meson_sec_wdt.c
+
+-- 
+2.7.4
+
