@@ -2,51 +2,51 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEFD13C909
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2020 17:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE8913C90D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2020 17:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbgAOQSf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 15 Jan 2020 11:18:35 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:45898 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726132AbgAOQSe (ORCPT
+        id S1726132AbgAOQSr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 15 Jan 2020 11:18:47 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33670 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726248AbgAOQSr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 15 Jan 2020 11:18:34 -0500
-Received: by mail-pl1-f194.google.com with SMTP id b22so7020845pls.12;
-        Wed, 15 Jan 2020 08:18:34 -0800 (PST)
+        Wed, 15 Jan 2020 11:18:47 -0500
+Received: by mail-pg1-f195.google.com with SMTP id 6so8441061pgk.0;
+        Wed, 15 Jan 2020 08:18:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Tst3+NoZOjPeKK6GzMhIojQUUKbJbvQl9ky5BOz8lmQ=;
-        b=PxKWiwhBEkmErHxzMfn5QDi+04Ren62xykXbNVEqezNIyRmF44/6vjMdlrUm0hjuWt
-         QYGyNbNQ2+T8UlE9gP00GXK1MLdbJm+nZzBQG8O9mPkXWPDSWiE+BH6wPSMJnxOLjOTW
-         koPxecIFE7P0shjSVJFwAs/YK+RNGEhPgtf+zq2t7JtsZuTcvfFyPfNIotTJWFIGD48N
-         1/YB/fRjrQsPLxDBfPWi9KDl1dkWDvvn0fTNuxrhl5TdSB6edKoCOVCpHcqgsZB82J0J
-         6GSSP7d2pldNkavRcKb1rX1Dt5axjCXzY8RlUUqHk4L+iUQ/HMVyNnd186K37TBLJX4i
-         orpw==
+        bh=kFZXMHBry+L47F+qM+tBs/CLu4eTyxiD1l9sMPZiabg=;
+        b=Iv3d2Ny2zXWbM48eUhUk9dHw9fNN1BcoCyW/u65PYOuMwrAkjU2P+BGI0tngaLBpto
+         huTFtiCH4La8U2zXlXyDNMmaMziDo8X5HU/+ZtQ+y0C4wBgHF8jH1BXCrh/SyLmbfl2x
+         rDtq4s4iAV+n4MruclgcbNUN7r7MjpeKKn0UIuWS51B48+1kk5nKkDoQ5jjBsYVbrisk
+         hfc38kUyWjMaKdZD16BWMWjTVfqqDcQlPn4rS70dfPtDrBmDyKILDVqz6ZYgDIl/H266
+         LXWbxCF5O49sLI22T5xVfuEOc0UefKb+aTLfH7MiSL+szmBlEsbvLsehJuuvtFxL2dyP
+         ee5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Tst3+NoZOjPeKK6GzMhIojQUUKbJbvQl9ky5BOz8lmQ=;
-        b=LYAa/vtjugWUswAhRapmybOF0t8pkQo7TUNgoHlkBewWeEgJyDrsMeqfOsC5IivliF
-         jUz+SAQsNf358dj9aWiSzXKljdcxdgVmS4dPAufLyQpunY5srvZISNX/ZhXQLUTxBxci
-         XJIAdmshf6KScioqfaRhmwGLX/lQ973wh4yAL9331zpK8DURRtEfrjiwVxDclTkT0ahh
-         mzVQhBErpkUD6SafTgbXy9xdtrre3JGLPpNipLpXKEVQnQ2o9nxwuURJPfU7dnVWHOZ0
-         gYqhoSduGVlBrsAfHZi+D1ZGnWCc2dE48a40rs532yj3+hgagFUS8aysfB/lgKWrrv3I
-         /h6Q==
-X-Gm-Message-State: APjAAAWRQFaRFWI4woHNS0gw9N4ow9PU+6e3IUmRquTyMbUZgCJLPHeG
-        9SRT8Q0DNiCnJaRLdhFk7fQ=
-X-Google-Smtp-Source: APXvYqxScsQiAjrT+Kq2OwO6meR2sTHwdcGBQVYINaiuAq+tmhQ0p6Tj/psLT4U/+RBhgHMyefQd/g==
-X-Received: by 2002:a17:902:5ac9:: with SMTP id g9mr26000048plm.69.1579105113906;
-        Wed, 15 Jan 2020 08:18:33 -0800 (PST)
+        bh=kFZXMHBry+L47F+qM+tBs/CLu4eTyxiD1l9sMPZiabg=;
+        b=SqvSxQLLZQqbdCeo64k7YBGnwjMUertqTFSINjSmhmvrdWbiOXD5pOa46TY4dsKg6Z
+         L1GlLVMrxyzAaAFpxLfoRz3JS4ZHylFRACXfbwyAHn8/XOIECTY1TJYwFeTyq1oZ5EJN
+         3qjANKxGCqOLWfXOgtZlMrXaQPGhXHdsVGR8xPslYA6QHwJRbAvi+SXZtfkGl2jxXKgP
+         ZzrLkwfcLyJXST+tADT9Lei+HXi3lJ8U53VPw7jVzAXaGRoZ4EcmoVZ9m1Brw/XIpmjG
+         Rf/uLxmc+OUf3xbkYyZGtPRNTseEBzU+fyjMuw4hBiFbcNpuXBabGNRqJ5dB5yd1X0gp
+         R5TA==
+X-Gm-Message-State: APjAAAUemlDOOkXLm2FQORXnmgHoYCCNnzy/1Y4n3nct0Q8buqhslGpv
+        Ol5gxwtyR8Ejhsh27Yb4/w4=
+X-Google-Smtp-Source: APXvYqyAzKfeOQN1KEqcuJJsYULzFNW7nRQf0FhEjcUHl8gG0GpWS07Xin657lcnmljGgLIQkCfndA==
+X-Received: by 2002:aa7:824d:: with SMTP id e13mr32114420pfn.247.1579105126655;
+        Wed, 15 Jan 2020 08:18:46 -0800 (PST)
 Received: from ziggy.stardust ([37.223.145.31])
-        by smtp.gmail.com with ESMTPSA id e6sm22962452pfh.32.2020.01.15.08.18.30
+        by smtp.gmail.com with ESMTPSA id t63sm22592758pfb.70.2020.01.15.08.18.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jan 2020 08:18:33 -0800 (PST)
-Subject: Re: [PATCH v12 3/4] watchdog: mtk_wdt: mt8183: Add reset controller
+        Wed, 15 Jan 2020 08:18:45 -0800 (PST)
+Subject: Re: [PATCH v12 4/4] watchdog: mtk_wdt: mt2712: Add reset controller
 To:     Yong Liang <yong.liang@mediatek.com>, wim@linux-watchdog.org,
         linux@roeck-us.net, p.zabel@pengutronix.de,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -56,7 +56,7 @@ To:     Yong Liang <yong.liang@mediatek.com>, wim@linux-watchdog.org,
         jiaxin.yu@mediatek.com
 Cc:     yingjoe.chen@mediatek.com, sboyd@kernel.org
 References: <20200115085828.27791-1-yong.liang@mediatek.com>
- <20200115085828.27791-4-yong.liang@mediatek.com>
+ <20200115085828.27791-5-yong.liang@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
 Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
  mQINBFP1zgUBEAC21D6hk7//0kOmsUrE3eZ55kjc9DmFPKIz6l4NggqwQjBNRHIMh04BbCMY
@@ -132,12 +132,12 @@ Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
  jzi+DzD9cvj2K6eD5j5kcKJJQactXqfJvF1Eb+OnxlB1BCLE8D1rNkPO5O742Mq3MgDmq19l
  +abzEL6QDAAxn9md8KwrA3RtucNh87cHlDXfUBKa7SRvBjTczDg+HEPNk2u3hrz1j3l2rliQ
  y1UfYx7Vk/TrdwUIJgKS8QAr8Lw9WuvY2hSqL9vEjx8VAkPWNWPwrQ==
-Message-ID: <372a4c8e-2ff1-3424-069c-7d359e1f16f1@gmail.com>
-Date:   Wed, 15 Jan 2020 17:18:26 +0100
+Message-ID: <987a7ccf-3d1b-9d4b-d766-63925268c21e@gmail.com>
+Date:   Wed, 15 Jan 2020 17:18:41 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <20200115085828.27791-4-yong.liang@mediatek.com>
+In-Reply-To: <20200115085828.27791-5-yong.liang@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -151,7 +151,7 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 On 15/01/2020 09:58, Yong Liang wrote:
 > From: "yong.liang" <yong.liang@mediatek.com>
 > 
-> Add reset controller API in watchdog driver.
+> Add reset controller for 2712.
 > Besides watchdog, MTK toprgu module alsa provide sub-system (eg, audio,
 > camera, codec and connectivity) software reset functionality.
 > 
@@ -163,164 +163,38 @@ On 15/01/2020 09:58, Yong Liang wrote:
 Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
 
 > ---
->  drivers/watchdog/mtk_wdt.c | 99 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 98 insertions(+), 1 deletion(-)
+>  drivers/watchdog/mtk_wdt.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 > diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index 9c3d0033260d..e88aacb0404d 100644
+> index e88aacb0404d..d6a6393f609d 100644
 > --- a/drivers/watchdog/mtk_wdt.c
 > +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -9,6 +9,8 @@
+> @@ -9,6 +9,7 @@
 >   * Based on sunxi_wdt.c
 >   */
 >  
-> +#include <dt-bindings/reset-controller/mt8183-resets.h>
-> +#include <linux/delay.h>
+> +#include <dt-bindings/reset-controller/mt2712-resets.h>
+>  #include <dt-bindings/reset-controller/mt8183-resets.h>
+>  #include <linux/delay.h>
 >  #include <linux/err.h>
->  #include <linux/init.h>
->  #include <linux/io.h>
-> @@ -16,10 +18,11 @@
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
->  #include <linux/types.h>
->  #include <linux/watchdog.h>
-> -#include <linux/delay.h>
->  
->  #define WDT_MAX_TIMEOUT		31
->  #define WDT_MIN_TIMEOUT		1
-> @@ -44,6 +47,9 @@
->  #define WDT_SWRST		0x14
->  #define WDT_SWRST_KEY		0x1209
->  
-> +#define WDT_SWSYSRST		0x18U
-> +#define WDT_SWSYS_RST_KEY	0x88000000
-> +
->  #define DRV_NAME		"mtk-wdt"
->  #define DRV_VERSION		"1.0"
->  
-> @@ -53,8 +59,90 @@ static unsigned int timeout;
->  struct mtk_wdt_dev {
->  	struct watchdog_device wdt_dev;
->  	void __iomem *wdt_base;
-> +	spinlock_t lock; /* protects WDT_SWSYSRST reg */
-> +	struct reset_controller_dev rcdev;
-> +};
-> +
-> +struct mtk_wdt_data {
-> +	int toprgu_sw_rst_num;
+> @@ -67,6 +68,10 @@ struct mtk_wdt_data {
+>  	int toprgu_sw_rst_num;
 >  };
 >  
-> +static const struct mtk_wdt_data mt8183_data = {
-> +	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
+> +static const struct mtk_wdt_data mt2712_data = {
+> +	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
 > +};
 > +
-> +static int toprgu_reset_update(struct reset_controller_dev *rcdev,
-> +			       unsigned long id, bool assert)
-> +{
-> +	unsigned int tmp;
-> +	unsigned long flags;
-> +	struct mtk_wdt_dev *data =
-> +		 container_of(rcdev, struct mtk_wdt_dev, rcdev);
-> +
-> +	spin_lock_irqsave(&data->lock, flags);
-> +
-> +	tmp = readl(data->wdt_base + WDT_SWSYSRST);
-> +	if (assert)
-> +		tmp |= BIT(id);
-> +	else
-> +		tmp &= ~BIT(id);
-> +	tmp |= WDT_SWSYS_RST_KEY;
-> +	writel(tmp, data->wdt_base + WDT_SWSYSRST);
-> +
-> +	spin_unlock_irqrestore(&data->lock, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +static int toprgu_reset_assert(struct reset_controller_dev *rcdev,
-> +			       unsigned long id)
-> +{
-> +	return toprgu_reset_update(rcdev, id, true);
-> +}
-> +
-> +static int toprgu_reset_deassert(struct reset_controller_dev *rcdev,
-> +				 unsigned long id)
-> +{
-> +	return toprgu_reset_update(rcdev, id, false);
-> +}
-> +
-> +static int toprgu_reset(struct reset_controller_dev *rcdev,
-> +			unsigned long id)
-> +{
-> +	int ret;
-> +
-> +	ret = toprgu_reset_assert(rcdev, id);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return toprgu_reset_deassert(rcdev, id);
-> +}
-> +
-> +static const struct reset_control_ops toprgu_reset_ops = {
-> +	.assert = toprgu_reset_assert,
-> +	.deassert = toprgu_reset_deassert,
-> +	.reset = toprgu_reset,
-> +};
-> +
-> +static int toprgu_register_reset_controller(struct platform_device *pdev,
-> +					    int rst_num)
-> +{
-> +	int ret;
-> +	struct mtk_wdt_dev *mtk_wdt = platform_get_drvdata(pdev);
-> +
-> +	spin_lock_init(&mtk_wdt->lock);
-> +
-> +	mtk_wdt->rcdev.owner = THIS_MODULE;
-> +	mtk_wdt->rcdev.nr_resets = rst_num;
-> +	mtk_wdt->rcdev.ops = &toprgu_reset_ops;
-> +	mtk_wdt->rcdev.of_node = pdev->dev.of_node;
-> +	ret = devm_reset_controller_register(&pdev->dev, &mtk_wdt->rcdev);
-> +	if (ret != 0)
-> +		dev_err(&pdev->dev,
-> +			"couldn't register wdt reset controller: %d\n", ret);
-> +	return ret;
-> +}
-> +
->  static int mtk_wdt_restart(struct watchdog_device *wdt_dev,
->  			   unsigned long action, void *data)
->  {
-> @@ -155,6 +243,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct mtk_wdt_dev *mtk_wdt;
-> +	const struct mtk_wdt_data *wdt_data;
->  	int err;
->  
->  	mtk_wdt = devm_kzalloc(dev, sizeof(*mtk_wdt), GFP_KERNEL);
-> @@ -190,6 +279,13 @@ static int mtk_wdt_probe(struct platform_device *pdev)
->  	dev_info(dev, "Watchdog enabled (timeout=%d sec, nowayout=%d)\n",
->  		 mtk_wdt->wdt_dev.timeout, nowayout);
->  
-> +	wdt_data = of_device_get_match_data(dev);
-> +	if (wdt_data) {
-> +		err = toprgu_register_reset_controller(pdev,
-> +						       wdt_data->toprgu_sw_rst_num);
-> +		if (err)
-> +			return err;
-> +	}
->  	return 0;
->  }
->  
-> @@ -219,6 +315,7 @@ static int mtk_wdt_resume(struct device *dev)
+>  static const struct mtk_wdt_data mt8183_data = {
+>  	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
+>  };
+> @@ -314,6 +319,7 @@ static int mtk_wdt_resume(struct device *dev)
+>  #endif
 >  
 >  static const struct of_device_id mtk_wdt_dt_ids[] = {
+> +	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
 >  	{ .compatible = "mediatek,mt6589-wdt" },
-> +	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+>  	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
 >  	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
 > 
