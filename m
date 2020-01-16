@@ -2,23 +2,23 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB1C13DBB8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2020 14:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AC113DBCD
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2020 14:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbgAPN1p (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jan 2020 08:27:45 -0500
-Received: from mail-dm6nam11on2051.outbound.protection.outlook.com ([40.107.223.51]:32096
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S1726899AbgAPN2F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Jan 2020 08:28:05 -0500
+Received: from mail-eopbgr700073.outbound.protection.outlook.com ([40.107.70.73]:40833
+        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729005AbgAPN1o (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jan 2020 08:27:44 -0500
+        id S1727008AbgAPN1m (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 16 Jan 2020 08:27:42 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Slzr86z6jmf8GeVCVPUkWCLMviP9k/VDOtDn9JqaCiOmRUo+f6J2KNxrsAAqirug2W6KEf+2kL94oIW0hkXTMjNDNwMSmEdqudHYRa2vqtt0YLH7iegqKkaxx6a9C8uuWEMWY50xaFZRYwbSvb8H5dR2ajOY/aK50L44YBH3YfThdNlfAQjuiXP3pdRSq+vq8EzWG9gm5XPes246R3S54eqO702fYrD6eYtsk7214dq4a0D5xzhKLzZKBI8EM6/q4688T4IpAAjp2L45yWny2WvxoyOvnNFZ2PA0dH8Cbc/qSJbRevCjAaunuZK7vTt3e7MIO+vBULImq+Bsloa+dw==
+ b=HIExJKqCtgrnrzXaxNfVOJO/SSDbaDtozE+m9/C4rO2O4RiHMqiDqFsqk2DafadF8C2NgcgUAZmwyJynbb2hGwcVmgSeIh6xvQvw/9OTaWloV44+BIxhF6e4gDvrHBQxgEXsVJ7t1LuTI0MKKTSaT596WHcBR4sWz6oJe/x2rZOzMRHBQkXnYUvzuxaOkKTenZouz2k+gSICX6+wIxwfPBito39KQpS0Mnm1tlrfKr4lFqzjyJix7dB+jE/dMIcgzdJv6D81eKQN6eEwFJe8vQz2vgLcN5RTb79ubiE2guCMeQZMzdA+wYCBJ3DYGOcw2n0U4VR2/rTg7aOc/D80Yg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CrM3hFaA94ZGR0dieQwlPgTi+iGbq0J/YGjqs8/a0Zc=;
- b=QAXo1ENKpCNMWJMYRpLwQUL9ofyUrxzWwNDM8qDNG6NCS/WIBzm6qGMOztDiI5zDolBsRs+vkX3FiD47zakC2NI+GPGI6iGAdC2RpbPmbvfOjA9xOmax6E5GqYYmDrm+XrzrLlIcIzfYA2bhqR5q72Qb+Ch64FrExB+4d16nro6knMNkpLy7gLSLnM7+3lsyzUkltVwmY3Ybrswms6z1IQ0zXwHtZp60stfuH+iX4KHKWKR3yuhc5zbXVWSzAFSR/iL+55NJQiVwuIiBD0Umez8POh8lZNBFYMd3ztUlgOvLwCCGFHVGsVsqbj/yCsBMnTc4MK2B3pygVteKhvNprw==
+ bh=zren9AmI5kwSedMoJZmzUtpomiwcxSJIc7hV5rHKd9U=;
+ b=HbRhNCsWgDR6CSya5KH98Kh+3qH1CQbH+NR4GK7LIIPsnBaBCG1nB5pT3J1+RsbRs3bCQ0P1LjoxOrHhYLpRz24ZpVk2Ibe6M/4Mg2aQg9p0b/jhJ3p7tgy698oqt+3CR325SsOhJcqcRYScsW0gHrIGgw6JAjRq/aGIJGlh6u06n1pT1LxbhRryQiEI46kh3cDVnIVB72SejXjoZI93blh68Qr7cCiXh4SsT3G+FeYKWuTuJ7m6285RcLqAsBeTd2I8+//uUG/abCZvj7JFpYruiKmhTeWa/stIUuBySicfbZHNt9jaaaCiM9hQSVn+0qCEdCRxdXEC/qKDPhCzRg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
  dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CrM3hFaA94ZGR0dieQwlPgTi+iGbq0J/YGjqs8/a0Zc=;
- b=ign8iS51m+hIIkMlEcTvlMSMo6fW+cpm7GQUG++0ATM2Jge0OeQLP2kgYE5cGHJj7S4E0RNwtq38izntDXaK7Fl845yJ0SJIb1l0HnQWNLUazt/wknr7d1kmrrACS5vVhTcGjnCMuvmbbV5TWOl40/Qxzi/HKpNl+2duGhP2NOQ=
-Received: from BYAPR02CA0058.namprd02.prod.outlook.com (2603:10b6:a03:54::35)
- by BN7PR02MB4179.namprd02.prod.outlook.com (2603:10b6:406:f5::17) with
+ bh=zren9AmI5kwSedMoJZmzUtpomiwcxSJIc7hV5rHKd9U=;
+ b=VUyQY6zPnGhTTRakkgFWrxVOIwaq9ZOSMhOny6uR+7R4u9qJfdp/Y2kTBpfJwwjT3dJDtCszfQlV8YkatNsXvhTOVROyKOYqE9dKYQRoAPRW1jJ8n8dYjiGrqu2ncjzZfIVWl5wiDpWcPMFaQHCoZ53yBmvPCkKMA+SD876RYiE=
+Received: from BYAPR02CA0026.namprd02.prod.outlook.com (2603:10b6:a02:ee::39)
+ by SN6PR02MB4893.namprd02.prod.outlook.com (2603:10b6:805:98::31) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.10; Thu, 16 Jan
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.9; Thu, 16 Jan
  2020 13:27:40 +0000
-Received: from SN1NAM02FT048.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::201) by BYAPR02CA0058.outlook.office365.com
- (2603:10b6:a03:54::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2602.15 via Frontend
- Transport; Thu, 16 Jan 2020 13:27:40 +0000
+Received: from SN1NAM02FT015.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::200) by BYAPR02CA0026.outlook.office365.com
+ (2603:10b6:a02:ee::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.8 via Frontend
+ Transport; Thu, 16 Jan 2020 13:27:39 +0000
 Authentication-Results: spf=pass (sender IP is 149.199.60.83)
  smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
@@ -46,33 +46,33 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
  149.199.60.83 as permitted sender) receiver=protection.outlook.com;
  client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
 Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- SN1NAM02FT048.mail.protection.outlook.com (10.152.72.202) with Microsoft SMTP
+ SN1NAM02FT015.mail.protection.outlook.com (10.152.72.109) with Microsoft SMTP
  Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2644.19
  via Frontend Transport; Thu, 16 Jan 2020 13:27:39 +0000
 Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
         by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
         (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1is5BT-0005wN-07; Thu, 16 Jan 2020 05:27:39 -0800
+        id 1is5BS-0005wL-Pm; Thu, 16 Jan 2020 05:27:38 -0800
 Received: from [127.0.0.1] (helo=localhost)
         by xsj-pvapsmtp01 with smtp (Exim 4.63)
         (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1is5BN-0001FY-SJ; Thu, 16 Jan 2020 05:27:33 -0800
-Received: from xsj-pvapsmtp01 (xsj-smtp.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 00GDRKRR016392;
-        Thu, 16 Jan 2020 05:27:21 -0800
+        id 1is5BN-0001FY-M4; Thu, 16 Jan 2020 05:27:33 -0800
+Received: from xsj-pvapsmtp01 (xsj-smtp1.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 00GDRNQ1016410;
+        Thu, 16 Jan 2020 05:27:23 -0800
 Received: from [10.140.6.6] (helo=xhdappanad40.xilinx.com)
         by xsj-pvapsmtp01 with esmtp (Exim 4.63)
         (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1is5BA-00018J-Bu; Thu, 16 Jan 2020 05:27:20 -0800
+        id 1is5BD-00018J-4w; Thu, 16 Jan 2020 05:27:23 -0800
 From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
 To:     linux@roeck-us.net, michal.simek@xilinx.com,
         shubhrajyoti.datta@xilinx.com, sgoud@xilinx.com
 Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         git@xilinx.com
-Subject: [PATCH 7/9] watchdog: of_xilinx_wdt: Add Versal support
-Date:   Thu, 16 Jan 2020 18:56:55 +0530
-Message-Id: <1579181217-31127-8-git-send-email-srinivas.neeli@xilinx.com>
+Subject: [PATCH 8/9] watchdog: of_xilinx_wdt: Wire setting up timeout via module parameter/DT
+Date:   Thu, 16 Jan 2020 18:56:56 +0530
+Message-Id: <1579181217-31127-9-git-send-email-srinivas.neeli@xilinx.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1579181217-31127-1-git-send-email-srinivas.neeli@xilinx.com>
 References: <1579181217-31127-1-git-send-email-srinivas.neeli@xilinx.com>
@@ -81,27 +81,27 @@ X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
 X-TM-AS-User-Approved-Sender: Yes;Yes
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(396003)(39860400002)(346002)(189003)(199004)(81156014)(44832011)(6666004)(8676002)(356004)(5660300002)(4326008)(336012)(478600001)(70206006)(2906002)(107886003)(9786002)(36756003)(6636002)(316002)(70586007)(186003)(426003)(26005)(8936002)(81166006)(2616005)(7696005);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR02MB4179;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(396003)(376002)(346002)(189003)(199004)(26005)(5660300002)(186003)(426003)(336012)(2616005)(8936002)(70586007)(7696005)(4326008)(70206006)(9786002)(107886003)(81156014)(6636002)(8676002)(44832011)(356004)(6666004)(36756003)(316002)(2906002)(81166006)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR02MB4893;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9b2b73de-f8f3-4092-edc3-08d79a87dbd0
-X-MS-TrafficTypeDiagnostic: BN7PR02MB4179:
-X-Microsoft-Antispam-PRVS: <BN7PR02MB417938FB81F6CE39ED95152BAF360@BN7PR02MB4179.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 8cbbf6a6-44b7-44b9-898c-08d79a87dbae
+X-MS-TrafficTypeDiagnostic: SN6PR02MB4893:
+X-Microsoft-Antispam-PRVS: <SN6PR02MB48934C84CC98D2751C63BB99AF360@SN6PR02MB4893.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Oob-TLC-OOBClassifiers: OLM:2201;
 X-Forefront-PRVS: 02843AA9E0
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XLjpS9YlsIgO3o2Kw4R1CQZXUADZ/zTy03vdAgu2vkQqOgLcopQSg4mQuPMVGjYuyzNSkVwhVtft1eJTFbX32zGSqzy1evz2/Lvvh2xFovx+tC39MTgVxgKsT41W8p8LgYt+CjDXkICBF/tfrhkqXGVirJs3//F//uVyPDZkLp6RwKJOLD4zVuhCPGicoJFdlOMRCYUg3GMVxli3jqtEOfzBriwLiRhsSSm2HJqZVg3+U7dtP0mcuDV3vKZKrQEvosaAJhMz4kFdgT/0uy9sWYFdvVmUdhpgyXV891OEU5UT1CT+ulgKxPcCBuKDG5CkKLWwDUf8vccS/wjWYIrzoaI+xET83Z2Kk0CE7UuK9mnNq+3rNbD4Gqr8PpCt+TuG3yvlC+SaKYoJo7UWO82fAg6LwH1mQTQlPWK3yX80I3t/9EkONMgCdMS4oJhHLJc3
+X-Microsoft-Antispam-Message-Info: 0OCqkjbZa5mx8lc+1JGsfnvO31KQ4X7B/6wjSWZWd/+XAkhsRoLY6BCaJlI8zIp0USIyl2Vg/9Atfmebbt7XIXAErsDIRYJeuhvRKUKOaT1vul6BErp4NfFkXi0yy0rdhFoUSS1i3khxWeubMS75lJmUBydPtSMM+dRYra12INqvZZ0r1mBo7dv6S4L5Bq2afYBUsienquKRbkZZ2HEjPE+Eh0XCkZUCiX2D2m4NhnTAJ7F7BNp/LkndX4m1o8d+Gwy4egfY45uOkiZjADKg3k+Pk+MZ9dsNqlnnek+sgt4PuhDaF7rS4nU9ig609p3JLryQ+ulMTpLRbe/X/AmmKpQ8bUZfeaD3gjN7/xJsbvSRkoqMFIl0rvbtvtUNT9PinclSqJX36EgbhdeGl5cG118K0a2CU7s7y8HWe6/QTI+L7Ev4/QGRnKPeYElCieXH
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2020 13:27:39.3898
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2020 13:27:39.1994
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b2b73de-f8f3-4092-edc3-08d79a87dbd0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8cbbf6a6-44b7-44b9-898c-08d79a87dbae
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB4179
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4893
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
@@ -109,226 +109,57 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Srinivas Goud <srinivas.goud@xilinx.com>
 
-Versal watchdog driver uses generic watchdog mode.
-Generic watchdog contains closed and open window of equal timeout.
-Generic watchdog will generate reset signal if it is not explicitly
-refreshed in second window.
+Add support for setting up timeout via kernel module parameter or read
+timeout-sec via device tree.
 
 Signed-off-by: Srinivas Goud <srinivas.goud@xilinx.com>
 Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
 ---
- drivers/watchdog/of_xilinx_wdt.c | 150 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 149 insertions(+), 1 deletion(-)
+ drivers/watchdog/of_xilinx_wdt.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
-index 3b93b60f1a00..d2c389d9eaa7 100644
+index d2c389d9eaa7..375289e3bed2 100644
 --- a/drivers/watchdog/of_xilinx_wdt.c
 +++ b/drivers/watchdog/of_xilinx_wdt.c
-@@ -2,7 +2,7 @@
- /*
-  * Watchdog Device Driver for Xilinx axi/xps_timebase_wdt
-  *
-- * (C) Copyright 2013 - 2014 Xilinx, Inc.
-+ * (C) Copyright 2013 - 2020 Xilinx, Inc.
-  * (C) Copyright 2011 (Alejandro Cabrera <aldaya@gmail.com>)
-  */
- 
-@@ -18,10 +18,19 @@
+@@ -18,6 +18,7 @@
  #include <linux/of_device.h>
  #include <linux/of_address.h>
  
-+#define XWT_WWDT_MIN_TIMEOUT		1
-+#define XWT_WWDT_MAX_TIMEOUT		80
-+
- /* Register offsets for the Wdt device */
- #define XWT_TWCSR0_OFFSET   0x0 /* Control/Status Register0 */
- #define XWT_TWCSR1_OFFSET   0x4 /* Control/Status Register1 */
- #define XWT_TBR_OFFSET      0x8 /* Timebase Register Offset */
-+#define XWT_WWREF_OFFSET	0x1000 /* Refresh Register */
-+#define XWT_WWCSR_OFFSET	0x2000 /* Control/Status Register */
-+#define XWT_WWOFF_OFFSET	0x2008 /* Offset Register */
-+#define XWT_WWCMP0_OFFSET	0x2010 /* Compare Value Register0 */
-+#define XWT_WWCMP1_OFFSET	0x2014 /* Compare Value Register1 */
-+#define XWT_WWWRST_OFFSET	0x2FD0 /* Warm Reset Register */
++#define XWT_WWDT_DEFAULT_TIMEOUT	10
+ #define XWT_WWDT_MIN_TIMEOUT		1
+ #define XWT_WWDT_MAX_TIMEOUT		80
  
- /* Control/Status Register Masks  */
- #define XWT_CSR0_WRS_MASK	BIT(3) /* Reset status */
-@@ -31,6 +40,15 @@
- /* Control/Status Register 0/1 bits  */
- #define XWT_CSRX_EWDT2_MASK	BIT(0) /* Enable bit 2 */
+@@ -55,6 +56,13 @@
  
-+/* Refresh Register Masks */
-+#define XWT_WWREF_GWRR_MASK	BIT(0) /* Refresh and start new period */
+ #define WATCHDOG_NAME     "Xilinx Watchdog"
+ 
++static int wdt_timeout;
 +
-+/* Generic Control/Status Register Masks  */
-+#define XWT_WWCSR_GWEN_MASK	BIT(0) /* Enable Bit */
++module_param(wdt_timeout, int, 0644);
++MODULE_PARM_DESC(wdt_timeout,
++		 "Watchdog time in seconds. (default="
++		 __MODULE_STRING(XWT_WWDT_DEFAULT_TIMEOUT) ")");
 +
-+/* Warm Reset Register Masks */
-+#define XWT_WWRST_GWWRR_MASK	BIT(0) /* Warm Reset Register */
-+
- /* SelfTest constants */
- #define XWT_MAX_SELFTEST_LOOP_COUNT 0x00010000
- #define XWT_TIMER_FAILED            0xFFFFFFFF
-@@ -41,9 +59,11 @@
+ /**
   * enum xwdt_ip_type - WDT IP type.
   *
-  * @XWDT_WDT: Soft wdt ip.
-+ * @XWDT_WWDT: Window wdt ip.
-  */
- enum xwdt_ip_type {
- 	XWDT_WDT = 0,
-+	XWDT_WWDT,
- };
+@@ -416,6 +424,15 @@ static int xwdt_probe(struct platform_device *pdev)
+ 			xilinx_wdt_wdd->timeout =
+ 				2 * ((1 << xdev->wdt_interval) /
+ 					pfreq);
++	} else {
++		xilinx_wdt_wdd->timeout = XWT_WWDT_DEFAULT_TIMEOUT;
++		xilinx_wdt_wdd->min_timeout = XWT_WWDT_MIN_TIMEOUT;
++		xilinx_wdt_wdd->max_timeout = XWT_WWDT_MAX_TIMEOUT;
++
++		rc = watchdog_init_timeout(xilinx_wdt_wdd,
++					   wdt_timeout, &pdev->dev);
++		if (rc)
++			dev_warn(&pdev->dev, "unable to set timeout value\n");
+ 	}
  
- struct xwdt_devtype_data {
-@@ -145,6 +165,126 @@ static const struct watchdog_ops xilinx_wdt_ops = {
- 	.ping = xilinx_wdt_keepalive,
- };
- 
-+static int xilinx_wwdt_start(struct watchdog_device *wdd)
-+{
-+	int ret;
-+	u32 control_status_reg;
-+	u64 count;
-+	struct xwdt_device *xdev = watchdog_get_drvdata(wdd);
-+	struct watchdog_device *xilinx_wdt_wdd = &xdev->xilinx_wdt_wdd;
-+
-+	unsigned long clock_f = clk_get_rate(xdev->clk);
-+
-+	/* Calculate timeout count */
-+	count = wdd->timeout * clock_f;
-+	ret  = clk_enable(xdev->clk);
-+	if (ret) {
-+		dev_err(wdd->parent, "Failed to enable clock\n");
-+		return ret;
-+	}
-+
-+	spin_lock(&xdev->spinlock);
-+
-+	/*
-+	 * Timeout count is half as there are two windows
-+	 * first window overflow is ignored (interrupt),
-+	 * reset is only generated at second window overflow
-+	 */
-+	count = count >> 1;
-+
-+	/* Disable the generic watchdog timer */
-+	control_status_reg = ioread32(xdev->base + XWT_WWCSR_OFFSET);
-+	control_status_reg &= ~(XWT_WWCSR_GWEN_MASK);
-+	iowrite32(control_status_reg, xdev->base + XWT_WWCSR_OFFSET);
-+
-+	/* Set compare and offset registers for generic watchdog timeout */
-+	iowrite32((u32)count, xdev->base + XWT_WWCMP0_OFFSET);
-+	iowrite32((u32)0, xdev->base + XWT_WWCMP1_OFFSET);
-+	iowrite32((u32)count, xdev->base + XWT_WWOFF_OFFSET);
-+
-+	/* Enable the generic watchdog timer */
-+	control_status_reg = ioread32(xdev->base + XWT_WWCSR_OFFSET);
-+	control_status_reg |= (XWT_WWCSR_GWEN_MASK);
-+	iowrite32(control_status_reg, xdev->base + XWT_WWCSR_OFFSET);
-+
-+	spin_unlock(&xdev->spinlock);
-+
-+	dev_dbg(xilinx_wdt_wdd->parent, "Watchdog Started!\n");
-+
-+	return 0;
-+}
-+
-+static int xilinx_wwdt_stop(struct watchdog_device *wdd)
-+{
-+	u32 control_status_reg;
-+	struct xwdt_device *xdev = watchdog_get_drvdata(wdd);
-+	struct watchdog_device *xilinx_wdt_wdd = &xdev->xilinx_wdt_wdd;
-+
-+	spin_lock(&xdev->spinlock);
-+
-+	/* Disable the generic watchdog timer */
-+	control_status_reg = ioread32(xdev->base + XWT_WWCSR_OFFSET);
-+	control_status_reg &= ~(XWT_WWCSR_GWEN_MASK);
-+	iowrite32(control_status_reg, xdev->base + XWT_WWCSR_OFFSET);
-+
-+	spin_unlock(&xdev->spinlock);
-+
-+	clk_disable(xdev->clk);
-+
-+	dev_dbg(xilinx_wdt_wdd->parent, "Watchdog Stopped!\n");
-+
-+	return 0;
-+}
-+
-+static int xilinx_wwdt_keepalive(struct watchdog_device *wdd)
-+{
-+	struct xwdt_device *xdev = watchdog_get_drvdata(wdd);
-+
-+	spin_lock(&xdev->spinlock);
-+
-+	iowrite32(XWT_WWREF_GWRR_MASK, xdev->base + XWT_WWREF_OFFSET);
-+
-+	spin_unlock(&xdev->spinlock);
-+
-+	return 0;
-+}
-+
-+static int xilinx_wwdt_set_timeout(struct watchdog_device *wdd,
-+				   unsigned int new_time)
-+{
-+	struct xwdt_device *xdev = watchdog_get_drvdata(wdd);
-+	struct watchdog_device *xilinx_wdt_wdd = &xdev->xilinx_wdt_wdd;
-+
-+	if (new_time < XWT_WWDT_MIN_TIMEOUT ||
-+	    new_time > XWT_WWDT_MAX_TIMEOUT) {
-+		dev_warn(xilinx_wdt_wdd->parent,
-+			 "timeout value must be %d<=x<=%d, using %d\n",
-+				XWT_WWDT_MIN_TIMEOUT,
-+				XWT_WWDT_MAX_TIMEOUT, new_time);
-+		return -EINVAL;
-+	}
-+
-+	wdd->timeout = new_time;
-+
-+	return xilinx_wwdt_start(wdd);
-+}
-+
-+static const struct watchdog_info xilinx_wwdt_ident = {
-+	.options =  WDIOF_MAGICCLOSE |
-+		WDIOF_KEEPALIVEPING |
-+		WDIOF_SETTIMEOUT,
-+	.firmware_version =	1,
-+	.identity = "xlnx_wwdt watchdog",
-+};
-+
-+static const struct watchdog_ops xilinx_wwdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = xilinx_wwdt_start,
-+	.stop = xilinx_wwdt_stop,
-+	.ping = xilinx_wwdt_keepalive,
-+	.set_timeout = xilinx_wwdt_set_timeout,
-+};
-+
- static u32 xwdt_selftest(struct xwdt_device *xdev)
- {
- 	int i;
-@@ -181,11 +321,19 @@ static const struct xwdt_devtype_data xwdt_wdt_data = {
- 	.xwdt_ops = &xilinx_wdt_ops,
- };
- 
-+static const struct xwdt_devtype_data xwdt_wwdt_data = {
-+	.wdttype = XWDT_WWDT,
-+	.xwdt_info = &xilinx_wwdt_ident,
-+	.xwdt_ops = &xilinx_wwdt_ops,
-+};
-+
- static const struct of_device_id xwdt_of_match[] = {
- 	{ .compatible = "xlnx,xps-timebase-wdt-1.00.a",
- 		.data = &xwdt_wdt_data },
- 	{ .compatible = "xlnx,xps-timebase-wdt-1.01.a",
- 		.data = &xwdt_wdt_data },
-+	{ .compatible = "xlnx,versal-wwdt-1.0",
-+		.data = &xwdt_wwdt_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, xwdt_of_match);
+ 	spin_lock_init(&xdev->spinlock);
 -- 
 2.7.4
 
