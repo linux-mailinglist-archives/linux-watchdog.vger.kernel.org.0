@@ -2,69 +2,87 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D01C13D4EA
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2020 08:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C627913D945
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2020 12:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730568AbgAPHXa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jan 2020 02:23:30 -0500
-Received: from stcim.de ([78.46.90.227]:47336 "EHLO stcim.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730400AbgAPHX3 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jan 2020 02:23:29 -0500
-Received: from [2001:4dd4:d47c:0:a288:b4ff:fee5:f5cc] (helo=porty)
-        by stcim with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <contact@stefanchrist.eu>)
-        id 1irzUv-0004a2-CJ; Thu, 16 Jan 2020 08:23:21 +0100
-Date:   Thu, 16 Jan 2020 08:23:20 +0100
-From:   Stefan Lengfeld <contact@stefanchrist.eu>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     support.opensource@diasemi.com, linux@roeck-us.net,
-        Adam.Thomson.Opensource@diasemi.com,
-        linux-watchdog@vger.kernel.org, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] watchdog: da9062: make restart handler atomic safe
-Message-ID: <20200116072320.f7ia3e76hx7yknqb@porty>
-References: <20200115162307.7336-1-m.felsch@pengutronix.de>
+        id S1726045AbgAPLpl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Jan 2020 06:45:41 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:43948 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbgAPLpk (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 16 Jan 2020 06:45:40 -0500
+Received: by mail-io1-f68.google.com with SMTP id n21so21369991ioo.10
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jan 2020 03:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=NvAZUv5ZGB55ThY+bLBf8tvOip6guzklAz3av6cc2wU=;
+        b=V3d1ypbtepopmN9GGSjqcRf2coqa65KbbUtUuLxkHtN6hmTrGOQmN7Ejcyc5x2G0iy
+         OSQulfs8qUJsufb+ZBwyETfaG3vQvlfqW99UxgMiDbopq3dek0g3IwAv35obxKmjsRbG
+         lfcKoCmcBCjxntXKijOfGax3EgZqLcRYXpQO1Tymaut6LDONKYb/t7JONSIriV3kSOnv
+         +YOqCY/YFLVCyKjO/Iwrm6anszwhQ99iCMmi/cuinu2dN8wBEsvVno7Sx+gg996tXpQV
+         5y/fGI/ugduyhf3Y07CJhNA0PfhvC7wmCLGnKeuCqMRyto0LPrYzJT51EZjd/RzOvDw+
+         Mpvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=NvAZUv5ZGB55ThY+bLBf8tvOip6guzklAz3av6cc2wU=;
+        b=LL946zmSGa1JTqbk5Xf9D2AHzdpcdUCrjLvU2Ah2gmdJTFv5ogtdEMshnXevHeFFuH
+         tyFrbSOjEiDmZzLR+ppWFZXOlHPnyQLHf/VzcseYPDNwunAnLf1iIrEmuMoDU7xh4w+T
+         h0lr8PU5dDdAk09ObAi7d9qMMXsDPoiKicQWo8ObrtITE/S7L4J/xUSZh1Zhiy8nXmhJ
+         /pInODutfFGlPZ//1nwPiE+xkCnSepWyaCRQrSKaMfeZynpraXseLwROOnpBe0uPe10x
+         kiiwPIzEOn3wgT9CKZL3ztzKn3WTH4ioCmVP47v6jXS3Y5xHYBCDETT7XdLVTR4MersM
+         /0HQ==
+X-Gm-Message-State: APjAAAUNak03/4cNztcyL217KCyMUfsDew/BgmLdPdRA4NYw5xU+slVd
+        xAqYrT23A07x9GtEBxc+5oLxqB8AWsTb5aB/JvI=
+X-Google-Smtp-Source: APXvYqzzn3wPJaLITRn+w8Sui/mK9bORHo90nTe5g3G4cKje7k4QUZo7cOZUg0n4ODUGosjAcRacpYIcs6jSguEc8qA=
+X-Received: by 2002:a6b:730c:: with SMTP id e12mr26087886ioh.4.1579175140160;
+ Thu, 16 Jan 2020 03:45:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200115162307.7336-1-m.felsch@pengutronix.de>
-X-PGP-Key: https://stefanchrist.eu/personal/Stefan_Lengfeld_0xE44A23B289092311.asc
-User-Agent: NeoMutt/20180716
+Received: by 2002:a5e:da0c:0:0:0:0:0 with HTTP; Thu, 16 Jan 2020 03:45:39
+ -0800 (PST)
+Reply-To: mr.mahmouda@yahoo.com
+From:   "Mr.Mahmoud Abbas" <anmadosman2000@gmail.com>
+Date:   Thu, 16 Jan 2020 11:45:39 +0000
+Message-ID: <CAL0KREMu8hn5NjOUGFr+-CRpUNANw1uvORvSghJdtFW3AZuBHg@mail.gmail.com>
+Subject: I am only contacting you as a foreigner because this money can not be
+ approved to a local person here.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Marco,
+--=20
+Dear Friend,
 
-On Wed, Jan 15, 2020 at 05:23:07PM +0100, Marco Felsch wrote:
-> The restart handler is executed during the shutdown phase which is
-> atomic/irq-less. The i2c framework supports atomic transfers since
-> commit 63b96983a5dd ("i2c: core: introduce callbacks for atomic
-> transfers") to address this use case. Using regmap within an atomic
-> context is allowed only if the regmap type is MMIO and the cache type
-> 'flat' or no cache is used. Using the i2c_smbus_write_byte_data()
-> function can be done without additional tests because:
->  1) the DA9062 is an i2c-only device and
->  2) the i2c framework emulates the smbus protocol if the host adapter
->     does not support smbus_xfer by using the master_xfer.
-> 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+I am Mr.Mahmoud Abbas, the accountant personal confident to Dr. S=C3=B2ng W=
+=C3=A1ng
+who died together with his wife Dr. Mrs. Lee W=C3=A1ng in a plane crash on =
+the
+1st Oct. 2003 on their way to attend wedding in Boston. Dr. S=C3=B2ng W=C3=
+=A1ng, is
+an Chinese, a physician and industrialist, he died without having any
+beneficiary to his assets including his account here in Burkina Faso which
+he opened in one of the Bank in the year 2000 as his personal savings for
+the purpose of expansion and development of his company before his untimely
+death in 2003.
 
-Reviewed-by: Stefan Lengfeld <contact@stefanchrist.eu>
+The amount involved is (USD 10,500,000.00) Ten Million Five Hundred
+Thousand USD, no other person knows about this account, I am contacting you
+for us to transfer this funds to your account as the beneficiary,) but I
+don't know any foreigner, I am only contacting you as a foreigner because
+this money can not be approved to a local person here.
 
+Reply urgently so that I will inform you the next step to take urgently.
 
-On Wed, Marco Flesch wrote [1]:
-> I will send a v2 to cover Guenter's suggestion. Can I keep your reviewed
-> by tag?
+Sincerely,
 
-Yes, you can keep it. See above. I also checked by reading the code that
-'i2c_smbus_write_byte_data' behaves the same as 'i2c_transfer'. Just
-with some indirections.
+Mr.Mahmoud Abbas.
 
-Kind regards,
-    Stefan
-
-[1]: https://www.spinics.net/lists/linux-watchdog/msg17194.html
+Reply to this e-mail addess:mr.mahmouda@yahoo.com
