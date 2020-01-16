@@ -2,90 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7885F13DC29
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2020 14:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B1013DE39
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2020 16:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726898AbgAPNfd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jan 2020 08:35:33 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:53622 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726706AbgAPNfc (ORCPT
+        id S1726343AbgAPPEQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Jan 2020 10:04:16 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:35002 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbgAPPEP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jan 2020 08:35:32 -0500
-Received: by mail-wm1-f66.google.com with SMTP id m24so3786628wmc.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jan 2020 05:35:31 -0800 (PST)
+        Thu, 16 Jan 2020 10:04:15 -0500
+Received: by mail-pj1-f65.google.com with SMTP id s7so1718372pjc.0;
+        Thu, 16 Jan 2020 07:04:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=ex5iQAOgOE6sJdpP0UDJP/wplcXOALsRuy3uUtlLaZk=;
-        b=qvE1YVwT35KAeibCSPNMT/6IWonjdnLnAq1kCZSEo2b6CAJEN9devCVU4H5nrBg2rO
-         v4d7PuV0IkaKNwVaPYX6jabBbx/jR9M39wGOm+HZHZNqIgGZN76fsJvUlDZufuLHPvOJ
-         HXr/9CHED1bnmgkT9sgFnuN1mKu7ErycVEgs83sk7SIZ2GoCxuZTB1LUP7Luz76nf7oe
-         +cfe3FbC79HZVuUG7Yj315LHG7QVX3BJoTY/1cLlNnHpW2KyYbDRQMYehIQ4UW/9qX+M
-         37YsSC5z93n/8D+dDEAGa0xl9vvuSt9ruOiCzeE2BTKLh6bs2lxvVksLKYBVwmUurDHz
-         CowQ==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9aYYysUJc5O1GVrj/WJZfQ1VR8Kjol/FSsTxs8wt3Po=;
+        b=su1RMBdpMgNolta0yRnwdr2hFM60rZ6K0CJP2l3ExFb8UekzOBhvGCYzWj9Zjive1a
+         nfLfP7a5Idwr2vzP+5JMFW+5DuL2nIM5DcTIOpISxyXxKcxp9NHYUWr5gN+8SqzncaRX
+         kXgHeczMUSmyhiZ68VneOltC1XFA0yrE8q6+yV0t1YK/otddH6p31jIWrZpT5QrXHAzQ
+         4/DdQuxvEG5nw0nM2l7ngUvWroOh/lDta7eU+wWGbMDMRmXGdANBPFHWA48KMgStK/5b
+         yzf9OugbebywJa+hFCX83ukPpdd58F5MuoVwmYR7IE5pO52aI0tQmHJcrOc8yBC+cluM
+         GqeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=ex5iQAOgOE6sJdpP0UDJP/wplcXOALsRuy3uUtlLaZk=;
-        b=kpDJtXdwkzaKLYlQ+tyXtmML3gSGNGpRyeg/X0S/9KkdvbfSEnUiyW91Z148igwAQg
-         5WvY/zOD1DNbA4PTsqoab+35ZeQQttfHlLQK9jNca+SgUjvVMTWhAi4ob3DEnmbuiB6J
-         AtoXWtZMa4zgCqptXOhP2b3I2qxppGCCXI75DBoZqlTfrHY9H4SGF0ynwI2QlIacMZSs
-         Up3eQY/Sq3qdqG+rHP7oZUQ7Bz3Smg2/EpAPvgEekaanmTyMt6y7PJrzww1sYIdLRHsm
-         cDPBfSzoPSAQ/n3DhV3gVFqrQtXxrwyLWa06iZWsfKPcVFIqcLiZFPm/6jU7S2Hkcebq
-         UAiQ==
-X-Gm-Message-State: APjAAAWdRwcFWfCPRy4VSmZvTT5q9ckKeRT6i9OvQMqshJhM9kNQU7jW
-        Xfr9wrXb4cRRiR/sihUfGlYk5Q==
-X-Google-Smtp-Source: APXvYqzGsGr1esnWAtuowtgwjETYSUMAmmdt6JTJvoDok/p5abyr1h1lybNOYRUwc3ulCQlDtT9X5g==
-X-Received: by 2002:a7b:c957:: with SMTP id i23mr6217830wml.49.1579181730878;
-        Thu, 16 Jan 2020 05:35:30 -0800 (PST)
-Received: from dell ([2.27.35.221])
-        by smtp.gmail.com with ESMTPSA id u18sm28884904wrt.26.2020.01.16.05.35.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 05:35:30 -0800 (PST)
-Date:   Thu, 16 Jan 2020 13:35:46 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     support.opensource@diasemi.com, linux@roeck-us.net,
-        robh+dt@kernel.org, stwiss.opensource@diasemi.com,
-        Adam.Thomson.Opensource@diasemi.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/3] mfd: da9062: fix watchdog compatible string
-Message-ID: <20200116133546.GR325@dell>
-References: <20200108095704.23233-1-m.felsch@pengutronix.de>
- <20200108095704.23233-2-m.felsch@pengutronix.de>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9aYYysUJc5O1GVrj/WJZfQ1VR8Kjol/FSsTxs8wt3Po=;
+        b=SQDLKfnp7NTxnInRYCCfF8cY1tSeMoNGSDArdfdQ4tqsHaqnubqzqcwId5mz3dW+zH
+         qQY5zGyDgDwtgqzIYMKN5juMmGEMLa5Mn+L/HJ+uT0nS7xAqTfv8y32IclG/5JO64Nqw
+         sg6GHqhGukdcZBbfMTKtI/X19mqiVnPnMrJYKLaMQAk19CF0MXY4o5x5qS3qOi+TIwhx
+         eiDwdZ9pR9+8Yi4pIdUNEjxv9zXXPHeC67pnP225G9vCkHTuLZTYBZ7kkRUN9pF2qvv1
+         V1sxa+Rav1yv7+BPpC7hoOqTPVhbfLpMge1Ls/YCoTIG3fJv28yInltxmjNuXAz53wmD
+         gRFw==
+X-Gm-Message-State: APjAAAWdQqIeeS87jJE2dMImwl+DSXdV+ns2tBPVL7HCxlUVLfqqHtre
+        hlNWqw8UHTjK5E9AJRxGIb4=
+X-Google-Smtp-Source: APXvYqweT9duHvIwuiopBktIZ1DmoA3YPIEGyOxcRBNR8OotDJuab5tPjaSkV4tho7CtYEOjVqM+ew==
+X-Received: by 2002:a17:902:bb83:: with SMTP id m3mr32964602pls.258.1579187055039;
+        Thu, 16 Jan 2020 07:04:15 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g22sm24354714pgk.85.2020.01.16.07.04.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jan 2020 07:04:14 -0800 (PST)
+Subject: Re: [PATCH 2/9] watchdog: of_xilinx_wdt: Used BIT macro
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com,
+        sgoud@xilinx.com
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com
+References: <1579181217-31127-1-git-send-email-srinivas.neeli@xilinx.com>
+ <1579181217-31127-3-git-send-email-srinivas.neeli@xilinx.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <3f904c30-32e2-914a-9545-9cd554b45bfe@roeck-us.net>
+Date:   Thu, 16 Jan 2020 07:04:12 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200108095704.23233-2-m.felsch@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1579181217-31127-3-git-send-email-srinivas.neeli@xilinx.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 08 Jan 2020, Marco Felsch wrote:
-
-> The watchdog driver compatible is "dlg,da9062-watchdog" and not
-> "dlg,da9062-wdt". Therefore the mfd-core can't populate the of_node and
-> fwnode. As result the watchdog driver can't parse the devicetree.
+On 1/16/20 5:26 AM, Srinivas Neeli wrote:
+> From: Srinivas Goud <srinivas.goud@xilinx.com>
 > 
-> Fixes: 9b40b030c4ad ("mfd: da9062: Supply core driver")
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> Used BIT macro instead of mask value.
+> 
+> Signed-off-by: Srinivas Goud <srinivas.goud@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 > ---
->  drivers/mfd/da9062-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/watchdog/of_xilinx_wdt.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+> index 00549164b3d7..0d7df2370db7 100644
+> --- a/drivers/watchdog/of_xilinx_wdt.c
+> +++ b/drivers/watchdog/of_xilinx_wdt.c
+> @@ -24,12 +24,12 @@
+>   #define XWT_TBR_OFFSET      0x8 /* Timebase Register Offset */
+>   
+>   /* Control/Status Register Masks  */
+> -#define XWT_CSR0_WRS_MASK   0x00000008 /* Reset status */
+> -#define XWT_CSR0_WDS_MASK   0x00000004 /* Timer state  */
+> -#define XWT_CSR0_EWDT1_MASK 0x00000002 /* Enable bit 1 */
+> +#define XWT_CSR0_WRS_MASK	BIT(3) /* Reset status */
+> +#define XWT_CSR0_WDS_MASK	BIT(2) /* Timer state  */
+> +#define XWT_CSR0_EWDT1_MASK	BIT(1) /* Enable bit 1 */
+>   
+>   /* Control/Status Register 0/1 bits  */
+> -#define XWT_CSRX_EWDT2_MASK 0x00000001 /* Enable bit 2 */
+> +#define XWT_CSRX_EWDT2_MASK	BIT(0) /* Enable bit 2 */
+>   
+>   /* SelfTest constants */
+>   #define XWT_MAX_SELFTEST_LOOP_COUNT 0x00010000
+> 
+Using bitops also requires including linux/bits.h explicitly.
 
-Applied, thanks.
+Guenter
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+
