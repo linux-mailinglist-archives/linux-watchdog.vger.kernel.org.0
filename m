@@ -2,104 +2,105 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A056D13F8F4
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2020 20:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FBE141B94
+	for <lists+linux-watchdog@lfdr.de>; Sun, 19 Jan 2020 04:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392760AbgAPTVw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jan 2020 14:21:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37538 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731066AbgAPQxh (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:53:37 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 72337214AF;
-        Thu, 16 Jan 2020 16:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193617;
-        bh=zv0uIQnbRuBqCuzGClHLpmzrWhj9qCdptkqR74SgYfU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PwSR9O2zM3e5dZKi4kPruSALAsifbTuvCBq/fjHzflyT4l/gL+6bIlbvM5A1vuSsH
-         nS1HdQAx7UxRlvkvtOCSjJ2MoQ9X7lSh5MeHzXz4lW4JfH9XoMUSq3hCBN2I6xEnU3
-         4geXSS6R9vV68Cs+5u0BM2NXzMWG2DsiPRKKgWC0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuiqing Li <shuiqing.li@unisoc.com>,
-        Dongwei Wang <dongwei.wang@unisoc.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 153/205] watchdog: sprd: Fix the incorrect pointer getting from driver data
-Date:   Thu, 16 Jan 2020 11:42:08 -0500
-Message-Id: <20200116164300.6705-153-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
-References: <20200116164300.6705-1-sashal@kernel.org>
+        id S1725980AbgASDWX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 18 Jan 2020 22:22:23 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:22750 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725497AbgASDWX (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 18 Jan 2020 22:22:23 -0500
+X-UUID: 69125e9aa54e446c9366f7f201a9d17a-20200119
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=N4m9R+HOEDebYFK3h+Sc6tDJ4qpxShm9ZEefTev3gRc=;
+        b=GDKHRbGqMIa1Fbjl67s5M9EaXA3KXyexPY5V6kV+EhVh/DmDufg6TvQ9JOTuZkUff0nCUoDogkrgVZ+P+8l5jpwmbkib/S3vKmK0dAFDf7ZOz/7PZJC0XPPZvG9F08PD46+C1EG0qyBpoIX9GgZbDJ8eYRgjfaPqDtQyYEWqqSw=;
+X-UUID: 69125e9aa54e446c9366f7f201a9d17a-20200119
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <yong.liang@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1301561568; Sun, 19 Jan 2020 11:22:02 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31DR.mediatek.inc
+ (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Sun, 19 Jan
+ 2020 11:20:20 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sun, 19 Jan 2020 11:22:07 +0800
+Message-ID: <1579404112.27500.0.camel@mhfsdcap03>
+Subject: Re: [PATCH v12 4/4] watchdog: mtk_wdt: mt2712: Add reset controller
+From:   Yong Liang <yong.liang@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Chang-An Chen =?UTF-8?Q?=28=E9=99=B3=E6=98=B6=E5=AE=89=29?= 
+        <Chang-An.Chen@mediatek.com>,
+        Freddy Hsin =?UTF-8?Q?=28=E8=BE=9B=E6=81=92=E8=B1=90=29?= 
+        <Freddy.Hsin@mediatek.com>,
+        Jiaxin Yu =?UTF-8?Q?=28=E4=BF=9E=E5=AE=B6=E9=91=AB=29?= 
+        <Jiaxin.Yu@mediatek.com>, "sboyd@kernel.org" <sboyd@kernel.org>,
+        Yingjoe Chen =?UTF-8?Q?=28=E9=99=B3=E8=8B=B1=E6=B4=B2=29?= 
+        <Yingjoe.Chen@mediatek.com>
+Date:   Sun, 19 Jan 2020 11:21:52 +0800
+In-Reply-To: <987a7ccf-3d1b-9d4b-d766-63925268c21e@gmail.com>
+References: <20200115085828.27791-1-yong.liang@mediatek.com>
+         <20200115085828.27791-5-yong.liang@mediatek.com>
+         <987a7ccf-3d1b-9d4b-d766-63925268c21e@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-TM-SNTS-SMTP: 0375DB0187E35C7A60A71975C79E48344130A27F5AE250EF19AE1BE1763111EC2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Shuiqing Li <shuiqing.li@unisoc.com>
-
-[ Upstream commit 39e68d9e7ab276880980ee5386301fb218202192 ]
-
-The device driver data saved the 'struct sprd_wdt' object, it is
-incorrect to get 'struct watchdog_device' object from the driver
-data, thus fix it.
-
-Fixes: 477603467009 ("watchdog: Add Spreadtrum watchdog driver")
-Reported-by: Dongwei Wang <dongwei.wang@unisoc.com>
-Signed-off-by: Shuiqing Li <shuiqing.li@unisoc.com>
-Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/76d4687189ec940baa90cb8d679a8d4c8f02ee80.1573210405.git.baolin.wang@linaro.org
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/watchdog/sprd_wdt.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
-index 0bb17b046140..65cb55f3916f 100644
---- a/drivers/watchdog/sprd_wdt.c
-+++ b/drivers/watchdog/sprd_wdt.c
-@@ -327,10 +327,9 @@ static int sprd_wdt_probe(struct platform_device *pdev)
- 
- static int __maybe_unused sprd_wdt_pm_suspend(struct device *dev)
- {
--	struct watchdog_device *wdd = dev_get_drvdata(dev);
- 	struct sprd_wdt *wdt = dev_get_drvdata(dev);
- 
--	if (watchdog_active(wdd))
-+	if (watchdog_active(&wdt->wdd))
- 		sprd_wdt_stop(&wdt->wdd);
- 	sprd_wdt_disable(wdt);
- 
-@@ -339,7 +338,6 @@ static int __maybe_unused sprd_wdt_pm_suspend(struct device *dev)
- 
- static int __maybe_unused sprd_wdt_pm_resume(struct device *dev)
- {
--	struct watchdog_device *wdd = dev_get_drvdata(dev);
- 	struct sprd_wdt *wdt = dev_get_drvdata(dev);
- 	int ret;
- 
-@@ -347,7 +345,7 @@ static int __maybe_unused sprd_wdt_pm_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	if (watchdog_active(wdd)) {
-+	if (watchdog_active(&wdt->wdd)) {
- 		ret = sprd_wdt_start(&wdt->wdd);
- 		if (ret) {
- 			sprd_wdt_disable(wdt);
--- 
-2.20.1
+T24gVGh1LCAyMDIwLTAxLTE2IGF0IDAwOjE4ICswODAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3Rl
+Og0KPiANCj4gT24gMTUvMDEvMjAyMCAwOTo1OCwgWW9uZyBMaWFuZyB3cm90ZToNCj4gPiBGcm9t
+OiAieW9uZy5saWFuZyIgPHlvbmcubGlhbmdAbWVkaWF0ZWsuY29tPg0KPiA+IA0KPiA+IEFkZCBy
+ZXNldCBjb250cm9sbGVyIGZvciAyNzEyLg0KPiA+IEJlc2lkZXMgd2F0Y2hkb2csIE1USyB0b3By
+Z3UgbW9kdWxlIGFsc2EgcHJvdmlkZSBzdWItc3lzdGVtIChlZywgYXVkaW8sDQo+ID4gY2FtZXJh
+LCBjb2RlYyBhbmQgY29ubmVjdGl2aXR5KSBzb2Z0d2FyZSByZXNldCBmdW5jdGlvbmFsaXR5Lg0K
+PiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IHlvbmcubGlhbmcgPHlvbmcubGlhbmdAbWVkaWF0ZWsu
+Y29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEppYXhpbiBZdSA8amlheGluLnl1QG1lZGlhdGVrLmNv
+bT4NCj4gPiBSZXZpZXdlZC1ieTogWWluZ2pvZSBDaGVuIDx5aW5nam9lLmNoZW5AbWVkaWF0ZWsu
+Y29tPg0KPiA+IFJldmlld2VkLWJ5OiBQaGlsaXBwIFphYmVsIDxwLnphYmVsQHBlbmd1dHJvbml4
+LmRlPg0KPiANCj4gQWNrZWQtYnk6IE1hdHRoaWFzIEJydWdnZXIgPG1hdHRoaWFzLmJnZ0BnbWFp
+bC5jb20+DQoNCkhpIE1hdHRpYXM6DQogIE1heSBJIG5lZWQgc2VuZCBhIG5ldyBwYXRjaCB3aGl0
+aCB0aGlzIHRhZz8NCj4gDQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5j
+IHwgNiArKysrKysNCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQ0KPiA+IA0K
+PiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3dhdGNoZG9nL210a193ZHQuYyBiL2RyaXZlcnMvd2F0
+Y2hkb2cvbXRrX3dkdC5jDQo+ID4gaW5kZXggZTg4YWFjYjA0MDRkLi5kNmE2MzkzZjYwOWQgMTAw
+NjQ0DQo+ID4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy9tdGtfd2R0LmMNCj4gPiArKysgYi9kcml2
+ZXJzL3dhdGNoZG9nL210a193ZHQuYw0KPiA+IEBAIC05LDYgKzksNyBAQA0KPiA+ICAgKiBCYXNl
+ZCBvbiBzdW54aV93ZHQuYw0KPiA+ICAgKi8NCj4gPiAgDQo+ID4gKyNpbmNsdWRlIDxkdC1iaW5k
+aW5ncy9yZXNldC1jb250cm9sbGVyL210MjcxMi1yZXNldHMuaD4NCj4gPiAgI2luY2x1ZGUgPGR0
+LWJpbmRpbmdzL3Jlc2V0LWNvbnRyb2xsZXIvbXQ4MTgzLXJlc2V0cy5oPg0KPiA+ICAjaW5jbHVk
+ZSA8bGludXgvZGVsYXkuaD4NCj4gPiAgI2luY2x1ZGUgPGxpbnV4L2Vyci5oPg0KPiA+IEBAIC02
+Nyw2ICs2OCwxMCBAQCBzdHJ1Y3QgbXRrX3dkdF9kYXRhIHsNCj4gPiAgCWludCB0b3ByZ3Vfc3df
+cnN0X251bTsNCj4gPiAgfTsNCj4gPiAgDQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgbXRrX3dk
+dF9kYXRhIG10MjcxMl9kYXRhID0gew0KPiA+ICsJLnRvcHJndV9zd19yc3RfbnVtID0gTVQyNzEy
+X1RPUFJHVV9TV19SU1RfTlVNLA0KPiA+ICt9Ow0KPiA+ICsNCj4gPiAgc3RhdGljIGNvbnN0IHN0
+cnVjdCBtdGtfd2R0X2RhdGEgbXQ4MTgzX2RhdGEgPSB7DQo+ID4gIAkudG9wcmd1X3N3X3JzdF9u
+dW0gPSBNVDgxODNfVE9QUkdVX1NXX1JTVF9OVU0sDQo+ID4gIH07DQo+ID4gQEAgLTMxNCw2ICsz
+MTksNyBAQCBzdGF0aWMgaW50IG10a193ZHRfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCj4g
+PiAgI2VuZGlmDQo+ID4gIA0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBt
+dGtfd2R0X2R0X2lkc1tdID0gew0KPiA+ICsJeyAuY29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdDI3
+MTItd2R0IiwgLmRhdGEgPSAmbXQyNzEyX2RhdGEgfSwNCj4gPiAgCXsgLmNvbXBhdGlibGUgPSAi
+bWVkaWF0ZWssbXQ2NTg5LXdkdCIgfSwNCj4gPiAgCXsgLmNvbXBhdGlibGUgPSAibWVkaWF0ZWss
+bXQ4MTgzLXdkdCIsIC5kYXRhID0gJm10ODE4M19kYXRhIH0sDQo+ID4gIAl7IC8qIHNlbnRpbmVs
+ICovIH0NCj4gPiANCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fDQo+IExpbnV4LW1lZGlhdGVrIG1haWxpbmcgbGlzdA0KPiBMaW51eC1tZWRpYXRl
+a0BsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxt
+YW4vbGlzdGluZm8vbGludXgtbWVkaWF0ZWsNCg0K
 
