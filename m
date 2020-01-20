@@ -2,63 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA09E141F5E
-	for <lists+linux-watchdog@lfdr.de>; Sun, 19 Jan 2020 19:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439221426E8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Jan 2020 10:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727195AbgASSoV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 19 Jan 2020 13:44:21 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43107 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728596AbgASSoU (ORCPT
+        id S1726619AbgATJRh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 Jan 2020 04:17:37 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:41285 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbgATJRh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 19 Jan 2020 13:44:20 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x6so14632113pfo.10
-        for <linux-watchdog@vger.kernel.org>; Sun, 19 Jan 2020 10:44:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
-         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
-         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
-         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
-         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
-         Gp1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=SnQpNbcBGEvlCWOlYPS7PHLaSCXU4XHOddDwQux6Ao0AtKXF0f2+USB/vts0Gxygzz
-         Z+fQz0qNfJobhuRiY8X0CSTaRSMJVpJDSgktMuA9OE0j4YsN2Nyxo2gr8m6Cw4BSdDpg
-         hk98xwlS/4PZxVpX/PXrb3Mw3QQaCmVdfWJXhwkpKXXTTrAVlFSnZnCMwC3bP+TrFyX2
-         gu3sQQWS5HwzZjpFnydp8jxQoRwHNQCFH9Gwxj/BOZvSuukRthXP0yMupMPrGzdVNGPa
-         0rTHN/oTQ8gZ/EOICmQlO7Qor1ixXiJY2cDrq4Y0cwVIgqwEwBgqIArpHQXkLu/SRqmM
-         ptQw==
-X-Gm-Message-State: APjAAAWHPKiXCD48/+wJq3MGIf0/fWPzFxz9NvGCXCHC0HlbKtNIxPti
-        JVGF0WqzdFmop8DyOrJHe8mNPBLG9KcLnCdUr6IOXGrLpPuezg==
-X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
-X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
- Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+        Mon, 20 Jan 2020 04:17:37 -0500
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1itTBc-0005op-C8; Mon, 20 Jan 2020 10:17:32 +0100
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1itTBb-0000TQ-SF; Mon, 20 Jan 2020 10:17:31 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     support.opensource@diasemi.com, linux@roeck-us.net,
+        stwiss.opensource@diasemi.com, Adam.Thomson.Opensource@diasemi.com
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] watchdog: da9062: do not ping the hw during stop()
+Date:   Mon, 20 Jan 2020 10:17:29 +0100
+Message-Id: <20200120091729.16256-1-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
- -0800 (PST)
-Reply-To: favordens@email.com
-From:   Favor Desmond <contecindy5@gmail.com>
-Date:   Sun, 19 Jan 2020 18:44:18 +0000
-Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello Dear
-Greetings to you,I am Favor Desmond from Ivory coast currently living
-in  Togo Republic,I would like to know you more, so that i can tell
-you little amount myself and my photo, email address is
-favordens@email.com
-Thanks
-Favor
+The da9062 hw has a minimum ping cool down phase of at least 200ms. The
+driver takes that into account by setting the min_hw_heartbeat_ms to
+300ms and the core guarantees that the hw limit is observed for the
+ping() calls. But the core can't guarantees the required minimum ping
+cool down phase if a stop() command is send immediately after the ping()
+command. So it is not allowed to ping the watchdog within the stop()
+command as the driver do. Remove the ping can be done without doubts
+because the watchdog gets disabled anyway and a (re)start reset the
+watchdog counter too.
+
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+---
+ drivers/watchdog/da9062_wdt.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
+index 77b6b5336067..0ad15d55071c 100644
+--- a/drivers/watchdog/da9062_wdt.c
++++ b/drivers/watchdog/da9062_wdt.c
+@@ -97,13 +97,6 @@ static int da9062_wdt_stop(struct watchdog_device *wdd)
+ 	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
+ 	int ret;
+ 
+-	ret = da9062_reset_watchdog_timer(wdt);
+-	if (ret) {
+-		dev_err(wdt->hw->dev, "Failed to ping the watchdog (err = %d)\n",
+-			ret);
+-		return ret;
+-	}
+-
+ 	ret = regmap_update_bits(wdt->hw->regmap,
+ 				 DA9062AA_CONTROL_D,
+ 				 DA9062AA_TWDSCALE_MASK,
+-- 
+2.20.1
+
