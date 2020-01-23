@@ -2,165 +2,119 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B33D1472D9
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jan 2020 21:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D649B1472DC
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jan 2020 21:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728988AbgAWUvf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 Jan 2020 15:51:35 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33265 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727453AbgAWUve (ORCPT
+        id S1728767AbgAWUzB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 Jan 2020 15:55:01 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40870 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726191AbgAWUzA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 Jan 2020 15:51:34 -0500
-Received: by mail-pf1-f193.google.com with SMTP id z16so2113763pfk.0;
-        Thu, 23 Jan 2020 12:51:34 -0800 (PST)
+        Thu, 23 Jan 2020 15:55:00 -0500
+Received: by mail-pg1-f194.google.com with SMTP id k25so1975001pgt.7;
+        Thu, 23 Jan 2020 12:55:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=K77eSmdWz1+NmXI8IIP5zQeFXy1IFpWD093Uxox8NOU=;
-        b=BBLW0BaOM4on5DdbdiLtHMKuO3T+8QsfvdYTK7GTXpdRNA55oWvBeHqXf5ZnQ6TIeT
-         OUVrXQfTNhVjfCFWsAS49kxX+2BD2+pgWiAgwgSGD8V4qsj7yoVywYf8Cms5y4D1Xu1b
-         z1G4xae69m4Te+xqkX9KkY1ssW8BajBuwaQlagtgmUALCeX67R6GonJdfn46HpBUTA9U
-         8qXquGmhhgWfS5NupBE+D8KURUVYO3O6LRwu0o5BE9W30ecndLvVH3SsA+k9GgKtLHNy
-         P0up6IVmeOqgtKWmSUy0mhHcbkTYzAY94tjX6/S1nSJapmbxJ0GAWFc0OmBJNhwL0Uf6
-         t8/A==
+        bh=VkVxNXoZb5ITMLmFjeLX1O6fjDK5AnFJMJ0BZSxNB5g=;
+        b=m+lTZedK9gWF4xwuaTyxbjIg3bAIdwWaB6Ad4V6MfH/Vio65HRNqXkwK0kgc01h0kI
+         5kTOxiQ9vPmo/ygxF2dAX9D/uL+c4r7xKDUHv68qzm1sfcDeh8kyhOg3Ukk4LmkYxD1J
+         jhvIj68UrMBL5PdrQpg1Ee9cJPRODjOuka+qYPSICNp8lJaI6wlOhtJmKECSi3W7Zwxl
+         8ekZzqlJAQnsRemRBYW1i2PAS3flE+CrcoRJ2ZLEAylFOSCFtIhLVSAewJepv1s3wn8Y
+         uv8/6fmuYtlTTfHu3MSpoJQWNJarjMQShWNHz2zAieUl75osDU5NX4dV/BCT0O6Iu5Ii
+         Prsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=K77eSmdWz1+NmXI8IIP5zQeFXy1IFpWD093Uxox8NOU=;
-        b=Q7xWOQD5IvD1pWdFkCs0Eh3C3wOmK2zkUOmkCnWrMyYsjtVXEGvmJ5cBPWAr18LKeb
-         ix+kJ8MwjfakpN0gDOsofy4cqCZULf7t3wzLpReIie6/e7bwkKWdY2P7Wf/NjOHhrZ3K
-         rSshASKm2FKRLXFSj/UxIqa1RNgSsvbl9v7hNRb2jDfghZfTGnWQIRMpEhSgyEDVUwOP
-         aL/o2AgpydvSlqBDs8CA6masys113Vw1Cpw0bIds0/0BKGruBSIcXwHWz5iZeQSfzFcU
-         1DOa5PBJRQpCwUL79U+8VJdNnHogf38mSa7W/Q59n0lFnE4d3P2uN0VpW5vUnBaEZ0Vi
-         QmtA==
-X-Gm-Message-State: APjAAAXz3m3fR16ThOJwreczyZrzf59uqmEYx+aFyZ2mecsIoUl+sdXH
-        M3rpQMjasXsaukNt4qvUFhw=
-X-Google-Smtp-Source: APXvYqwZr0tJhNHkcK7303hXr6iMNRlpKCJAuvyzomKYlS0IIbomaWFESDZPFsmpV8QzGpznGP2gdQ==
-X-Received: by 2002:a63:d54c:: with SMTP id v12mr234596pgi.227.1579812694248;
-        Thu, 23 Jan 2020 12:51:34 -0800 (PST)
+        bh=VkVxNXoZb5ITMLmFjeLX1O6fjDK5AnFJMJ0BZSxNB5g=;
+        b=AVUF0vXy9InGmK4sr4LcAfNTTa+YD1cKGuflc33KSgWoUlAVoA49Z0o8m+5b5ZLbtL
+         O1FMCGU6yUeI6v6imxKWSjilkeqyvoOnF1J4kBCnhfE3DecmEGI786hY+vq4bALtuU3D
+         jnO16cLCCkSx4geOzaMlu+sNh0U7QTknJ0bZqRU6sZHSbRvU72doKbMXN6fMWQHcS4eS
+         /gJQoszJTjWJUatICNnCELmwZlpWVvXCXhC0uXJ5Otk+FuWB4ytdi0WQHsVbrbqV9XL/
+         VR7tN9foZT7ct3SbSi1hoTjiSdou8mahQ9qAqkftxsrxYQSYUffjEi23Lvjv7E29KnTG
+         hoJA==
+X-Gm-Message-State: APjAAAWvROhUbffPyAVoQcMQSb2OR0eadWXNNrXdjlJc2i4pzlL2Xi7s
+        0ChEpY0i2jrv1GLBEcVUBg4=
+X-Google-Smtp-Source: APXvYqzHIJnoi81iMDc7G9FPl8tVJE3Z0QS08Q2YEjqX/z/j/UPzE2UfRZuf39Ccdq50EzPulbIa6Q==
+X-Received: by 2002:aa7:8ecf:: with SMTP id b15mr144675pfr.86.1579812900166;
+        Thu, 23 Jan 2020 12:55:00 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z130sm4106020pgz.6.2020.01.23.12.51.33
+        by smtp.gmail.com with ESMTPSA id e38sm2857390pgm.82.2020.01.23.12.54.59
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Jan 2020 12:51:33 -0800 (PST)
-Date:   Thu, 23 Jan 2020 12:51:32 -0800
+        Thu, 23 Jan 2020 12:54:59 -0800 (PST)
+Date:   Thu, 23 Jan 2020 12:54:58 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     support.opensource@diasemi.com, robh+dt@kernel.org,
-        lee.jones@linaro.org, stwiss.opensource@diasemi.com,
-        Adam.Thomson.Opensource@diasemi.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 3/3] watchdog: da9062: add power management ops
-Message-ID: <20200123205132.GA13377@roeck-us.net>
-References: <20200108095704.23233-1-m.felsch@pengutronix.de>
- <20200108095704.23233-4-m.felsch@pengutronix.de>
+To:     Yong Liang <yong.liang@mediatek.com>
+Cc:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        matthias.bgg@gmail.com, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        chang-an.chen@mediatek.com, freddy.hsin@mediatek.com,
+        jiaxin.yu@mediatek.com, yingjoe.chen@mediatek.com, sboyd@kernel.org
+Subject: Re: [PATCH v12 4/4] watchdog: mtk_wdt: mt2712: Add reset controller
+Message-ID: <20200123205458.GA13785@roeck-us.net>
+References: <20200115085828.27791-1-yong.liang@mediatek.com>
+ <20200115085828.27791-5-yong.liang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200108095704.23233-4-m.felsch@pengutronix.de>
+In-Reply-To: <20200115085828.27791-5-yong.liang@mediatek.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jan 08, 2020 at 10:57:04AM +0100, Marco Felsch wrote:
-> Disable the watchdog during suspend if it is enabled and re-enable it on
-> resume. So we can sleep without the interruptions.
+On Wed, Jan 15, 2020 at 04:58:28PM +0800, Yong Liang wrote:
+> From: "yong.liang" <yong.liang@mediatek.com>
 > 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+> Add reset controller for 2712.
+> Besides watchdog, MTK toprgu module alsa provide sub-system (eg, audio,
+> camera, codec and connectivity) software reset functionality.
+> 
+> Signed-off-by: yong.liang <yong.liang@mediatek.com>
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> v2:
-> - add dlg,use-sw-pm check to differentiate between automatic and manual
->   disabling/enabling.
-> ---
->  drivers/watchdog/da9062_wdt.c | 37 +++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
+>  drivers/watchdog/mtk_wdt.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-> index e149e66a6ea9..c9b9d6394525 100644
-> --- a/drivers/watchdog/da9062_wdt.c
-> +++ b/drivers/watchdog/da9062_wdt.c
-> @@ -15,6 +15,7 @@
->  #include <linux/jiffies.h>
->  #include <linux/mfd/da9062/registers.h>
->  #include <linux/mfd/da9062/core.h>
-> +#include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/of.h>
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index e88aacb0404d..d6a6393f609d 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -9,6 +9,7 @@
+>   * Based on sunxi_wdt.c
+>   */
 >  
-> @@ -30,6 +31,7 @@ static const unsigned int wdt_timeout[] = { 0, 2, 4, 8, 16, 32, 65, 131 };
->  struct da9062_watchdog {
->  	struct da9062 *hw;
->  	struct watchdog_device wdtdev;
-> +	bool use_sw_pm;
+> +#include <dt-bindings/reset-controller/mt2712-resets.h>
+>  #include <dt-bindings/reset-controller/mt8183-resets.h>
+>  #include <linux/delay.h>
+>  #include <linux/err.h>
+> @@ -67,6 +68,10 @@ struct mtk_wdt_data {
+>  	int toprgu_sw_rst_num;
 >  };
 >  
->  static unsigned int da9062_wdt_timeout_to_sel(unsigned int secs)
-> @@ -198,6 +200,8 @@ static int da9062_wdt_probe(struct platform_device *pdev)
->  	if (!wdt)
->  		return -ENOMEM;
->  
-> +	wdt->use_sw_pm = device_property_present(dev, "dlg,use-sw-pm");
+> +static const struct mtk_wdt_data mt2712_data = {
+> +	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
+> +};
 > +
->  	wdt->hw = chip;
->  
->  	wdt->wdtdev.info = &da9062_watchdog_info;
-> @@ -212,6 +216,7 @@ static int da9062_wdt_probe(struct platform_device *pdev)
->  	watchdog_set_restart_priority(&wdt->wdtdev, 128);
->  
->  	watchdog_set_drvdata(&wdt->wdtdev, wdt);
-> +	dev_set_drvdata(dev, &wdt->wdtdev);
->  
->  	ret = devm_watchdog_register_device(dev, &wdt->wdtdev);
->  	if (ret < 0)
-> @@ -220,10 +225,42 @@ static int da9062_wdt_probe(struct platform_device *pdev)
->  	return da9062_wdt_ping(&wdt->wdtdev);
->  }
->  
-> +static int __maybe_unused da9062_wdt_suspend(struct device *dev)
-> +{
-> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
-> +	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
-> +
-> +	if (!wdt->use_sw_pm)
-> +		return 0;
-> +
-> +	if (watchdog_active(wdd))
-> +		return da9062_wdt_stop(wdd);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused da9062_wdt_resume(struct device *dev)
-> +{
-> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
-> +	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
-> +
-> +	if (!wdt->use_sw_pm)
-> +		return 0;
-> +
-> +	if (watchdog_active(wdd))
-> +		return da9062_wdt_start(wdd);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(da9062_wdt_pm_ops,
-> +			 da9062_wdt_suspend, da9062_wdt_resume);
-> +
->  static struct platform_driver da9062_wdt_driver = {
->  	.probe = da9062_wdt_probe,
->  	.driver = {
->  		.name = "da9062-watchdog",
-> +		.pm = &da9062_wdt_pm_ops,
->  		.of_match_table = da9062_compatible_id_table,
->  	},
+>  static const struct mtk_wdt_data mt8183_data = {
+>  	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
 >  };
+> @@ -314,6 +319,7 @@ static int mtk_wdt_resume(struct device *dev)
+>  #endif
+>  
+>  static const struct of_device_id mtk_wdt_dt_ids[] = {
+> +	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+>  	{ .compatible = "mediatek,mt6589-wdt" },
+>  	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+>  	{ /* sentinel */ }
