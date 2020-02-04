@@ -2,49 +2,49 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 596AD151D14
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Feb 2020 16:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CABA151D15
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Feb 2020 16:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727336AbgBDPVf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Feb 2020 10:21:35 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37634 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727304AbgBDPVf (ORCPT
+        id S1727358AbgBDPVm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Feb 2020 10:21:42 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:36993 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727304AbgBDPVm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Feb 2020 10:21:35 -0500
-Received: by mail-wm1-f67.google.com with SMTP id f129so4156733wmf.2;
-        Tue, 04 Feb 2020 07:21:33 -0800 (PST)
+        Tue, 4 Feb 2020 10:21:42 -0500
+Received: by mail-wr1-f65.google.com with SMTP id w15so23598494wru.4;
+        Tue, 04 Feb 2020 07:21:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hw4xZ1kYqp8gKYk3+om1U5PHQxcSQbw6w+wShSO5zY0=;
-        b=Tb/kG89v4p60cznaGWi4jGb0no5xjGih/XfTLAI6BV/XsqyP9CYXMCcKMCYu8jdPwp
-         fR37Eae23M8tczpXWmyORXL8LrJS2wOQzOfF+OUFLUmtYXo5736HH+hSQ9tMTFm9VsEE
-         rGY+mOtHUr8E8NGFRYTV2IunnlnXWnTM8zPWkCLs6v+PDW7AgXLMShECvwdYYi06eAwv
-         mo5wenDUAA/36f/0k9eKOzVgispGoLYw7dIJEvgu+zgcNM4O8VmMQFlWNKxrCQ4ejDm3
-         7GiO694T439wMIydZko/acP0dc0fY+rE2KDbuHzVJuObC/bAyt4wEPmJ1W6wmI5Kt6M/
-         iRQA==
+        bh=IYd/QKfvl5lKpjb0P27O+LHksv33HQMEU50lHIKW7qc=;
+        b=NRXhrdh5Rb97QAC85TQXRfLbha7BQp5PxRsH4sese3VbM9AkgzbaItOgm/MDbZLsj+
+         UKuR4IgAtwG+1yy7TsZ67lAlfd2ODdlrPMcfRUGLuvrNZB05GR7cI3AakFuVomWzZ4xD
+         NV/tgUfHgHKVqvEovTB70a8rTWssXfzAB7mgaNU1WCy0MbS0UFydBpgNqZAkifH+0qHR
+         KhCmGfvVxg5r7Yu8cRVvQ3XCR655Xt0/wPaoP7A0Kb7o3kCqct1q3AC9lCT5dCc4l0XQ
+         //ZOv5xL+S/I3fvI6XzVkVrbkEny42NQR77EmDoDHdyFQqmYFdPyEryHcLVHS1GTCfs9
+         RJqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hw4xZ1kYqp8gKYk3+om1U5PHQxcSQbw6w+wShSO5zY0=;
-        b=obTBZ8tTb7HnC0ujQ3sWgWyOa1rl6wIw3BnZ2C7sfeCDlTHBe7hPJ3EHesUbsYqfHX
-         /XwrXNFJQ27B/Cqe77xWpT8R3ftYOR4kXcunttmOmQ8GuYwz6uTnhB1un0RG0RtHR1jn
-         sHreBl/XrMPoFDjTzvG03QAbcCZWCDT7yfq6vfsZTNYo33gySOiJzWstFbJnnr4uOmbG
-         jPZ0BZC88Htw/SzxqMu3ruaX6yM/UqTATQi7S/D1eCKKKR5iDnoVKQ4aCgeM8cP5fESG
-         YqnU21O99v2q6dWsrmYSegeptQzrGvIIGns/CvLY476JLMxN1LG/wzlkUVzUxbOTvUSU
-         5tBQ==
-X-Gm-Message-State: APjAAAVCZA7HAs1XkYXKRUMs033UZBwQTi7jCnDVhYtejh6rlQXyDY1U
-        ilNReoiYKwUdhvjjwqktYN8=
-X-Google-Smtp-Source: APXvYqyqhJRpF0IBUgqXPq4gRr+htq5lVI2geTgVCQj21fYbe1kHlA6HUzk8LLHguNfpfHKhvvTNgw==
-X-Received: by 2002:a1c:3906:: with SMTP id g6mr6674925wma.49.1580829692715;
-        Tue, 04 Feb 2020 07:21:32 -0800 (PST)
+        bh=IYd/QKfvl5lKpjb0P27O+LHksv33HQMEU50lHIKW7qc=;
+        b=OYr9sLGOjUeNB6Bd8+BbGhgntQQvAzpawxdNXXI5l7357bmvg7NR401JlnmSA/64zU
+         iFBn8LP7W3xWL7eAKkjGqJp+MUT/zBiOJPzKB2kmlAuyCDzOmy04q6MbLRBAgVozHVf9
+         n+gktyVzCYS6wVxllvqItGLddMgUZQCRQba8DbgHRhiWm/u5ueTzkqz2zz3uyjXr78zh
+         29g40fIrReEM/w39RPA7qrkMGRnMnHJmU2FrsO6S4Gzneigkz0WOK9evEbw7eV3a91lv
+         8yLOM879vIfFe5ZmXhNClFYMhm3CoPjkM/zHvB4+0Ld6lt0XSUD1OiMurCuGOA01qx7P
+         izow==
+X-Gm-Message-State: APjAAAX6IoAuoc7CKBrzONePs8uvgHpPvKFqaFXyvDrEgUHVoYRi6dp7
+        PB5BR/uJqvflqT6OC5U0644=
+X-Google-Smtp-Source: APXvYqzKp5ib9bjFyBvcOodNWyfCm3frsjRuCpkEVS86DeFPQsVS9Oh78tgaxHBk7beSKl4Y27QKig==
+X-Received: by 2002:a05:6000:1012:: with SMTP id a18mr12703005wrx.113.1580829699732;
+        Tue, 04 Feb 2020 07:21:39 -0800 (PST)
 Received: from Ansuel-XPS.localdomain (93-39-149-95.ip76.fastwebnet.it. [93.39.149.95])
-        by smtp.googlemail.com with ESMTPSA id x10sm29902174wrv.60.2020.02.04.07.21.31
+        by smtp.googlemail.com with ESMTPSA id x10sm29902174wrv.60.2020.02.04.07.21.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2020 07:21:32 -0800 (PST)
+        Tue, 04 Feb 2020 07:21:39 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Andy Gross <agross@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Mark Rutland <mark.rutland@arm.com>,
         linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] Documentation: watchdog: qcom-wdt: Remove deprecated compatible
-Date:   Tue,  4 Feb 2020 16:21:02 +0100
-Message-Id: <20200204152104.13278-2-ansuelsmth@gmail.com>
+Subject: [PATCH 3/3] Documentation: watchdog: qcom-wdt: add new no-pretimeout option
+Date:   Tue,  4 Feb 2020 16:21:03 +0100
+Message-Id: <20200204152104.13278-3-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200204152104.13278-1-ansuelsmth@gmail.com>
 References: <20200204152104.13278-1-ansuelsmth@gmail.com>
@@ -69,43 +69,27 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-"qcom,kpss-wdt-msm8960"
-"qcom,kpss-wdt-apq8064"
-"qcom,kpss-wdt-ipq8064"
-"qcom,kpss-wdt-ipq4019"
-
-and deprectaed and not used in the driver code at all. Drop them and
-fix the example.
+Add description for new no-pretimeout function to force legacy
+probe if any interrupt is defined.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- Documentation/devicetree/bindings/watchdog/qcom-wdt.txt | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.txt b/Documentation/devicetree/bindings/watchdog/qcom-wdt.txt
-index 41aeaa2ff0f8..33081bd33637 100644
+index 33081bd33637..01978bff74ee 100644
 --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.txt
 +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.txt
-@@ -4,10 +4,6 @@ Qualcomm Krait Processor Sub-system (KPSS) Watchdog
- Required properties :
- - compatible : shall contain only one of the following:
- 
--			"qcom,kpss-wdt-msm8960"
--			"qcom,kpss-wdt-apq8064"
--			"qcom,kpss-wdt-ipq8064"
--			"qcom,kpss-wdt-ipq4019"
- 			"qcom,kpss-timer"
- 			"qcom,scss-timer"
- 			"qcom,kpss-wdt"
-@@ -21,7 +17,7 @@ Optional properties :
+@@ -14,6 +14,8 @@ Required properties :
+ Optional properties :
+ - timeout-sec : shall contain the default watchdog timeout in seconds,
+                 if unset, the default timeout is 30 seconds
++- no-pretimeout : shall be set if the platform have some interrupts
++                  defined in the node but doesn't support pretimeout
  
  Example:
  	watchdog@208a038 {
--		compatible = "qcom,kpss-wdt-ipq8064";
-+		compatible = "qcom,kpss-timer";
- 		reg = <0x0208a038 0x40>;
- 		clocks = <&sleep_clk>;
- 		timeout-sec = <10>;
 -- 
 2.24.0
 
