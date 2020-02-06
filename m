@@ -2,75 +2,168 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EA715355D
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Feb 2020 17:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A8A1540C7
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Feb 2020 10:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727466AbgBEQig (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 5 Feb 2020 11:38:36 -0500
-Received: from mga03.intel.com ([134.134.136.65]:4185 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726678AbgBEQig (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 5 Feb 2020 11:38:36 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 08:38:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,406,1574150400"; 
-   d="scan'208";a="343744237"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 05 Feb 2020 08:38:32 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 05 Feb 2020 18:38:31 +0200
-Date:   Wed, 5 Feb 2020 18:38:31 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+        id S1727976AbgBFJAS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 6 Feb 2020 04:00:18 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:50555 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727974AbgBFJAS (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 6 Feb 2020 04:00:18 -0500
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1izd19-0002bO-4D; Thu, 06 Feb 2020 10:00:11 +0100
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1izd18-0005Aq-3G; Thu, 06 Feb 2020 10:00:10 +0100
+Date:   Thu, 6 Feb 2020 10:00:10 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, Tom Abraham <tabraham@suse.com>
-Subject: Re: Forcing non-ACPI watchdog driver
-Message-ID: <20200205163831.GG2667@lahna.fi.intel.com>
-References: <1580915129.23547.3.camel@suse.de>
- <20200205152435.GE2667@lahna.fi.intel.com>
- <20200205163048.GD25403@roeck-us.net>
+Cc:     support.opensource@diasemi.com, robh+dt@kernel.org,
+        lee.jones@linaro.org, stwiss.opensource@diasemi.com,
+        Adam.Thomson.Opensource@diasemi.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 3/3] watchdog: da9062: add power management ops
+Message-ID: <20200206090010.ya6p2kvab452kedr@pengutronix.de>
+References: <20200108095704.23233-1-m.felsch@pengutronix.de>
+ <20200108095704.23233-4-m.felsch@pengutronix.de>
+ <20200123205132.GA13377@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200205163048.GD25403@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200123205132.GA13377@roeck-us.net>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:58:04 up 83 days, 16 min, 81 users,  load average: 0.06, 0.11,
+ 0.06
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Feb 05, 2020 at 08:30:48AM -0800, Guenter Roeck wrote:
-> On Wed, Feb 05, 2020 at 05:24:35PM +0200, Mika Westerberg wrote:
-> > On Wed, Feb 05, 2020 at 04:05:29PM +0100, Jean Delvare wrote:
-> > > Hi all,
-> > 
-> > Hi,
-> > 
-> > > Is there a way to prevent the ACPI WDAT watchdog interface from being
-> > > used and force the use of a native watchdog driver instead?
-> > > 
-> > > I have a customer who reports a regression on kernel upgrade. Old
-> > > kernel (v4.4) uses iTCO_wdt and watchdog works, new kernel (v4.12) uses
-> > > wdat_wdt and watchdog doesn't work (instant reboot when opening the
-> > > device). While I'm going to look for fixes to backport, I think it
-> > > would be pretty convenient to have a way to just revert to the working
-> > > driver until the new driver is fixed somehow. But I can't see any way
-> > > to do that at the moment, short of disabling ACPI completely, which is
-> > > definitely too extreme to be considered.
-> > > 
-> > > Am I missing something?
-> > 
-> > You should be able to revert to iTCO_wdt by simply disabling
-> > CONFIG_WDAT_WDT from .config. Then acpi_has_watchdog() returns false
-> > which means that iTCO_wdt is used instead.
-> 
-> That may not be possible in a generic distribution.
+Hi Guenter,
 
-Right, they would need to build their own kernel. Currently there is no
-way to do that without changing .config.
+On 20-01-23 12:51, Guenter Roeck wrote:
+> On Wed, Jan 08, 2020 at 10:57:04AM +0100, Marco Felsch wrote:
+> > Disable the watchdog during suspend if it is enabled and re-enable it on
+> > resume. So we can sleep without the interruptions.
+> > 
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+I got an kbuild email so I checked the linux-next master tree. On
+linux-next this patch isn't used instead the old v1 was used...
+
+Regards,
+  Marco
+
+> > ---
+> > v2:
+> > - add dlg,use-sw-pm check to differentiate between automatic and manual
+> >   disabling/enabling.
+> > ---
+> >  drivers/watchdog/da9062_wdt.c | 37 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> > 
+> > diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
+> > index e149e66a6ea9..c9b9d6394525 100644
+> > --- a/drivers/watchdog/da9062_wdt.c
+> > +++ b/drivers/watchdog/da9062_wdt.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/jiffies.h>
+> >  #include <linux/mfd/da9062/registers.h>
+> >  #include <linux/mfd/da9062/core.h>
+> > +#include <linux/property.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/of.h>
+> >  
+> > @@ -30,6 +31,7 @@ static const unsigned int wdt_timeout[] = { 0, 2, 4, 8, 16, 32, 65, 131 };
+> >  struct da9062_watchdog {
+> >  	struct da9062 *hw;
+> >  	struct watchdog_device wdtdev;
+> > +	bool use_sw_pm;
+> >  };
+> >  
+> >  static unsigned int da9062_wdt_timeout_to_sel(unsigned int secs)
+> > @@ -198,6 +200,8 @@ static int da9062_wdt_probe(struct platform_device *pdev)
+> >  	if (!wdt)
+> >  		return -ENOMEM;
+> >  
+> > +	wdt->use_sw_pm = device_property_present(dev, "dlg,use-sw-pm");
+> > +
+> >  	wdt->hw = chip;
+> >  
+> >  	wdt->wdtdev.info = &da9062_watchdog_info;
+> > @@ -212,6 +216,7 @@ static int da9062_wdt_probe(struct platform_device *pdev)
+> >  	watchdog_set_restart_priority(&wdt->wdtdev, 128);
+> >  
+> >  	watchdog_set_drvdata(&wdt->wdtdev, wdt);
+> > +	dev_set_drvdata(dev, &wdt->wdtdev);
+> >  
+> >  	ret = devm_watchdog_register_device(dev, &wdt->wdtdev);
+> >  	if (ret < 0)
+> > @@ -220,10 +225,42 @@ static int da9062_wdt_probe(struct platform_device *pdev)
+> >  	return da9062_wdt_ping(&wdt->wdtdev);
+> >  }
+> >  
+> > +static int __maybe_unused da9062_wdt_suspend(struct device *dev)
+> > +{
+> > +	struct watchdog_device *wdd = dev_get_drvdata(dev);
+> > +	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
+> > +
+> > +	if (!wdt->use_sw_pm)
+> > +		return 0;
+> > +
+> > +	if (watchdog_active(wdd))
+> > +		return da9062_wdt_stop(wdd);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int __maybe_unused da9062_wdt_resume(struct device *dev)
+> > +{
+> > +	struct watchdog_device *wdd = dev_get_drvdata(dev);
+> > +	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
+> > +
+> > +	if (!wdt->use_sw_pm)
+> > +		return 0;
+> > +
+> > +	if (watchdog_active(wdd))
+> > +		return da9062_wdt_start(wdd);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static SIMPLE_DEV_PM_OPS(da9062_wdt_pm_ops,
+> > +			 da9062_wdt_suspend, da9062_wdt_resume);
+> > +
+> >  static struct platform_driver da9062_wdt_driver = {
+> >  	.probe = da9062_wdt_probe,
+> >  	.driver = {
+> >  		.name = "da9062-watchdog",
+> > +		.pm = &da9062_wdt_pm_ops,
+> >  		.of_match_table = da9062_compatible_id_table,
+> >  	},
+> >  };
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
