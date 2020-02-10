@@ -2,88 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 072B115713B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2020 09:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E9E1572B2
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2020 11:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727436AbgBJIxL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 10 Feb 2020 03:53:11 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47667 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727121AbgBJIxL (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 10 Feb 2020 03:53:11 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j14oX-0001oF-Kk; Mon, 10 Feb 2020 09:53:09 +0100
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j14oX-0000tK-B8; Mon, 10 Feb 2020 09:53:09 +0100
-Date:   Mon, 10 Feb 2020 09:53:09 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Stefan Lengfeld <contact@stefanchrist.eu>
-Subject: Re: [PATCH] watchdog: da9062: Add dependency on I2C
-Message-ID: <20200210085309.vv47s2i5kg4yyagi@pengutronix.de>
-References: <20200208130803.23387-1-linux@roeck-us.net>
- <20200208140152.op4dplfvljosnlvb@pengutronix.de>
- <a02386a9-041b-a351-643f-ba0b6e91bab3@roeck-us.net>
+        id S1727507AbgBJKQu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 10 Feb 2020 05:16:50 -0500
+Received: from mx2.suse.de ([195.135.220.15]:43592 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727499AbgBJKQu (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 10 Feb 2020 05:16:50 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 790F3ACCA;
+        Mon, 10 Feb 2020 10:16:48 +0000 (UTC)
+Date:   Mon, 10 Feb 2020 11:16:38 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Tom Abraham <tabraham@suse.com>
+Subject: wdat_wdt: access width inconsistency
+Message-ID: <20200210111638.64925c8e@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a02386a9-041b-a351-643f-ba0b6e91bab3@roeck-us.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:48:54 up 87 days, 7 min, 100 users,  load average: 0.12, 0.09,
- 0.02
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 20-02-08 06:22, Guenter Roeck wrote:
-> On 2/8/20 6:01 AM, Marco Felsch wrote:
-> > Hi,
-> > 
-> > On 20-02-08 05:08, Guenter Roeck wrote:
-> > > Since commit 057b52b4b3d58 ("watchdog: da9062: make restart handler atomic
-> > > safe"), the driver calls i2c functions directly. It now therefore depends
-> > > on I2C. This is a hard dependency which overrides COMPILE_TEST.
-> > 
-> > I just wondered why it doesn't complain if no regmap support is on and
-> > surprise it provides stubs ^^ Is it worth to add i2c stubs too?
-> > 
-> 
-> I'd rather not go there. In practice it doesn't make much of a difference -
-> it just ensures that COMPILE_TEST can run on architectures which don't
-> support I2C. I think 0day only finds it because they select COMPILE_TEST
-> and then selectively disable I2C (and maybe other configuration options)
-> to catch problems like this.
+Hi all,
 
-I know, just saying that this is a bit confusing for a reader because
-the deps are handled correctly by MFD_* and REGMAP_* symbols. Anyway
-thanks for fixing the bug I introduced. I was a bit to busy last week.
+I'm still working on my customer issue where the wdat_wdt driver
+reboots the server instantly as soon as the watchdog daemon is started.
+I looked at all the upstream fixes and we already have all relevant
+ones in our kernel so I start suspecting either a driver bug or a BIOS
+issue.
 
-Regards,
-  Marco
+While reading the driver code I noticed one suspect thing related to
+the register access width, which I'd like a second opinion on.
 
-> Guenter
-> 
+Both acpi_watchdog.c and wdat_wdt.c contain code like:
 
+	res.end = res.start + gas->access_width - 1;
+
+This suggests that gas->access_width is expected to be 4 in case of a
+32-bit register. However in wdat_wdt_read/wdat_wdt_write we have:
+
+	switch (gas->access_width) {
+	(...)
+	case 3:
+		*value = ioread32(instr->reg);
+
+This looks inconsistent to me.
+
+My reading of the ACPI specification suggests that 3 is the right value
+for 32-bit registers. If so, then shouldn't the resource's end be set
+to:
+
+	res.end = res.start + (1 << (gas->access_width - 1)) - 1;
+
+?
+
+Thanks,
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Jean Delvare
+SUSE L3 Support
