@@ -2,96 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57928157D55
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2020 15:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BABAE158F7E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2020 14:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727581AbgBJOZj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 10 Feb 2020 09:25:39 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35107 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727481AbgBJOZj (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 10 Feb 2020 09:25:39 -0500
-Received: by mail-pg1-f195.google.com with SMTP id l24so4011082pgk.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 10 Feb 2020 06:25:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=AXBkhZzKdKxwGIXw4ADNoEHCoihZ/K5+LwaV913MLy0=;
-        b=f2ZVznRX1U9ClKU+NP/F9+PYel0pzFUgcjfywt/EpexyZQsn44418Xju2mxWS8WrlS
-         Z1thCTkAsIMl4fYJwuDleKSPG3ouR5MTNi5NKHy8+evFsfgB51Zj8ApRQhVl+HpeI8yf
-         2ozYG9q0OOEDwobKhPMiaH/2aIyVBREX5BC7bX4h+0bQeGOLXbxJN1vv16yrNMPSp6cz
-         OZtOtZyDdcEIfpzhhnJhfXn0BhwGhwkiiiT5o5osy2QK6+wsbD551WIwLTAqWEcCNlMt
-         UBJlkA+wZeZYGKDv2FWOw5k9RGmaFxPG72DrPr5+xlpgTEp5hVdetHkDszoGZOEDtlW/
-         rRrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AXBkhZzKdKxwGIXw4ADNoEHCoihZ/K5+LwaV913MLy0=;
-        b=fvnWscXXvTJBdvyl0S9cqhJkkcSrKcJxCVjitng67qkreA/IobQKfECKHePH3Fg2j/
-         IleJgbsX5KfizKdKeSS3kP9L2l3WQ9K0QHtMBFQbGA5WG0E7s00M65thlE37vnP98f/k
-         wMhpMamp3e75+SKb8z7rBh66b2C5tK8aRHHDXB0rlSOsnB0sVdHOq2NjtYulVMeI0S/n
-         REelMMB2kIhbblPxLCLxU2BC2JGpRQx15YCfO/BT1Ky2r2CZLbuWerOZE+wwyLHCTmKg
-         bgn55GMkHqolspK3vkAgqhoisTkKYgm/qeLU/NPwwxnQhKVbdRDBc/A8/cmjq8PlvD/J
-         qYDQ==
-X-Gm-Message-State: APjAAAUSsmvEgcGTqrZXs5AtdBE3EcW2ctXecMezB9LGWZGAV/VEEklr
-        Mijr8N6D3BCsUUFoh1ShrTE=
-X-Google-Smtp-Source: APXvYqx+DUfpWQ8VSRKEBGe10WN47E1DfcTfXE5IuwHox5JWM8RCVTmLwG+5030/xI73Wre/csQDAQ==
-X-Received: by 2002:a63:3487:: with SMTP id b129mr1946087pga.320.1581344738700;
-        Mon, 10 Feb 2020 06:25:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p3sm597375pfg.184.2020.02.10.06.25.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Feb 2020 06:25:37 -0800 (PST)
-Subject: Re: [PATCH RESEND] watchdog: wm831x: Use GPIO descriptor
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-References: <20200210102209.289379-1-linus.walleij@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <26fc06fb-fd1d-064b-4015-d68a98369ecb@roeck-us.net>
-Date:   Mon, 10 Feb 2020 06:25:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1728925AbgBKNLv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 11 Feb 2020 08:11:51 -0500
+Received: from mx2.suse.de ([195.135.220.15]:35080 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727567AbgBKNLu (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 11 Feb 2020 08:11:50 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 8987BBD7F;
+        Tue, 11 Feb 2020 13:11:48 +0000 (UTC)
+Date:   Tue, 11 Feb 2020 14:11:47 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, Tom Abraham <tabraham@suse.com>
+Subject: Re: wdat_wdt: access width inconsistency
+Message-ID: <20200211141147.20bad275@endymion>
+In-Reply-To: <20200210112326.GP2667@lahna.fi.intel.com>
+References: <20200210111638.64925c8e@endymion>
+        <20200210112326.GP2667@lahna.fi.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20200210102209.289379-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2/10/20 2:22 AM, Linus Walleij wrote:
-> The WM831x watchdog driver passes a global GPIO number from
-> platform data into this driver, this is discouraged so pass
-> a GPIO descriptor instead.
-> 
-> More thorough approaches are possible passing descriptors
-> associated with the device through machine descriptor tables,
-> but no boardfiles in the kernel currently use this driver
-> so it is hard to test.
-> 
-> Cc: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Hi Mika,
 
-Interesting, I don't see evidence of the original patch in
-watchdog patchwork.
+On Mon, 10 Feb 2020 13:23:26 +0200, Mika Westerberg wrote:
+> On Mon, Feb 10, 2020 at 11:16:38AM +0100, Jean Delvare wrote:
+> > I'm still working on my customer issue where the wdat_wdt driver
+> > reboots the server instantly as soon as the watchdog daemon is started.  
+> 
+> BTW, you can use "wdat_wdt.dyndbg" to debug this. It should log all the
+> instructions it runs.
 
-Anyway, it seems to me it would be better to remove the gpio code
-entirely from this driver. It is instantiated from an mfd driver
-which doesn't set the gpio pin. It is quite unlikely that it is
-ever going to be used, so we might as well remove it (instead of
-modifying it without ability to test it).
+Thanks for the suggestion. That's not going to help much when the
+system reboots instantly as soon as the device node is accessed, but
+maybe it will bring some light about what happens before that point.
+
+> > I looked at all the upstream fixes and we already have all relevant
+> > ones in our kernel so I start suspecting either a driver bug or a BIOS
+> > issue.
+> > 
+> > While reading the driver code I noticed one suspect thing related to
+> > the register access width, which I'd like a second opinion on.
+> > 
+> > Both acpi_watchdog.c and wdat_wdt.c contain code like:
+> > 
+> > 	res.end = res.start + gas->access_width - 1;
+> > 
+> > This suggests that gas->access_width is expected to be 4 in case of a
+> > 32-bit register. However in wdat_wdt_read/wdat_wdt_write we have:
+> > 
+> > 	switch (gas->access_width) {
+> > 	(...)
+> > 	case 3:
+> > 		*value = ioread32(instr->reg);
+> > 
+> > This looks inconsistent to me.  
+> 
+> I think you are right. For the code in acpi_watchdog.c:
+> 
+> 	if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
+> 		res.flags = IORESOURCE_MEM;
+> 		res.end = res.start + ALIGN(gas->access_width, 4) - 1;
+> 	} else if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
+> 		res.flags = IORESOURCE_IO;
+> 		res.end = res.start + gas->access_width - 1;
+> 	} else {
+> 		..
+> 
+> I think it does the "correct" thing, although it is bit convoluted. The
+> first one aligns it to 4 and the I/O access is either 8- or 16-bits so
+> it should be fine, unless I'm missing something.
+> 
+> However, this code in wdat_wdt.c:
+> 
+>                  r.end = r.start + gas->access_width - 1;
+> 
+> is not correct. In this case, I don't think it affects anything but
+> should still be fixed.
+
+OK, thanks for confirming.
+
+> > My reading of the ACPI specification suggests that 3 is the right value
+> > for 32-bit registers. If so, then shouldn't the resource's end be set
+> > to:
+> > 
+> > 	res.end = res.start + (1 << (gas->access_width - 1)) - 1;
+> > 
+> > ?  
+> 
+> Yes, I agree. It seems that we also have helper macro for this:
+> ACPI_ACCESS_BIT_WIDTH() that can be used as well but the result needs to
+> be divided by 8.
+
+I looked for that macro but my grep wouldn't find it because I expected
+a value in bytes not bits. Thanks for pointing it out.
+
+Maybe we should introduce ACPI_ACCESS_BYTE_WIDTH() for the purpose?
+This would make the code less convoluted than ACPI_ACCESS_BIT_WIDTH() /
+8.
+
+> I will make a patch that fixes these later this week (quite busy with
+> something else right now), unless you want to do that.
+
+I'll write the patch, no problem.
 
 Thanks,
-Guenter
+-- 
+Jean Delvare
+SUSE L3 Support
