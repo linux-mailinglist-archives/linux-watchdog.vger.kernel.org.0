@@ -2,155 +2,118 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 976F8159141
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2020 14:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAE615933B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2020 16:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729424AbgBKN7t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 11 Feb 2020 08:59:49 -0500
-Received: from mga07.intel.com ([134.134.136.100]:36406 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729031AbgBKN7s (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 11 Feb 2020 08:59:48 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Feb 2020 05:59:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
-   d="scan'208";a="347283315"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 11 Feb 2020 05:59:44 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 11 Feb 2020 15:59:44 +0200
-Date:   Tue, 11 Feb 2020 15:59:44 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, Tom Abraham <tabraham@suse.com>
-Subject: Re: wdat_wdt: access width inconsistency
-Message-ID: <20200211135944.GF2667@lahna.fi.intel.com>
-References: <20200210111638.64925c8e@endymion>
- <20200210112326.GP2667@lahna.fi.intel.com>
- <20200211141147.20bad275@endymion>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200211141147.20bad275@endymion>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1729398AbgBKPeU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 11 Feb 2020 10:34:20 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:50479 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729395AbgBKPeU (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 11 Feb 2020 10:34:20 -0500
+Received: by mail-wm1-f67.google.com with SMTP id a5so4096069wmb.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 11 Feb 2020 07:34:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=gaMBkxIEADyOXYD+m1B71q6f40Ft/0OxAlwSgeW5wfA=;
+        b=lFsBW6NdC7MfU5CLv6IRxqCkHvmPkDb85IcKSpBizTC8NeOMPVtw9yYwPYi/8SGzJZ
+         XpzdL8blUUOFabnKVH7n9euT16lWxcFhBb+yCFV1/Be91esLVpjdVdRV3VCFvUETSnaP
+         /RnHHhsUAR41crWtqIfDKW1wLXlF35Fu3bMevp+/lCK4nYZYEXy2+3pHBD/T+25rPhA4
+         adr9NVepY7/N2MJXLHswuv5N2/4jiNPqx7UxnCfQbJ+x+LRdGML0gSYfcQswWPlocggA
+         BmdaEMR1Owmbnnwbqw08dGCtIDT2i6vxwjMYSdKzbmbGZguqNRLiP6hd5XYumGW9KPFt
+         9u3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gaMBkxIEADyOXYD+m1B71q6f40Ft/0OxAlwSgeW5wfA=;
+        b=pT2fYm0f/4mKftqw0eW5HEdNwRGbkiWhilHu0myV0WDDI/NFGfI25Y19M3yXpdEugK
+         t6726HSkE2ReODLQnS29mTSZDnchk7/qWq34jLg8H1cIvOHLcCe71DOvaDUpnE3agiR9
+         mO5YBzEqMWlUQViH1RNXUzSNj+iGySG6ahg4DzfPDnPtMv23DIIi2fDHr41jFrxrWkOe
+         GFSVeAWnbVVUr4aGu5yxme6GBLVxEX4cOl4H7LxyQVsjuZ9ekhgVlEy4k+4UuFCBHlRz
+         zpa5Z65D9UehXugLTgjveDDx8QA1TJlgxiB0zE+jzB/M/Pz+OEdCyZ3AyYk9PgA5CLWa
+         zFFQ==
+X-Gm-Message-State: APjAAAXe7Zbhyefa/dC+qByJd4b8WgKqvB4Dr6z8TB/Mi14dbMQqf5RY
+        As3N9W9gIrOCFPkINKWF9tf0vw==
+X-Google-Smtp-Source: APXvYqyLBtxEowztihqQPFRW4TAySU04wCU9yDXJhtugFo7bNmOnLvDdHuVlqLV50jfMYDXMzCH8Pg==
+X-Received: by 2002:a05:600c:410f:: with SMTP id j15mr6001839wmi.132.1581435257750;
+        Tue, 11 Feb 2020 07:34:17 -0800 (PST)
+Received: from localhost.localdomain ([172.111.156.65])
+        by smtp.gmail.com with ESMTPSA id s23sm5634505wra.15.2020.02.11.07.34.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 11 Feb 2020 07:34:17 -0800 (PST)
+From:   Loic Poulain <loic.poulain@linaro.org>
+To:     linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>
+Subject: [PATCH] watchdog: pm8916_wdt: Add system sleep callbacks
+Date:   Tue, 11 Feb 2020 16:38:03 +0100
+Message-Id: <1581435483-6796-1-git-send-email-loic.poulain@linaro.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Feb 11, 2020 at 02:11:47PM +0100, Jean Delvare wrote:
-> Hi Mika,
-> 
-> On Mon, 10 Feb 2020 13:23:26 +0200, Mika Westerberg wrote:
-> > On Mon, Feb 10, 2020 at 11:16:38AM +0100, Jean Delvare wrote:
-> > > I'm still working on my customer issue where the wdat_wdt driver
-> > > reboots the server instantly as soon as the watchdog daemon is started.  
-> > 
-> > BTW, you can use "wdat_wdt.dyndbg" to debug this. It should log all the
-> > instructions it runs.
-> 
-> Thanks for the suggestion. That's not going to help much when the
-> system reboots instantly as soon as the device node is accessed, but
-> maybe it will bring some light about what happens before that point.
+Add suspend and resume pm operations.
+Tested on dragonboard-410c.
 
-If the default timeout is short then that might happen but I think WDAT
-spec had some "reasonable" lower limit.
+Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+---
+ drivers/watchdog/pm8916_wdt.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-You may set bigger default timeout during the probe by doing something
-like below. This should give some 30s time before the system is rebooted
-after the device is opened.
-
-diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index b069349b52f5..24351afe2718 100644
---- a/drivers/watchdog/wdat_wdt.c
-+++ b/drivers/watchdog/wdat_wdt.c
-@@ -439,6 +439,10 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, wdat);
+diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
+index 1213179..0937b8d3 100644
+--- a/drivers/watchdog/pm8916_wdt.c
++++ b/drivers/watchdog/pm8916_wdt.c
+@@ -192,6 +192,7 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
+ 	wdt->wdev.timeout = PM8916_WDT_DEFAULT_TIMEOUT;
+ 	wdt->wdev.pretimeout = 0;
+ 	watchdog_set_drvdata(&wdt->wdev, wdt);
++	platform_set_drvdata(pdev, wdt);
  
- 	watchdog_set_nowayout(&wdat->wdd, nowayout);
-+
-+	/* Increase default timeout */
-+	wdat_wdt_set_timeout(&wdat->wdd, 30 * 1000);
-+
- 	return devm_watchdog_register_device(dev, &wdat->wdd);
+ 	watchdog_init_timeout(&wdt->wdev, 0, dev);
+ 	pm8916_wdt_configure_timers(&wdt->wdev);
+@@ -199,6 +200,29 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
+ 	return devm_watchdog_register_device(dev, &wdt->wdev);
  }
  
-> > > I looked at all the upstream fixes and we already have all relevant
-> > > ones in our kernel so I start suspecting either a driver bug or a BIOS
-> > > issue.
-> > > 
-> > > While reading the driver code I noticed one suspect thing related to
-> > > the register access width, which I'd like a second opinion on.
-> > > 
-> > > Both acpi_watchdog.c and wdat_wdt.c contain code like:
-> > > 
-> > > 	res.end = res.start + gas->access_width - 1;
-> > > 
-> > > This suggests that gas->access_width is expected to be 4 in case of a
-> > > 32-bit register. However in wdat_wdt_read/wdat_wdt_write we have:
-> > > 
-> > > 	switch (gas->access_width) {
-> > > 	(...)
-> > > 	case 3:
-> > > 		*value = ioread32(instr->reg);
-> > > 
-> > > This looks inconsistent to me.  
-> > 
-> > I think you are right. For the code in acpi_watchdog.c:
-> > 
-> > 	if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-> > 		res.flags = IORESOURCE_MEM;
-> > 		res.end = res.start + ALIGN(gas->access_width, 4) - 1;
-> > 	} else if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
-> > 		res.flags = IORESOURCE_IO;
-> > 		res.end = res.start + gas->access_width - 1;
-> > 	} else {
-> > 		..
-> > 
-> > I think it does the "correct" thing, although it is bit convoluted. The
-> > first one aligns it to 4 and the I/O access is either 8- or 16-bits so
-> > it should be fine, unless I'm missing something.
-> > 
-> > However, this code in wdat_wdt.c:
-> > 
-> >                  r.end = r.start + gas->access_width - 1;
-> > 
-> > is not correct. In this case, I don't think it affects anything but
-> > should still be fixed.
-> 
-> OK, thanks for confirming.
-> 
-> > > My reading of the ACPI specification suggests that 3 is the right value
-> > > for 32-bit registers. If so, then shouldn't the resource's end be set
-> > > to:
-> > > 
-> > > 	res.end = res.start + (1 << (gas->access_width - 1)) - 1;
-> > > 
-> > > ?  
-> > 
-> > Yes, I agree. It seems that we also have helper macro for this:
-> > ACPI_ACCESS_BIT_WIDTH() that can be used as well but the result needs to
-> > be divided by 8.
-> 
-> I looked for that macro but my grep wouldn't find it because I expected
-> a value in bytes not bits. Thanks for pointing it out.
-> 
-> Maybe we should introduce ACPI_ACCESS_BYTE_WIDTH() for the purpose?
-> This would make the code less convoluted than ACPI_ACCESS_BIT_WIDTH() /
-> 8.
++static int __maybe_unused pm8916_wdt_suspend(struct device *dev)
++{
++	struct pm8916_wdt *wdt = dev_get_drvdata(dev);
++
++	if (watchdog_active(&wdt->wdev))
++		return pm8916_wdt_stop(&wdt->wdev);
++
++	return 0;
++}
++
++static int __maybe_unused pm8916_wdt_resume(struct device *dev)
++{
++	struct pm8916_wdt *wdt = dev_get_drvdata(dev);
++
++	if (watchdog_active(&wdt->wdev))
++		return pm8916_wdt_start(&wdt->wdev);
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(pm8916_wdt_pm_ops, pm8916_wdt_suspend,
++			 pm8916_wdt_resume);
++
+ static const struct of_device_id pm8916_wdt_id_table[] = {
+ 	{ .compatible = "qcom,pm8916-wdt" },
+ 	{ }
+@@ -210,6 +234,7 @@ static struct platform_driver pm8916_wdt_driver = {
+ 	.driver = {
+ 		.name = "pm8916-wdt",
+ 		.of_match_table = of_match_ptr(pm8916_wdt_id_table),
++		.pm = &pm8916_wdt_pm_ops,
+ 	},
+ };
+ module_platform_driver(pm8916_wdt_driver);
+-- 
+2.7.4
 
-Good idea.
-
-> > I will make a patch that fixes these later this week (quite busy with
-> > something else right now), unless you want to do that.
-> 
-> I'll write the patch, no problem.
-
-Thanks!
