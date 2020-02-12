@@ -2,124 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8D315A8E0
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Feb 2020 13:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF0015AAC4
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Feb 2020 15:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbgBLMNw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Feb 2020 07:13:52 -0500
-Received: from mga14.intel.com ([192.55.52.115]:43990 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725874AbgBLMNw (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Feb 2020 07:13:52 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 04:13:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
-   d="scan'208";a="347504215"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 12 Feb 2020 04:13:48 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 12 Feb 2020 14:13:48 +0200
-Date:   Wed, 12 Feb 2020 14:13:48 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, Tom Abraham <tabraham@suse.com>
-Subject: Re: [PATCH 3/3] ACPI / watchdog: Set default timeout in probe
-Message-ID: <20200212121348.GD2667@lahna.fi.intel.com>
-References: <20200211180331.11dbe525@endymion>
- <20200212110540.83559-1-mika.westerberg@linux.intel.com>
- <20200212110540.83559-3-mika.westerberg@linux.intel.com>
- <20200212130701.1682e406@endymion>
+        id S1727732AbgBLONC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Feb 2020 09:13:02 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:43508 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727662AbgBLONC (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 12 Feb 2020 09:13:02 -0500
+Received: by mail-ot1-f65.google.com with SMTP id p8so1993086oth.10;
+        Wed, 12 Feb 2020 06:13:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9ttdkOvRWv6DGMpcB3fcAKHkL0yPgPNj0xyxtGHAS+k=;
+        b=rxk73IvXMa+wxmrMWK4PMfjZ9ZGBLZmGevAsO0/PuizLU3LI6fN5tcJRknhUpxWycC
+         k1Zb7KW8kt9W40Cs7ZJjPPWtfj/7yY5+AAKO+u4MosFEhzkbyIbD8rZWBNlkECoddr76
+         nUVFuQuha/UfWSyLtjhB4hfKymJPTW/BPAXu0wjnJcQvtrHQQX3xkCDkNRYOgbJ8jjjx
+         dYCMzJhK/MXSUIwxpv2Te5j8bDJcMqM60xShocQ0aOvCeQXX1ZoO4vZlRSGcomYA4kAN
+         NWQeg+cNXEzD8Z3iVkhwx1XtwsZK+rm99sbDkDGCori/cliXxEc3FG/CbTwajUICY2Ha
+         8PEQ==
+X-Gm-Message-State: APjAAAXkQWUKTesCDX1a6slCD24E0K3cDROOx/yXxLYLmURoLa7YHGZQ
+        VxxZZ6RYOcxJnhUo88WGK/7Um2dT12Ks/c51SOynMA==
+X-Google-Smtp-Source: APXvYqzR7OaORdlF5UrmLZ6EPRNXL2rF6WTTqvtrdkhAi4jB+4tYETxFyim3k2HGtzfrNJJl7j89X3hkheK9gcgrp5I=
+X-Received: by 2002:a9d:7602:: with SMTP id k2mr9507732otl.39.1581516781508;
+ Wed, 12 Feb 2020 06:13:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200212130701.1682e406@endymion>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200208130803.23387-1-linux@roeck-us.net>
+In-Reply-To: <20200208130803.23387-1-linux@roeck-us.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Feb 2020 15:12:50 +0100
+Message-ID: <CAMuHMdWjTNwqtUmgw5xh0B+VPALmk8G+Br5je1=w-=nGZq8jMw@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: da9062: Add dependency on I2C
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Stefan Lengfeld <contact@stefanchrist.eu>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 01:07:01PM +0100, Jean Delvare wrote:
-> On Wed, 12 Feb 2020 14:05:40 +0300, Mika Westerberg wrote:
-> > If the BIOS default timeout for the watchdog is too small userspace may
-> > not have enough time to configure new timeout after opening the device
-> > before the system is already reset. For this reason program default
-> > timeout of 30 seconds in the driver probe and allow userspace to change
-> > this from command line or through module parameter (wdat_wdt.timeout).
-> > 
-> > Reported-by: Jean Delvare <jdelvare@suse.de>
-> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > ---
-> >  drivers/watchdog/wdat_wdt.c | 24 ++++++++++++++++++++++++
-> >  1 file changed, 24 insertions(+)
-> > 
-> > diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-> > index 2132018f031d..7b0257163522 100644
-> > --- a/drivers/watchdog/wdat_wdt.c
-> > +++ b/drivers/watchdog/wdat_wdt.c
-> > @@ -54,6 +54,13 @@ module_param(nowayout, bool, 0);
-> >  MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-> >  		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> >  
-> > +#define WDAT_DEFAULT_TIMEOUT	30
-> > +
-> > +static int timeout = WDAT_DEFAULT_TIMEOUT;
-> > +module_param(timeout, int, 0);
-> > +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default="
-> > +		 __MODULE_STRING(WDAT_DEFAULT_TIMEOUT) ")");
-> > +
-> >  static int wdat_wdt_read(struct wdat_wdt *wdat,
-> >  	 const struct wdat_instruction *instr, u32 *value)
-> >  {
-> > @@ -308,6 +315,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
-> >  	struct device *dev = &pdev->dev;
-> >  	const struct acpi_wdat_entry *entries;
-> >  	const struct acpi_table_wdat *tbl;
-> > +	int default_timeout = timeout;
-> >  	struct wdat_wdt *wdat;
-> >  	struct resource *res;
-> >  	void __iomem **regs;
-> > @@ -438,6 +446,22 @@ static int wdat_wdt_probe(struct platform_device *pdev)
-> >  
-> >  	platform_set_drvdata(pdev, wdat);
-> >  
-> > +	/*
-> > +	 * Set initial timeout so that userspace has time to configure
-> > +	 * the watchdog properly after it has opened the device. In some
-> > +	 * cases the BIOS default is too short and causes immediate reboot.
-> > +	 */
-> > +	default_timeout = timeout;
-> 
-> You have already done that at variable declaration time.
-> 
-> > +	if (timeout < wdat->wdd.min_hw_heartbeat_ms ||
-> > +	    timeout > wdat->wdd.max_hw_heartbeat_ms)
-> 
-> Comparing seconds to milliseconds is unlikely to give the expected
-> result.
-> 
-> > +		default_timeout = WDAT_DEFAULT_TIMEOUT;
-> > +	else
-> > +		default_timeout = timeout;
-> 
-> You have already done that twice ;-)
-> 
-> > +
-> > +	ret = wdat_wdt_set_timeout(&wdat->wdd, timeout);
-> 
-> You must pass "default_timeout" here, not "timeout", else the check
-> before serves no purpose. It might be less confusing to not introduce a
-> separate variable and just tweak timeout in place?
+On Sat, Feb 8, 2020 at 2:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> Since commit 057b52b4b3d58 ("watchdog: da9062: make restart handler atomic
+> safe"), the driver calls i2c functions directly. It now therefore depends
+> on I2C. This is a hard dependency which overrides COMPILE_TEST.
+>
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Fixes: 057b52b4b3d58 ("watchdog: da9062: make restart handler atomic safe")
+> Cc: Marco Felsch <m.felsch@pengutronix.de>
+> Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+> Cc: Stefan Lengfeld <contact@stefanchrist.eu>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Heh, looks like this whole patch series is completely broken. Thanks for
-taking time to review it and spotting all those errors. I'll fix all
-these up in v2.
+Just ran into the same issue, so
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Sorry about this mess.
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
