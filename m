@@ -2,109 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B15515ADDE
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Feb 2020 17:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DAE15B26D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Feb 2020 22:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728226AbgBLQ6E (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Feb 2020 11:58:04 -0500
-Received: from mga14.intel.com ([192.55.52.115]:1933 "EHLO mga14.intel.com"
+        id S1728674AbgBLVCE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Feb 2020 16:02:04 -0500
+Received: from mga11.intel.com ([192.55.52.93]:40824 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726351AbgBLQ6E (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Feb 2020 11:58:04 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1727138AbgBLVCE (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 12 Feb 2020 16:02:04 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 08:58:04 -0800
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 13:02:03 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,433,1574150400"; 
-   d="scan'208";a="347547083"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 12 Feb 2020 08:58:00 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 12 Feb 2020 18:58:00 +0200
-Date:   Wed, 12 Feb 2020 18:58:00 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+X-IronPort-AV: E=Sophos;i="5.70,434,1574150400"; 
+   d="scan'208";a="281337938"
+Received: from orsmsx106.amr.corp.intel.com ([10.22.225.133])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Feb 2020 13:02:03 -0800
+Received: from orsmsx110.amr.corp.intel.com ([169.254.10.107]) by
+ ORSMSX106.amr.corp.intel.com ([169.254.1.123]) with mapi id 14.03.0439.000;
+ Wed, 12 Feb 2020 13:02:03 -0800
+From:   "Moore, Robert" <robert.moore@intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     Len Brown <lenb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Tom Abraham <tabraham@suse.com>
-Subject: Re: [PATCH v2 2/3] ACPI / watchdog: Fix gas->access_width usage
-Message-ID: <20200212165800.GG2667@lahna.fi.intel.com>
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "Kaneda, Erik" <erik.kaneda@intel.com>,
+        "Tom Abraham" <tabraham@suse.com>
+Subject: RE: [PATCH v2 1/3] ACPICA: Introduce ACPI_ACCESS_BYTE_WIDTH() macro
+Thread-Topic: [PATCH v2 1/3] ACPICA: Introduce ACPI_ACCESS_BYTE_WIDTH() macro
+Thread-Index: AQHV4bUX6obbox02EUG+swOmUWlaeagYC72w
+Date:   Wed, 12 Feb 2020 21:02:02 +0000
+Message-ID: <94F2FBAB4432B54E8AACC7DFDE6C92E3B96E7D91@ORSMSX110.amr.corp.intel.com>
 References: <20200212145941.32914-1-mika.westerberg@linux.intel.com>
- <20200212145941.32914-3-mika.westerberg@linux.intel.com>
- <20200212165537.46f251cf@endymion>
+ <20200212145941.32914-2-mika.westerberg@linux.intel.com>
+In-Reply-To: <20200212145941.32914-2-mika.westerberg@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMjhjMmE5OTktNjg4OC00MDRkLTg5OTgtY2ZlMzMzZDg3OGZkIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiK2lpWUJ1b2JzTHJsbzFiWm43cDVud1g2Ulh2WDFpXC9OUndHVW8yMXVxbmtGV1lhZGRMUVREQlhtZVB3elZDMjcifQ==
+x-ctpclassification: CTP_NT
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.138]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200212165537.46f251cf@endymion>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 04:55:37PM +0100, Jean Delvare wrote:
-> On Wed, 12 Feb 2020 17:59:40 +0300, Mika Westerberg wrote:
-> > ACPI Generic Address Structure (GAS) access_width field is not in bytes
-> > as the driver seems to expect in few places so fix this by using the
-> > newly introduced macro ACPI_ACCESS_BYTE_WIDTH().
-> > 
-> > Fixes: b1abf6fc4982 ("ACPI / watchdog: Fix off-by-one error at resource assignment")
-> 
-> It does not actually fix that commit, as the bug already existed prior
-> to it. It has to be applied on top of that commit though because they
-> touch the same lines, granted.
 
-Yeah, I figured I should put the dependency commit here as well. I guess
-Depends-on can be used as well:
 
-Depends-on: b1abf6fc4982 ("ACPI / watchdog: Fix off-by-one error at resource assignment")
+-----Original Message-----
+From: Mika Westerberg <mika.westerberg@linux.intel.com> 
+Sent: Wednesday, February 12, 2020 7:00 AM
+To: Jean Delvare <jdelvare@suse.de>; Rafael J. Wysocki <rjw@rjwysocki.net>
+Cc: Len Brown <lenb@kernel.org>; linux-acpi@vger.kernel.org; Wim Van Sebroeck <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>; linux-watchdog@vger.kernel.org; Moore, Robert <robert.moore@intel.com>; Kaneda, Erik <erik.kaneda@intel.com>; Tom Abraham <tabraham@suse.com>; Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 1/3] ACPICA: Introduce ACPI_ACCESS_BYTE_WIDTH() macro
 
-> > Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
-> > Reported-by: Jean Delvare <jdelvare@suse.de>
-> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > ---
-> >  drivers/acpi/acpi_watchdog.c | 3 +--
-> >  drivers/watchdog/wdat_wdt.c  | 2 +-
-> >  2 files changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/acpi/acpi_watchdog.c b/drivers/acpi/acpi_watchdog.c
-> > index b5516b04ffc0..d827a4a3e946 100644
-> > --- a/drivers/acpi/acpi_watchdog.c
-> > +++ b/drivers/acpi/acpi_watchdog.c
-> > @@ -126,12 +126,11 @@ void __init acpi_watchdog_init(void)
-> >  		gas = &entries[i].register_region;
-> >  
-> >  		res.start = gas->address;
-> > +		res.end = res.start + ACPI_ACCESS_BYTE_WIDTH(gas->access_width) - 1;
-> >  		if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-> >  			res.flags = IORESOURCE_MEM;
-> > -			res.end = res.start + ALIGN(gas->access_width, 4) - 1;
-> >  		} else if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
-> >  			res.flags = IORESOURCE_IO;
-> > -			res.end = res.start + gas->access_width - 1;
-> >  		} else {
-> >  			pr_warn("Unsupported address space: %u\n",
-> >  				gas->space_id);
-> > diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-> > index b069349b52f5..e1b1fcfc02af 100644
-> > --- a/drivers/watchdog/wdat_wdt.c
-> > +++ b/drivers/watchdog/wdat_wdt.c
-> > @@ -389,7 +389,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
-> >  
-> >  		memset(&r, 0, sizeof(r));
-> >  		r.start = gas->address;
-> > -		r.end = r.start + gas->access_width - 1;
-> > +		r.end = r.start + ACPI_ACCESS_BYTE_WIDTH(gas->access_width) - 1;
-> >  		if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-> >  			r.flags = IORESOURCE_MEM;
-> >  		} else if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
-> 
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Sometimes it is useful to find the access_width field value in bytes and not in bits so add a helper that can be used for this purpose.
 
-Thanks!
+Suggested-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+---
+ include/acpi/actypes.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h index a2583c2bc054..4defed58ea33 100644
+--- a/include/acpi/actypes.h
++++ b/include/acpi/actypes.h
+@@ -532,11 +532,12 @@ typedef u64 acpi_integer;
+ 	 strnlen (a, ACPI_NAMESEG_SIZE) == ACPI_NAMESEG_SIZE)
+ 
+ /*
+- * Algorithm to obtain access bit width.
++ * Algorithm to obtain access bit or byte width.
+  * Can be used with access_width of struct acpi_generic_address and access_size of
+  * struct acpi_resource_generic_register.
+  */
+ #define ACPI_ACCESS_BIT_WIDTH(size)     (1 << ((size) + 2))
++#define ACPI_ACCESS_BYTE_WIDTH(size)    (1 << ((size) - 1))
+ 
+OK, we've taken this one into ACPICA.
+Thanks,
+Bob
+
+ /*******************************************************************************
+  *
+--
+2.25.0
+
