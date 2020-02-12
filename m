@@ -2,20 +2,20 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E1D15A867
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Feb 2020 12:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D526E15A8BE
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Feb 2020 13:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728098AbgBLL4I (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Feb 2020 06:56:08 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58000 "EHLO mx2.suse.de"
+        id S1725874AbgBLMHe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Feb 2020 07:07:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:34028 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727007AbgBLL4I (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Feb 2020 06:56:08 -0500
+        id S1726470AbgBLMHd (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 12 Feb 2020 07:07:33 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6BED4AC5C;
-        Wed, 12 Feb 2020 11:56:06 +0000 (UTC)
-Date:   Wed, 12 Feb 2020 12:56:05 +0100
+        by mx2.suse.de (Postfix) with ESMTP id 5B0F3AD2C;
+        Wed, 12 Feb 2020 12:07:32 +0000 (UTC)
+Date:   Wed, 12 Feb 2020 13:07:01 +0100
 From:   Jean Delvare <jdelvare@suse.de>
 To:     Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -23,12 +23,12 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-watchdog@vger.kernel.org, Tom Abraham <tabraham@suse.com>
-Subject: Re: [PATCH 2/3] ACPI / watchdog: Fix gas->access_width usage
-Message-ID: <20200212125605.4b2013b4@endymion>
-In-Reply-To: <20200212110540.83559-2-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH 3/3] ACPI / watchdog: Set default timeout in probe
+Message-ID: <20200212130701.1682e406@endymion>
+In-Reply-To: <20200212110540.83559-3-mika.westerberg@linux.intel.com>
 References: <20200211180331.11dbe525@endymion>
         <20200212110540.83559-1-mika.westerberg@linux.intel.com>
-        <20200212110540.83559-2-mika.westerberg@linux.intel.com>
+        <20200212110540.83559-3-mika.westerberg@linux.intel.com>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -39,63 +39,84 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 12 Feb 2020 14:05:39 +0300, Mika Westerberg wrote:
-> ACPI Generic Address Structure (GAS) access_width field is not in bytes
-> as the driver seems to expect in few places so fix this by using the
-> newly introduced macro ACPI_ACCESS_BIT_WIDTH().
+On Wed, 12 Feb 2020 14:05:40 +0300, Mika Westerberg wrote:
+> If the BIOS default timeout for the watchdog is too small userspace may
+> not have enough time to configure new timeout after opening the device
+> before the system is already reset. For this reason program default
+> timeout of 30 seconds in the driver probe and allow userspace to change
+> this from command line or through module parameter (wdat_wdt.timeout).
 > 
 > Reported-by: Jean Delvare <jdelvare@suse.de>
 > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 > ---
-> Not sure if this is stable material since there is no user visible issues
-> without the fix. If this needs to go stable then the ACPICA change need to
-> be taken there as well (or we make separate fix for stable without the
-> macro).
-
-I thought about it too and I don't think it qualifies for stable
-because we have no proof it affects any user in pratcice. You may want
-to add a "Fixes:" tag though to track where the bug was introduced and
-let distributions backport the fix if they want to.
-
+>  drivers/watchdog/wdat_wdt.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 > 
->  drivers/acpi/acpi_watchdog.c | 3 +--
->  drivers/watchdog/wdat_wdt.c  | 2 +-
->  2 files changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/acpi/acpi_watchdog.c b/drivers/acpi/acpi_watchdog.c
-> index b5516b04ffc0..ef0832999892 100644
-> --- a/drivers/acpi/acpi_watchdog.c
-> +++ b/drivers/acpi/acpi_watchdog.c
-> @@ -126,12 +126,11 @@ void __init acpi_watchdog_init(void)
->  		gas = &entries[i].register_region;
->  
->  		res.start = gas->address;
-> +		res.end = res.start + ACPI_ACCESS_BIT_WIDTH(gas->access_width) - 1;
->  		if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
->  			res.flags = IORESOURCE_MEM;
-> -			res.end = res.start + ALIGN(gas->access_width, 4) - 1;
->  		} else if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
->  			res.flags = IORESOURCE_IO;
-> -			res.end = res.start + gas->access_width - 1;
->  		} else {
->  			pr_warn("Unsupported address space: %u\n",
->  				gas->space_id);
 > diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-> index b069349b52f5..2132018f031d 100644
+> index 2132018f031d..7b0257163522 100644
 > --- a/drivers/watchdog/wdat_wdt.c
 > +++ b/drivers/watchdog/wdat_wdt.c
-> @@ -389,7 +389,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+> @@ -54,6 +54,13 @@ module_param(nowayout, bool, 0);
+>  MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+>  		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 >  
->  		memset(&r, 0, sizeof(r));
->  		r.start = gas->address;
-> -		r.end = r.start + gas->access_width - 1;
-> +		r.end = r.start + ACPI_ACCESS_BIT_WIDTH(gas->access_width) - 1;
->  		if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
->  			r.flags = IORESOURCE_MEM;
->  		} else if (gas->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
+> +#define WDAT_DEFAULT_TIMEOUT	30
+> +
+> +static int timeout = WDAT_DEFAULT_TIMEOUT;
+> +module_param(timeout, int, 0);
+> +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default="
+> +		 __MODULE_STRING(WDAT_DEFAULT_TIMEOUT) ")");
+> +
+>  static int wdat_wdt_read(struct wdat_wdt *wdat,
+>  	 const struct wdat_instruction *instr, u32 *value)
+>  {
+> @@ -308,6 +315,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	const struct acpi_wdat_entry *entries;
+>  	const struct acpi_table_wdat *tbl;
+> +	int default_timeout = timeout;
+>  	struct wdat_wdt *wdat;
+>  	struct resource *res;
+>  	void __iomem **regs;
+> @@ -438,6 +446,22 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, wdat);
+>  
+> +	/*
+> +	 * Set initial timeout so that userspace has time to configure
+> +	 * the watchdog properly after it has opened the device. In some
+> +	 * cases the BIOS default is too short and causes immediate reboot.
+> +	 */
+> +	default_timeout = timeout;
 
-You are using ACPI_ACCESS_BIT_WIDTH() where you clearly meant to use
-ACPI_ACCESS_BYTE_WIDTH().
+You have already done that at variable declaration time.
+
+> +	if (timeout < wdat->wdd.min_hw_heartbeat_ms ||
+> +	    timeout > wdat->wdd.max_hw_heartbeat_ms)
+
+Comparing seconds to milliseconds is unlikely to give the expected
+result.
+
+> +		default_timeout = WDAT_DEFAULT_TIMEOUT;
+> +	else
+> +		default_timeout = timeout;
+
+You have already done that twice ;-)
+
+> +
+> +	ret = wdat_wdt_set_timeout(&wdat->wdd, timeout);
+
+You must pass "default_timeout" here, not "timeout", else the check
+before serves no purpose. It might be less confusing to not introduce a
+separate variable and just tweak timeout in place?
+
+> +	if (ret)
+> +		return ret;
+> +
+>  	watchdog_set_nowayout(&wdat->wdd, nowayout);
+>  	return devm_watchdog_register_device(dev, &wdat->wdd);
+>  }
+
 
 -- 
 Jean Delvare
