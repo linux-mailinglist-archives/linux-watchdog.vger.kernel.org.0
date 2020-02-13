@@ -2,104 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DAE15B26D
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Feb 2020 22:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D0F15C9D2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Feb 2020 19:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728674AbgBLVCE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Feb 2020 16:02:04 -0500
-Received: from mga11.intel.com ([192.55.52.93]:40824 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727138AbgBLVCE (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Feb 2020 16:02:04 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 13:02:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,434,1574150400"; 
-   d="scan'208";a="281337938"
-Received: from orsmsx106.amr.corp.intel.com ([10.22.225.133])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Feb 2020 13:02:03 -0800
-Received: from orsmsx110.amr.corp.intel.com ([169.254.10.107]) by
- ORSMSX106.amr.corp.intel.com ([169.254.1.123]) with mapi id 14.03.0439.000;
- Wed, 12 Feb 2020 13:02:03 -0800
-From:   "Moore, Robert" <robert.moore@intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC:     Len Brown <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        id S1727778AbgBMSAH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 13 Feb 2020 13:00:07 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:33009 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726282AbgBMSAG (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 13 Feb 2020 13:00:06 -0500
+Received: by mail-wm1-f66.google.com with SMTP id m10so279366wmc.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 13 Feb 2020 10:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=googlenew;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IM6o8NVQDeHS8QF7w0dNqh6FQQqjXCaR+XNTNS4nvcs=;
+        b=MoDwHO9KiaUH/rFESW5hrHUe6v4R738SjyRG+ioB0uW53m+A741omymcNbuRb/eaHO
+         chIR7BML7ZqSd1DMuvV3Y8e3PexeI5qId7YZTSCGcapAYzl2giUJtrD0vd8RUizvX+9k
+         uVkwvuTkXIP/fCXv1/36zEDsCxBeoeUhFjGXsBk4pMf3RqxakZlD1dcGx3wIITxP7WpT
+         x3IzcBJy0iyAcNyQsgWqwgr2lxSThhSYeW2g2Gl4ZfV97j0iIIgPzXxYifVoHmpCJLG6
+         C3PtpaSWs2W39AbIPTi3+veHiegYzL05DNI/jLppZokLidC8aOXcfXzbncLUofrzxl9/
+         5Eew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IM6o8NVQDeHS8QF7w0dNqh6FQQqjXCaR+XNTNS4nvcs=;
+        b=eIjy+pcQ65SFSBrwHUsug8IQVE80sn7xEmKDJHLwUk64n6roJG1iDCpNqyI+pA8BWX
+         GJDNzimNwwYVmJZU5Ln8FSzt9Fzk2PNAvmuHusRkFC6He1dw1T95jK7E/QVqKm9UpBne
+         5aSKgqdDdKV8d0nWi0NRdIImHTx/iwkzxX5e0UBETNc76WZV6cA6dR/3Fr9U5sSLn6/7
+         Pcr4+rweSntHebFphAFKKld6x13rt+UfsgnQZSgcn8OsFH6H4Ox7TepaM1nQZ8QSPrs1
+         gYGpwKD6czTgDskMeupsNepmpVzPsfMmX+dIAZM4qtywAtpZwCMpOGoG9chx2Ihb422b
+         HtuQ==
+X-Gm-Message-State: APjAAAUR+opw8R+VKB/6Uf1xvRW/kq8wWgOpKgw9s2yJTtWM8VQUKu0+
+        AZpdhX+hJj7hHUZWvDqXNmrSHg==
+X-Google-Smtp-Source: APXvYqz/77uAvbDFxP8E/deYuR68tDru3DVawV19plhpicmeO9etnayOqLvyl7nL1AnjQfDUTaYmxg==
+X-Received: by 2002:a1c:6209:: with SMTP id w9mr6674232wmb.183.1581616804754;
+        Thu, 13 Feb 2020 10:00:04 -0800 (PST)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id z11sm3630089wrv.96.2020.02.13.10.00.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2020 10:00:04 -0800 (PST)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "Kaneda, Erik" <erik.kaneda@intel.com>,
-        "Tom Abraham" <tabraham@suse.com>
-Subject: RE: [PATCH v2 1/3] ACPICA: Introduce ACPI_ACCESS_BYTE_WIDTH() macro
-Thread-Topic: [PATCH v2 1/3] ACPICA: Introduce ACPI_ACCESS_BYTE_WIDTH() macro
-Thread-Index: AQHV4bUX6obbox02EUG+swOmUWlaeagYC72w
-Date:   Wed, 12 Feb 2020 21:02:02 +0000
-Message-ID: <94F2FBAB4432B54E8AACC7DFDE6C92E3B96E7D91@ORSMSX110.amr.corp.intel.com>
-References: <20200212145941.32914-1-mika.westerberg@linux.intel.com>
- <20200212145941.32914-2-mika.westerberg@linux.intel.com>
-In-Reply-To: <20200212145941.32914-2-mika.westerberg@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMjhjMmE5OTktNjg4OC00MDRkLTg5OTgtY2ZlMzMzZDg3OGZkIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiK2lpWUJ1b2JzTHJsbzFiWm43cDVud1g2Ulh2WDFpXC9OUndHVW8yMXVxbmtGV1lhZGRMUVREQlhtZVB3elZDMjcifQ==
-x-ctpclassification: CTP_NT
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.22.254.138]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 0/2] watchdog: Provide user control over WDOG_STOP_ON_REBOOT
+Date:   Thu, 13 Feb 2020 17:59:56 +0000
+Message-Id: <20200213175958.105914-1-dima@arista.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Add WDIOS_RUN_ON_REBOOT and WDIOS_STOP_ON_REBOOT to control the
+watchdog's behavior over reboot.
 
+Changes since RFC:
+o rebase over v5.6
+o fixed return code for ioctl()
 
------Original Message-----
-From: Mika Westerberg <mika.westerberg@linux.intel.com> 
-Sent: Wednesday, February 12, 2020 7:00 AM
-To: Jean Delvare <jdelvare@suse.de>; Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: Len Brown <lenb@kernel.org>; linux-acpi@vger.kernel.org; Wim Van Sebroeck <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>; linux-watchdog@vger.kernel.org; Moore, Robert <robert.moore@intel.com>; Kaneda, Erik <erik.kaneda@intel.com>; Tom Abraham <tabraham@suse.com>; Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2 1/3] ACPICA: Introduce ACPI_ACCESS_BYTE_WIDTH() macro
+I've sent RFC a while ago and it probably was very late in release
+cycle to catch any attention:
+https://lkml.kernel.org/r/20200121162145.166334-1-dima@arista.com
 
-Sometimes it is useful to find the access_width field value in bytes and not in bits so add a helper that can be used for this purpose.
+While waiting for rc1, I've changed my mind that it's RFC material and
+sending it as PATCHv1 instead.
 
-Suggested-by: Jean Delvare <jdelvare@suse.de>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
----
- include/acpi/actypes.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-watchdog@vger.kernel.org
 
-diff --git a/include/acpi/actypes.h b/include/acpi/actypes.h index a2583c2bc054..4defed58ea33 100644
---- a/include/acpi/actypes.h
-+++ b/include/acpi/actypes.h
-@@ -532,11 +532,12 @@ typedef u64 acpi_integer;
- 	 strnlen (a, ACPI_NAMESEG_SIZE) == ACPI_NAMESEG_SIZE)
- 
- /*
-- * Algorithm to obtain access bit width.
-+ * Algorithm to obtain access bit or byte width.
-  * Can be used with access_width of struct acpi_generic_address and access_size of
-  * struct acpi_resource_generic_register.
-  */
- #define ACPI_ACCESS_BIT_WIDTH(size)     (1 << ((size) + 2))
-+#define ACPI_ACCESS_BYTE_WIDTH(size)    (1 << ((size) - 1))
- 
-OK, we've taken this one into ACPICA.
-Thanks,
-Bob
+Dmitry Safonov (2):
+  watchdog: Check WDOG_STOP_ON_REBOOT in reboot notifier
+  watchdog/uapi: Add WDIOS_{RUN,STOP}_ON_REBOOT
 
- /*******************************************************************************
-  *
---
+ drivers/watchdog/watchdog_core.c | 27 +++++++++++++--------------
+ drivers/watchdog/watchdog_dev.c  | 12 ++++++++++++
+ include/linux/watchdog.h         |  6 ++++++
+ include/uapi/linux/watchdog.h    |  3 ++-
+ 4 files changed, 33 insertions(+), 15 deletions(-)
+
+-- 
 2.25.0
 
