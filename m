@@ -2,164 +2,92 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EEF15CAFA
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Feb 2020 20:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5F415CC50
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Feb 2020 21:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727913AbgBMTMe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 13 Feb 2020 14:12:34 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33143 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727652AbgBMTMd (ORCPT
+        id S1726968AbgBMUX5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 13 Feb 2020 15:23:57 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:50334 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728260AbgBMUX5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 13 Feb 2020 14:12:33 -0500
-Received: by mail-pf1-f193.google.com with SMTP id n7so3549772pfn.0;
-        Thu, 13 Feb 2020 11:12:33 -0800 (PST)
+        Thu, 13 Feb 2020 15:23:57 -0500
+Received: by mail-wm1-f68.google.com with SMTP id a5so7675859wmb.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 13 Feb 2020 12:23:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1yzD2nIJu9iDj+p19SPYjqCO9YDBUBldaHl5pgvZIkA=;
-        b=aR+wadMQloZsuakKRGdXqCS5O/mnk2txXZviNhUOAdiS6sB0IeCQbc3wOGVs/r5Hgn
-         0S5xiWgDt70dH1rIlZK4zZbWbl09aNR2owPR/vLCxcz56ZNOmtZb6M9Va7Om+9H0yQfz
-         STwgqvoT2XokTQVT9/iJQd67NYIF135MjvKixSxl+GzkMxeaQq5hsUNPjDQ1Bd8aL1Dw
-         /404HwN1BywbApKQZ/WPXAmJbtsCGeBruBtriG1whqCAb1ZDSDSv9dekd1KNLAOeNfVu
-         rnGpP14U9WN2gDP9HzcGt9AmvTwVVZ2Q+8mG7SFoysTucdDRP6gmNZhimy+evvsb8tH3
-         oyVQ==
+        d=arista.com; s=googlenew;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=z0gjJEmRAwNymPwA00fmzFhjNC7Qe4kL5vReX8cevnI=;
+        b=Hz/xL3g4x51bG7UTsON1g0txoL+UQIUGlDIxuBxUvr2H3k12pXc/T/otefb4iCRVft
+         4ov86aKFTIW1nMR+qgtLawZAt6+nyiYLHH4OCVRSmd1Fh3PaOR9aMQ/e5M/sPXu7owO4
+         jOS7Po0sT9ic7cUHflzW8HE8OycaB9fYChOyRnCocqK6mu1rT/gnzpro/8OZSG+Ay0kk
+         C+ANlMSCQ/oPcITNh6DtEDm5Mr/DpbgwrsDe8A3Vo0JQot/cuxDnVwJ6MIYADFOig9Aq
+         xt6hnnucC1kJVZpl7n7GqLBnFfhymOeWIUp+ApzWYNs0sqVarGSIZ/fw/Nb3LhVBOYeF
+         y/MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1yzD2nIJu9iDj+p19SPYjqCO9YDBUBldaHl5pgvZIkA=;
-        b=DlYwr4fanCoX5mIDJOXHWnDNuKPscEmc+hgBT4ArsLPUTJpuAw3UV0NtBwd1jg5OXx
-         3SrqBKOUm62So+Q2caNWF/htSMHpj/VM9qGmLUxSOQXlvdlhCPyYMDzfJFnXJm1nowmj
-         1or+YaFWjKQkNugWzNV5K8yKMy6EZ7KmhctBOmZ7B83O2B7Sox8hB90IJGmeC/ltGfZ7
-         QM7nbDxIDmBhUVI2MyHp2PGlHHf8VBSY1TjgDZklMVnzTeU8s+Bl1qoqKCXUvQFSvSwk
-         BYUTAmaIFTaIGuzw5DLtbCCrDJJD3s+FPCuw10quGGpQFEkg2/Q0HzL4gtx2uHYwPZGn
-         /stg==
-X-Gm-Message-State: APjAAAU222I8ARhyQ9NM0d2xdUFhj/xsFL95Bz55DXhHz/oSZTvD2aYc
-        3+SZmA8HVO27ts9X8bhHHpc=
-X-Google-Smtp-Source: APXvYqw39zG2TOqVnTodCGBX5UdXeAZwww9nEINmKr1buhV9EIw/P2mvX/jEE5sMFWQv6g+KKOWUdw==
-X-Received: by 2002:a63:aa0d:: with SMTP id e13mr6982145pgf.75.1581621152860;
-        Thu, 13 Feb 2020 11:12:32 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c26sm4148476pfj.8.2020.02.13.11.12.31
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Feb 2020 11:12:31 -0800 (PST)
-Date:   Thu, 13 Feb 2020 11:12:30 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dmitry Safonov <dima@arista.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=z0gjJEmRAwNymPwA00fmzFhjNC7Qe4kL5vReX8cevnI=;
+        b=OCzjDebLLxJ9pkcP0R0JA4spn4rxFOJFJarWfEIuklSb/mBVgF+vjqNJCrxXQF1E/V
+         wckgtXM1F1Vw2FzI9agC0cTjgKRxTkEmqLHtUhwFxuj7hts0LB97yuSrgOvBcRwaM3Xt
+         l/7ssoAOmVQzl8eH4IimUvVL7TrvOI6albGjNBraTGXTXCO0JbNuSSkj6XTKeKsBMpiK
+         /RhcgjBTrZe6/WUbJFoniALC49JhlzL1tTHt6dWMgcp002tuz4RyOk1Qo0dmIEM1AdKT
+         fpX56BwNjZvnzWl7VRAQweih1HlKR2tI+L8yrO/aaf3wHqm3vWCNFWo1UCqYfMZ9tz8p
+         83CA==
+X-Gm-Message-State: APjAAAV1qtKY/YuoemWpdf9Y4DoH1p4l1i9wEOeWV/h99VGljFEq2S+J
+        QCDGfA8HOT8fOm18lMq1PmszwWYnlus=
+X-Google-Smtp-Source: APXvYqzqyPeBFBhVewwKaBK9XjxIwvnsPNpsAByNUUEuukhTDypWS6UDuisfdJZDF6q4I4Mj1hC2NA==
+X-Received: by 2002:a1c:a5c7:: with SMTP id o190mr7779715wme.183.1581625434916;
+        Thu, 13 Feb 2020 12:23:54 -0800 (PST)
+Received: from [10.83.36.153] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id o15sm4276160wra.83.2020.02.13.12.23.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Feb 2020 12:23:54 -0800 (PST)
+Subject: Re: [PATCH 1/2] watchdog: Check WDOG_STOP_ON_REBOOT in reboot
+ notifier
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org,
         Dmitry Safonov <0x7f454c46@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/2] watchdog: Check WDOG_STOP_ON_REBOOT in reboot
- notifier
-Message-ID: <20200213191230.GA17448@roeck-us.net>
 References: <20200213175958.105914-1-dima@arista.com>
  <20200213175958.105914-2-dima@arista.com>
+ <20200213191230.GA17448@roeck-us.net>
+From:   Dmitry Safonov <dima@arista.com>
+Message-ID: <3de88f30-e601-77b3-d477-ca9ce461c920@arista.com>
+Date:   Thu, 13 Feb 2020 20:23:53 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200213175958.105914-2-dima@arista.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200213191230.GA17448@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 05:59:57PM +0000, Dmitry Safonov wrote:
-> Many watchdog drivers use watchdog_stop_on_reboot() helper in order
-> to stop the watchdog on system reboot. Unfortunately, this logic is
-> coded in driver's probe function and doesn't allows user to decide what
-> to do during shutdown/reboot.
-> 
-> On the other side, Xen and Qemu watchdog drivers (xen_wdt and i6300esb)
-> may be configured to either send NMI or turn off/reboot VM as
-> the watchdog action. As the kernel may stuck at any state, sending NMIs
-> can't reliably reboot the VM.
-> 
-> At Arista, we benefited from the following set-up: the emulated watchdogs
-> trigger VM reset and softdog is set to catch less severe conditions to
-> generate vmcore. Just before reboot watchdog's timeout is increased
-> to some good-enough value (3 mins). That keeps watchdog always running
-> and guarantees that VM doesn't stuck.
-> 
-> As a preparation to move the watchdog's decision to stop on reboot or
-> not in userspace, allow WDOG_STOP_ON_REBOOT to be set during runtime,
-> not only on driver's probing. Always register reboot notifier and check
-> WDOG_STOP_ON_REBOOT inside it (on actual reboot).
-> 
+Hi Guenter,
 
-Does that really have to be decided at runtime, by the user ?
-How about doing it with a module parameter ?
-
-Also, I am not sure if an ioctl is the best means to do this, if it indeed
-makes sense to decide it at runtime. ioctl implies an open watchdog device,
-which interferes with the watchdog daemon. This means that the watchdog
-daemon would have to be modified to support this, making this a quite expensive
-change. It also implies that the action would have to be known when the
-watchdog daemon is started, suggesting that a module parameter should be
-sufficient.
-
-Guenter
-
-> Signed-off-by: Dmitry Safonov <dima@arista.com>
-> ---
->  drivers/watchdog/watchdog_core.c | 27 +++++++++++++--------------
->  1 file changed, 13 insertions(+), 14 deletions(-)
+On 2/13/20 7:12 PM, Guenter Roeck wrote:
+> Does that really have to be decided at runtime, by the user ?
+> How about doing it with a module parameter ?
 > 
-> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-> index 861daf4f37b2..ebf80ff3e8ce 100644
-> --- a/drivers/watchdog/watchdog_core.c
-> +++ b/drivers/watchdog/watchdog_core.c
-> @@ -153,6 +153,10 @@ static int watchdog_reboot_notifier(struct notifier_block *nb,
->  	struct watchdog_device *wdd;
->  
->  	wdd = container_of(nb, struct watchdog_device, reboot_nb);
-> +
-> +	if (!test_bit(WDOG_STOP_ON_REBOOT, &wdd->status))
-> +		return NOTIFY_DONE;
-> +
->  	if (code == SYS_DOWN || code == SYS_HALT) {
->  		if (watchdog_active(wdd)) {
->  			int ret;
-> @@ -254,17 +258,14 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
->  		}
->  	}
->  
-> -	if (test_bit(WDOG_STOP_ON_REBOOT, &wdd->status)) {
-> -		wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
-> -
-> -		ret = register_reboot_notifier(&wdd->reboot_nb);
-> -		if (ret) {
-> -			pr_err("watchdog%d: Cannot register reboot notifier (%d)\n",
-> -			       wdd->id, ret);
-> -			watchdog_dev_unregister(wdd);
-> -			ida_simple_remove(&watchdog_ida, id);
-> -			return ret;
-> -		}
-> +	wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
-> +	ret = register_reboot_notifier(&wdd->reboot_nb);
-> +	if (ret) {
-> +		pr_err("watchdog%d: Cannot register reboot notifier (%d)\n",
-> +				wdd->id, ret);
-> +		watchdog_dev_unregister(wdd);
-> +		ida_simple_remove(&watchdog_ida, id);
-> +		return ret;
->  	}
->  
->  	if (wdd->ops->restart) {
-> @@ -321,9 +322,7 @@ static void __watchdog_unregister_device(struct watchdog_device *wdd)
->  	if (wdd->ops->restart)
->  		unregister_restart_handler(&wdd->restart_nb);
->  
-> -	if (test_bit(WDOG_STOP_ON_REBOOT, &wdd->status))
-> -		unregister_reboot_notifier(&wdd->reboot_nb);
-> -
-> +	unregister_reboot_notifier(&wdd->reboot_nb);
->  	watchdog_dev_unregister(wdd);
->  	ida_simple_remove(&watchdog_ida, wdd->id);
->  }
-> -- 
-> 2.25.0
-> 
+> Also, I am not sure if an ioctl is the best means to do this, if it indeed
+> makes sense to decide it at runtime. ioctl implies an open watchdog device,
+> which interferes with the watchdog daemon. This means that the watchdog
+> daemon would have to be modified to support this, making this a quite expensive
+> change. It also implies that the action would have to be known when the
+> watchdog daemon is started, suggesting that a module parameter should be
+> sufficient.
+
+Yes, fair points. I went with ioctl() because the timeout can be changed
+in runtime. But you're right, I'll look into making it a module
+parameter instead.
+
+Thanks for the review and time,
+          Dmitry
