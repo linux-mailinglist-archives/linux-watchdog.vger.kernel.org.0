@@ -2,103 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BA015D964
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2020 15:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8023915DE94
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2020 17:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729345AbgBNO0e (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 14 Feb 2020 09:26:34 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:27310 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728123AbgBNO0e (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 14 Feb 2020 09:26:34 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01EEP3Pf024353;
-        Fri, 14 Feb 2020 08:26:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=U6qKy7cs9oRNnaRfqOZ/roMszJAm4Xv4q8p55wB5rDs=;
- b=fLAoZMoJ2LbCsI8k+53LARmUcgyd2yxndK7sujdBytYPcWzCfskTG3h32t/c1aoaqrmb
- cy6RfNZZ/oXtXd2QC+AXGMlmCTCbg8Jgdv0NPLJSStdIVcZAC1nt9/RpeM2t/6BQtGkk
- fWAXp7Atf5cZwUa3MXYoNX4FrvS4087Mx19XSKTD25lMPgVtNbxO86I85jWZgP1hRwue
- WQZLMxndwdhccluuAzobn7l6lQg02OsIxDHtw7Y+8R6N8kuKK7/QpfX9zRf3voKdQqoM
- lLOLc4ZhYoPPRM0fQnrOqfE7+/WYCQ1lfe2Mtnx0in1IyLxJDpN6Cq5Er2UiwG9lFj0Z IQ== 
-Authentication-Results: ppops.net;
-        spf=fail smtp.mailfrom=ckeepax@opensource.cirrus.com
-Received: from ediex01.ad.cirrus.com ([5.172.152.52])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2y1u9a2fk2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 14 Feb 2020 08:26:12 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Fri, 14 Feb
- 2020 14:26:10 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Fri, 14 Feb 2020 14:26:10 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7C6442AB;
-        Fri, 14 Feb 2020 14:26:09 +0000 (UTC)
-Date:   Fri, 14 Feb 2020 14:26:09 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
+        id S2389825AbgBNQEB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 Feb 2020 11:04:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51714 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389820AbgBNQEA (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:04:00 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 604BE2467E;
+        Fri, 14 Feb 2020 16:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581696239;
+        bh=UqdYGeT1iRgYAILlaBy3iyBXTZws2wXAzGt+0B3DafM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=msYQvqSAy9Dgc5udRrI4Fbews6NMnhHE1SSDtUSDXVwMSeRCBoqkp8taO0uBnQy2e
+         7UX1SrwOXkOKzjE4mhHRpNLw6MZ4Y3h5E/3aq0T/Mh5aBSrFP8Cg4tOhG/A1gBVJlf
+         KO5VrcL1ediftIvnUj+RosP3FvITWxq8hxZHjHZc=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Stephen Boyd <swboyd@chromium.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        <linux-watchdog@vger.kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH RESEND] watchdog: wm831x: Use GPIO descriptor
-Message-ID: <20200214142609.GF4098@ediswmail.ad.cirrus.com>
-References: <20200210102209.289379-1-linus.walleij@linaro.org>
- <26fc06fb-fd1d-064b-4015-d68a98369ecb@roeck-us.net>
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 098/459] watchdog: qcom: Use platform_get_irq_optional() for bark irq
+Date:   Fri, 14 Feb 2020 10:55:48 -0500
+Message-Id: <20200214160149.11681-98-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
+References: <20200214160149.11681-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <26fc06fb-fd1d-064b-4015-d68a98369ecb@roeck-us.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-SPF-Result: fail
-X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
- -all
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=926 mlxscore=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 clxscore=1011 malwarescore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002140115
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Feb 10, 2020 at 06:25:35AM -0800, Guenter Roeck wrote:
-> On 2/10/20 2:22 AM, Linus Walleij wrote:
-> >The WM831x watchdog driver passes a global GPIO number from
-> >platform data into this driver, this is discouraged so pass
-> >a GPIO descriptor instead.
-> >
-> >More thorough approaches are possible passing descriptors
-> >associated with the device through machine descriptor tables,
-> >but no boardfiles in the kernel currently use this driver
-> >so it is hard to test.
-> >
-> >Cc: Richard Fitzgerald <rf@opensource.cirrus.com>
-> >Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> >Cc: Mark Brown <broonie@kernel.org>
-> >Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> 
-> Interesting, I don't see evidence of the original patch in
-> watchdog patchwork.
-> 
-> Anyway, it seems to me it would be better to remove the gpio code
-> entirely from this driver. It is instantiated from an mfd driver
-> which doesn't set the gpio pin. It is quite unlikely that it is
-> ever going to be used, so we might as well remove it (instead of
-> modifying it without ability to test it).
-> 
+From: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
 
-We don't have any internal users for the WDT GPIOs here, given
-the age of the part perhaps removing the GPIO is the simplest
-solution.
+[ Upstream commit e0b4f4e0cf7fa9d62628d4249c765ec18dffd143 ]
 
-Thanks,
-Charles
+platform_get_irq() prints an error message when the interrupt
+is not available. So on platforms where bark interrupt is
+not specified, following error message is observed on SDM845.
+
+[    2.975888] qcom_wdt 17980000.watchdog: IRQ index 0 not found
+
+This is also seen on SC7180, SM8150 SoCs as well.
+Fix this by using platform_get_irq_optional() instead.
+
+Fixes: 36375491a4395654 ("watchdog: qcom: support pre-timeout when the bark irq is available")
+Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lore.kernel.org/r/20191213064934.4112-1-saiprakash.ranjan@codeaurora.org
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/watchdog/qcom-wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index a494543d3ae1b..eb47fe5ed2805 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -246,7 +246,7 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* check if there is pretimeout support */
+-	irq = platform_get_irq(pdev, 0);
++	irq = platform_get_irq_optional(pdev, 0);
+ 	if (irq > 0) {
+ 		ret = devm_request_irq(dev, irq, qcom_wdt_isr,
+ 				       IRQF_TRIGGER_RISING,
+-- 
+2.20.1
+
