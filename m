@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F9715EE45
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2020 18:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C37715F3F8
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2020 19:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389816AbgBNQD7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 14 Feb 2020 11:03:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51674 "EHLO mail.kernel.org"
+        id S2388053AbgBNSQ5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 Feb 2020 13:16:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56224 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389809AbgBNQD6 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:03:58 -0500
+        id S1730746AbgBNPvW (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:51:22 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 006A7222C2;
-        Fri, 14 Feb 2020 16:03:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A6FDA2465D;
+        Fri, 14 Feb 2020 15:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696238;
+        s=default; t=1581695481;
         bh=HnWhr6/KKXYznfesNXl5gOHM6wIdNTDv3KbNna8Ndxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LcNEtOz9ZBb0EqlKjXMQy/d2ykxJDzEtTN8unPZ8bendSqzQ7y3e6cnVNgCRurDPV
-         j6ip8FIUsp3vTUzlTAtTOHXg8wmIHSPa/+MgygF3N7+hcHoBZPvy+9QBWfe33ta32L
-         D3WjHrsuZUezK01P1wGlvpNpteW+hm2Wt/oPtUbE=
+        b=osyLz0MlWwJLVhCxGdxUX8/BI+wT+TSk5+VkHYdIgzzwYbaPNCQYYXPHO3PK+TeEa
+         Txp171XWkslZ9ZK3ocpiSQBdftjWDCA0Dyn2gDXhe9vabf+ZJHFsdruboT0QkwAezQ
+         KvgLkQTyDKtJ6yplQuVa4PotWSws6/fLXkOfXrwk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christophe Roullier <christophe.roullier@st.com>,
@@ -32,12 +32,12 @@ Cc:     Christophe Roullier <christophe.roullier@st.com>,
         linux-watchdog@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 097/459] drivers: watchdog: stm32_iwdg: set WDOG_HW_RUNNING at probe
-Date:   Fri, 14 Feb 2020 10:55:47 -0500
-Message-Id: <20200214160149.11681-97-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 113/542] drivers: watchdog: stm32_iwdg: set WDOG_HW_RUNNING at probe
+Date:   Fri, 14 Feb 2020 10:41:45 -0500
+Message-Id: <20200214154854.6746-113-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
-References: <20200214160149.11681-1-sashal@kernel.org>
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
