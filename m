@@ -2,82 +2,101 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C87160CB6
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Feb 2020 09:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C574161179
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Feb 2020 12:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727332AbgBQIQl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Feb 2020 03:16:41 -0500
-Received: from mail3.iservicesmail.com ([217.130.24.75]:34577 "EHLO
-        mail3.iservicesmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726932AbgBQIQl (ORCPT
+        id S1728819AbgBQLzr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Feb 2020 06:55:47 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:35635 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728773AbgBQLzr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Feb 2020 03:16:41 -0500
-IronPort-SDR: Y2cbL+w2WYY0unhVZDBxWy+fR6PK1fj5Zx7y6impTKpKsYvaEPlXDN/I/WDMf5y0cJrCHhJimH
- Czdi8T/cEyMQ==
-IronPort-PHdr: =?us-ascii?q?9a23=3AG//NKRWI9ob/WTa1T6hEUyV6PqbV8LGtZVwlr6?=
- =?us-ascii?q?E/grcLSJyIuqrYYx2Dt8tkgFKBZ4jH8fUM07OQ7/m8HzNdqs/Y7TgrS99laV?=
- =?us-ascii?q?wssY0uhQsuAcqIWwXQDcXBSGgEJvlET0Jv5HqhMEJYS47UblzWpWCuv3ZJQk?=
- =?us-ascii?q?2sfQV6Kf7oFYHMks+5y/69+4HJYwVPmTGxfa5+IA+5oAnMucQam4lvJ6Y+xh?=
- =?us-ascii?q?fUv3dFe/ldyH91K16Ugxvz6cC88YJ5/S9Nofwh7clAUav7f6Q8U7NVCSktPn?=
- =?us-ascii?q?426sP2qxTNVBOD6XQAXGoYlBpIGBXF4wrhXpjtqCv6t/Fy1zecMMbrUL07Qz?=
- =?us-ascii?q?Wi76NsSB/1lCcKMiMy/W/LhsBsiq9QvRSsrAF9zYHJeoGYLPRwcKPHfd0ERm?=
- =?us-ascii?q?RPQ8leWDBODI6nc4sCDfYOMfpEo4XhuVcDqwa1Cwm2BOPozz9FnmX40rMm0+?=
- =?us-ascii?q?s/CwHNwQwvH9UIsHTbsd74M78SUeevzKnU1zrOdO5W2TH86IjTbhAhu+uDUq?=
- =?us-ascii?q?9qfsbLyEkvCxrIg1ONooLmJzOYzvoBv3WZ4uZ6SO6ihXIrpxtvrjWg3MshhI?=
- =?us-ascii?q?nEi4QIwV7e7yp52pw6JdigRU5+Zt6rDYVfujmBN4tzXsMiW2ZouDsmyrEeuZ?=
- =?us-ascii?q?60YiwKyJM/yh7acfOHcoyI4gj9W+aVPTt1i2hpeKy4hxmv60egxOr8Vs+q31?=
- =?us-ascii?q?pQsCVFicHAtnEL1xPN9siKUuVx8lqj1DqVygze5P1ILVoqmafUMZIszL49mo?=
- =?us-ascii?q?IWsUvZHy/2nEv2jLWRdkUh4uWo8+PnYq/6ppCGLIJ0lwf+MqU1msyjG+Q3KB?=
- =?us-ascii?q?UBUHKB9eS9yL3v5Vf5T6lSjv0qjqnZt4jXJcAapq6/Hg9U3Z8v6hilADe6zN?=
- =?us-ascii?q?sYnWQILFVKeB+ckYjpNE/BIOriAfe8nVusijFryO7CPrH7BZXNNHfDw//deu?=
- =?us-ascii?q?N56khB2E8sxMxU555TBZkfL//pHEz8rtrVClk+KQPn+ev/DMRB0dYmVH6CGO?=
- =?us-ascii?q?emN6Xd+QuQ6/4iOfaLYoAVuzbmIfMN6PvnjHt/klgYK/qHx5wSPUi1Avl8a3?=
- =?us-ascii?q?qeZ3Wk1s8GC3sDlhc4Tff2klSOWHhSeyDhDOoH+jgnBdf+Xs/4TYe3jenZ0Q?=
- =?us-ascii?q?=3D=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2G9TQDOSkpelyMYgtllgkOBPgIBgUU?=
- =?us-ascii?q?QUiASjGOGa1QGcx+DQ4ZShRaBAIMzhgcTDIFbDQEBAQEBNQIEAQGEQIIEJDw?=
- =?us-ascii?q?CDQIDDQEBBgEBAQEBBQQBAQIQAQEBAQEIFgaFc4I7IoNwIA85SkwBDgGDV4J?=
- =?us-ascii?q?LAQEKKax1DQ0ChR6CSwQKgQiBGyOBNgMBAYwhGnmBB4EjIYIrCAGCAYJ/ARI?=
- =?us-ascii?q?BboJIglkEjVISIYlFmDSBaloElmuCOQEPiBaENwOCWg+BC4MdgwmBZ4RSgX+?=
- =?us-ascii?q?fZoQUV4Egc3EzGggwgW4agSBPGA2ON44rAkCBFxACT4tJgjIBAQ?=
-X-IPAS-Result: =?us-ascii?q?A2G9TQDOSkpelyMYgtllgkOBPgIBgUUQUiASjGOGa1QGc?=
- =?us-ascii?q?x+DQ4ZShRaBAIMzhgcTDIFbDQEBAQEBNQIEAQGEQIIEJDwCDQIDDQEBBgEBA?=
- =?us-ascii?q?QEBBQQBAQIQAQEBAQEIFgaFc4I7IoNwIA85SkwBDgGDV4JLAQEKKax1DQ0Ch?=
- =?us-ascii?q?R6CSwQKgQiBGyOBNgMBAYwhGnmBB4EjIYIrCAGCAYJ/ARIBboJIglkEjVISI?=
- =?us-ascii?q?YlFmDSBaloElmuCOQEPiBaENwOCWg+BC4MdgwmBZ4RSgX+fZoQUV4Egc3EzG?=
- =?us-ascii?q?ggwgW4agSBPGA2ON44rAkCBFxACT4tJgjIBAQ?=
-X-IronPort-AV: E=Sophos;i="5.70,451,1574118000"; 
-   d="scan'208";a="319488593"
-Received: from mailrel04.vodafone.es ([217.130.24.35])
-  by mail01.vodafone.es with ESMTP; 17 Feb 2020 09:16:38 +0100
-Received: (qmail 3320 invoked from network); 17 Feb 2020 06:34:47 -0000
-Received: from unknown (HELO 192.168.1.163) (mariapazos@[217.217.179.17])
-          (envelope-sender <porta@unistrada.it>)
-          by mailrel04.vodafone.es (qmail-ldap-1.03) with SMTP
-          for <linux-watchdog@vger.kernel.org>; 17 Feb 2020 06:34:47 -0000
-Date:   Mon, 17 Feb 2020 07:34:38 +0100 (CET)
-From:   Peter Wong <porta@unistrada.it>
-Reply-To: Peter Wong <peterwonghkhsbc@gmail.com>
-To:     linux-watchdog@vger.kernel.org
-Message-ID: <22536428.420166.1581921287637.JavaMail.cash@217.130.24.55>
-Subject: Investment opportunity
+        Mon, 17 Feb 2020 06:55:47 -0500
+Received: by mail-qt1-f195.google.com with SMTP id n17so11804066qtv.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 Feb 2020 03:55:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lY87+KOEZ6dGuNkZONRFyrPUlCbu+gnrKXQE8dlGuE4=;
+        b=W3P0OcO2TvK2z/0LRMWHw4+JB1JA4XDZks9OBu2hNQT0Q2fQEKktTQQsjT6ePg+9T+
+         +ZgTVszIjaKtSk1VRvlhNfK/vj4JTKYDNTs7uz8h5qgddPvOVhoix4UcFUc15Mxm54q/
+         XCi0HTe9cUTOYMnmdLrJDyXXS8STOWkT6EINE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lY87+KOEZ6dGuNkZONRFyrPUlCbu+gnrKXQE8dlGuE4=;
+        b=kUkreprd6jpyddxFtpEy2nsbQvn40qlG+9zvT8HozcMuiU1lIr0ODg320QaPN89cGs
+         j8fk0WP5scH5iqzpjmbf9/3oVn7zqg7nkbOCH7cnI59Ie/D20QkqKMBNv15WORtP0axE
+         MfNJfVacHaG5gG30yAeqgGSY9uZJ8EUDvDGyKroZ7tx6ubP6lYRnuUO8m6v3NV7BAIH3
+         TBXoCgEBnum4iV8jKQL9mA42SgBviwuQWP5JCnYXmfPJ1u0U3t/Nkw+NJNTb5H+zCSsi
+         ktbyoymca+mpuUAOB3ZJjTw7dqIeyfB7dSYt4IoZTZk7XG/8u4igDO/QbTOLfzcbdVdj
+         hrxg==
+X-Gm-Message-State: APjAAAWUAlZGfv5gfXFneizoTcO5fxjKof1h0gonqvZOagLXR3+vWuQa
+        liy3cZyeY//HE1ixBgdatPszxSF7zisM1Mp05iWb+Q==
+X-Google-Smtp-Source: APXvYqxXaOqF5RRBCXB80/95e7xeSGrR7pmCNocEcu0xOUXI3fgjJxuQ9h/mlMMoIKtHtT+m3VHnkUsDG4t42Tr1goI=
+X-Received: by 2002:ac8:3946:: with SMTP id t6mr12871326qtb.278.1581940546729;
+ Mon, 17 Feb 2020 03:55:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <77c1e557-4941-3806-2933-6c3583576390@infradead.org> <20200203174937.GA18628@roeck-us.net>
+In-Reply-To: <20200203174937.GA18628@roeck-us.net>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Mon, 17 Feb 2020 19:55:36 +0800
+Message-ID: <CANMq1KB28PZhrh4VKurN+oXrQx4xdM31sfk82_j09CQa5Ek8mA@mail.gmail.com>
+Subject: Re: [PATCH -next] watchdog: fix mtk_wdt.c RESET_CONTROLLER build error
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Greetings,
-Please check the attached email for a buisness proposal to explore.
-Looking forward to hearing from you for more details.
-Sincerely: Peter Wong
+On Tue, Feb 4, 2020 at 1:49 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Mon, Feb 03, 2020 at 08:10:29AM -0800, Randy Dunlap wrote:
+> > From: Randy Dunlap <rdunlap@infradead.org>
+> >
+> > Fix build error when CONFIG_RESET_CONTROLLER is not set by
+> > selecting RESET_CONTROLLER.
+> >
+> > ld: drivers/watchdog/mtk_wdt.o: in function `mtk_wdt_probe':
+> > mtk_wdt.c:(.text+0x3ec): undefined reference to `devm_reset_controller_register'
+> >
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> > Cc: linux-watchdog@vger.kernel.org
+>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Wim: Can you please help pick this patch? This seems necessary.
+
+I'd also add this to the commit message:
+Fixes: c254e103082b74e ("watchdog: mtk_wdt: mt8183: Add reset controller")
+
+Thanks!
 
 
-
-
-----------------------------------------------------
-This email was sent by the shareware version of Postman Professional.
-
+> > ---
+> >  drivers/watchdog/Kconfig |    1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > --- linux-next-20200203.orig/drivers/watchdog/Kconfig
+> > +++ linux-next-20200203/drivers/watchdog/Kconfig
+> > @@ -841,6 +841,7 @@ config MEDIATEK_WATCHDOG
+> >       tristate "Mediatek SoCs watchdog support"
+> >       depends on ARCH_MEDIATEK || COMPILE_TEST
+> >       select WATCHDOG_CORE
+> > +     select RESET_CONTROLLER
+> >       help
+> >         Say Y here to include support for the watchdog timer
+> >         in Mediatek SoCs.
+> >
+> >
