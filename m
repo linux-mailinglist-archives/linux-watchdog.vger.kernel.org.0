@@ -2,80 +2,121 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3932B1656F7
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2020 06:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC4C1657E5
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2020 07:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbgBTFb2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 20 Feb 2020 00:31:28 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:63136 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726032AbgBTFb2 (ORCPT
+        id S1726526AbgBTGlj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 Feb 2020 01:41:39 -0500
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:33076 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726198AbgBTGlj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 20 Feb 2020 00:31:28 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582176687; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=1IQ7rTO8MrCC26jln2QV3jowt/CvD+kTkMdX2ajR2JI=;
- b=VQcdePU2mRMEz/HdIJpWEeDSXflUTdhb8rT1U1e+qA+dNootHMbb+CbZJaV3R+FF93PF3N9g
- NDByLPbsGYucFTIw8iiE8MWGsi5Ij3yYgxAfeF3R1eVolZ9Afytjd5YvdlA8gV083V7O6v7K
- oJnNShOL6xZc4NKR1ePps2a/Mbg=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyJmNTk5OSIsICJsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e4e19a8.7fde26b66570-smtp-out-n02;
- Thu, 20 Feb 2020 05:31:20 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 642A8C447A0; Thu, 20 Feb 2020 05:31:19 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: saiprakash.ranjan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D25D3C43383;
-        Thu, 20 Feb 2020 05:31:18 +0000 (UTC)
+        Thu, 20 Feb 2020 01:41:39 -0500
+Received: by mail-vs1-f68.google.com with SMTP id n27so2031975vsa.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 19 Feb 2020 22:41:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9FII6SdDOT5LM0XD58UCmM9UhU3FnY2YeLrE2lk53Is=;
+        b=k5J7L+u1jOqu5YUkSY9+Wm+SZ9fEd0plNX6vVCCQMNxtJ17xPFpHlzurSPf923XUx5
+         fGd8FKC/yCneBjJp84L4iNCbiXagGjaBqqevwWiGJTr6ZgEhG51rY5aoA+f0Upr+DuoI
+         aK9EFDfSdNNI3IUdXgtYEmwjegBCvffppiAHQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9FII6SdDOT5LM0XD58UCmM9UhU3FnY2YeLrE2lk53Is=;
+        b=dTWgDdpcMW7dmVLXCTVwQBiGKly4Df6ppoyX2lZyKCyNdi8zKkO2+YWtSRMMqvofnV
+         zDEUM1mcml3wHipjaLI2DttGTT+eixnP5x48jshOhogBWTN4CoTWLxmwOoW8sVBcoAN5
+         3GKwAIgsCIlXCQtwNs2DvJhL8DjMmJNLrUMjX1EMZo5Y1Vlv/W07jcQlnotgYPGY+BJ5
+         uVwmgqxBCLKoUkLZd+QfdbFS8kTgkWkPl1KdJM/4kdL0yJRTvWMFb1jhbTHCDCcZh6H4
+         qhD78pXeJLXOs4uCV3dVlNpPg8EOtQ93DACmpc7PuZt/roI3rybGIOY8yi6kbMpoMw0D
+         ZhWQ==
+X-Gm-Message-State: APjAAAWnUR7CWMoRLeR2u/P2BKX+R+b6KoXWI1lXyguUXq8fMoCR1UGC
+        kU8JUJv/QkfVOSTAmS/N75o4m5eGwNU=
+X-Google-Smtp-Source: APXvYqzBZvcR4VJBoJluvhYLgSchKbv91M4YZRmTLh7077YpHgWAlTGEhXXRAl/CVEYjauqGQeiL/g==
+X-Received: by 2002:a67:f758:: with SMTP id w24mr16282013vso.5.1582180898032;
+        Wed, 19 Feb 2020 22:41:38 -0800 (PST)
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
+        by smtp.gmail.com with ESMTPSA id v21sm570642vkd.54.2020.02.19.22.41.36
+        for <linux-watchdog@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Feb 2020 22:41:36 -0800 (PST)
+Received: by mail-vs1-f54.google.com with SMTP id p6so1984500vsj.11
+        for <linux-watchdog@vger.kernel.org>; Wed, 19 Feb 2020 22:41:36 -0800 (PST)
+X-Received: by 2002:a67:f541:: with SMTP id z1mr15813130vsn.70.1582180895674;
+ Wed, 19 Feb 2020 22:41:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 20 Feb 2020 11:01:18 +0530
-From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+References: <20200214062637.216209-1-evanbenn@chromium.org>
+ <20200214172512.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
+ <20200219223046.GA16537@bogus> <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
+ <20200219232005.GA9737@roeck-us.net>
+In-Reply-To: <20200219232005.GA9737@roeck-us.net>
+From:   Evan Benn <evanbenn@chromium.org>
+Date:   Thu, 20 Feb 2020 17:41:09 +1100
+X-Gmail-Original-Message-ID: <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
+Message-ID: <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add arm,smc-wdt watchdog
+ arm,smc-wdt compatible
+To:     xingyu.chen@amlogic.com
+Cc:     Julius Werner <jwerner@chromium.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH] watchdog: qcom: Use irq flags from firmware
-In-Reply-To: <20200220002047.115000-1-swboyd@chromium.org>
-References: <20200220002047.115000-1-swboyd@chromium.org>
-Message-ID: <c454ec5812217f41d56984ce68b643da@codeaurora.org>
-X-Sender: saiprakash.ranjan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        Rob Herring <robh@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2020-02-20 05:50, Stephen Boyd wrote:
-> The DT or ACPI tables should tell the driver what the irq flags are.
-> Given that this driver probes only on DT based platforms and those DT
-> platforms specify the irq flags we can safely drop the forced irq flag
-> setting here.
-> 
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Dear Xingyu,
 
-Thanks,
+Could this driver also cover your usecase? I am not familiar with
+meson, but it seems like the meson calls could
+be replaced with arm_smccc calls. Then this driver will cover both
+chips. I am not sure if your firmware is upstream
+somewhere, but this might be adapted;
+https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405
 
-Reviewed-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Thanks
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
-member
-of Code Aurora Forum, hosted by The Linux Foundation
+
+On Thu, Feb 20, 2020 at 10:20 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Feb 19, 2020 at 03:04:54PM -0800, Julius Werner wrote:
+> > > You are not the first 'watchdog in firmware accessed via an SMC call'.
+> > > Is there some more detail about what implementation this is? Part of
+> > > TF-A? Defined by some spec (I can dream)?
+> >
+> > This is just some random implementation written by me because we
+> > needed one. I would like it to be the new generic implementation, but
+> > it sounds like people here prefer the naming to be MediaTek specific
+> > (at least for now). The other SMC watchdog we're aware of is
+> > imx_sc_wdt but unfortunately that seems to hardcode platform-specific
+>
+> There is one more pending, for Meson SMC.
+>
+> https://patchwork.kernel.org/project/linux-watchdog/list/?series=227733
+>
+> Unfortunately it uses Meson firmware API functions, though it has pretty
+> much the same functionality since those ultimately end up calling
+> arm_smccc_smc().
+>
+> Guenter
+>
+> > details in the interface (at least in the pretimeout SMC) so we can't
+> > just expand that. With this driver I tried to directly wrap the kernel
+> > watchdog interface so it should be platform-agnostic and possible to
+> > expand this driver to other platforms later if desired. The SMC
+> > function ID would still always have to be platform-specific,
+> > unfortunately (but we could pass it in through the device tree), since
+> > the Arm SMC spec doesn't really leave any room for OS-generic SMCs
+> > like this.
