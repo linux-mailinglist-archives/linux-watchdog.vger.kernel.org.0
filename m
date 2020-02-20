@@ -2,104 +2,91 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5A4165303
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2020 00:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D08165376
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2020 01:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbgBSXUI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Feb 2020 18:20:08 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40120 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726613AbgBSXUH (ORCPT
+        id S1726776AbgBTAUt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Feb 2020 19:20:49 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:45522 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726677AbgBTAUt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Feb 2020 18:20:07 -0500
-Received: by mail-pg1-f193.google.com with SMTP id z7so886644pgk.7;
-        Wed, 19 Feb 2020 15:20:07 -0800 (PST)
+        Wed, 19 Feb 2020 19:20:49 -0500
+Received: by mail-pl1-f196.google.com with SMTP id b22so780430pls.12
+        for <linux-watchdog@vger.kernel.org>; Wed, 19 Feb 2020 16:20:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zTjU5dQLnIByh50nZjXZubn4ZLHJkYRWG/8ptJLiRjw=;
-        b=ZNuqnwZQz4FPhaySnryBa1KYuR9FGehK5Ds+5qdR/Mxbf/TNvxEG6gCMYJpY95YbGu
-         tDgSoBOnqu3J+MOmT3Oni8Oaa7G6kpcPeG8tLgTCPew/qXaDN1kBcEen5q87vMU3mUDT
-         MEY+lzdNqwZW1NXv3qfo/ks6Jrh3K+/RVo5fu2LvTc74nnhH9W7hu6sOjDtnw+BfoGoZ
-         wFj66S2w2RPqIFPoc3rF5M/PrgzforO1gMj8U+cgkywv4sCN2XM6vwJaiMWjPnw6gDJA
-         1HFW2mr8MX2G8mfnDhKGvCp8T10c5H4EtG1xeIQb7IfptUjhyrvWSg2rnD3+ACXcPKaL
-         SqBw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/jTaHDD+09W3xPLB5zxqrZcfKt5xjlZG4YPPLRu8eAo=;
+        b=b1XelOjvj05D0Bwh2OQjpR9HZva2lUVZkRpxeC9Q98tZq8EZ4K9eDHdlUPwmiOOop8
+         QkMHi2N81LsFtlBSeEFLuFw3VZUe+PpiUS4er8PSCtS5Tt8WBr3C2D2/RiSBm/RQ/aId
+         920+6K4rD3kfJybAs0JO6Bag2lo7zANivnhIc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zTjU5dQLnIByh50nZjXZubn4ZLHJkYRWG/8ptJLiRjw=;
-        b=ab3+CnO63Eu6h9RbkVl5Pf96K1EDPWbMe3DVyawJOtFt+1/yaesDm//057XpGHYnzt
-         IZ7V/p0lPE6ea73bkmY1G505yawDcWvg8lPnPq2t0+XmEUGbbgWEcxTA0rc49qODMF8f
-         F1YX9gYSxVbwYTjCDmfZF8ulw4vOeKHH0qQWVAzYNQ+jlX4GnBpPUV7kNdAGx7QaHjA1
-         WQBzH/msjpw3+MbjRIar26thr/Ya6iCFcF+Q/aNsxoqmuxMpJHmJGxqUyrcFFid8M/wr
-         a5Dr/93BeiA6ltWd2AkGixPnVE4thjLtE5kLvwbxL6DWCCUivGYXOg1zXGmEAus7765m
-         vBUw==
-X-Gm-Message-State: APjAAAW2I8pWfrsntcOcwVo/yACl/lAc7QqkKWjo/Advb5loew6zRw1M
-        9JSDtDRbJZIA4Jokey/nx6c=
-X-Google-Smtp-Source: APXvYqxz0n6zqalLUF3s6QqBodmosHFcUuuBe1/KTM20rWHdJjKmvRZx4tgia2eFo1BcWdur6hHGEQ==
-X-Received: by 2002:a63:354b:: with SMTP id c72mr26575153pga.99.1582154406970;
-        Wed, 19 Feb 2020 15:20:06 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2sm832488pjv.18.2020.02.19.15.20.05
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 19 Feb 2020 15:20:06 -0800 (PST)
-Date:   Wed, 19 Feb 2020 15:20:05 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>, Evan Benn <evanbenn@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add arm,smc-wdt watchdog
- arm,smc-wdt compatible
-Message-ID: <20200219232005.GA9737@roeck-us.net>
-References: <20200214062637.216209-1-evanbenn@chromium.org>
- <20200214172512.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
- <20200219223046.GA16537@bogus>
- <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/jTaHDD+09W3xPLB5zxqrZcfKt5xjlZG4YPPLRu8eAo=;
+        b=h/wYromL+QpA/jq7kHM90XHrZzpxmv/gB041T1MjxeEHRjMEj2QR/IxMMQKvenS7eq
+         MTTUSlH6C2jP76UaoAwuu7O8UpmTJyM2kN0xSkGcWc/AhSEOVzYNJb1aZwZ9NQ34O1ZI
+         0+Ob+3p+QGZLkAzcwFA813bfBGSMFBOH3oiWwLVwiM1+ZoHguAj/+9/HUb+mPA8ElwGH
+         W+b8+BMi1OeE6krgj1m13RtEKMuutHf3E6E4YW1MEcux8l+k+Os765LewCbNp7we6hXS
+         gGaAFrZSjJ6IZeJU/vcISShkr+XmNajhut+jVcJgzlTxiAI9aWPQemM2XA3LQIUdYOMx
+         FLpw==
+X-Gm-Message-State: APjAAAVxu7luBGaiYisZe3VfRmIHlHLyTPM/tns+qsViAHFhyf8fRKmp
+        EEe5QBYTPe8JCbzOhd97rYYJ1e15c3k=
+X-Google-Smtp-Source: APXvYqxZJROEl7Go9mJ14zcRqIEZy8MOQhYz52cxdH9LK3/ms/0tqs13Hch4RiI8ug3rWwZp182Wog==
+X-Received: by 2002:a17:902:104:: with SMTP id 4mr28045532plb.24.1582158048735;
+        Wed, 19 Feb 2020 16:20:48 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g21sm804731pfb.126.2020.02.19.16.20.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2020 16:20:48 -0800 (PST)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Subject: [PATCH] watchdog: qcom: Use irq flags from firmware
+Date:   Wed, 19 Feb 2020 16:20:47 -0800
+Message-Id: <20200220002047.115000-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 03:04:54PM -0800, Julius Werner wrote:
-> > You are not the first 'watchdog in firmware accessed via an SMC call'.
-> > Is there some more detail about what implementation this is? Part of
-> > TF-A? Defined by some spec (I can dream)?
-> 
-> This is just some random implementation written by me because we
-> needed one. I would like it to be the new generic implementation, but
-> it sounds like people here prefer the naming to be MediaTek specific
-> (at least for now). The other SMC watchdog we're aware of is
-> imx_sc_wdt but unfortunately that seems to hardcode platform-specific
+The DT or ACPI tables should tell the driver what the irq flags are.
+Given that this driver probes only on DT based platforms and those DT
+platforms specify the irq flags we can safely drop the forced irq flag
+setting here.
 
-There is one more pending, for Meson SMC.
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/watchdog/qcom-wdt.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-https://patchwork.kernel.org/project/linux-watchdog/list/?series=227733
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index eb47fe5ed280..c70e89013101 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -248,8 +248,7 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 	/* check if there is pretimeout support */
+ 	irq = platform_get_irq_optional(pdev, 0);
+ 	if (irq > 0) {
+-		ret = devm_request_irq(dev, irq, qcom_wdt_isr,
+-				       IRQF_TRIGGER_RISING,
++		ret = devm_request_irq(dev, irq, qcom_wdt_isr, 0,
+ 				       "wdt_bark", &wdt->wdd);
+ 		if (ret)
+ 			return ret;
+-- 
+Sent by a computer, using git, on the internet
 
-Unfortunately it uses Meson firmware API functions, though it has pretty
-much the same functionality since those ultimately end up calling
-arm_smccc_smc().
-
-Guenter
-
-> details in the interface (at least in the pretimeout SMC) so we can't
-> just expand that. With this driver I tried to directly wrap the kernel
-> watchdog interface so it should be platform-agnostic and possible to
-> expand this driver to other platforms later if desired. The SMC
-> function ID would still always have to be platform-specific,
-> unfortunately (but we could pass it in through the device tree), since
-> the Arm SMC spec doesn't really leave any room for OS-generic SMCs
-> like this.
