@@ -2,113 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D69165813
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2020 07:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E54165A8A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2020 10:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbgBTG6D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 20 Feb 2020 01:58:03 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:56251 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgBTG6D (ORCPT
+        id S1726805AbgBTJyi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 Feb 2020 04:54:38 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40474 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727035AbgBTJyi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 20 Feb 2020 01:58:03 -0500
-Received: by mail-pj1-f66.google.com with SMTP id d5so462752pjz.5
-        for <linux-watchdog@vger.kernel.org>; Wed, 19 Feb 2020 22:58:03 -0800 (PST)
+        Thu, 20 Feb 2020 04:54:38 -0500
+Received: by mail-pg1-f194.google.com with SMTP id z7so1672197pgk.7
+        for <linux-watchdog@vger.kernel.org>; Thu, 20 Feb 2020 01:54:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Qjx6aSF/rYbAiv0EvUOF/ZsAzxN0pfEVgpw7b59ljRE=;
-        b=H62U5hBEbjiE4TCDoMRdK1Jd86R01mh7rJVbO8yWo1j8QYD/F0egNJdaQLiP9Y68O5
-         J/NusiLUwR1RZUPv/eH48umnaBo3GiMrY2T0F2hqxf7/FPBwgnWh9uliywhNTtlQ9pFl
-         OoDa0qXB5F1ze2QjirWfLhJsuDuYbP/eA6fYs=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
+        b=KfNWW2kcqvTW/9/08hTLogIqobA7bvlKpQJoYHafvufqDMAEJNGTi16kdgjiBPR6K2
+         IBu4QoBeoD1zPK+mAFEFCyGoW7vmbfnnJRoF3S1jn953AwhHjpsb61lJNKtC5Cd4w3ly
+         LyXVFblZTrGK4xKB1acSQvvf0L0W5gtLLv17Nc8u08V8JuGNOrki7Hu4hIn889cOrocf
+         OI7ofI/Ba26rlHcp25+n0dtCNsZNHdepJpLTvIgblIc5oB7MwKt85sd2HkDRZ6GK9GOZ
+         1AD79o4ZcYs/IVxzGoSLwT+BZX2xrTfctgg/ehk24p/tiuqY5cUAh9nbhz8Oq+hbCjua
+         K5DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qjx6aSF/rYbAiv0EvUOF/ZsAzxN0pfEVgpw7b59ljRE=;
-        b=mqiIyg5NAuSePiVDzOvCKmF7RKIyxaAaer5VmPz7cgzAqlumrT79qYIrXY+uN8l6dq
-         ezjPweg6vS49GvldLsmaTPu2R7V3SCmfzishttK9J3vuJzBcm8P0R//evPHPiGq57fyC
-         nGbiweGiiieEcbupARKEAeHWji75theJJDY8oXOOPQR7IT3nWVBv7A7dHVdtevTTwCwY
-         CeQuuMVfuYQZduZ68Fi+MkPHvv/G1jy0/qKB1wvErn5JwbuSXXhzb+NHByMd80fcX+3t
-         zgPM3qHuCDBAhZOPCpKYzwoTBtvbN56pUCgFPMdtfbUjlAA1iPNMbyHIMFgHq8LkDAQ3
-         4epg==
-X-Gm-Message-State: APjAAAWHYTxy36eDP/d08arHPgC94guomVHiGdA6Q0MzSVC8sQjCN0V8
-        nPdCLwMWHNb22oZzzHvL9smvN7orLvQ=
-X-Google-Smtp-Source: APXvYqxe0Tje4BrGjBQobxBgA3cfe74wO55HqfEtQS3YN0gF/px5OyCidVZbU5feyDBRPw5+S2ZGTQ==
-X-Received: by 2002:a17:902:6809:: with SMTP id h9mr29582100plk.32.1582181882745;
-        Wed, 19 Feb 2020 22:58:02 -0800 (PST)
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com. [209.85.210.173])
-        by smtp.gmail.com with ESMTPSA id s7sm2001733pgp.44.2020.02.19.22.58.02
-        for <linux-watchdog@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Feb 2020 22:58:02 -0800 (PST)
-Received: by mail-pf1-f173.google.com with SMTP id 4so1430083pfz.9
-        for <linux-watchdog@vger.kernel.org>; Wed, 19 Feb 2020 22:58:02 -0800 (PST)
-X-Received: by 2002:a67:fdd3:: with SMTP id l19mr15726222vsq.42.1582181429665;
- Wed, 19 Feb 2020 22:50:29 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
+        b=WpAAURxtf/0RYzuaZ8R3zr1eztS9UMPeWv6CRgoYjhE0TZSrNc4EHyql+qA4DjeA7J
+         Ra/DPQXyP/7yUeYSZlTgQcOa4RkPyYAqPs4gR/9ixDFP8IAcxEeEBC/nUFBWo10vGn9C
+         kQG57ERusS6P/8yigjC/3GwV1aWleKPxFMxoRs4P4fA93oNqHB4qi+kRl3UmIcA5J3lx
+         zctSlrEXCq7N50STKDtsgNY7rSfCyEXXmuH4pgfBcjBAqh0Og7rtbPJKDYJSdkjYrC26
+         qqPnpxe96DDzai5xene5I5zmQsyM5aDE5Cbu90bKczI5+8lHOtgLQEMLhlEt4T7EiRTb
+         vJ7w==
+X-Gm-Message-State: APjAAAW3PQ0jROkax6ZwO1yqBEk2p7qDGk4JZ2SalpMC9Df44TDEPSri
+        FqAhefMansT+kLG6B+IHNPGptg3e2Oso0ZTvGgg=
+X-Google-Smtp-Source: APXvYqySoCSJ82A8OuYPdZOTOSzwsgpIu/3GOYLR3uHjrSC8cVSsXETPeL8PxFF00bDBm0liDA2StN1CChwALXKR/tU=
+X-Received: by 2002:a62:5bc7:: with SMTP id p190mr30655380pfb.16.1582192477900;
+ Thu, 20 Feb 2020 01:54:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20200214062637.216209-1-evanbenn@chromium.org>
- <20200214172512.2.I7c8247c29891a538f258cb47828d58acf22c95a2@changeid> <804d3cc5-688d-7025-cb87-10b9616f4d9b@roeck-us.net>
-In-Reply-To: <804d3cc5-688d-7025-cb87-10b9616f4d9b@roeck-us.net>
-From:   Evan Benn <evanbenn@chromium.org>
-Date:   Thu, 20 Feb 2020 17:50:03 +1100
-X-Gmail-Original-Message-ID: <CAKz_xw0fHgVBLdEoEoQ7OSAgBcvYBAowV0obWLsDUGNPotP55Q@mail.gmail.com>
-Message-ID: <CAKz_xw0fHgVBLdEoEoQ7OSAgBcvYBAowV0obWLsDUGNPotP55Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] watchdog: Add new arm_smc_wdt watchdog driver
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Julius Werner <jwerner@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Olof Johansson <olof@lixom.net>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, linux-watchdog@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Anson Huang <Anson.Huang@nxp.com>
+Received: by 2002:a17:90a:90f:0:0:0:0 with HTTP; Thu, 20 Feb 2020 01:54:37
+ -0800 (PST)
+Reply-To: cagesusan199@gmail.com
+From:   "Mrs. Susan S. Cage" <drgoodluckebelejonathan061@gmail.com>
+Date:   Thu, 20 Feb 2020 01:54:37 -0800
+Message-ID: <CALjo5=_qROtCiT4u8zj8ta2R612eUBzRGz6aZpKsD-fVmmvMXA@mail.gmail.com>
+Subject: Attention:Beneficiary
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-> > +     if ((int)res->a0 == PSCI_RET_NOT_SUPPORTED)
-> > +             return -ENOTSUPP;
->
-> -ENODEV would be better here.
->
-> > +     if ((int)res->a0 == PSCI_RET_INVALID_PARAMS)
-> > +             return -EINVAL;
-> > +     if ((int)res->a0 < 0)
-> > +             return -EIO;
+-- 
+Dearest Friend,
 
-In fixing this I found drivers/firmware/psci/psci.c:145
-Which also translates psci codes to errno codes, but uses EOPNOTSUPP:
+Sorry for invading your privacy, my name is Susan S. Cage I am 81
+years, citizen of United States and presently in hospital undergoing
+chromatography for bronchogenic carcinomas (Lung cancer) which
+affected both Lungs. The doctors said I have few days to live because
+the cancer has now affected my brain.
 
-    switch (errno) {
-    case PSCI_RET_SUCCESS:
-        return 0;
-    case PSCI_RET_NOT_SUPPORTED:
-        return -EOPNOTSUPP;
-    case PSCI_RET_INVALID_PARAMS:
-    case PSCI_RET_INVALID_ADDRESS:
-        return -EINVAL;
-    case PSCI_RET_DENIED:
-        return -EPERM;
-    };
+My late husband left Fifteen Million, Five Hundred British Pounds
+Sterling in my account, I want to transfer the money to you and I want
+you to use it as a donate for charitable and help the needy,
+motherless, less privileged and widows within your location.
 
-    return -EINVAL;
+I need your assurance that you will use the fund for charity, once I a
+favorable reply from you, will inform my Bank through my lawyer to
+transfer the fund to you as my Next of Kin and Sole Beneficiary. Once
+I receive your response, I will inform my bank in writing through my
+lawyer.
 
-Are these more appropriate?
 
-Evan
+
+Thank you and God bless you.
+
+Mrs. Susan S. Cage
