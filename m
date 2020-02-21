@@ -2,89 +2,111 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDD4167F95
-	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Feb 2020 15:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B881681CA
+	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Feb 2020 16:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728130AbgBUOGC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 21 Feb 2020 09:06:02 -0500
-Received: from www.linux-watchdog.org ([185.87.125.42]:53430 "EHLO
-        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727836AbgBUOGB (ORCPT
+        id S1727096AbgBUPfo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 21 Feb 2020 10:35:44 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:26487 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727053AbgBUPfn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 21 Feb 2020 09:06:01 -0500
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id 0A8AB409DB; Fri, 21 Feb 2020 14:15:49 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 0A8AB409DB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1582290950;
-        bh=FcZySqhyMAh9lhbUP3TGUj05n+xie8vP4kFrH3asFSs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sUGL2Eyw7ZvNBTVhZpFSwCmasMbiGhBCLkENp72UmNpG7U38DgtL+ZVa3+xsYsUB2
-         8eIpN6bRGM9nQDW3NE0ChuikpJzG40yDEuupKZVswdaDO1fgt2gvDSFx18yGp2wRXm
-         ZyqepsqmARYTa+SbmFhZv1/tKOvcmAfxPP9rxp+I=
-Date:   Fri, 21 Feb 2020 14:15:49 +0100
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Fri, 21 Feb 2020 10:35:43 -0500
+Received: from [10.28.90.153] (10.28.90.153) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Fri, 21 Feb 2020
+ 23:36:03 +0800
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add arm,smc-wdt watchdog
+ arm,smc-wdt compatible
+To:     Evan Benn <evanbenn@chromium.org>
+CC:     Julius Werner <jwerner@chromium.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [GIT PULL REQUEST] watchdog - v5.6 Fixes
-Message-ID: <20200221131549.GA13194@www.linux-watchdog.org>
+        Rob Herring <robh@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-watchdog@vger.kernel.org>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yonghui Yu <yonghui.yu@amlogic.com>
+References: <20200214062637.216209-1-evanbenn@chromium.org>
+ <20200214172512.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
+ <20200219223046.GA16537@bogus>
+ <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
+ <20200219232005.GA9737@roeck-us.net>
+ <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+Message-ID: <e42320b8-266f-0b0e-b20b-b72228510e81@amlogic.com>
+Date:   Fri, 21 Feb 2020 23:36:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.20 (2009-12-10)
+In-Reply-To: <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
+X-Originating-IP: [10.28.90.153]
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Linus,
+Hi, Evan
 
-Please pull the watchdog fixes for the v5.6 release cycle.
+Because the ATF does not define standard wdt index, each vendor defines 
+its own index.
+So I don't think that the current driver[0] can fully cover my usecases. 
+As discussed in your
+previous email, the meson wdt driver [1] can use the arm_smccc instead 
+of meson_sm_call.
 
-This series contains:
-* mtk_wdt.c: RESET_CONTROLLER build error fix
-* da9062: fix power management ops
-* da9062: do not ping the hw during stop()
-* da9062: Add dependency on I2C
+[0]: https://patchwork.kernel.org/patch/11395579/
+[1]: https://patchwork.kernel.org/patch/11331271/
 
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit 11a48a5a18c63fd7621bb050228cebf13566e4d8:
+Best Regards
 
-  Linux 5.6-rc2 (2020-02-16 13:16:59 -0800)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.6-rc3
-
-for you to fetch changes up to 44144c809e39d64ff9931c7e8956c42b2baa89e6:
-
-  watchdog: da9062: Add dependency on I2C (2020-02-17 13:19:08 +0100)
-
-----------------------------------------------------------------
-linux-watchdog 5.6-rc3 tag
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      watchdog: da9062: Add dependency on I2C
-
-Marco Felsch (2):
-      watchdog: da9062: do not ping the hw during stop()
-      watchdog: da9062: fix power management ops
-
-Randy Dunlap (1):
-      watchdog: fix mtk_wdt.c RESET_CONTROLLER build error
-
- drivers/watchdog/Kconfig      |  2 ++
- drivers/watchdog/da9062_wdt.c | 19 ++++++++++++-------
- 2 files changed, 14 insertions(+), 7 deletions(-)
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
-
+On 2020/2/20 14:41, Evan Benn wrote:
+> Dear Xingyu,
+>
+> Could this driver also cover your usecase? I am not familiar with
+> meson, but it seems like the meson calls could
+> be replaced with arm_smccc calls. Then this driver will cover both
+> chips. I am not sure if your firmware is upstream
+> somewhere, but this might be adapted;
+> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405
+>
+> Thanks
+>
+>
+> On Thu, Feb 20, 2020 at 10:20 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On Wed, Feb 19, 2020 at 03:04:54PM -0800, Julius Werner wrote:
+>>>> You are not the first 'watchdog in firmware accessed via an SMC call'.
+>>>> Is there some more detail about what implementation this is? Part of
+>>>> TF-A? Defined by some spec (I can dream)?
+>>> This is just some random implementation written by me because we
+>>> needed one. I would like it to be the new generic implementation, but
+>>> it sounds like people here prefer the naming to be MediaTek specific
+>>> (at least for now). The other SMC watchdog we're aware of is
+>>> imx_sc_wdt but unfortunately that seems to hardcode platform-specific
+>> There is one more pending, for Meson SMC.
+>>
+>> https://patchwork.kernel.org/project/linux-watchdog/list/?series=227733
+>>
+>> Unfortunately it uses Meson firmware API functions, though it has pretty
+>> much the same functionality since those ultimately end up calling
+>> arm_smccc_smc().
+>>
+>> Guenter
+>>
+>>> details in the interface (at least in the pretimeout SMC) so we can't
+>>> just expand that. With this driver I tried to directly wrap the kernel
+>>> watchdog interface so it should be platform-agnostic and possible to
+>>> expand this driver to other platforms later if desired. The SMC
+>>> function ID would still always have to be platform-specific,
+>>> unfortunately (but we could pass it in through the device tree), since
+>>> the Arm SMC spec doesn't really leave any room for OS-generic SMCs
+>>> like this.
+> .
