@@ -2,81 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F73C168C40
-	for <lists+linux-watchdog@lfdr.de>; Sat, 22 Feb 2020 05:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67066168FE7
+	for <lists+linux-watchdog@lfdr.de>; Sat, 22 Feb 2020 16:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbgBVEBD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 21 Feb 2020 23:01:03 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:57549 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbgBVEBD (ORCPT
+        id S1727339AbgBVPzt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 22 Feb 2020 10:55:49 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:39736 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727230AbgBVPzt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 21 Feb 2020 23:01:03 -0500
-Received: from [10.28.90.152] (10.28.90.152) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Sat, 22 Feb 2020
- 12:01:26 +0800
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add arm,smc-wdt watchdog
- arm,smc-wdt compatible
-To:     Julius Werner <jwerner@chromium.org>
-CC:     Evan Benn <evanbenn@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-watchdog@vger.kernel.org>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yonghui Yu <yonghui.yu@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <20200214062637.216209-1-evanbenn@chromium.org>
- <20200214172512.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
- <20200219223046.GA16537@bogus>
- <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
- <20200219232005.GA9737@roeck-us.net>
- <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
- <e42320b8-266f-0b0e-b20b-b72228510e81@amlogic.com>
- <CAODwPW94KX46PzSrf_uuEFPKudXor=26d=g3Qta5veRfxmMDUA@mail.gmail.com>
-From:   Xingyu Chen <xingyu.chen@amlogic.com>
-Message-ID: <1326f594-3cfd-c03d-4f2c-50eeb75724b2@amlogic.com>
-Date:   Sat, 22 Feb 2020 12:01:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        Sat, 22 Feb 2020 10:55:49 -0500
+Received: by mail-pj1-f65.google.com with SMTP id e9so2121317pjr.4;
+        Sat, 22 Feb 2020 07:55:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xBBBMhUIQhUE2f9rKIV0ran2b+vF87fdNtOXyBakS7w=;
+        b=Vex6A7caHfueCivvuB68sR3wUUvABHwkEuux7USfTw6eBrrIWO4trPVm66SQy0njXD
+         2FzojX2T/Bz7mCjktrl7sAJhJRXjO2d+NUYyJjSXrqEuqD96p7psuvdvPy3E9e2NJGBB
+         2PzTANbFlc7KFR9OsIL/tg7I2iHCGWHqxtqZAhCokXPLXyPiDAB3ca/Vv7TEnild+j4f
+         Gye9cjWaPoRu/bAsy0prcJynaZseQwFjzOTSJm9zUJ4rrJOkrIdBrieTsL3ZLu66hJmt
+         h2bZ+RCuMMNMTLAydAJeCnREaaCCND1d9JeImVv2ZJVrJO10UWhY7B4TdpFxR4+IIErb
+         y8UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xBBBMhUIQhUE2f9rKIV0ran2b+vF87fdNtOXyBakS7w=;
+        b=TA0B1PCWTcG0lRAkkWlXoQytm6whq0Xz4LJx+1UaW0qzknRyde9KEwv4dIjobsiK0i
+         FWvrVkpDIDdGUn2T0UbNwrUr6L6KkOF/3cSBqkl+ISfewxU7++hSRk8JyGVbig4hfNn9
+         NrPzyKRJqtPp/5LbdGeD2K7YE9RQHx8PVOQc3EGDJtbP/R0JWPNBty9MyKfMmO09qFL+
+         +IaITpbdFypQyD24LttsjN365P8o/K+OrZ3KiorsKeZI3I0KQdpmvKN9XfemsZy2Tz6P
+         PpyATx5gA3TB8strfcwAuugKPxl+aWdBEIEJ3ig0amN1Lf+WrxyiKvwg9C/pnTA5pwJi
+         gjvw==
+X-Gm-Message-State: APjAAAXchXCiJhjbOredeZEm5QELLhlMZgRE/R61m6yjYy+O46KmSYeQ
+        aYwAX4+V5jPSts7xjHyBaZA=
+X-Google-Smtp-Source: APXvYqxarWw25HR6eJgr5jn1aGOQGyPF2NF5phA2vFgKlpU8qKGocjNHXL74q/xw5OO5iLYG0mkIPA==
+X-Received: by 2002:a17:902:b484:: with SMTP id y4mr41025827plr.126.1582386948559;
+        Sat, 22 Feb 2020 07:55:48 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o6sm3342655pfg.180.2020.02.22.07.55.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Feb 2020 07:55:47 -0800 (PST)
+Subject: Re: [PATCH 1/3] watchdog: imx_sc_wdt: Remove unused includes
+To:     Anson Huang <Anson.Huang@nxp.com>, wim@linux-watchdog.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1582250430-8872-1-git-send-email-Anson.Huang@nxp.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <74657776-ebee-555f-431c-00b65ba83ca9@roeck-us.net>
+Date:   Sat, 22 Feb 2020 07:55:46 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAODwPW94KX46PzSrf_uuEFPKudXor=26d=g3Qta5veRfxmMDUA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <1582250430-8872-1-git-send-email-Anson.Huang@nxp.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
-X-Originating-IP: [10.28.90.152]
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi, Julius
+On 2/20/20 6:00 PM, Anson Huang wrote:
+> There is nothing in use from init.h/reboot.h, remove them.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
-On 2020/2/22 3:41, Julius Werner wrote:
->> Because the ATF does not define standard wdt index, each vendor defines
->> its own index.
->> So I don't think that the current driver[0] can fully cover my usecases.
-> I think the best way to solve this would be to put the SMC function ID
-> as another field into the device tree, so that multiple vendors could
-> share the same driver even if their firmware interface uses a
-> different SMC. But they still have to implement the same API for that
-> SMC, of course, not sure if the Meson driver is suitable for that (but
-> if it is then I think merging those drivers would be a good idea).
-The SMC function ID may be solved by the DTS, but the wdt indexs(Eg: 
-SMCWD_INFO) are also different
-for each vendor. The imx_sc_wdt.c is also use the SMC to operate the 
-WDT, but the wdt indexs(Eg: IMX_SIP_TIMER_START_WDOG)
-are different from ours. IMO, If the ATF can implement a common hal 
-interface and index for watchdog, then writing a
-common smc wdt driver will be easier to compatible with all vendors.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Best Regards
->
-> .
+> ---
+>   drivers/watchdog/imx_sc_wdt.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
+> index 8ed89f0..60a3246 100644
+> --- a/drivers/watchdog/imx_sc_wdt.c
+> +++ b/drivers/watchdog/imx_sc_wdt.c
+> @@ -6,13 +6,11 @@
+>   #include <linux/arm-smccc.h>
+>   #include <linux/firmware/imx/sci.h>
+>   #include <linux/io.h>
+> -#include <linux/init.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+>   #include <linux/moduleparam.h>
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+> -#include <linux/reboot.h>
+>   #include <linux/watchdog.h>
+>   
+>   #define DEFAULT_TIMEOUT 60
+> 
+
