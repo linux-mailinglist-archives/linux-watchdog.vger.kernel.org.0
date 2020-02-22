@@ -2,142 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E3F1689D3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Feb 2020 23:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F73C168C40
+	for <lists+linux-watchdog@lfdr.de>; Sat, 22 Feb 2020 05:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729134AbgBUWLy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 21 Feb 2020 17:11:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50688 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726725AbgBUWLy (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 21 Feb 2020 17:11:54 -0500
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 212962467A;
-        Fri, 21 Feb 2020 22:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582323113;
-        bh=bf2RsaSvZhMI79nHgHionWDyrsV17B3qT+29dL6QM30=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uLjEhdPGfBBs8J8kMdI9gKpPjMd/M6RazcBBvo02LI5gk5BBFs1us7fw56ebDGrNr
-         hDqGewgjxff4DzdXTjm8dNTCjRJxHnGbNdbxaZF/ZCJqBbS4adXiRUSQWuVIIS7L26
-         e7yPR4613FuK8IHfzY0sRp0MoZGPOYUofpaCd1UI=
-Received: by mail-qv1-f44.google.com with SMTP id ci20so323874qvb.4;
-        Fri, 21 Feb 2020 14:11:53 -0800 (PST)
-X-Gm-Message-State: APjAAAVivR2353AR4kVorgtpB2nMIOumPz2X2wA3uQbFRmriV7WZGve4
-        1JONzwQhqHQM0bOzzn/vpgDpF1pWc5bNzb6XjA==
-X-Google-Smtp-Source: APXvYqyYbXN85xYUMFaOgLv6Q5mUpNeZ8NyF/CcoNZ4CxdRu4RUYJEOgtcn8M4e8AKdcB5TiFQMt27ZRzzmiMvhInMw=
-X-Received: by 2002:a0c:f68f:: with SMTP id p15mr31162876qvn.79.1582323112146;
- Fri, 21 Feb 2020 14:11:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20200221053802.70716-1-evanbenn@chromium.org> <20200221163717.v2.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
-In-Reply-To: <20200221163717.v2.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 21 Feb 2020 16:11:40 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL94vtBEmV2gNWx-D==sLiRXjxBBFZS8fw1cR6=KjS7XQ@mail.gmail.com>
-Message-ID: <CAL_JsqL94vtBEmV2gNWx-D==sLiRXjxBBFZS8fw1cR6=KjS7XQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: Add mt8173,smc-wdt watchdog
-To:     Evan Benn <evanbenn@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Julius Werner <jwerner@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726672AbgBVEBD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 21 Feb 2020 23:01:03 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:57549 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726032AbgBVEBD (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 21 Feb 2020 23:01:03 -0500
+Received: from [10.28.90.152] (10.28.90.152) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Sat, 22 Feb 2020
+ 12:01:26 +0800
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add arm,smc-wdt watchdog
+ arm,smc-wdt compatible
+To:     Julius Werner <jwerner@chromium.org>
+CC:     Evan Benn <evanbenn@chromium.org>,
         Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-watchdog@vger.kernel.org>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yonghui Yu <yonghui.yu@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <20200214062637.216209-1-evanbenn@chromium.org>
+ <20200214172512.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
+ <20200219223046.GA16537@bogus>
+ <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
+ <20200219232005.GA9737@roeck-us.net>
+ <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
+ <e42320b8-266f-0b0e-b20b-b72228510e81@amlogic.com>
+ <CAODwPW94KX46PzSrf_uuEFPKudXor=26d=g3Qta5veRfxmMDUA@mail.gmail.com>
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+Message-ID: <1326f594-3cfd-c03d-4f2c-50eeb75724b2@amlogic.com>
+Date:   Sat, 22 Feb 2020 12:01:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
+MIME-Version: 1.0
+In-Reply-To: <CAODwPW94KX46PzSrf_uuEFPKudXor=26d=g3Qta5veRfxmMDUA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
+X-Originating-IP: [10.28.90.152]
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 11:38 PM Evan Benn <evanbenn@chromium.org> wrote:
->
-> This watchdog can be used on ARM systems with a Secure
-> Monitor firmware to forward watchdog operations to
-> firmware via a Secure Monitor Call.
->
-> Signed-off-by: Evan Benn <evanbenn@chromium.org>
-> ---
->
-> Changes in v2:
-> - Change name arm > mt8173
->
->  .../bindings/watchdog/mt8173,smc-wdt.yaml     | 30 +++++++++++++++++++
->  MAINTAINERS                                   |  6 ++++
->  2 files changed, 36 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/mt8173,smc-wdt.yaml
->
-> diff --git a/Documentation/devicetree/bindings/watchdog/mt8173,smc-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mt8173,smc-wdt.yaml
-> new file mode 100644
-> index 0000000000000..ff45e13bc548b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/mt8173,smc-wdt.yaml
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/mt8173,smc-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ARM Secure Monitor Call based watchdog
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-> +
-> +maintainers:
-> +  - Julius Werner <jwerner@chromium.org>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mt8173,smc-wdt
+Hi, Julius
 
-compatible strings are in the form <vendor>,<device>. 'mt8173' is not a vendor.
+On 2020/2/22 3:41, Julius Werner wrote:
+>> Because the ATF does not define standard wdt index, each vendor defines
+>> its own index.
+>> So I don't think that the current driver[0] can fully cover my usecases.
+> I think the best way to solve this would be to put the SMC function ID
+> as another field into the device tree, so that multiple vendors could
+> share the same driver even if their firmware interface uses a
+> different SMC. But they still have to implement the same API for that
+> SMC, of course, not sure if the Meson driver is suitable for that (but
+> if it is then I think merging those drivers would be a good idea).
+The SMC function ID may be solved by the DTS, but the wdt indexs(Eg: 
+SMCWD_INFO) are also different
+for each vendor. The imx_sc_wdt.c is also use the SMC to operate the 
+WDT, but the wdt indexs(Eg: IMX_SIP_TIMER_START_WDOG)
+are different from ours. IMO, If the ATF can implement a common hal 
+interface and index for watchdog, then writing a
+common smc wdt driver will be easier to compatible with all vendors.
 
-> +
-> +required:
-> +  - compatible
-> +
-> +examples:
-> +  - |
-> +    watchdog {
-
-This should be a child of some Mediatek firmware node. I assume
-watchdog is not the *only* function.
-
-> +      compatible = "mt8173,smc-wdt";
-> +      timeout-sec = <15>;
-> +    };
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e48ab79879ace..59e8779363c12 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1421,6 +1421,12 @@ S:       Maintained
->  F:     Documentation/devicetree/bindings/interrupt-controller/amazon,al-fic.txt
->  F:     drivers/irqchip/irq-al-fic.c
+Best Regards
 >
-> +ARM SMC WATCHDOG DRIVER
-> +M:     Julius Werner <jwerner@chromium.org>
-> +R:     Evan Benn <evanbenn@chromium.org>
-> +S:     Maintained
-> +F:     devicetree/bindings/watchdog/mt8173,smc-wdt.yaml
-> +
->  ARM SMMU DRIVERS
->  M:     Will Deacon <will@kernel.org>
->  R:     Robin Murphy <robin.murphy@arm.com>
-> --
-> 2.25.0.265.gbab2e86ba0-goog
->
+> .
