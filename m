@@ -2,95 +2,129 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D6E169751
-	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Feb 2020 12:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D3E169763
+	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Feb 2020 12:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726023AbgBWLWB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 23 Feb 2020 06:22:01 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:34153 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbgBWLWB (ORCPT
+        id S1725980AbgBWLto (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 23 Feb 2020 06:49:44 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:44408 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727391AbgBWLtn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 23 Feb 2020 06:22:01 -0500
-Received: by mail-ed1-f65.google.com with SMTP id r18so8365121edl.1
-        for <linux-watchdog@vger.kernel.org>; Sun, 23 Feb 2020 03:22:00 -0800 (PST)
+        Sun, 23 Feb 2020 06:49:43 -0500
+Received: by mail-ed1-f66.google.com with SMTP id g19so8360697eds.11
+        for <linux-watchdog@vger.kernel.org>; Sun, 23 Feb 2020 03:49:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=arista.com; s=googlenew;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=I7rQJgBtj2WD56CuhDDY5luHd0dpn2aSY0uftQht5ZY=;
-        b=L4zCbEHEPzVE43pBLR7WjtzcS3JDvt5WjCIe2+iDIf92RrrcWY75h+Vn/ZR+naVONz
-         Fcm5D3OfF3aM7CMksqiP2I+71HuT6iHUs3nsiFj6opaJgJ1vDw9YR0pYZJU8PedHfQA6
-         wBD7ISEfBuhjerMlqm11ycAWFmES2smKg9wM+jqewCAztKimeFXNmkXa4IZstD4c/A1T
-         6NC8zAAtl71g1htXbl8fxs2pznxDL4EXhIPCwUx62wyZamIJr99eT5Xwxg1Z4U/NQPx3
-         Tjx1COuUUmV7AhWJcwyA4atKE/yYfeMIyE2vQWSzM2E6hmRq6ZxfZarJbGXmTwU4qgUB
-         vHoQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HhQ3dLxQEyfhwpgG/2V7Ytlqomn7vI0cGazzgEuSPP4=;
+        b=cjFMGUPWHpL5PPkyHsnZZp8nPNIIf6PV3J2w0KK0MP8ALMJLpyl2VwGYFZzmHmztFe
+         2rMcbumUsJbphS9ZhoIAkKb3Qv1UfvDckpnHs2oS5H4ws5g6UhTiwzbL4nWGeVB5ztw3
+         5Z6EaA9/t7KL4QwJ30yOz3TYyRir3LvW/U6bZNJE39tvtoR4g5kravOCeHhn4XwZzXmI
+         XQHo+WbDK8Y+J9msu2AxjLCqypo5Jp+eccQaya6ruf0qBO1ndZxuR2iJzl9qnQ96Bw/H
+         XpVP/tMnnKMQpQcWYv7IKJqF8TylPJtutxGvJ0zoI7O5RXNvU7UGZ4f9jtdfUtU2pjov
+         dx1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=I7rQJgBtj2WD56CuhDDY5luHd0dpn2aSY0uftQht5ZY=;
-        b=MgIZU7HcCvtavChQaP0RobLPv2xEseBrAGwpu0SHnzxRtvJVEW6X3XRotcwyjs5CH+
-         3mAOx3StSR53vDkWlmYxH2ugyf7FTGM1Do93W67IMGU3VFMW/sxyA2LUJNlV6cLir+AP
-         Gu20sQabF0eOMnmxhFtBJ4bzz8lAB+GWev3pwrB4weV5BHwqpP/SSruNvFikAk3gH6BT
-         gEmHwrF03VzwCI3zBWJvKbIfl7uzCAiB9dOoeBh3EEMvUHi5+TgO4Bs3BWPrgqrw0y/k
-         ocK8y4WDkQnpu41shS0xF5ahE3iJ12gHl2mEmmdAA2jwXkJeMG6abMseKLV+huDrvkkT
-         uAnA==
-X-Gm-Message-State: APjAAAWXdQbzuGIf9YUV5VwP4/zJmYA+yBBgjDHPJL8kEPtRa2HE/K3m
-        qX/en0XkQKXraLaGevqn91wMjw==
-X-Google-Smtp-Source: APXvYqyD2OOCxUukSbGgSCpuRxlrUzuSY/iqLh1Bk/5C1CX3LGqG3cxQPjzRF8TdhBraa6MyX457BQ==
-X-Received: by 2002:aa7:df09:: with SMTP id c9mr41891593edy.133.1582456919461;
-        Sun, 23 Feb 2020 03:21:59 -0800 (PST)
-Received: from ?IPv6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id b9sm762595edm.60.2020.02.23.03.21.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Feb 2020 03:21:58 -0800 (PST)
-Subject: Re: [PATCHv2] watchdog: Add stop_on_reboot parameter to control
- reboot policy
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
+        bh=HhQ3dLxQEyfhwpgG/2V7Ytlqomn7vI0cGazzgEuSPP4=;
+        b=PqHOyI578gzXLQzTvxBTfq8z0SpqyJaDAcV+gqSob9gQkxHzFjX6d/MviEqBOtzQml
+         EQ89yxwQbYD6splhX8dhpOmhyrP8aD1zrYS2C91tuG6BAgbrUddM0SrwpdVZF9iOWW7/
+         1Ljc65AiM9IW8GfCNnrBnnvemeDbqJI5MkOu2UW+OF0EB8tmt9JI2dFdcj7utay0QU1Y
+         36LVM7W4FKFbvSD9LVuTWEimVFs8wYzAED/LF8Jw1UHl6xDBmut6P0m608BnEG3MAF6+
+         YsLmsmMDtRrBzzDKIy5ZwtUc8MBVkZoQly+1KsFgjREQmAw8TQxo1zAuCaWtINqHqXlO
+         hIhA==
+X-Gm-Message-State: APjAAAXTbJ1tKJpvHeSOok4q8udw1Mw9RJL9OEla4UFu+GI9oSiXWm9P
+        aBUBGFl8oTUb+DrA7f5uXHk6uQ==
+X-Google-Smtp-Source: APXvYqwzGpMCywapv/KxwqGPT90G4Og93tXFNsN7NA8LY36Ur3LZd8RUwnMTrBLigSli5ExMbM2z9g==
+X-Received: by 2002:a05:6402:1044:: with SMTP id e4mr41838931edu.233.1582458581021;
+        Sun, 23 Feb 2020 03:49:41 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id i31sm786194edi.42.2020.02.23.03.49.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Feb 2020 03:49:40 -0800 (PST)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org
-References: <20200214162209.129107-1-dima@arista.com>
- <20200222160639.GA12925@roeck-us.net>
-From:   Dmitry Safonov <dima@arista.com>
-Message-ID: <d45c945a-043d-8e18-1f8b-a1e7c7f4d2bb@arista.com>
-Date:   Sun, 23 Feb 2020 11:21:59 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+Subject: [PATCHv3] watchdog: Add stop_on_reboot parameter to control reboot policy
+Date:   Sun, 23 Feb 2020 11:49:39 +0000
+Message-Id: <20200223114939.194754-1-dima@arista.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-In-Reply-To: <20200222160639.GA12925@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter,
+Many watchdog drivers use watchdog_stop_on_reboot() helper in order
+to stop the watchdog on system reboot. Unfortunately, this logic is
+coded in driver's probe function and doesn't allows user to decide what
+to do during shutdown/reboot.
 
-On 2/22/20 4:06 PM, Guenter Roeck wrote:
-> On Fri, Feb 14, 2020 at 04:22:09PM +0000, Dmitry Safonov wrote:
-[..]
->> +static int stop_on_reboot = -1;
->> +module_param(stop_on_reboot, int, 0644);
->> +MODULE_PARM_DESC(stop_on_reboot, "Stop watchdogs on reboot (0=keep watching, 1=stop)");
->> +
-> 
-> My major concern is that this is writeable at runtime.
-> Changing the value won't change the behavior of already loaded
-> drivers. Unloading and reloading the driver will change its behavior
-> after the value was changed. This would be confusing, and it is hard
-> to imagine for anyone to expect such a behavior. Does this have to be
-> writeable ?
+On the other side, Xen and Qemu watchdog drivers (xen_wdt and i6300esb)
+may be configured to either send NMI or turn off/reboot VM as
+the watchdog action. As the kernel may stuck at any state, sending NMIs
+can't reliably reboot the VM.
 
-No, it wasn't. I've messed it up by thinking about fours in 0644, but
-for some reason failed to recognize that it allows root writes.
+At Arista, we benefited from the following set-up: the emulated watchdogs
+trigger VM reset and softdog is set to catch less severe conditions to
+generate vmcore. Just before reboot watchdog's timeout is increased
+to some good-enough value (3 mins). That keeps watchdog always running
+and guarantees that VM doesn't stuck.
 
-I'll follow up with v3, sorry for simple-minded typo.
+Provide new stop_on_reboot module parameter to let user control
+watchdog's reboot policy.
 
-Thanks,
-          Dmitry
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-watchdog@vger.kernel.org
+Signed-off-by: Dmitry Safonov <dima@arista.com>
+---
+Changes:
+v3: Make module parameter read-only in runtime (Thanks Guenter for
+    spotting the typo!)
+v2: Add module parameter instead of ioctl()
+
+ drivers/watchdog/watchdog_core.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+index 861daf4f37b2..423844757812 100644
+--- a/drivers/watchdog/watchdog_core.c
++++ b/drivers/watchdog/watchdog_core.c
+@@ -39,6 +39,10 @@
+ 
+ static DEFINE_IDA(watchdog_ida);
+ 
++static int stop_on_reboot = -1;
++module_param(stop_on_reboot, int, 0444);
++MODULE_PARM_DESC(stop_on_reboot, "Stop watchdogs on reboot (0=keep watching, 1=stop)");
++
+ /*
+  * Deferred Registration infrastructure.
+  *
+@@ -254,6 +258,14 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+ 		}
+ 	}
+ 
++	/* Module parameter to force watchdog policy on reboot. */
++	if (stop_on_reboot != -1) {
++		if (stop_on_reboot)
++			set_bit(WDOG_STOP_ON_REBOOT, &wdd->status);
++		else
++			clear_bit(WDOG_STOP_ON_REBOOT, &wdd->status);
++	}
++
+ 	if (test_bit(WDOG_STOP_ON_REBOOT, &wdd->status)) {
+ 		wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
+ 
+-- 
+2.25.0
+
