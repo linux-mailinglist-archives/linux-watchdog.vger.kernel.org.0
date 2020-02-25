@@ -2,52 +2,29 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4947A16C410
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2020 15:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D717E16C438
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2020 15:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729894AbgBYOhM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 Feb 2020 09:37:12 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41673 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729048AbgBYOhM (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 Feb 2020 09:37:12 -0500
-Received: by mail-pl1-f193.google.com with SMTP id t14so5567638plr.8;
-        Tue, 25 Feb 2020 06:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ipevhSF8N9M3cyotJYXUjwn4UfTuGovT1aQqFV/X9qA=;
-        b=qZI8D8+Q392/bA/HphKfRiLKSbZMGKrKBqpeCmjuJSyeb6hbvqgyZ+lZA7WHB1+GZp
-         KHge0+WsP3W8x9WW2swiydXqKYDTMvkUNAVI3qZa4c4as9SoseNFbXw3I1+K8kwCmxQ+
-         CnW6bLm+CcsHIC5nUg7UPzKXgVHVwxhsQt5cR6Cc/qUpnBFyjMlMb+INsbajimwv1yNA
-         cIG2hiEK4wM1k65tVbfkiOh0GI8ffmIl2z0liEG3e08o7yN9hzUv43dATicf/d7oAD+A
-         GCG5fGYeSd9q/NcidYPUeMHzd9rwLYPGpafIpbiG5tZvitvtEgkNVLeZyryHxJtd01wC
-         7v4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ipevhSF8N9M3cyotJYXUjwn4UfTuGovT1aQqFV/X9qA=;
-        b=KGPhC+557V9kSslKmzvBgo1hZOu4i2+ibtWdVwmlTqxPnrTYvcMqk5Hf3CKmEKQKV/
-         qE5palE32KfNUQnF881Q7VDPPDUycCsOHDIX+W+kFis7qGZ6ncX3Rz63SPdHKhZUUxKe
-         hns/4SCZMaXg8qfONabL9GEiktFliN5EJCOxB++MDNUcpwu6RGBNj0atCo0PYtfLkKhD
-         6nO6aoHYdWZmCCMP2Th07+ZsDlg+5G+hi+qpKZd8J9IrWXsoP2Au2Sv1H8elf6j0P6Ns
-         5odZ3aUXHHJd2kr6gU+dsmHnmwz3/2a/2gyZdRYnThLi3JCLW5KP2t0GhchLIRWwGVHU
-         RZvw==
-X-Gm-Message-State: APjAAAUb4DbMiixhaKFXPs1iAZgEjhCOPycLpSjV9JB351ihWtZGFr7H
-        SW9wtOQV8w5asbFRhcwQIw4=
-X-Google-Smtp-Source: APXvYqwETdgLZFN5OPBfpsGlLn4WflSJ106UwC0zYPQepTknpnzAG/rvZl0HqyHBw6s84ZuOHuvSVA==
-X-Received: by 2002:a17:90b:254:: with SMTP id fz20mr5468567pjb.25.1582641431565;
-        Tue, 25 Feb 2020 06:37:11 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g13sm16993177pgh.82.2020.02.25.06.37.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 25 Feb 2020 06:37:10 -0800 (PST)
-Date:   Tue, 25 Feb 2020 06:37:09 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+        id S1730817AbgBYOkx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 Feb 2020 09:40:53 -0500
+Received: from mga05.intel.com ([192.55.52.43]:22384 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730532AbgBYOkw (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 25 Feb 2020 09:40:52 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 06:40:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,484,1574150400"; 
+   d="scan'208";a="350159059"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 25 Feb 2020 06:40:48 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 25 Feb 2020 16:40:47 +0200
+Date:   Tue, 25 Feb 2020 16:40:47 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Wolfram Sang <wsa@the-dreams.de>,
@@ -56,76 +33,71 @@ Cc:     Jean Delvare <jdelvare@suse.com>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] watchdog: iTCO_wdt: Make ICH_RES_IO_SMI optional
-Message-ID: <20200225143709.GA450@roeck-us.net>
+Subject: Re: [PATCH 3/3] i2c: i801: Do not add ICH_RES_IO_SMI if PMC device
+ is not present
+Message-ID: <20200225144047.GC2667@lahna.fi.intel.com>
 References: <20200225123802.88984-1-mika.westerberg@linux.intel.com>
- <20200225123802.88984-3-mika.westerberg@linux.intel.com>
+ <20200225123802.88984-4-mika.westerberg@linux.intel.com>
+ <2dec872e-26fb-eefc-5606-cfb1bf55d02e@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200225123802.88984-3-mika.westerberg@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <2dec872e-26fb-eefc-5606-cfb1bf55d02e@roeck-us.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 03:38:01PM +0300, Mika Westerberg wrote:
-> The iTCO_wdt driver only needs ICH_RES_IO_SMI I/O resource when either
-> turn_SMI_watchdog_clear_off module parameter is set to match ->iTCO_version
-> (or higher), and when legacy iTCO_vendorsupport is set. Modify the driver
-> so that ICH_RES_IO_SMI is optional if the two conditions are not met.
+On Tue, Feb 25, 2020 at 06:21:16AM -0800, Guenter Roeck wrote:
+> On 2/25/20 4:38 AM, Mika Westerberg wrote:
+> > Martin noticed that nct6775 driver does not load properly on his system
+> > in v5.4+ kernels. The issue was bisected to commit b84398d6d7f9 ("i2c:
+> > i801: Use iTCO version 6 in Cannon Lake PCH and beyond") but it is
+> > likely not the culprit because the faulty code has been in the driver
+> > already since commit 9424693035a5 ("i2c: i801: Create iTCO device on
+> > newer Intel PCHs"). So more likely some commit that added PCI IDs of
+> > recent chipsets made the driver to create the iTCO_wdt device on Martins
+> > system.
+> > 
+> > The issue was debugged to be PCI configuration access to the PMC device
+> > that is not present. This returns all 1's when read and this caused the
+> > iTCO_wdt driver to accidentally request resourses used by nct6775.
+> > 
+> > Fix this by checking that the PMC device is there and only then populate
+> > the iTCO_wdt ICH_RES_IO_SMI resource. Since the resource is now optional
+> > the iTCO_wdt driver should continue to work on recent systems without it.
+> > 
+> > Link: https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com/
+> > Fixes: 9424693035a5 ("i2c: i801: Create iTCO device on newer Intel PCHs")
+> > Reported-by: Martin Volf <martin.volf.42@gmail.com>
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
+> >   drivers/i2c/busses/i2c-i801.c | 45 +++++++++++++++++++++--------------
+> >   1 file changed, 27 insertions(+), 18 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > index ca4f096fef74..7fa58375bd4b 100644
+> > --- a/drivers/i2c/busses/i2c-i801.c
+> > +++ b/drivers/i2c/busses/i2c-i801.c
+> > @@ -1519,7 +1519,7 @@ static DEFINE_SPINLOCK(p2sb_spinlock);
+> >   static struct platform_device *
+> >   i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+> > -		 struct resource *tco_res)
+> > +		 struct resource *tco_res, size_t nres)
+> >   {
+> >   	struct resource *res;
+> >   	unsigned int devfn;
+> > @@ -1563,7 +1563,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+> >   	res->flags = IORESOURCE_MEM;
+> >   	return platform_device_register_resndata(&pci_dev->dev, "iTCO_wdt", -1,
+> > -					tco_res, 3, &spt_tco_platform_data,
+> > +					tco_res, nres + 1, &spt_tco_platform_data,
 > 
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
->  drivers/watchdog/iTCO_wdt.c | 22 +++++++++++++---------
->  1 file changed, 13 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-> index 156360e37714..f1692452bc25 100644
-> --- a/drivers/watchdog/iTCO_wdt.c
-> +++ b/drivers/watchdog/iTCO_wdt.c
-> @@ -460,7 +460,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
->  		return -ENODEV;
->  
->  	p->smi_res = platform_get_resource(pdev, IORESOURCE_IO, ICH_RES_IO_SMI);
-> -	if (!p->smi_res)
-> +	if (!p->smi_res && iTCO_vendorsupport)
->  		return -ENODEV;
->  
->  	p->iTCO_version = pdata->version;
-> @@ -492,15 +492,19 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
->  	/* Set the NO_REBOOT bit to prevent later reboots, just for sure */
->  	p->update_no_reboot_bit(p->no_reboot_priv, true);
->  
-> -	/* The TCO logic uses the TCO_EN bit in the SMI_EN register */
-> -	if (!devm_request_region(dev, p->smi_res->start,
-> -				 resource_size(p->smi_res),
-> -				 pdev->name)) {
-> -		pr_err("I/O address 0x%04llx already in use, device disabled\n",
-> -		       (u64)SMI_EN(p));
-> -		return -EBUSY;
-> -	}
->  	if (turn_SMI_watchdog_clear_off >= p->iTCO_version) {
-> +		if (!p->smi_res) {
-> +			pr_err("SMI I/O resource is missing\n");
-> +			return -EINVAL;
-> +		}
-> +		/* The TCO logic uses the TCO_EN bit in the SMI_EN register */
-> +		if (!devm_request_region(dev, p->smi_res->start,
-> +					 resource_size(p->smi_res),
-> +					 pdev->name)) {
-> +			pr_err("I/O address 0x%04llx already in use, device disabled\n",
-> +			       (u64)SMI_EN(p));
-> +			return -EBUSY;
-> +		}
+> Does this work as intended ? It still adds ICH_RES_MEM_OFF at index 2,
+> but if there is no SMI resource it will only pass two sets of resources
+> to the wdt driver, one of which (the SMI resource) would be empty,
+> ie have start == NULL and size == 0.
 
-The request_region call is also needed if iTCO_vendorsupport is true.
-Well, not strictly speaking, I guess, but then one could argue that
-it isn't needed at all.
-
-In this context - looking into the vendorsupport code, I wonder if
-it is time to retire it. Separate patch, of course, but still.
-Any thoughts ?
-
-Guenter
+Good point that would not work as expected. I'll fix this one in the
+next version.
