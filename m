@@ -2,100 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 822A416F41F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Feb 2020 01:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE7E16FFD3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Feb 2020 14:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729282AbgBZAPy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 Feb 2020 19:15:54 -0500
-Received: from mail-ua1-f52.google.com ([209.85.222.52]:34760 "EHLO
-        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729277AbgBZAPy (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 Feb 2020 19:15:54 -0500
-Received: by mail-ua1-f52.google.com with SMTP id 1so356214uao.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 25 Feb 2020 16:15:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oTRomC2W+BSThGwAQZ4mFHuy58uAWVt5delRT81IvjU=;
-        b=MyRXyQ29K/5rD2ii3vJTRTLOQGj7HhOiybWmpSn7wQARePsB21oMCNPqUfbw9IaLkk
-         fEjTnM0c2DDcQCOnKybAVQGg6IvEpPJl+yg2p7SHDkweG+05yI8+cKr/gCSIP1gB7R1F
-         2uI0P2Q2CK/LKaq2R3M3UpOFhAR122qdsb7KQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oTRomC2W+BSThGwAQZ4mFHuy58uAWVt5delRT81IvjU=;
-        b=JZ5xzVM8gQqDP6A4N40ekjRkxVV+BWH+cEWmWL4UBmEy9p0CJxEq18oJ4nBWX5ylYn
-         /O/VAJwN1Pj4S7sTvHx8swRbtstlzV8eHXh1HWHLi5uRHTRfc+MFI4OI/BCzzWsnY7I4
-         /ZBLYGLBb6IR80Bfwzx2q4i+3axHGJhvrhOKNPeUcjsL4GW8L7UCPKAUV5jiF4znx1gQ
-         Tt7gYu/WlpRh+UbWYIEFSc5TQBsT6IkIzlyrDqEP2EmiqErWXpis38AiLiB/sj4obeW+
-         Qqqg8ucxOsskJHdza1/csdnsM0MrArDQxfH8JS6PGJyPHy/5CLNdFVhIzNyt4qxQraps
-         LlPg==
-X-Gm-Message-State: APjAAAXVXrt+13YmKq3azt67e28Y6TdZEv8rv7fX0foIJcPgz1eGNj97
-        mNabI5oMjLQsI6V1Tx1T2kuOSbhes0Y=
-X-Google-Smtp-Source: APXvYqxtC9wP6aTsDHlnYTgAVN5cZqAwdKyp5hdpkr873XVLyHBxJBakFU+PRZqYC/UmVgSvPBQAqA==
-X-Received: by 2002:ab0:6258:: with SMTP id p24mr1791306uao.24.1582676152700;
-        Tue, 25 Feb 2020 16:15:52 -0800 (PST)
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com. [209.85.217.49])
-        by smtp.gmail.com with ESMTPSA id i3sm108193vso.3.2020.02.25.16.15.50
-        for <linux-watchdog@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2020 16:15:51 -0800 (PST)
-Received: by mail-vs1-f49.google.com with SMTP id g15so703131vsf.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 25 Feb 2020 16:15:50 -0800 (PST)
-X-Received: by 2002:a67:f541:: with SMTP id z1mr1739800vsn.70.1582676150352;
- Tue, 25 Feb 2020 16:15:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20200221053802.70716-1-evanbenn@chromium.org> <20200221163717.v2.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
- <CAL_JsqL94vtBEmV2gNWx-D==sLiRXjxBBFZS8fw1cR6=KjS7XQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqL94vtBEmV2gNWx-D==sLiRXjxBBFZS8fw1cR6=KjS7XQ@mail.gmail.com>
-From:   Evan Benn <evanbenn@chromium.org>
-Date:   Wed, 26 Feb 2020 11:15:24 +1100
-X-Gmail-Original-Message-ID: <CAKz_xw2ETZ5eyNfdWU5cF6Qy23E1NqhpFHoLT_CzUDHWTCbw4Q@mail.gmail.com>
-Message-ID: <CAKz_xw2ETZ5eyNfdWU5cF6Qy23E1NqhpFHoLT_CzUDHWTCbw4Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: Add mt8173,smc-wdt watchdog
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Julius Werner <jwerner@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        id S1727152AbgBZNVi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 26 Feb 2020 08:21:38 -0500
+Received: from mga06.intel.com ([134.134.136.31]:39882 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726525AbgBZNV2 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 26 Feb 2020 08:21:28 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 05:21:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,488,1574150400"; 
+   d="scan'208";a="231395660"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 26 Feb 2020 05:21:23 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 94465252; Wed, 26 Feb 2020 15:21:22 +0200 (EET)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Martin Volf <martin.volf.42@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] i2c: i801: Fix iTCO_wdt resource creation if PMC is not present
+Date:   Wed, 26 Feb 2020 16:21:19 +0300
+Message-Id: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.25.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Thanks Rob
+Hi all,
 
-> This should be a child of some Mediatek firmware node. I assume
-> watchdog is not the *only* function.
+This series aims to fix the issue reported by Martin Volf [1] that prevents
+the nct6775 driver from loading.
 
-I am not quite sure what you mean, do you intend this:
+I added Fixes tag to the last patch but not stable tag because the other
+two patches it depends are not really stable material IMO. Please let me
+know if there is a better way to organize these :)
 
- firmware {
-   watchdog {
-     ...
-   }
-}
+I tested this on Intel Whiskey Lake based system (CNL derived) and on Comet
+Lake-V based system (SPT derived and the iTCO_wdt still works and I can see
+the expected resources in /proc/ioports and /proc/iomem.
 
-I do not have a deep understanding of devicetree yet, can you point me
-to anything that will help me understand
-the consequences of that change?
+The previous version of the patch series can be found here:
 
-Thanks
+  https://lore.kernel.org/linux-hwmon/20200225123802.88984-1-mika.westerberg@linux.intel.com/
 
-Evan
+Changes from the previous version:
+
+  * Call request_region() also for iTCO_vendorsupport
+  * Drop the core populating ICH_RES_IO_SMI completely from i2c-i801.c
+
+[1] https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com/
+
+Mika Westerberg (3):
+  watchdog: iTCO_wdt: Export vendorsupport
+  watchdog: iTCO_wdt: Make ICH_RES_IO_SMI optional
+  i2c: i801: Do not add ICH_RES_IO_SMI for the iTCO_wdt device
+
+ drivers/i2c/busses/i2c-i801.c          | 45 +++++++-------------------
+ drivers/watchdog/iTCO_vendor.h         |  2 ++
+ drivers/watchdog/iTCO_vendor_support.c | 16 +++++----
+ drivers/watchdog/iTCO_wdt.c            | 28 +++++++++-------
+ 4 files changed, 39 insertions(+), 52 deletions(-)
+
+-- 
+2.25.0
+
