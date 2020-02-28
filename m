@@ -2,107 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9642173DDC
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2020 18:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6174F173E14
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2020 18:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbgB1RDp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Feb 2020 12:03:45 -0500
-Received: from sauhun.de ([88.99.104.3]:59882 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgB1RDp (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Feb 2020 12:03:45 -0500
-Received: from localhost (p54B3301B.dip0.t-ipconnect.de [84.179.48.27])
-        by pokefinder.org (Postfix) with ESMTPSA id D2A142C1E8B;
-        Fri, 28 Feb 2020 18:03:42 +0100 (CET)
-Date:   Fri, 28 Feb 2020 18:03:42 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Martin Volf <martin.volf.42@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] i2c: i801: Fix iTCO_wdt resource creation if PMC
- is not present
-Message-ID: <20200228170342.GC1130@ninjato>
-References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
+        id S1726627AbgB1RNR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Feb 2020 12:13:17 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:38715 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725900AbgB1RNQ (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 28 Feb 2020 12:13:16 -0500
+Received: by mail-pg1-f196.google.com with SMTP id d6so1833976pgn.5;
+        Fri, 28 Feb 2020 09:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xJi6vZcYcttW+MZfr9/rRJo0DF++IJ1/RUDtbKhU1AY=;
+        b=uEOAohEGBRoCSThVEmWLtAKPOqOCFMCaUcBA+F58HYQJ4WlwP99B0kkn5pagoVx9ia
+         ciyWMsE+sn335hZ75HM6QJ1hCDukb9Suie1cGGMW2CGkSeudg/JIePTCYGESVNsyzVvx
+         2yCpjoSiVB7B58PbXo5dzIdwKsB7nXSsB4qu/5qixVM9wJDBDP8LorAMIphl8QEyUu4w
+         tx7Ljaicm2ngq5StYDxBLLfcaHDE9bo08CT29iQoLWRs9BnkembEXNKAuMFTbN1kZnc+
+         rMUXNfZRE9iQg6Pvk4U20jO1SK28BuxQMZVUdpXosWbGA1asQrgJqXSeTclTNd72OGDS
+         4akw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xJi6vZcYcttW+MZfr9/rRJo0DF++IJ1/RUDtbKhU1AY=;
+        b=hoH0F2fupTBp2Ul+dYtwWyTm5hqo9KQbuVYZAv3ddJZAE35xFfW1p9j50Zls5QYlZ1
+         QgEdblzqPojmIfeC/qXsoQiZ3IXoTMBzP1b9GioVUbyNXk4X5zo1sQUa8iQqzreW9stL
+         wp0YS4Hrfy0J1jnGABhyDJpg224asygP0KmeJ4xOQnndzzGPtNyWqGPvfaIct2o1CUjL
+         xHzMKWlU/OxlocEijIO5uzcJh0sYNwo5Q6SKdBNTa3cMNy+O3HC/rnS5bFesYPMzkThZ
+         GZ+fuFphse9REpHumog9VTMOfQhQz/RtwKtNS1LfZJvCG7eicGbJcb9nq8exCar6xRK5
+         FKxQ==
+X-Gm-Message-State: APjAAAUSe5bLd6ffKCGMhpn/5Lb5YEimgMgKPoD2SqRwAjLhM7nzQ1ms
+        XXSgqXE+AE91qP7hkwKNE3M=
+X-Google-Smtp-Source: APXvYqwRnGkDeSmzVIq5t1dNZsR0afEyiIO9TeGMrlGYsOPCoVbGkguOPHdpxhLdA+JLiDLGB3FEAw==
+X-Received: by 2002:a63:1d22:: with SMTP id d34mr5495224pgd.21.1582909995462;
+        Fri, 28 Feb 2020 09:13:15 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q13sm11203198pgh.30.2020.02.28.09.13.14
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 28 Feb 2020 09:13:14 -0800 (PST)
+Date:   Fri, 28 Feb 2020 09:13:14 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Tero Kristo <t-kristo@ti.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] watchdog: add support for resetting keepalive timers
+ at start
+Message-ID: <20200228171314.GA14594@roeck-us.net>
+References: <20200228142331.13716-1-t-kristo@ti.com>
+ <20200228142331.13716-3-t-kristo@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="da4uJneut+ArUgXk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200228142331.13716-3-t-kristo@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Fri, Feb 28, 2020 at 04:23:29PM +0200, Tero Kristo wrote:
+> Current watchdog core pets the timer always after the initial keepalive
+> time has expired from boot-up. This is incorrect for certain timers that
+> don't like to be petted immediately when they are started, if they have
+> not been running over the boot.
+> 
+> To allow drivers to reset their keepalive timers during startup, add
+> a new watchdog flag to the api, WDOG_RESET_KEEPALIVE.
+> 
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> ---
+>  drivers/watchdog/watchdog_dev.c | 2 ++
+>  include/linux/watchdog.h        | 1 +
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 8b5c742f24e8..131e40c21703 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -283,6 +283,8 @@ static int watchdog_start(struct watchdog_device *wdd)
+>  		set_bit(WDOG_ACTIVE, &wdd->status);
+>  		wd_data->last_keepalive = started_at;
+>  		watchdog_update_worker(wdd);
+> +		if (test_bit(WDOG_RESET_KEEPALIVE, &wdd->status))
+> +			wd_data->last_hw_keepalive = started_at;
 
---da4uJneut+ArUgXk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't think the additional flag is needed. The code should just set
+last_hw_keepalive. After all, it already sets last_keepalive, which
+determines when the next internal keepalive will be sent. It makes sense
+to also set last_hw_keepalive to prevent the next keepalive from being
+sent too early.
 
-On Wed, Feb 26, 2020 at 04:21:19PM +0300, Mika Westerberg wrote:
-> Hi all,
->=20
-> This series aims to fix the issue reported by Martin Volf [1] that preven=
-ts
-> the nct6775 driver from loading.
->=20
-> I added Fixes tag to the last patch but not stable tag because the other
-> two patches it depends are not really stable material IMO. Please let me
-> know if there is a better way to organize these :)
->=20
-> I tested this on Intel Whiskey Lake based system (CNL derived) and on Com=
-et
-> Lake-V based system (SPT derived and the iTCO_wdt still works and I can s=
-ee
-> the expected resources in /proc/ioports and /proc/iomem.
->=20
-> The previous version of the patch series can be found here:
->=20
->   https://lore.kernel.org/linux-hwmon/20200225123802.88984-1-mika.westerb=
-erg@linux.intel.com/
->=20
-> Changes from the previous version:
->=20
->   * Call request_region() also for iTCO_vendorsupport
->   * Drop the core populating ICH_RES_IO_SMI completely from i2c-i801.c
->=20
-> [1] https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=3DHhBu-2donSsuoga=
-bkfP03v1YF26Q7_BgvgA@mail.gmail.com/
-
-I can take this series via I2C. Just wanted to let you know that I am
-aiming for rc5, because I'd like to have this in linux-next for a week
-to make sure we don't regress again (despite all precautions) somewhere
-else.
-
-Thanks to everyone to get this regression handled in such a concentrated
-manner!
-
-
---da4uJneut+ArUgXk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5ZR+4ACgkQFA3kzBSg
-Kbb29A//YUY3JKyYa6plCWxNQj6H12cc6EdXrS4lOnESwx89pq9ITm98Juu/VPqe
-41Y0idzm2RNeq9ez7J6lxzGfYul5TkAxex+FGirUlp5GwrtrpRq2WFptcCR66Vx3
-Tx4hw4bnValX5pWvQegGpvCX0kvFvMu4/Lv47C8nCWEljm0L0j144MTgXfgzCRKb
-1iElopnX9Y7c0p5SaJUmM13WjHi9Y4TloOjmeIcGjOpEcQ0YzdsPeFfuGpn17FhX
-Ninbdux+DM94gWEuK6e3Xc3HAyz3zQDN9b1MR0A/0UqjoeEUspa2yvSOEOcNcDDH
-KyD7No8DbVNc6n8dLmncQqf+jZ4yN2hPMy/6YaJGhjk40hJI8M1cYC3jVqj8bnYA
-ItjrjV7QANSUwP+Kne2qCf5rQ10P18SJXaDd8s8cWXBmOh1Y6U9XsaDRrbfuXBO1
-t0Lr6ssJZ3/RCu+X8wVMAIqgBQkhV57T0HItN8xeNhS8HpSopXank5tKVhQaUx7N
-vy4E8AoTO/T/mkNdjiUFfhDCxRqUElM5V5gtYJEl+B5Bx//2f1doGMBa0A+UIOk4
-oMsevqtEXyPacx7U7gaXbverDoLwppf2zNclJ9aSopCDoyHUBTjbvIw2aHQA3oyz
-uvhVF1Re0owL3aqfAuXbPQtUdLMdJRELXEIa0dcwOi89leiCdmc=
-=71Zy
------END PGP SIGNATURE-----
-
---da4uJneut+ArUgXk--
+Guenter
