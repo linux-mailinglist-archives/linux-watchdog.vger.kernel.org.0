@@ -2,47 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8A41739C4
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2020 15:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D141739C0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2020 15:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgB1OYR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Feb 2020 09:24:17 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:47642 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726875AbgB1OYQ (ORCPT
+        id S1727060AbgB1OYL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Feb 2020 09:24:11 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:55434 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726388AbgB1OYL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Feb 2020 09:24:16 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01SENwnb053696;
-        Fri, 28 Feb 2020 08:23:58 -0600
+        Fri, 28 Feb 2020 09:24:11 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01SENn8P077145;
+        Fri, 28 Feb 2020 08:23:49 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582899838;
-        bh=gFf3iMUyi6ZJJ+RWZCMBD5YGM1y98+HWlMtKDjZYE1Q=;
+        s=ti-com-17Q1; t=1582899829;
+        bh=g5E4/aGbLDlYTVFp8WXs8uHkeTO14nlnI7GK+d1POtE=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=zPcTgXaRJ4JSp2y+F2uLiZGqv66FBx3oqcAII53m4HNVo+ldnrWpdRD7ilZSxNzPE
-         XMhIk/xBP0wf1mqMtHfRsl0PJ+O+n2uBoR4SDYtcdfMXowWO3QNWuEmRIF1AsmWsSl
-         2X4RBKbvlN8ShzaDTjpefWZ021tSta/6y5XdPR7c=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01SENv7G086299;
-        Fri, 28 Feb 2020 08:23:57 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+        b=INn3yA/y+d0vG5dbm4VadOdIzJ0QFvZNjOleX/9vMLMqNGWKQ4cUH5ho47AORG/K/
+         3+iTUfQxtMiIRTnqq8+w4E6rkQqVa0ufukKwJ6G8wUSCCtbLs7wSQ3h7R+9PS27Rt0
+         MHPkkJ3svUK/j7EqvuNMmKTqI9aDr1fLIZYGazo8=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01SENnKt007136
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 28 Feb 2020 08:23:49 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 28
- Feb 2020 08:23:46 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2020 08:23:47 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Fri, 28 Feb 2020 08:23:46 -0600
+ Frontend Transport; Fri, 28 Feb 2020 08:23:47 -0600
 Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01SENf40049600;
-        Fri, 28 Feb 2020 08:23:45 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01SENf41049600;
+        Fri, 28 Feb 2020 08:23:46 -0600
 From:   Tero Kristo <t-kristo@ti.com>
 To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
         <linux-watchdog@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/4] watchdog: add support for resetting keepalive timers at start
-Date:   Fri, 28 Feb 2020 16:23:29 +0200
-Message-ID: <20200228142331.13716-3-t-kristo@ti.com>
+Subject: [PATCH 3/4] watchdog: Add K3 RTI watchdog support
+Date:   Fri, 28 Feb 2020 16:23:30 +0200
+Message-ID: <20200228142331.13716-4-t-kristo@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200228142331.13716-1-t-kristo@ti.com>
 References: <20200228142331.13716-1-t-kristo@ti.com>
@@ -54,45 +55,307 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Current watchdog core pets the timer always after the initial keepalive
-time has expired from boot-up. This is incorrect for certain timers that
-don't like to be petted immediately when they are started, if they have
-not been running over the boot.
-
-To allow drivers to reset their keepalive timers during startup, add
-a new watchdog flag to the api, WDOG_RESET_KEEPALIVE.
+Texas Instruments K3 SoCs contain an RTI (Real Time Interrupt) module
+which can be used as a watchdog. This IP provides a support for
+windowed watchdog mode, in which the watchdog must be petted within
+a certain time window. If it is petted either too soon, or too late,
+a watchdog error will be triggered.
 
 Signed-off-by: Tero Kristo <t-kristo@ti.com>
 ---
- drivers/watchdog/watchdog_dev.c | 2 ++
- include/linux/watchdog.h        | 1 +
- 2 files changed, 3 insertions(+)
+ drivers/watchdog/Kconfig   |   8 ++
+ drivers/watchdog/Makefile  |   1 +
+ drivers/watchdog/rti_wdt.c | 250 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 259 insertions(+)
+ create mode 100644 drivers/watchdog/rti_wdt.c
 
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index 8b5c742f24e8..131e40c21703 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -283,6 +283,8 @@ static int watchdog_start(struct watchdog_device *wdd)
- 		set_bit(WDOG_ACTIVE, &wdd->status);
- 		wd_data->last_keepalive = started_at;
- 		watchdog_update_worker(wdd);
-+		if (test_bit(WDOG_RESET_KEEPALIVE, &wdd->status))
-+			wd_data->last_hw_keepalive = started_at;
- 	}
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index cec868f8db3f..81faf47d44a6 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -583,6 +583,14 @@ config DAVINCI_WATCHDOG
+ 	  NOTE: once enabled, this timer cannot be disabled.
+ 	  Say N if you are unsure.
  
- 	return err;
-diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-index 417d9f37077a..b56e3f1b1ec3 100644
---- a/include/linux/watchdog.h
-+++ b/include/linux/watchdog.h
-@@ -116,6 +116,7 @@ struct watchdog_device {
- #define WDOG_STOP_ON_REBOOT	2	/* Should be stopped on reboot */
- #define WDOG_HW_RUNNING		3	/* True if HW watchdog running */
- #define WDOG_STOP_ON_UNREGISTER	4	/* Should be stopped on unregister */
-+#define WDOG_RESET_KEEPALIVE	5	/* Reset keepalive timers at start */
- 	struct list_head deferred;
- };
- 
++config K3_RTI_WATCHDOG
++	tristate "Texas Instruments K3 RTI watchdog"
++	depends on ARCH_K3 || COMPILE_TEST
++	select WATCHDOG_CORE
++	help
++	  Say Y here if you want to include support for the K3 watchdog
++	  timer (RTI module) available in the K3 generation of processors.
++
+ config ORION_WATCHDOG
+ 	tristate "Orion watchdog"
+ 	depends on ARCH_ORION5X || ARCH_DOVE || MACH_DOVE || ARCH_MVEBU || (COMPILE_TEST && !ARCH_EBSA110)
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 2ee352bf3372..6de2e4ceef19 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -57,6 +57,7 @@ obj-$(CONFIG_EP93XX_WATCHDOG) += ep93xx_wdt.o
+ obj-$(CONFIG_PNX4008_WATCHDOG) += pnx4008_wdt.o
+ obj-$(CONFIG_IOP_WATCHDOG) += iop_wdt.o
+ obj-$(CONFIG_DAVINCI_WATCHDOG) += davinci_wdt.o
++obj-$(CONFIG_K3_RTI_WATCHDOG) += rti_wdt.o
+ obj-$(CONFIG_ORION_WATCHDOG) += orion_wdt.o
+ obj-$(CONFIG_SUNXI_WATCHDOG) += sunxi_wdt.o
+ obj-$(CONFIG_RN5T618_WATCHDOG) += rn5t618_wdt.o
+diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+new file mode 100644
+index 000000000000..b0933b090f53
+--- /dev/null
++++ b/drivers/watchdog/rti_wdt.c
+@@ -0,0 +1,250 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Watchdog driver for the K3 RTI module
++ *
++ * (c) Copyright 2019 Texas Instruments Inc.
++ * All rights reserved.
++ */
++
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/mod_devicetable.h>
++#include <linux/types.h>
++#include <linux/kernel.h>
++#include <linux/watchdog.h>
++#include <linux/platform_device.h>
++#include <linux/io.h>
++#include <linux/device.h>
++#include <linux/clk.h>
++#include <linux/err.h>
++#include <linux/pm_runtime.h>
++
++#define MODULE_NAME "rti-wdt"
++#define DEFAULT_HEARTBEAT 60
++#define MAX_HEARTBEAT     1000
++
++/* Timer register set definition */
++#define RTIDWDCTRL	0x90
++#define RTIDWDPRLD	0x94
++#define RTIWDSTATUS	0x98
++#define RTIWDKEY	0x9c
++#define RTIDWDCNTR	0xa0
++#define RTIWWDRXCTRL	0xa4
++#define RTIWWDSIZECTRL	0xa8
++
++#define RTIWWDRX_NMI	0xa
++
++#define RTIWWDSIZE_50P	0x50
++
++#define WDENABLE_KEY	0xa98559da
++
++#define WDKEY_SEQ0		0xe51a
++#define WDKEY_SEQ1		0xa35c
++
++#define WDT_PRELOAD_SHIFT	13
++
++#define WDT_PRELOAD_MAX		0xfff
++
++#define DWDST			BIT(1)
++
++static int heartbeat;
++
++/*
++ * struct to hold data for each WDT device
++ * @base - base io address of WD device
++ * @clk - source clock of WDT
++ * @wdd - hold watchdog device as is in WDT core
++ */
++struct rti_wdt_device {
++	void __iomem		*base;
++	struct clk		*clk;
++	struct watchdog_device	wdd;
++};
++
++static int rti_wdt_start(struct watchdog_device *wdd)
++{
++	u32 timer_margin;
++	unsigned long freq;
++	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
++
++	freq = clk_get_rate(wdt->clk);
++
++	/* set timeout period */
++	timer_margin = (u64)wdd->timeout * freq;
++	timer_margin >>= WDT_PRELOAD_SHIFT;
++	if (timer_margin > WDT_PRELOAD_MAX)
++		timer_margin = WDT_PRELOAD_MAX;
++	writel_relaxed(timer_margin, wdt->base + RTIDWDPRLD);
++
++	/* Set min heartbeat to 1.1x window size */
++	wdd->min_hw_heartbeat_ms = 11 * wdd->timeout * 1000 / 20;
++
++	/* Generate NMI when wdt expires */
++	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
++
++	/* Window size 50% */
++	writel_relaxed(RTIWWDSIZE_50P, wdt->base + RTIWWDSIZECTRL);
++
++	readl_relaxed(wdt->base + RTIWWDSIZECTRL);
++
++	/* enable watchdog */
++	writel_relaxed(WDENABLE_KEY, wdt->base + RTIDWDCTRL);
++	return 0;
++}
++
++static int rti_wdt_ping(struct watchdog_device *wdd)
++{
++	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
++
++	/* put watchdog in service state */
++	writel_relaxed(WDKEY_SEQ0, wdt->base + RTIWDKEY);
++	/* put watchdog in active state */
++	writel_relaxed(WDKEY_SEQ1, wdt->base + RTIWDKEY);
++
++	if (readl_relaxed(wdt->base + RTIWDSTATUS))
++		WARN_ON_ONCE(1);
++
++	return 0;
++}
++
++static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
++{
++	u64 timer_counter;
++	unsigned long freq;
++	u32 val;
++	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
++
++	/* if timeout has occurred then return 0 */
++	val = readl_relaxed(wdt->base + RTIWDSTATUS);
++	if (val & DWDST)
++		return 0;
++
++	freq = clk_get_rate(wdt->clk);
++	if (!freq)
++		return 0;
++
++	timer_counter = readl_relaxed(wdt->base + RTIDWDCNTR);
++
++	do_div(timer_counter, freq);
++
++	return timer_counter;
++}
++
++static const struct watchdog_info rti_wdt_info = {
++	.options = WDIOF_KEEPALIVEPING,
++	.identity = "K3 RTI Watchdog",
++};
++
++static const struct watchdog_ops rti_wdt_ops = {
++	.owner		= THIS_MODULE,
++	.start		= rti_wdt_start,
++	.ping		= rti_wdt_ping,
++	.get_timeleft	= rti_wdt_get_timeleft,
++};
++
++static int rti_wdt_probe(struct platform_device *pdev)
++{
++	int ret = 0;
++	struct device *dev = &pdev->dev;
++	struct resource *wdt_mem;
++	struct watchdog_device *wdd;
++	struct rti_wdt_device *wdt;
++
++	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
++	if (!wdt)
++		return -ENOMEM;
++
++	wdt->clk = devm_clk_get(dev, NULL);
++	if (IS_ERR(wdt->clk)) {
++		if (PTR_ERR(wdt->clk) != -EPROBE_DEFER)
++			dev_err(dev, "failed to get clock\n");
++		return PTR_ERR(wdt->clk);
++	}
++
++	pm_runtime_enable(dev);
++	ret = pm_runtime_get_sync(dev);
++	if (ret) {
++		if (ret != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "runtime pm failed\n");
++		return ret;
++	}
++
++	platform_set_drvdata(pdev, wdt);
++
++	wdd = &wdt->wdd;
++	wdd->info = &rti_wdt_info;
++	wdd->ops = &rti_wdt_ops;
++	wdd->min_timeout = 1;
++	/* Set min heartbeat to 1.1x window size */
++	wdd->min_hw_heartbeat_ms = 11 * DEFAULT_HEARTBEAT * 1000 / 20;
++	wdd->max_hw_heartbeat_ms = MAX_HEARTBEAT * 1000;
++	wdd->timeout = DEFAULT_HEARTBEAT;
++	wdd->parent = dev;
++
++	set_bit(WDOG_RESET_KEEPALIVE, &wdd->status);
++
++	watchdog_init_timeout(wdd, heartbeat, dev);
++
++	watchdog_set_drvdata(wdd, wdt);
++	watchdog_set_nowayout(wdd, 1);
++	watchdog_set_restart_priority(wdd, 128);
++
++	wdt_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	wdt->base = devm_ioremap_resource(dev, wdt_mem);
++	if (IS_ERR(wdt->base)) {
++		ret = PTR_ERR(wdt->base);
++		goto err_iomap;
++	}
++
++	ret = watchdog_register_device(wdd);
++	if (ret) {
++		dev_err(dev, "cannot register watchdog device\n");
++		goto err_iomap;
++	}
++
++	return 0;
++
++err_iomap:
++	pm_runtime_put_sync(&pdev->dev);
++
++	return ret;
++}
++
++static int rti_wdt_remove(struct platform_device *pdev)
++{
++	struct rti_wdt_device *wdt = platform_get_drvdata(pdev);
++
++	watchdog_unregister_device(&wdt->wdd);
++	pm_runtime_put(&pdev->dev);
++
++	return 0;
++}
++
++static const struct of_device_id rti_wdt_of_match[] = {
++	{ .compatible = "ti,rti-wdt", },
++	{},
++};
++MODULE_DEVICE_TABLE(of, rti_wdt_of_match);
++
++static struct platform_driver rti_wdt_driver = {
++	.driver = {
++		.name = "rti-wdt",
++		.of_match_table = rti_wdt_of_match,
++	},
++	.probe = rti_wdt_probe,
++	.remove = rti_wdt_remove,
++};
++
++module_platform_driver(rti_wdt_driver);
++
++MODULE_AUTHOR("Tero Kristo <t-kristo@ti.com>");
++MODULE_DESCRIPTION("K3 RTI Watchdog Driver");
++
++module_param(heartbeat, int, 0);
++MODULE_PARM_DESC(heartbeat,
++		 "Watchdog heartbeat period in seconds from 1 to "
++		 __MODULE_STRING(MAX_HEARTBEAT) ", default "
++		 __MODULE_STRING(DEFAULT_HEARTBEAT));
++
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:rti-wdt");
 -- 
 2.17.1
 
