@@ -2,53 +2,53 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CF8174CAF
-	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Mar 2020 11:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726FA174CD2
+	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Mar 2020 11:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbgCAKGD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 1 Mar 2020 05:06:03 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:40390 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725812AbgCAKGC (ORCPT
+        id S1726094AbgCAKsN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 1 Mar 2020 05:48:13 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:37432 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726050AbgCAKsN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 1 Mar 2020 05:06:02 -0500
-Received: by mail-pj1-f66.google.com with SMTP id 12so3154487pjb.5;
-        Sun, 01 Mar 2020 02:06:01 -0800 (PST)
+        Sun, 1 Mar 2020 05:48:13 -0500
+Received: by mail-pl1-f196.google.com with SMTP id q4so3034517pls.4;
+        Sun, 01 Mar 2020 02:48:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=DLOrqo7GTQEIze4XEf2f91ocTASE1gzbIlbF34p0mw0=;
-        b=ZnvEqWulAKwt54aFHxTDZn/mbCrSvMKGpWRsGo/VSdXxVsFuKzWjFz2IePudWiS15t
-         T+zajbi7gZfcY1zMrEBSyZk34/ZgAIXnjPW20A/nmff9ePdLnDsLdKD/3KQD34wlIs8E
-         TOWWVXFcX0Yrw+wb6n4BkRp/AxBoNbL7i9QvkmsZv0yds8/CiwMjvkcgNN63No+u0G7W
-         T77cvsvnYFCRMf5lK5llPMHnikoP8rWRC6NLIdtErcxmMLNPvppAyW11SdXK2rjjshFQ
-         zSrmwV2aZHwRS8VEfkN191ZqmQWqZY2Wl7FzhjPdQ1xx1r5xCrR2rlNT+d1d99o0jTH6
-         if+g==
+        bh=A53gC+RfC7zmp0f0TDYfbN3t0EUbzSA9wOyX7JA2gYY=;
+        b=XSYfapLvHcNViQ0j0sUWvp1LcPPDkSPa8h9Li50ug4i+l+yyFQ8KcE+lpdVUd4kOA4
+         DlC9d2veNFOlqeH9+AjMT/Xyjr4UyN/TyH+45o/tUULVItbDAkNZECNNQJyZ6X3B8j0S
+         kcLFCDdy7I5tkfWHAYBI6azHxgpwx7tYpQKwexPyCcUHKjQEZ6g9mpVFAdtTaYHjXVdT
+         PIvmOLG5mQC/WYQ6VhkBX+aqVCSFQrP30oa0JjsxqJyuHZQYz+INrOhr90Umswx0cvEd
+         Gi7Fbr5Qi6+XeE1XcyfmkCIlgMfgmH6368TEd/XZuwDC9qDF/uxXkUxCCKwdSwod6gQa
+         q5pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=DLOrqo7GTQEIze4XEf2f91ocTASE1gzbIlbF34p0mw0=;
-        b=cHuQbvP6GBMemREO6kh4FStylDmDSlytVqiP86SakQiUFvLZTsnnEZgM/mxTpYlE+U
-         eP667g47HAno+Kf22DPROgsoxRqMeCtKqv4mi70gAMMQXD3BpjbBeVvPE5zd1oEg6z5F
-         m0IdLKGkifqNUziXqeRzl2tt6ze4DYem3USrIL8x3JQYr0fs2XvmAN1xtwPm/ZMfnWH0
-         pfkTtXV9cVrwYGa0Ko33hGzvCVUlESug+KMW/7GfC4eoFktHmw1SX64cEf9Vji5zlN+L
-         OD8eoBx5N2WVWMcZpcUbU/o7Y0z9PJLxxn1jET+ZDo6h4oqnoKrue9Q6q5KXWseHKx4E
-         18IQ==
-X-Gm-Message-State: APjAAAW27KVFstazjLmYMKoyjwCqLo9rSqKG3EQ8wsvNWaCFu731aMif
-        /+np13n3Z4VgLqCaGjeIcPA=
-X-Google-Smtp-Source: APXvYqzwh3kmMN5UVnwebCICqh6IFRAy8g0IILKdDQcIwxt91UODgIc8NynyqUvZ0YLgzoo6THgHog==
-X-Received: by 2002:a17:90a:102:: with SMTP id b2mr14832651pjb.64.1583057161402;
-        Sun, 01 Mar 2020 02:06:01 -0800 (PST)
+        bh=A53gC+RfC7zmp0f0TDYfbN3t0EUbzSA9wOyX7JA2gYY=;
+        b=SbeNqiiR3wRyTOYYbhwgRbXvEIIj3ms6NuS+YljNe7UVBQXrxav02zhQA3OiKzfTp1
+         XOR1K1jOJgXnMJMAXmtqGrfxSAVYe60nKIVBoEUnC58gOSRJ2Ea6OJsbk0doLSDcWcxO
+         cYQPJY4tiHRR0t/CD1fGPlAKHTfHERrXTSd3CdpvxN3Yxzc6g+D8rwmPMRM0YutVUxoN
+         +i1dI6nF9VJFlA14pJL1eNAJ6LOrGhrtpiUgtGbO1NJUefknHK9HT/EDKjh+xJkTP1xr
+         SwixpD95d6CbTIhifkCEuO2s59hBJarjR5BPG3lPrwO+EcXJbAFzspdJRIThKpbx5sbM
+         uAQg==
+X-Gm-Message-State: APjAAAV8b3JIb76ONd4JhtxLKMbWqsEcUjquAng44aBTRVVt2xSHxoqW
+        yw1uEc/Y8GY4WYgFDU27ApU=
+X-Google-Smtp-Source: APXvYqxv+gV2P7/wOE+6NDBdXmUZquV1RpSVjIKbo8Asb52yZ6IFL0CjUInClqrtYn3NRVeZ1WjMCA==
+X-Received: by 2002:a17:902:9f83:: with SMTP id g3mr12817171plq.101.1583059691512;
+        Sun, 01 Mar 2020 02:48:11 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h7sm17981304pfq.36.2020.03.01.02.05.59
+        by smtp.gmail.com with ESMTPSA id d1sm8827044pfc.3.2020.03.01.02.48.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Mar 2020 02:06:00 -0800 (PST)
-Subject: Re: [PATCH v1 1/4] dt-binding: watchdog: add restart priority
- documentation
+        Sun, 01 Mar 2020 02:48:10 -0800 (PST)
+Subject: Re: [PATCH v1 4/4] watchdog: npcm: sets card ext1 and ext2 bootstatus
+ during probe
 To:     Tomer Maimon <tmaimon77@gmail.com>, wim@linux-watchdog.org,
         robh+dt@kernel.org, mark.rutland@arm.com, joel@jms.id.au,
         avifishman70@gmail.com, tali.perry1@gmail.com, yuenn@google.com,
@@ -56,7 +56,7 @@ To:     Tomer Maimon <tmaimon77@gmail.com>, wim@linux-watchdog.org,
 Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
 References: <20200301094040.123189-1-tmaimon77@gmail.com>
- <20200301094040.123189-2-tmaimon77@gmail.com>
+ <20200301094040.123189-5-tmaimon77@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,51 +101,256 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <6ecf9a6b-8fca-1e7a-10d0-ee518e6ecf64@roeck-us.net>
-Date:   Sun, 1 Mar 2020 02:05:58 -0800
+Message-ID: <026fa94c-8fde-acda-e218-ffff9b5891c9@roeck-us.net>
+Date:   Sun, 1 Mar 2020 02:48:08 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200301094040.123189-2-tmaimon77@gmail.com>
+In-Reply-To: <20200301094040.123189-5-tmaimon77@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 3/1/20 1:40 AM, Tomer Maimon wrote:
-> Add device tree restart priority documentation.
+> During probe NPCM watchdog sets the following bootstatus flags:
+> 	- WDIOF_CARDRESET represent power and core reset.
+> 	- WDIOF_EXTERN1 represent watchdog 0-2 reset.
+> 	- WDIOF_EXTERN2 represent software 1-4 reset.
+> 
+> Each flag is representing a group of bootstatus.
+> The user can configure through the device treethe exact reset
+> to each flag group.
 > 
 
-I think this warrants an explanation _why_ this is needed.
-What is the use case ? Not just theory, please.
+Sorry, this doesn't make sense to me. I could understand reporting
+the above, but it looks to me like devicetree is used to associate
+a reset bit from the controller with one of the above.
+Devicetree only seems to be used to associate reset status bits
+from the controller with WDIOF_CARDRESET, WDIOF_EXTERN1, or
+WDIOF_EXTERN2. That adds a lot of complexity for little if any
+gain.
+
+It would make sense to set the bootstatus bits as suggested above,
+but that doesn't require devicetree properties.
+
+More comments inline.
 
 Guenter
 
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/watchdog/npcm_wdt.c | 132 ++++++++++++++++++++++++++++++++----
+>  1 file changed, 119 insertions(+), 13 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
-> index 6d593003c933..0a0f86a25eb0 100644
-> --- a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
-> @@ -17,6 +17,7 @@ Required clocking property, have to be one of:
+> diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
+> index 8609c7acf17d..dba9a73249c9 100644
+> --- a/drivers/watchdog/npcm_wdt.c
+> +++ b/drivers/watchdog/npcm_wdt.c
+> @@ -11,7 +11,24 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/watchdog.h>
+> -
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+> +
+New include files in alphabetic order merged with existing ones, please.
+
+> +/* NPCM7xx GCR module */
+> +#define NPCM7XX_RESSR_OFFSET		0x6C
+> +#define NPCM7XX_INTCR2_OFFSET		0x60
+> +
+> +#define NPCM7XX_PORST			BIT(31)
+> +#define NPCM7XX_CORST			BIT(30)
+> +#define NPCM7XX_WD0RST			BIT(29)
+> +#define NPCM7XX_WD1RST			BIT(24)
+> +#define NPCM7XX_WD2RST			BIT(23)
+> +#define NPCM7XX_SWR1RST			BIT(28)
+> +#define NPCM7XX_SWR2RST			BIT(27)
+> +#define NPCM7XX_SWR3RST			BIT(26)
+> +#define NPCM7XX_SWR4RST			BIT(25)
+> +
+> + /* WD register */
+>  #define NPCM_WTCR	0x1C
 >  
->  Optional properties:
->  - timeout-sec : Contains the watchdog timeout in seconds
-> +- nuvoton,restart-priority : Contains the card restart priority.
->  
->  Example:
->  
-> @@ -25,4 +26,5 @@ timer@f000801c {
->      interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
->      reg = <0xf000801c 0x4>;
->      clocks = <&clk NPCM7XX_CLK_TIMER>;
-> +	nuvoton,restart-priority = <155>;
+>  #define NPCM_WTCLK	(BIT(10) | BIT(11))	/* Clock divider */
+> @@ -43,6 +60,9 @@
+>  struct npcm_wdt {
+>  	struct watchdog_device  wdd;
+>  	void __iomem		*reg;
+> +	u32			card_reset;
+> +	u32			ext1_reset;
+> +	u32			ext2_reset;
 >  };
+>  
+>  static inline struct npcm_wdt *to_npcm_wdt(struct watchdog_device *wdd)
+> @@ -103,30 +123,29 @@ static int npcm_wdt_stop(struct watchdog_device *wdd)
+>  	return 0;
+>  }
+>  
+> -
+>  static int npcm_wdt_set_timeout(struct watchdog_device *wdd,
+>  				unsigned int timeout)
+>  {
+>  	if (timeout < 2)
+>  		wdd->timeout = 1;
+>  	else if (timeout < 3)
+> -	      wdd->timeout = 2;
+> +		wdd->timeout = 2;
+>  	else if (timeout < 6)
+> -	      wdd->timeout = 5;
+> +		wdd->timeout = 5;
+>  	else if (timeout < 11)
+> -	      wdd->timeout = 10;
+> +		wdd->timeout = 10;
+>  	else if (timeout < 22)
+> -	      wdd->timeout = 21;
+> +		wdd->timeout = 21;
+>  	else if (timeout < 44)
+> -	      wdd->timeout = 43;
+> +		wdd->timeout = 43;
+>  	else if (timeout < 87)
+> -	      wdd->timeout = 86;
+> +		wdd->timeout = 86;
+>  	else if (timeout < 173)
+> -	      wdd->timeout = 172;
+> +		wdd->timeout = 172;
+>  	else if (timeout < 688)
+> -	      wdd->timeout = 687;
+> +		wdd->timeout = 687;
+>  	else
+> -	      wdd->timeout = 2750;
+> +		wdd->timeout = 2750;
+>  
+
+Whitespace changes in a separate patch, please.
+
+>  	if (watchdog_active(wdd))
+>  		npcm_wdt_start(wdd);
+> @@ -177,9 +196,61 @@ static const struct watchdog_ops npcm_wdt_ops = {
+>  	.restart = npcm_wdt_restart,
+>  };
+>  
+> +static void npcm_get_reset_status(struct npcm_wdt *wdt, struct device *dev)
+> +{
+> +	struct regmap *gcr_regmap;
+> +	u32 rstval;
+> +
+> +	if (of_device_is_compatible(dev->of_node, "nuvoton,npcm750-wdt")) {
+> +		gcr_regmap = syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
+> +		if (IS_ERR(gcr_regmap))
+> +			dev_warn(dev, "Failed to find nuvoton,npcm750-gcr WD reset status not supported\n");
+> +
+> +		regmap_read(gcr_regmap, NPCM7XX_RESSR_OFFSET, &rstval);
+> +		if (!rstval) {
+> +			regmap_read(gcr_regmap, NPCM7XX_INTCR2_OFFSET, &rstval);
+> +			rstval = ~rstval;
+> +		}
+
+The second register reports the same as the first only negated if
+bits in the first register are not set ? That seems unlikely.
+Please point to the datasheet, or at least provide a reference to the
+two registers.
+
+> +
+> +		if (rstval & wdt->card_reset)
+> +			wdt->wdd.bootstatus |= WDIOF_CARDRESET;
+> +		if (rstval & wdt->ext1_reset)
+> +			wdt->wdd.bootstatus |= WDIOF_EXTERN1;
+> +		if (rstval & wdt->ext2_reset)
+> +			wdt->wdd.bootstatus |= WDIOF_EXTERN2;
+> +	}
+> +}
+> +
+> +static u32 npcm_wdt_reset_type(const char *reset_type)
+> +{
+> +	if (!strcmp(reset_type, "porst"))
+> +		return NPCM7XX_PORST;
+> +	else if (!strcmp(reset_type, "corst"))
+> +		return NPCM7XX_CORST;
+> +	else if (!strcmp(reset_type, "wd0"))
+> +		return NPCM7XX_WD0RST;
+> +	else if (!strcmp(reset_type, "wd1"))
+> +		return NPCM7XX_WD1RST;
+> +	else if (!strcmp(reset_type, "wd2"))
+> +		return NPCM7XX_WD2RST;
+> +	else if (!strcmp(reset_type, "sw1"))
+> +		return NPCM7XX_SWR1RST;
+> +	else if (!strcmp(reset_type, "sw2"))
+> +		return NPCM7XX_SWR2RST;
+> +	else if (!strcmp(reset_type, "sw3"))
+> +		return NPCM7XX_SWR3RST;
+> +	else if (!strcmp(reset_type, "sw4"))
+> +		return NPCM7XX_SWR4RST;
+> +
+> +	return 0;
+> +}
+> +
+>  static int npcm_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> +	const char *card_reset_type;
+> +	const char *ext1_reset_type;
+> +	const char *ext2_reset_type;
+>  	struct npcm_wdt *wdt;
+>  	u32 priority;
+>  	int irq;
+> @@ -202,6 +273,39 @@ static int npcm_wdt_probe(struct platform_device *pdev)
+>  	else
+>  		watchdog_set_restart_priority(&wdt->wdd, priority);
+>  
+> +	ret = of_property_read_string(pdev->dev.of_node,
+> +				      "nuvoton,card-reset-type",
+> +				      &card_reset_type);
+> +	if (ret) {
+> +		wdt->card_reset = NPCM7XX_PORST;
+> +	} else {
+> +		wdt->card_reset = npcm_wdt_reset_type(card_reset_type);
+> +		if (!wdt->card_reset)
+> +			wdt->card_reset = NPCM7XX_PORST;
+> +	}
+> +
+> +	ret = of_property_read_string(pdev->dev.of_node,
+> +				      "nuvoton,ext1-reset-type",
+> +				      &ext1_reset_type);
+> +	if (ret) {
+> +		wdt->ext1_reset = NPCM7XX_WD0RST;
+> +	} else {
+> +		wdt->ext1_reset = npcm_wdt_reset_type(ext1_reset_type);
+> +		if (!wdt->ext1_reset)
+> +			wdt->ext1_reset = NPCM7XX_WD0RST;
+> +	}
+> +
+> +	ret = of_property_read_string(pdev->dev.of_node,
+> +				      "nuvoton,ext2-reset-type",
+> +				      &ext2_reset_type);
+> +	if (ret) {
+> +		wdt->ext2_reset = NPCM7XX_SWR1RST;
+> +	} else {
+> +		wdt->ext2_reset = npcm_wdt_reset_type(ext2_reset_type);
+> +		if (!wdt->ext2_reset)
+> +			wdt->ext2_reset = NPCM7XX_SWR1RST;
+> +	}
+> +
+>  	wdt->wdd.info = &npcm_wdt_info;
+>  	wdt->wdd.ops = &npcm_wdt_ops;
+>  	wdt->wdd.min_timeout = 1;
+> @@ -220,8 +324,10 @@ static int npcm_wdt_probe(struct platform_device *pdev)
+>  		set_bit(WDOG_HW_RUNNING, &wdt->wdd.status);
+>  	}
+>  
+> -	ret = devm_request_irq(dev, irq, npcm_wdt_interrupt, 0, "watchdog",
+> -			       wdt);
+> +	npcm_get_reset_status(wdt, dev);
+> +
+> +	ret = devm_request_irq(dev, irq, npcm_wdt_interrupt, 0,
+> +			       "watchdog", wdt);
+>  	if (ret)
+>  		return ret;
+>  
 > 
 
