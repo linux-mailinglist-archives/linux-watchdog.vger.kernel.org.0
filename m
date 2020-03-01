@@ -2,22 +2,21 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC953174CB1
-	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Mar 2020 11:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87202174CB2
+	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Mar 2020 11:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725812AbgCAKHz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 1 Mar 2020 05:07:55 -0500
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:38437 "EHLO
+        id S1725874AbgCAKIO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 1 Mar 2020 05:08:14 -0500
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:38444 "EHLO
         herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725768AbgCAKHz (ORCPT
+        with ESMTP id S1725768AbgCAKIO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 1 Mar 2020 05:07:55 -0500
-X-Greylist: delayed 1569 seconds by postgrey-1.27 at vger.kernel.org; Sun, 01 Mar 2020 05:07:51 EST
+        Sun, 1 Mar 2020 05:08:14 -0500
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 0219eg7I028745;
-        Sun, 1 Mar 2020 11:40:42 +0200
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 0219ehkc028746;
+        Sun, 1 Mar 2020 11:40:43 +0200
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id B51436032E; Sun,  1 Mar 2020 11:40:42 +0200 (IST)
+        id 4E5926032F; Sun,  1 Mar 2020 11:40:43 +0200 (IST)
 From:   Tomer Maimon <tmaimon77@gmail.com>
 To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         mark.rutland@arm.com, joel@jms.id.au, avifishman70@gmail.com,
@@ -25,10 +24,12 @@ To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
 Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 0/4] watchdog: npcm: support new capabilities
-Date:   Sun,  1 Mar 2020 11:40:36 +0200
-Message-Id: <20200301094040.123189-1-tmaimon77@gmail.com>
+Subject: [PATCH v1 1/4] dt-binding: watchdog: add restart priority documentation
+Date:   Sun,  1 Mar 2020 11:40:37 +0200
+Message-Id: <20200301094040.123189-2-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20200301094040.123189-1-tmaimon77@gmail.com>
+References: <20200301094040.123189-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
@@ -36,22 +37,31 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This patch set adds last reset bootstatus and restart priority
-support in watchdog the Nuvoton NPCM Baseboard Management
-Controller (BMC).
+Add device tree restart priority documentation.
 
-The NPCM watchdog driver tested on NPCM750 evaluation board.
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+---
+ Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Tomer Maimon (4):
-  dt-binding: watchdog: add restart priority documentation
-  watchdog: npcm: add restart priority support
-  dt-binding: watchdog: add bootstatus reset type documentation
-  watchdog: npcm: sets card ext1 and ext2 bootstatus during probe
-
- .../bindings/watchdog/nuvoton,npcm-wdt.txt    |  32 ++++
- drivers/watchdog/npcm_wdt.c                   | 138 ++++++++++++++++--
- 2 files changed, 157 insertions(+), 13 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+index 6d593003c933..0a0f86a25eb0 100644
+--- a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
++++ b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+@@ -17,6 +17,7 @@ Required clocking property, have to be one of:
+ 
+ Optional properties:
+ - timeout-sec : Contains the watchdog timeout in seconds
++- nuvoton,restart-priority : Contains the card restart priority.
+ 
+ Example:
+ 
+@@ -25,4 +26,5 @@ timer@f000801c {
+     interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
+     reg = <0xf000801c 0x4>;
+     clocks = <&clk NPCM7XX_CLK_TIMER>;
++	nuvoton,restart-priority = <155>;
+ };
 -- 
 2.22.0
 
