@@ -2,89 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A061756B1
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Mar 2020 10:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA25175808
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Mar 2020 11:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgCBJPx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 2 Mar 2020 04:15:53 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:50278 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726654AbgCBJPx (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 2 Mar 2020 04:15:53 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0229EGWC010138;
-        Mon, 2 Mar 2020 03:15:32 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=y8QM+XoK9yFgrjrmzHNSkNBsrFZrqnpOHADaZte4ZwY=;
- b=R3ZwVCKWZTRyNrTTlbQpU2ry48a88hA6e1hXOh6b9QVMsPPgvy54ivnSWDJT+tQLYLg3
- xxESedr9+NdRvnAiGh1H3vVVbnBQG9A3XMWplTtkE2PfKhpMukRYrQL4tTUMi3cPOzvh
- f9yi22NfApq1Pmql/RIaPmGHu6k9u3jfGzRQf+MDEcsa0VxfN/saZdi7JcZbO7b8PUqU
- 0VlBmsvyvB4xF5fpb5yfiZDeikVlHVJnZq6Q3RTKjRVQm1dGtp5qq5MoNrFA/uk3JPsk
- 5G4E6ypgl0KDSr/ALHHyiDWmK5cEEsCWblR2Ww9uTpGI3hhfU2JEEA3bv2pA4SYjx+uS AA== 
-Authentication-Results: ppops.net;
-        spf=pass smtp.mailfrom=ckeepax@opensource.cirrus.com
-Received: from ediex01.ad.cirrus.com ([5.172.152.52])
-        by mx0a-001ae601.pphosted.com with ESMTP id 2yfp89txqv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 02 Mar 2020 03:15:31 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Mon, 2 Mar
- 2020 09:15:29 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
- Transport; Mon, 2 Mar 2020 09:15:29 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CCF642AB;
-        Mon,  2 Mar 2020 09:15:29 +0000 (UTC)
-Date:   Mon, 2 Mar 2020 09:15:29 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH] watchdog: wm831x_wdt: Remove GPIO handling
-Message-ID: <20200302091529.GK108283@ediswmail.ad.cirrus.com>
-References: <20200229115046.57781-1-linus.walleij@linaro.org>
+        id S1727107AbgCBKMQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 2 Mar 2020 05:12:16 -0500
+Received: from mga03.intel.com ([134.134.136.65]:26807 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727076AbgCBKMQ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 2 Mar 2020 05:12:16 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Mar 2020 02:12:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,506,1574150400"; 
+   d="scan'208";a="351511538"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 02 Mar 2020 02:12:11 -0800
+Received: by lahna (sSMTP sendmail emulation); Mon, 02 Mar 2020 12:12:10 +0200
+Date:   Mon, 2 Mar 2020 12:12:10 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Martin Volf <martin.volf.42@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] i2c: i801: Fix iTCO_wdt resource creation if PMC
+ is not present
+Message-ID: <20200302101210.GW2667@lahna.fi.intel.com>
+References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
+ <20200228170342.GC1130@ninjato>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200229115046.57781-1-linus.walleij@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-SPF-Result: pass
-X-Proofpoint-SPF-Record: v=spf1 include:spf-001ae601.pphosted.com include:spf.protection.outlook.com
- ip4:5.172.152.52 -all
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- bulkscore=0 clxscore=1015 spamscore=0 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003020072
+In-Reply-To: <20200228170342.GC1130@ninjato>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Feb 29, 2020 at 12:50:46PM +0100, Linus Walleij wrote:
-> An attempt to convert the driver to using GPIO descriptors
-> (see Link tag) was discouraged in favor of deleting the
-> handling of the update GPIO altogehter since there are
-> no in-tree users.
+On Fri, Feb 28, 2020 at 06:03:42PM +0100, Wolfram Sang wrote:
+> On Wed, Feb 26, 2020 at 04:21:19PM +0300, Mika Westerberg wrote:
+> > Hi all,
+> > 
+> > This series aims to fix the issue reported by Martin Volf [1] that prevents
+> > the nct6775 driver from loading.
+> > 
+> > I added Fixes tag to the last patch but not stable tag because the other
+> > two patches it depends are not really stable material IMO. Please let me
+> > know if there is a better way to organize these :)
+> > 
+> > I tested this on Intel Whiskey Lake based system (CNL derived) and on Comet
+> > Lake-V based system (SPT derived and the iTCO_wdt still works and I can see
+> > the expected resources in /proc/ioports and /proc/iomem.
+> > 
+> > The previous version of the patch series can be found here:
+> > 
+> >   https://lore.kernel.org/linux-hwmon/20200225123802.88984-1-mika.westerberg@linux.intel.com/
+> > 
+> > Changes from the previous version:
+> > 
+> >   * Call request_region() also for iTCO_vendorsupport
+> >   * Drop the core populating ICH_RES_IO_SMI completely from i2c-i801.c
+> > 
+> > [1] https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com/
 > 
-> This patch deletes the GPIO handling instead.
-> 
-> Cc: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Link: https://lore.kernel.org/linux-watchdog/20200210102209.289379-1-linus.walleij@linaro.org/
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
+> I can take this series via I2C. Just wanted to let you know that I am
+> aiming for rc5, because I'd like to have this in linux-next for a week
+> to make sure we don't regress again (despite all precautions) somewhere
+> else.
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-
-Thanks,
-Charles
+Makes sense, thanks!
