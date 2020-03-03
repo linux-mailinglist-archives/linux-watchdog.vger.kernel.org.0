@@ -2,67 +2,102 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7710E178251
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Mar 2020 20:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8688A1784AE
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Mar 2020 22:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732520AbgCCSKV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 Mar 2020 13:10:21 -0500
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:40391 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732115AbgCCSKU (ORCPT
+        id S1732463AbgCCVNC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 3 Mar 2020 16:13:02 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40038 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732397AbgCCVNC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 Mar 2020 13:10:20 -0500
-Received: by mail-vk1-f193.google.com with SMTP id c129so1166584vkh.7
-        for <linux-watchdog@vger.kernel.org>; Tue, 03 Mar 2020 10:10:20 -0800 (PST)
+        Tue, 3 Mar 2020 16:13:02 -0500
+Received: by mail-pg1-f195.google.com with SMTP id t24so2119794pgj.7;
+        Tue, 03 Mar 2020 13:13:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=bHeBUSPiHoUbrBV+hl3+/vpnoyGyVGSAGueX0QFcdi3uMApLQ7CuiJU5Bu9vmrpLdq
-         5uO14T88cO9jN5exI5ip7DxCm/83Z8cp64nJK80AXsLt1IdmyRn2hWQ2R6yjaMoXEmtW
-         h9oOreSdUs44J9o2yZfH/UBLYISyBcfx6kflVWUIkgIN1VhIBOpnC0M/KTU/5yWJSAGz
-         fGG5i5rBuqC/+1ZbFdQB02YRytYOH5ooqY4vFwMYyVA4+buWbNObDEiboewJEpe1nonK
-         OFpOqLrPH7zWtF7AOxB6DMwTP4+/voHMipJjn9qbUZ+6EoklRF1iUY5IEpjKgoV1LQCF
-         QvUg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cjXy/AHGlnAlmHeoOkLzE1LxnTMabJl9XqoDCRnfzNE=;
+        b=sEjAkOMSLNvtn3nZJRpx/eE6ORIfEgvsFBh+5/piT1xic0gKe7EwFsQ6Pl9ugiU0Ha
+         e4siP8DGeYfqtlAmIaCHjCe7rU00pMcdPlBUqC7aY2dUW3nXYSB20yvLSxKkqBPULEtm
+         VfOem5NK/9HCV5QuxeZu3q29yJhpqHWkArurUDVw+aAnxJ0YTahhqUpGUM7AHaIIwT2z
+         KYc4Ggb+hvXd/au56BzgAxSBsKmdpOi86a46z51yvNi2Q8/Zrke+N3R2ZwqUVIJtSe+f
+         sl2/ZmeJulF4gyidW5fUwg06977aj9IkKrc4Uyc+DRbiiPaIOgZa6g4WpTXLrihmmCk6
+         TdzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=GG0erw7ZBzomkKkbZPmcERIk3/g8PdNxQV7mcwsUNFs9DKd5wH8tJ7x/JAKObL2WvN
-         CqcBZq7ol76/Kr1EvEJAhKj4hIBNzmZCaZV2aWq9bNDz0U22ljbCpvK4ShpsDfMHKtCT
-         /S+FRWMoGOwNZ0EnadzpxdHjrkaAYWJZKlzLoGxv6sbVnS/H314AbcGeCI45K0uhZGhe
-         najAHi5w52Co4NXOgKWJpJbIe+6lpWY6eSHHiIoIgJ1Z8pwt/DRoc5dbgSTKcuRdVuM8
-         /hgFspd/Z/7X06GvQWaZ8vLdxsQXxhWyVBvW3Dtw9cA7qokY5hDOAMJXjZkvWEQYtHQD
-         F5KQ==
-X-Gm-Message-State: ANhLgQ3wgo8btDHpYWtu/oqkGwW9rEnurzY2xe6hztyQe9+hLvpIhWkY
-        BYNuqE3u6rdY343PI1Le2pCUwYS3Db8bVfA5tkA=
-X-Google-Smtp-Source: ADFU+vu5KpUHXjnd3JvQt09wp+JnXyWVLMBY2VsdsFUzmqBVcWzpHFB7U23a/bK39LvY/cjRBQlqVApXxvE2pbFCtDk=
-X-Received: by 2002:a1f:8d0f:: with SMTP id p15mr3652760vkd.100.1583259019551;
- Tue, 03 Mar 2020 10:10:19 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cjXy/AHGlnAlmHeoOkLzE1LxnTMabJl9XqoDCRnfzNE=;
+        b=XLmfX11eM6GVXXBRr0uvFCztB1pXO4UiqP0nHqck9tvkjBNeVVyfQiKJ8PfPeeHBu8
+         JI8l45AbenlLsBwFQO1UDyNdP2L3nyexfdpy5IsohvnjA7Cyi/DU8o4I5eANPM4UwCFP
+         ZAUjy7qjBdRdZZFSnr2CxvcYGofirB82NzV3mYPGLK9/UatSXAseJltVEqwtuvys+FvV
+         XMFIRdnavCoYp/mR8EsVSQvZ6+wE2G9WgIk9T6eG89NF3G6g1mCqlLEePnXC+SFkMhrC
+         ESah59bC1FgVp918yuCpvcvlFpNab8xFKg2DN459JVNkh406eq+slVGhW+Jhlq1nRzxb
+         HCNA==
+X-Gm-Message-State: ANhLgQ2Sx/RcRBRSfFJ++CxLAI7S8AygNlNczHeQYYAxyr4Iq8w2bDYe
+        oB0pZcY+wnJjgxAazpkmC9Q=
+X-Google-Smtp-Source: ADFU+vvDPgFZc1xbBVSUOTlj/dSzxsSyW1Yi/QOyvs65jdchwSF2E/h4FOLGKh+lSE+ibyqQqnn5aA==
+X-Received: by 2002:aa7:9e5e:: with SMTP id z30mr6091148pfq.132.1583269981097;
+        Tue, 03 Mar 2020 13:13:01 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t15sm25080543pgr.60.2020.03.03.13.13.00
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 03 Mar 2020 13:13:00 -0800 (PST)
+Date:   Tue, 3 Mar 2020 13:12:59 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Tero Kristo <t-kristo@ti.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 2/4] watchdog: reset last_hw_keepalive time at start
+Message-ID: <20200303211259.GA28733@roeck-us.net>
+References: <20200302200426.6492-1-t-kristo@ti.com>
+ <20200302200426.6492-3-t-kristo@ti.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:2a59:0:0:0:0:0 with HTTP; Tue, 3 Mar 2020 10:10:18 -0800 (PST)
-Reply-To: dr.challynoah@gmail.com
-From:   DR CHALLY NOAH <official.dhlexpress@gmail.com>
-Date:   Tue, 3 Mar 2020 19:10:18 +0100
-Message-ID: <CAJ-5BZEDKvaazVaTzGQXA-vgBjBwA7RM2DE4ZKgMm4iDYhx9aw@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200302200426.6492-3-t-kristo@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello Dear,
-What Have Kept You Waiting To Claim Your $600,000.00 USD Compensation Award?
-This said fund was issued out by the UNITED NATIONS To compensate
-you.Please If You Have Not Claim Your Fund (Award),Kindly contact me
-at   DR.CHALLYNOAH@GMAIL.COM   for further details on how to proceed your
-fund (award)release to you or better still reply back Immediately You
-Receive This Information For An Urgent Confirmation And Release Of Your
-Fund To You Without Delays, as your email was listed among those to be
-compensated this year.Congratulations..
-Best Regards,
-Dr Chally Noah.
-Minister Of Finance On Foreign Remittance:
+On Mon, Mar 02, 2020 at 10:04:24PM +0200, Tero Kristo wrote:
+> Currently the watchdog core does not initialize the last_hw_keepalive
+> time during watchdog startup. This will cause the watchdog to be pinged
+> immediately if enough time has passed from the system boot-up time, and
+> some types of watchdogs like K3 RTI does not like this.
+> 
+> To avoid the issue, setup the last_hw_keepalive time during watchdog
+> startup.
+> 
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+> v2:
+>   * apply functionality always instead of being behind a flag
+> 
+>  drivers/watchdog/watchdog_dev.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 8b5c742f24e8..7e4cd34a8c20 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -282,6 +282,7 @@ static int watchdog_start(struct watchdog_device *wdd)
+>  	if (err == 0) {
+>  		set_bit(WDOG_ACTIVE, &wdd->status);
+>  		wd_data->last_keepalive = started_at;
+> +		wd_data->last_hw_keepalive = started_at;
+>  		watchdog_update_worker(wdd);
+>  	}
+>  
+> -- 
+> 2.17.1
+> 
+> --
+> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
