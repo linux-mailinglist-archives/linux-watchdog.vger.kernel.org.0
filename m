@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7786A176C93
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Mar 2020 03:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE30176C18
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Mar 2020 03:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727546AbgCCC5b (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 2 Mar 2020 21:57:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43976 "EHLO mail.kernel.org"
+        id S1728765AbgCCCtU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 2 Mar 2020 21:49:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45544 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727174AbgCCCsU (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:48:20 -0500
+        id S1728748AbgCCCtU (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:49:20 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B67724699;
-        Tue,  3 Mar 2020 02:48:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F3CD24697;
+        Tue,  3 Mar 2020 02:49:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203700;
-        bh=YD7v9zrFJtvaLsNrF546RSRmnm4uFXbq0n+c7ihwoqs=;
+        s=default; t=1583203759;
+        bh=/oieK3WjFdfK5bWzACAMf3QvziVCdoKD5yWwZLuPJ7c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tSKzHGP++xgXcD5cLtpKhGlKRP3p1LsVuxshdcw4UshMf4ykviU+gsqPPYJWU8xpa
-         /YA6Fw3hjDB1gKnLs/AsBbt9Zax8YCZ4bKK92/GREs89RBbF9dj6lUcM3Eadth2jGN
-         NKSpty/p69QDGubgnTSdXFO8Dit1V0p9VjCcmBBc=
+        b=OjorCWCwDPWmiKGeb4Iz/Z3FSGFXWXoglRQrN/eA9LQEj5jlcTo6w9/6+AUKjb+i6
+         /udeLeRbotOf3XH7dKKcewIgq9OKbSqVnKBIwXxAGYGK+lfg1fICL7wOnZrwjSwZhN
+         iQeNaEvRplphtBXSFVZHImHQldxSqlvyl7ydkIe4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Marco Felsch <m.felsch@pengutronix.de>,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 32/58] watchdog: da9062: do not ping the hw during stop()
-Date:   Mon,  2 Mar 2020 21:47:14 -0500
-Message-Id: <20200303024740.9511-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 21/32] watchdog: da9062: do not ping the hw during stop()
+Date:   Mon,  2 Mar 2020 21:48:40 -0500
+Message-Id: <20200303024851.10054-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200303024740.9511-1-sashal@kernel.org>
-References: <20200303024740.9511-1-sashal@kernel.org>
+In-Reply-To: <20200303024851.10054-1-sashal@kernel.org>
+References: <20200303024851.10054-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -70,10 +70,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 deletions(-)
 
 diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-index e149e66a6ea9f..e92f38fcb7a4a 100644
+index fe169d8e1fb2f..7f0a8e6352860 100644
 --- a/drivers/watchdog/da9062_wdt.c
 +++ b/drivers/watchdog/da9062_wdt.c
-@@ -94,13 +94,6 @@ static int da9062_wdt_stop(struct watchdog_device *wdd)
+@@ -99,13 +99,6 @@ static int da9062_wdt_stop(struct watchdog_device *wdd)
  	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
  	int ret;
  
