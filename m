@@ -2,632 +2,375 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC09178DAA
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Mar 2020 10:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D36B3178EB3
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Mar 2020 11:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729148AbgCDJnC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 4 Mar 2020 04:43:02 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:58385 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728387AbgCDJnC (ORCPT
+        id S2387746AbgCDKmh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 4 Mar 2020 05:42:37 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:58672 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387396AbgCDKmh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 4 Mar 2020 04:43:02 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0249E4NE011815;
-        Wed, 4 Mar 2020 10:42:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=xTAUbZgzzObrdlT6XJnXg3/PAUo5cKiPBTLGO0YruFg=;
- b=hlXhHnDbQJxP6dASolVJe0dZAbU211etYavIVMwzJ1KoweX9QigDvPrTsfmZxz0CoBpw
- IcN68SMkFZgDoVNbcq42E0PypcbBwzWFy/mq3AtFroc+urJch3zu9QaB2THUFZzoJki8
- Fcptc6XwZ+vfoagCOgTXsWmktJZxSK4FAMC94M/jSCJe76of4Jkq1SSUk3v++wdShlDn
- jaUY4F13SmSRbrCBIQBQ+GKYlCa+NGxVZLjEZPse29iK9KM3OuoKlD9JsDcuwkaBEOsf
- lBE7jSUiY/kgbWmRyPSd69DGfLS+l86zeRiLGx1YQXCUOnk8NUCGTqO3IAHV7nGmXjp7 Bg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2yfem0yy1n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Mar 2020 10:42:31 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D375D10002A;
-        Wed,  4 Mar 2020 10:42:30 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 96C652A59B8;
-        Wed,  4 Mar 2020 10:42:30 +0100 (CET)
-Received: from localhost (10.75.127.46) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 4 Mar 2020 10:42:29
- +0100
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <dmitry.torokhov@gmail.com>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <lee.jones@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <p.paillet@st.com>
-CC:     <linux-input@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v5] dt-bindings: mfd: Convert stpmic1 bindings to json-schema
-Date:   Wed, 4 Mar 2020 10:42:20 +0100
-Message-ID: <20200304094220.28156-1-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
+        Wed, 4 Mar 2020 05:42:37 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 024AgHUr106323;
+        Wed, 4 Mar 2020 04:42:17 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1583318537;
+        bh=pQgS9Th5rNALp4fVxKYaOI0XHNnVEXFhkgILxFV03aY=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=pgoNiHq+NQRASMtZ+lMvUHjoRaoh/P60IqjG0jbEUmzbgCQI28dg0wecuBdJpebVK
+         MdUKkR2VMA7RXdkLBbNyv2sf8WFUTxfbq8IFgLSRQijIjY+zFMbXvkxz7/hqdRFdsn
+         vCbkSGjKCnLmNjGkc1zaUQyiNBDt6Z5H81IqLGLk=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 024AgHEQ022377
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 4 Mar 2020 04:42:17 -0600
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 4 Mar
+ 2020 04:42:17 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 4 Mar 2020 04:42:17 -0600
+Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 024AgFV1076263;
+        Wed, 4 Mar 2020 04:42:15 -0600
+From:   Tero Kristo <t-kristo@ti.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCHv3 3/4] watchdog: Add K3 RTI watchdog support
+Date:   Wed, 4 Mar 2020 12:42:14 +0200
+Message-ID: <20200304104214.8625-1-t-kristo@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <aed89814-a78b-4a59-7673-bce5de34022d@roeck-us.net>
+References: <aed89814-a78b-4a59-7673-bce5de34022d@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-04_01:2020-03-03,2020-03-04 signatures=0
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert stpmic1 bindings to json-schema.
+Texas Instruments K3 SoCs contain an RTI (Real Time Interrupt) module
+which can be used as a watchdog. This IP provides a support for
+windowed watchdog mode, in which the watchdog must be petted within
+a certain time window. If it is petted either too soon, or too late,
+a watchdog error will be triggered.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+Signed-off-by: Tero Kristo <t-kristo@ti.com>
 ---
-version 5:
-- move $ref regulator.yaml under a patternProperties
-- move remain fixed strings under properties field
+v3:
+  * changed to use clk_get/put instead of devm_* versions of this
 
-version 4:
-- move on uppder node $ref: ../regulator/regulator.yaml 
-- move fixed strings under properties field
-- remove unneeded () in patternProperties
-- keep ldo3 separate from other ldo properties
-Note:
-- 'st,mask-reset' property stay in each subnode, I don't find
-  the syntax to avoid dupliquate it. 
-- ldo6-supply and all possible *-supply are describe by this regular
-  expression: ^(buck[1-4]|ldo[1-6]|boost|pwr_sw[1-2])-supply$":
+v2:
+  * Added better documentation within the driver code
+  * Dropped fck handle, instead get the fck rate during probe only
+  * Modified the max_hw_heartbeat calculation logic a bit
 
-version 3:
-- put $ref under allOf keyword
-- for each regulator node add the list of supported regulator properties
+ drivers/watchdog/Kconfig   |   8 ++
+ drivers/watchdog/Makefile  |   1 +
+ drivers/watchdog/rti_wdt.c | 255 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 261 insertions(+)
+ create mode 100644 drivers/watchdog/rti_wdt.c
 
- .../devicetree/bindings/input/st,stpmic1-onkey.txt |  28 --
- .../devicetree/bindings/mfd/st,stpmic1.txt         |  61 ----
- .../devicetree/bindings/mfd/st,stpmic1.yaml        | 339 +++++++++++++++++++++
- .../bindings/regulator/st,stpmic1-regulator.txt    |  64 ----
- .../bindings/watchdog/st,stpmic1-wdt.txt           |  11 -
- 5 files changed, 339 insertions(+), 164 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/st,stpmic1-onkey.txt
- delete mode 100644 Documentation/devicetree/bindings/mfd/st,stpmic1.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
- delete mode 100644 Documentation/devicetree/bindings/regulator/st,stpmic1-regulator.txt
- delete mode 100644 Documentation/devicetree/bindings/watchdog/st,stpmic1-wdt.txt
-
-diff --git a/Documentation/devicetree/bindings/input/st,stpmic1-onkey.txt b/Documentation/devicetree/bindings/input/st,stpmic1-onkey.txt
-deleted file mode 100644
-index eb8e83736c02..000000000000
---- a/Documentation/devicetree/bindings/input/st,stpmic1-onkey.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--STMicroelectronics STPMIC1 Onkey
--
--Required properties:
--
--- compatible = "st,stpmic1-onkey";
--- interrupts: interrupt line to use
--- interrupt-names = "onkey-falling", "onkey-rising"
--	onkey-falling: happens when onkey is pressed; IT_PONKEY_F of pmic
--	onkey-rising: happens when onkey is released; IT_PONKEY_R of pmic
--
--Optional properties:
--
--- st,onkey-clear-cc-flag: onkey is able power on after an
--  over-current shutdown event.
--- st,onkey-pu-inactive: onkey pull up is not active
--- power-off-time-sec: Duration in seconds which the key should be kept
--        pressed for device to power off automatically (from 1 to 16 seconds).
--        see See Documentation/devicetree/bindings/input/input.yaml
--
--Example:
--
--onkey {
--	compatible = "st,stpmic1-onkey";
--	interrupt-parent = <&pmic>;
--	interrupts = <IT_PONKEY_F 0>,<IT_PONKEY_R 1>;
--	interrupt-names = "onkey-falling", "onkey-rising";
--	power-off-time-sec = <10>;
--};
-diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.txt b/Documentation/devicetree/bindings/mfd/st,stpmic1.txt
-deleted file mode 100644
-index afd45c089585..000000000000
---- a/Documentation/devicetree/bindings/mfd/st,stpmic1.txt
-+++ /dev/null
-@@ -1,61 +0,0 @@
--* STMicroelectronics STPMIC1 Power Management IC
--
--Required properties:
--- compatible:		: "st,stpmic1"
--- reg:			: The I2C slave address for the STPMIC1 chip.
--- interrupts:		: The interrupt line the device is connected to.
--- #interrupt-cells:	: Should be 1.
--- interrupt-controller:	: Marks the device node as an interrupt controller.
--			    Interrupt numbers are defined at
--			    dt-bindings/mfd/st,stpmic1.h.
--
--STPMIC1 consists in a varied group of sub-devices.
--Each sub-device binding is be described in own documentation file.
--
--Device			 Description
--------			------------
--st,stpmic1-onkey	: Power on key, see ../input/st,stpmic1-onkey.txt
--st,stpmic1-regulators	: Regulators, see ../regulator/st,stpmic1-regulator.txt
--st,stpmic1-wdt		: Watchdog, see ../watchdog/st,stpmic1-wdt.txt
--
--Example:
--
--#include <dt-bindings/mfd/st,stpmic1.h>
--
--pmic: pmic@33 {
--	compatible = "st,stpmic1";
--	reg = <0x33>;
--	interrupt-parent = <&gpioa>;
--	interrupts = <0 2>;
--
--	interrupt-controller;
--	#interrupt-cells = <2>;
--
--	onkey {
--		compatible = "st,stpmic1-onkey";
--		interrupts = <IT_PONKEY_F 0>,<IT_PONKEY_R 1>;
--		interrupt-names = "onkey-falling", "onkey-rising";
--		power-off-time-sec = <10>;
--	};
--
--	watchdog {
--		compatible = "st,stpmic1-wdt";
--	};
--
--	regulators {
--		compatible = "st,stpmic1-regulators";
--
--		vdd_core: buck1 {
--			regulator-name = "vdd_core";
--			regulator-boot-on;
--			regulator-min-microvolt = <700000>;
--			regulator-max-microvolt = <1200000>;
--		};
--		vdd: buck3 {
--			regulator-name = "vdd";
--			regulator-min-microvolt = <3300000>;
--			regulator-max-microvolt = <3300000>;
--			regulator-boot-on;
--			regulator-pull-down;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index cec868f8db3f..81faf47d44a6 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -583,6 +583,14 @@ config DAVINCI_WATCHDOG
+ 	  NOTE: once enabled, this timer cannot be disabled.
+ 	  Say N if you are unsure.
+ 
++config K3_RTI_WATCHDOG
++	tristate "Texas Instruments K3 RTI watchdog"
++	depends on ARCH_K3 || COMPILE_TEST
++	select WATCHDOG_CORE
++	help
++	  Say Y here if you want to include support for the K3 watchdog
++	  timer (RTI module) available in the K3 generation of processors.
++
+ config ORION_WATCHDOG
+ 	tristate "Orion watchdog"
+ 	depends on ARCH_ORION5X || ARCH_DOVE || MACH_DOVE || ARCH_MVEBU || (COMPILE_TEST && !ARCH_EBSA110)
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 2ee352bf3372..6de2e4ceef19 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -57,6 +57,7 @@ obj-$(CONFIG_EP93XX_WATCHDOG) += ep93xx_wdt.o
+ obj-$(CONFIG_PNX4008_WATCHDOG) += pnx4008_wdt.o
+ obj-$(CONFIG_IOP_WATCHDOG) += iop_wdt.o
+ obj-$(CONFIG_DAVINCI_WATCHDOG) += davinci_wdt.o
++obj-$(CONFIG_K3_RTI_WATCHDOG) += rti_wdt.o
+ obj-$(CONFIG_ORION_WATCHDOG) += orion_wdt.o
+ obj-$(CONFIG_SUNXI_WATCHDOG) += sunxi_wdt.o
+ obj-$(CONFIG_RN5T618_WATCHDOG) += rn5t618_wdt.o
+diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
 new file mode 100644
-index 000000000000..d9ad9260e348
+index 000000000000..7a46c40891e2
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-@@ -0,0 +1,339 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/st,stpmic1.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectonics STPMIC1 Power Management IC bindings
-+
-+description: STMicroelectronics STPMIC1 Power Management IC
-+
-+maintainers:
-+  - pascal Paillet <p.paillet@st.com>
-+
-+properties:
-+  compatible:
-+    const: st,stpmic1
-+
-+  reg:
-+    const: 0x33
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  "#interrupt-cells":
-+    const: 2
-+
-+  interrupt-controller: true
-+
-+  onkey:
-+    type: object
-+
-+    allOf:
-+      - $ref: ../input/input.yaml
-+
-+    properties:
-+      compatible:
-+        const: st,stpmic1-onkey
-+
-+      interrupts:
-+        items:
-+          - description: onkey-falling, happens when onkey is pressed. IT_PONKEY_F of pmic
-+          - description: onkey-rising, happens when onkey is released. IT_PONKEY_R of pmic
-+
-+      interrupt-names:
-+        items:
-+          - const: onkey-falling
-+          - const: onkey-rising
-+
-+      st,onkey-clear-cc-flag:
-+        description: onkey is able power on after an over-current shutdown event.
-+        $ref: /schemas/types.yaml#/definitions/flag
-+
-+      st,onkey-pu-inactive:
-+        description: onkey pull up is not active
-+        $ref: /schemas/types.yaml#/definitions/flag
-+
-+      power-off-time-sec:
-+        minimum: 1
-+        maximum: 16
-+
-+    required:
-+      - compatible
-+      - interrupts
-+      - interrupt-names
-+
-+    additionalProperties: false
-+
-+  watchdog:
-+    type: object
-+
-+    allOf:
-+      - $ref: ../watchdog/watchdog.yaml
-+
-+    properties:
-+      compatible:
-+        const: st,stpmic1-wdt
-+
-+      timeout-sec: true
-+
-+    required:
-+      - compatible
-+
-+    additionalProperties: false
-+
-+  regulators:
-+    type: object
-+
-+    description: |
-+      Available Regulators in STPMIC1 device are:
-+        - buck1 for Buck BUCK1
-+        - buck2 for Buck BUCK2
-+        - buck3 for Buck BUCK3
-+        - buck4 for Buck BUCK4
-+        - ldo1 for LDO LDO1
-+        - ldo2 for LDO LDO2
-+        - ldo3 for LDO LDO3
-+        - ldo4 for LDO LDO4
-+        - ldo5 for LDO LDO5
-+        - ldo6 for LDO LDO6
-+        - vref_ddr for LDO Vref DDR
-+        - boost for Buck BOOST
-+        - pwr_sw1 for VBUS_OTG switch
-+        - pwr_sw2 for SW_OUT switch
-+      Switches are fixed voltage regulators with only enable/disable capability.
-+
-+    properties:
-+      compatible:
-+        const: st,stpmic1-regulators
-+
-+      ldo3:
-+        type: object
-+
-+        properties:
-+          interrupts:
-+            maxItems: 1
-+
-+          st,mask-reset:
-+            description: mask reset for this regulator,
-+                         the regulator configuration is maintained during pmic reset.
-+            $ref: /schemas/types.yaml#/definitions/flag
-+
-+          regulator-name: true
-+          regulator-boot-on: true
-+          regulator-always-on: true
-+          regulator-min-microvolt: true
-+          regulator-max-microvolt: true
-+          regulator-allow-bypass: true
-+          regulator-over-current-protection: true
-+
-+        additionalProperties: false
-+
-+      ldo4:
-+        type: object
-+
-+        properties:
-+          interrupts:
-+            maxItems: 1
-+
-+          st,mask-reset:
-+            description: mask reset for this regulator,
-+                         the regulator configuration is maintained during pmic reset.
-+            $ref: /schemas/types.yaml#/definitions/flag
-+
-+          regulator-name: true
-+          regulator-boot-on: true
-+          regulator-always-on: true
-+          regulator-over-current-protection: true
-+
-+        additionalProperties: false
-+
-+      vref_ddr:
-+        type: object
-+
-+        properties:
-+          interrupts:
-+            maxItems: 1
-+
-+          st,mask-reset:
-+            description: mask reset for this regulator,
-+                         the regulator configuration is maintained during pmic reset.
-+            $ref: /schemas/types.yaml#/definitions/flag
-+
-+          regulator-name: true
-+          regulator-boot-on: true
-+          regulator-always-on: true
-+
-+        additionalProperties: false
-+
-+      boost:
-+        type: object
-+
-+        properties:
-+          interrupts:
-+            maxItems: 1
-+
-+          st,mask-reset:
-+            description: mask reset for this regulator,
-+                         the regulator configuration is maintained during pmic reset.
-+            $ref: /schemas/types.yaml#/definitions/flag
-+
-+          regulator-name: true
-+          regulator-boot-on: true
-+          regulator-always-on: true
-+          regulator-over-current-protection: true
-+
-+        additionalProperties: false
-+
-+    patternProperties:
-+      "^(buck[1-4]|ldo[1-6]|boost|pwr_sw[1-2])-supply$":
-+        description: STPMIC1 voltage regulators supplies
-+
-+      "^(buck[1-4]|ldo[1-6]|boost|vref_ddr|pwr_sw[1-2])$":
-+        allOf:
-+          - $ref: ../regulator/regulator.yaml
-+
-+      "^ldo[1-2,5-6]$":
-+        type: object
-+
-+        properties:
-+          interrupts:
-+            maxItems: 1
-+
-+          st,mask-reset:
-+            description: mask reset for this regulator,
-+                         the regulator configuration is maintained during pmic reset.
-+            $ref: /schemas/types.yaml#/definitions/flag
-+
-+          regulator-name: true
-+          regulator-boot-on: true
-+          regulator-always-on: true
-+          regulator-min-microvolt: true
-+          regulator-max-microvolt: true
-+          regulator-over-current-protection: true
-+          regulator-enable-ramp-delay: true
-+
-+        additionalProperties: false
-+
-+      "^buck[1-4]$":
-+        type: object
-+
-+        properties:
-+          interrupts:
-+            maxItems: 1
-+
-+          st,mask-reset:
-+            description: mask reset for this regulator,
-+                         the regulator configuration is maintained during pmic reset.
-+            $ref: /schemas/types.yaml#/definitions/flag
-+
-+          regulator-name: true
-+          regulator-boot-on: true
-+          regulator-always-on: true
-+          regulator-min-microvolt: true
-+          regulator-max-microvolt: true
-+          regulator-initial-mode: true
-+          regulator-pull-down: true
-+          regulator-over-current-protection: true
-+          regulator-enable-ramp-delay: true
-+
-+        additionalProperties: false
-+
-+      "^pwr_sw[1-2]$":
-+        type: object
-+
-+        properties:
-+          interrupts:
-+            maxItems: 1
-+
-+          regulator-name: true
-+          regulator-boot-on: true
-+          regulator-always-on: true
-+          regulator-over-current-protection: true
-+          regulator-active-discharge: true
-+
-+        additionalProperties: false
-+
-+    required:
-+      - compatible
-+
-+    additionalProperties: false
-+
-+  additionalProperties: false
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#interrupt-cells"
-+  - interrupt-controller
-+
-+examples:
-+  - |
-+    #include <dt-bindings/mfd/st,stpmic1.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    i2c@0 {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      pmic@33 {
-+        compatible = "st,stpmic1";
-+        reg = <0x33>;
-+        interrupt-parent = <&gpioa>;
-+        interrupts = <0 2>;
-+
-+        interrupt-controller;
-+        #interrupt-cells = <2>;
-+
-+        onkey {
-+          compatible = "st,stpmic1-onkey";
-+          interrupts = <IT_PONKEY_F 0>,<IT_PONKEY_R 1>;
-+          interrupt-names = "onkey-falling", "onkey-rising";
-+          power-off-time-sec = <10>;
-+        };
-+
-+        watchdog {
-+          compatible = "st,stpmic1-wdt";
-+        };
-+
-+        regulators {
-+          compatible = "st,stpmic1-regulators";
-+
-+          ldo6-supply = <&v3v3>;
-+
-+          buck1 {
-+            regulator-name = "vdd_core";
-+            interrupts = <IT_CURLIM_BUCK1 0>;
-+            st,mask-reset;
-+            regulator-boot-on;
-+            regulator-min-microvolt = <700000>;
-+            regulator-max-microvolt = <1200000>;
-+          };
-+
-+          buck3 {
-+            regulator-name = "vdd";
-+            regulator-min-microvolt = <3300000>;
-+            regulator-max-microvolt = <3300000>;
-+            regulator-boot-on;
-+            regulator-pull-down;
-+          };
-+
-+          buck4 {
-+            regulator-name = "v3v3";
-+            interrupts = <IT_CURLIM_BUCK4 0>;
-+            regulator-min-microvolt = <3300000>;
-+            regulator-max-microvolt = <3300000>;
-+          };
-+
-+          ldo6 {
-+            regulator-name = "v1v8";
-+            regulator-min-microvolt = <1800000>;
-+            regulator-max-microvolt = <1800000>;
-+            regulator-over-current-protection;
-+          };
-+        };
-+      };
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/regulator/st,stpmic1-regulator.txt b/Documentation/devicetree/bindings/regulator/st,stpmic1-regulator.txt
-deleted file mode 100644
-index 6189df71ea98..000000000000
---- a/Documentation/devicetree/bindings/regulator/st,stpmic1-regulator.txt
-+++ /dev/null
-@@ -1,64 +0,0 @@
--STMicroelectronics STPMIC1 Voltage regulators
--
--Regulator Nodes are optional depending on needs.
--
--Available Regulators in STPMIC1 device are:
--  - buck1 for Buck BUCK1
--  - buck2 for Buck BUCK2
--  - buck3 for Buck BUCK3
--  - buck4 for Buck BUCK4
--  - ldo1 for LDO LDO1
--  - ldo2 for LDO LDO2
--  - ldo3 for LDO LDO3
--  - ldo4 for LDO LDO4
--  - ldo5 for LDO LDO5
--  - ldo6 for LDO LDO6
--  - vref_ddr for LDO Vref DDR
--  - boost for Buck BOOST
--  - pwr_sw1 for VBUS_OTG switch
--  - pwr_sw2 for SW_OUT switch
--
--Switches are fixed voltage regulators with only enable/disable capability.
--
--Optional properties:
--- st,mask-reset: mask reset for this regulator: the regulator configuration
--  is maintained during pmic reset.
--- regulator-over-current-protection:
--    if set, all regulators are switched off in case of over-current detection
--    on this regulator,
--    if not set, the driver only sends an over-current event.
--- interrupts: index of current limit detection interrupt
--- <regulator>-supply: phandle to the parent supply/regulator node
--	each regulator supply can be described except vref_ddr.
--- regulator-active-discharge: can be used on pwr_sw1 and pwr_sw2.
--
--Example:
--regulators {
--	compatible = "st,stpmic1-regulators";
--
--	ldo6-supply = <&v3v3>;
--
--	vdd_core: buck1 {
--		regulator-name = "vdd_core";
--		interrupts = <IT_CURLIM_BUCK1 0>;
--		st,mask-reset;
--		regulator-pull-down;
--		regulator-min-microvolt = <700000>;
--		regulator-max-microvolt = <1200000>;
--	};
--
--	v3v3: buck4 {
--		regulator-name = "v3v3";
--		interrupts = <IT_CURLIM_BUCK4 0>;
--
--		regulator-min-microvolt = <3300000>;
--		regulator-max-microvolt = <3300000>;
--	};
--
--	v1v8: ldo6 {
--		regulator-name = "v1v8";
--		regulator-min-microvolt = <1800000>;
--		regulator-max-microvolt = <1800000>;
--		regulator-over-current-protection;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/watchdog/st,stpmic1-wdt.txt b/Documentation/devicetree/bindings/watchdog/st,stpmic1-wdt.txt
-deleted file mode 100644
-index 7cc1407f15cb..000000000000
---- a/Documentation/devicetree/bindings/watchdog/st,stpmic1-wdt.txt
-+++ /dev/null
-@@ -1,11 +0,0 @@
--STMicroelectronics STPMIC1 Watchdog
--
--Required properties:
--
--- compatible : should be "st,stpmic1-wdt"
--
--Example:
--
--watchdog {
--	compatible = "st,stpmic1-wdt";
--};
++++ b/drivers/watchdog/rti_wdt.c
+@@ -0,0 +1,255 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Watchdog driver for the K3 RTI module
++ *
++ * (c) Copyright 2019-2020 Texas Instruments Inc.
++ * All rights reserved.
++ */
++
++#include <linux/clk.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/types.h>
++#include <linux/watchdog.h>
++
++#define DEFAULT_HEARTBEAT 60
++
++/* Max heartbeat is calculated at 32kHz source clock */
++#define MAX_HEARTBEAT	1000
++
++/* Timer register set definition */
++#define RTIDWDCTRL	0x90
++#define RTIDWDPRLD	0x94
++#define RTIWDSTATUS	0x98
++#define RTIWDKEY	0x9c
++#define RTIDWDCNTR	0xa0
++#define RTIWWDRXCTRL	0xa4
++#define RTIWWDSIZECTRL	0xa8
++
++#define RTIWWDRX_NMI	0xa
++
++#define RTIWWDSIZE_50P	0x50
++
++#define WDENABLE_KEY	0xa98559da
++
++#define WDKEY_SEQ0		0xe51a
++#define WDKEY_SEQ1		0xa35c
++
++#define WDT_PRELOAD_SHIFT	13
++
++#define WDT_PRELOAD_MAX		0xfff
++
++#define DWDST			BIT(1)
++
++static int heartbeat;
++
++/*
++ * struct to hold data for each WDT device
++ * @base - base io address of WD device
++ * @freq - source clock frequency of WDT
++ * @wdd  - hold watchdog device as is in WDT core
++ */
++struct rti_wdt_device {
++	void __iomem		*base;
++	unsigned long		freq;
++	struct watchdog_device	wdd;
++};
++
++static int rti_wdt_start(struct watchdog_device *wdd)
++{
++	u32 timer_margin;
++	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
++
++	/* set timeout period */
++	timer_margin = (u64)wdd->timeout * wdt->freq;
++	timer_margin >>= WDT_PRELOAD_SHIFT;
++	if (timer_margin > WDT_PRELOAD_MAX)
++		timer_margin = WDT_PRELOAD_MAX;
++	writel_relaxed(timer_margin, wdt->base + RTIDWDPRLD);
++
++	/*
++	 * RTI only supports a windowed mode, where the watchdog can only
++	 * be petted during the open window; not too early or not too late.
++	 * The HW configuration options only allow for the open window size
++	 * to be 50% or less than that; we obviouly want to configure the open
++	 * window as large as possible so we select the 50% option. To avoid
++	 * any glitches, we accommodate 5% safety margin also, so we setup
++	 * the min_hw_hearbeat at 55% of the timeout period.
++	 */
++	wdd->min_hw_heartbeat_ms = 11 * wdd->timeout * 1000 / 20;
++
++	/* Generate NMI when wdt expires */
++	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
++
++	/* Open window size 50%; this is the largest window size available */
++	writel_relaxed(RTIWWDSIZE_50P, wdt->base + RTIWWDSIZECTRL);
++
++	readl_relaxed(wdt->base + RTIWWDSIZECTRL);
++
++	/* enable watchdog */
++	writel_relaxed(WDENABLE_KEY, wdt->base + RTIDWDCTRL);
++	return 0;
++}
++
++static int rti_wdt_ping(struct watchdog_device *wdd)
++{
++	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
++
++	/* put watchdog in service state */
++	writel_relaxed(WDKEY_SEQ0, wdt->base + RTIWDKEY);
++	/* put watchdog in active state */
++	writel_relaxed(WDKEY_SEQ1, wdt->base + RTIWDKEY);
++
++	return 0;
++}
++
++static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
++{
++	u64 timer_counter;
++	u32 val;
++	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
++
++	/* if timeout has occurred then return 0 */
++	val = readl_relaxed(wdt->base + RTIWDSTATUS);
++	if (val & DWDST)
++		return 0;
++
++	timer_counter = readl_relaxed(wdt->base + RTIDWDCNTR);
++
++	do_div(timer_counter, wdt->freq);
++
++	return timer_counter;
++}
++
++static const struct watchdog_info rti_wdt_info = {
++	.options = WDIOF_KEEPALIVEPING,
++	.identity = "K3 RTI Watchdog",
++};
++
++static const struct watchdog_ops rti_wdt_ops = {
++	.owner		= THIS_MODULE,
++	.start		= rti_wdt_start,
++	.ping		= rti_wdt_ping,
++	.get_timeleft	= rti_wdt_get_timeleft,
++};
++
++static int rti_wdt_probe(struct platform_device *pdev)
++{
++	int ret = 0;
++	struct device *dev = &pdev->dev;
++	struct resource *wdt_mem;
++	struct watchdog_device *wdd;
++	struct rti_wdt_device *wdt;
++	struct clk *clk;
++
++	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
++	if (!wdt)
++		return -ENOMEM;
++
++	clk = clk_get(dev, NULL);
++	if (IS_ERR(clk)) {
++		if (PTR_ERR(clk) != -EPROBE_DEFER)
++			dev_err(dev, "failed to get clock\n");
++		return PTR_ERR(clk);
++	}
++
++	wdt->freq = clk_get_rate(clk);
++
++	clk_put(clk);
++
++	if (!wdt->freq) {
++		dev_err(dev, "Failed to get fck rate.\n");
++		return -EINVAL;
++	}
++
++	pm_runtime_enable(dev);
++	ret = pm_runtime_get_sync(dev);
++	if (ret) {
++		if (ret != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "runtime pm failed\n");
++		return ret;
++	}
++
++	platform_set_drvdata(pdev, wdt);
++
++	wdd = &wdt->wdd;
++	wdd->info = &rti_wdt_info;
++	wdd->ops = &rti_wdt_ops;
++	wdd->min_timeout = 1;
++	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
++		wdt->freq * 1000;
++	wdd->timeout = DEFAULT_HEARTBEAT;
++	wdd->parent = dev;
++
++	watchdog_init_timeout(wdd, heartbeat, dev);
++
++	watchdog_set_drvdata(wdd, wdt);
++	watchdog_set_nowayout(wdd, 1);
++	watchdog_set_restart_priority(wdd, 128);
++
++	wdt_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	wdt->base = devm_ioremap_resource(dev, wdt_mem);
++	if (IS_ERR(wdt->base)) {
++		ret = PTR_ERR(wdt->base);
++		goto err_iomap;
++	}
++
++	ret = watchdog_register_device(wdd);
++	if (ret) {
++		dev_err(dev, "cannot register watchdog device\n");
++		goto err_iomap;
++	}
++
++	return 0;
++
++err_iomap:
++	pm_runtime_put_sync(&pdev->dev);
++
++	return ret;
++}
++
++static int rti_wdt_remove(struct platform_device *pdev)
++{
++	struct rti_wdt_device *wdt = platform_get_drvdata(pdev);
++
++	watchdog_unregister_device(&wdt->wdd);
++	pm_runtime_put(&pdev->dev);
++
++	return 0;
++}
++
++static const struct of_device_id rti_wdt_of_match[] = {
++	{ .compatible = "ti,rti-wdt", },
++	{},
++};
++MODULE_DEVICE_TABLE(of, rti_wdt_of_match);
++
++static struct platform_driver rti_wdt_driver = {
++	.driver = {
++		.name = "rti-wdt",
++		.of_match_table = rti_wdt_of_match,
++	},
++	.probe = rti_wdt_probe,
++	.remove = rti_wdt_remove,
++};
++
++module_platform_driver(rti_wdt_driver);
++
++MODULE_AUTHOR("Tero Kristo <t-kristo@ti.com>");
++MODULE_DESCRIPTION("K3 RTI Watchdog Driver");
++
++module_param(heartbeat, int, 0);
++MODULE_PARM_DESC(heartbeat,
++		 "Watchdog heartbeat period in seconds from 1 to "
++		 __MODULE_STRING(MAX_HEARTBEAT) ", default "
++		 __MODULE_STRING(DEFAULT_HEARTBEAT));
++
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:rti-wdt");
 -- 
-2.15.0
+2.17.1
 
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
