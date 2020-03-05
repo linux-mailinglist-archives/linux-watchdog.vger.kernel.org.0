@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C12317AD13
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Mar 2020 18:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E7017AC84
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Mar 2020 18:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgCERNW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Mar 2020 12:13:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38758 "EHLO mail.kernel.org"
+        id S1727702AbgCEROc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Mar 2020 12:14:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40676 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726565AbgCERNV (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:13:21 -0500
+        id S1725977AbgCEROb (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:14:31 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35BCC2146E;
-        Thu,  5 Mar 2020 17:13:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D319621739;
+        Thu,  5 Mar 2020 17:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583428401;
-        bh=CJj57vez/X1dcVkerZLsOV4I/r+1s3WBoBpSHJ3tuj4=;
+        s=default; t=1583428470;
+        bh=aTdpUfC9CqY/wB251UlTwSnnH+oYCQX5mXBrUSe7RY0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KrP0y1uVX5x3lCkpUv5xsU2K7pBVdxd8yNYQgqWDNUc/awv3AsazlXGfZLtgheOM8
-         yIt37miZ7RdbM3PweoicpVdk/yOkL8vCW+nmXCXou3s1bwlGCyppn+wKn+CIRjJGj2
-         RlTUErY3uCDOmGJgdphaog3ToYAbGf+DUaSQanXY=
+        b=E/QmWYthf+1g71e7SFwDVITcuGtx6jopsmB0d3xhjIkY0UjA3tA8OUTcupzoaZBCB
+         WQXpJXXmt3cUwOVTjt1HkRlpVkcbKOI0BI0lZv9VefE0a63Bf2+fWHab6UL7Iwr+IN
+         WJGLU9a22lPx1Pa7ufk2Y4LWk4fyyRBL9geyz7Gw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Jean Delvare <jdelvare@suse.de>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 08/67] ACPI: watchdog: Set default timeout in probe
-Date:   Thu,  5 Mar 2020 12:12:09 -0500
-Message-Id: <20200305171309.29118-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 08/58] ACPI: watchdog: Set default timeout in probe
+Date:   Thu,  5 Mar 2020 12:13:29 -0500
+Message-Id: <20200305171420.29595-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305171309.29118-1-sashal@kernel.org>
-References: <20200305171309.29118-1-sashal@kernel.org>
+In-Reply-To: <20200305171420.29595-1-sashal@kernel.org>
+References: <20200305171420.29595-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,7 +64,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 23 insertions(+)
 
 diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index b069349b52f55..85d6f16d95cca 100644
+index e7cf41aa26c3b..697b04ffee97c 100644
 --- a/drivers/watchdog/wdat_wdt.c
 +++ b/drivers/watchdog/wdat_wdt.c
 @@ -54,6 +54,13 @@ module_param(nowayout, bool, 0);
