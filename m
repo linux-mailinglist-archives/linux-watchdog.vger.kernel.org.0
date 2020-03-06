@@ -2,66 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B140917C188
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Mar 2020 16:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78F917C196
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Mar 2020 16:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725935AbgCFPSj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Mar 2020 10:18:39 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34178 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725873AbgCFPSi (ORCPT
+        id S1726083AbgCFPUd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 6 Mar 2020 10:20:33 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:51488 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbgCFPUc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Mar 2020 10:18:38 -0500
-Received: by mail-pf1-f195.google.com with SMTP id y21so1273186pfp.1;
-        Fri, 06 Mar 2020 07:18:37 -0800 (PST)
+        Fri, 6 Mar 2020 10:20:32 -0500
+Received: by mail-pj1-f67.google.com with SMTP id l8so1191679pjy.1;
+        Fri, 06 Mar 2020 07:20:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zF1aUPvrJoqRWvHW9G34N4+Iycf5hM+l/TP/8XyWQD8=;
-        b=A26MYVGfEA/Zuj8FOfgiJXRYeX28jXApvtoXKSv9nyRC84S6lRoJR1PWCzLpPG2f3b
-         FELSFYtlTyuio+UT6fFOdzHcvxCTylelBkDeD9rX3+u9x2hc4S5lWyIHm2ZuYCI7VMJP
-         R/VZFv25I5/mQx0cc1YAG4Mo8LxUWJ4CIzFKoVP3g6xEhpnEyKAQFjqFs3Zk8z/LGV/I
-         AlD2dDx/l89pt0B4Pr3zsOdYn5f45X7TyJoF/W/gsAiJl+z12Ov/iPHs9Ujb2soEg9o6
-         X6IvcW0uEudYOavQfEHWDsk1GN5PokyHBx2PRF+uGDQW4S2tkYy85rhRYJPAvDrYkfU0
-         enQQ==
+        bh=LTW/5J9zbOegV+y5cwFRAAha8iVgu2WAeK+wZzLrVgo=;
+        b=eEMYXZmlifY7rqDP1JgSqRZhs6FijSm2MeNPTI/pArcB79sBdzpZV0p9k30TB2hCVa
+         xf5Tb8aTUIN1y8SnLwKmLpyb3pmqCrPVQDaf6fgRW9HRbi3es4nmBX1ocyu+ek+IT9k0
+         YlePXtI59/NYbY8gbfRcohI4ejUiYblLQeTTM88V0jWXKi3E9sIUSl2BEZRxi7cUghcy
+         ZYU5U51b/WOWHTfphlAXrEQlVTYrP5kwm4UZnbEHI4MIgkFV9pJYKWXz2DK6k6VzLAly
+         maqEsrv4OeQ8S+0+R8+PTO3aQpx9idaFB156o3daVdLKBdXjDngtdP6EAhgXbUBMHvWv
+         lU/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=zF1aUPvrJoqRWvHW9G34N4+Iycf5hM+l/TP/8XyWQD8=;
-        b=M2iOoRHAWfW4G7gQ7NtxSkaWoQ/xxY4RSnGSERi22Uxre+XnI+S+yRL+2r4/y6fl4p
-         eSYeOr1c97rIB5famjUdh7Ne9Dd+VuuCsATOx1v+CAdPjEBYWa7j8A/XE8LBU3k9UGhj
-         zzzYme4W8bAsSpycCCz7BXpyzq5n1Ckq3QlxHoiMtRef1NvU2DZkrXOi5oGy1/WCs/5S
-         BkZo/UognI9qmnpKzKZ9U8A7kz417gzlABlJgfzA/Cny7GtsXDFQ/BszgCWY/7ZGODDl
-         2riu1WNK3FcekVIva5HlxGB7MydC4+lFUHSFi7dhro9YXowd0bPxT4YYsmShpOmWUopB
-         1CEA==
-X-Gm-Message-State: ANhLgQ1B7ytM8cw/0QmN2J7XqRjtsEVlGAPWKzt5obDKylQQZ3OiPKj9
-        6c3j3GjaGgGzW055fExBFPPuKYY1
-X-Google-Smtp-Source: ADFU+vtYdSzic5qCSzVitOM5a6jZ6lRZWREC3pEXRO0lfFBvy/OAkyViWAOLv+4Hi24i2btOedRSAg==
-X-Received: by 2002:aa7:858a:: with SMTP id w10mr4200185pfn.210.1583507916924;
-        Fri, 06 Mar 2020 07:18:36 -0800 (PST)
+        bh=LTW/5J9zbOegV+y5cwFRAAha8iVgu2WAeK+wZzLrVgo=;
+        b=f73lBOivOjU1Cwu294bN9asqDiZFX/j8tX9vYcs2Y5PSfsp/b1xXRtxP9lS4Sp22yD
+         wWON/ySDgox43NTo1nNIaN47DURgRy0ikF5bm+Gfrk2hUph0cgejlh8AvTnFl3KDNXjC
+         i2s0zFdPC+wc2F6x4JGszknC+qchfVnB9B7Mu+LaJ/bXvjfnlf8skMB0Ua7QWxIL15WG
+         IkccJJv8GarSdgTq871lp94c2i9ikzPY+C/XlLqOnd6E6uW/0b8pCUC/AlM2hx/pZVbL
+         zoI9SEZN1vTkAWOY/d5SdqsLoFrSLxtJ9sYmVvn+W3foWZpqzWCXAf1m2EaOAUe8X+YW
+         Ia3A==
+X-Gm-Message-State: ANhLgQ1bc+8Klx11TUYHP8/zXkrUqG8Qqy+OFjPwMXWnpBnbW6Bl9dSi
+        pgKhFBmF8vz1PKvCW1tgCfkSZ0gT
+X-Google-Smtp-Source: ADFU+vvYPWE8JwxjsELSGmJq9+MKPyt1KPBd8D9w1sNOv5bJaA9LfFz8t1RznbuX5ewyTebNMYgV1g==
+X-Received: by 2002:a17:902:8e84:: with SMTP id bg4mr3419034plb.11.1583508030906;
+        Fri, 06 Mar 2020 07:20:30 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x3sm9785005pjq.5.2020.03.06.07.18.35
+        by smtp.gmail.com with ESMTPSA id k20sm13877826pfk.123.2020.03.06.07.20.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Mar 2020 07:18:36 -0800 (PST)
-Subject: Re: [PATCH 1/7] dt-bindings: watchdog: dw-wdt: Replace legacy
- bindings file with YAML-based one
+        Fri, 06 Mar 2020 07:20:30 -0800 (PST)
+Subject: Re: [PATCH 3/7] watchdog: watchdog_dev: Use generic msec-per-sec
+ macro
 To:     Sergey.Semin@baikalelectronics.ru,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
+        Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20200306132747.14701-1-Sergey.Semin@baikalelectronics.ru>
- <20200306132803.770DC8030792@mail.baikalelectronics.ru>
+ <20200306132823.D5C5B803087C@mail.baikalelectronics.ru>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -106,12 +103,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <8c10be04-5aa2-af5e-7b15-262dcdc04875@roeck-us.net>
-Date:   Fri, 6 Mar 2020 07:18:35 -0800
+Message-ID: <5d0a9d49-cbc8-08bb-8c34-065427a16bec@roeck-us.net>
+Date:   Fri, 6 Mar 2020 07:20:29 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200306132803.770DC8030792@mail.baikalelectronics.ru>
+In-Reply-To: <20200306132823.D5C5B803087C@mail.baikalelectronics.ru>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -123,25 +120,14 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 On 3/6/20 5:27 AM, Sergey.Semin@baikalelectronics.ru wrote:
 > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> Modern device tree bindings are supposed to be created as YAML-files
-> in accordane with dt-schema. This commit replaces the DW Watchdog
-> legacy bare text bindings with YAML file. As before the the bindings
-> states that the corresponding dts node is supposed to have a registers
-> range reference, at least one clocks phandle reference, optional reset
-> lines. Seeing all the platforms with DW Watchdog provide the watchdog
-> interrupt property and since in further commit we'll alter the driver
-> to use it for pre-timeout functionality implementation, lets declare
-> the IRQ property to be required.
+> For better readability replace the numeric literals with globally
+> available xSEC_PER_SEC macro.
 > 
 
-First, this is not just a replacement - it changes semantics.
-
-Second, I disagree with making interrupts mandatory. They are only needed
-for pretimeout functionality, and not everyone may want to enable that.
-I don't see the point of forcing everyone to enable and provide functionality
-that is neither wanted or needed for a given use case. Yes, the interrupt
-is provided by all users today, but we may have one coming up tomorrow
-where the interrupt line is not even wired up. What then ?
+This is really completely unrelated to the rest of the series,
+and I don't really see the point. I am fine with such changes if there
+are some context changes around it, but otherwise they add no value
+other than being a potential source of backport conflicts.
 
 Guenter
 
@@ -151,113 +137,30 @@ Guenter
 > Cc: Paul Burton <paulburton@kernel.org>
 > Cc: Ralf Baechle <ralf@linux-mips.org>
 > ---
->  .../devicetree/bindings/watchdog/dw_wdt.txt   | 24 -------
->  .../bindings/watchdog/snps,dw-wdt.yaml        | 66 +++++++++++++++++++
->  2 files changed, 66 insertions(+), 24 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+>  drivers/watchdog/watchdog_dev.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/dw_wdt.txt b/Documentation/devicetree/bindings/watchdog/dw_wdt.txt
-> deleted file mode 100644
-> index eb0914420c7c..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/dw_wdt.txt
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -Synopsys Designware Watchdog Timer
-> -
-> -Required Properties:
-> -
-> -- compatible	: Should contain "snps,dw-wdt"
-> -- reg		: Base address and size of the watchdog timer registers.
-> -- clocks	: phandle + clock-specifier for the clock that drives the
-> -		watchdog timer.
-> -
-> -Optional Properties:
-> -
-> -- interrupts	: The interrupt used for the watchdog timeout warning.
-> -- resets	: phandle pointing to the system reset controller with
-> -		line index for the watchdog.
-> -
-> -Example:
-> -
-> -	watchdog0: wd@ffd02000 {
-> -		compatible = "snps,dw-wdt";
-> -		reg = <0xffd02000 0x1000>;
-> -		interrupts = <0 171 4>;
-> -		clocks = <&per_base_clk>;
-> -		resets = <&rst WDT0_RESET>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> new file mode 100644
-> index 000000000000..8b30f9601c38
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Copyright (C) 2019 BAIKAL ELECTRONICS, JSC
-> +#
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/snps,dw-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Synopsys Designware Watchdog Timer
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-> +
-> +maintainers:
-> +  - Jamie Iles <jamie@jamieiles.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: snps,dw-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    description: DW Watchdog pre-timeout interrupts.
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    items:
-> +      - description: Watchdog timer reference clock.
-> +      - description: APB3 interface clock.
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: tclk
-> +      - const: pclk
-> +
-> +  assigned-clocks: true
-> +
-> +  assigned-clock-rates: true
-> +
-> +  resets:
-> +    description: Phandle to the DW Watchdog reset lane.
-> +    maxItems: 1
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +examples:
-> +  - |
-> +    watchdog0: watchdog@ffd02000 {
-> +      compatible = "snps,dw-wdt";
-> +      reg = <0xffd02000 0x1000>;
-> +      interrupts = <0 171 4>;
-> +      clocks = <&per_base_clk>;
-> +      resets = <&wdt_rst>;
-> +    };
-> +...
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 8b5c742f24e8..a1a3bbe21653 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -99,7 +99,7 @@ static inline bool watchdog_need_worker(struct watchdog_device *wdd)
+>  {
+>  	/* All variables in milli-seconds */
+>  	unsigned int hm = wdd->max_hw_heartbeat_ms;
+> -	unsigned int t = wdd->timeout * 1000;
+> +	unsigned int t = wdd->timeout * MSEC_PER_SEC;
+>  
+>  	/*
+>  	 * A worker to generate heartbeat requests is needed if all of the
+> @@ -121,7 +121,7 @@ static inline bool watchdog_need_worker(struct watchdog_device *wdd)
+>  static ktime_t watchdog_next_keepalive(struct watchdog_device *wdd)
+>  {
+>  	struct watchdog_core_data *wd_data = wdd->wd_data;
+> -	unsigned int timeout_ms = wdd->timeout * 1000;
+> +	unsigned int timeout_ms = wdd->timeout * MSEC_PER_SEC;
+>  	ktime_t keepalive_interval;
+>  	ktime_t last_heartbeat, latest_heartbeat;
+>  	ktime_t virt_timeout;
 > 
 
