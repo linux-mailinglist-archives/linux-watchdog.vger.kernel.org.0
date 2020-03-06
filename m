@@ -2,45 +2,42 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A6017BF16
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Mar 2020 14:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6B317BF1F
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Mar 2020 14:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbgCFNiC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Mar 2020 08:38:02 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:37304 "EHLO
+        id S1726300AbgCFNiG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 6 Mar 2020 08:38:06 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:37308 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbgCFNiC (ORCPT
+        with ESMTP id S1726565AbgCFNiD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Mar 2020 08:38:02 -0500
+        Fri, 6 Mar 2020 08:38:03 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 98D7F80307C2;
-        Fri,  6 Mar 2020 13:28:18 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id D5C5B803087C;
+        Fri,  6 Mar 2020 13:28:23 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 00CjeEVMtjHR; Fri,  6 Mar 2020 16:28:18 +0300 (MSK)
+        with ESMTP id yO8_Hpnu8yKT; Fri,  6 Mar 2020 16:28:23 +0300 (MSK)
 From:   <Sergey.Semin@baikalelectronics.ru>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
+        Guenter Roeck <linux@roeck-us.net>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/7] dt-bindings: watchdog: dw-wdt: Add watchdog TOPs array property
-Date:   Fri, 6 Mar 2020 16:27:42 +0300
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 3/7] watchdog: watchdog_dev: Use generic msec-per-sec macro
+Date:   Fri, 6 Mar 2020 16:27:43 +0300
 In-Reply-To: <20200306132747.14701-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200306132747.14701-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-Message-Id: <20200306132818.98D7F80307C2@mail.baikalelectronics.ru>
+Message-Id: <20200306132823.D5C5B803087C@mail.baikalelectronics.ru>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
@@ -48,10 +45,8 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-In case if DW Watchdog IP core is built with WDT_USE_FIX_TOP == false,
-a custom timeout periods are used to preset the timer counter. In
-this case that periods should be specified in a new "snps,watchdog-tops"
-property of the DW watchdog dts node.
+For better readability replace the numeric literals with globally
+available xSEC_PER_SEC macro.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
@@ -59,55 +54,31 @@ Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
 ---
- .../bindings/watchdog/snps,dw-wdt.yaml        | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/watchdog/watchdog_dev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-index 8b30f9601c38..1b3b71351628 100644
---- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-@@ -46,6 +46,21 @@ properties:
-     description: Phandle to the DW Watchdog reset lane.
-     maxItems: 1
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 8b5c742f24e8..a1a3bbe21653 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -99,7 +99,7 @@ static inline bool watchdog_need_worker(struct watchdog_device *wdd)
+ {
+ 	/* All variables in milli-seconds */
+ 	unsigned int hm = wdd->max_hw_heartbeat_ms;
+-	unsigned int t = wdd->timeout * 1000;
++	unsigned int t = wdd->timeout * MSEC_PER_SEC;
  
-+  snps,watchdog-tops:
-+    description: |
-+      DW APB Watchdog custom timer intervals - Timeout Period ranges (TOPs).
-+      Each TOP is a number loaded into the watchdog counter at the moment of
-+      the timer restart. The counter decrementing happens each tick of the
-+      reference clock. Therefore the TOPs array is equivalent to an array of
-+      the timer expiration intervals supported by the DW APB Watchdog. Note
-+      DW APB Watchdog IP-cores might be synthesized with fixed TOP values,
-+      in which case this property is unnecessary.
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32-array
-+      - items:
-+          minItems: 16
-+          maxItems: 16
-+
- additionalProperties: false
- 
- required:
-@@ -63,4 +78,19 @@ examples:
-       clocks = <&per_base_clk>;
-       resets = <&wdt_rst>;
-     };
-+
-+  - |
-+    watchdog1: watchdog@ffd02000 {
-+      compatible = "snps,dw-wdt";
-+      reg = <0xffd02000 0x1000>;
-+      interrupts = <0 171 4>;
-+      clocks = <&per_base_clk>;
-+      clock-names = "tclk";
-+      snps,watchdog-tops = <0x000000FF 0x000001FF 0x000003FF
-+                            0x000007FF 0x0000FFFF 0x0001FFFF
-+                            0x0003FFFF 0x0007FFFF 0x000FFFFF
-+                            0x001FFFFF 0x003FFFFF 0x007FFFFF
-+                            0x00FFFFFF 0x01FFFFFF 0x03FFFFFF
-+                            0x07FFFFFF>;
-+    };
- ...
+ 	/*
+ 	 * A worker to generate heartbeat requests is needed if all of the
+@@ -121,7 +121,7 @@ static inline bool watchdog_need_worker(struct watchdog_device *wdd)
+ static ktime_t watchdog_next_keepalive(struct watchdog_device *wdd)
+ {
+ 	struct watchdog_core_data *wd_data = wdd->wd_data;
+-	unsigned int timeout_ms = wdd->timeout * 1000;
++	unsigned int timeout_ms = wdd->timeout * MSEC_PER_SEC;
+ 	ktime_t keepalive_interval;
+ 	ktime_t last_heartbeat, latest_heartbeat;
+ 	ktime_t virt_timeout;
 -- 
 2.25.1
 
