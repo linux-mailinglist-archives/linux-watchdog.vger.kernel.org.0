@@ -2,132 +2,152 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E742317ED52
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Mar 2020 01:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738BA17ED87
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Mar 2020 02:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727471AbgCJAdi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 9 Mar 2020 20:33:38 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:44470 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727287AbgCJAdi (ORCPT
+        id S1727597AbgCJBBA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 9 Mar 2020 21:01:00 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:41523 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727380AbgCJBA7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 9 Mar 2020 20:33:38 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 9DDE880307C8;
-        Tue, 10 Mar 2020 00:33:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1ZkS3tMholhH; Tue, 10 Mar 2020 03:33:34 +0300 (MSK)
-Date:   Tue, 10 Mar 2020 03:32:44 +0300
-From:   Sergey Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/7] watchdog: dw_wdt: Take Baikal-T1 DW WDT
- peculiarities into account
-References: <20200306132747.14701-1-Sergey.Semin@baikalelectronics.ru>
+        Mon, 9 Mar 2020 21:00:59 -0400
+Received: by mail-vs1-f67.google.com with SMTP id k188so7351020vsc.8
+        for <linux-watchdog@vger.kernel.org>; Mon, 09 Mar 2020 18:00:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g5xnWgJ5omzmZiku6UfaNj8qU529m5YfhrjX1iEpn4A=;
+        b=kjWV2H+ENIYP82wnkfLeoFh/cu0d6WCJIUEmu3ujdQeJGhIXy/5G1boCNlFG8g0qBr
+         +2e4zj+IUgMgrGGmx8xi/SpqcykgxdFjE8+INLu57lfr0OaK5tzabI36l1MbeHx1erNT
+         dYDE3RDADynW72cXRucYvQhJa+Zy4oyvr3wGA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g5xnWgJ5omzmZiku6UfaNj8qU529m5YfhrjX1iEpn4A=;
+        b=h4KLAZMJvbkcp9DXqWm84FSPnxOOMoFcYt6SxOVGxWFOWorBvOsbVIkhvm949oWA3c
+         Z3tQpDFrHS44ODBk6R6FXrIJCfpiMv7qiITWUoxWFBYixZ2HkOHdEcQZwo/PuWSkfbZI
+         jZabr+wauj2NS2PSOSghv4P5+EMKCE18qXkr5JwXSgvH/e966lR0HTQ7JIVZwym7I3eS
+         GVAD5Cl/GX+Wn4C5tyixEufUb0aeG1DKZ0g8Zq5HJtYovCi5Kl6OI4DlfjYCyxbZKe0+
+         7RCsiNoyRcSoKNWRV/phrH/hi28t9EAgEFeVIKfNOICbA8TzTjhDHmsaoyGQEnryhjMG
+         dRNw==
+X-Gm-Message-State: ANhLgQ2HR3B2AggD0NWdbkbComjAfzAe/XpjVmL1sZnE4MLQp1fOQmtl
+        6V3YS0rAnmcI5MI9OuH3uzZqBXRn3XI=
+X-Google-Smtp-Source: ADFU+vtglc+zR0zPo09ESJeP+jAnxYsyO8Q8qPgzXFTzteUeAvo/hS6TvbdYNq+9DD/5UERaMvAkSg==
+X-Received: by 2002:a67:1b81:: with SMTP id b123mr12229046vsb.185.1583802056341;
+        Mon, 09 Mar 2020 18:00:56 -0700 (PDT)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id u29sm8210670vkk.36.2020.03.09.18.00.54
+        for <linux-watchdog@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Mar 2020 18:00:54 -0700 (PDT)
+Received: by mail-ua1-f46.google.com with SMTP id 8so4065934uar.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 09 Mar 2020 18:00:54 -0700 (PDT)
+X-Received: by 2002:ab0:3392:: with SMTP id y18mr2111560uap.66.1583802054012;
+ Mon, 09 Mar 2020 18:00:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200306132747.14701-1-Sergey.Semin@baikalelectronics.ru>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-Message-Id: <20200310003335.9DDE880307C8@mail.baikalelectronics.ru>
+References: <20200214062637.216209-1-evanbenn@chromium.org>
+ <20200214172512.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
+ <20200219223046.GA16537@bogus> <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
+ <20200219232005.GA9737@roeck-us.net> <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
+ <e42320b8-266f-0b0e-b20b-b72228510e81@amlogic.com> <CAODwPW94KX46PzSrf_uuEFPKudXor=26d=g3Qta5veRfxmMDUA@mail.gmail.com>
+ <1326f594-3cfd-c03d-4f2c-50eeb75724b2@amlogic.com> <CAODwPW8WwntWb_=dg2J3AMy-gHw2QvNj_g98SufN13+AuGnUSg@mail.gmail.com>
+ <b4ba821a-eef6-4aea-1eba-897171b92c41@amlogic.com>
+In-Reply-To: <b4ba821a-eef6-4aea-1eba-897171b92c41@amlogic.com>
+From:   Evan Benn <evanbenn@chromium.org>
+Date:   Tue, 10 Mar 2020 12:00:27 +1100
+X-Gmail-Original-Message-ID: <CAKz_xw2T1UceCwFZnBxg6WVp2D4+MziyvQPdU6tEnR_BdLh-PQ@mail.gmail.com>
+Message-ID: <CAKz_xw2T1UceCwFZnBxg6WVp2D4+MziyvQPdU6tEnR_BdLh-PQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add arm,smc-wdt watchdog
+ arm,smc-wdt compatible
+To:     Xingyu Chen <xingyu.chen@amlogic.com>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yonghui Yu <yonghui.yu@amlogic.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Mar 06, 2020 at 04:27:40PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> From: Serge Semin <fancer.lancer@gmail.com>
-> 
-> There were a few features enabled at the time of the Baikal-T1 SoC DW WDT
-> IP synthesis, which weren't taken into account in the DW WDT driver available
-> in the kernel. First of all the SoC engineers synthesized the watchdog core
-> with WDT_USE_FIX_TOP set to false (don't really know why, but they did).
-> Due to this the timer reset values weren't fixed as the driver expected
-> but were initialized with a pre-defined values selected by the engineers.
-> Secondly the driver expected that the watchdog APB bus and the timer had
-> synchronous reference clocks, while Baikal-T1 SoC DW WDT was created with
-> asynchronous ones. So the driver should enable two clock devices: APB bus
-> clocks and a separate timer reference clock. Finally DW Watchdog Timer is
-> capable of generating a pre-timeout interrupt if corresponding config is
-> enabled. The problem was that the pre-timeout IRQ happens when the set
-> timeout elapses, while the actual WDT expiration and subsequent reboot take
-> place in the next timeout. This makes the pre-timeout functionality
-> implementation a bit tricky, since in this case we would have to find a
-> WDT timeout twice smaller the requested timeout. All of the changes described
-> above are provided by the patches in this patchset.
-> 
-> In addition traditionally we replaced the legacy plain text-based dt-binding
-> file with yaml-based one, made some cleanups in the watchdog core code (just
-> replaced time-unit numerical literals with corresponding macro) and added
-> DebugFS nodes to ease the driver debug procedure.
-> 
-> This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
-> commit 98d54f81e36b ("Linux 5.6-rc4").
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-> Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (7):
->   dt-bindings: watchdog: dw-wdt: Replace legacy bindings file with
->     YAML-based one
->   dt-bindings: watchdog: dw-wdt: Add watchdog TOPs array property
->   watchdog: watchdog_dev: Use generic msec-per-sec macro
->   watchdog: dw_wdt: Support devices with non-fixed TOP values
->   watchdog: dw_wdt: Support devices with asynch clocks
->   watchdog: dw_wdt: Add pre-timeouts support
->   watchdog: dw_wdt: Add DebugFS files
-> 
->  .../devicetree/bindings/watchdog/dw_wdt.txt   |  24 -
->  .../bindings/watchdog/snps,dw-wdt.yaml        |  96 ++++
->  drivers/watchdog/dw_wdt.c                     | 460 ++++++++++++++++--
->  drivers/watchdog/watchdog_dev.c               |   4 +-
->  4 files changed, 523 insertions(+), 61 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> 
-> -- 
-> 2.25.1
-> 
+Hi Xingyu,
 
-Folks,
+I am trying to establish some clarity about what to do here.
 
-It appears our corporate email server changes the Message-Id field of 
-messages passing through it. Due to that the emails threading gets to be
-broken. I'll resubmit the properly structured v2 patchset as soon as our
-system administrator fixes the problem and all the questions, already raised by
-the maintainers/reviewer, are settled. Sorry for the inconvenience caused me.
+The trusted firmware review has now been accepted
+https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405.
 
-Regards,
--Sergey
+I could try to add your mentioned extra operation indexes to the ATF
+watchdog, to try to establish a standard ATF smc watchdog interface.
+Hypothetically then your linux driver could connect to any of the ATF
+watchdogs, apart from the meson indirection layer.
+I do not quite understand the meson layer to be honest, would we run
+the meson layer on non-amlogic SOCs?
+
+It looks feasible to strip the meson part from your driver so that it
+works on more socs, please correct me if I am wrong.
+
+Alternatively we could also add these extra operation indexes to this
+linux driver. Unfortunately I would not have a way to test that.
+
+Thanks
+
+Evan
+
+On Tue, Feb 25, 2020 at 6:43 PM Xingyu Chen <xingyu.chen@amlogic.com> wrote:
+>
+> Hi, Julius
+>
+> On 2020/2/25 9:23, Julius Werner wrote:
+> >> The SMC function ID may be solved by the DTS, but the wdt indexs(Eg:
+> >> SMCWD_INFO) are also different
+> >> for each vendor. The imx_sc_wdt.c is also use the SMC to operate the
+> >> WDT, but the wdt indexs(Eg: IMX_SIP_TIMER_START_WDOG)
+> >> are different from ours. IMO, If the ATF can implement a common hal
+> >> interface and index for watchdog, then writing a
+> >> common smc wdt driver will be easier to compatible with all vendors.
+> > The MediaTek driver is still in flux (e.g. still being reviewed in
+> > Trusted Firmware here:
+> > https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405),
+> > we can still change it. So if we can now decide on making this a
+> > "standard" driver, we can change the MediaTek interface to match IMX
+> > and standardize on that. (There are existing Chromebooks shipped with
+> > a different interface, but we could handle those separately with
+> > downstream patches. I think having a unified interface that will
+> > prevent this problem in the future would be worth some extra
+> > complication right now.)
+> If the ATF provides a common watchdog hal interface and index, I am
+> happy to match
+> the generic sec wdt driver. Compared to the current MTK wdt index [0],
+> the following
+> indexes need to be supported for meson wdt [1].
+> - *_INIT.
+> - *_GETTIMEOUT.
+> - *_RESETNOW.  It is used to reset the system right now, similar to your
+> SOFT RESET.
+>
+> For another platform-specific parameter "SMC function ID", the generic
+> sec wdt driver can get it from the dts, but if
+> the driver want to compatible with more vendors in the future, maybe we
+> should consider Guenter's suggestion at [2]
+>
+> [0]: https://patchwork.kernel.org/patch/11395579/
+> [1]: https://patchwork.kernel.org/patch/11331271/
+> [2]:
+> https://lore.kernel.org/linux-watchdog/20200220155159.GB29658@roeck-us.net/T/#md00328548222965054cd19ec7dda074f8fc09fe2
+>
+> Best Regards
+> > .
