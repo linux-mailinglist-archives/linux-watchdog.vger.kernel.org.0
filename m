@@ -2,98 +2,93 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BC61812DC
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Mar 2020 09:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC39B182230
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Mar 2020 20:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728195AbgCKIZV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Mar 2020 04:25:21 -0400
-Received: from correo.santafe.edu.ar ([200.12.192.40]:34558 "EHLO
-        correo.santafe.edu.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726097AbgCKIZV (ORCPT
+        id S1730705AbgCKTYO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Mar 2020 15:24:14 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:43675 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730858AbgCKTYO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Mar 2020 04:25:21 -0400
-Received: from correo.santafe.edu.ar (localhost [127.0.0.1])
-        by correo.santafe.edu.ar (Postfix) with ESMTP id 48clQ64tLtzgWY
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Mar 2020 05:25:18 -0300 (-03)
-Authentication-Results: correo.santafe.edu.ar (amavisd-new);
-        dkim=pass (1024-bit key) reason="pass (just generated, assumed good)"
-        header.d=santafe.edu.ar
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=santafe.edu.ar;
-         h=content-transfer-encoding:organization:message-id:user-agent
-        :reply-to:subject:subject:to:from:from:date:date:content-type
-        :content-type:mime-version; s=dkim; t=1583915118; x=1586507119;
-         bh=GTX+I2lrRocRyMCIJn+Orvxlx+42FbqbjCLS2lt3HEw=; b=EWV5GAlD8QjG
-        908nyvuwMPtBHckGksQYopG6WQBHIRBIeFtlbZb3n349E7RQvMiqO8ltHs4OwfuK
-        Sx1SvVtL3E0s+zI8lOTlKuVEL1xXebhfRQtbMwlmKS+HD71DK7BBugysgdjWWsPS
-        TfMiBE+NDL3OTQcCGR6w5aIHTdHY9Y4=
-X-Virus-Scanned: Debian amavisd-new at debian9-asiserver.santafe.gob.ar
-Received: from correo.santafe.edu.ar ([127.0.0.1])
-        by correo.santafe.edu.ar (correo.santafe.edu.ar [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id rYRZF4VrRDfl for <linux-watchdog@vger.kernel.org>;
-        Wed, 11 Mar 2020 05:25:18 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.santafe.edu.ar (Postfix) with ESMTPSA id 48clMg3CwSzg3D;
-        Wed, 11 Mar 2020 05:23:11 -0300 (-03)
+        Wed, 11 Mar 2020 15:24:14 -0400
+Received: by mail-il1-f193.google.com with SMTP id d14so2625044ilq.10
+        for <linux-watchdog@vger.kernel.org>; Wed, 11 Mar 2020 12:24:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8N/7KqaO2uHDIYZv/eBCikgO0CGFEy0TUrj3C3ZKTKg=;
+        b=ARE6qGsmx2gNgSWJCSYU0TNiWLYMwyiRcF6ENWM3CzZ22PibB5K9mK6zqiGKXRuzWy
+         KopIQ+9mN/zayHYAau1eIEgQO/CVEKQFu7DTE9CQOd0YytHsopNF7ePGCmgBn4lttdgq
+         MMEyPTdXGQ7lKTsi+rgkBT4ejvtJ6j+kWqLpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8N/7KqaO2uHDIYZv/eBCikgO0CGFEy0TUrj3C3ZKTKg=;
+        b=EVZS8cvMAgKXzhakOxnvNXlJ51V6AuyAghFLl6Wlob9Ob1nGCCwNgO7jg8OaAs5G3g
+         ycGdvd1U2a6mlDEfK/AOayFCs1Kd7+2U+7GtFutK17drz2nmZrS2lflv/mphE7K5+wj2
+         wfp58Y1KHLeOgDa1OVZ98fn0g1vf8QKFBmWL7cLtY07M1qymFik8u6FImPEC8URRqMDb
+         JSTrIsqUYRU11dWDnzWm/v3HYbnbhPkhTBlSL8cp+yZWdMAFPmkLZAmk4aGrRL754JJ2
+         pBOyrMHEzeNzFO955oZunBEXU/1r/ZA4GaarXT/TMuQW6c/dl4nKUgrFVWbx7Jvx1FFa
+         RLmA==
+X-Gm-Message-State: ANhLgQ0/XDSK3pmS0w22F6mH3Cz0gn9Pn4sQzIhkM3w1rbmuUrw9kZM4
+        kXS6GmxpcUyAQ85MRZDbQ2cPiHpcpwHigT4E5RdMDg==
+X-Google-Smtp-Source: ADFU+vu73cL6OluZ5si943eP+eQIpQ8nGNRk/kAu29sLxMb2Kjpld2YYVtSCdcWAgwpjVWtWsQ9Tjb7Cnb1d1i9YbQA=
+X-Received: by 2002:a92:52:: with SMTP id 79mr4698842ila.41.1583954653040;
+ Wed, 11 Mar 2020 12:24:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Date:   Wed, 11 Mar 2020 09:23:11 +0100
-From:   Rosario <prim128_rosario@santafe.edu.ar>
-To:     undisclosed-recipients:;
-Subject: AW:
-Reply-To: niklas@zennstromcare.org
-User-Agent: Roundcube Webmail
-Message-ID: <d349e7dc9c25c78dcd4733f875b52488@santafe.edu.ar>
-X-Sender: prim128_rosario@santafe.edu.ar
-Organization: niklas@zennstromcare.org
-Content-Transfer-Encoding: quoted-printable
+References: <20200214062637.216209-1-evanbenn@chromium.org>
+ <20200214172512.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
+ <20200219223046.GA16537@bogus> <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
+ <20200219232005.GA9737@roeck-us.net> <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
+ <e42320b8-266f-0b0e-b20b-b72228510e81@amlogic.com> <CAODwPW94KX46PzSrf_uuEFPKudXor=26d=g3Qta5veRfxmMDUA@mail.gmail.com>
+ <1326f594-3cfd-c03d-4f2c-50eeb75724b2@amlogic.com> <CAODwPW8WwntWb_=dg2J3AMy-gHw2QvNj_g98SufN13+AuGnUSg@mail.gmail.com>
+ <b4ba821a-eef6-4aea-1eba-897171b92c41@amlogic.com> <CAKz_xw2T1UceCwFZnBxg6WVp2D4+MziyvQPdU6tEnR_BdLh-PQ@mail.gmail.com>
+ <ad28aa47-0490-937f-898f-0e4695ef6ec6@amlogic.com>
+In-Reply-To: <ad28aa47-0490-937f-898f-0e4695ef6ec6@amlogic.com>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Wed, 11 Mar 2020 12:24:01 -0700
+Message-ID: <CAODwPW9oxx33hkO3kv2_G8YyLWvigVHkfJU7xUHLVgB7QU2i3Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add arm,smc-wdt watchdog
+ arm,smc-wdt compatible
+To:     Xingyu Chen <xingyu.chen@amlogic.com>
+Cc:     Evan Benn <evanbenn@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Yonghui Yu <yonghui.yu@amlogic.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Julius Werner <jwerner@chromium.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+> - *_INIT and *GETTIMEOUT.      Although your driver does not need them, could you take them as options in your driver ?
 
+The driver already has SMCWD_INFO which is used during probe to
+retrieve the minimum and maximum timeout values supported by the
+hardware at probe time. Maybe it would make sense to rename that to
+INIT (which would still return those values, but can also do whatever
+initialization needs to be done in TF)? GETTIMELEFT I agree we can
+implement optionally, and other platforms would just return a
+PSCI_RET_NOT_SUPPORTED for that.
 
---=20
-Sch=C3=B6nen Tag,
+> - *_RESETNOW.      It is used to reset the system right now, similar to your SOFT RESET. could you reserve an operation index in ATF ?
 
-Herr Niklas Zennstr=C3=B6m, ein schwedischer Wirtschaftsmagnat, Investor =
-und=20
-Philanthrop, der weltweit rund =C2=A3208.3 Millionen Pfund an=20
-Menschenrechtsorganisationen / Wohlt=C3=A4tigkeitsorganisationen gespende=
-t=20
-hat, hat sich ebenfalls verpflichtet, den Rest von 25% in diesem Jahr=20
-2020 zu verschenken, und Ihre E-Mail erfolgte nach dem Zufallsprinzip=20
-Das Team von Google Inc. wurde als aktiver Web-Nutzer ausgew=C3=A4hlt, um=
-=20
-eine Spende in H=C3=B6he von 1 Million USD im Rahmen des=20
-Wohlt=C3=A4tigkeitsprojekts Zennstr=C3=B6m Philanthropies zu erhalten. Bi=
-tte=20
-best=C3=A4tigen Sie den Besitz Ihrer E-Mail-Adresse, indem Sie sich per=20
-E-Mail an Niklas Zennstr=C3=B6m wenden: niklas@zennstromcare.org F=C3=BCr=
- den=20
-Anspruch
-
-
-Name des Ansprechpartners: Herr Niklas Zennstr=C3=B6m
--------------------------------------------------------------------------=
--------------------------------------------------------------------------=
------------------------
-
-Good day,
-
-Mr. Niklas Zennstr=C3=B6m, a Swedish business tycoon, investor, and=20
-philanthropist who has distributed approximately =C2=A3208.3 million to h=
-uman=20
-rights organizations/charity globally, has also pledged to give away the=20
-rest of 25% this year 2020 and your E-mail =C2=A0was randomly selected by=
-=20
-Google Inc team as an active web user to =C2=A0receive a donation of $1m =
-(One=20
-Million USD) as part of Zennstr=C3=B6m Philanthropies charity project. Do=
-=20
-Kindly Confirm ownership of your E-mail by contacting Niklas Zennstr=C3=B6=
-m=20
-via email: niklas@zennstromcare.org for claim.
-
-Contact Name: Mr. Niklas Zennstr=C3=B6m
+Just curious, why do you need this? Shouldn't you use the PSCI
+standard SYSTEM_RESET SMC for that? (If you want to control exactly
+how the platform is reset, you could also use SYSTEM_RESET2 with a
+vendor-defined reset_type.)
