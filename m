@@ -2,97 +2,85 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B29182CE2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Mar 2020 10:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5255183C4D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Mar 2020 23:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgCLJ64 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 12 Mar 2020 05:58:56 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:42350 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbgCLJ64 (ORCPT
+        id S1726621AbgCLWWF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 12 Mar 2020 18:22:05 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:36726 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726548AbgCLWWF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 12 Mar 2020 05:58:56 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02C9wXRs054704;
-        Thu, 12 Mar 2020 04:58:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1584007113;
-        bh=uiFzRscv7Q/Por3roHFVtDDPPVCVZ2Mgpw9+arQADOg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=kNLYcYN60WfGD+xjtvgH9yIuZKP2GKM0ZvXpo+KUEmexGbUoi111uoX2zIz2+Uf1g
-         d0bWKIaHq977L8/AZzuCJkLlXFkphG5mQKfC18U5tLK4R+Stmyt3F7pluwhjxYjJ0y
-         kMHyDPrfT7VDO7baPShYTKBGHLMc6QEyzm+3/h5I=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02C9wX7V010654;
-        Thu, 12 Mar 2020 04:58:33 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
- Mar 2020 04:58:32 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 12 Mar 2020 04:58:32 -0500
-Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02C9wOR9089783;
-        Thu, 12 Mar 2020 04:58:31 -0500
-From:   Tero Kristo <t-kristo@ti.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCHv4 4/4] arm64: dts: ti: k3-j721e-main: Add MAIN domain watchdog entries
-Date:   Thu, 12 Mar 2020 11:58:08 +0200
-Message-ID: <20200312095808.19907-5-t-kristo@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200312095808.19907-1-t-kristo@ti.com>
-References: <20200312095808.19907-1-t-kristo@ti.com>
+        Thu, 12 Mar 2020 18:22:05 -0400
+Received: by mail-oi1-f194.google.com with SMTP id k18so7282984oib.3;
+        Thu, 12 Mar 2020 15:22:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OsTug+wFPYvu1dsEP+HjJTVY8zFYC98KWDkMm6y/bAM=;
+        b=Q/34E52L5C2ETz37DXsW+OokQGk6gUzXI4rferXXtbhguw3iL/oGUTC/OHmxFhGg4v
+         2rKLKcopkbKD0AmcBHU2fR9stX3WV7jjY07kBpIZn/EqTKSancu9okcZiEFiFFgszjZx
+         6MP7K83fw22aLFUvxCDiRHoJvSv6hQ2qBR3KyamLyqP8LhPyyf3OQlwykDqA+zYTQdIW
+         +D9Gwv0Jca/O+QTnNdyow03ctkKCgUGqX+sODAYl2Ht9Xjztksikuco2zG7Omqvsww7V
+         BXUjxDX+JH67zHxL5nemWpfSbZiXIDY7iWs0DyVd02Cg4Dj5EXifZO/C/mD3uoh2Ajs8
+         mIoA==
+X-Gm-Message-State: ANhLgQ34MTr9zdN4OknHjVhmW8OrqJerDZPdetbn7C0fmkKlPzAUtscf
+        MReApFmOo/2btsbsMp79xg==
+X-Google-Smtp-Source: ADFU+vt7wLxkZF+SNDSBgEsIFB/+M2Ofk3SegkM60wYe0M9i2VazpAmQDww4IoWy/Oa5AfmBoQ1EQQ==
+X-Received: by 2002:aca:cdcd:: with SMTP id d196mr4574031oig.16.1584051724248;
+        Thu, 12 Mar 2020 15:22:04 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id k101sm9796724otk.6.2020.03.12.15.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2020 15:22:03 -0700 (PDT)
+Received: (nullmailer pid 19309 invoked by uid 1000);
+        Thu, 12 Mar 2020 22:22:02 -0000
+Date:   Thu, 12 Mar 2020 17:22:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sergey.Semin@baikalelectronics.ru
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/7] dt-bindings: watchdog: dw-wdt: Add watchdog TOPs
+ array property
+Message-ID: <20200312222202.GA19251@bogus>
+References: <20200306132747.14701-1-Sergey.Semin@baikalelectronics.ru>
+ <20200306132818.98D7F80307C2@mail.baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200306132818.98D7F80307C2@mail.baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add DT entries for main domain watchdog0 and 1 instances.
+On Fri, 6 Mar 2020 16:27:42 +0300, <Sergey.Semin@baikalelectronics.ru> wrote:
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> In case if DW Watchdog IP core is built with WDT_USE_FIX_TOP == false,
+> a custom timeout periods are used to preset the timer counter. In
+> this case that periods should be specified in a new "snps,watchdog-tops"
+> property of the DW watchdog dts node.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> ---
+>  .../bindings/watchdog/snps,dw-wdt.yaml        | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
 
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
----
-v4:
-  * renamed main_rti* instances to watchdog*
-
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-index 0b9d14b838a1..aa525bc321f1 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-@@ -963,4 +963,22 @@
- 
- 		status = "disabled";
- 	};
-+
-+	watchdog0: watchdog@2200000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x0 0x2200000 0x0 0x100>;
-+		clocks = <&k3_clks 252 1>;
-+		power-domains = <&k3_pds 252 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 252 1>;
-+		assigned-clock-parents = <&k3_clks 252 5>;
-+	};
-+
-+	watchdog1: watchdog@2210000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x0 0x2210000 0x0 0x100>;
-+		clocks = <&k3_clks 253 1>;
-+		power-domains = <&k3_pds 253 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 253 1>;
-+		assigned-clock-parents = <&k3_clks 253 5>;
-+	};
- };
--- 
-2.17.1
-
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Reviewed-by: Rob Herring <robh@kernel.org>
