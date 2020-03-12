@@ -2,93 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC39B182230
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Mar 2020 20:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F60C182CE0
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Mar 2020 10:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730705AbgCKTYO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Mar 2020 15:24:14 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:43675 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730858AbgCKTYO (ORCPT
+        id S1726528AbgCLJ6t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 12 Mar 2020 05:58:49 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:42340 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbgCLJ6s (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Mar 2020 15:24:14 -0400
-Received: by mail-il1-f193.google.com with SMTP id d14so2625044ilq.10
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Mar 2020 12:24:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8N/7KqaO2uHDIYZv/eBCikgO0CGFEy0TUrj3C3ZKTKg=;
-        b=ARE6qGsmx2gNgSWJCSYU0TNiWLYMwyiRcF6ENWM3CzZ22PibB5K9mK6zqiGKXRuzWy
-         KopIQ+9mN/zayHYAau1eIEgQO/CVEKQFu7DTE9CQOd0YytHsopNF7ePGCmgBn4lttdgq
-         MMEyPTdXGQ7lKTsi+rgkBT4ejvtJ6j+kWqLpE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8N/7KqaO2uHDIYZv/eBCikgO0CGFEy0TUrj3C3ZKTKg=;
-        b=EVZS8cvMAgKXzhakOxnvNXlJ51V6AuyAghFLl6Wlob9Ob1nGCCwNgO7jg8OaAs5G3g
-         ycGdvd1U2a6mlDEfK/AOayFCs1Kd7+2U+7GtFutK17drz2nmZrS2lflv/mphE7K5+wj2
-         wfp58Y1KHLeOgDa1OVZ98fn0g1vf8QKFBmWL7cLtY07M1qymFik8u6FImPEC8URRqMDb
-         JSTrIsqUYRU11dWDnzWm/v3HYbnbhPkhTBlSL8cp+yZWdMAFPmkLZAmk4aGrRL754JJ2
-         pBOyrMHEzeNzFO955oZunBEXU/1r/ZA4GaarXT/TMuQW6c/dl4nKUgrFVWbx7Jvx1FFa
-         RLmA==
-X-Gm-Message-State: ANhLgQ0/XDSK3pmS0w22F6mH3Cz0gn9Pn4sQzIhkM3w1rbmuUrw9kZM4
-        kXS6GmxpcUyAQ85MRZDbQ2cPiHpcpwHigT4E5RdMDg==
-X-Google-Smtp-Source: ADFU+vu73cL6OluZ5si943eP+eQIpQ8nGNRk/kAu29sLxMb2Kjpld2YYVtSCdcWAgwpjVWtWsQ9Tjb7Cnb1d1i9YbQA=
-X-Received: by 2002:a92:52:: with SMTP id 79mr4698842ila.41.1583954653040;
- Wed, 11 Mar 2020 12:24:13 -0700 (PDT)
+        Thu, 12 Mar 2020 05:58:48 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02C9wRsh054691;
+        Thu, 12 Mar 2020 04:58:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1584007107;
+        bh=iYZGpxc/4x16TGmIaej35oayuQv5bkMV+LQiaqr8PHY=;
+        h=From:To:CC:Subject:Date;
+        b=mP3iyMkYuIba96hg68IdIlsvvmTm8a0mKL1u+bYt+sIIwWoLDB+T+Zc1RARau78Hz
+         WHayskJEQU5MEM3VV0YrfTfpI8tx/qUShVOlM6RuoPh84rLP+LrgIQNFsy38WKqmIZ
+         FgZ9FCu6DlPnMrKzNiIPtuHjUfpfhk4H4ZWV/d1o=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02C9wR1e104200
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 12 Mar 2020 04:58:27 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
+ Mar 2020 04:58:26 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 12 Mar 2020 04:58:26 -0500
+Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02C9wOR5089783;
+        Thu, 12 Mar 2020 04:58:25 -0500
+From:   Tero Kristo <t-kristo@ti.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCHv4 0/4] watchdog: add K3 RTI watchdog support
+Date:   Thu, 12 Mar 2020 11:58:04 +0200
+Message-ID: <20200312095808.19907-1-t-kristo@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20200214062637.216209-1-evanbenn@chromium.org>
- <20200214172512.1.I02ebc5b8743b1a71e0e15f68ea77e506d4e6f840@changeid>
- <20200219223046.GA16537@bogus> <CAODwPW8JspiUtyU4CC95w9rbNRyUF-Aeb9TuPm1PzmP6u=y1EA@mail.gmail.com>
- <20200219232005.GA9737@roeck-us.net> <CAKz_xw2hvHL=a4s37dmuCTWDbxefQFR3rfcaNiWYJY4T+jqabA@mail.gmail.com>
- <e42320b8-266f-0b0e-b20b-b72228510e81@amlogic.com> <CAODwPW94KX46PzSrf_uuEFPKudXor=26d=g3Qta5veRfxmMDUA@mail.gmail.com>
- <1326f594-3cfd-c03d-4f2c-50eeb75724b2@amlogic.com> <CAODwPW8WwntWb_=dg2J3AMy-gHw2QvNj_g98SufN13+AuGnUSg@mail.gmail.com>
- <b4ba821a-eef6-4aea-1eba-897171b92c41@amlogic.com> <CAKz_xw2T1UceCwFZnBxg6WVp2D4+MziyvQPdU6tEnR_BdLh-PQ@mail.gmail.com>
- <ad28aa47-0490-937f-898f-0e4695ef6ec6@amlogic.com>
-In-Reply-To: <ad28aa47-0490-937f-898f-0e4695ef6ec6@amlogic.com>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Wed, 11 Mar 2020 12:24:01 -0700
-Message-ID: <CAODwPW9oxx33hkO3kv2_G8YyLWvigVHkfJU7xUHLVgB7QU2i3Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add arm,smc-wdt watchdog
- arm,smc-wdt compatible
-To:     Xingyu Chen <xingyu.chen@amlogic.com>
-Cc:     Evan Benn <evanbenn@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Yonghui Yu <yonghui.yu@amlogic.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Julius Werner <jwerner@chromium.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-> - *_INIT and *GETTIMEOUT.      Although your driver does not need them, could you take them as options in your driver ?
+Hi,
 
-The driver already has SMCWD_INFO which is used during probe to
-retrieve the minimum and maximum timeout values supported by the
-hardware at probe time. Maybe it would make sense to rename that to
-INIT (which would still return those values, but can also do whatever
-initialization needs to be done in TF)? GETTIMELEFT I agree we can
-implement optionally, and other platforms would just return a
-PSCI_RET_NOT_SUPPORTED for that.
+This addresses the comments from Rob against the DT binding doc, and
+does the necessary changes to the driver code based on that (just
+compatible name change on that side.) I retained Guenter's reviewed by
+tag due to the very minor changes to the code.
 
-> - *_RESETNOW.      It is used to reset the system right now, similar to your SOFT RESET. could you reserve an operation index in ATF ?
+Version jumps to v4 for all patches here, I happened to post v3 of patch
+#3 before.
 
-Just curious, why do you need this? Shouldn't you use the PSCI
-standard SYSTEM_RESET SMC for that? (If you want to control exactly
-how the platform is reset, you could also use SYSTEM_RESET2 with a
-vendor-defined reset_type.)
+-Tero
+
+
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
