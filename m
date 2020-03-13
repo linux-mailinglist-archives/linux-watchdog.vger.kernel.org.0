@@ -2,85 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5255183C4D
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Mar 2020 23:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D72A183F55
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Mar 2020 04:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbgCLWWF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 12 Mar 2020 18:22:05 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:36726 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726548AbgCLWWF (ORCPT
+        id S1726331AbgCMDNS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 12 Mar 2020 23:13:18 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:36898 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbgCMDNS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 12 Mar 2020 18:22:05 -0400
-Received: by mail-oi1-f194.google.com with SMTP id k18so7282984oib.3;
-        Thu, 12 Mar 2020 15:22:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OsTug+wFPYvu1dsEP+HjJTVY8zFYC98KWDkMm6y/bAM=;
-        b=Q/34E52L5C2ETz37DXsW+OokQGk6gUzXI4rferXXtbhguw3iL/oGUTC/OHmxFhGg4v
-         2rKLKcopkbKD0AmcBHU2fR9stX3WV7jjY07kBpIZn/EqTKSancu9okcZiEFiFFgszjZx
-         6MP7K83fw22aLFUvxCDiRHoJvSv6hQ2qBR3KyamLyqP8LhPyyf3OQlwykDqA+zYTQdIW
-         +D9Gwv0Jca/O+QTnNdyow03ctkKCgUGqX+sODAYl2Ht9Xjztksikuco2zG7Omqvsww7V
-         BXUjxDX+JH67zHxL5nemWpfSbZiXIDY7iWs0DyVd02Cg4Dj5EXifZO/C/mD3uoh2Ajs8
-         mIoA==
-X-Gm-Message-State: ANhLgQ34MTr9zdN4OknHjVhmW8OrqJerDZPdetbn7C0fmkKlPzAUtscf
-        MReApFmOo/2btsbsMp79xg==
-X-Google-Smtp-Source: ADFU+vt7wLxkZF+SNDSBgEsIFB/+M2Ofk3SegkM60wYe0M9i2VazpAmQDww4IoWy/Oa5AfmBoQ1EQQ==
-X-Received: by 2002:aca:cdcd:: with SMTP id d196mr4574031oig.16.1584051724248;
-        Thu, 12 Mar 2020 15:22:04 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id k101sm9796724otk.6.2020.03.12.15.22.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 15:22:03 -0700 (PDT)
-Received: (nullmailer pid 19309 invoked by uid 1000);
-        Thu, 12 Mar 2020 22:22:02 -0000
-Date:   Thu, 12 Mar 2020 17:22:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sergey.Semin@baikalelectronics.ru
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] dt-bindings: watchdog: dw-wdt: Add watchdog TOPs
- array property
-Message-ID: <20200312222202.GA19251@bogus>
-References: <20200306132747.14701-1-Sergey.Semin@baikalelectronics.ru>
- <20200306132818.98D7F80307C2@mail.baikalelectronics.ru>
+        Thu, 12 Mar 2020 23:13:18 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6BC0D8365A;
+        Fri, 13 Mar 2020 16:13:15 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1584069195;
+        bh=n96UwtAtVOCVHqBXD70o6APPLnkWO/O45cJLkbbT0Zk=;
+        h=From:To:Cc:Subject:Date;
+        b=zYw0NoNs3KaMnK/wxPgSGom2mI5TlMYTNANDEORO8JqI5TuPFN7tOtWdjhXTpTPco
+         0KIb7U8dRwpdXPAfFJMYCsq/Cl3NXnt6Oxba0k50Ate5QcGBYET1ZqNZzEKqejCO+c
+         fEBBELYKvHTzRrKErf3Cd+CzTrjFCt02swvv1xnDEsgqPZvSnDDr63IQ1vETkmft3z
+         T9qbtXNup04e96UX/o09EnnD097e+j0f3M6zEf8qFVfjgsVkbXKDbe5XXIPIlvOnbR
+         UuHIfy6mVrf8G4KUUO5hmAArBVi+PuOF6XDEgx2SfhD5A5V2Uq61Ld+EKi6ce9c/bw
+         FIfQ2I4TQnvdQ==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e6afa4b0000>; Fri, 13 Mar 2020 16:13:15 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id 2640013EED5;
+        Fri, 13 Mar 2020 16:13:15 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 3498E28006E; Fri, 13 Mar 2020 16:13:15 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] watchdog: orion: use 0 for unset heartbeat
+Date:   Fri, 13 Mar 2020 16:13:12 +1300
+Message-Id: <20200313031312.1485-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200306132818.98D7F80307C2@mail.baikalelectronics.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 6 Mar 2020 16:27:42 +0300, <Sergey.Semin@baikalelectronics.ru> wrote:
-> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> In case if DW Watchdog IP core is built with WDT_USE_FIX_TOP == false,
-> a custom timeout periods are used to preset the timer counter. In
-> this case that periods should be specified in a new "snps,watchdog-tops"
-> property of the DW watchdog dts node.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> ---
->  .../bindings/watchdog/snps,dw-wdt.yaml        | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
+If the heartbeat module param is not specified we would get an error
+message
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+  watchdog: f1020300.watchdog: driver supplied timeout (4294967295) out o=
+f range
+  watchdog: f1020300.watchdog: falling back to default timeout (171)
+
+This is because we were initialising heartbeat to -1. By removing the
+initialisation (thus letting the C run time initialise it to 0) we
+silence the warning message and the default timeout is still used.
+
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+ drivers/watchdog/orion_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
+index 8e6dfe76f9c9..4ddb4ea2e4a3 100644
+--- a/drivers/watchdog/orion_wdt.c
++++ b/drivers/watchdog/orion_wdt.c
+@@ -52,7 +52,7 @@
+ #define WDT_A370_RATIO		(1 << WDT_A370_RATIO_SHIFT)
+=20
+ static bool nowayout =3D WATCHDOG_NOWAYOUT;
+-static int heartbeat =3D -1;		/* module parameter (seconds) */
++static int heartbeat;		/* module parameter (seconds) */
+=20
+ struct orion_watchdog;
+=20
+--=20
+2.25.1
+
