@@ -2,100 +2,88 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F61195B08
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Mar 2020 17:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6A2195E09
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Mar 2020 20:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727585AbgC0QZA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Mar 2020 12:25:00 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:52785 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726333AbgC0QZA (ORCPT
+        id S1727423AbgC0TCA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 27 Mar 2020 15:02:00 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:34284 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727444AbgC0TB7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Mar 2020 12:25:00 -0400
-Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 4148F22FEC;
-        Fri, 27 Mar 2020 17:24:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1585326298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ng+Lsq19j4XccySd1d6Zbq1RgEHID3cA0n98wcptYNM=;
-        b=Z1ioTCPtpUNNJjGvqanMVFj1JmYt5B8tJ2dbXANqJBgo+15dPaIlW8kwnOK6OJTL2Irgr5
-        dzrQns9ckAW1p6tAErtD8//jekH1RrJAXLSbWnjYIujeVk+PWmDi8Wt6e9dj4ubXWW1t/b
-        Fqa3j5vCmjtiHYV3d0TNgV+LjsWVzUM=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     Jongsung Kim <neidhard.kim@lge.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH] watchdog: sp805: fix restart handler
-Date:   Fri, 27 Mar 2020 17:24:50 +0100
-Message-Id: <20200327162450.28506-1-michael@walle.cc>
-X-Mailer: git-send-email 2.20.1
+        Fri, 27 Mar 2020 15:01:59 -0400
+Received: by mail-lf1-f67.google.com with SMTP id e7so8779166lfq.1
+        for <linux-watchdog@vger.kernel.org>; Fri, 27 Mar 2020 12:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CooN/lA7d5yACqkmjNxbvElnXH9xWYc5D690cPagV5A=;
+        b=XzwTwOQ2tZqjO9DLphNswRW0Faz+tkI3lW4QKn8PnDodceq0s69XJc+EX+CaxLUZAc
+         DsmeaJdkg7faxGR2WlOr2Q2xOqCK3LhvO83UpvhTPjbrrDITVXe01nU0HW2zIBGLSdNK
+         x+SI4S2qeU3EY5SopL7X1UD90wHcT3WjJvLfVVsAO2U5Em5d1XWCXX0PRhRjUwlFbFjC
+         /RhNOl/qPgtup89fKy/XuqC10uHh8xb2p99SAbLCDPTbSVvO8tHFnVGOGXPs57VzLKHy
+         z3pNrxrHAv/ZVQFSEpVOjEocb4Os2eKubiclJ5LN8KBbJgdGF3NkBVCWlJGOm0DbvFTa
+         Y1mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CooN/lA7d5yACqkmjNxbvElnXH9xWYc5D690cPagV5A=;
+        b=TIZVOoxlWW6+s7eTrBKsd/fYskrIpDwWd4u4KTcZEcVNypSbPC6g93Kr21TzasuLLZ
+         C6g/Rv1CMTVHvT4+5a0wYONvV8amrabk28bExD+E/ajfhlMUeNWglS+v9kn0PdnHDaqd
+         s1Aid8GA1gY+2S1o+7Koi1Hot9J2L3dt4ZRSntIX3mR6NrZ5/tGV+FMVbMHRmy23AatG
+         AOtV4R6cSacN4xiEj/OW//mCte9cxoICWYajKJC5rfSwZphLbOsoUwyP+aSGXTsCsZl4
+         fvIqdMcZLBXF8VTqqNnu/hYxgJSFDsht24+4bqaQ2G9X49eS+XSIJ+t7UYwa1mn3y5Dr
+         O4cw==
+X-Gm-Message-State: AGi0PublzJg+wrg6Js7TmNUo5W7t65wVh1FCIF3XxkZSpM37+UZ7zERh
+        6/T8auwofnvpOHqQbYIZSw24lGh1Ucs5tOFcHnxPxA==
+X-Google-Smtp-Source: APiQypLD/fNDqtD4u7+uuQ8ZqMmHjJHk9/rbkJ2Ows6MzWRJlKEVAAUCTvzeqzTfoWN78XIJxBngK/onAWpgkIOJt00=
+X-Received: by 2002:ac2:5f7c:: with SMTP id c28mr457241lfc.4.1585335716191;
+ Fri, 27 Mar 2020 12:01:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++
-X-Spam-Level: ****
-X-Rspamd-Server: web
-X-Spam-Status: No, score=4.90
-X-Spam-Score: 4.90
-X-Rspamd-Queue-Id: 4148F22FEC
-X-Spamd-Result: default: False [4.90 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         R_MISSING_CHARSET(2.50)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         NEURAL_SPAM(0.00)[0.335];
-         BROKEN_CONTENT_TYPE(1.50)[];
-         RCPT_COUNT_FIVE(0.00)[6];
-         DKIM_SIGNED(0.00)[];
-         MID_CONTAINS_FROM(1.00)[];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:31334, ipnet:2a02:810c:8000::/33, country:DE]
+References: <20200317205017.28280-1-michael@walle.cc> <20200317205017.28280-13-michael@walle.cc>
+ <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
+ <9c310f2a11913d4d089ef1b07671be00@walle.cc> <CAMpxmJXmD-M+Wbj6=wgFgP2aDxbqDN=ceHi1XDun4iwdLm55Zg@mail.gmail.com>
+ <22944c9b62aa69da418de7766b7741bd@walle.cc> <CACRpkdbJ3DBO+W4P0n-CfZ1T3L8d_L0Nizra8frkv92XPXR4WA@mail.gmail.com>
+ <4d8d3bc26bdf73eb5c0e5851589fe085@walle.cc>
+In-Reply-To: <4d8d3bc26bdf73eb5c0e5851589fe085@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Mar 2020 20:01:44 +0100
+Message-ID: <CACRpkdYwqReW+UcY=4S3ZnC+jFeVr=e+Ns12A_CK6o7VBUXHbA@mail.gmail.com>
+Subject: Re: [PATCH 12/18] gpio: add support for the sl28cpld GPIO controller
+To:     Michael Walle <michael@walle.cc>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The restart handler is missing two things, first, the registers
-has to be unlocked and second there is no synchronization for the
-write_relaxed() calls.
+On Fri, Mar 27, 2020 at 4:28 PM Michael Walle <michael@walle.cc> wrote:
 
-This was tested on a custom board with the NXP LS1028A SoC.
+> For starters, would that be a drivers/gpio/gpio-regmap.c or a
+> drivers/base/regmap/regmap-gpio.c? I would assume the first,
 
-Fixes: 6c5c0d48b686c ("watchdog: sp805: add restart handler")
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/watchdog/sp805_wdt.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Yeah I would name it like that. gpio-regmap.c.
 
-diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-index 53e04926a7b2..190d26e2e75f 100644
---- a/drivers/watchdog/sp805_wdt.c
-+++ b/drivers/watchdog/sp805_wdt.c
-@@ -137,10 +137,14 @@ wdt_restart(struct watchdog_device *wdd, unsigned long mode, void *cmd)
- {
- 	struct sp805_wdt *wdt = watchdog_get_drvdata(wdd);
- 
-+	writel_relaxed(UNLOCK, wdt->base + WDTLOCK);
- 	writel_relaxed(0, wdt->base + WDTCONTROL);
- 	writel_relaxed(0, wdt->base + WDTLOAD);
- 	writel_relaxed(INT_ENABLE | RESET_ENABLE, wdt->base + WDTCONTROL);
- 
-+	/* Flush posted writes. */
-+	readl_relaxed(wdt->base + WDTLOCK);
-+
- 	return 0;
- }
- 
--- 
-2.20.1
-
+Yours,
+Linus Walleij
