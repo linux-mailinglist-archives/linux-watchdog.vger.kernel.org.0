@@ -2,222 +2,105 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1D2194FFD
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Mar 2020 05:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB56195507
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Mar 2020 11:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbgC0ESP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Mar 2020 00:18:15 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:55486 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgC0ESP (ORCPT
+        id S1726096AbgC0KVL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 27 Mar 2020 06:21:11 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:35409 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726217AbgC0KVK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Mar 2020 00:18:15 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 901B280237;
-        Fri, 27 Mar 2020 17:18:12 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1585282692;
-        bh=rWzErC/ba66zHapfPKXI81c1IflcLBV+nnSryfHwXwA=;
-        h=From:To:Cc:Subject:Date;
-        b=0g1fmZueMk51yLex3C8s+GfM70ah49mp6CsZ615iF/Ze/vGwxjtc6y+RAE6rmvpA9
-         K89f1DjkMXk6dd/v0Z4V+OxeqlM8LByiktTt+9IPeFCXwh7oo8iG+Ehot9/+6N6xyK
-         S0Bzl+bj//6he8p9muhxkfpnmQjnT5g72wweAp/fDZljEjhX7fcYA4Ln3uwyUZoRGa
-         N/ZCvJOPJvJnK7c82334d9pVRZfqwH77ocdB+4K/FojrpYFGlIfjJjP2Gb85vDZFwD
-         grUCyRn3KVwlUtF48WryAy+JZbueUKsA5fpNfQNVvjBk22b/rjBCHhhGA9sbxaZiYh
-         OwYwDnAAwHVYw==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5e7d7e840000>; Fri, 27 Mar 2020 17:18:12 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id 63BF913EEB7;
-        Fri, 27 Mar 2020 17:18:11 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 96C7128006C; Fri, 27 Mar 2020 17:18:11 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v2] rtc: ds1307: add support for watchdog timer on ds1388
-Date:   Fri, 27 Mar 2020 17:18:09 +1300
-Message-Id: <20200327041809.2029-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 Mar 2020 06:21:10 -0400
+Received: by mail-lf1-f66.google.com with SMTP id t16so6556907lfl.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 27 Mar 2020 03:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TuB8BNTEMS6Xu4xWKK0GTpM0KTFJDSPd7CoTH260LEY=;
+        b=BWdcmcSOZAia9WokqOKv83FwargH+rfDXr2Mp0QwyZsT/mABCSd3y3ZMISvNsbmXhU
+         gQMIR1duY1UxdvKr1tbHQzNudMLJvKqINJWtOlrbk9+kwOmXToR95IOMrI3yVrYmqYw4
+         ERIXKr3kSqBiWHHSNhbcDl9Iko5A1Q0USZ7lVRGh7i4ZWuu8E4UBLvEJ0Rb7XNIkfIsy
+         aw8uoNh4prsuenO/RPpdtz/llUkVRpSahQ6WFiqcc4YqGBOhRx5YxeATNzXZkpF5gRXs
+         u9qzGndEeTvD5XvNeditQ2MMZ58/zYFaGXYoaCpP0AzoqV0GaxsvyztxFYEj52lAcoCH
+         pBJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TuB8BNTEMS6Xu4xWKK0GTpM0KTFJDSPd7CoTH260LEY=;
+        b=JxYFl9OHtdR89uVnXJsgGCVY6JjXJIFLKbY8AOtLKIva+tIDIWMg+Zr1pXm+jOBYeE
+         JcVagAxmM+z65yjNOQqjP036InYgaq8mHQJoUBaqGKH7tPuvD5YJOyzjVmS8MSaqkr8a
+         1TGz0QwaYrgrD4SdhduGzaOsJbcL0rNOhIUZirHrjbMMD0NfGduJbsUXdzBCoNEWN4to
+         Pkoqtqmtq9O4Bog0hafJ7sRawB+x4Ka4DkdEvFQciR7wFvJDe/bNabgZqyUmKkR3dxrH
+         M3vtJRYRJejE5hBYD2mWn7eiiZ9EdoAXgN893vUeOpQSP6VcPnGDHPEnh+/NxnlgKliP
+         xKog==
+X-Gm-Message-State: ANhLgQ3QRfSU4mTjhYuUA71z1uIrA/p+luR1jL9kGEwAo0Tko8IXU2Pn
+        fZNEwnohs4oX6U33MSOgV2m37FI5UxrPVFvbsZGAZw==
+X-Google-Smtp-Source: ADFU+vtsIgqK8FyZODtKNKWKI1HxhtKduwTybRXQvKGmxQLsPLeMOqx9p3y4gdOqstKYu6oc3bIWeFZeiamysR3lBHg=
+X-Received: by 2002:a19:ac8:: with SMTP id 191mr8675462lfk.77.1585304468041;
+ Fri, 27 Mar 2020 03:21:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+References: <20200317205017.28280-1-michael@walle.cc> <20200317205017.28280-13-michael@walle.cc>
+ <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
+ <9c310f2a11913d4d089ef1b07671be00@walle.cc> <CAMpxmJXmD-M+Wbj6=wgFgP2aDxbqDN=ceHi1XDun4iwdLm55Zg@mail.gmail.com>
+ <22944c9b62aa69da418de7766b7741bd@walle.cc>
+In-Reply-To: <22944c9b62aa69da418de7766b7741bd@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Mar 2020 11:20:56 +0100
+Message-ID: <CACRpkdbJ3DBO+W4P0n-CfZ1T3L8d_L0Nizra8frkv92XPXR4WA@mail.gmail.com>
+Subject: Re: [PATCH 12/18] gpio: add support for the sl28cpld GPIO controller
+To:     Michael Walle <michael@walle.cc>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The DS1388 variant has watchdog timer capabilities. When using a DS1388
-and having enabled CONFIG_WATCHDOG_CORE register a watchdog device for
-the DS1388.
+On Thu, Mar 26, 2020 at 9:06 PM Michael Walle <michael@walle.cc> wrote:
+> Am 2020-03-25 12:50, schrieb Bartosz Golaszewski:
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
-This is going to the linux-watchdog list as well this time so it's probab=
-ly the
-first time the watchdog maintainers have seen it.
+> > In that case maybe you should use the disable_locking option in
+> > regmap_config and provide your own callbacks that you can use in the
+> > irqchip code too?
+>
+> But how would that solve problem (1). And keep in mind, that the
+> reqmap_irqchip is actually used for the interrupt controller, which
+> is not this gpio controller.
+>
+> Ie. the interrupt controller of the sl28cpld uses the regmap_irqchip
+> and all interrupt phandles pointing to the interrupt controller will
+> reference the toplevel node. Any phandles pointing to the gpio
+> controller will reference the GPIO subnode.
 
-Changes in v2:
-- Address review comments from Alexandre, the only functional change is s=
-etting
-  the hundredths of seconds to 0 instead of 99.
+Ideally we would create something generic that has been on my
+mind for some time, like a generic GPIO regmap irqchip now that
+there are a few controllers like that.
 
- drivers/rtc/rtc-ds1307.c | 97 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+I don't know how feasible it is or how much work it would be. But
+as with GPIO_GENERIC (for MMIO) it would be helpful since we
+can then implement things like .set_multiple() and .get_multiple()
+for everyone.
 
-diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index 31a38d468378..1452982c3a6a 100644
---- a/drivers/rtc/rtc-ds1307.c
-+++ b/drivers/rtc/rtc-ds1307.c
-@@ -22,6 +22,7 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/clk-provider.h>
- #include <linux/regmap.h>
-+#include <linux/watchdog.h>
-=20
- /*
-  * We can't determine type by probing, but if we expect pre-Linux code
-@@ -144,8 +145,15 @@ enum ds_type {
- #	define M41TXX_BIT_CALIB_SIGN	BIT(5)
- #	define M41TXX_M_CALIBRATION	GENMASK(4, 0)
-=20
-+#define DS1388_REG_WDOG_HUN_SECS	0x08
-+#define DS1388_REG_WDOG_SECS		0x09
- #define DS1388_REG_FLAG			0x0b
-+#	define DS1388_BIT_WF		BIT(6)
- #	define DS1388_BIT_OSF		BIT(7)
-+#define DS1388_REG_CONTROL		0x0c
-+#	define DS1388_BIT_RST		BIT(0)
-+#	define DS1388_BIT_WDE		BIT(1)
-+
- /* negative offset step is -2.034ppm */
- #define M41TXX_NEG_OFFSET_STEP_PPB	2034
- /* positive offset step is +4.068ppm */
-@@ -166,6 +174,9 @@ struct ds1307 {
- #ifdef CONFIG_COMMON_CLK
- 	struct clk_hw		clks[2];
- #endif
-+#ifdef CONFIG_WATCHDOG_CORE
-+	struct watchdog_device	wdt;
-+#endif
- };
-=20
- struct chip_desc {
-@@ -854,6 +865,58 @@ static int m41txx_rtc_set_offset(struct device *dev,=
- long offset)
- 				  ctrl_reg);
- }
-=20
-+#ifdef CONFIG_WATCHDOG_CORE
-+static int ds1388_wdt_start(struct watchdog_device *wdt_dev)
-+{
-+	struct ds1307 *ds1307 =3D watchdog_get_drvdata(wdt_dev);
-+	u8 regs[2];
-+	int ret;
-+
-+	ret =3D regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
-+				 DS1388_BIT_WF, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D regmap_update_bits(ds1307->regmap, DS1388_REG_CONTROL,
-+				 DS1388_BIT_WDE | DS1388_BIT_RST, 0);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * watchdog timeouts are measured in seconds. So ignore hundreths of
-+	 * seconds field.
-+	 */
-+	regs[0] =3D 0;
-+	regs[1] =3D bin2bcd(wdt_dev->timeout);
-+
-+	ret =3D regmap_bulk_write(ds1307->regmap, DS1388_REG_WDOG_HUN_SECS, reg=
-s,
-+				sizeof(regs));
-+	if (ret)
-+		return ret;
-+
-+	return regmap_update_bits(ds1307->regmap, DS1388_REG_CONTROL,
-+				  DS1388_BIT_WDE | DS1388_BIT_RST,
-+				  DS1388_BIT_WDE | DS1388_BIT_RST);
-+}
-+
-+static int ds1388_wdt_stop(struct watchdog_device *wdt_dev)
-+{
-+	struct ds1307 *ds1307 =3D watchdog_get_drvdata(wdt_dev);
-+
-+	return regmap_update_bits(ds1307->regmap, DS1388_REG_CONTROL,
-+				  DS1388_BIT_WDE | DS1388_BIT_RST, 0);
-+}
-+
-+static int ds1388_wdt_ping(struct watchdog_device *wdt_dev)
-+{
-+	struct ds1307 *ds1307 =3D watchdog_get_drvdata(wdt_dev);
-+	u8 regs[2];
-+
-+	return regmap_bulk_read(ds1307->regmap, DS1388_REG_WDOG_HUN_SECS, regs,
-+				sizeof(regs));
-+}
-+#endif
-+
- static const struct rtc_class_ops rx8130_rtc_ops =3D {
- 	.read_time      =3D ds1307_get_time,
- 	.set_time       =3D ds1307_set_time,
-@@ -1576,6 +1639,39 @@ static void ds1307_clks_register(struct ds1307 *ds=
-1307)
-=20
- #endif /* CONFIG_COMMON_CLK */
-=20
-+#ifdef CONFIG_WATCHDOG_CORE
-+static const struct watchdog_info ds1388_wdt_info =3D {
-+	.options =3D WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
-+	.identity =3D "DS1388 watchdog",
-+};
-+
-+static const struct watchdog_ops ds1388_wdt_ops =3D {
-+	.owner =3D THIS_MODULE,
-+	.start =3D ds1388_wdt_start,
-+	.stop =3D ds1388_wdt_stop,
-+	.ping =3D ds1388_wdt_ping,
-+};
-+
-+static void ds1307_wdt_register(struct ds1307 *ds1307)
-+{
-+	if (ds1307->type !=3D ds_1388)
-+		return;
-+
-+	ds1307->wdt.info =3D &ds1388_wdt_info;
-+	ds1307->wdt.ops =3D &ds1388_wdt_ops;
-+	ds1307->wdt.max_timeout =3D 99;
-+	ds1307->wdt.min_timeout =3D 1;
-+
-+	watchdog_init_timeout(&ds1307->wdt, 99, ds1307->dev);
-+	watchdog_set_drvdata(&ds1307->wdt, ds1307);
-+	watchdog_register_device(&ds1307->wdt);
-+}
-+#else
-+static void ds1307_wdt_register(struct ds1307 *ds1307)
-+{
-+}
-+#endif /* CONFIG_WATCHDOG_CORE */
-+
- static const struct regmap_config regmap_config =3D {
- 	.reg_bits =3D 8,
- 	.val_bits =3D 8,
-@@ -1865,6 +1961,7 @@ static int ds1307_probe(struct i2c_client *client,
-=20
- 	ds1307_hwmon_register(ds1307);
- 	ds1307_clks_register(ds1307);
-+	ds1307_wdt_register(ds1307);
-=20
- 	return 0;
-=20
---=20
-2.25.1
-
+Yours,
+Linus Walleij
