@@ -2,57 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C246F195FED
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Mar 2020 21:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DBB19603D
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Mar 2020 22:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727322AbgC0UmL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Mar 2020 16:42:11 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42540 "EHLO
+        id S1727606AbgC0VMY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 27 Mar 2020 17:12:24 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:46893 "EHLO
         mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726959AbgC0UmK (ORCPT
+        with ESMTP id S1727352AbgC0VMX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Mar 2020 16:42:10 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 22so5041880pfa.9;
-        Fri, 27 Mar 2020 13:42:07 -0700 (PDT)
+        Fri, 27 Mar 2020 17:12:23 -0400
+Received: by mail-pf1-f194.google.com with SMTP id q3so5066218pff.13;
+        Fri, 27 Mar 2020 14:12:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Q2fc09QuL0vuPEfyLn2MIhj2N/FRjY+3fW5Z5f14Js4=;
-        b=jLhGpXkYA1wZJl+Vn9LrohRWXm5mT0YDaYcBdgBKC0OKpg194RYojlYMU+bkNpL1pb
-         Qbksq6QhLXjbMJfC9QCkiP5lUvD0wsJ37xplLmW+bNK/nJGBj/NCIyGH2MLwk6F7e+J1
-         9EcgY+o1nAR6D0wKS1w3mxWylxrGoYyiC9w5wAml+chT3cGYETUEUIttc7YSpplyrPU6
-         /G51bgGfY3E3a4lGrRhKXn78wRQnQJ7jgr4fwQU3jPN9O8ZVCOmw8ygKi+3gC0K7YSrx
-         NukdfVL9Ady6tGFwjri/4NsFh1MRQY4ehza5XNIqq6vmr390foWj/OtqmLSh7TbAGx90
-         0MLg==
+        bh=AvMap2oHzGADAPyLaHD1k6GQ9GPfHKezf4ZSh/78MJ8=;
+        b=N6Y5HXHAnkeQ2DIEh6vJFCeE+YVmEfQbt/h9VnZXv3w7OrPSGFbPQDY3CsnlSHsRSN
+         Mgb3eNw9MYKU4iwHx9dOpjEe/1HqPIid+Wg9OU0qgKp7zjb0V9ka+HnDRPlCcAcQvKHG
+         S4Do2OAudEnymbMjEL0U95bJNk5628wCcKJ8qjmORvVKiH/c+xfFgW2JMmdaWGtb5GpN
+         Fq8fFGpsvgiPoHQ82TOd7qv6v+WMKUvwDHMGZ875KM0iFs9ofbo/9oSOKubLVwR2Ib/S
+         sOqPCn81n4nk5n4vkc6puKpHONTTT2sxmUsy9/E9a7fXYV/ubWj/zh5PHhD409sOH1Rb
+         CadA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Q2fc09QuL0vuPEfyLn2MIhj2N/FRjY+3fW5Z5f14Js4=;
-        b=cWNP+z0L0/syMPu0H7ke3SCxCVXKG4zY5cugza7IWibpLC8iKSrVvZ+iu5mIk4zMjp
-         E0CfhxHMhkEVlHPW32uPCRYsU8UzxjgUtQ3TQTywSCxx2kZNPxA54Dv73n3EtU68c+KE
-         6wWw5eDyenoZ5fJIexBRvr0OQTqmRNsmmvRHcEnJ89fWEo3QTHhghaBOid2H9YYiMPP+
-         Z8rWuL3W17fdkNyyHl41+LeBwCxwKSx8Ql/qMAMWqqesyG2ueYAdp5lwbDvlOS+na+cn
-         tHgmuPbFKKUofWaYlTMjEhTk72b1DGHOefkdQeM8b07GXOiHsE4nJDDBa6W/vpgHUS75
-         uCfw==
-X-Gm-Message-State: ANhLgQ3Fcs8wNH/pCUlQq5cZvadLfYC9MNgAJVE4Tr2SpNzAsAu1dbfn
-        iZbWZGmgFDj4Vi19zBpX+/c=
-X-Google-Smtp-Source: ADFU+vtAlj4M3EZreawCR4E6F/hBdZJPEnWEguI9gSWbo7xQ+qm2EsmjVrWgkCFoixTRhjA0LNblSw==
-X-Received: by 2002:a62:778d:: with SMTP id s135mr1101976pfc.21.1585341727423;
-        Fri, 27 Mar 2020 13:42:07 -0700 (PDT)
+        bh=AvMap2oHzGADAPyLaHD1k6GQ9GPfHKezf4ZSh/78MJ8=;
+        b=HgLCuqGH5rkUxnVugYWn9l2HeJR4sUvE3JqEzwnhEb6n22rLWKf4fy44j9r154gO2s
+         Oxj9VHT/y1Ule/2jJ0xovA/Pb/fSkPwIvyCeroZPywX8jCyknhU3R7/9GqxIhwdLRdG5
+         ROgRKxhqb5fDB+rCNmFWT8r7PbCMAG+C2BBZ7cCmqjVpG9gNN2ntg5tr2joakiBDrXT7
+         EAcivfXbs0ziYxkS+QjQ+iEg9Yjd/GRj1M/MUiQOBrOJejPH1U+TOEznrx1Np4xL26HH
+         3gB5ldzuUWR3Xhq0aYGFZi8AyUVB1murSlK7KnYxs/ejPRDEdWakZcFxSzPjq8LXUcu7
+         ACLg==
+X-Gm-Message-State: ANhLgQ0Wt3KKCSAN1v0Z1xhYSlyw2Iqr0pdwTOxB8wizDZvunI21g1/N
+        B9Bs/lisxYfgFkgBtL4MT/VrJyk1
+X-Google-Smtp-Source: ADFU+vsJOQ5Gt7WKw/I4h7UdqwUkPoZ4Pif9QREGCvZCF0aU//yKU/AbqXG0IAp+2QubtRdj539/4A==
+X-Received: by 2002:a62:1a90:: with SMTP id a138mr1225151pfa.320.1585343540790;
+        Fri, 27 Mar 2020 14:12:20 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e26sm4796108pfj.61.2020.03.27.13.42.05
+        by smtp.gmail.com with ESMTPSA id x4sm3897352pga.54.2020.03.27.14.12.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Mar 2020 13:42:06 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: sp805: fix restart handler
-To:     Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Cc:     Jongsung Kim <neidhard.kim@lge.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-References: <20200327162450.28506-1-michael@walle.cc>
+        Fri, 27 Mar 2020 14:12:19 -0700 (PDT)
+Subject: Re: [PATCH v2] rtc: ds1307: add support for watchdog timer on ds1388
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        wim@linux-watchdog.org
+Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200327041809.2029-1-chris.packham@alliedtelesis.co.nz>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -97,54 +98,209 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <89ad42e9-8852-7ffd-6bfa-6db602caa51c@roeck-us.net>
-Date:   Fri, 27 Mar 2020 13:42:04 -0700
+Message-ID: <4aecb77e-f635-9bfd-c2bd-21cb68fa333d@roeck-us.net>
+Date:   Fri, 27 Mar 2020 14:12:18 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200327162450.28506-1-michael@walle.cc>
+In-Reply-To: <20200327041809.2029-1-chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/27/20 9:24 AM, Michael Walle wrote:
-> The restart handler is missing two things, first, the registers
-> has to be unlocked and second there is no synchronization for the
-> write_relaxed() calls.
+On 3/26/20 9:18 PM, Chris Packham wrote:
+> The DS1388 variant has watchdog timer capabilities. When using a DS1388
+> and having enabled CONFIG_WATCHDOG_CORE register a watchdog device for
+> the DS1388.
 > 
-> This was tested on a custom board with the NXP LS1028A SoC.
-> 
-> Fixes: 6c5c0d48b686c ("watchdog: sp805: add restart handler")
-> Signed-off-by: Michael Walle <michael@walle.cc>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
->  drivers/watchdog/sp805_wdt.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> This is going to the linux-watchdog list as well this time so it's probably the
+> first time the watchdog maintainers have seen it.
 > 
-> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-> index 53e04926a7b2..190d26e2e75f 100644
-> --- a/drivers/watchdog/sp805_wdt.c
-> +++ b/drivers/watchdog/sp805_wdt.c
-> @@ -137,10 +137,14 @@ wdt_restart(struct watchdog_device *wdd, unsigned long mode, void *cmd)
->  {
->  	struct sp805_wdt *wdt = watchdog_get_drvdata(wdd);
+> Changes in v2:
+> - Address review comments from Alexandre, the only functional change is setting
+>   the hundredths of seconds to 0 instead of 99.
+> 
+>  drivers/rtc/rtc-ds1307.c | 97 ++++++++++++++++++++++++++++++++++++++++
+
+	"select WATCHDOG_CORE if WATCHDOG"
+
+should be added to Kconfig. While it makes sense for watchdog functionality
+to depend on WATCHDOG, it should not depend on the existence of another
+watchdog driver in the system.
+
+>  1 file changed, 97 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+> index 31a38d468378..1452982c3a6a 100644
+> --- a/drivers/rtc/rtc-ds1307.c
+> +++ b/drivers/rtc/rtc-ds1307.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/hwmon-sysfs.h>
+>  #include <linux/clk-provider.h>
+>  #include <linux/regmap.h>
+> +#include <linux/watchdog.h>
 >  
-> +	writel_relaxed(UNLOCK, wdt->base + WDTLOCK);
->  	writel_relaxed(0, wdt->base + WDTCONTROL);
->  	writel_relaxed(0, wdt->base + WDTLOAD);
->  	writel_relaxed(INT_ENABLE | RESET_ENABLE, wdt->base + WDTCONTROL);
+>  /*
+>   * We can't determine type by probing, but if we expect pre-Linux code
+> @@ -144,8 +145,15 @@ enum ds_type {
+>  #	define M41TXX_BIT_CALIB_SIGN	BIT(5)
+>  #	define M41TXX_M_CALIBRATION	GENMASK(4, 0)
 >  
-> +	/* Flush posted writes. */
-> +	readl_relaxed(wdt->base + WDTLOCK);
+> +#define DS1388_REG_WDOG_HUN_SECS	0x08
+> +#define DS1388_REG_WDOG_SECS		0x09
+>  #define DS1388_REG_FLAG			0x0b
+> +#	define DS1388_BIT_WF		BIT(6)
+>  #	define DS1388_BIT_OSF		BIT(7)
+> +#define DS1388_REG_CONTROL		0x0c
+> +#	define DS1388_BIT_RST		BIT(0)
+> +#	define DS1388_BIT_WDE		BIT(1)
 > +
->  	return 0;
+>  /* negative offset step is -2.034ppm */
+>  #define M41TXX_NEG_OFFSET_STEP_PPB	2034
+>  /* positive offset step is +4.068ppm */
+> @@ -166,6 +174,9 @@ struct ds1307 {
+>  #ifdef CONFIG_COMMON_CLK
+>  	struct clk_hw		clks[2];
+>  #endif
+> +#ifdef CONFIG_WATCHDOG_CORE
+> +	struct watchdog_device	wdt;
+> +#endif
+
+I don't immediately see why this would be necessary. I think it would
+be better to allocate struct watchdog_device in ds1307_wdt_register().
+
+>  };
+>  
+>  struct chip_desc {
+> @@ -854,6 +865,58 @@ static int m41txx_rtc_set_offset(struct device *dev, long offset)
+>  				  ctrl_reg);
 >  }
+>  
+> +#ifdef CONFIG_WATCHDOG_CORE
+> +static int ds1388_wdt_start(struct watchdog_device *wdt_dev)
+> +{
+> +	struct ds1307 *ds1307 = watchdog_get_drvdata(wdt_dev);
+> +	u8 regs[2];
+> +	int ret;
+> +
+> +	ret = regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
+> +				 DS1388_BIT_WF, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_update_bits(ds1307->regmap, DS1388_REG_CONTROL,
+> +				 DS1388_BIT_WDE | DS1388_BIT_RST, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * watchdog timeouts are measured in seconds. So ignore hundreths of
+
+hundredths
+
+> +	 * seconds field.
+> +	 */
+> +	regs[0] = 0;
+> +	regs[1] = bin2bcd(wdt_dev->timeout);
+> +
+> +	ret = regmap_bulk_write(ds1307->regmap, DS1388_REG_WDOG_HUN_SECS, regs,
+> +				sizeof(regs));
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_update_bits(ds1307->regmap, DS1388_REG_CONTROL,
+> +				  DS1388_BIT_WDE | DS1388_BIT_RST,
+> +				  DS1388_BIT_WDE | DS1388_BIT_RST);
+> +}
+> +
+> +static int ds1388_wdt_stop(struct watchdog_device *wdt_dev)
+> +{
+> +	struct ds1307 *ds1307 = watchdog_get_drvdata(wdt_dev);
+> +
+> +	return regmap_update_bits(ds1307->regmap, DS1388_REG_CONTROL,
+> +				  DS1388_BIT_WDE | DS1388_BIT_RST, 0);
+> +}
+> +
+> +static int ds1388_wdt_ping(struct watchdog_device *wdt_dev)
+> +{
+> +	struct ds1307 *ds1307 = watchdog_get_drvdata(wdt_dev);
+> +	u8 regs[2];
+> +
+> +	return regmap_bulk_read(ds1307->regmap, DS1388_REG_WDOG_HUN_SECS, regs,
+> +				sizeof(regs));
+> +}
+> +#endif
+> +
+>  static const struct rtc_class_ops rx8130_rtc_ops = {
+>  	.read_time      = ds1307_get_time,
+>  	.set_time       = ds1307_set_time,
+> @@ -1576,6 +1639,39 @@ static void ds1307_clks_register(struct ds1307 *ds1307)
+>  
+>  #endif /* CONFIG_COMMON_CLK */
+>  
+> +#ifdef CONFIG_WATCHDOG_CORE
+> +static const struct watchdog_info ds1388_wdt_info = {
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+> +	.identity = "DS1388 watchdog",
+> +};
+> +
+> +static const struct watchdog_ops ds1388_wdt_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = ds1388_wdt_start,
+> +	.stop = ds1388_wdt_stop,
+> +	.ping = ds1388_wdt_ping,
+
+Maybe I am missing something, but I don't see how the timeout is updated
+if it is changed while the watchdog is already running.
+
+> +};
+> +
+> +static void ds1307_wdt_register(struct ds1307 *ds1307)
+> +{
+> +	if (ds1307->type != ds_1388)
+> +		return;
+> +
+> +	ds1307->wdt.info = &ds1388_wdt_info;
+> +	ds1307->wdt.ops = &ds1388_wdt_ops;
+> +	ds1307->wdt.max_timeout = 99;
+> +	ds1307->wdt.min_timeout = 1;
+> +
+> +	watchdog_init_timeout(&ds1307->wdt, 99, ds1307->dev);
+
+That is quite pointless; just set wdt.timeout to 99 (assuming
+that is what you want as default).
+
+watchdog_init_timeout() only makes sense if it is used to set the
+timeout from a module parameter or from a devicetree property.
+
+> +	watchdog_set_drvdata(&ds1307->wdt, ds1307);
+> +	watchdog_register_device(&ds1307->wdt);
+
+Please call devm_watchdog_register_device().
+
+> +}
+> +#else
+> +static void ds1307_wdt_register(struct ds1307 *ds1307)
+> +{
+> +}
+> +#endif /* CONFIG_WATCHDOG_CORE */
+> +
+>  static const struct regmap_config regmap_config = {
+>  	.reg_bits = 8,
+>  	.val_bits = 8,
+> @@ -1865,6 +1961,7 @@ static int ds1307_probe(struct i2c_client *client,
+>  
+>  	ds1307_hwmon_register(ds1307);
+>  	ds1307_clks_register(ds1307);
+> +	ds1307_wdt_register(ds1307);
+>  
+>  	return 0;
 >  
 > 
 
