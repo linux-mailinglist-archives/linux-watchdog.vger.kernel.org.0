@@ -2,58 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A062197A3F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Mar 2020 13:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CDF0197A9B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Mar 2020 13:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729699AbgC3LB1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 30 Mar 2020 07:01:27 -0400
-Received: from mail.11d01.mspz7.gob.ec ([190.152.145.91]:53606 "EHLO
-        mail.11d01.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729497AbgC3LBM (ORCPT
+        id S1729779AbgC3LWD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 30 Mar 2020 07:22:03 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:36966 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729759AbgC3LWD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 30 Mar 2020 07:01:12 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 5D9FD2F6F5A1;
-        Mon, 30 Mar 2020 04:16:33 -0500 (-05)
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id vYATl8-zP0Ve; Mon, 30 Mar 2020 04:16:32 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id BB9162F6F5DB;
-        Mon, 30 Mar 2020 04:16:32 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.9.2 mail.11d01.mspz7.gob.ec BB9162F6F5DB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=11d01.mspz7.gob.ec;
-        s=50CBC7E4-8BED-11E9-AF6C-F1A741A224D3; t=1585559792;
-        bh=cLQbOHa1aY+/FyDjaDQOZOnnnlZDxMu+rBX/cg5yps8=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Reply-To:Message-Id;
-        b=ShxVLxxMtR9/wtJwTytPwnwDZmW73XZBYvFYxhD1XqscsEhSKn5k+zJSJpBuxx0fi
-         EurwhHpzefrmwBgDcS7FYj73zQM99vckv4inFO5ixcKJKX7bB21dBWDvC64RrORsZ1
-         QZgw/QNge5NQjPfeosHvynlDr4E5xWg9xh42iHWY=
-X-Virus-Scanned: amavisd-new at 11d01.mspz7.gob.ec
-Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9_B0NvO60Gi4; Mon, 30 Mar 2020 04:16:32 -0500 (-05)
-Received: from [10.121.152.251] (unknown [105.12.0.10])
-        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTPSA id 80C722F6F595;
-        Mon, 30 Mar 2020 04:16:22 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 30 Mar 2020 07:22:03 -0400
+Received: by mail-qk1-f194.google.com with SMTP id x3so18432000qki.4
+        for <linux-watchdog@vger.kernel.org>; Mon, 30 Mar 2020 04:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CzM9Ul/dphXe/6k6V017VGqcrogFXRUNidC2oEsJyA4=;
+        b=Lo81bSLQWPVgU/i6sxlrCIBODUnjRkBTUhlltdOET1Dmks4BFPSVpOUpndvcX76UyB
+         hkWTYKD7omKCo2QzXiH1W+Q/eSWGYesRpzjunThYHGs7hjuSdF+XD+aVckt8qcSQLHLf
+         2dGg3fYi4+AUTb5J78URConeOPfe4tGuRHbb2F1LS3sMbaCujqQsCxjWXbGbH5HyzGhD
+         p/Ux96ci6T31CRwG9rUx5pXRxGzCZ84npmpm7CJGxisaBEPrDQEfeik1T+tSs3DS8SSR
+         xRT/u5P760PPOifEwBJ2NscES25L2rM7gIEkuzVGazBBxQdHCpd66DpKgluiH+hEAOZj
+         1OzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CzM9Ul/dphXe/6k6V017VGqcrogFXRUNidC2oEsJyA4=;
+        b=RN6hZ1J9DIZj8BqiuQuVcgfWrQMLrBLRFogqtSCZGfkCvbXKmcO6gegiWAgfXuW2hL
+         p7kHUSvTUw++yliLxm3Z16iqpJEPfP+jw7LvDN2LNYQatPfRV9p5FBOiNNnvaNsp+zJD
+         zhVQobSEOBHAVzUrjyz4lwCw9+4RYgJR059rorqvg6lrlCIfP2YjCFqPLVsWVnL7c+zq
+         n29wZsneej4V4z6AkllkwrMqDV/X40SSdlRJcuhDW3TDLQtbHf8BPo6LUml38jkt/oLO
+         yxqvkPSXV7WpeNtYuES7KeBt14RAmz44KbyyZHaVV3FBf549csiomfv7aWyADeTPnYxk
+         1v3A==
+X-Gm-Message-State: ANhLgQ2wX4cBNom2Vpc8O0NSl6PHdpEK/FNdyA7ZKBaGixSBbQvNRCjn
+        FiavtGUCMDbQAdPqHBxOAczYSP2PdXkPKK6Wz3Fcow==
+X-Google-Smtp-Source: ADFU+vstVtsw7JWrmBNop5+zhRNU4WPamx9SIUzCEtNOrBy3Hzu3AZDNweBkY+DVn4Q0wOYnEWX26BByXVYtpX6VxmE=
+X-Received: by 2002:a37:a2c8:: with SMTP id l191mr11373979qke.120.1585567321647;
+ Mon, 30 Mar 2020 04:22:01 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200317205017.28280-1-michael@walle.cc> <20200317205017.28280-13-michael@walle.cc>
+ <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
+ <9c310f2a11913d4d089ef1b07671be00@walle.cc> <CAMpxmJXmD-M+Wbj6=wgFgP2aDxbqDN=ceHi1XDun4iwdLm55Zg@mail.gmail.com>
+ <22944c9b62aa69da418de7766b7741bd@walle.cc> <CACRpkdbJ3DBO+W4P0n-CfZ1T3L8d_L0Nizra8frkv92XPXR4WA@mail.gmail.com>
+ <4d8d3bc26bdf73eb5c0e5851589fe085@walle.cc>
+In-Reply-To: <4d8d3bc26bdf73eb5c0e5851589fe085@walle.cc>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 30 Mar 2020 13:21:50 +0200
+Message-ID: <CAMpxmJUj7wBvO=Y-u5CXazHhjsPHXcq=5iST4KuLrfakW_a9Mg@mail.gmail.com>
+Subject: Re: [PATCH 12/18] gpio: add support for the sl28cpld GPIO controller
+To:     Michael Walle <michael@walle.cc>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: spende von 2.000.000,00 Euro
-To:     Recipients <luis.sanchez@11d01.mspz7.gob.ec>
-From:   "Manuel Franco" <luis.sanchez@11d01.mspz7.gob.ec>
-Date:   Mon, 30 Mar 2020 11:47:36 +0200
-Reply-To: manuelfrancospende11@gmail.com
-Message-Id: <20200330091622.80C722F6F595@mail.11d01.mspz7.gob.ec>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Ich bin Manuel Franco, ich spende Ihnen 2.000.000,00 Euro. Kontaktieren Sie=
- mich jetzt, damit wir fortfahren k=F6nnen.
+pt., 27 mar 2020 o 16:28 Michael Walle <michael@walle.cc> napisa=C5=82(a):
+>
+> Am 2020-03-27 11:20, schrieb Linus Walleij:
+> > On Thu, Mar 26, 2020 at 9:06 PM Michael Walle <michael@walle.cc> wrote:
+> >> Am 2020-03-25 12:50, schrieb Bartosz Golaszewski:
+> >
+> >> > In that case maybe you should use the disable_locking option in
+> >> > regmap_config and provide your own callbacks that you can use in the
+> >> > irqchip code too?
+> >>
+> >> But how would that solve problem (1). And keep in mind, that the
+> >> reqmap_irqchip is actually used for the interrupt controller, which
+> >> is not this gpio controller.
+> >>
+> >> Ie. the interrupt controller of the sl28cpld uses the regmap_irqchip
+> >> and all interrupt phandles pointing to the interrupt controller will
+> >> reference the toplevel node. Any phandles pointing to the gpio
+> >> controller will reference the GPIO subnode.
+> >
+> > Ideally we would create something generic that has been on my
+> > mind for some time, like a generic GPIO regmap irqchip now that
+> > there are a few controllers like that.
+> >
+> > I don't know how feasible it is or how much work it would be. But
+> > as with GPIO_GENERIC (for MMIO) it would be helpful since we
+> > can then implement things like .set_multiple() and .get_multiple()
+> > for everyone.
+>
+> For starters, would that be a drivers/gpio/gpio-regmap.c or a
+> drivers/base/regmap/regmap-gpio.c? I would assume the first,
+> because the stuff in drivers/base/regmap operates on a given
+> regmap and we'd just be using one, correct? On the other hand
+> there is also the reqmap-irq.c. But as pointed out before, it
+> will add an interrupt controller to the regmap, not a device
+> so to speak.
+>
+> -michael
 
-I am Manuel Franco, I donate to you 2,000,000.00 euros. Contact me now so w=
-e can proceed.
+This has been on my TODO list for so long, but I've never been able to
+find the time... I'd really appreciate any effort in that direction as
+I believe it would allow us to slowly port a big part of the GPIO
+expander drivers over to it and make large portions of our codebase
+generic.
+
+Best regards,
+Bartosz Golaszewski
