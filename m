@@ -2,155 +2,140 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD52B199B08
-	for <lists+linux-watchdog@lfdr.de>; Tue, 31 Mar 2020 18:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C15199E65
+	for <lists+linux-watchdog@lfdr.de>; Tue, 31 Mar 2020 20:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730149AbgCaQLu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 31 Mar 2020 12:11:50 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:37570 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727703AbgCaQLt (ORCPT
+        id S1727020AbgCaSuP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 31 Mar 2020 14:50:15 -0400
+Received: from rcdn-iport-9.cisco.com ([173.37.86.80]:33247 "EHLO
+        rcdn-iport-9.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726548AbgCaSuP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 31 Mar 2020 12:11:49 -0400
-Received: by mail-pg1-f193.google.com with SMTP id i34so418147pgl.4;
-        Tue, 31 Mar 2020 09:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=w9aZt5kj5dEodJPJpXH7a5YTDfiFLHJYid+xgTUSEqk=;
-        b=gEqZNQgfhN4RRt0lF/OEy9kx/LD/Nhw7gepxbzUe+Dj2K7MQrHvr8mszW9PJJwq7cd
-         zAXZAcH+Ur/EWa6r9/MuAI1WqO4faTCjiZBwXmjRLFbv6ciCwrY0dNxdKLo4nxZw8nSa
-         MCZKFUX1hkU4a7g3dWGl2HVSjk/xO7mk6CDuYyzU4MXQM2n0iW4M1vCP3nnMDwT6EYqf
-         u3pz4GFPxoMS0EvGbg0MUEYlPOPCZLcbQQ//z88cAp6R24kTBNAP6LepeBtdl7ajZBLg
-         9Dh9YZ2aO0QB4kAPg/pB6f+99f8SIm92H58TI6XimTawgvwFblrIsoQbsvWtG2I8WFIH
-         P7mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=w9aZt5kj5dEodJPJpXH7a5YTDfiFLHJYid+xgTUSEqk=;
-        b=BgKWPRHsAPTdHzOOeg4xtI8Z4l/9zkoc9WS1QCPiEEp+WrMZn9jiyeuVeDn+sR+8eb
-         JxnyrDzkHlfnzPPxSr17IMHI9mGXyRnL4tPzmkw9cwVsrnCldJ8Ms6f8CtbZ2LuVB1io
-         r51sfld2+LhC82+3NfCJhSVwhJFDufY0qAY/iOb1d6B7LASE4XOLFRptjBmyAq09sVla
-         xSuUGlkiQfijaqsXXzeNrrut+BGZLsLPn1TFi/KpOas9WRzASHVmeOGGJBzB+DZk6nF/
-         1vd+50CZ8P3nZe8uFAeWGzDtqBWIngDL/jw0OefXoWgewckcq58bDMQQMfO/5DBx/+xn
-         xcdA==
-X-Gm-Message-State: ANhLgQ1JO805OICyvh1D0wciskDCox+EYC1IfAKqmmhJYp11a3vyhPkg
-        fWQc9NSc/BB2Aq+uS0pw1J6gyFAT
-X-Google-Smtp-Source: ADFU+vuYyprfaK6MnpO5n5k9ZNFba/my0hFDDzPzu7DxGXyclceI+9t3jPhSJk0TM142DDm6hFnARA==
-X-Received: by 2002:a63:1660:: with SMTP id 32mr18108713pgw.169.1585671106300;
-        Tue, 31 Mar 2020 09:11:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m28sm12068793pgn.7.2020.03.31.09.11.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2020 09:11:45 -0700 (PDT)
-Subject: Re: [PATCH 3/3] watchdog: da9062: No need to ping manually before
- setting timeout
-To:     Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Support Opensource <support.opensource@diasemi.com>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200326150203.371673-1-s.riedmueller@phytec.de>
- <20200326150203.371673-3-s.riedmueller@phytec.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <6331c612-70f0-5dc6-c3d1-a7a5a72e61fe@roeck-us.net>
-Date:   Tue, 31 Mar 2020 09:11:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200326150203.371673-3-s.riedmueller@phytec.de>
-Content-Type: text/plain; charset=utf-8
+        Tue, 31 Mar 2020 14:50:15 -0400
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Tue, 31 Mar 2020 14:50:14 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=335; q=dns/txt; s=iport;
+  t=1585680614; x=1586890214;
+  h=from:to:subject:date:message-id:content-id:
+   content-transfer-encoding:mime-version;
+  bh=aw3Ejn6bjkGbyipSQt+JgGJGD1ObhaAHbtMmo7lA8S8=;
+  b=LEJQ8AbmEa/uVvsH6umJy7f4VUT4lydfCLI0cQpFmKUAtWLhDMyn6d1g
+   AmzyVd1Vh2RuFCYUVqJO2uDjNVpFlkeUTTmvJZ0fO2cRB1FUwLPx3EYmO
+   J93ox47T3C/JqaDHeZ1uGVc8NYt5LL0fmFeQ0oDYlA3a+/Z2IqOLK7vzo
+   I=;
+IronPort-PHdr: =?us-ascii?q?9a23=3A0cFjzBT9eOz4jM5WgAf6GQOPF9psv++ubAcI9p?=
+ =?us-ascii?q?oqja5Pea2//pPkeVbS/uhpkESXBNfA8/wRje3QvuigQmEG7Zub+FE6OJ1XH1?=
+ =?us-ascii?q?5g640NmhA4RsuMCEn1NvnvOiAzGsVPUEBs13q6KkNSXs35Yg6arw=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0CjMQCSjoNe/5RdJa1mHAEBATgBBAQ?=
+ =?us-ascii?q?BAQIBBwEBgVWBPgIBARBQBYFEIAQLKgqHVQOKbU6RMROIaoJSA1QKAQEBDAE?=
+ =?us-ascii?q?BLQIEAQGGeyQ4EwIDAQELAQEFAQEBAgEFBG2FVgyGCSgGAQE4EQEpFR8FHic?=
+ =?us-ascii?q?EATSFUAMuAaMuAoE5iGKCJ4J/AQEFhRgYggwJgTYCAQEBAYwtGoFBP48hsHE?=
+ =?us-ascii?q?Kgj2XCykOgi0BmTKPG5wFAgQCBAUCDgEBBYFpIiqBLnAVgydQGA2SEIpVdIE?=
+ =?us-ascii?q?pjFQBgQ8BAQ?=
+X-IronPort-AV: E=Sophos;i="5.72,328,1580774400"; 
+   d="scan'208";a="658798671"
+Received: from rcdn-core-12.cisco.com ([173.37.93.148])
+  by rcdn-iport-9.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 31 Mar 2020 18:43:07 +0000
+Received: from XCH-ALN-005.cisco.com (xch-aln-005.cisco.com [173.36.7.15])
+        by rcdn-core-12.cisco.com (8.15.2/8.15.2) with ESMTPS id 02VIh130001952
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=FAIL);
+        Tue, 31 Mar 2020 18:43:07 GMT
+Received: from xhs-aln-003.cisco.com (173.37.135.120) by XCH-ALN-005.cisco.com
+ (173.36.7.15) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 31 Mar
+ 2020 13:43:06 -0500
+Received: from xhs-rtp-002.cisco.com (64.101.210.229) by xhs-aln-003.cisco.com
+ (173.37.135.120) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 31 Mar
+ 2020 13:43:06 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (64.101.32.56) by
+ xhs-rtp-002.cisco.com (64.101.210.229) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Tue, 31 Mar 2020 14:43:06 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TRFEKn3+kwRPqYw+CXSlr3+WwJE6blM/yVUNnNnlhqcjBOgaiifnDUq5Uy23yMryUgM7T7CRw77x481JUQOmhCyuySr5m+F5wZsRQl9TopnkcyUFwn2zcVdFQt/TicpjoUH+P3VnH+hXPh/tp4q7XFQV+x8bFcuda2hPv/Aa5lN36DNikGJL8DKt3hk4QYIW/16Ez2vM5UNrHy11XDSHRdlmmDOIRvlwZvQSja4Vy90etZAcqm5zOjDJp2ITA5hBIpwiLcwPpv91pUU0iV1YfkWGpcT3XsIjA+TzrYf83akQaGOm0wOd8UaF+4Un/QZEuFXTYo7VbCBTLqfZk2KExg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aw3Ejn6bjkGbyipSQt+JgGJGD1ObhaAHbtMmo7lA8S8=;
+ b=NVODku+hCq7Kwo0Y++XXhOsyM9ScKSVoqSWg8/wLk02W0Ch1w//9VqDM1judL09IQkdzcztvtPdakRbaHTT0jTub1Mcp/rRrIEvrLZHTREGCSNaK4XDMLqMNPUgqRrGdk1gXCStypkRRcjcH3Sr6q3YR6IHRDGejqQ/pOlgiRCED6BLFsdBe8qWodUflUACAkqMFMnmAnrMJMzUMaOmfsJHw25pKPAp+YPwt1c8bi+SLLXfZbPDzdDukWu2vwZzcOT21oHHQSaWG0nxWFvlMJYnRaeXwGDo8pIgjFh20S8cV/O0U5aQ3EaNOrz/I8gWIZ1unEhBoSWaHLLSimUPdMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
+ dkim=pass header.d=cisco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cisco.onmicrosoft.com;
+ s=selector2-cisco-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aw3Ejn6bjkGbyipSQt+JgGJGD1ObhaAHbtMmo7lA8S8=;
+ b=LsKMDL82GJoCJrjcKAABRYZsCFXxz6jjFEO+BnC2GgIKltI1g1YJ1gadWIjDQFr+STZqoKkGqVDSm6iQchb/Wz+o0M3HxZCSo158X5yue+q5firtZ5yzsajruuIpQZOOKUYXrmtZNX1GxdCdSFhp9x0JI4VHiyT/gETgmrPPsV0=
+Received: from BYAPR11MB3205.namprd11.prod.outlook.com (2603:10b6:a03:1e::32)
+ by BYAPR11MB2743.namprd11.prod.outlook.com (2603:10b6:a02:c7::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.20; Tue, 31 Mar
+ 2020 18:43:05 +0000
+Received: from BYAPR11MB3205.namprd11.prod.outlook.com
+ ([fe80::d015:3039:2595:7222]) by BYAPR11MB3205.namprd11.prod.outlook.com
+ ([fe80::d015:3039:2595:7222%7]) with mapi id 15.20.2856.019; Tue, 31 Mar 2020
+ 18:43:05 +0000
+From:   "Daniel Walker (danielwa)" <danielwa@cisco.com>
+To:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>
+Subject: iTCO core dumping on timeout ?
+Thread-Topic: iTCO core dumping on timeout ?
+Thread-Index: AQHWB4w2NxzuWNvJsUOWZ1JeofHf0A==
+Date:   Tue, 31 Mar 2020 18:43:05 +0000
+Message-ID: <20200331184304.GW823@zorba>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mutt/1.9.4 (2018-02-28)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=danielwa@cisco.com; 
+x-originating-ip: [128.107.241.186]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4dbca216-b2d6-472c-3efd-08d7d5a3596f
+x-ms-traffictypediagnostic: BYAPR11MB2743:
+x-microsoft-antispam-prvs: <BYAPR11MB27435A9B0BB37DDCEE2B65B2DDC80@BYAPR11MB2743.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0359162B6D
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3205.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(7916004)(136003)(366004)(396003)(376002)(346002)(39860400002)(66556008)(86362001)(71200400001)(4744005)(110136005)(66476007)(81156014)(26005)(8936002)(66446008)(1076003)(186003)(66946007)(316002)(64756008)(76116006)(478600001)(81166006)(5660300002)(33656002)(6486002)(2906002)(33716001)(8676002)(9686003)(6512007)(6506007);DIR:OUT;SFP:1101;
+received-spf: None (protection.outlook.com: cisco.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Bf8rWfG3FRmVzFnRvfS0CjBvZTCxp8wnZy2k0NxYVGplx4H7avvXt5BnTUsgngdbd01ZXmFdrxvHAByEzB1ztalpudfAIIGcB9xEDlRLCKD3U4L//CFYIEbTgyW7gXxoZ8GJaiZqXQrDZ5YGwMM7KsUoADps5SVPhOVisFu5DOZ3twEgruj0xl0K8CieH+2ktRu4+YkP2bE21tPqEh08QSmuMxXUsLRr7jfdNLd+nGI87ZeYfJgQ9pobJr5hUiHUuuVflW72d1w+uR1eiQRPCm/roodKiMg5CGuO3aAEGLN2LshwZsDxvzducrhLPZxru/uSfSepY3RfBLU5UpTWdLDKn912bG43RafbAg4mPaGkOH67AK1jY3pS5UisKmizdbpRhXO/eO299kdzFHSxtyxyMTYZytv3C9wR6nQ8LOh85vmAJlqU0puVvirotOr3
+x-ms-exchange-antispam-messagedata: d5b/cbXTsg2leTZbuEPvRhadjIEwKtOVRt26GdrDvjw99agOwOehfDoOmNNNPNvG0K0w1PwQb2c6nb5tx6rc169f/zmsRCO92otZe0dyFLxGhpJWIDrhDj0br/aazOb2G25hThzYe8QGG9xTNwmA4Q==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2360297670ED604593528E0A6A65A72E@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4dbca216-b2d6-472c-3efd-08d7d5a3596f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2020 18:43:05.2033
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PljG9l388PaGrvsvHhwP4ZxEsamdJFe12Y8Vh/KX0A6oUB9inEfb2u9Q7zYAqNuoTeHWx/BcEr0S4yA3jNYMFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2743
+X-OriginatorOrg: cisco.com
+X-Outbound-SMTP-Client: 173.36.7.15, xch-aln-005.cisco.com
+X-Outbound-Node: rcdn-core-12.cisco.com
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/26/20 8:02 AM, Stefan Riedmueller wrote:
-> There is actually no need to ping the watchdog before disabling it
-> during timeout change. Disabling the watchdog already takes care of
-> resetting the counter.
-> 
-> This fixes an issue during boot when the userspace watchdog handler takes
-> over and the watchdog is already running. Opening the watchdog in this case
-> leads to the first ping and directly after that without the required
-> heartbeat delay a second ping issued by the set_timeout call. Due to the
-> missing delay this resulted in a reset.
-> 
-> Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+Hi,
 
-Makes sense to me.
+At Cisco we typical dump a core file in crash cases, and in watchdog timeou=
+ts.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+It doesn't appear that the iTCO is setup to trigger a core dump, or panic. =
+It
+looks like it just reboots on triggering.
 
-Guenter
+Is there a method I'm missing which would allow selecting a core or panic f=
+or
+this driver?
 
-> ---
->  drivers/watchdog/da9062_wdt.c | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-> index 6d81b1276b87..c5bd075c8b14 100644
-> --- a/drivers/watchdog/da9062_wdt.c
-> +++ b/drivers/watchdog/da9062_wdt.c
-> @@ -66,11 +66,6 @@ static int da9062_wdt_update_timeout_register(struct da9062_watchdog *wdt,
->  					      unsigned int regval)
->  {
->  	struct da9062 *chip = wdt->hw;
-> -	int ret;
-> -
-> -	ret = da9062_reset_watchdog_timer(wdt);
-> -	if (ret)
-> -		return ret;
->  
->  	regmap_update_bits(chip->regmap,
->  				  DA9062AA_CONTROL_D,
-> 
-
+Thanks,
+Daniel=
