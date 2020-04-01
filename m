@@ -2,167 +2,393 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CEB19A96E
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Apr 2020 12:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5013A19ABF6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Apr 2020 14:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728434AbgDAKUl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Apr 2020 06:20:41 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.114]:46862 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727308AbgDAKUk (ORCPT
+        id S1732404AbgDAMpX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Apr 2020 08:45:23 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:44432 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732396AbgDAMpX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Apr 2020 06:20:40 -0400
-Received: from [100.113.5.83] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-3.bemta.az-b.eu-central-1.aws.symcld.net id E1/42-35964-5FA648E5; Wed, 01 Apr 2020 10:20:37 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA1WScVCTdRjH+e19N16J1csY8cg5i6GWxNYwvL3
-  aHZfXH60SDzn7h8R6N97YcBtz76hR2i2BjuAssFBCAdHN00KUeRHBYInEAafOQSBFJQh5IAep
-  ZN1EZ3v3otV/n+/z/b7P73vvPQQmOS9KIBi7jbGaaaNcFIXrn485rbiTX7JDVb+PoIbaD4uo0
-  eauSGqq8YKAGm9vFFCTM0HsJaHmZFOTUBMcy9B897cjUrPgXpmJZwsNZm2B/W2h/pqrGrNcjr
-  J3tqgdaI4oR1EEIl0YDDRcF/CiF4dFV7GQF2cRLO4LiDiBk30Y1BwcCcckZJUAOq7ux3jxC4J
-  f20ZQOVpGiEgKPu8bD38iJVsRBCqrcU5gZCmCAee9cCqWfBM+7poQciwlt8ODg/cxntdBVfMp
-  nGOcXAU1o1dCTBBiMgcujW3mxhLSAp6L9UJuvIxMh2+b8rkxImXw50dfh7dgZDz8PNUg4BhIE
-  pweH8ZzHMxMBoV8noH+vaOIn6fAxStTS5wIfz1YXGIZDDZULHEGTJSdwXlOhvnvD4h4psBZUR
-  puCaHGwe4iHo1wqHkdn1gDC7//uNRgBdS13I3kfgiQh3EYnL6FVSJV7X9a85wCRzpui3h+Do4
-  3zmIci8kY6P9yCj+C8K8QpbUa8vQ2E20wKlJVKkVq6guKNMX6DUr6fYVWyRQqdIzZZqVDppJ+
-  j1WyRSadMVdpZmxuFLqn3F34i21o6NQfym60nBDI48Qn3ijZIXlcW5BbpKdZ/VvWQiPDdqMVB
-  CEH8XVDyIuxMnmM/R2DMXSVD20gouVS8VheyBazFtrEGvJ4awApiMqZuqOYBDcXmJmEeHF66H
-  glJBfSF5ofrXh424NIlhArRhEREZJoC2M1GWz/92+geALJY8VZ3JZog9n26KUboRKCUIlhezF
-  Xwkb/ayU4BIW6LRcwp2CjPq7XmN2RHbj/TE+iSH3u+O4fOp88ce3SaM2erImMc7tcOWq3wn8z
-  Y9P+vczqY56stTnSpLLNe7oTNwqTZy2zQ8WdennpeffOjjv1var01+o2rO+3PNaW9IGfMM15X
-  pXdtXmUx2TTw5SPCNSmxTizF26/7qVbVjK6si2fXNZ8WumH3DR1/7bM7f7dbH7gjK5vte+mex
-  60+QVo4mVteUlc69afPqvUBN2veHdGUGzV1uLannlCq/F+8c1AzYdn53xPd6nx5opWh3TR++y
-  aTOb00QOiovZVmlvLq6cdV9eW9/ijcNf4PbMh5WSS77en3h3Bh7EnvJsmVXKc1dOpyZiVpf8B
-  ZPn5l1YEAAA=
-X-Env-Sender: Adam.Thomson.Opensource@diasemi.com
-X-Msg-Ref: server-4.tower-246.messagelabs.com!1585736436!1095708!1
-X-Originating-IP: [104.47.17.175]
-X-SYMC-ESS-Client-Auth: mailfrom-relay-check=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.50.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 19265 invoked from network); 1 Apr 2020 10:20:37 -0000
-Received: from mail-vi1eur05lp2175.outbound.protection.outlook.com (HELO EUR05-VI1-obe.outbound.protection.outlook.com) (104.47.17.175)
-  by server-4.tower-246.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 1 Apr 2020 10:20:37 -0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W6CSgatRBrsxpVvS+BE9i0PPu0aNuZBZEAky9WqriEjXCAkDtsnMlIyNv5sJ4blAQGZYrOpTceiHABNUV467yaywxXnZhNR/tGwb7IB6rZqmDwfep4CYFjheezG7i6m6zuM6dyel/VLRTlEC8GAityPKPPJ+kOuHrKeUKfiJf4jDVY0u69XcYnmCaojsZq97Ry+QSIRAQTW+wxJLlNFVAcOIs9uQWOCdgIvJIVGaNMAoi9bsuTRwQSJPtzbDjiSXSKWv8KXdRVYZBpCKk9QA8ZzIAx7cH4svamCDublJp4WWiuJ+UGqDoG1Y5J25zMOP4mh6ByytHY5KDyUZdgNpdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I5B2QaH1bzl/LWmC6KeB2TKq4+GQSuZPWpfxNSn5CJ4=;
- b=mOJIrF5iYFhuuDq4CPu/am8KOhtL/JdYNDpwMScRu5K+jPVZ8MHkChs+mnLBO5V98PsnKWC6c3QCn59kxZzJItRNm5F1d+J1BQfXLqMfvy+MaJVjDWPaMdTYBSUM8n/VlZ2xbSfa66NP81CQ/tn1+eoNqd6MSTHJ+pyKK2qrwEkF727Vb1j1VlnzYjPluwR88iRmTweHJBGbMlSxgvlg0Azhr8wDoDasiNIH7b9alklsYnQbqg3e8nkO7HCQnO2q6cWHBPHVO20PwHE/88RJe7EAzPFtVXf5UeK7wBZX84KVNt92zA1zVm0AzhBg7LtCp/872wGj59ahLeIvwQwKxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
- dkim=pass header.d=diasemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dialogsemiconductor.onmicrosoft.com;
- s=selector1-dialogsemiconductor-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I5B2QaH1bzl/LWmC6KeB2TKq4+GQSuZPWpfxNSn5CJ4=;
- b=Q7xd8I9xANBynOvXKOAr9Wa2byQWAu0okYbWVEONSTSXM0UBSbbGDCjCmrh854c+JUYn2CaM+nvGJ0JsJXV/TB9NPiRoPV+rN1cRD18y9QMdKNpEx/mncfwbM7WSpyYfYKEn669XpqDA+WrYWPe4F+3M4hKYKxx1AeRNcBSP288=
-Received: from AM6PR10MB2263.EURPRD10.PROD.OUTLOOK.COM (20.177.116.141) by
- AM6PR10MB2120.EURPRD10.PROD.OUTLOOK.COM (52.134.113.144) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2856.20; Wed, 1 Apr 2020 10:20:32 +0000
-Received: from AM6PR10MB2263.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::993f:cdb5:bb05:b01]) by AM6PR10MB2263.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::993f:cdb5:bb05:b01%7]) with mapi id 15.20.2856.019; Wed, 1 Apr 2020
- 10:20:32 +0000
-From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-To:     Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Support Opensource <Support.Opensource@diasemi.com>
-CC:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 3/3] watchdog: da9062: No need to ping manually before
- setting timeout
-Thread-Topic: [PATCH 3/3] watchdog: da9062: No need to ping manually before
- setting timeout
-Thread-Index: AQHWA3+NbV06Uh/Df0mWcPQbot1CmahkF1Ag
-Date:   Wed, 1 Apr 2020 10:20:32 +0000
-Message-ID: <AM6PR10MB226301829B873FFEFE845FE180C90@AM6PR10MB2263.EURPRD10.PROD.OUTLOOK.COM>
-References: <20200326150203.371673-1-s.riedmueller@phytec.de>
- <20200326150203.371673-3-s.riedmueller@phytec.de>
-In-Reply-To: <20200326150203.371673-3-s.riedmueller@phytec.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [165.225.80.64]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 399ec2d5-d0ba-41a1-b63a-08d7d6264f65
-x-ms-traffictypediagnostic: AM6PR10MB2120:
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR10MB2120183A9A5F17914E1B41FDA7C90@AM6PR10MB2120.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 03607C04F0
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR10MB2263.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(396003)(376002)(39850400004)(366004)(136003)(346002)(64756008)(54906003)(33656002)(5660300002)(186003)(53546011)(6506007)(6636002)(71200400001)(9686003)(26005)(110136005)(55016002)(4326008)(66556008)(66946007)(86362001)(316002)(52536014)(478600001)(66446008)(76116006)(7696005)(66476007)(2906002)(8676002)(81166006)(8936002)(81156014)(55236004);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: diasemi.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wRDkVy4zOxhvI5mpGca/sVQypxAI6//eb5DQv29f1Cu2N7UCC5l6Z3MFqGvRLxDI0QmYABa2PO844t5xGjn1i3xJI/AmiuFVY5MddhH8G6owWH/64s0/lpRFqcqQdwL7bgZz/yjCuWWuzH44Vv83a/tBn86cG6EOxNdGcxNJEYB1kJbhkZMUUGKeLwqfeHxcQJwycTBK3f5a+GKnQdXILcuSzXK6Wu630ePHyHI4MEkSP9ZJ7otqMXeKqbpJ+yTXNmBLU9zimmmvjNcCqFNvQEw0fG8CALKechjhXBg6FRc1638sWfZ5VEXcuNCWxWP9sUu82pTfsoPy7RJw+UW+U1/ykMLjTu1kUHSCYtpkQXGn6ZJGqUIJQuatwBGxafNaA55uTVc2cNH77H5L9/cNNPL5W9EQhGdiv2AOr5jrOVUBXqyCFutEGtsY5EE2uNLW
-x-ms-exchange-antispam-messagedata: aynqdGgbCnm8z8s1r3pOJi7KmilNoeF7OcrMYAMRlnhYhkF/ArRZ8SpdOvO9F/rqJD5w36E+e7LunnLXmfpCJSufh5ojdpZL8Qx0Lpqu3onWs1wM1W5ZNxwEEJqM8fQBov2m/mkM7+fFLMO+xjDVTw==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 1 Apr 2020 08:45:23 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 031CixCn110031;
+        Wed, 1 Apr 2020 07:44:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1585745099;
+        bh=EXr5QlMbshMwscdF3zgelBhqcQsLW50D1jVVHAr6mRY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=ZMExe/cNH+GKiOufRdJsmu9aBGYCQTUyF2lMZoQmbYdVf1wXBco26HKKtTth3TBc5
+         DfGEouo2Csh72s+7YEfjDrTWTDZtF9HyR7TPdshM7WNz5b0QxZ9070TDnguZwDhEoP
+         q2lF4mttmg6MkFQ/QagnQUiwP2KkIYogkOI/EQmY=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 031CixxZ019375
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 1 Apr 2020 07:44:59 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 1 Apr
+ 2020 07:44:58 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 1 Apr 2020 07:44:59 -0500
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 031CivZ3045434;
+        Wed, 1 Apr 2020 07:44:57 -0500
+Subject: Re: [PATCHv3 3/4] watchdog: Add K3 RTI watchdog support
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <wim@linux-watchdog.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <aed89814-a78b-4a59-7673-bce5de34022d@roeck-us.net>
+ <20200304104214.8625-1-t-kristo@ti.com> <20200304220648.GA31640@roeck-us.net>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <ac261582-a101-c7c7-66e4-4ef20d037c7d@ti.com>
+Date:   Wed, 1 Apr 2020 15:44:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: diasemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 399ec2d5-d0ba-41a1-b63a-08d7d6264f65
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2020 10:20:32.4582
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vHEYk1ECfNN6HR/kfwPTV8ktzL+YoTUsd6a1p3ciLJM/O0dZdiPic2zxST18HhJfrkctLwFDKeFyV00z7JEr/FfYWnpcNVAD26xid7wkV68=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB2120
+In-Reply-To: <20200304220648.GA31640@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 26 March 2020 15:02, Stefan Riedmueller wrote:
+On 05/03/2020 00:06, Guenter Roeck wrote:
+> On Wed, Mar 04, 2020 at 12:42:14PM +0200, Tero Kristo wrote:
+>> Texas Instruments K3 SoCs contain an RTI (Real Time Interrupt) module
+>> which can be used as a watchdog. This IP provides a support for
+>> windowed watchdog mode, in which the watchdog must be petted within
+>> a certain time window. If it is petted either too soon, or too late,
+>> a watchdog error will be triggered.
+>>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> There is actually no need to ping the watchdog before disabling it
-> during timeout change. Disabling the watchdog already takes care of
-> resetting the counter.
->=20
-> This fixes an issue during boot when the userspace watchdog handler takes
-> over and the watchdog is already running. Opening the watchdog in this ca=
-se
-> leads to the first ping and directly after that without the required
-> heartbeat delay a second ping issued by the set_timeout call. Due to the
-> missing delay this resulted in a reset.
->=20
-> Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+Whats the plan for merging this one + the DT binding doc? I can't see 
+this in linux-next yet at least, I do see the watchdog core change from 
+this series though.
 
-Thanks for the update:
+-Tero
 
-Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+> 
+>> ---
+>> v3:
+>>    * changed to use clk_get/put instead of devm_* versions of this
+>>
+>> v2:
+>>    * Added better documentation within the driver code
+>>    * Dropped fck handle, instead get the fck rate during probe only
+>>    * Modified the max_hw_heartbeat calculation logic a bit
+>>
+>>   drivers/watchdog/Kconfig   |   8 ++
+>>   drivers/watchdog/Makefile  |   1 +
+>>   drivers/watchdog/rti_wdt.c | 255 +++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 261 insertions(+)
+>>   create mode 100644 drivers/watchdog/rti_wdt.c
+>>
+>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>> index cec868f8db3f..81faf47d44a6 100644
+>> --- a/drivers/watchdog/Kconfig
+>> +++ b/drivers/watchdog/Kconfig
+>> @@ -583,6 +583,14 @@ config DAVINCI_WATCHDOG
+>>   	  NOTE: once enabled, this timer cannot be disabled.
+>>   	  Say N if you are unsure.
+>>   
+>> +config K3_RTI_WATCHDOG
+>> +	tristate "Texas Instruments K3 RTI watchdog"
+>> +	depends on ARCH_K3 || COMPILE_TEST
+>> +	select WATCHDOG_CORE
+>> +	help
+>> +	  Say Y here if you want to include support for the K3 watchdog
+>> +	  timer (RTI module) available in the K3 generation of processors.
+>> +
+>>   config ORION_WATCHDOG
+>>   	tristate "Orion watchdog"
+>>   	depends on ARCH_ORION5X || ARCH_DOVE || MACH_DOVE || ARCH_MVEBU || (COMPILE_TEST && !ARCH_EBSA110)
+>> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+>> index 2ee352bf3372..6de2e4ceef19 100644
+>> --- a/drivers/watchdog/Makefile
+>> +++ b/drivers/watchdog/Makefile
+>> @@ -57,6 +57,7 @@ obj-$(CONFIG_EP93XX_WATCHDOG) += ep93xx_wdt.o
+>>   obj-$(CONFIG_PNX4008_WATCHDOG) += pnx4008_wdt.o
+>>   obj-$(CONFIG_IOP_WATCHDOG) += iop_wdt.o
+>>   obj-$(CONFIG_DAVINCI_WATCHDOG) += davinci_wdt.o
+>> +obj-$(CONFIG_K3_RTI_WATCHDOG) += rti_wdt.o
+>>   obj-$(CONFIG_ORION_WATCHDOG) += orion_wdt.o
+>>   obj-$(CONFIG_SUNXI_WATCHDOG) += sunxi_wdt.o
+>>   obj-$(CONFIG_RN5T618_WATCHDOG) += rn5t618_wdt.o
+>> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+>> new file mode 100644
+>> index 000000000000..7a46c40891e2
+>> --- /dev/null
+>> +++ b/drivers/watchdog/rti_wdt.c
+>> @@ -0,0 +1,255 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Watchdog driver for the K3 RTI module
+>> + *
+>> + * (c) Copyright 2019-2020 Texas Instruments Inc.
+>> + * All rights reserved.
+>> + */
+>> +
+>> +#include <linux/clk.h>
+>> +#include <linux/device.h>
+>> +#include <linux/err.h>
+>> +#include <linux/io.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/module.h>
+>> +#include <linux/moduleparam.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/pm_runtime.h>
+>> +#include <linux/types.h>
+>> +#include <linux/watchdog.h>
+>> +
+>> +#define DEFAULT_HEARTBEAT 60
+>> +
+>> +/* Max heartbeat is calculated at 32kHz source clock */
+>> +#define MAX_HEARTBEAT	1000
+>> +
+>> +/* Timer register set definition */
+>> +#define RTIDWDCTRL	0x90
+>> +#define RTIDWDPRLD	0x94
+>> +#define RTIWDSTATUS	0x98
+>> +#define RTIWDKEY	0x9c
+>> +#define RTIDWDCNTR	0xa0
+>> +#define RTIWWDRXCTRL	0xa4
+>> +#define RTIWWDSIZECTRL	0xa8
+>> +
+>> +#define RTIWWDRX_NMI	0xa
+>> +
+>> +#define RTIWWDSIZE_50P	0x50
+>> +
+>> +#define WDENABLE_KEY	0xa98559da
+>> +
+>> +#define WDKEY_SEQ0		0xe51a
+>> +#define WDKEY_SEQ1		0xa35c
+>> +
+>> +#define WDT_PRELOAD_SHIFT	13
+>> +
+>> +#define WDT_PRELOAD_MAX		0xfff
+>> +
+>> +#define DWDST			BIT(1)
+>> +
+>> +static int heartbeat;
+>> +
+>> +/*
+>> + * struct to hold data for each WDT device
+>> + * @base - base io address of WD device
+>> + * @freq - source clock frequency of WDT
+>> + * @wdd  - hold watchdog device as is in WDT core
+>> + */
+>> +struct rti_wdt_device {
+>> +	void __iomem		*base;
+>> +	unsigned long		freq;
+>> +	struct watchdog_device	wdd;
+>> +};
+>> +
+>> +static int rti_wdt_start(struct watchdog_device *wdd)
+>> +{
+>> +	u32 timer_margin;
+>> +	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
+>> +
+>> +	/* set timeout period */
+>> +	timer_margin = (u64)wdd->timeout * wdt->freq;
+>> +	timer_margin >>= WDT_PRELOAD_SHIFT;
+>> +	if (timer_margin > WDT_PRELOAD_MAX)
+>> +		timer_margin = WDT_PRELOAD_MAX;
+>> +	writel_relaxed(timer_margin, wdt->base + RTIDWDPRLD);
+>> +
+>> +	/*
+>> +	 * RTI only supports a windowed mode, where the watchdog can only
+>> +	 * be petted during the open window; not too early or not too late.
+>> +	 * The HW configuration options only allow for the open window size
+>> +	 * to be 50% or less than that; we obviouly want to configure the open
+>> +	 * window as large as possible so we select the 50% option. To avoid
+>> +	 * any glitches, we accommodate 5% safety margin also, so we setup
+>> +	 * the min_hw_hearbeat at 55% of the timeout period.
+>> +	 */
+>> +	wdd->min_hw_heartbeat_ms = 11 * wdd->timeout * 1000 / 20;
+>> +
+>> +	/* Generate NMI when wdt expires */
+>> +	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
+>> +
+>> +	/* Open window size 50%; this is the largest window size available */
+>> +	writel_relaxed(RTIWWDSIZE_50P, wdt->base + RTIWWDSIZECTRL);
+>> +
+>> +	readl_relaxed(wdt->base + RTIWWDSIZECTRL);
+>> +
+>> +	/* enable watchdog */
+>> +	writel_relaxed(WDENABLE_KEY, wdt->base + RTIDWDCTRL);
+>> +	return 0;
+>> +}
+>> +
+>> +static int rti_wdt_ping(struct watchdog_device *wdd)
+>> +{
+>> +	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
+>> +
+>> +	/* put watchdog in service state */
+>> +	writel_relaxed(WDKEY_SEQ0, wdt->base + RTIWDKEY);
+>> +	/* put watchdog in active state */
+>> +	writel_relaxed(WDKEY_SEQ1, wdt->base + RTIWDKEY);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
+>> +{
+>> +	u64 timer_counter;
+>> +	u32 val;
+>> +	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
+>> +
+>> +	/* if timeout has occurred then return 0 */
+>> +	val = readl_relaxed(wdt->base + RTIWDSTATUS);
+>> +	if (val & DWDST)
+>> +		return 0;
+>> +
+>> +	timer_counter = readl_relaxed(wdt->base + RTIDWDCNTR);
+>> +
+>> +	do_div(timer_counter, wdt->freq);
+>> +
+>> +	return timer_counter;
+>> +}
+>> +
+>> +static const struct watchdog_info rti_wdt_info = {
+>> +	.options = WDIOF_KEEPALIVEPING,
+>> +	.identity = "K3 RTI Watchdog",
+>> +};
+>> +
+>> +static const struct watchdog_ops rti_wdt_ops = {
+>> +	.owner		= THIS_MODULE,
+>> +	.start		= rti_wdt_start,
+>> +	.ping		= rti_wdt_ping,
+>> +	.get_timeleft	= rti_wdt_get_timeleft,
+>> +};
+>> +
+>> +static int rti_wdt_probe(struct platform_device *pdev)
+>> +{
+>> +	int ret = 0;
+>> +	struct device *dev = &pdev->dev;
+>> +	struct resource *wdt_mem;
+>> +	struct watchdog_device *wdd;
+>> +	struct rti_wdt_device *wdt;
+>> +	struct clk *clk;
+>> +
+>> +	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>> +	if (!wdt)
+>> +		return -ENOMEM;
+>> +
+>> +	clk = clk_get(dev, NULL);
+>> +	if (IS_ERR(clk)) {
+>> +		if (PTR_ERR(clk) != -EPROBE_DEFER)
+>> +			dev_err(dev, "failed to get clock\n");
+>> +		return PTR_ERR(clk);
+>> +	}
+>> +
+>> +	wdt->freq = clk_get_rate(clk);
+>> +
+>> +	clk_put(clk);
+>> +
+>> +	if (!wdt->freq) {
+>> +		dev_err(dev, "Failed to get fck rate.\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	pm_runtime_enable(dev);
+>> +	ret = pm_runtime_get_sync(dev);
+>> +	if (ret) {
+>> +		if (ret != -EPROBE_DEFER)
+>> +			dev_err(&pdev->dev, "runtime pm failed\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	platform_set_drvdata(pdev, wdt);
+>> +
+>> +	wdd = &wdt->wdd;
+>> +	wdd->info = &rti_wdt_info;
+>> +	wdd->ops = &rti_wdt_ops;
+>> +	wdd->min_timeout = 1;
+>> +	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
+>> +		wdt->freq * 1000;
+>> +	wdd->timeout = DEFAULT_HEARTBEAT;
+>> +	wdd->parent = dev;
+>> +
+>> +	watchdog_init_timeout(wdd, heartbeat, dev);
+>> +
+>> +	watchdog_set_drvdata(wdd, wdt);
+>> +	watchdog_set_nowayout(wdd, 1);
+>> +	watchdog_set_restart_priority(wdd, 128);
+>> +
+>> +	wdt_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +	wdt->base = devm_ioremap_resource(dev, wdt_mem);
+>> +	if (IS_ERR(wdt->base)) {
+>> +		ret = PTR_ERR(wdt->base);
+>> +		goto err_iomap;
+>> +	}
+>> +
+>> +	ret = watchdog_register_device(wdd);
+>> +	if (ret) {
+>> +		dev_err(dev, "cannot register watchdog device\n");
+>> +		goto err_iomap;
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +err_iomap:
+>> +	pm_runtime_put_sync(&pdev->dev);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int rti_wdt_remove(struct platform_device *pdev)
+>> +{
+>> +	struct rti_wdt_device *wdt = platform_get_drvdata(pdev);
+>> +
+>> +	watchdog_unregister_device(&wdt->wdd);
+>> +	pm_runtime_put(&pdev->dev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id rti_wdt_of_match[] = {
+>> +	{ .compatible = "ti,rti-wdt", },
+>> +	{},
+>> +};
+>> +MODULE_DEVICE_TABLE(of, rti_wdt_of_match);
+>> +
+>> +static struct platform_driver rti_wdt_driver = {
+>> +	.driver = {
+>> +		.name = "rti-wdt",
+>> +		.of_match_table = rti_wdt_of_match,
+>> +	},
+>> +	.probe = rti_wdt_probe,
+>> +	.remove = rti_wdt_remove,
+>> +};
+>> +
+>> +module_platform_driver(rti_wdt_driver);
+>> +
+>> +MODULE_AUTHOR("Tero Kristo <t-kristo@ti.com>");
+>> +MODULE_DESCRIPTION("K3 RTI Watchdog Driver");
+>> +
+>> +module_param(heartbeat, int, 0);
+>> +MODULE_PARM_DESC(heartbeat,
+>> +		 "Watchdog heartbeat period in seconds from 1 to "
+>> +		 __MODULE_STRING(MAX_HEARTBEAT) ", default "
+>> +		 __MODULE_STRING(DEFAULT_HEARTBEAT));
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_ALIAS("platform:rti-wdt");
+>> -- 
+>> 2.17.1
+>>
+>> --
 
-> ---
->  drivers/watchdog/da9062_wdt.c | 5 -----
->  1 file changed, 5 deletions(-)
->=20
-> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.=
-c
-> index 6d81b1276b87..c5bd075c8b14 100644
-> --- a/drivers/watchdog/da9062_wdt.c
-> +++ b/drivers/watchdog/da9062_wdt.c
-> @@ -66,11 +66,6 @@ static int da9062_wdt_update_timeout_register(struct
-> da9062_watchdog *wdt,
->  					      unsigned int regval)
->  {
->  	struct da9062 *chip =3D wdt->hw;
-> -	int ret;
-> -
-> -	ret =3D da9062_reset_watchdog_timer(wdt);
-> -	if (ret)
-> -		return ret;
->=20
->  	regmap_update_bits(chip->regmap,
->  				  DA9062AA_CONTROL_D,
-> --
-> 2.23.0
-
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
