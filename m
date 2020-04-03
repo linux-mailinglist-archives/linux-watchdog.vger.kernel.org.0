@@ -2,178 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8327319CF04
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Apr 2020 06:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC1C19CFC0
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Apr 2020 07:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728146AbgDCEHb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Apr 2020 00:07:31 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:40525 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbgDCEHb (ORCPT
+        id S1732784AbgDCF3Q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Apr 2020 01:29:16 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33533 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732711AbgDCF3Q (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Apr 2020 00:07:31 -0400
-Received: by mail-pl1-f196.google.com with SMTP id h11so2197307plk.7;
-        Thu, 02 Apr 2020 21:07:30 -0700 (PDT)
+        Fri, 3 Apr 2020 01:29:16 -0400
+Received: by mail-pf1-f193.google.com with SMTP id c138so2963578pfc.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 02 Apr 2020 22:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ZBjkJKJ5u2z+Q+We6EYzbdq7wJVe06yWFlZX4pTzXxY=;
-        b=jflbWB9+gGGoOHmCUaEOBLFj34cg+V30/HZBeTFc0vAeC/Nqp+9m6We53b/ifWfEje
-         Fgcpei59mxXVlBJfg1rjJcoc5Wwun3dEvEKFB1/1taH7XiNBb36ZIkAye6dNZ71VFKy4
-         506rjnzjOQe4YdmlrG18YE4K7e7c+FgzRlhdRR0aqD+68DvBcuPhTE9dKCXuTKgLSvAB
-         eDx8FJeOocNOgjO2BNDETJYJKeUqtdxOPEWuSjT4YY5Kf1uoDjexLpe6fbTPtv13MkXw
-         RQsAbwtv60si+Gpih6Glh3SIWU+H+x2QjKdYdCaIMyFc1qJAB4t1ikyeclB1RiUAXgHT
-         WRwA==
+        bh=TWUVEWHfILYD4mLoLxiKPBxfXnp3kNrR0NuQf2K0ahQ=;
+        b=Xi5KMTsZkOO7QTHFIZYuRuEr2Z/+6lNWa58ajHP5SQHleic4V+fa3OVt47Iv2/Ytlo
+         AXpJAyiP3yJ3dlaDdpHDhDZFU6cTeYM5BpcgJRXE6fBovCc7bjdG4NRusRfkdLgkky0y
+         VuKqJHgsxIvuagj4lAOrlp9zMnQUOMncAdPIA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=ZBjkJKJ5u2z+Q+We6EYzbdq7wJVe06yWFlZX4pTzXxY=;
-        b=fZuaSGWY5DSfSYDGY9C8MAXl1Cyf6SblYLTstDypamK7KnG0/KjYv5+CP7a/zumtP1
-         8duxBvRSLwxkYDq6GzUjh2j2ycnroxPHZmx80Jjc7qCYTLftM0YeeCD8UbX1CR8oEhNp
-         3ffTbAbpO5LTwzNSV0QZYke03ZC/4m6XTtTZNSTywThHJlwuIPFa6W+rvii5V38i5Wf6
-         PaxyfCNyNUeWYS2qRNC0nsEohc+gA41P+vvlh5y3ZDB8f/AumTD0YBkLm/s5eCNFlpzS
-         RyySpQ+E0dHw+JfqXoMrSo5abmHsnAp7D9NEznXjKhUdVlIXLgWm5X34g01fXlVkTlJT
-         V7QQ==
-X-Gm-Message-State: AGi0PuacoVkbAE6Hr97gNPaQJCiPgyAcZbqHavFK6YI4d8VMfODC4Qh9
-        5zg7oX7hAoQkRoghvIY2xG53CkxZ
-X-Google-Smtp-Source: APiQypJshgb3GVfOMqeQAkG1bLCvRzepMFb/Gc8KNNpf+fqtUcos0fQtGxiycuKE6lQrBRAvw8W1zA==
-X-Received: by 2002:a17:902:9348:: with SMTP id g8mr6155341plp.112.1585886850044;
-        Thu, 02 Apr 2020 21:07:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v42sm4416221pgn.6.2020.04.02.21.07.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TWUVEWHfILYD4mLoLxiKPBxfXnp3kNrR0NuQf2K0ahQ=;
+        b=Qb1lxEKn7PQ4TZyaXSJwqSugSWUmcHgZYTZ4w3c5ilcXmyD6gyAZmgDZY2XBt4Lr8+
+         4Jb34kMmIE+VugehqT70JlzB50dYvAZkLGCULX/QlN+QSI/D+hALDtKLZX6IIDb/cqG/
+         pWMLeSNgEGIwJ03nel0bO96UTwpThGbNXEGIf+r0T1QDhwtK3TrwxUIPUcjxfPGO3821
+         +G5yXbXHmVImOPfg6dQWB5NF0CKPeTyIK1T2LwzA8TMyB7+xjaZ3KdbE0IUYRz06s2bj
+         XanWiAzRRH+veOjoHmRKwlyawhqCKex/7n/8JC/cEHA4XS/LuG8GwOkTI8vLOySvcgza
+         d/fA==
+X-Gm-Message-State: AGi0Puak9WNkDVoQilWFJiki7Ny3PCieM3SOZDG59OmaRj0DthlsZnox
+        s6RriKJOMrmMwRZc3t/8I8UuSg==
+X-Google-Smtp-Source: APiQypJwFGVlMhKNjzHxxikpLJzTjv9S0yp8wd3gigfUtQE9RxnY+jxENnaohkQ5QkAddaxMxtczTg==
+X-Received: by 2002:aa7:961c:: with SMTP id q28mr7020119pfg.177.1585891755586;
+        Thu, 02 Apr 2020 22:29:15 -0700 (PDT)
+Received: from localhost ([2401:fa00:9:14:1105:3e8a:838d:e326])
+        by smtp.gmail.com with ESMTPSA id c21sm4451578pgn.84.2020.04.02.22.29.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Apr 2020 21:07:29 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: clarify that stop() is optional
-To:     Bumsik Kim <kbumsik@gmail.com>, wim@linux-watchdog.org,
-        corbet@lwn.net
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Bumsik Kim <k.bumsik@gmail.com>
-References: <20200403031507.63487-1-k.bumsik@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <1fe9be6e-7da1-e738-c825-beddef31fd54@roeck-us.net>
-Date:   Thu, 2 Apr 2020 21:07:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Thu, 02 Apr 2020 22:29:15 -0700 (PDT)
+From:   Evan Benn <evanbenn@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     xingyu.chen@amlogic.com, jwerner@chromium.org,
+        Evan Benn <evanbenn@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor Calls.
+Date:   Fri,  3 Apr 2020 16:28:58 +1100
+Message-Id: <20200403052900.258855-1-evanbenn@chromium.org>
+X-Mailer: git-send-email 2.26.0.292.g33ef6b2f38-goog
 MIME-Version: 1.0
-In-Reply-To: <20200403031507.63487-1-k.bumsik@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/2/20 8:15 PM, Bumsik Kim wrote:
-> The commit d0684c8a9354 ("watchdog: Make stop function optional")
-> made stop function not mandatory, but the comments
-> and the doc weren't reflected. Fix it to clarify.
-> 
-> Signed-off-by: Bumsik Kim <k.bumsik@gmail.com>
+This is currently supported in firmware deployed on oak, hana and elm mt8173
+chromebook devices. The kernel driver is written to be a generic SMC
+watchdog driver.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Arm Trusted Firmware upstreaming review:
+    https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405
 
-> ---
->  Documentation/watchdog/convert_drivers_to_kernel_api.rst | 2 +-
->  Documentation/watchdog/watchdog-kernel-api.rst           | 2 +-
->  include/linux/watchdog.h                                 | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/watchdog/convert_drivers_to_kernel_api.rst b/Documentation/watchdog/convert_drivers_to_kernel_api.rst
-> index dd934cc08e40..51b999b5551a 100644
-> --- a/Documentation/watchdog/convert_drivers_to_kernel_api.rst
-> +++ b/Documentation/watchdog/convert_drivers_to_kernel_api.rst
-> @@ -115,7 +115,7 @@ Add the watchdog operations
->  ---------------------------
->  
->  All possible callbacks are defined in 'struct watchdog_ops'. You can find it
-> -explained in 'watchdog-kernel-api.txt' in this directory. start(), stop() and
-> +explained in 'watchdog-kernel-api.txt' in this directory. start() and
->  owner must be set, the rest are optional. You will easily find corresponding
->  functions in the old driver. Note that you will now get a pointer to the
->  watchdog_device as a parameter to these functions, so you probably have to
-> diff --git a/Documentation/watchdog/watchdog-kernel-api.rst b/Documentation/watchdog/watchdog-kernel-api.rst
-> index 864edbe932c1..068a55ee0d4a 100644
-> --- a/Documentation/watchdog/watchdog-kernel-api.rst
-> +++ b/Documentation/watchdog/watchdog-kernel-api.rst
-> @@ -123,8 +123,8 @@ The list of watchdog operations is defined as::
->  	struct module *owner;
->  	/* mandatory operations */
->  	int (*start)(struct watchdog_device *);
-> -	int (*stop)(struct watchdog_device *);
->  	/* optional operations */
-> +	int (*stop)(struct watchdog_device *);
->  	int (*ping)(struct watchdog_device *);
->  	unsigned int (*status)(struct watchdog_device *);
->  	int (*set_timeout)(struct watchdog_device *, unsigned int);
-> diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-> index 417d9f37077a..1464ce6ffa31 100644
-> --- a/include/linux/watchdog.h
-> +++ b/include/linux/watchdog.h
-> @@ -37,15 +37,15 @@ struct watchdog_governor;
->   *
->   * The watchdog_ops structure contains a list of low-level operations
->   * that control a watchdog device. It also contains the module that owns
-> - * these operations. The start and stop function are mandatory, all other
-> + * these operations. The start function is mandatory, all other
->   * functions are optional.
->   */
->  struct watchdog_ops {
->  	struct module *owner;
->  	/* mandatory operations */
->  	int (*start)(struct watchdog_device *);
-> -	int (*stop)(struct watchdog_device *);
->  	/* optional operations */
-> +	int (*stop)(struct watchdog_device *);
->  	int (*ping)(struct watchdog_device *);
->  	unsigned int (*status)(struct watchdog_device *);
->  	int (*set_timeout)(struct watchdog_device *, unsigned int);
-> 
+Patch to add oak, hana, elm device tree:
+    https://lore.kernel.org/linux-arm-kernel/20200110073730.213789-1-hsinyi@chromium.org/
+I would like to add the device tree support after the above patch is
+accepted.
+
+Changes in v3:
+- Change name back to arm
+- Add optional get_timeleft op
+- change name to arm_smc_wdt
+
+Changes in v2:
+- Change name arm > mt8173
+- use watchdog_stop_on_reboot
+- use watchdog_stop_on_unregister
+- use devm_watchdog_register_device
+- remove smcwd_shutdown, smcwd_remove
+- change error codes
+
+Evan Benn (1):
+  dt-bindings: watchdog: Add ARM smc wdt for mt8173 watchdog
+
+Julius Werner (1):
+  watchdog: Add new arm_smd_wdt watchdog driver
+
+ .../bindings/watchdog/arm-smc-wdt.yaml        |  30 +++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/watchdog/Kconfig                      |  13 ++
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/arm_smc_wdt.c                | 181 ++++++++++++++++++
+ 6 files changed, 233 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml
+ create mode 100644 drivers/watchdog/arm_smc_wdt.c
+
+-- 
+2.26.0.292.g33ef6b2f38-goog
 
