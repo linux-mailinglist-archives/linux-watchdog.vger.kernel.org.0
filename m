@@ -2,53 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 259A519E133
-	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Apr 2020 00:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F7C19E20A
+	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Apr 2020 03:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727947AbgDCW44 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Apr 2020 18:56:56 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:34385 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728459AbgDCW4z (ORCPT
+        id S1726197AbgDDBI6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Apr 2020 21:08:58 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:38693 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726186AbgDDBI6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Apr 2020 18:56:55 -0400
-Received: by mail-il1-f195.google.com with SMTP id t11so9050946ils.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 03 Apr 2020 15:56:53 -0700 (PDT)
+        Fri, 3 Apr 2020 21:08:58 -0400
+Received: by mail-pj1-f66.google.com with SMTP id m15so3812714pje.3
+        for <linux-watchdog@vger.kernel.org>; Fri, 03 Apr 2020 18:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AqKl27V7RFNmyor6QW5xd8i8kAV8SFQrhYdOkxkJcC8=;
-        b=WPiy5e7K8C3QPMOUC92RgkkaI6mdprM/z4x2IEncYmEy/d6KK7jUOHmCmetCMsnqVc
-         kBUsXiMJ5CPk89GqAtdkTRa9LsdaBYEp/cpn3fJHtLs0/2nM49F6CjWMe6UupK/IYTAT
-         rhxUvgs+Xgt7OFNKBYmzA2qIcnYwH6wRp3tqs=
+        bh=O6b2gnL33BXhVFyfbJth5+UU7eciSHYX3oxtDKEDuDA=;
+        b=alUJeSWDQbazGmCHaD3vGtuEij3VFxX3HTi56q8fbqaiBp7/Y6J7p4a0acMrl7kInW
+         X0JbVTtUVvSwa+p2769ApqQW7OcZsWyXCQkuQCxepnyx8UF3+h0nm3E2wSbAjzoh6pmH
+         YX5cL9Gly/HX3522R8CBtJKjQTggV2WVU4SLc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AqKl27V7RFNmyor6QW5xd8i8kAV8SFQrhYdOkxkJcC8=;
-        b=KKaHNTVbXlFrWbqdXUecwM5JS7a5irdlYpC+EPznKC0qrO5ipZnVH5pZn9PC4aSMc2
-         8x38MmtMUZjMAtWWjoCx5qTlQiKda9oQ6IZi6uRidTxSxE36u9CB3u7MEdRogf4nLfvE
-         LsUW9GPXYiizxEvP0XtUIQ0rLZ6RL6HjokivCl+9SndQtYiahuZ3gfrY52DiyHSIifYc
-         S0/LYVg2AfYGnR9gGvVZlEFd4gFOSrk+MVwVV/OikD0W1InR3jEUzpuNDKDRKAqQoBtI
-         D10UgNY7mcXDfWl3UoqfqUeSnxkS24PNd8FbIZTxW/jZAzxwNuQ03tooGAtULRnSQS5i
-         yBDw==
-X-Gm-Message-State: AGi0PuZnAgjLkZWM6FmP3oCRDfvTKn86Be/Qq9BpNACRwjalU9zC3OxY
-        lgksyv2EB3azs2Hg5Ds0Wyl7AwcgmViMy0s7uYCxyg==
-X-Google-Smtp-Source: APiQypL/sgMRDscOesM/zrdL1QTRF5Nh56tikQdrdQDMkREU9bHS6EGHPKDF0BFGjrApSU6HGaGpCM0nXaMias8jAvA=
-X-Received: by 2002:a92:cb49:: with SMTP id f9mr10827666ilq.193.1585954612585;
- Fri, 03 Apr 2020 15:56:52 -0700 (PDT)
+        bh=O6b2gnL33BXhVFyfbJth5+UU7eciSHYX3oxtDKEDuDA=;
+        b=V2MoQlsCHK+uuSTJhCOuiu1VIc496QzrnjGn2VrgQ3TZxS0t3udjhEu/ZQdc4VVLQ4
+         Jtn9iOyeVXR1OVzpEqTuwWdxqlWCxnGshYrAVqIX19rkxIk3dhS4d/pG+3v8i7V1w+XD
+         TnwFZeb25HQw9SvzDYlvEtpuEBdh5yjspq8vXsMFwLCEXuMydtJz5qdhWWVk+3c2z1Fr
+         arzV76PPgwv/00OukJMqJcyoRQjWnn5F8UMySz6uho3PCAYdJ0xWd/USpTAiNDvLfVw0
+         WFfA4OwDVh3X/V54o23QUr9c3fjp3P1ro1aRg3Mp+BXj8Ds/57M+Z1g6Pk8OsReYUDgJ
+         KncQ==
+X-Gm-Message-State: AGi0PuaDOWYsAB5wkz2SucSopacruWOjQIbsqz7w+JWFxjEHsVQAwiSk
+        zJK+ARAXR10eg53zujtogwUe2RKMn5AOPg==
+X-Google-Smtp-Source: APiQypLzYWERP7ObEnRfa9OAin0aq5mQCkoKYvilcAICtghVyb/90PbgQuJA9LzeNu0XfSWDhTM9Cg==
+X-Received: by 2002:a17:902:8546:: with SMTP id d6mr10548733plo.280.1585962536681;
+        Fri, 03 Apr 2020 18:08:56 -0700 (PDT)
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com. [209.85.210.177])
+        by smtp.gmail.com with ESMTPSA id s65sm200781pgs.30.2020.04.03.18.08.56
+        for <linux-watchdog@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Apr 2020 18:08:56 -0700 (PDT)
+Received: by mail-pf1-f177.google.com with SMTP id c20so4471160pfi.7
+        for <linux-watchdog@vger.kernel.org>; Fri, 03 Apr 2020 18:08:56 -0700 (PDT)
+X-Received: by 2002:a1f:e546:: with SMTP id c67mr8715562vkh.38.1585962045690;
+ Fri, 03 Apr 2020 18:00:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200403052900.258855-1-evanbenn@chromium.org> <20200403162742.v2.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
-In-Reply-To: <20200403162742.v2.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Fri, 3 Apr 2020 15:56:40 -0700
-Message-ID: <CAODwPW_iSK_d6EHCk7QUVF7=bHVLuUYHX5mfapf+yeyuHHdNZA@mail.gmail.com>
+References: <20200403052900.258855-1-evanbenn@chromium.org>
+ <20200403162742.v2.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid> <CAODwPW_iSK_d6EHCk7QUVF7=bHVLuUYHX5mfapf+yeyuHHdNZA@mail.gmail.com>
+In-Reply-To: <CAODwPW_iSK_d6EHCk7QUVF7=bHVLuUYHX5mfapf+yeyuHHdNZA@mail.gmail.com>
+From:   Evan Benn <evanbenn@chromium.org>
+Date:   Sat, 4 Apr 2020 12:00:18 +1100
+X-Gmail-Original-Message-ID: <CAKz_xw3W3xWBfspj0DmbR-p8qF9A+sSsuT_euqmYNbx=47HpoQ@mail.gmail.com>
+Message-ID: <CAKz_xw3W3xWBfspj0DmbR-p8qF9A+sSsuT_euqmYNbx=47HpoQ@mail.gmail.com>
 Subject: Re: [PATCH v2 2/2] watchdog: Add new arm_smd_wdt watchdog driver
-To:     Evan Benn <evanbenn@chromium.org>
+To:     Julius Werner <jwerner@chromium.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Xingyu Chen <xingyu.chen@amlogic.com>,
-        Julius Werner <jwerner@chromium.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Anson Huang <Anson.Huang@nxp.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -78,15 +88,25 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-> +       wdd->info = &smcwd_info;
-> +       /* get_timeleft is optional */
-> +       if (smcwd_call(SMCWD_GET_TIMELEFT, 0, NULL))
+On Sat, Apr 4, 2020 at 9:56 AM Julius Werner <jwerner@chromium.org> wrote:
+>
+> > +       wdd->info = &smcwd_info;
+> > +       /* get_timeleft is optional */
+> > +       if (smcwd_call(SMCWD_GET_TIMELEFT, 0, NULL))
+>
+> How is this supposed to work? A firmware that implements this call
+> would return the time left here which may not be 0 (maybe the watchdog
+> was already primed by the bootloader or whatever), so smcwd_call()
+> would interpret it as an error.
+>
+> I think the cleanest solution would be to stick to the same return
+> codes in a0 and use a1 to report the time left when a0 is
+> PSCI_SUCCESS. This is more consistent with SMCWD_INIT too.
 
-How is this supposed to work? A firmware that implements this call
-would return the time left here which may not be 0 (maybe the watchdog
-was already primed by the bootloader or whatever), so smcwd_call()
-would interpret it as an error.
+Yes you are right, I have the wrong return code in the get_timeleft
+implementation. It should use ->a1 for the actual timeleft, a0 is for
+the error code.
 
-I think the cleanest solution would be to stick to the same return
-codes in a0 and use a1 to report the time left when a0 is
-PSCI_SUCCESS. This is more consistent with SMCWD_INIT too.
+Here smcwd_call returns the error code, which is NOT_IMPLEMENTED if
+the firmware does not implement timeleft. The timeleft itself cannot
+return error codes else we would just return that there I guess.
