@@ -2,60 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A111A65E1
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Apr 2020 13:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4101A66D3
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Apr 2020 15:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729218AbgDMLuL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Apr 2020 07:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
+        id S1729793AbgDMNTO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Apr 2020 09:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729212AbgDMLuA (ORCPT
+        with ESMTP id S1729268AbgDMNTO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Apr 2020 07:50:00 -0400
-X-Greylist: delayed 509 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Apr 2020 07:50:00 EDT
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A14DC03BC86
-        for <linux-watchdog@vger.kernel.org>; Mon, 13 Apr 2020 04:41:30 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id t8so3501992ilj.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 13 Apr 2020 04:41:30 -0700 (PDT)
+        Mon, 13 Apr 2020 09:19:14 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE6CC0A3BDC;
+        Mon, 13 Apr 2020 06:19:13 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id i75so8384184ild.13;
+        Mon, 13 Apr 2020 06:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=qlKWExEze9qCqlwbpw1q4+d2Zjr4ETGVa64TcX+dTlk=;
-        b=prjS9vX1/lBHBQnmn8S5eSRPyVAkL53RoKQzE5AAHbxvNYI4a2v2cjTji7kXTppOEc
-         z/YC5TVvRJiGk2ecDbuxQbDezIHvoL12TwU8A8MoLDqkPTvq0EUKN12xVXuoac5P5vPG
-         CDxQUahEZp79myUg0SW4XqnobzWbEdaMDOCEcwJOYEkU2vBAFQtTx1QiAdzIaX9heUrh
-         wXqF9HmIVWbzu+LjtyhWb9YxG3jDJu9H0/2YRuWHtIWQg0GYyRRf+7+N2+T4/5hNzYkA
-         0Td5bmAVNGOZBhXtNLv8DRN8PKs1LisEF6odwJbW1cWSeUhqmMnZAT2UKZl4iJ1E/PV6
-         qofQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BZzMZDGqgBwX4Xh7KHoiKVja3NDIa0mY3TIVJFbrBQY=;
+        b=fJYKZ/XmwUlxghngbQncUbotyBqjvCuUw2LJVgWQ9jb3jOx+lm+N1xdJAtQhM3vxw/
+         /5ezliLqrf7G6qxE+UmevZNoIm5mRLG7KqdHaMqVkP3OPuFQefozAdUHT44vGQwNaD/3
+         dO+xR3VEELksN7X6CqKHHSbVhvhesiKQs+cNutrdrc3VKYk+xDokz4BjgktTz0cI3W8W
+         slyUInVSN6vC9P+aEVNXOnznXVUi50vvhokf/FtLUxs0ewXWglLUGhIvlFEg14QroK1k
+         asWmBJTxHYf3cibpHGBT8veXDXzuobFXk2Fcgae3z29OrMTLrbJNV+X7hEOoSskHwVrC
+         xDvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=qlKWExEze9qCqlwbpw1q4+d2Zjr4ETGVa64TcX+dTlk=;
-        b=JhSXxDDPmglbG9HQYcV8ZzYjiS/a1RDHKJAyk8A82YuMOL3CstYBDEHfM1P1TNzy7S
-         lRwYjg2gg7j9R1WJox5DNo53Cw/bMeuKrGfUKwYqWVB+s6ahOSmVODf8N5Tt2KlXoVbJ
-         CSup1NrOWLLTC8H6lPxllVLHTXWBi8tDNGTUUgwYbO5k6YIvNRvJryuwMRVGVlm5JvUO
-         DBZjf1jpaO0MEFmlDJRP9miGW+XJ1RroYxggiLfeVZK19kIK0q5RmAZmRWyt+mUqpL9i
-         vlHLQ6QIeRIP/CnBh+hvmlV7bGoEjK/QtZePn1GNar/78c8ZPFdHl0VBG/69fYZoFhT2
-         bKjQ==
-X-Gm-Message-State: AGi0PuZL7vXeY8FwwHoGAF0nX8q8DvooVroncVaCpl8Gqa+dbzuAoC0Y
-        +NEMJ0F6VgqiGTfeZDn5K5eKw8jXqadijvv42WZ2gH4=
-X-Google-Smtp-Source: APiQypL8TqJIeu3sv8q1i+SGhGHI+g2m6cjavfj0dEc+5JPmC3aVP4wfZgyktqWXbHy6/UF7VoKUuS2YyJ3E1gwa7Hs=
-X-Received: by 2002:a92:cccb:: with SMTP id u11mr9656514ilq.8.1586778089638;
- Mon, 13 Apr 2020 04:41:29 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BZzMZDGqgBwX4Xh7KHoiKVja3NDIa0mY3TIVJFbrBQY=;
+        b=pK6m3/uGiZhh+GYbQWONcWSe+EcClunn1A2VeMahIHX3SWN31YPQuqq0W8Sd88A+z5
+         GBkO2/iiNCg2qtaSLpbxV04fwytoFilA1T0Qn8dRV2gkXrsEYNafbzBVNe7Pgnch/J4/
+         4FLVnQeJm2slt9n5NcqVcxPfiWE6vQGfSQNtuIL31f0vHPlBD2ARO9nRHAb8xKcMv6Sa
+         mEfTOrq/dC5T/W3weFAuqHm5odwct7hpEW/2rYNVdPLA4Hhp56unsv2SjsL3xjeyw+k/
+         TXJ2/Ur1kHHvk7n3Ns8AaAEdcQ0RHQtOr4WSdEPlGFLgV8nWSwA354jYlTuUKiAXOWeX
+         vrJw==
+X-Gm-Message-State: AGi0PuZJAOK44pBKVWcc+zg2Sbw0aPuUGo0mz+xoCu0poPLd1sJZJf9v
+        W+DXwlrAepm4gURHOKQbLMQDqj8eaLYwGbe7iXI=
+X-Google-Smtp-Source: APiQypLL2RO7vkWepX4zJfT3mg+ZZfFwS0tioHyqiE0a9rgOxbf+a264s0Uqh9dgtn1qb2Vwy6CnWJzlKoFypcpId+s=
+X-Received: by 2002:a05:6e02:4ae:: with SMTP id e14mr4823031ils.190.1586783953013;
+ Mon, 13 Apr 2020 06:19:13 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a02:5e49:0:0:0:0:0 with HTTP; Mon, 13 Apr 2020 04:41:28
- -0700 (PDT)
-Reply-To: mgbenin903@gmail.com
-From:   Barrister Robert Richter UN-Attorney at Law Court-Benin 
-        <info.zennitbankplcnigerian@gmail.com>
-Date:   Mon, 13 Apr 2020 13:41:28 +0200
-Message-ID: <CABHzvrngm=rA5Ct9h+JGdbyDfHJmnfntceDPoyJToo8PZn+YZg@mail.gmail.com>
-Subject: I have already sent you first payment US$5000.00 this morning through
- MONEY Gram service.it is available to pick up in address now.
-To:     undisclosed-recipients:;
+References: <20200412230122.5601-1-festevam@gmail.com> <9a59ecda-785e-1e26-110d-7951af650c89@roeck-us.net>
+In-Reply-To: <9a59ecda-785e-1e26-110d-7951af650c89@roeck-us.net>
+From:   Breno Matheus Lima <brenomatheus@gmail.com>
+Date:   Mon, 13 Apr 2020 09:19:04 -0400
+Message-ID: <CAC4tdFWo2dJQ_=W8U3dP-svOxuH2ygVxepKPCD0m0NnkBNNS6w@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: imx_sc_wdt: Fix reboot on crash
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Fabio Estevam <festevam@gmail.com>, wim@linux-watchdog.org,
+        linux-imx@nxp.com, linux-watchdog@vger.kernel.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
@@ -63,50 +62,31 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-ATTN DEAR BENEFICIARY.
+Hi Fabio,
 
-GOOD NEWS.
+Em dom., 12 de abr. de 2020 =C3=A0s 20:17, Guenter Roeck
+<linux@roeck-us.net> escreveu:
+>
+> On 4/12/20 4:01 PM, Fabio Estevam wrote:
+> > Currently when running the samples/watchdog/watchdog-simple.c
+> > application and forcing a kernel crash by doing:
+> >
+> > # ./watchdog-simple &
+> > # echo c > /proc/sysrq-trigger
+> >
+> > The system does not reboot as expected.
+> >
+> > Fix it by calling imx_sc_wdt_set_timeout() to configure the i.MX8QXP
+> > watchdog with a proper timeout.
+> >
+> > Cc: <stable@vger.kernel.org>
+> > Fixes: 986857acbc9a ("watchdog: imx_sc: Add i.MX system controller watc=
+hdog support")
+> > Reported-by: Breno Lima <breno.lima@nxp.com>
+> > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-I have already sent you first payment US$5000.00 this morning through
-MONEY Gram service.it is available to pick up in address now.
+Thanks for the fix.
 
-So we advise you to Contact This Money Gram office to pick up your
-transfer $US5000.00 today.
-
-
-Note that your compensation payment funds is total amount $US2.800,000
-Million Dollars.We have instructed the Money Gram Agent,Mr. James
-Gadner to keep sending the transfer to you daily, but the maximum
-amount you will be receiving everyday is US$5000.00. Contact Agent now
-to pick up your first payment $US5000.00 immediately.
-
-Contact Person, Mr. James Gadner, Dir. Money Gram Benin.
-Email: mgbenin903@gmail.com
-Telephone Numbers: +229 62819378/ +229 98477762
-
-HERE IS YOUR PAYMENT DETAILS FOR THE FIRST =C2=A3US5000.00 SENT TODAY.
-
-Track View Website link:
-https://secure.moneygram.com/track
-Sender=E2=80=99s First name: David
-Sender=E2=80=99s Last Name: Joiner
-Money Transfer Control Number (MTCN) (REFERENCE)# 26046856
-
-Contact the Mmoney Gram Urgent and reconfirm your address to the
-office before, they will allow you to pick up the transfer today.
-
-HERE IS WHAT REQUIRED OF YOU.
-
-YOUR FULL NAME---------
-ADDRESS--------------
-COUNTRY-----------------------------
-TELEPHONE NUMBERS-----------------
-
-Note, I paid the transfer fee for you, but only you are required to
-send to the office is $75 only,Been Your Payment File activation fee,
-Send once you contact the office,before you can able to pick up your
-transfer today.
-
-Let me know once you pick up first payment today.
-
-Barrister Robert Richter UN-Attorney at Law Court-Benin
+Tested-by: Breno Lima <breno.lima@nxp.com>
