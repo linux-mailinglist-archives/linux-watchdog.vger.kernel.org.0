@@ -2,36 +2,36 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 420F01A89DD
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Apr 2020 20:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F2B1A8BA8
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Apr 2020 21:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504158AbgDNSl6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Apr 2020 14:41:58 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:42151 "EHLO
+        id S2505311AbgDNT5x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Apr 2020 15:57:53 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:38619 "EHLO
         ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729777AbgDNSlw (ORCPT
+        with ESMTP id S2505301AbgDNT53 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Apr 2020 14:41:52 -0400
+        Tue, 14 Apr 2020 15:57:29 -0400
 Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 02BB72222E;
-        Tue, 14 Apr 2020 20:41:46 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 6B92922FEC;
+        Tue, 14 Apr 2020 21:57:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1586889706;
+        t=1586894236;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=l8iSoKOFISTm7e3WSV4reMrghBve1U8G6s6rKNmMUNA=;
-        b=rtveXxXS06F/NYmV9F2bGS5feXtMfE9gJBoboXZn8qEe9Lv/Pdw+PkB3WYbQaCUuxLEI6I
-        01s6XbVlOTMD8dnUpTguXYKOq3sSaQOCnztQCPF9doXoASZlztSVASr7gO1ILou1R9B2WC
-        mzBh5hFIxbe65adMWQoMX24W8N21isE=
+        bh=c1MxhBoeYs71xwy2H0AJkghL+7Y+1QwLOd9ofZWf8mY=;
+        b=oYyi/K9Wgv1J8oUv562gbV/e/cxfMAv1K6H8unRKColnTKhwpm+o2zuVXXywnycQemE920
+        49lVQd/oeC++cP1U8UAjd2wqxmRkE+CsXw4zAXo8aqoBXwRTVNIy+ObJKwMDB2s3LXJS0A
+        SUYA2YwD+G6uEd0VIP7BN8x0gr1wjC0=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8;
  format=flowed
 Content-Transfer-Encoding: 8bit
-Date:   Tue, 14 Apr 2020 20:41:45 +0200
+Date:   Tue, 14 Apr 2020 21:57:15 +0200
 From:   Michael Walle <michael@walle.cc>
 To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
@@ -55,7 +55,7 @@ Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using
  regmap
-In-Reply-To: <CAMpxmJW1x4Orh1BZ4TUoCsYeaAAZ4NBUNvoMG9JgP0iLvXTOtg@mail.gmail.com>
+In-Reply-To: <62d157198a75a59ada15c496deeab49b@walle.cc>
 References: <20200402203656.27047-1-michael@walle.cc>
  <20200402203656.27047-11-michael@walle.cc>
  <CAMpxmJVE3PgVCxkQ-ryc5=KSrKcpdmk1cnJUxJBz9QFCx-e_+A@mail.gmail.com>
@@ -63,7 +63,8 @@ References: <20200402203656.27047-1-michael@walle.cc>
  <CAMpxmJVC7e9JnHzBo-h8M1+KmcA32=Rvxo7+znH=-kAbcCr_LQ@mail.gmail.com>
  <e0388a2137e23d76b2415a7549c01dd1@walle.cc>
  <CAMpxmJW1x4Orh1BZ4TUoCsYeaAAZ4NBUNvoMG9JgP0iLvXTOtg@mail.gmail.com>
-Message-ID: <62d157198a75a59ada15c496deeab49b@walle.cc>
+ <62d157198a75a59ada15c496deeab49b@walle.cc>
+Message-ID: <eab972adf53bbac20b5a9e613fcfb5b0@walle.cc>
 X-Sender: michael@walle.cc
 User-Agent: Roundcube Webmail/1.3.10
 X-Spamd-Bar: +
@@ -71,7 +72,7 @@ X-Spam-Level: *
 X-Rspamd-Server: web
 X-Spam-Status: No, score=1.40
 X-Spam-Score: 1.40
-X-Rspamd-Queue-Id: 02BB72222E
+X-Rspamd-Queue-Id: 6B92922FEC
 X-Spamd-Result: default: False [1.40 / 15.00];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
@@ -81,7 +82,7 @@ X-Spamd-Result: default: False [1.40 / 15.00];
          MIME_GOOD(-0.10)[text/plain];
          DKIM_SIGNED(0.00)[];
          RCPT_COUNT_TWELVE(0.00)[23];
-         NEURAL_HAM(-0.00)[-1.082];
+         NEURAL_HAM(-0.00)[-0.400];
          RCVD_COUNT_ZERO(0.00)[0];
          FROM_EQ_ENVFROM(0.00)[];
          MIME_TRACE(0.00)[0:+];
@@ -93,44 +94,61 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am 2020-04-14 19:00, schrieb Bartosz Golaszewski:
-> wt., 14 kwi 2020 o 12:07 Michael Walle <michael@walle.cc> napisał(a):
->> >>
->> >> So the best from a user perspective I've could come up with was:
->> >>
->> >>    ->base_reg = GPIO_REGMAP_ADDR(addr);
->> >>
->> >> I'm open for suggestions.
->> >>
->> >
->> > Maybe setting the pointer to ERR_PTR(-ENOENT) which will result in
->> > IS_ERR() returning true?
+Hi Mark, Hi Bartosz, Hi Linus,
+
+Am 2020-04-14 20:41, schrieb Michael Walle:
+> Am 2020-04-14 19:00, schrieb Bartosz Golaszewski:
+>> wt., 14 kwi 2020 o 12:07 Michael Walle <michael@walle.cc> napisał(a):
+>>> >>
+>>> >> So the best from a user perspective I've could come up with was:
+>>> >>
+>>> >>    ->base_reg = GPIO_REGMAP_ADDR(addr);
+>>> >>
+>>> >> I'm open for suggestions.
+>>> >>
+>>> >
+>>> > Maybe setting the pointer to ERR_PTR(-ENOENT) which will result in
+>>> > IS_ERR() returning true?
+>>> 
+>>> Unfortunatly, its not a pointer, but only a regular unsigned int (ie
+>>> the type the regmap API has for its "reg" property). It could be a
+>>> pointer of course but then the user would have to allocate additional
+>>> memory.
+>>> 
+>>> -michael
+>>> 
 >> 
->> Unfortunatly, its not a pointer, but only a regular unsigned int (ie
->> the type the regmap API has for its "reg" property). It could be a
->> pointer of course but then the user would have to allocate additional
->> memory.
->> 
->> -michael
->> 
+>> Eek, of course it's not a pointer. If possible I'd like to avoid this
+>> GPIO_REGMAP_ADDR() macro, so how about having some separate field for
+>> invalid offsets making every offset 'valid' by default?
 > 
-> Eek, of course it's not a pointer. If possible I'd like to avoid this
-> GPIO_REGMAP_ADDR() macro, so how about having some separate field for
-> invalid offsets making every offset 'valid' by default?
+> IMHO this has the same problems as mentioned in the response to Mark's
+> idea. Normally, the user sets only some addresses, thus he has to mark
+> all other as invalid. And if you add another address, you have to touch
+> all the drivers to mark it as invalid.
+> 
+> We could add some force bits like the "use_ack" flag in the bgpio 
+> driver,
+> where you can force the use of the value 0. But I'd really like to find
+> a better way..
 
-IMHO this has the same problems as mentioned in the response to Mark's
-idea. Normally, the user sets only some addresses, thus he has to mark
-all other as invalid. And if you add another address, you have to touch
-all the drivers to mark it as invalid.
+So what about the following:
 
-We could add some force bits like the "use_ack" flag in the bgpio 
-driver,
-where you can force the use of the value 0. But I'd really like to find
-a better way..
+#define GPIO_REGMAP_ADDR_ZERO (unsigned int)(-1)
+
+So this way the user might assign the base addresses the normal way
+except when he wants to use zero, in that case he has to use
+
+   ->base_adr = GPIO_REGMAP_ADDR_ZERO;
+
+gpio-regmap.c could use then:
+
+if (base_addr)
+   something_useful(gpio_regmap_addr(base_addr));
+
+unsigned int gpio_regmap_addr(unsigned int addr)
+{
+   return (addr == GPIO_REGMAP_ADDR_ZERO) ? 0 : addr;
+}
 
 -michael
-
-> 
-> Linus: do you have a better idea?
-> 
-> Bart
