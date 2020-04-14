@@ -2,307 +2,289 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D31A1A781D
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Apr 2020 12:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101371A8331
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Apr 2020 17:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438135AbgDNKHa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Apr 2020 06:07:30 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:39923 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438129AbgDNKHW (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Apr 2020 06:07:22 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        id S2440544AbgDNPiC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Apr 2020 11:38:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58150 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2440529AbgDNPhx (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 14 Apr 2020 11:37:53 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 3CF8C22EEB;
-        Tue, 14 Apr 2020 12:07:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1586858831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=APa0klHYbq0nRnZCFsgw5rX3mQ0o6Wd2E6ZRzR/tOMM=;
-        b=uLyAAYMIctXbXn9cwOwmR55h8ibp43+Djfg86KlNcR7vgHgZZwlDgYiRikLd5qtnEMmsMc
-        PzDJsZxopbkE54MxXLnOoNx1pAf8tR0ohLsnwK7dyAuGExIalFgJsLgv7Fxr4qrCcCMQhy
-        F83tczkLaB8z8xbA7ARkBZ9/CpoYSSU=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 14 Apr 2020 12:07:01 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 217052075E;
+        Tue, 14 Apr 2020 15:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586878671;
+        bh=wsnp91rcwdxYBpYao46YELhWn6oIvD6jIFh28S6ADA8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=eaPNXm0eBthNtlwBsPDfapYe+Lln6DcD+Fs92BFAyuuJ6c8XZ+IMegeGcMfBWcPOf
+         UaMKwqoNjvUXSXYI/GatTtDnNYZ+Q8guQSDr701azEr1WhvnRDeT9uDU0typ7VXcna
+         P3BXeGoNg2eXfaGm6h9+Q0lnYCMLyknBkMBDsiTo=
+Date:   Tue, 14 Apr 2020 16:37:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using
- regmap
-In-Reply-To: <CAMpxmJVC7e9JnHzBo-h8M1+KmcA32=Rvxo7+znH=-kAbcCr_LQ@mail.gmail.com>
-References: <20200402203656.27047-1-michael@walle.cc>
- <20200402203656.27047-11-michael@walle.cc>
- <CAMpxmJVE3PgVCxkQ-ryc5=KSrKcpdmk1cnJUxJBz9QFCx-e_+A@mail.gmail.com>
- <80bd8661ec8a1f5eda3f09a267846eaa@walle.cc>
- <CAMpxmJVC7e9JnHzBo-h8M1+KmcA32=Rvxo7+znH=-kAbcCr_LQ@mail.gmail.com>
-Message-ID: <e0388a2137e23d76b2415a7549c01dd1@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Spam-Level: *
-X-Rspamd-Server: web
-X-Spam-Status: No, score=1.40
-X-Spam-Score: 1.40
-X-Rspamd-Queue-Id: 3CF8C22EEB
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_TWELVE(0.00)[23];
-         NEURAL_HAM(-0.00)[-1.081];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,linaro.org,kernel.org,suse.com,roeck-us.net,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,linutronix.de,lakedaemon.net,linuxfoundation.org];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+        Jean Delvare <jdelvare@suse.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Li Yang <leoyang.li@nxp.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Applied "regmap-irq: make it possible to add irq_chip do a specific device node" to the regmap tree
+In-Reply-To:  <20200402203656.27047-5-michael@walle.cc>
+Message-Id:  <applied-20200402203656.27047-5-michael@walle.cc>
+X-Patchwork-Hint: ignore
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am 2020-04-14 11:50, schrieb Bartosz Golaszewski:
-> pon., 6 kwi 2020 o 12:10 Michael Walle <michael@walle.cc> napisał(a):
->> 
->> 
->> Hi Bartosz, Hi Mark Brown,
->> 
->> Am 2020-04-06 09:47, schrieb Bartosz Golaszewski:
->> > czw., 2 kwi 2020 o 22:37 Michael Walle <michael@walle.cc> napisał(a):
->> >>
->> >> There are quite a lot simple GPIO controller which are using regmap to
->> >> access the hardware. This driver tries to be a base to unify existing
->> >> code into one place. This won't cover everything but it should be a
->> >> good
->> >> starting point.
->> >>
->> >> It does not implement its own irq_chip because there is already a
->> >> generic one for regmap based devices. Instead, the irq_chip will be
->> >> instanciated in the parent driver and its irq domain will be associate
->> >> to this driver.
->> >>
->> >> For now it consists of the usual registers, like set (and an optional
->> >> clear) data register, an input register and direction registers.
->> >> Out-of-the-box, it supports consecutive register mappings and mappings
->> >> where the registers have gaps between them with a linear mapping
->> >> between
->> >> GPIO offset and bit position. For weirder mappings the user can
->> >> register
->> >> its own .xlate().
->> >>
->> >> Signed-off-by: Michael Walle <michael@walle.cc>
->> >
->> > Hi Michael,
->> >
->> > Thanks for doing this! When looking at other generic drivers:
->> > gpio-mmio and gpio-reg I can see there are some corner-cases and more
->> > specific configuration options we could add
->> 
->> I didn't want to copy every bit without being able to test it.
->> 
-> 
-> Sure, I didn't mean we need to do it now - just set it as the future 
-> goal.
-> 
->> > but it's not a blocker,
->> > we'll probably be extending this one as we convert more drivers to
->> > using it.
->> 
->> correct, that was also my plan.
->> 
->> > Personally I'd love to see gpio-mmio and gpio-reg removed
->> > and replaced by a single, generic regmap interface eventually.
->> 
->> agreed.
->> 
->> 
-> 
-> [snip!]
-> 
->> >> +
->> >> +/**
->> >> + * gpio_regmap_simple_xlate() - translate base/offset to reg/mask
->> >> + *
->> >> + * Use a simple linear mapping to translate the offset to the
->> >> bitmask.
->> >> + */
->> >> +int gpio_regmap_simple_xlate(struct gpio_regmap *gpio, unsigned int
->> >> base,
->> >> +                            unsigned int offset,
->> >> +                            unsigned int *reg, unsigned int *mask)
->> >> +{
->> >> +       unsigned int line = offset % gpio->ngpio_per_reg;
->> >> +       unsigned int stride = offset / gpio->ngpio_per_reg;
->> >> +
->> >> +       *reg = base + stride * gpio->reg_stride;
->> >> +       *mask = BIT(line);
->> >> +
->> >> +       return 0;
->> >> +}
->> >> +EXPORT_SYMBOL_GPL(gpio_regmap_simple_xlate);
->> >
->> > Why does this need to be exported?
->> 
->> Mh, the idea was that a user could also set this xlate() by himself 
->> (for
->> whatever reason). But since it is the default, it is not really
->> necessary.
->> That being said, I don't care if its only local to this module.
->> 
-> 
-> Let's only export symbols that have external users then.
-> 
-> [snip!]
-> 
->> >> +
->> >> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
->> >> +MODULE_DESCRIPTION("GPIO generic regmap driver core");
->> >> +MODULE_LICENSE("GPL");
->> >> diff --git a/include/linux/gpio-regmap.h b/include/linux/gpio-regmap.h
->> >> new file mode 100644
->> >> index 000000000000..ad63955e0e43
->> >> --- /dev/null
->> >> +++ b/include/linux/gpio-regmap.h
->> >> @@ -0,0 +1,88 @@
->> >> +/* SPDX-License-Identifier: GPL-2.0-only */
->> >> +
->> >> +#ifndef _LINUX_GPIO_REGMAP_H
->> >> +#define _LINUX_GPIO_REGMAP_H
->> >> +
->> >> +struct gpio_regmap_addr {
->> >> +       unsigned int addr;
->> >> +       bool valid;
->> >> +};
->> >
->> > I'm not quite sure what the meaning behind the valid field here is.
->> > When would we potentially set it to false?
->> 
->> Some base addresses are optional, but on the other hand, a base 
->> address
->> of 0 could also be valid. So I cannot use 0 as an indicator whether a
->> base address is set or not. The generic mmio driver has some special
->> case for the ack base, where there is a use_ack flag which forces to
->> use the ack register even if its zero. So I've had a look at the 
->> kernel
->> if there is a better idiom for that, but I haven't found anything.
->> 
->> So the best from a user perspective I've could come up with was:
->> 
->>    ->base_reg = GPIO_REGMAP_ADDR(addr);
->> 
->> I'm open for suggestions.
->> 
-> 
-> Maybe setting the pointer to ERR_PTR(-ENOENT) which will result in
-> IS_ERR() returning true?
+The patch
 
-Unfortunatly, its not a pointer, but only a regular unsigned int (ie
-the type the regmap API has for its "reg" property). It could be a
-pointer of course but then the user would have to allocate additional
-memory.
+   regmap-irq: make it possible to add irq_chip do a specific device node
 
--michael
+has been applied to the regmap tree at
 
-> 
->> >
->> >> +#define GPIO_REGMAP_ADDR(_addr) \
->> >> +       ((struct gpio_regmap_addr) { .addr = _addr, .valid = true })
->> >> +
->> >> +/**
->> >> + * struct gpio_regmap - Description of a generic regmap gpio_chip.
->> >> + *
->> >> + * @parent:            The parent device
->> >> + * @regmap:            The regmap use to access the registers
->> >
->> > s/use/used/
->> >
->> >> + *                     given, the name of the device is used
->> >> + * @label:             (Optional) Descriptive name for GPIO
->> >> controller.
->> >> + *                     If not given, the name of the device is used.
->> >> + * @ngpio:             Number of GPIOs
->> >> + * @reg_dat_base:      (Optional) (in) register base address
->> >> + * @reg_set_base:      (Optional) set register base address
->> >> + * @reg_clr_base:      (Optional) clear register base address
->> >> + * @reg_dir_in_base:   (Optional) out setting register base address
->> >> + * @reg_dir_out_base:  (Optional) in setting register base address
->> >> + * @reg_stride:                (Optional) May be set if the registers
->> >> (of the
->> >> + *                     same type, dat, set, etc) are not consecutive.
->> >> + * @ngpio_per_reg:     Number of GPIOs per register
->> >> + * @irq_domain:                (Optional) IRQ domain if the
->> >> controller is
->> >> + *                     interrupt-capable
->> >> + * @reg_mask_xlate:     (Optional) Translates base address and GPIO
->> >> + *                     offset to a register/bitmask pair. If not
->> >> + *                     given the default gpio_regmap_simple_xlate()
->> >> + *                     is used.
->> >> + * @to_irq:            (Optional) Maps GPIO offset to a irq number.
->> >> + *                     By default assumes a linear mapping of the
->> >> + *                     given irq_domain.
->> >> + * @driver_data:       Pointer to the drivers private data. Not used
->> >> by
->> >> + *                     gpio-regmap.
->> >> + *
->> >> + * The reg_mask_xlate translates a given base address and GPIO offset
->> >> to
->> >> + * register and mask pair. The base address is one of the given
->> >> reg_*_base.
->> >> + */
->> >> +struct gpio_regmap {
->> >
->> > I'd prefer to follow a pattern seen in other such APIs of calling this
->> > structure gpio_regmap_config and creating another private structure
->> > called gpio_regmap used in callbacks that would only contain necessary
->> > fields.
->> 
->> something like the following?
->> 
->> struct gpio_regmap *gpio_regmap_register(struct gpio_regmap_config *)
->> 
->> but if that structure is private, how can a callback access individual
->> elements? Or do you mean private in "local to the gpio drivers"?
->> 
-> 
-> Either making the structure local to drivers/gpio or making it
-> entirely opaque and providing accessor functions. Depending on how
-> much of the structure one may want to access.
-> 
->> Also I was unsure about the naming, eg. some use
->> stuff_register()/stuff_unregister() and some 
->> stuff_add()/stuff_remove().
->> 
-> 
-> register/unregister is fine with me.
-> 
-> Bart
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git 
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 12479382877dcf6623af4676caa8d3c647469a1b Mon Sep 17 00:00:00 2001
+From: Michael Walle <michael@walle.cc>
+Date: Thu, 2 Apr 2020 22:36:44 +0200
+Subject: [PATCH] regmap-irq: make it possible to add irq_chip do a specific
+ device node
+
+Add a new function regmap_add_irq_chip_np() with its corresponding
+devm_regmap_add_irq_chip_np() variant. Sometimes one want to register
+the IRQ domain on a different device node that the one of the regmap
+node. For example when using a MFD where there are different interrupt
+controllers and particularly for the generic regmap gpio_chip/irq_chip
+driver. In this case it is not desireable to have the IRQ domain on
+the parent node.
+
+Signed-off-by: Michael Walle <michael@walle.cc>
+Link: https://lore.kernel.org/r/20200402203656.27047-5-michael@walle.cc
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/base/regmap/regmap-irq.c | 84 ++++++++++++++++++++++++++------
+ include/linux/regmap.h           | 10 ++++
+ 2 files changed, 78 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index 3d64c9331a82..4340e1d268b6 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -541,8 +541,9 @@ static const struct irq_domain_ops regmap_domain_ops = {
+ };
+ 
+ /**
+- * regmap_add_irq_chip() - Use standard regmap IRQ controller handling
++ * regmap_add_irq_chip_np() - Use standard regmap IRQ controller handling
+  *
++ * @np: The device_node where the IRQ domain should be added to.
+  * @map: The regmap for the device.
+  * @irq: The IRQ the device uses to signal interrupts.
+  * @irq_flags: The IRQF_ flags to use for the primary interrupt.
+@@ -556,9 +557,10 @@ static const struct irq_domain_ops regmap_domain_ops = {
+  * register cache.  The chip driver is responsible for restoring the
+  * register values used by the IRQ controller over suspend and resume.
+  */
+-int regmap_add_irq_chip(struct regmap *map, int irq, int irq_flags,
+-			int irq_base, const struct regmap_irq_chip *chip,
+-			struct regmap_irq_chip_data **data)
++int regmap_add_irq_chip_np(struct device_node *np, struct regmap *map, int irq,
++			   int irq_flags, int irq_base,
++			   const struct regmap_irq_chip *chip,
++			   struct regmap_irq_chip_data **data)
+ {
+ 	struct regmap_irq_chip_data *d;
+ 	int i;
+@@ -769,12 +771,10 @@ int regmap_add_irq_chip(struct regmap *map, int irq, int irq_flags,
+ 	}
+ 
+ 	if (irq_base)
+-		d->domain = irq_domain_add_legacy(map->dev->of_node,
+-						  chip->num_irqs, irq_base, 0,
+-						  &regmap_domain_ops, d);
++		d->domain = irq_domain_add_legacy(np, chip->num_irqs, irq_base,
++						  0, &regmap_domain_ops, d);
+ 	else
+-		d->domain = irq_domain_add_linear(map->dev->of_node,
+-						  chip->num_irqs,
++		d->domain = irq_domain_add_linear(np, chip->num_irqs,
+ 						  &regmap_domain_ops, d);
+ 	if (!d->domain) {
+ 		dev_err(map->dev, "Failed to create IRQ domain\n");
+@@ -808,6 +808,30 @@ int regmap_add_irq_chip(struct regmap *map, int irq, int irq_flags,
+ 	kfree(d);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(regmap_add_irq_chip_np);
++
++/**
++ * regmap_add_irq_chip() - Use standard regmap IRQ controller handling
++ *
++ * @map: The regmap for the device.
++ * @irq: The IRQ the device uses to signal interrupts.
++ * @irq_flags: The IRQF_ flags to use for the primary interrupt.
++ * @irq_base: Allocate at specific IRQ number if irq_base > 0.
++ * @chip: Configuration for the interrupt controller.
++ * @data: Runtime data structure for the controller, allocated on success.
++ *
++ * Returns 0 on success or an errno on failure.
++ *
++ * This is the same as regmap_add_irq_chip_np, except that the device
++ * node of the regmap is used.
++ */
++int regmap_add_irq_chip(struct regmap *map, int irq, int irq_flags,
++			int irq_base, const struct regmap_irq_chip *chip,
++			struct regmap_irq_chip_data **data)
++{
++	return regmap_add_irq_chip_np(map->dev->of_node, map, irq, irq_flags,
++				      irq_base, chip, data);
++}
+ EXPORT_SYMBOL_GPL(regmap_add_irq_chip);
+ 
+ /**
+@@ -875,9 +899,10 @@ static int devm_regmap_irq_chip_match(struct device *dev, void *res, void *data)
+ }
+ 
+ /**
+- * devm_regmap_add_irq_chip() - Resource manager regmap_add_irq_chip()
++ * devm_regmap_add_irq_chip_np() - Resource manager regmap_add_irq_chip_np()
+  *
+  * @dev: The device pointer on which irq_chip belongs to.
++ * @np: The device_node where the IRQ domain should be added to.
+  * @map: The regmap for the device.
+  * @irq: The IRQ the device uses to signal interrupts
+  * @irq_flags: The IRQF_ flags to use for the primary interrupt.
+@@ -890,10 +915,11 @@ static int devm_regmap_irq_chip_match(struct device *dev, void *res, void *data)
+  * The &regmap_irq_chip_data will be automatically released when the device is
+  * unbound.
+  */
+-int devm_regmap_add_irq_chip(struct device *dev, struct regmap *map, int irq,
+-			     int irq_flags, int irq_base,
+-			     const struct regmap_irq_chip *chip,
+-			     struct regmap_irq_chip_data **data)
++int devm_regmap_add_irq_chip_np(struct device *dev, struct device_node *np,
++				struct regmap *map, int irq, int irq_flags,
++				int irq_base,
++				const struct regmap_irq_chip *chip,
++				struct regmap_irq_chip_data **data)
+ {
+ 	struct regmap_irq_chip_data **ptr, *d;
+ 	int ret;
+@@ -903,8 +929,8 @@ int devm_regmap_add_irq_chip(struct device *dev, struct regmap *map, int irq,
+ 	if (!ptr)
+ 		return -ENOMEM;
+ 
+-	ret = regmap_add_irq_chip(map, irq, irq_flags, irq_base,
+-				  chip, &d);
++	ret = regmap_add_irq_chip_np(np, map, irq, irq_flags, irq_base,
++				     chip, &d);
+ 	if (ret < 0) {
+ 		devres_free(ptr);
+ 		return ret;
+@@ -915,6 +941,32 @@ int devm_regmap_add_irq_chip(struct device *dev, struct regmap *map, int irq,
+ 	*data = d;
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(devm_regmap_add_irq_chip_np);
++
++/**
++ * devm_regmap_add_irq_chip() - Resource manager regmap_add_irq_chip()
++ *
++ * @dev: The device pointer on which irq_chip belongs to.
++ * @map: The regmap for the device.
++ * @irq: The IRQ the device uses to signal interrupts
++ * @irq_flags: The IRQF_ flags to use for the primary interrupt.
++ * @irq_base: Allocate at specific IRQ number if irq_base > 0.
++ * @chip: Configuration for the interrupt controller.
++ * @data: Runtime data structure for the controller, allocated on success
++ *
++ * Returns 0 on success or an errno on failure.
++ *
++ * The &regmap_irq_chip_data will be automatically released when the device is
++ * unbound.
++ */
++int devm_regmap_add_irq_chip(struct device *dev, struct regmap *map, int irq,
++			     int irq_flags, int irq_base,
++			     const struct regmap_irq_chip *chip,
++			     struct regmap_irq_chip_data **data)
++{
++	return devm_regmap_add_irq_chip_np(dev, map->dev->of_node, map, irq,
++					   irq_flags, irq_base, chip, data);
++}
+ EXPORT_SYMBOL_GPL(devm_regmap_add_irq_chip);
+ 
+ /**
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index 40b07168fd8e..ae5034b2d7c3 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -21,6 +21,7 @@
+ struct module;
+ struct clk;
+ struct device;
++struct device_node;
+ struct i2c_client;
+ struct i3c_device;
+ struct irq_domain;
+@@ -1310,12 +1311,21 @@ struct regmap_irq_chip_data;
+ int regmap_add_irq_chip(struct regmap *map, int irq, int irq_flags,
+ 			int irq_base, const struct regmap_irq_chip *chip,
+ 			struct regmap_irq_chip_data **data);
++int regmap_add_irq_chip_np(struct device_node *np, struct regmap *map, int irq,
++			   int irq_flags, int irq_base,
++			   const struct regmap_irq_chip *chip,
++			   struct regmap_irq_chip_data **data);
+ void regmap_del_irq_chip(int irq, struct regmap_irq_chip_data *data);
+ 
+ int devm_regmap_add_irq_chip(struct device *dev, struct regmap *map, int irq,
+ 			     int irq_flags, int irq_base,
+ 			     const struct regmap_irq_chip *chip,
+ 			     struct regmap_irq_chip_data **data);
++int devm_regmap_add_irq_chip_np(struct device *dev, struct device_node *np,
++				struct regmap *map, int irq, int irq_flags,
++				int irq_base,
++				const struct regmap_irq_chip *chip,
++				struct regmap_irq_chip_data **data);
+ void devm_regmap_del_irq_chip(struct device *dev, int irq,
+ 			      struct regmap_irq_chip_data *data);
+ 
+-- 
+2.20.1
+
