@@ -2,25 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6571D1A9E59
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Apr 2020 13:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0645E1AB3CF
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Apr 2020 00:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897869AbgDOLy2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 15 Apr 2020 07:54:28 -0400
-Received: from mail-sz.amlogic.com ([211.162.65.117]:23884 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2897860AbgDOLyT (ORCPT
+        id S1732133AbgDOW3s (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 15 Apr 2020 18:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732109AbgDOW3n (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:54:19 -0400
-Received: from [10.28.39.241] (10.28.39.241) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Wed, 15 Apr 2020
- 19:54:57 +0800
-Subject: Re: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor
- Calls.
-From:   Xingyu Chen <xingyu.chen@amlogic.com>
-To:     Evan Benn <evanbenn@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Julius Werner <jwerner@chromium.org>,
+        Wed, 15 Apr 2020 18:29:43 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C119AC061A0F
+        for <linux-watchdog@vger.kernel.org>; Wed, 15 Apr 2020 15:29:42 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id b12so18944668ion.8
+        for <linux-watchdog@vger.kernel.org>; Wed, 15 Apr 2020 15:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PVtGYrIeBI2+9xVgD4LCkJpnGBHTWG+8tKFXeAJgTRU=;
+        b=gXSGbTR09MscBjxHvvT6Zy0GE7nYGjJ8nQRhWPJMjuaPZPTM411vSTxLoPH1wb/lRH
+         E6Z4jtglLRMXQKommS2CbxodCJi11rjz7cgYPRAWFMxtk1Sc3UXB1U2xuagdbDr83VUY
+         5gnHcn+7SSgE8W9/iOMJ1SOy7cFoMYxBGg8EM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PVtGYrIeBI2+9xVgD4LCkJpnGBHTWG+8tKFXeAJgTRU=;
+        b=dJA3OSz8ENq5aoWhZ/ipoR78y7VFaMVpq7T4JEH9p45r1xgXgaI+TwrRLXuTfIkfzR
+         RqNyUxiahuYfEzgbMf4i1VlfJNzorys45bF5qZkBc9ktIMncvfNy7hU6iYUVFLiYUsyx
+         EO35TjIyIH+tuJjgIxBrPxkxdlyvC9fgcPQd3Atxx2K/HR2Eom107dNGmgkzyNrdP/2/
+         1S/ovSxTgE/hwHald7PGPIwKRH1dOj/0XocRMIZikWr2vDhMBgzspERW5lgxnYlIEVaO
+         6kYVwhWQFSgDNNMU82eECTuUHGU7CGWMrUjcuuRSpbIY1thQHcbKNyYnG0anM5FmJJZq
+         MC3A==
+X-Gm-Message-State: AGi0PubqF8gG9y48S4nRMD+wbjqUJv+YHXLAQsI2KgFJNQBaYg8xd+o5
+        hw6UOArBVUF4xPpUU/pRpZ77lJz5CpAWd2rcenxPeA==
+X-Google-Smtp-Source: APiQypJ3eoCymVEhOWkVktr1qddf2Xa0knAtkx0Gy+/ySRR66TTx2i5h4oQ94XSCgON3AJO5/Bo8xzGkGGc86wd33Kk=
+X-Received: by 2002:a05:6602:1302:: with SMTP id h2mr28555486iov.186.1586989781796;
+ Wed, 15 Apr 2020 15:29:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200403052900.258855-1-evanbenn@chromium.org>
+ <CAKz_xw0gV+w_gMkLfB4qUBdULLfFoiv1TBWp9_PHy33wP_XWyA@mail.gmail.com>
+ <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com> <243e107c-35c1-2d14-5285-c9e13744963c@amlogic.com>
+In-Reply-To: <243e107c-35c1-2d14-5285-c9e13744963c@amlogic.com>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Wed, 15 Apr 2020 15:29:29 -0700
+Message-ID: <CAODwPW9RSB37+4EJ2QXAwz=ShFB23L1GKC2mLYE5L5JuQR2tPw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor Calls.
+To:     Xingyu Chen <xingyu.chen@amlogic.com>
+Cc:     Evan Benn <evanbenn@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Julius Werner <jwerner@chromium.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Anson Huang <Anson.Huang@nxp.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -41,7 +74,7 @@ CC:     Julius Werner <jwerner@chromium.org>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        <devicetree@vger.kernel.org>,
+        devicetree@vger.kernel.org,
         "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "moderated list:ARM/Mediatek SoC support" 
@@ -49,125 +82,38 @@ CC:     Julius Werner <jwerner@chromium.org>,
         LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
         Jianxin Pan <jianxin.pan@amlogic.com>,
         Yonghui Yu <yonghui.yu@amlogic.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <20200403052900.258855-1-evanbenn@chromium.org>
- <CAKz_xw0gV+w_gMkLfB4qUBdULLfFoiv1TBWp9_PHy33wP_XWyA@mail.gmail.com>
- <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com>
-Message-ID: <243e107c-35c1-2d14-5285-c9e13744963c@amlogic.com>
-Date:   Wed, 15 Apr 2020 19:54:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.28.39.241]
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,Evan
+> In addition, It looks more reasonable to use the "msec" as the unit of
+> timeout parameter for the ATF fw interface with SMCWD_SET_TIMEOUT:
+>
+> - The fw interface will compatible with the uboot generic watchdog
+> interface at [0], and there is no need to convert timeout from msec
+> to sec.
 
-On 2020/4/11 23:06, Xingyu Chen wrote:
-> Hi, Evan
-> 
-> On 2020/4/3 14:04, Evan Benn wrote:
->> Apologies I forgot to add this note to my cover letter.
->>
->> Xingyu do you mind seeing if you can modify your ATF firmware to match 
->> this driver?
->> We can add a compatible or make other changes to suit you.
-> Thanks for your patch [0],  I will test this patch on the meson-A1 
-> platform, but It looks more
-> convenient to be compatible with other platforms if using the compatible 
-> strings to correlate
-> platform differences include function ID and wdt_ops.
-> 
-> [0]: https://patchwork.kernel.org/patch/11471829/
+I think we're trying hard to keep this compatible to a Trusted
+Firmware counterpart that we have already shipped, so we would prefer
+to keep it at seconds if possible. That's what the Linux watchdog core
+uses as well after all, so it just seems natural. I don't really see
+how what U-Boot does would have anything to do with this.
 
-I have tested your patch on the meson-A1, but I use the compatible 
-strings to correlate the following platform differences，it works normally.
+> - Some vendor's watchdog may be not support the "wdt_trigger_reset"
+> reset operation, but they can use the method below to reset the system
+> by the watchdog right now.
+>
+> watchdog_set_time(1);  //1ms
+> watchdog_enable();
 
-static const struct smcwd_data smcwd_mtk_data = {
-	.func_id = 0x82003d06,
-	.ops     = &smcwd_ops,
-}
-
-static const struct smcwd_data smcwd_meson_data = {
-	.func_id = 0x82000086,
-	.ops     = &smcwd_timeleft_ops,
-}
-
-In addition, It looks more reasonable to use the "msec" as the unit of 
-timeout parameter for the ATF fw interface with SMCWD_SET_TIMEOUT:
-
-- The fw interface will compatible with the uboot generic watchdog 
-interface at [0], and there is no need to convert timeout from msec
-to sec.
-
-- Some vendor's watchdog may be not support the "wdt_trigger_reset" 
-reset operation, but they can use the method below to reset the system
-by the watchdog right now.
-
-watchdog_set_time(1);  //1ms
-watchdog_enable();
-
-[0]: 
-https://gitlab.denx.de/u-boot/u-boot/-/blob/master/drivers/watchdog/wdt-uclass.c
-
-Best Regards
->> Thanks
->>
->> On Fri, Apr 3, 2020 at 4:29 PM Evan Benn <evanbenn@chromium.org 
->> <mailto:evanbenn@chromium.org>> wrote:
->>
->>     This is currently supported in firmware deployed on oak, hana and
->>     elm mt8173
->>     chromebook devices. The kernel driver is written to be a generic SMC
->>     watchdog driver.
->>
->>     Arm Trusted Firmware upstreaming review:
->>     https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405
->>
->>     Patch to add oak, hana, elm device tree:
->>     https://lore.kernel.org/linux-arm-kernel/20200110073730.213789-1-hsinyi@chromium.org/
->>     I would like to add the device tree support after the above patch is
->>     accepted.
->>
->>     Changes in v3:
->>     - Change name back to arm
->>     - Add optional get_timeleft op
->>     - change name to arm_smc_wdt
->>
->>     Changes in v2:
->>     - Change name arm > mt8173
->>     - use watchdog_stop_on_reboot
->>     - use watchdog_stop_on_unregister
->>     - use devm_watchdog_register_device
->>     - remove smcwd_shutdown, smcwd_remove
->>     - change error codes
->>
->>     Evan Benn (1):
->>       dt-bindings: watchdog: Add ARM smc wdt for mt8173 watchdog
->>
->>     Julius Werner (1):
->>       watchdog: Add new arm_smd_wdt watchdog driver
->>
->>      .../bindings/watchdog/arm-smc-wdt.yaml        |  30 +++
->>      MAINTAINERS                                   |   7 +
->>      arch/arm64/configs/defconfig                  |   1 +
->>      drivers/watchdog/Kconfig                      |  13 ++
->>      drivers/watchdog/Makefile                     |   1 +
->>      drivers/watchdog/arm_smc_wdt.c                | 181
->>     ++++++++++++++++++
->>      6 files changed, 233 insertions(+)
->>      create mode 100644
->>     Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml
->>      create mode 100644 drivers/watchdog/arm_smc_wdt.c
->>
->>     -- 
->>     2.26.0.292.g33ef6b2f38-goog
->>
+They can still do that but they should do that on the Trusted Firmware
+side. Emulating a missing reset functionality should be handled by the
+hardware abstraction layer (in this case Trusted Firmware), not at the
+Linux API level. So Linux would still send a PSCI_SYSTEM_RESET SMC,
+but then Trusted Firmware can choose to implement that by setting the
+watchdog to the smallest possible timeout (which it can because it's
+accessing it directly, not through this SMC interface) and letting it
+expire.
