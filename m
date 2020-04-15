@@ -2,155 +2,172 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1971A8FE3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Apr 2020 02:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6571D1A9E59
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Apr 2020 13:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2634701AbgDOAsr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Apr 2020 20:48:47 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:57138 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392429AbgDOAsc (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Apr 2020 20:48:32 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6F22C200675;
-        Wed, 15 Apr 2020 02:48:22 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 49A35200651;
-        Wed, 15 Apr 2020 02:48:17 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 15CB1402B4;
-        Wed, 15 Apr 2020 08:48:11 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH V2 2/2] dt-bindings: watchdog: Convert i.MX7ULP to json-schema
-Date:   Wed, 15 Apr 2020 08:40:11 +0800
-Message-Id: <1586911211-1141-2-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1586911211-1141-1-git-send-email-Anson.Huang@nxp.com>
-References: <1586911211-1141-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S2897869AbgDOLy2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 15 Apr 2020 07:54:28 -0400
+Received: from mail-sz.amlogic.com ([211.162.65.117]:23884 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2897860AbgDOLyT (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:54:19 -0400
+Received: from [10.28.39.241] (10.28.39.241) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Wed, 15 Apr 2020
+ 19:54:57 +0800
+Subject: Re: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor
+ Calls.
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+To:     Evan Benn <evanbenn@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     Julius Werner <jwerner@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yonghui Yu <yonghui.yu@amlogic.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <20200403052900.258855-1-evanbenn@chromium.org>
+ <CAKz_xw0gV+w_gMkLfB4qUBdULLfFoiv1TBWp9_PHy33wP_XWyA@mail.gmail.com>
+ <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com>
+Message-ID: <243e107c-35c1-2d14-5285-c9e13744963c@amlogic.com>
+Date:   Wed, 15 Apr 2020 19:54:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.28.39.241]
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert the i.MX7ULP watchdog binding to DT schema format using json-schema.
+Hi,Evan
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
-Changes since V1:
-	- Add 'timeout-sec' property to avoid build error.
----
- .../bindings/watchdog/fsl-imx7ulp-wdt.txt          | 22 --------
- .../bindings/watchdog/fsl-imx7ulp-wdt.yaml         | 65 ++++++++++++++++++++++
- 2 files changed, 65 insertions(+), 22 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+On 2020/4/11 23:06, Xingyu Chen wrote:
+> Hi, Evan
+> 
+> On 2020/4/3 14:04, Evan Benn wrote:
+>> Apologies I forgot to add this note to my cover letter.
+>>
+>> Xingyu do you mind seeing if you can modify your ATF firmware to match 
+>> this driver?
+>> We can add a compatible or make other changes to suit you.
+> Thanks for your patch [0],  I will test this patch on the meson-A1 
+> platform, but It looks more
+> convenient to be compatible with other platforms if using the compatible 
+> strings to correlate
+> platform differences include function ID and wdt_ops.
+> 
+> [0]: https://patchwork.kernel.org/patch/11471829/
 
-diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
-deleted file mode 100644
-index f902508..0000000
---- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--* Freescale i.MX7ULP Watchdog Timer (WDT) Controller
--
--Required properties:
--- compatible : Should be "fsl,imx7ulp-wdt"
--- reg : Should contain WDT registers location and length
--- interrupts : Should contain WDT interrupt
--- clocks: Should contain a phandle pointing to the gated peripheral clock.
--
--Optional properties:
--- timeout-sec : Contains the watchdog timeout in seconds
--
--Examples:
--
--wdog1: watchdog@403d0000 {
--	compatible = "fsl,imx7ulp-wdt";
--	reg = <0x403d0000 0x10000>;
--	interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
--	clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
--	assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
--	assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
--	timeout-sec = <40>;
--};
-diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-new file mode 100644
-index 0000000..86b4d93
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/fsl-imx7ulp-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale i.MX7ULP Watchdog Timer (WDT) Controller
-+
-+maintainers:
-+  - Anson Huang <Anson.Huang@nxp.com>
-+
-+allOf:
-+  - $ref: "watchdog.yaml#"
-+
-+properties:
-+  compatible:
-+    enum:
-+      - fsl,imx7ulp-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    description: |
-+      Watchdog's clock source.
-+    maxItems: 1
-+
-+  assigned-clocks:
-+    maxItems: 1
-+
-+  assigned-clocks-parents:
-+    maxItems: 1
-+
-+  timeout-sec:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Contains the watchdog timeout in seconds.
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - reg
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/imx7ulp-clock.h>
-+
-+    wdog1: watchdog@403d0000 {
-+        compatible = "fsl,imx7ulp-wdt";
-+        reg = <0x403d0000 0x10000>;
-+        interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
-+        assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
-+        assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
-+        timeout-sec = <40>;
-+    };
-+
-+...
--- 
-2.7.4
+I have tested your patch on the meson-A1, but I use the compatible 
+strings to correlate the following platform differences，it works normally.
 
+static const struct smcwd_data smcwd_mtk_data = {
+	.func_id = 0x82003d06,
+	.ops     = &smcwd_ops,
+}
+
+static const struct smcwd_data smcwd_meson_data = {
+	.func_id = 0x82000086,
+	.ops     = &smcwd_timeleft_ops,
+}
+
+In addition, It looks more reasonable to use the "msec" as the unit of 
+timeout parameter for the ATF fw interface with SMCWD_SET_TIMEOUT:
+
+- The fw interface will compatible with the uboot generic watchdog 
+interface at [0], and there is no need to convert timeout from msec
+to sec.
+
+- Some vendor's watchdog may be not support the "wdt_trigger_reset" 
+reset operation, but they can use the method below to reset the system
+by the watchdog right now.
+
+watchdog_set_time(1);  //1ms
+watchdog_enable();
+
+[0]: 
+https://gitlab.denx.de/u-boot/u-boot/-/blob/master/drivers/watchdog/wdt-uclass.c
+
+Best Regards
+>> Thanks
+>>
+>> On Fri, Apr 3, 2020 at 4:29 PM Evan Benn <evanbenn@chromium.org 
+>> <mailto:evanbenn@chromium.org>> wrote:
+>>
+>>     This is currently supported in firmware deployed on oak, hana and
+>>     elm mt8173
+>>     chromebook devices. The kernel driver is written to be a generic SMC
+>>     watchdog driver.
+>>
+>>     Arm Trusted Firmware upstreaming review:
+>>     https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405
+>>
+>>     Patch to add oak, hana, elm device tree:
+>>     https://lore.kernel.org/linux-arm-kernel/20200110073730.213789-1-hsinyi@chromium.org/
+>>     I would like to add the device tree support after the above patch is
+>>     accepted.
+>>
+>>     Changes in v3:
+>>     - Change name back to arm
+>>     - Add optional get_timeleft op
+>>     - change name to arm_smc_wdt
+>>
+>>     Changes in v2:
+>>     - Change name arm > mt8173
+>>     - use watchdog_stop_on_reboot
+>>     - use watchdog_stop_on_unregister
+>>     - use devm_watchdog_register_device
+>>     - remove smcwd_shutdown, smcwd_remove
+>>     - change error codes
+>>
+>>     Evan Benn (1):
+>>       dt-bindings: watchdog: Add ARM smc wdt for mt8173 watchdog
+>>
+>>     Julius Werner (1):
+>>       watchdog: Add new arm_smd_wdt watchdog driver
+>>
+>>      .../bindings/watchdog/arm-smc-wdt.yaml        |  30 +++
+>>      MAINTAINERS                                   |   7 +
+>>      arch/arm64/configs/defconfig                  |   1 +
+>>      drivers/watchdog/Kconfig                      |  13 ++
+>>      drivers/watchdog/Makefile                     |   1 +
+>>      drivers/watchdog/arm_smc_wdt.c                | 181
+>>     ++++++++++++++++++
+>>      6 files changed, 233 insertions(+)
+>>      create mode 100644
+>>     Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml
+>>      create mode 100644 drivers/watchdog/arm_smc_wdt.c
+>>
+>>     -- 
+>>     2.26.0.292.g33ef6b2f38-goog
+>>
