@@ -2,57 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0CF1AB40D
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Apr 2020 01:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BC21AB4E5
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Apr 2020 02:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388105AbgDOXMV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 15 Apr 2020 19:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S2405166AbgDPAwS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 15 Apr 2020 20:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388104AbgDOXMS (ORCPT
+        with ESMTP id S2405170AbgDPAwQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 15 Apr 2020 19:12:18 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F75DC061A0C;
-        Wed, 15 Apr 2020 16:12:18 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id t40so520573pjb.3;
-        Wed, 15 Apr 2020 16:12:18 -0700 (PDT)
+        Wed, 15 Apr 2020 20:52:16 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82EEC061A0C
+        for <linux-watchdog@vger.kernel.org>; Wed, 15 Apr 2020 17:52:14 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id y3so19650840qky.8
+        for <linux-watchdog@vger.kernel.org>; Wed, 15 Apr 2020 17:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=F4xy1ePNo4/sZnGsQ3y2Wap+w9rXMc+z0VuLe1xlqjQ=;
-        b=jbf+wIu44k/DfZ3pl3RN+n8kY8thZUYIw2Ipq5qKiQqOd/un49pRkXwqToVPR3gfGM
-         5lzD4YNJtHJ0TGIWKmkezhGKrohuQUNdMiKAzjgH4WQ0s5uhMDPh+7VtzTnU6ZF7LMYL
-         AArC6zrxH/IvRd+ZEHod9VC+ODN/CPXgaHPQj7INdhHFYuBjxAOOaGhNwOV7dUpyS2qz
-         vvderTdPOUm401Bji072y+qFP0V/DdRRmegOHp2CObNYas3awA3FjgTC3n2QM+RjU7d1
-         sW2K1ZtsER7ExRKQfhhSylNPe65vHzYtoQLWVx1cmcLnuRLqHO/Y05+1qQq5GFHPRxgI
-         KZGw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oymDymDSGwWgVl7PdrWgMeH1mdt9MH+svEJHIh9ofYo=;
+        b=a2XbOiwlAAQzxczt4QF4WPs7900EFsrLVOxWmAfWFDrYlbOxFqFleRRIhOr+uI8M5f
+         M2cwVJ40d4uDtjkefb7KmLLsMXHjL/sGzNwIx0DMzOlXnR5mb/1snHQ+m68Q4OvzwI+F
+         RFsl2ztnRLmbC/I9LzD4UKpcjD3O1jAdNfCXg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=F4xy1ePNo4/sZnGsQ3y2Wap+w9rXMc+z0VuLe1xlqjQ=;
-        b=PvyF6y/dspDli9XoY7OG2U8WnzLKkEif4JD1HoB3JL0EwAX7OzntC/DGGTTXdBZPnN
-         QXk65JIRkdyDxzHPAw2+4CzwDXyEIKar11ytXNQq5IYMZTdfZj7v0Rc4am6kgLV0JtTx
-         PP5S4Umn6o3F+k5oRvs+ufTJeHqkVMLGFUPwOySu7IczEjLm26JoJKL+rvovGcyBwiUC
-         AjtFnBFcfkjAihSiCgGeQZ7An+l8cjyKvesCBL57dnV68RS2eyfg3tc0IjucNotVegr9
-         pLboSRkzXqv99VD5qacB5dxTEfBifKJFOdSKQrEcZcvrqnhsinemz56SPAPessokG0Gp
-         lLdg==
-X-Gm-Message-State: AGi0PuYCJESJ9xEBWtJLLnlFLvTE/p5GImPcP4I+AVa22gxKR0+Z98j0
-        hs5YFqqGAowLqatSchLdozY=
-X-Google-Smtp-Source: APiQypIYdvm0Liaxe68090I5H87tFeGCrKfeq9nu/dduUJbnTStMnEQZdx4m1HvArqBCM2DSzI/AIA==
-X-Received: by 2002:a17:902:7289:: with SMTP id d9mr6991775pll.49.1586992337834;
-        Wed, 15 Apr 2020 16:12:17 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l71sm9190804pge.3.2020.04.15.16.12.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 Apr 2020 16:12:17 -0700 (PDT)
-Date:   Wed, 15 Apr 2020 16:12:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Xingyu Chen <xingyu.chen@amlogic.com>,
-        Evan Benn <evanbenn@google.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oymDymDSGwWgVl7PdrWgMeH1mdt9MH+svEJHIh9ofYo=;
+        b=eMR3v90StQxGIXEU3eOvNeSHyORa7L6S+slSkI31gkrU1jvJWsdilb9WHdPk1iW13R
+         3EgmVfVIx+jaE5P6+7u98X18iUAkQrhHPPWpxRvDuq3F19o5CBFUmHVEwyRLxqNndIGP
+         4inVJ9pNDfWefQfpEy57lQTQ+d61B044tjkjLpplXI8R3brr12KfzyCJdKu+Eq0pWyec
+         C0KOZQrzWUJcDohQ7SBsv2UMZf0MMrPgQN/KbYeDnwI0NF2fMNq4OxfpRpOyIN0pq2AJ
+         izIW1m+gTdZAyfGQERI7eFGnTZOJjuQFLlcVcDI+sqxVXahAkkBfUWfNEaqgEcNWmrRH
+         2AZQ==
+X-Gm-Message-State: AGi0PuZIM7Z7XT0Ig/8g30PFS5MmEtjnLONj1eGibQ4jC0ixBiB6xakq
+        8tlNb3BYm82myGcf5JBQJK3jtu4pnak=
+X-Google-Smtp-Source: APiQypITKU0yd5l4/jSgpTZTf6H/wVxtwSPDDaGGts6VUdnyRvtkhcdBU77BPyLySbsPXidJPycdfQ==
+X-Received: by 2002:a37:a844:: with SMTP id r65mr20292597qke.264.1586998333774;
+        Wed, 15 Apr 2020 17:52:13 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id 18sm7374109qks.98.2020.04.15.17.52.13
+        for <linux-watchdog@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2020 17:52:13 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id g6so1050045ybh.12
+        for <linux-watchdog@vger.kernel.org>; Wed, 15 Apr 2020 17:52:13 -0700 (PDT)
+X-Received: by 2002:ab0:592c:: with SMTP id n41mr1543975uad.73.1586998027359;
+ Wed, 15 Apr 2020 17:47:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200403052900.258855-1-evanbenn@chromium.org>
+ <CAKz_xw0gV+w_gMkLfB4qUBdULLfFoiv1TBWp9_PHy33wP_XWyA@mail.gmail.com>
+ <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com> <243e107c-35c1-2d14-5285-c9e13744963c@amlogic.com>
+ <CAODwPW9RSB37+4EJ2QXAwz=ShFB23L1GKC2mLYE5L5JuQR2tPw@mail.gmail.com> <20200415231215.GA182398@roeck-us.net>
+In-Reply-To: <20200415231215.GA182398@roeck-us.net>
+From:   Evan Benn <evanbenn@chromium.org>
+Date:   Thu, 16 Apr 2020 10:46:39 +1000
+X-Gmail-Original-Message-ID: <CAKz_xw0+gKBM1jp-Avnd+4j9vSxUix67RZBX-NNbStb0+ri4+Q@mail.gmail.com>
+Message-ID: <CAKz_xw0+gKBM1jp-Avnd+4j9vSxUix67RZBX-NNbStb0+ri4+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor Calls.
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Xingyu Chen <xingyu.chen@amlogic.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Anson Huang <Anson.Huang@nxp.com>,
@@ -82,55 +93,55 @@ Cc:     Xingyu Chen <xingyu.chen@amlogic.com>,
         Jianxin Pan <jianxin.pan@amlogic.com>,
         Yonghui Yu <yonghui.yu@amlogic.com>,
         "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>
-Subject: Re: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure
- Monitor Calls.
-Message-ID: <20200415231215.GA182398@roeck-us.net>
-References: <20200403052900.258855-1-evanbenn@chromium.org>
- <CAKz_xw0gV+w_gMkLfB4qUBdULLfFoiv1TBWp9_PHy33wP_XWyA@mail.gmail.com>
- <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com>
- <243e107c-35c1-2d14-5285-c9e13744963c@amlogic.com>
- <CAODwPW9RSB37+4EJ2QXAwz=ShFB23L1GKC2mLYE5L5JuQR2tPw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAODwPW9RSB37+4EJ2QXAwz=ShFB23L1GKC2mLYE5L5JuQR2tPw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 03:29:29PM -0700, Julius Werner wrote:
-> > In addition, It looks more reasonable to use the "msec" as the unit of
-> > timeout parameter for the ATF fw interface with SMCWD_SET_TIMEOUT:
-> >
-> > - The fw interface will compatible with the uboot generic watchdog
-> > interface at [0], and there is no need to convert timeout from msec
-> > to sec.
-> 
-> I think we're trying hard to keep this compatible to a Trusted
-> Firmware counterpart that we have already shipped, so we would prefer
-> to keep it at seconds if possible. That's what the Linux watchdog core
-> uses as well after all, so it just seems natural. I don't really see
-> how what U-Boot does would have anything to do with this.
-> 
-> > - Some vendor's watchdog may be not support the "wdt_trigger_reset"
-> > reset operation, but they can use the method below to reset the system
-> > by the watchdog right now.
-> >
-> > watchdog_set_time(1);  //1ms
-> > watchdog_enable();
-> 
-> They can still do that but they should do that on the Trusted Firmware
-> side. Emulating a missing reset functionality should be handled by the
-> hardware abstraction layer (in this case Trusted Firmware), not at the
-> Linux API level. So Linux would still send a PSCI_SYSTEM_RESET SMC,
-> but then Trusted Firmware can choose to implement that by setting the
-> watchdog to the smallest possible timeout (which it can because it's
-> accessing it directly, not through this SMC interface) and letting it
-> expire.
+Thanks Xingyu,
 
-I agree. Using a watchdog to implement reset functionality is always a
-means of last resort and should be avoided if possible.
+Can anyone provide advice about making SMCWD_FUNC_ID a device tree
+param directly, vs using the compatible to select from a table.
 
-Guenter
+Please note get_timeleft erroneously returns res.a0 instead of res.a1
+in this version.
+
+Evan
+
+On Thu, Apr 16, 2020 at 9:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Apr 15, 2020 at 03:29:29PM -0700, Julius Werner wrote:
+> > > In addition, It looks more reasonable to use the "msec" as the unit of
+> > > timeout parameter for the ATF fw interface with SMCWD_SET_TIMEOUT:
+> > >
+> > > - The fw interface will compatible with the uboot generic watchdog
+> > > interface at [0], and there is no need to convert timeout from msec
+> > > to sec.
+> >
+> > I think we're trying hard to keep this compatible to a Trusted
+> > Firmware counterpart that we have already shipped, so we would prefer
+> > to keep it at seconds if possible. That's what the Linux watchdog core
+> > uses as well after all, so it just seems natural. I don't really see
+> > how what U-Boot does would have anything to do with this.
+> >
+> > > - Some vendor's watchdog may be not support the "wdt_trigger_reset"
+> > > reset operation, but they can use the method below to reset the system
+> > > by the watchdog right now.
+> > >
+> > > watchdog_set_time(1);  //1ms
+> > > watchdog_enable();
+> >
+> > They can still do that but they should do that on the Trusted Firmware
+> > side. Emulating a missing reset functionality should be handled by the
+> > hardware abstraction layer (in this case Trusted Firmware), not at the
+> > Linux API level. So Linux would still send a PSCI_SYSTEM_RESET SMC,
+> > but then Trusted Firmware can choose to implement that by setting the
+> > watchdog to the smallest possible timeout (which it can because it's
+> > accessing it directly, not through this SMC interface) and letting it
+> > expire.
+>
+> I agree. Using a watchdog to implement reset functionality is always a
+> means of last resort and should be avoided if possible.
+>
+> Guenter
