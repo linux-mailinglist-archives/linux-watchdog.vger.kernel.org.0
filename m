@@ -2,38 +2,38 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A4B1AEF17
-	for <lists+linux-watchdog@lfdr.de>; Sat, 18 Apr 2020 16:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782481AF0BB
+	for <lists+linux-watchdog@lfdr.de>; Sat, 18 Apr 2020 16:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgDROkw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 18 Apr 2020 10:40:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49334 "EHLO mail.kernel.org"
+        id S1728375AbgDROv4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 18 Apr 2020 10:51:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52600 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726748AbgDROkw (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 18 Apr 2020 10:40:52 -0400
+        id S1728345AbgDROmb (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 18 Apr 2020 10:42:31 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2376D21974;
-        Sat, 18 Apr 2020 14:40:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6EC721D6C;
+        Sat, 18 Apr 2020 14:42:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587220851;
-        bh=mNN3goFAdj6cbIOVlz0S+XGlyz6dKS6SjydtWTzaTLw=;
+        s=default; t=1587220950;
+        bh=e3Ix0CKQnO2vFrhw8s5qjaLhbJuDinvzEZLMlqEOCsc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zqWWJIrJtNGA+JF+eLHsfwxolcnWcKYhB/ecEDoHMEjA4c5iPBroW7MiwWIcSx6ab
-         vQhQmGMC6u5U4kRd0+UoMuw7DLnefnrNmVw3gtXicccgXToor6FlmG94WVw5SkXvdP
-         LrtTYI9k6cqfQrlrX/yZGl7UG96/KdV1Q2+QDJpY=
+        b=vho8deI5/tV6KinOFwXMTnY8nqvtBwsKkHdrIjWQWkv6ZjbNUr1dtwCDgajUyFJGB
+         UxoV2/ZYKC4UviFh2lwb0GjKJfmQW80XpT6WSe3plRc1UvCM60mUNgIOJJNfqrJuWY
+         pI3cs/vKSz9fvkDL+yR9PVkNXaAYImcE62aIhKuY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tero Kristo <t-kristo@ti.com>, Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 03/78] watchdog: reset last_hw_keepalive time at start
-Date:   Sat, 18 Apr 2020 10:39:32 -0400
-Message-Id: <20200418144047.9013-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 02/47] watchdog: reset last_hw_keepalive time at start
+Date:   Sat, 18 Apr 2020 10:41:42 -0400
+Message-Id: <20200418144227.9802-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200418144047.9013-1-sashal@kernel.org>
-References: <20200418144047.9013-1-sashal@kernel.org>
+In-Reply-To: <20200418144227.9802-1-sashal@kernel.org>
+References: <20200418144227.9802-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -66,10 +66,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index ce04edc69e5f0..c4147e93aa7d4 100644
+index e64aa88e99dab..10b2090f3e5e7 100644
 --- a/drivers/watchdog/watchdog_dev.c
 +++ b/drivers/watchdog/watchdog_dev.c
-@@ -282,6 +282,7 @@ static int watchdog_start(struct watchdog_device *wdd)
+@@ -264,6 +264,7 @@ static int watchdog_start(struct watchdog_device *wdd)
  	if (err == 0) {
  		set_bit(WDOG_ACTIVE, &wdd->status);
  		wd_data->last_keepalive = started_at;
