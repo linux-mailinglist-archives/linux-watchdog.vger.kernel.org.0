@@ -2,115 +2,181 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8091A1B10B9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Apr 2020 17:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DE91B186A
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Apr 2020 23:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726933AbgDTPxD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 20 Apr 2020 11:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbgDTPxD (ORCPT
+        id S1727123AbgDTV1y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 Apr 2020 17:27:54 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:38014 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbgDTV1y (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 20 Apr 2020 11:53:03 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C74DC061A0C;
-        Mon, 20 Apr 2020 08:53:02 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id a22so20379pjk.5;
-        Mon, 20 Apr 2020 08:53:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KpOu42kL/pQUGpBchlxGpON9Ofes9T2Kauo44/uMQ/Q=;
-        b=CY2i3G+JUCNbfJUUootRFUoK9Eo6VDW8N775KqtVJxSrhmBDxbj9XiNEYT0X5rUyPJ
-         Vj1dOsJssQLlQiPZvpV1gczoFQrRLCNyOp1Ou1tg2bqdtH0FvSiZxKNyoZaybbh0BI2x
-         fI4P1dV9O7gypHHn9yyiuNhj+wL12kKxEGia3qOARyaID9bvziFMjmZPB+2ha9y8to3p
-         Nsy1aa3GJDsdIj06yYlIfQMqOj6+ioQh8OmhFh10ve3a6oB+HUp/zhmpXnEGOmTgIVbd
-         jVMwkMv6FeoVV8q5BKlUrNieO7qp2GaMORvOaq2B6XZL19bVv4n8Bc4Fl4+C2Dz8R5g8
-         qZqw==
+        Mon, 20 Apr 2020 17:27:54 -0400
+Received: by mail-oi1-f196.google.com with SMTP id r66so10197232oie.5;
+        Mon, 20 Apr 2020 14:27:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KpOu42kL/pQUGpBchlxGpON9Ofes9T2Kauo44/uMQ/Q=;
-        b=CkDO1lWb6tw9Zc7w7X6nOdst9x9uIDtEj83Tz7N25Iuq9etIUjOBmYzqJzsgQZiKqx
-         apzR9u8KUAjr3HKxtpDsFs0V3sd7//Ed9CAlZiEU1L+g0rsg620i6wfEiannlY/ZR4f0
-         KcoFYhQy/jn/kiBAFYdvnIPcIjHoLz2kb6v+CaIN2dOdS6xKa4uTaKfGWGIsrCMCYbUN
-         jtgw6DBpnBYoF6jIltxKqZToyA/8ZLkGehJwCn9rG9EspGyWe577WDcCmVIx6P21i2W3
-         W/nbhhFB2Yez+wWPIxwDdRyhINsL4pBxC7IZ2I80eljb45iUXcGkMhTWpuEbOSOamHu1
-         ytJw==
-X-Gm-Message-State: AGi0PuY/vtzRVTkZIKJURZAWO8FaRFaSDisw5qQVuDWLoorw0dAf2XfC
-        BkxBTejyaT2EL+objxvoTy2UbOSnsq/f8iHGxAvnl3LpV78=
-X-Google-Smtp-Source: APiQypLIaJG3DtsZI4suVENYT2gkb+3YUhLFwswQ6fVzuIKkjdLgztB4zGiy/NWus0rd2QVE38hOSk/jBs6O1mZayJs=
-X-Received: by 2002:a17:90a:364c:: with SMTP id s70mr8228pjb.143.1587397981656;
- Mon, 20 Apr 2020 08:53:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XubFQFGj+oE5E81AV09uEAWEQbJMsk1LmCjakkP+xS8=;
+        b=cXXQur5XI1hPr0gk1XS4o4L08LI7Z8bpK8goE3pUPBssZBJDRH5ivIYhF5JVRmfsHR
+         E+YcIEe0UwoMdjVFUst5Am8k+A5kr9UPzUyg1INnwQX3Jac40KyAbw+y7yJ3LsQnApzG
+         P6pd15ONbzq5pRIuW4tU3grUEGmDbZPypLGrvULHQpitxpusWDiGrB2g4WBRbWNvWYpi
+         7Xt3S3/wi9aCvmdqcDk92+jDJ4n9x5s112EAvTUtDoN0Um/ZYPum4ZJAo88WXSmaEoTn
+         gDvrsvJlB4G7RvMCg4mm3OtvSAV2GIE8bDdRuJ/YuvWf0WcjEIoKziRNWiX6vk1OiSjz
+         h2pA==
+X-Gm-Message-State: AGi0PuYODOl6EvIEfyR/TxN+IdqKsqD4mRYMmup0P75hal3qJvowSBRj
+        UHPlEIpSY3Lu9ao68X1bpg==
+X-Google-Smtp-Source: APiQypKA8/DjgklKphF/q6s1sPMusvYqMqJJGh1gdjSYDDBmjDBbaTp+L99fqFcY2mwLoCgx5i9uAQ==
+X-Received: by 2002:aca:6143:: with SMTP id v64mr1039248oib.36.1587418073095;
+        Mon, 20 Apr 2020 14:27:53 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 69sm218723otm.60.2020.04.20.14.27.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2020 14:27:52 -0700 (PDT)
+Received: (nullmailer pid 13638 invoked by uid 1000);
+        Mon, 20 Apr 2020 21:27:51 -0000
+Date:   Mon, 20 Apr 2020 16:27:51 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH V2 2/2] dt-bindings: watchdog: Convert i.MX7ULP to
+ json-schema
+Message-ID: <20200420212751.GA7615@bogus>
+References: <1586911211-1141-1-git-send-email-Anson.Huang@nxp.com>
+ <1586911211-1141-2-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
-References: <20200416163514.7334-1-michaelsh@mellanox.com> <CAHp75VfZLR0an_bkD0vK6sTQSTcf_xHbAB0i7Qbod02gpV4tzg@mail.gmail.com>
-In-Reply-To: <CAHp75VfZLR0an_bkD0vK6sTQSTcf_xHbAB0i7Qbod02gpV4tzg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 20 Apr 2020 18:52:55 +0300
-Message-ID: <CAHp75VeXC=sMW54yGnSY6S-_kECXY+KURRt2LWGfBm5W14ue-w@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] support watchdog with longer timeout period
-To:     michaelsh@mellanox.com
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-watchdog@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Vadim Pasternak <vadimp@mellanox.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1586911211-1141-2-git-send-email-Anson.Huang@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Apr 17, 2020 at 4:41 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Apr 16, 2020 at 7:35 PM <michaelsh@mellanox.com> wrote:
-> >
-> > From: Michael Shych <michaelsh@mellanox.com>
-> >
-> > This patchset adds support of extended new watchdog type 3 of Mellanox
-> > Ethernet and Infiniband switch systems.
-> > This type of watchdog can have a timeout period longer than 255 or 32 sec.
-> > as it was before.
-> >
->
-> Pushed to my review and testing queue, thanks!
+On Wed, Apr 15, 2020 at 08:40:11AM +0800, Anson Huang wrote:
+> Convert the i.MX7ULP watchdog binding to DT schema format using json-schema.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+> Changes since V1:
+> 	- Add 'timeout-sec' property to avoid build error.
+> ---
+>  .../bindings/watchdog/fsl-imx7ulp-wdt.txt          | 22 --------
+>  .../bindings/watchdog/fsl-imx7ulp-wdt.yaml         | 65 ++++++++++++++++++++++
+>  2 files changed, 65 insertions(+), 22 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
+> deleted file mode 100644
+> index f902508..0000000
+> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -* Freescale i.MX7ULP Watchdog Timer (WDT) Controller
+> -
+> -Required properties:
+> -- compatible : Should be "fsl,imx7ulp-wdt"
+> -- reg : Should contain WDT registers location and length
+> -- interrupts : Should contain WDT interrupt
+> -- clocks: Should contain a phandle pointing to the gated peripheral clock.
+> -
+> -Optional properties:
+> -- timeout-sec : Contains the watchdog timeout in seconds
+> -
+> -Examples:
+> -
+> -wdog1: watchdog@403d0000 {
+> -	compatible = "fsl,imx7ulp-wdt";
+> -	reg = <0x403d0000 0x10000>;
+> -	interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
+> -	clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+> -	assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+> -	assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
+> -	timeout-sec = <40>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> new file mode 100644
+> index 0000000..86b4d93
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/fsl-imx7ulp-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale i.MX7ULP Watchdog Timer (WDT) Controller
+> +
+> +maintainers:
+> +  - Anson Huang <Anson.Huang@nxp.com>
+> +
+> +allOf:
+> +  - $ref: "watchdog.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,imx7ulp-wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: |
+> +      Watchdog's clock source.
+> +    maxItems: 1
+> +
+> +  assigned-clocks:
+> +    maxItems: 1
+> +
+> +  assigned-clocks-parents:
+> +    maxItems: 1
+> +
+> +  timeout-sec:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Contains the watchdog timeout in seconds.
 
-Withdrawn due to changes requested.
-Please, address and resend.
+This already has a definition in watchdog.yaml, just need:
 
->
->
-> > Michael Shych (4):
-> >   platform_data/mlxreg: support new watchdog type with longer timeout
-> >     period
-> >   platform/x86: mlx-platform: support new watchdog type with longer
-> >     timeout
-> >   watchdog: mlx-wdt: support new watchdog type with longer timeout
-> >     period
-> >   Documentation/watchdog: Add description of new watchdog type 3
-> >
-> >  Documentation/watchdog/mlx-wdt.rst   |   9 +++
-> >  drivers/platform/x86/mlx-platform.c  | 106 +++++++++++++++++++++++++++++++
-> >  drivers/watchdog/mlx_wdt.c           |  75 +++++++++++++++++++++----
-> >  include/linux/platform_data/mlxreg.h |   5 +-
-> >  4 files changed, 183 insertions(+), 12 deletions(-)
-> >
-> > --
-> > 2.11.0
-> >
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+timeout-sec: true
 
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - reg
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/imx7ulp-clock.h>
+> +
+> +    wdog1: watchdog@403d0000 {
+> +        compatible = "fsl,imx7ulp-wdt";
+> +        reg = <0x403d0000 0x10000>;
+> +        interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+> +        assigned-clocks = <&pcc2 IMX7ULP_CLK_WDG1>;
+> +        assigned-clocks-parents = <&scg1 IMX7ULP_CLK_FIRC_BUS_CLK>;
+> +        timeout-sec = <40>;
+> +    };
+> +
+> +...
+> -- 
+> 2.7.4
+> 
