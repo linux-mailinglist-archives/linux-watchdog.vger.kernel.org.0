@@ -2,68 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5331B1B15
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Apr 2020 03:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E7B1B1BFC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Apr 2020 04:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726055AbgDUBJa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 20 Apr 2020 21:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
+        id S1726809AbgDUChL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 Apr 2020 22:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725958AbgDUBJa (ORCPT
+        by vger.kernel.org with ESMTP id S1725829AbgDUChL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 20 Apr 2020 21:09:30 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DB6C061A0E
-        for <linux-watchdog@vger.kernel.org>; Mon, 20 Apr 2020 18:09:28 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id z1so7404733vsn.11
-        for <linux-watchdog@vger.kernel.org>; Mon, 20 Apr 2020 18:09:28 -0700 (PDT)
+        Mon, 20 Apr 2020 22:37:11 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD60C061A0E;
+        Mon, 20 Apr 2020 19:37:09 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id s10so9100074edy.9;
+        Mon, 20 Apr 2020 19:37:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aFRq3RluqVTW3eItiffvhrul27fygOSDx5LOp792/cY=;
-        b=jGemw2P2rq8+zKge7bcDV6mMP5GeCYSBjW21Yga4LFd+SRnJNGAo1LIyCZsecJrAj+
-         3Y2nk68i50FiVZkjKg3XewJTSb85k963UHIJB4QyqWe/KfxK1rup1VWPKA6RhXdb/LbF
-         ZALCrIEKJacoE0XvLyBHMyRJFtUd8Qd5IXRqI=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wfjIAKV3CzN2ahQVF5QQ7qnHBO9rsV9xDFuglbIYlvo=;
+        b=ePqxLPQpEgCKHMylYI58HlD8/cm9VNW5FPOSETx1OcR1+SmzgCaSSbuvVi8em6SgPX
+         /vk71YJnaBWoVN2KWdJFcQdLMlp8QaPEtL3XT2g0Ha/t7jMhHlptiTsxMjJ73sv8AULl
+         TGkfouaOnEYkzihEu2Ln6B+0iQvN1VeXhWja7oz8lJ+Iy2N+UI34KCG6N4SufASF1BbH
+         QqjJm+G6nJh+nUAZ/oKJS8B7ncIwR5sim9M+/BeODFxTxk+L7Orff90XH53EmdYlYFuG
+         TsYPZLcWIp6Ycoiw9Nc8z/1Wn/rkDaOD0m6DTWWse67H2GwP3U50UsqXUqlpWW+N2Nbg
+         0k7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aFRq3RluqVTW3eItiffvhrul27fygOSDx5LOp792/cY=;
-        b=KuG82qN5ZMXe7fMh7HJ67CYIi8FPji9xoUWBRRHcVD85xa/jhH+uu8/Tgy0Ixw+Teb
-         mztbMXVEcm4XKjXqDKXNmmi37lZL6WUe9iyaGtkE4FXcxK3nCMPQLqP9cmCihtWCE81Q
-         YBSXmvrDYk7p+oJCJFcFLawqKe12PmHozjNWUuXALj3/ZjrIXDzH02opfU53+IaWjUbF
-         ZP/wGhy5Fw0q3bMa8MoO/lxpzlKSKF3fNr3qfMB8sgtKjo02JSwwbILDgnNS7hYF13oA
-         QKQk7vuRWjsuSwEqwS3A2Fl1fSplKVNJBYPwjvLGXhL3WNLErhWx0S2I1YAIhO+pCBeI
-         sWoA==
-X-Gm-Message-State: AGi0PuYDdkL5o64S8kz5IIuzSSySBvse9K8QiGSVEp2hYz+mudm51i9W
-        VbnthDGj4eeLy+9LSiRt3D3L4yh6jiw=
-X-Google-Smtp-Source: APiQypJ4+SV5IRmKY3wcFhS7tBt0WcuUB+d5d2XhQG9ZzPA4/KieDi4asDhEsFqZUbKq3eqSwJHI/A==
-X-Received: by 2002:a67:28c5:: with SMTP id o188mr14746656vso.227.1587431367804;
-        Mon, 20 Apr 2020 18:09:27 -0700 (PDT)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id u5sm338762vkk.16.2020.04.20.18.09.26
-        for <linux-watchdog@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wfjIAKV3CzN2ahQVF5QQ7qnHBO9rsV9xDFuglbIYlvo=;
+        b=G548z2qt7PHu5W9634A0UI73udffUCRx/Hg2bIuLiRKpaX+zuH/f8lH+NCumU4uNz7
+         lZQD3eaO9H/7lMdSQnT7bTPMqVbd2noX6CvDWqRCpLLJTsdgsxkAHK8g3XSEbioJPvIh
+         HBdZuycCLsoC+ghdHWB21NawPp+FC+k1m7S81tSH+8Z3FIPfBp5vFMSMCX5n1pMe0SZl
+         be3ZPwBCeumw7+QpWmA1Wh/B0UQAiwu3AxNbIs1ZeNJB2tBwKp6Hqp3KMQPk1IWnMxjk
+         fFb4/Mb4s0TDfpYzfSjxQwPPDpcZzb4M/9yhBod5pxVda5ABmr6U45oYWSBkzdWMBsmq
+         kpxw==
+X-Gm-Message-State: AGi0PuaXAtC3TQWKMjw/IOyNrfLEi/JrVJRZ17rg+2ck/kjC7TdQwHRB
+        3XYKB8MgCKNe61fwjkwb+nc5WW9b
+X-Google-Smtp-Source: APiQypJhXdwWOerhgYAN5dOVFSby+3Mbee+FNPtzk+Uk3eZXjRSCcip4tP0F0bwdHDDzezV9TrpUdA==
+X-Received: by 2002:a50:b263:: with SMTP id o90mr16161876edd.326.1587436628433;
+        Mon, 20 Apr 2020 19:37:08 -0700 (PDT)
+Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
+        by smtp.gmail.com with ESMTPSA id z18sm253309ejl.37.2020.04.20.19.37.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Apr 2020 18:09:26 -0700 (PDT)
-Received: by mail-vs1-f41.google.com with SMTP id 1so7387608vsl.9
-        for <linux-watchdog@vger.kernel.org>; Mon, 20 Apr 2020 18:09:26 -0700 (PDT)
-X-Received: by 2002:a67:d61c:: with SMTP id n28mr14119322vsj.70.1587431365930;
- Mon, 20 Apr 2020 18:09:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200403052900.258855-1-evanbenn@chromium.org>
- <CAKz_xw0gV+w_gMkLfB4qUBdULLfFoiv1TBWp9_PHy33wP_XWyA@mail.gmail.com>
- <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com> <243e107c-35c1-2d14-5285-c9e13744963c@amlogic.com>
- <CAODwPW9RSB37+4EJ2QXAwz=ShFB23L1GKC2mLYE5L5JuQR2tPw@mail.gmail.com>
- <20200415231215.GA182398@roeck-us.net> <CAKz_xw0+gKBM1jp-Avnd+4j9vSxUix67RZBX-NNbStb0+ri4+Q@mail.gmail.com>
- <CAODwPW9Vt7TcWfKYDmRgLndb2-+5HoNvA6XMJJznXCudQDngqw@mail.gmail.com> <9d029a04-2a37-cbbe-1932-be34d34f6b69@gmail.com>
-In-Reply-To: <9d029a04-2a37-cbbe-1932-be34d34f6b69@gmail.com>
-From:   Evan Benn <evanbenn@chromium.org>
-Date:   Tue, 21 Apr 2020 11:08:57 +1000
-X-Gmail-Original-Message-ID: <CAKz_xw33YBChSCDHcki2JCR=LXrvfEN2pseEN471xVvqhqrUfA@mail.gmail.com>
-Message-ID: <CAKz_xw33YBChSCDHcki2JCR=LXrvfEN2pseEN471xVvqhqrUfA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor Calls.
-To:     Florian Fainelli <f.fainelli@gmail.com>
+        Mon, 20 Apr 2020 19:37:07 -0700 (PDT)
+Subject: Re: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor
+ Calls.
+To:     Evan Benn <evanbenn@chromium.org>
 Cc:     Julius Werner <jwerner@chromium.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -96,28 +84,52 @@ Cc:     Julius Werner <jwerner@chromium.org>,
         Vinod Koul <vkoul@kernel.org>, Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>,
         "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+References: <20200403052900.258855-1-evanbenn@chromium.org>
+ <CAKz_xw0gV+w_gMkLfB4qUBdULLfFoiv1TBWp9_PHy33wP_XWyA@mail.gmail.com>
+ <890948ef-7276-fdae-d270-eb30eff3eab2@amlogic.com>
+ <243e107c-35c1-2d14-5285-c9e13744963c@amlogic.com>
+ <CAODwPW9RSB37+4EJ2QXAwz=ShFB23L1GKC2mLYE5L5JuQR2tPw@mail.gmail.com>
+ <20200415231215.GA182398@roeck-us.net>
+ <CAKz_xw0+gKBM1jp-Avnd+4j9vSxUix67RZBX-NNbStb0+ri4+Q@mail.gmail.com>
+ <CAODwPW9Vt7TcWfKYDmRgLndb2-+5HoNvA6XMJJznXCudQDngqw@mail.gmail.com>
+ <9d029a04-2a37-cbbe-1932-be34d34f6b69@gmail.com>
+ <CAKz_xw33YBChSCDHcki2JCR=LXrvfEN2pseEN471xVvqhqrUfA@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d1fe9a51-d180-a4f4-7af4-b8edbf3c6f29@gmail.com>
+Date:   Mon, 20 Apr 2020 19:36:58 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <CAKz_xw33YBChSCDHcki2JCR=LXrvfEN2pseEN471xVvqhqrUfA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Thanks Florian,
 
-> The PSCI binding itself has provision for specifying function IDs for
-> different functions, and this seems to be followed by other subsystems
-> as well like SCMI:
->
-> https://www.spinics.net/lists/arm-kernel/msg791270.html
 
-Are you referring to this line in the devicetree linked?
+On 4/20/2020 6:08 PM, Evan Benn wrote:
+> Thanks Florian,
+> 
+>> The PSCI binding itself has provision for specifying function IDs for
+>> different functions, and this seems to be followed by other subsystems
+>> as well like SCMI:
+>>
+>> https://www.spinics.net/lists/arm-kernel/msg791270.html
+> 
+> Are you referring to this line in the devicetree linked?
+> 
+> +- arm,smc-id : SMC id required when using smc or hvc transports
+> 
+> I cannot find any prior definition of this in the devicetree yaml
+> format, so I will add that as well.
+> Did you have a link for the psci usage that you referenced?
 
-+- arm,smc-id : SMC id required when using smc or hvc transports
+Sure, line 80 and below from psci.yaml:
 
-I cannot find any prior definition of this in the devicetree yaml
-format, so I will add that as well.
-Did you have a link for the psci usage that you referenced?
-
-Thanks
-
-Evan
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/arm/psci.yaml#n80
+-- 
+Florian
