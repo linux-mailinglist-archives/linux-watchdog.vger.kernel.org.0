@@ -2,210 +2,130 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A16261B245C
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Apr 2020 12:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C621B2487
+	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Apr 2020 13:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728689AbgDUKvG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 Apr 2020 06:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S1728335AbgDULFh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 21 Apr 2020 07:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728479AbgDUKvF (ORCPT
+        with ESMTP id S1726120AbgDULFh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 Apr 2020 06:51:05 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CF0C061A0F;
-        Tue, 21 Apr 2020 03:51:04 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 3C07E23059;
-        Tue, 21 Apr 2020 12:51:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1587466263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OSieuTLDTWJZlGZSja3Um3+Gmk1FrxNg3rEeH5FZD9Y=;
-        b=lomhw53NjPGviUGO5c6ReoggM7XHM605itwqG5h1JP3Dpj8r6pXCY28LtwhLVpYpY40Ihd
-        Ku3dGMHKcp68tgLHGsSTqOfceoAzyHJUvzqjunut4xiPDyHEsdpt6Wwkcg8Nu0BdYzkTzj
-        pFap2F6Dl6lKIfJ4b7WMMOlrxShKN0w=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 21 Apr 2020 12:50:59 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        Tue, 21 Apr 2020 07:05:37 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6E0C061A0F
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Apr 2020 04:05:36 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id w65so6435282pfc.12
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Apr 2020 04:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WvF21qmP3gF9P7JZJ1ONcszxypmYyGE19tvUhWUTsVs=;
+        b=h+1WGBmhpgBtdaANZUwwMqTOtqCaHeP8LEw5UWv2vHgLHr/sm2q1g/zutfJc3XCFY5
+         2a426+CkciRwHnsNtSmp2IC36uhc193CxU8uvnyojGagWNbqLGXkCrqZycjGRJass4yv
+         v08www/I7ltHOkci3lA0Ub2nYKge1VZpCKO3k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WvF21qmP3gF9P7JZJ1ONcszxypmYyGE19tvUhWUTsVs=;
+        b=KzmrjQ8sZr9VaQbTCqLoijTXpinimtNZWdwSgxtUQPDtco4sq1aacGzXGS5QHXRSh9
+         BmfXLzjy3OdWZrx36oQHg6dU7ctZ/fiLQlFzX4UFOpuzodbqd8iipSKRXOVhBOq5W59E
+         rxRB+r8g3d5dURSwHGhYdgVtQpFd9H5tBgFa79qnuWuLGKsqS9VO5HGf8O/MKNEF11Ho
+         h0dIg9+fugapuR3cm2ZlZD5DQBh++giRjF7kBaG7z8yJ05C0RmySto0PEmVdQ5oJfepB
+         vzHnnJirIFst66hQ9CC5xSneZQ0mxYGNwfFvKUaTavtyJ0t8pUTV+0aA6uLEjZPNstdS
+         mmzw==
+X-Gm-Message-State: AGi0PuYAEY80j8kR0VmnkZbzxQFwazDohLXAPFUVxgSK7+6ABSEh+hyk
+        kmpUd0OXIUmBFKse1eN1c66z1A==
+X-Google-Smtp-Source: APiQypL4PFUwg5GwPRrSlb0y3fSgyECAShAITRonjEWPiB9jvTC9CBnU3LdyUl5Ks5ZaHOn5MmV5AA==
+X-Received: by 2002:a63:1d52:: with SMTP id d18mr20242532pgm.443.1587467136316;
+        Tue, 21 Apr 2020 04:05:36 -0700 (PDT)
+Received: from localhost ([2401:fa00:9:14:1105:3e8a:838d:e326])
+        by smtp.gmail.com with ESMTPSA id j10sm2217695pfa.57.2020.04.21.04.05.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Apr 2020 04:05:35 -0700 (PDT)
+From:   Evan Benn <evanbenn@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     xingyu.chen@amlogic.com, jwerner@chromium.org,
+        Evan Benn <evanbenn@chromium.org>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Will Deacon <will@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using
- regmap
-In-Reply-To: <f82706a8596436d13642c49e26233133@walle.cc>
-References: <20200402203656.27047-1-michael@walle.cc>
- <20200402203656.27047-11-michael@walle.cc>
- <CACRpkdaqgHhPwdKdUai4zvi21qR-cSQUKyzZ3SyfWBLPN9us3w@mail.gmail.com>
- <f82706a8596436d13642c49e26233133@walle.cc>
-Message-ID: <3ef94b68893e2fb3075bd5236d0fa6ee@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Spam-Level: *
-X-Rspamd-Server: web
-X-Spam-Status: No, score=1.40
-X-Spam-Score: 1.40
-X-Rspamd-Queue-Id: 3C07E23059
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_TWELVE(0.00)[23];
-         NEURAL_HAM(-0.00)[-0.743];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,baylibre.com,kernel.org,suse.com,roeck-us.net,linaro.org,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,linutronix.de,lakedaemon.net,linuxfoundation.org];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor Calls.
+Date:   Tue, 21 Apr 2020 21:05:18 +1000
+Message-Id: <20200421110520.197930-1-evanbenn@chromium.org>
+X-Mailer: git-send-email 2.26.1.301.g55bc3eb7cb9-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Linus,
+This is currently supported in firmware deployed on oak, hana and elm mt8173
+chromebook devices. The kernel driver is written to be a generic SMC
+watchdog driver.
 
-Am 2020-04-17 08:34, schrieb Michael Walle:
-> Hi Linus,
-> 
-> Am 2020-04-16 11:27, schrieb Linus Walleij:
->> On Thu, Apr 2, 2020 at 10:37 PM Michael Walle <michael@walle.cc> 
->> wrote:
->> 
->>> There are quite a lot simple GPIO controller which are using regmap 
->>> to
->>> access the hardware. This driver tries to be a base to unify existing
->>> code into one place. This won't cover everything but it should be a 
->>> good
->>> starting point.
->>> 
->>> It does not implement its own irq_chip because there is already a
->>> generic one for regmap based devices. Instead, the irq_chip will be
->>> instanciated in the parent driver and its irq domain will be 
->>> associate
->>> to this driver.
->>> 
->>> For now it consists of the usual registers, like set (and an optional
->>> clear) data register, an input register and direction registers.
->>> Out-of-the-box, it supports consecutive register mappings and 
->>> mappings
->>> where the registers have gaps between them with a linear mapping 
->>> between
->>> GPIO offset and bit position. For weirder mappings the user can 
->>> register
->>> its own .xlate().
->>> 
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->> 
->> Overall I really like this driver and I think we should merge is as 
->> soon
->> as it is in reasonable shape and then improve on top so we can start
->> migrating drivers to it.
->> 
->>> +static int gpio_regmap_to_irq(struct gpio_chip *chip, unsigned int 
->>> offset)
->>> +{
->>> +       struct gpio_regmap_data *data = gpiochip_get_data(chip);
->>> +       struct gpio_regmap *gpio = data->gpio;
->>> +
->>> +       /* the user might have its own .to_irq callback */
->>> +       if (gpio->to_irq)
->>> +               return gpio->to_irq(gpio, offset);
->>> +
->>> +       return irq_create_mapping(gpio->irq_domain, offset);
->> 
->> I think that should at least be irq_find_mapping(), the mapping should
->> definately not be created by the .to_irq() callback since that is just
->> a convenience function.
-> 
-> what do you mean by conenience function? are there other ways? if you 
-> use
-> irq_find_mapping() who will create the mappings? most gpio drivers use 
-> a
-> similar function like gpio_regmap_to_irq().
-> 
->> 
->>> +       if (gpio->irq_domain)
->>> +               chip->to_irq = gpio_regmap_to_irq;
->> 
->> I don't know about this.
->> (...)
->>> + * @irq_domain:                (Optional) IRQ domain if the 
->>> controller is
->>> + *                     interrupt-capable
->> (...)
->>> +       struct irq_domain *irq_domain;
->> 
->> I don't think this is a good storage place for the irqdomain, we 
->> already have
->> gpio_irq_chip inside gpio_chip and that has an irqdomain, we should
->> strive to reuse that infrastructure also for regmap GPIO I think, for 
->> now
->> I would just leave .to_irq() out of this and let the driver deal with 
->> any
->> irqs.
-> 
-> How would a driver attach the to_irq callback then? At the moment, the
-> gpio_regmap doesn't expose the gpio_chip. So either we have to do that 
-> or
-> the config still have to have a .to_irq property.
+Arm Trusted Firmware upstreaming review:
+    https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405
 
-Also, if I move the interrupt hanling completely out of the gpio-regmap, 
-the
-driver would have to deal with "struct gpio_chip" which I would like to 
-avoid
-if possible and keep it private to gpio-regmap.
+Patch to add oak, hana, elm device tree:
+    https://lore.kernel.org/linux-arm-kernel/20200110073730.213789-1-hsinyi@chromium.org/
+I would like to add the device tree support after the above patch is
+accepted.
 
-Unfortunately, I don't have much experience how a good API for the 
-interrupt
-handling and the gpio-regmap might look like. And there seems to be some
-overlap between regmap-irq and the interrupt stuff in gpiolib. For 
-example,
-both provide and set the irq_domain_ops. Thus handing the domain over to
-gpio-regmap looked like a good idea to me. I get you point, that there 
-is
-already a irqdomain in gpiolib and also a _to_irq() which is the same as
-the current implementation in gpio-regmap. Maybe it makes sense to just
-have a new function
+Changes in v4:
+- Add arm,smc-id property
+- Get smc-id from of property
+- Return a1 instead of a0 in timeleft
 
-int gpiolib_add_irqdomain(struct gpio_chip *gc, struct irq_domain 
-domain)
-{
-   gc->irq.domain = domain;
-   gc->to_irq = gpiochip_to_irq;
-}
+Changes in v3:
+- Change name back to arm
+- Add optional get_timeleft op
+- change name to arm_smc_wdt
 
-which is called by gpio_regmap_register() if a config->irq_domain is 
-given.
+Changes in v2:
+- Change name arm > mt8173
+- use watchdog_stop_on_reboot
+- use watchdog_stop_on_unregister
+- use devm_watchdog_register_device
+- remove smcwd_shutdown, smcwd_remove
+- change error codes
 
--michael
+Evan Benn (1):
+  dt-bindings: watchdog: Add ARM smc wdt for mt8173 watchdog
+
+Julius Werner (1):
+  watchdog: Add new arm_smc_wdt watchdog driver
+
+ .../bindings/watchdog/arm-smc-wdt.yaml        |  36 ++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/watchdog/Kconfig                      |  13 ++
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/arm_smc_wdt.c                | 194 ++++++++++++++++++
+ 6 files changed, 252 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml
+ create mode 100644 drivers/watchdog/arm_smc_wdt.c
+
+-- 
+2.26.1.301.g55bc3eb7cb9-goog
+
