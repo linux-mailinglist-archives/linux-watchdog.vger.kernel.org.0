@@ -2,57 +2,66 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3881B3137
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Apr 2020 22:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0101B3415
+	for <lists+linux-watchdog@lfdr.de>; Wed, 22 Apr 2020 02:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbgDUUbi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 Apr 2020 16:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S1726115AbgDVAlI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 21 Apr 2020 20:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725850AbgDUUbh (ORCPT
+        with ESMTP id S1726061AbgDVAlI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 Apr 2020 16:31:37 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2628C0610D5
-        for <linux-watchdog@vger.kernel.org>; Tue, 21 Apr 2020 13:31:37 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id f19so5064iog.5
-        for <linux-watchdog@vger.kernel.org>; Tue, 21 Apr 2020 13:31:37 -0700 (PDT)
+        Tue, 21 Apr 2020 20:41:08 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BDCC0610D5
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Apr 2020 17:41:08 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id o19so787760qkk.5
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Apr 2020 17:41:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DgynPmoHWquo2i6Yyvm5x5n+FCVjD0yzZNoB+cTueB0=;
-        b=ie6ohRqyPbI+C4yBuHi6QA74OoL4yfStj7tBGqZwCMM1CSqVDKrZo5EzljVuI4Nwbh
-         E8w+vvHv6vtOly2PHR4bf5m/LDCu6LXowc5Tv2F49VGJ+gHtIvdW7VpJTdKQDUsGlSXS
-         JS2dURYAU+iGzaWXuh4lmrsMHOChsYSg3Z7aM=
+        bh=DXWORpjRxTkR+i2fu0N9aGTa6+ZQqTZNmK158+3pxDo=;
+        b=XXLAHVjCxmQ0g6P2WSs/mW+8skAgEVSeb5nc/EBOC+NLqjYIAm5C09vy+AXo9NYmfF
+         NuHUkcuMDH0a1DRZzGjmt54BElkiJlno6nBpxUT0EPKcmqSA4/bYO2WbY7dzaNrsqOn5
+         cyDQd1ZAV0QjIHtu5L4OU2ziPMQrf7AdumzEU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DgynPmoHWquo2i6Yyvm5x5n+FCVjD0yzZNoB+cTueB0=;
-        b=Sqz55j2Lpt/ewzAUPsCiYVuXoHn05xtyad0Wih8gQmjvp9XXuuzzxdiT3s2ChyH3af
-         c6HOwwGe8cvpkgVrDS4/dJ5DvBrCIkkr+X6ITW6ZJVfGaL8Oh8vuTPKj2fVyeJzYcout
-         rYWoB2/a/N90HzPHZYiPr1vCziR5P6GefCisVHZFZ5auHp/vnOh91xBxH3g9W0BSfyn4
-         ZieF7Td7Bbj7faBgeGrtlv/NSoYtQUj/TBYF0dnFNnzDPyaQSHT1mbDJeH8JkfbrRnYM
-         rAoU8HBa0spp8nRRXH5+et2PeiP02D84z+uhuFhMQwjqaJgfY1mmYEiYTTeKf0REwcCr
-         voFg==
-X-Gm-Message-State: AGi0PuarXe5+FNVb2FcHFYVl2jK7+qECGhrsmUp3PPvMoTvI5SUmiYVF
-        hM63paQAkLfVhCZfxM5iuIwbr11uXxf/xEYv2W/C7g==
-X-Google-Smtp-Source: APiQypIcsdGYB8kMa8Ef+QUbCPlWkfdqxPhfOwVS4UVzcXSmpGcF+MidhHbAyxQF165SEW5wUu6EYFT0GGPRKs8fm9c=
-X-Received: by 2002:a02:90cd:: with SMTP id c13mr21792999jag.83.1587501096755;
- Tue, 21 Apr 2020 13:31:36 -0700 (PDT)
+        bh=DXWORpjRxTkR+i2fu0N9aGTa6+ZQqTZNmK158+3pxDo=;
+        b=Lep/KqTaxcVn9uDJM/co7MutqWfSEwYVXKFHC6VyRvW9EOmGCcS+YXzwMkqlMZxEhZ
+         JBLp1ijttOKEE2E31V+7qD57qU2w2oE9bOlBYvH/ITZkCpc9soqdmHSmZlJQ5rPwz0BG
+         G+4IkOQqqO1RiBJvAp/CD1L7CoOOokjuhZSmiuYyqHoUUujQc6l/3HEaS64+Lmrpuxji
+         q6ACdfQM3rOqmK4vAelZwcsIt89C0z2aKLl6l93IeCTiA2YGHwdokwlEG2wgOJcxRTdj
+         y6xZqE7XJ51hNrS+lwxXDZnBuKSHb0odbF+B3cHnfBmn7zrudKZiq5BAywwlShMiBWBl
+         046Q==
+X-Gm-Message-State: AGi0PubDUf1NhIH82zDEl9bzOaA7laDn/3I3P7xfszJUEKyLQVPMKnfM
+        zb17KEGr3B6XTfxsrEQ8Viq4VpaIyOA=
+X-Google-Smtp-Source: APiQypLWyY1PR2VseWm4XENJo1TBwDChoC8I8vdAhMVVMUzqKncE20AsqRIHuExcMz0zbul9+Yz/gA==
+X-Received: by 2002:a37:9b4a:: with SMTP id d71mr23512878qke.382.1587516067097;
+        Tue, 21 Apr 2020 17:41:07 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id z2sm2850981qkc.28.2020.04.21.17.41.05
+        for <linux-watchdog@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Apr 2020 17:41:06 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id o198so282163ybg.10
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Apr 2020 17:41:05 -0700 (PDT)
+X-Received: by 2002:ab0:592c:: with SMTP id n41mr14287181uad.73.1587516064329;
+ Tue, 21 Apr 2020 17:41:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200421110520.197930-1-evanbenn@chromium.org> <20200421210403.v2.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
-In-Reply-To: <20200421210403.v2.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Tue, 21 Apr 2020 13:31:25 -0700
-Message-ID: <CAODwPW9MtDLSL_up9W0TO1PcjyA_9cUtNo3No7XXusiwqKBLDw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] watchdog: Add new arm_smc_wdt watchdog driver
-To:     Evan Benn <evanbenn@chromium.org>
+References: <20200421110520.197930-1-evanbenn@chromium.org> <e81737bc-9461-0fdb-245f-d88bdde8f0ee@roeck-us.net>
+In-Reply-To: <e81737bc-9461-0fdb-245f-d88bdde8f0ee@roeck-us.net>
+From:   Evan Benn <evanbenn@chromium.org>
+Date:   Wed, 22 Apr 2020 10:40:37 +1000
+X-Gmail-Original-Message-ID: <CAKz_xw0wAN4rG8xF1Y7amshoECJAjiWNDFQ5GQHPAbCfXi1bDg@mail.gmail.com>
+Message-ID: <CAKz_xw0wAN4rG8xF1Y7amshoECJAjiWNDFQ5GQHPAbCfXi1bDg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Add a watchdog driver that uses ARM Secure Monitor Calls.
+To:     Guenter Roeck <linux@roeck-us.net>, Simon Glass <sjg@google.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Xingyu Chen <xingyu.chen@amlogic.com>,
         Julius Werner <jwerner@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
         Anson Huang <Anson.Huang@nxp.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -64,11 +73,13 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Rob Herring <robh@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Will Deacon <will@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org,
         "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
         "moderated list:ARM/Mediatek SoC support" 
@@ -80,42 +91,13 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-> +static int smcwd_call(unsigned long smc_func_id, enum smcwd_call call,
-> +                     unsigned long arg, struct arm_smccc_res *res)
+> Subject says v2. This is confusing, at the very least.
+>
+> Guenter
 
-I think you should just take a struct watchdog_device* here and do the
-drvdata unpacking inside the function.
+Apologies! I am using the patman script, it threw this message that I
+did not understand: 'Change log for unknown version v3'.
+And I did not spot the issue in the emails before send. Not sure why
+patman worked for v2 and v3 but not v4... I will take a look.
 
-> +static int smcwd_probe(struct platform_device *pdev)
-> +{
-> +       struct watchdog_device *wdd;
-> +       int err;
-> +       struct arm_smccc_res res;
-> +       u32 *smc_func_id;
-> +
-> +       smc_func_id =
-> +               devm_kzalloc(&pdev->dev, sizeof(*smc_func_id), GFP_KERNEL);
-> +       if (!smc_func_id)
-> +               return -ENOMEM;
-
-nit: Could save the allocation by just casting the value itself to a
-pointer? Or is that considered too hacky?
-
-> +static const struct of_device_id smcwd_dt_ids[] = {
-> +       { .compatible = "mediatek,mt8173-smc-wdt" },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, smcwd_dt_ids);
-
-So I'm a bit confused about this... I thought the plan was to either
-use arm,smc-id and then there'll be no reason to put platform-specific
-quirks into the driver, so we can just use a generic "arm,smc-wdt"
-compatible string on all platforms; or we put individual compatible
-strings for each platform and use them to hardcode platform-specific
-differences (like the SMC ID) in the driver. But now you're kinda
-doing both by making the driver code platform-independent but still
-using a platform-specific compatible string, that doesn't seem to fit
-together. (If the driver can be platform independent, I think it's
-nicer to have a generic compatible string so that future platforms
-which support the same interface don't have to land code changes in
-order to just use the driver.)
+Evan
