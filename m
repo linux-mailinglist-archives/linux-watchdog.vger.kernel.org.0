@@ -2,59 +2,23 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5E51B3580
-	for <lists+linux-watchdog@lfdr.de>; Wed, 22 Apr 2020 05:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C6B1B35DD
+	for <lists+linux-watchdog@lfdr.de>; Wed, 22 Apr 2020 06:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726409AbgDVDX0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 Apr 2020 23:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726228AbgDVDX0 (ORCPT
+        id S1725786AbgDVECA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 22 Apr 2020 00:02:00 -0400
+Received: from mail-sz.amlogic.com ([211.162.65.117]:11272 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgDVECA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 Apr 2020 23:23:26 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17528C0610D6;
-        Tue, 21 Apr 2020 20:23:26 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id o15so400054pgi.1;
-        Tue, 21 Apr 2020 20:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HPFpz21JuDXUPFU+5CkFUTKdUzagbUbfsrfVpNgHypY=;
-        b=CJlF4wJOme+r6e61VQ+j97yb8EywOUssW8ux5Pzjw5i5q+lctQA0K3TTTFU/YPxrye
-         5/1jcUKom3o7FLcazdpeV0xeXppwFP+ASabaauWNkm6RYAMHoVUTexILCxX/Ee9DqU/7
-         6WxHn4jNcVnGglzYmY4PxTCrwu/+vB96suazQLHuCGQOrGLchkQM30Ftw8B0wJkyZcLS
-         H+8JpBDoIhixOCIE28eMpGWT5FRJyMfHTRZVYBfjbmry4ahWuf2YBPXa9/HwlPwLG2Nc
-         nxiTqbK2PTH0ETJyVv6xRUuKFxo2HaShKs29WQZhOuOmhHS78rrAH5rZw/6QHyjNTvLM
-         xt+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=HPFpz21JuDXUPFU+5CkFUTKdUzagbUbfsrfVpNgHypY=;
-        b=Kz7DkOs/78DcakZnzFGwD0Z4XlmQAJ2WM0b4CgtAniyJg8gms/+IsSv1S8FpeX2Kz5
-         TR46PZqLXVpywvnpeIRCEeP7P/bq49VoSpnwa333h5pIRzKsgpfQxdvMOMil5h8g6BqG
-         IHtSO1ml3JbOr8t6QSwvvqSIHfS0rMu6ik+jo1rXfEQ3jNba0N0oPaxSt4Wh7A+cKQ1F
-         0YR6Zsvi6XuJy6MyjOLCZ/QwsvH7fSkIYFh3H8/MlM8LCQdV5KEFAUCuMOYxJSIZ3TVs
-         TFIGMgZmw0uWbZQLvcqxS0T79aCiLlYO5dareBB7vPw9fwMperRLklaE2N8Yug0bAz8d
-         TuiQ==
-X-Gm-Message-State: AGi0PuYRIbO0YqCtpw80+Iphfb32es/qCQEAWT6imVNQJvV4hlywHxLc
-        xDDgIumqOSgnaWpH8MTBvnobV28F
-X-Google-Smtp-Source: APiQypKZ1UETfezXnPsNQGhXgPN+D/pchmvoIp1U7gUDRE24xZJKWYXoyn/pnZO2kb2KiIxId1+A3Q==
-X-Received: by 2002:a63:e607:: with SMTP id g7mr23935131pgh.303.1587525805347;
-        Tue, 21 Apr 2020 20:23:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 185sm3943742pfv.9.2020.04.21.20.23.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2020 20:23:24 -0700 (PDT)
+        Wed, 22 Apr 2020 00:02:00 -0400
+Received: from [10.28.39.241] (10.28.39.241) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Wed, 22 Apr 2020
+ 12:02:48 +0800
 Subject: Re: [PATCH v2 2/2] watchdog: Add new arm_smc_wdt watchdog driver
-To:     Julius Werner <jwerner@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Xingyu Chen <xingyu.chen@amlogic.com>,
+To:     Evan Benn <evanbenn@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <jwerner@chromium.org>, Guenter Roeck <linux@roeck-us.net>,
         Anson Huang <Anson.Huang@nxp.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -71,124 +35,228 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Will Deacon <will@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
         <linux-mediatek@lists.infradead.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>
+        <linux-watchdog@vger.kernel.org>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yonghui Yu <yonghui.yu@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
 References: <20200421110520.197930-1-evanbenn@chromium.org>
  <20200421210403.v2.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
- <CAODwPW9MtDLSL_up9W0TO1PcjyA_9cUtNo3No7XXusiwqKBLDw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <e382a9fe-9909-5d07-4b71-efe80cb35e4c@roeck-us.net>
-Date:   Tue, 21 Apr 2020 20:23:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+From:   Xingyu Chen <xingyu.chen@amlogic.com>
+Message-ID: <64c40c96-5a5f-b111-3b3f-44f874cc3968@amlogic.com>
+Date:   Wed, 22 Apr 2020 12:02:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAODwPW9MtDLSL_up9W0TO1PcjyA_9cUtNo3No7XXusiwqKBLDw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20200421210403.v2.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.28.39.241]
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/21/20 1:31 PM, Julius Werner wrote:
->> +static int smcwd_call(unsigned long smc_func_id, enum smcwd_call call,
->> +                     unsigned long arg, struct arm_smccc_res *res)
-> 
-> I think you should just take a struct watchdog_device* here and do the
-> drvdata unpacking inside the function.
-> 
->> +static int smcwd_probe(struct platform_device *pdev)
->> +{
->> +       struct watchdog_device *wdd;
->> +       int err;
->> +       struct arm_smccc_res res;
->> +       u32 *smc_func_id;
->> +
->> +       smc_func_id =
->> +               devm_kzalloc(&pdev->dev, sizeof(*smc_func_id), GFP_KERNEL);
->> +       if (!smc_func_id)
->> +               return -ENOMEM;
-> 
-> nit: Could save the allocation by just casting the value itself to a
-> pointer? Or is that considered too hacky?
-> 
+Hi,Evan
 
-Actually, the current code is what is hacky. I'd either do
-what you suggest, or allocate a structure such as
-
-struct local_data {
-	u32 smc_func_id;
-	struct watchdog_device wdd;
-};
-
-and use it accordingly.
-
-Guenter
-
->> +static const struct of_device_id smcwd_dt_ids[] = {
->> +       { .compatible = "mediatek,mt8173-smc-wdt" },
->> +       {}
->> +};
->> +MODULE_DEVICE_TABLE(of, smcwd_dt_ids);
+On 2020/4/21 19:05, Evan Benn wrote:
+> From: Julius Werner <jwerner@chromium.org>
 > 
-> So I'm a bit confused about this... I thought the plan was to either
-> use arm,smc-id and then there'll be no reason to put platform-specific
-> quirks into the driver, so we can just use a generic "arm,smc-wdt"
-> compatible string on all platforms; or we put individual compatible
-> strings for each platform and use them to hardcode platform-specific
-> differences (like the SMC ID) in the driver. But now you're kinda
-> doing both by making the driver code platform-independent but still
-> using a platform-specific compatible string, that doesn't seem to fit
-> together. (If the driver can be platform independent, I think it's
-> nicer to have a generic compatible string so that future platforms
-> which support the same interface don't have to land code changes in
-> order to just use the driver.)
+> This patch adds a watchdog driver that can be used on ARM systems
+> with the appropriate watchdog implemented in Secure Monitor firmware.
+> The driver communicates with firmware via a Secure Monitor Call.
+> This may be useful for platforms using TrustZone that want
+> the Secure Monitor firmware to have the final control over the watchdog.
 > 
+> This is implemented on mt8173 chromebook devices oak, elm and hana in
+> arm trusted firmware file plat/mediatek/mt8173/drivers/wdt/wdt.c.
+> 
+> Signed-off-by: Julius Werner <jwerner@chromium.org>
+> Signed-off-by: Evan Benn <evanbenn@chromium.org>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> ---
+> 
+> Changes in v4:
+> - Get smc-id from of property
+> - Return a1 instead of a0 in timeleft
+> 
+> Changes in v3:
+> - Add optional get_timeleft op
+> - change name to arm_smc_wdt
+> 
+> Changes in v2:
+> - use watchdog_stop_on_reboot
+> - use watchdog_stop_on_unregister
+> - use devm_watchdog_register_device
+> - remove smcwd_shutdown, smcwd_remove
+> - change error codes
+> 
+>   MAINTAINERS                    |   1 +
+>   arch/arm64/configs/defconfig   |   1 +
+>   drivers/watchdog/Kconfig       |  13 +++
+>   drivers/watchdog/Makefile      |   1 +
+>   drivers/watchdog/arm_smc_wdt.c | 194 +++++++++++++++++++++++++++++++++
+>   5 files changed, 210 insertions(+)
+>   create mode 100644 drivers/watchdog/arm_smc_wdt.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0f2b39767bfa9..2b782bbff200a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1462,6 +1462,7 @@ M:	Julius Werner <jwerner@chromium.org>
+>   R:	Evan Benn <evanbenn@chromium.org>
+>   S:	Maintained
+>   F:	devicetree/bindings/watchdog/arm-smc-wdt.yaml
+> +F:	drivers/watchdog/arm_smc_wdt.c
+>   
+>   ARM SMMU DRIVERS
+>   M:	Will Deacon <will@kernel.org>
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 24e534d850454..0619df80f7575 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -513,6 +513,7 @@ CONFIG_UNIPHIER_THERMAL=y
+>   CONFIG_WATCHDOG=y
+>   CONFIG_ARM_SP805_WATCHDOG=y
+>   CONFIG_ARM_SBSA_WATCHDOG=y
+> +CONFIG_ARM_SMC_WATCHDOG=y
+>   CONFIG_S3C2410_WATCHDOG=y
+>   CONFIG_DW_WATCHDOG=y
+>   CONFIG_SUNXI_WATCHDOG=m
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 0663c604bd642..c440b576d23bf 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -867,6 +867,19 @@ config DIGICOLOR_WATCHDOG
+>   	  To compile this driver as a module, choose M here: the
+>   	  module will be called digicolor_wdt.
+>   
+> +config ARM_SMC_WATCHDOG
+> +	tristate "ARM Secure Monitor Call based watchdog support"
+> +	depends on ARM || ARM64
+> +	depends on OF
+> +	depends on HAVE_ARM_SMCCC
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Say Y here to include support for a watchdog timer
+> +	  implemented by the EL3 Secure Monitor on ARM platforms.
+> +	  Requires firmware support.
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called arm_smc_wdt.
+> +
+>   config LPC18XX_WATCHDOG
+>   	tristate "LPC18xx/43xx Watchdog"
+>   	depends on ARCH_LPC18XX || COMPILE_TEST
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 6de2e4ceef190..97bed1d3d97cb 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -94,6 +94,7 @@ obj-$(CONFIG_UNIPHIER_WATCHDOG) += uniphier_wdt.o
+>   obj-$(CONFIG_RTD119X_WATCHDOG) += rtd119x_wdt.o
+>   obj-$(CONFIG_SPRD_WATCHDOG) += sprd_wdt.o
+>   obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
+> +obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
+>   
+>   # X86 (i386 + ia64 + x86_64) Architecture
+>   obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
+> diff --git a/drivers/watchdog/arm_smc_wdt.c b/drivers/watchdog/arm_smc_wdt.c
+> new file mode 100644
+> index 0000000000000..29d2573b2ca11
+> --- /dev/null
+> +++ b/drivers/watchdog/arm_smc_wdt.c
+> @@ -0,0 +1,194 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * ARM Secure Monitor Call watchdog driver
+> + *
+> + * Copyright 2020 Google LLC.
+> + * Julius Werner <jwerner@chromium.org>
+> + * Based on mtk_wdt.c
+> + */
+> +
+> +#include <linux/arm-smccc.h>
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/types.h>
+> +#include <linux/watchdog.h>
+> +#include <uapi/linux/psci.h>
+> +
+> +#define DRV_NAME		"arm_smc_wdt"
+> +#define DRV_VERSION		"1.0"
+> +
+> +#define get_smc_func_id(wdd) (*(u32 *)watchdog_get_drvdata(wdd))
+> +enum smcwd_call {
+> +	SMCWD_INIT		= 0,
+> +	SMCWD_SET_TIMEOUT	= 1,
+> +	SMCWD_ENABLE		= 2,
+> +	SMCWD_PET		= 3,
+> +	SMCWD_GET_TIMELEFT	= 4,
+> +};
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +static unsigned int timeout;
+> +
+> +static int smcwd_call(unsigned long smc_func_id, enum smcwd_call call,
+> +		      unsigned long arg, struct arm_smccc_res *res)
+> +{
+> +	struct arm_smccc_res local_res;
+> +
+> +	if (!res)
+> +		res = &local_res;
+> +
+> +	arm_smccc_smc(smc_func_id, call, arg, 0, 0, 0, 0, 0, res);
+> +
+> +	if (res->a0 == PSCI_RET_NOT_SUPPORTED)
+> +		return -ENODEV;
+> +	if (res->a0 == PSCI_RET_INVALID_PARAMS)
+> +		return -EINVAL;
+> +	if (res->a0 != PSCI_RET_SUCCESS)
+> +		return -EIO;
+> +	return 0;
+> +}
+> +
+> +static int smcwd_ping(struct watchdog_device *wdd)
+> +{
+> +	return smcwd_call(get_smc_func_id(wdd), SMCWD_PET, 0, NULL);
+> +}
+> +
+> +static unsigned int smcwd_get_timeleft(struct watchdog_device *wdd)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	smcwd_call(get_smc_func_id(wdd), SMCWD_GET_TIMELEFT, 0, &res);
+> +	return res.a1;It should return 0 when the smcwd_call return error according to 
+Guenter's suggestion at [0]
 
+[0]: https://patchwork.kernel.org/patch/11197781/
+
+Thanks.
+> +
+> +static int smcwd_set_timeout(struct watchdog_device *wdd, unsigned int timeout)
+> +{
+> +	int res;
+> +
+> +	res = smcwd_call(get_smc_func_id(wdd), SMCWD_SET_TIMEOUT, timeout,
+> +			 NULL);
+> +	if (!res)
+> +		wdd->timeout = timeout;
+> +	return res;
+> +}
+> +
+> +static int smcwd_stop(struct watchdog_device *wdd)
+> +{
+> +	return smcwd_call(get_smc_func_id(wdd), SMCWD_ENABLE, 0, NULL);
+> +}
+> +
+[...]
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Julius Werner <jwerner@chromium.org>");
+> +MODULE_DESCRIPTION("ARM Secure Monitor Call Watchdog Driver");
+> +MODULE_VERSION(DRV_VERSION);
+> 
