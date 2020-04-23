@@ -2,92 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 954491B6381
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Apr 2020 20:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9AD1B66AA
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Apr 2020 00:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730401AbgDWS1S (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 Apr 2020 14:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S1727065AbgDWWRW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 Apr 2020 18:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730396AbgDWS1Q (ORCPT
+        with ESMTP id S1726060AbgDWWRV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 Apr 2020 14:27:16 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9243BC09B043
-        for <linux-watchdog@vger.kernel.org>; Thu, 23 Apr 2020 11:27:14 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id p10so7502176ioh.7
-        for <linux-watchdog@vger.kernel.org>; Thu, 23 Apr 2020 11:27:14 -0700 (PDT)
+        Thu, 23 Apr 2020 18:17:21 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C42C09B043
+        for <linux-watchdog@vger.kernel.org>; Thu, 23 Apr 2020 15:17:20 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id u12so7494949uau.10
+        for <linux-watchdog@vger.kernel.org>; Thu, 23 Apr 2020 15:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=G0MearUWJO2XoX5WFWCbOSBM0KnomNOcLxBMKb36E56Tk8IIyFbWO7z4INTed1WkRU
-         qeMi1eRR7YsA+BDT6DQvUAii78YnzCjvNMVBKy4slcZy3/gJbFRS56rTYb2i1ZQ8vqn/
-         EOaplCA4N/rSu1DPvHSaWXp+qBo2gCjTbf/vDHta9DawS0nUkV5FYws7CV/zXlK/VYiG
-         COL+ehFclZxGMjmnJCFdgQT7XS8eBs73XeZW6OQ9vAUq0KfaGK/YZHActLVD5NzSJiie
-         gXxsbNT9IQMnd4wAzDKDPSrX8AkY/tvkHFQgBX+60qxPigWKusZrEf/ce5VP7zRF3LJ+
-         eYhg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ImyDKT5GUuGx4UdReAU1SFZBdyoyuA09f+p98B9B22U=;
+        b=MVrB7ptavsGiQQua0Vjywdn5LaMTu4XF0Z1Ou35iDTtlPrECrJF03b1X9OfQreT1Sv
+         Vrs6/p06qmY0edU5rq5DjBnn0HF8gPWw2/bsLkke5gs8JhP6nZqduiZuAIPqaK/geeaF
+         9jGZybC4kWQR1xAWiRngZ+uRtePeQ1MeLOEvk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=fsgJrtWLaE8uA7YJkFnGRr+lZ2HDNTbEZK+t6GBuphiDCIxxcd/0wRQF97edtSzGsK
-         oBcqCdfXiUffBequwWh4/pUmHg+nk5ixY6O3sC8+OMJJBe+7biXymoWEGm/VF68CXgfq
-         P1Ep/sMq6Llc+9F/WOuquM9PJmPN1ciMtgACnWgAo8bShMfYbACey9cLu+wnkjd26KlW
-         1zliUtSmDYVuPqfMFjEjWvOJMJO02Wx+KiCGMoer/3ihCSC81bdkaCuGKCtY2GjT6vq4
-         5YqjdCyy3hbate7BfopRjPFulKwxQZe4BfOsT03FBwgvWuQYM76FLTNHMaUYZwtWuN3Y
-         oVJw==
-X-Gm-Message-State: AGi0PuYzVgUOgfD6UyTCYutXCvIBveoxyJ3bFa+DPFcT4a3d3yU7o8kJ
-        A1NNCTvkZ5+L70a6GHzH1sm5MdiP+9vApWPTr6OtxSA=
-X-Google-Smtp-Source: APiQypKOhu0Ivyzu1MQANRLgnSM6D7f6PDwmOyOGFsy7UwOOUt5tM1gVxevJ7CcMC29eb2aYcjzRxadXayX+T6slpNc=
-X-Received: by 2002:a05:6602:d:: with SMTP id b13mr5025673ioa.176.1587666433220;
- Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ImyDKT5GUuGx4UdReAU1SFZBdyoyuA09f+p98B9B22U=;
+        b=IZ+id0I9Q/0Fd0M81LPiy7nDzoHRnsHYxkOoqF2QMLu3lvVGWboHaJjRatxZ06qeiX
+         9q2d94NyzIltEN9119VtD/3RSf0QGnJPycfa9hBmiW5MrOE9dX7GmmtYiznb7xDmLOl6
+         vCfyZFd66fDnsQTmX+0Rh35hhg+tYmby9lNbL4L7UufbBL+3ZFxmuJ8jxP7NdW5qj7/F
+         C/hJQQH2iUqxJvJSOci/JABUR6GThzq57AuWNz2m6S9HaoelqJT1HCwtOD7ehpf+vV1/
+         8TJNCawkKtbOFm0ZZjRtNIDOtlvDslft/DrJjURK4U5guL3b2y12Uz+3bSMvRR2IemZh
+         3idQ==
+X-Gm-Message-State: AGi0PubWuTzRan/ZfvMBk3WnRv3JTejDWu1LYUOvBH+qswhjejM8UgAe
+        GrPg8gHxwGnLiGrIIMUO1BKl9SyoaHOpPlI05M7vlA==
+X-Google-Smtp-Source: APiQypJDlCWw7UIoyUEUjtlXhQdYSbXsrKe/ELL5y8iA5voVOv7hSWTM7nSU1GgatF1cMHiK0C9YmT8nvji7Iv8Jnmc=
+X-Received: by 2002:a67:1447:: with SMTP id 68mr5466353vsu.163.1587680238725;
+ Thu, 23 Apr 2020 15:17:18 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:27:12
- -0700 (PDT)
-Reply-To: boa.benin107@yahoo.com
-From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
-Date:   Thu, 23 Apr 2020 20:27:12 +0200
-Message-ID: <CABHzvrnzZLe4Z0E4acOdcsDJTPa3wvp-Oz12f_M4TQ03PAGZkw@mail.gmail.com>
-Subject: Contact Eco bank-Benin to receive your payment funds transfer amount
- of $12.800.000,00 Million USD,approved this morning by IMF.
-To:     undisclosed-recipients:;
+References: <20200423044036.234578-1-evanbenn@chromium.org> <20200423143945.v5.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
+In-Reply-To: <20200423143945.v5.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Thu, 23 Apr 2020 15:17:06 -0700
+Message-ID: <CAODwPW9-c8EcZh_zB6SwohzvHtCQasaNLQM0fj2bj5O5KuVPfg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] watchdog: Add new arm_smc_wdt watchdog driver
+To:     Evan Benn <evanbenn@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Xingyu Chen <xingyu.chen@amlogic.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Olof Johansson <olof@lixom.net>, Rob Herring <robh@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Attn Dear.
-Contact Bank of Africa-Benin to receive your payment funds transfer amount =
-of
-$12.800.000,00 Million USD,approved this morning by IMF.
-Happy to inform you, we have finally deposited your payment funds
-$12.8 million us dollars with the Paying Bank of Africa-Benin
-to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
-Contact the bank immediately you receive this email now.
-Director Bank of Africa-Benin: Dr. Festus Obiara
-Email id:  boa.benin107@yahoo.com
-Tel/mobile, (229) 62819378
-BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
-Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
-Phone:(229) 62819378.
-2020 GROUPE BANK OF AFRICA
-Be advised to re-confirm your bank details to this bank as listed.
-Your account Holder's name----------------
-Bank Name----------------------------------------------------------
-Bank address----------------------------------------------
-Account Numbers---------------------------------------
-Rounting-----------------------------------------------------------------
-Your direct Phone Numbers----------------------------------------------
-Note,I have paid the deposit and insurance fees for you
-But the only money you are to send to this bank is $150.00 us dollars
-Been for the wire transfer fees of your funds
-Contact Him now to receive your transfer deposited this morning
-I wait for your reply upon confirmation
-Mrs. Angella Michelle
-Editor, Zenith Bank- Companies Benin
-mrsa9389@gmail.com
+> +       err = of_property_read_u32(pdev->dev.of_node, "arm,smc-id",
+> +                                  &smc_func_id);
+> +       if (err < 0)
+> +               return err;
+> +       watchdog_set_drvdata(wdd, (void *)(uintptr_t)smc_func_id);
+
+Your device tree binding says there's a default and this is optional.
+I think you need to change the code so that that's actually true.
