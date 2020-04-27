@@ -2,63 +2,106 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EDE1BA2BF
-	for <lists+linux-watchdog@lfdr.de>; Mon, 27 Apr 2020 13:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC53C1BA2D0
+	for <lists+linux-watchdog@lfdr.de>; Mon, 27 Apr 2020 13:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbgD0Llv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 27 Apr 2020 07:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S1727798AbgD0LmV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 27 Apr 2020 07:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727089AbgD0Llg (ORCPT
+        with ESMTP id S1727045AbgD0LmV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 27 Apr 2020 07:41:36 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2830EC0A3BF8
-        for <linux-watchdog@vger.kernel.org>; Mon, 27 Apr 2020 04:41:35 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id n11so465661pgl.9
-        for <linux-watchdog@vger.kernel.org>; Mon, 27 Apr 2020 04:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
-        b=uI1U3pP4FazEZaTfkDGgaf1Qyb1hL6AlgZB9tozzlJtw0tc2p0xAeW9BNdbY4A2XuL
-         JYn8lE6gg3HqjBgRaTT8CTSOLDZ9E79yDyBM0EGnWldSdHyzrk+BT/7frJGn/PAhMIrE
-         VCZdq7yfljhgiOOYhIeLP2AIIFXvLFMREe3IREMgf/Wimn5okrCaqK4gkS0+n2Tqfq3c
-         EFYh4cYLyK3nIET0YOm2adzDe5W5QN3hsgSvwW72euh+PRPDs3oxC82+7cfg/ZGTOz8/
-         eTagf6SblJMWIJeJ59y/zg3//EVOq9RPByBfKkQCDUJB6vE62XJLcx9qUgZNIxoYrz8S
-         JAeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
-        b=RQsGFk7RQBVvzVwLwPb8BesVT3neGs6k4GEHaBAqoQIx0pFq2u66fU67BHESSAFSFE
-         wp50wJx7MDNiW08qE+JTNkpjSUKUkeXfE8MPMCko1Fe+2X5wFXswkHlC2GSgvD7crcIn
-         sTYfaVlaeevFKObmY7zAElXYvRo6lL80BRaApQhQTTGFbB2zGDmAODnD191xMc3nL/V3
-         3oOb/uUmzbiyQrQ/ED3wAMaVpD+UCAEwYOIlCGmaEZO09zlCSftYyUPIomE9dJeEn5HG
-         O5ZO8uBdBpp2D1jzTT6W8SLpL9XANBeL5wVJZStegbAGgj/4JpR4Qms6rdne5yjApwv5
-         Cpjw==
-X-Gm-Message-State: AGi0PuavYLaDjpj86FL7vLiFC6GBqOYWanMwwVOENt3ncuagkJux0a/z
-        kGdbTwW+czvJB2J9GVMQa/XGl2WcVeWgtITs+3yUnRwjT3o=
-X-Google-Smtp-Source: APiQypJWdjzUZMbeRoAX94bUJV0IgwyoF5kUG7iPo3CBzKxW8lStFNsM/6tz3An/TyzRuH2Qw14DtavsVumw6JVLls0=
-X-Received: by 2002:a6b:7d4a:: with SMTP id d10mr4072296ioq.70.1587987694042;
- Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
+        Mon, 27 Apr 2020 07:42:21 -0400
+Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAF8C0610D5;
+        Mon, 27 Apr 2020 04:42:21 -0700 (PDT)
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1jT29J-0001JG-W7; Mon, 27 Apr 2020 13:42:10 +0200
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 66B12100606; Mon, 27 Apr 2020 13:42:09 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Michael Walle <michael@walle.cc>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v3 09/16] gpiolib: Introduce gpiochip_irqchip_add_domain()
+In-Reply-To: <20200423174543.17161-10-michael@walle.cc>
+References: <20200423174543.17161-1-michael@walle.cc> <20200423174543.17161-10-michael@walle.cc>
+Date:   Mon, 27 Apr 2020 13:42:09 +0200
+Message-ID: <87mu6xqhny.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Received: by 2002:a5d:8f89:0:0:0:0:0 with HTTP; Mon, 27 Apr 2020 04:41:33
- -0700 (PDT)
-Reply-To: convy0090@gmail.com
-From:   Ruben CONVY <andrewboccc@gmail.com>
-Date:   Mon, 27 Apr 2020 12:41:33 +0100
-Message-ID: <CAHVC0+Ag87TMCmfNNwWbxXOFxn5166q8GG5wEfPjwtixj9=EXQ@mail.gmail.com>
-Subject: Why continued silence 2
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Did you receive my previous email regarding your family inheritance?
-Reply strictly through: convy0090@gmail.com
-Best Regards,
-Ruben CONVY
+Michael Walle <michael@walle.cc> writes:
+> This connects an IRQ domain to a gpiochip and reuses
+> gpiochip_to_irq().
+
+A little bit more context and explanation why this function is useful
+would be appreciated.
+
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/gpio/gpiolib.c      | 20 ++++++++++++++++++++
+>  include/linux/gpio/driver.h |  3 +++
+>  2 files changed, 23 insertions(+)
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 40f2d7f69be2..7b3d7f496b9a 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -2722,6 +2722,26 @@ int gpiochip_irqchip_add_key(struct gpio_chip *gc,
+>  }
+>  EXPORT_SYMBOL_GPL(gpiochip_irqchip_add_key);
+>  
+> +/**
+> + * gpiochip_irqchip_add_key() - adds an irqdomain to a gpiochip
+
+Copy & paste is wonderful
+
+> + * @gc: the gpiochip to add the irqchip to
+> + * @domain: the irqdomain to add to the gpiochip
+> + *
+> + * This function adds an IRQ domain to the gpiochip.
+> + */
+> +int gpiochip_irqchip_add_domain(struct gpio_chip *gc,
+> +				struct irq_domain *domain)
+> +{
+> +	if (!domain)
+> +		return -EINVAL;
+> +
+> +	gc->to_irq = gpiochip_to_irq;
+> +	gc->irq.domain = domain;
+> +
+> +	return 0;
+> +}
+
+Thanks,
+
+        tglx
