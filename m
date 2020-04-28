@@ -2,105 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D5F1BC369
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Apr 2020 17:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0889C1BC3CE
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Apr 2020 17:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728494AbgD1PZr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Apr 2020 11:25:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42660 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728487AbgD1PZr (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Apr 2020 11:25:47 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C4838206D8;
-        Tue, 28 Apr 2020 15:25:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588087546;
-        bh=th3tqv11ZgZgj8E96bFG6ckng9nKhzjnFA3FZBoCqDM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UlWrbndNBYw9f/3rJZ9vWhuiMI9bols+NUpDrkpb6nMDPcIB+exm9thHsajcNMv2s
-         zF8ons1G+Tu9b/RtEzHyR4oERYHCJhNFS7iYENen9Yfm5zJskPzV8YzecKgzoPwIBB
-         YihdZq8p8AkIueprECGqpetiJGVIrRNXwJ4Om4/8=
-Date:   Tue, 28 Apr 2020 16:25:43 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Walle <michael@walle.cc>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 02/16] mfd: mfd-core: Don't overwrite the dma_mask of
- the child device
-Message-ID: <20200428152543.GI5677@sirena.org.uk>
-References: <20200423174543.17161-1-michael@walle.cc>
- <20200423174543.17161-3-michael@walle.cc>
- <20200428124548.GS185537@smile.fi.intel.com>
- <3cd3705a-4f48-6a46-e869-3ee11dc17323@arm.com>
- <20200428142938.GX185537@smile.fi.intel.com>
- <6ccad285-7b5f-3037-d4d5-ff4d9571b612@arm.com>
+        id S1728018AbgD1PgI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Apr 2020 11:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727932AbgD1PgH (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 28 Apr 2020 11:36:07 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAA4C03C1AB;
+        Tue, 28 Apr 2020 08:36:07 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id l20so2555063pgb.11;
+        Tue, 28 Apr 2020 08:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=47/IKu5NcN48zokcEkCuU0Ibnk7c4G0KllSpA5jpEXg=;
+        b=BRhyMcJ8Fm3fFROWFd6GPam53RdFNs6yOE4jMBHrieKKdwd7DzksDMZrVESd53FNOH
+         Hc6AU9U1eZV63fZLzteSw2Tr4D++/Zbie0ree9Fok2fZKZMGvdpk3gAuQL1VZYoZ1gSi
+         FBrkf9X1ZBCFZpZbEA+EvksZtamQtZBa4fsgmAOS04VRsVk4Wkwc9S3aHNLdLd9xvDtO
+         1QI7Q41PpPndAZDcEoQ42+LdL4laE95om89tIAaPXImCZMPUq8/OfDBNrHVgD4QWG6/Y
+         Hc4e9ajMiGnEz7uXMb1LPkzjMxUWleQ7nUx1MwB0D2D1e+gQMh9dtPfCb8ZjlDX62OVb
+         Z8gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=47/IKu5NcN48zokcEkCuU0Ibnk7c4G0KllSpA5jpEXg=;
+        b=Ph42VBU4xuyHD5uVJTdKGQ7JcUGq3ONH050Z60wGIn6ZRAPwFGQLvMJ0TXsawWZvSE
+         uIzJHN7re2dLoVb8pYfmU1q6kfFepBq7raULbh4PEABMmUV9SL5g6DFG/86MaQOl3SwX
+         Fm0WyTLnDLpSfjECLoE3k9owvtYC7YJPDCuk5TCSgtABny3g+vZrkf5Oj9hA2UWk359I
+         908hD2AEmR0zxlmoHT16rYtMgGYnEe6u01nE4oHdIaOYmsZbiBgDci+QPy7NzHXXOZL6
+         vOsEUzAxnw/uuVwFPAt+BHacTpeQ/KdgyJLOymcc4bJmZM5ob/+xeBkwvc8sy4btNA8B
+         Cxag==
+X-Gm-Message-State: AGi0PuZ3MEU6L4MjJCnXq7hoGPVv92JXG1ghAObFJ4pIxKZdMyybftz3
+        eKomqLoIkSJPCkA/eMLTPvJ/T+Ys7vqLyBpTvcU=
+X-Google-Smtp-Source: APiQypIiwRcZyqamaoyII4of/pYVXVo9MalYv/fXia9WK+JRC5qUmdVe2lmsiapfwJP8qVaHcDIFK2jsjw2t5jAN0MY=
+X-Received: by 2002:a63:1c1:: with SMTP id 184mr29987668pgb.203.1588088167227;
+ Tue, 28 Apr 2020 08:36:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LYw3s/afESlflPpp"
-Content-Disposition: inline
-In-Reply-To: <6ccad285-7b5f-3037-d4d5-ff4d9571b612@arm.com>
-X-Cookie: Eschew obfuscation.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200428130816.582-1-michaelsh@mellanox.com>
+In-Reply-To: <20200428130816.582-1-michaelsh@mellanox.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Apr 2020 18:36:00 +0300
+Message-ID: <CAHp75VdxGO55sGvMizzZrLfs-sdmEBmDj5nRXYn_wQ=GugexYw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] support watchdog with longer timeout period
+To:     michaelsh@mellanox.com
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        linux-watchdog@vger.kernel.org,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Vadim Pasternak <vadimp@mellanox.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Tue, Apr 28, 2020 at 4:09 PM <michaelsh@mellanox.com> wrote:
+>
+> From: Michael Shych <michaelsh@mellanox.com>
+>
+> This patchset adds support of extended new watchdog type 3 of Mellanox
+> Ethernet and Infiniband switch systems.
+> This type of watchdog can have a timeout period longer than 255 or 32 sec.
+> as it was before.
+>
 
---LYw3s/afESlflPpp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-On Tue, Apr 28, 2020 at 03:49:49PM +0100, Robin Murphy wrote:
+for PDx86 bits.
 
-> For better or worse, the platform bus is the dumping ground for random crap,
-> so we just have to deal with all the abstraction breakage that leaks out of
-> that.
+> Michael Shych (4):
+>   platform_data/mlxreg: support new watchdog type with longer timeout
+>     period
+>   platform/x86: mlx-platform: support new watchdog type with longer
+>     timeout
+>   watchdog: mlx-wdt: support new watchdog type with longer timeout
+>     period
+>   docs: watchdog: mlx-wdt: Add description of new watchdog type 3
+>
+>  Documentation/watchdog/mlx-wdt.rst   |  12 ++++
+>  drivers/platform/x86/mlx-platform.c  | 106 ++++++++++++++++++++++++++++++
+>  drivers/watchdog/mlx_wdt.c           |  75 +++++++++++++++++++++----
+>  include/linux/platform_data/mlxreg.h |   5 +-
+>  4 files changed, 186 insertions(+), 12 deletions(-)
+>
+> --
+> 2.11.0
+>
 
-The reason we're using the platform bus for this is that historically
-people were creating buses which were essentially carbon copies of the
-platform bus with the name changed and it was felt that rather than
-duplicate code it was better to just use platform devices with no MMIO
-ranges defined.  If there's some assumptions about DMA for platform
-devices floating about somewhere it might be reasonable to revisit this
-and create a non-DMA variant of platform devices since there is a
-meaningful difference.
 
---LYw3s/afESlflPpp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6oSvYACgkQJNaLcl1U
-h9Bs4Qf/RCa5JW+qq8H0nchlRU4JeR7TBiAfPi1/fksL+W8k+qMkV0/KwPSMqloA
-CaWErSXTzc1Mk3WKIT7UxNlcK1QsuUfNZnyA3JhFXAg39xjWpt2vSM7A/zY5mnOm
-ZkujuFzw0NzNuBoxG+8OaBH1Ltitu/KpgCPJgrmwT09V5WuZ5uf8b3mjnEo0reaN
-DYcUgV/u3XkUeSbMd1iljqd8bt+jHFHoFlVOVtcw+xh20cKvQ6kOzIPYlDbuz9rM
-tGPZwlyojrQeFd8YYTh1hqSzqeB6E19JgdPEi9P34gi7rIctOcI6b9PwFO9er5fW
-ov2hgkFJC60dI+z5f9j70bLBQfMw/w==
-=hzNB
------END PGP SIGNATURE-----
-
---LYw3s/afESlflPpp--
+-- 
+With Best Regards,
+Andy Shevchenko
