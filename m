@@ -2,31 +2,33 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C10761BBE93
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Apr 2020 15:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F341BBE98
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Apr 2020 15:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726866AbgD1NI1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Apr 2020 09:08:27 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:50889 "EHLO
+        id S1726764AbgD1NIb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Apr 2020 09:08:31 -0400
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:50910 "EHLO
         mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726785AbgD1NI0 (ORCPT
+        with ESMTP id S1727026AbgD1NIb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Apr 2020 09:08:26 -0400
+        Tue, 28 Apr 2020 09:08:31 -0400
 Received: from Internal Mail-Server by MTLPINE1 (envelope-from michaelsh@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 28 Apr 2020 16:08:24 +0300
+        with ESMTPS (AES256-SHA encrypted); 28 Apr 2020 16:08:26 +0300
 Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 03SD8OAD026463;
-        Tue, 28 Apr 2020 16:08:24 +0300
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 03SD8OAE026463;
+        Tue, 28 Apr 2020 16:08:25 +0300
 From:   michaelsh@mellanox.com
 To:     linux@roeck-us.net, wim@linux-watchdog.org, andy@infradead.org,
         dvhart@infradead.org
 Cc:     linux-watchdog@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, vadimp@mellanox.com,
         Michael Shych <michaelsh@mellanox.com>
-Subject: [PATCH v2 0/4] support watchdog with longer timeout period
-Date:   Tue, 28 Apr 2020 16:08:12 +0300
-Message-Id: <20200428130816.582-1-michaelsh@mellanox.com>
+Subject: [PATCH v2 1/4] platform_data/mlxreg: support new watchdog type with longer timeout period
+Date:   Tue, 28 Apr 2020 16:08:13 +0300
+Message-Id: <20200428130816.582-2-michaelsh@mellanox.com>
 X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20200428130816.582-1-michaelsh@mellanox.com>
+References: <20200428130816.582-1-michaelsh@mellanox.com>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
@@ -34,26 +36,43 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Michael Shych <michaelsh@mellanox.com>
 
-This patchset adds support of extended new watchdog type 3 of Mellanox
-Ethernet and Infiniband switch systems.
-This type of watchdog can have a timeout period longer than 255 or 32 sec.
-as it was before.
+Add new watchdog type 3 with longer timeout period.
+Extend size of health_cntr field that that can be used to init watchdog
+timeout period.
 
-Michael Shych (4):
-  platform_data/mlxreg: support new watchdog type with longer timeout
-    period
-  platform/x86: mlx-platform: support new watchdog type with longer
-    timeout
-  watchdog: mlx-wdt: support new watchdog type with longer timeout
-    period
-  docs: watchdog: mlx-wdt: Add description of new watchdog type 3
+Signed-off-by: Michael Shych <michaelsh@mellanox.com>
+Reviewed-by: Vadim Pasternak <vadimp@mellanox.com>
+---
+ include/linux/platform_data/mlxreg.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- Documentation/watchdog/mlx-wdt.rst   |  12 ++++
- drivers/platform/x86/mlx-platform.c  | 106 ++++++++++++++++++++++++++++++
- drivers/watchdog/mlx_wdt.c           |  75 +++++++++++++++++++++----
- include/linux/platform_data/mlxreg.h |   5 +-
- 4 files changed, 186 insertions(+), 12 deletions(-)
-
+diff --git a/include/linux/platform_data/mlxreg.h b/include/linux/platform_data/mlxreg.h
+index b8da8aef2446..2c5e58d1d77b 100644
+--- a/include/linux/platform_data/mlxreg.h
++++ b/include/linux/platform_data/mlxreg.h
+@@ -43,10 +43,13 @@
+  *
+  * TYPE1 HW watchdog implementation exist in old systems.
+  * All new systems have TYPE2 HW watchdog.
++ * TYPE3 HW watchdog can exist on all systems with new CPLD.
++ * TYPE3 is selected by WD capability bit.
+  */
+ enum mlxreg_wdt_type {
+ 	MLX_WDT_TYPE1,
+ 	MLX_WDT_TYPE2,
++	MLX_WDT_TYPE3,
+ };
+ 
+ /**
+@@ -90,7 +93,7 @@ struct mlxreg_core_data {
+ 	umode_t	mode;
+ 	struct device_node *np;
+ 	struct mlxreg_hotplug_device hpdev;
+-	u8 health_cntr;
++	u32 health_cntr;
+ 	bool attached;
+ };
+ 
 -- 
 2.11.0
 
