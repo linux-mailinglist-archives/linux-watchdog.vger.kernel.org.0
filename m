@@ -2,103 +2,93 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0889C1BC3CE
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Apr 2020 17:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E526E1BCD02
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Apr 2020 22:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728018AbgD1PgI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Apr 2020 11:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S1726274AbgD1UHC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Apr 2020 16:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727932AbgD1PgH (ORCPT
+        by vger.kernel.org with ESMTP id S1726180AbgD1UGf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Apr 2020 11:36:07 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAA4C03C1AB;
-        Tue, 28 Apr 2020 08:36:07 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id l20so2555063pgb.11;
-        Tue, 28 Apr 2020 08:36:07 -0700 (PDT)
+        Tue, 28 Apr 2020 16:06:35 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE08C03C1AB
+        for <linux-watchdog@vger.kernel.org>; Tue, 28 Apr 2020 13:06:35 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id c24so22780429uap.13
+        for <linux-watchdog@vger.kernel.org>; Tue, 28 Apr 2020 13:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=47/IKu5NcN48zokcEkCuU0Ibnk7c4G0KllSpA5jpEXg=;
-        b=BRhyMcJ8Fm3fFROWFd6GPam53RdFNs6yOE4jMBHrieKKdwd7DzksDMZrVESd53FNOH
-         Hc6AU9U1eZV63fZLzteSw2Tr4D++/Zbie0ree9Fok2fZKZMGvdpk3gAuQL1VZYoZ1gSi
-         FBrkf9X1ZBCFZpZbEA+EvksZtamQtZBa4fsgmAOS04VRsVk4Wkwc9S3aHNLdLd9xvDtO
-         1QI7Q41PpPndAZDcEoQ42+LdL4laE95om89tIAaPXImCZMPUq8/OfDBNrHVgD4QWG6/Y
-         Hc4e9ajMiGnEz7uXMb1LPkzjMxUWleQ7nUx1MwB0D2D1e+gQMh9dtPfCb8ZjlDX62OVb
-         Z8gg==
+        bh=NWN2pTS6iB36h7DaRZrhXtMe3/2D3xJNS6+5ajy+5jY=;
+        b=lxlBvAi5+Kp0E1kvuLZIfX3f5amfiRbPoT6rwz3YRt6V2J5+GvjYw+NTGMfqvzrN5e
+         8VVsWcLM3UTsASESHTZPQ57s3QqSBVpqWcc2FO4IpeAbwUgcS0LVqe1vsODS2nG7Bz+d
+         FscPV1JN0QyruGS7iIFxIIT5zT9F53xrKisX4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=47/IKu5NcN48zokcEkCuU0Ibnk7c4G0KllSpA5jpEXg=;
-        b=Ph42VBU4xuyHD5uVJTdKGQ7JcUGq3ONH050Z60wGIn6ZRAPwFGQLvMJ0TXsawWZvSE
-         uIzJHN7re2dLoVb8pYfmU1q6kfFepBq7raULbh4PEABMmUV9SL5g6DFG/86MaQOl3SwX
-         Fm0WyTLnDLpSfjECLoE3k9owvtYC7YJPDCuk5TCSgtABny3g+vZrkf5Oj9hA2UWk359I
-         908hD2AEmR0zxlmoHT16rYtMgGYnEe6u01nE4oHdIaOYmsZbiBgDci+QPy7NzHXXOZL6
-         vOsEUzAxnw/uuVwFPAt+BHacTpeQ/KdgyJLOymcc4bJmZM5ob/+xeBkwvc8sy4btNA8B
-         Cxag==
-X-Gm-Message-State: AGi0PuZ3MEU6L4MjJCnXq7hoGPVv92JXG1ghAObFJ4pIxKZdMyybftz3
-        eKomqLoIkSJPCkA/eMLTPvJ/T+Ys7vqLyBpTvcU=
-X-Google-Smtp-Source: APiQypIiwRcZyqamaoyII4of/pYVXVo9MalYv/fXia9WK+JRC5qUmdVe2lmsiapfwJP8qVaHcDIFK2jsjw2t5jAN0MY=
-X-Received: by 2002:a63:1c1:: with SMTP id 184mr29987668pgb.203.1588088167227;
- Tue, 28 Apr 2020 08:36:07 -0700 (PDT)
+        bh=NWN2pTS6iB36h7DaRZrhXtMe3/2D3xJNS6+5ajy+5jY=;
+        b=TuNRDyQu9W7xaU7UPHZg45ONrm4+vKgEh2PF4SDHsR/QTCITVmNZj9KkP+wsmZGmv4
+         iXkFWORRbawyMPubugYBw7RzJzgFzWQMQ385lFgejSXWoRpZABWhh0G1+Ec1iAXgYAj5
+         LKGySrrmDBCUfTWQjLWeOizJc0erDJvMsVPIbwzNgNOZ8Nue+zVo2VejtFN7qk8A1h34
+         NQTdklA2KCiXCndbDcsXQ2fHYm5lzQg0F1pkdRXKsokLCVqc669wzWXsLz3s35QLo6qF
+         +5k/U9LHcm6/nahSbknUgPakqDKUkzbJ2+/05LQmp/HU+QuYSmiq1+zIkas0anjPdJAt
+         0O1g==
+X-Gm-Message-State: AGi0Pua2SYS81PPiPNKT59m7o9lMUwjjv/nXseMeTt1rKA4IqZkmeh5f
+        zRuaZEeV4MtzEzM+624axVuWkgJ3dD+r2yix97a09g==
+X-Google-Smtp-Source: APiQypJ5GASwyuTmq6vb+mMs8GlOiPOB+ZU/74cFC69Z5RtuhkUtZGHT2TQvquei4X23XLIf2FoJH6WJiKs+6iDLpWw=
+X-Received: by 2002:ab0:689a:: with SMTP id t26mr24178132uar.105.1588104394359;
+ Tue, 28 Apr 2020 13:06:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200428130816.582-1-michaelsh@mellanox.com>
-In-Reply-To: <20200428130816.582-1-michaelsh@mellanox.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 28 Apr 2020 18:36:00 +0300
-Message-ID: <CAHp75VdxGO55sGvMizzZrLfs-sdmEBmDj5nRXYn_wQ=GugexYw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] support watchdog with longer timeout period
-To:     michaelsh@mellanox.com
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+References: <20200423044036.234578-1-evanbenn@chromium.org>
+ <20200423143945.v5.2.Ia92bb4d4ce84bcefeba1d00aaa1c1e919b6164ef@changeid>
+ <CAODwPW9-c8EcZh_zB6SwohzvHtCQasaNLQM0fj2bj5O5KuVPfg@mail.gmail.com> <CAKz_xw0nQL2t1a-ofosLVb72JwSAGXCea5wOuddstOMrULNygg@mail.gmail.com>
+In-Reply-To: <CAKz_xw0nQL2t1a-ofosLVb72JwSAGXCea5wOuddstOMrULNygg@mail.gmail.com>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Tue, 28 Apr 2020 13:06:21 -0700
+Message-ID: <CAODwPW9STGmh5EZjhxARmY+PFLC_UoQYxbfGoRTD5w4BvMv=0g@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] watchdog: Add new arm_smc_wdt watchdog driver
+To:     Evan Benn <evanbenn@chromium.org>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xingyu Chen <xingyu.chen@amlogic.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Olof Johansson <olof@lixom.net>, Rob Herring <robh@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Will Deacon <will@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-watchdog@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Vadim Pasternak <vadimp@mellanox.com>
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 4:09 PM <michaelsh@mellanox.com> wrote:
->
-> From: Michael Shych <michaelsh@mellanox.com>
->
-> This patchset adds support of extended new watchdog type 3 of Mellanox
-> Ethernet and Infiniband switch systems.
-> This type of watchdog can have a timeout period longer than 255 or 32 sec.
-> as it was before.
->
+> I think I have misunderstood the device tree json-schema spec.
+> My intention was for the device tree to fill in a default value in the dtb for
+> arm,smc-id if it was omitted in the dts. But now I see that does not seem to
+> happen, I cannot really find any documentation of `default`, so I will just put
+> a documentation string in instead and force the default in the driver.
 
-Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-for PDx86 bits.
-
-> Michael Shych (4):
->   platform_data/mlxreg: support new watchdog type with longer timeout
->     period
->   platform/x86: mlx-platform: support new watchdog type with longer
->     timeout
->   watchdog: mlx-wdt: support new watchdog type with longer timeout
->     period
->   docs: watchdog: mlx-wdt: Add description of new watchdog type 3
->
->  Documentation/watchdog/mlx-wdt.rst   |  12 ++++
->  drivers/platform/x86/mlx-platform.c  | 106 ++++++++++++++++++++++++++++++
->  drivers/watchdog/mlx_wdt.c           |  75 +++++++++++++++++++++----
->  include/linux/platform_data/mlxreg.h |   5 +-
->  4 files changed, 186 insertions(+), 12 deletions(-)
->
-> --
-> 2.11.0
->
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+The bindings in Documentation/device-tree are just for informational
+purposes, they do not have any direct effect on anything. If you want
+there to be a default, you'll have to write the kernel code to fill it
+in.
