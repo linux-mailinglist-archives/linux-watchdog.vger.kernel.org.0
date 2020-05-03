@@ -2,83 +2,101 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 414DE1C2A25
-	for <lists+linux-watchdog@lfdr.de>; Sun,  3 May 2020 07:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169071C2DD6
+	for <lists+linux-watchdog@lfdr.de>; Sun,  3 May 2020 18:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgECFee (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 3 May 2020 01:34:34 -0400
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:34417 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726937AbgECFed (ORCPT
+        id S1728883AbgECQKx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 3 May 2020 12:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728665AbgECQKw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 3 May 2020 01:34:33 -0400
-Received: from Internal Mail-Server by MTLPINE1 (envelope-from michaelsh@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 3 May 2020 08:34:31 +0300
-Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 0435YQbV008633;
-        Sun, 3 May 2020 08:34:31 +0300
-From:   michaelsh@mellanox.com
-To:     linux@roeck-us.net, wim@linux-watchdog.org, andy@infradead.org,
-        dvhart@infradead.org
-Cc:     linux-watchdog@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, vadimp@mellanox.com,
-        Michael Shych <michaelsh@mellanox.com>
-Subject: [PATCH v3 4/4] docs: watchdog: mlx-wdt: Add description of new watchdog type 3
-Date:   Sun,  3 May 2020 08:34:24 +0300
-Message-Id: <20200503053424.31943-5-michaelsh@mellanox.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200503053424.31943-1-michaelsh@mellanox.com>
+        Sun, 3 May 2020 12:10:52 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5302C061A0E;
+        Sun,  3 May 2020 09:10:52 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id a7so2581188pju.2;
+        Sun, 03 May 2020 09:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lNEP2F0m0UFazKrvCDAnOWUwZWM1bpEcCCWurLrhkJI=;
+        b=a6c65hcobLfmVxvbRbTKX8Ybbiw2xzcrUQX+Pxzs2cINAgx/uZ8rO+f6gkHt9TRIrd
+         wNz9EksMbNMeYfRiJaVkVLEejP/TbhB4ujAbylpQ/3Q/5lWPSfM8Jp8Fg3cHg9lGbF/i
+         NtQ9rBENI9jZ9StfvJsqRFW/s/O5h1W4nal+fhmZXQUIhe4FmdTTkw+ZFmIgUaWC4DcL
+         uHnfc7WuMxEhtQM3IpUm9t/YdB+SBWcnPrSW0/QE/+tg8mf66jvYITc+pmfM/0oHgWLu
+         b5V1LOczH3TVW7QkM5c37m50ku6vfYdYygithN+hJd9sNp7te+BLZL9ejL1fXDDl7ptR
+         NLvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lNEP2F0m0UFazKrvCDAnOWUwZWM1bpEcCCWurLrhkJI=;
+        b=EK1iPebmTecBLV23g2/Xp7dTQXpCPHoSNJ8rTVujwwOAltW89BRNSCNkHJoPrPiH/N
+         p9i7FSmOVxY33sYConcyqoI/OYYbT7bDf3ssGfxGJBKz0s2mr6pV7bqUnAFRsSWlSjdF
+         5eoDaewjKoraOhc1uB2XFlGelhLsjRlAvBM2JlWt7FGvmDzMpnEWdRTImHAx1J6gOoH8
+         9PyjjLWuBUqIUugByj/ozmiAf/8KdC9abz96yNH+A8jy6gE4sJKn8Y5RF5lyMq/2BNWf
+         e073CB0qSp0Ii74QYenqTJgMiVBvAOSM7S1q4QZpW7lVTdb0lkbefiiRtuH3hu5C1V5t
+         zj5g==
+X-Gm-Message-State: AGi0PuZnKcxBRo5h9CGI2bYmxwOgnSLrtpymL6l260ut+4VrHQlUCAGH
+        rjTFVvkj4I/xyvXqZAyJD2HxLZ1fd2xquEWY9Ak=
+X-Google-Smtp-Source: APiQypLoQLYQKdDpwLOr/HehPEuWMsinBA8F2qs5KS3UF3yDJKoG/eJ7YRd4Z8tbG2mQep8N+P6sIJIREU7qzqbD/uQ=
+X-Received: by 2002:a17:902:7003:: with SMTP id y3mr14472271plk.18.1588522252296;
+ Sun, 03 May 2020 09:10:52 -0700 (PDT)
+MIME-Version: 1.0
 References: <20200503053424.31943-1-michaelsh@mellanox.com>
+In-Reply-To: <20200503053424.31943-1-michaelsh@mellanox.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 3 May 2020 19:10:40 +0300
+Message-ID: <CAHp75Vff-xe06L1xOc9jMii+kEPJZzmiPBFPVMkeD46v0QW+hw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] support watchdog with longer timeout period
+To:     michaelsh@mellanox.com
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        linux-watchdog@vger.kernel.org,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Vadim Pasternak <vadimp@mellanox.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Michael Shych <michaelsh@mellanox.com>
+On Sun, May 3, 2020 at 8:34 AM <michaelsh@mellanox.com> wrote:
+>
+> From: Michael Shych <michaelsh@mellanox.com>
+>
+> This patchset adds support of extended new watchdog type 3 of Mellanox
+> Ethernet and Infiniband switch systems.
+> This type of watchdog can have a timeout period longer than 255 or 32 sec.
+> as it was before.
+>
 
-Add documentation with details of new type of Mellanox watchdog driver.
+If you ignore my tags, why are you bothering about changes at all?
 
-Signed-off-by: Michael Shych <michaelsh@mellanox.com>
-Reviewed-by: Vadim Pasternak <vadimp@mellanox.com>
----
-v1-v2:
-Add explanation about device registers order
----
-v2-v3:
-Remove note about cpu_to_le16 and vice versa conversion
----
- Documentation/watchdog/mlx-wdt.rst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> Michael Shych (4):
+>   platform_data/mlxreg: support new watchdog type with longer timeout
+>     period
+>   platform/x86: mlx-platform: support new watchdog type with longer
+>     timeout
+>   watchdog: mlx-wdt: support new watchdog type with longer timeout
+>     period
+>   docs: watchdog: mlx-wdt: Add description of new watchdog type 3
+>
+>  Documentation/watchdog/mlx-wdt.rst   |  10 ++++
+>  drivers/platform/x86/mlx-platform.c  | 106 ++++++++++++++++++++++++++++++
+>  drivers/watchdog/mlx_wdt.c           |  73 ++++++++++++++++++++----
+>  include/linux/platform_data/mlxreg.h |   5 +-
+>  4 files changed, 182 insertions(+), 12 deletions(-)
+>
+> --
+> 2.11.0
+>
 
-diff --git a/Documentation/watchdog/mlx-wdt.rst b/Documentation/watchdog/mlx-wdt.rst
-index bf5bafac47f0..35e690dea9db 100644
---- a/Documentation/watchdog/mlx-wdt.rst
-+++ b/Documentation/watchdog/mlx-wdt.rst
-@@ -24,10 +24,19 @@ Type 2:
-   Maximum timeout is 255 sec.
-   Get time-left is supported.
- 
-+Type 3:
-+  Same as Type 2 with extended maximum timeout period.
-+  Maximum timeout is 65535 sec.
-+
- Type 1 HW watchdog implementation exist in old systems and
- all new systems have type 2 HW watchdog.
- Two types of HW implementation have also different register map.
- 
-+Type 3 HW watchdog implementation can exist on all Mellanox systems
-+with new programmer logic device.
-+It's differentiated by WD capability bit.
-+Old systems still have only one main watchdog.
-+
- Mellanox system can have 2 watchdogs: main and auxiliary.
- Main and auxiliary watchdog devices can be enabled together
- on the same system.
-@@ -54,3 +63,4 @@ The driver checks during initialization if the previous system reset
- was done by the watchdog. If yes, it makes a notification about this event.
- 
- Access to HW registers is performed through a generic regmap interface.
-+Programmable logic device registers have little-endian order.
+
 -- 
-2.11.0
-
+With Best Regards,
+Andy Shevchenko
