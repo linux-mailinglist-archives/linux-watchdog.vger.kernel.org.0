@@ -2,62 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E39CD1C5CFA
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 May 2020 18:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D261C5D02
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 May 2020 18:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729857AbgEEQH1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 5 May 2020 12:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S1729365AbgEEQID (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 5 May 2020 12:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728804AbgEEQH1 (ORCPT
+        with ESMTP id S1728804AbgEEQIC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 5 May 2020 12:07:27 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A21AC061A0F;
-        Tue,  5 May 2020 09:07:27 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id hi11so1365579pjb.3;
-        Tue, 05 May 2020 09:07:27 -0700 (PDT)
+        Tue, 5 May 2020 12:08:02 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924F7C061A0F;
+        Tue,  5 May 2020 09:08:02 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id t7so1012811plr.0;
+        Tue, 05 May 2020 09:08:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=jmQbNiJc4Rt7W+n9x3IKtdD5p4Uz4lxzRqmcMyvQAOc=;
-        b=EKYHfM0W5nbH/CN2y59v8WgMXSLwr5dY5zl5WgdL4s37QGSLZxsAeG2NkjitAcfKg+
-         jk27p0A+bZA4WoqUxGokpLvssmAGsP4P74y1MNSxVGILCk+9nil7QimPm2QmLmUT6QFb
-         w+bS4J023InaZBOUdcYm8IfqsWQH5ahFH3iVTFfHICm+bh9bL5yjGcMnmFqRSsHi2ilN
-         iuONDcz6dA9YZvjqaArC0uDcDRk+WdC4ZNwQgcj2y9TSDB0svXH8ErDqURy2zxrPOUYc
-         aU/NonfUGRFACsuzbQWY5aljijIQk7E/+bZaAix/RC8/VCYUA5KWORg44vpw+DXC7CxM
-         cm2w==
+        bh=qF5t/5B/Sbt1oYUUbSa89RTBRJneyVHJyniDjoH+tug=;
+        b=Nam9xoGDFdXkjP3cUEfl3jPgSTHCvaVdLjlVXT2yV0EttRAvYICYJ+a3TSJliMdR/R
+         7BKCsdy+xbhbpgVolkXi6cKIjUr349R7Qrab4HQ2XwYy1s5unvQ1eO1W/Vyp7xOCGXE7
+         4cTk/iHLASewPD9A36wNOQQd/6ckJ/K8sMyF61eY+Asj5y+IFJhyiAg/V/bLtlgQsru+
+         iJBZaQ7Pe422GEOuNUqRyGsXH75vzyUn31XRk2txRMs/tpm3ghYhLS85U2oMINUgkZ2R
+         9WrW3t74/3NfyRSdi4ZLBb8iXCKCPlB0r/jQGZOZT+Zp6HGsOPf62fYZrsMDU5zZjJdE
+         tTDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=jmQbNiJc4Rt7W+n9x3IKtdD5p4Uz4lxzRqmcMyvQAOc=;
-        b=JPvo2z7wBtV0JuLC8ZlP4YQuciOPR8ObaKu27fiFfAEei6oUGC1jtAcg1dHc+Zcga/
-         fzrcn4AiassSZYP4Ii/MR+DOIiS6y/xpupeX4zlTlE5t+oznbjk7Rj+rOXS+ubWXGNVY
-         5ewI8X4c/S2YxMajPAcPKRWe2OEi7lqela0dERoJtjHsLKD4YHWo/yBoqZoAZcgD+pVT
-         9I1u6CEg2sb/BuX6M10yTwcTQN7xBr7Me7iRbMlXFGqwIHA37iK6QNdgjZdTcI8uTF0R
-         YESmqj9j5cWyxKkXHS/jf1/8PMxHgfusRNvWYyjFTbOdKM3VqiqK9CTPf2obM1OgRzbO
-         N08Q==
-X-Gm-Message-State: AGi0PuYtKEv1mVYxVSAtGjiLboVD+ANZZsW5RgCojuRJBQ9aCVvx5Lud
-        YHb2MPczICpRrc+MsVGCK8Q=
-X-Google-Smtp-Source: APiQypLJeVmZrmmGnBtcok3OQ1MW3t4M+5OK0UnluK2XMGwVYRBx0RfEIaRHEOjLQDneiz7Flh8Kvg==
-X-Received: by 2002:a17:902:eb43:: with SMTP id i3mr3273707pli.299.1588694846521;
-        Tue, 05 May 2020 09:07:26 -0700 (PDT)
+        bh=qF5t/5B/Sbt1oYUUbSa89RTBRJneyVHJyniDjoH+tug=;
+        b=XkLSJu/3Dfjy2LMGsmSPaeRVSL9zb29VxH3f0+uIXIM3B9Wcia8rZlf9MXfxrNQPVW
+         r6m/HhGMBGZARzkiQdOYCXfkgLbKvWywwUbChFoKOKscWzF8p8bqATNyCcEqO04ChGAn
+         wvvALe054xu1ShqMSnmjCocdwMA7CmyWAuJTdghNVAfNQVhGi8gRcaU5SHHFebiWIxOW
+         yMeo2n1yzI8lxCcoOUSeYlW/K8T4Ey5bxZ+F73BIvO5XEEAu+8Fo2StkupRX0ZKJ+I7c
+         SFXf0SQeFTB/mMhDXkz2MN7tkzz9jNL6FymKPftjppssJdqhtKba2IxDY03tK4hkzsrt
+         DUcw==
+X-Gm-Message-State: AGi0PuYbCBh203BahpcQWkj7ITc7wBN/+le+hzJkRNTJ5EB3XOFhIag9
+        4Ra9FjIfOdkru/C7bG8RGrQ=
+X-Google-Smtp-Source: APiQypJn+OxmUlmUV5cZyc1N94fO2wVwBTkwCE9o+3SvFFhea19QXEl++JxGLvMZcqaCy5tKBIHoEg==
+X-Received: by 2002:a17:90a:6e0f:: with SMTP id b15mr4035693pjk.129.1588694882169;
+        Tue, 05 May 2020 09:08:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 138sm2388782pfz.31.2020.05.05.09.07.25
+        by smtp.gmail.com with ESMTPSA id x18sm2394703pfi.22.2020.05.05.09.08.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2020 09:07:25 -0700 (PDT)
-Subject: Re: [PATCH v4 3/4] watchdog: mlx-wdt: support new watchdog type with
- longer timeout period
+        Tue, 05 May 2020 09:08:01 -0700 (PDT)
+Subject: Re: [PATCH v4 4/4] docs: watchdog: mlx-wdt: Add description of new
+ watchdog type 3
 To:     michaelsh@mellanox.com, wim@linux-watchdog.org, andy@infradead.org,
         dvhart@infradead.org
 Cc:     linux-watchdog@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, vadimp@mellanox.com
 References: <20200504141427.17685-1-michaelsh@mellanox.com>
- <20200504141427.17685-4-michaelsh@mellanox.com>
+ <20200504141427.17685-5-michaelsh@mellanox.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -102,12 +102,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <366b5f85-9468-44ac-ece9-da21ae4b55e5@roeck-us.net>
-Date:   Tue, 5 May 2020 09:07:24 -0700
+Message-ID: <e85001c3-052e-e0e1-4653-4594d3570b94@roeck-us.net>
+Date:   Tue, 5 May 2020 09:08:00 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200504141427.17685-4-michaelsh@mellanox.com>
+In-Reply-To: <20200504141427.17685-5-michaelsh@mellanox.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -119,11 +119,7 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 On 5/4/20 7:14 AM, michaelsh@mellanox.com wrote:
 > From: Michael Shych <michaelsh@mellanox.com>
 > 
-> New programmable logic device can have watchdog type 3 implementation.
-> It's same as Type 2 with extended maximum timeout period.
-> Maximum timeout is up-to 65535 sec.
-> Type 3 HW watchdog implementation can exist on all Mellanox systems.
-> It is differentiated by WD capability bit.
+> Add documentation with details of new type of Mellanox watchdog driver.
 > 
 > Signed-off-by: Michael Shych <michaelsh@mellanox.com>
 > Reviewed-by: Vadim Pasternak <vadimp@mellanox.com>
@@ -132,151 +128,42 @@ Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
 > v1-v2:
-> Make changes pointed out by Guenter:
-> -Simplify bit operations
-> -Consistency in registers access
-> -Don't check irrelevant return code
+> Add explanation about device registers order
 > ---
-> v2-v3
-> Remove unnecessary cpu_to_le16 and vice versa conversions
+> v2-v3:
+> Remove note about cpu_to_le16 and vice versa conversion
 > ---
->  drivers/watchdog/mlx_wdt.c | 73 +++++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 62 insertions(+), 11 deletions(-)
+>  Documentation/watchdog/mlx-wdt.rst | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/drivers/watchdog/mlx_wdt.c b/drivers/watchdog/mlx_wdt.c
-> index 03b9ac4b99af..54193369e85c 100644
-> --- a/drivers/watchdog/mlx_wdt.c
-> +++ b/drivers/watchdog/mlx_wdt.c
-> @@ -21,6 +21,7 @@
->  #define MLXREG_WDT_CLOCK_SCALE		1000
->  #define MLXREG_WDT_MAX_TIMEOUT_TYPE1	32
->  #define MLXREG_WDT_MAX_TIMEOUT_TYPE2	255
-> +#define MLXREG_WDT_MAX_TIMEOUT_TYPE3	65535
->  #define MLXREG_WDT_MIN_TIMEOUT		1
->  #define MLXREG_WDT_OPTIONS_BASE (WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE | \
->  				 WDIOF_SETTIMEOUT)
-> @@ -49,6 +50,7 @@ struct mlxreg_wdt {
->  	int tleft_idx;
->  	int ping_idx;
->  	int reset_idx;
-> +	int regmap_val_sz;
->  	enum mlxreg_wdt_type wdt_type;
->  };
+> diff --git a/Documentation/watchdog/mlx-wdt.rst b/Documentation/watchdog/mlx-wdt.rst
+> index bf5bafac47f0..35e690dea9db 100644
+> --- a/Documentation/watchdog/mlx-wdt.rst
+> +++ b/Documentation/watchdog/mlx-wdt.rst
+> @@ -24,10 +24,19 @@ Type 2:
+>    Maximum timeout is 255 sec.
+>    Get time-left is supported.
 >  
-> @@ -111,7 +113,8 @@ static int mlxreg_wdt_set_timeout(struct watchdog_device *wdd,
->  	u32 regval, set_time, hw_timeout;
->  	int rc;
->  
-> -	if (wdt->wdt_type == MLX_WDT_TYPE1) {
-> +	switch (wdt->wdt_type) {
-> +	case MLX_WDT_TYPE1:
->  		rc = regmap_read(wdt->regmap, reg_data->reg, &regval);
->  		if (rc)
->  			return rc;
-> @@ -120,14 +123,32 @@ static int mlxreg_wdt_set_timeout(struct watchdog_device *wdd,
->  		regval = (regval & reg_data->mask) | hw_timeout;
->  		/* Rowndown to actual closest number of sec. */
->  		set_time = BIT(hw_timeout) / MLXREG_WDT_CLOCK_SCALE;
-> -	} else {
-> +		rc = regmap_write(wdt->regmap, reg_data->reg, regval);
-> +		break;
-> +	case MLX_WDT_TYPE2:
-> +		set_time = timeout;
-> +		rc = regmap_write(wdt->regmap, reg_data->reg, timeout);
-> +		break;
-> +	case MLX_WDT_TYPE3:
-> +		/* WD_TYPE3 has 2B set time register */
->  		set_time = timeout;
-> -		regval = timeout;
-> +		if (wdt->regmap_val_sz == 1) {
-> +			regval = timeout & 0xff;
-> +			rc = regmap_write(wdt->regmap, reg_data->reg, regval);
-> +			if (!rc) {
-> +				regval = (timeout & 0xff00) >> 8;
-> +				rc = regmap_write(wdt->regmap,
-> +						reg_data->reg + 1, regval);
-> +			}
-> +		} else {
-> +			rc = regmap_write(wdt->regmap, reg_data->reg, timeout);
-> +		}
-> +		break;
-> +	default:
-> +		return -EINVAL;
->  	}
->  
->  	wdd->timeout = set_time;
-> -	rc = regmap_write(wdt->regmap, reg_data->reg, regval);
-> -
->  	if (!rc) {
->  		/*
->  		 * Restart watchdog with new timeout period
-> @@ -147,10 +168,25 @@ static unsigned int mlxreg_wdt_get_timeleft(struct watchdog_device *wdd)
->  {
->  	struct mlxreg_wdt *wdt = watchdog_get_drvdata(wdd);
->  	struct mlxreg_core_data *reg_data = &wdt->pdata->data[wdt->tleft_idx];
-> -	u32 regval;
-> +	u32 regval, msb, lsb;
->  	int rc;
->  
-> -	rc = regmap_read(wdt->regmap, reg_data->reg, &regval);
-> +	if (wdt->wdt_type == MLX_WDT_TYPE2) {
-> +		rc = regmap_read(wdt->regmap, reg_data->reg, &regval);
-> +	} else {
-> +		/* WD_TYPE3 has 2 byte timeleft register */
-> +		if (wdt->regmap_val_sz == 1) {
-> +			rc = regmap_read(wdt->regmap, reg_data->reg, &lsb);
-> +			if (!rc) {
-> +				rc = regmap_read(wdt->regmap,
-> +						reg_data->reg + 1, &msb);
-> +				regval = (msb & 0xff) << 8 | (lsb & 0xff);
-> +			}
-> +		} else {
-> +			rc = regmap_read(wdt->regmap, reg_data->reg, &regval);
-> +		}
-> +	}
+> +Type 3:
+> +  Same as Type 2 with extended maximum timeout period.
+> +  Maximum timeout is 65535 sec.
 > +
->  	/* Return 0 timeleft in case of failure register read. */
->  	return rc == 0 ? regval : 0;
->  }
-> @@ -212,13 +248,23 @@ static void mlxreg_wdt_config(struct mlxreg_wdt *wdt,
->  		wdt->wdd.info = &mlxreg_wdt_aux_info;
+>  Type 1 HW watchdog implementation exist in old systems and
+>  all new systems have type 2 HW watchdog.
+>  Two types of HW implementation have also different register map.
 >  
->  	wdt->wdt_type = pdata->version;
-> -	if (wdt->wdt_type == MLX_WDT_TYPE2) {
-> -		wdt->wdd.ops = &mlxreg_wdt_ops_type2;
-> -		wdt->wdd.max_timeout = MLXREG_WDT_MAX_TIMEOUT_TYPE2;
-> -	} else {
-> +	switch (wdt->wdt_type) {
-> +	case MLX_WDT_TYPE1:
->  		wdt->wdd.ops = &mlxreg_wdt_ops_type1;
->  		wdt->wdd.max_timeout = MLXREG_WDT_MAX_TIMEOUT_TYPE1;
-> +		break;
-> +	case MLX_WDT_TYPE2:
-> +		wdt->wdd.ops = &mlxreg_wdt_ops_type2;
-> +		wdt->wdd.max_timeout = MLXREG_WDT_MAX_TIMEOUT_TYPE2;
-> +		break;
-> +	case MLX_WDT_TYPE3:
-> +		wdt->wdd.ops = &mlxreg_wdt_ops_type2;
-> +		wdt->wdd.max_timeout = MLXREG_WDT_MAX_TIMEOUT_TYPE3;
-> +		break;
-> +	default:
-> +		break;
->  	}
+> +Type 3 HW watchdog implementation can exist on all Mellanox systems
+> +with new programmer logic device.
+> +It's differentiated by WD capability bit.
+> +Old systems still have only one main watchdog.
 > +
->  	wdt->wdd.min_timeout = MLXREG_WDT_MIN_TIMEOUT;
->  }
+>  Mellanox system can have 2 watchdogs: main and auxiliary.
+>  Main and auxiliary watchdog devices can be enabled together
+>  on the same system.
+> @@ -54,3 +63,4 @@ The driver checks during initialization if the previous system reset
+>  was done by the watchdog. If yes, it makes a notification about this event.
 >  
-> @@ -249,6 +295,11 @@ static int mlxreg_wdt_probe(struct platform_device *pdev)
->  
->  	wdt->wdd.parent = dev;
->  	wdt->regmap = pdata->regmap;
-> +	rc = regmap_get_val_bytes(wdt->regmap);
-> +	if (rc < 0)
-> +		return -EINVAL;
-> +
-> +	wdt->regmap_val_sz = rc;
->  	mlxreg_wdt_config(wdt, pdata);
->  
->  	if ((pdata->features & MLXREG_CORE_WD_FEATURE_NOWAYOUT))
+>  Access to HW registers is performed through a generic regmap interface.
+> +Programmable logic device registers have little-endian order.
 > 
 
