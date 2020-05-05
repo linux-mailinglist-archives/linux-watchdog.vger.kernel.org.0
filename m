@@ -2,62 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D261C5D02
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 May 2020 18:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041281C5D08
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 May 2020 18:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729365AbgEEQID (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 5 May 2020 12:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
+        id S1729398AbgEEQJG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 5 May 2020 12:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728804AbgEEQIC (ORCPT
+        with ESMTP id S1728804AbgEEQJF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 5 May 2020 12:08:02 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924F7C061A0F;
-        Tue,  5 May 2020 09:08:02 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id t7so1012811plr.0;
-        Tue, 05 May 2020 09:08:02 -0700 (PDT)
+        Tue, 5 May 2020 12:09:05 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E433C061A0F;
+        Tue,  5 May 2020 09:09:05 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id fu13so1310621pjb.5;
+        Tue, 05 May 2020 09:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=qF5t/5B/Sbt1oYUUbSa89RTBRJneyVHJyniDjoH+tug=;
-        b=Nam9xoGDFdXkjP3cUEfl3jPgSTHCvaVdLjlVXT2yV0EttRAvYICYJ+a3TSJliMdR/R
-         7BKCsdy+xbhbpgVolkXi6cKIjUr349R7Qrab4HQ2XwYy1s5unvQ1eO1W/Vyp7xOCGXE7
-         4cTk/iHLASewPD9A36wNOQQd/6ckJ/K8sMyF61eY+Asj5y+IFJhyiAg/V/bLtlgQsru+
-         iJBZaQ7Pe422GEOuNUqRyGsXH75vzyUn31XRk2txRMs/tpm3ghYhLS85U2oMINUgkZ2R
-         9WrW3t74/3NfyRSdi4ZLBb8iXCKCPlB0r/jQGZOZT+Zp6HGsOPf62fYZrsMDU5zZjJdE
-         tTDw==
+        bh=zVaF07F0KsepJwS7iJib7vuK01NbBc0z0ymT/FtOLwQ=;
+        b=laeIrzSNkP4v3hdsp1IUeylRHYn0kpqk67Isby3uAzkWueaO+0h8AVOtj5nRHYGmn2
+         fRBvGgYE4E1/fBTYxsXWsWKH2aL451dC5YR6AT/IMaOJ4WE5/O55FTAONOuASAjVnxuv
+         h8+oKLCTzgx4w1UxBCAsE5TAXVqiWkG0pSo0N6J7tpqFwgCqme0ECD/GtMnPHy012RKM
+         vZR4SFEj0IyiJrwKNPChpNWwd0n+Ugfcl4nCrWxZvTDu2BTkInSrwjTj1o+UHwBDE3gd
+         wORXvYH5FULZ/IhrV9IjlPpdgnPJ86fCHNQOwL5F7WIsKtMhtyGkCPh8+THHdH0eqdml
+         RRPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=qF5t/5B/Sbt1oYUUbSa89RTBRJneyVHJyniDjoH+tug=;
-        b=XkLSJu/3Dfjy2LMGsmSPaeRVSL9zb29VxH3f0+uIXIM3B9Wcia8rZlf9MXfxrNQPVW
-         r6m/HhGMBGZARzkiQdOYCXfkgLbKvWywwUbChFoKOKscWzF8p8bqATNyCcEqO04ChGAn
-         wvvALe054xu1ShqMSnmjCocdwMA7CmyWAuJTdghNVAfNQVhGi8gRcaU5SHHFebiWIxOW
-         yMeo2n1yzI8lxCcoOUSeYlW/K8T4Ey5bxZ+F73BIvO5XEEAu+8Fo2StkupRX0ZKJ+I7c
-         SFXf0SQeFTB/mMhDXkz2MN7tkzz9jNL6FymKPftjppssJdqhtKba2IxDY03tK4hkzsrt
-         DUcw==
-X-Gm-Message-State: AGi0PuYbCBh203BahpcQWkj7ITc7wBN/+le+hzJkRNTJ5EB3XOFhIag9
-        4Ra9FjIfOdkru/C7bG8RGrQ=
-X-Google-Smtp-Source: APiQypJn+OxmUlmUV5cZyc1N94fO2wVwBTkwCE9o+3SvFFhea19QXEl++JxGLvMZcqaCy5tKBIHoEg==
-X-Received: by 2002:a17:90a:6e0f:: with SMTP id b15mr4035693pjk.129.1588694882169;
-        Tue, 05 May 2020 09:08:02 -0700 (PDT)
+        bh=zVaF07F0KsepJwS7iJib7vuK01NbBc0z0ymT/FtOLwQ=;
+        b=FaMXc6w6MeN0OezBT50qrSRsMyAik5jLUsPTZJAipboPv42bND3GtnqPAs4fTnF4nK
+         9YZUs7LbruFzFftHyyMcwmEynaFtqO7F2z0z+O/3Dspg4yh3lAgR8Pc2FDZkcndu/ciD
+         mrgOVBTRPBma3NY4vsNwydpbF7WdH0araSghe6y7NSvgq9u6lHIXL8Fl0z4/1X6pzyND
+         tGp1eU1DA658xD8c/8rcKWaGVD8HiyJUn8kPx0ePEBYLEZI6mjjK4pvsEKzlFDWY9XQs
+         g6Q7+X1PjYKgE25fG359FIYhuDjdZwwD1ht29kGUN30ouOh4VkvgaabtSMHmdtd2Fhmp
+         HhSw==
+X-Gm-Message-State: AGi0PuZwMjBWwCCqZFOEnCtLr5q6IrnftlH8nscm0oigQlH7bka2khwR
+        HeprBNiG4q+NyvAG/W3j3eYJfyPq
+X-Google-Smtp-Source: APiQypJiR8bXFqf7mEkxBW7/1ApgqY3El9UjQB9f3KlOIsF7/bkx3NWEup1JkSJQGLeaQto4Ta3iEA==
+X-Received: by 2002:a17:90a:e28c:: with SMTP id d12mr3904836pjz.19.1588694945142;
+        Tue, 05 May 2020 09:09:05 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x18sm2394703pfi.22.2020.05.05.09.08.01
+        by smtp.gmail.com with ESMTPSA id 140sm2450468pfw.96.2020.05.05.09.09.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2020 09:08:01 -0700 (PDT)
-Subject: Re: [PATCH v4 4/4] docs: watchdog: mlx-wdt: Add description of new
- watchdog type 3
+        Tue, 05 May 2020 09:09:04 -0700 (PDT)
+Subject: Re: [PATCH v4 0/4] support watchdog with longer timeout period
 To:     michaelsh@mellanox.com, wim@linux-watchdog.org, andy@infradead.org,
         dvhart@infradead.org
 Cc:     linux-watchdog@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, vadimp@mellanox.com
 References: <20200504141427.17685-1-michaelsh@mellanox.com>
- <20200504141427.17685-5-michaelsh@mellanox.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -102,12 +100,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <e85001c3-052e-e0e1-4653-4594d3570b94@roeck-us.net>
-Date:   Tue, 5 May 2020 09:08:00 -0700
+Message-ID: <ac2c580c-7cc0-8091-f3bc-fce175478e50@roeck-us.net>
+Date:   Tue, 5 May 2020 09:09:03 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200504141427.17685-5-michaelsh@mellanox.com>
+In-Reply-To: <20200504141427.17685-1-michaelsh@mellanox.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -119,51 +117,27 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 On 5/4/20 7:14 AM, michaelsh@mellanox.com wrote:
 > From: Michael Shych <michaelsh@mellanox.com>
 > 
-> Add documentation with details of new type of Mellanox watchdog driver.
+> This patchset adds support of extended new watchdog type 3 of Mellanox
+> Ethernet and Infiniband switch systems.
+> This type of watchdog can have a timeout period longer than 255 or 32 sec.
+> as it was before.
 > 
-> Signed-off-by: Michael Shych <michaelsh@mellanox.com>
-> Reviewed-by: Vadim Pasternak <vadimp@mellanox.com>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> v1-v2:
-> Add explanation about device registers order
-> ---
-> v2-v3:
-> Remove note about cpu_to_le16 and vice versa conversion
-> ---
->  Documentation/watchdog/mlx-wdt.rst | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> Michael Shych (4):
+>   platform_data/mlxreg: support new watchdog type with longer timeout
+>     period
+>   platform/x86: mlx-platform: support new watchdog type with longer
+>     timeout
+>   watchdog: mlx-wdt: support new watchdog type with longer timeout
+>     period
+>   docs: watchdog: mlx-wdt: Add description of new watchdog type 3
 > 
-> diff --git a/Documentation/watchdog/mlx-wdt.rst b/Documentation/watchdog/mlx-wdt.rst
-> index bf5bafac47f0..35e690dea9db 100644
-> --- a/Documentation/watchdog/mlx-wdt.rst
-> +++ b/Documentation/watchdog/mlx-wdt.rst
-> @@ -24,10 +24,19 @@ Type 2:
->    Maximum timeout is 255 sec.
->    Get time-left is supported.
->  
-> +Type 3:
-> +  Same as Type 2 with extended maximum timeout period.
-> +  Maximum timeout is 65535 sec.
-> +
->  Type 1 HW watchdog implementation exist in old systems and
->  all new systems have type 2 HW watchdog.
->  Two types of HW implementation have also different register map.
->  
-> +Type 3 HW watchdog implementation can exist on all Mellanox systems
-> +with new programmer logic device.
-> +It's differentiated by WD capability bit.
-> +Old systems still have only one main watchdog.
-> +
->  Mellanox system can have 2 watchdogs: main and auxiliary.
->  Main and auxiliary watchdog devices can be enabled together
->  on the same system.
-> @@ -54,3 +63,4 @@ The driver checks during initialization if the previous system reset
->  was done by the watchdog. If yes, it makes a notification about this event.
->  
->  Access to HW registers is performed through a generic regmap interface.
-> +Programmable logic device registers have little-endian order.
+>  Documentation/watchdog/mlx-wdt.rst   |  10 ++++
+>  drivers/platform/x86/mlx-platform.c  | 106 ++++++++++++++++++++++++++++++
+>  drivers/watchdog/mlx_wdt.c           |  73 ++++++++++++++++++++----
+>  include/linux/platform_data/mlxreg.h |   5 +-
+>  4 files changed, 182 insertions(+), 12 deletions(-)
 > 
+Guess the big question is now which branch to use to take this series.
+Thoughts, anyone ?
 
+Guenter
