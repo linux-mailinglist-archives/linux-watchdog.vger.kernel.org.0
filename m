@@ -2,60 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E481CAD65
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 May 2020 15:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779331CB7D7
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 May 2020 21:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729753AbgEHNB0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 8 May 2020 09:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33990 "EHLO
+        id S1726807AbgEHTB0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 8 May 2020 15:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729576AbgEHNBZ (ORCPT
+        by vger.kernel.org with ESMTP id S1726797AbgEHTB0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 8 May 2020 09:01:25 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08886C05BD43
-        for <linux-watchdog@vger.kernel.org>; Fri,  8 May 2020 06:01:25 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id f8so711509plt.2
-        for <linux-watchdog@vger.kernel.org>; Fri, 08 May 2020 06:01:25 -0700 (PDT)
+        Fri, 8 May 2020 15:01:26 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12930C061A0C
+        for <linux-watchdog@vger.kernel.org>; Fri,  8 May 2020 12:01:26 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id b8so1123435plm.11
+        for <linux-watchdog@vger.kernel.org>; Fri, 08 May 2020 12:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=e9pc8m33f+Di1GjIAL8PmUrVmUekIyLKEueDSFmAcQI=;
-        b=QX/KF6MTvrvFB+/2ottN2yVHz1VOLM576+WzkqrVRFqSfKmZQnddJMGekiDjUml9bc
-         0OFqx8YdG9ILUyoaNdBs2qI0hr05rq+I4MgyXaOKNga/gxeCGK4meG/Hb5qRiqnWHFo2
-         kcqFHIChhY/ETW5aWDjD4ARdji0bSTcIjJ5Ptc1x5EQ8crna682FPc5NDNimOmd5oLfR
-         iO0CCMgammlqG9LsdZsosvxOqZT72YmQb9TCi3d/H1GkNlVhZJOC4hpA0+VcGiUHRRFb
-         /5OhvTXVnCWuEHACUtvw/KZQSToHyNR3sbELVl+HsNQaCykC9v5OyvTXA3KIhBnJbEoV
-         eSRQ==
+        bh=yN5q+JlOATRa2oUv0ciOvh2BNSpq4i6FjS4nY+WUPZI=;
+        b=B3AJTLT2AZEAxx2FBJ0zLwRGFHHKGGxKFbRNs702+WTKoTFWPdKiIsnLdnKX+yGFt4
+         1IOEASXxRD1YjkL4eKynuu0obahHvTLJ+575dSFv8dfg26EtmbyMAoFY9m7psY02XJas
+         W66LWZWGTmRAlQJQvE0xqSRUfVKhpzo74LmBXcKAmoZ61rxsXHOknGYTPKMzndBCHtJ6
+         GHMHkcprLi0QU3n0VkPQyCbpOnuocYtESMHIEpViWbvuZkL/eA3+2CYh4oGzLWtYFqyY
+         pE84AdLPjzcn4ecUuS2I6SHGB9aC+GEu0uo9xZaER0HGGFYPieGQ4ff9zXCrWzcyZiOD
+         ZcDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=e9pc8m33f+Di1GjIAL8PmUrVmUekIyLKEueDSFmAcQI=;
-        b=aUqwbGN75r9PgxaD/vwfa23A4kN9EY50RgWkQYd+Ej4FG/UjyuUpFQ5gCr5xq93J68
-         PJcN0qdk5l13ORCt/9PNwDqEhXs504cvu1X0ztUDaL2LQIDtIzuZcwH3mD/y8RhJSB9R
-         DQO/limIpFR4YAyXx0mumTTtObYQPjJdcr7A+nvStDo3iM1tdA+OSU0+utHxgiKKRG9/
-         rpQY2gqN5frszht6phg3YtYve43Q9jhSAu+uII9NkKuYpbTa0y7TQWxvkBRkwZL8Febb
-         0hM/g0Ymy+w4tYIEAPeA4hW8HmHJsgK8ue7LSn2T+boU1obxim5bxbiDvoBv3cRxeM5S
-         Fx5Q==
-X-Gm-Message-State: AGi0PuZb9iggd9jx0aBMnS5wAx+6G++fIRHWXd/jVcY+5leuW/BPWtys
-        a92E1Ko/MH1CX7/GfXLqyLauHlme
-X-Google-Smtp-Source: APiQypIFrdxTsHMwvf1R3Bhtsvn0AII40Nlw7SijIwwMqGLY7juZKrElSU/YU+ATJYP7YOL/uEEzmw==
-X-Received: by 2002:a17:90a:a50b:: with SMTP id a11mr5947810pjq.143.1588942884243;
-        Fri, 08 May 2020 06:01:24 -0700 (PDT)
+        bh=yN5q+JlOATRa2oUv0ciOvh2BNSpq4i6FjS4nY+WUPZI=;
+        b=jIQyC7oO8meJvBeniKZU82vZoasumlI1oyTdLpEygQy56BELEYwWR4C9/KqWDEJ9J4
+         CpKUr27QYMYoEr5dQPFEOFmhRFErIfgMd4IZ9MrZ6TzCqg5EYRo3YUfMNQwZS9u8ImLX
+         A1SZm+c4lnmhdt15CxHZNnHXWRWKncsvrmVgUhtnUt52gOXtM4mqUxetslJpDgzVNABm
+         paHMnftwd/y87+PRoUI2qky45Hq00vQrQf5Q//J00Sfmnp0MdGlZN2EzafduewCrKyx7
+         1AF6G7gXEjWwUBDLcqNyvpfolfurr0HcV2Xm5vJa/WU5ej07LdRx+qlRCA4jYqrRyz9L
+         K+Sw==
+X-Gm-Message-State: AGi0PuYIInVKcWjgNqDlYY5qGeK+CrrD6+n4OxYNfCrcO+0UJyYL2UhD
+        u20VG79S/Mu9lQ8+PMsNDvgRgnEc
+X-Google-Smtp-Source: APiQypICwsFPrZa/bB4olum2wKD+ESYEZ3kd4VasdSYWl9764iLNrB2ThmX2G6ZDXbs9QGF50GiP+g==
+X-Received: by 2002:a17:90a:23ad:: with SMTP id g42mr8068395pje.35.1588964485029;
+        Fri, 08 May 2020 12:01:25 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w1sm1396951pgh.53.2020.05.08.06.01.23
+        by smtp.gmail.com with ESMTPSA id q21sm1866606pgc.76.2020.05.08.12.01.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 May 2020 06:01:23 -0700 (PDT)
+        Fri, 08 May 2020 12:01:24 -0700 (PDT)
 Subject: Re: [RFC] driver: Adding helper macro for platform_driver
  boilerplate.
-To:     harshal chaudhari <harshalchau04@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org
+To:     harshal chaudhari <harshalchau04@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
 References: <CAFEvwu=+qZts-bcR8svxLPoCcFtzQh42EJQXVD_5Jjpp9m-D+Q@mail.gmail.com>
+ <18078080-67d9-a508-ccdf-fdc57b97ae8d@roeck-us.net>
+ <CAFEvwunf=qmWHdXjR-DJRHHrdy2CZ6o6j=cTz_yje-AOr3iGMQ@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -100,12 +102,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <18078080-67d9-a508-ccdf-fdc57b97ae8d@roeck-us.net>
-Date:   Fri, 8 May 2020 06:01:22 -0700
+Message-ID: <39df736e-a408-af29-7e8c-1d154451f51a@roeck-us.net>
+Date:   Fri, 8 May 2020 12:01:23 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAFEvwu=+qZts-bcR8svxLPoCcFtzQh42EJQXVD_5Jjpp9m-D+Q@mail.gmail.com>
+In-Reply-To: <CAFEvwunf=qmWHdXjR-DJRHHrdy2CZ6o6j=cTz_yje-AOr3iGMQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -114,61 +116,133 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/8/20 4:39 AM, harshal chaudhari wrote:
-> Hi Wim and Guenter,
+On 5/8/20 11:50 AM, harshal chaudhari wrote:
+> Hi Guenter,
 > 
 > 
-> For simple module that contain a single platform_driver without any additional setup code then ends up being a block of duplicated boilerplate.
+> Sorry for the last patch. please consider this new below patch.
 > 
-> This patch add a new micro, module_platform_driver(), which replace the module_init()/module_exit() registrations with template functions.
 > 
+> And yes driver is still running independently means without watchdog subsystem, but as init and exit functions just do a platform_driver_register and platform_driver_unregister, and nothing else, so its better to use the module_platform_driver macro rather replicating its implementation. and i have already tested it with this patch so its running fine.
+> 
+
+If you have the hardware, I would suggest to convert the driver to use
+the watchdog subsystem. That would be much more valuable.
+
 > 
 > Signed-off-by: harshal chaudhari <harshalchau04@gmail.com <mailto:harshalchau04@gmail.com>>
 > 
 
-First, this is not in correct patch format. Second, I don't really see
-the point of making such changes without converting the driver to use
-the watchdog subsystem.
+Please consult Documentation/process/submitting-patches.rst for guidelines
+on how to submit patches.
 
+Thanks,
 Guenter
 
-> Patch as below:
+> From 11eeac26b352ad83fcf1d349c5e37040e6dc8c06 Mon Sep 17 00:00:00 2001
+> From: Harshal <harshalchau04@gmail.com <mailto:harshalchau04@gmail.com>>
+> Date: Fri, 8 May 2020 23:56:26 +0530
+> Subject: [PATCH] [RFC] driver: Adding helper macro for platform_driver
+>  boilerplate
+> 
+> ---
+>  drivers/watchdog/gef_wdt.c | 14 +-------------
+>  1 file changed, 1 insertion(+), 13 deletions(-)
 > 
 > diff --git a/drivers/watchdog/gef_wdt.c b/drivers/watchdog/gef_wdt.c
-> index f6541d1b65e3..e1e9d5ecd31c 100644
+> index f6541d1b65e3..4421a452d0f5 100644
 > --- a/drivers/watchdog/gef_wdt.c
 > +++ b/drivers/watchdog/gef_wdt.c
-> @@ -300,6 +300,7 @@ static const struct of_device_id gef_wdt_ids[] = {
->         },
->         {},
->  };
-> +
->  MODULE_DEVICE_TABLE(of, gef_wdt_ids);
->  
->  static struct platform_driver gef_wdt_driver = {
-> @@ -311,19 +312,7 @@ static struct platform_driver gef_wdt_driver = {
->         .remove         = gef_wdt_remove,
+> @@ -311,19 +311,7 @@ static struct platform_driver gef_wdt_driver = {
+>   .remove = gef_wdt_remove,
 >  };
 >  
 > -static int __init gef_wdt_init(void)
 > -{
-> -       pr_info("GE watchdog driver\n");
-> -       return platform_driver_register(&gef_wdt_driver);
+> - pr_info("GE watchdog driver\n");
+> - return platform_driver_register(&gef_wdt_driver);
 > -}
 > -
 > -static void __exit gef_wdt_exit(void)
 > -{
-> -       platform_driver_unregister(&gef_wdt_driver);
+> - platform_driver_unregister(&gef_wdt_driver);
 > -}
 > -
 > -module_init(gef_wdt_init);
 > -module_exit(gef_wdt_exit);
 > +module_platform_driver(gef_wdt_driver);
+>  
+>  MODULE_AUTHOR("Martyn Welch <martyn.welch@ge.com <mailto:martyn.welch@ge.com>>");
+>  MODULE_DESCRIPTION("GE watchdog driver");
+> -- 
+> 2.17.1
 > 
 > 
 > 
-> Thanks & Regards,
 > 
-> Harshal Chaudhari
+> 
+> 
+> 
+> 
+> 
+> On Fri, May 8, 2020 at 6:31 PM Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
+> 
+>     On 5/8/20 4:39 AM, harshal chaudhari wrote:
+>     > Hi Wim and Guenter,
+>     >
+>     >
+>     > For simple module that contain a single platform_driver without any additional setup code then ends up being a block of duplicated boilerplate.
+>     >
+>     > This patch add a new micro, module_platform_driver(), which replace the module_init()/module_exit() registrations with template functions.
+>     >
+>     >
+>     > Signed-off-by: harshal chaudhari <harshalchau04@gmail.com <mailto:harshalchau04@gmail.com> <mailto:harshalchau04@gmail.com <mailto:harshalchau04@gmail.com>>>
+>     >
+> 
+>     First, this is not in correct patch format. Second, I don't really see
+>     the point of making such changes without converting the driver to use
+>     the watchdog subsystem.
+> 
+>     Guenter
+> 
+>     > Patch as below:
+>     >
+>     > diff --git a/drivers/watchdog/gef_wdt.c b/drivers/watchdog/gef_wdt.c
+>     > index f6541d1b65e3..e1e9d5ecd31c 100644
+>     > --- a/drivers/watchdog/gef_wdt.c
+>     > +++ b/drivers/watchdog/gef_wdt.c
+>     > @@ -300,6 +300,7 @@ static const struct of_device_id gef_wdt_ids[] = {
+>     >         },
+>     >         {},
+>     >  };
+>     > +
+>     >  MODULE_DEVICE_TABLE(of, gef_wdt_ids);
+>     >  
+>     >  static struct platform_driver gef_wdt_driver = {
+>     > @@ -311,19 +312,7 @@ static struct platform_driver gef_wdt_driver = {
+>     >         .remove         = gef_wdt_remove,
+>     >  };
+>     >  
+>     > -static int __init gef_wdt_init(void)
+>     > -{
+>     > -       pr_info("GE watchdog driver\n");
+>     > -       return platform_driver_register(&gef_wdt_driver);
+>     > -}
+>     > -
+>     > -static void __exit gef_wdt_exit(void)
+>     > -{
+>     > -       platform_driver_unregister(&gef_wdt_driver);
+>     > -}
+>     > -
+>     > -module_init(gef_wdt_init);
+>     > -module_exit(gef_wdt_exit);
+>     > +module_platform_driver(gef_wdt_driver);
+>     >
+>     >
+>     >
+>     > Thanks & Regards,
+>     >
+>     > Harshal Chaudhari
+>     >
 > 
 
