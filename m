@@ -2,79 +2,118 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B5F1CE36F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 May 2020 21:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9191F1CE5F1
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 May 2020 22:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731249AbgEKTAI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 11 May 2020 15:00:08 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:36588 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731014AbgEKTAH (ORCPT
+        id S1731810AbgEKUpd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 11 May 2020 16:45:33 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:41203 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731636AbgEKUpc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 11 May 2020 15:00:07 -0400
-Received: by mail-oi1-f193.google.com with SMTP id x7so15148475oic.3;
-        Mon, 11 May 2020 12:00:06 -0700 (PDT)
+        Mon, 11 May 2020 16:45:32 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 63so1339932oto.8;
+        Mon, 11 May 2020 13:45:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3OQElmdEf6ANxO9yWCHx08jhkcCE6GTH6WxnqucsYS4=;
-        b=hDyuoXHR1Qq/cye5pJ66z5UoeyQSoNG1db+bhOh+9A0gpB+BLOVux6NKXsUMJKWGZ0
-         0K+bLE1H8avv8GacU+dMJLjCizFYr1Yny6LlyB1aYnLVHkCO8VBSw22VGmPnwgtR7Kz/
-         ZbTjzoCwbQnukEwRsAWWR6dXnLicDFv5rthn6Kn9y6PHooMWi3p2FFQsHCITBEYkdZ9b
-         60/uPIuPIIrp2qbBRl3K1ViYhSUpkYFT20OglsXnWgBoz/24z6074dOjS9/kHqTWrYW5
-         H1p+vsCyigFqDOFhKBo86TLn2GI43sGAD+BBwK4BHkDC1T+mAC8sIgtoNNY26nkmH0Qc
-         bKRQ==
-X-Gm-Message-State: AGi0PuZz9vFUOx3YPVrAVaLiIPnlSKMOwDrsOil+vQRPMv2GFj7P7Zrj
-        lQkCwxdLdG8fy0cFIMFPXw==
-X-Google-Smtp-Source: APiQypIlbJwELJ7ratpU0IUXyqMjaII4UKvwSaScvVnUdGMDRLxrcwTHhlisxm9GrChX2KpbzKWLxQ==
-X-Received: by 2002:aca:c613:: with SMTP id w19mr19787064oif.114.1589223605738;
-        Mon, 11 May 2020 12:00:05 -0700 (PDT)
+        bh=8HYjnhh8Bu8XYDVDKIXasgsrQoeCjoEU/+GLZVp6VL4=;
+        b=uXcM4p4xBbOwgs+INZ2/puw0lKenm4NLcwzj0XpH1V6Z2gLm87nl7V7ROaI7/zCg5L
+         lQqvbe46Qr20HiPLrkrEt4+lDtkB+COd+1BZ27JPepw+e2POEXGxgA7dwcd7ZFfvJtB5
+         8Mzg5TXhLNFNuU+E7rq1HCRrYWniPTnrQU3SeVodUfmO/qvp+RUDFwj/UNtNINXGbrE5
+         S0s2bc2ec0OyLe04sWorBgVRXOm+viVoPj2YiJvWynfSdD3WuXhJGiDON+gVUHYW8FvL
+         G4RTaPyLx/88r+CG/D6PJTlWMHysbk0us/T/zhYKT0hn1XzOtfr33w1kO03BPzzDSq0d
+         uJfQ==
+X-Gm-Message-State: AGi0Pualo8+1VHIsPCUPHX4SHJlUe/8Fv2PRkkiC5GHRCcneN/4Ii5i1
+        OSy8EfNO9ZftsExpT9zdZg==
+X-Google-Smtp-Source: APiQypKrHjG2YQsNuUzJ0MXv21zFdiAFCnjL4QWURbbEGJWV5Y68QNrIXfpv8r9brDsrOsEu41aYVA==
+X-Received: by 2002:a9d:6ac8:: with SMTP id m8mr14284404otq.262.1589229931484;
+        Mon, 11 May 2020 13:45:31 -0700 (PDT)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l89sm2332076otc.32.2020.05.11.12.00.04
+        by smtp.gmail.com with ESMTPSA id n24sm263926otr.35.2020.05.11.13.45.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 12:00:05 -0700 (PDT)
-Received: (nullmailer pid 7490 invoked by uid 1000);
-        Mon, 11 May 2020 19:00:04 -0000
-Date:   Mon, 11 May 2020 14:00:04 -0500
+        Mon, 11 May 2020 13:45:30 -0700 (PDT)
+Received: (nullmailer pid 14771 invoked by uid 1000);
+        Mon, 11 May 2020 20:45:29 -0000
+Date:   Mon, 11 May 2020 15:45:29 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     wim@linux-watchdog.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Linux-imx@nxp.com, robh+dt@kernel.org,
-        linux-watchdog@vger.kernel.org, festevam@gmail.com,
-        kernel@pengutronix.de, linux@roeck-us.net,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V3 2/2] dt-bindings: watchdog: Convert i.MX7ULP to
- json-schema
-Message-ID: <20200511190004.GA7369@bogus>
-References: <1587478886-21512-1-git-send-email-Anson.Huang@nxp.com>
- <1587478886-21512-2-git-send-email-Anson.Huang@nxp.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 08/16] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200511204529.GA3518@bogus>
+References: <20200423174543.17161-1-michael@walle.cc>
+ <20200423174543.17161-9-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1587478886-21512-2-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <20200423174543.17161-9-michael@walle.cc>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 21 Apr 2020 22:21:26 +0800, Anson Huang wrote:
-> Convert the i.MX7ULP watchdog binding to DT schema format using json-schema.
+On Thu, Apr 23, 2020 at 07:45:35PM +0200, Michael Walle wrote:
+> This adds support for the PWM controller of the sl28cpld board
+> management controller. This is part of a multi-function device driver.
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
-> Changes since V2:
-> 	- drop clocks description;
-> 	- drop unused label;
-> 	- improve timeout-sec.
-> ---
->  .../bindings/watchdog/fsl-imx7ulp-wdt.txt          | 22 --------
->  .../bindings/watchdog/fsl-imx7ulp-wdt.yaml         | 60 ++++++++++++++++++++++
->  2 files changed, 60 insertions(+), 22 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-> 
+>  drivers/pwm/Kconfig        |  10 ++
+>  drivers/pwm/Makefile       |   1 +
+>  drivers/pwm/pwm-sl28cpld.c | 203 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 214 insertions(+)
+>  create mode 100644 drivers/pwm/pwm-sl28cpld.c
 
-Applied, thanks!
+
+> +static const struct of_device_id sl28cpld_pwm_of_match[] = {
+> +	{ .compatible = "kontron,sl28cpld-pwm" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, sl28cpld_pwm_of_match);
+> +
+> +static const struct platform_device_id sl28cpld_pwm_id_table[] = {
+> +	{"sl28cpld-gpio"},
+
+copy-n-paste error?
+
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(platform, sl28cpld_pwm_id_table);
+> +
+> +static struct platform_driver sl28cpld_pwm_driver = {
+> +	.probe = sl28cpld_pwm_probe,
+> +	.remove	= sl28cpld_pwm_remove,
+> +	.id_table = sl28cpld_pwm_id_table,
+> +	.driver = {
+> +		.name = KBUILD_MODNAME,
+> +		.of_match_table = sl28cpld_pwm_of_match,
+> +	},
+> +};
+> +module_platform_driver(sl28cpld_pwm_driver);
+> +
+> +MODULE_DESCRIPTION("sl28cpld PWM Driver");
+> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.20.1
+> 
