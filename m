@@ -2,111 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E23681CD3DA
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 May 2020 10:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E37B1CE369
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 May 2020 20:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729226AbgEKI2I (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 11 May 2020 04:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729137AbgEKI2H (ORCPT
+        id S1731214AbgEKS7K (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 11 May 2020 14:59:10 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40029 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729530AbgEKS7J (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 11 May 2020 04:28:07 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E005EC061A0C
-        for <linux-watchdog@vger.kernel.org>; Mon, 11 May 2020 01:28:06 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id 188so6739385lfa.10
-        for <linux-watchdog@vger.kernel.org>; Mon, 11 May 2020 01:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xRvOsGODr2gBty44WMLBkyLF05Kazw7eweqK6vwx6G8=;
-        b=NMwUyTJEcbx88njWIumKBmdXEPVUEg0mDKK5uVHZYtRcI2EsMUGm4RKTg3v8t+HImQ
-         Dhe486gV9U3C4ZEk4KudoDojO6BjvFuqPrSrFdE4okuodgo/vKBO7N4q5xWUO/NMudOQ
-         DTuEFJkPsULwl23xN7LXDN9fsCueSRXI+9f+sBdEpJRqHpcQGpC4PLuWVfhfKfb/7sEq
-         uo3QClFkWonGW7vE54sEwFf8dNmqJ2+lehPnKgvPNk46g4jFIuFyFTqgzRFS2tMjLNth
-         /shvpXWyz143uoEV7N4gcySD//s/ZbmhSw9s7vO1MyDWWtv9vcxSQ02NXPMObmMJpMiz
-         BKng==
+        Mon, 11 May 2020 14:59:09 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t199so16088788oif.7;
+        Mon, 11 May 2020 11:59:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xRvOsGODr2gBty44WMLBkyLF05Kazw7eweqK6vwx6G8=;
-        b=myymYqDwCF5iskDKpr+fvTDeiQcy+JaHtaVi0Cj1S/wTOoyt7V8LjPqmy28VVsaFTW
-         3uJmAV/q50278GmkWElYXlgqs2Z1KV+6eYQAPcDHX3es2yC5QbJMK3OtiyIqB4FlqgUL
-         5Awq9HUv7YRgW4sWtZlm3nGWVws4zN1t57NvFIZRGC8FdGcZWLwzOwVfQ9Z1E5SbHNMG
-         ok2Kk7JxWL8DtMu4AnTO+7d36YBsY0fpGk2tDelJgwdFvpxJgZekpmsTlWbsWjfeAzBB
-         m0pc4PPaRLNgPgulffDVP4GiLxKhHlMOCxkRK+c/24dQz+saZ7KY0Szgv410ehbQSFYj
-         D1DQ==
-X-Gm-Message-State: AOAM530AbtLoljCeeU3rMCgK1Is6K7ol92wmfL28RA4qE6dJqELi89oh
-        IO4C5IfxP9vUwG4FtTPN5R2aZQ==
-X-Google-Smtp-Source: ABdhPJy9RJ6KQf/3Kl5eqQg+JUSwUL3ldNqhxlgS3bNEYoMSUpVKEawpvAY6S5rxYHjoPhvrWBixXw==
-X-Received: by 2002:ac2:59ce:: with SMTP id x14mr10087337lfn.183.1589185685335;
-        Mon, 11 May 2020 01:28:05 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:482:2677:ba:b682:3c24:214e? ([2a00:1fa0:482:2677:ba:b682:3c24:214e])
-        by smtp.gmail.com with ESMTPSA id m13sm10297061lfk.12.2020.05.11.01.28.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2020 01:28:04 -0700 (PDT)
-Subject: Re: [PATCH v2 2/7] dt-bindings: watchdog: dw-wdt: Support devices
- with asynch clocks
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200306132758.703FC8030704@mail.baikalelectronics.ru>
- <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
- <20200510105807.880-3-Sergey.Semin@baikalelectronics.ru>
- <f065ff5f-af86-4293-b208-766e41699436@cogentembedded.com>
-Message-ID: <477b9f75-485c-3208-b58c-56a5c13e15bb@cogentembedded.com>
-Date:   Mon, 11 May 2020 11:28:00 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EzGSAEhMRCQmh/uukdsZU1Wyq2X3cZKWLbb3M9w2uU0=;
+        b=dACHxc8MPylaYGzC+77nxGwEpnWZzMCyR5+Lzsa+HB3kLXkqgRk93F3Dw1uSbRc2gr
+         wENQGkv9I9W8gdh8qw/PZ5L8Sfh1lfUBd5fBEKlUizOhMCvrDd5WaQfqNnKgt4CaeY+H
+         WN6EbkTtDgFl1P7hJd59RCHHluMnb2hJT7Y87s0Hoqzu3QgmFP/Joa37g9thGYQ3/acl
+         Q2NuCoYjZN/uVfWgg7JBDNRqdzk1uiLaWeLwYSNo0aWT1n9b7RuYTC4HKRnHxvF2BE8m
+         z40jsD/hsCOhClRzyVlncWIY7xX31KZ88OuEM9oQzk+J+xUKSwRqX9IaqXsz2h3pfpgx
+         WSvg==
+X-Gm-Message-State: AGi0PubxFJbH/OSGD9Hp4UVv1ZBNxKMB51r0pFoRvaB+78i1QPsclFlJ
+        Au9oNA96qkRSbpEJKbT1/4glULQ=
+X-Google-Smtp-Source: APiQypJLwE5G8HTFSG69tUK6PQXc+J8y9iArzf1DlACKjlE2ctk9cwX64/nmHhxnbfrSW2cG7UluYA==
+X-Received: by 2002:aca:ac84:: with SMTP id v126mr21321792oie.132.1589223548934;
+        Mon, 11 May 2020 11:59:08 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 10sm2835605oto.80.2020.05.11.11.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2020 11:59:08 -0700 (PDT)
+Received: (nullmailer pid 5979 invoked by uid 1000);
+        Mon, 11 May 2020 18:59:06 -0000
+Date:   Mon, 11 May 2020 13:59:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     linux@roeck-us.net, s.hauer@pengutronix.de, wim@linux-watchdog.org,
+        festevam@gmail.com, shawnguo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linux-imx@nxp.com, devicetree@vger.kernel.org, robh+dt@kernel.org,
+        kernel@pengutronix.de, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH V3 1/2] dt-bindings: watchdog: Convert i.MX to json-schema
+Message-ID: <20200511185906.GA5896@bogus>
+References: <1587478886-21512-1-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <f065ff5f-af86-4293-b208-766e41699436@cogentembedded.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1587478886-21512-1-git-send-email-Anson.Huang@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11.05.2020 11:25, Sergei Shtylyov wrote:
-
->> DW Watchdog IP core can be synthesised with asynchronous timer/APB
->> clocks support (WDT_ASYNC_CLK_MODE_ENABLE == 1). In this case
->> a separate clock signal is supposed to be used to feed watchdog timer
->> and APB interface of the device. Lets along with the watchdog timer
->                                         ^ verb missing? or comma?
-
-    Oh, and probably "Let's" too. :-)
-
+On Tue, 21 Apr 2020 22:21:25 +0800, Anson Huang wrote:
+> Convert the i.MX watchdog binding to DT schema format using json-schema.
 > 
->> reference clock expect to have the optional APB3 bu interface clock
->> sepcified in a DW WDT dt node.
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+> Changes since V2:
+> 	- drop clocks description;
+> 	- drop unused label.
+> ---
+>  .../devicetree/bindings/watchdog/fsl-imx-wdt.txt   | 24 ----------
+>  .../devicetree/bindings/watchdog/fsl-imx-wdt.yaml  | 54 ++++++++++++++++++++++
+>  2 files changed, 54 insertions(+), 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
 > 
->     Specified.
-> 
->> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
->> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
->> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->> Cc: Paul Burton <paulburton@kernel.org>
->> Cc: Ralf Baechle <ralf@linux-mips.org>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Philipp Zabel <p.zabel@pengutronix.de>
->> Cc: linux-mips@vger.kernel.org
-> [...]
 
-MBR, Sergei
+Applied, thanks!
