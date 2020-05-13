@@ -2,121 +2,154 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5B71D067C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 May 2020 07:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD7D1D21CD
+	for <lists+linux-watchdog@lfdr.de>; Thu, 14 May 2020 00:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728891AbgEMFm4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 13 May 2020 01:42:56 -0400
-Received: from mx.socionext.com ([202.248.49.38]:59168 "EHLO mx.socionext.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728097AbgEMFm4 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 13 May 2020 01:42:56 -0400
-Received: from unknown (HELO kinkan-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 13 May 2020 14:42:53 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan-ex.css.socionext.com (Postfix) with ESMTP id 218601800CF;
-        Wed, 13 May 2020 14:42:54 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 13 May 2020 14:42:54 +0900
-Received: from plum.e01.socionext.com (unknown [10.213.132.32])
-        by kinkan.css.socionext.com (Postfix) with ESMTP id AB2C11A12AD;
-        Wed, 13 May 2020 14:42:53 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        id S1730900AbgEMWPa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 13 May 2020 18:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730532AbgEMWP3 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 13 May 2020 18:15:29 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A1EC061A0C;
+        Wed, 13 May 2020 15:15:29 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5752922FEC;
+        Thu, 14 May 2020 00:15:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1589408125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IjMyCHfdnLjEuVo++xDGBWjambq+Fde/qc+KEJNfdSc=;
+        b=eKf0mnWxRhNAeHVKoNWCeiV9u0yLpbJAusnkLK3vNXKHhQeGeNYWKXQ++zSpwJbX38tbdU
+        2EJap+54vaZnLGcacA4UH6AZs5fGtsgB2NmyXR2hFOrHme+LDvtC1sdogLUw19sHNQKzAs
+        BwssZiT/tIG61qYJfOLJ1Eowufi8hK0=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 14 May 2020 00:15:22 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Keiji Hayashibara <hayashibara.keiji@socionext.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH] dt-bindings: watchdog: Convert UniPhier watchdog timer to json-schema
-Date:   Wed, 13 May 2020 14:42:25 +0900
-Message-Id: <1589348545-22244-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 05/16] mfd: Add support for Kontron sl28cpld management
+ controller
+In-Reply-To: <CAL_JsqJBAghgdKmH1OfpH0B508st7Gx3GMtjufjZvBWM_c6GAQ@mail.gmail.com>
+References: <20200423174543.17161-1-michael@walle.cc>
+ <20200423174543.17161-6-michael@walle.cc> <20200511211359.GB3518@bogus>
+ <f0fafa63047f00e912013b137e4db15c@walle.cc>
+ <CAL_JsqJBAghgdKmH1OfpH0B508st7Gx3GMtjufjZvBWM_c6GAQ@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <c170d7ad3874567e624bb827c1eac661@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert UniPhier watchdog timer binding to DT schema format.
+Am 2020-05-12 23:59, schrieb Rob Herring:
+> On Mon, May 11, 2020 at 4:45 PM Michael Walle <michael@walle.cc> wrote:
+>> 
+>> Am 2020-05-11 23:13, schrieb Rob Herring:
+>> > On Thu, Apr 23, 2020 at 07:45:32PM +0200, Michael Walle wrote:
+>> >> +#define SL28CPLD_VERSION    0x03
+>> >> +#define SL28CPLD_WATCHDOG_BASE      0x04
+>> >> +#define SL28CPLD_HWMON_FAN_BASE     0x0b
+>> >> +#define SL28CPLD_PWM0_BASE  0x0c
+>> >> +#define SL28CPLD_PWM1_BASE  0x0e
+>> >> +#define SL28CPLD_GPIO0_BASE 0x10
+>> >> +#define SL28CPLD_GPIO1_BASE 0x15
+>> >> +#define SL28CPLD_GPO_BASE   0x1a
+>> >> +#define SL28CPLD_GPI_BASE   0x1b
+>> >> +#define SL28CPLD_INTC_BASE  0x1c
+>> >
+>> > If you want to use 'reg' in the binding, these are the numbers you
+>> > should be using rather than making up numbering!
+>> 
+>> My motivation is that I don't want to hardcode the internal addresses
+>> of the management controller in the device tree. For example if they
+>> will move around with a later update of the controller, so a driver 
+>> can
+>> be compatible with both the old and the new version. If they are in 
+>> the
+>> device tree, only one register layout is possible.
+> 
+> I don't understand, if the addresses change, then the above defines
+> have to change. So your driver is only compatible with 1 version. If
+> you change the CPLD, then that's a h/w change and your h/w description
+> (DT) should change. That can either be the compatible string changing
+> and updating the driver with new match data such as register offsets
+> or all the differences are in DT and there's no kernel change.
 
-Cc: Keiji Hayashibara <hayashibara.keiji@socionext.com>
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- .../bindings/watchdog/socionext,uniphier-wdt.yaml  | 36 ++++++++++++++++++++++
- .../devicetree/bindings/watchdog/uniphier-wdt.txt  | 20 ------------
- 2 files changed, 36 insertions(+), 20 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/uniphier-wdt.txt
+The CPLD and the board is designed in a way that it is possible to
+update and/or change its function (or parts of it). It must not be
+a hardware change, although I admit thats a bit of a grey area wether
+you treat it as hardware or "firmware". Anyway, yes you'd have to
+change the register offsets, but as this is code it might support
+different register offsets. For example you could dynamically add
+functionality, if there is a newer controller version while still
+being compatible with older versions.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml b/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
-new file mode 100644
-index 0000000..a059d16
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
-@@ -0,0 +1,36 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/socionext,uniphier-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Socionext UniPhier watchdog timer
-+
-+maintainers:
-+  - Keiji Hayashibara <hayashibara.keiji@socionext.com>
-+
-+allOf:
-+  - $ref: "watchdog.yaml#"
-+
-+properties:
-+  compatible:
-+    const: socionext,uniphier-wdt
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    // The UniPhier watchdog should be a subnode of a "syscon" compatible node.
-+
-+    sysctrl@61840000 {
-+        compatible = "socionext,uniphier-ld11-sysctrl",
-+                     "simple-mfd", "syscon";
-+        reg = <0x61840000 0x10000>;
-+
-+        watchdog {
-+            compatible = "socionext,uniphier-wdt";
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/watchdog/uniphier-wdt.txt b/Documentation/devicetree/bindings/watchdog/uniphier-wdt.txt
-deleted file mode 100644
-index bf63375..0000000
---- a/Documentation/devicetree/bindings/watchdog/uniphier-wdt.txt
-+++ /dev/null
-@@ -1,20 +0,0 @@
--UniPhier watchdog timer controller
--
--This UniPhier watchdog timer controller must be under sysctrl node.
--
--Required properties:
--- compatible: should be "socionext,uniphier-wdt"
--
--Example:
--
--	sysctrl@61840000 {
--		compatible = "socionext,uniphier-ld11-sysctrl",
--			     "simple-mfd", "syscon";
--		reg = <0x61840000 0x4000>;
--
--		watchdog {
--			compatible = "socionext,uniphier-wdt";
--		}
--
--		other nodes ...
--	};
--- 
-2.7.4
+>> > However, I still don't think you need any child nodes. All the data in
+>> > the DT binding is right here in the driver already. There's no
+>> > advantage
+>> > to putting child nodes in DT, because this driver still has to be
+>> > updated if you add more nodes.
+>> 
+>> But then any phandle will reference the mfd device. And for example
+>> there
+>> are two different interrupt controllers, that is the INTC and the
+>> GPIO[01],
+>> which will then be combined into one device tree node, right?
+> 
+> You either have to add a cell for 'bank' or divide the 1st cell into a
+> bank and index. Both have been done before.
 
+But this won't work with watchdogs, correct? See
+https://lore.kernel.org/linux-devicetree/7acbb6d9b2240b1856136fa35c1318bf@walle.cc/
+
+> To go the other direction, AIUI you shouldn't need OF_MFD_CELL_REG
+> entries if you have the child devices in DT.
+
+This is a general problem IMHO. There are mfd drivers which have mfd
+cells and a device tree node associated with each cell. But it just
+works as long as there is only one sub device per unique compatible
+string. So you cannot have multiple mfd cells with the same
+compatible string.
+
+That being said, I can try to reimplement it using
+of_platform_populate() and its internal offset as its unit address.
+
+> Pick one way or the
+> other. It's ultimately a judgement call. For a one-off device, sub
+> devices in DT doesn't really buy you anything. If you have sub-blocks
+> showing up multiple devices, then sub devices makes sense. If there's
+> only 2-3 combinations, then it's a toss up.
+
+-michael
