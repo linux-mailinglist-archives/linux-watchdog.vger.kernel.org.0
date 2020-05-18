@@ -2,62 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EDF1D7897
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 May 2020 14:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25D31D797D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 May 2020 15:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgERM2F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 18 May 2020 08:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S1726855AbgERNR5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 18 May 2020 09:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbgERM2E (ORCPT
+        with ESMTP id S1726918AbgERNR4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 18 May 2020 08:28:04 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF748C061A0C;
-        Mon, 18 May 2020 05:28:03 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id 19so8779290oiy.8;
-        Mon, 18 May 2020 05:28:03 -0700 (PDT)
+        Mon, 18 May 2020 09:17:56 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF40C05BD0F
+        for <linux-watchdog@vger.kernel.org>; Mon, 18 May 2020 06:17:56 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id f18so9791002lja.13
+        for <linux-watchdog@vger.kernel.org>; Mon, 18 May 2020 06:17:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=knD02Z+9tC//YVd/yYg62jSva7tZ6kZO0J1cHOboZm0=;
-        b=tyJZJSdScYatoaiD3+nk8CaRyh/JcfmnCgYlKTcucGjbqGbNfJuy/pfaeFbWIiPvAE
-         Sn8UvhLxfP7wDSCX5CFCI/uWIPmOMWwv5D2RLwMwD2Emng16expUeCaEKjbsgCWOgjAz
-         RZx3PDskmOhc2BvEfg3adwjssmO0Bju9slSd+an6tw851Oh0t4/EEvxoMLWvE1ymqY29
-         GBYHNvJ1XhiTPz8BwcBUPjr1/BNQl6fgddkDDeSd/EMbIeDscKxA0WmyBMO6mbluT+YD
-         nowhn8OeLyNEVShUCCuaDVn/IFhpufgHp6oDyPXDtcaqdU+nkLga/mtxwLHyvR+v0AIB
-         U0FA==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aaWFz8XM3lber/1QtUDkEYgUS7TEOfr3vPPMOdwLrk4=;
+        b=xj1It/WGw6ho2gXyehxm6yxVpJNgYenYhtlgl5YhWyN5asWO9hvDGHw8rwukxDXrfX
+         dXgMMo0ZAZFQ8mEccZQHf50PdHilbq4KXfNFMbIfNosARIoOPCtmETgBepVHiDoNsjuH
+         A83hapb8pSHGKAN1sMZb8UMxb3PPZOzXEJWGAalWbF/RLzFuG97AwGFScLZAvWV2/z3m
+         E/Vn9Ns9itIfGBr03TxabMBQ53aGb1nWX+LDlRj2KXVhwV6AGa+r/FR+aKeEIn1RKWYn
+         7KyBPmyJIMzxnGy/lCHE9zMxdtRAgWMjgnpmyJBjZvPKtk4iu86WCuyUFTFHGnO06xBX
+         pVAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=knD02Z+9tC//YVd/yYg62jSva7tZ6kZO0J1cHOboZm0=;
-        b=RMmeitidF0VFigiYzwAVTww5NeCztTBeux3D067yWghIRHIl0rC7zaGPogmzr+DfSd
-         95KRDndpwHgteZb02iYatrp8lJ83OxRmuZm16rX6XVOSufP5pAsCfLvyMBKX1MXWf+qs
-         zfI5zknvbiJmt1Fe/N3NCN0nZFiepKMrfsQwjYkuT3V6hprMbaeqBe5bfOT4n6a8hXxt
-         Z7suuKEgDAdpX0wPyjPHYBrqjpXCa4ujQylZQGWn/6mrNrQjixBidimQmbhwzcVkWazO
-         b/ljSz9Wpmo41P0TfIE+iLSTLeuR28+kVNJXvXLbPCWQ8DTKgOvAU6mH6edwgxk/plMA
-         J52w==
-X-Gm-Message-State: AOAM533iGzbZdwAavS2lIPIOk3FheZWNQUYxzEVSN0FCb04Q+MTEB1SF
-        WH8mJEW1AuiQ90HTrbaQHi8h5hJfPWl2YKKlNyE=
-X-Google-Smtp-Source: ABdhPJzZ2lS0ejqPsWuIGn043vBk+9V7Kj1deZdI5q/OaKt45cHvC56EYzI/9nBuanFZEV1fpAhD/jFUNkKMy5Tat5g=
-X-Received: by 2002:a05:6808:106:: with SMTP id b6mr4197157oie.142.1589804882884;
- Mon, 18 May 2020 05:28:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-18-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVV+2HsgmBytCOFg4pri4XinT_SPWT_Ac6n7FMZN3dR3w@mail.gmail.com>
-In-Reply-To: <CAMuHMdVV+2HsgmBytCOFg4pri4XinT_SPWT_Ac6n7FMZN3dR3w@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 18 May 2020 13:27:36 +0100
-Message-ID: <CA+V-a8tmG1LKYqbc7feGZQO2Tj5RCpNUHi9e19vPr+bED0KOyQ@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aaWFz8XM3lber/1QtUDkEYgUS7TEOfr3vPPMOdwLrk4=;
+        b=pD3hRfNEuD8Naoc5p0SBVqUZ3xhp58EVSNspzsKWjnXe58esTLLvvG/0sVev0MEuLF
+         N9eWyzD+fNBTG5jkA0vD/r4uHr6x+3hgB/bIQ/TgVSCPtyMB8akYUttr5u8+x1Cv/ruC
+         OAj/pfYTV7vnSKeViAjHrMt+pxMHS6SoEdzjn4QsnqmzCV8/1Sbtx0d6KvHcQpq6xBQP
+         d9j9DAjEKL4TwfUeNlgZdi4c0VoqLJYsa87sHqk0S0nZt15DGKRXKOB120jML7/BKbjq
+         m2IXqGpP/F62lvIccAq+CpkuUjdFGN/yKb6zmzAEAyL1313JFvaUHR5yrEl5A4ZAhMV8
+         LmxA==
+X-Gm-Message-State: AOAM5334zxS4/4/j5FgfSZV8RFU0It15ql8YgBI0qWyty+/l4P94kLvR
+        q+bzi1d+XcwIILH/ytysy3MNh1FDgAQ=
+X-Google-Smtp-Source: ABdhPJw19UGyEwWJ5Mq/Mme9WNx4l0h6pfEFIGaCERwgxusIQHdpFrVvwJLlfLQPp5MqmCtmQRT2Bg==
+X-Received: by 2002:a2e:9a82:: with SMTP id p2mr10501360lji.279.1589807874514;
+        Mon, 18 May 2020 06:17:54 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:484c:c9e:1c14:285d:1715:e170? ([2a00:1fa0:484c:c9e:1c14:285d:1715:e170])
+        by smtp.gmail.com with ESMTPSA id v10sm5486890lja.23.2020.05.18.06.17.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2020 06:17:52 -0700 (PDT)
 Subject: Re: [PATCH 17/17] ARM: dts: r8a7742: Add RWDT node
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
         "David S. Miller" <davem@davemloft.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
@@ -69,70 +67,60 @@ Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         netdev <netdev@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1589555337-5498-18-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdVV+2HsgmBytCOFg4pri4XinT_SPWT_Ac6n7FMZN3dR3w@mail.gmail.com>
+ <CA+V-a8tmG1LKYqbc7feGZQO2Tj5RCpNUHi9e19vPr+bED0KOyQ@mail.gmail.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <9ab946d2-1076-ed92-0a48-9a95d798d291@cogentembedded.com>
+Date:   Mon, 18 May 2020 16:17:46 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <CA+V-a8tmG1LKYqbc7feGZQO2Tj5RCpNUHi9e19vPr+bED0KOyQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Geert,
+Hello!
 
-Thank you for the review.
+On 18.05.2020 15:27, Lad, Prabhakar wrote:
 
-On Mon, May 18, 2020 at 12:47 PM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Fri, May 15, 2020 at 5:10 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Add a device node for the Watchdog Timer (RWDT) controller on the Renesas
-> > RZ/G1H (r8a7742) SoC.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
->
-> Thanks for your patch!
->
-> > --- a/arch/arm/boot/dts/r8a7742.dtsi
-> > +++ b/arch/arm/boot/dts/r8a7742.dtsi
-> > @@ -201,6 +201,16 @@
-> >                 #size-cells = <2>;
-> >                 ranges;
-> >
-> > +               rwdt: watchdog@e6020000 {
-> > +                       compatible = "renesas,r8a7742-wdt",
-> > +                                    "renesas,rcar-gen2-wdt";
-> > +                       reg = <0 0xe6020000 0 0x0c>;
-> > +                       clocks = <&cpg CPG_MOD 402>;
-> > +                       power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-> > +                       resets = <&cpg 402>;
-> > +                       status = "disabled";
->
-> Missing "interrupts" property.
->
-"interrupts" property isn't used by rwdt driver  and can be dropped
-from bindings file.
+>>> Add a device node for the Watchdog Timer (RWDT) controller on the Renesas
+>>> RZ/G1H (r8a7742) SoC.
+>>>
+>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+>>
+>> Thanks for your patch!
+>>
+>>> --- a/arch/arm/boot/dts/r8a7742.dtsi
+>>> +++ b/arch/arm/boot/dts/r8a7742.dtsi
+>>> @@ -201,6 +201,16 @@
+>>>                  #size-cells = <2>;
+>>>                  ranges;
+>>>
+>>> +               rwdt: watchdog@e6020000 {
+>>> +                       compatible = "renesas,r8a7742-wdt",
+>>> +                                    "renesas,rcar-gen2-wdt";
+>>> +                       reg = <0 0xe6020000 0 0x0c>;
+>>> +                       clocks = <&cpg CPG_MOD 402>;
+>>> +                       power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
+>>> +                       resets = <&cpg 402>;
+>>> +                       status = "disabled";
+>>
+>> Missing "interrupts" property.
+>>
+> "interrupts" property isn't used by rwdt driver  and can be dropped
+> from bindings file.
 
-Cheers,
---Prabhakar
+    DT describes the hardware, not its driver's abilities.
 
-> > +               };
-> > +
-> >                 gpio0: gpio@e6050000 {
-> >                         compatible = "renesas,gpio-r8a7742",
-> >                                      "renesas,rcar-gen2-gpio";
->
-> The rest looks fine, so with the above fixed:
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+> Cheers,
+> --Prabhakar
+
+MBR, Sergei
