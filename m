@@ -2,115 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4BB1D74CA
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 May 2020 12:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9CA1D7747
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 May 2020 13:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726682AbgERKKY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 18 May 2020 06:10:24 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:42086 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726040AbgERKKY (ORCPT
+        id S1727969AbgERLfd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 18 May 2020 07:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726739AbgERLfc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 18 May 2020 06:10:24 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l6so2622638oic.9;
-        Mon, 18 May 2020 03:10:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OUWwAW1tiZj2X0S32FYVRQZMXC7D2eYX5NkiVFQhWuM=;
-        b=jHTzn0kZ2WgWP9ll68PeWpOYW0SEYTSqGrXDFO8PGseYmiIfoWTSpXlLyYJy29CYQW
-         dNTCM+K5gIbTai1adyeqFkkIUyK6mzuwE+jH/ePsJML9KoSW0vxr+fIC++q68ovb4/00
-         8kqWB5arem5HInZB92P9a92Qj0JRRNkbgmXDRodzeQiHzCdAADtw63Z+ok2mBV6RQkM8
-         e8VieaBLvO150B/p2z0MWWNTGRBBekAxuY3bPm5TshYCw5Hw16GpgDLgXcQ6uXINA4JQ
-         u2ou/Ffsot0kaRARMOuGS6vqLAMx4yh2PpNrmTW4MAqIjRKoCH9FCFQH9+uo//o1vmaL
-         c0mg==
-X-Gm-Message-State: AOAM532JzgILyyQvEpVz1AHJaQQhr5gOPcJ7DhZc82wPHXEqNs3k1lPq
-        839j7oyD3Uk8nSgXatxWR08i2UanzBUJBKeOfwQ=
-X-Google-Smtp-Source: ABdhPJyBWPgZF8Nef5VFnPwIMZCFFtRvCnBOgZddEawH+Whlxj+gaH+OLdK5CmIFCwYF6ugC0lIB1QUdlxdAkaabczY=
-X-Received: by 2002:aca:cd93:: with SMTP id d141mr9870659oig.148.1589796621997;
- Mon, 18 May 2020 03:10:21 -0700 (PDT)
+        Mon, 18 May 2020 07:35:32 -0400
+X-Greylist: delayed 1618 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 May 2020 04:35:32 PDT
+Received: from vps.dvp24.com (unknown [IPv6:2a02:348:36:5b8c::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C69CC061A0C;
+        Mon, 18 May 2020 04:35:32 -0700 (PDT)
+Received: from localhost ([127.0.0.1] helo=dvp24.com)
+        by vps.dvp24.com with esmtpa (Exim 4.77)
+        (envelope-from <abhay@dvp24.com>)
+        id 1jadYS-0006r4-97; Mon, 18 May 2020 13:03:32 +0200
 MIME-Version: 1.0
-References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200515171031.GB19423@ninjato> <CA+V-a8t6rPs4s8uMCpBQEAUvwsVn7Cte-vX3z2atWRhy_RFLQw@mail.gmail.com>
- <20200518092601.GA3268@ninjato>
-In-Reply-To: <20200518092601.GA3268@ninjato>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 18 May 2020 12:10:05 +0200
-Message-ID: <CAMuHMdVWe1EEAtP64VW+0zXNingM1LiENv_Rfz5qTQ+C0dtGSw@mail.gmail.com>
-Subject: Re: [PATCH 03/17] ARM: dts: r8a7742: Add I2C and IIC support
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 18 May 2020 12:03:32 +0100
+From:   pedro hills <abhay@dvp24.com>
+To:     undisclosed-recipients:;
+Subject: (DONATION) $2 Million Has Been Donated
+Reply-To: <pedrohills@outlook.es>
+Mail-Reply-To: <pedrohills@outlook.es>
+Message-ID: <4f8b251c274cf8e27d8c41dd4ed99b52@dvp24.com>
+X-Sender: abhay@dvp24.com
+User-Agent: Roundcube Webmail/0.7.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wolfram,
 
-On Mon, May 18, 2020 at 11:26 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > > However, both versions (with and without automatic transmission) are
-> > > described with the same "renesas,iic-r8a7742" compatible. Is it possible
-> > > to detect the reduced variant at runtime somehow?
-> > >
-> > I couldn't find anything the manual that would be useful to detect at runtime.
-
-Hence if we really need that (see below), we need a quirk based on compatible
-value + base address.
-
-> > > My concern is that the peculiarity of this SoC might be forgotten if we
-> > > describe it like this and ever add "automatic transmissions" somewhen.
-> > >
-> > Agreed.
->
-> Well, I guess reading from a register which is supposed to not be there
-> on the modified IP core is too hackish.
-
-According to the Hardware User's Manual Rev. 1.00, the registers do exist
-on all RZ/G1, except for RZ/G1E (see below).
-
-   "(automatic transmission can be used as a hardware function, but this is
-    not meaningful for actual use cases)."
-
-(whatever that comment may mean?)
-
-> Leaves us with a seperate compatible entry for it?
-
-On R-Car E3 and RZ/G2E, which have a single IIC instance, we
-handled that by:
-
-        The r8a77990 (R-Car E3) and r8a774c0 (RZ/G2E)
-        controllers are not considered compatible with
-        "renesas,rcar-gen3-iic" or "renesas,rmobile-iic"
-        due to the absence of automatic transmission registers.
-
-On R-Car E2 and RZ/G1E, we forgot, and used both SoC-specific and
-family-specific compatible values.
-
-Gr{oetje,eeting}s,
-
-                        Geert
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+$2 Million Has Been Donated To You,By PEDRO this is Real For More Info
+  Contact PEDRO immediately for your clame This Email:
+  pedrohills@outlook.es
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+  Contact phone number +34632232897
+  Send Your Response To: pedrohills@outlook.es
+
+  2 Millionen US-Dollar wurden an Sie gespendet. Von PEDRO ist dies für
+weitere Informationen real
+  Wenden Sie sich umgehend an PEDRO. Diese E-Mail:
+  pedrohills@outlook.es
+
+  Kontakttelefonnummer +34632232897
+  Senden Sie Ihre Antwort an: pedrohills@outlook.es
