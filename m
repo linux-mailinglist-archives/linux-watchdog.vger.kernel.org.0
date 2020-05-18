@@ -2,90 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC8D1D6D66
-	for <lists+linux-watchdog@lfdr.de>; Sun, 17 May 2020 23:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CD11D735B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 May 2020 10:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726665AbgEQVIk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 17 May 2020 17:08:40 -0400
-Received: from sauhun.de ([88.99.104.3]:33722 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726288AbgEQVIk (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 17 May 2020 17:08:40 -0400
-Received: from localhost (p5486C87C.dip0.t-ipconnect.de [84.134.200.124])
-        by pokefinder.org (Postfix) with ESMTPSA id 59E902C049C;
-        Sun, 17 May 2020 23:08:37 +0200 (CEST)
-Date:   Sun, 17 May 2020 23:08:37 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        id S1726590AbgERI7Z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 18 May 2020 04:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726180AbgERI7Y (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 18 May 2020 04:59:24 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02EAC061A0C;
+        Mon, 18 May 2020 01:59:24 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id l6so2485574oic.9;
+        Mon, 18 May 2020 01:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LYV5EXh8n5rFl/NTMi7Ga5qcFteCzV/5Bynz9/j/gws=;
+        b=JUwzz0rrL4NlaPHDGnOL5OqO9C4s6vqDx6DD7xWQcMzu0te7kTNTmH3ttNmPdTU1Ad
+         1YCOXlK95i1Wkry3f946HZmHLu4pIxHK1m0dFLdhBbXiV4mOgqLY7uht6OjBH5jcdLni
+         s0oVIEc+rGoTG4C0ARpq7T5ZydTTubYgGXaoSuTXL5IiVDsr+5Mw6/N5DVKpLCJYy+6I
+         J3xSSiyMSb4BVy7fCBzvEb0om2pF1v91PQpcbGrYyhfmwKlZT8MzpukS3lwdyNhBBBGf
+         FGYV0MtyHMOPQtoHXB3qIUwEngtXD6dR2O6h0R4JyqiNPNtFc0uuSQ95r8ntCOCpEX9o
+         5DMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LYV5EXh8n5rFl/NTMi7Ga5qcFteCzV/5Bynz9/j/gws=;
+        b=Q5HX5Cpgxqvwn9PUCedBcLK1VJ6AcHLaYv18RTZTuLjybFaY+Hm2vdc/wMMGW+0Qku
+         FXfP1j1DGdEOH/D+K+PqnlQW9pdKgCtLRmM4XoZtl3QGE0c/3FgEWOPGbEiVfxnR7kh3
+         zpcPfZyblXh3Vj3M7LI/eRymM9kdCzawiC5HJHhNSDXrBoxfW8IJtk27jBlK5Im3vIf4
+         WPn2wlWt6BG3YkzhQ4bZHEUE4U8RvTGp7+kr2EMdp7NidKEBm/mMg6Yvp8iQp53/6Utf
+         3Vyxm+TuIFEX3vv+URLwAkVFN8V/w5OeyxJjLt7DgMYxxVJnS02VU3k6iD/o7w/ZboS/
+         GULg==
+X-Gm-Message-State: AOAM532erRGuLLUQQHDzmWnq5ldlBSaRWBnQ39LcGoodIpsWucDbVVoV
+        Cil4pZH0gyp04P2nEEUx91L1PnOnY6rftWP50Sc=
+X-Google-Smtp-Source: ABdhPJwuIyJOLz2e50Yb4QdqqIwLF4pHQVzO5AcIThkrk7hdw9v+MTXkyCY4cka5nwu5504APsj8MpP7w418Dex33Y4=
+X-Received: by 2002:aca:f550:: with SMTP id t77mr9597289oih.8.1589792364142;
+ Mon, 18 May 2020 01:59:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1589555337-5498-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com> <20200515171031.GB19423@ninjato>
+In-Reply-To: <20200515171031.GB19423@ninjato>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 18 May 2020 09:58:57 +0100
+Message-ID: <CA+V-a8t6rPs4s8uMCpBQEAUvwsVn7Cte-vX3z2atWRhy_RFLQw@mail.gmail.com>
+Subject: Re: [PATCH 03/17] ARM: dts: r8a7742: Add I2C and IIC support
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
         "David S. Miller" <davem@davemloft.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH 17/17] ARM: dts: r8a7742: Add RWDT node
-Message-ID: <20200517210837.GL1370@kunai>
-References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-18-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="L1EIGrW/+75u5Nmw"
-Content-Disposition: inline
-In-Reply-To: <1589555337-5498-18-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-i2c@vger.kernel.org,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hi Wolfram,
 
---L1EIGrW/+75u5Nmw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank for the review.
 
-On Fri, May 15, 2020 at 04:08:57PM +0100, Lad Prabhakar wrote:
-> Add a device node for the Watchdog Timer (RWDT) controller on the Renesas
-> RZ/G1H (r8a7742) SoC.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renes=
-as.com>
+On Fri, May 15, 2020 at 6:10 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> On Fri, May 15, 2020 at 04:08:43PM +0100, Lad Prabhakar wrote:
+> > Add the I2C[0-3] and IIC[0-3] devices nodes to the R8A7742 device tree.
+> >
+> > Automatic transmission for PMIC control is not available on IIC3 hence
+> > compatible string "renesas,rcar-gen2-iic" and "renesas,rmobile-iic" is
+> > not added to iic3 node.
+>
+> Makes sense.
+>
+> However, both versions (with and without automatic transmission) are
+> described with the same "renesas,iic-r8a7742" compatible. Is it possible
+> to detect the reduced variant at runtime somehow?
+>
+I couldn't find anything the manual that would be useful to detect at runtime.
 
-The DTS change looks fine, I checked it against similar SoCs (like the
-previous patched). So, for that:
+> My concern is that the peculiarity of this SoC might be forgotten if we
+> describe it like this and ever add "automatic transmissions" somewhen.
+>
+Agreed.
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-However, just to make sure, have you checked the WDT (especially reboot)
-with SMP and multiple CPU cores enabled? Some early Gen2 SoCs had issues
-there.
-
-
---L1EIGrW/+75u5Nmw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7Bp9UACgkQFA3kzBSg
-KbYEshAAosauCUFrzQlQlXv4wH1aOYquXgPvrPAxwbdOQrOJ3fJxzVrUgTiaPyGq
-yNcpBusF53fs7P2kVCRY7N3shXgrF8Ypa3C+JuY1Yb6xYATbfF3+XNMLfggcBThs
-htV0h0//jTN88J/2HYCalL31c73sMwBF7ItAMS/EU3KqzAKDMXJ2Sc4MV2FlU+3C
-MyvJKNgdjXYqOj/tdzkcB4BM4MCp9nHwkyS8sWx1jUaLwtenNVHtnJrNaLn5CFo0
-Q0YGgiM9shefCoMpqcuHNdxCT7qBjc+3dz0vYqwtPqthA+uYdkawI6bDMOFwI83n
-3O2Qgf1xeRY/JoI/kGcQies+09BaDN4HZ0NflEtWfetZ3DsIcQBuZ6menbYu8oG+
-D/h2oC9JeamOLn3deWz4Lfhnb8f7HDgzAHDrooFjqHgFetzOgZuj4QLoQH/Tz1T2
-4jRGfiN5qub1LnAI/D/joDp+VAV4UltJTCfM60OtToXX6fV04IWl2tLnCRLwoAIY
-rbRXQba9CBkGQZcerCI+jyy5df+flRx7WUND0lgdcgL8Qwqdz4KOGlSeE7yOZIV5
-zA37gqwG34M0PWpcFTbby4Wjjf99QY9uCvIrgWEqPd7bnouS6CtdGLWxW8KD5CwO
-k0nK6so1jXOIZ0L4XVO2n1muTpw6KN9GmNtOIi2A3nuYHlGROs8=
-=DE4O
------END PGP SIGNATURE-----
-
---L1EIGrW/+75u5Nmw--
+Cheers,
+--Prabhakar
