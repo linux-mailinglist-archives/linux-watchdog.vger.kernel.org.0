@@ -2,116 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DE31D7D3C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 May 2020 17:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D700E1D8956
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 May 2020 22:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728309AbgERPpz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 18 May 2020 11:45:55 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:41615 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgERPpy (ORCPT
+        id S1726615AbgERUfq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 18 May 2020 16:35:46 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:43242 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726358AbgERUfq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 18 May 2020 11:45:54 -0400
-Received: by mail-oi1-f195.google.com with SMTP id 19so9359277oiy.8;
-        Mon, 18 May 2020 08:45:52 -0700 (PDT)
+        Mon, 18 May 2020 16:35:46 -0400
+Received: by mail-io1-f68.google.com with SMTP id h10so12150358iob.10;
+        Mon, 18 May 2020 13:35:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/f/rHROcvUhCw63I5sVVKyGk9toPKIj6soJfQz2EyMk=;
-        b=qLeGB4aOl/w5JiRu8iF/OJTmVYQEoafdZUarQZDWXzAC0yq26tJtbUclmzHMpF5CLN
-         s4ii1ZweH8SwgT5fzQWSzcO11IYhLuPFk8kj6EUxdGVVzsYVvwH8X7CxjtA6Op36SUgm
-         RK2Uxi6fImrCYS+e23jnhkAEWL+TTDD5w1uvO0FuxitaqszyvZUelHifa26i1gyTz6Fc
-         AF95uVFYYY7uoIi22QuMZxWRfQn1CWqVVvfrRWW6MYh9T+o5fz19yfaPy7hoFu1QoG9F
-         E3NKPBr7e6oq/5Mr6wymi33+Jp0vtfA263Rag5YGl24sYLt5iqsdNrz+2OGdhIw9uPce
-         cZ9g==
-X-Gm-Message-State: AOAM531QikCru4ApAVm0boY8/2y+33noCex7rbsYb4RqJf4uaC2prQET
-        /puod+lhyUKC+M8xb7r261HYweorV2wv65kQbtk=
-X-Google-Smtp-Source: ABdhPJwSk1XfmEg5VHimLrZlcq2vUCKSvy8da0C+Vb1NpLhDq1xPj9z+Pbn4JqCRj9XUaY6QJTN5Vm86GhCvioFXK6Y=
-X-Received: by 2002:a05:6808:1:: with SMTP id u1mr18216oic.54.1589816752210;
- Mon, 18 May 2020 08:45:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-18-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdVV+2HsgmBytCOFg4pri4XinT_SPWT_Ac6n7FMZN3dR3w@mail.gmail.com>
- <CA+V-a8tmG1LKYqbc7feGZQO2Tj5RCpNUHi9e19vPr+bED0KOyQ@mail.gmail.com>
- <9ab946d2-1076-ed92-0a48-9a95d798d291@cogentembedded.com> <CA+V-a8uuP9d6dNeRpn3O0_aOc15CqWoh0bbAfYze1_hn0dCh8g@mail.gmail.com>
-In-Reply-To: <CA+V-a8uuP9d6dNeRpn3O0_aOc15CqWoh0bbAfYze1_hn0dCh8g@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 18 May 2020 17:45:40 +0200
-Message-ID: <CAMuHMdVkf8vGL-769PvfTkMV=yuqW_V8gjo_ZfwEHVkdDWGTyw@mail.gmail.com>
-Subject: Re: [PATCH 17/17] ARM: dts: r8a7742: Add RWDT node
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JjYSpin899Gjim3f+QGoxZ4qTSeE2J/qf7iPbcWzPDE=;
+        b=DbucJSVz/4utqvp0B/5RNXmetr0hh1ZPSXUzoteNtDDFY7S+RpD6PGwORIdeuAuKXB
+         8EBLZ+uJ/IWlACHel13d9gScuv/ODr13F769KKcPO7loQcr1r4n1j5IQLtB3F0rcZo4z
+         Ixe2nYAZzN41Lgw3DV4/Bp5zf3eptPVOWC2y6jTHzKMFxDT8UMU22JO8X6FRPBdHZAPD
+         kmUDmL6g8ftfjWO6MYe5lyaFLNF4SCGi8xIMhgJoKhAfDFzHZ++neRrhuJanjOLrcHyv
+         HDca5vZEr02V2CDItuWTbLzq/l3QSYp7zYaZ9nbTKYgv746qTlRuEu8PBz2DM68C+o4h
+         VMCg==
+X-Gm-Message-State: AOAM530s9j6omPBt+gd6WWwR0bDKIbpwvWeI5JRH0fTk9bNbUoI293Tu
+        qc0HPQ+ttD0vGf1H2ihBPg==
+X-Google-Smtp-Source: ABdhPJy+XxeBOrpK4uX07ks+Fl38Z36Sl0DOE11M4s2qvytoWNII6l9sRNIAJb9dbzonRTzVBICiJg==
+X-Received: by 2002:a5e:8705:: with SMTP id y5mr16376190ioj.142.1589834145037;
+        Mon, 18 May 2020 13:35:45 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id u25sm4187718iob.19.2020.05.18.13.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2020 13:35:44 -0700 (PDT)
+Received: (nullmailer pid 2414 invoked by uid 1000);
+        Mon, 18 May 2020 20:35:42 -0000
+Date:   Mon, 18 May 2020 14:35:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v2 1/7] dt-bindings: watchdog: Convert DW WDT binding to
+ DT schema
+Message-ID: <20200518203542.GA2375@bogus>
+References: <20200306132758.703FC8030704@mail.baikalelectronics.ru>
+ <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510105807.880-2-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200510105807.880-2-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, May 18, 2020 at 3:23 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Mon, May 18, 2020 at 2:17 PM Sergei Shtylyov
-> <sergei.shtylyov@cogentembedded.com> wrote:
-> > On 18.05.2020 15:27, Lad, Prabhakar wrote:
-> > >>> Add a device node for the Watchdog Timer (RWDT) controller on the Renesas
-> > >>> RZ/G1H (r8a7742) SoC.
-> > >>>
-> > >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >>> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> > >>
-> > >> Thanks for your patch!
-> > >>
-> > >>> --- a/arch/arm/boot/dts/r8a7742.dtsi
-> > >>> +++ b/arch/arm/boot/dts/r8a7742.dtsi
-> > >>> @@ -201,6 +201,16 @@
-> > >>>                  #size-cells = <2>;
-> > >>>                  ranges;
-> > >>>
-> > >>> +               rwdt: watchdog@e6020000 {
-> > >>> +                       compatible = "renesas,r8a7742-wdt",
-> > >>> +                                    "renesas,rcar-gen2-wdt";
-> > >>> +                       reg = <0 0xe6020000 0 0x0c>;
-> > >>> +                       clocks = <&cpg CPG_MOD 402>;
-> > >>> +                       power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-> > >>> +                       resets = <&cpg 402>;
-> > >>> +                       status = "disabled";
-> > >>
-> > >> Missing "interrupts" property.
-> > >>
-> > > "interrupts" property isn't used by rwdt driver  and can be dropped
-> > > from bindings file.
-> >
-> >     DT describes the hardware, not its driver's abilities.
+On Sun, 10 May 2020 13:58:01 +0300, Serge Semin wrote:
+> Modern device tree bindings are supposed to be created as YAML-files
+> in accordance with dt-schema. This commit replaces the DW Watchdog
+> legacy bare text bindings with YAML file. As before the binding states
+> that the corresponding dts node is supposed to have a registers
+> range, a watchdog timer references clock source, optional reset line and
+> pre-timeout interrupt.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-mips@vger.kernel.org
+> 
+> ---
+> 
+> Changelog v2:
+> - Rearrange SoBs.
+> - Discard BE copyright header.
+> - Replace "additionalProperties: false" with "unevaluatedProperties: false"
+>   property.
+> - Discard interrupts property from the required properties list.
+> - Remove a label definition from the binding example.
+> - Move the asynchronous APB3 clock support into a dedicated patch.
+> ---
+>  .../devicetree/bindings/watchdog/dw_wdt.txt   | 24 ---------
+>  .../bindings/watchdog/snps,dw-wdt.yaml        | 50 +++++++++++++++++++
+>  2 files changed, 50 insertions(+), 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> 
 
-Thanks for chiming in, Sergei!
-
-> Agreed will add, I had followed it on similar lines of r8a7743/44.
-
-Yeah. I know it's missing for a few other SoCs, too.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Rob Herring <robh@kernel.org>
