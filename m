@@ -2,121 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7BC1D8A2B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 May 2020 23:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81AF1D9B2F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 19 May 2020 17:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgERVmJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 18 May 2020 17:42:09 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:50344 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726443AbgERVmJ (ORCPT
+        id S1729161AbgESPab (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 19 May 2020 11:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728778AbgESPab (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 18 May 2020 17:42:09 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 65401803080B;
-        Mon, 18 May 2020 21:42:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5IrPr8Pw3O58; Tue, 19 May 2020 00:42:01 +0300 (MSK)
-Date:   Tue, 19 May 2020 00:42:00 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/7] dt-bindings: watchdog: dw-wdt: Add watchdog TOPs
- array property
-Message-ID: <20200518214200.cmkzyzzwxm4kotte@mobilestation>
-References: <20200306132758.703FC8030704@mail.baikalelectronics.ru>
- <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
- <20200510105807.880-4-Sergey.Semin@baikalelectronics.ru>
- <20200518204037.GA4909@bogus>
+        Tue, 19 May 2020 11:30:31 -0400
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC63C08C5C1
+        for <linux-watchdog@vger.kernel.org>; Tue, 19 May 2020 08:30:30 -0700 (PDT)
+Received: by mail-ua1-x944.google.com with SMTP id i5so45184uaq.1
+        for <linux-watchdog@vger.kernel.org>; Tue, 19 May 2020 08:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gRtjuUSYT9o98HLxZ4XPAs12lnRhBaPqO3z+DvVbkXQ=;
+        b=qL4QXfwKBZ8jPjCgkPdHLsNzO3/idGDrn4woTx+Iaqn6RAptgipyKH04ujRHYZjG88
+         6h+bcxiTfIwF/L9qvccSvRM1/GxUjlw/HeyNlEcnxKgpivdoDc42/1LeeqUf5xXLBe0j
+         6HqkWM5XX+UIELvR7g8Lwiy37Sng0XHKrYq9WBGrPxdqaFXz+eY2WtwPjjuqh6abGUZj
+         cQuChf+5HtiOSA0tlViPvgzEbmQZFVs5v+qES50lIvTBeC3DvKISZpV9x0QAK0xcnTF0
+         wOd+ah2kE6iBsTcmFxS+uJOaF6E6DEmDVtdq120xhn/50fbY/t1Rmg8uZ5MPsvr0eACC
+         toQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gRtjuUSYT9o98HLxZ4XPAs12lnRhBaPqO3z+DvVbkXQ=;
+        b=MKJ+/JlqGs2U6UCt//ClfGj+SmsfoGCmb3SIyLElUXZA8xfcbNXb8adIMTRdoiRFQn
+         BolvaMi6rW2BbduO9R4RgFeI47fg+VGpeGj9wS+oldY2CWqxqGQu2b9Sb0hZckogRqSY
+         Tw8c7ugjJoB5QY423WIVvz8GVKb+wSwiztCVczDdQFGfquiB6ADD/8qxlruUy5ABixq4
+         V94q2X9HtQvZPpcKfFOuI5RZoke0zC9PCCnK33tMYB5Ultu0D353ozeVpUdUmEk5JiL+
+         ue4m2zmXc8O9lt+W+qCLfnPJc9sDjOIfIh4NxL4VspvHIAF4oTcw16Ld1gBORdaatW1S
+         KoKA==
+X-Gm-Message-State: AOAM531qaJqkBaHfAdIsOwbt3pCP6ZPC74wN8/D7Alt6z/4RlwNl9BJ6
+        QxZ0Xyg4fofrSP7g3vNQrAEx6EAf1yzU8efu2Z94SA==
+X-Google-Smtp-Source: ABdhPJzPgBQocJHPBpM1TmD4hAcv+eqS/ZghZr75cOL/pxSov9+iNsVjciXOY1ZcKGnnELDE1CIZW7qYNDDgGWRq0RQ=
+X-Received: by 2002:ab0:186d:: with SMTP id j45mr575631uag.104.1589902229726;
+ Tue, 19 May 2020 08:30:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200518204037.GA4909@bogus>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1589555337-5498-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1589555337-5498-5-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 19 May 2020 17:29:52 +0200
+Message-ID: <CAPDyKFobJkEUvqJpKOtpLLyLBbxBukASbKPapt5-gxh_iP=cdA@mail.gmail.com>
+Subject: Re: [PATCH 04/17] dt-bindings: mmc: renesas,sdhi: Document r8a7742 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, May 18, 2020 at 02:40:37PM -0600, Rob Herring wrote:
-> On Sun, May 10, 2020 at 01:58:03PM +0300, Serge Semin wrote:
-> > In case if DW Watchdog IP core is built with WDT_USE_FIX_TOP == false,
-> > a custom timeout periods are used to preset the timer counter. In
-> > this case that periods should be specified in a new "snps,watchdog-tops"
-> > property of the DW watchdog dts node.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> > Cc: linux-mips@vger.kernel.org
-> > 
-> > ---
-> > 
-> > Rob, I had to remove your Reviewed-by tag, since the patch needed
-> > to be updated a bit (see changelog).
-> > 
-> > Changelog v2:
-> > - Rearrange SoBs.
-> > - Move $ref to the root level of the "snps,watchdog-tops" property
-> >   so does the constraints.
-> > - Add default TOP values array.
-> > - Discard the label definition from the new bindings example.
-> > ---
-> >  .../bindings/watchdog/snps,dw-wdt.yaml        | 33 +++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> > index 5bf6dc6377f3..cc741fb5a685 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> > +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> > @@ -39,6 +39,24 @@ properties:
-> >      description: Phandle to the DW Watchdog reset lane
-> >      maxItems: 1
-> >  
-> > +  snps,watchdog-tops:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +    description: |
-> > +      DW APB Watchdog custom timer intervals - Timeout Period ranges (TOPs).
-> > +      Each TOP is a number loaded into the watchdog counter at the moment of
-> > +      the timer restart. The counter decrementing happens each tick of the
-> > +      reference clock. Therefore the TOPs array is equivalent to an array of
-> > +      the timer expiration intervals supported by the DW APB Watchdog. Note
-> > +      DW APB Watchdog IP-core might be synthesized with fixed TOP values,
-> > +      in which case this property is unnecessary with default TOPs utilized.
-> > +    default: [0x0001000 0x0002000 0x0004000 0x0008000
-> > +      0x0010000 0x0020000 0x0040000 0x0080000
-> > +      0x0100000 0x0200000 0x0400000 0x0800000
-> > +      0x1000000 0x2000000 0x4000000 0x8000000]
-> > +    items:
-> > +      minItems: 16
-> > +      maxItems: 16
-> 
-> Drop 'items' and move these up a level. That may have given you some 
-> issues, but I made some fixes recently.
+On Fri, 15 May 2020 at 17:09, Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> Document SDHI controller for RZ/G1H (R8A7742) SoC, which is compatible
+> with R-Car Gen2 SoC family.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
-Ok. Thanks.
+Applied for next, thanks!
 
--Sergey
+Kind regards
+Uffe
 
-> 
-> With that,
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> Rob
+
+> ---
+>  Documentation/devicetree/bindings/mmc/renesas,sdhi.txt | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/renesas,sdhi.txt b/Documentation/devicetree/bindings/mmc/renesas,sdhi.txt
+> index e6cc478..0ca9a62 100644
+> --- a/Documentation/devicetree/bindings/mmc/renesas,sdhi.txt
+> +++ b/Documentation/devicetree/bindings/mmc/renesas,sdhi.txt
+> @@ -7,6 +7,7 @@ Required properties:
+>                 "renesas,sdhi-r7s9210" - SDHI IP on R7S9210 SoC
+>                 "renesas,sdhi-r8a73a4" - SDHI IP on R8A73A4 SoC
+>                 "renesas,sdhi-r8a7740" - SDHI IP on R8A7740 SoC
+> +               "renesas,sdhi-r8a7742" - SDHI IP on R8A7742 SoC
+>                 "renesas,sdhi-r8a7743" - SDHI IP on R8A7743 SoC
+>                 "renesas,sdhi-r8a7744" - SDHI IP on R8A7744 SoC
+>                 "renesas,sdhi-r8a7745" - SDHI IP on R8A7745 SoC
+> --
+> 2.7.4
+>
