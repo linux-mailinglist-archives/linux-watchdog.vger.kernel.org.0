@@ -2,141 +2,123 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8290D1DCD5C
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 May 2020 14:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1491DCFA9
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 May 2020 16:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729054AbgEUM5Z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 21 May 2020 08:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728133AbgEUM5Y (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 21 May 2020 08:57:24 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B74FC061A0E;
-        Thu, 21 May 2020 05:57:23 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id j21so3117868pgb.7;
-        Thu, 21 May 2020 05:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WJ2J0c4nx8VwKRs6VsjA2J0n5LxLHAUWuS116Ks5Rxk=;
-        b=baeKJz4Ye6sCcUqw0mYZm3toOvCphLbBet+iXy2gD6hSx0mqks6gXQw5XmWCr3+l1v
-         731E8MF8jJwB7lm+3iL6eZ9UlKvtj9RuLAim/ZMZb8pQOdT2ETuDaVnyG8O19I/T4IBf
-         MiJsHE3mLhekeYRCmEqeoZDJCd5qkZ5i62v4NHZbBSZHObwfQVHf4Pi33X3bsoOGyunc
-         DYimoYpdKz04+JIbDaQZz7OdP+BBaj6IIqMcNixaDZ3kwZ7XBeQba5WOnKf5ZHzjq9w0
-         z7pmwM4GJO/90Lfy0LPOnoiWLWHkQ70l9MhHIvFc1nEbq0N9hB8zkjsaggM8srH7q67C
-         t8Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=WJ2J0c4nx8VwKRs6VsjA2J0n5LxLHAUWuS116Ks5Rxk=;
-        b=dqDvT/FpZnH4XnkS8mTG1+ccV4wkaUXtjBxJayHug5xEwXHG48fNLrzB8wXvLdIXMY
-         7jTm+XT9PkOW2WopesyXdLVnzOSMH0dxnQW1H/lUGdTyCev03AxSvJ4aR3T47hjXkvhE
-         4NLFBmlfpnFmon1bXgWL+MwSui4ATgwYRB8JOf3YN+Y5cbti0RZkIWwhF6KiYg/yjsLj
-         BBp1UYj/xLuqvHCfQuNXGLACuy1qOxCq5JSKWjoFArr0MYpafCQli2G0GR95vClMQ+2N
-         agWIKctcZgabsm+HryXyDMA5jIb6qtq7u3W60WFToDywCu/P/4T4RvnvgAQeBC35lXFz
-         ftRw==
-X-Gm-Message-State: AOAM531RAeYtWTsJy0up7zfNrG9y91OtvCCB4MK+OOdFFPLdprQTsMVf
-        5dVDZxQhmJTGNKVpRCLBAKpA/2Ht
-X-Google-Smtp-Source: ABdhPJzEO1+MVotmNCehwqbZS7wpwLsfnFq+lJ94EZvXDqteSGkWgjKVuIEnnSEhi97Q/08lwuRQRw==
-X-Received: by 2002:a63:d547:: with SMTP id v7mr8713272pgi.413.1590065842630;
-        Thu, 21 May 2020 05:57:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l4sm3975682pgo.92.2020.05.21.05.57.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2020 05:57:21 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: Fix runtime PM imbalance on error
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>, kjlu@umn.edu
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200521080141.24373-1-dinghao.liu@zju.edu.cn>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <7c20e9da-18df-8476-5029-9441cc7ebccf@roeck-us.net>
-Date:   Thu, 21 May 2020 05:57:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200521080141.24373-1-dinghao.liu@zju.edu.cn>
-Content-Type: text/plain; charset=utf-8
+        id S1727016AbgEUOZW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 21 May 2020 10:25:22 -0400
+Received: from mail-eopbgr70087.outbound.protection.outlook.com ([40.107.7.87]:34612
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726973AbgEUOZW (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 21 May 2020 10:25:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=feiF4NAMdtkwBGd3rGymh+CiE4XBp3/DV7PdKzPc+/0IHfp3e28MunrI0+J8XMXbYW5/ICAQXhZT6Yv6HfKfa+g9rhs8kriV4uNeMZt4DuBLsdPwHyjguqF9iBe9wdzfp6EJM2pg1fh400S7X8eRzRvxNlvvj1qjuTjMH0atTGDC0UFC6i6ZK+ZKTIIUMKpLkLQUDa+wLK6CNRYsiaXZ/naj/qd0ovQ6Nig0Y9qtp+dxakb/7VQxYrydU6ME+WEe9+SKXcTp3DdOGglfOWZ1/inO2MyxfTnHS5ybPFkFFh/RrBQzcYgdIvZoy9RQG62V2Xk8SuPm6CaIrX1x5sEQIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XyFDcUf9R/Kjyc/bBZzn4y7CoMZdQUAmX3D1BBMIKEs=;
+ b=YXKPpBLDpitCZ3TBzp/63ptFZkrQZ98F2psLXiLQW77eEW9hESq3WKM+UfJSaGX3Kpa11F7pdSqWHUEPkNFU6Cw36hSCXhFhWgxUBisztVy/6zPGRvnlQ69yhEgaIHdWjmZpkEvLJQ0Vw5KtlZTdkjTzFNmmXgosjfJb8cY5dq2+cii/9dstkHOyerfNieN8U8wbUMEqLmZiY1hudHdFtr0Klh4FUT/kOC2+EwLD1UWR/WsAHnObYJ4OIbohOCmKub5/vUxyXrnjJeu38cE9W6fgrbgL/eRQz2gBtW65DAOJ8bk9Zn9CkGLAXY3zScrLTUGsi7vGwVIvDyCMutHA3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XyFDcUf9R/Kjyc/bBZzn4y7CoMZdQUAmX3D1BBMIKEs=;
+ b=HMdYWqglNXQiN7TPPfGrMeSkNLKpcnh6P7X1s3hGEMWtY7fZ4g41CY7tCqmAkNhlNOiBr6SMS0FyDU8mrlDtG3P/DpdSNpgJKEZLFmJZYXD9Dq4VJadgWGdCGkC+8cPbVJM9m8e61aBn0WGrAil/VyvteTxOWDzpAMwOSwVF2LA=
+Received: from AM6PR05MB6168.eurprd05.prod.outlook.com (2603:10a6:20b:2a::21)
+ by AM6PR05MB5109.eurprd05.prod.outlook.com (2603:10a6:20b:60::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.24; Thu, 21 May
+ 2020 14:25:19 +0000
+Received: from AM6PR05MB6168.eurprd05.prod.outlook.com
+ ([fe80::7ce1:9f42:460e:b1f3]) by AM6PR05MB6168.eurprd05.prod.outlook.com
+ ([fe80::7ce1:9f42:460e:b1f3%5]) with mapi id 15.20.3000.034; Thu, 21 May 2020
+ 14:25:19 +0000
+From:   Michael Shych <michaelsh@mellanox.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Vadim Pasternak <vadimp@mellanox.com>
+Subject: RE: [PATCH v4 0/4] support watchdog with longer timeout period
+Thread-Topic: [PATCH v4 0/4] support watchdog with longer timeout period
+Thread-Index: AQHWIh5tVtrzRBGJ90CKWZXbdHOj+qiZqsCAgAABdICAGQWXcA==
+Date:   Thu, 21 May 2020 14:25:19 +0000
+Message-ID: <AM6PR05MB6168698F8A3D49F0EF61EFF0D9B70@AM6PR05MB6168.eurprd05.prod.outlook.com>
+References: <20200504141427.17685-1-michaelsh@mellanox.com>
+ <ac2c580c-7cc0-8091-f3bc-fce175478e50@roeck-us.net>
+ <CAHp75VdN6PfCCmRB_FssTRCoXms7JTt_af59pMqZNgV4ygz_8w@mail.gmail.com>
+In-Reply-To: <CAHp75VdN6PfCCmRB_FssTRCoXms7JTt_af59pMqZNgV4ygz_8w@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=mellanox.com;
+x-originating-ip: [109.186.42.32]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 9d37d8e5-7def-49f7-6fc2-08d7fd92c9ff
+x-ms-traffictypediagnostic: AM6PR05MB5109:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR05MB51090098381F9A4BADE77433D9B70@AM6PR05MB5109.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-forefront-prvs: 041032FF37
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0KjulBpjLoFBISOJU98mXl4dzyxqtrw3BA+6hI3ydHy9Knz0r0eczzT5BpZsglqtIQu98jcXryvC2RvINFSjzQiH03fzYAdC1JjCEwX1wkkmcYaaFIgZ0fCLfKyUMC6UTCSu0c5zwTbeb6m3sHUOWV5bNmBuK6jKbTx/BR2j1xzXfZqpHnwm3uTYmhJky7cAJW1vM68JKtV8AiewdocNN3SccyB3zw67Y08Mm5eObBY70Gq93HUhmeCJATMXti1qD2wTNfnn2ONy0PFensRLfJlOYgpMD156JURNetQA2KAnQhNZivR84gNtDKTIHeP2RZerSSkgxzWxrKYDwCm+yXcMV6k48ARVYcNo5gtkoPMGVTQA9r/eiqk5Vyr8IrOs
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR05MB6168.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(396003)(376002)(136003)(366004)(346002)(107886003)(71200400001)(478600001)(26005)(4326008)(5660300002)(53546011)(6506007)(186003)(7696005)(66446008)(64756008)(66946007)(8676002)(54906003)(8936002)(9686003)(110136005)(316002)(86362001)(52536014)(55016002)(33656002)(2906002)(66556008)(76116006)(66476007)(148743002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: mBQCvarxd8lZqv1aCq11vRyd9fhveaR/5G5lgoh+AWtwMgSkFJcdekrVor0kkwHD6OsLt3KUt05/hl1ju9v0hS2hxZM8+UvU+ZOLR05Sbf11PwXhpuEVP/+P3Iphhs0xlPp8DqRzF4O4JMcD4ZvsWrgLqnAQwihgBnQqfwXVJWCVHuCxxJdrS6uIyfJLvV29fKHEGrazPgrlSX18mXfzm+XdzpZtpedIwzUmAPbI+LdFVwpy05LjTOPPmo/Q3BWmp4azYGFmG+1HGezorSYVxoaFE3a1TBj9SLbIzb4uesL1gppW2zjeAup6mhaeFYh41bGnx6mhjVGsPP10+Bp2ajMpTKkb11PXh5AJdRufIf120lotYU9xIQNTpR0idyrTstW1NoriEdj72GlLzafuXDF8oVGURovlbFM44W2lsld+NHbivC0MYaboKcrM0XSXOJumFDAayuVmn0Xt+ndjcVQwD4ghMM1C7cTfBq3v5I1bGpDjqj3T2SqbVI7sa7nG
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d37d8e5-7def-49f7-6fc2-08d7fd92c9ff
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2020 14:25:19.1318
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: q46Zho7p/zIrMQtOnxycOgNvAoN4IBBmXcDTdRoj4wjwNQOUOQR9CCcfsaCzdEmG6arv3yk20+T297ph9H0UwA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5109
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/21/20 1:01 AM, Dinghao Liu wrote:
-> When watchdog_register_device() returns an error code,
-> a pairing runtime PM usage counter decrement is needed
-> to keep the counter balanced.
-> 
-> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/watchdog/omap_wdt.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/omap_wdt.c b/drivers/watchdog/omap_wdt.c
-> index 9b91882fe3c4..1616f93dfad7 100644
-> --- a/drivers/watchdog/omap_wdt.c
-> +++ b/drivers/watchdog/omap_wdt.c
-> @@ -273,6 +273,7 @@ static int omap_wdt_probe(struct platform_device *pdev)
->  
->  	ret = watchdog_register_device(&wdev->wdog);
->  	if (ret) {
-> +		pm_runtime_put(wdev->dev);
->  		pm_runtime_disable(wdev->dev);
->  		return ret;
->  	}
-> 
-
+SGkgQW5keSwgR3VlbnRlciwNCg0KRGlkIHlvdSB1bmRlcnN0YW5kIHRvIHdoaWNoIGJyYW5jaCBp
+dCB3aWxsIGJlIGJldHRlciB0byB0YWtlIHRoaXMgcGF0Y2hzZXQ/DQoNClRoYW5rcywNCiAgIE1p
+Y2hhZWwuDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQW5keSBTaGV2
+Y2hlbmtvIDxhbmR5LnNoZXZjaGVua29AZ21haWwuY29tPg0KPiBTZW50OiBUdWVzZGF5LCBNYXkg
+NSwgMjAyMCA3OjE0IFBNDQo+IFRvOiBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+
+DQo+IENjOiBNaWNoYWVsIFNoeWNoIDxtaWNoYWVsc2hAbWVsbGFub3guY29tPjsgV2ltIFZhbiBT
+ZWJyb2VjayA8d2ltQGxpbnV4LQ0KPiB3YXRjaGRvZy5vcmc+OyBBbmR5IFNoZXZjaGVua28gPGFu
+ZHlAaW5mcmFkZWFkLm9yZz47IERhcnJlbiBIYXJ0DQo+IDxkdmhhcnRAaW5mcmFkZWFkLm9yZz47
+IGxpbnV4LXdhdGNoZG9nQHZnZXIua2VybmVsLm9yZzsgUGxhdGZvcm0gRHJpdmVyDQo+IDxwbGF0
+Zm9ybS1kcml2ZXIteDg2QHZnZXIua2VybmVsLm9yZz47IFZhZGltIFBhc3Rlcm5haw0KPiA8dmFk
+aW1wQG1lbGxhbm94LmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NCAwLzRdIHN1cHBvcnQg
+d2F0Y2hkb2cgd2l0aCBsb25nZXIgdGltZW91dCBwZXJpb2QNCj4gDQo+IE9uIFR1ZSwgTWF5IDUs
+IDIwMjAgYXQgNzowOSBQTSBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+IHdyb3Rl
+Og0KPiA+IE9uIDUvNC8yMCA3OjE0IEFNLCBtaWNoYWVsc2hAbWVsbGFub3guY29tIHdyb3RlOg0K
+PiA+ID4gRnJvbTogTWljaGFlbCBTaHljaCA8bWljaGFlbHNoQG1lbGxhbm94LmNvbT4NCj4gDQo+
+ID4gPiBNaWNoYWVsIFNoeWNoICg0KToNCj4gPiA+ICAgcGxhdGZvcm1fZGF0YS9tbHhyZWc6IHN1
+cHBvcnQgbmV3IHdhdGNoZG9nIHR5cGUgd2l0aCBsb25nZXIgdGltZW91dA0KPiA+ID4gICAgIHBl
+cmlvZA0KPiA+ID4gICBwbGF0Zm9ybS94ODY6IG1seC1wbGF0Zm9ybTogc3VwcG9ydCBuZXcgd2F0
+Y2hkb2cgdHlwZSB3aXRoIGxvbmdlcg0KPiA+ID4gICAgIHRpbWVvdXQNCj4gPiA+ICAgd2F0Y2hk
+b2c6IG1seC13ZHQ6IHN1cHBvcnQgbmV3IHdhdGNoZG9nIHR5cGUgd2l0aCBsb25nZXIgdGltZW91
+dA0KPiA+ID4gICAgIHBlcmlvZA0KPiA+ID4gICBkb2NzOiB3YXRjaGRvZzogbWx4LXdkdDogQWRk
+IGRlc2NyaXB0aW9uIG9mIG5ldyB3YXRjaGRvZyB0eXBlIDMNCj4gPiA+DQo+ID4gPiAgRG9jdW1l
+bnRhdGlvbi93YXRjaGRvZy9tbHgtd2R0LnJzdCAgIHwgIDEwICsrKysNCj4gPiA+ICBkcml2ZXJz
+L3BsYXRmb3JtL3g4Ni9tbHgtcGxhdGZvcm0uYyAgfCAxMDYNCj4gKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrDQo+ID4gPiAgZHJpdmVycy93YXRjaGRvZy9tbHhfd2R0LmMgICAgICAgICAg
+IHwgIDczICsrKysrKysrKysrKysrKysrKysrLS0tLQ0KPiA+ID4gIGluY2x1ZGUvbGludXgvcGxh
+dGZvcm1fZGF0YS9tbHhyZWcuaCB8ICAgNSArLQ0KPiANCj4gPiBHdWVzcyB0aGUgYmlnIHF1ZXN0
+aW9uIGlzIG5vdyB3aGljaCBicmFuY2ggdG8gdXNlIHRvIHRha2UgdGhpcyBzZXJpZXMuDQo+ID4g
+VGhvdWdodHMsIGFueW9uZSA/DQo+IA0KPiBjb3VudCh3YXRjaGRvZykgPSA4DQo+IGNvdW50KHBs
+YXRmb3JtKSA9IDYNCj4gDQo+IFRob3VnaHRzPw0KPiANCj4gLS0NCj4gV2l0aCBCZXN0IFJlZ2Fy
+ZHMsDQo+IEFuZHkgU2hldmNoZW5rbw0K
