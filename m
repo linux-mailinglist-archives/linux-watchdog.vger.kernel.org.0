@@ -2,147 +2,244 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF9A1E0FC6
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 May 2020 15:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B031E1373
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 May 2020 19:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403851AbgEYNrz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 25 May 2020 09:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403812AbgEYNry (ORCPT
+        id S2391332AbgEYRgf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 May 2020 13:36:35 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:60753 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388230AbgEYRge (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 May 2020 09:47:54 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF54BC061A0E;
-        Mon, 25 May 2020 06:47:54 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id n15so8877864pfd.0;
-        Mon, 25 May 2020 06:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VcGafp8vYz7TvTuBeeeP/O5YdWrMHPjkDw/pJSuJQfI=;
-        b=IH94MBuj777Z55q239PkDGqWzRH08hPpb57jTzEWpS9G9mc9Jhjq8zpJoJENDHm4U9
-         3zB6M4GEbcpfGJ0NBXu8CAS22ZcFTVV4HFEjSeZRj2R24oN5cQAo9xldE4tUvktX+0TW
-         8YMk02GUa1JVqu2jwOZxOLCweFPOykcWAPF9lM/Hb1OSsrQtdQUs4Ury7apsc8KvofnK
-         UXDa1NJ8NLO7ZukKMgqjMSmPs1w+fR6ZJtroVf5n0sxpATI38f/fjQAgwH6NpyzUs5Ue
-         dwc4EC6AbOGxvpRJLCMe/KDvIKYoFGF4b/Rsxaljz+eLNL3ypZh5vJ95TJ1WX4G1N/W0
-         q2Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=VcGafp8vYz7TvTuBeeeP/O5YdWrMHPjkDw/pJSuJQfI=;
-        b=CNRzVcckjvjoZm22eaidiePlnkkIyx8BAMgYkFhMqPhmqa1U561UI5OvBYrQUhN2Nn
-         xUHgkHxnECMplptsO4sKX8T1zA8K/inHVBoCuQ86zFyQIfVvbC5//B8HhCRl5+EMNedt
-         EMZ2QxsQ9Qs+YKw6R47BPBm48hK4udq2PQb/CgizsxVrD/D2OqcJYjLhTsuyGCbmX8Go
-         fs/OFEmYNKDApVEDML2VUqDsEM6lyOOdoLTijVcl140dDoiB0KX7zBNb8dausrE27sDO
-         6J98Jj4oeE6ri2E3ImJijFL1Rj5qLwCtxrGqyKDJsfHlfUYj9jcFqh/wnZDICgm0NWC+
-         D5RA==
-X-Gm-Message-State: AOAM5323QH0SctVzSrHpFKmP+T0dZEEjQymR6hinLiGoLuXg0yOfcYmj
-        l14BdLjCbP5cDg64pq/sodA=
-X-Google-Smtp-Source: ABdhPJw7Pg6kCi1qdVbUPYeIonnpWCkLyPvKrko13ySTvzyksbjZ/hbYRG4JVPibw9vVkbBXrq4MFw==
-X-Received: by 2002:a63:f959:: with SMTP id q25mr25821977pgk.137.1590414474376;
-        Mon, 25 May 2020 06:47:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w69sm13551316pff.168.2020.05.25.06.47.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2020 06:47:53 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: bcm_kona_wdt: Use correct return value for
- bcm_kona_wdt_probe()
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-References: <1590391864-308-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <99e82049-2d99-9a8e-4023-96f585b47e30@roeck-us.net>
-Date:   Mon, 25 May 2020 06:47:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 25 May 2020 13:36:34 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id DDEC922F2E;
+        Mon, 25 May 2020 19:36:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1590428188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tccD7vzIYEWi1bFmktWHDapg7/kSp29lv3VkLLvN1aI=;
+        b=f6dMxTFgq0dv3WcoUWQY3lGpKEI1zRaAo5vQ4eXD9W5/1IcgsbkQs2IprvSdGhntzf7+3s
+        VjDUBiP0Ohl+I7F/gjvbCkc+SOXy34S18pA/Vg+5sV+GUZVZ6tYqTNQJ4NOoGbVDgMncOV
+        VXE73fAV7Jnjk0n8FxO++uqxK4wM9EM=
 MIME-Version: 1.0
-In-Reply-To: <1590391864-308-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Mon, 25 May 2020 19:36:27 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 03/16] mfd: mfd-core: match device tree node against
+ reg property
+In-Reply-To: <20200515102848.GH271301@dell>
+References: <20200423174543.17161-1-michael@walle.cc>
+ <20200423174543.17161-4-michael@walle.cc>
+ <67e90dafd67c285158c2c6f67f92edb7@walle.cc> <20200515102848.GH271301@dell>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <159e68b4ce53630ef906b2fcbca925bd@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/25/20 12:31 AM, Tiezhu Yang wrote:
-> When call function devm_platform_ioremap_resource(), we should use IS_ERR()
-> to check the return value and return PTR_ERR() if failed.
+Am 2020-05-15 12:28, schrieb Lee Jones:
+> On Thu, 30 Apr 2020, Michael Walle wrote:
 > 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/watchdog/bcm_kona_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>> Hi Lee,
+>> 
+>> Am 2020-04-23 19:45, schrieb Michael Walle:
+>> > There might be multiple children with the device tree compatible, for
+>> > example if a MFD has multiple instances of the same function. In this
+>> > case only the first is matched and the other children get a wrong
+>> > of_node reference.
+>> > Add a new option to match also against the unit address of the child
+>> > node. Additonally, a new helper OF_MFD_CELL_REG is added.
+>> 
+>> 
+>> Do you think this is feasible? I guess this is the biggest uncertainty
+>> for me at the moment in this patch series.
 > 
-> diff --git a/drivers/watchdog/bcm_kona_wdt.c b/drivers/watchdog/bcm_kona_wdt.c
-> index eb850a8..8237c4e 100644
-> --- a/drivers/watchdog/bcm_kona_wdt.c
-> +++ b/drivers/watchdog/bcm_kona_wdt.c
-> @@ -279,7 +279,7 @@ static int bcm_kona_wdt_probe(struct platform_device *pdev)
->  
->  	wdt->base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(wdt->base))
-> -		return -ENODEV;
-> +		return PTR_ERR(wdt->base);
->  
->  	wdt->resolution = SECWDOG_DEFAULT_RESOLUTION;
->  	ret = bcm_kona_wdt_set_resolution_reg(wdt);
+> I think it sounds fine in principle.  So long as it doesn't change the
+> existing behaviour when of_reg isn't set.
 > 
+>> > Signed-off-by: Michael Walle <michael@walle.cc>
+>> > ---
+>> >  drivers/mfd/mfd-core.c   | 29 ++++++++++++++++++++---------
+>> >  include/linux/mfd/core.h | 26 ++++++++++++++++++++------
+>> >  2 files changed, 40 insertions(+), 15 deletions(-)
+>> >
+>> > diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
+>> > index e735565969b3..4ecb376338f7 100644
+>> > --- a/drivers/mfd/mfd-core.c
+>> > +++ b/drivers/mfd/mfd-core.c
+>> > @@ -117,6 +117,7 @@ static int mfd_add_device(struct device *parent, int
+>> > id,
+>> >  	struct device_node *np = NULL;
+>> >  	int ret = -ENOMEM;
+>> >  	int platform_id;
+>> > +	u32 of_reg;
+>> >  	int r;
+>> >
+>> >  	if (id == PLATFORM_DEVID_AUTO)
+>> > @@ -151,16 +152,26 @@ static int mfd_add_device(struct device *parent,
+>> > int id,
+>> >
+>> >  	if (parent->of_node && cell->of_compatible) {
+>> >  		for_each_child_of_node(parent->of_node, np) {
+>> > -			if (of_device_is_compatible(np, cell->of_compatible)) {
+>> > -				if (!of_device_is_available(np)) {
+>> > -					/* Ignore disabled devices error free */
+>> > -					ret = 0;
+>> > -					goto fail_alias;
+>> > -				}
+>> > -				pdev->dev.of_node = np;
+>> > -				pdev->dev.fwnode = &np->fwnode;
+>> > -				break;
+>> > +			if (!of_device_is_compatible(np, cell->of_compatible))
+>> > +				continue;
+>> > +
+>> > +			/* also match the unit address if set */
+> 
+> Please use correct grammar in comments (leaving off the full-stop).
+> 
+>> > +			if (cell->of_reg & MFD_OF_REG_VALID) {
+>> > +				if (of_property_read_u32(np, "reg", &of_reg))
+>> > +					continue;
+>> > +				if ((cell->of_reg & MFD_OF_REG_MASK) != of_reg)
+>> > +					continue;
+>> >  			}
+>> > +
+>> > +			if (!of_device_is_available(np)) {
+>> > +				/* Ignore disabled devices error free */
+>> > +				ret = 0;
+>> > +				goto fail_alias;
+>> > +			}
+>> > +
+>> > +			pdev->dev.of_node = np;
+>> > +			pdev->dev.fwnode = &np->fwnode;
+>> > +			break;
+>> >  		}
+>> >  	}
+>> >
+>> > diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
+>> > index d01d1299e49d..c2c0ad6b14f3 100644
+>> > --- a/include/linux/mfd/core.h
+>> > +++ b/include/linux/mfd/core.h
+>> > @@ -13,8 +13,11 @@
+>> >  #include <linux/platform_device.h>
+>> >
+>> >  #define MFD_RES_SIZE(arr) (sizeof(arr) / sizeof(struct resource))
+>> > +#define MFD_OF_REG_VALID	BIT(31)
+> 
+> What about 64bit platforms?
 
+The idea was to have this as a logical number. I.e. for now you may only
+have one subdevice per unique compatible string. In fact, if you have a
+look at the ab8500.c, there are multiple "stericsson,ab8500-pwm"
+subdevices. But there is only one DT node for all three of it. I guess
+this works as long as you don't use phandles to reference the pwm node
+in the device tree. Or you don't want to use device tree properties
+per subdevice (for example the "timeout-sec" of a watchdog device).
+
+So to circumvent this, I thought of having the unit-address (and thus
+the "reg" property) to differentiate between multiple subdevices. Now
+there is one special case for me: this board management controller
+might be upgradable and it might change internally. Thus I came up
+with that logical numbering of subdevices. Rob doesn't seem to be a
+fan of that, though. Therefore, having bit 31 as a valid indicator
+leaves you with 2^31 logical devices, which should be enough ;)
+
+Rob proposed to have the internal offset as the unit-address. But
+in that case I can also use devm_of_platform_populate() and don't
+need the OF_MFD_CELL_REG; I'd just parse the reg offset in each
+individual subdevice driver. But like I said, I wanted to keep the
+internal offsets out of the device tree.
+
+-michael
+
+> 
+>> > +#define MFD_OF_REG_MASK		GENMASK(30, 0)
+>> >
+>> > -#define MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,
+>> > _match)\
+>> > +#define MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
+>> > +		     _of_reg, _match)					\
+>> >  	{								\
+>> >  		.name = (_name),					\
+>> >  		.resources = (_res),					\
+>> > @@ -22,24 +25,32 @@
+>> >  		.platform_data = (_pdata),				\
+>> >  		.pdata_size = (_pdsize),				\
+>> >  		.of_compatible = (_compat),				\
+>> > +		.of_reg = (_of_reg),					\
+>> >  		.acpi_match = (_match),					\
+>> >  		.id = (_id),						\
+>> >  	}
+>> >
+>> > +#define OF_MFD_CELL_REG(_name, _res, _pdata, _pdsize, _id, _compat,	\
+>> > +			_of_reg)					\
+>> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
+>> > +		     ((_of_reg) | MFD_OF_REG_VALID), NULL)		\
+>> > +
+>> >  #define OF_MFD_CELL(_name, _res, _pdata, _pdsize,_id, _compat)		\
+>> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat, NULL)	\
+>> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
+>> > +		     0, NULL)						\
+>> >
+>> >  #define ACPI_MFD_CELL(_name, _res, _pdata, _pdsize, _id, _match)	\
+>> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, _match)	\
+>> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, 0,	\
+>> > +		     _match)						\
+>> >
+>> >  #define MFD_CELL_BASIC(_name, _res, _pdata, _pdsize, _id)		\
+>> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, NULL)	\
+>> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, 0, NULL) \
+>> >
+>> >  #define MFD_CELL_RES(_name, _res)					\
+>> > -	MFD_CELL_ALL(_name, _res, NULL, 0, 0, NULL, NULL)		\
+>> > +	MFD_CELL_ALL(_name, _res, NULL, 0, 0, NULL, 0, NULL)		\
+>> >
+>> >  #define MFD_CELL_NAME(_name)						\
+>> > -	MFD_CELL_ALL(_name, NULL, NULL, 0, 0, NULL, NULL)		\
+>> > +	MFD_CELL_ALL(_name, NULL, NULL, 0, 0, NULL, 0, NULL)		\
+>> >
+>> >  struct irq_domain;
+>> >  struct property_entry;
+>> > @@ -78,6 +89,9 @@ struct mfd_cell {
+>> >  	 */
+>> >  	const char		*of_compatible;
+>> >
+>> > +	/* matching the reg property if set */
+> 
+> Proper grammar please.
+> 
+> "OF unit address for device matching"
+> 
+>> > +	unsigned int		of_reg;
+>> > +
+>> >  	/* Matches ACPI */
+>> >  	const struct mfd_cell_acpi_match	*acpi_match;
