@@ -2,122 +2,174 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A1D1E08B6
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 May 2020 10:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EDB1E099F
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 May 2020 11:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731353AbgEYIXW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 25 May 2020 04:23:22 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40463 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbgEYIXV (ORCPT
+        id S2388773AbgEYJGE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 May 2020 05:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388182AbgEYJGE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 May 2020 04:23:21 -0400
-Received: by mail-oi1-f196.google.com with SMTP id v128so15405092oia.7;
-        Mon, 25 May 2020 01:23:20 -0700 (PDT)
+        Mon, 25 May 2020 05:06:04 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FE8C061A0E
+        for <linux-watchdog@vger.kernel.org>; Mon, 25 May 2020 02:06:03 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id b27so6925049qka.4
+        for <linux-watchdog@vger.kernel.org>; Mon, 25 May 2020 02:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dPuZPyJHL9y310jCMBab1+wUqEyxBpL9sxzRpIMUcDw=;
+        b=nO2zcmFBdCWzlGqLw1pR2ThUuz31GiwsX9FmLMPWXkIRbISIRdArAGzOKpkV7Qzv10
+         5VetiQSFGmqqkEyKB7+SGACaU0qLz2m+9iyUgPiDy2IDRCPxhwFx8/5DMtWUHYRsjtlL
+         0atWQF/ahgFhsYQYAzdXXs0aRQhob0wySOVyDYs2DXpouokBCqB6slqb/TvDM+I33ev8
+         yk0brFmDMsprGHiwBPRLvyh/NVcy/OCFMiVYdFYc4bQaZFP6VvDRpzKRyp0zTf5FOVWN
+         aSAJO9abuoljXUYQUaIMlrcVwRxlonf00RVbuDaEI1E+vkonNYosmqgXcWB0HgzUmBS7
+         NMpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=28/BUMdFhJjxsxR1feXVFplXDlF+r6hoIsh+I+AzW0E=;
-        b=un18HYLQ7z1tPBCJLUfcvJDsi35hNSYl70745bPTOjIqRFwBqT21L1VEvBnmIrMyJC
-         hX7zM0pXtbr/lq7fLTGja1BxlJks+1zpFuBL5GZtKDXW0RZhQG6uxAg34mZUEuKbAOiy
-         /KbCfmgzRroOCaU7HQKTC12P5T3w4GD9Eo7vuipUFQkM6WlwdYIF+N0rkGyxPpcZJcuL
-         dSzQMLjA8WZaM589mIUJxrmnaFtfFk6im8MvLjkb6BVhbGcUp/oAVSWY0PiweHHgxwTH
-         hHbFjVqpidmvwkDE7i+bIN53RQ7Ok4+tr0let3cL9FztTh8UKABiHE2SEW6+A2axIpSv
-         4TGw==
-X-Gm-Message-State: AOAM5328wcEyAYZb3Z8l6FqeHHpp74wDlvXzCSBRRld9AUP2Tbe6wgPb
-        2CJ+rIRNriAXfyEyg/SadlSdsnwKjczhH8H3qDcqLnEo
-X-Google-Smtp-Source: ABdhPJyzr0dnWV3MxYv2OKruE8IEE6eIwSdF+vupDK8Z/lgVCl750YPGIPHRJxBhyO31YeNKh1PTPnPf9gE6bcsIQIk=
-X-Received: by 2002:aca:cd93:: with SMTP id d141mr9968926oig.148.1590394999938;
- Mon, 25 May 2020 01:23:19 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dPuZPyJHL9y310jCMBab1+wUqEyxBpL9sxzRpIMUcDw=;
+        b=HK/1DhzhdQj0scWXFbZHGOslBjk8l2yeH38PnwI50KPp0B/whgz+sCBazBDPeLCNIP
+         WT0Xlmrd19L9VDKpSU7EFTinNYL/LEXBHvTGohPsw0OkWNO7OATEKc8GbII9LdsU2QvC
+         EDLmFAEO1TC6snjSQmRqEA4PhNT96JylIArJusqVWD/uTLKyET5SW0R635m05GVZlR+y
+         WbMl+U9hRgJmqfqexXWbsETLY03QosUqayD3VeRyzOx0jVamKC69OYsu6hrkL9vWSuQ+
+         pUlmbtdxupIFFg6nB7Lw00UsIXfvHovSBbIn8/MvZKmngjWyok6zeUbmbgcO2kPGkCNO
+         WBbw==
+X-Gm-Message-State: AOAM533fbo0wETxwSkXLamG5wAWbiPCMfYSluB05IffeCH43JvjBhSQL
+        Tl4hHeKlB4/UH5s3/nr4ZYld1PPCfBrZUKQvkEN2AA==
+X-Google-Smtp-Source: ABdhPJwwogx5lD1d892oBsZ0UV12gKR+k0N+3QkhwPrACB1IANnU5OS7w1qWs680sMYLIO0JDYTSL1iYK1byj+QAdpM=
+X-Received: by 2002:a37:5b47:: with SMTP id p68mr26336785qkb.120.1590397562647;
+ Mon, 25 May 2020 02:06:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <1589555337-5498-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1589555337-5498-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200515171031.GB19423@ninjato> <CA+V-a8t6rPs4s8uMCpBQEAUvwsVn7Cte-vX3z2atWRhy_RFLQw@mail.gmail.com>
- <20200518092601.GA3268@ninjato> <CAMuHMdVWe1EEAtP64VW+0zXNingM1LiENv_Rfz5qTQ+C0dtGSw@mail.gmail.com>
- <CA+V-a8tVx6D8Vh=rYD2=Z-14GAW0puo009FtjYM++sw8PAtJug@mail.gmail.com> <20200522201727.GA21376@ninjato>
-In-Reply-To: <20200522201727.GA21376@ninjato>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 25 May 2020 10:23:08 +0200
-Message-ID: <CAMuHMdUDs1DXfKMwDgK3e29vdzhPCPBbms2Hj8t7Pvp4j5D5Tg@mail.gmail.com>
-Subject: Re: [PATCH 03/17] ARM: dts: r8a7742: Add I2C and IIC support
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "David S. Miller" <davem@davemloft.net>,
+References: <20200423174543.17161-1-michael@walle.cc> <20200423174543.17161-11-michael@walle.cc>
+ <CAMpxmJV3XTOxuoKeV-z2d75qWqHkgvV9419tfe3idDeKwoeoLA@mail.gmail.com> <75bff2917be1badd36af9f980cf59d2c@walle.cc>
+In-Reply-To: <75bff2917be1badd36af9f980cf59d2c@walle.cc>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 25 May 2020 11:05:51 +0200
+Message-ID: <CAMpxmJXctc5cbrjSeJxa7DfmjiVsbyhqAbEKt-gtayKhQj0Cnw@mail.gmail.com>
+Subject: Re: [PATCH v3 10/16] gpio: add a reusable generic gpio_chip using regmap
+To:     Michael Walle <michael@walle.cc>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wolfram,
-
-On Fri, May 22, 2020 at 10:17 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > > According to the Hardware User's Manual Rev. 1.00, the registers do exist
-> > > on all RZ/G1, except for RZ/G1E (see below).
-> > >
-> > >    "(automatic transmission can be used as a hardware function, but this is
-> > >     not meaningful for actual use cases)."
-> > >
-> > > (whatever that comment may mean?)
+wt., 12 maj 2020 o 16:41 Michael Walle <michael@walle.cc> napisa=C5=82(a):
 >
-> Strange comment, in deed. Given the paragraph before, I would guess Gen1
-> maybe had a "fitting" PMIC where SoC/PMIC handled DVFS kind of magically
-> with this automatic transfer feature? And Gen2 has not.
+> >> +
+> >> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> >> +MODULE_DESCRIPTION("GPIO generic regmap driver core");
+> >> +MODULE_LICENSE("GPL");
+> >> diff --git a/include/linux/gpio-regmap.h b/include/linux/gpio-regmap.h
+> >> new file mode 100644
+> >> index 000000000000..a868cbcde6e9
+> >> --- /dev/null
+> >> +++ b/include/linux/gpio-regmap.h
+> >> @@ -0,0 +1,69 @@
+> >> +/* SPDX-License-Identifier: GPL-2.0-only */
+> >> +
+> >> +#ifndef _LINUX_GPIO_REGMAP_H
+> >> +#define _LINUX_GPIO_REGMAP_H
+> >> +
+> >> +struct gpio_regmap;
+> >> +
+> >> +#define GPIO_REGMAP_ADDR_ZERO ((unsigned long)(-1))
+> >> +#define GPIO_REGMAP_ADDR(addr) ((addr) ? : GPIO_REGMAP_ADDR_ZERO)
+> >> +
+> >
+> > What if the addr is actually 0?
 >
-> > > On R-Car E3 and RZ/G2E, which have a single IIC instance, we
-> > > handled that by:
-> > >
-> > >         The r8a77990 (R-Car E3) and r8a774c0 (RZ/G2E)
-> > >         controllers are not considered compatible with
-> > >         "renesas,rcar-gen3-iic" or "renesas,rmobile-iic"
-> > >         due to the absence of automatic transmission registers.
+> Then the driver has to set GPIO_REGMAP_ADDR_ZERO or use the convenience
+> macro GPIO_REGMAP_ADDR.
 >
-> From a "describe the HW" point of view, this still makes sense to me.
-> Although, it is unlikely we will add support for the automatic
-> transmission feature (maybe famous last words).
-
-;-)
-
-> > > On R-Car E2 and RZ/G1E, we forgot, and used both SoC-specific and
-> > > family-specific compatible values.
+> So you can have
 >
-> Okay, but we can fix DTs when they have bugs, or?
+>    struct gpio_regmap_config config =3D { 0 };
+>    config.reg_dat_base =3D 0x10;
+>    config.reg_dir_out_base =3D 0x20;
+>
+> or
+>
+>    config.reg_dat_base =3D GPIO_REGMAP_ADDR_ZERO;
+>
+> or if you can't be sure if the RHS value might be zero:
+>
+>    config.reg_dat_base =3D GPIO_REGMAP_ADDR(reg);
+>
+>
+> > Maybe drop GPIO_REGMAP_ADDR and require users to set unused registers
+> > to GPIO_REGMAP_ADDR_ZERO?
+>
+> Thats bad because:
+>   * you'd have to set plenty of unused base registers for a simple driver
+>   * if there will be additional properties in the future, you have to
+> touch
+>     all other drivers, because they are initialized as 0 (ie. valid reg
+> 0).
+>
+> >> +/**
+> >> + * struct gpio_regmap_config - Description of a generic regmap
+> >> gpio_chip.
+> >> + *
+> >> + * @parent:            The parent device
+> >> + * @regmap:            The regmap used to access the registers
+> >> + *                     given, the name of the device is used
+> >> + * @label:             (Optional) Descriptive name for GPIO
+> >> controller.
+> >> + *                     If not given, the name of the device is used.
+> >> + * @ngpio:             Number of GPIOs
+> >> + * @reg_dat_base:      (Optional) (in) register base address
+> >> + * @reg_set_base:      (Optional) set register base address
+> >> + * @reg_clr_base:      (Optional) clear register base address
+> >> + * @reg_dir_in_base:   (Optional) out setting register base address
+> >> + * @reg_dir_out_base:  (Optional) in setting register base address
+> >
+> > The two above are inverted I think?
+> good catch.
+>
+> > Also: why the limitation of only supporting one at a time?
+>
+> they should be exclusive, either you have a register where you set the
+> output bits to one, or the input bits. Maybe this need a bit more
+> context
+> above. in gpio-mmio.c you can set both and both are used in
+> set_direction(), but only one is read in get_direction().
+>
+> That being said, I have no strong opinion wether they should be
+> exclusive
+> or not, besides the symmetry of set_/get_direction().
+>
+> -michael
+>
 
-We can.  But we also have to consider DT backwards compatibility: i.e.
-using an old DTB with a future kernel implementing the automatic
-transmission feature.
+Sorry for the late response, your comments make sense to me. Are you
+going to submit a v4 before the v5.8 merge window?
 
-Fortunately R-Car E2 and RZ/G1E have SoC-specific compatible values,
-so we can easily blacklist it in the driver based on that.
-Blacklisting the last instance on the other SoCs is uglier, as it needs a
-quirk that checks both the SoC-compatible value and the absence of the
-generic compatible value. But it can still be done.
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.9.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Bart
