@@ -2,186 +2,160 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FB81E25B4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 May 2020 17:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8541E261D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 May 2020 17:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729895AbgEZPln (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 May 2020 11:41:43 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58606 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730135AbgEZPlj (ORCPT
+        id S1730092AbgEZPyu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 May 2020 11:54:50 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:44023 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727862AbgEZPyt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 May 2020 11:41:39 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C3E1E8030878;
-        Tue, 26 May 2020 15:41:34 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 499XuFg3cxQM; Tue, 26 May 2020 18:41:34 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 7/7] watchdog: dw_wdt: Add DebugFS files
-Date:   Tue, 26 May 2020 18:41:23 +0300
-Message-ID: <20200526154123.24402-8-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
+        Tue, 26 May 2020 11:54:49 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 25A9823E2C;
+        Tue, 26 May 2020 17:54:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1590508485;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fea62NxmJK3eV7EnGjkH2PK8+sAxiTRywctVj4jahAw=;
+        b=p/H6CoByMx+/VRkUqo+zYBHQEDnzKf87T6UB5OckeCGd559i5IIHZzp0KffewoWwrz88Ae
+        h4yBFkejNH9BHFDcaRt1kgJ81Y0dFZk9I17TNByb0x/PZd+5Ojh4zOlgnTuQUvHMWc5GBK
+        mSDPNjq9ejnJ/5I3fr34XdPofcyMOs0=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 26 May 2020 17:54:38 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 03/16] mfd: mfd-core: match device tree node against
+ reg property
+In-Reply-To: <20200526072427.GC3628@dell>
+References: <20200423174543.17161-1-michael@walle.cc>
+ <20200423174543.17161-4-michael@walle.cc>
+ <67e90dafd67c285158c2c6f67f92edb7@walle.cc> <20200515102848.GH271301@dell>
+ <159e68b4ce53630ef906b2fcbca925bd@walle.cc> <20200526072427.GC3628@dell>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <f5704ce5a3e280f63c81fe35efb08234@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-For the sake of the easier device-driver debug procedure, we added a
-DebugFS file with the controller registers state. It's available only if
-kernel is configured with DebugFS support.
+Am 2020-05-26 09:24, schrieb Lee Jones:
+> On Mon, 25 May 2020, Michael Walle wrote:
+> 
+>> Am 2020-05-15 12:28, schrieb Lee Jones:
+>> > On Thu, 30 Apr 2020, Michael Walle wrote:
+>> >
+>> > > Hi Lee,
+>> > >
+>> > > Am 2020-04-23 19:45, schrieb Michael Walle:
+>> > > > There might be multiple children with the device tree compatible, for
+>> > > > example if a MFD has multiple instances of the same function. In this
+>> > > > case only the first is matched and the other children get a wrong
+>> > > > of_node reference.
+>> > > > Add a new option to match also against the unit address of the child
+>> > > > node. Additonally, a new helper OF_MFD_CELL_REG is added.
+>> > >
+>> > >
+>> > > Do you think this is feasible? I guess this is the biggest uncertainty
+>> > > for me at the moment in this patch series.
+>> >
+>> > I think it sounds fine in principle.  So long as it doesn't change the
+>> > existing behaviour when of_reg isn't set.
+>> >
+>> > > > Signed-off-by: Michael Walle <michael@walle.cc>
+>> > > > ---
+>> > > >  drivers/mfd/mfd-core.c   | 29 ++++++++++++++++++++---------
+>> > > >  include/linux/mfd/core.h | 26 ++++++++++++++++++++------
+>> > > >  2 files changed, 40 insertions(+), 15 deletions(-)
+> 
+> [...]
+> 
+>> > > > diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
+>> > > > index d01d1299e49d..c2c0ad6b14f3 100644
+>> > > > --- a/include/linux/mfd/core.h
+>> > > > +++ b/include/linux/mfd/core.h
+>> > > > @@ -13,8 +13,11 @@
+>> > > >  #include <linux/platform_device.h>
+>> > > >
+>> > > >  #define MFD_RES_SIZE(arr) (sizeof(arr) / sizeof(struct resource))
+>> > > > +#define MFD_OF_REG_VALID	BIT(31)
+>> >
+>> > What about 64bit platforms?
+>> 
+>> The idea was to have this as a logical number. I.e. for now you may 
+>> only
+>> have one subdevice per unique compatible string. In fact, if you have 
+>> a
+>> look at the ab8500.c, there are multiple "stericsson,ab8500-pwm"
+>> subdevices. But there is only one DT node for all three of it. I guess
+>> this works as long as you don't use phandles to reference the pwm node
+>> in the device tree. Or you don't want to use device tree properties
+>> per subdevice (for example the "timeout-sec" of a watchdog device).
+>> 
+>> So to circumvent this, I thought of having the unit-address (and thus
+>> the "reg" property) to differentiate between multiple subdevices. Now
+>> there is one special case for me: this board management controller
+>> might be upgradable and it might change internally. Thus I came up
+>> with that logical numbering of subdevices. Rob doesn't seem to be a
+>> fan of that, though. Therefore, having bit 31 as a valid indicator
+>> leaves you with 2^31 logical devices, which should be enough ;)
+>> 
+>> Rob proposed to have the internal offset as the unit-address. But
+>> in that case I can also use devm_of_platform_populate() and don't
+>> need the OF_MFD_CELL_REG; I'd just parse the reg offset in each
+>> individual subdevice driver. But like I said, I wanted to keep the
+>> internal offsets out of the device tree.
+> 
+> Oh, I see what you're doing.
+> 
+> So you're adding an arbitrary ID to the device's reg property in DT?
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: devicetree@vger.kernel.org
+Yes.
 
----
+> How is this not a hack?
 
-Changelog v2:
-- Rearrange SoBs.
-- Discard timeout/pretimeout/ping/enable DebugFS nodes. Registers state
-  dump node is only left.
----
- drivers/watchdog/dw_wdt.c | 68 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+Well IMHO this is not more or less a hack as the current of_node
+handling of MFD devices, which happens to work only because there
+is only one device per compatible string (or it doesn't really work,
+like in the stericsson,ab8500-pwm case). The of_node is assigned
+according to the compatible string, just like in my case, only that
+I have two subdevices with the same compatible string.
 
-diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-index 3cd7c485cd70..012681baaa6d 100644
---- a/drivers/watchdog/dw_wdt.c
-+++ b/drivers/watchdog/dw_wdt.c
-@@ -28,6 +28,7 @@
- #include <linux/platform_device.h>
- #include <linux/reset.h>
- #include <linux/watchdog.h>
-+#include <linux/debugfs.h>
- 
- #define WDOG_CONTROL_REG_OFFSET		    0x00
- #define WDOG_CONTROL_REG_WDT_EN_MASK	    0x01
-@@ -39,8 +40,14 @@
- #define WDOG_COUNTER_RESTART_KICK_VALUE	    0x76
- #define WDOG_INTERRUPT_STATUS_REG_OFFSET    0x10
- #define WDOG_INTERRUPT_CLEAR_REG_OFFSET     0x14
-+#define WDOG_COMP_PARAMS_5_REG_OFFSET       0xe4
-+#define WDOG_COMP_PARAMS_4_REG_OFFSET       0xe8
-+#define WDOG_COMP_PARAMS_3_REG_OFFSET       0xec
-+#define WDOG_COMP_PARAMS_2_REG_OFFSET       0xf0
- #define WDOG_COMP_PARAMS_1_REG_OFFSET       0xf4
- #define WDOG_COMP_PARAMS_1_USE_FIX_TOP      BIT(6)
-+#define WDOG_COMP_VERSION_REG_OFFSET        0xf8
-+#define WDOG_COMP_TYPE_REG_OFFSET           0xfc
- 
- /* There are sixteen TOPs (timeout periods) that can be set in the watchdog. */
- #define DW_WDT_NUM_TOPS		16
-@@ -85,6 +92,10 @@ struct dw_wdt {
- 	/* Save/restore */
- 	u32			control;
- 	u32			timeout;
-+
-+#ifdef CONFIG_DEBUG_FS
-+	struct dentry		*dbgfs_dir;
-+#endif
- };
- 
- #define to_dw_wdt(wdd)	container_of(wdd, struct dw_wdt, wdd)
-@@ -484,6 +495,59 @@ static int dw_wdt_init_timeouts(struct dw_wdt *dw_wdt, struct device *dev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_DEBUG_FS
-+
-+#define DW_WDT_DBGFS_REG(_name, _off) \
-+{				      \
-+	.name = _name,		      \
-+	.offset = _off		      \
-+}
-+
-+static const struct debugfs_reg32 dw_wdt_dbgfs_regs[] = {
-+	DW_WDT_DBGFS_REG("cr", WDOG_CONTROL_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("torr", WDOG_TIMEOUT_RANGE_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("ccvr", WDOG_CURRENT_COUNT_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("crr", WDOG_COUNTER_RESTART_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("stat", WDOG_INTERRUPT_STATUS_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param5", WDOG_COMP_PARAMS_5_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param4", WDOG_COMP_PARAMS_4_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param3", WDOG_COMP_PARAMS_3_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param2", WDOG_COMP_PARAMS_2_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("param1", WDOG_COMP_PARAMS_1_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("version", WDOG_COMP_VERSION_REG_OFFSET),
-+	DW_WDT_DBGFS_REG("type", WDOG_COMP_TYPE_REG_OFFSET)
-+};
-+
-+static void dw_wdt_dbgfs_init(struct dw_wdt *dw_wdt)
-+{
-+	struct device *dev = dw_wdt->wdd.parent;
-+	struct debugfs_regset32 *regset;
-+
-+	regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
-+	if (!regset)
-+		return;
-+
-+	regset->regs = dw_wdt_dbgfs_regs;
-+	regset->nregs = ARRAY_SIZE(dw_wdt_dbgfs_regs);
-+	regset->base = dw_wdt->regs;
-+
-+	dw_wdt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
-+
-+	debugfs_create_regset32("registers", 0444, dw_wdt->dbgfs_dir, regset);
-+}
-+
-+static void dw_wdt_dbgfs_clear(struct dw_wdt *dw_wdt)
-+{
-+	debugfs_remove_recursive(dw_wdt->dbgfs_dir);
-+}
-+
-+#else /* !CONFIG_DEBUG_FS */
-+
-+static void dw_wdt_dbgfs_init(struct dw_wdt *dw_wdt) {}
-+static void dw_wdt_dbgfs_clear(struct dw_wdt *dw_wdt) {}
-+
-+#endif /* !CONFIG_DEBUG_FS */
-+
- static int dw_wdt_drv_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -607,6 +671,8 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto out_disable_pclk;
- 
-+	dw_wdt_dbgfs_init(dw_wdt);
-+
- 	return 0;
- 
- out_disable_pclk:
-@@ -621,6 +687,8 @@ static int dw_wdt_drv_remove(struct platform_device *pdev)
- {
- 	struct dw_wdt *dw_wdt = platform_get_drvdata(pdev);
- 
-+	dw_wdt_dbgfs_clear(dw_wdt);
-+
- 	watchdog_unregister_device(&dw_wdt->wdd);
- 	reset_control_assert(dw_wdt->rst);
- 	clk_disable_unprepare(dw_wdt->pclk);
--- 
-2.26.2
+> Why don't you use the full address for identification?
 
+Like I said, in the long term I would like to have support for
+different versions of the board management controller without having
+to change the device tree and have device tree bindings for the
+subdevices at the same time. But it seems, that this is not possible
+and I guess I have to bite the bullet and may need to provide another
+device tree if the controller might be updated.
+
+-michael
