@@ -2,38 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B031E1373
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 May 2020 19:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D18C1E1C23
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 May 2020 09:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391332AbgEYRgf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 25 May 2020 13:36:35 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:60753 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388230AbgEYRge (ORCPT
+        id S1731541AbgEZHYd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 May 2020 03:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726971AbgEZHYd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 May 2020 13:36:34 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id DDEC922F2E;
-        Mon, 25 May 2020 19:36:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1590428188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tccD7vzIYEWi1bFmktWHDapg7/kSp29lv3VkLLvN1aI=;
-        b=f6dMxTFgq0dv3WcoUWQY3lGpKEI1zRaAo5vQ4eXD9W5/1IcgsbkQs2IprvSdGhntzf7+3s
-        VjDUBiP0Ohl+I7F/gjvbCkc+SOXy34S18pA/Vg+5sV+GUZVZ6tYqTNQJ4NOoGbVDgMncOV
-        VXE73fAV7Jnjk0n8FxO++uqxK4wM9EM=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 25 May 2020 19:36:27 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Lee Jones <lee.jones@linaro.org>
+        Tue, 26 May 2020 03:24:33 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D1FC061A0E
+        for <linux-watchdog@vger.kernel.org>; Tue, 26 May 2020 00:24:31 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id n5so2211933wmd.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 26 May 2020 00:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=MecCjMd20t1+f6I9nwNK+2FBCJgJkQD5Pmqxvgh9VA8=;
+        b=eiHKETmZiOUORm6uj3B4kuDo0VRvtDLuGSC0gNQ3a59gj373QKgaE721sKr/ykkKkg
+         7qdUWclvwqMnNLFiJQqjOOugsHtPFLM6VSvw6jGro/v/ZXUj3U7qc3cxhrGVP5Clff5C
+         8I/kJG/n5bQk4GhT/fjWSKolKOJzr1yVQ8sa3VNlxlUkbdNRZnRxvvQcDeRvrUdeGhOX
+         vnUF6o45Z9ZzuAllwXv+BGt/2TaKUqdapTdBLjOcpj6v24tMnf5vLKUJ7owDZVWdzoRu
+         kiTlj5+sDCTHTBvmnRy3l/AhKDw/A1M3UghofyLUTYtjHz0QfkOD1gcfXFTNU12x61J9
+         25PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=MecCjMd20t1+f6I9nwNK+2FBCJgJkQD5Pmqxvgh9VA8=;
+        b=oHYca1vf39LrG4lNDDc1/jXQHYY8IBMI5UZUEdr1WmDngSL8uDriPZlz+ylzhogyv5
+         E01hNXX4E80L8H/1FUTyFHCEVaLxl90lu0N2aKJhLLE5MhtG++D+TIWAl+d8SZTWFyXM
+         HVSFRZsa0mo7V3j5ZPt+XevsN3SXd2TWak+Hyqy4OexD60pA16UuCBstivJokeBkYXMv
+         gmzcyY8EYXRcF2e3DHRb3bzuIhJpSX+AgdDyam5FVYJhX5V6Ru94wrQNumDhGli8IQTx
+         69DdwxjxEeYBpREfyUgz9rCpPva/xo0IkpA6b2W7+nzGXFpW/Gzq9AxaDZrer4+Ea9MR
+         GdcA==
+X-Gm-Message-State: AOAM533vKGbSZKnqNzW0WWmlejHKCWA6oa14luibxxkXdkN4mk/tERWZ
+        SWeeVARA1qrcLE3S8QTHbM+WzQ==
+X-Google-Smtp-Source: ABdhPJwmU+QRbZ/BsP6+F83Pu7Mwfeap63WbqvY224Kv0JCyRvDBG7exlrbFRDFk1GmkCzHs6nyaKg==
+X-Received: by 2002:a1c:acc8:: with SMTP id v191mr59767wme.154.1590477870140;
+        Tue, 26 May 2020 00:24:30 -0700 (PDT)
+Received: from dell ([95.149.164.102])
+        by smtp.gmail.com with ESMTPSA id l17sm6343895wmi.3.2020.05.26.00.24.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 00:24:29 -0700 (PDT)
+Date:   Tue, 26 May 2020 08:24:27 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Michael Walle <michael@walle.cc>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -41,7 +59,8 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -54,192 +73,96 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH v3 03/16] mfd: mfd-core: match device tree node against
  reg property
-In-Reply-To: <20200515102848.GH271301@dell>
+Message-ID: <20200526072427.GC3628@dell>
 References: <20200423174543.17161-1-michael@walle.cc>
  <20200423174543.17161-4-michael@walle.cc>
- <67e90dafd67c285158c2c6f67f92edb7@walle.cc> <20200515102848.GH271301@dell>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <159e68b4ce53630ef906b2fcbca925bd@walle.cc>
-X-Sender: michael@walle.cc
+ <67e90dafd67c285158c2c6f67f92edb7@walle.cc>
+ <20200515102848.GH271301@dell>
+ <159e68b4ce53630ef906b2fcbca925bd@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <159e68b4ce53630ef906b2fcbca925bd@walle.cc>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am 2020-05-15 12:28, schrieb Lee Jones:
-> On Thu, 30 Apr 2020, Michael Walle wrote:
-> 
->> Hi Lee,
->> 
->> Am 2020-04-23 19:45, schrieb Michael Walle:
->> > There might be multiple children with the device tree compatible, for
->> > example if a MFD has multiple instances of the same function. In this
->> > case only the first is matched and the other children get a wrong
->> > of_node reference.
->> > Add a new option to match also against the unit address of the child
->> > node. Additonally, a new helper OF_MFD_CELL_REG is added.
->> 
->> 
->> Do you think this is feasible? I guess this is the biggest uncertainty
->> for me at the moment in this patch series.
-> 
-> I think it sounds fine in principle.  So long as it doesn't change the
-> existing behaviour when of_reg isn't set.
-> 
->> > Signed-off-by: Michael Walle <michael@walle.cc>
->> > ---
->> >  drivers/mfd/mfd-core.c   | 29 ++++++++++++++++++++---------
->> >  include/linux/mfd/core.h | 26 ++++++++++++++++++++------
->> >  2 files changed, 40 insertions(+), 15 deletions(-)
->> >
->> > diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
->> > index e735565969b3..4ecb376338f7 100644
->> > --- a/drivers/mfd/mfd-core.c
->> > +++ b/drivers/mfd/mfd-core.c
->> > @@ -117,6 +117,7 @@ static int mfd_add_device(struct device *parent, int
->> > id,
->> >  	struct device_node *np = NULL;
->> >  	int ret = -ENOMEM;
->> >  	int platform_id;
->> > +	u32 of_reg;
->> >  	int r;
->> >
->> >  	if (id == PLATFORM_DEVID_AUTO)
->> > @@ -151,16 +152,26 @@ static int mfd_add_device(struct device *parent,
->> > int id,
->> >
->> >  	if (parent->of_node && cell->of_compatible) {
->> >  		for_each_child_of_node(parent->of_node, np) {
->> > -			if (of_device_is_compatible(np, cell->of_compatible)) {
->> > -				if (!of_device_is_available(np)) {
->> > -					/* Ignore disabled devices error free */
->> > -					ret = 0;
->> > -					goto fail_alias;
->> > -				}
->> > -				pdev->dev.of_node = np;
->> > -				pdev->dev.fwnode = &np->fwnode;
->> > -				break;
->> > +			if (!of_device_is_compatible(np, cell->of_compatible))
->> > +				continue;
->> > +
->> > +			/* also match the unit address if set */
-> 
-> Please use correct grammar in comments (leaving off the full-stop).
-> 
->> > +			if (cell->of_reg & MFD_OF_REG_VALID) {
->> > +				if (of_property_read_u32(np, "reg", &of_reg))
->> > +					continue;
->> > +				if ((cell->of_reg & MFD_OF_REG_MASK) != of_reg)
->> > +					continue;
->> >  			}
->> > +
->> > +			if (!of_device_is_available(np)) {
->> > +				/* Ignore disabled devices error free */
->> > +				ret = 0;
->> > +				goto fail_alias;
->> > +			}
->> > +
->> > +			pdev->dev.of_node = np;
->> > +			pdev->dev.fwnode = &np->fwnode;
->> > +			break;
->> >  		}
->> >  	}
->> >
->> > diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
->> > index d01d1299e49d..c2c0ad6b14f3 100644
->> > --- a/include/linux/mfd/core.h
->> > +++ b/include/linux/mfd/core.h
->> > @@ -13,8 +13,11 @@
->> >  #include <linux/platform_device.h>
->> >
->> >  #define MFD_RES_SIZE(arr) (sizeof(arr) / sizeof(struct resource))
->> > +#define MFD_OF_REG_VALID	BIT(31)
-> 
-> What about 64bit platforms?
+On Mon, 25 May 2020, Michael Walle wrote:
 
-The idea was to have this as a logical number. I.e. for now you may only
-have one subdevice per unique compatible string. In fact, if you have a
-look at the ab8500.c, there are multiple "stericsson,ab8500-pwm"
-subdevices. But there is only one DT node for all three of it. I guess
-this works as long as you don't use phandles to reference the pwm node
-in the device tree. Or you don't want to use device tree properties
-per subdevice (for example the "timeout-sec" of a watchdog device).
+> Am 2020-05-15 12:28, schrieb Lee Jones:
+> > On Thu, 30 Apr 2020, Michael Walle wrote:
+> > 
+> > > Hi Lee,
+> > > 
+> > > Am 2020-04-23 19:45, schrieb Michael Walle:
+> > > > There might be multiple children with the device tree compatible, for
+> > > > example if a MFD has multiple instances of the same function. In this
+> > > > case only the first is matched and the other children get a wrong
+> > > > of_node reference.
+> > > > Add a new option to match also against the unit address of the child
+> > > > node. Additonally, a new helper OF_MFD_CELL_REG is added.
+> > > 
+> > > 
+> > > Do you think this is feasible? I guess this is the biggest uncertainty
+> > > for me at the moment in this patch series.
+> > 
+> > I think it sounds fine in principle.  So long as it doesn't change the
+> > existing behaviour when of_reg isn't set.
+> > 
+> > > > Signed-off-by: Michael Walle <michael@walle.cc>
+> > > > ---
+> > > >  drivers/mfd/mfd-core.c   | 29 ++++++++++++++++++++---------
+> > > >  include/linux/mfd/core.h | 26 ++++++++++++++++++++------
+> > > >  2 files changed, 40 insertions(+), 15 deletions(-)
 
-So to circumvent this, I thought of having the unit-address (and thus
-the "reg" property) to differentiate between multiple subdevices. Now
-there is one special case for me: this board management controller
-might be upgradable and it might change internally. Thus I came up
-with that logical numbering of subdevices. Rob doesn't seem to be a
-fan of that, though. Therefore, having bit 31 as a valid indicator
-leaves you with 2^31 logical devices, which should be enough ;)
+[...]
 
-Rob proposed to have the internal offset as the unit-address. But
-in that case I can also use devm_of_platform_populate() and don't
-need the OF_MFD_CELL_REG; I'd just parse the reg offset in each
-individual subdevice driver. But like I said, I wanted to keep the
-internal offsets out of the device tree.
+> > > > diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
+> > > > index d01d1299e49d..c2c0ad6b14f3 100644
+> > > > --- a/include/linux/mfd/core.h
+> > > > +++ b/include/linux/mfd/core.h
+> > > > @@ -13,8 +13,11 @@
+> > > >  #include <linux/platform_device.h>
+> > > >
+> > > >  #define MFD_RES_SIZE(arr) (sizeof(arr) / sizeof(struct resource))
+> > > > +#define MFD_OF_REG_VALID	BIT(31)
+> > 
+> > What about 64bit platforms?
+> 
+> The idea was to have this as a logical number. I.e. for now you may only
+> have one subdevice per unique compatible string. In fact, if you have a
+> look at the ab8500.c, there are multiple "stericsson,ab8500-pwm"
+> subdevices. But there is only one DT node for all three of it. I guess
+> this works as long as you don't use phandles to reference the pwm node
+> in the device tree. Or you don't want to use device tree properties
+> per subdevice (for example the "timeout-sec" of a watchdog device).
+> 
+> So to circumvent this, I thought of having the unit-address (and thus
+> the "reg" property) to differentiate between multiple subdevices. Now
+> there is one special case for me: this board management controller
+> might be upgradable and it might change internally. Thus I came up
+> with that logical numbering of subdevices. Rob doesn't seem to be a
+> fan of that, though. Therefore, having bit 31 as a valid indicator
+> leaves you with 2^31 logical devices, which should be enough ;)
+> 
+> Rob proposed to have the internal offset as the unit-address. But
+> in that case I can also use devm_of_platform_populate() and don't
+> need the OF_MFD_CELL_REG; I'd just parse the reg offset in each
+> individual subdevice driver. But like I said, I wanted to keep the
+> internal offsets out of the device tree.
 
--michael
+Oh, I see what you're doing.
 
-> 
->> > +#define MFD_OF_REG_MASK		GENMASK(30, 0)
->> >
->> > -#define MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,
->> > _match)\
->> > +#define MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
->> > +		     _of_reg, _match)					\
->> >  	{								\
->> >  		.name = (_name),					\
->> >  		.resources = (_res),					\
->> > @@ -22,24 +25,32 @@
->> >  		.platform_data = (_pdata),				\
->> >  		.pdata_size = (_pdsize),				\
->> >  		.of_compatible = (_compat),				\
->> > +		.of_reg = (_of_reg),					\
->> >  		.acpi_match = (_match),					\
->> >  		.id = (_id),						\
->> >  	}
->> >
->> > +#define OF_MFD_CELL_REG(_name, _res, _pdata, _pdsize, _id, _compat,	\
->> > +			_of_reg)					\
->> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
->> > +		     ((_of_reg) | MFD_OF_REG_VALID), NULL)		\
->> > +
->> >  #define OF_MFD_CELL(_name, _res, _pdata, _pdsize,_id, _compat)		\
->> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat, NULL)	\
->> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
->> > +		     0, NULL)						\
->> >
->> >  #define ACPI_MFD_CELL(_name, _res, _pdata, _pdsize, _id, _match)	\
->> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, _match)	\
->> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, 0,	\
->> > +		     _match)						\
->> >
->> >  #define MFD_CELL_BASIC(_name, _res, _pdata, _pdsize, _id)		\
->> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, NULL)	\
->> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, 0, NULL) \
->> >
->> >  #define MFD_CELL_RES(_name, _res)					\
->> > -	MFD_CELL_ALL(_name, _res, NULL, 0, 0, NULL, NULL)		\
->> > +	MFD_CELL_ALL(_name, _res, NULL, 0, 0, NULL, 0, NULL)		\
->> >
->> >  #define MFD_CELL_NAME(_name)						\
->> > -	MFD_CELL_ALL(_name, NULL, NULL, 0, 0, NULL, NULL)		\
->> > +	MFD_CELL_ALL(_name, NULL, NULL, 0, 0, NULL, 0, NULL)		\
->> >
->> >  struct irq_domain;
->> >  struct property_entry;
->> > @@ -78,6 +89,9 @@ struct mfd_cell {
->> >  	 */
->> >  	const char		*of_compatible;
->> >
->> > +	/* matching the reg property if set */
-> 
-> Proper grammar please.
-> 
-> "OF unit address for device matching"
-> 
->> > +	unsigned int		of_reg;
->> > +
->> >  	/* Matches ACPI */
->> >  	const struct mfd_cell_acpi_match	*acpi_match;
+So you're adding an arbitrary ID to the device's reg property in DT?
+
+How is this not a hack?
+
+Why don't you use the full address for identification?
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
