@@ -2,167 +2,85 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D18C1E1C23
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 May 2020 09:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9041E20CB
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 May 2020 13:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731541AbgEZHYd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 May 2020 03:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726971AbgEZHYd (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 May 2020 03:24:33 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D1FC061A0E
-        for <linux-watchdog@vger.kernel.org>; Tue, 26 May 2020 00:24:31 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id n5so2211933wmd.0
-        for <linux-watchdog@vger.kernel.org>; Tue, 26 May 2020 00:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MecCjMd20t1+f6I9nwNK+2FBCJgJkQD5Pmqxvgh9VA8=;
-        b=eiHKETmZiOUORm6uj3B4kuDo0VRvtDLuGSC0gNQ3a59gj373QKgaE721sKr/ykkKkg
-         7qdUWclvwqMnNLFiJQqjOOugsHtPFLM6VSvw6jGro/v/ZXUj3U7qc3cxhrGVP5Clff5C
-         8I/kJG/n5bQk4GhT/fjWSKolKOJzr1yVQ8sa3VNlxlUkbdNRZnRxvvQcDeRvrUdeGhOX
-         vnUF6o45Z9ZzuAllwXv+BGt/2TaKUqdapTdBLjOcpj6v24tMnf5vLKUJ7owDZVWdzoRu
-         kiTlj5+sDCTHTBvmnRy3l/AhKDw/A1M3UghofyLUTYtjHz0QfkOD1gcfXFTNU12x61J9
-         25PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MecCjMd20t1+f6I9nwNK+2FBCJgJkQD5Pmqxvgh9VA8=;
-        b=oHYca1vf39LrG4lNDDc1/jXQHYY8IBMI5UZUEdr1WmDngSL8uDriPZlz+ylzhogyv5
-         E01hNXX4E80L8H/1FUTyFHCEVaLxl90lu0N2aKJhLLE5MhtG++D+TIWAl+d8SZTWFyXM
-         HVSFRZsa0mo7V3j5ZPt+XevsN3SXd2TWak+Hyqy4OexD60pA16UuCBstivJokeBkYXMv
-         gmzcyY8EYXRcF2e3DHRb3bzuIhJpSX+AgdDyam5FVYJhX5V6Ru94wrQNumDhGli8IQTx
-         69DdwxjxEeYBpREfyUgz9rCpPva/xo0IkpA6b2W7+nzGXFpW/Gzq9AxaDZrer4+Ea9MR
-         GdcA==
-X-Gm-Message-State: AOAM533vKGbSZKnqNzW0WWmlejHKCWA6oa14luibxxkXdkN4mk/tERWZ
-        SWeeVARA1qrcLE3S8QTHbM+WzQ==
-X-Google-Smtp-Source: ABdhPJwmU+QRbZ/BsP6+F83Pu7Mwfeap63WbqvY224Kv0JCyRvDBG7exlrbFRDFk1GmkCzHs6nyaKg==
-X-Received: by 2002:a1c:acc8:: with SMTP id v191mr59767wme.154.1590477870140;
-        Tue, 26 May 2020 00:24:30 -0700 (PDT)
-Received: from dell ([95.149.164.102])
-        by smtp.gmail.com with ESMTPSA id l17sm6343895wmi.3.2020.05.26.00.24.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 00:24:29 -0700 (PDT)
-Date:   Tue, 26 May 2020 08:24:27 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 03/16] mfd: mfd-core: match device tree node against
- reg property
-Message-ID: <20200526072427.GC3628@dell>
-References: <20200423174543.17161-1-michael@walle.cc>
- <20200423174543.17161-4-michael@walle.cc>
- <67e90dafd67c285158c2c6f67f92edb7@walle.cc>
- <20200515102848.GH271301@dell>
- <159e68b4ce53630ef906b2fcbca925bd@walle.cc>
+        id S2388746AbgEZLVp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 May 2020 07:21:45 -0400
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:39201 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388728AbgEZLVp (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 26 May 2020 07:21:45 -0400
+Received: from [192.168.0.7] (ip5f5af73c.dynamic.kabel-deutschland.de [95.90.247.60])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D4F82206442E6;
+        Tue, 26 May 2020 13:21:42 +0200 (CEST)
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        it+linux-watchdog@molgen.mpg.de
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: watchdog: iTCO_wdt: cannot register miscdev on minor=130 (err=-16).
+Message-ID: <a6e0f876-3a0f-49fd-7f45-715e75b6a779@molgen.mpg.de>
+Date:   Tue, 26 May 2020 13:21:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <159e68b4ce53630ef906b2fcbca925bd@walle.cc>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 25 May 2020, Michael Walle wrote:
+Dear Linux folks,
 
-> Am 2020-05-15 12:28, schrieb Lee Jones:
-> > On Thu, 30 Apr 2020, Michael Walle wrote:
-> > 
-> > > Hi Lee,
-> > > 
-> > > Am 2020-04-23 19:45, schrieb Michael Walle:
-> > > > There might be multiple children with the device tree compatible, for
-> > > > example if a MFD has multiple instances of the same function. In this
-> > > > case only the first is matched and the other children get a wrong
-> > > > of_node reference.
-> > > > Add a new option to match also against the unit address of the child
-> > > > node. Additonally, a new helper OF_MFD_CELL_REG is added.
-> > > 
-> > > 
-> > > Do you think this is feasible? I guess this is the biggest uncertainty
-> > > for me at the moment in this patch series.
-> > 
-> > I think it sounds fine in principle.  So long as it doesn't change the
-> > existing behaviour when of_reg isn't set.
-> > 
-> > > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > > ---
-> > > >  drivers/mfd/mfd-core.c   | 29 ++++++++++++++++++++---------
-> > > >  include/linux/mfd/core.h | 26 ++++++++++++++++++++------
-> > > >  2 files changed, 40 insertions(+), 15 deletions(-)
 
-[...]
+Linux 5.4.39 reports the watchdog messages below on a Dell PowerEdge 
+T630 with 12x E5-2603 v4 @ 1.70GHz.
 
-> > > > diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
-> > > > index d01d1299e49d..c2c0ad6b14f3 100644
-> > > > --- a/include/linux/mfd/core.h
-> > > > +++ b/include/linux/mfd/core.h
-> > > > @@ -13,8 +13,11 @@
-> > > >  #include <linux/platform_device.h>
-> > > >
-> > > >  #define MFD_RES_SIZE(arr) (sizeof(arr) / sizeof(struct resource))
-> > > > +#define MFD_OF_REG_VALID	BIT(31)
-> > 
-> > What about 64bit platforms?
-> 
-> The idea was to have this as a logical number. I.e. for now you may only
-> have one subdevice per unique compatible string. In fact, if you have a
-> look at the ab8500.c, there are multiple "stericsson,ab8500-pwm"
-> subdevices. But there is only one DT node for all three of it. I guess
-> this works as long as you don't use phandles to reference the pwm node
-> in the device tree. Or you don't want to use device tree properties
-> per subdevice (for example the "timeout-sec" of a watchdog device).
-> 
-> So to circumvent this, I thought of having the unit-address (and thus
-> the "reg" property) to differentiate between multiple subdevices. Now
-> there is one special case for me: this board management controller
-> might be upgradable and it might change internally. Thus I came up
-> with that logical numbering of subdevices. Rob doesn't seem to be a
-> fan of that, though. Therefore, having bit 31 as a valid indicator
-> leaves you with 2^31 logical devices, which should be enough ;)
-> 
-> Rob proposed to have the internal offset as the unit-address. But
-> in that case I can also use devm_of_platform_populate() and don't
-> need the OF_MFD_CELL_REG; I'd just parse the reg offset in each
-> individual subdevice driver. But like I said, I wanted to keep the
-> internal offsets out of the device tree.
+     DMI: Dell Inc. PowerEdge T630/0NT78X, BIOS 2.5.4 08/17/2017
 
-Oh, I see what you're doing.
+```
+handsomejack:~$ more /proc/version
+Linux version 5.4.39.mx64.334 (root@lol.molgen.mpg.de) (gcc version 
+7.5.0 (GCC)) #1 SMP Thu May 7 14:27:50 CEST 2020
+handsomejack:~$ grep TCO /boot/config-5.4.39.mx64.334
+CONFIG_NETCONSOLE=m
+CONFIG_NETCONSOLE_DYNAMIC=y
+# CONFIG_SP5100_TCO is not set
+CONFIG_ITCO_WDT=y
+CONFIG_ITCO_VENDOR_SUPPORT=y
+CONFIG_NV_TCO=y
+# CONFIG_INTEL_SMARTCONNECT is not set
+# CONFIG_EXTCON is not set
+handsomejack:~$ dmesg --level=err
+[   11.618887] watchdog: iTCO_wdt: cannot register miscdev on minor=130 
+(err=-16).
+[   11.627956] watchdog: iTCO_wdt: a legacy watchdog module is probably 
+present.
+handsomejack:~$ dmesg | grep -e iTCO -e watchdog
+[   11.603138] iTCO_wdt: Intel TCO WatchDog Timer Driver v1.11
+[   11.609888] iTCO_wdt: Found a Wellsburg TCO device (Version=2, 
+TCOBASE=0x0460)
+[   11.618887] watchdog: iTCO_wdt: cannot register miscdev on minor=130 
+(err=-16).
+[   11.627956] watchdog: iTCO_wdt: a legacy watchdog module is probably 
+present.
+[   11.636462] iTCO_wdt: initialized. heartbeat=30 sec (nowayout=0)
+[   11.643679] iTCO_vendor_support: vendor-support=0
+handsomejack:~$ ls -l /dev/watchdog
+crw------- 1 root root 10, 130 May 26 11:40 /dev/watchdog
+```
 
-So you're adding an arbitrary ID to the device's reg property in DT?
+Together the error and success messages are from the same module are 
+confusing me a little. How can I find out the legacy watchdog module?
 
-How is this not a hack?
 
-Why don't you use the full address for identification?
+Kind regards,
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Paul
