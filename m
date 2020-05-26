@@ -2,114 +2,139 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E86091E236F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 May 2020 15:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6351E25C2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 May 2020 17:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728164AbgEZNyY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 May 2020 09:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726930AbgEZNyY (ORCPT
+        id S1730125AbgEZPmC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 May 2020 11:42:02 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:58492 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728297AbgEZPlf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 May 2020 09:54:24 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9009AC03E96D;
-        Tue, 26 May 2020 06:54:23 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id t8so1368019pju.3;
-        Tue, 26 May 2020 06:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZkVKV2UH/eWvLbkE4SW9kgvEsO5RkJGpATRi0sdomAE=;
-        b=Ya783eH2nqFGoCATcI3/aVBaz5YMlyLVtXNwQKv4SbAb79lWOuBCJXr9hq7++1gfnk
-         WTr65POwRa8F4+qjJT8DTvfhs6nvqFARCrE5eFukGrkh+2GM9wCXdByfA/G65k0iR/rd
-         tYRuW1hcq8RWjnJ0voJ0ja4QdVi+JwuvHWQhuk+4fCqlO3qLe6uXQz8wEtJanGIv8p3i
-         NuntsL7Fiv4iZGnHAoz9q88qYU+hmaBeBG6bKrSznEvhXmMttm/WN/ulBf4SvIOWqAH+
-         coKdHbG3j8WP5+/IBWLm82LVhRF35sEG3EGMSmboueQHxSJCLQesJVQOS4KzanILBOdR
-         uPsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZkVKV2UH/eWvLbkE4SW9kgvEsO5RkJGpATRi0sdomAE=;
-        b=dM8dqyyPOkPw257yeAuYEqxOD51eBFsh9pLVRx3sRGP7/qNND/xYtLor1p9CDkY7uC
-         j4Ph66JF3/L6Z0dnUGnzNv1kMoKIRsOWYdmFGGcOuHoWOvDPUD62HMVJNlSZvyb05S3T
-         jc2OvL4zCuF6j7SucPpbxrYgOttc0BAe4z9CAnKJD88kvpOdSssmacc53u81ZOK/xXPa
-         Qh+stM66GYpd8W0zBL2Dc1EJ4W+dmfb7WEv4ovMh+BmqZ6RMS6WNjeho48YwijilsHRf
-         3tKWZg8TIj4OD2fLeVemER9zb7Rwy73jooVON8pWhMJKfDDKhmJVjDiFTZRqGZ13pEJ+
-         qkTQ==
-X-Gm-Message-State: AOAM532/nb2xizJDNV3hcxOiXVQfPWQnb6PZzuGugveS7kDvsQMO5S/h
-        fK8G9bkCaB2/LyWNDIaovsRV24JB
-X-Google-Smtp-Source: ABdhPJzYvnKwagq+l2qllbYDUBjIFSq3XZyryPSx45eSR3T6IH48O+w7cMc7nk07Nv8TygUthmrKFA==
-X-Received: by 2002:a17:90a:aa8d:: with SMTP id l13mr27503913pjq.92.1590501263025;
-        Tue, 26 May 2020 06:54:23 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w190sm15134657pfw.35.2020.05.26.06.54.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 26 May 2020 06:54:22 -0700 (PDT)
-Date:   Tue, 26 May 2020 06:54:21 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        it+linux-watchdog@molgen.mpg.de
-Subject: Re: watchdog: iTCO_wdt: cannot register miscdev on minor=130
- (err=-16).
-Message-ID: <20200526135421.GB51584@roeck-us.net>
-References: <a6e0f876-3a0f-49fd-7f45-715e75b6a779@molgen.mpg.de>
- <95b7828b-2de2-6c29-f51d-c6d22b59d014@roeck-us.net>
- <843f5c26-82ac-3553-7d98-3cbe3068cc99@molgen.mpg.de>
+        Tue, 26 May 2020 11:41:35 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id CE9DC803086C;
+        Tue, 26 May 2020 15:41:30 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lrA8Y0ZfdvuY; Tue, 26 May 2020 18:41:29 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/7] watchdog: dw_wdt: Take Baikal-T1 DW WDT peculiarities into account
+Date:   Tue, 26 May 2020 18:41:16 +0300
+Message-ID: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <843f5c26-82ac-3553-7d98-3cbe3068cc99@molgen.mpg.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Paul,
+Merge window is upon us. Please review/merge in/whatever the rest of the
+patches.
 
-On Tue, May 26, 2020 at 01:54:40PM +0200, Paul Menzel wrote:
-[ ... ]
+There were a few features enabled at the time of the Baikal-T1 SoC DW WDT
+IP synthesis, which weren't taken into account in the DW WDT driver available
+in the kernel. First of all the SoC engineers synthesized the watchdog core
+with WDT_USE_FIX_TOP set to false (don't really know why, but they did).
+Due to this the timer reset values weren't fixed as the driver expected
+but were initialized with a pre-defined values selected by the engineers.
+Secondly the driver expected that the watchdog APB bus and the timer had
+synchronous reference clocks, while Baikal-T1 SoC DW WDT was created with
+asynchronous ones. So the driver should enable two clock devices: APB bus
+clocks and a separate timer reference clock. Finally DW Watchdog Timer is
+capable of generating a pre-timeout interrupt if corresponding config is
+enabled. The problem was that the pre-timeout IRQ happens when the set
+timeout elapses, while the actual WDT expiration and subsequent reboot take
+place in the next timeout. This makes the pre-timeout functionality
+implementation a bit tricky, since in this case we would have to find a
+WDT timeout twice smaller the requested timeout. All of the changes described
+above are provided by the patches in this patchset.
 
-> 
-> I wonder if the error message could be made extended.
-> 
-Question is what to extend it to. Best we could do would be to report that
-the driver will still try to install itself. Since the legacy driver doesn't
-use the watchdog infrastructure, the watchdog infrastructure knows nothing
-about it, and it can only guess the reason why /dev/watchdog is not
-available.
+In addition traditionally we replaced the legacy plain text-based dt-binding
+file with yaml-based one and added the controller registers dump DebugFS node
+to ease the driver debug procedure.
 
-Personally I'd rather see the ipmi watchdog driver to be converted to use
-the watchdog subsystem, but that is a bit unlikely to happen.
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
 
-> > made the default.
-> 
-> > You might have some other log messages indicating which other watchdog
-> > is installed. Otherwise you might need to use ioctls on /dev/watchdog
-> > to determine its name. 'lsmod' might also be useful.
-> 
-> Please find the logs and lsmod output attached. It might be created by the
-> IPMI driver.
-> 
-> ```
-> handsomejack:~$ dmesg | grep IPMI
-> [    9.890808] IPMI message handler: version 39.2
-> [    9.900456] ipmi_si: IPMI System Interface driver
-> [   10.080438] ipmi_si dmi-ipmi-si.0: IPMI message handler: Found new BMC
-> (man_id: 0x0002a2, prod_id: 0x0100, dev_id: 0x20)
-> [   10.113076] ipmi_si dmi-ipmi-si.0: IPMI kcs interface initialized
-> [   10.121572] IPMI Watchdog: driver initialized
+Changelog v2:
+- Rearrange SoBs.
+- Discard BE copyright header from the binding file.
+- Replace "additionalProperties: false" with "unevaluatedProperties: false"
+  property in the binding.
+- Move the APB3 clocks support declared in the dt binding file into a
+  dedicated patch.
+- Move $ref to the root level of the "snps,watchdog-tops" property
+  so does the constraints.
+- Make Pre-timeout IRQs support being optional.
+- Add "ms" suffix to the methods returning msec and convert the methods
+  with no "ms" suffix to return a timeout in sec.
+- Make sure minimum timeout is at least 1 sec.
+- Refactor the timeouts calculation procedure to to retain the timeouts in
+  the ascending order.
+- Make sure there is no integer overflow in milliseconds calculation. It
+  is saved in a dedicated uint field of the timeout structure.
+- Discard timeout/pretimeout/ping/enable DebugFS nodes. Registers state
+  dump node is only left.
 
-Yes, that is indeed the case. If you don't want it, you could maybe
-blacklist it. Unfortunately it looks like it is built into the kernel,
-so you would also have to change your kernel configuration to
-CONFIG_IPMI_WATCHDOG=m. Alternatively, you could keep it and just use
-/dev/watchdog1. Either case, you should make make sure that it works.
+Link: https://lore.kernel.org/linux-watchdog/20200510105807.880-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Add Rob's Reviewed-by tag to the DT-related patches.
+- Remove items from the "snps,watchdog-tops" property and move the
+  minItems and maxItems constraints to the root level of it.
 
-Guenter
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-watchdog@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (7):
+  dt-bindings: watchdog: Convert DW WDT binding to DT schema
+  dt-bindings: watchdog: dw-wdt: Support devices with asynch clocks
+  dt-bindings: watchdog: dw-wdt: Add watchdog TOPs array property
+  watchdog: dw_wdt: Support devices with non-fixed TOP values
+  watchdog: dw_wdt: Support devices with asynch clocks
+  watchdog: dw_wdt: Add pre-timeouts support
+  watchdog: dw_wdt: Add DebugFS files
+
+ .../devicetree/bindings/watchdog/dw_wdt.txt   |  24 -
+ .../bindings/watchdog/snps,dw-wdt.yaml        |  90 ++++
+ drivers/watchdog/dw_wdt.c                     | 437 ++++++++++++++++--
+ 3 files changed, 494 insertions(+), 57 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+
+-- 
+2.26.2
+
