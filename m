@@ -2,215 +2,178 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A79661E8BAF
-	for <lists+linux-watchdog@lfdr.de>; Sat, 30 May 2020 01:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11A51E8BC9
+	for <lists+linux-watchdog@lfdr.de>; Sat, 30 May 2020 01:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726943AbgE2XDx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 May 2020 19:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
+        id S1726974AbgE2XMG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 May 2020 19:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726898AbgE2XDw (ORCPT
+        with ESMTP id S1726898AbgE2XMF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 May 2020 19:03:52 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E1AC03E969;
-        Fri, 29 May 2020 16:03:52 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id m7so1816014plt.5;
-        Fri, 29 May 2020 16:03:52 -0700 (PDT)
+        Fri, 29 May 2020 19:12:05 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A399FC03E969;
+        Fri, 29 May 2020 16:12:05 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id d10so609133pgn.4;
+        Fri, 29 May 2020 16:12:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ndzMBUKACoRHXRVkdipRojb6jIrnb/f0a9K1IurFbZg=;
-        b=HAha1e4VEudvL9+qwzCq8jJRaRo2oKs8q7oY27tVG2Un4zFmt/WNDielrJaHPxXEkd
-         LltB40JE/AmZ8Mpj+FxwuHZwYsKQb/e9L+1QjW3/6K6NpamiVJtZAtAKYc9EKcDJyuMD
-         QKQHkkFwbSpuRWqYSqLFMBKBwpUJGSNcplXRiQnOspHRitdPwFeRpoY7LbTRzsrzJEyR
-         dgQatYwIjVTFKpYZhyTlYezfru3QgGuYkbhs+p7MwaM1ojlf7roi7JRa8YG/JC1PXGwk
-         Kzj0Y1DDYkEwBu71Kneip2ctwFxjKhfoiZtuuxueaxBT27zusMMYYXBp4ms9nP339sQZ
-         /REg==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UyD3DwGcPFptU34is7EBy9YqqMnLUZNp6l2qXoFpLUE=;
+        b=KWMd43IrffgFVyqMXJVHCo1L/0r4bxXyP8w8IXQQJBHaFIFwcli6fMMhWX08dAjuqp
+         R+mvzDXwFtlljp/NSH3OYW2IG36F68+64krJhOorza5BJbMBCoru8hufOJYvwP2DoDzn
+         rPaHs05yJDNBKwF7CliZViMXmVvOdoMIk+yO7e/np74gP2RXzjz1tCndiCvXo2Dkwa1t
+         OtvPvxvIyNEoY630eTqmv9ykaclEm9hjk1pVYR2GC6Ul5ToLbnoJ35g6TBp3eYgcrYTN
+         YROVdgUQVS6boKkCNVKbYWLh2R6zIf/eQGsLPZmbDHSnF+VPd1a6b5mLMWGH+Wrj9kNu
+         sZUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ndzMBUKACoRHXRVkdipRojb6jIrnb/f0a9K1IurFbZg=;
-        b=MWXXW9vcrtT8yeKkTDmCppUDYBn2wWJy+eB9nVdPMLE87tq37ERw9tBCI66h8Im9So
-         Da3QrXrOoJVocYiWbJs6utsqYn24CU7JSLPBiuugGVcjuGIBDoHyjALIostgrpw1cDm2
-         Ka78pCf3nFhRkebJoxhHNrxHTJejKIN2MTlOXCpYzEw7BOy5lRcu47h2Rz/4BwdSQ852
-         Sp5bDCVrXJUF+nYRZpHogPIZEjCyLLmLACLQf3Q49jtyyw/XuyPCQfTOkpIFXpc+pWHW
-         Ka7zz/K+0vcXYL6Fby0PWeVfJmR5FD+8lL2Zx0IYEnuYd3RBrwiAg+dfypIQX0mUN1xK
-         GrEA==
-X-Gm-Message-State: AOAM533kPn2+97WYTDjG9tk2MCSyAwAu8T1Ac2tO2pXF77fYyV6TByxl
-        bddLhHqUe0hkfJEMpEOFXjg=
-X-Google-Smtp-Source: ABdhPJxyjjrcG57XtfCniJFVDLVe8rhocrCsphaLwuljpISpMu67cocDRi9j6UQvyGYQ7Mocp24Xkg==
-X-Received: by 2002:a17:902:262:: with SMTP id 89mr10007786plc.251.1590793432252;
-        Fri, 29 May 2020 16:03:52 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q189sm8352553pfc.112.2020.05.29.16.03.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 29 May 2020 16:03:51 -0700 (PDT)
-Date:   Fri, 29 May 2020 16:03:51 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=UyD3DwGcPFptU34is7EBy9YqqMnLUZNp6l2qXoFpLUE=;
+        b=kVCt/T2wMUuSShDzuUaFwheY1KeBHeWfetQ3LSUulmARjd9zmkTZOdfjszsSeEVxRF
+         KIZzc4eFr0YqhZOlErj/6KcKIucHTTFSd9FdH1PMHP66/XoNYw/Rq1hLWBKsL3xQjpMH
+         GBislKgwCunSysxGEOlQWDZvOQFGBmlkMAdiS2jZuvG21NtERb3OrQ+gBvZmpcM+gMur
+         3xT64qBRYgIdq6NxflxLOliGKiCUaDlchicFim8msP0+OIO+Vp4JpUDqjZFcQFJ2ntFA
+         yqTISgYGiaC4nxXFcoPlg/WLzrXm72UXZiiEUlkAms4gkL00oOBVzA01Ez3PoXhDVeq0
+         b4bA==
+X-Gm-Message-State: AOAM531Cfgot4uZKK0xehUosDZrqeEM+kFJeqINMkzQSL1+381DfJMUF
+        5ic1NwwbBFFE1PmUDpiC0O0=
+X-Google-Smtp-Source: ABdhPJxnglhpTNHWzamGYEiCl0lK3nOnuiGvha9vD2jdtALH5qFgqdHaUnqtVkzGpYa1uTPvyh26vQ==
+X-Received: by 2002:a63:348:: with SMTP id 69mr9283139pgd.68.1590793925167;
+        Fri, 29 May 2020 16:12:05 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v129sm8403630pfv.18.2020.05.29.16.12.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2020 16:12:04 -0700 (PDT)
+Subject: Re: [PATCH v4 0/4] support watchdog with longer timeout period
+To:     Michael Shych <michaelsh@mellanox.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] watchdog: dw_wdt: Add DebugFS files
-Message-ID: <20200529230351.GA195027@roeck-us.net>
-References: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
- <20200526154123.24402-8-Sergey.Semin@baikalelectronics.ru>
+        Andy Shevchenko <andy@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Vadim Pasternak <vadimp@mellanox.com>
+References: <20200504141427.17685-1-michaelsh@mellanox.com>
+ <ac2c580c-7cc0-8091-f3bc-fce175478e50@roeck-us.net>
+ <CAHp75VdN6PfCCmRB_FssTRCoXms7JTt_af59pMqZNgV4ygz_8w@mail.gmail.com>
+ <AM6PR05MB6168698F8A3D49F0EF61EFF0D9B70@AM6PR05MB6168.eurprd05.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <be4e03f9-8b20-6775-96cf-dc6d13027184@roeck-us.net>
+Date:   Fri, 29 May 2020 16:12:03 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200526154123.24402-8-Sergey.Semin@baikalelectronics.ru>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <AM6PR05MB6168698F8A3D49F0EF61EFF0D9B70@AM6PR05MB6168.eurprd05.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, May 26, 2020 at 06:41:23PM +0300, Serge Semin wrote:
-> For the sake of the easier device-driver debug procedure, we added a
-> DebugFS file with the controller registers state. It's available only if
-> kernel is configured with DebugFS support.
+On 5/21/20 7:25 AM, Michael Shych wrote:
+> Hi Andy, Guenter,
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
+> Did you understand to which branch it will be better to take this patchset?
+> 
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I created an immutable branch at
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-mlx-immutable
 
-> ---
+Guenter
+
+> Thanks,
+>    Michael.
 > 
-> Changelog v2:
-> - Rearrange SoBs.
-> - Discard timeout/pretimeout/ping/enable DebugFS nodes. Registers state
->   dump node is only left.
-> ---
->  drivers/watchdog/dw_wdt.c | 68 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index 3cd7c485cd70..012681baaa6d 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -28,6 +28,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/reset.h>
->  #include <linux/watchdog.h>
-> +#include <linux/debugfs.h>
->  
->  #define WDOG_CONTROL_REG_OFFSET		    0x00
->  #define WDOG_CONTROL_REG_WDT_EN_MASK	    0x01
-> @@ -39,8 +40,14 @@
->  #define WDOG_COUNTER_RESTART_KICK_VALUE	    0x76
->  #define WDOG_INTERRUPT_STATUS_REG_OFFSET    0x10
->  #define WDOG_INTERRUPT_CLEAR_REG_OFFSET     0x14
-> +#define WDOG_COMP_PARAMS_5_REG_OFFSET       0xe4
-> +#define WDOG_COMP_PARAMS_4_REG_OFFSET       0xe8
-> +#define WDOG_COMP_PARAMS_3_REG_OFFSET       0xec
-> +#define WDOG_COMP_PARAMS_2_REG_OFFSET       0xf0
->  #define WDOG_COMP_PARAMS_1_REG_OFFSET       0xf4
->  #define WDOG_COMP_PARAMS_1_USE_FIX_TOP      BIT(6)
-> +#define WDOG_COMP_VERSION_REG_OFFSET        0xf8
-> +#define WDOG_COMP_TYPE_REG_OFFSET           0xfc
->  
->  /* There are sixteen TOPs (timeout periods) that can be set in the watchdog. */
->  #define DW_WDT_NUM_TOPS		16
-> @@ -85,6 +92,10 @@ struct dw_wdt {
->  	/* Save/restore */
->  	u32			control;
->  	u32			timeout;
-> +
-> +#ifdef CONFIG_DEBUG_FS
-> +	struct dentry		*dbgfs_dir;
-> +#endif
->  };
->  
->  #define to_dw_wdt(wdd)	container_of(wdd, struct dw_wdt, wdd)
-> @@ -484,6 +495,59 @@ static int dw_wdt_init_timeouts(struct dw_wdt *dw_wdt, struct device *dev)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_DEBUG_FS
-> +
-> +#define DW_WDT_DBGFS_REG(_name, _off) \
-> +{				      \
-> +	.name = _name,		      \
-> +	.offset = _off		      \
-> +}
-> +
-> +static const struct debugfs_reg32 dw_wdt_dbgfs_regs[] = {
-> +	DW_WDT_DBGFS_REG("cr", WDOG_CONTROL_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("torr", WDOG_TIMEOUT_RANGE_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("ccvr", WDOG_CURRENT_COUNT_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("crr", WDOG_COUNTER_RESTART_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("stat", WDOG_INTERRUPT_STATUS_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("param5", WDOG_COMP_PARAMS_5_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("param4", WDOG_COMP_PARAMS_4_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("param3", WDOG_COMP_PARAMS_3_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("param2", WDOG_COMP_PARAMS_2_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("param1", WDOG_COMP_PARAMS_1_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("version", WDOG_COMP_VERSION_REG_OFFSET),
-> +	DW_WDT_DBGFS_REG("type", WDOG_COMP_TYPE_REG_OFFSET)
-> +};
-> +
-> +static void dw_wdt_dbgfs_init(struct dw_wdt *dw_wdt)
-> +{
-> +	struct device *dev = dw_wdt->wdd.parent;
-> +	struct debugfs_regset32 *regset;
-> +
-> +	regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
-> +	if (!regset)
-> +		return;
-> +
-> +	regset->regs = dw_wdt_dbgfs_regs;
-> +	regset->nregs = ARRAY_SIZE(dw_wdt_dbgfs_regs);
-> +	regset->base = dw_wdt->regs;
-> +
-> +	dw_wdt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
-> +
-> +	debugfs_create_regset32("registers", 0444, dw_wdt->dbgfs_dir, regset);
-> +}
-> +
-> +static void dw_wdt_dbgfs_clear(struct dw_wdt *dw_wdt)
-> +{
-> +	debugfs_remove_recursive(dw_wdt->dbgfs_dir);
-> +}
-> +
-> +#else /* !CONFIG_DEBUG_FS */
-> +
-> +static void dw_wdt_dbgfs_init(struct dw_wdt *dw_wdt) {}
-> +static void dw_wdt_dbgfs_clear(struct dw_wdt *dw_wdt) {}
-> +
-> +#endif /* !CONFIG_DEBUG_FS */
-> +
->  static int dw_wdt_drv_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -607,6 +671,8 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto out_disable_pclk;
->  
-> +	dw_wdt_dbgfs_init(dw_wdt);
-> +
->  	return 0;
->  
->  out_disable_pclk:
-> @@ -621,6 +687,8 @@ static int dw_wdt_drv_remove(struct platform_device *pdev)
->  {
->  	struct dw_wdt *dw_wdt = platform_get_drvdata(pdev);
->  
-> +	dw_wdt_dbgfs_clear(dw_wdt);
-> +
->  	watchdog_unregister_device(&dw_wdt->wdd);
->  	reset_control_assert(dw_wdt->rst);
->  	clk_disable_unprepare(dw_wdt->pclk);
+>> -----Original Message-----
+>> From: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Sent: Tuesday, May 5, 2020 7:14 PM
+>> To: Guenter Roeck <linux@roeck-us.net>
+>> Cc: Michael Shych <michaelsh@mellanox.com>; Wim Van Sebroeck <wim@linux-
+>> watchdog.org>; Andy Shevchenko <andy@infradead.org>; Darren Hart
+>> <dvhart@infradead.org>; linux-watchdog@vger.kernel.org; Platform Driver
+>> <platform-driver-x86@vger.kernel.org>; Vadim Pasternak
+>> <vadimp@mellanox.com>
+>> Subject: Re: [PATCH v4 0/4] support watchdog with longer timeout period
+>>
+>> On Tue, May 5, 2020 at 7:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>> On 5/4/20 7:14 AM, michaelsh@mellanox.com wrote:
+>>>> From: Michael Shych <michaelsh@mellanox.com>
+>>
+>>>> Michael Shych (4):
+>>>>   platform_data/mlxreg: support new watchdog type with longer timeout
+>>>>     period
+>>>>   platform/x86: mlx-platform: support new watchdog type with longer
+>>>>     timeout
+>>>>   watchdog: mlx-wdt: support new watchdog type with longer timeout
+>>>>     period
+>>>>   docs: watchdog: mlx-wdt: Add description of new watchdog type 3
+>>>>
+>>>>  Documentation/watchdog/mlx-wdt.rst   |  10 ++++
+>>>>  drivers/platform/x86/mlx-platform.c  | 106
+>> ++++++++++++++++++++++++++++++
+>>>>  drivers/watchdog/mlx_wdt.c           |  73 ++++++++++++++++++++----
+>>>>  include/linux/platform_data/mlxreg.h |   5 +-
+>>
+>>> Guess the big question is now which branch to use to take this series.
+>>> Thoughts, anyone ?
+>>
+>> count(watchdog) = 8
+>> count(platform) = 6
+>>
+>> Thoughts?
+>>
+>> --
+>> With Best Regards,
+>> Andy Shevchenko
+
