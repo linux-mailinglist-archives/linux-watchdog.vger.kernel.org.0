@@ -2,178 +2,363 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C11A51E8BC9
-	for <lists+linux-watchdog@lfdr.de>; Sat, 30 May 2020 01:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D471E8E3E
+	for <lists+linux-watchdog@lfdr.de>; Sat, 30 May 2020 08:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726974AbgE2XMG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 May 2020 19:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726898AbgE2XMF (ORCPT
+        id S1728404AbgE3Gvy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 30 May 2020 02:51:54 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:51922 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726028AbgE3Gvy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 May 2020 19:12:05 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A399FC03E969;
-        Fri, 29 May 2020 16:12:05 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id d10so609133pgn.4;
-        Fri, 29 May 2020 16:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UyD3DwGcPFptU34is7EBy9YqqMnLUZNp6l2qXoFpLUE=;
-        b=KWMd43IrffgFVyqMXJVHCo1L/0r4bxXyP8w8IXQQJBHaFIFwcli6fMMhWX08dAjuqp
-         R+mvzDXwFtlljp/NSH3OYW2IG36F68+64krJhOorza5BJbMBCoru8hufOJYvwP2DoDzn
-         rPaHs05yJDNBKwF7CliZViMXmVvOdoMIk+yO7e/np74gP2RXzjz1tCndiCvXo2Dkwa1t
-         OtvPvxvIyNEoY630eTqmv9ykaclEm9hjk1pVYR2GC6Ul5ToLbnoJ35g6TBp3eYgcrYTN
-         YROVdgUQVS6boKkCNVKbYWLh2R6zIf/eQGsLPZmbDHSnF+VPd1a6b5mLMWGH+Wrj9kNu
-         sZUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=UyD3DwGcPFptU34is7EBy9YqqMnLUZNp6l2qXoFpLUE=;
-        b=kVCt/T2wMUuSShDzuUaFwheY1KeBHeWfetQ3LSUulmARjd9zmkTZOdfjszsSeEVxRF
-         KIZzc4eFr0YqhZOlErj/6KcKIucHTTFSd9FdH1PMHP66/XoNYw/Rq1hLWBKsL3xQjpMH
-         GBislKgwCunSysxGEOlQWDZvOQFGBmlkMAdiS2jZuvG21NtERb3OrQ+gBvZmpcM+gMur
-         3xT64qBRYgIdq6NxflxLOliGKiCUaDlchicFim8msP0+OIO+Vp4JpUDqjZFcQFJ2ntFA
-         yqTISgYGiaC4nxXFcoPlg/WLzrXm72UXZiiEUlkAms4gkL00oOBVzA01Ez3PoXhDVeq0
-         b4bA==
-X-Gm-Message-State: AOAM531Cfgot4uZKK0xehUosDZrqeEM+kFJeqINMkzQSL1+381DfJMUF
-        5ic1NwwbBFFE1PmUDpiC0O0=
-X-Google-Smtp-Source: ABdhPJxnglhpTNHWzamGYEiCl0lK3nOnuiGvha9vD2jdtALH5qFgqdHaUnqtVkzGpYa1uTPvyh26vQ==
-X-Received: by 2002:a63:348:: with SMTP id 69mr9283139pgd.68.1590793925167;
-        Fri, 29 May 2020 16:12:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v129sm8403630pfv.18.2020.05.29.16.12.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2020 16:12:04 -0700 (PDT)
-Subject: Re: [PATCH v4 0/4] support watchdog with longer timeout period
-To:     Michael Shych <michaelsh@mellanox.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Vadim Pasternak <vadimp@mellanox.com>
-References: <20200504141427.17685-1-michaelsh@mellanox.com>
- <ac2c580c-7cc0-8091-f3bc-fce175478e50@roeck-us.net>
- <CAHp75VdN6PfCCmRB_FssTRCoXms7JTt_af59pMqZNgV4ygz_8w@mail.gmail.com>
- <AM6PR05MB6168698F8A3D49F0EF61EFF0D9B70@AM6PR05MB6168.eurprd05.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <be4e03f9-8b20-6775-96cf-dc6d13027184@roeck-us.net>
-Date:   Fri, 29 May 2020 16:12:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sat, 30 May 2020 02:51:54 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8D2B48030778;
+        Sat, 30 May 2020 06:51:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7Zw6Vs17Jq8u; Sat, 30 May 2020 09:51:50 +0300 (MSK)
+Date:   Sat, 30 May 2020 09:51:48 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 6/7] watchdog: dw_wdt: Add pre-timeouts support
+Message-ID: <20200530065148.qswtkedsn6uibzlo@mobilestation>
+References: <20200526154123.24402-1-Sergey.Semin@baikalelectronics.ru>
+ <20200526154123.24402-7-Sergey.Semin@baikalelectronics.ru>
+ <20200529230219.GA194766@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <AM6PR05MB6168698F8A3D49F0EF61EFF0D9B70@AM6PR05MB6168.eurprd05.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200529230219.GA194766@roeck-us.net>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/21/20 7:25 AM, Michael Shych wrote:
-> Hi Andy, Guenter,
+On Fri, May 29, 2020 at 04:02:19PM -0700, Guenter Roeck wrote:
+> On Tue, May 26, 2020 at 06:41:22PM +0300, Serge Semin wrote:
+> > DW Watchdog can rise an interrupt in case if IRQ request mode is enabled
+> > and timer reaches the zero value. In this case the IRQ lane is left
+> > pending until either the next watchdog kick event (watchdog restart) or
+> > until the WDT_EOI register is read or the device/system reset. This
+> > interface can be used to implement the pre-timeout functionality
+> > optionally provided by the Linux kernel watchdog devices.
+> > 
+> > IRQ mode provides a two stages timeout interface. It means the IRQ is
+> > raised when the counter reaches zero, while the system reset occurs only
+> > after subsequent timeout if the timer restart is not performed. Due to
+> > this peculiarity the pre-timeout value is actually set to the achieved
+> > hardware timeout, while the real watchdog timeout is considered to be
+> > twice as much of it. This applies a significant limitation on the
+> > pre-timeout values, so current implementation supports either zero value,
+> > which disables the pre-timeout events, or non-zero values, which imply
+> > the pre-timeout to be at least half of the current watchdog timeout.
+> > 
+> > Note that we ask the interrupt controller to detect the rising-edge
+> > pre-timeout interrupts to prevent the high-level-IRQs flood, since
+> > if the pre-timeout happens, the IRQ lane will be left pending until
+> > it's cleared by the timer restart.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
 > 
-> Did you understand to which branch it will be better to take this patchset?
+
+> Nitpick below, but I don't really know what to do about it, so
 > 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-I created an immutable branch at
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-mlx-immutable
+Right. Semantically platform_get_irq_optional() should never return zero even
+though the comment above that function definition states otherwise. I'll fix the
+conditional statement to check for > 0 you've commented below and resend with
+your tag attached. Thanks.
 
-Guenter
+-Sergey
 
-> Thanks,
->    Michael.
 > 
->> -----Original Message-----
->> From: Andy Shevchenko <andy.shevchenko@gmail.com>
->> Sent: Tuesday, May 5, 2020 7:14 PM
->> To: Guenter Roeck <linux@roeck-us.net>
->> Cc: Michael Shych <michaelsh@mellanox.com>; Wim Van Sebroeck <wim@linux-
->> watchdog.org>; Andy Shevchenko <andy@infradead.org>; Darren Hart
->> <dvhart@infradead.org>; linux-watchdog@vger.kernel.org; Platform Driver
->> <platform-driver-x86@vger.kernel.org>; Vadim Pasternak
->> <vadimp@mellanox.com>
->> Subject: Re: [PATCH v4 0/4] support watchdog with longer timeout period
->>
->> On Tue, May 5, 2020 at 7:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>> On 5/4/20 7:14 AM, michaelsh@mellanox.com wrote:
->>>> From: Michael Shych <michaelsh@mellanox.com>
->>
->>>> Michael Shych (4):
->>>>   platform_data/mlxreg: support new watchdog type with longer timeout
->>>>     period
->>>>   platform/x86: mlx-platform: support new watchdog type with longer
->>>>     timeout
->>>>   watchdog: mlx-wdt: support new watchdog type with longer timeout
->>>>     period
->>>>   docs: watchdog: mlx-wdt: Add description of new watchdog type 3
->>>>
->>>>  Documentation/watchdog/mlx-wdt.rst   |  10 ++++
->>>>  drivers/platform/x86/mlx-platform.c  | 106
->> ++++++++++++++++++++++++++++++
->>>>  drivers/watchdog/mlx_wdt.c           |  73 ++++++++++++++++++++----
->>>>  include/linux/platform_data/mlxreg.h |   5 +-
->>
->>> Guess the big question is now which branch to use to take this series.
->>> Thoughts, anyone ?
->>
->> count(watchdog) = 8
->> count(platform) = 6
->>
->> Thoughts?
->>
->> --
->> With Best Regards,
->> Andy Shevchenko
-
+> > ---
+> > 
+> > Changelog v2:
+> > - Rearrange SoBs.
+> > - Make the Pre-timeout IRQ being optionally supported.
+> > ---
+> >  drivers/watchdog/dw_wdt.c | 138 +++++++++++++++++++++++++++++++++++---
+> >  1 file changed, 130 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+> > index efbc36872670..3cd7c485cd70 100644
+> > --- a/drivers/watchdog/dw_wdt.c
+> > +++ b/drivers/watchdog/dw_wdt.c
+> > @@ -22,6 +22,7 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/moduleparam.h>
+> > +#include <linux/interrupt.h>
+> >  #include <linux/of.h>
+> >  #include <linux/pm.h>
+> >  #include <linux/platform_device.h>
+> > @@ -36,6 +37,8 @@
+> >  #define WDOG_CURRENT_COUNT_REG_OFFSET	    0x08
+> >  #define WDOG_COUNTER_RESTART_REG_OFFSET     0x0c
+> >  #define WDOG_COUNTER_RESTART_KICK_VALUE	    0x76
+> > +#define WDOG_INTERRUPT_STATUS_REG_OFFSET    0x10
+> > +#define WDOG_INTERRUPT_CLEAR_REG_OFFSET     0x14
+> >  #define WDOG_COMP_PARAMS_1_REG_OFFSET       0xf4
+> >  #define WDOG_COMP_PARAMS_1_USE_FIX_TOP      BIT(6)
+> >  
+> > @@ -59,6 +62,11 @@ module_param(nowayout, bool, 0);
+> >  MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started "
+> >  		 "(default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> >  
+> > +enum dw_wdt_rmod {
+> > +	DW_WDT_RMOD_RESET = 1,
+> > +	DW_WDT_RMOD_IRQ = 2
+> > +};
+> > +
+> >  struct dw_wdt_timeout {
+> >  	u32 top_val;
+> >  	unsigned int sec;
+> > @@ -70,6 +78,7 @@ struct dw_wdt {
+> >  	struct clk		*clk;
+> >  	struct clk		*pclk;
+> >  	unsigned long		rate;
+> > +	enum dw_wdt_rmod	rmod;
+> >  	struct dw_wdt_timeout	timeouts[DW_WDT_NUM_TOPS];
+> >  	struct watchdog_device	wdd;
+> >  	struct reset_control	*rst;
+> > @@ -86,6 +95,20 @@ static inline int dw_wdt_is_enabled(struct dw_wdt *dw_wdt)
+> >  		WDOG_CONTROL_REG_WDT_EN_MASK;
+> >  }
+> >  
+> > +static void dw_wdt_update_mode(struct dw_wdt *dw_wdt, enum dw_wdt_rmod rmod)
+> > +{
+> > +	u32 val;
+> > +
+> > +	val = readl(dw_wdt->regs + WDOG_CONTROL_REG_OFFSET);
+> > +	if (rmod == DW_WDT_RMOD_IRQ)
+> > +		val |= WDOG_CONTROL_REG_RESP_MODE_MASK;
+> > +	else
+> > +		val &= ~WDOG_CONTROL_REG_RESP_MODE_MASK;
+> > +	writel(val, dw_wdt->regs + WDOG_CONTROL_REG_OFFSET);
+> > +
+> > +	dw_wdt->rmod = rmod;
+> > +}
+> > +
+> >  static unsigned int dw_wdt_find_best_top(struct dw_wdt *dw_wdt,
+> >  					 unsigned int timeout, u32 *top_val)
+> >  {
+> > @@ -145,7 +168,11 @@ static unsigned int dw_wdt_get_timeout(struct dw_wdt *dw_wdt)
+> >  			break;
+> >  	}
+> >  
+> > -	return dw_wdt->timeouts[idx].sec;
+> > +	/*
+> > +	 * In IRQ mode due to the two stages counter, the actual timeout is
+> > +	 * twice greater than the TOP setting.
+> > +	 */
+> > +	return dw_wdt->timeouts[idx].sec * dw_wdt->rmod;
+> >  }
+> >  
+> >  static int dw_wdt_ping(struct watchdog_device *wdd)
+> > @@ -164,7 +191,20 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
+> >  	unsigned int timeout;
+> >  	u32 top_val;
+> >  
+> > -	timeout = dw_wdt_find_best_top(dw_wdt, top_s, &top_val);
+> > +	/*
+> > +	 * Note IRQ mode being enabled means having a non-zero pre-timeout
+> > +	 * setup. In this case we try to find a TOP as close to the half of the
+> > +	 * requested timeout as possible since DW Watchdog IRQ mode is designed
+> > +	 * in two stages way - first timeout rises the pre-timeout interrupt,
+> > +	 * second timeout performs the system reset. So basically the effective
+> > +	 * watchdog-caused reset happens after two watchdog TOPs elapsed.
+> > +	 */
+> > +	timeout = dw_wdt_find_best_top(dw_wdt, DIV_ROUND_UP(top_s, dw_wdt->rmod),
+> > +				       &top_val);
+> > +	if (dw_wdt->rmod == DW_WDT_RMOD_IRQ)
+> > +		wdd->pretimeout = timeout;
+> > +	else
+> > +		wdd->pretimeout = 0;
+> >  
+> >  	/*
+> >  	 * Set the new value in the watchdog.  Some versions of dw_wdt
+> > @@ -175,25 +215,47 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
+> >  	writel(top_val | top_val << WDOG_TIMEOUT_RANGE_TOPINIT_SHIFT,
+> >  	       dw_wdt->regs + WDOG_TIMEOUT_RANGE_REG_OFFSET);
+> >  
+> > +	/* Kick new TOP value into the watchdog counter if activated. */
+> > +	if (watchdog_active(wdd))
+> > +		dw_wdt_ping(wdd);
+> > +
+> >  	/*
+> >  	 * In case users set bigger timeout value than HW can support,
+> >  	 * kernel(watchdog_dev.c) helps to feed watchdog before
+> >  	 * wdd->max_hw_heartbeat_ms
+> >  	 */
+> >  	if (top_s * 1000 <= wdd->max_hw_heartbeat_ms)
+> > -		wdd->timeout = timeout;
+> > +		wdd->timeout = timeout * dw_wdt->rmod;
+> >  	else
+> >  		wdd->timeout = top_s;
+> >  
+> >  	return 0;
+> >  }
+> >  
+> > +static int dw_wdt_set_pretimeout(struct watchdog_device *wdd, unsigned int req)
+> > +{
+> > +	struct dw_wdt *dw_wdt = to_dw_wdt(wdd);
+> > +
+> > +	/*
+> > +	 * We ignore actual value of the timeout passed from user-space
+> > +	 * using it as a flag whether the pretimeout functionality is intended
+> > +	 * to be activated.
+> > +	 */
+> > +	dw_wdt_update_mode(dw_wdt, req ? DW_WDT_RMOD_IRQ : DW_WDT_RMOD_RESET);
+> > +	dw_wdt_set_timeout(wdd, wdd->timeout);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static void dw_wdt_arm_system_reset(struct dw_wdt *dw_wdt)
+> >  {
+> >  	u32 val = readl(dw_wdt->regs + WDOG_CONTROL_REG_OFFSET);
+> >  
+> > -	/* Disable interrupt mode; always perform system reset. */
+> > -	val &= ~WDOG_CONTROL_REG_RESP_MODE_MASK;
+> > +	/* Disable/enable interrupt mode depending on the RMOD flag. */
+> > +	if (dw_wdt->rmod == DW_WDT_RMOD_IRQ)
+> > +		val |= WDOG_CONTROL_REG_RESP_MODE_MASK;
+> > +	else
+> > +		val &= ~WDOG_CONTROL_REG_RESP_MODE_MASK;
+> >  	/* Enable watchdog. */
+> >  	val |= WDOG_CONTROL_REG_WDT_EN_MASK;
+> >  	writel(val, dw_wdt->regs + WDOG_CONTROL_REG_OFFSET);
+> > @@ -231,6 +293,7 @@ static int dw_wdt_restart(struct watchdog_device *wdd,
+> >  	struct dw_wdt *dw_wdt = to_dw_wdt(wdd);
+> >  
+> >  	writel(0, dw_wdt->regs + WDOG_TIMEOUT_RANGE_REG_OFFSET);
+> > +	dw_wdt_update_mode(dw_wdt, DW_WDT_RMOD_RESET);
+> >  	if (dw_wdt_is_enabled(dw_wdt))
+> >  		writel(WDOG_COUNTER_RESTART_KICK_VALUE,
+> >  		       dw_wdt->regs + WDOG_COUNTER_RESTART_REG_OFFSET);
+> > @@ -246,9 +309,19 @@ static int dw_wdt_restart(struct watchdog_device *wdd,
+> >  static unsigned int dw_wdt_get_timeleft(struct watchdog_device *wdd)
+> >  {
+> >  	struct dw_wdt *dw_wdt = to_dw_wdt(wdd);
+> > +	unsigned int sec;
+> > +	u32 val;
+> > +
+> > +	val = readl(dw_wdt->regs + WDOG_CURRENT_COUNT_REG_OFFSET);
+> > +	sec = val / dw_wdt->rate;
+> >  
+> > -	return readl(dw_wdt->regs + WDOG_CURRENT_COUNT_REG_OFFSET) /
+> > -		dw_wdt->rate;
+> > +	if (dw_wdt->rmod == DW_WDT_RMOD_IRQ) {
+> > +		val = readl(dw_wdt->regs + WDOG_INTERRUPT_STATUS_REG_OFFSET);
+> > +		if (!val)
+> > +			sec += wdd->pretimeout;
+> > +	}
+> > +
+> > +	return sec;
+> >  }
+> >  
+> >  static const struct watchdog_info dw_wdt_ident = {
+> > @@ -257,16 +330,41 @@ static const struct watchdog_info dw_wdt_ident = {
+> >  	.identity	= "Synopsys DesignWare Watchdog",
+> >  };
+> >  
+> > +static const struct watchdog_info dw_wdt_pt_ident = {
+> > +	.options	= WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT |
+> > +			  WDIOF_PRETIMEOUT | WDIOF_MAGICCLOSE,
+> > +	.identity	= "Synopsys DesignWare Watchdog",
+> > +};
+> > +
+> >  static const struct watchdog_ops dw_wdt_ops = {
+> >  	.owner		= THIS_MODULE,
+> >  	.start		= dw_wdt_start,
+> >  	.stop		= dw_wdt_stop,
+> >  	.ping		= dw_wdt_ping,
+> >  	.set_timeout	= dw_wdt_set_timeout,
+> > +	.set_pretimeout	= dw_wdt_set_pretimeout,
+> >  	.get_timeleft	= dw_wdt_get_timeleft,
+> >  	.restart	= dw_wdt_restart,
+> >  };
+> >  
+> > +static irqreturn_t dw_wdt_irq(int irq, void *devid)
+> > +{
+> > +	struct dw_wdt *dw_wdt = devid;
+> > +	u32 val;
+> > +
+> > +	/*
+> > +	 * We don't clear the IRQ status. It's supposed to be done by the
+> > +	 * following ping operations.
+> > +	 */
+> > +	val = readl(dw_wdt->regs + WDOG_INTERRUPT_STATUS_REG_OFFSET);
+> > +	if (!val)
+> > +		return IRQ_NONE;
+> > +
+> > +	watchdog_notify_pretimeout(&dw_wdt->wdd);
+> > +
+> > +	return IRQ_HANDLED;
+> > +}
+> > +
+> >  #ifdef CONFIG_PM_SLEEP
+> >  static int dw_wdt_suspend(struct device *dev)
+> >  {
+> > @@ -447,6 +545,31 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
+> >  		goto out_disable_pclk;
+> >  	}
+> >  
+> > +	/* Enable normal reset without pre-timeout by default. */
+> > +	dw_wdt_update_mode(dw_wdt, DW_WDT_RMOD_RESET);
+> > +
+> > +	/*
+> > +	 * Pre-timeout IRQ is optional, since some hardware may lack support
+> > +	 * of it. Note we must request rising-edge IRQ, since the lane is left
+> > +	 * pending either until the next watchdog kick event or up to the
+> > +	 * system reset.
+> > +	 */
+> > +	ret = platform_get_irq_optional(pdev, 0);
+> > +	if (ret >= 0) {
+> 
+> I keep seeing notes that an interrupt value of 0 is invalid.
+> 
+> > +		ret = devm_request_irq(dev, ret, dw_wdt_irq,
+> > +				       IRQF_SHARED | IRQF_TRIGGER_RISING,
+> > +				       pdev->name, dw_wdt);
+> > +		if (ret)
+> > +			goto out_disable_pclk;
+> > +
+> > +		dw_wdt->wdd.info = &dw_wdt_pt_ident;
+> > +	} else {
+> > +		if (ret == -EPROBE_DEFER)
+> > +			goto out_disable_pclk;
+> > +
+> > +		dw_wdt->wdd.info = &dw_wdt_ident;
+> > +	}
+> > +
+> >  	reset_control_deassert(dw_wdt->rst);
+> >  
+> >  	ret = dw_wdt_init_timeouts(dw_wdt, dev);
+> > @@ -454,7 +577,6 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
+> >  		goto out_disable_clk;
+> >  
+> >  	wdd = &dw_wdt->wdd;
+> > -	wdd->info = &dw_wdt_ident;
+> >  	wdd->ops = &dw_wdt_ops;
+> >  	wdd->min_timeout = dw_wdt_get_min_timeout(dw_wdt);
+> >  	wdd->max_hw_heartbeat_ms = dw_wdt_get_max_timeout_ms(dw_wdt);
