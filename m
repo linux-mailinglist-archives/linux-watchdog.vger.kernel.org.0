@@ -2,155 +2,161 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8131ECDBD
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Jun 2020 12:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B461ECEF7
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Jun 2020 13:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725930AbgFCKkr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 3 Jun 2020 06:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgFCKkr (ORCPT
+        id S1725930AbgFCLtd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 3 Jun 2020 07:49:33 -0400
+Received: from www.linux-watchdog.org ([185.87.125.42]:51132 "EHLO
+        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725833AbgFCLtc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 3 Jun 2020 06:40:47 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A852C08C5C0
-        for <linux-watchdog@vger.kernel.org>; Wed,  3 Jun 2020 03:40:47 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id t4so2636304yba.12
-        for <linux-watchdog@vger.kernel.org>; Wed, 03 Jun 2020 03:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Dx8BZCAyOelUut0rl9Q9MMUdQl4nnORmkfsPLfnsf9I=;
-        b=mqgtV/eo4BkZHFXXVju/3WABrqnYwuXHGrSz102vmjoxmxHqFFHyQ9a1yN1pIC8KN1
-         wDM+RSjgurcfuf6sT4x1Mxxzgnd6OY5HlPZcaJYeBdlmuHfGUyf4/eWjHuF4ULxj9pE9
-         u3wHTXd7e4mb680zmVouUfZYkg9FwUuVOm5WdMTdIKC9oCtgjkSRx7TWyiUmHox1thlZ
-         /LvSM2TXz7JRrqEaltbg3Lm74U3+7h3f5iztc4ZYJHNcIJVOdZd22SNKWpad70lLHlce
-         kqtk1kr6/JFp+f9ykTuurar0kxOCS+jEbvDW1SvZBP7ekq0jL/0vp/0vudM2tlsFeVem
-         sr3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Dx8BZCAyOelUut0rl9Q9MMUdQl4nnORmkfsPLfnsf9I=;
-        b=LJph3tPKGg9vivii6HxSafC1WtnNaw2oH606VoPC0FY151l3c6R3Q47kpkxv9TUBvF
-         tmJrSXfsAPTuWn8MuYAJyL3IiyUATcd6Uuwd479cL2BhOuIrGKM8Wr0CQ6zA5mBUY5Xg
-         8+Ux5RUH45lUKU1rPY//LXgPv/hTAz/d/iRUdjnJEQ/uOmuNOnpyjKYNXMh5RAml7G3f
-         HmfzzOxD2jowCK/2SUqMCj1nrhNDT99JslmhfcEwS29jwAZ559mHtzp1cR4LbBpWZrle
-         X05DbRc3DuyGd/LcqdFi18t6TyVKVnEhtRvBpSWsdXjI1P/nJtt81H6vz5EWJ8EEurNo
-         jn1g==
-X-Gm-Message-State: AOAM530XSjHmTjz/NDEkhwsbAWgGhEnAA7jFUv9vcXlA2QrkLS4Do130
-        slFePZqCEJyMbxki9PO8ozc3dOuJM2Glug==
-X-Google-Smtp-Source: ABdhPJyoC8t2KMc/aMEktF8cUJY2eR4tlOdFRNKqM99WWDuNN02vdfCr2gf9KKK1yOhvd2wdApd7hw6cxZ+tNQ==
-X-Received: by 2002:a25:3203:: with SMTP id y3mr38762116yby.77.1591180846405;
- Wed, 03 Jun 2020 03:40:46 -0700 (PDT)
-Date:   Wed,  3 Jun 2020 18:39:24 +0800
-Message-Id: <20200603103923.116113-1-woodylin@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.rc2.251.g90737beb825-goog
-Subject: [PATCH] softdog: Add options 'soft_reboot_target' and 'soft_active_on_boot'
-From:   Woody Lin <woodylin@google.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, Woody Lin <woodylin@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 3 Jun 2020 07:49:32 -0400
+X-Greylist: delayed 498 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Jun 2020 07:49:32 EDT
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 398F4409DB; Wed,  3 Jun 2020 12:45:21 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 398F4409DB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1591181121;
+        bh=GZUVWstdXkI+h/i93KPfb8kDZBh1tszMSwwt+h9Hi7U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZGL6/2IuOUBQx4dagp8i1lGa6/vSgFM9hcTjxRo58jzxlZ7mnlE0H7rVamp2qsRkY
+         Zijd4jKIDAkJc/KNvy9C0Nhp4jq+f37Ds0XYdxvh6hGIeUTp0e08nrl7PaRGrf18sE
+         ulMbgwWaT5sZ2JS04D7xkL037gpjAQAcDdriyu4c=
+Date:   Wed, 3 Jun 2020 12:45:21 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Bumsik Kim <kbumsik@gmail.com>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Evan Benn <evanbenn@chromium.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Jason Yan <yanaijie@huawei.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Shyam Saini <mayhs11saini@gmail.com>,
+        Stefan Riedmueller <s.riedmueller@phytec.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [GIT PULL REQUEST] watchdog - v5.8 Merge window
+Message-ID: <20200603104521.GA14826@www.linux-watchdog.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add module parameters 'soft_reboot_target' and 'soft_active_on_boot' for
-customizing softdog configuration; config reboot target by assigning
-soft_reboot_target, and set soft_active_on_boot to start up softdog
-timer at module initialization stage.
+Hi Linus,
 
-Signed-off-by: Woody Lin <woodylin@google.com>
+Please pull the watchdog changes for the v5.8 release cycle.
+
+This series contains:
+* Add new arm_smc_wdt watchdog driver
+* da9062 and da9063 improvements
+* Clarify documentation about stop() that became optional
+* Document r8a7742 support
+* some overall fixes and improvements
+
+Please also note that Stephen Rothwell reported a conflict between the device tree and the watchdog tree on Tue, 26 May 2020 15:20:15 +1000.
+He fixed it with the following patch:
+diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+index 27e8c4accd67..572f4c912fef 100644
+--- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+@@ -24,6 +24,7 @@ properties:
+
+       - items:
+           - enum:
++              - renesas,r8a7742-wdt      # RZ/G1H
+               - renesas,r8a7743-wdt      # RZ/G1M
+               - renesas,r8a7744-wdt      # RZ/G1N
+               - renesas,r8a7745-wdt      # RZ/G1E
 ---
- drivers/watchdog/softdog.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
 
-diff --git a/drivers/watchdog/softdog.c b/drivers/watchdog/softdog.c
-index 3e4885c1545e..f5027acddbbb 100644
---- a/drivers/watchdog/softdog.c
-+++ b/drivers/watchdog/softdog.c
-@@ -20,11 +20,13 @@
- #include <linux/hrtimer.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
-+#include <linux/kthread.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
- #include <linux/reboot.h>
- #include <linux/types.h>
- #include <linux/watchdog.h>
-+#include <linux/workqueue.h>
- 
- #define TIMER_MARGIN	60		/* Default is 60 seconds */
- static unsigned int soft_margin = TIMER_MARGIN;	/* in seconds */
-@@ -49,9 +51,32 @@ module_param(soft_panic, int, 0);
- MODULE_PARM_DESC(soft_panic,
- 	"Softdog action, set to 1 to panic, 0 to reboot (default=0)");
- 
-+static char *soft_reboot_target;
-+module_param(soft_reboot_target, charp, 0000);
-+MODULE_PARM_DESC(soft_reboot_target,
-+	"Softdog action, set reboot target (default=emergency)");
-+
-+static bool soft_active_on_boot;
-+module_param(soft_active_on_boot, bool, 0000);
-+MODULE_PARM_DESC(soft_active_on_boot,
-+	"Set to true to active Softdog on boot (default=false)");
-+
- static struct hrtimer softdog_ticktock;
- static struct hrtimer softdog_preticktock;
- 
-+static int reboot_kthread_fn(void *data)
-+{
-+	kernel_restart(soft_reboot_target);
-+	emergency_restart(); /* Should not reach here */
-+	return -EPERM;       /* Should not reach here */
-+}
-+
-+static void reboot_work_fn(struct work_struct *unused)
-+{
-+	if (IS_ERR(kthread_run(reboot_kthread_fn, NULL, "softdog_reboot")))
-+		emergency_restart();
-+}
-+
- static enum hrtimer_restart softdog_fire(struct hrtimer *timer)
- {
- 	module_put(THIS_MODULE);
-@@ -62,6 +87,12 @@ static enum hrtimer_restart softdog_fire(struct hrtimer *timer)
- 		panic("Software Watchdog Timer expired");
- 	} else {
- 		pr_crit("Initiating system reboot\n");
-+		if (soft_reboot_target != NULL) {
-+			static DECLARE_WORK(reboot_work, reboot_work_fn);
-+
-+			schedule_work(&reboot_work);
-+			return HRTIMER_NORESTART;
-+		}
- 		emergency_restart();
- 		pr_crit("Reboot didn't ?????\n");
- 	}
-@@ -145,12 +176,19 @@ static int __init softdog_init(void)
- 		softdog_preticktock.function = softdog_pretimeout;
- 	}
- 
-+	if (soft_active_on_boot) {
-+		set_bit(WDOG_HW_RUNNING, &softdog_dev.status);
-+		set_bit(WDOG_ACTIVE, &softdog_dev.status);
-+	}
-+
- 	ret = watchdog_register_device(&softdog_dev);
- 	if (ret)
- 		return ret;
- 
- 	pr_info("initialized. soft_noboot=%d soft_margin=%d sec soft_panic=%d (nowayout=%d)\n",
- 		soft_noboot, softdog_dev.timeout, soft_panic, nowayout);
-+	pr_info("             soft_reboot_target=%s soft_active_on_boot=%d\n",
-+		soft_reboot_target, soft_active_on_boot);
- 
- 	return 0;
- }
--- 
-2.27.0.rc2.251.g90737beb825-goog
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 9cb1fd0efd195590b828b9b865421ad345a4a145:
+
+  Linux 5.7-rc7 (2020-05-24 15:32:54 -0700)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.8-rc1
+
+for you to fetch changes up to 072cb8b628d312f5785ffdf324286a0519aed910:
+
+  watchdog: m54xx: Add missing include (2020-05-25 08:55:47 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 5.8-rc1 tag
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      watchdog: iTCO: fix link error
+
+Bumsik Kim (1):
+      watchdog: clarify that stop() is optional
+
+Dinghao Liu (1):
+      watchdog: Fix runtime PM imbalance on error
+
+Evan Benn (1):
+      dt-bindings: watchdog: Add ARM smc wdt for mt8173 watchdog
+
+Fabio Estevam (1):
+      watchdog: imx_sc_wdt: Fix reboot on crash
+
+Jason Yan (1):
+      watchdog: riowd: remove unneeded semicolon
+
+Julius Werner (1):
+      watchdog: Add new arm_smc_wdt watchdog driver
+
+Lad Prabhakar (1):
+      dt-bindings: watchdog: renesas,wdt: Document r8a7742 support
+
+Shyam Saini (1):
+      watchdog: ts72xx_wdt: fix build error
+
+Stefan Riedmueller (3):
+      watchdog: da9062: Initialize timeout during probe
+      watchdog: da9063: Make use of pre-configured timeout during probe
+      watchdog: da9062: No need to ping manually before setting timeout
+
+Thomas Gleixner (1):
+      watchdog: m54xx: Add missing include
+
+Wolfram Sang (1):
+      watchdog: imx2_wdt: update contact email
+
+ .../devicetree/bindings/watchdog/arm-smc-wdt.yaml  |  37 ++++
+ .../devicetree/bindings/watchdog/renesas,wdt.txt   |   1 +
+ .../watchdog/convert_drivers_to_kernel_api.rst     |   2 +-
+ Documentation/watchdog/watchdog-kernel-api.rst     |   2 +-
+ MAINTAINERS                                        |   7 +
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/watchdog/Kconfig                           |  15 ++
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/arm_smc_wdt.c                     | 188 +++++++++++++++++++++
+ drivers/watchdog/da9062_wdt.c                      |  32 ++--
+ drivers/watchdog/da9063_wdt.c                      |  20 ++-
+ drivers/watchdog/imx2_wdt.c                        |   2 +-
+ drivers/watchdog/imx_sc_wdt.c                      |   5 +
+ drivers/watchdog/m54xx_wdt.c                       |   1 +
+ drivers/watchdog/omap_wdt.c                        |   1 +
+ drivers/watchdog/riowd.c                           |   2 +-
+ include/linux/watchdog.h                           |   4 +-
+ 17 files changed, 299 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml
+ create mode 100644 drivers/watchdog/arm_smc_wdt.c
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
 
