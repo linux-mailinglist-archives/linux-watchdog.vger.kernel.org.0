@@ -2,96 +2,67 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 521961EE909
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Jun 2020 19:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89EBF1EEA35
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Jun 2020 20:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729929AbgFDRBK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 4 Jun 2020 13:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729907AbgFDRBK (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 4 Jun 2020 13:01:10 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E26C08C5C0;
-        Thu,  4 Jun 2020 10:01:09 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id bg4so2435209plb.3;
-        Thu, 04 Jun 2020 10:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=APr1c63yMB00bntd9u0Oxg5hC4qT0S7BCgh01Muh2aY=;
-        b=O3MH17LyPnMyb7sHeYcslLOYF7wsDvUAEBlNco3jOwD/3lVvqCSzNJrkVa6VxOi85W
-         oqES2f88fwj9E6dW8lC6VuPkrjpl2NLspzDkeyl58Jj79vAjlRrbSXVzJROJ7iJ4g33t
-         RVzQ8oJmi9yVeUfmWmQBUlufMhsf47cEhkMUzJE6np68aJD/hUX2OvZ6D2fk4p/NuOKW
-         KE2tqTf8pnwiXALW7AR4CeOUPO/ruw9ZPNj3PCADgQ1Ix38jt/A4tHid0kbzqRF5tTKu
-         IthiZ149ItvUtCsnVhm1bQ6QmkTHBLw0iqpRgSXD7YpQYlRMyFU7Vy+KOQG2T0q4nCQq
-         nGbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=APr1c63yMB00bntd9u0Oxg5hC4qT0S7BCgh01Muh2aY=;
-        b=IasYgz3L/724yRlMbdStr6pCV3AG05GrAMIAo7a3RG2tIS+s0Z0PoMv1Opw1crBAAr
-         w5+ROpHxp1VVvaPv37mHg+eRYt2ZpXmqCJWrTiRz2hw0TCfYswaXBtEcndBSYMB1N151
-         Av6N3mHkfXbqP+Ws4bKH7ar0LfDlKUPRPaXtnDQHoW7j0hfBMpnPoBdDGBQZZScmcfHX
-         GOaY/2eQtrML7qbzqj5L+tdUeP781xtGZNFfQKgaJ8scbliIK9Z0mVWsUh5ra8sYTeS5
-         IfzKo59lALHHBCqhiMNO7tTW6QepchXnA6CW4jhF50I+K+g7AUnnJNCK1+xtMGK8Ukd1
-         JoPA==
-X-Gm-Message-State: AOAM530vBC8CDFEPSBXFdMr13If/s1VO8a+LHXKGTRsdz/TNiefoUvhz
-        KWqq3frVJTA0etxKuGsT3kjFKAyY
-X-Google-Smtp-Source: ABdhPJwCJ5clmX2jl7zg/KBRzcXMZU8E2He1CRlXqRcYVoQHut8qTfGPumlfcGAIPbFlDc19EnvpoQ==
-X-Received: by 2002:a17:902:c082:: with SMTP id j2mr5928765pld.268.1591290069319;
-        Thu, 04 Jun 2020 10:01:09 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 73sm4538481pge.15.2020.06.04.10.01.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 04 Jun 2020 10:01:08 -0700 (PDT)
-Date:   Thu, 4 Jun 2020 10:01:07 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        martin@geanix.com, bth@kamstrup.com
-Subject: Re: [PATCH] rtc: pcf2127: watchdog: handle nowayout feature
-Message-ID: <20200604170106.GA99753@roeck-us.net>
-References: <20200604162602.76524-1-bruno.thomsen@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200604162602.76524-1-bruno.thomsen@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1730775AbgFDSZD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 4 Jun 2020 14:25:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44678 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730773AbgFDSZD (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 4 Jun 2020 14:25:03 -0400
+Subject: Re: [GIT PULL REQUEST] watchdog - v5.8 Merge window
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591295103;
+        bh=4GYfG4NIAtWs5zkPYaH7LAejT+acjQnuz5KG0/00Cow=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=nY1WUt11VZr8ZQppkAOxUHueHNlhROnLD6Wl/Rj73j2NUGCvn2luTycQ/xo5jedgd
+         Xtw5oXa3L2maHpFX6CTAFUbC3YWjIQmaxMMBeso0ACXZOALxG9k/xOIMOBSsOLy6pC
+         XUManJqpykj8jBwureAoYcmL16Wg/DgSEjxxOYLw=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200603104521.GA14826@www.linux-watchdog.org>
+References: <20200603104521.GA14826@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200603104521.GA14826@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git
+ tags/linux-watchdog-5.8-rc1
+X-PR-Tracked-Commit-Id: 072cb8b628d312f5785ffdf324286a0519aed910
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0486a39a6d6c8db78bde4d7b9c44e32dcc6050d4
+Message-Id: <159129510300.18772.3554679226160374886.pr-tracker-bot@kernel.org>
+Date:   Thu, 04 Jun 2020 18:25:03 +0000
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Bumsik Kim <kbumsik@gmail.com>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Evan Benn <evanbenn@chromium.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Jason Yan <yanaijie@huawei.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Shyam Saini <mayhs11saini@gmail.com>,
+        Stefan Riedmueller <s.riedmueller@phytec.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 06:26:02PM +0200, Bruno Thomsen wrote:
-> Driver does not use module parameter for nowayout, so it need to
-> statically initialize status variable of the watchdog_device based
-> on CONFIG_WATCHDOG_NOWAYOUT.
-> 
-> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+The pull request you sent on Wed, 3 Jun 2020 12:45:21 +0200:
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.8-rc1
 
-> ---
->  drivers/rtc/rtc-pcf2127.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index 4e50d6768f13..0f7d0a9a2d18 100644
-> --- a/drivers/rtc/rtc-pcf2127.c
-> +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -441,6 +441,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->  	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
->  	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
->  	pcf2127->wdd.min_hw_heartbeat_ms = 500;
-> +	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
->  
->  	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
->  
-> -- 
-> 2.26.2
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0486a39a6d6c8db78bde4d7b9c44e32dcc6050d4
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
