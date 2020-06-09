@@ -2,50 +2,50 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CBC1F368B
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Jun 2020 10:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3551B1F368C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Jun 2020 10:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727942AbgFII5q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Jun 2020 04:57:46 -0400
-Received: from mga11.intel.com ([192.55.52.93]:32395 "EHLO mga11.intel.com"
+        id S1728159AbgFII55 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Jun 2020 04:57:57 -0400
+Received: from mga07.intel.com ([134.134.136.100]:63575 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727023AbgFII5p (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Jun 2020 04:57:45 -0400
-IronPort-SDR: oM/EaYzZwNaNuVI5WUQ6ChzyzQGTJXen0nOGs36QFgmslaKjgUQcY+VycSLOUbksuuWIf8aTVD
- uZiT9L7jJA0A==
+        id S1727023AbgFII5z (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 9 Jun 2020 04:57:55 -0400
+IronPort-SDR: 0Apht4sP8kgflqzjtPyiAoaXc1Mi3vZbnGPt+3TtLidOpeF8AEVO00aDW349tWK38/Mf6KfXDV
+ 6qz2XroOoOzA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2020 01:57:43 -0700
-IronPort-SDR: GIRaMrOrpXlCj1nB5MRcGlNFFZoOD5ymxT4t0908X5luyn6OQQIuqUi76fvu4DmlM+m0Rum7lN
- dpgmJ98uBVlw==
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2020 01:57:54 -0700
+IronPort-SDR: 29e8Ey9G7kNr+oenwBfl0xYeoEgWRj39Uu/pDoiG2r9Lam3mTYwsWYvexTIF9/wgnQEgB2n5Si
+ CQ8aAYqztmWQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,491,1583222400"; 
-   d="scan'208";a="306199982"
+   d="scan'208";a="418340444"
 Received: from linux.intel.com ([10.54.29.200])
-  by orsmga008.jf.intel.com with ESMTP; 09 Jun 2020 01:57:43 -0700
+  by orsmga004.jf.intel.com with ESMTP; 09 Jun 2020 01:57:54 -0700
 Received: from [10.215.166.141] (ekotax-mobl.gar.corp.intel.com [10.215.166.141])
-        by linux.intel.com (Postfix) with ESMTP id 874C15805B5;
-        Tue,  9 Jun 2020 01:57:40 -0700 (PDT)
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: intel: Add YAML Schemas for
- Watchdog timer
+        by linux.intel.com (Postfix) with ESMTP id 50BC35805B5;
+        Tue,  9 Jun 2020 01:57:51 -0700 (PDT)
+Subject: Re: [PATCH 2/2] watchdog: intel: Watchdog timer support on Lightning
+ Mountain
 To:     Guenter Roeck <linux@roeck-us.net>, wim@linux-watchdog.org,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         robbh@kernel.org
 Cc:     linux-kernel@vger.kernel.org, andriy.shevchenko@intel.com,
         cheol.yong.kim@intel.com, qi-ming.wu@intel.com, yixin.zhu@intel.com
 References: <cover.1591584255.git.eswara.kota@linux.intel.com>
- <ac89e289b79fec0a82d1dd060e17eeca024885d5.1591584255.git.eswara.kota@linux.intel.com>
- <235d301b-3b25-bb00-bd1b-c4392fa23c63@roeck-us.net>
+ <220609c6aec3dbd06585897ddcfdde277c823cac.1591584255.git.eswara.kota@linux.intel.com>
+ <61d256e7-88ca-ac89-9c80-132c0d2de4a8@roeck-us.net>
 From:   Dilip Kota <eswara.kota@linux.intel.com>
-Message-ID: <4a336f1d-68da-3356-a73a-95747ba4af4c@linux.intel.com>
-Date:   Tue, 9 Jun 2020 16:57:39 +0800
+Message-ID: <af453186-8017-31de-f6b3-f39f0c3704b8@linux.intel.com>
+Date:   Tue, 9 Jun 2020 16:57:50 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <235d301b-3b25-bb00-bd1b-c4392fa23c63@roeck-us.net>
+In-Reply-To: <61d256e7-88ca-ac89-9c80-132c0d2de4a8@roeck-us.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
@@ -53,74 +53,152 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
-On 6/8/2020 9:37 PM, Guenter Roeck wrote:
+On 6/8/2020 9:36 PM, Guenter Roeck wrote:
 > On 6/7/20 10:49 PM, Dilip Kota wrote:
->> Add YAML schemas for the watchdog timer on Intel Lightning
->> Mountain SoC.
+>> On Intel Lightning Mountain SoC, General Purpose Timer Counter(GPTC)
+>> programmable as clocksource, real time clock or watchdog timer.
+>>
+>> This driver configures GPTC as Watchdog timer and triggers reset signal
+>> to CPU on timeout.
 >>
 >> Signed-off-by: Dilip Kota <eswara.kota@linux.intel.com>
 >> ---
->>   .../bindings/watchdog/intel,lgm-gptc-wdt.yaml      | 75 ++++++++++++++++++++++
->>   1 file changed, 75 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/watchdog/intel,lgm-gptc-wdt.yaml
+>>   drivers/watchdog/Kconfig              |  13 ++
+>>   drivers/watchdog/Makefile             |   1 +
+>>   drivers/watchdog/intel_lgm_gptc_wdt.c | 420 ++++++++++++++++++++++++++++++++++
+>>   3 files changed, 434 insertions(+)
+>>   create mode 100644 drivers/watchdog/intel_lgm_gptc_wdt.c
 >>
->> diff --git a/Documentation/devicetree/bindings/watchdog/intel,lgm-gptc-wdt.yaml b/Documentation/devicetree/bindings/watchdog/intel,lgm-gptc-wdt.yaml
+>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>> index 0663c604bd642..8009c11e75dda 100644
+>> --- a/drivers/watchdog/Kconfig
+>> +++ b/drivers/watchdog/Kconfig
+>> @@ -1789,6 +1789,19 @@ config IMGPDC_WDT
+>>   	  To compile this driver as a loadable module, choose M here.
+>>   	  The module will be called imgpdc_wdt.
+>>   
+>> +config INTEL_LGM_GPTC_WDT
+>> +	tristate "INTEL LGM SoC Watchdog"
+>> +	depends on X86 || COMPILE_TEST
+>> +	depends on OF && HAS_IOMEM
+>> +	select REGMAP
+>> +	select MFD_SYSCON
+>> +	select WATCHDOG_CORE
+>> +	help
+>> +	  Driver for Watchdog Timer on Intel Lightning Mountain SoC.
+>> +
+>> +	  To compile this driver as a loadable module, choose M here.
+>> +	  The module will be called intel_lgm_gptc_wdt.
+>> +
+>>   config LANTIQ_WDT
+>>   	tristate "Lantiq SoC watchdog"
+>>   	depends on LANTIQ
+>> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+>> index 6de2e4ceef190..92c99e4c46eb7 100644
+>> --- a/drivers/watchdog/Makefile
+>> +++ b/drivers/watchdog/Makefile
+>> @@ -166,6 +166,7 @@ obj-$(CONFIG_TXX9_WDT) += txx9wdt.o
+>>   obj-$(CONFIG_OCTEON_WDT) += octeon-wdt.o
+>>   octeon-wdt-y := octeon-wdt-main.o octeon-wdt-nmi.o
+>>   obj-$(CONFIG_LANTIQ_WDT) += lantiq_wdt.o
+>> +obj-$(CONFIG_INTEL_LGM_GPTC_WDT) += intel_lgm_gptc_wdt.o
+>>   obj-$(CONFIG_LOONGSON1_WDT) += loongson1_wdt.o
+>>   obj-$(CONFIG_RALINK_WDT) += rt2880_wdt.o
+>>   obj-$(CONFIG_IMGPDC_WDT) += imgpdc_wdt.o
+>> diff --git a/drivers/watchdog/intel_lgm_gptc_wdt.c b/drivers/watchdog/intel_lgm_gptc_wdt.c
 >> new file mode 100644
->> index 0000000000000..83dc39a5090c1
+>> index 0000000000000..52be7cc194f8f
 >> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/watchdog/intel,lgm-gptc-wdt.yaml
->> @@ -0,0 +1,75 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/watchdog/intel,lgm-gptc-wdt.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +++ b/drivers/watchdog/intel_lgm_gptc_wdt.c
+>> @@ -0,0 +1,420 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) 2020 Intel Corporation.
+>> + */
 >> +
->> +title: Intel Lightning Mountain Watchdog timer.
+>> +#include <linux/bitfield.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/cpu.h>
+>> +#include <linux/io.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/watchdog.h>
 >> +
->> +maintainers:
->> +  - Dilip Kota <eswara.kota@linux.intel.com>
+>> +#define GPTC_CLC		0x00
+>> +#define GPTC_CLC_SUSPEND	BIT(4)
+>> +#define GPTC_CLC_RMC		GENMASK(15, 8)
 >> +
->> +description: |
->> +  Intel Lightning Mountain SoC has General Purpose Timer Counter(GPTC) which can
->> +  be configured as Clocksource, real time clock and Watchdog timer.
->> +  Each General Purpose Timer Counter has three timers. And total four General
->> +  Purpose Timer Counters are present on Lightning Mountain SoC which sums up
->> +  to 12 timers.
->> +  Lightning Mountain has four CPUs and each CPU is configured with one GPTC
->> +  timer as watchdog timer. Total four timers are configured as watchdog timers
->> +  on Lightning Mountain SoC.
+>> +/* divider 10 to produce 200 / 10 = 20 MHz clock */
+>> +#define CLC_RMC_DIV		10
 >> +
-> Why not just one ? The watchdog subsystem does not monitor individual CPUs,
-> it monitors the system.
-
-Intel Atom based Lightning Mountain SoC, system has four CPUs. On 
-Lightning Mountain SoC ,Watchdog subsystem is combination of GPTC timers 
-and reset controller unit. On Lightning Mountain SoC, each CPU is 
-configured with one GPTC timer, so that if any of the CPU hangs or 
-freezes, the watchdog daemon running on respective CPU cannot reset/ping 
-or pet the watchdog timer. This causes the watchdog timeout. On watchdog 
-timeout, reset controller triggers the reset to respective CPU.
-
-
-____________________
------------------------------>|                |
-                                                    |         
------------->| Reset controller unit    |
-|                     |                 |___________________|
-|                     |
-|                     |
-   ______________________|__________|______
-   |                                  GPTC   | |            |
-   | ___________   ________|_       ______|____   |
-   | |      timer 1 |   | timer 2      |    | timer 3      |    |
-   | |_________|   |_________|    |_________|    |
-   |______________________________________|
+>> +#define GPTC_CON(X)		(0x10 + (X) * 0x20)
+>> +#define GPTC_CON_CNT_UP		BIT(1)
+>> +#define GPTC_CON_ONESHOT	BIT(3)
+>> +#define GPTC_CON_EXT		BIT(4)
+>> +
+>> +#define GPTC_RUN(X)		(0x18 + (X) * 0x20)
+>> +#define GPTC_RUN_EN		BIT(0)
+>> +#define GPTC_RUN_STOP		BIT(1)
+>> +#define GPTC_RUN_RELOAD		BIT(2)
+>> +
+>> +#define GPTC_RLD(X)		(0x20 + (X) * 0x20)
+>> +#define GPTC_CNT(X)		(0x28 + (X) * 0x20)
+>> +
+>> +#define GPTC_IRNENCLR		0xF0
+>> +#define GPTC_IRNEN		0xF4
+>> +#define GPTC_IRNCR		0xFC
+>> +
+>> +/* Watchdog Timeout Reset register offset and bitfeilds */
+>> +#define BIA_WDT_RST_EN		0x1E0
+>> +#define BIA_WDT			BIT(6)
+>> +
+>> +#define MAX_TIMERID		2
+>> +#define MAX_CPUID		3
+>> +#define TIMER_MARGIN_SEC	300
+>> +
+>> +static bool nowayout = WATCHDOG_NOWAYOUT;
+>> +module_param(nowayout, bool, 0);
+>> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started\n"
+>> +	" (default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>> +
+>> +struct lgm_gptc_timer {
+>> +	struct lgm_gptc_wdt	*wdt_node;
+>> +	struct watchdog_device	wdd;
+>> +	unsigned int		tid;
+>> +	unsigned int		cpuid;
+>> +	unsigned int		frequency;
+>> +	unsigned int		cycles;
+>> +	bool			enable;
+>> +};
+>> +
+>> +struct lgm_gptc_wdt {
+>> +	struct device		*dev;
+>> +	void __iomem		*gptc_base;
+>> +	struct regmap		*rst_hndl;
+>> +	struct clk		*freqclk;
+>> +	struct clk		*gateclk;
+>> +	unsigned int		fpifreq;
+>> +	enum cpuhp_state	state;
+>> +};
+>> +
+>> +DEFINE_PER_CPU(struct lgm_gptc_timer, lgm_timer_per_cpu);
+>> +
+> This is unusual. You'll have to provide a very detailed explanation
+> why this is needed.
+Sure will add it.
+It is required for the hotplug cpu support, and hotplug cpu is added 
+because, the cpus on Lightning Mountain SoC can be online and offline 
+dynamically.
+If CPUs come to online after the watchdog driver probe, hotplug CPU 
+support helps to configure watchdog timer once CPU is online.
 
 Regards,
 -Dilip
-
-
+>
 > Guenter
 >
 >
