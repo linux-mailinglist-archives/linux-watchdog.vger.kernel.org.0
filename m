@@ -2,194 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050801F344A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Jun 2020 08:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CBC1F368B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Jun 2020 10:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgFIGrl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Jun 2020 02:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726917AbgFIGrk (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Jun 2020 02:47:40 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A16C08C5C3
-        for <linux-watchdog@vger.kernel.org>; Mon,  8 Jun 2020 23:47:40 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id q25so1914868wmj.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 08 Jun 2020 23:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=AwtDdz17DFDmRBPEGuRAOpx0vtQ2m9UoLoRBSQqsyp0=;
-        b=f0FgM4Vro6vfvlNeSVfc1iBcrhCl+E0gwx58KhDVXNN908yZbqUz+mMshmPtCEnlmR
-         VwW2GNhT56ZYbGOa1IoMFhQ73ta0IpXBTP+UnYFqFIqeYSD8Q+KmHWAe9EUQkVP/Ti54
-         2XsWxtT9M+slp4+imVCL4xcL/NqM/6mxNI8M3B+BWoOxSuhJuafxLu/sZkpSqDM/DOJ/
-         rGB3oVrbVqO7RWvp+yWo1R+iT3pmyikiZZmMzq6MGzQC6rPJSiovGWM2xWLq4hKl1H0Z
-         /bougyij11X7OPIzVjdnCIsdwnbNAwC3aiABpVHKE4o5DP2Fj70XHrncpk+OoU1zAf64
-         asXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=AwtDdz17DFDmRBPEGuRAOpx0vtQ2m9UoLoRBSQqsyp0=;
-        b=ovzYp9yfAltBMtA/b9604JBq+dS1wgus/UjFNAqBCPXM+siajxCX5OrqeTnm75AEfJ
-         QbPbIklP0jcNuL7YtPw7g8EiMTS31d078y7CZ6r4NYyHJSXBZO3iizv0h2EMPWupHCob
-         35UVtNqT2M9Xk6BgUW+/i0xlp7gwJw3Co1Npi4Ke7hmHBfvjo92mragq7VK41+GMUOT2
-         niSiep3GR3JZkB5WQ5kCgkJzD4yLQHlIEk0yz0huNEudTWuYhhip5+fnXwmxNxNSQJos
-         NU8UAdJuYIHw3oaJ9FertCrwigngqMhlL/sBt85PjcZ/tMDI9Cg2WEHELAkxarWKDeNE
-         rWmQ==
-X-Gm-Message-State: AOAM531+Dw1KZ1YebcNLRVd5uv0xI2pmfD02ssSQ/L92fZgT6mk2jmSN
-        pKaPvZQlVQ1WMwpGHSDTfFeJHg==
-X-Google-Smtp-Source: ABdhPJyLJRU7T7hP/+Yp6Xb+G+8dn3OI3DNS03pAkr/nWuDA1Spa9xboardProc7fDE8512XGawIOA==
-X-Received: by 2002:a7b:c7d8:: with SMTP id z24mr2371607wmk.28.1591685258604;
-        Mon, 08 Jun 2020 23:47:38 -0700 (PDT)
-Received: from dell ([2.27.167.101])
-        by smtp.gmail.com with ESMTPSA id x205sm1818570wmx.21.2020.06.08.23.47.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2020 23:47:37 -0700 (PDT)
-Date:   Tue, 9 Jun 2020 07:47:35 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        david.m.ertman@intel.com, shiraz.saleem@intel.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v4 02/11] mfd: Add support for Kontron sl28cpld
- management controller
-Message-ID: <20200609064735.GH4106@dell>
-References: <20200605065709.GD3714@dell>
- <20200605105026.GC5413@sirena.org.uk>
- <c5632bfab3956265e90fc2fb6c0b3cae@walle.cc>
- <20200606114645.GB2055@sirena.org.uk>
- <dc052a5c77171014ecc465b1da8b7ef8@walle.cc>
- <20200608082827.GB3567@dell>
- <CAHp75VdiH=J-ovCdh1RFJDW_bJM8=pbXRaHmB691GLb-5oBmYQ@mail.gmail.com>
- <7d7feb374cbf5a587dc1ce65fc3ad672@walle.cc>
- <20200608185651.GD4106@dell>
- <32231f26f7028d62aeda8fdb3364faf1@walle.cc>
+        id S1727942AbgFII5q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Jun 2020 04:57:46 -0400
+Received: from mga11.intel.com ([192.55.52.93]:32395 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727023AbgFII5p (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 9 Jun 2020 04:57:45 -0400
+IronPort-SDR: oM/EaYzZwNaNuVI5WUQ6ChzyzQGTJXen0nOGs36QFgmslaKjgUQcY+VycSLOUbksuuWIf8aTVD
+ uZiT9L7jJA0A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2020 01:57:43 -0700
+IronPort-SDR: GIRaMrOrpXlCj1nB5MRcGlNFFZoOD5ymxT4t0908X5luyn6OQQIuqUi76fvu4DmlM+m0Rum7lN
+ dpgmJ98uBVlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,491,1583222400"; 
+   d="scan'208";a="306199982"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 09 Jun 2020 01:57:43 -0700
+Received: from [10.215.166.141] (ekotax-mobl.gar.corp.intel.com [10.215.166.141])
+        by linux.intel.com (Postfix) with ESMTP id 874C15805B5;
+        Tue,  9 Jun 2020 01:57:40 -0700 (PDT)
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: intel: Add YAML Schemas for
+ Watchdog timer
+To:     Guenter Roeck <linux@roeck-us.net>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        robbh@kernel.org
+Cc:     linux-kernel@vger.kernel.org, andriy.shevchenko@intel.com,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com, yixin.zhu@intel.com
+References: <cover.1591584255.git.eswara.kota@linux.intel.com>
+ <ac89e289b79fec0a82d1dd060e17eeca024885d5.1591584255.git.eswara.kota@linux.intel.com>
+ <235d301b-3b25-bb00-bd1b-c4392fa23c63@roeck-us.net>
+From:   Dilip Kota <eswara.kota@linux.intel.com>
+Message-ID: <4a336f1d-68da-3356-a73a-95747ba4af4c@linux.intel.com>
+Date:   Tue, 9 Jun 2020 16:57:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <235d301b-3b25-bb00-bd1b-c4392fa23c63@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <32231f26f7028d62aeda8fdb3364faf1@walle.cc>
+Content-Language: en-US
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 08 Jun 2020, Michael Walle wrote:
 
-> Am 2020-06-08 20:56, schrieb Lee Jones:
-> > On Mon, 08 Jun 2020, Michael Walle wrote:
-> > 
-> > > Am 2020-06-08 12:02, schrieb Andy Shevchenko:
-> > > > +Cc: some Intel people WRT our internal discussion about similar
-> > > > problem and solutions.
-> > > >
-> > > > On Mon, Jun 8, 2020 at 11:30 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > > > > On Sat, 06 Jun 2020, Michael Walle wrote:
-> > > > > > Am 2020-06-06 13:46, schrieb Mark Brown:
-> > > > > > > On Fri, Jun 05, 2020 at 10:07:36PM +0200, Michael Walle wrote:
-> > > > > > > > Am 2020-06-05 12:50, schrieb Mark Brown:
-> > > >
-> > > > ...
-> > > >
-> > > > > Right.  I'm suggesting a means to extrapolate complex shared and
-> > > > > sometimes intertwined batches of register sets to be consumed by
-> > > > > multiple (sub-)devices spanning different subsystems.
-> > > > >
-> > > > > Actually scrap that.  The most common case I see is a single Regmap
-> > > > > covering all child-devices.
-> > > >
-> > > > Yes, because often we need a synchronization across the entire address
-> > > > space of the (parent) device in question.
-> > > >
-> > > > >  It would be great if there was a way in
-> > > > > which we could make an assumption that the entire register address
-> > > > > space for a 'tagged' (MFD) device is to be shared (via Regmap) between
-> > > > > each of the devices described by its child-nodes.  Probably by picking
-> > > > > up on the 'simple-mfd' compatible string in the first instance.
-> > > > >
-> > > > > Rob, is the above something you would contemplate?
-> > > > >
-> > > > > Michael, do your register addresses overlap i.e. are they intermingled
-> > > > > with one another?  Do multiple child devices need access to the same
-> > > > > registers i.e. are they shared?
-> > > 
-> > > No they don't overlap, expect for maybe the version register, which is
-> > > just there once and not per function block.
-> > 
-> > Then what's stopping you having each device Regmap their own space?
-> 
-> Because its just one I2C device, AFAIK thats not possible, right?
+On 6/8/2020 9:37 PM, Guenter Roeck wrote:
+> On 6/7/20 10:49 PM, Dilip Kota wrote:
+>> Add YAML schemas for the watchdog timer on Intel Lightning
+>> Mountain SoC.
+>>
+>> Signed-off-by: Dilip Kota <eswara.kota@linux.intel.com>
+>> ---
+>>   .../bindings/watchdog/intel,lgm-gptc-wdt.yaml      | 75 ++++++++++++++++++++++
+>>   1 file changed, 75 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/watchdog/intel,lgm-gptc-wdt.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/watchdog/intel,lgm-gptc-wdt.yaml b/Documentation/devicetree/bindings/watchdog/intel,lgm-gptc-wdt.yaml
+>> new file mode 100644
+>> index 0000000000000..83dc39a5090c1
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/watchdog/intel,lgm-gptc-wdt.yaml
+>> @@ -0,0 +1,75 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/watchdog/intel,lgm-gptc-wdt.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Intel Lightning Mountain Watchdog timer.
+>> +
+>> +maintainers:
+>> +  - Dilip Kota <eswara.kota@linux.intel.com>
+>> +
+>> +description: |
+>> +  Intel Lightning Mountain SoC has General Purpose Timer Counter(GPTC) which can
+>> +  be configured as Clocksource, real time clock and Watchdog timer.
+>> +  Each General Purpose Timer Counter has three timers. And total four General
+>> +  Purpose Timer Counters are present on Lightning Mountain SoC which sums up
+>> +  to 12 timers.
+>> +  Lightning Mountain has four CPUs and each CPU is configured with one GPTC
+>> +  timer as watchdog timer. Total four timers are configured as watchdog timers
+>> +  on Lightning Mountain SoC.
+>> +
+> Why not just one ? The watchdog subsystem does not monitor individual CPUs,
+> it monitors the system.
 
-Not sure what (if any) the restrictions are.
+Intel Atom based Lightning Mountain SoC, system has four CPUs. On 
+Lightning Mountain SoC ,Watchdog subsystem is combination of GPTC timers 
+and reset controller unit. On Lightning Mountain SoC, each CPU is 
+configured with one GPTC timer, so that if any of the CPU hangs or 
+freezes, the watchdog daemon running on respective CPU cannot reset/ping 
+or pet the watchdog timer. This causes the watchdog timeout. On watchdog 
+timeout, reset controller triggers the reset to respective CPU.
 
-I can't think of any reasons why not, off the top of my head.
 
-Does Regmap only deal with shared accesses from multiple devices
-accessing a single register map, or can it also handle multiple
-devices communicating over a single I2C channel?
+____________________
+----------------------------->|                |
+                                                    |         
+------------>| Reset controller unit    |
+|                     |                 |___________________|
+|                     |
+|                     |
+   ______________________|__________|______
+   |                                  GPTC   | |            |
+   | ___________   ________|_       ______|____   |
+   | |      timer 1 |   | timer 2      |    | timer 3      |    |
+   | |_________|   |_________|    |_________|    |
+   |______________________________________|
 
-One for Mark perhaps.
+Regards,
+-Dilip
 
-> > The issues I wish to resolve using 'simple-mfd' are when sub-devices
-> > register maps overlap and intertwine.
 
-[...]
-
-> > > > > What do these bits configure?
-> > > 
-> > > - hardware strappings which have to be there before the board powers
-> > > up,
-> > >   like clocking mode for different SerDes settings
-> > > - "keep-in-reset" bits for onboard peripherals if you want to save
-> > > power
-> > > - disable watchdog bits (there is a watchdog which is active right
-> > > from
-> > >   the start and supervises the bootloader start and switches to
-> > > failsafe
-> > >   mode if it wasn't successfully started)
-> > > - special boot modes, like eMMC, etc.
-> > > 
-> > > Think of it as a 16bit configuration word.
-> > 
-> > And you wish for users to be able to view these at run-time?
-> 
-> And esp. change them.
-> 
-> > Can they adapt any of them on-the-fly or will the be RO?
-> 
-> They are R/W but only will only affect the board behavior after a reset.
-
-I see.  Makes sense.  This is board controller territory.  Perhaps
-suitable for inclusion into drivers/soc or drivers/platform.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> Guenter
+>
+>
