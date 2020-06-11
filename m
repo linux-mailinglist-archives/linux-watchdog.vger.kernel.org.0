@@ -2,37 +2,37 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 138E71F6DD6
-	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Jun 2020 21:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5090A1F6DD3
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Jun 2020 21:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgFKTSA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 11 Jun 2020 15:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
+        id S1726671AbgFKTR5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 11 Jun 2020 15:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726694AbgFKTR6 (ORCPT
+        with ESMTP id S1725782AbgFKTR4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 11 Jun 2020 15:17:58 -0400
+        Thu, 11 Jun 2020 15:17:56 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110E6C08C5C5
-        for <linux-watchdog@vger.kernel.org>; Thu, 11 Jun 2020 12:17:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1C5C08C5C1
+        for <linux-watchdog@vger.kernel.org>; Thu, 11 Jun 2020 12:17:56 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <afa@pengutronix.de>)
-        id 1jjSi1-0002Ix-GI; Thu, 11 Jun 2020 21:17:53 +0200
+        id 1jjSi1-0002J6-Oi; Thu, 11 Jun 2020 21:17:53 +0200
 Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <afa@pengutronix.de>)
-        id 1jjSi0-0000y6-NN; Thu, 11 Jun 2020 21:17:52 +0200
+        id 1jjSi1-0000yP-6Y; Thu, 11 Jun 2020 21:17:53 +0200
 From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Knud Poulsen <knpo@ieee.org>
 Cc:     linux-watchdog@vger.kernel.org, kernel@pengutronix.de,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>, stable@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/8] docs: watchdog: codify ident.options as superset of possible status flags
-Date:   Thu, 11 Jun 2020 21:17:42 +0200
-Message-Id: <20200611191750.28096-2-a.fatoum@pengutronix.de>
+Subject: [PATCH v1 2/8] watchdog: f71808e_wdt: indicate WDIOF_CARDRESET support in watchdog_info.options
+Date:   Thu, 11 Jun 2020 21:17:43 +0200
+Message-Id: <20200611191750.28096-3-a.fatoum@pengutronix.de>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200611191750.28096-1-a.fatoum@pengutronix.de>
 References: <20200611191750.28096-1-a.fatoum@pengutronix.de>
@@ -47,34 +47,31 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The FIXME comment has been in-tree since the very first git commit.
-The described behavior has been since relied on by some userspace, e.g.
-the util-linux wdctl command and has been ignored by some kernelspace,
-like the f71808e_wdt driver.
+The driver supports populating bootstatus with WDIOF_CARDRESET, but so
+far userspace couldn't portably determine whether absence of this flag
+meant no watchdog reset or no driver support. Or-in the bit to fix this.
 
-The functionality is useful to have to be able to differentiate between a
-driver that doesn't support WDIOF_CARDRESET and one that does, but hasn't
-had a watchdog reset, thus drop the FIXME to encourage drivers adopting
-this convention.
-
+Fixes: b97cb21a4634 ("watchdog: f71808e_wdt: Fix WDTMOUT_STS register read")
+Cc: stable@vger.kernel.org
 Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 ---
- Documentation/watchdog/watchdog-api.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/watchdog/f71808e_wdt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/watchdog/watchdog-api.rst b/Documentation/watchdog/watchdog-api.rst
-index c6c1e9fa9f73..800dcd7586f2 100644
---- a/Documentation/watchdog/watchdog-api.rst
-+++ b/Documentation/watchdog/watchdog-api.rst
-@@ -168,7 +168,7 @@ the fields returned in the ident struct are:
+diff --git a/drivers/watchdog/f71808e_wdt.c b/drivers/watchdog/f71808e_wdt.c
+index a3c44d75d80e..c8ce80c13403 100644
+--- a/drivers/watchdog/f71808e_wdt.c
++++ b/drivers/watchdog/f71808e_wdt.c
+@@ -692,7 +692,8 @@ static int __init watchdog_init(int sioaddr)
+ 	watchdog.sioaddr = sioaddr;
+ 	watchdog.ident.options = WDIOC_SETTIMEOUT
+ 				| WDIOF_MAGICCLOSE
+-				| WDIOF_KEEPALIVEPING;
++				| WDIOF_KEEPALIVEPING
++				| WDIOF_CARDRESET;
  
- the options field can have the following bits set, and describes what
- kind of information that the GET_STATUS and GET_BOOT_STATUS ioctls can
--return.   [FIXME -- Is this correct?]
-+return.
- 
- 	================	=========================
- 	WDIOF_OVERHEAT		Reset due to CPU overheat
+ 	snprintf(watchdog.ident.identity,
+ 		sizeof(watchdog.ident.identity), "%s watchdog",
 -- 
 2.27.0
 
