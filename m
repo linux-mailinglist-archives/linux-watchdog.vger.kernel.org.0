@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3221FE41F
-	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Jun 2020 04:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707621FE6E0
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Jun 2020 04:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731073AbgFRCQF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 17 Jun 2020 22:16:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52538 "EHLO mail.kernel.org"
+        id S1733023AbgFRChG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 17 Jun 2020 22:37:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43176 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730298AbgFRBUX (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:20:23 -0400
+        id S1727806AbgFRBNs (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:13:48 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB57620663;
-        Thu, 18 Jun 2020 01:20:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 17F40221EB;
+        Thu, 18 Jun 2020 01:13:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443222;
-        bh=H567rIveBQagBeIyCQT4uZJ6nC8iGaFQT5iuc7GH3jU=;
+        s=default; t=1592442827;
+        bh=BpY0I3vmf68N8BpdZoJscmHBHcofX93f8rmbrcIsk90=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bgu7DCubv2KG0ZuA1MKNueFPurf1cfXwc7EOtE7RQWp3G/Q3E/Nq5jFV2zaBqhz0x
-         y7wz3mCa2x3B5lYX6/jBJQKKPOJE96sqbWPtdIJluRXMOSz/U/l5pMj++MUf+Ahtcv
-         qCftXpK7fnZPQArPrp8EPWRUiBxy6QiV7YoRnJZM=
+        b=cCT/KymKr1zMZ0rs9WBngXGSx6Xr2MJ+NDr6RNydc9bptaQOmn7esr2NNnBpaBHIv
+         uz84+c0XGErHQp48quRp5etmqYb7ZqHfbrD2RNtZanv/3B/1BQ1VyB8ZZLsSFqJp7e
+         JPGnOz6GhzaeSC8wS8WhXHbaicIwykSRHEvSbe4c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Stefan Riedmueller <s.riedmueller@phytec.de>,
@@ -30,12 +30,12 @@ Cc:     Stefan Riedmueller <s.riedmueller@phytec.de>,
         Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 177/266] watchdog: da9062: No need to ping manually before setting timeout
-Date:   Wed, 17 Jun 2020 21:15:02 -0400
-Message-Id: <20200618011631.604574-177-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 263/388] watchdog: da9062: No need to ping manually before setting timeout
+Date:   Wed, 17 Jun 2020 21:06:00 -0400
+Message-Id: <20200618010805.600873-263-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
-References: <20200618011631.604574-1-sashal@kernel.org>
+In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
+References: <20200618010805.600873-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 deletions(-)
 
 diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-index e92f38fcb7a4..1b9bcfed39e9 100644
+index 0ad15d55071c..18dec438d518 100644
 --- a/drivers/watchdog/da9062_wdt.c
 +++ b/drivers/watchdog/da9062_wdt.c
-@@ -55,11 +55,6 @@ static int da9062_wdt_update_timeout_register(struct da9062_watchdog *wdt,
+@@ -58,11 +58,6 @@ static int da9062_wdt_update_timeout_register(struct da9062_watchdog *wdt,
  					      unsigned int regval)
  {
  	struct da9062 *chip = wdt->hw;
