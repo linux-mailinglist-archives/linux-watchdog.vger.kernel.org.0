@@ -2,90 +2,148 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 707621FE6E0
-	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Jun 2020 04:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF47F1FF8F6
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Jun 2020 18:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733023AbgFRChG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 17 Jun 2020 22:37:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43176 "EHLO mail.kernel.org"
+        id S1728642AbgFRQPz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 18 Jun 2020 12:15:55 -0400
+Received: from david.siemens.de ([192.35.17.14]:37673 "EHLO david.siemens.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727806AbgFRBNs (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:13:48 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 17F40221EB;
-        Thu, 18 Jun 2020 01:13:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442827;
-        bh=BpY0I3vmf68N8BpdZoJscmHBHcofX93f8rmbrcIsk90=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cCT/KymKr1zMZ0rs9WBngXGSx6Xr2MJ+NDr6RNydc9bptaQOmn7esr2NNnBpaBHIv
-         uz84+c0XGErHQp48quRp5etmqYb7ZqHfbrD2RNtZanv/3B/1BQ1VyB8ZZLsSFqJp7e
-         JPGnOz6GhzaeSC8wS8WhXHbaicIwykSRHEvSbe4c=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 263/388] watchdog: da9062: No need to ping manually before setting timeout
-Date:   Wed, 17 Jun 2020 21:06:00 -0400
-Message-Id: <20200618010805.600873-263-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
-References: <20200618010805.600873-1-sashal@kernel.org>
+        id S1728169AbgFRQPz (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 18 Jun 2020 12:15:55 -0400
+X-Greylist: delayed 317 seconds by postgrey-1.27 at vger.kernel.org; Thu, 18 Jun 2020 12:15:53 EDT
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by david.siemens.de (8.15.2/8.15.2) with ESMTPS id 05IG9r1B018927
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Jun 2020 18:09:54 +0200
+Received: from [167.87.74.25] ([167.87.74.25])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 05IG9p9m011107;
+        Thu, 18 Jun 2020 18:09:51 +0200
+Subject: Re: [PATCHv4 1/4] dt-bindings: watchdog: Add support for TI K3 RTI
+ watchdog
+To:     Tero Kristo <t-kristo@ti.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux-watchdog@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        devicetree@vger.kernel.org
+References: <20200312095808.19907-1-t-kristo@ti.com>
+ <20200312095808.19907-2-t-kristo@ti.com>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Message-ID: <d576a40f-46fb-7ad9-7bfe-11891f9867a6@siemens.com>
+Date:   Thu, 18 Jun 2020 18:09:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200312095808.19907-2-t-kristo@ti.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Stefan Riedmueller <s.riedmueller@phytec.de>
+On 12.03.20 10:58, Tero Kristo wrote:
+> TI K3 SoCs contain an RTI (Real Time Interrupt) module which can be
+> used to implement a windowed watchdog functionality. Windowed watchdog
+> will generate an error if it is petted outside the time window, either
+> too early or too late.
+> 
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> ---
+> v4:
+>   * changed license to dual
+>   * added documentation for missing properties
+>   * added ref to watchdog.yaml
+>   * renamed main_rti0 to watchdog0 in example
+> 
+>  .../bindings/watchdog/ti,rti-wdt.yaml         | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> new file mode 100644
+> index 000000000000..e83026fef2e9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/ti,rti-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments K3 SoC Watchdog Timer
+> +
+> +maintainers:
+> +  - Tero Kristo <t-kristo@ti.com>
+> +
+> +description:
+> +  The TI K3 SoC watchdog timer is implemented via the RTI (Real Time
+> +  Interrupt) IP module. This timer adds a support for windowed watchdog
+> +  mode, which will signal an error if it is pinged outside the watchdog
+> +  time window, meaning either too early or too late. The error signal
+> +  generated can be routed to either interrupt a safety controller or
+> +  to directly reset the SoC.
+> +
+> +allOf:
+> +  - $ref: "watchdog.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,j7-rti-wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  assigned-clocks:
+> +    maxItems: 1
+> +
+> +  assigned-clocks-parents:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - power-domains
+> +
+> +examples:
+> +  - |
+> +    /*
+> +     * RTI WDT in main domain on J721e SoC. Assigned clocks are used to
+> +     * select the source clock for the watchdog, forcing it to tick with
+> +     * a 32kHz clock in this case.
+> +     */
+> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
+> +
+> +    watchdog0: rti@2200000 {
+> +        compatible = "ti,rti-wdt";
 
-[ Upstream commit a0948ddba65f4f6d3cfb5e2b84685485d0452966 ]
+At some stage, you changed the compatible string to something
+J721e-specific. This one wasn't updated.
 
-There is actually no need to ping the watchdog before disabling it
-during timeout change. Disabling the watchdog already takes care of
-resetting the counter.
+> +        reg = <0x0 0x2200000 0x0 0x100>;
+> +        clocks = <&k3_clks 252 1>;
+> +        power-domains = <&k3_pds 252 TI_SCI_PD_EXCLUSIVE>;
+> +        assigned-clocks = <&k3_clks 252 1>;
+> +        assigned-clock-parents = <&k3_clks 252 5>;
+> +    };
+> 
 
-This fixes an issue during boot when the userspace watchdog handler takes
-over and the watchdog is already running. Opening the watchdog in this case
-leads to the first ping and directly after that without the required
-heartbeat delay a second ping issued by the set_timeout call. Due to the
-missing delay this resulted in a reset.
+And where is the binding for the AM65x? I know that PG1 has nice
+erratum, but I would expect PG2 to be fine and register-wise compatible, no?
 
-Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Link: https://lore.kernel.org/r/20200403130728.39260-3-s.riedmueller@phytec.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/watchdog/da9062_wdt.c | 5 -----
- 1 file changed, 5 deletions(-)
+Jan
 
-diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-index 0ad15d55071c..18dec438d518 100644
---- a/drivers/watchdog/da9062_wdt.c
-+++ b/drivers/watchdog/da9062_wdt.c
-@@ -58,11 +58,6 @@ static int da9062_wdt_update_timeout_register(struct da9062_watchdog *wdt,
- 					      unsigned int regval)
- {
- 	struct da9062 *chip = wdt->hw;
--	int ret;
--
--	ret = da9062_reset_watchdog_timer(wdt);
--	if (ret)
--		return ret;
- 
- 	regmap_update_bits(chip->regmap,
- 				  DA9062AA_CONTROL_D,
 -- 
-2.25.1
-
+Siemens AG, Corporate Technology, CT RDA IOT SES-DE
+Corporate Competence Center Embedded Linux
