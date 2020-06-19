@@ -2,148 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF47F1FF8F6
-	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Jun 2020 18:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6F0200635
+	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Jun 2020 12:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728642AbgFRQPz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 18 Jun 2020 12:15:55 -0400
-Received: from david.siemens.de ([192.35.17.14]:37673 "EHLO david.siemens.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728169AbgFRQPz (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 18 Jun 2020 12:15:55 -0400
-X-Greylist: delayed 317 seconds by postgrey-1.27 at vger.kernel.org; Thu, 18 Jun 2020 12:15:53 EDT
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by david.siemens.de (8.15.2/8.15.2) with ESMTPS id 05IG9r1B018927
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Jun 2020 18:09:54 +0200
-Received: from [167.87.74.25] ([167.87.74.25])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 05IG9p9m011107;
-        Thu, 18 Jun 2020 18:09:51 +0200
-Subject: Re: [PATCHv4 1/4] dt-bindings: watchdog: Add support for TI K3 RTI
- watchdog
-To:     Tero Kristo <t-kristo@ti.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, linux-watchdog@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        devicetree@vger.kernel.org
-References: <20200312095808.19907-1-t-kristo@ti.com>
- <20200312095808.19907-2-t-kristo@ti.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-Message-ID: <d576a40f-46fb-7ad9-7bfe-11891f9867a6@siemens.com>
-Date:   Thu, 18 Jun 2020 18:09:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1732379AbgFSK2K (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 19 Jun 2020 06:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732378AbgFSK2F (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 19 Jun 2020 06:28:05 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC6EC06174E
+        for <linux-watchdog@vger.kernel.org>; Fri, 19 Jun 2020 03:27:17 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id x25so7171897edr.8
+        for <linux-watchdog@vger.kernel.org>; Fri, 19 Jun 2020 03:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kPEfq+/6b+G+EXZN69BsPMP21SU77fxBrWOwIXCfLBY=;
+        b=BAUuYX2LXQmdwL+L9tPeCmNK3L0A+wwmJVeh3m9a5kQVWb0zPKYBT6kMW5zY4zPw5C
+         MUxeCp8igp9FI7PXIwFtCL+cRkIZzUg/DHB/8uGea8Nm8yKWuzvWXmtwYV15nA7s+kMN
+         jnk7vzb37BoclJ6Pz/OXuGTpcd4nqSSGqhvIXf4BB++OSrE7xRftqSO1PMH5AoktunEJ
+         pPnd7pFhzWXXfUdk/5aB34pAxVHMv/EjEV+s4JBiOlZnH0LuM0FvCTnpa95kiBv98NWw
+         fZJG0f8EhpxwS0qyieB7xE5ER0N4OqR6MlI9uBS3hWf5zNgOCwLUkpaOkOXzmydGf2H7
+         1OMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kPEfq+/6b+G+EXZN69BsPMP21SU77fxBrWOwIXCfLBY=;
+        b=GnjoCzekCGhpNHTB+eBLswXFLU5LSYuTvSaA8oRTSUi7QH/yvXc08EkWxL3nvvPc79
+         1cko8jZ7U9YMgK4DGfef+6z6Dvg5a0eJWeN9yg/5nltBtE7/93iQSxzg7h/ICDkQG3Ut
+         d6tGDEdZD+6E5KbNFZIWEa2uuuBqRs2HcnZaeNGtuIZrSza7rOx7Twdl6tNKSz4C3sSI
+         8+EeYL+z3bUXC5dwp4/YqjCmZ8aHJkLhl+ghDZrBK9K+BH94+Cq96I0oJG3eMfF4fvHn
+         goMmgANyXT0HMOc9JcsAKH3bpCDHXeG/5usIYtHMGMLRs6UmrGUA5Urm6ZjXFdLnN2NC
+         04WQ==
+X-Gm-Message-State: AOAM5322mDC97Izlu4hXbRmikEFGUIfVSlVtxAmx2aVUBXOm6/20layv
+        V4meHViPtFFQN4vaCdRyRAdawpoR4oyQkUZk8upKoJGcMTM=
+X-Google-Smtp-Source: ABdhPJxPXvMirCaubsdoy048tYU/ZWaaSptLBoUg3TNp5KvYPFJ/naIndPxmARHS30WObK4DfYcEMcd9Q+ZxQAWUDJc=
+X-Received: by 2002:a50:f017:: with SMTP id r23mr2456294edl.205.1592562435416;
+ Fri, 19 Jun 2020 03:27:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200312095808.19907-2-t-kristo@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200612155942.246816-1-woodylin@google.com> <65a90fe9-8935-284a-80a9-5a4a37da6b05@roeck-us.net>
+In-Reply-To: <65a90fe9-8935-284a-80a9-5a4a37da6b05@roeck-us.net>
+From:   Woody Lin <woodylin@google.com>
+Date:   Fri, 19 Jun 2020 18:27:04 +0800
+Message-ID: <CAHn4DeecXWuG6Jt+icZohrr8icN+ZAkx1QDLG=CZgtCiW-ZWWg@mail.gmail.com>
+Subject: Re: [PATCH v2] softdog: Add options 'soft_reboot_target' and 'soft_active_on_boot'
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12.03.20 10:58, Tero Kristo wrote:
-> TI K3 SoCs contain an RTI (Real Time Interrupt) module which can be
-> used to implement a windowed watchdog functionality. Windowed watchdog
-> will generate an error if it is petted outside the time window, either
-> too early or too late.
-> 
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> ---
-> v4:
->   * changed license to dual
->   * added documentation for missing properties
->   * added ref to watchdog.yaml
->   * renamed main_rti0 to watchdog0 in example
-> 
->  .../bindings/watchdog/ti,rti-wdt.yaml         | 65 +++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> new file mode 100644
-> index 000000000000..e83026fef2e9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> @@ -0,0 +1,65 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/ti,rti-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments K3 SoC Watchdog Timer
-> +
-> +maintainers:
-> +  - Tero Kristo <t-kristo@ti.com>
-> +
-> +description:
-> +  The TI K3 SoC watchdog timer is implemented via the RTI (Real Time
-> +  Interrupt) IP module. This timer adds a support for windowed watchdog
-> +  mode, which will signal an error if it is pinged outside the watchdog
-> +  time window, meaning either too early or too late. The error signal
-> +  generated can be routed to either interrupt a safety controller or
-> +  to directly reset the SoC.
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,j7-rti-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  assigned-clocks:
-> +    maxItems: 1
-> +
-> +  assigned-clocks-parents:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - power-domains
-> +
-> +examples:
-> +  - |
-> +    /*
-> +     * RTI WDT in main domain on J721e SoC. Assigned clocks are used to
-> +     * select the source clock for the watchdog, forcing it to tick with
-> +     * a 32kHz clock in this case.
-> +     */
-> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +
-> +    watchdog0: rti@2200000 {
-> +        compatible = "ti,rti-wdt";
+Hi Guenter,
 
-At some stage, you changed the compatible string to something
-J721e-specific. This one wasn't updated.
+> The code should include an explanation for the need for the double
+> indirection (ie why schedule another worker instead of calling
+> kthread_run directly). Also, there should be a comment explaining
+> how it works, especially if kthread_run() fails to run a thread,
+> and why kthread_run() is needed in the first place.
 
-> +        reg = <0x0 0x2200000 0x0 0x100>;
-> +        clocks = <&k3_clks 252 1>;
-> +        power-domains = <&k3_pds 252 TI_SCI_PD_EXCLUSIVE>;
-> +        assigned-clocks = <&k3_clks 252 1>;
-> +        assigned-clock-parents = <&k3_clks 252 5>;
-> +    };
-> 
+No problem, I am adding this to the next version.
 
-And where is the binding for the AM65x? I know that PG1 has nice
-erratum, but I would expect PG2 to be fine and register-wise compatible, no?
+> This isn't really a "reboot target". It is just a string passed
+> to kernel_restart(). For the most part that string doesn't really
+> do anything useful. What is it supposed to accomplish in your case,
+> other than causing a reboot with the configured reboot_mode
+> (which is a global variable) ?
+>
+> If the underlying idea is to cause an orderly restart following
+> reboot_mode, a boolean would accomplish pretty much the same.
+>
+> Am I missing something ?
 
-Jan
+This argument is next sent to registered reboot notifiers and machine_restart,
+according to implementation of 'kernel_restart'. So for platforms which
+implemented different handlers for each 'cmd', the timeout can be handled with
+desired behavior. For example, some platforms might want to reboot to rescue
+mode when timeout.
 
--- 
-Siemens AG, Corporate Technology, CT RDA IOT SES-DE
-Corporate Competence Center Embedded Linux
+ void kernel_restart(char *cmd)
+   kernel_restart_prepare(cmd);
+     -> blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
+   ...
+   machine_restart(cmd);
+
+Btw, according to the signature of kernel_restart, I should name this argument
+'soft_reboot_cmd', instead of '*_target'. Sorry for causing the confusion.
+
+> > +     if (soft_active_on_boot) {
+> > +             set_bit(WDOG_HW_RUNNING, &softdog_dev.status);
+> > +             set_bit(WDOG_ACTIVE, &softdog_dev.status);
+> > +     }
+>
+> Strictly speaking you should call the ping function here to start the timer.
+> Otherwise the watchdog won't really start if watchdog_register_device()
+> fails.
+
+Thanks for catching this, I will revise this in the next version.
+
+Woody
