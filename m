@@ -2,50 +2,50 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 104902025A4
+	by mail.lfdr.de (Postfix) with ESMTP id 496282025AA
 	for <lists+linux-watchdog@lfdr.de>; Sat, 20 Jun 2020 19:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728126AbgFTRfH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 20 Jun 2020 13:35:07 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:36342 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728349AbgFTRfF (ORCPT
+        id S1728357AbgFTRfG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 20 Jun 2020 13:35:06 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:44684 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728126AbgFTRfF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
         Sat, 20 Jun 2020 13:35:05 -0400
-Received: by mail-oi1-f194.google.com with SMTP id a137so11587118oii.3
-        for <linux-watchdog@vger.kernel.org>; Sat, 20 Jun 2020 10:35:03 -0700 (PDT)
+Received: by mail-ot1-f67.google.com with SMTP id e5so9780531ote.11
+        for <linux-watchdog@vger.kernel.org>; Sat, 20 Jun 2020 10:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=HOVBYX09s4vb3dCiShBG4NSsb19cgNGL44yivBt9AqQ=;
-        b=ioJCILskKb7oD4HN+oRp0Xb7bCKYZgLEUbxjkk+m9AMKBg7srdQhlvulVDHO8I0ATQ
-         VAolcNgU5Zj9svSjp6saOjl+sn0XNXkNk9ObjJCUP+II3W6pLEatemkwcwyU9eNLCcut
-         ZhLyStdZtq4/ESsc/K/xd1m0xwVgB5Os9sPTYSYHrxwUNSrfjKsqsOb/ikUZ50J8vj3c
-         09XOuTlbV9KJ84Uf+WB91Pewqjf5iVWnQQe49VjTzVeLDDEbEQfnNmlDO2h4Mc36HS2L
-         mc6XwSDtA/ljrBb6flI+O7SLzBsHnSoo+GD97UPqhIPvbAs4M1U4Bxtd6bLH1UiOcOmI
-         25bw==
+        bh=f4PL0T6GCERZ/YEDo14hZLuC450xWsmw+SQUtlVusaM=;
+        b=DTmFYFHf2N8OTI5tCrUf5rn2dn4VZ1Y3PK6m11rb3lNXWDWU9Ike6gABkBFEuT4/xl
+         NocJI/qCR9HYx1rUjX9yLpocA8UmMRM7zEyoVviOte0I5SMQY71vpNdcgA9rG4pNNU2V
+         DnxkYCNzfR1ksSUjIztkXT3ooXwIupGfNDMBZvJtJgA+Cxl+10e0vXV/iMhkHPKToOMN
+         X+CrnJF3sNUFTYtVS0F3owIqk67u/lBX65aZcVNuJZVL4nBuE7Rx5OnSdBDqUA4OuIDd
+         b3+inw+nrYbsEJU/BGkR7wAYQalZTDzb7EtJhBKS3yxbH+Wk4KxebHRkaPkW3eJCXTs5
+         3FcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=HOVBYX09s4vb3dCiShBG4NSsb19cgNGL44yivBt9AqQ=;
-        b=pZqi8bXQ4YfTYV1C/nuzOSo1qP8C6a/8/A06wgNm/llqZfm3Pxy6kXo0snbdM3mlx8
-         M0Iv7c2xNVE6Euf+7kXpWaGY4nThnc1NTbX3+D21WrP5obIxynUz8/MQl85mFJYU09Fw
-         1bZturHKvAmeiBRBgMOO6hH8SpZn+vPdw/koU9FP7evGEgKwS9vNzUcTLwEm5l2aJLki
-         F5S2c3Ff6tt7JzsVTjCq4lGOVQ4sR7+Y4Jk86M7OI5v4qssgdESnq5yjefvVEh+mTMSs
-         XicEnsu6jwvIMw3gUAWvVCgWjH0Jrs+QH3ISeg/BOOQypdLBRS2KWizF1raZpyD0I0Zc
-         1sQw==
-X-Gm-Message-State: AOAM530dSAdjW3Iy2ij4ZOysqIJxJkad8RTBrw0tFnyU7ZuVWm/jSosZ
-        KadYOLKOMmtzIsY5YEyEJ+goxR4=
-X-Google-Smtp-Source: ABdhPJzJ/aOvpOMypiS7YmUOUcr7cGrxm74otNl6GSmSwuphL4reMsApF68JVR3YLlZVALQSCF8KdA==
-X-Received: by 2002:a05:6808:c2:: with SMTP id t2mr7599544oic.44.1592674442594;
-        Sat, 20 Jun 2020 10:34:02 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.146.204])
-        by smtp.gmail.com with ESMTPSA id y206sm2128230ooa.32.2020.06.20.10.34.01
+        bh=f4PL0T6GCERZ/YEDo14hZLuC450xWsmw+SQUtlVusaM=;
+        b=V//qciAGV8UEKN8xzK6lK+m40iPMDikMdDKhX5bt17Nkc+jtl1ncM8aUIS+y7MM0JT
+         StF6RBe3z4zvS9WMCWcCDi4zZr0BgtZBINlIvTjQeHhVxXA8nitPKeKeXfWCy2qluxNK
+         PQCfjzWEtt6O9dK+11R/RE9mml8OQaAWBa1u3+OEfG2ovT08KFsKir0lmgloYLvLw/uR
+         7XcnwwZmagFTGqoDB1ckVpOo1ayisWwfXEm6Og6+579gcurZBBeSybsxBE2zzqN9ieSb
+         xhhUoThiqoS/xba3isg410M40DxbM3bBlrTdXZVDbHnttAKEOJukCwomTQBmViJ30rYz
+         OCIg==
+X-Gm-Message-State: AOAM53070PjLEbRda16n6BcFIsqMiqyAhoAp5ITB48l1z3+qLq/+RFsi
+        NGlrd8kWpCY1rnSQfbx+pUsnDJo=
+X-Google-Smtp-Source: ABdhPJzaqfVKX6ZRV8gBsTlcbwKJXnTzYBdGNtAEhZDTPBi5QD7morWMsndmGyEbK36ECY7sg641Rg==
+X-Received: by 2002:a9d:6e0a:: with SMTP id e10mr7997634otr.171.1592674443480;
+        Sat, 20 Jun 2020 10:34:03 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id u125sm1982816oif.57.2020.06.20.10.34.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 20 Jun 2020 10:34:01 -0700 (PDT)
 Received: from t560.minyard.net (unknown [IPv6:2001:470:b8f6:1b:f17b:b355:b0a4:2592])
-        by serve.minyard.net (Postfix) with ESMTPA id 68241180171;
+        by serve.minyard.net (Postfix) with ESMTPA id 87777180545;
         Sat, 20 Jun 2020 17:34:00 +0000 (UTC)
 From:   minyard@acm.org
 To:     Guenter Roeck <linux@roeck-us.net>,
@@ -53,9 +53,9 @@ To:     Guenter Roeck <linux@roeck-us.net>,
 Cc:     linux-watchdog@vger.kernel.org,
         Gabriele Paoloni <gabriele.paoloni@intel.com>,
         Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 1/6] watchdog: Allow a driver to use milliseconds instead of seconds
-Date:   Sat, 20 Jun 2020 12:33:46 -0500
-Message-Id: <20200620173351.18752-2-minyard@acm.org>
+Subject: [PATCH 2/6] watchdog: Add ioctls for millisecond timeout handling
+Date:   Sat, 20 Jun 2020 12:33:47 -0500
+Message-Id: <20200620173351.18752-3-minyard@acm.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200620173351.18752-1-minyard@acm.org>
 References: <20200620173351.18752-1-minyard@acm.org>
@@ -66,290 +66,299 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Corey Minyard <cminyard@mvista.com>
 
-If the WDIOF_MSECTIMER is set, then all the timeouts in the watchdog
-structure are expected to be in milliseconds.  Add the flag and the
-various conversions.  This should have no effect on existing drivers.
+Add millisecond ioctls for the five timeout ioctls in the watchdog.  If
+the driver being used doesn't support milliseconds, the appropriate
+conversions are done.
 
 Signed-off-by: Corey Minyard <cminyard@mvista.com>
 ---
- drivers/watchdog/watchdog_core.c | 30 +++++++++++++-------
- drivers/watchdog/watchdog_dev.c  | 47 ++++++++++++++++++++++++++------
- include/linux/watchdog.h         | 29 +++++++++++++++-----
- include/uapi/linux/watchdog.h    |  1 +
- 4 files changed, 82 insertions(+), 25 deletions(-)
+ drivers/watchdog/watchdog_core.c |   5 +-
+ drivers/watchdog/watchdog_core.h |   2 +
+ drivers/watchdog/watchdog_dev.c  | 123 ++++++++++++++++++++++---------
+ include/uapi/linux/watchdog.h    |   5 ++
+ 4 files changed, 98 insertions(+), 37 deletions(-)
 
 diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-index 423844757812..b54451a9a336 100644
+index b54451a9a336..9c531ae05c46 100644
 --- a/drivers/watchdog/watchdog_core.c
 +++ b/drivers/watchdog/watchdog_core.c
-@@ -116,17 +116,17 @@ int watchdog_init_timeout(struct watchdog_device *wdd,
- {
- 	const char *dev_str = wdd->parent ? dev_name(wdd->parent) :
- 			      (const char *)wdd->info->identity;
--	unsigned int t = 0;
- 	int ret = 0;
- 
- 	watchdog_check_min_max_timeout(wdd);
- 
- 	/* check the driver supplied value (likely a module parameter) first */
- 	if (timeout_parm) {
--		if (!watchdog_timeout_invalid(wdd, timeout_parm)) {
--			wdd->timeout = timeout_parm;
--			return 0;
--		}
-+		if (wdd->info->options & WDIOF_MSECTIMER) {
-+			if (!_watchdog_timeout_invalid(wdd, timeout_parm))
-+				goto set_timeout;
-+		} else if (!watchdog_timeout_invalid(wdd, timeout_parm))
-+			goto set_timeout;
- 		pr_err("%s: driver supplied timeout (%u) out of range\n",
- 			dev_str, timeout_parm);
- 		ret = -EINVAL;
-@@ -134,12 +134,18 @@ int watchdog_init_timeout(struct watchdog_device *wdd,
- 
- 	/* try to get the timeout_sec property */
- 	if (dev && dev->of_node &&
--	    of_property_read_u32(dev->of_node, "timeout-sec", &t) == 0) {
--		if (t && !watchdog_timeout_invalid(wdd, t)) {
--			wdd->timeout = t;
--			return 0;
-+	    of_property_read_u32(dev->of_node, "timeout-sec",
-+				 &timeout_parm) == 0) {
-+		if (timeout_parm &&
-+		    !watchdog_timeout_invalid(wdd, timeout_parm)) {
-+			if (!(wdd->info->options & WDIOF_MSECTIMER))
-+				/* Convert to msecs if not already so. */
-+				timeout_parm *= 1000;
-+			goto set_timeout;
+@@ -138,9 +138,8 @@ int watchdog_init_timeout(struct watchdog_device *wdd,
+ 				 &timeout_parm) == 0) {
+ 		if (timeout_parm &&
+ 		    !watchdog_timeout_invalid(wdd, timeout_parm)) {
+-			if (!(wdd->info->options & WDIOF_MSECTIMER))
+-				/* Convert to msecs if not already so. */
+-				timeout_parm *= 1000;
++			timeout_parm = watchdog_timeout_tointernal(wdd, false,
++							timeout_parm);
+ 			goto set_timeout;
  		}
--		pr_err("%s: DT supplied timeout (%u) out of range\n", dev_str, t);
-+
-+		pr_err("%s: DT supplied timeout (%u) out of range\n", dev_str,
-+		       timeout_parm);
- 		ret = -EINVAL;
- 	}
  
-@@ -148,6 +154,10 @@ int watchdog_init_timeout(struct watchdog_device *wdd,
- 			wdd->timeout);
- 
- 	return ret;
-+
-+set_timeout:
-+	wdd->timeout = timeout_parm;
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(watchdog_init_timeout);
- 
+diff --git a/drivers/watchdog/watchdog_core.h b/drivers/watchdog/watchdog_core.h
+index a5062e8e0d13..151806073d58 100644
+--- a/drivers/watchdog/watchdog_core.h
++++ b/drivers/watchdog/watchdog_core.h
+@@ -31,3 +31,5 @@ extern int watchdog_dev_register(struct watchdog_device *);
+ extern void watchdog_dev_unregister(struct watchdog_device *);
+ extern int __init watchdog_dev_init(void);
+ extern void __exit watchdog_dev_exit(void);
++extern unsigned int watchdog_timeout_tointernal(struct watchdog_device *,
++						bool, unsigned int);
 diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index 7e4cd34a8c20..480460b89c16 100644
+index 480460b89c16..eca13ce1dc91 100644
 --- a/drivers/watchdog/watchdog_dev.c
 +++ b/drivers/watchdog/watchdog_dev.c
-@@ -99,7 +99,11 @@ static inline bool watchdog_need_worker(struct watchdog_device *wdd)
- {
- 	/* All variables in milli-seconds */
- 	unsigned int hm = wdd->max_hw_heartbeat_ms;
--	unsigned int t = wdd->timeout * 1000;
-+	unsigned int t = wdd->timeout;
-+
-+	if (!(wdd->info->options & WDIOF_MSECTIMER))
-+		/* Convert to msecs if not already so. */
-+		t *= 1000;
- 
- 	/*
- 	 * A worker to generate heartbeat requests is needed if all of the
-@@ -121,12 +125,16 @@ static inline bool watchdog_need_worker(struct watchdog_device *wdd)
- static ktime_t watchdog_next_keepalive(struct watchdog_device *wdd)
- {
- 	struct watchdog_core_data *wd_data = wdd->wd_data;
--	unsigned int timeout_ms = wdd->timeout * 1000;
-+	unsigned int timeout_ms = wdd->timeout;
- 	ktime_t keepalive_interval;
- 	ktime_t last_heartbeat, latest_heartbeat;
- 	ktime_t virt_timeout;
- 	unsigned int hw_heartbeat_ms;
- 
-+	if (!(wdd->info->options & WDIOF_MSECTIMER))
-+		/* Convert to msecs if not already so. */
-+		timeout_ms *= 1000;
-+
- 	if (watchdog_active(wdd))
- 		virt_timeout = ktime_add(wd_data->last_keepalive,
- 					 ms_to_ktime(timeout_ms));
-@@ -137,7 +145,7 @@ static ktime_t watchdog_next_keepalive(struct watchdog_device *wdd)
- 	keepalive_interval = ms_to_ktime(hw_heartbeat_ms / 2);
- 
- 	/*
--	 * To ensure that the watchdog times out wdd->timeout seconds
-+	 * To ensure that the watchdog times out wdd->timeout seconds/msecs
- 	 * after the most recent ping from userspace, the last
- 	 * worker ping has to come in hw_heartbeat_ms before this timeout.
- 	 */
-@@ -382,6 +390,8 @@ static int watchdog_set_timeout(struct watchdog_device *wdd,
- 	if (watchdog_timeout_invalid(wdd, timeout))
- 		return -EINVAL;
- 
-+	if (wdd->info->options & WDIOF_MSECTIMER)
-+		timeout *= 1000;
- 	if (wdd->ops->set_timeout) {
- 		err = wdd->ops->set_timeout(wdd, timeout);
- 	} else {
-@@ -413,6 +423,8 @@ static int watchdog_set_pretimeout(struct watchdog_device *wdd,
- 	if (watchdog_pretimeout_invalid(wdd, timeout))
- 		return -EINVAL;
- 
-+	if (wdd->info->options & WDIOF_MSECTIMER)
-+		timeout *= 1000;
- 	if (wdd->ops->set_pretimeout)
- 		err = wdd->ops->set_pretimeout(wdd, timeout);
- 	else
-@@ -440,6 +452,8 @@ static int watchdog_get_timeleft(struct watchdog_device *wdd,
- 		return -EOPNOTSUPP;
- 
- 	*timeleft = wdd->ops->get_timeleft(wdd);
-+	if (wdd->info->options & WDIOF_MSECTIMER)
-+		*timeleft /= 1000;
- 
- 	return 0;
- }
-@@ -508,8 +522,11 @@ static ssize_t timeleft_show(struct device *dev, struct device_attribute *attr,
- 	mutex_lock(&wd_data->lock);
- 	status = watchdog_get_timeleft(wdd, &val);
- 	mutex_unlock(&wd_data->lock);
--	if (!status)
-+	if (!status) {
-+		if (wdd->info->options & WDIOF_MSECTIMER)
-+			val /= 1000;
- 		status = sprintf(buf, "%u\n", val);
-+	}
- 
+@@ -371,6 +371,56 @@ static unsigned int watchdog_get_status(struct watchdog_device *wdd)
  	return status;
- }
-@@ -519,8 +536,12 @@ static ssize_t timeout_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
- {
- 	struct watchdog_device *wdd = dev_get_drvdata(dev);
-+	unsigned int t = wdd->timeout;
-+
-+	if (wdd->info->options & WDIOF_MSECTIMER)
-+		t /= 1000;
- 
--	return sprintf(buf, "%u\n", wdd->timeout);
-+	return sprintf(buf, "%u\n", t);
- }
- static DEVICE_ATTR_RO(timeout);
- 
-@@ -528,8 +549,12 @@ static ssize_t pretimeout_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	struct watchdog_device *wdd = dev_get_drvdata(dev);
-+	unsigned int t = wdd->pretimeout;
- 
--	return sprintf(buf, "%u\n", wdd->pretimeout);
-+	if (wdd->info->options & WDIOF_MSECTIMER)
-+		t /= 1000;
-+
-+	return sprintf(buf, "%u\n", t);
- }
- static DEVICE_ATTR_RO(pretimeout);
- 
-@@ -783,7 +808,10 @@ static long watchdog_ioctl(struct file *file, unsigned int cmd,
- 			err = -EOPNOTSUPP;
- 			break;
- 		}
--		err = put_user(wdd->timeout, p);
-+		val = wdd->timeout;
-+		if (wdd->info->options & WDIOF_MSECTIMER)
-+			val /= 1000;
-+		err = put_user(val, p);
- 		break;
- 	case WDIOC_GETTIMELEFT:
- 		err = watchdog_get_timeleft(wdd, &val);
-@@ -799,7 +827,10 @@ static long watchdog_ioctl(struct file *file, unsigned int cmd,
- 		err = watchdog_set_pretimeout(wdd, val);
- 		break;
- 	case WDIOC_GETPRETIMEOUT:
--		err = put_user(wdd->pretimeout, p);
-+		val = wdd->pretimeout;
-+		if (wdd->info->options & WDIOF_MSECTIMER)
-+			val /= 1000;
-+		err = put_user(val, p);
- 		break;
- 	default:
- 		err = -ENOTTY;
-diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-index 1464ce6ffa31..49bfaf986b37 100644
---- a/include/linux/watchdog.h
-+++ b/include/linux/watchdog.h
-@@ -55,7 +55,9 @@ struct watchdog_ops {
- 	long (*ioctl)(struct watchdog_device *, unsigned int, unsigned long);
- };
- 
--/** struct watchdog_device - The structure that defines a watchdog device
-+/** struct watchdog_device - The structure that defines a watchdog device.
-+ * Unless otherwise specified, all timeouts are in seconds unless
-+ * WDIOF_MSECTIMER is set, then they are in milliseconds.
-  *
-  * @id:		The watchdog's ID. (Allocated by watchdog_register_device)
-  * @parent:	The parent bus device
-@@ -65,10 +67,10 @@ struct watchdog_ops {
-  * @ops:	Pointer to the list of watchdog operations.
-  * @gov:	Pointer to watchdog pretimeout governor.
-  * @bootstatus:	Status of the watchdog device at boot.
-- * @timeout:	The watchdog devices timeout value (in seconds).
-+ * @timeout:	The watchdog devices timeout value.
-  * @pretimeout: The watchdog devices pre_timeout value.
-- * @min_timeout:The watchdog devices minimum timeout value (in seconds).
-- * @max_timeout:The watchdog devices maximum timeout value (in seconds)
-+ * @min_timeout:The watchdog devices minimum timeout value.
-+ * @max_timeout:The watchdog devices maximum timeout value
-  *		as configurable from user space. Only relevant if
-  *		max_hw_heartbeat_ms is not provided.
-  * @min_hw_heartbeat_ms:
-@@ -156,6 +158,17 @@ static inline void watchdog_stop_on_unregister(struct watchdog_device *wdd)
- 	set_bit(WDOG_STOP_ON_UNREGISTER, &wdd->status);
  }
  
 +/*
-+ * Use the following function to check if a timeout value is
-+ * internally consistent with the range parameters.  t is in milliseconds.
++ *	watchdog_timeout_tointernal: Convert to internal time representation
++ *	@wdd: the watchdog device
++ *	@in_msecs: false - timeout in seconds, true - timeout in milliseconds
++ *	@timeout: timeout to convert
++ *
++ *	Convert from an external representation of the timeout in
++ *	seconds (or milliseconds if in_msecs is true) to the internal
++ *	timeout in seconds or milliseconds, depending on
++ *	WDIOF_MSECTIMER.
 + */
-+static inline bool _watchdog_timeout_invalid(struct watchdog_device *wdd, unsigned int t)
++unsigned int watchdog_timeout_tointernal(struct watchdog_device *wdd,
++					 bool in_msecs,
++					 unsigned int timeout)
 +{
-+	return  t < wdd->min_timeout ||
-+		(!wdd->max_hw_heartbeat_ms && wdd->max_timeout &&
-+		 t > wdd->max_timeout);
++	if (wdd->info->options & WDIOF_MSECTIMER) {
++		if (!in_msecs)
++			timeout *= 1000;
++	} else if (in_msecs) {
++		/* Truncate up. */
++		timeout = (timeout + 999) / 1000;
++	}
++	return timeout;
 +}
 +
- /* Use the following function to check if a timeout value is invalid */
- static inline bool watchdog_timeout_invalid(struct watchdog_device *wdd, unsigned int t)
- {
-@@ -170,9 +183,11 @@ static inline bool watchdog_timeout_invalid(struct watchdog_device *wdd, unsigne
- 	 *   is configured, and the requested value is larger than the
- 	 *   configured maximum timeout.
- 	 */
--	return t > UINT_MAX / 1000 || t < wdd->min_timeout ||
--		(!wdd->max_hw_heartbeat_ms && wdd->max_timeout &&
--		 t > wdd->max_timeout);
-+	if (t > UINT_MAX / 1000)
-+		return true;
-+	if (wdd->info->options & WDIOF_MSECTIMER)
-+		t *= 1000;
-+	return _watchdog_timeout_invalid(wdd, t);
- }
++/*
++ *	watchdog_timeout_toexternal: Convert to external time representation
++ *	@wdd: the watchdog device
++ *	@in_msecs: false - returns seconds, true - returns milliseconds
++ *	@timeout: timeout in seconds (or milliseconds if WDIOF_MSECTIMER is set)
++ *
++ *	Convert from an internal representation of the timeout in
++ *	seconds (or milliseconds if WDIOF_MSECTIMER is set) to the
++ *	external timeout in seconds or milliseconds, depending on
++ *	in_msecs.
++ */
++static unsigned int watchdog_timeout_toexternal(struct watchdog_device *wdd,
++						bool in_msecs,
++						unsigned int timeout)
++{
++	if (wdd->info->options & WDIOF_MSECTIMER) {
++		if (!in_msecs)
++			timeout /= 1000;
++	} else if (in_msecs) {
++		timeout *= 1000;
++	}
++
++	return timeout;
++}
++
+ /*
+  *	watchdog_set_timeout: set the watchdog timer timeout
+  *	@wdd: the watchdog device to set the timeout for
+@@ -379,7 +429,7 @@ static unsigned int watchdog_get_status(struct watchdog_device *wdd)
+  *	The caller must hold wd_data->lock.
+  */
  
- /* Use the following function to check if a pretimeout value is invalid */
+-static int watchdog_set_timeout(struct watchdog_device *wdd,
++static int watchdog_set_timeout(struct watchdog_device *wdd, bool in_msecs,
+ 							unsigned int timeout)
+ {
+ 	int err = 0;
+@@ -387,11 +437,13 @@ static int watchdog_set_timeout(struct watchdog_device *wdd,
+ 	if (!(wdd->info->options & WDIOF_SETTIMEOUT))
+ 		return -EOPNOTSUPP;
+ 
+-	if (watchdog_timeout_invalid(wdd, timeout))
++	if (in_msecs) {
++		if (_watchdog_timeout_invalid(wdd, timeout))
++			return -EINVAL;
++	} else if (watchdog_timeout_invalid(wdd, timeout))
+ 		return -EINVAL;
+ 
+-	if (wdd->info->options & WDIOF_MSECTIMER)
+-		timeout *= 1000;
++	timeout = watchdog_timeout_tointernal(wdd, in_msecs, timeout);
+ 	if (wdd->ops->set_timeout) {
+ 		err = wdd->ops->set_timeout(wdd, timeout);
+ 	} else {
+@@ -413,6 +465,7 @@ static int watchdog_set_timeout(struct watchdog_device *wdd,
+  */
+ 
+ static int watchdog_set_pretimeout(struct watchdog_device *wdd,
++				   bool in_msecs,
+ 				   unsigned int timeout)
+ {
+ 	int err = 0;
+@@ -423,8 +476,7 @@ static int watchdog_set_pretimeout(struct watchdog_device *wdd,
+ 	if (watchdog_pretimeout_invalid(wdd, timeout))
+ 		return -EINVAL;
+ 
+-	if (wdd->info->options & WDIOF_MSECTIMER)
+-		timeout *= 1000;
++	timeout = watchdog_timeout_tointernal(wdd, in_msecs, timeout);
+ 	if (wdd->ops->set_pretimeout)
+ 		err = wdd->ops->set_pretimeout(wdd, timeout);
+ 	else
+@@ -443,7 +495,7 @@ static int watchdog_set_pretimeout(struct watchdog_device *wdd,
+  *	Get the time before a watchdog will reboot (if not pinged).
+  */
+ 
+-static int watchdog_get_timeleft(struct watchdog_device *wdd,
++static int watchdog_get_timeleft(struct watchdog_device *wdd, bool in_msecs,
+ 							unsigned int *timeleft)
+ {
+ 	*timeleft = 0;
+@@ -452,8 +504,7 @@ static int watchdog_get_timeleft(struct watchdog_device *wdd,
+ 		return -EOPNOTSUPP;
+ 
+ 	*timeleft = wdd->ops->get_timeleft(wdd);
+-	if (wdd->info->options & WDIOF_MSECTIMER)
+-		*timeleft /= 1000;
++	*timeleft = watchdog_timeout_toexternal(wdd, in_msecs, *timeleft);
+ 
+ 	return 0;
+ }
+@@ -520,13 +571,11 @@ static ssize_t timeleft_show(struct device *dev, struct device_attribute *attr,
+ 	unsigned int val;
+ 
+ 	mutex_lock(&wd_data->lock);
+-	status = watchdog_get_timeleft(wdd, &val);
++	status = watchdog_get_timeleft(wdd, false, &val);
+ 	mutex_unlock(&wd_data->lock);
+-	if (!status) {
+-		if (wdd->info->options & WDIOF_MSECTIMER)
+-			val /= 1000;
+-		status = sprintf(buf, "%u\n", val);
+-	}
++	if (!status)
++		status = sprintf(buf, "%u\n",
++				 watchdog_timeout_toexternal(wdd, false, val));
+ 
+ 	return status;
+ }
+@@ -536,12 +585,9 @@ static ssize_t timeout_show(struct device *dev, struct device_attribute *attr,
+ 				char *buf)
+ {
+ 	struct watchdog_device *wdd = dev_get_drvdata(dev);
+-	unsigned int t = wdd->timeout;
+ 
+-	if (wdd->info->options & WDIOF_MSECTIMER)
+-		t /= 1000;
+-
+-	return sprintf(buf, "%u\n", t);
++	return sprintf(buf, "%u\n",
++		       watchdog_timeout_toexternal(wdd, false, wdd->timeout));
+ }
+ static DEVICE_ATTR_RO(timeout);
+ 
+@@ -549,12 +595,10 @@ static ssize_t pretimeout_show(struct device *dev,
+ 			       struct device_attribute *attr, char *buf)
+ {
+ 	struct watchdog_device *wdd = dev_get_drvdata(dev);
+-	unsigned int t = wdd->pretimeout;
+-
+-	if (wdd->info->options & WDIOF_MSECTIMER)
+-		t /= 1000;
+ 
+-	return sprintf(buf, "%u\n", t);
++	return sprintf(buf, "%u\n",
++		       watchdog_timeout_toexternal(wdd, false,
++						   wdd->pretimeout));
+ }
+ static DEVICE_ATTR_RO(pretimeout);
+ 
+@@ -788,11 +832,13 @@ static long watchdog_ioctl(struct file *file, unsigned int cmd,
+ 		err = watchdog_ping(wdd);
+ 		break;
+ 	case WDIOC_SETTIMEOUT:
++	case WDIOC_SETTIMEOUT_MS:
+ 		if (get_user(val, p)) {
+ 			err = -EFAULT;
+ 			break;
+ 		}
+-		err = watchdog_set_timeout(wdd, val);
++		err = watchdog_set_timeout(wdd, cmd == WDIOC_SETTIMEOUT_MS,
++					   val);
+ 		if (err < 0)
+ 			break;
+ 		/* If the watchdog is active then we send a keepalive ping
+@@ -803,33 +849,42 @@ static long watchdog_ioctl(struct file *file, unsigned int cmd,
+ 			break;
+ 		/* fall through */
+ 	case WDIOC_GETTIMEOUT:
++	case WDIOC_GETTIMEOUT_MS:
+ 		/* timeout == 0 means that we don't know the timeout */
+ 		if (wdd->timeout == 0) {
+ 			err = -EOPNOTSUPP;
+ 			break;
+ 		}
+-		val = wdd->timeout;
+-		if (wdd->info->options & WDIOF_MSECTIMER)
+-			val /= 1000;
++		val = watchdog_timeout_toexternal(wdd,
++					  (cmd == WDIOC_SETTIMEOUT_MS ||
++					   cmd == WDIOC_GETTIMEOUT_MS),
++					  wdd->timeout);
+ 		err = put_user(val, p);
+ 		break;
+ 	case WDIOC_GETTIMELEFT:
+-		err = watchdog_get_timeleft(wdd, &val);
++	case WDIOC_GETTIMELEFT_MS:
++		err = watchdog_get_timeleft(wdd, cmd == WDIOC_GETTIMELEFT_MS,
++					    &val);
+ 		if (err < 0)
+ 			break;
+ 		err = put_user(val, p);
+ 		break;
+ 	case WDIOC_SETPRETIMEOUT:
++	case WDIOC_SETPRETIMEOUT_MS:
+ 		if (get_user(val, p)) {
+ 			err = -EFAULT;
+ 			break;
+ 		}
+-		err = watchdog_set_pretimeout(wdd, val);
++		err = watchdog_set_pretimeout(wdd,
++					      cmd == WDIOC_SETPRETIMEOUT_MS,
++					      val);
+ 		break;
+ 	case WDIOC_GETPRETIMEOUT:
+-		val = wdd->pretimeout;
+-		if (wdd->info->options & WDIOF_MSECTIMER)
+-			val /= 1000;
++	case WDIOC_GETPRETIMEOUT_MS:
++		val = watchdog_timeout_toexternal(wdd,
++					  (cmd == WDIOC_SETPRETIMEOUT_MS ||
++					   cmd == WDIOC_GETPRETIMEOUT_MS),
++					  wdd->pretimeout);
+ 		err = put_user(val, p);
+ 		break;
+ 	default:
 diff --git a/include/uapi/linux/watchdog.h b/include/uapi/linux/watchdog.h
-index b15cde5c9054..feb3bcc46993 100644
+index feb3bcc46993..3df7880c6fca 100644
 --- a/include/uapi/linux/watchdog.h
 +++ b/include/uapi/linux/watchdog.h
-@@ -48,6 +48,7 @@ struct watchdog_info {
- #define	WDIOF_PRETIMEOUT	0x0200  /* Pretimeout (in seconds), get/set */
- #define	WDIOF_ALARMONLY		0x0400	/* Watchdog triggers a management or
- 					   other external alarm not a reboot */
-+#define	WDIOF_MSECTIMER		0x0800	/* Driver can use milliseconds for timeouts */
- #define	WDIOF_KEEPALIVEPING	0x8000	/* Keep alive ping reply */
+@@ -32,6 +32,11 @@ struct watchdog_info {
+ #define	WDIOC_SETPRETIMEOUT	_IOWR(WATCHDOG_IOCTL_BASE, 8, int)
+ #define	WDIOC_GETPRETIMEOUT	_IOR(WATCHDOG_IOCTL_BASE, 9, int)
+ #define	WDIOC_GETTIMELEFT	_IOR(WATCHDOG_IOCTL_BASE, 10, int)
++#define	WDIOC_SETTIMEOUT_MS	_IOWR(WATCHDOG_IOCTL_BASE, 11, int)
++#define	WDIOC_GETTIMEOUT_MS	_IOR(WATCHDOG_IOCTL_BASE, 12, int)
++#define	WDIOC_SETPRETIMEOUT_MS	_IOWR(WATCHDOG_IOCTL_BASE, 13, int)
++#define	WDIOC_GETPRETIMEOUT_MS	_IOR(WATCHDOG_IOCTL_BASE, 14, int)
++#define	WDIOC_GETTIMELEFT_MS	_IOR(WATCHDOG_IOCTL_BASE, 15, int)
  
- #define	WDIOS_DISABLECARD	0x0001	/* Turn off the watchdog timer */
+ #define	WDIOF_UNKNOWN		-1	/* Unknown flag error */
+ #define	WDIOS_UNKNOWN		-1	/* Unknown status error */
 -- 
 2.17.1
 
