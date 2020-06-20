@@ -2,58 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 624732025B7
-	for <lists+linux-watchdog@lfdr.de>; Sat, 20 Jun 2020 19:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1523C2025B5
+	for <lists+linux-watchdog@lfdr.de>; Sat, 20 Jun 2020 19:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgFTRuQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 20 Jun 2020 13:50:16 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44499 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728369AbgFTRuP (ORCPT
+        id S1728306AbgFTRuO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 20 Jun 2020 13:50:14 -0400
+Received: from mail-oo1-f66.google.com ([209.85.161.66]:45114 "EHLO
+        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726838AbgFTRuN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 20 Jun 2020 13:50:15 -0400
-Received: by mail-ot1-f68.google.com with SMTP id e5so9799418ote.11
-        for <linux-watchdog@vger.kernel.org>; Sat, 20 Jun 2020 10:50:14 -0700 (PDT)
+        Sat, 20 Jun 2020 13:50:13 -0400
+Received: by mail-oo1-f66.google.com with SMTP id k7so2536859ooo.12
+        for <linux-watchdog@vger.kernel.org>; Sat, 20 Jun 2020 10:50:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EZ87HAZTDdt3n3C9oeFellNh4inXOqJx8U+6lc7QfOQ=;
-        b=BJ9R24HYViAnp9paCk61vLoCVDVB8wq0MhANRXPpjyagKgMeyOyq+kOqbgnhnGPLfF
-         IFGHEOUfCDi5T01Jd/7XBrryrvLDR/DpoGZDGQFracj325e0pR430X1rGk+ZhBrldL4Z
-         b/dc3JxPntgtg3/XScTCOCsvEE6vtyH7O6f3QbB/Lf2MNNcFopteSvXmOI9+JTh1LbAi
-         8CVw0ufqVx97lrrR13PMcEW1Z4Tbw1W0C+KfnDn0IU1kNCKAi3lw0PBDEiyxyLeIfdlv
-         gzh+yQscCs9H0JNeqDTOogCvewIuOTtE32J4GLpOQxKgl5xsgHuG6ROZ2NJR5MK2fu0h
-         gNTw==
+        bh=9UxhjSoE82TmEXppeCDn14Vvto0FXpWKoJEeMHzGlYo=;
+        b=UekCF6s7D3qzXwRvg84H2d03EQWIOEb6dc3Lu1zHaxHJeqxWiExJrBIVtSoDmf5QQl
+         GDwscbKXnH8Wcoqjx1RT11BsIk643BJTD4vsxgKV47iMh+yw4k0bzNrhJnals2gUE5vZ
+         6Bgh6iS9o7viXmuSaEhZykiDtNUs/LHKZCjH1WaR7U7AWALq/rmSv2pXW3QvcwYojt+B
+         Cb8VnFZcsUAglzAXXBMkCj/87ZbyTRLw7wgi60ZZlmiaI+Dquqw9J1A0FllwF5OeIcVR
+         ddyC5NrDSFLRVL79vpdYdL9UTKklPaIkCXTnKpWk4r9yFs+UOvJLoU2/bPZX7iEkOyGE
+         vJVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=EZ87HAZTDdt3n3C9oeFellNh4inXOqJx8U+6lc7QfOQ=;
-        b=IIj2ZrH3lHvEwXtvxHuXT6mcC/jJOnHHxC8WCv05TokEjj+ZiP5BnCfP4fdmVoWn3N
-         ztmJZnFUMT+B3vNTY6eU6HYRRBQnjTv59kTfzj33fUYSMpjkFIVkyfBZs3/LweyFRux1
-         BdHDWdbPTIFeYT1F1lPav3JVehJIQvfDYEOC5/y5dweE/mXeKpWoVBtjHa5FprpJWxVt
-         HMEqphReWPSSRxvKBdspy3ICEkysW0mMiwDVv1AwzlDUMJBLXFVc9WBddAFuBpXbMX8f
-         Oow8mHIu0yCa/0dG94Y9ruWakxKngnO3RLpK4dzITl0mgHVk4QbqBxM88HuriXoLfr2U
-         FAUw==
-X-Gm-Message-State: AOAM5325bJHIZGgwGoshXemQfeC0wIQs/4L/ur4pMvCmaBhpNG3oiLea
-        xIPK3OhRPfHlY2tlbNmsTQ==
-X-Google-Smtp-Source: ABdhPJw0CbCwMoZvhYI7R6/GLLKwFKpofJQjrF6y4vveqT5NWORBZU3VlHElFB2pRSsN9CvcQOQYUA==
-X-Received: by 2002:a9d:f07:: with SMTP id 7mr7610999ott.46.1592675353682;
-        Sat, 20 Jun 2020 10:49:13 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id u80sm2003711oia.5.2020.06.20.10.49.12
+        bh=9UxhjSoE82TmEXppeCDn14Vvto0FXpWKoJEeMHzGlYo=;
+        b=JsnOfHaeRTC6iYqOeAHH68S05Wrx2gRrAzCRwAYYazBRAU6BN3gcKPwiwqN/8c0yPT
+         VwldKyjC7WdFY3P3rbxXgbF7Hf6HToagnl9V0Zwbyy5PwFuIFs0Gz4DdjbMHdIsP1agY
+         k4exCuA5KbrmFfbuOQmtWDAxGJ8rTuRw0tzUGDZjN2D70SPEcvN4fSZsir9XX+lfno/S
+         bgin5DREEjoso0fmTal9absa2zvbP3wiKmYrwQ9JMoHfaOqFYoOebN0McnNSHenCBJEd
+         1mCi3DSKxS1j8LbnpvHWTnVP1UgTVPqSdnANx4xWscgSRwvZkgZis+a4oVaWvmi+1M4V
+         ksBw==
+X-Gm-Message-State: AOAM532fZMK/hNTfHt5z+Tinx3xb3cNOyLuQW8OOoJ+LXqvZaNOen4Go
+        1AQzotdkCdtJ+BDE+vH6VJblE8M=
+X-Google-Smtp-Source: ABdhPJzhyC/dF1sfvjhicBX2eMfArY8Ag0C+jhIh52nMNtfIUPR0JkPhRKWCAD87Z269iK+sY7m+4w==
+X-Received: by 2002:a4a:e496:: with SMTP id s22mr8167459oov.67.1592675352862;
+        Sat, 20 Jun 2020 10:49:12 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.146.204])
+        by smtp.gmail.com with ESMTPSA id w19sm298243otj.10.2020.06.20.10.49.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 20 Jun 2020 10:49:12 -0700 (PDT)
 Received: from t560.minyard.net (unknown [IPv6:2001:470:b8f6:1b:98f8:1e34:b5b7:82f7])
-        by serve.minyard.net (Postfix) with ESMTPA id 7329B180171;
+        by serve.minyard.net (Postfix) with ESMTPA id 89471180545;
         Sat, 20 Jun 2020 17:49:11 +0000 (UTC)
 From:   minyard@acm.org
 To:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc:     linux-watchdog@vger.kernel.org, Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 01/10] watchdog: Ignore stop_on_reboot if no stop function
-Date:   Sat, 20 Jun 2020 12:48:58 -0500
-Message-Id: <20200620174907.20229-2-minyard@acm.org>
+Subject: [PATCH 02/10] watchdog: Add read capability
+Date:   Sat, 20 Jun 2020 12:48:59 -0500
+Message-Id: <20200620174907.20229-3-minyard@acm.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200620174907.20229-1-minyard@acm.org>
 References: <20200620174907.20229-1-minyard@acm.org>
@@ -64,40 +64,113 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Corey Minyard <cminyard@mvista.com>
 
-The reboot notifier unconditionally calls the stop function on the
-watchdog, which would result in a crash if the watchdog didn't have a
-stop function.  So check at register time to see if there is a stop
-function, and don't do stop_on_reboot if it is NULL.
+Allow read, poll, and fasync calls on the watchdog device to be passed
+to the driver.  This is so the IPMI driver can be moved over to the
+watchdog framework, as it has the ability to have a read return when
+data comes in on the watchdog.
 
 Signed-off-by: Corey Minyard <cminyard@mvista.com>
 ---
- drivers/watchdog/watchdog_core.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/watchdog/watchdog_dev.c | 45 +++++++++++++++++++++++++++++++++
+ include/linux/watchdog.h        |  8 ++++++
+ 2 files changed, 53 insertions(+)
 
-diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-index 423844757812..03943a34e9fb 100644
---- a/drivers/watchdog/watchdog_core.c
-+++ b/drivers/watchdog/watchdog_core.c
-@@ -260,10 +260,16 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 7e4cd34a8c20..45a0a4fe731d 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -698,6 +698,48 @@ static ssize_t watchdog_write(struct file *file, const char __user *data,
+ 	return len;
+ }
  
- 	/* Module parameter to force watchdog policy on reboot. */
- 	if (stop_on_reboot != -1) {
--		if (stop_on_reboot)
--			set_bit(WDOG_STOP_ON_REBOOT, &wdd->status);
--		else
-+		if (stop_on_reboot) {
-+			if (!wdd->ops->stop) {
-+				pr_err("watchdog%d: stop_on_reboot set, but no stop function.  Ignoring stop_on_reboot.\n", wdd->id);
-+				clear_bit(WDOG_STOP_ON_REBOOT, &wdd->status);
-+			} else {
-+				set_bit(WDOG_STOP_ON_REBOOT, &wdd->status);
-+			}
-+		} else {
- 			clear_bit(WDOG_STOP_ON_REBOOT, &wdd->status);
-+		}
- 	}
++/*
++ *	watchdog_read: Pass a read on to the device if it accepts it
++ *	@file: file handle to the device
++ *	@buf: the buffer to read into
++ *	@count: the size of buf in bytes
++ *      @ppos: pointer to the file offset
++ *
++ *	The watchdog API defines a common set of functions for all watchdogs
++ *	according to their available features.
++ */
++
++static ssize_t watchdog_read(struct file *file, char __user *buf,
++			     size_t count, loff_t *ppos)
++{
++	struct watchdog_core_data *wd_data = file->private_data;
++	struct watchdog_device *wdd = wd_data->wdd;
++
++	if (!wdd->ops->read)
++		return -EINVAL;
++	return wdd->ops->read(wdd, file, buf, count, ppos);
++}
++
++static __poll_t watchdog_poll(struct file *file, poll_table *wait)
++{
++	struct watchdog_core_data *wd_data = file->private_data;
++	struct watchdog_device *wdd = wd_data->wdd;
++
++	if (!wdd->ops->poll)
++		return DEFAULT_POLLMASK;
++	return wdd->ops->poll(wdd, file, wait);
++}
++
++static int watchdog_fasync(int fd, struct file *file, int on)
++{
++	struct watchdog_core_data *wd_data = file->private_data;
++	struct watchdog_device *wdd = wd_data->wdd;
++
++	if (!wdd->ops->fasync)
++		return 0;
++	return wdd->ops->fasync(wdd, fd, file, on);
++}
++
+ /*
+  *	watchdog_ioctl: handle the different ioctl's for the watchdog device.
+  *	@file: file handle to the device
+@@ -951,6 +993,9 @@ static int watchdog_release(struct inode *inode, struct file *file)
+ static const struct file_operations watchdog_fops = {
+ 	.owner		= THIS_MODULE,
+ 	.write		= watchdog_write,
++	.read		= watchdog_read,
++	.poll		= watchdog_poll,
++	.fasync		= watchdog_fasync,
+ 	.unlocked_ioctl	= watchdog_ioctl,
+ 	.compat_ioctl	= compat_ptr_ioctl,
+ 	.open		= watchdog_open,
+diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
+index 1464ce6ffa31..36f99c8c973e 100644
+--- a/include/linux/watchdog.h
++++ b/include/linux/watchdog.h
+@@ -15,6 +15,7 @@
+ #include <linux/device.h>
+ #include <linux/kernel.h>
+ #include <linux/notifier.h>
++#include <linux/poll.h>
+ #include <uapi/linux/watchdog.h>
  
- 	if (test_bit(WDOG_STOP_ON_REBOOT, &wdd->status)) {
+ struct watchdog_ops;
+@@ -34,6 +35,9 @@ struct watchdog_governor;
+  * @get_timeleft:The routine that gets the time left before a reset (in seconds).
+  * @restart:	The routine for restarting the machine.
+  * @ioctl:	The routines that handles extra ioctl calls.
++ * @read:	Call this is not NULL and a read comes in on the watchdog dev.
++ * @poll:	Call this is not NULL and a poll comes in on the watchdog dev.
++ * @fasync:	Call this is not NULL and a fasync comes in on the watchdog dev.
+  *
+  * The watchdog_ops structure contains a list of low-level operations
+  * that control a watchdog device. It also contains the module that owns
+@@ -53,6 +57,10 @@ struct watchdog_ops {
+ 	unsigned int (*get_timeleft)(struct watchdog_device *);
+ 	int (*restart)(struct watchdog_device *, unsigned long, void *);
+ 	long (*ioctl)(struct watchdog_device *, unsigned int, unsigned long);
++	ssize_t (*read)(struct watchdog_device *, struct file *, char __user *,
++			size_t, loff_t *);
++	__poll_t (*poll)(struct watchdog_device *, struct file *, poll_table *);
++	int (*fasync)(struct watchdog_device *, int, struct file *, int);
+ };
+ 
+ /** struct watchdog_device - The structure that defines a watchdog device
 -- 
 2.17.1
 
