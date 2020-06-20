@@ -2,58 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A2A2025BA
-	for <lists+linux-watchdog@lfdr.de>; Sat, 20 Jun 2020 19:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717A32025BD
+	for <lists+linux-watchdog@lfdr.de>; Sat, 20 Jun 2020 19:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728380AbgFTRuR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 20 Jun 2020 13:50:17 -0400
-Received: from mail-oo1-f66.google.com ([209.85.161.66]:41590 "EHLO
-        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728374AbgFTRuR (ORCPT
+        id S1728376AbgFTRuS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 20 Jun 2020 13:50:18 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:45016 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728369AbgFTRuR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
         Sat, 20 Jun 2020 13:50:17 -0400
-Received: by mail-oo1-f66.google.com with SMTP id y45so2544499ooi.8
+Received: by mail-oo1-f67.google.com with SMTP id e8so2541940ooi.11
         for <linux-watchdog@vger.kernel.org>; Sat, 20 Jun 2020 10:50:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=OncGKKbA6gT/96giqWKN/U+R9TK/ALHmSmRLVCnXkPQ=;
-        b=coOuX6XcUTWgRZU300y5NFlNKGVruiqWyAf8Y4qmFdkl4laHxwHPMEazbQYnJ1bXfH
-         gLwxYilUECU6f+NfwBfetReR2dO+DcKUuW5jVhgshw5E1pEI1VA371GYwmcbehL+BLPE
-         98ugSb2yptFU0b1IpWiHH9YKQcDPxq+41qXmOXpAzHga5RbsZsHKxgZVXstanxK5WV26
-         j3Hpt2mQdsvQzaAyWRFuMj7nGv2ymhM5eXiPajx97i2CJIbO1BlkHWCMKJ8PEaU26DQ1
-         Lq506g2mOw5yYLcYf+AXRGcs7NMCT0unvswehrRdrpeGNY+teV61B4fWNMnOOPTHIci9
-         9z9A==
+        bh=HsaXFJFfQTpkc7VsM0wDRnmHbxrLz37kqFWylfZRzzM=;
+        b=jT6Bbt0Ek2xHqLGMOWoYZsGqvN6b8e9X2DImY+3pet48uuzTvYP+Yj/mcHHM/mC9pZ
+         xchlRTJLcaBooCkOsr94JPbCUlDz2gRr64qBI1yIRPU1Y2s+wquLVOcLU4sR6EhWpFKs
+         kD6KMM+UJc+WNZmhjEEJEbMmawKOtosKcUpjrk2Ic0tnaKNP4Sf/eJ6LYoduY1PooQp2
+         jLfDKEf+tapJU4r/1mZk70ilqHiubEHq3EpkSIGCVy3ohzLopgAS/uPsbUrsOihAVgmI
+         C35JG/ul95L6qH9cPdjZpvXCYYftWtfpspRAShpnHHWui++RJqW/3eKbWFVF/jIu5py7
+         QM9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=OncGKKbA6gT/96giqWKN/U+R9TK/ALHmSmRLVCnXkPQ=;
-        b=peMKIxPo53A442X/bS81NgiqAQ6YfvsVH6DjUclssFydzZexrHTBN16z5pC1O6zNrO
-         skaP6R+7h5psccnBtwMvPxGvppY6TLHfW3bN6fEn5L4AjGSarJnsSTC2uqGVr+eUdyzc
-         ZxjK0XRSOQIyqxHseSkUyic8/P7Ge0kEvHoNjqvVG2T//JL/tyqSyRtBKMSIH7k+fp7S
-         z+a2EbqfdY7k/A4jCDRh3nJBSQQx2E7LeE2zR4KiewFcsU1qtDuf+Feh0USy4RilUhhZ
-         tfCYduOucYErkrpiYRO3kClwga6cjMwM6po+qqgbdbc+Tyl/hxqsENMiCqSN6HqK87+v
-         DPow==
-X-Gm-Message-State: AOAM531vckvHQGZIA61hyrrmTqJIWvkB20YnySsLh+94VbVue4kYezle
-        Skgvr2VPcs+tBsqZes68y5lSnd8=
-X-Google-Smtp-Source: ABdhPJxRws+qAhJg9fLrzbvfEra/lWdn7HzVVl8glAC9Z8cWuGzalmAKnpo6z2OOnfAL5PQJgaiQCQ==
-X-Received: by 2002:a4a:e58a:: with SMTP id o10mr8185528oov.21.1592675355972;
-        Sat, 20 Jun 2020 10:49:15 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.146.204])
-        by smtp.gmail.com with ESMTPSA id e68sm2060840ote.56.2020.06.20.10.49.13
+        bh=HsaXFJFfQTpkc7VsM0wDRnmHbxrLz37kqFWylfZRzzM=;
+        b=KPglsWurHK5tfXoab+6rVfOYWUKYAt/CTWiKRe7sVoqbk2/wUbuA3qZ7D9T2mWZLyB
+         28rZe4uLZhpnw6wtHNjHaqapD3jDiqWNzttjxmMV6/krAXMUZ8AJ6cvPSbooTXqKc4dp
+         YcIepPiiOnbNEHYBHhclblW/R9Goh1LacUVNhQJLaiizA7P9kn6gfQ/Yy9gGL97himIW
+         Yne6o/FagtDF56nqeGJo2+8gWzca/OzLZMdtH6VThrZtSSnP8C/5VDMQWo6OI6IYyN8I
+         EuO582NdoX57ZxV/I7q7kX+0o/ywLY0mvVL3+KPW4JHgNg+398RIQXwJuLfdxnmtfx28
+         B66g==
+X-Gm-Message-State: AOAM533RcBhkmh448YTQMXKJJLDcDyi2bKs4RdUkze/ahzQ3Db7srV+1
+        HUrbNpL+Sa+x5fErCQWMXA==
+X-Google-Smtp-Source: ABdhPJy3d1wuDeFjdp7oZk+5cCDDlakTQLgbG2oIH27O9d/D+zmje+jdbS/X+wqbKonwA+n7O+C7cw==
+X-Received: by 2002:a4a:4c8e:: with SMTP id a136mr8166914oob.23.1592675356330;
+        Sat, 20 Jun 2020 10:49:16 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id e19sm826452otq.29.2020.06.20.10.49.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 20 Jun 2020 10:49:14 -0700 (PDT)
 Received: from t560.minyard.net (unknown [IPv6:2001:470:b8f6:1b:98f8:1e34:b5b7:82f7])
-        by serve.minyard.net (Postfix) with ESMTPA id DFFB9180563;
+        by serve.minyard.net (Postfix) with ESMTPA id F0AC9180564;
         Sat, 20 Jun 2020 17:49:11 +0000 (UTC)
 From:   minyard@acm.org
 To:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc:     linux-watchdog@vger.kernel.org, Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 07/10] ipmi:watchdog: Allow the reboot timeout to be specified
-Date:   Sat, 20 Jun 2020 12:49:04 -0500
-Message-Id: <20200620174907.20229-8-minyard@acm.org>
+Subject: [PATCH 08/10] watchdog: Add a way to extend the timeout on a reboot
+Date:   Sat, 20 Jun 2020 12:49:05 -0500
+Message-Id: <20200620174907.20229-9-minyard@acm.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200620174907.20229-1-minyard@acm.org>
 References: <20200620174907.20229-1-minyard@acm.org>
@@ -64,48 +64,51 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Corey Minyard <cminyard@mvista.com>
 
-It was fixed at 120, allow that to be changed.
+If reboot_timeout is set in the watchdog device struct, set the timeout
+to that value on a reboot.  This way more time can be given for a reboot
+to complete.
 
 Signed-off-by: Corey Minyard <cminyard@mvista.com>
 ---
- drivers/char/ipmi/ipmi_watchdog.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/watchdog/watchdog_core.c | 2 ++
+ include/linux/watchdog.h         | 4 ++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
-index 9265a5145691..6e0c9faa6e6a 100644
---- a/drivers/char/ipmi/ipmi_watchdog.c
-+++ b/drivers/char/ipmi/ipmi_watchdog.c
-@@ -140,6 +140,9 @@ static int pretimeout;
- /* Default timeout to set on panic */
- static int panic_wdt_timeout = 255;
+diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+index 03943a34e9fb..5792f9bca645 100644
+--- a/drivers/watchdog/watchdog_core.c
++++ b/drivers/watchdog/watchdog_core.c
+@@ -165,6 +165,8 @@ static int watchdog_reboot_notifier(struct notifier_block *nb,
+ 			if (ret)
+ 				return NOTIFY_BAD;
+ 		}
++	} else if (wdd->reboot_timeout) {
++		watchdog_set_timeout(wdd, wdd->reboot_timeout);
+ 	}
  
-+/* Default timeout to set on reboot */
-+static int reboot_wdt_timeout = 120;
-+
- /* Default action is to reset the board on a timeout. */
- static unsigned char action_val = WDOG_TIMEOUT_RESET;
+ 	return NOTIFY_DONE;
+diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
+index 1eefae61215d..0fb57f29346c 100644
+--- a/include/linux/watchdog.h
++++ b/include/linux/watchdog.h
+@@ -92,6 +92,9 @@ struct watchdog_ops {
+  * @status:	Field that contains the devices internal status bits.
+  * @deferred:	Entry in wtd_deferred_reg_list which is used to
+  *		register early initialized watchdogs.
++ * @reboot_timeout:
++ *		If non-zero, the timeout will be set to this value
++ *		on a reboot.  This lets a reboot be given more time.
+  *
+  * The watchdog_device structure contains all information about a
+  * watchdog timer device.
+@@ -125,6 +128,7 @@ struct watchdog_device {
+ #define WDOG_HW_RUNNING		3	/* True if HW watchdog running */
+ #define WDOG_STOP_ON_UNREGISTER	4	/* Should be stopped on unregister */
+ 	struct list_head deferred;
++	unsigned int reboot_timeout;
+ };
  
-@@ -318,6 +321,9 @@ MODULE_PARM_DESC(pretimeout, "Pretimeout value in seconds.");
- module_param(panic_wdt_timeout, timeout, 0644);
- MODULE_PARM_DESC(panic_wdt_timeout, "Timeout value on kernel panic in seconds.");
- 
-+module_param(reboot_wdt_timeout, timeout, 0644);
-+MODULE_PARM_DESC(reboot_wdt_timeout, "Timeout value on a reboot in seconds.");
-+
- module_param_cb(action, &param_ops_str, action_op, 0644);
- MODULE_PARM_DESC(action, "Timeout action. One of: "
- 		 "reset, none, power_cycle, power_off.");
-@@ -1077,8 +1083,8 @@ static int wdog_reboot_handler(struct notifier_block *this,
- 			/* Set a long timer to let the reboot happen or
- 			   reset if it hangs, but only if the watchdog
- 			   timer was already running. */
--			if (timeout < 120)
--				timeout = 120;
-+			if (timeout < reboot_wdt_timeout)
-+				timeout = reboot_wdt_timeout;
- 			pretimeout = 0;
- 			ipmi_watchdog_state = WDOG_TIMEOUT_RESET;
- 			ipmi_set_timeout(&ipmi_wdd, IPMI_SET_TIMEOUT_NO_HB);
+ #define WATCHDOG_NOWAYOUT		IS_BUILTIN(CONFIG_WATCHDOG_NOWAYOUT)
 -- 
 2.17.1
 
