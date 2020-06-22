@@ -2,176 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F506202FEC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jun 2020 08:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD64203469
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jun 2020 12:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726704AbgFVGq0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 22 Jun 2020 02:46:26 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:50250 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725933AbgFVGq0 (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 22 Jun 2020 02:46:26 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05M6juET037132;
-        Mon, 22 Jun 2020 01:45:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1592808356;
-        bh=CzFkttaRhi3JTEfc3yW2lucwElCU+YQ+OtTKPFDbd+8=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=TV4xGCpFnjxAd54nxcfg4xS7anK+kfMrUtfOPCWALgU8JXq75pmRXgFuxQbfkvnjc
-         0MJEkYepa+lk5Y+ay80qE201tbRvG79jkntXoVPsLE0AeXFYCqtlw66vakucwOaXZ/
-         1hVt52vzIVOVj0OggFbofvOoRUc2MH8qlreXQ1BA=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05M6juZ7102986
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 22 Jun 2020 01:45:56 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 22
- Jun 2020 01:45:56 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 22 Jun 2020 01:45:56 -0500
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05M6jrhJ049545;
-        Mon, 22 Jun 2020 01:45:54 -0500
-Subject: Re: [PATCHv4 1/4] dt-bindings: watchdog: Add support for TI K3 RTI
- watchdog
-To:     Jan Kiszka <jan.kiszka@siemens.com>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20200312095808.19907-1-t-kristo@ti.com>
- <20200312095808.19907-2-t-kristo@ti.com>
- <d576a40f-46fb-7ad9-7bfe-11891f9867a6@siemens.com>
-From:   Tero Kristo <t-kristo@ti.com>
-Message-ID: <dac576e5-72a1-dfff-dbb3-9695ac0f687e@ti.com>
-Date:   Mon, 22 Jun 2020 09:45:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1728106AbgFVKD3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 22 Jun 2020 06:03:29 -0400
+Received: from mail-eopbgr1320044.outbound.protection.outlook.com ([40.107.132.44]:38144
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726898AbgFVKD3 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 22 Jun 2020 06:03:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mxPe+bnmlo/3jsHCYeH6KNti5x+NajJwC0kTC0gasQDp+Ob0uFs8UCXcJ9PXEHkq5XpPFJfg/lIUIe2/n7on+rVsbo3Q32yEfBEJedW1U/ssHBPsjgQ2to3VStsNf2vivaV3ez411Ng3dq7w+jUSGakr848YrDWoDxdQyjq7SI22+vka71sKY4vGrlOf4zU4a3Djf+c7kJ3umlMHF9rB9C1tbYitkJwl3haro4KjkcDDggGth8c93MP3Ljem7kMkFH2IkrGR/0TAI71hJIvrXLA7gzyCaNJfISGlo/i3XAXnGI7eWepeExER0nFFy+YrC7Jtt3ijpYrV0DP3qx56CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=52apssC4otua/CVCCdZPkxtkXa4DFoOmbThtVqQRDT0=;
+ b=gSMiRJa2Pz8tJ9MuiAIU7H5qnNg6GRBoCYOd6UV0A54xL/pHC9sKv4mcDWyrfMzEbEpHjgnLgOvrRu5MTm1QUvD2c+pXdJDmQc0ymiUu6l60Nz7U7SbP/Y53IKn0TVT8bdIWNioWvvzXIyfuRVO0Ta6o13HrRs/7CeYsrqfo8pxIfImqKvyuWX86fZKvekkGImH5MG1MX/u53RogSe6H8myqIgP97Xnge0FQRhr1BMBc2wI9X2zm+uOVtBZa+XAl7NiNw3jCmeTaX/txYPTwll0uziEx2lPEbnfXgb04N/cDLGQ3mioZC3Dn3UX8QOJeJA41DiIctOrpiMNyMJ6xGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
+ dkim=pass header.d=moxa.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=52apssC4otua/CVCCdZPkxtkXa4DFoOmbThtVqQRDT0=;
+ b=f0rnTYI3CfemgBt7CCNNLvnS+9Br9apjeIZGyxEtSZPXdGVn+OqcGUuLrhu2Q8RKR/95Yqc5+14/rKRD1p8N4WDlkHCydPHc0DdeMqA5eWDXwEl3LeUxtpuyLdoYepO8hx8I/ulzW8mtkSVKKniL3/ieu5pxbmpOvAePimAWxHo=
+Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
+ (2603:1096:202:22::12) by HK2PR01MB3217.apcprd01.prod.exchangelabs.com
+ (2603:1096:202:24::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22; Mon, 22 Jun
+ 2020 10:03:25 +0000
+Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
+ ([fe80::712b:170d:f873:68a3]) by HK2PR01MB3281.apcprd01.prod.exchangelabs.com
+ ([fe80::712b:170d:f873:68a3%6]) with mapi id 15.20.3109.027; Mon, 22 Jun 2020
+ 10:03:25 +0000
+From:   =?big5?B?Sm9obnNvbiBDSCBDaGVuICizr6xMvrEp?= 
+        <JohnsonCH.Chen@moxa.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 0/3] Use MFD for Dallas/Maxim DS1374 driver series
+Thread-Topic: [PATCH 0/3] Use MFD for Dallas/Maxim DS1374 driver series
+Thread-Index: AQHWSHk8vS8zWbAau0uFznOwrrAykg==
+Date:   Mon, 22 Jun 2020 10:03:25 +0000
+Message-ID: <HK2PR01MB3281DAE412911621A7F8963BFA970@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=moxa.com;
+x-originating-ip: [123.51.145.16]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e4c19f4d-e555-4032-51a8-08d81693810e
+x-ms-traffictypediagnostic: HK2PR01MB3217:
+x-microsoft-antispam-prvs: <HK2PR01MB3217E5E4447606484BFE6290FA970@HK2PR01MB3217.apcprd01.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0442E569BC
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /GTnCBOCZhBySj3o9jMS4AOp8c9mEY8JW44mBK69qR1Kc7PimZq8r5EQNU4hTxn4VYefgDZDXztH16FMz2fnGHfMb63BH+nujNy9zTaxXWwy9sHKPaJQVETe2JElGNSsR8VxCyZsOF1giajnruPlxyv1Eji8s5NMcJoCLxBxMYiugUkVB+CKrNvONSSfpGLhmzYvABX8tJxNACS0us6LsmKYzNg3g14yMcNB9irxqrqUabALaIpzRNIvRwOZwKItMbLV6pcBq2F/NODl1ed7vbjIdwzGozdNUIqfXPo2e/x7KERl03FkN7dyZbDk5PxJ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR01MB3281.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(366004)(346002)(396003)(376002)(39850400004)(186003)(85182001)(6506007)(26005)(8936002)(6916009)(7696005)(8676002)(71200400001)(4326008)(83380400001)(316002)(2906002)(86362001)(33656002)(52536014)(9686003)(66946007)(76116006)(64756008)(55016002)(54906003)(5660300002)(478600001)(66446008)(66556008)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: qRSYRA6nsRTxSGrfkkOnblq+oiatP2z3Sw55j0kulse61ELmdpKpaGOj5dn2KWRRdiBJPAUYfhu/PgX+0osSXhThIZApS3JCXp05vmI+UQnQpxo7F2QrWFKcPycV2UBPm7pUDghEs3EYwUf1V5gdV/UQk2kIbcZVypp9ATpSGBR/A8xg3gAuTTw47pqwdE07LHSJdQ7e3Cnlmt3GFpDv6fQ9P+U+Edw96r/XTWOcnXRQKm1MdxpxpZjZ1mWJ4gT9NqRC7guHbZKQvr6sUZeTOb8pSlp/flf8a6PqfZ/yXWZiT89Gr/BLK/JLi3vzrczRnpfBx3Y0/OSmGL1q43a9ioCzCDxCsJRx6Hq6gp0cxvOQRJWbvivtvX+FR0mqxaoWKplmFyc1Y3B6CUfpl2p3zbXxYTnAVmJ7sV78PxHf1L94N3MLPQNZSc1LnaCtiSy2pA2zqn3myB6J9dEbCP+Sbmc++y4yKEn4LBGkFYkpqVI=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <d576a40f-46fb-7ad9-7bfe-11891f9867a6@siemens.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-OriginatorOrg: moxa.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4c19f4d-e555-4032-51a8-08d81693810e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2020 10:03:25.2169
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 30lVuhDVs8Jb2Tayv78PSjLJHB52zVWCX1eA4RTRuG0v4kXjsC4E1Lq5lGYmSPvTqY0ikrURGHLPXrobE6Pw6Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR01MB3217
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 18/06/2020 19:09, Jan Kiszka wrote:
-> On 12.03.20 10:58, Tero Kristo wrote:
->> TI K3 SoCs contain an RTI (Real Time Interrupt) module which can be
->> used to implement a windowed watchdog functionality. Windowed watchdog
->> will generate an error if it is petted outside the time window, either
->> too early or too late.
->>
->> Cc: Rob Herring <robh@kernel.org>
->> Cc: devicetree@vger.kernel.org
->> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->> ---
->> v4:
->>    * changed license to dual
->>    * added documentation for missing properties
->>    * added ref to watchdog.yaml
->>    * renamed main_rti0 to watchdog0 in example
->>
->>   .../bindings/watchdog/ti,rti-wdt.yaml         | 65 +++++++++++++++++++
->>   1 file changed, 65 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
->> new file mode 100644
->> index 000000000000..e83026fef2e9
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
->> @@ -0,0 +1,65 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/watchdog/ti,rti-wdt.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Texas Instruments K3 SoC Watchdog Timer
->> +
->> +maintainers:
->> +  - Tero Kristo <t-kristo@ti.com>
->> +
->> +description:
->> +  The TI K3 SoC watchdog timer is implemented via the RTI (Real Time
->> +  Interrupt) IP module. This timer adds a support for windowed watchdog
->> +  mode, which will signal an error if it is pinged outside the watchdog
->> +  time window, meaning either too early or too late. The error signal
->> +  generated can be routed to either interrupt a safety controller or
->> +  to directly reset the SoC.
->> +
->> +allOf:
->> +  - $ref: "watchdog.yaml#"
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ti,j7-rti-wdt
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  power-domains:
->> +    maxItems: 1
->> +
->> +  assigned-clocks:
->> +    maxItems: 1
->> +
->> +  assigned-clocks-parents:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - power-domains
->> +
->> +examples:
->> +  - |
->> +    /*
->> +     * RTI WDT in main domain on J721e SoC. Assigned clocks are used to
->> +     * select the source clock for the watchdog, forcing it to tick with
->> +     * a 32kHz clock in this case.
->> +     */
->> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
->> +
->> +    watchdog0: rti@2200000 {
->> +        compatible = "ti,rti-wdt";
-> 
-> At some stage, you changed the compatible string to something
-> J721e-specific. This one wasn't updated.
-
-Hmm nice catch, this should be fixed. I wonder why the DT test tools did 
-not catch this when I changed the compatible...
-
->> +        reg = <0x0 0x2200000 0x0 0x100>;
->> +        clocks = <&k3_clks 252 1>;
->> +        power-domains = <&k3_pds 252 TI_SCI_PD_EXCLUSIVE>;
->> +        assigned-clocks = <&k3_clks 252 1>;
->> +        assigned-clock-parents = <&k3_clks 252 5>;
->> +    };
->>
-> 
-> And where is the binding for the AM65x? I know that PG1 has nice
-> erratum, but I would expect PG2 to be fine and register-wise compatible, no?
-
-ti,am65-rti-wdt should be added as a new compatible to this binding once 
-we have a board where we can actually support this. Right now TI AM65x 
-boards depend on firmware for the ESM side support; there has been some 
-internal discussion about how to get this done and I believe you are 
-aware of that.
-
--Tero
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+SGVsbG8gYWxsLAoKVGhpcyBwYXRjaCBzZXQgdXNlcyBNRkQgc3RydWN0dXJlIGZvciBEUzEzNzQg
+c28gdGhhdCBSVEMgYW5kIFdhdGNoZG9nCmZ1bmN0aW9ucyBjYW4gYmUgc2VwYXJhdGVseS4gVGhl
+cmVmb3JlLCB3ZSBjYW4gYWRkIG1vcmUgV2F0Y2hkb2cgCnN1YmZ1bmN0aW9ucyBoZXJlLgoKQSBE
+UzEzNzQgTUZEIGNvcmUgZHJpdmVyIHN1cHBvcnRzIHRoZSBJMkMgY29tbXVuaWNhdGlvbiB0byBS
+VEMgYW5kCldhdGNoZG9nIGRldmljZXMuCgoxLiBBZGQgRFMxMzc0IE1GRCBjb3JlIGRyaXZlciB3
+aXRoIEkyQyBidXMuCjIuIExldCBEUzEzNzQgUlRDIGRyaXZlciBoYXMgUlRDIGFuZCBBbGFybSBm
+dW5jdGlvbnMgb25seS4KMy4gQWRkIERTMTM3NCBXYXRjaGRvZyBkcml2ZXIuCgpUaGFua3MsCkpv
+aG5zb24KCkpvaG5zb24gQ2hlbiAoMyk6CiAgbWZkOiBkczEzNzQ6IEludHJvZHVjZSBEYWxsYXMv
+TWF4aW0gRFMxMzc0IE1GRCBjb3JlIGRyaXZlcgogIHJ0YzogcnRjLWRzMTM3NDogTW92ZSBvdXQg
+V2F0Y2hkb2cgZnVuY3Rpb24gYW5kIEkyQyBjbGllbnQKICB3YXRjaGRvZzogZHMxMzc0X3dkdDog
+SW50cm9kdWNlIERhbGxhcy9NYXhpbSBEUzEzNzQgV2F0Y2hkb2cgZHJpdmVyCgogZHJpdmVycy9t
+ZmQvS2NvbmZpZyAgICAgICAgICAgfCAgMTEgKwogZHJpdmVycy9tZmQvTWFrZWZpbGUgICAgICAg
+ICAgfCAgIDIgKwogZHJpdmVycy9tZmQvZHMxMzc0LmMgICAgICAgICAgfCAxMDEgKysrKysrKysK
+IGRyaXZlcnMvcnRjL0tjb25maWcgICAgICAgICAgIHwgICA5ICstCiBkcml2ZXJzL3J0Yy9ydGMt
+ZHMxMzc0LmMgICAgICB8IDQ1OCArKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiBk
+cml2ZXJzL3dhdGNoZG9nL0tjb25maWcgICAgICB8ICAxMSArCiBkcml2ZXJzL3dhdGNoZG9nL01h
+a2VmaWxlICAgICB8ICAgMSArCiBkcml2ZXJzL3dhdGNoZG9nL2RzMTM3NF93ZHQuYyB8IDMzMCAr
+KysrKysrKysrKysrKysrKysrKysrKysKIDggZmlsZXMgY2hhbmdlZCwgNTMyIGluc2VydGlvbnMo
+KyksIDM5MSBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL21mZC9kczEz
+NzQuYwogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvd2F0Y2hkb2cvZHMxMzc0X3dkdC5jCgot
+LSAKMi4yMC4xCg==
