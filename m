@@ -2,151 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 196FF20A3A8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Jun 2020 19:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B789420A5C7
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Jun 2020 21:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404326AbgFYRGa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 Jun 2020 13:06:30 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:41856 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404376AbgFYRGa (ORCPT
+        id S2403781AbgFYT3T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 25 Jun 2020 15:29:19 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:23630 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405221AbgFYT3T (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 Jun 2020 13:06:30 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05PH4s1j015335;
-        Thu, 25 Jun 2020 12:04:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1593104694;
-        bh=ONVcVn3bey9yl+Y9AA3TJVO17GyEvycrQ6oGUr5xABk=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=VeX/+nmR89jbqhMaGIjQZcXyTRkVf8XN2TGdHgOPTjeN+6tIIcJUj2UJZ2qNOwjzN
-         k2wDLNwWtVI5hmoI0mW8Rn/Z9fB47/08j5fiB+xrAUcD2YZgUZLH4gU2dGvq9IA3Zv
-         rSoDjm1EjYdkCj77mB9ShAKbSWmADriglQu3FODw=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05PH4sqM075398
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 25 Jun 2020 12:04:54 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 25
- Jun 2020 12:04:53 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 25 Jun 2020 12:04:53 -0500
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05PH4pWG025571;
-        Thu, 25 Jun 2020 12:04:52 -0500
-Subject: Re: [PATCH 2/2] watchdog: rti: tweak min_hw_heartbeat_ms to match
- initial allowed window
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jan Kiszka <jan.kiszka@siemens.com>, <wim@linux-watchdog.org>,
-        <linux-watchdog@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-References: <20200624114534.1362-1-t-kristo@ti.com>
- <20200624114534.1362-3-t-kristo@ti.com>
- <289c6104-a885-d3c1-c670-a081ebaaf782@siemens.com>
- <b3849bea-2a4d-079e-e9df-8a1d6c13c0c7@ti.com>
- <25bf3ed1-5434-9b45-20ae-e1b2cfc5e5c0@roeck-us.net>
-From:   Tero Kristo <t-kristo@ti.com>
-Message-ID: <1d84e633-b808-d6ac-a34c-9cc4709e43f6@ti.com>
-Date:   Thu, 25 Jun 2020 20:04:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Thu, 25 Jun 2020 15:29:19 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1593113359; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=pS8ssR3Zq6zNvmjEpPa5Dbnbgq7E+hJ95usQPKlO6uk=; b=XZWp0KNqXvgUA1gsBX5g6VVA1LitJqPcKhrToiREOdjVXtbPr6lkalEmga5pVf/nIqdRquOf
+ 0odRBJjSBH667MUaiwEAo97w3wEHACZm9b5jfcqI/qIg6JiWrkmdigViChZcvcbVphULgjXx
+ M/iDEZFfu2DDCt8u7RX7CnUrOv0=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyJmNTk5OSIsICJsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n13.prod.us-west-2.postgun.com with SMTP id
+ 5ef4fb0efe1db4db892c8722 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 25 Jun 2020 19:29:18
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id ABFA1C4339C; Thu, 25 Jun 2020 19:29:17 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: saiprakash.ranjan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C4815C433C8;
+        Thu, 25 Jun 2020 19:29:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C4815C433C8
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=saiprakash.ranjan@codeaurora.org
+From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+To:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Subject: [RESEND PATCHv3 0/2] Convert QCOM watchdog timer bindings to YAML
+Date:   Fri, 26 Jun 2020 00:59:03 +0530
+Message-Id: <cover.1593112534.git.saiprakash.ranjan@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <25bf3ed1-5434-9b45-20ae-e1b2cfc5e5c0@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 25/06/2020 16:35, Guenter Roeck wrote:
-> On 6/25/20 1:32 AM, Tero Kristo wrote:
->> On 24/06/2020 18:24, Jan Kiszka wrote:
->>> On 24.06.20 13:45, Tero Kristo wrote:
->>>> If the RTI watchdog has been started by someone (like bootloader) when
->>>> the driver probes, we must adjust the initial ping timeout to match the
->>>> currently running watchdog window to avoid generating watchdog reset.
->>>>
->>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->>>> ---
->>>>    drivers/watchdog/rti_wdt.c | 25 +++++++++++++++++++++++++
->>>>    1 file changed, 25 insertions(+)
->>>>
->>>> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
->>>> index d456dd72d99a..02ea2b2435f5 100644
->>>> --- a/drivers/watchdog/rti_wdt.c
->>>> +++ b/drivers/watchdog/rti_wdt.c
->>>> @@ -55,11 +55,13 @@ static int heartbeat;
->>>>     * @base - base io address of WD device
->>>>     * @freq - source clock frequency of WDT
->>>>     * @wdd  - hold watchdog device as is in WDT core
->>>> + * @min_hw_heartbeat_save - save of the min hw heartbeat value
->>>>     */
->>>>    struct rti_wdt_device {
->>>>        void __iomem        *base;
->>>>        unsigned long        freq;
->>>>        struct watchdog_device    wdd;
->>>> +    unsigned int        min_hw_heartbeat_save;
->>>>    };
->>>>    static int rti_wdt_start(struct watchdog_device *wdd)
->>>> @@ -107,6 +109,11 @@ static int rti_wdt_ping(struct watchdog_device *wdd)
->>>>        /* put watchdog in active state */
->>>>        writel_relaxed(WDKEY_SEQ1, wdt->base + RTIWDKEY);
->>>> +    if (wdt->min_hw_heartbeat_save) {
->>>> +        wdd->min_hw_heartbeat_ms = wdt->min_hw_heartbeat_save;
->>>> +        wdt->min_hw_heartbeat_save = 0;
->>>> +    }
->>>> +
->>>>        return 0;
->>>>    }
->>>> @@ -201,6 +208,24 @@ static int rti_wdt_probe(struct platform_device *pdev)
->>>>            goto err_iomap;
->>>>        }
->>>> +    if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
->>>> +        u32 time_left;
->>>> +        u32 heartbeat;
->>>> +
->>>> +        set_bit(WDOG_HW_RUNNING, &wdd->status);
->>>> +        time_left = rti_wdt_get_timeleft(wdd);
->>>> +        heartbeat = readl(wdt->base + RTIDWDPRLD);
->>>> +        heartbeat <<= WDT_PRELOAD_SHIFT;
->>>> +        heartbeat /= wdt->freq;
->>>> +        if (time_left < heartbeat / 2)
->>>> +            wdd->min_hw_heartbeat_ms = 0;
->>>> +        else
->>>> +            wdd->min_hw_heartbeat_ms =
->>>> +                (time_left - heartbeat / 2 + 1) * 1000;
->>>> +
->>>> +        wdt->min_hw_heartbeat_save = 11 * heartbeat * 1000 / 20;
->>>> +    }
->>>> +
->>>>        ret = watchdog_register_device(wdd);
->>>>        if (ret) {
->>>>            dev_err(dev, "cannot register watchdog device\n");
->>>>
->>>
->>> This assumes that the bootloader also programmed a 50% window, right? The pending U-Boot patch will do that, but what if that may chance or someone uses a different setup?
->>
->> Yes, we assume 50%. I think based on the hw design, 50% is the only sane value to be used, otherwise you just shrink the open window too much and for no apparent reason.
->>
-> 
-> Not sure if that is a valid assumption. Someone who designs a watchdog
-> with such a narrow ping window might as well also use it. The question
-> is if you want to rely on that assumption, or check and change it if needed.
+This series converts QCOM watchdog timer bindings to YAML. Also
+it adds the missing SoC-specific compatible for QCS404, SC7180,
+SDM845 and SM8150 SoCs.
 
-Right, if that is a blocker, I can modify the code. Should be maybe 
-couple of lines addition.
+v1: https://lore.kernel.org/lkml/cover.1576211720.git.saiprakash.ranjan@codeaurora.org/
+v2: https://lore.kernel.org/lkml/cover.1580570160.git.saiprakash.ranjan@codeaurora.org/
 
-> Also, I wonder if we should add an API function such as
-> "set_last_hw_keepalive()" to avoid all that complexity.
+Resending this series with watchdog mailing list added.
 
-I can try adding that also if it is desirable.
+Changes since v2:
+ * Add missing compatibles to enum.
 
--Tero
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Changes since v1:
+ As per Rob's suggestion:
+  * Replaced oneOf+const with enum.
+  * Removed timeout-sec and included watchdog.yaml.
+  * Removed repeated use of const:qcom,kpss-wdt and made use of enum.
+
+Sai Prakash Ranjan (2):
+  dt-bindings: watchdog: Convert QCOM watchdog timer bindings to YAML
+  dt-bindings: watchdog: Add compatible for QCS404, SC7180, SDM845,
+    SM8150
+
+ .../devicetree/bindings/watchdog/qcom-wdt.txt | 28 -----------
+ .../bindings/watchdog/qcom-wdt.yaml           | 48 +++++++++++++++++++
+ 2 files changed, 48 insertions(+), 28 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/qcom-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
