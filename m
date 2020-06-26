@@ -2,95 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8D020A5D1
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Jun 2020 21:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1CE20BBDE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jun 2020 23:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406329AbgFYT3d (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 Jun 2020 15:29:33 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:16963 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406335AbgFYT3d (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 Jun 2020 15:29:33 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1593113372; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=bZEXLpiFS2CTcQQYib0XcL0ZOSWmr7D6wUi6jTv1x9A=; b=PGbVQJ0VtYaiwn09VzQml6yG0ElWRYA/HLf6vvAgRlWc0gpHzvgKUwDDtsuqo5lROfTQWLr6
- NoRAOdTIiy3FbMTnnaO5OIkukYPnGrVbRGf8LWpmDSMoaYRwl+QCAhvI+/Kg+NPXUsB/RTaz
- ZaezJ1V8H++d7f8gD2+qgWs0m7A=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyJmNTk5OSIsICJsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n11.prod.us-west-2.postgun.com with SMTP id
- 5ef4fb1bfe1db4db892ca91d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 25 Jun 2020 19:29:31
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 65246C43395; Thu, 25 Jun 2020 19:29:31 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: saiprakash.ranjan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B5F9BC433CA;
-        Thu, 25 Jun 2020 19:29:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B5F9BC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=saiprakash.ranjan@codeaurora.org
-From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-To:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [RESEND PATCHv3 2/2] dt-bindings: watchdog: Add compatible for QCS404, SC7180, SDM845, SM8150
-Date:   Fri, 26 Jun 2020 00:59:05 +0530
-Message-Id: <09da1ba319dc4a27ef4e4e177e67e68f1cb4f35b.1593112534.git.saiprakash.ranjan@codeaurora.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <cover.1593112534.git.saiprakash.ranjan@codeaurora.org>
-References: <cover.1593112534.git.saiprakash.ranjan@codeaurora.org>
+        id S1725793AbgFZVvf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 Jun 2020 17:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725780AbgFZVvf (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 26 Jun 2020 17:51:35 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41196C03E979;
+        Fri, 26 Jun 2020 14:51:35 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id u8so5222328pje.4;
+        Fri, 26 Jun 2020 14:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Cqb3wk0hUma413lkpnxtyPqW03CAUoIBPP21b3/U7s4=;
+        b=XvioqvgD+aew35FOBeGXJNltNZyBpH0u8SJEfqCEKL/TjOymGdZoUchFVYv4VnrqQG
+         LLp41C3Hf1LwcSfwcH8bf2AxtmqPv54wsqi3iNQK1pRjRf5qtlprPtPPW0wux+WTCJc+
+         xs3bsTPfEbl7UToVTJ8MDpPM9YMQ92vRDmnQpFwM8mafjuB+S8udpWrtPmbsOH4YRU41
+         4zB3tZ8XUfMQeZM1adBUYtCQMVDl+FwfMO/1vp+RsB08BI0e0L8Hkae2wtP8XN3DSac3
+         GrVwOxY9LlyLtqkbs/6qZ85yBZcTWztnZBmgW8zHJyUHL5lpfzfdDv3pS8RHyJ6u4t6c
+         mGSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Cqb3wk0hUma413lkpnxtyPqW03CAUoIBPP21b3/U7s4=;
+        b=cxMKpa4gcCbTFMkIeQvSGhHd+Vo1I6X6QywqfdIcLjhU/RIzLR6y+mY9PERBwhwYKN
+         IPcFFlB0G6ADfOoaoBugclsChPG9yvXktQGyDRasdxHeZNxYcpIHCcUQd3qzZ1yFsW/P
+         ZaIqyHu6g5zxuGUeFTY90iMrXQfuEKJMIbmTjtQmunv9qQIMTd7xMcVahE5voqWsVfa9
+         nPQHtVa+cl8pLNvpc6khwzKePRuWQNHRRCxnGsMBJ3qyAMP2+Yi5dgBNDBSBADhrjYG9
+         yt7/ZwHe4gXs1eKEfxZ9U04WdNURzWB5Dimqr4gqDcnA+yHlaEDBj94IioCUiE6Npk4J
+         oLjQ==
+X-Gm-Message-State: AOAM530lwXtCGOdtSOiJ7yJZeRWYHKFxovxrC8//AzDBcUA8lv2nObwo
+        K93TI5y/QJ6BAyfGISLSj66AHYuR
+X-Google-Smtp-Source: ABdhPJzNJTgLL2d14HOeuVE2qg2Mwn93jZdK3mlmy/7vdBiwrfJlqpT6etOWvNaDZePsrZmMCavNyg==
+X-Received: by 2002:a17:90a:f206:: with SMTP id bs6mr5689392pjb.48.1593208294806;
+        Fri, 26 Jun 2020 14:51:34 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 140sm26539226pfz.154.2020.06.26.14.51.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 26 Jun 2020 14:51:34 -0700 (PDT)
+Date:   Fri, 26 Jun 2020 14:51:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Timothy Myers <timothy.myers@adtran.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Boike <david.boike@adtran.com>
+Subject: Re: [PATCH 1/1] watchdog: Add common nowayout parameter to booke_wdt
+ driver
+Message-ID: <20200626215133.GB254814@roeck-us.net>
+References: <CH2PR19MB35903F8A6A46864C47A720029D930@CH2PR19MB3590.namprd19.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CH2PR19MB35903F8A6A46864C47A720029D930@CH2PR19MB3590.namprd19.prod.outlook.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add missing compatible for watchdog timer on QCS404,
-SC7180, SDM845 and SM8150 SoCs.
+On Fri, Jun 26, 2020 at 01:39:43PM +0000, Timothy Myers wrote:
+> Add the common "nowayout" parameter to booke_wdt to make this behavior
+> selectable at runtime and to make the implementation more consistent with
+> many other watchdog drivers.
+> 
+> Signed-off-by: Timothy Myers <timothy.myers@adtran.com>
 
-Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-index 5448cc537a03..0709ddf0b6a5 100644
---- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-@@ -15,6 +15,10 @@ allOf:
- properties:
-   compatible:
-     enum:
-+      - qcom,apss-wdt-qcs404
-+      - qcom,apss-wdt-sc7180
-+      - qcom,apss-wdt-sdm845
-+      - qcom,apss-wdt-sm8150
-       - qcom,kpss-timer
-       - qcom,kpss-wdt
-       - qcom,kpss-wdt-apq8064
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
-
+> ---
+>  drivers/watchdog/booke_wdt.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/booke_wdt.c b/drivers/watchdog/booke_wdt.c
+> index 9d09bbfdef20..7817fb976f9c 100644
+> --- a/drivers/watchdog/booke_wdt.c
+> +++ b/drivers/watchdog/booke_wdt.c
+> @@ -39,6 +39,11 @@ static bool booke_wdt_enabled;
+>  module_param(booke_wdt_enabled, bool, 0);
+>  static int  booke_wdt_period = CONFIG_BOOKE_WDT_DEFAULT_TIMEOUT;
+>  module_param(booke_wdt_period, int, 0);
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout,
+> +               "Watchdog cannot be stopped once started (default="
+> +                               __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> 
+>  #ifdef CONFIG_PPC_FSL_BOOK3E
+> 
+> @@ -215,7 +220,6 @@ static void __exit booke_wdt_exit(void)
+>  static int __init booke_wdt_init(void)
+>  {
+>         int ret = 0;
+> -       bool nowayout = WATCHDOG_NOWAYOUT;
+> 
+>         pr_info("powerpc book-e watchdog driver loaded\n");
+>         booke_wdt_info.firmware_version = cur_cpu_spec->pvr_value;
+> 
+> base-commit: dd0d718152e4c65b173070d48ea9dfc06894c3e5
+> --
+> 2.20.1
+> 
+> 
+> 
+> Timothy Myers
+> Software Design Engineer
+> 
+> Office: 256.963.8844
+> Email: timothy.myers@adtran.com<https://owa.adtran.com/owa/redir.aspx?C=LNINRERj1VQgAKE9UNiu-b2J50yb_mKuK9OX8J4spjQqMzmAKlzUCA..&URL=mailto%3atom.patterson%40adtran.com>
+> Web: www.adtran.com<https://owa.adtran.com/owa/redir.aspx?C=AO4_0fpgN4Gmyy4bPe0sTxLKfRJry5Qrse3aJSw01zEqMzmAKlzUCA..&URL=http%3a%2f%2fs.bl-1.com%2fh%2fCoY1mz9%3furl%3dhttp%3a%2f%2fwww.adtran.com>
+> 
+> ADTRAN
+> 901 Explorer Boulevard
+> Huntsville, AL 35806 - USA
