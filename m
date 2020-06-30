@@ -2,115 +2,94 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD06220FDBF
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A8720FDD2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729517AbgF3Ugi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Jun 2020 16:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S1729729AbgF3Uhz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Jun 2020 16:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbgF3Ugi (ORCPT
+        with ESMTP id S1725872AbgF3Uhy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Jun 2020 16:36:38 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F56C061755;
-        Tue, 30 Jun 2020 13:36:37 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id s14so8945849plq.6;
-        Tue, 30 Jun 2020 13:36:37 -0700 (PDT)
+        Tue, 30 Jun 2020 16:37:54 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9BAC061755;
+        Tue, 30 Jun 2020 13:37:54 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id i25so22581606iog.0;
+        Tue, 30 Jun 2020 13:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1JdJb/nPVAT5gkfGcCX+Fs5CyEjoe06QaSekf6Stnh8=;
-        b=d7ZZOgU2yNglOX/gwwDdMEMpRKngen5f3Xht5ti/J2AnhUkz2mZFmxUJf9mPqaUfhg
-         NTEu3vL5APw55cgTD82Z+6eX4EloHuqjnTO4UxuBLkxdL4eFu++4DDtwo6wYCZ6ktJpU
-         LabSdjrB6EyX9qB/wxFhqht9ZHj0jEDOG/5rf+ntwJDr8rRDqL3kjhTqgoCw6l7cG0+H
-         xG0inm/xX6f0d/4+aopYs8A4ubnKiZBzMAfwdmB2xH7m/oI03/Pyn8XeeVvJuiZJAEFl
-         i96jsx5trjNl5PH5GEgfZB9K3xVXQZUNJ73RedaEKE7wcgWTxzRcmiUjzmN1cuha4TYw
-         bL5Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=38KZfXGo5PyBgcyR/mf9dfZW2Qk4B4rGtanP3anFAmo=;
+        b=Fj2uWZRhmQdVb+7q/isHj2wQVqMFAfhVSu3lMN2Id2l5Ye5HnMqwP4j5lQKn0fHb66
+         MUv+1SfaS35JLFwD6WJcuYE+MTOkl0W8SUYaYigvls5G1jDG5imxELY1kvoh0SxqMKJG
+         QSg4O5uFukVwLDfqc7Dqnnund7fXbQjjZ/y45OOfWnmex0OHEsNxYk5A+0JvkSBIrauZ
+         MkQAEj1MFvL3b4qJuczRsNcgPSagcw3SNnjNAD9t9HTjUJY07djMjkia9x0T/WRTkntO
+         3M154WqULBtiU0BN400kx+uc7dN0kWlmkKZZf90rbyKr6qd9xuf40grRx2k1z68xEfHC
+         nWRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1JdJb/nPVAT5gkfGcCX+Fs5CyEjoe06QaSekf6Stnh8=;
-        b=NFKeOrYwMwndevnL2Ea7rx+tQDWhFpOcsarERQZNiGAtgxA+MIuJG4Cnrb9qWLZvS7
-         DUNco94E2AIM/y2OyK1CeSeKPQ1fZnPcHonWHRAbByVq9IeeP01cy4nYB9e0GRq+ZumQ
-         nkYLJiMyQhllYV2fx97KiQ8frp2uKaLuI/7PrQnygx7RyUSwFLHbcdEPdoESy5q0l254
-         TLzHt+1j/zRISHsHJkJFMaNNoCJd3LfrulolBxiTG5Dusliot9M0s8NEcuCgVOsPvYV9
-         ZAwFYOWJA0ZyC8IS4SoU8lUv6u5k7aBgM6MmF++wAvAFDBz3Snh5JZgJvzzs1ipJwgnK
-         oK8g==
-X-Gm-Message-State: AOAM5324Mwz/rP2UUJreIM4yz+9SBIEiasAy2lOaC9hOCzm5QHZtRDu8
-        P4rr4Jv1R3Mk4emx0LWneOk=
-X-Google-Smtp-Source: ABdhPJymtH7xcMvVH/kgjgDOiZvw/Qgu0o7ylLg9VDhbkJIM4SHD/nGfLFAeDemh4omr59n3AiuKAA==
-X-Received: by 2002:a17:90a:67c7:: with SMTP id g7mr22748358pjm.165.1593549397427;
-        Tue, 30 Jun 2020 13:36:37 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m4sm3012520pjs.29.2020.06.30.13.36.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Jun 2020 13:36:36 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 13:36:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Tero Kristo <t-kristo@ti.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jan.kiszka@siemens.com
-Subject: Re: [PATCH 1/2] watchdog: use __watchdog_ping in startup
-Message-ID: <20200630203636.GA20146@roeck-us.net>
-References: <20200624114534.1362-1-t-kristo@ti.com>
- <20200624114534.1362-2-t-kristo@ti.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=38KZfXGo5PyBgcyR/mf9dfZW2Qk4B4rGtanP3anFAmo=;
+        b=gAvwCtKOI1tZy9QqzwfG7q72cgQsEyrM8Bmo63UrseFvcVNpxcRMpTFnr2FeXTXcMX
+         hEVXuZ7jSz1IO/F4WkHPqKE1DtJtgfeUMslwFWMNEjldqGQNauf89LXwIs6hdsJlwr0G
+         0bhsC47GW5K0hj9TDKP4dI2hW4bywT1g9nYozk1Qco8VqejWvKJjpJbX9XhDXFn8JNza
+         pPyPtf+IJWnBol+UbgBStgiPvDGuhthae0C2UYMVrR2lVrNFtZpFw9ddZ8UwHdLFBlSg
+         9dF7LHUhLIBMWO1Ht/wm5FNT76ZlxHHPSJ6pH85kUcGQ3VjWaS2GZBYtxQS6xvZWQ9NS
+         YlAA==
+X-Gm-Message-State: AOAM5322Om1pzZgMq32inNyBGxJrqj5gwH2uvdAoI6OGI0Vvrcimummj
+        Bu7weJj3efIyfnwT2JA+4e6rNh+yMS2UQ/ab/VU=
+X-Google-Smtp-Source: ABdhPJyb/CEwkfINABpfWWMSQ+ML0+ykFVkIncKfSMyZm7IOmv3ls+GVwrxAUKHMFFSVIk+7vkK2LsLzL8TstG9FxFM=
+X-Received: by 2002:a02:30c4:: with SMTP id q187mr24244868jaq.102.1593549473442;
+ Tue, 30 Jun 2020 13:37:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200624114534.1362-2-t-kristo@ti.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200602052104.7795-1-lukas.bulwahn@gmail.com>
+ <828311d2-61ea-42cb-1449-a53f3772543d@roeck-us.net> <CAODwPW_oxDxF_5-icRs0eaRVLgtP+bDc_OSKa=EcfeSp=c6Fag@mail.gmail.com>
+ <CAKz_xw0Tqr-idoZbNzg_didSCr5L+L1=76xjF=Sqj4DgpL9g7Q@mail.gmail.com>
+ <CAKz_xw3KuWFSkcz-9hLHGZ2=S7nJ=K=AN6j2FJ6afZBFowJO7g@mail.gmail.com>
+ <alpine.DEB.2.21.2006302156120.3966@felia> <20200630203245.GA19763@roeck-us.net>
+In-Reply-To: <20200630203245.GA19763@roeck-us.net>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Tue, 30 Jun 2020 22:37:42 +0200
+Message-ID: <CAKXUXMxF8YwhGKjUr5h_c2ewmXiSz7saLYWvThn6VwyTYLKAeg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: rectify entry in ARM SMC WATCHDOG DRIVER
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Evan Benn <evanbenn@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 02:45:33PM +0300, Tero Kristo wrote:
-> Current watchdog startup functionality does not respect the minimum hw
-> heartbeat setup and the last watchdog ping timeframe when watchdog is
-> already running and userspace process attaches to it. Fix this by using
-> the __watchdog_ping from the startup also. For this code path, we can
-> also let the __watchdog_ping handle the bookkeeping for the worker and
-> last keepalive times.
-> 
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+On Tue, Jun 30, 2020 at 10:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Tue, Jun 30, 2020 at 09:59:51PM +0200, Lukas Bulwahn wrote:
+> >
+> >
+> > On Fri, 5 Jun 2020, Evan Benn wrote:
+> >
+> > > AFAICT this has now been merged upstream, I'm not sure what action to take:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5c24a28b4eb842ad1256496be6ae01bab15f1dcb
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=72a9e7fea5866fc471fda78f05f166595c8c6ba6
+> >
+> > This patch is still fully valid and still applies to next-20200630; it can
+> > be simply applied as any other bug fix to your driver code.
+> >
+> > Evan, can you please ask Wim as linux-watchdog maintainer to pick-up this
+> > patch, with the reviews below?
+> >
+>
+> It is in my tree. Maybe it got lost in the back-and-forth. I'll send
+> a pull request to Wim in the next couple of weeks.
+>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/watchdog/watchdog_dev.c | 19 +++++++++++--------
->  1 file changed, 11 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index 7e4cd34a8c20..bc1cfa288553 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -275,15 +275,18 @@ static int watchdog_start(struct watchdog_device *wdd)
->  	set_bit(_WDOG_KEEPALIVE, &wd_data->status);
->  
->  	started_at = ktime_get();
-> -	if (watchdog_hw_running(wdd) && wdd->ops->ping)
-> -		err = wdd->ops->ping(wdd);
-> -	else
-> +	if (watchdog_hw_running(wdd) && wdd->ops->ping) {
-> +		err = __watchdog_ping(wdd);
-> +		if (err == 0)
-> +			set_bit(WDOG_ACTIVE, &wdd->status);
-> +	} else {
->  		err = wdd->ops->start(wdd);
-> -	if (err == 0) {
-> -		set_bit(WDOG_ACTIVE, &wdd->status);
-> -		wd_data->last_keepalive = started_at;
-> -		wd_data->last_hw_keepalive = started_at;
-> -		watchdog_update_worker(wdd);
-> +		if (err == 0) {
-> +			set_bit(WDOG_ACTIVE, &wdd->status);
-> +			wd_data->last_keepalive = started_at;
-> +			wd_data->last_hw_keepalive = started_at;
-> +			watchdog_update_worker(wdd);
-> +		}
->  	}
->  
->  	return err;
+Great! Thanks, Guenter.
