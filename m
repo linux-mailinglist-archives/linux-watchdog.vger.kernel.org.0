@@ -2,198 +2,98 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E91520FD96
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D22B20FDB8
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729370AbgF3UYB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Jun 2020 16:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S1727041AbgF3Ucs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Jun 2020 16:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726642AbgF3UYA (ORCPT
+        with ESMTP id S1725872AbgF3Ucr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Jun 2020 16:24:00 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429EBC061755;
-        Tue, 30 Jun 2020 13:24:00 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id k71so6464558pje.0;
-        Tue, 30 Jun 2020 13:24:00 -0700 (PDT)
+        Tue, 30 Jun 2020 16:32:47 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D99C061755;
+        Tue, 30 Jun 2020 13:32:47 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id g67so9578613pgc.8;
+        Tue, 30 Jun 2020 13:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=bAnFWDXrNwZJcACP9IOdAh/yJEqe7UvCHQljaZTXU6Q=;
-        b=KcMy0csfV+LwdO58342SklgsOVTD/dn11b/TFu+QjFjgpTJ/quFUh5M0g65ft4+9Rz
-         /n2q6A2VLSDgselfx38JxL8mznDfB79zSfuxmIAAbhw4M+OQyhf+mJ3hQ4kKJE0oaLsH
-         Rcj8TxxrkX6l0BzJ34rXA5CekVGHEKjU91pA7JCDSDs4m3JLsF1CIPMoqio9q8Na08yg
-         qFonsv3+lMdwDKNsryiShGcx88FObnuOb1qqlkleEWhJhFP6tKqqzq2A9CZ3qkysKuLh
-         SO7rGHbJV2Gie6Xj6XvcWAHwMJJLuCuM9dVXenV0PsFjqLR+giDGFfyapC4yb6mMJeGz
-         bc+w==
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZOvD+yJGwWIdexNCHF7ao+M7ocFeeBUXDaMNE7cgLcQ=;
+        b=IA/L5j7gfJeTDO/PW+30Z14uTFoK3CAYSiZR4Q+MyfHAlE9YwD/wkY5q7FYwB+2Eq9
+         W/6BHnch9MdF0BJO+kwbOyNQhSdvFAyh0hUrwZb6kgR2oR8hO9u6JScyZxLOdHxW8Nwc
+         O4bg9j6oz+jpxob61BaGiJjp7WGEi+Tm31nxNshuDnZLCXCt/f56a7EZnS4T1FnrqPef
+         LjYIG2suEpsYEHLDNK8KeBJeTtPT2AJyCYuNENUnQF+s9OTdlAiVDgHBG9tdKngclGCr
+         3AeLQgKIH6H1VhKiJg6FXOx2gKiZt+Q1uWIuzl63nt/xSa9emgAElanDtI5/V0FiHwW0
+         fvYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=bAnFWDXrNwZJcACP9IOdAh/yJEqe7UvCHQljaZTXU6Q=;
-        b=TSARc3oD/pgs8oX2ndzaFQ2WipnYUTV1sADYn4G+A3uuEaRp62DGzBmk0yTQ6LrPZR
-         nIJdSl0n1S9F1HhflhcA5Mve+QnTMs0hAy1g+NMAzdQ6K7t6k1A6zEgFNbyvbdIkXMsn
-         Y8fXpr6BYnyzMnOkU0a58JKfBMRZZDhTBTCyQoHB54R1Xw/XPcwC780EMb2fRlRXJGLN
-         sGprjCfPQaqzjCcxiE4YozBa3ALF9UmOPTR1VVLgKlLeM2vBpK8EGydXg/WG85FgcvR3
-         rL49ZNkvUFoVhaVJS5a3uCIJqwuk4Dwih92A6Pi+8y1zpAV1hNKVDPDb5KZ9VXuK1NWk
-         ngjw==
-X-Gm-Message-State: AOAM533kpylF6y4d400cVOj7bEcpx1EQhlbLIPiUVg0fDVHV8LhL/Wfz
-        ANphT4WxwK1jUm0mdiNaE2s=
-X-Google-Smtp-Source: ABdhPJzQ/w+IwOwSx0RgvzmxIlFx1k6w2+8fhfEcPOHn5Gmjp2wfQYj9ujBGFtqtLKcszX2ZYG7w2Q==
-X-Received: by 2002:a17:902:6acc:: with SMTP id i12mr17649806plt.75.1593548638953;
-        Tue, 30 Jun 2020 13:23:58 -0700 (PDT)
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZOvD+yJGwWIdexNCHF7ao+M7ocFeeBUXDaMNE7cgLcQ=;
+        b=UH6odYY9N82tjeJ5BOYhgJbzpfxo0VVptcdFeJCiyU0ddzMdyqTsWX9oQ/B983CwJg
+         3IFqfy877pjX7TDlhVkw3Ybi4hmGGFV8T2jybnl1u3/d37nmfIxDbKxrrtgaeu7mCTOM
+         2R2QOUuqz7axwk4Y4LrIJOoYL+YJfkQpM5/1xYKo65DThRuqHawt+Gxa/DE3+A93PxYg
+         K/lrzsBGmvJugvpwxVD3FwvDJ+R5mp1ynKlFCUELP+6511dmdFznQzPN/L0dz7t3gV3Y
+         TOMtTSdcdox3+IljLr0Qak/R8u/TotWwSGacSVyzBbmFklCpE0KQ/an78tpi94q5I5Po
+         LlMA==
+X-Gm-Message-State: AOAM533+A/gxzOIGgYQuQK/Uwkn25WdYQymnV9VjZC0/Yt1/Z0UyZbdj
+        Dx3XE5oHOdSRksewdJANn32bVHGp
+X-Google-Smtp-Source: ABdhPJwUIs/KHc1fM7VSYIVz8n691X9VHdigNFpZCXHDxispSzkaMGkBpwyOBEriVVR7bbJ32PK11Q==
+X-Received: by 2002:a63:b90a:: with SMTP id z10mr15798942pge.277.1593549167091;
+        Tue, 30 Jun 2020 13:32:47 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w9sm3598332pfq.178.2020.06.30.13.23.57
+        by smtp.gmail.com with ESMTPSA id i8sm3395573pfd.14.2020.06.30.13.32.46
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Jun 2020 13:23:58 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 13:23:56 -0700
+        Tue, 30 Jun 2020 13:32:46 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 13:32:45 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Tero Kristo <t-kristo@ti.com>
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] watchdog: rti: tweak min_hw_heartbeat_ms to match
- initial allowed window
-Message-ID: <20200630202356.GA16412@roeck-us.net>
-References: <20200624114534.1362-1-t-kristo@ti.com>
- <20200624114534.1362-3-t-kristo@ti.com>
- <289c6104-a885-d3c1-c670-a081ebaaf782@siemens.com>
- <b3849bea-2a4d-079e-e9df-8a1d6c13c0c7@ti.com>
- <25bf3ed1-5434-9b45-20ae-e1b2cfc5e5c0@roeck-us.net>
- <1d84e633-b808-d6ac-a34c-9cc4709e43f6@ti.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Evan Benn <evanbenn@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: rectify entry in ARM SMC WATCHDOG DRIVER
+Message-ID: <20200630203245.GA19763@roeck-us.net>
+References: <20200602052104.7795-1-lukas.bulwahn@gmail.com>
+ <828311d2-61ea-42cb-1449-a53f3772543d@roeck-us.net>
+ <CAODwPW_oxDxF_5-icRs0eaRVLgtP+bDc_OSKa=EcfeSp=c6Fag@mail.gmail.com>
+ <CAKz_xw0Tqr-idoZbNzg_didSCr5L+L1=76xjF=Sqj4DgpL9g7Q@mail.gmail.com>
+ <CAKz_xw3KuWFSkcz-9hLHGZ2=S7nJ=K=AN6j2FJ6afZBFowJO7g@mail.gmail.com>
+ <alpine.DEB.2.21.2006302156120.3966@felia>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1d84e633-b808-d6ac-a34c-9cc4709e43f6@ti.com>
+In-Reply-To: <alpine.DEB.2.21.2006302156120.3966@felia>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 08:04:50PM +0300, Tero Kristo wrote:
-> On 25/06/2020 16:35, Guenter Roeck wrote:
-> > On 6/25/20 1:32 AM, Tero Kristo wrote:
-> > > On 24/06/2020 18:24, Jan Kiszka wrote:
-> > > > On 24.06.20 13:45, Tero Kristo wrote:
-> > > > > If the RTI watchdog has been started by someone (like bootloader) when
-> > > > > the driver probes, we must adjust the initial ping timeout to match the
-> > > > > currently running watchdog window to avoid generating watchdog reset.
-> > > > > 
-> > > > > Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> > > > > ---
-> > > > >    drivers/watchdog/rti_wdt.c | 25 +++++++++++++++++++++++++
-> > > > >    1 file changed, 25 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-> > > > > index d456dd72d99a..02ea2b2435f5 100644
-> > > > > --- a/drivers/watchdog/rti_wdt.c
-> > > > > +++ b/drivers/watchdog/rti_wdt.c
-> > > > > @@ -55,11 +55,13 @@ static int heartbeat;
-> > > > >     * @base - base io address of WD device
-> > > > >     * @freq - source clock frequency of WDT
-> > > > >     * @wdd  - hold watchdog device as is in WDT core
-> > > > > + * @min_hw_heartbeat_save - save of the min hw heartbeat value
-> > > > >     */
-> > > > >    struct rti_wdt_device {
-> > > > >        void __iomem        *base;
-> > > > >        unsigned long        freq;
-> > > > >        struct watchdog_device    wdd;
-> > > > > +    unsigned int        min_hw_heartbeat_save;
-> > > > >    };
-> > > > >    static int rti_wdt_start(struct watchdog_device *wdd)
-> > > > > @@ -107,6 +109,11 @@ static int rti_wdt_ping(struct watchdog_device *wdd)
-> > > > >        /* put watchdog in active state */
-> > > > >        writel_relaxed(WDKEY_SEQ1, wdt->base + RTIWDKEY);
-> > > > > +    if (wdt->min_hw_heartbeat_save) {
-> > > > > +        wdd->min_hw_heartbeat_ms = wdt->min_hw_heartbeat_save;
-> > > > > +        wdt->min_hw_heartbeat_save = 0;
-> > > > > +    }
-> > > > > +
-> > > > >        return 0;
-> > > > >    }
-> > > > > @@ -201,6 +208,24 @@ static int rti_wdt_probe(struct platform_device *pdev)
-> > > > >            goto err_iomap;
-> > > > >        }
-> > > > > +    if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
-> > > > > +        u32 time_left;
-> > > > > +        u32 heartbeat;
-> > > > > +
-> > > > > +        set_bit(WDOG_HW_RUNNING, &wdd->status);
-> > > > > +        time_left = rti_wdt_get_timeleft(wdd);
-> > > > > +        heartbeat = readl(wdt->base + RTIDWDPRLD);
-> > > > > +        heartbeat <<= WDT_PRELOAD_SHIFT;
-> > > > > +        heartbeat /= wdt->freq;
-> > > > > +        if (time_left < heartbeat / 2)
-> > > > > +            wdd->min_hw_heartbeat_ms = 0;
-> > > > > +        else
-> > > > > +            wdd->min_hw_heartbeat_ms =
-> > > > > +                (time_left - heartbeat / 2 + 1) * 1000;
-> > > > > +
-> > > > > +        wdt->min_hw_heartbeat_save = 11 * heartbeat * 1000 / 20;
-> > > > > +    }
-> > > > > +
-> > > > >        ret = watchdog_register_device(wdd);
-> > > > >        if (ret) {
-> > > > >            dev_err(dev, "cannot register watchdog device\n");
-> > > > > 
-> > > > 
-> > > > This assumes that the bootloader also programmed a 50% window, right? The pending U-Boot patch will do that, but what if that may chance or someone uses a different setup?
-> > > 
-> > > Yes, we assume 50%. I think based on the hw design, 50% is the only sane value to be used, otherwise you just shrink the open window too much and for no apparent reason.
-> > > 
+On Tue, Jun 30, 2020 at 09:59:51PM +0200, Lukas Bulwahn wrote:
+> 
+> 
+> On Fri, 5 Jun 2020, Evan Benn wrote:
+> 
+> > AFAICT this has now been merged upstream, I'm not sure what action to take:
 > > 
-> > Not sure if that is a valid assumption. Someone who designs a watchdog
-> > with such a narrow ping window might as well also use it. The question
-> > is if you want to rely on that assumption, or check and change it if needed.
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5c24a28b4eb842ad1256496be6ae01bab15f1dcb
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=72a9e7fea5866fc471fda78f05f166595c8c6ba6
 > 
-> Right, if that is a blocker, I can modify the code. Should be maybe couple
-> of lines addition.
+> This patch is still fully valid and still applies to next-20200630; it can 
+> be simply applied as any other bug fix to your driver code.
 > 
-> > Also, I wonder if we should add an API function such as
-> > "set_last_hw_keepalive()" to avoid all that complexity.
-> 
-> I can try adding that also if it is desirable.
+> Evan, can you please ask Wim as linux-watchdog maintainer to pick-up this 
+> patch, with the reviews below?
 > 
 
-But wait, the code doesn't really match what the description of this
-patch claims, or at least the description is misleading. Per the
-description, this is to prevent an early timeout. However, the problem
-here is that the watchdog core does not generate a ping, even if
-requested, because it believes that it just generated one right before
-the watchdog timer was registered, and that it can not generate another
-one because min_hw_heartbeat_ms has not elapsed.
+It is in my tree. Maybe it got lost in the back-and-forth. I'll send
+a pull request to Wim in the next couple of weeks.
 
-With that in mind, the problem is a bit more complex.
-
-First, the driver doesn't really update the current timeout to the
-value that is currently configured and enabled. Instead, it just
-uses/assumes the default (DEFAULT_HEARTBEAT or whatever the heartbeat
-module parameter is set to). This means that it is still possible for
-an early timeout to occur if there is a mismatch between the bootloader
-timeout and the timeout assumed by the driver. Worse, the timeout
-is only updated in the start function - and the start function isn't
-called if the watchdog is already running. Actually, the driver does
-not support updating the timeout at all. This means that a mismatch
-between the bootloader timeout and the timeout assumed by the driver
-is not handled well.
-
-To solve this, the driver would have to update the actual timeout to
-whatever is programmed into the chip and ignore any module parameter
-and default settings if the watchdog is already running. Alternatively,
-it would have to support updating the timeout (if the hardware supports
-that) after the watchdog was started.
-
-Second, handling min_hw_heartbeat_ms properly should really be implemented
-in the watchdog core. Instead of assuming that the most recent keepalive
-happened "just before now", as it currently does, it should call the
-timeleft function (if available and if the watchdog is running) and
-calculate the most recent keepalive (and thus the earliest acceptable
-next keepalive) from its return value.
-
-Thanks,
 Guenter
