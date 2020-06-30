@@ -2,104 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3681F20FDD7
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8019C20FE24
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729838AbgF3UjF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Jun 2020 16:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S1726161AbgF3Utn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Jun 2020 16:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729341AbgF3UjE (ORCPT
+        with ESMTP id S1725805AbgF3Utn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Jun 2020 16:39:04 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3324EC061755;
-        Tue, 30 Jun 2020 13:39:04 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id m22so108173pgv.9;
-        Tue, 30 Jun 2020 13:39:04 -0700 (PDT)
+        Tue, 30 Jun 2020 16:49:43 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198EDC061755;
+        Tue, 30 Jun 2020 13:49:43 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id u185so7895935pfu.1;
+        Tue, 30 Jun 2020 13:49:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=SQiFOaLh1j0WoaGW8HU6ASOHGGkIHwej9YhMbLkGD8g=;
-        b=g+V9UwcbjoJZzicB/JpaUeCKluYowoLvLMVisPV+jeRGBTkI7Nz6RPIzsGk12F0fH4
-         zq/A8QQj7ER1s5L2bebyDMf6pcf4jJrFqPWsz8Nf6m0g+E9DkiBSX/L5ca6pNqUeCCcw
-         iu1N4qUwaKLe25xgQCJ55rIiIZhS9Jk/Mn1DheWX9BumrVflAOe0cqTGIDEAl2iLhDDq
-         yEsH105D84RpOGz42JNSKMcQ/fBYJZ6v5H+5+9SpjyGb2U435gTzdIYaTB+IqQSAkHYy
-         PWalaZd40GHE5Q60lwbIZU0JyTULWHVU9DbPFz8cUzJJVBeh160NzRcC6d1Gu+WZR29m
-         CsQQ==
+        bh=sQoAydE/3UY3Alh/aGXWB+4BkhDq1O/wJupmqiEZk5o=;
+        b=LQOptagwhd+Vwu2bgtXRJPK7VgNJrpIbMAn9qdEyRPdVnuCsJMA6HhNJqB8T6DEyIJ
+         7BhMZCYFsqqnAjPDchlJGJwtjch4l7nA/pjQUv57dLVoyw+FaOCRQKLYkTlwp+p2rPdD
+         hgvkPGfrL9Aq2q7cLq20PYO93qPhW9SVDkRqYyLyjFJXjU+NF4pzu0DB6FBPmdLO8Dgs
+         xwk77Oo49uTA5yPcZUL0nHc0XAClVphem4C79//jaRng1jPkrEsmy72vBBoae3HVPLuV
+         nbRTs5gJ8DzQB5aIjmbGr4ejG8Crqejt7byp6tBFtdsjDb7zQHZWzpTQjyoR8xxW9kXB
+         95KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SQiFOaLh1j0WoaGW8HU6ASOHGGkIHwej9YhMbLkGD8g=;
-        b=AVc6+mbv1r3LFj1+3t44r3k1NaSmP/mmOsAvBgGX0a0vjFT6umw1/ngR+nX6ijsS1w
-         8JwX8bTQu3f8ThrswynZ/ChSYZJuA8L1JML/vtZceHReBzWiEW/q/OaDh9ZIT2mGYfPF
-         OUdISTxrQ4R6ck45snD9N5Nzr8mM0DE4uqI0RJGt2o1yrRCI9K8QJYaEnqpuX2CW78h/
-         HYtq1cvHO+3W9OiYw9Y76ibIlVWADRFOtVH1m6n4UfH2jkrOi4AGmhbAC2Jla7Ey89un
-         aTeisQYtBK+pAUwuI9zamx+j32bH+4NFla9WJmuwb6zg1uFeLTuTTY+2325+wvInSiKR
-         bnBQ==
-X-Gm-Message-State: AOAM533CfYMJp7cQkfiYwZ9n3e/JWc9azHsTY1/evGys1l63C4bTtTTh
-        iwF+by4GLZwTggUD7k2WUnk=
-X-Google-Smtp-Source: ABdhPJwBbu9XaH6Gaawzg4apz35khgge11T7VS3A9pjCwqj0I3uOdYn6Igtq9M7Fe91d4sXCDCowiw==
-X-Received: by 2002:a05:6a00:1507:: with SMTP id q7mr19535233pfu.131.1593549543796;
-        Tue, 30 Jun 2020 13:39:03 -0700 (PDT)
+        bh=sQoAydE/3UY3Alh/aGXWB+4BkhDq1O/wJupmqiEZk5o=;
+        b=EF2bmptlBGlgqOdaim9gH6vpebgyuo+chnlkSlmPEh4KA0SLdg+U3CKR77q/hqCYtY
+         blLRBZTUNrNEoC+aa2Ukx4ZjIxrh2ucSnZuuqwf7q+G1He6Dpc2bNij0vvHYhUbok/bz
+         jdTa9MMr4wJ8fxrlWMiD62pSMSMcf5IjQcWvSeYuNNyEh0vtZyBxWWR6bELm6pT0uZf1
+         nKnDD6PEJBq2ivYJQlllI90c8ODiY6KU2SYg+ivqqbFBKu9yH64BvTXfu+jflbD3EOTG
+         pgrmavBlQrD6YvAEq8vH9qWj2Jq/6LoOdrfbEnOQUYr0LvekBky5JSJL97NTgQ7wO2oe
+         OPwA==
+X-Gm-Message-State: AOAM5310gFYP8lttxOq3snWolCb0mX6Emk7Wqw0JVfkJUSu7fV4CdZa8
+        qybAWdteJ2osbhttCExrw7b3A4yX
+X-Google-Smtp-Source: ABdhPJxFi+QMSPKppjW0crVKIt+/uhwCuFq8PsfWF31k5dQKhwGYgSPOejxH4d+9bPw1v/zT08n67w==
+X-Received: by 2002:a63:8b42:: with SMTP id j63mr16993931pge.131.1593550181938;
+        Tue, 30 Jun 2020 13:49:41 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 19sm3576756pfy.193.2020.06.30.13.39.02
+        by smtp.gmail.com with ESMTPSA id t29sm3569483pfq.50.2020.06.30.13.49.41
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Jun 2020 13:39:03 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 13:39:02 -0700
+        Tue, 30 Jun 2020 13:49:41 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 13:49:40 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Cc:     linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [RESEND PATCHv3 2/2] dt-bindings: watchdog: Add compatible for
- QCS404, SC7180, SDM845, SM8150
-Message-ID: <20200630203902.GA20540@roeck-us.net>
-References: <cover.1593112534.git.saiprakash.ranjan@codeaurora.org>
- <09da1ba319dc4a27ef4e4e177e67e68f1cb4f35b.1593112534.git.saiprakash.ranjan@codeaurora.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/8] docs: watchdog: codify ident.options as superset
+ of possible status flags
+Message-ID: <20200630204940.GA21564@roeck-us.net>
+References: <20200611191750.28096-1-a.fatoum@pengutronix.de>
+ <20200611191750.28096-2-a.fatoum@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <09da1ba319dc4a27ef4e4e177e67e68f1cb4f35b.1593112534.git.saiprakash.ranjan@codeaurora.org>
+In-Reply-To: <20200611191750.28096-2-a.fatoum@pengutronix.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 12:59:05AM +0530, Sai Prakash Ranjan wrote:
-> Add missing compatible for watchdog timer on QCS404,
-> SC7180, SDM845 and SM8150 SoCs.
+On Thu, Jun 11, 2020 at 09:17:42PM +0200, Ahmad Fatoum wrote:
+> The FIXME comment has been in-tree since the very first git commit.
+> The described behavior has been since relied on by some userspace, e.g.
+> the util-linux wdctl command and has been ignored by some kernelspace,
+> like the f71808e_wdt driver.
 > 
-> Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Acked-by: Rob Herring <robh@kernel.org>
+> The functionality is useful to have to be able to differentiate between a
+> driver that doesn't support WDIOF_CARDRESET and one that does, but hasn't
+> had a watchdog reset, thus drop the FIXME to encourage drivers adopting
+> this convention.
+> 
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+>  Documentation/watchdog/watchdog-api.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 5448cc537a03..0709ddf0b6a5 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -15,6 +15,10 @@ allOf:
->  properties:
->    compatible:
->      enum:
-> +      - qcom,apss-wdt-qcs404
-> +      - qcom,apss-wdt-sc7180
-> +      - qcom,apss-wdt-sdm845
-> +      - qcom,apss-wdt-sm8150
->        - qcom,kpss-timer
->        - qcom,kpss-wdt
->        - qcom,kpss-wdt-apq8064
+> diff --git a/Documentation/watchdog/watchdog-api.rst b/Documentation/watchdog/watchdog-api.rst
+> index c6c1e9fa9f73..800dcd7586f2 100644
+> --- a/Documentation/watchdog/watchdog-api.rst
+> +++ b/Documentation/watchdog/watchdog-api.rst
+> @@ -168,7 +168,7 @@ the fields returned in the ident struct are:
+>  
+>  the options field can have the following bits set, and describes what
+>  kind of information that the GET_STATUS and GET_BOOT_STATUS ioctls can
+> -return.   [FIXME -- Is this correct?]
+> +return.
+>  
+>  	================	=========================
+>  	WDIOF_OVERHEAT		Reset due to CPU overheat
