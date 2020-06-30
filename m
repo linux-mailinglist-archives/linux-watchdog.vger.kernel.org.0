@@ -2,103 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8019C20FE24
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF1920FE2F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726161AbgF3Utn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Jun 2020 16:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S1726262AbgF3Uvd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Jun 2020 16:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbgF3Utn (ORCPT
+        with ESMTP id S1725862AbgF3Uvc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Jun 2020 16:49:43 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198EDC061755;
-        Tue, 30 Jun 2020 13:49:43 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id u185so7895935pfu.1;
-        Tue, 30 Jun 2020 13:49:43 -0700 (PDT)
+        Tue, 30 Jun 2020 16:51:32 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7532BC061755;
+        Tue, 30 Jun 2020 13:51:32 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id q17so9927094pfu.8;
+        Tue, 30 Jun 2020 13:51:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=sQoAydE/3UY3Alh/aGXWB+4BkhDq1O/wJupmqiEZk5o=;
-        b=LQOptagwhd+Vwu2bgtXRJPK7VgNJrpIbMAn9qdEyRPdVnuCsJMA6HhNJqB8T6DEyIJ
-         7BhMZCYFsqqnAjPDchlJGJwtjch4l7nA/pjQUv57dLVoyw+FaOCRQKLYkTlwp+p2rPdD
-         hgvkPGfrL9Aq2q7cLq20PYO93qPhW9SVDkRqYyLyjFJXjU+NF4pzu0DB6FBPmdLO8Dgs
-         xwk77Oo49uTA5yPcZUL0nHc0XAClVphem4C79//jaRng1jPkrEsmy72vBBoae3HVPLuV
-         nbRTs5gJ8DzQB5aIjmbGr4ejG8Crqejt7byp6tBFtdsjDb7zQHZWzpTQjyoR8xxW9kXB
-         95KQ==
+        bh=k/n92nNe83tZwUXGZP93dxugUjMurXa9lQlgKrPw4u0=;
+        b=XAbc0UaBfOap0VdeCTuIJzSsWAvtK6eKynP+8YLTU9lax8vE15V9TkpFzMGl0yJ0WF
+         djJc0LEz/MFp72+Z9xHNHplJ7IujLtCt7DQhgVqhhomsLTbjQkoH7NjXxX4XE/f6Jx5M
+         9t4MN6czTmWs1reeFs5wrtvR4Oceo46dL1m2B8hI1PbSBkAoXKHygEeBOwgOAZCaqeEi
+         aYnSz4vYYXjsBtbzI9yF/j3bPcsuud+qYR03nrtWSP3sVKdgVpze99sxJkJDc9ESFDJw
+         0Ixy72S6LWSuBUL2YSQTaN3dg5BlkD3ayn9knzXepPXiJGSwoBfh3hP/voESaJe9Q/9j
+         JTVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sQoAydE/3UY3Alh/aGXWB+4BkhDq1O/wJupmqiEZk5o=;
-        b=EF2bmptlBGlgqOdaim9gH6vpebgyuo+chnlkSlmPEh4KA0SLdg+U3CKR77q/hqCYtY
-         blLRBZTUNrNEoC+aa2Ukx4ZjIxrh2ucSnZuuqwf7q+G1He6Dpc2bNij0vvHYhUbok/bz
-         jdTa9MMr4wJ8fxrlWMiD62pSMSMcf5IjQcWvSeYuNNyEh0vtZyBxWWR6bELm6pT0uZf1
-         nKnDD6PEJBq2ivYJQlllI90c8ODiY6KU2SYg+ivqqbFBKu9yH64BvTXfu+jflbD3EOTG
-         pgrmavBlQrD6YvAEq8vH9qWj2Jq/6LoOdrfbEnOQUYr0LvekBky5JSJL97NTgQ7wO2oe
-         OPwA==
-X-Gm-Message-State: AOAM5310gFYP8lttxOq3snWolCb0mX6Emk7Wqw0JVfkJUSu7fV4CdZa8
-        qybAWdteJ2osbhttCExrw7b3A4yX
-X-Google-Smtp-Source: ABdhPJxFi+QMSPKppjW0crVKIt+/uhwCuFq8PsfWF31k5dQKhwGYgSPOejxH4d+9bPw1v/zT08n67w==
-X-Received: by 2002:a63:8b42:: with SMTP id j63mr16993931pge.131.1593550181938;
-        Tue, 30 Jun 2020 13:49:41 -0700 (PDT)
+        bh=k/n92nNe83tZwUXGZP93dxugUjMurXa9lQlgKrPw4u0=;
+        b=XOo6hRqC+uEHSNjr+pOYXDj8PAL4t+o/1x3GBbHDE94I45Vv+xfgV1OcRztSR07/36
+         X0y+44Szd5oy6iUQPwVfU4diFIyi8OILlNTcUnl00dj4PZw43ZQHP9+icP5Fqs4MUJQ6
+         cAbPC2xnWRe6uTMjBRXgajREabtiAdnYrnKYZBsIv/13zY2buNCltmLZR9ig70z3aiPL
+         QPjXVK7jjhdlxfiqNJMbPh80yUeqb4CPdEWYujnFIzOR/PEdzMVn9/V/p31OU0oaRrfD
+         WQyEH7CPzWG4Y4QZI0ojEfkrO80D3NIzzKWkuNgQW6Cql6yolqsimLq6jiMi11saI8KT
+         3kqg==
+X-Gm-Message-State: AOAM532WPSCC8ynRnTEfMLQjVYJvW/RQby5N3kJ7Wz8WUIhXnGSwKlXo
+        unC7DHy6HgrBpuhkyc8atZk=
+X-Google-Smtp-Source: ABdhPJxceCc08nliYrPiKRxjvKyZCOHMjlVsl1TGkhmHDCLGJBAjfi3oGzYWscCAi6IofwMOQEk/Lg==
+X-Received: by 2002:a63:b90a:: with SMTP id z10mr15852318pge.277.1593550292052;
+        Tue, 30 Jun 2020 13:51:32 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t29sm3569483pfq.50.2020.06.30.13.49.41
+        by smtp.gmail.com with ESMTPSA id d22sm3571885pfd.105.2020.06.30.13.51.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Jun 2020 13:49:41 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 13:49:40 -0700
+        Tue, 30 Jun 2020 13:51:31 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 13:51:30 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, kernel@pengutronix.de,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/8] docs: watchdog: codify ident.options as superset
- of possible status flags
-Message-ID: <20200630204940.GA21564@roeck-us.net>
+        Knud Poulsen <knpo@ieee.org>, linux-watchdog@vger.kernel.org,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/8] watchdog: f71808e_wdt: indicate WDIOF_CARDRESET
+ support in watchdog_info.options
+Message-ID: <20200630205130.GA21689@roeck-us.net>
 References: <20200611191750.28096-1-a.fatoum@pengutronix.de>
- <20200611191750.28096-2-a.fatoum@pengutronix.de>
+ <20200611191750.28096-3-a.fatoum@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200611191750.28096-2-a.fatoum@pengutronix.de>
+In-Reply-To: <20200611191750.28096-3-a.fatoum@pengutronix.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jun 11, 2020 at 09:17:42PM +0200, Ahmad Fatoum wrote:
-> The FIXME comment has been in-tree since the very first git commit.
-> The described behavior has been since relied on by some userspace, e.g.
-> the util-linux wdctl command and has been ignored by some kernelspace,
-> like the f71808e_wdt driver.
+On Thu, Jun 11, 2020 at 09:17:43PM +0200, Ahmad Fatoum wrote:
+> The driver supports populating bootstatus with WDIOF_CARDRESET, but so
+> far userspace couldn't portably determine whether absence of this flag
+> meant no watchdog reset or no driver support. Or-in the bit to fix this.
 > 
-> The functionality is useful to have to be able to differentiate between a
-> driver that doesn't support WDIOF_CARDRESET and one that does, but hasn't
-> had a watchdog reset, thus drop the FIXME to encourage drivers adopting
-> this convention.
-> 
+> Fixes: b97cb21a4634 ("watchdog: f71808e_wdt: Fix WDTMOUT_STS register read")
+> Cc: stable@vger.kernel.org
 > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  Documentation/watchdog/watchdog-api.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/watchdog/f71808e_wdt.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/watchdog/watchdog-api.rst b/Documentation/watchdog/watchdog-api.rst
-> index c6c1e9fa9f73..800dcd7586f2 100644
-> --- a/Documentation/watchdog/watchdog-api.rst
-> +++ b/Documentation/watchdog/watchdog-api.rst
-> @@ -168,7 +168,7 @@ the fields returned in the ident struct are:
+> diff --git a/drivers/watchdog/f71808e_wdt.c b/drivers/watchdog/f71808e_wdt.c
+> index a3c44d75d80e..c8ce80c13403 100644
+> --- a/drivers/watchdog/f71808e_wdt.c
+> +++ b/drivers/watchdog/f71808e_wdt.c
+> @@ -692,7 +692,8 @@ static int __init watchdog_init(int sioaddr)
+>  	watchdog.sioaddr = sioaddr;
+>  	watchdog.ident.options = WDIOC_SETTIMEOUT
+>  				| WDIOF_MAGICCLOSE
+> -				| WDIOF_KEEPALIVEPING;
+> +				| WDIOF_KEEPALIVEPING
+> +				| WDIOF_CARDRESET;
 >  
->  the options field can have the following bits set, and describes what
->  kind of information that the GET_STATUS and GET_BOOT_STATUS ioctls can
-> -return.   [FIXME -- Is this correct?]
-> +return.
->  
->  	================	=========================
->  	WDIOF_OVERHEAT		Reset due to CPU overheat
+>  	snprintf(watchdog.ident.identity,
+>  		sizeof(watchdog.ident.identity), "%s watchdog",
