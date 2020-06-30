@@ -2,94 +2,176 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A8720FDD2
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AF920FDCE
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jun 2020 22:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729729AbgF3Uhz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Jun 2020 16:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S1729770AbgF3Uh5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Jun 2020 16:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbgF3Uhy (ORCPT
+        with ESMTP id S1729704AbgF3Uhz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Jun 2020 16:37:54 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9BAC061755;
+        Tue, 30 Jun 2020 16:37:55 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ED5C03E979;
         Tue, 30 Jun 2020 13:37:54 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id i25so22581606iog.0;
+Received: by mail-pj1-x1042.google.com with SMTP id o22so4947321pjw.2;
         Tue, 30 Jun 2020 13:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=38KZfXGo5PyBgcyR/mf9dfZW2Qk4B4rGtanP3anFAmo=;
-        b=Fj2uWZRhmQdVb+7q/isHj2wQVqMFAfhVSu3lMN2Id2l5Ye5HnMqwP4j5lQKn0fHb66
-         MUv+1SfaS35JLFwD6WJcuYE+MTOkl0W8SUYaYigvls5G1jDG5imxELY1kvoh0SxqMKJG
-         QSg4O5uFukVwLDfqc7Dqnnund7fXbQjjZ/y45OOfWnmex0OHEsNxYk5A+0JvkSBIrauZ
-         MkQAEj1MFvL3b4qJuczRsNcgPSagcw3SNnjNAD9t9HTjUJY07djMjkia9x0T/WRTkntO
-         3M154WqULBtiU0BN400kx+uc7dN0kWlmkKZZf90rbyKr6qd9xuf40grRx2k1z68xEfHC
-         nWRA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Vik1wDMns4lHXvZGrHxJ8AhRkA4fYb5uyHi++Y4drwk=;
+        b=HZhRENCMeqqegrLyoxvhQutm1GVjjQNldim8H8To9sUK4VK1oWZahUq2Xx6LLQugiV
+         dK7a8xKc4SaMxPBuRCX42qHkXPoBzzv91sadC5A5/vgBw4IaX/yDmvIu1T83Hf5r2U01
+         rIGJriM7XOIgHN6oARwT11Mli76jnKkGrKS2KSg8azZkdmx8h56dN9W7YMJB1KDYaqZP
+         s591dEgU0STrc3aL3/f/7qHJ1d3PyftYSPYHffChphin/md7+hvyl30VtZubKabv9RIt
+         hRaiK7riIycPehcuPzm3sZeVo9lESYJJ2xnOoNelO9i7YcqhQ7MvyZNIHBuXjiDsOOEI
+         lgWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=38KZfXGo5PyBgcyR/mf9dfZW2Qk4B4rGtanP3anFAmo=;
-        b=gAvwCtKOI1tZy9QqzwfG7q72cgQsEyrM8Bmo63UrseFvcVNpxcRMpTFnr2FeXTXcMX
-         hEVXuZ7jSz1IO/F4WkHPqKE1DtJtgfeUMslwFWMNEjldqGQNauf89LXwIs6hdsJlwr0G
-         0bhsC47GW5K0hj9TDKP4dI2hW4bywT1g9nYozk1Qco8VqejWvKJjpJbX9XhDXFn8JNza
-         pPyPtf+IJWnBol+UbgBStgiPvDGuhthae0C2UYMVrR2lVrNFtZpFw9ddZ8UwHdLFBlSg
-         9dF7LHUhLIBMWO1Ht/wm5FNT76ZlxHHPSJ6pH85kUcGQ3VjWaS2GZBYtxQS6xvZWQ9NS
-         YlAA==
-X-Gm-Message-State: AOAM5322Om1pzZgMq32inNyBGxJrqj5gwH2uvdAoI6OGI0Vvrcimummj
-        Bu7weJj3efIyfnwT2JA+4e6rNh+yMS2UQ/ab/VU=
-X-Google-Smtp-Source: ABdhPJyb/CEwkfINABpfWWMSQ+ML0+ykFVkIncKfSMyZm7IOmv3ls+GVwrxAUKHMFFSVIk+7vkK2LsLzL8TstG9FxFM=
-X-Received: by 2002:a02:30c4:: with SMTP id q187mr24244868jaq.102.1593549473442;
- Tue, 30 Jun 2020 13:37:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200602052104.7795-1-lukas.bulwahn@gmail.com>
- <828311d2-61ea-42cb-1449-a53f3772543d@roeck-us.net> <CAODwPW_oxDxF_5-icRs0eaRVLgtP+bDc_OSKa=EcfeSp=c6Fag@mail.gmail.com>
- <CAKz_xw0Tqr-idoZbNzg_didSCr5L+L1=76xjF=Sqj4DgpL9g7Q@mail.gmail.com>
- <CAKz_xw3KuWFSkcz-9hLHGZ2=S7nJ=K=AN6j2FJ6afZBFowJO7g@mail.gmail.com>
- <alpine.DEB.2.21.2006302156120.3966@felia> <20200630203245.GA19763@roeck-us.net>
-In-Reply-To: <20200630203245.GA19763@roeck-us.net>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 30 Jun 2020 22:37:42 +0200
-Message-ID: <CAKXUXMxF8YwhGKjUr5h_c2ewmXiSz7saLYWvThn6VwyTYLKAeg@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: rectify entry in ARM SMC WATCHDOG DRIVER
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Evan Benn <evanbenn@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Vik1wDMns4lHXvZGrHxJ8AhRkA4fYb5uyHi++Y4drwk=;
+        b=oUZOsGrJspjpZotYEBra47A3FqNGw1GcA5QQ1YwkuAcTBENSsASaksyQEw13tlcYzr
+         rzBkooyFGEOxhhL91dz2UQhMFdEn+/UPH6JaBNMeItc+Djsesf5tyvN1dFUwBiLUgSEu
+         +gAPt2PMi3ZsyFzh9+84hVcpvswMnEcOBvKkCvnJC0b2cDTbom4JfrN3tNVatKCwAhMS
+         lQ2fOQ2aiOw83aXb5u67GtkZ/9g2tipZ8uwiO8x81Hn/hTEQwkVv6NGO2TT3UD3qL1Vz
+         Tk5eRcp9Vj+C0xcqD9j3DYAUJu1Ehl5Wg1Q5I5o+RZgcWrB9EwiEIfJ5A6guN/dHX2s3
+         x89A==
+X-Gm-Message-State: AOAM530eDQzKY2rMcEARenBh2AMWAGfJVFY2Ark1GaqZykpU/g01Ij92
+        1hfEZ8sR+IIioaaeT9P0mQ4=
+X-Google-Smtp-Source: ABdhPJwDv8rmd9PxDGb5EKo1dKzsyH4tuN76FCWm9Uv2Cw1ODUe85eR8mvo86Iveb22sEm+F16siiA==
+X-Received: by 2002:a17:90a:987:: with SMTP id 7mr22502303pjo.186.1593549473444;
+        Tue, 30 Jun 2020 13:37:53 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f2sm2397939pfb.184.2020.06.30.13.37.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 30 Jun 2020 13:37:52 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 13:37:52 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Cc:     linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [RESEND PATCHv3 1/2] dt-bindings: watchdog: Convert QCOM
+ watchdog timer bindings to YAML
+Message-ID: <20200630203752.GA20330@roeck-us.net>
+References: <cover.1593112534.git.saiprakash.ranjan@codeaurora.org>
+ <77b47aad9d17cb4ec8359bdbbb30c33d818117e6.1593112534.git.saiprakash.ranjan@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77b47aad9d17cb4ec8359bdbbb30c33d818117e6.1593112534.git.saiprakash.ranjan@codeaurora.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 10:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Tue, Jun 30, 2020 at 09:59:51PM +0200, Lukas Bulwahn wrote:
-> >
-> >
-> > On Fri, 5 Jun 2020, Evan Benn wrote:
-> >
-> > > AFAICT this has now been merged upstream, I'm not sure what action to take:
-> > >
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5c24a28b4eb842ad1256496be6ae01bab15f1dcb
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=72a9e7fea5866fc471fda78f05f166595c8c6ba6
-> >
-> > This patch is still fully valid and still applies to next-20200630; it can
-> > be simply applied as any other bug fix to your driver code.
-> >
-> > Evan, can you please ask Wim as linux-watchdog maintainer to pick-up this
-> > patch, with the reviews below?
-> >
->
-> It is in my tree. Maybe it got lost in the back-and-forth. I'll send
-> a pull request to Wim in the next couple of weeks.
->
+On Fri, Jun 26, 2020 at 12:59:04AM +0530, Sai Prakash Ranjan wrote:
+> Convert QCOM watchdog timer bindings to DT schema format using
+> json-schema.
+> 
+> Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Great! Thanks, Guenter.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  .../devicetree/bindings/watchdog/qcom-wdt.txt | 28 ------------
+>  .../bindings/watchdog/qcom-wdt.yaml           | 44 +++++++++++++++++++
+>  2 files changed, 44 insertions(+), 28 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/qcom-wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.txt b/Documentation/devicetree/bindings/watchdog/qcom-wdt.txt
+> deleted file mode 100644
+> index 41aeaa2ff0f8..000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.txt
+> +++ /dev/null
+> @@ -1,28 +0,0 @@
+> -Qualcomm Krait Processor Sub-system (KPSS) Watchdog
+> ----------------------------------------------------
+> -
+> -Required properties :
+> -- compatible : shall contain only one of the following:
+> -
+> -			"qcom,kpss-wdt-msm8960"
+> -			"qcom,kpss-wdt-apq8064"
+> -			"qcom,kpss-wdt-ipq8064"
+> -			"qcom,kpss-wdt-ipq4019"
+> -			"qcom,kpss-timer"
+> -			"qcom,scss-timer"
+> -			"qcom,kpss-wdt"
+> -
+> -- reg : shall contain base register location and length
+> -- clocks : shall contain the input clock
+> -
+> -Optional properties :
+> -- timeout-sec : shall contain the default watchdog timeout in seconds,
+> -                if unset, the default timeout is 30 seconds
+> -
+> -Example:
+> -	watchdog@208a038 {
+> -		compatible = "qcom,kpss-wdt-ipq8064";
+> -		reg = <0x0208a038 0x40>;
+> -		clocks = <&sleep_clk>;
+> -		timeout-sec = <10>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> new file mode 100644
+> index 000000000000..5448cc537a03
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/qcom-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Krait Processor Sub-system (KPSS) Watchdog timer
+> +
+> +maintainers:
+> +  - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,kpss-timer
+> +      - qcom,kpss-wdt
+> +      - qcom,kpss-wdt-apq8064
+> +      - qcom,kpss-wdt-ipq4019
+> +      - qcom,kpss-wdt-ipq8064
+> +      - qcom,kpss-wdt-msm8960
+> +      - qcom,scss-timer
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +examples:
+> +  - |
+> +    watchdog@208a038 {
+> +      compatible = "qcom,kpss-wdt-ipq8064";
+> +      reg = <0x0208a038 0x40>;
+> +      clocks = <&sleep_clk>;
+> +      timeout-sec = <10>;
+> +    };
