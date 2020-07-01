@@ -2,118 +2,203 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E889210235
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jul 2020 04:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D125D21036F
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jul 2020 07:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726430AbgGACtp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Jun 2020 22:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgGACtp (ORCPT
+        id S1726875AbgGAFvI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Jul 2020 01:51:08 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:52480 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726092AbgGAFvI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Jun 2020 22:49:45 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B948C061755
-        for <linux-watchdog@vger.kernel.org>; Tue, 30 Jun 2020 19:49:45 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id u5so10328290pfn.7
-        for <linux-watchdog@vger.kernel.org>; Tue, 30 Jun 2020 19:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YovxSutyVC3vPfc30qLKb6C4cR4BTtXDoCbOH8uIRNw=;
-        b=DwawwzSNZXUs/ul8j3UxdEhWDK6LG6Yq49fb3zaJboYENd/zzF9tlrelO4cFOdjPHZ
-         EskL/hJuWRcBYReu+b2rtQa7621SBGyBshfCyPT15pEWZ/gy+8TBC8mGEVjmqlrKFoHt
-         PEIJrRGK8rrl1ItpNJJmyTvQ4OxV4xc9Cc/36M2Lv2cvT0hs1HriGzfxsS069MwRoteM
-         cj44A5sN377kcZI5o6awi4nwWKfhtoy3feZcQP/rIgKBHoHDP8wUd5ZZomHEwpbQQf4Y
-         2QL/rFbxwUjIWaO2QNl1NJ6/c9QDWS7tFAp12n3mljo8M5zoA5a42MYEO86n09HA0mfb
-         3XKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YovxSutyVC3vPfc30qLKb6C4cR4BTtXDoCbOH8uIRNw=;
-        b=QCwkVPnKJOC1qHuTYiMUIQTXdjcsB0X9JhcnrtlaZsS+oaRxbY8SGa7s4QGz5MoLpX
-         Ag0OwC26UmoqA+TtYoe2EYdu1FhMeJeF9GE07qepSysPIEHZzjK2YGrapp3OSXCChTNV
-         DM80kX9q9iKiwqLWmPLvXzYydeh23JN/HecN57xpognZMj34hDTlKYb9Kro1wKEvruSu
-         TgFgBF2ct3/B2MgBBXsBjp7mBbeMThIwHEcVrrAl3fJtyTq/2QQfr1LtjItlNN1awa4k
-         Wra2Hc49AGsDeNqb/tmgckXnF7FNZtmKs5M2s8s4Q86U0TFgXhCtVDqR5JG+7przrs/1
-         GqVQ==
-X-Gm-Message-State: AOAM530m9m9Q3K7ROS5UiIEJtGmeEG0ZCEWHdWSqleXFOd/R94BYxXE0
-        PLKiTOLgjYGOAFqKUZlH2Js=
-X-Google-Smtp-Source: ABdhPJz/9gfFC0rESSGA+bceqb6orLMDOUrxt6uGXsbWN9aLp2JU1s0ppHhSUvHUAVBMqgblW0CfWg==
-X-Received: by 2002:a63:e214:: with SMTP id q20mr10616640pgh.402.1593571784913;
-        Tue, 30 Jun 2020 19:49:44 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m7sm3973871pgg.69.2020.06.30.19.49.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Jun 2020 19:49:44 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 19:49:43 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     minyard@acm.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, Corey Minyard <cminyard@mvista.com>
-Subject: Re: [PATCH 03/10] watchdog: Add documentation for read capability
-Message-ID: <20200701024943.GC84420@roeck-us.net>
-References: <20200620174907.20229-1-minyard@acm.org>
- <20200620174907.20229-4-minyard@acm.org>
+        Wed, 1 Jul 2020 01:51:08 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0615ojJs042309;
+        Wed, 1 Jul 2020 00:50:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1593582645;
+        bh=YUXD9ShzQYb7VpV33VRcMcIHHXqrxjBgwEaOLpyAUWA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=vOmou64nBL+UgIXvO1hdA8KW/sse0kvsw/1NxW4HWvnwDuZGoko3Jr8J4cq8dvmfd
+         tjPZMHJKNgLNHICA5QcWkiBgnOcKTETauu0aSW3UckXHwDjZsVP0ad42vGrMo8zZ54
+         7h24RA+F1Y9nwgpi8MoxoFGIr3VLM3p+X5+/Y8QU=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0615ojUL037785
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 1 Jul 2020 00:50:45 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 1 Jul
+ 2020 00:50:45 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 1 Jul 2020 00:50:45 -0500
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0615ohlE059541;
+        Wed, 1 Jul 2020 00:50:44 -0500
+Subject: Re: [PATCH 2/2] watchdog: rti: tweak min_hw_heartbeat_ms to match
+ initial allowed window
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Jan Kiszka <jan.kiszka@siemens.com>, <wim@linux-watchdog.org>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200624114534.1362-1-t-kristo@ti.com>
+ <20200624114534.1362-3-t-kristo@ti.com>
+ <289c6104-a885-d3c1-c670-a081ebaaf782@siemens.com>
+ <b3849bea-2a4d-079e-e9df-8a1d6c13c0c7@ti.com>
+ <25bf3ed1-5434-9b45-20ae-e1b2cfc5e5c0@roeck-us.net>
+ <1d84e633-b808-d6ac-a34c-9cc4709e43f6@ti.com>
+ <20200630202356.GA16412@roeck-us.net>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <4e9c2731-bf02-1b59-298b-b7f9a0e87d10@ti.com>
+Date:   Wed, 1 Jul 2020 08:50:42 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200620174907.20229-4-minyard@acm.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200630202356.GA16412@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 12:49:00PM -0500, minyard@acm.org wrote:
-> From: Corey Minyard <cminyard@mvista.com>
+On 30/06/2020 23:23, Guenter Roeck wrote:
+> On Thu, Jun 25, 2020 at 08:04:50PM +0300, Tero Kristo wrote:
+>> On 25/06/2020 16:35, Guenter Roeck wrote:
+>>> On 6/25/20 1:32 AM, Tero Kristo wrote:
+>>>> On 24/06/2020 18:24, Jan Kiszka wrote:
+>>>>> On 24.06.20 13:45, Tero Kristo wrote:
+>>>>>> If the RTI watchdog has been started by someone (like bootloader) when
+>>>>>> the driver probes, we must adjust the initial ping timeout to match the
+>>>>>> currently running watchdog window to avoid generating watchdog reset.
+>>>>>>
+>>>>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>>>>>> ---
+>>>>>>     drivers/watchdog/rti_wdt.c | 25 +++++++++++++++++++++++++
+>>>>>>     1 file changed, 25 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+>>>>>> index d456dd72d99a..02ea2b2435f5 100644
+>>>>>> --- a/drivers/watchdog/rti_wdt.c
+>>>>>> +++ b/drivers/watchdog/rti_wdt.c
+>>>>>> @@ -55,11 +55,13 @@ static int heartbeat;
+>>>>>>      * @base - base io address of WD device
+>>>>>>      * @freq - source clock frequency of WDT
+>>>>>>      * @wdd  - hold watchdog device as is in WDT core
+>>>>>> + * @min_hw_heartbeat_save - save of the min hw heartbeat value
+>>>>>>      */
+>>>>>>     struct rti_wdt_device {
+>>>>>>         void __iomem        *base;
+>>>>>>         unsigned long        freq;
+>>>>>>         struct watchdog_device    wdd;
+>>>>>> +    unsigned int        min_hw_heartbeat_save;
+>>>>>>     };
+>>>>>>     static int rti_wdt_start(struct watchdog_device *wdd)
+>>>>>> @@ -107,6 +109,11 @@ static int rti_wdt_ping(struct watchdog_device *wdd)
+>>>>>>         /* put watchdog in active state */
+>>>>>>         writel_relaxed(WDKEY_SEQ1, wdt->base + RTIWDKEY);
+>>>>>> +    if (wdt->min_hw_heartbeat_save) {
+>>>>>> +        wdd->min_hw_heartbeat_ms = wdt->min_hw_heartbeat_save;
+>>>>>> +        wdt->min_hw_heartbeat_save = 0;
+>>>>>> +    }
+>>>>>> +
+>>>>>>         return 0;
+>>>>>>     }
+>>>>>> @@ -201,6 +208,24 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>>>>>>             goto err_iomap;
+>>>>>>         }
+>>>>>> +    if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
+>>>>>> +        u32 time_left;
+>>>>>> +        u32 heartbeat;
+>>>>>> +
+>>>>>> +        set_bit(WDOG_HW_RUNNING, &wdd->status);
+>>>>>> +        time_left = rti_wdt_get_timeleft(wdd);
+>>>>>> +        heartbeat = readl(wdt->base + RTIDWDPRLD);
+>>>>>> +        heartbeat <<= WDT_PRELOAD_SHIFT;
+>>>>>> +        heartbeat /= wdt->freq;
+>>>>>> +        if (time_left < heartbeat / 2)
+>>>>>> +            wdd->min_hw_heartbeat_ms = 0;
+>>>>>> +        else
+>>>>>> +            wdd->min_hw_heartbeat_ms =
+>>>>>> +                (time_left - heartbeat / 2 + 1) * 1000;
+>>>>>> +
+>>>>>> +        wdt->min_hw_heartbeat_save = 11 * heartbeat * 1000 / 20;
+>>>>>> +    }
+>>>>>> +
+>>>>>>         ret = watchdog_register_device(wdd);
+>>>>>>         if (ret) {
+>>>>>>             dev_err(dev, "cannot register watchdog device\n");
+>>>>>>
+>>>>>
+>>>>> This assumes that the bootloader also programmed a 50% window, right? The pending U-Boot patch will do that, but what if that may chance or someone uses a different setup?
+>>>>
+>>>> Yes, we assume 50%. I think based on the hw design, 50% is the only sane value to be used, otherwise you just shrink the open window too much and for no apparent reason.
+>>>>
+>>>
+>>> Not sure if that is a valid assumption. Someone who designs a watchdog
+>>> with such a narrow ping window might as well also use it. The question
+>>> is if you want to rely on that assumption, or check and change it if needed.
+>>
+>> Right, if that is a blocker, I can modify the code. Should be maybe couple
+>> of lines addition.
+>>
+>>> Also, I wonder if we should add an API function such as
+>>> "set_last_hw_keepalive()" to avoid all that complexity.
+>>
+>> I can try adding that also if it is desirable.
+>>
 > 
-> Document the read, poll, and async operations.
-> 
-> Signed-off-by: Corey Minyard <cminyard@mvista.com>
-> ---
->  Documentation/watchdog/watchdog-kernel-api.rst | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/watchdog/watchdog-kernel-api.rst b/Documentation/watchdog/watchdog-kernel-api.rst
-> index 068a55ee0d4a..aa15a2d35397 100644
-> --- a/Documentation/watchdog/watchdog-kernel-api.rst
-> +++ b/Documentation/watchdog/watchdog-kernel-api.rst
-> @@ -132,6 +132,10 @@ The list of watchdog operations is defined as::
->  	unsigned int (*get_timeleft)(struct watchdog_device *);
->  	int (*restart)(struct watchdog_device *);
->  	long (*ioctl)(struct watchdog_device *, unsigned int, unsigned long);
-> +	ssize_t (*read)(struct watchdog_device *, struct file *, char __user *,
-> +			size_t, loff_t *);
-> +	__poll_t (*poll)(struct watchdog_device *, struct file *, poll_table *);
-> +	int (*fasync)(struct watchdog_device *, int, struct file *, int);
->    };
->  
->  It is important that you first define the module owner of the watchdog timer
-> @@ -235,6 +239,14 @@ they are supported. These optional routines/operations are:
->    our own internal ioctl call handling. This routine should return -ENOIOCTLCMD
->    if a command is not supported. The parameters that are passed to the ioctl
->    call are: watchdog_device, cmd and arg.
-> +* read: If a read call comes in on the watchdog device, call this function.
-> +  This allows a watchdog to provide data to the user.
+> But wait, the code doesn't really match what the description of this
+> patch claims, or at least the description is misleading. Per the
+> description, this is to prevent an early timeout. However, the problem
+> here is that the watchdog core does not generate a ping, even if
+> requested, because it believes that it just generated one right before
+> the watchdog timer was registered, and that it can not generate another
+> one because min_hw_heartbeat_ms has not elapsed.
 
-I don't think this makes any sense. To be accepted, this would need to be
-standardized. We can't have userspace read from a watchdog device without
-knowing what is going to be returned.
+You are right. Maybe the patch description could use some more beef into it.
 
-Guenter
-
-> +* poll: If a poll call comes in on the watchdog device, call this.  This
-> +  allows the user to do select/poll waiting on the device to have read data
-> +  ready.
-> +* fasync: If a fasync call comes in on the watchdog, call this.  This
-> +  allows the user to do async operations waiting for read data from
-> +  the device.
->  
->  The status bits should (preferably) be set with the set_bit and clear_bit alike
->  bit-operations. The status bits that are defined are:
-> -- 
-> 2.17.1
 > 
+> With that in mind, the problem is a bit more complex.
+> 
+> First, the driver doesn't really update the current timeout to the
+> value that is currently configured and enabled. Instead, it just
+> uses/assumes the default (DEFAULT_HEARTBEAT or whatever the heartbeat
+> module parameter is set to). This means that it is still possible for
+> an early timeout to occur if there is a mismatch between the bootloader
+> timeout and the timeout assumed by the driver. Worse, the timeout
+> is only updated in the start function - and the start function isn't
+> called if the watchdog is already running. Actually, the driver does
+> not support updating the timeout at all. This means that a mismatch
+> between the bootloader timeout and the timeout assumed by the driver
+> is not handled well.
+> 
+> To solve this, the driver would have to update the actual timeout to
+> whatever is programmed into the chip and ignore any module parameter
+> and default settings if the watchdog is already running. Alternatively,
+> it would have to support updating the timeout (if the hardware supports
+> that) after the watchdog was started.
+
+Hardware supports changing the timeout value, however it only updates 
+this during the next window (preload values are picked once user pings 
+the watchdog.)
+
+> Second, handling min_hw_heartbeat_ms properly should really be implemented
+> in the watchdog core. Instead of assuming that the most recent keepalive
+> happened "just before now", as it currently does, it should call the
+> timeleft function (if available and if the watchdog is running) and
+> calculate the most recent keepalive (and thus the earliest acceptable
+> next keepalive) from its return value.
+Yes, it all becomes bit complex if we let the bootloader configure the 
+values freely. Current bootloader implementation does not do this, as it 
+is mostly a copy of the kernel driver.
+
+However, I can modify the kernel driver to take all this into account, 
+even if the code becomes a bit more complex due to this.
+
+-Tero
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
