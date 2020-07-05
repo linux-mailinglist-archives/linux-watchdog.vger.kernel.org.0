@@ -2,61 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA42214D3A
-	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Jul 2020 16:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C30214D42
+	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Jul 2020 16:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727115AbgGEOtl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 5 Jul 2020 10:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S1726923AbgGEO6E (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 5 Jul 2020 10:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726826AbgGEOtk (ORCPT
+        with ESMTP id S1726826AbgGEO6E (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 5 Jul 2020 10:49:40 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A822FC061794;
-        Sun,  5 Jul 2020 07:49:40 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id k27so1145016pgm.2;
-        Sun, 05 Jul 2020 07:49:40 -0700 (PDT)
+        Sun, 5 Jul 2020 10:58:04 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3387DC061794;
+        Sun,  5 Jul 2020 07:58:04 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id t15so1516428pjq.5;
+        Sun, 05 Jul 2020 07:58:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=WxUo/BWpif7dA8qqdOiGfk3KcUDPY7ZlwEmiGmL009k=;
-        b=PozhM0vxa4gRPR+hrxboq3ZNOYSVsLKleRac3CX+07bDwpMmSiItfsQ2HOYN8YgX5o
-         fK0Q6H2E5kdIdtoW3VKnhVBeZY2F4lnVckRwGZZUiEZHCGPyUrHH9ecuUwSQChN7r9cW
-         7A4MiWa0UdD+dZmZYjWduyxUaa9mnGGfDV/HD4sHd3P/5mlnbCQzkA/xoo7yld4yWbnW
-         6d2jDBQKDmHEHkqaO4ctgm9dVAr1gY3nx/Ju+pE1YDvuedgeac1OqY6wZm1QiiDXUNHu
-         28EYxSA2Jf5tNNUraJaVfSmPc7NERc3Oa4q0TEsxZ/8TMZ98vwiR4oRaIVcuBeITbnV9
-         o46Q==
+        bh=B6/CZwdLxr6H8ujYUWoMtrCMefluk58574rLY2XQtFg=;
+        b=f1IsVAhNxGPKw2WDguxnU9dW7OMxPEZgRvmIIZ5Of2KsumEzLqCkmp2132anzSdXSZ
+         sevvxfGvISujMAw0W1tQOTieEVcZpVdKFgH8ZGKn/Oye8vkfQq6Qa7eJsF14QS1rPX+0
+         Ieqv91T79BzplJHsc8W/bRDNoFObmytKMS78+oHfjWXdRj/WsCG4MIppizH1RSQy4VEb
+         tZvC84jFlmUsGDCr/pLlAjzj361TS/kd+4Q6It0clwiPSakOZjT/oMkZF2PKemimFt/P
+         XrPj/AHZUAiBTMa+BUZmKXVgQVDNpBhtmhW/y45SGa2XbabKCX0PHbzABoM6onOGZzIl
+         spzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=WxUo/BWpif7dA8qqdOiGfk3KcUDPY7ZlwEmiGmL009k=;
-        b=OAN4hlLm9fhKbbiJOlYxgpB2lLbJheZZkzVW0qPRXBRAF6mQ9/C1wjvgf4n0P2pPW0
-         26JQSA3T8pRuB8SfM26BcJJjqr4CTGHPhrXPFkh9DBh41uxnMqiOmEYDfj+H139hAZYe
-         TNdVY4BypIrfL+kBg8ebCOHfTpCC1dO4cOvotr1xU8XawFFtfbVv2uEKHcsgCB9YlLmv
-         jDm3nlbHH0UZpzH4WBFQw82mCa2PWfC/8rj/OynPz6Ez1qrG44Hd5GdUYb3k1OJ4M/18
-         nzQm5gkNuaJ3ZQpVKqTrzO1Z8eafn3zfLXXfqAE2dGcT16EHwmRI8UF/RaitXmgzYKeL
-         Qhaw==
-X-Gm-Message-State: AOAM532RThjWm1K1xR4DtSb6FjmGNJjExHTQ88b04gB7ejHWAlgUZR6L
-        7TuRqNlF7mOahxDbWUN9e28=
-X-Google-Smtp-Source: ABdhPJx/utwpAFRiywr/Ao44HkufHb1ctjp4h85nObIcIfB1vMEamY5g9H/sKkbOldojNJA9v2nF4g==
-X-Received: by 2002:a63:1548:: with SMTP id 8mr12062793pgv.172.1593960580184;
-        Sun, 05 Jul 2020 07:49:40 -0700 (PDT)
+        bh=B6/CZwdLxr6H8ujYUWoMtrCMefluk58574rLY2XQtFg=;
+        b=hHRtIg61cYSZlZYMkWl3pYoPjI5gcyrRXfYIea7L5WCcEzUAzfEDrl62SCLOxVovT0
+         pCNfPMv5EGplfxCk0+lYbZJH4hRDGYvKkOnK34ugTEKhqjlAEVQWojng1k+S2vnpLveo
+         oNd/eUlNeCeNmcoxArEvUVHyDVMYCfnAuHboRs5w9zwHL6UlN71oT2FW77yqxIaqT20r
+         yvna9mWy8WVuNp6GjBR/pnqqEuhLUWNmppqfk9rx7yEc/ZTDnuPTFqGLhAcSCIQcw8Jn
+         xcccriwz1pdf+btvOJY+FgyuvbBmbG9vlo+neQFT4tczDst8iPtH7AWVm6kYbu8z82ey
+         wpMQ==
+X-Gm-Message-State: AOAM532udJuQvj6kE+/MHXiI4khO+CTiD6NiRdGH640ONhEyUZHWcOL+
+        4Ui00hVHCavoW5dunIAN41U=
+X-Google-Smtp-Source: ABdhPJxawKs3ZVThXGNG3Vb/kc5717gwFAlkRD46on87/rvozPA+l1xoxkmHeZW/sFY8u03ssqmWGQ==
+X-Received: by 2002:a17:90a:cf05:: with SMTP id h5mr1170688pju.219.1593961083672;
+        Sun, 05 Jul 2020 07:58:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f18sm16278300pgv.84.2020.07.05.07.49.39
+        by smtp.gmail.com with ESMTPSA id e191sm16421139pfh.42.2020.07.05.07.58.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jul 2020 07:49:39 -0700 (PDT)
-Subject: Re: [PATCHv2 3/5] watchdog: rti-wdt: add support for window size
- configuration
+        Sun, 05 Jul 2020 07:58:03 -0700 (PDT)
+Subject: Re: [PATCHv2 2/5] watchdog: add support for adjusting last known HW
+ keepalive time
 To:     Tero Kristo <t-kristo@ti.com>, wim@linux-watchdog.org,
         linux-watchdog@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, jan.kiszka@siemens.com
 References: <20200703120406.7092-1-t-kristo@ti.com>
- <20200703120406.7092-4-t-kristo@ti.com>
+ <20200703120406.7092-3-t-kristo@ti.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,12 +101,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <74679c9b-eb33-1a95-60f4-49575ee71a34@roeck-us.net>
-Date:   Sun, 5 Jul 2020 07:49:38 -0700
+Message-ID: <faeebfbb-cb8c-e31e-50ef-af42e1b11e0e@roeck-us.net>
+Date:   Sun, 5 Jul 2020 07:58:02 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200703120406.7092-4-t-kristo@ti.com>
+In-Reply-To: <20200703120406.7092-3-t-kristo@ti.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -116,228 +116,82 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 7/3/20 5:04 AM, Tero Kristo wrote:
-> RTI watchdog can support different open window sizes. Add support for
-> these and add a new module parameter to configure it. The default open
-> window size for the driver still remains at 50%.
-> 
-> Also, modify the margin calculation logic a bit for 32k source clock,
-> instead of adding a margin to every window config, assume the 32k source
-> clock is running slower.
+> Certain watchdogs require the watchdog only to be pinged within a
+> specific time window, pinging too early or too late cause the watchdog
+> to fire. In cases where this sort of watchdog has been started before
+> kernel comes up, we must adjust the watchdog keepalive window to match
+> the actually running timer, so add a new driver API for this purpose.
 > 
 > Signed-off-by: Tero Kristo <t-kristo@ti.com>
 > ---
->  drivers/watchdog/rti_wdt.c | 112 +++++++++++++++++++++++++++++++------
->  1 file changed, 95 insertions(+), 17 deletions(-)
+>  drivers/watchdog/watchdog_dev.c | 23 +++++++++++++++++++++++
+>  include/linux/watchdog.h        |  2 ++
+>  2 files changed, 25 insertions(+)
 > 
-> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-> index d456dd72d99a..110bfc8d0bb3 100644
-> --- a/drivers/watchdog/rti_wdt.c
-> +++ b/drivers/watchdog/rti_wdt.c
-> @@ -19,7 +19,8 @@
->  #include <linux/types.h>
->  #include <linux/watchdog.h>
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index bc1cfa288553..5848551cf29d 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -1138,6 +1138,29 @@ void watchdog_dev_unregister(struct watchdog_device *wdd)
+>  	watchdog_cdev_unregister(wdd);
+>  }
 >  
-> -#define DEFAULT_HEARTBEAT 60
-> +#define DEFAULT_HEARTBEAT	60
-> +#define DEFAULT_WINDOWSIZE	50
->  
->  /* Max heartbeat is calculated at 32kHz source clock */
->  #define MAX_HEARTBEAT	1000
-> @@ -35,9 +36,13 @@
->  
->  #define RTIWWDRX_NMI	0xa
->  
-> -#define RTIWWDSIZE_50P	0x50
-> +#define RTIWWDSIZE_50P		0x50
-> +#define RTIWWDSIZE_25P		0x500
-> +#define RTIWWDSIZE_12P5		0x5000
-> +#define RTIWWDSIZE_6P25		0x50000
-> +#define RTIWWDSIZE_3P125	0x500000
->  
-> -#define WDENABLE_KEY	0xa98559da
-> +#define WDENABLE_KEY		0xa98559da
->  
->  #define WDKEY_SEQ0		0xe51a
->  #define WDKEY_SEQ1		0xa35c
-> @@ -48,7 +53,8 @@
->  
->  #define DWDST			BIT(1)
->  
-> -static int heartbeat;
-> +static int heartbeat =		DEFAULT_HEARTBEAT;
-> +static u32 wsize =		DEFAULT_WINDOWSIZE;
->  
+> +/*
+> + *	watchdog_set_last_hw_keepalive: set last HW keepalive time for watchdog
+> + *
+> + *	Adjusts the last known HW keepalive time for a watchdog timer.
+> + *	This is needed in case where watchdog has been started before
+> + *	kernel by someone like bootloader, and it can't be pinged
+
+... needed if the watchdog is already running when the probe function
+is called, and ...
+
+> + *	immediately. This adjusts the watchdog ping period to match
+> + *	the currently running timer.
+
+It doesn't adjust the ping period.
+
+> + */
+
+last_ping_ms needs to be documented (the last heartbeat was last_ping_ms
+milliseconds ago ?), both here and in Documentation/watchdog/watchdog-kernel-api.rst.
+It needs to be documented that the function must be called immediately
+after watchdog registration, and that min_hw_heartbeat_ms must
+be set for it to be useful.
+
+> +int watchdog_set_last_hw_keepalive(struct watchdog_device *wdd,
+> +				   unsigned int last_ping_ms)
+> +{
+> +	struct watchdog_core_data *wd_data = wdd->wd_data;
+
+This needs a NULL check, in case it is called before watchdog driver
+registration.
+
+> +	ktime_t now;
+> +
+> +	now = ktime_get();
+> +
+> +	wd_data->last_hw_keepalive = ktime_sub(now, ms_to_ktime(last_ping_ms));
+> +
+> +	return __watchdog_ping(wdd);
+> +}
+> +EXPORT_SYMBOL_GPL(watchdog_set_last_hw_keepalive);
+> +
 >  /*
->   * struct to hold data for each WDT device
-> @@ -62,34 +68,93 @@ struct rti_wdt_device {
->  	struct watchdog_device	wdd;
->  };
+>   *	watchdog_dev_init: init dev part of watchdog core
+>   *
+> diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
+> index 1464ce6ffa31..9b19e6bb68b5 100644
+> --- a/include/linux/watchdog.h
+> +++ b/include/linux/watchdog.h
+> @@ -210,6 +210,8 @@ extern int watchdog_init_timeout(struct watchdog_device *wdd,
+>  extern int watchdog_register_device(struct watchdog_device *);
+>  extern void watchdog_unregister_device(struct watchdog_device *);
 >  
-> +static int rti_wdt_convert_wsize(void)
-> +{
-> +	if (wsize >= 50) {
-> +		wsize = RTIWWDSIZE_50P;
-> +	} else if (wsize >= 25) {
-> +		wsize = RTIWWDSIZE_25P;
-> +	} else if (wsize > 12) {
-> +		wsize = RTIWWDSIZE_12P5;
-> +	} else if (wsize > 6) {
-> +		wsize = RTIWWDSIZE_6P25;
-> +	} else if (wsize > 3) {
-> +		wsize = RTIWWDSIZE_3P125;
-> +	} else {
-> +		pr_err("%s: bad windowsize: %d\n", __func__, wsize);
-
-Please do not use pr_ functions. Pass the watchdog device as argument
-and use dev_err().
-
-Also, this function modifies the wsize parameter. When called
-again, that parameter will have a  totally different meaning, and
-the second call to this function will always set the window size
-to 50.
-
-On top of all that, window sizes larger than 50 are set to 50,
-window sizes between 4 and 49 are adjusted, and window sizes <= 3
-are rejected. That is not exactly consistent.
-
-Does this module parameter really add value / make sense ?
-What is the use case ? We should not add such complexity without
-use case.
-
-> +		return -EINVAL;
-> +	}
+> +int watchdog_set_last_hw_keepalive(struct watchdog_device *, unsigned int);
 > +
-> +	return 0;
-> +}
-> +
-> +static int rti_wdt_setup_hw_hb(struct watchdog_device *wdd)
-> +{
-> +	/*
-> +	 * RTI only supports a windowed mode, where the watchdog can only
-> +	 * be petted during the open window; not too early or not too late.
-> +	 * The HW configuration options only allow for the open window size
-> +	 * to be 50% or less than that.
-> +	 */
-> +	switch (wsize) {
-> +	case RTIWWDSIZE_50P:
-> +		/* 50% open window => 50% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 500 * heartbeat;
-> +		break;
-> +
-> +	case RTIWWDSIZE_25P:
-> +		/* 25% open window => 75% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 750 * heartbeat;
-> +		break;
-> +
-> +	case RTIWWDSIZE_12P5:
-> +		/* 12.5% open window => 87.5% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 875 * heartbeat;
-> +		break;
-> +
-> +	case RTIWWDSIZE_6P25:
-> +		/* 6.5% open window => 93.5% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 935 * heartbeat;
-> +		break;
-> +
-> +	case RTIWWDSIZE_3P125:
-> +		/* 3.125% open window => 96.9% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 969 * heartbeat;
-> +		break;
-> +
-> +	default:
-> +		pr_err("%s: Bad watchdog window size!\n", __func__);
-
-Same here.
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int rti_wdt_start(struct watchdog_device *wdd)
->  {
->  	u32 timer_margin;
->  	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
-> +	int ret;
+>  /* devres register variant */
+>  int devm_watchdog_register_device(struct device *dev, struct watchdog_device *);
 >  
->  	/* set timeout period */
-> -	timer_margin = (u64)wdd->timeout * wdt->freq;
-> +	timer_margin = (u64)heartbeat * wdt->freq;
->  	timer_margin >>= WDT_PRELOAD_SHIFT;
->  	if (timer_margin > WDT_PRELOAD_MAX)
->  		timer_margin = WDT_PRELOAD_MAX;
->  	writel_relaxed(timer_margin, wdt->base + RTIDWDPRLD);
->  
-> -	/*
-> -	 * RTI only supports a windowed mode, where the watchdog can only
-> -	 * be petted during the open window; not too early or not too late.
-> -	 * The HW configuration options only allow for the open window size
-> -	 * to be 50% or less than that; we obviouly want to configure the open
-> -	 * window as large as possible so we select the 50% option. To avoid
-> -	 * any glitches, we accommodate 5% safety margin also, so we setup
-> -	 * the min_hw_hearbeat at 55% of the timeout period.
-> -	 */
-> -	wdd->min_hw_heartbeat_ms = 11 * wdd->timeout * 1000 / 20;
-> +	ret = rti_wdt_convert_wsize();
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = rti_wdt_setup_hw_hb(wdd);
-> +	if (ret)
-> +		return ret;
->  
-
-This is the wrong place to validate the window size. It should be done
-only once, in the probe function. The start function should not fail
-because of a bad window size.
-
-With such parameters, the wsize written into the chip should be kept
-in struct rti_wdt_device if it needs to be set more than once.
-The module parameter should not be changed, and it should not be used
-to store the register value. min_hw_heartbeat_ms needs to be set in the
-probe function, not in the start function. Sorry that I didn't notice
-that before.
-
->  	/* Generate NMI when wdt expires */
->  	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
->  
-> -	/* Open window size 50%; this is the largest window size available */
-> -	writel_relaxed(RTIWWDSIZE_50P, wdt->base + RTIWWDSIZECTRL);
-> +	writel_relaxed(wsize, wdt->base + RTIWWDSIZECTRL);
->  
->  	readl_relaxed(wdt->base + RTIWWDSIZECTRL);
->  
-> @@ -169,6 +234,14 @@ static int rti_wdt_probe(struct platform_device *pdev)
->  		return -EINVAL;
->  	}
->  
-> +	/*
-> +	 * If watchdog is running at 32k clock, it is not accurate.
-> +	 * Adjust frequency down in this case so that we don't pet
-> +	 * the watchdog too often.
-> +	 */
-> +	if (wdt->freq > 30000 && wdt->freq < 32768)
-> +		wdt->freq = 30000;
-> +
-
-Combining that with a window size of 96.9% min heartbeat is asking
-for trouble. It will be all but impossible to catch the window with
-such constraints if the frequency is really that inaccurate.
-
->  	pm_runtime_enable(dev);
->  	ret = pm_runtime_get_sync(dev);
->  	if (ret) {
-> @@ -251,5 +324,10 @@ MODULE_PARM_DESC(heartbeat,
->  		 __MODULE_STRING(MAX_HEARTBEAT) ", default "
->  		 __MODULE_STRING(DEFAULT_HEARTBEAT));
->  
-> +module_param(wsize, uint, 0);
-> +MODULE_PARM_DESC(wsize,
-> +		 "Watchdog open window size in percentage from 3 to 50, "
-> +		 "default " __MODULE_STRING(DEFAULT_WINDOW_SIZE));
-> +
->  MODULE_LICENSE("GPL");
->  MODULE_ALIAS("platform:rti-wdt");
 > 
 
