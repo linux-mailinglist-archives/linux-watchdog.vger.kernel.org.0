@@ -2,61 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB511214D4B
-	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Jul 2020 17:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A60214D4D
+	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Jul 2020 17:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727051AbgGEPHf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 5 Jul 2020 11:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
+        id S1726861AbgGEPI1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 5 Jul 2020 11:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726826AbgGEPHf (ORCPT
+        with ESMTP id S1726826AbgGEPI1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 5 Jul 2020 11:07:35 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB09C061794;
-        Sun,  5 Jul 2020 08:07:35 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id t15so1522186pjq.5;
-        Sun, 05 Jul 2020 08:07:35 -0700 (PDT)
+        Sun, 5 Jul 2020 11:08:27 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05555C061794;
+        Sun,  5 Jul 2020 08:08:27 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id b92so15923948pjc.4;
+        Sun, 05 Jul 2020 08:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=oWGjpobOxzlgwjb1kbGd6v3TL3FL54/58+CeQAJAuJ0=;
-        b=i946XFFCKKCU8GwBwPNdoOw3vsFKf9p/fhx8beEFAlkdb9uNPcthLKLOKUTlrdSLz3
-         kjS7d8qyKyHaRjy6YiaJDxXxSNdNMdAMGfwMBrAW14PzAdh+RL91tVl+Q59Rw/NXiTxS
-         20YhY5EaRtTnLrN5A8WNHM8/aCtwBcO0KYT6SXURYnS7+pCIhqbG00DBllv/B0aZeGsm
-         900zWbGXvF9wyKOrXbaN/HtWKRncm3hpN5KaQDWt/9xQKHu9k3ZiXsad1V2jamvNxDNi
-         dade+mPdftbso0wToPi6lPWHaSv+Sj1C4GDpHgxQx3Nq/Z1g+j8DC+00aQ+xR91T3EIE
-         TJ8Q==
+        bh=A5I6VGkhJ2xJ6GDa94vWXmkdx6+7jGgFgpoPYfiHtH4=;
+        b=YPEoW4F+ma/2eQSWDui9L+e9wmZFKYCEo28j7haweM1imaCl8+/evhw0m/HUuhem59
+         RXYWzt/16c4PQ3lgDYYMDsK95AAlTeWR9s2KqeBxclOFB1u3ciIdwoqbPvQQWIrLyW7T
+         iVMgTN//HZWnUGyHt5Y291eymAgH8tsSKCA4XL08vwOIyR1xe56FsBHeQeES5CdYMr+7
+         BAnxQkzKdCkD0GMBgbSPDsFHUDMIpbosKrE3wZGecKpZmpW0fgf3z41zjaM6rynYbms5
+         t9eNO4oPMgrzGRlY0cRWwh923AVbgTPzX27/zaSCuVGGyT3D+fcIUIU9xVYcg+cN97WZ
+         GyMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=oWGjpobOxzlgwjb1kbGd6v3TL3FL54/58+CeQAJAuJ0=;
-        b=GQsjLdK5LeNVc32YunpG0n6EaZm7ZZhbY9eHkV5w+juSI6g1tvyfF38ufEZAWeATNl
-         HMVoVPBk8Tgd+mftY4l8vETmZzkRPRETnjQEnp3sS7U/SCsTsh7TOy0DcXYWZGh7wF/q
-         pyicG3vhCfFDlWRWrIUn9NBhLB58y+7fl3Xg9zmpMcpLBFMPeqd5iDdxqrUoqYoDyUnc
-         VBh1skK5WhrrEWoBBrgoYI2EVn54pIk3krKYllx+w5Eg6KZfVroWm8rCk4Brn5tvGh8+
-         OKYjNAJir6hOjoicA0xulqWvSyykddiPp4nxHesz0iNJIzdFOoPRdZ//qw2q+OpyrIYx
-         9cKQ==
-X-Gm-Message-State: AOAM530Pq+Iq9sNxLtlOrlifovu0Zc55YClKop911571iCrTe0tT3Uuv
-        XCKYDhDlHuO4kub35Pw54TPJ0MtOOlo=
-X-Google-Smtp-Source: ABdhPJzc31fO0WKOCE7yIYY7Ka6DQ0woxsrO7Cyb4HcmjxkwR4wOwSWRqdLdqey1KdMOfSRpIQrQSA==
-X-Received: by 2002:a17:90b:3555:: with SMTP id lt21mr50581897pjb.234.1593961654790;
-        Sun, 05 Jul 2020 08:07:34 -0700 (PDT)
+        bh=A5I6VGkhJ2xJ6GDa94vWXmkdx6+7jGgFgpoPYfiHtH4=;
+        b=Wct6j/Yl+F9d2CpLYWK4p06TNcWp3kRFmrztuDXDtSmmkHEQvQoF10GPsJNriIx6PO
+         zhuh2zHtHZKx7eVN/7yfE4DmD1jTYmq2mQ5NwYqBJKSoxxH0QXczIEfgtdXB1ieHyH+k
+         hwXSKAd37NexVaqZc6Ip63yh/cRvcI1eczTvVeQosjqfGOqDcLkMD0MI+9daJlsaA29T
+         G9OpTmMdz2xqvptbk+0tIQZN9Npj9mGx6N87gVF9lLWzREcCkD04ZS0cHp5c9fxUnoE1
+         jDIDMWj4Jh7+p5NssYLMQzfs4W5z70SKaD93ei1FA07zhtAReZjzudzbW1c08l4fbCjN
+         ySJg==
+X-Gm-Message-State: AOAM530hPlNUX/T5SWs8bIJt9woZ5NwnSXxuMUwkfUdApUTs8cHxYAjJ
+        Q5/eaqnRpFwNm6VhrWmOppvVth3UwA0=
+X-Google-Smtp-Source: ABdhPJwxPge74+8uNfr5ykDiE+IFl+ovnJMfkVLDwrruTtasf+tiCZRe9GqCpHEkCY5Jwp7MhhY4wQ==
+X-Received: by 2002:a17:90b:4d0f:: with SMTP id mw15mr47770999pjb.68.1593961706605;
+        Sun, 05 Jul 2020 08:08:26 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r204sm9951785pfc.134.2020.07.05.08.07.33
+        by smtp.gmail.com with ESMTPSA id h100sm16474304pjb.46.2020.07.05.08.08.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jul 2020 08:07:34 -0700 (PDT)
-Subject: Re: [PATCHv2 4/5] watchdog: rti-wdt: attach to running watchdog
- during probe
+        Sun, 05 Jul 2020 08:08:26 -0700 (PDT)
+Subject: Re: [PATCHv2 5/5] watchdog: rti-wdt: balance pm runtime enable calls
 To:     Tero Kristo <t-kristo@ti.com>, wim@linux-watchdog.org,
         linux-watchdog@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, jan.kiszka@siemens.com
 References: <20200703120406.7092-1-t-kristo@ti.com>
- <20200703120406.7092-5-t-kristo@ti.com>
+ <20200703120406.7092-6-t-kristo@ti.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,108 +100,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <8eecaa6a-2e0e-14b3-473a-0674f9b2be26@roeck-us.net>
-Date:   Sun, 5 Jul 2020 08:07:33 -0700
+Message-ID: <bf1f8fd7-db24-22c8-0d1f-4083ad4e580c@roeck-us.net>
+Date:   Sun, 5 Jul 2020 08:08:25 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200703120406.7092-5-t-kristo@ti.com>
+In-Reply-To: <20200703120406.7092-6-t-kristo@ti.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 7/3/20 5:04 AM, Tero Kristo wrote:
-> If the RTI watchdog is running already during probe, the driver must
-> configure itself to match the HW. Window size and timeout is probed from
-> hardware, and the last keepalive ping is adjusted to match it also.
+> PM runtime should be disabled in the fail path of probe and when
+> the driver is removed.
 > 
+> Fixes: 2d63908bdbfb ("watchdog: Add K3 RTI watchdog support")
 > Signed-off-by: Tero Kristo <t-kristo@ti.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/watchdog/rti_wdt.c | 26 +++++++++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
+>  drivers/watchdog/rti_wdt.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 > diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-> index 110bfc8d0bb3..987e5a798cb4 100644
+> index 987e5a798cb4..7007445da80b 100644
 > --- a/drivers/watchdog/rti_wdt.c
 > +++ b/drivers/watchdog/rti_wdt.c
-> @@ -213,6 +213,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
->  	struct watchdog_device *wdd;
->  	struct rti_wdt_device *wdt;
->  	struct clk *clk;
-> +	u32 last_ping = 0;
->  
->  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
->  	if (!wdt)
-> @@ -258,11 +259,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
->  	wdd->min_timeout = 1;
->  	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
->  		wdt->freq * 1000;
-> -	wdd->timeout = DEFAULT_HEARTBEAT;
-
-What if the watchdog is not running ?
-
->  	wdd->parent = dev;
->  
-> -	watchdog_init_timeout(wdd, heartbeat, dev);
-> -
->  	watchdog_set_drvdata(wdd, wdt);
->  	watchdog_set_nowayout(wdd, 1);
->  	watchdog_set_restart_priority(wdd, 128);
-> @@ -274,12 +272,34 @@ static int rti_wdt_probe(struct platform_device *pdev)
->  		goto err_iomap;
->  	}
->  
-> +	if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
-> +		u32 time_left;
-> +
-> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
-> +		time_left = rti_wdt_get_timeleft(wdd);
-> +		heartbeat = readl(wdt->base + RTIDWDPRLD);
-> +		heartbeat <<= WDT_PRELOAD_SHIFT;
-> +		heartbeat /= wdt->freq;
-> +
-
-This ignores any heartbeat configured as module parameter, which most
-people will consider unexpected. It might be worthwhile documenting that.
-
-> +		wsize = readl(wdt->base + RTIWWDSIZECTRL);
-> +		ret = rti_wdt_setup_hw_hb(wdd);
-> +		if (ret)
-> +			goto err_iomap;
-> +
-> +		last_ping = -(time_left - heartbeat) * 1000;
-
-Why the double negation ?
-
-		last_ping = (heartbeat - time_left) * 1000;
-
-seems simpler. Also, what if heartbeat - time_left is negative for whatever
-reason ?
-
-I am not sure if it is a good idea to call rti_wdt_get_timeleft()
-here. It might be better to add a helper function such as
-rti_wdt_get_timeleft_ms() to return the time left in milli-seconds
-for improved accuracy.
-
-> +	}
-> +
-> +	watchdog_init_timeout(wdd, heartbeat, dev);
-> +
->  	ret = watchdog_register_device(wdd);
->  	if (ret) {
->  		dev_err(dev, "cannot register watchdog device\n");
->  		goto err_iomap;
->  	}
->  
-> +	if (last_ping)
-> +		watchdog_set_last_hw_keepalive(wdd, last_ping);
-> +
->  	return 0;
+> @@ -304,6 +304,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
 >  
 >  err_iomap:
+>  	pm_runtime_put_sync(&pdev->dev);
+> +	pm_runtime_disable(&pdev->dev);
+>  
+>  	return ret;
+>  }
+> @@ -314,6 +315,7 @@ static int rti_wdt_remove(struct platform_device *pdev)
+>  
+>  	watchdog_unregister_device(&wdt->wdd);
+>  	pm_runtime_put(&pdev->dev);
+> +	pm_runtime_disable(&pdev->dev);
+>  
+>  	return 0;
+>  }
 > 
 
