@@ -2,61 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C30214D42
-	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Jul 2020 16:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB511214D4B
+	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Jul 2020 17:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726923AbgGEO6E (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 5 Jul 2020 10:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S1727051AbgGEPHf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 5 Jul 2020 11:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726826AbgGEO6E (ORCPT
+        with ESMTP id S1726826AbgGEPHf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 5 Jul 2020 10:58:04 -0400
+        Sun, 5 Jul 2020 11:07:35 -0400
 Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3387DC061794;
-        Sun,  5 Jul 2020 07:58:04 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id t15so1516428pjq.5;
-        Sun, 05 Jul 2020 07:58:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB09C061794;
+        Sun,  5 Jul 2020 08:07:35 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id t15so1522186pjq.5;
+        Sun, 05 Jul 2020 08:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=B6/CZwdLxr6H8ujYUWoMtrCMefluk58574rLY2XQtFg=;
-        b=f1IsVAhNxGPKw2WDguxnU9dW7OMxPEZgRvmIIZ5Of2KsumEzLqCkmp2132anzSdXSZ
-         sevvxfGvISujMAw0W1tQOTieEVcZpVdKFgH8ZGKn/Oye8vkfQq6Qa7eJsF14QS1rPX+0
-         Ieqv91T79BzplJHsc8W/bRDNoFObmytKMS78+oHfjWXdRj/WsCG4MIppizH1RSQy4VEb
-         tZvC84jFlmUsGDCr/pLlAjzj361TS/kd+4Q6It0clwiPSakOZjT/oMkZF2PKemimFt/P
-         XrPj/AHZUAiBTMa+BUZmKXVgQVDNpBhtmhW/y45SGa2XbabKCX0PHbzABoM6onOGZzIl
-         spzg==
+        bh=oWGjpobOxzlgwjb1kbGd6v3TL3FL54/58+CeQAJAuJ0=;
+        b=i946XFFCKKCU8GwBwPNdoOw3vsFKf9p/fhx8beEFAlkdb9uNPcthLKLOKUTlrdSLz3
+         kjS7d8qyKyHaRjy6YiaJDxXxSNdNMdAMGfwMBrAW14PzAdh+RL91tVl+Q59Rw/NXiTxS
+         20YhY5EaRtTnLrN5A8WNHM8/aCtwBcO0KYT6SXURYnS7+pCIhqbG00DBllv/B0aZeGsm
+         900zWbGXvF9wyKOrXbaN/HtWKRncm3hpN5KaQDWt/9xQKHu9k3ZiXsad1V2jamvNxDNi
+         dade+mPdftbso0wToPi6lPWHaSv+Sj1C4GDpHgxQx3Nq/Z1g+j8DC+00aQ+xR91T3EIE
+         TJ8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=B6/CZwdLxr6H8ujYUWoMtrCMefluk58574rLY2XQtFg=;
-        b=hHRtIg61cYSZlZYMkWl3pYoPjI5gcyrRXfYIea7L5WCcEzUAzfEDrl62SCLOxVovT0
-         pCNfPMv5EGplfxCk0+lYbZJH4hRDGYvKkOnK34ugTEKhqjlAEVQWojng1k+S2vnpLveo
-         oNd/eUlNeCeNmcoxArEvUVHyDVMYCfnAuHboRs5w9zwHL6UlN71oT2FW77yqxIaqT20r
-         yvna9mWy8WVuNp6GjBR/pnqqEuhLUWNmppqfk9rx7yEc/ZTDnuPTFqGLhAcSCIQcw8Jn
-         xcccriwz1pdf+btvOJY+FgyuvbBmbG9vlo+neQFT4tczDst8iPtH7AWVm6kYbu8z82ey
-         wpMQ==
-X-Gm-Message-State: AOAM532udJuQvj6kE+/MHXiI4khO+CTiD6NiRdGH640ONhEyUZHWcOL+
-        4Ui00hVHCavoW5dunIAN41U=
-X-Google-Smtp-Source: ABdhPJxawKs3ZVThXGNG3Vb/kc5717gwFAlkRD46on87/rvozPA+l1xoxkmHeZW/sFY8u03ssqmWGQ==
-X-Received: by 2002:a17:90a:cf05:: with SMTP id h5mr1170688pju.219.1593961083672;
-        Sun, 05 Jul 2020 07:58:03 -0700 (PDT)
+        bh=oWGjpobOxzlgwjb1kbGd6v3TL3FL54/58+CeQAJAuJ0=;
+        b=GQsjLdK5LeNVc32YunpG0n6EaZm7ZZhbY9eHkV5w+juSI6g1tvyfF38ufEZAWeATNl
+         HMVoVPBk8Tgd+mftY4l8vETmZzkRPRETnjQEnp3sS7U/SCsTsh7TOy0DcXYWZGh7wF/q
+         pyicG3vhCfFDlWRWrIUn9NBhLB58y+7fl3Xg9zmpMcpLBFMPeqd5iDdxqrUoqYoDyUnc
+         VBh1skK5WhrrEWoBBrgoYI2EVn54pIk3krKYllx+w5Eg6KZfVroWm8rCk4Brn5tvGh8+
+         OKYjNAJir6hOjoicA0xulqWvSyykddiPp4nxHesz0iNJIzdFOoPRdZ//qw2q+OpyrIYx
+         9cKQ==
+X-Gm-Message-State: AOAM530Pq+Iq9sNxLtlOrlifovu0Zc55YClKop911571iCrTe0tT3Uuv
+        XCKYDhDlHuO4kub35Pw54TPJ0MtOOlo=
+X-Google-Smtp-Source: ABdhPJzc31fO0WKOCE7yIYY7Ka6DQ0woxsrO7Cyb4HcmjxkwR4wOwSWRqdLdqey1KdMOfSRpIQrQSA==
+X-Received: by 2002:a17:90b:3555:: with SMTP id lt21mr50581897pjb.234.1593961654790;
+        Sun, 05 Jul 2020 08:07:34 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e191sm16421139pfh.42.2020.07.05.07.58.02
+        by smtp.gmail.com with ESMTPSA id r204sm9951785pfc.134.2020.07.05.08.07.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jul 2020 07:58:03 -0700 (PDT)
-Subject: Re: [PATCHv2 2/5] watchdog: add support for adjusting last known HW
- keepalive time
+        Sun, 05 Jul 2020 08:07:34 -0700 (PDT)
+Subject: Re: [PATCHv2 4/5] watchdog: rti-wdt: attach to running watchdog
+ during probe
 To:     Tero Kristo <t-kristo@ti.com>, wim@linux-watchdog.org,
         linux-watchdog@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, jan.kiszka@siemens.com
 References: <20200703120406.7092-1-t-kristo@ti.com>
- <20200703120406.7092-3-t-kristo@ti.com>
+ <20200703120406.7092-5-t-kristo@ti.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,12 +101,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <faeebfbb-cb8c-e31e-50ef-af42e1b11e0e@roeck-us.net>
-Date:   Sun, 5 Jul 2020 07:58:02 -0700
+Message-ID: <8eecaa6a-2e0e-14b3-473a-0674f9b2be26@roeck-us.net>
+Date:   Sun, 5 Jul 2020 08:07:33 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200703120406.7092-3-t-kristo@ti.com>
+In-Reply-To: <20200703120406.7092-5-t-kristo@ti.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -116,82 +116,93 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 7/3/20 5:04 AM, Tero Kristo wrote:
-> Certain watchdogs require the watchdog only to be pinged within a
-> specific time window, pinging too early or too late cause the watchdog
-> to fire. In cases where this sort of watchdog has been started before
-> kernel comes up, we must adjust the watchdog keepalive window to match
-> the actually running timer, so add a new driver API for this purpose.
+> If the RTI watchdog is running already during probe, the driver must
+> configure itself to match the HW. Window size and timeout is probed from
+> hardware, and the last keepalive ping is adjusted to match it also.
 > 
 > Signed-off-by: Tero Kristo <t-kristo@ti.com>
 > ---
->  drivers/watchdog/watchdog_dev.c | 23 +++++++++++++++++++++++
->  include/linux/watchdog.h        |  2 ++
->  2 files changed, 25 insertions(+)
+>  drivers/watchdog/rti_wdt.c | 26 +++++++++++++++++++++++---
+>  1 file changed, 23 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index bc1cfa288553..5848551cf29d 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -1138,6 +1138,29 @@ void watchdog_dev_unregister(struct watchdog_device *wdd)
->  	watchdog_cdev_unregister(wdd);
->  }
+> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+> index 110bfc8d0bb3..987e5a798cb4 100644
+> --- a/drivers/watchdog/rti_wdt.c
+> +++ b/drivers/watchdog/rti_wdt.c
+> @@ -213,6 +213,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  	struct watchdog_device *wdd;
+>  	struct rti_wdt_device *wdt;
+>  	struct clk *clk;
+> +	u32 last_ping = 0;
 >  
-> +/*
-> + *	watchdog_set_last_hw_keepalive: set last HW keepalive time for watchdog
-> + *
-> + *	Adjusts the last known HW keepalive time for a watchdog timer.
-> + *	This is needed in case where watchdog has been started before
-> + *	kernel by someone like bootloader, and it can't be pinged
+>  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>  	if (!wdt)
+> @@ -258,11 +259,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  	wdd->min_timeout = 1;
+>  	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
+>  		wdt->freq * 1000;
+> -	wdd->timeout = DEFAULT_HEARTBEAT;
 
-... needed if the watchdog is already running when the probe function
-is called, and ...
+What if the watchdog is not running ?
 
-> + *	immediately. This adjusts the watchdog ping period to match
-> + *	the currently running timer.
-
-It doesn't adjust the ping period.
-
-> + */
-
-last_ping_ms needs to be documented (the last heartbeat was last_ping_ms
-milliseconds ago ?), both here and in Documentation/watchdog/watchdog-kernel-api.rst.
-It needs to be documented that the function must be called immediately
-after watchdog registration, and that min_hw_heartbeat_ms must
-be set for it to be useful.
-
-> +int watchdog_set_last_hw_keepalive(struct watchdog_device *wdd,
-> +				   unsigned int last_ping_ms)
-> +{
-> +	struct watchdog_core_data *wd_data = wdd->wd_data;
-
-This needs a NULL check, in case it is called before watchdog driver
-registration.
-
-> +	ktime_t now;
-> +
-> +	now = ktime_get();
-> +
-> +	wd_data->last_hw_keepalive = ktime_sub(now, ms_to_ktime(last_ping_ms));
-> +
-> +	return __watchdog_ping(wdd);
-> +}
-> +EXPORT_SYMBOL_GPL(watchdog_set_last_hw_keepalive);
-> +
->  /*
->   *	watchdog_dev_init: init dev part of watchdog core
->   *
-> diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-> index 1464ce6ffa31..9b19e6bb68b5 100644
-> --- a/include/linux/watchdog.h
-> +++ b/include/linux/watchdog.h
-> @@ -210,6 +210,8 @@ extern int watchdog_init_timeout(struct watchdog_device *wdd,
->  extern int watchdog_register_device(struct watchdog_device *);
->  extern void watchdog_unregister_device(struct watchdog_device *);
+>  	wdd->parent = dev;
 >  
-> +int watchdog_set_last_hw_keepalive(struct watchdog_device *, unsigned int);
-> +
->  /* devres register variant */
->  int devm_watchdog_register_device(struct device *dev, struct watchdog_device *);
+> -	watchdog_init_timeout(wdd, heartbeat, dev);
+> -
+>  	watchdog_set_drvdata(wdd, wdt);
+>  	watchdog_set_nowayout(wdd, 1);
+>  	watchdog_set_restart_priority(wdd, 128);
+> @@ -274,12 +272,34 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  		goto err_iomap;
+>  	}
 >  
+> +	if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
+> +		u32 time_left;
+> +
+> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
+> +		time_left = rti_wdt_get_timeleft(wdd);
+> +		heartbeat = readl(wdt->base + RTIDWDPRLD);
+> +		heartbeat <<= WDT_PRELOAD_SHIFT;
+> +		heartbeat /= wdt->freq;
+> +
+
+This ignores any heartbeat configured as module parameter, which most
+people will consider unexpected. It might be worthwhile documenting that.
+
+> +		wsize = readl(wdt->base + RTIWWDSIZECTRL);
+> +		ret = rti_wdt_setup_hw_hb(wdd);
+> +		if (ret)
+> +			goto err_iomap;
+> +
+> +		last_ping = -(time_left - heartbeat) * 1000;
+
+Why the double negation ?
+
+		last_ping = (heartbeat - time_left) * 1000;
+
+seems simpler. Also, what if heartbeat - time_left is negative for whatever
+reason ?
+
+I am not sure if it is a good idea to call rti_wdt_get_timeleft()
+here. It might be better to add a helper function such as
+rti_wdt_get_timeleft_ms() to return the time left in milli-seconds
+for improved accuracy.
+
+> +	}
+> +
+> +	watchdog_init_timeout(wdd, heartbeat, dev);
+> +
+>  	ret = watchdog_register_device(wdd);
+>  	if (ret) {
+>  		dev_err(dev, "cannot register watchdog device\n");
+>  		goto err_iomap;
+>  	}
+>  
+> +	if (last_ping)
+> +		watchdog_set_last_hw_keepalive(wdd, last_ping);
+> +
+>  	return 0;
+>  
+>  err_iomap:
 > 
 
