@@ -2,94 +2,155 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9838221543F
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jul 2020 10:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6202158D5
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jul 2020 15:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728386AbgGFI4t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Jul 2020 04:56:49 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:47850 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728135AbgGFI4t (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Jul 2020 04:56:49 -0400
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj99B5wJf_pVQAA--.131S3;
-        Mon, 06 Jul 2020 16:56:34 +0800 (CST)
-Subject: Re: [PATCH] watchdog: bcm_kona_wdt: Use correct return value for
- bcm_kona_wdt_probe()
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-References: <1590391864-308-1-git-send-email-yangtiezhu@loongson.cn>
- <99e82049-2d99-9a8e-4023-96f585b47e30@roeck-us.net>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <19929e73-253b-7d29-b8f8-365266d88a5f@loongson.cn>
-Date:   Mon, 6 Jul 2020 16:56:33 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1729064AbgGFNvZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Jul 2020 09:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728961AbgGFNvY (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 6 Jul 2020 09:51:24 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A2FC061755;
+        Mon,  6 Jul 2020 06:51:24 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id o22so11997719pjw.2;
+        Mon, 06 Jul 2020 06:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=z6poFi9+zWbY1L4gWrKF8A7RpLC+zqPqyhWKFm2NtEY=;
+        b=bi/1u86pOYCzm383ZnOKrlUK7mPZGkPQ42EF/iISNegNEdBvpIM7ihIeKQX6jV6oRV
+         MpjS7eq9yI1fZKgc+FOF5e6Lc6U5GjYK+3OWOHHxvwXcMHvL2YiWtGsU3kpQNjx8Xcni
+         z+Q8zqg/zRJTCDDGB5SnnDf1XBZAsKzoojKHloLsOzEApycYe/rkCIYbQ/ubLfunWtaW
+         VrcuydUb2d21UrpBTmtvtZenBWJ3iYYDMOVeoMU/Izaz8k4paeXra+r7hU8Z7+/aMm/3
+         B8RlBmxFixnbqve2S3afviAFd6CLblpqlXteRJcG3MyWxZ6q5G6tM06maGMRC6RGrIQ0
+         ijhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=z6poFi9+zWbY1L4gWrKF8A7RpLC+zqPqyhWKFm2NtEY=;
+        b=P72mJIQunyoSbEXoUyJIo6lgsmsknX1JLFUQX/5K+NOg6XLQW4jMh5Klo7kG2bmWwL
+         5+AWntvOiryOaQlK8se/SdJBdM0BOdXhXPAuvslyOzl5/h8QY6sBTj2Mzy+MWgBYXUbJ
+         xv22Tplb/ReWUXyl4t6UvU2M0OgVApR7Bz0UN7FAYJXXKuuOb14AkGIZ+xBwuZTl/B+u
+         MisGNoX6+b8vVi/9BP9ktaXnWVucwnRLNmYCdNqYX+FcDpl58c8eUjYATvM2QSJ3uIVa
+         c6sUp1RLMzZ3n5dVS7naXZV7V8mdfuF9d3i7GnDLv2FxvRXNE33hhus6YP1nkv1hBbNp
+         m+Nw==
+X-Gm-Message-State: AOAM5310CVUTbnUU2K4aYei98DxANmsJCHhvvO/0NoJzg3X3krKNkGIr
+        vtYbUy7AQUsVXfb7w9d5eVqKEY3gXv8=
+X-Google-Smtp-Source: ABdhPJypJYrz0xeNjuylMgkjURdVfAuAbuXUUsahd8hCWmARlHuhrS+/gja/3CQojCFUOARO5eXDnQ==
+X-Received: by 2002:a17:902:bccc:: with SMTP id o12mr43490783pls.29.1594043483881;
+        Mon, 06 Jul 2020 06:51:23 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k7sm20008166pgh.46.2020.07.06.06.51.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jul 2020 06:51:22 -0700 (PDT)
+Subject: Re: [PATCH 1/1] watchdog: Add common nowayout parameter to booke_wdt
+ driver
+To:     Timothy Myers <timothy.myers@adtran.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Boike <david.boike@adtran.com>
+References: <CH2PR19MB35903F8A6A46864C47A720029D930@CH2PR19MB3590.namprd19.prod.outlook.com>
+ <20200626215133.GB254814@roeck-us.net>
+ <CH2PR19MB359071AAD5258D75F7255CA99D690@CH2PR19MB3590.namprd19.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <3e45acc4-3986-4172-36c6-758dcf1f0c60@roeck-us.net>
+Date:   Mon, 6 Jul 2020 06:51:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <99e82049-2d99-9a8e-4023-96f585b47e30@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxj99B5wJf_pVQAA--.131S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7JFy8ArWrWw4kGF4UXr1DJrb_yoWDtwb_Ga
-        12krZ3ury8Wr10vFn0yay5ZwsxtFn8uF1kXw1xKay3X347JryfArW09r1ftw43Ww4Yyrsx
-        AFyDWw4a9rnrGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCY02Avz4vE14v_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
-        x4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUsF4iUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+In-Reply-To: <CH2PR19MB359071AAD5258D75F7255CA99D690@CH2PR19MB3590.namprd19.prod.outlook.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: base64
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 05/25/2020 09:47 PM, Guenter Roeck wrote:
-> On 5/25/20 12:31 AM, Tiezhu Yang wrote:
->> When call function devm_platform_ioremap_resource(), we should use IS_ERR()
->> to check the return value and return PTR_ERR() if failed.
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-Hi,
-
-Could you please apply this patch?
-
-Thanks,
-Tiezhu
-
->
->> ---
->>   drivers/watchdog/bcm_kona_wdt.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/watchdog/bcm_kona_wdt.c b/drivers/watchdog/bcm_kona_wdt.c
->> index eb850a8..8237c4e 100644
->> --- a/drivers/watchdog/bcm_kona_wdt.c
->> +++ b/drivers/watchdog/bcm_kona_wdt.c
->> @@ -279,7 +279,7 @@ static int bcm_kona_wdt_probe(struct platform_device *pdev)
->>   
->>   	wdt->base = devm_platform_ioremap_resource(pdev, 0);
->>   	if (IS_ERR(wdt->base))
->> -		return -ENODEV;
->> +		return PTR_ERR(wdt->base);
->>   
->>   	wdt->resolution = SECWDOG_DEFAULT_RESOLUTION;
->>   	ret = bcm_kona_wdt_set_resolution_reg(wdt);
->>
-
+T24gNy82LzIwIDQ6NTQgQU0sIFRpbW90aHkgTXllcnMgd3JvdGU6DQo+IA0KPiANCj4gLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tDQo+ICpGcm9tOiogR3VlbnRlciBSb2VjayA8Z3JvZWNrN0BnbWFp
+bC5jb20+IG9uIGJlaGFsZiBvZiBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+
+DQo+ICpTZW50OiogRnJpZGF5LCBKdW5lIDI2LCAyMDIwIDQ6NTEgUE0NCj4gKlRvOiogVGlt
+b3RoeSBNeWVycyA8dGltb3RoeS5teWVyc0BhZHRyYW4uY29tPg0KPiAqQ2M6KiBXaW0gVmFu
+IFNlYnJvZWNrIDx3aW1AbGludXgtd2F0Y2hkb2cub3JnPjsgbGludXgtd2F0Y2hkb2dAdmdl
+ci5rZXJuZWwub3JnIDxsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmc+OyBsaW51eC1r
+ZXJuZWxAdmdlci5rZXJuZWwub3JnIDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnPjsg
+RGF2aWQgQm9pa2UgPGRhdmlkLmJvaWtlQGFkdHJhbi5jb20+DQo+ICpTdWJqZWN0OiogUmU6
+IFtQQVRDSCAxLzFdIHdhdGNoZG9nOiBBZGQgY29tbW9uIG5vd2F5b3V0IHBhcmFtZXRlciB0
+byBib29rZV93ZHQgZHJpdmVyDQo+IKANCj4gT24gRnJpLCBKdW4gMjYsIDIwMjAgYXQgMDE6
+Mzk6NDNQTSArMDAwMCwgVGltb3RoeSBNeWVycyB3cm90ZToNCj4+IEFkZCB0aGUgY29tbW9u
+ICJub3dheW91dCIgcGFyYW1ldGVyIHRvIGJvb2tlX3dkdCB0byBtYWtlIHRoaXMgYmVoYXZp
+b3INCj4+IHNlbGVjdGFibGUgYXQgcnVudGltZSBhbmQgdG8gbWFrZSB0aGUgaW1wbGVtZW50
+YXRpb24gbW9yZSBjb25zaXN0ZW50IHdpdGgNCj4+IG1hbnkgb3RoZXIgd2F0Y2hkb2cgZHJp
+dmVycy4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBUaW1vdGh5IE15ZXJzIDx0aW1vdGh5Lm15
+ZXJzQGFkdHJhbi5jb20+DQo+IA0KPiBSZXZpZXdlZC1ieTogR3VlbnRlciBSb2VjayA8bGlu
+dXhAcm9lY2stdXMubmV0Pg0KPiANCj4gSGVsbG8sDQo+IKAgoCBJIGFsc28gaGF2ZSBhIHNp
+bWlsYXIgcXVlc3Rpb24gYXOgVGllemh1IHJlY2VudGx5LiBOb3cgdGhhdCB0aGlzIHBhdGNo
+IGhhcyBiZWVuIHJldmlld2VkLCB3aGF0IGlzIHRoZSBuZXh0IHN0ZXA/DQo+IFRoYW5rIHlv
+dSwNCj4gVGltIE15ZXJzDQoNCkludGVyZXN0aW5nLiBUaGUgb3RoZXIgcGF0Y2ggaXMgaW4g
+bXkgLW5leHQgdHJlZSwgYW5kIEkgcGxhbiB0byBzZW5kIGEgcHVsbA0KcmVxdWVzdCB0byBX
+aW0gc2hvcnRseS4gSG93ZXZlciwgcGF0Y2h3b3JrIGhhcyBubyByZWNvcmQgb2YgeW91ciBw
+YXRjaC4NClNpbmNlIEkgYXBwbHkgcGF0Y2hlcyBmcm9tIHBhdGNod29yaywgaXQgZWZmZWN0
+aXZlbHkgZ290IGxvc3QuIFBsZWFzZSByZXNlbmQsDQpwcmVmZXJhYmx5IHdpdGggbXkgUmV2
+aWV3ZWQtYnk6IHRhZy4NCg0KR3VlbnRlcg0KDQo+IA0KPj4gLS0tDQo+PiBkcml2ZXJzL3dh
+dGNoZG9nL2Jvb2tlX3dkdC5jIHwgNiArKysrKy0NCj4+IDEgZmlsZSBjaGFuZ2VkLCA1IGlu
+c2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy93YXRjaGRvZy9ib29rZV93ZHQuYyBiL2RyaXZlcnMvd2F0Y2hkb2cvYm9va2Vfd2R0LmMN
+Cj4+IGluZGV4IDlkMDliYmZkZWYyMC4uNzgxN2ZiOTc2ZjljIDEwMDY0NA0KPj4gLS0tIGEv
+ZHJpdmVycy93YXRjaGRvZy9ib29rZV93ZHQuYw0KPj4gKysrIGIvZHJpdmVycy93YXRjaGRv
+Zy9ib29rZV93ZHQuYw0KPj4gQEAgLTM5LDYgKzM5LDExIEBAIHN0YXRpYyBib29sIGJvb2tl
+X3dkdF9lbmFibGVkOw0KPj4gbW9kdWxlX3BhcmFtKGJvb2tlX3dkdF9lbmFibGVkLCBib29s
+LCAwKTsNCj4+IHN0YXRpYyBpbnQgYm9va2Vfd2R0X3BlcmlvZCA9IENPTkZJR19CT09LRV9X
+RFRfREVGQVVMVF9USU1FT1VUOw0KPj4gbW9kdWxlX3BhcmFtKGJvb2tlX3dkdF9wZXJpb2Qs
+IGludCwgMCk7DQo+PiArc3RhdGljIGJvb2wgbm93YXlvdXQgPSBXQVRDSERPR19OT1dBWU9V
+VDsNCj4+ICttb2R1bGVfcGFyYW0obm93YXlvdXQsIGJvb2wsIDApOw0KPj4gK01PRFVMRV9Q
+QVJNX0RFU0Mobm93YXlvdXQsDQo+PiArICJXYXRjaGRvZyBjYW5ub3QgYmUgc3RvcHBlZCBv
+bmNlIHN0YXJ0ZWQgKGRlZmF1bHQ9Ig0KPj4gKyBfX01PRFVMRV9TVFJJTkcoV0FUQ0hET0df
+Tk9XQVlPVVQpICIpIik7DQo+Pg0KPj4gI2lmZGVmIENPTkZJR19QUENfRlNMX0JPT0szRQ0K
+Pj4NCj4+IEBAIC0yMTUsNyArMjIwLDYgQEAgc3RhdGljIHZvaWQgX19leGl0IGJvb2tlX3dk
+dF9leGl0KHZvaWQpDQo+PiBzdGF0aWMgaW50IF9faW5pdCBib29rZV93ZHRfaW5pdCh2b2lk
+KQ0KPj4gew0KPj4gaW50IHJldCA9IDA7DQo+PiAtIGJvb2wgbm93YXlvdXQgPSBXQVRDSERP
+R19OT1dBWU9VVDsNCj4+DQo+PiBwcl9pbmZvKCJwb3dlcnBjIGJvb2stZSB3YXRjaGRvZyBk
+cml2ZXIgbG9hZGVkXG4iKTsNCj4+IGJvb2tlX3dkdF9pbmZvLmZpcm13YXJlX3ZlcnNpb24g
+PSBjdXJfY3B1X3NwZWMtPnB2cl92YWx1ZTsNCj4+DQo+PiBiYXNlLWNvbW1pdDogZGQwZDcx
+ODE1MmU0YzY1YjE3MzA3MGQ0OGVhOWRmYzA2ODk0YzNlNQ0KPj4gLS0NCj4+IDIuMjAuMQ0K
+Pj4NCj4+DQo+Pg0KPj4gVGltb3RoeSBNeWVycw0KPj4gU29mdHdhcmUgRGVzaWduIEVuZ2lu
+ZWVyDQo+Pg0KPj4gT2ZmaWNlOiAyNTYuOTYzLjg4NDQNCj4+IEVtYWlsOiB0aW1vdGh5Lm15
+ZXJzQGFkdHJhbi5jb208aHR0cHM6Ly9vd2EuYWR0cmFuLmNvbS9vd2EvcmVkaXIuYXNweD9D
+PUxOSU5SRVJqMVZRZ0FLRTlVTml1LWIySjUweWJfbUt1SzlPWDhKNHNwalFxTXptQUtselVD
+QS4uJlVSTD1tYWlsdG8lM2F0b20ucGF0dGVyc29uJTQwYWR0cmFuLmNvbSA8aHR0cHM6Ly9w
+cm90ZWN0LXVzLm1pbWVjYXN0LmNvbS9zL2hoY29DNzNWa0JoRTNMNm5GTjRJMDY/ZG9tYWlu
+PW93YS5hZHRyYW4uY29tPj4NCj4+IFdlYjogd3d3LmFkdHJhbi5jb20gPGh0dHBzOi8vcHJv
+dGVjdC11cy5taW1lY2FzdC5jb20vcy9GZTM4QzgyS2xERk9uOU1CRm9iT3JIP2RvbWFpbj1h
+ZHRyYW4uY29tPjxodHRwczovL293YS5hZHRyYW4uY29tL293YS9yZWRpci5hc3B4P0M9QU80
+XzBmcGdONEdteXk0YlBlMHNUeExLZlJKcnk1UXJzZTNhSlN3MDF6RXFNem1BS2x6VUNBLi4m
+VVJMPWh0dHAlM2ElMmYlMmZzLmJsLTEuY29tJTJmaCUyZkNvWTFtejklM2Z1cmwlM2RodHRw
+JTNhJTJmJTJmd3d3LmFkdHJhbi5jb20gPGh0dHBzOi8vcHJvdGVjdC11cy5taW1lY2FzdC5j
+b20vcy9wWGd5QzlyWW1FdVJvOEtyVTF1elNoP2RvbWFpbj1vd2EuYWR0cmFuLmNvbT4+DQo+
+Pg0KPj4gQURUUkFODQo+PiA5MDEgRXhwbG9yZXIgQm91bGV2YXJkDQo+PiBIdW50c3ZpbGxl
+LCBBTCAzNTgwNiAtIFVTQQ0KDQo=
