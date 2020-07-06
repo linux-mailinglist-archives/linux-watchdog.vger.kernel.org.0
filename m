@@ -2,195 +2,145 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1A6215A51
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jul 2020 17:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE374215BDA
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jul 2020 18:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729235AbgGFPKJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Jul 2020 11:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729140AbgGFPKJ (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Jul 2020 11:10:09 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6011C061755;
-        Mon,  6 Jul 2020 08:10:08 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id b92so17154866pjc.4;
-        Mon, 06 Jul 2020 08:10:08 -0700 (PDT)
+        id S1729367AbgGFQdd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Jul 2020 12:33:33 -0400
+Received: from mail-co1nam11on2113.outbound.protection.outlook.com ([40.107.220.113]:39264
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729293AbgGFQdd (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 6 Jul 2020 12:33:33 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iQi4kz9V4DrapQtUBtkPkKP0149viDeeUxUqGSlfCvIL3pJB9IUOVwu8qBHPd6//z9xzSNNsGF24hyLmDa4ZAt5TDA1pYB+nftBBBkDlz/qHHgY/qGXOsYClcX+aFoWQbXKwi6FBkv9a98h/0Bwa6/KXoQbvUxFbeSn9hGyAYWaGLt0XPDToO3ILEAIwZNvDP3LC3KNo011vO8/KG4G9gqQpnLuKVheWqRvwAExHSlpuP23N/elb6rXSzT5hofFGlqPbN4PB/tHzf4ei+WBwYIK/OHGQyaK3WE15mvUK1zt5HLAOxrDADhQARmSKqBOFtF5OQkrimTj7DOTLvTTuFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UHQQBFom6Hig5u53Ks8iq+cE258DtbFv2laWaEQWAhM=;
+ b=hDx7hL1YYF/YOArxUpT3gQP3lPe3AzrtCVZNSrXVx0FIwlm2+uLUYxpiVnSvG5LzvG5XCD2b81XxCixxJWMFXcyJ+9rGYLEfy4Ms9ylcitRMZzN0+vqhKbKkTCmUD8XxR4mcQQF+wOXqBDFOUbpMQiZIFC1qrXUfnG3PngyMlQ3/3XCGeo/76Y3P881qmpXbHvsUuNZaQgsinessovE4XewdGXLGwTZM1KR37/HJ5zrGXvBqn8ZkS9nRZ9MQI27jpANIvUIQcoET5k9LImFwIHs/bgqUH3ZBS5jAlY/V8XKCTzYrFsUB8QpksU/bQ1slcVzm0lD6iaIP4s3vEzww/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=adtran.com; dmarc=pass action=none header.from=adtran.com;
+ dkim=pass header.d=adtran.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eBwRBRvbZOXipdiY/rQrSNtoTZTEajJqSqQHdmUlhbM=;
-        b=tV1JMNZzXHdxfvShvh6uNoSuG/8TZP2PahLCFdqv6tZSovyHysS2B/+xdShCD0LNC4
-         OkkYRWzKsgb7+u82U811xXdRnHP0bv7TyYLrM1GBIo81uXGh/fVxSej52lzvV4YIXmwX
-         9brlx3Zaeu6RftVgBNXY/HoaPx+Isst0Lw23OujPqbgnz6jV0mQNmr/P5KmCmtA0Beqh
-         FOHcbJrL8+1hlwFLlwQ2bCAKP+vLolNUyuME4ppAd/DSuUs//QBZ/PocU8Uk5IxiKQBl
-         tIDWsjA3o5RY404Pgkght1Bfpy74xLXW6bV0NUA51RUUzrl7RqARQ/+W9wA6r/NpzY8i
-         mfZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=eBwRBRvbZOXipdiY/rQrSNtoTZTEajJqSqQHdmUlhbM=;
-        b=YSBnSVWzqItCnKvt2nnsiG9gKT/67YO7mgaxDwhX6o3Tx+II7yL7oidYyRejeF3tjx
-         7BGRcpKNALiVD5j9EoeKOWj9/dm0/tfzR1gYsEnLDp78Td3wx98F0t/MlL7CZtzlZ/Qv
-         KmRU9G8hZQZfzjjOhR4QDMgb8GakbvZwn4oghTrvRrEnmoY6VTLC0bFvg1SlxK0hCOa0
-         m8szrzgoCOMxKcMJp1zHItn5VA/IRGDQBat6io47b0I2In1MiHICwkrghxtTyQHHhzN9
-         ZiI50NuYr8s4V29MKaizychmYk9ma/i5L39xWqB48uqVum0hZ7xcYcuAyJl+70qI3kXq
-         tA8g==
-X-Gm-Message-State: AOAM532B01XLZyFZygZ3YeBVYqASvY8TJkDboAShD/FHS17J23ZqOOzw
-        XzrV3oQOkDdQV8h9oBsPGGM=
-X-Google-Smtp-Source: ABdhPJyYA10lGpxfw9PSuWB0ZRBpDQ5LBoHQWODc3UVIQKefv7hkzOH3ZbtiljU3ldRUABiWfkU5vQ==
-X-Received: by 2002:a17:902:7b89:: with SMTP id w9mr30340110pll.175.1594048208345;
-        Mon, 06 Jul 2020 08:10:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e195sm17321997pfh.218.2020.07.06.08.10.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2020 08:10:07 -0700 (PDT)
-Subject: Re: [PATCH 1/1] watchdog: Add common nowayout parameter to booke_wdt
- driver
-To:     Timothy Myers <timothy.myers@adtran.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+ d=ADTRAN.onmicrosoft.com; s=selector2-ADTRAN-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UHQQBFom6Hig5u53Ks8iq+cE258DtbFv2laWaEQWAhM=;
+ b=pSJC32huZ8vfG/WJ9laE9edG51NTxnEEe6jHVGe894Sf6+salaftKEjMtfKFX+DWLdmXcIRcxIAh2A2+LEopBK3LMlELf7PXbNYWup0SOK8cuskIu5Ac4XUvXNur+qkwLFRXXrO1pxptmf3MnPorlU4dTEn2fg6S64loSvWz9Zc=
+Received: from CH2PR19MB3590.namprd19.prod.outlook.com (2603:10b6:610:41::21)
+ by CH2PR19MB3990.namprd19.prod.outlook.com (2603:10b6:610:97::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.24; Mon, 6 Jul
+ 2020 16:33:31 +0000
+Received: from CH2PR19MB3590.namprd19.prod.outlook.com
+ ([fe80::d08:8df0:e25a:2a83]) by CH2PR19MB3590.namprd19.prod.outlook.com
+ ([fe80::d08:8df0:e25a:2a83%3]) with mapi id 15.20.3153.029; Mon, 6 Jul 2020
+ 16:33:31 +0000
+From:   Timothy Myers <timothy.myers@adtran.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         David Boike <david.boike@adtran.com>
-References: <CH2PR19MB3590AFAC86BA1697956EAD1C9D690@CH2PR19MB3590.namprd19.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <6b24e27b-c47a-8fd3-179b-761fb53f02b0@roeck-us.net>
-Date:   Mon, 6 Jul 2020 08:10:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <CH2PR19MB3590AFAC86BA1697956EAD1C9D690@CH2PR19MB3590.namprd19.prod.outlook.com>
-Content-Type: text/plain; charset=windows-1252
+Subject: [PATCH v3 1/1] watchdog: Add common nowayout parameter to booke_wdt
+ driver
+Thread-Topic: [PATCH v3 1/1] watchdog: Add common nowayout parameter to
+ booke_wdt driver
+Thread-Index: AQHWU7JDRSh3gBbtWE2YCV42YoqLzw==
+Date:   Mon, 6 Jul 2020 16:33:31 +0000
+Message-ID: <CH2PR19MB359059AA5C8917D8D24633FF9D690@CH2PR19MB3590.namprd19.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux-watchdog.org; dkim=none (message not signed)
+ header.d=none;linux-watchdog.org; dmarc=none action=none
+ header.from=adtran.com;
+x-originating-ip: [24.96.75.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2b436e88-8fc4-4e25-b60b-08d821ca51c0
+x-ms-traffictypediagnostic: CH2PR19MB3990:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CH2PR19MB399001ED62129360BE09307D9D690@CH2PR19MB3990.namprd19.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:989;
+x-forefront-prvs: 04569283F9
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GhSFKfA1pIbDWMCraKAIEFOSbLaVE5EkcyWxYIA274drYtE4Xb5CK5zxXLpHsnAaRxVt48jodQcI3wPyZILqF+NMyQUyEo3W7dKckKcO5QFOIAjwkuf+HBIfAzMpiaF2vN6p+0gpZI7mYsSNRiz0PeCFcqF/9pNupdqyjz5vTLc8gHZfgwaevsd7RHkUIiF/iI7o5e5Vny3kcIuicpf9RFtRGZy7BA/TFLBiFBJwP+DpeI3b/nMk2fxlsC4hu2PY4NNP76jJ8gzXdnjDmT9k3gU+eZC6R2ITZOo4BIYfwl01L5/K9EG9RRpF+lBr22IY8jOMaQFQ7Xk3LBStxbXigfNP+k5uBGn4YEgJHyANb6JQqLOp9HnUQiQeNLf2oCNGIAbdLiKYWUvhWoAdmzvkjw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR19MB3590.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(136003)(376002)(366004)(39850400004)(396003)(64756008)(44832011)(66946007)(55016002)(66476007)(66446008)(2906002)(66556008)(76116006)(15974865002)(7696005)(91956017)(71200400001)(8936002)(4326008)(186003)(107886003)(9686003)(86362001)(8676002)(54906003)(110136005)(316002)(478600001)(83380400001)(5660300002)(6506007)(26005)(33656002)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: Bf2m0ymGamQdUFPWExkPX0DrqNIuwe+GrRlYeC67IYn8ToUZa4xLIqA7PCoqkCYX7TirZHsw8nuwvjPnHTVIZBUDCKjdb0RbA6TxihNv9TVuEuFF/ZaVY4/M2EXPkp9Xxyq7xkwwcPZoNrzcNvERexMIS5WuAorg9T+p5zPKPjHj5XEIhznpIE+cx9NoTlQqwL2K9HX3v8+ukbJZc6vB2S10NVC68/NwJkgNiuMV0xEmhuc2yGQU7l0hYFOUFh8TYdxPusPyyRR5t4HWozdRAjy82F6+R5OeoSLywWO86smMqy8EzFbQBl3prQO9EwB4RZ5ZmYwX7z5DrqiRQLSjmeXeK0o+YsT/al1pjj+iVPH+nPDqtUCyFgLxDsqcYcC1R4qWPyh3OEDZ2Oylrt51EoYCpRzjYdNhpGO7x/liCUYNp95Wrof/rUae0OYnA9/4EyzawBMibX0/eFG7C1me1u0vl/uNBXBMSTzILZRn6VA=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: adtran.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR19MB3590.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b436e88-8fc4-4e25-b60b-08d821ca51c0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2020 16:33:31.0550
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 423946e4-28c0-4deb-904c-a4a4b174fb3f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9a0cQ2pECW4oBwVw8oHyA4/DFBn6+SWLlBDZDvW6RNRHU/f1J0fhQ6aFLraB57QXhqc2AqLnDq5+iiistiz5F010w+nP9obV/PGihw67fiQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR19MB3990
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/6/20 7:13 AM, Timothy Myers wrote:
-> Add the common "nowayout" parameter to booke_wdt to make this behavior
-> selectable at runtime and to make the implementation more consistent with
-> many other watchdog drivers.
-> 
-> Signed-off-by: Timothy Myers <timothy.myers@adtran.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-The added Reviewed-by: makes it v2.
-
-Anyway, your patch is whitespace corrupted.
-
-ERROR: code indent should use tabs where possible
-#36: FILE: drivers/watchdog/booke_wdt.c:45:
-+               "Watchdog cannot be stopped once started (default="$
-
-WARNING: please, no spaces at the start of a line
-#36: FILE: drivers/watchdog/booke_wdt.c:45:
-+               "Watchdog cannot be stopped once started (default="$
-
-ERROR: code indent should use tabs where possible
-#37: FILE: drivers/watchdog/booke_wdt.c:46:
-+                               __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");$
-
-WARNING: please, no spaces at the start of a line
-#37: FILE: drivers/watchdog/booke_wdt.c:46:
-+                               __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");$
-
-That explains a lot. I guess it is corrupted so badly that patchwork
-doesn't recognize it as patch. Sorry, won't be able to apply it.
-Please send a non-corrupted version.
-
-Guenter
-
-> ---
->  drivers/watchdog/booke_wdt.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/booke_wdt.c b/drivers/watchdog/booke_wdt.c
-> index 9d09bbfdef20..7817fb976f9c 100644
-> --- a/drivers/watchdog/booke_wdt.c
-> +++ b/drivers/watchdog/booke_wdt.c
-> @@ -39,6 +39,11 @@ static bool booke_wdt_enabled;
->  module_param(booke_wdt_enabled, bool, 0);
->  static int  booke_wdt_period = CONFIG_BOOKE_WDT_DEFAULT_TIMEOUT;
->  module_param(booke_wdt_period, int, 0);
-> +static bool nowayout = WATCHDOG_NOWAYOUT;
-> +module_param(nowayout, bool, 0);
-> +MODULE_PARM_DESC(nowayout,
-> +               "Watchdog cannot be stopped once started (default="
-> +                               __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> 
->  #ifdef CONFIG_PPC_FSL_BOOK3E
-> 
-> @@ -215,7 +220,6 @@ static void __exit booke_wdt_exit(void)
->  static int __init booke_wdt_init(void)
->  {
->         int ret = 0;
-> -       bool nowayout = WATCHDOG_NOWAYOUT;
-> 
->         pr_info("powerpc book-e watchdog driver loaded\n");
->         booke_wdt_info.firmware_version = cur_cpu_spec->pvr_value;
-> 
-> base-commit: dd0d718152e4c65b173070d48ea9dfc06894c3e5
-> --
-> 2.20.1
-> 
-> 
-> 
-> *Timothy Myers*
-> Software Design Engineer
-> 
-> Office: 256.963.8844
-> 
-> ADTRAN
-> 901 Explorer Boulevard 
-> Huntsville, AL 35806 - USA
-
+Add the common "nowayout" parameter to booke_wdt to make this behavior=0A=
+selectable at runtime and to make the implementation more consistent with=
+=0A=
+many other watchdog drivers.=0A=
+=0A=
+Signed-off-by: Timothy Myers <timothy.myers@adtran.com>=0A=
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>=0A=
+=0A=
+Changes in:=0A=
+	v2:=0A=
+		Added Guenter Roeck's reviewed-by tag at his request=0A=
+	v3:=0A=
+		Fix whitespace formatting in message.=0A=
+---=0A=
+ drivers/watchdog/booke_wdt.c | 6 +++++-=0A=
+ 1 file changed, 5 insertions(+), 1 deletion(-)=0A=
+=0A=
+diff --git a/drivers/watchdog/booke_wdt.c b/drivers/watchdog/booke_wdt.c=0A=
+index 9d09bbfdef20..7817fb976f9c 100644=0A=
+--- a/drivers/watchdog/booke_wdt.c=0A=
++++ b/drivers/watchdog/booke_wdt.c=0A=
+@@ -39,6 +39,11 @@ static bool booke_wdt_enabled;=0A=
+ module_param(booke_wdt_enabled, bool, 0);=0A=
+ static int  booke_wdt_period =3D CONFIG_BOOKE_WDT_DEFAULT_TIMEOUT;=0A=
+ module_param(booke_wdt_period, int, 0);=0A=
++static bool nowayout =3D WATCHDOG_NOWAYOUT;=0A=
++module_param(nowayout, bool, 0);=0A=
++MODULE_PARM_DESC(nowayout,=0A=
++		"Watchdog cannot be stopped once started (default=3D"=0A=
++				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");=0A=
+ =0A=
+ #ifdef CONFIG_PPC_FSL_BOOK3E=0A=
+ =0A=
+@@ -215,7 +220,6 @@ static void __exit booke_wdt_exit(void)=0A=
+ static int __init booke_wdt_init(void)=0A=
+ {=0A=
+ 	int ret =3D 0;=0A=
+-	bool nowayout =3D WATCHDOG_NOWAYOUT;=0A=
+ =0A=
+ 	pr_info("powerpc book-e watchdog driver loaded\n");=0A=
+ 	booke_wdt_info.firmware_version =3D cur_cpu_spec->pvr_value;=0A=
+=0A=
+base-commit: dd0d718152e4c65b173070d48ea9dfc06894c3e5=0A=
+-- =0A=
+2.20.1=0A=
+=0A=
+Timothy Myers=0A=
+Software Design Engineer=0A=
+=0A=
+Office: 256.963.8844=0A=
+Email: timothy.myers@adtran.com=0A=
+Web:=A0www.adtran.com=0A=
+=0A=
+ADTRAN=0A=
+901 Explorer Boulevard=A0=0A=
+Huntsville, AL 35806 - USA=
