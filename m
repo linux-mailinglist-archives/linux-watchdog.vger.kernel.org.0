@@ -2,253 +2,146 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A0F216C0E
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jul 2020 13:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254E9216C96
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jul 2020 14:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727800AbgGGLrK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jul 2020 07:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727079AbgGGLrJ (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jul 2020 07:47:09 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31CFC061755
-        for <linux-watchdog@vger.kernel.org>; Tue,  7 Jul 2020 04:47:09 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id z5so19890845pgb.6
-        for <linux-watchdog@vger.kernel.org>; Tue, 07 Jul 2020 04:47:09 -0700 (PDT)
+        id S1728066AbgGGMN4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jul 2020 08:13:56 -0400
+Received: from mail-co1nam11on2136.outbound.protection.outlook.com ([40.107.220.136]:27000
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728053AbgGGMNz (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 7 Jul 2020 08:13:55 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FETKPUCAFjSTYUU+CmWQNcQXHOzXpl/5qVF8cY+/UN64obYpqF6McJpAJiP+fDrEjnpgR/C+K52KTqojoVgqfLSXxe++JTYHNxQodg0xdBQIjaNGkkp/9sFwwGBhyehEdocyoOkpEpRzJvwQ8j6AiOj5jFMNVDrRimYnIXk2KosObzuIyE6Jl0ozBZL15/yytt3UdSsYTJxoawp9YZtER/AtUj1WDpwVR4Y9Cl7WHtaJrp8VPIZoLsp12vQpvQsMU4w5aX5Yi5QIzl4p5hUOKKrRhK4xDYXfudmH+xidSe41Wd0vPGaNXl7UMfGHlhTpjuucQB0ziZP6SsdWe7lRoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OgIlzWnuWeGaNJhjWYMyGkGOidyQanpqiaj+Uu9O/b0=;
+ b=i313B+qIxOLCVGXaNiOVd+RWdiUjbUjZeivNclL3wiYMnRwrDInxXtjTaRDRrpnwmMPLw6r2WHs1sLiNvLhNe4uCjpkk/y2Rg4UQGp0ET1lkss/Be1ddR8aQVOu3/n8zb/SLccP5wmQdo5f1DGxxpPzuez7p+ECY5Lf2KXg/AE+AbvraRlVf0e37E64WBBOQOarMK27QknElME0BGMoCFR7VGIjzGjBmZ3YIdSSZeIRdoXFqrK1FA9NSENOScn/a6H8iJMDOi72RGCjG+XYZWKQR9GQq0iFqIubdKJqTTemdnedyFMFihgR1OTx932f61G+V1wEgu3qI8ouvu7W0Kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=adtran.com; dmarc=pass action=none header.from=adtran.com;
+ dkim=pass header.d=adtran.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=SYiExkGaj8ChzOjKtRmCIUhDqCYi0gNGJig9nLjegqI=;
-        b=mTrI8JgGh25rWNtBrT0Ee68mqeAR6nBIx7YUJ5USKTIbJcsjL/TmLvDiW2ShYpz0Cm
-         RZsTI45RCoYjwd7jVhd58tjeqcHJWXP+v6VWogIzxpOEfbMQsTWF2PrIoH/U3HW0ykys
-         hRL9tam/jjsbWdqVJLz21KtEBgD4GtSkQzppdWebzKY6NLqIpr0P0aZ0W2erMyDYJcvd
-         k738f7Y8THSTzyeVMOuQ6h0qDK0izdqdtwBJIhf1DZEGdsTM0AI7dIJ+pjb9xBgJiDtQ
-         vW0ZY6IhGXXrw0SIZdzomDXJ2RDdZKZqfpsB8kobxEsbBHUuDkSjT55W2bPFRQKoroi0
-         549w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=SYiExkGaj8ChzOjKtRmCIUhDqCYi0gNGJig9nLjegqI=;
-        b=CCaSG/0sNepIEb9EHiBbQ80Qfzw+9SNig1OVO9eoC5b4Y8uPUUcLPfuP689tfTcVD0
-         pFeI/cx+dPvPmd6QnyQwtjkhvXYzqoNQKNn4N5aBuBR2fuzlEC/AmG1F1km21BNN1LnV
-         EMLoi6OPIvgULuyt+RsHBKLlsJ9Ui7C3DLVR0Trwz+PzUK2rAJC0wqSIyr14JxZQl9qa
-         n+owO/ZMkJ0UdTXRDNHHI5/uSbpv0IchcIvQTEXyClez93SrmCMvarTtQUvxrPmHN/XH
-         19VMWvJykBN0qwP16bdsnCbyB+5rO3vZq9pO4QJfAhMEKnPOILY97jirBtUTE9E1xijb
-         Bw4w==
-X-Gm-Message-State: AOAM5337RAU47qz44OgVpLsGbEmKX/xyzpUspuaMAwt8CVv4vmXzYi1P
-        yRXxKb2zGbtRhXBDWKCYYQFi+j/cM1U=
-X-Google-Smtp-Source: ABdhPJxtp/8fXZOyUWSprCYCw5ZaOrwho0n6t2fxhigtEB3evuQ+VaxurOWH+sBFZXKojUZPI89faQ==
-X-Received: by 2002:a63:4957:: with SMTP id y23mr1975849pgk.230.1594122429078;
-        Tue, 07 Jul 2020 04:47:09 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y24sm16346426pfp.217.2020.07.07.04.47.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 04:47:08 -0700 (PDT)
-Subject: Re: [PATCH v3] softdog: Add options 'soft_reboot_cmd' and
- 'soft_active_on_boot'
-To:     Woody Lin <woodylin@google.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org
-References: <20200701110339.2833449-1-woodylin@google.com>
- <20200707040356.GA213018@roeck-us.net>
- <CAHn4DedP=r0UwN4bn=A3nH_2bcEFA24SEYSq4gJUcC9w9p0UKQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <8e16b12c-1097-dea7-32d7-f3381568407a@roeck-us.net>
-Date:   Tue, 7 Jul 2020 04:47:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <CAHn4DedP=r0UwN4bn=A3nH_2bcEFA24SEYSq4gJUcC9w9p0UKQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+ d=ADTRAN.onmicrosoft.com; s=selector2-ADTRAN-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OgIlzWnuWeGaNJhjWYMyGkGOidyQanpqiaj+Uu9O/b0=;
+ b=XBt2eL0O+yVPEGsLZ3npkeqzW7j02EReZV0i9KSTGWb3QHfgSw+gnnJaby9Jde7evlvX9AiGoqPy4hsmV6BiJeZFNDVp+hKk+Rx3QdcXLRRrcE1o92wgjmrnYMUNuTP/bUu57yxFH5m8Y9cWG+JOE59TxjFNLXHmU364pRWJFTk=
+Received: from CH2PR19MB3590.namprd19.prod.outlook.com (2603:10b6:610:41::21)
+ by CH2PR19MB4056.namprd19.prod.outlook.com (2603:10b6:610:a3::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.20; Tue, 7 Jul
+ 2020 12:13:52 +0000
+Received: from CH2PR19MB3590.namprd19.prod.outlook.com
+ ([fe80::d08:8df0:e25a:2a83]) by CH2PR19MB3590.namprd19.prod.outlook.com
+ ([fe80::d08:8df0:e25a:2a83%3]) with mapi id 15.20.3153.029; Tue, 7 Jul 2020
+ 12:13:52 +0000
+From:   Timothy Myers <timothy.myers@adtran.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Boike <david.boike@adtran.com>
+Subject: Re: [PATCH v3 1/1] watchdog: Add common nowayout parameter to
+ booke_wdt driver
+Thread-Topic: [PATCH v3 1/1] watchdog: Add common nowayout parameter to
+ booke_wdt driver
+Thread-Index: AQHWU7JDRSh3gBbtWE2YCV42YoqLz6j7H2KAgADogn0=
+Date:   Tue, 7 Jul 2020 12:13:52 +0000
+Message-ID: <CH2PR19MB359083E23E8A94C23EE712379D660@CH2PR19MB3590.namprd19.prod.outlook.com>
+References: <CH2PR19MB359059AA5C8917D8D24633FF9D690@CH2PR19MB3590.namprd19.prod.outlook.com>,<ed8ba33f-b3d4-8070-e0ca-fdaf4668cf91@roeck-us.net>
+In-Reply-To: <ed8ba33f-b3d4-8070-e0ca-fdaf4668cf91@roeck-us.net>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=adtran.com;
+x-originating-ip: [24.96.75.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 32f1834b-f094-445c-1fc6-08d8226f365f
+x-ms-traffictypediagnostic: CH2PR19MB4056:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CH2PR19MB4056E94E6BBC72A0A53ED0589D660@CH2PR19MB4056.namprd19.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0457F11EAF
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 057+PLjLkPT6DmWrmd4mH4vkAWer7PHxkR5VnpTW6DWIAfXw6BjAWOehWiXs48EPSpziyB9T24LuHt/q5lEPOhdAWwZm3i036YloQhk5e/QjTGXffl9xVTst4+fpwLFKD0B8jGwOqLvwOJ3a4ekz3fdYSVw8+a+jD0osP9r2Lp97JLvWMXusIp76x88XmnuSd1rB/7n7nlZb9hRmkB413fzD9ZYdwtWa33MQwsnS753dRHTzAg5+P1wiCZHeEZv4wM5hAOoKoYAvRl+Cj5Ha+hqu5i5BiuqTa/GXgY05Mo/rXbGE6bKjKwHfWPf0i+O0pwiEi16O0bXUzzhFcsYtPza79iFmjubuY/3a+KhF68QRrxhzNzL86MlZTQovACkuXcQvkVelPWY1cPkqZvIedw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR19MB3590.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(39850400004)(396003)(366004)(376002)(136003)(8676002)(7696005)(9686003)(966005)(4326008)(5660300002)(478600001)(71200400001)(44832011)(83380400001)(45080400002)(186003)(52536014)(53546011)(55016002)(26005)(6506007)(2906002)(8936002)(54906003)(107886003)(91956017)(86362001)(76116006)(66556008)(316002)(66446008)(66476007)(64756008)(33656002)(66946007)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: 6gxBZNcOj/ANbfXOfUI392KmgRfJ3aQWmVZelz1zhMwUDafftQZDfMYkOmx4XAe1hI5oV0M63u4WU11w7D7H1XlgsfyWoxWrN+v1tkTUU3lQTvd38KsBIp6sQQ/2iWb68qE1zEBdaVS9z/qxrNdPuwEUxx44bja6PnYjKmMXvl52hhrVFtKQYRQ45758LHmEcPQO5i2pCsnWCiX2vjh385tMCL2pTDNGJGsfLrUt0AZcA5ClnGoUKo+BOGhj6ULcckJ9ukPvsTrmYO4k2NmQFfSneHEcwcMc38veErjbOvgQfgTJOBtr3rBv0w2P1iZpc4Ae9oaF/HNcQEB+vf0s73Tvt1mMGx7D1y6Nax97ao7h6ftG6GEhPVfWXWoStZnlmgnaIS9C69+ptSaRohojj15HLCTbSXdsgkXfPEw8sVwPp8WMqK6p2YAUXwKqi5rxM/bS1CTHTx06XBJOz6gbnCQtA5NZ6WxvbWWt1+t2qUU=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: adtran.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR19MB3590.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32f1834b-f094-445c-1fc6-08d8226f365f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2020 12:13:52.0613
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 423946e4-28c0-4deb-904c-a4a4b174fb3f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1mt+cI3Kca91mrdIvbgyhF8gJD7fTxkCcjrHNft/tjhXS6A/GPNeRplIJIaD65M8eBZeg+XB8O3MlCNrccFguPsqi82YXqMB5sdbSKe4VYo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR19MB4056
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/7/20 1:46 AM, Woody Lin wrote:
-> On Tue, Jul 7, 2020 at 12:04 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On Wed, Jul 01, 2020 at 07:03:40PM +0800, Woody Lin wrote:
->>> Add module parameters 'soft_reboot_cmd' and 'soft_active_on_boot' for
->>> customizing softdog configuration; config reboot command by assigning
->>> soft_reboot_cmd, and set soft_active_on_boot to start up softdog
->>> timer at module initialization stage.
->>>
->>> Signed-off-by: Woody Lin <woodylin@google.com>
->>> ---
->>>  drivers/watchdog/softdog.c | 56 ++++++++++++++++++++++++++++++++++++++
->>>  1 file changed, 56 insertions(+)
->>>
->>> diff --git a/drivers/watchdog/softdog.c b/drivers/watchdog/softdog.c
->>> index 3e4885c1545e..8c8d214b6aa7 100644
->>> --- a/drivers/watchdog/softdog.c
->>> +++ b/drivers/watchdog/softdog.c
->>> @@ -20,11 +20,13 @@
->>>  #include <linux/hrtimer.h>
->>>  #include <linux/init.h>
->>>  #include <linux/kernel.h>
->>> +#include <linux/kthread.h>
->>>  #include <linux/module.h>
->>>  #include <linux/moduleparam.h>
->>>  #include <linux/reboot.h>
->>>  #include <linux/types.h>
->>>  #include <linux/watchdog.h>
->>> +#include <linux/workqueue.h>
->>>
->>>  #define TIMER_MARGIN 60              /* Default is 60 seconds */
->>>  static unsigned int soft_margin = TIMER_MARGIN;      /* in seconds */
->>> @@ -49,11 +51,33 @@ module_param(soft_panic, int, 0);
->>>  MODULE_PARM_DESC(soft_panic,
->>>       "Softdog action, set to 1 to panic, 0 to reboot (default=0)");
->>>
->>> +static char *soft_reboot_cmd;
->>> +module_param(soft_reboot_cmd, charp, 0000);
->>> +MODULE_PARM_DESC(soft_reboot_cmd,
->>> +     "Set reboot command. Emergency reboot takes place if unset");
->>> +
->>> +static bool soft_active_on_boot;
->>> +module_param(soft_active_on_boot, bool, 0000);
->>> +MODULE_PARM_DESC(soft_active_on_boot,
->>> +     "Set to true to active Softdog on boot (default=false)");
->>> +
->>>  static struct hrtimer softdog_ticktock;
->>>  static struct hrtimer softdog_preticktock;
->>>
->>> +static int reboot_kthread_fn(void *data)
->>> +{
->>> +     kernel_restart(soft_reboot_cmd);
->>> +     return -EPERM; /* Should not reach here */
->>> +}
->>> +
->>> +static void reboot_work_fn(struct work_struct *unused)
->>> +{
->>> +     kthread_run(reboot_kthread_fn, NULL, "softdog_reboot");
->>> +}
->>> +
->>>  static enum hrtimer_restart softdog_fire(struct hrtimer *timer)
->>>  {
->>> +     static bool soft_reboot_fired;
->>
->> Per coding style there should be an empty line here.
-> 
-> Ack.
-> 
->>
->>>       module_put(THIS_MODULE);
->>>       if (soft_noboot) {
->>>               pr_crit("Triggered - Reboot ignored\n");
->>> @@ -62,6 +86,33 @@ static enum hrtimer_restart softdog_fire(struct hrtimer *timer)
->>>               panic("Software Watchdog Timer expired");
->>>       } else {
->>>               pr_crit("Initiating system reboot\n");
->>> +             if (!soft_reboot_fired && soft_reboot_cmd != NULL) {
->>> +                     static DECLARE_WORK(reboot_work, reboot_work_fn);
->>> +                     /*
->>> +                      * The 'kernel_restart' is a 'might-sleep' operation.
->>> +                      * Also, executing it in system-wide workqueues blocks
->>> +                      * any driver from using the same workqueue in its
->>> +                      * shutdown callback function. Thus, we should execute
->>> +                      * the 'kernel_restart' in a standalone kernel thread.
->>> +                      * But since starting a kernel thread is also a
->>> +                      * 'might-sleep' operation, so the 'reboot_work' is
->>> +                      * required as a launcher of the kernel thread.
->>> +                      *
->>> +                      * After request the reboot, restart the timer to
->>> +                      * schedule an 'emergency_restart' reboot after
->>> +                      * 'TIMER_MARGIN' seconds. It's because if the softdog
->>> +                      * hangs, it might be because of scheduling issues. And
->>> +                      * if that is the case, both 'schedule_work' and
->>> +                      * 'kernel_restart' may possibly be malfunctional at the
->>> +                      * same time.
->>> +                      */
->>> +                     soft_reboot_fired = true;
->>> +                     schedule_work(&reboot_work);
->>> +                     hrtimer_add_expires_ns(timer,
->>> +                                     (u64)TIMER_MARGIN * NSEC_PER_SEC);
->>> +
->>> +                     return HRTIMER_RESTART;
->>> +             }
->>>               emergency_restart();
->>>               pr_crit("Reboot didn't ?????\n");
->>>       }
->>> @@ -145,12 +196,17 @@ static int __init softdog_init(void)
->>>               softdog_preticktock.function = softdog_pretimeout;
->>>       }
->>>
->>> +     if (soft_active_on_boot)
->>> +             softdog_ping(&softdog_dev);
->>> +
->>>       ret = watchdog_register_device(&softdog_dev);
->>>       if (ret)
->>>               return ret;
->>>
->>>       pr_info("initialized. soft_noboot=%d soft_margin=%d sec soft_panic=%d (nowayout=%d)\n",
->>>               soft_noboot, softdog_dev.timeout, soft_panic, nowayout);
->>> +     pr_info("             soft_reboot_cmd=%s soft_active_on_boot=%d\n",
->>> +             soft_reboot_cmd, soft_active_on_boot);
->>
->> soft_reboot_cmd can be NULL, which makes the output a bit awkward.
-> 
-> Then how about change it to something like this:
-> "soft_reboot_cmd=%s", soft_reboot_cmd ?: "<null> (emergency reboot)"
-> Then we will see "soft_reboot_cmd=<null> (emergency reboot)" when it's NULL.
-
-I'd rather see something like "<not set>". "<null>" looks like an error.
-Also, it isn't correct to assume emergency reboot; that is only correct
-if neither soft_noboot nor soft_panic is set.
-
-Thanks,
-Guenter
-
-
+=0A=
+=0A=
+=0A=
+From: linux-watchdog-owner@vger.kernel.org <linux-watchdog-owner@vger.kerne=
+l.org> on behalf of Guenter Roeck <linux@roeck-us.net>=0A=
+Sent: Monday, July 6, 2020 5:18 PM=0A=
+To: Timothy Myers <timothy.myers@adtran.com>; Wim Van Sebroeck <wim@linux-w=
+atchdog.org>; linux-watchdog@vger.kernel.org <linux-watchdog@vger.kernel.or=
+g>=0A=
+Cc: linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; David Boik=
+e <david.boike@adtran.com>=0A=
+Subject: Re: [PATCH v3 1/1] watchdog: Add common nowayout parameter to book=
+e_wdt driver =0A=
+=A0=0A=
+On 7/6/20 9:33 AM, Timothy Myers wrote:=0A=
+>> Add the common "nowayout" parameter to booke_wdt to make this behavior=
+=0A=
+>> selectable at runtime and to make the implementation more consistent wit=
+h=0A=
+>> many other watchdog drivers.=0A=
+>> =0A=
+>> Signed-off-by: Timothy Myers <timothy.myers@adtran.com>=0A=
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>=0A=
+>> =0A=
+>> Changes in:=0A=
+>> v2:=0A=
+>> Added Guenter Roeck's reviewed-by tag at his request=0A=
+>> v3:=0A=
+>> Fix whitespace formatting in message.=0A=
+>> ---=0A=
+>=0A=
+>Change log goes here.=0A=
+>=0A=
+>I applied your patch to watchdog-next, but there is still something=0A=
+>in it which prevents it from showing up at=0A=
+>https://patchwork.kernel.org/project/linux-watchdog/list/, even though=0A=
+>I do see it at https://lore.kernel.org/linux-watchdog/.=0A=
+>=0A=
+>Looking into the e-mail source, I think the problem may be due=0A=
+>to some Outlook specific formatting in the raw message:=0A=
+>=0A=
+>Add the common "nowayout" parameter to booke_wdt to make this behavior=3D0=
+A=3D=0A=
+>selectable at runtime and to make the implementation more consistent with=
+=3D=0A=
+>=3D0A=3D=0A=
+>many other watchdog drivers.=3D0A=3D=0A=
+>=3D0A=3D=0A=
+>=0A=
+>and so on. If that is persistent, it may make sense to fix it, or=0A=
+>you might wonder why some of your patches are being ignored.=0A=
+>=0A=
+>Thanks,=0A=
+>Guenter=0A=
+Thank you for applying the patch, and thank you again for your help with my=
+ mail. I'll look into the formatting.=
