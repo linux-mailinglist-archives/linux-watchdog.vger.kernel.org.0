@@ -2,113 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D952D2184DA
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jul 2020 12:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5045218780
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jul 2020 14:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728304AbgGHKWx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Jul 2020 06:22:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725949AbgGHKWw (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Jul 2020 06:22:52 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 02ABA206F6;
-        Wed,  8 Jul 2020 10:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594203771;
-        bh=wqmaKC3soWVBrlD0Udy60m7oemLeH3Uc93lnAOZzD64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aYUJimONTlH3wLq1pKSc1jyXGvkW2lRwGivQTRbMogNQuQnSdwDRn+kL2E4zSJ1lr
-         dt+DglW619hP+mHz7wZvNNOFaZS4z1CNFMdod/h3vMwzXOeBIuQdGyn5r1VucItt9+
-         93Kk/xam0fZbQoT25njkkG2V8PcvfpNiw3dhKgow=
-Date:   Wed, 8 Jul 2020 11:22:46 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 01/13] regmap-irq: use fwnode instead of device node
- in add_irq_chip()
-Message-ID: <20200708102246.GC4655@sirena.org.uk>
-References: <20200706175353.16404-1-michael@walle.cc>
- <20200706175353.16404-2-michael@walle.cc>
+        id S1729214AbgGHMdk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Jul 2020 08:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729234AbgGHMdc (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 8 Jul 2020 08:33:32 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E317C08EAF3
+        for <linux-watchdog@vger.kernel.org>; Wed,  8 Jul 2020 05:33:30 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id f23so46809989iof.6
+        for <linux-watchdog@vger.kernel.org>; Wed, 08 Jul 2020 05:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=CtDA46Te1kJYGFqAkgr9Vub/YrG6WB2S+VlEURQEEM4x6m9sjli+Jz/yotFRmV/AMR
+         T/h2d+e8At09eChsFX2C+mUFLH+FsdwAy78KAtzHqTPpG69rhvmbmMUpZSALFUdgKxT3
+         rKV4TF8A0J+Za5tWsTPtObTKnCJJSeTUvLM0KCUCLapZUiUA/CE0qJguNsnmAcBYT7Bw
+         PUSSiRKtit7eL05YbTu8d4vZk3Rk52mtpEQs926eluhEg6IUrqIesfOKILheZFFzZp0P
+         0kRnPxRkSyAb2gIupk6cQmoDhkGW5ga2ONIfRh7Ui0T+vXHI9OfE4hLpnUDNkQjQgdsE
+         pxTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=ezSmdNmjsjrbF92mCm2ZjnZcr6C8Lv6nvICS8SDqs+pBuSl5M5klJ/Su6ZlKCXYXPy
+         HM/X53ryHDmdjZGsRuxyQJcROVbEI+rEr8dcGZejRgyKXadnTAZ6Tg1NuP9KMg4x7qbr
+         rS5VfzUlFCOS2v9TK7gTO+PKmhEhenq43uwOCoRkZ/C7ySoC862w1f7HEzs9kwKCQEw7
+         +cRUWO9q394FyI2PIMpqIe6ZK0ei4Al09WXoHx+SYAsaSpZdW3+cX9lfNcwTMCkq0oCz
+         pq4uzIrdnbG+BEGxUb50JSuwCX8862kE1TkJHRpmFfV8yIAaCmazGo+lTpJP9vrqVPKj
+         gOIQ==
+X-Gm-Message-State: AOAM531w/AXAnA+2IiN8HPTZkvVzx3IXlooj08aJ5K8jJniF9mxDPVwl
+        J0w0xGLa9kb95tlmBI7b/n9YPlHuYdEVnsYuegE=
+X-Google-Smtp-Source: ABdhPJy69qBRFRW2d2u+0xyGHVfmVbQRW6SQ4gKLQIvGwSNWfhZDhNcIlxNh+7AirNZFy3An0aJSkt25Q8y7juQZu8o=
+X-Received: by 2002:a05:6638:12c7:: with SMTP id v7mr64754290jas.56.1594211609022;
+ Wed, 08 Jul 2020 05:33:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iFRdW5/EC4oqxDHL"
-Content-Disposition: inline
-In-Reply-To: <20200706175353.16404-2-michael@walle.cc>
-X-Cookie: Oh Dad!  We're ALL Devo!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:6602:1582:0:0:0:0 with HTTP; Wed, 8 Jul 2020 05:33:28
+ -0700 (PDT)
+Reply-To: mmsafiatou057@gmail.com
+From:   "Mrs. Safitaou Zoungrana" <richardlaurentdr@gmail.com>
+Date:   Wed, 8 Jul 2020 12:33:28 +0000
+Message-ID: <CALJAiTVXhrKZYOHVoupnx6hmXXD0i2k4MOSO6HW+mj1BAydXhA@mail.gmail.com>
+Subject: My Dear Beloved One,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+My Dear Beloved One,
 
---iFRdW5/EC4oqxDHL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I greet you in the name of God almighty the givers of all good things
+in life. Please kindly pardon me for any inconvenience this letter may
+cost you because I know it may come to you as a surprise as we have no
+previous correspondence.  I sent this mail praying for it to reach you
+in good health, since I myself are in a very critical health condition
+in which I sleep every night without knowing if I may be alive to see
+the next day.
 
-On Mon, Jul 06, 2020 at 07:53:41PM +0200, Michael Walle wrote:
-> Convert the argument to the newer fwnode_handle instead a device tree
-> node. Fortunately, there are no users for now. So this is an easy
-> change.
+I am Mrs. Safiatou Zoungrana,  the wife of late Engineer Ralph
+Alphonso Zoungrana from Paris France but based here in Burkina Faso
+West Africa since eight years ago as a business woman dealing with
+gold exportation and Sales. We have been married for years before his
+sudden death although we were childless. I have been diagnosed with
+ovarian cancer and I have been battling with the sickness when my late
+lovely husband of a blessed memory was alive. May his soul rest in
+peace, Amen.
 
-The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
+My late Husband left the sum of =E2=82=AC7.900.000.00 Seven Million Nine
+Hundred Thousand Euros in a fix/suspense account in one of the prime
+bank here in Burkina Faso. Recently, my Doctor told me that I have few
+days to live due to the cancer problem. The one that disturbs me most
+is my blood pressure sickness.
 
-  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
+Having known my health condition I decided to seek for your kind
+assistance to transfer this fund into your account and you will use it
+to establish an orphanage home in my name. I will give you more
+details about the project as soon as I receive your reply in my
+private email (mmsafiatou057@gmail.com) to handle this project because
+I do not want to state all here until I see your reply, desire and
+commitment to handle this project.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-np-fwnode
-
-for you to fetch changes up to 5cc2013bfeee756a1ee6da9bfbe42e52b4695035:
-
-  regmap-irq: use fwnode instead of device node in add_irq_chip() (2020-07-08 11:15:12 +0100)
-
-----------------------------------------------------------------
-regmap: Change node pointer to fwnode in new IRQ API
-
-----------------------------------------------------------------
-Michael Walle (1):
-      regmap-irq: use fwnode instead of device node in add_irq_chip()
-
- drivers/base/regmap/regmap-irq.c | 53 ++++++++++++++++++++++------------------
- include/linux/regmap.h           | 21 +++++++++-------
- 2 files changed, 41 insertions(+), 33 deletions(-)
-
---iFRdW5/EC4oqxDHL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8FnnUACgkQJNaLcl1U
-h9B0awf+K6uyKfcY+Cw0Q9cXWpxT1fJLMyrXuyyDLg9o9Qo5YPVU8XkiwRGhJJto
-Asdm6vmCDIr0StMW2SEZxg4vVW6Xxw2UKMU2+ZBJxsGZEgpLxec+7NdiXOtqUQsL
-JmKcTbR+nObPx+w74a1G7QHftWWVDX4peRYST0rLvo8tzaS1NoACmku5AYVhc9Z6
-aUUQKrAghHkoinADk2p6YHBuo4C5EZg/qmB/iN2t5g3aNF9YhdDXNB4ZeE+UwQG+
-F+RC9shXxL6/pSqCpua22fNq6tEHEpaWnGwnsxX3eaJ00iDuD0KAHAmtNuo6X75M
-41RS28TqmDnMbDlLrCvgPxlHJ8Lpjw==
-=nOcx
------END PGP SIGNATURE-----
-
---iFRdW5/EC4oqxDHL--
+My Regards to your family.
+Mrs. Safiatou Zoungrana.
