@@ -2,72 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3772180A8
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jul 2020 09:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5C521814D
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jul 2020 09:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729897AbgGHHSD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Jul 2020 03:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S1726145AbgGHHfj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Jul 2020 03:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729896AbgGHHSC (ORCPT
+        with ESMTP id S1726112AbgGHHfe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Jul 2020 03:18:02 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E713C061755
-        for <linux-watchdog@vger.kernel.org>; Wed,  8 Jul 2020 00:18:02 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id e22so40739800edq.8
-        for <linux-watchdog@vger.kernel.org>; Wed, 08 Jul 2020 00:18:02 -0700 (PDT)
+        Wed, 8 Jul 2020 03:35:34 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7028DC08E85B
+        for <linux-watchdog@vger.kernel.org>; Wed,  8 Jul 2020 00:35:34 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id g139so26286522lfd.10
+        for <linux-watchdog@vger.kernel.org>; Wed, 08 Jul 2020 00:35:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HUGD/S+GEk5VECplCes3Yk8kYGwUbUvVAZ00O9FQW/o=;
-        b=kos1f4blni6xuAyaqcgyYJMUQWKVAy60G6bKfYz9A5fm69kFXQZ5bonW41XVUGPw05
-         4De3VTuZtdqsJ6ROI4wsd/TsLa2iL8mTJgjkHwuYOm2qTVJEU9cx1UJHE8IdiheS/yof
-         QwwOONkpB2MWQ5y4O/cztZPO5kBP3ionnsC8pp8GhbhYM+5n8G4Ev6UCv1ClzXNGdiaQ
-         VAlZKrMh9z31ZqS9BlqfdILygRpXzwYyCURQloqGBxDrW8Z2TFFa1MVUgz8W9sbfK5Hv
-         WHRIDytR/4DXn75z9lTthmN66/gpn9SzyBHbk7VPVSA1hQFodxUmpDPqsiuAxpWRU8AH
-         /fIA==
+        bh=BR6f0/BqJCEN1CVfcKyyqFPGBwWk+T779U9WQ9pd+T8=;
+        b=XmHSa0UzMCoKN/tnYpRpf1kVvmOC6ZnhRaRiqN4dhekdDS+dYRV4tKqjXeotjjk6CM
+         0MOlfsqx2ohqnb6RqR6ienmLqhlOgV5HpjXxdnuF+2RNshU0o9RIAIhUZSGaeqwlgB4C
+         gUW8FyQX+VrymFES8f5hJ2kMWkTZXksc4SuBtTUoukp8gzsIOf9gOetUEQ9GKiXZ9aEU
+         cTaQ5sIe+t/aBH6d25PGmD5Ym6EFRxjCK4D01B+XFLYt6JFtN/HdUdeQ6VoTnNi1Qi+J
+         7eBpWDqvtLxhJ+XWohhbbsQWumjK6uhfievDT2eH1knqhrEDjvihiHsulNpgkNzY+qj6
+         CMLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HUGD/S+GEk5VECplCes3Yk8kYGwUbUvVAZ00O9FQW/o=;
-        b=iPFGsoTLqhDVCkIIbL0no4khpJKSvBLQ6Xey3Fg0/w1HexwCSx3BicB9/QjYiVwcwO
-         TQ1xd+7gDRlHubGzh90yWg0fjg0IC+5QhAV7yTUZguwIKsQitYYcBBMiqeT9BDbexzoB
-         LSS1b4bWtP5jWf/cSpqq4+OAuaJIySezExMnt3vkDCWbwD8qa1D08ICwAQngRQ7svAFX
-         XPZGAthCsXEamx1zbmr2LofZIr4dTayGPqWeqhYuUZT1sBIxaKY4IR+pzSFmzZHJmz/u
-         f1HG1OOetoGUyzbYhi6rSL9213RKU2bwHhSK/biuIUxZLJa2yoaADdt/Zc7x9GM/o4Ml
-         SVwQ==
-X-Gm-Message-State: AOAM532KDzVisknUdnNUCwmStHcGiiHKQFoCWGWHhIKPOjwMrCoj8kS6
-        Kg4PPjnlv4lLCxJJ7T4LDe6Hy/KXWDohObbicbma+/vck5Q=
-X-Google-Smtp-Source: ABdhPJx90knx8CiTADejxWTxsC9Yh2x45VHlpXrTK91iYy5mbDiRmJkvyK28AwoEEHMFWN4DjlUuxuF/YNiA1J7HPxY=
-X-Received: by 2002:aa7:c80f:: with SMTP id a15mr63700849edt.299.1594192680942;
- Wed, 08 Jul 2020 00:18:00 -0700 (PDT)
+        bh=BR6f0/BqJCEN1CVfcKyyqFPGBwWk+T779U9WQ9pd+T8=;
+        b=TpHYRH0RdDlEaPgBNDSzReFFgOmfMqCYqZkIWTkANJfnbCvCHLXXNl6quHpz48VVm8
+         QePjn5859VGgT9A8u0VMkUMfIPubbCIdEZBkrxJieE4ChgGe9hD9/1bcgSt4a1Rw8W1D
+         KF6ASmL/hG+OyGS0xn3+fhtXb+0hmIJDBLd0K+l7z0Q0xZe/VGcAmVxGGbB71vuP2sPT
+         uywbt167m6SI1rTuTU+O8bb3+KRWrWkj8TiOnn3KZdfE+7+o1ahVVKEQOGoXp8TLrMI0
+         tAtqzgdMoKEG/GIutZmEQLNBBaDsAMfJMD2U+HcThsTpulti/bZoTG9TZtVZN1cS4DSl
+         R9HQ==
+X-Gm-Message-State: AOAM531Zn1Rz8jp2464fssujojGLK6jJHnJwU+URBQS9XPgqr95zyM4M
+        FzyZe+x1CjpO5UZdD2WNaZbGWjk+GTXkZF/JL4s9mg==
+X-Google-Smtp-Source: ABdhPJyJ+eDL/+RhcnG7xcn/RKZTuk4K1j7DdGcaDL2nOuPTPOOM3n5gq5c736mD3TdGBOD+yswnwtLJpQbCLuN0+7s=
+X-Received: by 2002:ac2:47ed:: with SMTP id b13mr35325021lfp.21.1594193732803;
+ Wed, 08 Jul 2020 00:35:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200701110339.2833449-1-woodylin@google.com> <20200707040356.GA213018@roeck-us.net>
- <CAHn4DedP=r0UwN4bn=A3nH_2bcEFA24SEYSq4gJUcC9w9p0UKQ@mail.gmail.com> <8e16b12c-1097-dea7-32d7-f3381568407a@roeck-us.net>
-In-Reply-To: <8e16b12c-1097-dea7-32d7-f3381568407a@roeck-us.net>
-From:   Woody Lin <woodylin@google.com>
-Date:   Wed, 8 Jul 2020 15:17:49 +0800
-Message-ID: <CAHn4DecB9OD=PACzr7H6=+P2xUjpMRJz8TQ6pYPZypVkzdx02Q@mail.gmail.com>
-Subject: Re: [PATCH v3] softdog: Add options 'soft_reboot_cmd' and 'soft_active_on_boot'
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org
+References: <20200706175353.16404-1-michael@walle.cc> <20200706175353.16404-9-michael@walle.cc>
+In-Reply-To: <20200706175353.16404-9-michael@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 8 Jul 2020 09:35:21 +0200
+Message-ID: <CACRpkda=C1XxLEJrVb8oMdrt1CgVyfDn7=cf7UdK0AJJwt+0Yg@mail.gmail.com>
+Subject: Re: [PATCH v5 08/13] gpio: add support for the sl28cpld GPIO controller
+To:     Michael Walle <michael@walle.cc>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jul 7, 2020 at 7:47 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> I'd rather see something like "<not set>". "<null>" looks like an error.
-> Also, it isn't correct to assume emergency reboot; that is only correct
-> if neither soft_noboot nor soft_panic is set.
+On Mon, Jul 6, 2020 at 7:57 PM Michael Walle <michael@walle.cc> wrote:
 
-"<not set>" sounds good to me, and thanks for correcting my usage
-description on "(emergency reboot)".
-I'm uploading the next version.
+> Add support for the GPIO controller of the sl28 board management
+> controller. This driver is part of a multi-function device.
+>
+> A controller has 8 lines. There are three different flavors:
+> full-featured GPIO with interrupt support, input-only and output-only.
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> Changes since v4:
 
-Woody
+This is awesomely elegant now.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+I suppose it needs merging through MFD with the rest.
+
+Yours,
+Linus Walleij
