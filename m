@@ -2,393 +2,516 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3C1219B76
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Jul 2020 10:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256EA21A3BC
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Jul 2020 17:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726372AbgGIIuW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 9 Jul 2020 04:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S1727107AbgGIP2L (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 9 Jul 2020 11:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbgGIIuT (ORCPT
+        with ESMTP id S1726410AbgGIP2L (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 9 Jul 2020 04:50:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9F0C08C5CE
-        for <linux-watchdog@vger.kernel.org>; Thu,  9 Jul 2020 01:50:19 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jtSFw-0008EV-8U; Thu, 09 Jul 2020 10:50:12 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jtSFq-0005Cr-D3; Thu, 09 Jul 2020 10:50:06 +0200
-Date:   Thu, 9 Jul 2020 10:50:06 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
-Message-ID: <20200709085006.b54ype3p4yu64upl@pengutronix.de>
-References: <20200706175353.16404-1-michael@walle.cc>
- <20200706175353.16404-8-michael@walle.cc>
+        Thu, 9 Jul 2020 11:28:11 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57090C08C5CE;
+        Thu,  9 Jul 2020 08:28:11 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id g67so1117474pgc.8;
+        Thu, 09 Jul 2020 08:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WylchBfGGLMzx3ZzERebZby/QP/QB8eRJGUJW1Q7JZ8=;
+        b=p5spxUWFsNi5HwqwxSCvJuoRlkLMCVExTlXY8K3oNmOE5xgU4elb6WgeMbN5qWpXVY
+         +uVduHvrRFitgzgql5fGcEyThXi56X0YbWmcJ0EILbpDykX5bEEEvqM3C6fW9aZe6P6G
+         XS2shukMZhNTe31DkvV6mzEUO8OtEMWgUjpbUCvEOAnZjLRB6jt+NnkcZ9v8Lkph5H2N
+         Hn2GEDRg2Uhw5ov3IDIEVhOGjLk/U5iMUWN+cFYqBkJ/YR1Xq1mhPEqymJpf9+C5FaGl
+         WhnXhyoojaMQcNHL0Ffpv1WnYEaZnUahz6N4uldRqwzZDH6rFs9/K9Es8DVCFrp7VCB/
+         gahw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=WylchBfGGLMzx3ZzERebZby/QP/QB8eRJGUJW1Q7JZ8=;
+        b=phcNRpIzOcKjlfC7NtazK1vvTYMvPlbZ/nMwbVsET2S0QwNbLCQolNWJDg26HZJC6y
+         UvsQ/4zvDx1Q+rvT4X4KvX8NK8bST7YxnXrDqgiFRw0ZJkeKiRNDeMxABHWPCCuHBVCo
+         Fv3JoGgSEZ1noTOnZKXUym3xqQPxGrAHvKnj2t1Aa9VMzjCvIUTqE4eB+VTNIHaQ64Xk
+         hqKlgVbslmWAllSAU1kwvbfbOada/wsWsWee63zUDs5QdXgxmWdodjALL5jiXuFzEQi6
+         Is10snbstWFmMVpqADCqzQs0BXCy+BP8b698jeN/VZ5WdS7BB4P1zenVjWye96Qq16N1
+         CaGw==
+X-Gm-Message-State: AOAM531bC3cxUQO7i2ffbssfd1dbwXXLzn/iF2tZEG9hWfkcEdd2wkc9
+        uY87YJddQgVj8WBVToJZmwMwRv+f3h0=
+X-Google-Smtp-Source: ABdhPJwkE6R1r6f9kxqbCDr8RYFhE2F4eWjoWE8o1bChozVjjDkAxha8/Y73jw4XM4iwl14zv0Zxag==
+X-Received: by 2002:a65:64c5:: with SMTP id t5mr49606615pgv.28.1594308490556;
+        Thu, 09 Jul 2020 08:28:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c187sm3103864pfc.146.2020.07.09.08.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jul 2020 08:28:10 -0700 (PDT)
+Subject: Re: [PATCH v4] rtc: rtc-ds1374: wdt: Use watchdog core for watchdog
+ part
+To:     =?UTF-8?B?Sm9obnNvbiBDSCBDaGVuICjpmbPmmK3li7Mp?= 
+        <JohnsonCH.Chen@moxa.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+References: <HK2PR01MB328182D5A54BFAA8A22E448AFA640@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <9643e71a-0819-eff6-80b2-04dd7d879d16@roeck-us.net>
+Date:   Thu, 9 Jul 2020 08:28:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zo5wkjqhpntpevbs"
-Content-Disposition: inline
-In-Reply-To: <20200706175353.16404-8-michael@walle.cc>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+In-Reply-To: <HK2PR01MB328182D5A54BFAA8A22E448AFA640@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+Content-Type: text/plain; charset=big5
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 7/8/20 11:34 PM, Johnson CH Chen (³¯¬L¾±) wrote:
+> Let ds1374 watchdog use watchdog core functions. It also includes
+> improving watchdog timer setting and nowayout, and just uses ioctl()
+> of watchdog core.
+> 
+> Signed-off-by: Johnson Chen <johnsonch.chen@moxa.com>
 
---zo5wkjqhpntpevbs
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Hello Michael,
-
-On Mon, Jul 06, 2020 at 07:53:47PM +0200, Michael Walle wrote:
-> diff --git a/drivers/pwm/pwm-sl28cpld.c b/drivers/pwm/pwm-sl28cpld.c
-> new file mode 100644
-> index 000000000000..8ee286b605bf
-> --- /dev/null
-> +++ b/drivers/pwm/pwm-sl28cpld.c
-> @@ -0,0 +1,187 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * sl28cpld PWM driver
-> + *
-> + * Copyright 2020 Kontron Europe GmbH
-> + */
-
-Is there publically available documenation available? If so please add a
-link here.
-
+> ---
+> v3->v4:
+> - Fix coding styles 
+> - Remove dev_info() in ds1374_wdt_settimeout()
+> - Fix missing error check
+> 
+> v2->v3:
+> - Fix a problem reported by WATCHDOG_CORE if WATCHDOG
+> - Remove save_client
+> - Let wdt_margin be 0 for watchdog_init_timeout()
+> - Use dev_info() rather than pr_info()
+> - Avoid more strings in this driver
+> 
+> v1->v2:
+> - Use ds1374_wdt_settimeout() before registering the watchdog
+> - Remove watchdog_unregister_device() because devm_watchdog_register_device() is used
+> - Remove ds1374_wdt_ping()
+> - TIMER_MARGIN_MAX to 4095 for 24-bit value
+> - Keep wdt_margin
+> - Fix coding styles
+> 
+>  drivers/rtc/Kconfig      |   1 +
+>  drivers/rtc/rtc-ds1374.c | 258 +++++++++------------------------------
+>  2 files changed, 62 insertions(+), 197 deletions(-)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index b54d87d45c89..c25d51f35f0c 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -282,6 +282,7 @@ config RTC_DRV_DS1374
+>  config RTC_DRV_DS1374_WDT
+>  	bool "Dallas/Maxim DS1374 watchdog timer"
+>  	depends on RTC_DRV_DS1374
+> +	select WATCHDOG_CORE if WATCHDOG
+>  	help
+>  	  If you say Y here you will get support for the
+>  	  watchdog timer in the Dallas Semiconductor DS1374
+> diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
+> index 9c51a12cf70f..c71065d26cd2 100644
+> --- a/drivers/rtc/rtc-ds1374.c
+> +++ b/drivers/rtc/rtc-ds1374.c
+> @@ -46,6 +46,7 @@
+>  #define DS1374_REG_WDALM2	0x06
+>  #define DS1374_REG_CR		0x07 /* Control */
+>  #define DS1374_REG_CR_AIE	0x01 /* Alarm Int. Enable */
+> +#define DS1374_REG_CR_WDSTR	0x08 /* 1=INT, 0=RST */
+>  #define DS1374_REG_CR_WDALM	0x20 /* 1=Watchdog, 0=Alarm */
+>  #define DS1374_REG_CR_WACE	0x40 /* WD/Alarm counter enable */
+>  #define DS1374_REG_SR		0x08 /* Status */
+> @@ -71,7 +72,9 @@ struct ds1374 {
+>  	struct i2c_client *client;
+>  	struct rtc_device *rtc;
+>  	struct work_struct work;
+> -
+> +#ifdef CONFIG_RTC_DRV_DS1374_WDT
+> +	struct watchdog_device wdt;
+> +#endif
+>  	/* The mutex protects alarm operations, and prevents a race
+>  	 * between the enable_irq() in the workqueue and the free_irq()
+>  	 * in the remove function.
+> @@ -369,238 +372,98 @@ static const struct rtc_class_ops ds1374_rtc_ops = {
+>   *
+>   *****************************************************************************
+>   */
+> -static struct i2c_client *save_client;
+>  /* Default margin */
+> -#define WD_TIMO 131762
+> +#define TIMER_MARGIN_DEFAULT	32
+> +#define TIMER_MARGIN_MIN	1
+> +#define TIMER_MARGIN_MAX	4095 /* 24-bit value */
+>  
+>  #define DRV_NAME "DS1374 Watchdog"
+>  
+> -static int wdt_margin = WD_TIMO;
+> -static unsigned long wdt_is_open;
+> +static int wdt_margin;
+>  module_param(wdt_margin, int, 0);
+>  MODULE_PARM_DESC(wdt_margin, "Watchdog timeout in seconds (default 32s)");
+>  
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default ="
+> +		__MODULE_STRING(WATCHDOG_NOWAYOUT)")");
 > +
-> +#include <linux/bitfield.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pwm.h>
-> +#include <linux/regmap.h>
+>  static const struct watchdog_info ds1374_wdt_info = {
+>  	.identity       = "DS1374 WTD",
+>  	.options        = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
+>  						WDIOF_MAGICCLOSE,
+>  };
+>  
+> -static int ds1374_wdt_settimeout(unsigned int timeout)
+> +static int ds1374_wdt_settimeout(struct watchdog_device *wdt, unsigned int timeout)
+>  {
+> -	int ret = -ENOIOCTLCMD;
+> -	int cr;
+> +	struct ds1374 *ds1374 = watchdog_get_drvdata(wdt);
+> +	struct i2c_client *client = ds1374->client;
+> +	int ret, cr;
+>  
+> -	ret = cr = i2c_smbus_read_byte_data(save_client, DS1374_REG_CR);
+> -	if (ret < 0)
+> -		goto out;
+> +	wdt->timeout = timeout;
 > +
-> +/*
-> + * PWM timer block registers.
-> + */
-> +#define PWM_CTRL		0x00
-> +#define   PWM_ENABLE		BIT(7)
-> +#define   PWM_MODE_250HZ	0
-> +#define   PWM_MODE_500HZ	1
-> +#define   PWM_MODE_1KHZ		2
-> +#define   PWM_MODE_2KHZ		3
-> +#define   PWM_MODE_MASK		GENMASK(1, 0)
-> +#define PWM_CYCLE		0x01
-> +#define   PWM_CYCLE_MAX		0x7f
-
-Please use a less generic prefix for your defines. Also I like having
-the defines for field names include register name. Something like:
-
-	#define PWM_SL28CPLD_CTRL		0x00
-	#define PWM_SL28CPLD_CTRL_ENABLE		BIT(7)
-	#define PWM_SL28CPLD_CTRL_MODE_MASK		GENMASK(1, 0)
-	#define PWM_SL28CPLD_CTRL_MODE_250HZ		FIELD_PREP(PWM_SL28CPLD_CTRL_MODE_MA=
-SK, 0)
-
-> +struct sl28cpld_pwm {
-> +	struct pwm_chip pwm_chip;
-> +	struct regmap *regmap;
-> +	u32 offset;
-> +};
-> +
-> +struct sl28cpld_pwm_periods {
-> +	u8 ctrl;
-> +	unsigned long duty_cycle;
-> +};
-> +
-> +struct sl28cpld_pwm_config {
-> +	unsigned long period_ns;
-> +	u8 max_duty_cycle;
-> +};
-> +
-> +static struct sl28cpld_pwm_config sl28cpld_pwm_config[] =3D {
-
-const ? (Or drop as the values can be easily computed, see below.)
-
-> +	[PWM_MODE_250HZ] =3D { .period_ns =3D 4000000, .max_duty_cycle =3D 0x80=
- },
-> +	[PWM_MODE_500HZ] =3D { .period_ns =3D 2000000, .max_duty_cycle =3D 0x40=
- },
-> +	[PWM_MODE_1KHZ]  =3D { .period_ns =3D 1000000, .max_duty_cycle =3D 0x20=
- },
-> +	[PWM_MODE_2KHZ]  =3D { .period_ns =3D  500000, .max_duty_cycle =3D 0x10=
- },
-> +};
-> +
-> +static void sl28cpld_pwm_get_state(struct pwm_chip *chip,
-> +				   struct pwm_device *pwm,
-> +				   struct pwm_state *state)
-> +{
-> +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
-> +	static struct sl28cpld_pwm_config *config;
-> +	unsigned int reg;
-> +	unsigned int mode;
-> +
-> +	regmap_read(priv->regmap, priv->offset + PWM_CTRL, &reg);
-> +
-> +	state->enabled =3D reg & PWM_ENABLE;
-
-Would it be more consisted to use FIELD_GET here, too?
-
-> +
-> +	mode =3D FIELD_GET(PWM_MODE_MASK, reg);
-> +	config =3D &sl28cpld_pwm_config[mode];
-> +	state->period =3D config->period_ns;
-
-I wonder if this could be done more effectively without the above table.
-Something like:
-
-	state->period =3D 4000000 >> mode.
-=09
-(with a #define for 4000000 of course).
-
-> +	regmap_read(priv->regmap, priv->offset + PWM_CYCLE, &reg);
-> +	pwm_set_relative_duty_cycle(state, reg, config->max_duty_cycle);
-
-Oh, what a creative idea to use pwm_set_relative_duty_cycle here.
-Unfortunately it's using the wrong rounding strategy. Please enable
-PWM_DEBUG which should diagnose these problems (given enough testing).
-
-(Hmm, on second thought I'm not sure that rounding is relevant with the
-numbers of this hardware. Still it's wrong in general and I don't want
-to have others copy this.)
-
-> +}
-> +
-> +static int sl28cpld_pwm_apply(struct pwm_chip *chip, struct pwm_device *=
-pwm,
-> +			      const struct pwm_state *state)
-> +{
-> +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
-> +	struct sl28cpld_pwm_config *config;
-> +	unsigned int cycle;
-> +	int ret;
-> +	int mode;
-> +	u8 ctrl;
-> +
-> +	/* Get the configuration by comparing the period */
-> +	for (mode =3D 0; mode < ARRAY_SIZE(sl28cpld_pwm_config); mode++) {
-> +		config =3D &sl28cpld_pwm_config[mode];
-> +		if (state->period =3D=3D config->period_ns)
-> +			break;
-> +	}
-> +
-> +	if (mode =3D=3D ARRAY_SIZE(sl28cpld_pwm_config))
-> +		return -EINVAL;
-
-You're supposed to pick the biggest period that isn't bigger than the
-requested period. So something like:
-
-	switch(period) {
-	case 4000000 ... UINT_MAX:
-		mode =3D 0;
-		break;
-	case 2000000 ... 3999999:
-		mode =3D 1;
-		break;
-	...
-	}
-
-(or:
-
-	if period >=3D 4000000:
-		mode =3D 0
-	else:
-		// I think ... please double-check
-		mode =3D ilog2(4000000 / (period + 1)) + 1
-
-	if mode > 3:
-		return -ERANGE;
-)
-
-	real_period =3D 4000000 >> mode;
-
-> +	ctrl =3D FIELD_PREP(PWM_MODE_MASK, mode);
-> +	if (state->enabled)
-> +		ctrl |=3D PWM_ENABLE;
-> +
-> +	cycle =3D pwm_get_relative_duty_cycle(state, config->max_duty_cycle);
-
-Again the rounding is wrong. You need need to round down the requested
-duty_cycle to the next possible value. So something like:
-
-	duty_cycle =3D min(real_period, state->duty_cycle);
-
-	cycle =3D duty_cycle * (0x80 >> mode) / (4000000 >> mode);
-
-which can be further simplified to
-
-	cycle =3D duty_cycle / 31250
-
-=2E
-
-> +	/*
-> +	 * The hardware doesn't allow to set max_duty_cycle if the
-> +	 * 250Hz mode is enabled, thus we have to trap that here.
-> +	 * But because a 100% duty cycle is equal on all modes, i.e.
-
-It depends on how picky you are if you can agree here. Please document
-this in a Limitations paragraph at the top of the driver similar to
-drivers/pwm/pwm-rcar.c and others.
-
-> +	 * it is just a "all-high" output, we trap any case with a
-> +	 * 100% duty cycle and use the 500Hz mode.
-
-Please only trap on 250Hz mode. (Can be done using: if (cycle =3D=3D 0x80) I
-think)
-
-> +	 */
-> +	if (cycle =3D=3D config->max_duty_cycle) {
-> +		ctrl &=3D ~PWM_MODE_MASK;
-> +		ctrl |=3D FIELD_PREP(PWM_MODE_MASK, PWM_MODE_500HZ);
-> +		cycle =3D PWM_CYCLE_MAX;
-=09
-I would have expected 0x40 here instead of 0x7f?
-
-> +	}
-> +
-> +	ret =3D regmap_write(priv->regmap, priv->offset + PWM_CTRL, ctrl);
+> +	cr = i2c_smbus_read_byte_data(client, DS1374_REG_CR);
+> +	if (cr < 0)
+> +		return cr;
+>  
+>  	/* Disable any existing watchdog/alarm before setting the new one */
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+> -	ret = i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+> +	ret = i2c_smbus_write_byte_data(client, DS1374_REG_CR, cr);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	/* Set new watchdog time */
+> -	ret = ds1374_write_rtc(save_client, timeout, DS1374_REG_WDALM0, 3);
+> -	if (ret) {
+> -		pr_info("couldn't set new watchdog time\n");
+> -		goto out;
+> -	}
+> +	timeout = timeout * 4096;
+> +	ret = ds1374_write_rtc(client, timeout, DS1374_REG_WDALM0, 3);
 > +	if (ret)
 > +		return ret;
-> +
-> +	return regmap_write(priv->regmap, priv->offset + PWM_CYCLE, (u8)cycle);
-
-I assume this can result in broken output? Consider the hardware runs
-with mode =3D 1 & cycle =3D 0x23 and you want to go to mode =3D 0 & cycle =
-=3D
-0x42: Can this result in a period that has mode =3D 0 & cycle =3D 0x23?
-
-If this cannot be avoided, please document this in the Limitations
-paragraph.
-
-> +}
-> +
-> +static const struct pwm_ops sl28cpld_pwm_ops =3D {
-> +	.apply =3D sl28cpld_pwm_apply,
-> +	.get_state =3D sl28cpld_pwm_get_state,
-> +	.owner =3D THIS_MODULE,
-> +};
-> +
-> +static int sl28cpld_pwm_probe(struct platform_device *pdev)
-> +{
-> +	struct sl28cpld_pwm *priv;
-> +	struct pwm_chip *chip;
-> +	int ret;
-> +
-> +	if (!pdev->dev.parent)
-> +		return -ENODEV;
-> +
-> +	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
-> +	if (!priv->regmap)
-> +		return -ENODEV;
-> +
-> +	ret =3D device_property_read_u32(&pdev->dev, "reg", &priv->offset);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	/* Initialize the pwm_chip structure */
-> +	chip =3D &priv->pwm_chip;
-> +	chip->dev =3D &pdev->dev;
-> +	chip->ops =3D &sl28cpld_pwm_ops;
-> +	chip->base =3D -1;
-> +	chip->npwm =3D 1;
-> +
-> +	ret =3D pwmchip_add(&priv->pwm_chip);
-> +	if (ret)
+>  
+>  	/* Enable watchdog timer */
+>  	cr |= DS1374_REG_CR_WACE | DS1374_REG_CR_WDALM;
+> +	cr &= ~DS1374_REG_CR_WDSTR;/* for RST PIN */
+>  	cr &= ~DS1374_REG_CR_AIE;
+>  
+> -	ret = i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+> +	ret = i2c_smbus_write_byte_data(client, DS1374_REG_CR, cr);
+>  	if (ret < 0)
+> -		goto out;
 > +		return ret;
+>  
+>  	return 0;
+> -out:
+> -	return ret;
+>  }
+>  
+> -
+>  /*
+>   * Reload the watchdog timer.  (ie, pat the watchdog)
+>   */
+> -static void ds1374_wdt_ping(void)
+> +static int ds1374_wdt_start(struct watchdog_device *wdt)
+>  {
+> +	struct ds1374 *ds1374 = watchdog_get_drvdata(wdt);
+>  	u32 val;
+> -	int ret = 0;
+>  
+> -	ret = ds1374_read_rtc(save_client, &val, DS1374_REG_WDALM0, 3);
+> -	if (ret)
+> -		pr_info("WD TICK FAIL!!!!!!!!!! %i\n", ret);
+> +	return ds1374_read_rtc(ds1374->client, &val, DS1374_REG_WDALM0, 3);
+>  }
+>  
+> -static void ds1374_wdt_disable(void)
+> +static int ds1374_wdt_stop(struct watchdog_device *wdt)
+>  {
+> +	struct ds1374 *ds1374 = watchdog_get_drvdata(wdt);
+> +	struct i2c_client *client = ds1374->client;
+>  	int cr;
+>  
+> -	cr = i2c_smbus_read_byte_data(save_client, DS1374_REG_CR);
+> +	cr = i2c_smbus_read_byte_data(client, DS1374_REG_CR);
+> +	if (cr < 0)
+> +		return cr;
 > +
-> +	platform_set_drvdata(pdev, priv);
+>  	/* Disable watchdog timer */
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+> -	i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+> -}
+> -
+> -/*
+> - * Watchdog device is opened, and watchdog starts running.
+> - */
+> -static int ds1374_wdt_open(struct inode *inode, struct file *file)
+> -{
+> -	struct ds1374 *ds1374 = i2c_get_clientdata(save_client);
+> -
+> -	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR) {
+> -		mutex_lock(&ds1374->mutex);
+> -		if (test_and_set_bit(0, &wdt_is_open)) {
+> -			mutex_unlock(&ds1374->mutex);
+> -			return -EBUSY;
+> -		}
+> -		/*
+> -		 *      Activate
+> -		 */
+> -		wdt_is_open = 1;
+> -		mutex_unlock(&ds1374->mutex);
+> -		return stream_open(inode, file);
+> -	}
+> -	return -ENODEV;
+> -}
+> -
+> -/*
+> - * Close the watchdog device.
+> - */
+> -static int ds1374_wdt_release(struct inode *inode, struct file *file)
+> -{
+> -	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR)
+> -		clear_bit(0, &wdt_is_open);
+> -
+> -	return 0;
+> +	return i2c_smbus_write_byte_data(client, DS1374_REG_CR, cr);
+>  }
+>  
+> -/*
+> - * Pat the watchdog whenever device is written to.
+> - */
+> -static ssize_t ds1374_wdt_write(struct file *file, const char __user *data,
+> -				size_t len, loff_t *ppos)
+> -{
+> -	if (len) {
+> -		ds1374_wdt_ping();
+> -		return 1;
+> -	}
+> -	return 0;
+> -}
+> -
+> -static ssize_t ds1374_wdt_read(struct file *file, char __user *data,
+> -				size_t len, loff_t *ppos)
+> -{
+> -	return 0;
+> -}
+> -
+> -/*
+> - * Handle commands from user-space.
+> - */
+> -static long ds1374_wdt_ioctl(struct file *file, unsigned int cmd,
+> -							unsigned long arg)
+> -{
+> -	int new_margin, options;
+> -
+> -	switch (cmd) {
+> -	case WDIOC_GETSUPPORT:
+> -		return copy_to_user((struct watchdog_info __user *)arg,
+> -		&ds1374_wdt_info, sizeof(ds1374_wdt_info)) ? -EFAULT : 0;
+> -
+> -	case WDIOC_GETSTATUS:
+> -	case WDIOC_GETBOOTSTATUS:
+> -		return put_user(0, (int __user *)arg);
+> -	case WDIOC_KEEPALIVE:
+> -		ds1374_wdt_ping();
+> -		return 0;
+> -	case WDIOC_SETTIMEOUT:
+> -		if (get_user(new_margin, (int __user *)arg))
+> -			return -EFAULT;
+> -
+> -		/* the hardware's tick rate is 4096 Hz, so
+> -		 * the counter value needs to be scaled accordingly
+> -		 */
+> -		new_margin <<= 12;
+> -		if (new_margin < 1 || new_margin > 16777216)
+> -			return -EINVAL;
+> -
+> -		wdt_margin = new_margin;
+> -		ds1374_wdt_settimeout(new_margin);
+> -		ds1374_wdt_ping();
+> -		/* fallthrough */
+> -	case WDIOC_GETTIMEOUT:
+> -		/* when returning ... inverse is true */
+> -		return put_user((wdt_margin >> 12), (int __user *)arg);
+> -	case WDIOC_SETOPTIONS:
+> -		if (copy_from_user(&options, (int __user *)arg, sizeof(int)))
+> -			return -EFAULT;
+> -
+> -		if (options & WDIOS_DISABLECARD) {
+> -			pr_info("disable watchdog\n");
+> -			ds1374_wdt_disable();
+> -			return 0;
+> -		}
+> -
+> -		if (options & WDIOS_ENABLECARD) {
+> -			pr_info("enable watchdog\n");
+> -			ds1374_wdt_settimeout(wdt_margin);
+> -			ds1374_wdt_ping();
+> -			return 0;
+> -		}
+> -		return -EINVAL;
+> -	}
+> -	return -ENOTTY;
+> -}
+> -
+> -static long ds1374_wdt_unlocked_ioctl(struct file *file, unsigned int cmd,
+> -			unsigned long arg)
+> -{
+> -	int ret;
+> -	struct ds1374 *ds1374 = i2c_get_clientdata(save_client);
+> -
+> -	mutex_lock(&ds1374->mutex);
+> -	ret = ds1374_wdt_ioctl(file, cmd, arg);
+> -	mutex_unlock(&ds1374->mutex);
+> -
+> -	return ret;
+> -}
+> -
+> -static int ds1374_wdt_notify_sys(struct notifier_block *this,
+> -			unsigned long code, void *unused)
+> -{
+> -	if (code == SYS_DOWN || code == SYS_HALT)
+> -		/* Disable Watchdog */
+> -		ds1374_wdt_disable();
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static const struct file_operations ds1374_wdt_fops = {
+> -	.owner			= THIS_MODULE,
+> -	.read			= ds1374_wdt_read,
+> -	.unlocked_ioctl		= ds1374_wdt_unlocked_ioctl,
+> -	.compat_ioctl		= compat_ptr_ioctl,
+> -	.write			= ds1374_wdt_write,
+> -	.open                   = ds1374_wdt_open,
+> -	.release                = ds1374_wdt_release,
+> -	.llseek			= no_llseek,
+> -};
+> -
+> -static struct miscdevice ds1374_miscdev = {
+> -	.minor          = WATCHDOG_MINOR,
+> -	.name           = "watchdog",
+> -	.fops           = &ds1374_wdt_fops,
+> -};
+> -
+> -static struct notifier_block ds1374_wdt_notifier = {
+> -	.notifier_call = ds1374_wdt_notify_sys,
+> +static const struct watchdog_ops ds1374_wdt_ops = {
+> +	.owner          = THIS_MODULE,
+> +	.start          = ds1374_wdt_start,
+> +	.stop           = ds1374_wdt_stop,
+> +	.set_timeout    = ds1374_wdt_settimeout,
+>  };
+> -
+>  #endif /*CONFIG_RTC_DRV_DS1374_WDT*/
+>  /*
+>   *****************************************************************************
+> @@ -652,16 +515,22 @@ static int ds1374_probe(struct i2c_client *client,
+>  		return ret;
+>  
+>  #ifdef CONFIG_RTC_DRV_DS1374_WDT
+> -	save_client = client;
+> -	ret = misc_register(&ds1374_miscdev);
+> +	ds1374->wdt.info = &ds1374_wdt_info;
+> +	ds1374->wdt.ops = &ds1374_wdt_ops;
+> +	ds1374->wdt.timeout = TIMER_MARGIN_DEFAULT;
+> +	ds1374->wdt.min_timeout = TIMER_MARGIN_MIN;
+> +	ds1374->wdt.max_timeout = TIMER_MARGIN_MAX;
 > +
-> +	return 0;
-> +}
-
-Please add error messages with some details for the error paths
-(preferable using %pe to indicate the error code).
-
-> +static int sl28cpld_pwm_remove(struct platform_device *pdev)
-> +{
-> +	struct sl28cpld_pwm *priv =3D platform_get_drvdata(pdev);
+> +	watchdog_init_timeout(&ds1374->wdt, wdt_margin, &client->dev);
+> +	watchdog_set_nowayout(&ds1374->wdt, nowayout);
+> +	watchdog_stop_on_reboot(&ds1374->wdt);
+> +	watchdog_stop_on_unregister(&ds1374->wdt);
+> +	watchdog_set_drvdata(&ds1374->wdt, ds1374);
+> +	ds1374_wdt_settimeout(&ds1374->wdt, ds1374->wdt.timeout);
 > +
-> +	return pwmchip_remove(&priv->pwm_chip);
-> +}
-> +
-> +static const struct of_device_id sl28cpld_pwm_of_match[] =3D {
-> +	{ .compatible =3D "kontron,sl28cpld-pwm" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, sl28cpld_pwm_of_match);
-> +
-> +static struct platform_driver sl28cpld_pwm_driver =3D {
-> +	.probe =3D sl28cpld_pwm_probe,
-> +	.remove	=3D sl28cpld_pwm_remove,
-> +	.driver =3D {
-> +		.name =3D "sl28cpld-pwm",
-> +		.of_match_table =3D sl28cpld_pwm_of_match,
-> +	},
-> +};
-> +module_platform_driver(sl28cpld_pwm_driver);
-> +
-> +MODULE_DESCRIPTION("sl28cpld PWM Driver");
-> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
-> +MODULE_LICENSE("GPL");
+> +	ret = devm_watchdog_register_device(&client->dev, &ds1374->wdt);
+>  	if (ret)
+>  		return ret;
+> -	ret = register_reboot_notifier(&ds1374_wdt_notifier);
+> -	if (ret) {
+> -		misc_deregister(&ds1374_miscdev);
+> -		return ret;
+> -	}
+> -	ds1374_wdt_settimeout(131072);
+>  #endif
+>  
+>  	return 0;
+> @@ -670,11 +539,6 @@ static int ds1374_probe(struct i2c_client *client,
+>  static int ds1374_remove(struct i2c_client *client)
+>  {
+>  	struct ds1374 *ds1374 = i2c_get_clientdata(client);
+> -#ifdef CONFIG_RTC_DRV_DS1374_WDT
+> -	misc_deregister(&ds1374_miscdev);
+> -	ds1374_miscdev.parent = NULL;
+> -	unregister_reboot_notifier(&ds1374_wdt_notifier);
+> -#endif
+>  
+>  	if (client->irq > 0) {
+>  		mutex_lock(&ds1374->mutex);
+> 
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---zo5wkjqhpntpevbs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8G2joACgkQwfwUeK3K
-7AmJGgf/WBxR5LIpn0VH8Eu7pe5XA6Ic/I7iL7pbWV+u7KttKvKeJSKDQP+Rj7w/
-oTgVpPOzquY7nsgi8Xc+X980NILKIg3h/GOOWCie31utloJHocy4Xva3W4AtfJFi
-vtu5Aeunx9zaStCDvwrA/5QKsxYuMSAKWoTqzRW8gdGyyUFKG5rnS4Sz5A1Zk7Tj
-kv2pVpbVAU4JsnS8FUGQnXG32UhrZddYZKb6h6NoOIP13OybadiQ11dcsfrjguPg
-0NgNL+VHwM1nFEOOTza5u3WfaEXSFIInFev55g3TYnjOIk1mY980eNLc682VqhZX
-djlTan09K0g6k9nD5qjkmhAT8tntQw==
-=pWwP
------END PGP SIGNATURE-----
-
---zo5wkjqhpntpevbs--
