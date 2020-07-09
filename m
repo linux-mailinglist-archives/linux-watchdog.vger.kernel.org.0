@@ -2,283 +2,393 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 914C32198B6
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Jul 2020 08:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3C1219B76
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Jul 2020 10:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726163AbgGIGeO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 9 Jul 2020 02:34:14 -0400
-Received: from mail-eopbgr1320080.outbound.protection.outlook.com ([40.107.132.80]:36201
-        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726140AbgGIGeN (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 9 Jul 2020 02:34:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ecoKHfeCVmcCFROLzcRCLfile4EMBxjHZ6gWxdI1fpaifruGRA8gwEinPyM1Pbh08bwjrkFCm+bDo6zkb/276yrrSwQG6rp2iWng7vd6nf/DQ30JicweLh3qiQ+UAhAZchPSrtIPeC5dUwZiwfNtFgJJoX3UZOAiDaBsX3PoOlN1Ave9yZK3Koarg3qhr4fSBKLgrA8txUAeciITH73R8NpQEkVssefi9gD5ZJRf3L3iFT5ZVAnulzrrdHFb4zdZDIU0g//uF0VScGcVZbOckvFFbo22AyvJuyoydxUYIuQb80XVb4+N1Ex9Gq4ll97ncc1WlSiQwqBFsBIp6plAog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OIsml8s2yfN+2Ht1qWdc6IqEhrKe0W3XnWGvP2ctW3w=;
- b=d2Lag+PfqvaR2Z8o+tBuenOEK0R1rf+/4djUbkzw+qSZebvFwsx1mJSXRZxr7/QchRTd1MLYqcF7qlpr4bd+iQVPYrOXxThXrafVss23g4k9Ia8df2PepmnPqg5Qa4CFfZPJVga/AN1LNW04EPpcDGGc+dlVmGnaLRAupfIC+ckr9aKJ0K0474pDSFjkLpJTGev9TtXjOPteqZqEhYTWOoufLuHI2e+7eIhtj5qdjWMZyWYZ7DnqaUZ2KjZ73f2PaVG0JgqYNCGssfnOyLCX87DdIHuUKsRmNL4PzGI8HzEAdMzwo5gFU2tbhoLkOA1+Q0fVbsZ8o0XqmXwGwP71Cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
- dkim=pass header.d=moxa.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OIsml8s2yfN+2Ht1qWdc6IqEhrKe0W3XnWGvP2ctW3w=;
- b=DlPDwkIcV3Ol3Qh7SEthTPl8fdoNnqXEpoRnkd47pNaZqzCKX0qf0VkRHIXKxbnTLhj8D3WLYQmeuOYOtJPjQwNIDcFnPz+YdYCE6XyK6VaHAJ2vn8rQElfWU/zeBOsvRSQNm9OtoZbOgBUkkp0uOTO2z4ZhbGP/0xUuA520k+g=
-Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- (2603:1096:202:22::12) by HK0PR01MB3508.apcprd01.prod.exchangelabs.com
- (2603:1096:203:b3::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Thu, 9 Jul
- 2020 06:34:06 +0000
-Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- ([fe80::dce:9650:6c58:8b77]) by HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- ([fe80::dce:9650:6c58:8b77%4]) with mapi id 15.20.3153.030; Thu, 9 Jul 2020
- 06:34:06 +0000
-From:   =?big5?B?Sm9obnNvbiBDSCBDaGVuICizr6xMvrEp?= 
-        <JohnsonCH.Chen@moxa.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-CC:     Guenter Roeck <linux@roeck-us.net>,
+        id S1726372AbgGIIuW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 9 Jul 2020 04:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbgGIIuT (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 9 Jul 2020 04:50:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9F0C08C5CE
+        for <linux-watchdog@vger.kernel.org>; Thu,  9 Jul 2020 01:50:19 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jtSFw-0008EV-8U; Thu, 09 Jul 2020 10:50:12 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jtSFq-0005Cr-D3; Thu, 09 Jul 2020 10:50:06 +0200
+Date:   Thu, 9 Jul 2020 10:50:06 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-Subject: [PATCH v4] rtc: rtc-ds1374: wdt: Use watchdog core for watchdog part
-Thread-Topic: [PATCH v4] rtc: rtc-ds1374: wdt: Use watchdog core for watchdog
- part
-Thread-Index: AQHWVbngd+pQBJxC9UWoA5oXNhhYhg==
-Date:   Thu, 9 Jul 2020 06:34:06 +0000
-Message-ID: <HK2PR01MB328182D5A54BFAA8A22E448AFA640@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=moxa.com;
-x-originating-ip: [123.51.145.16]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f239b6c4-1625-47c2-d0e2-08d823d21429
-x-ms-traffictypediagnostic: HK0PR01MB3508:
-x-microsoft-antispam-prvs: <HK0PR01MB35083D50819346753AD746A7FA640@HK0PR01MB3508.apcprd01.prod.exchangelabs.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2150;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KvOP9q+07SQFU5gGp88omVqA3REpimS2Ek/krziXK+p3PrCxZzo6ZJSQhfZimKfF7SzBpKkD/FrZvOpbm3sN8r4W2Vl6LpjFECI6DAwF4evyuNthzxomoVsdm00CdpGCag1Dlx4aqkoTQO7DIYeqb+uMFCrS2Zz10KvYbwPgbBXYwRIOZiedUExocU8HHBy5rCx5i0Ci9OqKaDJxDKB7GhyyNHzQpG0f3dEI+/Yhd7B9uwqLbi2pAhvzbH+ld0qATWG4JNiVVgLE1OFRtK3eUZEN3XT6NPd+t/T3xsLEj32AiXAlA+Ds7WNXVhzZNf39X7sGLroz0V8JFTZEdfli58B30F8NMdn2Uy1fcXWsIeSp6qruDsPqjC4c0fExrPata81EdWhiR0U412L4qeVpOw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR01MB3281.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(136003)(396003)(346002)(39850400004)(376002)(54906003)(52536014)(110136005)(26005)(478600001)(8676002)(8936002)(316002)(30864003)(186003)(7696005)(71200400001)(55016002)(9686003)(86362001)(85182001)(2906002)(6506007)(76116006)(5660300002)(64756008)(83380400001)(33656002)(66476007)(66556008)(4326008)(66946007)(66446008)(171213001)(6606295002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: wUT7rKyXKGNYUNzltk3ekeGCfP9tVzaonJ6I85IR8STnqOfbvSq2pe82ve8NUggCq+jtQQeW2e/tjUxrQsweS/80NFYd18NGHXS1mL87BUQSH259Ytm7hdU1nb6/uF05gACPJmYdvEggdPMYHtsPwyK7zhRvu6GgPRpHYNW6TT3CBpTAQEMWfyNRGEB9lVyVTICPHj/Z6HpbiZGaC9o29ywclMffUZ8C9jXwenAPNXLEFN2kYB3c+wDYvHa7l8FFpr2xhqbnMzMXNUU/8iW9n/SYKtCN9R9WrP855oj+Zk+i+oRLOfRiQJ2hyHPfo7+URYibEoje9sqEnTnjbY+VKea8al3uleNDG1IBozyoRLraccgQbrJIarSv7KguE3fqP3keL93LdasPq2YcLUGu7PVuvXY3UL5MtD1WSflf6yh/FalDDmsc95/Umeg3ahGqHrFT6KADUPacxlHf3+jBshAOvwbQStustVvE4EtgjFlb7eq9G9UA3C9q2vEoc0c4
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200709085006.b54ype3p4yu64upl@pengutronix.de>
+References: <20200706175353.16404-1-michael@walle.cc>
+ <20200706175353.16404-8-michael@walle.cc>
 MIME-Version: 1.0
-X-OriginatorOrg: moxa.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR01MB3281.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f239b6c4-1625-47c2-d0e2-08d823d21429
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2020 06:34:06.0154
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: An+2nG6jOtylOtOfrsinQ8qS9xPHbBLbIQN3o/qeKEunU1ceARyQihLwSK46AcOMsfjR9eQ39tIFKOuDel5jTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR01MB3508
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zo5wkjqhpntpevbs"
+Content-Disposition: inline
+In-Reply-To: <20200706175353.16404-8-michael@walle.cc>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-TGV0IGRzMTM3NCB3YXRjaGRvZyB1c2Ugd2F0Y2hkb2cgY29yZSBmdW5jdGlvbnMuIEl0IGFsc28g
-aW5jbHVkZXMKaW1wcm92aW5nIHdhdGNoZG9nIHRpbWVyIHNldHRpbmcgYW5kIG5vd2F5b3V0LCBh
-bmQganVzdCB1c2VzIGlvY3RsKCkKb2Ygd2F0Y2hkb2cgY29yZS4KClNpZ25lZC1vZmYtYnk6IEpv
-aG5zb24gQ2hlbiA8am9obnNvbmNoLmNoZW5AbW94YS5jb20+Ci0tLQp2My0+djQ6Ci0gRml4IGNv
-ZGluZyBzdHlsZXMgCi0gUmVtb3ZlIGRldl9pbmZvKCkgaW4gZHMxMzc0X3dkdF9zZXR0aW1lb3V0
-KCkKLSBGaXggbWlzc2luZyBlcnJvciBjaGVjawoKdjItPnYzOgotIEZpeCBhIHByb2JsZW0gcmVw
-b3J0ZWQgYnkgV0FUQ0hET0dfQ09SRSBpZiBXQVRDSERPRwotIFJlbW92ZSBzYXZlX2NsaWVudAot
-IExldCB3ZHRfbWFyZ2luIGJlIDAgZm9yIHdhdGNoZG9nX2luaXRfdGltZW91dCgpCi0gVXNlIGRl
-dl9pbmZvKCkgcmF0aGVyIHRoYW4gcHJfaW5mbygpCi0gQXZvaWQgbW9yZSBzdHJpbmdzIGluIHRo
-aXMgZHJpdmVyCgp2MS0+djI6Ci0gVXNlIGRzMTM3NF93ZHRfc2V0dGltZW91dCgpIGJlZm9yZSBy
-ZWdpc3RlcmluZyB0aGUgd2F0Y2hkb2cKLSBSZW1vdmUgd2F0Y2hkb2dfdW5yZWdpc3Rlcl9kZXZp
-Y2UoKSBiZWNhdXNlIGRldm1fd2F0Y2hkb2dfcmVnaXN0ZXJfZGV2aWNlKCkgaXMgdXNlZAotIFJl
-bW92ZSBkczEzNzRfd2R0X3BpbmcoKQotIFRJTUVSX01BUkdJTl9NQVggdG8gNDA5NSBmb3IgMjQt
-Yml0IHZhbHVlCi0gS2VlcCB3ZHRfbWFyZ2luCi0gRml4IGNvZGluZyBzdHlsZXMKCiBkcml2ZXJz
-L3J0Yy9LY29uZmlnICAgICAgfCAgIDEgKwogZHJpdmVycy9ydGMvcnRjLWRzMTM3NC5jIHwgMjU4
-ICsrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogMiBmaWxlcyBjaGFuZ2Vk
-LCA2MiBpbnNlcnRpb25zKCspLCAxOTcgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVy
-cy9ydGMvS2NvbmZpZyBiL2RyaXZlcnMvcnRjL0tjb25maWcKaW5kZXggYjU0ZDg3ZDQ1Yzg5Li5j
-MjVkNTFmMzVmMGMgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvcnRjL0tjb25maWcKKysrIGIvZHJpdmVy
-cy9ydGMvS2NvbmZpZwpAQCAtMjgyLDYgKzI4Miw3IEBAIGNvbmZpZyBSVENfRFJWX0RTMTM3NAog
-Y29uZmlnIFJUQ19EUlZfRFMxMzc0X1dEVAogCWJvb2wgIkRhbGxhcy9NYXhpbSBEUzEzNzQgd2F0
-Y2hkb2cgdGltZXIiCiAJZGVwZW5kcyBvbiBSVENfRFJWX0RTMTM3NAorCXNlbGVjdCBXQVRDSERP
-R19DT1JFIGlmIFdBVENIRE9HCiAJaGVscAogCSAgSWYgeW91IHNheSBZIGhlcmUgeW91IHdpbGwg
-Z2V0IHN1cHBvcnQgZm9yIHRoZQogCSAgd2F0Y2hkb2cgdGltZXIgaW4gdGhlIERhbGxhcyBTZW1p
-Y29uZHVjdG9yIERTMTM3NApkaWZmIC0tZ2l0IGEvZHJpdmVycy9ydGMvcnRjLWRzMTM3NC5jIGIv
-ZHJpdmVycy9ydGMvcnRjLWRzMTM3NC5jCmluZGV4IDljNTFhMTJjZjcwZi4uYzcxMDY1ZDI2Y2Qy
-IDEwMDY0NAotLS0gYS9kcml2ZXJzL3J0Yy9ydGMtZHMxMzc0LmMKKysrIGIvZHJpdmVycy9ydGMv
-cnRjLWRzMTM3NC5jCkBAIC00Niw2ICs0Niw3IEBACiAjZGVmaW5lIERTMTM3NF9SRUdfV0RBTE0y
-CTB4MDYKICNkZWZpbmUgRFMxMzc0X1JFR19DUgkJMHgwNyAvKiBDb250cm9sICovCiAjZGVmaW5l
-IERTMTM3NF9SRUdfQ1JfQUlFCTB4MDEgLyogQWxhcm0gSW50LiBFbmFibGUgKi8KKyNkZWZpbmUg
-RFMxMzc0X1JFR19DUl9XRFNUUgkweDA4IC8qIDE9SU5ULCAwPVJTVCAqLwogI2RlZmluZSBEUzEz
-NzRfUkVHX0NSX1dEQUxNCTB4MjAgLyogMT1XYXRjaGRvZywgMD1BbGFybSAqLwogI2RlZmluZSBE
-UzEzNzRfUkVHX0NSX1dBQ0UJMHg0MCAvKiBXRC9BbGFybSBjb3VudGVyIGVuYWJsZSAqLwogI2Rl
-ZmluZSBEUzEzNzRfUkVHX1NSCQkweDA4IC8qIFN0YXR1cyAqLwpAQCAtNzEsNyArNzIsOSBAQCBz
-dHJ1Y3QgZHMxMzc0IHsKIAlzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50OwogCXN0cnVjdCBydGNf
-ZGV2aWNlICpydGM7CiAJc3RydWN0IHdvcmtfc3RydWN0IHdvcms7Ci0KKyNpZmRlZiBDT05GSUdf
-UlRDX0RSVl9EUzEzNzRfV0RUCisJc3RydWN0IHdhdGNoZG9nX2RldmljZSB3ZHQ7CisjZW5kaWYK
-IAkvKiBUaGUgbXV0ZXggcHJvdGVjdHMgYWxhcm0gb3BlcmF0aW9ucywgYW5kIHByZXZlbnRzIGEg
-cmFjZQogCSAqIGJldHdlZW4gdGhlIGVuYWJsZV9pcnEoKSBpbiB0aGUgd29ya3F1ZXVlIGFuZCB0
-aGUgZnJlZV9pcnEoKQogCSAqIGluIHRoZSByZW1vdmUgZnVuY3Rpb24uCkBAIC0zNjksMjM4ICsz
-NzIsOTggQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBydGNfY2xhc3Nfb3BzIGRzMTM3NF9ydGNfb3Bz
-ID0gewogICoKICAqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKgogICovCi1zdGF0aWMgc3RydWN0IGkyY19j
-bGllbnQgKnNhdmVfY2xpZW50OwogLyogRGVmYXVsdCBtYXJnaW4gKi8KLSNkZWZpbmUgV0RfVElN
-TyAxMzE3NjIKKyNkZWZpbmUgVElNRVJfTUFSR0lOX0RFRkFVTFQJMzIKKyNkZWZpbmUgVElNRVJf
-TUFSR0lOX01JTgkxCisjZGVmaW5lIFRJTUVSX01BUkdJTl9NQVgJNDA5NSAvKiAyNC1iaXQgdmFs
-dWUgKi8KIAogI2RlZmluZSBEUlZfTkFNRSAiRFMxMzc0IFdhdGNoZG9nIgogCi1zdGF0aWMgaW50
-IHdkdF9tYXJnaW4gPSBXRF9USU1POwotc3RhdGljIHVuc2lnbmVkIGxvbmcgd2R0X2lzX29wZW47
-CitzdGF0aWMgaW50IHdkdF9tYXJnaW47CiBtb2R1bGVfcGFyYW0od2R0X21hcmdpbiwgaW50LCAw
-KTsKIE1PRFVMRV9QQVJNX0RFU0Mod2R0X21hcmdpbiwgIldhdGNoZG9nIHRpbWVvdXQgaW4gc2Vj
-b25kcyAoZGVmYXVsdCAzMnMpIik7CiAKK3N0YXRpYyBib29sIG5vd2F5b3V0ID0gV0FUQ0hET0df
-Tk9XQVlPVVQ7Cittb2R1bGVfcGFyYW0obm93YXlvdXQsIGJvb2wsIDApOworTU9EVUxFX1BBUk1f
-REVTQyhub3dheW91dCwgIldhdGNoZG9nIGNhbm5vdCBiZSBzdG9wcGVkIG9uY2Ugc3RhcnRlZCAo
-ZGVmYXVsdCA9IgorCQlfX01PRFVMRV9TVFJJTkcoV0FUQ0hET0dfTk9XQVlPVVQpIikiKTsKKwog
-c3RhdGljIGNvbnN0IHN0cnVjdCB3YXRjaGRvZ19pbmZvIGRzMTM3NF93ZHRfaW5mbyA9IHsKIAku
-aWRlbnRpdHkgICAgICAgPSAiRFMxMzc0IFdURCIsCiAJLm9wdGlvbnMgICAgICAgID0gV0RJT0Zf
-U0VUVElNRU9VVCB8IFdESU9GX0tFRVBBTElWRVBJTkcgfAogCQkJCQkJV0RJT0ZfTUFHSUNDTE9T
-RSwKIH07CiAKLXN0YXRpYyBpbnQgZHMxMzc0X3dkdF9zZXR0aW1lb3V0KHVuc2lnbmVkIGludCB0
-aW1lb3V0KQorc3RhdGljIGludCBkczEzNzRfd2R0X3NldHRpbWVvdXQoc3RydWN0IHdhdGNoZG9n
-X2RldmljZSAqd2R0LCB1bnNpZ25lZCBpbnQgdGltZW91dCkKIHsKLQlpbnQgcmV0ID0gLUVOT0lP
-Q1RMQ01EOwotCWludCBjcjsKKwlzdHJ1Y3QgZHMxMzc0ICpkczEzNzQgPSB3YXRjaGRvZ19nZXRf
-ZHJ2ZGF0YSh3ZHQpOworCXN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQgPSBkczEzNzQtPmNsaWVu
-dDsKKwlpbnQgcmV0LCBjcjsKIAotCXJldCA9IGNyID0gaTJjX3NtYnVzX3JlYWRfYnl0ZV9kYXRh
-KHNhdmVfY2xpZW50LCBEUzEzNzRfUkVHX0NSKTsKLQlpZiAocmV0IDwgMCkKLQkJZ290byBvdXQ7
-CisJd2R0LT50aW1lb3V0ID0gdGltZW91dDsKKworCWNyID0gaTJjX3NtYnVzX3JlYWRfYnl0ZV9k
-YXRhKGNsaWVudCwgRFMxMzc0X1JFR19DUik7CisJaWYgKGNyIDwgMCkKKwkJcmV0dXJuIGNyOwog
-CiAJLyogRGlzYWJsZSBhbnkgZXhpc3Rpbmcgd2F0Y2hkb2cvYWxhcm0gYmVmb3JlIHNldHRpbmcg
-dGhlIG5ldyBvbmUgKi8KIAljciAmPSB+RFMxMzc0X1JFR19DUl9XQUNFOwogCi0JcmV0ID0gaTJj
-X3NtYnVzX3dyaXRlX2J5dGVfZGF0YShzYXZlX2NsaWVudCwgRFMxMzc0X1JFR19DUiwgY3IpOwor
-CXJldCA9IGkyY19zbWJ1c193cml0ZV9ieXRlX2RhdGEoY2xpZW50LCBEUzEzNzRfUkVHX0NSLCBj
-cik7CiAJaWYgKHJldCA8IDApCi0JCWdvdG8gb3V0OworCQlyZXR1cm4gcmV0OwogCiAJLyogU2V0
-IG5ldyB3YXRjaGRvZyB0aW1lICovCi0JcmV0ID0gZHMxMzc0X3dyaXRlX3J0YyhzYXZlX2NsaWVu
-dCwgdGltZW91dCwgRFMxMzc0X1JFR19XREFMTTAsIDMpOwotCWlmIChyZXQpIHsKLQkJcHJfaW5m
-bygiY291bGRuJ3Qgc2V0IG5ldyB3YXRjaGRvZyB0aW1lXG4iKTsKLQkJZ290byBvdXQ7Ci0JfQor
-CXRpbWVvdXQgPSB0aW1lb3V0ICogNDA5NjsKKwlyZXQgPSBkczEzNzRfd3JpdGVfcnRjKGNsaWVu
-dCwgdGltZW91dCwgRFMxMzc0X1JFR19XREFMTTAsIDMpOworCWlmIChyZXQpCisJCXJldHVybiBy
-ZXQ7CiAKIAkvKiBFbmFibGUgd2F0Y2hkb2cgdGltZXIgKi8KIAljciB8PSBEUzEzNzRfUkVHX0NS
-X1dBQ0UgfCBEUzEzNzRfUkVHX0NSX1dEQUxNOworCWNyICY9IH5EUzEzNzRfUkVHX0NSX1dEU1RS
-Oy8qIGZvciBSU1QgUElOICovCiAJY3IgJj0gfkRTMTM3NF9SRUdfQ1JfQUlFOwogCi0JcmV0ID0g
-aTJjX3NtYnVzX3dyaXRlX2J5dGVfZGF0YShzYXZlX2NsaWVudCwgRFMxMzc0X1JFR19DUiwgY3Ip
-OworCXJldCA9IGkyY19zbWJ1c193cml0ZV9ieXRlX2RhdGEoY2xpZW50LCBEUzEzNzRfUkVHX0NS
-LCBjcik7CiAJaWYgKHJldCA8IDApCi0JCWdvdG8gb3V0OworCQlyZXR1cm4gcmV0OwogCiAJcmV0
-dXJuIDA7Ci1vdXQ6Ci0JcmV0dXJuIHJldDsKIH0KIAotCiAvKgogICogUmVsb2FkIHRoZSB3YXRj
-aGRvZyB0aW1lci4gIChpZSwgcGF0IHRoZSB3YXRjaGRvZykKICAqLwotc3RhdGljIHZvaWQgZHMx
-Mzc0X3dkdF9waW5nKHZvaWQpCitzdGF0aWMgaW50IGRzMTM3NF93ZHRfc3RhcnQoc3RydWN0IHdh
-dGNoZG9nX2RldmljZSAqd2R0KQogeworCXN0cnVjdCBkczEzNzQgKmRzMTM3NCA9IHdhdGNoZG9n
-X2dldF9kcnZkYXRhKHdkdCk7CiAJdTMyIHZhbDsKLQlpbnQgcmV0ID0gMDsKIAotCXJldCA9IGRz
-MTM3NF9yZWFkX3J0YyhzYXZlX2NsaWVudCwgJnZhbCwgRFMxMzc0X1JFR19XREFMTTAsIDMpOwot
-CWlmIChyZXQpCi0JCXByX2luZm8oIldEIFRJQ0sgRkFJTCEhISEhISEhISEgJWlcbiIsIHJldCk7
-CisJcmV0dXJuIGRzMTM3NF9yZWFkX3J0YyhkczEzNzQtPmNsaWVudCwgJnZhbCwgRFMxMzc0X1JF
-R19XREFMTTAsIDMpOwogfQogCi1zdGF0aWMgdm9pZCBkczEzNzRfd2R0X2Rpc2FibGUodm9pZCkK
-K3N0YXRpYyBpbnQgZHMxMzc0X3dkdF9zdG9wKHN0cnVjdCB3YXRjaGRvZ19kZXZpY2UgKndkdCkK
-IHsKKwlzdHJ1Y3QgZHMxMzc0ICpkczEzNzQgPSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSh3ZHQpOwor
-CXN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQgPSBkczEzNzQtPmNsaWVudDsKIAlpbnQgY3I7CiAK
-LQljciA9IGkyY19zbWJ1c19yZWFkX2J5dGVfZGF0YShzYXZlX2NsaWVudCwgRFMxMzc0X1JFR19D
-Uik7CisJY3IgPSBpMmNfc21idXNfcmVhZF9ieXRlX2RhdGEoY2xpZW50LCBEUzEzNzRfUkVHX0NS
-KTsKKwlpZiAoY3IgPCAwKQorCQlyZXR1cm4gY3I7CisKIAkvKiBEaXNhYmxlIHdhdGNoZG9nIHRp
-bWVyICovCiAJY3IgJj0gfkRTMTM3NF9SRUdfQ1JfV0FDRTsKIAotCWkyY19zbWJ1c193cml0ZV9i
-eXRlX2RhdGEoc2F2ZV9jbGllbnQsIERTMTM3NF9SRUdfQ1IsIGNyKTsKLX0KLQotLyoKLSAqIFdh
-dGNoZG9nIGRldmljZSBpcyBvcGVuZWQsIGFuZCB3YXRjaGRvZyBzdGFydHMgcnVubmluZy4KLSAq
-Lwotc3RhdGljIGludCBkczEzNzRfd2R0X29wZW4oc3RydWN0IGlub2RlICppbm9kZSwgc3RydWN0
-IGZpbGUgKmZpbGUpCi17Ci0Jc3RydWN0IGRzMTM3NCAqZHMxMzc0ID0gaTJjX2dldF9jbGllbnRk
-YXRhKHNhdmVfY2xpZW50KTsKLQotCWlmIChNSU5PUihpbm9kZS0+aV9yZGV2KSA9PSBXQVRDSERP
-R19NSU5PUikgewotCQltdXRleF9sb2NrKCZkczEzNzQtPm11dGV4KTsKLQkJaWYgKHRlc3RfYW5k
-X3NldF9iaXQoMCwgJndkdF9pc19vcGVuKSkgewotCQkJbXV0ZXhfdW5sb2NrKCZkczEzNzQtPm11
-dGV4KTsKLQkJCXJldHVybiAtRUJVU1k7Ci0JCX0KLQkJLyoKLQkJICogICAgICBBY3RpdmF0ZQot
-CQkgKi8KLQkJd2R0X2lzX29wZW4gPSAxOwotCQltdXRleF91bmxvY2soJmRzMTM3NC0+bXV0ZXgp
-OwotCQlyZXR1cm4gc3RyZWFtX29wZW4oaW5vZGUsIGZpbGUpOwotCX0KLQlyZXR1cm4gLUVOT0RF
-VjsKLX0KLQotLyoKLSAqIENsb3NlIHRoZSB3YXRjaGRvZyBkZXZpY2UuCi0gKi8KLXN0YXRpYyBp
-bnQgZHMxMzc0X3dkdF9yZWxlYXNlKHN0cnVjdCBpbm9kZSAqaW5vZGUsIHN0cnVjdCBmaWxlICpm
-aWxlKQotewotCWlmIChNSU5PUihpbm9kZS0+aV9yZGV2KSA9PSBXQVRDSERPR19NSU5PUikKLQkJ
-Y2xlYXJfYml0KDAsICZ3ZHRfaXNfb3Blbik7Ci0KLQlyZXR1cm4gMDsKKwlyZXR1cm4gaTJjX3Nt
-YnVzX3dyaXRlX2J5dGVfZGF0YShjbGllbnQsIERTMTM3NF9SRUdfQ1IsIGNyKTsKIH0KIAotLyoK
-LSAqIFBhdCB0aGUgd2F0Y2hkb2cgd2hlbmV2ZXIgZGV2aWNlIGlzIHdyaXR0ZW4gdG8uCi0gKi8K
-LXN0YXRpYyBzc2l6ZV90IGRzMTM3NF93ZHRfd3JpdGUoc3RydWN0IGZpbGUgKmZpbGUsIGNvbnN0
-IGNoYXIgX191c2VyICpkYXRhLAotCQkJCXNpemVfdCBsZW4sIGxvZmZfdCAqcHBvcykKLXsKLQlp
-ZiAobGVuKSB7Ci0JCWRzMTM3NF93ZHRfcGluZygpOwotCQlyZXR1cm4gMTsKLQl9Ci0JcmV0dXJu
-IDA7Ci19Ci0KLXN0YXRpYyBzc2l6ZV90IGRzMTM3NF93ZHRfcmVhZChzdHJ1Y3QgZmlsZSAqZmls
-ZSwgY2hhciBfX3VzZXIgKmRhdGEsCi0JCQkJc2l6ZV90IGxlbiwgbG9mZl90ICpwcG9zKQotewot
-CXJldHVybiAwOwotfQotCi0vKgotICogSGFuZGxlIGNvbW1hbmRzIGZyb20gdXNlci1zcGFjZS4K
-LSAqLwotc3RhdGljIGxvbmcgZHMxMzc0X3dkdF9pb2N0bChzdHJ1Y3QgZmlsZSAqZmlsZSwgdW5z
-aWduZWQgaW50IGNtZCwKLQkJCQkJCQl1bnNpZ25lZCBsb25nIGFyZykKLXsKLQlpbnQgbmV3X21h
-cmdpbiwgb3B0aW9uczsKLQotCXN3aXRjaCAoY21kKSB7Ci0JY2FzZSBXRElPQ19HRVRTVVBQT1JU
-OgotCQlyZXR1cm4gY29weV90b191c2VyKChzdHJ1Y3Qgd2F0Y2hkb2dfaW5mbyBfX3VzZXIgKilh
-cmcsCi0JCSZkczEzNzRfd2R0X2luZm8sIHNpemVvZihkczEzNzRfd2R0X2luZm8pKSA/IC1FRkFV
-TFQgOiAwOwotCi0JY2FzZSBXRElPQ19HRVRTVEFUVVM6Ci0JY2FzZSBXRElPQ19HRVRCT09UU1RB
-VFVTOgotCQlyZXR1cm4gcHV0X3VzZXIoMCwgKGludCBfX3VzZXIgKilhcmcpOwotCWNhc2UgV0RJ
-T0NfS0VFUEFMSVZFOgotCQlkczEzNzRfd2R0X3BpbmcoKTsKLQkJcmV0dXJuIDA7Ci0JY2FzZSBX
-RElPQ19TRVRUSU1FT1VUOgotCQlpZiAoZ2V0X3VzZXIobmV3X21hcmdpbiwgKGludCBfX3VzZXIg
-KilhcmcpKQotCQkJcmV0dXJuIC1FRkFVTFQ7Ci0KLQkJLyogdGhlIGhhcmR3YXJlJ3MgdGljayBy
-YXRlIGlzIDQwOTYgSHosIHNvCi0JCSAqIHRoZSBjb3VudGVyIHZhbHVlIG5lZWRzIHRvIGJlIHNj
-YWxlZCBhY2NvcmRpbmdseQotCQkgKi8KLQkJbmV3X21hcmdpbiA8PD0gMTI7Ci0JCWlmIChuZXdf
-bWFyZ2luIDwgMSB8fCBuZXdfbWFyZ2luID4gMTY3NzcyMTYpCi0JCQlyZXR1cm4gLUVJTlZBTDsK
-LQotCQl3ZHRfbWFyZ2luID0gbmV3X21hcmdpbjsKLQkJZHMxMzc0X3dkdF9zZXR0aW1lb3V0KG5l
-d19tYXJnaW4pOwotCQlkczEzNzRfd2R0X3BpbmcoKTsKLQkJLyogZmFsbHRocm91Z2ggKi8KLQlj
-YXNlIFdESU9DX0dFVFRJTUVPVVQ6Ci0JCS8qIHdoZW4gcmV0dXJuaW5nIC4uLiBpbnZlcnNlIGlz
-IHRydWUgKi8KLQkJcmV0dXJuIHB1dF91c2VyKCh3ZHRfbWFyZ2luID4+IDEyKSwgKGludCBfX3Vz
-ZXIgKilhcmcpOwotCWNhc2UgV0RJT0NfU0VUT1BUSU9OUzoKLQkJaWYgKGNvcHlfZnJvbV91c2Vy
-KCZvcHRpb25zLCAoaW50IF9fdXNlciAqKWFyZywgc2l6ZW9mKGludCkpKQotCQkJcmV0dXJuIC1F
-RkFVTFQ7Ci0KLQkJaWYgKG9wdGlvbnMgJiBXRElPU19ESVNBQkxFQ0FSRCkgewotCQkJcHJfaW5m
-bygiZGlzYWJsZSB3YXRjaGRvZ1xuIik7Ci0JCQlkczEzNzRfd2R0X2Rpc2FibGUoKTsKLQkJCXJl
-dHVybiAwOwotCQl9Ci0KLQkJaWYgKG9wdGlvbnMgJiBXRElPU19FTkFCTEVDQVJEKSB7Ci0JCQlw
-cl9pbmZvKCJlbmFibGUgd2F0Y2hkb2dcbiIpOwotCQkJZHMxMzc0X3dkdF9zZXR0aW1lb3V0KHdk
-dF9tYXJnaW4pOwotCQkJZHMxMzc0X3dkdF9waW5nKCk7Ci0JCQlyZXR1cm4gMDsKLQkJfQotCQly
-ZXR1cm4gLUVJTlZBTDsKLQl9Ci0JcmV0dXJuIC1FTk9UVFk7Ci19Ci0KLXN0YXRpYyBsb25nIGRz
-MTM3NF93ZHRfdW5sb2NrZWRfaW9jdGwoc3RydWN0IGZpbGUgKmZpbGUsIHVuc2lnbmVkIGludCBj
-bWQsCi0JCQl1bnNpZ25lZCBsb25nIGFyZykKLXsKLQlpbnQgcmV0OwotCXN0cnVjdCBkczEzNzQg
-KmRzMTM3NCA9IGkyY19nZXRfY2xpZW50ZGF0YShzYXZlX2NsaWVudCk7Ci0KLQltdXRleF9sb2Nr
-KCZkczEzNzQtPm11dGV4KTsKLQlyZXQgPSBkczEzNzRfd2R0X2lvY3RsKGZpbGUsIGNtZCwgYXJn
-KTsKLQltdXRleF91bmxvY2soJmRzMTM3NC0+bXV0ZXgpOwotCi0JcmV0dXJuIHJldDsKLX0KLQot
-c3RhdGljIGludCBkczEzNzRfd2R0X25vdGlmeV9zeXMoc3RydWN0IG5vdGlmaWVyX2Jsb2NrICp0
-aGlzLAotCQkJdW5zaWduZWQgbG9uZyBjb2RlLCB2b2lkICp1bnVzZWQpCi17Ci0JaWYgKGNvZGUg
-PT0gU1lTX0RPV04gfHwgY29kZSA9PSBTWVNfSEFMVCkKLQkJLyogRGlzYWJsZSBXYXRjaGRvZyAq
-LwotCQlkczEzNzRfd2R0X2Rpc2FibGUoKTsKLQlyZXR1cm4gTk9USUZZX0RPTkU7Ci19Ci0KLXN0
-YXRpYyBjb25zdCBzdHJ1Y3QgZmlsZV9vcGVyYXRpb25zIGRzMTM3NF93ZHRfZm9wcyA9IHsKLQku
-b3duZXIJCQk9IFRISVNfTU9EVUxFLAotCS5yZWFkCQkJPSBkczEzNzRfd2R0X3JlYWQsCi0JLnVu
-bG9ja2VkX2lvY3RsCQk9IGRzMTM3NF93ZHRfdW5sb2NrZWRfaW9jdGwsCi0JLmNvbXBhdF9pb2N0
-bAkJPSBjb21wYXRfcHRyX2lvY3RsLAotCS53cml0ZQkJCT0gZHMxMzc0X3dkdF93cml0ZSwKLQku
-b3BlbiAgICAgICAgICAgICAgICAgICA9IGRzMTM3NF93ZHRfb3BlbiwKLQkucmVsZWFzZSAgICAg
-ICAgICAgICAgICA9IGRzMTM3NF93ZHRfcmVsZWFzZSwKLQkubGxzZWVrCQkJPSBub19sbHNlZWss
-Ci19OwotCi1zdGF0aWMgc3RydWN0IG1pc2NkZXZpY2UgZHMxMzc0X21pc2NkZXYgPSB7Ci0JLm1p
-bm9yICAgICAgICAgID0gV0FUQ0hET0dfTUlOT1IsCi0JLm5hbWUgICAgICAgICAgID0gIndhdGNo
-ZG9nIiwKLQkuZm9wcyAgICAgICAgICAgPSAmZHMxMzc0X3dkdF9mb3BzLAotfTsKLQotc3RhdGlj
-IHN0cnVjdCBub3RpZmllcl9ibG9jayBkczEzNzRfd2R0X25vdGlmaWVyID0gewotCS5ub3RpZmll
-cl9jYWxsID0gZHMxMzc0X3dkdF9ub3RpZnlfc3lzLAorc3RhdGljIGNvbnN0IHN0cnVjdCB3YXRj
-aGRvZ19vcHMgZHMxMzc0X3dkdF9vcHMgPSB7CisJLm93bmVyICAgICAgICAgID0gVEhJU19NT0RV
-TEUsCisJLnN0YXJ0ICAgICAgICAgID0gZHMxMzc0X3dkdF9zdGFydCwKKwkuc3RvcCAgICAgICAg
-ICAgPSBkczEzNzRfd2R0X3N0b3AsCisJLnNldF90aW1lb3V0ICAgID0gZHMxMzc0X3dkdF9zZXR0
-aW1lb3V0LAogfTsKLQogI2VuZGlmIC8qQ09ORklHX1JUQ19EUlZfRFMxMzc0X1dEVCovCiAvKgog
-ICoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqCkBAIC02NTIsMTYgKzUxNSwyMiBAQCBzdGF0aWMgaW50IGRz
-MTM3NF9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LAogCQlyZXR1cm4gcmV0OwogCiAj
-aWZkZWYgQ09ORklHX1JUQ19EUlZfRFMxMzc0X1dEVAotCXNhdmVfY2xpZW50ID0gY2xpZW50Owot
-CXJldCA9IG1pc2NfcmVnaXN0ZXIoJmRzMTM3NF9taXNjZGV2KTsKKwlkczEzNzQtPndkdC5pbmZv
-ID0gJmRzMTM3NF93ZHRfaW5mbzsKKwlkczEzNzQtPndkdC5vcHMgPSAmZHMxMzc0X3dkdF9vcHM7
-CisJZHMxMzc0LT53ZHQudGltZW91dCA9IFRJTUVSX01BUkdJTl9ERUZBVUxUOworCWRzMTM3NC0+
-d2R0Lm1pbl90aW1lb3V0ID0gVElNRVJfTUFSR0lOX01JTjsKKwlkczEzNzQtPndkdC5tYXhfdGlt
-ZW91dCA9IFRJTUVSX01BUkdJTl9NQVg7CisKKwl3YXRjaGRvZ19pbml0X3RpbWVvdXQoJmRzMTM3
-NC0+d2R0LCB3ZHRfbWFyZ2luLCAmY2xpZW50LT5kZXYpOworCXdhdGNoZG9nX3NldF9ub3dheW91
-dCgmZHMxMzc0LT53ZHQsIG5vd2F5b3V0KTsKKwl3YXRjaGRvZ19zdG9wX29uX3JlYm9vdCgmZHMx
-Mzc0LT53ZHQpOworCXdhdGNoZG9nX3N0b3Bfb25fdW5yZWdpc3RlcigmZHMxMzc0LT53ZHQpOwor
-CXdhdGNoZG9nX3NldF9kcnZkYXRhKCZkczEzNzQtPndkdCwgZHMxMzc0KTsKKwlkczEzNzRfd2R0
-X3NldHRpbWVvdXQoJmRzMTM3NC0+d2R0LCBkczEzNzQtPndkdC50aW1lb3V0KTsKKworCXJldCA9
-IGRldm1fd2F0Y2hkb2dfcmVnaXN0ZXJfZGV2aWNlKCZjbGllbnQtPmRldiwgJmRzMTM3NC0+d2R0
-KTsKIAlpZiAocmV0KQogCQlyZXR1cm4gcmV0OwotCXJldCA9IHJlZ2lzdGVyX3JlYm9vdF9ub3Rp
-ZmllcigmZHMxMzc0X3dkdF9ub3RpZmllcik7Ci0JaWYgKHJldCkgewotCQltaXNjX2RlcmVnaXN0
-ZXIoJmRzMTM3NF9taXNjZGV2KTsKLQkJcmV0dXJuIHJldDsKLQl9Ci0JZHMxMzc0X3dkdF9zZXR0
-aW1lb3V0KDEzMTA3Mik7CiAjZW5kaWYKIAogCXJldHVybiAwOwpAQCAtNjcwLDExICs1MzksNiBA
-QCBzdGF0aWMgaW50IGRzMTM3NF9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LAogc3Rh
-dGljIGludCBkczEzNzRfcmVtb3ZlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpCiB7CiAJc3Ry
-dWN0IGRzMTM3NCAqZHMxMzc0ID0gaTJjX2dldF9jbGllbnRkYXRhKGNsaWVudCk7Ci0jaWZkZWYg
-Q09ORklHX1JUQ19EUlZfRFMxMzc0X1dEVAotCW1pc2NfZGVyZWdpc3RlcigmZHMxMzc0X21pc2Nk
-ZXYpOwotCWRzMTM3NF9taXNjZGV2LnBhcmVudCA9IE5VTEw7Ci0JdW5yZWdpc3Rlcl9yZWJvb3Rf
-bm90aWZpZXIoJmRzMTM3NF93ZHRfbm90aWZpZXIpOwotI2VuZGlmCiAKIAlpZiAoY2xpZW50LT5p
-cnEgPiAwKSB7CiAJCW11dGV4X2xvY2soJmRzMTM3NC0+bXV0ZXgpOwotLSAKMi4yMC4xCg==
+
+--zo5wkjqhpntpevbs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Michael,
+
+On Mon, Jul 06, 2020 at 07:53:47PM +0200, Michael Walle wrote:
+> diff --git a/drivers/pwm/pwm-sl28cpld.c b/drivers/pwm/pwm-sl28cpld.c
+> new file mode 100644
+> index 000000000000..8ee286b605bf
+> --- /dev/null
+> +++ b/drivers/pwm/pwm-sl28cpld.c
+> @@ -0,0 +1,187 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * sl28cpld PWM driver
+> + *
+> + * Copyright 2020 Kontron Europe GmbH
+> + */
+
+Is there publically available documenation available? If so please add a
+link here.
+
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pwm.h>
+> +#include <linux/regmap.h>
+> +
+> +/*
+> + * PWM timer block registers.
+> + */
+> +#define PWM_CTRL		0x00
+> +#define   PWM_ENABLE		BIT(7)
+> +#define   PWM_MODE_250HZ	0
+> +#define   PWM_MODE_500HZ	1
+> +#define   PWM_MODE_1KHZ		2
+> +#define   PWM_MODE_2KHZ		3
+> +#define   PWM_MODE_MASK		GENMASK(1, 0)
+> +#define PWM_CYCLE		0x01
+> +#define   PWM_CYCLE_MAX		0x7f
+
+Please use a less generic prefix for your defines. Also I like having
+the defines for field names include register name. Something like:
+
+	#define PWM_SL28CPLD_CTRL		0x00
+	#define PWM_SL28CPLD_CTRL_ENABLE		BIT(7)
+	#define PWM_SL28CPLD_CTRL_MODE_MASK		GENMASK(1, 0)
+	#define PWM_SL28CPLD_CTRL_MODE_250HZ		FIELD_PREP(PWM_SL28CPLD_CTRL_MODE_MA=
+SK, 0)
+
+> +struct sl28cpld_pwm {
+> +	struct pwm_chip pwm_chip;
+> +	struct regmap *regmap;
+> +	u32 offset;
+> +};
+> +
+> +struct sl28cpld_pwm_periods {
+> +	u8 ctrl;
+> +	unsigned long duty_cycle;
+> +};
+> +
+> +struct sl28cpld_pwm_config {
+> +	unsigned long period_ns;
+> +	u8 max_duty_cycle;
+> +};
+> +
+> +static struct sl28cpld_pwm_config sl28cpld_pwm_config[] =3D {
+
+const ? (Or drop as the values can be easily computed, see below.)
+
+> +	[PWM_MODE_250HZ] =3D { .period_ns =3D 4000000, .max_duty_cycle =3D 0x80=
+ },
+> +	[PWM_MODE_500HZ] =3D { .period_ns =3D 2000000, .max_duty_cycle =3D 0x40=
+ },
+> +	[PWM_MODE_1KHZ]  =3D { .period_ns =3D 1000000, .max_duty_cycle =3D 0x20=
+ },
+> +	[PWM_MODE_2KHZ]  =3D { .period_ns =3D  500000, .max_duty_cycle =3D 0x10=
+ },
+> +};
+> +
+> +static void sl28cpld_pwm_get_state(struct pwm_chip *chip,
+> +				   struct pwm_device *pwm,
+> +				   struct pwm_state *state)
+> +{
+> +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
+> +	static struct sl28cpld_pwm_config *config;
+> +	unsigned int reg;
+> +	unsigned int mode;
+> +
+> +	regmap_read(priv->regmap, priv->offset + PWM_CTRL, &reg);
+> +
+> +	state->enabled =3D reg & PWM_ENABLE;
+
+Would it be more consisted to use FIELD_GET here, too?
+
+> +
+> +	mode =3D FIELD_GET(PWM_MODE_MASK, reg);
+> +	config =3D &sl28cpld_pwm_config[mode];
+> +	state->period =3D config->period_ns;
+
+I wonder if this could be done more effectively without the above table.
+Something like:
+
+	state->period =3D 4000000 >> mode.
+=09
+(with a #define for 4000000 of course).
+
+> +	regmap_read(priv->regmap, priv->offset + PWM_CYCLE, &reg);
+> +	pwm_set_relative_duty_cycle(state, reg, config->max_duty_cycle);
+
+Oh, what a creative idea to use pwm_set_relative_duty_cycle here.
+Unfortunately it's using the wrong rounding strategy. Please enable
+PWM_DEBUG which should diagnose these problems (given enough testing).
+
+(Hmm, on second thought I'm not sure that rounding is relevant with the
+numbers of this hardware. Still it's wrong in general and I don't want
+to have others copy this.)
+
+> +}
+> +
+> +static int sl28cpld_pwm_apply(struct pwm_chip *chip, struct pwm_device *=
+pwm,
+> +			      const struct pwm_state *state)
+> +{
+> +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
+> +	struct sl28cpld_pwm_config *config;
+> +	unsigned int cycle;
+> +	int ret;
+> +	int mode;
+> +	u8 ctrl;
+> +
+> +	/* Get the configuration by comparing the period */
+> +	for (mode =3D 0; mode < ARRAY_SIZE(sl28cpld_pwm_config); mode++) {
+> +		config =3D &sl28cpld_pwm_config[mode];
+> +		if (state->period =3D=3D config->period_ns)
+> +			break;
+> +	}
+> +
+> +	if (mode =3D=3D ARRAY_SIZE(sl28cpld_pwm_config))
+> +		return -EINVAL;
+
+You're supposed to pick the biggest period that isn't bigger than the
+requested period. So something like:
+
+	switch(period) {
+	case 4000000 ... UINT_MAX:
+		mode =3D 0;
+		break;
+	case 2000000 ... 3999999:
+		mode =3D 1;
+		break;
+	...
+	}
+
+(or:
+
+	if period >=3D 4000000:
+		mode =3D 0
+	else:
+		// I think ... please double-check
+		mode =3D ilog2(4000000 / (period + 1)) + 1
+
+	if mode > 3:
+		return -ERANGE;
+)
+
+	real_period =3D 4000000 >> mode;
+
+> +	ctrl =3D FIELD_PREP(PWM_MODE_MASK, mode);
+> +	if (state->enabled)
+> +		ctrl |=3D PWM_ENABLE;
+> +
+> +	cycle =3D pwm_get_relative_duty_cycle(state, config->max_duty_cycle);
+
+Again the rounding is wrong. You need need to round down the requested
+duty_cycle to the next possible value. So something like:
+
+	duty_cycle =3D min(real_period, state->duty_cycle);
+
+	cycle =3D duty_cycle * (0x80 >> mode) / (4000000 >> mode);
+
+which can be further simplified to
+
+	cycle =3D duty_cycle / 31250
+
+=2E
+
+> +	/*
+> +	 * The hardware doesn't allow to set max_duty_cycle if the
+> +	 * 250Hz mode is enabled, thus we have to trap that here.
+> +	 * But because a 100% duty cycle is equal on all modes, i.e.
+
+It depends on how picky you are if you can agree here. Please document
+this in a Limitations paragraph at the top of the driver similar to
+drivers/pwm/pwm-rcar.c and others.
+
+> +	 * it is just a "all-high" output, we trap any case with a
+> +	 * 100% duty cycle and use the 500Hz mode.
+
+Please only trap on 250Hz mode. (Can be done using: if (cycle =3D=3D 0x80) I
+think)
+
+> +	 */
+> +	if (cycle =3D=3D config->max_duty_cycle) {
+> +		ctrl &=3D ~PWM_MODE_MASK;
+> +		ctrl |=3D FIELD_PREP(PWM_MODE_MASK, PWM_MODE_500HZ);
+> +		cycle =3D PWM_CYCLE_MAX;
+=09
+I would have expected 0x40 here instead of 0x7f?
+
+> +	}
+> +
+> +	ret =3D regmap_write(priv->regmap, priv->offset + PWM_CTRL, ctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_write(priv->regmap, priv->offset + PWM_CYCLE, (u8)cycle);
+
+I assume this can result in broken output? Consider the hardware runs
+with mode =3D 1 & cycle =3D 0x23 and you want to go to mode =3D 0 & cycle =
+=3D
+0x42: Can this result in a period that has mode =3D 0 & cycle =3D 0x23?
+
+If this cannot be avoided, please document this in the Limitations
+paragraph.
+
+> +}
+> +
+> +static const struct pwm_ops sl28cpld_pwm_ops =3D {
+> +	.apply =3D sl28cpld_pwm_apply,
+> +	.get_state =3D sl28cpld_pwm_get_state,
+> +	.owner =3D THIS_MODULE,
+> +};
+> +
+> +static int sl28cpld_pwm_probe(struct platform_device *pdev)
+> +{
+> +	struct sl28cpld_pwm *priv;
+> +	struct pwm_chip *chip;
+> +	int ret;
+> +
+> +	if (!pdev->dev.parent)
+> +		return -ENODEV;
+> +
+> +	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+> +	if (!priv->regmap)
+> +		return -ENODEV;
+> +
+> +	ret =3D device_property_read_u32(&pdev->dev, "reg", &priv->offset);
+> +	if (ret)
+> +		return -EINVAL;
+> +
+> +	/* Initialize the pwm_chip structure */
+> +	chip =3D &priv->pwm_chip;
+> +	chip->dev =3D &pdev->dev;
+> +	chip->ops =3D &sl28cpld_pwm_ops;
+> +	chip->base =3D -1;
+> +	chip->npwm =3D 1;
+> +
+> +	ret =3D pwmchip_add(&priv->pwm_chip);
+> +	if (ret)
+> +		return ret;
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	return 0;
+> +}
+
+Please add error messages with some details for the error paths
+(preferable using %pe to indicate the error code).
+
+> +static int sl28cpld_pwm_remove(struct platform_device *pdev)
+> +{
+> +	struct sl28cpld_pwm *priv =3D platform_get_drvdata(pdev);
+> +
+> +	return pwmchip_remove(&priv->pwm_chip);
+> +}
+> +
+> +static const struct of_device_id sl28cpld_pwm_of_match[] =3D {
+> +	{ .compatible =3D "kontron,sl28cpld-pwm" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, sl28cpld_pwm_of_match);
+> +
+> +static struct platform_driver sl28cpld_pwm_driver =3D {
+> +	.probe =3D sl28cpld_pwm_probe,
+> +	.remove	=3D sl28cpld_pwm_remove,
+> +	.driver =3D {
+> +		.name =3D "sl28cpld-pwm",
+> +		.of_match_table =3D sl28cpld_pwm_of_match,
+> +	},
+> +};
+> +module_platform_driver(sl28cpld_pwm_driver);
+> +
+> +MODULE_DESCRIPTION("sl28cpld PWM Driver");
+> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> +MODULE_LICENSE("GPL");
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zo5wkjqhpntpevbs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8G2joACgkQwfwUeK3K
+7AmJGgf/WBxR5LIpn0VH8Eu7pe5XA6Ic/I7iL7pbWV+u7KttKvKeJSKDQP+Rj7w/
+oTgVpPOzquY7nsgi8Xc+X980NILKIg3h/GOOWCie31utloJHocy4Xva3W4AtfJFi
+vtu5Aeunx9zaStCDvwrA/5QKsxYuMSAKWoTqzRW8gdGyyUFKG5rnS4Sz5A1Zk7Tj
+kv2pVpbVAU4JsnS8FUGQnXG32UhrZddYZKb6h6NoOIP13OybadiQ11dcsfrjguPg
+0NgNL+VHwM1nFEOOTza5u3WfaEXSFIInFev55g3TYnjOIk1mY980eNLc682VqhZX
+djlTan09K0g6k9nD5qjkmhAT8tntQw==
+=pWwP
+-----END PGP SIGNATURE-----
+
+--zo5wkjqhpntpevbs--
