@@ -2,103 +2,168 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D8A21DB29
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jul 2020 18:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E47F21E1CA
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jul 2020 22:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729811AbgGMQEc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jul 2020 12:04:32 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:44876 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729027AbgGMQEb (ORCPT
+        id S1726382AbgGMU6c (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jul 2020 16:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726325AbgGMU6b (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jul 2020 12:04:31 -0400
-Received: by mail-io1-f65.google.com with SMTP id i4so14006285iov.11;
-        Mon, 13 Jul 2020 09:04:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0sunnV9kDrUsUSO/lW1Logo3b4p4WNuGPhwv9k+yy78=;
-        b=CDL5Dt3PPhI0ChMjEqhu/vdu8NqDoXjUnaVcNafdkb7GsgpKiR9B2Iw6IxEu+30s0U
-         8BICW3ode1gsiUVC4U8z4rWVZl28QM/wCwynWO+PoRnVc5KUyZv49AZdwvvs9PG5rm8j
-         Z/5cglDvhd38abiRrqzxVeY2cd/m6lw35wV1EPlH1kIrV+wEqmtKMquKKXaN8KDur9pQ
-         O9nNAUe2hdRIbj3AhnHxAjsyerUa0I0Jt23ts3E3ofA8qVvLPbaGXKHpwSBQEpVvxPw0
-         ouzG0Qz85L574ekv4qM7251yIBVjKBrADU3M93vUIK2G9ytEzu+hq5l+VVimwdlSSb9K
-         e5jA==
-X-Gm-Message-State: AOAM531ILEb7cDrzlGt8qdXtRZPFk2upAsHCMqpPF7bjkaIMmGjsCNft
-        MtjQS+CYYs5nyGtqjy6g3w==
-X-Google-Smtp-Source: ABdhPJxD7uq5WmIrqpNMEk2ms+CZADoNvoKAM2eqWWrJFaO+FKRn2p5bDlePNgpedl3T+/Pf63xtTg==
-X-Received: by 2002:a6b:d31a:: with SMTP id s26mr429334iob.48.1594656270186;
-        Mon, 13 Jul 2020 09:04:30 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id w15sm8941248ila.65.2020.07.13.09.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 09:04:29 -0700 (PDT)
-Received: (nullmailer pid 303717 invoked by uid 1000);
-        Mon, 13 Jul 2020 16:04:27 -0000
-Date:   Mon, 13 Jul 2020 10:04:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Li Yang <leoyang.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pwm@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>
-Subject: Re: [PATCH v5 03/13] dt-bindings: mfd: Add bindings for sl28cpld
-Message-ID: <20200713160427.GA303616@bogus>
-References: <20200706175353.16404-1-michael@walle.cc>
- <20200706175353.16404-4-michael@walle.cc>
+        Mon, 13 Jul 2020 16:58:31 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60859C061755;
+        Mon, 13 Jul 2020 13:58:31 -0700 (PDT)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 347F8BC07E;
+        Mon, 13 Jul 2020 20:58:27 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH] watchdog: Replace HTTP links with HTTPS ones
+Date:   Mon, 13 Jul 2020 22:58:21 +0200
+Message-Id: <20200713205821.38223-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200706175353.16404-4-michael@walle.cc>
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: ++++++
+X-Spam-Level: ******
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+X-Spam: Yes
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 06 Jul 2020 19:53:43 +0200, Michael Walle wrote:
-> Add a device tree bindings for the board management controller found on
-> the Kontron SMARC-sAL28 board.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> Changes since v4:
->  - fix the regex of the unit-address
-> 
-> Changes since v3:
->  - see cover letter
-> 
->  .../bindings/gpio/kontron,sl28cpld-gpio.yaml  |  54 +++++++
->  .../hwmon/kontron,sl28cpld-hwmon.yaml         |  27 ++++
->  .../kontron,sl28cpld-intc.yaml                |  54 +++++++
->  .../bindings/mfd/kontron,sl28cpld.yaml        | 153 ++++++++++++++++++
->  .../bindings/pwm/kontron,sl28cpld-pwm.yaml    |  35 ++++
->  .../watchdog/kontron,sl28cpld-wdt.yaml        |  35 ++++
->  6 files changed, 358 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
->  create mode 100644 Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
->  create mode 100644 Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
->  create mode 100644 Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
-> 
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
+
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+---
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+ (Actually letting a shell for loop submit all this stuff for me.)
+
+ If there are any URLs to be removed completely or at least not just HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+ Sorry again to all maintainers who complained about subject lines.
+ Now I realized that you want an actually perfect prefixes,
+ not just subsystem ones.
+ I tried my best...
+ And yes, *I could* (at least half-)automate it.
+ Impossible is nothing! :)
+
+
+ Documentation/devicetree/bindings/watchdog/davinci-wdt.txt | 4 ++--
+ drivers/watchdog/Kconfig                                   | 2 +-
+ drivers/watchdog/dw_wdt.c                                  | 2 +-
+ drivers/watchdog/nv_tco.c                                  | 2 +-
+ drivers/watchdog/nv_tco.h                                  | 2 +-
+ drivers/watchdog/sp5100_tco.c                              | 2 +-
+ 6 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt b/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
+index e60b9a13bdcb..aa10b8ec36e2 100644
+--- a/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
++++ b/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
+@@ -11,8 +11,8 @@ Optional properties:
+ 	   See clock-bindings.txt
+ 
+ Documentation:
+-Davinci DM646x - http://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
+-Keystone - http://www.ti.com/lit/ug/sprugv5a/sprugv5a.pdf
++Davinci DM646x - https://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
++Keystone - https://www.ti.com/lit/ug/sprugv5a/sprugv5a.pdf
+ 
+ Examples:
+ 
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 4f4687c46d38..ab7aad5a1e69 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1027,7 +1027,7 @@ config ADVANTECH_WDT
+ 	  If you are configuring a Linux kernel for the Advantech single-board
+ 	  computer, say `Y' here to support its built-in watchdog timer
+ 	  feature. More information can be found at
+-	  <http://www.advantech.com.tw/products/>
++	  <https://www.advantech.com.tw/products/>
+ 
+ config ALIM1535_WDT
+ 	tristate "ALi M1535 PMU Watchdog Timer"
+diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+index fba21de2bbad..57bbc1434341 100644
+--- a/drivers/watchdog/dw_wdt.c
++++ b/drivers/watchdog/dw_wdt.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+  * Copyright 2010-2011 Picochip Ltd., Jamie Iles
+- * http://www.picochip.com
++ * https://www.picochip.com
+  *
+  * This file implements a driver for the Synopsys DesignWare watchdog device
+  * in the many subsystems. The watchdog has 16 different timeout periods
+diff --git a/drivers/watchdog/nv_tco.c b/drivers/watchdog/nv_tco.c
+index d7a560e348d5..179fb9aa3cf4 100644
+--- a/drivers/watchdog/nv_tco.c
++++ b/drivers/watchdog/nv_tco.c
+@@ -7,7 +7,7 @@
+  *	Based off i8xx_tco.c:
+  *	(c) Copyright 2000 kernel concepts <nils@kernelconcepts.de>, All Rights
+  *	Reserved.
+- *				http://www.kernelconcepts.de
++ *				https://www.kernelconcepts.de
+  *
+  *	TCO timer driver for NV chipsets
+  *	based on softdog.c by Alan Cox <alan@redhat.com>
+diff --git a/drivers/watchdog/nv_tco.h b/drivers/watchdog/nv_tco.h
+index d325e528010f..c65f82588386 100644
+--- a/drivers/watchdog/nv_tco.h
++++ b/drivers/watchdog/nv_tco.h
+@@ -9,7 +9,7 @@
+  *
+  *	(c) Copyright 2000 kernel concepts <nils@kernelconcepts.de>, All Rights
+  *	Reserved.
+- *				http://www.kernelconcepts.de
++ *				https://www.kernelconcepts.de
+  *
+  *	Neither kernel concepts nor Nils Faerber admit liability nor provide
+  *	warranty for any of this software. This material is provided
+diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+index 93bd302ae7c5..85e9664318c9 100644
+--- a/drivers/watchdog/sp5100_tco.c
++++ b/drivers/watchdog/sp5100_tco.c
+@@ -7,7 +7,7 @@
+  *	Based on i8xx_tco.c:
+  *	(c) Copyright 2000 kernel concepts <nils@kernelconcepts.de>, All Rights
+  *	Reserved.
+- *				http://www.kernelconcepts.de
++ *				https://www.kernelconcepts.de
+  *
+  *	See AMD Publication 43009 "AMD SB700/710/750 Register Reference Guide",
+  *	    AMD Publication 45482 "AMD SB800-Series Southbridges Register
+-- 
+2.27.0
+
