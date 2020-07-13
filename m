@@ -2,61 +2,44 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD6721D22C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jul 2020 10:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF3B21D257
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jul 2020 10:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725969AbgGMIsE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jul 2020 04:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S1728738AbgGMI7u (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jul 2020 04:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729403AbgGMIsD (ORCPT
+        with ESMTP id S1726300AbgGMI7u (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jul 2020 04:48:03 -0400
+        Mon, 13 Jul 2020 04:59:50 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1391FC061755
-        for <linux-watchdog@vger.kernel.org>; Mon, 13 Jul 2020 01:48:03 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1juu7w-00049g-AP; Mon, 13 Jul 2020 10:47:56 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1juu7q-0002yC-Fw; Mon, 13 Jul 2020 10:47:50 +0200
-Date:   Mon, 13 Jul 2020 10:47:50 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Walle <michael@walle.cc>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
-Message-ID: <20200713084750.qj4hquzd6uz6y526@pengutronix.de>
-References: <20200706175353.16404-1-michael@walle.cc>
- <20200706175353.16404-8-michael@walle.cc>
- <20200709085006.b54ype3p4yu64upl@pengutronix.de>
- <72858253a9094074e9c8cd7a4e1db09f@walle.cc>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FF5C061794
+        for <linux-watchdog@vger.kernel.org>; Mon, 13 Jul 2020 01:59:49 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1juuJQ-0005Uk-0a; Mon, 13 Jul 2020 10:59:48 +0200
+Subject: Re: [PATCH v1 8/8] watchdog: f71808e_wdt: rename variant-independent
+ identifiers appropriately
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org
+References: <20200611191750.28096-1-a.fatoum@pengutronix.de>
+ <20200611191750.28096-9-a.fatoum@pengutronix.de>
+ <20200630212927.GA24643@roeck-us.net>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <6a31b919-4142-ba07-09c6-75e56c3050ed@pengutronix.de>
+Date:   Mon, 13 Jul 2020 10:59:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kbnayqgol27lp4uu"
-Content-Disposition: inline
-In-Reply-To: <72858253a9094074e9c8cd7a4e1db09f@walle.cc>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
+In-Reply-To: <20200630212927.GA24643@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
@@ -65,405 +48,332 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
---kbnayqgol27lp4uu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello Michael,
+On 6/30/20 11:29 PM, Guenter Roeck wrote:
+> On Thu, Jun 11, 2020 at 09:17:49PM +0200, Ahmad Fatoum wrote:
+>> Code for the common parts of the driver, either uses watchdog_ as
+>> prefix for the watchdog API or f71808e_ for everything else.
+>>
+>> The driver now supports 9 more variants besides the f71808e,
+>> so let's rename the common parts to start with fintek_ instead.
+>>
+>> This makes code browsing easier, because it's readily apparent whether a
+>> function is variant-specific or not. Also the watchdog_ namespace isn't
+>> used anymore for the driver-internal functions.
+>>
+>> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> ---
+>>  drivers/watchdog/f71808e_wdt.c | 98 +++++++++++++++++-----------------
+>>  1 file changed, 49 insertions(+), 49 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/f71808e_wdt.c b/drivers/watchdog/f71808e_wdt.c
+>> index 7c42cbf9912e..c866d05e8788 100644
+>> --- a/drivers/watchdog/f71808e_wdt.c
+>> +++ b/drivers/watchdog/f71808e_wdt.c
+>> @@ -114,18 +114,18 @@ static inline int superio_enter(int base);
+>>  static inline void superio_select(int base, int ld);
+>>  static inline void superio_exit(int base);
+>>  
+>> -struct watchdog_data;
+>> +struct fintek_wdog_data;
+>>  
+>> -struct f71808e_variant {
+>> +struct fintek_variant {
+>>  	u16 id;
+>>  	const char *wdt_name; /* NULL if chip lacks watchdog timer */
+>> -	void (*pinconf)(struct watchdog_data *wd);
+>> +	void (*pinconf)(struct fintek_wdog_data *wd);
+>>  };
+>>  
+>> -struct watchdog_data {
+>> +struct fintek_wdog_data {
+>>  	struct watchdog_device wdd;
+>>  	unsigned short	sioaddr;
+>> -	const struct f71808e_variant *variant;
+>> +	const struct fintek_variant *variant;
+>>  	struct watchdog_info ident;
+>>  
+>>  	u8		timer_val;	/* content for the wd_time register */
+>> @@ -134,7 +134,7 @@ struct watchdog_data {
+>>  	char		pulse_mode;	/* enable pulse output mode? */
+>>  };
+>>  
+>> -static inline bool has_f81865_wdo_conf(struct watchdog_data *wd)
+>> +static inline bool has_f81865_wdo_conf(struct fintek_wdog_data *wd)
+>>  {
+>>  	return wd->variant->id == SIO_F81865_ID
+>>  		|| wd->variant->id == SIO_F81866_ID;
+>> @@ -202,9 +202,9 @@ static inline void superio_exit(int base)
+>>  	release_region(base, 2);
+>>  }
+>>  
+>> -static int watchdog_set_timeout(struct watchdog_device *wdd, unsigned int new_timeout)
+>> +static int fintek_wdog_set_timeout(struct watchdog_device *wdd, unsigned int new_timeout)
+>>  {
+>> -	struct watchdog_data *wd = watchdog_get_drvdata(wdd);
+>> +	struct fintek_wdog_data *wd = watchdog_get_drvdata(wdd);
+>>  
+>>  	wdd->timeout = new_timeout;
+>>  	if (new_timeout > 0xff) {
+>> @@ -218,7 +218,7 @@ static int watchdog_set_timeout(struct watchdog_device *wdd, unsigned int new_ti
+>>  	return 0;
+>>  }
+>>  
+>> -static int watchdog_set_pulse_width(struct watchdog_data *wd, unsigned int pw)
+>> +static int fintek_wdog_set_pulse_width(struct fintek_wdog_data *wd, unsigned int pw)
+>>  {
+>>  	unsigned int t1 = 25, t2 = 125, t3 = 5000;
+>>  
+>> @@ -246,9 +246,9 @@ static int watchdog_set_pulse_width(struct watchdog_data *wd, unsigned int pw)
+>>  	return 0;
+>>  }
+>>  
+>> -static int watchdog_keepalive(struct watchdog_device *wdd)
+>> +static int fintek_wdog_keepalive(struct watchdog_device *wdd)
+>>  {
+>> -	struct watchdog_data *wd = watchdog_get_drvdata(wdd);
+>> +	struct fintek_wdog_data *wd = watchdog_get_drvdata(wdd);
+>>  	int err;
+>>  
+>>  	err = superio_enter(wd->sioaddr);
+>> @@ -274,13 +274,13 @@ static int watchdog_keepalive(struct watchdog_device *wdd)
+>>  	return 0;
+>>  }
+>>  
+>> -static int watchdog_start(struct watchdog_device *wdd)
+>> +static int fintek_wdog_start(struct watchdog_device *wdd)
+>>  {
+>> -	struct watchdog_data *wd = watchdog_get_drvdata(wdd);
+>> +	struct fintek_wdog_data *wd = watchdog_get_drvdata(wdd);
+>>  	int err;
+>>  
+>>  	/* Make sure we don't die as soon as the watchdog is enabled below */
+>> -	err = watchdog_keepalive(wdd);
+>> +	err = fintek_wdog_keepalive(wdd);
+>>  	if (err)
+>>  		return err;
+>>  
+>> @@ -328,9 +328,9 @@ static int watchdog_start(struct watchdog_device *wdd)
+>>  	return err;
+>>  }
+>>  
+>> -static int watchdog_stop(struct watchdog_device *wdd)
+>> +static int fintek_wdog_stop(struct watchdog_device *wdd)
+>>  {
+>> -	struct watchdog_data *wd = watchdog_get_drvdata(wdd);
+>> +	struct fintek_wdog_data *wd = watchdog_get_drvdata(wdd);
+>>  	int err;
+>>  
+>>  	err = superio_enter(wd->sioaddr);
+>> @@ -346,21 +346,21 @@ static int watchdog_stop(struct watchdog_device *wdd)
+>>  	return 0;
+>>  }
+>>  
+>> -static const struct watchdog_ops f71808e_wdog_ops = {
+>> +static const struct watchdog_ops fintek_wdog_ops = {
+>>  	.owner = THIS_MODULE,
+>> -	.start = watchdog_start,
+>> -	.stop = watchdog_stop,
+>> -	.ping = watchdog_keepalive,
+>> -	.set_timeout = watchdog_set_timeout,
+>> +	.start = fintek_wdog_start,
+>> +	.stop = fintek_wdog_stop,
+>> +	.ping = fintek_wdog_keepalive,
+>> +	.set_timeout = fintek_wdog_set_timeout,
+>>  };
+>>  
+>> -static bool watchdog_is_running(struct watchdog_data *wd, u8 wdt_conf)
+>> +static bool fintek_wdog_is_running(struct fintek_wdog_data *wd, u8 wdt_conf)
+>>  {
+>>  	return (superio_inb(wd->sioaddr, SIO_REG_ENABLE) & BIT(0))
+>>  		&& (wdt_conf & BIT(F71808FG_FLAG_WD_EN));
+>>  }
+>>  
+>> -static int __init watchdog_init(struct watchdog_data *wd)
+>> +static int __init fintek_wdog_init(struct fintek_wdog_data *wd)
+>>  {
+>>  	struct watchdog_device *wdd = &wd->wdd;
+>>  	int wdt_conf, err = 0;
+>> @@ -390,17 +390,17 @@ static int __init watchdog_init(struct watchdog_data *wd)
+>>  	superio_outb(wd->sioaddr, F71808FG_REG_WDT_CONF,
+>>  		     wdt_conf | BIT(F71808FG_FLAG_WDTMOUT_STS));
+>>  
+>> -	if (watchdog_is_running(wd, wdt_conf))
+>> +	if (fintek_wdog_is_running(wd, wdt_conf))
+>>  		set_bit(WDOG_HW_RUNNING, &wdd->status);
+>>  
+>>  	superio_exit(wd->sioaddr);
+>>  
+>> -	err = watchdog_set_pulse_width(wd, pulse_width);
+>> +	err = fintek_wdog_set_pulse_width(wd, pulse_width);
+>>  	if (err)
+>>  		return err;
+>>  
+>>  	wdd->info		= &wd->ident;
+>> -	wdd->ops		= &f71808e_wdog_ops;
+>> +	wdd->ops		= &fintek_wdog_ops;
+>>  	wdd->min_timeout	= 1;
+>>  	wdd->max_timeout	= max_timeout;
+>>  	wdd->timeout		= timeout;
+>> @@ -418,18 +418,18 @@ static int __init watchdog_init(struct watchdog_data *wd)
+>>  	 * WATCHDOG_HANDLE_BOOT_ENABLED can result in keepalive being directly
+>>  	 * called without a set_timeout before, so it needs to be done here once
+>>  	 */
+>> -	watchdog_set_timeout(wdd, wdd->timeout);
+>> +	fintek_wdog_set_timeout(wdd, wdd->timeout);
+>>  
+>>  	return watchdog_register_device(wdd);
+>>  }
+>>  
+>> -static void f71808fg_pinconf(struct watchdog_data *wd)
+>> +static void f71808fg_pinconf(struct fintek_wdog_data *wd)
+>>  {
+>>  	/* Set pin 21 to GPIO23/WDTRST#, then to WDTRST# */
+>>  	superio_clear_bit(wd->sioaddr, SIO_REG_MFUNCT2, 3);
+>>  	superio_clear_bit(wd->sioaddr, SIO_REG_MFUNCT3, 3);
+>>  }
+>> -static void f71862fg_pinconf(struct watchdog_data *wd)
+>> +static void f71862fg_pinconf(struct fintek_wdog_data *wd)
+>>  {
+>>  	if (f71862fg_pin == 63) {
+>>  		/* SPI must be disabled first to use this pin! */
+>> @@ -439,23 +439,23 @@ static void f71862fg_pinconf(struct watchdog_data *wd)
+>>  		superio_set_bit(wd->sioaddr, SIO_REG_MFUNCT1, 1);
+>>  	}
+>>  }
+>> -static void f71868_pinconf(struct watchdog_data *wd)
+>> +static void f71868_pinconf(struct fintek_wdog_data *wd)
+>>  {
+>>  	/* GPIO14 --> WDTRST# */
+>>  	superio_clear_bit(wd->sioaddr, SIO_REG_MFUNCT1, 4);
+>>  }
+>> -static void f71882fg_pinconf(struct watchdog_data *wd)
+>> +static void f71882fg_pinconf(struct fintek_wdog_data *wd)
+>>  {
+>>  	/* Set pin 56 to WDTRST# */
+>>  	superio_set_bit(wd->sioaddr, SIO_REG_MFUNCT1, 1);
+>>  }
+>> -static void f71889fg_pinconf(struct watchdog_data *wd)
+>> +static void f71889fg_pinconf(struct fintek_wdog_data *wd)
+>>  {
+>>  	/* set pin 40 to WDTRST# */
+>>  	superio_outb(wd->sioaddr, SIO_REG_MFUNCT3,
+>>  		     superio_inb(wd->sioaddr, SIO_REG_MFUNCT3) & 0xcf);
+>>  }
+>> -static void f81803_pinconf(struct watchdog_data *wd)
+>> +static void f81803_pinconf(struct fintek_wdog_data *wd)
+>>  {
+>>  	/* Enable TSI Level register bank */
+>>  	superio_clear_bit(wd->sioaddr, SIO_REG_CLOCK_SEL, 3);
+>> @@ -463,12 +463,12 @@ static void f81803_pinconf(struct watchdog_data *wd)
+>>  	superio_outb(wd->sioaddr, SIO_REG_TSI_LEVEL_SEL, 0x5f &
+>>  		     superio_inb(wd->sioaddr, SIO_REG_TSI_LEVEL_SEL));
+>>  }
+>> -static void f81865_pinconf(struct watchdog_data *wd)
+>> +static void f81865_pinconf(struct fintek_wdog_data *wd)
+>>  {
+>>  	/* Set pin 70 to WDTRST# */
+>>  	superio_clear_bit(wd->sioaddr, SIO_REG_MFUNCT3, 5);
+>>  }
+>> -static void f81866_pinconf(struct watchdog_data *wd)
+>> +static void f81866_pinconf(struct fintek_wdog_data *wd)
+>>  {
+>>  	/*
+>>  	 * GPIO1 Control Register when 27h BIT3:2 = 01 & BIT0 = 0.
+>> @@ -484,7 +484,7 @@ static void f81866_pinconf(struct watchdog_data *wd)
+>>  	superio_clear_bit(wd->sioaddr, SIO_F81866_REG_GPIO1, 5);
+>>  }
+>>  
+>> -struct f71808e_variant f71808e_variants[] = {
+>> +struct fintek_variant fintek_variants[] = {
+> 
+> 0-day has a point here. Granted, that is inherited, but still ...
 
-On Sat, Jul 11, 2020 at 07:28:05PM +0200, Michael Walle wrote:
-> Am 2020-07-09 10:50, schrieb Uwe Kleine-K=F6nig:
-> > On Mon, Jul 06, 2020 at 07:53:47PM +0200, Michael Walle wrote:
-> > > diff --git a/drivers/pwm/pwm-sl28cpld.c b/drivers/pwm/pwm-sl28cpld.c
-> > > new file mode 100644
-> > > index 000000000000..8ee286b605bf
-> > > --- /dev/null
-> > > +++ b/drivers/pwm/pwm-sl28cpld.c
-> > > @@ -0,0 +1,187 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * sl28cpld PWM driver
-> > > + *
-> > > + * Copyright 2020 Kontron Europe GmbH
-> > > + */
-> >=20
-> > Is there publically available documenation available? If so please add a
-> > link here.
->=20
-> Unfortunately not. But it should be easy enough and I'll describe it
-> briefly in the header.
+Ye, will fix in v2. Was just waiting for more review.
 
-That's fine.
+Thanks,
+Ahmad
 
-> > > +#include <linux/bitfield.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/mod_devicetable.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/pwm.h>
-> > > +#include <linux/regmap.h>
-> > > +
-> > > +/*
-> > > + * PWM timer block registers.
-> > > + */
-> > > +#define PWM_CTRL		0x00
-> > > +#define   PWM_ENABLE		BIT(7)
-> > > +#define   PWM_MODE_250HZ	0
-> > > +#define   PWM_MODE_500HZ	1
-> > > +#define   PWM_MODE_1KHZ		2
-> > > +#define   PWM_MODE_2KHZ		3
-> > > +#define   PWM_MODE_MASK		GENMASK(1, 0)
-> > > +#define PWM_CYCLE		0x01
-> > > +#define   PWM_CYCLE_MAX		0x7f
-> >=20
-> > Please use a less generic prefix for your defines. Also I like having
-> > the defines for field names include register name. Something like:
-> >=20
-> > 	#define PWM_SL28CPLD_CTRL		0x00
-> > 	#define PWM_SL28CPLD_CTRL_ENABLE		BIT(7)
-> > 	#define PWM_SL28CPLD_CTRL_MODE_MASK		GENMASK(1, 0)
->=20
-> Ok.
->=20
-> > 	#define
-> > PWM_SL28CPLD_CTRL_MODE_250HZ		FIELD_PREP(PWM_SL28CPLD_CTRL_MODE_MASK,
-> > 0)
->=20
-> Shouldn't we just "#define ..MODE_250HZ 1" use FIELD_PREP inside the code,
-> so you can actually use the normalized enumeration values, too?
+> 
+>>  	{ SIO_F71808_ID,  "f71808fg", f71808fg_pinconf },
+>>  	{ SIO_F71862_ID,  "f71862fg", f71862fg_pinconf },
+>>  	{ SIO_F71868_ID,  "f71868",   f71868_pinconf },
+>> @@ -500,9 +500,9 @@ struct f71808e_variant f71808e_variants[] = {
+>>  	{ /* sentinel */ }
+>>  };
+>>  
+>> -static struct f71808e_variant __init *f71808e_find(int sioaddr)
+>> +static struct fintek_variant __init *fintek_wdog_find(int sioaddr)
+>>  {
+>> -	struct f71808e_variant *variant;
+>> +	struct fintek_variant *variant;
+>>  	u16 devid;
+>>  	int err = superio_enter(sioaddr);
+>>  	if (err)
+>> @@ -516,7 +516,7 @@ static struct f71808e_variant __init *f71808e_find(int sioaddr)
+>>  	}
+>>  
+>>  	devid = force_id ? force_id : superio_inw(sioaddr, SIO_REG_DEVID);
+>> -	for (variant = f71808e_variants; variant->id; variant++) {
+>> +	for (variant = fintek_variants; variant->id; variant++) {
+>>  		if (variant->id == devid)
+>>  			break;
+>>  	}
+>> @@ -536,13 +536,13 @@ static struct f71808e_variant __init *f71808e_find(int sioaddr)
+>>  	return variant;
+>>  }
+>>  
+>> -static struct watchdog_data watchdog;
+>> +static struct fintek_wdog_data watchdog;
+>>  
+>> -static int __init f71808e_init(void)
+>> +static int __init fintek_wdog_probe(void)
+>>  {
+>> -	struct watchdog_data *wd = &watchdog;
+>> +	struct fintek_wdog_data *wd = &watchdog;
+>>  	static const unsigned short addrs[] = { 0x2e, 0x4e };
+>> -	struct f71808e_variant *variant;
+>> +	struct fintek_variant *variant;
+>>  	int i;
+>>  
+>>  	if (f71862fg_pin != 63 && f71862fg_pin != 56) {
+>> @@ -551,7 +551,7 @@ static int __init f71808e_init(void)
+>>  	}
+>>  
+>>  	for (i = 0; i < ARRAY_SIZE(addrs); i++) {
+>> -		variant = f71808e_find(addrs[i]);
+>> +		variant = fintek_wdog_find(addrs[i]);
+>>  		if (!IS_ERR(variant))
+>>  			break;
+>>  	}
+>> @@ -561,17 +561,17 @@ static int __init f71808e_init(void)
+>>  	wd->variant = variant;
+>>  	wd->sioaddr = addrs[i];
+>>  
+>> -	return watchdog_init(wd);
+>> +	return fintek_wdog_init(wd);
+>>  }
+>>  
+>> -static void __exit f71808e_exit(void)
+>> +static void __exit fintek_wdog_exit(void)
+>>  {
+>>  	watchdog_unregister_device(&watchdog.wdd);
+>>  }
+>>  
+>> -MODULE_DESCRIPTION("F71808E Watchdog Driver");
+>> +MODULE_DESCRIPTION("Fintek F71808E Watchdog Driver");
+>>  MODULE_AUTHOR("Giel van Schijndel <me@mortis.eu>");
+>>  MODULE_LICENSE("GPL");
+>>  
+>> -module_init(f71808e_init);
+>> -module_exit(f71808e_exit);
+>> +module_init(fintek_wdog_probe);
+>> +module_exit(fintek_wdog_exit);
+> 
 
-yeah, looks sane.
-
-> Actually, I'll rename the PWM_MODE to PWM_PRESCALER, because that is
-> more accurate.
-
-Whatever suits you and is consistent is fine for me.
-
-> > > +struct sl28cpld_pwm {
-> > > +	struct pwm_chip pwm_chip;
-> > > +	struct regmap *regmap;
-> > > +	u32 offset;
-> > > +};
-> > > +
-> > > +struct sl28cpld_pwm_periods {
-> > > +	u8 ctrl;
-> > > +	unsigned long duty_cycle;
-> > > +};
-> > > +
-> > > +struct sl28cpld_pwm_config {
-> > > +	unsigned long period_ns;
-> > > +	u8 max_duty_cycle;
-> > > +};
-> > > +
-> > > +static struct sl28cpld_pwm_config sl28cpld_pwm_config[] =3D {
-> >=20
-> > const ? (Or drop as the values can be easily computed, see below.)
-> >=20
-> > > +	[PWM_MODE_250HZ] =3D { .period_ns =3D 4000000, .max_duty_cycle =3D =
-0x80 },
-> > > +	[PWM_MODE_500HZ] =3D { .period_ns =3D 2000000, .max_duty_cycle =3D =
-0x40 },
-> > > +	[PWM_MODE_1KHZ]  =3D { .period_ns =3D 1000000, .max_duty_cycle =3D =
-0x20 },
-> > > +	[PWM_MODE_2KHZ]  =3D { .period_ns =3D  500000, .max_duty_cycle =3D =
-0x10 },
-> > > +};
-> > > +
-> > > +static void sl28cpld_pwm_get_state(struct pwm_chip *chip,
-> > > +				   struct pwm_device *pwm,
-> > > +				   struct pwm_state *state)
-> > > +{
-> > > +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
-> > > +	static struct sl28cpld_pwm_config *config;
-> > > +	unsigned int reg;
-> > > +	unsigned int mode;
-> > > +
-> > > +	regmap_read(priv->regmap, priv->offset + PWM_CTRL, &reg);
-> > > +
-> > > +	state->enabled =3D reg & PWM_ENABLE;
-> >=20
-> > Would it be more consisted to use FIELD_GET here, too?
->=20
-> I had used FIELD_GET only for bit-fields with more than one bit,
-> i.e. no flags. But that is just a matter of taste, I guess. I'd
-> prefer to keep the simple "reg & PWM_ENABLE". If you insist on
-> the FIELD_GET() I'll change it ;)
-
-I think using FIELD_GET is more consistent, but I won't insist.
-
-> > > +	mode =3D FIELD_GET(PWM_MODE_MASK, reg);
-> > > +	config =3D &sl28cpld_pwm_config[mode];
-> > > +	state->period =3D config->period_ns;
-> >=20
-> > I wonder if this could be done more effectively without the above table.
-> > Something like:
-> >=20
-> > 	state->period =3D 4000000 >> mode.
->=20
-> The reason I introduced a lookup table here was that I need a
-> list of the supported modes; I wasn't aware of the rounding.
-
-List of supported modes =3D [0, 1, 2, 3], isn't it?
-
-> See also below.
->=20
-> > (with a #define for 4000000 of course).
-> >=20
-> > > +	regmap_read(priv->regmap, priv->offset + PWM_CYCLE, &reg);
-> > > +	pwm_set_relative_duty_cycle(state, reg, config->max_duty_cycle);
-> >=20
-> > Oh, what a creative idea to use pwm_set_relative_duty_cycle here.
->=20
-> What is that helper for then? The former versions did the same
-> calculations (i.e. DIV_ROUND_CLOSEST_ULL()) just open coded. But
-> I guess then it was also rounding the wrong way.
-
-Yes. In my book pwm_set_relative_duty_cycle is for consumers. And if
-DIV_ROUND_CLOSEST_ULL is the right thing for them depends on their use
-case.
-
-> > Unfortunately it's using the wrong rounding strategy. Please enable
-> > PWM_DEBUG which should diagnose these problems (given enough testing).
->=20
-> Is there any written documentation on how to round, i.e. up or down?
-
-There are the checks implemented for PWM_DEBUG. I started to work on the
-documentation
-(https://patchwork.ozlabs.org/project/linux-pwm/patch/20191209213233.29574-=
-2-u.kleine-koenig@pengutronix.de/)
-but didn't get feedback yet. (And the rounding rules are not included
-there.)
-
-> I had a look Documentation/driver-api/pwm.rst again. But couldn't find
-> anything. A grep DIV_ROUND_CLOSEST_ULL() turns out that quite a few
-> drivers use it, so I did the same ;)
-
-Yes, the rounding requirement is new and many driver's are not
-conforming (yet).
-
-> > (Hmm, on second thought I'm not sure that rounding is relevant with the
-> > numbers of this hardware. Still it's wrong in general and I don't want
-> > to have others copy this.)
-> >=20
-> > > +}
-> > > +
-> > > +static int sl28cpld_pwm_apply(struct pwm_chip *chip, struct
-> > > pwm_device *pwm,
-> > > +			      const struct pwm_state *state)
-> > > +{
-> > > +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
-> > > +	struct sl28cpld_pwm_config *config;
-> > > +	unsigned int cycle;
-> > > +	int ret;
-> > > +	int mode;
-> > > +	u8 ctrl;
-> > > +
-> > > +	/* Get the configuration by comparing the period */
-> > > +	for (mode =3D 0; mode < ARRAY_SIZE(sl28cpld_pwm_config); mode++) {
-> > > +		config =3D &sl28cpld_pwm_config[mode];
-> > > +		if (state->period =3D=3D config->period_ns)
-> > > +			break;
-> > > +	}
-> > > +
-> > > +	if (mode =3D=3D ARRAY_SIZE(sl28cpld_pwm_config))
-> > > +		return -EINVAL;
-> >=20
-> > You're supposed to pick the biggest period that isn't bigger than the
-> > requested period. So something like:
-> >=20
-> > 	switch(period) {
-> > 	case 4000000 ... UINT_MAX:
-> > 		mode =3D 0;
-> > 		break;
-> > 	case 2000000 ... 3999999:
-> > 		mode =3D 1;
-> > 		break;
-> > 	...
-> > 	}
-> >=20
-> > (or:
-> >=20
-> > 	if period >=3D 4000000:
-> > 		mode =3D 0
-> > 	else:
-> > 		// I think ... please double-check
-> > 		mode =3D ilog2(4000000 / (period + 1)) + 1
-> >=20
-> > 	if mode > 3:
-> > 		return -ERANGE;
-> > )
->=20
-> I see. In this case I can of course drop the table. But the rounding
-> will be then very coarse for this driver. And there is no way to get
-> the value which is actually set, right? You can just read the cached
-> value. So that value might be far off the actual one set in the
-> hardware.
-
-Yes, we once changed pwm_get_rate to return the actually implemented
-setting, but this broke some stuff; see commit
-40a6b9a00930fd6b59aa2eb6135abc2efe5440c3.
-
-I already thought about proposing pwm_get_rate_hw(), but for now there
-is (AFAICT) no user who would need it. And it's hard to know which
-variant is actually preferred by consumers. My expectation is that most
-don't even care.
-
-I also have a pwm_round_rate() function in mind that will give you the
-actual rate without applying it. This can then be used by consumers who
-care. But also there is no user who would need it today.
-
-> During testing I've also found the following problem: Assume we set
-> a period of 5000000ns; this will be rounded to 4000000ns and written
-> to the hardware. But the usable duty cycle is still 0..5000000ns. The
-> driver will translate this input in the following manner:
->  - 0..4000000 -> 0%..100%
->  - >4000000 -> 100%
-> Is this behavior intended?
-
-It's expected.
-
-> Even for PWM hardware which supports finer
-> grained frequencies there will be some upper and lower limits. Is
-> the user of the PWM supposed to know these?
-
-There is nothing we can do on hardware imposed limits. In practise it
-doesn't seem to matter. Also note that most consumers get a proposed
-period length.
-
-> > 	real_period =3D 4000000 >> mode;
-> >=20
-> > > +	ctrl =3D FIELD_PREP(PWM_MODE_MASK, mode);
-> > > +	if (state->enabled)
-> > > +		ctrl |=3D PWM_ENABLE;
-> > > +
-> > > +	cycle =3D pwm_get_relative_duty_cycle(state, config->max_duty_cycle=
-);
-> >=20
-> > Again the rounding is wrong. You need need to round down the requested
-> > duty_cycle to the next possible value. So something like:
-> >=20
-> > 	duty_cycle =3D min(real_period, state->duty_cycle);
-> >=20
-> > 	cycle =3D duty_cycle * (0x80 >> mode) / (4000000 >> mode);
-> >=20
-> > which can be further simplified to
-> >=20
-> > 	cycle =3D duty_cycle / 31250
->=20
-> Mh, this made me think where that "magic" number is coming from. Turns
-> out this is the NSECS_PE_SEC / base clock of the PWM.
-
-It's a simplification of the line above, so it is 4000000 / 0x80. (But
-it's not by chance this matches NSECS_PER_SEC / base clock of course.)
-
-> I guess I'll rework the get_state() and apply() to just use this
-> base frequency, dropping the table etc.
->=20
-> Btw what about the polarity. Do I have to support it or can I
-> return an error code if its !=3D PWM_POLARITY_NORMAL? If so, which
-> error code? EINVAL?
-
-=2E.ooOO(Did I really miss that during review? Bummer)
-
-If your hardware only support normal polarity, only implement this and
-return -EINVAL for inverted polarity requests.
-
-> I know I could just invert the duty cycle in
-> software, but shouldn't this be done in the core for any controller
-> which doesn't support changing the polarity in hardware?
-
-Please don't. This should indeed be done at the framework level. (But
-I'm not convinced doing this unconditionally is a good idea.)
-
-> > > +	/*
-> > > +	 * The hardware doesn't allow to set max_duty_cycle if the
-> > > +	 * 250Hz mode is enabled, thus we have to trap that here.
-> > > +	 * But because a 100% duty cycle is equal on all modes, i.e.
-> >=20
-> > It depends on how picky you are if you can agree here.
->=20
-> why is that? The only drawback is that the mode is changed without
-> the user seeing it.
-
-Ideally periods are completed before they change. So if a user requests
-=2Eperiod =3D .duty_cycle =3D 100ms with having the PWM disabled before and
-afterwards, the expectation is that it is active for (an integer
-multiple of) 100 ms. But honestly there are not many hardware
-implementation + driver combos that get this right.
-
-> But the PWM subsystem returns the cached state,
-> right? get_state() is called only on device request (and during
-> debug it seems). Actually, enabling PWM_DEBUG might choke on this
-> workaround (".apply didn't pick the best available period"). Is
-> this ok?
-
-hmm, I didn't consider this when writing the checks for PWM_DEBUG.
-According to the currently checked rules the expected configuration is
-to pick the 250Hz mode and use cycle =3D 0x7f. Hmm, I have to think about
-this. Maybe we should weaken the check to the cases with
-0 < duty_cycle < period. Thierry, what do you think?
-
-Special casing 0% and 100% is annoying, but insisting 250Hz + 0x7f seems
-to be far from reality. (Is it?)=20
-
-> > > +	ret =3D regmap_write(priv->regmap, priv->offset + PWM_CTRL, ctrl);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	return regmap_write(priv->regmap, priv->offset + PWM_CYCLE,
-> > > (u8)cycle);
-> >=20
-> > I assume this can result in broken output? Consider the hardware runs
-> > with mode =3D 1 & cycle =3D 0x23 and you want to go to mode =3D 0 & cyc=
-le =3D
-> > 0x42: Can this result in a period that has mode =3D 0 & cycle =3D 0x23?
->=20
-> Isn't that always the case if a write may fail and there are more than
-> one register to configure?
-
-Depending on hardware capabilities you might not be able to prevent
-this yes. Unfortunately this is quite common.
-
-But there are hardware implementations that are not prone to such
-failures. (E.g. the registers written can be only shadow values that are
-latched into hardware only when the last value is written.)
-
-> For example, have a look at pwm-iqs620a.c.
-> Btw. the get_state might also fail, but there is no return value to
-> return the error.
-
-Yes, changing this is on my todo list.
-
-> > If this cannot be avoided, please document this in the Limitations
-> > paragraph.
->=20
-> Sure. There might be (or most likely are) gliches when you change the
-> mode.
-
-If you change only cycle but not mode, does the hardware complete the
-currently running period? What about disable()?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kbnayqgol27lp4uu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8MH7MACgkQwfwUeK3K
-7AmS/wgAgHtz0usxb1L3V3EzTvq2Es3IDi4siQeD/8CLuqVRsqsIERfdSp8yrehG
-nvdw5AWxPCQbnMPqdw3l/jIpTYJBMXGkkq6ISgoP5l3oJgcTUXV2A88J8jLbxYpQ
-v7NrAqFHXELiZDD3fy4INiUmItloGTnpYWlZ0Bdjjvom9ZBUlUF+KDV0n+HWdyJ6
-+GZIHtcifIDydf2Bd5lpUMVdyw6y1gm/WC3sXbRjIetzRKe7QNLUVffWH9uXtWI1
-/gU0+/i77tZrrr/xNUFnhA86kJtRzdg64ek+x/DL90QNhI3/AvEeVhmcj3/ZFl9K
-OP7/l4770EssKbeTeU7MojZVu8YqRQ==
-=UAV3
------END PGP SIGNATURE-----
-
---kbnayqgol27lp4uu--
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
