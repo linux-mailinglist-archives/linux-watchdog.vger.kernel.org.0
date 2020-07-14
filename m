@@ -2,30 +2,38 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E3D21F6C6
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jul 2020 18:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0BD21FFA3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jul 2020 23:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbgGNQJF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Jul 2020 12:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728258AbgGNQJE (ORCPT
+        id S1728130AbgGNVJd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Jul 2020 17:09:33 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:33871 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726750AbgGNVJc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Jul 2020 12:09:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9256C061794
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Jul 2020 09:09:03 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jvNUI-0006MO-Nr; Tue, 14 Jul 2020 18:08:58 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jvNUG-00029L-H1; Tue, 14 Jul 2020 18:08:56 +0200
-Date:   Tue, 14 Jul 2020 18:08:56 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Walle <michael@walle.cc>
+        Tue, 14 Jul 2020 17:09:32 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 169EE22FB3;
+        Tue, 14 Jul 2020 23:09:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1594760969;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4AoDvP+OzW/wwTOs72I67TRZ+06uoGV7X/2qnpc/9rQ=;
+        b=BZmzeIaSbj+Tme4+wzwLPgEdCz+d98gFzXsqF4qIFLcAjIRaiy4OrJjoCkFdo4ipBQc2D+
+        /ZHLBmbLwwnIY+C153lVLlu1QhkmQK09njzFQ6aCqKUZRs5EhN3s/iGw8tLFCiBfFe7L83
+        lIJT60kEw2+nPfy8vgOjxtuXcwQezIs=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Tue, 14 Jul 2020 23:09:28 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -45,170 +53,175 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
-Message-ID: <20200714160856.rjqi7lv63geil3hm@pengutronix.de>
+In-Reply-To: <20200714160856.rjqi7lv63geil3hm@pengutronix.de>
 References: <20200706175353.16404-1-michael@walle.cc>
  <20200706175353.16404-8-michael@walle.cc>
  <20200709085006.b54ype3p4yu64upl@pengutronix.de>
  <72858253a9094074e9c8cd7a4e1db09f@walle.cc>
  <20200713084750.qj4hquzd6uz6y526@pengutronix.de>
  <c0594c34c712ce26b3936d42c92d2361@walle.cc>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ochzazkc36dtv4os"
-Content-Disposition: inline
-In-Reply-To: <c0594c34c712ce26b3936d42c92d2361@walle.cc>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+ <20200714160856.rjqi7lv63geil3hm@pengutronix.de>
+User-Agent: Roundcube Webmail/1.4.7
+Message-ID: <eedceb44cba9b54e0634f0e8e4f96f70@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hi Uwe,
 
---ochzazkc36dtv4os
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Am 2020-07-14 18:08, schrieb Uwe Kleine-König:
+> On Tue, Jul 14, 2020 at 01:31:13PM +0200, Michael Walle wrote:
+>> Am 2020-07-13 10:47, schrieb Uwe Kleine-König:
+>> > I already thought about proposing pwm_get_rate_hw(), but for now there
+>> > is (AFAICT) no user who would need it. And it's hard to know which
+>> > variant is actually preferred by consumers. My expectation is that most
+>> > don't even care.
+>> >
+>> > I also have a pwm_round_rate() function in mind that will give you the
+>> > actual rate without applying it. This can then be used by consumers who
+>> > care. But also there is no user who would need it today.
+>> 
+>> Ok. I take it that all such improvements are still in the making ;)
+> 
+> If you have a real use case, present it, then I give it a boost on my
+> todo list.
 
-Hello Michael,
+Not really.
 
-On Tue, Jul 14, 2020 at 01:31:13PM +0200, Michael Walle wrote:
-> Am 2020-07-13 10:47, schrieb Uwe Kleine-K=F6nig:
-> > I already thought about proposing pwm_get_rate_hw(), but for now there
-> > is (AFAICT) no user who would need it. And it's hard to know which
-> > variant is actually preferred by consumers. My expectation is that most
-> > don't even care.
-> >=20
-> > I also have a pwm_round_rate() function in mind that will give you the
-> > actual rate without applying it. This can then be used by consumers who
-> > care. But also there is no user who would need it today.
->=20
-> Ok. I take it that all such improvements are still in the making ;)
+>> > > But the PWM subsystem returns the cached state,
+>> > > right? get_state() is called only on device request (and during
+>> > > debug it seems). Actually, enabling PWM_DEBUG might choke on this
+>> > > workaround (".apply didn't pick the best available period"). Is
+>> > > this ok?
+>> >
+>> > hmm, I didn't consider this when writing the checks for PWM_DEBUG.
+>> > According to the currently checked rules the expected configuration is
+>> > to pick the 250Hz mode and use cycle = 0x7f.
+>> 
+>> Not to use 0x80, which is the max_duty_cycle? Like its 0x40 for the 
+>> 500Hz
+>> mode.
+> 
+> No, when I thought about a sane set of rules (and so checks for
+> PWM_DEBUG) I didn't consider a PWM that can implement 100% but not for
+> all otherwise available period lengths. I'm still amazed sometimes how
+> different the capabilities of different implementations for something 
+> so
+> seemingly easy like a PWM are.
+> 
+>> > Hmm, I have to think about
+>> > this. Maybe we should weaken the check to the cases with
+>> > 0 < duty_cycle < period. Thierry, what do you think?
+>> >
+>> > Special casing 0% and 100% is annoying, but insisting 250Hz + 0x7f seems
+>> > to be far from reality. (Is it?)
+>> 
+>> If you mean by insisting to clip at 0x7f, yeah thats bad IMHO, because
+>> the user wants an all-high line, but in the end it would be a toggling
+>> line. It wouldn't be that bad for anything in between 0% and 100% but
+>> IMHO its bad for exactly 0% and 100%.
+>> 
+>> You could also ask the driver about known quirks, like special 0% and
+>> 100% handling and exclude it from the tests accordingly.
+> 
+> Do you care enough to propose a patch? You're in the situation to test
+> it.
 
-If you have a real use case, present it, then I give it a boost on my
-todo list.
+Ok. I'll come up with something outside of this patch series.
 
-> > > But the PWM subsystem returns the cached state,
-> > > right? get_state() is called only on device request (and during
-> > > debug it seems). Actually, enabling PWM_DEBUG might choke on this
-> > > workaround (".apply didn't pick the best available period"). Is
-> > > this ok?
-> >=20
-> > hmm, I didn't consider this when writing the checks for PWM_DEBUG.
-> > According to the currently checked rules the expected configuration is
-> > to pick the 250Hz mode and use cycle =3D 0x7f.
->=20
-> Not to use 0x80, which is the max_duty_cycle? Like its 0x40 for the 500Hz
-> mode.
+>> > > > > +	ret = regmap_write(priv->regmap, priv->offset + PWM_CTRL, ctrl);
+>> > > > > +	if (ret)
+>> > > > > +		return ret;
+>> > > > > +
+>> > > > > +	return regmap_write(priv->regmap, priv->offset + PWM_CYCLE,
+>> > > > > (u8)cycle);
+>> > > >
+>> > > > I assume this can result in broken output? Consider the hardware runs
+>> > > > with mode = 1 & cycle = 0x23 and you want to go to mode = 0 & cycle =
+>> > > > 0x42: Can this result in a period that has mode = 0 & cycle = 0x23?
+>> > >
+>> > > Isn't that always the case if a write may fail and there are more than
+>> > > one register to configure?
+>> >
+>> > Depending on hardware capabilities you might not be able to prevent
+>> > this yes. Unfortunately this is quite common.
+>> >
+>> > But there are hardware implementations that are not prone to such
+>> > failures. (E.g. the registers written can be only shadow values that are
+>> > latched into hardware only when the last value is written.)
+>> 
+>> Maybe this could be improved in the future.
+> 
+> We should somewhere describe, what an ideal PWM can do.
+> My wishlist (just as it comes to my mind, so no guarantee of
+> completeness):
+> 
+>  - can do 0% duty cycle for all supported period lengths
+>  - can do 100% duty cycle for all supported period lengths
+>  - supports both polarities
+>  - supports immediate change of configuration and after completion of
+>    the currently running period
+>  - atomic update (i.e. if you go from configuration A to configuration 
+> B
+>    the hardware guarantees to only emit periods of type A and then type
+>    B. (Depending on the item above, the last A period might be cut 
+> off.)
 
-No, when I thought about a sane set of rules (and so checks for
-PWM_DEBUG) I didn't consider a PWM that can implement 100% but not for
-all otherwise available period lengths. I'm still amazed sometimes how
-different the capabilities of different implementations for something so
-seemingly easy like a PWM are.
+We actually discussed this, because the implementation would be easier. 
+But
+if the change takes place immediately you might end up with a longer 
+duty
+cycle. Assume the PWM runs at 80% duty cycle and starts with the 
+on-period.
+If you now change that to 50% you might end up with one successive duty
+cycle of "130%". Eg. the 80% of the old and right after that you switch 
+to
+the new 50% and then you'd have a high output which corresponds to a 
+130%
+cycle. I don't know if that is acceptable for all applications.
 
-> > Hmm, I have to think about
-> > this. Maybe we should weaken the check to the cases with
-> > 0 < duty_cycle < period. Thierry, what do you think?
-> >=20
-> > Special casing 0% and 100% is annoying, but insisting 250Hz + 0x7f seems
-> > to be far from reality. (Is it?)
->=20
-> If you mean by insisting to clip at 0x7f, yeah thats bad IMHO, because
-> the user wants an all-high line, but in the end it would be a toggling
-> line. It wouldn't be that bad for anything in between 0% and 100% but
-> IMHO its bad for exactly 0% and 100%.
->=20
-> You could also ask the driver about known quirks, like special 0% and
-> 100% handling and exclude it from the tests accordingly.
+>  - emits an irq when configuration changes
 
-Do you care enough to propose a patch? You're in the situation to test
-it.
+Why would you need the interrupt?
 
-> > > > > +	ret =3D regmap_write(priv->regmap, priv->offset + PWM_CTRL, ctr=
-l);
-> > > > > +	if (ret)
-> > > > > +		return ret;
-> > > > > +
-> > > > > +	return regmap_write(priv->regmap, priv->offset + PWM_CYCLE,
-> > > > > (u8)cycle);
-> > > >
-> > > > I assume this can result in broken output? Consider the hardware ru=
-ns
-> > > > with mode =3D 1 & cycle =3D 0x23 and you want to go to mode =3D 0 &=
- cycle =3D
-> > > > 0x42: Can this result in a period that has mode =3D 0 & cycle =3D 0=
-x23?
-> > >=20
-> > > Isn't that always the case if a write may fail and there are more than
-> > > one register to configure?
-> >=20
-> > Depending on hardware capabilities you might not be able to prevent
-> > this yes. Unfortunately this is quite common.
-> >=20
-> > But there are hardware implementations that are not prone to such
-> > failures. (E.g. the registers written can be only shadow values that are
-> > latched into hardware only when the last value is written.)
->=20
-> Maybe this could be improved in the future.
+> 
+>> > If you change only cycle but not mode, does the hardware complete the
+>> > currently running period?
+>> 
+>> No it does not.
+> 
+> Please document this as a Limitation.
 
-We should somewhere describe, what an ideal PWM can do.=20
-My wishlist (just as it comes to my mind, so no guarantee of
-completeness):
+I've discussed this internally, for now its a limitation. In the worst
+case you'd do one 100% duty cycle. Maybe we can fix the hardware. I
+acknowledge that this is a severe limitation, esp. if you use the PWM
+for controlling stuff (for now its only LCD backlight.. so thats ok).
 
- - can do 0% duty cycle for all supported period lengths
- - can do 100% duty cycle for all supported period lengths
- - supports both polarities
- - supports immediate change of configuration and after completion of
-   the currently running period
- - atomic update (i.e. if you go from configuration A to configuration B
-   the hardware guarantees to only emit periods of type A and then type
-   B. (Depending on the item above, the last A period might be cut off.)
- - emits an irq when configuration changes
+>> > What about disable()?
+>> 
+>> Mhh well, it would do one 100% cycle.. mhh ;) Lets see if there we can
+>> fix that (in hardware), not much we can do in the driver here. We are
+>> _very_ constraint in size, therefore all that little edge cases fall 
+>> off
+>> the table.
+> 
+> You're saying that on disable the hardware emits a constant high level
+> for one cycle? I hope not ...
 
-> > If you change only cycle but not mode, does the hardware complete the
-> > currently running period?
->=20
-> No it does not.
+Mh, I was mistaken, disabling the PWM will turn it off immediately, but
+one 100% duty cycle may happen if you change from a higher to a lower
+duty cycle setting. See above.
 
-Please document this as a Limitation.
-=20
-> > What about disable()?
->=20
-> Mhh well, it would do one 100% cycle.. mhh ;) Lets see if there we can
-> fix that (in hardware), not much we can do in the driver here. We are
-> _very_ constraint in size, therefore all that little edge cases fall off
-> the table.
+> I never programmed a CPLD to emulate a hardware PWM, but I wonder if
+> these are really edge cases that increase the size of the binary?!
 
-You're saying that on disable the hardware emits a constant high level
-for one cycle? I hope not ...
+At the moment there is only one 8bit register which stores the value
+which is used for matching. If you want to change that setting after
+a whole cycle, you'd use another 8bit register to cache the new value.
+So this would at least needs 8 additional flip-flops. This doesn't
+sound much, but we are already near 100% usage of the CPLD. So its
+hard to convince people why this is really necessary.
 
-I never programmed a CPLD to emulate a hardware PWM, but I wonder if
-these are really edge cases that increase the size of the binary?!
-
-Best regards
-Uwe
-
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ochzazkc36dtv4os
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8N2JUACgkQwfwUeK3K
-7AkhFQf/QeUghp0itjnebSKuCcU1Du1FgZx19oml+qdZdrWg9phaEQGAQxXc7m+N
-HoMLWaZLv3O8L5DS4hpYKyj+hK1w7pN1qjuRbkevrgYUlDcU/NYeA+3UUfB7TAMz
-N7muhIaeivH8Z4gJfLtnFtosfOHt3sqZTEYeX5frrCTHro4f7ecgwqkbtAv9MO+M
-Ct382nabV/hgbpuyAya4PbeHtpJXqRVB4fgXFim8n86jJVZcqLgm+Cjk+NG3BABF
-+gaDplLA8kTNTKJnKUxpMbKpsR4YBz6hqmP/YlhmWHweIwDy6HXMQyOkrnH0LINz
-4YQ4iZLwcCQt6CY4bEP1h+aiZJjm+g==
-=A67j
------END PGP SIGNATURE-----
-
---ochzazkc36dtv4os--
+-michael
