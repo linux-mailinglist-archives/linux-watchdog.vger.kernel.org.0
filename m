@@ -2,79 +2,67 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C7C2224AE
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 16:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B3E2224D2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 16:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729305AbgGPOA5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jul 2020 10:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
+        id S1728777AbgGPOGP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Jul 2020 10:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728963AbgGPOA4 (ORCPT
+        with ESMTP id S1728418AbgGPOGO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jul 2020 10:00:56 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22496C061755;
-        Thu, 16 Jul 2020 07:00:56 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id o22so4722674pjw.2;
-        Thu, 16 Jul 2020 07:00:56 -0700 (PDT)
+        Thu, 16 Jul 2020 10:06:14 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8204EC061755;
+        Thu, 16 Jul 2020 07:06:14 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id e8so4910767pgc.5;
+        Thu, 16 Jul 2020 07:06:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZXwipsxzhMLk2JJvPXEXMGOn+vKEGM/eqHRemYcvCrg=;
-        b=IjNgN8K1TicGwm+foK+8A2I3d8vTB3uyfkdOCPkkmW0MvFVv6JDomDlTOHv98xDMnz
-         OzNwiKS0C8vfhj+cWHnK0SHUZ3Ty/l+YIKLnUI5HalHIcuSHBPuLwiQ+xPb36V0o5tLD
-         FjqgrVrCzfjSJtKEB2w9VRFYNMXrwz5GH1UNqNPT/IoeCQjCUJggANB10qzc6VVvJPMD
-         ERepX3Idy4c7Pv+TS+ELf3AkzPlTb2xeSOBA44cBscKS6ry24rIxDy5/wMs37nmNWkoy
-         /2kCOrThbI6fURVWswRR7X6rJj2h8Pq8md2hmcJHJzhAJdHme+o5Gfht5IrIlsgfab9G
-         CQWw==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=qp5LmKixJbTZrd7dvLLYaQtddHIpTsfAo6ECopZweXQ=;
+        b=S/y331CQGpGTRoxMTS0W9OaxMezWmiauIc7qwm2Kk6e5FoHlxNUbnIG+jjxsPjKJ+o
+         H9Icw1n2MsYTZL4Wx518YJHKh8qPkSosLXgYA3N1BNEdJW584p5o1EaGb1p78YCDEk+2
+         lUOX6xwBKTKXkTiUkB04uUQzRisvnEdLR2zpKNr16GoKkE/JPH/FBayOtvUXt8WI7uG0
+         EHxdQIqAYrUwpVeSye55o0QYL+ddKQqnYmC95e7/2NfCAJ0ngfw2S5Fe8Q358RVbWEbX
+         eA+qMfL/YmT9ieF2GNxzN9rmfn0elmCg2TUQQ0yHToV+yZCt3h84CYKLH01ddM/t31s+
+         BF/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZXwipsxzhMLk2JJvPXEXMGOn+vKEGM/eqHRemYcvCrg=;
-        b=qscqr7M6mAdXAjMuv7EtOWWDChQ6oKyawMhQPdmYUSi7Pk10RDD+1wXO7W+AP7W7Tl
-         i62mJkfQeQfzJXXeAusB+KLlZ+Qvpvu01/rm95XBnuxrsvSMwqnCdks8miykQquzEKnz
-         TpitG+/6sakB1FQI3pDGONGE/zZFzn1leKlR06Yebyw38MxhriixnValLT/WuCgiVuno
-         +VGo6oaJMLyxlEs3P/4Xh/H4XeQtZL6MLKdKT8qz6BRr6mEAyLuKUN+qnLx+NiUhVat0
-         LNU6gpeyDfbB0G0zwnCRzoOUDXned+G+y0gEGhGhKSBg/onSnA9HJPU9fCTR74LlrlFG
-         jasw==
-X-Gm-Message-State: AOAM531p6aFQ8jO8eB1ziSnUWhl0SQdeIPNseOFcwKnY0WdTbKfwWOWr
-        IZwMZinnYwlpPMfJ2SCzWq9pzyCG
-X-Google-Smtp-Source: ABdhPJxu7WUcmeSgdm290onW6kxQX/qiQThjX0j5m9YDfH+DJyLfGowLlNqhJ5NcJCe7FwB4Ei3NrQ==
-X-Received: by 2002:a17:90a:21c3:: with SMTP id q61mr5077345pjc.207.1594908055533;
-        Thu, 16 Jul 2020 07:00:55 -0700 (PDT)
+         :mime-version:content-disposition:user-agent;
+        bh=qp5LmKixJbTZrd7dvLLYaQtddHIpTsfAo6ECopZweXQ=;
+        b=d1MgJiexh7Ncz6xeavlCfiji46WbQf5uW5bUsAGSEZ9QqCU9mWFhR3qY2RzeNXuRXT
+         U+HcgjwHyguzgEB6twfJ74tdDMisxq7yLm5lvk/RW0oxMyRTn7lT6nn8oO/T0r7xycBv
+         wh5lqxBHZfAgF/17AR1fuZnnb6XJLbTxAojF2oOXVyTo0PVejnr7hNvBZ2p6wDIoWSn3
+         BAfnVBlbgzqHEPT+XWr54azpLoWul2ftOm9KdgNS3Yo8bEuWJ7czWsPruaJsGXAu1uLd
+         HobYcWz48OCTrWHP5V4hT/6uD1ovgCHi1mnJv8OexwmzDVvPczS64xOSaswsUirdk/8R
+         KSug==
+X-Gm-Message-State: AOAM531BlJM0600wgyDQNvuRn8UznasEggpb9/UBPhneRLiCM3SOIiM6
+        +NKPX9XKguZ1wY5p4RQSqpElXofx
+X-Google-Smtp-Source: ABdhPJyvfbpnG8f0g45i/nGY1bR9SBkQBNKXhxsxLK0J2RCTSfbUZAqAHAu5J4ZilTH23h/IOBvGsw==
+X-Received: by 2002:a63:5412:: with SMTP id i18mr4520670pgb.63.1594908373956;
+        Thu, 16 Jul 2020 07:06:13 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n9sm234117pjo.53.2020.07.16.07.00.53
+        by smtp.gmail.com with ESMTPSA id g5sm286732pjl.31.2020.07.16.07.06.12
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 Jul 2020 07:00:54 -0700 (PDT)
-Date:   Thu, 16 Jul 2020 07:00:53 -0700
+        Thu, 16 Jul 2020 07:06:13 -0700 (PDT)
+Date:   Thu, 16 Jul 2020 07:06:12 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     "krzysztof.sobota@nokia.com" <krzysztof.sobota@nokia.com>
 Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
         linux-kernel@vger.kernel.org, alexander.sverdlin@nokia.com
 Subject: Re: [PATCH v3] watchdog: initialize device before misc_register
-Message-ID: <20200716140053.GA258176@roeck-us.net>
-References: <ab5739d7-3542-08d0-402d-65aeb14b78ab@nokia.com>
- <a9338b3b-92d8-08b9-2f4e-59abceb1b307@roeck-us.net>
- <55fa2e05-9a99-b205-2dad-b797786af22a@nokia.com>
- <1f20e45d-aba5-6226-27f2-cb6438cc224e@nokia.com>
+Message-ID: <20200716140612.GA130965@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1f20e45d-aba5-6226-27f2-cb6438cc224e@nokia.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
-
-PLEASE PLEASE PLEASE _never_ send a new version of a patch as reply
-to a previous one. All this ensures it that it won't find its way
-into patchwork, which I and others use to track patches.
-This means such patches will likely get lost.
-
-Guenter
 
 On Thu, Jul 16, 2020 at 01:32:12PM +0200, krzysztof.sobota@nokia.com wrote:
 > When watchdog device is being registered, it calls misc_register that
@@ -146,6 +134,19 @@ On Thu, Jul 16, 2020 at 01:32:12PM +0200, krzysztof.sobota@nokia.com wrote:
 > v2 -> v3
 > * convert spaces to tabs
 > * convert (hopefully) mail to plaintext
+
+Doesn't look like it.
+
+Applying: watchdog: initialize device before misc_register
+error: corrupt patch at line 17
+Patch failed at 0001 watchdog: initialize device before misc_register
+Use 'git am --show-current-patch' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+
+Guenter
+
 > ---
 >  drivers/watchdog/watchdog_dev.c | 18 +++++++++---------
 >  1 file changed, 9 insertions(+), 9 deletions(-)
