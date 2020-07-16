@@ -2,93 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 637072225D5
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 16:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F6422261F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 16:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728663AbgGPOiE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jul 2020 10:38:04 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:44979 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbgGPOiC (ORCPT
+        id S1728345AbgGPOrJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Jul 2020 10:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726963AbgGPOrJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jul 2020 10:38:02 -0400
-Received: by mail-ot1-f65.google.com with SMTP id 5so4323541oty.11;
-        Thu, 16 Jul 2020 07:38:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cFt6Ih4dR+9bhvF4Z3Iyf+2RottXHRxHsSc8BPG3n+E=;
-        b=ICQpLaNGHYXZ6OwEY0O4U1XxZ9MZ+dYPwjco8/MOdtYg/sEmEkq4I5GDmgaGYfbdri
-         sldOgwedtQa3K6GvcQi8jWncsUNtPyupuzoYiocgbT8+zFJua4ox7zx1uZut1S7sHgD5
-         yA8K2g6iz9J8nercYJPdP8VF1vBtUswIwTlZt0Oh+PmR5TRcou1vi0EuQKv1MpH7Ss1W
-         +FVs5TPCkjOPfS6wCw0Q1jhBabdRDvvNIn6zKRW/Bd0QEBSFW1IBvnxIKAtqus+lKKmE
-         9Ze+HwmXyKiQWUHTJDW9JuqvkhE9UntCQowy18A8ttsHSC5hZSgiURf3vBOKwJmeWnil
-         +UZg==
-X-Gm-Message-State: AOAM531aXd/VvTXk0N53XkA5QO9OzW3G/BMzdH5XMyhNuKNSc+YhfSLT
-        I3qqWjM4lq7LzWaI7z+m85ssH84FZbHGhICfxt8=
-X-Google-Smtp-Source: ABdhPJwkPkeL5c/hqJtoC1wZ2AAYrBSLb4X8g8cBn+I7fUNaNR8wo2Ics7CsuC8wJT1X2HzPdN2+2dOWg7q7F3mH9cc=
-X-Received: by 2002:a9d:2646:: with SMTP id a64mr4463700otb.107.1594910281539;
- Thu, 16 Jul 2020 07:38:01 -0700 (PDT)
+        Thu, 16 Jul 2020 10:47:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58670C061755
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jul 2020 07:47:09 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jw5AB-0002nr-8h; Thu, 16 Jul 2020 16:47:07 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jw5A9-0002fZ-LK; Thu, 16 Jul 2020 16:47:05 +0200
+Date:   Thu, 16 Jul 2020 16:47:05 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        wim@linux-watchdog.org, linux@roeck-us.net, bth@kamstrup.com
+Subject: Re: [PATCH v3 4/5] rtc: pcf2127: add watchdog feature support
+Message-ID: <20200716144705.o57m4r7ptmsm3m6n@pengutronix.de>
+References: <20190822131936.18772-1-bruno.thomsen@gmail.com>
+ <20190822131936.18772-4-bruno.thomsen@gmail.com>
 MIME-Version: 1.0
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 16 Jul 2020 16:37:50 +0200
-Message-ID: <CAMuHMdX3F0He8gxUpF3Z+wTUqX2hBzs+0RRgL1Wzyn-gfzTyDg@mail.gmail.com>
-Subject: Re: [PATCH 03/20] thermal: rcar_gen3_thermal: Add r8a774e1 support
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wlydsxkzm4ykmx3v"
+Content-Disposition: inline
+In-Reply-To: <20190822131936.18772-4-bruno.thomsen@gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 1:09 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> From: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
->
-> Add r8a774e1 specific compatible string.
->
-> Signed-off-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+--wlydsxkzm4ykmx3v
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Gr{oetje,eeting}s,
+Hello,
 
-                        Geert
+On Thu, Aug 22, 2019 at 03:19:35PM +0200, Bruno Thomsen wrote:
+> Add partial support for the watchdog functionality of
+> both PCF2127 and PCF2129 chips.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I have a board here with a pcf2127 that has the #RST pin
+not connected.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+The problem this creates is: The bootloader arms the SoC's watchdog and
+jumps into Linux. The pcf2127 driver happens to load first, so watchdog0
+is provided by the RTC (but non-functional). Systemd is configured to
+feed the watchdog, but happens to feed the wrong one, so the machine
+resets shortly after it is up :-|
+
+So I wonder if we need a dt property that tells the driver if the RST
+line is connected or not.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--wlydsxkzm4ykmx3v
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8QaGYACgkQwfwUeK3K
+7AnYzQf/V7RnI9MWGMYzHgloRnRN97jS9wQHOPccvFvBIh9fwps/5vVDxGmJxuJN
+PYmMoPye3fDDArmEi1apkMx8qVu0ou35EaPfqs72RcfwCObtDILEfCEGyyA6QcDS
+Mi6IBtDtPBhb3DRR5UUuzbnB2gyrxO/iPWt9Btb8Mb0etdFhSrO9KD91GXpfL0ja
+X7CoyBqOkV+9ujnH38CWdfDKfDsgw01Em06+D2wtyyT7Q/h2VtZMGa/Kt/DGFbNb
+0AqHYeyoB9m2NSqiBbcC0zfjJ11nrhlsPmufbK5BxPFUuESAhdUjnyxX/U55QD5i
+BY/z/2xS4ijW0cYC0HZtWnlf7HTpuA==
+=HTG/
+-----END PGP SIGNATURE-----
+
+--wlydsxkzm4ykmx3v--
