@@ -2,217 +2,219 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C34C221C64
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 08:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FC7221E6A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 10:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727948AbgGPGKY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jul 2020 02:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725844AbgGPGKX (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jul 2020 02:10:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262A9C08C5C0
-        for <linux-watchdog@vger.kernel.org>; Wed, 15 Jul 2020 23:10:23 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jvx5y-0004Ls-Bg; Thu, 16 Jul 2020 08:10:14 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jvx5w-0008GV-5U; Thu, 16 Jul 2020 08:10:12 +0200
-Date:   Thu, 16 Jul 2020 08:10:09 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
-Message-ID: <20200716061009.z7uu4lcwo3wk6dzb@pengutronix.de>
-References: <20200709085006.b54ype3p4yu64upl@pengutronix.de>
- <72858253a9094074e9c8cd7a4e1db09f@walle.cc>
- <20200713084750.qj4hquzd6uz6y526@pengutronix.de>
- <c0594c34c712ce26b3936d42c92d2361@walle.cc>
- <20200714160856.rjqi7lv63geil3hm@pengutronix.de>
- <eedceb44cba9b54e0634f0e8e4f96f70@walle.cc>
- <20200715163620.xhi24mct5b64qpyp@pengutronix.de>
- <7d8e9f524f0fd81be282be0be50d16ad@walle.cc>
- <20200715181803.nmgi32tugpbuqvjg@pengutronix.de>
- <8debe0ee9aff2c49a7567069d7bb9477@walle.cc>
+        id S1725934AbgGPIbY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Jul 2020 04:31:24 -0400
+Received: from mail-eopbgr40130.outbound.protection.outlook.com ([40.107.4.130]:55553
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727870AbgGPIbU (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 16 Jul 2020 04:31:20 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AZyUKX54OcaO8js2Tulirr2OgWMDWmTYvLu0XodiC6gTQh74Dh34tgHH7aQ5emDfwsVHfxfo3f43p6t48YO5sRgHbeJV3hL/j1C5AB9qto5qXdVjINgSzu54Sb42gFfJQ/qe/ST7Vkgi7WfnJLxomX1yQD8QSS1YYabrYtLnmkROfK0pkELkOE8lzGmXZUxc5/LkF06Da3CA6b2alv4GJmrl2XiuibwSXR/h7uGLBSOwP2SMI05aocvehxp87BDmiToniL+1J6SiFzTU3viJQPI0gl0GfOGTeeCqWu4Nj7LU7I8dRX9Ic5anNhFLdMBZ9o4M2ReMOB3OH3bF5IqMGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SkRRNpih0npcoGRw2pUawuHCbLJRaJnkIDPn+w3E/eQ=;
+ b=J2FxMIE914HEw6dMA3Cg2OVATwD5f/cI483uRTX5zKm2JXR11a8aMaO2gU9zyn3DGrWLvoOf4tqkzmz+M+a5tcTFJ98Q8A2k/VaiHwvJjd70zWS+XO/zJfGkpYXZ3MJhyYs61XFGung2peaC/+Ktkp1IWPHv3xVcNvFqzjwE/Q7gfYfv9dlIKtR768HsFP45cY0DMzY40dV5KfOkS8DtjpM4pVBQkz8sAaSckEpptkf6Y8KUUJg8xmstOaZAvge6CF7APwEr8NM0hwWuK4kAczbMpwudguuvS9kVqeG6yGvH/CUNvd9Gjb6P6QJ2sIoD/4aebEmW6sCxAhJeDTSrrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SkRRNpih0npcoGRw2pUawuHCbLJRaJnkIDPn+w3E/eQ=;
+ b=ju7ijHN7cAoTk176WBWniDxFvBDHx6oYe4jjgROxxlkKmAGTdrBfBgms6VeKftavesPhEWL1dXCyGZTNRF+t4oeEqx1Q66fifSVRYe2G8ScBLU9KETWjCx+OyjYnU3JQv+IZxQt+b3n10hpY+e6gnTSrfrk98YPK64CT2ZpqcYQ=
+Authentication-Results: nokia.com; dkim=none (message not signed)
+ header.d=none;nokia.com; dmarc=none action=none header.from=nokia.com;
+Received: from DB7PR07MB5356.eurprd07.prod.outlook.com (2603:10a6:10:70::33)
+ by DB7PR07MB5029.eurprd07.prod.outlook.com (2603:10a6:10:59::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.9; Thu, 16 Jul
+ 2020 08:31:15 +0000
+Received: from DB7PR07MB5356.eurprd07.prod.outlook.com
+ ([fe80::986:d072:defd:74a9]) by DB7PR07MB5356.eurprd07.prod.outlook.com
+ ([fe80::986:d072:defd:74a9%6]) with mapi id 15.20.3195.018; Thu, 16 Jul 2020
+ 08:31:15 +0000
+Subject: [PATCH v2] watchdog: initialize device before misc_register
+To:     Guenter Roeck <linux@roeck-us.net>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     alexander.sverdlin@nokia.com
+References: <ab5739d7-3542-08d0-402d-65aeb14b78ab@nokia.com>
+ <a9338b3b-92d8-08b9-2f4e-59abceb1b307@roeck-us.net>
+From:   "krzysztof.sobota@nokia.com" <krzysztof.sobota@nokia.com>
+Message-ID: <55fa2e05-9a99-b205-2dad-b797786af22a@nokia.com>
+Date:   Thu, 16 Jul 2020 10:31:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+In-Reply-To: <a9338b3b-92d8-08b9-2f4e-59abceb1b307@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: CH2PR14CA0032.namprd14.prod.outlook.com
+ (2603:10b6:610:56::12) To DB7PR07MB5356.eurprd07.prod.outlook.com
+ (2603:10a6:10:70::33)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4bah6ckq6xdukftr"
-Content-Disposition: inline
-In-Reply-To: <8debe0ee9aff2c49a7567069d7bb9477@walle.cc>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.154.35.67] (131.228.32.163) by CH2PR14CA0032.namprd14.prod.outlook.com (2603:10b6:610:56::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17 via Frontend Transport; Thu, 16 Jul 2020 08:31:13 +0000
+X-Originating-IP: [131.228.32.163]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 04eb95a1-59ef-4216-ad0b-08d829629aa5
+X-MS-TrafficTypeDiagnostic: DB7PR07MB5029:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB7PR07MB5029A547F89DB01268F056CF937F0@DB7PR07MB5029.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d1W9iD03J4UAWcCxqcmNXm6J4h7wajszVyp9JbRZcmP6Tv5sCSehU51JHb5/RGVhfsiKDYbYSHRv/J213U+8SuzJQRqx4mv4FpwAbureTQjePfg2a60paS86PVAqwHoC0z9jDr1RZJa1RJaVloNFPRR3fekR5aPrF3Lo4kIuaNsmRGfafSx5BUpf2qL4zP310hBG9Mk73gFPFv1WiamgR/Pbd7Bt5+I5+7CPqf+RrwAmsnicDE0jLbClpkn+FV8qDpQnQfAbj32TVIa4AF4zrY54c5G32//iHNSjfVKu/T/+4PW8xMRIkQ3eP/mmXh7w10I9IQ16AYZ/5H4MujMbuGGlX48PJHv91cbrenExM4NgeT+ia7xhUKUSGley3Gtb
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR07MB5356.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(136003)(376002)(396003)(346002)(39860400002)(186003)(2906002)(478600001)(52116002)(8676002)(16526019)(31696002)(6486002)(5660300002)(36756003)(83380400001)(107886003)(86362001)(31686004)(316002)(8936002)(4326008)(16576012)(45080400002)(66556008)(2616005)(956004)(26005)(66946007)(6666004)(66476007)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: xsrrAJ6gIbVWtW+pe+drLb+ZHXCVCGu99gHbMaZLLlVueUJLW9CZzFL+PU1nupafqKaVTcWu/hmykCxI8zoLn+HIThWH77TpZbxb+Mr7C5Q0QmRrkTtNEASI+Lq+MeZzeiJlebO73A9tmxNLkV31UAtymZBwVyyTBS1VKsUS0bh/XCR8vb36V5V+UlWeGHVDuUpQ1i6K7rwWFWJ6g7X0E+1bjfQANLoe8G/KwH2F8WF3PbBys6LEH/YSXa8GyndZzmnj3XxZIszSFIcWYS9WxZ4Bq9GyuJwYuF7sfkTCKpkO3qc9o6NbMzCHJSrpVHlme8S8qeWvnm7mF9AWKHy5omZX3MBaCPVfpR8n+xovpFxVDyCzxEjJ6kcw2VkpnIoe0Mt6Iyhb+Kh/jlwDrKUpHyviZNlYLG9VgsQSKddP2TktjFDutEiopItB0GvztaPTeYJUwl80zQtC5wGYGDNE/CTWuVY39LrNVg7fxm2xGnsz+LOKVRdM8Xmk2IEBfuJS
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04eb95a1-59ef-4216-ad0b-08d829629aa5
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR07MB5356.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2020 08:31:15.3036
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sbzrSPlhNHeOcbna6J5foEs5lTyRPOo9feqTEKZmKsL+IWMZrHUBWIUYU+tQ1h6pzFKKIxQ/skAj4MdlLvId84kOXomY8PntSGVBRV9w2L4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR07MB5029
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+watchdog: initialize device before misc_register
 
---4bah6ckq6xdukftr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+When watchdog device is being registered, it calls misc_register that
+makes watchdog available for systemd to open. This is a data race
+scenario, because when device is open it may still have device struct
+not initialized - this in turn causes a crash. This patch moves
+device initialization before misc_register call and it solves the
+problem printed below.
 
-Hello Michael,
+------------[ cut here ]------------
+WARNING: CPU: 3 PID: 1 at lib/kobject.c:612 kobject_get+0x50/0x54
+kobject: '(null)' ((ptrval)): is not initialized, yet kobject_get() is 
+being called.
+Modules linked in: k2_reset_status(O) davinci_wdt(+) 
+sfn_platform_hwbcn(O) fsmddg_sfn(O) clk_misc_mmap(O) clk_sw_bcn(O) 
+fsp_reset(O) cma_mod(O) slave_sup_notif(O) fpga_master(O) latency(O+) 
+evnotify(O) enable_arm_pmu(O) xge(O) rio_mport_cdev br_netfilter bridge 
+stp llc nvrd_checksum(O) ipv6
+CPU: 3 PID: 1 Comm: systemd Tainted: G           O 
+4.19.113-g2579778-fsm4_k2 #1
+Hardware name: Keystone
+[<c02126c4>] (unwind_backtrace) from [<c020da94>] (show_stack+0x18/0x1c)
+[<c020da94>] (show_stack) from [<c07f87d8>] (dump_stack+0xb4/0xe8)
+[<c07f87d8>] (dump_stack) from [<c0221f70>] (__warn+0xfc/0x114)
+[<c0221f70>] (__warn) from [<c0221fd8>] (warn_slowpath_fmt+0x50/0x74)
+[<c0221fd8>] (warn_slowpath_fmt) from [<c07fd394>] (kobject_get+0x50/0x54)
+[<c07fd394>] (kobject_get) from [<c0602ce8>] (get_device+0x1c/0x24)
+[<c0602ce8>] (get_device) from [<c06961e0>] (watchdog_open+0x90/0xf0)
+[<c06961e0>] (watchdog_open) from [<c06001dc>] (misc_open+0x130/0x17c)
+[<c06001dc>] (misc_open) from [<c0388228>] (chrdev_open+0xec/0x1a8)
+[<c0388228>] (chrdev_open) from [<c037fa98>] (do_dentry_open+0x204/0x3cc)
+[<c037fa98>] (do_dentry_open) from [<c0391e2c>] (path_openat+0x330/0x1148)
+[<c0391e2c>] (path_openat) from [<c0394518>] (do_filp_open+0x78/0xec)
+[<c0394518>] (do_filp_open) from [<c0381100>] (do_sys_open+0x130/0x1f4)
+[<c0381100>] (do_sys_open) from [<c0201000>] (ret_fast_syscall+0x0/0x28)
+Exception stack(0xd2ceffa8 to 0xd2cefff0)
+ffa0:                   b6f69968 00000000 ffffff9c b6ebd210 000a0001 
+00000000
+ffc0: b6f69968 00000000 00000000 00000142 fffffffd ffffffff 00b65530 
+bed7bb78
+ffe0: 00000142 bed7ba70 b6cc2503 b6cc41d6
+---[ end trace 7b16eb105513974f ]---
 
-On Wed, Jul 15, 2020 at 10:41:25PM +0200, Michael Walle wrote:
-> Am 2020-07-15 20:18, schrieb Uwe Kleine-K=F6nig:
-> > On Wed, Jul 15, 2020 at 07:45:10PM +0200, Michael Walle wrote:
-> > >=20
-> > > Am 2020-07-15 18:36, schrieb Uwe Kleine-K=F6nig:
-> > > > On Tue, Jul 14, 2020 at 11:09:28PM +0200, Michael Walle wrote:
-> > > > > > My wishlist (just as it comes to my mind, so no guarantee of
-> > > > > > completeness):
-> > > > > >
-> > > > > >  - can do 0% duty cycle for all supported period lengths
-> > > > > >  - can do 100% duty cycle for all supported period lengths
-> > > > > >  - supports both polarities
-> > > > > >  - supports immediate change of configuration and after complet=
-ion of
-> > > > > >    the currently running period
-> > > > > >  - atomic update (i.e. if you go from configuration A to config=
-uration B
-> > > > > >    the hardware guarantees to only emit periods of type A and t=
-hen type
-> > > > > >    B. (Depending on the item above, the last A period might be =
-cut off.)
-> > > > >
-> > > > > We actually discussed this, because the implementation would be
-> > > > > easier. But
-> > > > > if the change takes place immediately you might end up with a lon=
-ger
-> > > > > duty
-> > > > > cycle. Assume the PWM runs at 80% duty cycle and starts with the
-> > > > > on-period.
-> > > > > If you now change that to 50% you might end up with one successive
-> > > > > duty
-> > > > > cycle of "130%". Eg. the 80% of the old and right after that you
-> > > > > switch to
-> > > > > the new 50% and then you'd have a high output which corresponds t=
-o a
-> > > > > 130%
-> > > > > cycle. I don't know if that is acceptable for all applications.
-> > > >
-> > > > I thought this is a "change takes place immediately" implementation=
-?! So
-> > > > these problems are actually real here. (And this not happening is
-> > > > exactly
-> > > > my wish here. Is there a mis-understanding?)
-> > >=20
-> > > I wasn't talking about the sl28cpld btw. What is the difference
-> > > between
-> > > your proposed "change take place immediately" and "after the cycle".
-> > > I understand how the after the cycle should work. But how would the
-> > > immediate change work in your ideal PWM?
-> >=20
-> > If the PWM is running at 1/3 duty cycle and reconfigured for 2/3, then
-> > the two scenarios are (the * marks the moment where pwm_apply_state() is
-> > called, ^ marks the start of a period):
-> >=20
-> > immediately:
-> >=20
-> >   __       __    _____    _____
-> >  /  \_____/  \__/     \__/
-> >  ^        ^     ^        ^
-> >                 *
->=20
-> Ok lets assume 2/3 and change it to 1/3:
->=20
->    ____     ______      __
->   /    \___/      \____/  \____
->   ^        ^   ^       ^
->                *
-> This will then have a longer on period than any of the settings.
+------------[ cut here ]------------
+WARNING: CPU: 3 PID: 1 at lib/refcount.c:153 kobject_get+0x24/0x54
+refcount_t: increment on 0; use-after-free.
+Modules linked in: k2_reset_status(O) davinci_wdt(+) 
+sfn_platform_hwbcn(O) fsmddg_sfn(O) clk_misc_mmap(O) clk_sw_bcn(O) 
+fsp_reset(O) cma_mod(O) slave_sup_notif(O) fpga_master(O) latency(O+) 
+evnotify(O) enable_arm_pmu(O) xge(O) rio_mport_cdev br_netfilter bridge 
+stp llc nvrd_checksum(O) ipv6
+CPU: 3 PID: 1 Comm: systemd Tainted: G        W  O 
+4.19.113-g2579778-fsm4_k2 #1
+Hardware name: Keystone
+[<c02126c4>] (unwind_backtrace) from [<c020da94>] (show_stack+0x18/0x1c)
+[<c020da94>] (show_stack) from [<c07f87d8>] (dump_stack+0xb4/0xe8)
+[<c07f87d8>] (dump_stack) from [<c0221f70>] (__warn+0xfc/0x114)
+[<c0221f70>] (__warn) from [<c0221fd8>] (warn_slowpath_fmt+0x50/0x74)
+[<c0221fd8>] (warn_slowpath_fmt) from [<c07fd368>] (kobject_get+0x24/0x54)
+[<c07fd368>] (kobject_get) from [<c0602ce8>] (get_device+0x1c/0x24)
+[<c0602ce8>] (get_device) from [<c06961e0>] (watchdog_open+0x90/0xf0)
+[<c06961e0>] (watchdog_open) from [<c06001dc>] (misc_open+0x130/0x17c)
+[<c06001dc>] (misc_open) from [<c0388228>] (chrdev_open+0xec/0x1a8)
+[<c0388228>] (chrdev_open) from [<c037fa98>] (do_dentry_open+0x204/0x3cc)
+[<c037fa98>] (do_dentry_open) from [<c0391e2c>] (path_openat+0x330/0x1148)
+[<c0391e2c>] (path_openat) from [<c0394518>] (do_filp_open+0x78/0xec)
+[<c0394518>] (do_filp_open) from [<c0381100>] (do_sys_open+0x130/0x1f4)
+[<c0381100>] (do_sys_open) from [<c0201000>] (ret_fast_syscall+0x0/0x28)
+Exception stack(0xd2ceffa8 to 0xd2cefff0)
+ffa0:                   b6f69968 00000000 ffffff9c b6ebd210 000a0001 
+00000000
+ffc0: b6f69968 00000000 00000000 00000142 fffffffd ffffffff 00b65530 
+bed7bb78
+ffe0: 00000142 bed7ba70 b6cc2503 b6cc41d6
+---[ end trace 7b16eb1055139750 ]---
 
-I think we agree here. With an immediate change to the new setting both
-too long and too short signals can heppen. How bad this is depends on
-the use. The consumers currently in the kernel probably don't care too
-much.
+Fixes: 72139dfa2464 ("watchdog: Fix the race between the release of 
+watchdog_core_data and cdev")
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Krzysztof Sobota <krzysztof.sobota@nokia.com>
+---
+v1 -> v2:
+* removed Change-Id tag
+* added Review-by tag
+---
+  drivers/watchdog/watchdog_dev.c | 18 +++++++++---------
+  1 file changed, 9 insertions(+), 9 deletions(-)
 
-> > > > > > > > What about disable()?
-> > > > > > >
-> > > > > > > Mhh well, it would do one 100% cycle.. mhh ;) Lets see if the=
-re we can
-> > > > > > > fix that (in hardware), not much we can do in the driver here=
-=2E We are
-> > > > > > > _very_ constraint in size, therefore all that little edge cas=
-es fall
-> > > > > > > off
-> > > > > > > the table.
-> > > > > >
-> > > > > > You're saying that on disable the hardware emits a constant hig=
-h level
-> > > > > > for one cycle? I hope not ...
-> > > > >
-> > > > > Mh, I was mistaken, disabling the PWM will turn it off immediatel=
-y,
-> > > > > but
-> > > >
-> > > > And does turn off mean, the output gets inactive?
-> > > > If so you might also disable the hardware if a 0% duty cycle is
-> > > > configured assuming this saves some energy without modifying the
-> > > > resulting wave form.
-> > >=20
-> > > Disabling it has some side effects like switching to another function
-> > > for this multi function pin. So I'd rather keep it on ;)
-> >=20
-> > So IMHO you should also keep it on when pwm_apply_state is called with
-> > state.enabled =3D false to ensure a low output.
->=20
-> That won't work either, because that is how you would turn on that multi
-> function. Ie. it is GPIO (default input) as long as the PWM is not enable=
-d,
-> otherwise its PWM.
+diff --git a/drivers/watchdog/watchdog_dev.c 
+b/drivers/watchdog/watchdog_dev.c
+index 10b2090f3e5e..1c322caecf7f 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -947,6 +947,15 @@ static int watchdog_cdev_register(struct 
+watchdog_device *wdd)
+         if (IS_ERR_OR_NULL(watchdog_kworker))
+                 return -ENODEV;
 
-I think you misunderstood what I wrote. The intended behaviour for a
-disabled PWM (as in: pwm_apply_state() was called with state.enabled =3D
-false) is that the output is a constant low (assuming a normal
-polarity). If disabling your hardware results in something else, don't
-disable the hardware. That's another item in the Limitations paragraph.
++       device_initialize(&wd_data->dev);
++       wd_data->dev.devt = MKDEV(MAJOR(watchdog_devt), wdd->id);
++       wd_data->dev.class = &watchdog_class;
++       wd_data->dev.parent = wdd->parent;
++       wd_data->dev.groups = wdd->groups;
++       wd_data->dev.release = watchdog_core_data_release;
++       dev_set_drvdata(&wd_data->dev, wdd);
++       dev_set_name(&wd_data->dev, "watchdog%d", wdd->id);
++
+         kthread_init_work(&wd_data->work, watchdog_ping_work);
+         hrtimer_init(&wd_data->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+         wd_data->timer.function = watchdog_timer_expired;
+@@ -967,15 +976,6 @@ static int watchdog_cdev_register(struct 
+watchdog_device *wdd)
+                 }
+         }
 
-Best regards
-Uwe
+-       device_initialize(&wd_data->dev);
+-       wd_data->dev.devt = MKDEV(MAJOR(watchdog_devt), wdd->id);
+-       wd_data->dev.class = &watchdog_class;
+-       wd_data->dev.parent = wdd->parent;
+-       wd_data->dev.groups = wdd->groups;
+-       wd_data->dev.release = watchdog_core_data_release;
+-       dev_set_drvdata(&wd_data->dev, wdd);
+-       dev_set_name(&wd_data->dev, "watchdog%d", wdd->id);
+-
+         /* Fill in the data structures */
+         cdev_init(&wd_data->cdev, &watchdog_fops);
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+--
+2.14.0
 
---4bah6ckq6xdukftr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8P7z4ACgkQwfwUeK3K
-7AkERwf7Bnq1RmmZZQEaEwO2ylFCpy6YKnXVLNIu3EmoJGn5P52CsM5A5Qfzg+lh
-FqwhdDqowMO7BpePNly1bdYZzO32kuVb2rJUAgBcXtC06liNeJWCwXgCMola+8LC
-ZXVn66RdWkQpBVO2mHjnTgOLorVIJuytb//evqyxYgNcicNwUGy5Nq9WtQM9OkBl
-nwd1o+p5iqOvwJ5YfjJNTTKoDbzoG0RqfTcwSWiAazSZZBdcERzbCxUuKM+ci55y
-0CjOU+OaEQU2lMc6h+0e+mlYO3+3fHL4wiOF32iRXEabMbaaUxVq+R46VJXBwwwM
-CmDqF+afXcPaPzQqs1QqUj35WTTi5Q==
-=t2cU
------END PGP SIGNATURE-----
-
---4bah6ckq6xdukftr--
