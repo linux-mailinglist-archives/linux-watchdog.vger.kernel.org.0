@@ -2,95 +2,121 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F6422261F
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 16:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0EE222740
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 17:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728345AbgGPOrJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jul 2020 10:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726963AbgGPOrJ (ORCPT
+        id S1729254AbgGPPi5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Jul 2020 11:38:57 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45742 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728967AbgGPPi4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jul 2020 10:47:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58670C061755
-        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jul 2020 07:47:09 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jw5AB-0002nr-8h; Thu, 16 Jul 2020 16:47:07 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jw5A9-0002fZ-LK; Thu, 16 Jul 2020 16:47:05 +0200
-Date:   Thu, 16 Jul 2020 16:47:05 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        wim@linux-watchdog.org, linux@roeck-us.net, bth@kamstrup.com
-Subject: Re: [PATCH v3 4/5] rtc: pcf2127: add watchdog feature support
-Message-ID: <20200716144705.o57m4r7ptmsm3m6n@pengutronix.de>
-References: <20190822131936.18772-1-bruno.thomsen@gmail.com>
- <20190822131936.18772-4-bruno.thomsen@gmail.com>
+        Thu, 16 Jul 2020 11:38:56 -0400
+Received: by mail-ot1-f65.google.com with SMTP id h1so4524111otq.12;
+        Thu, 16 Jul 2020 08:38:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U90hHEc54jdrWNma8Ae66aUnovbTk060PhIZQuQR+QY=;
+        b=Byt9bKj4gM5ybZPk/tMcE2C+FKnbynrlDnBkbpp8R1bgpyMEkhAptqZutYQ2IrV1oX
+         V1NwkwizhYquGkzMpAv1dgDr4pguOftRFEU1V2QAs6QeZFpwk+bSgQUgEZaLUeiQ0axc
+         zSnBxbwct4Dr6c2lA9K7fN6Xe2kRCbPzrNCJioVEixDMPvB0N3zfBoW5hk5zEJMpXglY
+         J3rZQX+e0KO3MuMxHr5Tpi16xyrGlpxIXH7fLQDQux01lZzPfUt7FezhWnY+2e3TaIT9
+         H9YN8X0iMCr9T6t66f2F83c31V6djPGtkpJq377twI+uxy0LT0uC2DlbmGQsLLU1tzwL
+         o/mQ==
+X-Gm-Message-State: AOAM533lbWJfcbW8dyfxqWJRCwbclNkPqkaXs5wUvyc9OEVSiBoQLXpQ
+        nLfH0g2C3ZOK/d0df2h1V+pJRntyddOx5q6SiqQ=
+X-Google-Smtp-Source: ABdhPJwZ5OQQ9EGRyQ3xUMXe0z77A9hIeMmqlCkxDKaqcv1Z/fgnXN/N+/X37FauDrLUuxCrtlxdJJObhqTJMAWoTSQ=
+X-Received: by 2002:a05:6830:1451:: with SMTP id w17mr5037827otp.250.1594913935397;
+ Thu, 16 Jul 2020 08:38:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wlydsxkzm4ykmx3v"
-Content-Disposition: inline
-In-Reply-To: <20190822131936.18772-4-bruno.thomsen@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594811350-14066-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 16 Jul 2020 17:38:44 +0200
+Message-ID: <CAMuHMdWH2y6p3J4S3qeZNFN6v=_Rnz_zg0etG7DzcQ+NhS9RHA@mail.gmail.com>
+Subject: Re: [PATCH 01/20] arm64: dts: renesas: r8a774e1: Add operating points
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hi Prabhakar,
 
---wlydsxkzm4ykmx3v
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 15, 2020 at 1:09 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> From: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+>
+> The RZ/G2H (r8a774e1) comes with two clusters of processors, similarly to
+> the r8a774a1. The first cluster is made of A57s, the second cluster is made
+> of A53s.
+>
+> The operating points for the cluster with the A57s are:
+>
+> Frequency | Voltage
+> ----------|---------
+> 500 MHz   | 0.82V
+> 1.0 GHz   | 0.82V
+> 1.5 GHz   | 0.82V
+>
+> The operating points for the cluster with the A53s are:
+>
+> Frequency | Voltage
+> ----------|---------
+> 800 MHz   | 0.82V
+> 1.0 GHz   | 0.82V
+> 1.2 GHz   | 0.82V
 
-Hello,
+I trust you on the actual values...
 
-On Thu, Aug 22, 2019 at 03:19:35PM +0200, Bruno Thomsen wrote:
-> Add partial support for the watchdog functionality of
-> both PCF2127 and PCF2129 chips.
+>
+> This patch adds the definitions for the operating points to the SoC
+> specific DT.
+>
+> Signed-off-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-I have a board here with a pcf2127 that has the #RST pin
-not connected.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.9.
 
-The problem this creates is: The bootloader arms the SoC's watchdog and
-jumps into Linux. The pcf2127 driver happens to load first, so watchdog0
-is provided by the RTC (but non-functional). Systemd is configured to
-feed the watchdog, but happens to feed the wrong one, so the machine
-resets shortly after it is up :-|
+Gr{oetje,eeting}s,
 
-So I wonder if we need a dt property that tells the driver if the RST
-line is connected or not.
+                        Geert
 
-Best regards
-Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---wlydsxkzm4ykmx3v
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8QaGYACgkQwfwUeK3K
-7AnYzQf/V7RnI9MWGMYzHgloRnRN97jS9wQHOPccvFvBIh9fwps/5vVDxGmJxuJN
-PYmMoPye3fDDArmEi1apkMx8qVu0ou35EaPfqs72RcfwCObtDILEfCEGyyA6QcDS
-Mi6IBtDtPBhb3DRR5UUuzbnB2gyrxO/iPWt9Btb8Mb0etdFhSrO9KD91GXpfL0ja
-X7CoyBqOkV+9ujnH38CWdfDKfDsgw01Em06+D2wtyyT7Q/h2VtZMGa/Kt/DGFbNb
-0AqHYeyoB9m2NSqiBbcC0zfjJ11nrhlsPmufbK5BxPFUuESAhdUjnyxX/U55QD5i
-BY/z/2xS4ijW0cYC0HZtWnlf7HTpuA==
-=HTG/
------END PGP SIGNATURE-----
-
---wlydsxkzm4ykmx3v--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
