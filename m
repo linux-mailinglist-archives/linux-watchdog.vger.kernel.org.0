@@ -2,146 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B00224447
-	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jul 2020 21:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16A2224604
+	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jul 2020 23:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728666AbgGQTdg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 17 Jul 2020 15:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728328AbgGQTdf (ORCPT
+        id S1727119AbgGQVyu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Jul 2020 17:54:50 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:37007 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726793AbgGQVyu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 17 Jul 2020 15:33:35 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4354EC0619D2;
-        Fri, 17 Jul 2020 12:33:35 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id z5so7156321pgb.6;
-        Fri, 17 Jul 2020 12:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=duL6IX1llb3XdntaTNWCnSA0z2uW92ABC9f/xeUasgw=;
-        b=nNBnvZg9rkU+2ervHWthLL2Xa2nApycF/1iDBGJLJL7Bhtc9N9lEdd1nynWg2Blqhv
-         f+OpzSmXl9D5brxNRY0i1vucEyFVdAifMOXxiN+H8NEgH93aESGHRSzH0tXgJj72QQa9
-         tsBiNJbRFsmUdz1Gdhpq4EvhODcQlhnmqJzelsgoPekiQyqmICqJ89+IWVlYCtU91XZA
-         jpMzhbsGuCxlKk36MBYu1V3Vqddc4twP2rYKIdfd0QR8wek0M3Wx1KMn8Q7kVH61XnNh
-         NnzxS1DadOIjOySd6JDjhZ62ruyLM8JN2+jL40eh7iHXB7Fth8g0nq4tEczjlrdnVfPw
-         K7mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=duL6IX1llb3XdntaTNWCnSA0z2uW92ABC9f/xeUasgw=;
-        b=Yxum07UDkjDX4YFIV/yi5OJWKDMfxqKVRhjVFHY49FX7Inp6pn0IxRjyNKXTxzmbiE
-         K91x4N84JrHAHIJeWK9v7HEGKstvi80cDYckdcjtkGzp7fjq0aaHeTuFLjqhQW5FPwnK
-         GKauzjrksj0fVG3THbM+2WheQjjAB6WzpPbbcVgT6QsBowKUHKfoSzpVC7QLbdvlRuCf
-         C48boHgraIKQoAuE9dUJTjcjlgWdCPds12M0mkgLT04qPjdZqg40xo5vD4PtU8CEOLwX
-         6BorGe+UzmVwiveBInxEXqYKUqffSAFGVAaDce32HvcVFi3Y0NWWo1Zdol+X2Qlnff7E
-         lwfQ==
-X-Gm-Message-State: AOAM531dYzc6ftBjMsI35P7wctXiHXOIXSs3Z6xDIoF66KxTgfB++71G
-        8NMzmTkc/8/3NWM2XAE0/CE=
-X-Google-Smtp-Source: ABdhPJxZKtfNREViNM/oa5hJ7AVHGD5KLOnwojnzT8F309zYRGCg/4KYDHJ+3N4SQdAqIau78ZZEPA==
-X-Received: by 2002:a65:67d9:: with SMTP id b25mr10126669pgs.311.1595014414580;
-        Fri, 17 Jul 2020 12:33:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p12sm8753495pgk.40.2020.07.17.12.33.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2020 12:33:33 -0700 (PDT)
-Subject: Re: [PATCH][next] watchdog: scx200_wdt: Use fallthrough
- pseudo-keyword
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-References: <20200717164059.GA26947@embeddedor>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <3f95aa68-cd5b-2942-5eed-c29494ae8068@roeck-us.net>
-Date:   Fri, 17 Jul 2020 12:33:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 17 Jul 2020 17:54:50 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id BE8012304C;
+        Fri, 17 Jul 2020 23:54:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1595022887;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CGb6zPojzWptr9RntI9Q3NPEKDFmlMY+j6ZpL+FsLqc=;
+        b=lXUBPhprMxuWRTGWj9ooCq/GJ4mduBqqCqkYMgu/pDyDfu75YE4/ef2ZgJ+fQ3e7CL1Tl9
+        MRG/bXe1GHq2w8n/hrhFFsoN+fiFgxupsc0LkwpgnlFow0FVYgv4Qq4LQRjSeokbD6WD9N
+        nh2GUUA2A7+CA/NgsN+TkqLnuF/u2tk=
 MIME-Version: 1.0
-In-Reply-To: <20200717164059.GA26947@embeddedor>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Fri, 17 Jul 2020 23:54:42 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe Kleine-K??nig <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 12/13] arm64: dts: freescale: sl28: enable LED support
+In-Reply-To: <20200717083610.GC1027@bug>
+References: <20200706175353.16404-1-michael@walle.cc>
+ <20200706175353.16404-13-michael@walle.cc> <20200717083610.GC1027@bug>
+User-Agent: Roundcube Webmail/1.4.7
+Message-ID: <af0584da0f43cb6cfffeb8fcf2235acb@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/17/20 9:40 AM, Gustavo A. R. Silva wrote:
-> Replace the existing /* fall through */ comments and its variants with
-> the new pseudo-keyword macro fallthrough[1].
-> 
-> [1] https://www.kernel.org/doc/html/v5.7-rc7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Hi Pavel,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/watchdog/scx200_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Am 2020-07-17 10:36, schrieb Pavel Machek:
+> Hi!
 > 
-> diff --git a/drivers/watchdog/scx200_wdt.c b/drivers/watchdog/scx200_wdt.c
-> index c94098acb78f..7b5e18323f3f 100644
-> --- a/drivers/watchdog/scx200_wdt.c
-> +++ b/drivers/watchdog/scx200_wdt.c
-> @@ -186,7 +186,7 @@ static long scx200_wdt_ioctl(struct file *file, unsigned int cmd,
->  		margin = new_margin;
->  		scx200_wdt_update_margin();
->  		scx200_wdt_ping();
-> -		/* Fall through */
-> +		fallthrough;
->  	case WDIOC_GETTIMEOUT:
->  		if (put_user(margin, p))
->  			return -EFAULT;
+>> Now that we have support for GPIO lines of the SMARC connector, enable
+>> LED support on the KBox A-230-LS. There are two LEDs without fixed
+>> functions, one is yellow and one is green. Unfortunately, it is just 
+>> one
+>> multi-color LED, thus while it is possible to enable both at the same
+>> time it is hard to tell the difference between "yellow only" and 
+>> "yellow
+>> and green".
 > 
+>> +		user_yellow {
+>> +			label = "s1914:yellow:user";
+>> +			gpios = <&sl28cpld_gpio0 0 0>;
+>> +		};
+>> +
+>> +		user_green {
+>> +			label = "s1914:green:user";
+>> +			gpios = <&sl28cpld_gpio1 3 0>;
+>> +		};
+> 
+> This is not suitable label for such LEDs... there's zero chance 
+> userland will
+> know what to do with these.
+> 
+> Do they have some kind of "usual" function?
 
+Unfortunately, they do not. I guess the green one could be something 
+like
+"application ready" and the yellow one could be an indication that some
+fault occurred.
+
+Do you have any suggestions?
+
+-michael
