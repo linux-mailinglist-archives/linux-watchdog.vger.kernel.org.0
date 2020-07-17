@@ -2,77 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D42222ABE
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jul 2020 20:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906B322328E
+	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jul 2020 06:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728237AbgGPSST (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jul 2020 14:18:19 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:54965 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbgGPSST (ORCPT
+        id S1725936AbgGQEof (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Jul 2020 00:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgGQEoe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jul 2020 14:18:19 -0400
-X-Originating-IP: 90.65.108.121
-Received: from localhost (lfbn-lyo-1-1676-121.w90-65.abo.wanadoo.fr [90.65.108.121])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id EBAA11BF20F;
-        Thu, 16 Jul 2020 18:18:16 +0000 (UTC)
-Date:   Thu, 16 Jul 2020 20:18:16 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Bruno Thomsen <bruno.thomsen@gmail.com>, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, a.zummo@towertech.it,
-        wim@linux-watchdog.org, linux@roeck-us.net, bth@kamstrup.com
-Subject: Re: [PATCH v3 4/5] rtc: pcf2127: add watchdog feature support
-Message-ID: <20200716181816.GF3428@piout.net>
-References: <20190822131936.18772-1-bruno.thomsen@gmail.com>
- <20190822131936.18772-4-bruno.thomsen@gmail.com>
- <20200716144705.o57m4r7ptmsm3m6n@pengutronix.de>
+        Fri, 17 Jul 2020 00:44:34 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25C4C08C5DB
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jul 2020 21:44:33 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id l2so15309968wmf.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jul 2020 21:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=S9S68y6b2mPbKuzgaCo1jN4A32wueiis4gs7MPkym/M=;
+        b=YBTRlAxQNCrp0VWtdAoz7HX1TcMxgP8c+pztXkm9DckROsrCs8s1wiHI5Ty0T6SgrK
+         x1LT/2APXM2vMzv8oPhbWLw0GHTyp4WhkivO6gKr6Fyodd1U8eGi9prToTvyCdvhjwuu
+         D/2FUpr4dbooLhpYGT4dm3UwB8hQ0iuvNDR5WtKOUPmAO1XOPM9iqBTmOIE3rIhpejZD
+         UuV0PnY40TbCaLn4R1LYeLSHKHkJ1uEJRN1YQ2eDSc8zlbJWvqUCqi2RbB/AK2Bmot/z
+         bai/MmFwyt17VnEi9eZU4lF9z9MMd+wSlLUM9q4lUfSN/7KO5Q5X5N7DH8omfftLoyew
+         HClw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=S9S68y6b2mPbKuzgaCo1jN4A32wueiis4gs7MPkym/M=;
+        b=k/wb5kD1qx46zWjXtMXMWpTcwxXRLNj7Ls2xnU4pH0/GAcTArDlt3rCdAT27KxUdXg
+         N4DwwGXZxt1RJLf7VkNl3DR3oWaa0Ex5Qb+o3vGddN7YxriEsL9a4HvwtghVV+y3jJUe
+         W6VZsndzzWx6R0iFzGH8UDJGHCLupPFRtLNjkZFtRYvtUK0zpdAObWqNDuqGXx+io5Q4
+         xvgZbMOAmbzzhQK265iueKvHTzNG5ZqpjlQoUrJ0Qy9YiBUo0CYUTLZ4rZkQ9Mex9Mn+
+         82iOuYalXcXnW4iz26cMK3gTjCVmwPIkCVXqu/NkX5xb1FuZB2AfbsAEY5osbx9fH8N0
+         5/8A==
+X-Gm-Message-State: AOAM533iWaDLl8vg5NDWvrndJRnLljignNMCj9bf2E9gu/OiFpv6x4aN
+        JTVBj58McPzkNGPFFm2/IehRjg==
+X-Google-Smtp-Source: ABdhPJyEBG67fJXokeAElVWPCoMwiGiAI/9HSCWG+w7OI40KZczqAmqnOUUNQcrS+TOsyYDFflbNaQ==
+X-Received: by 2002:a7b:ce83:: with SMTP id q3mr7184668wmj.5.1594961072462;
+        Thu, 16 Jul 2020 21:44:32 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:9880:a643:3e69:6393? ([2a01:e34:ed2f:f020:9880:a643:3e69:6393])
+        by smtp.googlemail.com with ESMTPSA id o21sm11356388wmh.18.2020.07.16.21.44.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jul 2020 21:44:31 -0700 (PDT)
+Subject: Re: [PATCH 03/20] thermal: rcar_gen3_thermal: Add r8a774e1 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <bcda3aae-a276-173f-71e2-381736481ab2@linaro.org>
+Date:   Fri, 17 Jul 2020 06:44:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <1594811350-14066-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200716144705.o57m4r7ptmsm3m6n@pengutronix.de>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+On 15/07/2020 13:08, Lad Prabhakar wrote:
+> From: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> 
+> Add r8a774e1 specific compatible string.
+> 
+> Signed-off-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> ---
 
-On 16/07/2020 16:47:05+0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, Aug 22, 2019 at 03:19:35PM +0200, Bruno Thomsen wrote:
-> > Add partial support for the watchdog functionality of
-> > both PCF2127 and PCF2129 chips.
-> 
-> I have a board here with a pcf2127 that has the #RST pin
-> not connected.
-> 
-> The problem this creates is: The bootloader arms the SoC's watchdog and
-> jumps into Linux. The pcf2127 driver happens to load first, so watchdog0
-> is provided by the RTC (but non-functional). Systemd is configured to
-> feed the watchdog, but happens to feed the wrong one, so the machine
-> resets shortly after it is up :-|
-> 
-> So I wonder if we need a dt property that tells the driver if the RST
-> line is connected or not.
-> 
+Applied, thanks
 
-I guess the current solution is to set WatchdogDevice to point to a link
-that is updated by udev thus ensuring it points to the correct watchdog
-device regardless of the probe order.
 
-This would be similar to the /dev/rtc symlink, pointing to the systohc
-RTC by default (even if I don't really like that heuristic).
-
-What you suggest is somewhat okay but doesn't really solve the issue if
-both watchdogs are functional and systemd still doesn't pick the one
-that is armed by the bootloader.
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+<http://www.linaro.org/> Linaro.org â”‚ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
