@@ -2,91 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B51223CC2
-	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jul 2020 15:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C5B2240AE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jul 2020 18:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbgGQNa7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 17 Jul 2020 09:30:59 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:39678 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726856AbgGQNar (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 17 Jul 2020 09:30:47 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06HDUEXW052070;
-        Fri, 17 Jul 2020 08:30:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1594992614;
-        bh=i8u41iPJxXK9FTGgItdBbgPW6UUUoKzYd1anGp6xt94=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=JTxVJnfYZWd0xrNzDVBf77IYGMFxJP1VBOxqXCplc8UC4q4haODryGmYjXPqJd2Ki
-         HXkeihj1YUtQPBd3HgWaWdnhmSgRNBTLHG4HuZmGwMaqpj2PcVKd9SsjBIQHGYdFnU
-         vlzHNFDtjxwMQGue34LrFcdO0YdM3waNHiMGakVU=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06HDUE8K074823
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Jul 2020 08:30:14 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 17
- Jul 2020 08:30:14 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 17 Jul 2020 08:30:14 -0500
-Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06HDU5Lf051528;
-        Fri, 17 Jul 2020 08:30:13 -0500
-From:   Tero Kristo <t-kristo@ti.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jan.kiszka@siemens.com>
-Subject: [PATCHv4 4/4] watchdog: rti-wdt: balance pm runtime enable calls
-Date:   Fri, 17 Jul 2020 16:29:58 +0300
-Message-ID: <20200717132958.14304-5-t-kristo@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200717132958.14304-1-t-kristo@ti.com>
-References: <20200717132958.14304-1-t-kristo@ti.com>
+        id S1726858AbgGQQff (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Jul 2020 12:35:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59528 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726221AbgGQQfe (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 17 Jul 2020 12:35:34 -0400
+Received: from embeddedor (unknown [201.162.167.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9A6D52065E;
+        Fri, 17 Jul 2020 16:35:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595003734;
+        bh=PKNDgQwBHU+u8iM5TGqJfeOToHbtv4pEScV52MFvHls=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TxrJ7MbTKKQV9fmTaapbzAMx82PP2hfF0FIoSt9LDMdPqIRlGudG3yJ01uwHmGhB5
+         xuciIdPKqVhf9uoQaTkLSkxE2QyoiinG9PwsMe82+8Nw2SmzMxRHklZNNC3nzAYXy2
+         G+ztodhuCgdH/qcjHxyaU5OuuUAgLzENA+9E9dEk=
+Date:   Fri, 17 Jul 2020 11:40:59 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Jim Cromie <jim.cromie@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH][next] watchdog: scx200_wdt: Use fallthrough pseudo-keyword
+Message-ID: <20200717164059.GA26947@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-PM runtime should be disabled in the fail path of probe and when
-the driver is removed.
+Replace the existing /* fall through */ comments and its variants with
+the new pseudo-keyword macro fallthrough[1].
 
-Fixes: 2d63908bdbfb ("watchdog: Add K3 RTI watchdog support")
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+[1] https://www.kernel.org/doc/html/v5.7-rc7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/watchdog/rti_wdt.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/watchdog/scx200_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-index 7cbdc178ffe8..705e8f7523e8 100644
---- a/drivers/watchdog/rti_wdt.c
-+++ b/drivers/watchdog/rti_wdt.c
-@@ -303,6 +303,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
- 
- err_iomap:
- 	pm_runtime_put_sync(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
- 
- 	return ret;
- }
-@@ -313,6 +314,7 @@ static int rti_wdt_remove(struct platform_device *pdev)
- 
- 	watchdog_unregister_device(&wdt->wdd);
- 	pm_runtime_put(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
- }
+diff --git a/drivers/watchdog/scx200_wdt.c b/drivers/watchdog/scx200_wdt.c
+index c94098acb78f..7b5e18323f3f 100644
+--- a/drivers/watchdog/scx200_wdt.c
++++ b/drivers/watchdog/scx200_wdt.c
+@@ -186,7 +186,7 @@ static long scx200_wdt_ioctl(struct file *file, unsigned int cmd,
+ 		margin = new_margin;
+ 		scx200_wdt_update_margin();
+ 		scx200_wdt_ping();
+-		/* Fall through */
++		fallthrough;
+ 	case WDIOC_GETTIMEOUT:
+ 		if (put_user(margin, p))
+ 			return -EFAULT;
 -- 
-2.17.1
+2.27.0
 
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
