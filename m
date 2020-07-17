@@ -2,47 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1831F223CBC
+	by mail.lfdr.de (Postfix) with ESMTP id 83021223CBD
 	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jul 2020 15:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbgGQNas (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 17 Jul 2020 09:30:48 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:39676 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726852AbgGQNas (ORCPT
+        id S1726941AbgGQNat (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Jul 2020 09:30:49 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:48622 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726858AbgGQNas (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
         Fri, 17 Jul 2020 09:30:48 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06HDUBdD052006;
-        Fri, 17 Jul 2020 08:30:11 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06HDUDx9112228;
+        Fri, 17 Jul 2020 08:30:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1594992611;
-        bh=1f8QGphM1gDJrV+uk7tlCewgRrYPd1fn7gpp9JJzAS0=;
+        s=ti-com-17Q1; t=1594992613;
+        bh=BGRzQzJRUgPtGm9sLOJlBVaMwh3yhhpVDzyWW8ni8hM=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ha9xdr5caMQ9HSqkgqjaXI0k7GcV8aBYkZVJoojL6WdL76SULLHnqN4n5Cnbu+7UY
-         4MOoHS+0GxySsIzt2rER4QqPCgy0ULc20vce7m80L8iJ3C/fRJotuqmRmiXopISStW
-         h7lgUhYZwakuVgqgfdxwO+LzgMTPky5kVFMnA6BM=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06HDUBup075551;
-        Fri, 17 Jul 2020 08:30:11 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        b=eA7AA5wESPdz6F5Tb4V1vTxf6BMYnACBYvyqeyF3oGA6oa4Ou2PE+cT7XFtDW3vR4
+         iIWn8RaS0AnhwKeUkOs7L2gGLrK/DkWlmoCjkTGb4JRN4vzEvJIFaZS7N0eiAwEMoS
+         DMGJc6+ij+L1VtsG0Jrgs81Mm+cKKFxVkDIC+70g=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06HDUDp2074781
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 17 Jul 2020 08:30:13 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 17
- Jul 2020 08:30:11 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2020 08:30:12 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 17 Jul 2020 08:30:11 -0500
+ Frontend Transport; Fri, 17 Jul 2020 08:30:12 -0500
 Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06HDU5Ld051528;
-        Fri, 17 Jul 2020 08:30:09 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06HDU5Le051528;
+        Fri, 17 Jul 2020 08:30:11 -0500
 From:   Tero Kristo <t-kristo@ti.com>
 To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
         <linux-watchdog@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <jan.kiszka@siemens.com>
-Subject: [PATCHv4 2/4] watchdog: add support for adjusting last known HW keepalive time
-Date:   Fri, 17 Jul 2020 16:29:56 +0300
-Message-ID: <20200717132958.14304-3-t-kristo@ti.com>
+Subject: [PATCHv4 3/4] watchdog: rti-wdt: attach to running watchdog during probe
+Date:   Fri, 17 Jul 2020 16:29:57 +0300
+Message-ID: <20200717132958.14304-4-t-kristo@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200717132958.14304-1-t-kristo@ti.com>
 References: <20200717132958.14304-1-t-kristo@ti.com>
@@ -54,93 +55,208 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Certain watchdogs require the watchdog only to be pinged within a
-specific time window, pinging too early or too late cause the watchdog
-to fire. In cases where this sort of watchdog has been started before
-kernel comes up, we must adjust the watchdog keepalive window to match
-the actually running timer, so add a new driver API for this purpose.
+If the RTI watchdog is running already during probe, the driver must
+configure itself to match the HW. Window size and timeout is probed from
+hardware, and the last keepalive ping is adjusted to match it also.
 
 Signed-off-by: Tero Kristo <t-kristo@ti.com>
 ---
- .../watchdog/watchdog-kernel-api.rst          | 12 ++++++++
- drivers/watchdog/watchdog_dev.c               | 30 +++++++++++++++++++
- include/linux/watchdog.h                      |  2 ++
- 3 files changed, 44 insertions(+)
+ drivers/watchdog/rti_wdt.c | 112 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 102 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/watchdog/watchdog-kernel-api.rst b/Documentation/watchdog/watchdog-kernel-api.rst
-index 068a55ee0d4a..baf44e986b07 100644
---- a/Documentation/watchdog/watchdog-kernel-api.rst
-+++ b/Documentation/watchdog/watchdog-kernel-api.rst
-@@ -336,3 +336,15 @@ an action is taken by a preconfigured pretimeout governor preassigned to
- the watchdog device. If watchdog pretimeout governor framework is not
- enabled, watchdog_notify_pretimeout() prints a notification message to
- the kernel log buffer.
-+
-+To set the last known HW keepalive time for a watchdog, the following function
-+should be used::
-+
-+  int watchdog_set_last_hw_keepalive(struct watchdog_device *wdd,
-+                                     unsigned int last_ping_ms)
-+
-+This function must be called immediately after watchdog registration. It
-+sets the last known hardware heartbeat to have happened last_ping_ms before
-+current time. Calling this is only needed if the watchdog is already running
-+when probe is called, and the watchdog can only be pinged after the
-+min_hw_heartbeat_ms time has passed from the last ping.
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index bc1cfa288553..e74a0c6811b5 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -1138,6 +1138,36 @@ void watchdog_dev_unregister(struct watchdog_device *wdd)
- 	watchdog_cdev_unregister(wdd);
+diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+index d456dd72d99a..7cbdc178ffe8 100644
+--- a/drivers/watchdog/rti_wdt.c
++++ b/drivers/watchdog/rti_wdt.c
+@@ -35,7 +35,11 @@
+ 
+ #define RTIWWDRX_NMI	0xa
+ 
+-#define RTIWWDSIZE_50P	0x50
++#define RTIWWDSIZE_50P		0x50
++#define RTIWWDSIZE_25P		0x500
++#define RTIWWDSIZE_12P5		0x5000
++#define RTIWWDSIZE_6P25		0x50000
++#define RTIWWDSIZE_3P125	0x500000
+ 
+ #define WDENABLE_KEY	0xa98559da
+ 
+@@ -48,7 +52,7 @@
+ 
+ #define DWDST			BIT(1)
+ 
+-static int heartbeat;
++static int heartbeat = DEFAULT_HEARTBEAT;
+ 
+ /*
+  * struct to hold data for each WDT device
+@@ -79,11 +83,9 @@ static int rti_wdt_start(struct watchdog_device *wdd)
+ 	 * be petted during the open window; not too early or not too late.
+ 	 * The HW configuration options only allow for the open window size
+ 	 * to be 50% or less than that; we obviouly want to configure the open
+-	 * window as large as possible so we select the 50% option. To avoid
+-	 * any glitches, we accommodate 5% safety margin also, so we setup
+-	 * the min_hw_hearbeat at 55% of the timeout period.
++	 * window as large as possible so we select the 50% option.
+ 	 */
+-	wdd->min_hw_heartbeat_ms = 11 * wdd->timeout * 1000 / 20;
++	wdd->min_hw_heartbeat_ms = 500 * wdd->timeout;
+ 
+ 	/* Generate NMI when wdt expires */
+ 	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
+@@ -110,7 +112,48 @@ static int rti_wdt_ping(struct watchdog_device *wdd)
+ 	return 0;
  }
  
-+/*
-+ *	watchdog_set_last_hw_keepalive: set last HW keepalive time for watchdog
-+ *	@wdd: watchdog device
-+ *	@last_ping_ms: time since last HW heartbeat
-+ *
-+ *	Adjusts the last known HW keepalive time for a watchdog timer.
-+ *	This is needed if the watchdog is already running when the probe
-+ *	function is called, and it can't be pinged immediately. This
-+ *	function must be called immediately after watchdog registration,
-+ *	and min_hw_heartbeat_ms must be set for this to be useful.
-+ */
-+int watchdog_set_last_hw_keepalive(struct watchdog_device *wdd,
-+				   unsigned int last_ping_ms)
+-static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
++static int rti_wdt_setup_hw_hb(struct watchdog_device *wdd, u32 wsize)
 +{
-+	struct watchdog_core_data *wd_data;
-+	ktime_t now;
++	/*
++	 * RTI only supports a windowed mode, where the watchdog can only
++	 * be petted during the open window; not too early or not too late.
++	 * The HW configuration options only allow for the open window size
++	 * to be 50% or less than that.
++	 */
++	switch (wsize) {
++	case RTIWWDSIZE_50P:
++		/* 50% open window => 50% min heartbeat */
++		wdd->min_hw_heartbeat_ms = 500 * heartbeat;
++		break;
 +
-+	if (!wdd)
++	case RTIWWDSIZE_25P:
++		/* 25% open window => 75% min heartbeat */
++		wdd->min_hw_heartbeat_ms = 750 * heartbeat;
++		break;
++
++	case RTIWWDSIZE_12P5:
++		/* 12.5% open window => 87.5% min heartbeat */
++		wdd->min_hw_heartbeat_ms = 875 * heartbeat;
++		break;
++
++	case RTIWWDSIZE_6P25:
++		/* 6.5% open window => 93.5% min heartbeat */
++		wdd->min_hw_heartbeat_ms = 935 * heartbeat;
++		break;
++
++	case RTIWWDSIZE_3P125:
++		/* 3.125% open window => 96.9% min heartbeat */
++		wdd->min_hw_heartbeat_ms = 969 * heartbeat;
++		break;
++
++	default:
 +		return -EINVAL;
++	}
 +
-+	wd_data = wdd->wd_data;
-+
-+	now = ktime_get();
-+
-+	wd_data->last_hw_keepalive = ktime_sub(now, ms_to_ktime(last_ping_ms));
-+
-+	return __watchdog_ping(wdd);
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(watchdog_set_last_hw_keepalive);
 +
- /*
-  *	watchdog_dev_init: init dev part of watchdog core
-  *
-diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-index 1464ce6ffa31..9b19e6bb68b5 100644
---- a/include/linux/watchdog.h
-+++ b/include/linux/watchdog.h
-@@ -210,6 +210,8 @@ extern int watchdog_init_timeout(struct watchdog_device *wdd,
- extern int watchdog_register_device(struct watchdog_device *);
- extern void watchdog_unregister_device(struct watchdog_device *);
++static unsigned int rti_wdt_get_timeleft_ms(struct watchdog_device *wdd)
+ {
+ 	u64 timer_counter;
+ 	u32 val;
+@@ -123,11 +166,18 @@ static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
  
-+int watchdog_set_last_hw_keepalive(struct watchdog_device *, unsigned int);
+ 	timer_counter = readl_relaxed(wdt->base + RTIDWDCNTR);
+ 
++	timer_counter *= 1000;
 +
- /* devres register variant */
- int devm_watchdog_register_device(struct device *dev, struct watchdog_device *);
+ 	do_div(timer_counter, wdt->freq);
  
+ 	return timer_counter;
+ }
+ 
++static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
++{
++	return rti_wdt_get_timeleft_ms(wdd) / 1000;
++}
++
+ static const struct watchdog_info rti_wdt_info = {
+ 	.options = WDIOF_KEEPALIVEPING,
+ 	.identity = "K3 RTI Watchdog",
+@@ -148,6 +198,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 	struct watchdog_device *wdd;
+ 	struct rti_wdt_device *wdt;
+ 	struct clk *clk;
++	u32 last_ping = 0;
+ 
+ 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+ 	if (!wdt)
+@@ -169,6 +220,14 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
++	/*
++	 * If watchdog is running at 32k clock, it is not accurate.
++	 * Adjust frequency down in this case so that we don't pet
++	 * the watchdog too often.
++	 */
++	if (wdt->freq < 32768)
++		wdt->freq = wdt->freq * 9 / 10;
++
+ 	pm_runtime_enable(dev);
+ 	ret = pm_runtime_get_sync(dev);
+ 	if (ret) {
+@@ -185,11 +244,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 	wdd->min_timeout = 1;
+ 	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
+ 		wdt->freq * 1000;
+-	wdd->timeout = DEFAULT_HEARTBEAT;
+ 	wdd->parent = dev;
+ 
+-	watchdog_init_timeout(wdd, heartbeat, dev);
+-
+ 	watchdog_set_drvdata(wdd, wdt);
+ 	watchdog_set_nowayout(wdd, 1);
+ 	watchdog_set_restart_priority(wdd, 128);
+@@ -201,12 +257,48 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 		goto err_iomap;
+ 	}
+ 
++	if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
++		u32 time_left_ms;
++		u64 heartbeat_ms;
++		u32 wsize;
++
++		set_bit(WDOG_HW_RUNNING, &wdd->status);
++		time_left_ms = rti_wdt_get_timeleft_ms(wdd);
++		heartbeat_ms = readl(wdt->base + RTIDWDPRLD);
++		heartbeat_ms <<= WDT_PRELOAD_SHIFT;
++		heartbeat_ms *= 1000;
++		do_div(heartbeat_ms, wdt->freq);
++		if (heartbeat_ms != heartbeat * 1000)
++			dev_warn(dev, "watchdog already running, ignoring heartbeat config!\n");
++
++		heartbeat = heartbeat_ms;
++		heartbeat /= 1000;
++
++		wsize = readl(wdt->base + RTIWWDSIZECTRL);
++		ret = rti_wdt_setup_hw_hb(wdd, wsize);
++		if (ret) {
++			dev_err(dev, "bad window size.\n");
++			goto err_iomap;
++		}
++
++		last_ping = heartbeat_ms - time_left_ms;
++		if (time_left_ms > heartbeat_ms) {
++			dev_warn(dev, "time_left > heartbeat? Assuming last ping just before now.\n");
++			last_ping = 0;
++		}
++	}
++
++	watchdog_init_timeout(wdd, heartbeat, dev);
++
+ 	ret = watchdog_register_device(wdd);
+ 	if (ret) {
+ 		dev_err(dev, "cannot register watchdog device\n");
+ 		goto err_iomap;
+ 	}
+ 
++	if (last_ping)
++		watchdog_set_last_hw_keepalive(wdd, last_ping);
++
+ 	return 0;
+ 
+ err_iomap:
 -- 
 2.17.1
 
