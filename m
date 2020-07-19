@@ -2,133 +2,198 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4E9225232
-	for <lists+linux-watchdog@lfdr.de>; Sun, 19 Jul 2020 16:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5042422547E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Jul 2020 00:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbgGSOZo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 19 Jul 2020 10:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726038AbgGSOZn (ORCPT
+        id S1726598AbgGSW0A (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 19 Jul 2020 18:26:00 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:40581 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726156AbgGSW0A (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 19 Jul 2020 10:25:43 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7008AC0619D2
-        for <linux-watchdog@vger.kernel.org>; Sun, 19 Jul 2020 07:25:43 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id u185so7788585pfu.1
-        for <linux-watchdog@vger.kernel.org>; Sun, 19 Jul 2020 07:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6mcWbHjFY3/Gvc/lmgo5JpfmiJVAARzIxccyNENiA+U=;
-        b=jvqROPYlsFvBfTMHZYkikGtUJhnlX9eNkLXQukDF+RF+cwVlXvYJK5eI/MpX5eFqfH
-         87jTtWgsBmoxZdPLKAg0Tt6xtKbtSQeTYEXNxVkvbNMandHtNo0aCud+VfYpuoquFME3
-         humPuGJhwOUm6gHs2g6fo+AaG34vafSfXrI99Ds3dvnDYr2mpVbVot2kn5KT958t+Ucj
-         d0bZYilVBXd9WEvHHyXixY6RdSthk9zLsuWycnRV9qMLd94XUnU7M0jiTIjkBTGNcrr2
-         H15fzXG35DcaNe6VmFpHSMCCAg55s3KaCq5+7MncYvAEK1a9Ddr7fXsXSmFm+uMR+oTx
-         QJDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6mcWbHjFY3/Gvc/lmgo5JpfmiJVAARzIxccyNENiA+U=;
-        b=Yy0vVoikJLfH6VPC5+gASfn9YRq5f/2tRNebYQSM+xTKw3+zJBV1GHqPdYIjnE3S57
-         EtvdPm7Fb0x74sOTkQKaESNWlqNcskYk3X0i5xe1nKTKX/2NLotRZKIMjfhS3JnTVRDc
-         mQQEiyM6sQouNVLGYmpbEhLgev91gZmMB92jVuzIvMh3j+7X1L1Qxrg5QSlg7dCZlQ3g
-         TI3EdjvOpLJN5JNOtx6j6zHQDOFDSLen62dsKLQ2vfLsmEohJIVRPbfyqwD97e3dZvr1
-         vVM/gm/pa+p+TuIpWkLVnbPR8gvlrdEjCy6PGyrQCoOdW61NVr39Lz5xv1mvzrTOZnqK
-         8g0A==
-X-Gm-Message-State: AOAM533wNRKwwhzG0NM3ZwZA8qTH53DLnY6yonf5H13QUZbcp8ormZyO
-        n3KAPZRDpIvLoiWAQHO7Ifs=
-X-Google-Smtp-Source: ABdhPJzDQGJuQEsUrP87F8y69YZLua5BL6eU57uG/fn6l9WYtrPiIdl3R1olrF8XXEI2vAYFFL/bfQ==
-X-Received: by 2002:a63:cc18:: with SMTP id x24mr15032008pgf.86.1595168742801;
-        Sun, 19 Jul 2020 07:25:42 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r204sm14041536pfc.134.2020.07.19.07.25.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 19 Jul 2020 07:25:42 -0700 (PDT)
-Date:   Sun, 19 Jul 2020 07:25:40 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     minyard@acm.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, Corey Minyard <cminyard@mvista.com>
-Subject: Re: [PATCH 08/10] watchdog: Add a way to extend the timeout on a
- reboot
-Message-ID: <20200719142540.GA39395@roeck-us.net>
-References: <20200620174907.20229-1-minyard@acm.org>
- <20200620174907.20229-9-minyard@acm.org>
+        Sun, 19 Jul 2020 18:26:00 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id D498B22FEC;
+        Mon, 20 Jul 2020 00:25:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1595197556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P1EARcVS+vt3gGzV2O04vTL98QliSbGs8ZYhiqN1cK8=;
+        b=L8a9kMdjygjsyDp8WZPCdrn8cqiEuXSYyDStMPiQK9XjxDkcyI5zkGtjQl5bgmqUckT/4H
+        n8CH8YTFb3jsa8lY3vAgQzc2SQdaURhejaltLX/vnwCW5HnOn9fLrg6TZ4cGDaOi55qtwT
+        uK3rdim4Gt1gtfOPtV/Qfj2QSw+wTKY=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200620174907.20229-9-minyard@acm.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 20 Jul 2020 00:25:52 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 02/13] mfd: add simple regmap based I2C driver
+In-Reply-To: <20200717090444.GE3165313@dell>
+References: <20200706175353.16404-1-michael@walle.cc>
+ <20200706175353.16404-3-michael@walle.cc> <20200717090444.GE3165313@dell>
+User-Agent: Roundcube Webmail/1.4.7
+Message-ID: <09810b67fb0259a57086f938cd8382c5@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 12:49:05PM -0500, minyard@acm.org wrote:
-> From: Corey Minyard <cminyard@mvista.com>
+Am 2020-07-17 11:04, schrieb Lee Jones:
+> On Mon, 06 Jul 2020, Michael Walle wrote:
 > 
-> If reboot_timeout is set in the watchdog device struct, set the timeout
-> to that value on a reboot.  This way more time can be given for a reboot
-> to complete.
+>> There are I2C devices which contain several different functions but
+>> doesn't require any special access functions. For these kind of 
+>> drivers
+>> an I2C regmap should be enough.
+>> 
+>> Create an I2C driver which creates an I2C regmap and enumerates its
+>> children. If a device wants to use this as its MFD core driver, it has
+>> to add an individual compatible string. It may provide its own regmap
+>> configuration.
+>> 
+>> Subdevices can use dev_get_regmap() on the parent to get their regmap
+>> instance.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>> Changes since v4:
+>>  - new patch. Lee, please bear with me. I didn't want to delay the
+>>    new version (where a lot of remarks on the other patches were
+>>    addressed) even more, just because we haven't figured out how
+>>    to deal with the MFD part. So for now, I've included this one.
+>> 
+>>  drivers/mfd/Kconfig          |  9 +++++++
+>>  drivers/mfd/Makefile         |  1 +
+>>  drivers/mfd/simple-mfd-i2c.c | 50 
+>> ++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 60 insertions(+)
+>>  create mode 100644 drivers/mfd/simple-mfd-i2c.c
+>> 
+>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>> index 33df0837ab41..f1536a710aca 100644
+>> --- a/drivers/mfd/Kconfig
+>> +++ b/drivers/mfd/Kconfig
+>> @@ -1162,6 +1162,15 @@ config MFD_SI476X_CORE
+>>  	  To compile this driver as a module, choose M here: the
+>>  	  module will be called si476x-core.
+>> 
+>> +config MFD_SIMPLE_MFD_I2C
+>> +	tristate "Simple regmap based I2C devices"
+>> +	depends on I2C
+>> +	select MFD_CORE
+>> +	select REGMAP_I2C
+>> +	help
+>> +	  This is a consolidated driver for all MFD devices which are
+>> +	  basically just a regmap bus driver.
+>> +
+>>  config MFD_SM501
+>>  	tristate "Silicon Motion SM501"
+>>  	depends on HAS_DMA
+>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+>> index a60e5f835283..78d24a3e7c9e 100644
+>> --- a/drivers/mfd/Makefile
+>> +++ b/drivers/mfd/Makefile
+>> @@ -264,3 +264,4 @@ obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
+>>  obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
+>> 
+>>  obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+>> +obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+>> diff --git a/drivers/mfd/simple-mfd-i2c.c 
+>> b/drivers/mfd/simple-mfd-i2c.c
+>> new file mode 100644
+>> index 000000000000..1fdca89964b1
+>> --- /dev/null
+>> +++ b/drivers/mfd/simple-mfd-i2c.c
+>> @@ -0,0 +1,49 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +#include <linux/i2c.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/mfd/core.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/regmap.h>
 > 
-I think this should be aligned with watchdog_set_open_deadline(),
-ie use a function to set the reboot timeout instead of adding it
-to struct watchdog_device.
+> I'm pretty sure you do not require all of these headers.
 
-> Signed-off-by: Corey Minyard <cminyard@mvista.com>
-> ---
->  drivers/watchdog/watchdog_core.c | 2 ++
->  include/linux/watchdog.h         | 4 ++++
->  2 files changed, 6 insertions(+)
+Shot, I'll clean that up.
+
+>> +struct simple_mfd_i2c_config {
+>> +	const struct regmap_config *regmap_config;
+>> +};
 > 
-> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-> index 03943a34e9fb..5792f9bca645 100644
-> --- a/drivers/watchdog/watchdog_core.c
-> +++ b/drivers/watchdog/watchdog_core.c
-> @@ -165,6 +165,8 @@ static int watchdog_reboot_notifier(struct notifier_block *nb,
->  			if (ret)
->  				return NOTIFY_BAD;
->  		}
-> +	} else if (wdd->reboot_timeout) {
-> +		watchdog_set_timeout(wdd, wdd->reboot_timeout);
+> No need for this yet I feel.
+> 
+> Let's keep it as simple as possible.
 
-This has no practical impact; the code above checks for SYS_DOWN,
-and for whatever reason SYS_DOWN has the same value as SYS_RESTART.
-So the only value is for SYS_POWER_OFF, and that should arguably
-be included in the first check (meaning we should probably remove
-that check entirely, if anything).
+ok
 
-Also, the reboot notifier is only called if WDOG_STOP_ON_REBOOT
-is set, which contradicts the idea behind this change.
+>> +static const struct regmap_config simple_regmap_config = {
+>> +	.reg_bits = 8,
+>> +	.val_bits = 8,
+>> +};
+>> +
+>> +static int simple_mfd_i2c_probe(struct i2c_client *i2c)
+>> +{
+>> +	const struct regmap_config *regmap_config = &simple_regmap_config;
+>> +	const struct simple_mfd_i2c_config *config;
+>> +	struct regmap *regmap;
+>> +
+>> +	config = device_get_match_data(&i2c->dev);
+> 
+> Have this return regmap_config.
 
-Guenter
+ok
 
->  	}
->  
->  	return NOTIFY_DONE;
-> diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
-> index 1eefae61215d..0fb57f29346c 100644
-> --- a/include/linux/watchdog.h
-> +++ b/include/linux/watchdog.h
-> @@ -92,6 +92,9 @@ struct watchdog_ops {
->   * @status:	Field that contains the devices internal status bits.
->   * @deferred:	Entry in wtd_deferred_reg_list which is used to
->   *		register early initialized watchdogs.
-> + * @reboot_timeout:
-> + *		If non-zero, the timeout will be set to this value
-> + *		on a reboot.  This lets a reboot be given more time.
->   *
->   * The watchdog_device structure contains all information about a
->   * watchdog timer device.
-> @@ -125,6 +128,7 @@ struct watchdog_device {
->  #define WDOG_HW_RUNNING		3	/* True if HW watchdog running */
->  #define WDOG_STOP_ON_UNREGISTER	4	/* Should be stopped on unregister */
->  	struct list_head deferred;
-> +	unsigned int reboot_timeout;
->  };
->  
->  #define WATCHDOG_NOWAYOUT		IS_BUILTIN(CONFIG_WATCHDOG_NOWAYOUT)
+>> +	if (config && config->regmap_config)
+>> +		regmap_config = config->regmap_config;
+>> +
+>> +	regmap = devm_regmap_init_i2c(i2c, regmap_config);
+>> +	if (IS_ERR(regmap))
+>> +		return PTR_ERR(regmap);
+>> +
+>> +	return devm_of_platform_populate(&i2c->dev);
+>> +}
+>> +
+>> +static const struct of_device_id simple_mfd_i2c_of_match[] = {
+>> +	{}
+>> +};
+>> +
+>> +static struct i2c_driver simple_mfd_i2c_driver = {
+>> +	.probe_new = simple_mfd_i2c_probe,
+>> +	.driver = {
+>> +		.name = "simple-mfd-i2c",
+>> +		.of_match_table = simple_mfd_i2c_of_match,
+>> +	},
+>> +};
+>> +builtin_i2c_driver(simple_mfd_i2c_driver);
+
+-- 
+-michael
