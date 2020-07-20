@@ -2,148 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD2A2258D4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Jul 2020 09:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E084E225D29
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Jul 2020 13:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbgGTHnS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 20 Jul 2020 03:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgGTHnR (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 20 Jul 2020 03:43:17 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41858C0619D2
-        for <linux-watchdog@vger.kernel.org>; Mon, 20 Jul 2020 00:43:17 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id 17so24115200wmo.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 20 Jul 2020 00:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=m6yytUMdKpAiiKF/+CcuV8LMm9NpXNcKGc9Sb6F7cqo=;
-        b=IVK09e1ld+9cwoXx1bqDODaFImU/E8BERDq0mWlu1Dh3gZ8IilQ3NLb5AgUJs2EZ6A
-         DOpTQs9i1N8ia2cP2g7Hb9P6XoaJ7E0SsvqJvP109FQdN1+ZnJhAs2U+kTjtokXyi7kX
-         KZWHKc+5M16aNSA+dKO3bVZQ3Ch6eBOqPwHOhmW6ZcCXCA9lkNv0mus2J2Dg295523dN
-         wlMsuRQmfpFIbc8P/E473L2Usu9r1pSH6N0HzqC+VSRl0++AZtaLlfi6afz/RKsfOi1+
-         pBDqXeB4fWSWXBmqduD5AQBaV8vSZx9hm2B0U5J2k7sG/cAbFhzBStssMGIksHjKYPH5
-         ApOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=m6yytUMdKpAiiKF/+CcuV8LMm9NpXNcKGc9Sb6F7cqo=;
-        b=CBWk55AL8xwVWTY4KsRwftBSz7Ozzggk1nAJmXCR/fnHRVh3Pkz5rrXRHdschi6sD6
-         wMfq9TgUcBbrdhoB2uYTLMcaYBnea3RmAfY5VBXl/uswMxDhcE89bRs60Yd6GfUC8wPt
-         tgeK/4MBq+R30sXF9uHAsHs+v7x9QQDfirKThw1rO2TIWoVPFs/Ip617ReEQsG/RsnE1
-         H29OBXcJoJuOggiV6aQ+/ENQJLhlmREl6yKTPmurn49El7gICKRU9B1rB3KDzB5PrILQ
-         C1hzLXwZ8AYF1Jnbj7UXHaLYpefaqys4QFUNe/VdwJPqAAEZME1jlLdsgxOhiPk58Kxx
-         ADHA==
-X-Gm-Message-State: AOAM531gUFiiKm3VTOsOktAHS3FC4/yWV16GGpM/VsQdJ5yxOCwhLn1g
-        FX4hTuQK6asDe6Ivhrm+QiAjOg==
-X-Google-Smtp-Source: ABdhPJzdJSdBbBWM2quCXUnipLg3+n/33qPK8Rxd7dlcJHIfTbXk90f6awCJz9w28J/D1s9VK8ooPw==
-X-Received: by 2002:a1c:408b:: with SMTP id n133mr20209577wma.88.1595230995865;
-        Mon, 20 Jul 2020 00:43:15 -0700 (PDT)
-Received: from dell ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id o7sm17531643wrv.50.2020.07.20.00.43.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 00:43:15 -0700 (PDT)
-Date:   Mon, 20 Jul 2020 08:43:12 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        id S1728104AbgGTLMO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 Jul 2020 07:12:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52084 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727094AbgGTLMN (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 20 Jul 2020 07:12:13 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 689E92073A;
+        Mon, 20 Jul 2020 11:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595243533;
+        bh=9Yy+1VjcfL5aQqBqsh+BDfHhT28teG125L+0sNy5ehc=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=hAnDisAU5CkKAmHpE/TlDXaSa61cF0JA6RYkNQwVsbS2KHEPnHbsA064m/XFR1u/T
+         z//PW9qlfb6Lwl2oAr78zQ6ONpyQ79rnqVCxfhGpQ0WbjKfNRt5Zp9J68zrYhDPdF8
+         wriqqXI+iRwPMIMpW2FBryFhRaNOpStEuiSEMfmY=
+Date:   Mon, 20 Jul 2020 12:12:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     devicetree@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 02/13] mfd: add simple regmap based I2C driver
-Message-ID: <20200720074312.GL3165313@dell>
-References: <20200706175353.16404-1-michael@walle.cc>
- <20200706175353.16404-3-michael@walle.cc>
- <20200717090656.GF3165313@dell>
- <52d85ea1ddc488762df547168e2001e9@walle.cc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <52d85ea1ddc488762df547168e2001e9@walle.cc>
+        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-spi@vger.kernel.org, Prabhakar <prabhakar.csengg@gmail.com>,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Amit Kucheria <amit.kucheria@verdurent.com>
+In-Reply-To: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 00/20] Add support for [H]SCIF/TMU/CMT/THS/SDHI/MSIOF/CAN[FD]/I2C/IIC/RWDT on R8A774E1
+Message-Id: <159524352070.8289.9628744508547399473.b4-ty@kernel.org>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 20 Jul 2020, Michael Walle wrote:
-
-> Am 2020-07-17 11:06, schrieb Lee Jones:
-> > On Mon, 06 Jul 2020, Michael Walle wrote:
-> > 
-> > > There are I2C devices which contain several different functions but
-> > > doesn't require any special access functions. For these kind of
-> > > drivers
-> > > an I2C regmap should be enough.
-> > > 
-> > > Create an I2C driver which creates an I2C regmap and enumerates its
-> > > children. If a device wants to use this as its MFD core driver, it has
-> > > to add an individual compatible string. It may provide its own regmap
-> > > configuration.
-> > > 
-> > > Subdevices can use dev_get_regmap() on the parent to get their regmap
-> > > instance.
-> > > 
-> > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > ---
-> > > Changes since v4:
-> > >  - new patch. Lee, please bear with me. I didn't want to delay the
-> > >    new version (where a lot of remarks on the other patches were
-> > >    addressed) even more, just because we haven't figured out how
-> > >    to deal with the MFD part. So for now, I've included this one.
-> > > 
-> > >  drivers/mfd/Kconfig          |  9 +++++++
-> > >  drivers/mfd/Makefile         |  1 +
-> > >  drivers/mfd/simple-mfd-i2c.c | 50
-> > > ++++++++++++++++++++++++++++++++++++
-> > >  3 files changed, 60 insertions(+)
-> > >  create mode 100644 drivers/mfd/simple-mfd-i2c.c
-> > > 
-> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > index 33df0837ab41..f1536a710aca 100644
-> > > --- a/drivers/mfd/Kconfig
-> > > +++ b/drivers/mfd/Kconfig
-> > > @@ -1162,6 +1162,15 @@ config MFD_SI476X_CORE
-> > >  	  To compile this driver as a module, choose M here: the
-> > >  	  module will be called si476x-core.
-> > > 
-> > > +config MFD_SIMPLE_MFD_I2C
-> > > +	tristate "Simple regmap based I2C devices"
-> > 
-> > Doesn't look like tristate to me.
-> > 
-> > Haven't you made this builtin only?
+On Wed, 15 Jul 2020 12:08:50 +0100, Lad Prabhakar wrote:
+> This patch series enables support for following on RZ/G2H SoC,
+> * CPU OPP
+> * THS
+> * CMT/TMU
+> * I2C/IIC
+> * MSIOF
+> * RWDT
+> * SDHI
+> * SCIF/HSCIF
+> * CAN/CANFD
 > 
-> Mh yeah, I forgot to change it to module in the driver. I don't
-> know whats better though, have it tristate or just offer a boolean
-> option because it should be small anyway. What do you think?
-> My interrupt driver will force it to boolean anyway.
+> [...]
 
-Better to give consumers the choice I think.
+Applied to
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: renesas,sh-msiof: Add r8a774e1 support
+      commit: b4f7f5f5470588e45e5d004f1dc4887af20f18c0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
