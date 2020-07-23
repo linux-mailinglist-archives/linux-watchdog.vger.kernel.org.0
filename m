@@ -2,72 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7856B22AB65
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jul 2020 11:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC3E22B89D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jul 2020 23:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728001AbgGWJIo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 Jul 2020 05:08:44 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:19453 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726127AbgGWJIn (ORCPT
+        id S1726855AbgGWV2F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 Jul 2020 17:28:05 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:36546 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbgGWV2F (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 Jul 2020 05:08:43 -0400
-X-UUID: a394200657ba4bb49d41679fa2ec77aa-20200723
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=LkLD6rKD+tyfSOxJ/tFfCgfVHNHDHHwbNbevew2fYZ4=;
-        b=tBh0SDxEkPPTeQ8bV8EjBxN5n90HlyJbdD7ZbLv5syW+VDbcyoOtwWcvqh81YHLZ3gVivyEM1qE1trsYssbaB/uMOTPIX+y5mKBQ54kCYOlkSpBXl9e4NZvbDYGN8n2dzDs5V2bUtR6+QvoDkcs4JOVvmSagTjS0S6C+n/o/hSU=;
-X-UUID: a394200657ba4bb49d41679fa2ec77aa-20200723
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <seiya.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 125551253; Thu, 23 Jul 2020 17:08:39 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 23 Jul 2020 17:08:36 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 23 Jul 2020 17:08:37 +0800
-From:   Seiya Wang <seiya.wang@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 23 Jul 2020 17:28:05 -0400
+Received: by mail-il1-f195.google.com with SMTP id x9so5601096ila.3;
+        Thu, 23 Jul 2020 14:28:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SGrdVeSEpiWCWaFeRxn1THIMaeD/i6V3qXeYtCopQ5M=;
+        b=cj1xRVdGqSA8pMYHHNLZp18j2ZVe6BRkkzoUZdOnmbdYTm6gls5SoAEWjm0VVLzN9U
+         FwOVQsEFM8DIfvkuQLFyMKuV7/iJRvX/xW4FRNRL5/cCaZcHNlBj3Ycqba9nZLwaHRij
+         pQrknlUiI5wJemxvfLaL2ANO3iudAWHtk9Y2Bn05xbu7Ys1KHRnpp2b6lFiJcmnm0QSD
+         4bqQSg7OGVuIFQjqD376Tz6TRZ037maBKQx/0NpUSVoof+QgELMfgTH5Xr65j12Lodto
+         rQulRlX1DaatI0iMeIJVXIfdAVyLi3FKYXtep3ZNLiryIdz49cxh48c0hbVVwR16DWj5
+         Awbw==
+X-Gm-Message-State: AOAM533X62y3CZYWolfv7NESZ0sNt/huTeQVGlYXvuZ1SBe0EvMMV7eQ
+        jz4siNZI8Lfk0DB1GHGYWQ==
+X-Google-Smtp-Source: ABdhPJz7NZ07oV2YI6+xdgYtE3bNTA7ewz+4xk+gmQaRX1u2WcAI2yQMS726ZBZHBEXxDhgzeLJPAA==
+X-Received: by 2002:a92:9e5c:: with SMTP id q89mr317408ili.265.1595539684704;
+        Thu, 23 Jul 2020 14:28:04 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id t21sm2086484ioc.0.2020.07.23.14.28.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2020 14:28:04 -0700 (PDT)
+Received: (nullmailer pid 889370 invoked by uid 1000);
+        Thu, 23 Jul 2020 21:28:03 -0000
+Date:   Thu, 23 Jul 2020 15:28:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Seiya Wang <seiya.wang@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org,
         Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-kernel@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>,
-        Crystal Guo <crystal.guo@mediatek.com>
-Subject: [PATCH 4/4] dt-binding: mediatek: mt8192: update mtk-wdt document
-Date:   Thu, 23 Jul 2020 17:07:31 +0800
-Message-ID: <20200723090731.4482-5-seiya.wang@mediatek.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20200723090731.4482-1-seiya.wang@mediatek.com>
+        linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH 2/4] dt-bindings: serial: Add compatible for Mediatek
+ MT8192
+Message-ID: <20200723212803.GA889323@bogus>
 References: <20200723090731.4482-1-seiya.wang@mediatek.com>
+ <20200723090731.4482-3-seiya.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200723090731.4482-3-seiya.wang@mediatek.com>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-RnJvbTogQ3J5c3RhbCBHdW8gPGNyeXN0YWwuZ3VvQG1lZGlhdGVrLmNvbT4NCg0KdXBkYXRlIG10
-ay13ZHQgZG9jdW1lbnQgZm9yIE1UODE5MiBwbGF0Zm9ybQ0KDQpTaWduZWQtb2ZmLWJ5OiBDcnlz
-dGFsIEd1byA8Y3J5c3RhbC5ndW9AbWVkaWF0ZWsuY29tPg0KLS0tDQogRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210ay13ZHQudHh0IHwgMiArKw0KIDEgZmlsZSBj
-aGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9tdGstd2R0LnR4dCBiL0RvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9tdGstd2R0LnR4dA0KaW5kZXggNGRkMzZiZDNmMWFk
-Li5kNzYwY2E4YTYzMGUgMTAwNjQ0DQotLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQNCisrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy93YXRjaGRvZy9tdGstd2R0LnR4dA0KQEAgLTEyLDYgKzEyLDggQEAgUmVxdWly
-ZWQgcHJvcGVydGllczoNCiAJIm1lZGlhdGVrLG10NzYyOS13ZHQiLCAibWVkaWF0ZWssbXQ2NTg5
-LXdkdCI6IGZvciBNVDc2MjkNCiAJIm1lZGlhdGVrLG10ODE4My13ZHQiLCAibWVkaWF0ZWssbXQ2
-NTg5LXdkdCI6IGZvciBNVDgxODMNCiAJIm1lZGlhdGVrLG10ODUxNi13ZHQiLCAibWVkaWF0ZWss
-bXQ2NTg5LXdkdCI6IGZvciBNVDg1MTYNCisJIm1lZGlhdGVrLG10ODE5Mi13ZHQiOiBmb3IgTVQ4
-MTkyDQorDQogDQogLSByZWcgOiBTcGVjaWZpZXMgYmFzZSBwaHlzaWNhbCBhZGRyZXNzIGFuZCBz
-aXplIG9mIHRoZSByZWdpc3RlcnMuDQogDQotLSANCjIuMTQuMQ0K
+On Thu, 23 Jul 2020 17:07:29 +0800, Seiya Wang wrote:
+> This commit adds dt-binding documentation of uart for Mediatek MT8192 SoC
+> Platform.
+> 
+> Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/serial/mtk-uart.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
+Acked-by: Rob Herring <robh@kernel.org>
