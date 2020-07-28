@@ -2,209 +2,154 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CAB230C9B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jul 2020 16:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1263123163B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 01:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730455AbgG1OmJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Jul 2020 10:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730391AbgG1OmJ (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Jul 2020 10:42:09 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CD0C061794;
-        Tue, 28 Jul 2020 07:42:09 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id p3so11993934pgh.3;
-        Tue, 28 Jul 2020 07:42:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/eHJQLNWjzIejlZ2T4kesqmM/hbY171Zx3dgWw26xXA=;
-        b=sQCEwezlEx1XDt1GSk43CcwwVTvir7FU/FnVdOklhCMoxFG8VHCSml1Fxok75CFZLr
-         4Xt1yVZxuYEYRA/doH/mrv81tK4PWtQojOeWWKklvMMMefpk5jX3nxi/Hz/K9fyRjM9Q
-         kekg/2lw3Zn1vr8KIInOcLhB7e7mxbxU9bBubu6fYHcYQcA8OlKj67y8ylDTeBXAPDpv
-         AO9YYLD6qHwVZXklTRpDc/BA+BwIL40nRaywXaqsL/HJAr5cx+jlfkqDTGmjoJ/M4JNu
-         DMqRrWvc5uh2M17XYXxz4ennPjN7VBoSmG1leO+B+LE3SnagvGUS7xMVt4Xt/PVNIVoo
-         FEeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=/eHJQLNWjzIejlZ2T4kesqmM/hbY171Zx3dgWw26xXA=;
-        b=m9DgrfF28YghQWUZtGljPA205wxZXGqU2PEEhWnIw/+gT4uYFmSSE/Ag/8/WHD6OQ6
-         g2HzPNgB1by72mSEopW7EyzIKr57oMx6LS2A7t5Q4K5bmlRpVMqkmteKRZKRwrx2OR2Z
-         P3581hpDPR4X4lvLrCMg/TiqBil/MbXaOe9hLlpKAv03oktQl/F5ZBlVQ7RlqD9E4fnZ
-         UmT5fRaQJzUVcQhTZmv0yh2YN7sEzFJnynJrQNfRSBh4zF5QqGKO0C1P0zqxfq5UgMVc
-         VojkXEL74EyCvoO3mgyWU2kmqYFANF84Kg6n2OYUs3sCVpzQX559eNVU0uzFcxfFsYeI
-         yaZA==
-X-Gm-Message-State: AOAM530AZh3wjFCNXZMFV0rxa647zQlDT5sXpTnehcIffwT4nKzKJQIy
-        hAy22N5B+72cUrcNHBBefA0o6q6k
-X-Google-Smtp-Source: ABdhPJyQnyJ5RdYKOkI0HIaqRlKvRnxM9YtIC2sh7TjKK77k+YYhwcCnTycKsFjeBQgIOS7oZ7Oo8w==
-X-Received: by 2002:a63:b956:: with SMTP id v22mr24644559pgo.242.1595947328460;
-        Tue, 28 Jul 2020 07:42:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j4sm17697538pgk.4.2020.07.28.07.42.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jul 2020 07:42:07 -0700 (PDT)
-Subject: Re: [PATCH 1/3] watchdog: mtk_wdt: remove mt8xxx-resets.h
-To:     Crystal Guo <crystal.guo@mediatek.com>, robh+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com
-References: <1595932949-7033-1-git-send-email-crystal.guo@mediatek.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <02a15f39-4b85-e450-defd-2df0e4a1ad87@roeck-us.net>
-Date:   Tue, 28 Jul 2020 07:42:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <1595932949-7033-1-git-send-email-crystal.guo@mediatek.com>
-Content-Type: text/plain; charset=utf-8
+        id S1730500AbgG1XgK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Jul 2020 19:36:10 -0400
+Received: from mail-eopbgr70054.outbound.protection.outlook.com ([40.107.7.54]:64577
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730402AbgG1XgJ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 28 Jul 2020 19:36:09 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eUUmDGDlil5TWN2XNjpwjFkMixOlTf7vstikcYecFxqY6wQdMILDS5bUcwQk29CxdokPGvfjHUeMe7eBokmy5ZQ27D5D5zkaO3LdWlUG6kykqL68arYSRk568Pl8YuuJjbnBLYwj0Wt1vVW3MQGbw8gyNceCEOZUUo1JsXjJ+EePXuCoVmROlxjJlREfhEWK3YEGcoQqKrifnIEYLSsJkN6v8laR9i8DlNRK1ORW2wiuAAYY0296z9qSAcQ/ls6xcSQwnqf63T/edTWCRHS4Ju2jBP+duBNNZZ+R3Mpcp1jxaUQfgh1eUjPMgw6QjYqOAhV2gqN7QB+oRUxzA/yH0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rVcc8ZqYWLlX4w8VVaWGqo3bjVatQP82gxk0GmcJ7/g=;
+ b=iF6Axjsc0vQgqDb9OzO2DEfa12/WY5r0rEfdl5ZxLjPuJzD86RxK45uNA2ouTh23uSkX2a1t9OGlxu0SULLZTRDN5Y+nJua2nts3kLgcD1A+7RJKWfLJil8ALhBNwS8RAIwl3iAgIoS9t1o+L+gE0N8D96mtKmkq9efNwk4cDrjmAe8X/HdPxfB+jxwRCn3UzpDNMvdizpSZ7QYObKCbPL+bMLBZ7F/PHbHarqP1hStOrEUJuuWalyieMJq7tMIOaSi0IgZtQg+q1SAlrMMyTYs4AM5rbhITgCyuw9PgMLoLrr/NgbYnRHmvyNT8y0Qpm8U1eJvr0JTshphWqSUuhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rVcc8ZqYWLlX4w8VVaWGqo3bjVatQP82gxk0GmcJ7/g=;
+ b=VnQikaXYFd0DjoBCzotE+q6DBH94CUcPAw2oAVpBv5ccLrHFNpH62k+AAUPQakQ9ZlEI0lS0586dEM53q3H9h3B5vOWP7EciNDOCUagHdUgefxLJ6y2wCKJitS4prh6Q5DMXO1sPDYnPVdHZHKzraT5QM6zTUs2ZesThLGu3T1s=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (2603:10a6:8:10::18)
+ by DB7PR04MB4235.eurprd04.prod.outlook.com (2603:10a6:5:22::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.23; Tue, 28 Jul
+ 2020 23:36:03 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::49f8:20ce:cf20:80b3]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::49f8:20ce:cf20:80b3%6]) with mapi id 15.20.3216.034; Tue, 28 Jul 2020
+ 23:36:03 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH 1/2] watchdog: imx7ulp: Strictly follow the sequence for
+ wdog operations
+Thread-Topic: [PATCH 1/2] watchdog: imx7ulp: Strictly follow the sequence for
+ wdog operations
+Thread-Index: AQHWZKrocghDMpUaBEu/lC3XXGngDakdDvaAgACUUzA=
+Date:   Tue, 28 Jul 2020 23:36:03 +0000
+Message-ID: <DB3PR0402MB3916744794CDCCE7BC332147F5730@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <1595918567-2017-1-git-send-email-Anson.Huang@nxp.com>
+ <566adde7-c397-72f1-145d-fbca9de77cd7@roeck-us.net>
+In-Reply-To: <566adde7-c397-72f1-145d-fbca9de77cd7@roeck-us.net>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [183.192.23.221]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 5d09a625-ac17-4993-0635-08d8334efe2a
+x-ms-traffictypediagnostic: DB7PR04MB4235:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR04MB423500CA0DB6B4DE0C2F5B71F5730@DB7PR04MB4235.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JctIpaiqNs1j5UHoIAlv7sGtRKIgWqgbnWlMt4yNUYcTtJbd0vQqHOVFZ19puj6aQ55aAMB6brqgEU1SDln13Zc9xslrhd4otBaqeydqRtTKjjp6RoEwsxBg8DEL8Lu23EDOcNLlKjPOhzeS5mODSeEjlm3FDGsvuG+hr6Y6vQNb0gl0rs1ORAKZevWr+ZtZvsJoSsvhf/OopCM/CBPuL0zXs2z2BZ50b95VTlbUVMZKclO9RKy8PPFImwbDSi4ozr++o754y7UlhcV8BrVbKVC3nyeOul5aHY+BDAvm/ZRWdgAzW5L3MEVFfwWKWIvYvJXxdUpVXdY1c6sBHA+V1w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(366004)(346002)(376002)(39840400004)(396003)(8936002)(55016002)(6506007)(4326008)(110136005)(478600001)(2906002)(316002)(53546011)(71200400001)(186003)(8676002)(7696005)(26005)(5660300002)(52536014)(33656002)(83380400001)(86362001)(66476007)(64756008)(66446008)(66556008)(76116006)(66946007)(44832011)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: MQ30VDdve7A9y8EGQbCgU1qjFdGWiKvz6JKw1OznVFQlGiBFQq/kYFo7bxvQ9+Fx/84SltTgcT14L8dZ4aoIGVtMuQfYdwHqYfxp9zKoyw00jHfHDfQvU1HeLOZEhBFYEQFKrGrfq+Y8YQ9IHQM/crkclzfrjcXS+vAfMgFS6cdk+SD7hizOtIjs+SPJckDKuIoEz4Wfig2+y7aFFC97mLDA7CNGK3mIsU5yeusdZQLkbaeDZB24o3QT97uoP9HzyhMWE5kwZv/bBkwZXqm5uGxkhATv4wt+tDUUYCQpH9I1xG1FoQk5PvDiEIg5tuXEPezhPD2zRppm3oZPpNgd0IWHOfVZS2US2YEE2xxdbBIJK6i8HNQfP+l1mfwCgtqKjKq+UEeIfKyTUjjktOG3nHaxbD/H+6eF5HbasAdereD2LVwDtLrDkKE/YonYofkk3Wtd5QN+s4FA/RedXkcRFXW2fYkIbA70Qp/CZzCbxd7TPwSutRQIH7M0weceaAXR
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB3PR0402MB3916.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d09a625-ac17-4993-0635-08d8334efe2a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jul 2020 23:36:03.5868
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Wi0sZL2+EnTqbnv8jAvwwIcVcda/Yk0K4kn+DgB8tyiQE2NCeAr8iAC5qqRhipQXJS3mhCeWQ92z+HlSR+H7aQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4235
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/28/20 3:42 AM, Crystal Guo wrote:
-> mt8xxx-resets.h actually just used to define TOPRGU_SW_RST_NUM.
-> Instead of resubmit the mt8xxx-reset.h for a new IC, get the number
-> of reset bits from dtsi is more easier to maintain.
-> > Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
-> ---
->  drivers/watchdog/mtk_wdt.c | 26 +++++---------------------
->  1 file changed, 5 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index d6a6393..adc88c2 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -9,8 +9,6 @@
->   * Based on sunxi_wdt.c
->   */
->  
-> -#include <dt-bindings/reset-controller/mt2712-resets.h>
-> -#include <dt-bindings/reset-controller/mt8183-resets.h>
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/init.h>
-> @@ -64,18 +62,6 @@ struct mtk_wdt_dev {
->  	struct reset_controller_dev rcdev;
->  };
->  
-> -struct mtk_wdt_data {
-> -	int toprgu_sw_rst_num;
-> -};
-> -
-> -static const struct mtk_wdt_data mt2712_data = {
-> -	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
-> -};
-> -
-> -static const struct mtk_wdt_data mt8183_data = {
-> -	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
-> -};
-> -
->  static int toprgu_reset_update(struct reset_controller_dev *rcdev,
->  			       unsigned long id, bool assert)
->  {
-> @@ -248,7 +234,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct mtk_wdt_dev *mtk_wdt;
-> -	const struct mtk_wdt_data *wdt_data;
-> +	u32 toprgu_sw_rst_num;
-
-toprgu_sw_ is a completely unnecessary prefix for a local variable.
-
->  	int err;
->  
->  	mtk_wdt = devm_kzalloc(dev, sizeof(*mtk_wdt), GFP_KERNEL);
-> @@ -284,10 +270,10 @@ static int mtk_wdt_probe(struct platform_device *pdev)
->  	dev_info(dev, "Watchdog enabled (timeout=%d sec, nowayout=%d)\n",
->  		 mtk_wdt->wdt_dev.timeout, nowayout);
->  
-> -	wdt_data = of_device_get_match_data(dev);
-> -	if (wdt_data) {
-> -		err = toprgu_register_reset_controller(pdev,
-> -						       wdt_data->toprgu_sw_rst_num);
-> +	err = of_property_read_u32(pdev->dev.of_node, "rst-num",
-> +				&toprgu_sw_rst_num);
-
-There is no such property. Maybe that is added with a subsequent patch or
-preceding patch, but that is not in -next. If this patch is applied without
-rst-num already present in affected devicetree files, the code will no longer
-work. That means this patch requires context, and can not be applied without it.
-That in turn means it can not be patch 1 of 3.
-
-Guenter
-
-> +	if (!err) {
-> +		err = toprgu_register_reset_controller(pdev, toprgu_sw_rst_num);
->  		if (err)
->  			return err;
->  	}
-> @@ -319,9 +305,7 @@ static int mtk_wdt_resume(struct device *dev)
->  #endif
->  
->  static const struct of_device_id mtk_wdt_dt_ids[] = {
-> -	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
->  	{ .compatible = "mediatek,mt6589-wdt" },
-> -	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
-
-I don't see the point of removing the mediatek,mt2712-wdt and mediatek,mt8183-wdt
-compatible lines.
-
->  	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
-> 
-
+SGksIEd1ZW50ZXINCg0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS8yXSB3YXRjaGRvZzogaW14
+N3VscDogU3RyaWN0bHkgZm9sbG93IHRoZSBzZXF1ZW5jZSBmb3INCj4gd2RvZyBvcGVyYXRpb25z
+DQo+IA0KPiBPbiA3LzI3LzIwIDExOjQyIFBNLCBBbnNvbiBIdWFuZyB3cm90ZToNCj4gPiBBY2Nv
+cmRpbmcgdG8gcmVmZXJlbmNlIG1hbnVhbCwgdGhlIGkuTVg3VUxQIFdET0cncyBvcGVyYXRpb25z
+IHNob3VsZA0KPiA+IGZvbGxvdyBiZWxvdyBzZXF1ZW5jZToNCj4gPg0KPiA+IDEuIGRpc2FibGUg
+Z2xvYmFsIGludGVycnVwdHM7DQo+ID4gMi4gdW5sb2NrIHRoZSB3ZG9nIGFuZCB3YWl0IHVubG9j
+ayBiaXQgc2V0OyAzLiByZWNvbmZpZ3VyZSB0aGUgd2RvZw0KPiA+IGFuZCB3YWl0IGZvciByZWNv
+bmZpZ3VyYXRpb24gYml0IHNldDsgNC4gZW5hYmVsIGdsb2JhbCBpbnRlcnJ1cHRzLg0KPiA+DQo+
+ID4gU3RyaWN0bHkgZm9sbG93IHRoZSByZWNvbW1lbmRlZCBzZXF1ZW5jZSBjYW4gbWFrZSBpdCBt
+b3JlIHJvYnVzdC4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEFuc29uIEh1YW5nIDxBbnNvbi5I
+dWFuZ0BueHAuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3dhdGNoZG9nL2lteDd1bHBfd2R0
+LmMgfCAyOSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdl
+ZCwgMjkgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hk
+b2cvaW14N3VscF93ZHQuYw0KPiA+IGIvZHJpdmVycy93YXRjaGRvZy9pbXg3dWxwX3dkdC5jIGlu
+ZGV4IDc5OTNjOGMuLmI0MTRlY2YgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy9p
+bXg3dWxwX3dkdC5jDQo+ID4gKysrIGIvZHJpdmVycy93YXRjaGRvZy9pbXg3dWxwX3dkdC5jDQo+
+ID4gQEAgLTQsNiArNCw3IEBADQo+ID4gICAqLw0KPiA+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9j
+bGsuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L2RlbGF5Lmg+DQo+ID4gICNpbmNsdWRlIDxsaW51
+eC9pby5oPg0KPiA+ICAjaW5jbHVkZSA8bGludXgva2VybmVsLmg+DQo+ID4gICNpbmNsdWRlIDxs
+aW51eC9tb2R1bGUuaD4NCj4gPiBAQCAtNDgsMTcgKzQ5LDMyIEBAIHN0cnVjdCBpbXg3dWxwX3dk
+dF9kZXZpY2Ugew0KPiA+ICAJc3RydWN0IGNsayAqY2xrOw0KPiA+ICB9Ow0KPiA+DQo+ID4gK3N0
+YXRpYyBpbmxpbmUgdm9pZCBpbXg3dWxwX3dkdF93YWl0KHZvaWQgX19pb21lbSAqYmFzZSwgdTMy
+IG1hc2spIHsNCj4gPiArCWludCByZXRyaWVzID0gMTAwOw0KPiA+ICsNCj4gPiArCWRvIHsNCj4g
+PiArCQlpZiAocmVhZGxfcmVsYXhlZChiYXNlICsgV0RPR19DUykgJiBtYXNrKQ0KPiA+ICsJCQly
+ZXR1cm47DQo+ID4gKwkJdXNsZWVwX3JhbmdlKDIwMCwgMTAwMCk7DQo+ID4gKwl9IHdoaWxlIChy
+ZXRyaWVzLS0pOw0KPiANCj4gU2xlZXAgd2l0aCBpbnRlcnJ1cHRzIGRpc2FibGVkID8gSSBjYW4g
+bm90IGltYWdpbmUgdGhhdCB0aGlzIHdvcmtzIHdlbGwgaW4gYQ0KPiBzaW5nbGUgQ1BVIHN5c3Rl
+bS4gT24gdG9wIG9mIHRoYXQsIGl0IHNlZW1zIHF1aXRlIHBvaW50bGVzcy4NCj4gRWl0aGVyIHlv
+dSBkb24ndCB3YW50IHRvIGJlIGludGVycnVwdGVkIG9yIHlvdSBkbywgYnV0IHNsZWVwaW5nIHdp
+dGggaW50ZXJydXB0cw0KPiBkaXNhYmxlZCByZWFsbHkgZG9lc24ndCBtYWtlIHNlbnNlLiBBbmQg
+ZG9lcyBpdCByZWFsbHkgdGFrZSAyMDAtMTAwMCB1UyBmb3IgdGhlDQo+IHdhdGNoZG9nIHN1YnN5
+c3RlbSB0byByZWFjdCwgYW5kIHNvbWV0aW1lcyB1cCB0byAyMDAgKiAxMDAgPSAyMCBtUyA/IFRo
+YXQNCj4gc2VlbXMgaGlnaGx5IHVubGlrZWx5LiBJZiBzdWNoIGEgZGVsYXkgbG9vcCBpcyBpbmRl
+ZWQgbmVlZGVkLCBpdCBzaG91bGQgYmUNCj4gbGltaXRlZCBieSBhIHRpbWUsIG5vdCBieSBudW1i
+ZXIgb2YgcmVwZXRpdGlvbnMuDQo+IA0KPiBVbmxlc3MgdGhlcmUgaXMgZXZpZGVuY2UgdGhhdCB0
+aGVyZSBpcyBhIHByb2JsZW0gdGhhdCBuZWVkcyB0byBiZSBzb2x2ZWQsIEkgYW0NCj4gbm90IGdv
+aW5nIHRvIGFjY2VwdCB0aGlzIGNvZGUuDQo+IA0KDQpPb3BzLCB0aGlzIGlzIGEgbWlzdGFrZSBv
+ZiB1c2luZyBzbGVlcCB3aXRoIGludGVycnVwdCBkaXNhYmxlZCwgc29ycnkgZm9yIHRoYXQuDQpU
+aGUgYmVzdCBvcHRpb24gaXMgdG8gdXNlIHJlYWRsX3JlbGF4ZWRfcG9sbF90aW1lb3V0X2F0b21p
+YygpIHRvIHBvbGwgdGhlIHN0YXR1cw0KYml0LCBob3dldmVyLCB0aGUgaS5NWDdVTFAgd2F0Y2hk
+b2cgaXMgdmVyeSBzcGVjaWFsIHRoYXQgdGhlIHVubG9jayB3aW5kb3cgT05MWQ0Kb3BlbiBmb3Ig
+c2V2ZXJhbCBjeWNsZXMsIHRoYXQgbWVhbnMgdGhlIHVubG9jayBzdGF0dXMgYml0IHdpbGwgYmUg
+c2V0IGFuZCB0aGVuIGNsZWFyDQphdXRvbWF0aWNhbGx5IGFmdGVyIHRob3NlIGN5Y2xlcywgdXNp
+bmcgcmVhZGxfcmVsYXhlZF9wb2xsX3RpbWVvdXRfYXRvbWljKCkgd2lsbA0KZmFpbCBzaW5jZSB0
+aGVyZSBhcmUgbWFueSB0aW1lb3V0IGhhbmRsZSBjb2RlIGluIGl0IGFuZCB0aGUgdW5sb2NrIHdp
+bmRvdyBpcyBvcGVuDQphbmQgY2xvc2UgZHVyaW5nIHRoaXMgdGltZW91dCBoYW5kbGUgaW50ZXJ2
+YWwsIHNvIGl0IGZhaWwgdG8gY2F0Y2ggdGhlIHVubG9jayBiaXQuDQoNClRoZSBpZGVhbCBvcHRp
+b24gaXMgdXNpbmcgYXRvbWljIHBvbGxpbmcgd2l0aG91dCBhbnkgb3RoZXIgdGltZW91dCBjaGVj
+ayB0byBtYWtlDQpzdXJlIHRoZSB1bmxvY2sgd2luZG93IGlzIE5PVCBtaXNzZWQsIGJ1dCBJIHRo
+aW5rIExpbnV4IGtlcm5lbCB3aWxsIE5PVCBhY2NlcHQNCmEgd2hpbGUgbG9vcCB3aXRob3V0IHRp
+bWVvdXQsIGFuZCB0aGF0IGlzIHdoeSBJIHRyaWVkIHRvIHVzZSB1c2xlZXBfcmFuZ2VzKCksIGJ1
+dA0Kb2J2aW91c2x5IEkgbWFkZSBhIG1pc3Rha2Ugb2YgdXNpbmcgaXQgd2l0aCBJUlEgZGlzYWJs
+ZWQuDQoNCkRvIHlvdSBoYXZlIGFueSBzdWdnZXN0aW9uIG9mIGhvdyB0byBoYW5kbGUgc3VjaCBj
+YXNlPyBJZiB0aGUgaGFyZHdhcmUgT05MWQ0KdW5sb2NrIHRoZSByZWdpc3RlciBmb3IgYSBzbWFs
+bCB3aW5kb3csIGhvdyB0byBwb2xsIHRoZSBzdGF0dXMgYml0IHdpdGggdGltZW91dA0KaGFuZGxl
+IGFuZCBhbHNvIG1ha2Ugc3VyZSB0aGUgdGltZW91dCBoYW5kbGUgY29kZSBhcyBxdWljayBhcyBw
+b3NzaWJsZSB0byBOT1QNCm1pc3MgdGhlIHdpbmRvdz8NCg0KVGhhbmtzLA0KQW5zb24NCg0KIA0K
+DQoNCg0K
