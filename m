@@ -2,62 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0B6230C7F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jul 2020 16:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CAB230C9B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jul 2020 16:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730368AbgG1OeL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Jul 2020 10:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S1730455AbgG1OmJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Jul 2020 10:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729410AbgG1OeL (ORCPT
+        with ESMTP id S1730391AbgG1OmJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Jul 2020 10:34:11 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EBAC061794;
-        Tue, 28 Jul 2020 07:34:10 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id k4so9970908pld.12;
-        Tue, 28 Jul 2020 07:34:10 -0700 (PDT)
+        Tue, 28 Jul 2020 10:42:09 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CD0C061794;
+        Tue, 28 Jul 2020 07:42:09 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id p3so11993934pgh.3;
+        Tue, 28 Jul 2020 07:42:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Gol3YEjZg+DdUDqVA5CTPFx2cwX3l9O5rj/E8q5KIWU=;
-        b=dqIEAHN9Gj6nRHFrLPP3id5phRX61Jo38NkPro7IU3G6ipk9Sno/mdjfeZRB/G8use
-         xqYknq3XvnUqmHaH725q0w8Ef6Rj9rjRJ/N46bnMrTqwKTaJXkHSmOANUVwSnQ+SMwlO
-         t6MixwiEbxRPV4XhwvU3bGwpfpD6PFzHbyH+vi7OBT8OkhnceYKHoAZ8bmQyrcYMJIeA
-         JR97BYgNWgizLXobVkKTh15WnONOInOc2L9zxB7FXr+BGZOm+B4teM6JVkTqiYUYaTh+
-         4fjs1FVCAdau3aR1RDYdC2W//HPl4xjhBaL6hpOTSqc97HHL6KcRCYFmC4REODumSR2x
-         HpDA==
+        bh=/eHJQLNWjzIejlZ2T4kesqmM/hbY171Zx3dgWw26xXA=;
+        b=sQCEwezlEx1XDt1GSk43CcwwVTvir7FU/FnVdOklhCMoxFG8VHCSml1Fxok75CFZLr
+         4Xt1yVZxuYEYRA/doH/mrv81tK4PWtQojOeWWKklvMMMefpk5jX3nxi/Hz/K9fyRjM9Q
+         kekg/2lw3Zn1vr8KIInOcLhB7e7mxbxU9bBubu6fYHcYQcA8OlKj67y8ylDTeBXAPDpv
+         AO9YYLD6qHwVZXklTRpDc/BA+BwIL40nRaywXaqsL/HJAr5cx+jlfkqDTGmjoJ/M4JNu
+         DMqRrWvc5uh2M17XYXxz4ennPjN7VBoSmG1leO+B+LE3SnagvGUS7xMVt4Xt/PVNIVoo
+         FEeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Gol3YEjZg+DdUDqVA5CTPFx2cwX3l9O5rj/E8q5KIWU=;
-        b=sMnhvafK6/tcKtUuXjUveGzO618QcFijWfe7SUM71YZXzzMkD4fZX7RIwjmeXnRGsU
-         N0vQuOEdaU8yxi+Id9/16Rn5UGiNqXk+CbGlrVc+GHarbM6u7vQvR5E66aFmO+v2wx/a
-         AfrZN/ezswvoGgb8KYMWsXdvkHxaZ/Y+5Ot6BgxiR+srCFHK1GJ2+eKaKl4bZ5lxHgLS
-         nuR6bQ7JtTFwbDb7fZ4a9HuwAXizyAWA0SNn7jEyGcl0BUuL9XGtFz9Hmo3/nbxW290o
-         o3csmK8N3J415dpFghbBxRf0eblPk4DBP8xwGfDSo2ZtXN9iIbyFY8inRO0WGE9h4jGq
-         Ne8w==
-X-Gm-Message-State: AOAM532W8c6SJXr0FCe6Wfr4fUoA+bMTCBlrVzYrRPJCl+yrrx3iXg3w
-        pSxelXYsio3j4NmJgmcz86c=
-X-Google-Smtp-Source: ABdhPJy93uhGYKVvztyUXpnZL/qAuBttRC4YS6R4ru0UvimGlBwcTqGIqXqK3s8PoQfypbrdn8yHXg==
-X-Received: by 2002:a17:902:ff16:: with SMTP id f22mr10219128plj.269.1595946850409;
-        Tue, 28 Jul 2020 07:34:10 -0700 (PDT)
+        bh=/eHJQLNWjzIejlZ2T4kesqmM/hbY171Zx3dgWw26xXA=;
+        b=m9DgrfF28YghQWUZtGljPA205wxZXGqU2PEEhWnIw/+gT4uYFmSSE/Ag/8/WHD6OQ6
+         g2HzPNgB1by72mSEopW7EyzIKr57oMx6LS2A7t5Q4K5bmlRpVMqkmteKRZKRwrx2OR2Z
+         P3581hpDPR4X4lvLrCMg/TiqBil/MbXaOe9hLlpKAv03oktQl/F5ZBlVQ7RlqD9E4fnZ
+         UmT5fRaQJzUVcQhTZmv0yh2YN7sEzFJnynJrQNfRSBh4zF5QqGKO0C1P0zqxfq5UgMVc
+         VojkXEL74EyCvoO3mgyWU2kmqYFANF84Kg6n2OYUs3sCVpzQX559eNVU0uzFcxfFsYeI
+         yaZA==
+X-Gm-Message-State: AOAM530AZh3wjFCNXZMFV0rxa647zQlDT5sXpTnehcIffwT4nKzKJQIy
+        hAy22N5B+72cUrcNHBBefA0o6q6k
+X-Google-Smtp-Source: ABdhPJyQnyJ5RdYKOkI0HIaqRlKvRnxM9YtIC2sh7TjKK77k+YYhwcCnTycKsFjeBQgIOS7oZ7Oo8w==
+X-Received: by 2002:a63:b956:: with SMTP id v22mr24644559pgo.242.1595947328460;
+        Tue, 28 Jul 2020 07:42:08 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d29sm17673991pgb.54.2020.07.28.07.34.08
+        by smtp.gmail.com with ESMTPSA id j4sm17697538pgk.4.2020.07.28.07.42.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jul 2020 07:34:09 -0700 (PDT)
-Subject: Re: [PATCH 1/2] watchdog: imx7ulp: Strictly follow the sequence for
- wdog operations
-To:     Anson Huang <Anson.Huang@nxp.com>, wim@linux-watchdog.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-References: <1595918567-2017-1-git-send-email-Anson.Huang@nxp.com>
+        Tue, 28 Jul 2020 07:42:07 -0700 (PDT)
+Subject: Re: [PATCH 1/3] watchdog: mtk_wdt: remove mt8xxx-resets.h
+To:     Crystal Guo <crystal.guo@mediatek.com>, robh+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com
+References: <1595932949-7033-1-git-send-email-crystal.guo@mediatek.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -102,12 +101,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <566adde7-c397-72f1-145d-fbca9de77cd7@roeck-us.net>
-Date:   Tue, 28 Jul 2020 07:34:07 -0700
+Message-ID: <02a15f39-4b85-e450-defd-2df0e4a1ad87@roeck-us.net>
+Date:   Tue, 28 Jul 2020 07:42:06 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1595918567-2017-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1595932949-7033-1-git-send-email-crystal.guo@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -116,128 +115,96 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/27/20 11:42 PM, Anson Huang wrote:
-> According to reference manual, the i.MX7ULP WDOG's operations should
-> follow below sequence:
-> 
-> 1. disable global interrupts;
-> 2. unlock the wdog and wait unlock bit set;
-> 3. reconfigure the wdog and wait for reconfiguration bit set;
-> 4. enabel global interrupts.
-> 
-> Strictly follow the recommended sequence can make it more robust.
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+On 7/28/20 3:42 AM, Crystal Guo wrote:
+> mt8xxx-resets.h actually just used to define TOPRGU_SW_RST_NUM.
+> Instead of resubmit the mt8xxx-reset.h for a new IC, get the number
+> of reset bits from dtsi is more easier to maintain.
+> > Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
 > ---
->  drivers/watchdog/imx7ulp_wdt.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
+>  drivers/watchdog/mtk_wdt.c | 26 +++++---------------------
+>  1 file changed, 5 insertions(+), 21 deletions(-)
 > 
-> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
-> index 7993c8c..b414ecf 100644
-> --- a/drivers/watchdog/imx7ulp_wdt.c
-> +++ b/drivers/watchdog/imx7ulp_wdt.c
-> @@ -4,6 +4,7 @@
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index d6a6393..adc88c2 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -9,8 +9,6 @@
+>   * Based on sunxi_wdt.c
 >   */
 >  
->  #include <linux/clk.h>
-> +#include <linux/delay.h>
->  #include <linux/io.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> @@ -48,17 +49,32 @@ struct imx7ulp_wdt_device {
->  	struct clk *clk;
+> -#include <dt-bindings/reset-controller/mt2712-resets.h>
+> -#include <dt-bindings/reset-controller/mt8183-resets.h>
+>  #include <linux/delay.h>
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+> @@ -64,18 +62,6 @@ struct mtk_wdt_dev {
+>  	struct reset_controller_dev rcdev;
 >  };
 >  
-> +static inline void imx7ulp_wdt_wait(void __iomem *base, u32 mask)
-> +{
-> +	int retries = 100;
-> +
-> +	do {
-> +		if (readl_relaxed(base + WDOG_CS) & mask)
-> +			return;
-> +		usleep_range(200, 1000);
-> +	} while (retries--);
+> -struct mtk_wdt_data {
+> -	int toprgu_sw_rst_num;
+> -};
+> -
+> -static const struct mtk_wdt_data mt2712_data = {
+> -	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
+> -};
+> -
+> -static const struct mtk_wdt_data mt8183_data = {
+> -	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
+> -};
+> -
+>  static int toprgu_reset_update(struct reset_controller_dev *rcdev,
+>  			       unsigned long id, bool assert)
+>  {
+> @@ -248,7 +234,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct mtk_wdt_dev *mtk_wdt;
+> -	const struct mtk_wdt_data *wdt_data;
+> +	u32 toprgu_sw_rst_num;
 
-Sleep with interrupts disabled ? I can not imagine that this works well
-in a single CPU system. On top of that, it seems quite pointless.
-Either you don't want to be interrupted or you do, but sleeping
-with interrupts disabled really doesn't make sense. And does it really
-take 200-1000 uS for the watchdog subsystem to react, and sometimes up
-to 200 * 100 = 20 mS ? That seems highly unlikely. If such a delay loop
-is indeed needed, it should be limited by a time, not by number of
-repetitions.
+toprgu_sw_ is a completely unnecessary prefix for a local variable.
 
-Unless there is evidence that there is a problem that needs to be solved,
-I am not going to accept this code.
+>  	int err;
+>  
+>  	mtk_wdt = devm_kzalloc(dev, sizeof(*mtk_wdt), GFP_KERNEL);
+> @@ -284,10 +270,10 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+>  	dev_info(dev, "Watchdog enabled (timeout=%d sec, nowayout=%d)\n",
+>  		 mtk_wdt->wdt_dev.timeout, nowayout);
+>  
+> -	wdt_data = of_device_get_match_data(dev);
+> -	if (wdt_data) {
+> -		err = toprgu_register_reset_controller(pdev,
+> -						       wdt_data->toprgu_sw_rst_num);
+> +	err = of_property_read_u32(pdev->dev.of_node, "rst-num",
+> +				&toprgu_sw_rst_num);
 
-Thanks,
+There is no such property. Maybe that is added with a subsequent patch or
+preceding patch, but that is not in -next. If this patch is applied without
+rst-num already present in affected devicetree files, the code will no longer
+work. That means this patch requires context, and can not be applied without it.
+That in turn means it can not be patch 1 of 3.
+
 Guenter
 
-> +}
-> +
->  static void imx7ulp_wdt_enable(struct watchdog_device *wdog, bool enable)
->  {
->  	struct imx7ulp_wdt_device *wdt = watchdog_get_drvdata(wdog);
+> +	if (!err) {
+> +		err = toprgu_register_reset_controller(pdev, toprgu_sw_rst_num);
+>  		if (err)
+>  			return err;
+>  	}
+> @@ -319,9 +305,7 @@ static int mtk_wdt_resume(struct device *dev)
+>  #endif
 >  
->  	u32 val = readl(wdt->base + WDOG_CS);
->  
-> +	local_irq_disable();
->  	writel(UNLOCK, wdt->base + WDOG_CNT);
-> +	imx7ulp_wdt_wait(wdt->base, WDOG_CS_ULK);
->  	if (enable)
->  		writel(val | WDOG_CS_EN, wdt->base + WDOG_CS);
->  	else
->  		writel(val & ~WDOG_CS_EN, wdt->base + WDOG_CS);
-> +	imx7ulp_wdt_wait(wdt->base, WDOG_CS_RCS);
-> +	local_irq_enable();
->  }
->  
->  static bool imx7ulp_wdt_is_enabled(void __iomem *base)
-> @@ -72,7 +88,12 @@ static int imx7ulp_wdt_ping(struct watchdog_device *wdog)
->  {
->  	struct imx7ulp_wdt_device *wdt = watchdog_get_drvdata(wdog);
->  
-> +	local_irq_disable();
-> +	writel(UNLOCK, wdt->base + WDOG_CNT);
-> +	imx7ulp_wdt_wait(wdt->base, WDOG_CS_ULK);
->  	writel(REFRESH, wdt->base + WDOG_CNT);
-> +	imx7ulp_wdt_wait(wdt->base, WDOG_CS_RCS);
-> +	local_irq_enable();
->  
->  	return 0;
->  }
-> @@ -98,8 +119,12 @@ static int imx7ulp_wdt_set_timeout(struct watchdog_device *wdog,
->  	struct imx7ulp_wdt_device *wdt = watchdog_get_drvdata(wdog);
->  	u32 val = WDOG_CLOCK_RATE * timeout;
->  
-> +	local_irq_disable();
->  	writel(UNLOCK, wdt->base + WDOG_CNT);
-> +	imx7ulp_wdt_wait(wdt->base, WDOG_CS_ULK);
->  	writel(val, wdt->base + WDOG_TOVAL);
-> +	imx7ulp_wdt_wait(wdt->base, WDOG_CS_RCS);
-> +	local_irq_enable();
->  
->  	wdog->timeout = timeout;
->  
-> @@ -140,15 +165,19 @@ static void imx7ulp_wdt_init(void __iomem *base, unsigned int timeout)
->  {
->  	u32 val;
->  
-> +	local_irq_disable();
->  	/* unlock the wdog for reconfiguration */
->  	writel_relaxed(UNLOCK_SEQ0, base + WDOG_CNT);
->  	writel_relaxed(UNLOCK_SEQ1, base + WDOG_CNT);
-> +	imx7ulp_wdt_wait(base, WDOG_CS_ULK);
->  
->  	/* set an initial timeout value in TOVAL */
->  	writel(timeout, base + WDOG_TOVAL);
->  	/* enable 32bit command sequence and reconfigure */
->  	val = WDOG_CS_CMD32EN | WDOG_CS_CLK | WDOG_CS_UPDATE;
->  	writel(val, base + WDOG_CS);
-> +	imx7ulp_wdt_wait(base, WDOG_CS_RCS);
-> +	local_irq_enable();
->  }
->  
->  static void imx7ulp_wdt_action(void *data)
+>  static const struct of_device_id mtk_wdt_dt_ids[] = {
+> -	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+>  	{ .compatible = "mediatek,mt6589-wdt" },
+> -	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+
+I don't see the point of removing the mediatek,mt2712-wdt and mediatek,mt8183-wdt
+compatible lines.
+
+>  	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
 > 
 
