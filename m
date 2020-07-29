@@ -2,54 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C16F523230C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 19:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C394232364
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 19:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbgG2RCs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jul 2020 13:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S1726804AbgG2Rdr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jul 2020 13:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbgG2RCr (ORCPT
+        with ESMTP id S1726365AbgG2Rdr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jul 2020 13:02:47 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9D8C061794;
-        Wed, 29 Jul 2020 10:02:47 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id l12so3489821pgt.13;
-        Wed, 29 Jul 2020 10:02:47 -0700 (PDT)
+        Wed, 29 Jul 2020 13:33:47 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC32C061794;
+        Wed, 29 Jul 2020 10:33:47 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id t15so16465561iob.3;
+        Wed, 29 Jul 2020 10:33:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xtqCPAZNxab7obAfm7++LTbvH7dNhg0P0KIRGD5EzeI=;
-        b=aGqeuLKOzgNcfhya9sQK3coK1kl3GVMYKFr3x1SV5UCfe2X0O1AdN+tnxf+TeFg/o3
-         iqW3kB4RJ5diJhHYeBcfy8SjrXvEGi1ZaplHoEFYp3e3r5Tbmfm+9Wp+MRcYd5JaPnyG
-         S6iTXsgMH4xENZcjLPRikafGXw3xj6uTtqHEB7nWQc4JO3xsfk50GlSJfM71Y2bIodVK
-         MjwSwKmoMRWsfEJPkcbAowlXzD3dUPjL1oaIh1rHFPyznOsO+atvXcseaSs1CCEEoQA7
-         JWz7H9S7Wxtmd0lsQyOtiFlcDogOd9rv2KeCd01vQIUoAisWh4NUcqrEIZ18jmTiBEO2
-         r3bQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+vixry6nEfXY47k6g2NXP88IRhPMZr+Wty/TXFz87ZI=;
+        b=gEZonXZ2LluZLk3wgSvAmRHYh6Y5lkUAK4lLJMc1yVFPJR1PO91DBhcC5QCIyyCjrb
+         38uWEJfu/NMrP6fqwOUe6lVlmItgvFQAWWXDRTB95Af3MUfosDIBCdYm1lXzREIWKrvx
+         qTdsZg/nO5MEdzBj54EfbseYbNCqzHZW13pAnxqyLYrPghobQlD0a8hinT3BLQ3RzZet
+         /aVm3iDE7LrJLe87AUDX+qaj58ymtPru1aTDSBC/0Of4VifVNzKviVn4RPLcjsWqLA2z
+         ulcu71J6axfi77BFKVZwDBjc5YyOreWrm9HdaSkR0eyP5XYVpC1ZvGrW3AArhyQhQg6p
+         9Buw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xtqCPAZNxab7obAfm7++LTbvH7dNhg0P0KIRGD5EzeI=;
-        b=Vgl7i20Xf5AJVyV7vuWA7drPb375EMG6hrSHvTC4QF3M0zdnGPPB3W/11LcbEoBHfH
-         4TNrwuJPR9HXfgQskLNBHC+c10Z/qInYxQOKglZdT6V34hpbAF8HbUp7iTNVxMAVVFtC
-         baM24JjJPR3Wle1VutkcesKmbj6pDOotW/XqZ+rpdaHczdo8D2JNHC/Ah5VZntx+P/L/
-         T+i37sduHHsqjIBVUSkymRZ3elaY8ZYQQvERAakxn+SV9qtY8CyCXyY7WwqtS2uYLvPO
-         Q22HOIpRARsNtc3+WhalknDpb8QJjUXpxT3MEZOxBzSakQPLJKTP32QYcixLHxFc+kg3
-         n4+Q==
-X-Gm-Message-State: AOAM532aUjWwc2vBOiJOk6JW6wvGrZBXXbRKdIblE76SJ4kplEXEBRAN
-        yCN1rPXAqBOcClw4JM4AICU=
-X-Google-Smtp-Source: ABdhPJzULaOVQ0tOHf7TxVqsmf9UR8ysNODjrXMfRJJtpEZ0uM9i9DYpEFzw/2aHDHyHlfcNVuYGig==
-X-Received: by 2002:a63:fc1f:: with SMTP id j31mr30573226pgi.104.1596042167176;
-        Wed, 29 Jul 2020 10:02:47 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b128sm2876722pfg.114.2020.07.29.10.02.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 29 Jul 2020 10:02:46 -0700 (PDT)
-Date:   Wed, 29 Jul 2020 10:02:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+vixry6nEfXY47k6g2NXP88IRhPMZr+Wty/TXFz87ZI=;
+        b=qwHD+2qJSBRWtex3q9lGnBqMuV71gPOqdCknN+UyajEq5lAIfsWiyyHfDYNwIjCRJA
+         07VSTS5FWi6uGIIgvlBNMGXE5Wm0AobqXF/qd9+EIppis/7I3+HAvSCi2fWTCodlNmJ9
+         93e/EJ5zCjw9VI3TjxoyfD25YhyiccjI26oSL1HxBomq2855X7+4CxGi9olcRsmWi+po
+         r/QGe8xQ+XeAzywaUoBb1ic89p09yJDeQlgzjPQp0AlFq0crXdzFnTQaqXtXr3drgBPm
+         wChlHs6nSGLtNLSL6mOioJsKzbwxi95E2bmE1Na84YiqpbnGlWKtkjQn0M48DNOq8y8I
+         YYHw==
+X-Gm-Message-State: AOAM533Reh1dvnJRys/a005joFDkfaUBg3VZz4j2OzUpmfDzyG06b4xv
+        2mVcC63vCcw0lwZjR2xAhpme1D6szd1mxpH5GFc=
+X-Google-Smtp-Source: ABdhPJyU3nx+6KzmW6K1NkPxxx1sarMux4E+xojFgg0PzkSzoL7OvYQEsP5p3zMcB3nMwxoG31aqQdwbPDeMstxfK4Y=
+X-Received: by 2002:a02:aa1b:: with SMTP id r27mr38565873jam.89.1596044026207;
+ Wed, 29 Jul 2020 10:33:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200729160942.28867-1-krzk@kernel.org> <20200729160942.28867-7-krzk@kernel.org>
+In-Reply-To: <20200729160942.28867-7-krzk@kernel.org>
+From:   Tomasz Figa <tomasz.figa@gmail.com>
+Date:   Wed, 29 Jul 2020 19:33:33 +0200
+Message-ID: <CA+Ln22F_PaEMNyEg4XSR0PXHTa+3dQyEvzgtnRNHMu61uZytQg@mail.gmail.com>
+Subject: Re: [PATCH 6/7] ARM: s3c64xx: Switch to generic watchdog driver reset
 To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Russell King <linux@armlinux.org.uk>,
         Kukjin Kim <kgene@kernel.org>,
@@ -59,157 +60,187 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:SAMSUNG SOC CLOCK DRIVERS" 
+        <linux-samsung-soc@vger.kernel.org>,
         linux-stm32@st-md-mailman.stormreply.com,
-        patches@opensource.cirrus.com, linux-clk@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
         linux-watchdog@vger.kernel.org,
         Sergio Prado <sergio.prado@e-labworks.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Sylwester Nawrocki <snawrocki@kernel.org>,
         Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>
-Subject: Re: [PATCH 5/7] ARM: samsung: Kill useless HAVE_S3C2410_WATCHDOG
-Message-ID: <20200729170245.GA177035@roeck-us.net>
-References: <20200729160942.28867-1-krzk@kernel.org>
- <20200729160942.28867-6-krzk@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200729160942.28867-6-krzk@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 06:09:40PM +0200, Krzysztof Kozlowski wrote:
-> A separate Kconfig option HAVE_S3C2410_WATCHDOG for Samsung SoCs does
-> not have sense, because:
-> 1. All ARMv7 and ARMv8 Samsung SoCs have watchdog,
-> 2. All architecture Kconfigs were selecting it (if WATCHDOG framework is
->    chosen),
-> 3. HAVE_S3C2410_WATCHDOG is doing nothing except being a dependency of
->    actual Samsung SoC watchdog driver, which is enabled manually by
->    specific defconfigs.
-> 
-> HAVE_S3C2410_WATCHDOG can be safely removed.
-> 
+Hi Krzysztof,
 
-That is not really correct. HAVE_S3C2410_WATCHDOG is used to ensure
-that users can only enable S3C2410_WATCHDOG if the watchdog actually
-exists in a system. With this change, it can be enabled for all
-architectures and platforms.
-
-NACK.
-
-Guenter
-
+2020=E5=B9=B47=E6=9C=8829=E6=97=A5(=E6=B0=B4) 18:11 Krzysztof Kozlowski <kr=
+zk@kernel.org>:
+>
+> Similarly to commit f6361c6b3880 ("ARM: S3C24XX: remove separate restart
+> code"), the platform watchdog reset code can be removed in favor of
+> a generic watchdog driver which already handles reset.
+>
+> This allows removal of a bunch of machine code and fixes also W=3D1
+> compile warnings:
+>
+>     arch/arm/plat-samsung/watchdog-reset.c:29:6: warning: no previous pro=
+totype for 'samsung_wdt_reset' [-Wmissing-prototypes]
+>        29 | void samsung_wdt_reset(void)
+>           |      ^~~~~~~~~~~~~~~~~
+>     arch/arm/plat-samsung/watchdog-reset.c:69:13: warning: no previous pr=
+ototype for 'samsung_wdt_reset_of_init' [-Wmissing-prototypes]
+>        69 | void __init samsung_wdt_reset_of_init(void)
+>           |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+>     arch/arm/plat-samsung/watchdog-reset.c:89:13: warning: no previous pr=
+ototype for 'samsung_wdt_reset_init' [-Wmissing-prototypes]
+>        89 | void __init samsung_wdt_reset_init(void __iomem *base)
+>
 > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  arch/arm/Kconfig              | 1 -
->  arch/arm/mach-exynos/Kconfig  | 1 -
->  arch/arm/mach-s3c64xx/Kconfig | 2 --
->  arch/arm/mach-s5pv210/Kconfig | 1 -
->  arch/arm64/Kconfig.platforms  | 1 -
->  drivers/watchdog/Kconfig      | 8 --------
->  6 files changed, 14 deletions(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 7564f293f107..fe95777af653 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -504,7 +504,6 @@ config ARCH_S3C24XX
->  	select GPIOLIB
->  	select GENERIC_IRQ_MULTI_HANDLER
->  	select HAVE_S3C2410_I2C if I2C
-> -	select HAVE_S3C2410_WATCHDOG if WATCHDOG
->  	select HAVE_S3C_RTC if RTC_CLASS
->  	select NEED_MACH_IO_H
->  	select SAMSUNG_ATAGS
-> diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-> index f185cd3d4c62..d2d249706ebb 100644
-> --- a/arch/arm/mach-exynos/Kconfig
-> +++ b/arch/arm/mach-exynos/Kconfig
-> @@ -24,7 +24,6 @@ menuconfig ARCH_EXYNOS
->  	select HAVE_ARM_ARCH_TIMER if ARCH_EXYNOS5
->  	select HAVE_ARM_SCU if SMP
->  	select HAVE_S3C2410_I2C if I2C
-> -	select HAVE_S3C2410_WATCHDOG if WATCHDOG
->  	select HAVE_S3C_RTC if RTC_CLASS
->  	select PINCTRL
->  	select PINCTRL_EXYNOS
-> diff --git a/arch/arm/mach-s3c64xx/Kconfig b/arch/arm/mach-s3c64xx/Kconfig
-> index ac3e3563487f..e208c2b48853 100644
+>  arch/arm/mach-s3c64xx/Kconfig           |  3 +-
+>  arch/arm/mach-s3c64xx/common.c          | 15 +---
+>  arch/arm/mach-s3c64xx/common.h          |  2 -
+>  arch/arm/mach-s3c64xx/mach-anw6410.c    |  1 -
+>  arch/arm/mach-s3c64xx/mach-crag6410.c   |  1 -
+>  arch/arm/mach-s3c64xx/mach-hmt.c        |  1 -
+>  arch/arm/mach-s3c64xx/mach-mini6410.c   |  1 -
+>  arch/arm/mach-s3c64xx/mach-ncp.c        |  1 -
+>  arch/arm/mach-s3c64xx/mach-real6410.c   |  1 -
+>  arch/arm/mach-s3c64xx/mach-s3c64xx-dt.c | 17 -----
+>  arch/arm/mach-s3c64xx/mach-smartq5.c    |  1 -
+>  arch/arm/mach-s3c64xx/mach-smartq7.c    |  1 -
+>  arch/arm/mach-s3c64xx/mach-smdk6400.c   |  1 -
+>  arch/arm/mach-s3c64xx/mach-smdk6410.c   |  1 -
+>  arch/arm/mach-s3c64xx/watchdog-reset.h  | 16 -----
+>  arch/arm/plat-samsung/Kconfig           |  6 --
+>  arch/arm/plat-samsung/Makefile          |  1 -
+>  arch/arm/plat-samsung/watchdog-reset.c  | 93 -------------------------
+>  18 files changed, 5 insertions(+), 158 deletions(-)
+>  delete mode 100644 arch/arm/mach-s3c64xx/watchdog-reset.h
+>  delete mode 100644 arch/arm/plat-samsung/watchdog-reset.c
+>
+
+Thanks for the patch! Please see my comments inline.
+
+> diff --git a/arch/arm/mach-s3c64xx/Kconfig b/arch/arm/mach-s3c64xx/Kconfi=
+g
+> index e208c2b48853..f3fcb570edf5 100644
 > --- a/arch/arm/mach-s3c64xx/Kconfig
 > +++ b/arch/arm/mach-s3c64xx/Kconfig
-> @@ -13,7 +13,6 @@ menuconfig ARCH_S3C64XX
->  	select GPIO_SAMSUNG if ATAGS
->  	select GPIOLIB
->  	select HAVE_S3C2410_I2C if I2C
-> -	select HAVE_S3C2410_WATCHDOG if WATCHDOG
->  	select HAVE_TCM
->  	select PLAT_SAMSUNG
->  	select PM_GENERIC_DOMAINS if PM
-> @@ -165,7 +164,6 @@ config MACH_SMDK6410
->  	bool "SMDK6410"
->  	depends on ATAGS
->  	select CPU_S3C6410
-> -	select HAVE_S3C2410_WATCHDOG if WATCHDOG
->  	select S3C64XX_SETUP_FB_24BPP
->  	select S3C64XX_SETUP_I2C1
->  	select S3C64XX_SETUP_IDE
-> diff --git a/arch/arm/mach-s5pv210/Kconfig b/arch/arm/mach-s5pv210/Kconfig
-> index 03984a791879..b3db1191e437 100644
-> --- a/arch/arm/mach-s5pv210/Kconfig
-> +++ b/arch/arm/mach-s5pv210/Kconfig
-> @@ -14,7 +14,6 @@ config ARCH_S5PV210
->  	select COMMON_CLK_SAMSUNG
->  	select GPIOLIB
->  	select HAVE_S3C2410_I2C if I2C
-> -	select HAVE_S3C2410_WATCHDOG if WATCHDOG
->  	select HAVE_S3C_RTC if RTC_CLASS
->  	select PINCTRL
->  	select PINCTRL_EXYNOS
-> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> index cd58f8495c45..d235b27cf372 100644
-> --- a/arch/arm64/Kconfig.platforms
-> +++ b/arch/arm64/Kconfig.platforms
-> @@ -80,7 +80,6 @@ config ARCH_EXYNOS
->  	select EXYNOS_CHIPID
->  	select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
->  	select EXYNOS_PMU
-> -	select HAVE_S3C2410_WATCHDOG if WATCHDOG
->  	select HAVE_S3C_RTC if RTC_CLASS
->  	select PINCTRL
->  	select PINCTRL_EXYNOS
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 4f4687c46d38..ae86ea135d2b 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -478,16 +478,8 @@ config IXP4XX_WATCHDOG
->  
->  	  Say N if you are unsure.
->  
-> -config HAVE_S3C2410_WATCHDOG
-> -	bool
-> -	help
-> -	  This will include watchdog timer support for Samsung SoCs. If
-> -	  you want to include watchdog support for any machine, kindly
-> -	  select this in the respective mach-XXXX/Kconfig file.
+> @@ -18,9 +18,10 @@ menuconfig ARCH_S3C64XX
+>         select PM_GENERIC_DOMAINS if PM
+>         select S3C_DEV_NAND if ATAGS
+>         select S3C_GPIO_TRACK if ATAGS
+> +       select S3C2410_WATCHDOG
+>         select SAMSUNG_ATAGS if ATAGS
+>         select SAMSUNG_WAKEMASK if PM
+> -       select SAMSUNG_WDT_RESET
+> +       select WATCHDOG
+>         help
+>           Samsung S3C64XX series based systems
+>
+> diff --git a/arch/arm/mach-s3c64xx/common.c b/arch/arm/mach-s3c64xx/commo=
+n.c
+> index a655bf0c7802..42e96d196f61 100644
+> --- a/arch/arm/mach-s3c64xx/common.c
+> +++ b/arch/arm/mach-s3c64xx/common.c
+> @@ -50,7 +50,6 @@
+>
+>  #include "common.h"
+>  #include "irq-uart.h"
+> -#include "watchdog-reset.h"
+>
+>  /* External clock frequency */
+>  static unsigned long xtal_f __ro_after_init =3D 12000000;
+> @@ -232,10 +231,11 @@ void __init s3c64xx_init_irq(u32 vic0_valid, u32 vi=
+c1_valid)
+>         /*
+>          * FIXME: there is no better place to put this at the moment
+>          * (s3c64xx_clk_init needs ioremap and must happen before init_ti=
+me
+> -        * samsung_wdt_reset_init needs clocks)
+> +        * samsung_wdt_reset_init needs clocks).  However
+> +        * samsung_wdt_reset_init() was removed in favor of watchdog driv=
+er
+> +        * so this should be revised.
+
+This leaves the comment referring to an inexistent function.
+
+I wonder if this being here is actually a problem at all. It's legacy
+code and probably there isn't much value in reshuffling it further.
+Rather than that, we would probably want to make sure that everything
+migrated to DT and just drop the board files.
+
+>          */
+>         s3c64xx_clk_init(NULL, xtal_f, xusbxti_f, soc_is_s3c6400(), S3C_V=
+A_SYS);
+> -       samsung_wdt_reset_init(S3C_VA_WATCHDOG);
+>
+>         printk(KERN_DEBUG "%s: initialising interrupts\n", __func__);
+>
+> @@ -429,12 +429,3 @@ static int __init s3c64xx_init_irq_eint(void)
+>         return 0;
+>  }
+>  arch_initcall(s3c64xx_init_irq_eint);
 > -
->  config S3C2410_WATCHDOG
->  	tristate "S3C2410 Watchdog"
-> -	depends on HAVE_S3C2410_WATCHDOG || COMPILE_TEST
->  	select WATCHDOG_CORE
->  	select MFD_SYSCON if ARCH_EXYNOS
->  	help
-> -- 
-> 2.17.1
-> 
+> -void s3c64xx_restart(enum reboot_mode mode, const char *cmd)
+> -{
+> -       if (mode !=3D REBOOT_SOFT)
+> -               samsung_wdt_reset();
+> -
+> -       /* if all else fails, or mode was for soft, jump to 0 */
+> -       soft_restart(0);
+
+Does this remove the soft reboot capability? I'm not sure how much of
+a problem that would be, though.
+
+[snip]
+> diff --git a/arch/arm/mach-s3c64xx/mach-s3c64xx-dt.c b/arch/arm/mach-s3c6=
+4xx/mach-s3c64xx-dt.c
+> index 1724f5ea5c46..09c4e8742629 100644
+> --- a/arch/arm/mach-s3c64xx/mach-s3c64xx-dt.c
+> +++ b/arch/arm/mach-s3c64xx/mach-s3c64xx-dt.c
+> @@ -12,7 +12,6 @@
+>  #include <mach/map.h>
+>
+>  #include "common.h"
+> -#include "watchdog-reset.h"
+>
+>  /*
+>   * IO mapping for shared system controller IP.
+> @@ -39,20 +38,6 @@ static void __init s3c64xx_dt_map_io(void)
+>                 panic("SoC is not S3C64xx!");
+>  }
+>
+> -static void __init s3c64xx_dt_init_machine(void)
+> -{
+> -       samsung_wdt_reset_of_init();
+> -}
+> -
+> -static void s3c64xx_dt_restart(enum reboot_mode mode, const char *cmd)
+> -{
+> -       if (mode !=3D REBOOT_SOFT)
+> -               samsung_wdt_reset();
+> -
+> -       /* if all else fails, or mode was for soft, jump to 0 */
+> -       soft_restart(0);
+
+Ditto.
+
+Best regards,
+Tomasz
