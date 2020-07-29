@@ -2,41 +2,57 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CADDB232033
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 16:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AF823210B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 16:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbgG2ORc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jul 2020 10:17:32 -0400
-Received: from mail-eopbgr130040.outbound.protection.outlook.com ([40.107.13.40]:48191
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726581AbgG2ORc (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jul 2020 10:17:32 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PeH90YbPlSt7ypRJ1veRKj16XcrGh3qr9aYxW54getdcELCuo6IKjqJOxpdfjlF4A+/l/PbrTawtjecZe/Pzq3scLo2Y42Fo0/XMZqJU3ZQsHa4ATUpxCMWVlW0fMOxF6uhj6wBKVw3rNAg/zJIJPeAvQx6/fGJTxrg3Jx2lXpy5g6qdo6A2mkiLHhKfCVAEH3UgM1M9GQWgyDYhHGfwP7iNjh4ZTuzHmAFOWdm9OgBy36HhFvRW5AasOj1U1M3X0Fny/nZ1m3SLTM/PsI5nB0KabulbKG05nFm3HP/kmEvWSP0/qysmYkT9jHcW7DA7SRbDXaYXFblYWIfJNZbBqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+zYvzCCJZJ11GKm/tLngDyensMDogiHTwj6aKXcLyrc=;
- b=M8OsS0s5AF35eceeWLpbDTqbHU9zAHD9VbDBUQ3xM4T6oeRFy+jySMQlzjAlPs8RifdwTSXgVapRl9QugsnsImQjfV/9xlifw+wC1vDI9cMYGL4H66eaq8bXphVrkOZVbFKBJytUbcukpvvta/bkAye9F48ndRNbNqDTofONDQ2LC42OoyiL934PBSvOUnEO+N2K2jB38/kdOQco0w2Ccc7YIlUq0WQQmnBPFwRyyjGy4WY9eE9lokNb3DVbwliv5rq7vQUzqAU1G0f5yD3cUWaXW+iyXVpirJCtt9+kRISIK+vu+Kld3zzr/yqs+Il5lqhZ+tQQ+ljCsYVNkabc6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+zYvzCCJZJ11GKm/tLngDyensMDogiHTwj6aKXcLyrc=;
- b=RSYD1so/Kmi7yvddzTAIxbk2RlaysMhSe35il6sXy/xhKGEaZVRKMND22FOFmTHosxGQjg0lkzpvQ8lf4YplNREXQNAsxcEMFaBnz+iGgWPFZ+jal3JsETz98DsgZqRRTdWCQMamNfIWR8JaC+n0qZyZ/GKDKQCbhdpAkPCYqZk=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (2603:10a6:8:10::18)
- by DB8PR04MB5658.eurprd04.prod.outlook.com (2603:10a6:10:b2::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.16; Wed, 29 Jul
- 2020 14:17:27 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::49f8:20ce:cf20:80b3]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::49f8:20ce:cf20:80b3%6]) with mapi id 15.20.3216.034; Wed, 29 Jul 2020
- 14:17:27 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
+        id S1726365AbgG2OzK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jul 2020 10:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726353AbgG2OzJ (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 29 Jul 2020 10:55:09 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D393C061794;
+        Wed, 29 Jul 2020 07:55:09 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id w17so11886864ply.11;
+        Wed, 29 Jul 2020 07:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fHVJHfObezpNx93Kfw2osfsK9YONudmdl/9M9ShWilA=;
+        b=pMVsa2kFrNxwiB+woqhgYWEmPn6hxu1Wl5nP5VSpDroHqn1u0KYJ1mE9/92HKhEc1Q
+         8wzWWmFhrGiPJuj52Y2xzZP7q6TueWaVa/q7syP4dztKYcsMaolh0hn47kWbbS+rThMp
+         Cn2ZhJkC0/L7paLD0z+v1Vhs0BvVCmUcCAaidjSkCfV6OJMnyuq6V0jlBoTETA6PTVfO
+         2+xyEu79lwJcIvs8hJPSo5NxK3xjQ7H+Y2cEE86POj8MsJgg20NdVr36jAqmTwOVDRgP
+         RHelmv8nQ3VBlMz5M8coMH1Qq4Cl6VwdY8mXqrCJ45ZNbK6MRVh9yXciLpv3JGTSKjIJ
+         6yYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=fHVJHfObezpNx93Kfw2osfsK9YONudmdl/9M9ShWilA=;
+        b=i14gBKnsTOWzsgdot3Zj18cuhH+WjtXYEyoYvFFQdom9Bt2wzDn6kiBGhH76K5vZKi
+         N1gySs0iNLDPIrrtzlYGMqTH0lkBu3IQJkrI6+Mw2NX9Dw7kAZIkMxJ7VAAyc8KE+JXP
+         r5tMq/ui0t0URlsKK9E2RPXABSV+KAfhgLqMMl2ZWzvCxl59hOyRgWyAOZHmq3Fcon+h
+         ZoJ34bvSHjfSyQm7DLFdR3jB7WU6E2LuppapP3ut6QGFijFKfuCUwlhv9rykQhzxKN7b
+         6n6rPWTF4wOVcSgmEn8PF2eJGpCuriC6fC7XGZN+ckD229Oe/4JnnKhD9SCp5Olbg5F7
+         H8gQ==
+X-Gm-Message-State: AOAM532c0QF+lSB65jNZwx/uSH8nddHNXtwI4Ihzkf8QXaLmOe03gP/Q
+        eaOO8laICjCxlVHmZgruCqY=
+X-Google-Smtp-Source: ABdhPJzg9Kx70gtjWlbtTC6HVc9CHC8eWPqmI+dtjQiDk47CJiiTp6Ly1fgXMC4Jvbgc/r8g0A/ZSA==
+X-Received: by 2002:a17:90a:c094:: with SMTP id o20mr9648330pjs.12.1596034509012;
+        Wed, 29 Jul 2020 07:55:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y69sm2714578pfc.111.2020.07.29.07.55.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2020 07:55:08 -0700 (PDT)
+Subject: Re: [PATCH V2 1/2] watchdog: imx7ulp: Strictly follow the sequence
+ for wdog operations
+To:     Anson Huang <anson.huang@nxp.com>,
         "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
         "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
@@ -46,113 +62,157 @@ To:     Guenter Roeck <linux@roeck-us.net>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V2 1/2] watchdog: imx7ulp: Strictly follow the sequence
- for wdog operations
-Thread-Topic: [PATCH V2 1/2] watchdog: imx7ulp: Strictly follow the sequence
- for wdog operations
-Thread-Index: AQHWZU9toVNXTyNlR0yNnyvd1DR7Makd8woAgAAEoFCAAKKOAIAAAOIg
-Date:   Wed, 29 Jul 2020 14:17:26 +0000
-Message-ID: <DB3PR0402MB3916A03896012BC96A861882F5700@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+Cc:     dl-linux-imx <linux-imx@nxp.com>
 References: <1595989227-24700-1-git-send-email-Anson.Huang@nxp.com>
  <00587a78-8069-4fbd-7e02-b774d541f75a@roeck-us.net>
  <DB3PR0402MB3916C412DE1E83A2D40B2341F5700@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <6ac07203-a966-f985-52ae-b3dd264b3786@roeck-us.net>
-In-Reply-To: <6ac07203-a966-f985-52ae-b3dd264b3786@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [183.192.23.221]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 0c0aaad0-3ffc-451c-05b0-08d833ca1f1a
-x-ms-traffictypediagnostic: DB8PR04MB5658:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB8PR04MB565894CBED09C80427E9F36AF5700@DB8PR04MB5658.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nAa4eGBU7FY9YmvGqfPvgDspPC1ke4tIyIv7C2X2zZb/zG5cjpEZo6+9rWGOtonTIkELD+PyQRib/40n/arPaUGh8VDYktXTzsjpKK4AtrEvL+0HvYwu8I0bQXxuFYfubIWYkm2EyKjlUzPB9bvJHGnN8YuA/3c274L8M+mN99BoMHJFbpdcU3Y2z4pPBJuHvAe7DpvJ5b/PM0uQzS8eRW5cqE3Icb9IY3mnDa/wY8xhAmmX4YSMRfy+vpYUKwPDHeNFjG2TsalCXomVhuIuXhqg5B/8OobAzpDFol6erUWikv/VnU8QkIACuChvlEE6zKNDdEyOlN0Xh1oRcWdCOw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(396003)(136003)(346002)(376002)(366004)(478600001)(33656002)(83380400001)(9686003)(2906002)(8936002)(4326008)(8676002)(55016002)(44832011)(71200400001)(5660300002)(6506007)(52536014)(316002)(7696005)(66446008)(64756008)(66556008)(66476007)(76116006)(66946007)(110136005)(53546011)(26005)(186003)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 2K761aIKklb7DUObwnSSDAQGOWguZUudbS7PCXeWxkR8fJW/lvDCBp6rX3BruN7TA+TpOXO2wMLoRBQoXa3QxAyf7A4AD4aagfNNFHwq3gZXEoSSI+9sQFX65b3ZlWrUg0ksiV7UYepUJub3dnv+KYQC1L9HXamnJcjsj5qD/JhFabvNTGMq14xbx0kZqDMZj2jAXbUjVmFtVJ/SRpk53Mbd1v0sXJedcesjFYy3OI83BaOHriRu1hVPtGDfGJ5jA35ZTH10CLmmSsRGWosrMkUfpRwrsc1O6Ikda4Am+Q6OqNLfX1ta2wfV+Y2YcCPVdF7bX634lvUWX4FE20hLrTiyFiVRCMcu1Et1EFlt6jo3Z72l48hWAhNVWesH/0rgbAuTvgpPiYAi4XF8n838qQ+twmxFXfqdUuvi7NUiOc1rB4hzDp7pMJafOyY2UolfwcbyJ4FtrQrfhSzFpogFi/n4kC5jJbyWdVe2LFHaO4W0kLM6PE4rnvlx1va9PAZ+HH6mwGGP6wbLow5d49RQ8REJfik2g9vNzptWvWoxoJaVxfNtCe2z81UdBrxtSKV9nAz1/jeXO2fm4SAaEIiUyd3JpxQsEp3gqtSd8x4kOKtPadk7FPRgfrHPJ/vCvoQsTArOI0fOVv0Sfbyl3SqcTg==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <DB3PR0402MB3916B38E7DA20A35403F5B1EF5700@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <22e16ed3-355a-70c4-ccc7-aece498b29fb@roeck-us.net>
+Date:   Wed, 29 Jul 2020 07:55:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB3PR0402MB3916.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c0aaad0-3ffc-451c-05b0-08d833ca1f1a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jul 2020 14:17:26.9715
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FdiBKDQw5I96BOwHE2hPzjPUIFl89a3DguZ2kyo2v9iHK3R9hS3WbeK+5yBE+mUiDUsHUyDOd3wD4grFQ/3Osw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB5658
+In-Reply-To: <DB3PR0402MB3916B38E7DA20A35403F5B1EF5700@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGksIEd1ZW50ZXINCg0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggVjIgMS8yXSB3YXRjaGRvZzog
-aW14N3VscDogU3RyaWN0bHkgZm9sbG93IHRoZSBzZXF1ZW5jZQ0KPiBmb3Igd2RvZyBvcGVyYXRp
-b25zDQo+IA0KPiBPbiA3LzI4LzIwIDk6NTAgUE0sIEFuc29uIEh1YW5nIHdyb3RlOg0KPiA+IEhp
-LCBHdWVudGVyDQo+ID4NCj4gPg0KPiA+PiBTdWJqZWN0OiBSZTogW1BBVENIIFYyIDEvMl0gd2F0
-Y2hkb2c6IGlteDd1bHA6IFN0cmljdGx5IGZvbGxvdyB0aGUNCj4gPj4gc2VxdWVuY2UgZm9yIHdk
-b2cgb3BlcmF0aW9ucw0KPiA+Pg0KPiA+PiBPbiA3LzI4LzIwIDc6MjAgUE0sIEFuc29uIEh1YW5n
-IHdyb3RlOg0KPiA+Pj4gQWNjb3JkaW5nIHRvIHJlZmVyZW5jZSBtYW51YWwsIHRoZSBpLk1YN1VM
-UCBXRE9HJ3Mgb3BlcmF0aW9ucyBzaG91bGQNCj4gPj4+IGZvbGxvdyBiZWxvdyBzZXF1ZW5jZToN
-Cj4gPj4+DQo+ID4+PiAxLiBkaXNhYmxlIGdsb2JhbCBpbnRlcnJ1cHRzOw0KPiA+Pj4gMi4gdW5s
-b2NrIHRoZSB3ZG9nIGFuZCB3YWl0IHVubG9jayBiaXQgc2V0OyAzLiByZWNvbmZpZ3VyZSB0aGUg
-d2RvZw0KPiA+Pj4gYW5kIHdhaXQgZm9yIHJlY29uZmlndXJhdGlvbiBiaXQgc2V0OyA0LiBlbmFi
-ZWwgZ2xvYmFsIGludGVycnVwdHMuDQo+ID4+Pg0KPiA+Pj4gU3RyaWN0bHkgZm9sbG93IHRoZSBy
-ZWNvbW1lbmRlZCBzZXF1ZW5jZSBjYW4gbWFrZSBpdCBtb3JlIHJvYnVzdC4NCj4gPj4+DQo+ID4+
-PiBTaWduZWQtb2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gPj4+
-IC0tLQ0KPiA+Pj4gQ2hhbmdlcyBzaW5jZSBWMToNCj4gPj4+IAktIHVzZSByZWFkbF9wb2xsX3Rp
-bWVvdXRfYXRvbWljKCkgaW5zdGVhZCBvZiB1c2xlZXBfcmFuZ2VzKCkgc2luY2UNCj4gPj4+IElS
-USBpcw0KPiA+PiBkaXNhYmxlZC4NCj4gPj4+IC0tLQ0KPiA+Pj4gIGRyaXZlcnMvd2F0Y2hkb2cv
-aW14N3VscF93ZHQuYyB8IDI5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4+PiAg
-MSBmaWxlIGNoYW5nZWQsIDI5IGluc2VydGlvbnMoKykNCj4gPj4+DQo+ID4+PiBkaWZmIC0tZ2l0
-IGEvZHJpdmVycy93YXRjaGRvZy9pbXg3dWxwX3dkdC5jDQo+ID4+PiBiL2RyaXZlcnMvd2F0Y2hk
-b2cvaW14N3VscF93ZHQuYyBpbmRleCA3OTkzYzhjLi43ZDJiMTJlIDEwMDY0NA0KPiA+Pj4gLS0t
-IGEvZHJpdmVycy93YXRjaGRvZy9pbXg3dWxwX3dkdC5jDQo+ID4+PiArKysgYi9kcml2ZXJzL3dh
-dGNoZG9nL2lteDd1bHBfd2R0LmMNCj4gPj4+IEBAIC01LDYgKzUsNyBAQA0KPiA+Pj4NCj4gPj4+
-ICAjaW5jbHVkZSA8bGludXgvY2xrLmg+DQo+ID4+PiAgI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQo+
-ID4+PiArI2luY2x1ZGUgPGxpbnV4L2lvcG9sbC5oPg0KPiA+Pj4gICNpbmNsdWRlIDxsaW51eC9r
-ZXJuZWwuaD4NCj4gPj4+ICAjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ID4+PiAgI2luY2x1
-ZGUgPGxpbnV4L29mLmg+DQo+ID4+PiBAQCAtMzYsNiArMzcsNyBAQA0KPiA+Pj4gICNkZWZpbmUg
-REVGQVVMVF9USU1FT1VUCTYwDQo+ID4+PiAgI2RlZmluZSBNQVhfVElNRU9VVAkxMjgNCj4gPj4+
-ICAjZGVmaW5lIFdET0dfQ0xPQ0tfUkFURQkxMDAwDQo+ID4+PiArI2RlZmluZSBXRE9HX1dBSVRf
-VElNRU9VVAkxMDAwMA0KPiA+Pj4NCj4gPj4+ICBzdGF0aWMgYm9vbCBub3dheW91dCA9IFdBVENI
-RE9HX05PV0FZT1VUOw0KPiA+PiBtb2R1bGVfcGFyYW0obm93YXlvdXQsDQo+ID4+PiBib29sLCAw
-MDAwKTsgQEAgLTQ4LDE3ICs1MCwzMSBAQCBzdHJ1Y3QgaW14N3VscF93ZHRfZGV2aWNlIHsNCj4g
-Pj4+ICAJc3RydWN0IGNsayAqY2xrOw0KPiA+Pj4gIH07DQo+ID4+Pg0KPiA+Pj4gK3N0YXRpYyBp
-bmxpbmUgdm9pZCBpbXg3dWxwX3dkdF93YWl0KHZvaWQgX19pb21lbSAqYmFzZSwgdTMyIG1hc2sp
-IHsNCj4gPj4+ICsJdTMyIHZhbCA9IHJlYWRsKGJhc2UgKyBXRE9HX0NTKTsNCj4gPj4+ICsNCj4g
-Pj4+ICsJaWYgKCEodmFsICYgbWFzaykpDQo+ID4+PiArCQlXQVJOX09OKHJlYWRsX3BvbGxfdGlt
-ZW91dF9hdG9taWMoYmFzZSArIFdET0dfQ1MsIHZhbCwNCj4gPj4+ICsJCQkJCQkgIHZhbCAmIG1h
-c2ssIDAsDQo+ID4+PiArCQkJCQkJICBXRE9HX1dBSVRfVElNRU9VVCkpOw0KPiA+Pg0KPiA+PiBJ
-IGFtIG5vdCBhIGZyaWVuZCBvZiBXQVJOX09OLCBlc3BlY2lhbGx5IGluIHNpdHVhdGlvbnMgbGlr
-ZSB0aGlzLg0KPiA+PiBQbGVhc2UgZXhwbGFpbiB3aHkgdGhpcyBpcyBuZWVkZWQsIGFuZCB3aHkg
-YSByZXR1cm4gb2YgLUVUSU1FRE9VVCBpcw0KPiA+PiBub3QgZmVhc2libGUuDQo+ID4NCj4gPiBP
-SywgSSB3aWxsIHVzZSByZXR1cm4gdmFsdWUgb2YgLUVUSU1FT1VUIGFuZCBoYW5kbGUgaXQgaW4g
-dGhlIGNhbGxlci4NCj4gPg0KPiA+Pg0KPiA+PiBBbHNvLCBJIGRvIG5vdCBiZWxpZXZlIHRoYXQg
-YSAxMCBtaWxsaS1zZWNvbmQgdGltZW91dCBpcyB3YXJyYW50ZWQuDQo+ID4+IFRoaXMgd2lsbCBu
-ZWVkIHRvIGJlIGJhY2tlZCB1cCBieSB0aGUgZGF0YXNoZWV0Lg0KPiA+Pg0KPiA+DQo+ID4gVGhl
-cmUgaXMgbm8gc3VjaCBpbmZvIHByb3ZpZGVkIGluIHJlZmVyZW5jZSBtYW51YWwgb3IgZGF0YXNo
-ZWV0LCBidXQgSQ0KPiA+IGp1c3QgZGlkIGFuIGV4cGVyaW1lbnQsIHRoZSB1bmxvY2sgd2luZG93
-IGlzIG9wZW4gaW4gbGVzcyB0aGFuIDF1cw0KPiA+IGFmdGVyIHNlbmRpbmcgdW5sb2NrIGNvbW1h
-bmQsIGFuZCBPTkxZIGxhc3QgZm9yIE9OTFkgMn4zIHVzIHRoZW4NCj4gPiBjbG9zZSwgdGhlIHJl
-Y29uZmlndXJhdGlvbiBzdGF0dXMgYml0IHdpbGwgYmUgc2V0IGluIGxlc3MgdGhhbiAxdXMgYWZ0
-ZXIgcmVnaXN0ZXINCj4gd3JpdGUuIFNvIHdoYXQgZG8geW91IHJlY29tbWVuZCBmb3IgdGhpcyB0
-aW1lb3V0IHZhbHVlPyAxMDBtUyBmb3Igc2FmZT8NCj4gPg0KPiANCj4gVGhhdCB3b3VsZCBiZSBl
-dmVuIHdvcnNlLiBZb3Ugc2F5IHlvdXJzZWxmIHRoYXQgdGhlIHdpbmRvdyBpcyBvbmx5IG9wZW4g
-Zm9yIGENCj4gZmV3IG1pY3Jvc2Vjb25kcy4gTm93IHlvdSBhcmUgc3VnZ2VzdGluZyB0byBob2xk
-IHRoZSBlbnRpcmUgc3lzdGVtIGhvc3RhZ2UNCj4gZm9yIHVwIHRvDQo+IDEwMCBtUyBpZiB0aGUg
-Y29kZSBtaXNzZXMgdGhhdCB3aW5kb3cgZm9yIHNvbWUgcmVhc29uLiBCYXNlZCBvbiB3aGF0IHlv
-dQ0KPiBzYWlkLA0KPiAxMDAgdVMgbWlnaHQgYmUgYmFyZWx5IGFjY2VwdGFibGUuIDEwLTIwIHVT
-IHdvdWxkIGJlIHJlYXNvbmFibGUuIEJ1dCBub3QNCj4gMTAwIG1TLg0KDQpPSywgSSB3aWxsIHVz
-ZSAyMHVzLg0KDQpUaGFua3MsDQpBbnNvbg0KDQoNCg==
+On 7/28/20 10:02 PM, Anson Huang wrote:
+> Hi, Guenter
+> 
+> 
+>> Subject: RE: [PATCH V2 1/2] watchdog: imx7ulp: Strictly follow the sequence
+>> for wdog operations
+>>
+>> Hi, Guenter
+>>
+>>
+>>> Subject: Re: [PATCH V2 1/2] watchdog: imx7ulp: Strictly follow the
+>>> sequence for wdog operations
+>>>
+>>> On 7/28/20 7:20 PM, Anson Huang wrote:
+>>>> According to reference manual, the i.MX7ULP WDOG's operations should
+>>>> follow below sequence:
+>>>>
+>>>> 1. disable global interrupts;
+>>>> 2. unlock the wdog and wait unlock bit set; 3. reconfigure the wdog
+>>>> and wait for reconfiguration bit set; 4. enabel global interrupts.
+>>>>
+>>>> Strictly follow the recommended sequence can make it more robust.
+>>>>
+>>>> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+>>>> ---
+>>>> Changes since V1:
+>>>> 	- use readl_poll_timeout_atomic() instead of usleep_ranges() since
+>>>> IRQ is
+>>> disabled.
+>>>> ---
+>>>>  drivers/watchdog/imx7ulp_wdt.c | 29 +++++++++++++++++++++++++++++
+>>>>  1 file changed, 29 insertions(+)
+>>>>
+>>>> diff --git a/drivers/watchdog/imx7ulp_wdt.c
+>>>> b/drivers/watchdog/imx7ulp_wdt.c index 7993c8c..7d2b12e 100644
+>>>> --- a/drivers/watchdog/imx7ulp_wdt.c
+>>>> +++ b/drivers/watchdog/imx7ulp_wdt.c
+>>>> @@ -5,6 +5,7 @@
+>>>>
+>>>>  #include <linux/clk.h>
+>>>>  #include <linux/io.h>
+>>>> +#include <linux/iopoll.h>
+>>>>  #include <linux/kernel.h>
+>>>>  #include <linux/module.h>
+>>>>  #include <linux/of.h>
+>>>> @@ -36,6 +37,7 @@
+>>>>  #define DEFAULT_TIMEOUT	60
+>>>>  #define MAX_TIMEOUT	128
+>>>>  #define WDOG_CLOCK_RATE	1000
+>>>> +#define WDOG_WAIT_TIMEOUT	10000
+>>>>
+>>>>  static bool nowayout = WATCHDOG_NOWAYOUT;
+>>> module_param(nowayout,
+>>>> bool, 0000); @@ -48,17 +50,31 @@ struct imx7ulp_wdt_device {
+>>>>  	struct clk *clk;
+>>>>  };
+>>>>
+>>>> +static inline void imx7ulp_wdt_wait(void __iomem *base, u32 mask) {
+>>>> +	u32 val = readl(base + WDOG_CS);
+>>>> +
+>>>> +	if (!(val & mask))
+>>>> +		WARN_ON(readl_poll_timeout_atomic(base + WDOG_CS, val,
+>>>> +						  val & mask, 0,
+>>>> +						  WDOG_WAIT_TIMEOUT));
+>>>
+>>> I am not a friend of WARN_ON, especially in situations like this.
+>>> Please explain why this is needed, and why a return of -ETIMEDOUT is
+>>> not feasible.
+>>
+>> OK, I will use return value of -ETIMEOUT and handle it in the caller.
+> 
+> After a further look, some of the imx7ulp_wdt_wait () callers are void function, so if want
+> to handle the return value, all those functions return type need to be changed. And, when
+> the return value is -ETIMEDOUT, the ONLY action is to print out some error message
+> for these void function, need to use pr_err() due to no dev pointer available, so
+> do you think it is acceptable to just replace the WARN_ON with pr_err() as below?
+> 
+First, the point here is that the callers can't do their work if the function times
+out. So, if the return value isn't necessary, and callers don't need to check it,
+the function would not be necessary to start with. If it is necessary, and if there
+is a concern that it can fail, callers should make sure that it actually succeeded.
+With that in mind, yes, imx7ulp_wdt_init() should fail and return an error,
+because presumably that is what happened. The same is true for imx7ulp_wdt_enable().
+Really, what is the point of detecting a problem just to ignore it ?
+
+Second, the wait function is also called _after_ a register was set. In many cases
+that won't do any good or bad. While it is ok to ignore the error in that case
+(when nothing else is done), the error message is pointless in that situation.
+
+Thanks,
+Guenter
