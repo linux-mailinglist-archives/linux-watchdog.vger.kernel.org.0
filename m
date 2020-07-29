@@ -2,56 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4276D232385
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 19:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C83B2323A1
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 19:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbgG2RkB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jul 2020 13:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S1726509AbgG2RqR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jul 2020 13:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbgG2RkB (ORCPT
+        with ESMTP id S1726385AbgG2RqR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jul 2020 13:40:01 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01064C061794;
-        Wed, 29 Jul 2020 10:40:01 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id c16so8333007ils.8;
-        Wed, 29 Jul 2020 10:40:00 -0700 (PDT)
+        Wed, 29 Jul 2020 13:46:17 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D45C061794;
+        Wed, 29 Jul 2020 10:46:17 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id j8so13080844ioe.9;
+        Wed, 29 Jul 2020 10:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=aEIYYq2kW/WiB6gUi4gfbO509LEn/L/Pyhh8ZaCEkmE=;
-        b=ZIAkcoprPEJ+NVIytPXW7aSmDNMFVtiigUDPl/ClKFR8KIIQsziLh0oVZ0wnHihULU
-         uXFjNq74e7qd8p4nRqlufhnQ+KV4/AnDIfG6PkEccPwwY53UWbBQdoKVHDbnlYm0x/zt
-         7g85MxLYVCd60/lbpRH2F1wAn8yCWMLdffq31MXEdjhEL95Y5uXMgJ8QNfLUm6QMcLK0
-         gTFcJh5phQAFCZbSYhfQx3ULbKrbPvIYdy8Q8W0XjxIxO9rs75F7+8Bjf9c4SdBjpjdY
-         VRqzj/RazUGauvupuwGUFHaVitpZT5dE8vtqXDkAJ/1m5e15P/awYrDdN2P3aNKb0Cjm
-         EhwQ==
+        bh=vL2EiXbptWkb+CeJ1aIsaGaoV70y1mT289hYeI0vTkg=;
+        b=Pf7nKXdGqrVr1RkAz85fBJsu445+W+MUqnKlS7wvsWqPMO452kHEujmP81SJ2ac2bL
+         GWC1J1h8oaCzKyxX7XK0ItTcmK31ixIteOA0BSX4uj+twuZdQpmi3po/ANKyEIYDbmn8
+         EMdDl5xm6ZzEU/zfhm66lMzsaVChyR/LeQVY4PLxaz5HhQ7faPp8RLNd1F/bgLCB0qyH
+         vH8NwBOTEycRR1UyELKB0AC7Pif05craVIlH+T4owJgFn7exkibt5z8R/Wu0eXaXC1D6
+         8Ca2pERhmJdQ8UandVs4rt3pFeYa37PMpCkubj+L/ssLWtvhmzGKkpxEF4iPtQBqG6NQ
+         9tmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aEIYYq2kW/WiB6gUi4gfbO509LEn/L/Pyhh8ZaCEkmE=;
-        b=e5uFTRCq9gyjuZVhbmhfVdGPhIwi0kP+Wd5Kj+dBSAvg7o+WOovp5nR7pf8uG1FDQ+
-         fq0ATRZiVQdIQIktEk4wWvh1aKrSkLV2sronIREko+hZQ7aJ1k+JTQhK0+X69s8rvmSs
-         /wzuDp+jwH9t8+6PDvDWj35NV+LXTA2mDGF8WhyTtKTI1GYTghI6lcqkNHYzW+ILxgBi
-         cGHFQW7zK35sMcGl4kXNJePVPG/8RdeiyJ4cAI1aPAbwI1McEVtGR21/QNbm8M86Oluv
-         +4F1t/xl0bM7zJfFGz/TWAeUXlgjpC8PI7ZZ4n6ibvxazwbWJ+2qkW9wUA4YlOYHhqbm
-         /+Aw==
-X-Gm-Message-State: AOAM532wnusYvQ2O5QqKh8XEpdsMAxaUGCdgjMJfi0FhQeBLmfPf7U83
-        YrpHKYrdqO7rb7oi8SU16thjy193m6CoA713Qt0=
-X-Google-Smtp-Source: ABdhPJwlp3xYVIJRiw+Y130nbuhCK+JvFexj+zBfdC3ovRWCIz3H/lUQR0sXo63rj1TyhNei7XVXo1nGHy8fELiAB2A=
-X-Received: by 2002:a92:8946:: with SMTP id n67mr16523409ild.168.1596044400155;
- Wed, 29 Jul 2020 10:40:00 -0700 (PDT)
+        bh=vL2EiXbptWkb+CeJ1aIsaGaoV70y1mT289hYeI0vTkg=;
+        b=Hfc50umP6M2KOEXdA3I9Jt//rhhqT3yvzKAu+wsefjskTMGQ6H3Yth+7FL21OScfI4
+         olWHCUhAWe8q4rwtLe8UU2v3UuRrXdrct+QD54Sk2fuQr/6BWU0Bf2sOb1eieYsBH61W
+         ha025ViNO7CxhUU+fzOz0QRl5NIUqJAls+/KLdK1xcfDf7QI+r9mR+Zvadq+HGlQH4jo
+         2yylyEAnu5Q9gmRmvP+lxiF3YJ0Jbn41FYpeSXVgtAl92D2bxf0klL/maTYATwN3pKrJ
+         6YwTrcMbRreCqIH6PhhEWhGsT6t/LhRs44VMWj1DUXy28hZmdPn1cxVdAlAcPRgJXl+G
+         j1qQ==
+X-Gm-Message-State: AOAM5334VF8fXvR6kyA0iM6pN0xVpPF0Ws7L9TeE1KTR2dySeoPstrsp
+        Ev1SSe/T46F6wjJuXgmuDIL1wN6/68LZHj4q4vc=
+X-Google-Smtp-Source: ABdhPJwZMsvcOsBvVWQSB6Ahydqr7L806TY0co61XGVRpo8vp0muMNJkqI8HcDgdalYRhv7rGELQFoCQfN7UP/aoQDc=
+X-Received: by 2002:a02:ccd7:: with SMTP id k23mr24083657jaq.73.1596044776435;
+ Wed, 29 Jul 2020 10:46:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200729160942.28867-1-krzk@kernel.org> <20200729160942.28867-2-krzk@kernel.org>
-In-Reply-To: <20200729160942.28867-2-krzk@kernel.org>
+References: <20200729160942.28867-1-krzk@kernel.org> <20200729160942.28867-3-krzk@kernel.org>
+In-Reply-To: <20200729160942.28867-3-krzk@kernel.org>
 From:   Tomasz Figa <tomasz.figa@gmail.com>
-Date:   Wed, 29 Jul 2020 19:39:47 +0200
-Message-ID: <CA+Ln22E_VkAYz7cpE1TdVGj6AkjWOgyVm01gzSjMPs=JE8+qLw@mail.gmail.com>
-Subject: Re: [PATCH 1/7] clk: samsung: s3c64xx: Declare s3c64xx_clk_init() in
- shared header
+Date:   Wed, 29 Jul 2020 19:46:04 +0200
+Message-ID: <CA+Ln22EMWTRu4j-6b5Oj63Yvo+GYa_cB2+QU-h-woQ5G1K5DJw@mail.gmail.com>
+Subject: Re: [PATCH 2/7] ARM: s3c64xx: Include header to fix -Wmissing-prototypes
 To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Russell King <linux@armlinux.org.uk>,
         Kukjin Kim <kgene@kernel.org>,
@@ -90,24 +89,33 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 2020=E5=B9=B47=E6=9C=8829=E6=97=A5(=E6=B0=B4) 18:11 Krzysztof Kozlowski <kr=
 zk@kernel.org>:
 >
-> The s3c64xx_clk_init() is defined and used by clk-s3c64xx driver and
-> also used in mach-s3c64xx machine code.  Move the declaration to a
-> header to fix W=3D1 build warning:
+> Include the spi-s3c64xx.h header to fix W=3D1 build warning:
 >
->     drivers/clk/samsung/clk-s3c64xx.c:391:13: warning: no previous protot=
-ype for 's3c64xx_clk_init' [-Wmissing-prototypes]
->       391 | void __init s3c64xx_clk_init(struct device_node *np, unsigned=
- long xtal_f,
+>     arch/arm/mach-s3c64xx/setup-spi.c:11:5: warning:
+>         no previous prototype for 's3c64xx_spi0_cfg_gpio' [-Wmissing-prot=
+otypes]
+>        11 | int s3c64xx_spi0_cfg_gpio(void)
 >
 > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  MAINTAINERS                       |  1 +
->  arch/arm/mach-s3c64xx/common.c    |  1 +
->  arch/arm/mach-s3c64xx/common.h    |  2 --
->  drivers/clk/samsung/clk-s3c64xx.c |  1 +
->  include/linux/clk/samsung.h       | 21 +++++++++++++++++++++
->  5 files changed, 24 insertions(+), 2 deletions(-)
->  create mode 100644 include/linux/clk/samsung.h
+>  arch/arm/mach-s3c64xx/setup-spi.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/arm/mach-s3c64xx/setup-spi.c b/arch/arm/mach-s3c64xx/se=
+tup-spi.c
+> index 39dfae1f46e7..03c9d296bb0f 100644
+> --- a/arch/arm/mach-s3c64xx/setup-spi.c
+> +++ b/arch/arm/mach-s3c64xx/setup-spi.c
+> @@ -4,6 +4,7 @@
+>  //             http://www.samsung.com/
+>
+>  #include <linux/gpio.h>
+> +#include <linux/platform_data/spi-s3c64xx.h>
+>  #include <plat/gpio-cfg.h>
+>  #include <mach/gpio-samsung.h>
+>
+> --
+> 2.17.1
 >
 
 Reviewed-by: Tomasz Figa <tomasz.figa@gmail.com>
