@@ -2,57 +2,37 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC80231AF4
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 10:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71CD231B49
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 10:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbgG2IPQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jul 2020 04:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbgG2IPP (ORCPT
+        id S1726710AbgG2Ifi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jul 2020 04:35:38 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:44615 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726336AbgG2Ifi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jul 2020 04:15:15 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C0EC061794;
-        Wed, 29 Jul 2020 01:15:15 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id 184so2038731wmb.0;
-        Wed, 29 Jul 2020 01:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rlchZqwkXTtwtE28PNsYh99vPS/5jVQbHUXJ9dhuRrA=;
-        b=P9cG23A4bFDPWjtj4larjxw9qub354zQJMGt5m62NGpQZpZF1zWrdiDiI0E56b8bbe
-         Ibl63wLkvwrYw1yO6bvu5qRR9Is94HvtOtHxhoV9oNvJaQ6wzhwYo58wAPYP6JEmn5ss
-         Fxh0ydAuS41xj5OPLQZeuyR6PC2OE20K19zt26Wi35TVcs6YS4rEz7U2RT7l4TI14jpK
-         GTF52mTM953Tbhi4XahEtPtjuefcbB0wRQ/zCPFf3HwOtRa5ydkptAcivPwhBZ33d7hs
-         vjfp2wbqX5WHkzIB1+JoASZsOhQc+oxdW+PUvytH/UlkuJOnqcb9Vp2rZUcAW/2Mg4gO
-         Q7Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rlchZqwkXTtwtE28PNsYh99vPS/5jVQbHUXJ9dhuRrA=;
-        b=Kuc4zgLqKVHwT+foG33YBcLyzpQrS0lHDf34O/h6OfLCEq5Ql/3yVKdOYG2jXFBAdK
-         mcweZRiye6qev9IvS3rbbtfF6ccOrqkq1odH8qjljVEF6DziYN4GPUuy6QXzbLkzMIl5
-         Ts9pescZrCcJGKzKD+o8amPwFz65x4aSe2X4nLKIKQRwz6tV8++mlK5rJfqAhGSJE4a2
-         FnLloUQjbiBU5tLfU3Z6fWq+RWeG8zhPYfW5W5RM9Kqaar6HI15Ou3QGbkLub5CbSMoF
-         jF47s5qNcFM0BW7KGOAh3jmHBa5LRHKS0EgQ2PuUI6D3qVjdzaqbexvVWYdVocnOKK1r
-         5jRA==
-X-Gm-Message-State: AOAM5302LwFYTSvWr5ZbNnRsr9ycRfho4W6ZFvMXNdQhF9v+DTM7y0cH
-        UlYeNqcSsbLFcJYtT07Zzts=
-X-Google-Smtp-Source: ABdhPJyFW7pSFOpmJYqx4oK1oTZOOOz/JCxfYIwaWtqZ29VmQTDiliOunqQhsLOYzEtFTRU+wQ5fgA==
-X-Received: by 2002:a7b:c258:: with SMTP id b24mr7413895wmj.122.1596010514275;
-        Wed, 29 Jul 2020 01:15:14 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.122.158])
-        by smtp.gmail.com with ESMTPSA id p6sm3336770wru.33.2020.07.29.01.15.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2020 01:15:13 -0700 (PDT)
+        Wed, 29 Jul 2020 04:35:38 -0400
+X-UUID: 4e4ab3a91fca403f94f31a95a30ab41b-20200729
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Ia1XARyByvYXLRx9mXxEAiykte60Wo0wfVOMz7hQaag=;
+        b=Rl600GB3WJS55HmIodQw2NddouKCMuQpzR3iK/EXrxGrXxktCQVCSUdqNxWi618HKp2lXzNforX5An9nlGrPahLi4nYoxVPnkja1gCH6bT2rLJRMYCQcu+idXxOst7WGBd4R+EnceL/k4k0zyhVkq9BEwhjH+AproaFgZnSGAjk=;
+X-UUID: 4e4ab3a91fca403f94f31a95a30ab41b-20200729
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <crystal.guo@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 444962580; Wed, 29 Jul 2020 16:35:33 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs07n1.mediatek.inc
+ (172.21.101.16) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 29 Jul
+ 2020 16:35:32 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 29 Jul 2020 16:35:30 +0800
+Message-ID: <1596011707.11360.9.camel@mhfsdcap03>
 Subject: Re: [v2,2/3] dt-bindings: watchdog: add a new head file for toprgu
  reset-controllers
-To:     Crystal Guo <crystal.guo@mediatek.com>
-Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
+From:   Crystal Guo <crystal.guo@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         srv_heupstream <srv_heupstream@mediatek.com>,
         "linux-mediatek@lists.infradead.org" 
@@ -61,74 +41,57 @@ Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        =?UTF-8?B?U2VpeWEgV2FuZyAo546L6L+65ZCbKQ==?= 
+        Seiya Wang =?UTF-8?Q?=28=E7=8E=8B=E8=BF=BA=E5=90=9B=29?= 
         <seiya.wang@mediatek.com>,
-        =?UTF-8?B?RXJpbiBMbyAo576F6ZuF6b2hKQ==?= <erin.lo@mediatek.com>
+        Erin Lo =?UTF-8?Q?=28=E7=BE=85=E9=9B=85=E9=BD=A1=29?= 
+        <erin.lo@mediatek.com>
+Date:   Wed, 29 Jul 2020 16:35:07 +0800
+In-Reply-To: <72d317ef-7f69-9e61-b1d5-23d660c58560@gmail.com>
 References: <1596004249-28655-1-git-send-email-crystal.guo@mediatek.com>
- <1596004249-28655-3-git-send-email-crystal.guo@mediatek.com>
- <fb7ef8a7-5bbc-8e4b-7a23-c84f151587ba@gmail.com>
- <1596010313.11360.2.camel@mhfsdcap03>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <72d317ef-7f69-9e61-b1d5-23d660c58560@gmail.com>
-Date:   Wed, 29 Jul 2020 10:15:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+         <1596004249-28655-3-git-send-email-crystal.guo@mediatek.com>
+         <fb7ef8a7-5bbc-8e4b-7a23-c84f151587ba@gmail.com>
+         <1596010313.11360.2.camel@mhfsdcap03>
+         <72d317ef-7f69-9e61-b1d5-23d660c58560@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <1596010313.11360.2.camel@mhfsdcap03>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+T24gV2VkLCAyMDIwLTA3LTI5IGF0IDE2OjE1ICswODAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3Rl
+Og0KPiANCj4gT24gMjkvMDcvMjAyMCAxMDoxMSwgQ3J5c3RhbCBHdW8gd3JvdGU6DQo+ID4gT24g
+V2VkLCAyMDIwLTA3LTI5IGF0IDE1OjQyICswODAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3RlOg0K
+PiA+PiBIaSBDcnlzdGFsLA0KPiA+Pg0KPiA+PiBPbiAyOS8wNy8yMDIwIDA4OjMwLCBDcnlzdGFs
+IEd1byB3cm90ZToNCj4gPj4+IG1lcmdlIGFsbCB0aGUgcmVzZXQgbnVtYmVycyBpbiBvbmUgaGVh
+ZCBmaWxlLg0KPiA+Pj4NCj4gPj4+IFNpZ25lZC1vZmYtYnk6IENyeXN0YWwgR3VvIDxjcnlzdGFs
+Lmd1b0BtZWRpYXRlay5jb20+DQo+ID4+PiAtLS0NCj4gPj4+ICAgIGluY2x1ZGUvZHQtYmluZGlu
+Z3MvcmVzZXQtY29udHJvbGxlci9tdGstcmVzZXRzLmggfCAxMyArKysrKysrKysrKysrDQo+ID4+
+PiAgICAxIGZpbGUgY2hhbmdlZCwgMTMgaW5zZXJ0aW9ucygrKQ0KPiA+Pj4gICAgY3JlYXRlIG1v
+ZGUgMTAwNjQ0IGluY2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQtY29udHJvbGxlci9tdGstcmVzZXRz
+LmgNCj4gPj4+DQo+ID4+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kdC1iaW5kaW5ncy9yZXNldC1j
+b250cm9sbGVyL210ay1yZXNldHMuaCBiL2luY2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQtY29udHJv
+bGxlci9tdGstcmVzZXRzLmgNCj4gPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4+PiBpbmRl
+eCAwMDAwMDAwLi5kNzNhNGJhDQo+ID4+PiAtLS0gL2Rldi9udWxsDQo+ID4+PiArKysgYi9pbmNs
+dWRlL2R0LWJpbmRpbmdzL3Jlc2V0LWNvbnRyb2xsZXIvbXRrLXJlc2V0cy5oDQo+ID4+PiBAQCAt
+MCwwICsxLDEzIEBADQo+ID4+PiArLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAg
+Ki8NCj4gPj4+ICsvKg0KPiA+Pj4gKyAqIENvcHlyaWdodCAoQykgMjAyMCBNZWRpYXRlayBJbmMu
+DQo+ID4+PiArICoNCj4gPj4+ICsgKi8NCj4gPj4+ICsNCj4gPj4+ICsjaWZuZGVmIF9EVF9CSU5E
+SU5HU19SRVNFVF9DT05UUk9MTEVSX01USw0KPiA+Pj4gKyNkZWZpbmUgX0RUX0JJTkRJTkdTX1JF
+U0VUX0NPTlRST0xMRVJfTVRLDQo+ID4+PiArDQo+ID4+PiArI2RlZmluZSBNVDI3MTJfVE9QUkdV
+X1NXX1JTVF9OVU0JMTENCj4gPj4+ICsjZGVmaW5lIE1UODE4M19UT1BSR1VfU1dfUlNUX05VTSAg
+ICAgICAgMTkNCj4gPj4NCj4gPj4gTWF5YmUgSSBkaWRuJ3QgZXhwbGFpbiBteXNlbGYgcHJvcGVy
+bHkuIFdlIHdhbnQgdG8gaGF2ZSBhbGwgcmVzZXRzIGluIG9uZSBmaWxlDQo+ID4+IGFuZCBkbyBu
+b3Qgd2FudCB0byBoYXZlIHRoZSByZXNldHMgZm9yIHRoZSB3YXRjaGRvZyBpbiBhIGRpZmZlcmVu
+dCBmaWxlLiBUaGF0DQo+ID4+IG1lYW5zIEkgZG9uJ3QgdGhpbiB5b3VyIHBhdGNoIGlzIGNvcnJl
+Y3QgYW5kIHRoZSBlZmZvcnQgc2hvdWxkIGJlIGFiYW5kb25lZC4NCj4gPj4NCj4gPj4gUmVnYXJk
+cywNCj4gPj4gTWF0dGhpYXMNCj4gPiANCj4gPiBEbyB5b3UgbWVhbiB0byBrZWVwIHRoZSBjdXJy
+ZW50IHdheSB1bmNoYW5nZWQ/IEZvciBleGFtcGxlLCB3aXRoIGEgbmV3DQo+ID4gU09DIDgxOTIs
+IHNob3VsZCBhZGQgYSBuZXcgaGVhZCBmaWxlIG10ODE5Ml9yZXNldHMuaCBmb3IgdGhlIHJlc2V0
+cw0KPiA+IG51bWJlcnMuDQo+ID4gDQo+IA0KPiBFeGFjdGx5Lg0KPiANCj4gUmVnYXJkcywNCj4g
+TWF0dGhpYXMNCg0KT0ssIGJ1dCB0aGUgZHQtYmluZGluZyBtdGstd2R0LnR4dCBzdGlsbCBuZWVk
+IHRvIHVwZGF0ZSwgcGxlYXNlIGhlbHAgbWUNCnRvIHJldmlldywgbWFueSB0aGFua3N+DQoNCg==
 
-
-On 29/07/2020 10:11, Crystal Guo wrote:
-> On Wed, 2020-07-29 at 15:42 +0800, Matthias Brugger wrote:
->> Hi Crystal,
->>
->> On 29/07/2020 08:30, Crystal Guo wrote:
->>> merge all the reset numbers in one head file.
->>>
->>> Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
->>> ---
->>>    include/dt-bindings/reset-controller/mtk-resets.h | 13 +++++++++++++
->>>    1 file changed, 13 insertions(+)
->>>    create mode 100644 include/dt-bindings/reset-controller/mtk-resets.h
->>>
->>> diff --git a/include/dt-bindings/reset-controller/mtk-resets.h b/include/dt-bindings/reset-controller/mtk-resets.h
->>> new file mode 100644
->>> index 0000000..d73a4ba
->>> --- /dev/null
->>> +++ b/include/dt-bindings/reset-controller/mtk-resets.h
->>> @@ -0,0 +1,13 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 */
->>> +/*
->>> + * Copyright (C) 2020 Mediatek Inc.
->>> + *
->>> + */
->>> +
->>> +#ifndef _DT_BINDINGS_RESET_CONTROLLER_MTK
->>> +#define _DT_BINDINGS_RESET_CONTROLLER_MTK
->>> +
->>> +#define MT2712_TOPRGU_SW_RST_NUM	11
->>> +#define MT8183_TOPRGU_SW_RST_NUM        19
->>
->> Maybe I didn't explain myself properly. We want to have all resets in one file
->> and do not want to have the resets for the watchdog in a different file. That
->> means I don't thin your patch is correct and the effort should be abandoned.
->>
->> Regards,
->> Matthias
-> 
-> Do you mean to keep the current way unchanged? For example, with a new
-> SOC 8192, should add a new head file mt8192_resets.h for the resets
-> numbers.
-> 
-
-Exactly.
-
-Regards,
-Matthias
