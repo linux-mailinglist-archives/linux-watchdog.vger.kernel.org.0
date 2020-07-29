@@ -2,77 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC622231C71
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 12:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2733E231C93
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 12:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbgG2KCk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jul 2020 06:02:40 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:52293 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726645AbgG2KCg (ORCPT
+        id S1726365AbgG2KSp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jul 2020 06:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726336AbgG2KSp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jul 2020 06:02:36 -0400
-X-UUID: 6792aa04c7e14555b13847bce6b20a09-20200729
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=vh67dDG+PPF5w/5q7NusigBDM+ZZIr+ZRqBQV1zStds=;
-        b=UotqtxYZ19vdsC5qy2/SGNztYUUbhjAeJNhEGKQNZKmg823MAXWHucEIrS4oHBph7Ogg5++8MRwpXlpu05fOezRRdhmvGjBOpL/aUkQGGhraSIQ+/PNPuj/0Wc3ETWHUkdAtbmVa8oUbfmTVg9DtEzakujKr3h6efB3uQy8hss4=;
-X-UUID: 6792aa04c7e14555b13847bce6b20a09-20200729
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <crystal.guo@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 2119183333; Wed, 29 Jul 2020 18:02:32 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 29 Jul 2020 18:02:29 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 29 Jul 2020 18:02:29 +0800
-From:   Crystal Guo <crystal.guo@mediatek.com>
-To:     <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <seiya.wang@mediatek.com>, <erin.lo@mediatek.com>,
-        Crystal Guo <crystal.guo@mediatek.com>
-Subject: [v2,3/3] watchdog: mt8192: add wdt support
-Date:   Wed, 29 Jul 2020 18:02:02 +0800
-Message-ID: <1596016922-13184-4-git-send-email-crystal.guo@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1596016922-13184-1-git-send-email-crystal.guo@mediatek.com>
+        Wed, 29 Jul 2020 06:18:45 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F49FC061794;
+        Wed, 29 Jul 2020 03:18:45 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id f1so20530570wro.2;
+        Wed, 29 Jul 2020 03:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=L+8hZ3DUqeSgXJLLu1cI0x5JkwDrCOyHENvm/ECikNc=;
+        b=bIdFvI3/b8pv4BIyHsFtohM1EZp7ZiWGwuY25r0zJSXFAfX9+sd5ktN+PbRNZDbqlV
+         zRzoLtSlknW5G4ti5ZRIywZWxbhkff5gJSsFZgfpNT6NN6Xipbo8mNa63fWGVtdwWe/4
+         OpJGFH4susK10dQS6o3d40MIExTwIPmnfKyZtNNAIwRfuLaLluuJ++DYQToe4lqGulPo
+         ItRdwZeTv/4AbPPpZPwojxn37JkFcbE59xemrKMVMQ6WL7Vxo1ft7Svp9S/x6lHX1mLs
+         psxI/L8x+LyZcR6Wr5hK0BQn7X2nDQ9zESvULQ7XE+gJA/vMonbnWzDz91SCuPUWA/LV
+         IOeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=L+8hZ3DUqeSgXJLLu1cI0x5JkwDrCOyHENvm/ECikNc=;
+        b=DqNkP67puBWEHqJfqYy1lCcd08JF+JmczkfrYFE8cvqFaTxvQ++xqvcRadSamxicbf
+         clpc1O2TmFWZfnmTMFYIbu8ruZZfnkv2ZlOYvT35rZH+BRR7H5bjkgO5EdNC1/JJn9Jd
+         0LKPcgEiZJay1pVsKq8g6DJQ1pEV9LC5XbxYazoJZJ+RGb55HiQhizQ4DueNuAUauqB6
+         9qQmt1TDVEpvd4MqQcPjsU3c0KdMbazuNwTSoqUE0O8ODKZGf0byoQXwPJpIBjokM0nn
+         +4qmA9WYV57ohr0n8CdhpJHIl8/vmaS5vhm2rheMipLU7k35c6ACmjXlJuPY/mxAGt36
+         2PMQ==
+X-Gm-Message-State: AOAM532KUy94BRYm7cfDKHOJbq/sf8RVmcgYfqZbj13RHoR/5BG4QPi5
+        y/7qzO3UzpsDebrKwO+RJyUNRpFdxBo=
+X-Google-Smtp-Source: ABdhPJyVVOF7Ria9gxZG0U9j3Vr6Dep9PAZVLWiHJbAHm04ETXwhwhaGwQN1UKqYu3/SAS/3h3B7qg==
+X-Received: by 2002:a5d:6702:: with SMTP id o2mr28315989wru.364.1596017923835;
+        Wed, 29 Jul 2020 03:18:43 -0700 (PDT)
+Received: from ziggy.stardust ([213.195.122.158])
+        by smtp.gmail.com with ESMTPSA id z12sm4182465wrp.20.2020.07.29.03.18.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2020 03:18:43 -0700 (PDT)
+Subject: Re: [v2,1/3] dt-binding: mediatek: mt8192: update mtk-wdt document
+To:     Crystal Guo <crystal.guo@mediatek.com>, linux@roeck-us.net,
+        robh+dt@kernel.org
+Cc:     srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com,
+        erin.lo@mediatek.com
 References: <1596016922-13184-1-git-send-email-crystal.guo@mediatek.com>
+ <1596016922-13184-2-git-send-email-crystal.guo@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <c6ea8852-0381-0924-185e-083ea167f8fa@gmail.com>
+Date:   Wed, 29 Jul 2020 12:18:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <1596016922-13184-2-git-send-email-crystal.guo@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-YWRkIGRyaXZlciBzZXR0aW5nIHRvIHN1cHBvcnQgbXQ4MTkyIHdkdA0KDQpTaWduZWQtb2ZmLWJ5
-OiBDcnlzdGFsIEd1byA8Y3J5c3RhbC5ndW9AbWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy93
-YXRjaGRvZy9tdGtfd2R0LmMgfCA2ICsrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlv
-bnMoKykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5jIGIvZHJpdmVy
-cy93YXRjaGRvZy9tdGtfd2R0LmMNCmluZGV4IGQ2YTYzOTMuLmFlZjBjMmQgMTAwNjQ0DQotLS0g
-YS9kcml2ZXJzL3dhdGNoZG9nL210a193ZHQuYw0KKysrIGIvZHJpdmVycy93YXRjaGRvZy9tdGtf
-d2R0LmMNCkBAIC0xMSw2ICsxMSw3IEBADQogDQogI2luY2x1ZGUgPGR0LWJpbmRpbmdzL3Jlc2V0
-LWNvbnRyb2xsZXIvbXQyNzEyLXJlc2V0cy5oPg0KICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9yZXNl
-dC1jb250cm9sbGVyL210ODE4My1yZXNldHMuaD4NCisjaW5jbHVkZSA8ZHQtYmluZGluZ3MvcmVz
-ZXQtY29udHJvbGxlci9tdDgxOTItcmVzZXRzLmg+DQogI2luY2x1ZGUgPGxpbnV4L2RlbGF5Lmg+
-DQogI2luY2x1ZGUgPGxpbnV4L2Vyci5oPg0KICNpbmNsdWRlIDxsaW51eC9pbml0Lmg+DQpAQCAt
-NzYsNiArNzcsMTAgQEAgc3RydWN0IG10a193ZHRfZGF0YSB7DQogCS50b3ByZ3Vfc3dfcnN0X251
-bSA9IE1UODE4M19UT1BSR1VfU1dfUlNUX05VTSwNCiB9Ow0KIA0KK3N0YXRpYyBjb25zdCBzdHJ1
-Y3QgbXRrX3dkdF9kYXRhIG10ODE5Ml9kYXRhID0gew0KKwkudG9wcmd1X3N3X3JzdF9udW0gPSBN
-VDgxOTJfVE9QUkdVX1NXX1JTVF9OVU0sDQorfTsNCisNCiBzdGF0aWMgaW50IHRvcHJndV9yZXNl
-dF91cGRhdGUoc3RydWN0IHJlc2V0X2NvbnRyb2xsZXJfZGV2ICpyY2RldiwNCiAJCQkgICAgICAg
-dW5zaWduZWQgbG9uZyBpZCwgYm9vbCBhc3NlcnQpDQogew0KQEAgLTMyMiw2ICszMjcsNyBAQCBz
-dGF0aWMgaW50IG10a193ZHRfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCiAJeyAuY29tcGF0
-aWJsZSA9ICJtZWRpYXRlayxtdDI3MTItd2R0IiwgLmRhdGEgPSAmbXQyNzEyX2RhdGEgfSwNCiAJ
-eyAuY29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdDY1ODktd2R0IiB9LA0KIAl7IC5jb21wYXRpYmxl
-ID0gIm1lZGlhdGVrLG10ODE4My13ZHQiLCAuZGF0YSA9ICZtdDgxODNfZGF0YSB9LA0KKwl7IC5j
-b21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE5Mi13ZHQiLCAuZGF0YSA9ICZtdDgxOTJfZGF0YSB9
-LA0KIAl7IC8qIHNlbnRpbmVsICovIH0NCiB9Ow0KIE1PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIG10
-a193ZHRfZHRfaWRzKTsNCi0tIA0KMS44LjEuMS5kaXJ0eQ0K
 
+
+On 29/07/2020 12:02, Crystal Guo wrote:
+> update mtk-wdt document for MT8192 platform
+
+
+should be two patches. one fixing the compatibles and second adding new board.
+
+> 
+> Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
+> ---
+>   Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> index 4dd36bd..e36ba60 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> @@ -4,14 +4,15 @@ Required properties:
+>   
+>   - compatible should contain:
+>   	"mediatek,mt2701-wdt", "mediatek,mt6589-wdt": for MT2701
+> -	"mediatek,mt2712-wdt", "mediatek,mt6589-wdt": for MT2712
+> +	"mediatek,mt2712-wdt": for MT2712
+>   	"mediatek,mt6589-wdt": for MT6589
+>   	"mediatek,mt6797-wdt", "mediatek,mt6589-wdt": for MT6797
+>   	"mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for MT7622
+>   	"mediatek,mt7623-wdt", "mediatek,mt6589-wdt": for MT7623
+>   	"mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for MT7629
+> -	"mediatek,mt8183-wdt", "mediatek,mt6589-wdt": for MT8183
+> +	"mediatek,mt8183-wdt": for MT8183
+
+We will need to update the DTSI in a seperate patch as well.
+
+>   	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
+> +	"mediatek,mt8192-wdt": for MT8192
+>   
+>   - reg : Specifies base physical address and size of the registers.
+>   
+> 
