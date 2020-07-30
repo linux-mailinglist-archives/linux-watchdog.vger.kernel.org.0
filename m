@@ -2,234 +2,162 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA35233123
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Jul 2020 13:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B773523364C
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Jul 2020 18:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726615AbgG3Lp0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 30 Jul 2020 07:45:26 -0400
-Received: from mail-ej1-f68.google.com ([209.85.218.68]:33995 "EHLO
-        mail-ej1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbgG3LpZ (ORCPT
+        id S1729091AbgG3QGw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Jul 2020 12:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727966AbgG3QGv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 30 Jul 2020 07:45:25 -0400
-Received: by mail-ej1-f68.google.com with SMTP id o23so183424ejr.1;
-        Thu, 30 Jul 2020 04:45:21 -0700 (PDT)
+        Thu, 30 Jul 2020 12:06:51 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2668C061574;
+        Thu, 30 Jul 2020 09:06:51 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id g19so1994560plq.0;
+        Thu, 30 Jul 2020 09:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GhpcKX576gNG3e6fvUmX715XzKZ/gDgDhfOPrvbZwyQ=;
+        b=YiyAL6Nc+Czgq2OXZdBrJSo5CmeqtKq6WGq7ORc73Lkl7hKETUYMoGEpTwtcjR74Qd
+         bvDmMnzPkKcau8OSK47lx4j5NLy6U2VCuNGUR/zD8cPFq05xhDibkTM3NxJ7lsj5DA0Z
+         IQHyjYhkrB7ll0ZgcIVkKXiKw840wKrbA5NNy4rBaQoghwjq9vG+5jc1UalschOk4LFO
+         DOM7LdnABr7lRDE8af3xoseYEiTkCMQvfbwLoVgXElR5WpyyRgqRk2mauKLjr8tfw8ot
+         NwptU93WrLENSU7tQl0zUxMDMuW2PwSsVcIF5kHKixM1wRsCr0aNSv3tSDKSQRrnJuX+
+         VvVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=dmIx6K39AwVClBedb7QkpR0HhfnQSCjcLCYyud3CBv4=;
-        b=iE/NNV7zTGzRl8FAj6VR0lC86+5TkKuHPVT0PK+6S57ujDEq6i/gzAo/TLibq5GDgk
-         mhqv8ki48eNvvEs5eF3y0fjigV7ScfVelG+XrE+s+Em7rLUIBSD/j6orl05YEW94xo2M
-         f+WQ/i2bnRYsgvSNrQlDcDevzJVV+sWEtGeiUjA5nM2ULVrKaTim1eN7RT0y47rQ7Lw6
-         9Y3LLs9UmCyrWG14JxKa6iB89XrdMg9lEy25RgKk8MDh7FpLa8ufAoSobr6XxzNjC+w0
-         YIGB+0aPH1VTcK74HpFGHliOjGE+WytfbLGsa7dY1/ws4kmSiAjMrjkYRkfaR3slc7+Q
-         Ybug==
-X-Gm-Message-State: AOAM5327pELRF0a+qzf1Is4t1jCgumvoERAjnk9LI3GLEyUXHLQ9flwY
-        qXAC9a7FXV2POYfSBDX0jh0=
-X-Google-Smtp-Source: ABdhPJw5Nk510vllHk10fhn8xgW3ei+PX5ztO4fQj7uiS9l3iTHjtMnKWBz5JnnoLkSsrfF2wmI07w==
-X-Received: by 2002:a17:906:6dd1:: with SMTP id j17mr2282792ejt.272.1596109521064;
-        Thu, 30 Jul 2020 04:45:21 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.213])
-        by smtp.googlemail.com with ESMTPSA id e26sm3161870edq.23.2020.07.30.04.45.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 30 Jul 2020 04:45:19 -0700 (PDT)
-Date:   Thu, 30 Jul 2020 13:45:15 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Tomasz Figa <tomasz.figa@gmail.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Kukjin Kim <kgene@kernel.org>,
-        Vincent Sanders <vince@simtec.co.uk>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:SAMSUNG SOC CLOCK DRIVERS" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        patches@opensource.cirrus.com,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Sergio Prado <sergio.prado@e-labworks.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>
-Subject: Re: [PATCH 6/7] ARM: s3c64xx: Switch to generic watchdog driver reset
-Message-ID: <20200730114515.GA20438@kozik-lap>
-References: <20200729160942.28867-1-krzk@kernel.org>
- <20200729160942.28867-7-krzk@kernel.org>
- <CA+Ln22F_PaEMNyEg4XSR0PXHTa+3dQyEvzgtnRNHMu61uZytQg@mail.gmail.com>
- <20200729191544.GB5822@kozik-lap>
- <CA+Ln22ED+-B96jf8p89sXpD2vmDLuteKXQiuKPy50vJ80MgSjA@mail.gmail.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=GhpcKX576gNG3e6fvUmX715XzKZ/gDgDhfOPrvbZwyQ=;
+        b=uGxqsPBdv6Y8ThWsDypdDiaQG9ElTydtwSPZllnnLjH/tLSEPx2f4zLOJ2CjXifNlZ
+         kOW6G/PG9yPn5LPRg40x4T1hXW2REXua5Sy/naWKunjEUwIntzHRv9cBb82HlDuKxLFx
+         GWxfJ1Rn4/8GdaP2D7FAk5JXe5cztEZsBBDT8chQ+bP5CVn8Lx6fa1bhuDACdznUGlF7
+         17MDLhCzET/D5hrlA+Ejqa+A8KJAKIdY7RAPQ0ngHBFNzRa51a2jPAfOd+72WZrTiVao
+         KsczmbHCOXTuXbp4yocjf+jE4hfGdYjPYspny//XY8tyZx97sxUXY1AVmKhEJ5WG9RjM
+         OUAA==
+X-Gm-Message-State: AOAM532IDfzR+cqgr7qosHD2e7zMTWIxNwlz1BVs+gaeJ3LnK698QxlN
+        yuMboeL6xWvVHxHoF1K4CFU=
+X-Google-Smtp-Source: ABdhPJx09HZYzOqvJSHSy9DVLGDqR2GnQ2VbF72b/27vYeEpUm5UOa7anTogbx3LYXWfeOjoTgWf0A==
+X-Received: by 2002:a65:4549:: with SMTP id x9mr34439912pgr.415.1596125211126;
+        Thu, 30 Jul 2020 09:06:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f6sm6546120pje.16.2020.07.30.09.06.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2020 09:06:50 -0700 (PDT)
+Subject: Re: [v3,5/5] watchdog: mt8192: add wdt support
+To:     Crystal Guo <crystal.guo@mediatek.com>, robh+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com
+References: <1596104510-11113-1-git-send-email-crystal.guo@mediatek.com>
+ <1596104510-11113-6-git-send-email-crystal.guo@mediatek.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <6801c0d3-323f-0e48-9433-5e74ba78057e@roeck-us.net>
+Date:   Thu, 30 Jul 2020 09:06:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <1596104510-11113-6-git-send-email-crystal.guo@mediatek.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <CA+Ln22ED+-B96jf8p89sXpD2vmDLuteKXQiuKPy50vJ80MgSjA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 01:34:38PM +0200, Tomasz Figa wrote:
-> 2020年7月29日(水) 21:15 Krzysztof Kozlowski <krzk@kernel.org>:
-> >
-> > On Wed, Jul 29, 2020 at 07:33:33PM +0200, Tomasz Figa wrote:
-> > > Hi Krzysztof,
-> > >
-> > > 2020年7月29日(水) 18:11 Krzysztof Kozlowski <krzk@kernel.org>:
-> > > >
-> > > > Similarly to commit f6361c6b3880 ("ARM: S3C24XX: remove separate restart
-> > > > code"), the platform watchdog reset code can be removed in favor of
-> > > > a generic watchdog driver which already handles reset.
-> > > >
-> > > > This allows removal of a bunch of machine code and fixes also W=1
-> > > > compile warnings:
-> > > >
-> > > >     arch/arm/plat-samsung/watchdog-reset.c:29:6: warning: no previous prototype for 'samsung_wdt_reset' [-Wmissing-prototypes]
-> > > >        29 | void samsung_wdt_reset(void)
-> > > >           |      ^~~~~~~~~~~~~~~~~
-> > > >     arch/arm/plat-samsung/watchdog-reset.c:69:13: warning: no previous prototype for 'samsung_wdt_reset_of_init' [-Wmissing-prototypes]
-> > > >        69 | void __init samsung_wdt_reset_of_init(void)
-> > > >           |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > > >     arch/arm/plat-samsung/watchdog-reset.c:89:13: warning: no previous prototype for 'samsung_wdt_reset_init' [-Wmissing-prototypes]
-> > > >        89 | void __init samsung_wdt_reset_init(void __iomem *base)
-> > > >
-> > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > > ---
-> > > >  arch/arm/mach-s3c64xx/Kconfig           |  3 +-
-> > > >  arch/arm/mach-s3c64xx/common.c          | 15 +---
-> > > >  arch/arm/mach-s3c64xx/common.h          |  2 -
-> > > >  arch/arm/mach-s3c64xx/mach-anw6410.c    |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-crag6410.c   |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-hmt.c        |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-mini6410.c   |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-ncp.c        |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-real6410.c   |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-s3c64xx-dt.c | 17 -----
-> > > >  arch/arm/mach-s3c64xx/mach-smartq5.c    |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-smartq7.c    |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-smdk6400.c   |  1 -
-> > > >  arch/arm/mach-s3c64xx/mach-smdk6410.c   |  1 -
-> > > >  arch/arm/mach-s3c64xx/watchdog-reset.h  | 16 -----
-> > > >  arch/arm/plat-samsung/Kconfig           |  6 --
-> > > >  arch/arm/plat-samsung/Makefile          |  1 -
-> > > >  arch/arm/plat-samsung/watchdog-reset.c  | 93 -------------------------
-> > > >  18 files changed, 5 insertions(+), 158 deletions(-)
-> > > >  delete mode 100644 arch/arm/mach-s3c64xx/watchdog-reset.h
-> > > >  delete mode 100644 arch/arm/plat-samsung/watchdog-reset.c
-> > > >
-> > >
-> > > Thanks for the patch! Please see my comments inline.
-> > >
-> > > > diff --git a/arch/arm/mach-s3c64xx/Kconfig b/arch/arm/mach-s3c64xx/Kconfig
-> > > > index e208c2b48853..f3fcb570edf5 100644
-> > > > --- a/arch/arm/mach-s3c64xx/Kconfig
-> > > > +++ b/arch/arm/mach-s3c64xx/Kconfig
-> > > > @@ -18,9 +18,10 @@ menuconfig ARCH_S3C64XX
-> > > >         select PM_GENERIC_DOMAINS if PM
-> > > >         select S3C_DEV_NAND if ATAGS
-> > > >         select S3C_GPIO_TRACK if ATAGS
-> > > > +       select S3C2410_WATCHDOG
-> > > >         select SAMSUNG_ATAGS if ATAGS
-> > > >         select SAMSUNG_WAKEMASK if PM
-> > > > -       select SAMSUNG_WDT_RESET
-> > > > +       select WATCHDOG
-> > > >         help
-> > > >           Samsung S3C64XX series based systems
-> > > >
-> > > > diff --git a/arch/arm/mach-s3c64xx/common.c b/arch/arm/mach-s3c64xx/common.c
-> > > > index a655bf0c7802..42e96d196f61 100644
-> > > > --- a/arch/arm/mach-s3c64xx/common.c
-> > > > +++ b/arch/arm/mach-s3c64xx/common.c
-> > > > @@ -50,7 +50,6 @@
-> > > >
-> > > >  #include "common.h"
-> > > >  #include "irq-uart.h"
-> > > > -#include "watchdog-reset.h"
-> > > >
-> > > >  /* External clock frequency */
-> > > >  static unsigned long xtal_f __ro_after_init = 12000000;
-> > > > @@ -232,10 +231,11 @@ void __init s3c64xx_init_irq(u32 vic0_valid, u32 vic1_valid)
-> > > >         /*
-> > > >          * FIXME: there is no better place to put this at the moment
-> > > >          * (s3c64xx_clk_init needs ioremap and must happen before init_time
-> > > > -        * samsung_wdt_reset_init needs clocks)
-> > > > +        * samsung_wdt_reset_init needs clocks).  However
-> > > > +        * samsung_wdt_reset_init() was removed in favor of watchdog driver
-> > > > +        * so this should be revised.
-> > >
-> > > This leaves the comment referring to an inexistent function.
-> >
-> > Yes, I left it as a reference/reason. Although might be quite confusing
-> > now...
-> >
-> > >
-> > > I wonder if this being here is actually a problem at all. It's legacy
-> > > code and probably there isn't much value in reshuffling it further.
-> > > Rather than that, we would probably want to make sure that everything
-> > > migrated to DT and just drop the board files.
-> >
-> > Maybe let's remove the FIXME and leave the clock init. Since all these
-> > times no one fixed the FIXME, so now with limited hardware access I do
-> > not expect any movements here.
-> >
+On 7/30/20 3:21 AM, Crystal Guo wrote:
+> Add support for watchdog device found in MT8192 SoC
 > 
-> I think that would be fairly uncontroversial at this point.
-> 
-> > >
-> > > >          */
-> > > >         s3c64xx_clk_init(NULL, xtal_f, xusbxti_f, soc_is_s3c6400(), S3C_VA_SYS);
-> > > > -       samsung_wdt_reset_init(S3C_VA_WATCHDOG);
-> > > >
-> > > >         printk(KERN_DEBUG "%s: initialising interrupts\n", __func__);
-> > > >
-> > > > @@ -429,12 +429,3 @@ static int __init s3c64xx_init_irq_eint(void)
-> > > >         return 0;
-> > > >  }
-> > > >  arch_initcall(s3c64xx_init_irq_eint);
-> > > > -
-> > > > -void s3c64xx_restart(enum reboot_mode mode, const char *cmd)
-> > > > -{
-> > > > -       if (mode != REBOOT_SOFT)
-> > > > -               samsung_wdt_reset();
-> > > > -
-> > > > -       /* if all else fails, or mode was for soft, jump to 0 */
-> > > > -       soft_restart(0);
-> > >
-> > > Does this remove the soft reboot capability? I'm not sure how much of
-> > > a problem that would be, though.
-> >
-> > 1. No one cared about it in f6361c6b3880 :)
-> 
-> That was a different SoC family, though.
-> 
-> > 2. Exynos does not have it
-> > 3. Does soft_restart really work? It would be worth to keep it if more
-> >    or less it was working.
-> 
-> Anyway, I guess there is no way to know other than just removing it.
-> It can be always brought back if it turns out that someone needs it.
-> Please just mention that in the commit message.
-> 
-> With that addressed:
-> 
-> Reviewed-by: Tomasz Figa <tomasz.figa@gmail.com>
+> Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Sure, I'll do it. Thanks for review.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Best regards,
-Krzysztof
+> ---
+>  drivers/watchdog/mtk_wdt.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index d6a6393..aef0c2d 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -11,6 +11,7 @@
+>  
+>  #include <dt-bindings/reset-controller/mt2712-resets.h>
+>  #include <dt-bindings/reset-controller/mt8183-resets.h>
+> +#include <dt-bindings/reset-controller/mt8192-resets.h>
+>  #include <linux/delay.h>
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+> @@ -76,6 +77,10 @@ struct mtk_wdt_data {
+>  	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
+>  };
+>  
+> +static const struct mtk_wdt_data mt8192_data = {
+> +	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
+> +};
+> +
+>  static int toprgu_reset_update(struct reset_controller_dev *rcdev,
+>  			       unsigned long id, bool assert)
+>  {
+> @@ -322,6 +327,7 @@ static int mtk_wdt_resume(struct device *dev)
+>  	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+>  	{ .compatible = "mediatek,mt6589-wdt" },
+>  	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+> +	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+>  	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
+> 
+
