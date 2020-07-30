@@ -2,118 +2,94 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7457123260A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jul 2020 22:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B903232997
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Jul 2020 03:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbgG2UQm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jul 2020 16:16:42 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:41033 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726476AbgG2UQm (ORCPT
+        id S1726287AbgG3Bfu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jul 2020 21:35:50 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:16032 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726194AbgG3Bfu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jul 2020 16:16:42 -0400
-Received: by mail-ej1-f67.google.com with SMTP id w9so25622030ejc.8;
-        Wed, 29 Jul 2020 13:16:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=G9J40aLhPUBHarAksyHrJM+WbtR3gRhMvbXXJTyIEsw=;
-        b=k2GVsKVFsPbSoZjpQ3yHGuN2nXG3JuzUeQS7q3rJbgD8wQ3i4YS9KDvXh493xZ1163
-         PCH/5gcPzeFR8WzXsUt6l2320LsIG14JQeSuv3dLC+gdwrZBomBsKhFXVyPc/sdfxJSL
-         jxVpsVBjPuSFkybl+r+EkcU+pPgKfe4Hu9EwkzghJQGdIr7uPwaaBkJuAXOAu9xgcobS
-         FzBsSUyUacvrAsYzhgfS06VdcRIBY1CTNMSelLQNy5sMDBcsbE750/GjICDAIzztoRDy
-         rvITvxUzH7lerEzbP78/kaBtzXszVmFzn7kQdiSA2e+6pLgrJnoC+QqMWC9xGsbBINi8
-         MX/Q==
-X-Gm-Message-State: AOAM531HQspdPQmKdwXRXrtihdzC1rOoTyjQmb6u41EbhI48M8ZFFVaK
-        Z0EvW5gM2LuP/3wUtw/aU/k=
-X-Google-Smtp-Source: ABdhPJz8NSZ1YgCRCp5BY64q7jD+PPCB1uyy1HQKw9M5f39sg32SzCcRfdGo1BmuaDhYo5fGcHeBew==
-X-Received: by 2002:a17:906:78e:: with SMTP id l14mr80328ejc.67.1596053799753;
-        Wed, 29 Jul 2020 13:16:39 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.213])
-        by smtp.googlemail.com with ESMTPSA id a23sm2669500eju.68.2020.07.29.13.16.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 29 Jul 2020 13:16:39 -0700 (PDT)
-Date:   Wed, 29 Jul 2020 22:16:35 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Vincent Sanders <vince@simtec.co.uk>,
-        Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-watchdog@vger.kernel.org, patches@opensource.cirrus.com,
-        Sergio Prado <sergio.prado@e-labworks.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>
-Subject: Re: [PATCH 1/7] clk: samsung: s3c64xx: Declare s3c64xx_clk_init() in
- shared header
-Message-ID: <20200729201635.GB26917@kozik-lap>
-References: <20200729160942.28867-1-krzk@kernel.org>
- <20200729160942.28867-2-krzk@kernel.org>
- <159605176358.1360974.7715120460121088439@swboyd.mtv.corp.google.com>
+        Wed, 29 Jul 2020 21:35:50 -0400
+X-UUID: 95aa0a724cb341fbb607e4a31a9b81c8-20200730
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Gf/Mo8xD23Vb19E0FPpkZ0VSoaVgKK6weloMaegtMYM=;
+        b=ixe0Z2+Ot/DWdm2oYuiS2Vx9b0YCFNpzBt1gc5TXw31ClcDHQ7Q7P/B0Fu0mc5IPjCHAjGxzXVPILGFvEaEem4hN+9BX8lL/AQzoBZo6FrcnRTuPV6vdym0p4Y1HnL6NOaLTxHyG4FvQnzg8lHhxUfvwIpRQ4ekn5jwocgbkQ84=;
+X-UUID: 95aa0a724cb341fbb607e4a31a9b81c8-20200730
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <crystal.guo@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1527585400; Thu, 30 Jul 2020 09:35:47 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs02n1.mediatek.inc
+ (172.21.101.77) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 30 Jul
+ 2020 09:35:39 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 30 Jul 2020 09:35:38 +0800
+Message-ID: <1596072913.11360.12.camel@mhfsdcap03>
+Subject: Re: [v2,1/3] dt-binding: mediatek: mt8192: update mtk-wdt document
+From:   Crystal Guo <crystal.guo@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Seiya Wang =?UTF-8?Q?=28=E7=8E=8B=E8=BF=BA=E5=90=9B=29?= 
+        <seiya.wang@mediatek.com>,
+        Erin Lo =?UTF-8?Q?=28=E7=BE=85=E9=9B=85=E9=BD=A1=29?= 
+        <erin.lo@mediatek.com>
+Date:   Thu, 30 Jul 2020 09:35:13 +0800
+In-Reply-To: <c6ea8852-0381-0924-185e-083ea167f8fa@gmail.com>
+References: <1596016922-13184-1-git-send-email-crystal.guo@mediatek.com>
+         <1596016922-13184-2-git-send-email-crystal.guo@mediatek.com>
+         <c6ea8852-0381-0924-185e-083ea167f8fa@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <159605176358.1360974.7715120460121088439@swboyd.mtv.corp.google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 12:42:43PM -0700, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2020-07-29 09:09:36)
-> > diff --git a/include/linux/clk/samsung.h b/include/linux/clk/samsung.h
-> > new file mode 100644
-> > index 000000000000..b6b253c46c22
-> > --- /dev/null
-> > +++ b/include/linux/clk/samsung.h
-> > @@ -0,0 +1,21 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (c) 2020 Krzysztof Kozlowski <krzk@kernel.org>
-> > + */
-> > +
-> > +#ifndef __LINUX_CLK_SAMSUNG_H_
-> > +#define __LINUX_CLK_SAMSUNG_H_
-> > +
-> > +#ifdef CONFIG_ARCH_S3C64XX
-> > +void __init s3c64xx_clk_init(struct device_node *np, unsigned long xtal_f,
-> 
-> Don't use __init in header files. It doesn't do anything.
-> 
-> > +                            unsigned long xusbxti_f, bool s3c6400,
-> > +                            void __iomem *base);
-> > +#else
-> > +static inline void __init s3c64xx_clk_init(struct device_node *np,
-> 
-> Forward declare struct device_node;
-> 
-> > +                                          unsigned long xtal_f,
-> > +                                          unsigned long xusbxti_f,
-> > +                                          bool s3c6400,
-> > +                                          void __iomem *base) { }
-> 
-> Include <linux/compiler.h> (or compiler_types.h) for __iomem define
-> please.
-
-Thanks for the feedback. I'll send v2.
-
-Best regards,
-Krzysztof
+T24gV2VkLCAyMDIwLTA3LTI5IGF0IDE4OjE4ICswODAwLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3Rl
+Og0KPiANCj4gT24gMjkvMDcvMjAyMCAxMjowMiwgQ3J5c3RhbCBHdW8gd3JvdGU6DQo+ID4gdXBk
+YXRlIG10ay13ZHQgZG9jdW1lbnQgZm9yIE1UODE5MiBwbGF0Zm9ybQ0KPiANCj4gDQo+IHNob3Vs
+ZCBiZSB0d28gcGF0Y2hlcy4gb25lIGZpeGluZyB0aGUgY29tcGF0aWJsZXMgYW5kIHNlY29uZCBh
+ZGRpbmcgbmV3IGJvYXJkLg0KPiANCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBDcnlzdGFsIEd1
+byA8Y3J5c3RhbC5ndW9AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAgRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210ay13ZHQudHh0IHwgNSArKystLQ0KPiA+
+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gPiAN
+Cj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNo
+ZG9nL210ay13ZHQudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNo
+ZG9nL210ay13ZHQudHh0DQo+ID4gaW5kZXggNGRkMzZiZC4uZTM2YmE2MCAxMDA2NDQNCj4gPiAt
+LS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50
+eHQNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cv
+bXRrLXdkdC50eHQNCj4gPiBAQCAtNCwxNCArNCwxNSBAQCBSZXF1aXJlZCBwcm9wZXJ0aWVzOg0K
+PiA+ICAgDQo+ID4gICAtIGNvbXBhdGlibGUgc2hvdWxkIGNvbnRhaW46DQo+ID4gICAJIm1lZGlh
+dGVrLG10MjcwMS13ZHQiLCAibWVkaWF0ZWssbXQ2NTg5LXdkdCI6IGZvciBNVDI3MDENCj4gPiAt
+CSJtZWRpYXRlayxtdDI3MTItd2R0IiwgIm1lZGlhdGVrLG10NjU4OS13ZHQiOiBmb3IgTVQyNzEy
+DQo+ID4gKwkibWVkaWF0ZWssbXQyNzEyLXdkdCI6IGZvciBNVDI3MTINCj4gPiAgIAkibWVkaWF0
+ZWssbXQ2NTg5LXdkdCI6IGZvciBNVDY1ODkNCj4gPiAgIAkibWVkaWF0ZWssbXQ2Nzk3LXdkdCIs
+ICJtZWRpYXRlayxtdDY1ODktd2R0IjogZm9yIE1UNjc5Nw0KPiA+ICAgCSJtZWRpYXRlayxtdDc2
+MjItd2R0IiwgIm1lZGlhdGVrLG10NjU4OS13ZHQiOiBmb3IgTVQ3NjIyDQo+ID4gICAJIm1lZGlh
+dGVrLG10NzYyMy13ZHQiLCAibWVkaWF0ZWssbXQ2NTg5LXdkdCI6IGZvciBNVDc2MjMNCj4gPiAg
+IAkibWVkaWF0ZWssbXQ3NjI5LXdkdCIsICJtZWRpYXRlayxtdDY1ODktd2R0IjogZm9yIE1UNzYy
+OQ0KPiA+IC0JIm1lZGlhdGVrLG10ODE4My13ZHQiLCAibWVkaWF0ZWssbXQ2NTg5LXdkdCI6IGZv
+ciBNVDgxODMNCj4gPiArCSJtZWRpYXRlayxtdDgxODMtd2R0IjogZm9yIE1UODE4Mw0KPiANCj4g
+V2Ugd2lsbCBuZWVkIHRvIHVwZGF0ZSB0aGUgRFRTSSBpbiBhIHNlcGVyYXRlIHBhdGNoIGFzIHdl
+bGwuDQoNClllcywgdGhpcyBwYXRjaCBpcyBiYXNlZCBvbg0KaHR0cHM6Ly9wYXRjaHdvcmsua2Vy
+bmVsLm9yZy9wYXRjaC8xMTY5MDQwMS8gLCB3aGljaCBtb2RpZnkgZGVzY3JpcHRpb24NCmZvciBt
+dDI3MTIgYW5kIG10ODE4My4NCg0KPiANCj4gPiAgIAkibWVkaWF0ZWssbXQ4NTE2LXdkdCIsICJt
+ZWRpYXRlayxtdDY1ODktd2R0IjogZm9yIE1UODUxNg0KPiA+ICsJIm1lZGlhdGVrLG10ODE5Mi13
+ZHQiOiBmb3IgTVQ4MTkyDQo+ID4gICANCj4gPiAgIC0gcmVnIDogU3BlY2lmaWVzIGJhc2UgcGh5
+c2ljYWwgYWRkcmVzcyBhbmQgc2l6ZSBvZiB0aGUgcmVnaXN0ZXJzLg0KPiA+ICAgDQo+ID4gDQoN
+Cg==
 
