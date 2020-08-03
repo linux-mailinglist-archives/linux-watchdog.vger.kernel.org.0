@@ -2,31 +2,31 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE2923A026
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Aug 2020 09:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5893323A02B
+	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Aug 2020 09:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgHCHPy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 3 Aug 2020 03:15:54 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:55066 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725855AbgHCHPx (ORCPT
+        id S1726243AbgHCHQA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 3 Aug 2020 03:16:00 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:39511 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726125AbgHCHPz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 3 Aug 2020 03:15:53 -0400
-X-UUID: 83db4d96e74947709a2fa7bc6fea14ae-20200803
+        Mon, 3 Aug 2020 03:15:55 -0400
+X-UUID: da9ff929f236497985a6641e3534a480-20200803
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=V0XHyqq4D13l/tJUvNmzHj4e1uk9k7au8T5F6+FRuGc=;
-        b=JKqzL3gWm3iwjR1uZRSksSFpivJJIglj7ZN9gk8INWxZjxFes7PSiyX/FlPlpiZpf2xkTbrVuLAJd0YELfiGubcXwlRbOlqB2DO8ZjvwzA3eoHphgaM6Dm8lWaA3L7UD6eO2niCEutg54hRzoAj7Ug8selPNG+5UbWZMuwMZ8yg=;
-X-UUID: 83db4d96e74947709a2fa7bc6fea14ae-20200803
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=CNroCAZ0RL2N4ZfavyHWU/kNJ5us1mqnMHLPTgRxTSI=;
+        b=M0gif7lQTTZI2Kps5e9YXK+h5ChG3QBhzNG+n2X8uOG/5ggKCkI40KJ3gcXGaae+25iZyevPHqkTXF+nVNsD2m7ktid1gZ1vqbzkzH6uJ8woUO9hIi0RoY05WWU3TeXQw8a4Qd6ZIpYUaFmiiPCXA1JRuMypvZR2cIBIx7W3d6c=;
+X-UUID: da9ff929f236497985a6641e3534a480-20200803
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <crystal.guo@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1357255327; Mon, 03 Aug 2020 15:15:49 +0800
+        with ESMTP id 1374218471; Mon, 03 Aug 2020 15:15:51 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 3 Aug 2020 15:15:46 +0800
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 3 Aug 2020 15:15:47 +0800
 Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 3 Aug 2020 15:15:46 +0800
+ Transport; Mon, 3 Aug 2020 15:15:47 +0800
 From:   Crystal Guo <crystal.guo@mediatek.com>
 To:     <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <matthias.bgg@gmail.com>
@@ -35,14 +35,15 @@ CC:     <srv_heupstream@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
         <seiya.wang@mediatek.com>, Crystal Guo <crystal.guo@mediatek.com>
-Subject: [v4,3/5] dt-binding: mediatek: mt8192: update mtk-wdt document
-Date:   Mon, 3 Aug 2020 15:14:59 +0800
-Message-ID: <20200803071501.30634-4-crystal.guo@mediatek.com>
+Subject: [v4,4/5] dt-binding: mt8192: add toprgu reset-controller head file
+Date:   Mon, 3 Aug 2020 15:15:00 +0800
+Message-ID: <20200803071501.30634-5-crystal.guo@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20200803071501.30634-1-crystal.guo@mediatek.com>
 References: <20200803071501.30634-1-crystal.guo@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-TM-SNTS-SMTP: CC8ACE99E7C3A2203BB499DE3F720B05598A06C197EC599126E29BFB8327004D2000:8
 X-MTK:  N
 Content-Transfer-Encoding: base64
 Sender: linux-watchdog-owner@vger.kernel.org
@@ -50,21 +51,34 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-dXBkYXRlIG10ay13ZHQgZG9jdW1lbnQgZm9yIE1UODE5MiBwbGF0Zm9ybQ0KDQpTaWduZWQtb2Zm
-LWJ5OiBDcnlzdGFsIEd1byA8Y3J5c3RhbC5ndW9AbWVkaWF0ZWsuY29tPg0KUmV2aWV3ZWQtYnk6
-IE1hdHRoaWFzIEJydWdnZXIgPG1hdHRoaWFzLmJnZ0BnbWFpbC5jb20+DQpSZXZpZXdlZC1ieTog
-R3VlbnRlciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0Pg0KLS0tDQogRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210ay13ZHQudHh0IHwgMSArDQogMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspDQoNCmRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2Rldmlj
-ZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQgYi9Eb2N1bWVudGF0aW9uL2Rldmlj
-ZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQNCmluZGV4IDQ1ZWVkYzJjMzE0MS4u
-ZTM2YmE2MGRlODI5IDEwMDY0NA0KLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL3dhdGNoZG9nL210ay13ZHQudHh0DQorKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUv
-YmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQNCkBAIC0xMiw2ICsxMiw3IEBAIFJlcXVpcmVk
-IHByb3BlcnRpZXM6DQogCSJtZWRpYXRlayxtdDc2Mjktd2R0IiwgIm1lZGlhdGVrLG10NjU4OS13
-ZHQiOiBmb3IgTVQ3NjI5DQogCSJtZWRpYXRlayxtdDgxODMtd2R0IjogZm9yIE1UODE4Mw0KIAki
-bWVkaWF0ZWssbXQ4NTE2LXdkdCIsICJtZWRpYXRlayxtdDY1ODktd2R0IjogZm9yIE1UODUxNg0K
-KwkibWVkaWF0ZWssbXQ4MTkyLXdkdCI6IGZvciBNVDgxOTINCiANCiAtIHJlZyA6IFNwZWNpZmll
-cyBiYXNlIHBoeXNpY2FsIGFkZHJlc3MgYW5kIHNpemUgb2YgdGhlIHJlZ2lzdGVycy4NCiANCi0t
-IA0KMi4xOC4wDQo=
+YWRkIHRvcHJndSByZXNldC1jb250cm9sbGVyIGhlYWQgZmlsZSBmb3IgTVQ4MTkyIHBsYXRmb3Jt
+DQoNClNpZ25lZC1vZmYtYnk6IENyeXN0YWwgR3VvIDxjcnlzdGFsLmd1b0BtZWRpYXRlay5jb20+
+DQpSZXZpZXdlZC1ieTogTWF0dGhpYXMgQnJ1Z2dlciA8bWF0dGhpYXMuYmdnQGdtYWlsLmNvbT4N
+Ci0tLQ0KIC4uLi9yZXNldC1jb250cm9sbGVyL210ODE5Mi1yZXNldHMuaCAgICAgICAgICB8IDMw
+ICsrKysrKysrKysrKysrKysrKysNCiAxIGZpbGUgY2hhbmdlZCwgMzAgaW5zZXJ0aW9ucygrKQ0K
+IGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0LWNvbnRyb2xsZXIv
+bXQ4MTkyLXJlc2V0cy5oDQoNCmRpZmYgLS1naXQgYS9pbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0
+LWNvbnRyb2xsZXIvbXQ4MTkyLXJlc2V0cy5oIGIvaW5jbHVkZS9kdC1iaW5kaW5ncy9yZXNldC1j
+b250cm9sbGVyL210ODE5Mi1yZXNldHMuaA0KbmV3IGZpbGUgbW9kZSAxMDA2NDQNCmluZGV4IDAw
+MDAwMDAwMDAwMC4uODRmZWUzNGYxYzMyDQotLS0gL2Rldi9udWxsDQorKysgYi9pbmNsdWRlL2R0
+LWJpbmRpbmdzL3Jlc2V0LWNvbnRyb2xsZXIvbXQ4MTkyLXJlc2V0cy5oDQpAQCAtMCwwICsxLDMw
+IEBADQorLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAgKi8NCisvKg0KKyAqIENv
+cHlyaWdodCAoYykgMjAyMCBNZWRpYVRlayBJbmMuDQorICogQXV0aG9yOiBZb25nIExpYW5nIDx5
+b25nLmxpYW5nQG1lZGlhdGVrLmNvbT4NCisgKi8NCisNCisjaWZuZGVmIF9EVF9CSU5ESU5HU19S
+RVNFVF9DT05UUk9MTEVSX01UODE5Mg0KKyNkZWZpbmUgX0RUX0JJTkRJTkdTX1JFU0VUX0NPTlRS
+T0xMRVJfTVQ4MTkyDQorDQorI2RlZmluZSBNVDgxODNfVE9QUkdVX01NX1NXX1JTVAkJCQkJMQ0K
+KyNkZWZpbmUgTVQ4MTgzX1RPUFJHVV9NRkdfU1dfUlNUCQkJCTINCisjZGVmaW5lIE1UODE4M19U
+T1BSR1VfVkVOQ19TV19SU1QJCQkJMw0KKyNkZWZpbmUgTVQ4MTgzX1RPUFJHVV9WREVDX1NXX1JT
+VAkJCQk0DQorI2RlZmluZSBNVDgxODNfVE9QUkdVX0lNR19TV19SU1QJCQkJNQ0KKyNkZWZpbmUg
+TVQ4MTgzX1RPUFJHVV9NRF9TV19SU1QJCQkJCTcNCisjZGVmaW5lIE1UODE4M19UT1BSR1VfQ09O
+Tl9TV19SU1QJCQkJOQ0KKyNkZWZpbmUgTVQ4MTgzX1RPUFJHVV9DT05OX01DVV9TV19SU1QJCQkx
+Mg0KKyNkZWZpbmUgTVQ4MTgzX1RPUFJHVV9JUFUwX1NXX1JTVAkJCQkxNA0KKyNkZWZpbmUgTVQ4
+MTgzX1RPUFJHVV9JUFUxX1NXX1JTVAkJCQkxNQ0KKyNkZWZpbmUgTVQ4MTgzX1RPUFJHVV9BVURJ
+T19TV19SU1QJCQkJMTcNCisjZGVmaW5lIE1UODE4M19UT1BSR1VfQ0FNU1lTX1NXX1JTVAkJCQkx
+OA0KKyNkZWZpbmUgTVQ4MTkyX1RPUFJHVV9NSkNfU1dfUlNUCQkJCTE5DQorI2RlZmluZSBNVDgx
+OTJfVE9QUkdVX0MyS19TMl9TV19SU1QJCQkJMjANCisjZGVmaW5lIE1UODE5Ml9UT1BSR1VfQzJL
+X1NXX1JTVAkJCQkyMQ0KKyNkZWZpbmUgTVQ4MTkyX1RPUFJHVV9QRVJJX1NXX1JTVAkJCQkyMg0K
+KyNkZWZpbmUgTVQ4MTkyX1RPUFJHVV9QRVJJX0FPX1NXX1JTVAkJCTIzDQorDQorI2RlZmluZSBN
+VDgxOTJfVE9QUkdVX1NXX1JTVF9OVU0JCQkJMjMNCisNCisjZW5kaWYgIC8qIF9EVF9CSU5ESU5H
+U19SRVNFVF9DT05UUk9MTEVSX01UODE5MiAqLw0KLS0gDQoyLjE4LjANCg==
 
