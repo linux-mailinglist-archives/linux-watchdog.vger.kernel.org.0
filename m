@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31ABA23BFE1
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Aug 2020 21:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F5223BFE8
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Aug 2020 21:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgHDT2P (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Aug 2020 15:28:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40490 "EHLO mail.kernel.org"
+        id S1728264AbgHDT2W (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Aug 2020 15:28:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40632 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726360AbgHDT2P (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Aug 2020 15:28:15 -0400
+        id S1727124AbgHDT2V (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 4 Aug 2020 15:28:21 -0400
 Received: from localhost.localdomain (unknown [194.230.155.117])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9FCAF22CA0;
-        Tue,  4 Aug 2020 19:28:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A4A7522B42;
+        Tue,  4 Aug 2020 19:28:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596569295;
-        bh=jL0qvrIWZbUG6iyW2+vlFy/rDnA34eVXXUTdLk1dH1A=;
+        s=default; t=1596569300;
+        bh=V/XnlICubaqSdGc/oVbL46LdDLz8pa5t8bkW3kyzvAw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pi6SY3SUL0/7MiBZt2jitKAi1avA9Ai19KAHIvMhbgLFqULvT289Do353HeEsuRh6
-         nsv65LJBKJWxFTWhwiuouhQPd+G+pGvQC7nFahhlxqCDGq1MHshl7MZy74rQCpKrGu
-         As6mppldhxYGAaF8gcuispWPEDInceuejaQ2thpA=
+        b=Lp9rL0QjqRmYlIilySHlm+OoQDEI75KLDagAujimB4X5nPwr0UaaeJ6sjYLcWMK17
+         3t4IEKW+3btM8obpbEi9ukBNEMuaAJUPGQMAu2HhgpAH5jg4iGRagtO/Xrcjexguxv
+         WN1no2xHHDDPeAIK+u5eOw/tw5DT10EFnlds4Aw0=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Russell King <linux@armlinux.org.uk>,
         Kukjin Kim <kgene@kernel.org>,
@@ -50,9 +50,9 @@ Cc:     Sergio Prado <sergio.prado@e-labworks.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Sylwester Nawrocki <snawrocki@kernel.org>,
         Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>
-Subject: [PATCH v2 09/13] ARM: s3c24xx: include common.h header in s3c2443.c
-Date:   Tue,  4 Aug 2020 21:26:50 +0200
-Message-Id: <20200804192654.12783-10-krzk@kernel.org>
+Subject: [PATCH v2 10/13] ARM: s3c24xx: sdhci: include plat/sdhci.h header
+Date:   Tue,  4 Aug 2020 21:26:51 +0200
+Message-Id: <20200804192654.12783-11-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200804192654.12783-1-krzk@kernel.org>
 References: <20200804192654.12783-1-krzk@kernel.org>
@@ -61,15 +61,13 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Include common.h header in the s3c2443.c to bring the prototypes of
+Include plat/sdhci.h header in the sdhci code to bring the prototypes of
 defined functions and fix W=1 compile warnings:
 
-    arch/arm/mach-s3c24xx/s3c2443.c:60:12: warning: no previous prototype for 's3c2443_init' [-Wmissing-prototypes]
-       60 | int __init s3c2443_init(void)
-    arch/arm/mach-s3c24xx/s3c2443.c:77:13: warning: no previous prototype for 's3c2443_init_uarts' [-Wmissing-prototypes]
-       77 | void __init s3c2443_init_uarts(struct s3c2410_uartcfg *cfg, int no)
-    arch/arm/mach-s3c24xx/s3c2443.c:88:13: warning: no previous prototype for 's3c2443_map_io' [-Wmissing-prototypes]
-       88 | void __init s3c2443_map_io(void)
+    arch/arm/mach-s3c24xx/setup-sdhci-gpio.c:21:6: warning: no previous prototype for 's3c2416_setup_sdhci0_cfg_gpio' [-Wmissing-prototypes]
+       21 | void s3c2416_setup_sdhci0_cfg_gpio(struct platform_device *dev, int width)
+    arch/arm/mach-s3c24xx/setup-sdhci-gpio.c:26:6: warning: no previous prototype for 's3c2416_setup_sdhci1_cfg_gpio' [-Wmissing-prototypes]
+       26 | void s3c2416_setup_sdhci1_cfg_gpio(struct platform_device *dev, int width)
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
@@ -78,21 +76,21 @@ Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 Changes since v1:
 1. New patch
 ---
- arch/arm/mach-s3c24xx/s3c2443.c | 1 +
+ arch/arm/mach-s3c24xx/setup-sdhci-gpio.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/mach-s3c24xx/s3c2443.c b/arch/arm/mach-s3c24xx/s3c2443.c
-index 4cbeb74cf3d6..c278cfc10ba5 100644
---- a/arch/arm/mach-s3c24xx/s3c2443.c
-+++ b/arch/arm/mach-s3c24xx/s3c2443.c
-@@ -38,6 +38,7 @@
- #include <plat/cpu.h>
- #include <plat/adc-core.h>
+diff --git a/arch/arm/mach-s3c24xx/setup-sdhci-gpio.c b/arch/arm/mach-s3c24xx/setup-sdhci-gpio.c
+index 218346a36d1e..ff5c0a51ded5 100644
+--- a/arch/arm/mach-s3c24xx/setup-sdhci-gpio.c
++++ b/arch/arm/mach-s3c24xx/setup-sdhci-gpio.c
+@@ -17,6 +17,7 @@
+ #include <mach/regs-gpio.h>
+ #include <mach/gpio-samsung.h>
+ #include <plat/gpio-cfg.h>
++#include <plat/sdhci.h>
  
-+#include "common.h"
- #include "fb-core.h"
- #include "nand-core.h"
- #include "spi-core.h"
+ void s3c2416_setup_sdhci0_cfg_gpio(struct platform_device *dev, int width)
+ {
 -- 
 2.17.1
 
