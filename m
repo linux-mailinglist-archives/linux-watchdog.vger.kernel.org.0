@@ -2,123 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E558623A1F3
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Aug 2020 11:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F54023B613
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Aug 2020 09:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726823AbgHCJm4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 3 Aug 2020 05:42:56 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:44577 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbgHCJmq (ORCPT
+        id S1726233AbgHDHw2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Aug 2020 03:52:28 -0400
+Received: from lx0001.riocuarto.gov.ar ([181.15.158.195]:34666 "EHLO
+        lx0001.riocuarto.gov.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726198AbgHDHw1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 3 Aug 2020 05:42:46 -0400
-Received: from mwalle01.sab.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 7A60C23E52;
-        Mon,  3 Aug 2020 11:42:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1596447764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FD8R5v259HaQ4ECWV5Hx71Eg8JRggizA9m7r3kudZP4=;
-        b=TPjWWO7r5Q2P+dXWzXXQAkTIpjA5yZN/oRCvpH/AqwSYO3d8VDVCB8IamtAENaVvvXx2jK
-        83Y3il/alxlqIl84wV0N1cgpSA5/kg3ASuFQXZ1Lt5CcAHNr8+bRgQ9f45GOZcLrd0+QbO
-        gllT5Fc4FdNCugBca9Ojv9fYLbUMLHg=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v7 13/13] arm64: defconfig: enable the sl28cpld board management controller
-Date:   Mon,  3 Aug 2020 11:35:59 +0200
-Message-Id: <20200803093559.12289-14-michael@walle.cc>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200803093559.12289-1-michael@walle.cc>
-References: <20200803093559.12289-1-michael@walle.cc>
+        Tue, 4 Aug 2020 03:52:27 -0400
+X-Greylist: delayed 2011 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Aug 2020 03:52:26 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.riocuarto.gov.ar (Postfix) with ESMTP id 3B5A7606E7A54;
+        Tue,  4 Aug 2020 03:54:46 -0300 (-03)
+Received: from lx0001.riocuarto.gov.ar ([127.0.0.1])
+        by localhost (zimbra.riocuarto.gov.ar [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id n9GP8UNlaz7y; Tue,  4 Aug 2020 03:54:45 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.riocuarto.gov.ar (Postfix) with ESMTP id 0A72D606E7A5C;
+        Tue,  4 Aug 2020 03:54:44 -0300 (-03)
+X-Virus-Scanned: amavisd-new at riocuarto.gov.ar
+Received: from lx0001.riocuarto.gov.ar ([127.0.0.1])
+        by localhost (zimbra.riocuarto.gov.ar [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QAJ_2RmBh6MN; Tue,  4 Aug 2020 03:54:43 -0300 (-03)
+Received: from zimbra.riocuarto.gov.ar (localhost [127.0.0.1])
+        by zimbra.riocuarto.gov.ar (Postfix) with ESMTP id 1641A606E7A4B;
+        Tue,  4 Aug 2020 03:54:41 -0300 (-03)
+Date:   Tue, 4 Aug 2020 03:54:41 -0300 (ART)
+From:   Jorge Meroni <jmeroni@riocuarto.gov.ar>
+Reply-To: DANIEL MADRE <danielsmadre6@gmail.com>
+Message-ID: <450903157.1407904.1596524081044.JavaMail.zimbra@riocuarto.gov.ar>
+Subject: SPENDE
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [105.9.103.250]
+X-Mailer: Zimbra 8.8.15_GA_3918 (zclient/8.8.15_GA_3918)
+Thread-Index: NYlVZQFgGjMoA+bIXKoUFv3VgwLJbA==
+Thread-Topic: SPENDE
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Enable the kernel modules for the board management controller "sl28cpld"
-which is used on the SMARC-sAL28 board.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-Changes since v6:
- - none
 
-Changes since v5:
- - new patch
-
- arch/arm64/configs/defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 500b782b92df..dd1a8b9856b5 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -500,6 +500,7 @@ CONFIG_GPIO_PCA953X=y
- CONFIG_GPIO_PCA953X_IRQ=y
- CONFIG_GPIO_BD9571MWV=m
- CONFIG_GPIO_MAX77620=y
-+CONFIG_GPIO_SL28CPLD=m
- CONFIG_POWER_AVS=y
- CONFIG_QCOM_CPR=y
- CONFIG_ROCKCHIP_IODOMAIN=y
-@@ -513,6 +514,7 @@ CONFIG_SENSORS_ARM_SCPI=y
- CONFIG_SENSORS_LM90=m
- CONFIG_SENSORS_PWM_FAN=m
- CONFIG_SENSORS_RASPBERRYPI_HWMON=m
-+CONFIG_SENSORS_SL28CPLD=m
- CONFIG_SENSORS_INA2XX=m
- CONFIG_SENSORS_INA3221=m
- CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
-@@ -535,6 +537,7 @@ CONFIG_QCOM_TSENS=y
- CONFIG_QCOM_SPMI_TEMP_ALARM=m
- CONFIG_UNIPHIER_THERMAL=y
- CONFIG_WATCHDOG=y
-+CONFIG_SL28CPLD_WATCHDOG=m
- CONFIG_ARM_SP805_WATCHDOG=y
- CONFIG_ARM_SBSA_WATCHDOG=y
- CONFIG_ARM_SMC_WATCHDOG=y
-@@ -935,8 +938,10 @@ CONFIG_PWM_MESON=m
- CONFIG_PWM_RCAR=m
- CONFIG_PWM_ROCKCHIP=y
- CONFIG_PWM_SAMSUNG=y
-+CONFIG_PWM_SL28CPLD=m
- CONFIG_PWM_SUN4I=m
- CONFIG_PWM_TEGRA=m
-+CONFIG_SL28CPLD_INTC=y
- CONFIG_QCOM_PDC=y
- CONFIG_RESET_QCOM_AOSS=y
- CONFIG_RESET_QCOM_PDC=m
--- 
-2.20.1
-
+Ich habe eine Spende von 5,5 Millionen Euro für Sie. Bitte antworten Sie.
