@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D95F23BFB8
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Aug 2020 21:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449A823BFBB
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Aug 2020 21:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbgHDT1W (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Aug 2020 15:27:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39638 "EHLO mail.kernel.org"
+        id S1727064AbgHDT12 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Aug 2020 15:27:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726027AbgHDT1W (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Aug 2020 15:27:22 -0400
+        id S1726027AbgHDT12 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 4 Aug 2020 15:27:28 -0400
 Received: from localhost.localdomain (unknown [194.230.155.117])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 45AA522B42;
-        Tue,  4 Aug 2020 19:27:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE01322CB1;
+        Tue,  4 Aug 2020 19:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596569241;
-        bh=T7vK95m658FiqBZzoh7EYBskLGic2GgHyDK417xvIz8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Fk0ASglsqZU4iDkOd19jKtB/jO6vAgnJ1HNi0VGPnDRyiCwEMjKrbA8TnKNVlyF7H
-         EgpSvGJqOSnYE7jdajxr5glShUT7YSWFapyRBFQK03WfoVAO0EYNAKvlJxLfw+SLQ3
-         MsBwwqZNm/jlGjchCk1+wUHsY46lX8ggZsBMfk5Q=
+        s=default; t=1596569247;
+        bh=uWBhjP6cYA/GkdxQt1ojbTAvgXvjD+ztYBpbG25q+ds=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=s07+Z3tHcqZckXKO3mhC0hZgUPLNucom00ju7a8rVeNOZn8mXRQr9bY87ZJqDHLEu
+         Bfvv/aM2aeQ7bpaAulkXNgXFJ2Oqrb2SejSwWx4ECafc74kXO0q+zKvbRvCDC1BmPh
+         5YXKDNikOq7NqNR1Afcl0zZVW89JH8eMf9LetyUY=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Russell King <linux@armlinux.org.uk>,
         Kukjin Kim <kgene@kernel.org>,
@@ -50,122 +50,122 @@ Cc:     Sergio Prado <sergio.prado@e-labworks.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Sylwester Nawrocki <snawrocki@kernel.org>,
         Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>
-Subject: [PATCH v2 00/13] clk/watchdog/ARM: Cleanup of various S3C bits
-Date:   Tue,  4 Aug 2020 21:26:41 +0200
-Message-Id: <20200804192654.12783-1-krzk@kernel.org>
+Subject: [PATCH v2 01/13] clk: samsung: s3c64xx: declare s3c64xx_clk_init() in shared header
+Date:   Tue,  4 Aug 2020 21:26:42 +0200
+Message-Id: <20200804192654.12783-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200804192654.12783-1-krzk@kernel.org>
+References: <20200804192654.12783-1-krzk@kernel.org>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+The s3c64xx_clk_init() is defined and used by the clk-s3c64xx driver and
+also used in the mach-s3c64xx machine code.  Move the declaration to a
+header to fix W=1 build warning:
 
-I tried to cleanup few warnings in S3C machine code which lead to
-finding some bigger issues.
+    drivers/clk/samsung/clk-s3c64xx.c:391:13: warning: no previous prototype for 's3c64xx_clk_init' [-Wmissing-prototypes]
+      391 | void __init s3c64xx_clk_init(struct device_node *np, unsigned long xtal_f,
 
-The patchset touches clk and watchdog trees. I would appreciate acks so
-I can take everything through Samsung SoC tree. I have later a bigger
-set which would create conflicts with it [1].
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Reviewed-by: Tomasz Figa <tomasz.figa@gmail.com>
 
+---
 
 Changes since v1:
-1. Few new patches,
-2. Addressed review around clk and watchdog changes (see change logs in
-   individual patches).
-
-
-[1] v2 of Arnd's work for making S3C24xx multiplatform:
-https://github.com/krzk/linux/tree/for-next/s3c-multiplatform-cleanup-w1-warnings-v2
-
-Best regards,
-Krzysztof
-
-
-Krzysztof Kozlowski (13):
-  clk: samsung: s3c64xx: declare s3c64xx_clk_init() in shared header
-  clk: samsung: s3c24xx: declare s3c24xx_common_clk_init() in shared
-    header
-  ARM: s3c64xx: include header to fix -Wmissing-prototypes
-  ARM: s3c: remove plat-samsung/.../samsung-time.h
-  ARM: samsung: fix language typo
-  ARM: samsung: remove HAVE_S3C2410_WATCHDOG and use direct dependencies
-  ARM: s3c64xx: switch to generic watchdog driver reset
-  ARM: s3c24xx: fix missing system reset
-  ARM: s3c24xx: include common.h header in s3c2443.c
-  ARM: s3c24xx: sdhci: include plat/sdhci.h header
-  ARM: s3c24xx: ts: include platform data header
-  ARM: s3c24xx: ts: document function argument
-  ARM: s3c24xx: camif: include header with prototypes and unify
-    declaration
-
- MAINTAINERS                                   |  1 +
- arch/arm/Kconfig                              |  3 +-
- arch/arm/mach-exynos/Kconfig                  |  1 -
- arch/arm/mach-s3c24xx/common.c                |  1 +
- arch/arm/mach-s3c24xx/common.h                | 25 +++--
- arch/arm/mach-s3c24xx/mach-amlm5900.c         |  2 -
- arch/arm/mach-s3c24xx/mach-anubis.c           |  1 -
- arch/arm/mach-s3c24xx/mach-at2440evb.c        |  1 -
- arch/arm/mach-s3c24xx/mach-bast.c             |  1 -
- arch/arm/mach-s3c24xx/mach-gta02.c            |  1 -
- arch/arm/mach-s3c24xx/mach-h1940.c            |  1 -
- arch/arm/mach-s3c24xx/mach-jive.c             |  1 -
- arch/arm/mach-s3c24xx/mach-mini2440.c         |  1 -
- arch/arm/mach-s3c24xx/mach-n30.c              |  1 -
- arch/arm/mach-s3c24xx/mach-nexcoder.c         |  1 -
- arch/arm/mach-s3c24xx/mach-osiris.c           |  1 -
- arch/arm/mach-s3c24xx/mach-otom.c             |  1 -
- arch/arm/mach-s3c24xx/mach-qt2410.c           |  1 -
- arch/arm/mach-s3c24xx/mach-rx1950.c           |  1 -
- arch/arm/mach-s3c24xx/mach-rx3715.c           |  1 -
- arch/arm/mach-s3c24xx/mach-smdk2410.c         |  1 -
- arch/arm/mach-s3c24xx/mach-smdk2413.c         |  1 -
- arch/arm/mach-s3c24xx/mach-smdk2416.c         |  1 -
- arch/arm/mach-s3c24xx/mach-smdk2440.c         |  1 -
- arch/arm/mach-s3c24xx/mach-smdk2443.c         |  1 -
- arch/arm/mach-s3c24xx/mach-tct_hammer.c       |  1 -
- arch/arm/mach-s3c24xx/mach-vr1000.c           |  1 -
- arch/arm/mach-s3c24xx/mach-vstms.c            |  1 -
- arch/arm/mach-s3c24xx/s3c2443.c               |  1 +
- arch/arm/mach-s3c24xx/setup-camif.c           |  5 +-
- arch/arm/mach-s3c24xx/setup-sdhci-gpio.c      |  1 +
- arch/arm/mach-s3c24xx/setup-ts.c              |  3 +
- arch/arm/mach-s3c64xx/Kconfig                 |  5 +-
- arch/arm/mach-s3c64xx/common.c                | 17 +---
- arch/arm/mach-s3c64xx/common.h                | 17 +++-
- arch/arm/mach-s3c64xx/mach-anw6410.c          |  2 -
- arch/arm/mach-s3c64xx/mach-crag6410.c         |  2 -
- arch/arm/mach-s3c64xx/mach-hmt.c              |  2 -
- arch/arm/mach-s3c64xx/mach-mini6410.c         |  2 -
- arch/arm/mach-s3c64xx/mach-ncp.c              |  2 -
- arch/arm/mach-s3c64xx/mach-real6410.c         |  2 -
- arch/arm/mach-s3c64xx/mach-s3c64xx-dt.c       | 17 ----
- arch/arm/mach-s3c64xx/mach-smartq.c           |  1 -
- arch/arm/mach-s3c64xx/mach-smartq5.c          |  2 -
- arch/arm/mach-s3c64xx/mach-smartq7.c          |  2 -
- arch/arm/mach-s3c64xx/mach-smdk6400.c         |  2 -
- arch/arm/mach-s3c64xx/mach-smdk6410.c         |  2 -
- arch/arm/mach-s3c64xx/setup-spi.c             |  1 +
- arch/arm/mach-s3c64xx/watchdog-reset.h        | 16 ----
- arch/arm/mach-s5pv210/Kconfig                 |  1 -
- arch/arm/plat-samsung/Kconfig                 | 10 +-
- arch/arm/plat-samsung/Makefile                |  1 -
- .../plat-samsung/include/plat/samsung-time.h  | 26 ------
- arch/arm/plat-samsung/watchdog-reset.c        | 93 -------------------
- arch/arm64/Kconfig.platforms                  |  1 -
- drivers/clk/samsung/clk-s3c2410.c             |  1 +
- drivers/clk/samsung/clk-s3c2412.c             |  1 +
- drivers/clk/samsung/clk-s3c2443.c             |  1 +
- drivers/clk/samsung/clk-s3c64xx.c             |  1 +
- drivers/watchdog/Kconfig                      | 10 +-
- include/linux/clk/samsung.h                   | 56 +++++++++++
- 61 files changed, 105 insertions(+), 256 deletions(-)
- delete mode 100644 arch/arm/mach-s3c64xx/watchdog-reset.h
- delete mode 100644 arch/arm/plat-samsung/include/plat/samsung-time.h
- delete mode 100644 arch/arm/plat-samsung/watchdog-reset.c
+1. Drop __init from header (as suggested by Stephen),
+2. Add necessary header and forward declaration (as suggested by
+   Stephen),
+3. Add review tag.
+---
+ MAINTAINERS                       |  1 +
+ arch/arm/mach-s3c64xx/common.c    |  1 +
+ arch/arm/mach-s3c64xx/common.h    |  2 --
+ drivers/clk/samsung/clk-s3c64xx.c |  1 +
+ include/linux/clk/samsung.h       | 24 ++++++++++++++++++++++++
+ 5 files changed, 27 insertions(+), 2 deletions(-)
  create mode 100644 include/linux/clk/samsung.h
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a2885ec15bb8..5675fc9bfa00 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15294,6 +15294,7 @@ F:	Documentation/devicetree/bindings/clock/samsung,s3c*
+ F:	Documentation/devicetree/bindings/clock/samsung,s5p*
+ F:	drivers/clk/samsung/
+ F:	include/dt-bindings/clock/exynos*.h
++F:	include/linux/clk/samsung.h
+ 
+ SAMSUNG SPI DRIVERS
+ M:	Kukjin Kim <kgene@kernel.org>
+diff --git a/arch/arm/mach-s3c64xx/common.c b/arch/arm/mach-s3c64xx/common.c
+index 13e91074308a..a655bf0c7802 100644
+--- a/arch/arm/mach-s3c64xx/common.c
++++ b/arch/arm/mach-s3c64xx/common.c
+@@ -24,6 +24,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/reboot.h>
+ #include <linux/io.h>
++#include <linux/clk/samsung.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/irq.h>
+ #include <linux/gpio.h>
+diff --git a/arch/arm/mach-s3c64xx/common.h b/arch/arm/mach-s3c64xx/common.h
+index 03670887a764..f4eca42cdc86 100644
+--- a/arch/arm/mach-s3c64xx/common.h
++++ b/arch/arm/mach-s3c64xx/common.h
+@@ -22,8 +22,6 @@ void s3c64xx_init_io(struct map_desc *mach_desc, int size);
+ void s3c64xx_restart(enum reboot_mode mode, const char *cmd);
+ 
+ struct device_node;
+-void s3c64xx_clk_init(struct device_node *np, unsigned long xtal_f,
+-	unsigned long xusbxti_f, bool is_s3c6400, void __iomem *reg_base);
+ void s3c64xx_set_xtal_freq(unsigned long freq);
+ void s3c64xx_set_xusbxti_freq(unsigned long freq);
+ 
+diff --git a/drivers/clk/samsung/clk-s3c64xx.c b/drivers/clk/samsung/clk-s3c64xx.c
+index b96d33e5eb45..56f95b63f71f 100644
+--- a/drivers/clk/samsung/clk-s3c64xx.c
++++ b/drivers/clk/samsung/clk-s3c64xx.c
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/slab.h>
+ #include <linux/clk-provider.h>
++#include <linux/clk/samsung.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ 
+diff --git a/include/linux/clk/samsung.h b/include/linux/clk/samsung.h
+new file mode 100644
+index 000000000000..7a0824b22eed
+--- /dev/null
++++ b/include/linux/clk/samsung.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 Krzysztof Kozlowski <krzk@kernel.org>
++ */
++
++#ifndef __LINUX_CLK_SAMSUNG_H_
++#define __LINUX_CLK_SAMSUNG_H_
++
++#include <linux/compiler_types.h>
++
++struct device_node;
++
++#ifdef CONFIG_ARCH_S3C64XX
++void s3c64xx_clk_init(struct device_node *np, unsigned long xtal_f,
++		      unsigned long xusbxti_f, bool s3c6400,
++		      void __iomem *base);
++#else
++static inline void s3c64xx_clk_init(struct device_node *np,
++				    unsigned long xtal_f,
++				    unsigned long xusbxti_f,
++				    bool s3c6400, void __iomem *base) { }
++#endif /* CONFIG_ARCH_S3C64XX */
++
++#endif /* __LINUX_CLK_SAMSUNG_H_ */
 -- 
 2.17.1
 
