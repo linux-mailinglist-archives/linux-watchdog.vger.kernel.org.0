@@ -2,55 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E11C23C2E7
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Aug 2020 03:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0970A23C2EA
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Aug 2020 03:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgHEBLI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Aug 2020 21:11:08 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:29223 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726799AbgHEBLI (ORCPT
+        id S1726584AbgHEBL6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Aug 2020 21:11:58 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:29564 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726799AbgHEBL6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Aug 2020 21:11:08 -0400
+        Tue, 4 Aug 2020 21:11:58 -0400
 Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200805011102epoutp049f944f0cc1cc697fffe2100db01e59b1~oOgVu00Mx1854518545epoutp04F
-        for <linux-watchdog@vger.kernel.org>; Wed,  5 Aug 2020 01:11:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200805011102epoutp049f944f0cc1cc697fffe2100db01e59b1~oOgVu00Mx1854518545epoutp04F
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200805011154epoutp019df587c32144778ae2bc8251847247d1~oOhFWRoUg0461804618epoutp01g
+        for <linux-watchdog@vger.kernel.org>; Wed,  5 Aug 2020 01:11:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200805011154epoutp019df587c32144778ae2bc8251847247d1~oOhFWRoUg0461804618epoutp01g
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1596589862;
-        bh=KbCNbDMefhUKUbaajNsecum/XHQG4c5fyXLbqxhiJ5o=;
+        s=mail20170921; t=1596589914;
+        bh=hDLYzYfHbnyglVwlnkBmFuPskO6P5tYXJ7M1u0PeIXo=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=PkyKC3jBH4e6rISn6xyBG+EC2Ct7cix9j6XueUCQhlqe7q1dRCPpnBvZh9P/kr2tU
-         Fw1Pkzoa6uDW8AZ3pm4+P9iKYZiIiPjOuNtGosB4yhrUvwkp3FTQTKR8EkrxNs/3ee
-         0XSQ16sydzGRtMxD0ojlyGhTOI3JZHo0PdQuTKdg=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200805011101epcas1p134440b8ec7af625f204b01561337fc4f~oOgUDj0by1284812848epcas1p1h;
-        Wed,  5 Aug 2020 01:11:01 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4BLtq64hQ8zMqYm6; Wed,  5 Aug
-        2020 01:10:58 +0000 (GMT)
+        b=BMraRx/koVyuiOvq6Ya9jMvIjeSs10CDnJJTwvAifGfN3Gza4Qzr8p7QBYPKU53CL
+         /mbnXSI8XWGad/aFUu0FRxgPwAnBP/jynOjqeAVPxdxUG+ftJT8GEYAA0gvqOvSuHu
+         EUmY5ldoAQEfGFTpGx1vXpmGcGqiomntHKIAVjwA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20200805011153epcas1p3c9c9588625f9051da5137e7eb0b34283~oOhEjUNWj1187411874epcas1p3h;
+        Wed,  5 Aug 2020 01:11:53 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4BLtr66V0yzMqYkg; Wed,  5 Aug
+        2020 01:11:50 +0000 (GMT)
 Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        85.87.28578.2270A2F5; Wed,  5 Aug 2020 10:10:58 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7F.86.29173.6570A2F5; Wed,  5 Aug 2020 10:11:50 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200805011056epcas1p3bf9fd741d56d48ac5768a6a5e90da1ff~oOgQCGJYH0168901689epcas1p3T;
-        Wed,  5 Aug 2020 01:10:56 +0000 (GMT)
+        20200805011150epcas1p3c35e7509c0e954e4cf056cb868abc059~oOhCCk31b0916809168epcas1p3x;
+        Wed,  5 Aug 2020 01:11:50 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200805011056epsmtrp20e45b5cbcf7fadd254d3f86828ae5cd7~oOgQA7Fg90232902329epsmtrp2R;
-        Wed,  5 Aug 2020 01:10:56 +0000 (GMT)
-X-AuditID: b6c32a39-8c9ff70000006fa2-5f-5f2a0722e5a7
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200805011150epsmtrp1940caf1b8a475442ba0b51692e7b5167~oOhCBjPwC1575015750epsmtrp1D;
+        Wed,  5 Aug 2020 01:11:50 +0000 (GMT)
+X-AuditID: b6c32a37-9cdff700000071f5-a7-5f2a07566447
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6B.A8.08303.0270A2F5; Wed,  5 Aug 2020 10:10:56 +0900 (KST)
+        7C.C8.08303.6570A2F5; Wed,  5 Aug 2020 10:11:50 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200805011056epsmtip2170aeeb40ed95d556a30fc7c39949768~oOgPrgvw20930009300epsmtip2D;
-        Wed,  5 Aug 2020 01:10:56 +0000 (GMT)
-Subject: Re: [PATCH v2 01/13] clk: samsung: s3c64xx: declare
- s3c64xx_clk_init() in shared header
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200805011150epsmtip1a3f2f782c70cdbf0719e17880ec76e67~oOhBshqsw0131801318epsmtip1O;
+        Wed,  5 Aug 2020 01:11:50 +0000 (GMT)
+Subject: Re: [PATCH v2 02/13] clk: samsung: s3c24xx: declare
+ s3c24xx_common_clk_init() in shared header
 To:     Krzysztof Kozlowski <krzk@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         Kukjin Kim <kgene@kernel.org>,
@@ -78,63 +78,63 @@ Cc:     Sergio Prado <sergio.prado@e-labworks.com>,
         Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <0fe2b0fc-6a41-3063-a407-5568e3bf28af@samsung.com>
-Date:   Wed, 5 Aug 2020 10:22:56 +0900
+Message-ID: <47fafd62-15fc-3542-30dd-610738b6c848@samsung.com>
+Date:   Wed, 5 Aug 2020 10:23:50 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20200804192654.12783-2-krzk@kernel.org>
+In-Reply-To: <20200804192654.12783-3-krzk@kernel.org>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTZxTP19sXRPRSFD+7ZcM7zUaVRynFDwTiAri7aCbZ2BYaZ+3gDgjQ
-        dr2UiCMDnPISRFgYUJ4KzgjIEBgTBjSCjjHADpGXEZG0bLwqKoM6EBilmvHf75zvd87v/M6X
-        w8V4tRw+N0IeQ6nksiiCbc1s7HB0cSI4Aqlr7T8EumHoBmgl5zcOmvsxA6As/QyGdLpaDuo9
-        M8tBdfpBFnqW8YiF8nVtDJQ+aGCh4Zo2DmrPbQXIcKmHgZYbk5jo+u1RDipZuc5CfX8EoPk5
-        LQt1zKaw0OrgDSYy5fQxUf3DQjZKmZjCUGXzS4DOPhQj/dQqhsYzCtmH3iCrS6oB2T/Yh5HL
-        SzmAnBs+xyHLu4cAmVUzzyKbNKMcsq4yjU1eq65mkfUVCWRe0Rog62cmMbLJlMghLzRUAlI3
-        m8skb7UJA3mSSO9wShZKqRwoeYgiNEIe5kMc+UTqJxV7uAqdhJ7oAOEgl0VTPoT/0UCnwxFR
-        6+shHGJlUer1VKCMpgkXX2+VQh1DOYQr6BgfglKGRik9lc60LJpWy8OcQxTRXkJXVzfxOvFk
-        ZPhY8TJHmWF9qiA1D0sEJk46sOJC3B12jv/KSgfWXB5+E8DZtX6GJXgO4KO7f7MtwTyAf02c
-        YbwuGTOuMs2YhzcDmF+mspDmALx6P2e9L5drh38JjUMJ5vx2fIANCy4XAXOA4Z0AjhZOsszV
-        bFwAtZPDbDPehu+GAy/0wIxtcF/YlDm6gZn4Hpg5cg8z4x34Z7Cr8ewrji3sKjBsTGGFi2Hz
-        2NoGxvCd8IGhlGHBb8NfjEWYWRjii1awQpvENk8HcX9Y852rxY0dnO5seLUMPpx/0sq24G/g
-        ta7bbEttKoAN2j9ZlgcR1F75nmHug+GO8KdmF0t6N2xaLgYW3a3wyUIGyyJlA1OTeRbKO7D/
-        8eirJe6C5Slp7IuA0Gxyo9nkQLPJgeZ/sTLArAT2lJKODqNooVK8+bfrwMbpCDxvgjzjU+d2
-        wOCCdgC5GLHd5tn8u1KeTags7jSlUkhV6iiKbgfi9f1mY/wdIYr125PHSIViN5FIhNyFHmKh
-        kNhpM/7AQcrDw2QxVCRFKSnV6zoG14qfyMiUuAsFPS3vi2aOVQfvUfUuHYi1H8m8sLCQ77t6
-        /vefj+7ty1NP9d87NxEfEFQwfuWLsLGCt9wP9lBEYNXIZGzyiQ+Pv0g/aJd2NX5tOtjVKzn7
-        sBe+slgliTPdqgz2G+V1lIQcjyBUFaZdn/qeLJdUhGwJGnp52cV2YKb0vPrfx0bdhLi0K9da
-        8qZg5U7GfUH24r6qr/gt72XtD4iyTdPHJRlNxjunTeIx/2NLddi+LaLy9unE6NyU5/Ofc1dO
-        5DOHezW0W9DkD18nPN27LSl08YNTHhId7XeI2ef7kf0lfbf3fklrC98wEl5cdfHuWqS/NoFW
-        bz0ii9cG5HzrOFMW+LE/waTDZUIBpqJl/wHhKKhdwwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUyTVxiGd95vmjS8FA1HcdHVD7QGpDrNwSG6r+QIf2RGZ9SAdbwDMlq6
-        VqYuMVbDgrAKGwmgbUUUQmZTmUCD0ihq2ZjOTei6tXWCTFqkDGplDYOJVC3NEv5dee77ep7z
-        43CkxEgv5gpVhwSNSlEkZURUR7d0afIyVpabese/GrX67gE0W93DomCzHqAq7xiJenuvsOjX
-        k+MsavO6aDShf0SjM71dBKpw+Wjkaelikb3mBkC+C78QaKbjBIUu/zDAovrZyzRy/PwhCgVv
-        0qh7vIxGYVcrhaaqHRRq7zcyqGx4lERm2wuASvs3Iu9omESP9UZmWyK21FsAdrocJJ55Xg1w
-        0PMVixvvuQGuagnRuNMwwOI2czmDL1ksNG5vOo7rTC8Bbh/zk7hzSsfiSqsZ4N7xGgrf7pLv
-        kOwVpecJRYVfCJp1GQdEBYPnZli1XnTk7Kk6Ugem2AoQw0H+bTgYCFMVQMRJ+GsATjdcJKPB
-        Iljr+PE1c685HnZ3a6OdAIAnRmxEZB7PH4QB9/HIfAH/kIF9egcdcUn+LoAjntio0A5grd9L
-        RQKGl8Gbfg8T4Vj+LfjHtBdEWMxnwM7TA3NM8Svg6Qe/zT1iIb8bdjZ5iWgnDt4965vbE8Nv
-        hLbBl1T0WBJ8UR/tk3wC/NN3nojyUng1YCK/AfGGebphnmKYpxjmKQ2AMoNFglqrzFdq5er1
-        KuFwilah1Jao8lM+KVa2gbn/I5NdA9fNz1LsgOCAHUCOlC4QT4SSciXiPMXRLwVNca6mpEjQ
-        2kEiR0kTxJOGCzkSPl9xSPhMENSC5v+U4GIW6wiTKXDq+8drTPvLnq1dX3cjxb3PH7t1PLzy
-        mLFnuzrN9HxTFnb2Fet3ZSsFxqXfZFdtcP5DJtlqsjr+Kxn6907fyuDkFvbb9K2lmz0L74/S
-        Es9FiTXO7W5ODDm3D3LkjpOr4qq3lQ3pLEMPD5SLvk4vra38q7L/WKBl7fmnzbM1G1ot1qs9
-        9gRT3QfOn/as+8i3N/Pc7QbzsonUW13h2eTvCu9bs62N+JLbvzzZsWLn3yVL3ojLes+vm2n8
-        3d9mG55+9+Ni7tPQ5xl6XZPCuXySyct8ZJTkpL1ZQOQclGcPc0np3idXgu83pmb66sVn8BP5
-        OyPX95se5A2Vj+UOZ6QlV0kpbYFCLiM1WsUrNx22L64DAAA=
-X-CMS-MailID: 20200805011056epcas1p3bf9fd741d56d48ac5768a6a5e90da1ff
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf1CTdRzuu3fbuyHTl/nrG9o5Jtax4secgy8I6iV1rwd23FlcWcdc8AYc
+        sO02trTOgJ3ID6fkgGpjEoqU0LD4qZBAAeYR1kJ+CAKeNDQIaA1SCBDaGF789zyfz/Pc5/t8
+        vvdhYdwq3JOVKEullDJpMp/pRq9v8/H3jcYFkoDMwQBUNdoJ0FP9TziyfaUDKM86gSGL5Tsc
+        /aKdxFG1tY+B7Lr7DPSFpZmGcvtGGaj/ajOOWgubABq9eJuGFuoz6KiyfRhHxU8rGajr59fQ
+        jK2Fgdomsxhoqa+Kjmb1XXRUM1TERFkPxzFU0bgI0KkhMbKOL2FoRFfEPLCNNBebAdnd14WR
+        C/N6QNr6M3GytPMuIPOuzjDIBuMwTlZX5DDJcrOZQdZcTiM/Ny0DsmZiDCMbZtNx8lxtBSAt
+        k4V08sdmYRT3aFJoAiWNo5Q8ShYrj0uUxYfxI45IDkrEgQFCX2EwCuLzZNIUKowfHhnl+3pi
+        smM9fJ5Gmqx2lKKkKhXff1+oUq5OpXgJclVqGJ9SxCUrghV+KmmKSi2L94uVp4QIAwJ2ix3C
+        Y0kJN0zLuKLY/bj5QTVIBzq3XMBmQWIPbOiZYuQCNxaXuA5g9uQFpotMA3jbYqa5yAyAhtxi
+        /JllUG9ZbTQCePNODeYiNgDzTGdoTtVGIhF22CtXGpuIXiY0XDIBJ8GIWwAOF40xnComIYAt
+        Y/1MJ95AeMHeOatDxGJxiH3QYIXOMp3who8WO1dGbyaiYUf9KeDEHMIDdhhG6U45mxDDgkxf
+        ZxkjtsJ7o1/SXHgHvDZlWnkDJJ6w4eBCE8MVIRy2dNsxF94I/7xVuxrNE47nnV7FH8Pyjnam
+        y5wNYG3Lb6tmEWwpy6c5B2OED/y20d9V9oINCxeAa/B6+NdjHcMpgQQHZp/muiQ7YfeDYZoL
+        Pw9Ls3KYnwK+cU0a45oIxjURjP8PKwH0CrCFUqhS4imVUCFa+93VYOV2BEHXwWdTf/u1AhoL
+        tALIwvibOPaZlyRcTpz0xEeUUi5RqpMpVSsQO/Z7HvPcHCt3HJ8sVSIU7xaJRGiPMFAsFPK3
+        ckbu8SRcIl6aSiVRlIJSPvPRWGzPdJo0/KzHo6OLdUvp89Tiq2dIQQib91h5uYBVZgqOKL2x
+        tGv7QIR4RHslZK4JvI/FgDrd2O/tO84lHiwpKVQZlO2fePd9715zPixt2etQ9pX4nl1l2pKE
+        7JiCt6O/md5/gubx6yD7lekjHmrK01ugdKdF9KcFvvPugM9hZDSX0rekTfTkaO/aNPaR5g/+
+        yNC/7BX51jZD5YjY4wWfur2apJgm29ed+T+oTlIW0f43YtvWiTVPdpycuXgoQxN3fCiy6MWl
+        53At3vthQdmbMpvbw1m6uvLaeHq+NVRRvt08mcLsMF2y3Vynf+/O4fsHTBs8jbmauaB/1x8b
+        kO3VT/wj1O60+83z6aoEqVCAKVXS/wAqdk7WxAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0xTZxSH8/be23tpbLwrEF5oZNIYNKUwMXa+JAaJi9m7xDiDCVE/0DZ4
+        RxEopRVlJg4wM2DTwNKIfwqCKGNYC0K7qJ0I0qqRgtZCxAZBne0AIwwJIbhRyyzNEr49Ob/f
+        k3M+HIYQmakEpkBzjNNpVEUSvoC85ZIkpubQUsXW1uo41B0YBOiT6RGN5tqMANX53xPI4+mi
+        0ZPTMzSy+UcpNG98RaGLnl4eMowGKOTr7KWRs/4eQIGWIR5avlVFoo4HEzRq+tRBIa97D1qY
+        66OQa6aaQqHRbhItmbwkso838FH1X+8IZPkjCNDP43Lkfxci0J/GBn6WGFubrACPjHoJvPyv
+        CeA53xkaXxt8AXBd5wKFHeYJGtssZ/n4utVKYXtrBb7QuAKw/f00gR1LlTSu/d0CsGemnsT9
+        ven7RYcFO49wRQXHOd1XmUqBuqdxhdY2rSu3vrGBSmAUGEAUA9nt8KXJwzMAASNi7wBY91uI
+        jgTx8Lz3IWEAzGeOhi6XPtKZBdD+NATCnWi2AA7MdxDhIIZ9yYfPjF4qHBDsAIBTvvURww7g
+        m/Yafjjgs1LYN+1b5fVsEnz+0Q/CG4RsJrzkh+ExyW6Ck8HB1SNi2RzoaPXzwixkv4ADlwJk
+        uB7FyuG5M6mRVZthsGmYiHAcHAs08yL8Jbw920j8AqLNa2zzGsW8RjGvUa4A0gLiOa2+OL9Y
+        n67dpuFOpOlVxfoyTX5aXkmxDay+j1R6B/RYPqQ5AY8BTgAZQhIjnF/YrBAJj6h+PMnpShS6
+        siJO7wRihpTECRfNLbkiNl91jCvkOC2n+z/lMVEJlbx7U/fLhSmp6sBNWf2QRlz9iBKXXi5c
+        pxzebZfHJ5JVdzd2jMQ6r556hXctBvPUBkw93rNJLUsSna/KKO1qC2Yppjd86wFCt3apQZ7R
+        KW1/siS7PxNVb08/+myveUG7szn79o5YmSl0bmPKSnmFMsvdn5w9fmgs5+jyYr+hG0hqbSrl
+        lFh7LTf24NdZPzywPV2R7/Mr2wQ1gUNbS8cOvB5r/uDbb0shbvyqOPUaTyb/3f7im7sOx41m
+        93BuWaaod+K7fcHsYHKMe1dee1LPhZySoYdc4j8jFbN9tVe+x30fT2R0/cScrBHkPg4MXswQ
+        TxbVvE3YffWgk3EV+hpkWySkXq1KlxI6veo/0h8kMq0DAAA=
+X-CMS-MailID: 20200805011150epcas1p3c35e7509c0e954e4cf056cb868abc059
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200804192731epcas1p2612b16d6fa53bb30fdd289bfd835f3d8
+X-CMS-RootMailID: 20200804192736epcas1p1d2d70d7481631154e5efa66acf5e7f2f
 References: <20200804192654.12783-1-krzk@kernel.org>
-        <CGME20200804192731epcas1p2612b16d6fa53bb30fdd289bfd835f3d8@epcas1p2.samsung.com>
-        <20200804192654.12783-2-krzk@kernel.org>
+        <CGME20200804192736epcas1p1d2d70d7481631154e5efa66acf5e7f2f@epcas1p1.samsung.com>
+        <20200804192654.12783-3-krzk@kernel.org>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
@@ -143,36 +143,33 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 Hi Krzysztof,
 
 On 8/5/20 4:26 AM, Krzysztof Kozlowski wrote:
-> The s3c64xx_clk_init() is defined and used by the clk-s3c64xx driver and
-> also used in the mach-s3c64xx machine code.  Move the declaration to a
-> header to fix W=1 build warning:
+> The s3c2410_common_clk_init() and others are defined and used by the
+> clk-s3c24xx driver and also used in the mach-s3c24xx machine code.  Move
+> the declaration to a header to fix W=1 build warnings:
 > 
->     drivers/clk/samsung/clk-s3c64xx.c:391:13: warning: no previous prototype for 's3c64xx_clk_init' [-Wmissing-prototypes]
->       391 | void __init s3c64xx_clk_init(struct device_node *np, unsigned long xtal_f,
+>     drivers/clk/samsung/clk-s3c2410.c:320:13: warning: no previous prototype for 's3c2410_common_clk_init' [-Wmissing-prototypes]
+>       320 | void __init s3c2410_common_clk_init(struct device_node *np, unsigned long xti_f,
+>     drivers/clk/samsung/clk-s3c2412.c:205:13: warning: no previous prototype for 's3c2412_common_clk_init' [-Wmissing-prototypes]
+>       205 | void __init s3c2412_common_clk_init(struct device_node *np, unsigned long xti_f,
+>     drivers/clk/samsung/clk-s3c2443.c:341:13: warning: no previous prototype for 's3c2443_common_clk_init' [-Wmissing-prototypes]
+>       341 | void __init s3c2443_common_clk_init(struct device_node *np, unsigned long xti_f,
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Reviewed-by: Tomasz Figa <tomasz.figa@gmail.com>
 > 
 > ---
 > 
 > Changes since v1:
-> 1. Drop __init from header (as suggested by Stephen),
-> 2. Add necessary header and forward declaration (as suggested by
->    Stephen),
-> 3. Add review tag.
+> 1. New patch
 > ---
->  MAINTAINERS                       |  1 +
->  arch/arm/mach-s3c64xx/common.c    |  1 +
->  arch/arm/mach-s3c64xx/common.h    |  2 --
->  drivers/clk/samsung/clk-s3c64xx.c |  1 +
->  include/linux/clk/samsung.h       | 24 ++++++++++++++++++++++++
->  5 files changed, 27 insertions(+), 2 deletions(-)
->  create mode 100644 include/linux/clk/samsung.h
-> 
+>  arch/arm/mach-s3c24xx/common.c    |  1 +
+>  arch/arm/mach-s3c24xx/common.h    | 15 ---------------
+>  drivers/clk/samsung/clk-s3c2410.c |  1 +
+>  drivers/clk/samsung/clk-s3c2412.c |  1 +
+>  drivers/clk/samsung/clk-s3c2443.c |  1 +
+>  include/linux/clk/samsung.h       | 32 +++++++++++++++++++++++++++++++
+>  6 files changed, 36 insertions(+), 15 deletions(-)
 
 (snip)
-
-Looks good to me. Thanks.
 
 Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
