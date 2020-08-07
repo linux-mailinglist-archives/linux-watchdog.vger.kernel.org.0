@@ -2,65 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5277C23F2EC
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Aug 2020 21:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B030623F2F9
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Aug 2020 21:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbgHGTBA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 Aug 2020 15:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S1726066AbgHGTIt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 7 Aug 2020 15:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbgHGTBA (ORCPT
+        with ESMTP id S1726015AbgHGTIs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 Aug 2020 15:01:00 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F50CC061756;
-        Fri,  7 Aug 2020 12:01:00 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id y206so1494742pfb.10;
-        Fri, 07 Aug 2020 12:01:00 -0700 (PDT)
+        Fri, 7 Aug 2020 15:08:48 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DA5C061756;
+        Fri,  7 Aug 2020 12:08:48 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id r4so1533160pls.2;
+        Fri, 07 Aug 2020 12:08:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=saLQk+mB1SUD13WmocNiXHXzR672Cu6mqFYivPpQKHw=;
-        b=HAO3pCy2kEji9Lds8wW0lfaIDfrSt0SUU7AOYctfve3MUHJ+BwyKkPv02Iw81ULNRU
-         VgybYfzW+NKNww+hz0u9y6n01CVc1iZlvadEY4sLSp/tiCE4YT1/UeKTxxwMzWDAyR1Y
-         h20MaGHAQpJSab6T1ZEN8QXRpR99h1eIts3sYeQ5PCoZNaj4eYCB2JOpdl2Qh0WWTbmw
-         17xFatieZmOlvLY8dx9IBCjmloen4NMvYHmQdpBdnXhTO6MIrAecvh2WOkFZJcCSbt4S
-         GfjFsBPqnsO8rAOaEyJ6pDO9OSs3NBTQeydt8ZerdBe64KKO5OAwW5O2+x7H6uTkaPGn
-         IFJA==
+        bh=rnGb9sOppjE3N1Nli9X1x3L4VMPPhFl52eNOc7JQXfM=;
+        b=kvmd69ndOASREggmVhOQqM9JjjV9E88s8xw8Y+qdPH7OD4q/Mry5EjZBck2vgapqjf
+         A0S6N0tXTd9rBQ1sL1HyD/nPDaNJLn54U3J0ZdEaQ0Zh4OFstXNDzB/spAjOQwMA6Ie9
+         BdjGMIBiqULyUqpDiCkCCvpwsUpQXc4wijoePuiqv1c1P0WFM36itIz9v/Ug2t+9QJ8w
+         L5fzYGlylZp48l//HL8ryEVDK/O4RWLEH6mOXXXaQ0wWOzJQNLlfu3RVPgK8K/mR5Q7C
+         +PLF1v5uNNiPNzUKYyNU4L+lcATLD1U+k2Ip7cpGUQ80wCDW4pP3zcAx0APmI1/uTRh5
+         PwPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=saLQk+mB1SUD13WmocNiXHXzR672Cu6mqFYivPpQKHw=;
-        b=C62+4iUl19kwk0id/bW2tXOH5LgzjwfApWpr2Lk7Z+58cv2yB4EPcPCD9u+UV9a1RD
-         Y7aniBFExv8konhN4HFNEM+GtQmvyvxUcddXVwqJMtKgJGbidaSYOLN2+pzC6UwiNHbk
-         bCkp5lb7p57MW6aWbQ8bQv8H0xR3eAnJTsRZ3OSTRxvDIILG67oIDhOwAmY+HL32mu+B
-         sd8lVN3/SDx5p32AgBJ6+imUVL9iMb3TTpuKrwK3Pg921m8SLI1wRK+trIdeweJ/ubQ6
-         FWt1/Io1kRZuMV+hCuVyRe8Lk3BQyf4yl3fO809mYPVashPtSiJ6v2b4Mh1wR6TaHggG
-         gQxA==
-X-Gm-Message-State: AOAM532zTX9x4glcaX+CBGx+5iOPYCEJQsn0InpZN7hCxqQDJUIxE1UF
-        NiUBCKDOiQgsuwnN/AAhFhc=
-X-Google-Smtp-Source: ABdhPJwoFFYkyyiRbGPG2s3FpLHLUamdnqKkjtrnXXY2PZ9dZ+3WyGy+oiWXBAr0SCKFcJzkjLPWsQ==
-X-Received: by 2002:a62:7785:: with SMTP id s127mr14215549pfc.196.1596826859559;
-        Fri, 07 Aug 2020 12:00:59 -0700 (PDT)
+        bh=rnGb9sOppjE3N1Nli9X1x3L4VMPPhFl52eNOc7JQXfM=;
+        b=dCGLJqQGfeSXjRfbximP7Dineyb6RmeTGHPt7GTgHXdIVIzlkrUU2gSrAkP3reaEIz
+         L1DudJIh7Ur+HaDUi7ftMievrHVzjxxL+hkrDHQKexBiCHACiDb5lhTHhA/lbnWKeYNb
+         MVnc2rDYWtlb4eGmQ5G7PdAuyOwyaQO/XtpnB7Mm4UO5liSizYPkSnHr3gQFa1BO4++M
+         Q1e2Bwe2N6DEhx+ncVlvt9/dnY3lllWsijYrTP/JDi6PGMFCfqfA9hAByXGfXToyq9OO
+         thwQuprgKqMUgYHgVpcGlFhwL7zbRKXzgGpwfGE/Jno+Ac/GUcMEucsi8PslQ0u+X8+M
+         4u8Q==
+X-Gm-Message-State: AOAM531AcH49Zedv0ikvggSOdLqPuxHPPYg6n2uHAJT/TDz2v/MR+W9j
+        cMqBOMrINz2aI3wxJc5Edsc=
+X-Google-Smtp-Source: ABdhPJzZKuHLjA60DqQPRCt6LmfbZT1/rUOlw18GY9vliaiL5JVG7p4dOy9DPwM/brM7UctMjkqk/w==
+X-Received: by 2002:a17:90b:18b:: with SMTP id t11mr14971480pjs.105.1596827327997;
+        Fri, 07 Aug 2020 12:08:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f27sm13282080pfk.217.2020.08.07.12.00.57
+        by smtp.gmail.com with ESMTPSA id x9sm11436307pjt.9.2020.08.07.12.08.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Aug 2020 12:00:58 -0700 (PDT)
-Subject: Re: [ldv-project] [PATCH] drivers: watchdog: rdc321x_wdt: Fix race
- condition bugs
-To:     Evgeny Novikov <novikov@ispras.ru>,
-        "madhuparnabhowmik10@gmail.com" <madhuparnabhowmik10@gmail.com>
-Cc:     "ldv-project@linuxtesting.org" <ldv-project@linuxtesting.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>
+        Fri, 07 Aug 2020 12:08:47 -0700 (PDT)
+Subject: Re: [PATCH] drivers: watchdog: rdc321x_wdt: Fix race condition bugs
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        madhuparnabhowmik10@gmail.com
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andrianov@ispras.ru,
+        ldv-project@linuxtesting.org
 References: <20200807112902.28764-1-madhuparnabhowmik10@gmail.com>
- <20200807162141.GA41980@roeck-us.net> <507311596824581@mail.yandex.ru>
+ <20200807162141.GA41980@roeck-us.net>
+ <8dca64a1-8cd9-6a41-b61d-1c4c14e5cd5e@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -105,12 +103,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <6fb7fc90-1577-98ac-2be3-a8aa631f11ef@roeck-us.net>
-Date:   Fri, 7 Aug 2020 12:00:56 -0700
+Message-ID: <bc8c5d7d-91a4-e955-854f-eef88812ac1a@roeck-us.net>
+Date:   Fri, 7 Aug 2020 12:08:45 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <507311596824581@mail.yandex.ru>
+In-Reply-To: <8dca64a1-8cd9-6a41-b61d-1c4c14e5cd5e@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -119,38 +117,43 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/7/20 11:30 AM, Evgeny Novikov wrote:
-> 07.08.2020, 19:21, "Guenter Roeck" <linux@roeck-us.net>:
+On 8/7/20 11:08 AM, Florian Fainelli wrote:
+> 
+> 
+> On 8/7/2020 9:21 AM, Guenter Roeck wrote:
 >> On Fri, Aug 07, 2020 at 04:59:02PM +0530, madhuparnabhowmik10@gmail.com wrote:
->>>  From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+>>> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 >>>
->>>  In rdc321x_wdt_probe(), rdc321x_wdt_device.queue is initialized
->>>  after misc_register(), hence if ioctl is called before its
->>>  initialization which can call rdc321x_wdt_start() function,
->>>  it will see an uninitialized value of rdc321x_wdt_device.queue,
->>>  hence initialize it before misc_register().
->>>  Also, rdc321x_wdt_device.default_ticks is accessed in reset()
->>>  function called from write callback, thus initialize it before
->>>  misc_register().
+>>> In rdc321x_wdt_probe(), rdc321x_wdt_device.queue is initialized
+>>> after misc_register(), hence if ioctl is called before its
+>>> initialization which can call rdc321x_wdt_start() function,
+>>> it will see an uninitialized value of rdc321x_wdt_device.queue,
+>>> hence initialize it before misc_register().
+>>> Also, rdc321x_wdt_device.default_ticks is accessed in reset()
+>>> function called from write callback, thus initialize it before
+>>> misc_register().
 >>>
->>>  Found by Linux Driver Verification project (linuxtesting.org).
+>>> Found by Linux Driver Verification project (linuxtesting.org).
 >>>
->>>  Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+>>> Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 >>
 >> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 >>
 >> Having said that ... this is yet another potentially obsolete driver.
 >> You are really wasting your (and, fwiw, my) time.
+>>
+>> Florian, any thoughts if support for this chip can/should be deprecated
+>> or even removed ?
 > 
-> Static analysis tools are not aware about obsolete drivers.
-> It would be great if there will be some formal way to filter them out.
-> Maybe some file will enumerate all obsolete drivers, or there will be
-> something within their source code, or something else.
+> I am still using my rdc321x-based SoC, so no, this is not obsolete as
+> far as I am concerned, time permitting, modernizing the driver is on my
+> TODO after checking/fixing the Ethernet driver first.
 > 
 
-In general, all watchdog drivers not implementing the watchdog API
-are effectively obsolete and should not be touched. If they are still
-in use (meaning someone has a means to test them), they should be
-converted to use the watchdog API instead.
+Do you have a manual ? I'd give it a try if you can test it - conversion
+should be simple enough (I have a coccinelle script which partially
+automates it), but this chip seems to have a fast timeout, and the
+comments in the code ("set the timeout to 81.92 us") seem to be quite
+obviously wrong.
 
 Guenter
