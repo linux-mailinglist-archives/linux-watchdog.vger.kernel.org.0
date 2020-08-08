@@ -2,425 +2,152 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7847623F53D
-	for <lists+linux-watchdog@lfdr.de>; Sat,  8 Aug 2020 01:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7425D23F595
+	for <lists+linux-watchdog@lfdr.de>; Sat,  8 Aug 2020 02:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726126AbgHGXam (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 Aug 2020 19:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S1726163AbgHHAmG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 7 Aug 2020 20:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726066AbgHGXal (ORCPT
+        with ESMTP id S1726159AbgHHAmG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 Aug 2020 19:30:41 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE279C061756;
-        Fri,  7 Aug 2020 16:30:40 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id u128so1937576pfb.6;
-        Fri, 07 Aug 2020 16:30:40 -0700 (PDT)
+        Fri, 7 Aug 2020 20:42:06 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D561C061756;
+        Fri,  7 Aug 2020 17:42:06 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id k18so2017920pfp.7;
+        Fri, 07 Aug 2020 17:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=pPcwqC37bWlLnIU95eOzUiAM672CtcaNNJrpAYPnB90=;
-        b=N2v+6fRS8A+M4XefPlAIpXLM5S7+CUninSbiOX+T0gsOQjWFa36EKNhG4pEvnaz9ck
-         hIHVjEP5VAPZWpEtd+l2Kb2ADen2/Riz9JzStS29W+KBalAIjksqgaYuGrBlQx8NNGN+
-         rbSu6xMtSSRMNoBPBiTO2QeE0lgP3p0tQmbC/aIr4dDr4DoUbvC0Qf3D6Y/Mafuw/oW3
-         KbgYDJ1L3ke/lcFo5oEnOp3F5ENChz1BRNHwV0wdTgWjUhmgteBPS0ynAY3ksZQz79kC
-         aHPWMhCEGoKhJmaCiDZ67oh07iMafRlmOoGyQXy74+f1wmQLDi9l7caX2jUV/Vcs7abk
-         uYBA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OWmRiiY1ajUidkV+ex1iLiz+iRJer13P1EHnmTWY5Y8=;
+        b=eRS9r27SO6tSzYjU9IP97NXHnwEnUIMU/P2Xy1XvRvbFj6M+LDWTDSpdt1H+rnP/DK
+         LZUWqUFbiLmqsGoBD/4gaURPaa2KdOrky1VLLqmDi+MmCSYI8/6UbGikMNeVt/2INtss
+         fVThHADAd6sPvNTa0Lu6vJiEmg18tYxci3Gd+hdRlncFQckAkKue3NN2LXjjAR+gSMzi
+         q4ZRFK1skIHoP27yvDI8U4onBJWygua6Kqs8fmarWIr8RZLX6NKJHjT4dNAsWGcwoOQF
+         kijhkmucP39glx74qFTGaWmyhW8atlIjcoAOGmixqsLX9t1E0aSo2Mb/HMgRoOmJLjzp
+         AE3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=pPcwqC37bWlLnIU95eOzUiAM672CtcaNNJrpAYPnB90=;
-        b=I1nh0i06QCju60nYrU1xuvfkCxUuVQB0aoK+GQg/rkjUutFEBQSym0VKBYaqEW2jDd
-         55CF/uI9FjH2a9N3UJmGxmyy9ZkxFhV7gA78kB5CY8kjnlXVeyglbUa5f364kZD/BAyn
-         EqY6PrHxrod4Tn+TkQo6u+OSG6TsSlc37PHZXEZ8WgqJPpDrhVQLdVYoKsDKI9o38Ohh
-         qkHob/aZzxpLZem1/zm5TNHWNCORBox+70r9QZMetXSFlRI57bIBXbVLeY4UFstE4Uk4
-         hG063xyeQ/K16diU3UeunNoQ7ZbRCY09VqryaJGTCfzrL3VmiSF5BrHVOnJQxPVPsdIz
-         Q8AQ==
-X-Gm-Message-State: AOAM531drVBlXv9c+vpkVWFUiWiVud4c45Ds2lliwJMwkRXv/Qs2RWqh
-        oC6KcMm9oyRECAfmS0JHIcquu2J5
-X-Google-Smtp-Source: ABdhPJxYOL+zg2P09p/L48nVMu9B2FcVxFpRmKb0ZDUNM933Hsx4CabNkpXo2sKa13DK8EBDj67Heg==
-X-Received: by 2002:a62:7c4f:: with SMTP id x76mr16168493pfc.124.1596843039699;
-        Fri, 07 Aug 2020 16:30:39 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f63sm11354232pjk.53.2020.08.07.16.30.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 07 Aug 2020 16:30:39 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-watchdog@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [RFC/RFT PATCH] watchdog: rdc321x_wdt: Convert to use watchdog subsystem
-Date:   Fri,  7 Aug 2020 16:30:33 -0700
-Message-Id: <20200807233033.106729-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OWmRiiY1ajUidkV+ex1iLiz+iRJer13P1EHnmTWY5Y8=;
+        b=OC1IBjLSNXEmTYjCjdkjKeySJ768CTFtXFVPZsyJHTdQrnfOmovCTLWQPAJoqA2ess
+         dM1tH0N6nIKw9td/RXmYFnIMyOqdv54kBfUBWwEqVzhL6TPCHhgb97pT8zjMb2I9sbrB
+         q3kEez0dER1YQrdc5b+GWA7Yiq5DfQE98C0SquwIvIK29T4M5ZmyKRZaIUjmfLTj0euO
+         rEOHm7ZpFD/ZrHQ8cRObWexqg9GMiI4OUQAhMNKpEEgDpOhPg6OgXapkl3YyXzpNFDuF
+         8C9iXTZLngRHHf2N+ZIYEjFyDg1NDH4IADyVy/cN5vl+Vbj4eJAAXfpDSRzLLdKfyNXp
+         ncIQ==
+X-Gm-Message-State: AOAM530GK8UxPM/eM3ETZxW1RfKMUoXOhHUYQOp4/Zt+1SN6LjnQCCMa
+        JObtey+XJeSncbDSkmMg+wA=
+X-Google-Smtp-Source: ABdhPJwsxoW/t8ROjo8qhKS1fYcEX/4qKZdm33HQWAXI4UXV+w3EwSAge+KxW+HLE8Yz5vD8gQGUEA==
+X-Received: by 2002:a63:9256:: with SMTP id s22mr11833063pgn.75.1596847325753;
+        Fri, 07 Aug 2020 17:42:05 -0700 (PDT)
+Received: from [10.230.30.107] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id h5sm14230583pfq.146.2020.08.07.17.42.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Aug 2020 17:42:05 -0700 (PDT)
+Subject: Re: [PATCH] drivers: watchdog: rdc321x_wdt: Fix race condition bugs
+To:     Guenter Roeck <linux@roeck-us.net>, madhuparnabhowmik10@gmail.com
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andrianov@ispras.ru,
+        ldv-project@linuxtesting.org
+References: <20200807112902.28764-1-madhuparnabhowmik10@gmail.com>
+ <20200807162141.GA41980@roeck-us.net>
+ <8dca64a1-8cd9-6a41-b61d-1c4c14e5cd5e@gmail.com>
+ <bc8c5d7d-91a4-e955-854f-eef88812ac1a@roeck-us.net>
+ <1b9db5ad-0edf-091b-a04e-a8f3a6ac08e2@gmail.com>
+ <c7a03401-2c50-868b-57b0-ae3c0bd61e70@roeck-us.net>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <5c048af7-e7b0-4928-9088-b0bbbcfab0ed@gmail.com>
+Date:   Fri, 7 Aug 2020 17:41:56 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <c7a03401-2c50-868b-57b0-ae3c0bd61e70@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert driver to use watchdog subsystem.
 
-RFC/RFT: Completely untested. Also see FIXME comments in code.
 
-Notes:
-- The driver no longer uses platform data.
-  Using resources to pass PCI configuration register addresses
-  does not make much sense, and the PCI device can be obtained
-  with to_pci_dev(dev->parent).
-- WDIOC_GETSTATUS no longer returns the raw watchdog register
-  value.
-- WDIOS_DISABLECARD no longer returns -EIO but just stops
-  the watchdog.
+On 8/7/2020 4:23 PM, Guenter Roeck wrote:
+> Hi Florian,
+> 
+> On 8/7/20 1:09 PM, Florian Fainelli wrote:
+>>
+>> On 8/7/2020 12:08 PM, Guenter Roeck wrote:
+>>> On 8/7/20 11:08 AM, Florian Fainelli wrote:
+>>>>
+>>>>
+>>>> On 8/7/2020 9:21 AM, Guenter Roeck wrote:
+>>>>> On Fri, Aug 07, 2020 at 04:59:02PM +0530, madhuparnabhowmik10@gmail.com wrote:
+>>>>>> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+>>>>>>
+>>>>>> In rdc321x_wdt_probe(), rdc321x_wdt_device.queue is initialized
+>>>>>> after misc_register(), hence if ioctl is called before its
+>>>>>> initialization which can call rdc321x_wdt_start() function,
+>>>>>> it will see an uninitialized value of rdc321x_wdt_device.queue,
+>>>>>> hence initialize it before misc_register().
+>>>>>> Also, rdc321x_wdt_device.default_ticks is accessed in reset()
+>>>>>> function called from write callback, thus initialize it before
+>>>>>> misc_register().
+>>>>>>
+>>>>>> Found by Linux Driver Verification project (linuxtesting.org).
+>>>>>>
+>>>>>> Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+>>>>>
+>>>>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>>>>>
+>>>>> Having said that ... this is yet another potentially obsolete driver.
+>>>>> You are really wasting your (and, fwiw, my) time.
+>>>>>
+>>>>> Florian, any thoughts if support for this chip can/should be deprecated
+>>>>> or even removed ?
+>>>>
+>>>> I am still using my rdc321x-based SoC, so no, this is not obsolete as
+>>>> far as I am concerned, time permitting, modernizing the driver is on my
+>>>> TODO after checking/fixing the Ethernet driver first.
+>>>>
+>>>
+>>> Do you have a manual ? I'd give it a try if you can test it - conversion
+>>> should be simple enough (I have a coccinelle script which partially
+>>> automates it), but this chip seems to have a fast timeout, and the
+>>> comments in the code ("set the timeout to 81.92 us") seem to be quite
+>>> obviously wrong.
+>>
+>> Yes, there is a public manual for that SoC, search for RDC R8610 and the
+>> first link you find should be a 276 page long manual for the SoC.
+>>
+> 
+> I found two, one for R8610 and one for R8610-G.
 
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/watchdog/rdc321x_wdt.c | 274 +++++++++------------------------
- 1 file changed, 69 insertions(+), 205 deletions(-)
+The R8610-G datasheet is the one that I have had and used thus far.
 
-diff --git a/drivers/watchdog/rdc321x_wdt.c b/drivers/watchdog/rdc321x_wdt.c
-index 57187efeb86f..5a3eaca6b9f8 100644
---- a/drivers/watchdog/rdc321x_wdt.c
-+++ b/drivers/watchdog/rdc321x_wdt.c
-@@ -8,19 +8,10 @@
-  */
- 
- #include <linux/module.h>
--#include <linux/moduleparam.h>
- #include <linux/types.h>
- #include <linux/errno.h>
--#include <linux/miscdevice.h>
--#include <linux/fs.h>
--#include <linux/ioport.h>
--#include <linux/timer.h>
--#include <linux/completion.h>
--#include <linux/jiffies.h>
- #include <linux/platform_device.h>
- #include <linux/watchdog.h>
--#include <linux/io.h>
--#include <linux/uaccess.h>
- #include <linux/mfd/rdc321x.h>
- 
- #define RDC_WDT_MASK	0x80000000 /* Mask */
-@@ -32,247 +23,120 @@
- #define RDC_WDT_CNT	0x00000001 /* WDT count */
- 
- #define RDC_CLS_TMR	0x80003844 /* Clear timer */
-+				// xxxx44 -> 2.34s or 2.68s timeout
-+				// (or maybe 2.5s / 2.85s)
-+				// xxx8xx -> route to irq[1]
-+				// xx3xxx -> reserved
-+				// (should that have been 3xxxxx ?)
-+				// 8xxxxxxx -> not defined in datasheet
- 
--#define RDC_WDT_INTERVAL	(HZ/10+1)
-+#define DEFAULT_TIMEOUT		30	/* seconds */
- 
--static int ticks = 1000;
--
--/* some device data */
--
--static struct {
--	struct completion stop;
--	int running;
--	struct timer_list timer;
--	int queue;
--	int default_ticks;
--	unsigned long inuse;
-+struct rdc321x_wdt_device {
-+	struct watchdog_device wdd;
- 	spinlock_t lock;
- 	struct pci_dev *sb_pdev;
--	int base_reg;
--} rdc321x_wdt_device;
--
--/* generic helper functions */
-+};
- 
--static void rdc321x_wdt_trigger(struct timer_list *unused)
-+static int rdc321x_wdt_ping(struct watchdog_device *wdd)
- {
-+	struct rdc321x_wdt_device *wdt = watchdog_get_drvdata(wdd);
- 	unsigned long flags;
- 	u32 val;
- 
--	if (rdc321x_wdt_device.running)
--		ticks--;
--
--	/* keep watchdog alive */
--	spin_lock_irqsave(&rdc321x_wdt_device.lock, flags);
--	pci_read_config_dword(rdc321x_wdt_device.sb_pdev,
--					rdc321x_wdt_device.base_reg, &val);
-+	spin_lock_irqsave(&wdt->lock, flags);
-+	/* FIXME it appears that writing RDC_WDT_EN restarts the timer */
-+	pci_read_config_dword(wdt->sb_pdev, RDC321X_WDT_CTRL, &val);
- 	val |= RDC_WDT_EN;
--	pci_write_config_dword(rdc321x_wdt_device.sb_pdev,
--					rdc321x_wdt_device.base_reg, val);
--	spin_unlock_irqrestore(&rdc321x_wdt_device.lock, flags);
--
--	/* requeue?? */
--	if (rdc321x_wdt_device.queue && ticks)
--		mod_timer(&rdc321x_wdt_device.timer,
--				jiffies + RDC_WDT_INTERVAL);
--	else {
--		/* ticks doesn't matter anyway */
--		complete(&rdc321x_wdt_device.stop);
--	}
--
--}
--
--static void rdc321x_wdt_reset(void)
--{
--	ticks = rdc321x_wdt_device.default_ticks;
--}
--
--static void rdc321x_wdt_start(void)
--{
--	unsigned long flags;
--
--	if (!rdc321x_wdt_device.queue) {
--		rdc321x_wdt_device.queue = 1;
--
--		/* Clear the timer */
--		spin_lock_irqsave(&rdc321x_wdt_device.lock, flags);
--		pci_write_config_dword(rdc321x_wdt_device.sb_pdev,
--				rdc321x_wdt_device.base_reg, RDC_CLS_TMR);
--
--		/* Enable watchdog and set the timeout to 81.92 us */
--		pci_write_config_dword(rdc321x_wdt_device.sb_pdev,
--					rdc321x_wdt_device.base_reg,
--					RDC_WDT_EN | RDC_WDT_CNT);
--		spin_unlock_irqrestore(&rdc321x_wdt_device.lock, flags);
--
--		mod_timer(&rdc321x_wdt_device.timer,
--				jiffies + RDC_WDT_INTERVAL);
--	}
-+	pci_write_config_dword(wdt->sb_pdev, RDC321X_WDT_CTRL, val);
-+	spin_unlock_irqrestore(&wdt->lock, flags);
- 
--	/* if process dies, counter is not decremented */
--	rdc321x_wdt_device.running++;
--}
--
--static int rdc321x_wdt_stop(void)
--{
--	if (rdc321x_wdt_device.running)
--		rdc321x_wdt_device.running = 0;
--
--	ticks = rdc321x_wdt_device.default_ticks;
--
--	return -EIO;
--}
--
--/* filesystem operations */
--static int rdc321x_wdt_open(struct inode *inode, struct file *file)
--{
--	if (test_and_set_bit(0, &rdc321x_wdt_device.inuse))
--		return -EBUSY;
--
--	return stream_open(inode, file);
--}
--
--static int rdc321x_wdt_release(struct inode *inode, struct file *file)
--{
--	clear_bit(0, &rdc321x_wdt_device.inuse);
- 	return 0;
- }
- 
--static long rdc321x_wdt_ioctl(struct file *file, unsigned int cmd,
--				unsigned long arg)
-+static int rdc321x_wdt_start(struct watchdog_device *wdd)
- {
--	void __user *argp = (void __user *)arg;
--	u32 value;
--	static const struct watchdog_info ident = {
--		.options = WDIOF_CARDRESET,
--		.identity = "RDC321x WDT",
--	};
-+	struct rdc321x_wdt_device *wdt = watchdog_get_drvdata(wdd);
- 	unsigned long flags;
- 
--	switch (cmd) {
--	case WDIOC_KEEPALIVE:
--		rdc321x_wdt_reset();
--		break;
--	case WDIOC_GETSTATUS:
--		/* Read the value from the DATA register */
--		spin_lock_irqsave(&rdc321x_wdt_device.lock, flags);
--		pci_read_config_dword(rdc321x_wdt_device.sb_pdev,
--					rdc321x_wdt_device.base_reg, &value);
--		spin_unlock_irqrestore(&rdc321x_wdt_device.lock, flags);
--		if (copy_to_user(argp, &value, sizeof(u32)))
--			return -EFAULT;
--		break;
--	case WDIOC_GETSUPPORT:
--		if (copy_to_user(argp, &ident, sizeof(ident)))
--			return -EFAULT;
--		break;
--	case WDIOC_SETOPTIONS:
--		if (copy_from_user(&value, argp, sizeof(int)))
--			return -EFAULT;
--		switch (value) {
--		case WDIOS_ENABLECARD:
--			rdc321x_wdt_start();
--			break;
--		case WDIOS_DISABLECARD:
--			return rdc321x_wdt_stop();
--		default:
--			return -EINVAL;
--		}
--		break;
--	default:
--		return -ENOTTY;
--	}
-+	spin_lock_irqsave(&wdt->lock, flags);
-+	/* Clear the timer */
-+	pci_write_config_dword(wdt->sb_pdev, RDC321X_WDT_CTRL, RDC_CLS_TMR);
-+	/* Enable watchdog and set the timeout to 81.92 us */
-+	// FIXME The above comment doesn't really make sense.
-+	// The kernel would be unable to handle a timeout of 81.92 us.
-+	// Also, the code used to generate a heartbeat every ~100 ms.
-+	pci_write_config_dword(wdt->sb_pdev, RDC321X_WDT_CTRL, RDC_WDT_EN | RDC_WDT_CNT);
-+	spin_unlock_irqrestore(&wdt->lock, flags);
-+
- 	return 0;
- }
- 
--static ssize_t rdc321x_wdt_write(struct file *file, const char __user *buf,
--				size_t count, loff_t *ppos)
-+static int rdc321x_wdt_stop(struct watchdog_device *wdd)
- {
--	if (!count)
--		return -EIO;
-+	struct rdc321x_wdt_device *wdt = watchdog_get_drvdata(wdd);
- 
--	rdc321x_wdt_reset();
-+	pci_write_config_dword(wdt->sb_pdev, RDC321X_WDT_CTRL, 0);
- 
--	return count;
-+	return 0;
- }
- 
--static const struct file_operations rdc321x_wdt_fops = {
--	.owner		= THIS_MODULE,
--	.llseek		= no_llseek,
--	.unlocked_ioctl	= rdc321x_wdt_ioctl,
--	.compat_ioctl	= compat_ptr_ioctl,
--	.open		= rdc321x_wdt_open,
--	.write		= rdc321x_wdt_write,
--	.release	= rdc321x_wdt_release,
-+static const struct watchdog_ops rdc321x_wdt_ops = {
-+	.start = rdc321x_wdt_start,
-+	.stop = rdc321x_wdt_stop,
-+	.ping = rdc321x_wdt_ping,
-+	// FIXME We can't set the timeout since we don't know
-+	// how to write the counter register bits.
-+	// .set_timeout = rdc321x_wdt_set_timeout,
- };
- 
--static struct miscdevice rdc321x_wdt_misc = {
--	.minor	= WATCHDOG_MINOR,
--	.name	= "watchdog",
--	.fops	= &rdc321x_wdt_fops,
-+static struct watchdog_info rdc321x_wdt_info = {
-+	.options = WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE | WDIOF_CARDRESET,
-+	.identity = "RDC321x WDT",
- };
- 
- static int rdc321x_wdt_probe(struct platform_device *pdev)
- {
--	int err;
--	struct resource *r;
--	struct rdc321x_wdt_pdata *pdata;
-+	struct device *dev = &pdev->dev;
-+	struct rdc321x_wdt_device *wdt;
-+	struct watchdog_device *wdd;
-+	u32 val;
- 
--	pdata = dev_get_platdata(&pdev->dev);
--	if (!pdata) {
--		dev_err(&pdev->dev, "no platform data supplied\n");
-+	if (!dev->parent) {
-+		dev_err(dev, "no parent device\n");
- 		return -ENODEV;
- 	}
- 
--	r = platform_get_resource_byname(pdev, IORESOURCE_IO, "wdt-reg");
--	if (!r) {
--		dev_err(&pdev->dev, "failed to get wdt-reg resource\n");
--		return -ENODEV;
--	}
-+	wdt = devm_kzalloc(dev, sizeof(*wdd), GFP_KERNEL);
-+	if (!wdt)
-+		return -ENOMEM;
- 
--	rdc321x_wdt_device.sb_pdev = pdata->sb_pdev;
--	rdc321x_wdt_device.base_reg = r->start;
-+	wdt->sb_pdev = to_pci_dev(dev->parent);
- 
--	err = misc_register(&rdc321x_wdt_misc);
--	if (err < 0) {
--		dev_err(&pdev->dev, "misc_register failed\n");
--		return err;
--	}
-+	spin_lock_init(&wdt->lock);
- 
--	spin_lock_init(&rdc321x_wdt_device.lock);
-+	wdd = &wdt->wdd;
-+	wdd->parent = dev;
-+	wdd->info = &rdc321x_wdt_info,
-+	wdd->min_timeout = 1,
-+	// FIXME
-+	// wdd->max_hw_heartbeat_ms = 4690,	/* Assumes external clock */
-+	wdd->max_hw_heartbeat_ms = 2340,	/* guess */
-+	wdd->timeout = DEFAULT_TIMEOUT,
-+	wdd->ops = &rdc321x_wdt_ops,
-+	watchdog_set_drvdata(wdd, wdt);
- 
--	/* Reset the watchdog */
--	pci_write_config_dword(rdc321x_wdt_device.sb_pdev,
--				rdc321x_wdt_device.base_reg, RDC_WDT_RST);
-+	pci_read_config_dword(wdt->sb_pdev, RDC321X_WDT_CTRL, &val);
-+	if (val & RDC_WDT_RST)
-+		wdd->bootstatus = WDIOF_CARDRESET;
- 
--	init_completion(&rdc321x_wdt_device.stop);
--	rdc321x_wdt_device.queue = 0;
-+	pci_write_config_dword(wdt->sb_pdev, RDC321X_WDT_CTRL, RDC_WDT_RST);
- 
--	clear_bit(0, &rdc321x_wdt_device.inuse);
--
--	timer_setup(&rdc321x_wdt_device.timer, rdc321x_wdt_trigger, 0);
--
--	rdc321x_wdt_device.default_ticks = ticks;
--
--	dev_info(&pdev->dev, "watchdog init success\n");
--
--	return 0;
--}
--
--static int rdc321x_wdt_remove(struct platform_device *pdev)
--{
--	if (rdc321x_wdt_device.queue) {
--		rdc321x_wdt_device.queue = 0;
--		wait_for_completion(&rdc321x_wdt_device.stop);
--	}
--
--	misc_deregister(&rdc321x_wdt_misc);
--
--	return 0;
-+	return devm_watchdog_register_device(dev, wdd);
- }
- 
- static struct platform_driver rdc321x_wdt_driver = {
- 	.probe = rdc321x_wdt_probe,
--	.remove = rdc321x_wdt_remove,
- 	.driver = {
- 		.name = "rdc321x-wdt",
- 	},
+> Unfortunately, none of those
+> describes the use of bit(31) in the watchdog register, nor the meaning
+> of bit(12) and bit(13). Bit(31) is described in the code as "Mask",
+> and it is set by a couple of commands. I _suspect_ that bit(31) has to be
+> set to change some of the register bits, for example the counter value.
+> That is just a wild guess, but it would explain why the driver works
+> in the first place.
+> 
+> It is also not clear if the bits in the counter register are accumulative
+> or if only the highest bit counts. The datasheets suggest that only the
+> highest bit counts, but then the value of RDC_CLS_TMR doesn't make much
+> sense since it sets two bits.
+> 
+> Since you wrote the driver, I was hoping that you might have a datasheet
+> which explains all this in more detail.
+
+I do not, and this was over 12 years ago, and I honestly do not recall
+all the details, when I get the board running a newish kernel, I will
+poke around.
 -- 
-2.17.1
-
+Florian
