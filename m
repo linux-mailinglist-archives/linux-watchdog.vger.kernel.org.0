@@ -2,144 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64B023FE93
-	for <lists+linux-watchdog@lfdr.de>; Sun,  9 Aug 2020 15:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B06240249
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Aug 2020 09:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbgHINip (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 9 Aug 2020 09:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S1726127AbgHJHNf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 10 Aug 2020 03:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgHINio (ORCPT
+        with ESMTP id S1726382AbgHJHNe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 9 Aug 2020 09:38:44 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97958C061756;
-        Sun,  9 Aug 2020 06:38:43 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id u20so3737628pfn.0;
-        Sun, 09 Aug 2020 06:38:43 -0700 (PDT)
+        Mon, 10 Aug 2020 03:13:34 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745D2C06178B
+        for <linux-watchdog@vger.kernel.org>; Mon, 10 Aug 2020 00:13:33 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id p20so7121441wrf.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 10 Aug 2020 00:13:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=e43BGIqjUtFLkllWZLVnRPk7JR3nJMKINK9MXa2Oc1o=;
-        b=Ay2vzmjJW0yzDZutiLDKugvlcDR7WBCF12bPD3pf1FV/pMOd6c9Uc9Qpn+ZsReiq7s
-         EBjWLrFkoipRafMcrZ5q3TwoLsm9I8UK27IQX9lcmPKe/G+9+DiuPOSe1whfKL5YOrqt
-         AuA2xh4MuU6YbFNY5DqwEl1lO/zdn/jgH6PAj0XIgp10qIxaAxCujIuLh6Pwk46IKKVl
-         w43z4yJBUM2XSKaLHfCZZkqWGtdCy3ty8S9cQWAxi7pBtFI0Z+LxAtecaGmjOcXUeDaE
-         6Z+vlYgoj/qwfW8ZOzg+59GgRGSkXK+/GilfUwM6FWzzvp+8qvFiITCzGtkLNlF6UFfh
-         /Dkw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=+TUd9JRbZ1pyZaCnuclZ/AO9DW45PgvoNIXxTZ6zZrE=;
+        b=xQ1R7jn546DiRqc42dCW1K0GBZinc8U+spujkwGvBUURTctIhYaWn2QdhGZfToWnw/
+         5WaTr1uaqsnHbcqicFNMbrOXBvK3DRuOoa97gNdCZ3P/jMkT5DMw8Oqxo1o+rrdWnycB
+         F1Cmwbw50K8AsHAmU5ovD0YutO27HrbG0f5BRd7XGL/5CQdplPTOe43ukzJHgt0QJuIM
+         D49YXIRmo8bTF+TIGOxUn4gLC+4NkqpjzL3XxxmadY2k4VEgAi1B7xaQTHPeVPo2lVZS
+         qyQZU1p/vIReqk4RRLfGi8wx+XfFdG1W58Ic/CLzzZfCQ4+MaAjNBW4DYLLJJNqNd9tS
+         kRWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=e43BGIqjUtFLkllWZLVnRPk7JR3nJMKINK9MXa2Oc1o=;
-        b=XMJ4sSb1VtlezyDNv8OFB+XowWc4QvzTTUt5Dlyb57d1cNZ4hH/l9z0ZHM+Hj3CUni
-         ov/QDh/fcy5+y2KGaIPDX/qEFYxzR6IuNqG0IfHxzVi0GREQM4ROvs2m3BPL1Fm2V7S/
-         NJVUAkDXaesF2pXQFOtx2KwKvLSQn9zAKH2p1adZG6D0jjH+0B0sPoNE9Ih76QOlYfvs
-         +EnBKLaT0Q51ZwrlrVLwM4a0kBzmmUXKFsHNwhOpxtgyUenttbzlj2kIMwwUt80TulbX
-         j3qMbc+J66IUTOvtvMnTShumCs0Ab82Hf5B+kT9PnR5Ryf7uvbRoxaBKpxvgTdz693St
-         01VA==
-X-Gm-Message-State: AOAM531v9RZDEyjtHelzACGKimBERZ+NFywNpwAvwnVRkqmbu75S3JFC
-        7Baf/K4GVktLz7jzMFWLP510Z++i
-X-Google-Smtp-Source: ABdhPJzXE9qQ6GW7nBeHTr/VqtdCUVwKWqEoue4QKyW1B3Xr0sUa8tBJAo74/7pex3Pt367JclBrmg==
-X-Received: by 2002:a63:e017:: with SMTP id e23mr18496702pgh.125.1596980322799;
-        Sun, 09 Aug 2020 06:38:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n22sm16127568pjq.25.2020.08.09.06.38.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Aug 2020 06:38:42 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: pcwd_usb: Avoid GFP_ATOMIC where it is not
- needed
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <20200809071912.742836-1-christophe.jaillet@wanadoo.fr>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <42ad4fb9-e16a-147f-1732-950e657c0a79@roeck-us.net>
-Date:   Sun, 9 Aug 2020 06:38:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=+TUd9JRbZ1pyZaCnuclZ/AO9DW45PgvoNIXxTZ6zZrE=;
+        b=SKyP6Oy8Z/wDDVp+S8lOi2RNJXBJZCyJKPZi2CO8Jd5hcR3n3odHVSlPZctn/iHh4K
+         ogCCb6GpTMqaXOn2qu/B6lR0YIt7R3YnpvC4MWPoL6DIDghB7BjMMSNtPJI9orVZE3Pr
+         M4NtYenkzy/9IFhSWTuknTi8IjO3uTiu+2PHNNQ3SJnk8aluRC5MxZ94efJ0CBKWKX6E
+         s8ScTPU4dqLCbSshbkgthhKP7pWeLWA6L/qMwzDcALIywNE8USDXXnjwUs3qlqfHiKQF
+         cWN+2eWzqu5hjmJlB2LUE4gv4yDhOo4GToAIZHdRu/G4Xj+o0fydYYbaT1D48O8AZVeO
+         /9zw==
+X-Gm-Message-State: AOAM530doxcp61iON6s2S3EjAEdoE3EKYRbgh7f6Ezf1bHZCQx8zGbL8
+        atM0TOS7Ueail1AvFoap5iQqxA==
+X-Google-Smtp-Source: ABdhPJyqMpwZFIytM3dip4yb9zg/T5q+SVei4Y+VdZ3uIDP/QBRxHBX79zX6kLVNBEQ3N66zTYZL3w==
+X-Received: by 2002:a5d:51c3:: with SMTP id n3mr23689763wrv.104.1597043611405;
+        Mon, 10 Aug 2020 00:13:31 -0700 (PDT)
+Received: from dell ([2.27.167.73])
+        by smtp.gmail.com with ESMTPSA id t3sm3850812wrx.5.2020.08.10.00.13.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2020 00:13:30 -0700 (PDT)
+Date:   Mon, 10 Aug 2020 08:13:28 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v7 06/13] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200810071328.GB4411@dell>
+References: <20200803093559.12289-1-michael@walle.cc>
+ <20200803093559.12289-7-michael@walle.cc>
+ <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
+ <e288ca6cfee819223395712e04159dd9@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <20200809071912.742836-1-christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e288ca6cfee819223395712e04159dd9@walle.cc>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/9/20 12:19 AM, Christophe JAILLET wrote:
-> There is no need to use GFP_ATOMIC here. It is a probe function, no
-> spinlock is taken and GFP_KERNEL is used just before and just after this
-> 'usb_alloc_coherent()' call.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+On Fri, 07 Aug 2020, Michael Walle wrote:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/watchdog/pcwd_usb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Uwe, Hi Lee,
 > 
-> diff --git a/drivers/watchdog/pcwd_usb.c b/drivers/watchdog/pcwd_usb.c
-> index 2f44af1831d0..ea67b98ed35d 100644
-> --- a/drivers/watchdog/pcwd_usb.c
-> +++ b/drivers/watchdog/pcwd_usb.c
-> @@ -657,7 +657,7 @@ static int usb_pcwd_probe(struct usb_interface *interface,
->  
->  	/* set up the memory buffer's */
->  	usb_pcwd->intr_buffer = usb_alloc_coherent(udev, usb_pcwd->intr_size,
-> -					GFP_ATOMIC, &usb_pcwd->intr_dma);
-> +					GFP_KERNEL, &usb_pcwd->intr_dma);
->  	if (!usb_pcwd->intr_buffer) {
->  		pr_err("Out of memory\n");
->  		goto error;
+> Am 2020-08-06 10:40, schrieb Uwe Kleine-König:
+> > On Mon, Aug 03, 2020 at 11:35:52AM +0200, Michael Walle wrote:
+> > > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> > > index 7dbcf6973d33..a0d50d70c3b9 100644
+> > > --- a/drivers/pwm/Kconfig
+> > > +++ b/drivers/pwm/Kconfig
+> > > @@ -428,6 +428,16 @@ config PWM_SIFIVE
+> > >  	  To compile this driver as a module, choose M here: the module
+> > >  	  will be called pwm-sifive.
+> > > 
+> > > +config PWM_SL28CPLD
+> > > +	tristate "Kontron sl28cpld PWM support"
+> > > +	select MFD_SIMPLE_MFD_I2C
+> > 
+> > Is it sensible to present this option to everyone? Maybe
+> > 
+> > 	depends on SOME_SYMBOL_ONLY_TRUE_ON_SL28CPLD || COMPILE_TEST
 > 
+> Because there is now no real MFD driver anymore, there is also
+> no symbol for that. The closest would be ARCH_ARM64 but I don't
+> think that is a good idea.
+> 
+> Lee, what do you think about adding a symbol to the MFD, which
+> selects MFD_SIMPLE_MFD_I2C but doesn't enable any C modules?
+> 
+> I.e.
+> config MFD_SL28CPLD
+>     tristate "Kontron sl28cpld"
+>     select MFD_SIMPLE_MFD_I2C
+>     help
+>       Say yes here to add support for the Kontron sl28cpld board
+>       management controller.
+> 
+> Then all the other device driver could depend on the MFD_SL28CPLD
+> symbol.
 
+You want to add a virtual symbol to prevent having to present a real
+one?  How is that a reasonable solution?
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
