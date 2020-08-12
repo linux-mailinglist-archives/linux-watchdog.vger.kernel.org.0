@@ -2,115 +2,228 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DB02428A8
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Aug 2020 13:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B5F242994
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Aug 2020 14:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727773AbgHLL2z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Aug 2020 07:28:55 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:39803 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726404AbgHLL2y (ORCPT
+        id S1727871AbgHLMoi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Aug 2020 08:44:38 -0400
+Received: from www.linux-watchdog.org ([185.87.125.42]:44182 "EHLO
+        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbgHLMoh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Aug 2020 07:28:54 -0400
-Received: from mail-qt1-f170.google.com ([209.85.160.170]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MLzeb-1kN4o136Y5-00HzPW; Wed, 12 Aug 2020 13:28:52 +0200
-Received: by mail-qt1-f170.google.com with SMTP id o22so1127966qtt.13;
-        Wed, 12 Aug 2020 04:28:52 -0700 (PDT)
-X-Gm-Message-State: AOAM531AkD4/0SayogMk90hrDyOlkL9n8c4b64soJbT5S3a1qLWmHG/m
-        IYvV+PJEgv5C7QxchBD1kn9srofSiSMizNVGqf8=
-X-Google-Smtp-Source: ABdhPJxsW8KvhXUS1ojoIaqN362ISA/JDUik1npds+V9z2Z/6a42INf5aMjjkxMPeXquVPo4e7r0h6AJVgmGkNoG4Tw=
-X-Received: by 2002:aed:33e7:: with SMTP id v94mr5752270qtd.18.1597231731435;
- Wed, 12 Aug 2020 04:28:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200804192654.12783-1-krzk@kernel.org> <20200804192654.12783-14-krzk@kernel.org>
- <159721917443.33733.7919188364233003142@swboyd.mtv.corp.google.com>
- <CGME20200812091510eucas1p15944eb26bb496e20b9fadd609063a490@eucas1p1.samsung.com>
- <CAK8P3a13u0KY0jzxNLs=irTs6ZSXyObKKTp-8KEmowcOZrZXxQ@mail.gmail.com> <8066413c-367d-2f8d-3e7b-dacd954675be@samsung.com>
-In-Reply-To: <8066413c-367d-2f8d-3e7b-dacd954675be@samsung.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 12 Aug 2020 13:28:35 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1xXe56k5nKuCJ-25h1VqWKRb9JGnFrr=SPg_icay-vZA@mail.gmail.com>
-Message-ID: <CAK8P3a1xXe56k5nKuCJ-25h1VqWKRb9JGnFrr=SPg_icay-vZA@mail.gmail.com>
-Subject: Re: [PATCH v2 13/13] ARM: s3c24xx: camif: include header with
- prototypes and unify declaration
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+        Wed, 12 Aug 2020 08:44:37 -0400
+X-Greylist: delayed 348 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Aug 2020 08:44:37 EDT
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 395C3407AF; Wed, 12 Aug 2020 13:39:03 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 395C3407AF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1597232343;
+        bh=eJ+9TxHv79OCcPjS6SyOF3HAI3s+kCWErgOfkJljAfs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=azM+OjDWCqJnQJ/XZIFmBgKsS2VUkScXNYF+oKHDN3ExviVkGh+LjtKW1ijtvykll
+         zaeZ6tng3eCq13X7OvJd4LOfNPcOZfg8WtgLspR/RQzWPzC+3eEvSkt1UUz1ORgk6j
+         PMD4wGwpBZjiz8FxbrA27kBKDV1l0O50EgPab77c=
+Date:   Wed, 12 Aug 2020 13:39:03 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        patches@opensource.cirrus.com,
-        Sergio Prado <sergio.prado@e-labworks.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:2C/lhlOU3R2lkBbParLcFu4HTCZmdLUHTi3gkwxRTTYn4h+FnJw
- ezp9uvaYSpdsqf/cwkshQq32GCk8qrX26af3HGamFCEFfhUzXLETkoCXm2/4/Z+lZ1x/vi4
- cS6woBG4E5rpy6FEr90UlnDwI6fvIxvFXda/d3/GAV7ORck5VKk4Y+3bwmLjdA7gUpyGReZ
- ouz1QWSh3nwK9W2vlgoYg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YY5ax/N2kRs=:dL4ZaISW56P3jQkQRTrGSb
- ZIIicumDg7fpoDKvbKFrbVkrm+v9+l5TI1kxINFI0Yhu87iqnQQ9ARixHZt2poF0zLooRZHls
- Rq2uFWr4Qckeq6c7AU+uoOJP7g71bvGDCCAVDCKGkGuOmvWovR7DJJRdWt4pdAaTeZ/pvuHe3
- sGwIXL5U+d5Vi80rY/vfxE+ZDOPWdqyHri7L4UYiACtpKTxy4inHzklxXjG6b5FYi+JIZw40j
- 6peAEHbpSyDUa+E7LbtJapLg2mXyhsofKB6eiHTQImggrFyAKSbZzlHeofN7DzEEbf62PiP7I
- nmdI9+UqhY0E6kyyDjLNEmN6OLDXX1lGiyrl9+SaNgQKJvOra8I/Wo2hnrLzzZX473xzJWtYu
- YeWsB80Ga5IdRqEBPPp57dP8Zr3FZCZSvfhge5BbFuerBxEOKNa+YU+OVCpy/WGpeP102VB8b
- rncYSJDyfkCPWIPeufO9W/fQZIw9zARfi1eVCzzEG3QpfdMZb0M/rTd7NmS0KlzS/XYaETnVQ
- Rczlo85V2naNkZ5roTAPiiurQWbdykC0bA6Vlxrt6FtQ/DDm0dmmACkoeeUVwkr+SX6yT1xxa
- 07LL6N0CLx7gpsB3Sqz1CRdWtjNk7ZZ75MiUgeeEYvuQ99j3qz8JYbR/gKktg5KvBhaPRMEyK
- iGr50JkotdeF/3fBk09vexA8tV/DXTMbvJY9vysf6fhHTILX9kgibgab+tx3iGsvlSFrYwYXb
- qHJojb0NOcnAEkT4C3Cf4Y4VRn6EdPlvC7JzdYVVOUyqwRKyh7EuQA8wmxlLOjVDG/QyW+Id+
- xEcgbiQhK5Djs6M8pLZhJp2LJq38ECS+FdW+l1v+gVCCVawC/NxrvghQb+tv9ucd3VJnFGbrN
- h+/GFsM7KYEF1awB2RWLWbLAQOYam8LynA+C1NOFxLIGAF77vW0WiDQoYLQCoIGo79tuo5d4u
- skhRnA6nY+TnbQgl6fEHP26E95WRdy3DUFZDFoW8YpFQIt0v3/aVB
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Bumsik Kim <kbumsik@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Krzysztof Sobota <krzysztof.sobota@nokia.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Martin Wu <wuyan@allwinnertech.com>,
+        Michael Shych <michaelsh@mellanox.com>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Tero Kristo <t-kristo@ti.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Timothy Myers <timothy.myers@adtran.com>,
+        Wang Qing <wangqing@vivo.com>, Woody Lin <woodylin@google.com>,
+        Xu Wang <vulab@iscas.ac.cn>
+Subject: [GIT PULL REQUEST] watchdog - v5.9 Merge window
+Message-ID: <20200812113903.GA14481@www.linux-watchdog.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 12:46 PM Sylwester Nawrocki
-<s.nawrocki@samsung.com> wrote:
-> On 12.08.2020 11:14, Arnd Bergmann wrote:
-> >
-> > It seems there have never been any callers and the entire file
-> > can just be removed, with the rest of that platform_data header
-> > file moved to drivers/media/platform/s3c-camif/.
->
-> Yes, it seems that patch never made it to mainline:
-> https://git.linuxtv.org/snawrocki/media.git/commit/?h=testing/s3c-camif&id=355cbf835aff2aabf78390931cbbaa608af77967
+Hi Linus,
 
-I suppose it would still apply if anyone was interested, but I see your
-point.
+Please pull the watchdog changes for the v5.2 release cycle.
 
-> I doubt there are still users of camera on the s3c2440 boards
-> with current mainline kernels, if any at all, there are much
-> better HW alternatives right now.
+This series contains:
+* f71808e_wdt imporvements
+* dw_wdt improvements
+* mlx-wdt: support new watchdog type with longer timeout period
+* fallthrough pseudo-keyword replacements
+* overall small fixes and improvements
 
-I see two board files (and no DT) instantiate the camif device:
-NexVision Nexcoder 2440 and the FriendlyARM mini2440.
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 92ed301919932f777713b9172e525674157e983d:
 
-Can you say whether the camif on those would actually work
-at all without your patch? If not, we know that there are no
-users of that driver and could either drop it completely or move
-it to staging for a release or two.
+  Linux 5.8-rc7 (2020-07-26 14:14:06 -0700)
 
-     Arnd
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.9-rc1
+
+for you to fetch changes up to d5b29c2c5ba2bd5bbdb5b744659984185d17d079:
+
+  watchdog: rti-wdt: balance pm runtime enable calls (2020-08-05 18:43:03 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 5.9-rc1 tag
+
+----------------------------------------------------------------
+Ahmad Fatoum (5):
+      docs: watchdog: codify ident.options as superset of possible status flags
+      watchdog: f71808e_wdt: indicate WDIOF_CARDRESET support in watchdog_info.options
+      watchdog: f71808e_wdt: remove use of wrong watchdog_info option
+      watchdog: f71808e_wdt: clear watchdog timeout occurred flag
+      watchdog: f71808e_wdt: do stricter parameter validation
+
+Alexander A. Klimov (1):
+      watchdog: Replace HTTP links with HTTPS ones
+
+Bumsik Kim (1):
+      watchdog: test_bit() => watchdog_active()
+
+Gustavo A. R. Silva (2):
+      watchdog: Use fallthrough pseudo-keyword
+      watchdog: scx200_wdt: Use fallthrough pseudo-keyword
+
+Krzysztof Sobota (1):
+      watchdog: initialize device before misc_register
+
+Lad Prabhakar (1):
+      dt-bindings: watchdog: renesas,wdt: Document r8a774e1 support
+
+Lukas Bulwahn (1):
+      MAINTAINERS: rectify entry in ARM SMC WATCHDOG DRIVER
+
+Martin Wu (1):
+      watchdog: sunxi_wdt: fix improper error exit code
+
+Michael Shych (4):
+      platform_data/mlxreg: support new watchdog type with longer timeout period
+      platform/x86: mlx-platform: support new watchdog type with longer timeout
+      watchdog: mlx-wdt: support new watchdog type with longer timeout period
+      docs: watchdog: mlx-wdt: Add description of new watchdog type 3
+
+Sai Prakash Ranjan (2):
+      dt-bindings: watchdog: Convert QCOM watchdog timer bindings to YAML
+      dt-bindings: watchdog: Add compatible for QCS404, SC7180, SDM845, SM8150
+
+Serge Semin (7):
+      dt-bindings: watchdog: Convert DW WDT binding to DT schema
+      dt-bindings: watchdog: dw-wdt: Support devices with asynch clocks
+      dt-bindings: watchdog: dw-wdt: Add watchdog TOPs array property
+      watchdog: dw_wdt: Support devices with non-fixed TOP values
+      watchdog: dw_wdt: Support devices with asynch clocks
+      watchdog: dw_wdt: Add pre-timeouts support
+      watchdog: dw_wdt: Add DebugFS files
+
+Tero Kristo (4):
+      watchdog: use __watchdog_ping in startup
+      watchdog: add support for adjusting last known HW keepalive time
+      watchdog: rti-wdt: attach to running watchdog during probe
+      watchdog: rti-wdt: balance pm runtime enable calls
+
+Tiezhu Yang (1):
+      watchdog: bcm_kona_wdt: Use correct return value for bcm_kona_wdt_probe()
+
+Timothy Myers (1):
+      watchdog: booke_wdt: Add common nowayout parameter driver
+
+Wang Qing (1):
+      watchdog: Use kobj_to_dev() API
+
+Woody Lin (1):
+      watchdog: softdog: Add options 'soft_reboot_cmd' and 'soft_active_on_boot'
+
+Xu Wang (1):
+      watchdog: pcwd_usb: remove needless check before usb_free_coherent()
+
+ .../devicetree/bindings/watchdog/davinci-wdt.txt   |   4 +-
+ .../devicetree/bindings/watchdog/dw_wdt.txt        |  24 --
+ .../devicetree/bindings/watchdog/qcom-wdt.txt      |  28 --
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |  48 +++
+ .../devicetree/bindings/watchdog/renesas,wdt.yaml  |   1 +
+ .../devicetree/bindings/watchdog/snps,dw-wdt.yaml  |  90 +++++
+ Documentation/watchdog/mlx-wdt.rst                 |  10 +
+ Documentation/watchdog/watchdog-api.rst            |   2 +-
+ Documentation/watchdog/watchdog-kernel-api.rst     |  12 +
+ MAINTAINERS                                        |   2 +-
+ drivers/platform/x86/mlx-platform.c                | 106 +++++
+ drivers/watchdog/Kconfig                           |   2 +-
+ drivers/watchdog/advantechwdt.c                    |   2 +-
+ drivers/watchdog/alim1535_wdt.c                    |   2 +-
+ drivers/watchdog/alim7101_wdt.c                    |   2 +-
+ drivers/watchdog/ar7_wdt.c                         |   3 +-
+ drivers/watchdog/ath79_wdt.c                       |   2 +-
+ drivers/watchdog/bcm_kona_wdt.c                    |   2 +-
+ drivers/watchdog/booke_wdt.c                       |   6 +-
+ drivers/watchdog/dw_wdt.c                          | 439 +++++++++++++++++++--
+ drivers/watchdog/eurotechwdt.c                     |   2 +-
+ drivers/watchdog/f71808e_wdt.c                     |  54 ++-
+ drivers/watchdog/gef_wdt.c                         |   2 +-
+ drivers/watchdog/geodewdt.c                        |   2 +-
+ drivers/watchdog/ib700wdt.c                        |   2 +-
+ drivers/watchdog/it8712f_wdt.c                     |   2 +-
+ drivers/watchdog/ixp4xx_wdt.c                      |   2 +-
+ drivers/watchdog/m54xx_wdt.c                       |   2 +-
+ drivers/watchdog/machzwd.c                         |   2 +-
+ drivers/watchdog/mlx_wdt.c                         |  73 +++-
+ drivers/watchdog/mv64x60_wdt.c                     |   2 +-
+ drivers/watchdog/nv_tco.c                          |   4 +-
+ drivers/watchdog/nv_tco.h                          |   2 +-
+ drivers/watchdog/pc87413_wdt.c                     |   2 +-
+ drivers/watchdog/pcwd.c                            |   2 +-
+ drivers/watchdog/pcwd_pci.c                        |   2 +-
+ drivers/watchdog/pcwd_usb.c                        |   7 +-
+ drivers/watchdog/rc32434_wdt.c                     |   2 +-
+ drivers/watchdog/riowd.c                           |   2 +-
+ drivers/watchdog/rti_wdt.c                         | 114 +++++-
+ drivers/watchdog/sa1100_wdt.c                      |   2 +-
+ drivers/watchdog/sb_wdog.c                         |   2 +-
+ drivers/watchdog/sbc60xxwdt.c                      |   2 +-
+ drivers/watchdog/sbc7240_wdt.c                     |   2 +-
+ drivers/watchdog/sbc_fitpc2_wdt.c                  |   2 +-
+ drivers/watchdog/sc520_wdt.c                       |   2 +-
+ drivers/watchdog/sch311x_wdt.c                     |   2 +-
+ drivers/watchdog/scx200_wdt.c                      |   2 +-
+ drivers/watchdog/smsc37b787_wdt.c                  |   2 +-
+ drivers/watchdog/softdog.c                         |  57 +++
+ drivers/watchdog/sp5100_tco.c                      |   2 +-
+ drivers/watchdog/sunxi_wdt.c                       |   2 +-
+ drivers/watchdog/w83877f_wdt.c                     |   2 +-
+ drivers/watchdog/w83977f_wdt.c                     |   2 +-
+ drivers/watchdog/wafer5823wdt.c                    |   2 +-
+ drivers/watchdog/watchdog_dev.c                    |  73 +++-
+ drivers/watchdog/wdt.c                             |   2 +-
+ drivers/watchdog/wdt285.c                          |   2 +-
+ drivers/watchdog/wdt977.c                          |   2 +-
+ drivers/watchdog/wdt_pci.c                         |   2 +-
+ include/linux/platform_data/mlxreg.h               |   5 +-
+ include/linux/watchdog.h                           |   2 +
+ 62 files changed, 1032 insertions(+), 210 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/qcom-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
