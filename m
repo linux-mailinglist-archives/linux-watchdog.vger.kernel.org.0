@@ -2,41 +2,53 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D11242DE0
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Aug 2020 19:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FCB242EB1
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Aug 2020 20:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726394AbgHLRNf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Aug 2020 13:13:35 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:33050 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbgHLRNf (ORCPT
+        id S1726529AbgHLStk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Aug 2020 14:49:40 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:60961 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726609AbgHLStk (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Aug 2020 13:13:35 -0400
-Received: by mail-ed1-f66.google.com with SMTP id v22so2123870edy.0;
-        Wed, 12 Aug 2020 10:13:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MT1HlMJVel4NfjLeoguo3S82lKmyadBedQuGtY3rkqk=;
-        b=TfnCt8i46ssK+my+himX+2+Tux9PbfF5q6UvtbkAYYfII09bJB39WAz3TRXJ2D17au
-         oT769zYqfbgbDLRFpa1Sh1/qY0Ni3xqTG5ipCP2oaWR1qftCOCCTAE9BMBfvQgOQAUpo
-         Z4MAk5drl2VVDv6EH53M91CZ4J7jMhsd6IdXC0C8mcvJtsQ30P3UGLvoft97c2zsQknM
-         rBfLddvN/XjTeQxOpogTtQflQZBpAmKeODc6y/mROOkwg98R65FFcfLpFeo+J9NHGPh7
-         irtqtqhNqwBg4Yo+xeSMvYXGa2/fpbFOc2cgzpr6s1a2TrrmQM8QQ9w4vWfCyz7molfv
-         dJng==
-X-Gm-Message-State: AOAM5318bYz8jZQ2v+LXzBl1EAv66vj7curb0EddonzJ5hXtFVYAoYOC
-        OvVfdUOdtIpNO1NwhSPQezQq3Dbivgg=
-X-Google-Smtp-Source: ABdhPJxHwROrd0TssNGyu5e5q3y0vfIOw6f27KQllbOmg3rLagqeBRyVqwp6k+Jy2UBlAMcA2OF4Tw==
-X-Received: by 2002:a05:6402:c84:: with SMTP id cm4mr920950edb.20.1597252412911;
-        Wed, 12 Aug 2020 10:13:32 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.117])
-        by smtp.googlemail.com with ESMTPSA id b20sm1821329eds.7.2020.08.12.10.13.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Aug 2020 10:13:32 -0700 (PDT)
-Date:   Wed, 12 Aug 2020 19:13:29 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+        Wed, 12 Aug 2020 14:49:40 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200812184937euoutp02deea291e20cbc16c0cd2a2730ac97b05~qmdmU0nhT2767127671euoutp02a
+        for <linux-watchdog@vger.kernel.org>; Wed, 12 Aug 2020 18:49:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200812184937euoutp02deea291e20cbc16c0cd2a2730ac97b05~qmdmU0nhT2767127671euoutp02a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1597258177;
+        bh=s3ZHCEzw9q2HR8CaGE1flMYvKuALZpBvcp7A5ytX9wg=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=CXLJ2wn2tAaKhU6qzh039Q6gKstyZ/XtRe6Uwxgyp5cKKXolrBOXi74j8aC6MdO88
+         kthRe8K8Ab6aKkt/MrBblwunZmHXoiqEt/1OlXxKGtpMElXTjMpTf1RkXJvty0CDZ5
+         sAEcZNumxtSbpzYyQ4BXXLTJFxjbqSx6Hy1jzKXE=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200812184936eucas1p1327b48495e28f400f22281c85890397e~qmdlQqpVw2581225812eucas1p1Z;
+        Wed, 12 Aug 2020 18:49:36 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 4A.82.05997.0C9343F5; Wed, 12
+        Aug 2020 19:49:36 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200812184935eucas1p2e8bf2589f1b82161237144d48e6ef374~qmdkCi-hb2980129801eucas1p2q;
+        Wed, 12 Aug 2020 18:49:35 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200812184935eusmtrp11d352cc340aac680aaecd17a9a7fcfa0~qmdkBqlIo1774417744eusmtrp1s;
+        Wed, 12 Aug 2020 18:49:35 +0000 (GMT)
+X-AuditID: cbfec7f4-677ff7000000176d-a1-5f3439c04221
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 96.1D.06017.FB9343F5; Wed, 12
+        Aug 2020 19:49:35 +0100 (BST)
+Received: from [106.210.123.115] (unknown [106.210.123.115]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200812184933eusmtip13e8e059aeb5b035461182d7779562369~qmdiZj2x70951409514eusmtip1c;
+        Wed, 12 Aug 2020 18:49:33 +0000 (GMT)
+Subject: Re: [PATCH v2 13/13] ARM: s3c24xx: camif: include header with
+ prototypes and unify declaration
+To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
         Alexandre Torgue <alexandre.torgue@st.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -62,91 +74,80 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Sylwester Nawrocki <snawrocki@kernel.org>,
         Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>
-Subject: Re: [PATCH v2 13/13] ARM: s3c24xx: camif: include header with
- prototypes and unify declaration
-Message-ID: <20200812171329.GA3420@kozik-lap>
-References: <20200804192654.12783-1-krzk@kernel.org>
- <20200804192654.12783-14-krzk@kernel.org>
- <159721917443.33733.7919188364233003142@swboyd.mtv.corp.google.com>
- <CGME20200812091510eucas1p15944eb26bb496e20b9fadd609063a490@eucas1p1.samsung.com>
- <CAK8P3a13u0KY0jzxNLs=irTs6ZSXyObKKTp-8KEmowcOZrZXxQ@mail.gmail.com>
- <8066413c-367d-2f8d-3e7b-dacd954675be@samsung.com>
- <CAK8P3a1xXe56k5nKuCJ-25h1VqWKRb9JGnFrr=SPg_icay-vZA@mail.gmail.com>
- <6ccf14a9-802f-25b8-494d-e957cafd073d@samsung.com>
- <20200812133109.GA15697@pi3>
- <828b3dd5-31f0-0414-e6ea-7629b063e8ce@samsung.com>
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <c8a36f33-74d7-96d7-b297-3488874604ad@samsung.com>
+Date:   Wed, 12 Aug 2020 20:49:32 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <828b3dd5-31f0-0414-e6ea-7629b063e8ce@samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200812171329.GA3420@kozik-lap>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0yTVxjO6XeFWP2oGN4UN03jXNgyKt5yvMSImXpiiC4u/lkyWdEvQAQk
+        raDoD6uiMKhYa5CtJYqbOO1KVWAomFVs0KpFKyEW1GKjFDfESgwYAi0w2o9t/Hve55L3fU4O
+        TynaWCWfnbdP1OZpclRsLN10b/TxV62rlqcvGX6txNcDboTHTfc4PHjJgHDX8F8MPtU7QGGP
+        5xqHHx19x+H6Xi+DPxheMvgnj0OGy7wBBnfbHRx2Vv6JcOBCuwyHmo7QuK6th8PnxusY3PFw
+        Ix4avM3gCe91Go+YOmjc4LOwuKSvn8LWljDCxb4VuLd/gsKvDBZ2fSKxnbMh0untoEhozITI
+        YPdxjvzq7kLklH2IIc3mHo7UW39kyRWbjSENFw+TqupJRBoG/qZI84ieIxWNVkQ87yppcseR
+        8o3iu9i1u8Wc7EJRq173Q2yWoczJ5VdSB173DCA9csvKUAwPwnLoqi2my1AsrxAuI7h9v52S
+        hmEExb+HOGkYQuAKNv4XGRhtnxZ+Q3DB5p/Of0BgDryKuuYK2VASvIoiOF5Igq7xESZiooQn
+        PFzzn40KrJACJ+9WRLFcWAcf7ZZomBY+g962GjqC5wk74Q/XU5nkiYMHPwemeJ6PEZIhPLow
+        QlNCAjwPnJdJeAHcCFZHO4BQHgMlpXZWOvtr6Ktu4SQ8F966GqfxfHCfMdBS4BgCw60XnDQY
+        EfhdNUhyrQHf4zE2spmaqnO1RS3RqeByGZkIDcJs6A7GSUfMBlNTFSXRcig9oZDciyBkrZp+
+        RSWUByZpI1KZZzQzz6hjnlHH/P/eGkRbUYJYoMvNFHVL88T9yTpNrq4gLzN5197cejT1t90T
+        ruGbqCWc4UQCj1Sz5MaxZekKRlOoK8p1IuApVbx8wyP3ToV8t6booKjdm64tyBF1TpTI06oE
+        +bJf+r9XCJmafeIeUcwXtf+qMj5GqUfflqeJ+ozVVZs9qxduzzc5TgdH1XVCee3k59qnGYXG
+        ogMpfbIKdZK29dNjG3zmHR3G+2r32BO7v6Z1Tqo+tTnwiaVRtSVpVfy44469eWOn0uR727ne
+        vjWRCVXGbZvFhqliY9qhLP/B0k21X94KH/dWPLCkLX5PnUl/82zlyR3kporWZWlSvqC0Os0/
+        +2K9mtcDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUhTYRTHe/bcu3utFrer0YNCyYWQgmbXl/bYi0j0ciHo9ZuVa+hNJedk
+        d/b6IYvCuiw1RaxpVvSGY2pqWEqZLtNqC1vKlHBBbWW5SqJi2KblHIHffpzz/x3OgUNDdoiM
+        pfMLTaKxUFfAKecTjul+z+onaSnaNa/LCNzicwA8VdlH4Yk7ZoCHf42RuNzrh3hg4B6FX535
+        SuFWr5vEP8zvSHx5oEuBZbePxCNNXRS2Vz8G2HfDqcDB9tMEbuz1ULh+qpHErpdb8M+JJySe
+        drcQOFDpInDbaK0Sl378ArG1MwTw2dFU7P0yDfF7c60yI06w1duAMOh2QSH4pxIIEyPnKOGm
+        YxgI5U0/SaHD4qGEVusFpdBgs5FC261TQk3dXyC0+T9DoSNQQgll961AGPhaTQg9XfwuNlO9
+        wWgoNonxeQbJtJHbx+MkNZ+G1UkpaWo+WXNgXVIql5i+IUcsyD8iGhPTD6rzzLKdKqqGxz54
+        /KAEOBQyiKIRk4L8k05KBvNplrkN0GNXGZABPdOIRdfOcpFMNAq5ZWWYWWYCIOfDBWGOZvJR
+        6bdmEOYYZiUangqQ4TmQGaHRjapmZWToOIGG3wwS4ZSS4dHFZ2WzhopJR7+bame3IJgVyNt7
+        fTazhMlC3ot/YSSzGL244iPCC0UxahSajA+XIZOAQvVvYISXore+a4oIL0cPvtXBCsBa5tiW
+        OYpljmKZo1wHhBXEiMWSPlcvJaklnV4qLsxVZxv0rWDmo9r7Ju8/BPL3vXbA0IBbqKr4k6xl
+        Sd0R6bjeDhANuRjVpleOLFaVozt+QjQatMbiAlGyg9SZ2y7B2CXZhpn/LDRp+VReg9N4TbIm
+        eS3mlqrOMz37WSZXZxIPi2KRaPzvKeio2BJgrr3AjTfvPnc3mGIa3/FLszkUPOZ8XrXtlpJf
+        ERwam7eL7vJltNmWOZy72bEPrB3GXZXlmk+PptqLtm92rR/tbgycyPjuOdpb9/K0VN1yMq85
+        Z9G9hNfroXZVdOZIXFbnjtKtO2t0K7OfrnvbkBg4lN+t6g/6A2KCtWdPP10a5AgpT8evgkZJ
+        9w8p+097ZwMAAA==
+X-CMS-MailID: 20200812184935eucas1p2e8bf2589f1b82161237144d48e6ef374
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200812091510eucas1p15944eb26bb496e20b9fadd609063a490
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200812091510eucas1p15944eb26bb496e20b9fadd609063a490
+References: <20200804192654.12783-1-krzk@kernel.org>
+        <20200804192654.12783-14-krzk@kernel.org>
+        <159721917443.33733.7919188364233003142@swboyd.mtv.corp.google.com>
+        <CGME20200812091510eucas1p15944eb26bb496e20b9fadd609063a490@eucas1p1.samsung.com>
+        <CAK8P3a13u0KY0jzxNLs=irTs6ZSXyObKKTp-8KEmowcOZrZXxQ@mail.gmail.com>
+        <8066413c-367d-2f8d-3e7b-dacd954675be@samsung.com>
+        <CAK8P3a1xXe56k5nKuCJ-25h1VqWKRb9JGnFrr=SPg_icay-vZA@mail.gmail.com>
+        <6ccf14a9-802f-25b8-494d-e957cafd073d@samsung.com>
+        <20200812133109.GA15697@pi3>
+        <828b3dd5-31f0-0414-e6ea-7629b063e8ce@samsung.com>
+        <20200812171329.GA3420@kozik-lap>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 05:58:52PM +0200, Sylwester Nawrocki wrote:
-> On 12.08.2020 15:31, Krzysztof Kozlowski wrote:
-> > On Wed, Aug 12, 2020 at 03:11:41PM +0200, Sylwester Nawrocki wrote:
-> >> On 12.08.2020 13:28, Arnd Bergmann wrote:
-> >>> On Wed, Aug 12, 2020 at 12:46 PM Sylwester Nawrocki
-> >>> <s.nawrocki@samsung.com> wrote:
-> >>>> On 12.08.2020 11:14, Arnd Bergmann wrote:
-> 
-> >>> I see two board files (and no DT) instantiate the camif device:
-> >>> NexVision Nexcoder 2440 and the FriendlyARM mini2440.
-> >>>
-> >>> Can you say whether the camif on those would actually work
-> >>> at all without your patch? If not, we know that there are no
-> >>> users of that driver and could either drop it completely or move
-> >>> it to staging for a release or two.
-> >>
-> >> Without additional patches the camif will not work, the driver 
-> >> needs an instance of struct s3c_camif_plat_data which specifies
-> >> what image sensor is attached.
-> >>
-> >> I think we can drop the driver, together with the s3c_camif_device
-> >> platform device definitions. It can always be added again if anyone
-> >> ever needs it or converts the platform to DT.
-> > 
-> > Since the header was in /include/media I assumed there might be some
-> > user-space tools using it. But if it is not the case, I'll drop the code
-> > then.
-> 
-> That's a kernel internal header, only for board files, it should really 
-> have been added to include/linux/platform_data.
->   
-> >> IMO all non-DT code in arch/arm/mach-s3c24xx is a candidate for
-> >> removal, it just adds to the maintenance effort and I seriously
-> >> doubt there are now any users of it.
-> > 
-> > That is quite tricky... I really do not know whether there are any real
-> > world users of S3C24xx and S3C64xx platforms. Evalkits are mostly not
-> > available for buying so I do not expect new designs. However still
-> > existing ones might be somewhere... Few years ago, back in Samsung, I
-> > mentioned removing them. That time I think Marek or you Sylwester, said
-> > that there are industrial applications using S3C24xx. I believe, why
-> > not. The trouble is - how to find such users? How to get in touch for
-> > testing or at least for bug reports if something is broken?
-> 
-> I believe if there any such applications of the S3C24XX SoCs still existing 
-> somewhere their long term support doesn't include updating to new kernels. 
-> I used to keep a running S3C2440 SoC based board just for the purpose of
-> testing patches touching the common code, but I stopped it, I think it is
-> not worth to waste time and health on it any more. For example support for 
-> the OSELAS.BSP-Pengutronix-Mini2440 BSP I used for tests ended 5 years ago
-> [1].
-> 
-> > Or even more important - is it worth to spend effort and time on this?
-> > If there is no single production system using recent Linux kernel, the
-> > answer should be negative...
-> 
-> I suspect nobody cares about that code (non-DT s3c24xx) any more for other
-> than sentimental reasons.
+On 12.08.2020 19:13, Krzysztof Kozlowski wrote:
+> I'll start then with S3C camif driver. :) I guess
+> drivers/media/platform/s3c-camif/ still should be left?
 
-I'll start then with S3C camif driver. :) I guess
-drivers/media/platform/s3c-camif/ still should be left?
+No, if you want to remove the driver then this whole directory
+should be removed. The driver also supports the S3C6410 CAMIF
+but there is no s3c6410-camif devices instantiated in 
+arch/arm/mach-s3c64xx either.
 
-Best regards,
-Krzysztof
-
+-- 
+Regards,
+Sylwester
