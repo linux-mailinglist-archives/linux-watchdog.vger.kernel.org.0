@@ -2,107 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 636FD243A62
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Aug 2020 14:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41EC2441B7
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Aug 2020 01:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726131AbgHMM6U (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 13 Aug 2020 08:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbgHMM6T (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 13 Aug 2020 08:58:19 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E4FC061757;
-        Thu, 13 Aug 2020 05:58:18 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id u20so2785912pfn.0;
-        Thu, 13 Aug 2020 05:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=gTPtLLpVlGWVqCEQ50i6eGJ0HyGEAaWaZg6X6EHGJ8Y=;
-        b=N2wAovWQSI8dNBnAOPeeCXGOCZvLZ/zlHpkRNfRRrXr7TK+FK1x0d0t928qClLtlsJ
-         ePcFzX6FIsx+3Zag95C1ASGvtL1i0gN7g4PQrk0FyILr1vLpIE7c1c/DdloHGOAT4DzQ
-         S3u9a8O8S3x5c2Ez9w0hxSGirLz2Y0e4r8f545233XTtkXYeCHcV/wqgo41VYDlAobvK
-         AYHKoIPG7e4fKvriHYYRgCYaCH/+TTlmmFFi80Bm+buFPoXkja5tV+wLDQQyNC8CaUvF
-         w8bWztwBSf9wYmh7/0ApV/eVRfLXtYJ1Fcugvp3IHeReLEom8EYfdMp3iTNFg6Fa8+0u
-         LkRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=gTPtLLpVlGWVqCEQ50i6eGJ0HyGEAaWaZg6X6EHGJ8Y=;
-        b=hOYq7ytX7N5gmbc8dEteytU2xHM+y2NBtCaTBL7VSBnFGpIozXaI065cIY5yQGFjt+
-         RfBpQv1aRF2KiFofqA6vPMT6JW6/GxOBOyur+XBni1EjYrY1D7wW4EWq6SFwIXuNDvju
-         7XniLa0Wq9HFHn+M4ebK7y5L3DJ+hQeALM6LF8UGPStGquq6AVZ+p6AckBuxT+uF84yO
-         BCbIh9nLu4nAI5nEGqS5SQuvwY6AC+tcITZVtdf8zKIYCdoPzGnDGQaoXi6ZECZzug/N
-         cmAq2lio8qigmnd8YstGkGZ3LwlnML+ltx+2gIkeKg16kcX5oQeehR6BfWQx9ULBwGc1
-         rrMA==
-X-Gm-Message-State: AOAM533YeM0smjgoof/bBEwhxCNrtkLrBdLlV3hJqzXEak+nNFNYWtIZ
-        WDXynJ3EN79NVASME3NIVw==
-X-Google-Smtp-Source: ABdhPJw8tVwRtB2mbHav0pWxygwVqsparobl/2DbPyh0e/21PyJK33hzSdGPRKdiUtrobdCikjuXMw==
-X-Received: by 2002:a63:925d:: with SMTP id s29mr3531093pgn.423.1597323498077;
-        Thu, 13 Aug 2020 05:58:18 -0700 (PDT)
-Received: from localhost.localdomain ([2402:3a80:cea:b0c7:809d:c953:9730:34b1])
-        by smtp.gmail.com with ESMTPSA id t19sm5820505pfc.5.2020.08.13.05.58.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2020 05:58:16 -0700 (PDT)
-From:   madhuparnabhowmik10@gmail.com
-To:     wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrianov@ispras.ru, ldv-project@linuxtesting.org,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-Subject: [PATCH] drivers: watchdog: pc87413_wdt: Fix Race condition bug
-Date:   Thu, 13 Aug 2020 18:24:51 +0530
-Message-Id: <20200813125451.19118-1-madhuparnabhowmik10@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726567AbgHMX0F convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 13 Aug 2020 19:26:05 -0400
+Received: from [186.47.21.114] ([186.47.21.114]:36998 "EHLO mail.hmvi.gob.ec"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726205AbgHMX0F (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 13 Aug 2020 19:26:05 -0400
+X-Greylist: delayed 11640 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Aug 2020 19:26:04 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hmvi.gob.ec (Postfix) with ESMTP id 11474C0377DBF;
+        Thu, 13 Aug 2020 12:53:43 -0500 (-05)
+Received: from mail.hmvi.gob.ec ([127.0.0.1])
+        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id QApyj1gsrnQQ; Thu, 13 Aug 2020 12:53:42 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hmvi.gob.ec (Postfix) with ESMTP id B20E4C01B5733;
+        Thu, 13 Aug 2020 12:35:38 -0500 (-05)
+X-Virus-Scanned: amavisd-new at hmvi.gob.ec
+Received: from mail.hmvi.gob.ec ([127.0.0.1])
+        by localhost (mail.hmvi.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id f1Gcc_7tXv-4; Thu, 13 Aug 2020 12:35:38 -0500 (-05)
+Received: from [10.73.80.190] (unknown [105.8.3.183])
+        by mail.hmvi.gob.ec (Postfix) with ESMTPSA id 17661C035F3A8;
+        Thu, 13 Aug 2020 12:23:30 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <danny.puetate@mail.hmvi.gob.ec>
+From:   ''Tayeb Souami'' <danny.puetate@mail.hmvi.gob.ec>
+Date:   Thu, 13 Aug 2020 19:23:10 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200813172331.17661C035F3A8@mail.hmvi.gob.ec>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+Lieber Freund,
 
-After misc_register the open() callback can be called.
-However the base address (swc_base_addr) is set after misc_register()
-in init.
-As a result, if open callback is called before pc87413_get_swc_base_addr()
-then in the following call chain: pc87413_open() -> pc87413_refresh() ->
-pc87413_swc_bank3() : The value of swc_base_addr will be -1.
-Therefore, do misc_register() after pc87413_get_swc_base_addr().
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika,
+der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich
+an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre
+E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines
+Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und
+Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die
+Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden,
+um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite
+unten.
 
-Found by Linux Driver Verification project (linuxtesting.org).
 
-Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
----
- drivers/watchdog/pc87413_wdt.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
-index 73fbfc99083b..ad8b8af2bdc0 100644
---- a/drivers/watchdog/pc87413_wdt.c
-+++ b/drivers/watchdog/pc87413_wdt.c
-@@ -512,6 +512,10 @@ static int __init pc87413_init(void)
- 	if (ret != 0)
- 		pr_err("cannot register reboot notifier (err=%d)\n", ret);
- 
-+	pc87413_select_wdt_out();
-+	pc87413_enable_swc();
-+	pc87413_get_swc_base_addr();
-+
- 	ret = misc_register(&pc87413_miscdev);
- 	if (ret != 0) {
- 		pr_err("cannot register miscdev on minor=%d (err=%d)\n",
-@@ -520,10 +524,6 @@ static int __init pc87413_init(void)
- 	}
- 	pr_info("initialized. timeout=%d min\n", timeout);
- 
--	pc87413_select_wdt_out();
--	pc87413_enable_swc();
--	pc87413_get_swc_base_addr();
--
- 	if (!request_region(swc_base_addr, 0x20, MODNAME)) {
- 		pr_err("cannot request SWC region at 0x%x\n", swc_base_addr);
- 		ret = -EBUSY;
--- 
-2.17.1
 
+Das ist dein Spendencode: [TS530342018]
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+
+Grüße
+
+Herr Tayeb Souami
