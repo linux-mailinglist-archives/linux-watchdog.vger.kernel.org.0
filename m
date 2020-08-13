@@ -2,137 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F104243A10
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Aug 2020 14:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636FD243A62
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Aug 2020 14:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbgHMMtY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 13 Aug 2020 08:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
+        id S1726131AbgHMM6U (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 13 Aug 2020 08:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbgHMMs7 (ORCPT
+        with ESMTP id S1726102AbgHMM6T (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 13 Aug 2020 08:48:59 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E511C061386;
-        Thu, 13 Aug 2020 05:48:59 -0700 (PDT)
-Received: from mwalle01.sab.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6DD5A23E52;
-        Thu, 13 Aug 2020 14:48:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1597322937;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jzoYKZop+EzAsyWCwSg4207lyXayLCZfQtt4nzi0YQM=;
-        b=ZrfsBV5XwVlGpJtWArjAeYmO9Cwe7PmXMacwTqM+0NpYjrd4gN5HoBVQ/h0pI1F9NU24r6
-        D3a0ZtoySmdPkc2aZzM8jXoKpTWi8O86MVL4GButea66XSlXeC1z0t0fvPM7v94nEfv7WH
-        CIRuYDvqsKlzOMrK42+25UXRtXr+18E=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v8 13/13] arm64: defconfig: enable the sl28cpld board management controller
-Date:   Thu, 13 Aug 2020 14:48:32 +0200
-Message-Id: <20200813124832.17349-14-michael@walle.cc>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200813124832.17349-1-michael@walle.cc>
-References: <20200813124832.17349-1-michael@walle.cc>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
+        Thu, 13 Aug 2020 08:58:19 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E4FC061757;
+        Thu, 13 Aug 2020 05:58:18 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id u20so2785912pfn.0;
+        Thu, 13 Aug 2020 05:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=gTPtLLpVlGWVqCEQ50i6eGJ0HyGEAaWaZg6X6EHGJ8Y=;
+        b=N2wAovWQSI8dNBnAOPeeCXGOCZvLZ/zlHpkRNfRRrXr7TK+FK1x0d0t928qClLtlsJ
+         ePcFzX6FIsx+3Zag95C1ASGvtL1i0gN7g4PQrk0FyILr1vLpIE7c1c/DdloHGOAT4DzQ
+         S3u9a8O8S3x5c2Ez9w0hxSGirLz2Y0e4r8f545233XTtkXYeCHcV/wqgo41VYDlAobvK
+         AYHKoIPG7e4fKvriHYYRgCYaCH/+TTlmmFFi80Bm+buFPoXkja5tV+wLDQQyNC8CaUvF
+         w8bWztwBSf9wYmh7/0ApV/eVRfLXtYJ1Fcugvp3IHeReLEom8EYfdMp3iTNFg6Fa8+0u
+         LkRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gTPtLLpVlGWVqCEQ50i6eGJ0HyGEAaWaZg6X6EHGJ8Y=;
+        b=hOYq7ytX7N5gmbc8dEteytU2xHM+y2NBtCaTBL7VSBnFGpIozXaI065cIY5yQGFjt+
+         RfBpQv1aRF2KiFofqA6vPMT6JW6/GxOBOyur+XBni1EjYrY1D7wW4EWq6SFwIXuNDvju
+         7XniLa0Wq9HFHn+M4ebK7y5L3DJ+hQeALM6LF8UGPStGquq6AVZ+p6AckBuxT+uF84yO
+         BCbIh9nLu4nAI5nEGqS5SQuvwY6AC+tcITZVtdf8zKIYCdoPzGnDGQaoXi6ZECZzug/N
+         cmAq2lio8qigmnd8YstGkGZ3LwlnML+ltx+2gIkeKg16kcX5oQeehR6BfWQx9ULBwGc1
+         rrMA==
+X-Gm-Message-State: AOAM533YeM0smjgoof/bBEwhxCNrtkLrBdLlV3hJqzXEak+nNFNYWtIZ
+        WDXynJ3EN79NVASME3NIVw==
+X-Google-Smtp-Source: ABdhPJw8tVwRtB2mbHav0pWxygwVqsparobl/2DbPyh0e/21PyJK33hzSdGPRKdiUtrobdCikjuXMw==
+X-Received: by 2002:a63:925d:: with SMTP id s29mr3531093pgn.423.1597323498077;
+        Thu, 13 Aug 2020 05:58:18 -0700 (PDT)
+Received: from localhost.localdomain ([2402:3a80:cea:b0c7:809d:c953:9730:34b1])
+        by smtp.gmail.com with ESMTPSA id t19sm5820505pfc.5.2020.08.13.05.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Aug 2020 05:58:16 -0700 (PDT)
+From:   madhuparnabhowmik10@gmail.com
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrianov@ispras.ru, ldv-project@linuxtesting.org,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+Subject: [PATCH] drivers: watchdog: pc87413_wdt: Fix Race condition bug
+Date:   Thu, 13 Aug 2020 18:24:51 +0530
+Message-Id: <20200813125451.19118-1-madhuparnabhowmik10@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Enable the kernel modules for the board management controller "sl28cpld"
-which is used on the SMARC-sAL28 board.
+From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+After misc_register the open() callback can be called.
+However the base address (swc_base_addr) is set after misc_register()
+in init.
+As a result, if open callback is called before pc87413_get_swc_base_addr()
+then in the following call chain: pc87413_open() -> pc87413_refresh() ->
+pc87413_swc_bank3() : The value of swc_base_addr will be -1.
+Therefore, do misc_register() after pc87413_get_swc_base_addr().
+
+Found by Linux Driver Verification project (linuxtesting.org).
+
+Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 ---
-Changes since v7:
- - added new virtual symbol CONFIG_MFD_SL28CPLD
+ drivers/watchdog/pc87413_wdt.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Changes since v6:
- - none
-
-Changes since v5:
- - new patch
-
- arch/arm64/configs/defconfig | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 500b782b92df..badfca74d656 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -500,6 +500,7 @@ CONFIG_GPIO_PCA953X=y
- CONFIG_GPIO_PCA953X_IRQ=y
- CONFIG_GPIO_BD9571MWV=m
- CONFIG_GPIO_MAX77620=y
-+CONFIG_GPIO_SL28CPLD=m
- CONFIG_POWER_AVS=y
- CONFIG_QCOM_CPR=y
- CONFIG_ROCKCHIP_IODOMAIN=y
-@@ -513,6 +514,7 @@ CONFIG_SENSORS_ARM_SCPI=y
- CONFIG_SENSORS_LM90=m
- CONFIG_SENSORS_PWM_FAN=m
- CONFIG_SENSORS_RASPBERRYPI_HWMON=m
-+CONFIG_SENSORS_SL28CPLD=m
- CONFIG_SENSORS_INA2XX=m
- CONFIG_SENSORS_INA3221=m
- CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
-@@ -535,6 +537,7 @@ CONFIG_QCOM_TSENS=y
- CONFIG_QCOM_SPMI_TEMP_ALARM=m
- CONFIG_UNIPHIER_THERMAL=y
- CONFIG_WATCHDOG=y
-+CONFIG_SL28CPLD_WATCHDOG=m
- CONFIG_ARM_SP805_WATCHDOG=y
- CONFIG_ARM_SBSA_WATCHDOG=y
- CONFIG_ARM_SMC_WATCHDOG=y
-@@ -560,6 +563,7 @@ CONFIG_MFD_MAX77620=y
- CONFIG_MFD_SPMI_PMIC=y
- CONFIG_MFD_RK808=y
- CONFIG_MFD_SEC_CORE=y
-+CONFIG_MFD_SL28CPLD=y
- CONFIG_MFD_ROHM_BD718XX=y
- CONFIG_MFD_WCD934X=m
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
-@@ -935,8 +939,10 @@ CONFIG_PWM_MESON=m
- CONFIG_PWM_RCAR=m
- CONFIG_PWM_ROCKCHIP=y
- CONFIG_PWM_SAMSUNG=y
-+CONFIG_PWM_SL28CPLD=m
- CONFIG_PWM_SUN4I=m
- CONFIG_PWM_TEGRA=m
-+CONFIG_SL28CPLD_INTC=y
- CONFIG_QCOM_PDC=y
- CONFIG_RESET_QCOM_AOSS=y
- CONFIG_RESET_QCOM_PDC=m
+diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
+index 73fbfc99083b..ad8b8af2bdc0 100644
+--- a/drivers/watchdog/pc87413_wdt.c
++++ b/drivers/watchdog/pc87413_wdt.c
+@@ -512,6 +512,10 @@ static int __init pc87413_init(void)
+ 	if (ret != 0)
+ 		pr_err("cannot register reboot notifier (err=%d)\n", ret);
+ 
++	pc87413_select_wdt_out();
++	pc87413_enable_swc();
++	pc87413_get_swc_base_addr();
++
+ 	ret = misc_register(&pc87413_miscdev);
+ 	if (ret != 0) {
+ 		pr_err("cannot register miscdev on minor=%d (err=%d)\n",
+@@ -520,10 +524,6 @@ static int __init pc87413_init(void)
+ 	}
+ 	pr_info("initialized. timeout=%d min\n", timeout);
+ 
+-	pc87413_select_wdt_out();
+-	pc87413_enable_swc();
+-	pc87413_get_swc_base_addr();
+-
+ 	if (!request_region(swc_base_addr, 0x20, MODNAME)) {
+ 		pr_err("cannot request SWC region at 0x%x\n", swc_base_addr);
+ 		ret = -EBUSY;
 -- 
-2.20.1
+2.17.1
 
