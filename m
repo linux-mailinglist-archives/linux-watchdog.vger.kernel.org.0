@@ -2,71 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73EDD242FBF
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Aug 2020 21:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0905E243472
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Aug 2020 09:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgHLT6N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Aug 2020 15:58:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47880 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726526AbgHLT6M (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Aug 2020 15:58:12 -0400
-Subject: Re: [GIT PULL REQUEST] watchdog - v5.9 Merge window
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597262292;
-        bh=7BjRGpdNVqLiBiQlSFB7gykyIJjApbxW+W5+qA3TEls=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=zbDLRZVXizwWwdk/kIjDhhT51Nc1T+ROuYGvEmGWQtpftThf0N1gvGi/ZKMxSe/hl
-         yTr4yi/qj9lEDLfdP9L1kZ9X8AbaHYYRiTVgEb4cekFLW4khP2iTHjw7DiRLgVfbZ8
-         v3qicqOxrI8t0Rn7+gTi3CohROZb49tHEqo4PE3g=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200812113903.GA14481@www.linux-watchdog.org>
-References: <20200812113903.GA14481@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200812113903.GA14481@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.9-rc1
-X-PR-Tracked-Commit-Id: d5b29c2c5ba2bd5bbdb5b744659984185d17d079
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4586039427fab2b8c4edd49c73002e13e04315cf
-Message-Id: <159726229223.30367.3082350104066434774.pr-tracker-bot@kernel.org>
-Date:   Wed, 12 Aug 2020 19:58:12 +0000
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        id S1726699AbgHMHJo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 13 Aug 2020 03:09:44 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:46899 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbgHMHJn (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 13 Aug 2020 03:09:43 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E483222EDE;
+        Thu, 13 Aug 2020 09:09:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1597302580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ok4pEqRTPwdokbHa/IMlTv6DhwAEzETP5M+d49NSRsM=;
+        b=KMS6BhghAQ9AwIZUVDheuUNtL7OEYIkis7uX8/9dUmN63Qe/n9j00W7sI8bUHvL/pRW1/7
+        wOlmzcsgJNfoPreYCDGd6SiW85qjkd2QMTfXndnjgrXQHNuuWI+BHnE3e91xiw1pZ/N7aV
+        eCxtpctn8ewVaU0Ah6sRQJrKLcV7OaI=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Thu, 13 Aug 2020 09:09:32 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Bumsik Kim <kbumsik@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Krzysztof Sobota <krzysztof.sobota@nokia.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Martin Wu <wuyan@allwinnertech.com>,
-        Michael Shych <michaelsh@mellanox.com>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Tero Kristo <t-kristo@ti.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Timothy Myers <timothy.myers@adtran.com>,
-        Wang Qing <wangqing@vivo.com>, Woody Lin <woodylin@google.com>,
-        Xu Wang <vulab@iscas.ac.cn>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v7 06/13] pwm: add support for sl28cpld PWM controller
+In-Reply-To: <2ca0a3a3f03a1f5b9b2777738824123b@walle.cc>
+References: <20200803093559.12289-1-michael@walle.cc>
+ <20200803093559.12289-7-michael@walle.cc>
+ <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
+ <e288ca6cfee819223395712e04159dd9@walle.cc> <20200810071328.GB4411@dell>
+ <2ca0a3a3f03a1f5b9b2777738824123b@walle.cc>
+User-Agent: Roundcube Webmail/1.4.7
+Message-ID: <514d83dadc2055abb5e6b5328eff4d97@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The pull request you sent on Wed, 12 Aug 2020 13:39:03 +0200:
+Am 2020-08-10 09:31, schrieb Michael Walle:
+> Am 2020-08-10 09:13, schrieb Lee Jones:
+>> On Fri, 07 Aug 2020, Michael Walle wrote:
+>> 
+>>> Hi Uwe, Hi Lee,
+>>> 
+>>> Am 2020-08-06 10:40, schrieb Uwe Kleine-König:
+>>> > On Mon, Aug 03, 2020 at 11:35:52AM +0200, Michael Walle wrote:
+>>> > > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+>>> > > index 7dbcf6973d33..a0d50d70c3b9 100644
+>>> > > --- a/drivers/pwm/Kconfig
+>>> > > +++ b/drivers/pwm/Kconfig
+>>> > > @@ -428,6 +428,16 @@ config PWM_SIFIVE
+>>> > >  	  To compile this driver as a module, choose M here: the module
+>>> > >  	  will be called pwm-sifive.
+>>> > >
+>>> > > +config PWM_SL28CPLD
+>>> > > +	tristate "Kontron sl28cpld PWM support"
+>>> > > +	select MFD_SIMPLE_MFD_I2C
+>>> >
+>>> > Is it sensible to present this option to everyone? Maybe
+>>> >
+>>> > 	depends on SOME_SYMBOL_ONLY_TRUE_ON_SL28CPLD || COMPILE_TEST
+>>> 
+>>> Because there is now no real MFD driver anymore, there is also
+>>> no symbol for that. The closest would be ARCH_ARM64 but I don't
+>>> think that is a good idea.
+>>> 
+>>> Lee, what do you think about adding a symbol to the MFD, which
+>>> selects MFD_SIMPLE_MFD_I2C but doesn't enable any C modules?
+>>> 
+>>> I.e.
+>>> config MFD_SL28CPLD
+>>>     tristate "Kontron sl28cpld"
+>>>     select MFD_SIMPLE_MFD_I2C
+>>>     help
+>>>       Say yes here to add support for the Kontron sl28cpld board
+>>>       management controller.
+>>> 
+>>> Then all the other device driver could depend on the MFD_SL28CPLD
+>>> symbol.
+>> 
+>> You want to add a virtual symbol to prevent having to present a real
+>> one?  How is that a reasonable solution?
+> 
+> (1) Its a symbol on which all sl28cpld will depend on. Thus they will
+>     all be hidden if that is not set.
+> (2) the drivers itself wouldn't need to depend on MFD_SIMPLE_MFD_I2C,
+>     which is more correct, because they don't have anything to do with
+>     i2c.
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.9-rc1
+Lee, would you accept such a symbol? Otherwise, I'd leave it as is.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4586039427fab2b8c4edd49c73002e13e04315cf
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+-michael
