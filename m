@@ -2,94 +2,115 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E883A24A5D3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Aug 2020 20:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A777824AD0E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Aug 2020 04:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbgHSSSg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Aug 2020 14:18:36 -0400
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:40922 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbgHSSSe (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Aug 2020 14:18:34 -0400
-Received: by mail-ej1-f66.google.com with SMTP id o18so27415590eje.7;
-        Wed, 19 Aug 2020 11:18:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wnUg3p/rkzEg7r5c/DTFnIBFdODWMiQLm/bvg10pJj4=;
-        b=lfBI0Y7XjyoRqPM//x6zAuavRa5q+XbI8w7QLgQkIhqyMfIKVmdKkgyzl7rURNejsF
-         YpIcHIIK9gFFtyn7uPe7l5i15yqixWwJElmT0S7l4Pa9pC0ikV5yHbo8WO7BSdDKmRND
-         wV1cjfPNO4lWyD5kVzmCi/SxkM0KlteLjRzKbkMt4FZc8m0wFxdFrSG436tO4nMXQYky
-         7vpbiv3lXzmJjT6w/erpCZDoGbgUezlSqDP1wVrnmyhc+FXqF7uTiEQFB6Fp5W5BE8Zi
-         95xRKc1RcsxLo711IkecguxqAdhL/sGT8Pl1Jnl/SxaIyaLqpEV7dI4WOaX3wvh+o9dy
-         Td6w==
-X-Gm-Message-State: AOAM533Xle120cNVtjC/zMgkbpdT/Um617cWl49W6IEd/YMLqzCcdUZB
-        0rqXj/Axc1rvCGbNvsxUjQU=
-X-Google-Smtp-Source: ABdhPJwhe7v/Ue1xFghexM9wTspolT/ZMLwUsVvmESFPXE05UaS1MOTnbDUeHiPOeM2GGznnOamAJg==
-X-Received: by 2002:a17:906:2717:: with SMTP id z23mr5615021ejc.19.1597861111871;
-        Wed, 19 Aug 2020 11:18:31 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.216])
-        by smtp.googlemail.com with ESMTPSA id x10sm17923412eds.21.2020.08.19.11.18.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 19 Aug 2020 11:18:31 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 20:18:28 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>,
-        Kukjin Kim <kgene@kernel.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        patches@opensource.cirrus.com, linux-clk@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Cc:     Sergio Prado <sergio.prado@e-labworks.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Cedric Roux <sed@free.fr>, Lihua Yao <ylhuajnu@outlook.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 08/13] ARM: s3c24xx: fix missing system reset
-Message-ID: <20200819181828.GC21298@kozik-lap>
-References: <20200804192654.12783-1-krzk@kernel.org>
- <20200804192654.12783-9-krzk@kernel.org>
+        id S1726578AbgHTClC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Aug 2020 22:41:02 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:46060 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726435AbgHTClC (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 19 Aug 2020 22:41:02 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id D0FA6B74D5D34CE20B31;
+        Thu, 20 Aug 2020 10:40:58 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Thu, 20 Aug 2020
+ 10:40:52 +0800
+From:   Wang Wensheng <wangwensheng4@huawei.com>
+To:     <linux-watchdog@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <linux-kernel@vger.kernel.org>
+CC:     <rui.xiang@huawei.com>, <guohanjun@huawei.com>,
+        <lizefan@huawei.com>
+Subject: [PATCH] watchdog: Add interface to config timeout and pretimeout in sysfs
+Date:   Thu, 20 Aug 2020 02:38:58 +0000
+Message-ID: <20200820023858.10873-1-wangwensheng4@huawei.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200804192654.12783-9-krzk@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.208]
+X-CFilter-Loop: Reflected
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Aug 04, 2020 at 09:26:49PM +0200, Krzysztof Kozlowski wrote:
-> Commit f6361c6b3880 ("ARM: S3C24XX: remove separate restart code")
-> removed usage of the watchdog reset platform code in favor of the
-> Samsung SoC watchdog driver.  However the latter was not selected thus
-> S3C24xx platforms lost reset abilities.
-> 
-> Cc: <stable@vger.kernel.org>
-> Fixes: f6361c6b3880 ("ARM: S3C24XX: remove separate restart code")
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  arch/arm/Kconfig | 2 ++
+Those interfaces exist already in sysfs of watchdog driver core, but
+they are readonly. This patch add write hook so we can config timeout
+and pretimeout by writing those files.
 
-Applied.
+Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
+---
+ drivers/watchdog/watchdog_dev.c | 48 +++++++++++++++++++++++++++++++--
+ 1 file changed, 46 insertions(+), 2 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 10b2090f3e5e..bb8ddc71d4ea 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -485,7 +485,29 @@ static ssize_t timeout_show(struct device *dev, struct device_attribute *attr,
+ 
+ 	return sprintf(buf, "%u\n", wdd->timeout);
+ }
+-static DEVICE_ATTR_RO(timeout);
++
++static ssize_t timeout_store(struct device *dev, struct device_attribute *attr,
++				const char *buf, size_t count)
++{
++	int ret;
++	unsigned int val;
++	struct watchdog_device *wdd = dev_get_drvdata(dev);
++	struct watchdog_core_data *wd_data = wdd->wd_data;
++
++	ret = kstrtouint(buf, 0, &val);
++	if (ret)
++		return ret;
++
++	mutex_lock(&wd_data->lock);
++	ret = watchdog_set_timeout(wdd, val);
++	mutex_unlock(&wd_data->lock);
++
++	if (!ret)
++		ret = count;
++
++	return ret;
++}
++static DEVICE_ATTR_RW(timeout);
+ 
+ static ssize_t pretimeout_show(struct device *dev,
+ 			       struct device_attribute *attr, char *buf)
+@@ -494,7 +516,29 @@ static ssize_t pretimeout_show(struct device *dev,
+ 
+ 	return sprintf(buf, "%u\n", wdd->pretimeout);
+ }
+-static DEVICE_ATTR_RO(pretimeout);
++
++static ssize_t pretimeout_store(struct device *dev,
++		struct device_attribute *attr, const char *buf, size_t count)
++{
++	int ret;
++	unsigned int val;
++	struct watchdog_device *wdd = dev_get_drvdata(dev);
++	struct watchdog_core_data *wd_data = wdd->wd_data;
++
++	ret = kstrtouint(buf, 0, &val);
++	if (ret)
++		return ret;
++
++	mutex_lock(&wd_data->lock);
++	ret = watchdog_set_pretimeout(wdd, val);
++	mutex_unlock(&wd_data->lock);
++
++	if (!ret)
++		ret = count;
++
++	return ret;
++}
++static DEVICE_ATTR_RW(pretimeout);
+ 
+ static ssize_t identity_show(struct device *dev, struct device_attribute *attr,
+ 				char *buf)
+-- 
+2.25.0
 
