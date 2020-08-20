@@ -2,115 +2,47 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A777824AD0E
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Aug 2020 04:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137C624B856
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Aug 2020 13:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgHTClC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Aug 2020 22:41:02 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:46060 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726435AbgHTClC (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Aug 2020 22:41:02 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id D0FA6B74D5D34CE20B31;
-        Thu, 20 Aug 2020 10:40:58 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Thu, 20 Aug 2020
- 10:40:52 +0800
-From:   Wang Wensheng <wangwensheng4@huawei.com>
-To:     <linux-watchdog@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <linux-kernel@vger.kernel.org>
-CC:     <rui.xiang@huawei.com>, <guohanjun@huawei.com>,
-        <lizefan@huawei.com>
-Subject: [PATCH] watchdog: Add interface to config timeout and pretimeout in sysfs
-Date:   Thu, 20 Aug 2020 02:38:58 +0000
-Message-ID: <20200820023858.10873-1-wangwensheng4@huawei.com>
-X-Mailer: git-send-email 2.25.0
+        id S1728381AbgHTLRy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 Aug 2020 07:17:54 -0400
+Received: from [125.140.134.231] ([125.140.134.231]:51952 "EHLO
+        WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730374AbgHTLRl (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 20 Aug 2020 07:17:41 -0400
+Received: from User ([154.127.53.23]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
+         Thu, 20 Aug 2020 20:15:47 +0900
+Reply-To: <robertdankworth@aol.com>
+From:   "ROBERT DANKWORTH" <robertdankworth@aol.com>
+Subject: INVESTMENT
+Date:   Thu, 20 Aug 2020 04:15:49 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.208]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <WIN-DAONO245HJFShWl00c36379@WIN-DAONO245HJF>
+X-OriginalArrivalTime: 20 Aug 2020 11:15:47.0514 (UTC) FILETIME=[410EA1A0:01D676E3]
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Those interfaces exist already in sysfs of watchdog driver core, but
-they are readonly. This patch add write hook so we can config timeout
-and pretimeout by writing those files.
+Good day,
 
-Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
----
- drivers/watchdog/watchdog_dev.c | 48 +++++++++++++++++++++++++++++++--
- 1 file changed, 46 insertions(+), 2 deletions(-)
+You were recommended by a mutual associate. I write you regarding an investment of bearer bonds I made on behalf of a client.
 
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index 10b2090f3e5e..bb8ddc71d4ea 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -485,7 +485,29 @@ static ssize_t timeout_show(struct device *dev, struct device_attribute *attr,
- 
- 	return sprintf(buf, "%u\n", wdd->timeout);
- }
--static DEVICE_ATTR_RO(timeout);
-+
-+static ssize_t timeout_store(struct device *dev, struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned int val;
-+	struct watchdog_device *wdd = dev_get_drvdata(dev);
-+	struct watchdog_core_data *wd_data = wdd->wd_data;
-+
-+	ret = kstrtouint(buf, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&wd_data->lock);
-+	ret = watchdog_set_timeout(wdd, val);
-+	mutex_unlock(&wd_data->lock);
-+
-+	if (!ret)
-+		ret = count;
-+
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(timeout);
- 
- static ssize_t pretimeout_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
-@@ -494,7 +516,29 @@ static ssize_t pretimeout_show(struct device *dev,
- 
- 	return sprintf(buf, "%u\n", wdd->pretimeout);
- }
--static DEVICE_ATTR_RO(pretimeout);
-+
-+static ssize_t pretimeout_store(struct device *dev,
-+		struct device_attribute *attr, const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned int val;
-+	struct watchdog_device *wdd = dev_get_drvdata(dev);
-+	struct watchdog_core_data *wd_data = wdd->wd_data;
-+
-+	ret = kstrtouint(buf, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&wd_data->lock);
-+	ret = watchdog_set_pretimeout(wdd, val);
-+	mutex_unlock(&wd_data->lock);
-+
-+	if (!ret)
-+		ret = count;
-+
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(pretimeout);
- 
- static ssize_t identity_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
--- 
-2.25.0
+      The investment was made in 2009 and has been under my management. The said investor is deceased. The window is now available to assign these bonds to any name or company of my choice. I have all the necessary information to achieve this within 10 banking days.
+   
+      The total value of the bond is 100million pounds sterling, in a million pound denominations.
+   
+        If you can handle this, do contact me at your earliest convenience via my email robertdankworth@aol.com
+So we can discuss the final details Thank you.
 
+Mr ROBERT DANKWORTH
