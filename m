@@ -2,104 +2,113 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D1524FF21
-	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Aug 2020 15:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A802501F3
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Aug 2020 18:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726187AbgHXNkt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 24 Aug 2020 09:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727116AbgHXNhb (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 24 Aug 2020 09:37:31 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F429C061575;
-        Mon, 24 Aug 2020 06:37:30 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id v16so4250442plo.1;
-        Mon, 24 Aug 2020 06:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=KxnJ226rDEIRCYSAfgyQD9VSISjkVVFiQbho/xUa2SA=;
-        b=NMmyyMPgB/lrfnnRRTyR4UPqUE/BEx0i2SqGdFdnIR5BqKp+uXn58ArQ9p+GBWGXBG
-         ga3kv+F6nJNaZ4aa1iIfYJvoXVylqsq6BXkOflL5RHQpXN8oetMgfb9Pag33aZoZ4Ufc
-         bs5aluqrYiYOOA6008C7gl4/JZvEf6w6EMbtQ25UvXVSLL6Q1Fo67IUW00eLkPlf20ca
-         Hm9fXSpvbYkqzxnZjw8MeRBSxxAZEI/+V7vp+uGooTrn4JiQpnn0bKGBrAUY0Cy7+iTB
-         fz5LxtHabotoJNfBiZukJbuJiKmqfyBrv2j1wToMfeYUBXoJsJFpvHFNn+zoUNmssTEL
-         1/kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=KxnJ226rDEIRCYSAfgyQD9VSISjkVVFiQbho/xUa2SA=;
-        b=dNa7c1R1Kz1L6Ganppk9Ty/OutlzWAPmiZoaZpFkMZJsyfQJGQ4LV71L1B7KjIRPRN
-         ucmEBkpfd+vHIWaYKDVZ99Z2Dd7Pi2YZ8KID+cOtH2ypWdF5ljKrj0CR/GjpFcKwdYNY
-         nZ/mrGS0DIJBlSuKUy4lOSeY+0eVxaov95cj5v731DaewylM0bwBYxwEgv89BORehP1V
-         7NHpRM1HBuQSF1D+T2E4TdfAEz1JZfIXfuKHWUmyJG1PDcM3bKt3AlVnzTQzWstFWzxs
-         6sNvnYdnhRJx3iRBWpJRYsC5XoUlLQvY7/n66LLfiQgED3TcHnK+sEzfyAqDAPd/5NL5
-         2aPg==
-X-Gm-Message-State: AOAM530vsJRENw6oTx6WTFGbolltOp9tT0oP2lTDTF4IbOq49D+WRYCi
-        BiaO9KdMDf5qU1+woraK/xs=
-X-Google-Smtp-Source: ABdhPJyblR17voN8n55AJBmzyqzj7oJ0VpoOBnxQZXjNDrfhr/CoulNXRFksFXDdkDw5JzvcD3o1rg==
-X-Received: by 2002:a17:902:d90e:: with SMTP id c14mr3804333plz.76.1598276250112;
-        Mon, 24 Aug 2020 06:37:30 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y7sm10518969pjm.3.2020.08.24.06.37.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Aug 2020 06:37:29 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 06:37:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
-Cc:     kjlu@umn.edu, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Sobota <krzysztof.sobota@nokia.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] watchdog: Use put_device on error
-Message-ID: <20200824133728.GC192024@roeck-us.net>
-References: <20200824031230.31050-1-dinghao.liu@zju.edu.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200824031230.31050-1-dinghao.liu@zju.edu.cn>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1727011AbgHXQ1S (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 24 Aug 2020 12:27:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56626 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725780AbgHXQ1R (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:27:17 -0400
+Received: from kozik-lap.mshome.net (unknown [194.230.155.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7E5F2072D;
+        Mon, 24 Aug 2020 16:27:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598286437;
+        bh=lnBHoUXioLOrOWNKvWtcrwmt13u6QaY0trxOTodHtew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Znz4cKVrnSCgYw35MMVSPppJ5hjlovEHC0R/6Thnt26/cwLk2AL+Vy0L/Q8VJDg2z
+         0YaNbOuluJaThIJ/UdVJU13Pvd1GJutNSYP8bKDyNdneetH6PEX0IKFOEeU0GmtueK
+         tTgVmwEG0W5wMKi6KelLbGhNcQGJlRHl+mt+/mRA=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v2 01/19] dt-bindings: gpio: fsl-imx-gpio: Add i.MX 8 compatibles
+Date:   Mon, 24 Aug 2020 18:26:34 +0200
+Message-Id: <20200824162652.21047-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 11:12:30AM +0800, Dinghao Liu wrote:
-> We should use put_device() instead of freeing device
-> directly after device_initialize().
-> 
-> Fixes: cb36e29bb0e4b ("watchdog: initialize device before misc_register")
-> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+DTSes with new i.MX 8 SoCs introduce their own compatibles so add them
+to fix dtbs_check warnings like:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible:0: 'fsl,imx8mm-gpio' is not one of ['fsl,imx1-gpio', 'fsl,imx21-gpio', 'fsl,imx31-gpio', 'fsl,imx35-gpio', 'fsl,imx7d-gpio']
+    From schema: Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
 
-> ---
-> 
-> Changelog:
-> 
-> v2: - Use put_device() instead of just removing kfree.
->       Move the memleak part to a separate patch.
-> ---
->  drivers/watchdog/watchdog_dev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index 6798addabd5a..b0fa7f31b1b6 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -1021,7 +1021,7 @@ static int watchdog_cdev_register(struct watchdog_device *wdd)
->  				pr_err("%s: a legacy watchdog module is probably present.\n",
->  					wdd->info->identity);
->  			old_wd_data = NULL;
-> -			kfree(wd_data);
-> +			put_device(&wd_data->dev);
->  			return err;
->  		}
->  	}
-> -- 
-> 2.17.1
-> 
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible: ['fsl,imx8mm-gpio', 'fsl,imx35-gpio'] is too long
+
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible: Additional items are not allowed ('fsl,imx35-gpio' was unexpected)
+
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ .../bindings/gpio/fsl-imx-gpio.yaml           | 21 +++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+index 0b223abe8cfb..454db20c2d1a 100644
+--- a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+@@ -11,12 +11,21 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - fsl,imx1-gpio
+-      - fsl,imx21-gpio
+-      - fsl,imx31-gpio
+-      - fsl,imx35-gpio
+-      - fsl,imx7d-gpio
++    oneOf:
++      - enum:
++          - fsl,imx1-gpio
++          - fsl,imx21-gpio
++          - fsl,imx31-gpio
++          - fsl,imx35-gpio
++          - fsl,imx7d-gpio
++      - items:
++          - enum:
++              - fsl,imx8mm-gpio
++              - fsl,imx8mn-gpio
++              - fsl,imx8mp-gpio
++              - fsl,imx8mq-gpio
++              - fsl,imx8qxp-gpio
++          - const: fsl,imx35-gpio
+ 
+   reg:
+     maxItems: 1
+-- 
+2.17.1
+
