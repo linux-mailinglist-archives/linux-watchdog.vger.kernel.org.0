@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48567250699
-	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Aug 2020 19:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490FA250677
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Aug 2020 19:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbgHXRd2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 24 Aug 2020 13:33:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56840 "EHLO mail.kernel.org"
+        id S1728129AbgHXQdB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 24 Aug 2020 12:33:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57218 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726666AbgHXQ1p (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:27:45 -0400
+        id S1727921AbgHXQ14 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:27:56 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84EEC207CD;
-        Mon, 24 Aug 2020 16:27:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 60FAE214F1;
+        Mon, 24 Aug 2020 16:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598286454;
-        bh=xV9upgJFUdWJViQpTgljw0h9O9Oy/nU6sRG9fJrRqIA=;
+        s=default; t=1598286474;
+        bh=yKCM7tLnXxMws8MTZ9jhKA97yUjAzHOZPP6ETkwSECU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rbb5Xsxg/cfMuBlbOhmadtnzMEI+gV19eqcQz5I6FbgH9EE9d9S8KhzNKQoMQL/KP
-         UnqVKL7CBXxTmSlJC5S4xiX7r8RilT3hhfyDXF6IB/0wiSM/RJhVZB0jeyLvmP4DFa
-         8I3AJahzpeTvWZTFk/XhSw6z8DAu5DHFfokfQOiM=
+        b=T28+DYimoy5ezz1TXh0OAU7UF/YfnHNFL5qVY9mjiduN7+REBZvhRh0pmYSQFqGGj
+         w+t3D2KHxkx1wevSR322Urb5CVSvHzQ8se31+dhbPvC2x9YKmq3iUlwue7nS/1H6Ju
+         XRftq/YfTgR0Fbn7Sw71UGh0vzsd8jBrncXH2hOc=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -50,9 +50,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 03/19] dt-bindings: gpio: fsl-imx-gpio: Add parsing of hogs
-Date:   Mon, 24 Aug 2020 18:26:36 +0200
-Message-Id: <20200824162652.21047-3-krzk@kernel.org>
+Subject: [PATCH v2 06/19] dt-bindings: pwm: imx-pwm: Add i.MX 8M compatibles
+Date:   Mon, 24 Aug 2020 18:26:39 +0200
+Message-Id: <20200824162652.21047-6-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200824162652.21047-1-krzk@kernel.org>
 References: <20200824162652.21047-1-krzk@kernel.org>
@@ -61,45 +61,49 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Allow parsing GPIO controller children nodes with GPIO hogs to fix
-warning:
+DTSes with new i.MX 8M SoCs introduce their own compatibles so add them
+to fix dtbs_check warnings like:
 
-  arch/arm64/boot/dts/freescale/imx8mq-evk.dt.yaml: gpio@30240000: 'wl-reg-on' does not match any of the regexes: 'pinctrl-[0-9]+'
-    From schema: Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
+    compatible:0: 'fsl,imx8mm-pwm' is not one of ['fsl,imx1-pwm', 'fsl,imx27-pwm']
+    From schema: Documentation/devicetree/bindings/pwm/imx-pwm.yaml
+
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
+    compatible: ['fsl,imx8mm-pwm', 'fsl,imx27-pwm'] is too long
+
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
+    compatible: Additional items are not allowed ('fsl,imx27-pwm' was unexpected)
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- .../devicetree/bindings/gpio/fsl-imx-gpio.yaml  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ Documentation/devicetree/bindings/pwm/imx-pwm.yaml | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-index dffd9171ea66..620a52f944e8 100644
---- a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-@@ -53,6 +53,23 @@ properties:
+diff --git a/Documentation/devicetree/bindings/pwm/imx-pwm.yaml b/Documentation/devicetree/bindings/pwm/imx-pwm.yaml
+index 01df06777cba..473863eb67e5 100644
+--- a/Documentation/devicetree/bindings/pwm/imx-pwm.yaml
++++ b/Documentation/devicetree/bindings/pwm/imx-pwm.yaml
+@@ -19,9 +19,17 @@ properties:
+       - 3
  
-   gpio-ranges: true
+   compatible:
+-    enum:
+-      - fsl,imx1-pwm
+-      - fsl,imx27-pwm
++    oneOf:
++      - enum:
++          - fsl,imx1-pwm
++          - fsl,imx27-pwm
++      - items:
++          - enum:
++              - fsl,imx8mm-pwm
++              - fsl,imx8mn-pwm
++              - fsl,imx8mp-pwm
++              - fsl,imx8mq-pwm
++          - const: fsl,imx27-pwm
  
-+patternProperties:
-+  "^(hog-[0-9]+|.+-hog(-[0-9]+)?)$":
-+    type: object
-+    properties:
-+      gpio-hog: true
-+      gpios: true
-+      input: true
-+      output-high: true
-+      output-low: true
-+      line-name: true
-+
-+    required:
-+      - gpio-hog
-+      - gpios
-+
-+    additionalProperties: false
-+
- required:
-   - compatible
-   - reg
+   reg:
+     maxItems: 1
 -- 
 2.17.1
 
