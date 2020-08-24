@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF91250201
-	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Aug 2020 18:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412C925020D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Aug 2020 18:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727858AbgHXQ1q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 24 Aug 2020 12:27:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56910 "EHLO mail.kernel.org"
+        id S1728006AbgHXQ2Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 24 Aug 2020 12:28:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727104AbgHXQ1p (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:27:45 -0400
+        id S1727991AbgHXQ2J (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:28:09 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E4FAF2074D;
-        Mon, 24 Aug 2020 16:27:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D2A0120738;
+        Mon, 24 Aug 2020 16:28:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598286461;
-        bh=cZzFTIoWcXT6M9HSNXfqfq+DZRK1D1RaihKGsTahtFA=;
+        s=default; t=1598286488;
+        bh=NxgEI35oyykqhboGx/XN/M8uVZEQeFJp9m/hyO8Zrz8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1T3IVbMmG1TZP5iun1zNgDoGjpciQSLpzc6JCV5wsPs7PV9bg/pQcb1GsBStmT0Gc
-         RLHaHgl21OrK2jHPZ95V3YbmF9Er/yppyRC9ZauduwpGg+cgm/KA85fHfXfV5OkVQi
-         CcDfKRxrRGM46tDfay5yiLXr3VEa+zma06RLXVu8=
+        b=XTqczjKjHJ68aZnCriupqIDy8TROXvBw+2pPtLlrlOKEyMUyJywYCE7/2lYvNrxRw
+         ha7HID//r9sRGPIYqiLmmZ8JbiUpGlnqTZhe8cbr/CYB3VHatZuJ2JkhoKQBM2XoH/
+         Mwkr8XWX4EOf8VySp4knB+IW2IZIEeYqjHGpIxco=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -50,9 +50,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 04/19] dt-bindings: gpio: fsl-imx-gpio: Add power-domains
-Date:   Mon, 24 Aug 2020 18:26:37 +0200
-Message-Id: <20200824162652.21047-4-krzk@kernel.org>
+Subject: [PATCH v2 08/19] dt-bindings: watchdog: fsl-imx-wdt: Add i.MX 8M compatibles
+Date:   Mon, 24 Aug 2020 18:26:41 +0200
+Message-Id: <20200824162652.21047-8-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200824162652.21047-1-krzk@kernel.org>
 References: <20200824162652.21047-1-krzk@kernel.org>
@@ -61,31 +61,46 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Parse also optional power-domains property to fix dtbs_check warnings
-like:
+DTSes with new i.MX 8M SoCs introduce their own compatibles so add them
+to fix dtbs_check warnings like:
 
-  arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dt.yaml: gpio@5d080000: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
-    From schema: Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+  arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dt.yaml: watchdog@30280000:
+    compatible:0: 'fsl,imx8mm-wdt' is not one of ['fsl,imx21-wdt']
+    From schema: Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+
+  arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dt.yaml: watchdog@30280000:
+    compatible: ['fsl,imx8mm-wdt', 'fsl,imx21-wdt'] is too long
+
+  arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dt.yaml: watchdog@30280000:
+    compatible: Additional items are not allowed ('fsl,imx21-wdt' was unexpected)
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ .../devicetree/bindings/watchdog/fsl-imx-wdt.yaml     | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-index 620a52f944e8..de0b9b5f6a70 100644
---- a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-@@ -53,6 +53,9 @@ properties:
+diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+index d96b93b11fad..991b4e33486e 100644
+--- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+@@ -14,8 +14,15 @@ allOf:
  
-   gpio-ranges: true
+ properties:
+   compatible:
+-    enum:
+-      - fsl,imx21-wdt
++    oneOf:
++      - const: fsl,imx21-wdt
++      - items:
++          - enum:
++              - fsl,imx8mm-wdt
++              - fsl,imx8mn-wdt
++              - fsl,imx8mp-wdt
++              - fsl,imx8mq-wdt
++          - const: fsl,imx21-wdt
  
-+  power-domains:
-+    maxItems: 1
-+
- patternProperties:
-   "^(hog-[0-9]+|.+-hog(-[0-9]+)?)$":
-     type: object
+   reg:
+     maxItems: 1
 -- 
 2.17.1
 
