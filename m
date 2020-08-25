@@ -2,96 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF832514FA
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Aug 2020 11:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B382F25201D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Aug 2020 21:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729213AbgHYJHn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 Aug 2020 05:07:43 -0400
-Received: from sonic303-1.consmr.mail.bf2.yahoo.com ([74.6.131.40]:46859 "EHLO
-        sonic303-1.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729200AbgHYJHn (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 Aug 2020 05:07:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1598346461; bh=hkYSfrxTonACfliPSB6IYnWC0p+Veg0756S5roQpVX8=; h=Date:From:Reply-To:Subject:References:From:Subject; b=jtOwt1cGUPU8PikXMo3ltYAwNu+YsrBfsVmDM7mZqnlX0qcU9ZWaTu6rmT7PSmzSMKUT7DpLdxh5oHmuHD3a5z3saNoftmwhyW9+VimH1nu6TlpGvtUxKlMOT2ofqU9TYvq9VMxZiQmRpE2no/mixDoxEpJ8aoCFuvGvuw1J0CU75V5nA30hdcYmceESoegLXJzuuiJLyqGsa6jF/UuYt7QU60tNZPRGb4pIjsJ8UNqlqWhWqez+I6J18zMPSok6G16WaoJYBanKdzqvGIexYUqpoWIs6OI99NVYNH4tSlw0QnDgl3iO+sckiDX1Za3weqk2YuTKz9r+MWYYZHBajA==
-X-YMail-OSG: a.csGUIVM1nRs5yjgFfqWmdHXm4zibTWJCs9FyC802tkhMRJ6tdPgn3eX2WkOHO
- .aVFaILlx9bOOXRgItdy3LM2LOhbwrJKcXSJzbHDNl.cHRwUkowU4TX23lvUOe98K38.XBy89.wx
- .2ZBzfHBfviL.87uMJX6FMGwsCYK5CuZlg7jtrcR4u7grUFOK.RuChOZ3z4OrEueuf8eNi1Lu_5U
- Ao.LSQB26QJxPRKoCm8d0a0WZt46MPVagDGOQwc0A_YYOTgW3iMu.xw.8QZJYeUaf7TjTrVXs7kj
- ggrqSb3FlKs1GNsLA7yZlNfBJ5W8OrZ8Hh5kGJKGCc1af2zsBmTsy_Qz5gKbieGMjuwgqBKu7YL5
- DjuB6yyx5WiUM4yxPnONcnQGKIHtYIxi.AxfnYXPZEvT.Nat4nnpWHdcKAx9cFZ4BLYTMfChX9JU
- VW9pg_7kXTLERcOQGhRrA8P1ySySrjtNB35HNNTnlESWltKdWMWUaaihB6D9ly_1A40tPSqwNUhV
- IxljG5V6i7s6FZzE3BEc5vYkmu4TjVWgQq9I.hsh_nvr8ZosXfIrlf5ggfPonM_XxQoMabo9QEzh
- RC9YBRBMmRCZWIBT5sAXLiYrTkhSAGeR92gf99eQ8MtehkXy4VvtRCrpgUUGIgPk9GS2Fs102zeI
- lJ4Fs8omc4bIASMZa1tii2mNoxyqqB12KVn0XydwnMczmuCclkbmlIYrZwx_rXae.fRs0j_SjxbZ
- yNdbMkI.rchXnmiBRXYKwuz8A22TyJPj3M0MdvojKIQkWYD9v_3umXQaroWIM79Ay0NTz8zWVcJy
- xFW0YCNSh57ex4Ia7E1ffTn669LLfq5TxfZ5zWxdgK1GSElAmmhNAnFbU3JQwVKmz53tbqnugRdP
- hGdlXRGMxsHBZf37xJtZvA0QgqvfNHoBBhJ7iqnId0aOGyMObXThgXPehBUFas2yO_Wt2EXKbd46
- Dz0qJQ1nnCFiGHHC._tmwNSehlT2OZ13IuvoahEzQlEXZFcUx7F2Muab3cU.GWCt3aS9iTvgY8ZU
- ru.CxkesIG4pZ18.bzGpFw9MZuqKM0E3VtCPbOrfZJjbwPlkEvVLeaQ8CgR4PtxhK3izwWGHZ_SM
- fImkepKPelOg8r9S9MZSycczyiXbcDhPWlQYpt3yLbcNbwoUWXWEUvv_pscs8AfKXwkBJHB01o1e
- aWeJg78K6vC8a1miwH9WNz.Efu_VuTCPybMjIfbvU7OAPEsglp6HOS_7JCrey0ToQdZyUXHufX0R
- DdtL.Iw1BCZVXdABnMb39lkzq8xpxgvEQFp9mk7irc8SYAnZ09aP0ngDXRSpnebMKzKFWekSJs6x
- EbDuzWwCegmDGXlwmKcpNpRXfgp28qewgjUF81Wtz.z1Xxb9fLRUHc.XaUCe1gxKnhnpQmHYij7i
- aIb2FTDafb.sL5ipg2libaHlWWPNx_OsiHdabNWo2M0HfEy8oG1c-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.bf2.yahoo.com with HTTP; Tue, 25 Aug 2020 09:07:41 +0000
-Date:   Tue, 25 Aug 2020 09:07:38 +0000 (UTC)
-From:   Sgt Vivian Robert <sgtvivarob@gmail.com>
-Reply-To: sgtvivarob@gmail.com
-Message-ID: <560999273.5272175.1598346458271@mail.yahoo.com>
-Subject:  kindly respond to my mail
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <560999273.5272175.1598346458271.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16455 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:79.0) Gecko/20100101 Firefox/79.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726717AbgHYTgA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 Aug 2020 15:36:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39366 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726149AbgHYTf7 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 25 Aug 2020 15:35:59 -0400
+Received: from localhost.localdomain (unknown [194.230.155.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D9EB72075E;
+        Tue, 25 Aug 2020 19:35:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598384158;
+        bh=M1J8uZpqgbBk0Tp3JOS/OOQb4fA/JLnQDLU2aYyUXZk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HIS7rlbZC99+PFJ+c8TL3+mAFsePhLupI704uWAszxjjQtUK0rRn26QHhWk51eWPf
+         osIIVZV6O8lT/j7Ew+BLD285VUcGHCFOkYLMR0yuSzUtYuTjxNzMDHDy+Ab3kRUQYC
+         hmdIrv3bnxN73fG1c+3EPyro5Z47zPoDJd5DzXyQ=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v3 00/19] dt-bindings / arm64: Cleanup of i.MX 8 bindings
+Date:   Tue, 25 Aug 2020 21:35:17 +0200
+Message-Id: <20200825193536.7332-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hi,
+
+This is a v3 of cleanup of i.XM 8 bindings and DTSes.
+
+It is separate patchset from i.MX 8 pin configuration cleanup, which
+also touch the bindings [1]. No dependencies (although in my tree this
+comes first).
+
+Merging
+=======
+There are no dependencies, so dt-bindings could go through Rob's tree,
+DTS through SoC. I think there is no point to push dt-bindings changes
+through subsystem maintainers (gpio, pwm, watchdog, mtd etc). Usually
+Rob has been picking them up.
+
+Changes since v2:
+=================
+1. Add Rob's review,
+2. Correct things pointed during review (see individual patches and
+their change logs).
+
+[1] dt-bindings: mtd: gpmi-nand: Fix matching of clocks on different SoC
+
+Best regards,
+Krzysztof
 
 
-Good=C2=A0Day,=C2=A0I=C2=A0am=C2=A0glad=C2=A0to=C2=A0contact=C2=A0you=C2=A0=
-through=C2=A0this=C2=A0medium=C2=A0I=E2=80=99m=C2=A0Sgt=C2=A0Vivian=C2=A0Ro=
-bert=C2=A0am=C2=A0from=C2=A0united=C2=A0state,=C2=A028=C2=A0years=C2=A0old=
-=C2=A0single=C2=A0I=C2=A0am=C2=A0the=C2=A0only=C2=A0surviving=C2=A0child=C2=
-=A0of=C2=A0my=C2=A0late=C2=A0parents,=C2=A0I=C2=A0am=C2=A0America=C2=A0fema=
-le=C2=A0soldier=C2=A0presently=C2=A0in=C2=A0Afghanistan=C2=A0for=C2=A0the=
-=C2=A0training,=C2=A0advising=C2=A0the=C2=A0Afghan=C2=A0forces=C2=A0and=C2=
-=A0also=C2=A0helping=C2=A0in=C2=A0stabilizing=C2=A0the=C2=A0country=C2=A0ag=
-ainst=C2=A0security=C2=A0challenges,=C2=A0am=C2=A0Actually=C2=A0seeking=C2=
-=A0your=C2=A0assistance=C2=A0to=C2=A0evacuate=C2=A0the=C2=A0sum=C2=A0of=C2=
-=A0$3.5=C2=A0million,=C2=A0This=C2=A0money=C2=A0I=C2=A0got=C2=A0it=C2=A0as=
-=C2=A0my=C2=A0reward=C2=A0in=C2=A0service=C2=A0by=C2=A0Afghanistan=C2=A0gov=
-ernment=C2=A0to=C2=A0support=C2=A0me=C2=A0for=C2=A0my=C2=A0Good=C2=A0job=C2=
-=A0in=C2=A0their=C2=A0land.=C2=A0Right=C2=A0now,=C2=A0I=C2=A0want=C2=A0you=
-=C2=A0to=C2=A0stand=C2=A0as=C2=A0my=C2=A0beneficiary=C2=A0and=C2=A0receive=
-=C2=A0the=C2=A0fund=C2=A0my=C2=A0certificate=C2=A0of=C2=A0deposit=C2=A0from=
-=C2=A0the=C2=A0Bank=C2=A0where=C2=A0this=C2=A0fund=C2=A0deposited=C2=A0and=
-=C2=A0my=C2=A0authorization=C2=A0letter=C2=A0is=C2=A0with=C2=A0me=C2=A0now.=
-My=C2=A0contact=C2=A0with=C2=A0you=C2=A0is=C2=A0not=C2=A0by=C2=A0my=C2=A0po=
-wer=C2=A0but=C2=A0it=C2=A0is=C2=A0divinely=C2=A0made=C2=A0for=C2=A0God's=C2=
-=A0purpose=C2=A0to=C2=A0be=C2=A0fulfilled=C2=A0in=C2=A0our=C2=A0lives.=C2=
-=A0I=C2=A0want=C2=A0you=C2=A0to=C2=A0be=C2=A0rest=C2=A0assured=C2=A0that=C2=
-=A0this=C2=A0transaction=C2=A0is=C2=A0legitimate=C2=A0and=C2=A0a=C2=A0100%=
-=C2=A0risk=C2=A0free=C2=A0involvement,=C2=A0all=C2=A0you=C2=A0have=C2=A0to=
-=C2=A0do=C2=A0is=C2=A0to=C2=A0keep=C2=A0it=C2=A0secret=C2=A0and=C2=A0confid=
-ential=C2=A0to=C2=A0yourself=C2=A0,=C2=A0this=C2=A0transaction=C2=A0will=C2=
-=A0not=C2=A0take=C2=A0more=C2=A0than=C2=A07=C2=A0working=C2=A0banking=C2=A0=
-days=C2=A0for=C2=A0the=C2=A0money=C2=A0to=C2=A0get=C2=A0into=C2=A0your=C2=
-=A0account=C2=A0based=C2=A0on=C2=A0your=C2=A0sincerity=C2=A0and=C2=A0cooper=
-ation.=C2=A0i=C2=A0want=C2=A0you=C2=A0to=C2=A0take=C2=A040%=C2=A0Percent=C2=
-=A0of=C2=A0the=C2=A0total=C2=A0money=C2=A0for=C2=A0your=C2=A0personal=C2=A0=
-use=C2=A0While=C2=A020%=C2=A0Percent=C2=A0of=C2=A0the=C2=A0money=C2=A0will=
-=C2=A0go=C2=A0to=C2=A0charity,=C2=A0people=C2=A0in=C2=A0the=C2=A0street=C2=
-=A0and=C2=A0helping=C2=A0the=C2=A0orphanage=C2=A0the=C2=A0remaining=C2=A040=
-%=C2=A0percent=C2=A0of=C2=A0the=C2=A0total=C2=A0money=C2=A0.you=C2=A0will=
-=C2=A0assist=C2=A0me=C2=A0to=C2=A0invest=C2=A0it=C2=A0in=C2=A0a=C2=A0good=
-=C2=A0profitable=C2=A0Venture=C2=A0or=C2=A0you=C2=A0keep=C2=A0it=C2=A0for=
-=C2=A0me=C2=A0until=C2=A0I=C2=A0arrive=C2=A0your=C2=A0country.=C2=A0If=C2=
-=A0you=E2=80=99re=C2=A0willing=C2=A0to=C2=A0assist=C2=A0me=C2=A0contact=C2=
-=A0me=C2=A0through=C2=A0my=C2=A0email=C2=A0address=C2=A0=E2=80=9Csgtvivarob=
-@gmail.com.
+Krzysztof Kozlowski (19):
+  dt-bindings: gpio: fsl-imx-gpio: Add i.MX 8 compatibles
+  dt-bindings: gpio: fsl-imx-gpio: Add gpio-ranges property
+  dt-bindings: gpio: fsl-imx-gpio: Add parsing of hogs
+  dt-bindings: gpio: fsl-imx-gpio: Add power-domains
+  dt-bindings: perf: fsl-imx-ddr: Add i.MX 8M compatibles
+  dt-bindings: pwm: imx-pwm: Add i.MX 8M compatibles
+  dt-bindings: serial: fsl-imx-uart: Add i.MX 8M compatibles
+  dt-bindings: watchdog: fsl-imx-wdt: Add i.MX 8M compatibles
+  dt-bindings: mtd: gpmi-nand: Add i.MX 8M compatibles
+  dt-bindings: reset: fsl,imx7-src: Add i.MX 8M compatibles
+  dt-bindings: thermal: imx8mm-thermal: Add i.MX 8M Nano compatible
+  dt-bindings: mmc: fsl-imx-esdhc: Fix i.MX 8 compatible matching
+  dt-bindings: nvmem: imx-ocotp: Update i.MX 8M compatibles
+  dt-bindings: arm: fsl: Fix Toradex Colibri i.MX 8 binding
+  dt-bindings: arm: fsl: Add ZII Ultra boards binding
+  dt-bindings: interrupt-controller: fsl,irqsteer: Fix compatible
+    matching
+  dt-bindings: serial: fsl-lpuart: Fix compatible matching
+  arm64: dts: imx8mq-evk: Add hog suffix to wl-reg-on
+  arm64: dts: imx8mq-zii-ultra: Add hog suffixes to GPIO hogs
 
-Sgt=C2=A0Vivian=C2=A0Robert
+ .../devicetree/bindings/arm/fsl.yaml          | 14 ++++++
+ .../bindings/gpio/fsl-imx-gpio.yaml           | 43 ++++++++++++++++---
+ .../interrupt-controller/fsl,irqsteer.yaml    |  8 ++--
+ .../bindings/mmc/fsl-imx-esdhc.yaml           | 37 ++++++++--------
+ .../devicetree/bindings/mtd/gpmi-nand.yaml    | 18 +++++---
+ .../devicetree/bindings/nvmem/imx-ocotp.yaml  | 38 +++++++++-------
+ .../devicetree/bindings/perf/fsl-imx-ddr.yaml | 16 +++++--
+ .../devicetree/bindings/pwm/imx-pwm.yaml      | 14 ++++--
+ .../bindings/reset/fsl,imx7-src.yaml          | 19 +++++---
+ .../bindings/serial/fsl-imx-uart.yaml         |  4 ++
+ .../bindings/serial/fsl-lpuart.yaml           | 17 +++++---
+ .../bindings/thermal/imx8mm-thermal.yaml      | 10 +++--
+ .../bindings/watchdog/fsl-imx-wdt.yaml        | 11 ++++-
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts  |  2 +-
+ .../boot/dts/freescale/imx8mq-zii-ultra.dtsi  |  8 ++--
+ 15 files changed, 182 insertions(+), 77 deletions(-)
+
+-- 
+2.17.1
+
