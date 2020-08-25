@@ -2,31 +2,45 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A50C82510E1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Aug 2020 06:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E5025129C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Aug 2020 09:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbgHYErq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 Aug 2020 00:47:46 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:48803 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728310AbgHYErq (ORCPT
+        id S1729277AbgHYHI5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 Aug 2020 03:08:57 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34705 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728936AbgHYHI4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 Aug 2020 00:47:46 -0400
-Received: from [2001:67c:670:100:1d::c0] (helo=ptx.hi.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kAQrH-0004DB-JG; Tue, 25 Aug 2020 06:46:55 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1kAQrF-0004IR-Cn; Tue, 25 Aug 2020 06:46:53 +0200
-Date:   Tue, 25 Aug 2020 06:46:53 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Tue, 25 Aug 2020 03:08:56 -0400
+Received: by mail-wr1-f68.google.com with SMTP id f7so11614882wrw.1;
+        Tue, 25 Aug 2020 00:08:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=l54b9M6lsfNgFjV5LriaXZxkCjRvfaXuheWXTmhA8H0=;
+        b=IhJpiKm5Vp3VzhjSJT571kVboqOooMmXwHKQfrJe0v5jcYoZJz7rmdoIugP8nLVVY4
+         vg9RUGaJYw2SrljnPJEtWjZRYziyBEPhRJOC4XXnxx4Vk7HTOFB6DZWPhhXekF9un+2B
+         VwXIrn6Pn3M/g7x1U7ktjlhhtnjkMsgQv8cU2dgwK8GNN62uco1YPUNIr0I9JUYVkvwf
+         IjXc6yx0F817c+m/n+bRScmigY9RCumpvnbwtz1Qhtoo9hMU7zX34WLt9PDMo+V/ZACn
+         jyYOghhxSYRIILxzX2UuJUT/h75RhjChvRLVoICg7zISWdeLAMvNOEY4yERqO/zp7DAL
+         1Gbg==
+X-Gm-Message-State: AOAM533YmdK5ORUcDXJ2Bh2wSimS/8BDJLipqZzbFpn/GeEaB/JkbGOA
+        t7459voHH9YXg04qQ5Ec0KE=
+X-Google-Smtp-Source: ABdhPJx6Y8Pp2Xu+VQIJdGvRDGKdAFvlXR7vDcNPN4yTT16XHARtlil/gzCAiQcAzCm0WH80KJ2xHQ==
+X-Received: by 2002:a5d:494b:: with SMTP id r11mr9680913wrs.419.1598339333020;
+        Tue, 25 Aug 2020 00:08:53 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id h11sm29004318wrb.68.2020.08.25.00.08.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 25 Aug 2020 00:08:52 -0700 (PDT)
+Date:   Tue, 25 Aug 2020 09:08:49 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
@@ -36,7 +50,7 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Will Deacon <will@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-15?Q?Kleine-K=F6nig?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -47,73 +61,93 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
         linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 13/19] dt-bindings: nvmem: imx-ocotp: Update i.MX 8M
- compatibles
-Message-ID: <20200825044653.GK13023@pengutronix.de>
+Subject: Re: [PATCH v2 12/19] dt-bindings: mmc: fsl-imx-esdhc: Fix i.MX 8
+ compatible matching
+Message-ID: <20200825070849.GC3458@kozik-lap>
 References: <20200824162652.21047-1-krzk@kernel.org>
- <20200824162652.21047-13-krzk@kernel.org>
+ <20200824162652.21047-12-krzk@kernel.org>
+ <20200825023801.GA3835035@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200824162652.21047-13-krzk@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 06:38:05 up 187 days, 12:08, 138 users,  load average: 0.13, 0.17,
- 0.18
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+In-Reply-To: <20200825023801.GA3835035@bogus>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 06:26:46PM +0200, Krzysztof Kozlowski wrote:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - fsl,imx6q-ocotp
-> +              - fsl,imx6sl-ocotp
-> +              - fsl,imx6sx-ocotp
-> +              - fsl,imx6ul-ocotp
-> +              - fsl,imx6ull-ocotp
-> +              - fsl,imx7d-ocotp
-> +              - fsl,imx6sll-ocotp
-> +              - fsl,imx7ulp-ocotp
-> +              - fsl,imx8mq-ocotp
-> +              - fsl,imx8mm-ocotp
-> +              - fsl,imx8mn-ocotp
-> +              - fsl,imx8mp-ocotp
-> +          - const: syscon
-> +      - items:
-> +          # The devices are not really compatible with fsl,imx8mm-ocotp, however
-> +          # the code for getting SoC revision depends on fsl,imx8mm-ocotp compatible.
-
-Shouldn't this be fixed? It seems strange to justify a binding with
-existing code.
-
-Sascha
-
-> +          - enum:
-> +              - fsl,imx8mn-ocotp
-> +              - fsl,imx8mp-ocotp
-> +          - const: fsl,imx8mm-ocotp
-> +          - const: syscon
->  
->    reg:
->      maxItems: 1
-> -- 
-> 2.17.1
+On Mon, Aug 24, 2020 at 08:38:01PM -0600, Rob Herring wrote:
+> On Mon, Aug 24, 2020 at 06:26:45PM +0200, Krzysztof Kozlowski wrote:
+> > The i.MX 8 DTSes use two compatibles so update the binding to fix
+> > dtbs_check warnings like:
+> > 
+> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: mmc@30b40000:
+> >     compatible: ['fsl,imx8mn-usdhc', 'fsl,imx7d-usdhc'] is too long
+> >     From schema: Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > 
+> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: mmc@30b40000:
+> >     compatible: Additional items are not allowed ('fsl,imx7d-usdhc' was unexpected)
+> > 
+> >   arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dt.yaml: mmc@30b40000:
+> >     compatible: ['fsl,imx8mn-usdhc', 'fsl,imx7d-usdhc'] is too long
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > 
+> > ---
+> > 
+> > Changes since v1:
+> > 1. Handle also fsl,imx8mm-usdhc and fsl,imx8qxp-usdhc
+> > ---
+> >  .../bindings/mmc/fsl-imx-esdhc.yaml           | 40 +++++++++++--------
+> >  1 file changed, 23 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > index 10b45966f1b8..54f05e2a4246 100644
+> > --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > @@ -21,23 +21,29 @@ description: |
+> >  
+> >  properties:
+> >    compatible:
+> > -    enum:
+> > -      - fsl,imx25-esdhc
+> > -      - fsl,imx35-esdhc
+> > -      - fsl,imx51-esdhc
+> > -      - fsl,imx53-esdhc
+> > -      - fsl,imx6q-usdhc
+> > -      - fsl,imx6sl-usdhc
+> > -      - fsl,imx6sx-usdhc
+> > -      - fsl,imx6ull-usdhc
+> > -      - fsl,imx7d-usdhc
+> > -      - fsl,imx7ulp-usdhc
+> > -      - fsl,imx8mq-usdhc
+> > -      - fsl,imx8mm-usdhc
+> > -      - fsl,imx8mn-usdhc
+> > -      - fsl,imx8mp-usdhc
+> > -      - fsl,imx8qm-usdhc
+> > -      - fsl,imx8qxp-usdhc
+> > +    oneOf:
+> > +      - enum:
+> > +          - fsl,imx25-esdhc
+> > +          - fsl,imx35-esdhc
+> > +          - fsl,imx51-esdhc
+> > +          - fsl,imx53-esdhc
+> > +          - fsl,imx6q-usdhc
+> > +          - fsl,imx6sl-usdhc
+> > +          - fsl,imx6sx-usdhc
+> > +          - fsl,imx6ull-usdhc
+> > +          - fsl,imx7d-usdhc
+> > +          - fsl,imx7ulp-usdhc
 > 
+> > +          - fsl,imx8mq-usdhc
+> > +          - fsl,imx8mm-usdhc
+> > +          - fsl,imx8qxp-usdhc
 > 
+> These should be dropped.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+You're right, thanks.
+
+Best regards,
+Krzysztof
+
