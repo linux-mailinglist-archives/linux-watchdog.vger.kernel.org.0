@@ -2,63 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F95254632
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Aug 2020 15:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5165A254635
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Aug 2020 15:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbgH0NmQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 27 Aug 2020 09:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S1726878AbgH0NoU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 Aug 2020 09:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727945AbgH0NkR (ORCPT
+        with ESMTP id S1727987AbgH0Nm0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 27 Aug 2020 09:40:17 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DC9C061264;
-        Thu, 27 Aug 2020 06:40:17 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 17so3525369pfw.9;
-        Thu, 27 Aug 2020 06:40:17 -0700 (PDT)
+        Thu, 27 Aug 2020 09:42:26 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C98BC061232
+        for <linux-watchdog@vger.kernel.org>; Thu, 27 Aug 2020 06:42:26 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id p37so3407360pgl.3
+        for <linux-watchdog@vger.kernel.org>; Thu, 27 Aug 2020 06:42:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=tLpdbfj/D8amTpZadRj9/ibQPTgmMGzwD3ljLxKfs8U=;
-        b=O1jV6yS7C1b++jbk1MGLo+upM5bsHCL4kmH3wuM2j/GLI5+r0Cw1wzfHbbMoFd1kX5
-         H/HoMwQOcFdwhbWnfIZFhkpPuj6OXLIM27eU56ttCxcoU78mGC6qiCL5WDkqIx1+JY9U
-         oLUhPlT2phKxqfsoKfrE4K4aRbehSukeZsW4pn5U5iqsBTJhqjrTTlCqwLy7dOyfLsOM
-         sxkIxbXwYZ+5jmmAmjSm/bQYlJHNSW7h1qBavuksRLSmGGXXIN9GtD7zhBRvGGgZvq2c
-         yCFWtiXAK3XUWGYjhC9jeb/qoAbByAGTqNO8euSTuYkhvlBBpxwj+xxvC+7/vrTFOwdg
-         bVxw==
+        bh=0FwFiXHbyICWRNgo0vbMhsQj/j2ou67Y63ddP67ojXs=;
+        b=uFYnPOe2TrZPrU+JQ6GRD/a462xhXa9RB3jo7kThhDKqHHbKEZHHMiGXpDHWr2wgi2
+         j4VzXj4pbb+vA2BB4z5ZK4XSaTiPcfbS2PuzMMsS7eQUvNaB5PtpYrnbz4XO98DRUmth
+         XZ08k7T06UsskFe2hO//ednt65XUpfIj3viN165MgXSEbWysVJBvkTgB/vKBGWkogf+M
+         dh0iC5uGUraKJN5QYmvc59YRQH6gzx5C36iVrznUoEYsfs28Om6wwjegVJLuJ8+BX6+B
+         ZPvmSROYb4sn1rmH1d0Zmvg8LKZLc6Gc/GwH4dN03F5vQ64UMfQMTyTUYCaTUkOe5Dqt
+         qY8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=tLpdbfj/D8amTpZadRj9/ibQPTgmMGzwD3ljLxKfs8U=;
-        b=lmzbnxL/uFoMU5ctCe800FOASoPVmEcLKi0HGHmMo7Sr9B7nHXtw+shTBx4G/OnQ5Z
-         KBq06d/A8Mz1xDYfUBHfz0UQYhS99gUI8TNVCeM3KNeh0PBGQvrldn8dLXavWhdaJjaW
-         PmDqfXj3x1l54GADCU4H8PHjD6b9Crrxemvp/QyUjWFyQsRm0VhTL4w0PscDKmPV1+xs
-         rejJFGADkSTGCX+ABwz9UKugP/jee9msg2sHhDXwr9HtolcCaP22QsTEwEKwyDuB8/CY
-         doYDJKKiN7IunAy1lp9Pa0oZvrhmHe9MHbdHKcYFI0nKOOy8GvklYcfFQviVHM2jEwGr
-         F0EQ==
-X-Gm-Message-State: AOAM532U6SLEswGkNHvkbdlVL1s+EIDx9L+GrKHY/EG2o5R0aHvmCd/U
-        4OBfmZ35yFZmdY6NA1ZlawWKs55PXJg=
-X-Google-Smtp-Source: ABdhPJzRsJ8waflL1U47V3fIdZjAlb0Xh05jt/eTEjTD0QidjSCjVYc9Jlv84XYT7aB68HeqmbQy8A==
-X-Received: by 2002:aa7:981a:: with SMTP id e26mr16520275pfl.25.1598535616520;
-        Thu, 27 Aug 2020 06:40:16 -0700 (PDT)
+        bh=0FwFiXHbyICWRNgo0vbMhsQj/j2ou67Y63ddP67ojXs=;
+        b=HWBRqgE6OyXaG6+JBFNN1A+MjsZ/Xu+gtofiNYPwgoVolnfnD7ApDkIuooM3C8/hgI
+         Ul0L0Ze9fxuTnPuAYgaj0BWgYRol9un63ec45u6vtLZQWZB9JI+ESjEhwpSLgej18rQu
+         0NfqUAGq0BbEfy0b5ughD/1Ie4CcMYKeVfgifFxT+0j+eSqFMLK0Fla2kTXMYXHv+JLz
+         1vDxUXxRQ39oRXXFVUHA2U34LWtEktCdtiqPUo6TzmQPzAncJfKVUIUUkpMRVCukQheH
+         A20xaLtAcotLoKf8+5hljm68wQFXecfWwPUSkHgF4+gvXUHn8b03OZMW4pRcdK7hylDg
+         pohg==
+X-Gm-Message-State: AOAM531LTRGEguCljMPavO+oRS+LHL20Lu7HEuWD9JCJ2dMNuYuQmt4e
+        B0odr4JhAmrCC5xEQF5fDM9JhVmklEc=
+X-Google-Smtp-Source: ABdhPJwXSnodHxhYu/eYZI1lB0V9+BGL7zXOs1EobYtBojV9pcDgwodDfq10fD2wr/7qNqjhamcSVA==
+X-Received: by 2002:a63:3d41:: with SMTP id k62mr306532pga.87.1598535745792;
+        Thu, 27 Aug 2020 06:42:25 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a5sm2732051pfi.79.2020.08.27.06.40.15
+        by smtp.gmail.com with ESMTPSA id g17sm2348690pjl.37.2020.08.27.06.42.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Aug 2020 06:40:16 -0700 (PDT)
-Subject: Re: [PATCH 1/1] watchdog: remove unneeded inclusion of
- <uapi/linux/sched/types.h>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-watchdog <linux-watchdog@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20200827062154.1847-1-thunder.leizhen@huawei.com>
+        Thu, 27 Aug 2020 06:42:25 -0700 (PDT)
+Subject: Re: [PATCH] watchdog: it87_wdt: add IT8772 ID
+To:     Hanspeter Portner <hanspeter.portner@livesystems.ch>,
+        wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org,
+        Hanspeter Portner <dev@open-music-kontrollers.ch>
+References: <20200827105940.2835910-1-hanspeter.portner@livesystems.ch>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -103,12 +100,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <55ad40ff-dcc1-5051-65d2-24201c471a8f@roeck-us.net>
-Date:   Thu, 27 Aug 2020 06:40:14 -0700
+Message-ID: <12f1a454-36e2-58ac-b971-fbab2b207024@roeck-us.net>
+Date:   Thu, 27 Aug 2020 06:42:24 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200827062154.1847-1-thunder.leizhen@huawei.com>
+In-Reply-To: <20200827105940.2835910-1-hanspeter.portner@livesystems.ch>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -117,32 +114,47 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/26/20 11:21 PM, Zhen Lei wrote:
-> There has been no reference to "struct sched_param" since
-> commit 94beddacb53c ("sched,watchdog: Convert to sched_set_fifo()"), so
-> there's no need to include <uapi/linux/sched/types.h> any more, delete
-> it.
+On 8/27/20 3:59 AM, Hanspeter Portner wrote:
+> IT8772 watchdog works as in IT872x
 > 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> Tested on SHAREVDI K6-F12 board.
+> 
+> Signed-off-by: Hanspeter Portner <dev@open-music-kontrollers.ch>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/watchdog_dev.c | 2 --
->  1 file changed, 2 deletions(-)
+>  drivers/watchdog/it87_wdt.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index 6798addabd5a067..0f18fa2433310b0 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -43,8 +43,6 @@
->  #include <linux/watchdog.h>	/* For watchdog specific items */
->  #include <linux/uaccess.h>	/* For copy_to_user/put_user/... */
+> diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
+> index f3bf3ea50e39..2dac0ba551ce 100644
+> --- a/drivers/watchdog/it87_wdt.c
+> +++ b/drivers/watchdog/it87_wdt.c
+> @@ -15,7 +15,7 @@
+>   *	Support of the watchdog timers, which are available on
+>   *	IT8607, IT8620, IT8622, IT8625, IT8628, IT8655, IT8665, IT8686,
+>   *	IT8702, IT8712, IT8716, IT8718, IT8720, IT8721, IT8726, IT8728,
+> - *	and IT8783.
+> + *	IT8772 and IT8783.
+>   */
 >  
-> -#include <uapi/linux/sched/types.h>	/* For struct sched_param */
-> -
->  #include "watchdog_core.h"
->  #include "watchdog_pretimeout.h"
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> @@ -66,6 +66,7 @@
+>  #define IT8721_ID	0x8721
+>  #define IT8726_ID	0x8726	/* the data sheet suggest wrongly 0x8716 */
+>  #define IT8728_ID	0x8728
+> +#define IT8772_ID	0x8772
+>  #define IT8783_ID	0x8783
+>  #define IT8786_ID	0x8786
 >  
+> @@ -294,6 +295,7 @@ static int __init it87_wdt_init(void)
+>  	case IT8720_ID:
+>  	case IT8721_ID:
+>  	case IT8728_ID:
+> +	case IT8772_ID:
+>  	case IT8783_ID:
+>  	case IT8786_ID:
+>  		max_units = 65535;
 > 
 
