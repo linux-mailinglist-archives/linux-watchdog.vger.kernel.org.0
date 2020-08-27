@@ -2,103 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BC0254B58
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Aug 2020 19:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36ED5255032
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Aug 2020 22:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726938AbgH0RA4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 27 Aug 2020 13:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgH0RA4 (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 27 Aug 2020 13:00:56 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4523C061264;
-        Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id q16so3334209ybk.6;
-        Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xn9e8QiSfQjfmv9dvYGGI9EBZKWaBpd/I2U5mUE1tdE=;
-        b=PS28p8gtpgp5Vzmtu8C8Fn69h9JbIZLvzinkhZ2VyIy3eTvrrbRHZKK4e0X+S2HoYc
-         2ht0sqrAPSZP5wC4rEdgvlanP38jwoYA5gvs1a6CG9GeHyR6ac+LqKIr0bwn7rKWAksT
-         +Jnz6WdeesntSn4mFO+1jVcTpyth5j7J+Vy/05SMpk56xcAWcqLVcn2GMXnukQUowFqk
-         +Lwbfs1JMDSfElZQK2Vus32IYWbcURmEHaMfH2pztvogga5OyHAjbpZP8CIrX0OXtSrc
-         MmZzCb5KDFWhzu+f2jWG6oR83iyADCOYDUjDiDurt8cV8fborBSzq1yr88HVmzwc8eiJ
-         tPxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xn9e8QiSfQjfmv9dvYGGI9EBZKWaBpd/I2U5mUE1tdE=;
-        b=UNPO/PjxGsd0qgUbgjV0iKkSk/VGkHudUh/q2d+Y/WJDNOX2Ff+b9u17hbAzBzH6ql
-         1Mfl0FPLCWKrN3pusNWV0XXVRiVPKfXYi6F0jQSgtcmoQZr6fSomLA3ISwOF77P8pzoF
-         mgcb9EWX0eSHE63Hdr/WGrcAhTQOvlDFi+h+PJGSZxHVHnvD49r2gwhULCl/f1Kc+2iG
-         3Kg9/M4m7345z75ZYhKLAMge7EiXcBctG6Mj805PLBBA4bw0Xxj4hazglEO7S1Ah8VC1
-         C/I0f9ouXYFeqJZznxawk/qPQVqI/hzDuMkWnjaI/3RTIYo+ALugl2VjhchkpCTTee/l
-         9/Vg==
-X-Gm-Message-State: AOAM530ER8RXWUHa6d2E04BJMBLotc2wdZiREVoBTTJTa0vEe/B6I9O8
-        nsx9+nFwMw1mCtYcWcBDiGyR/ty74FGYXJeJXXs=
-X-Google-Smtp-Source: ABdhPJzWiP13RDlFWXYqZS9M+n/syiQtjHPq+mDPjJNKGxrQjLeEpeZ4VcNxTZaUseudqJ0OnSwa50hS9cPCBO2SK/M=
-X-Received: by 2002:a25:e712:: with SMTP id e18mr28991911ybh.395.1598547655180;
- Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 27 Aug 2020 18:00:29 +0100
-Message-ID: <CA+V-a8sBF2ak+dYd9g=Tf_2Kwz_Om2mpK=z+KzGQQG4qJM-+zA@mail.gmail.com>
-Subject: Re: [PATCH 05/20] dt-bindings: timer: renesas,cmt: Document r8a774e1
- CMT support
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        id S1726266AbgH0UwF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 Aug 2020 16:52:05 -0400
+Received: from smtp4-g21.free.fr ([212.27.42.4]:35916 "EHLO smtp4-g21.free.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726147AbgH0UwF (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 27 Aug 2020 16:52:05 -0400
+Received: from [IPv6:2a01:cb1d:6eb:3100:ad4:cff:fee2:7ba1] (unknown [IPv6:2a01:cb1d:6eb:3100:ad4:cff:fee2:7ba1])
+        (Authenticated sender: sed)
+        by smtp4-g21.free.fr (Postfix) with ESMTPSA id DAD4519F61F;
+        Thu, 27 Aug 2020 22:50:30 +0200 (CEST)
+Subject: Re: [PATCH v2 13/13] ARM: s3c24xx: camif: include header with
+ prototypes and unify declaration
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Kukjin Kim <kgene@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        Sergio Prado <sergio.prado@e-labworks.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Lihua Yao <ylhuajnu@outlook.com>
+References: <20200804192654.12783-1-krzk@kernel.org>
+ <20200804192654.12783-14-krzk@kernel.org>
+ <159721917443.33733.7919188364233003142@swboyd.mtv.corp.google.com>
+ <CGME20200812091510eucas1p15944eb26bb496e20b9fadd609063a490@eucas1p1.samsung.com>
+ <CAK8P3a13u0KY0jzxNLs=irTs6ZSXyObKKTp-8KEmowcOZrZXxQ@mail.gmail.com>
+ <8066413c-367d-2f8d-3e7b-dacd954675be@samsung.com>
+ <CAK8P3a1xXe56k5nKuCJ-25h1VqWKRb9JGnFrr=SPg_icay-vZA@mail.gmail.com>
+ <6ccf14a9-802f-25b8-494d-e957cafd073d@samsung.com>
+ <20200812133109.GA15697@pi3>
+From:   Cedric Roux <sed@free.fr>
+Message-ID: <30eb6355-0749-8268-c87a-f389dc4b4f1b@free.fr>
+Date:   Thu, 27 Aug 2020 22:52:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200812133109.GA15697@pi3>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Daniel and Thomas,
+On 8/12/20 3:31 PM, Krzysztof Kozlowski wrote:
+> Or even more important - is it worth to spend effort and time on this?
+> If there is no single production system using recent Linux kernel, the
+> answer should be negative...
 
-On Wed, Jul 15, 2020 at 12:09 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> Document SoC specific bindings for RZ/G2H (r8a774e1) SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/timer/renesas,cmt.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->
-Gentle ping.
-
-Cheers,
-Prabhakar
+Well, I have a server running on mini2440 with a not-too-young
+but not-too-old kernel. I don't have much time to test recent
+kernels though so I guess that doesn't count.
