@@ -2,107 +2,147 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFF4253FC2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Aug 2020 09:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F95254632
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Aug 2020 15:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgH0H4A (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 27 Aug 2020 03:56:00 -0400
-Received: from mail-eopbgr00087.outbound.protection.outlook.com ([40.107.0.87]:16061
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728483AbgH0Hzf (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 27 Aug 2020 03:55:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RRUbg2kctkhAkaynb+r58qmJGfxmihGeWULmTtUzXmBcLRf0o81wMWwmz9jPIWXf946CMb96zse7Ts2fXP1LZJQeFUqFPipEBKwVZEmxP8LG3u7FwadL4SMgMVcwwj8by1CbbIrm24AGoIL5gC5xElBQxekmlPzq8FTMcuDiU0kttrXRA10WnfV+SKICPKC/UMWWUL151lx9x26uFKTNtZ4mev3MY+qI9uL0ohxaVBMuEwepepjw8MinNBOhduKiuGECB+PMc/Du4bZHGMqFbbMsA0m4ovsQPFbYL4/Qnkw81JQpB3JuTQxYKx8wICqARfXxDIcmd5jLjS2+MvSOtQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EqQ3PfO4lTFtQEE/pauAjtgGHv3nmXuntFu1goRmARE=;
- b=BgFTsP7x8/YA+pL4Fc34ovRb8K8OmfG/7X0QjPlkRgSe7Us2KWGqn5EJk7yQKqxjTSUgDZw3RisuZTFxpazbwBzTrP46Vah5UlqijvvUZnnVgQBi4BvfsuTHogKiAshBqBvoGZ636VJjTd1jTPqj/14d1DzvpSgUKx1sOgbyvVnq05m1srINXFKmXTO3I1I/IJC4ENGeYh0IDSL5jAAhXa4hranoe51/e1zeAU9y3DPUU6J6et0jU9r5poGkNMcJ4w5cwDQ1FJWCvjC9yljfyYIvydbD/jHV5fyKSjf/F3/BTRFpF3i5S4NXolWkDBd2dlYAB1k3RSHSwibnqFYTNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EqQ3PfO4lTFtQEE/pauAjtgGHv3nmXuntFu1goRmARE=;
- b=Hq4IaKnltB6WLkR8VSXpJqzHEQ41rcilILKGhtsA+mniFNeOAKs8oLdI02wmg3354IRXRDG1djQGOClfZpTNN8m2hfPaCzVEOIcXedEObo4RiaVc9z9oiaWlsf+q5tFGtmZUJ8YpeOJKpj1inmi5AzHgCH8jMs2PZoTz+ZqBLUk=
-Received: from VE1PR04MB6768.eurprd04.prod.outlook.com (2603:10a6:803:129::26)
- by VI1PR04MB4543.eurprd04.prod.outlook.com (2603:10a6:803:6e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24; Thu, 27 Aug
- 2020 07:55:31 +0000
-Received: from VE1PR04MB6768.eurprd04.prod.outlook.com
- ([fe80::9149:1826:669a:4d6f]) by VE1PR04MB6768.eurprd04.prod.outlook.com
- ([fe80::9149:1826:669a:4d6f%7]) with mapi id 15.20.3326.021; Thu, 27 Aug 2020
- 07:55:31 +0000
-From:   Qiang Zhao <qiang.zhao@nxp.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>
-CC:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] watchdog: sbsa_gwdt: add shutdown hook to driver
-Thread-Topic: [PATCH] watchdog: sbsa_gwdt: add shutdown hook to driver
-Thread-Index: AQHWefAjnrqJazWM50KAGHPpwcHNk6lHQSuAgARYKyA=
-Date:   Thu, 27 Aug 2020 07:55:31 +0000
-Message-ID: <VE1PR04MB67681C26D81E855A152043BE91550@VE1PR04MB6768.eurprd04.prod.outlook.com>
-References: <20200824081804.23206-1-qiang.zhao@nxp.com>
- <cdfd0c4d-3433-f952-0e49-ebc0f7474e1a@roeck-us.net>
-In-Reply-To: <cdfd0c4d-3433-f952-0e49-ebc0f7474e1a@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: e1de29fe-d48c-4bb0-e012-08d84a5e9272
-x-ms-traffictypediagnostic: VI1PR04MB4543:
-x-microsoft-antispam-prvs: <VI1PR04MB454352DFACAAF0D335A4D62091550@VI1PR04MB4543.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: aBPIF7aM1UN1zI21LXY+lQPxpS9si2x8qYShzoCtiPK/FBc07lJDLfjKnALsk3z1m+/VxoZ8XLrVp/nqNXwafx4oaP42QedJ3r0fpTYcj66C1iJCOZHXmTK9/acB46RcFEJTZtldX2YXMZNIy+CN8YIdD4oO/E1zePVU7LrJBdk/3gCHPX/4n/VTDIRttHaBeykBBxye1SU6p9weWHGYzs6xTEJmwII2wuWNpz2Hbrw8wkP+/QQ2GJb8xNJmifCnfdggxhLKQq7H6/QfHz7BOZwhGhEmDEiMWK7MeSeUn8fdMvr8A7RDbEFJC9U7leL2GshqSPkEow3TYtkjKRoyLA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6768.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(136003)(39860400002)(346002)(366004)(55016002)(33656002)(26005)(9686003)(8676002)(5660300002)(83380400001)(478600001)(186003)(76116006)(44832011)(66946007)(66446008)(66476007)(4744005)(64756008)(8936002)(66556008)(316002)(54906003)(53546011)(6506007)(110136005)(2906002)(86362001)(52536014)(71200400001)(4326008)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: MfW+JLyurTaKxJHGcVrJwL7L9a454QfF3C57YyMdBbV7zBVZT2WXGeUVHmsWcpDoAK6IHmOpJFSZnsP1xOYsftr6RS9u78fA5AJ0LuftEQiZxhpUh4jJtuVvPS7WQWPVLMzoK39+dma2OVyvTWN3fEKpLqngxMADy19uughtOlxVYIbLFQRhr1kBLEi3Ke1GIP9nc1a3l+n5ahK9Tj3DUhwfDS+KQJHXboby7nd5kVJCW3iCAoKLqNK2WXFZuLy4fuBaQyJQ3auTXxAJYAW2g52DmKEcwq8+RW0xW6a2zIOLfbEO3uwoyP9CCSoSgpPtbl+mZMaXWx2lKVLD3LL0rNDjGIlKAQEOY1zHiJFf8dUVOSTEKgvMaMQWha+u6qaxfoYtjUXBedKIgzF7gYdCLzK0ML7Je7ZJvh+a2fProZVYNx41pmRTnHooF7ZuHwLBKutZDfg/5ulqro76iz4RUAehXtKRGtLmpwP1NFhgdA7yiPj3jxCk63grFF/WDtBqX9+xJgoY7+KJkImrMTQ+Vd4sfKv/Q9Ybgp1xefjWBscEIEdFqmtVUwOrKPZuhiKhOlbSKUe6huMhAD+eBVboHJb3+YTu4ZI8af6F0GjVd6FV61oCrONKNDHX6ajJS2qFXy7wl1wGUUj46RsAez/m/w==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727104AbgH0NmQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 Aug 2020 09:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727945AbgH0NkR (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 27 Aug 2020 09:40:17 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DC9C061264;
+        Thu, 27 Aug 2020 06:40:17 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id 17so3525369pfw.9;
+        Thu, 27 Aug 2020 06:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tLpdbfj/D8amTpZadRj9/ibQPTgmMGzwD3ljLxKfs8U=;
+        b=O1jV6yS7C1b++jbk1MGLo+upM5bsHCL4kmH3wuM2j/GLI5+r0Cw1wzfHbbMoFd1kX5
+         H/HoMwQOcFdwhbWnfIZFhkpPuj6OXLIM27eU56ttCxcoU78mGC6qiCL5WDkqIx1+JY9U
+         oLUhPlT2phKxqfsoKfrE4K4aRbehSukeZsW4pn5U5iqsBTJhqjrTTlCqwLy7dOyfLsOM
+         sxkIxbXwYZ+5jmmAmjSm/bQYlJHNSW7h1qBavuksRLSmGGXXIN9GtD7zhBRvGGgZvq2c
+         yCFWtiXAK3XUWGYjhC9jeb/qoAbByAGTqNO8euSTuYkhvlBBpxwj+xxvC+7/vrTFOwdg
+         bVxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=tLpdbfj/D8amTpZadRj9/ibQPTgmMGzwD3ljLxKfs8U=;
+        b=lmzbnxL/uFoMU5ctCe800FOASoPVmEcLKi0HGHmMo7Sr9B7nHXtw+shTBx4G/OnQ5Z
+         KBq06d/A8Mz1xDYfUBHfz0UQYhS99gUI8TNVCeM3KNeh0PBGQvrldn8dLXavWhdaJjaW
+         PmDqfXj3x1l54GADCU4H8PHjD6b9Crrxemvp/QyUjWFyQsRm0VhTL4w0PscDKmPV1+xs
+         rejJFGADkSTGCX+ABwz9UKugP/jee9msg2sHhDXwr9HtolcCaP22QsTEwEKwyDuB8/CY
+         doYDJKKiN7IunAy1lp9Pa0oZvrhmHe9MHbdHKcYFI0nKOOy8GvklYcfFQviVHM2jEwGr
+         F0EQ==
+X-Gm-Message-State: AOAM532U6SLEswGkNHvkbdlVL1s+EIDx9L+GrKHY/EG2o5R0aHvmCd/U
+        4OBfmZ35yFZmdY6NA1ZlawWKs55PXJg=
+X-Google-Smtp-Source: ABdhPJzRsJ8waflL1U47V3fIdZjAlb0Xh05jt/eTEjTD0QidjSCjVYc9Jlv84XYT7aB68HeqmbQy8A==
+X-Received: by 2002:aa7:981a:: with SMTP id e26mr16520275pfl.25.1598535616520;
+        Thu, 27 Aug 2020 06:40:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a5sm2732051pfi.79.2020.08.27.06.40.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Aug 2020 06:40:16 -0700 (PDT)
+Subject: Re: [PATCH 1/1] watchdog: remove unneeded inclusion of
+ <uapi/linux/sched/types.h>
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-watchdog <linux-watchdog@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20200827062154.1847-1-thunder.leizhen@huawei.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <55ad40ff-dcc1-5051-65d2-24201c471a8f@roeck-us.net>
+Date:   Thu, 27 Aug 2020 06:40:14 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6768.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1de29fe-d48c-4bb0-e012-08d84a5e9272
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2020 07:55:31.5609
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: v3wHE1JFw+d9uvqAuE/oWGDCD37e2adUIi6Rylam98HWyN99PnkOJUHb0wpT/k3yVb5CGo2/DMXiCgYk51Xo9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4543
+In-Reply-To: <20200827062154.1847-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-T24gOC8yNC8yMCAyMToyOSBBTSwgR3VlbnRlciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0PiB3
-cm90ZToNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBHdWVudGVyIFJv
-ZWNrIDxncm9lY2s3QGdtYWlsLmNvbT4gT24gQmVoYWxmIE9mIEd1ZW50ZXIgUm9lY2sNCj4gU2Vu
-dDogMjAyMOW5tDjmnIgyNOaXpSAyMToyOQ0KPiBUbzogUWlhbmcgWmhhbyA8cWlhbmcuemhhb0Bu
-eHAuY29tPjsgd2ltQGxpbnV4LXdhdGNoZG9nLm9yZw0KPiBDYzogbGludXgtd2F0Y2hkb2dAdmdl
-ci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJl
-OiBbUEFUQ0hdIHdhdGNoZG9nOiBzYnNhX2d3ZHQ6IGFkZCBzaHV0ZG93biBob29rIHRvIGRyaXZl
-cg0KPiANCj4gT24gOC8yNC8yMCAxOjE4IEFNLCBRaWFuZyBaaGFvIHdyb3RlOg0KPiA+IEZyb206
-IFpoYW8gUWlhbmcgPHFpYW5nLnpoYW9AbnhwLmNvbT4NCj4gPg0KPiA+IEtleGVjIG1heWJlIG5l
-ZWQgbW9yZSB0aW1lIHRoYW4gdGltZW91dCBvZiB3ZHQoc2JzYSkgd2hpY2ggd2lsbCByZXNldA0K
-PiA+IHRoZSBzeXN0ZW0uDQo+ID4gU28gaXQgaXMgbmVjZXNzYXJ5IHRvIGFkZCBzaHV0ZG93biBo
-b29rIHRvIGRpc2FibGUgdGhlIHdkdCB3aGVuIHJ1bg0KPiA+IGtleGVjLg0KPiA+DQo+IA0KPiBQ
-bGVhc2UgZXhwbGFpbiB3aHkgd2F0Y2hkb2dfc3RvcF9vbl9yZWJvb3QoKSBkb2VzIG5vdCB3b3Jr
-Lg0KPiANCg0KVGhhbmsgeW91IGZvciB5b3VyIGNvbW1lbnRzLCBpdCBpcyBoZWxwZnVsLg0KSSBp
-bnZlc3RpZ2F0ZSB0aGlzIGlzc3VlIGFnYWluLCBmb3VuZCB0aGF0IHRoaXMgd2F0Y2hkb2cgYXJl
-IGVuYWJsZWQgYnkgdWJvb3QsDQpNZWFud2hpbGUgaW4ga2VybmVsLCBpdCBpcyBub3QgdGhlIGRl
-ZmF1bHQgd2F0Y2hkb2csIGluIGFub3RoZXIgd29yZHMsIGl0IGlzIG5vdCBhY3RpdmUgaW4ga2Vy
-bmVsLg0KU28gd2F0Y2hkb2dfc3RvcF9vbl9yZWJvb3QoKSBkb2VzIG5vdCB3b3JrLg0KVGhpcyBw
-YXRjaCBpcyBub3QgdGhlIHJpZ2h0IHNvbHV0aW9uIGZvciB0aGUgc2l0dWF0aW9uLCBJIHdpbGwg
-YWJhbmRvbiBpdC4gDQoNCkJlc3QgUmVnYXJkcw0KUWlhbmcgWmhhbw0K
+On 8/26/20 11:21 PM, Zhen Lei wrote:
+> There has been no reference to "struct sched_param" since
+> commit 94beddacb53c ("sched,watchdog: Convert to sched_set_fifo()"), so
+> there's no need to include <uapi/linux/sched/types.h> any more, delete
+> it.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/watchdog_dev.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 6798addabd5a067..0f18fa2433310b0 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -43,8 +43,6 @@
+>  #include <linux/watchdog.h>	/* For watchdog specific items */
+>  #include <linux/uaccess.h>	/* For copy_to_user/put_user/... */
+>  
+> -#include <uapi/linux/sched/types.h>	/* For struct sched_param */
+> -
+>  #include "watchdog_core.h"
+>  #include "watchdog_pretimeout.h"
+>  
+> 
+
