@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C531E25614B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 21:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A6E256150
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 21:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgH1TcK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Aug 2020 15:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S1725979AbgH1TdL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Aug 2020 15:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725969AbgH1TcJ (ORCPT
+        with ESMTP id S1725969AbgH1TdI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Aug 2020 15:32:09 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513A9C061264;
-        Fri, 28 Aug 2020 12:32:09 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id h2so153580plr.0;
-        Fri, 28 Aug 2020 12:32:09 -0700 (PDT)
+        Fri, 28 Aug 2020 15:33:08 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E33C061264;
+        Fri, 28 Aug 2020 12:33:07 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id t185so1131127pfd.13;
+        Fri, 28 Aug 2020 12:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=y4NO6C2GV0o3kaxGtzR9KMaM39GUS99QozvNVChO/BE=;
-        b=mzbkEQcczmM/g92OEOsw3oEtZH07nLsanvCBiaJ+1+mm63E+vgdzEDz9Q6AIWQ8P28
-         CoT2X8q7gFodYZCa8BSF//LPZXh04CeGgtJosBUQTaFnLHArEOZEqg6Xl6sIRX6XX5Hx
-         OBpCEo5xV/ScXWMvFH7mcC+QaCXBeXF48ZjXlNgJGQPQ4xNpl1XfPN4iH22CLPxtqW2G
-         HvGNVnS4RM8tRAUNF6p7HE4Oz4JwssbeE3Gnx97ME7v2TENKZrEMHdBgyFu1XNNX5S+D
-         OXVID5rNR58yT803+nJgSdopiGRQkUDPRBeck52sgFwGLRGRM/lK542N3WFvICOh2sgL
-         m2KQ==
+        bh=DjGEyJIDY41xacy94QgecNPulT1GfkVth+1wobQPYBo=;
+        b=dpQ8G+h4/mUI+ge756iVkkIwe4RKR71aglz7eApSSORcaz5pz97DDvYhN3GDwNvpyi
+         lydxbynVbBwPOXaGiOz1J8weTg6k5Fz+6s/JFGt/X4mRiODAiKgCpj+FY6q2b16+lZgE
+         IGPT6c30fbeUHxHZ6a7ShEaIJmS+I92y1KwhnphxLtUw+qkqTsH3GuKssdgvh4KM4Sf2
+         twdxf5f+fkS11+6iB9C31T+p039Yh3YmUnHIk5uaQaa/wlVpeC3Clgp7PKPADAhpfTgV
+         jsm9vqmoTz48QMB3yLa6/AJ3b9sT1XNVLBQb+DTcqrkwE/D40uZMchNjyxoEXFzT59Z5
+         bZBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=y4NO6C2GV0o3kaxGtzR9KMaM39GUS99QozvNVChO/BE=;
-        b=LOVVyM0uNgfLGxgVbGxAXZVfr5pRUiI/VQ+rGxmuL2R13PAQh2NTyrK6D3OODM+ITP
-         zYC3v4xz+YHybhpK3u7aiqay82ozNhruUiXu8CrFtfjtH/XebhQ+zKvhxqcJKmzpA0Ut
-         J19o3jGT5v7pulJeaPtMB6Op97TkxZUwKdsxL5S12qZF6naCMCUTGR2ikIFghwb+P0Hm
-         /c2tVvm21fAIikx1DBhERgN7DLIOql58gEM9lwZm3ZCLnD/CcasErCTLSD+roezyVKbA
-         T3s1D30Sg1LK4ByokmFDF1wheDryBjGZx1mCap55wq38N8aeW0W4pgfRhG8eo7JFrveD
-         vxmg==
-X-Gm-Message-State: AOAM533wSvstrENg/6ORmf0CgtAmdrL4rPVxKjAcoH0gMh+A4ktW4FH/
-        wU1KRkYPyyZz83fUxcTtB30=
-X-Google-Smtp-Source: ABdhPJyFeICuZ9UTMAk75SvVvTTNapZts4YRYPV+KXP73eTwJlb64/YZlEq73U/AF1+MwUsybfveVg==
-X-Received: by 2002:a17:902:e789:: with SMTP id cp9mr307907plb.215.1598643128878;
-        Fri, 28 Aug 2020 12:32:08 -0700 (PDT)
+        bh=DjGEyJIDY41xacy94QgecNPulT1GfkVth+1wobQPYBo=;
+        b=JfUedIoLL8rWjvYPsOIHpvDDj1rIKo214hiSLotyXFrjUIGBz4ElpHepHPZkvJOFeq
+         XlhUT3mAT5q6Q/9AdeMo/jz6wYupFSQXvhvbM8vXyxA22dvsYnthpNUhl0QPMHBmx90E
+         +R+o9YlEG4dOo+4sxckSQPcLmiTp6+F6kjEG3Fma4pZ1miBMHo/qkANOQoWanxUMdm2/
+         uihl+pAMnT3L9e+k8tewBcQhs/G8RE6jMagCd7N5OmsYn8AJfhx9hu8pu6/5dWNPn6Rq
+         0+LPDxzSAS//UIkoYXYsEAsEVlmiRwNqHY6idVxcMJj0zp7BacC0u5nz7Nao9T/ydAV4
+         3UWQ==
+X-Gm-Message-State: AOAM530MdfboQyjrYOOaSIRYhKotGWVG7QZTcVyNQxNf2QcnndYzpVBT
+        v6x30odN7HDe9rQi7Ff18O0=
+X-Google-Smtp-Source: ABdhPJz+B6JPi5CIt9OUF8bGa4+xqB25Cx5h9oMCAuhu6vPPCZtS+NDfKBRUHqU+cd/R6P6oRNfPog==
+X-Received: by 2002:a63:4b5e:: with SMTP id k30mr231972pgl.205.1598643187449;
+        Fri, 28 Aug 2020 12:33:07 -0700 (PDT)
 Received: from [10.67.50.75] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x1sm216542pfp.7.2020.08.28.12.32.01
+        by smtp.googlemail.com with ESMTPSA id ga20sm128134pjb.11.2020.08.28.12.33.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Aug 2020 12:32:07 -0700 (PDT)
-Subject: Re: [PATCH 09/10] ARM: dts: NSP: Fix SP805 clock-names
+        Fri, 28 Aug 2020 12:33:06 -0700 (PDT)
+Subject: Re: [PATCH 03/10] arm64: dts: broadcom: Fix SP805 clock-names
 To:     Andre Przywara <andre.przywara@arm.com>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
@@ -60,7 +60,7 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com
 References: <20200828130602.42203-1-andre.przywara@arm.com>
- <20200828130602.42203-10-andre.przywara@arm.com>
+ <20200828130602.42203-4-andre.przywara@arm.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  mQGiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -116,12 +116,12 @@ Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  caxTGgc5zzQHeX67eMzrGomG3ZnIxmd1sAbgvJUDaD2GrYlulfwGWwWyTNbWRvMighVdPkSF
  6XFgQaosWxkV0OELLy2N485YrTr2Uq64VKyxpncLh50e2RnyAJ9Za0Dx0yyp44iD1OvHtkEI
  M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
-Message-ID: <99c41835-e685-78d8-585b-997198cc2ae3@gmail.com>
-Date:   Fri, 28 Aug 2020 12:31:57 -0700
+Message-ID: <1cb06e45-6f8f-6623-62b1-f420495c706e@gmail.com>
+Date:   Fri, 28 Aug 2020 12:32:56 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200828130602.42203-10-andre.przywara@arm.com>
+In-Reply-To: <20200828130602.42203-4-andre.przywara@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -130,13 +130,18 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/28/20 6:06 AM, Andre Przywara wrote:
+On 8/28/20 6:05 AM, Andre Przywara wrote:
 > The SP805 binding sets the name for the actual watchdog clock to
 > "wdog_clk" (with an underscore).
 > 
-> Change the name in the DTs for the Broadcom NSP platform to match that.
-> The Linux and U-Boot driver use the *first* clock for this purpose
-> anyway, so it does not break anything.
+> Change the name in the DTs for Broadcom platforms to match that. The
+> Linux and U-Boot driver use the *first* clock for this purpose anyway,
+> so it does not break anything.
+
+Not that it really matters because the driver does a
+devm_clk_get(&adev->dev, NULL), but yes, this should be fixed to conform
+to the binding.
+
 > 
 > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
