@@ -2,96 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D84C2255A9B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 14:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4D2255ACD
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 15:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729445AbgH1MwI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Aug 2020 08:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729489AbgH1Mvg (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Aug 2020 08:51:36 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB399C061235
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 Aug 2020 05:51:34 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id w14so1178027ljj.4
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 Aug 2020 05:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RSrvv0FJmitf6q9JxmYipGO4Y6PZy6cFkX1VzqR3xEU=;
-        b=Pf4uaxGE3D9QkcwZ3m7v40UpPYGsLMXlPXzxXdofFxgCOrudLrDJjKqDtapXdZT1me
-         U/qpgdyHur4b2ylpfOmLYfGRbbgioYR4DE8hUX9n3OD1PsJjx4bY6DfOPPLZ+nR7uoPR
-         t2fPwIQzvGmoNipg0tib+zvmAuyzH0asX7NHoXYzOS+c1S9GjWZHK3ZfK4tTEAShELZn
-         UQgYkmIIjXX9+QwSVHsgwAXyE2t1Y98bukfmK6CGzaKFvQbixk0LvK3eWs+XS6UxLeZr
-         H6WwkkQfXpaJarmhsieD/FOJieotOGDuhvpWyJnLOHQ5bvJH2PkEoyOghCRX7loqwBdo
-         Wlxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RSrvv0FJmitf6q9JxmYipGO4Y6PZy6cFkX1VzqR3xEU=;
-        b=kQv9F5i/H7qKcNX7ajYXFlIe8jg9BvjgYoAKkG//E0JY0QZTKyiVuBIRGsjj3/OhzD
-         vqJP9o0X2JtJVPAZh47ldfS00HlJ4DY6sij+b5pUWjdx9V64YKYUpP1I5ics+u6/GH57
-         eAQbYFVip3RxaSaFVes6aWa4nFuKP01fMyESTLNpAb0ZpptSxMfBgIGnNpHAycsQYc3+
-         5es9Xky7/mWBLTY1Rcm2Tux/HSQl/Yxf4HTrP8TQivN3TYAUEyv/k8nXkVQcQrgsOoBJ
-         4w+Aiw5E655h0E6+UmV5zOuPQVT26hVGffSzZ+iyXM2H59KHb/YLb+vcl/ybPbK/HxKv
-         tKuQ==
-X-Gm-Message-State: AOAM530Xx6Y9uHPqjZpKo9iPtE5RhEUrZzsQq89BEduo111+IcoRYaXy
-        30dq22EPFzjJaG0a69sYKAw1DoaZAWN5i+PWAR61LA==
-X-Google-Smtp-Source: ABdhPJzTyH+jeLvxiBsauaVxTH5hij7/x8BNA+Ly/857QQXdScYFOsf9kjoayIwSsdP0TIKRwlItOzGM4zkgBEGoiX8=
-X-Received: by 2002:a2e:b80b:: with SMTP id u11mr872506ljo.286.1598619091424;
- Fri, 28 Aug 2020 05:51:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200825193536.7332-1-krzk@kernel.org>
-In-Reply-To: <20200825193536.7332-1-krzk@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 28 Aug 2020 14:51:20 +0200
-Message-ID: <CACRpkdb4j2kJvpY23G-os9gTktZW5HT287MsvMZxC=ovgn_9LQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/19] dt-bindings / arm64: Cleanup of i.MX 8 bindings
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
-        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd@lists.infradead.org, linux-pwm@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729493AbgH1NIN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Aug 2020 09:08:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:48666 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729172AbgH1NGX (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 28 Aug 2020 09:06:23 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4216B1FB;
+        Fri, 28 Aug 2020 06:06:11 -0700 (PDT)
+Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.195.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D0ADB3F66B;
+        Fri, 28 Aug 2020 06:06:08 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chanho Min <chanho.min@lge.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Wei Xu <xuwei5@hisilicon.com>
+Subject: [PATCH 00/10] dt-bindings: Convert SP805 to Json-schema (and fix users)
+Date:   Fri, 28 Aug 2020 14:05:52 +0100
+Message-Id: <20200828130602.42203-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 9:35 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+This is an attempt to convert the SP805 watchdog DT binding to yaml.
+This is done in the first patch, the remaining nine fix some DT users.
 
-> This is a v3 of cleanup of i.XM 8 bindings and DTSes.
+I couldn't test any of those DT files on actual machines, but tried
+to make the changes in a way that would be transparent to at least the
+Linux driver. The only other SP805 DT user I could find is U-Boot, which
+seems to only use a very minimal subset of the binding (just the first
+clock).
+I only tried to fix those DTs that were easily and reliably fixable.
+AFAICT, a missing primecell compatible string, for instance, would
+prevent the Linux driver from probing the device at all, so I didn't
+dare to touch those DTs at all. Missing clocks are equally fatal.
 
-If you are going to be working a lot on Freescale SoC code going forward
-I wouldn't mind if you could add yourself as maintainer for the
-Freescale pin controller and GPIO at least, I already have high trust
-in you in general so if the Freescale maintainers also have that I think you
-should just sign up as maintainer. This makes it easier to do pull requests
-and things like that.
+Cheers,
+Andre
 
-Yours,
-Linus Walleij
+Andre Przywara (10):
+  dt-bindings: watchdog: sp-805: Convert to Json-schema
+  arm64: dts: arm: Fix SP805 clock-names
+  arm64: dts: broadcom: Fix SP805 clock-names
+  arm64: dts: freescale: Fix SP805 clock-names
+  arm64: dts: hisilicon: Fix SP805 clocks
+  arm64: dts: lg: Fix SP805 clocks
+  ARM: dts: arm: Fix SP805 clocks
+  ARM: dts: Cygnus: Fix SP805 clocks
+  ARM: dts: NSP: Fix SP805 clock-names
+  ARM: dts: hisilicon: Fix SP805 clocks
+
+ .../bindings/watchdog/arm,sp805.txt           | 32 ---------
+ .../bindings/watchdog/arm,sp805.yaml          | 72 +++++++++++++++++++
+ arch/arm/boot/dts/arm-realview-eb.dtsi        |  2 +-
+ arch/arm/boot/dts/arm-realview-pb11mp.dts     |  4 +-
+ arch/arm/boot/dts/arm-realview-pbx.dtsi       |  4 +-
+ arch/arm/boot/dts/bcm-cygnus.dtsi             |  4 +-
+ arch/arm/boot/dts/bcm-nsp.dtsi                |  2 +-
+ arch/arm/boot/dts/hisi-x5hd2.dtsi             |  5 +-
+ arch/arm/boot/dts/mps2.dtsi                   |  4 +-
+ arch/arm/boot/dts/vexpress-v2m-rs1.dtsi       |  2 +-
+ arch/arm/boot/dts/vexpress-v2m.dtsi           |  2 +-
+ arch/arm/boot/dts/vexpress-v2p-ca15-tc1.dts   |  4 +-
+ arch/arm/boot/dts/vexpress-v2p-ca15_a7.dts    |  2 +-
+ arch/arm/boot/dts/vexpress-v2p-ca9.dts        |  2 +-
+ arch/arm64/boot/dts/arm/juno-motherboard.dtsi |  2 +-
+ .../boot/dts/arm/rtsm_ve-motherboard.dtsi     |  2 +-
+ .../boot/dts/broadcom/northstar2/ns2.dtsi     |  2 +-
+ .../boot/dts/broadcom/stingray/stingray.dtsi  |  2 +-
+ .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |  4 +-
+ .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 16 ++---
+ .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi | 16 ++---
+ arch/arm64/boot/dts/hisilicon/hi3660.dtsi     | 10 +--
+ arch/arm64/boot/dts/hisilicon/hi6220.dtsi     |  5 +-
+ arch/arm64/boot/dts/lg/lg1312.dtsi            |  4 +-
+ arch/arm64/boot/dts/lg/lg1313.dtsi            |  4 +-
+ 25 files changed, 126 insertions(+), 82 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/arm,sp805.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/arm,sp805.yaml
+
+-- 
+2.17.1
+
