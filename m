@@ -2,114 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A66255D11
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 16:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165E4255F6C
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 19:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbgH1Ovm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Aug 2020 10:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
+        id S1725814AbgH1RIy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Aug 2020 13:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727777AbgH1Ovf (ORCPT
+        with ESMTP id S1726654AbgH1RIk (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Aug 2020 10:51:35 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F3CC061233
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 Aug 2020 07:51:34 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id w14so1624721ljj.4
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 Aug 2020 07:51:34 -0700 (PDT)
+        Fri, 28 Aug 2020 13:08:40 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8F7C061233
+        for <linux-watchdog@vger.kernel.org>; Fri, 28 Aug 2020 10:08:39 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id c142so877924pfb.7
+        for <linux-watchdog@vger.kernel.org>; Fri, 28 Aug 2020 10:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ImiWhFwiMiRaDILGK2vYxwtK6H1QbPrDWNEB8Fo5yp0=;
-        b=m3SH83JhPp5zysOZ8UGaOASaGvHwyBdy+dMZYhDz9IjeZrOUNDL7DGC2IYkYpae6UT
-         FpGAiEisi2hdICi2QBwVlxCRBlQYajQ6kIl3apwv6Zd5zwaMsm+woTJe0VxhXsJCBmVB
-         /Krz+up/rlea+pltJEx57NrY0mSwXBmgaoM8eBGVocnnO/EabniaNW7LYGT8om9EynVv
-         CIC9WHLTJ4TqH3GGF/DLZDlPvjr7OZ+u5Gmua0OvS7bbxfJ/KVP9l6u2f80iB9oWA4S5
-         XcREjqO8mQbwzNglMH6NjTAUpG2SBhzd1ox2KvfQMgaZMf3Rcty3gxm60W7RrjIkgx2T
-         DCMQ==
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=PkU2nF0bf0ig0+Ovi1RNPm0NnQeO/Bze0oV8LgroTYE=;
+        b=FlaMflUyvCPl7nmKSmqVyx6Fp4LG7GtqSIvahsbYOE8tnFPGVTgvfwBrW9oS3+OIQ8
+         +mUlu2HlXSoD4Gv/h7u6zvSrBKleUilbVdAykpjKAQOJIYnqVfC8z3G4T3gh+40DH41v
+         lbNyOqzy52GH/fPrAfaahdIdru8wmCcLcBHw8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ImiWhFwiMiRaDILGK2vYxwtK6H1QbPrDWNEB8Fo5yp0=;
-        b=dcnbNN+Cc0FtOqI0uQxxm+EAZx7V+2bGAOxyMNebqW7EQE45hyAFdjGdGgRLGKbO42
-         MbpYMq+t8fFQv9iLPCDNLY6U7UeiQ+owJZHJsjXImU2wu1yQ9E6INY1NHyyq2uT3YkJL
-         vvtfsN00ps2YBPyPnOK90VmKgQUnbzgLI25JQROYu4uIhVfsNS0Bxxmhq70U+eNtX2Ec
-         JalmqTtPj7M1+YTCLcoHucXdjSfHAZYJRbVNOyZl/Aij1aaqhwIpkUTLXTWlGD4l7o0d
-         GUd6u8yh8lYp0+6R8cL1zjxzkL5siM7K0x/tOeTCm3NuwBcWMkK/uw/dt5UHBCnYBaXN
-         aTIw==
-X-Gm-Message-State: AOAM5309hJfHR/R5aurYPi7atZu51yB4WaoXcJGboX2n/Rfsjbm7SlbE
-        zex+/cIvubvQPQ2D4gHo2LFSPeAgpDMbnudtmgettg==
-X-Google-Smtp-Source: ABdhPJz7nqwPZB2YVbmFth99db1dEuQGwLTN+Hy4/7RmCxHXULzHeBqpJLldBTh4ZZ0VSRoDavwoeUh9uKGkK6yVJPw=
-X-Received: by 2002:a2e:9dd0:: with SMTP id x16mr1026817ljj.144.1598626291535;
- Fri, 28 Aug 2020 07:51:31 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PkU2nF0bf0ig0+Ovi1RNPm0NnQeO/Bze0oV8LgroTYE=;
+        b=aepTsdtUTEjLv+vdlxbm29FZkrY6dZHTspUGxyKGqBA0AmbY4MQQqMV8N43RYw7C6W
+         0oitg5U16yfCTC7Xwd3hKtZ/LmlztQyyqeS8ZUU7VPiPaCIkoKljuK3Dvt+osDA6H0gD
+         45oJn+q0sdOJUJXLEYZ6HNMAe4umz9C1CXpLgu4qsPVosuANaEXX1kKUO5ZhjL7XABEA
+         sFUzjhtmDovcSVBj01FhyxFHsAxuI16/y+7Ub9zywQspkcoQXRJTx3hCmCGvWTl8bV/V
+         t/Mv5xr1uvhLhG7v0uECvxYBL30dOvW8D1wu3KA6xgM+mpqdSQQZ/82E35KNwiaH34uo
+         h9/Q==
+X-Gm-Message-State: AOAM5328zf3/4p27ssrvXRXjHOXdGxIqiXAGqw1KZfE1ie7eRvF0UcLJ
+        EmK3nIHApwOgohOttepbyDItoQ==
+X-Google-Smtp-Source: ABdhPJyC9MVX3M9/sT/W2e4w4F0egFyUIln5HdPBydtLKWawLwvZBjobhwHOOpnVbO9xgGI90ctb1g==
+X-Received: by 2002:a62:1706:: with SMTP id 6mr25921pfx.26.1598634518989;
+        Fri, 28 Aug 2020 10:08:38 -0700 (PDT)
+Received: from [10.136.8.253] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id p17sm2251665pfn.147.2020.08.28.10.08.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Aug 2020 10:08:38 -0700 (PDT)
+Subject: Re: [PATCH 03/10] arm64: dts: broadcom: Fix SP805 clock-names
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com
+References: <20200828130602.42203-1-andre.przywara@arm.com>
+ <20200828130602.42203-4-andre.przywara@arm.com>
+From:   Ray Jui <ray.jui@broadcom.com>
+Message-ID: <078843e4-37af-4178-72c8-5ace4d85727e@broadcom.com>
+Date:   Fri, 28 Aug 2020 10:08:36 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <20200825193536.7332-1-krzk@kernel.org> <CACRpkdb4j2kJvpY23G-os9gTktZW5HT287MsvMZxC=ovgn_9LQ@mail.gmail.com>
- <20200828130837.GA14163@kozik-lap>
-In-Reply-To: <20200828130837.GA14163@kozik-lap>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 28 Aug 2020 16:51:20 +0200
-Message-ID: <CACRpkdaWAzJQz_Z1zsRbyVQNPO2wUogH8U_mDNV2fSkW22zmtQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/19] dt-bindings / arm64: Cleanup of i.MX 8 bindings
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
-        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd@lists.infradead.org, linux-pwm@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200828130602.42203-4-andre.przywara@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 3:08 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Fri, Aug 28, 2020 at 02:51:20PM +0200, Linus Walleij wrote:
-> > On Tue, Aug 25, 2020 at 9:35 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >
-> > > This is a v3 of cleanup of i.XM 8 bindings and DTSes.
-> >
-> > If you are going to be working a lot on Freescale SoC code going forward
-> > I wouldn't mind if you could add yourself as maintainer for the
-> > Freescale pin controller and GPIO at least, I already have high trust
-> > in you in general so if the Freescale maintainers also have that I think you
-> > should just sign up as maintainer. This makes it easier to do pull requests
-> > and things like that.
->
-> Thanks for encouragement.  Indeed I am planning to do more work around
-> i.MX 8M platforms from NXP/Freescale. However there are already four
-> maintainers for Freescale pin controller drivers so I doubt there is
-> need for fifth entry :).
 
-I beg to differ. As subsystem maintainer it has happened to me more
-than once that the i.MX pin control patches went unreviewed for weeks.
-Everyone listed for this driver is a kitchen sink maintainer that get
-way too much traffic and things fall over the edge.
 
-> Different question is the GPIO driver which apparently lacks entry in
-> Maintainers file.
+On 8/28/2020 6:05 AM, Andre Przywara wrote:
+> The SP805 binding sets the name for the actual watchdog clock to
+> "wdog_clk" (with an underscore).
+> 
+> Change the name in the DTs for Broadcom platforms to match that. The
+> Linux and U-Boot driver use the *first* clock for this purpose anyway,
+> so it does not break anything.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi    | 2 +-
+>  arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
+> index 15f7b0ed3836..6a5fc55f0a4e 100644
+> --- a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
+> +++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
+> @@ -576,7 +576,7 @@
+>  			reg = <0x66090000 0x1000>;
+>  			interrupts = <GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>;
+>  			clocks = <&iprocslow>, <&iprocslow>;
+> -			clock-names = "wdogclk", "apb_pclk";
+> +			clock-names = "wdog_clk", "apb_pclk";
+>  		};
+>  
+>  		gpio_g: gpio@660a0000 {
+> diff --git a/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi b/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
+> index 0098dfdef96c..b425b12c3ed2 100644
+> --- a/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
+> +++ b/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
+> @@ -438,7 +438,7 @@
+>  			reg = <0x000c0000 0x1000>;
+>  			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
+>  			clocks = <&hsls_25m_div2_clk>, <&hsls_div4_clk>;
+> -			clock-names = "wdogclk", "apb_pclk";
+> +			clock-names = "wdog_clk", "apb_pclk";
+>  			timeout-sec = <60>;
+>  		};
+>  
+> 
 
-That's probably just an oversight. Feel free to add it!
+Although not currently used in the driver, this indeed should be fixed
+to match DT documentation and be ready for future clock support in the
+driver (i.e., getting clock by name).
 
-Yours,
-Linus Walleij
+Reviewed-by: Ray Jui <ray.jui@broadcom.com>
