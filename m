@@ -2,91 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C14256285
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 23:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F92C256310
+	for <lists+linux-watchdog@lfdr.de>; Sat, 29 Aug 2020 00:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgH1Vi6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Aug 2020 17:38:58 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:40618 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726536AbgH1Viz (ORCPT
+        id S1727848AbgH1W0o (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Aug 2020 18:26:44 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:37027 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726386AbgH1W0K (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Aug 2020 17:38:55 -0400
-Received: by mail-il1-f196.google.com with SMTP id y2so1905101ilp.7;
-        Fri, 28 Aug 2020 14:38:54 -0700 (PDT)
+        Fri, 28 Aug 2020 18:26:10 -0400
+Received: by mail-io1-f66.google.com with SMTP id b16so622655ioj.4;
+        Fri, 28 Aug 2020 15:26:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Z9aNuFEY8MHLzwmbgIdHHAKZXLe3aQgkptJsyFL+HWw=;
-        b=mI8y56Vyety6L8Vk+sh058Im4xbh3izhfaoT6GLfZDM3AdOy2ZST0dwUBlrTg4KMuK
-         EJ3FMpw1J/jb3cR6ru5oQ63hebgS4w/rYL1qqHx/de36z/9M0zPXk2Wh9C2OjUyWkzyZ
-         mH/zUPvDhe3q+PK4wX5jAvFkROTCzBj9Zq0zTp6YI6HRLuV8nwsRkWEW0P5eQmCaEFV3
-         pZzK+Ro5bq+EGubseHbdB1JRpw311ZitRQJTHDoak8pEryJunDPCqGt6QG6Lcu/TT0gx
-         PyA3VeWNePfKFU7tfyFURiFwuuzK6pVSwY8m7+OI+Z2zS7km3m7GP6Z9ZbEJvK9LRmUK
-         g9LA==
-X-Gm-Message-State: AOAM53032OGGthGk8GkKi4defUO/af1YhPXZ4VkL4xt7smWkqhc4X7cf
-        lh/XoRqi1y5SWpkcBs8Pcg==
-X-Google-Smtp-Source: ABdhPJzS3P2Iz0zwjThn5mGNinrojy9M8UeF8yi+ZuR6dvHqFhATIGtKUGFyG79NQ/sI23b+DIN6qw==
-X-Received: by 2002:a92:79ca:: with SMTP id u193mr669859ilc.185.1598650734133;
-        Fri, 28 Aug 2020 14:38:54 -0700 (PDT)
+        bh=4duqBmGrOIE5h/MJFYsH8A08MjLB2XqWQDb7B6Dfs74=;
+        b=TmtOIpaHqGCAZgJqPOx28dvGaCvJHfiuT0c014Excs6ark6RVFMYjaF/4z5/jXoILg
+         iZWXp3mKR+Z0p7sKr/Kra4ByspMwik+MH7uqL3nqw8DprcKb8SSBmErshqdqk+7JCGsN
+         54H+xUqC1muXm0SCJlr3ThKrrGUtck5SBqqZYzkI3qzzYZY54Jn1DLJxdt/b48iMc3XJ
+         +reavvzaTvNHSJIK+AmQbteSoQP/XDDgOUBG21eygCVWllnCLYer0ZcEFR5eTJVIC4xU
+         hwDQ0Es/3mP0DI02be9tLyxnUssNMocwJ/7kOyAg+FEWCMVGdg94gDKg4Pqv9b8D59/H
+         hd4w==
+X-Gm-Message-State: AOAM53245nuzsEpP2JP5bbGQugWDBrjsuKHm6iXxfDl4ChBwh/E24EDp
+        j3oCGHFmdKO2jcomSqYscQ==
+X-Google-Smtp-Source: ABdhPJyWo64sqjslBZ2g1+ACJ1BfQG2GiCxOUhoNMkowfb9iLK/cF8i/5RAnmdqpHsTGdOTEKzSrEA==
+X-Received: by 2002:a05:6602:1589:: with SMTP id e9mr699348iow.85.1598653569509;
+        Fri, 28 Aug 2020 15:26:09 -0700 (PDT)
 Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id a9sm224951iol.9.2020.08.28.14.38.51
+        by smtp.gmail.com with ESMTPSA id y8sm255986iom.26.2020.08.28.15.26.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Aug 2020 14:38:53 -0700 (PDT)
-Received: (nullmailer pid 3445893 invoked by uid 1000);
-        Fri, 28 Aug 2020 21:38:50 -0000
-Date:   Fri, 28 Aug 2020 15:38:50 -0600
+        Fri, 28 Aug 2020 15:26:08 -0700 (PDT)
+Received: (nullmailer pid 3514602 invoked by uid 1000);
+        Fri, 28 Aug 2020 22:26:04 -0000
+Date:   Fri, 28 Aug 2020 16:26:04 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Fugang Duan <fugang.duan@nxp.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Anson Huang <Anson.Huang@nxp.com>, Han Xu <han.xu@nxp.com>,
-        linux-serial@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Shawn Guo <shawnguo@kernel.org>,
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, Han Xu <han.xu@nxp.com>,
+        linux-kernel@vger.kernel.org, Frank Li <frank.li@nxp.com>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-watchdog@vger.kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-pm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Anson Huang <Anson.Huang@nxp.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Frank Li <frank.li@nxp.com>,
+        Fugang Duan <fugang.duan@nxp.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3 12/19] dt-bindings: mmc: fsl-imx-esdhc: Fix i.MX 8
- compatible matching
-Message-ID: <20200828213850.GA3444012@bogus>
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-gpio@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-serial@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH v3 13/19] dt-bindings: nvmem: imx-ocotp: Update i.MX 8M
+ compatibles
+Message-ID: <20200828222604.GA3514520@bogus>
 References: <20200825193536.7332-1-krzk@kernel.org>
- <20200825193536.7332-13-krzk@kernel.org>
+ <20200825193536.7332-14-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200825193536.7332-13-krzk@kernel.org>
+In-Reply-To: <20200825193536.7332-14-krzk@kernel.org>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 25 Aug 2020 21:35:29 +0200, Krzysztof Kozlowski wrote:
-> The i.MX 8 DTSes use two compatibles so update the binding to fix
-> dtbs_check warnings like:
+On Tue, 25 Aug 2020 21:35:30 +0200, Krzysztof Kozlowski wrote:
+> DTSes with new i.MX 8M SoCs use two compatibles so update the binding to
+> fix dtbs_check warnings like:
 > 
->   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: mmc@30b40000:
->     compatible: ['fsl,imx8mn-usdhc', 'fsl,imx7d-usdhc'] is too long
->     From schema: Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+>   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: efuse@30350000: compatible:1: 'syscon' was expected
+>     From schema: Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
 > 
->   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: mmc@30b40000:
->     compatible: Additional items are not allowed ('fsl,imx7d-usdhc' was unexpected)
+>   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: efuse@30350000:
+>     compatible: ['fsl,imx8mn-ocotp', 'fsl,imx8mm-ocotp', 'syscon'] is too long
 > 
->   arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dt.yaml: mmc@30b40000:
->     compatible: ['fsl,imx8mn-usdhc', 'fsl,imx7d-usdhc'] is too long
+>   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: efuse@30350000:
+>     compatible: Additional items are not allowed ('syscon' was unexpected)
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > 
@@ -94,30 +93,9 @@ On Tue, 25 Aug 2020 21:35:29 +0200, Krzysztof Kozlowski wrote:
 > 
 > Changes since v2:
 > 1. Remove moved compatibles.
-> 
-> Changes since v1:
-> 1. Handle also fsl,imx8mm-usdhc and fsl,imx8qxp-usdhc
 > ---
->  .../bindings/mmc/fsl-imx-esdhc.yaml           | 37 ++++++++++---------
->  1 file changed, 20 insertions(+), 17 deletions(-)
+>  .../devicetree/bindings/nvmem/imx-ocotp.yaml  | 38 +++++++++++--------
+>  1 file changed, 23 insertions(+), 15 deletions(-)
 > 
 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx8qxp-lpcg.example.dt.yaml: mmc@5b010000: compatible: ['fsl,imx8qxp-usdhc'] is not valid under any of the given schemas (Possible causes of the failure):
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx8qxp-lpcg.example.dt.yaml: mmc@5b010000: compatible: ['fsl,imx8qxp-usdhc'] is too short
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/imx8qxp-lpcg.example.dt.yaml: mmc@5b010000: compatible:0: 'fsl,imx8qxp-usdhc' is not one of ['fsl,imx25-esdhc', 'fsl,imx35-esdhc', 'fsl,imx51-esdhc', 'fsl,imx53-esdhc', 'fsl,imx6q-usdhc', 'fsl,imx6sl-usdhc', 'fsl,imx6sx-usdhc', 'fsl,imx6ull-usdhc', 'fsl,imx7d-usdhc', 'fsl,imx7ulp-usdhc']
-
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-
-
-See https://patchwork.ozlabs.org/patch/1351360
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+Reviewed-by: Rob Herring <robh@kernel.org>
