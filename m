@@ -2,70 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D133255AEE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 15:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEBA255AD8
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Aug 2020 15:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729578AbgH1NKM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Aug 2020 09:10:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:48828 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729461AbgH1NHh (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Aug 2020 09:07:37 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74B9D1509;
-        Fri, 28 Aug 2020 06:06:28 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.195.35])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3E2CD3F66B;
-        Fri, 28 Aug 2020 06:06:27 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Xu <xuwei5@hisilicon.com>
-Subject: [PATCH 10/10] ARM: dts: hisilicon: Fix SP805 clocks
-Date:   Fri, 28 Aug 2020 14:06:02 +0100
-Message-Id: <20200828130602.42203-11-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200828130602.42203-1-andre.przywara@arm.com>
-References: <20200828130602.42203-1-andre.przywara@arm.com>
+        id S1729528AbgH1NJY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Aug 2020 09:09:24 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:35284 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729397AbgH1NIo (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 28 Aug 2020 09:08:44 -0400
+Received: by mail-ed1-f65.google.com with SMTP id ba12so1120747edb.2;
+        Fri, 28 Aug 2020 06:08:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=E+aHZUYr4/xAk5Vx/I2zH6eSvAeQy3DL/RIU7rMycss=;
+        b=E6cZZR0YEuayjCgtPIhKLaUIm015EoxA1zp2DQ3mJjPxd8e8zcjzbcRiES2lP5KKil
+         ZHyxfWyVrPmfud2YWtfm3unM/emunX0V+iZXtBUG9oHa3pw3fCHCAbTTZmfYdIQKHH0U
+         rJT5GRgunJKmH1PyhbcYYS7Btq7HCcNhg5y1FuZZB0Qfo7Sl+fo9v6AMaXS4ztoHCxsR
+         avp1g1C8naIobLfPK0qRzrne94ZuHbkeyJEBl9xZv+olRpo2HmP0MBQXX53WZqcOO/JZ
+         tITcVbeNrmkmMhjjJ2jjzt85u1WmVXTJw2IxcJdBQ6duH9npieWavBV6l1Yrx3NgSErr
+         J7zw==
+X-Gm-Message-State: AOAM531Cr0WRLpsOxHehy9OwhcqbaIGYQtMpX3hNg6pX13RJ2Z2JcA4o
+        /IQpt6b6ooKDnE9aSm6JNU4=
+X-Google-Smtp-Source: ABdhPJw2sUyi5oI180j1s6a0iPM15L1BAjci1fZItmg5NmiUYVf2976kX7V0+smnXtOdifVljCX0Xg==
+X-Received: by 2002:a50:bf08:: with SMTP id f8mr1717050edk.207.1598620121241;
+        Fri, 28 Aug 2020 06:08:41 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id j21sm849059eja.109.2020.08.28.06.08.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 28 Aug 2020 06:08:40 -0700 (PDT)
+Date:   Fri, 28 Aug 2020 15:08:37 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd@lists.infradead.org, linux-pwm@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v3 00/19] dt-bindings / arm64: Cleanup of i.MX 8 bindings
+Message-ID: <20200828130837.GA14163@kozik-lap>
+References: <20200825193536.7332-1-krzk@kernel.org>
+ <CACRpkdb4j2kJvpY23G-os9gTktZW5HT287MsvMZxC=ovgn_9LQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CACRpkdb4j2kJvpY23G-os9gTktZW5HT287MsvMZxC=ovgn_9LQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The SP805 DT binding requires two clocks to be specified, but
-Hisilicon platform DTs currently only specify one clock.
+On Fri, Aug 28, 2020 at 02:51:20PM +0200, Linus Walleij wrote:
+> On Tue, Aug 25, 2020 at 9:35 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> 
+> > This is a v3 of cleanup of i.XM 8 bindings and DTSes.
+> 
+> If you are going to be working a lot on Freescale SoC code going forward
+> I wouldn't mind if you could add yourself as maintainer for the
+> Freescale pin controller and GPIO at least, I already have high trust
+> in you in general so if the Freescale maintainers also have that I think you
+> should just sign up as maintainer. This makes it easier to do pull requests
+> and things like that.
 
-In practice, Linux would pick a clock named "apb_pclk" for the bus
-clock, and the Linux and U-Boot SP805 driver would use the first clock
-to derive the actual watchdog counter frequency.
+Thanks for encouragement.  Indeed I am planning to do more work around
+i.MX 8M platforms from NXP/Freescale. However there are already four
+maintainers for Freescale pin controller drivers so I doubt there is
+need for fifth entry :).
 
-Since currently both are the very same clock, we can just double the
-clock reference, and add the correct clock-names, to match the binding.
+Different question is the GPIO driver which apparently lacks entry in
+Maintainers file.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- arch/arm/boot/dts/hisi-x5hd2.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/hisi-x5hd2.dtsi b/arch/arm/boot/dts/hisi-x5hd2.dtsi
-index 3ee7967c202d..e2dbf1d8a67b 100644
---- a/arch/arm/boot/dts/hisi-x5hd2.dtsi
-+++ b/arch/arm/boot/dts/hisi-x5hd2.dtsi
-@@ -370,8 +370,9 @@
- 				arm,primecell-periphid = <0x00141805>;
- 				reg = <0xa2c000 0x1000>;
- 				interrupts = <0 29 4>;
--				clocks = <&clock HIX5HD2_WDG0_RST>;
--				clock-names = "apb_pclk";
-+				clocks = <&clock HIX5HD2_WDG0_RST>,
-+					 <&clock HIX5HD2_WDG0_RST>;
-+				clock-names = "wdog_clk", "apb_pclk";
- 			};
- 		};
- 
--- 
-2.17.1
+Best regards,
+Krzysztof
 
