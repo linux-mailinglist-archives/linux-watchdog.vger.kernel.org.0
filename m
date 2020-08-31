@@ -2,100 +2,101 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B891625728D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 31 Aug 2020 05:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDF125734C
+	for <lists+linux-watchdog@lfdr.de>; Mon, 31 Aug 2020 07:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726687AbgHaD7k (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 30 Aug 2020 23:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S1726518AbgHaF2f (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 31 Aug 2020 01:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbgHaD7j (ORCPT
+        with ESMTP id S1725810AbgHaF2b (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 30 Aug 2020 23:59:39 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50695C061573;
-        Sun, 30 Aug 2020 20:59:39 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id q1so2296181pjd.1;
-        Sun, 30 Aug 2020 20:59:39 -0700 (PDT)
+        Mon, 31 Aug 2020 01:28:31 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645B3C061575
+        for <linux-watchdog@vger.kernel.org>; Sun, 30 Aug 2020 22:28:30 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id np15so800352pjb.0
+        for <linux-watchdog@vger.kernel.org>; Sun, 30 Aug 2020 22:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CAK2taVhKaOL1VPAdPF1CAKiLijCzZCiNCOhkBkdyH8=;
-        b=FcHToBAC1G99IbYmEIWo5XdC31xWX1mAvUYwRIEeyPf6LAcLV0bBBKOv3knx/NLUBs
-         lVSx9HmaCeudrJPN2zSRnI3Go52uZVcxayDN/Uw7NZWqvLCo9BMnb4cq1RDrEMQJ5vq7
-         Un5H8lUqMaO2qQ/WW+UWWucylH6r8UNWVCAuZmYPDm6lgcB5GHyET72Z2VKUdPWBKyTl
-         QnS5U4OhaDRx8nr0ODgTNELx8uyjwSoU20qCWtMp9Y7v72ypOzY7S18io5+LX+txQBDs
-         xWqRFCy2B5nL2jVSKUAtfybALPfGuR/8J0t1ilIpzHmeFI671mJOrv85Ezw+SVqUqTIe
-         M4HA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tLWtD+wuuRp1aiLM/sqC5p8ibdIf7AwldZEs7jvXZcs=;
+        b=TlUIzJjHY6Dpk8b4Z6uQnnJJ9OyqXy/dw2h3ICbORzJRb6N1o+WsM1rStNZ54u47uB
+         a+QAu1F7BzxZGEVH2WIhwQrxRHmUATMtNmNwKv7cL2lsS7s3nPXoSFRknkoEwgZ4m4nO
+         y4qORtJKEjyP+DDhw0ewws1uOZbaGo8s0GVzk7rO3hq6rsmO3tJ/1m6a/VoB3Ikn2Iqu
+         G46scuvw/Sj1FNZwUN0fQZsJlm8kZnaND9Njja/9bP8NirCe2PWAxmOVbr/DWv2+8MuT
+         inlrSUnmwiBgYL3n+GEWM8MO0IDU/pAvU+EtbNv0vtm7edZuO9u1N0/zgWx0QzYTHUFZ
+         D4Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CAK2taVhKaOL1VPAdPF1CAKiLijCzZCiNCOhkBkdyH8=;
-        b=BvdlzhSAci6mwsAS7XongTB3U4xXgBd9cLv6UAryr3SFj5vnY16EoXV14Nj5ssdrMd
-         DPueAg3RpshED74b4EwV7Uh72C7QuloxVagthS8paohQIHsUyOeMV9eSWdhZgd55Y8B6
-         JLsHkr7Y796pvMOzYO2Tx35Rd+cn4p5p40oh4f1iUqRAhHN6e0DIF8ipW2yyAFZpsrZb
-         RymBPQedIQmReFWmYzuLRUNOIvHzYZLBRpM+dHcaPS+Xo0OuYCGBfHyFjLZrAaV/seTp
-         u6ICSQJQTLsZeBuuIAJ+T01eglbfGKfX3mbKizqpKnRv9Tkgf8amdRe7xHjSuSEOZ8eV
-         XAaQ==
-X-Gm-Message-State: AOAM533M4VIZjmVA7+7RijJJIdPKhoosxuHHfhwLAs6zRZsV7WGcNl3l
-        THGu7q9vIs5SXW2lzNfcwABszZ6vIDw=
-X-Google-Smtp-Source: ABdhPJwdKhsm6eCvXoumm3qIA5WBUjkkxHjtzGkZCwEMFQfwgrNR762FTqfxn8sm57bC0WNKDj6xEA==
-X-Received: by 2002:a17:90a:eb15:: with SMTP id j21mr9366185pjz.83.1598846378718;
-        Sun, 30 Aug 2020 20:59:38 -0700 (PDT)
-Received: from [10.230.30.107] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id m22sm5479595pja.36.2020.08.30.20.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Aug 2020 20:59:38 -0700 (PDT)
-Subject: Re: [PATCH 08/10] ARM: dts: Cygnus: Fix SP805 clocks
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Andre Przywara <andre.przywara@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tLWtD+wuuRp1aiLM/sqC5p8ibdIf7AwldZEs7jvXZcs=;
+        b=n13ocGhou9Lh4Nu64rupF4oKcDu8v6BkO/nHHjgtYeYROnDB3u8nctG0SGED55gAHU
+         HOmAAnlu5ttz+i008SeMzfwE0XkQz8RKDLWPXgwaEi5w5D6uu3dEvDLci1ehqej/OsnD
+         KNpFxP6hsUrDLDh9OX8220XYwmIPh6gAd31YyadTCgjNrvw2pUGwP9J/Ua1iJe+Com5r
+         yImt7n9/kl1GD1Ger19UozgE1wqMNRg3MVfVrVuyvTPBCEaORLVPjK7yJQAlqBFjc/pu
+         D0iZjq4jgGiuE2dByL2S60XpF9LCXRTRo/1yPTpmb4bYtfoUK6DN/LwF/plXlrqPHOfD
+         /2jA==
+X-Gm-Message-State: AOAM533ROJ+ive67V4MjryKADc5toAs9/qaZhM/pmghvjyruAV763edP
+        1rQVVMlPtoaUn9NYM8mTek9Krg==
+X-Google-Smtp-Source: ABdhPJz9JcfzTlWfMFwenjNQr2tWTTmECGqopiTNS9/UzC5fEVmndWK+6vQb2WWep2RtbJ6/401k/w==
+X-Received: by 2002:a17:90a:2d82:: with SMTP id p2mr97869pjd.166.1598851709756;
+        Sun, 30 Aug 2020 22:28:29 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id n67sm2075913pgn.14.2020.08.30.22.28.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 30 Aug 2020 22:28:28 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 10:58:17 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Viresh Kumar <vireshk@kernel.org>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chanho Min <chanho.min@lge.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Wei Xu <xuwei5@hisilicon.com>
+Subject: Re: [PATCH 01/10] dt-bindings: watchdog: sp-805: Convert to
+ Json-schema
+Message-ID: <20200831052817.azrovfs2khm4yitj@vireshk-i7>
 References: <20200828130602.42203-1-andre.przywara@arm.com>
- <20200828130602.42203-9-andre.przywara@arm.com>
- <20200831035506.1332109-1-f.fainelli@gmail.com>
-Message-ID: <4d9e64dd-c081-f68e-0682-a9e30e8e4793@gmail.com>
-Date:   Sun, 30 Aug 2020 20:59:35 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.1.1
+ <20200828130602.42203-2-andre.przywara@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200831035506.1332109-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200828130602.42203-2-andre.przywara@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
-
-On 8/30/2020 8:55 PM, Florian Fainelli wrote:
-> On Fri, 28 Aug 2020 14:06:00 +0100, Andre Przywara <andre.przywara@arm.com> wrote:
->> The SP805 DT binding requires two clocks to be specified, but the
->> Broadcom Cygnus DT currently only specifies one clock.
->>
->> In practice, Linux would pick a clock named "apb_pclk" for the bus
->> clock, and the Linux and U-Boot SP805 driver would use the first clock
->> to derive the actual watchdog counter frequency.
->>
->> Since currently both are the very same clock, we can just double the
->> clock reference, and add the correct clock-names, to match the binding.
->>
->> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
->> ---
+On 28-08-20, 14:05, Andre Przywara wrote:
+> Convert the ARM SP-805 watchdog IP DT binding over to Json-schema.
 > 
-> Applied to qspi-fixes, thanks!
+> A straight-forward conversion, but the requirement for providing two
+> clocks got strengthened from "should" to "must".
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  .../bindings/watchdog/arm,sp805.txt           | 32 --------
+>  .../bindings/watchdog/arm,sp805.yaml          | 75 +++++++++++++++++++
+>  2 files changed, 75 insertions(+), 32 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/arm,sp805.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/arm,sp805.yaml
 
-Applied to devicetree/next actually, likewise for the next patch.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
 -- 
-Florian
+viresh
