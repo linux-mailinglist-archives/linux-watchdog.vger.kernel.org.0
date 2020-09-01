@@ -2,119 +2,150 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B2D25955D
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Sep 2020 17:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB86B2595DF
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Sep 2020 17:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbgIAPum (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 1 Sep 2020 11:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728819AbgIAPuh (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 1 Sep 2020 11:50:37 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C556C06125F;
-        Tue,  1 Sep 2020 08:50:32 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id u20so1033506pfn.0;
-        Tue, 01 Sep 2020 08:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HeGBPCmtRrSwxguF1t/lDmn0Piwm4iwKIT8Cjmy4NkE=;
-        b=jUGWBg6UDQJ3uPksKhZadG9q93rq50zkSmOYkb+I7uRfsp/K3JEQx5xPSTtkl2PUNp
-         4w7XOHG2bNhNAFOVF1ZueSiw3Z75ZRe+xy9lCQNrI+YtELLCDhDo8MdRUtX5D9Hiiivn
-         N4PVbwfK7wVcHIDBrX46RpEkpLfiZ7Ro+pK/5YvV5kLWkDY3r21BXmHOc3xmrBlvZVq6
-         EdVxlShmrwWim2V2Ga6mF+8NXk68vqhq1VwC9dadxI2zheO4vtl2A85KmYKJ8m4UJ3CW
-         1Q18tBTLxdCprt7NxK+ia4He3scuEY/Xymwvd/UNlKcBogbWmaGjTkDWPvkNOtBeE7Sy
-         lrjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HeGBPCmtRrSwxguF1t/lDmn0Piwm4iwKIT8Cjmy4NkE=;
-        b=rdC7epMpy2mueL2J/sQvOtHA/lU1l1bdYBubEsdLCN1CWJaKysN4dijjrSchTf3XsV
-         cqk0qahaFAvvlfLcM+aphlLSwqOcDd+vu5WA7M1fFL1SGP77RCkbnjInYLB7BZ9S1zqG
-         66LGKKrPnrHo7s8JXTUWdTbyErGoQBE1neOW2+TIMT/7niLkK4mIMxL5ueK0r9FeBcYo
-         Ga5c9HZ0MutHW5pyIsZJgEPWvIzGPC9zxK1cgGiop4Xo0+Qx2fP4vVr32Av5POg1buKR
-         bboIn/09f/4OxZ43TUWwOROy7OreUousAAQaeJ9PcsjrCpmQxAs9iv34T/mccbQJPXfX
-         eqMg==
-X-Gm-Message-State: AOAM531jLMgd3Yt8c59age4olMAVZUZSiChIn9dzaIgEwgXOofVA+nTb
-        Fuf83BsvTb+7V99RViz1Vvs=
-X-Google-Smtp-Source: ABdhPJyGGjI8lazFMYb/Odt42bJDkZ204tyXwU4ZazliCZIiAlQ0mvO/XkGrMisfYInXA8eBXVmzFA==
-X-Received: by 2002:a65:6714:: with SMTP id u20mr2085793pgf.252.1598975431993;
-        Tue, 01 Sep 2020 08:50:31 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x144sm2324377pfc.82.2020.09.01.08.50.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 01 Sep 2020 08:50:31 -0700 (PDT)
-Date:   Tue, 1 Sep 2020 08:50:30 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] watchdog: rti: Simplify with dev_err_probe()
-Message-ID: <20200901155030.GC106798@roeck-us.net>
-References: <20200901153141.18960-1-krzk@kernel.org>
- <20200901153141.18960-3-krzk@kernel.org>
+        id S1732160AbgIAP4z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 1 Sep 2020 11:56:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:44610 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731364AbgIAP4f (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 1 Sep 2020 11:56:35 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFAE91045;
+        Tue,  1 Sep 2020 08:56:34 -0700 (PDT)
+Received: from [192.168.2.22] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 17F3C3F71F;
+        Tue,  1 Sep 2020 08:56:31 -0700 (PDT)
+Subject: Re: [PATCH 00/10] dt-bindings: Convert SP805 to Json-schema (and fix
+ users)
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chanho Min <chanho.min@lge.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Wei Xu <xuwei5@hisilicon.com>
+References: <20200828130602.42203-1-andre.przywara@arm.com>
+ <19c6a67e-48f0-c0b6-3653-32a5a1f09e07@gmail.com>
+ <CAL_JsqKvcGAotS6xL7pu+wM8X33PLCQCuoaXYmWrA3j3OdoR5A@mail.gmail.com>
+ <bbba0345-f1e3-a240-eaca-d67fa5f8259b@gmail.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Przywara?= <andre.przywara@arm.com>
+Autocrypt: addr=andre.przywara@arm.com; prefer-encrypt=mutual; keydata=
+ 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
+ i4aIXCH3Wv6K
+Organization: ARM Ltd.
+Message-ID: <5fc1f463-7d48-e1e1-e316-3083becf8c34@arm.com>
+Date:   Tue, 1 Sep 2020 16:56:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200901153141.18960-3-krzk@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <bbba0345-f1e3-a240-eaca-d67fa5f8259b@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 05:31:41PM +0200, Krzysztof Kozlowski wrote:
-> Common pattern of handling deferred probe can be simplified with
-> dev_err_probe().  Less code and the error value gets printed.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+On 28/08/2020 22:32, Florian Fainelli wrote:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Hi,
 
+Florian, thanks for queueing the Broadcom specific patches!
+
+> On 8/28/20 2:28 PM, Rob Herring wrote:
+>> On Fri, Aug 28, 2020 at 1:34 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>
+>>> On 8/28/20 6:05 AM, Andre Przywara wrote:
+>>>> This is an attempt to convert the SP805 watchdog DT binding to yaml.
+>>>> This is done in the first patch, the remaining nine fix some DT users.
+>>>>
+>>>> I couldn't test any of those DT files on actual machines, but tried
+>>>> to make the changes in a way that would be transparent to at least the
+>>>> Linux driver. The only other SP805 DT user I could find is U-Boot, which
+>>>> seems to only use a very minimal subset of the binding (just the first
+>>>> clock).
+>>>> I only tried to fix those DTs that were easily and reliably fixable.
+>>>> AFAICT, a missing primecell compatible string, for instance, would
+>>>> prevent the Linux driver from probing the device at all, so I didn't
+>>>> dare to touch those DTs at all. Missing clocks are equally fatal.
+>>>
+>>> What is the plan for merging this series? Should Rob pick up all changes
+>>> or since those are non critical changes, should we just leave it to the
+>>> SoC maintainers to pick up the changes in their tree?
+>>
+>> I don't take .dts files. Either subarch maintainers can pick up
+>> individual patches or send a PR to SoC maintainers.
 > 
-> ---
-> 
-> It is unusual to expect deferred probe from pm_runtime_get()...
-> ---
->  drivers/watchdog/rti_wdt.c | 14 ++++----------
->  1 file changed, 4 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-> index 705e8f7523e8..836319cbaca9 100644
-> --- a/drivers/watchdog/rti_wdt.c
-> +++ b/drivers/watchdog/rti_wdt.c
-> @@ -205,11 +205,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	clk = clk_get(dev, NULL);
-> -	if (IS_ERR(clk)) {
-> -		if (PTR_ERR(clk) != -EPROBE_DEFER)
-> -			dev_err(dev, "failed to get clock\n");
-> -		return PTR_ERR(clk);
-> -	}
-> +	if (IS_ERR(clk))
-> +		return dev_err_probe(dev, PTR_ERR(clk), "failed to get clock\n");
->  
->  	wdt->freq = clk_get_rate(clk);
->  
-> @@ -230,11 +227,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
->  
->  	pm_runtime_enable(dev);
->  	ret = pm_runtime_get_sync(dev);
-> -	if (ret) {
-> -		if (ret != -EPROBE_DEFER)
-> -			dev_err(&pdev->dev, "runtime pm failed\n");
-> -		return ret;
-> -	}
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "runtime pm failed\n");
->  
->  	platform_set_drvdata(pdev, wdt);
->  
-> -- 
-> 2.17.1
-> 
+> OK, so we are fine, to say make sure this all lands in v5.10-rc1 at some
+> point and the warnings should no longer exist by then?
+
+So yes, I would be very grateful if subsystem maintainers take this at
+their discretion.
+For once, I didn't actually change anything in the binding, so most
+things were already slightly wrong according to the .txt binding, just
+nobody realised or cared. So those .dts files changes are actually
+independent and justified even without patch 01/10.
+
+Secondly, there are already so many warnings in many .dts files at the
+moment, that (in the worst case) a few more - for a brief period of time
+- do not really matter. But at the end it will improve the situation.
+
+Rob, if you are fine with the actual binding, I would try to pursue the
+remaining subsystem maintainers to get the .dts changes merged.
+
+Thanks,
+Andre.
