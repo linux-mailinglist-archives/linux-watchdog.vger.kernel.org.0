@@ -2,83 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1F325C228
-	for <lists+linux-watchdog@lfdr.de>; Thu,  3 Sep 2020 16:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96FE25D420
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Sep 2020 10:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728603AbgICOGE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 3 Sep 2020 10:06:04 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:46254 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728646AbgICOFq (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 3 Sep 2020 10:05:46 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id EEB8E52195;
-        Thu,  3 Sep 2020 13:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-transfer-encoding:mime-version:user-agent:content-type
-        :content-type:organization:references:in-reply-to:date:date:from
-        :from:subject:subject:message-id:received:received:received; s=
-        mta-01; t=1599139370; x=1600953771; bh=maYMfRPvJLxeRFZ0FdSIdjuGM
-        4Bq3KUCafttH82y2bE=; b=QJK0LQ9v4Ikk9Epnuzf4HAoEjyr7yY5rGvshmE63J
-        X/hzFwVZy3h57HSJ0jEMzNFfghfXldG5qo9zm8Kahd/vPS7i7DabhfMZOIpr+Lm5
-        TJr5gEOWpvSdIRFMscOV9p8G/wYFU2kNaH45ez42TAKwlnfYb5nKHPeDR6h8J8Ri
-        L8=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id OWFpNQ-Y-vQ3; Thu,  3 Sep 2020 16:22:50 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id DA97E5141E;
-        Thu,  3 Sep 2020 16:22:50 +0300 (MSK)
-Received: from localhost.localdomain (10.199.2.130) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Thu, 3 Sep 2020 16:22:50 +0300
-Message-ID: <7a58bc3f80783170ecc38371aad7addc04397787.camel@yadro.com>
-Subject: Re: watchdog start on restart
-From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Date:   Thu, 3 Sep 2020 16:26:18 +0300
-In-Reply-To: <d6aa46c5-a1ac-c32e-5cc6-bf9a15a53b65@csgroup.eu>
-References: <d2343032814705f33cd81f18f45630bf327c0ff8.camel@yadro.com>
-         <1721f170-95df-2451-e3af-6369e830afad@roeck-us.net>
-         <2b14920abf9f430731ec11c1df6c0253185c7ce7.camel@yadro.com>
-         <d6aa46c5-a1ac-c32e-5cc6-bf9a15a53b65@csgroup.eu>
-Organization: YADRO
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+        id S1729918AbgIDI66 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 4 Sep 2020 04:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729869AbgIDI64 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 4 Sep 2020 04:58:56 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B990C061246
+        for <linux-watchdog@vger.kernel.org>; Fri,  4 Sep 2020 01:58:56 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id y4so7028659ljk.8
+        for <linux-watchdog@vger.kernel.org>; Fri, 04 Sep 2020 01:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=e5bqL5TjHbwBbQQx08EWcQb2A9xnNxuFA36RwtHgwZA=;
+        b=vj9H27nYx9c3BTGbF47tdYeEfxFGyDB42r8FcChdlsq2Q/QAmh2XtJIHlpQp6swIoj
+         RMTZradXBRiPloHad/p0tj+CYFxCd0KLPu1rFIQDkAxZu9MvBT/H442q8ck4tszxddMW
+         FnwBQP08jLIPGtH9wX6JuEtRTf0htM/DhYKhe4TENRq7RI/4j2kFwh8YvydLBowPhWbO
+         tLXx1ZqjUnsur2XK8NUt/Y5qGRjIUPkEm0SKV8wa2QuRDfaK1aELXTFEaVa9NNaXEv87
+         f93oUQoAdT4bEQTpgSMejicznc2/XIjrvOG9WxQjK/3IwPnLOtbVXC1QNZALiagXtIma
+         mzyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=e5bqL5TjHbwBbQQx08EWcQb2A9xnNxuFA36RwtHgwZA=;
+        b=EkN5vkP2NrVHOJRwk+Qgae9Y68koOIW2M+9yoNmPvpwVSBRb6/QBi8GKnQhnB8nxZ/
+         5+tUGFqkz7oHwhP40QRcaoD901ZHN3G5H1KWhyuFWd9nWZqxnHDF38dcpcWaDNi/I/9H
+         pxHYMAqf4x5kCiGqvyWPjngzZ8PXmF1a9TzPnahDA7LYIKdLB31d3yW3jMszTR033cO8
+         fUkUVJg1AXItG6o5PlCHOeDEz0hn4ge1+Atn0SCeAxEdhnhOaDMTQ8gSQ+iNk6E+alus
+         NPVgrHesC/xz4dGGFFCNcUDM1c+tzHONiVA3mj6/cHiBTMBXuWUO07CawFK0/w/QxHZR
+         FsOw==
+X-Gm-Message-State: AOAM532oVd5ejNBKofiDG2156G4riJFgEdYXzpL5yrv9eVeuOdwYcUyA
+        Y5iPbJS4Y1MbZw7wGMvTsgQMVOvPopacDCL4yWDA5A==
+X-Google-Smtp-Source: ABdhPJwBOG7Hh44q1D63QCcRhYO5V5+LCYkolaEWM8gLEkK+7LP+gf9P/+1WSp243uMeKZNw+XTvVtxuRO+q8WQ14gM=
+X-Received: by 2002:a2e:9988:: with SMTP id w8mr3563728lji.286.1599209934290;
+ Fri, 04 Sep 2020 01:58:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.199.2.130]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
+References: <20200828130602.42203-1-andre.przywara@arm.com> <19c6a67e-48f0-c0b6-3653-32a5a1f09e07@gmail.com>
+In-Reply-To: <19c6a67e-48f0-c0b6-3653-32a5a1f09e07@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 4 Sep 2020 10:58:43 +0200
+Message-ID: <CACRpkdbMbNd87145iwdL7=x501cvgU7wiZXNLF456sn6WvoodQ@mail.gmail.com>
+Subject: Re: [PATCH 00/10] dt-bindings: Convert SP805 to Json-schema (and fix users)
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chanho Min <chanho.min@lge.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Wei Xu <xuwei5@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 2020-09-03 at 13:13 +0200, Christophe Leroy wrote:
+On Fri, Aug 28, 2020 at 9:34 PM Florian Fainelli <f.fainelli@gmail.com> wro=
+te:
+> On 8/28/20 6:05 AM, Andre Przywara wrote:
 
-> You want to start the watchdog just before calling 'reboot' but want to 
-> make sure that the watchdog will not reset the board before all 
-> userspace has shut down correctly ?
+> What is the plan for merging this series? Should Rob pick up all changes
+> or since those are non critical changes, should we just leave it to the
+> SoC maintainers to pick up the changes in their tree?
 
-Yes, just for an example, in the nature exists some aspeed2400/2500 board which
-has 2 watchdog devices and 2 spi flash memories. By default it starts from 1 spi
-flash. When watchdog triggers, on next boot, it's automatically starts from 2
-flash, also you can manually switch from 1 spi flash to 2 with 2 watchdog device
-by trigger of it, like transparent reload from 1 spi flash side to 2.
+What about Andr=C3=A9 just send a pull request to the ARM SoC maintainers
+for the whole thing?
 
-> But what is the purpose of the watchdog then, isn't it there to make 
-> sure that the machine gets reboot within a given timeout anyway in case 
-> some userspace takes too long to shut down ?
-
-Usually, yes.
-
-Thanks.
-
+Yours,
+Linus Walleij
