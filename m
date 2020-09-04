@@ -2,116 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DE725E33B
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Sep 2020 23:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94CA25E3B4
+	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Sep 2020 00:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728001AbgIDVRb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 4 Sep 2020 17:17:31 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:60625 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727923AbgIDVR3 (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 4 Sep 2020 17:17:29 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 5C5EEAFB;
-        Fri,  4 Sep 2020 17:17:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 04 Sep 2020 17:17:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        open-music-kontrollers.ch; h=from:to:cc:subject:date:message-id
-        :in-reply-to:references:mime-version:content-transfer-encoding;
-         s=fm3; bh=peUDp0pNQ6Mbe/9IFdEaUL4hm+A5G2i/KNTyI2Pd8c8=; b=elaUB
-        5TXc6pRBZH3Jg71IsUECbR3LTfcqidjYvD2ufkHvUbw/Zv6qUM07zB0YX/koPtEf
-        V7eDlAUcY15hlyIq9laAYCT4ksmqY7mSXYLMOwI65y6Ck5DQhQbniKjKj5DfkfrE
-        JeQZYS3t1sV5WL6o9bMV0wk2mkpC0ZdWi/j3KKWdlMXDnb2Yl8lag11zZnqpPpvM
-        lQ7JqGqCeQlGFPwfrRoYfqmmfFw5gDqNFcGnlj9hZ2ScZGb54iUGb9a157bP8kF6
-        4RRIEEYYtFyG5pi/6W9P6u8qpzqnDjV211D8QCcBAxIM6rDfz1iMMqWo8Eg8Vs0m
-        Li+XNNlalYoiluWiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=peUDp0pNQ6Mbe/9IFdEaUL4hm+A5G2i/KNTyI2Pd8c8=; b=Q3VdN5qZ
-        XBFIQ5q8uFVjX0uRx/SATV7b7aDUZj6m/lhlPrixKSUgXaA4g7ppUI9W1Rzz+UG3
-        73rhM0Imu4HKTKHwIFqmhU0aZwUKZSyT6fZXhBDWb5GJvb2qlpErnbaXe3gKwACZ
-        8vwVGFxEyCF+Y0ZBqGng75TjlHABBXSajHwxXzKVxQEcj8OiRHjUN9ECz40k/C26
-        iBAosygg0b+bY324V1nuIGslo6o6hHNyurqV30IGTplLG/8gNKDf9mfB6eDBzfwT
-        wHoJBWFTDlgeJEBk1mW4vQHr/PT9iFcDwHK1CtEcVsJyvWJAovc2x6Q1yInsOHik
-        ZrpfDWn6KqEngw==
-X-ME-Sender: <xms:5q5SXxLi810DIf2Jqs5Ee7al3OP63y1dBUH9tsLudXV-asMLhGhuAA>
-    <xme:5q5SX9KJgWqS7s13WWC-9s6cx-erP7QG9-6W1MLskeZWEdcnwjl5hjwfOEMtYpk1A
-    1x_lsWk297DzXc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudegfedgudeitdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpefjrghnshhpvghtvghrucfrohhrthhnvghruceouggvvhes
-    ohhpvghnqdhmuhhsihgtqdhkohhnthhrohhllhgvrhhsrdgthheqnecuggftrfgrthhtvg
-    hrnhepteeugfdvgedvhfejvdevgfffteekueethefhjeevfffgkeejjeefveffveevgfej
-    necukfhppeegiedruddvjedruddtledrieenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpeguvghvsehophgvnhdqmhhushhitgdqkhhonhhtrhho
-    lhhlvghrshdrtghh
-X-ME-Proxy: <xmx:5q5SX5uy8ttkvPyF8f81YThUGqbaPJKAwK8tjahEtmSaHF4E22pjiw>
-    <xmx:5q5SXya6lAi89JYEV2VKCai-c2aU-KtwtvUISX1cBdqHw1ibhxeYWQ>
-    <xmx:5q5SX4Yq3RGWtRUFdmdfijyfRfEKQIUnOBLwieT_xiKJ8_9nExBG9Q>
-    <xmx:5q5SXzyknhf7jVj5kG_eofUYGJuPbdGgKMHkPBgTQnW6B514JKl9Tg>
-Received: from localhost.localdomain (46-127-109-6.dynamic.hispeed.ch [46.127.109.6])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0DA00306005F;
-        Fri,  4 Sep 2020 17:17:25 -0400 (EDT)
-From:   Hanspeter Portner <dev@open-music-kontrollers.ch>
-To:     wim@linux-watchdog.org
-Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
-        dev@open-music-kontrollers.ch
-Subject: [PATCH 2/2] watchdog: it87_wdt: add IT8784 ID
-Date:   Fri,  4 Sep 2020 23:16:39 +0200
-Message-Id: <20200904211639.18787-2-dev@open-music-kontrollers.ch>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200904211639.18787-1-dev@open-music-kontrollers.ch>
-References: <20200904211639.18787-1-dev@open-music-kontrollers.ch>
+        id S1728140AbgIDW32 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 4 Sep 2020 18:29:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41384 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728012AbgIDW31 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 4 Sep 2020 18:29:27 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6AA67208C7;
+        Fri,  4 Sep 2020 22:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599258566;
+        bh=+8dgVfOXgmURomqOzPuR2s0d+0XktF+kVIZ4JamC1Yk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FPfVtLk3VgVy9YY2bppjWvDV2nvJ00oTy/jZPGsp1pSsT+kcmQKDELrZFVKOe/MW4
+         zJ45aqs0sB4ogJLfi9CwwVOS1v0zgXZFL4fluzz0xaGojKmgqLJSTmIwDbIBjLZCDs
+         e36mpUibGpzlRequFLGXPuBTspvr9u7SNO8bieYo=
+Received: by mail-ot1-f53.google.com with SMTP id g96so7253810otb.12;
+        Fri, 04 Sep 2020 15:29:26 -0700 (PDT)
+X-Gm-Message-State: AOAM530HI8S9w97j5PgXqi3vtRBxS4qaUMIMg4IDLgsN+4mUyfAvzmGg
+        1lBYOqogNOdrbP+dn0+qOhkmDJ2fNHZwlCDxBg==
+X-Google-Smtp-Source: ABdhPJyg8Cu0lq2UsQBYhJV227Jo2feqOcJKLxrdCLPxr9lVLm9MUPpbfMcEDGy7OIP/8N+4iwU7/9VeNN4vhk5EUSE=
+X-Received: by 2002:a9d:7f84:: with SMTP id t4mr7261177otp.192.1599258565768;
+ Fri, 04 Sep 2020 15:29:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200904152404.20636-1-krzk@kernel.org> <20200904152404.20636-14-krzk@kernel.org>
+In-Reply-To: <20200904152404.20636-14-krzk@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 4 Sep 2020 16:29:14 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKOkerY14qc-7e5721Xsp0k6jm9oh1U1Lr-3SZA0HFgjw@mail.gmail.com>
+Message-ID: <CAL_JsqKOkerY14qc-7e5721Xsp0k6jm9oh1U1Lr-3SZA0HFgjw@mail.gmail.com>
+Subject: Re: [PATCH v3 13/14] dt-bindings: mtd: nand-controller: Fix matching
+ with size-cells==1
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-IT8784 watchdog works as in IT878x
+On Fri, Sep 4, 2020 at 9:25 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> Most of Freescale/NXP GPMI device trees use size-cells==1 (even when
+> actually not needed except few boards).  This fixes dtbs_check warnings
+> like:
+>
+>     arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dt.yaml: nand-controller@33002000: #size-cells:0:0: 0 was expected
+>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/mtd/nand-controller.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> index 40fc5b0b2b8c..0879e1108837 100644
+> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> @@ -34,7 +34,10 @@ properties:
+>      const: 1
+>
+>    "#size-cells":
+> -    const: 0
+> +    description:
+> +      Depends on your controller. Put zero unless you need a mapping between CS
+> +      lines and dedicated memory regions.
+> +    enum: [0, 1]
 
-Tested on SHAREVDY K10 board.
+Humm, seems that was to describe partitions, but the expectation of
+the nand binding is describing nand chips. It seems the nand chips are
+never described and on 1 board even has partitions. I think you should
+fix the dts to move 'partition@N' nodes under 'partitions' which is
+preferred and needed if you ever describe nand chips. And then fix
+'#size-cells' to be 0.
 
-Signed-off-by: Hanspeter Portner <dev@open-music-kontrollers.ch>
----
- drivers/watchdog/it87_wdt.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
-index 2dac0ba551ce..2b4831842162 100644
---- a/drivers/watchdog/it87_wdt.c
-+++ b/drivers/watchdog/it87_wdt.c
-@@ -15,7 +15,7 @@
-  *	Support of the watchdog timers, which are available on
-  *	IT8607, IT8620, IT8622, IT8625, IT8628, IT8655, IT8665, IT8686,
-  *	IT8702, IT8712, IT8716, IT8718, IT8720, IT8721, IT8726, IT8728,
-- *	IT8772 and IT8783.
-+ *	IT8772, IT8783 and IT8784.
-  */
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-@@ -68,6 +68,7 @@
- #define IT8728_ID	0x8728
- #define IT8772_ID	0x8772
- #define IT8783_ID	0x8783
-+#define IT8784_ID	0x8784
- #define IT8786_ID	0x8786
- 
- /* GPIO Configuration Registers LDN=0x07 */
-@@ -297,6 +298,7 @@ static int __init it87_wdt_init(void)
- 	case IT8728_ID:
- 	case IT8772_ID:
- 	case IT8783_ID:
-+	case IT8784_ID:
- 	case IT8786_ID:
- 		max_units = 65535;
- 		break;
--- 
-2.28.0
-
+Rob
