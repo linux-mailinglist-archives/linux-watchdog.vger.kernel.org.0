@@ -2,60 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC5A25E8FF
-	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Sep 2020 18:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBD925E900
+	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Sep 2020 18:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbgIEQOX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 5 Sep 2020 12:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        id S1726568AbgIEQPG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 5 Sep 2020 12:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726456AbgIEQOV (ORCPT
+        with ESMTP id S1726456AbgIEQPD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 5 Sep 2020 12:14:21 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E1BC061244
-        for <linux-watchdog@vger.kernel.org>; Sat,  5 Sep 2020 09:14:20 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d9so13155pfd.3
-        for <linux-watchdog@vger.kernel.org>; Sat, 05 Sep 2020 09:14:20 -0700 (PDT)
+        Sat, 5 Sep 2020 12:15:03 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1DEC061244
+        for <linux-watchdog@vger.kernel.org>; Sat,  5 Sep 2020 09:15:02 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id d22so6291220pfn.5
+        for <linux-watchdog@vger.kernel.org>; Sat, 05 Sep 2020 09:15:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zN9SBXgtMdpYSfTzZI1pIN59cB3X3aWVuXfxXT1W69o=;
-        b=ERn4lyobv2FLfp9GEONWGq10MZE7HQMXsQQwjrvXbSLDdcj21AcR8/o1z9IdymPWKh
-         PHX2OeosAV9y6RE6Lc3I28TsC8mnK1aXN0mCoFYJ0CmufmEsd6Z1cNizINSUhgimau9r
-         wjnCc0TWmDO8dTU2WBbw6o5gvzkcSHhIO3tbZLqQCthuNo1QRJuqyEDA8MxiYEMV2zhF
-         YyPO270+4PONGN6tDKSM2jUnsadDR1UTSOQkWCRPVckfcUA/CeG78fkpwh33hwYMHgoX
-         5ltP39VSoGrXDHiZ4UM+26a+h1Pe6SldUVtg/MkcDhAglLjlNPbubI6VPWxHu36/j/bc
-         94KQ==
+        bh=kwD/jm03zHQuh6/m5T+KbmTBgkXoSzbSaAJFxiBIC2Q=;
+        b=LhkTBami4D1HL2O6K77khPEwCpGVpB6wwHbAc8wCG+IvHSvkLarf1CTDXbvfvYsJ1I
+         e4YDs8hIL1l8FQ5rGKBplJ6QvQr7ZjJABwlyFM+8/Et/ktM/wjTygLFVoVKB4WzFYGcs
+         Fuiy5YFdf5hVosZeWNB9Mbcw3rzs5zVmr2pGBsVJbLwgZBXthOIDzPC23PIX0LyYf1n2
+         yyLt/UfmFOQQ6rZlyXvNOWn38USYprM82sXH3PU8703IM6TL4fmzmraDD2XdML40RMnI
+         X1X7ht1ssc+rFp4EL+qpnrhKfJdz3VD6DeC7yKdpFnMah27FDN6xB8c9k+O91clNyXac
+         L2/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=zN9SBXgtMdpYSfTzZI1pIN59cB3X3aWVuXfxXT1W69o=;
-        b=QjzlfW2FEfHxyWXTyYI26i1KZOHtxE7y9isEPSM+73IM9o+l3KHMM91rvIcB40pLG6
-         YmMgL24uSdA75vVhcqAU8wEAAh8ZW8gTq+yJaVw3kwKEm09YyKgSneaTwwILjU90wLlq
-         sb+UmAMBRo7pA9nk4F39B4jS5OiVpM3UxBGeEfdN+OOQsTSPk3V+oUhCpg3B0jv8ES7D
-         PHpgxr+B1q3Bw02pfUbJyZqbSUNaYJE+tochVmm79yD688cbSOdpkXjw3oBDwnz4eFzC
-         fu2s2EyIOfC0a47KWmI6wlEeWX/MvL4UnaYvQdWU6myo/4AD8G+LutgALnaoIxIfV7Do
-         ipdw==
-X-Gm-Message-State: AOAM532W9P6KKDHuoNzrMkTRpf6yuAe3QAxGMDoVIHZE1LoM8X7t54BF
-        aOpof037cSWrVjrH9QYa5pXTwUqhqtQ=
-X-Google-Smtp-Source: ABdhPJwGflgTCP6xX2FeQtD03Qe0q2grXr+UHoo7MWxe4YhhyFUqVrICWPwJ5r2Fbpt1c+imCxe/zQ==
-X-Received: by 2002:a05:6a00:14d4:: with SMTP id w20mr5438459pfu.199.1599322460201;
-        Sat, 05 Sep 2020 09:14:20 -0700 (PDT)
+        bh=kwD/jm03zHQuh6/m5T+KbmTBgkXoSzbSaAJFxiBIC2Q=;
+        b=pf45/D6eRV+zBvc91GYgFbkgL1iW0vvCSJ9PsSez0OLiXzUsHU3wrPlPtNalQz6b6L
+         mnP+lH6cvNdQcM7+7c4/XEVGz2PYL87I6/3qLzuLry3UP9AAkThnkyHn9jbEG7RRnomG
+         r5lx2oSyCVsIl2+29xDiOU0hSP0/FIVm5oGJnMlkRTQon4yB07jTDtSOlkbPxSZ7lrlj
+         Iq5NPqaOYo3kdO7GmxFs7OiZEH+lTx/XJUhcLnUG28OiL0H7UZhWYdpZv4pALGYhfUSn
+         o2732bpQ+pHVxLLl6H0H5JxHgeljAHWaYnbghEFE3JXAVqhdLMH77B0iZsHKrIm68lm9
+         TSsQ==
+X-Gm-Message-State: AOAM531Krry728yZ30+FSvKGjz+xhEOn6PrcswOF6IlMHCf9GlzgqQxW
+        0oIJ6p93FIAzDwu4zFS9B7Vi+jRHlog=
+X-Google-Smtp-Source: ABdhPJzDWDuBFNBr0W3SCf0y2gOA0QQgO69YqxoMfVoBEQKoUuoTnFD3ZlAbrNU2B/mbTm6766iijQ==
+X-Received: by 2002:a63:fc41:: with SMTP id r1mr11105400pgk.179.1599322502046;
+        Sat, 05 Sep 2020 09:15:02 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x185sm10277885pfc.188.2020.09.05.09.14.19
+        by smtp.gmail.com with ESMTPSA id b20sm10784306pfb.198.2020.09.05.09.15.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2020 09:14:19 -0700 (PDT)
-Subject: Re: [PATCH 2/2] watchdog: it87_wdt: add IT8784 ID
+        Sat, 05 Sep 2020 09:15:01 -0700 (PDT)
+Subject: Re: [PATCH 1/2] watchdog: it87_wdt: add IT8772 ID
 To:     Hanspeter Portner <dev@open-music-kontrollers.ch>,
         wim@linux-watchdog.org
 Cc:     linux-watchdog@vger.kernel.org
 References: <20200904211639.18787-1-dev@open-music-kontrollers.ch>
- <20200904211639.18787-2-dev@open-music-kontrollers.ch>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -100,12 +99,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <b0b2ad3e-447f-4247-66ff-3277d3370996@roeck-us.net>
-Date:   Sat, 5 Sep 2020 09:14:18 -0700
+Message-ID: <cbd4cadc-7633-d33e-71df-61667472aa2b@roeck-us.net>
+Date:   Sat, 5 Sep 2020 09:15:00 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200904211639.18787-2-dev@open-music-kontrollers.ch>
+In-Reply-To: <20200904211639.18787-1-dev@open-music-kontrollers.ch>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -115,46 +114,49 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 9/4/20 2:16 PM, Hanspeter Portner wrote:
-> IT8784 watchdog works as in IT878x
+> IT8772 watchdog works as in IT872x
 > 
-> Tested on SHAREVDY K10 board.
+> Tested on SHAREVDI K6-F12 board.
 > 
 > Signed-off-by: Hanspeter Portner <dev@open-music-kontrollers.ch>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Please do not resend patches without versioning.
+
+Guenter
 
 > ---
 >  drivers/watchdog/it87_wdt.c | 4 +++-
 >  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
-> index 2dac0ba551ce..2b4831842162 100644
+> index f3bf3ea50e39..2dac0ba551ce 100644
 > --- a/drivers/watchdog/it87_wdt.c
 > +++ b/drivers/watchdog/it87_wdt.c
 > @@ -15,7 +15,7 @@
 >   *	Support of the watchdog timers, which are available on
 >   *	IT8607, IT8620, IT8622, IT8625, IT8628, IT8655, IT8665, IT8686,
 >   *	IT8702, IT8712, IT8716, IT8718, IT8720, IT8721, IT8726, IT8728,
-> - *	IT8772 and IT8783.
-> + *	IT8772, IT8783 and IT8784.
+> - *	and IT8783.
+> + *	IT8772 and IT8783.
 >   */
 >  
 >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> @@ -68,6 +68,7 @@
+> @@ -66,6 +66,7 @@
+>  #define IT8721_ID	0x8721
+>  #define IT8726_ID	0x8726	/* the data sheet suggest wrongly 0x8716 */
 >  #define IT8728_ID	0x8728
->  #define IT8772_ID	0x8772
+> +#define IT8772_ID	0x8772
 >  #define IT8783_ID	0x8783
-> +#define IT8784_ID	0x8784
 >  #define IT8786_ID	0x8786
 >  
->  /* GPIO Configuration Registers LDN=0x07 */
-> @@ -297,6 +298,7 @@ static int __init it87_wdt_init(void)
+> @@ -294,6 +295,7 @@ static int __init it87_wdt_init(void)
+>  	case IT8720_ID:
+>  	case IT8721_ID:
 >  	case IT8728_ID:
->  	case IT8772_ID:
+> +	case IT8772_ID:
 >  	case IT8783_ID:
-> +	case IT8784_ID:
 >  	case IT8786_ID:
 >  		max_units = 65535;
->  		break;
 > 
 
