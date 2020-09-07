@@ -2,227 +2,82 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D2125F302
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Sep 2020 08:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E499225F44E
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Sep 2020 09:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgIGGKH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 7 Sep 2020 02:10:07 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:44350 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725803AbgIGGKG (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 7 Sep 2020 02:10:06 -0400
-Received: by mail-ej1-f67.google.com with SMTP id r7so3266499ejs.11;
-        Sun, 06 Sep 2020 23:10:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GVokwuwCaSVBc9Gyn7b0LOXpcqkbxNYOMN+1IZzWnZQ=;
-        b=a/E5fKmAyHWIix6L1IW31pNLvcxTdToWINidap+0KcmBjq68Hhx6EC+MLnZ3Iv0nKu
-         LGT8SDT65dzLFvq4lmEcpnivS8uEhkZXehNbUtQiG7j3h3KSNg3ZVxQQiSH/HCaOqkds
-         I9ZE9KoHf2eWgIKSIB7JOtDHXgNK6W7eHiZRwEOWJaV01frOvckMeRnQDEAnWyP9SW+K
-         LxxPcBKdjx30SLeFCTyEigg9UYzHjpep0iKNQU0cqjiXUsEO8xApx73G5BhFZNI61yXm
-         /p6sYNeJcjBWHmrdiM92DID6TLHNTug2TChQadaD5FkhxOEvqwpzJiZW923LRtAA+4ph
-         I4wA==
-X-Gm-Message-State: AOAM531ZCzY/DJ6nK2AKirtVlNY4PbDLfXAq4PnodCCT8SHTY+h20F8w
-        MmbRxd2w5uB1/i0LC/BzvoWX17+N00s=
-X-Google-Smtp-Source: ABdhPJzM/GiqDDPUglZaYg3VUWUe0/dDHCWpXQ1+YwL2JZxA9p9bR+MKuStVCwG/XpSPy00N+WM4qQ==
-X-Received: by 2002:a17:906:a00d:: with SMTP id p13mr20408792ejy.535.1599459001754;
-        Sun, 06 Sep 2020 23:10:01 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.174])
-        by smtp.googlemail.com with ESMTPSA id r16sm14473271ejb.110.2020.09.06.23.09.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 06 Sep 2020 23:10:00 -0700 (PDT)
-Date:   Mon, 7 Sep 2020 08:09:58 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 12/14] dt-bindings: mtd: gpmi-nand: Fix matching of
- clocks on different SoCs
-Message-ID: <20200907060958.GA4525@kozik-lap>
-References: <20200904152404.20636-1-krzk@kernel.org>
- <20200904152404.20636-13-krzk@kernel.org>
- <CAL_Jsq+tGQhkqtQszOx7nvr1PR=YFz2p1=OnWQ8JxmSg4qNkHA@mail.gmail.com>
+        id S1727107AbgIGHuZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 7 Sep 2020 03:50:25 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:10824 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726443AbgIGHuX (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 7 Sep 2020 03:50:23 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 8FF7D959581DFC30C317;
+        Mon,  7 Sep 2020 15:50:20 +0800 (CST)
+Received: from [127.0.0.1] (10.174.177.253) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Mon, 7 Sep 2020
+ 15:50:18 +0800
+Subject: Re: [PATCH 1/1] watchdog: remove unneeded inclusion of
+ <uapi/linux/sched/types.h>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-watchdog <linux-watchdog@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20200827062154.1847-1-thunder.leizhen@huawei.com>
+ <55ad40ff-dcc1-5051-65d2-24201c471a8f@roeck-us.net>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <f80cc7ea-9d1f-64a4-7c18-faf672bf8cf6@huawei.com>
+Date:   Mon, 7 Sep 2020 15:50:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+tGQhkqtQszOx7nvr1PR=YFz2p1=OnWQ8JxmSg4qNkHA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <55ad40ff-dcc1-5051-65d2-24201c471a8f@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.253]
+X-CFilter-Loop: Reflected
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 04:36:39PM -0600, Rob Herring wrote:
-> On Fri, Sep 4, 2020 at 9:25 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >
-> > Driver requires different amount of clocks for different SoCs.  Describe
-> > these requirements properly to fix dtbs_check warnings like:
-> >
-> >     arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dt.yaml: nand-controller@33002000: clock-names:1: 'gpmi_apb' was expected
-> >
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> >
-> > ---
-> >
-> > Changes since v1:
-> > 1. Do not require order of clocks (use pattern).
+Hi, Wim Van Sebroeck, Guenter Roeck:
+  What's your opinion? Guenter Roeck given "Reviewed-by" two weeks ago.
+
+
+On 2020/8/27 21:40, Guenter Roeck wrote:
+> On 8/26/20 11:21 PM, Zhen Lei wrote:
+>> There has been no reference to "struct sched_param" since
+>> commit 94beddacb53c ("sched,watchdog: Convert to sched_set_fifo()"), so
+>> there's no need to include <uapi/linux/sched/types.h> any more, delete
+>> it.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 > 
-> To the extent that you can, you should fix the order in dts files
-> first. If we just adjust the schemas to match the dts files, then
-> what's the point?
-
-The DTSes do not have mixed order of clocks between each other, as fair
-as I remember. It was fix after Sasha Hauer comment that order is not
-necessarily good.
-
-We have the clock-names property, why enforcing the order?
-
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> > ---
-> >  .../devicetree/bindings/mtd/gpmi-nand.yaml    | 76 +++++++++++++++----
-> >  1 file changed, 61 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml b/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
-> > index 28ff8c581837..e08e0a50929e 100644
-> > --- a/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
-> > +++ b/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
-> > @@ -9,9 +9,6 @@ title: Freescale General-Purpose Media Interface (GPMI) binding
-> >  maintainers:
-> >    - Han Xu <han.xu@nxp.com>
-> >
-> > -allOf:
-> > -  - $ref: "nand-controller.yaml"
-> > -
-> >  description: |
-> >    The GPMI nand controller provides an interface to control the NAND
-> >    flash chips. The device tree may optionally contain sub-nodes
-> > @@ -58,22 +55,10 @@ properties:
-> >    clocks:
-> >      minItems: 1
-> >      maxItems: 5
-> > -    items:
-> > -      - description: SoC gpmi io clock
-> > -      - description: SoC gpmi apb clock
-> > -      - description: SoC gpmi bch clock
-> > -      - description: SoC gpmi bch apb clock
-> > -      - description: SoC per1 bch clock
-> >
-> >    clock-names:
-> >      minItems: 1
-> >      maxItems: 5
-> > -    items:
-> > -      - const: gpmi_io
-> > -      - const: gpmi_apb
-> > -      - const: gpmi_bch
-> > -      - const: gpmi_bch_apb
-> > -      - const: per1_bch
-> >
-> >    fsl,use-minimum-ecc:
-> >      type: boolean
-> > @@ -107,6 +92,67 @@ required:
-> >
-> >  unevaluatedProperties: false
-> >
-> > +allOf:
-> > +  - $ref: "nand-controller.yaml"
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - fsl,imx23-gpmi-nand
-> > +              - fsl,imx28-gpmi-nand
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          items:
-> > +            - description: SoC gpmi io clock
-> > +        clock-names:
-> > +          items:
-> > +            - const: gpmi_io
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - fsl,imx6q-gpmi-nand
-> > +              - fsl,imx6sx-gpmi-nand
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          items:
-> > +            - description: SoC gpmi io clock
-> > +            - description: SoC gpmi apb clock
-> > +            - description: SoC gpmi bch clock
-> > +            - description: SoC gpmi bch apb clock
-> > +            - description: SoC per1 bch clock
-> > +        clock-names:
-> > +          items:
-> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
-> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
-> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
-> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
-> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
+>> ---
+>>  drivers/watchdog/watchdog_dev.c | 2 --
+>>  1 file changed, 2 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+>> index 6798addabd5a067..0f18fa2433310b0 100644
+>> --- a/drivers/watchdog/watchdog_dev.c
+>> +++ b/drivers/watchdog/watchdog_dev.c
+>> @@ -43,8 +43,6 @@
+>>  #include <linux/watchdog.h>	/* For watchdog specific items */
+>>  #include <linux/uaccess.h>	/* For copy_to_user/put_user/... */
+>>  
+>> -#include <uapi/linux/sched/types.h>	/* For struct sched_param */
+>> -
+>>  #include "watchdog_core.h"
+>>  #include "watchdog_pretimeout.h"
+>>  
+>>
 > 
-> BTW, you can make 'items' a schema rather than a list to apply a
-> constraint to all entries:
 > 
-> maxItems: 5
-> items:
->   pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
-
-Right, I forgot about such syntax.
-
 > 
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: fsl,imx7d-gpmi-nand
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          items:
-> > +            - description: SoC gpmi io clock
-> > +            - description: SoC gpmi bch apb clock
-> > +        clock-names:
-> > +          minItems: 2
-> > +          maxItems: 2
-> 
-> You can drop these. It's the default based on the size of 'items'.
 
-Sure.
-
-> 
-> > +          items:
-> > +            - pattern: "^gpmi_(io|bch_apb)$"
-> > +            - pattern: "^gpmi_(io|bch_apb)$"
-> 
-> Surely here we can define the order.
-
-Yes, but still the same question as before - do we want the order? Why
-enforcing it?
-
-Best regards,
-Krzysztof
