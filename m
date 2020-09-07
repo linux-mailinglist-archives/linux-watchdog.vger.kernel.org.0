@@ -2,94 +2,227 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A90B425EEC3
-	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Sep 2020 17:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D2125F302
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Sep 2020 08:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729083AbgIFPmx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 6 Sep 2020 11:42:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50274 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729077AbgIFPmA (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 6 Sep 2020 11:42:00 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC587208B3;
-        Sun,  6 Sep 2020 15:41:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599406920;
-        bh=r/gOQLwi0vjxIzoJJal9o3e2qU4i0aOboXzVPzBsSr8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LDXst8xQux98fgwS+DCPPihpnc/EIEY5qjXq28Z6Q+CGRBgcseA42lQoMei/yn6wl
-         7o3dnsXl8KCvWfXAyW6DQN8eWLud2lv08WmDva8Ob3vXhLaa5IAihtkKAgQoSAAx5o
-         w9KubcmigtPzKB26MfUkK97aI+LYQYGo4cwv/I4U=
-Received: by mail-ed1-f54.google.com with SMTP id t16so5493912edw.7;
-        Sun, 06 Sep 2020 08:41:59 -0700 (PDT)
-X-Gm-Message-State: AOAM532nFJQzpVqxCCzLyHyNjM00mgT4uKzwyTV38z3lHJtLKn5tqrbt
-        H0Xk0c8UukToWbW8LN5pcwBz9UUslDOmK+KRoic=
-X-Google-Smtp-Source: ABdhPJxIynhvt9FPtCkCknmoZlm54k/a28/XHX67a2orq3+WSH0hrY9/KZ8SKA/AvmUK58YzhTnGp1wjkPUSp+tg52g=
-X-Received: by 2002:a05:6402:ca7:: with SMTP id cn7mr17583253edb.143.1599406918482;
- Sun, 06 Sep 2020 08:41:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200804192654.12783-1-krzk@kernel.org> <20200804192654.12783-14-krzk@kernel.org>
- <159721917443.33733.7919188364233003142@swboyd.mtv.corp.google.com>
- <CGME20200812091510eucas1p15944eb26bb496e20b9fadd609063a490@eucas1p1.samsung.com>
- <CAK8P3a13u0KY0jzxNLs=irTs6ZSXyObKKTp-8KEmowcOZrZXxQ@mail.gmail.com>
- <8066413c-367d-2f8d-3e7b-dacd954675be@samsung.com> <CAK8P3a1xXe56k5nKuCJ-25h1VqWKRb9JGnFrr=SPg_icay-vZA@mail.gmail.com>
- <6ccf14a9-802f-25b8-494d-e957cafd073d@samsung.com> <20200812133109.GA15697@pi3>
- <30eb6355-0749-8268-c87a-f389dc4b4f1b@free.fr>
-In-Reply-To: <30eb6355-0749-8268-c87a-f389dc4b4f1b@free.fr>
+        id S1726769AbgIGGKH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 7 Sep 2020 02:10:07 -0400
+Received: from mail-ej1-f67.google.com ([209.85.218.67]:44350 "EHLO
+        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725803AbgIGGKG (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 7 Sep 2020 02:10:06 -0400
+Received: by mail-ej1-f67.google.com with SMTP id r7so3266499ejs.11;
+        Sun, 06 Sep 2020 23:10:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GVokwuwCaSVBc9Gyn7b0LOXpcqkbxNYOMN+1IZzWnZQ=;
+        b=a/E5fKmAyHWIix6L1IW31pNLvcxTdToWINidap+0KcmBjq68Hhx6EC+MLnZ3Iv0nKu
+         LGT8SDT65dzLFvq4lmEcpnivS8uEhkZXehNbUtQiG7j3h3KSNg3ZVxQQiSH/HCaOqkds
+         I9ZE9KoHf2eWgIKSIB7JOtDHXgNK6W7eHiZRwEOWJaV01frOvckMeRnQDEAnWyP9SW+K
+         LxxPcBKdjx30SLeFCTyEigg9UYzHjpep0iKNQU0cqjiXUsEO8xApx73G5BhFZNI61yXm
+         /p6sYNeJcjBWHmrdiM92DID6TLHNTug2TChQadaD5FkhxOEvqwpzJiZW923LRtAA+4ph
+         I4wA==
+X-Gm-Message-State: AOAM531ZCzY/DJ6nK2AKirtVlNY4PbDLfXAq4PnodCCT8SHTY+h20F8w
+        MmbRxd2w5uB1/i0LC/BzvoWX17+N00s=
+X-Google-Smtp-Source: ABdhPJzM/GiqDDPUglZaYg3VUWUe0/dDHCWpXQ1+YwL2JZxA9p9bR+MKuStVCwG/XpSPy00N+WM4qQ==
+X-Received: by 2002:a17:906:a00d:: with SMTP id p13mr20408792ejy.535.1599459001754;
+        Sun, 06 Sep 2020 23:10:01 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.174])
+        by smtp.googlemail.com with ESMTPSA id r16sm14473271ejb.110.2020.09.06.23.09.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 06 Sep 2020 23:10:00 -0700 (PDT)
+Date:   Mon, 7 Sep 2020 08:09:58 +0200
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Sun, 6 Sep 2020 17:41:46 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcrhv=1FKE+9RxuYtCb9ZbmMcLt2N0p5pf_sUTimE5Jtw@mail.gmail.com>
-Message-ID: <CAJKOXPcrhv=1FKE+9RxuYtCb9ZbmMcLt2N0p5pf_sUTimE5Jtw@mail.gmail.com>
-Subject: Re: [PATCH v2 13/13] ARM: s3c24xx: camif: include header with
- prototypes and unify declaration
-To:     Cedric Roux <sed@free.fr>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        patches@opensource.cirrus.com,
-        Sergio Prado <sergio.prado@e-labworks.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Lihua Yao <ylhuajnu@outlook.com>
-Content-Type: text/plain; charset="UTF-8"
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 12/14] dt-bindings: mtd: gpmi-nand: Fix matching of
+ clocks on different SoCs
+Message-ID: <20200907060958.GA4525@kozik-lap>
+References: <20200904152404.20636-1-krzk@kernel.org>
+ <20200904152404.20636-13-krzk@kernel.org>
+ <CAL_Jsq+tGQhkqtQszOx7nvr1PR=YFz2p1=OnWQ8JxmSg4qNkHA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAL_Jsq+tGQhkqtQszOx7nvr1PR=YFz2p1=OnWQ8JxmSg4qNkHA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 27 Aug 2020 at 22:51, Cedric Roux <sed@free.fr> wrote:
->
-> On 8/12/20 3:31 PM, Krzysztof Kozlowski wrote:
-> > Or even more important - is it worth to spend effort and time on this?
-> > If there is no single production system using recent Linux kernel, the
-> > answer should be negative...
->
-> Well, I have a server running on mini2440 with a not-too-young
-> but not-too-old kernel. I don't have much time to test recent
-> kernels though so I guess that doesn't count.
+On Fri, Sep 04, 2020 at 04:36:39PM -0600, Rob Herring wrote:
+> On Fri, Sep 4, 2020 at 9:25 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >
+> > Driver requires different amount of clocks for different SoCs.  Describe
+> > these requirements properly to fix dtbs_check warnings like:
+> >
+> >     arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dt.yaml: nand-controller@33002000: clock-names:1: 'gpmi_apb' was expected
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> >
+> > ---
+> >
+> > Changes since v1:
+> > 1. Do not require order of clocks (use pattern).
+> 
+> To the extent that you can, you should fix the order in dts files
+> first. If we just adjust the schemas to match the dts files, then
+> what's the point?
 
-Actually good to hear. It counts a little bit :)
+The DTSes do not have mixed order of clocks between each other, as fair
+as I remember. It was fix after Sasha Hauer comment that order is not
+necessarily good.
+
+We have the clock-names property, why enforcing the order?
+
+> 
+> > ---
+> >  .../devicetree/bindings/mtd/gpmi-nand.yaml    | 76 +++++++++++++++----
+> >  1 file changed, 61 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml b/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
+> > index 28ff8c581837..e08e0a50929e 100644
+> > --- a/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
+> > +++ b/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
+> > @@ -9,9 +9,6 @@ title: Freescale General-Purpose Media Interface (GPMI) binding
+> >  maintainers:
+> >    - Han Xu <han.xu@nxp.com>
+> >
+> > -allOf:
+> > -  - $ref: "nand-controller.yaml"
+> > -
+> >  description: |
+> >    The GPMI nand controller provides an interface to control the NAND
+> >    flash chips. The device tree may optionally contain sub-nodes
+> > @@ -58,22 +55,10 @@ properties:
+> >    clocks:
+> >      minItems: 1
+> >      maxItems: 5
+> > -    items:
+> > -      - description: SoC gpmi io clock
+> > -      - description: SoC gpmi apb clock
+> > -      - description: SoC gpmi bch clock
+> > -      - description: SoC gpmi bch apb clock
+> > -      - description: SoC per1 bch clock
+> >
+> >    clock-names:
+> >      minItems: 1
+> >      maxItems: 5
+> > -    items:
+> > -      - const: gpmi_io
+> > -      - const: gpmi_apb
+> > -      - const: gpmi_bch
+> > -      - const: gpmi_bch_apb
+> > -      - const: per1_bch
+> >
+> >    fsl,use-minimum-ecc:
+> >      type: boolean
+> > @@ -107,6 +92,67 @@ required:
+> >
+> >  unevaluatedProperties: false
+> >
+> > +allOf:
+> > +  - $ref: "nand-controller.yaml"
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - fsl,imx23-gpmi-nand
+> > +              - fsl,imx28-gpmi-nand
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          items:
+> > +            - description: SoC gpmi io clock
+> > +        clock-names:
+> > +          items:
+> > +            - const: gpmi_io
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - fsl,imx6q-gpmi-nand
+> > +              - fsl,imx6sx-gpmi-nand
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          items:
+> > +            - description: SoC gpmi io clock
+> > +            - description: SoC gpmi apb clock
+> > +            - description: SoC gpmi bch clock
+> > +            - description: SoC gpmi bch apb clock
+> > +            - description: SoC per1 bch clock
+> > +        clock-names:
+> > +          items:
+> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
+> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
+> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
+> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
+> > +            - pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
+> 
+> BTW, you can make 'items' a schema rather than a list to apply a
+> constraint to all entries:
+> 
+> maxItems: 5
+> items:
+>   pattern: "^(gpmi_(io|apb|bch|bch_apb)|per1_bch)$"
+
+Right, I forgot about such syntax.
+
+> 
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: fsl,imx7d-gpmi-nand
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          items:
+> > +            - description: SoC gpmi io clock
+> > +            - description: SoC gpmi bch apb clock
+> > +        clock-names:
+> > +          minItems: 2
+> > +          maxItems: 2
+> 
+> You can drop these. It's the default based on the size of 'items'.
+
+Sure.
+
+> 
+> > +          items:
+> > +            - pattern: "^gpmi_(io|bch_apb)$"
+> > +            - pattern: "^gpmi_(io|bch_apb)$"
+> 
+> Surely here we can define the order.
+
+Yes, but still the same question as before - do we want the order? Why
+enforcing it?
 
 Best regards,
 Krzysztof
