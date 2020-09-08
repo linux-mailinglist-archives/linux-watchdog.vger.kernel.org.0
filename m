@@ -2,78 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0A6261573
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Sep 2020 18:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E9026157C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Sep 2020 18:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731943AbgIHQu1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 8 Sep 2020 12:50:27 -0400
-Received: from foss.arm.com ([217.140.110.172]:58182 "EHLO foss.arm.com"
+        id S1732058AbgIHQvj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 8 Sep 2020 12:51:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731998AbgIHQuH (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 8 Sep 2020 12:50:07 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 64D1D106F;
-        Tue,  8 Sep 2020 05:48:37 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E995F3F73C;
-        Tue,  8 Sep 2020 05:48:34 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     devicetree@vger.kernel.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        linux-watchdog@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ray Jui <rjui@broadcom.com>, Wei Xu <xuwei5@hisilicon.com>,
-        Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Chanho Min <chanho.min@lge.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        id S1731909AbgIHQvJ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 8 Sep 2020 12:51:09 -0400
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B576E2137B;
+        Tue,  8 Sep 2020 16:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599583868;
+        bh=pW1S8wYQ7shAS4VTkFPTvct/ClWzUHOw3xWhbsYQUNo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FgS6w9TKkNIumIokoiwznLHegSZ8da9H6/tyCUONyA8D6mS4MC5L9U2z22U5vpbaJ
+         F9LBw9H3U/ZQfNzWt6ceq2QpbMCME12qMJBPAnufXbEXaMdXUN5OQTdjSiBIy0r3bk
+         7U2jnKRg1UiTm9IReOgbeVZRQG6XO2kMrq5x8Ajs=
+Received: by mail-oo1-f51.google.com with SMTP id 4so4091291ooh.11;
+        Tue, 08 Sep 2020 09:51:08 -0700 (PDT)
+X-Gm-Message-State: AOAM5336w4FaUrgkkaZQMHIC9XcoaoO79MmlghHpn2rTwscnyo8U5huj
+        MQjZH4r+nvWe9apsBepBEXfpRVfNTTha4s0nQQ==
+X-Google-Smtp-Source: ABdhPJyVFdSAOgZ7160kEJoAezjYnztio3h9Ino2moi2r5NNuCCiGtHqBpSUtvivi5rsYhCBevOSckk/m/8RpCmF5Go=
+X-Received: by 2002:a4a:d306:: with SMTP id g6mr19090952oos.25.1599583867914;
+ Tue, 08 Sep 2020 09:51:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200904152404.20636-1-krzk@kernel.org> <20200904152404.20636-13-krzk@kernel.org>
+ <CAL_Jsq+tGQhkqtQszOx7nvr1PR=YFz2p1=OnWQ8JxmSg4qNkHA@mail.gmail.com> <20200907060958.GA4525@kozik-lap>
+In-Reply-To: <20200907060958.GA4525@kozik-lap>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 8 Sep 2020 10:50:56 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJZ=PxDxH-=GUUg7WadZrAKjYbtE0sQ8h9YDGOGx6Ykwg@mail.gmail.com>
+Message-ID: <CAL_JsqJZ=PxDxH-=GUUg7WadZrAKjYbtE0sQ8h9YDGOGx6Ykwg@mail.gmail.com>
+Subject: Re: [PATCH v3 12/14] dt-bindings: mtd: gpmi-nand: Fix matching of
+ clocks on different SoCs
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>
-Subject: Re: [PATCH 00/10] dt-bindings: Convert SP805 to Json-schema (and fix users)
-Date:   Tue,  8 Sep 2020 13:48:33 +0100
-Message-Id: <159956909739.1981.1445009961790432291.b4-ty@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200828130602.42203-1-andre.przywara@arm.com>
-References: <20200828130602.42203-1-andre.przywara@arm.com>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 28 Aug 2020 14:05:52 +0100, Andre Przywara wrote:
-> This is an attempt to convert the SP805 watchdog DT binding to yaml.
-> This is done in the first patch, the remaining nine fix some DT users.
-> 
-> I couldn't test any of those DT files on actual machines, but tried
-> to make the changes in a way that would be transparent to at least the
-> Linux driver. The only other SP805 DT user I could find is U-Boot, which
-> seems to only use a very minimal subset of the binding (just the first
-> clock).
-> I only tried to fix those DTs that were easily and reliably fixable.
-> AFAICT, a missing primecell compatible string, for instance, would
-> prevent the Linux driver from probing the device at all, so I didn't
-> dare to touch those DTs at all. Missing clocks are equally fatal.
-> 
-> [...]
+On Mon, Sep 7, 2020 at 12:10 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> On Fri, Sep 04, 2020 at 04:36:39PM -0600, Rob Herring wrote:
+> > On Fri, Sep 4, 2020 at 9:25 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > >
+> > > Driver requires different amount of clocks for different SoCs.  Describe
+> > > these requirements properly to fix dtbs_check warnings like:
+> > >
+> > >     arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dt.yaml: nand-controller@33002000: clock-names:1: 'gpmi_apb' was expected
+> > >
+> > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > >
+> > > ---
+> > >
+> > > Changes since v1:
+> > > 1. Do not require order of clocks (use pattern).
+> >
+> > To the extent that you can, you should fix the order in dts files
+> > first. If we just adjust the schemas to match the dts files, then
+> > what's the point?
+>
+> The DTSes do not have mixed order of clocks between each other, as fair
+> as I remember. It was fix after Sasha Hauer comment that order is not
+> necessarily good.
+>
+> We have the clock-names property, why enforcing the order?
 
-I have picked 2 patches for Arm Ltd boards/models.
+Because DT/OpenFirmware has always had a defined order for property
+values. '*-names' is just extra information.
 
-Applied to sudeep.holla/linux (for-next/juno), thanks!
-
-[1/2] (korg_sudeep/for-next/juno, for-next/juno) arm64: dts: arm: Fix SP805 clock-names
-      https://git.kernel.org/sudeep.holla/c/b83ded8a31
-[2/2] ARM: dts: arm: Fix SP805 clocks
-      https://git.kernel.org/sudeep.holla/c/a894c6dd56
-
---
-
-Regards,
-Sudeep
-
+Rob
