@@ -2,91 +2,179 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6859262BBF
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Sep 2020 11:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54771262D6D
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Sep 2020 12:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbgIIJZh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 9 Sep 2020 05:25:37 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:54228 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbgIIJZe (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 9 Sep 2020 05:25:34 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 359D81C0B8A; Wed,  9 Sep 2020 11:25:31 +0200 (CEST)
-Date:   Wed, 9 Sep 2020 11:25:30 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        id S1727113AbgIIKuy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Sep 2020 06:50:54 -0400
+Received: from foss.arm.com ([217.140.110.172]:41582 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726426AbgIIKux (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 9 Sep 2020 06:50:53 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28C1A31B;
+        Wed,  9 Sep 2020 03:50:53 -0700 (PDT)
+Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.195.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DF1F3F68F;
+        Wed,  9 Sep 2020 03:50:51 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v9 11/13] arm64: dts: freescale: sl28: enable LED support
-Message-ID: <20200909092530.GC14289@amd>
-References: <20200907213802.26745-1-michael@walle.cc>
- <20200907213802.26745-12-michael@walle.cc>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="vOmOzSkFvhd7u8Ms"
-Content-Disposition: inline
-In-Reply-To: <20200907213802.26745-12-michael@walle.cc>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        Viresh Kumar <vireshk@kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: watchdog: sp-805: Convert to Json-schema
+Date:   Wed,  9 Sep 2020 11:50:46 +0100
+Message-Id: <20200909105046.160991-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Convert the ARM SP-805 watchdog IP DT binding over to Json-schema.
 
---vOmOzSkFvhd7u8Ms
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+A straight-forward conversion, but the requirement for providing two
+clocks got strengthened from "should" to "must".
 
-On Mon 2020-09-07 23:38:00, Michael Walle wrote:
-> Now that we have support for GPIO lines of the SMARC connector, enable
-> LED support on the KBox A-230-LS. There are two LEDs without fixed
-> functions, one is yellow and one is green. Unfortunately, it is just one
-> multi-color LED, thus while it is possible to enable both at the same
-> time it is hard to tell the difference between "yellow only" and "yellow
-> and green".
->=20
-> Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+Hi,
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
+this is just the bindings conversion patch, updated to address Rob's
+comments:
+- Remove redundant primecell.yaml inclusion
+- Reference watchdog.yaml
+- Drop now redundant timeout-sec property
+- Add unevaluatedProperties
 
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
+The DT fixes are independent and now partly already queued, so I am
+posting this separately.
 
---vOmOzSkFvhd7u8Ms
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+Cheers,
+Andre
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+ .../bindings/watchdog/arm,sp805.txt           | 32 ---------
+ .../bindings/watchdog/arm,sp805.yaml          | 71 +++++++++++++++++++
+ 2 files changed, 71 insertions(+), 32 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/arm,sp805.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/arm,sp805.yaml
 
-iEYEARECAAYFAl9Yn4oACgkQMOfwapXb+vKlEwCffsn/eLFslqgKQ+Rq7ewumG4T
-awAAn0ncLmIiVkw2e88vrBqQ9XWGm+jv
-=cwpv
------END PGP SIGNATURE-----
+diff --git a/Documentation/devicetree/bindings/watchdog/arm,sp805.txt b/Documentation/devicetree/bindings/watchdog/arm,sp805.txt
+deleted file mode 100644
+index bee6f1f0e41b..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/arm,sp805.txt
++++ /dev/null
+@@ -1,32 +0,0 @@
+-ARM AMBA Primecell SP805 Watchdog
+-
+-SP805 WDT is a ARM Primecell Peripheral and has a standard-id register that
+-can be used to identify the peripheral type, vendor, and revision.
+-This value can be used for driver matching.
+-
+-As SP805 WDT is a primecell IP, it follows the base bindings specified in
+-'arm/primecell.txt'
+-
+-Required properties:
+-- compatible:  Should be "arm,sp805" & "arm,primecell"
+-- reg:         Should contain location and length for watchdog timer register
+-- clocks:      Clocks driving the watchdog timer hardware. This list should be
+-               2 clocks. With 2 clocks, the order is wdog_clk, apb_pclk
+-               wdog_clk can be equal to or be a sub-multiple of the apb_pclk
+-               frequency
+-- clock-names: Shall be "wdog_clk" for first clock and "apb_pclk" for the
+-               second one
+-
+-Optional properties:
+-- interrupts:  Should specify WDT interrupt number
+-- timeout-sec: Should specify default WDT timeout in seconds. If unset, the
+-               default timeout is determined by the driver
+-
+-Example:
+-	watchdog@66090000 {
+-		compatible = "arm,sp805", "arm,primecell";
+-		reg = <0x66090000 0x1000>;
+-		interrupts = <GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>;
+-		clocks = <&wdt_clk>, <&apb_pclk>;
+-		clock-names = "wdog_clk", "apb_pclk";
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/arm,sp805.yaml b/Documentation/devicetree/bindings/watchdog/arm,sp805.yaml
+new file mode 100644
+index 000000000000..a69cac8ec208
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/arm,sp805.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/arm,sp805.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ARM AMBA Primecell SP805 Watchdog
++
++maintainers:
++  - Viresh Kumar <vireshk@kernel.org>
++
++description: |+
++  The Arm SP805 IP implements a watchdog device, which triggers an interrupt
++  after a configurable time period. If that interrupt has not been serviced
++  when the next interrupt would be triggered, the reset signal is asserted.
++
++allOf:
++  - $ref: /schemas/watchdog/watchdog.yaml#
++
++# Need a custom select here or 'arm,primecell' will match on lots of nodes
++select:
++  properties:
++    compatible:
++      contains:
++        const: arm,sp805
++  required:
++    - compatible
++
++properties:
++  compatible:
++    items:
++      - const: arm,sp805
++      - const: arm,primecell
++
++  interrupts:
++    maxItems: 1
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description: |
++      Clocks driving the watchdog timer hardware. The first clock is used
++      for the actual watchdog counter. The second clock drives the register
++      interface.
++    minItems: 2
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: wdog_clk
++      - const: apb_pclk
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    watchdog@66090000 {
++        compatible = "arm,sp805", "arm,primecell";
++        reg = <0x66090000 0x1000>;
++        interrupts = <GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&wdt_clk>, <&apb_pclk>;
++        clock-names = "wdog_clk", "apb_pclk";
++    };
+-- 
+2.17.1
 
---vOmOzSkFvhd7u8Ms--
