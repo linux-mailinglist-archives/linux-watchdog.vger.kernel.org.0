@@ -2,105 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B584264D33
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Sep 2020 20:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DB7265766
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Sep 2020 05:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbgIJSfg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Sep 2020 14:35:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726984AbgIJSeb (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Sep 2020 14:34:31 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4A1BC2087C;
-        Thu, 10 Sep 2020 18:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599762869;
-        bh=SRgE3e+cWOee6V2K0Aw2EKLPOh+GtgrkQeeqC/WhKkI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iRRR8DCEphKxCESUIOWKSYOGUMgScZXbeOeEcg0yOyRFJbnqmaYlOsiksuwiLjobQ
-         M4uyBus+mshUVHZZ3JgPrAGSIFrgxOqZoEzzZ37YKf8U3tBk8av9U+Y8144ibkRREk
-         PXnrMHTG6GY6MWdGQ00DeKQVPH9cYf3H7WrJDCZw=
-Received: by mail-ej1-f51.google.com with SMTP id z23so10139662ejr.13;
-        Thu, 10 Sep 2020 11:34:29 -0700 (PDT)
-X-Gm-Message-State: AOAM5309MZH2hu7qkldGTU7mIu6vR+EodTzY1BZTBk5+Pn51YJBCdv8c
-        7Oe/ExFWFSLC8z+1Ugwp+aJ3u3mdF3wKah6FmvI=
-X-Google-Smtp-Source: ABdhPJyqKY0eU5W2IUZveRSdHihYXkn66844ltcGWOZGAN2rPhOWdGk7NLfovjoBdKlH8jBLp9/fUyrxxJec5WeF4cE=
-X-Received: by 2002:a17:906:af53:: with SMTP id ly19mr9924685ejb.503.1599762867837;
- Thu, 10 Sep 2020 11:34:27 -0700 (PDT)
+        id S1725385AbgIKD0e (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 10 Sep 2020 23:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725300AbgIKD0b (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 10 Sep 2020 23:26:31 -0400
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FDDC061573
+        for <linux-watchdog@vger.kernel.org>; Thu, 10 Sep 2020 20:26:30 -0700 (PDT)
+Received: by mail-ua1-x944.google.com with SMTP id u48so2684425uau.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 10 Sep 2020 20:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FvQeieKv5rbJ5/s4eJT2O+IOF1Saic+Crp4J5iKZQf4=;
+        b=T8vrlsUAjemV8EhbZG0kArfreNIjgn3IeAZ9umv25OXXKgdAG3mJcTUQXK+AvrXY13
+         BAI+4GjON0vIeGj0QPlOIe/Qlb74NnKfR2ocY5plpnUUgw7BwrDWNJRggjmMvQbn3T8Q
+         aXC3dFk102DstFA3OZdzhxqeyaAstAE0NfHaY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FvQeieKv5rbJ5/s4eJT2O+IOF1Saic+Crp4J5iKZQf4=;
+        b=Qf7ax2c1ERpn5zriULpT3/KbsXObG8HeIaG8Wa/bVy+hJLOpgaSKJNwWTWnVeQ7vEw
+         VmmEh3dBD4B6GqQCrc9HVNIT1N5+Fgp9jMI6KxxFwe5/VCj0aXiqP5fAQoo9DwrWbCSy
+         0KgxACOIVjQ/lYyWbfWxIcF3nvatbR/Qyz7zFEnrTejeXYDMdeqWeVAyZacUlOe8f/DD
+         OgAOE9Yy3OcRUvo/yJZuNuYPfa7PDYdYeM5lRW55Zskb9smRhWOwXTbljqcCZsljVaRY
+         ET5+W1sJ5mq7mBzY4rqkEEfgTxt0mJf85TFJmgVkF28xykwnq5cXulX/ZUZpizKRvnca
+         NpLA==
+X-Gm-Message-State: AOAM5308Gc9k6cXlIvBGXdch2dAOtCGrTus5KzVObLg+zL6gvZ8s47Wj
+        9ExEdnN0jg3n8ATWPxF5ReXmNEVAzUUSwSovywHtVw==
+X-Google-Smtp-Source: ABdhPJwxVrNhrniN5woxKGWcan1oHwHrjdiscQz8zYmgZM3N/r1SrH7wmqgMzlo7PmXudZk/YFVEzcQkn29JMBnylaw=
+X-Received: by 2002:ab0:1450:: with SMTP id c16mr523uae.27.1599794789775; Thu,
+ 10 Sep 2020 20:26:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200904152404.20636-1-krzk@kernel.org> <20200904152404.20636-13-krzk@kernel.org>
- <CAL_Jsq+tGQhkqtQszOx7nvr1PR=YFz2p1=OnWQ8JxmSg4qNkHA@mail.gmail.com>
- <20200907060958.GA4525@kozik-lap> <CAL_JsqJZ=PxDxH-=GUUg7WadZrAKjYbtE0sQ8h9YDGOGx6Ykwg@mail.gmail.com>
-In-Reply-To: <CAL_JsqJZ=PxDxH-=GUUg7WadZrAKjYbtE0sQ8h9YDGOGx6Ykwg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Thu, 10 Sep 2020 20:34:15 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPdVDGhdD5hMuXBDBa6XiaYRAK86E2G1gpGZSqnMLiY+Lg@mail.gmail.com>
-Message-ID: <CAJKOXPdVDGhdD5hMuXBDBa6XiaYRAK86E2G1gpGZSqnMLiY+Lg@mail.gmail.com>
-Subject: Re: [PATCH v3 12/14] dt-bindings: mtd: gpmi-nand: Fix matching of
- clocks on different SoCs
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>
+References: <20200803071501.30634-1-crystal.guo@mediatek.com>
+In-Reply-To: <20200803071501.30634-1-crystal.guo@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Fri, 11 Sep 2020 11:26:20 +0800
+Message-ID: <CANMq1KA=t8srKfC4XUqk2V2N6Jm0=-P4rQSh9Mqbo2tFFKgTEA@mail.gmail.com>
+Subject: Re: [v4,0/5] watchdog: mt8192: add wdt support
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com,
+        Crystal Guo <crystal.guo@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 8 Sep 2020 at 18:51, Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Mon, Sep 7, 2020 at 12:10 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >
-> > On Fri, Sep 04, 2020 at 04:36:39PM -0600, Rob Herring wrote:
-> > > On Fri, Sep 4, 2020 at 9:25 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > > >
-> > > > Driver requires different amount of clocks for different SoCs.  Describe
-> > > > these requirements properly to fix dtbs_check warnings like:
-> > > >
-> > > >     arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dt.yaml: nand-controller@33002000: clock-names:1: 'gpmi_apb' was expected
-> > > >
-> > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > >
-> > > > ---
-> > > >
-> > > > Changes since v1:
-> > > > 1. Do not require order of clocks (use pattern).
-> > >
-> > > To the extent that you can, you should fix the order in dts files
-> > > first. If we just adjust the schemas to match the dts files, then
-> > > what's the point?
-> >
-> > The DTSes do not have mixed order of clocks between each other, as fair
-> > as I remember. It was fix after Sasha Hauer comment that order is not
-> > necessarily good.
-> >
-> > We have the clock-names property, why enforcing the order?
->
-> Because DT/OpenFirmware has always had a defined order for property
-> values. '*-names' is just extra information.
+Matthias, Guenter,
 
-Thanks for the explanation. There are few nonobvious requirements
-about writing schema which seems many (including me) miss. It might be
-a good topic for some conference. Too bad ELCE CFP ended some time
-ago. :)
+These patches have all been reviewed (apart from fairly trivial 2/5),
+which maintainer should be picking those up?
 
-Best regards,
-Krzysztof
+Thanks!
+
+On Mon, Aug 3, 2020 at 3:15 PM Crystal Guo <crystal.guo@mediatek.com> wrote:
+>
+> v4 changes:
+> revise commit messages.
+>
+> v3 changes:
+> https://patchwork.kernel.org/patch/11692731/
+> https://patchwork.kernel.org/patch/11692767/
+> https://patchwork.kernel.org/patch/11692729/
+> https://patchwork.kernel.org/patch/11692771/
+> https://patchwork.kernel.org/patch/11692733/
+>
+> Crystal Guo (5):
+>   dt-binding: mediatek: watchdog: fix the description of compatible
+>   arm64: dts: mt8183: update watchdog device node
+>   dt-binding: mediatek: mt8192: update mtk-wdt document
+>   dt-binding: mt8192: add toprgu reset-controller head file
+>   watchdog: mt8192: add wdt support
+>
+>  .../devicetree/bindings/watchdog/mtk-wdt.txt  |  5 ++--
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  3 +-
+>  drivers/watchdog/mtk_wdt.c                    |  6 ++++
+>  .../reset-controller/mt8192-resets.h          | 30 +++++++++++++++++++
+>  4 files changed, 40 insertions(+), 4 deletions(-)
+>  create mode 100644 include/dt-bindings/reset-controller/mt8192-resets.h
+>
+>
