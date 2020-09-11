@@ -2,99 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DB7265766
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Sep 2020 05:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BE72658CE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Sep 2020 07:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725385AbgIKD0e (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Sep 2020 23:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725300AbgIKD0b (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Sep 2020 23:26:31 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FDDC061573
-        for <linux-watchdog@vger.kernel.org>; Thu, 10 Sep 2020 20:26:30 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id u48so2684425uau.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 10 Sep 2020 20:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FvQeieKv5rbJ5/s4eJT2O+IOF1Saic+Crp4J5iKZQf4=;
-        b=T8vrlsUAjemV8EhbZG0kArfreNIjgn3IeAZ9umv25OXXKgdAG3mJcTUQXK+AvrXY13
-         BAI+4GjON0vIeGj0QPlOIe/Qlb74NnKfR2ocY5plpnUUgw7BwrDWNJRggjmMvQbn3T8Q
-         aXC3dFk102DstFA3OZdzhxqeyaAstAE0NfHaY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FvQeieKv5rbJ5/s4eJT2O+IOF1Saic+Crp4J5iKZQf4=;
-        b=Qf7ax2c1ERpn5zriULpT3/KbsXObG8HeIaG8Wa/bVy+hJLOpgaSKJNwWTWnVeQ7vEw
-         VmmEh3dBD4B6GqQCrc9HVNIT1N5+Fgp9jMI6KxxFwe5/VCj0aXiqP5fAQoo9DwrWbCSy
-         0KgxACOIVjQ/lYyWbfWxIcF3nvatbR/Qyz7zFEnrTejeXYDMdeqWeVAyZacUlOe8f/DD
-         OgAOE9Yy3OcRUvo/yJZuNuYPfa7PDYdYeM5lRW55Zskb9smRhWOwXTbljqcCZsljVaRY
-         ET5+W1sJ5mq7mBzY4rqkEEfgTxt0mJf85TFJmgVkF28xykwnq5cXulX/ZUZpizKRvnca
-         NpLA==
-X-Gm-Message-State: AOAM5308Gc9k6cXlIvBGXdch2dAOtCGrTus5KzVObLg+zL6gvZ8s47Wj
-        9ExEdnN0jg3n8ATWPxF5ReXmNEVAzUUSwSovywHtVw==
-X-Google-Smtp-Source: ABdhPJwxVrNhrniN5woxKGWcan1oHwHrjdiscQz8zYmgZM3N/r1SrH7wmqgMzlo7PmXudZk/YFVEzcQkn29JMBnylaw=
-X-Received: by 2002:ab0:1450:: with SMTP id c16mr523uae.27.1599794789775; Thu,
- 10 Sep 2020 20:26:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200803071501.30634-1-crystal.guo@mediatek.com>
-In-Reply-To: <20200803071501.30634-1-crystal.guo@mediatek.com>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Fri, 11 Sep 2020 11:26:20 +0800
-Message-ID: <CANMq1KA=t8srKfC4XUqk2V2N6Jm0=-P4rQSh9Mqbo2tFFKgTEA@mail.gmail.com>
-Subject: Re: [v4,0/5] watchdog: mt8192: add wdt support
+        id S1725535AbgIKFch (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 11 Sep 2020 01:32:37 -0400
+Received: from gecko.sbs.de ([194.138.37.40]:59330 "EHLO gecko.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgIKFch (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 11 Sep 2020 01:32:37 -0400
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 08B5WJCo006982
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Sep 2020 07:32:20 +0200
+Received: from [167.87.49.221] ([167.87.49.221])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 08B5WI45025883;
+        Fri, 11 Sep 2020 07:32:19 +0200
+Subject: Re: [PATCH 2/2] watchdog: sp5100_tco: Enable watchdog on Family 17h
+ devices if disabled
+From:   Jan Kiszka <jan.kiszka@siemens.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com,
-        Crystal Guo <crystal.guo@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200910163109.235136-1-linux@roeck-us.net>
+ <20200910163109.235136-2-linux@roeck-us.net>
+ <30f69c2c-d4c8-a143-6bfa-34394b6361cf@siemens.com>
+ <6ff3df92-3465-f619-7c21-eed421ff719d@roeck-us.net>
+ <2e35ac70-deca-d414-e8a6-2815bdd638d4@siemens.com>
+Message-ID: <b17232b2-5246-d2fe-bdf9-85abb9cc78f3@siemens.com>
+Date:   Fri, 11 Sep 2020 07:32:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+In-Reply-To: <2e35ac70-deca-d414-e8a6-2815bdd638d4@siemens.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Matthias, Guenter,
+On 10.09.20 18:55, Jan Kiszka wrote:
+> On 10.09.20 18:53, Guenter Roeck wrote:
+>> Hi Jan,
+>>
+>> On 9/10/20 9:34 AM, Jan Kiszka wrote:
+>>> On 10.09.20 18:31, Guenter Roeck wrote:
+>>>> On Family 17h (Ryzen) devices, the WatchdogTmrEn bit of PmDecodeEn not only
+>>>> enables watchdog memory decoding at 0xfeb00000, it also enables the
+>>>> watchdog hardware itself. Use this information to enable the watchdog if
+>>>> it is not already enabled.
+>>>>
+>>>> Cc: Jan Kiszka <jan.kiszka@siemens.com>
+>>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>>>> ---
+>>>>  drivers/watchdog/sp5100_tco.c | 18 ++++++++++++++++++
+>>>>  1 file changed, 18 insertions(+)
+>>>>
+>>>> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+>>>> index 85e9664318c9..a730ecbf78cd 100644
+>>>> --- a/drivers/watchdog/sp5100_tco.c
+>>>> +++ b/drivers/watchdog/sp5100_tco.c
+>>>> @@ -17,6 +17,12 @@
+>>>>   *	    AMD Publication 51192 "AMD Bolton FCH Register Reference Guide"
+>>>>   *	    AMD Publication 52740 "BIOS and Kernel Developer’s Guide (BKDG)
+>>>>   *				for AMD Family 16h Models 30h-3Fh Processors"
+>>>> + *	    AMD Publication 55570-B1-PUB "Processor Programming Reference (PPR)
+>>>> + *				for AMD Family 17h Model 18h, Revision B1
+>>>> + *				Processors (PUB)
+>>>> + *	    AMD Publication 55772-A1-PUB "Processor Programming Reference (PPR)
+>>>> + *				for AMD Family 17h Model 20h, Revision A1
+>>>> + *				Processors (PUB)
+>>>>   */
+>>>>  
+>>>>  /*
+>>>> @@ -241,6 +247,18 @@ static int sp5100_tco_setupdevice(struct device *dev,
+>>>>  		break;
+>>>>  	case efch:
+>>>>  		dev_name = SB800_DEVNAME;
+>>>> +		/*
+>>>> +		 * On Family 17h devices, the EFCH_PM_DECODEEN_WDT_TMREN bit of
+>>>> +		 * EFCH_PM_DECODEEN not only enables the EFCH_PM_WDT_ADDR memory
+>>>> +		 * region, it also enables the watchdog itself.
+>>>> +		 */
+>>>> +		if (boot_cpu_data.x86 == 0x17) {
+>>>> +			val = sp5100_tco_read_pm_reg8(EFCH_PM_DECODEEN);
+>>>> +			if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
+>>>> +				sp5100_tco_update_pm_reg8(EFCH_PM_DECODEEN, 0xff,
+>>>> +							  EFCH_PM_DECODEEN_WDT_TMREN);
+>>>> +			}
+>>>> +		}
+>>>>  		val = sp5100_tco_read_pm_reg8(EFCH_PM_DECODEEN);
+>>>>  		if (val & EFCH_PM_DECODEEN_WDT_TMREN)
+>>>>  			mmio_addr = EFCH_PM_WDT_ADDR;
+>>>>
+>>>
+>>> Won't that bring us EFCH_PM_WDT_ADDR as address, rather than
+>>> EFCH_PM_ACPI_MMIO_ADDR which worked in my case? Or is one an alias of
+>>> the other.
+>>>
+>>
+>> Yes, it does use EFCH_PM_WDT_ADDR. EFCH_PM_ACPI_MMIO_ADDR works as well,
+>> but is meant to be a fallback. Both point to the watchdog memory space.
+>>
+> 
+> OK, will test, possibly only on the weekend, and confirm this also on my
+> board.
+> 
+> Jan
+> 
 
-These patches have all been reviewed (apart from fairly trivial 2/5),
-which maintainer should be picking those up?
+Both patches now
 
-Thanks!
+Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
 
-On Mon, Aug 3, 2020 at 3:15 PM Crystal Guo <crystal.guo@mediatek.com> wrote:
->
-> v4 changes:
-> revise commit messages.
->
-> v3 changes:
-> https://patchwork.kernel.org/patch/11692731/
-> https://patchwork.kernel.org/patch/11692767/
-> https://patchwork.kernel.org/patch/11692729/
-> https://patchwork.kernel.org/patch/11692771/
-> https://patchwork.kernel.org/patch/11692733/
->
-> Crystal Guo (5):
->   dt-binding: mediatek: watchdog: fix the description of compatible
->   arm64: dts: mt8183: update watchdog device node
->   dt-binding: mediatek: mt8192: update mtk-wdt document
->   dt-binding: mt8192: add toprgu reset-controller head file
->   watchdog: mt8192: add wdt support
->
->  .../devicetree/bindings/watchdog/mtk-wdt.txt  |  5 ++--
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  3 +-
->  drivers/watchdog/mtk_wdt.c                    |  6 ++++
->  .../reset-controller/mt8192-resets.h          | 30 +++++++++++++++++++
->  4 files changed, 40 insertions(+), 4 deletions(-)
->  create mode 100644 include/dt-bindings/reset-controller/mt8192-resets.h
->
->
+Thanks,
+Jan
+
+-- 
+Siemens AG, Corporate Technology, CT RDA IOT SES-DE
+Corporate Competence Center Embedded Linux
