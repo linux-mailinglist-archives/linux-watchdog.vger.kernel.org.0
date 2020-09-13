@@ -2,124 +2,50 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BE72658CE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Sep 2020 07:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E719268A4B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Sep 2020 13:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725535AbgIKFch (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 11 Sep 2020 01:32:37 -0400
-Received: from gecko.sbs.de ([194.138.37.40]:59330 "EHLO gecko.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgIKFch (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 11 Sep 2020 01:32:37 -0400
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 08B5WJCo006982
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Sep 2020 07:32:20 +0200
-Received: from [167.87.49.221] ([167.87.49.221])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 08B5WI45025883;
-        Fri, 11 Sep 2020 07:32:19 +0200
-Subject: Re: [PATCH 2/2] watchdog: sp5100_tco: Enable watchdog on Family 17h
- devices if disabled
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200910163109.235136-1-linux@roeck-us.net>
- <20200910163109.235136-2-linux@roeck-us.net>
- <30f69c2c-d4c8-a143-6bfa-34394b6361cf@siemens.com>
- <6ff3df92-3465-f619-7c21-eed421ff719d@roeck-us.net>
- <2e35ac70-deca-d414-e8a6-2815bdd638d4@siemens.com>
-Message-ID: <b17232b2-5246-d2fe-bdf9-85abb9cc78f3@siemens.com>
-Date:   Fri, 11 Sep 2020 07:32:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726125AbgINLpX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Sep 2020 07:45:23 -0400
+Received: from mail.bnv.gob.ve ([201.249.200.115]:38048 "EHLO
+        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726051AbgINLlR (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 14 Sep 2020 07:41:17 -0400
+X-Greylist: delayed 25694 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Sep 2020 07:39:03 EDT
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 7DCD334C541A;
+        Sun, 13 Sep 2020 20:00:15 -0400 (-04)
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id PWncf_-g0lUa; Sun, 13 Sep 2020 20:00:15 -0400 (-04)
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 2A12E3293272;
+        Sun, 13 Sep 2020 19:43:25 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bnv.gob.ve
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id u93qn7jTg1tU; Sun, 13 Sep 2020 19:43:25 -0400 (-04)
+Received: from [192.168.8.101] (8ta-229-1-199.telkomadsl.co.za [197.229.1.199])
+        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 63AE634A4877;
+        Sun, 13 Sep 2020 19:14:30 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <2e35ac70-deca-d414-e8a6-2815bdd638d4@siemens.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Spende von 2.000.000,00 Euro.
+To:     Recipients <manuelfranco@info.com>
+From:   "manuel franco" <manuelfranco@info.com>
+Date:   Mon, 14 Sep 2020 01:14:22 +0200
+Reply-To: manuelfrancospende11@gmail.com
+Message-Id: <20200913231431.63AE634A4877@correo.bnv.gob.ve>
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10.09.20 18:55, Jan Kiszka wrote:
-> On 10.09.20 18:53, Guenter Roeck wrote:
->> Hi Jan,
->>
->> On 9/10/20 9:34 AM, Jan Kiszka wrote:
->>> On 10.09.20 18:31, Guenter Roeck wrote:
->>>> On Family 17h (Ryzen) devices, the WatchdogTmrEn bit of PmDecodeEn not only
->>>> enables watchdog memory decoding at 0xfeb00000, it also enables the
->>>> watchdog hardware itself. Use this information to enable the watchdog if
->>>> it is not already enabled.
->>>>
->>>> Cc: Jan Kiszka <jan.kiszka@siemens.com>
->>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->>>> ---
->>>>  drivers/watchdog/sp5100_tco.c | 18 ++++++++++++++++++
->>>>  1 file changed, 18 insertions(+)
->>>>
->>>> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
->>>> index 85e9664318c9..a730ecbf78cd 100644
->>>> --- a/drivers/watchdog/sp5100_tco.c
->>>> +++ b/drivers/watchdog/sp5100_tco.c
->>>> @@ -17,6 +17,12 @@
->>>>   *	    AMD Publication 51192 "AMD Bolton FCH Register Reference Guide"
->>>>   *	    AMD Publication 52740 "BIOS and Kernel Developerâ€™s Guide (BKDG)
->>>>   *				for AMD Family 16h Models 30h-3Fh Processors"
->>>> + *	    AMD Publication 55570-B1-PUB "Processor Programming Reference (PPR)
->>>> + *				for AMD Family 17h Model 18h, Revision B1
->>>> + *				Processors (PUB)
->>>> + *	    AMD Publication 55772-A1-PUB "Processor Programming Reference (PPR)
->>>> + *				for AMD Family 17h Model 20h, Revision A1
->>>> + *				Processors (PUB)
->>>>   */
->>>>  
->>>>  /*
->>>> @@ -241,6 +247,18 @@ static int sp5100_tco_setupdevice(struct device *dev,
->>>>  		break;
->>>>  	case efch:
->>>>  		dev_name = SB800_DEVNAME;
->>>> +		/*
->>>> +		 * On Family 17h devices, the EFCH_PM_DECODEEN_WDT_TMREN bit of
->>>> +		 * EFCH_PM_DECODEEN not only enables the EFCH_PM_WDT_ADDR memory
->>>> +		 * region, it also enables the watchdog itself.
->>>> +		 */
->>>> +		if (boot_cpu_data.x86 == 0x17) {
->>>> +			val = sp5100_tco_read_pm_reg8(EFCH_PM_DECODEEN);
->>>> +			if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
->>>> +				sp5100_tco_update_pm_reg8(EFCH_PM_DECODEEN, 0xff,
->>>> +							  EFCH_PM_DECODEEN_WDT_TMREN);
->>>> +			}
->>>> +		}
->>>>  		val = sp5100_tco_read_pm_reg8(EFCH_PM_DECODEEN);
->>>>  		if (val & EFCH_PM_DECODEEN_WDT_TMREN)
->>>>  			mmio_addr = EFCH_PM_WDT_ADDR;
->>>>
->>>
->>> Won't that bring us EFCH_PM_WDT_ADDR as address, rather than
->>> EFCH_PM_ACPI_MMIO_ADDR which worked in my case? Or is one an alias of
->>> the other.
->>>
->>
->> Yes, it does use EFCH_PM_WDT_ADDR. EFCH_PM_ACPI_MMIO_ADDR works as well,
->> but is meant to be a fallback. Both point to the watchdog memory space.
->>
-> 
-> OK, will test, possibly only on the weekend, and confirm this also on my
-> board.
-> 
-> Jan
-> 
+ Sie haben eine Spende von 2.000.000,00 Euro.
 
-Both patches now
-
-Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
-
-Thanks,
-Jan
-
--- 
-Siemens AG, Corporate Technology, CT RDA IOT SES-DE
-Corporate Competence Center Embedded Linux
+Mein Name ist Manuel Franco aus den USA.
+Ich habe die America-Lotterie im Wert von 768 Millionen US-Dollar gewonnen und spende einen Teil davon an nur 5 glückliche Menschen und einige Waisenhäuser als Wohlwollen für die Menschheit.
