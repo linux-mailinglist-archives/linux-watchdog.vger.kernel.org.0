@@ -2,63 +2,67 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBA1268F65
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Sep 2020 17:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29508268FDC
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Sep 2020 17:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726106AbgINPPn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Sep 2020 11:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S1726091AbgINP06 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Sep 2020 11:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbgINPPK (ORCPT
+        with ESMTP id S1726019AbgINP0q (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Sep 2020 11:15:10 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEAAC06174A;
-        Mon, 14 Sep 2020 08:15:08 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id a2so209733otr.11;
-        Mon, 14 Sep 2020 08:15:08 -0700 (PDT)
+        Mon, 14 Sep 2020 11:26:46 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABAEC06178A;
+        Mon, 14 Sep 2020 08:26:46 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id m7so321173oie.0;
+        Mon, 14 Sep 2020 08:26:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=CfDNK8oDiRlyO66Z8NrDw//xEhow0np5RFaxDAoV1Us=;
-        b=G5kLPjlgtm18L1Zrk53vSmHlCuxF2mzzwOEz+DaS+uAQHUccyXn+US0pKfqp2u/5df
-         JjsrgjRFnvOA6XNeMxHdljAlqVz6ULDfx57rmDXE9YzMlvovjJ+GJ0sOnAXb+WoippyP
-         YZYHBHsl9a7l0BDbK3Q/ppciRwP6a25/v4n92hZrNV2r9DpyhqgCcAXhRAxTmu94bZrj
-         CKLSQltJS7+gTaxs3caCIGWfF+MTp+xw6qAxFZNsD24HbgLs7OQc4F8d/zhj9ryJpmjs
-         i3rRckQ1slL9PVjIJKMM4y2iPzDU+H9DCvSAZez7kmzHZ2AcKSl4CyihwhlEWRLgmdkf
-         OKLg==
+        bh=43Mo2cDCJQk1bbidqAAmRcOmWVTocCMpFsO0wzwgtfU=;
+        b=Wj09zd+LrzMhQxCDjshlAMV6t1w7Rkdf0ywVbMErtypJg88Tnmm0ox2cL54MuraIQm
+         xlQxTFS0oHj3PnDZjiAimlYycVfSSnG9TC8yH9drsLXANlVj6P1oPiRnB8mLiHR9tcpU
+         gQPanlF8Hr2t05MmAJrikUq/84tyZdDW09yKQDWRuPKFTyQuwQHc3yyvpUv0CuK4REbR
+         xTRBDoGQ2nCqKXv9bHgupSx8DQ1IwBX8X1SxvYFxvZyp+V44qsPhCx7HfVCJUb3H8i9q
+         8pwrY1YFa/gCPBB1w+OBkjzGdZyaL+B84BcWuUh31d+1iohjVt/8n4xLzKxjGh2LprZW
+         m6eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=CfDNK8oDiRlyO66Z8NrDw//xEhow0np5RFaxDAoV1Us=;
-        b=SXugG45M8wBwi2C+ynoeLAOYkCS5ycGSBnSEfxAWCbxVHeGn3nqwZjaDm8pVCyMNKa
-         sotjO7EI8Lm4Rq6J1F/WlExiLGONcOTSZxnvZsNg3sZpPkv90wfAX0WQqGCqne+v/KLK
-         zE+J3noOkFYM47y5tg35yEZaa2pzpxhYENKhDzn/vBsgIYIJwsKRQpdPZxWRfqMz6qyh
-         Kguhm+Pf7JG2f3V9YDMZ8JPb7o5j/KfyhJ0wElGP8p6aMRIKaRLAoHxjDZIbrOiRSGau
-         39jvn5i0wLsn/77hTVdMoeW9iotKXJYKXXXC7xsMCT2gal04w7WHXrsU4mJvVUJVmJRE
-         U9Ng==
-X-Gm-Message-State: AOAM531quqOYEO8jOMycvTCQXOmcAhbxC7A8hm6K2L/eCmSYuK1tUPGy
-        ZvSqwTpFTsKFGuVIiHXACpShHBaKYoY=
-X-Google-Smtp-Source: ABdhPJyvX8wq/8kbyWJRbVwmSAvlmfbczxKY2iXoDZC9+gtlpV1r/A3oKXBxARKHgJ6JLfUQNyXnIw==
-X-Received: by 2002:a9d:7841:: with SMTP id c1mr9943615otm.318.1600096508210;
-        Mon, 14 Sep 2020 08:15:08 -0700 (PDT)
+        bh=43Mo2cDCJQk1bbidqAAmRcOmWVTocCMpFsO0wzwgtfU=;
+        b=uY/IoxYx/Yr2a1c2JAOoeZYY7URyjrJ0j7EP+GnnkG5rSyZihafpWX57gJ5pdmAwS/
+         eQw/MvUS8MXyrq+6otuqtRFswjrNWWR6zkoC8UdL4kBaoL608IZJirPXy7CY3Enn74fl
+         8Ps/Xn6MWUtVrsqetiYaadqYGMj4qCVfgGmRxBr6hy4awilcOAfgH8w0KjgBsBTWgpfx
+         NJ7kNGj8R5chI69mjqLMKecnC6bMu2Zpn/gVwCl2sryW7Q8AQ4AFEhLeiKezlzEBc4wJ
+         O4Q7h6Nrbp/aQyk4piF9/dWC803YeSBXyzWaYe+RmfoE7Xd33bht6E5OjOr2OCCb5KF/
+         FtyA==
+X-Gm-Message-State: AOAM533YkyDI6Nm53EvpKyz+jgF81R0D//e/+GR3NXEoRz2HdiSD4pkz
+        Fvqlktza6QQIznI4pa1lYb8=
+X-Google-Smtp-Source: ABdhPJyrIlzIPp2/8/eTxGNpxg7QwI6VdCEtTRsuyhm8l5bxu8DpAw+V/AZ1oQpVlsIj8g77iZ0VrQ==
+X-Received: by 2002:a05:6808:9a9:: with SMTP id e9mr9326940oig.114.1600097205618;
+        Mon, 14 Sep 2020 08:26:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v25sm3433869ota.39.2020.09.14.08.15.06
+        by smtp.gmail.com with ESMTPSA id c15sm3772166oiy.13.2020.09.14.08.26.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Sep 2020 08:15:07 -0700 (PDT)
-Subject: Re: [v4,4/5] dt-binding: mt8192: add toprgu reset-controller head
- file
-To:     Crystal Guo <crystal.guo@mediatek.com>, robh+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com
+        Mon, 14 Sep 2020 08:26:45 -0700 (PDT)
+Subject: Re: [v4,0/5] watchdog: mt8192: add wdt support
+To:     Nicolas Boichat <drinkcat@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com,
+        Crystal Guo <crystal.guo@mediatek.com>
 References: <20200803071501.30634-1-crystal.guo@mediatek.com>
- <20200803071501.30634-5-crystal.guo@mediatek.com>
+ <CANMq1KA=t8srKfC4XUqk2V2N6Jm0=-P4rQSh9Mqbo2tFFKgTEA@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -103,68 +107,60 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <72032ece-5162-d728-0c29-f25cd35c0c9e@roeck-us.net>
-Date:   Mon, 14 Sep 2020 08:15:06 -0700
+Message-ID: <e74681e5-640c-5e5f-5daf-e22ed9b2594e@roeck-us.net>
+Date:   Mon, 14 Sep 2020 08:26:43 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200803071501.30634-5-crystal.guo@mediatek.com>
+In-Reply-To: <CANMq1KA=t8srKfC4XUqk2V2N6Jm0=-P4rQSh9Mqbo2tFFKgTEA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/3/20 12:15 AM, Crystal Guo wrote:
-> add toprgu reset-controller head file for MT8192 platform
+On 9/10/20 8:26 PM, Nicolas Boichat wrote:
+> Matthias, Guenter,
 > 
-> Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> These patches have all been reviewed (apart from fairly trivial 2/5),
+> which maintainer should be picking those up?
+> 
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+I don't see an Acked-by or Reviewed-by from a DT maintainer.
+We'll have to wait for feedback from Rob.
 
-> ---
->  .../reset-controller/mt8192-resets.h          | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 include/dt-bindings/reset-controller/mt8192-resets.h
+Thanks,
+Guenter
+
+> Thanks!
 > 
-> diff --git a/include/dt-bindings/reset-controller/mt8192-resets.h b/include/dt-bindings/reset-controller/mt8192-resets.h
-> new file mode 100644
-> index 000000000000..84fee34f1c32
-> --- /dev/null
-> +++ b/include/dt-bindings/reset-controller/mt8192-resets.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2020 MediaTek Inc.
-> + * Author: Yong Liang <yong.liang@mediatek.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8192
-> +#define _DT_BINDINGS_RESET_CONTROLLER_MT8192
-> +
-> +#define MT8183_TOPRGU_MM_SW_RST					1
-> +#define MT8183_TOPRGU_MFG_SW_RST				2
-> +#define MT8183_TOPRGU_VENC_SW_RST				3
-> +#define MT8183_TOPRGU_VDEC_SW_RST				4
-> +#define MT8183_TOPRGU_IMG_SW_RST				5
-> +#define MT8183_TOPRGU_MD_SW_RST					7
-> +#define MT8183_TOPRGU_CONN_SW_RST				9
-> +#define MT8183_TOPRGU_CONN_MCU_SW_RST			12
-> +#define MT8183_TOPRGU_IPU0_SW_RST				14
-> +#define MT8183_TOPRGU_IPU1_SW_RST				15
-> +#define MT8183_TOPRGU_AUDIO_SW_RST				17
-> +#define MT8183_TOPRGU_CAMSYS_SW_RST				18
-> +#define MT8192_TOPRGU_MJC_SW_RST				19
-> +#define MT8192_TOPRGU_C2K_S2_SW_RST				20
-> +#define MT8192_TOPRGU_C2K_SW_RST				21
-> +#define MT8192_TOPRGU_PERI_SW_RST				22
-> +#define MT8192_TOPRGU_PERI_AO_SW_RST			23
-> +
-> +#define MT8192_TOPRGU_SW_RST_NUM				23
-> +
-> +#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8192 */
-> 
+> On Mon, Aug 3, 2020 at 3:15 PM Crystal Guo <crystal.guo@mediatek.com> wrote:
+>>
+>> v4 changes:
+>> revise commit messages.
+>>
+>> v3 changes:
+>> https://patchwork.kernel.org/patch/11692731/
+>> https://patchwork.kernel.org/patch/11692767/
+>> https://patchwork.kernel.org/patch/11692729/
+>> https://patchwork.kernel.org/patch/11692771/
+>> https://patchwork.kernel.org/patch/11692733/
+>>
+>> Crystal Guo (5):
+>>   dt-binding: mediatek: watchdog: fix the description of compatible
+>>   arm64: dts: mt8183: update watchdog device node
+>>   dt-binding: mediatek: mt8192: update mtk-wdt document
+>>   dt-binding: mt8192: add toprgu reset-controller head file
+>>   watchdog: mt8192: add wdt support
+>>
+>>  .../devicetree/bindings/watchdog/mtk-wdt.txt  |  5 ++--
+>>  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  3 +-
+>>  drivers/watchdog/mtk_wdt.c                    |  6 ++++
+>>  .../reset-controller/mt8192-resets.h          | 30 +++++++++++++++++++
+>>  4 files changed, 40 insertions(+), 4 deletions(-)
+>>  create mode 100644 include/dt-bindings/reset-controller/mt8192-resets.h
+>>
+>>
 
