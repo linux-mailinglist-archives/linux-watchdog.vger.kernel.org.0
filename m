@@ -2,62 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDFB268F4B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Sep 2020 17:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E2C268F57
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Sep 2020 17:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725990AbgINPNH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Sep 2020 11:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S1726381AbgINPOR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Sep 2020 11:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725978AbgINPMv (ORCPT
+        with ESMTP id S1726379AbgINPOB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Sep 2020 11:12:51 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F43C061788;
-        Mon, 14 Sep 2020 08:12:51 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id n2so266773oij.1;
-        Mon, 14 Sep 2020 08:12:50 -0700 (PDT)
+        Mon, 14 Sep 2020 11:14:01 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792E8C06174A;
+        Mon, 14 Sep 2020 08:14:01 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id y6so240529oie.5;
+        Mon, 14 Sep 2020 08:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=LZrXleXpXEX3rywb4yNGm04A0HJp8KBFheDhY65INpw=;
-        b=efRBLRVl3nHQno3tjYKzOEZWwFChe1gRg5jwgJ5pP5yBYm1wUBcI1Zjx5AtW0/jL3L
-         Q/QpLJq3J3QTWtJVjRpubVEUJrdiFg0+MeJzHBXHyFiRSAbGeqw2nTlCFMRDQBXBM0Kl
-         mO5FsXSAkJk+NRQkLhVjVOIFcwTuqqt6aDlQ9ThH1uVG/cYxFckCDiNIlcaqpvCV32Qz
-         T5SrqwOm3Tv2/++vYGA2u4Lu15BqDi3I8RudPkcZgo+vvmSdDV5ciAPNXNHBh/RGVFAR
-         rY9H8iuusTyJSu3hsodF2NedX5BrFieDTPDhHLgl0V0JT/QQ47o5QFGgWK8hfWu7nO7i
-         /yqQ==
+        bh=pExX/qa1szkvPX8pYwNyLmNXDOdTczhRv94lptODYlY=;
+        b=Lq21MYxmdCmBtqzyJGaS896KfxOo5bjKXJHhsFNVbjoifXPV9UDZrVxmQuZ6qPS7+o
+         3U1B2VGSZB3K3jp9OpHTtRlld94153F+I4jpf3916EOxDJK5nI78SegmsuzOXFgQRy7R
+         X88qb/wg4A9Xxzi936IKQ441au0ulwgg1w5MtaNXSUBdNDbh+Khd44+RH8rveyGjXdBb
+         lme/ZiLM+lXxOdO7JF58p31kppmMG6nQWzNTllnhyMX9MqqQ4956apV1CPUDNpAN9gnM
+         ZxR3J+slz7o3bs3l7yrj7Pgaeeef+R+SNn6W78w4FIzcfBR/iO5twLID3CUYnCPE8AkE
+         Tp2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=LZrXleXpXEX3rywb4yNGm04A0HJp8KBFheDhY65INpw=;
-        b=Jfvrn48etQm1RhjdQ7omrAFS3pzULXMzSJsrCNlsrAf8pDgwmP32dfXp3ofog4A+Hk
-         zfUvE0QjrWC0zUSLER4jXIzsmSN2KLvDZO71yEUR74XHuNfgj/j+TS7rLRs3reMOCWUs
-         9Y6NAcIKjqkduwFB13CWknA28S0PiqOW4uHKbp1Wv6NWXWu0dR1OygEnK7QJsfwBUAs3
-         H27ZTpt6xnpdlaq0LWViTFoap0lLD8KOx+BjD92wnf7A/wdjV33hOMdV9EppIMO0EzFN
-         NlHkaNbpA3tX/JKNO1e+8nP/fcXCrbNdFJREc4/9mTB5J/x3lNBiniXAHIR6wwl61c+W
-         qOtg==
-X-Gm-Message-State: AOAM532IoPwd0/d0JVwSZyR2HJYmYAC5LzxdA0K73RIIgDa+1puQATw5
-        iAZj3Uiy7U8uzaYCd50n/Do=
-X-Google-Smtp-Source: ABdhPJwGgbaXoSJ/l7VKXkf8oDmFB2QVKI+6O44pezJ69IiU3M4Egz2wvtGu7Epl+HsVjIryUW3EDg==
-X-Received: by 2002:a54:4388:: with SMTP id u8mr9182862oiv.1.1600096370502;
-        Mon, 14 Sep 2020 08:12:50 -0700 (PDT)
+        bh=pExX/qa1szkvPX8pYwNyLmNXDOdTczhRv94lptODYlY=;
+        b=K/6NO1I5trm4Y5uIrKZRSg0SaIyKGiHOe2KULgSdeW0EFzn8oP40H0DTwx+sLNRb6A
+         eH8f5UwjoRU5NlhDu7QSQd6FnJxDRf0r3KugFZdBDitjF9yg6mT6QyONY7o8EwhrHfcA
+         7jNzFSIFpkVJTqRXeM+L5TDCqcEYAlDh9qJ07WzCspXQcvOFalzapR8aHk1sPpegz4Ke
+         ozh0UL2ticspy3lSUsrkes8OtkljSf5VwwQUAkLymqIupdxZDTdYzxUYcMCkKDEpf/mr
+         M3IPtYSkjnnWp11yFPl3v7I/2LrHEjxB7kUs7mLDJQU/qCsCnP7/arESEwve0zyFNapb
+         sh2A==
+X-Gm-Message-State: AOAM530ZUI0CNc91S5SG4cg8fo4cLdoTJWx/O7IBeYTbGQIjTeW7wSNM
+        EzImSmRtVBPJL/5yACnkuks=
+X-Google-Smtp-Source: ABdhPJy66MZDQ76mM9RDDsow5oNvbzte8cjiDXlKDGeUpTels5KbtwNsyP2/155t35QSX+jqrEuAAQ==
+X-Received: by 2002:aca:db42:: with SMTP id s63mr8586805oig.4.1600096440910;
+        Mon, 14 Sep 2020 08:14:00 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r3sm3617082ooo.16.2020.09.14.08.12.49
+        by smtp.gmail.com with ESMTPSA id n37sm3423980ota.20.2020.09.14.08.13.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Sep 2020 08:12:49 -0700 (PDT)
-Subject: Re: [v4,5/5] watchdog: mt8192: add wdt support
+        Mon, 14 Sep 2020 08:14:00 -0700 (PDT)
+Subject: Re: [v4,1/5] dt-binding: mediatek: watchdog: fix the description of
+ compatible
 To:     Crystal Guo <crystal.guo@mediatek.com>, robh+dt@kernel.org,
         matthias.bgg@gmail.com
 Cc:     srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com
 References: <20200803071501.30634-1-crystal.guo@mediatek.com>
- <20200803071501.30634-6-crystal.guo@mediatek.com>
+ <20200803071501.30634-2-crystal.guo@mediatek.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -102,12 +103,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <4128d166-0c32-7a66-ff9b-b3bad495dcb5@roeck-us.net>
-Date:   Mon, 14 Sep 2020 08:12:48 -0700
+Message-ID: <37c94b62-3802-e6b9-e02a-0d676b8e32d7@roeck-us.net>
+Date:   Mon, 14 Sep 2020 08:13:59 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200803071501.30634-6-crystal.guo@mediatek.com>
+In-Reply-To: <20200803071501.30634-2-crystal.guo@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -116,8 +117,9 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/3/20 12:15 AM, Crystal Guo wrote:
-> Add support for watchdog device found in MT8192 SoC
+On 8/3/20 12:14 AM, Crystal Guo wrote:
+> The watchdog driver for MT2712 and MT8183 relies on DT data, so
+> the fallback compatible MT6589 won't work.
 > 
 > Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
 > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
@@ -125,39 +127,28 @@ On 8/3/20 12:15 AM, Crystal Guo wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/mtk_wdt.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index d6a6393f609d..aef0c2db6a11 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -11,6 +11,7 @@
+> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> index 4dd36bd3f1ad..45eedc2c3141 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> @@ -4,13 +4,13 @@ Required properties:
 >  
->  #include <dt-bindings/reset-controller/mt2712-resets.h>
->  #include <dt-bindings/reset-controller/mt8183-resets.h>
-> +#include <dt-bindings/reset-controller/mt8192-resets.h>
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/init.h>
-> @@ -76,6 +77,10 @@ static const struct mtk_wdt_data mt8183_data = {
->  	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
->  };
+>  - compatible should contain:
+>  	"mediatek,mt2701-wdt", "mediatek,mt6589-wdt": for MT2701
+> -	"mediatek,mt2712-wdt", "mediatek,mt6589-wdt": for MT2712
+> +	"mediatek,mt2712-wdt": for MT2712
+>  	"mediatek,mt6589-wdt": for MT6589
+>  	"mediatek,mt6797-wdt", "mediatek,mt6589-wdt": for MT6797
+>  	"mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for MT7622
+>  	"mediatek,mt7623-wdt", "mediatek,mt6589-wdt": for MT7623
+>  	"mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for MT7629
+> -	"mediatek,mt8183-wdt", "mediatek,mt6589-wdt": for MT8183
+> +	"mediatek,mt8183-wdt": for MT8183
+>  	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
 >  
-> +static const struct mtk_wdt_data mt8192_data = {
-> +	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
-> +};
-> +
->  static int toprgu_reset_update(struct reset_controller_dev *rcdev,
->  			       unsigned long id, bool assert)
->  {
-> @@ -322,6 +327,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
->  	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
->  	{ .compatible = "mediatek,mt6589-wdt" },
->  	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
-> +	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
->  	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
+>  - reg : Specifies base physical address and size of the registers.
 > 
 
