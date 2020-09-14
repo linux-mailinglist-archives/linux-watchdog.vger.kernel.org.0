@@ -2,67 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29508268FDC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Sep 2020 17:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E1D2691D6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Sep 2020 18:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbgINP06 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Sep 2020 11:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
+        id S1726435AbgINPOz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Sep 2020 11:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbgINP0q (ORCPT
+        with ESMTP id S1726389AbgINPOg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Sep 2020 11:26:46 -0400
+        Mon, 14 Sep 2020 11:14:36 -0400
 Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABAEC06178A;
-        Mon, 14 Sep 2020 08:26:46 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id m7so321173oie.0;
-        Mon, 14 Sep 2020 08:26:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDDAC06174A;
+        Mon, 14 Sep 2020 08:14:32 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id d189so191732oig.12;
+        Mon, 14 Sep 2020 08:14:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=43Mo2cDCJQk1bbidqAAmRcOmWVTocCMpFsO0wzwgtfU=;
-        b=Wj09zd+LrzMhQxCDjshlAMV6t1w7Rkdf0ywVbMErtypJg88Tnmm0ox2cL54MuraIQm
-         xlQxTFS0oHj3PnDZjiAimlYycVfSSnG9TC8yH9drsLXANlVj6P1oPiRnB8mLiHR9tcpU
-         gQPanlF8Hr2t05MmAJrikUq/84tyZdDW09yKQDWRuPKFTyQuwQHc3yyvpUv0CuK4REbR
-         xTRBDoGQ2nCqKXv9bHgupSx8DQ1IwBX8X1SxvYFxvZyp+V44qsPhCx7HfVCJUb3H8i9q
-         8pwrY1YFa/gCPBB1w+OBkjzGdZyaL+B84BcWuUh31d+1iohjVt/8n4xLzKxjGh2LprZW
-         m6eA==
+        bh=qD8UOak9rcCgSS3n2z3fRwRhSVKqfGfQ7QFMsM1bLpY=;
+        b=WHTD1OJHvqY/Mnvgbhb9QxzsATBhHEjkHOU7A4ZvjqJ1GJdJXPvGk41f3EdkMTqnEG
+         Ro4mQJaqACiEbayqgnNIk+ju/FDcm54lN3Yqe1AkHZobEQvYYcXmP3RAc3J4lOMPctcw
+         qQNN65Av0Mz7QxDLktRntYxpxoJwU4g2pytPnPFbpeutJUKkcDomt922X31R24HuFdhH
+         4FgE1aT7czoeJhAuGMVyhKRQKJqNf1MYazndwA7WEkAtyUQuoU7fvkLqcd7EsU3zQARG
+         FE6XfeIM4p+7VK5xDH+VMGZxIlnBSiB5Ddj8n3NbLNcP3Lu8VWXUUHSAaUjFYKy0GgRy
+         2kSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=43Mo2cDCJQk1bbidqAAmRcOmWVTocCMpFsO0wzwgtfU=;
-        b=uY/IoxYx/Yr2a1c2JAOoeZYY7URyjrJ0j7EP+GnnkG5rSyZihafpWX57gJ5pdmAwS/
-         eQw/MvUS8MXyrq+6otuqtRFswjrNWWR6zkoC8UdL4kBaoL608IZJirPXy7CY3Enn74fl
-         8Ps/Xn6MWUtVrsqetiYaadqYGMj4qCVfgGmRxBr6hy4awilcOAfgH8w0KjgBsBTWgpfx
-         NJ7kNGj8R5chI69mjqLMKecnC6bMu2Zpn/gVwCl2sryW7Q8AQ4AFEhLeiKezlzEBc4wJ
-         O4Q7h6Nrbp/aQyk4piF9/dWC803YeSBXyzWaYe+RmfoE7Xd33bht6E5OjOr2OCCb5KF/
-         FtyA==
-X-Gm-Message-State: AOAM533YkyDI6Nm53EvpKyz+jgF81R0D//e/+GR3NXEoRz2HdiSD4pkz
-        Fvqlktza6QQIznI4pa1lYb8=
-X-Google-Smtp-Source: ABdhPJyrIlzIPp2/8/eTxGNpxg7QwI6VdCEtTRsuyhm8l5bxu8DpAw+V/AZ1oQpVlsIj8g77iZ0VrQ==
-X-Received: by 2002:a05:6808:9a9:: with SMTP id e9mr9326940oig.114.1600097205618;
-        Mon, 14 Sep 2020 08:26:45 -0700 (PDT)
+        bh=qD8UOak9rcCgSS3n2z3fRwRhSVKqfGfQ7QFMsM1bLpY=;
+        b=C86ewxwyrmukuvyJ8QFK4Wm0i0W4W4nxCj4eNs3greSc1dxg5z5eHFJnlQAExitmiR
+         X3h0CX90YOLGgwv9X256aGghl38pXen8sWIaFHrU3mVndL5kdQTHACcaIr8zXG7vfm8e
+         t1ycDE1vTr23ct89LXFej0JWIOvfgHnDGU9PDzGTrCJW9CwlAxLux2nrjYBLCM8sl3zu
+         xMLUHKSt5GiTmun46hF/LxxodjN42S+mLLectGjnbpt85DxdrmPdr8ukOIAYvDbdrqzp
+         Y3YZxMauNuPw1cnOfxZyfkisVt4SziCmDEoMu2LsV0DPazen19hiYfuz4lUayyr7gTHx
+         s3gw==
+X-Gm-Message-State: AOAM533VyddbGeuzkobDK0Ul+4dAcuEg6jUeybZ/lperB1jC9IcpeNsQ
+        YG6YzUkGQ2dRJCIgGyKMRHE=
+X-Google-Smtp-Source: ABdhPJyu9UmM4FzHywSsK76o4er/josukRwvwNBlLN2jhwo+O1mjlNgZHu+kJIXr+z4owlFumgJpng==
+X-Received: by 2002:aca:5b03:: with SMTP id p3mr8612480oib.41.1600096471724;
+        Mon, 14 Sep 2020 08:14:31 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c15sm3772166oiy.13.2020.09.14.08.26.44
+        by smtp.gmail.com with ESMTPSA id 126sm4287931oof.28.2020.09.14.08.14.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Sep 2020 08:26:45 -0700 (PDT)
-Subject: Re: [v4,0/5] watchdog: mt8192: add wdt support
-To:     Nicolas Boichat <drinkcat@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com,
-        Crystal Guo <crystal.guo@mediatek.com>
+        Mon, 14 Sep 2020 08:14:31 -0700 (PDT)
+Subject: Re: [v4,2/5] arm64: dts: mt8183: update watchdog device node
+To:     Crystal Guo <crystal.guo@mediatek.com>, robh+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, seiya.wang@mediatek.com
 References: <20200803071501.30634-1-crystal.guo@mediatek.com>
- <CANMq1KA=t8srKfC4XUqk2V2N6Jm0=-P4rQSh9Mqbo2tFFKgTEA@mail.gmail.com>
+ <20200803071501.30634-3-crystal.guo@mediatek.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -107,60 +102,46 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <e74681e5-640c-5e5f-5daf-e22ed9b2594e@roeck-us.net>
-Date:   Mon, 14 Sep 2020 08:26:43 -0700
+Message-ID: <01ab02d8-0154-f151-42da-4b46d85b46ac@roeck-us.net>
+Date:   Mon, 14 Sep 2020 08:14:29 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CANMq1KA=t8srKfC4XUqk2V2N6Jm0=-P4rQSh9Mqbo2tFFKgTEA@mail.gmail.com>
+In-Reply-To: <20200803071501.30634-3-crystal.guo@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-watchdog-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 9/10/20 8:26 PM, Nicolas Boichat wrote:
-> Matthias, Guenter,
+On 8/3/20 12:14 AM, Crystal Guo wrote:
+> The watchdog driver for MT8183 relies on DT data, so the fallback
+> compatible MT6589 won't work, need to update watchdog device node
+> to sync with watchdog dt-binding document.
 > 
-> These patches have all been reviewed (apart from fairly trivial 2/5),
-> which maintainer should be picking those up?
+> Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-
-I don't see an Acked-by or Reviewed-by from a DT maintainer.
-We'll have to wait for feedback from Rob.
-
-Thanks,
-Guenter
-
-> Thanks!
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 1e03c849dc5d..f8d835746ab8 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -310,8 +310,7 @@
+>  		};
+>  
+>  		watchdog: watchdog@10007000 {
+> -			compatible = "mediatek,mt8183-wdt",
+> -				     "mediatek,mt6589-wdt";
+> +			compatible = "mediatek,mt8183-wdt";
+>  			reg = <0 0x10007000 0 0x100>;
+>  			#reset-cells = <1>;
+>  		};
 > 
-> On Mon, Aug 3, 2020 at 3:15 PM Crystal Guo <crystal.guo@mediatek.com> wrote:
->>
->> v4 changes:
->> revise commit messages.
->>
->> v3 changes:
->> https://patchwork.kernel.org/patch/11692731/
->> https://patchwork.kernel.org/patch/11692767/
->> https://patchwork.kernel.org/patch/11692729/
->> https://patchwork.kernel.org/patch/11692771/
->> https://patchwork.kernel.org/patch/11692733/
->>
->> Crystal Guo (5):
->>   dt-binding: mediatek: watchdog: fix the description of compatible
->>   arm64: dts: mt8183: update watchdog device node
->>   dt-binding: mediatek: mt8192: update mtk-wdt document
->>   dt-binding: mt8192: add toprgu reset-controller head file
->>   watchdog: mt8192: add wdt support
->>
->>  .../devicetree/bindings/watchdog/mtk-wdt.txt  |  5 ++--
->>  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  3 +-
->>  drivers/watchdog/mtk_wdt.c                    |  6 ++++
->>  .../reset-controller/mt8192-resets.h          | 30 +++++++++++++++++++
->>  4 files changed, 40 insertions(+), 4 deletions(-)
->>  create mode 100644 include/dt-bindings/reset-controller/mt8192-resets.h
->>
->>
 
