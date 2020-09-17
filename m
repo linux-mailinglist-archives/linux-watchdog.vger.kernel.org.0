@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 523D326D5A6
-	for <lists+linux-watchdog@lfdr.de>; Thu, 17 Sep 2020 10:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078F126D620
+	for <lists+linux-watchdog@lfdr.de>; Thu, 17 Sep 2020 10:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbgIQIG7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 17 Sep 2020 04:06:59 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:44871 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbgIQIG5 (ORCPT
+        id S1726458AbgIQINc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 17 Sep 2020 04:13:32 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:38814 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726370AbgIQIN1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 17 Sep 2020 04:06:57 -0400
-Received: by mail-lj1-f193.google.com with SMTP id b19so1193726lji.11;
-        Thu, 17 Sep 2020 01:06:53 -0700 (PDT)
+        Thu, 17 Sep 2020 04:13:27 -0400
+Received: by mail-wr1-f65.google.com with SMTP id g4so1016367wrs.5
+        for <linux-watchdog@vger.kernel.org>; Thu, 17 Sep 2020 01:13:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=KEqK5iL5V8OVnfT1sM2AlMGibK6VAQVnAF8zKdX9N+s=;
-        b=pw79xZClHavTA5Hx06w1mUcpgfyTbgPWpdUCaT3IQkZnQT66Wk+3PBUqQIoq5NM0/E
-         yOAXChtvVuExCipgzwAvZxLBy6qG+EAO8n2BXubR3/iO9fU61JTUpqjKok2Xd28/bDXw
-         Qq1EHihPqzPisgcNcykIOQz3xfqrzkNLPDeRwFMZYkacwRIf3eIPUjf6r3x9Mv/FGqGL
-         SuxvXXAKMPvfwJha0jGzQtdtY06iLEDDGufqVYcrI3ahAn8LPzDl/1IdR+TdcbjNTT0I
-         JAFuM0pmYYg6ouMD90FxxzECO0K3AJrsQRE/XtQ54q7tLz4nO77/nI9eGUh53mc+SIM9
-         z16g==
-X-Gm-Message-State: AOAM531DcDQ/h0MaULbJaQmxOjWeV1zWgUuxdSk2Py4hjC0xpwT4JLfF
-        nZSuTUJCPXpMGaPdksB3DRWZ94HEThvR6w==
-X-Google-Smtp-Source: ABdhPJwCj2s4ANtkApSdN0e6y4QOq3QgwL/3ZfbXIsaDcFSXGaeQafjuWENG+fJbIcfsN+/QtjqOFA==
-X-Received: by 2002:a2e:8146:: with SMTP id t6mr8836192ljg.259.1600329799462;
-        Thu, 17 Sep 2020 01:03:19 -0700 (PDT)
+        bh=toXwBkTb4ax6qvYa0IwMxQ6v0bcL7Gdok5RVoZ0x4vU=;
+        b=H2StpvFJLL5BTkOJAdNPM/PqctRrNiXpuSss23unnV/R5BI2brUGFNfm/yl6MUgz59
+         jeuIvNzvJxwtQAVTO0wGRi7hAQLSXZWW9DMMka5fl/+P14+C7KNu3l9hbgBc/fFPataK
+         K6cnznOAb9MTgGQ4AUyFGU8nrRBzv+xzSRPjILfkp87O1SS6MkJ7A+ro95GZaI/QYR/t
+         2qv8jq+u7FJOa0d4h2u2oxLQEXWck8YHkNa8Y8xVz2D3QuPodvf47GG7up7eaLR5E4WJ
+         +h0oF6HMZw/DIhx+qc40d0cQzuzymcn9UOLYKWM/20pW3YpaxtBM0ZC+mhfsPWzQ6dNN
+         mOdQ==
+X-Gm-Message-State: AOAM532ooVFDAWqnQNW0QsgfbxfwfVrEmLJKvBEaO14xViSYbqIh0tmQ
+        EcthcC9L7tfddKb8oN905uikBXRt/NgTYg==
+X-Google-Smtp-Source: ABdhPJxVmhZ7tzIdFMham6OFeTbFNPmqug19t7pNDYJ0iGTkjh1RgMby+ZielRqbgZcwL5zk8n3pdA==
+X-Received: by 2002:a2e:8e63:: with SMTP id t3mr8979352ljk.132.1600329820266;
+        Thu, 17 Sep 2020 01:03:40 -0700 (PDT)
 Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id s11sm5894105ljh.56.2020.09.17.01.03.14
+        by smtp.gmail.com with ESMTPSA id i5sm5461581lfe.8.2020.09.17.01.03.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 01:03:15 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 11:03:08 +0300
+        Thu, 17 Sep 2020 01:03:38 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 11:03:31 +0300
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
@@ -45,8 +45,8 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH v1 4/6] wdt: Support wdt on ROHM BD9576MUF and BD9573MUF
-Message-ID: <1993b8516fefd3d8ea16e926c4db379b89ae4096.1600329307.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v1 5/6] regulator: Support ROHM BD9576MUF and BD9573MUF
+Message-ID: <78baea1d7922506827ca717e277e4e6b391bbb78.1600329307.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1600329307.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -57,358 +57,396 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add Watchdog support for ROHM BD9576MUF and BD9573MUF PMICs which are
-mainly used to power the R-Car series processors. The watchdog is
-pinged using a GPIO and enabled using another GPIO. Additionally
-watchdog time-out can be configured to HW prior starting the watchdog.
-Watchdog timeout can be configured to detect only delayed ping or in
-a window mode where also too fast pings are detected.
+Add initial support for ROHM BD9576MUF and BD9573MUF PMICs regulators.
+These PMICs are mainly used to power the R-Car series processors.
+
+The BD9576 includes some functional-safety features which are not
+present on BD9573.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
- drivers/watchdog/Kconfig      |  13 ++
- drivers/watchdog/Makefile     |   1 +
- drivers/watchdog/bd9576_wdt.c | 295 ++++++++++++++++++++++++++++++++++
- 3 files changed, 309 insertions(+)
- create mode 100644 drivers/watchdog/bd9576_wdt.c
+ drivers/regulator/Kconfig            |  10 +
+ drivers/regulator/Makefile           |   1 +
+ drivers/regulator/bd9576-regulator.c | 337 +++++++++++++++++++++++++++
+ 3 files changed, 348 insertions(+)
+ create mode 100644 drivers/regulator/bd9576-regulator.c
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index ab7aad5a1e69..d042a517a946 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -172,6 +172,19 @@ config BD70528_WATCHDOG
- 	  Alternatively say M to compile the driver as a module,
- 	  which will be called bd70528_wdt.
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index de17ef7e18f0..49e698c042b8 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -231,6 +231,16 @@ config REGULATOR_BD9571MWV
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called bd9571mwv-regulator.
  
-+config BD957XMUF_WATCHDOG
-+	tristate "ROHM BD9576MUF and BD9573MUF PMIC Watchdog"
++config REGULATOR_BD957XMUF
++	tristate "ROHM BD9576MUF and BD9573MUF Regulators"
 +	depends on MFD_ROHM_BD957XMUF
-+	select WATCHDOG_CORE
 +	help
-+	  Support for the watchdog in the ROHM BD9576 and BD9573 PMICs.
-+	  These PMIC ICs contain watchdog block which can be configured
-+	  to toggle reset line if SoC fails to ping watchdog via GPIO.
++	  This driver supports voltage regulators on ROHM BD9576MUF and
++	  BD9573MUF PMICs.
 +
-+	  Say Y here to include support for the ROHM BD9576 or BD9573
-+	  watchdog. Alternatively say M to compile the driver as a module,
-+	  which will be called bd9576_wdt.
++	  This driver can also be built as a module. If so, the module
++	  will be called bd9576-regulator.
 +
- config DA9052_WATCHDOG
- 	tristate "Dialog DA9052 Watchdog"
- 	depends on PMIC_DA9052 || COMPILE_TEST
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 97bed1d3d97c..14d75f98e3df 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -208,6 +208,7 @@ obj-$(CONFIG_XEN_WDT) += xen_wdt.o
- 
- # Architecture Independent
- obj-$(CONFIG_BD70528_WATCHDOG) += bd70528_wdt.o
-+obj-$(CONFIG_BD957XMUF_WATCHDOG) += bd9576_wdt.o
- obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
- obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
- obj-$(CONFIG_DA9062_WATCHDOG) += da9062_wdt.o
-diff --git a/drivers/watchdog/bd9576_wdt.c b/drivers/watchdog/bd9576_wdt.c
+ config REGULATOR_CPCAP
+ 	tristate "Motorola CPCAP regulator"
+ 	depends on MFD_CPCAP
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index d8d3ecf526a8..92f50f12ca6d 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -32,6 +32,7 @@ obj-$(CONFIG_REGULATOR_BD70528) += bd70528-regulator.o
+ obj-$(CONFIG_REGULATOR_BD71828) += bd71828-regulator.o
+ obj-$(CONFIG_REGULATOR_BD718XX) += bd718x7-regulator.o
+ obj-$(CONFIG_REGULATOR_BD9571MWV) += bd9571mwv-regulator.o
++obj-$(CONFIG_REGULATOR_BD957XMUF) += bd9576-regulator.o
+ obj-$(CONFIG_REGULATOR_DA903X)	+= da903x-regulator.o
+ obj-$(CONFIG_REGULATOR_DA9052)	+= da9052-regulator.o
+ obj-$(CONFIG_REGULATOR_DA9055)	+= da9055-regulator.o
+diff --git a/drivers/regulator/bd9576-regulator.c b/drivers/regulator/bd9576-regulator.c
 new file mode 100644
-index 000000000000..917c8c7ddeb1
+index 000000000000..4137fa9a73bb
 --- /dev/null
-+++ b/drivers/watchdog/bd9576_wdt.c
-@@ -0,0 +1,295 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (C) 2020 ROHM Semiconductors
-+ *
-+ * ROHM BD9576MUF and BD9573MUF Watchdog driver
-+ */
++++ b/drivers/regulator/bd9576-regulator.c
+@@ -0,0 +1,337 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2020 ROHM Semiconductors
++// ROHM BD9576MUF/BD9573MUF regulator driver
 +
-+#include <linux/err.h>
 +#include <linux/delay.h>
-+#include <linux/mfd/rohm-bd957x.h>
-+#include <linux/module.h>
++#include <linux/err.h>
 +#include <linux/gpio/consumer.h>
++#include <linux/interrupt.h>
++#include <linux/kernel.h>
++#include <linux/mfd/rohm-bd957x.h>
++#include <linux/mfd/rohm-generic.h>
++#include <linux/module.h>
 +#include <linux/of.h>
 +#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/watchdog.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/machine.h>
++#include <linux/regulator/of_regulator.h>
++#include <linux/slab.h>
 +
-+static bool nowayout;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout,
-+		"Watchdog cannot be stopped once started (default=\"false\")");
++#define BD957X_VOUTS1_VOLT	3300000
++#define BD957X_VOUTS4_BASE_VOLT	1030000
++#define BD957X_VOUTS34_NUM_VOLT	32
 +
-+#define HW_MARGIN_MIN 2
-+#define HW_MARGIN_MAX 4416
-+#define BD957X_WDT_DEFAULT_MARGIN 4416
++static int vout1_volt_table[] = {5000000, 4900000, 4800000, 4700000, 4600000,
++				 4500000, 4500000, 4500000, 5000000, 5100000,
++				 5200000, 5300000, 5400000, 5500000, 5500000,
++				 5500000};
 +
-+struct bd9576_wdt_priv {
-+	struct gpio_desc	*gpiod_ping;
-+	struct gpio_desc	*gpiod_en;
-+	struct device		*dev;
-+	struct regmap		*regmap;
-+	bool			always_running;
-+	struct watchdog_device	wdd;
++static int vout2_volt_table[] = {1800000, 1780000, 1760000, 1740000, 1720000,
++				 1700000, 1680000, 1660000, 1800000, 1820000,
++				 1840000, 1860000, 1880000, 1900000, 1920000,
++				 1940000};
++
++static int voutl1_volt_table[] = {2500000, 2540000, 2580000, 2620000, 2660000,
++				  2700000, 2740000, 2780000, 2500000, 2460000,
++				  2420000, 2380000, 2340000, 2300000, 2260000,
++				  2220000};
++
++struct bd957x_regulator_data {
++	struct regulator_desc desc;
++	int base_voltage;
 +};
 +
-+static void bd9576_wdt_disable(struct bd9576_wdt_priv *priv)
++static int bd957x_vout34_list_voltage(struct regulator_dev *rdev,
++				      unsigned int selector)
 +{
-+	gpiod_set_value_cansleep(priv->gpiod_en, 0);
++	const struct regulator_desc *desc = rdev->desc;
++	int multiplier = selector & desc->vsel_mask & 0x7f;
++	int tune;
++
++	/* VOUT3 and 4 has 10mV step */
++	tune = multiplier * 10000;
++
++	if (!(selector & 0x80))
++		return desc->fixed_uV - tune;
++
++	return desc->fixed_uV + tune;
 +}
 +
-+static int bd9576_wdt_ping(struct watchdog_device *wdd)
++static int bd957x_list_voltage(struct regulator_dev *rdev,
++			       unsigned int selector)
 +{
-+	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
++	const struct regulator_desc *desc = rdev->desc;
++	int index = selector & desc->vsel_mask & 0x7f;
 +
-+	/* Pulse */
-+	gpiod_set_value_cansleep(priv->gpiod_ping, 1);
-+	gpiod_set_value_cansleep(priv->gpiod_ping, 0);
++	if (!(selector & 0x80))
++		index += desc->n_voltages/2;
 +
-+	return 0;
++	if (index >= desc->n_voltages)
++		return -EINVAL;
++
++	return desc->volt_table[index];
 +}
 +
-+static int bd9576_wdt_start(struct watchdog_device *wdd)
-+{
-+	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
-+
-+	gpiod_set_value_cansleep(priv->gpiod_en, 1);
-+
-+	return bd9576_wdt_ping(wdd);
-+}
-+
-+static int bd9576_wdt_stop(struct watchdog_device *wdd)
-+{
-+	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
-+
-+	if (!priv->always_running)
-+		bd9576_wdt_disable(priv);
-+	else
-+		set_bit(WDOG_HW_RUNNING, &wdd->status);
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_info bd957x_wdt_ident = {
-+	.options	= WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING |
-+			  WDIOF_SETTIMEOUT,
-+	.identity	= "BD957x Watchdog",
++static const struct regulator_ops bd957x_vout34_ops = {
++	.is_enabled = regulator_is_enabled_regmap,
++	.list_voltage = bd957x_vout34_list_voltage,
++	.get_voltage_sel = regulator_get_voltage_sel_regmap,
 +};
 +
-+static const struct watchdog_ops bd957x_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= bd9576_wdt_start,
-+	.stop		= bd9576_wdt_stop,
-+	.ping		= bd9576_wdt_ping,
++static const struct regulator_ops bd957X_vouts1_regulator_ops = {
++	.is_enabled = regulator_is_enabled_regmap,
 +};
 +
-+/* Unit is hundreds of uS */
-+#define FASTNG_MIN 23
++static const struct regulator_ops bd957x_ops = {
++	.is_enabled = regulator_is_enabled_regmap,
++	.list_voltage = bd957x_list_voltage,
++	.get_voltage_sel = regulator_get_voltage_sel_regmap,
++};
 +
-+static int find_closest_fast(int target, int *sel, int *val)
-+{
-+	int i;
-+	int window = FASTNG_MIN;
-+
-+	for (i = 0; i < 8 && window < target; i++)
-+		window <<= 1;
-+
-+	*val = window;
-+	*sel = i;
-+
-+	if (i == 8)
-+		return -EINVAL;
-+
-+	return 0;
-+
-+}
-+
-+static int find_closest_slow_by_fast(int fast_val, int target, int *slowsel)
-+{
-+	int sel;
-+	static const int multipliers[] = {2, 3, 7, 15};
-+
-+	for (sel = 0; sel < ARRAY_SIZE(multipliers) &&
-+	     multipliers[sel] * fast_val < target; sel++)
-+		;
-+
-+	if (sel == ARRAY_SIZE(multipliers))
-+		return -EINVAL;
-+
-+	*slowsel = sel;
-+
-+	return 0;
-+}
-+
-+static int find_closest_slow(int target, int *slow_sel, int *fast_sel)
-+{
-+	static const int multipliers[] = {2, 3, 7, 15};
-+	int i, j;
-+	int val = 0;
-+	int window = FASTNG_MIN;
-+
-+	for (i = 0; i < 8; i++) {
-+		for (j = 0; j < ARRAY_SIZE(multipliers); j++) {
-+			int slow;
-+
-+			slow = window * multipliers[j];
-+			if (slow >= target && (!val || slow < val)) {
-+				val = slow;
-+				*fast_sel = i;
-+				*slow_sel = j;
-+			}
-+		}
-+		window <<= 1;
-+	}
-+	if (!val)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+#define BD957X_WDG_TYPE_WINDOW BIT(5)
-+#define BD957X_WDG_TYPE_SLOW 0
-+#define BD957X_WDG_TYPE_MASK BIT(5)
-+#define BD957X_WDG_NG_RATIO_MASK 0x18
-+#define BD957X_WDG_FASTNG_MASK 0x7
-+
-+static int bd957x_set_wdt_mode(struct bd9576_wdt_priv *priv, int hw_margin,
-+			       int hw_margin_min)
-+{
-+	int ret, fastng, slowng, type, reg, mask;
-+	struct device *dev = priv->dev;
-+
-+	/* convert to 100uS */
-+	hw_margin *= 10;
-+	hw_margin_min *= 10;
-+	if (hw_margin_min) {
-+		int min;
-+
-+		type = BD957X_WDG_TYPE_WINDOW;
-+		dev_dbg(dev, "Setting type WINDOW 0x%x\n", type);
-+		ret = find_closest_fast(hw_margin_min, &fastng, &min);
-+		if (ret) {
-+			dev_err(dev, "bad WDT window for fast timeout\n");
-+			return ret;
-+		}
-+
-+		ret = find_closest_slow_by_fast(min, hw_margin, &slowng);
-+		if (ret) {
-+			dev_err(dev, "bad WDT window\n");
-+			return ret;
-+		}
-+
-+	} else {
-+		type = BD957X_WDG_TYPE_SLOW;
-+		dev_dbg(dev, "Setting type SLOW 0x%x\n", type);
-+		ret = find_closest_slow(hw_margin, &slowng, &fastng);
-+		if (ret) {
-+			dev_err(dev, "bad WDT window\n");
-+			return ret;
-+		}
-+	}
-+
-+	slowng <<= ffs(BD957X_WDG_NG_RATIO_MASK) - 1;
-+	reg = type | slowng | fastng;
-+	mask = BD957X_WDG_TYPE_MASK | BD957X_WDG_NG_RATIO_MASK |
-+	       BD957X_WDG_FASTNG_MASK;
-+	ret = regmap_update_bits(priv->regmap, BD957X_REG_WDT_CONF,
-+				 mask, reg);
-+
-+	return ret;
-+}
-+
-+static int bd9576_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->parent->of_node;
-+	struct bd9576_wdt_priv *priv;
-+	u32 hw_margin, hw_margin_min;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	priv->dev = dev;
-+	priv->regmap = dev_get_regmap(dev->parent, NULL);
-+	if (!priv->regmap) {
-+		dev_err(dev, "No regmap found\n");
-+		return -ENODEV;
-+	}
-+
-+	priv->gpiod_en = devm_gpiod_get_from_of_node(dev, dev->parent->of_node,
-+						     "rohm,watchdog-enable-gpios",
-+						     0, GPIOD_OUT_LOW,
-+						     "watchdog-enable");
-+	if (IS_ERR(priv->gpiod_en)) {
-+		dev_err(dev, "getting watchdog-enable GPIO failed\n");
-+		return PTR_ERR(priv->gpiod_en);
-+	}
-+
-+	priv->gpiod_ping = devm_gpiod_get_from_of_node(dev, dev->parent->of_node,
-+						     "rohm,watchdog-ping-gpios",
-+						     0, GPIOD_OUT_LOW,
-+						     "watchdog-ping");
-+	if (IS_ERR(priv->gpiod_ping)) {
-+		dev_err(dev, "getting watchdog-ping GPIO failed\n");
-+		return PTR_ERR(priv->gpiod_ping);
-+	}
-+
-+	ret = of_property_read_u32(np,
-+				   "hw_margin_ms", &hw_margin);
-+	if (ret) {
-+		if (ret != -EINVAL)
-+			return ret;
-+
-+		hw_margin = BD957X_WDT_DEFAULT_MARGIN;
-+	}
-+
-+	ret = of_property_read_u32(np, "rohm,hw-margin-min-ms", &hw_margin_min);
-+	if (ret == -EINVAL)
-+		hw_margin_min = 0;
-+	else if (ret)
-+		return ret;
-+
-+	ret = bd957x_set_wdt_mode(priv, hw_margin, hw_margin_min);
-+	if (ret)
-+		return ret;
-+
-+	priv->always_running = of_property_read_bool(np,
-+						     "always-running");
-+
-+	watchdog_set_drvdata(&priv->wdd, priv);
-+
-+	priv->wdd.info			= &bd957x_wdt_ident;
-+	priv->wdd.ops			= &bd957x_wdt_ops;
-+	priv->wdd.min_hw_heartbeat_ms	= hw_margin_min;
-+	priv->wdd.max_hw_heartbeat_ms	= hw_margin;
-+	priv->wdd.parent		= dev;
-+	priv->wdd.timeout		= (hw_margin / 2) * 1000;
-+
-+	watchdog_init_timeout(&priv->wdd, 0, dev);
-+	watchdog_set_nowayout(&priv->wdd, nowayout);
-+
-+	watchdog_stop_on_reboot(&priv->wdd);
-+
-+	if (priv->always_running)
-+		bd9576_wdt_start(&priv->wdd);
-+
-+	return devm_watchdog_register_device(dev, &priv->wdd);
-+}
-+
-+static struct platform_driver bd9576_wdt_driver = {
-+	.driver	= {
-+		.name		= "bd9576-wdt",
++static struct bd957x_regulator_data bd9576_regulators[] = {
++	{
++		.desc = {
++			.name = "VD50",
++			.of_match = of_match_ptr("regulator-vd50"),
++			.regulators_node = of_match_ptr("regulators"),
++			.id = BD957X_VD50,
++			.type = REGULATOR_VOLTAGE,
++			.ops = &bd957x_ops,
++			.volt_table = &vout1_volt_table[0],
++			.n_voltages = ARRAY_SIZE(vout1_volt_table),
++			.vsel_reg = BD957X_REG_VOUT1_TUNE,
++			.vsel_mask = BD957X_MASK_VOUT1_TUNE,
++			.enable_reg = BD957X_REG_POW_TRIGGER1,
++			.enable_mask = BD957X_REGULATOR_EN_MASK,
++			.enable_val = BD957X_REGULATOR_DIS_VAL,
++			.enable_is_inverted = true,
++			.owner = THIS_MODULE,
++		},
 +	},
-+	.probe	= bd9576_wdt_probe,
++	{
++		.desc = {
++			.name = "VD18",
++			.of_match = of_match_ptr("regulator-vd18"),
++			.regulators_node = of_match_ptr("regulators"),
++			.id = BD957X_VD18,
++			.type = REGULATOR_VOLTAGE,
++			.ops = &bd957x_ops,
++			.volt_table = &vout2_volt_table[0],
++			.n_voltages = ARRAY_SIZE(vout2_volt_table),
++			.vsel_reg = BD957X_REG_VOUT2_TUNE,
++			.vsel_mask = BD957X_MASK_VOUT2_TUNE,
++			.enable_reg = BD957X_REG_POW_TRIGGER2,
++			.enable_mask = BD957X_REGULATOR_EN_MASK,
++			.enable_val = BD957X_REGULATOR_DIS_VAL,
++			.enable_is_inverted = true,
++			.owner = THIS_MODULE,
++		},
++	},
++	{
++		.desc = {
++			.name = "VDDDR",
++			.of_match = of_match_ptr("regulator-vdddr"),
++			.regulators_node = of_match_ptr("regulators"),
++			.id = BD957X_VDDDR,
++			.ops = &bd957x_vout34_ops,
++			.type = REGULATOR_VOLTAGE,
++			.n_voltages = BD957X_VOUTS34_NUM_VOLT,
++			.vsel_reg = BD957X_REG_VOUT3_TUNE,
++			.vsel_mask = BD957X_MASK_VOUT3_TUNE,
++			.enable_reg = BD957X_REG_POW_TRIGGER3,
++			.enable_mask = BD957X_REGULATOR_EN_MASK,
++			.enable_val = BD957X_REGULATOR_DIS_VAL,
++			.enable_is_inverted = true,
++			.owner = THIS_MODULE,
++		},
++	},
++	{
++		.desc = {
++			.name = "VD10",
++			.of_match = of_match_ptr("regulator-vd10"),
++			.regulators_node = of_match_ptr("regulators"),
++			.id = BD957X_VD10,
++			.ops = &bd957x_vout34_ops,
++			.type = REGULATOR_VOLTAGE,
++			.fixed_uV = BD957X_VOUTS4_BASE_VOLT,
++			.n_voltages = BD957X_VOUTS34_NUM_VOLT,
++			.vsel_reg = BD957X_REG_VOUT4_TUNE,
++			.vsel_mask = BD957X_MASK_VOUT4_TUNE,
++			.enable_reg = BD957X_REG_POW_TRIGGER4,
++			.enable_mask = BD957X_REGULATOR_EN_MASK,
++			.enable_val = BD957X_REGULATOR_DIS_VAL,
++			.enable_is_inverted = true,
++			.owner = THIS_MODULE,
++		},
++	},
++	{
++		.desc = {
++			.name = "VOUTL1",
++			.of_match = of_match_ptr("regulator-voutl1"),
++			.regulators_node = of_match_ptr("regulators"),
++			.id = BD957X_VOUTL1,
++			.ops = &bd957x_ops,
++			.type = REGULATOR_VOLTAGE,
++			.volt_table = &voutl1_volt_table[0],
++			.n_voltages = ARRAY_SIZE(voutl1_volt_table),
++			.vsel_reg = BD957X_REG_VOUTL1_TUNE,
++			.vsel_mask = BD957X_MASK_VOUTL1_TUNE,
++			.enable_reg = BD957X_REG_POW_TRIGGERL1,
++			.enable_mask = BD957X_REGULATOR_EN_MASK,
++			.enable_val = BD957X_REGULATOR_DIS_VAL,
++			.enable_is_inverted = true,
++			.owner = THIS_MODULE,
++		},
++	},
++	{
++		.desc = {
++			.name = "VOUTS1",
++			.of_match = of_match_ptr("regulator-vouts1"),
++			.regulators_node = of_match_ptr("regulators"),
++			.id = BD957X_VOUTS1,
++			.ops = &bd957X_vouts1_regulator_ops,
++			.type = REGULATOR_VOLTAGE,
++			.n_voltages = 1,
++			.fixed_uV = BD957X_VOUTS1_VOLT,
++			.enable_reg = BD957X_REG_POW_TRIGGERS1,
++			.enable_mask = BD957X_REGULATOR_EN_MASK,
++			.enable_val = BD957X_REGULATOR_DIS_VAL,
++			.enable_is_inverted = true,
++			.owner = THIS_MODULE,
++		},
++	},
 +};
 +
-+module_platform_driver(bd9576_wdt_driver);
++static int bd957x_probe(struct platform_device *pdev)
++{
++	struct regmap *regmap;
++	struct regulator_config config = { 0 };
++	int i, err;
++	bool vout_mode, ddr_sel;
++	const struct bd957x_regulator_data *reg_data = &bd9576_regulators[0];
++	unsigned int num_reg_data = ARRAY_SIZE(bd9576_regulators);
++	enum rohm_chip_type chip = platform_get_device_id(pdev)->driver_data;
++
++	regmap = dev_get_regmap(pdev->dev.parent, NULL);
++	if (!regmap) {
++		dev_err(&pdev->dev, "No regmap\n");
++		return -EINVAL;
++	}
++	vout_mode = of_property_read_bool(pdev->dev.parent->of_node,
++					 "rohm,vout1-en-low");
++	if (vout_mode) {
++		struct gpio_desc *en;
++
++		dev_dbg(&pdev->dev, "GPIO controlled mode\n");
++
++		/* VOUT1 enable state judged by VOUT1_EN pin */
++		/* See if we have GPIO defined */
++		en = devm_gpiod_get_from_of_node(&pdev->dev,
++						 pdev->dev.parent->of_node,
++						 "rohm,vout1-en-gpios", 0,
++						 GPIOD_OUT_LOW, "vout1-en");
++		if (!IS_ERR(en)) {
++			/* VOUT1_OPS gpio ctrl */
++			/*
++			 * Regulator core prioritizes the ena_gpio over
++			 * enable/disable/is_enabled callbacks so no need to
++			 * clear them. We can still use same ops
++			 */
++			config.ena_gpiod = en;
++		} else {
++			/*
++			 * In theory it is possible someone wants to set
++			 * vout1-en LOW during OTP loading and set VOUT1 to be
++			 * controlled by GPIO - but control the GPIO from some
++			 * where else than this driver. For that to work we
++			 * should unset the is_enabled callback here.
++			 *
++			 * I believe such case where rohm,vout1-en-low is set
++			 * and vout1-en-gpios is not is likely to be a
++			 * misconfiguration. So let's just err out for now.
++			 */
++			dev_err(&pdev->dev,
++				"Failed to get VOUT1 control GPIO\n");
++			return PTR_ERR(en);
++		}
++	}
++
++	/*
++	 * If more than one PMIC needs to be controlled by same processor then
++	 * allocate the regulator data array here and use bd9576_regulators as
++	 * template. At the moment I see no such use-case so I spare some
++	 * bytes and use bd9576_regulators directly for non-constant configs
++	 * like DDR voltage selection.
++	 */
++	ddr_sel =  of_property_read_bool(pdev->dev.parent->of_node,
++					 "rohm,ddr-sel-low");
++	if (ddr_sel)
++		bd9576_regulators[2].desc.fixed_uV = 1350000;
++	else
++		bd9576_regulators[2].desc.fixed_uV = 1500000;
++
++	switch (chip) {
++	case ROHM_CHIP_TYPE_BD9576:
++		dev_dbg(&pdev->dev, "Found BD9576MUF\n");
++		break;
++	case ROHM_CHIP_TYPE_BD9573:
++		pr_info(&pdev->dev, "Found BD9573MUF\n");
++		break;
++	default:
++		dev_err(&pdev->dev, "Unsupported chip type\n");
++		err = -EINVAL;
++		goto err;
++	}
++
++	config.dev = pdev->dev.parent;
++	config.regmap = regmap;
++
++	for (i = 0; i < num_reg_data; i++) {
++
++		const struct regulator_desc *desc;
++		struct regulator_dev *rdev;
++		const struct bd957x_regulator_data *r;
++
++		r = &reg_data[i];
++		desc = &r->desc;
++
++		rdev = devm_regulator_register(&pdev->dev, desc, &config);
++		if (IS_ERR(rdev)) {
++			dev_err(&pdev->dev,
++				"failed to register %s regulator\n",
++				desc->name);
++			err = PTR_ERR(rdev);
++			goto err;
++		}
++		/*
++		 * Clear the VOUT1 GPIO setting - rest of the regulators do not
++		 * support GPIO control
++		 */
++		config.ena_gpiod = NULL;
++	}
++
++err:
++	return err;
++}
++
++static const struct platform_device_id bd957x_pmic_id[] = {
++	{ "bd9573-pmic", ROHM_CHIP_TYPE_BD9573 },
++	{ "bd9576-pmic", ROHM_CHIP_TYPE_BD9576 },
++	{ },
++};
++MODULE_DEVICE_TABLE(platform, bd957x_pmic_id);
++
++static struct platform_driver bd957x_regulator = {
++	.driver = {
++		.name = "bd957x-pmic",
++	},
++	.probe = bd957x_probe,
++	.id_table = bd957x_pmic_id,
++};
++
++module_platform_driver(bd957x_regulator);
 +
 +MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
-+MODULE_DESCRIPTION("ROHM BD9576/BD9573 Watchdog driver");
++MODULE_DESCRIPTION("ROHM BD9576/BD9573 voltage regulator driver");
 +MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:bd9576-wdt");
++MODULE_ALIAS("platform:bd957x-pmic");
 -- 
 2.21.0
 
