@@ -2,107 +2,131 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3197626AF1B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Sep 2020 23:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF0726D609
+	for <lists+linux-watchdog@lfdr.de>; Thu, 17 Sep 2020 10:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727806AbgIOVEH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 15 Sep 2020 17:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727986AbgIOVEF (ORCPT
+        id S1726234AbgIQICL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 17 Sep 2020 04:02:11 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42653 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726153AbgIQIBp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 15 Sep 2020 17:04:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1747C061797
-        for <linux-watchdog@vger.kernel.org>; Tue, 15 Sep 2020 14:03:54 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kII79-00006G-Jl; Tue, 15 Sep 2020 23:03:47 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kII73-00019G-6I; Tue, 15 Sep 2020 23:03:41 +0200
-Date:   Tue, 15 Sep 2020 23:03:40 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Walle <michael@walle.cc>, Lee Jones <lee.jones@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        Thu, 17 Sep 2020 04:01:45 -0400
+Received: by mail-lj1-f196.google.com with SMTP id k25so1188917ljg.9;
+        Thu, 17 Sep 2020 01:01:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=keP0zGyPB/h0gT6DXrHCTVCk7Uuvvtj1dSD5Jl+0+N0=;
+        b=F6+LE53zPxKw9QWvfldBWUywHIZ9ZrD/f5tCI3QKAk5CUA9LhQFeGcCkz4AtDNY+Yh
+         egEmZa56AdX+TmhCOR2UbSxi0BFXsrR1fXZETvnVwQotRPi39tFyhBk4lyfxnx+FWEYR
+         phxapkLW3GGi7KDXhTlrW1W786LVd0se17LZ5Bxin0UkMI4N/9KiOo3CaCqkVH4OgZlW
+         tBNVgc2z1XkpN9wf3EJtUD74IveA0MHCe/LUBHf3L8lxaeMb4uJe93W1wDEcaOZNjGPj
+         Pt4xi0LAhk1Irs+wTq7miaV9zg/kwqcukwUUVfl+q30NPhM3NP7cSftijQ0J/RFFo0S0
+         o43g==
+X-Gm-Message-State: AOAM530+Uh8h2Hu1+qeuqfoT4/yy2zRT9ODwtuYnRbubBMnW6l3wa1Sq
+        hWJJFMt3MEYGDzHp6MwrZ3Y=
+X-Google-Smtp-Source: ABdhPJyHEOnNIjjQS5xiARJQyMZoabABxUOGIlLqJvGTDlk5JEi4O9myrdmeoyrb3/EjDLQf1QvS4w==
+X-Received: by 2002:a2e:91cd:: with SMTP id u13mr8786118ljg.421.1600329698968;
+        Thu, 17 Sep 2020 01:01:38 -0700 (PDT)
+Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id b72sm5001856lfd.299.2020.09.17.01.01.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 01:01:35 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 11:01:27 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v10 06/13] pwm: add support for sl28cpld PWM controller
-Message-ID: <20200915210340.xg5xwmajufedyltr@pengutronix.de>
-References: <20200914214341.14268-1-michael@walle.cc>
- <20200914214341.14268-7-michael@walle.cc>
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v1 0/6] Support ROHM BD9576MUF and BD9573MUF PMICs
+Message-ID: <cover.1600329307.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cyiwyjcsxpn452wt"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200914214341.14268-7-michael@walle.cc>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-Sender: linux-watchdog-owner@vger.kernel.org
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Initial support for ROHM BD9576MUF and BD9573MUF PMICs.
 
---cyiwyjcsxpn452wt
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+These PMICs are primarily intended to be used to power the R-Car family
+processors. BD9576MUF includes some additional safety features the
+BD9573MUF does not have. This initial version of drivers does not
+utilize these features and for now the SW behaviour is identical.
 
-On Mon, Sep 14, 2020 at 11:43:34PM +0200, Michael Walle wrote:
-> Add support for the PWM controller of the sl28cpld board management
-> controller. This is part of a multi-function device driver.
->=20
-> The controller has one PWM channel and can just generate four distinct
-> frequencies.
->=20
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Acked-by: Thierry Reding <thierry.reding@gmail.com>
+Please note that this version of drivers is only tested on BD9576MUF
+but according to the data-sheets the relevant parts of registers should
+be same so drivers should also work on BD9573MUF.
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+This patch series includes MFD, watchdog and regulator drivers with
+basic functionality such as:
 
-@Lee: From my side taking the patch via your mfd tree is fine.
+- Enabling and pinging the watchdog
+- configuring watchog timeout / window from device-tree
+- reading regulator states/voltages
+- enabling/disabling VOUT1 (VD50) when control mode B is used.
 
-Thanks for your effort to align your patch to my reviews
-Uwe
+This patch series does not bring interrupt support. BD9576MUF and BD9573MUF
+are designed to keep the IRQ line low for whole duration of error
+condition. IRQ can't be 'acked'. So proper IRQ support would require
+some IRQ limiter implementation (delayed unmask?) in order to not hog
+the CPU.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+---
 
---cyiwyjcsxpn452wt
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Matti Vaittinen (6):
+  dt_bindings: mfd: Add ROHM BD9576MUF and BD9573MUF PMICs
+  dt_bindings: regulator: Add ROHM BD9576MUF and BD9573MUF PMICs
+  mfd: Support ROHM BD9576MUF and BD9573MUF
+  wdt: Support wdt on ROHM BD9576MUF and BD9573MUF
+  regulator: Support ROHM BD9576MUF and BD9573MUF
+  MAINTAINERS: Add ROHM BD9576MUF and BD9573MUF drivers
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl9hLCkACgkQwfwUeK3K
-7AmJogf/X2AMslmJpJk0/t52+83yxuLmP8HEPZ/fZLyaE9/xTy0N/O2LeLsp13pK
-Jy7h+pQXkSORq2B/y38E5O+HAYSHquEkhnJKCG6sQk6gFxBH4F4eU14Y3LB7etqM
-8mNonE4LjJoNew2Mv2hBdO+9fTMum16bEe7rcQwBY3B6BYFkmad7ZK9XoDYm4cfB
-V5aLHywUaFB9/CZ2fqXDvtN/47Rf+ejnkrijTYwwu+BGf8i6bxIOUzSTHrrm5KnF
-fZ+GAFFikBriPAKpJvrVA0w3/tOhHpaOhNu405ghN4+aNwieSq0f6OZVP8IgJP3T
-c/G/lstWFGVi0MbWlbzQfVxcrCnBpg==
-=I40k
------END PGP SIGNATURE-----
+ .../bindings/mfd/rohm,bd9576-pmic.yaml        | 129 +++++++
+ .../regulator/rohm,bd9576-regulator.yaml      |  33 ++
+ MAINTAINERS                                   |   4 +
+ drivers/mfd/Kconfig                           |  11 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/rohm-bd9576.c                     | 130 +++++++
+ drivers/regulator/Kconfig                     |  10 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/bd9576-regulator.c          | 337 ++++++++++++++++++
+ drivers/watchdog/Kconfig                      |  13 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/bd9576_wdt.c                 | 295 +++++++++++++++
+ include/linux/mfd/rohm-bd957x.h               |  61 ++++
+ include/linux/mfd/rohm-generic.h              |   2 +
+ 14 files changed, 1028 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.yaml
+ create mode 100644 drivers/mfd/rohm-bd9576.c
+ create mode 100644 drivers/regulator/bd9576-regulator.c
+ create mode 100644 drivers/watchdog/bd9576_wdt.c
+ create mode 100644 include/linux/mfd/rohm-bd957x.h
 
---cyiwyjcsxpn452wt--
+
+base-commit: f4d51dffc6c01a9e94650d95ce0104964f8ae822
+-- 
+2.21.0
+
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
