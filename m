@@ -2,28 +2,28 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CC5271281
-	for <lists+linux-watchdog@lfdr.de>; Sun, 20 Sep 2020 07:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C0C271285
+	for <lists+linux-watchdog@lfdr.de>; Sun, 20 Sep 2020 07:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgITFSl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 20 Sep 2020 01:18:41 -0400
-Received: from mo-csw1515.securemx.jp ([210.130.202.154]:42502 "EHLO
+        id S1726918AbgITFSq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 20 Sep 2020 01:18:46 -0400
+Received: from mo-csw1115.securemx.jp ([210.130.202.157]:52080 "EHLO
         mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726822AbgITFSl (ORCPT
+        with ESMTP id S1726760AbgITFSq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 20 Sep 2020 01:18:41 -0400
-Received: by mo-csw.securemx.jp (mx-mo-csw1515) id 08K5IC49021223; Sun, 20 Sep 2020 14:18:13 +0900
-X-Iguazu-Qid: 34treFjs2vYn3NDKW8
-X-Iguazu-QSIG: v=2; s=0; t=1600579092; q=34treFjs2vYn3NDKW8; m=kdVt313gdTPCEPKRWrUQ25NcT9Va3B1WnUM79RCVMIY=
-Received: from imx12.toshiba.co.jp (imx12.toshiba.co.jp [61.202.160.132])
-        by relay.securemx.jp (mx-mr1510) id 08K5IBR9024943;
+        Sun, 20 Sep 2020 01:18:46 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 08K5IEbY010349; Sun, 20 Sep 2020 14:18:14 +0900
+X-Iguazu-Qid: 2wHHJOhcAsU2A9e1Ug
+X-Iguazu-QSIG: v=2; s=0; t=1600579094; q=2wHHJOhcAsU2A9e1Ug; m=Yh9/o4G2zDlRAkbgJoLLLw9Ur0YO6DS12y7ZRu2U+zQ=
+Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
+        by relay.securemx.jp (mx-mr1113) id 08K5IBZ6029357;
+        Sun, 20 Sep 2020 14:18:12 +0900
+Received: from enc01.toshiba.co.jp ([106.186.93.100])
+        by imx2.toshiba.co.jp  with ESMTP id 08K5IB3B010424;
+        Sun, 20 Sep 2020 14:18:11 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+        by enc01.toshiba.co.jp  with ESMTP id 08K5IBo1005743;
         Sun, 20 Sep 2020 14:18:11 +0900
-Received: from enc02.toshiba.co.jp ([61.202.160.51])
-        by imx12.toshiba.co.jp  with ESMTP id 08K5IAP6027861;
-        Sun, 20 Sep 2020 14:18:10 +0900 (JST)
-Received: from hop101.toshiba.co.jp ([133.199.85.107])
-        by enc02.toshiba.co.jp  with ESMTP id 08K5IAve009984;
-        Sun, 20 Sep 2020 14:18:10 +0900
 From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 To:     Rob Herring <robh+dt@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -32,61 +32,82 @@ Cc:     punit1.agrawal@toshiba.co.jp, yuji2.ishikawa@toshiba.co.jp,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-watchdog@vger.kernel.org,
         Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: [PATCH v3 0/2] Add WDT driver for Toshiba Visconti ARM SoC
-Date:   Sun, 20 Sep 2020 14:18:05 +0900
+Subject: [PATCH v3 1/2] watchdog: bindings: Add binding documentation for Toshiba Visconti watchdog device
+Date:   Sun, 20 Sep 2020 14:18:06 +0900
 X-TSB-HOP: ON
-Message-Id: <20200920051807.288034-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+Message-Id: <20200920051807.288034-2-nobuhiro1.iwamatsu@toshiba.co.jp>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200920051807.288034-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+References: <20200920051807.288034-1-nobuhiro1.iwamatsu@toshiba.co.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+Add documentation for the binding of Toshiba Visconti SoC's watchdog.
 
-This is the PWM driver for Toshiba's ARM SoC, Visconti[0].
-This has not yet been included in Linux kernel, but patches have been posted [1]
-and some patches have been applied [2].
-
-Since this is a SoC driver, this cannot work by itself, but I have confirmed that it
-works with the patch series sent as [1] with DT setting.
-
-Best regards,
-  Nobuhiro
-
-[0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
-[1]: http://lists.infradead.org/pipermail/linux-arm-kernel/2020-September/599678.html
-[2]: http://lists.infradead.org/pipermail/linux-arm-kernel/2020-September/600578.html
-
-watchdog: bindings: Add binding documentation for Toshiba Visconti watchdog device
-  v2 - > v3:
-    - no update
-  v1 - > v2:
-    - no update
-
-watchdog: Add Toshiba Visconti watchdog driver
-  v1 - > v3:
-    - Fix unnecessary split lines
-    - Fix negative value check and handling for visconti_wdt_get_timeleft()
-  v1 - > v2:
-    - Sort incclude alphabetically.
-    - Add negative value check and handling for visconti_wdt_get_timeleft()
-    - Use dev_err_probe() with devm_clk_get()
-
-Nobuhiro Iwamatsu (2):
-  watchdog: bindings: Add binding documentation for Toshiba Visconti
-    watchdog device
-  watchdog: Add Toshiba Visconti watchdog driver
-
- .../watchdog/toshiba,visconti-wdt.yaml        |  49 +++++
- drivers/watchdog/Kconfig                      |   8 +
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/visconti_wdt.c               | 191 ++++++++++++++++++
- 4 files changed, 249 insertions(+)
+Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+---
+ .../watchdog/toshiba,visconti-wdt.yaml        | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
- create mode 100644 drivers/watchdog/visconti_wdt.c
 
+diff --git a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+new file mode 100644
+index 000000000000..721e38fa5a0f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2020 Toshiba Electronic Devices & Storage Corporation
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/watchdog/toshiba,visconti-wdt.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Toshiba Visconti SoCs PIUWDT Watchdog timer
++
++maintainers:
++  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    enum:
++      - toshiba,visconti-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++examples:
++  - |
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        wdt_clk: wdt-clk {
++            compatible = "fixed-clock";
++            clock-frequency = <150000000>;
++            #clock-cells = <0>;
++        };
++
++        watchdog@28330000 {
++            compatible = "toshiba,visconti-wdt";
++            reg = <0 0x28330000 0 0x1000>;
++            clocks = <&wdt_clk>;
++        };
++    };
 -- 
 2.27.0
 
