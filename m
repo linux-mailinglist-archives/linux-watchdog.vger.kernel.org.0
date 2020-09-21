@@ -2,148 +2,98 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E04271E51
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Sep 2020 10:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD47271EA6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Sep 2020 11:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgIUIrU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 21 Sep 2020 04:47:20 -0400
-Received: from mo-csw1116.securemx.jp ([210.130.202.158]:54902 "EHLO
+        id S1726333AbgIUJNK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Sep 2020 05:13:10 -0400
+Received: from mo-csw1116.securemx.jp ([210.130.202.158]:57980 "EHLO
         mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbgIUIrU (ORCPT
+        with ESMTP id S1726334AbgIUJNJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 21 Sep 2020 04:47:20 -0400
-Received: by mo-csw.securemx.jp (mx-mo-csw1116) id 08L8koid019827; Mon, 21 Sep 2020 17:46:50 +0900
-X-Iguazu-Qid: 2wHHUwt3Pz0wvvh0gy
-X-Iguazu-QSIG: v=2; s=0; t=1600678010; q=2wHHUwt3Pz0wvvh0gy; m=0zEXxIcWnOF+gblniTiYWVlNOKvXel4cIO/JZFORh8Y=
+        Mon, 21 Sep 2020 05:13:09 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1116) id 08L9CfMj019274; Mon, 21 Sep 2020 18:12:41 +0900
+X-Iguazu-Qid: 2wHHjJER8YyHUbfWCH
+X-Iguazu-QSIG: v=2; s=0; t=1600679560; q=2wHHjJER8YyHUbfWCH; m=2kg8CbwQ10zgxLgNj1b4DaAvHMEKIpqTs6QU11ddojQ=
 Received: from imx12.toshiba.co.jp (imx12.toshiba.co.jp [61.202.160.132])
-        by relay.securemx.jp (mx-mr1113) id 08L8kmMm014124;
-        Mon, 21 Sep 2020 17:46:48 +0900
+        by relay.securemx.jp (mx-mr1112) id 08L9Ccgt033210;
+        Mon, 21 Sep 2020 18:12:39 +0900
 Received: from enc02.toshiba.co.jp ([61.202.160.51])
-        by imx12.toshiba.co.jp  with ESMTP id 08L8km8I017516;
-        Mon, 21 Sep 2020 17:46:48 +0900 (JST)
+        by imx12.toshiba.co.jp  with ESMTP id 08L9CcPE022062;
+        Mon, 21 Sep 2020 18:12:38 +0900 (JST)
 Received: from hop101.toshiba.co.jp ([133.199.85.107])
-        by enc02.toshiba.co.jp  with ESMTP id 08L8klTe009188;
-        Mon, 21 Sep 2020 17:46:48 +0900
-Date:   Mon, 21 Sep 2020 17:46:46 +0900
+        by enc02.toshiba.co.jp  with ESMTP id 08L9Cc2l016936;
+        Mon, 21 Sep 2020 18:12:38 +0900
 From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-To:     Punit Agrawal <punit1.agrawal@toshiba.co.jp>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, yuji2.ishikawa@toshiba.co.jp,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 2/2] watchdog: Add Toshiba Visconti watchdog driver
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     punit1.agrawal@toshiba.co.jp, yuji2.ishikawa@toshiba.co.jp,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Subject: [PATCH v4 0/2] Add WDT driver for Toshiba Visconti ARM SoC
+Date:   Mon, 21 Sep 2020 18:12:33 +0900
 X-TSB-HOP: ON
-Message-ID: <20200921084646.w4cps33nnxnqxefx@toshiba.co.jp>
-References: <20200920051807.288034-1-nobuhiro1.iwamatsu@toshiba.co.jp>
- <20200920051807.288034-3-nobuhiro1.iwamatsu@toshiba.co.jp>
- <87d02flhfr.fsf@kokedama.swc.toshiba.co.jp>
+Message-Id: <20200921091235.299774-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87d02flhfr.fsf@kokedama.swc.toshiba.co.jp>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 Hi,
 
-Thanks for your review.
+This is the WDT driver for Toshiba's ARM SoC, Visconti[0].
+This has not yet been included in Linux kernel, but patches have been posted [1]
+and some patches have been applied [2].
 
-On Mon, Sep 21, 2020 at 04:25:44PM +0900, Punit Agrawal wrote:
-> Iwamatsu-san,
-> 
-> Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp> writes:
-> 
-> > Add the watchdog driver for Toshiba Visconti series.
-> >
-> > Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> > ---
-> >  drivers/watchdog/Kconfig        |   8 ++
-> >  drivers/watchdog/Makefile       |   1 +
-> >  drivers/watchdog/visconti_wdt.c | 191 ++++++++++++++++++++++++++++++++
-> >  3 files changed, 200 insertions(+)
-> >  create mode 100644 drivers/watchdog/visconti_wdt.c
-> >
-> 
-> [...]
-> 
-> > diff --git a/drivers/watchdog/visconti_wdt.c b/drivers/watchdog/visconti_wdt.c
-> > new file mode 100644
-> > index 000000000000..4a67b9fe9220
-> > --- /dev/null
-> > +++ b/drivers/watchdog/visconti_wdt.c
-> > @@ -0,0 +1,191 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2020 TOSHIBA CORPORATION
-> > + * Copyright (c) 2020 Toshiba Electronic Devices & Storage Corporation
-> > + * Copyright (c) 2020 Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> > + */
-> > +
-> > +#include <linux/clk.h>
-> > +#include <linux/interrupt.h>
-> 
-> interrupt.h doesn't seem to be used. It can be dropped.
-> 
-
-Right. I will remove this.
-
-
-> > +#include <linux/io.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/watchdog.h>
-> > +
-> > +#define WDT_CNT			0x00
-> > +#define WDT_MIN			0x04
-> > +#define WDT_MAX			0x08
-> > +#define WDT_CTL			0x0c
-> > +#define WDT_CMD			0x10
-> > +#define WDT_CMD_CLEAR		0x4352
-> > +#define WDT_CMD_START_STOP	0x5354
-> > +#define WDT_DIV			0x30
-> > +
-> > +#define VISCONTI_WDT_FREQ	2000000 /* 2MHz */
-> > +#define WDT_DEFAULT_TIMEOUT	10U /* in seconds */
-> > +
-> > +static bool nowayout = WATCHDOG_NOWAYOUT;
-> > +module_param(nowayout, bool, 0);
-> > +MODULE_PARM_DESC(
-> > +	nowayout,
-> > +	"Watchdog cannot be stopped once started (default=" __MODULE_STRING(WATCHDOG_NOWAYOUT)")");
-
-
-<snip>
-
-
-> > +module_platform_driver(visconti_wdt_driver);
-> > +
-> > +MODULE_DESCRIPTION("TOSHIBA Visconti Watchdog Driver");
-> > +MODULE_AUTHOR("TOSHIBA ELECTRONIC DEVICES & STORAGE CORPORATION");
-> 
-> The MODULE_AUTHOR() macro is usually used to represent the driver
-> authors. Not sure about using it for the organization name which is
-> already included in the copyright notice. Please drop it or replace it
-> with the author name / email.
-
-Well, it's unnecessary for MODULE_AUTHOR.
-I will drop this.
-
-> 
-> > +MODULE_AUTHOR("Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp");
-> > +MODULE_LICENSE("GPL v2");
-> 
-> Reviewed-by: Punit Agrawal <punit1.agrawal@toshiba.co.jp>
-> 
-
-Thanks!
-
-> Thanks,
-> Punit
-> 
+Since this is a SoC driver, this cannot work by itself, but I have confirmed that it
+works with the patch series sent as [1] with DT setting.
 
 Best regards,
   Nobuhiro
+
+[0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
+[1]: http://lists.infradead.org/pipermail/linux-arm-kernel/2020-September/599678.html
+[2]: http://lists.infradead.org/pipermail/linux-arm-kernel/2020-September/600578.html
+
+watchdog: bindings: Add binding documentation for Toshiba Visconti watchdog device
+  v3 - > v4:
+    - Add timeout-sec property 
+    - Add Reviewed-by: Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+  v2 - > v3:
+    - no update
+  v1 - > v2:
+    - no update
+
+watchdog: Add Toshiba Visconti watchdog driver
+  v3 - > v4:
+    - Remove unnecessary include file.
+    - Drop unnecessary MODULE_AUTHOR.
+    - Add Reviewed-by: Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+  v2 - > v3:
+    - Fix unnecessary split lines
+    - Fix negative value check and handling for visconti_wdt_get_timelef()
+  v1 - > v2:
+    - Sort incclude alphabetically.
+    - Add negative value check and handling for visconti_wdt_get_timelef()
+    - Use dev_err_probe() with devm_clk_get()
+
+Nobuhiro Iwamatsu (2):
+  watchdog: bindings: Add binding documentation for Toshiba Visconti
+    watchdog device
+  watchdog: Add Toshiba Visconti watchdog driver
+
+ .../watchdog/toshiba,visconti-wdt.yaml        |  52 +++++
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/visconti_wdt.c               | 189 ++++++++++++++++++
+ 4 files changed, 250 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+ create mode 100644 drivers/watchdog/visconti_wdt.c
+
+-- 
+2.27.0
+
