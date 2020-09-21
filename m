@@ -2,84 +2,101 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE1627160E
-	for <lists+linux-watchdog@lfdr.de>; Sun, 20 Sep 2020 18:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B151271A9E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Sep 2020 08:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726326AbgITQvO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 20 Sep 2020 12:51:14 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:28606 "EHLO pegase1.c-s.fr"
+        id S1726353AbgIUGD7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Sep 2020 02:03:59 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:38266 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726267AbgITQvO (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 20 Sep 2020 12:51:14 -0400
-X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Sun, 20 Sep 2020 12:51:13 EDT
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BvXnZ292gz9twrG;
-        Sun, 20 Sep 2020 18:18:58 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id Y2LHIYqBMmfM; Sun, 20 Sep 2020 18:18:58 +0200 (CEST)
-Received: from vm-hermes.si.c-s.fr (vm-hermes.si.c-s.fr [192.168.25.253])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BvXnZ182Yz9twrF;
-        Sun, 20 Sep 2020 18:18:58 +0200 (CEST)
-Received: by vm-hermes.si.c-s.fr (Postfix, from userid 33)
-        id 2CDF9650; Sun, 20 Sep 2020 18:21:03 +0200 (CEST)
-Received: from rop17-1_migr-88-124-70-171.fbx.proxad.net
- (rop17-1_migr-88-124-70-171.fbx.proxad.net [88.124.70.171]) by
- messagerie.si.c-s.fr (Horde Framework) with HTTP; Sun, 20 Sep 2020 18:21:03
- +0200
-Date:   Sun, 20 Sep 2020 18:21:03 +0200
-Message-ID: <20200920182103.Horde.CrXBasE1t05E1AKBoy6wCQ1@messagerie.si.c-s.fr>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, wim@linux-watchdog.org
-Subject: Re: [PATCH] watchdog: fix memory leak in error path
-In-Reply-To: <20200920083745.GA1186@amd>
-User-Agent: Internet Messaging Program (IMP) H5 (6.2.3)
-Content-Type: text/plain; charset=UTF-8; format=flowed; DelSp=Yes
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
+        id S1726011AbgIUGD7 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 21 Sep 2020 02:03:59 -0400
+X-Greylist: delayed 435 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 02:03:58 EDT
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 37DE9200621;
+        Mon, 21 Sep 2020 07:56:43 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D16B5200A5A;
+        Mon, 21 Sep 2020 07:56:39 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 5619840309;
+        Mon, 21 Sep 2020 07:56:35 +0200 (CEST)
+From:   Qiang Zhao <qiang.zhao@nxp.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Zhao Qiang <qiang.zhao@nxp.com>
+Subject: [Patch v2 1/3] dt-bindings: rtc: pcf2127: Add bindings for nxp,pcf2127
+Date:   Mon, 21 Sep 2020 13:48:19 +0800
+Message-Id: <20200921054821.26071-1-qiang.zhao@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Pavel Machek <pavel@ucw.cz> a écrit :
+From: Zhao Qiang <qiang.zhao@nxp.com>
 
-> Fix memory leak in error path.
->
-> Signed-off-by: Pavel Machek (CIP) <pavel@denx.de>
->
-> diff --git a/drivers/watchdog/watchdog_dev.c  
-> b/drivers/watchdog/watchdog_dev.c
-> index 6798addabd5a..785270ee337c 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -994,8 +994,10 @@ static int watchdog_cdev_register(struct  
-> watchdog_device *wdd)
->  	wd_data->wdd = wdd;
->  	wdd->wd_data = wd_data;
->
-> -	if (IS_ERR_OR_NULL(watchdog_kworker))
+Add bindings for nxp,pcf2127
 
-Maybe it would be better to move this check before the kzalloc as the  
-wd_data is not needed for doing that check.
+Signed-off-by: Zhao Qiang <qiang.zhao@nxp.com>
+---
+Changes for v2:
+ - modify the format to yaml
+ - add compitable "nxp,pca2129"
 
-Christophe
+ .../devicetree/bindings/rtc/nxp,pcf2127.yaml       | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
 
-> +	if (IS_ERR_OR_NULL(watchdog_kworker)) {
-> +		kfree(wd_data);
->  		return -ENODEV;
-> +	}
->
->  	device_initialize(&wd_data->dev);
->  	wd_data->dev.devt = MKDEV(MAJOR(watchdog_devt), wdd->id);
->
-> --
-> (english) http://www.livejournal.com/~pavelmachek
-> (cesky, pictures)  
-> http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
-
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+new file mode 100644
+index 0000000..226a0b2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/nxp,pcf2127.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: PCF RTCs
++
++maintainers:
++  - Qiang Zhao <qiang.zhao@nxp.com>
++
++allOf:
++  - $ref: "rtc.yaml#"
++
++properties:
++  compatible:
++    enum:
++      - nxp,pcf2127
++      - nxp,pcf2129
++      - nxp,pca2129
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  no-watchdog:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      With this property, the device will not registered as a watchdog device.
++
++  start-year: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++...
+-- 
+2.7.4
 
