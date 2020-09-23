@@ -2,154 +2,185 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A39DA2759A1
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Sep 2020 16:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B87A2759ED
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Sep 2020 16:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgIWOPR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 23 Sep 2020 10:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgIWOPQ (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 23 Sep 2020 10:15:16 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6695AC0613CE;
-        Wed, 23 Sep 2020 07:15:16 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id c18so173160wrm.9;
-        Wed, 23 Sep 2020 07:15:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CCpG6jWr4GZzW1CfQaSnnmzY1h1hQX+z5GfUGphu6mo=;
-        b=WyrzDX2hgEfYU9YEV2oB2Vy6Tk0kl11zvxMh4GY5Zt2ZGXDlcM0bIRvJURSeI8ygz8
-         K7BOrYW6NZZZZ8WNO359lHGhMUBKLp8RYVFb1RA9XE6CqaxCBH28mpQ9VlNnCEYpp3oB
-         YaiQ5Pj3XC5d+3qWk61xf4Xl2LYrqI3P+6YmLSDhln3QT1ToaJ/YKV/EMYVvYoFY1K/n
-         CYQfJkBIqbqGPooaLBU3l8dRSPFw3jl+SdGXFuDyljkKofyPmTaHKCbPTQL6hm3orrk/
-         wFBw5Rfz51qnFjDZ6W5wZswA+McLUuOlY4QMfhiXajTRVEeG7MBrNA9HnrmSlEwbsek2
-         V/pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CCpG6jWr4GZzW1CfQaSnnmzY1h1hQX+z5GfUGphu6mo=;
-        b=j9SmZ4sBiSMf4g2btvHev7WDIpJIdRN0dhxjbWsGERL+LJBZqQ20WrVptNvv6jf6yv
-         IJeBhVu8iP2usmmWCFiA8Qtlo1z/L894jKg8nNbhJj5/eqbPDv193PCBiqFiy5YjxxcF
-         b7ns7unDr0lv2xpiuwcjY4az/hJywusbujDdo1UXBRFvb6EcU8NXHqhg3W/spbN++3jF
-         gf/nLM6JMBLNuc3SJIGOaaJ+yxDHdF7wDvhXTeOUi4uofBRd8P93q7vPJzVXhhHbW9hT
-         7KKjeOG2Ik0wmd1VXHFlgMiLukLNOqEuEtUxEpHfVkbxBWQx7h/CYJeCnSX/0OuafBvP
-         B4fQ==
-X-Gm-Message-State: AOAM533fqfkRPjCJQhTEiWnkgWxSeb9GvLKWoVpPPTmMOdVNYYPqvQPo
-        HZKGdMiQrJbnZ9hbmnVBm9o=
-X-Google-Smtp-Source: ABdhPJxE/2vXIiL4kN9hTjYGmAYGf/ntfPr0bNkLM/DKOX5sQazw3tKXKwd9st2bXep+5i7oBXEVXA==
-X-Received: by 2002:a5d:568d:: with SMTP id f13mr1056599wrv.303.1600870515112;
-        Wed, 23 Sep 2020 07:15:15 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id o4sm29300893wru.55.2020.09.23.07.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2020 07:15:13 -0700 (PDT)
-Date:   Wed, 23 Sep 2020 16:15:11 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
-        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3 06/19] dt-bindings: pwm: imx-pwm: Add i.MX 8M
- compatibles
-Message-ID: <20200923141511.GF1848911@ulmo>
-References: <20200825193536.7332-1-krzk@kernel.org>
- <20200825193536.7332-7-krzk@kernel.org>
- <20200923115201.GD1846003@ulmo>
- <CAJKOXPcZuonCBK1Fc9r=rHzOL02MArrsE=R4x1tWGqov2nP0fA@mail.gmail.com>
+        id S1726574AbgIWO1Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 23 Sep 2020 10:27:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34646 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726504AbgIWO1Y (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 23 Sep 2020 10:27:24 -0400
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 751E323772;
+        Wed, 23 Sep 2020 14:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600871243;
+        bh=pi/+5nDRkcxfTm2jn5nOSauI+FsVqWbO30qcgFTG248=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mY17aq3dJI8aIpX/xcAMQycrUYG36+II4NOhXrSfYdD9Do6twOn4mD30lVEoxR/AF
+         DqbvappkTUlgztcXes3gBIQkZCa/HQ5aIJJqJH+JR8REIpsSh0Fs5q8LUo6AygLEG/
+         NUqgTnrfDam68YrccAYdrrqNhj4kfjMFYpR7tIQI=
+Received: by mail-oo1-f54.google.com with SMTP id c4so2606372oou.6;
+        Wed, 23 Sep 2020 07:27:23 -0700 (PDT)
+X-Gm-Message-State: AOAM5333G262marxkyyy++X6AbPwhLdbybn5r6Yq6A656FMnZYIRM6Co
+        /HegxRMNN3JPzyZLzCqst5GcIRtbeWUvmKyX+A==
+X-Google-Smtp-Source: ABdhPJy1wjB10AtEoz9fkxnAfi3ktZI/HbwPlqScoSgThEMaJ2Toc7AyO+mQAkYcSF9cm7R/tmKMhy71RM1nF7v6pfc=
+X-Received: by 2002:a4a:d306:: with SMTP id g6mr7311oos.25.1600871242745; Wed,
+ 23 Sep 2020 07:27:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SxgehGEc6vB0cZwN"
-Content-Disposition: inline
-In-Reply-To: <CAJKOXPcZuonCBK1Fc9r=rHzOL02MArrsE=R4x1tWGqov2nP0fA@mail.gmail.com>
-User-Agent: Mutt/1.14.7 (2020-08-29)
+References: <cover.1600329307.git.matti.vaittinen@fi.rohmeurope.com>
+ <434579d4cddf891f8fa0f50a152c098b113fa2fb.1600329307.git.matti.vaittinen@fi.rohmeurope.com>
+ <20200918172834.GA3819336@bogus> <06961c1a52e7ed08b970745a64705df83bceeb31.camel@fi.rohmeurope.com>
+In-Reply-To: <06961c1a52e7ed08b970745a64705df83bceeb31.camel@fi.rohmeurope.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 23 Sep 2020 08:27:11 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLj-JqnfH7eh=sR0=izK5NRBusXmwGiuDmX89cn3KA2+A@mail.gmail.com>
+Message-ID: <CAL_JsqLj-JqnfH7eh=sR0=izK5NRBusXmwGiuDmX89cn3KA2+A@mail.gmail.com>
+Subject: Re: [PATCH v1 1/6] dt_bindings: mfd: Add ROHM BD9576MUF and BD9573MUF PMICs
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
---SxgehGEc6vB0cZwN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Sep 23, 2020 at 04:08:53PM +0200, Krzysztof Kozlowski wrote:
-> On Wed, 23 Sep 2020 at 13:52, Thierry Reding <thierry.reding@gmail.com> w=
-rote:
-> >
-> > On Tue, Aug 25, 2020 at 09:35:23PM +0200, Krzysztof Kozlowski wrote:
-> > > DTSes with new i.MX 8M SoCs introduce their own compatibles so add th=
-em
-> > > to fix dtbs_check warnings like:
+On Sat, Sep 19, 2020 at 5:46 AM Vaittinen, Matti
+<Matti.Vaittinen@fi.rohmeurope.com> wrote:
+>
+> Thanks Rob for taking a look at this!
+>
+> On Fri, 2020-09-18 at 11:28 -0600, Rob Herring wrote:
+> > On Thu, Sep 17, 2020 at 11:01:52AM +0300, Matti Vaittinen wrote:
+> > > Add bindings for ROHM BD9576MUF and BD9573MUF PMICs. These
+> > > PMICs are primarily intended to be used to power the R-Car series
+> > > processors. They provide 6 power outputs, safety features and a
+> > > watchdog with two functional modes.
 > > >
-> > >   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
-> > >     compatible:0: 'fsl,imx8mm-pwm' is not one of ['fsl,imx1-pwm', 'fs=
-l,imx27-pwm']
-> > >     From schema: Documentation/devicetree/bindings/pwm/imx-pwm.yaml
-> > >
-> > >   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
-> > >     compatible: ['fsl,imx8mm-pwm', 'fsl,imx27-pwm'] is too long
-> > >
-> > >   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
-> > >     compatible: Additional items are not allowed ('fsl,imx27-pwm' was=
- unexpected)
-> > >
-> > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 > > > ---
-> > >  Documentation/devicetree/bindings/pwm/imx-pwm.yaml | 14 +++++++++++-=
---
-> > >  1 file changed, 11 insertions(+), 3 deletions(-)
+> > >  .../bindings/mfd/rohm,bd9576-pmic.yaml        | 129
+> > > ++++++++++++++++++
+> > >  1 file changed, 129 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd9576-
+> > > pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd9576-
+> > > pmic.yaml
+> > > new file mode 100644
+> > > index 000000000000..f17d4d621585
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+> > > @@ -0,0 +1,129 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/mfd/rohm,bd9576-pmic.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: ROHM BD9576MUF and BD9573MUF Power Management Integrated
+> > > Circuit bindings
+> > > +
+> > > +maintainers:
+> > > +  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > > +
+> > > +description: |
+> > > +  BD9576MUF and BD9573MUF are power management ICs primarily
+> > > intended for
+> > > +  powering the R-Car series processors.
+> > > +  The IC provides 6 power outputs with configurable sequencing and
+> > > safety
+> > > +  monitoring. A watchdog logic with slow ping/windowed modes is
+> > > also included.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - rohm,bd9576
+> > > +      - rohm,bd9573
+> > > +
+> > > +  reg:
+> > > +    description:
+> > > +      I2C slave address.
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  rohm,vout1-en-low:
+> > > +    description:
+> > > +      BD9576 and BD9573 VOUT1 regulator enable state can be
+> > > individually
+> > > +      controlled by a GPIO. This is dictated by state of vout1-en
+> > > pin during
+> > > +      the PMIC startup. If vout1-en is LOW during PMIC startup
+> > > then the VOUT1
+> > > +      enable sate is controlled via this pin. Set this property if
+> > > vout1-en
+> > > +      is wired to be down at PMIC start-up.
+> > > +    type: boolean
+> > > +
+> > > +  rohm,vout1-en-gpios:
+> > > +    description:
+> > > +      GPIO specifier to specify the GPIO connected to vout1-en for
+> > > vout1 ON/OFF
+> > > +      state control.
+> > > +    maxItems: 1
+> > > +
+> > > +  rohm,ddr-sel-low:
+> > > +    description:
+> > > +      The BD9576 and BD9573 output voltage for DDR can be selected
+> > > by setting
+> > > +      the ddr-sel pin low or high. Set this property if ddr-sel is
+> > > grounded.
+> > > +    type: boolean
+> > > +
+> > > +  rohm,watchdog-enable-gpios:
+> > > +    description: The GPIO line used to enable the watchdog.
+> > > +    maxItems: 1
+> > > +
+> > > +  rohm,watchdog-ping-gpios:
+> > > +    description: The GPIO line used to ping the watchdog.
+> > > +    maxItems: 1
+> > > +
+> > > +  hw_margin_ms:
 > >
-> > Applied, thanks.
->=20
-> Thanks Thierry, but this was already picked up by Rob into DT tree.
+> > Needs a vendor prefix.
+> >
+> > s/_/-/
+> >
+> > > +    minimum: 4
+> > > +    maximum: 4416
+> > > +    description: Watchog timeout in milliseconds
+> >
+> > Maybe the words in the description should be in the property name as
+> > I don't see how 'h/w margin' relates to 'watchdog timeout'.
+>
+> The hw_margin_ms is an existing property. As I wrote to Guenter:
+> "hw_margin_ms" is an existing binding for specifying the maximum TMO in
+> HW (if I understood it correctly). (It is used at least by the generig
+> GPIO watchdog) I thought it's better to not invent a new vendor
+> specific binding when we have a generic one.
+>
+> https://elixir.bootlin.com/linux/v5.9-rc2/source/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
 
-I hadn't seen any email and since Rob had given a reviewed-by I assumed
-this was supposed to be picked up into subsystem trees. I'll drop it
-again.
+That one is odd and I haven't found an actual user of it. It would
+make more sense as a collection of properties devices could use rather
+than a virtual device.
 
-Thierry
+I think I'd do something like 'watchdog-ping-time-msec' that can be
+either '<min> <max>' or '<max>'.
 
---SxgehGEc6vB0cZwN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9rWG8ACgkQ3SOs138+
-s6FYZA/+J5rgjcPTqcNSA6/9QwG56DhiJV6FV2eQhf5UbL1l2RFHvVGpAnZxjxM7
-UFP1CVWZIFEYJlXCAjEjHeKrz8wz/M8+j2UYqzCnew7XwH2QOKvJRiQYyjMzJyLh
-Z9AI7zgkZXqz0xH+WIjkynmWnoz1jZw2Ct331f2jaPHmkD4B2CURyhkVtVNhW0Kr
-5Vq8t7NQ7tqQjh2+q4cxf6ge1zc1J2PCNNdc6MDdTHFTBhpqGp4IF7Sx7aMq79OT
-/JtEp0TZohhPUXtkDl1ZghDzryf9pksNOf+HwgpgrbrbZl5tP0y2K3TL+9uIXjfT
-6clna7VIx9ofQpnAeL1RzJMGM93laLOpvdcAj02cgUcNcOU3Bj3oVGBx076M8WyA
-i58nto1/wlQEcZzlMcQigyNCFWu6nhXjebM5U9WdEWAm9xkGv4OSbHQw7ZV7TM8b
-JI334Uvholn1f99bt3JosCAOYTV/88sn4Px8SAxvwGy6EttBPKdnUvBwZdk86xTa
-eKbDtGkvF2pFAgaO7ylV2ADQnVW+A3JEXF+RbT/u5jiFiHUEz8XncHiJmB+e4xrf
-4W3V2QqbWkF6y7BQ+OaNYk98m5dkNE/e7kSCdXcmjjJwazDunejXvQvnNDr70LIP
-oNqvMzEtfA0q5K2Fee3TyE31GBycFO3i6PjxrIad0PsInjVV2Ok=
-=J7v2
------END PGP SIGNATURE-----
-
---SxgehGEc6vB0cZwN--
+Rob
