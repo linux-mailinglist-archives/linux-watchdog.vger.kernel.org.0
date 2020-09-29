@@ -2,106 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB35027BF0A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Sep 2020 10:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13E127D1E3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Sep 2020 16:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727620AbgI2IRw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 29 Sep 2020 04:17:52 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:46818 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgI2IRv (ORCPT
+        id S1729721AbgI2OxW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 29 Sep 2020 10:53:22 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:44468 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727328AbgI2OxW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 29 Sep 2020 04:17:51 -0400
-Received: by mail-lf1-f68.google.com with SMTP id b22so4424963lfs.13;
-        Tue, 29 Sep 2020 01:17:50 -0700 (PDT)
+        Tue, 29 Sep 2020 10:53:22 -0400
+Received: by mail-ot1-f66.google.com with SMTP id a2so4671510otr.11;
+        Tue, 29 Sep 2020 07:53:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Z2cMPrnQf5Z9BUMQYWdci5L6icLIhq49YJLAXZRSXl0=;
-        b=ojIA5V4QGX0i4CNS04m8SotsjZn4mxljmcXssaWN/0YHDzjYu5cvrv71jeo5blhAdN
-         zpudWBvW7FC4xwWk5L7B+qRHiI42o89Ny0uDtm36aogD7y1cNHsPYYrZCEjfFPJokeiF
-         vE9JMWn+y7ao17IBaZjBrp4V93Cg3ubeCIdVER2IiyaRRJLsPzTrcEE3pR6HkOP51hxw
-         jbrTpuHmoxt4mWxjZhqZB8K0kWwC6UItuSfND2k0GpeTpn7LS3qMJRepLlLIF4AHjs6y
-         vKx+2LRfSOsIqbOdhrViiwQyUdp3SkoNV9ncJXOx+x8lpMs0nigu7vYB0pCGZiu6qTcG
-         jUIw==
-X-Gm-Message-State: AOAM533z3OCmrALllTizBitLk8KuoSre5vrZel3KSY1XtJhAVY41ynzf
-        HuYEFX34Y62oOemQiD8xwd4=
-X-Google-Smtp-Source: ABdhPJyHNR55E4rSPl+IOgewnxKYkupeTBKiBvuirANjU2i7DA2BvJdl4CxAulqo/V13DP5/sVX06Q==
-X-Received: by 2002:a19:8b56:: with SMTP id n83mr727271lfd.235.1601367469377;
-        Tue, 29 Sep 2020 01:17:49 -0700 (PDT)
-Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id r7sm287958ljd.57.2020.09.29.01.17.48
+         :mime-version:content-disposition:in-reply-to;
+        bh=Rvja7UAx5LjxNIXrk+u593vmL/usEajExGbX7/fKE+0=;
+        b=mZYAmYI+iiHpohdXmoGTiWpvtqvMduyMxeigWa+R/XPBtFCnOjx7DF0RfLptL5FvIR
+         oAnIOtAcNx9Prg3M5NEC0k2Jk6lQ74r9b4pGXtuAbgEwpcJ8BHNc9DVwIMZjyCP8v9gd
+         CziLEVCGDXf/aJ+3DUxSwoU/KDfgajpIoxCl3r/cF0A8yyPMJQLNIkPjPirsoFL22gwi
+         1UNFvJqgZX5WXneBA/C7TwYgTEwkww4sAcAv3MXzdIIKdf6szp8kpLJRci/b5Odleqp8
+         mscjhW9pgvo+sMg0vSGpJlCGtCI9TsuzIcTAi2wRhsGuU+ULGfakZp8bDirbMqiW+J7Z
+         YVBA==
+X-Gm-Message-State: AOAM533ofMNhogC4sse2rnJBv7IZYJuTG+eoAm4TPbkR/uLSQW/0AryG
+        UeqRzrR/9nG5aqz5zGmAew==
+X-Google-Smtp-Source: ABdhPJwIET4C0nxWL8gE1hkKLCvBgCVpPpnIwFGNqDoKTJttXb4uXp3Kaa0d9N2tBjqVkMfIbkFy6g==
+X-Received: by 2002:a05:6830:110b:: with SMTP id w11mr2859417otq.109.1601391201417;
+        Tue, 29 Sep 2020 07:53:21 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id p1sm1036861otq.7.2020.09.29.07.53.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 01:17:48 -0700 (PDT)
-Date:   Tue, 29 Sep 2020 11:17:36 +0300
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     mazziesaccount@gmail.com, matti.vaittinen@fi.rohmeurope.com
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v3 4/4] MAINTAINERS: Add ROHM BD9576MUF and BD9573MUF drivers
-Message-ID: <4e81f30a0f2f1ddd6d9890da57e1dead51bd5847.1601366711.git.matti.vaittinen@fi.rohmeurope.com>
+        Tue, 29 Sep 2020 07:53:20 -0700 (PDT)
+Received: (nullmailer pid 575408 invoked by uid 1000);
+        Tue, 29 Sep 2020 14:53:19 -0000
+Date:   Tue, 29 Sep 2020 09:53:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     devicetree@vger.kernel.org, linux-power@fi.rohmeurope.com,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, mazziesaccount@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH v3 1/4] dt_bindings: mfd: Add ROHM BD9576MUF and
+ BD9573MUF PMICs
+Message-ID: <20200929145319.GA575227@bogus>
 References: <cover.1601366711.git.matti.vaittinen@fi.rohmeurope.com>
+ <be3518afb2a54ff02ca15e63cac21c99bcdfaef6.1601366711.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1601366711.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <be3518afb2a54ff02ca15e63cac21c99bcdfaef6.1601366711.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add maintainer entries for ROHM BD9576MUF and ROHM BD9573MUF drivers.
-MFD, regulator and watchdog drivers were introduced for these PMICs.
+On Tue, 29 Sep 2020 11:15:31 +0300, Matti Vaittinen wrote:
+> Add bindings for ROHM BD9576MUF and BD9573MUF PMICs. These
+> PMICs are primarily intended to be used to power the R-Car series
+> processors. They provide 6 power outputs, safety features and a
+> watchdog with two functional modes.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> ---
+> 
+> Changes from v2:
+>   - Replace bindings hw_margin_ms and rohm,hw-margin-min-ms with
+>     rohm,hw-timeout-ms
+> 
+>  .../bindings/mfd/rohm,bd9576-pmic.yaml        | 123 ++++++++++++++++++
+>  1 file changed, 123 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+> 
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b5cfab015bd6..630a23fc84f0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14956,16 +14956,20 @@ F:	drivers/gpio/gpio-bd71828.c
- F:	drivers/mfd/rohm-bd70528.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
-+F:	drivers/mfd/rohm-bd9576.c
- F:	drivers/power/supply/bd70528-charger.c
- F:	drivers/regulator/bd70528-regulator.c
- F:	drivers/regulator/bd71828-regulator.c
- F:	drivers/regulator/bd718x7-regulator.c
-+F:	drivers/regulator/bd9576-regulator.c
- F:	drivers/regulator/rohm-regulator.c
- F:	drivers/rtc/rtc-bd70528.c
- F:	drivers/watchdog/bd70528_wdt.c
-+F:	drivers/watchdog/bd9576_wdt.c
- F:	include/linux/mfd/rohm-bd70528.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
-+F:	include/linux/mfd/rohm-bd957x.h
- F:	include/linux/mfd/rohm-generic.h
- F:	include/linux/mfd/rohm-shared.h
- 
--- 
-2.21.0
-
-
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
+Reviewed-by: Rob Herring <robh@kernel.org>
