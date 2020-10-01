@@ -2,442 +2,321 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BF02802C4
-	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Oct 2020 17:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AFB280617
+	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Oct 2020 20:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732031AbgJAPa7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 1 Oct 2020 11:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S1730070AbgJASAl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 1 Oct 2020 14:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730534AbgJAPa6 (ORCPT
+        with ESMTP id S1730029AbgJASAl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 1 Oct 2020 11:30:58 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7B8C0613D0;
-        Thu,  1 Oct 2020 08:30:58 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id c13so5986264oiy.6;
-        Thu, 01 Oct 2020 08:30:58 -0700 (PDT)
+        Thu, 1 Oct 2020 14:00:41 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3013BC0613D0;
+        Thu,  1 Oct 2020 11:00:41 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id a2so6331930otr.11;
+        Thu, 01 Oct 2020 11:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=nu+IG8+xs9NBtVzK0DoIb79yQ8taGywj0u0wfvRaj9M=;
-        b=V1HvkiVYtvlpmNaRYSioPKqkn9zOz7FZnsVrYErtULlOT9ZBE2NiOx0USL3MWqpS1M
-         z66wHyGy2E7xsPayKmX/8HhWctZGTm38XmH/vvoespbVTEmns9bxs8mbjNnzp83kQSJR
-         o0g7TnSM6Y2ncOi9jwHNcs4V29Y8YCI8b0tdLxIUVokWJ2EpPGqJ5/wYb7EZh+yPavnL
-         QRrBkLEtf13QfzdmWSJknuxHLBmjgmpzad9cCnviYtiPxMRIi7R8+cLlAseiL7cNRoTL
-         YIySFwpzuV/+KeGr8m+lRXjnodBLVSxlVIOUOh6Aa20vFowlpoYpo/Tfbj1yKcbKK8h0
-         U7Ow==
+        bh=DAwMxt1zwqKOmcq07DnBKidKaMWrYeQpOexh+LQ6J2I=;
+        b=LozjD72prjjhYckpLatd6YD+87bDjNZXqFMOqiDqqkunDwcnnxw6K+vklpdWiK8Ez+
+         uZTzI7AdMW0PiwQ81XfAuOEp8wf1YcOjYY3GA0nqUFCpTQFAx2elIRpKpMMfUh0/bymf
+         eqcliXnp2ZQS0/TfvE3jig1B+UQ38K7OBsLbbGjLMoy/0VRl0bVUVdPG6zKyT9/HIVMI
+         TNzpIerGsHZ3PqpEXz1tBgYQXYc2uCWfZezSSgl+GjFxSwY0lipSBYRtdTqtgtvThyuS
+         ChekNiQ4dgE1dgN1+nCmIHVhXFfuwrK9TFC+u/Aw2qzke12ezWd/913h0i5HdARt4b0g
+         k98Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nu+IG8+xs9NBtVzK0DoIb79yQ8taGywj0u0wfvRaj9M=;
-        b=GysrN2OjNs5+ziwfVgj4jJLAj//8AYrB6DkkLDTEjveDyi8DBsUaMIADpDOrvq3qlY
-         I6QfiwkN3UteV08tst4+ePGVryX9RNH7vdOHBs0hlzZ4NyhUAI/B9FbWliK7qPO6KTK9
-         Cr3uZP9RELr2L1e0YZ8fluvWN71iEWlPtifWRmU8ZVUzgPIMhVJsVzN6AGBo1FkX+/xQ
-         ZLIr/aejHCAxAaALUDSWAu/Ft8iv3LC3D7iLvaPu/KKhlQ/VFdOtUW08TsEY3TMM8yJ+
-         NLDkYYGc0JX5oT5ZQo2/zs2J8GhVtiVpNgsjdu/lpnyNBMV14AskmwMaR3Y+33NRfn5X
-         N4rQ==
-X-Gm-Message-State: AOAM532YbybLl7PZC3wwfBXn0chEd5wkBl6c53FvJBMFavtqAT/G4L+u
-        2PeU4xVwZesNmKt4RGopqds=
-X-Google-Smtp-Source: ABdhPJwRZ+zBSMpyMEDrUl7Tiol200jnK1YMLzwcxjUUu2zLLJFHw3TQkaBwasGY4V73dJtFloRxrw==
-X-Received: by 2002:a54:438f:: with SMTP id u15mr328201oiv.162.1601566257707;
-        Thu, 01 Oct 2020 08:30:57 -0700 (PDT)
+        bh=DAwMxt1zwqKOmcq07DnBKidKaMWrYeQpOexh+LQ6J2I=;
+        b=f2gWceDn39VltujCUKq6UDbR4afdDj0yKGUEPYCtTHyTCFLrXzDn83r/WZ3OvrFlYU
+         dDgaibQH8tj9gIqK8U8VGYfUe8r1VtvB9SFkbr6n6+37Gw8vCho5oWiVGaWrwH2KKUd4
+         tkNlw8S6Ht/0FJTUU9xNrc/acNzZq86rwh0sX8j7QH4JOVLsBLy2Fa3NswzT8nG/hPYh
+         SH36dWJE+LPUGVvfssZUdZ3LgpGTSTCbgCXJbyhkN/PX/Bs6O2u5TmJ0/3EWfO6ukKT/
+         Ibvq+2IUSH9sJAjzMFhBXCrkewgq2U1QeD/tV3WLetcHcxGCiGQ5iyy+7D97tV5eOo+q
+         Oz+Q==
+X-Gm-Message-State: AOAM531r6HbEntOsIhAn/d6tvbMCmlTPkhsHdasUnDxDRYvRzpdn/FMH
+        va/ybntiw9EV/hKMIaWj78g8yu2hNh8=
+X-Google-Smtp-Source: ABdhPJy/x0MO/e4cQ+i6VAHWaBarxwEUqFnmPbom4NmlOSQUGJoponAj2pxCir+arFiv/vKer66ZwA==
+X-Received: by 2002:a9d:8ca:: with SMTP id 68mr5566801otf.163.1601575240513;
+        Thu, 01 Oct 2020 11:00:40 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t5sm1247099otp.76.2020.10.01.08.30.56
+        by smtp.gmail.com with ESMTPSA id m3sm1447528otc.72.2020.10.01.11.00.39
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 01 Oct 2020 08:30:57 -0700 (PDT)
+        Thu, 01 Oct 2020 11:00:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 1 Oct 2020 08:30:56 -0700
+Date:   Thu, 1 Oct 2020 11:00:38 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-power@fi.rohmeurope.com, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] wdt: Support wdt on ROHM BD9576MUF and BD9573MUF
-Message-ID: <20201001153056.GD64648@roeck-us.net>
-References: <cover.1601366711.git.matti.vaittinen@fi.rohmeurope.com>
- <ce789c2dba0613edfd7398ee7f201ba89428402a.1601366711.git.matti.vaittinen@fi.rohmeurope.com>
+        punit1.agrawal@toshiba.co.jp, yuji2.ishikawa@toshiba.co.jp,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] watchdog: Add Toshiba Visconti watchdog driver
+Message-ID: <20201001180038.GA102106@roeck-us.net>
+References: <20200921091235.299774-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+ <20200921091235.299774-3-nobuhiro1.iwamatsu@toshiba.co.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ce789c2dba0613edfd7398ee7f201ba89428402a.1601366711.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <20200921091235.299774-3-nobuhiro1.iwamatsu@toshiba.co.jp>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 11:17:07AM +0300, Matti Vaittinen wrote:
-> Add Watchdog support for ROHM BD9576MUF and BD9573MUF PMICs which are
-> mainly used to power the R-Car series processors. The watchdog is
-> pinged using a GPIO and enabled using another GPIO. Additionally
-> watchdog time-out can be configured to HW prior starting the watchdog.
-> Watchdog timeout can be configured to detect only delayed ping or in
-> a window mode where also too fast pings are detected.
+On Mon, Sep 21, 2020 at 06:12:35PM +0900, Nobuhiro Iwamatsu wrote:
+> Add the watchdog driver for Toshiba Visconti series.
 > 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> Reviewed-by: Punit Agrawal <punit1.agrawal@toshiba.co.jp>
 > ---
-> 
-> Changes from v2:
->   - Replace bindings hw_margin_ms and rohm,hw-margin-min-ms with
->     rohm,hw-timeout-ms
-> 
->  drivers/watchdog/Kconfig      |  13 ++
->  drivers/watchdog/Makefile     |   1 +
->  drivers/watchdog/bd9576_wdt.c | 290 ++++++++++++++++++++++++++++++++++
->  3 files changed, 304 insertions(+)
->  create mode 100644 drivers/watchdog/bd9576_wdt.c
+>  drivers/watchdog/Kconfig        |   8 ++
+>  drivers/watchdog/Makefile       |   1 +
+>  drivers/watchdog/visconti_wdt.c | 189 ++++++++++++++++++++++++++++++++
+>  3 files changed, 198 insertions(+)
+>  create mode 100644 drivers/watchdog/visconti_wdt.c
 > 
 > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index ab7aad5a1e69..d042a517a946 100644
+> index ab7aad5a1e69..0cb078ce5e9d 100644
 > --- a/drivers/watchdog/Kconfig
 > +++ b/drivers/watchdog/Kconfig
-> @@ -172,6 +172,19 @@ config BD70528_WATCHDOG
->  	  Alternatively say M to compile the driver as a module,
->  	  which will be called bd70528_wdt.
+> @@ -1004,6 +1004,14 @@ config PM8916_WATCHDOG
+>  	  Say Y here to include support watchdog timer embedded into the
+>  	  pm8916 module.
 >  
-> +config BD957XMUF_WATCHDOG
-> +	tristate "ROHM BD9576MUF and BD9573MUF PMIC Watchdog"
-> +	depends on MFD_ROHM_BD957XMUF
+> +config VISCONTI_WATCHDOG
+> +	tristate "Toshiba Visconti series watchdog support"
+> +	depends on ARCH_VISCONTI || COMPILE_TEST
 > +	select WATCHDOG_CORE
 > +	help
-> +	  Support for the watchdog in the ROHM BD9576 and BD9573 PMICs.
-> +	  These PMIC ICs contain watchdog block which can be configured
-> +	  to toggle reset line if SoC fails to ping watchdog via GPIO.
+> +	  Say Y here to include support for the watchdog timer in Toshiba
+> +	  Visconti SoCs.
 > +
-> +	  Say Y here to include support for the ROHM BD9576 or BD9573
-> +	  watchdog. Alternatively say M to compile the driver as a module,
-> +	  which will be called bd9576_wdt.
-> +
->  config DA9052_WATCHDOG
->  	tristate "Dialog DA9052 Watchdog"
->  	depends on PMIC_DA9052 || COMPILE_TEST
+>  # X86 (i386 + ia64 + x86_64) Architecture
+>  
+>  config ACQUIRE_WDT
 > diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 97bed1d3d97c..14d75f98e3df 100644
+> index 97bed1d3d97c..a7747e76fd29 100644
 > --- a/drivers/watchdog/Makefile
 > +++ b/drivers/watchdog/Makefile
-> @@ -208,6 +208,7 @@ obj-$(CONFIG_XEN_WDT) += xen_wdt.o
+> @@ -95,6 +95,7 @@ obj-$(CONFIG_RTD119X_WATCHDOG) += rtd119x_wdt.o
+>  obj-$(CONFIG_SPRD_WATCHDOG) += sprd_wdt.o
+>  obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
+>  obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
+> +obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
 >  
->  # Architecture Independent
->  obj-$(CONFIG_BD70528_WATCHDOG) += bd70528_wdt.o
-> +obj-$(CONFIG_BD957XMUF_WATCHDOG) += bd9576_wdt.o
->  obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
->  obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
->  obj-$(CONFIG_DA9062_WATCHDOG) += da9062_wdt.o
-> diff --git a/drivers/watchdog/bd9576_wdt.c b/drivers/watchdog/bd9576_wdt.c
+>  # X86 (i386 + ia64 + x86_64) Architecture
+>  obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
+> diff --git a/drivers/watchdog/visconti_wdt.c b/drivers/watchdog/visconti_wdt.c
 > new file mode 100644
-> index 000000000000..afef19ce01be
+> index 000000000000..9448eaaa51b6
 > --- /dev/null
-> +++ b/drivers/watchdog/bd9576_wdt.c
-> @@ -0,0 +1,290 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +++ b/drivers/watchdog/visconti_wdt.c
+> @@ -0,0 +1,189 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Copyright (C) 2020 ROHM Semiconductors
-> + *
-> + * ROHM BD9576MUF and BD9573MUF Watchdog driver
+> + * Copyright (c) 2020 TOSHIBA CORPORATION
+> + * Copyright (c) 2020 Toshiba Electronic Devices & Storage Corporation
+> + * Copyright (c) 2020 Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 > + */
 > +
-> +#include <linux/err.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/mfd/rohm-bd957x.h>
+> +#include <linux/clk.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
 > +#include <linux/module.h>
 > +#include <linux/of.h>
 > +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
 > +#include <linux/watchdog.h>
 > +
-> +static bool nowayout;
+> +#define WDT_CNT			0x00
+> +#define WDT_MIN			0x04
+> +#define WDT_MAX			0x08
+> +#define WDT_CTL			0x0c
+> +#define WDT_CMD			0x10
+> +#define WDT_CMD_CLEAR		0x4352
+> +#define WDT_CMD_START_STOP	0x5354
+> +#define WDT_DIV			0x30
+> +
+> +#define VISCONTI_WDT_FREQ	2000000 /* 2MHz */
+> +#define WDT_DEFAULT_TIMEOUT	10U /* in seconds */
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
 > +module_param(nowayout, bool, 0);
-> +MODULE_PARM_DESC(nowayout,
-> +		"Watchdog cannot be stopped once started (default=\"false\")");
+> +MODULE_PARM_DESC(
+> +	nowayout,
+> +	"Watchdog cannot be stopped once started (default=" __MODULE_STRING(WATCHDOG_NOWAYOUT)")");
 > +
-> +#define HW_MARGIN_MIN 2
-> +#define HW_MARGIN_MAX 4416
-> +#define BD957X_WDT_DEFAULT_MARGIN 4416
-> +
-> +struct bd9576_wdt_priv {
-> +	struct gpio_desc	*gpiod_ping;
-> +	struct gpio_desc	*gpiod_en;
-> +	struct device		*dev;
-> +	struct regmap		*regmap;
-> +	bool			always_running;
-> +	struct watchdog_device	wdd;
+> +struct visconti_wdt_priv {
+> +	struct watchdog_device wdev;
+> +	void __iomem *base;
+> +	u32 div;
 > +};
 > +
-> +static void bd9576_wdt_disable(struct bd9576_wdt_priv *priv)
+> +static int visconti_wdt_start(struct watchdog_device *wdev)
 > +{
-> +	gpiod_set_value_cansleep(priv->gpiod_en, 0);
-> +}
+> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	u32 timeout = wdev->timeout * VISCONTI_WDT_FREQ;
 > +
-> +static int bd9576_wdt_ping(struct watchdog_device *wdd)
-> +{
-> +	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
-> +
-> +	/* Pulse */
-> +	gpiod_set_value_cansleep(priv->gpiod_ping, 1);
-> +	gpiod_set_value_cansleep(priv->gpiod_ping, 0);
+> +	writel(priv->div, priv->base + WDT_DIV);
+> +	writel(0, priv->base + WDT_MIN);
+> +	writel(timeout, priv->base + WDT_MAX);
+> +	writel(0, priv->base + WDT_CTL);
+> +	writel(WDT_CMD_START_STOP, priv->base + WDT_CMD);
 > +
 > +	return 0;
 > +}
 > +
-> +static int bd9576_wdt_start(struct watchdog_device *wdd)
+> +static int visconti_wdt_stop(struct watchdog_device *wdev)
 > +{
-> +	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
+> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdev);
 > +
-> +	gpiod_set_value_cansleep(priv->gpiod_en, 1);
-> +
-> +	return bd9576_wdt_ping(wdd);
-> +}
-> +
-> +static int bd9576_wdt_stop(struct watchdog_device *wdd)
-> +{
-> +	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
-> +
-> +	if (!priv->always_running)
-> +		bd9576_wdt_disable(priv);
-> +	else
-> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
+> +	writel(1, priv->base + WDT_CTL);
+> +	writel(WDT_CMD_START_STOP, priv->base + WDT_CMD);
 > +
 > +	return 0;
 > +}
 > +
-> +static const struct watchdog_info bd957x_wdt_ident = {
-> +	.options	= WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING |
-> +			  WDIOF_SETTIMEOUT,
-> +	.identity	= "BD957x Watchdog",
+> +static int visconti_wdt_ping(struct watchdog_device *wdd)
+> +{
+> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdd);
+> +
+> +	writel(WDT_CMD_CLEAR, priv->base + WDT_CMD);
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int visconti_wdt_get_timeleft(struct watchdog_device *wdev)
+> +{
+> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	u32 timeout = wdev->timeout * VISCONTI_WDT_FREQ;
+> +	u32 cnt = readl(priv->base + WDT_CNT);
+> +
+> +	if (timeout <= cnt)
+> +		return 0;
+> +	timeout -= cnt;
+> +
+> +	return timeout / VISCONTI_WDT_FREQ;
+> +}
+> +
+> +static int visconti_wdt_set_timeout(struct watchdog_device *wdev, unsigned int timeout)
+> +{
+> +	u32 val;
+> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +
+> +	wdev->timeout = timeout;
+> +	val = wdev->timeout * VISCONTI_WDT_FREQ;
+> +
+> +	/* Clear counter before setting timeout because WDT expires */
+> +	writel(WDT_CMD_CLEAR, priv->base + WDT_CMD);
+> +	writel(val, priv->base + WDT_MAX);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct watchdog_info visconti_wdt_info = {
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
+> +	.identity = "Visconti Watchdog",
 > +};
 > +
-> +static const struct watchdog_ops bd957x_wdt_ops = {
+> +static const struct watchdog_ops visconti_wdt_ops = {
 > +	.owner		= THIS_MODULE,
-> +	.start		= bd9576_wdt_start,
-> +	.stop		= bd9576_wdt_stop,
-> +	.ping		= bd9576_wdt_ping,
+> +	.start		= visconti_wdt_start,
+> +	.stop		= visconti_wdt_stop,
+> +	.ping		= visconti_wdt_ping,
+> +	.get_timeleft	= visconti_wdt_get_timeleft,
+> +	.set_timeout	= visconti_wdt_set_timeout,
 > +};
 > +
-> +/* Unit is hundreds of uS */
-> +#define FASTNG_MIN 23
-> +
-> +static int find_closest_fast(int target, int *sel, int *val)
+> +static int visconti_wdt_probe(struct platform_device *pdev)
 > +{
-> +	int i;
-> +	int window = FASTNG_MIN;
-> +
-> +	for (i = 0; i < 8 && window < target; i++)
-> +		window <<= 1;
-> +
-> +	*val = window;
-> +	*sel = i;
-> +
-> +	if (i == 8)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +
-> +}
-> +
-> +static int find_closest_slow_by_fast(int fast_val, int target, int *slowsel)
-> +{
-> +	int sel;
-> +	static const int multipliers[] = {2, 3, 7, 15};
-> +
-> +	for (sel = 0; sel < ARRAY_SIZE(multipliers) &&
-> +	     multipliers[sel] * fast_val < target; sel++)
-> +		;
-> +
-> +	if (sel == ARRAY_SIZE(multipliers))
-> +		return -EINVAL;
-> +
-> +	*slowsel = sel;
-> +
-> +	return 0;
-> +}
-> +
-> +static int find_closest_slow(int target, int *slow_sel, int *fast_sel)
-> +{
-> +	static const int multipliers[] = {2, 3, 7, 15};
-> +	int i, j;
-> +	int val = 0;
-> +	int window = FASTNG_MIN;
-> +
-> +	for (i = 0; i < 8; i++) {
-> +		for (j = 0; j < ARRAY_SIZE(multipliers); j++) {
-> +			int slow;
-> +
-> +			slow = window * multipliers[j];
-> +			if (slow >= target && (!val || slow < val)) {
-> +				val = slow;
-> +				*fast_sel = i;
-> +				*slow_sel = j;
-> +			}
-> +		}
-> +		window <<= 1;
-> +	}
-> +	if (!val)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
-> +#define BD957X_WDG_TYPE_WINDOW BIT(5)
-> +#define BD957X_WDG_TYPE_SLOW 0
-> +#define BD957X_WDG_TYPE_MASK BIT(5)
-> +#define BD957X_WDG_NG_RATIO_MASK 0x18
-> +#define BD957X_WDG_FASTNG_MASK 0x7
-> +
-> +static int bd957x_set_wdt_mode(struct bd9576_wdt_priv *priv, int hw_margin,
-> +			       int hw_margin_min)
-> +{
-> +	int ret, fastng, slowng, type, reg, mask;
-> +	struct device *dev = priv->dev;
-> +
-> +	/* convert to 100uS */
-> +	hw_margin *= 10;
-> +	hw_margin_min *= 10;
-> +	if (hw_margin_min) {
-> +		int min;
-> +
-> +		type = BD957X_WDG_TYPE_WINDOW;
-> +		dev_dbg(dev, "Setting type WINDOW 0x%x\n", type);
-> +		ret = find_closest_fast(hw_margin_min, &fastng, &min);
-> +		if (ret) {
-> +			dev_err(dev, "bad WDT window for fast timeout\n");
-> +			return ret;
-> +		}
-> +
-> +		ret = find_closest_slow_by_fast(min, hw_margin, &slowng);
-> +		if (ret) {
-> +			dev_err(dev, "bad WDT window\n");
-> +			return ret;
-> +		}
-> +
-> +	} else {
-> +		type = BD957X_WDG_TYPE_SLOW;
-> +		dev_dbg(dev, "Setting type SLOW 0x%x\n", type);
-> +		ret = find_closest_slow(hw_margin, &slowng, &fastng);
-> +		if (ret) {
-> +			dev_err(dev, "bad WDT window\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	slowng <<= ffs(BD957X_WDG_NG_RATIO_MASK) - 1;
-> +	reg = type | slowng | fastng;
-> +	mask = BD957X_WDG_TYPE_MASK | BD957X_WDG_NG_RATIO_MASK |
-> +	       BD957X_WDG_FASTNG_MASK;
-> +	ret = regmap_update_bits(priv->regmap, BD957X_REG_WDT_CONF,
-> +				 mask, reg);
-> +
-> +	return ret;
-> +}
-> +
-> +static int bd9576_wdt_probe(struct platform_device *pdev)
-> +{
+> +	struct watchdog_device *wdev;
+> +	struct visconti_wdt_priv *priv;
 > +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->parent->of_node;
-> +	struct bd9576_wdt_priv *priv;
-> +	u32 hw_margin[2];
-> +	u32 hw_margin_max = BD957X_WDT_DEFAULT_MARGIN, hw_margin_min = 0;
+> +	struct clk *clk;
 > +	int ret;
+> +	unsigned long clk_freq;
 > +
 > +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
 > +	if (!priv)
 > +		return -ENOMEM;
 > +
-> +	platform_set_drvdata(pdev, priv);
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
 > +
-> +	priv->dev = dev;
-> +	priv->regmap = dev_get_regmap(dev->parent, NULL);
-> +	if (!priv->regmap) {
-> +		dev_err(dev, "No regmap found\n");
-> +		return -ENODEV;
-> +	}
+> +	clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(clk))
+> +		return dev_err_probe(dev, PTR_ERR(clk), "Could not get clock\n");
 > +
-> +	priv->gpiod_en = devm_gpiod_get_from_of_node(dev, dev->parent->of_node,
-> +						     "rohm,watchdog-enable-gpios",
-> +						     0, GPIOD_OUT_LOW,
-> +						     "watchdog-enable");
-> +	if (IS_ERR(priv->gpiod_en))
-> +		return dev_err_probe(dev, PTR_ERR(priv->gpiod_en),
-> +			      "getting watchdog-enable GPIO failed\n");
-> +
-> +	priv->gpiod_ping = devm_gpiod_get_from_of_node(dev, dev->parent->of_node,
-> +						     "rohm,watchdog-ping-gpios",
-> +						     0, GPIOD_OUT_LOW,
-> +						     "watchdog-ping");
-> +	if (IS_ERR(priv->gpiod_ping))
-> +		return dev_err_probe(dev, PTR_ERR(priv->gpiod_ping),
-> +				     "getting watchdog-ping GPIO failed\n");
-> +
-> +	ret = of_property_read_variable_u32_array(np, "rohm,hw-timeout-ms",
-> +						  &hw_margin[0], 1, 2);
-> +	if (ret < 0 && ret != -EINVAL)
+> +	ret = clk_prepare_enable(clk);
+> +	if (ret) {
+> +		dev_err(dev, "Could not enable clock\n");
 > +		return ret;
+> +	}
+
+There is no clk_disable_unprepare() when the driver is removed, or when
+devm_watchdog_register_device() fails. For situations like this I suggest
+to handle cleanup with devm_add_action_or_reset(), which would also
+simplify error handling. There are lots of examples in other watchdog
+drivers.
+
+Guenter
+
 > +
-> +	if (ret == 1)
-> +		hw_margin_max = hw_margin[0];
-> +
-> +	if (ret == 2) {
-> +		hw_margin_max = hw_margin[1];
-> +		hw_margin_min = hw_margin[0];
+> +	clk_freq = clk_get_rate(clk);
+> +	if (!clk_freq) {
+> +		clk_disable_unprepare(clk);
+> +		dev_err(dev, "Could not get clock rate\n");
+> +		return -EINVAL;
 > +	}
 > +
-> +	ret = bd957x_set_wdt_mode(priv, hw_margin_max, hw_margin_min);
+> +	priv->div = clk_freq / VISCONTI_WDT_FREQ;
+> +
+> +	/* Initialize struct watchdog_device. */
+> +	wdev = &priv->wdev;
+> +	wdev->info = &visconti_wdt_info;
+> +	wdev->ops = &visconti_wdt_ops;
+> +	wdev->parent = dev;
+> +	wdev->min_timeout = 1;
+> +	wdev->max_timeout = 0xffffffff / VISCONTI_WDT_FREQ;
+> +	wdev->timeout = min(wdev->max_timeout, WDT_DEFAULT_TIMEOUT);
+> +
+> +	watchdog_set_drvdata(wdev, priv);
+> +	watchdog_set_nowayout(wdev, nowayout);
+> +	watchdog_stop_on_unregister(wdev);
+> +
+> +	/* This overrides the default timeout only if DT configuration was found */
+> +	ret = watchdog_init_timeout(wdev, 0, dev);
 > +	if (ret)
-> +		return ret;
+> +		dev_warn(dev, "Specified timeout value invalid, using default\n");
 > +
-> +	priv->always_running = of_property_read_bool(np, "always-running");
-> +
-> +	watchdog_set_drvdata(&priv->wdd, priv);
-> +
-> +	priv->wdd.info			= &bd957x_wdt_ident;
-> +	priv->wdd.ops			= &bd957x_wdt_ops;
-> +	priv->wdd.min_hw_heartbeat_ms	= hw_margin_min;
-> +	priv->wdd.max_hw_heartbeat_ms	= hw_margin_max;
-> +	priv->wdd.parent		= dev;
-> +	priv->wdd.timeout		= (hw_margin_max / 2) * 1000;
-> +
-> +	watchdog_init_timeout(&priv->wdd, 0, dev);
-> +	watchdog_set_nowayout(&priv->wdd, nowayout);
-> +
-> +	watchdog_stop_on_reboot(&priv->wdd);
-> +
-> +	if (priv->always_running)
-> +		bd9576_wdt_start(&priv->wdd);
-> +
-> +	return devm_watchdog_register_device(dev, &priv->wdd);
+> +	return devm_watchdog_register_device(dev, wdev);
 > +}
 > +
-> +static struct platform_driver bd9576_wdt_driver = {
-> +	.driver	= {
-> +		.name = "bd9576-wdt",
-> +	},
-> +	.probe	= bd9576_wdt_probe,
+> +static const struct of_device_id visconti_wdt_of_match[] = {
+> +	{ .compatible = "toshiba,visconti-wdt", },
+> +	{}
 > +};
+> +MODULE_DEVICE_TABLE(of, visconti_wdt_of_match);
 > +
-> +module_platform_driver(bd9576_wdt_driver);
+> +static struct platform_driver visconti_wdt_driver = {
+> +	.driver = {
+> +			.name = "visconti_wdt",
+> +			.of_match_table = visconti_wdt_of_match,
+> +		},
+> +	.probe = visconti_wdt_probe,
+> +};
+> +module_platform_driver(visconti_wdt_driver);
 > +
-> +MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
-> +MODULE_DESCRIPTION("ROHM BD9576/BD9573 Watchdog driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:bd9576-wdt");
+> +MODULE_DESCRIPTION("TOSHIBA Visconti Watchdog Driver");
+> +MODULE_AUTHOR("Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp");
+> +MODULE_LICENSE("GPL v2");
 > -- 
-> 2.21.0
+> 2.27.0
 > 
-> 
-> -- 
-> Matti Vaittinen, Linux device drivers
-> ROHM Semiconductors, Finland SWDC
-> Kiviharjunlenkki 1E
-> 90220 OULU
-> FINLAND
-> 
-> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-> Simon says - in Latin please.
-> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-> Thanks to Simon Glass for the translation =] 
