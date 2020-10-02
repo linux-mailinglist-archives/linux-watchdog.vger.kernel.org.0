@@ -2,42 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A15281D5A
-	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Oct 2020 23:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C62281BC2
+	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Oct 2020 21:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725791AbgJBVFO convert rfc822-to-8bit (ORCPT
+        id S2388555AbgJBTXJ convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 2 Oct 2020 17:05:14 -0400
-Received: from mail3.lapompeya.com.ar ([190.189.89.7]:22178 "EHLO
-        mail3.lapompeya.com.ar" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725283AbgJBVFO (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 2 Oct 2020 17:05:14 -0400
-X-Greylist: delayed 11754 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 17:05:12 EDT
-Received: from [192.168.2.241] (80.106.241.112) by mail3.lapompeya.com.ar
- (192.168.11.16) with Microsoft SMTP Server id 14.3.468.0; Fri, 2 Oct 2020
- 14:49:00 -0300
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 2 Oct 2020 15:23:09 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:50644 "EHLO mx.metalurgs.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388479AbgJBTW6 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 2 Oct 2020 15:22:58 -0400
+X-Greylist: delayed 384 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:22:57 EDT
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 528F46217B
+        for <linux-watchdog@vger.kernel.org>; Fri,  2 Oct 2020 22:16:32 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 33CED61D30
+        for <linux-watchdog@vger.kernel.org>; Fri,  2 Oct 2020 22:16:32 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id D3C6962AF0; Fri,  2 Oct 2020 22:16:30 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.50])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 6A30461B33;
+        Fri,  2 Oct 2020 22:16:24 +0300 (EEST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 Content-Description: Mail message body
-Subject: Gute Nachrichten !
-To:     Recipients <chi1grant22@gmail.com>
-From:   "Mr. Marvin" <chi1grant22@gmail.com>
-Date:   Fri, 2 Oct 2020 20:48:44 +0300
-Reply-To: <marvinsims00@gmail.com>
-Message-ID: <6201d2fc-0f08-4c76-ac44-3bce43d47916@VMMAIL2010.pompeya.local>
-Received-SPF: SoftFail (vmmail2010.pompeya.local: domain of transitioning
- chi1grant22@gmail.com discourages use of 80.106.241.112 as permitted sender)
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Fri, 02 Oct 2020 16:16:17 -0300
+Reply-To: binmurrah@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201002191630.D3C6962AF0@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan.
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201002 notchecked
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Die letzten Monate waren nicht gut für Unternehmen, Institutionen und Einzelpersonen auf der ganzen Welt. Die globale Epidemie (Covid-19) hat alle finanziell erschöpft und Sie wurden nicht freigestellt. Ihr Hilferuf wurde gehört und wir sind bereit, Ihnen unsere freundliche Geste anzubieten. Sie gehören zu den 3. Chargen, die von unserem Fondsprogramm profitieren, und ich muss aufrichtig sagen, dass die 1. und 2. Charge für die von uns geleistete Hilfe dankbar ist. Sie haben erfolgreich die kumulierte Gesamtsumme von (50.000,00 USD) als Gemeinschaftsspende von Oxfam Aid erhalten. Antworten Sie zurück, um weitere Informationen und Anweisungen zur Beantragung Ihres Zuschusses zu erhalten.
+Hello Dear,
 
-Denken Sie daran, immer in Sicherheit zu bleiben und soziale Distanzierung zu üben. Befolgen Sie immer die Anweisungen der örtlichen Behörden.
+We are Investment Company offering Corporate and Personal
+Loan at 3% Interest Rate for a duration of 10Years.
 
-Herr Marvin Sims,
+We also pay 1% commission to brokers, who introduce project
+owners for finance or other opportunities.
 
-Supervisor (Oxfam Finanzabteilung)
-Oxfam International Inc
+Please get back to me if you are interested for more
+details.
+
+Yours faithfully,
+Hashim Bin 
