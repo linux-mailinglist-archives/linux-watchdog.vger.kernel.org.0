@@ -2,65 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C62281BC2
-	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Oct 2020 21:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA6B2829F7
+	for <lists+linux-watchdog@lfdr.de>; Sun,  4 Oct 2020 11:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388555AbgJBTXJ convert rfc822-to-8bit (ORCPT
+        id S1725930AbgJDJ6Y convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 2 Oct 2020 15:23:09 -0400
-Received: from mx.metalurgs.lv ([81.198.125.103]:50644 "EHLO mx.metalurgs.lv"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388479AbgJBTW6 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 2 Oct 2020 15:22:58 -0400
-X-Greylist: delayed 384 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:22:57 EDT
-Received: from mx.metalurgs.lv (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 528F46217B
-        for <linux-watchdog@vger.kernel.org>; Fri,  2 Oct 2020 22:16:32 +0300 (EEST)
-Received: from kas30pipe.localhost (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 33CED61D30
-        for <linux-watchdog@vger.kernel.org>; Fri,  2 Oct 2020 22:16:32 +0300 (EEST)
-Received: by mx.metalurgs.lv (Postfix, from userid 1005)
-        id D3C6962AF0; Fri,  2 Oct 2020 22:16:30 +0300 (EEST)
-Received: from [100.64.1.74] (unknown [190.15.125.50])
-        (Authenticated sender: admin)
-        by mx.metalurgs.lv (Postfix) with ESMTPA id 6A30461B33;
-        Fri,  2 Oct 2020 22:16:24 +0300 (EEST)
+        Sun, 4 Oct 2020 05:58:24 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:49374 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgJDJ6Y (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sun, 4 Oct 2020 05:58:24 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 897651C0B76; Sun,  4 Oct 2020 11:58:20 +0200 (CEST)
+Date:   Sun, 4 Oct 2020 11:58:19 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe Kleine-K??nig <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v9 11/13] arm64: dts: freescale: sl28: enable LED support
+Message-ID: <20201004095818.GA1104@bug>
+References: <20200907213802.26745-1-michael@walle.cc>
+ <20200907213802.26745-12-michael@walle.cc>
 MIME-Version: 1.0
-Content-Description: Mail message body
-To:     Recipients <financialcapability6@gmail.com>
-From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
-Date:   Fri, 02 Oct 2020 16:16:17 -0300
-Reply-To: binmurrah@gmail.com
-X-SpamTest-Envelope-From: financialcapability6@gmail.com
-X-SpamTest-Group-ID: 00000000
-X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
-X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
-X-SpamTest-Info: {DATE: unreal year}
-X-SpamTest-Method: none
-X-SpamTest-Rate: 55
-X-SpamTest-Status: Not detected
-X-SpamTest-Status-Extended: not_detected
-X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
-Message-ID: <20201002191630.D3C6962AF0@mx.metalurgs.lv>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: 8BIT
-Subject: Low Rate Loan.
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20140401 #7726142, check: 20201002 notchecked
+In-Reply-To: <20200907213802.26745-12-michael@walle.cc>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello Dear,
+On Mon 2020-09-07 23:38:00, Michael Walle wrote:
+> Now that we have support for GPIO lines of the SMARC connector, enable
+> LED support on the KBox A-230-LS. There are two LEDs without fixed
+> functions, one is yellow and one is green. Unfortunately, it is just one
+> multi-color LED, thus while it is possible to enable both at the same
+> time it is hard to tell the difference between "yellow only" and "yellow
+> and green".
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-We are Investment Company offering Corporate and Personal
-Loan at 3% Interest Rate for a duration of 10Years.
+Acked-by: Pavel Machek <pavel@ucw.cz>
 
-We also pay 1% commission to brokers, who introduce project
-owners for finance or other opportunities.
 
-Please get back to me if you are interested for more
-details.
-
-Yours faithfully,
-Hashim Bin 
+-- 
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
