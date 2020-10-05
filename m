@@ -2,195 +2,384 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E53B6283A58
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Oct 2020 17:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A6E283E6A
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Oct 2020 20:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728172AbgJEPdj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Oct 2020 11:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728155AbgJEPd3 (ORCPT
+        id S1728750AbgJESim (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Oct 2020 14:38:42 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:35257 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725940AbgJESik (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Oct 2020 11:33:29 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582CC0613CE;
-        Mon,  5 Oct 2020 08:33:29 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id 60so9016830otw.3;
-        Mon, 05 Oct 2020 08:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fAOWrG6/S5ZLKKTVVMDNIJzBJtKBZUeWpIvLtMobwPo=;
-        b=VuyDJA4xw1yX1PwCiRz/8mYgftsQ91grxDWzEphk4r9mwI4onu+Ur6TUBhKj1JUPZ3
-         EkzK4KnZszDi0qXqYRximTV6i/D5DyYc7E4b5CecgkcyDYElKzWbHKM7dW4kv/aTWJFK
-         q0z+T6YQnzj0J8uitDkGUCdNmWfIhTW6fJNuH0xmpe19mGGwZXqlIYhCoXsQizCINliO
-         1Xon+tjC26NVbuwM+xd0DXamfmjXNa/GdTfkjxMDWu8FJk/7UYAyF5J2Bg+v77thPPsE
-         OmW3Y1k3qmeF55h/RAV4aa5us4AIgQ5T3x9dOC7R8ESaplPKSPI/BiQQ6uwescGbLB0g
-         tzYQ==
+        Mon, 5 Oct 2020 14:38:40 -0400
+Received: by mail-oi1-f193.google.com with SMTP id w141so9706420oia.2;
+        Mon, 05 Oct 2020 11:38:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=fAOWrG6/S5ZLKKTVVMDNIJzBJtKBZUeWpIvLtMobwPo=;
-        b=PfEObO4EMHYqi+J0g+vK84jZh0MdGfsmTFsUkUQdjH6NnxkdY7mJdVV/sDMUAT+/vo
-         8N+DKHB5SVW1NY7VCHPCkOTeaUsmyXIrSi7aH/QEx3Ovlzhr809daKDKlDsR3m8P/Y7c
-         6L8YxuixgfQipiQebsMauQj4gbo+Zh+qZxNhG1q03ldvM/zk37uISqDfVnkOWTnsJ8bt
-         RuNIfLn5pq6zZISXaK5pBf66QV5aNDSCwM4WQVvkoeZnoqwqw5DcZf8iB7ZyiBFByc1t
-         dBtw35X15pTNVUccP/VLogleEC+dhLIgEvVesMPaXFUd1TA2LUSMml8sJDNhB04uQOG/
-         JfAg==
-X-Gm-Message-State: AOAM531gCmECg9KNaSQKmpzMpnta/1+aFuyJ6bYD6h6F9JDd05QZSjWP
-        o5gpMBxx9/yR7MFxKV8C2Oo=
-X-Google-Smtp-Source: ABdhPJy4YyY/calQK6fzUeUHLDJv0BboyToBE2dqThOrHpI3/lyJJop0/nb0G72JZIg6fuhP+yQp0w==
-X-Received: by 2002:a9d:6c4d:: with SMTP id g13mr11567819otq.367.1601912008696;
-        Mon, 05 Oct 2020 08:33:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h14sm8157otr.21.2020.10.05.08.33.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2020 08:33:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v5 1/2] watchdog: bindings: Add binding documentation for
- Toshiba Visconti watchdog device
-To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     punit1.agrawal@toshiba.co.jp, yuji2.ishikawa@toshiba.co.jp,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>
-References: <20201005023012.603026-1-nobuhiro1.iwamatsu@toshiba.co.jp>
- <20201005023012.603026-2-nobuhiro1.iwamatsu@toshiba.co.jp>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <d85ab1e2-a20c-ac48-e806-7b95105581da@roeck-us.net>
-Date:   Mon, 5 Oct 2020 08:33:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FKBuvtLQAdMRryG6abzok93hEZkfxfk1NvbdtZDThTc=;
+        b=bDK75CryujMO76IjbGfXVn3NMjUDRV7I4OLzQAONqY7A1asItWuGsGw1ge1m3Wl+tH
+         mdm8Vr+7+odoC8NpnKJKmMTRcS9JWvP4c4MFz8HnmqY54UGwUmm7dbSO5DZTVpExMxsd
+         ihuo4hUM+0nSKwDlJwZI0TrJmhvY8iVajwhlgNqMd2AG+H7AYpqFq+dJbMnYhezJt37r
+         8EaMuOrmOTnyM4NrsmRee0eX7DF24KMgRRhN6PUb0J2tPGOPf0A1QCGHJZZWNy6EyxFs
+         3hVssrxSxJ+V7+R+464rXfqvVkG4r0OFuDZ9RBHOEr2HluU8Y0qcSxk+5i6p2+uVJw3I
+         4SFQ==
+X-Gm-Message-State: AOAM532Z6hwvunkSQ1ckEkZp2o3GvhXNL76YTzTSxp3kYXv2R/csYiSF
+        0LActFl2druxp4twqBkV04nTJDUQDGbZ
+X-Google-Smtp-Source: ABdhPJwtSa8Y/I6DT15kFb+c+yKVzbdUj3v7XcBfx5+TPJ0mpN3ESYoYQunOScJs66Yn+dcB/iKTAA==
+X-Received: by 2002:aca:50d2:: with SMTP id e201mr416333oib.31.1601923115204;
+        Mon, 05 Oct 2020 11:38:35 -0700 (PDT)
+Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.googlemail.com with ESMTPSA id z25sm143140otq.31.2020.10.05.11.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Oct 2020 11:38:34 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Richard Weinberger <richard@nod.at>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 0/4] dt-bindings: additional/unevaluatedProperties clean-ups
+Date:   Mon,  5 Oct 2020 13:38:26 -0500
+Message-Id: <20201005183830.486085-1-robh@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20201005023012.603026-2-nobuhiro1.iwamatsu@toshiba.co.jp>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/4/20 7:30 PM, Nobuhiro Iwamatsu wrote:
-> Add documentation for the binding of Toshiba Visconti SoC's watchdog.
-> 
-> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Reviewed-by: Punit Agrawal <punit1.agrawal@toshiba.co.jp>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+The default behavior for json-schema is any unknown property is allowed.
+That is generally not the behavior we want for DT. In order to disallow
+extra properties, schemas need to define 'additionalProperties: false'
+typically. Ideally, we'd just add that automatically with the tools, but
+there are some exceptions so only making things explicit everywhere
+really works. Missing 'additionalProperties' or 'unevaluatedProperties'
+has been a constant source of review comments, so a meta-schema check is
+really needed here.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Once this series is in place, the meta-schema can be updated with a
+check. The rule is if there's a $ref to another schema, then either
+'additionalProperties' or 'unevaluatedProperties' is required. If not,
+then 'additionalProperties' is required.
 
-> ---
->  .../watchdog/toshiba,visconti-wdt.yaml        | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> new file mode 100644
-> index 000000000000..690e19ce4b87
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2020 Toshiba Electronic Devices & Storage Corporation
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/watchdog/toshiba,visconti-wdt.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Toshiba Visconti SoCs PIUWDT Watchdog timer
-> +
-> +maintainers:
-> +  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - toshiba,visconti-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  timeout-sec: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        wdt_clk: wdt-clk {
-> +            compatible = "fixed-clock";
-> +            clock-frequency = <150000000>;
-> +            #clock-cells = <0>;
-> +        };
-> +
-> +        watchdog@28330000 {
-> +            compatible = "toshiba,visconti-wdt";
-> +            reg = <0 0x28330000 0 0x1000>;
-> +            clocks = <&wdt_clk>;
-> +            timeout-sec = <20>;
-> +        };
-> +    };
-> 
+Rob
 
+
+Rob Herring (4):
+  dt-bindings: Add missing 'unevaluatedProperties'
+  dt-bindings: Use 'additionalProperties' instead of
+    'unevaluatedProperties'
+  dt-bindings: Explicitly allow additional properties in board/SoC
+    schemas
+  dt-bindings: Explicitly allow additional properties in common schemas
+
+ Documentation/devicetree/bindings/arm/actions.yaml     |  2 ++
+ Documentation/devicetree/bindings/arm/altera.yaml      |  3 +++
+ Documentation/devicetree/bindings/arm/amazon,al.yaml   |  2 ++
+ Documentation/devicetree/bindings/arm/amlogic.yaml     |  3 +++
+ .../devicetree/bindings/arm/arm,integrator.yaml        |  2 ++
+ .../devicetree/bindings/arm/arm,realview.yaml          |  2 ++
+ .../devicetree/bindings/arm/arm,versatile.yaml         |  2 ++
+ .../devicetree/bindings/arm/arm,vexpress-juno.yaml     |  2 ++
+ Documentation/devicetree/bindings/arm/atmel-at91.yaml  |  2 ++
+ Documentation/devicetree/bindings/arm/axxia.yaml       |  2 ++
+ Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,bcm11351.yaml     |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,bcm21664.yaml     |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,bcm23550.yaml     |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,bcm4708.yaml      |  3 +++
+ .../devicetree/bindings/arm/bcm/brcm,cygnus.yaml       |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,hr2.yaml          |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,ns2.yaml          |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,nsp.yaml          |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,stingray.yaml     |  2 ++
+ .../devicetree/bindings/arm/bcm/brcm,vulcan-soc.yaml   |  2 ++
+ Documentation/devicetree/bindings/arm/bitmain.yaml     |  3 +++
+ Documentation/devicetree/bindings/arm/calxeda.yaml     |  2 ++
+ .../devicetree/bindings/arm/coresight-cti.yaml         |  2 ++
+ Documentation/devicetree/bindings/arm/cpus.yaml        |  2 ++
+ Documentation/devicetree/bindings/arm/digicolor.yaml   |  2 ++
+ Documentation/devicetree/bindings/arm/fsl.yaml         |  2 ++
+ .../devicetree/bindings/arm/hisilicon/hisilicon.yaml   |  3 +++
+ .../devicetree/bindings/arm/intel,keembay.yaml         |  3 +++
+ .../devicetree/bindings/arm/intel-ixp4xx.yaml          |  2 ++
+ .../bindings/arm/keystone/ti,k3-sci-common.yaml        |  2 ++
+ .../devicetree/bindings/arm/marvell/armada-7k-8k.yaml  |  2 ++
+ Documentation/devicetree/bindings/arm/mediatek.yaml    |  3 +++
+ .../devicetree/bindings/arm/microchip,sparx5.yaml      |  2 ++
+ Documentation/devicetree/bindings/arm/moxart.yaml      |  1 +
+ Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml   |  3 +++
+ Documentation/devicetree/bindings/arm/mstar/mstar.yaml |  2 ++
+ .../bindings/arm/nvidia,tegra194-ccplex.yaml           |  2 ++
+ Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml |  2 ++
+ Documentation/devicetree/bindings/arm/qcom.yaml        |  2 ++
+ Documentation/devicetree/bindings/arm/rda.yaml         |  2 ++
+ Documentation/devicetree/bindings/arm/realtek.yaml     |  3 +++
+ Documentation/devicetree/bindings/arm/renesas.yaml     |  2 ++
+ Documentation/devicetree/bindings/arm/rockchip.yaml    |  3 +++
+ .../bindings/arm/samsung/samsung-boards.yaml           |  2 ++
+ Documentation/devicetree/bindings/arm/sirf.yaml        |  3 +++
+ .../devicetree/bindings/arm/socionext/milbeaut.yaml    |  3 +++
+ .../devicetree/bindings/arm/socionext/uniphier.yaml    |  2 ++
+ Documentation/devicetree/bindings/arm/spear.yaml       |  3 +++
+ Documentation/devicetree/bindings/arm/sprd/sprd.yaml   |  2 ++
+ Documentation/devicetree/bindings/arm/sti.yaml         |  3 +++
+ .../devicetree/bindings/arm/stm32/st,mlahb.yaml        |  2 ++
+ Documentation/devicetree/bindings/arm/stm32/stm32.yaml |  3 +++
+ Documentation/devicetree/bindings/arm/sunxi.yaml       |  2 ++
+ Documentation/devicetree/bindings/arm/tegra.yaml       |  2 ++
+ Documentation/devicetree/bindings/arm/ti/nspire.yaml   |  3 +++
+ .../devicetree/bindings/arm/ti/ti,davinci.yaml         |  3 +++
+ Documentation/devicetree/bindings/arm/ux500.yaml       |  2 ++
+ Documentation/devicetree/bindings/arm/vt8500.yaml      |  3 +++
+ Documentation/devicetree/bindings/arm/xilinx.yaml      |  2 ++
+ Documentation/devicetree/bindings/arm/zte.yaml         |  2 ++
+ .../devicetree/bindings/ata/faraday,ftide010.yaml      |  2 ++
+ Documentation/devicetree/bindings/ata/pata-common.yaml |  2 ++
+ Documentation/devicetree/bindings/ata/sata-common.yaml |  2 ++
+ Documentation/devicetree/bindings/bus/renesas,bsc.yaml |  2 ++
+ .../devicetree/bindings/bus/simple-pm-bus.yaml         |  2 ++
+ .../bindings/chrome/google,cros-ec-typec.yaml          |  2 ++
+ .../devicetree/bindings/clock/baikal,bt1-ccu-div.yaml  |  6 +++++-
+ .../devicetree/bindings/clock/baikal,bt1-ccu-pll.yaml  |  2 +-
+ .../devicetree/bindings/clock/imx8m-clock.yaml         |  2 +-
+ .../devicetree/bindings/connector/usb-connector.yaml   |  2 ++
+ .../bindings/display/bridge/snps,dw-mipi-dsi.yaml      |  2 ++
+ .../devicetree/bindings/display/dsi-controller.yaml    |  2 ++
+ .../devicetree/bindings/display/panel/lvds.yaml        |  2 ++
+ .../bindings/display/panel/panel-common.yaml           |  2 ++
+ .../devicetree/bindings/display/panel/tpo,tpg110.yaml  |  2 ++
+ Documentation/devicetree/bindings/dma/dma-common.yaml  |  2 ++
+ .../devicetree/bindings/dma/dma-controller.yaml        |  2 ++
+ Documentation/devicetree/bindings/dma/dma-router.yaml  |  2 ++
+ Documentation/devicetree/bindings/dma/ingenic,dma.yaml |  2 ++
+ .../devicetree/bindings/dma/st,stm32-dma.yaml          |  2 ++
+ .../devicetree/bindings/dma/st,stm32-dmamux.yaml       |  2 ++
+ .../devicetree/bindings/dma/st,stm32-mdma.yaml         |  2 ++
+ Documentation/devicetree/bindings/dma/ti/k3-udma.yaml  |  2 ++
+ .../devicetree/bindings/extcon/wlf,arizona.yaml        |  2 ++
+ .../devicetree/bindings/hwmon/baikal,bt1-pvt.yaml      |  4 ++--
+ .../devicetree/bindings/i2c/amlogic,meson6-i2c.yaml    |  2 ++
+ .../devicetree/bindings/i2c/cdns,i2c-r1p10.yaml        |  2 ++
+ Documentation/devicetree/bindings/i2c/i2c-gpio.yaml    |  2 ++
+ Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml    |  2 ++
+ .../bindings/i2c/socionext,uniphier-fi2c.yaml          |  2 ++
+ .../bindings/i2c/socionext,uniphier-i2c.yaml           |  2 ++
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml          |  2 ++
+ .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml   |  2 ++
+ .../devicetree/bindings/iio/accel/adi,adis16240.yaml   |  4 ++++
+ .../devicetree/bindings/iio/accel/adi,adxl345.yaml     |  4 ++++
+ .../devicetree/bindings/iio/accel/adi,adxl372.yaml     |  4 ++++
+ .../devicetree/bindings/iio/adc/adi,ad7124.yaml        |  4 ++++
+ .../devicetree/bindings/iio/adc/adi,ad7192.yaml        |  4 ++++
+ .../devicetree/bindings/iio/adc/adi,ad7292.yaml        |  4 ++++
+ .../devicetree/bindings/iio/adc/adi,ad7606.yaml        |  6 ++++++
+ .../devicetree/bindings/iio/adc/adi,ad7923.yaml        |  4 ++++
+ .../devicetree/bindings/iio/adc/maxim,max1241.yaml     |  4 ++++
+ .../bindings/iio/adc/samsung,exynos-adc.yaml           |  5 ++++-
+ Documentation/devicetree/bindings/iio/common.yaml      |  2 ++
+ .../devicetree/bindings/iio/dac/adi,ad5770r.yaml       | 10 ++++++++++
+ .../devicetree/bindings/iio/frequency/adf4371.yaml     |  4 ++++
+ .../devicetree/bindings/iio/imu/adi,adis16460.yaml     |  4 ++++
+ .../devicetree/bindings/iio/imu/adi,adis16475.yaml     |  2 ++
+ .../devicetree/bindings/iio/imu/bosch,bmi160.yaml      |  4 ++++
+ .../devicetree/bindings/iio/imu/nxp,fxos8700.yaml      |  4 ++++
+ .../devicetree/bindings/input/fsl,mpr121-touchkey.yaml |  2 ++
+ Documentation/devicetree/bindings/input/input.yaml     |  2 ++
+ .../devicetree/bindings/input/matrix-keymap.yaml       |  2 ++
+ .../bindings/input/touchscreen/touchscreen.yaml        |  2 ++
+ .../bindings/interrupt-controller/loongson,htpic.yaml  |  2 ++
+ .../interrupt-controller/loongson,liointc.yaml         |  2 ++
+ .../bindings/interrupt-controller/mti,gic.yaml         |  2 +-
+ Documentation/devicetree/bindings/leds/common.yaml     |  2 ++
+ .../bindings/leds/leds-class-multicolor.yaml           |  3 +++
+ .../devicetree/bindings/leds/trigger-source.yaml       |  2 ++
+ Documentation/devicetree/bindings/media/rc.yaml        |  2 ++
+ .../bindings/memory-controllers/renesas,rpc-if.yaml    |  2 ++
+ .../devicetree/bindings/mfd/cirrus,lochnagar.yaml      | 10 +++++++++-
+ Documentation/devicetree/bindings/mfd/syscon.yaml      |  2 +-
+ .../bindings/mfd/ti,j721e-system-controller.yaml       |  5 ++++-
+ .../devicetree/bindings/mips/ingenic/devices.yaml      |  3 +++
+ .../devicetree/bindings/mips/loongson/devices.yaml     |  3 +++
+ .../devicetree/bindings/misc/olpc,xo1.75-ec.yaml       |  4 +++-
+ .../devicetree/bindings/mmc/amlogic,meson-mx-sdhc.yaml |  2 ++
+ Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml  |  2 ++
+ Documentation/devicetree/bindings/mmc/ingenic,mmc.yaml |  2 ++
+ .../devicetree/bindings/mmc/mmc-controller.yaml        |  2 ++
+ Documentation/devicetree/bindings/mmc/owl-mmc.yaml     |  2 ++
+ .../devicetree/bindings/mmc/rockchip-dw-mshc.yaml      |  2 ++
+ Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml   |  2 ++
+ .../devicetree/bindings/mmc/socionext,uniphier-sd.yaml |  2 ++
+ .../bindings/mmc/synopsys-dw-mshc-common.yaml          |  2 ++
+ .../devicetree/bindings/mmc/synopsys-dw-mshc.yaml      |  2 ++
+ Documentation/devicetree/bindings/mtd/denali,nand.yaml |  2 ++
+ .../devicetree/bindings/mtd/ingenic,nand.yaml          |  2 ++
+ .../devicetree/bindings/mtd/nand-controller.yaml       |  2 ++
+ .../devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml    |  2 ++
+ Documentation/devicetree/bindings/net/adi,adin.yaml    |  2 ++
+ .../devicetree/bindings/net/amlogic,meson-dwmac.yaml   |  2 ++
+ .../devicetree/bindings/net/aspeed,ast2600-mdio.yaml   |  2 ++
+ .../devicetree/bindings/net/can/can-transceiver.yaml   |  2 ++
+ Documentation/devicetree/bindings/net/dsa/dsa.yaml     |  2 ++
+ .../devicetree/bindings/net/ethernet-controller.yaml   |  2 ++
+ .../devicetree/bindings/net/ethernet-phy.yaml          |  2 ++
+ .../devicetree/bindings/net/marvell,mvusb.yaml         |  2 ++
+ Documentation/devicetree/bindings/net/mdio.yaml        |  2 ++
+ .../devicetree/bindings/net/mediatek,star-emac.yaml    |  2 ++
+ Documentation/devicetree/bindings/net/nxp,tja11xx.yaml |  2 ++
+ Documentation/devicetree/bindings/net/qca,ar71xx.yaml  |  2 ++
+ Documentation/devicetree/bindings/net/qca,ar803x.yaml  |  2 ++
+ .../devicetree/bindings/net/qcom,ipq4019-mdio.yaml     |  2 ++
+ .../devicetree/bindings/net/qcom,ipq8064-mdio.yaml     |  2 ++
+ .../devicetree/bindings/net/renesas,ether.yaml         |  2 ++
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml  |  2 ++
+ Documentation/devicetree/bindings/net/stm32-dwmac.yaml |  2 ++
+ .../devicetree/bindings/net/ti,davinci-mdio.yaml       |  2 ++
+ Documentation/devicetree/bindings/net/ti,dp83867.yaml  |  2 ++
+ Documentation/devicetree/bindings/net/ti,dp83869.yaml  |  2 ++
+ Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml |  2 ++
+ .../devicetree/bindings/nvmem/nvmem-consumer.yaml      |  2 ++
+ Documentation/devicetree/bindings/nvmem/nvmem.yaml     |  2 ++
+ .../devicetree/bindings/nvmem/qcom,qfprom.yaml         |  2 ++
+ .../devicetree/bindings/nvmem/qcom,spmi-sdam.yaml      |  2 ++
+ .../devicetree/bindings/nvmem/rockchip-efuse.yaml      |  2 ++
+ .../devicetree/bindings/nvmem/st,stm32-romem.yaml      |  2 ++
+ .../opp/allwinner,sun50i-h6-operating-points.yaml      |  4 +++-
+ .../devicetree/bindings/pci/cdns,cdns-pcie-ep.yaml     |  2 ++
+ .../devicetree/bindings/pci/cdns,cdns-pcie-host.yaml   |  2 ++
+ .../devicetree/bindings/pci/cdns-pcie-ep.yaml          |  2 ++
+ .../devicetree/bindings/pci/cdns-pcie-host.yaml        |  2 ++
+ Documentation/devicetree/bindings/pci/cdns-pcie.yaml   |  2 ++
+ .../devicetree/bindings/pci/host-generic-pci.yaml      |  2 ++
+ Documentation/devicetree/bindings/pci/loongson.yaml    |  2 ++
+ Documentation/devicetree/bindings/pci/pci-ep.yaml      |  2 ++
+ .../devicetree/bindings/pci/ti,j721e-pci-ep.yaml       |  2 ++
+ .../devicetree/bindings/pci/ti,j721e-pci-host.yaml     |  2 ++
+ Documentation/devicetree/bindings/pci/versatile.yaml   |  2 ++
+ .../devicetree/bindings/pinctrl/cirrus,madera.yaml     |  2 ++
+ .../devicetree/bindings/pinctrl/pincfg-node.yaml       |  2 ++
+ .../devicetree/bindings/pinctrl/pinmux-node.yaml       |  2 ++
+ .../devicetree/bindings/power/pd-samsung.yaml          |  2 ++
+ .../devicetree/bindings/power/power-domain.yaml        |  2 ++
+ .../devicetree/bindings/power/supply/power-supply.yaml |  2 ++
+ Documentation/devicetree/bindings/pwm/pwm.yaml         |  2 ++
+ .../devicetree/bindings/regulator/fixed-regulator.yaml |  2 ++
+ .../bindings/regulator/google,cros-ec-regulator.yaml   |  2 ++
+ .../devicetree/bindings/regulator/gpio-regulator.yaml  |  2 ++
+ .../bindings/regulator/qcom-labibb-regulator.yaml      |  2 +-
+ .../devicetree/bindings/regulator/regulator.yaml       |  2 ++
+ .../bindings/regulator/st,stm32-booster.yaml           |  2 ++
+ .../bindings/regulator/st,stm32-vrefbuf.yaml           |  2 ++
+ .../bindings/regulator/vqmmc-ipq4019-regulator.yaml    |  2 ++
+ .../devicetree/bindings/regulator/wlf,arizona.yaml     |  2 ++
+ Documentation/devicetree/bindings/riscv/cpus.yaml      |  2 ++
+ Documentation/devicetree/bindings/riscv/sifive.yaml    |  3 +++
+ Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml |  2 ++
+ Documentation/devicetree/bindings/rtc/rtc.yaml         |  2 ++
+ Documentation/devicetree/bindings/rtc/s3c-rtc.yaml     |  2 ++
+ .../devicetree/bindings/serial/ingenic,uart.yaml       |  5 +++++
+ .../devicetree/bindings/serial/renesas,hscif.yaml      |  2 ++
+ .../devicetree/bindings/serial/renesas,sci.yaml        |  2 ++
+ .../devicetree/bindings/serial/renesas,scif.yaml       |  2 ++
+ .../devicetree/bindings/serial/renesas,scifa.yaml      |  2 ++
+ .../devicetree/bindings/serial/renesas,scifb.yaml      |  2 ++
+ Documentation/devicetree/bindings/serial/rs485.yaml    |  3 +++
+ Documentation/devicetree/bindings/serial/serial.yaml   |  2 ++
+ .../devicetree/bindings/serial/snps-dw-apb-uart.yaml   |  2 ++
+ .../devicetree/bindings/soc/imx/fsl,aips-bus.yaml      |  2 ++
+ .../devicetree/bindings/sound/amlogic,aiu.yaml         |  2 ++
+ .../devicetree/bindings/sound/cirrus,madera.yaml       |  2 ++
+ .../bindings/sound/nvidia,tegra210-ahub.yaml           |  3 +++
+ .../devicetree/bindings/sound/wlf,arizona.yaml         |  2 ++
+ .../bindings/soundwire/soundwire-controller.yaml       |  2 ++
+ .../bindings/spi/amlogic,meson-gx-spicc.yaml           |  2 ++
+ .../devicetree/bindings/spi/amlogic,meson6-spifc.yaml  |  2 ++
+ .../devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml    |  2 ++
+ .../devicetree/bindings/spi/qca,ar934x-spi.yaml        |  2 ++
+ .../devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml    |  2 ++
+ .../devicetree/bindings/spi/renesas,hspi.yaml          |  2 ++
+ .../devicetree/bindings/spi/renesas,rspi.yaml          |  2 ++
+ .../devicetree/bindings/spi/renesas,sh-msiof.yaml      |  2 ++
+ .../bindings/spi/socionext,uniphier-spi.yaml           |  2 ++
+ .../devicetree/bindings/spi/spi-controller.yaml        |  2 ++
+ Documentation/devicetree/bindings/spi/spi-gpio.yaml    |  2 ++
+ Documentation/devicetree/bindings/spi/spi-mux.yaml     |  2 ++
+ Documentation/devicetree/bindings/spi/spi-pl022.yaml   |  2 ++
+ .../devicetree/bindings/spi/spi-rockchip.yaml          |  2 ++
+ Documentation/devicetree/bindings/spi/spi-sifive.yaml  |  2 ++
+ .../devicetree/bindings/spi/st,stm32-qspi.yaml         |  2 ++
+ .../devicetree/bindings/spi/st,stm32-spi.yaml          |  2 ++
+ Documentation/devicetree/bindings/spmi/spmi.yaml       |  2 ++
+ .../bindings/thermal/thermal-cooling-devices.yaml      |  2 ++
+ .../devicetree/bindings/thermal/thermal-sensor.yaml    |  2 ++
+ .../devicetree/bindings/timer/snps,dw-apb-timer.yaml   |  2 +-
+ Documentation/devicetree/bindings/usb/ti,tps6598x.yaml |  2 ++
+ Documentation/devicetree/bindings/usb/usb-hcd.yaml     |  2 ++
+ .../bindings/watchdog/amlogic,meson-gxbb-wdt.yaml      |  2 ++
+ .../devicetree/bindings/watchdog/arm-smc-wdt.yaml      |  2 ++
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml         |  2 ++
+ .../devicetree/bindings/watchdog/samsung-wdt.yaml      |  2 ++
+ .../devicetree/bindings/watchdog/st,stm32-iwdg.yaml    |  2 ++
+ .../devicetree/bindings/watchdog/ti,rti-wdt.yaml       |  2 ++
+ .../devicetree/bindings/watchdog/watchdog.yaml         |  2 ++
+ 249 files changed, 570 insertions(+), 14 deletions(-)
+
+--
+2.25.1
