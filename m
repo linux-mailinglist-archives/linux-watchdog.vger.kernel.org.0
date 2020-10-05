@@ -2,64 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1AD283A99
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Oct 2020 17:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53B6283A58
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Oct 2020 17:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728182AbgJEPdq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Oct 2020 11:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S1728172AbgJEPdj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Oct 2020 11:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728117AbgJEPdO (ORCPT
+        with ESMTP id S1728155AbgJEPd3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Oct 2020 11:33:14 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A1DC0613CE;
-        Mon,  5 Oct 2020 08:33:14 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id l4so5535361ota.7;
-        Mon, 05 Oct 2020 08:33:14 -0700 (PDT)
+        Mon, 5 Oct 2020 11:33:29 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582CC0613CE;
+        Mon,  5 Oct 2020 08:33:29 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id 60so9016830otw.3;
+        Mon, 05 Oct 2020 08:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=eg/r8knaWKVMzpIOvdK4ogEsezgtI2ZeXd1cMC5p5yk=;
-        b=bVocSIToEIYhvOh9nc1XoASAUn7gPO0UIysUzQDX8QeAI5KoVSohiJtl3yFgH/biv4
-         C5qCNK882GtpeKt6/nIbevD9Cov1K9jq3X2BqkHag0TeR6+AU/qjVlnzJa6grdU9JQU4
-         HWPcsGRUhY44mGC5EdXLmwEHX+6ND9kW+E1WzVSu9Sqeec4cs1d0xPj9BM4uKyffoo/v
-         i8un6WzL0Hk3OlLZRuEHV8JseQ79jSqM4MlP/3TgeBf23MaqT3N5AG2ChL1FWxkhFjyh
-         b51kJANvllMg5C0Xh2jwjDzT8dfJvmiXScNXEXnGXA8kHaDc5bY20h2K0btgNwGrB89z
-         h3Ew==
+        bh=fAOWrG6/S5ZLKKTVVMDNIJzBJtKBZUeWpIvLtMobwPo=;
+        b=VuyDJA4xw1yX1PwCiRz/8mYgftsQ91grxDWzEphk4r9mwI4onu+Ur6TUBhKj1JUPZ3
+         EkzK4KnZszDi0qXqYRximTV6i/D5DyYc7E4b5CecgkcyDYElKzWbHKM7dW4kv/aTWJFK
+         q0z+T6YQnzj0J8uitDkGUCdNmWfIhTW6fJNuH0xmpe19mGGwZXqlIYhCoXsQizCINliO
+         1Xon+tjC26NVbuwM+xd0DXamfmjXNa/GdTfkjxMDWu8FJk/7UYAyF5J2Bg+v77thPPsE
+         OmW3Y1k3qmeF55h/RAV4aa5us4AIgQ5T3x9dOC7R8ESaplPKSPI/BiQQ6uwescGbLB0g
+         tzYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=eg/r8knaWKVMzpIOvdK4ogEsezgtI2ZeXd1cMC5p5yk=;
-        b=KMMQbpOQedMhYgz8hu3ErztEK1gxzRG3WAvyw3CrFaK4/VBJqz8HDsZcZ0vFV/xhjr
-         q+N631g3ItAaKaJlhsUDt4OfItqnD3XSUG/sXvt0ms1WqhDguj+VTnRT9TDEvWSySLOF
-         5EOwzIYljCveQXWUFtB8t78Bd6UOAJ2IflQJBKqJJYDagl5yu3picvER3bnmFK1pF9aB
-         XSfLgw08MUaKodA8aU6C2EOHtxy3Llk5/jkA5Ks9NOGm1aMEACK50kRDyJJMN4edM43y
-         yvuqw5z/pAqrEXn/EskJ31896jhG2hmYEtobtrp8wbWiuVcydMv8BzcFyaCa6mBYGetQ
-         N8aw==
-X-Gm-Message-State: AOAM532fUuE5NUSafs1/esf+2m1NqV9JWSFE3e7Bb+An2zLZ/Hd2kFW2
-        Ma6PXMVMMvPOPIbZJTUFXNquKm7/leA=
-X-Google-Smtp-Source: ABdhPJw3yS5P1EqPoAIVLPgJ+KjZBECyHUmei3QIkbIYuSxqodG2C6z4QReNQTBtBJY6h1xxWuQKGw==
-X-Received: by 2002:a05:6830:164c:: with SMTP id h12mr13003695otr.48.1601911993587;
-        Mon, 05 Oct 2020 08:33:13 -0700 (PDT)
+        bh=fAOWrG6/S5ZLKKTVVMDNIJzBJtKBZUeWpIvLtMobwPo=;
+        b=PfEObO4EMHYqi+J0g+vK84jZh0MdGfsmTFsUkUQdjH6NnxkdY7mJdVV/sDMUAT+/vo
+         8N+DKHB5SVW1NY7VCHPCkOTeaUsmyXIrSi7aH/QEx3Ovlzhr809daKDKlDsR3m8P/Y7c
+         6L8YxuixgfQipiQebsMauQj4gbo+Zh+qZxNhG1q03ldvM/zk37uISqDfVnkOWTnsJ8bt
+         RuNIfLn5pq6zZISXaK5pBf66QV5aNDSCwM4WQVvkoeZnoqwqw5DcZf8iB7ZyiBFByc1t
+         dBtw35X15pTNVUccP/VLogleEC+dhLIgEvVesMPaXFUd1TA2LUSMml8sJDNhB04uQOG/
+         JfAg==
+X-Gm-Message-State: AOAM531gCmECg9KNaSQKmpzMpnta/1+aFuyJ6bYD6h6F9JDd05QZSjWP
+        o5gpMBxx9/yR7MFxKV8C2Oo=
+X-Google-Smtp-Source: ABdhPJy4YyY/calQK6fzUeUHLDJv0BboyToBE2dqThOrHpI3/lyJJop0/nb0G72JZIg6fuhP+yQp0w==
+X-Received: by 2002:a9d:6c4d:: with SMTP id g13mr11567819otq.367.1601912008696;
+        Mon, 05 Oct 2020 08:33:28 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g26sm2968046otn.77.2020.10.05.08.33.12
+        by smtp.gmail.com with ESMTPSA id h14sm8157otr.21.2020.10.05.08.33.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2020 08:33:12 -0700 (PDT)
+        Mon, 05 Oct 2020 08:33:28 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v5 2/2] watchdog: Add Toshiba Visconti watchdog driver
+Subject: Re: [PATCH v5 1/2] watchdog: bindings: Add binding documentation for
+ Toshiba Visconti watchdog device
 To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Rob Herring <robh+dt@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc:     punit1.agrawal@toshiba.co.jp, yuji2.ishikawa@toshiba.co.jp,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org
+        linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>
 References: <20201005023012.603026-1-nobuhiro1.iwamatsu@toshiba.co.jp>
- <20201005023012.603026-3-nobuhiro1.iwamatsu@toshiba.co.jp>
+ <20201005023012.603026-2-nobuhiro1.iwamatsu@toshiba.co.jp>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -104,12 +105,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <17cc88d7-aa27-c44d-81ab-2c91c398171b@roeck-us.net>
-Date:   Mon, 5 Oct 2020 08:33:11 -0700
+Message-ID: <d85ab1e2-a20c-ac48-e806-7b95105581da@roeck-us.net>
+Date:   Mon, 5 Oct 2020 08:33:26 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201005023012.603026-3-nobuhiro1.iwamatsu@toshiba.co.jp>
+In-Reply-To: <20201005023012.603026-2-nobuhiro1.iwamatsu@toshiba.co.jp>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -118,251 +119,78 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 10/4/20 7:30 PM, Nobuhiro Iwamatsu wrote:
-> Add the watchdog driver for Toshiba Visconti series.
+> Add documentation for the binding of Toshiba Visconti SoC's watchdog.
 > 
 > Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 > Reviewed-by: Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/Kconfig        |   8 ++
->  drivers/watchdog/Makefile       |   1 +
->  drivers/watchdog/visconti_wdt.c | 195 ++++++++++++++++++++++++++++++++
->  3 files changed, 204 insertions(+)
->  create mode 100644 drivers/watchdog/visconti_wdt.c
+>  .../watchdog/toshiba,visconti-wdt.yaml        | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index ab7aad5a1e69..0cb078ce5e9d 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1004,6 +1004,14 @@ config PM8916_WATCHDOG
->  	  Say Y here to include support watchdog timer embedded into the
->  	  pm8916 module.
->  
-> +config VISCONTI_WATCHDOG
-> +	tristate "Toshiba Visconti series watchdog support"
-> +	depends on ARCH_VISCONTI || COMPILE_TEST
-> +	select WATCHDOG_CORE
-> +	help
-> +	  Say Y here to include support for the watchdog timer in Toshiba
-> +	  Visconti SoCs.
-> +
->  # X86 (i386 + ia64 + x86_64) Architecture
->  
->  config ACQUIRE_WDT
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 97bed1d3d97c..a7747e76fd29 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -95,6 +95,7 @@ obj-$(CONFIG_RTD119X_WATCHDOG) += rtd119x_wdt.o
->  obj-$(CONFIG_SPRD_WATCHDOG) += sprd_wdt.o
->  obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
->  obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
-> +obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
->  
->  # X86 (i386 + ia64 + x86_64) Architecture
->  obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-> diff --git a/drivers/watchdog/visconti_wdt.c b/drivers/watchdog/visconti_wdt.c
+> diff --git a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
 > new file mode 100644
-> index 000000000000..83ef55e66ca8
+> index 000000000000..690e19ce4b87
 > --- /dev/null
-> +++ b/drivers/watchdog/visconti_wdt.c
-> @@ -0,0 +1,195 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2020 TOSHIBA CORPORATION
-> + * Copyright (c) 2020 Toshiba Electronic Devices & Storage Corporation
-> + * Copyright (c) 2020 Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> + */
+> +++ b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2020 Toshiba Electronic Devices & Storage Corporation
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/watchdog/toshiba,visconti-wdt.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 > +
-> +#include <linux/clk.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/watchdog.h>
+> +title: Toshiba Visconti SoCs PIUWDT Watchdog timer
 > +
-> +#define WDT_CNT			0x00
-> +#define WDT_MIN			0x04
-> +#define WDT_MAX			0x08
-> +#define WDT_CTL			0x0c
-> +#define WDT_CMD			0x10
-> +#define WDT_CMD_CLEAR		0x4352
-> +#define WDT_CMD_START_STOP	0x5354
-> +#define WDT_DIV			0x30
+> +maintainers:
+> +  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 > +
-> +#define VISCONTI_WDT_FREQ	2000000 /* 2MHz */
-> +#define WDT_DEFAULT_TIMEOUT	10U /* in seconds */
+> +allOf:
+> +  - $ref: watchdog.yaml#
 > +
-> +static bool nowayout = WATCHDOG_NOWAYOUT;
-> +module_param(nowayout, bool, 0);
-> +MODULE_PARM_DESC(
-> +	nowayout,
-> +	"Watchdog cannot be stopped once started (default=" __MODULE_STRING(WATCHDOG_NOWAYOUT)")");
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - toshiba,visconti-wdt
 > +
-> +struct visconti_wdt_priv {
-> +	struct watchdog_device wdev;
-> +	void __iomem *base;
-> +	u32 div;
-> +};
+> +  reg:
+> +    maxItems: 1
 > +
-> +static int visconti_wdt_start(struct watchdog_device *wdev)
-> +{
-> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	u32 timeout = wdev->timeout * VISCONTI_WDT_FREQ;
+> +  clocks:
+> +    maxItems: 1
 > +
-> +	writel(priv->div, priv->base + WDT_DIV);
-> +	writel(0, priv->base + WDT_MIN);
-> +	writel(timeout, priv->base + WDT_MAX);
-> +	writel(0, priv->base + WDT_CTL);
-> +	writel(WDT_CMD_START_STOP, priv->base + WDT_CMD);
+> +  timeout-sec: true
 > +
-> +	return 0;
-> +}
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
 > +
-> +static int visconti_wdt_stop(struct watchdog_device *wdev)
-> +{
-> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +additionalProperties: false
 > +
-> +	writel(1, priv->base + WDT_CTL);
-> +	writel(WDT_CMD_START_STOP, priv->base + WDT_CMD);
+> +examples:
+> +  - |
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
 > +
-> +	return 0;
-> +}
+> +        wdt_clk: wdt-clk {
+> +            compatible = "fixed-clock";
+> +            clock-frequency = <150000000>;
+> +            #clock-cells = <0>;
+> +        };
 > +
-> +static int visconti_wdt_ping(struct watchdog_device *wdd)
-> +{
-> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdd);
-> +
-> +	writel(WDT_CMD_CLEAR, priv->base + WDT_CMD);
-> +
-> +	return 0;
-> +}
-> +
-> +static unsigned int visconti_wdt_get_timeleft(struct watchdog_device *wdev)
-> +{
-> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	u32 timeout = wdev->timeout * VISCONTI_WDT_FREQ;
-> +	u32 cnt = readl(priv->base + WDT_CNT);
-> +
-> +	if (timeout <= cnt)
-> +		return 0;
-> +	timeout -= cnt;
-> +
-> +	return timeout / VISCONTI_WDT_FREQ;
-> +}
-> +
-> +static int visconti_wdt_set_timeout(struct watchdog_device *wdev, unsigned int timeout)
-> +{
-> +	u32 val;
-> +	struct visconti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +
-> +	wdev->timeout = timeout;
-> +	val = wdev->timeout * VISCONTI_WDT_FREQ;
-> +
-> +	/* Clear counter before setting timeout because WDT expires */
-> +	writel(WDT_CMD_CLEAR, priv->base + WDT_CMD);
-> +	writel(val, priv->base + WDT_MAX);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct watchdog_info visconti_wdt_info = {
-> +	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
-> +	.identity = "Visconti Watchdog",
-> +};
-> +
-> +static const struct watchdog_ops visconti_wdt_ops = {
-> +	.owner		= THIS_MODULE,
-> +	.start		= visconti_wdt_start,
-> +	.stop		= visconti_wdt_stop,
-> +	.ping		= visconti_wdt_ping,
-> +	.get_timeleft	= visconti_wdt_get_timeleft,
-> +	.set_timeout	= visconti_wdt_set_timeout,
-> +};
-> +
-> +static void visconti_clk_disable_unprepare(void *data)
-> +{
-> +	clk_disable_unprepare(data);
-> +}
-> +
-> +static int visconti_wdt_probe(struct platform_device *pdev)
-> +{
-> +	struct watchdog_device *wdev;
-> +	struct visconti_wdt_priv *priv;
-> +	struct device *dev = &pdev->dev;
-> +	struct clk *clk;
-> +	int ret;
-> +	unsigned long clk_freq;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->base))
-> +		return PTR_ERR(priv->base);
-> +
-> +	clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(clk))
-> +		return dev_err_probe(dev, PTR_ERR(clk), "Could not get clock\n");
-> +
-> +	ret = clk_prepare_enable(clk);
-> +	if (ret) {
-> +		dev_err(dev, "Could not enable clock\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(dev, visconti_clk_disable_unprepare, clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	clk_freq = clk_get_rate(clk);
-> +	if (!clk_freq)
-> +		return -EINVAL;
-> +
-> +	priv->div = clk_freq / VISCONTI_WDT_FREQ;
-> +
-> +	/* Initialize struct watchdog_device. */
-> +	wdev = &priv->wdev;
-> +	wdev->info = &visconti_wdt_info;
-> +	wdev->ops = &visconti_wdt_ops;
-> +	wdev->parent = dev;
-> +	wdev->min_timeout = 1;
-> +	wdev->max_timeout = 0xffffffff / VISCONTI_WDT_FREQ;
-> +	wdev->timeout = min(wdev->max_timeout, WDT_DEFAULT_TIMEOUT);
-> +
-> +	watchdog_set_drvdata(wdev, priv);
-> +	watchdog_set_nowayout(wdev, nowayout);
-> +	watchdog_stop_on_unregister(wdev);
-> +
-> +	/* This overrides the default timeout only if DT configuration was found */
-> +	ret = watchdog_init_timeout(wdev, 0, dev);
-> +	if (ret)
-> +		dev_warn(dev, "Specified timeout value invalid, using default\n");
-> +
-> +	return devm_watchdog_register_device(dev, wdev);
-> +}
-> +
-> +static const struct of_device_id visconti_wdt_of_match[] = {
-> +	{ .compatible = "toshiba,visconti-wdt", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, visconti_wdt_of_match);
-> +
-> +static struct platform_driver visconti_wdt_driver = {
-> +	.driver = {
-> +			.name = "visconti_wdt",
-> +			.of_match_table = visconti_wdt_of_match,
-> +		},
-> +	.probe = visconti_wdt_probe,
-> +};
-> +module_platform_driver(visconti_wdt_driver);
-> +
-> +MODULE_DESCRIPTION("TOSHIBA Visconti Watchdog Driver");
-> +MODULE_AUTHOR("Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp");
-> +MODULE_LICENSE("GPL v2");
+> +        watchdog@28330000 {
+> +            compatible = "toshiba,visconti-wdt";
+> +            reg = <0 0x28330000 0 0x1000>;
+> +            clocks = <&wdt_clk>;
+> +            timeout-sec = <20>;
+> +        };
+> +    };
 > 
 
