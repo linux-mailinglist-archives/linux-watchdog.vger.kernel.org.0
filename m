@@ -2,54 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A860284598
-	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Oct 2020 07:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC33F28467B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Oct 2020 08:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgJFFmj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 6 Oct 2020 01:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        id S1727170AbgJFG6f (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 6 Oct 2020 02:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727040AbgJFFmb (ORCPT
+        with ESMTP id S1726957AbgJFG63 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 6 Oct 2020 01:42:31 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE00C0613A8
-        for <linux-watchdog@vger.kernel.org>; Mon,  5 Oct 2020 22:42:31 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id l85so11367079oih.10
-        for <linux-watchdog@vger.kernel.org>; Mon, 05 Oct 2020 22:42:31 -0700 (PDT)
+        Tue, 6 Oct 2020 02:58:29 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D81C0613D5
+        for <linux-watchdog@vger.kernel.org>; Mon,  5 Oct 2020 23:58:29 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id d3so1835996wma.4
+        for <linux-watchdog@vger.kernel.org>; Mon, 05 Oct 2020 23:58:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FYOEybxQ9Y8nUxVZmzLLg+Qyso2tjlpbGNthFRqblLc=;
-        b=scAXD8YuBk8j/NF0iYDdCeaAVj2lJqU4ekQ7XmxKGRZD9n7rlAL/7uG23DDE1fcZ56
-         zF72mU8P6EdMfXizzEbowAVRT7aqB90B0ZPahldWPyAERYWd6msUiWvIw5u5I68GC10s
-         2mfO8dqRM6oWZLB0Q6RNjtouVvMzAMtCqHytHKbKwrjH25Far6tK8oMk2FL/+Ytm6yFo
-         ix24Oh/3R7FZgjcOmnnbZhO2Rnj4pwkEjTGIWiz4UAhFCmHcKJq5fJPHDGVhMb52+bja
-         GRW+sJiWWq/RfS6N9j6fS0MlegpQS8J4O6R0p/6fHQbNSKo6Dg2SOD+ESIa+qx/GxTp7
-         QQLQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=hye8oZPllXv0LLz+UWG2B82nJ6IN2QnHfKrsEX8XCOU=;
+        b=jn2dIC4KneJcMCE5DY3o93rmWgdTmK7NJWwKNWGocC7HbxwqveIdxS9nVru8ryq+P9
+         s4//ef94qJ6Y8ujWnpglPZlIlD6sJ33blfTKKcaCdwJolql9IFEUfzJMHCTe1JnaG8Iw
+         b+YeHxV9DI6DSD3tgOAF3IaWem5VxRfAN0ODuGo/qw2A8ReI6qDWtdlFFibEvRuFiEoQ
+         dhilbFbgvuG8V67ydtdAffL1xmKMRbv76Ctys34uqkoMVb3gFX2RETn3H/bHFtSxghuV
+         ji7JhUukKOJOEajfS3LrzYX2Rf2L6FpU2JZ9jHfMZk5oQaZMZKMZfy/k1RR5/u729NJu
+         K0HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FYOEybxQ9Y8nUxVZmzLLg+Qyso2tjlpbGNthFRqblLc=;
-        b=crimbvOtWOV/ZjZwxDH5CEn1S8ihJ6bBRJRR5JIDNwmHQrQzCg2DOTpu7WIrEaiKJP
-         2PzvkAsyNHLZ+sredsHLH8qA+toHqn9aSou6TI9EgyKxb7utbbSZvEvCtP+hi57Ln83w
-         ufhAcw4HoajhZBSLs7qI9Z41O6aphBHRNDq38GWgNm5Eske0AVjZGCl3+hHe3Qi9aLoV
-         5RTVZ5RDmC4ne4YLyenkxk05kXX1Kez3hoTM/TfLis0gC/psIjR8i2dcqfqCVhAfYiT5
-         xTdC0AzHf+7YIARbpfNtW2WpX2bCSm5+pqmSvZbk1AK5tnh8wD+uFQZPGd2ocjbkQysL
-         8EfA==
-X-Gm-Message-State: AOAM530rmIWKX0xhxMbavbz7ev17O1VM4v8LAlsUddJjqeNGVfEoyNPl
-        WIy3eXNccCZwowMExAV2Y5NdKiX9OqE7cQ==
-X-Google-Smtp-Source: ABdhPJzo+T1F54fl8q16F3SuWBffglk48PEytQu7/wpxM8oR5iYvbOQGglf6EbVoa0EICQ893qG+lw==
-X-Received: by 2002:a17:90b:950:: with SMTP id dw16mr2661711pjb.200.1601962950652;
-        Mon, 05 Oct 2020 22:42:30 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id d145sm2005503pfd.136.2020.10.05.22.42.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Oct 2020 22:42:29 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 11:12:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hye8oZPllXv0LLz+UWG2B82nJ6IN2QnHfKrsEX8XCOU=;
+        b=AjPotLMLW2M+Y6cAq8Wv8gNWYaqiPyoGJZvnACZFfAX16c8dSy5SZC3gOwWphbw2hs
+         oUdFfaHD4JkhujPFZZI3LNZBg21eVB3Q0z3Dpj+anLCD6Nhowir0CLoou79oHRrz+Awt
+         SbLYfy1XmVFMGqpFCiw+G9JrQzLQ9Vn1GjOl+rqMEHAJJy81S42ayzGHAlGsOwdJ3IYR
+         AeyeJ57eVtDKbvXg7JPTtyzF8Yjk9CrwdFK+6KwKO00qQLBQI7Fliv1dwxa6u0JGrkqa
+         L3AyK5IA9ezbIbw5bHJgAKnXh4kS3kqcbtuY6xNmsZsupYyZvDmt1Q5qwTIEU89M+b8S
+         qGfg==
+X-Gm-Message-State: AOAM533+pdJcylqJanqOlmAFQ8XI3BQZ2BMdCEj6Zu8XJX9fJl/d5Esg
+        Fmbd+LDzgE3He95zPyggGpeR44lNbv9qIQ==
+X-Google-Smtp-Source: ABdhPJxsvKtzCqkv4fxGZg3y/AIgf4rU1S8D4EatsKLRXGnqjE4r6Ftdz8iBdl2gfcmAi+GG7YDezw==
+X-Received: by 2002:a1c:2cc2:: with SMTP id s185mr3211564wms.77.1601967506851;
+        Mon, 05 Oct 2020 23:58:26 -0700 (PDT)
+Received: from dell ([91.110.221.236])
+        by smtp.gmail.com with ESMTPSA id u12sm3158245wrt.81.2020.10.05.23.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Oct 2020 23:58:26 -0700 (PDT)
+Date:   Tue, 6 Oct 2020 07:58:20 +0100
+From:   Lee Jones <lee.jones@linaro.org>
 To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -70,7 +71,6 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -111,31 +111,31 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: Explicitly allow additional properties
- in board/SoC schemas
-Message-ID: <20201006054228.ho3ajzfgpiew32ft@vireshk-i7>
+Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
+ in common schemas
+Message-ID: <20201006065820.GY6148@dell>
 References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-4-robh@kernel.org>
+ <20201005183830.486085-5-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-4-robh@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 05-10-20, 13:38, Rob Herring wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As the top-level
-> board/SoC schemas always have additional properties, add
-> 'additionalProperties: true'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/arm/spear.yaml               | 3 +++
+On Mon, 05 Oct 2020, Rob Herring wrote:
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> In order to add meta-schema checks for additional/unevaluatedProperties
+> being present, all schema need to make this explicit. As common/shared
+> schema are included by other schemas, they should always allow for
+> additionalProperties.
+
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
-viresh
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
