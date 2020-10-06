@@ -2,54 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF60284B2A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Oct 2020 13:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F374284DA5
+	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Oct 2020 16:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbgJFL4V (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 6 Oct 2020 07:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S1725981AbgJFO3Q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 6 Oct 2020 10:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbgJFL4V (ORCPT
+        with ESMTP id S1725906AbgJFO3Q (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 6 Oct 2020 07:56:21 -0400
+        Tue, 6 Oct 2020 10:29:16 -0400
 Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BF0C061755;
-        Tue,  6 Oct 2020 04:56:19 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id 26so12300386ois.5;
-        Tue, 06 Oct 2020 04:56:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90F2C061755;
+        Tue,  6 Oct 2020 07:29:15 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id t77so9288329oie.4;
+        Tue, 06 Oct 2020 07:29:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+        h=sender:subject:from:to:cc:references:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to;
-        bh=JNHgnUkVCcHnTYb9aD+ejOV1q+BxbD2oTjD0QUoKHLM=;
-        b=umUwmQCnLwmmp5iMp8nPNFyjp0ehREyrq0z5X2q9Xs2jTgp7kXNvswN+4NPXm9/JZh
-         z08dh/uiCCKjl7mFaZgK+IIwc+RzLOC0u3fxxWrLl+KHz2yddjSKo0R4W4mr0HsuXWSY
-         5L2d/pP9lOylMF7EGy795YuT2z/hJQme0gM0sLSlg5jF7iJjgToTwFQqsvsdNFwujm8b
-         qBfA7VXiSnLYxBwV3eQhY2X4nLHSlWkk2vjgeoeoF/l4sTOpAzcLWjNModx8VbTTDran
-         l4btJ5mxhIzL9EdLVIT627pF5c4xVHQVxWICQ5KnWrwRrRnEqq1Coo5eRfi6beIjTY0n
-         vwbg==
+        bh=gWCvr6jme1sD/L2VS+NEvBVzgBRNU/acJHMvPlKRV3g=;
+        b=TY/p8N5LTJziXQ/Itigt48TvXXajZIxPUM+dTMxSyncSk9h4JIsnqa4m7AMQT5282i
+         H1xMcTIjTLWQ/XltFZznjx3JLxo68ECPFH7qR1ei8RtghfvsiaElrQ7damhqS/uPCVN5
+         Bn7WCYejwSA3hRW0RI6IDqiV/CGDydjtY07nKPvjoSuxAxz5JqPIiRVlplrC1zff1uhZ
+         xJ14+yAC/t2MJIf272UdVf/128DUoAIlRO+XI6Qbrn0fx3cnZXTaCoPf3rel1EtFTUKh
+         Y4EoukoivcBCYBXekCwwYWAsjRSanghbsqhZ43A8q8gqojvQQI2FycQ4RPrO0drBimlI
+         mQ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+        h=x-gm-message-state:sender:subject:from:to:cc:references:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=JNHgnUkVCcHnTYb9aD+ejOV1q+BxbD2oTjD0QUoKHLM=;
-        b=SJ7f9UuMzTLx08N4d4lTQzHo4HzFmzO2kpX7oE2z/cUtu/KyilU5Ph+jWVEiC0NkzG
-         V17FvHou71JfvsCP1lDx0yysEcR+y/bbzvKwWi5eF9mkKUtpxeelxvhAgVvt0F5DZs5T
-         cmnXYTAKQkiXWRQ21Mu9OvRFQsiVqDlpp8x3JSn7APRKpL5naGjTAiPwqx9dQ3+D0oYG
-         hpLj15oUFo5ll/u8A+f6l7ECjl6bQLpv4a+JOmbyWDNLvSbThKU+xLa8BoyJfJYoOtkN
-         7VhqEJ+cGpNu5aNb8nh6ubS01PX6ihKjXxsyBSfxjxcBJ8obtGrwrNm1xYGNIw6VHKMg
-         /NRg==
-X-Gm-Message-State: AOAM5315k4uo77lpFbWjrjbIPewUH3NPrObE71BSchQNIy6MfhuhLxGp
-        u/R/5npvPXGYzInr6CW7CuY=
-X-Google-Smtp-Source: ABdhPJw3573ebO+CDzLiaIx8g3x6CssDiBihHtvtobq1wY1tFMbb1MMikEbtKfWT9BhwW9M0R50vhQ==
-X-Received: by 2002:a05:6808:7c9:: with SMTP id f9mr2587971oij.60.1601985379116;
-        Tue, 06 Oct 2020 04:56:19 -0700 (PDT)
+        bh=gWCvr6jme1sD/L2VS+NEvBVzgBRNU/acJHMvPlKRV3g=;
+        b=LO/aQXdKA5XC+oFuAcwIkhAIm4GsyfFzbLE23PbgMaCtjZR+uGo9sbzaCyW6UIAaVa
+         15B46cX0nHTry238uX9/vrL9Q/ZGOqtOXaVB+03Cn1pjES7gmzG0KlmiVNhaXA/AQsor
+         O4IwLiL+YPmH1fXK0Hyftbc/ZoNcwXkzgIAsLmE41c8g519N0vZJ7DtAvu2ku6TXRbnV
+         VTGhJiKgIOta/GgR6Ts+XkXuk2RlCXUoUTvQqLntKVNYK5o9EgTdKjq/bocW1h79y4rl
+         bke8zui7JO8iXlfMPN64W0bPMNUmP9Mw4w9awTjLxOBFZZYFngFyq8HM/Zk61MbFcAzy
+         VRbA==
+X-Gm-Message-State: AOAM5325F0RrihDKoXbO7YE2QJIvszNe6Hu5pVRCNOF6EFFi+r06NSM0
+        h2W2BrBJP42r+902m1G+9gdecJ57EC0=
+X-Google-Smtp-Source: ABdhPJz/RUK51CfJ2t7+19dmuSoLODv64KscwXc87lG4czFNnRdDCHk6EbRHPHYOx0FPZpRdXs9veA==
+X-Received: by 2002:aca:2808:: with SMTP id 8mr2845322oix.26.1601994555250;
+        Tue, 06 Oct 2020 07:29:15 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u9sm819308otq.54.2020.10.06.04.56.17
+        by smtp.gmail.com with ESMTPSA id k3sm870751oof.6.2020.10.06.07.29.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Oct 2020 04:56:18 -0700 (PDT)
+        Tue, 06 Oct 2020 07:29:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [RFC] Using a watchdog as system reset
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -57,7 +58,7 @@ To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
 Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         kernel@pengutronix.de
 References: <20201006102949.dbw6b2mrgt2ltgpw@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
+ <460aa962-9da5-6e1e-b5db-3f9f1d78110a@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -101,131 +102,154 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <460aa962-9da5-6e1e-b5db-3f9f1d78110a@roeck-us.net>
-Date:   Tue, 6 Oct 2020 04:56:15 -0700
+Message-ID: <41b0dfcd-adf1-296f-e5be-4db3eac9f097@roeck-us.net>
+Date:   Tue, 6 Oct 2020 07:29:11 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201006102949.dbw6b2mrgt2ltgpw@pengutronix.de>
+In-Reply-To: <460aa962-9da5-6e1e-b5db-3f9f1d78110a@roeck-us.net>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="WQODpNfZgrxoq7AEGCHz66hUzA9sr7HHw"
+ boundary="CFSApHr0l3KnAasu368AMnPWby3G87pPq"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---WQODpNfZgrxoq7AEGCHz66hUzA9sr7HHw
-Content-Type: multipart/mixed; boundary="FyYnKfEh6zJBMIBpR7mCNOTRFUEs2AnEz"
+--CFSApHr0l3KnAasu368AMnPWby3G87pPq
+Content-Type: multipart/mixed; boundary="JOX2XH2xOXwD2PyLmn477UaoCed7rcTlq"
 
---FyYnKfEh6zJBMIBpR7mCNOTRFUEs2AnEz
+--JOX2XH2xOXwD2PyLmn477UaoCed7rcTlq
 Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 10/6/20 3:29 AM, Uwe Kleine-K=F6nig wrote:
-> Hello,
+On 10/6/20 4:56 AM, Guenter Roeck wrote:
+> On 10/6/20 3:29 AM, Uwe Kleine-K=F6nig wrote:
+>> Hello,
+>>
+>> I have an i.MX25 system here with an external watchdog (using the
+>> gpio_wdt driver). So the internal watchdog (imx2_wdt) is unused.
+>>
+>> The problem with the unused imx2_wdt is that this usually provides the=
+
+>> restart handler and now a reboot ends with
+>>
+>> 	reboot: Restarting system
+>> 	Reboot failed -- System halted
+>>
+>> until eventually the watchdog bites and resets the machine.
+>>
+>> I imagine that this is a common enough issue to warrant a generic
+>> solution. My suggestion is to formalize and implement something like:
+>>
+>> 	watchdog {
+>> 		compatible =3D "linux,wdt-gpio";
+>> 		...
+>> 		provide-system-reset;
+>> 	}
+>>
+>> with the sematic of: "This is the dedicated mechanism to reset this
+>> machine."
+>>
 >=20
-> I have an i.MX25 system here with an external watchdog (using the
-> gpio_wdt driver). So the internal watchdog (imx2_wdt) is unused.
+> Some systems have more than one means to reset it, which is why
+> restart handlers have a priority. This in turn suggests that we should
+> maybe have a means to set that priority dynamically for the imx2_wdt dr=
+iver
+> (or for watchdog drivers in general) instead of having it fixed at 128.=
+
+> That would also solve your problem, assuming there is a different
+> (currently lower priority) means to reset the hardware in your system.
 >=20
-> The problem with the unused imx2_wdt is that this usually provides the
-> restart handler and now a reboot ends with
->=20
-> 	reboot: Restarting system
-> 	Reboot failed -- System halted
->=20
-> until eventually the watchdog bites and resets the machine.
->=20
-> I imagine that this is a common enough issue to warrant a generic
-> solution. My suggestion is to formalize and implement something like:
->=20
-> 	watchdog {
-> 		compatible =3D "linux,wdt-gpio";
-> 		...
-> 		provide-system-reset;
-> 	}
->=20
-> with the sematic of: "This is the dedicated mechanism to reset this
-> machine."
+> Alternatively, can't you just blacklist the imx2-wdt driver ?
 >=20
 
-Some systems have more than one means to reset it, which is why
-restart handlers have a priority. This in turn suggests that we should
-maybe have a means to set that priority dynamically for the imx2_wdt driv=
+After having another couple hours of sleep and a coffee, I wonder if
+this is already done, and the reboot just fails _because_ the imx2_wdt
+is _not_ loaded. Is that the case ?
+
+If so, it looks like you want the reset functionality of the imx_wdt driv=
 er
-(or for watchdog drivers in general) instead of having it fixed at 128.
-That would also solve your problem, assuming there is a different
-(currently lower priority) means to reset the hardware in your system.
+but not its watchdog functionality. And the above would be a suggestion
+to add a "generic" restart functionality into the watchdog subsystem,
+one that uses a watchdog with minimum timeout to reset the system,
+even if its driver doesn't explicitly register a restart handler.
+Is that what you are trying to suggest ?
 
-Alternatively, can't you just blacklist the imx2-wdt driver ?
-
-> (OK, I could enable the imx2_wdt driver and make sure with some udev
-> magic that the gpio watchdog is the one being fed by userspace. But
-> having two watchdogs fills me with some trepidation.)
->=20
-
-Hmm - that suggests that the reset may fail  because the reset code
-in imx2_wdt doesn't work, not because it isn't wired.
-If so, the driver code handling the reset may be buggy or incomplete.
-Have you tried setting (or not setting) the fsl,ext-reset-output
-property ?
-
-> Having said that, I wonder what the typical restart callback does
-> different from setting the timeout to a minimal value, start it and the=
-n
-> maybe call delay() to not return until the watchdog triggers. At least
-> that's what I would do for a watchdog that doesn't provide an explicit
-> .restart handler but has the provide-system-reset property.
-
-The intent of the callback was to handle situations where the watchdog
-hardware also generates the system reset. The secondary use was for syste=
-ms
-which don't have a means to reset the system other than what you describe=
-
-above.
-
+Thanks,
 Guenter
 
+>> (OK, I could enable the imx2_wdt driver and make sure with some udev
+>> magic that the gpio watchdog is the one being fed by userspace. But
+>> having two watchdogs fills me with some trepidation.)
+>>
 >=20
-> In my eyes this is somewhat of a hardware property, but I can imagine
-> that others don't agree and argue this shouldn't go into the device
-> tree. @Rob: What is your position here?
+> Hmm - that suggests that the reset may fail  because the reset code
+> in imx2_wdt doesn't work, not because it isn't wired.
+> If so, the driver code handling the reset may be buggy or incomplete.
+> Have you tried setting (or not setting) the fsl,ext-reset-output
+> property ?
 >=20
-> Does this sound sane? Do we also need a property like
-> "no-provide-system-reset" to better maintain backward compatibility?
-> (which then would result in not registering the watchdog as reset
-> trigger even if the driver provides a .restart.)
-> Does someone know a better name for the property?
+>> Having said that, I wonder what the typical restart callback does
+>> different from setting the timeout to a minimal value, start it and th=
+en
+>> maybe call delay() to not return until the watchdog triggers. At least=
+
+>> that's what I would do for a watchdog that doesn't provide an explicit=
+
+>> .restart handler but has the provide-system-reset property.
 >=20
-> Best regards
-> Uwe
+> The intent of the callback was to handle situations where the watchdog
+> hardware also generates the system reset. The secondary use was for sys=
+tems
+> which don't have a means to reset the system other than what you descri=
+be
+> above.
+>=20
+> Guenter
+>=20
+>>
+>> In my eyes this is somewhat of a hardware property, but I can imagine
+>> that others don't agree and argue this shouldn't go into the device
+>> tree. @Rob: What is your position here?
+>>
+>> Does this sound sane? Do we also need a property like
+>> "no-provide-system-reset" to better maintain backward compatibility?
+>> (which then would result in not registering the watchdog as reset
+>> trigger even if the driver provides a .restart.)
+>> Does someone know a better name for the property?
+>>
+>> Best regards
+>> Uwe
+>>
+>=20
 >=20
 
 
 
---FyYnKfEh6zJBMIBpR7mCNOTRFUEs2AnEz--
+--JOX2XH2xOXwD2PyLmn477UaoCed7rcTlq--
 
---WQODpNfZgrxoq7AEGCHz66hUzA9sr7HHw
+--CFSApHr0l3KnAasu368AMnPWby3G87pPq
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAl98W2AACgkQyx8mb86f
-mYEx5Q//WnaG1XV8kZRM9t1hTpU954UiTZlKELiWX5w3tF4DQMwpUEBNxPivfSGN
-zLqK2oPrdMMQqliT+quFuiw2JqSlguGZEJYvGdZFEV6V1rtgcnYHrUCzoN41Nn5b
-wAK24NtPya8OWHiyd8BM+wK0X6fqrJxBo8QusTPJFW3O+i8E1pYpz3Shqqm/KRA5
-zfpOk+dEOMK3mfzMbbOwrHDOav1wdaguZIR3rtOjTkcdsS8oXgO4EbjcDrF7uyiX
-PLGwGq08VApRollCz/XFwXur8F1fT2JEqmc7HNQPXGbNRVd84jC+6GPDOPFEnE35
-Z86TlpurLwefDsi/RV4eTomaC++iOIN98a/gApVogro/Ft6vPh6q5CKNtdHTbm6V
-LOBAi26xNSKg7FEsJ3ieLNW+BjOv4yIxbKGWOXGleCjvAr5GgSkB3PQkcIWQH70X
-2Mt4GQW8GMxU7jNWgLDBK3xVFUXfogIw4Y5i783x/aJHWQa7kog5lnnN5AgxnyH6
-ceXJO2q1FSLJsPpRlpeEUmKJ+ew2vBrVmEVuRrm34s8NmJRO15lrIj1viSNSJnIV
-RxMdvV00rJTNSv9GYP9cP/sABrFD5mzTGOdaBzeIhlVPOihgV7udQSlBHNk99vkd
-xohWjgKxAVGV/iGfLyXhFzjXvmGJYtFRdvOMWH+O2SrVf14HnPI=
-=XKjw
+iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAl98fzcACgkQyx8mb86f
+mYFNhA/7B4wtOx2ZYicsiG7HWm10Ntb+WDHweJmWBzQxgcp+Ex2ZO6q9BCWhK0uT
+t1AtV4PQMhjKlvWrbDdnV+NXeNZb8T09Nl8yEw/22eNj141HdMaG1xt3Dz49FW53
+J328kn+ANk+W9UVNZh71+DnSkugh8jjaszIg1ipBXO3lScaaIiPjOL2LfDrpIkCq
+iAp5RbSryEgtcRbxAqj1D/dGVSc0kplHxMsh2bQFR62k/m6sfHtn9piR8/yDl9Vl
+EYQAJUu6G9NUxaxSSqSwb3/sp/rAq4Mzrj1fp4wytaU3wdM4dOQPMSrKUJTeCrVc
+1DyObi/kfNfBU7Mt0aWl6xZmnp1VqsqWuiKtbK6+aKKFvOGTQbaKwF2URHK4PCUX
+tv1bMR/QYv456XnQuDSUgipZjXgoL4MIQdnkDMFzmsjO23FHOBy8j+ZacpQ0MKSg
+IIz/xuFSaSeKxVv6Yzc+LpfCWuOC1mLt20ZBcpkiKKi0XhZ/w1V2qdkUIFVMyzid
+mIWHxsxE73IGe7SfIfYp5c0LXzhBiDegw1ii9rid8JJRvx13HUCreDngFD1tkzBI
+gfhLxq0YERF9mjwRt74NQbEQWX/hI2B50buKRfz6K0p/g1lr8wd/gaimVZ8STU3O
+JjWQNtR5ySMLrWnW7+Vn9omGGbYyjLAXzeMjxbbFU8b5dBGwr80=
+=OZLL
 -----END PGP SIGNATURE-----
 
---WQODpNfZgrxoq7AEGCHz66hUzA9sr7HHw--
+--CFSApHr0l3KnAasu368AMnPWby3G87pPq--
