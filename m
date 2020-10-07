@@ -2,68 +2,195 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D32285D80
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Oct 2020 12:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4678285DC3
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Oct 2020 13:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728262AbgJGKwU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 7 Oct 2020 06:52:20 -0400
-Received: from mx.metalurgs.lv ([81.198.125.103]:61424 "EHLO mx.metalurgs.lv"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728272AbgJGKwU (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 7 Oct 2020 06:52:20 -0400
-Received: from mx.metalurgs.lv (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id CF13366A1C
-        for <linux-watchdog@vger.kernel.org>; Wed,  7 Oct 2020 13:51:30 +0300 (EEST)
-Received: from kas30pipe.localhost (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id A723F66A0F
-        for <linux-watchdog@vger.kernel.org>; Wed,  7 Oct 2020 13:51:30 +0300 (EEST)
-Received: by mx.metalurgs.lv (Postfix, from userid 1005)
-        id 2762B66887; Wed,  7 Oct 2020 13:51:30 +0300 (EEST)
-Received: from [100.64.1.74] (unknown [190.15.125.55])
-        (Authenticated sender: admin)
-        by mx.metalurgs.lv (Postfix) with ESMTPA id E763F65D08;
-        Wed,  7 Oct 2020 13:51:23 +0300 (EEST)
+        id S1728003AbgJGLE2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 7 Oct 2020 07:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727278AbgJGLE2 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 7 Oct 2020 07:04:28 -0400
+Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66825C061755;
+        Wed,  7 Oct 2020 04:04:27 -0700 (PDT)
+Received: by mail-oo1-xc44.google.com with SMTP id b12so489341oop.13;
+        Wed, 07 Oct 2020 04:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1ymvn+cxkMCxMYqq3wm6zoSqMltLe0LOv9Gk+3UzRlw=;
+        b=nTsTEOYyMWDvbLVhAJ1vmhc5uc/KiwqgqlGIuvCsxZQSqDuSti+h+EZsCaCGIBfrCW
+         vY/VVNVklO2e1gZzy3+1rvSKUWwRjHyF4w11jfT+Af/LnxRm3t0QAt2YMVU2K4tOTqGn
+         bJi40nKI3PrUe//EQZG0OBYW7YNhV9pbdSnG+bCWFSXJzIMBdflwgBzOCj+xTln+vjnU
+         NjU1fyaS5kLfvGEXRRI+SkjBIOky4be7y5M0xJg14efz/U3F1YAWB0d1pAyvZ4ucaVO3
+         V1ZwYOiNyFyr/lJVWHnhNhmlMSRuifQEnNHA5SRMhpbn95JG9ri2UzQVWhDpyrJ3nrMd
+         db5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=1ymvn+cxkMCxMYqq3wm6zoSqMltLe0LOv9Gk+3UzRlw=;
+        b=HBKFFNXUqVpiRlRu4T5FVk8616Y162Df4TUZl86AiZCyxwrJGIIafo1ss64KQ/0kFJ
+         nd1s2FTXQxCswN8+aEdzQCCWCd+aXi3edHl2EefUr2SqfuE6ZJidQV5O+RniOkXbCvlR
+         ZwMZqZbLr+96mSl4q9Ma5z7K1kAKHh1Spfuc9jJNHIS61BBJ8wQ8JHuhYqtLXHrku5pl
+         x0XEZv6amiaHT3Z73oMwRVM4hQCBWh+7fpZwY7K5PhuJ9oZsTrv7PLmPlnixCE7wdLtx
+         tY1bg1yjKgGClm1fMQyvYyupMrxNf0B+XVvqvjNxNpAYLZU9rcAlZFpaPct4oz5HtcIL
+         soxw==
+X-Gm-Message-State: AOAM533S0mVdz5HkJLMw+N7bOYMapG0jSxCJzopn0xidM6tNEA8PXx29
+        BQBAS1/DhtT63ce5NtEmTnmyquGiI9Y=
+X-Google-Smtp-Source: ABdhPJwDZw7JffZYdib9ML6Cd1+kBHuBA4PMTzFg2qPml4R9jvSaKCEN1GZW/203a7unvszDSa6gWg==
+X-Received: by 2002:a4a:e544:: with SMTP id s4mr1701634oot.74.1602068666610;
+        Wed, 07 Oct 2020 04:04:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y10sm1870925oot.46.2020.10.07.04.04.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Oct 2020 04:04:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: dt-binding to define default watchdog and machine reset (Was: Re:
+ [RFC] Using a watchdog as system reset)
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        kernel@pengutronix.de, Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Frank Rowand <frowand.list@gmail.com>
+References: <20201006102949.dbw6b2mrgt2ltgpw@pengutronix.de>
+ <460aa962-9da5-6e1e-b5db-3f9f1d78110a@roeck-us.net>
+ <41b0dfcd-adf1-296f-e5be-4db3eac9f097@roeck-us.net>
+ <20201006184130.r2lajves5l7lm2qk@pengutronix.de>
+ <c989af68-fa7b-e6cb-9306-a5f2e196fb20@roeck-us.net>
+ <20201007071222.pnftcuezlricotq3@pengutronix.de>
+ <04e33d49-4210-9dcd-040c-35059e0619ba@pengutronix.de>
+ <20201007101835.yhlbjfpklepfodgw@pengutronix.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <7e6dd4f6-cc1d-c7c8-4e56-5239995c4e87@roeck-us.net>
+Date:   Wed, 7 Oct 2020 04:04:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Description: Mail message body
-To:     Recipients <financialcapability6@gmail.com>
-From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
-Date:   Wed, 07 Oct 2020 07:51:17 -0300
-Reply-To: hmurrah39@gmail.com
-X-SpamTest-Envelope-From: financialcapability6@gmail.com
-X-SpamTest-Group-ID: 00000000
-X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
-X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
-X-SpamTest-Info: {DATE: unreal year}
-X-SpamTest-Method: none
-X-SpamTest-Rate: 55
-X-SpamTest-Status: Not detected
-X-SpamTest-Status-Extended: not_detected
-X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
-Message-ID: <20201007105130.2762B66887@mx.metalurgs.lv>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-Subject: Low Rate Loan./mmm,
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20140401 #7726142, check: 20201007 notchecked
+In-Reply-To: <20201007101835.yhlbjfpklepfodgw@pengutronix.de>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello Dear,
+On 10/7/20 3:18 AM, Uwe Kleine-König wrote:
+> Hello,
+> 
+> [promoted Rob from Cc: to To: and adapted the subject in the hope to get
+> some feedback]
+> 
+> On Wed, Oct 07, 2020 at 09:25:30AM +0200, Ahmad Fatoum wrote:
+>> On 10/7/20 9:12 AM, Uwe Kleine-König wrote:
+>>> On Tue, Oct 06, 2020 at 02:04:10PM -0700, Guenter Roeck wrote:
+>>>> With that in mind, your other option kind of makes sense. The only
+>>>> question would be how to express this in devicetree. I am certainly
+>>>> open to accepting a patch introducing such a property/functionality
+>>>> into the watchdog core.
+>>>
+>>> OK, will try to come up with a patch.
+>>
+>> Instead of having a `provide-system-reset' property, how about providing
+>> it unconditionally, but with a very low priority?
+>>
+Personally I don't think that would be a good idea, first in general but
+also because the generic restart handling mechanism is still not universally
+used (the last five or so patches needed to make it complete have been
+blocked by various people each time they were submitted, so we can be sure
+that they will never be accepted).
 
+Also, you would have to have a means to disable it, which would be equivalent
+to having a means to enable it, so making it enabled by default seems pointless
+and would unnecessarily introduce potential problems.
 
-We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+>> This can be coupled with Guenther's suggestion of having a dynamic
+>> way to set the priority, e.g. a `watchdog-priority' property in the device
+>> tree that's common to all watchdogs? That's the way barebox is handling
+>> multiple watchdogs (default value in driver overridable in DT and at runtime).
+> 
+> OK, I'll try to put this in more verbose words:
+> 
+> Let's introduce a generic watchdog property `watchdog-priority' that
+> provides a u32 to order the watchdogs for systems having two or more.
+> The value 0 means the watchdog is unusable/broken/disabled and the
+> watchdog with the biggest value is the one supposed to be used by
+> default.
+> 
 
+How do you suggest to implement that ? Device naming is determined
+by registration order. The watchdog subsystem doesn't decide which of
+the watchdogs is being used; userspace does that by opening the
+watchdog device. Userspace can already decide which watchdog to use
+by checking its sysfs attributes. If we were to create a sysfs attribute
+for userspace to read and compare, userspace could as well use the existing
+'identity' attribute to make that decision.
 
-We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+> Analogous a property `watchdog-restart-priority` is used to define if a
+> watchdog is supposed to be used to restart the machine. Again a value of
+> 0 means "Don't use" and otherwise the highest-value watchdog is used to
+> reset the machine.
+> 
 
+That makes more sense to me.
 
-Please get back to me if you are interested for more
+Guenter
 
-details.
+> Maybe `restart-priority` is a better name that can also be used by
+> PMICs?!
+> 
+>> What's the DT folks opinion on that?
+> 
+> Best regards
+> Uwe
+> 
 
-
-Yours faithfully,
-
-Hashim Murrah
