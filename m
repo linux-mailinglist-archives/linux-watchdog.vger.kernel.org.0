@@ -2,137 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 644432931B4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 20 Oct 2020 01:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094072934E0
+	for <lists+linux-watchdog@lfdr.de>; Tue, 20 Oct 2020 08:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388897AbgJSXFv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Oct 2020 19:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S1728112AbgJTGVo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 20 Oct 2020 02:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388812AbgJSXFu (ORCPT
+        with ESMTP id S2404070AbgJTGVh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Oct 2020 19:05:50 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7121C0613E3
-        for <linux-watchdog@vger.kernel.org>; Mon, 19 Oct 2020 16:05:49 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id p15so89638ioh.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 19 Oct 2020 16:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KZcwJitFojA7RhzeD/UU8gbzehCBdvf6g5ia0ZYCrq4=;
-        b=R0THCPfeT+NjRv5n7wRuWr3+iQQVH5mYQugrcFEorv7jMlZOJpq4gWO8x2sltRZ1S3
-         8+uXkfK+0xraFRPc7RLEyC+L1Eqn+lwfgcQ60rCu3Ir6T0iqCUlHxkXPI8IxQxljNihW
-         MxA7dERE+Fo0B6yhfEPLGm6gbjuMrGvt0ee7i4ozPAa6C0OwTV1SJBaz+sj8rzyyiIix
-         DQ1LhxNguLsVQ2r9xWcmCur9QDHoeimXQtC/UVpN+4Yl8O9ZbpYKUwlrKFZtzYHwjpgZ
-         iC+kREvCZvwgmOBCIm7DmgxG6/6ncKrp6QDCnbxkp/qIzrhuMyauJsg53LWTp//HSslk
-         z+3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KZcwJitFojA7RhzeD/UU8gbzehCBdvf6g5ia0ZYCrq4=;
-        b=ojEE8jD2E/f0f9aDqMmvUhnshpeGk/8E04wtGAI/5+12BtguLrzv4bQLo5gb/IOlM4
-         gbxhfBA/JFivdvD0ooJaFDZICjSc6fP4BzoK1pu49Ssn3rLaDJRssoN+y9IPSzu3HfIf
-         g4b377QHRZUi/Tzc+U+JgdasOFF/30IlaG0NrqKWoMyykr76ffFq6GyEcurCFpOgCAfe
-         81bHr1HhHTxEm97KGvfSVK2Xtb7NmBKXw3IdiNipU6otpPxyk+no1umFeu18f5g1RH3d
-         6eu+thenEneCfbojFQ79WwSNzFTI2g2i7hc0WqjVeS2ebwtrnkNYMT967E8NsGXkhkE4
-         TJxw==
-X-Gm-Message-State: AOAM530tmdPVMGQM1KSV365PqzINW04hrDh45KjapZBnJpHi0PwzIYOf
-        hMdGw8+jTkU9FfUMIZOu0kHUow==
-X-Google-Smtp-Source: ABdhPJwE/qhLAedndnNRaUrUDMs331Onaq8Iz+VDEVRJN+4h4B5ckC67pNXDnvS9MRF/DxLJjNlnIQ==
-X-Received: by 2002:a6b:5019:: with SMTP id e25mr44377iob.123.1603148748578;
-        Mon, 19 Oct 2020 16:05:48 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id u8sm7938ilm.36.2020.10.19.16.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 16:05:47 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kUeDq-002hRf-LL; Mon, 19 Oct 2020 20:05:46 -0300
-Date:   Mon, 19 Oct 2020 20:05:46 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-block@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        storagedev@microchip.com, devel@driverdev.osuosl.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        George Burgess <gbiv@google.com>
-Subject: Re: [RFC] treewide: cleanup unreachable breaks
-Message-ID: <20201019230546.GH36674@ziepe.ca>
-References: <20201017160928.12698-1-trix@redhat.com>
- <20201018054332.GB593954@kroah.com>
- <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+        Tue, 20 Oct 2020 02:21:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26393C061755
+        for <linux-watchdog@vger.kernel.org>; Mon, 19 Oct 2020 23:21:37 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1kUl1T-00064i-6m; Tue, 20 Oct 2020 08:21:27 +0200
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1kUl1R-00030o-NA; Tue, 20 Oct 2020 08:21:25 +0200
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: [PATCH v2 0/2] watchdog: f71808e_wdt: migrate to new kernel API
+Date:   Tue, 20 Oct 2020 08:21:10 +0200
+Message-Id: <20201020062112.6762-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 12:42:15PM -0700, Nick Desaulniers wrote:
-> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
-> > > From: Tom Rix <trix@redhat.com>
-> > >
-> > > This is a upcoming change to clean up a new warning treewide.
-> > > I am wondering if the change could be one mega patch (see below) or
-> > > normal patch per file about 100 patches or somewhere half way by collecting
-> > > early acks.
-> >
-> > Please break it up into one-patch-per-subsystem, like normal, and get it
-> > merged that way.
-> >
-> > Sending us a patch, without even a diffstat to review, isn't going to
-> > get you very far...
-> 
-> Tom,
-> If you're able to automate this cleanup, I suggest checking in a
-> script that can be run on a directory.  Then for each subsystem you
-> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
->  Then others can help you drive the tree wide cleanup.  Then we can
-> enable -Wunreachable-code-break either by default, or W=2 right now
-> might be a good idea.
+This series migrates the driver to use first the driver model, then
+the new kernel watchdog API.
 
-I remember using clang-modernize in the past to fix issues very
-similar to this, if clang machinery can generate the warning, can't
-something like clang-tidy directly generate the patch?
+I tested it on a f81866.
 
-You can send me a patch for drivers/infiniband/* as well
+v1 had a wrong title (f71808e_wdt: migrate to kernel). It's available here:
+https://lore.kernel.org/linux-watchdog/20200611191750.28096-1-a.fatoum@pengutronix.de/
 
-Thanks,
-Jason
+v1 -> v2:
+    - reworked to platform device/driver pair (Guenther)
+    - squashed identifier renaming into the patches that touch
+      the respective lines anyway
+    - fixed checkpatch.pl nitpicks (Guenther)
+    - fixed locally used variable declared without static (0-day)
+    - fixed unneded line break due to old line limit (Guenther)
+    - renamed struct fintek_wdog_data to struct fintek_wdt
+
+Ahmad Fatoum (2):
+  watchdog: f71808e_wdt: refactor to platform device/driver pair
+  watchdog: f71808e_wdt: migrate to new kernel watchdog API
+
+ drivers/watchdog/Kconfig       |   1 +
+ drivers/watchdog/f71808e_wdt.c | 815 ++++++++++++---------------------
+ 2 files changed, 292 insertions(+), 524 deletions(-)
+
+-- 
+2.28.0
+
