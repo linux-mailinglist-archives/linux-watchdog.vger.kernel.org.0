@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E92ED299B75
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Oct 2020 00:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D21A299F52
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Oct 2020 01:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409439AbgJZXva (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 26 Oct 2020 19:51:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52300 "EHLO mail.kernel.org"
+        id S2410985AbgJZXzv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 26 Oct 2020 19:55:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409425AbgJZXv3 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:51:29 -0400
+        id S2410195AbgJZXyV (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:54:21 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CBA9520882;
-        Mon, 26 Oct 2020 23:51:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 95BAD21655;
+        Mon, 26 Oct 2020 23:54:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756288;
+        s=default; t=1603756460;
         bh=03IWLhNICanjpu44Xap0cbktcyiY4USCLLvEEvUWjh4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nu//U8yoMEUofFZEYJi3llKg0aUaX39/dMrsr8E8d6ytFu5VCvFFESuEAdBauW0ex
-         hVeGAA55u+rXtbam1NW0fex36lN9aY9kpxyqvy/PH6AEuKNdtgxyEwUvYEgmdwaN7e
-         7/P8Vm/BImeo+6icU7s9yuEQeCMxxCuGhvgMUt9s=
+        b=vLnMNsKSkjZBfKOiy6zSRrAs8+VIZVdKq2etiIC5rEHYgjjptuTpjzNa7XUdIV1Qt
+         2V56HUSE38JPXG5lJ8+6n0ZiZom1ZGYppB/SJWj1xHrfhQ4LKSoG6WJvpuiuxlshNK
+         Elnv01vGLgYMVr1CqPwY01ThN7l6vWqYtuNWY+B4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 117/147] drivers: watchdog: rdc321x_wdt: Fix race condition bugs
-Date:   Mon, 26 Oct 2020 19:48:35 -0400
-Message-Id: <20201026234905.1022767-117-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 109/132] drivers: watchdog: rdc321x_wdt: Fix race condition bugs
+Date:   Mon, 26 Oct 2020 19:51:41 -0400
+Message-Id: <20201026235205.1023962-109-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026234905.1022767-1-sashal@kernel.org>
-References: <20201026234905.1022767-1-sashal@kernel.org>
+In-Reply-To: <20201026235205.1023962-1-sashal@kernel.org>
+References: <20201026235205.1023962-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
