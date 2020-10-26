@@ -2,27 +2,27 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D21A299F52
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Oct 2020 01:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 550DD299CAC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Oct 2020 01:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410985AbgJZXzv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 26 Oct 2020 19:55:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60106 "EHLO mail.kernel.org"
+        id S2437260AbgJ0AAu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 26 Oct 2020 20:00:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36548 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410195AbgJZXyV (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:54:21 -0400
+        id S2436492AbgJZX4e (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:56:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 95BAD21655;
-        Mon, 26 Oct 2020 23:54:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0C0C920770;
+        Mon, 26 Oct 2020 23:56:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756460;
-        bh=03IWLhNICanjpu44Xap0cbktcyiY4USCLLvEEvUWjh4=;
+        s=default; t=1603756593;
+        bh=rF3Bs3s+nWvLHxRMvK0zTH0TD+YotFbPgtNExKl6fUY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vLnMNsKSkjZBfKOiy6zSRrAs8+VIZVdKq2etiIC5rEHYgjjptuTpjzNa7XUdIV1Qt
-         2V56HUSE38JPXG5lJ8+6n0ZiZom1ZGYppB/SJWj1xHrfhQ4LKSoG6WJvpuiuxlshNK
-         Elnv01vGLgYMVr1CqPwY01ThN7l6vWqYtuNWY+B4=
+        b=iYO9YCL9Bb2EgEM3ouoOwqSqwIp6qoHsbY9BcENCEnyjXNSuvMEuRj408HFqrLThY
+         /qvky6ZHcMRXC1osw6LMC9aiR8iwahsQYTD3Ppn2EOg5RZU8KJ97CJKOGbWYxYZccv
+         Z4yXzgzHHrPudIqE8vZZqgpoa7laztmmBd8i7RNY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 109/132] drivers: watchdog: rdc321x_wdt: Fix race condition bugs
-Date:   Mon, 26 Oct 2020 19:51:41 -0400
-Message-Id: <20201026235205.1023962-109-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 64/80] drivers: watchdog: rdc321x_wdt: Fix race condition bugs
+Date:   Mon, 26 Oct 2020 19:55:00 -0400
+Message-Id: <20201026235516.1025100-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026235205.1023962-1-sashal@kernel.org>
-References: <20201026235205.1023962-1-sashal@kernel.org>
+In-Reply-To: <20201026235516.1025100-1-sashal@kernel.org>
+References: <20201026235516.1025100-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/watchdog/rdc321x_wdt.c b/drivers/watchdog/rdc321x_wdt.c
-index 57187efeb86f1..f0c94ea51c3e4 100644
+index 2e608ae6cbc78..e0efbc5831986 100644
 --- a/drivers/watchdog/rdc321x_wdt.c
 +++ b/drivers/watchdog/rdc321x_wdt.c
-@@ -231,6 +231,8 @@ static int rdc321x_wdt_probe(struct platform_device *pdev)
+@@ -230,6 +230,8 @@ static int rdc321x_wdt_probe(struct platform_device *pdev)
  
  	rdc321x_wdt_device.sb_pdev = pdata->sb_pdev;
  	rdc321x_wdt_device.base_reg = r->start;
@@ -83,7 +83,7 @@ index 57187efeb86f1..f0c94ea51c3e4 100644
  
  	err = misc_register(&rdc321x_wdt_misc);
  	if (err < 0) {
-@@ -245,14 +247,11 @@ static int rdc321x_wdt_probe(struct platform_device *pdev)
+@@ -244,14 +246,11 @@ static int rdc321x_wdt_probe(struct platform_device *pdev)
  				rdc321x_wdt_device.base_reg, RDC_WDT_RST);
  
  	init_completion(&rdc321x_wdt_device.stop);
