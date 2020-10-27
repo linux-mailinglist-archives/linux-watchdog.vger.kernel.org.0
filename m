@@ -2,122 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAFF29A7A9
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Oct 2020 10:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0747D29A7F6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Oct 2020 10:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505458AbgJ0JVp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 27 Oct 2020 05:21:45 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:45709 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404528AbgJ0JVp (ORCPT
+        id S2895681AbgJ0Jeo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 27 Oct 2020 05:34:44 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:35359 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2409431AbgJ0Jeo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:21:45 -0400
-Received: by mail-wr1-f67.google.com with SMTP id e17so983962wru.12;
-        Tue, 27 Oct 2020 02:21:43 -0700 (PDT)
+        Tue, 27 Oct 2020 05:34:44 -0400
+Received: by mail-wm1-f68.google.com with SMTP id h22so695667wmb.0;
+        Tue, 27 Oct 2020 02:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=z186JCjjaFAvCwc5lnsVqYkaLznjMGEXbtq2BCuMZUU=;
-        b=R/zY8H/5RPpLm3egn2ta5iUiZIwEuBzVCXPw+Lg91p9vvPRrGBl2piv7GEZSMLjpfE
-         ueb6cEurQZV2EBfy0xfbCkbpmsNtkSng1lab2hKeN2VHcpLcwer2p7ySHksmrwhHzCaA
-         isMvam17ZW1fhjfjzEHD5oFU6pms1bfxiLTPWXI+8vas75xeAxnyN6HBUxnJddury4Ba
-         VKWdjVUTfQkcLzGv49PIDfpjKrMcfepltj5TeQAFbPfSMjYD6JmZl6Xjj87LZL2tsimi
-         waq91nLJhvvTJFvEBLnpZF0d/90+4zf+GaLd9IxeD7YcM72URPo04KwM/wTDY9F+0kp6
-         Gvng==
+        bh=1O6ReDftOPLuv+rKw4ASKdk+lBtaUq2pZDF0lCYQsaY=;
+        b=pNbiUAvuBMXmcIWQBwkpHxeGJ6lfMPyMfSjHPJBk7lnMR6fn907w/4tPUp92smmO+c
+         OtboQXGXVo8oSyZKaoE+ONYfHMlVL+rwTLqvqIc+fkrLR55oDG2ez59rbAAPuG12YJkB
+         zf0hOvoeLkIcctIsXOnKkbHOGSxU2I7LAyTh+sgdSLgGfgDmx3aQi3IzB9IVBhlqPVbO
+         CejlAdz0eXH8AN6WJh130ZeUqOv9N+dAHR80tqPGfUjF8hTeKkVhHS2XqDz5YwwWoDo+
+         lupNzOQj57cr88XXDchbhOUc2TF2dx+ixHS81WyEmlPIu/WHXc4Ga9S/bCj0cyNAsZ8b
+         lR5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=z186JCjjaFAvCwc5lnsVqYkaLznjMGEXbtq2BCuMZUU=;
-        b=dL/AnY3VCiQMI+C7MWRbLlwZl5Y9zsTmWmO2TU+X2hRhCU+URVIsWi0J6xzzpG6pbP
-         QH9LKoGjKuv0PjNrAX1TmC0YrXmsZmimWV8KPfmRT3lffDT0xA9Do2Snh1WPhuL2L2q+
-         wwmnO3YyCVdtL/wYHipD6LVspFohNrMZgByuRt7n3PHmkzwJOQMzbmcW8xhOch9ksVtH
-         4sTjqYbibcufugJ7+qqG3lpebPKzSOTHLYUZJg7XflM58GPY34E0p+nuXPPMVaFD1Cxv
-         kkAR0Emoga2ZpZa0yWFt3OK394Mb9xFSAXFVyqMJ9KDuF54V96fu98c9Igv2LSNERjBl
-         z6ug==
-X-Gm-Message-State: AOAM533rFWZoq/kjhxNcYMTMDKjOiEbYdpej4GPRr4Oh3AYgM/rVZxYU
-        YztejqjRDsQ8No5ohmcfcP9jolrxL9pF2vbpHek=
-X-Google-Smtp-Source: ABdhPJzLZIQloIRWMS3CKSzfJxNeKxMuq7Fc6dt5T+aLr/rd4csjRbbxN9ImnAaNVvWLX9fEwgmSwsjd/e6BlOpueGQ=
-X-Received: by 2002:a5d:554b:: with SMTP id g11mr1665906wrw.370.1603790502743;
- Tue, 27 Oct 2020 02:21:42 -0700 (PDT)
+        bh=1O6ReDftOPLuv+rKw4ASKdk+lBtaUq2pZDF0lCYQsaY=;
+        b=D9dyBaACcZto7Hgh8ti/bVvALrKrKKoQMAxFLQqv8ZWYH7oLQrLgABCun45hUW1/yH
+         /y+EUsvrLwFTvG66Jm2B4sHi1RPn4uHyzqtDShMGLokhH0H0IsDDjE6XNsygmV/gZ8UM
+         MA98vzXzcZdbRzoHXRjrEUpE+OapjvFtwzWf6l7obGJ9hbJYEd2366LSiWBBCNJMX0cj
+         8F3ksC7EQVfvHPDzR5jk+E0C3/nrUTTBEoiT5aQCYGoveoXnxTyxsbMvXi/9VrCSgSir
+         R621vwOA/lqoGq/x3T8ddfYBJ42F++Yus9rqmGc6wZtn72Nu6q7g42ys+JZZg8zlMxxJ
+         OIbw==
+X-Gm-Message-State: AOAM532ChuGn+pKWkw0C22T7b1BS54e+R1RoglXd4CzE9MOqr1jd7M9J
+        Js/113u+RXQYZzQ2hpSjZWVMPMBsJafliqDyD97dAwpI6pz5Dg==
+X-Google-Smtp-Source: ABdhPJwopd/345MJxBCHQ2u3UoN/KSlAOVDjSs698J3nx/jmQOOY9DR3A4NMAMdWhEs5uVQncfbwYD9szUXfHf3SFI0=
+X-Received: by 2002:a05:600c:2252:: with SMTP id a18mr1614048wmm.166.1603791282238;
+ Tue, 27 Oct 2020 02:34:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201026080919.28413-1-zhang.lyra@gmail.com> <20201026080919.28413-3-zhang.lyra@gmail.com>
- <1bb8a3cf-5cdf-2c7f-29a2-3307f0de7cb0@roeck-us.net>
-In-Reply-To: <1bb8a3cf-5cdf-2c7f-29a2-3307f0de7cb0@roeck-us.net>
+References: <20201026080919.28413-1-zhang.lyra@gmail.com> <20201026080919.28413-2-zhang.lyra@gmail.com>
+ <2691dbe4-0bff-fdb4-0871-60b491d740a4@roeck-us.net>
+In-Reply-To: <2691dbe4-0bff-fdb4-0871-60b491d740a4@roeck-us.net>
 From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Tue, 27 Oct 2020 17:21:06 +0800
-Message-ID: <CAAfSe-v1Qt1KG0DowigYWG=pK2abQ5UzQv4FqWRq8_YzYqKz7Q@mail.gmail.com>
-Subject: Re: [PATCH 2/3] watchdog: sprd: change timeout value from 1000 to 2000
+Date:   Tue, 27 Oct 2020 17:34:06 +0800
+Message-ID: <CAAfSe-shio68k9twUbCxT7WuvSQ1H2U83xqs4P95nF5Ys_J_Ng@mail.gmail.com>
+Subject: Re: [PATCH 1/3] watchdog: sprd: should not disable watchdog in resume
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Orson Zhai <orsonzhai@gmail.com>,
         Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        jingchao.ye@unisoc.com, ling_ling.xu@unisoc.com,
-        xiaoqing.wu@unisoc.com
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 26 Oct 2020 at 22:36, Guenter Roeck <linux@roeck-us.net> wrote:
+On Mon, 26 Oct 2020 at 22:27, Guenter Roeck <linux@roeck-us.net> wrote:
 >
 > On 10/26/20 1:09 AM, Chunyan Zhang wrote:
 > > From: Lingling Xu <ling_ling.xu@unisoc.com>
 > >
-> > Because cpu_relax() takes different time on different SoCs, for some rare
-> > cases, it would take more than 1000 cycles for waitting load operation
->
-> waiting
-
-Ok.
-
->
-> > finished. The result of many times testing verified that changing the
-> > timeout value to 2000 can solve the issue.
+> > Don't disable watchdog in resume process, otherwise system would crash
+> > once kick watchdog.
 > >
 >
-> This is just a kludge that doesn't address the underlying problem.
-> As the wait loop states, "Waiting the load value operation done,
-> it needs two or three RTC clock cycles". This means the loop
-> should wait for a maximum number of clock cycles, and not run
-> as hot loop. If we assume that clk_get_rate() returns the clock
-> frequency, that frequency can be used to determine how long this
-> needs to be retried. It might also make sense - depending on how
-> long this actually takes - to use usleep_range() instead of
-> cpu_relax() to avoid the hot loop.
+> This is a bit misleading: It is only disabled if the attempt to start it
+> has failed. Was this observed in practice ? If so, it might make sense
+> to identify and fix the underlying problem instead of trying to work
+> around it (or is this addressed with the second patch of the series ?)
 
-Agree, using usleep_range() instead makes more sense, I will look into that.
+Yes, I think the root cause of this problem was like what I explained
+in the 3rd patch in this series.
+Lingling found there was something wrong in sprd_wdt_pm_resume() when
+debugging that issue, then we had this patch.
 
-Thanks for your review.
+>
+> Anyway, the patch itself is fine.
+>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
+Thanks,
 Chunyan
 
 >
+> Thanks,
 > Guenter
 >
 > > Fixes: 477603467009 ("watchdog: Add Spreadtrum watchdog driver")
 > > Signed-off-by: Lingling Xu <ling_ling.xu@unisoc.com>
 > > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 > > ---
-> >  drivers/watchdog/sprd_wdt.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  drivers/watchdog/sprd_wdt.c | 9 ++-------
+> >  1 file changed, 2 insertions(+), 7 deletions(-)
 > >
 > > diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
-> > index f3c90b4afead..4f2a8c6d6485 100644
+> > index 65cb55f3916f..f3c90b4afead 100644
 > > --- a/drivers/watchdog/sprd_wdt.c
 > > +++ b/drivers/watchdog/sprd_wdt.c
-> > @@ -53,7 +53,7 @@
+> > @@ -345,15 +345,10 @@ static int __maybe_unused sprd_wdt_pm_resume(struct device *dev)
+> >       if (ret)
+> >               return ret;
 > >
-> >  #define SPRD_WDT_CNT_HIGH_SHIFT              16
-> >  #define SPRD_WDT_LOW_VALUE_MASK              GENMASK(15, 0)
-> > -#define SPRD_WDT_LOAD_TIMEOUT                1000
-> > +#define SPRD_WDT_LOAD_TIMEOUT                2000
+> > -     if (watchdog_active(&wdt->wdd)) {
+> > +     if (watchdog_active(&wdt->wdd))
+> >               ret = sprd_wdt_start(&wdt->wdd);
+> > -             if (ret) {
+> > -                     sprd_wdt_disable(wdt);
+> > -                     return ret;
+> > -             }
+> > -     }
 > >
-> >  struct sprd_wdt {
-> >       void __iomem *base;
+> > -     return 0;
+> > +     return ret;
+> >  }
+> >
+> >  static const struct dev_pm_ops sprd_wdt_pm_ops = {
 > >
 >
