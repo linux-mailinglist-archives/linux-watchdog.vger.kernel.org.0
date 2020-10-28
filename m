@@ -2,124 +2,127 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0747D29A7F6
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Oct 2020 10:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DDE29D49B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Oct 2020 22:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895681AbgJ0Jeo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 27 Oct 2020 05:34:44 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:35359 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2409431AbgJ0Jeo (ORCPT
+        id S1727798AbgJ1Vx2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 28 Oct 2020 17:53:28 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33517 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728433AbgJ1Vx1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:34:44 -0400
-Received: by mail-wm1-f68.google.com with SMTP id h22so695667wmb.0;
-        Tue, 27 Oct 2020 02:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1O6ReDftOPLuv+rKw4ASKdk+lBtaUq2pZDF0lCYQsaY=;
-        b=pNbiUAvuBMXmcIWQBwkpHxeGJ6lfMPyMfSjHPJBk7lnMR6fn907w/4tPUp92smmO+c
-         OtboQXGXVo8oSyZKaoE+ONYfHMlVL+rwTLqvqIc+fkrLR55oDG2ez59rbAAPuG12YJkB
-         zf0hOvoeLkIcctIsXOnKkbHOGSxU2I7LAyTh+sgdSLgGfgDmx3aQi3IzB9IVBhlqPVbO
-         CejlAdz0eXH8AN6WJh130ZeUqOv9N+dAHR80tqPGfUjF8hTeKkVhHS2XqDz5YwwWoDo+
-         lupNzOQj57cr88XXDchbhOUc2TF2dx+ixHS81WyEmlPIu/WHXc4Ga9S/bCj0cyNAsZ8b
-         lR5g==
+        Wed, 28 Oct 2020 17:53:27 -0400
+Received: by mail-lf1-f68.google.com with SMTP id l2so766209lfk.0;
+        Wed, 28 Oct 2020 14:53:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1O6ReDftOPLuv+rKw4ASKdk+lBtaUq2pZDF0lCYQsaY=;
-        b=D9dyBaACcZto7Hgh8ti/bVvALrKrKKoQMAxFLQqv8ZWYH7oLQrLgABCun45hUW1/yH
-         /y+EUsvrLwFTvG66Jm2B4sHi1RPn4uHyzqtDShMGLokhH0H0IsDDjE6XNsygmV/gZ8UM
-         MA98vzXzcZdbRzoHXRjrEUpE+OapjvFtwzWf6l7obGJ9hbJYEd2366LSiWBBCNJMX0cj
-         8F3ksC7EQVfvHPDzR5jk+E0C3/nrUTTBEoiT5aQCYGoveoXnxTyxsbMvXi/9VrCSgSir
-         R621vwOA/lqoGq/x3T8ddfYBJ42F++Yus9rqmGc6wZtn72Nu6q7g42ys+JZZg8zlMxxJ
-         OIbw==
-X-Gm-Message-State: AOAM532ChuGn+pKWkw0C22T7b1BS54e+R1RoglXd4CzE9MOqr1jd7M9J
-        Js/113u+RXQYZzQ2hpSjZWVMPMBsJafliqDyD97dAwpI6pz5Dg==
-X-Google-Smtp-Source: ABdhPJwopd/345MJxBCHQ2u3UoN/KSlAOVDjSs698J3nx/jmQOOY9DR3A4NMAMdWhEs5uVQncfbwYD9szUXfHf3SFI0=
-X-Received: by 2002:a05:600c:2252:: with SMTP id a18mr1614048wmm.166.1603791282238;
- Tue, 27 Oct 2020 02:34:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=B/Uh8Mjxj70GqN4e6bC2jcGCEwyOED4qRiTj7eOFPOc=;
+        b=q8Hqkjenyae+adKAHtM6BqLkyv2DDY31SclVL/PUxc4/9Wrk3LaaJd72RHw/SKEA/B
+         DHlvKGg2b8+1BH6S+8mJdiNeyNzVHLM0wSuDqS2eZCdmmmvEr2Aeo8jL7IZUBnexnvaW
+         sn4nYAN3ykPncxcyfreSGyUA7fOsxZMm+StvI979keBtFm4pgGbktNTIXRVIfMQeFRpn
+         +uBetW3hMFSUwo3M6oP6Zf6vvBAaFcX2x5vs/wqaOCPr7kwWTXdQwiaFtFk5caUxgFHJ
+         QyHnX4T85Pcj3dA5RGsyYUxDkxcMmcGTwZT8JxZVIKwowzDzcqezdlzkNzA1w/W/qPG0
+         yX9g==
+X-Gm-Message-State: AOAM533acrA9AgEAZj6WOHJ4mEQK9LN2zHydxRvn1UA6mID53E3l+Zc1
+        XlYYAnKI8eZe2y9K5QG5Z1XAqt6riRO0sg==
+X-Google-Smtp-Source: ABdhPJz0Sa7eG4YThApVZWur5qzm6uMCWvxrV014/0GVslKKoUWqx9NmSYiEY6KbNcBZzcEr8d8OCA==
+X-Received: by 2002:a2e:8750:: with SMTP id q16mr2653847ljj.53.1603878334962;
+        Wed, 28 Oct 2020 02:45:34 -0700 (PDT)
+Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id u11sm525138ljl.38.2020.10.28.02.45.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 02:45:34 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 11:45:27 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     mazziesaccount@gmail.com, matti.vaittinen@fi.rohmeurope.com
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v4 0/4] Support ROHM BD9576MUF and BD9573MUF PMICs
+Message-ID: <cover.1603877481.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-References: <20201026080919.28413-1-zhang.lyra@gmail.com> <20201026080919.28413-2-zhang.lyra@gmail.com>
- <2691dbe4-0bff-fdb4-0871-60b491d740a4@roeck-us.net>
-In-Reply-To: <2691dbe4-0bff-fdb4-0871-60b491d740a4@roeck-us.net>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Tue, 27 Oct 2020 17:34:06 +0800
-Message-ID: <CAAfSe-shio68k9twUbCxT7WuvSQ1H2U83xqs4P95nF5Ys_J_Ng@mail.gmail.com>
-Subject: Re: [PATCH 1/3] watchdog: sprd: should not disable watchdog in resume
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 26 Oct 2020 at 22:27, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 10/26/20 1:09 AM, Chunyan Zhang wrote:
-> > From: Lingling Xu <ling_ling.xu@unisoc.com>
-> >
-> > Don't disable watchdog in resume process, otherwise system would crash
-> > once kick watchdog.
-> >
->
-> This is a bit misleading: It is only disabled if the attempt to start it
-> has failed. Was this observed in practice ? If so, it might make sense
-> to identify and fix the underlying problem instead of trying to work
-> around it (or is this addressed with the second patch of the series ?)
+Initial support for ROHM BD9576MUF and BD9573MUF PMICs.
 
-Yes, I think the root cause of this problem was like what I explained
-in the 3rd patch in this series.
-Lingling found there was something wrong in sprd_wdt_pm_resume() when
-debugging that issue, then we had this patch.
+These PMICs are primarily intended to be used to power the R-Car family
+processors. BD9576MUF includes some additional safety features the
+BD9573MUF does not have. This initial version of drivers does not
+utilize these features and for now the SW behaviour is identical.
 
->
-> Anyway, the patch itself is fine.
->
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This patch series includes MFD and watchdog drivers. Regulator part was
+already applied.
 
-Thanks,
-Chunyan
+- Enabling and pinging the watchdog
+- configuring watchog timeout / window from device-tree
 
->
-> Thanks,
-> Guenter
->
-> > Fixes: 477603467009 ("watchdog: Add Spreadtrum watchdog driver")
-> > Signed-off-by: Lingling Xu <ling_ling.xu@unisoc.com>
-> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> > ---
-> >  drivers/watchdog/sprd_wdt.c | 9 ++-------
-> >  1 file changed, 2 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
-> > index 65cb55f3916f..f3c90b4afead 100644
-> > --- a/drivers/watchdog/sprd_wdt.c
-> > +++ b/drivers/watchdog/sprd_wdt.c
-> > @@ -345,15 +345,10 @@ static int __maybe_unused sprd_wdt_pm_resume(struct device *dev)
-> >       if (ret)
-> >               return ret;
-> >
-> > -     if (watchdog_active(&wdt->wdd)) {
-> > +     if (watchdog_active(&wdt->wdd))
-> >               ret = sprd_wdt_start(&wdt->wdd);
-> > -             if (ret) {
-> > -                     sprd_wdt_disable(wdt);
-> > -                     return ret;
-> > -             }
-> > -     }
-> >
-> > -     return 0;
-> > +     return ret;
-> >  }
-> >
-> >  static const struct dev_pm_ops sprd_wdt_pm_ops = {
-> >
->
+This patch series does not bring interrupt support. BD9576MUF and BD9573MUF
+are designed to keep the IRQ line low for whole duration of error
+condition. IRQ can't be 'acked'. So proper IRQ support would require
+some IRQ limiter implementation (delayed unmask?) in order to not hog
+the CPU.
+
+Changelog v3:
+  - rebased on top of 5.10-rc1
+  - Fix typo (repeated word maximum) from the DT binding doc
+
+Changelog v3:
+  - use only one binding to specify watchdog time-out window.
+
+Changelog v2:
+  - dropped already applied regulator part
+  - dt_bindings: Fix case for regulator-names in the example
+  - watchdod: unify probe error check and revise includes
+
+---
+
+Matti Vaittinen (4):
+  dt_bindings: mfd: Add ROHM BD9576MUF and BD9573MUF PMICs
+  mfd: Support ROHM BD9576MUF and BD9573MUF
+  wdt: Support wdt on ROHM BD9576MUF and BD9573MUF
+  MAINTAINERS: Add ROHM BD9576MUF and BD9573MUF drivers
+
+ .../bindings/mfd/rohm,bd9576-pmic.yaml        | 123 ++++++++
+ MAINTAINERS                                   |   4 +
+ drivers/mfd/Kconfig                           |  11 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/rohm-bd9576.c                     | 130 ++++++++
+ drivers/watchdog/Kconfig                      |  13 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/bd9576_wdt.c                 | 290 ++++++++++++++++++
+ include/linux/mfd/rohm-bd957x.h               |  59 ++++
+ include/linux/mfd/rohm-generic.h              |   2 +
+ 10 files changed, 634 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+ create mode 100644 drivers/mfd/rohm-bd9576.c
+ create mode 100644 drivers/watchdog/bd9576_wdt.c
+ create mode 100644 include/linux/mfd/rohm-bd957x.h
+
+
+base-commit: 3650b228f83adda7e5ee532e2b90429c03f7b9ec
+-- 
+2.21.3
+
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
