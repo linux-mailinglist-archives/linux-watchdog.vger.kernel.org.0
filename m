@@ -2,63 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE1F29E559
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Oct 2020 08:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C858129E555
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Oct 2020 08:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732450AbgJ2H4d (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 29 Oct 2020 03:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S1731836AbgJ2H4Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 29 Oct 2020 03:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727305AbgJ2Hxz (ORCPT
+        with ESMTP id S1726281AbgJ2HyI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 29 Oct 2020 03:53:55 -0400
+        Thu, 29 Oct 2020 03:54:08 -0400
 Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DC5C0613D5;
-        Thu, 29 Oct 2020 00:53:55 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id w65so1678007pfd.3;
-        Thu, 29 Oct 2020 00:53:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B39C0613D5;
+        Thu, 29 Oct 2020 00:54:07 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id a200so1651641pfa.10;
+        Thu, 29 Oct 2020 00:54:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jTgCofqTZH3uvNft4bI3w2FkkPwa29NU3EvFYtPNW3M=;
-        b=RAjVn4o2DSdCAF6XKMpACtzgiJuWB9ajdxrH0gTfgyV3XmwLMN7nXXL8BNCJhpJn2z
-         9cwiVICKeC1C+VwjORfdlFyjdMjfBwMWiQKqTQ1wxXKe5Y5zeE6vQTSaNL06f8Y6HALg
-         qb8Bq/JnxLomcs9763x+GQ7AV3Y5huHDCk2xqSjo0lTTAM2qXGVsLv4HT/uGzFVzglvv
-         bAzYgHWwgFfzWM24j4zl1mYIVquGfYZMkUO+tPew+WsYw/3kbNtfSStPy7vb1/57rIqa
-         4h7SvcZFvgBvpl601NK3zlrSUJIce23yt3GPTNmbLDnUEuamujRizFdV1aJkZ2kCbem+
-         RSAA==
+        bh=45WrHfAKbdYHjpbC20AMO5osfugbGDlzHaoUzU5Icuo=;
+        b=tsgIMHwo30bupNgyRYBxQu2rGAfExKotwCphoybjhufKRCTb3vJjtsAJJRcXjKXvD6
+         LRTFzBRuz3x95vTMXb8osjf93WFT5UR6Bs/VHkhu3r5z7w1+yRur1hslaq3eobRenbYe
+         6V8kG40I7rI6J6KchdjtOqMHhifU6t9nHd1YYeMzMOrKBp+0dbeE+I9ohPgj8h8oJZYV
+         cU6v80uAlvJwWelSuQFgrl9AxBXVCpNilmSjDW9++G8ZuczFzdjG+C9q5boqW+tISfOF
+         Mw1PYGFmsgt4oZZbHm/ql1hyE4mwyudvcuq16AC0kjhn/hEhB3NvsSwXn1icU8S0FTFY
+         c6gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jTgCofqTZH3uvNft4bI3w2FkkPwa29NU3EvFYtPNW3M=;
-        b=TEySfSYI1Yi0/knemkF5djxR6twFjM9E3hVxlWyuQC7WsCmanj2h/7fmvAXdbzGX5G
-         q8+r5jNK8bgt9fq4OHHhnNZ3D7njazIOFGI+Hjd936Z/NDpy2Wm6ves1IGtz1M/jclnv
-         NuwltbagyD8iokYaa3XVB6G/o9FpidBtL3A3KjDyyNq8fZ+wunPDhLM62+zl6chzTQ7G
-         QohuW4ZmWMt8IB3lgcSMhTtdz8VKZ+x7PIGMUnN2o7s8juSHGRF+7AxvlWRz15gsw22M
-         uq1xFrbaPwYd2maZzkSUkzlTU2TNHtlEX4xTe+AsVZfhFjhhTRhoFuWAQPJGl5qPBJoq
-         GXqQ==
-X-Gm-Message-State: AOAM533au953UUHjaILEKc9FN8ayBkdL4S8YVxLaKEJEDdhj5CYP3/uc
-        XFH/l5A1oRLNyUXSlTPHq/M22AQI8ZwVHyhb
-X-Google-Smtp-Source: ABdhPJy2ehajgbrB/4gdRfKNx0c/XTtErSwv2PVyts3tF8Q5u1Z99yQHorUE2vqfLu4KuzDQtz0j+g==
-X-Received: by 2002:aa7:83c2:0:b029:156:5ece:98b6 with SMTP id j2-20020aa783c20000b02901565ece98b6mr3001488pfn.4.1603958035020;
-        Thu, 29 Oct 2020 00:53:55 -0700 (PDT)
+        bh=45WrHfAKbdYHjpbC20AMO5osfugbGDlzHaoUzU5Icuo=;
+        b=FKQcm6wRpL4fpLVKnTIs8C1WWylrlhW+mKobrw2qp3b87kXcGsACVBIjSdVcP/5YWK
+         eSzxq7/yU1EZ13Hekjr7bosG/uclO/9LAICQBu31S0lmdmKckoFCWmRxb8BE7w8+dOf0
+         HZ5sJePmBrOmBzNcQaZ4P3lfD2nJD0nCpgX3zW8/4OqxubygnCmCzk5qnwnZXBRR4zdC
+         C2xCy5J9nGsmvj789JLwaD/61Xu4ms5QtswDzIJixWuIaNVzPC8qdKPTCuYQWXH5s2r9
+         maciq51PXj1Aiynay7Wg7Zd7gxhDBbobJvP+t0QX9m4c9J0N2DhYfKHTHaiAJ1gHYQvF
+         PBIQ==
+X-Gm-Message-State: AOAM530lKCIg0FdB93aQa7t4WkWRQRzInHmsU8TKQPHM8Q/0Eiv3Q6yY
+        p/NxDTg6u6l1QDYWaKqNwug=
+X-Google-Smtp-Source: ABdhPJx99n1MhtdolJkw34LO55uySelHItQmK6db7xOJvZRohQV+1cIV/6MP4ynkPxX2n4qvV/sq2A==
+X-Received: by 2002:a63:f40a:: with SMTP id g10mr3027586pgi.66.1603958047062;
+        Thu, 29 Oct 2020 00:54:07 -0700 (PDT)
 Received: from localhost ([2409:8a28:3c42:6840:9efc:e8ff:fef2:1cdc])
-        by smtp.gmail.com with ESMTPSA id 20sm1900352pfh.219.2020.10.29.00.53.53
+        by smtp.gmail.com with ESMTPSA id 65sm1573098pge.37.2020.10.29.00.54.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2020 00:53:54 -0700 (PDT)
+        Thu, 29 Oct 2020 00:54:06 -0700 (PDT)
 From:   Coiby Xu <coiby.xu@gmail.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Patrice Chotard <patrice.chotard@st.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STI
-        ARCHITECTURE),
+Cc:     Barry Song <baohua@kernel.org>,
         linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/3] watchdog: st_lpc_wdt: remove unnecessary CONFIG_PM_SLEEP
-Date:   Thu, 29 Oct 2020 15:53:26 +0800
-Message-Id: <20201029075327.228570-2-coiby.xu@gmail.com>
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/CSR SIRFPRIMA2
+        MACHINE SUPPORT), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 3/3] watchdog: sirfsoc_wdt: remove unnecessary CONFIG_PM_SLEEP
+Date:   Thu, 29 Oct 2020 15:53:27 +0800
+Message-Id: <20201029075327.228570-3-coiby.xu@gmail.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201029075327.228570-1-coiby.xu@gmail.com>
 References: <20201029075327.228570-1-coiby.xu@gmail.com>
@@ -72,29 +71,29 @@ SIMPLE_DEV_PM_OPS has already took good care of CONFIG_PM_CONFIG.
 
 Signed-off-by: Coiby Xu <coiby.xu@gmail.com>
 ---
- drivers/watchdog/st_lpc_wdt.c | 2 --
+ drivers/watchdog/sirfsoc_wdt.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/watchdog/st_lpc_wdt.c b/drivers/watchdog/st_lpc_wdt.c
-index 14ab6559c748..c1428d63dc9e 100644
---- a/drivers/watchdog/st_lpc_wdt.c
-+++ b/drivers/watchdog/st_lpc_wdt.c
-@@ -248,7 +248,6 @@ static int st_wdog_remove(struct platform_device *pdev)
+diff --git a/drivers/watchdog/sirfsoc_wdt.c b/drivers/watchdog/sirfsoc_wdt.c
+index 734cf2966ecb..dc8341cd7d44 100644
+--- a/drivers/watchdog/sirfsoc_wdt.c
++++ b/drivers/watchdog/sirfsoc_wdt.c
+@@ -170,7 +170,6 @@ static int sirfsoc_wdt_probe(struct platform_device *pdev)
  	return 0;
  }
  
--#ifdef CONFIG_PM_SLEEP
- static int st_wdog_suspend(struct device *dev)
+-#ifdef	CONFIG_PM_SLEEP
+ static int sirfsoc_wdt_suspend(struct device *dev)
  {
- 	struct st_wdog *st_wdog = watchdog_get_drvdata(&st_wdog_dev);
-@@ -285,7 +284,6 @@ static int st_wdog_resume(struct device *dev)
+ 	return 0;
+@@ -189,7 +188,6 @@ static int sirfsoc_wdt_resume(struct device *dev)
  
  	return 0;
  }
 -#endif
  
- static SIMPLE_DEV_PM_OPS(st_wdog_pm_ops,
- 			 st_wdog_suspend,
+ static SIMPLE_DEV_PM_OPS(sirfsoc_wdt_pm_ops,
+ 		sirfsoc_wdt_suspend, sirfsoc_wdt_resume);
 -- 
 2.28.0
 
