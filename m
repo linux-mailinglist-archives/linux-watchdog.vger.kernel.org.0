@@ -2,135 +2,152 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5F029E8F0
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Oct 2020 11:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE44629EC62
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Oct 2020 14:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbgJ2K11 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 29 Oct 2020 06:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
+        id S1726057AbgJ2NCr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 29 Oct 2020 09:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbgJ2K1Z (ORCPT
+        with ESMTP id S1725355AbgJ2NCq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 29 Oct 2020 06:27:25 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C589AC0613CF;
-        Thu, 29 Oct 2020 03:27:25 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id x23so1085295plr.6;
-        Thu, 29 Oct 2020 03:27:25 -0700 (PDT)
+        Thu, 29 Oct 2020 09:02:46 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71D5C0613CF;
+        Thu, 29 Oct 2020 06:02:46 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id x1so3039806oic.13;
+        Thu, 29 Oct 2020 06:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lI4GkUdPt6+xJMMHVAdO8QPYkUptmzNDzoT3r6qvrto=;
-        b=l2m8wDS8nK7lfpHMZaVHn793wNtqTGp3iQ/MzBg3FTNzGqJPPFnjwMZyxhZCyu9Pde
-         gvAOsO7jSKCOaYWQWnAql2/OZXZ7bKvXS08zdhfn+EgMwQeMDQS6EbwDawhYYSBdFZpV
-         cKHMsaprUTQfdZG7hPtlDLVtRxCoQx6MwH1J/8nPiuhkA42jo0Fj8eg0dJeEc0UW70ZX
-         n2W08r0I5j+Mefd6l34JpPdU6BQid83BNTbrlBIf5ZlFsD16ga+Wc+Xn1drfX3FWiuUu
-         sKVX2r9sUsATnGLMeE/1DrPw5Qnbys/WaIpmVP1OY00hE5kCYV9xpJgQHfYk0HS1Kk/Q
-         79DA==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/zj6CLJMyIB00YI+FnhcR6EiceS6PTlSxzmJoiVm518=;
+        b=PU41YRUrVJy+mt7xG5ul3Wuwt5gsihr3AhIGQmdvng+I08gi+Jtk2pR0aqfmfRJltK
+         0R2HzYvpr5BlMR8lb66sXy+ZoXWxZnhsI3e8lvrXri+OV+Um/lBgrZdovHGxnDEVxOOg
+         43CVYwf5qzSGMoFq+ZWkBsVxVvx2XEKQGAhMnP6aQNpRcMqJpQshIo0v0wO9Euay5GZj
+         R+M50MpjUfAghAIPiSuTW7XhMWQIXidw3pLVht+I1ZGDMC8F+kPzYrXDV1Nl90nrs8aU
+         dsJfbSjmVYAzfSoafmy7fACHNVv1lqhz2qQdqH1Dz36OtGbTBC7iS+0OiEYOIkEFke3F
+         3XCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lI4GkUdPt6+xJMMHVAdO8QPYkUptmzNDzoT3r6qvrto=;
-        b=izT6vZm8EcVJXP/gsKOtsOgXDz9H7A8TbzlyjLJIbSFKAu5Ol6Tx91zKxFHsw4LbSP
-         Abv0SgtorV9mz0MqQI6yhmUuWBDzniW3srtFjN3AaBENkWhs21h9w/IcBcQsi1AbhxPj
-         Z+XEYzZ8+0ZlDCWzjg3fpn7/+SaZ/C1pzNYcamiYJb7dGAn+7964mm2f3qgOVCCLoSgy
-         e3jjqqd+53x9RYYwL2VVmc5Gcu8nDTDMOocG9RyD8F1IxlswQ0CfXSA8iuDGkS0oD6nm
-         WFzBqETRJU+jc0BjAKGgCdh7/TkkqAOoapXKFiJytaA4Ld+IVJpkONdcKXvONQEC7ZSk
-         eDHQ==
-X-Gm-Message-State: AOAM533E+3gFxj7WVNFWvJsFN8mjXOm8CoBpcIqU04lyt5X2NvVXb2bh
-        j6yGK1o3HRmMzn6G2I94W3K/4sy0OAY=
-X-Google-Smtp-Source: ABdhPJx1iob7A+v20uolNb32xkngm5aIuSIbzNL/WksqE5Oc4qpLGPm3oAL6hZx++Kv294Fg29ePRA==
-X-Received: by 2002:a17:902:ee09:b029:d5:288d:fce4 with SMTP id z9-20020a170902ee09b02900d5288dfce4mr3327147plb.45.1603967245408;
-        Thu, 29 Oct 2020 03:27:25 -0700 (PDT)
-Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id cv6sm2485768pjb.2.2020.10.29.03.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2020 03:27:24 -0700 (PDT)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Lingling Xu <ling_ling.xu@unisoc.com>,
-        Jingchao Ye <jingchao.ye@unisoc.com>,
-        Xiaoqing Wu <xiaoqing.wu@unisoc.com>
-Subject: [PATCH v2 3/3] watchdog: sprd: change to use usleep_range() instead of busy loop
-Date:   Thu, 29 Oct 2020 18:27:16 +0800
-Message-Id: <20201029102716.4347-1-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201029023933.24548-4-zhang.lyra@gmail.com>
-References: <20201029023933.24548-4-zhang.lyra@gmail.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=/zj6CLJMyIB00YI+FnhcR6EiceS6PTlSxzmJoiVm518=;
+        b=Mo0C2GFH6qOIl1SzAebuYNBXGDCbOajRp1x2ebVGD5loeG65Za8kQmbiu96jQ76Ax1
+         p+mrE5dyilT8hk+yg26ixCK+yeOVZOplaOFz0/Py2DgrCMKTsGuVW76aGnbwNHeh8k6V
+         MMifb5Mon/VzMABvCxROkYYhGv+sokvotva6vU2+eTflrM2x7PotRJZwJnrgsdMWP0IX
+         nuQEao5osfoTBe/HyQWTkeZgVF3IpjJMuchQIj2T2DWp+mGwXcquUZX2z93fbo5vK6oO
+         mGZ4n0PvM57cgHXYFVHZM9hRsmqMCWVHSOD4iTvsMze6CMZYjBfCp2ZIJ8Q19V3F8jMi
+         rvXA==
+X-Gm-Message-State: AOAM533+OQaalTrrde7PpNkAZFgboJCU4wWD9PHzATNHaOMhTAw+Fxhe
+        0rt5Dd+Fmqw9wjbDDkFH8x6Ge/Oi+M8=
+X-Google-Smtp-Source: ABdhPJy3mLt9OWijcM3S2F8UQkq7bYvNLHy8gfKFNrVf9aJ2pg+AK1jhQR9aGSQ+jHVvCM+5T6tKwg==
+X-Received: by 2002:aca:d941:: with SMTP id q62mr2968241oig.33.1603976565915;
+        Thu, 29 Oct 2020 06:02:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t4sm568957oov.15.2020.10.29.06.02.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2020 06:02:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 1/3] ACPI: watchdog: remove unnecessary CONFIG_PM_SLEEP
+To:     Coiby Xu <coiby.xu@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20201029075327.228570-1-coiby.xu@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <d5a5453e-3223-ddf5-9913-b958a0722369@roeck-us.net>
+Date:   Thu, 29 Oct 2020 06:02:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201029075327.228570-1-coiby.xu@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+On 10/29/20 12:53 AM, Coiby Xu wrote:
+> SET_NOIRQ_SYSTEM_SLEEP_PM_OPS has already took good care of CONFIG_PM_CONFIG.
+> 
+Not really.
 
-After changing to check busy bit for the previous loading operation instead
-of the current one, for most of cases, the busy bit is not set for the
-first time of read, so there's no need to check so frequently, so this
-patch use usleep_range() to replace cpu_relax() to avoid busy loop.
+> Signed-off-by: Coiby Xu <coiby.xu@gmail.com>
+> ---
+>  drivers/watchdog/wdat_wdt.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+> index 3065dd670a18..0d912ceb2ecd 100644
+> --- a/drivers/watchdog/wdat_wdt.c
+> +++ b/drivers/watchdog/wdat_wdt.c
+> @@ -465,7 +465,6 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>  	return devm_watchdog_register_device(dev, &wdat->wdd);
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int wdat_wdt_suspend_noirq(struct device *dev)
 
-Also this patch change the max times to 11 which would be enough, since
-according to the specification, the busy bit would be set after a new
-loading operation and last 2 or 3 RTC clock cycles (about 60us~92us).
+You would have to add __maybe_unused here for this to work as intended.
 
-Fixes: 477603467009 ("watchdog: Add Spreadtrum watchdog driver")
-Original-by: Lingling Xu <ling_ling.xu@unisoc.com>
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
- drivers/watchdog/sprd_wdt.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Guenter
 
-diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
-index b9b1daa9e2a4..4e689b6ff141 100644
---- a/drivers/watchdog/sprd_wdt.c
-+++ b/drivers/watchdog/sprd_wdt.c
-@@ -6,6 +6,7 @@
- 
- #include <linux/bitops.h>
- #include <linux/clk.h>
-+#include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
-@@ -53,7 +54,7 @@
- 
- #define SPRD_WDT_CNT_HIGH_SHIFT		16
- #define SPRD_WDT_LOW_VALUE_MASK		GENMASK(15, 0)
--#define SPRD_WDT_LOAD_TIMEOUT		1000
-+#define SPRD_WDT_LOAD_TIMEOUT		11
- 
- struct sprd_wdt {
- 	void __iomem *base;
-@@ -109,15 +110,17 @@ static int sprd_wdt_load_value(struct sprd_wdt *wdt, u32 timeout,
- 	u32 prtmr_step = pretimeout * SPRD_WDT_CNT_STEP;
- 
- 	/*
--	 * Waiting the load value operation done,
--	 * it needs two or three RTC clock cycles.
-+	 * Checking busy bit to make sure the previous loading operation is
-+	 * done. According to the specification, the busy bit would be set
-+	 * after a new loading operation and last 2 or 3 RTC clock
-+	 * cycles (about 60us~92us).
- 	 */
- 	do {
- 		val = readl_relaxed(wdt->base + SPRD_WDT_INT_RAW);
- 		if (!(val & SPRD_WDT_LD_BUSY_BIT))
- 			break;
- 
--		cpu_relax();
-+		usleep_range(10, 100);
- 	} while (delay_cnt++ < SPRD_WDT_LOAD_TIMEOUT);
- 
- 	if (delay_cnt >= SPRD_WDT_LOAD_TIMEOUT)
--- 
-2.20.1
+>  {
+>  	struct wdat_wdt *wdat = dev_get_drvdata(dev);
+> @@ -526,7 +525,6 @@ static int wdat_wdt_resume_noirq(struct device *dev)
+>  
+>  	return wdat_wdt_start(&wdat->wdd);
+>  }
+> -#endif
+>  
+>  static const struct dev_pm_ops wdat_wdt_pm_ops = {
+>  	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(wdat_wdt_suspend_noirq,
+> 
 
