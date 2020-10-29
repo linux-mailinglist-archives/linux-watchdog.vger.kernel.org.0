@@ -2,155 +2,110 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1FE29EC6E
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Oct 2020 14:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B499829EC8D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Oct 2020 14:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725807AbgJ2NFY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 29 Oct 2020 09:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgJ2NFY (ORCPT
+        id S1725747AbgJ2NO4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 29 Oct 2020 09:14:56 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:12512 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725710AbgJ2NO4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 29 Oct 2020 09:05:24 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3D5C0613CF;
-        Thu, 29 Oct 2020 06:05:23 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id x1so3048523oic.13;
-        Thu, 29 Oct 2020 06:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9iXsLjZgUfdA09GLMwB0swDJcMnTzFt7AU3m46lf4t4=;
-        b=myYl8XFK6amQDTqj2VrTBoh+OvJUi+sIIwEKannjHGdG1cU6WtV0YIdTnjQP+mAe3S
-         SBvbI3WwQDA2U50xBHqRfDFs1rXIxKE7ZIVFGJRTy4BDKhMz7YAFsNTIN5tf0RqLyYid
-         ennK8RLLngOf6UHTQ8UuxCLK308pQQMdF2M0fSD0E/wsuqvx4nUHAg3n9KHeZ73ZNaG3
-         PEX7p9r5TmhvUb1GYBLmiTRJC2PI9dS0QN6pZ2s5bEsOGHy1ZozZ3hOHzzAXVg6eslJh
-         IAt/jRZ7ZCva66wiTOzO04g2iCqIpI1ELEzbA1s877sfsiODSmgcJrZUv0jZAcjDVMO6
-         FsiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=9iXsLjZgUfdA09GLMwB0swDJcMnTzFt7AU3m46lf4t4=;
-        b=kaivjJIBXZhVs65ZrLhV2ujfSl/BXnTWQ8w7roz21esM72PZqN4PyEZ71stemxcszK
-         0vAIIUanjkG57UmJV1nXz6wkMOmzkupo3KX7PSVqmqgN7t8BCdgg04uDaqChMzKqyBGW
-         q0KuVFDFZkYMhxq++x0gHImsc9kpTvseEw9tvtUO/14bJNhWuEEMEPgt7iIAf8aj85EB
-         gts/5nn1qEWg7jEeMo1WCRGWuH3aW+xyuIyiswAK67C2Ixc2Yos8NK7BfvlWzTLg8vtZ
-         u4HE1rcVdOsXa7FEZ2pZiXhnykQkw5lm444OFSkHxYWdpaCR4NgPJK0y2SVOOmStSscv
-         xhGQ==
-X-Gm-Message-State: AOAM531/joMPoaQ/TUqvnL+YhB/urt8LOYK8z8DG7hRNSqbti5ixlaxH
-        3Xos5DeO6UgEarthnlaVQQhIqYmuJVE=
-X-Google-Smtp-Source: ABdhPJwnDgXS+Qak/0GSaQu2DMn1nzM/MOQzw9czr7h6J4u7Oj84WPksoga2qlRh+6RcmhsF2W8ywg==
-X-Received: by 2002:aca:6501:: with SMTP id m1mr2720909oim.124.1603976723124;
-        Thu, 29 Oct 2020 06:05:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u7sm565978otg.60.2020.10.29.06.05.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2020 06:05:22 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 3/3] watchdog: sirfsoc_wdt: remove unnecessary
- CONFIG_PM_SLEEP
-To:     Coiby Xu <coiby.xu@gmail.com>,
+        Thu, 29 Oct 2020 09:14:56 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09TD77F1006830;
+        Thu, 29 Oct 2020 14:14:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=JsDOWpR7wWmDNPzt85sNwITIQxo1oDra/8kUlJSsU7c=;
+ b=CD1WEShP9kEccfRc2xX7j1t8+AMXzCmDKxmQy0AHCTUb7LweQUDM7vYrmswOG1UnJrZK
+ BBy53opospi33hxUTTcjrSUWTD8IF9R1Rroc9GBG7JiwXGlYL+zHMptYQPwMEhlXZqkt
+ v5J5iy5fDAO3oQl+3ltOof8r1Hew8Sgjlo3M+MaEzWwCmkvqIWzt218T1ROjAzzleUbL
+ f7joB9bGZUS42vgA3Yg8NXZv4EKu/Go40tezcke9OQ3nfkuGsmlEPqSTOXy8xjgEwLd7
+ fqKHMIic4x9Xhqfg9DCRmuLYrcy40eHqkXc2ayZSs9po+iEPerXueeyuM8N6cCuHTAUQ hw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 34ccj28b0r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Oct 2020 14:14:38 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7FE9910002A;
+        Thu, 29 Oct 2020 14:14:37 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1BC342B8A0A;
+        Thu, 29 Oct 2020 14:14:37 +0100 (CET)
+Received: from SFHDAG2NODE3.st.com (10.75.127.6) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 29 Oct
+ 2020 14:13:40 +0100
+Received: from SFHDAG2NODE3.st.com ([fe80::31b3:13bf:2dbe:f64c]) by
+ SFHDAG2NODE3.st.com ([fe80::31b3:13bf:2dbe:f64c%20]) with mapi id
+ 15.00.1473.003; Thu, 29 Oct 2020 14:13:40 +0100
+From:   Patrice CHOTARD <patrice.chotard@st.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Barry Song <baohua@kernel.org>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
-        "moderated list:ARM/CSR SIRFPRIMA2 MACHINE SUPPORT" 
+CC:     "moderated list:ARM/STI ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] watchdog: st_lpc_wdt: remove unnecessary
+ CONFIG_PM_SLEEP
+Thread-Topic: [PATCH 2/3] watchdog: st_lpc_wdt: remove unnecessary
+ CONFIG_PM_SLEEP
+Thread-Index: AQHWrcioFNV8nEJJDUWW2CVWTCiEIqmuJjyAgABYDoA=
+Date:   Thu, 29 Oct 2020 13:13:40 +0000
+Message-ID: <351407f1-e2c1-4f86-81be-0c26e60b3fd3@st.com>
 References: <20201029075327.228570-1-coiby.xu@gmail.com>
- <20201029075327.228570-3-coiby.xu@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <41e73435-375f-1865-69ce-462395476258@roeck-us.net>
-Date:   Thu, 29 Oct 2020 06:05:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201029075327.228570-3-coiby.xu@gmail.com>
-Content-Type: text/plain; charset=utf-8
+ <20201029075327.228570-2-coiby.xu@gmail.com>
+ <23c07a77-2ce3-1ebd-c8d7-001cd896f157@st.com>
+In-Reply-To: <23c07a77-2ce3-1ebd-c8d7-001cd896f157@st.com>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.45]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CF9F32F768011A44A5D1141127756B1A@st.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-29_06:2020-10-29,2020-10-29 signatures=0
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/29/20 12:53 AM, Coiby Xu wrote:
-> SIMPLE_DEV_PM_OPS has already took good care of CONFIG_PM_CONFIG.
-> 
-> Signed-off-by: Coiby Xu <coiby.xu@gmail.com>
-> ---
->  drivers/watchdog/sirfsoc_wdt.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/sirfsoc_wdt.c b/drivers/watchdog/sirfsoc_wdt.c
-> index 734cf2966ecb..dc8341cd7d44 100644
-> --- a/drivers/watchdog/sirfsoc_wdt.c
-> +++ b/drivers/watchdog/sirfsoc_wdt.c
-> @@ -170,7 +170,6 @@ static int sirfsoc_wdt_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#ifdef	CONFIG_PM_SLEEP
->  static int sirfsoc_wdt_suspend(struct device *dev)
-
-And again: __maybe_unused
-
-I would suggest to test compile the code with CONFIG_PM_SLEEP disabled.
-
->  {
->  	return 0;
-> @@ -189,7 +188,6 @@ static int sirfsoc_wdt_resume(struct device *dev)
->  
->  	return 0;
->  }
-> -#endif
->  
->  static SIMPLE_DEV_PM_OPS(sirfsoc_wdt_pm_ops,
->  		sirfsoc_wdt_suspend, sirfsoc_wdt_resume);
-> 
-
+SGkgQ29pYnkNCg0KQXMgYWxyZWFkeSBwb2ludGVkIGJ5IEZhYnJpY2UgR2FzbmllciBmb3Igc2lt
+aWxhciBwYXRjaCAiW1BBVENIIDEwLzE1XSBpaW86IGFkYzogc3RtMzI6IHJlbW92ZSB1bm5lY2Vz
+c2FyeSBDT05GSUdfUE1fU0xFRVAiDQoNCldoZW4gY29tcGlsaW5nIHdpdGggVz0xIGFuZCBDT05G
+SUdfUE1fU0xFRVAgZGlzYWJsZWQsIHdlIGdvdCB0aGUgZm9sbG93aW5nIHdhcm5pbmdzOg0KDQpk
+cml2ZXJzL3dhdGNoZG9nL3N0X2xwY193ZHQuYzoyNjU6MTI6IHdhcm5pbmc6IOKAmHN0X3dkb2df
+cmVzdW1l4oCZIGRlZmluZWQgYnV0IG5vdCB1c2VkIFstV3VudXNlZC1mdW5jdGlvbl0NCsKgIDI2
+NSB8IHN0YXRpYyBpbnQgc3Rfd2RvZ19yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2KQ0KwqDCoMKg
+wqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBefn5+fn5+fn5+fn5+fg0KZHJpdmVycy93YXRj
+aGRvZy9zdF9scGNfd2R0LmM6MjUxOjEyOiB3YXJuaW5nOiDigJhzdF93ZG9nX3N1c3BlbmTigJkg
+ZGVmaW5lZCBidXQgbm90IHVzZWQgWy1XdW51c2VkLWZ1bmN0aW9uXQ0KwqAgMjUxIHwgc3RhdGlj
+IGludCBzdF93ZG9nX3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KwqDCoMKgwqDCoCB8wqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBefn5+fn5+fn5+fn5+fn4NCg0KQ2FuIHlvdSBhZGQgbWlzc2lu
+ZyAiX19tYXliZSB1bnVzZWQiwqAgYXR0cmlidXRlID8NCg0KVGhhbmtzDQoNClBhdHJpY2UNCg0K
+T24gMTAvMjkvMjAgODo1OCBBTSwgUGF0cmljZSBDSE9UQVJEIHdyb3RlOg0KPiBIaSBDb2lieQ0K
+Pg0KPiBPbiAxMC8yOS8yMCA4OjUzIEFNLCBDb2lieSBYdSB3cm90ZToNCj4+IFNJTVBMRV9ERVZf
+UE1fT1BTIGhhcyBhbHJlYWR5IHRvb2sgZ29vZCBjYXJlIG9mIENPTkZJR19QTV9DT05GSUcuDQo+
+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ29pYnkgWHUgPGNvaWJ5Lnh1QGdtYWlsLmNvbT4NCj4+IC0t
+LQ0KPj4gIGRyaXZlcnMvd2F0Y2hkb2cvc3RfbHBjX3dkdC5jIHwgMiAtLQ0KPj4gIDEgZmlsZSBj
+aGFuZ2VkLCAyIGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3dhdGNo
+ZG9nL3N0X2xwY193ZHQuYyBiL2RyaXZlcnMvd2F0Y2hkb2cvc3RfbHBjX3dkdC5jDQo+PiBpbmRl
+eCAxNGFiNjU1OWM3NDguLmMxNDI4ZDYzZGM5ZSAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvd2F0
+Y2hkb2cvc3RfbHBjX3dkdC5jDQo+PiArKysgYi9kcml2ZXJzL3dhdGNoZG9nL3N0X2xwY193ZHQu
+Yw0KPj4gQEAgLTI0OCw3ICsyNDgsNiBAQCBzdGF0aWMgaW50IHN0X3dkb2dfcmVtb3ZlKHN0cnVj
+dCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+PiAgCXJldHVybiAwOw0KPj4gIH0NCj4+ICANCj4+
+IC0jaWZkZWYgQ09ORklHX1BNX1NMRUVQDQo+PiAgc3RhdGljIGludCBzdF93ZG9nX3N1c3BlbmQo
+c3RydWN0IGRldmljZSAqZGV2KQ0KPj4gIHsNCj4+ICAJc3RydWN0IHN0X3dkb2cgKnN0X3dkb2cg
+PSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSgmc3Rfd2RvZ19kZXYpOw0KPj4gQEAgLTI4NSw3ICsyODQs
+NiBAQCBzdGF0aWMgaW50IHN0X3dkb2dfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCj4+ICAN
+Cj4+ICAJcmV0dXJuIDA7DQo+PiAgfQ0KPj4gLSNlbmRpZg0KPj4gIA0KPj4gIHN0YXRpYyBTSU1Q
+TEVfREVWX1BNX09QUyhzdF93ZG9nX3BtX29wcywNCj4+ICAJCQkgc3Rfd2RvZ19zdXNwZW5kLA0K
+PiBSZXZpZXdlZC1ieTogUGF0cmljZSBDaG90YXJkIDxwYXRyaWNlLmNob3RhcmRAc3QuY29tPg0K
+Pg0KPiBUaGFua3MNCj4NCj4gUGF0cmljZQ0KPg==
