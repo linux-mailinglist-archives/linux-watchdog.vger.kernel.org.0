@@ -2,52 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254EF29E2D8
+	by mail.lfdr.de (Postfix) with ESMTP id 9213F29E2D9
 	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Oct 2020 03:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728610AbgJ2CkN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        id S1729958AbgJ2CkN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
         Wed, 28 Oct 2020 22:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725883AbgJ2Cjl (ORCPT
+        with ESMTP id S1728204AbgJ2Cjq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 28 Oct 2020 22:39:41 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80921C0613CF;
-        Wed, 28 Oct 2020 19:39:41 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id t22so586646plr.9;
-        Wed, 28 Oct 2020 19:39:41 -0700 (PDT)
+        Wed, 28 Oct 2020 22:39:46 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5A6C0613CF;
+        Wed, 28 Oct 2020 19:39:46 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 13so1115149pfy.4;
+        Wed, 28 Oct 2020 19:39:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dr2BluTtdmHH+Q1lAY7st7GEzyKQ390zItTf4RvlCZY=;
-        b=S0lBInDkLvV+Ukf9zXVmro8DC9tWjX7aUr2J72GYIZ8rjGbYpLA6Jvj8xo1yi/wOBX
-         T6nqZVSHlgO8vh6MzehMse9tgIH4mCaq0TVem/CbowDXZjvjtI5OMmoW+wHe9RQDBsl1
-         mmt/3eiiF3K7BhOk0OAZZmWFrgu5rKFi+GKyZnD1g2yOQvtUB38QkFIqSDsy6CFh/Gdz
-         SZCC0KWGmom+eFjo+U/vWx1DlyGfE1MxC/Gm6HaFK1ExFrE9gQVcAHA+Zf3yJmz30aS5
-         JUK88QZfk5yv9NGXYFbT+9Yfvz6QHZh49eXDAyjT9Ay0PT1zrAhSEobkPkVuq+d09G/s
-         ajTA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=d5Okb+bKE2F9destA6FuDQoNvbzUpEWsIIoQzZu0fGU=;
+        b=JsOldeqhYIi0aPHXalTCm5SQsA6iPfyWZevGG6oQi0rtb0l2s1TS4kMaiTrCHWQ4pU
+         zOtg6WoauDGZBNAU/AL77puRzIcVm+dLcbau/ZaV95A3RpfJpWPp/VIPz3ACStH+aQ+M
+         POu8jKlsEkgcOELLVMYeqlgZfCSLnr0h8uyqkBNyLnkN269a90udxv7/0SsbbWN2eysx
+         YfwloOLuobG6lfLFwB7wlO37OmgOWqWxAIsER5B40MDO1Tl4vtozQokTxhUx3o/MzlSi
+         YmAEfSNjD9tElEij8tHRqEsiNujBbzPBh9TuvZzA82zRSJLSH7f7iZEhNpm2Wc/ZPtD6
+         hdIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dr2BluTtdmHH+Q1lAY7st7GEzyKQ390zItTf4RvlCZY=;
-        b=n/OsTsNd9kDyVycFxnH0JW2+EwHWPQ5z73f/m+FxVNSx8czDL2/bigGLuHTCzyJIiy
-         qBS8zjXA4D9WWC6v9WykKupHYCWzhjvdczePEapFDs3jP8cPKLyU8wrFTJPUMXcM10fz
-         qtIJGzjv0WsYYmMVnwsaXIdTih0sooZ4BI3SqREwvIzgcByehZd17GYSfwm814O2Y3Ba
-         MjoghPEsakv+g/TgJ7t70DqyA/K5ZsMTPkzyevotZXnV1P2r7ITCYF+jGUDFhhH4qQ3z
-         WV5PxnfV5z5u1hgWk0dAI0fQ/wM9b8nhG85/d8N5ydPsJr+rhgColvPVydrybzsZpVSt
-         Meqg==
-X-Gm-Message-State: AOAM530jyQmfAtnJUiCo6ypVn/uHqDTUF5jeyd9uNAGyXMxvOxfJtTK3
-        n4u/Zqz8OlHsWD5o15mRghc/uBdxQFw8DQ==
-X-Google-Smtp-Source: ABdhPJwQjAyXPKt8m2X7EdmDP3/OKUlUFyLKL6avPIrYuhN05l1uNlJuY61Lk4Y1KGYMOsU9J36xqg==
-X-Received: by 2002:a17:902:7606:b029:d3:d2dd:2b3b with SMTP id k6-20020a1709027606b02900d3d2dd2b3bmr1820994pll.67.1603939181101;
-        Wed, 28 Oct 2020 19:39:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=d5Okb+bKE2F9destA6FuDQoNvbzUpEWsIIoQzZu0fGU=;
+        b=clgBeDFQDHLEuDh5upkI4ymBQKLAixToXgod9cBv+Dp5AU6ErKm0b6eP3ZnVXLFcfS
+         u5vSR22P78SSdq1MVEXUcuiOLHtevBDHIK0kguuwzMdgjAyOhM2oleu06TY/cmXZ/cZU
+         vxa24dLfq2z/TawC0LejmNBDBBovl4EfV1iaflqPEUoNBlG81IHxW3KgwGUahv8Ul6im
+         dFhljvQIMldWUYEoUve/SaNB/qWHYa4EoCLVU+iMRaTBwkSG31fxQvoFeqBFtwLLOiHK
+         Coc4F61VqUwx92+44vY8Ui0pTX5xB4xccQyxsyBxoYGE5IR8LqAYMTiVIKQkM9Wm7cku
+         Zjkg==
+X-Gm-Message-State: AOAM530vEjw0QhFnxPwhRJfx599HtabjtOtMIq6mexgm4ZtnCguS5sIc
+        lYGldVEy1qNhYMZqYhiIMk3AW5iTvpzWZQ==
+X-Google-Smtp-Source: ABdhPJzDONL5ZKlYbnPTAUkUF17XdCgSUhYhs/WgXtl61vH+wYPc1oD3haWu8NWQAwPlPxSTAdsUMg==
+X-Received: by 2002:a63:609:: with SMTP id 9mr2085722pgg.227.1603939185921;
+        Wed, 28 Oct 2020 19:39:45 -0700 (PDT)
 Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id kr14sm566260pjb.26.2020.10.28.19.39.36
+        by smtp.gmail.com with ESMTPSA id kr14sm566260pjb.26.2020.10.28.19.39.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 19:39:40 -0700 (PDT)
+        Wed, 28 Oct 2020 19:39:45 -0700 (PDT)
 From:   Chunyan Zhang <zhang.lyra@gmail.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
@@ -59,38 +59,58 @@ Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lingling Xu <ling_ling.xu@unisoc.com>,
         Jingchao Ye <jingchao.ye@unisoc.com>,
         Xiaoqing Wu <xiaoqing.wu@unisoc.com>
-Subject: [PATCH v2 0/3] A few fixes to sprd watchdog driver
-Date:   Thu, 29 Oct 2020 10:39:30 +0800
-Message-Id: <20201029023933.24548-1-zhang.lyra@gmail.com>
+Subject: [PATCH v2 1/3] watchdog: sprd: remove watchdog disable from resume fail path
+Date:   Thu, 29 Oct 2020 10:39:31 +0800
+Message-Id: <20201029023933.24548-2-zhang.lyra@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201029023933.24548-1-zhang.lyra@gmail.com>
+References: <20201029023933.24548-1-zhang.lyra@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+From: Lingling Xu <ling_ling.xu@unisoc.com>
 
-A few issues about sprd watchdog driver were found recently, this
-patchset would fix them.
+sprd_wdt_start() would return fail if the loading operation is not completed
+in a certain time, disabling watchdog for that case would probably cause
+the kernel crash when kick watchdog later, that's too bad, so remove the
+watchdog disable operation for the fail case to make sure other parts in
+the kernel can run normally.
 
-Changes since v1:
-* Added Reviewed-by from Guenter Roeck;
-* Abandon original patch 2, add a new patch to use usleep_range() instead of busy loop;
-* Revised the max times of loop, also revised the comments for checking busy bit;
-* Revised commit message for the whole patchset;
+[ chunyan: Massaged changelog ]
 
-Chunyan Zhang (1):
-  watchdog: sprd: change to use usleep_range() instead of busy loop
+Fixes: 477603467009 ("watchdog: Add Spreadtrum watchdog driver")
+Signed-off-by: Lingling Xu <ling_ling.xu@unisoc.com>
+Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/watchdog/sprd_wdt.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-Lingling Xu (2):
-  watchdog: sprd: remove watchdog disable from resume fail path
-  watchdog: sprd: check busy bit before new loading rather than after
-    that
-
- drivers/watchdog/sprd_wdt.c | 42 ++++++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 22 deletions(-)
-
+diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
+index 65cb55f3916f..f3c90b4afead 100644
+--- a/drivers/watchdog/sprd_wdt.c
++++ b/drivers/watchdog/sprd_wdt.c
+@@ -345,15 +345,10 @@ static int __maybe_unused sprd_wdt_pm_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (watchdog_active(&wdt->wdd)) {
++	if (watchdog_active(&wdt->wdd))
+ 		ret = sprd_wdt_start(&wdt->wdd);
+-		if (ret) {
+-			sprd_wdt_disable(wdt);
+-			return ret;
+-		}
+-	}
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static const struct dev_pm_ops sprd_wdt_pm_ops = {
 -- 
 2.20.1
 
