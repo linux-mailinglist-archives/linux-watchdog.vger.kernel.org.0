@@ -2,125 +2,113 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 710CD2A244D
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Nov 2020 06:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E8E2A257F
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Nov 2020 08:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725935AbgKBF02 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 2 Nov 2020 00:26:28 -0500
-Received: from mga04.intel.com ([192.55.52.120]:62071 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725985AbgKBF02 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 2 Nov 2020 00:26:28 -0500
-IronPort-SDR: TDgHEtgmGq2XcKFgzF/RRpz/ry0HMGtlXP5TQrfdd+SZS8TiDo42EepBPEcuaByNTn5FVeECd4
- rHOvi5M/K7lA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9792"; a="166245956"
-X-IronPort-AV: E=Sophos;i="5.77,444,1596524400"; 
-   d="scan'208";a="166245956"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2020 21:26:27 -0800
-IronPort-SDR: BT9VN+EsZ98PEuZRKskqwWhTFAhTmGQrWVeJvkRLJmjc5ECbJDc0BfIG+xyJLXKfdSyUHaJ4sD
- pOiKi3pcdzmA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,444,1596524400"; 
-   d="scan'208";a="319953381"
-Received: from ubuntu18.png.intel.com ([10.88.229.38])
-  by orsmga003.jf.intel.com with ESMTP; 01 Nov 2020 21:26:24 -0800
-From:   vijayakannan.ayyathurai@intel.com
-To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, mgross@linux.intel.com,
-        wan.ahmad.zainie.wan.mohamad@intel.com,
-        lakshmi.bai.raja.subramanian@intel.com,
-        vijayakannan.ayyathurai@intel.com
-Subject: [PATCH v1 2/2] dt-bindings: watchdog: Add bindings for Intel Keem Bay SoC
-Date:   Mon,  2 Nov 2020 13:23:12 +0800
-Message-Id: <3aa5d9e2031b4646b7f0c9831f4ea9cafffb2691.1604292525.git.vijayakannan.ayyathurai@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1604292525.git.vijayakannan.ayyathurai@intel.com>
-References: <cover.1604292525.git.vijayakannan.ayyathurai@intel.com>
-In-Reply-To: <cover.1604292525.git.vijayakannan.ayyathurai@intel.com>
-References: <cover.1604292525.git.vijayakannan.ayyathurai@intel.com>
+        id S1728144AbgKBHoh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 2 Nov 2020 02:44:37 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:7396 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726819AbgKBHog (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 2 Nov 2020 02:44:36 -0500
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CPlL76NNBz7231;
+        Mon,  2 Nov 2020 15:44:31 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Mon, 2 Nov 2020
+ 15:44:22 +0800
+From:   Wang Wensheng <wangwensheng4@huawei.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <rui.xiang@huawei.com>, <guohanjun@huawei.com>
+Subject: [PATCH -next] watchdog: Fix potential dereferencing of null pointer
+Date:   Mon, 2 Nov 2020 07:44:13 +0000
+Message-ID: <20201102074413.69552-1-wangwensheng4@huawei.com>
+X-Mailer: git-send-email 2.25.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.208]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
+A reboot notifier, which stops the WDT by calling the stop hook without
+any check, would be registered when we set WDOG_STOP_ON_REBOOT flag.
 
-Add Device Tree binding document for Watchdog IP in the Intel Keem Bay SoC.
+Howerer we allow the WDT driver to omit the stop hook since commit
+"d0684c8a93549" ("watchdog: Make stop function optional") and provide
+a module parameter for user that controls the WDOG_STOP_ON_REBOOT flag
+in commit 9232c80659e94 ("watchdog: Add stop_on_reboot parameter to
+control reboot policy"). Together that commits make user potential to
+insert a watchdog driver that don't provide a stop hook but with the
+stop_on_reboot parameter set, then dereferencing of null pointer occurs
+on system reboot.
 
-Signed-off-by: Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
-Acked-by: Mark Gross <mgross@linux.intel.com>
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Check the stop hook before registering the reboot notifier to fix the
+issue.
+
+Fixes: d0684c8a9354 ("watchdog: Make stop function optional")
+Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
 ---
- .../bindings/watchdog/intel,keembay-wdt.yaml  | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/watchdog/intel,keembay-wdt.yaml
+ drivers/watchdog/watchdog_core.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/intel,keembay-wdt.yaml b/Documentation/devicetree/bindings/watchdog/intel,keembay-wdt.yaml
-new file mode 100644
-index 000000000000..494c6d70d9af
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/intel,keembay-wdt.yaml
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/intel,keembay-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+index 423844757812..5269761ba072 100644
+--- a/drivers/watchdog/watchdog_core.c
++++ b/drivers/watchdog/watchdog_core.c
+@@ -252,10 +252,8 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+ 		wdd->id = id;
+ 
+ 		ret = watchdog_dev_register(wdd);
+-		if (ret) {
+-			ida_simple_remove(&watchdog_ida, id);
+-			return ret;
+-		}
++		if (ret)
++			goto id_remove;
+ 	}
+ 
+ 	/* Module parameter to force watchdog policy on reboot. */
+@@ -267,15 +265,17 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+ 	}
+ 
+ 	if (test_bit(WDOG_STOP_ON_REBOOT, &wdd->status)) {
+-		wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
++		if (!wdd->ops->stop) {
++			ret = -EINVAL;
++			goto dev_unregister;
++		}
+ 
++		wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
+ 		ret = register_reboot_notifier(&wdd->reboot_nb);
+ 		if (ret) {
+ 			pr_err("watchdog%d: Cannot register reboot notifier (%d)\n",
+ 			       wdd->id, ret);
+-			watchdog_dev_unregister(wdd);
+-			ida_simple_remove(&watchdog_ida, id);
+-			return ret;
++			goto dev_unregister;
+ 		}
+ 	}
+ 
+@@ -289,6 +289,13 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+ 	}
+ 
+ 	return 0;
 +
-+title: Intel Keem Bay SoC non-secure Watchdog Timer
++dev_unregister:
++	watchdog_dev_unregister(wdd);
++id_remove:
++	ida_simple_remove(&watchdog_ida, id);
 +
-+maintainers:
-+ - Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - intel,keembay-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    items:
-+      - description: interrupt specifier for threshold interrupt line
-+      - description: interrupt specifier for timeout interrupt line
-+
-+  interrupt-names:
-+    items:
-+      - const: threshold
-+      - const: timeout
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #define KEEM_BAY_A53_TIM
-+
-+    watchdog: watchdog@2033009c {
-+        compatible = "intel,keembay-wdt";
-+        reg = <0x2033009c 0x10>;
-+        interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "threshold", "timeout";
-+        clocks = <&scmi_clk KEEM_BAY_A53_TIM>;
-+    };
-+
-+...
++	return ret;
+ }
+ 
+ /**
 -- 
-2.17.1
+2.25.0
 
