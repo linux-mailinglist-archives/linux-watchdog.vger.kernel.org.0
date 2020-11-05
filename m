@@ -2,105 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0E32A7D4D
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Nov 2020 12:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FE42A7EC6
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Nov 2020 13:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgKELje (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Nov 2020 06:39:34 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39112 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729916AbgKELjH (ORCPT
+        id S1730184AbgKEMjN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Nov 2020 07:39:13 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7058 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725468AbgKEMjM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Nov 2020 06:39:07 -0500
-Received: by mail-lj1-f195.google.com with SMTP id m16so1222902ljo.6;
-        Thu, 05 Nov 2020 03:39:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jck8w/E9bpQVLqgSLUvOFfHIe/qaww3VwYRc6ypuzVs=;
-        b=rVy6mb96pi//rU8b5aRGlskQj5O9Btjtj9bWFH8YK1HgdKHMzpbypQkoCAnGltrSuv
-         Y6izofwDelzMSfF8zrxydU/TP13UIel2KJah26PBzH3SNMhykX+UFsyGmPVmpI5Pg6rc
-         dKB6PZH2400PxgY7lrQrbNfWZC1IYSLqB1ggWSyS5ASSCgicnSu1l8N96h0gEZ16VTU+
-         aN+nG402K0Ihst92ZQOjLdId0bDFmlIW8Jo+S2KfPbKZTdo+1ZXXf6iMmfoK9PqSfD7O
-         BxdG3ybRxwtWseDerGOsDOgAbiMgQLM0yT68Jh/ci9XBFafWaSxjClI/LD/rmKK1aTzW
-         fXNg==
-X-Gm-Message-State: AOAM533Of7e/OMWK/PTWqCSQdtR513vv6A+Md0oE5Mp5TTXMjPaDQ3kN
-        3MjLy/bReU7tjPLgKTpvEEU=
-X-Google-Smtp-Source: ABdhPJzTkXFOD3A2pwoRy5RZFHg5E8cJ3tij6JBJxB48XvEI60+KnoAUA0gjdpI2mPOgd+89mNiS3w==
-X-Received: by 2002:a2e:3915:: with SMTP id g21mr769847lja.18.1604576345135;
-        Thu, 05 Nov 2020 03:39:05 -0800 (PST)
-Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id r6sm130382ljg.6.2020.11.05.03.39.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 03:39:04 -0800 (PST)
-Date:   Thu, 5 Nov 2020 13:38:58 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v5 4/4] MAINTAINERS: Add ROHM BD9576MUF and BD9573MUF drivers
-Message-ID: <8126292cb00ddcad2c4e2e2572fceaa305179691.1604574431.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1604574431.git.matti.vaittinen@fi.rohmeurope.com>
+        Thu, 5 Nov 2020 07:39:12 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CRjkf56XVzhXfl;
+        Thu,  5 Nov 2020 20:39:06 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Thu, 5 Nov 2020
+ 20:39:01 +0800
+From:   Wang Wensheng <wangwensheng4@huawei.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <rui.xiang@huawei.com>, <guohanjun@huawei.com>
+Subject: [PATCH -next v3 1/2] watchdog: Fix potential dereferencing of null pointer
+Date:   Thu, 5 Nov 2020 12:38:47 +0000
+Message-ID: <20201105123848.93735-1-wangwensheng4@huawei.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1604574431.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.208]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add maintainer entries for ROHM BD9576MUF and ROHM BD9573MUF drivers.
-MFD, regulator and watchdog drivers were introduced for these PMICs.
+A reboot notifier, which stops the WDT by calling the stop hook without
+any check, would be registered when we set WDOG_STOP_ON_REBOOT flag.
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Howerer we allow the WDT driver to omit the stop hook since commit
+"d0684c8a93549" ("watchdog: Make stop function optional") and provide
+a module parameter for user that controls the WDOG_STOP_ON_REBOOT flag
+in commit 9232c80659e94 ("watchdog: Add stop_on_reboot parameter to
+control reboot policy"). Together that commits make user potential to
+insert a watchdog driver that don't provide a stop hook but with the
+stop_on_reboot parameter set, then dereferencing of null pointer occurs
+on system reboot.
+
+Check the stop hook before registering the reboot notifier to fix the
+issue.
+
+Fixes: d0684c8a9354 ("watchdog: Make stop function optional")
+Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
 ---
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/watchdog/watchdog_core.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b516bb34a8d5..0bd788a94376 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15088,16 +15088,20 @@ F:	drivers/gpio/gpio-bd71828.c
- F:	drivers/mfd/rohm-bd70528.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
-+F:	drivers/mfd/rohm-bd9576.c
- F:	drivers/power/supply/bd70528-charger.c
- F:	drivers/regulator/bd70528-regulator.c
- F:	drivers/regulator/bd71828-regulator.c
- F:	drivers/regulator/bd718x7-regulator.c
-+F:	drivers/regulator/bd9576-regulator.c
- F:	drivers/regulator/rohm-regulator.c
- F:	drivers/rtc/rtc-bd70528.c
- F:	drivers/watchdog/bd70528_wdt.c
-+F:	drivers/watchdog/bd9576_wdt.c
- F:	include/linux/mfd/rohm-bd70528.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
-+F:	include/linux/mfd/rohm-bd957x.h
- F:	include/linux/mfd/rohm-generic.h
- F:	include/linux/mfd/rohm-shared.h
+diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+index 423844757812..945ab38b14b8 100644
+--- a/drivers/watchdog/watchdog_core.c
++++ b/drivers/watchdog/watchdog_core.c
+@@ -267,8 +267,15 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+ 	}
  
+ 	if (test_bit(WDOG_STOP_ON_REBOOT, &wdd->status)) {
+-		wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
++		if (!wdd->ops->stop) {
++			pr_err("watchdog%d: Cannot support stop_on_reboot\n",
++				wdd->id);
++			watchdog_dev_unregister(wdd);
++			ida_simple_remove(&watchdog_ida, id);
++			return -EINVAL;
++		}
+ 
++		wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
+ 		ret = register_reboot_notifier(&wdd->reboot_nb);
+ 		if (ret) {
+ 			pr_err("watchdog%d: Cannot register reboot notifier (%d)\n",
 -- 
-2.21.3
+2.25.0
 
-
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
