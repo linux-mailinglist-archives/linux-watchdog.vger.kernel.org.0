@@ -2,43 +2,57 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F592A79BE
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Nov 2020 09:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897402A79E7
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Nov 2020 09:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730983AbgKEI43 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Nov 2020 03:56:29 -0500
-Received: from mail-am6eur05on2050.outbound.protection.outlook.com ([40.107.22.50]:33856
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730830AbgKEI42 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Nov 2020 03:56:28 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lihwMQiDi+oqsYNh9+Iz4raDS3ss4k0w2iXSGhszvLfbSfxs5aehKcexiQ2/8OiO81PlNcvSz6NaUiji+w43+E+w/3SX4F7T58291F6fSrj+bzyAnOijw90mwyngjpVGy/HsQB7IXGkGZq208BOuTUZV8bHRdusGwjBedyvBHTeOdLD5tb3BmNTXv0BUveJoMM7hP4JPqZ+3RBPxwmqok0Q0Qa4m1JdzZYtsRcl7iK4QD+Z/hnUUiFCKH+Htvc/Ol9rFIGu/GZMgayZuEB+yha/kxa0Ti/x+YWTY6sa8HMAMcsspfUo3PrHoKFh7fRfnVeipMzfGkHxlQT+zw0zQHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zXIn3lOx9AOKufZKFFwoljtWHROLLDawpB2MZY3EQDw=;
- b=kM8PjA26quDQKyUgmSehzwD44lQd9t4fB14K+xKueLjfPqAGZjtVQ6MSa7dEAbn7//HAcJFZyYsPp2Qf4RKP6qvDFSlfpkxPLgQEcWuI2dTIUMszN0fOrjkW9uEf/q4K3COrnalnIfyDMome2XiCeAZ4clH4YJ24B/4KLynZ9TpDuxTdn4FJ7mpqIY+xkzTHzu08WQKGh3we4SPiuH4v8wXVlL3ozUJehXlFhNGDxsJgtssETTcNEorWw2xSyqLboqB+Ic6vyrR/500o6TcDl+KXYIGZVLD4w3AWjJkwkhBaUQlXTVhfvCo9F9nyh9cg76aknqiDP1LaC4JGRtGyPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+        id S1728855AbgKEI6Q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Nov 2020 03:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725320AbgKEI6O (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 5 Nov 2020 03:58:14 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1936AC0613CF
+        for <linux-watchdog@vger.kernel.org>; Thu,  5 Nov 2020 00:58:14 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id p1so759918wrf.12
+        for <linux-watchdog@vger.kernel.org>; Thu, 05 Nov 2020 00:58:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zXIn3lOx9AOKufZKFFwoljtWHROLLDawpB2MZY3EQDw=;
- b=gQo2mCSBJwg7LN9XV75fq7K1lGO7Y3VAK/4AK5nsdcAfaWrbeLjjmCHnG7+FKaPwJPlEBWkwOH5lxVyY4VfR+4KAu9BSf0zrmrv+RNBJvY1KqdQrLOHhfVRXgl2z43FRIAxC1TtkNQrIhhOYCyHuusqfPGaIbWDtGsJifGs4LkU=
-Received: from DB6PR03MB3160.eurprd03.prod.outlook.com (2603:10a6:6:37::21) by
- DB6PR0302MB2741.eurprd03.prod.outlook.com (2603:10a6:4:ac::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3499.32; Thu, 5 Nov 2020 08:56:18 +0000
-Received: from DB6PR03MB3160.eurprd03.prod.outlook.com
- ([fe80::f0fb:9677:5a21:6107]) by DB6PR03MB3160.eurprd03.prod.outlook.com
- ([fe80::f0fb:9677:5a21:6107%7]) with mapi id 15.20.3477.038; Thu, 5 Nov 2020
- 08:56:17 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "lee.jones@linaro.org" <lee.jones@linaro.org>
-CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=C64vfAzohlbl3oXX4sm2PzWD/v8jPgW0sIcIItKTbrA=;
+        b=yL93fXz9X70npFWtsDKM/I7FXfceNmJpeQKfaJkSh/1zIhq5CkL0BXluc1shtQap6m
+         ciVb9ZpzUc95ZK4QBnxysdkYqZMmvSI3GJ3zA6ii836G4LBfqI/YACiEG070Gy7x95AJ
+         /BCVZBDDmJDY5QlUPC1grBbUrYSd1yiUJfLyoU0TPrPlbQOj6wmDNhTXb8SMtW+XWAAO
+         bq4po+PFSlA3JVZuBGdb0uHamVcXWLuQ6PhLlmQDdyammkZ52QpT7p154phAVb+SgCDd
+         XC0iLqUyI8RJZ2TgUm4qYktybONdAPj0X4XNWlsAF6MjcC0JsgLpspq9zWZ++SkIdyog
+         fqKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=C64vfAzohlbl3oXX4sm2PzWD/v8jPgW0sIcIItKTbrA=;
+        b=N8aZpLziygEUDKFhYINgxRVISvEWmW+iLoonqRJ1VVYvm8xd9BJskoiiOuSoArOQDS
+         ihBiEvl4EoaCzBpMPQzw2YPBbsFklL6b6Nw/4pXE342MCXwyokPGGup2+LAcVPpnwK7u
+         jALLPw0gmkpMVWFPV3nXYuv1z5HvjBTG32QV1y0q9RwcO3ex9Y4BEa/8xDqIsYWwBFlm
+         wTs7ziX2K6tU0PIHAc8sxGuvKLg3NCHI0qALk8kLb9iqTkaNDDvhBkimRiSyNWq0uMjJ
+         b8H0K+Ykfyxzy0xhVEUMWwF9nhnQrfuhOgq/v9q98TngFg+gu3ODzOT7gJEsz4QGJcBv
+         Gg7A==
+X-Gm-Message-State: AOAM5302uN9VNVArfA7TEdudH+78sCES9OR7SgOVEZc4AExw0e9uIO7j
+        nndpXk+spc7tX/Ir1Uo0IJfc7w==
+X-Google-Smtp-Source: ABdhPJwEvGUR3NXfEQhcj31CvjZxkcrWKkm7Qv9+67OFfyvqQ7ZXldAbYPmo5Zr5+X+LwQg+02o0VA==
+X-Received: by 2002:a5d:490a:: with SMTP id x10mr1523392wrq.289.1604566692856;
+        Thu, 05 Nov 2020 00:58:12 -0800 (PST)
+Received: from dell ([91.110.221.242])
+        by smtp.gmail.com with ESMTPSA id i13sm1591419wrs.9.2020.11.05.00.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 00:58:12 -0800 (PST)
+Date:   Thu, 5 Nov 2020 08:58:10 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
         "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
         "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -47,89 +61,88 @@ CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>
 Subject: Re: [PATCH v4 2/4] mfd: Support ROHM BD9576MUF and BD9573MUF
-Thread-Topic: [PATCH v4 2/4] mfd: Support ROHM BD9576MUF and BD9573MUF
-Thread-Index: AQHWrQ9DwN0nkcfMkkiJSgq2+hhNRam4KrWAgAD53wCAAA83gIAAC2AAgAAJuoA=
-Date:   Thu, 5 Nov 2020 08:56:17 +0000
-Message-ID: <c969857d70c3fea3e5369651d09aa4ba668418f7.camel@fi.rohmeurope.com>
+Message-ID: <20201105085810.GD4488@dell>
 References: <cover.1603877481.git.matti.vaittinen@fi.rohmeurope.com>
-         <c7a838830b7d5ea1c281e419cf0eff0cc50363e0.1603877481.git.matti.vaittinen@fi.rohmeurope.com>
-         <20201104155153.GQ4488@dell>
-         <058913084af32743f2e23228a46944bbfcbd52d2.camel@fi.rohmeurope.com>
-         <98d3a090462d21a97dd15490ac1e9de011819b35.camel@fi.rohmeurope.com>
-         <20201105082122.GU4488@dell>
-In-Reply-To: <20201105082122.GU4488@dell>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linaro.org; dkim=none (message not signed)
- header.d=none;linaro.org; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [62.78.225.252]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3171f514-502c-4e09-d72f-08d88168a887
-x-ms-traffictypediagnostic: DB6PR0302MB2741:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB6PR0302MB2741D17E59C1F3D0B255F16CADEE0@DB6PR0302MB2741.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: I4lX6pq8pxYB8YPmJFj95XTDBBiV6UGxJgM8J862MKn7D1jAIn8eF/b+UYcWfOI0gRPK+G024ULB66J/snzFjFhN66mg3THdokLmBEgZo7h1G7WAzxRaYzrz+6qZ6Uw03BUwewWzwelurmf6WuelQiuB77l53DtGv0wKXky07WjBISPoSUCRI5oYD2731mlN5SPae5EiiBf2VBmMr4GVnBJy1KyTVsoMoUdkX8jV7SMOoG0jnOeaBLYymGqJR9NGBVsNxbM4o9upDIaoueCQtLB5x/cseVXXMn5s/uGcH7foRAa6UaFv93Bzlkgoo0bjNvZNT7XEGDX3iVlT6R/WMw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR03MB3160.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39840400004)(396003)(366004)(346002)(376002)(66556008)(6506007)(91956017)(186003)(76116006)(66476007)(8936002)(66946007)(83380400001)(478600001)(8676002)(26005)(64756008)(66446008)(2616005)(6512007)(316002)(4326008)(54906003)(2906002)(6486002)(3450700001)(5660300002)(71200400001)(86362001)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: WZTwJIe3dWq26qTbC6xdwczBvqqIj7X/9xQv/Xf1sAs8nmFyO9uIyMLF1SHbmbz5UVDAs22k4GM0DHfIbdgnWIIERaeL3D3xgJ3YscIaPt2xgkqegw7WVgpP7KdEGF3r8u8EhOP4/omjhbRyWOwnfvE6YLMZHfObqtE0ewMe/Kkhjt9Eb+iejvCp3fulHq9YCSRV/YLsY218Q6VyQlDSTcJYUr9RT1e1t4cUOVs0C6eIdFxUTxgQIzDM7+y/K2AmqEA/1qKSSxblhxXAluvx7nKnZk1LFTAhWagT9rPfpQ8hj2mSav1WqtMiE1lsEtfgOGtYf12EY1VdajuZhms+bkc5QPqM7TGOJapkHk5vun55djY21XHeRP9ebqMwUGG6qf+Zr/sU5MV915/3c6MiNBkxOnlfiRKyDzdv8yOzeLKkBGgtmZRxCj9RWIAolprF2B1AKES0Xr4z1n1XxLBe9uopgBL7eBoq8oH0O42pHLepicpyihTyVPhqPDazvAab/SiWxlGYdimY4so+WvJ4Cy6TotivnoP+tN26zNVzI5YQpSdPJBkYNPvBAOItV7oSBrnaFhVKK+fXzBaQfGxrcL2wiK8ftEHSRUKmfYAPxOpf8hKZgFdU6hPia78HM5sQiX1JcVHz+P/2QOlvz1OvWg==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <60513F9E95CC8F44B7FC931D0BDC6195@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <c7a838830b7d5ea1c281e419cf0eff0cc50363e0.1603877481.git.matti.vaittinen@fi.rohmeurope.com>
+ <20201104155153.GQ4488@dell>
+ <058913084af32743f2e23228a46944bbfcbd52d2.camel@fi.rohmeurope.com>
+ <98d3a090462d21a97dd15490ac1e9de011819b35.camel@fi.rohmeurope.com>
+ <20201105082122.GU4488@dell>
+ <c969857d70c3fea3e5369651d09aa4ba668418f7.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR03MB3160.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3171f514-502c-4e09-d72f-08d88168a887
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2020 08:56:17.5742
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4Rkw8Er2AhuKQ9zu4a39xJEV7hAmUC67iCg70ALaSxl7rU8mU1uT2ufnun0z9tSXWSq9RFy1hoEczoX7BBEwzg9LxyZBEAHXgihNpyFtBfqzbFlAvpdHpUVDlGGiXugb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0302MB2741
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c969857d70c3fea3e5369651d09aa4ba668418f7.camel@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-DQpPbiBUaHUsIDIwMjAtMTEtMDUgYXQgMDg6MjEgKzAwMDAsIExlZSBKb25lcyB3cm90ZToNCj4g
-T24gVGh1LCAwNSBOb3YgMjAyMCwgVmFpdHRpbmVuLCBNYXR0aSB3cm90ZToNCj4gDQo+ID4gT24g
-VGh1LCAyMDIwLTExLTA1IGF0IDA4OjQ2ICswMjAwLCBNYXR0aSBWYWl0dGluZW4gd3JvdGU6DQo+
-ID4gPiBNb3JuaW5nIExlZSwNCj4gPiA+IA0KPiA+ID4gVGhhbmtzIGZvciB0YWtpbmcgYSBsb29r
-IGF0IHRoaXMgOikgSSBzZWUgbW9zdCBvZiB0aGUgY29tbWVudHMNCj4gPiA+IGJlaW5nDQo+ID4g
-PiB2YWxpZC4gVGhlcmUncyB0d28gSSB3b3VsZCBsaWtlIHRvIGNsYXJpZnkgdGhvdWdoLi4uDQo+
-ID4gPiANCj4gPiA+IE9uIFdlZCwgMjAyMC0xMS0wNCBhdCAxNTo1MSArMDAwMCwgTGVlIEpvbmVz
-IHdyb3RlOg0KPiA+ID4gPiBPbiBXZWQsIDI4IE9jdCAyMDIwLCBNYXR0aSBWYWl0dGluZW4gd3Jv
-dGU6DQo+ID4gPiA+IA0KPiA+ID4gPiA+IEFkZCBjb3JlIHN1cHBvcnQgZm9yIFJPSE0gQkQ5NTc2
-TVVGIGFuZCBCRDk1NzNNVUYgUE1JQ3Mgd2hpY2gNCj4gPiA+ID4gPiBhcmUNCj4gPiA+ID4gPiBt
-YWlubHkgdXNlZCB0byBwb3dlciB0aGUgUi1DYXIgc2VyaWVzIHByb2Nlc3NvcnMuDQo+ID4gPiA+
-ID4gDQo+ID4gPiA+ID4gU2lnbmVkLW9mZi1ieTogTWF0dGkgVmFpdHRpbmVuIDwNCj4gPiA+ID4g
-PiBtYXR0aS52YWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20NCj4gPiA+ID4gPiAtLS0NCj4gPiA+
-ID4gPiArCXVuc2lnbmVkIGludCBjaGlwX3R5cGU7DQo+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ICsJ
-Y2hpcF90eXBlID0gKHVuc2lnbmVkIGludCkodWludHB0cl90KQ0KPiA+ID4gPiA+ICsJCSAgICBv
-Zl9kZXZpY2VfZ2V0X21hdGNoX2RhdGEoJmkyYy0+ZGV2KTsNCj4gPiA+ID4gDQo+ID4gPiA+IE5v
-dCBvdmVybHkga2VlbiBvbiB0aGlzIGNhc3RpbmcuDQo+ID4gPiA+IA0KPiA+ID4gPiBXaHkgbm90
-IGp1c3QgbGVhdmUgaXQgYXMgKHVpbnRwdHJfdCk/DQo+ID4gPiANCj4gPiA+IEkgZGlkbid0IGRv
-IHNvIGJlY2F1c2Ugb24geDg2XzY0IHRoZSBhZGRyZXNzIHdpZHRoIGlzIHByb2JhYmx5IDY0DQo+
-ID4gPiBiaXRzDQo+ID4gPiB3aGVyZWFzIHRoZSB1bnNpZ25lZCBpbnQgaXMgbGlrZWx5IHRvIGJl
-IDMyIGJpdHMuIFNvIHRoZQ0KPiA+ID4gYXNzaWdubWVudA0KPiA+ID4gd2lsbCBjcm9wIGhhbGYg
-b2YgdGhlIHZhbHVlLiBJdCBkb2VzIG5vdCByZWFsbHkgbWF0dGVyIGFzIHZhbHVlcw0KPiA+ID4g
-YXJlDQo+ID4gPiBzbWFsbCAtIGJ1dCBJIHdvdWxkIGJlIHN1cnByaXplZCBpZiBubyBjb21waWxl
-cnMvYW5hbHl6ZXJzDQo+ID4gPiBlbWl0dGVkIGENCj4gPiA+IHdhcm5pbmcuDQo+ID4gPiANCj4g
-PiA+IEkgbXVzdCBhZG1pdCBJIGFtIG5vdCAxMDAlIHN1cmUgdGhvdWdoLiBJIHN1cmUgY2FuIGNo
-YW5nZSB0aGlzIGlmDQo+ID4gPiB5b3UNCj4gPiA+IGtub3cgaXQgYmV0dGVyPw0KPiANCj4gV2hh
-dCBpZiB5b3UgdXNlZCAnbG9uZycsIHdoaWNoIEkgYmVsaWV2ZSBjaGFuZ2VkIHdpdGggdGhlDQo+
-IGFyY2hpdGVjdHVyZSdzIGJ1cyB3aWR0aCBpbiBMaW51eD8NCg0KSSB0aGluayB0aGlzIGlzIGV4
-YWN0bHkgd2hhdCB1aW50cHRyX3Qgd2FzIGNyZWF0ZWQgZm9yLiBUbyBwcm92aWRlIHR5cGUNCndo
-aWNoIGFzc3VyZXMgYSBwb2ludGVyIGNvbnZlcnNpb24gdG8gaW50ZWdlciBhbmQgYmFjayB3b3Jr
-cy4NCg0KSSBndWVzcyBJIGNhbiBjaGFuZ2UgdGhlDQoNCnVuc2lnbmVkIGludCBjaGlwX3R5cGU7
-DQoNCnRvIHVpbnRwdHJfdCBhbmQgZ2V0IGF3YXkgd2l0aCBzaW5nbGUgY2FzdCBpZiBpdCBsb29r
-cyBiZXR0ZXIgdG8geW91Lg0KRm9yIG1lIHRoZSBkb3VibGUgY2FzdCBkb2VzIG5vdCBsb29rIHRo
-YXQgYmFkIHdoZW4gaXQgYWxsb3dzIHVzZSBvZg0KbmF0aXZlIGludCBzaXplIHZhcmlhYmxlIC0g
-YnV0IGluIHRoaXMgY2FzZSBpdCdzIHJlYWxseSBqdXN0IGEgbWF0dGVyDQpvZiB0YXN0ZS4gQm90
-aCBzaG91bGQgd29yayBmaW5lLg0KDQpJJ2xsIGNvb2sgdjUuDQoNCi0tTWF0dGkNCg0K
+On Thu, 05 Nov 2020, Vaittinen, Matti wrote:
+
+> 
+> On Thu, 2020-11-05 at 08:21 +0000, Lee Jones wrote:
+> > On Thu, 05 Nov 2020, Vaittinen, Matti wrote:
+> > 
+> > > On Thu, 2020-11-05 at 08:46 +0200, Matti Vaittinen wrote:
+> > > > Morning Lee,
+> > > > 
+> > > > Thanks for taking a look at this :) I see most of the comments
+> > > > being
+> > > > valid. There's two I would like to clarify though...
+> > > > 
+> > > > On Wed, 2020-11-04 at 15:51 +0000, Lee Jones wrote:
+> > > > > On Wed, 28 Oct 2020, Matti Vaittinen wrote:
+> > > > > 
+> > > > > > Add core support for ROHM BD9576MUF and BD9573MUF PMICs which
+> > > > > > are
+> > > > > > mainly used to power the R-Car series processors.
+> > > > > > 
+> > > > > > Signed-off-by: Matti Vaittinen <
+> > > > > > matti.vaittinen@fi.rohmeurope.com
+> > > > > > ---
+> > > > > > +	unsigned int chip_type;
+> > > > > > +
+> > > > > > +	chip_type = (unsigned int)(uintptr_t)
+> > > > > > +		    of_device_get_match_data(&i2c->dev);
+> > > > > 
+> > > > > Not overly keen on this casting.
+> > > > > 
+> > > > > Why not just leave it as (uintptr_t)?
+> > > > 
+> > > > I didn't do so because on x86_64 the address width is probably 64
+> > > > bits
+> > > > whereas the unsigned int is likely to be 32 bits. So the
+> > > > assignment
+> > > > will crop half of the value. It does not really matter as values
+> > > > are
+> > > > small - but I would be surprized if no compilers/analyzers
+> > > > emitted a
+> > > > warning.
+> > > > 
+> > > > I must admit I am not 100% sure though. I sure can change this if
+> > > > you
+> > > > know it better?
+> > 
+> > What if you used 'long', which I believe changed with the
+> > architecture's bus width in Linux?
+> 
+> I think this is exactly what uintptr_t was created for. To provide type
+> which assures a pointer conversion to integer and back works.
+> 
+> I guess I can change the
+> 
+> unsigned int chip_type;
+> 
+> to uintptr_t and get away with single cast if it looks better to you.
+> For me the double cast does not look that bad when it allows use of
+> native int size variable - but in this case it's really just a matter
+> of taste. Both should work fine.
+
+I do see people casting to uintptr and placing the result into a long.
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
