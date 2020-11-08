@@ -2,118 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5312A9B00
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Nov 2020 18:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72ABB2AAC2E
+	for <lists+linux-watchdog@lfdr.de>; Sun,  8 Nov 2020 17:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726176AbgKFRlM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Nov 2020 12:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S1727929AbgKHQZy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 8 Nov 2020 11:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgKFRlM (ORCPT
+        with ESMTP id S1726388AbgKHQZx (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Nov 2020 12:41:12 -0500
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33281C0613CF;
-        Fri,  6 Nov 2020 09:41:12 -0800 (PST)
-Received: by mail-ot1-x341.google.com with SMTP id i18so1985109ots.0;
-        Fri, 06 Nov 2020 09:41:12 -0800 (PST)
+        Sun, 8 Nov 2020 11:25:53 -0500
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD64C0613CF;
+        Sun,  8 Nov 2020 08:25:53 -0800 (PST)
+Received: by mail-oi1-x241.google.com with SMTP id j7so7388018oie.12;
+        Sun, 08 Nov 2020 08:25:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=uLhEdPzLKPN9y0Y1FvDCW1msQK/rmAeoz0yPSS7CP/s=;
-        b=jqRks1dh3gjGCUabb2ufNQxlNGI8bjL4On2wkLX9Ph8+OqEoK6yCVqP3PSAQrxYePZ
-         OvlbZdByOacc3+0thZjFFoJm5sywILYb9ecoghyIdSRyo4SksjTqKEKwrv0eMEvFrDOH
-         8OeowFAovGAqDBPuc4PLswmyAHnzXKiTZzXvGce0fwYP1UM5Yl3dBudxTkPFCVe1S/7J
-         HAOzPav18RCtb6VZLoE0ko9LqVCeZKOK/Wi1L+TMXcb9bf/CF+M8dfnVO41tpnENV2ly
-         MAYEG4gwCPHWmHxXyrhyEG6xUqX8bAIUtALTw5Z+uyC7qKHjxcabmD2CZVoimVwI0eQf
-         yZCg==
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=y7H39mVcek5Gfl56DHtreNxTggw3nG3wMjBDYefwKcM=;
+        b=Hkqc6KqANTQA9J7hn0qNGLRUAlI789x2UIJoG5SaxN+GcRD9H4JuunadDC/f25iian
+         UKfA3zzoidXobrURZ95TdiBLmAObXjFkE5urNHNz1C+R5ZvlPFu9pJidxArPWoBWR2yG
+         g/wXN475xGRXQTp+I+iZIGaagirPaRbHUkxhCJkPnhkvSMw70gsQA1Z+k71AYwRlF0f8
+         HxTP5Tn+s+vwzYPgPuiKqLm9d3RNBX9OKWYnOvzDNgOr/R/qmKW5pLfijEMjUJPazela
+         vtBfE7TTJpp7HsKGRGmP8l2OOPTesgwKNzlQ9hEsXxiWtpg+fPBQ7s+xJA2DUTX89hfG
+         I/pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uLhEdPzLKPN9y0Y1FvDCW1msQK/rmAeoz0yPSS7CP/s=;
-        b=EqNe9g6StmY1jZTLC3jxERX7ROPRbwN5Oy4gd8JRfGVBgUJgAqj3EPjdndKKUCdpi/
-         PjKOItYSBztuF/skVQq34puIVS3mKwJZQ4MWxmAeQ9J/H06YtLowRKcGhJ3DAp+zx3mL
-         FGL2E0EvxnWZFIZMUx7iblYbaOBrRql4kFNaWQcURFob729Fs8XPA6VXgcv9+yTS6Lza
-         hasgVTDkV0pz4dNVUxHT822I3qre/8weR7HnA0MIQ/eQxtXtJuTlR4cKKqVlQxP3QFYQ
-         Q1VltveFTRbOxCOXfYbh7rn4tmOFU5JvYGDVpn4SiREpcpYbPsQDtr//bbjUPwYcul5F
-         0SDg==
-X-Gm-Message-State: AOAM531sXP4uKjk9z8QVlb9yauwZHq5DhiYfDe8Gool8q8R8pYP6Fl6B
-        Fejou1PlsLFCdMsjtMQUpf8zZb0RPGo=
-X-Google-Smtp-Source: ABdhPJxSjaZ0nuVUyMqzhEbLb4XE4zzKDOr9zqrn8ee4fvTdWOQ00WwQQvU2vC4TLwd24DGXXkbhCQ==
-X-Received: by 2002:a9d:720e:: with SMTP id u14mr1893659otj.65.1604684471589;
-        Fri, 06 Nov 2020 09:41:11 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=y7H39mVcek5Gfl56DHtreNxTggw3nG3wMjBDYefwKcM=;
+        b=C2jXRgiJqY+QatZksEZFbqWx0HScagKBhc3a6t4cNm/simvANtmUUQ4KIg9rzJofC0
+         SjE0MiKjnBZ1r0YTOLOyILvWQdzpPgb8ab56OxdftKdVbXvXxXOVw60K2fQ81YBYunjV
+         /MuteQr0uoSqM24VwVT5HHkCkY1wuXk56eexcCHOg9IuRqDvjEv9jNtlr1iOjAsYb3hv
+         OVuoUInUx6J3dcryL7VW7TBX+gofnpTLCO5OU8etf89KMoMo37SiBoe9MQmA7BKxhZjt
+         oLndphgM4LGXh5WgVQ6UB0lD3ZvS2tWKZIHWP+5NwH3D8NYAMAwEbJuovyP00LtA8Wj0
+         I2TA==
+X-Gm-Message-State: AOAM5315DbzovSnYx0glOvsNLkQs6MxZ98FFxSD7K1GPhm+nhWNKxC2u
+        fGQVM7ayb+x+UHFXQs1WHM8=
+X-Google-Smtp-Source: ABdhPJxnrrMiXp39hxTKAWz6CjXselwNzDcNG3ayrWRQORvL9ZhRgigY1R9QPVpjInU+cePYhVEkDw==
+X-Received: by 2002:aca:ed06:: with SMTP id l6mr6629612oih.2.1604852752994;
+        Sun, 08 Nov 2020 08:25:52 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e3sm464230ooq.0.2020.11.06.09.41.10
+        by smtp.gmail.com with ESMTPSA id w18sm1875348otl.38.2020.11.08.08.25.52
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 06 Nov 2020 09:41:10 -0800 (PST)
+        Sun, 08 Nov 2020 08:25:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 6 Nov 2020 09:41:09 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe Roullier <christophe.roullier@st.com>
-Cc:     wim@linux-watchdog.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Etienne Carriere <etienne.carriere@st.com>
-Subject: Re: [PATCH V2 1/1] watchdog: stm32_iwdg: don't print an error on
- probe deferral
-Message-ID: <20201106174109.GF14837@roeck-us.net>
-References: <20201106142327.3129-1-christophe.roullier@st.com>
- <20201106142327.3129-2-christophe.roullier@st.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201106142327.3129-2-christophe.roullier@st.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/2] watchdog: armada_37xx: Add missing dependency on HAS_IOMEM
+Date:   Sun,  8 Nov 2020 08:25:49 -0800
+Message-Id: <20201108162550.27660-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 03:23:27PM +0100, Christophe Roullier wrote:
-> From: Etienne Carriere <etienne.carriere@st.com>
-> 
-> Do not print an error trace when deferring probe for clock resources.
-> 
-> Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
-> Signed-off-by: Christophe Roullier <christophe.roullier@st.com>
+The following kbuild warning is seen on a system without HAS_IOMEM.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+WARNING: unmet direct dependencies detected for MFD_SYSCON
+  Depends on [n]: HAS_IOMEM [=n]
+  Selected by [y]:
+  - ARMADA_37XX_WATCHDOG [=y] && WATCHDOG [=y] && (ARCH_MVEBU || COMPILE_TEST
 
-> ---
->  drivers/watchdog/stm32_iwdg.c | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
-> index 25188d6bbe15..a3436c296c97 100644
-> --- a/drivers/watchdog/stm32_iwdg.c
-> +++ b/drivers/watchdog/stm32_iwdg.c
-> @@ -162,18 +162,15 @@ static int stm32_iwdg_clk_init(struct platform_device *pdev,
->  	u32 ret;
->  
->  	wdt->clk_lsi = devm_clk_get(dev, "lsi");
-> -	if (IS_ERR(wdt->clk_lsi)) {
-> -		dev_err(dev, "Unable to get lsi clock\n");
-> -		return PTR_ERR(wdt->clk_lsi);
-> -	}
-> +	if (IS_ERR(wdt->clk_lsi))
-> +		return dev_err_probe(dev, PTR_ERR(wdt->clk_lsi), "Unable to get lsi clock\n");
->  
->  	/* optional peripheral clock */
->  	if (wdt->data->has_pclk) {
->  		wdt->clk_pclk = devm_clk_get(dev, "pclk");
-> -		if (IS_ERR(wdt->clk_pclk)) {
-> -			dev_err(dev, "Unable to get pclk clock\n");
-> -			return PTR_ERR(wdt->clk_pclk);
-> -		}
-> +		if (IS_ERR(wdt->clk_pclk))
-> +			return dev_err_probe(dev, PTR_ERR(wdt->clk_pclk),
-> +					     "Unable to get pclk clock\n");
->  
->  		ret = clk_prepare_enable(wdt->clk_pclk);
->  		if (ret) {
-> -- 
-> 2.17.1
-> 
+This results in a subsequent compile error.
+
+drivers/watchdog/armada_37xx_wdt.o: in function `armada_37xx_wdt_probe':
+armada_37xx_wdt.c:(.text+0xdc): undefined reference to `devm_ioremap'
+
+Add the missing dependency.
+
+Reported-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Fixes: 54e3d9b518c8 ("watchdog: Add support for Armada 37xx CPU watchdog")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/watchdog/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index fd7968635e6d..b3e8bdaa2a11 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -386,6 +386,7 @@ config ARM_SBSA_WATCHDOG
+ config ARMADA_37XX_WATCHDOG
+ 	tristate "Armada 37xx watchdog"
+ 	depends on ARCH_MVEBU || COMPILE_TEST
++	depends on HAS_IOMEM
+ 	select MFD_SYSCON
+ 	select WATCHDOG_CORE
+ 	help
+-- 
+2.17.1
+
