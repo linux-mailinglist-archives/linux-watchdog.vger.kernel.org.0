@@ -2,52 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0174B2AAFAE
+	by mail.lfdr.de (Postfix) with ESMTP id DD2882AAFB0
 	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Nov 2020 04:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729139AbgKIDBK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 8 Nov 2020 22:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S1729131AbgKIDBO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 8 Nov 2020 22:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728038AbgKIDBK (ORCPT
+        with ESMTP id S1728038AbgKIDBO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 8 Nov 2020 22:01:10 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFF7C0613CF;
-        Sun,  8 Nov 2020 19:01:10 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id h6so5810890pgk.4;
-        Sun, 08 Nov 2020 19:01:10 -0800 (PST)
+        Sun, 8 Nov 2020 22:01:14 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF5FC0613CF;
+        Sun,  8 Nov 2020 19:01:14 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id x23so3983979plr.6;
+        Sun, 08 Nov 2020 19:01:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=n1Lz146A6nS95leFWGrokBi9+iBoyGlmNS4AR/tppXk=;
-        b=XkY5oP1XfBAo6UT2hHOz2X4SXc++b5QeDald2o1fm2J1/aA/FoSIbDvqWQ5CHyiMuW
-         QdQzAGSqMoTNnpvggSkd2yQUgtl1j+vQyhMe48kMUO+1g7gqE797zz0ov+xhGANQvive
-         FqRhWJp9VU4tuCz1EBdvqcKVvi5+fgWtM3vxA4wP7IwqvSLm/af71grk/ZqeVbRnD/IA
-         rmU0Vp63rUHnJoUf6pH07RYkU2cfLjBrpM0Gdxbmk4jPiPbnfkNgAZ7MegIAAihPxORa
-         HWa44qQKeDDIIThWn1i/U2/fFTq0e2GHNwc2OVktftcz13TcM0ovUol2oIwKNq8cDddf
-         HGNA==
+        bh=eergAcVwrV/Vdb1ywFVydhk3J6PWGYILWqD6MtGIY3Q=;
+        b=viGoncLBKe05fI7/d15315arj7wLwmrBflFy4yggT1WjYM52xA7NyK+qv8xSk56uNJ
+         BxxV7tMat7v21Zp9sy31bguTwcc7xjBaWvq4ArjyN481XkzMUg6UIrVkLhK3mRiafWSk
+         TWtW3EKVwK5fCuJ68PUxSVaH7/miPy3wu4ZC/JtfBlr5F6mC2eFfuOicGwQmhaGvn2p1
+         cwOoAE8cLcjK6VYyJ0IJJD+abwq54WFLs2g3gYEy+NQCZ/QwLkdzB49Pn7WSTskblboo
+         MDu3lrOOi/AcBgp6+eonXYxu1FSqX6LWVtcdJhEyGYCK87izfSL0B+ltLw5c5QpCfhO1
+         e4FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=n1Lz146A6nS95leFWGrokBi9+iBoyGlmNS4AR/tppXk=;
-        b=S+7nzmwjshypUclRJf9JkFvqXxz7brKGMKhvgQHzCfaSTHHqRXBFTzOwsI3KC85jt7
-         ExH9vjycVEyCYMiq8mUhFU+TdPNWG5+5dcr186Vs2XGfzUcwwiemv8ZyxKbT88u3i56f
-         xgLFK/CqdckbF8ssM/15QhYc6G71KQVuJlChuHaLTNDoCKZPhyn0WSOdm3xi/5vMNXq9
-         f+nK4T2It7gb9aanq+Kl61Q4O4OJN9zhsaG1M7y8yKKdcjfoPyZqnNV4SB30IOuX8iLS
-         VhMJHpvldpXXtJeFfbfH0l+KRZCVnUie0yn2jLedgU2A6GTfRLGnAoSWXF9OiRwlR+UF
-         vAlA==
-X-Gm-Message-State: AOAM531rr8IUsE1fPuFpWtVC4YUSg1IS4eBGRG3x7ejKoTqD+9G0AGpu
-        VU48nSr1xjezzaXWHFOxCEg=
-X-Google-Smtp-Source: ABdhPJz4awQC08s3emYNgCco0rrREE7QEOjSTd1IIfOM2f7thz6A+oUw206Ylktq9JqBobTN5iXahA==
-X-Received: by 2002:a62:1b58:0:b029:18a:df98:24fa with SMTP id b85-20020a621b580000b029018adf9824famr11812933pfb.25.1604890869696;
-        Sun, 08 Nov 2020 19:01:09 -0800 (PST)
+        bh=eergAcVwrV/Vdb1ywFVydhk3J6PWGYILWqD6MtGIY3Q=;
+        b=QhoKOlZWHhiFzbxLcir4Bk0E2OWbi80rWxgXZ3nHchfulw0Z01d8NDe6zI/1P4U4t0
+         S4zbGTZ/4IClIWIzatUvWTOP3e19Rlbp3iJ/38S25rZIRIGv2Y4X+gnxYfpqYcK7qbZs
+         CT9JW9Q7CrnYSoU7TVH28NQvwJfr/aidgAtcL5VltiUYWfq1wqxatIDsfhlNSSRT6aHj
+         iTQdXq907dC9MI875X/0MD+MLmPou1J+Y/xD4oKjkGDjfnhqE8Cs8pfCP6dPxq0Plkdv
+         esas8SNlVm1ElZLxB1OR2eOXXmVNcCYoZzwILT94rYYNkK1nMsnfgrnn4Rk+lulq7zKx
+         JgDQ==
+X-Gm-Message-State: AOAM530OFtvY62CpUnII7RZzjfE/qzzGrik4a07ViNomIk5xxNX9WuGo
+        GVkZFg/gLk15ohnHI08pS7Q=
+X-Google-Smtp-Source: ABdhPJyLMqTT6dToDAs20txqLGCqIcuL5onR+HrvyPSTjTNCZDtQ9165pUMR+gn2MLHkfGfwBIaIxQ==
+X-Received: by 2002:a17:902:7606:b029:d4:c797:a186 with SMTP id k6-20020a1709027606b02900d4c797a186mr10658530pll.38.1604890873966;
+        Sun, 08 Nov 2020 19:01:13 -0800 (PST)
 Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id u197sm4344606pfc.127.2020.11.08.19.01.06
+        by smtp.gmail.com with ESMTPSA id u197sm4344606pfc.127.2020.11.08.19.01.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2020 19:01:09 -0800 (PST)
+        Sun, 08 Nov 2020 19:01:13 -0800 (PST)
 From:   Chunyan Zhang <zhang.lyra@gmail.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
@@ -58,9 +58,9 @@ Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lingling Xu <ling_ling.xu@unisoc.com>,
         Jingchao Ye <jingchao.ye@unisoc.com>,
         Xiaoqing Wu <xiaoqing.wu@unisoc.com>
-Subject: [PATCH v3 2/3] watchdog: sprd: check busy bit before new loading rather than after that
-Date:   Mon,  9 Nov 2020 11:00:54 +0800
-Message-Id: <20201109030055.27378-3-zhang.lyra@gmail.com>
+Subject: [PATCH v3 3/3] watchdog: sprd: change to use usleep_range() instead of busy loop
+Date:   Mon,  9 Nov 2020 11:00:55 +0800
+Message-Id: <20201109030055.27378-4-zhang.lyra@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201109030055.27378-1-zhang.lyra@gmail.com>
 References: <20201109030055.27378-1-zhang.lyra@gmail.com>
@@ -70,65 +70,67 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Lingling Xu <ling_ling.xu@unisoc.com>
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-As the specification described, users must check busy bit before start
-a new loading operation to make sure that the previous loading is done
-and the device is ready to accept a new one.
+After changing to check busy bit for the previous loading operation instead
+of the current one, for most of cases, the busy bit is not set for the
+first time of read, so there's no need to check so frequently, so this
+patch use usleep_range() to replace cpu_relax() to avoid busy loop.
 
-[ chunyan: Massaged changelog ]
+Also this patch change the max times to 11 which would be enough, since
+according to the specification, the busy bit would be set after a new
+loading operation and last 2 or 3 RTC clock cycles (about 60us~92us).
 
 Fixes: 477603467009 ("watchdog: Add Spreadtrum watchdog driver")
-Signed-off-by: Lingling Xu <ling_ling.xu@unisoc.com>
+Original-by: Lingling Xu <ling_ling.xu@unisoc.com>
 Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/watchdog/sprd_wdt.c | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+ drivers/watchdog/sprd_wdt.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/watchdog/sprd_wdt.c b/drivers/watchdog/sprd_wdt.c
-index f3c90b4afead..b9b1daa9e2a4 100644
+index b9b1daa9e2a4..4e689b6ff141 100644
 --- a/drivers/watchdog/sprd_wdt.c
 +++ b/drivers/watchdog/sprd_wdt.c
-@@ -108,18 +108,6 @@ static int sprd_wdt_load_value(struct sprd_wdt *wdt, u32 timeout,
- 	u32 tmr_step = timeout * SPRD_WDT_CNT_STEP;
+@@ -6,6 +6,7 @@
+ 
+ #include <linux/bitops.h>
+ #include <linux/clk.h>
++#include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+@@ -53,7 +54,7 @@
+ 
+ #define SPRD_WDT_CNT_HIGH_SHIFT		16
+ #define SPRD_WDT_LOW_VALUE_MASK		GENMASK(15, 0)
+-#define SPRD_WDT_LOAD_TIMEOUT		1000
++#define SPRD_WDT_LOAD_TIMEOUT		11
+ 
+ struct sprd_wdt {
+ 	void __iomem *base;
+@@ -109,15 +110,17 @@ static int sprd_wdt_load_value(struct sprd_wdt *wdt, u32 timeout,
  	u32 prtmr_step = pretimeout * SPRD_WDT_CNT_STEP;
  
--	sprd_wdt_unlock(wdt->base);
--	writel_relaxed((tmr_step >> SPRD_WDT_CNT_HIGH_SHIFT) &
--		      SPRD_WDT_LOW_VALUE_MASK, wdt->base + SPRD_WDT_LOAD_HIGH);
--	writel_relaxed((tmr_step & SPRD_WDT_LOW_VALUE_MASK),
--		       wdt->base + SPRD_WDT_LOAD_LOW);
--	writel_relaxed((prtmr_step >> SPRD_WDT_CNT_HIGH_SHIFT) &
--			SPRD_WDT_LOW_VALUE_MASK,
--		       wdt->base + SPRD_WDT_IRQ_LOAD_HIGH);
--	writel_relaxed(prtmr_step & SPRD_WDT_LOW_VALUE_MASK,
--		       wdt->base + SPRD_WDT_IRQ_LOAD_LOW);
--	sprd_wdt_lock(wdt->base);
--
  	/*
- 	 * Waiting the load value operation done,
- 	 * it needs two or three RTC clock cycles.
-@@ -134,6 +122,19 @@ static int sprd_wdt_load_value(struct sprd_wdt *wdt, u32 timeout,
+-	 * Waiting the load value operation done,
+-	 * it needs two or three RTC clock cycles.
++	 * Checking busy bit to make sure the previous loading operation is
++	 * done. According to the specification, the busy bit would be set
++	 * after a new loading operation and last 2 or 3 RTC clock
++	 * cycles (about 60us~92us).
+ 	 */
+ 	do {
+ 		val = readl_relaxed(wdt->base + SPRD_WDT_INT_RAW);
+ 		if (!(val & SPRD_WDT_LD_BUSY_BIT))
+ 			break;
+ 
+-		cpu_relax();
++		usleep_range(10, 100);
+ 	} while (delay_cnt++ < SPRD_WDT_LOAD_TIMEOUT);
  
  	if (delay_cnt >= SPRD_WDT_LOAD_TIMEOUT)
- 		return -EBUSY;
-+
-+	sprd_wdt_unlock(wdt->base);
-+	writel_relaxed((tmr_step >> SPRD_WDT_CNT_HIGH_SHIFT) &
-+		      SPRD_WDT_LOW_VALUE_MASK, wdt->base + SPRD_WDT_LOAD_HIGH);
-+	writel_relaxed((tmr_step & SPRD_WDT_LOW_VALUE_MASK),
-+		       wdt->base + SPRD_WDT_LOAD_LOW);
-+	writel_relaxed((prtmr_step >> SPRD_WDT_CNT_HIGH_SHIFT) &
-+			SPRD_WDT_LOW_VALUE_MASK,
-+		       wdt->base + SPRD_WDT_IRQ_LOAD_HIGH);
-+	writel_relaxed(prtmr_step & SPRD_WDT_LOW_VALUE_MASK,
-+		       wdt->base + SPRD_WDT_IRQ_LOAD_LOW);
-+	sprd_wdt_lock(wdt->base);
-+
- 	return 0;
- }
- 
 -- 
 2.20.1
 
