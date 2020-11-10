@@ -2,87 +2,129 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B11F2AD6CA
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Nov 2020 13:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89712ADB11
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Nov 2020 17:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730397AbgKJMsf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 10 Nov 2020 07:48:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40060 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726462AbgKJMsf (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 10 Nov 2020 07:48:35 -0500
-Received: from localhost (unknown [122.179.121.10])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 274B220637;
-        Tue, 10 Nov 2020 12:48:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605012514;
-        bh=HqIlZJaFEcBlGvTPmE4/CCgkt70rXFffPU39yaxTjmE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DBAL5u1I4TzkVzdXuoV3Ai5oHJZmFiicO/oeiVsBnxBqZfIy7HD4oEyq7v4EX8RtU
-         TXEzqzjHJ13slfR1iCfqUsCSrf2OTWNfUx/zQAEH76ivOjVVRYjaAqv2jF1QWzmTAb
-         RPWU3YmrUBn1V7mT06dG6xz5435t1JnGh3eZL0Rc=
-Date:   Tue, 10 Nov 2020 18:18:29 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Frank Lee <tiny.windzz@gmail.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Frank Lee <frank@allwinnertech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, kishon@ti.com,
-        wim@linux-watchdog.org, Guenter Roeck <linux@roeck-us.net>,
-        dan.j.williams@intel.com, Linus Walleij <linus.walleij@linaro.org>,
-        wsa+renesas@sang-engineering.com, dianders@chromium.org,
-        marex@denx.de, Colin King <colin.king@canonical.com>,
-        rdunlap@infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        rikard.falkeborn@gmail.com, dmaengine@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SECURE DIGITAL HO..." <linux-mmc@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        linux-gpio <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH 00/19] Second step support for A100
-Message-ID: <20201110124829.GB161013@vkoul-mobl>
-References: <20201110040553.1381-1-frank@allwinnertech.com>
- <CAEExFWsc4Rx2U+BVuqTJkL0wj-gdNcF=emJRcStQ2Uq=FQEx1g@mail.gmail.com>
- <CAJKOXPf4ARNnSnvDpn7vVC0kGNd+m_dkfgKkmH_bca2AZ_Osyg@mail.gmail.com>
- <CAEExFWv2o9aTfUVM5NzZz10kAO_Ya8VJvJrmyjh55=U_5G8RJw@mail.gmail.com>
+        id S1731175AbgKJQBW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 10 Nov 2020 11:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729909AbgKJQBV (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 10 Nov 2020 11:01:21 -0500
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6959C0613CF;
+        Tue, 10 Nov 2020 08:01:21 -0800 (PST)
+Received: by mail-oi1-x241.google.com with SMTP id j7so14865826oie.12;
+        Tue, 10 Nov 2020 08:01:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kDzPapGdXIwmXcJmTQZGIuILt4q/vwSqlKWbIudkGQY=;
+        b=Fg5+setHdx6WcyATDh9i9QQsjuOKojB/1HwsGCqR109+KSbAOS3mznvx0Zmn+VViOH
+         j8y3HTl4hsgjbcXiWmz56YdPS+uvtgUeEjzvAGciQd+uEmR/I4C/hfvY4ttxZ7gny16y
+         tkM93eZBRudiBqKZ6vQMAUSV84S6DrKKpiz8sHeptHCbjmkc8R34MmuyAZwme6iupq9j
+         410RZ+rSPuBFSJLUli3WB4Tlgfu554FOgAg9UjyeMecGI0M2XQLlJEPTQlya9CEhHmwS
+         Z3fgkTQXE63ONPBfjW8t0/OTjBiQJb6wk3AyitVH9Aezn6SyRDdrYCOqQAJz+2Rbynrw
+         3Ktg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kDzPapGdXIwmXcJmTQZGIuILt4q/vwSqlKWbIudkGQY=;
+        b=ZoPVJd8IbvPF6PkUcu+NNXySi5cByiP3QWNHEmGupEEKGF3T+gkEmj/OWfuxosnYNT
+         H3zKOHLn4DgAeKcwpPNdkM0lbnDqD4r/44+jwuGzrUr0a20ExetcMcevX5gbhrSyAK5t
+         /eQeUcc5fuxu1gvqUxflZLr9+M14Z3drX9mm1/5H9nYV0uHkZbKx4mUwLAZgTcbFgu/J
+         Yxlg5y2ShzZGlSmy96vGJIigW8GA4iEhbUq6D1LakQln1Rgt7MbLAtrym34FwDxXouO/
+         hKCJnDOcYCDoIXrIxK/rl2oduOIu3fyaK29rykssHtH0NSJGCM1A6x44JkweCPht6T+j
+         DAxA==
+X-Gm-Message-State: AOAM533NuL987SriT/3gZQHK2rIZKi4mAFUaZAmri6Vit+JFBWb+J43Y
+        VyGE+gVRD2/qp2Iyh3whPKPH4o4pF6k=
+X-Google-Smtp-Source: ABdhPJwCXuNKmg2h/odhEd9J6ZKMR6oT6qD8+oU+Elb6I9ADZ62BM2n0Y/GvGA1TUOO+UqOucAuKYw==
+X-Received: by 2002:aca:b288:: with SMTP id b130mr3031391oif.152.1605024080787;
+        Tue, 10 Nov 2020 08:01:20 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t6sm3231782ooo.22.2020.11.10.08.01.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 10 Nov 2020 08:01:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 10 Nov 2020 08:01:18 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wang Wensheng <wangwensheng4@huawei.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.xiang@huawei.com
+Subject: Re: [PATCH -next v4] watchdog: Fix potential dereferencing of null
+ pointer
+Message-ID: <20201110160118.GA17288@roeck-us.net>
+References: <20201109130512.28121-1-wangwensheng4@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEExFWv2o9aTfUVM5NzZz10kAO_Ya8VJvJrmyjh55=U_5G8RJw@mail.gmail.com>
+In-Reply-To: <20201109130512.28121-1-wangwensheng4@huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10-11-20, 16:51, Frank Lee wrote:
-> On Tue, Nov 10, 2020 at 4:43 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >
-> > On Tue, 10 Nov 2020 at 07:00, Frank Lee <tiny.windzz@gmail.com> wrote:
-> > >
-> > > It seems that sending too many e-mails at one time will cause some
-> > > emails to fail to be sent out. I will try again.
-> >
-> > Hi,
-> >
-> > Instead please reduce the address list to relevant people, as pointed
-> > out by scripts/get_maintainer.pl. Don't Cc irrelevant developers
-> > unless a file is abandoned and you need to get as much audience as
-> > possible... but sunxi is not abandoned.
+On Mon, Nov 09, 2020 at 01:05:12PM +0000, Wang Wensheng wrote:
+> A reboot notifier, which stops the WDT by calling the stop hook without
+> any check, would be registered when we set WDOG_STOP_ON_REBOOT flag.
 > 
-> Thank you for the reminder. I resend the version in the afternoon,
-> only CC the relevant people. I'm not sure. Should the cover be copied
-> to everyone?
+> Howerer we allow the WDT driver to omit the stop hook since commit
+> "d0684c8a93549" ("watchdog: Make stop function optional") and provide
+> a module parameter for user that controls the WDOG_STOP_ON_REBOOT flag
+> in commit 9232c80659e94 ("watchdog: Add stop_on_reboot parameter to
+> control reboot policy"). Together that commits make user potential to
+> insert a watchdog driver that don't provide a stop hook but with the
+> stop_on_reboot parameter set, then dereferencing of null pointer occurs
+> on system reboot.
+> 
+> Check the stop hook before registering the reboot notifier to fix the
+> issue.
+> 
+> Fixes: d0684c8a9354 ("watchdog: Make stop function optional")
+> Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
 
-Any reason why this should be a single series.. why not split it to
-bunch of chunks, one per subsystem like pinctrl, phy, dmaengine, etc...
-And then DTS parts and CC relevant list and maintainers. I do not think
-there is any dependency, right?
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
--- 
-~Vinod
+> ---
+>  drivers/watchdog/watchdog_core.c | 22 +++++++++++++---------
+>  1 file changed, 13 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+> index 423844757812..0e9a99559609 100644
+> --- a/drivers/watchdog/watchdog_core.c
+> +++ b/drivers/watchdog/watchdog_core.c
+> @@ -267,15 +267,19 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+>  	}
+>  
+>  	if (test_bit(WDOG_STOP_ON_REBOOT, &wdd->status)) {
+> -		wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
+> -
+> -		ret = register_reboot_notifier(&wdd->reboot_nb);
+> -		if (ret) {
+> -			pr_err("watchdog%d: Cannot register reboot notifier (%d)\n",
+> -			       wdd->id, ret);
+> -			watchdog_dev_unregister(wdd);
+> -			ida_simple_remove(&watchdog_ida, id);
+> -			return ret;
+> +		if (!wdd->ops->stop)
+> +			pr_warn("watchdog%d: stop_on_reboot not supported\n", wdd->id);
+> +		else {
+> +			wdd->reboot_nb.notifier_call = watchdog_reboot_notifier;
+> +
+> +			ret = register_reboot_notifier(&wdd->reboot_nb);
+> +			if (ret) {
+> +				pr_err("watchdog%d: Cannot register reboot notifier (%d)\n",
+> +					wdd->id, ret);
+> +				watchdog_dev_unregister(wdd);
+> +				ida_simple_remove(&watchdog_ida, id);
+> +				return ret;
+> +			}
+>  		}
+>  	}
+>  
+> -- 
+> 2.25.0
+> 
