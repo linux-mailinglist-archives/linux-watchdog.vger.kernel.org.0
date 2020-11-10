@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89E72B3EA4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Nov 2020 09:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0002B41C2
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Nov 2020 11:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgKPI2S convert rfc822-to-8bit (ORCPT
+        id S1728281AbgKPK4w convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 16 Nov 2020 03:28:18 -0500
-Received: from tigeramira.ro ([88.158.78.30]:32784 "EHLO mail.tigeramira.ro"
+        Mon, 16 Nov 2020 05:56:52 -0500
+Received: from tigeramira.ro ([88.158.78.30]:41959 "EHLO mail.tigeramira.ro"
         rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726172AbgKPI2R (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 16 Nov 2020 03:28:17 -0500
+        id S1728211AbgKPK4w (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 16 Nov 2020 05:56:52 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id A7A34C5ED6D
-        for <linux-watchdog@vger.kernel.org>; Sun, 15 Nov 2020 18:54:09 +0200 (EET)
+        by mail.tigeramira.ro (Postfix) with ESMTP id 38CAFC6D04C
+        for <linux-watchdog@vger.kernel.org>; Sun, 15 Nov 2020 22:42:33 +0200 (EET)
 Received: from mail.tigeramira.ro ([127.0.0.1])
         by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 9bVqYLH8mr4O for <linux-watchdog@vger.kernel.org>;
-        Sun, 15 Nov 2020 18:54:09 +0200 (EET)
+        with ESMTP id J5QCBEGzAMxt for <linux-watchdog@vger.kernel.org>;
+        Sun, 15 Nov 2020 22:42:18 +0200 (EET)
 Received: from mail.tigeramira.ro (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 0F855A7A274
-        for <linux-watchdog@vger.kernel.org>; Sat, 14 Nov 2020 11:24:54 +0200 (EET)
+        by mail.tigeramira.ro (Postfix) with ESMTP id E519B98E16D
+        for <linux-watchdog@vger.kernel.org>; Fri, 13 Nov 2020 18:31:22 +0200 (EET)
 Received: from [156.96.44.214] (unknown [192.168.12.254])
-        by mail.tigeramira.ro (Postfix) with ESMTP id A11D8914525
-        for <linux-watchdog@vger.kernel.org>; Fri, 13 Nov 2020 13:31:45 +0200 (EET)
+        by mail.tigeramira.ro (Postfix) with ESMTP id CC7B7D3FFEB
+        for <linux-watchdog@vger.kernel.org>; Tue, 10 Nov 2020 17:10:19 +0200 (EET)
 Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 Content-Description: Mail message body
-Subject: Corporate and Personal Loan::,
+Subject: Corporate and Personal Loan/
 To:     linux-watchdog@vger.kernel.org
 From:   "Investment  Corporate" <financialcapability6@gmail.com>
-Date:   Fri, 13 Nov 2020 02:31:59 -0800
+Date:   Tue, 10 Nov 2020 06:10:48 -0800
 Reply-To: hmurrah39@gmail.com
-Message-Id: <20201113113146.A11D8914525@mail.tigeramira.ro>
+Message-Id: <20201110151020.CC7B7D3FFEB@mail.tigeramira.ro>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
