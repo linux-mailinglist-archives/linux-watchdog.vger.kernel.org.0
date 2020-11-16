@@ -2,78 +2,105 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2DB2B43B7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Nov 2020 13:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885C22B45CC
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Nov 2020 15:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730115AbgKPM1T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 16 Nov 2020 07:27:19 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:41873 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728835AbgKPM1T (ORCPT
+        id S1730040AbgKPOZu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 16 Nov 2020 09:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729437AbgKPOZu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 16 Nov 2020 07:27:19 -0500
-X-UUID: 4a37f8205f2b46ab8b2151b28eccb133-20201116
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=syQ+udVPv5T4CZsRsJsAvtDXozry+wZ/L2ZNpQPdplU=;
-        b=Lwy7VfzVpIOg5v0cB93yWRX1IebJ++V3sVQNBH8VYwOSGMFm7aU9l2FSL+rBP1QgBZLU31Eyt+FILRm2tY6ey0aOlKhoNr1wL8tP2HrpKUYJkgDSKgQjpbU+MZHlpRMC/BczNMz1o9xYkABBj5Qhwo+kRm9ohHwjfvIz6jXRZVo=;
-X-UUID: 4a37f8205f2b46ab8b2151b28eccb133-20201116
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <crystal.guo@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1699799724; Mon, 16 Nov 2020 20:27:14 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs07n2.mediatek.inc
- (172.21.101.141) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 16 Nov
- 2020 20:27:12 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 16 Nov 2020 20:27:10 +0800
-Message-ID: <1605529631.14806.57.camel@mhfsdcap03>
-Subject: Re: [v6,2/4] dt-binding: mediatek: mt8192: update mtk-wdt document
-From:   Crystal Guo <crystal.guo@mediatek.com>
-To:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Seiya Wang =?UTF-8?Q?=28=E7=8E=8B=E8=BF=BA=E5=90=9B=29?= 
-        <seiya.wang@mediatek.com>
-Date:   Mon, 16 Nov 2020 20:27:11 +0800
-In-Reply-To: <20201014131936.20584-3-crystal.guo@mediatek.com>
-References: <20201014131936.20584-1-crystal.guo@mediatek.com>
-         <20201014131936.20584-3-crystal.guo@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        Mon, 16 Nov 2020 09:25:50 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4A4C0613CF;
+        Mon, 16 Nov 2020 06:25:48 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id d18so6000473edt.7;
+        Mon, 16 Nov 2020 06:25:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=L16V5nkbIF94gXRlKpA4q4FCXTH9WuIAPnoBpYHLXkU=;
+        b=WeuEqUIQw/uCXjwMIr5thuv465m2Wy5JvfRHw1rQyoY6Qk/w0DVnsuI3e1YgYAV85T
+         cyk7Wpj3FA/GhW72iZEsJZRgVRyJ7RivLX28BRGCS8yOQYAI1SDs+g8T607ZDRlZ7yXA
+         GXKVT99aISzRxj6V9xu0kM8s+9FNsaNfzZ4A8EVnT2XiGoLROkyizYg7frZs4uzOw7Hj
+         0NCCndfQY63iPYCq8/ctBiDn7k/GLRw318fKAqEMh6HVf/u8IIuq7pN4ihoBubNn1ABG
+         lOm9Dr6XwzFECnzqpx77d0pwrG7af5WcMlYcvhxs8VrAhz5Cq2+/6gmhNYKxmii8ikLp
+         Xv2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=L16V5nkbIF94gXRlKpA4q4FCXTH9WuIAPnoBpYHLXkU=;
+        b=iH3VWqXoFH0UgviF68rTp5IAV8HkdLiY1AL7BLnLOU2DI4XdeyKEnvsIjHyUQ2pyn0
+         7peTYw5xrpNKskVpmGqAPWMEFG/dK4+ML6VQD5ij6cXZWk9Cj+c1jah0jZjfvXO9Vu2m
+         TgyUcF2jt3/kuoCpIzblh1oGXZw6eF+X5fmlujiQVreWeMjcljGdSIfnndtX5vDMDkcF
+         QpSAX8/FDl6c5rr6FywdulIJoy0hsCdyzuxKmQtMmlCG2CYDTJC9ODlPh9BRxfOgrkcf
+         QN5D11DbWf7ayBBDY2pV9iR3ADDI6wLmEPHSsPPtWAwFAcyxrhodKHbj0TOk9IwCcLDz
+         rF4Q==
+X-Gm-Message-State: AOAM531YE37nnG0eaoCUVHmC3Gmz924gJzkoJIXvEuMGVLcu0u351pd7
+        QrkbTmvT17hygF5Xa2E4+RbvwtdNHZIVtw==
+X-Google-Smtp-Source: ABdhPJxBA/Rc8N9vzOogRluiecCDnqxK3aGFQpih53XK6vcBCS7S/v4+524mpSNCsYPMfP7Pdi984w==
+X-Received: by 2002:a50:cd0a:: with SMTP id z10mr15509771edi.223.1605536747378;
+        Mon, 16 Nov 2020 06:25:47 -0800 (PST)
+Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id cn8sm10581825edb.18.2020.11.16.06.25.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 16 Nov 2020 06:25:46 -0800 (PST)
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        jamie@jamieiles.com, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-binding: watchdog: add Rockchip compatibles to snps,dw-wdt.yaml
+Date:   Mon, 16 Nov 2020 15:25:39 +0100
+Message-Id: <20201116142539.12377-1-jbx6244@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGkgTWFpbnRhaW5lcnMsDQoNCkdlbnRsZSBwaW4gZm9yIHRoaXMgcGF0Y2guDQoNClRoYW5rcw0K
-DQpPbiBXZWQsIDIwMjAtMTAtMTQgYXQgMjE6MTkgKzA4MDAsIENyeXN0YWwgR3VvIHdyb3RlOg0K
-PiB1cGRhdGUgbXRrLXdkdCBkb2N1bWVudCBmb3IgTVQ4MTkyIHBsYXRmb3JtDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBDcnlzdGFsIEd1byA8Y3J5c3RhbC5ndW9AbWVkaWF0ZWsuY29tPg0KPiAtLS0N
-Cj4gIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9tdGstd2R0LnR4
-dCB8IDEgKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspDQo+IA0KPiBkaWZmIC0t
-Z2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210ay13ZHQu
-dHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210ay13ZHQu
-dHh0DQo+IGluZGV4IDQ1ZWVkYzJjMzE0MS4uZTM2YmE2MGRlODI5IDEwMDY0NA0KPiAtLS0gYS9E
-b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbXRrLXdkdC50eHQNCj4g
-KysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210ay13ZHQu
-dHh0DQo+IEBAIC0xMiw2ICsxMiw3IEBAIFJlcXVpcmVkIHByb3BlcnRpZXM6DQo+ICAJIm1lZGlh
-dGVrLG10NzYyOS13ZHQiLCAibWVkaWF0ZWssbXQ2NTg5LXdkdCI6IGZvciBNVDc2MjkNCj4gIAki
-bWVkaWF0ZWssbXQ4MTgzLXdkdCI6IGZvciBNVDgxODMNCj4gIAkibWVkaWF0ZWssbXQ4NTE2LXdk
-dCIsICJtZWRpYXRlayxtdDY1ODktd2R0IjogZm9yIE1UODUxNg0KPiArCSJtZWRpYXRlayxtdDgx
-OTItd2R0IjogZm9yIE1UODE5Mg0KPiAgDQo+ICAtIHJlZyA6IFNwZWNpZmllcyBiYXNlIHBoeXNp
-Y2FsIGFkZHJlc3MgYW5kIHNpemUgb2YgdGhlIHJlZ2lzdGVycy4NCj4gIA0KDQo=
+The Rockchip watchdog compatibles below are already in use,
+but somehow never added to a document,
+so add them to the snps,dw-wdt.yaml file.
+
+"rockchip,rk3066-wdt", "snps,dw-wdt"
+"rockchip,rk3188-wdt", "snps,dw-wdt"
+"rockchip,rk3288-wdt", "snps,dw-wdt"
+"rockchip,rk3368-wdt", "snps,dw-wdt"
+
+make ARCH=arm dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+
+make ARCH=arm64 dtbs_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+index d9fc7bb85..f7ee9229c 100644
+--- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+@@ -14,7 +14,15 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    const: snps,dw-wdt
++    oneOf:
++      - const: snps,dw-wdt
++      - items:
++          - enum:
++              - rockchip,rk3066-wdt
++              - rockchip,rk3188-wdt
++              - rockchip,rk3288-wdt
++              - rockchip,rk3368-wdt
++          - const: snps,dw-wdt
+ 
+   reg:
+     maxItems: 1
+-- 
+2.11.0
 
