@@ -2,126 +2,115 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 743F02BB8EE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Nov 2020 23:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA822BC1AF
+	for <lists+linux-watchdog@lfdr.de>; Sat, 21 Nov 2020 20:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728789AbgKTWVh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 20 Nov 2020 17:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728690AbgKTWVb (ORCPT
+        id S1728186AbgKUTLF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 21 Nov 2020 14:11:05 -0500
+Received: from gproxy7-pub.mail.unifiedlayer.com ([70.40.196.235]:38394 "EHLO
+        gproxy7-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728088AbgKUTLE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 20 Nov 2020 17:21:31 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583AEC0613CF;
-        Fri, 20 Nov 2020 14:21:29 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id w5so9946188ybj.11;
-        Fri, 20 Nov 2020 14:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=29/AaAKKWIjlxKBDiu42mXe16/c3LUzQvTdn0Wctw9g=;
-        b=th/UjqVcversiy9gEUr46cKRrhHywr0iTgf9mzUejm+T3/Jtu2c6ftjob7N1dnOe2S
-         rGVMit/4Gqy7ZDqW+do8x9wI8RCPt/cmuWncILsoBuux3CBAtfG8gT+eTL8wiBVSM5EH
-         rDgxqkIvK+vUXnfhgj71GxYIUQH1hInVNMbCl5+3prik9RGhi+hsmul85xXuf9uJVr2L
-         NGLQGWDmOXXHg4l9XujW0HrVyacbE3Q1QSLAkLJ0BjE5AdFqhLyeU3T8/6+nJ9hH0JSR
-         o1vAVeqr6Bt+/W6rGIwrn7PuvAvMGRmk1Avx4k6vjCg8etglRiDTMnimrqKcX/KEsNCP
-         0CAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=29/AaAKKWIjlxKBDiu42mXe16/c3LUzQvTdn0Wctw9g=;
-        b=UHSiMCaCq1HDI2xgOKyY6MLEiZLxmB5sqrMu9Dx3qbuULAAKgxYqdHa+UbBr28aM/x
-         2nCmLbY1U9BvWw1wVCJNZkcS4Ugmki+++ILTaKpyxP3eJpRiZ8Y0uQ5HsL3rc/uK0jYl
-         VjaDHp+k5mRj7eomdGTm4K+Q4ple6oxwB31vz4dqXlJk0RHcSMf4Li3pMc3bvCORu0LI
-         LeWNt/c/YIexxt2VtGN/SjWq4PfXlz7MJrzEmIs34yyhZxaxmIaXUpwhF/yiaqtGXxFD
-         1SciE7VPywVfjLNGIroytMONEVSrVNgeqaeSjQcTxDPJSFvE3zvMgA9QqRNKbOIyOkXb
-         u3MQ==
-X-Gm-Message-State: AOAM532xIYDNMjKLcF3nsH2cVE/I3hBZYmr3H5LbtV5pph6JrCNqlcAd
-        chzUoGXJyT4mCyaljqQQUSrfQxQbhg5CTNZRdsOrUYj6h2s=
-X-Google-Smtp-Source: ABdhPJzYUhkcjTyH5GIcOV5fWMsl+OUdzem471zLY9usW3RhV8izQIRbyESMTmZwFikqgbfOQQqVvSSQCZzBPJX4q90=
-X-Received: by 2002:a5b:40e:: with SMTP id m14mr22113400ybp.33.1605910888617;
- Fri, 20 Nov 2020 14:21:28 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1605896059.git.gustavoars@kernel.org>
-In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 20 Nov 2020 23:21:17 +0100
-Message-ID: <CANiq72=E_gEVvqUUTSqU4zegC2=yZSTM4b=4G-iofp6d3=UgWQ@mail.gmail.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+        Sat, 21 Nov 2020 14:11:04 -0500
+X-Greylist: delayed 1272 seconds by postgrey-1.27 at vger.kernel.org; Sat, 21 Nov 2020 14:11:04 EST
+Received: from cmgw15.unifiedlayer.com (unknown [10.9.0.15])
+        by gproxy7.mail.unifiedlayer.com (Postfix) with ESMTP id B4BF8215C31
+        for <linux-watchdog@vger.kernel.org>; Sat, 21 Nov 2020 11:49:52 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id gXxIkBWEOh41lgXxIkFuPW; Sat, 21 Nov 2020 11:49:52 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=FoUrAVjq c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
+ a=nNwsprhYR40A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=iH7RfIX4AAAA:20
+ a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8 a=HOh39_7OrIoUAtzd_H4A:9
+ a=CjuIK1q_8ugA:10:nop_charset_2 a=AjGcO6oz07-iQ99wixmX:22
+ a=nlm17XC03S6CtCLSeiRr:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Ma9SNEJKRKcEL3w9mUf3WVZyKUvisTLK9xTFAPqR6yE=; b=zOvCV+omlDOOeljNgIHaQlZmfB
+        l7npLiH9HBCVd5xY1R0U+EH8qeHQMquj0NUpSYFTZIA8VLn+7a21T/x+6jJHnJXW4YyRS38hGoaXs
+        56c9MQYanFKI1dwLXPYMlK/vHFvpOw53epzVF14PVrlk8Ns3cUbmjwiIdc+OMS7TRTogyZfXfcrF3
+        mjNB7ixyYXBF5qbQzMFdqcHILQWSxajwc69SSLJOSOo5jottummp+1g46bmoP2oDG8XbwUdjwe271
+        0Y2zbcN1oovUkdcXlSw+cO2dh0v+UPopHLRp4/MwM1VgLAX7sGzVtmUo+oaOLVtmMfktCMrwPyVMt
+        q5Mhzl2Q==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:40988 helo=localhost)
+        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1kgXxH-003CPv-QN; Sat, 21 Nov 2020 18:49:51 +0000
+Date:   Sat, 21 Nov 2020 10:49:51 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 057/141] watchdog: Fix fall-through warnings for Clang
+Message-ID: <20201121184951.GA114144@roeck-us.net>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <713aa26be06d50dd3bb582a3cb71f04787ad5d5b.1605896059.git.gustavoars@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <713aa26be06d50dd3bb582a3cb71f04787ad5d5b.1605896059.git.gustavoars@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1kgXxH-003CPv-QN
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:40988
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 57
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Gustavo,
+On Fri, Nov 20, 2020 at 12:32:51PM -0600, Gustavo A. R. Silva wrote:
+> In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
+> by explicitly adding a fallthrough pseudo-keyword instead of letting the
+> code fall through to the next case.
+> 
+> Link: https://github.com/KSPP/linux/issues/115
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/watchdog/machzwd.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/machzwd.c b/drivers/watchdog/machzwd.c
+> index 743377c5b173..73f2221f6222 100644
+> --- a/drivers/watchdog/machzwd.c
+> +++ b/drivers/watchdog/machzwd.c
+> @@ -174,6 +174,7 @@ static inline void zf_set_timer(unsigned short new, unsigned char n)
+>  		fallthrough;
+>  	case WD2:
+>  		zf_writeb(COUNTER_2, new > 0xff ? 0xff : new);
+> +		fallthrough;
 
-On Fri, Nov 20, 2020 at 7:21 PM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
->
-> Hi all,
->
-> This series aims to fix almost all remaining fall-through warnings in
-> order to enable -Wimplicit-fallthrough for Clang.
+fallthrough to return ? Oh well, this is an old style driver anyway,
+so I guess who cares.
 
-Thanks for this.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Since this warning is reliable in both/all compilers and we are
-eventually getting rid of all the cases, what about going even further
-and making it an error right after?
+Guenter
 
-Cheers,
-Miguel
+>  	default:
+>  		return;
+>  	}
+> -- 
+> 2.27.0
+> 
