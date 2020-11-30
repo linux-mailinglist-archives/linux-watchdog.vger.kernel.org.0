@@ -2,142 +2,131 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35912C9279
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Dec 2020 00:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4542C936E
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Dec 2020 00:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388178AbgK3XYL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 30 Nov 2020 18:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730563AbgK3XYK (ORCPT
+        id S2388723AbgK3X5R (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 30 Nov 2020 18:57:17 -0500
+Received: from gproxy10-pub.mail.unifiedlayer.com ([69.89.20.226]:55497 "EHLO
+        gproxy10-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388124AbgK3X5R (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 30 Nov 2020 18:24:10 -0500
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E76C0613D3
-        for <linux-watchdog@vger.kernel.org>; Mon, 30 Nov 2020 15:23:24 -0800 (PST)
-Received: by mail-oi1-x242.google.com with SMTP id y74so16133074oia.11
-        for <linux-watchdog@vger.kernel.org>; Mon, 30 Nov 2020 15:23:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rfUvf+rulCtui//LVYbddkRCxkkehBqPZfURfP/eFrU=;
-        b=PLlgDqjlIOXdd/Vh6ZyHIldiZt4b9P6ZhswLdwihql1BqN7yFeP1lNtxsAVT1rs6bL
-         dPkQYsA2Is4Bz2IgCmjfIEu8Mq4MKHBjZXyiqaUng2qWixeMPRFCVYqdarz9g1iERotE
-         2L4uLbzKUilmsVLLHLS3XzQTjFOQ/y+VyWXZ3cVBJ0e1zUxDxdyeTXl31KAfnWcNfy1K
-         5MAKiaq4WryagQ722zzEIN6FuYOF8gYFjIWv6iyRN67OZanAAyNt1I/UOaS6dFwKiGIj
-         sShpOM7uj0txKhHPyJNMbjDU3uE5Wwf8f8OAm+fZBKWQRMA5tPJwhTpTwyUhgPeLNaiL
-         LL7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rfUvf+rulCtui//LVYbddkRCxkkehBqPZfURfP/eFrU=;
-        b=KLDLfnPyIpOQozq3OqlqlID6+xAZeDjhqR88Gik/v2yP73h47BTtp2Tw+ew/4A5lEN
-         FXqZLGwp/bzmVpD79rh4d37SjiRO3bPV5BMnBn4uAtJfKZYfvOsLM+GMTfiHPYSfq0rd
-         sdqQPIi0OSHrluzoDpcrfVGRb8teNE51Q+U/xmvBnQVIY89yKRFnJSLK8c/q8ySwUYzQ
-         OOc14Ec1UlRB1RFDmvmq+TR52TxuMVZdpwYaMSMCrvrNz3DsOldUgjIFKgwxtHjubztC
-         voraDBTjBVkHTl3htkNBR8bAObLGM21wbcQcXq3+ZHLknaojFDINp4OI8PnKZfrpOwW3
-         v8fQ==
-X-Gm-Message-State: AOAM530izKH938tMUq1jYcZ6QhD91rBn93vg6X46BpU2qC5SFtd3XM/S
-        l90kxaa4Gl1PnNhzP26zLNKUHRJIt0KFYg==
-X-Google-Smtp-Source: ABdhPJzGX1RWNM92e0MhKFBt9MTPM9po/BVR8gIfY+k+Xx/iYnr1iktm9hSHta+ZFKAF398T7h6JLA==
-X-Received: by 2002:a05:6808:b38:: with SMTP id t24mr114114oij.153.1606778604124;
-        Mon, 30 Nov 2020 15:23:24 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 19sm9422012oth.63.2020.11.30.15.23.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 15:23:16 -0800 (PST)
-Date:   Mon, 30 Nov 2020 17:23:15 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+        Mon, 30 Nov 2020 18:57:17 -0500
+Received: from CMGW (unknown [10.9.0.13])
+        by gproxy10.mail.unifiedlayer.com (Postfix) with ESMTP id 929ED140437
+        for <linux-watchdog@vger.kernel.org>; Mon, 30 Nov 2020 16:56:36 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id jt24kGAsfi1lMjt24kELjP; Mon, 30 Nov 2020 16:56:36 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.2 cv=VoRTO6+n c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10 a=nNwsprhYR40A:10
+ a=evQFzbml-YQA:10 a=LpQP-O61AAAA:8 a=_jlGtV7tAAAA:8 a=o6rA3mgfRGNJ6BWNUK4A:9
+ a=CjuIK1q_8ugA:10 a=pioyyrs4ZptJ924tMmac:22 a=nlm17XC03S6CtCLSeiRr:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7Cv2ADl5wlW0FzpIAWuvEi3KmaSqX25T5Zo5cTY82DY=; b=ohegBH8rAeAYMUwcTSAwXN/bM9
+        u1+TQGrXe/1WCrhxvgI5TSJkOMGzxEzUgU2WB2gMUs5Th+IeMsjb36equeL3JN2i/QIviBEYZJzCq
+        NXgLIsYYNIH6fBKqhzaU31SV4KvsgBtBPJA1fahpSqHvvrEfpjohl0BK2w3pIk/WaYeBLEuLcxjxL
+        sqO3xnMw8VydIslyoDtwn7jVth1S/liAR/lng/KSXmAQOtXkjNjY48/3NDU5p+2Umi2zUJhOErqfV
+        So74U/giXOYgZGhj1tQemhIr//fi0KN/hFIP1W3EnFP7vOLdWDUCVhJWB4gD7qD9677Un+/RuEkAA
+        1FPf85JA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57056 helo=localhost)
+        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1kjt23-002FmK-JI; Mon, 30 Nov 2020 23:56:35 +0000
+Date:   Mon, 30 Nov 2020 15:56:35 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     agross@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>
+Cc:     Kathiravan T <kathirav@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        wim@linux-watchdog.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luka Perkov <luka.perkov@sartura.hr>
 Subject: Re: [PATCH v4] watchdog: qcom_wdt: set WDOG_HW_RUNNING bit when
  appropriate
-Message-ID: <X8V+442lvcTpNmth@builder.lan>
+Message-ID: <20201130235635.GA46844@roeck-us.net>
 References: <20201031121115.542752-1-robert.marko@sartura.hr>
+ <a71307f5-22b4-0d38-2880-96084bb07275@roeck-us.net>
+ <23aea80f-265b-8a23-e8ea-f46639dd4129@codeaurora.org>
+ <5b7def39-8c23-d30f-e2d3-bc38beee8919@roeck-us.net>
+ <dedebcc4-1c1f-bd56-07a6-ff7f44c06ed1@codeaurora.org>
+ <CA+HBbNFtfNcGKC0Tv7cfeBO-4p_momdQ9fr1=1hEd4O2ieskfw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201031121115.542752-1-robert.marko@sartura.hr>
+In-Reply-To: <CA+HBbNFtfNcGKC0Tv7cfeBO-4p_momdQ9fr1=1hEd4O2ieskfw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1kjt23-002FmK-JI
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57056
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 4
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat 31 Oct 07:11 CDT 2020, Robert Marko wrote:
+On Mon, Nov 30, 2020 at 07:27:00PM +0100, Robert Marko wrote:
+> On Mon, Nov 2, 2020 at 6:19 AM Kathiravan T <kathirav@codeaurora.org> wrote:
+> >
+> >
+> > On 11/2/2020 10:33 AM, Guenter Roeck wrote:
+> > > On 11/1/20 7:58 PM, Kathiravan T wrote:
+> > >> On 10/31/2020 7:38 PM, Guenter Roeck wrote:
+> > >>> On 10/31/20 5:11 AM, Robert Marko wrote:
+> > >>>> If the watchdog hardware is enabled/running during boot, e.g.
+> > >>>> due to a boot loader configuring it, we must tell the
+> > >>>> watchdog framework about this fact so that it can ping the
+> > >>>> watchdog until userspace opens the device and takes over
+> > >>>> control.
+> > >>>>
+> > >>>> Do so using the WDOG_HW_RUNNING flag that exists for exactly
+> > >>>> that use-case.
+> > >>>>
+> > >>>> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > >>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > >> Thanks for addressing the comments and now the patch looks good to me. One more suggestion, can we make the initcall level of the driver to subsys_initcall_sync so that the driver gets registered immediately after the watchdog_core is registered and watchdog_core starts pinging the WDT?
+> > >>
+> > > That would mean to replace module_platform_driver(), which would be a whole
+> > > different discussion, is not widely needed, and would potentially interfere
+> > > with the subsys_initcall_sync() in the watchdog core. This will require
+> > > specific evidence that a problem is seen in the field, and that it is truly
+> > > needed. Plus, it would have to be a different patch (which you could submit
+> > > yourself, with evidence). Let's stick with one logical change per patch,
+> > > please.
+> > >
+> > > Guenter
+> > Yeah, of course I don't want to squash the initcall level change with
+> > this one. Just made a suggestion to consider it. Anyway I will try to
+> > collect some data and post the patch by own on that suggestion. Thanks
+> > Guenter.
+> >
+> > --
+> > QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+> >
+> 
+> Any chance this could be picked for 5.11?
+> I have some boards depending on it for normal boot.
+> 
+It is queued in my watchdog-next branch, so Wim will most likely pick it up.
 
-> If the watchdog hardware is enabled/running during boot, e.g.
-> due to a boot loader configuring it, we must tell the
-> watchdog framework about this fact so that it can ping the
-> watchdog until userspace opens the device and takes over
-> control.
-> 
-> Do so using the WDOG_HW_RUNNING flag that exists for exactly
-> that use-case.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-> ---
-> Changes in v4:
-> * Use QCOM_WDT_ENABLE macro
-> 
-> Changes in v3:
-> * Drop call to stop as start already does it
-> * Update commit message
-> 
-> Changes in v2:
-> * Correct authorship
-> 
->  drivers/watchdog/qcom-wdt.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
-> index ab7465d186fd..07d399c4edc4 100644
-> --- a/drivers/watchdog/qcom-wdt.c
-> +++ b/drivers/watchdog/qcom-wdt.c
-> @@ -152,6 +152,13 @@ static int qcom_wdt_restart(struct watchdog_device *wdd, unsigned long action,
->  	return 0;
->  }
->  
-> +static int qcom_wdt_is_running(struct watchdog_device *wdd)
-> +{
-> +	struct qcom_wdt *wdt = to_qcom_wdt(wdd);
-> +
-> +	return (readl(wdt_addr(wdt, WDT_EN)) & QCOM_WDT_ENABLE);
-
-Although, you don't need the outer () here.
-
-Regards,
-Bjorn
-
-> +}
-> +
->  static const struct watchdog_ops qcom_wdt_ops = {
->  	.start		= qcom_wdt_start,
->  	.stop		= qcom_wdt_stop,
-> @@ -294,6 +301,17 @@ static int qcom_wdt_probe(struct platform_device *pdev)
->  	wdt->wdd.timeout = min(wdt->wdd.max_timeout, 30U);
->  	watchdog_init_timeout(&wdt->wdd, 0, dev);
->  
-> +	/*
-> +	 * If WDT is already running, call WDT start which
-> +	 * will stop the WDT, set timeouts as bootloader
-> +	 * might use different ones and set running bit
-> +	 * to inform the WDT subsystem to ping the WDT
-> +	 */
-> +	if (qcom_wdt_is_running(&wdt->wdd)) {
-> +		qcom_wdt_start(&wdt->wdd);
-> +		set_bit(WDOG_HW_RUNNING, &wdt->wdd.status);
-> +	}
-> +
->  	ret = devm_watchdog_register_device(dev, &wdt->wdd);
->  	if (ret)
->  		return ret;
-> -- 
-> 2.28.0
-> 
+Guenter
