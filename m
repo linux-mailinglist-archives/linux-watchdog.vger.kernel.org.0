@@ -2,165 +2,441 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 458672CA74E
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Dec 2020 16:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756D42CA852
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Dec 2020 17:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389636AbgLAPmV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 1 Dec 2020 10:42:21 -0500
-Received: from mga12.intel.com ([192.55.52.136]:61189 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389443AbgLAPmV (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 1 Dec 2020 10:42:21 -0500
-IronPort-SDR: JivhYQtM4rvMDlAgfuzDH6JT4QUnXKOwhMEqE2cOnRN8SGyscDdtUZckSsfOmOp2V7+BPk5Dlk
- yYu6jQssydHg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="152100625"
-X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
-   d="scan'208";a="152100625"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2020 07:41:40 -0800
-IronPort-SDR: LcgkthKaw9Y91+rxGt4s6eSJ6h0ol1ZZ3QABe7pD+VMgguT9TlrEbv8ybZQK05oTKR+zlshSn2
- Cjk6Gc017aXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,384,1599548400"; 
-   d="scan'208";a="537572721"
-Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Dec 2020 07:41:39 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 1 Dec 2020 07:41:39 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Tue, 1 Dec 2020 07:41:39 -0800
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (104.47.38.50) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Tue, 1 Dec 2020 07:41:39 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MpkQLeAXtuetqyh6a+9+1vQz62Vhj905EIEYeEw3XRaJXG8gEJ2w+VcA9V6Yr0pJpLkxJrCCr4Spjqf7fS7813UPGdt6iBeNz13ZJnSQowYfQnctuXZpBVekLX9+3P6vBF9546BuAvHZhNeBZlD7YSGK3uKft73p7mnbfP9rHfEeaghDht+2CcW1w4Vu2gHU5Gmn57GBDxMFkJ3Sx6CnQggyoC3LZ1wk85iQEOY9sgsBO//ldyMTQ8Whtq4fzPE4bRmDXjiUWGSyz6Eo4roiXaenAey33OHEiOurJjBsv3jmH0JXJmZ2y5GkmbFKnjkjTR90Z8TougcDRrbAjr+YMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XqstsU4fvp5VML2iPgWO3yuuuilXQZZmSPNYhT6hSWM=;
- b=EFIzEE4UoqXb4v5dhEy+Wmz/9SeZDjbGGPSYNkpsf2qJ8io0PlYVYBHz4Y0ox7wnU9FNKWFUMO3NsXTeawnmiWzTLlrrsWUnilj6EzD1eRCExxf8zKS4a32T42zzYEAyer3MQeutlLMoP5Lw97hBKR6NQOup1BNf+B5DxPqGfG7LegCwmP43ljGAn/G0Jq9nBQFUBQO3iU+ghvVmpLqKH8buFhvW6F/xD3qhDArRa21+GlJiU31cmf6heibmKu54S3DiuPzT2xMTicCnqBizDpzshJSw1y7Ih62VPBn4bv21H/OcC45sgN5i050EM6Yg3xhIKzyO3o1MJ9LNOGZw8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XqstsU4fvp5VML2iPgWO3yuuuilXQZZmSPNYhT6hSWM=;
- b=G2SutcWgDHO5bXkmAZlRUt2l/mh3a/foakSKpU40xXL9k0pw0vhZrNUXArtC7qH7j8pMl4unx6uVIdkviA053j7Um/arvzVzsatvNnyfzvBblXogFxgT5NVyeL6FGOsaFIWJokyR/zdUAFwpU9vanzFvhDj4kmFhF1SNifuVuac=
-Received: from DM6PR11MB4250.namprd11.prod.outlook.com (2603:10b6:5:1df::18)
- by DM6PR11MB2825.namprd11.prod.outlook.com (2603:10b6:5:c5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.31; Tue, 1 Dec
- 2020 15:41:38 +0000
-Received: from DM6PR11MB4250.namprd11.prod.outlook.com
- ([fe80::b90d:d053:9de6:e5ef]) by DM6PR11MB4250.namprd11.prod.outlook.com
- ([fe80::b90d:d053:9de6:e5ef%4]) with mapi id 15.20.3611.025; Tue, 1 Dec 2020
- 15:41:38 +0000
-From:   "Ayyathurai, Vijayakannan" <vijayakannan.ayyathurai@intel.com>
-To:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-CC:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "mgross@linux.intel.com" <mgross@linux.intel.com>,
-        "Wan Mohamad, Wan Ahmad Zainie" 
-        <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        "Raja Subramanian, Lakshmi Bai" 
-        <lakshmi.bai.raja.subramanian@intel.com>
-Subject: RE: [PATCH v3 2/2] dt-bindings: watchdog: Add bindings for Intel Keem
- Bay SoC
-Thread-Topic: [PATCH v3 2/2] dt-bindings: watchdog: Add bindings for Intel
- Keem Bay SoC
-Thread-Index: AQHWx/CMPyJ54KhtzECLIIMtmp7yx6niYKQw
-Date:   Tue, 1 Dec 2020 15:41:38 +0000
-Message-ID: <DM6PR11MB42502F3008B27BEB7C58E8B9FBF40@DM6PR11MB4250.namprd11.prod.outlook.com>
+        id S1725885AbgLAQba (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 1 Dec 2020 11:31:30 -0500
+Received: from gproxy8-pub.mail.unifiedlayer.com ([67.222.33.93]:54885 "EHLO
+        gproxy8-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726032AbgLAQb3 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 1 Dec 2020 11:31:29 -0500
+Received: from cmgw10.unifiedlayer.com (unknown [10.9.0.10])
+        by gproxy8.mail.unifiedlayer.com (Postfix) with ESMTP id 611141AB084
+        for <linux-watchdog@vger.kernel.org>; Tue,  1 Dec 2020 09:30:46 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id k8Y9krrHyDlydk8YAkfRvY; Tue, 01 Dec 2020 09:30:46 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=E4rjW5Vl c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
+ a=zTNgK-yGK50A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=QyXUC8HyAAAA:8
+ a=0SxRSwYGAAAA:8 a=WFEaG0DHoqVv2NmT4k4A:9 a=CjuIK1q_8ugA:10:nop_charset_2
+ a=evtWB9OUeeBtXImRToD_:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=MW45SPmUAqASbOxPmbjdhQwoPvzAULe2X/U49k7ExjY=; b=yB18T7r2fYvNiN4RwBRvrpRJL/
+        0SvhxSdFpL/iQwzsKWjtoDiWrgGI7Vg5XYDNrF5x50IupfpAhAVMRM4tGlN33wRUIpSBd38w0HcNU
+        ZwT1MKiHSZQV3+gBqUzpQTmYtvzlJolV7GiOJYNk96jiFMtgHFyigjCcvZNKets/K9k/oS3rdfmgZ
+        ChfHzwLNasbabuFUomVbTgceD5GQftWA7gn3PKXSR7Y8FfyW+hMJSRwuRlSpl8TanAj6/2nBLmCLM
+        QrPh3zCwE/yBXTyy8AyBHj2YiI+MkR9nPct8+Og8Mkt8kcYIMBFMHLZKqbVInkOWrlewE9utoHlYZ
+        vy5sRVyw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:60740 helo=localhost)
+        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1kk8Y9-001KHq-7E; Tue, 01 Dec 2020 16:30:45 +0000
+Date:   Tue, 1 Dec 2020 08:30:44 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     vijayakannan.ayyathurai@intel.com
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, mgross@linux.intel.com,
+        wan.ahmad.zainie.wan.mohamad@intel.com,
+        lakshmi.bai.raja.subramanian@intel.com
+Subject: Re: [PATCH v3 1/2] watchdog: Add watchdog driver for Intel Keembay
+ Soc
+Message-ID: <20201201163044.GA89174@roeck-us.net>
 References: <cover.1606833303.git.vijayakannan.ayyathurai@intel.com>
- <c3ffd4c2becada82c631ca035a3a1a8f0bd38dc8.1606833303.git.vijayakannan.ayyathurai@intel.com>
-In-Reply-To: <c3ffd4c2becada82c631ca035a3a1a8f0bd38dc8.1606833303.git.vijayakannan.ayyathurai@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.5.1.3
-authentication-results: linux-watchdog.org; dkim=none (message not signed)
- header.d=none;linux-watchdog.org; dmarc=none action=none
- header.from=intel.com;
-x-originating-ip: [42.106.176.52]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 37b47006-fb85-4cb7-d784-08d8960f9797
-x-ms-traffictypediagnostic: DM6PR11MB2825:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR11MB2825687D5DF76A764DC7B64CFBF40@DM6PR11MB2825.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HkIy3OMdplemkgLiFry3K3q96N4JthMcewo3lWnO/p9iyJPmNOM33oPb8c1Zx4F8SfKrCszktCvy26BzvlyY398rtvX5dJ0ksOMvdBt/R9i0BqnG8Y9QzkZjTaGeq1xpoBbVDCg63N9+SbyDFCaNebj5rznaW93eDGyn6ZRuL3AJ2nswUcDqEeSqyuuGHPiDOxQ8yqKYPpTcLv+nKm/rKD2YesiN+XC+Jfog4Egs4zTpsr5xYHldfU0w35rSNJh3NY431BVvYvVoIz4qXTAV7clkbxnkM/bhvYOphdYb/Gxc/kNCqnpVRm2wgiqGE4VCP2Nt1aBTtHNtCOMx42Vlbw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4250.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(376002)(39860400002)(136003)(366004)(8936002)(52536014)(5660300002)(54906003)(33656002)(86362001)(110136005)(8676002)(76116006)(64756008)(186003)(316002)(66446008)(66556008)(66946007)(6506007)(26005)(66476007)(7696005)(478600001)(4744005)(4326008)(55016002)(9686003)(71200400001)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?wTINJ9tOibXz9c8FO8Q1s8zppDEPfp6Em+SBeW0IkEJHPeZvZHZbOBlu4aix?=
- =?us-ascii?Q?zR+2W/Dgs0Vnqi//3mZCBmpP5PSxfEOJ5RI0n4rlX6XF+wSUlHQ1vo1/qn0K?=
- =?us-ascii?Q?qOg7noBYJclOFZlLTnhh+xdM+T7c11IMrDKryxbd7HGUyShqN8LrAKLJEecb?=
- =?us-ascii?Q?PEG95VlFgXcGo9ciZIr8l5Ln24p1y83ppuQ/tDT75w6H7f/5B6nD1Uzt0WxT?=
- =?us-ascii?Q?GY5jsYAOV8AXUodAVmtpCQPuWwBpJ9D8BKvwashbwRD4ePGPnoaTqIcg+BOy?=
- =?us-ascii?Q?836aWyRExd28eKnbTxKkVn6VCHTn2K5iwJB5vW+207IvcW6CWZP+g8lBJh0T?=
- =?us-ascii?Q?nCmhOYisDZR5fphwZXFG69L7gRvd1o+axbaMY0iRkNT3SAmobZRFmXV/Cll0?=
- =?us-ascii?Q?zNNJ4CUiPRqGRVyusAKPm1Y3tuB0RdXf0t44eQvrZkkEkfeOHfjeQoSkJwYT?=
- =?us-ascii?Q?AYvtqztmTDCr3dK4bhmWpEhjPQDOn0LBDY6mVTSnXXkWc5jqnOZP6m1qcTGr?=
- =?us-ascii?Q?KSle9Nx9wcFphc8uW04YX0YCrJBq6SGDaUK7dcYHhD+Xj9LfQVbrne3kiX3W?=
- =?us-ascii?Q?D6cwZ6pmj8xNrZmZXDl3c9aG3zKRwAoeWs0kxeogaatSmHwg1ZoCaxZBtU73?=
- =?us-ascii?Q?UagTeF4TFZ6FXLYQPpS0nWNpvOnvQVznl8o/3Fg691G8ShJMGzOCnVSLILAo?=
- =?us-ascii?Q?xoQWpbM7RvGDKZsE5CrJUMfvJbfKCGbYdu1Zssty8rh3HccWVnT0FM1IqHng?=
- =?us-ascii?Q?STzkLvE+M7AgEWHhQaFSZb+Er5hbl6cMLK68o308bWNtZdx+j+Jy8HpT0mgq?=
- =?us-ascii?Q?neHBAwFK5iLU0OZkbKJuIs7tTXi1fZueeCdIT+E8J6yzktHuz4ENqQJm5b1c?=
- =?us-ascii?Q?TuOMMh8zun89FskoV1lk9ZoCAU1WOtZr4np/RvnFwziN1UsE3uEGYDVru3Dd?=
- =?us-ascii?Q?H1WOlb6RFOvy40dBhCvm0Z+jh9ZKw9Jh6GATOVS4ydY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <e941999cb6ccd19d1830b3205ec3a66081ed29fd.1606833303.git.vijayakannan.ayyathurai@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4250.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37b47006-fb85-4cb7-d784-08d8960f9797
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2020 15:41:38.3622
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 95Ds0Qp6LEAxi4gobed9GWGkWkbgEH7BrAu3n7jLOyvuuSbOWcbWPbdYn62+Ok4P+VO9QkbHEm4oNs2XT9QRi1cNf1APDk+MNSFWo0geHci0FSojaiIBLOfH5xfbX/8S
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2825
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e941999cb6ccd19d1830b3205ec3a66081ed29fd.1606833303.git.vijayakannan.ayyathurai@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1kk8Y9-001KHq-7E
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:60740
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 6
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
-
-> From: Ayyathurai, Vijayakannan <vijayakannan.ayyathurai@intel.com>
->=20
-> Add Device Tree binding document for Watchdog IP in the Intel Keem Bay So=
-C.
->=20
-> Signed-off-by: Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com=
->
+On Tue, Dec 01, 2020 at 11:10:33PM +0800, vijayakannan.ayyathurai@intel.com wrote:
+> From: Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
+> 
+> Intel Keembay Soc requires watchdog timer support.
+> Add watchdog driver to enable this.
+> 
+> Signed-off-by: Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
 > Acked-by: Mark Gross <mgross@linux.intel.com>
 > Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Sorry, by mistake I missed adding Rob's Reviewed-by: tag.
-
 > ---
->  .../bindings/watchdog/intel,keembay-wdt.yaml  | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644
-> Documentation/devicetree/bindings/watchdog/intel,keembay-wdt.yaml
->
+>  drivers/watchdog/Kconfig       |  13 ++
+>  drivers/watchdog/Makefile      |   1 +
+>  drivers/watchdog/keembay_wdt.c | 284 +++++++++++++++++++++++++++++++++
+>  3 files changed, 298 insertions(+)
+>  create mode 100644 drivers/watchdog/keembay_wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index fd7968635e6d..f412cf2d0f1a 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -2163,4 +2163,17 @@ config USBPCWATCHDOG
+>  
+>  	  Most people will say N.
+>  
+> +config KEEMBAY_WATCHDOG
+> +	tristate "Intel Keem Bay SoC non-secure watchdog"
+> +	depends on ARCH_KEEMBAY || (ARM64 && COMPILE_TEST)
+> +	select WATCHDOG_CORE
+> +	help
+> +	 This option enable support for an In-secure watchdog timer driver for
+> +	 Intel Keem Bay SoC. This WDT has a 32 bit timer and decrements in every
+> +	 count unit. An interrupt will be triggered, when the count crosses
+> +	 the thershold configured in the register.
+> +
+> +	 To compile this driver as a module, choose M here: the
+> +	 module will be called keembay_wdt.
+> +
+>  endif # WATCHDOG
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 071a2e50be98..f6f9f434f407 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -146,6 +146,7 @@ obj-$(CONFIG_INTEL_MEI_WDT) += mei_wdt.o
+>  obj-$(CONFIG_NI903X_WDT) += ni903x_wdt.o
+>  obj-$(CONFIG_NIC7018_WDT) += nic7018_wdt.o
+>  obj-$(CONFIG_MLX_WDT) += mlx_wdt.o
+> +obj-$(CONFIG_KEEMBAY_WATCHDOG) += keembay_wdt.o
+>  
+>  # M68K Architecture
+>  obj-$(CONFIG_M54xx_WATCHDOG) += m54xx_wdt.o
+> diff --git a/drivers/watchdog/keembay_wdt.c b/drivers/watchdog/keembay_wdt.c
+> new file mode 100644
+> index 000000000000..1e1a1447c729
+> --- /dev/null
+> +++ b/drivers/watchdog/keembay_wdt.c
+> @@ -0,0 +1,284 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Watchdog driver for Intel Keem Bay non-secure watchdog.
+> + *
+> + * Copyright (C) 2020 Intel Corporation
+> + */
+> +
+> +#include <linux/arm-smccc.h>
+> +#include <linux/bits.h>
+> +#include <linux/clk.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/limits.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +#include <linux/watchdog.h>
+> +
+> +/* Non-secure watchdog register offsets */
+> +#define TIM_WATCHDOG		0x0
+> +#define TIM_WATCHDOG_INT_THRES	0x4
+> +#define TIM_WDOG_EN		0x8
+> +#define TIM_SAFE		0xc
+> +
+> +#define WDT_ISR_MASK		GENMASK(9, 8)
+> +#define WDT_ISR_CLEAR		0x8200ff18
+> +#define WDT_UNLOCK		0xf1d0dead
+> +#define WDT_LOAD_MAX		U32_MAX
+> +#define WDT_LOAD_MIN		1
+> +#define WDT_TIMEOUT		5
+> +
+> +static unsigned int timeout = WDT_TIMEOUT;
+> +module_param(timeout, int, 0);
+> +MODULE_PARM_DESC(timeout, "Watchdog timeout period in seconds (default = "
+> +		 __MODULE_STRING(WDT_TIMEOUT) ")");
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default = "
+> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> +
+> +struct keembay_wdt {
+> +	struct watchdog_device	wdd;
+> +	struct clk		*clk;
+> +	unsigned int		rate;
+> +	int			to_irq;
+> +	int			th_irq;
+> +	void __iomem		*base;
+> +};
+> +
+> +static inline u32 keembay_wdt_readl(struct keembay_wdt *wdt, u32 offset)
+> +{
+> +	return readl(wdt->base + offset);
+> +}
+> +
+> +static inline void keembay_wdt_writel(struct keembay_wdt *wdt,
+> +				      u32 offset, u32 val)
+> +{
+> +	writel(WDT_UNLOCK, wdt->base + TIM_SAFE);
+> +	writel(val, wdt->base + offset);
+> +}
+> +
+> +static void keembay_wdt_set_timeout_reg(struct watchdog_device *wdog, bool ping)
+> +{
+> +	struct keembay_wdt *wdt = watchdog_get_drvdata(wdog);
+> +	u32 th_val = 0;
+> +
+> +	if (!ping && wdog->pretimeout) {
+> +		th_val = wdog->timeout - wdog->pretimeout;
+> +		keembay_wdt_writel(wdt, TIM_WATCHDOG_INT_THRES, th_val * wdt->rate);
+
+Sorry for annoying you now, but I may have found another potential problem.
+
+What happens if the user sets a pretimeout, then removes it ?
+What should TIM_WATCHDOG_INT_THRES be set to in that case ?
+Right now TIM_WATCHDOG_INT_THRES won't be updated anymore
+in that case, which seems wrong. This might get worse with
+the following sequence.
+
+- set pretimeout
+- clear pretimeout
+- set timeout to some other value
+
 Thanks,
-Vijay
+Guenter
+
+> +	}
+> +
+> +	keembay_wdt_writel(wdt, TIM_WATCHDOG, wdog->timeout * wdt->rate);
+> +}
+> +
+> +static int keembay_wdt_start(struct watchdog_device *wdog)
+> +{
+> +	struct keembay_wdt *wdt = watchdog_get_drvdata(wdog);
+> +
+> +	keembay_wdt_set_timeout_reg(wdog, false);
+> +	keembay_wdt_writel(wdt, TIM_WDOG_EN, 1);
+> +
+> +	return 0;
+> +}
+> +
+> +static int keembay_wdt_stop(struct watchdog_device *wdog)
+> +{
+> +	struct keembay_wdt *wdt = watchdog_get_drvdata(wdog);
+> +
+> +	keembay_wdt_writel(wdt, TIM_WDOG_EN, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static int keembay_wdt_ping(struct watchdog_device *wdog)
+> +{
+> +	keembay_wdt_set_timeout_reg(wdog, true);
+> +
+> +	return 0;
+> +}
+> +
+> +static int keembay_wdt_set_timeout(struct watchdog_device *wdog, u32 t)
+> +{
+> +	wdog->timeout = t;
+> +	keembay_wdt_set_timeout_reg(wdog, false);
+> +
+> +	return 0;
+> +}
+> +
+> +static int keembay_wdt_set_pretimeout(struct watchdog_device *wdog, u32 t)
+> +{
+> +	wdog->pretimeout = t;
+> +	keembay_wdt_set_timeout_reg(wdog, false);
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int keembay_wdt_get_timeleft(struct watchdog_device *wdog)
+> +{
+> +	struct keembay_wdt *wdt = watchdog_get_drvdata(wdog);
+> +
+> +	return keembay_wdt_readl(wdt, TIM_WATCHDOG) / wdt->rate;
+> +}
+> +
+> +/*
+> + * SMC call is used to clear the interrupt bits, because the TIM_GEN_CONFIG
+> + * register is in the secure bank.
+> + */
+> +static irqreturn_t keembay_wdt_to_isr(int irq, void *dev_id)
+> +{
+> +	struct keembay_wdt *wdt = dev_id;
+> +	struct arm_smccc_res res;
+> +
+> +	keembay_wdt_writel(wdt, TIM_WATCHDOG, 1);
+> +	arm_smccc_smc(WDT_ISR_CLEAR, WDT_ISR_MASK, 0, 0, 0, 0, 0, 0, &res);
+> +	dev_crit(wdt->wdd.parent, "Intel Keem Bay non-sec wdt timeout.\n");
+> +	emergency_restart();
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t keembay_wdt_th_isr(int irq, void *dev_id)
+> +{
+> +	struct keembay_wdt *wdt = dev_id;
+> +	struct arm_smccc_res res;
+> +	u32 th_val = 0;
+> +
+> +	if (wdt->wdd.pretimeout)
+> +		th_val = wdt->wdd.timeout - wdt->wdd.pretimeout;
+> +
+> +	keembay_wdt_writel(wdt, TIM_WATCHDOG, th_val * wdt->rate + 1);
+> +	arm_smccc_smc(WDT_ISR_CLEAR, WDT_ISR_MASK, 0, 0, 0, 0, 0, 0, &res);
+> +	dev_crit(wdt->wdd.parent, "Intel Keem Bay non-sec wdt pre-timeout.\n");
+> +	watchdog_notify_pretimeout(&wdt->wdd);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static const struct watchdog_info keembay_wdt_info = {
+> +	.identity	= "Intel Keem Bay Watchdog Timer",
+> +	.options	= WDIOF_SETTIMEOUT |
+> +			  WDIOF_PRETIMEOUT |
+> +			  WDIOF_MAGICCLOSE |
+> +			  WDIOF_KEEPALIVEPING,
+> +};
+> +
+> +static const struct watchdog_ops keembay_wdt_ops = {
+> +	.owner		= THIS_MODULE,
+> +	.start		= keembay_wdt_start,
+> +	.stop		= keembay_wdt_stop,
+> +	.ping		= keembay_wdt_ping,
+> +	.set_timeout	= keembay_wdt_set_timeout,
+> +	.set_pretimeout	= keembay_wdt_set_pretimeout,
+> +	.get_timeleft	= keembay_wdt_get_timeleft,
+> +};
+> +
+> +static int keembay_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct keembay_wdt *wdt;
+> +	int ret;
+> +
+> +	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> +	if (!wdt)
+> +		return -ENOMEM;
+> +
+> +	wdt->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(wdt->base))
+> +		return PTR_ERR(wdt->base);
+> +
+> +	/* we do not need to enable the clock as it is enabled by default */
+> +	wdt->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(wdt->clk))
+> +		return dev_err_probe(dev, PTR_ERR(wdt->clk), "Failed to get clock\n");
+> +
+> +	wdt->rate = clk_get_rate(wdt->clk);
+> +	if (!wdt->rate)
+> +		return dev_err_probe(dev, -EINVAL, "Failed to get clock rate\n");
+> +
+> +	wdt->th_irq = platform_get_irq_byname(pdev, "threshold");
+> +	if (wdt->th_irq < 0)
+> +		return dev_err_probe(dev, wdt->th_irq, "Failed to get IRQ for threshold\n");
+> +
+> +	ret = devm_request_irq(dev, wdt->th_irq, keembay_wdt_th_isr, 0,
+> +			       "keembay-wdt", wdt);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to request IRQ for threshold\n");
+> +
+> +	wdt->to_irq = platform_get_irq_byname(pdev, "timeout");
+> +	if (wdt->to_irq < 0)
+> +		return dev_err_probe(dev, wdt->to_irq, "Failed to get IRQ for timeout\n");
+> +
+> +	ret = devm_request_irq(dev, wdt->to_irq, keembay_wdt_to_isr, 0,
+> +			       "keembay-wdt", wdt);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to request IRQ for timeout\n");
+> +
+> +	wdt->wdd.parent		= dev;
+> +	wdt->wdd.info		= &keembay_wdt_info;
+> +	wdt->wdd.ops		= &keembay_wdt_ops;
+> +	wdt->wdd.min_timeout	= WDT_LOAD_MIN;
+> +	wdt->wdd.max_timeout	= WDT_LOAD_MAX / wdt->rate;
+> +	wdt->wdd.timeout	= WDT_TIMEOUT;
+> +
+> +	watchdog_set_drvdata(&wdt->wdd, wdt);
+> +	watchdog_set_nowayout(&wdt->wdd, nowayout);
+> +	watchdog_init_timeout(&wdt->wdd, timeout, dev);
+> +	keembay_wdt_set_timeout(&wdt->wdd, wdt->wdd.timeout);
+> +
+> +	ret = devm_watchdog_register_device(dev, &wdt->wdd);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to register watchdog device.\n");
+> +
+> +	platform_set_drvdata(pdev, wdt);
+> +	dev_info(dev, "Initial timeout %d sec%s.\n",
+> +		 wdt->wdd.timeout, nowayout ? ", nowayout" : "");
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused keembay_wdt_suspend(struct device *dev)
+> +{
+> +	struct keembay_wdt *wdt = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&wdt->wdd))
+> +		return keembay_wdt_stop(&wdt->wdd);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused keembay_wdt_resume(struct device *dev)
+> +{
+> +	struct keembay_wdt *wdt = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&wdt->wdd))
+> +		return keembay_wdt_start(&wdt->wdd);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(keembay_wdt_pm_ops, keembay_wdt_suspend,
+> +			 keembay_wdt_resume);
+> +
+> +static const struct of_device_id keembay_wdt_match[] = {
+> +	{ .compatible = "intel,keembay-wdt" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, keembay_wdt_match);
+> +
+> +static struct platform_driver keembay_wdt_driver = {
+> +	.probe		= keembay_wdt_probe,
+> +	.driver		= {
+> +		.name		= "keembay_wdt",
+> +		.of_match_table	= keembay_wdt_match,
+> +		.pm		= &keembay_wdt_pm_ops,
+> +	},
+> +};
+> +
+> +module_platform_driver(keembay_wdt_driver);
+> +
+> +MODULE_DESCRIPTION("Intel Keem Bay SoC watchdog driver");
+> +MODULE_AUTHOR("Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.17.1
+> 
