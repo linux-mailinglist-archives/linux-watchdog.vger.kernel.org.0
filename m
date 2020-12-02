@@ -2,111 +2,137 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C302CB104
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Dec 2020 00:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593D72CBD94
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Dec 2020 13:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727370AbgLAXoD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 1 Dec 2020 18:44:03 -0500
-Received: from gproxy10-pub.mail.unifiedlayer.com ([69.89.20.226]:35213 "EHLO
-        gproxy10-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726066AbgLAXoD (ORCPT
+        id S1727531AbgLBM6O (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Dec 2020 07:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727513AbgLBM6N (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 1 Dec 2020 18:44:03 -0500
-Received: from cmgw12.unifiedlayer.com (unknown [10.9.0.12])
-        by gproxy10.mail.unifiedlayer.com (Postfix) with ESMTP id 08C041404B1
-        for <linux-watchdog@vger.kernel.org>; Tue,  1 Dec 2020 16:43:20 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id kFIlkelXneMJHkFIlklT4w; Tue, 01 Dec 2020 16:43:20 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=R6ct5+ZX c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
- a=zTNgK-yGK50A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=N54-gffFAAAA:8
- a=fk1lIlRQAAAA:8 a=xMGZVK2oIwHWdiNj_j4A:9 a=CjuIK1q_8ugA:10:nop_charset_2
- a=6l0D2HzqY3Epnrm8mE3f:22 a=U75ogvRika4pmaD_UPO0:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XnT3k0EIydSnbbeuqqN1ROof0SCVPonvgsDAEnSO6Zk=; b=Z3OBa9bOYvCIZmbqFD9iwk25Sx
-        LhW0NfYp9m8oSIoLCsiLZOqST6tV+B4B2FIA7xTqZDXnjLW6GjfAG6HEY9bJjcL6LyyfikcdFaekM
-        iWuc9PwOCM2UfIAX9UaTqKGEb6+zpb+tF+EF1aKamxvjaer/3YYEP2bFHOXkgu/9kL81Wes8frmhl
-        Iv4miFvfZE+EmknO+lAr8SRw6OetRPWpyXimRgWQ8ltaqpJDPtMQmREy7wcvJGqrhR5kHrDw8h7SM
-        fDoySrvY2e8bxzJQ8LYrwOj4psl2sg+N6bOk/Lhvki0WHgxy4/1NdpkTGFbTNRt8FXlBDwyYoABCi
-        ZGZHV7xw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33966 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1kkFIl-0045l3-3g; Tue, 01 Dec 2020 23:43:19 +0000
-Date:   Tue, 1 Dec 2020 15:43:18 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Corey Minyard <minyard@acm.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org,
-        Gabriele Paoloni <gabriele.paoloni@intel.com>,
-        Corey Minyard <cminyard@mvista.com>
-Subject: Re: [PATCH 1/6] watchdog: Allow a driver to use milliseconds instead
- of seconds
-Message-ID: <20201201234318.GA16359@roeck-us.net>
-References: <20200620173351.18752-1-minyard@acm.org>
- <20200620173351.18752-2-minyard@acm.org>
- <20200628145420.GA80485@roeck-us.net>
- <20201201225437.GC3110@minyard.net>
+        Wed, 2 Dec 2020 07:58:13 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD3EC0613D4
+        for <linux-watchdog@vger.kernel.org>; Wed,  2 Dec 2020 04:57:27 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id g14so3775444wrm.13
+        for <linux-watchdog@vger.kernel.org>; Wed, 02 Dec 2020 04:57:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=fUNJABfkVHPy4crD1mIRk8atZYm1MSll5dowagyi0KE=;
+        b=hR2a848MDCPa9lyCpzVgBc+9u0Sm1pugkHDQqndvUGWf+oTLodfFuOZdPSf8IggsF+
+         rzmZPtqlTW8EOGOHUkD2mAIaAlqyjTrRLC3J3S/sAU4l90WS+YYLq6jXwavM0x2hOawQ
+         LTCWcc1Ufol7AEZ5G0GTjQ7MIeGVIyCdEM/CMmQtpNTXwBajnChkKomG9TcT5B+JZ/uD
+         h6EC2C4LjT6cS7XZc0+UsZhNKTiw4JmachYSforKYLzDKoBM9m1QDRkYkQF2Julf2rXe
+         xHe9DGNFBkfZ5q/iMkN2Yr4v2Af5BarJg3mMaoZDQohXIfYHSnGsmAi6fZkQJ7gXkkLv
+         Bwbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=fUNJABfkVHPy4crD1mIRk8atZYm1MSll5dowagyi0KE=;
+        b=rs3MkkjulIn0l1XALYMdFOOx8BSDlkmyi5Mot5hL/RmMN1FXEl9dEZfMZDKPs/1Ht9
+         MeKXJFsycLF08QHzQnV4CEXxxsU6Ks5enZBq8UlMsJjylHJ+62H2BMDBjvqkhaESiGkU
+         EwR8ZFxbgcj8zN2olTxJ7zEyTM/6rVQ5DwQTDyFtxi1icE5MhfYzjojEh+MF0tgM/+07
+         JeMEf+Dh+kZJAqlB4yuT03XG5E92vt1/gKNf3uMcjzyBMVfI8gR+eABN/nqD92mwOUj3
+         PaG6h50sef6trWBxmwhwDy32iXH2wDfQvEcVY7U/VfUdFDC1P3Kfmb36/n+1eOJ+Lwkm
+         k8Zg==
+X-Gm-Message-State: AOAM530xVVF+R1Nzj6C8N+rv6kucTpl6WqhGxFzvn+wT7HdX0gWQMWY2
+        J24dMz5Rd9YdAaV95H4JtrDyVQ==
+X-Google-Smtp-Source: ABdhPJyTDOl+qd8DppZaifDoh+DnC5wCZyO8mgHKqBIIwlAIfMxOYS67jtCelXQ+yyfF9HqvHrHZMw==
+X-Received: by 2002:adf:cf0b:: with SMTP id o11mr3418263wrj.162.1606913845628;
+        Wed, 02 Dec 2020 04:57:25 -0800 (PST)
+Received: from dell ([91.110.221.235])
+        by smtp.gmail.com with ESMTPSA id b18sm2161476wrt.54.2020.12.02.04.57.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 04:57:24 -0800 (PST)
+Date:   Wed, 2 Dec 2020 12:57:23 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Subject: Re: [PATCH RESEND v6 2/4] mfd: Support ROHM BD9576MUF and BD9573MUF
+Message-ID: <20201202125723.GK4801@dell>
+References: <cover.1605882179.git.matti.vaittinen@fi.rohmeurope.com>
+ <cc46e329efa30c66f000ab7c97f9bbf0bc31f0f7.1605882179.git.matti.vaittinen@fi.rohmeurope.com>
+ <20201127083242.GK2455276@dell>
+ <6bd4abcb340bdf764fd23b685684d3f984319ed7.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201201225437.GC3110@minyard.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1kkFIl-0045l3-3g
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:33966
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 3
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6bd4abcb340bdf764fd23b685684d3f984319ed7.camel@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 04:54:37PM -0600, Corey Minyard wrote:
-> On Sun, Jun 28, 2020 at 07:54:20AM -0700, Guenter Roeck wrote:
-> > On Sat, Jun 20, 2020 at 12:33:46PM -0500, minyard@acm.org wrote:
-> > > From: Corey Minyard <cminyard@mvista.com>
-> > > 
-> > > If the WDIOF_MSECTIMER is set, then all the timeouts in the watchdog
-> > > structure are expected to be in milliseconds.  Add the flag and the
-> > > various conversions.  This should have no effect on existing drivers.
-> > > 
-> > 
-> > I have decided to go another route: Instead of using a WDIOF_MSECTIMER
-> > flag, provide new callback functions. That increases structure sizes,
-> > but ultimately I think it is cleaner.
-> > 
-> > I implemented a prototype, but didn't have a chance to test it yet.
-> > 
-> > Guenter
-> 
-> I was wondering if you had progressed with this.  I'm happy to help with
-> it, if there's anything I can do.
-> 
+On Fri, 27 Nov 2020, Vaittinen, Matti wrote:
 
-Unfortunately I got interrupted, and right now I am so deeply buried in work
-that I don't think I'll get to it anytime soon. Major problem I had before I
-had to give up is that everything I came up with was way too invasive for
-my liking.
+> Hello Lee,
+> 
+> On Fri, 2020-11-27 at 08:32 +0000, Lee Jones wrote:
+> > On Mon, 23 Nov 2020, Matti Vaittinen wrote:
+> > 
+> > > Add core support for ROHM BD9576MUF and BD9573MUF PMICs which are
+> > > mainly used to power the R-Car series processors.
+> > > 
+> > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > > ---
+> > >  drivers/mfd/Kconfig              |  11 ++++
+> > >  drivers/mfd/Makefile             |   1 +
+> > >  drivers/mfd/rohm-bd9576.c        | 108
+> > > +++++++++++++++++++++++++++++++
+> > >  include/linux/mfd/rohm-bd957x.h  |  59 +++++++++++++++++
+> > >  include/linux/mfd/rohm-generic.h |   2 +
+> > >  5 files changed, 181 insertions(+)
+> > >  create mode 100644 drivers/mfd/rohm-bd9576.c
+> > >  create mode 100644 include/linux/mfd/rohm-bd957x.h
+> > 
+> > Looks like a possible candidate for "simple-mfd-i2c".
+> > 
+> > Could you look into that please?
+> > 
+> I must admit I didn't know about "simple-mfd-i2c". Good thing to know
+> when working with simple devices :) Is this a new thing?
 
-Guenter
+Yes, it's new.
+
+> I am unsure I understand the idea fully. Should users put all the
+> different regamp configs in this file and just add the device IDs with
+> pointer to correct config? (BD9576 and BD9573 need volatile ranges).
+> Also, does this mean each sub-device should have own node and own
+> compatible in DT to get correctly load and probed? I guess this would
+> need a buy-in from Rob too then.
+
+You should describe the H/W in DT.
+
+> By the way - for uneducated eyes like mine this does not look like it
+> has much to do with MFD as a device - here MFD reminds me of a simple-
+> bus on top of I2C.
+
+This is for MFD devices where the parent does little more than create
+a shared address space for child devices to operate on - like yours.
+
+> Anyways, the BD9576 and BD9573 both have a few interrupts for OVD/UVD
+> conditions and I am expecting that I will be asked to provide the
+> regulator notifiers for those. Reason why I omitted the IRQs for now is
+> that the HW is designed to keep the IRQ asserted for whole error
+> duration so some delayed ack mechanism would be needed. I would like to
+> keep the door open for adding IRQs to MFD core.
+
+You mean to add an IRQ Domain?
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
