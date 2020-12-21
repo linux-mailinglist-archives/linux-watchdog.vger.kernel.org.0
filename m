@@ -2,133 +2,111 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F15C12DF0B4
-	for <lists+linux-watchdog@lfdr.de>; Sat, 19 Dec 2020 18:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF232DF881
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Dec 2020 06:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbgLSRfL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 19 Dec 2020 12:35:11 -0500
-Received: from www.zeus03.de ([194.117.254.33]:38720 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727109AbgLSRfK (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 19 Dec 2020 12:35:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=+CbbITCo4sjydHD9xFe8UNyiRYF
-        yWeWXAToXzvmfr6Q=; b=XdTM9lzev+ho5RQVJqaM5S6igsEuIjdiW/roKKjJzS8
-        eIBws6EY27MQ2NoVL+/pEpLtLvE7MP49E8b7EU0NhBOcrz+EEqFfNa/UudGxff3e
-        jdyhvNwmmrkaupvll8j9YpqYd7YCFuq2fMfdx1GNOn3LlVQxee23zSi3Zv27Fz3w
-        =
-Received: (qmail 4185329 invoked from network); 19 Dec 2020 18:34:28 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Dec 2020 18:34:28 +0100
-X-UD-Smtp-Session: l3s3148p1@pOUPo9S2EqEgAwDPXyWnAP8QpIJSuVO+
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] watchdog: renesas_wdt: don't sleep in atomic context
-Date:   Sat, 19 Dec 2020 18:34:15 +0100
-Message-Id: <20201219173415.21848-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.29.2
+        id S1725872AbgLUFHE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Dec 2020 00:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbgLUFHE (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 21 Dec 2020 00:07:04 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA62C061282
+        for <linux-watchdog@vger.kernel.org>; Sun, 20 Dec 2020 21:06:23 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id y8so4996517plp.8
+        for <linux-watchdog@vger.kernel.org>; Sun, 20 Dec 2020 21:06:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aD8F3zpX0cSK92jlYFm0rPZ8cbFr64Bk+pWnjCzU/v4=;
+        b=VFBOP49Tf/oZgAntdNhW5/0rbkNZyek5OtZgtlCtgrFklLUdLxiiSxWiqp6YFwULR/
+         Lh8v1fWx8j7cTko5rRy7P1bKsLyVCSmbbqfalpCUvGLhkLAVL9eu7glGvXEJj6N/NFce
+         iYj5D/l7NIjLbunQgdF+139RCpCyYWV7jpktQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aD8F3zpX0cSK92jlYFm0rPZ8cbFr64Bk+pWnjCzU/v4=;
+        b=MxSBFHdJdZ9sjmhHwrjNgcN1Jmhs8du0Ie95MRrnTUpOydgGVZ52dZfYoVofdYWJB8
+         2CWsm/D1sJBmPJmQuT8WIvJKIyzV9XvO4txYx/2X+WP/WrN0xcDTwDCVn2eR9Hpesphw
+         y7+KF57UO1gaKciV6bmQY7rXxtolZWlOIcm5N2C5j+/t1GZQYZbxj90qjQWdI82fVsU1
+         inJI9IjwlW5sf/zW1b+Dacw4I+64Rx3y7pb94MFE7c+p/KQgkxxGTCKI9DC/zA5NE4GE
+         8wk53R9+nlEG8Ge7N1yjkms1rSHYjzpsJVczoF3o1nP8yNL0PhUK5ASAcpUh21Gj0ffx
+         lvvw==
+X-Gm-Message-State: AOAM532QiN44SFw4dQxRipkuH6hySTvd/mOtGy+Yf5os7Jp3xKAPz4LU
+        Nf84sGK92TBwg+CXLkSBRCSq+CSURVkZiJ2RaTfQgtbDrPBEpw==
+X-Google-Smtp-Source: ABdhPJw8d7KjqC65970hMryKNpzWdCeSPfe/lxCWvLhC2qMbCfOgQK8Qiu6yJLpZ5qihETaT+x5hLUOxaozHWXP1e5w=
+X-Received: by 2002:a67:5c03:: with SMTP id q3mr10529936vsb.47.1608512380324;
+ Sun, 20 Dec 2020 16:59:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201014131936.20584-1-crystal.guo@mediatek.com>
+ <20201014131936.20584-3-crystal.guo@mediatek.com> <1605529631.14806.57.camel@mhfsdcap03>
+In-Reply-To: <1605529631.14806.57.camel@mhfsdcap03>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Mon, 21 Dec 2020 08:59:29 +0800
+Message-ID: <CANMq1KDB5W9ON0+ormDjFy=9oJUnAq4A41zNTUMHcWsAJ449Zg@mail.gmail.com>
+Subject: Re: [v6,2/4] dt-binding: mediatek: mt8192: update mtk-wdt document
+To:     Crystal Guo <crystal.guo@mediatek.com>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        =?UTF-8?B?U2VpeWEgV2FuZyAo546L6L+65ZCbKQ==?= 
+        <seiya.wang@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-In the restart handler, we hit multiple OOPSes. One because of
-usleep_range() and one because of RPM. So, instead of re-using
-rwdt_start(), we implement an atomic version of it in the restart
-handler. As a little bonus, reboot will occur sooner because we can now
-use the smallest divider in the custom restart routine.
+On Mon, Nov 16, 2020 at 8:27 PM Crystal Guo <crystal.guo@mediatek.com> wrote:
+>
+> Hi Maintainers,
+>
+> Gentle pin for this patch.
+>
+> Thanks
+>
+> On Wed, 2020-10-14 at 21:19 +0800, Crystal Guo wrote:
+> > update mtk-wdt document for MT8192 platform
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Rob: I assume your input is required here? Any chance we could have
+your ack/review on this trivial patch? It seems like the series is
+blocked pending on a review of this patch -- and I don't think it has
+been reviewed before.
 
-It is problematic to add a Fixes: tag because we would need three of
-them. So, I'd think we add a stable tag and as long as the patch
-applies, all is fine. Other opinions?
+Thanks,
 
- drivers/watchdog/renesas_wdt.c | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/watchdog/renesas_wdt.c b/drivers/watchdog/renesas_wdt.c
-index 47fce4de0110..d2b5074bca65 100644
---- a/drivers/watchdog/renesas_wdt.c
-+++ b/drivers/watchdog/renesas_wdt.c
-@@ -9,6 +9,7 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -50,6 +51,7 @@ struct rwdt_priv {
- 	struct watchdog_device wdev;
- 	unsigned long clk_rate;
- 	u8 cks;
-+	struct clk *clk;
- };
- 
- static void rwdt_write(struct rwdt_priv *priv, u32 val, unsigned int reg)
-@@ -125,13 +127,30 @@ static unsigned int rwdt_get_timeleft(struct watchdog_device *wdev)
- 	return DIV_BY_CLKS_PER_SEC(priv, 65536 - val);
- }
- 
-+/* needs to be atomic - no RPM, no usleep_range, no scheduling! */
- static int rwdt_restart(struct watchdog_device *wdev, unsigned long action,
- 			void *data)
- {
- 	struct rwdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u8 val;
-+
-+	clk_prepare_enable(priv->clk);
-+
-+	/* Stop the timer before we modify any register */
-+	val = readb_relaxed(priv->base + RWTCSRA) & ~RWTCSRA_TME;
-+	rwdt_write(priv, val, RWTCSRA);
-+	/* Delay 2 cycles before setting watchdog counter */
-+	udelay(DIV_ROUND_UP(2 * 1000000, priv->clk_rate));
- 
--	rwdt_start(wdev);
- 	rwdt_write(priv, 0xffff, RWTCNT);
-+	/* smallest divider to reboot soon */
-+	rwdt_write(priv, 0, RWTCSRA);
-+
-+	readb_poll_timeout_atomic(priv->base + RWTCSRA, val,
-+				  !(val & RWTCSRA_WRFLG), 1, 100);
-+
-+	rwdt_write(priv, RWTCSRA_TME, RWTCSRA);
-+
- 	return 0;
- }
- 
-@@ -191,7 +210,6 @@ static int rwdt_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct rwdt_priv *priv;
--	struct clk *clk;
- 	unsigned long clks_per_sec;
- 	int ret, i;
- 	u8 csra;
-@@ -207,13 +225,13 @@ static int rwdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
- 
--	clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(clk))
--		return PTR_ERR(clk);
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk))
-+		return PTR_ERR(priv->clk);
- 
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
--	priv->clk_rate = clk_get_rate(clk);
-+	priv->clk_rate = clk_get_rate(priv->clk);
- 	csra = readb_relaxed(priv->base + RWTCSRA);
- 	priv->wdev.bootstatus = csra & RWTCSRA_WOVF ? WDIOF_CARDRESET : 0;
- 	pm_runtime_put(dev);
--- 
-2.29.2
-
+> >
+> > Signed-off-by: Crystal Guo <crystal.guo@mediatek.com>
+> > ---
+> >  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> > index 45eedc2c3141..e36ba60de829 100644
+> > --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> > +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> > @@ -12,6 +12,7 @@ Required properties:
+> >       "mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for MT7629
+> >       "mediatek,mt8183-wdt": for MT8183
+> >       "mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
+> > +     "mediatek,mt8192-wdt": for MT8192
+> >
+> >  - reg : Specifies base physical address and size of the registers.
+> >
+>
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
