@@ -2,60 +2,67 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1082E2BB5
-	for <lists+linux-watchdog@lfdr.de>; Fri, 25 Dec 2020 15:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981712E2BBD
+	for <lists+linux-watchdog@lfdr.de>; Fri, 25 Dec 2020 15:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725982AbgLYOUF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 25 Dec 2020 09:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S1726445AbgLYO2J (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 25 Dec 2020 09:28:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725863AbgLYOUE (ORCPT
+        with ESMTP id S1726227AbgLYO2I (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 25 Dec 2020 09:20:04 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0482BC061573
-        for <linux-watchdog@vger.kernel.org>; Fri, 25 Dec 2020 06:19:23 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id d20so3943393otl.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 25 Dec 2020 06:19:23 -0800 (PST)
+        Fri, 25 Dec 2020 09:28:08 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA695C061573;
+        Fri, 25 Dec 2020 06:27:27 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id 11so3914386oty.9;
+        Fri, 25 Dec 2020 06:27:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=iWTbpTmTo7etIRpqSQfQC/tm525BK8QuDZtLhxfPDPo=;
-        b=EaN4E4gjjYvy4xpibfZ9M3a8D167Qmb+OBTAuKGQ4+2Jjmq7r6OffSSUf5KEWCgmUS
-         ft9XS1meoLBdUwqd2e+fEEYko8aemmovhggFiz5t4kdX+xvHglxrb+JSsXzBqX93lO0q
-         y+35hC434P0lp7RLnVtU086D4lgMw+rq3ASa9Nlq/KekiBwp/3bR3C17V1fG/hFHBxwD
-         GSFdOxizz1eT+ckGGgmbouMWjmj1eF6syoIO+uvHl/6nYo0MQR9tHD3EUJ3k4pRDZ8+e
-         k/L/iZKm9DYuzaJ/irDSqYBnTSiMIT/avF1NyhcmfbjU0S7eMrNHGoLkwMP7DSz2vst8
-         zbVg==
+        bh=oZZqS652feFDi+rDpYp850LeakI/uYF7nzQQb/ytiY4=;
+        b=tKOA3jN9ygj2IK5lvshj2chue+gRtH7ZpWpoH1uLlUjOsKt/fKjRu/FzANZbirdtOb
+         83/U7BjM543o//tQCca4X/MN9UuGDwr4ft1sOpd70UaGRlow1wIPXgXCx0XhnSM92jPm
+         cmsbcf3Sc34lBNlEygt0zZ4nGpSpsgTCd7HHoqDXOou7EXPhFKJZLBEMuggDTFCOknsI
+         O6X4zojtLW1JLNFqlKpWyHoxpnchc1KARLceSSHpx7YB6yvVv8csGWp8iz0nrPE12t+K
+         E8un8QA40Tnf9+HVV/32o90k8RIJLX2Gw2rjbZufd6VivX3KcOC9ikqHOwGfZnCWu/2p
+         MXKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=iWTbpTmTo7etIRpqSQfQC/tm525BK8QuDZtLhxfPDPo=;
-        b=jLGPMMSxQ8JuJYC7iGrV8UgViJBaCsd3YxKvOUR1f7QlKaEItNiz3+xVY5JEKgw6dF
-         hZye3gQM698SM555sH1YzEEvOgLJ+1VPzOzSBPP7zDGYX6N2E0jCbljsRxghR/8sY3Ym
-         DfUhrpI0MOBXFUS1JF9LykQWgsZ/P4Wbau7yxg+/Oq8JcsxfIJnu4RclGFT8O8UwZPMB
-         jpM7blPHcF5ebxHlEPkL4qPhbh5uD9SLlQ3utc/B1N2QXzADPWihHgpZgZbRuoBmVYYS
-         ThLeTxaA+8PNFcJbRzkm72smrfsBF/PEELzO5Y+hbhsnKefBU1qbfhAKiHEdQWDTRtjU
-         XU5g==
-X-Gm-Message-State: AOAM530Sht+L++hRfynbWliAHXzrOMgrd/BpVH1MJpgzrJVHdpUuizN2
-        LTQr+4J6ZmgWYxaa/JJ9xYAahdsuQkE=
-X-Google-Smtp-Source: ABdhPJxjFzlznMkgJqpywMNZ+5+qOsjjw6A+3ZpUP/lfJZ4QPfUb5sX26kpfXVBMY12q6hhZ0oQoJw==
-X-Received: by 2002:a05:6830:1e70:: with SMTP id m16mr10280202otr.22.1608905962966;
-        Fri, 25 Dec 2020 06:19:22 -0800 (PST)
+        bh=oZZqS652feFDi+rDpYp850LeakI/uYF7nzQQb/ytiY4=;
+        b=sgkupXXABigtbPwQ8SyvWmT1T/O3MrYW0xN0dxt8p79RVEo63s5YQrCCoDdMVJAgyI
+         3ZNmEaDtj4oFHF0AlvhSSHxjVbWbeiqyKNyM86kKA2NgosvGfi9+Na2j11lgZBml9/Uh
+         /WclewkfBKuCFLt7Unnimfm8jLfYNn4vVXU1wugz2O720k02AJ6cklJc4IuTXNH7LNBO
+         6Fz/wBCnXg0Sb3RUqM08tpDtBcvgNbJLc6VXfj7qCPmbA3sNIEnL6xpwXKhNHQ+/jeMD
+         pYM25vNiZ6MqqUWW4HVhn4YUxS4fwW9AgIYnUOK/xR3p/PJBBQJ4CgpAyCE8kKBp6kjJ
+         9D8Q==
+X-Gm-Message-State: AOAM530eDDbstxJOmObH+3rWSJn/eVfK4/Xm2odAZsuXWExheKjLCqZD
+        hRBjy64F2HTU2i584V4YMLE=
+X-Google-Smtp-Source: ABdhPJx+pPHZ/3fpiVHbPVHaJVZxmxdJIdS2DFc3rym4Y4YIe0Zb6yX28+8oVcrjGJ+8+OvO8o40DA==
+X-Received: by 2002:a9d:650e:: with SMTP id i14mr24447576otl.19.1608906446984;
+        Fri, 25 Dec 2020 06:27:26 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 11sm7429421oty.65.2020.12.25.06.19.21
+        by smtp.gmail.com with ESMTPSA id 31sm7446010otd.24.2020.12.25.06.27.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Dec 2020 06:19:22 -0800 (PST)
+        Fri, 25 Dec 2020 06:27:26 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog: ziirave_wdt: remove unused including
- <linux/version.h>
-To:     Tian Tao <tiantao6@hisilicon.com>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org
-References: <1608886154-55309-1-git-send-email-tiantao6@hisilicon.com>
+Subject: Re: [PATCH v1 1/1] driver: watchdog: Remove mtk_wdt_stop() in probe()
+ to prevent the system freeze and it doesn't reboot by watchdog problem
+To:     Freddy Hsin <freddy.hsin@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     wsd_upstream@mediatek.com, chang-an.chen@mediatek.com,
+        kuohong.wang@mediatek.com
+References: <1608881450-11081-1-git-send-email-freddy.hsin@mediatek.com>
+ <1608881450-11081-2-git-send-email-freddy.hsin@mediatek.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -100,41 +107,96 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <0887f9dc-2500-6788-a4a4-4c187c865395@roeck-us.net>
-Date:   Fri, 25 Dec 2020 06:19:20 -0800
+Message-ID: <a3851099-128a-1305-0f76-66af3c9c6e63@roeck-us.net>
+Date:   Fri, 25 Dec 2020 06:27:24 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1608886154-55309-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <1608881450-11081-2-git-send-email-freddy.hsin@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12/25/20 12:49 AM, Tian Tao wrote:
-> Remove including <linux/version.h> that don't need it.
+On 12/24/20 11:30 PM, Freddy Hsin wrote:
+> From: "freddy.hsin" <freddy.hsin@mediatek.com>
 > 
-> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Before user space daemon start to access the watchdog device,
+> there is a time interval that watchdog is disabled in the
+> original flow. If the system freezing at this interval, it
+> cannot be rebooted by watchdog hardware automatically.
+> 
+> In order to solve this problem, the watchdog hardware should be
+> kept working, and start hrtimer in framework to ping it by
+> setting max_hw_heartbeat_ms and HW_RUNNING used in
+> watchdog_need_worker to determine whether the worker should be
+> started or not
+> 
+> Change-Id: I6a041b0922888a90011d7538ee804d80bc8d15ea
+> Signed-off-by: freddy.hsin <freddy.hsin@mediatek.com>
 > ---
->  drivers/watchdog/ziirave_wdt.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/watchdog/mtk_wdt.c |   22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/watchdog/ziirave_wdt.c b/drivers/watchdog/ziirave_wdt.c
-> index cab86a0..4297280 100644
-> --- a/drivers/watchdog/ziirave_wdt.c
-> +++ b/drivers/watchdog/ziirave_wdt.c
-> @@ -18,7 +18,6 @@
->  #include <linux/slab.h>
->  #include <linux/sysfs.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
->  #include <linux/watchdog.h>
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index d6a6393..62f08cd 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -195,6 +195,19 @@ static int mtk_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>  	return 0;
+>  }
 >  
->  #include <asm/unaligned.h>
+> +static void mtk_wdt_init(struct watchdog_device *wdt_dev)
+> +{
+> +	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
+> +	void __iomem *wdt_base;
+> +
+> +	wdt_base = mtk_wdt->wdt_base;
+> +
+> +	if (readl(wdt_base + WDT_MODE) & WDT_MODE_EN) {
+> +		set_bit(WDOG_HW_RUNNING, &wdt_dev->status);
+> +		mtk_wdt_set_timeout(wdt_dev, wdt_dev->timeout);
+> +	}
+> +}
+> +
+>  static int mtk_wdt_stop(struct watchdog_device *wdt_dev)
+>  {
+>  	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
+> @@ -266,16 +279,17 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+>  	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
+>  	mtk_wdt->wdt_dev.max_timeout = WDT_MAX_TIMEOUT;
+
+No longer needed if max_hw_heartbeat_ms is set.
+
+>  	mtk_wdt->wdt_dev.min_timeout = WDT_MIN_TIMEOUT;
+> +	mtk_wdt->wdt_dev.max_hw_heartbeat_ms = (WDT_MAX_TIMEOUT - 1) * 1000;
+
+This needs explanation. Why WDT_MAX_TIMEOUT - 1 ?
+
+>  	mtk_wdt->wdt_dev.parent = dev;
+>  
+> +	watchdog_set_drvdata(&mtk_wdt->wdt_dev, mtk_wdt);
+> +
+> +	mtk_wdt_init(&mtk_wdt->wdt_dev);
+> +
+
+Setting the chip (with the maximum timeout) ...
+
+>  	watchdog_init_timeout(&mtk_wdt->wdt_dev, timeout, dev);
+
+just before initializing/setting the real timeout doesn't really make sense.
+
+>  	watchdog_set_nowayout(&mtk_wdt->wdt_dev, nowayout);
+>  	watchdog_set_restart_priority(&mtk_wdt->wdt_dev, 128);
+>  
+> -	watchdog_set_drvdata(&mtk_wdt->wdt_dev, mtk_wdt);
+> -
+> -	mtk_wdt_stop(&mtk_wdt->wdt_dev);
+> -
+>  	watchdog_stop_on_reboot(&mtk_wdt->wdt_dev);
+>  	err = devm_watchdog_register_device(dev, &mtk_wdt->wdt_dev);
+>  	if (unlikely(err))
 > 
 
