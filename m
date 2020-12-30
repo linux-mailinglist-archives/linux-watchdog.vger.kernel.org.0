@@ -2,112 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F411E2E76F6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Dec 2020 09:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 697A12E78EA
+	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Dec 2020 14:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbgL3IQy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 30 Dec 2020 03:16:54 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:41987 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725814AbgL3IQy (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 30 Dec 2020 03:16:54 -0500
-X-UUID: f020abc8af824630a5afae345e14860e-20201230
-X-UUID: f020abc8af824630a5afae345e14860e-20201230
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <freddy.hsin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 271173387; Wed, 30 Dec 2020 16:16:07 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 30 Dec 2020 16:15:58 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 30 Dec 2020 16:15:59 +0800
-From:   Freddy Hsin <freddy.hsin@mediatek.com>
-To:     Freddy Hsin <freddy.hsin@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        id S1727013AbgL3NEY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 30 Dec 2020 08:04:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53386 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726802AbgL3NEX (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 30 Dec 2020 08:04:23 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AC3B02242A;
+        Wed, 30 Dec 2020 13:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609333417;
+        bh=TYS9CyxV609M0wdg5tRs0/P/rV4X+CfCd2orivUlb5Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=m25d6LVtF9i+6WuO0wbyZo9bRtII8CkWVlvQxDjn36qfBQ9HIMNaabN4o5z4n5mDO
+         40DpdX21wqbHJzEfww8uJs4FLgsz4lrfPCYXAUB+AgWjK8GzE56Uefj0YDWiFj+Dgz
+         XXpBoXA2imwiCOkD7aA/CIq7cDaTnPgyN2J9ntCfhTZOhxcJ3/nLFQSPtZoblX5SsE
+         B1nZF/pnjqA8TJKqcy9dyE2ShiAsT9DsiyX1G3lBF7FzbH5v76NDmRvBvGJlR6wSd4
+         q+kwj2I/XwiltL87R2C69lKS1yJORbpDTc745fZ9c2+G/W+SdqE+bWnHXpgaSW/RKe
+         LMoB3CD5DVWlw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Zhang Qilong <zhangqilong3@huawei.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <wsd_upstream@mediatek.com>, <chang-an.chen@mediatek.com>,
-        <kuohong.wang@mediatek.com>
-Subject: [PATCH v2 1/1] watchdog: mtk_wdt: Remove mtk_wdt_stop() in probe() to prevent the system freeze and it doesn't reboot by watchdog problem
-Date:   Wed, 30 Dec 2020 16:15:57 +0800
-Message-ID: <1609316157-3748-1-git-send-email-freddy.hsin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 17/31] watchdog: rti-wdt: fix reference leak in rti_wdt_probe
+Date:   Wed, 30 Dec 2020 08:02:59 -0500
+Message-Id: <20201230130314.3636961-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201230130314.3636961-1-sashal@kernel.org>
+References: <20201230130314.3636961-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: D94B9C579622140CEE92807ED8F0662EE7B3DEE939D9028A2890F17DB13BB2692000:8
-X-MTK:  N
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: "freddy.hsin" <freddy.hsin@mediatek.com>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-Before user space daemon start to access the watchdog device,
-there is a time interval that watchdog is disabled in the
-original flow. If the system freezing at this interval, it
-cannot be rebooted by watchdog hardware automatically.
+[ Upstream commit 8711071e9700b67045fe5518161d63f7a03e3c9e ]
 
-In order to solve this problem, the watchdog hardware should be
-kept working, and start hrtimer in framework to ping it by
-setting max_hw_heartbeat_ms and HW_RUNNING used in
-watchdog_need_worker to determine whether the worker should be
-started or not. Besides the redundant setting of max_timeout is
-also removed.
+pm_runtime_get_sync() will increment pm usage counter even it
+failed. Forgetting to call pm_runtime_put_noidle will result
+in reference leak in rti_wdt_probe, so we should fix it.
 
-Signed-off-by: freddy.hsin <freddy.hsin@mediatek.com>
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20201030154909.100023-1-zhangqilong3@huawei.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/mtk_wdt.c |   17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/watchdog/rti_wdt.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index d6a6393..0c869b7 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -195,6 +195,19 @@ static int mtk_wdt_set_timeout(struct watchdog_device *wdt_dev,
- 	return 0;
- }
+diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+index 836319cbaca9d..359302f71f7ef 100644
+--- a/drivers/watchdog/rti_wdt.c
++++ b/drivers/watchdog/rti_wdt.c
+@@ -227,8 +227,10 @@ static int rti_wdt_probe(struct platform_device *pdev)
  
-+static void mtk_wdt_init(struct watchdog_device *wdt_dev)
-+{
-+	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
-+	void __iomem *wdt_base;
-+
-+	wdt_base = mtk_wdt->wdt_base;
-+
-+	if (readl(wdt_base + WDT_MODE) & WDT_MODE_EN) {
-+		set_bit(WDOG_HW_RUNNING, &wdt_dev->status);
-+		mtk_wdt_set_timeout(wdt_dev, wdt_dev->timeout);
+ 	pm_runtime_enable(dev);
+ 	ret = pm_runtime_get_sync(dev);
+-	if (ret)
++	if (ret) {
++		pm_runtime_put_noidle(dev);
+ 		return dev_err_probe(dev, ret, "runtime pm failed\n");
 +	}
-+}
-+
- static int mtk_wdt_stop(struct watchdog_device *wdt_dev)
- {
- 	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
-@@ -264,7 +277,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
- 	mtk_wdt->wdt_dev.info = &mtk_wdt_info;
- 	mtk_wdt->wdt_dev.ops = &mtk_wdt_ops;
- 	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
--	mtk_wdt->wdt_dev.max_timeout = WDT_MAX_TIMEOUT;
-+	mtk_wdt->wdt_dev.max_hw_heartbeat_ms = WDT_MAX_TIMEOUT * 1000;
- 	mtk_wdt->wdt_dev.min_timeout = WDT_MIN_TIMEOUT;
- 	mtk_wdt->wdt_dev.parent = dev;
  
-@@ -274,7 +287,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, wdt);
  
- 	watchdog_set_drvdata(&mtk_wdt->wdt_dev, mtk_wdt);
- 
--	mtk_wdt_stop(&mtk_wdt->wdt_dev);
-+	mtk_wdt_init(&mtk_wdt->wdt_dev);
- 
- 	watchdog_stop_on_reboot(&mtk_wdt->wdt_dev);
- 	err = devm_watchdog_register_device(dev, &mtk_wdt->wdt_dev);
 -- 
-1.7.9.5
+2.27.0
 
