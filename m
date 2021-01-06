@@ -2,108 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E162EBB2B
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jan 2021 09:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D7D2EBFF6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jan 2021 16:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726645AbhAFIiF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 6 Jan 2021 03:38:05 -0500
-Received: from mail-oo1-f48.google.com ([209.85.161.48]:42963 "EHLO
-        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726074AbhAFIiE (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 6 Jan 2021 03:38:04 -0500
-Received: by mail-oo1-f48.google.com with SMTP id x203so586896ooa.9;
-        Wed, 06 Jan 2021 00:37:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7OzcDXMwatEtiJomNBi1fhi3zuuxEWhyROAP2OwThNY=;
-        b=EQ71xKWn6jEzk16xLKPw5tpURAioSNiH1WBf7m9kaDOShUYzWqDQ2s2wBGAg4P9H3J
-         Mn4cea36V3yDJZZrvHcNzPWnFPRSJt/NLvTmeFnFgsH0whYPMW6IM5yqwm8jTr01KMl9
-         ZZEi8CE6gy5fRn7AkvD+pvWO05miEnxQilI78QQh7PLj6v+I+0jCuNrUcUv+dhGZEZiv
-         v0c6RD3T94Qw07f4jhO5ADNuzjlIEToYcUiiqj4wivYB6ei9N9PpupqdcyyFF4eRsE0X
-         6gjpUPUB00Jm1SxknefDlc66XhPGX55zcpbDjCYhJR+gAdb4eHo6ri1rjep5ilymjGKm
-         mnxQ==
-X-Gm-Message-State: AOAM530lsAiSTA+Tt8ZbOkvKTVNeR7z6UzFGVNcIKOS+9jJv/Yr6Dj3n
-        xMVsCDhZjaRef2yEGQJb1xW7zzukJ5CfJtulSPc=
-X-Google-Smtp-Source: ABdhPJz+riLQ42T+q9EFB1XsbUqjCK7bS2nCYCFI4IXj5lNnjzpQBlfNrLzEuiXe37snmeLQrap5l7udgxcoLsEDH3o=
-X-Received: by 2002:a4a:8353:: with SMTP id q19mr2071403oog.40.1609922242555;
- Wed, 06 Jan 2021 00:37:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jan 2021 09:37:11 +0100
-Message-ID: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        id S1726807AbhAFO7X (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 6 Jan 2021 09:59:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35098 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726326AbhAFO7W (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 6 Jan 2021 09:59:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5D8723110;
+        Wed,  6 Jan 2021 14:58:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609945121;
+        bh=fs4tnAAHZc6P9CcCZmtXnqhshJdz+3INo0fDCULFaD8=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=grRap1qACe13qOi+OZcRSFbPBF+dIr/ws3L/0hIw9hJfGzIKvP7l6ogZ4IDw43yGy
+         2LHdh5/KkLIX5OZy0HUphNkwfKucd730v8Tp6LLuzacbNiujVv7S8AcFgKaat4EO7E
+         y+/PvinZw7ISykZaboaWt60Ak3aP6L6FH/2ur96+2LlVa2dRoeg/GHIVTXjbL9m+/N
+         lmUrNwQGiW3vl9pfoybJQC9JwzVTaaO03pya7nRF3kZVYLga8QDzM2brjULMEAV5En
+         tz4bM66daxGgVwHYO/b7ctz5giI8LEijCXhmI8MPhXeH67zs/Q6iAskX79k3QrpAy9
+         gww2PkLy1Faag==
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, Guenter Roeck <linux@roeck-us.net>,
         Dan Williams <dan.j.williams@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-rtc@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, linux-ide@vger.kernel.org,
+        Jaroslav Kysela <perex@perex.cz>, linux-crypto@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Richard Weinberger <richard@nod.at>, dmaengine@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Matt Mackall <mpm@selenic.com>, alsa-devel@alsa-project.org,
+        linux-mips@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
         Vinod Koul <vkoul@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>, linux-ide@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
+        Alessandro Zummo <a.zummo@towertech.it>
+In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
+Message-Id: <160994509314.52132.9683741232298303961.b4-ty@kernel.org>
+Date:   Wed, 06 Jan 2021 14:58:13 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Thomas,
-
-CC Nemoto-san (de-facto TX49XX maintainer)
-
-On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
+On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
 > I couldn't find any buyable product other than reference boards using
 > TX49xx CPUs. And since nobody showed interest in keeping support for
 > it, it's time to remove it.
+> 
+> I've split up the removal into seperate parts for different maintainers.
+> So if the patch fits your needs, please take it via your tree or
+> give me an ack so I can apply them  the mips-next tree.
+> 
+> [...]
 
-I have an RBTX4927 development board in my board farm, boot-test every
-bi-weekly renesas-drivers release on it, and fix kernel issues when they
-appear.
+Applied to
 
-Is that sufficient to keep it?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-TX49xx SoCs were used in Sony LocationFree base stations, running
-VxWorks. You can no longer buy them.
-I'm not aware of anyone ever porting Linux to them.
-https://en.wikipedia.org/wiki/LocationFree_Player
+Thanks!
 
->   spi: txx9: Remove driver
+[10/10] ASoC: txx9: Remove driver
+        commit: a8644292ea46064f990e4a3c4585bdb294c0d89a
 
-I only noticed the planned removal when I saw the SPI patch was applied.
-Doesn't matter for me, as SPI is only present on TX4938, not on TX4927 ;-)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Gr{oetje,eeting}s,
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-                        Geert
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Mark
