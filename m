@@ -2,33 +2,46 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 119B22EB9EC
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jan 2021 07:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E162EBB2B
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jan 2021 09:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725906AbhAFGSz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 6 Jan 2021 01:18:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47556 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725562AbhAFGSz (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 6 Jan 2021 01:18:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AA573207AB;
-        Wed,  6 Jan 2021 06:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609913894;
-        bh=5lp+13jiD6sIpu3g6HHgflH2MeBd+glQhPUXzn5sEb0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CakvhJq/S0InR70KIkE0nT8f4OsK8tazYsMYaSFjfmUD+Huax/XAoFChfqSwh2Ko3
-         O2Yr5kMJTtRg84SKasb5ZjVbjiriRmjXC//Mp6svMTkOguihXcYD8Y7jrNAu5hhU9s
-         NdGVzXNjj+s9GjbUJWIyH+IHiUgF6TmPNadTJjfPC+mngpvbFg7c/5UFpGfay3esh2
-         cYJ3MG2vwyVhJDX/j+RFuMWxX9ZlY7uvVKpUVyQmSjwgaHtsGBtJTIpjBfFO76T5xG
-         lQPLPifs3+qF6HuckWFMEKtmfxytThn8qOgCOh6FZpFqy+bNi0rc5xLf/Si1eeEIi4
-         d5j4VPRJ+OyIg==
-Date:   Wed, 6 Jan 2021 11:48:10 +0530
-From:   Vinod Koul <vkoul@kernel.org>
+        id S1726645AbhAFIiF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 6 Jan 2021 03:38:05 -0500
+Received: from mail-oo1-f48.google.com ([209.85.161.48]:42963 "EHLO
+        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726074AbhAFIiE (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 6 Jan 2021 03:38:04 -0500
+Received: by mail-oo1-f48.google.com with SMTP id x203so586896ooa.9;
+        Wed, 06 Jan 2021 00:37:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7OzcDXMwatEtiJomNBi1fhi3zuuxEWhyROAP2OwThNY=;
+        b=EQ71xKWn6jEzk16xLKPw5tpURAioSNiH1WBf7m9kaDOShUYzWqDQ2s2wBGAg4P9H3J
+         Mn4cea36V3yDJZZrvHcNzPWnFPRSJt/NLvTmeFnFgsH0whYPMW6IM5yqwm8jTr01KMl9
+         ZZEi8CE6gy5fRn7AkvD+pvWO05miEnxQilI78QQh7PLj6v+I+0jCuNrUcUv+dhGZEZiv
+         v0c6RD3T94Qw07f4jhO5ADNuzjlIEToYcUiiqj4wivYB6ei9N9PpupqdcyyFF4eRsE0X
+         6gjpUPUB00Jm1SxknefDlc66XhPGX55zcpbDjCYhJR+gAdb4eHo6ri1rjep5ilymjGKm
+         mnxQ==
+X-Gm-Message-State: AOAM530lsAiSTA+Tt8ZbOkvKTVNeR7z6UzFGVNcIKOS+9jJv/Yr6Dj3n
+        xMVsCDhZjaRef2yEGQJb1xW7zzukJ5CfJtulSPc=
+X-Google-Smtp-Source: ABdhPJz+riLQ42T+q9EFB1XsbUqjCK7bS2nCYCFI4IXj5lNnjzpQBlfNrLzEuiXe37snmeLQrap5l7udgxcoLsEDH3o=
+X-Received: by 2002:a4a:8353:: with SMTP id q19mr2071403oog.40.1609922242555;
+ Wed, 06 Jan 2021 00:37:22 -0800 (PST)
+MIME-Version: 1.0
+References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 6 Jan 2021 09:37:11 +0100
+Message-ID: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Remove support for TX49xx
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Matt Mackall <mpm@selenic.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -41,28 +54,56 @@ Cc:     Matt Mackall <mpm@selenic.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 05/10] dma: tx49 removal
-Message-ID: <20210106061810.GO2771@vkoul-mobl>
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
- <20210105140305.141401-6-tsbogend@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210105140305.141401-6-tsbogend@alpha.franken.de>
+        Takashi Iwai <tiwai@suse.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dmaengine <dmaengine@vger.kernel.org>, linux-ide@vger.kernel.org,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 05-01-21, 15:02, Thomas Bogendoerfer wrote:
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Hi Thomas,
 
-Applied after fixing subsystem name, thanks
+CC Nemoto-san (de-facto TX49XX maintainer)
 
--- 
-~Vinod
+On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+> I couldn't find any buyable product other than reference boards using
+> TX49xx CPUs. And since nobody showed interest in keeping support for
+> it, it's time to remove it.
+
+I have an RBTX4927 development board in my board farm, boot-test every
+bi-weekly renesas-drivers release on it, and fix kernel issues when they
+appear.
+
+Is that sufficient to keep it?
+
+TX49xx SoCs were used in Sony LocationFree base stations, running
+VxWorks. You can no longer buy them.
+I'm not aware of anyone ever porting Linux to them.
+https://en.wikipedia.org/wiki/LocationFree_Player
+
+>   spi: txx9: Remove driver
+
+I only noticed the planned removal when I saw the SPI patch was applied.
+Doesn't matter for me, as SPI is only present on TX4938, not on TX4927 ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
