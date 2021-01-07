@@ -2,86 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CB62EC7A7
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Jan 2021 02:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EFF2ECA8B
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Jan 2021 07:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbhAGBUK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 6 Jan 2021 20:20:10 -0500
-Received: from mrdf0111.ocn.ad.jp ([125.206.160.167]:47912 "EHLO
-        mrdf0111.ocn.ad.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726301AbhAGBUJ (ORCPT
+        id S1726323AbhAGGhx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 7 Jan 2021 01:37:53 -0500
+Received: from mail-lf1-f49.google.com ([209.85.167.49]:34237 "EHLO
+        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725763AbhAGGhx (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 6 Jan 2021 20:20:09 -0500
-Received: from mogw5208.ocn.ad.jp (mogw5208.ocn.ad.jp [125.206.161.9])
-        by mrdf0111.ocn.ad.jp (Postfix) with ESMTP id D2B0C3E02EF;
-        Thu,  7 Jan 2021 10:18:51 +0900 (JST)
-Received: from mf-smf-unw005c1.ocn.ad.jp (mf-smf-unw005c1.ocn.ad.jp [153.138.219.78])
-        by mogw5208.ocn.ad.jp (Postfix) with ESMTP id 132CD2A041E;
-        Thu,  7 Jan 2021 10:17:34 +0900 (JST)
-Received: from ocn-vc-mts-201c1.ocn.ad.jp ([153.138.219.212])
-        by mf-smf-unw005c1.ocn.ad.jp with ESMTP
-        id xJu3kE3BKaeryxJvikLBIg; Thu, 07 Jan 2021 10:17:34 +0900
-Received: from smtp.ocn.ne.jp ([153.149.227.165])
-        by ocn-vc-mts-201c1.ocn.ad.jp with ESMTP
-        id xJvhkfc3Tf1TbxJvhkXnKU; Thu, 07 Jan 2021 10:17:34 +0900
-Received: from localhost (p1601136-ipoe.ipoe.ocn.ne.jp [114.172.254.135])
-        by smtp.ocn.ne.jp (Postfix) with ESMTPA;
-        Thu,  7 Jan 2021 10:17:33 +0900 (JST)
-Date:   Thu, 07 Jan 2021 10:17:29 +0900 (JST)
-Message-Id: <20210107.101729.1936921832901251107.anemo@mba.ocn.ne.jp>
-To:     geert@linux-m68k.org
-Cc:     tsbogend@alpha.franken.de, mpm@selenic.com,
-        herbert@gondor.apana.org.au, dan.j.williams@intel.com,
-        vkoul@kernel.org, davem@davemloft.net, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, kuba@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-From:   Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-In-Reply-To: <CAMuHMdV86BES7dmWr-7j1jbtoSy0bH1J0e5W41p8evagi0Nqcw@mail.gmail.com>
-References: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
-        <20210106184839.GA7773@alpha.franken.de>
-        <CAMuHMdV86BES7dmWr-7j1jbtoSy0bH1J0e5W41p8evagi0Nqcw@mail.gmail.com>
-X-Mailer: Mew version 6.7 on Emacs 24.5 / Mule 6.0 (HANACHIRUSATO)
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        Thu, 7 Jan 2021 01:37:53 -0500
+Received: by mail-lf1-f49.google.com with SMTP id o19so12223966lfo.1;
+        Wed, 06 Jan 2021 22:37:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=eugQ6sBmsnErNR+lYgl7iFDp5HtAPo4b3aA9DfPqt+s=;
+        b=mNwtFTMCl1xizO5O+RPx7fM5ZXVtXkS1reTXwpxUprep7JY7aqLoviT2bTUyslhap5
+         zy+9lLYGmJ9vxYBJp8KgSx13E6XrMvu2SYxCCUka8ZZDZHTEmWHSstYHvmpD7Qj3uUro
+         iOstd1o0VE8Bzay2owFIDNSq27LrJ/iWLnkZN0WdyrtKkvAZ3vdGOWIqn8CIflaRVz3p
+         /E9+MaA05Cbo1WyAPAuCxSumyr2hO9uykcCWrU7VSSPM9rvzm6dGcR6wieyGLHzfeyJM
+         y1LCDNrFfZ4ryJci6pF4CHP7h14R7G4/szfFihCitTkE6i4NBd0+LfueXbYMC7VvSzfJ
+         vZhw==
+X-Gm-Message-State: AOAM531wkp5m3x3Jkj3zW9FjcdaWnWpHrC5iHLEzj9cUW4Fsk+B7t+UU
+        qbdsgz+NB5aYKi6lm2/x8+c=
+X-Google-Smtp-Source: ABdhPJyXrX4vEvOHyQMS2ciT6sAzN1vrJY7FdCRzKtCqvSzFgr4W4E8Qk2+BjmzQ4SmtbyKSq/5zFA==
+X-Received: by 2002:a19:c7cb:: with SMTP id x194mr3375847lff.426.1610001430714;
+        Wed, 06 Jan 2021 22:37:10 -0800 (PST)
+Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id v14sm924248lfe.270.2021.01.06.22.37.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jan 2021 22:37:09 -0800 (PST)
+Date:   Thu, 7 Jan 2021 08:37:03 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-power@fi.rohmeurope.com, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] watchdog: bd70528: don't crash if WDG is confiured with
+ BD71828
+Message-ID: <671ac57ad53ab1614da7fe9a3d0f78bdb5b51fda.1610001365.git.matti.vaittinen@fi.rohmeurope.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 6 Jan 2021 21:41:24 +0100, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->> > Is that sufficient to keep it?
->>
->> for me it is. But now we probaly need some reverts then...
-> 
-> Indeed. Fortunately not all of it, as some removals were TX4938-only.
+If config for BD70528 watchdog is enabled when BD71828 or BD71815
+are used the RTC module will issue call to BD70528 watchdog with
+NULL data. Ignore this call and don't crash.
 
-These patches should not break RBTX4927:
-
-  net: tc35815: Drop support for TX49XX boards
-  spi: txx9: Remove driver
-  mtd: Remove drivers used by TX49xx
-  char: hw_random: Remove tx4939 driver
-  rtc: tx4939: Remove driver
-  ide: tx4938ide: Remove driver
-
-And these patches just break audio-support only.
-
-  dma: tx49 removal
-  ASoC: txx9: Remove driver
-
-I think dma and ASoC drivers are hard to maintain now, and can be
-dropped for basic support for RBTX4927.
-(TX39 boards does not have audio-support, so dma txx9 driver can be
-dropped too)
-
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
-Atsushi Nemoto
+ drivers/watchdog/bd70528_wdt.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/watchdog/bd70528_wdt.c b/drivers/watchdog/bd70528_wdt.c
+index 0170b37e6674..fde242b8a4a6 100644
+--- a/drivers/watchdog/bd70528_wdt.c
++++ b/drivers/watchdog/bd70528_wdt.c
+@@ -49,6 +49,21 @@ int bd70528_wdt_set(struct rohm_regmap_dev *data, int enable, int *old_state)
+ 	u8 wd_ctrl_arr[3] = { WD_CTRL_MAGIC1, WD_CTRL_MAGIC2, 0 };
+ 	u8 *wd_ctrl = &wd_ctrl_arr[2];
+ 
++	/*
++	 * BD71828 and BD71815 use same RTC driver as BD70528.
++	 * BD71815 and BD71828 do not need MFD data as they do not share
++	 * RTC counter with watchdog. The BD70528 watchdog should not be
++	 * compiled in with BD71815 or BD71828 and the stub implementation
++	 * for the bd70528_wdt_set should be provided instead.
++	 *
++	 * If one compiles this watchdog with BD71828 or BD71815 - the call
++	 * from RTC may get here and the data pointer is NULL. In that case,
++	 * warn and go out.
++	 */
++	if (!data) {
++		pr_warn("BD70528_WATCHDOG misconfigured\n");
++		return 0;
++	}
+ 	ret = regmap_read(bd70528->chip.regmap, BD70528_REG_WDT_CTRL, &tmp);
+ 	if (ret)
+ 		return ret;
+
+base-commit: 2c85ebc57b3e1817b6ce1a6b703928e113a90442
+-- 
+2.25.4
+
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
