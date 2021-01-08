@@ -2,98 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE3D2EED7C
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Jan 2021 07:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0362F2EEE8D
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Jan 2021 09:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbhAHGfl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 8 Jan 2021 01:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725791AbhAHGfk (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 8 Jan 2021 01:35:40 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B4EC0612F4;
-        Thu,  7 Jan 2021 22:35:00 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id r5so10049719eda.12;
-        Thu, 07 Jan 2021 22:35:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z9yWM8kO/yF3fqCL5n5LCq8fF4B951xR4ABXYDaphFA=;
-        b=GxYZ5/aERBYX+FmTnV/3chH3usPDq5qUsSCf/k2a2YystQU/HJsAmj7rbPy/KQtUZE
-         yD4D7B6EYc95ocuEA/5x73yz5hsaeJrfSIMZlYJ49rPhWANy3qvSkCmzt9EwsPov81il
-         Qei3hRnSljCzESnt/oZAXlyf+y/QH+4jjcWvA2EeBUzKEesf2C/wSXs7j6OUBm6hHUwL
-         +vXFU8DBH81xQ/fU+K5fAfnCMpXJD4EaeToQ4vC1OwPKzfpCKoFYPeBVlVbGmoh/Nwnw
-         WCnMiXaeVJV0UVcZuAmKF9kLcRK3rXudq+NFISCtPprfO/kQCJ7eAyLoulf/o5ZFWtZ9
-         OISA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z9yWM8kO/yF3fqCL5n5LCq8fF4B951xR4ABXYDaphFA=;
-        b=TLJmuQ3ur9hzdv1y5IfeBCtWNsNISlUE0NpgJ5lBl49nhjRsrpH4VyERWvwD8DdJCc
-         uEu5JIVAj2iVIVuK+A+poRLY/ZONd5blGeKvRjh3XQsqjf/wFzj0lWoQ/xGeaWR/4JsZ
-         mg+2qhtkYXipdn9sgsXgSLbIkc8RVEqfRh5wk1uh68/xrq2pwDXav7Pu8cb7nBU1nMZO
-         4gZBmcUe1jBpHzQ+QHi1/ubaWMW6UsPxUw5hzE2cKSPLqoxvGZDW4S9R12Y6ZkVW7VJc
-         nOpIGXHrt1PjF85PE8zt/VM3iUZnr6Aa4sTwxkTllq1WcipdR+9zEMGSblmrbnGJKBLX
-         16OQ==
-X-Gm-Message-State: AOAM532XoXzEzWK27fotJiQcDWA/Qyc5/Rs2WB/KY9OGSY1YXtBStbfT
-        Erp4fCGZkdaUkNhjDne2VnUe9vSpVfNjj62/Js58ebQp
-X-Google-Smtp-Source: ABdhPJy9ieoFaI86x6eIWFE4vyV9chCjzWRsITSEBJIQi3E5g/iQQ6nc0j2dtbL2FWZwVUQKRwJFUk06/MdUOzy7hgU=
-X-Received: by 2002:a50:ed17:: with SMTP id j23mr4230998eds.218.1610087697277;
- Thu, 07 Jan 2021 22:34:57 -0800 (PST)
-MIME-Version: 1.0
-References: <671ac57ad53ab1614da7fe9a3d0f78bdb5b51fda.1610001365.git.matti.vaittinen@fi.rohmeurope.com>
- <019c196041600a00143fe16bda19b2a8f060e9a9.1610001365.git.matti.vaittinen@fi.rohmeurope.com>
- <20210107151254.GB13040@roeck-us.net>
-In-Reply-To: <20210107151254.GB13040@roeck-us.net>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Date:   Fri, 8 Jan 2021 08:34:46 +0200
-Message-ID: <CANhJrGPqqb0WA0efEE0fjMEqaCwJaabyxBx2ucGhvC-JVxt7-w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] watchdog: BD70528: conditionally allow BD70528 module
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        id S1727529AbhAHI2l (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 8 Jan 2021 03:28:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59414 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727418AbhAHI2k (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 8 Jan 2021 03:28:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CC7A23435;
+        Fri,  8 Jan 2021 08:27:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610094479;
+        bh=SAoDiXJG+49pPIJcmLEdT3YdpudMLb3tXzuV+M1ddMg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EnEKOJIN+WnD4u6lFgo77faKCj54N+d/pFKhcGzW/Y3/Ccl68siuEONd2+MQVmWwA
+         g8i5J1Jp9PRFqP+bjh1UVHmW6ZNZoM79Em/nHN5DHOG6ps9hEvQuax6LdoYTVQba6R
+         W0M3rPvSPrbm/vYAaPU9CsppYeuXAhSoIAN8UGVK69VCDMDjU1FlkyeISfeCHTf0Cp
+         UrPLrlJpGz0S4tUYkZu+D7Yp8uZm4/13PvNs53jDnTG1yuR/TZx3S6Q2A5kjWrfu5R
+         w1MefWO2hD7veYyvb2xtc7eB2pAO3ZpInFWl5OgE2Cy2VRAsn/olPyc/xhF+bAgyze
+         9qY+rCVqge15w==
+Date:   Fri, 8 Jan 2021 13:57:54 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Joe Perches <joe@perches.com>, Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-power@fi.rohmeurope.com,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 05/10] dma: tx49 removal
+Message-ID: <20210108082754.GW2771@vkoul-mobl>
+References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+ <20210105140305.141401-6-tsbogend@alpha.franken.de>
+ <b84dadc2e98b1986dc800c5f6f202880ed905b38.camel@perches.com>
+ <20210107164015.GA12533@alpha.franken.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210107164015.GA12533@alpha.franken.de>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jan 7, 2021 at 5:12 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Jan 07, 2021 at 08:37:25AM +0200, Matti Vaittinen wrote:
-> > The BD70528 watchdog module provides start/stop interface for RTC
-> > driver because the BD70528 watchdog must be stopped when RTC time
-> > is set. (WDG uses RTC counter and setting RTC may accidentally trigger
-> > WDG if WDG is enabled). The BD71828 use same RTC driver as BD70528 but
-> > don't share same WDG logic. When BD70528 is not configured a stub call
-> > to "stop WDG" is implemented and in case when BD71828 is used, this
-> > stub function should be called. Prevent configuring in the BD70528
-> > watchdog when BD71828 is configured to avoid access to real WDG
-> > functions when WDG does not exist in HW.
-> >
-> > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
->
-> As mentioned in my response to the other patch, I think this is the
-> wrong solution.
+On 07-01-21, 17:40, Thomas Bogendoerfer wrote:
+> On Wed, Jan 06, 2021 at 11:10:38AM -0800, Joe Perches wrote:
+> > On Tue, 2021-01-05 at 15:02 +0100, Thomas Bogendoerfer wrote:
+> > > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > []
+> > > diff --git a/drivers/dma/txx9dmac.h b/drivers/dma/txx9dmac.h
+> > []
+> > > @@ -26,11 +26,6 @@
+> > >   * DMA channel.
+> > >   */
+> > >  
+> > > 
+> > > -#ifdef CONFIG_MACH_TX49XX
+> > > -static inline bool txx9_dma_have_SMPCHN(void)
+> > > -{
+> > > -	return true;
+> > > -}
+> > >  #define TXX9_DMA_USE_SIMPLE_CHAIN
+> > >  #else
+> > >  static inline bool txx9_dma_have_SMPCHN(void)
+> > 
+> > This doesn't look like it compiles as there's now an #else
+> > without an #if
+> 
+> you are right, no idea what I had in mind while doing that.
+> 
+> Vinod,
+> 
+> as this patch series found a still active user of the platform,
+> could you drop the patch from your tree, or do you want a revert
+> from me ?
 
-I agree. Please forget this :)
-Thanks for the review!
-
-Best Regards
-Matti
+Dropped now
 
 -- 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--Matti Vaittinen
-
-When you feel blue, no one sees your tears...
-When your down, no one understands your struggle...
-When you feel happy, no one notices your smile...
-But fart just once...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~Vinod
