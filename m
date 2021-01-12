@@ -2,66 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013C42F006A
-	for <lists+linux-watchdog@lfdr.de>; Sat,  9 Jan 2021 15:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9B02F4055
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Jan 2021 01:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbhAIOGf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 9 Jan 2021 09:06:35 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:36008 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725839AbhAIOGe (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 9 Jan 2021 09:06:34 -0500
-Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1kyEsH-0000Kp-BU; Sat, 09 Jan 2021 15:05:49 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     robh+dt@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        jamie@jamieiles.com, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 1/8] dt-binding: watchdog: add more Rockchip compatibles to snps,dw-wdt.yaml
-Date:   Sat, 09 Jan 2021 15:05:48 +0100
-Message-ID: <1773127.CQOukoFCf9@diego>
-In-Reply-To: <20201218120534.13788-1-jbx6244@gmail.com>
-References: <20201218120534.13788-1-jbx6244@gmail.com>
+        id S2387669AbhALXe3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 12 Jan 2021 18:34:29 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:36775 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733047AbhALXe2 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 12 Jan 2021 18:34:28 -0500
+X-Originating-IP: 86.202.109.140
+Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A8AE81BF20B;
+        Tue, 12 Jan 2021 23:33:41 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Matt Mackall <mpm@selenic.com>,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mark Brown <broonie@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-crypto@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-ide@vger.kernel.org, linux-spi@vger.kernel.org
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
+Date:   Wed, 13 Jan 2021 00:33:30 +0100
+Message-Id: <161049432258.352381.2804715824942772218.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Freitag, 18. Dezember 2020, 13:05:27 CET schrieb Johan Jonker:
-> The watchdog compatible strings are suppose to be SoC orientated.
-> In the more recently added Rockchip SoC dtsi files only
-> the fallback string "snps,dw-wdt" is used, so add the following
-> compatible strings:
+On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
+> I couldn't find any buyable product other than reference boards using
+> TX49xx CPUs. And since nobody showed interest in keeping support for
+> it, it's time to remove it.
 > 
-> "rockchip,px30-wdt", "snps,dw-wdt"
-> "rockchip,rk3228-wdt", "snps,dw-wdt"
-> "rockchip,rk3308-wdt", "snps,dw-wdt"
-> "rockchip,rk3328-wdt", "snps,dw-wdt"
-> "rockchip,rk3399-wdt", "snps,dw-wdt"
-> "rockchip,rv1108-wdt", "snps,dw-wdt"
+> I've split up the removal into seperate parts for different maintainers.
+> So if the patch fits your needs, please take it via your tree or
+> give me an ack so I can apply them  the mips-next tree.
 > 
-> make ARCH=arm dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> 
-> make ARCH=arm64 dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> [...]
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Applied, thanks!
 
-I'd like to pick up the devicetree patches (2-8) once this has landed
-in the watchdog tree.
+[08/10] rtc: tx4939: Remove driver
+        commit: 446667df283002fdda0530523347ffd1cf053373
 
-Thanks
-Heiko
-
-
+Best regards,
+-- 
+Alexandre Belloni <alexandre.belloni@bootlin.com>
