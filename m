@@ -2,62 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCDD2F9D20
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Jan 2021 11:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A9A2FA004
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Jan 2021 13:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389078AbhARKro (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 18 Jan 2021 05:47:44 -0500
-Received: from www.zeus03.de ([194.117.254.33]:47934 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389257AbhARJqu (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 18 Jan 2021 04:46:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=FSLRqQVx5AIjHrzsXlHfYW1hoLX
-        /ybhefgKMMKyZ9Kk=; b=lw1nL1iugO/W2prcUTYf9ulmUZYt6lj73VHtoUUQOoR
-        9k7VkYLjW+6//FwkeEXYH3nqgp1p/4F0BIc+U6sjfBd9D7vPE+q106nRWHvdsGeC
-        9KyIz9mP3hH8Vs4PZVq6gy0nVX96gN4KAKN0sXjCNWbhws22G6XnCnY1ahQMgqOQ
-        =
-Received: (qmail 647582 invoked from network); 18 Jan 2021 10:46:08 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Jan 2021 10:46:08 +0100
-X-UD-Smtp-Session: l3s3148p1@ublqlym51oYgAwDPXwacAOByz8F9Mgm1
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] watchdog: renesas_wdt: add grace period before rebooting
-Date:   Mon, 18 Jan 2021 10:45:58 +0100
-Message-Id: <20210118094558.36814-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.28.0
+        id S2404111AbhARMjB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 18 Jan 2021 07:39:01 -0500
+Received: from aclms1.advantech.com.tw ([61.58.41.199]:55411 "EHLO
+        aclms1.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391421AbhARMiy (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 18 Jan 2021 07:38:54 -0500
+Received: from taipei09.ADVANTECH.CORP (unverified [172.20.0.236]) by ACLMS2.ADVANTECH.CORP
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Te423a0aba9ac14014b1cbc@ACLMS2.ADVANTECH.CORP>;
+ Mon, 18 Jan 2021 20:37:55 +0800
+Received: from localhost (172.16.12.146) by taipei09.ADVANTECH.CORP
+ (172.20.0.236) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Jan
+ 2021 20:37:52 +0800
+From:   Campion Kang <campion.kang@advantech.com.tw>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        AceLan Kao <chia-lin.kao@canonical.com>,
+        Campion Kang <campion.kang@advantech.com.tw>
+Subject: [PATCH v6 1/6] MAINTAINERS: Add Advantech AHC1EC0 embedded controller entry
+Date:   Mon, 18 Jan 2021 20:37:44 +0800
+Message-ID: <20210118123749.4769-1-campion.kang@advantech.com.tw>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.12.146]
+X-ClientProxiedBy: ACLCAS4.ADVANTECH.CORP (172.20.2.20) To
+ taipei09.ADVANTECH.CORP (172.20.0.236)
+X-TM-SNTS-SMTP: 825B17EF239580278BAEB5586553E13416AA873D536EA6557C1679AE1DA87FA42000:8
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-arm64 does not have a grace period after calling reset handlers. It is
-rightfully assumed that watchdog drivers should wait because they know
-the time needed. Implement this for the Renesas watchdog driver.
+Add Advantech AHC1EC0 embedded controller entry
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Changed since V5:
+	- add include/linux/mfd/ahc1ec0.h
+
+Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
 ---
- drivers/watchdog/renesas_wdt.c | 3 +++
- 1 file changed, 3 insertions(+)
+ MAINTAINERS | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/watchdog/renesas_wdt.c b/drivers/watchdog/renesas_wdt.c
-index d2b5074bca65..5791198960e6 100644
---- a/drivers/watchdog/renesas_wdt.c
-+++ b/drivers/watchdog/renesas_wdt.c
-@@ -151,6 +151,9 @@ static int rwdt_restart(struct watchdog_device *wdev, unsigned long action,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 00836f6452f0..e1ccdaadb5ee 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -562,6 +562,17 @@ S:	Maintained
+ F:	Documentation/scsi/advansys.rst
+ F:	drivers/scsi/advansys.c
  
- 	rwdt_write(priv, RWTCSRA_TME, RWTCSRA);
- 
-+	/* wait 2 cycles, so watchdog will trigger */
-+	udelay(DIV_ROUND_UP(2 * 1000000, priv->clk_rate));
++ADVANTECH AHC1EC0 EMBEDDED CONTROLLER DRIVER
++M:	Campion Kang <campion.kang@advantech.com.tw>
++L:	linux-kernel@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
++F:	drivers/hwmon/ahc1ec0-hwmon.c
++F:	drivers/mfd/ahc1ec0.c
++F:	drivers/watchdog/ahc1ec0-wdt.c
++F:	include/dt-bindings/mfd/ahc1ec0-dt.h
++F:	include/linux/mfd/ahc1ec0.h
 +
- 	return 0;
- }
- 
+ ADXL34X THREE-AXIS DIGITAL ACCELEROMETER DRIVER (ADXL345/ADXL346)
+ M:	Michael Hennerich <michael.hennerich@analog.com>
+ S:	Supported
 -- 
-2.28.0
+2.17.1
 
