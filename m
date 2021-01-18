@@ -2,365 +2,115 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 319BF2FA01D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Jan 2021 13:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BFB2FA4EB
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Jan 2021 16:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404217AbhARMlJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 18 Jan 2021 07:41:09 -0500
-Received: from aclms3.advantech.com.tw ([125.252.70.86]:57706 "EHLO
-        aclms3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404147AbhARMkr (ORCPT
+        id S2391404AbhARPhc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 18 Jan 2021 10:37:32 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:49919 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2406006AbhARPfj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 18 Jan 2021 07:40:47 -0500
-Received: from taipei09.ADVANTECH.CORP (unverified [172.20.0.236]) by ACLMS4.ADVANTECH.CORP
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Te423a1714fac1401c812dc@ACLMS4.ADVANTECH.CORP>;
- Mon, 18 Jan 2021 20:38:46 +0800
-Received: from localhost (172.16.12.146) by taipei09.ADVANTECH.CORP
- (172.20.0.236) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Jan
- 2021 20:39:01 +0800
-From:   Campion Kang <campion.kang@advantech.com.tw>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Mon, 18 Jan 2021 10:35:39 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id BEA4958077C;
+        Mon, 18 Jan 2021 10:34:18 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 18 Jan 2021 10:34:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        from:date:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=oU0HqCO/5476uMOlzZwZPuowCXA
+        18QWWN/mw1RTCV9g=; b=vaLbxPDj1tzN7TvKH7vMSi8rBS2vusxWy7RC4A/CE9S
+        Ylt63G5nEwedMq4k910g9dGsqleq9P+5+WLnYB99gqTjkkT8DkXqQt7hY5CicuuU
+        QNee8aJ92b8/DJrqmADB/FO5bm1BHwTdLwVGHSk+AY1cnx4ejvMg8FD69cwhNlFE
+        cBqQDRP+OZ4vjQ0iJ9Ygl69Q+wxTp14dRR4p744L9nc+NRpIfjgMXgdr5petDQ+F
+        +5rBz4APbiZkBKs6S3PKv/+qpR4AH5nBhe+BGrYbjoiogNQ2gcCzS5R/xqiPlpz0
+        J+VR0VV8X4GVG5C4yPlt4nHjxk4CKb0U0PMOzf4b0aA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=oU0HqC
+        O/5476uMOlzZwZPuowCXA18QWWN/mw1RTCV9g=; b=mjqAXbJ6T9w+h2IIeJ2kX5
+        dy5ImmXm3D6BhD4QYyrTZInUCozeZE5atfcmUT+QIlkVv0yRDigd9ce1Va4g2afk
+        bvKjwg45/Kw/igygZlLmkjPEQGZ6nzcwuiCPHLsUUPTjtLorVZM/T0w3nxDthTD7
+        Il2/uBS0/7pQqfNYVV9dU2LJxD/X6tSRjvWqJd4vY8JH62Lo8Ul6nAqgrR1ESbj6
+        9hfokd49eLluMen+YfDewoAInBtbmMI+XQnpknlOlOaJ26LwO0nRsO8upZJD+7Ic
+        Zu6ZWju0Jv094mIZfuAMvl/zmH4zJZOd1U0V9HEvdb8ALm/HyqaixhKu8/u7pP9Q
+        ==
+X-ME-Sender: <xms:eqoFYAJ4CIUHiG4GVCR9KCgyZlIZ6qgs3_c5rq9uY6vJupciZOv_-g>
+    <xme:eqoFYAIBO-axLA9_9Bu_uw3lhNYlHZpSdGmIG4_m4sLk_B6xF-NcFlIvaOjKBIoVe
+    -IOSY9IK-8PwV65wDE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrtdekgdejkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhfffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepmhgrgihimhgv
+    segtvghrnhhordhtvggthhenucggtffrrghtthgvrhhnpefhffffgfetjeegieetleeuvd
+    ekffdukeejjeehveelkefggffgkeekvdfhieeggfenucfkphepledtrdekledrieekrdej
+    ieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:eqoFYAuSP6s61YaBhGfA4YBZq8QhJsIuKNugI-L4bTlJoEGbpCxTwA>
+    <xmx:eqoFYNZ8Tng5XbR2GgZ9fBL9Lz-bRniwPUQ3TgLruEFhyNG-KVA5DQ>
+    <xmx:eqoFYHYvH6Nzfweadf_THLEOYAh8kARqsi6PpmDOLaW5xGryZ6ecsg>
+    <xmx:eqoFYNweQh-H9eN39ex1dLODCaGKM4rRD-af1Dc_ji3FzpefRF-Fnw>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id E640E24005D;
+        Mon, 18 Jan 2021 10:34:17 -0500 (EST)
+From:   maxime@cerno.tech
+Date:   Mon, 18 Jan 2021 16:34:16 +0100
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com, Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        AceLan Kao <chia-lin.kao@canonical.com>,
-        Campion Kang <campion.kang@advantech.com.tw>
-Subject: [PATCH v6 6/6] watchdog: ahc1ec0-wdt: Add sub-device watchdog for Advantech embedded controller
-Date:   Mon, 18 Jan 2021 20:37:49 +0800
-Message-ID: <20210118123749.4769-6-campion.kang@advantech.com.tw>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210118123749.4769-1-campion.kang@advantech.com.tw>
-References: <20210118123749.4769-1-campion.kang@advantech.com.tw>
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v3 17/21] dt-bindings: watchdog: sun4i: Add H616
+ compatible string
+Message-ID: <20210118153416.h6zc5h5j52rlxro2@gilmour>
+65;6201;1cFrom: Maxime Ripard <maxime@cerno.tech>
+References: <20210118020848.11721-1-andre.przywara@arm.com>
+ <20210118020848.11721-18-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.12.146]
-X-ClientProxiedBy: ACLCAS4.ADVANTECH.CORP (172.20.2.20) To
- taipei09.ADVANTECH.CORP (172.20.0.236)
-X-TM-SNTS-SMTP: CE6D4BFE29C6B1349ADD14CA04192102ABFADF1D27100920852D4F69D64D178F2000:8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ekw7d4qbod7okqkh"
+Content-Disposition: inline
+In-Reply-To: <20210118020848.11721-18-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This is one of sub-device driver for Advantech embedded controller
-AHC1EC0. This driver provide watchdog functionality for Advantech
-related applications to restart the system.
 
-Changed since V5:
-	- remove unnecessary header files
-	- bug fixed: reboot halt if watchdog enabled
-	- Kconfig: add "AHC1EC0" string to clearly define the EC name
+--ekw7d4qbod7okqkh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
----
- drivers/watchdog/Kconfig       |  11 ++
- drivers/watchdog/Makefile      |   1 +
- drivers/watchdog/ahc1ec0-wdt.c | 261 +++++++++++++++++++++++++++++++++
- 3 files changed, 273 insertions(+)
- create mode 100644 drivers/watchdog/ahc1ec0-wdt.c
+On Mon, Jan 18, 2021 at 02:08:44AM +0000, Andre Przywara wrote:
+> Use enums to group all compatible devices together on the way.
+>=20
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 7ff941e71b79..1a27836883ac 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1636,6 +1636,17 @@ config NIC7018_WDT
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called nic7018_wdt.
- 
-+config AHC1EC0_WDT
-+	tristate "Advantech AHC1EC0 Watchdog Function"
-+	depends on MFD_AHC1EC0
-+	help
-+	  This is sub-device for Advantech AHC1EC0 embedded controller.
-+
-+	  This driver provide watchdog functionality for Advantech related
-+	  applications to restart the system.
-+	  To compile thie driver as a module, choose M here: the module will be
-+	  called ahc1ec0-wdt.
-+
- # M68K Architecture
- 
- config M54xx_WATCHDOG
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 5c74ee19d441..7190811b1e50 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -145,6 +145,7 @@ obj-$(CONFIG_INTEL_MID_WATCHDOG) += intel-mid_wdt.o
- obj-$(CONFIG_INTEL_MEI_WDT) += mei_wdt.o
- obj-$(CONFIG_NI903X_WDT) += ni903x_wdt.o
- obj-$(CONFIG_NIC7018_WDT) += nic7018_wdt.o
-+obj-$(CONFIG_AHC1EC0_WDT) += ahc1ec0-wdt.o
- obj-$(CONFIG_MLX_WDT) += mlx_wdt.o
- 
- # M68K Architecture
-diff --git a/drivers/watchdog/ahc1ec0-wdt.c b/drivers/watchdog/ahc1ec0-wdt.c
-new file mode 100644
-index 000000000000..4497b6106b24
---- /dev/null
-+++ b/drivers/watchdog/ahc1ec0-wdt.c
-@@ -0,0 +1,261 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Watchdog Driver for Advantech Embedded Controller chip AHC1EC0
-+ *
-+ * Copyright 2020, Advantech IIoT Group
-+ *
-+ */
-+
-+#include <linux/errno.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/ahc1ec0.h>
-+#include <linux/module.h>
-+#include <linux/notifier.h>
-+#include <linux/platform_device.h>
-+#include <linux/reboot.h>
-+#include <linux/types.h>
-+#include <linux/watchdog.h>
-+
-+#define DRV_NAME      "ahc1ec0-wdt"
-+
-+struct ec_wdt_data {
-+	struct watchdog_device wdtdev;
-+	struct adv_ec_platform_data *adv_ec_data;
-+	struct notifier_block reboot_nb;
-+	struct mutex lock_ioctl;
-+	int is_enable;
-+	int current_timeout;
-+};
-+
-+#define EC_WDT_MIN_TIMEOUT 1	/* The watchdog devices minimum timeout value (in seconds). */
-+#define EC_WDT_MAX_TIMEOUT 600  /* The watchdog devices maximum timeout value (in seconds) */
-+#define EC_WDT_DEFAULT_TIMEOUT 45
-+
-+static int set_delay(struct adv_ec_platform_data *adv_ec_data, unsigned short delay_timeout_in_ms)
-+{
-+	if (write_hw_ram(adv_ec_data, EC_RESET_DELAY_TIME_L, delay_timeout_in_ms & 0x00FF)) {
-+		pr_err("Failed to set Watchdog Retset Time Low byte.");
-+		return -EINVAL;
-+	}
-+
-+	if (write_hw_ram(adv_ec_data, EC_RESET_DELAY_TIME_H, (delay_timeout_in_ms & 0xFF00) >> 8)) {
-+		pr_err("Failed to set Watchdog Retset Time Hight byte.");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int advwdt_set_heartbeat(unsigned long t)
-+{
-+	if (t < 1 || t > 6553) {
-+		pr_err("%s: the input timeout is out of range.",  __func__);
-+		pr_err("Please choose valid data between 1 ~ 6553.");
-+		return -EINVAL;
-+	}
-+
-+	return (t * 10);
-+}
-+
-+/* Notifier for system down */
-+static int advwdt_notify_sys(struct notifier_block *nb, unsigned long code, void *data)
-+{
-+	if (code == SYS_DOWN || code == SYS_HALT) {
-+		struct ec_wdt_data *ec_wdt_data;
-+
-+		ec_wdt_data = container_of(nb, struct ec_wdt_data, reboot_nb);
-+		if (!ec_wdt_data)
-+			return NOTIFY_BAD;
-+
-+		/* Turn the WDT off */
-+		if (write_hwram_command(ec_wdt_data->adv_ec_data, EC_WDT_STOP)) {
-+			pr_err("Failed to set Watchdog stop.");
-+			return -EINVAL;
-+		}
-+		ec_wdt_data->is_enable = 0;
-+		pr_info("%s: notify sys shutdown", __func__);
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int ec_wdt_start(struct watchdog_device *wdd)
-+{
-+	int ret;
-+	int timeout, timeout_in_ms;
-+	struct ec_wdt_data *ec_wdt_data = watchdog_get_drvdata(wdd);
-+	struct adv_ec_platform_data *adv_ec_data;
-+
-+	dev_dbg(wdd->parent, "%s\n", __func__);
-+
-+	adv_ec_data = ec_wdt_data->adv_ec_data;
-+	timeout = wdd->timeout; /* The watchdog devices timeout value (in seconds). */
-+
-+	mutex_lock(&ec_wdt_data->lock_ioctl);
-+
-+	timeout_in_ms = advwdt_set_heartbeat(timeout);
-+	if (timeout_in_ms < 0) {
-+		mutex_unlock(&ec_wdt_data->lock_ioctl);
-+		return timeout_in_ms;
-+	}
-+
-+	ret = set_delay(adv_ec_data, (unsigned short)(timeout_in_ms-1));
-+	if (ret) {
-+		dev_err(wdd->parent, "Failed to set Watchdog delay (ret=%x).\n", ret);
-+		mutex_unlock(&ec_wdt_data->lock_ioctl);
-+		return ret;
-+	}
-+	ret = write_hwram_command(adv_ec_data, EC_WDT_STOP);
-+	ret = write_hwram_command(adv_ec_data, EC_WDT_START);
-+	if (ret) {
-+		dev_err(wdd->parent, "Failed to set Watchdog start (ret=%x).\n", ret);
-+		mutex_unlock(&ec_wdt_data->lock_ioctl);
-+		return ret;
-+	}
-+	ec_wdt_data->is_enable = 1;
-+	ec_wdt_data->current_timeout = timeout_in_ms/10;
-+
-+	mutex_unlock(&ec_wdt_data->lock_ioctl);
-+	return 0;
-+}
-+
-+static int ec_wdt_stop(struct watchdog_device *wdd)
-+{
-+	int ret;
-+	struct ec_wdt_data *ec_wdt_data = watchdog_get_drvdata(wdd);
-+	struct adv_ec_platform_data *adv_ec_data;
-+
-+	dev_dbg(wdd->parent, "%s\n", __func__);
-+
-+	adv_ec_data = ec_wdt_data->adv_ec_data;
-+
-+	mutex_lock(&ec_wdt_data->lock_ioctl);
-+	ret = write_hwram_command(adv_ec_data, EC_WDT_STOP);
-+	mutex_unlock(&ec_wdt_data->lock_ioctl);
-+	if (ret)
-+		pr_err("Failed to set Watchdog stop.");
-+	else
-+		ec_wdt_data->is_enable = 0;
-+
-+	return ret;
-+}
-+
-+static int ec_wdt_ping(struct watchdog_device *wdd)
-+{
-+	int ret;
-+	struct ec_wdt_data *ec_wdt_data = watchdog_get_drvdata(wdd);
-+	struct adv_ec_platform_data *adv_ec_data;
-+
-+	dev_dbg(wdd->parent, "%s\n", __func__);
-+
-+	adv_ec_data = ec_wdt_data->adv_ec_data;
-+
-+	mutex_lock(&ec_wdt_data->lock_ioctl);
-+	ret = write_hwram_command(adv_ec_data, EC_WDT_RESET);
-+	mutex_unlock(&ec_wdt_data->lock_ioctl);
-+	if (ret) {
-+		pr_err("Failed to set Watchdog reset.");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ec_wdt_set_timeout(struct watchdog_device *wdd,
-+				unsigned int timeout)
-+{
-+	dev_dbg(wdd->parent, "%s, timeout=%d\n", __func__, timeout);
-+
-+	wdd->timeout = timeout;
-+
-+	if (watchdog_active(wdd))
-+		return ec_wdt_start(wdd);
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_info ec_watchdog_info = {
-+	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
-+	.identity = "AHC1EC0 Watchdog",
-+};
-+
-+static const struct watchdog_ops ec_watchdog_ops = {
-+	.owner = THIS_MODULE,
-+	.start = ec_wdt_start,
-+	.stop = ec_wdt_stop,
-+	.ping = ec_wdt_ping,
-+	.set_timeout = ec_wdt_set_timeout,
-+};
-+
-+static int adv_ec_wdt_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	struct device *dev = &pdev->dev;
-+	struct adv_ec_platform_data *adv_ec_data;
-+	struct ec_wdt_data *ec_wdt_data;
-+	struct watchdog_device *wdd;
-+
-+	dev_info(dev, "watchdog probe start\n");
-+
-+	adv_ec_data = dev_get_drvdata(dev->parent);
-+	if (!adv_ec_data)
-+		return -EINVAL;
-+
-+	ec_wdt_data = devm_kzalloc(dev, sizeof(struct ec_wdt_data), GFP_KERNEL);
-+	if (!ec_wdt_data)
-+		return -ENOMEM;
-+
-+	mutex_init(&ec_wdt_data->lock_ioctl);
-+
-+	ec_wdt_data->adv_ec_data = adv_ec_data;
-+	wdd = &ec_wdt_data->wdtdev;
-+
-+	watchdog_init_timeout(&ec_wdt_data->wdtdev, 0, dev);
-+
-+	//watchdog_set_nowayout(&ec_wdt_data->wdtdev, WATCHDOG_NOWAYOUT);
-+	watchdog_set_drvdata(&ec_wdt_data->wdtdev, ec_wdt_data);
-+	platform_set_drvdata(pdev, ec_wdt_data);
-+
-+	wdd->info = &ec_watchdog_info;
-+	wdd->ops = &ec_watchdog_ops;
-+	wdd->min_timeout = EC_WDT_MIN_TIMEOUT;
-+	wdd->max_timeout = EC_WDT_MAX_TIMEOUT;
-+	wdd->parent = dev;
-+
-+	ec_wdt_data->wdtdev.timeout = EC_WDT_DEFAULT_TIMEOUT;
-+	ec_wdt_data->is_enable = 0;
-+	ec_wdt_data->current_timeout = EC_WDT_DEFAULT_TIMEOUT;
-+
-+	watchdog_stop_on_unregister(wdd);
-+
-+	ec_wdt_data->reboot_nb.notifier_call = advwdt_notify_sys;
-+	ret = devm_register_reboot_notifier(dev, &ec_wdt_data->reboot_nb);
-+	if (ret) {
-+		dev_err(dev, "watchdog%d: Cannot register reboot notifier (%d)\n",
-+			wdd->id, ret);
-+		return ret;
-+	}
-+
-+	ret = devm_watchdog_register_device(dev, wdd);
-+	if (ret != 0)
-+		dev_err(dev, "watchdog_register_device() failed: %d\n",
-+			ret);
-+
-+	dev_info(dev, "watchdog register success\n");
-+
-+	return 0;
-+}
-+
-+static struct platform_driver adv_wdt_drv = {
-+	.driver = {
-+		.name = DRV_NAME,
-+	},
-+	.probe = adv_ec_wdt_probe,
-+};
-+module_platform_driver(adv_wdt_drv);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:" DRV_NAME);
-+MODULE_DESCRIPTION("Advantech Embedded Controller Watchdog Driver.");
-+MODULE_AUTHOR("Campion Kang <campion.kang@advantech.com.tw>");
-+MODULE_VERSION("1.0");
--- 
-2.17.1
+Acked-by: Maxime Ripard <mripard@kernel.org>
 
+Maxime
+
+--ekw7d4qbod7okqkh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYAWqeAAKCRDj7w1vZxhR
+xa7kAQCUNTWleBinyXgESqWs2vbvBzOFbAYKt3vV6V2JdkaMIgEAoqaV9ae12yAo
+z+OKnbYdl4+hDmjGI/vB8yaRTyP6mwg=
+=maz4
+-----END PGP SIGNATURE-----
+
+--ekw7d4qbod7okqkh--
