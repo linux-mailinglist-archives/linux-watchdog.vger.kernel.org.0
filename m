@@ -2,115 +2,143 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BFB2FA4EB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Jan 2021 16:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E17CA2FA58E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Jan 2021 17:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391404AbhARPhc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 18 Jan 2021 10:37:32 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:49919 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406006AbhARPfj (ORCPT
+        id S2404834AbhARQEe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 18 Jan 2021 11:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406340AbhARQEZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 18 Jan 2021 10:35:39 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id BEA4958077C;
-        Mon, 18 Jan 2021 10:34:18 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 18 Jan 2021 10:34:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:date:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=oU0HqCO/5476uMOlzZwZPuowCXA
-        18QWWN/mw1RTCV9g=; b=vaLbxPDj1tzN7TvKH7vMSi8rBS2vusxWy7RC4A/CE9S
-        Ylt63G5nEwedMq4k910g9dGsqleq9P+5+WLnYB99gqTjkkT8DkXqQt7hY5CicuuU
-        QNee8aJ92b8/DJrqmADB/FO5bm1BHwTdLwVGHSk+AY1cnx4ejvMg8FD69cwhNlFE
-        cBqQDRP+OZ4vjQ0iJ9Ygl69Q+wxTp14dRR4p744L9nc+NRpIfjgMXgdr5petDQ+F
-        +5rBz4APbiZkBKs6S3PKv/+qpR4AH5nBhe+BGrYbjoiogNQ2gcCzS5R/xqiPlpz0
-        J+VR0VV8X4GVG5C4yPlt4nHjxk4CKb0U0PMOzf4b0aA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=oU0HqC
-        O/5476uMOlzZwZPuowCXA18QWWN/mw1RTCV9g=; b=mjqAXbJ6T9w+h2IIeJ2kX5
-        dy5ImmXm3D6BhD4QYyrTZInUCozeZE5atfcmUT+QIlkVv0yRDigd9ce1Va4g2afk
-        bvKjwg45/Kw/igygZlLmkjPEQGZ6nzcwuiCPHLsUUPTjtLorVZM/T0w3nxDthTD7
-        Il2/uBS0/7pQqfNYVV9dU2LJxD/X6tSRjvWqJd4vY8JH62Lo8Ul6nAqgrR1ESbj6
-        9hfokd49eLluMen+YfDewoAInBtbmMI+XQnpknlOlOaJ26LwO0nRsO8upZJD+7Ic
-        Zu6ZWju0Jv094mIZfuAMvl/zmH4zJZOd1U0V9HEvdb8ALm/HyqaixhKu8/u7pP9Q
-        ==
-X-ME-Sender: <xms:eqoFYAJ4CIUHiG4GVCR9KCgyZlIZ6qgs3_c5rq9uY6vJupciZOv_-g>
-    <xme:eqoFYAIBO-axLA9_9Bu_uw3lhNYlHZpSdGmIG4_m4sLk_B6xF-NcFlIvaOjKBIoVe
-    -IOSY9IK-8PwV65wDE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrtdekgdejkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhfffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepmhgrgihimhgv
-    segtvghrnhhordhtvggthhenucggtffrrghtthgvrhhnpefhffffgfetjeegieetleeuvd
-    ekffdukeejjeehveelkefggffgkeekvdfhieeggfenucfkphepledtrdekledrieekrdej
-    ieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:eqoFYAuSP6s61YaBhGfA4YBZq8QhJsIuKNugI-L4bTlJoEGbpCxTwA>
-    <xmx:eqoFYNZ8Tng5XbR2GgZ9fBL9Lz-bRniwPUQ3TgLruEFhyNG-KVA5DQ>
-    <xmx:eqoFYHYvH6Nzfweadf_THLEOYAh8kARqsi6PpmDOLaW5xGryZ6ecsg>
-    <xmx:eqoFYNweQh-H9eN39ex1dLODCaGKM4rRD-af1Dc_ji3FzpefRF-Fnw>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id E640E24005D;
-        Mon, 18 Jan 2021 10:34:17 -0500 (EST)
-From:   maxime@cerno.tech
-Date:   Mon, 18 Jan 2021 16:34:16 +0100
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com, Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3 17/21] dt-bindings: watchdog: sun4i: Add H616
- compatible string
-Message-ID: <20210118153416.h6zc5h5j52rlxro2@gilmour>
-65;6201;1cFrom: Maxime Ripard <maxime@cerno.tech>
-References: <20210118020848.11721-1-andre.przywara@arm.com>
- <20210118020848.11721-18-andre.przywara@arm.com>
+        Mon, 18 Jan 2021 11:04:25 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EF9C061573;
+        Mon, 18 Jan 2021 08:03:40 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id w3so16666504otp.13;
+        Mon, 18 Jan 2021 08:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=F0JC/E/AOr/eRbmtEdznyus5UuAFANJxSCbfh2MInQA=;
+        b=NrEVTZVbBbSzyMRnb1QtEfs53aErWZRqnjK4qhECWyj4HCqW/TiFwWGAMtR3DSn4kA
+         gP/hLdWh+3kGLV6AaDEAM/+8sGDKuV5W+jlq3tIhtg9detTjRFViUp49qX6Ghv43kq/r
+         +y2AD6Pn5USBADSnOwiCMByTA3VsDvg0Yx0+dLVhZMELLbCcMjRl9oWc9wWbWdKQO0US
+         JRvPDSSksg2V9rYDARDdq4xPwxIaSqDN9U+raqRyj9/LyLdRIvdcUvyJpXV20FjNC4wB
+         oB0BS5q83R+cQMhoAqY0/7W7rzX/SAPdRXzdvedBBl70lr7MdEtz8TblGOunCZBO02Q1
+         7nCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=F0JC/E/AOr/eRbmtEdznyus5UuAFANJxSCbfh2MInQA=;
+        b=mOiDkPIH1yrkbBy8V68bD9HZQxp2ng6VLNjAeBq1nV5E4UNAssXkcqN/RO+FlvIuGh
+         NRvEzb6LPqdzxB5fp5eAFxKjGbe8f/8kZw0h1f3wrY0SFar5mnrt/Ggo+1CpOiyzgYeB
+         oQ7yI8HFyn5yDl5HHVcsTR+vSXSFl/t29+EHTm1fWnXpxBEWdq4JmqAgbBx6NYq8vM4a
+         mZNycoMWitYDpYXHx7BQt+VUGtOAyU8z2d084OrgXTFFBb6rFIun07iynZ97zywkmIRJ
+         Vp780vef/OVcnqq5uLkiSlSexL0IBtekzetbnMvTsq54WAff8zllSDHpoaqBc6z+gSPu
+         gSFw==
+X-Gm-Message-State: AOAM531ep8qzj9vfuKiUc+i71BrpbnULglUs5rEYXD3HbeNyx4/S9Oya
+        6cr1QjGvFURdZ4UlR/6hX0zMmH5lCNo=
+X-Google-Smtp-Source: ABdhPJzWBfHkjR0flBfzQpLRA46uFAh87rId2dLSWHB7ZCjnEDi/HFk3Vvz17Kp5/5RSv4YRhPcM5A==
+X-Received: by 2002:a05:6830:1d58:: with SMTP id p24mr130208oth.286.1610985819369;
+        Mon, 18 Jan 2021 08:03:39 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g3sm3630986ooi.28.2021.01.18.08.03.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jan 2021 08:03:38 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] watchdog: renesas_wdt: add grace period before rebooting
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org
+References: <20210118094558.36814-1-wsa+renesas@sang-engineering.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <3557f4a2-b401-c622-2dc4-282efdebcb11@roeck-us.net>
+Date:   Mon, 18 Jan 2021 08:03:37 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ekw7d4qbod7okqkh"
-Content-Disposition: inline
-In-Reply-To: <20210118020848.11721-18-andre.przywara@arm.com>
+In-Reply-To: <20210118094558.36814-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 1/18/21 1:45 AM, Wolfram Sang wrote:
+> arm64 does not have a grace period after calling reset handlers. It is
+> rightfully assumed that watchdog drivers should wait because they know
+> the time needed. Implement this for the Renesas watchdog driver.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
---ekw7d4qbod7okqkh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Guenter Roeck <linux@oeck-us.net>
 
-On Mon, Jan 18, 2021 at 02:08:44AM +0000, Andre Przywara wrote:
-> Use enums to group all compatible devices together on the way.
->=20
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/watchdog/renesas_wdt.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/watchdog/renesas_wdt.c b/drivers/watchdog/renesas_wdt.c
+> index d2b5074bca65..5791198960e6 100644
+> --- a/drivers/watchdog/renesas_wdt.c
+> +++ b/drivers/watchdog/renesas_wdt.c
+> @@ -151,6 +151,9 @@ static int rwdt_restart(struct watchdog_device *wdev, unsigned long action,
+>  
+>  	rwdt_write(priv, RWTCSRA_TME, RWTCSRA);
+>  
+> +	/* wait 2 cycles, so watchdog will trigger */
+> +	udelay(DIV_ROUND_UP(2 * 1000000, priv->clk_rate));
+> +
+>  	return 0;
+>  }
+>  
+> 
 
-Acked-by: Maxime Ripard <mripard@kernel.org>
-
-Maxime
-
---ekw7d4qbod7okqkh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYAWqeAAKCRDj7w1vZxhR
-xa7kAQCUNTWleBinyXgESqWs2vbvBzOFbAYKt3vV6V2JdkaMIgEAoqaV9ae12yAo
-z+OKnbYdl4+hDmjGI/vB8yaRTyP6mwg=
-=maz4
------END PGP SIGNATURE-----
-
---ekw7d4qbod7okqkh--
