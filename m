@@ -2,118 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8472FB3F9
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Jan 2021 09:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6982FCC04
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Jan 2021 08:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbhASIYn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 19 Jan 2021 03:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731290AbhASIYX (ORCPT
+        id S1726790AbhATHtf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 20 Jan 2021 02:49:35 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:45111 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728909AbhATHtS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 19 Jan 2021 03:24:23 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BAAC061757
-        for <linux-watchdog@vger.kernel.org>; Tue, 19 Jan 2021 00:23:43 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id m4so18777094wrx.9
-        for <linux-watchdog@vger.kernel.org>; Tue, 19 Jan 2021 00:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=0o446r/7sfNrNMbiwlFxGJePev96CeNNzqsH+vREsX8=;
-        b=I+pBsb0vAWfUoTHY7RYJ6yNwT7cwg2JIs/IprcYa7Jzjnxdqdpn2CwBtUjTwRo4XM8
-         uyIxI/Ggh9GSR8awn0b5sPWRSJ6KeHwcuc4V3KOQtFbLoo91T/73rswe0bX4MOgtFIIq
-         ZGSHMQaKXk0g37CDxvDds7AOnm+lJVqQiA8kil11Bj3iT+HcRtNi3LkzM+W0rIu2yY5l
-         wYQ2dW8NeBCzjwnly/8/Evir6hbxKdfoTmtw8ACc/5C0nweEREnUNSjhfoxL146bZiLg
-         Aw0Xg9rkmpOGYX/qwx16LkK3/KSXweJF8f1Ja+42rbAaqhrWjHyujQ/j/QaJohd5V6CQ
-         +kbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0o446r/7sfNrNMbiwlFxGJePev96CeNNzqsH+vREsX8=;
-        b=sciWNpvQwj2RgHkYKwvFoXONt3BHzARXd9WjcVW3ka5p0EMbycLzCid4ujmjA4WBcZ
-         PnTa/o29MYCNxOoJUtjTwXgBayeeo7o2liAwrTxDiodWvTaYcEBlyIcmXnsXuOOQoTHA
-         aZhLpDVM+NsicV1mgmShgUTHqjKUHE3OgKfcB1IPRAVxYt3FQ/Cw1GSTeOD5KrmzjU81
-         XNuy3eFq9ASVF+xd9rnFN2/FRtIcxbVvYexSBv+t+y2YEHeuzPccjBlzw2Y19tSnhxwk
-         eNStVOy4sm0EoHRi6BS4/TgRQelGWFv8iMS+Iqc+2/iFBWfgrNJE7J9hO22h2iLtD7jV
-         I00g==
-X-Gm-Message-State: AOAM530lLZtYteZSzXOVZaUugFPQvQPIiuDC/h9K+kLu8yhBmOUvWPTE
-        4ZlxVaeCFhNGcO5N+nxTbtRXeQ==
-X-Google-Smtp-Source: ABdhPJy40W+PZAbNiUmSORK+HY3by6NS2OcSzoL5kUbSYa1SMUjm7J9uhh20bQCKaiilyG3zYfMTCA==
-X-Received: by 2002:a5d:6289:: with SMTP id k9mr3282521wru.200.1611044621936;
-        Tue, 19 Jan 2021 00:23:41 -0800 (PST)
-Received: from dell ([91.110.221.158])
-        by smtp.gmail.com with ESMTPSA id y14sm29847493wru.96.2021.01.19.00.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 00:23:41 -0800 (PST)
-Date:   Tue, 19 Jan 2021 08:23:39 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     AceLan Kao <chia-lin.kao@canonical.com>
-Cc:     Campion Kang <campion.kang@advantech.com.tw>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v6 4/6] mfd: ahc1ec0: Add support for Advantech embedded
- controller
-Message-ID: <20210119082339.GI4903@dell>
-References: <20210118123749.4769-1-campion.kang@advantech.com.tw>
- <20210118123749.4769-4-campion.kang@advantech.com.tw>
- <CAFv23QngmvuKZb0_pK7RBa=VX=2ypabg5p1+vSqrT36CNdJhgw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFv23QngmvuKZb0_pK7RBa=VX=2ypabg5p1+vSqrT36CNdJhgw@mail.gmail.com>
+        Wed, 20 Jan 2021 02:49:18 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=abaci-bugfix@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UMJS2ZT_1611128891;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:abaci-bugfix@linux.alibaba.com fp:SMTPD_---0UMJS2ZT_1611128891)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 20 Jan 2021 15:48:15 +0800
+From:   Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
+To:     jerry.hoemann@hpe.com
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
+Subject: [PATCH] watchdog/hpwdt: Assign boolean values to a bool variable
+Date:   Wed, 20 Jan 2021 15:48:10 +0800
+Message-Id: <1611128890-79204-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 19 Jan 2021, AceLan Kao wrote:
+Fix the following coccicheck warnings:
 
-> Campion Kang <campion.kang@advantech.com.tw> 於 2021年1月18日 週一 下午8:37寫道：
-> >
-> > AHC1EC0 is the embedded controller driver for Advantech industrial
-> > products. This provides sub-devices such as hwmon and watchdog, and also
-> > expose functions for sub-devices to read/write the value to embedded
-> > controller.
-> >
-> > Changed since V5:
-> >         - Kconfig: add "AHC1EC0" string to clearly define the EC name
-> >         - fix the code according to reviewer's suggestion
-> >         - remove unnecessary header files
-> >         - change the structure name to lower case, align with others
-> > naming
-> >
-> > Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
-> > ---
-> >  drivers/mfd/Kconfig         |  10 +
-> >  drivers/mfd/Makefile        |   2 +
-> >  drivers/mfd/ahc1ec0.c       | 808 ++++++++++++++++++++++++++++++++++++
-> >  include/linux/mfd/ahc1ec0.h | 276 ++++++++++++
-> >  4 files changed, 1096 insertions(+)
-> >  create mode 100644 drivers/mfd/ahc1ec0.c
-> >  create mode 100644 include/linux/mfd/ahc1ec0.h
+ ./drivers/watchdog/hpwdt.c:345:2-12: WARNING: Assignment of
+0/1 to bool variable.
 
-[...]
+./drivers/watchdog/hpwdt.c:126:2-12: WARNING: Assignment of
+0/1 to bool variable.
 
-NB: Snipped 1000 lines.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
+---
+ drivers/watchdog/hpwdt.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
-
-Would you be kind enough to snip your replies please AceLan?
-
-It would have the benefit of saving a lot of people a little time.
-
-TIA.
-
+diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
+index cbd1498..22ddba3 100644
+--- a/drivers/watchdog/hpwdt.c
++++ b/drivers/watchdog/hpwdt.c
+@@ -123,7 +123,7 @@ static int hpwdt_settimeout(struct watchdog_device *wdd, unsigned int val)
+ 	if (val <= wdd->pretimeout) {
+ 		dev_dbg(wdd->parent, "pretimeout < timeout. Setting to zero\n");
+ 		wdd->pretimeout = 0;
+-		pretimeout = 0;
++		pretimeout = false;
+ 		if (watchdog_active(wdd))
+ 			hpwdt_start(wdd);
+ 	}
+@@ -336,13 +336,13 @@ static int hpwdt_init_one(struct pci_dev *dev,
+ 	watchdog_init_timeout(&hpwdt_dev, soft_margin, NULL);
+ 
+ 	if (is_kdump_kernel()) {
+-		pretimeout = 0;
++		pretimeout = false;
+ 		kdumptimeout = 0;
+ 	}
+ 
+ 	if (pretimeout && hpwdt_dev.timeout <= PRETIMEOUT_SEC) {
+ 		dev_warn(&dev->dev, "timeout <= pretimeout. Setting pretimeout to zero\n");
+-		pretimeout = 0;
++		pretimeout = false;
+ 	}
+ 	hpwdt_dev.pretimeout = pretimeout ? PRETIMEOUT_SEC : 0;
+ 	kdumptimeout = min(kdumptimeout, HPWDT_MAX_TIMER);
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+1.8.3.1
+
