@@ -2,42 +2,42 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 661912FDC49
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Jan 2021 23:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77812FDC4B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Jan 2021 23:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728854AbhATWQu convert rfc822-to-8bit (ORCPT
+        id S1727294AbhATWRi convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Jan 2021 17:16:50 -0500
-Received: from mail-ed1-f54.google.com ([209.85.208.54]:39682 "EHLO
-        mail-ed1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388468AbhATVQQ (ORCPT
+        Wed, 20 Jan 2021 17:17:38 -0500
+Received: from mail-ed1-f46.google.com ([209.85.208.46]:35327 "EHLO
+        mail-ed1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbhATVSH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Jan 2021 16:16:16 -0500
-Received: by mail-ed1-f54.google.com with SMTP id b21so1696edy.6;
-        Wed, 20 Jan 2021 13:15:59 -0800 (PST)
+        Wed, 20 Jan 2021 16:18:07 -0500
+Received: by mail-ed1-f46.google.com with SMTP id j13so31600edp.2;
+        Wed, 20 Jan 2021 13:17:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5oYC75PmO4R043rd4aC6SKBywNaXBiqKKe3Uoo/WWB4=;
-        b=rJ+FYwbpQnCp3y1xZp/4ettKDmaCvz1qdJB//f6nFQ1oWYFq/4AQe2evVDlJMslkLW
-         W9Ktynnzvq/Sh+94Wz68vbx/loplV4FKCjlnaxloYk5rSCeb5qRcddiG7psDzMY8dUNq
-         mAb6AbHTAklw7Vo1vgmbtp9QyVjrAVZS62+yUnwVZl9cjTLuukqpvXiYlZMbtDqhglPk
-         3ttdoNkLXUlj2NmeSRjzMVXtg3Ad4a7CL4oqJPsDufgLaAB4emH++VhRyZEXDS0QBIih
-         g9uM7RqDiCBKMpaCv1vG5SCjRCDDeVZZrYplHx+SrhozsF6jRRe8iz++9dHx4r8pMs/U
-         RIaA==
-X-Gm-Message-State: AOAM5330HkQBSiDwFvfTo/mYKfc45h8gUt44sJsgySXkrqY+oh7791xy
-        p0mw8g0IHJoIUaJgykB8gaTBUDgGZHanlE+L1Jg=
-X-Google-Smtp-Source: ABdhPJzdAzvVX6KsSRj/oSYEDygtfov7p/fHo+3Wk15lTIsFpPzWfJz+kHeGXjjj50B19twsBGQQEsKBB7kz+kkqsCI=
-X-Received: by 2002:a05:6402:510f:: with SMTP id m15mr8809347edd.267.1611177333656;
- Wed, 20 Jan 2021 13:15:33 -0800 (PST)
+        bh=rfPZS+QeQ97OySN6yB+WvqXIkd4qMySlsw3yCmUzIn0=;
+        b=nXC7JZWh9VRNMN43bViAsXPidqT6uW7CY8X10+ki6bbPwAoZR+Pvid3LT4mkvWjs8E
+         fklymveCkYMOfsnu1xN85jgh2POqcZ1/MvsrWn469y5/D9y2gULzf8u51xAKn9AGaS5h
+         NelkNSoSo6d1m/3MkJ9aVg43O+kIcAChryM51j5luT7+eoBg2hzCSWR04ZP/rdehQbNb
+         T8bnNJwWknRoBL9/RkJkWfyHG17jRZMoAXajeqSl+uQQy1sayQsQHGS8L0pBFZyy6Aq0
+         ewcGWGAkALnLr9usSprr+xsVvMATMAeYfZzlLl0V1aaWS8wOdA5vIpvMHkhc8PdQOD2S
+         Yi1A==
+X-Gm-Message-State: AOAM5322SirJ7mZOY1Fy4L/ysrOSpQvSqIvK7Tkeqt+h1xx3pj5Vjfhn
+        Xpt3t1Gt+3S7E9Bee3HUDN28qW+ZeP5MeICBSTI=
+X-Google-Smtp-Source: ABdhPJxch6iulCnj74aXczbUuSVjxYnWRQqaSoZztFIQsQiEW9mnWjnGdTzPgkR3ue34ns5Q6vxS4Y10HnmlUMGkrTs=
+X-Received: by 2002:a50:fa86:: with SMTP id w6mr5419029edr.98.1611177443062;
+ Wed, 20 Jan 2021 13:17:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20210120162745.61268-1-arnd@kernel.org> <20210120162745.61268-2-arnd@kernel.org>
-In-Reply-To: <20210120162745.61268-2-arnd@kernel.org>
+References: <20210120162745.61268-1-arnd@kernel.org> <20210120162745.61268-3-arnd@kernel.org>
+In-Reply-To: <20210120162745.61268-3-arnd@kernel.org>
 From:   Barry Song <baohua@kernel.org>
-Date:   Thu, 21 Jan 2021 10:15:22 +1300
-Message-ID: <CAGsJ_4xsDG_FJO-QDehziM61mYrAawyKvZeDpTkctxWpt82L8A@mail.gmail.com>
-Subject: Re: [PATCH 1/5] watchdog: remove sirf prima driver
+Date:   Thu, 21 Jan 2021 10:17:11 +1300
+Message-ID: <CAGsJ_4zMzpdN1bdw=rLFShMg83Qc8i-So-quCtB+vuuaa4+M+w@mail.gmail.com>
+Subject: Re: [PATCH 2/5] watchdog: remove sirf atlas driver
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         LKML <linux-kernel@vger.kernel.org>,
@@ -63,108 +63,76 @@ Arnd Bergmann <arnd@kernel.org> 于2021年1月21日周四 上午5:27写道：
 Acked-by: Barry Song <baohua@kernel.org>
 
 > ---
->  .../bindings/watchdog/sirfsoc_wdt.txt         |  18 --
->  drivers/watchdog/Kconfig                      |  10 -
->  drivers/watchdog/Makefile                     |   1 -
->  drivers/watchdog/sirfsoc_wdt.c                | 216 ------------------
->  4 files changed, 245 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/sirfsoc_wdt.txt
->  delete mode 100644 drivers/watchdog/sirfsoc_wdt.c
+>  drivers/watchdog/Kconfig      |  10 --
+>  drivers/watchdog/Makefile     |   1 -
+>  drivers/watchdog/atlas7_wdt.c | 221 ----------------------------------
+>  3 files changed, 232 deletions(-)
+>  delete mode 100644 drivers/watchdog/atlas7_wdt.c
 >
-> diff --git a/Documentation/devicetree/bindings/watchdog/sirfsoc_wdt.txt b/Documentation/devicetree/bindings/watchdog/sirfsoc_wdt.txt
-> deleted file mode 100644
-> index 0dce5e3100b4..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/sirfsoc_wdt.txt
-> +++ /dev/null
-> @@ -1,18 +0,0 @@
-> -SiRFSoC Timer and Watchdog Timer(WDT) Controller
-> -
-> -Required properties:
-> -- compatible: "sirf,prima2-tick"
-> -- reg: Address range of tick timer/WDT register set
-> -- interrupts: interrupt number to the cpu
-> -
-> -Optional properties:
-> -- timeout-sec : Contains the watchdog timeout in seconds
-> -
-> -Example:
-> -
-> -timer@b0020000 {
-> -       compatible = "sirf,prima2-tick";
-> -       reg = <0xb0020000 0x1000>;
-> -       interrupts = <0>;
-> -       timeout-sec = <30>;
-> -};
 > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 7ff941e71b79..88f4827849e4 100644
+> index 88f4827849e4..5559e4325f6a 100644
 > --- a/drivers/watchdog/Kconfig
 > +++ b/drivers/watchdog/Kconfig
-> @@ -788,16 +788,6 @@ config MOXART_WDT
+> @@ -890,16 +890,6 @@ config LPC18XX_WATCHDOG
 >           To compile this driver as a module, choose M here: the
->           module will be called moxart_wdt.
+>           module will be called lpc18xx_wdt.
 >
-> -config SIRFSOC_WATCHDOG
-> -       tristate "SiRFSOC watchdog"
-> -       depends on HAS_IOMEM
-> -       depends on ARCH_SIRF || COMPILE_TEST
-> -       select WATCHDOG_CORE
-> -       default y
+> -config ATLAS7_WATCHDOG
+> -       tristate "CSRatlas7 watchdog"
+> -       depends on ARCH_ATLAS7 || COMPILE_TEST
 > -       help
-> -         Support for CSR SiRFprimaII and SiRFatlasVI watchdog. When
-> -         the watchdog triggers the system will be reset.
+> -         Say Y here to include Watchdog timer support for the watchdog
+> -         existing on the CSRatlas7 series platforms.
 > -
->  config ST_LPC_WATCHDOG
->         tristate "STMicroelectronics LPC Watchdog"
->         depends on ARCH_STI || COMPILE_TEST
+> -         To compile this driver as a module, choose M here: the
+> -         module will be called atlas7_wdt.
+> -
+>  config RENESAS_WDT
+>         tristate "Renesas WDT Watchdog"
+>         depends on ARCH_RENESAS || COMPILE_TEST
 > diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 5c74ee19d441..1741ed3c6ce6 100644
+> index 1741ed3c6ce6..40b94403c487 100644
 > --- a/drivers/watchdog/Makefile
 > +++ b/drivers/watchdog/Makefile
-> @@ -73,7 +73,6 @@ obj-$(CONFIG_UX500_WATCHDOG) += ux500_wdt.o
->  obj-$(CONFIG_RETU_WATCHDOG) += retu_wdt.o
->  obj-$(CONFIG_BCM2835_WDT) += bcm2835_wdt.o
->  obj-$(CONFIG_MOXART_WDT) += moxart_wdt.o
-> -obj-$(CONFIG_SIRFSOC_WATCHDOG) += sirfsoc_wdt.o
->  obj-$(CONFIG_ST_LPC_WATCHDOG) += st_lpc_wdt.o
->  obj-$(CONFIG_QCOM_WDT) += qcom-wdt.o
->  obj-$(CONFIG_BCM_KONA_WDT) += bcm_kona_wdt.o
-> diff --git a/drivers/watchdog/sirfsoc_wdt.c b/drivers/watchdog/sirfsoc_wdt.c
+> @@ -83,7 +83,6 @@ obj-$(CONFIG_MEDIATEK_WATCHDOG) += mtk_wdt.o
+>  obj-$(CONFIG_DIGICOLOR_WATCHDOG) += digicolor_wdt.o
+>  obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
+>  obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
+> -obj-$(CONFIG_ATLAS7_WATCHDOG) += atlas7_wdt.o
+>  obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
+>  obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
+>  obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
+> diff --git a/drivers/watchdog/atlas7_wdt.c b/drivers/watchdog/atlas7_wdt.c
 > deleted file mode 100644
-> index 734cf2966ecb..000000000000
-> --- a/drivers/watchdog/sirfsoc_wdt.c
+> index 9bfe650d802f..000000000000
+> --- a/drivers/watchdog/atlas7_wdt.c
 > +++ /dev/null
-> @@ -1,216 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-or-later
+> @@ -1,221 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
 > -/*
-> - * Watchdog driver for CSR SiRFprimaII and SiRFatlasVI
+> - * Watchdog driver for CSR Atlas7
 > - *
-> - * Copyright (c) 2013 Cambridge Silicon Radio Limited, a CSR plc group company.
+> - * Copyright (c) 2015 Cambridge Silicon Radio Limited, a CSR plc group company.
 > - */
 > -
+> -#include <linux/clk.h>
+> -#include <linux/io.h>
 > -#include <linux/module.h>
-> -#include <linux/watchdog.h>
-> -#include <linux/platform_device.h>
 > -#include <linux/moduleparam.h>
 > -#include <linux/of.h>
-> -#include <linux/io.h>
-> -#include <linux/uaccess.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/watchdog.h>
 > -
-> -#define CLOCK_FREQ     1000000
+> -#define ATLAS7_TIMER_WDT_INDEX         5
+> -#define ATLAS7_WDT_DEFAULT_TIMEOUT     20
 > -
-> -#define SIRFSOC_TIMER_COUNTER_LO       0x0000
-> -#define SIRFSOC_TIMER_MATCH_0          0x0008
-> -#define SIRFSOC_TIMER_INT_EN           0x0024
-> -#define SIRFSOC_TIMER_WATCHDOG_EN      0x0028
-> -#define SIRFSOC_TIMER_LATCH            0x0030
-> -#define SIRFSOC_TIMER_LATCHED_LO       0x0034
+> -#define ATLAS7_WDT_CNT_CTRL    (0 + 4 * ATLAS7_TIMER_WDT_INDEX)
+> -#define ATLAS7_WDT_CNT_MATCH   (0x18 + 4 * ATLAS7_TIMER_WDT_INDEX)
+> -#define ATLAS7_WDT_CNT         (0x48 +  4 * ATLAS7_TIMER_WDT_INDEX)
+> -#define ATLAS7_WDT_CNT_EN      (BIT(0) | BIT(1))
+> -#define ATLAS7_WDT_EN          0x64
 > -
-> -#define SIRFSOC_TIMER_WDT_INDEX                5
-> -
-> -#define SIRFSOC_WDT_MIN_TIMEOUT                30              /* 30 secs */
-> -#define SIRFSOC_WDT_MAX_TIMEOUT                (10 * 60)       /* 10 mins */
-> -#define SIRFSOC_WDT_DEFAULT_TIMEOUT    30              /* 30 secs */
-> -
-> -static unsigned int timeout;
+> -static unsigned int timeout = ATLAS7_WDT_DEFAULT_TIMEOUT;
 > -static bool nowayout = WATCHDOG_NOWAYOUT;
 > -
 > -module_param(timeout, uint, 0);
@@ -174,182 +142,193 @@ Acked-by: Barry Song <baohua@kernel.org>
 > -MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
 > -                       __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 > -
-> -static void __iomem *sirfsoc_wdt_base(struct watchdog_device *wdd)
+> -struct atlas7_wdog {
+> -       struct device *dev;
+> -       void __iomem *base;
+> -       unsigned long tick_rate;
+> -       struct clk *clk;
+> -};
+> -
+> -static unsigned int atlas7_wdt_gettimeleft(struct watchdog_device *wdd)
 > -{
-> -       return (void __iomem __force *)watchdog_get_drvdata(wdd);
+> -       struct atlas7_wdog *wdt = watchdog_get_drvdata(wdd);
+> -       u32 counter, match, delta;
+> -
+> -       counter = readl(wdt->base + ATLAS7_WDT_CNT);
+> -       match = readl(wdt->base + ATLAS7_WDT_CNT_MATCH);
+> -       delta = match - counter;
+> -
+> -       return  delta / wdt->tick_rate;
 > -}
 > -
-> -static unsigned int sirfsoc_wdt_gettimeleft(struct watchdog_device *wdd)
+> -static int atlas7_wdt_ping(struct watchdog_device *wdd)
 > -{
-> -       u32 counter, match;
-> -       void __iomem *wdt_base;
-> -       int time_left;
+> -       struct atlas7_wdog *wdt = watchdog_get_drvdata(wdd);
+> -       u32 counter, match, delta;
 > -
-> -       wdt_base = sirfsoc_wdt_base(wdd);
-> -       counter = readl(wdt_base + SIRFSOC_TIMER_COUNTER_LO);
-> -       match = readl(wdt_base +
-> -               SIRFSOC_TIMER_MATCH_0 + (SIRFSOC_TIMER_WDT_INDEX << 2));
+> -       counter = readl(wdt->base + ATLAS7_WDT_CNT);
+> -       delta = wdd->timeout * wdt->tick_rate;
+> -       match = counter + delta;
 > -
-> -       time_left = match - counter;
-> -
-> -       return time_left / CLOCK_FREQ;
-> -}
-> -
-> -static int sirfsoc_wdt_updatetimeout(struct watchdog_device *wdd)
-> -{
-> -       u32 counter, timeout_ticks;
-> -       void __iomem *wdt_base;
-> -
-> -       timeout_ticks = wdd->timeout * CLOCK_FREQ;
-> -       wdt_base = sirfsoc_wdt_base(wdd);
-> -
-> -       /* Enable the latch before reading the LATCH_LO register */
-> -       writel(1, wdt_base + SIRFSOC_TIMER_LATCH);
-> -
-> -       /* Set the TO value */
-> -       counter = readl(wdt_base + SIRFSOC_TIMER_LATCHED_LO);
-> -
-> -       counter += timeout_ticks;
-> -
-> -       writel(counter, wdt_base +
-> -               SIRFSOC_TIMER_MATCH_0 + (SIRFSOC_TIMER_WDT_INDEX << 2));
+> -       writel(match, wdt->base + ATLAS7_WDT_CNT_MATCH);
 > -
 > -       return 0;
 > -}
 > -
-> -static int sirfsoc_wdt_enable(struct watchdog_device *wdd)
+> -static int atlas7_wdt_enable(struct watchdog_device *wdd)
 > -{
-> -       void __iomem *wdt_base = sirfsoc_wdt_base(wdd);
-> -       sirfsoc_wdt_updatetimeout(wdd);
+> -       struct atlas7_wdog *wdt = watchdog_get_drvdata(wdd);
 > -
-> -       /*
-> -        * NOTE: If interrupt is not enabled
-> -        * then WD-Reset doesn't get generated at all.
-> -        */
-> -       writel(readl(wdt_base + SIRFSOC_TIMER_INT_EN)
-> -               | (1 << SIRFSOC_TIMER_WDT_INDEX),
-> -               wdt_base + SIRFSOC_TIMER_INT_EN);
-> -       writel(1, wdt_base + SIRFSOC_TIMER_WATCHDOG_EN);
+> -       atlas7_wdt_ping(wdd);
+> -
+> -       writel(readl(wdt->base + ATLAS7_WDT_CNT_CTRL) | ATLAS7_WDT_CNT_EN,
+> -             wdt->base + ATLAS7_WDT_CNT_CTRL);
+> -       writel(1, wdt->base + ATLAS7_WDT_EN);
 > -
 > -       return 0;
 > -}
 > -
-> -static int sirfsoc_wdt_disable(struct watchdog_device *wdd)
+> -static int atlas7_wdt_disable(struct watchdog_device *wdd)
 > -{
-> -       void __iomem *wdt_base = sirfsoc_wdt_base(wdd);
+> -       struct atlas7_wdog *wdt = watchdog_get_drvdata(wdd);
 > -
-> -       writel(0, wdt_base + SIRFSOC_TIMER_WATCHDOG_EN);
-> -       writel(readl(wdt_base + SIRFSOC_TIMER_INT_EN)
-> -               & (~(1 << SIRFSOC_TIMER_WDT_INDEX)),
-> -               wdt_base + SIRFSOC_TIMER_INT_EN);
+> -       writel(0, wdt->base + ATLAS7_WDT_EN);
+> -       writel(readl(wdt->base + ATLAS7_WDT_CNT_CTRL) & ~ATLAS7_WDT_CNT_EN,
+> -             wdt->base + ATLAS7_WDT_CNT_CTRL);
 > -
 > -       return 0;
 > -}
 > -
-> -static int sirfsoc_wdt_settimeout(struct watchdog_device *wdd, unsigned int to)
+> -static int atlas7_wdt_settimeout(struct watchdog_device *wdd, unsigned int to)
 > -{
 > -       wdd->timeout = to;
-> -       sirfsoc_wdt_updatetimeout(wdd);
 > -
 > -       return 0;
 > -}
 > -
 > -#define OPTIONS (WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE)
 > -
-> -static const struct watchdog_info sirfsoc_wdt_ident = {
-> -       .options          =     OPTIONS,
-> -       .firmware_version =     0,
-> -       .identity         =     "SiRFSOC Watchdog",
+> -static const struct watchdog_info atlas7_wdt_ident = {
+> -       .options = OPTIONS,
+> -       .firmware_version = 0,
+> -       .identity = "atlas7 Watchdog",
 > -};
 > -
-> -static const struct watchdog_ops sirfsoc_wdt_ops = {
+> -static const struct watchdog_ops atlas7_wdt_ops = {
 > -       .owner = THIS_MODULE,
-> -       .start = sirfsoc_wdt_enable,
-> -       .stop = sirfsoc_wdt_disable,
-> -       .get_timeleft = sirfsoc_wdt_gettimeleft,
-> -       .ping = sirfsoc_wdt_updatetimeout,
-> -       .set_timeout = sirfsoc_wdt_settimeout,
+> -       .start = atlas7_wdt_enable,
+> -       .stop = atlas7_wdt_disable,
+> -       .get_timeleft = atlas7_wdt_gettimeleft,
+> -       .ping = atlas7_wdt_ping,
+> -       .set_timeout = atlas7_wdt_settimeout,
 > -};
 > -
-> -static struct watchdog_device sirfsoc_wdd = {
-> -       .info = &sirfsoc_wdt_ident,
-> -       .ops = &sirfsoc_wdt_ops,
-> -       .timeout = SIRFSOC_WDT_DEFAULT_TIMEOUT,
-> -       .min_timeout = SIRFSOC_WDT_MIN_TIMEOUT,
-> -       .max_timeout = SIRFSOC_WDT_MAX_TIMEOUT,
+> -static struct watchdog_device atlas7_wdd = {
+> -       .info = &atlas7_wdt_ident,
+> -       .ops = &atlas7_wdt_ops,
+> -       .timeout = ATLAS7_WDT_DEFAULT_TIMEOUT,
 > -};
 > -
-> -static int sirfsoc_wdt_probe(struct platform_device *pdev)
+> -static const struct of_device_id atlas7_wdt_ids[] = {
+> -       { .compatible = "sirf,atlas7-tick"},
+> -       {}
+> -};
+> -
+> -static void atlas7_clk_disable_unprepare(void *data)
+> -{
+> -       clk_disable_unprepare(data);
+> -}
+> -
+> -static int atlas7_wdt_probe(struct platform_device *pdev)
 > -{
 > -       struct device *dev = &pdev->dev;
+> -       struct atlas7_wdog *wdt;
+> -       struct clk *clk;
 > -       int ret;
-> -       void __iomem *base;
 > -
-> -       base = devm_platform_ioremap_resource(pdev, 0);
-> -       if (IS_ERR(base))
-> -               return PTR_ERR(base);
+> -       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> -       if (!wdt)
+> -               return -ENOMEM;
+> -       wdt->base = devm_platform_ioremap_resource(pdev, 0);
+> -       if (IS_ERR(wdt->base))
+> -               return PTR_ERR(wdt->base);
 > -
-> -       watchdog_set_drvdata(&sirfsoc_wdd, (__force void *)base);
-> -
-> -       watchdog_init_timeout(&sirfsoc_wdd, timeout, dev);
-> -       watchdog_set_nowayout(&sirfsoc_wdd, nowayout);
-> -       sirfsoc_wdd.parent = dev;
-> -
-> -       watchdog_stop_on_reboot(&sirfsoc_wdd);
-> -       watchdog_stop_on_unregister(&sirfsoc_wdd);
-> -       ret = devm_watchdog_register_device(dev, &sirfsoc_wdd);
+> -       clk = devm_clk_get(dev, NULL);
+> -       if (IS_ERR(clk))
+> -               return PTR_ERR(clk);
+> -       ret = clk_prepare_enable(clk);
+> -       if (ret) {
+> -               dev_err(dev, "clk enable failed\n");
+> -               return ret;
+> -       }
+> -       ret = devm_add_action_or_reset(dev, atlas7_clk_disable_unprepare, clk);
 > -       if (ret)
 > -               return ret;
 > -
-> -       platform_set_drvdata(pdev, &sirfsoc_wdd);
+> -       /* disable watchdog hardware */
+> -       writel(0, wdt->base + ATLAS7_WDT_CNT_CTRL);
 > -
-> -       return 0;
+> -       wdt->tick_rate = clk_get_rate(clk);
+> -       if (!wdt->tick_rate)
+> -               return -EINVAL;
+> -
+> -       wdt->clk = clk;
+> -       atlas7_wdd.min_timeout = 1;
+> -       atlas7_wdd.max_timeout = UINT_MAX / wdt->tick_rate;
+> -
+> -       watchdog_init_timeout(&atlas7_wdd, 0, dev);
+> -       watchdog_set_nowayout(&atlas7_wdd, nowayout);
+> -
+> -       watchdog_set_drvdata(&atlas7_wdd, wdt);
+> -       platform_set_drvdata(pdev, &atlas7_wdd);
+> -
+> -       watchdog_stop_on_reboot(&atlas7_wdd);
+> -       watchdog_stop_on_unregister(&atlas7_wdd);
+> -       return devm_watchdog_register_device(dev, &atlas7_wdd);
 > -}
 > -
-> -#ifdef CONFIG_PM_SLEEP
-> -static int sirfsoc_wdt_suspend(struct device *dev)
+> -static int __maybe_unused atlas7_wdt_suspend(struct device *dev)
 > -{
+> -       /*
+> -        * NOTE:timer controller registers settings are saved
+> -        * and restored back by the timer-atlas7.c
+> -        */
 > -       return 0;
 > -}
 > -
-> -static int sirfsoc_wdt_resume(struct device *dev)
+> -static int __maybe_unused atlas7_wdt_resume(struct device *dev)
 > -{
 > -       struct watchdog_device *wdd = dev_get_drvdata(dev);
 > -
 > -       /*
 > -        * NOTE: Since timer controller registers settings are saved
-> -        * and restored back by the timer-prima2.c, so we need not
+> -        * and restored back by the timer-atlas7.c, so we need not
 > -        * update WD settings except refreshing timeout.
 > -        */
-> -       sirfsoc_wdt_updatetimeout(wdd);
+> -       atlas7_wdt_ping(wdd);
 > -
 > -       return 0;
 > -}
-> -#endif
 > -
-> -static SIMPLE_DEV_PM_OPS(sirfsoc_wdt_pm_ops,
-> -               sirfsoc_wdt_suspend, sirfsoc_wdt_resume);
+> -static SIMPLE_DEV_PM_OPS(atlas7_wdt_pm_ops,
+> -               atlas7_wdt_suspend, atlas7_wdt_resume);
 > -
-> -static const struct of_device_id sirfsoc_wdt_of_match[] = {
-> -       { .compatible = "sirf,prima2-tick"},
-> -       {},
-> -};
-> -MODULE_DEVICE_TABLE(of, sirfsoc_wdt_of_match);
+> -MODULE_DEVICE_TABLE(of, atlas7_wdt_ids);
 > -
-> -static struct platform_driver sirfsoc_wdt_driver = {
+> -static struct platform_driver atlas7_wdt_driver = {
 > -       .driver = {
-> -               .name = "sirfsoc-wdt",
-> -               .pm = &sirfsoc_wdt_pm_ops,
-> -               .of_match_table = sirfsoc_wdt_of_match,
+> -               .name = "atlas7-wdt",
+> -               .pm = &atlas7_wdt_pm_ops,
+> -               .of_match_table = atlas7_wdt_ids,
 > -       },
-> -       .probe = sirfsoc_wdt_probe,
+> -       .probe = atlas7_wdt_probe,
 > -};
-> -module_platform_driver(sirfsoc_wdt_driver);
+> -module_platform_driver(atlas7_wdt_driver);
 > -
-> -MODULE_DESCRIPTION("SiRF SoC watchdog driver");
-> -MODULE_AUTHOR("Xianglong Du <Xianglong.Du@csr.com>");
+> -MODULE_DESCRIPTION("CSRatlas7 watchdog driver");
+> -MODULE_AUTHOR("Guo Zeng <Guo.Zeng@csr.com>");
 > -MODULE_LICENSE("GPL v2");
-> -MODULE_ALIAS("platform:sirfsoc-wdt");
+> -MODULE_ALIAS("platform:atlas7-wdt");
 > --
 > 2.29.2
 >
