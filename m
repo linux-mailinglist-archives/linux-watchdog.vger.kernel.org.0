@@ -2,115 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DDE2FD7AA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Jan 2021 19:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9272FD949
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Jan 2021 20:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729549AbhATSBI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Jan 2021 13:01:08 -0500
-Received: from mx0a-002e3701.pphosted.com ([148.163.147.86]:26272 "EHLO
-        mx0a-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389189AbhATRyG (ORCPT
+        id S2387529AbhATTQp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 20 Jan 2021 14:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391982AbhATSvg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Jan 2021 12:54:06 -0500
-Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10KHmqet026688;
-        Wed, 20 Jan 2021 17:52:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=ymDPOgzNepWEMEbR41VTy3kWpcvb58iGsN9KkgiPEdY=;
- b=N9LiUe33vhpott9z5PueuzquizzLBM79h1m0FJG+0cORPYMuW1KnpFXSyH9bvcsbJ4Ww
- MaXo6kGfyqGIKrzzb7Ymeho1rsT4R+r9pkRRSIV0QGaVkR5E7WwgaoxWEXvVgu6gCUpt
- mNAn3IYXDBMrVkLfZuOAqoyjFVyPpDp3GdqmOl6n9sdIrveCzVI7JwAiXpKUxYDaa7Jq
- kTc42nAuANOr8RGa4A+ePYmjUdbzb4090QL2l7qWWLQFJS5azM0IGWIC+UnbUhUrvxwx
- BNhF4fyRmPTADUq4zNETyV8FcC6XykeErWAH7JKfOomJzXhhcIN5VyjG4eefco1FbGPx oQ== 
-Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
-        by mx0b-002e3701.pphosted.com with ESMTP id 3668r5qs4m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jan 2021 17:52:51 +0000
-Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-        by g4t3427.houston.hpe.com (Postfix) with ESMTP id BA4BF6A;
-        Wed, 20 Jan 2021 17:52:50 +0000 (UTC)
-Received: from anatevka.americas.hpqcorp.net (anatevka.americas.hpqcorp.net [10.33.237.3])
-        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id D63384B;
-        Wed, 20 Jan 2021 17:52:49 +0000 (UTC)
-Date:   Wed, 20 Jan 2021 10:52:49 -0700
-From:   Jerry Hoemann <jerry.hoemann@hpe.com>
-To:     Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog/hpwdt: Assign boolean values to a bool variable
-Message-ID: <20210120175249.GW594882@anatevka.americas.hpqcorp.net>
-References: <1611128890-79204-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+        Wed, 20 Jan 2021 13:51:36 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27550C06179C
+        for <linux-watchdog@vger.kernel.org>; Wed, 20 Jan 2021 10:48:55 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id u25so35533087lfc.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 20 Jan 2021 10:48:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=4rUoIhWsP7wng+ztm2qlaxCIqKsqUfQbKfTE3ftI22s=;
+        b=Ht+alIz0tU4RNMkOlZEcybtL/9C537ump5jLXzw85aYCA8jrNYp1/K36cxkq6BQFom
+         3yYhg/Rauje0Vkr6o2KCjSNbNJ1UyQaqzaXnO2hpiAk2wJxH5gaUiSyfvYYJuBM/zUlA
+         jH7vslR47MdRWeOLGEl95a+VeqrxIHJHKFuQrQM0fuoY6Zk8KIr2iar01VMkk8FlNZuO
+         WwmPF6K/zazHFZnbpmlj+t+hsQfHzFZZfH+a3+9BnqV/VAS0Ln425wPhQ++6BImpMkIj
+         7lCLZFbzN54wy4KPyYsvooTKGivA6fvfjQ+AMwEIYIEmyYZJMoPhuVmwlbYiro0Uuyae
+         JLIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=4rUoIhWsP7wng+ztm2qlaxCIqKsqUfQbKfTE3ftI22s=;
+        b=AoevQGm5AwtabgfXm4xlC927Y+gbG/Ii42SMFrY88wrKtEAyopAwx9bL9fG6PAaczn
+         FMmVSVyRzJSbmAKsQki6RGgS0fKX/SHZ8ihujLZ2AWSdAHKLi89R59wph/r1YPd7fUNq
+         9wT8biLIPFH0xEs9T+nZpaIj5fM8n4PQzHOQeVYXoebGXJI6Vi0WZF+5dYEiuzwcka9T
+         0p9zHnlsfw8byODpiCDBKc2UlbX+XCQ6eqZ3FVQOIFT+bwAQD9B5BqS/ROB3xUs7fJPr
+         IjPX2C0NXPec12wh43Q2Db8tYi4JLfELGEdeoZoO/wkvO5MhqxH+bDg/6DcshQUoLZ2R
+         wzFQ==
+X-Gm-Message-State: AOAM530QV+Gxj0lQtNzRk6TWXAs4UPs9hbT5fpR98ij9e5DmFZWPKxjG
+        H7SEBmGV6Egwex/M3tGo8KUtLUxH98fTsHpIXzY=
+X-Google-Smtp-Source: ABdhPJxkr8Fi+sj2L7hgiG6PRGUWeGwPHY20BllAhONlsKovdfCXy5MPc1sWHINrd6rw2y5bptnx3N2QhqUuWvWdYBg=
+X-Received: by 2002:a19:e30b:: with SMTP id a11mr4113679lfh.48.1611168533543;
+ Wed, 20 Jan 2021 10:48:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1611128890-79204-1-git-send-email-abaci-bugfix@linux.alibaba.com>
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-20_10:2021-01-20,2021-01-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- clxscore=1011 adultscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101200104
+Sender: anndims116@googlemail.com
+Received: by 2002:a05:6520:380c:b029:b8:2fbe:f20e with HTTP; Wed, 20 Jan 2021
+ 10:48:53 -0800 (PST)
+From:   Mike Uba <mikeuba1975@gmail.com>
+Date:   Wed, 20 Jan 2021 10:48:53 -0800
+X-Google-Sender-Auth: GyepqRGUg2ZwFdf7BQg74EGqlVU
+Message-ID: <CAHSOf5PfvrS72cXW5n5ad59jmmEjZ7GvXSvY+Z8d4VNjTqswoA@mail.gmail.com>
+Subject: Liebes Betrugsopfer
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 03:48:10PM +0800, Jiapeng Zhong wrote:
-> Fix the following coccicheck warnings:
-> 
->  ./drivers/watchdog/hpwdt.c:345:2-12: WARNING: Assignment of
-> 0/1 to bool variable.
-> 
-> ./drivers/watchdog/hpwdt.c:126:2-12: WARNING: Assignment of
-> 0/1 to bool variable.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>
-> ---
->  drivers/watchdog/hpwdt.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Indonesiens Korruptionsbek=C3=A4mpfung
+
+Kommission (Indonesisch: Komisi Pemberantasan Korupsi)
 
 
-Reviewed-by: Jerry Hoemann <jerry.hoemann@hpe.com>
+Liebes Betrugsopfer
 
+Ihr Name geh=C3=B6rt zu den Betrugsopfern, die im Begriff sind, eine
+Ausgleichszahlung f=C3=BCr die Gelder zu leisten, die wir von den
+Betr=C3=BCgern, die wir in unserer Obhut haben, zur=C3=BCckgefordert haben.=
+ Der
+Grund, warum wir Sie =C3=BCber diesen Brief kontaktieren, ist, dass Ihr
+Name uns nach ernsthaften Ermittlungen von einem der Betr=C3=BCger in
+unserem Haftraum mitgeteilt wurde und unser Ziel darin besteht, alle
+verlorenen Gelder an seinen rechtm=C3=A4=C3=9Figen Eigent=C3=BCmer zur=C3=
+=BCckzuerstatten.
 
-> 
-> diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
-> index cbd1498..22ddba3 100644
-> --- a/drivers/watchdog/hpwdt.c
-> +++ b/drivers/watchdog/hpwdt.c
-> @@ -123,7 +123,7 @@ static int hpwdt_settimeout(struct watchdog_device *wdd, unsigned int val)
->  	if (val <= wdd->pretimeout) {
->  		dev_dbg(wdd->parent, "pretimeout < timeout. Setting to zero\n");
->  		wdd->pretimeout = 0;
-> -		pretimeout = 0;
-> +		pretimeout = false;
->  		if (watchdog_active(wdd))
->  			hpwdt_start(wdd);
->  	}
-> @@ -336,13 +336,13 @@ static int hpwdt_init_one(struct pci_dev *dev,
->  	watchdog_init_timeout(&hpwdt_dev, soft_margin, NULL);
->  
->  	if (is_kdump_kernel()) {
-> -		pretimeout = 0;
-> +		pretimeout = false;
->  		kdumptimeout = 0;
->  	}
->  
->  	if (pretimeout && hpwdt_dev.timeout <= PRETIMEOUT_SEC) {
->  		dev_warn(&dev->dev, "timeout <= pretimeout. Setting pretimeout to zero\n");
-> -		pretimeout = 0;
-> +		pretimeout = false;
->  	}
->  	hpwdt_dev.pretimeout = pretimeout ? PRETIMEOUT_SEC : 0;
->  	kdumptimeout = min(kdumptimeout, HPWDT_MAX_TIMER);
-> -- 
-> 1.8.3.1
+Es wird Ihnen hiermit empfohlen, Ihre Daten unverz=C3=BCglich an dieses
+B=C3=BCro zu best=C3=A4tigen, damit wir diese an die zust=C3=A4ndige Beh=C3=
+=B6rde zur
+sofortigen Freigabe Ihrer Ausgleichsmittel an Sie weiterleiten k=C3=B6nnen.
 
--- 
+Vollst=C3=A4ndiger Name:
 
------------------------------------------------------------------------------
-Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
------------------------------------------------------------------------------
+Wohnadresse:
+
+Sex:
+
+Alter:
+
+Besetzung:
+
+Direkte Telefonnummer:
+
+Herr Michael Ub
+F=C3=BCr: Unabh=C3=A4ngige Kommission f=C3=BCr Korruptionspraktiken in Indo=
+nesien
+Korruptionsbek=C3=A4mpfung der KPK
