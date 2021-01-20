@@ -2,451 +2,343 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A392FD925
+	by mail.lfdr.de (Postfix) with ESMTP id 28FEE2FD924
 	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Jan 2021 20:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392406AbhATTHu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Jan 2021 14:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S2392309AbhATTHp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 20 Jan 2021 14:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392514AbhATTEV (ORCPT
+        with ESMTP id S2392520AbhATTE2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Jan 2021 14:04:21 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BCEC0613D3;
-        Wed, 20 Jan 2021 11:03:40 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id i18so6038589ooh.5;
-        Wed, 20 Jan 2021 11:03:40 -0800 (PST)
+        Wed, 20 Jan 2021 14:04:28 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C02C0613D6;
+        Wed, 20 Jan 2021 11:03:48 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id 63so1937642oty.0;
+        Wed, 20 Jan 2021 11:03:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=mZHCQLBWgYTEgzSBfLyQwdOZmWFmiaHz92a3fY5qrZ8=;
-        b=CUh0fU/hNLXVy0MlCQf1QZfIz2nmfwrT4uAQSV+we2EbyAe7LA6AIj9sFg8jSx19z/
-         s5s35Ejp/G7wKrsgu9u8qPtykal9uI1+JcpbiGdmfA0rxS7xdXmB6s+hH0ujmbKp9bho
-         tTgKAiYoFELuA8X8JelTE0Brai+SN23zx8ukrCQVQzkWzEEhz+BwZxv20mFrY0SmtCJe
-         hYMRfc6OLtdW0iS9YzVgPAeZessEZB6I4wXkG9nFubXnxcCgWnISSQqly+yeULDL+lPa
-         bnMB9K8e9E29AL60b4Nsusxx6rV5S2zdEUOknP84XHm8l5gQJQGCSTrhGbQqx724jYSC
-         alZQ==
+        bh=EL19vrBZEfjkKDNzr30gd4SAfdcULRu5rKALXpQ+hvQ=;
+        b=TXe63yNKsDS+1PWQiybqHj/8n1U7jTwAO6DGQ3KHdACF71IfnwKMJ8BUzq2TAMKqJM
+         FoqwtHxHOs6QlviYuW1aoyTXZeHvWer9Hy5CiQTPk4Zd/kiJFJc/bqRCVQKZS8S01bgx
+         J1zwcymuTu6/iwr9vhO+CVh7FWhQozmEMGfS91M9xAa7ReCIfqmryp9jLVDum9Vnm2Mh
+         5tpMayHsfsPA7s7ILzqWMTUZ0LODN7SzzBXQuZUjDE4zN1dTQbY04hvukNuTX3GcO0ux
+         35rLALPpQa7PpMbPFZKgOaPI9A3rjZn1SRuakY982U1gbEKLiGAkd6Tnf5AfwFR4pukl
+         PlmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mZHCQLBWgYTEgzSBfLyQwdOZmWFmiaHz92a3fY5qrZ8=;
-        b=RxGbthjJtZOFr6/nbCBEgVWY+P1M+s3pLimbYUaBj6AJsv2i40chi2qho6a/7QWOmp
-         YOQXiXxTShCLRjCz/yGtJSbqO8PEtdNNL0A+T3P8mufLX6X5PE+J3fj/exLoYiEHxWy5
-         fd97tr/dyGMAx7anMmE7GJPToMFu07jU1/E6C6TjDv2H1y6jxtEpd5T1TiuLfDXtwQS1
-         C3uaOmwjuDu7utk4VwSiBSgJ24kHkS6bBrJI353Kaddpl5QI2GrHLj/7QEvD2v0eqJQ2
-         UOPdIRGE6mIdQS4sQBgkjdjKQ23puGWrJdKzAqiEt4q5Zc66JUxrb1ta224BIJ2R/M2o
-         WikA==
-X-Gm-Message-State: AOAM531S0AEvJT+FxUPxReAC60KhEh66yW9+JgK2UJV5IsG8AlsEkCmU
-        29cMgfO483HHNQTsrsANEEx8pnuAa/k=
-X-Google-Smtp-Source: ABdhPJxUTFc04Gji/7r+9oq9BNrxSz6hiTIvbHuocmHrh9X476t35pcXcHwVrXnFM1GmjxEHEF9pzw==
-X-Received: by 2002:a4a:1e42:: with SMTP id 63mr7170833ooq.57.1611169419938;
-        Wed, 20 Jan 2021 11:03:39 -0800 (PST)
+        bh=EL19vrBZEfjkKDNzr30gd4SAfdcULRu5rKALXpQ+hvQ=;
+        b=cq2AzeNKDCc+DhIdWCgqxxMBY7HwEJG4Ib29zrnzq5xO0jb+rebuJ5bMujebh3CH46
+         7ansNJfC1BJ0DPNJzQR/uHtReoA43iJJFESFq3WWTaxsdTOcwQVONzVXRbeeC/6H8URS
+         WjFyAhc/q7DU7de9YZ4AweqHzxhis8thGRIWl35zhtbX3/XDqYpRMA+vM8DZEg94be6a
+         9MgVQtcGCoNDo1xjGvApSHMpwpYvtK2OTlskkvHxc2Bc2Eli3OTWkDeji3qD9N/gfE8V
+         LWRbDOG8zdhMfFdbeh8VeeAXrTWbUs1rsYhpq2ppTbS6eQv2vCLtAkEJDYkDC3MJk2CP
+         Ddmw==
+X-Gm-Message-State: AOAM533bLUVXPk6O1i5U6Mp9sOYRsKneVKj9Idrtl12GLWtHv+XpSNAV
+        haXg+/hHkZCZ1SNrkB8w/JE=
+X-Google-Smtp-Source: ABdhPJy1LQwul9rzb3qgkwsqXrRi7DOqe2GfijpewV75SCcjC5cvkYMeTGM4licow9l6WSpcoLwwLQ==
+X-Received: by 2002:a9d:7a48:: with SMTP id z8mr8056207otm.146.1611169427653;
+        Wed, 20 Jan 2021 11:03:47 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w5sm519541oow.7.2021.01.20.11.03.38
+        by smtp.gmail.com with ESMTPSA id t16sm169453otc.30.2021.01.20.11.03.46
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 Jan 2021 11:03:39 -0800 (PST)
+        Wed, 20 Jan 2021 11:03:46 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 20 Jan 2021 11:03:38 -0800
+Date:   Wed, 20 Jan 2021 11:03:45 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jun Nie <jun.nie@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH 3/5] watchdog: remove zte zx driver
-Message-ID: <20210120190337.GC162747@roeck-us.net>
+        Arnd Bergmann <arnd@arndb.de>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Mans Rullgard <mans@mansr.com>
+Subject: Re: [PATCH 4/5] watchdog: remove tango driver
+Message-ID: <20210120190345.GD162747@roeck-us.net>
 References: <20210120162745.61268-1-arnd@kernel.org>
- <20210120162745.61268-4-arnd@kernel.org>
+ <20210120162745.61268-5-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210120162745.61268-4-arnd@kernel.org>
+In-Reply-To: <20210120162745.61268-5-arnd@kernel.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 05:27:43PM +0100, Arnd Bergmann wrote:
+On Wed, Jan 20, 2021 at 05:27:44PM +0100, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The zte zx platform is getting removed, so this driver is no
+> The tango platform is getting removed, so the driver is no
 > longer needed.
 > 
-> Cc: Jun Nie <jun.nie@linaro.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Marc Gonzalez <marc.w.gonzalez@free.fr>
+> Cc: Mans Rullgard <mans@mansr.com>
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  .../bindings/watchdog/zte,zx2967-wdt.txt      |  32 --
->  drivers/watchdog/Kconfig                      |  10 -
->  drivers/watchdog/Makefile                     |   1 -
->  drivers/watchdog/zx2967_wdt.c                 | 279 ------------------
->  4 files changed, 322 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/zte,zx2967-wdt.txt
->  delete mode 100644 drivers/watchdog/zx2967_wdt.c
+>  drivers/watchdog/Kconfig      |  11 --
+>  drivers/watchdog/Makefile     |   1 -
+>  drivers/watchdog/tangox_wdt.c | 209 ----------------------------------
+>  3 files changed, 221 deletions(-)
+>  delete mode 100644 drivers/watchdog/tangox_wdt.c
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/zte,zx2967-wdt.txt b/Documentation/devicetree/bindings/watchdog/zte,zx2967-wdt.txt
-> deleted file mode 100644
-> index 06ce67766756..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/zte,zx2967-wdt.txt
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -ZTE zx2967 Watchdog timer
-> -
-> -Required properties:
-> -
-> -- compatible : should be one of the following.
-> -       * zte,zx296718-wdt
-> -- reg : Specifies base physical address and size of the registers.
-> -- clocks : Pairs of phandle and specifier referencing the controller's clocks.
-> -- resets : Reference to the reset controller controlling the watchdog
-> -           controller.
-> -
-> -Optional properties:
-> -
-> -- timeout-sec : Contains the watchdog timeout in seconds.
-> -- zte,wdt-reset-sysctrl : Directs how to reset system by the watchdog.
-> -	if we don't want to restart system when watchdog been triggered,
-> -	it's not required, vice versa.
-> -	It should include following fields.
-> -	  * phandle of aon-sysctrl.
-> -	  * offset of register that be written, should be 0xb0.
-> -	  * configure value that be written to aon-sysctrl.
-> -	  * bit mask, corresponding bits will be affected.
-> -
-> -Example:
-> -
-> -wdt: watchdog@1465000 {
-> -	compatible = "zte,zx296718-wdt";
-> -	reg = <0x1465000 0x1000>;
-> -	clocks = <&topcrm WDT_WCLK>;
-> -	resets = <&toprst 35>;
-> -	zte,wdt-reset-sysctrl = <&aon_sysctrl 0xb0 1 0x115>;
-> -};
 > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 5559e4325f6a..c36f8233f60b 100644
+> index c36f8233f60b..10efbb351f14 100644
 > --- a/drivers/watchdog/Kconfig
 > +++ b/drivers/watchdog/Kconfig
-> @@ -919,16 +919,6 @@ config ASPEED_WATCHDOG
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called aspeed_wdt.
+> @@ -254,17 +254,6 @@ config MENZ069_WATCHDOG
+>  	  This driver can also be built as a module. If so the module
+>  	  will be called menz069_wdt.
 >  
-> -config ZX2967_WATCHDOG
-> -	tristate "ZTE zx2967 SoCs watchdog support"
-> -	depends on ARCH_ZX
+> -config TANGOX_WATCHDOG
+> -	tristate "Sigma Designs SMP86xx/SMP87xx watchdog"
 > -	select WATCHDOG_CORE
+> -	depends on ARCH_TANGO || COMPILE_TEST
+> -	depends on HAS_IOMEM
 > -	help
-> -	  Say Y here to include support for the watchdog timer
-> -	  in ZTE zx2967 SoCs.
-> -	  To compile this driver as a module, choose M here: the
-> -	  module will be called zx2967_wdt.
+> -	  Support for the watchdog in Sigma Designs SMP86xx (tango3)
+> -	  and SMP87xx (tango4) family chips.
 > -
->  config STM32_WATCHDOG
->  	tristate "STM32 Independent WatchDoG (IWDG) support"
->  	depends on ARCH_STM32
+> -	  This driver can be built as a module. The module name is tangox_wdt.
+> -
+>  config WDAT_WDT
+>  	tristate "ACPI Watchdog Action Table (WDAT)"
+>  	depends on ACPI
 > diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 40b94403c487..7a95b280cd9f 100644
+> index 7a95b280cd9f..1ff40d6a027f 100644
 > --- a/drivers/watchdog/Makefile
 > +++ b/drivers/watchdog/Makefile
-> @@ -86,7 +86,6 @@ obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
->  obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
->  obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
->  obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
-> -obj-$(CONFIG_ZX2967_WATCHDOG) += zx2967_wdt.o
->  obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
->  obj-$(CONFIG_UNIPHIER_WATCHDOG) += uniphier_wdt.o
->  obj-$(CONFIG_RTD119X_WATCHDOG) += rtd119x_wdt.o
-> diff --git a/drivers/watchdog/zx2967_wdt.c b/drivers/watchdog/zx2967_wdt.c
+> @@ -210,7 +210,6 @@ obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
+>  obj-$(CONFIG_DA9062_WATCHDOG) += da9062_wdt.o
+>  obj-$(CONFIG_DA9063_WATCHDOG) += da9063_wdt.o
+>  obj-$(CONFIG_GPIO_WATCHDOG)	+= gpio_wdt.o
+> -obj-$(CONFIG_TANGOX_WATCHDOG) += tangox_wdt.o
+>  obj-$(CONFIG_WDAT_WDT) += wdat_wdt.o
+>  obj-$(CONFIG_WM831X_WATCHDOG) += wm831x_wdt.o
+>  obj-$(CONFIG_WM8350_WATCHDOG) += wm8350_wdt.o
+> diff --git a/drivers/watchdog/tangox_wdt.c b/drivers/watchdog/tangox_wdt.c
 > deleted file mode 100644
-> index bf183e73671a..000000000000
-> --- a/drivers/watchdog/zx2967_wdt.c
+> index 1afb0e9d808c..000000000000
+> --- a/drivers/watchdog/tangox_wdt.c
 > +++ /dev/null
-> @@ -1,279 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-only
+> @@ -1,209 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0+
 > -/*
-> - * watchdog driver for ZTE's zx2967 family
-> - *
-> - * Copyright (C) 2017 ZTE Ltd.
-> - *
-> - * Author: Baoyou Xie <baoyou.xie@linaro.org>
+> - *  Copyright (C) 2015 Mans Rullgard <mans@mansr.com>
+> - *  SMP86xx/SMP87xx Watchdog driver
 > - */
 > -
+> -#include <linux/bitops.h>
 > -#include <linux/clk.h>
+> -#include <linux/delay.h>
 > -#include <linux/io.h>
-> -#include <linux/mfd/syscon.h>
+> -#include <linux/kernel.h>
 > -#include <linux/module.h>
-> -#include <linux/of_address.h>
+> -#include <linux/moduleparam.h>
+> -#include <linux/mod_devicetable.h>
 > -#include <linux/platform_device.h>
-> -#include <linux/regmap.h>
-> -#include <linux/reset.h>
 > -#include <linux/watchdog.h>
 > -
-> -#define ZX2967_WDT_CFG_REG			0x4
-> -#define ZX2967_WDT_LOAD_REG			0x8
-> -#define ZX2967_WDT_REFRESH_REG			0x18
-> -#define ZX2967_WDT_START_REG			0x1c
+> -#define DEFAULT_TIMEOUT 30
 > -
-> -#define ZX2967_WDT_REFRESH_MASK			GENMASK(5, 0)
+> -static bool nowayout = WATCHDOG_NOWAYOUT;
+> -module_param(nowayout, bool, 0);
+> -MODULE_PARM_DESC(nowayout,
+> -		 "Watchdog cannot be stopped once started (default="
+> -		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 > -
-> -#define ZX2967_WDT_CFG_DIV(n)			((((n) & 0xff) - 1) << 8)
-> -#define ZX2967_WDT_START_EN			0x1
+> -static unsigned int timeout;
+> -module_param(timeout, int, 0);
+> -MODULE_PARM_DESC(timeout, "Watchdog timeout");
 > -
 > -/*
-> - * Hardware magic number.
-> - * When watchdog reg is written, the lowest 16 bits are valid, but
-> - * the highest 16 bits should be always this number.
+> - * Counter counts down from programmed value.  Reset asserts when
+> - * the counter reaches 1.
 > - */
-> -#define ZX2967_WDT_WRITEKEY			(0x1234 << 16)
-> -#define ZX2967_WDT_VAL_MASK			GENMASK(15, 0)
+> -#define WD_COUNTER		0
 > -
-> -#define ZX2967_WDT_DIV_DEFAULT			16
-> -#define ZX2967_WDT_DEFAULT_TIMEOUT		32
-> -#define ZX2967_WDT_MIN_TIMEOUT			1
-> -#define ZX2967_WDT_MAX_TIMEOUT			524
-> -#define ZX2967_WDT_MAX_COUNT			0xffff
+> -#define WD_CONFIG		4
+> -#define WD_CONFIG_XTAL_IN	BIT(0)
+> -#define WD_CONFIG_DISABLE	BIT(31)
 > -
-> -#define ZX2967_WDT_CLK_FREQ			0x8000
-> -
-> -#define ZX2967_WDT_FLAG_REBOOT_MON		BIT(0)
-> -
-> -struct zx2967_wdt {
-> -	struct watchdog_device	wdt_device;
-> -	void __iomem		*reg_base;
-> -	struct clk		*clock;
+> -struct tangox_wdt_device {
+> -	struct watchdog_device wdt;
+> -	void __iomem *base;
+> -	unsigned long clk_rate;
+> -	struct clk *clk;
 > -};
 > -
-> -static inline u32 zx2967_wdt_readl(struct zx2967_wdt *wdt, u16 reg)
+> -static int tangox_wdt_set_timeout(struct watchdog_device *wdt,
+> -				  unsigned int new_timeout)
 > -{
-> -	return readl_relaxed(wdt->reg_base + reg);
+> -	wdt->timeout = new_timeout;
+> -
+> -	return 0;
 > -}
 > -
-> -static inline void zx2967_wdt_writel(struct zx2967_wdt *wdt, u16 reg, u32 val)
+> -static int tangox_wdt_start(struct watchdog_device *wdt)
 > -{
-> -	writel_relaxed(val | ZX2967_WDT_WRITEKEY, wdt->reg_base + reg);
+> -	struct tangox_wdt_device *dev = watchdog_get_drvdata(wdt);
+> -	u32 ticks;
+> -
+> -	ticks = 1 + wdt->timeout * dev->clk_rate;
+> -	writel(ticks, dev->base + WD_COUNTER);
+> -
+> -	return 0;
 > -}
 > -
-> -static void zx2967_wdt_refresh(struct zx2967_wdt *wdt)
+> -static int tangox_wdt_stop(struct watchdog_device *wdt)
 > -{
-> -	u32 val;
+> -	struct tangox_wdt_device *dev = watchdog_get_drvdata(wdt);
 > -
-> -	val = zx2967_wdt_readl(wdt, ZX2967_WDT_REFRESH_REG);
-> -	/*
-> -	 * Bit 4-5, 1 and 2: refresh config info
-> -	 * Bit 2-3, 1 and 2: refresh counter
-> -	 * Bit 0-1, 1 and 2: refresh int-value
-> -	 * we shift each group value between 1 and 2 to refresh all data.
-> -	 */
-> -	val ^= ZX2967_WDT_REFRESH_MASK;
-> -	zx2967_wdt_writel(wdt, ZX2967_WDT_REFRESH_REG,
-> -			  val & ZX2967_WDT_VAL_MASK);
+> -	writel(0, dev->base + WD_COUNTER);
+> -
+> -	return 0;
 > -}
 > -
-> -static int
-> -zx2967_wdt_set_timeout(struct watchdog_device *wdd, unsigned int timeout)
+> -static unsigned int tangox_wdt_get_timeleft(struct watchdog_device *wdt)
 > -{
-> -	struct zx2967_wdt *wdt = watchdog_get_drvdata(wdd);
-> -	unsigned int divisor = ZX2967_WDT_DIV_DEFAULT;
+> -	struct tangox_wdt_device *dev = watchdog_get_drvdata(wdt);
 > -	u32 count;
 > -
-> -	count = timeout * ZX2967_WDT_CLK_FREQ;
-> -	if (count > divisor * ZX2967_WDT_MAX_COUNT)
-> -		divisor = DIV_ROUND_UP(count, ZX2967_WDT_MAX_COUNT);
-> -	count = DIV_ROUND_UP(count, divisor);
-> -	zx2967_wdt_writel(wdt, ZX2967_WDT_CFG_REG,
-> -			ZX2967_WDT_CFG_DIV(divisor) & ZX2967_WDT_VAL_MASK);
-> -	zx2967_wdt_writel(wdt, ZX2967_WDT_LOAD_REG,
-> -			count & ZX2967_WDT_VAL_MASK);
-> -	zx2967_wdt_refresh(wdt);
-> -	wdd->timeout =  (count * divisor) / ZX2967_WDT_CLK_FREQ;
+> -	count = readl(dev->base + WD_COUNTER);
 > -
-> -	return 0;
+> -	if (!count)
+> -		return 0;
+> -
+> -	return (count - 1) / dev->clk_rate;
 > -}
 > -
-> -static void __zx2967_wdt_start(struct zx2967_wdt *wdt)
-> -{
-> -	u32 val;
-> -
-> -	val = zx2967_wdt_readl(wdt, ZX2967_WDT_START_REG);
-> -	val |= ZX2967_WDT_START_EN;
-> -	zx2967_wdt_writel(wdt, ZX2967_WDT_START_REG,
-> -			val & ZX2967_WDT_VAL_MASK);
-> -}
-> -
-> -static void __zx2967_wdt_stop(struct zx2967_wdt *wdt)
-> -{
-> -	u32 val;
-> -
-> -	val = zx2967_wdt_readl(wdt, ZX2967_WDT_START_REG);
-> -	val &= ~ZX2967_WDT_START_EN;
-> -	zx2967_wdt_writel(wdt, ZX2967_WDT_START_REG,
-> -			val & ZX2967_WDT_VAL_MASK);
-> -}
-> -
-> -static int zx2967_wdt_start(struct watchdog_device *wdd)
-> -{
-> -	struct zx2967_wdt *wdt = watchdog_get_drvdata(wdd);
-> -
-> -	zx2967_wdt_set_timeout(wdd, wdd->timeout);
-> -	__zx2967_wdt_start(wdt);
-> -
-> -	return 0;
-> -}
-> -
-> -static int zx2967_wdt_stop(struct watchdog_device *wdd)
-> -{
-> -	struct zx2967_wdt *wdt = watchdog_get_drvdata(wdd);
-> -
-> -	__zx2967_wdt_stop(wdt);
-> -
-> -	return 0;
-> -}
-> -
-> -static int zx2967_wdt_keepalive(struct watchdog_device *wdd)
-> -{
-> -	struct zx2967_wdt *wdt = watchdog_get_drvdata(wdd);
-> -
-> -	zx2967_wdt_refresh(wdt);
-> -
-> -	return 0;
-> -}
-> -
-> -#define ZX2967_WDT_OPTIONS \
-> -	(WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE)
-> -static const struct watchdog_info zx2967_wdt_ident = {
-> -	.options          =     ZX2967_WDT_OPTIONS,
-> -	.identity         =	"zx2967 watchdog",
+> -static const struct watchdog_info tangox_wdt_info = {
+> -	.options  = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+> -	.identity = "tangox watchdog",
 > -};
 > -
-> -static const struct watchdog_ops zx2967_wdt_ops = {
-> -	.owner = THIS_MODULE,
-> -	.start = zx2967_wdt_start,
-> -	.stop = zx2967_wdt_stop,
-> -	.ping = zx2967_wdt_keepalive,
-> -	.set_timeout = zx2967_wdt_set_timeout,
-> -};
-> -
-> -static void zx2967_wdt_reset_sysctrl(struct device *dev)
+> -static int tangox_wdt_restart(struct watchdog_device *wdt,
+> -			      unsigned long action, void *data)
 > -{
-> -	int ret;
-> -	void __iomem *regmap;
-> -	unsigned int offset, mask, config;
-> -	struct of_phandle_args out_args;
+> -	struct tangox_wdt_device *dev = watchdog_get_drvdata(wdt);
 > -
-> -	ret = of_parse_phandle_with_fixed_args(dev->of_node,
-> -			"zte,wdt-reset-sysctrl", 3, 0, &out_args);
-> -	if (ret)
-> -		return;
+> -	writel(1, dev->base + WD_COUNTER);
 > -
-> -	offset = out_args.args[0];
-> -	config = out_args.args[1];
-> -	mask = out_args.args[2];
-> -
-> -	regmap = syscon_node_to_regmap(out_args.np);
-> -	if (IS_ERR(regmap)) {
-> -		of_node_put(out_args.np);
-> -		return;
-> -	}
-> -
-> -	regmap_update_bits(regmap, offset, mask, config);
-> -	of_node_put(out_args.np);
+> -	return 0;
 > -}
 > -
-> -static void zx2967_clk_disable_unprepare(void *data)
+> -static const struct watchdog_ops tangox_wdt_ops = {
+> -	.start		= tangox_wdt_start,
+> -	.stop		= tangox_wdt_stop,
+> -	.set_timeout	= tangox_wdt_set_timeout,
+> -	.get_timeleft	= tangox_wdt_get_timeleft,
+> -	.restart	= tangox_wdt_restart,
+> -};
+> -
+> -static void tangox_clk_disable_unprepare(void *data)
 > -{
 > -	clk_disable_unprepare(data);
 > -}
 > -
-> -static int zx2967_wdt_probe(struct platform_device *pdev)
+> -static int tangox_wdt_probe(struct platform_device *pdev)
 > -{
-> -	struct device *dev = &pdev->dev;
-> -	struct zx2967_wdt *wdt;
-> -	int ret;
-> -	struct reset_control *rstc;
+> -	struct tangox_wdt_device *dev;
+> -	u32 config;
+> -	int err;
 > -
-> -	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-> -	if (!wdt)
+> -	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+> -	if (!dev)
 > -		return -ENOMEM;
 > -
-> -	platform_set_drvdata(pdev, wdt);
+> -	dev->base = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(dev->base))
+> -		return PTR_ERR(dev->base);
 > -
-> -	wdt->wdt_device.info = &zx2967_wdt_ident;
-> -	wdt->wdt_device.ops = &zx2967_wdt_ops;
-> -	wdt->wdt_device.timeout = ZX2967_WDT_DEFAULT_TIMEOUT;
-> -	wdt->wdt_device.max_timeout = ZX2967_WDT_MAX_TIMEOUT;
-> -	wdt->wdt_device.min_timeout = ZX2967_WDT_MIN_TIMEOUT;
-> -	wdt->wdt_device.parent = dev;
+> -	dev->clk = devm_clk_get(&pdev->dev, NULL);
+> -	if (IS_ERR(dev->clk))
+> -		return PTR_ERR(dev->clk);
 > -
-> -	wdt->reg_base = devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(wdt->reg_base))
-> -		return PTR_ERR(wdt->reg_base);
+> -	err = clk_prepare_enable(dev->clk);
+> -	if (err)
+> -		return err;
+> -	err = devm_add_action_or_reset(&pdev->dev,
+> -				       tangox_clk_disable_unprepare, dev->clk);
+> -	if (err)
+> -		return err;
 > -
-> -	zx2967_wdt_reset_sysctrl(dev);
+> -	dev->clk_rate = clk_get_rate(dev->clk);
+> -	if (!dev->clk_rate)
+> -		return -EINVAL;
 > -
-> -	wdt->clock = devm_clk_get(dev, NULL);
-> -	if (IS_ERR(wdt->clock)) {
-> -		dev_err(dev, "failed to find watchdog clock source\n");
-> -		return PTR_ERR(wdt->clock);
+> -	dev->wdt.parent = &pdev->dev;
+> -	dev->wdt.info = &tangox_wdt_info;
+> -	dev->wdt.ops = &tangox_wdt_ops;
+> -	dev->wdt.timeout = DEFAULT_TIMEOUT;
+> -	dev->wdt.min_timeout = 1;
+> -	dev->wdt.max_hw_heartbeat_ms = (U32_MAX - 1) / dev->clk_rate;
+> -
+> -	watchdog_init_timeout(&dev->wdt, timeout, &pdev->dev);
+> -	watchdog_set_nowayout(&dev->wdt, nowayout);
+> -	watchdog_set_drvdata(&dev->wdt, dev);
+> -
+> -	/*
+> -	 * Deactivate counter if disable bit is set to avoid
+> -	 * accidental reset.
+> -	 */
+> -	config = readl(dev->base + WD_CONFIG);
+> -	if (config & WD_CONFIG_DISABLE)
+> -		writel(0, dev->base + WD_COUNTER);
+> -
+> -	writel(WD_CONFIG_XTAL_IN, dev->base + WD_CONFIG);
+> -
+> -	/*
+> -	 * Mark as active and restart with configured timeout if
+> -	 * already running.
+> -	 */
+> -	if (readl(dev->base + WD_COUNTER)) {
+> -		set_bit(WDOG_HW_RUNNING, &dev->wdt.status);
+> -		tangox_wdt_start(&dev->wdt);
 > -	}
 > -
-> -	ret = clk_prepare_enable(wdt->clock);
-> -	if (ret < 0) {
-> -		dev_err(dev, "failed to enable clock\n");
-> -		return ret;
-> -	}
-> -	ret = devm_add_action_or_reset(dev, zx2967_clk_disable_unprepare,
-> -				       wdt->clock);
-> -	if (ret)
-> -		return ret;
-> -	clk_set_rate(wdt->clock, ZX2967_WDT_CLK_FREQ);
+> -	watchdog_set_restart_priority(&dev->wdt, 128);
 > -
-> -	rstc = devm_reset_control_get_exclusive(dev, NULL);
-> -	if (IS_ERR(rstc)) {
-> -		dev_err(dev, "failed to get rstc");
-> -		return PTR_ERR(rstc);
-> -	}
+> -	watchdog_stop_on_unregister(&dev->wdt);
+> -	err = devm_watchdog_register_device(&pdev->dev, &dev->wdt);
+> -	if (err)
+> -		return err;
 > -
-> -	reset_control_assert(rstc);
-> -	reset_control_deassert(rstc);
+> -	platform_set_drvdata(pdev, dev);
 > -
-> -	watchdog_set_drvdata(&wdt->wdt_device, wdt);
-> -	watchdog_init_timeout(&wdt->wdt_device,
-> -			ZX2967_WDT_DEFAULT_TIMEOUT, dev);
-> -	watchdog_set_nowayout(&wdt->wdt_device, WATCHDOG_NOWAYOUT);
-> -
-> -	ret = devm_watchdog_register_device(dev, &wdt->wdt_device);
-> -	if (ret)
-> -		return ret;
-> -
-> -	dev_info(dev, "watchdog enabled (timeout=%d sec, nowayout=%d)",
-> -		 wdt->wdt_device.timeout, WATCHDOG_NOWAYOUT);
+> -	dev_info(&pdev->dev, "SMP86xx/SMP87xx watchdog registered\n");
 > -
 > -	return 0;
 > -}
 > -
-> -static const struct of_device_id zx2967_wdt_match[] = {
-> -	{ .compatible = "zte,zx296718-wdt", },
-> -	{}
+> -static const struct of_device_id tangox_wdt_dt_ids[] = {
+> -	{ .compatible = "sigma,smp8642-wdt" },
+> -	{ .compatible = "sigma,smp8759-wdt" },
+> -	{ }
 > -};
-> -MODULE_DEVICE_TABLE(of, zx2967_wdt_match);
+> -MODULE_DEVICE_TABLE(of, tangox_wdt_dt_ids);
 > -
-> -static struct platform_driver zx2967_wdt_driver = {
-> -	.probe		= zx2967_wdt_probe,
-> -	.driver		= {
-> -		.name	= "zx2967-wdt",
-> -		.of_match_table	= of_match_ptr(zx2967_wdt_match),
+> -static struct platform_driver tangox_wdt_driver = {
+> -	.probe	= tangox_wdt_probe,
+> -	.driver	= {
+> -		.name		= "tangox-wdt",
+> -		.of_match_table	= tangox_wdt_dt_ids,
 > -	},
 > -};
-> -module_platform_driver(zx2967_wdt_driver);
 > -
-> -MODULE_AUTHOR("Baoyou Xie <baoyou.xie@linaro.org>");
-> -MODULE_DESCRIPTION("ZTE zx2967 Watchdog Device Driver");
-> -MODULE_LICENSE("GPL v2");
+> -module_platform_driver(tangox_wdt_driver);
+> -
+> -MODULE_AUTHOR("Mans Rullgard <mans@mansr.com>");
+> -MODULE_DESCRIPTION("SMP86xx/SMP87xx Watchdog driver");
+> -MODULE_LICENSE("GPL");
 > -- 
 > 2.29.2
 > 
