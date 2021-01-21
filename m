@@ -2,319 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0A52FECC3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Jan 2021 15:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67DD2FEE54
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Jan 2021 16:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727283AbhAUOSw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 21 Jan 2021 09:18:52 -0500
-Received: from unicorn.mansr.com ([81.2.72.234]:60374 "EHLO unicorn.mansr.com"
+        id S1728448AbhAUPT4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 21 Jan 2021 10:19:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42314 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730872AbhAUOKm (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 21 Jan 2021 09:10:42 -0500
-Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:8d8e::3])
-        by unicorn.mansr.com (Postfix) with ESMTPS id ADCB715364;
-        Thu, 21 Jan 2021 14:01:00 +0000 (GMT)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id AADC221A3D9; Thu, 21 Jan 2021 14:01:00 +0000 (GMT)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        id S1732777AbhAUPTT (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 21 Jan 2021 10:19:19 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E3F3A23A03;
+        Thu, 21 Jan 2021 15:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611242317;
+        bh=v6+vvSaYWIajsivUUhnm7a7X5QHco3pxYbNl7HxE1Iw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VPn21a7jQTuJBe7K6iIi8d4kJvWlRrVJptfmlAQ6a/MKx2nvonMXmjLK3SkowqaIu
+         cLZ6rkRIhgem6Afrab/SXPi2dERjAjlrWEuuemp//U9+QWFRGT8kL1StPsyzpnMHb9
+         eQLm21jkAb/pEwzMetuX8jxmmSR5S3/QimPqcIfIurBcDdzA5FuSUtt7ke5TVsDTnv
+         pp6U4aVM9miZLF+GOc5Q0auDW8FHRxPvBlDoHrUkGd8OKP2a78kxYoSsgbx2iFfrcV
+         gq6v6tuTB2VjU/7LYNsb7ivuGVawCtQW9C9sWU2ISEYH02WzFB2j4cB3R2aMeNngVm
+         CqA+Q9xSxrXvA==
+Received: by mail-oi1-f176.google.com with SMTP id g69so1694821oib.12;
+        Thu, 21 Jan 2021 07:18:36 -0800 (PST)
+X-Gm-Message-State: AOAM530kEqvCqXMCFJ28WCxSAkUjyDFk/sPpja/W15DznkG5+G3Y4Xec
+        SWCbvJkwBlxLQAFuHfXrBm2pfptj/YB9X1Eywrs=
+X-Google-Smtp-Source: ABdhPJw0itn7ClD0Eq2pp0vSMlTaPvCv5/ESF9uPVl+TstvIzTqgG6OmMTXkR3vXeWNWW/7sdmTSiVULwXiUsfoMlBs=
+X-Received: by 2002:aca:be54:: with SMTP id o81mr40465oif.67.1611242316188;
+ Thu, 21 Jan 2021 07:18:36 -0800 (PST)
+MIME-Version: 1.0
+References: <20210120162745.61268-1-arnd@kernel.org> <20210120162745.61268-5-arnd@kernel.org>
+ <yw1xv9bqxucj.fsf@mansr.com>
+In-Reply-To: <yw1xv9bqxucj.fsf@mansr.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 21 Jan 2021 16:18:20 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2QFewbxz+HEo9MCE3+RuZBT=yM3Bd2pGhtvN0=-9sj_g@mail.gmail.com>
+Message-ID: <CAK8P3a2QFewbxz+HEo9MCE3+RuZBT=yM3Bd2pGhtvN0=-9sj_g@mail.gmail.com>
+Subject: Re: [PATCH 4/5] watchdog: remove tango driver
+To:     =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Marc Gonzalez <marc.w.gonzalez@free.fr>
-Subject: Re: [PATCH 4/5] watchdog: remove tango driver
-References: <20210120162745.61268-1-arnd@kernel.org>
-        <20210120162745.61268-5-arnd@kernel.org>
-Date:   Thu, 21 Jan 2021 14:01:00 +0000
-In-Reply-To: <20210120162745.61268-5-arnd@kernel.org> (Arnd Bergmann's message
-        of "Wed, 20 Jan 2021 17:27:44 +0100")
-Message-ID: <yw1xv9bqxucj.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
-
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Jan 21, 2021 at 3:01 PM M=C3=A5ns Rullg=C3=A5rd <mans@mansr.com> wr=
+ote:
+> Arnd Bergmann <arnd@kernel.org> writes:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The tango platform is getting removed, so the driver is no
+> > longer needed.
+> >
+> > Cc: Marc Gonzalez <marc.w.gonzalez@free.fr>
+> > Cc: Mans Rullgard <mans@mansr.com>
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  drivers/watchdog/Kconfig      |  11 --
+> >  drivers/watchdog/Makefile     |   1 -
+> >  drivers/watchdog/tangox_wdt.c | 209 ----------------------------------
+> >  3 files changed, 221 deletions(-)
+> >  delete mode 100644 drivers/watchdog/tangox_wdt.c
 >
-> The tango platform is getting removed, so the driver is no
-> longer needed.
->
-> Cc: Marc Gonzalez <marc.w.gonzalez@free.fr>
-> Cc: Mans Rullgard <mans@mansr.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/watchdog/Kconfig      |  11 --
->  drivers/watchdog/Makefile     |   1 -
->  drivers/watchdog/tangox_wdt.c | 209 ----------------------------------
->  3 files changed, 221 deletions(-)
->  delete mode 100644 drivers/watchdog/tangox_wdt.c
+> The DT binding can go as well.
 
-The DT binding can go as well.
+Good catch! I thought I had cross-checked all DT compatible strings of the
+removed dts files, bindings and drivers to make sure everything is gone
+at once, but it seems I missed a couple of files including this one.
 
-Otherwise:
+Guenter and Wim, let me know if I should resend this patch or all watchdog
+patches, or just remove the binding as part of the platform removal in the
+soc tree.
 
-Acked-by: Mans Rullgard <mans@mansr.com>
-
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index c36f8233f60b..10efbb351f14 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -254,17 +254,6 @@ config MENZ069_WATCHDOG
->  	  This driver can also be built as a module. If so the module
->  	  will be called menz069_wdt.
->
-> -config TANGOX_WATCHDOG
-> -	tristate "Sigma Designs SMP86xx/SMP87xx watchdog"
-> -	select WATCHDOG_CORE
-> -	depends on ARCH_TANGO || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	help
-> -	  Support for the watchdog in Sigma Designs SMP86xx (tango3)
-> -	  and SMP87xx (tango4) family chips.
-> -
-> -	  This driver can be built as a module. The module name is tangox_wdt.
-> -
->  config WDAT_WDT
->  	tristate "ACPI Watchdog Action Table (WDAT)"
->  	depends on ACPI
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 7a95b280cd9f..1ff40d6a027f 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -210,7 +210,6 @@ obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
->  obj-$(CONFIG_DA9062_WATCHDOG) += da9062_wdt.o
->  obj-$(CONFIG_DA9063_WATCHDOG) += da9063_wdt.o
->  obj-$(CONFIG_GPIO_WATCHDOG)	+= gpio_wdt.o
-> -obj-$(CONFIG_TANGOX_WATCHDOG) += tangox_wdt.o
->  obj-$(CONFIG_WDAT_WDT) += wdat_wdt.o
->  obj-$(CONFIG_WM831X_WATCHDOG) += wm831x_wdt.o
->  obj-$(CONFIG_WM8350_WATCHDOG) += wm8350_wdt.o
-> diff --git a/drivers/watchdog/tangox_wdt.c b/drivers/watchdog/tangox_wdt.c
-> deleted file mode 100644
-> index 1afb0e9d808c..000000000000
-> --- a/drivers/watchdog/tangox_wdt.c
-> +++ /dev/null
-> @@ -1,209 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0+
-> -/*
-> - *  Copyright (C) 2015 Mans Rullgard <mans@mansr.com>
-> - *  SMP86xx/SMP87xx Watchdog driver
-> - */
-> -
-> -#include <linux/bitops.h>
-> -#include <linux/clk.h>
-> -#include <linux/delay.h>
-> -#include <linux/io.h>
-> -#include <linux/kernel.h>
-> -#include <linux/module.h>
-> -#include <linux/moduleparam.h>
-> -#include <linux/mod_devicetable.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/watchdog.h>
-> -
-> -#define DEFAULT_TIMEOUT 30
-> -
-> -static bool nowayout = WATCHDOG_NOWAYOUT;
-> -module_param(nowayout, bool, 0);
-> -MODULE_PARM_DESC(nowayout,
-> -		 "Watchdog cannot be stopped once started (default="
-> -		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> -
-> -static unsigned int timeout;
-> -module_param(timeout, int, 0);
-> -MODULE_PARM_DESC(timeout, "Watchdog timeout");
-> -
-> -/*
-> - * Counter counts down from programmed value.  Reset asserts when
-> - * the counter reaches 1.
-> - */
-> -#define WD_COUNTER		0
-> -
-> -#define WD_CONFIG		4
-> -#define WD_CONFIG_XTAL_IN	BIT(0)
-> -#define WD_CONFIG_DISABLE	BIT(31)
-> -
-> -struct tangox_wdt_device {
-> -	struct watchdog_device wdt;
-> -	void __iomem *base;
-> -	unsigned long clk_rate;
-> -	struct clk *clk;
-> -};
-> -
-> -static int tangox_wdt_set_timeout(struct watchdog_device *wdt,
-> -				  unsigned int new_timeout)
-> -{
-> -	wdt->timeout = new_timeout;
-> -
-> -	return 0;
-> -}
-> -
-> -static int tangox_wdt_start(struct watchdog_device *wdt)
-> -{
-> -	struct tangox_wdt_device *dev = watchdog_get_drvdata(wdt);
-> -	u32 ticks;
-> -
-> -	ticks = 1 + wdt->timeout * dev->clk_rate;
-> -	writel(ticks, dev->base + WD_COUNTER);
-> -
-> -	return 0;
-> -}
-> -
-> -static int tangox_wdt_stop(struct watchdog_device *wdt)
-> -{
-> -	struct tangox_wdt_device *dev = watchdog_get_drvdata(wdt);
-> -
-> -	writel(0, dev->base + WD_COUNTER);
-> -
-> -	return 0;
-> -}
-> -
-> -static unsigned int tangox_wdt_get_timeleft(struct watchdog_device *wdt)
-> -{
-> -	struct tangox_wdt_device *dev = watchdog_get_drvdata(wdt);
-> -	u32 count;
-> -
-> -	count = readl(dev->base + WD_COUNTER);
-> -
-> -	if (!count)
-> -		return 0;
-> -
-> -	return (count - 1) / dev->clk_rate;
-> -}
-> -
-> -static const struct watchdog_info tangox_wdt_info = {
-> -	.options  = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
-> -	.identity = "tangox watchdog",
-> -};
-> -
-> -static int tangox_wdt_restart(struct watchdog_device *wdt,
-> -			      unsigned long action, void *data)
-> -{
-> -	struct tangox_wdt_device *dev = watchdog_get_drvdata(wdt);
-> -
-> -	writel(1, dev->base + WD_COUNTER);
-> -
-> -	return 0;
-> -}
-> -
-> -static const struct watchdog_ops tangox_wdt_ops = {
-> -	.start		= tangox_wdt_start,
-> -	.stop		= tangox_wdt_stop,
-> -	.set_timeout	= tangox_wdt_set_timeout,
-> -	.get_timeleft	= tangox_wdt_get_timeleft,
-> -	.restart	= tangox_wdt_restart,
-> -};
-> -
-> -static void tangox_clk_disable_unprepare(void *data)
-> -{
-> -	clk_disable_unprepare(data);
-> -}
-> -
-> -static int tangox_wdt_probe(struct platform_device *pdev)
-> -{
-> -	struct tangox_wdt_device *dev;
-> -	u32 config;
-> -	int err;
-> -
-> -	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-> -	if (!dev)
-> -		return -ENOMEM;
-> -
-> -	dev->base = devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(dev->base))
-> -		return PTR_ERR(dev->base);
-> -
-> -	dev->clk = devm_clk_get(&pdev->dev, NULL);
-> -	if (IS_ERR(dev->clk))
-> -		return PTR_ERR(dev->clk);
-> -
-> -	err = clk_prepare_enable(dev->clk);
-> -	if (err)
-> -		return err;
-> -	err = devm_add_action_or_reset(&pdev->dev,
-> -				       tangox_clk_disable_unprepare, dev->clk);
-> -	if (err)
-> -		return err;
-> -
-> -	dev->clk_rate = clk_get_rate(dev->clk);
-> -	if (!dev->clk_rate)
-> -		return -EINVAL;
-> -
-> -	dev->wdt.parent = &pdev->dev;
-> -	dev->wdt.info = &tangox_wdt_info;
-> -	dev->wdt.ops = &tangox_wdt_ops;
-> -	dev->wdt.timeout = DEFAULT_TIMEOUT;
-> -	dev->wdt.min_timeout = 1;
-> -	dev->wdt.max_hw_heartbeat_ms = (U32_MAX - 1) / dev->clk_rate;
-> -
-> -	watchdog_init_timeout(&dev->wdt, timeout, &pdev->dev);
-> -	watchdog_set_nowayout(&dev->wdt, nowayout);
-> -	watchdog_set_drvdata(&dev->wdt, dev);
-> -
-> -	/*
-> -	 * Deactivate counter if disable bit is set to avoid
-> -	 * accidental reset.
-> -	 */
-> -	config = readl(dev->base + WD_CONFIG);
-> -	if (config & WD_CONFIG_DISABLE)
-> -		writel(0, dev->base + WD_COUNTER);
-> -
-> -	writel(WD_CONFIG_XTAL_IN, dev->base + WD_CONFIG);
-> -
-> -	/*
-> -	 * Mark as active and restart with configured timeout if
-> -	 * already running.
-> -	 */
-> -	if (readl(dev->base + WD_COUNTER)) {
-> -		set_bit(WDOG_HW_RUNNING, &dev->wdt.status);
-> -		tangox_wdt_start(&dev->wdt);
-> -	}
-> -
-> -	watchdog_set_restart_priority(&dev->wdt, 128);
-> -
-> -	watchdog_stop_on_unregister(&dev->wdt);
-> -	err = devm_watchdog_register_device(&pdev->dev, &dev->wdt);
-> -	if (err)
-> -		return err;
-> -
-> -	platform_set_drvdata(pdev, dev);
-> -
-> -	dev_info(&pdev->dev, "SMP86xx/SMP87xx watchdog registered\n");
-> -
-> -	return 0;
-> -}
-> -
-> -static const struct of_device_id tangox_wdt_dt_ids[] = {
-> -	{ .compatible = "sigma,smp8642-wdt" },
-> -	{ .compatible = "sigma,smp8759-wdt" },
-> -	{ }
-> -};
-> -MODULE_DEVICE_TABLE(of, tangox_wdt_dt_ids);
-> -
-> -static struct platform_driver tangox_wdt_driver = {
-> -	.probe	= tangox_wdt_probe,
-> -	.driver	= {
-> -		.name		= "tangox-wdt",
-> -		.of_match_table	= tangox_wdt_dt_ids,
-> -	},
-> -};
-> -
-> -module_platform_driver(tangox_wdt_driver);
-> -
-> -MODULE_AUTHOR("Mans Rullgard <mans@mansr.com>");
-> -MODULE_DESCRIPTION("SMP86xx/SMP87xx Watchdog driver");
-> -MODULE_LICENSE("GPL");
-> -- 
->
-> 2.29.2
->
-
--- 
-Måns Rullgård
+       Arnd
