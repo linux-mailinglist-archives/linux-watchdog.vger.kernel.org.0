@@ -2,56 +2,57 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D341130053B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jan 2021 15:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644B5300629
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jan 2021 15:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728556AbhAVOWx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Jan 2021 09:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S1728627AbhAVOyB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Jan 2021 09:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728548AbhAVOWm (ORCPT
+        with ESMTP id S1728633AbhAVOXs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Jan 2021 09:22:42 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D68C06174A;
-        Fri, 22 Jan 2021 06:22:02 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id k8so5176604otr.8;
-        Fri, 22 Jan 2021 06:22:02 -0800 (PST)
+        Fri, 22 Jan 2021 09:23:48 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A453DC06174A;
+        Fri, 22 Jan 2021 06:23:08 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id w124so6124895oia.6;
+        Fri, 22 Jan 2021 06:23:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+        h=sender:subject:to:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=dE5eeABbsl9hoYyeXHJw9dTzbdaMxoVlvnITbTCl6Vg=;
-        b=sW5mi6DwxsKlgOpEA+BR+j9OUULLa9UEls+lEDf1fdLPuwrRPzDiZb9JXPUoj67b+n
-         6toaI/AVZOzngjEteTJixlnY8EvCzMJ/ep+BhSfBMYIzp6RPKftO2XEES2K5ixtwroR7
-         uExtbvH97tNf5kY8C3i0dEGXZ3rwV0LHfL4abiYPF5BUzXWjkaQxw8vz7ta6jXzBEXpw
-         2bPFxvME2oWvxhz3FFxMaZxRk/m2YwMGSkSurMMobxNvDyN5mc9EsdCU2C6yweHlUNwf
-         MyNYWERCIZ6mxQLMx5XubW4RR1PFK2BYaX4HUT1Yp/7X8CG/N8qcUwU5+ACK28A1qdxj
-         e7Aw==
+        bh=vqm/5IS836BfNYf0ZtG5mNjdaBB9uK6WkVWMGfpI2MA=;
+        b=KWDyotPc8z/8AfcJ/xMfbDdqtrlgQRNkdxp67t/xtg2/QRdzEwGmXlIFeE7d3qC3r/
+         vIFltDpwGm3I3omRLQu7gKzAyo2oJ0mHobXF9ky8Lk2DVHLtENFshxJLxMErMIGSJ1GL
+         BkFzA1pKe7EBmMRb7DoAsEVVMahlOB9lei5l0uL/dveBIdTFocP0DzZ8LEgvkVhqOGuX
+         GJ3mrS/F3v3Ae0moU3JCjaz8G82msQLwfKbgngJ5S9WCZ0RvtozuoFkQQz4s7Jjra12J
+         KXfG13kYxm2977ZvWHAgrGGxHvfc3zS2oCjdfVFB6wPM9SEuGGUar9z8HoY5x/eYOlNC
+         PM8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=dE5eeABbsl9hoYyeXHJw9dTzbdaMxoVlvnITbTCl6Vg=;
-        b=NIOnrs4FtNB1ypwm3qDgWJp2Mcmry6D65Cpry9lDQAXi4FRJNhtEi+Ae/JlFKnKGEN
-         ugKj2uEtIa5gxN9EcnV8NftwOnKtfmJWd4OFn9MXucHBYYH+6F32tzA6Y6WWX7IpHB+m
-         wxxwOcJXQk9itY5gdg1wN6EV1aMTxYZ1YBGpNXJXaUCpzYEDM4N4iMlQSIPdMAgNadOi
-         3vOhT7BB/lC7EtVgKQEq4rpQZVXIo9aa6PALkpb3zMr+htHgu12uhErcylKIDvBpnmPu
-         1O/uP5/Np6QkarIwzf7X1ldf0TEgapNel9bPee+mW9vnXuJ8eXylWh5A+G1WpSj8IEzL
-         M/MQ==
-X-Gm-Message-State: AOAM530tEXeSvuTIM87g6Zw9d/5ZMJDQ4tcttPQmGYO8Ye1Y7RAHz7Qg
-        lCPZkk87NuMFCSPf5kiVA78=
-X-Google-Smtp-Source: ABdhPJyeei9v5OqtdFEMSqhpcw9t6Qd1FeFBwKUV0/E/Ugzi3qj3swsAvivR6SVBIw1T/4WlWq5RbA==
-X-Received: by 2002:a05:6830:350:: with SMTP id h16mr452245ote.130.1611325321557;
-        Fri, 22 Jan 2021 06:22:01 -0800 (PST)
+        bh=vqm/5IS836BfNYf0ZtG5mNjdaBB9uK6WkVWMGfpI2MA=;
+        b=sTGMBjiZyiGodZdeAFeELp6C7Iwh66UxW1+tQB6mxnNLHgNnrzdlidje3dfwlCayDl
+         7Z4N8mYPy6IczX71tsY6kOQ9HVMEaN3RSWpajBFu96hK9QWOvPg5wzVPiIlEE95Q6mxb
+         mX773eP47J/lzrC2BAUwrwJ5vLq4IxLXCzuBdAGe+8id1fCQLwpJJW17qRHvoJU/ksum
+         8edC3R92EiDo8Oott4GlDNjee0NqfN9UgDpADxYGI5peyb4uFhjGdHvEx/ImSbA8wPyw
+         L5DeHmKsPy1UMwtmHpDaErIV9j+3e0YoOdxQSAenJ3OygTgVBdYPUDP+XkkMima4YPq8
+         Ui7A==
+X-Gm-Message-State: AOAM533+HyKSoD+8SCklMoxDAwrt4WOcSM/s+Q10hUx8MH1Z93IxNPhY
+        OSqGDgKFOBYvg1tiqINE5y0=
+X-Google-Smtp-Source: ABdhPJzHDPnSj73dur54fKvdNq6aCvt1gDpkuVsPd6J2mMP7/VsGA+ldglnBzAqqUGO97S9Rnxk8BQ==
+X-Received: by 2002:aca:fd49:: with SMTP id b70mr3381122oii.92.1611325388158;
+        Fri, 22 Jan 2021 06:23:08 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n1sm1024058oog.31.2021.01.22.06.21.59
+        by smtp.gmail.com with ESMTPSA id 8sm1760934oii.45.2021.01.22.06.23.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jan 2021 06:22:00 -0800 (PST)
+        Fri, 22 Jan 2021 06:23:07 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v1 4/5] platform/x86: intel_scu_wdt: Drop SCU notification
+Subject: Re: [PATCH v1 5/5] platform/x86: intel_scu_wdt: Get rid of custom x86
+ model comparison
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -60,10 +61,8 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mark Gross <mgross@linux.intel.com>,
         linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>
 References: <20210122123201.40935-1-andriy.shevchenko@linux.intel.com>
- <20210122123201.40935-4-andriy.shevchenko@linux.intel.com>
+ <20210122123201.40935-5-andriy.shevchenko@linux.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -108,12 +107,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <c0ab2b21-7907-92a8-04f3-0afe7dd38387@roeck-us.net>
-Date:   Fri, 22 Jan 2021 06:21:58 -0800
+Message-ID: <692bcf6f-78ce-e865-8bbc-05f260c41502@roeck-us.net>
+Date:   Fri, 22 Jan 2021 06:23:05 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210122123201.40935-4-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210122123201.40935-5-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -122,73 +121,55 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 1/22/21 4:32 AM, Andy Shevchenko wrote:
-> Since SCU code along with the Intel MID watchdog driver has been refactored
-> in a way that latter will be probed only after the former has been come
-> to live, the notification code is bogus and not needed. Remove it for good.
+> Switch the platform code to use x86_id_table and accompanying API
+> instead of custom comparison against x86 CPU model.
+> 
+> This is one of the last users of custom API for that and following
+> changes will remove it for the good.
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/platform/x86/intel_scu_wdt.c | 31 +++++++---------------------
->  1 file changed, 7 insertions(+), 24 deletions(-)
+>  drivers/platform/x86/intel_scu_wdt.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/platform/x86/intel_scu_wdt.c b/drivers/platform/x86/intel_scu_wdt.c
-> index 227218a8f98e..19f7686a3c19 100644
+> index 19f7686a3c19..85ee85ca2215 100644
 > --- a/drivers/platform/x86/intel_scu_wdt.c
 > +++ b/drivers/platform/x86/intel_scu_wdt.c
-> @@ -12,7 +12,6 @@
+> @@ -11,6 +11,8 @@
+>  #include <linux/platform_device.h>
 >  #include <linux/platform_data/intel-mid_wdt.h>
 >  
+> +#include <asm/cpu_device_id.h>
+> +#include <asm/intel-family.h>
 >  #include <asm/intel-mid.h>
-> -#include <asm/intel_scu_ipc.h>
 >  #include <asm/io_apic.h>
 >  #include <asm/hw_irq.h>
->  
-> @@ -49,34 +48,18 @@ static struct intel_mid_wdt_pdata tangier_pdata = {
+> @@ -48,12 +50,20 @@ static struct intel_mid_wdt_pdata tangier_pdata = {
 >  	.probe = tangier_probe,
 >  };
 >  
-> -static int wdt_scu_status_change(struct notifier_block *nb,
-> -				 unsigned long code, void *data)
-> -{
-> -	if (code == SCU_DOWN) {
-> -		platform_device_unregister(&wdt_dev);
-> -		return 0;
-> -	}
-> -
-> -	return platform_device_register(&wdt_dev);
-> -}
-> -
-> -static struct notifier_block wdt_scu_notifier = {
-> -	.notifier_call	= wdt_scu_status_change,
-> -};
-> -
+> +static const struct x86_cpu_id intel_mid_cpu_ids[] = {
+> +	X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT_MID, &tangier_pdata),
+> +	{}
+> +};
+> +
 >  static int __init register_mid_wdt(void)
 >  {
->  	if (intel_mid_identify_cpu() != INTEL_MID_CPU_CHIP_TANGIER)
+> -	if (intel_mid_identify_cpu() != INTEL_MID_CPU_CHIP_TANGIER)
+> +	const struct x86_cpu_id *id;
+> +
+> +	id = x86_match_cpu(intel_mid_cpu_ids);
+> +	if (!id)
 >  		return -ENODEV;
 >  
->  	wdt_dev.dev.platform_data = &tangier_pdata;
-> -
-> -	/*
-> -	 * We need to be sure that the SCU IPC is ready before watchdog device
-> -	 * can be registered:
-> -	 */
-> -	intel_scu_notifier_add(&wdt_scu_notifier);
-> -
-> -	return 0;
-> +	return platform_device_register(&wdt_dev);
+> -	wdt_dev.dev.platform_data = &tangier_pdata;
+> +	wdt_dev.dev.platform_data = (const struct intel_mid_wdt_pdata *)id->driver_data;
+>  	return platform_device_register(&wdt_dev);
 >  }
 >  arch_initcall(register_mid_wdt);
-> +
-> +static void __exit unregister_mid_wdt(void)
-> +{
-> +	platform_device_unregister(&wdt_dev);
-> +}
-> +__exitcall(unregister_mid_wdt);
 > 
 
