@@ -2,57 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E08E300536
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jan 2021 15:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D341130053B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jan 2021 15:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728533AbhAVOWK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Jan 2021 09:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S1728556AbhAVOWx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Jan 2021 09:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728043AbhAVOVz (ORCPT
+        with ESMTP id S1728548AbhAVOWm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Jan 2021 09:21:55 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60C2C06174A;
-        Fri, 22 Jan 2021 06:21:14 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id h6so4738257oie.5;
-        Fri, 22 Jan 2021 06:21:14 -0800 (PST)
+        Fri, 22 Jan 2021 09:22:42 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D68C06174A;
+        Fri, 22 Jan 2021 06:22:02 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id k8so5176604otr.8;
+        Fri, 22 Jan 2021 06:22:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=c81WqRSj1Tvcbd5sD/lwHpEyfNXlz1jmvdm9oQfl+jY=;
-        b=g6zCWc3pUO2pyE1REpUmNJn8epQSOiqKUVzhxLVw19Ka6nFrpuPOy/vVsyTwc20gGt
-         RHFx1BpJ+KmdtTRUdVJSdAbg6E4m72VfHCH4BpNmesPUjllB5eSdKBzdVRpsr29BAp/6
-         s7go3/Tlp1U6sSR/TIXUBltTqgJfIwL4e8HSrNkaXdHOIOuuHQgxC3OhLFJ/61Wx/jzg
-         5ghAaJJSmu4h8oq2g+O08toRQo/6ES5JoAidZLMaYVB2lYx1uJ4G9G13TjJ/TFBvDtPk
-         Dm4kvF/1LKeNVoG4LxEY6vJHJBXGtQZcq/h6V29zXsFV/SaCUJZPLx9uDD0tos9gxLyl
-         Lcag==
+        bh=dE5eeABbsl9hoYyeXHJw9dTzbdaMxoVlvnITbTCl6Vg=;
+        b=sW5mi6DwxsKlgOpEA+BR+j9OUULLa9UEls+lEDf1fdLPuwrRPzDiZb9JXPUoj67b+n
+         6toaI/AVZOzngjEteTJixlnY8EvCzMJ/ep+BhSfBMYIzp6RPKftO2XEES2K5ixtwroR7
+         uExtbvH97tNf5kY8C3i0dEGXZ3rwV0LHfL4abiYPF5BUzXWjkaQxw8vz7ta6jXzBEXpw
+         2bPFxvME2oWvxhz3FFxMaZxRk/m2YwMGSkSurMMobxNvDyN5mc9EsdCU2C6yweHlUNwf
+         MyNYWERCIZ6mxQLMx5XubW4RR1PFK2BYaX4HUT1Yp/7X8CG/N8qcUwU5+ACK28A1qdxj
+         e7Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=c81WqRSj1Tvcbd5sD/lwHpEyfNXlz1jmvdm9oQfl+jY=;
-        b=IoKlSCNRZoqorbdA8IavIT3r5dns6O8EhUNmKnsK1oyvC+NA/i41k65/Y3rinpjD2z
-         LwREKjTIrNwUsQgOByOtcS2TYcwtCmMRQoPEAcKupIHKUCrVUBehx/xTA41ZzW7px+mY
-         2g5sTWg5+Fwrm6yRN48wACRtzW0cAMp5F0hOI4HC/4OtEzLvjAr9+r4XLkr1wSj4ayaM
-         yykPa3M6fkz9mdV9RkQKDTBlboQdJ+S7cSYXyp5KcDn80UiDMaJIDOXRGa999+bw5ots
-         iQ3GKZeE7wWWWec9w7JVvQUyX4nQwgKFBC0vpT9qcEOpoWay9QLkjeP05FAEzCPdb5sA
-         CX3Q==
-X-Gm-Message-State: AOAM530nY3+EkolxMkHIa0U/htKpBc56/QD6zpAFwKDAWXgnVpGFKR+K
-        3i8mzwJXZpvDkhNkXtAPz1o=
-X-Google-Smtp-Source: ABdhPJyEWxtpfA2RU2h4Iy9/yWBtNAmfat5FwtmeVpKy3ucIfkzYUmD06A+3BEaECgpKwN18lzYJEA==
-X-Received: by 2002:aca:508f:: with SMTP id e137mr3413160oib.32.1611325274332;
-        Fri, 22 Jan 2021 06:21:14 -0800 (PST)
+        bh=dE5eeABbsl9hoYyeXHJw9dTzbdaMxoVlvnITbTCl6Vg=;
+        b=NIOnrs4FtNB1ypwm3qDgWJp2Mcmry6D65Cpry9lDQAXi4FRJNhtEi+Ae/JlFKnKGEN
+         ugKj2uEtIa5gxN9EcnV8NftwOnKtfmJWd4OFn9MXucHBYYH+6F32tzA6Y6WWX7IpHB+m
+         wxxwOcJXQk9itY5gdg1wN6EV1aMTxYZ1YBGpNXJXaUCpzYEDM4N4iMlQSIPdMAgNadOi
+         3vOhT7BB/lC7EtVgKQEq4rpQZVXIo9aa6PALkpb3zMr+htHgu12uhErcylKIDvBpnmPu
+         1O/uP5/Np6QkarIwzf7X1ldf0TEgapNel9bPee+mW9vnXuJ8eXylWh5A+G1WpSj8IEzL
+         M/MQ==
+X-Gm-Message-State: AOAM530tEXeSvuTIM87g6Zw9d/5ZMJDQ4tcttPQmGYO8Ye1Y7RAHz7Qg
+        lCPZkk87NuMFCSPf5kiVA78=
+X-Google-Smtp-Source: ABdhPJyeei9v5OqtdFEMSqhpcw9t6Qd1FeFBwKUV0/E/Ugzi3qj3swsAvivR6SVBIw1T/4WlWq5RbA==
+X-Received: by 2002:a05:6830:350:: with SMTP id h16mr452245ote.130.1611325321557;
+        Fri, 22 Jan 2021 06:22:01 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t25sm1704672oic.15.2021.01.22.06.21.11
+        by smtp.gmail.com with ESMTPSA id n1sm1024058oog.31.2021.01.22.06.21.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jan 2021 06:21:12 -0800 (PST)
+        Fri, 22 Jan 2021 06:22:00 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v1 3/5] platform/x86: intel_scu_wdt: Move driver from
- arch/x86
+Subject: Re: [PATCH v1 4/5] platform/x86: intel_scu_wdt: Drop SCU notification
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -64,7 +63,7 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Cc:     Hans de Goede <hdegoede@redhat.com>,
         Linus Walleij <linus.walleij@linaro.org>
 References: <20210122123201.40935-1-andriy.shevchenko@linux.intel.com>
- <20210122123201.40935-3-andriy.shevchenko@linux.intel.com>
+ <20210122123201.40935-4-andriy.shevchenko@linux.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -109,12 +108,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <35099684-7362-5cc7-1ddd-c70b3b25f7e3@roeck-us.net>
-Date:   Fri, 22 Jan 2021 06:21:10 -0800
+Message-ID: <c0ab2b21-7907-92a8-04f3-0afe7dd38387@roeck-us.net>
+Date:   Fri, 22 Jan 2021 06:21:58 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210122123201.40935-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210122123201.40935-4-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -122,74 +121,74 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 1/22/21 4:31 AM, Andy Shevchenko wrote:
-> The ACPI-enabled Intel MID platforms neither have WDAT table nor proper IDs
-> to instantiate watchdog device. In order to keep them working move the board
-> code from arch/x86 to drivers/platform/x86.
-> 
-> Note, the complete SFI support is going to be removed, that's why PDx86
-> has been chosen as a new home for it. This is the only device which needs
-> additional code so far.
+On 1/22/21 4:32 AM, Andy Shevchenko wrote:
+> Since SCU code along with the Intel MID watchdog driver has been refactored
+> in a way that latter will be probed only after the former has been come
+> to live, the notification code is bogus and not needed. Remove it for good.
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 > Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Not sure if I like the new name (seems to be a bit misleading), but still
-
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  arch/x86/platform/intel-mid/device_libs/Makefile          | 1 -
->  drivers/platform/x86/Kconfig                              | 8 ++++++++
->  drivers/platform/x86/Makefile                             | 1 +
->  .../platform/x86/intel_scu_wdt.c                          | 0
->  4 files changed, 9 insertions(+), 1 deletion(-)
->  rename arch/x86/platform/intel-mid/device_libs/platform_mrfld_wdt.c => drivers/platform/x86/intel_scu_wdt.c (100%)
+>  drivers/platform/x86/intel_scu_wdt.c | 31 +++++++---------------------
+>  1 file changed, 7 insertions(+), 24 deletions(-)
 > 
-> diff --git a/arch/x86/platform/intel-mid/device_libs/Makefile b/arch/x86/platform/intel-mid/device_libs/Makefile
-> index 480fed21cc7d..918edac9ab9a 100644
-> --- a/arch/x86/platform/intel-mid/device_libs/Makefile
-> +++ b/arch/x86/platform/intel-mid/device_libs/Makefile
-> @@ -30,4 +30,3 @@ obj-$(subst m,y,$(CONFIG_GPIO_PCA953X)) += platform_tca6416.o
->  obj-$(subst m,y,$(CONFIG_KEYBOARD_GPIO)) += platform_gpio_keys.o
->  obj-$(subst m,y,$(CONFIG_INTEL_MID_POWER_BUTTON)) += platform_mrfld_power_btn.o
->  obj-$(subst m,y,$(CONFIG_RTC_DRV_CMOS)) += platform_mrfld_rtc.o
-> -obj-$(subst m,y,$(CONFIG_INTEL_MID_WATCHDOG)) += platform_mrfld_wdt.o
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index 4a5798a0ce0c..0bb85eabace1 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -1424,6 +1424,14 @@ config INTEL_SCU_PLATFORM
->  	  and SCU (sometimes called PMC as well). The driver currently
->  	  supports Intel Elkhart Lake and compatible platforms.
+> diff --git a/drivers/platform/x86/intel_scu_wdt.c b/drivers/platform/x86/intel_scu_wdt.c
+> index 227218a8f98e..19f7686a3c19 100644
+> --- a/drivers/platform/x86/intel_scu_wdt.c
+> +++ b/drivers/platform/x86/intel_scu_wdt.c
+> @@ -12,7 +12,6 @@
+>  #include <linux/platform_data/intel-mid_wdt.h>
 >  
-> +config INTEL_SCU_WDT
-> +	bool
-> +	default INTEL_SCU_PCI
-> +	depends on INTEL_MID_WATCHDOG
-> +	help
-> +	  This is a specific platform code to instantiate watchdog device
-> +	  on ACPI-based Intel MID platforms.
+>  #include <asm/intel-mid.h>
+> -#include <asm/intel_scu_ipc.h>
+>  #include <asm/io_apic.h>
+>  #include <asm/hw_irq.h>
+>  
+> @@ -49,34 +48,18 @@ static struct intel_mid_wdt_pdata tangier_pdata = {
+>  	.probe = tangier_probe,
+>  };
+>  
+> -static int wdt_scu_status_change(struct notifier_block *nb,
+> -				 unsigned long code, void *data)
+> -{
+> -	if (code == SCU_DOWN) {
+> -		platform_device_unregister(&wdt_dev);
+> -		return 0;
+> -	}
+> -
+> -	return platform_device_register(&wdt_dev);
+> -}
+> -
+> -static struct notifier_block wdt_scu_notifier = {
+> -	.notifier_call	= wdt_scu_status_change,
+> -};
+> -
+>  static int __init register_mid_wdt(void)
+>  {
+>  	if (intel_mid_identify_cpu() != INTEL_MID_CPU_CHIP_TANGIER)
+>  		return -ENODEV;
+>  
+>  	wdt_dev.dev.platform_data = &tangier_pdata;
+> -
+> -	/*
+> -	 * We need to be sure that the SCU IPC is ready before watchdog device
+> -	 * can be registered:
+> -	 */
+> -	intel_scu_notifier_add(&wdt_scu_notifier);
+> -
+> -	return 0;
+> +	return platform_device_register(&wdt_dev);
+>  }
+>  arch_initcall(register_mid_wdt);
 > +
->  config INTEL_SCU_IPC_UTIL
->  	tristate "Intel SCU IPC utility driver"
->  	depends on INTEL_SCU
-> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-> index 728ccc226a29..19306450d791 100644
-> --- a/drivers/platform/x86/Makefile
-> +++ b/drivers/platform/x86/Makefile
-> @@ -146,6 +146,7 @@ obj-$(CONFIG_INTEL_PUNIT_IPC)		+= intel_punit_ipc.o
->  obj-$(CONFIG_INTEL_SCU_IPC)		+= intel_scu_ipc.o
->  obj-$(CONFIG_INTEL_SCU_PCI)		+= intel_scu_pcidrv.o
->  obj-$(CONFIG_INTEL_SCU_PLATFORM)	+= intel_scu_pltdrv.o
-> +obj-$(CONFIG_INTEL_SCU_WDT)		+= intel_scu_wdt.o
->  obj-$(CONFIG_INTEL_SCU_IPC_UTIL)	+= intel_scu_ipcutil.o
->  obj-$(CONFIG_INTEL_TELEMETRY)		+= intel_telemetry_core.o \
->  					   intel_telemetry_pltdrv.o \
-> diff --git a/arch/x86/platform/intel-mid/device_libs/platform_mrfld_wdt.c b/drivers/platform/x86/intel_scu_wdt.c
-> similarity index 100%
-> rename from arch/x86/platform/intel-mid/device_libs/platform_mrfld_wdt.c
-> rename to drivers/platform/x86/intel_scu_wdt.c
+> +static void __exit unregister_mid_wdt(void)
+> +{
+> +	platform_device_unregister(&wdt_dev);
+> +}
+> +__exitcall(unregister_mid_wdt);
 > 
 
