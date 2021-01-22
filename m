@@ -2,780 +2,703 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D4C30030B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jan 2021 13:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3774C300343
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jan 2021 13:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbhAVMbq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Jan 2021 07:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbhAVJZr (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Jan 2021 04:25:47 -0500
-Received: from antares.kleine-koenig.org (antares.kleine-koenig.org [IPv6:2a01:4f8:c0c:3a97::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C9CC06178B;
-        Fri, 22 Jan 2021 01:24:58 -0800 (PST)
-Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
-        id 74D36AD9970; Fri, 22 Jan 2021 10:24:56 +0100 (CET)
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pau Oliva Fora <pof@eslack.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hannes Reinecke <hare@suse.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
-        alsa-devel@alsa-project.org, Wolfram Sang <wsa@kernel.org>,
-        Takashi Iway <tiwai@suse.de>
-Subject: [PATCH v2 3/3] isa: Make the remove callback for isa drivers return void
-Date:   Fri, 22 Jan 2021 10:24:49 +0100
-Message-Id: <20210122092449.426097-4-uwe@kleine-koenig.org>
+        id S1728137AbhAVMf1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Jan 2021 07:35:27 -0500
+Received: from mga03.intel.com ([134.134.136.65]:46761 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728155AbhAVMek (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 22 Jan 2021 07:34:40 -0500
+IronPort-SDR: jsSXpFNxbuZAoZ7TLFCJozuny2DmLRY28EcOYabAwvrWmPEJlnhAaT+oBAOV30WkYVMGaOc2Jk
+ aF4bPZ/ndoEg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="179520242"
+X-IronPort-AV: E=Sophos;i="5.79,366,1602572400"; 
+   d="scan'208";a="179520242"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2021 04:32:07 -0800
+IronPort-SDR: k8e58dHKmjYi4OEbtVVeCJjVcf7cgHiirRI2LG61c8QIKUAWwn8RlNDQAk8rfI6oERvP7Upi4S
+ lrN+j0sd+3MQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,366,1602572400"; 
+   d="scan'208";a="367405632"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 22 Jan 2021 04:32:03 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C405014F; Fri, 22 Jan 2021 14:32:02 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        platform-driver-x86@vger.kernel.org,
+        Mark Gross <mgross@linux.intel.com>,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v1 1/5] watchdog: intel_scu_watchdog: Remove driver for deprecated platform
+Date:   Fri, 22 Jan 2021 14:31:57 +0200
+Message-Id: <20210122123201.40935-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210122092449.426097-1-uwe@kleine-koenig.org>
-References: <20210122092449.426097-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The driver core ignores the return value of the remove callback, so
-don't give isa drivers the chance to provide a value.
+Intel Moorestown and Medfield are quite old Intel Atom based
+32-bit platforms, which were in limited use in some Android phones,
+tablets and consumer electronics more than eight years ago.
 
-Adapt all isa_drivers with a remove callbacks accordingly; they all
-return 0 unconditionally anyhow.
+There are no bugs or problems ever reported outside from Intel
+for breaking any of that platforms for years. It seems no real
+users exists who run more or less fresh kernel on it. The commit
+05f4434bc130 ("ASoC: Intel: remove mfld_machine") also in align
+with this theory.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for drivers/net/can/sja1000/tscan1.c
-Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-Acked-by: Wolfram Sang <wsa@kernel.org> # for drivers/i2c/
-Reviewed-by: Takashi Iway <tiwai@suse.de> # for sound/
-Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
+Due to above and to reduce a burden of supporting outdated drivers
+we remove the support of outdated platforms completely.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/base/isa.c                   | 2 +-
- drivers/i2c/busses/i2c-elektor.c     | 4 +---
- drivers/i2c/busses/i2c-pca-isa.c     | 4 +---
- drivers/input/touchscreen/htcpen.c   | 4 +---
- drivers/media/radio/radio-isa.c      | 4 +---
- drivers/media/radio/radio-isa.h      | 2 +-
- drivers/media/radio/radio-sf16fmr2.c | 4 +---
- drivers/net/can/sja1000/tscan1.c     | 4 +---
- drivers/net/ethernet/3com/3c509.c    | 3 +--
- drivers/scsi/advansys.c              | 3 +--
- drivers/scsi/aha1542.c               | 3 +--
- drivers/scsi/fdomain_isa.c           | 3 +--
- drivers/scsi/g_NCR5380.c             | 5 ++---
- drivers/watchdog/pcwd.c              | 4 +---
- include/linux/isa.h                  | 2 +-
- sound/isa/ad1848/ad1848.c            | 3 +--
- sound/isa/adlib.c                    | 3 +--
- sound/isa/cmi8328.c                  | 3 +--
- sound/isa/cmi8330.c                  | 3 +--
- sound/isa/cs423x/cs4231.c            | 3 +--
- sound/isa/cs423x/cs4236.c            | 3 +--
- sound/isa/es1688/es1688.c            | 3 +--
- sound/isa/es18xx.c                   | 5 ++---
- sound/isa/galaxy/galaxy.c            | 3 +--
- sound/isa/gus/gusclassic.c           | 3 +--
- sound/isa/gus/gusextreme.c           | 3 +--
- sound/isa/gus/gusmax.c               | 3 +--
- sound/isa/gus/interwave.c            | 3 +--
- sound/isa/msnd/msnd_pinnacle.c       | 3 +--
- sound/isa/opl3sa2.c                  | 3 +--
- sound/isa/opti9xx/miro.c             | 3 +--
- sound/isa/opti9xx/opti92x-ad1848.c   | 5 ++---
- sound/isa/sb/jazz16.c                | 3 +--
- sound/isa/sb/sb16.c                  | 3 +--
- sound/isa/sb/sb8.c                   | 3 +--
- sound/isa/sc6000.c                   | 3 +--
- sound/isa/sscape.c                   | 3 +--
- sound/isa/wavefront/wavefront.c      | 3 +--
- 38 files changed, 41 insertions(+), 83 deletions(-)
+ drivers/watchdog/Kconfig              |   9 -
+ drivers/watchdog/Makefile             |   1 -
+ drivers/watchdog/intel_scu_watchdog.c | 533 --------------------------
+ drivers/watchdog/intel_scu_watchdog.h |  50 ---
+ 4 files changed, 593 deletions(-)
+ delete mode 100644 drivers/watchdog/intel_scu_watchdog.c
+ delete mode 100644 drivers/watchdog/intel_scu_watchdog.h
 
-diff --git a/drivers/base/isa.c b/drivers/base/isa.c
-index 2772f5d1948a..aa4737667026 100644
---- a/drivers/base/isa.c
-+++ b/drivers/base/isa.c
-@@ -51,7 +51,7 @@ static int isa_bus_remove(struct device *dev)
- 	struct isa_driver *isa_driver = dev->platform_data;
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 7ff941e71b79..6b9e93d8532b 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1219,15 +1219,6 @@ config IE6XX_WDT
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called ie6xx_wdt.
  
- 	if (isa_driver && isa_driver->remove)
--		return isa_driver->remove(dev, to_isa_dev(dev)->id);
-+		isa_driver->remove(dev, to_isa_dev(dev)->id);
- 
- 	return 0;
- }
-diff --git a/drivers/i2c/busses/i2c-elektor.c b/drivers/i2c/busses/i2c-elektor.c
-index 140426db28df..b72a3c3ef2ab 100644
---- a/drivers/i2c/busses/i2c-elektor.c
-+++ b/drivers/i2c/busses/i2c-elektor.c
-@@ -282,7 +282,7 @@ static int elektor_probe(struct device *dev, unsigned int id)
- 	return -ENODEV;
- }
- 
--static int elektor_remove(struct device *dev, unsigned int id)
-+static void elektor_remove(struct device *dev, unsigned int id)
- {
- 	i2c_del_adapter(&pcf_isa_ops);
- 
-@@ -298,8 +298,6 @@ static int elektor_remove(struct device *dev, unsigned int id)
- 		iounmap(base_iomem);
- 		release_mem_region(base, 2);
- 	}
+-config INTEL_SCU_WATCHDOG
+-	bool "Intel SCU Watchdog for Mobile Platforms"
+-	depends on X86_INTEL_MID
+-	help
+-	  Hardware driver for the watchdog time built into the Intel SCU
+-	  for Intel Mobile Platforms.
+-
+-	  To compile this driver as a module, choose M here.
+-
+ config INTEL_MID_WATCHDOG
+ 	tristate "Intel MID Watchdog Timer"
+ 	depends on X86_INTEL_MID
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 5c74ee19d441..74f61e4105d8 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -140,7 +140,6 @@ obj-$(CONFIG_W83877F_WDT) += w83877f_wdt.o
+ obj-$(CONFIG_W83977F_WDT) += w83977f_wdt.o
+ obj-$(CONFIG_MACHZ_WDT) += machzwd.o
+ obj-$(CONFIG_SBC_EPX_C3_WATCHDOG) += sbc_epx_c3.o
+-obj-$(CONFIG_INTEL_SCU_WATCHDOG) += intel_scu_watchdog.o
+ obj-$(CONFIG_INTEL_MID_WATCHDOG) += intel-mid_wdt.o
+ obj-$(CONFIG_INTEL_MEI_WDT) += mei_wdt.o
+ obj-$(CONFIG_NI903X_WDT) += ni903x_wdt.o
+diff --git a/drivers/watchdog/intel_scu_watchdog.c b/drivers/watchdog/intel_scu_watchdog.c
+deleted file mode 100644
+index 804e35940983..000000000000
+--- a/drivers/watchdog/intel_scu_watchdog.c
++++ /dev/null
+@@ -1,533 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- *      Intel_SCU 0.2:  An Intel SCU IOH Based Watchdog Device
+- *			for Intel part #(s):
+- *				- AF82MP20 PCH
+- *
+- *      Copyright (C) 2009-2010 Intel Corporation. All rights reserved.
+- */
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/compiler.h>
+-#include <linux/kernel.h>
+-#include <linux/moduleparam.h>
+-#include <linux/types.h>
+-#include <linux/miscdevice.h>
+-#include <linux/watchdog.h>
+-#include <linux/fs.h>
+-#include <linux/notifier.h>
+-#include <linux/reboot.h>
+-#include <linux/init.h>
+-#include <linux/jiffies.h>
+-#include <linux/uaccess.h>
+-#include <linux/slab.h>
+-#include <linux/io.h>
+-#include <linux/interrupt.h>
+-#include <linux/delay.h>
+-#include <linux/sched.h>
+-#include <linux/signal.h>
+-#include <linux/sfi.h>
+-#include <asm/irq.h>
+-#include <linux/atomic.h>
+-#include <asm/intel_scu_ipc.h>
+-#include <asm/apb_timer.h>
+-#include <asm/intel-mid.h>
+-
+-#include "intel_scu_watchdog.h"
+-
+-/* Bounds number of times we will retry loading time count */
+-/* This retry is a work around for a silicon bug.	   */
+-#define MAX_RETRY 16
+-
+-#define IPC_SET_WATCHDOG_TIMER	0xF8
+-
+-static int timer_margin = DEFAULT_SOFT_TO_HARD_MARGIN;
+-module_param(timer_margin, int, 0);
+-MODULE_PARM_DESC(timer_margin,
+-		"Watchdog timer margin"
+-		"Time between interrupt and resetting the system"
+-		"The range is from 1 to 160"
+-		"This is the time for all keep alives to arrive");
+-
+-static int timer_set = DEFAULT_TIME;
+-module_param(timer_set, int, 0);
+-MODULE_PARM_DESC(timer_set,
+-		"Default Watchdog timer setting"
+-		"Complete cycle time"
+-		"The range is from 1 to 170"
+-		"This is the time for all keep alives to arrive");
+-
+-/* After watchdog device is closed, check force_boot. If:
+- * force_boot == 0, then force boot on next watchdog interrupt after close,
+- * force_boot == 1, then force boot immediately when device is closed.
+- */
+-static int force_boot;
+-module_param(force_boot, int, 0);
+-MODULE_PARM_DESC(force_boot,
+-		"A value of 1 means that the driver will reboot"
+-		"the system immediately if the /dev/watchdog device is closed"
+-		"A value of 0 means that when /dev/watchdog device is closed"
+-		"the watchdog timer will be refreshed for one more interval"
+-		"of length: timer_set. At the end of this interval, the"
+-		"watchdog timer will reset the system."
+-		);
+-
+-/* there is only one device in the system now; this can be made into
+- * an array in the future if we have more than one device */
+-
+-static struct intel_scu_watchdog_dev watchdog_device;
+-
+-/* Forces restart, if force_reboot is set */
+-static void watchdog_fire(void)
+-{
+-	if (force_boot) {
+-		pr_crit("Initiating system reboot\n");
+-		emergency_restart();
+-		pr_crit("Reboot didn't ?????\n");
+-	}
+-
+-	else {
+-		pr_crit("Immediate Reboot Disabled\n");
+-		pr_crit("System will reset when watchdog timer times out!\n");
+-	}
+-}
+-
+-static int check_timer_margin(int new_margin)
+-{
+-	if ((new_margin < MIN_TIME_CYCLE) ||
+-	    (new_margin > MAX_TIME - timer_set)) {
+-		pr_debug("value of new_margin %d is out of the range %d to %d\n",
+-			 new_margin, MIN_TIME_CYCLE, MAX_TIME - timer_set);
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * IPC operations
+- */
+-static int watchdog_set_ipc(int soft_threshold, int threshold)
+-{
+-	u32	*ipc_wbuf;
+-	u8	 cbuf[16] = { '\0' };
+-	int	 ipc_ret = 0;
+-
+-	ipc_wbuf = (u32 *)&cbuf;
+-	ipc_wbuf[0] = soft_threshold;
+-	ipc_wbuf[1] = threshold;
+-
+-	ipc_ret = intel_scu_ipc_command(
+-			IPC_SET_WATCHDOG_TIMER,
+-			0,
+-			ipc_wbuf,
+-			2,
+-			NULL,
+-			0);
+-
+-	if (ipc_ret != 0)
+-		pr_err("Error setting SCU watchdog timer: %x\n", ipc_ret);
+-
+-	return ipc_ret;
+-};
+-
+-/*
+- *      Intel_SCU operations
+- */
+-
+-/* timer interrupt handler */
+-static irqreturn_t watchdog_timer_interrupt(int irq, void *dev_id)
+-{
+-	int int_status;
+-	int_status = ioread32(watchdog_device.timer_interrupt_status_addr);
+-
+-	pr_debug("irq, int_status: %x\n", int_status);
+-
+-	if (int_status != 0)
+-		return IRQ_NONE;
+-
+-	/* has the timer been started? If not, then this is spurious */
+-	if (watchdog_device.timer_started == 0) {
+-		pr_debug("spurious interrupt received\n");
+-		return IRQ_HANDLED;
+-	}
+-
+-	/* temporarily disable the timer */
+-	iowrite32(0x00000002, watchdog_device.timer_control_addr);
+-
+-	/* set the timer to the threshold */
+-	iowrite32(watchdog_device.threshold,
+-		  watchdog_device.timer_load_count_addr);
+-
+-	/* allow the timer to run */
+-	iowrite32(0x00000003, watchdog_device.timer_control_addr);
+-
+-	return IRQ_HANDLED;
+-}
+-
+-static int intel_scu_keepalive(void)
+-{
+-
+-	/* read eoi register - clears interrupt */
+-	ioread32(watchdog_device.timer_clear_interrupt_addr);
+-
+-	/* temporarily disable the timer */
+-	iowrite32(0x00000002, watchdog_device.timer_control_addr);
+-
+-	/* set the timer to the soft_threshold */
+-	iowrite32(watchdog_device.soft_threshold,
+-		  watchdog_device.timer_load_count_addr);
+-
+-	/* allow the timer to run */
+-	iowrite32(0x00000003, watchdog_device.timer_control_addr);
 -
 -	return 0;
- }
- 
- static struct isa_driver i2c_elektor_driver = {
-diff --git a/drivers/i2c/busses/i2c-pca-isa.c b/drivers/i2c/busses/i2c-pca-isa.c
-index f27bc1e55385..85e8cf58e8bf 100644
---- a/drivers/i2c/busses/i2c-pca-isa.c
-+++ b/drivers/i2c/busses/i2c-pca-isa.c
-@@ -161,7 +161,7 @@ static int pca_isa_probe(struct device *dev, unsigned int id)
- 	return -ENODEV;
- }
- 
--static int pca_isa_remove(struct device *dev, unsigned int id)
-+static void pca_isa_remove(struct device *dev, unsigned int id)
- {
- 	i2c_del_adapter(&pca_isa_ops);
- 
-@@ -170,8 +170,6 @@ static int pca_isa_remove(struct device *dev, unsigned int id)
- 		free_irq(irq, &pca_isa_ops);
- 	}
- 	release_region(base, IO_SIZE);
+-}
+-
+-static int intel_scu_stop(void)
+-{
+-	iowrite32(0, watchdog_device.timer_control_addr);
+-	return 0;
+-}
+-
+-static int intel_scu_set_heartbeat(u32 t)
+-{
+-	int			 ipc_ret;
+-	int			 retry_count;
+-	u32			 soft_value;
+-	u32			 hw_value;
+-
+-	watchdog_device.timer_set = t;
+-	watchdog_device.threshold =
+-		timer_margin * watchdog_device.timer_tbl_ptr->freq_hz;
+-	watchdog_device.soft_threshold =
+-		(watchdog_device.timer_set - timer_margin)
+-		* watchdog_device.timer_tbl_ptr->freq_hz;
+-
+-	pr_debug("set_heartbeat: timer freq is %d\n",
+-		 watchdog_device.timer_tbl_ptr->freq_hz);
+-	pr_debug("set_heartbeat: timer_set is %x (hex)\n",
+-		 watchdog_device.timer_set);
+-	pr_debug("set_heartbeat: timer_margin is %x (hex)\n", timer_margin);
+-	pr_debug("set_heartbeat: threshold is %x (hex)\n",
+-		 watchdog_device.threshold);
+-	pr_debug("set_heartbeat: soft_threshold is %x (hex)\n",
+-		 watchdog_device.soft_threshold);
+-
+-	/* Adjust thresholds by FREQ_ADJUSTMENT factor, to make the */
+-	/* watchdog timing come out right. */
+-	watchdog_device.threshold =
+-		watchdog_device.threshold / FREQ_ADJUSTMENT;
+-	watchdog_device.soft_threshold =
+-		watchdog_device.soft_threshold / FREQ_ADJUSTMENT;
+-
+-	/* temporarily disable the timer */
+-	iowrite32(0x00000002, watchdog_device.timer_control_addr);
+-
+-	/* send the threshold and soft_threshold via IPC to the processor */
+-	ipc_ret = watchdog_set_ipc(watchdog_device.soft_threshold,
+-				   watchdog_device.threshold);
+-
+-	if (ipc_ret != 0) {
+-		/* Make sure the watchdog timer is stopped */
+-		intel_scu_stop();
+-		return ipc_ret;
+-	}
+-
+-	/* Soft Threshold set loop. Early versions of silicon did */
+-	/* not always set this count correctly.  This loop checks */
+-	/* the value and retries if it was not set correctly.     */
+-
+-	retry_count = 0;
+-	soft_value = watchdog_device.soft_threshold & 0xFFFF0000;
+-	do {
+-
+-		/* Make sure timer is stopped */
+-		intel_scu_stop();
+-
+-		if (MAX_RETRY < retry_count++) {
+-			/* Unable to set timer value */
+-			pr_err("Unable to set timer\n");
+-			return -ENODEV;
+-		}
+-
+-		/* set the timer to the soft threshold */
+-		iowrite32(watchdog_device.soft_threshold,
+-			watchdog_device.timer_load_count_addr);
+-
+-		/* read count value before starting timer */
+-		ioread32(watchdog_device.timer_load_count_addr);
+-
+-		/* Start the timer */
+-		iowrite32(0x00000003, watchdog_device.timer_control_addr);
+-
+-		/* read the value the time loaded into its count reg */
+-		hw_value = ioread32(watchdog_device.timer_load_count_addr);
+-		hw_value = hw_value & 0xFFFF0000;
+-
+-
+-	} while (soft_value != hw_value);
+-
+-	watchdog_device.timer_started = 1;
 -
 -	return 0;
- }
- 
- static struct isa_driver pca_isa_driver = {
-diff --git a/drivers/input/touchscreen/htcpen.c b/drivers/input/touchscreen/htcpen.c
-index 2f261a34f9c2..056ba76087e8 100644
---- a/drivers/input/touchscreen/htcpen.c
-+++ b/drivers/input/touchscreen/htcpen.c
-@@ -171,7 +171,7 @@ static int htcpen_isa_probe(struct device *dev, unsigned int id)
- 	return err;
- }
- 
--static int htcpen_isa_remove(struct device *dev, unsigned int id)
-+static void htcpen_isa_remove(struct device *dev, unsigned int id)
- {
- 	struct input_dev *htcpen_dev = dev_get_drvdata(dev);
- 
-@@ -182,8 +182,6 @@ static int htcpen_isa_remove(struct device *dev, unsigned int id)
- 	release_region(HTCPEN_PORT_INDEX, 2);
- 	release_region(HTCPEN_PORT_INIT, 1);
- 	release_region(HTCPEN_PORT_IRQ_CLEAR, 1);
+-}
 -
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/drivers/media/radio/radio-isa.c b/drivers/media/radio/radio-isa.c
-index 527f4c3b0ca4..c591c0851fa2 100644
---- a/drivers/media/radio/radio-isa.c
-+++ b/drivers/media/radio/radio-isa.c
-@@ -337,13 +337,11 @@ int radio_isa_probe(struct device *pdev, unsigned int dev)
- }
- EXPORT_SYMBOL_GPL(radio_isa_probe);
- 
--int radio_isa_remove(struct device *pdev, unsigned int dev)
-+void radio_isa_remove(struct device *pdev, unsigned int dev)
- {
- 	struct radio_isa_card *isa = dev_get_drvdata(pdev);
- 
- 	radio_isa_common_remove(isa, isa->drv->region_size);
+-/*
+- * /dev/watchdog handling
+- */
 -
--	return 0;
- }
- EXPORT_SYMBOL_GPL(radio_isa_remove);
- 
-diff --git a/drivers/media/radio/radio-isa.h b/drivers/media/radio/radio-isa.h
-index 2f0736edfda8..c9159958203e 100644
---- a/drivers/media/radio/radio-isa.h
-+++ b/drivers/media/radio/radio-isa.h
-@@ -91,7 +91,7 @@ struct radio_isa_driver {
- 
- int radio_isa_match(struct device *pdev, unsigned int dev);
- int radio_isa_probe(struct device *pdev, unsigned int dev);
--int radio_isa_remove(struct device *pdev, unsigned int dev);
-+void radio_isa_remove(struct device *pdev, unsigned int dev);
- #ifdef CONFIG_PNP
- int radio_isa_pnp_probe(struct pnp_dev *dev,
- 			const struct pnp_device_id *dev_id);
-diff --git a/drivers/media/radio/radio-sf16fmr2.c b/drivers/media/radio/radio-sf16fmr2.c
-index 0388894cfe41..d0dde55b7930 100644
---- a/drivers/media/radio/radio-sf16fmr2.c
-+++ b/drivers/media/radio/radio-sf16fmr2.c
-@@ -293,11 +293,9 @@ static void fmr2_remove(struct fmr2 *fmr2)
- 	kfree(fmr2);
- }
- 
--static int fmr2_isa_remove(struct device *pdev, unsigned int ndev)
-+static void fmr2_isa_remove(struct device *pdev, unsigned int ndev)
- {
- 	fmr2_remove(dev_get_drvdata(pdev));
+-static int intel_scu_open(struct inode *inode, struct file *file)
+-{
 -
--	return 0;
- }
- 
- static void fmr2_pnp_remove(struct pnp_dev *pdev)
-diff --git a/drivers/net/can/sja1000/tscan1.c b/drivers/net/can/sja1000/tscan1.c
-index 6ea802c66124..3dbba8d61afb 100644
---- a/drivers/net/can/sja1000/tscan1.c
-+++ b/drivers/net/can/sja1000/tscan1.c
-@@ -159,7 +159,7 @@ static int tscan1_probe(struct device *dev, unsigned id)
- 	return -ENXIO;
- }
- 
--static int tscan1_remove(struct device *dev, unsigned id /*unused*/)
-+static void tscan1_remove(struct device *dev, unsigned id /*unused*/)
- {
- 	struct net_device *netdev;
- 	struct sja1000_priv *priv;
-@@ -179,8 +179,6 @@ static int tscan1_remove(struct device *dev, unsigned id /*unused*/)
- 	release_region(pld_base, TSCAN1_PLD_SIZE);
- 
- 	free_sja1000dev(netdev);
+-	/* Set flag to indicate that watchdog device is open */
+-	if (test_and_set_bit(0, &watchdog_device.driver_open))
+-		return -EBUSY;
 -
--	return 0;
- }
- 
- static struct isa_driver tscan1_isa_driver = {
-diff --git a/drivers/net/ethernet/3com/3c509.c b/drivers/net/ethernet/3com/3c509.c
-index 667f38c9e4c6..53e1f7e07959 100644
---- a/drivers/net/ethernet/3com/3c509.c
-+++ b/drivers/net/ethernet/3com/3c509.c
-@@ -335,12 +335,11 @@ static int el3_isa_match(struct device *pdev, unsigned int ndev)
- 	return 1;
- }
- 
--static int el3_isa_remove(struct device *pdev,
-+static void el3_isa_remove(struct device *pdev,
- 				    unsigned int ndev)
- {
- 	el3_device_remove(pdev);
- 	dev_set_drvdata(pdev, NULL);
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
-index 79830e77afa9..b1e97f75b0ba 100644
---- a/drivers/scsi/advansys.c
-+++ b/drivers/scsi/advansys.c
-@@ -11459,12 +11459,11 @@ static int advansys_isa_probe(struct device *dev, unsigned int id)
- 	return err;
- }
- 
--static int advansys_isa_remove(struct device *dev, unsigned int id)
-+static void advansys_isa_remove(struct device *dev, unsigned int id)
- {
- 	int ioport = _asc_def_iop_base[id];
- 	advansys_release(dev_get_drvdata(dev));
- 	release_region(ioport, ASC_IOADR_GAP);
--	return 0;
- }
- 
- static struct isa_driver advansys_isa_driver = {
-diff --git a/drivers/scsi/aha1542.c b/drivers/scsi/aha1542.c
-index dc5667afeb27..e0d8cca1c70b 100644
---- a/drivers/scsi/aha1542.c
-+++ b/drivers/scsi/aha1542.c
-@@ -1025,12 +1025,11 @@ static int aha1542_isa_match(struct device *pdev, unsigned int ndev)
- 	return 1;
- }
- 
--static int aha1542_isa_remove(struct device *pdev,
-+static void aha1542_isa_remove(struct device *pdev,
- 				    unsigned int ndev)
- {
- 	aha1542_release(dev_get_drvdata(pdev));
- 	dev_set_drvdata(pdev, NULL);
--	return 0;
- }
- 
- static struct isa_driver aha1542_isa_driver = {
-diff --git a/drivers/scsi/fdomain_isa.c b/drivers/scsi/fdomain_isa.c
-index e0cdcd2003d0..2b4280a43a53 100644
---- a/drivers/scsi/fdomain_isa.c
-+++ b/drivers/scsi/fdomain_isa.c
-@@ -175,7 +175,7 @@ static int fdomain_isa_param_match(struct device *dev, unsigned int ndev)
- 	return 1;
- }
- 
--static int fdomain_isa_remove(struct device *dev, unsigned int ndev)
-+static void fdomain_isa_remove(struct device *dev, unsigned int ndev)
- {
- 	struct Scsi_Host *sh = dev_get_drvdata(dev);
- 	int base = sh->io_port;
-@@ -183,7 +183,6 @@ static int fdomain_isa_remove(struct device *dev, unsigned int ndev)
- 	fdomain_destroy(sh);
- 	release_region(base, FDOMAIN_REGION_SIZE);
- 	dev_set_drvdata(dev, NULL);
--	return 0;
- }
- 
- static struct isa_driver fdomain_isa_driver = {
-diff --git a/drivers/scsi/g_NCR5380.c b/drivers/scsi/g_NCR5380.c
-index 2df2f38a9b12..7ba3c9312731 100644
---- a/drivers/scsi/g_NCR5380.c
-+++ b/drivers/scsi/g_NCR5380.c
-@@ -720,12 +720,11 @@ static int generic_NCR5380_isa_match(struct device *pdev, unsigned int ndev)
- 	return 1;
- }
- 
--static int generic_NCR5380_isa_remove(struct device *pdev,
--                                      unsigned int ndev)
-+static void generic_NCR5380_isa_remove(struct device *pdev,
-+				       unsigned int ndev)
- {
- 	generic_NCR5380_release_resources(dev_get_drvdata(pdev));
- 	dev_set_drvdata(pdev, NULL);
--	return 0;
- }
- 
- static struct isa_driver generic_NCR5380_isa_driver = {
-diff --git a/drivers/watchdog/pcwd.c b/drivers/watchdog/pcwd.c
-index b95cd38f3ceb..a793b03a785d 100644
---- a/drivers/watchdog/pcwd.c
-+++ b/drivers/watchdog/pcwd.c
-@@ -951,7 +951,7 @@ static int pcwd_isa_probe(struct device *dev, unsigned int id)
- 	return ret;
- }
- 
--static int pcwd_isa_remove(struct device *dev, unsigned int id)
-+static void pcwd_isa_remove(struct device *dev, unsigned int id)
- {
- 	if (debug >= DEBUG)
- 		pr_debug("pcwd_isa_remove id=%d\n", id);
-@@ -968,8 +968,6 @@ static int pcwd_isa_remove(struct device *dev, unsigned int id)
- 			(pcwd_private.revision == PCWD_REVISION_A) ? 2 : 4);
- 	pcwd_private.io_addr = 0x0000;
- 	cards_found--;
+-	/* Check for reopen of driver. Reopens are not allowed */
+-	if (watchdog_device.driver_closed)
+-		return -EPERM;
 -
+-	return stream_open(inode, file);
+-}
+-
+-static int intel_scu_release(struct inode *inode, struct file *file)
+-{
+-	/*
+-	 * This watchdog should not be closed, after the timer
+-	 * is started with the WDIPC_SETTIMEOUT ioctl
+-	 * If force_boot is set watchdog_fire() will cause an
+-	 * immediate reset. If force_boot is not set, the watchdog
+-	 * timer is refreshed for one more interval. At the end
+-	 * of that interval, the watchdog timer will reset the system.
+-	 */
+-
+-	if (!test_and_clear_bit(0, &watchdog_device.driver_open)) {
+-		pr_debug("intel_scu_release, without open\n");
+-		return -ENOTTY;
+-	}
+-
+-	if (!watchdog_device.timer_started) {
+-		/* Just close, since timer has not been started */
+-		pr_debug("closed, without starting timer\n");
+-		return 0;
+-	}
+-
+-	pr_crit("Unexpected close of /dev/watchdog!\n");
+-
+-	/* Since the timer was started, prevent future reopens */
+-	watchdog_device.driver_closed = 1;
+-
+-	/* Refresh the timer for one more interval */
+-	intel_scu_keepalive();
+-
+-	/* Reboot system (if force_boot is set) */
+-	watchdog_fire();
+-
+-	/* We should only reach this point if force_boot is not set */
 -	return 0;
- }
- 
- static void pcwd_isa_shutdown(struct device *dev, unsigned int id)
-diff --git a/include/linux/isa.h b/include/linux/isa.h
-index 41336da0f4e7..e30963190968 100644
---- a/include/linux/isa.h
-+++ b/include/linux/isa.h
-@@ -13,7 +13,7 @@
- struct isa_driver {
- 	int (*match)(struct device *, unsigned int);
- 	int (*probe)(struct device *, unsigned int);
--	int (*remove)(struct device *, unsigned int);
-+	void (*remove)(struct device *, unsigned int);
- 	void (*shutdown)(struct device *, unsigned int);
- 	int (*suspend)(struct device *, unsigned int, pm_message_t);
- 	int (*resume)(struct device *, unsigned int);
-diff --git a/sound/isa/ad1848/ad1848.c b/sound/isa/ad1848/ad1848.c
-index 593c6e959afe..48f7cc57c3da 100644
---- a/sound/isa/ad1848/ad1848.c
-+++ b/sound/isa/ad1848/ad1848.c
-@@ -118,10 +118,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_ad1848_remove(struct device *dev, unsigned int n)
-+static void snd_ad1848_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
+-}
+-
+-static ssize_t intel_scu_write(struct file *file,
+-			      char const *data,
+-			      size_t len,
+-			      loff_t *ppos)
+-{
+-
+-	if (watchdog_device.timer_started)
+-		/* Watchdog already started, keep it alive */
+-		intel_scu_keepalive();
+-	else
+-		/* Start watchdog with timer value set by init */
+-		intel_scu_set_heartbeat(watchdog_device.timer_set);
+-
+-	return len;
+-}
+-
+-static long intel_scu_ioctl(struct file *file,
+-			   unsigned int cmd,
+-			   unsigned long arg)
+-{
+-	void __user *argp = (void __user *)arg;
+-	u32 __user *p = argp;
+-	u32 new_margin;
+-
+-
+-	static const struct watchdog_info ident = {
+-		.options =          WDIOF_SETTIMEOUT
+-				    | WDIOF_KEEPALIVEPING,
+-		.firmware_version = 0,  /* @todo Get from SCU via
+-						 ipc_get_scu_fw_version()? */
+-		.identity =         "Intel_SCU IOH Watchdog"  /* len < 32 */
+-	};
+-
+-	switch (cmd) {
+-	case WDIOC_GETSUPPORT:
+-		return copy_to_user(argp,
+-				    &ident,
+-				    sizeof(ident)) ? -EFAULT : 0;
+-	case WDIOC_GETSTATUS:
+-	case WDIOC_GETBOOTSTATUS:
+-		return put_user(0, p);
+-	case WDIOC_KEEPALIVE:
+-		intel_scu_keepalive();
+-
+-		return 0;
+-	case WDIOC_SETTIMEOUT:
+-		if (get_user(new_margin, p))
+-			return -EFAULT;
+-
+-		if (check_timer_margin(new_margin))
+-			return -EINVAL;
+-
+-		if (intel_scu_set_heartbeat(new_margin))
+-			return -EINVAL;
+-		return 0;
+-	case WDIOC_GETTIMEOUT:
+-		return put_user(watchdog_device.soft_threshold, p);
+-
+-	default:
+-		return -ENOTTY;
+-	}
+-}
+-
+-/*
+- *      Notifier for system down
+- */
+-static int intel_scu_notify_sys(struct notifier_block *this,
+-			       unsigned long code,
+-			       void *another_unused)
+-{
+-	if (code == SYS_DOWN || code == SYS_HALT)
+-		/* Turn off the watchdog timer. */
+-		intel_scu_stop();
+-	return NOTIFY_DONE;
+-}
+-
+-/*
+- *      Kernel Interfaces
+- */
+-static const struct file_operations intel_scu_fops = {
+-	.owner          = THIS_MODULE,
+-	.llseek         = no_llseek,
+-	.write          = intel_scu_write,
+-	.unlocked_ioctl = intel_scu_ioctl,
+-	.compat_ioctl	= compat_ptr_ioctl,
+-	.open           = intel_scu_open,
+-	.release        = intel_scu_release,
+-};
+-
+-static int __init intel_scu_watchdog_init(void)
+-{
+-	int ret;
+-	u32 __iomem *tmp_addr;
+-
+-	/*
+-	 * We don't really need to check this as the SFI timer get will fail
+-	 * but if we do so we can exit with a clearer reason and no noise.
+-	 *
+-	 * If it isn't an intel MID device then it doesn't have this watchdog
+-	 */
+-	if (!intel_mid_identify_cpu())
+-		return -ENODEV;
+-
+-	/* Check boot parameters to verify that their initial values */
+-	/* are in range. */
+-	/* Check value of timer_set boot parameter */
+-	if ((timer_set < MIN_TIME_CYCLE) ||
+-	    (timer_set > MAX_TIME - MIN_TIME_CYCLE)) {
+-		pr_err("value of timer_set %x (hex) is out of range from %x to %x (hex)\n",
+-		       timer_set, MIN_TIME_CYCLE, MAX_TIME - MIN_TIME_CYCLE);
+-		return -EINVAL;
+-	}
+-
+-	/* Check value of timer_margin boot parameter */
+-	if (check_timer_margin(timer_margin))
+-		return -EINVAL;
+-
+-	watchdog_device.timer_tbl_ptr = sfi_get_mtmr(sfi_mtimer_num-1);
+-
+-	if (watchdog_device.timer_tbl_ptr == NULL) {
+-		pr_debug("timer is not available\n");
+-		return -ENODEV;
+-	}
+-	/* make sure the timer exists */
+-	if (watchdog_device.timer_tbl_ptr->phys_addr == 0) {
+-		pr_debug("timer %d does not have valid physical memory\n",
+-			 sfi_mtimer_num);
+-		return -ENODEV;
+-	}
+-
+-	if (watchdog_device.timer_tbl_ptr->irq == 0) {
+-		pr_debug("timer %d invalid irq\n", sfi_mtimer_num);
+-		return -ENODEV;
+-	}
+-
+-	tmp_addr = ioremap(watchdog_device.timer_tbl_ptr->phys_addr,
+-			20);
+-
+-	if (tmp_addr == NULL) {
+-		pr_debug("timer unable to ioremap\n");
+-		return -ENOMEM;
+-	}
+-
+-	watchdog_device.timer_load_count_addr = tmp_addr++;
+-	watchdog_device.timer_current_value_addr = tmp_addr++;
+-	watchdog_device.timer_control_addr = tmp_addr++;
+-	watchdog_device.timer_clear_interrupt_addr = tmp_addr++;
+-	watchdog_device.timer_interrupt_status_addr = tmp_addr++;
+-
+-	/* Set the default time values in device structure */
+-
+-	watchdog_device.timer_set = timer_set;
+-	watchdog_device.threshold =
+-		timer_margin * watchdog_device.timer_tbl_ptr->freq_hz;
+-	watchdog_device.soft_threshold =
+-		(watchdog_device.timer_set - timer_margin)
+-		* watchdog_device.timer_tbl_ptr->freq_hz;
+-
+-
+-	watchdog_device.intel_scu_notifier.notifier_call =
+-		intel_scu_notify_sys;
+-
+-	ret = register_reboot_notifier(&watchdog_device.intel_scu_notifier);
+-	if (ret) {
+-		pr_err("cannot register notifier %d)\n", ret);
+-		goto register_reboot_error;
+-	}
+-
+-	watchdog_device.miscdev.minor = WATCHDOG_MINOR;
+-	watchdog_device.miscdev.name = "watchdog";
+-	watchdog_device.miscdev.fops = &intel_scu_fops;
+-
+-	ret = misc_register(&watchdog_device.miscdev);
+-	if (ret) {
+-		pr_err("cannot register miscdev %d err =%d\n",
+-		       WATCHDOG_MINOR, ret);
+-		goto misc_register_error;
+-	}
+-
+-	ret = request_irq((unsigned int)watchdog_device.timer_tbl_ptr->irq,
+-		watchdog_timer_interrupt,
+-		IRQF_SHARED, "watchdog",
+-		&watchdog_device.timer_load_count_addr);
+-	if (ret) {
+-		pr_err("error requesting irq %d\n", ret);
+-		goto request_irq_error;
+-	}
+-	/* Make sure timer is disabled before returning */
+-	intel_scu_stop();
 -	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/adlib.c b/sound/isa/adlib.c
-index 5105524b6f38..e6cd7c4da38e 100644
---- a/sound/isa/adlib.c
-+++ b/sound/isa/adlib.c
-@@ -97,10 +97,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_adlib_remove(struct device *dev, unsigned int n)
-+static void snd_adlib_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_adlib_driver = {
-diff --git a/sound/isa/cmi8328.c b/sound/isa/cmi8328.c
-index faca5dd95bfe..3b9fbb02864b 100644
---- a/sound/isa/cmi8328.c
-+++ b/sound/isa/cmi8328.c
-@@ -403,7 +403,7 @@ static int snd_cmi8328_probe(struct device *pdev, unsigned int ndev)
- 	return err;
- }
- 
--static int snd_cmi8328_remove(struct device *pdev, unsigned int dev)
-+static void snd_cmi8328_remove(struct device *pdev, unsigned int dev)
- {
- 	struct snd_card *card = dev_get_drvdata(pdev);
- 	struct snd_cmi8328 *cmi = card->private_data;
-@@ -420,7 +420,6 @@ static int snd_cmi8328_remove(struct device *pdev, unsigned int dev)
- 	snd_cmi8328_cfg_write(cmi->port, CFG2, 0);
- 	snd_cmi8328_cfg_write(cmi->port, CFG3, 0);
- 	snd_card_free(card);
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/cmi8330.c b/sound/isa/cmi8330.c
-index 4669eb0cc8ce..19e258527d69 100644
---- a/sound/isa/cmi8330.c
-+++ b/sound/isa/cmi8330.c
-@@ -631,11 +631,10 @@ static int snd_cmi8330_isa_probe(struct device *pdev,
- 	return 0;
- }
- 
--static int snd_cmi8330_isa_remove(struct device *devptr,
-+static void snd_cmi8330_isa_remove(struct device *devptr,
- 				  unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/cs423x/cs4231.c b/sound/isa/cs423x/cs4231.c
-index 2135963eba78..383ee621cea1 100644
---- a/sound/isa/cs423x/cs4231.c
-+++ b/sound/isa/cs423x/cs4231.c
-@@ -135,10 +135,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_cs4231_remove(struct device *dev, unsigned int n)
-+static void snd_cs4231_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/cs423x/cs4236.c b/sound/isa/cs423x/cs4236.c
-index fa3c39cff5f8..24688271e73f 100644
---- a/sound/isa/cs423x/cs4236.c
-+++ b/sound/isa/cs423x/cs4236.c
-@@ -487,11 +487,10 @@ static int snd_cs423x_isa_probe(struct device *pdev,
- 	return 0;
- }
- 
--static int snd_cs423x_isa_remove(struct device *pdev,
-+static void snd_cs423x_isa_remove(struct device *pdev,
- 				 unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(pdev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/es1688/es1688.c b/sound/isa/es1688/es1688.c
-index 64610571a5e1..d99bb3f8f0c1 100644
---- a/sound/isa/es1688/es1688.c
-+++ b/sound/isa/es1688/es1688.c
-@@ -192,10 +192,9 @@ static int snd_es1688_isa_probe(struct device *dev, unsigned int n)
- 	return error;
- }
- 
--static int snd_es1688_isa_remove(struct device *dev, unsigned int n)
-+static void snd_es1688_isa_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_es1688_driver = {
-diff --git a/sound/isa/es18xx.c b/sound/isa/es18xx.c
-index 5f8d7e8a5477..9beef8079177 100644
---- a/sound/isa/es18xx.c
-+++ b/sound/isa/es18xx.c
-@@ -2210,11 +2210,10 @@ static int snd_es18xx_isa_probe(struct device *pdev, unsigned int dev)
- 	}
- }
- 
--static int snd_es18xx_isa_remove(struct device *devptr,
--				 unsigned int dev)
-+static void snd_es18xx_isa_remove(struct device *devptr,
-+				  unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/galaxy/galaxy.c b/sound/isa/galaxy/galaxy.c
-index 65f9f46c9f58..d33d69f29924 100644
---- a/sound/isa/galaxy/galaxy.c
-+++ b/sound/isa/galaxy/galaxy.c
-@@ -608,10 +608,9 @@ static int snd_galaxy_probe(struct device *dev, unsigned int n)
- 	return err;
- }
- 
--static int snd_galaxy_remove(struct device *dev, unsigned int n)
-+static void snd_galaxy_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_galaxy_driver = {
-diff --git a/sound/isa/gus/gusclassic.c b/sound/isa/gus/gusclassic.c
-index 7419b1939754..015f88a11352 100644
---- a/sound/isa/gus/gusclassic.c
-+++ b/sound/isa/gus/gusclassic.c
-@@ -195,10 +195,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_gusclassic_remove(struct device *dev, unsigned int n)
-+static void snd_gusclassic_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_gusclassic_driver = {
-diff --git a/sound/isa/gus/gusextreme.c b/sound/isa/gus/gusextreme.c
-index ed2f9d64efae..c9f31b4fb887 100644
---- a/sound/isa/gus/gusextreme.c
-+++ b/sound/isa/gus/gusextreme.c
-@@ -324,10 +324,9 @@ out:	snd_card_free(card);
- 	return error;
- }
- 
--static int snd_gusextreme_remove(struct device *dev, unsigned int n)
-+static void snd_gusextreme_remove(struct device *dev, unsigned int n)
- {
- 	snd_card_free(dev_get_drvdata(dev));
--	return 0;
- }
- 
- static struct isa_driver snd_gusextreme_driver = {
-diff --git a/sound/isa/gus/gusmax.c b/sound/isa/gus/gusmax.c
-index 05cd9be4dd8a..dc09fbd6f88d 100644
---- a/sound/isa/gus/gusmax.c
-+++ b/sound/isa/gus/gusmax.c
-@@ -338,10 +338,9 @@ static int snd_gusmax_probe(struct device *pdev, unsigned int dev)
- 	return err;
- }
- 
--static int snd_gusmax_remove(struct device *devptr, unsigned int dev)
-+static void snd_gusmax_remove(struct device *devptr, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #define DEV_NAME "gusmax"
-diff --git a/sound/isa/gus/interwave.c b/sound/isa/gus/interwave.c
-index 3e9ad930deae..e4d412e72b75 100644
---- a/sound/isa/gus/interwave.c
-+++ b/sound/isa/gus/interwave.c
-@@ -825,10 +825,9 @@ static int snd_interwave_isa_probe(struct device *pdev,
- 	}
- }
- 
--static int snd_interwave_isa_remove(struct device *devptr, unsigned int dev)
-+static void snd_interwave_isa_remove(struct device *devptr, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- static struct isa_driver snd_interwave_driver = {
-diff --git a/sound/isa/msnd/msnd_pinnacle.c b/sound/isa/msnd/msnd_pinnacle.c
-index 24b34ecf5e5b..69647b41300d 100644
---- a/sound/isa/msnd/msnd_pinnacle.c
-+++ b/sound/isa/msnd/msnd_pinnacle.c
-@@ -1049,10 +1049,9 @@ static int snd_msnd_isa_probe(struct device *pdev, unsigned int idx)
- #endif
- }
- 
--static int snd_msnd_isa_remove(struct device *pdev, unsigned int dev)
-+static void snd_msnd_isa_remove(struct device *pdev, unsigned int dev)
- {
- 	snd_msnd_unload(dev_get_drvdata(pdev));
--	return 0;
- }
- 
- static struct isa_driver snd_msnd_driver = {
-diff --git a/sound/isa/opl3sa2.c b/sound/isa/opl3sa2.c
-index 85a181acd388..7649a8a4128d 100644
---- a/sound/isa/opl3sa2.c
-+++ b/sound/isa/opl3sa2.c
-@@ -878,11 +878,10 @@ static int snd_opl3sa2_isa_probe(struct device *pdev,
- 	return 0;
- }
- 
--static int snd_opl3sa2_isa_remove(struct device *devptr,
-+static void snd_opl3sa2_isa_remove(struct device *devptr,
- 				  unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/opti9xx/miro.c b/sound/isa/opti9xx/miro.c
-index 44ed1b65f6ce..20933342f5eb 100644
---- a/sound/isa/opti9xx/miro.c
-+++ b/sound/isa/opti9xx/miro.c
-@@ -1480,11 +1480,10 @@ static int snd_miro_isa_probe(struct device *devptr, unsigned int n)
- 	return 0;
- }
- 
--static int snd_miro_isa_remove(struct device *devptr,
-+static void snd_miro_isa_remove(struct device *devptr,
- 			       unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #define DEV_NAME "miro"
-diff --git a/sound/isa/opti9xx/opti92x-ad1848.c b/sound/isa/opti9xx/opti92x-ad1848.c
-index 881d3b5711d2..758f5b579138 100644
---- a/sound/isa/opti9xx/opti92x-ad1848.c
-+++ b/sound/isa/opti9xx/opti92x-ad1848.c
-@@ -1024,11 +1024,10 @@ static int snd_opti9xx_isa_probe(struct device *devptr,
- 	return 0;
- }
- 
--static int snd_opti9xx_isa_remove(struct device *devptr,
--				  unsigned int dev)
-+static void snd_opti9xx_isa_remove(struct device *devptr,
-+				   unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/sb/jazz16.c b/sound/isa/sb/jazz16.c
-index ee379bbf70a4..0e2e0ab3b9e4 100644
---- a/sound/isa/sb/jazz16.c
-+++ b/sound/isa/sb/jazz16.c
-@@ -339,12 +339,11 @@ static int snd_jazz16_probe(struct device *devptr, unsigned int dev)
- 	return err;
- }
- 
--static int snd_jazz16_remove(struct device *devptr, unsigned int dev)
-+static void snd_jazz16_remove(struct device *devptr, unsigned int dev)
- {
- 	struct snd_card *card = dev_get_drvdata(devptr);
- 
- 	snd_card_free(card);
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/sb/sb16.c b/sound/isa/sb/sb16.c
-index 479197c13803..db284b7b88a7 100644
---- a/sound/isa/sb/sb16.c
-+++ b/sound/isa/sb/sb16.c
-@@ -547,10 +547,9 @@ static int snd_sb16_isa_probe(struct device *pdev, unsigned int dev)
- 	}
- }
- 
--static int snd_sb16_isa_remove(struct device *pdev, unsigned int dev)
-+static void snd_sb16_isa_remove(struct device *pdev, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(pdev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/sb/sb8.c b/sound/isa/sb/sb8.c
-index 438109f167d6..8e3e67b9a341 100644
---- a/sound/isa/sb/sb8.c
-+++ b/sound/isa/sb/sb8.c
-@@ -192,10 +192,9 @@ static int snd_sb8_probe(struct device *pdev, unsigned int dev)
- 	return err;
- }
- 
--static int snd_sb8_remove(struct device *pdev, unsigned int dev)
-+static void snd_sb8_remove(struct device *pdev, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(pdev));
--	return 0;
- }
- 
- #ifdef CONFIG_PM
-diff --git a/sound/isa/sc6000.c b/sound/isa/sc6000.c
-index 3d0bea44f454..def137579717 100644
---- a/sound/isa/sc6000.c
-+++ b/sound/isa/sc6000.c
-@@ -672,7 +672,7 @@ static int snd_sc6000_probe(struct device *devptr, unsigned int dev)
- 	return err;
- }
- 
--static int snd_sc6000_remove(struct device *devptr, unsigned int dev)
-+static void snd_sc6000_remove(struct device *devptr, unsigned int dev)
- {
- 	struct snd_card *card = dev_get_drvdata(devptr);
- 	char __iomem **vport = card->private_data;
-@@ -684,7 +684,6 @@ static int snd_sc6000_remove(struct device *devptr, unsigned int dev)
- 	release_region(mss_port[dev], 4);
- 
- 	snd_card_free(card);
--	return 0;
- }
- 
- static struct isa_driver snd_sc6000_driver = {
-diff --git a/sound/isa/sscape.c b/sound/isa/sscape.c
-index 2e5a5c5279e8..e70ef9aee545 100644
---- a/sound/isa/sscape.c
-+++ b/sound/isa/sscape.c
-@@ -1183,10 +1183,9 @@ static int snd_sscape_probe(struct device *pdev, unsigned int dev)
- 	return ret;
- }
- 
--static int snd_sscape_remove(struct device *devptr, unsigned int dev)
-+static void snd_sscape_remove(struct device *devptr, unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #define DEV_NAME "sscape"
-diff --git a/sound/isa/wavefront/wavefront.c b/sound/isa/wavefront/wavefront.c
-index 9e0f6b226775..b750a4fd40de 100644
---- a/sound/isa/wavefront/wavefront.c
-+++ b/sound/isa/wavefront/wavefront.c
-@@ -565,11 +565,10 @@ static int snd_wavefront_isa_probe(struct device *pdev,
- 	return 0;
- }
- 
--static int snd_wavefront_isa_remove(struct device *devptr,
-+static void snd_wavefront_isa_remove(struct device *devptr,
- 				    unsigned int dev)
- {
- 	snd_card_free(dev_get_drvdata(devptr));
--	return 0;
- }
- 
- #define DEV_NAME "wavefront"
+-
+-/* error cleanup */
+-
+-request_irq_error:
+-	misc_deregister(&watchdog_device.miscdev);
+-misc_register_error:
+-	unregister_reboot_notifier(&watchdog_device.intel_scu_notifier);
+-register_reboot_error:
+-	intel_scu_stop();
+-	iounmap(watchdog_device.timer_load_count_addr);
+-	return ret;
+-}
+-late_initcall(intel_scu_watchdog_init);
+diff --git a/drivers/watchdog/intel_scu_watchdog.h b/drivers/watchdog/intel_scu_watchdog.h
+deleted file mode 100644
+index fb12a25ee417..000000000000
+--- a/drivers/watchdog/intel_scu_watchdog.h
++++ /dev/null
+@@ -1,50 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- *      Intel_SCU 0.2:  An Intel SCU IOH Based Watchdog Device
+- *			for Intel part #(s):
+- *				- AF82MP20 PCH
+- *
+- *      Copyright (C) 2009-2010 Intel Corporation. All rights reserved.
+- */
+-
+-#ifndef __INTEL_SCU_WATCHDOG_H
+-#define __INTEL_SCU_WATCHDOG_H
+-
+-#define WDT_VER "0.3"
+-
+-/* minimum time between interrupts */
+-#define MIN_TIME_CYCLE 1
+-
+-/* Time from warning to reboot is 2 seconds */
+-#define DEFAULT_SOFT_TO_HARD_MARGIN 2
+-
+-#define MAX_TIME 170
+-
+-#define DEFAULT_TIME 5
+-
+-#define MAX_SOFT_TO_HARD_MARGIN (MAX_TIME-MIN_TIME_CYCLE)
+-
+-/* Ajustment to clock tick frequency to make timing come out right */
+-#define FREQ_ADJUSTMENT 8
+-
+-struct intel_scu_watchdog_dev {
+-	ulong driver_open;
+-	ulong driver_closed;
+-	u32 timer_started;
+-	u32 timer_set;
+-	u32 threshold;
+-	u32 soft_threshold;
+-	u32 __iomem *timer_load_count_addr;
+-	u32 __iomem *timer_current_value_addr;
+-	u32 __iomem *timer_control_addr;
+-	u32 __iomem *timer_clear_interrupt_addr;
+-	u32 __iomem *timer_interrupt_status_addr;
+-	struct sfi_timer_table_entry *timer_tbl_ptr;
+-	struct notifier_block intel_scu_notifier;
+-	struct miscdevice miscdev;
+-};
+-
+-extern int sfi_mtimer_num;
+-
+-/* extern struct sfi_timer_table_entry *sfi_get_mtmr(int hint); */
+-#endif /* __INTEL_SCU_WATCHDOG_H */
 -- 
 2.29.2
 
