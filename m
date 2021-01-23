@@ -2,95 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE7130172D
-	for <lists+linux-watchdog@lfdr.de>; Sat, 23 Jan 2021 18:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F30B5301737
+	for <lists+linux-watchdog@lfdr.de>; Sat, 23 Jan 2021 18:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725910AbhAWR0x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 23 Jan 2021 12:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S1725899AbhAWRaY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 23 Jan 2021 12:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725550AbhAWR0w (ORCPT
+        with ESMTP id S1725550AbhAWRaY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 23 Jan 2021 12:26:52 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60BFC06174A;
-        Sat, 23 Jan 2021 09:26:11 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id x137so8660746oix.11;
-        Sat, 23 Jan 2021 09:26:11 -0800 (PST)
+        Sat, 23 Jan 2021 12:30:24 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14E5C06174A;
+        Sat, 23 Jan 2021 09:29:43 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id k8so8452619otr.8;
+        Sat, 23 Jan 2021 09:29:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Fx0dTn/ibDFiP8TXms9D2tHALPZMdynL/f0uPDryXjQ=;
-        b=q5Zlsg1WoDKF5HigG82e/pxLTxUY6SJY+9HDrFuC9EAcR27LgiqN4L5gqWDv67r+7B
-         lcusl8aod6r5lP4D/9u5QK5/mfkRTLNSlSRRfkdIW+oz5t2fthyhoJkpsXb9LYGa7B3P
-         y+ecpbPvH2FhB12mTmwcIEkZ0vRwh8ehwJF3Vwv5tb8b4shDNE1JClE2oaJEP5pRSSEI
-         yZl4gN8eSzzbyKYSXPzHtxhd2z0Ej5RDcJplMV1GZd6KBpmHZ9XP+hzvLiRyEWkEDCS7
-         gtUnpImvb4M4qrEue9TCqQfZWS6ju4UiovQQX7HWp3DenYTwnTthqgio+SdOZ5bxuu/3
-         69Ow==
+        bh=3puvH5L1KRDWtKEUAlvHXEZu8I1zk2cc6t75N2DvFJQ=;
+        b=PHZGgoWYjgxoPgVrPav8gdm5QNNWhMtJCnk7UeI1/TuenY5z4kiRy8kqpivL28llPo
+         zUopJJznFJ7wgsGlUTEyXPmbbHhFpsvAkpbh0biKLbCoefJp8ggP2BbntJXZuysvWF7C
+         o/QvXotsRkFG62gmwtA0KR5Sop/fIHQLuu4FTX1ZXfTkJIs/5jShZcQjOqOI+yraA83K
+         Ww2fQ3krquw5naCiHybbkY68o1KSqzaH/xPicIwvS74yS0oKQtoL0gCdpgtMSBIQQOjt
+         zTHPQI7j/j1TzeifkUn5blg7MyGJA/2LzNP6n/MLtedATmytM70qyFONxl1QeLnYpz9g
+         UkMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Fx0dTn/ibDFiP8TXms9D2tHALPZMdynL/f0uPDryXjQ=;
-        b=Pl7tuOGrdxLxlWCd6oNJDDB57sZXjhhgWBoagFyWSeGJibPO8fQnNyP5M12Yr7Clsl
-         yQ8NO4gK0agsPwR6sFYNMnekwOry25mBx134FWXwf5ERbA2NRT2DBAKodymKIb7IEuKO
-         h7Fam875nDwsaRhJCLfXRmJQR4YBQ2Km/9L4D1NlNmBwIYYFubv87DnJZvGbMtDxYD3x
-         BXyw37JvWmyZ5C+/WwwcDi4nsgqKOV9Bli1Yw3nrNF6iV317/HK0lmuFFOABThazI+5E
-         p6YF2YUejFVn+KNPAWge31JrVZY9kWQku2eSIuO/cTJ9V2AQ8SNdf9coUGXa6jSOI5Eh
-         NbdA==
-X-Gm-Message-State: AOAM533gV5VlGLfTR7kzC+nvyBzwSpRG84p+HkLHXFqPCbE9otYcnimw
-        DH1i4MGtUEMFmf8mzk+zxSs=
-X-Google-Smtp-Source: ABdhPJz0OColhLeibwBoqtOA1S5cGh5GSWRV0MQuxWn9FfPLDub0hWFKifywOTmLY7ifgl0YMS6mFQ==
-X-Received: by 2002:aca:5bd4:: with SMTP id p203mr6873838oib.108.1611422771134;
-        Sat, 23 Jan 2021 09:26:11 -0800 (PST)
+        bh=3puvH5L1KRDWtKEUAlvHXEZu8I1zk2cc6t75N2DvFJQ=;
+        b=RAZmezFdpmmWtcoBDOhSQ8z7QuVCww3/iX/3RJMKPWrcfXfhp/lwoW3PGIQnPIh66R
+         lGzr1hMOnTZoR4XHnD9wFmThLY73O9Td5Ey87+MfbTSuqFVA8vtMN7owAlUlJzeM5My/
+         s34oyTX00reTfT1e1QpYeqntO3uCA6wmAC+QKOqXxoWsVnknMAmVm78kEDw8BiXdmtiV
+         j5yZW5qJ45qj4gxYLXenx5Pan/fGS3i12jv4ZD965JXExmLeZVLJinjNXs3FvD+RDOdz
+         yr0wsEEIh5RzSbWnxT6YXxmKxzF4QoCQ2xafomMpdghlCrim3wilFw+SMgK0UE9fwG3W
+         MFGw==
+X-Gm-Message-State: AOAM531R2YGQ9Bax2aOfrAn+1YU8ZxNuduVwmipkdpUzqrH0cQft1ktG
+        EjFs1GslE2nwlvmfPF/T3eo=
+X-Google-Smtp-Source: ABdhPJweF+RoTeM5djHPKGZzJlsU49ZZwkEIDxupe1PHBGnmv3SSsdQUbOF2XX0bRzDUZWgkG5kq5g==
+X-Received: by 2002:a9d:1710:: with SMTP id i16mr7120046ota.260.1611422983198;
+        Sat, 23 Jan 2021 09:29:43 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g13sm2392998otr.74.2021.01.23.09.26.10
+        by smtp.gmail.com with ESMTPSA id v10sm2392545otj.59.2021.01.23.09.29.42
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 23 Jan 2021 09:26:10 -0800 (PST)
+        Sat, 23 Jan 2021 09:29:42 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Jan 2021 09:26:09 -0800
+Date:   Sat, 23 Jan 2021 09:29:41 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Qiang Zhao <qiang.zhao@nxp.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: stop wdd when watchdog hw running in
- reboot_notifier
-Message-ID: <20210123172609.GA56545@roeck-us.net>
-References: <20210114082651.17162-1-qiang.zhao@nxp.com>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Icenowy Zheng <icenowy@aosc.xyz>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 17/21] dt-bindings: watchdog: sun4i: Add H616
+ compatible string
+Message-ID: <20210123172941.GA56996@roeck-us.net>
+References: <20201211011934.6171-1-andre.przywara@arm.com>
+ <20201211011934.6171-18-andre.przywara@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210114082651.17162-1-qiang.zhao@nxp.com>
+In-Reply-To: <20201211011934.6171-18-andre.przywara@arm.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 04:26:51PM +0800, Qiang Zhao wrote:
-> From: Zhao Qiang <qiang.zhao@nxp.com>
+On Fri, Dec 11, 2020 at 01:19:30AM +0000, Andre Przywara wrote:
+> Use enums to group all compatible devices together on the way.
 > 
-> In watchdog_reboot_notifier, wdd should be stopped when the device
-> is in hw_running state
-> 
-> Signed-off-by: Zhao Qiang <qiang.zhao@nxp.com>
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/watchdog_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-> index 861daf4..ec670cc 100644
-> --- a/drivers/watchdog/watchdog_core.c
-> +++ b/drivers/watchdog/watchdog_core.c
-> @@ -154,7 +154,7 @@ static int watchdog_reboot_notifier(struct notifier_block *nb,
->  
->  	wdd = container_of(nb, struct watchdog_device, reboot_nb);
->  	if (code == SYS_DOWN || code == SYS_HALT) {
-> -		if (watchdog_active(wdd)) {
-> +		if (watchdog_active(wdd) || watchdog_hw_running(wdd)) {
->  			int ret;
->  
->  			ret = wdd->ops->stop(wdd);
+> diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> index 5ac607de8be4..9aa3c313c49f 100644
+> --- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> @@ -19,13 +19,11 @@ properties:
+>        - const: allwinner,sun4i-a10-wdt
+>        - const: allwinner,sun6i-a31-wdt
+>        - items:
+> -          - const: allwinner,sun50i-a64-wdt
+> -          - const: allwinner,sun6i-a31-wdt
+> -      - items:
+> -          - const: allwinner,sun50i-a100-wdt
+> -          - const: allwinner,sun6i-a31-wdt
+> -      - items:
+> -          - const: allwinner,sun50i-h6-wdt
+> +          - enum:
+> +              - allwinner,sun50i-a64-wdt
+> +              - allwinner,sun50i-a100-wdt
+> +              - allwinner,sun50i-h6-wdt
+> +              - allwinner,sun50i-h616-wdt
+>            - const: allwinner,sun6i-a31-wdt
+>        - items:
+>            - const: allwinner,suniv-f1c100s-wdt
