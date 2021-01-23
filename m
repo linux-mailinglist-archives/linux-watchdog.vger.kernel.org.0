@@ -2,75 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A46B33017B8
-	for <lists+linux-watchdog@lfdr.de>; Sat, 23 Jan 2021 19:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959BD3017BA
+	for <lists+linux-watchdog@lfdr.de>; Sat, 23 Jan 2021 19:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbhAWSsH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 23 Jan 2021 13:48:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34396 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725922AbhAWSsH (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 23 Jan 2021 13:48:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 384EB22D2B;
-        Sat, 23 Jan 2021 18:47:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611427646;
-        bh=UXp2NFzKNxkatDDXxDwnkDYnaYkcm//9A6g0qxA8fvc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SglYl624Xv1++VESR5wVWFdUhAX3SX6PddbHOw0vXngq5p9zW/6iSEj8+PpGyJWx4
-         rG2pPXxpCrprG4NOFIdaF/HifBBuUDf2aIAkedamNqb81vUx3MY/dNP1uT2xoQwXBX
-         k+5Ow1VzZuua/jXKxEqJ6Z7RUqbV0EPOc/DFF3DekfFNOjs+pX/UbRju8aytx8dW/S
-         v6lsLUNU3ONpUjg7KRU45wD9rwv5DvPhbF+hg9IMoFmGBPHJJXePEWwo7bn86sHdne
-         9s5SFIwaZgA05N23p6QsFbnFuQ87IENhnS87Q2cy3MWDVqyLX1dp0eq4wHbNnED1X+
-         O0Qhxup3V1PWg==
-Received: by mail-ot1-f51.google.com with SMTP id v1so8594483ott.10;
-        Sat, 23 Jan 2021 10:47:26 -0800 (PST)
-X-Gm-Message-State: AOAM533rHNGQqbMvhmaIKXK9FlxiZWazVlKX6m6itVYKrAjmXNIKk7bD
-        haUWNgVMalpBJB8LjTGoyB/IwFOTFA4fonv2QPk=
-X-Google-Smtp-Source: ABdhPJzXadBvqbm0Ka4A7fE+buyojDLYxoXTZHvib7C9uxqYQEZ/kN8zd+yrdxDnsSWAqq4It9JoroPbQD7MoX7T0Z4=
-X-Received: by 2002:a05:6830:139a:: with SMTP id d26mr7354158otq.305.1611427645600;
- Sat, 23 Jan 2021 10:47:25 -0800 (PST)
+        id S1726208AbhAWSs3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 23 Jan 2021 13:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725910AbhAWSs1 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 23 Jan 2021 13:48:27 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78A8C06174A;
+        Sat, 23 Jan 2021 10:47:46 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id k8so8600628otr.8;
+        Sat, 23 Jan 2021 10:47:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XYNFh8HCy3HllFV5puNmV9b+Du9VX0jWelFOYgjhyu4=;
+        b=JNDJ+zoyreSkx9DmVwvPepwdlPL7RBxVLBuGo+4cz8uddpDXexoNZij8EaRS876e2N
+         /03dlr6FQtlWMpKE9mQGq//NYl4UyFqukfNc1HTXbIrneby9nRuzzP6qSJzzob9nTL65
+         WrGrJbwPVa4CJSAITCx1uijyyLgTHuGMWAhln6uN9XiecZeeeGricEJ2BS3XcKS2DPmT
+         m6oFU3rEzegzhyy2rruVSZGZRQw2sjvXJs34xsv9deRMGcS0oU5m2+wNXpI2wCUnQZvN
+         8xXiHnuCZ8HoZ6KRfSTGbiG+w52b9VXvlkWcAchtaMK+qFLFzLfqA5wwRxWdUKrrUWkw
+         KU0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XYNFh8HCy3HllFV5puNmV9b+Du9VX0jWelFOYgjhyu4=;
+        b=YgLVuaXfv7i8k4mQygbDNnaKHzN8bGsWH1gum+rD+yqjLkvPZLdRuMrinHwp5sm4ic
+         wJnPjaD/oxkS6tafDIUfLb8blRP/PlrDf1zK35s9IuwrA21lWzV3Gv+g97+4eOthLXHE
+         L1br3HIivMva34/RXeFXNOa86W/sM8MttM4q3BY5GOaQEx+fQ3mO7MOvSga5srrhrmT7
+         ckan5a86VYnX+TyCGjWzuga9u96vqojYJdc621H5n5dSMI2USOXHuMKL4IXHmib7DjYb
+         uITedFxt6NfPYJSoPxgi+YbTB3JiYlEMtuNhXNHlfOiXiB6ABOcoqCNbnkN3U08XBDw9
+         pEMw==
+X-Gm-Message-State: AOAM533LVsxbqWuV3DcpBBvT7pcf84lLODg1eTdKxjx217SsytwayUWD
+        IoKqUTS2c9r+6KetgwwQaFs=
+X-Google-Smtp-Source: ABdhPJwASq22aT3L8x8V5ei3chGMAoyuxH/n+w+/6j49VjuAm8BGXKofDv23J+QK6qYxGgTwJCX54w==
+X-Received: by 2002:a05:6830:3482:: with SMTP id c2mr7429160otu.59.1611427666419;
+        Sat, 23 Jan 2021 10:47:46 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l10sm2449466otn.56.2021.01.23.10.47.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 23 Jan 2021 10:47:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 23 Jan 2021 10:47:44 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Tomas Winkler <tomas.winkler@intel.com>
+Cc:     Wim Van Sebroeck <wim@iguana.be>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [watchdog] watchdog: mei_wdt: request stop on unregister
+Message-ID: <20210123184744.GA61339@roeck-us.net>
+References: <20210107195730.1660449-1-tomas.winkler@intel.com>
+ <20210108001215.GA58926@roeck-us.net>
 MIME-Version: 1.0
-References: <20210120162745.61268-1-arnd@kernel.org> <20210120162745.61268-5-arnd@kernel.org>
- <20210123183434.GA60725@roeck-us.net>
-In-Reply-To: <20210123183434.GA60725@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 23 Jan 2021 19:47:09 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0r_Fysv1cfj2FcW+PAv8FEAPu=EYTzXODxGXGLQe5hkQ@mail.gmail.com>
-Message-ID: <CAK8P3a0r_Fysv1cfj2FcW+PAv8FEAPu=EYTzXODxGXGLQe5hkQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] watchdog: remove tango driver
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Mans Rullgard <mans@mansr.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210108001215.GA58926@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Jan 23, 2021 at 7:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Wed, Jan 20, 2021 at 05:27:44PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The tango platform is getting removed, so the driver is no
-> > longer needed.
-> >
-> > Cc: Marc Gonzalez <marc.w.gonzalez@free.fr>
-> > Cc: Mans Rullgard <mans@mansr.com>
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > Acked-by: Mans Rullgard <mans@mansr.com>
->
-> I ueued this patch up in my watchdog-next tree, and while doing so
-> removed the devicetree bindings as well. If Wim picks up the patch
-> from my tree we should be fine; otherwise I'd suggest to submit a
-> follow-up patch after v5.11 to remove the bindings file.
+Tomas,
 
-Thanks a lot!
+On Thu, Jan 07, 2021 at 04:12:15PM -0800, Guenter Roeck wrote:
+> Hi,
+> 
+> On Thu, Jan 07, 2021 at 09:57:30PM +0200, Tomas Winkler wrote:
+> > From: Alexander Usyskin <alexander.usyskin@intel.com>
+> > 
+> > Send the stop command to the firmware on watchdog unregister
+> > to eleminate false event on suspend.
+> > 
+> 
+> Normally the watchdog driver would not be expected to unregister
+> during suspend, only when the driver is manually unloaded.
+> To support suspend/resume, other watchdog drivers implement
+> suspend/resume functions to stop the watchdog on suspend and
+> to restart it on resume. Unloading a watchdog driver on suspend
+> would also have odd implications for userspace watchdog daemons.
+> 
+> On top of that, it should not actually be possible to unregister
+> a watchdog while it is in use (because it is open in that case
+> and should be marked as busy). watchdog_stop_on_unregister()
+> only serves as backup in case someone actually manages to unload
+> the driver while the watchdog is running. The function was
+> implemented to avoid calls to stop the watchdog in the remove
+> function because I can not mathematically prove that there are
+> no situations where the watchdog is unloaded while running.
+> However, I have not actually been able to do that.
+> 
+> Are you sure this patch is doing what you expect it to do ?
+> 
 
-       Arnd
+I have not heard anything back. I tried to understand how this
+patch would resolve a problem during suspend/resume, but
+I didn't find anything.
+
+Can you maybe add a log message showing the false event that is
+prevented with this patch, and some context explaining how the
+patch fixes the problem ?
+
+Thanks,
+Guenter
+
+> Thanks,
+> Guenter
+> 
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+> > Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+> > ---
+> >  drivers/watchdog/mei_wdt.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/watchdog/mei_wdt.c b/drivers/watchdog/mei_wdt.c
+> > index 5391bf3e6b11..c5967d8b4256 100644
+> > --- a/drivers/watchdog/mei_wdt.c
+> > +++ b/drivers/watchdog/mei_wdt.c
+> > @@ -382,6 +382,7 @@ static int mei_wdt_register(struct mei_wdt *wdt)
+> >  
+> >  	watchdog_set_drvdata(&wdt->wdd, wdt);
+> >  	watchdog_stop_on_reboot(&wdt->wdd);
+> > +	watchdog_stop_on_unregister(&wdt->wdd);
+> >  
+> >  	ret = watchdog_register_device(&wdt->wdd);
+> >  	if (ret)
+> > -- 
+> > 2.26.2
+> > 
