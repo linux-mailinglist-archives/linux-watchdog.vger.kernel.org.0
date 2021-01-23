@@ -2,115 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C253017B0
-	for <lists+linux-watchdog@lfdr.de>; Sat, 23 Jan 2021 19:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A46B33017B8
+	for <lists+linux-watchdog@lfdr.de>; Sat, 23 Jan 2021 19:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725943AbhAWSjL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 23 Jan 2021 13:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725883AbhAWSjK (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 23 Jan 2021 13:39:10 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780A1C0613D6;
-        Sat, 23 Jan 2021 10:38:30 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id s2so6383862otp.5;
-        Sat, 23 Jan 2021 10:38:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9w1ACYrjetOei7hZUsBBvPCJPsWF7Ne5M1xRXd9d4sQ=;
-        b=qZTihFUCVboiFghtWNilWnT4seuou1bvz2HBiIvesddva2V72V0vjEPlSuvXKpf7d7
-         cNkuwP6MZYJ4gLOh2Ws7mLqkjE/wonlKYoPLpV5Ow7Z3YrsHCpIyPPRSQI0AzD4XDwS+
-         WobQnB6EyH71uJ2ZeO9ZiX1aPwkJu5K3YJbpTRUrltIYRbUJytWdDrXW08cC883HjZXr
-         DH/5Aa+xVQYPrbtR4/VxNZYTf0TLjqPVnlRetUS8DxDmGnNuYuiOiBnz7NQC2NJi+NGE
-         Lra6t/7Xo37ByV35ovv93n9T8y3n8kZtfvZbIGOdbcQpdIF2HopzGFAmMlUfHmn57+bE
-         L6TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9w1ACYrjetOei7hZUsBBvPCJPsWF7Ne5M1xRXd9d4sQ=;
-        b=A7ei+DsFIN1dIhtdJ9T48RI3XTNSzxR+wrDCijf+Hggn2dPTVlu97Zbb8Z7IxQaFWE
-         XIPtCfDEaOBg0p4NVnDMs+G7SX07w4MtrBbFhUdfhNZ0XEyCHptYbqV2oSHwqrh5ai+7
-         bpzKHAryFxTwpsPf5M+iSAU11lYngQL+AN8dpRlYFyptehasoKghjtNobbLSoi9rtDj9
-         8VWaLKOvr73iCM4jR/HOtfArzqQj8Vw1ZxT4Cj73bQHRSL/oWDtMye1H7xSDlFC0RiBY
-         NnGcjgYw+Dl9p0QcWjiDjLv5Pk2UCLMRbnPHvQ9rTSsq1gTWaGkV3Ji2vOUIqmlVtvtJ
-         FTyw==
-X-Gm-Message-State: AOAM533opm0gAiW37lqoJNOLC26psvmTrYJi6GOA2Gsa4md5C3A0BlR4
-        Ti7O4IWB/WUJzev7SDsUwvM=
-X-Google-Smtp-Source: ABdhPJzKUhl6X69rC8uzYMDjUWGzNYKUrqW/crUwIBle057SrecnEOULohMxPW2ng6zoVS0YK0jPRw==
-X-Received: by 2002:a05:6830:1b6b:: with SMTP id d11mr7220330ote.254.1611427109905;
-        Sat, 23 Jan 2021 10:38:29 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l10sm2445089otn.56.2021.01.23.10.38.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 23 Jan 2021 10:38:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Jan 2021 10:38:28 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-power@fi.rohmeurope.com, linux-watchdog@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH v7 5/6] MAINTAINERS: Add ROHM BD9576MUF and BD9573MUF
- drivers
-Message-ID: <20210123183828.GA61238@roeck-us.net>
-References: <cover.1611324968.git.matti.vaittinen@fi.rohmeurope.com>
- <d4a658492fd9168a3e8a922b941f45f8ac23934d.1611324968.git.matti.vaittinen@fi.rohmeurope.com>
+        id S1726021AbhAWSsH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 23 Jan 2021 13:48:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34396 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725922AbhAWSsH (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 23 Jan 2021 13:48:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 384EB22D2B;
+        Sat, 23 Jan 2021 18:47:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611427646;
+        bh=UXp2NFzKNxkatDDXxDwnkDYnaYkcm//9A6g0qxA8fvc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SglYl624Xv1++VESR5wVWFdUhAX3SX6PddbHOw0vXngq5p9zW/6iSEj8+PpGyJWx4
+         rG2pPXxpCrprG4NOFIdaF/HifBBuUDf2aIAkedamNqb81vUx3MY/dNP1uT2xoQwXBX
+         k+5Ow1VzZuua/jXKxEqJ6Z7RUqbV0EPOc/DFF3DekfFNOjs+pX/UbRju8aytx8dW/S
+         v6lsLUNU3ONpUjg7KRU45wD9rwv5DvPhbF+hg9IMoFmGBPHJJXePEWwo7bn86sHdne
+         9s5SFIwaZgA05N23p6QsFbnFuQ87IENhnS87Q2cy3MWDVqyLX1dp0eq4wHbNnED1X+
+         O0Qhxup3V1PWg==
+Received: by mail-ot1-f51.google.com with SMTP id v1so8594483ott.10;
+        Sat, 23 Jan 2021 10:47:26 -0800 (PST)
+X-Gm-Message-State: AOAM533rHNGQqbMvhmaIKXK9FlxiZWazVlKX6m6itVYKrAjmXNIKk7bD
+        haUWNgVMalpBJB8LjTGoyB/IwFOTFA4fonv2QPk=
+X-Google-Smtp-Source: ABdhPJzXadBvqbm0Ka4A7fE+buyojDLYxoXTZHvib7C9uxqYQEZ/kN8zd+yrdxDnsSWAqq4It9JoroPbQD7MoX7T0Z4=
+X-Received: by 2002:a05:6830:139a:: with SMTP id d26mr7354158otq.305.1611427645600;
+ Sat, 23 Jan 2021 10:47:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4a658492fd9168a3e8a922b941f45f8ac23934d.1611324968.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20210120162745.61268-1-arnd@kernel.org> <20210120162745.61268-5-arnd@kernel.org>
+ <20210123183434.GA60725@roeck-us.net>
+In-Reply-To: <20210123183434.GA60725@roeck-us.net>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 23 Jan 2021 19:47:09 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0r_Fysv1cfj2FcW+PAv8FEAPu=EYTzXODxGXGLQe5hkQ@mail.gmail.com>
+Message-ID: <CAK8P3a0r_Fysv1cfj2FcW+PAv8FEAPu=EYTzXODxGXGLQe5hkQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] watchdog: remove tango driver
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Mans Rullgard <mans@mansr.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 04:35:10PM +0200, Matti Vaittinen wrote:
-> Add maintainer entries for ROHM BD9576MUF and ROHM BD9573MUF drivers.
-> MFD, regulator and watchdog drivers were introduced for these PMICs.
-> 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+On Sat, Jan 23, 2021 at 7:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Jan 20, 2021 at 05:27:44PM +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The tango platform is getting removed, so the driver is no
+> > longer needed.
+> >
+> > Cc: Marc Gonzalez <marc.w.gonzalez@free.fr>
+> > Cc: Mans Rullgard <mans@mansr.com>
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > Acked-by: Mans Rullgard <mans@mansr.com>
+>
+> I ueued this patch up in my watchdog-next tree, and while doing so
+> removed the devicetree bindings as well. If Wim picks up the patch
+> from my tree we should be fine; otherwise I'd suggest to submit a
+> follow-up patch after v5.11 to remove the bindings file.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Thanks a lot!
 
-> ---
-> Changes since v6:
->  - no changes
->  MAINTAINERS | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cc1e6a5ee6e6..b59b7877258c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15336,16 +15336,20 @@ F:	drivers/gpio/gpio-bd71828.c
->  F:	drivers/mfd/rohm-bd70528.c
->  F:	drivers/mfd/rohm-bd71828.c
->  F:	drivers/mfd/rohm-bd718x7.c
-> +F:	drivers/mfd/rohm-bd9576.c
->  F:	drivers/power/supply/bd70528-charger.c
->  F:	drivers/regulator/bd70528-regulator.c
->  F:	drivers/regulator/bd71828-regulator.c
->  F:	drivers/regulator/bd718x7-regulator.c
-> +F:	drivers/regulator/bd9576-regulator.c
->  F:	drivers/regulator/rohm-regulator.c
->  F:	drivers/rtc/rtc-bd70528.c
->  F:	drivers/watchdog/bd70528_wdt.c
-> +F:	drivers/watchdog/bd9576_wdt.c
->  F:	include/linux/mfd/rohm-bd70528.h
->  F:	include/linux/mfd/rohm-bd71828.h
->  F:	include/linux/mfd/rohm-bd718x7.h
-> +F:	include/linux/mfd/rohm-bd957x.h
->  F:	include/linux/mfd/rohm-generic.h
->  F:	include/linux/mfd/rohm-shared.h
->  
+       Arnd
