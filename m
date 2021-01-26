@@ -2,152 +2,91 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F8B30361C
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jan 2021 07:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F453036E3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jan 2021 07:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727187AbhAZGAz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Jan 2021 01:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728434AbhAYMwc (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 Jan 2021 07:52:32 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508DAC06174A;
-        Mon, 25 Jan 2021 03:14:32 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id n10so8642162pgl.10;
-        Mon, 25 Jan 2021 03:14:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9MDoopSGxeIubZb9Ea5LNLoohJkL55ZuklY1qkGjioU=;
-        b=iFFQQNLIH8MeXeoZLF35XxFr2GVK2LCMT3a4uiBuoHqqbm9KtIR4zQZYXg4sfhyesW
-         jtV/vSntKpIvP/smVSbomec5khjwVUZU4Mpcm+4FZTFOgdWs+rmqm34sPP7o/a2l6p/K
-         wtR2pctmfNg4G291SUyJCUAUwgUAbPSYygbJi8AdJlefjCZc8FURUe7JSAn0bAV45Gr9
-         cYhn/iG9xMUZ/JrTpqIrGRcqgvtVzIP74C4TmzNi/HDoMCIJJsRZrRk444X3VDW5mxmc
-         lOZ0K35lHeR6rrDAe1yzNEhNxCDYa7zcTcjRSQAaNVfIThfpWPpk9jmatRbOm6c/EGYw
-         kv+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9MDoopSGxeIubZb9Ea5LNLoohJkL55ZuklY1qkGjioU=;
-        b=INMYUsIQg80amPlfd8AbrfCCzDRhBXx8I2nEh+hE6wjApe2gdVES907ykeMOCCZmuN
-         XBBfMLHquCiX+QWQNpYx7RZOom26ke9ya8rh6kliDeHgq65TGv0MhEd7LD0wGlnhBYKM
-         BB1pwn7bAT6iQtQo4Ie7EOXr/pmg8rh1s8e87IC+qX05TRdR2hHmPQjnyeosKOH9hbqx
-         2r6FrBZ1lTIjvT0eopt65+chw+1Go4P2azt/pprGV34gzYiqfr7DOgIJsf/rRJiHvW91
-         BFJZeRVEqk8HxcIkByPzwShjSL7cSU+ywNRhhxs/vGN4DC/FWXdEZMAtfdUEDkBTNqUx
-         EBsQ==
-X-Gm-Message-State: AOAM533Lu95BOSvMjz5IHynWksx6SFYAsrWHAyE24m7LwsT9nyQ5Ksx+
-        qnYaX1RTF3wFyYR+jvldsU7xhTLIWpzpdcGKhOk=
-X-Google-Smtp-Source: ABdhPJxPDgHNGzm1GRMIOIFpOTFAZ61OrN5NxCMaDSCzBn3T2cC8EqRcPHVvzIcACKgf5V7tfixFPHZ16YluF9PhPvc=
-X-Received: by 2002:a63:fc56:: with SMTP id r22mr122244pgk.203.1611573271723;
- Mon, 25 Jan 2021 03:14:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20210122123201.40935-1-andriy.shevchenko@linux.intel.com>
- <1f3d5ad1-9f8f-4a78-6239-6cdcbeeeb95b@redhat.com> <YArtsQSQsGdfNlBI@smile.fi.intel.com>
- <YArzAvcZXfv8DaI4@smile.fi.intel.com> <4ba64643-9254-055d-49a0-55104b8669d8@redhat.com>
- <1d57c7b0-9ef4-3306-1566-2b99f40d92d1@roeck-us.net> <eeda93c6-04cb-a775-7d79-b29a53c6a138@redhat.com>
-In-Reply-To: <eeda93c6-04cb-a775-7d79-b29a53c6a138@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Jan 2021 13:15:21 +0200
-Message-ID: <CAHp75VdE4LSHTKLuZ6x744224N2AvbMU0JeMmTWoqeEHDj7=2A@mail.gmail.com>
-Subject: Re: [PATCH v1 1/5] watchdog: intel_scu_watchdog: Remove driver for
- deprecated platform
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S2389281AbhAZG4x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Jan 2021 01:56:53 -0500
+Received: from mx2.suse.de ([195.135.220.15]:34846 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389275AbhAZG4b (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 26 Jan 2021 01:56:31 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 4EDD3AE91;
+        Tue, 26 Jan 2021 06:55:49 +0000 (UTC)
+Date:   Tue, 26 Jan 2021 07:55:47 +0100
+Message-ID: <s5hbldc2nm4.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pau Oliva Fora <pof@eslack.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 0/3] isa: Make the remove callback for isa drivers return void
+In-Reply-To: <20210122092449.426097-1-uwe@kleine-koenig.org>
+References: <20210122092449.426097-1-uwe@kleine-koenig.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Jan 23, 2021 at 2:08 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 1/23/21 1:27 AM, Guenter Roeck wrote:
-> > On 1/22/21 1:04 PM, Hans de Goede wrote:
-> >> On 1/22/21 4:45 PM, Andy Shevchenko wrote:
-> >>> On Fri, Jan 22, 2021 at 05:22:25PM +0200, Andy Shevchenko wrote:
-> >>>> On Fri, Jan 22, 2021 at 03:59:34PM +0100, Hans de Goede wrote:
+On Fri, 22 Jan 2021 10:24:46 +0100,
+Uwe Kleine-König wrote:
+> 
+> Hello,
+> 
+> changes since v1
+> (https://lore.kernel.org/r/20210121204812.402589-1-uwe@kleine-koenig.org):
+>  - fix build failure, found by the kernel test robot
+>    (my grep missed the struct isa_driver embedded in struct
+>    radio_isa_driver). For this I introduced patch 2 and adapted patch 3
+>    a bit. An interdiff is below.
+>  - Added Acks/Reviews by Guenter Roeck, William Breathitt Gray, Marc
+>    Kleine-Budde, Wolfram Sang and Takashi Iwai <tiwai@suse.de>
+> 
+> The base-commit I specified (by hand *sigh*) in v1 was broken, must be a
+> cut-n-paste-error, sorry for that.
+> 
+> Takashi suggested to take this series via sound.git given that this is
+> the most affected tree. This is fine for me. Otherwise I can also
+> provide an immutable branch. For both variants we still need a few acks
+> though.
 
-> >>>>> What is the plan for merging this series ?
-> >>>>>
-> >>>>> It touches files under:
-> >>>>> arch/x86
-> >>>>> drivers/watchdog
-> >>>>> drivers/platform/x86
-> >>>>>
-> >>>>> It is probably best if the entire series is merged through a single
-> >>>>> tree. I don't expect this to cause any conflicts with current / upcoming
-> >>>>> changes under drivers/platform/x86, so I'm fine with this being merged
-> >>>>> through another tree.
-> >>>>>
-> >>>>> Or if I can get an ack for that from the x86 and watchdog maintainers
-> >>>>> I can merge the entire series through the pdx86 tree.
-> >>>>
-> >>>> For time being I'm collecting tags and comments.
-> >>>> As of today this series is independent per se, but other (later) clean up
-> >>>> patches may rely on this.
-> >>>>
-> >>>> One strategy can be providing an immutable branch for anybody who wants it and
-> >>>> merge thru PDx86 or watchdog tree (I guess PDx86 is preferable because there
-> >>>> are more patches touching other stuff, though independently, in this matters).
-> >>>
-> >>> Yes, I think one more time and guess the best is:
-> >>>  - get tags from x86 / watchdog
-> >>>  - get tag from RTC
-> >>>  - collect everything in PDx86 immutable branch
-> >>
-> >> Ok, that works for me. I assume that it is best for the other subsystems
-> >> if I create an immutable branch for this based on 5.11-rc1
-> >> (and then merge that into pdx86/for-next) ?
-> >>
-> >> Guenter, I believe you have already reviewed all the watchdog changes,
-> >> are you ok with me creating an immutable branch for the entire series
-> >> and then sending you a pull-req for that ?
-> >
-> > Wim handles watchdog pull requests,
+Now I applied all three patches to my sound.git tree.
+It's found in isa-void-remove-callback signed tag, in case anyone else
+wants to merge in.  The branch is based on 5.11-rc4.
 
-Wim, can you Ack the watchdog changes?
+git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/isa-void-remove-callback
 
-> Ah, sorry I was under the impression you would do that because you were
-> doing the reviews (which I'm sure Wim appreciates).
->
-> > and he usually creates a branch
-> > for Linus to pull from either during or shortly before a commit window.
-> > Also, I don't immediately see why the watchdog tree should carry the other
-> > patches of this series, immutable or not; I would not expect a dependency
-> > against those.
-> >
-> > Anyway, I am fine if the the wdt driver removal is submitted through some
-> > other branch.
->
-> Hmm, looking at the code again it indeed seems that patch 1/5 + 2/5 could
-> be simply merged through the watchdog tree, as they don't appear to
-> have any interdependencies with the arch/x86 and drivers/platform/x86
-> changes.  Andy ?
 
-The first patch is a dependency to the later (that are not published yet).
-I was considering gathering all dependent patches in immutable
-branches and doing in three parts / phases.
+thanks,
 
-I can prepare a branch with a first batch (with Acks from respective
-maintainers) and send a PR to you.
-Would it work?
-
--- 
-With Best Regards,
-Andy Shevchenko
+Takashi
