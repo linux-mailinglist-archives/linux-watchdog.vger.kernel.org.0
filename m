@@ -2,76 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9E8304475
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jan 2021 18:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E649B30453E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jan 2021 18:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728439AbhAZGBP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Jan 2021 01:01:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:49664 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730088AbhAYPim (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 Jan 2021 10:38:42 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98FB71762;
-        Mon, 25 Jan 2021 07:19:15 -0800 (PST)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11BA93F68F;
-        Mon, 25 Jan 2021 07:19:12 -0800 (PST)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-Cc:     Jernej Skrabec <jernej.skrabec@siol.net>,
-        Samuel Holland <samuel@sholland.org>,
-        Icenowy Zheng <icenowy@aosc.io>, Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com, Guenter Roeck <linux@roeck-us.net>,
+        id S1728349AbhAZR0W (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Jan 2021 12:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731101AbhAZQ4k (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 26 Jan 2021 11:56:40 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3880EC061D7D;
+        Tue, 26 Jan 2021 08:56:00 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b26so23618682lff.9;
+        Tue, 26 Jan 2021 08:56:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IUDDZRZxdmyV3zHbIgFV/f+pJvlpZPQNewiwbQaO6tE=;
+        b=lW8J7gdCPRMweOQw8pwNhFi4aRG/l+tBBUD0aanYKeGqx5yQ1nLZ7amwTrNZHy6vU2
+         V9wwSXUgUvgm4WHsgQysRp7Qdnkj7lv13RJkpJmXiHgv2vptiA6hb/h3zaYrFtGVwNnB
+         wp0favvJMQzNKEyLe/ecQt4MU1Y4BDQ3+CCBSvfEouaXwPVNEjIMQaAm/INI0V4d4EYR
+         Euctr81IITXkASr5McZpLWSUZxaj+GPouo/1cYqAlGbcxNNFf46cYkjGnSmBVeBb3I4t
+         CHAgzgNNdr4nM29pWXKyRFzV2kGPi9FpD5hWu07RxVRd70ZvB5sgyWWcNPRMllyENxG9
+         800Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IUDDZRZxdmyV3zHbIgFV/f+pJvlpZPQNewiwbQaO6tE=;
+        b=O+IzDx/R5ply9lEv35ei1unhLF3QYjDeuIYvzGQfiWiF87wsenSAkYO6FpwABMX3Ru
+         0xp7N1Jo6dYj3eKAgqzIC+1xMACy3ys0W1AGWW0q3bUIkKevD0Och9oOM/coUU5bLfRX
+         /nH4voJzJoN1keIo0BNnCR9KhWMcofF87SJ8vpMQh6n4cSw/ACRwdWhZanCa8r1M+C1Y
+         IalR1nxjWJtqffvvxVAXPs8t3drkFN+BM62ZPfFX8sAZc1FXIV/ZSGmDSw+tkpf+9ds7
+         XhCyV3lquhdNHdXV8IhPaQYW1xz68OseUUxbRGg511FN5k7W/ECDkIfWk9qYGXBU9V6O
+         deVw==
+X-Gm-Message-State: AOAM530JYyAGWFrUSOZ09yN0WvOX+hCGP/wRgXULqPxylsy5Evy+bCxd
+        daJeIpWfsX0lR+mFEEGDMRecAPW04mHGqFgJx68=
+X-Google-Smtp-Source: ABdhPJy9dl1Tk9pVWPFcSjiX8vKJgMaCDnwogfliEKqUrmBFXH5j360/BhKOOcxo7U7KWVqbda7Zg9HYVSXc7AKyd7I=
+X-Received: by 2002:ac2:515b:: with SMTP id q27mr2948208lfd.516.1611680158749;
+ Tue, 26 Jan 2021 08:55:58 -0800 (PST)
+MIME-Version: 1.0
+References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
+ <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
+In-Reply-To: <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
+From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Date:   Tue, 26 Jan 2021 17:55:47 +0100
+Message-ID: <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
+Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH v4 09/21] dt-bindings: watchdog: sun4i: Add H616 compatible string
-Date:   Mon, 25 Jan 2021 15:17:59 +0000
-Message-Id: <20210125151811.11871-10-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20210125151811.11871-1-andre.przywara@arm.com>
-References: <20210125151811.11871-1-andre.przywara@arm.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Use enums to group all compatible devices together on the way.
+On Tue, Jan 26, 2021 at 4:51 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
+> <patrik.r.jakobsson@gmail.com> wrote:
+> > On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > Hi guys,
+> > >
+> > > This is first part of Intel MID outdated platforms removal. It's collected into
+> > > immutable branch with a given tag, please pull to yours subsystems.
+> >
+> > Hi Andy,
+> > Do you plan on eventually removing X86_INTEL_MID completely? If so,
+> > then I should probably start looking at removing the corresponding
+> > parts in GMA500.
+>
+> Nope. It is related to only Medfield / Clovertrail platforms.
+>
+> There are other (MID) platforms that may / might utilize this driver
+> in the future.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Acked-by: Maxime Ripard <mripard@kernel.org>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
- .../bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+Right, there's still Oaktrail / Moorestown with hardware in the wild.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-index 5ac607de8be4..9aa3c313c49f 100644
---- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-@@ -19,13 +19,11 @@ properties:
-       - const: allwinner,sun4i-a10-wdt
-       - const: allwinner,sun6i-a31-wdt
-       - items:
--          - const: allwinner,sun50i-a64-wdt
--          - const: allwinner,sun6i-a31-wdt
--      - items:
--          - const: allwinner,sun50i-a100-wdt
--          - const: allwinner,sun6i-a31-wdt
--      - items:
--          - const: allwinner,sun50i-h6-wdt
-+          - enum:
-+              - allwinner,sun50i-a64-wdt
-+              - allwinner,sun50i-a100-wdt
-+              - allwinner,sun50i-h6-wdt
-+              - allwinner,sun50i-h616-wdt
-           - const: allwinner,sun6i-a31-wdt
-       - items:
-           - const: allwinner,suniv-f1c100s-wdt
--- 
-2.17.5
+>
+> I.o.w. we probably can remove the oldest stuff in the driver WRT above
+> mentioned platforms, but leave the driver for the rest.
+> I wouldn't be in a hurry with this though, display drivers are easy to
+> remove, but really hard to get back on velocity after that.
 
+Ok, I'll have a look at removing Medfield. That code should have been
+removed a long time ago.
+
+-Patrik
