@@ -2,106 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7122304C78
+	by mail.lfdr.de (Postfix) with ESMTP id F3468304C79
 	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jan 2021 23:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728226AbhAZWnx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Jan 2021 17:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S1728081AbhAZWpH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Jan 2021 17:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388455AbhAZTHB (ORCPT
+        with ESMTP id S2405684AbhAZUyF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Jan 2021 14:07:01 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88298C061574;
-        Tue, 26 Jan 2021 11:06:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=zUcP2Ekow40wDr8LQu56g1JOWBLSxsWCwNUDwttWnJY=; b=ad84LgFWJ8FgdoRvBSNVnAdb+
-        0I6Sw5zFHnURG6DddKEQ8HbimmJVGhfZNBE+p4AhrkuGcqgL8wXJS/82Ulh3PCv17KG3N45R7A4lo
-        nmAWv3AnHF/mSc9xZD1jBN9qCv/KUXD01csQwhWLG+rkGDTkxKX1bLlQ1gn5TyX5Nq4qryobh41F5
-        DB4HHmb9nD2Xu3mV8TLNo+8B+nWoKTBy48lo4Q1JucKdB4IQ7QCREGM7mwYt646OKNjClWNUO1E6M
-        j60U9ebf7BAEOHy7IwgCDiy4Xjl4pjGwcbLID7o2kdNIzvVrdpvSEcEUXs6vOb5LBBAMtPHo30HE4
-        oAMpwR9Vw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:53070)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1l4TeW-0004lN-0N; Tue, 26 Jan 2021 19:05:24 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1l4TeJ-00042E-C4; Tue, 26 Jan 2021 19:05:11 +0000
-Date:   Tue, 26 Jan 2021 19:05:11 +0000
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tue, 26 Jan 2021 15:54:05 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9475DC0613D6;
+        Tue, 26 Jan 2021 12:53:25 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id l18so2978569pji.3;
+        Tue, 26 Jan 2021 12:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rbiGPK10hMkVPDroKMLJ5oV5M7XFgnNXGS2BK8hWuOo=;
+        b=rn/iGPtlK1tCt3ZcyGP0CCdw67MmANd7aV9K8V8aeKMW0OCHolf5rM2iIe3r4DjsNZ
+         F2fnJ6AdLLZDovpjn78dQoAwggG434OjHr5DX8MOMH7+Vl/IPf5JiUKCtosaapLQlE5Y
+         woQ/JsbLBBtAD/Q5HH6Xv3+NbWnByvdyZYrTsvi3vOD9YvZpTS7ffThCt9h0I79+HV+r
+         b/uEZSTH2DnvGIsEOObtjToqzcJZUUYNqmjR4Yt0w2cR9OdaBdi4O9fNBq7dohr/2tLW
+         zM6jUprpc/hFKn6hHnZiyRKWcD6SprVWgRYGxGKRTAmGJxOlkCdfcAsr1j89x+5wiViQ
+         Khcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rbiGPK10hMkVPDroKMLJ5oV5M7XFgnNXGS2BK8hWuOo=;
+        b=i6tyKPLyzcFEQCADGpTP9onWXOFToxJdTnaqtSz9UgDACTI/uSGuOgihOY3/uvlaCq
+         C6WY9TrSwzFPPPTKq2et4Cwn10qsN8v6JySdq/7+7D/GcpL/t1qMIxUmzDNYXXBQaJAD
+         BLvi6x7bGtwrvLdbHkCbDU98XV3ucxlf/KeIPNuaY1zWO9QPjOPxdllLZHNIS7eqlC+y
+         zXhZ9Csn97v6cUC8XBfBdgnzm5aXxuxxZ8fJlpNLbZsNg13S2ErYN2zwngnHMYFfuh50
+         Yvudm/L78JCSkXmHaUJRebJGWjoaUL6DAAI5ztXkAYOcfbNwAxWKG8ExxSWnfOO9kFd2
+         iZpg==
+X-Gm-Message-State: AOAM533WckD9vDEuUTFdCPObqFgRL9IA8vNrWmdLy6u0ws8DJGvJQZyA
+        m+LBVMdmypfB+W4WvYOiUK3aUmlmwxSk///yLDc=
+X-Google-Smtp-Source: ABdhPJwJydNn/+NYM8T4H1FZKTUZv+sFSaTn9sxHcmr1VIRqWPJz3yxipJEpIX89bzwIqva5/GylV4FLSr9ScI9Y40k=
+X-Received: by 2002:a17:90a:ca98:: with SMTP id y24mr1713563pjt.181.1611694405124;
+ Tue, 26 Jan 2021 12:53:25 -0800 (PST)
+MIME-Version: 1.0
+References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
+ <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
+ <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
+ <CAHp75VdKxARQAyyTd=ZcaoER1iF6Mk4AS1Dn6U9VCjt_D_+q8A@mail.gmail.com> <3b4c2f63-14e6-5041-3c15-c2d65b229269@redhat.com>
+In-Reply-To: <3b4c2f63-14e6-5041-3c15-c2d65b229269@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 26 Jan 2021 22:54:14 +0200
+Message-ID: <CAHp75VcEq4thOub+k5rDR61KZX4jCZj2zJr2OqsdedmpSB64KA@mail.gmail.com>
+Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-rtc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-serial@vger.kernel.org, coresight@lists.linaro.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, Leo Yan <leo.yan@linaro.org>,
-        dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Mike Leach <mike.leach@linaro.org>
-Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
-Message-ID: <20210126190511.GK1551@shell.armlinux.org.uk>
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
- <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
- <3e42b2ea-c713-31b2-9c86-c49a70d8e1f4@arm.com>
- <20210126175652.3caoqfnsky2es42f@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210126175652.3caoqfnsky2es42f@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 06:56:52PM +0100, Uwe Kleine-König wrote:
-> I'm surprised to see that the remove callback introduced in 2952ecf5df33
-> ("coresight: etm4x: Refactor probing routine") has an __exit annotation.
+On Tue, Jan 26, 2021 at 8:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 1/26/21 6:14 PM, Andy Shevchenko wrote:
+> > On Tue, Jan 26, 2021 at 6:55 PM Patrik Jakobsson
+> > <patrik.r.jakobsson@gmail.com> wrote:
+> >> On Tue, Jan 26, 2021 at 4:51 PM Andy Shevchenko
+> >> <andy.shevchenko@gmail.com> wrote:
+> >>> On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
+> >>> <patrik.r.jakobsson@gmail.com> wrote:
+> >>>> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
+> >>>> <andriy.shevchenko@linux.intel.com> wrote:
+> >>>>>
+> >>>>> Hi guys,
+> >>>>>
+> >>>>> This is first part of Intel MID outdated platforms removal. It's collected into
+> >>>>> immutable branch with a given tag, please pull to yours subsystems.
+> >>>>
+> >>>> Hi Andy,
+> >>>> Do you plan on eventually removing X86_INTEL_MID completely? If so,
+> >>>> then I should probably start looking at removing the corresponding
+> >>>> parts in GMA500.
+> >>>
+> >>> Nope. It is related to only Medfield / Clovertrail platforms.
+> >>>
+> >>> There are other (MID) platforms that may / might utilize this driver
+> >>> in the future.
+> >>
+> >> Right, there's still Oaktrail / Moorestown with hardware in the wild.
+> >
+> > Actually Moorestown had to be removed a few years ago (kernel won't
+> > boot on them anyway from that date when Alan removed support under
+> > arch/x86 for it).
+> >
+> > I'm talking about Merrifield and Moorefield that can utilize it and
+> > also some other platforms that are not SFI based (Cedar something...
+> > IIRC).
+>
+> Yes at least there are some 64 bit capable SoCs with GMA500 which were
+> used in NAS like devices. These NAS-es actually have a VGA output
+> (and maybe also DVI?) which is attached to the GMA500.
 
-In general, remove callbacks should not have an __exit annotation.
-__exit _can_ be discarded at link time for built-in stuff.
+Since you are talking about 64-bit, definitely they are *not*
+Moorestown, Medfield, Clovertrail since the mentioned never were
+64-bit. But it would be nice to see the CPU model number to be sure.
+
+> I know people are running Fedora on these, so we should at least keep
+> these supported.
+
+Is it possible to gather the CPU model number from them? (Or at least
+the exact device/box name)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
