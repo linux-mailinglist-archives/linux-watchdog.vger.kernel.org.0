@@ -2,100 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EAA304302
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jan 2021 16:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5218E304319
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jan 2021 16:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392788AbhAZPv5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Jan 2021 10:51:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392031AbhAZPvn (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Jan 2021 10:51:43 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB4DC061D73;
-        Tue, 26 Jan 2021 07:51:02 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id j21so5383821pls.7;
-        Tue, 26 Jan 2021 07:51:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e1wIxfZ2pa94U6ERVc2TBu1sPL7/ZYPSJAmu9tbJ7iw=;
-        b=fInUUBW/u2yZkKQ9i4u1tJ4c+stOkTJCJtSFcDLZ7m/xs9cZT542Eb2J5XlAOl8xPv
-         DtHadV5tMMfxNK6aBMVjHNggIwvNKjBxXQJORTHKRarKVjBMRj4aZ2ZFbdCSu6m/QBiJ
-         8WEOou3Sj7ixxzifYtQN/LX5gb98Of28SIfvk8keig14TyEK02m0ZM9sX5KjF+raFYRX
-         i9zNWhK5pY/8Qa/Ywd0D5gQzpd6FaQMM6bM69oPwHXiDxOmf7yaNaO9ibFdCQIUWeb70
-         PLaqHLpZ9cFYa9GvvdBBgHTZw2e6bySE0pNTApwJTaDkDEd/egu/gBGsb12p/44eYqRY
-         gXxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e1wIxfZ2pa94U6ERVc2TBu1sPL7/ZYPSJAmu9tbJ7iw=;
-        b=aSwpLjMzOaZSydQoU2DoupjjU74RYSVy1ktDdvMSO1Sfs1NI/X1Z3TFIg9Erx24gm7
-         zdbtfXkgSBvn3I3lKzhnzEyjPkVj52y3byefejl7966VcU4vc+QXeqdH+hi6fZQNr7fK
-         nXwfRfYSFsejYhBMcnuVLQpi/L66W2iRlr5mKnOeTgeGFbPcxgVO4pcWP9euL1xC6kRt
-         GOT1SAIwTuAcwB+G1njOvgIKmkGty2wOHJFlyZcD8YnhUw4kpfEc+9eE0zVZ6ECqXKHY
-         3hDjArDs2EWPUmpdjdSEk97mwyH3QGIjfKc6ZH/F3oAPcFKeZ/u8t6CIWX380J0CDy8e
-         K4Lw==
-X-Gm-Message-State: AOAM5301zX7du/pS4/x3rKYYBd38IsiR+09z88mJoG9zQdXLIXymw84A
-        D4ANM0429pG6NS33Rh+iL+pvTae+vb9tPKDZyyg=
-X-Google-Smtp-Source: ABdhPJx5glss0sqleRtDBlXmNqPnxXWh5zBE4ZdTKEjL+tUMNHRV8Ts7oKcmyySbHPNP8WfNZVvgavGou2cpAroNDx4=
-X-Received: by 2002:a17:90a:c84:: with SMTP id v4mr423673pja.228.1611676262312;
- Tue, 26 Jan 2021 07:51:02 -0800 (PST)
+        id S2404185AbhAZPy2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Jan 2021 10:54:28 -0500
+Received: from m42-8.mailgun.net ([69.72.42.8]:39218 "EHLO m42-8.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2403914AbhAZPyN (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 26 Jan 2021 10:54:13 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1611676429; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=mzFvspRxkqW9r0yBnxFG0ENYSFgGVzgg2SkmuFkOpd4=;
+ b=cJlcaAxKWd0b2k0JO2HaovSY667+lKojQRAZW97nZ7o3ohpYsz+GpgVvFASgIDX2jRx8Nu+6
+ +GtgAj+65+koiWNMtuWIdJ1eMNSjyDi0iCHCht/WSzTqkYJPQ/CKVc9Dn8/tG8K4Fin6+DWL
+ ZR1mP/jKM4uONmofQFXx7A/BXPw=
+X-Mailgun-Sending-Ip: 69.72.42.8
+X-Mailgun-Sid: WyJmNTk5OSIsICJsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 60103aea2c36b2106d328e42 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 26 Jan 2021 15:53:14
+ GMT
+Sender: saiprakash.ranjan=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id CDED8C43465; Tue, 26 Jan 2021 15:53:13 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: saiprakash.ranjan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0B9C8C433ED;
+        Tue, 26 Jan 2021 15:53:12 +0000 (UTC)
 MIME-Version: 1.0
-References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
-In-Reply-To: <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 26 Jan 2021 17:51:51 +0200
-Message-ID: <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
-Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 26 Jan 2021 21:23:12 +0530
+From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-watchdog@vger.kernel.org,
+        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
+        jorge@foundries.io, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] watchdog: qcom: Remove incorrect usage of
+ QCOM_WDT_ENABLE_IRQ
+In-Reply-To: <1c9d5e19-7ddd-345d-aa2d-b4fb48d9b4df@roeck-us.net>
+References: <20210126150241.10009-1-saiprakash.ranjan@codeaurora.org>
+ <1c9d5e19-7ddd-345d-aa2d-b4fb48d9b4df@roeck-us.net>
+Message-ID: <65015f8aa75efa6ead7dd7df45eb31d7@codeaurora.org>
+X-Sender: saiprakash.ranjan@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
-<patrik.r.jakobsson@gmail.com> wrote:
-> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > Hi guys,
-> >
-> > This is first part of Intel MID outdated platforms removal. It's collected into
-> > immutable branch with a given tag, please pull to yours subsystems.
->
-> Hi Andy,
-> Do you plan on eventually removing X86_INTEL_MID completely? If so,
-> then I should probably start looking at removing the corresponding
-> parts in GMA500.
+On 2021-01-26 20:53, Guenter Roeck wrote:
+> On 1/26/21 7:02 AM, Sai Prakash Ranjan wrote:
+>> As per register documentation, QCOM_WDT_ENABLE_IRQ which is BIT(1)
+>> of watchdog control register is wakeup interrupt enable bit and
+>> not related to bark interrupt at all, BIT(0) is used for that.
+>> So remove incorrect usage of this bit when supporting bark irq for
+>> pre-timeout notification. Currently with this bit set and bark
+>> interrupt specified, pre-timeout notification and/or watchdog
+>> reset/bite does not occur.
+>> 
+>> Fixes: 36375491a439 ("watchdog: qcom: support pre-timeout when the 
+>> bark irq is available")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> 
+> Assuming that pretimeout _does_ work with this patch applied,
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 
 
-Nope. It is related to only Medfield / Clovertrail platforms.
+Thanks Guenter. Yes I have patchset ready and tested [1] on 4
+different SoCs on which pretimeout works with this patch and without
+this, watchdog functionality would be broken on all those platforms
+and possibly more(the ones I couldn't get access to) if we add bark
+irq to the watchdog DT node.
 
-There are other (MID) platforms that may / might utilize this driver
-in the future.
+[1] https://lore.kernel.org/patchwork/cover/1371270/
 
-I.o.w. we probably can remove the oldest stuff in the driver WRT above
-mentioned platforms, but leave the driver for the rest.
-I wouldn't be in a hurry with this though, display drivers are easy to
-remove, but really hard to get back on velocity after that.
+Thanks,
+Sai
 
 -- 
-With Best Regards,
-Andy Shevchenko
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member
+of Code Aurora Forum, hosted by The Linux Foundation
