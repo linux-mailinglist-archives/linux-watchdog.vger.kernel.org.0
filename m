@@ -2,145 +2,171 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8688730518B
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Jan 2021 05:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B8730538B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Jan 2021 07:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238584AbhA0E5R (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Jan 2021 23:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388200AbhAZXUo (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Jan 2021 18:20:44 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C016EC06174A;
-        Tue, 26 Jan 2021 15:19:32 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id v200so249984ybe.1;
-        Tue, 26 Jan 2021 15:19:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yG8TN3kSOy/r5C1fLciwDAgyrhAMN8G3ZSfNxn4LKwI=;
-        b=JGn9UVd1WL6oLaAIgsVyZFefcVBcfaNKnNmOKOUyzbrJVYPNvDflHiTqTCWbm08KKm
-         cHN3UA9Qctcy/zocpr/AYU08cR4RovIIz4JlaEWXZxBMFL7ThTcs/Xw7vAn5YKV9F6bS
-         Ovrxi5Oqb0xAcSldXg7BPjJ7e8IrIwVj7lashPMbLmBoH+ir0sIVOOgNZRTTXJMWihA5
-         aBH8+0LeIHQz5MZkI5ksYuuMbyMEKaAIyhlG64IipkZUPMFKbeYo+0C5IyD9IBsL+mgu
-         NXmYmPsFaDDfqufP8ivVnzJswuQdVImtIfytTHJaKUTtTMsOam8GbSNJKsqKsz3Wlfh9
-         WIpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yG8TN3kSOy/r5C1fLciwDAgyrhAMN8G3ZSfNxn4LKwI=;
-        b=VQzjlGnjwwKXGtmg6M3zPDHX9hCe0FvY+1Msdl0oVJ5vHLuE+4qGmnWBI57mXUva7y
-         o2zvi+FzAv5LA0fyQ2mFNkirTYcUWFu6rtB7y5CuUU4H9/r/LFnGD1Sv3W3ipeMUgpVn
-         gVl90qg9KKqVNQ3arWXLYJUM0cKycEa4WSavMk0jeUuAKupGWS1KEmrQ4RVJQ2jClT8h
-         GGRhhVet7wd2XwpYaDkDGNHSiZYxluzuJ0AglniaJcwBGjTUoxFClli+Ka4hndHpGl1T
-         u2kRQ3x+sNihGyWuJLyVokibcXkad+Y98a+yijURkntQVA/ThsgygVbv2L34g6aImJ/a
-         FnWA==
-X-Gm-Message-State: AOAM533BgN2PQxauxeOIdYNK6Ug0jpmGKfmcMDPWlukyubKw8RusOpJ5
-        JvyaszjypAx1sHDpQ/44uzA0VLDYSZaaDdIuolM=
-X-Google-Smtp-Source: ABdhPJzBIh/uw8fHMxIPrq4i5pm0L5Jnoe2iN2FtZdlZzW9R7RDH1coLX0c8arxTOhBav4i1zaEHR/zAQGpitgryc7o=
-X-Received: by 2002:a25:9b81:: with SMTP id v1mr10594112ybo.168.1611703172052;
- Tue, 26 Jan 2021 15:19:32 -0800 (PST)
-MIME-Version: 1.0
-References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
- <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
- <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
- <CAHp75VdKxARQAyyTd=ZcaoER1iF6Mk4AS1Dn6U9VCjt_D_+q8A@mail.gmail.com>
- <3b4c2f63-14e6-5041-3c15-c2d65b229269@redhat.com> <CAHp75VcEq4thOub+k5rDR61KZX4jCZj2zJr2OqsdedmpSB64KA@mail.gmail.com>
-In-Reply-To: <CAHp75VcEq4thOub+k5rDR61KZX4jCZj2zJr2OqsdedmpSB64KA@mail.gmail.com>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Wed, 27 Jan 2021 00:19:17 +0100
-Message-ID: <CAMeQTsZMK9E4=qB-Kxnt9i4RGDFRkVMAgyYSck_tmk7C7yTH2A@mail.gmail.com>
-Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
+        id S231355AbhA0Gvh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 27 Jan 2021 01:51:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41084 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231916AbhA0GsF (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 27 Jan 2021 01:48:05 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6EB692072C;
+        Wed, 27 Jan 2021 06:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611730042;
+        bh=SMf/sTVmFizoaTCRhZKOzJIDd9pG2drSndbHjehSYHI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eIxDYowELLXJdzjiGwaNPG2hkaUmupGzw2zEemwVvQomvLqzMvseCF/SkUiqZIduO
+         Gvf8oKij0ja051ihFnNxn1vEEmr2V7Rezxly/hz1a2DfgLLDiHYVnu7ywJbmKoZ/1n
+         jTjUvD1r6r/xOuNkE/io5HVCc6JZfMxpD46Zw0pDJW3S6qcXerAxfVIO9YzZfcx8BZ
+         7abmVKMgGR50oOPfV4GFaWENi4Ss/oJanPtz4wNs5YcT6fz7mNssNUbap4x9DqDp7k
+         94/V6xmo4VOiVFFF3CTluEAGGxMwLkYC3YD81tj+qqyC0M53/29Mjt0KM9D41YabCf
+         I2bnFL90rxHIw==
+Date:   Wed, 27 Jan 2021 07:47:15 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
+Message-ID: <20210127064715.GA981@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, kvm@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+ <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="huq684BweRXVnRxX"
+Content-Disposition: inline
+In-Reply-To: <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 9:53 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jan 26, 2021 at 8:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> > On 1/26/21 6:14 PM, Andy Shevchenko wrote:
-> > > On Tue, Jan 26, 2021 at 6:55 PM Patrik Jakobsson
-> > > <patrik.r.jakobsson@gmail.com> wrote:
-> > >> On Tue, Jan 26, 2021 at 4:51 PM Andy Shevchenko
-> > >> <andy.shevchenko@gmail.com> wrote:
-> > >>> On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
-> > >>> <patrik.r.jakobsson@gmail.com> wrote:
-> > >>>> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
-> > >>>> <andriy.shevchenko@linux.intel.com> wrote:
-> > >>>>>
-> > >>>>> Hi guys,
-> > >>>>>
-> > >>>>> This is first part of Intel MID outdated platforms removal. It's collected into
-> > >>>>> immutable branch with a given tag, please pull to yours subsystems.
-> > >>>>
-> > >>>> Hi Andy,
-> > >>>> Do you plan on eventually removing X86_INTEL_MID completely? If so,
-> > >>>> then I should probably start looking at removing the corresponding
-> > >>>> parts in GMA500.
-> > >>>
-> > >>> Nope. It is related to only Medfield / Clovertrail platforms.
-> > >>>
-> > >>> There are other (MID) platforms that may / might utilize this driver
-> > >>> in the future.
-> > >>
-> > >> Right, there's still Oaktrail / Moorestown with hardware in the wild.
-> > >
-> > > Actually Moorestown had to be removed a few years ago (kernel won't
-> > > boot on them anyway from that date when Alan removed support under
-> > > arch/x86 for it).
 
-Ok. I lump Moorestown and Oaktrail together since they have the same
-Z6xx series CPU/GPU (GMA600). I still have a working Oaktrail device
-so that support should stay in gma500.
+--huq684BweRXVnRxX
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > >
-> > > I'm talking about Merrifield and Moorefield that can utilize it and
-> > > also some other platforms that are not SFI based (Cedar something...
-> > > IIRC).
-> >
-> > Yes at least there are some 64 bit capable SoCs with GMA500 which were
-> > used in NAS like devices. These NAS-es actually have a VGA output
-> > (and maybe also DVI?) which is attached to the GMA500.
+On Tue, Jan 26, 2021 at 05:58:34PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> All amba drivers return 0 in their remove callback. Together with the
+> driver core ignoring the return value anyhow, it doesn't make sense to
+> return a value here.
+>=20
+> Change the remove prototype to return void, which makes it explicit that
+> returning an error value doesn't work as expected. This simplifies changi=
+ng
+> the core remove callback to return void, too.
+>=20
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org> # for drivers/memory
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Yes these should be Cedarview/Cedartrail. Some of them are 64-bit and
-some are 32-bit. I think it came down to if bios enabled it or not.
-Cedarview comes with VGA, DVI and eDP/DP. Quite a few Cedarview
-devices exist in the wild.
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
->
-> Since you are talking about 64-bit, definitely they are *not*
-> Moorestown, Medfield, Clovertrail since the mentioned never were
-> 64-bit. But it would be nice to see the CPU model number to be sure.
->
-> > I know people are running Fedora on these, so we should at least keep
-> > these supported.
->
-> Is it possible to gather the CPU model number from them? (Or at least
-> the exact device/box name)
 
-Yes, it would be interesting to know more about Clovertrail. gma500
-only supports up to the Cedarview GPUs but Clovertrail might also use
-a Cedarview GPU.
+--huq684BweRXVnRxX
+Content-Type: application/pgp-signature; name="signature.asc"
 
--Patrik
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmARDG8ACgkQFA3kzBSg
+KbZUgg/+MkBwxjwkME0XbCPEYMUsJ9F6QLP4gXXTqGleAgxMVqSLG5XG/rJgCfPv
+BB3X116hBgVOZZBTz+uWxpOSy90WrhLh3HrOb/SGB6hmKn/a0fYdB2/YXhVOXKyN
+OlhKbYBl0Ev0PM+m8xV4sr0sQYOn1wOs0NMHoMvmK+TlnCX1GDxHBVuElpNWo8Wj
+/nFLnpq9eUGt+i4eAsKoTj/1l8Ak4cOihHe2cRWxVUC3NDRTJBL9HgZwD38wVl5v
+u/iwGQG5Zram49KLbGoBFpd60hrifA1X3Cwx2qhwZ+cm/ks3n+NwIQPvpoRyJ8Ny
+gK5+QKowfQvOtSP8PFC1QE/u+oLVpYJ4rVT3DmXddPj89l3Peo17VAS08AoPk3hO
+McIAFelbN1FmcjCpZ0ELpjCo/G6S1pKx9uAtFLbbMf80CoREU5ucCPzzWbf9unQv
+5xhIdK1xkszSC1kGjHABw1zBy/ZAEoy+x3yktPjX2nU1L8Ni/vKjR6+w27G7pspU
+WZwk2lkCFEnt8gFnRI4MFhjGagpiyiEfq0QeD1O452zgZimiPvfKjMLnWArfWzF0
+25EngNXoizDEZMYZX46drnzfUfIDKBVkCbj1CWcQLFivpp4pj7+7n4D5lJlgwNvE
+kqhQNlLLFbibwI0LNt/LqCbC/SggaYOUfYQ8XefoTe0Z6dH/+J0=
+=FyXm
+-----END PGP SIGNATURE-----
+
+--huq684BweRXVnRxX--
