@@ -2,439 +2,317 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A22730E982
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Feb 2021 02:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841DF30E9D1
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Feb 2021 03:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbhBDBfv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 3 Feb 2021 20:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S231709AbhBDCCG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 3 Feb 2021 21:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbhBDBfu (ORCPT
+        with ESMTP id S234250AbhBDCCE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 3 Feb 2021 20:35:50 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FCAC061573
-        for <linux-watchdog@vger.kernel.org>; Wed,  3 Feb 2021 17:35:10 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id k25so2047867oik.13
-        for <linux-watchdog@vger.kernel.org>; Wed, 03 Feb 2021 17:35:09 -0800 (PST)
+        Wed, 3 Feb 2021 21:02:04 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF8BC061573
+        for <linux-watchdog@vger.kernel.org>; Wed,  3 Feb 2021 18:01:24 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id d20so2120794oiw.10
+        for <linux-watchdog@vger.kernel.org>; Wed, 03 Feb 2021 18:01:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9cIqVg3zyDnxwlVTijePB9S7iCINNMB2xvPYD2P8haM=;
-        b=cv77Nhjut3WUb//UFRvCg++qyCdjoHQeBFpfwnoOUTxIxMvTHMlG0ZynJ2NqWWn/Vk
-         S5azzO52S0E4LhW8mdM+MSDzlkBs1O7AFViv01P+iK4k22fw2JTVuVrwsRtEKulnKarX
-         koGAq0HAxIo7M3SDo3nJ0h+x9RLaD8aXkQU2OyTXEjdaiEIXu172aQeF2b4+muLBfT1O
-         S2IYKCZ0IxKwiwKLqvLim0Meo3Lq3xjE8/ywp65QWlv391pwm2KGqs/CHiEnkW5E9Qhd
-         Mhoihag4w3V0HHZMvvuL3gnCRBX1FSktaQsx1tz0rWOJX9Tm+a2vLjpRdsEeRYqT4nsc
-         Q+YQ==
+        h=sender:subject:to:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jgG+Ezz4ZGHiwAd9uot2tYfnQqc2DdNufBjLPuUfz0M=;
+        b=h4EvnoFy9UaurOrFPS6o6V8ckVSFPnuGaFO95hE2TsbSo4XBDRf9OozlAdnN0oGMjP
+         TSWINixHvrfWEa+JWwULZoA9EtRQu/7vE5VxBjgrcxhTMBHO/1uhctMgWIWfoW/iZZGE
+         /TmCo/IbZxPCYLhLJKGvuFnn0wRLCiBOM606CKeOPFwVbwvV5RXi8itlPyMBjgMgTmCP
+         phKZnzEfoZsd6vlzjezSY+3j4bV02Ec6yV5uYEARplGNTPpmYKTuaWRYCAFf59dUiD4N
+         tFfp1T1Lrw0uJe/w7Tf+zuZ+xQg5wBjcqgj4kf1Ykk8MfVHcT7L4gY0uDNTH/SABmxwR
+         GhMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9cIqVg3zyDnxwlVTijePB9S7iCINNMB2xvPYD2P8haM=;
-        b=qPpRXHxRgGQlyv52w8FdHaRcCzsBMarVH5EfJl72zYMCHRHSib7mBCQGXD9Rj+1IPm
-         kEbM0OB65VIkQJOcKfFO+zNPSR8bWaMbYOxDFrW0O0SnxOlRp1E5oBT1uDIaIqmophkl
-         2y+poJKICiYnnxLicBRngo5uhGMy2x5iaU9PzX6NMmuYLyfuDSeXz7brQp20ofWg09Oj
-         E85a1vidZaGXsMrSg3ya9M6+rGakx7/V84irigkbYt7riV6MHbq1GFXRYaG2O2yE1otV
-         kF/s26zggemFOtG3xkFRIeu0CopcsRTCuzStbUJAKZMd2GgvW1mUcTrQyj7F/mqjU+Y6
-         QoZQ==
-X-Gm-Message-State: AOAM530axPUIdyZgWIBl2OF+AUdZy5ex0FvYvzHwpgvdDSCwND+KntZC
-        wpfynnQI0RRhTHDxDwIP5iW9zHSW0AQ=
-X-Google-Smtp-Source: ABdhPJxAInMcl793FhZFHdJkYdwHOVi01IVhsNePp7+8Km+sDiRwfsaD3SEXNhGHGHMYRP6QOrpAUw==
-X-Received: by 2002:a54:478a:: with SMTP id o10mr3839233oic.100.1612402509281;
-        Wed, 03 Feb 2021 17:35:09 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z10sm807619otk.8.2021.02.03.17.35.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 03 Feb 2021 17:35:08 -0800 (PST)
+        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=jgG+Ezz4ZGHiwAd9uot2tYfnQqc2DdNufBjLPuUfz0M=;
+        b=k0Q7m+/YEmX2gzfyOdLmLNAaBD1KhNjqadf22yu64luAyyV7n7GGH1ztC2+Un9OkCB
+         kXZSK8bFR4B1Z0brIIk44Hfqx6QtWHUgQVWUyHhLUGOP4Eq2SCZtXu2lq9+2yoO3LAtI
+         pFboQ2mcufKXj3CORcTtirznlJgsQmhDcl5f2aEZ6VDYHb+mVuXZlyvY3TcXkO29n6Qe
+         pxIYsqEtvakcTc7eanzfY2lpGy/er8eJ7XIAum2ceEVhWwFwwXorHcNvB7og4SD/2ukL
+         4D9AXsYxbEWFkE7ep2XikOC638jdfYA5ABul9NPq3L+KW99stWAphGPXCriraukYBU3h
+         CpqQ==
+X-Gm-Message-State: AOAM530FQBd9HvmAxT4mjryZdCncfKdH5N9tzJO0h2R3tCIYgeEFa9NB
+        BUZQqRSdZsndD/IQd52WPIYemuAB2d8=
+X-Google-Smtp-Source: ABdhPJyNlXm2ewR3QfdsmFdevGg5lukQBmBMWrNghYBvS5Li6oUTChC6Z1nAX7uWC/olr3GVxeZN6Q==
+X-Received: by 2002:aca:dd08:: with SMTP id u8mr3937692oig.55.1612404083170;
+        Wed, 03 Feb 2021 18:01:23 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h11sm844568ooj.36.2021.02.03.18.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Feb 2021 18:01:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 3 Feb 2021 17:35:06 -0800
+Subject: Re: [PATCH v4] Extend watchdog timeout during kernel panic.
+To:     JP Ertola <jp.ertola@hpe.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org
+References: <20210203153602.82063-1-jp.ertola@hpe.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Curtis Klein <curtis.klein@hpe.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3] watchdog: Add hrtimer-based pretimeout feature
-Message-ID: <20210204013506.GA87215@roeck-us.net>
-References: <1612383090-27110-1-git-send-email-curtis.klein@hpe.com>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <9ffe5103-d5c5-e823-71b0-f976c00fccb2@roeck-us.net>
+Date:   Wed, 3 Feb 2021 18:01:20 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1612383090-27110-1-git-send-email-curtis.klein@hpe.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210203153602.82063-1-jp.ertola@hpe.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 12:11:30PM -0800, Curtis Klein wrote:
-> This adds the option to use a hrtimer to generate a watchdog pretimeout
-> event for hardware watchdogs that do not natively support watchdog
-> pretimeouts.
+On 2/3/21 7:36 AM, JP Ertola wrote:
+> If the watchdog timeout is set such that the crash kernel does not
+> have time to collect a coredump and the crash kernel is not equipped to
+> ping the watchdog timer itself, then a kernel coredump will not be collected
+> before the watchdog fires. This change registers a panic notifier and
+> callback so the watchdog timeout can be extended if a kernel panic occurs.
+> This timeout extension would give the crash kernel enough time to collect
+> a coredump before the CPU resets. The watchdog timeout is extended if and only
+> if a crash kernel image is loaded in memory, the watchdog is active at the
+> time of the panic, and the kconfig setting is set.
 > 
-> With this enabled, all watchdogs will appear to have pretimeout support
-> in userspace. If no pretimeout value is set, there will be no change in
-> the watchdog's behavior. If a pretimeout value is set for a specific
-> watchdog that does not have built-in pretimeout support, a timer will be
-> started that should fire at the specified time before the watchdog
-> timeout would occur. When the watchdog is successfully pinged, the timer
-> will be restarted. If the timer is allowed to fire it will generate a
-> pretimeout event. However because a software timer is used, it may not
-> be able to fire in every circumstance.
+> A Kconfig option has been added to configure the timeout duration at
+> compile-time. Default is zero seconds.
 > 
-> If the watchdog does support a pretimeout natively, that functionality
-> will be used instead of the hrtimer.
-> 
-> The general design of this feaure was inspired by the software watchdog,
-> specifically its own pretimeout implementation. However the software
-> watchdog and this feature are completely independent. They can be used
-> together; with or without CONFIG_SOFT_WATCHDOG_PRETIMEOUT enabled.
-> 
-> The main advantage of using the hrtimer pretimeout with a hardware
-> watchdog, compared to running the software watchdog with a hardware
-> watchdog, is that if the hardware watchdog driver is unable to ping the
-> watchdog (e.g. due to a bus or communication error), then the hrtimer
-> pretimeout would still fire whereas the software watchdog would not.
-> 
-> Signed-off-by: Curtis Klein <curtis.klein@hpe.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: JP Ertola <jp.ertola@hpe.com>
 > ---
-> Changes from v2
->  - Added required includes to watchdog_core.h
->  - Added watchdog_have_pretimeout function and use throughout
->  - Moved function declarations to watchdog_core.h and made stubs static
-> 
-> Changes from v1 (watchdog: Add software pretimeout support)
->  - Changed subject for clarity
->  - Renamed KCONFIG to WATCHDOG_HRTIMER_PRETIMEOUT also for clarity
->  - Moved init/start/stop logic to watchdog_hrtimer_pretimeout.c
->  - Moved watchdog_core_data struct to watchdog_core.h so it can be
->     used in watchdog_hrtimer_pretimeout.c and watchdog_core.c
-> 
->  drivers/watchdog/Kconfig                       |  8 +++++
->  drivers/watchdog/Makefile                      |  1 +
->  drivers/watchdog/watchdog_core.h               | 48 ++++++++++++++++++++++++++
->  drivers/watchdog/watchdog_dev.c                | 47 +++++++++----------------
->  drivers/watchdog/watchdog_hrtimer_pretimeout.c | 44 +++++++++++++++++++++++
->  drivers/watchdog/watchdog_pretimeout.c         |  5 +--
->  6 files changed, 121 insertions(+), 32 deletions(-)
->  create mode 100644 drivers/watchdog/watchdog_hrtimer_pretimeout.c
+> v4: Remove optional callback mechanism alltogether. I agree with Guenter, 
+> not widely used.
+> v3: Fix logic so timeout extension is not longer than wdd->max_timeout
+> v2: Remove dead code and comments.
+>  drivers/watchdog/Kconfig        | 13 ++++++
+>  drivers/watchdog/watchdog_dev.c | 80 ++++++++++++++++++++++++++++++++-
+>  include/linux/watchdog.h        |  1 +
+>  3 files changed, 93 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 7ff941e..a5f0ca8 100644
+> index fd7968635e6d..f1055985e100 100644
 > --- a/drivers/watchdog/Kconfig
 > +++ b/drivers/watchdog/Kconfig
-> @@ -73,6 +73,14 @@ config WATCHDOG_SYSFS
->  	  Say Y here if you want to enable watchdog device status read through
->  	  sysfs attributes.
+> @@ -141,6 +141,19 @@ comment "Watchdog Device Drivers"
 >  
-> +config WATCHDOG_HRTIMER_PRETIMEOUT
-> +	bool "Enable watchdog hrtimer-based pretimeouts"
+>  # Architecture Independent
+>  
+> +config DEFAULT_WATCHDOG_CRASH_KERNEL_TIMEOUT
+> +	int "Default timeout for watchdog timer before crash kernel starts (seconds)"
+> +	default 0
 > +	help
-> +	  Enable this if you want to use a hrtimer timer based pretimeout for
-> +	  watchdogs that do not natively support pretimeout support. Be aware
-> +	  that because this pretimeout functionality uses hrtimers, it may not
-> +	  be able to fire before the actual watchdog fires in some situations.
+> +	  This option allows an extended timeout to be used for the watchdog when
+> +	  the kernel panics and a crash kernel is about to start. This is helpful
+> +	  when the existing WDT timeout value is less than the time required for
+> +	  crash kernel to run and the crash kernel is unable to handle the
+> +	  the watchdog itself. The timeout extension happens last in chain of
+> +	  kernel panic handler callbacks just in case another panic handler
+> +	  hangs unexpectedly. When this value is set to 0, the watchdog timeout
+> +	  will not be changed.
 > +
->  comment "Watchdog Pretimeout Governors"
->  
->  config WATCHDOG_PRETIMEOUT_GOV
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 5c74ee1..6fecaab 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -9,6 +9,7 @@ obj-$(CONFIG_WATCHDOG_CORE)	+= watchdog.o
->  watchdog-objs	+= watchdog_core.o watchdog_dev.o
->  
->  watchdog-$(CONFIG_WATCHDOG_PRETIMEOUT_GOV)	+= watchdog_pretimeout.o
-> +watchdog-$(CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT)	+= watchdog_hrtimer_pretimeout.o
->  
->  obj-$(CONFIG_WATCHDOG_PRETIMEOUT_GOV_NOOP)	+= pretimeout_noop.o
->  obj-$(CONFIG_WATCHDOG_PRETIMEOUT_GOV_PANIC)	+= pretimeout_panic.o
-> diff --git a/drivers/watchdog/watchdog_core.h b/drivers/watchdog/watchdog_core.h
-> index a5062e8..5b35a84 100644
-> --- a/drivers/watchdog/watchdog_core.h
-> +++ b/drivers/watchdog/watchdog_core.h
-> @@ -7,6 +7,8 @@
->   *
->   *	(c) Copyright 2008-2011 Wim Van Sebroeck <wim@iguana.be>.
->   *
-> + *	(c) Copyright 2021 Hewlett Packard Enterprise Development LP.
-> + *
->   *	This source code is part of the generic code that can be used
->   *	by all the watchdog timer drivers.
->   *
-> @@ -22,12 +24,58 @@
->   *	This material is provided "AS-IS" and at no charge.
->   */
->  
-> +#include <linux/hrtimer.h>
-> +#include <linux/kthread.h>
-> +
->  #define MAX_DOGS	32	/* Maximum number of watchdog devices */
->  
->  /*
-> + * struct watchdog_core_data - watchdog core internal data
-> + * @dev:	The watchdog's internal device
-> + * @cdev:	The watchdog's Character device.
-> + * @wdd:	Pointer to watchdog device.
-> + * @lock:	Lock for watchdog core.
-> + * @status:	Watchdog core internal status bits.
-> + */
-> +struct watchdog_core_data {
-> +	struct device dev;
-> +	struct cdev cdev;
-> +	struct watchdog_device *wdd;
-> +	struct mutex lock;
-> +	ktime_t last_keepalive;
-> +	ktime_t last_hw_keepalive;
-> +	ktime_t open_deadline;
-> +	struct hrtimer timer;
-> +	struct kthread_work work;
-> +#if IS_ENABLED(CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT)
-> +	struct hrtimer pretimeout_timer;
-> +#endif
-> +	unsigned long status;		/* Internal status bits */
-> +#define _WDOG_DEV_OPEN		0	/* Opened ? */
-> +#define _WDOG_ALLOW_RELEASE	1	/* Did we receive the magic char ? */
-> +#define _WDOG_KEEPALIVE		2	/* Did we receive a keepalive ? */
-> +};
-> +
-> +/*
->   *	Functions/procedures to be called by the core
->   */
->  extern int watchdog_dev_register(struct watchdog_device *);
->  extern void watchdog_dev_unregister(struct watchdog_device *);
->  extern int __init watchdog_dev_init(void);
->  extern void __exit watchdog_dev_exit(void);
-> +
-> +static inline bool watchdog_have_pretimeout(struct watchdog_device *wdd)
-> +{
-> +	return wdd->info->options & WDIOF_PRETIMEOUT ||
-> +	       IS_ENABLED(CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT);
-> +}
-> +
-> +#if IS_ENABLED(CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT)
-> +void watchdog_hrtimer_pretimeout_init(struct watchdog_device *wdd);
-> +void watchdog_hrtimer_pretimeout_start(struct watchdog_device *wdd);
-> +void watchdog_hrtimer_pretimeout_stop(struct watchdog_device *wdd);
-> +#else
-> +static inline void watchdog_hrtimer_pretimeout_init(struct watchdog_device *wdd) {}
-> +static inline void watchdog_hrtimer_pretimeout_start(struct watchdog_device *wdd) {}
-> +static inline void watchdog_hrtimer_pretimeout_stop(struct watchdog_device *wdd) {}
-> +#endif
+>  config SOFT_WATCHDOG
+>  	tristate "Software watchdog"
+>  	select WATCHDOG_CORE
 > diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index 2946f3a..3eb3814 100644
+> index 2946f3a63110..cf91c08b0606 100644
 > --- a/drivers/watchdog/watchdog_dev.c
 > +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -7,6 +7,7 @@
->   *
->   *	(c) Copyright 2008-2011 Wim Van Sebroeck <wim@iguana.be>.
->   *
-> + *	(c) Copyright 2021 Hewlett Packard Enterprise Development LP.
->   *
->   *	This source code is part of the generic code that can be used
->   *	by all the watchdog timer drivers.
-> @@ -46,30 +47,6 @@
->  #include "watchdog_core.h"
->  #include "watchdog_pretimeout.h"
+> @@ -34,6 +34,7 @@
+>  #include <linux/init.h>		/* For __init/__exit/... */
+>  #include <linux/hrtimer.h>	/* For hrtimers */
+>  #include <linux/kernel.h>	/* For printk/panic/... */
+> +#include <linux/kexec.h>	/* For checking if crash kernel is loaded */
+>  #include <linux/kthread.h>	/* For kthread_work */
+>  #include <linux/miscdevice.h>	/* For handling misc devices */
+>  #include <linux/module.h>	/* For module stuff/... */
+> @@ -82,6 +83,8 @@ static bool handle_boot_enabled =
 >  
-> -/*
-> - * struct watchdog_core_data - watchdog core internal data
-> - * @dev:	The watchdog's internal device
-> - * @cdev:	The watchdog's Character device.
-> - * @wdd:	Pointer to watchdog device.
-> - * @lock:	Lock for watchdog core.
-> - * @status:	Watchdog core internal status bits.
-> - */
-> -struct watchdog_core_data {
-> -	struct device dev;
-> -	struct cdev cdev;
-> -	struct watchdog_device *wdd;
-> -	struct mutex lock;
-> -	ktime_t last_keepalive;
-> -	ktime_t last_hw_keepalive;
-> -	ktime_t open_deadline;
-> -	struct hrtimer timer;
-> -	struct kthread_work work;
-> -	unsigned long status;		/* Internal status bits */
-> -#define _WDOG_DEV_OPEN		0	/* Opened ? */
-> -#define _WDOG_ALLOW_RELEASE	1	/* Did we receive the magic char ? */
-> -#define _WDOG_KEEPALIVE		2	/* Did we receive a keepalive ? */
-> -};
-> -
->  /* the dev_t structure to store the dynamically allocated watchdog devices */
->  static dev_t watchdog_devt;
->  /* Reference to watchdog device behind /dev/watchdog */
-> @@ -185,6 +162,9 @@ static int __watchdog_ping(struct watchdog_device *wdd)
->  	else
->  		err = wdd->ops->start(wdd); /* restart watchdog */
+>  static unsigned open_timeout = CONFIG_WATCHDOG_OPEN_TIMEOUT;
 >  
-> +	if (err == 0)
-> +		watchdog_hrtimer_pretimeout_start(wdd);
+> +static unsigned int wdt_panic_timeout = CONFIG_DEFAULT_WATCHDOG_CRASH_KERNEL_TIMEOUT;
 > +
->  	watchdog_update_worker(wdd);
+>  static bool watchdog_past_open_deadline(struct watchdog_core_data *data)
+>  {
+>  	return ktime_after(ktime_get(), data->open_deadline);
+> @@ -658,6 +661,59 @@ static int watchdog_ioctl_op(struct watchdog_device *wdd, unsigned int cmd,
+>   *	off the watchdog (if 'nowayout' is not set).
+>   */
 >  
->  	return err;
-> @@ -275,8 +255,10 @@ static int watchdog_start(struct watchdog_device *wdd)
->  	started_at = ktime_get();
->  	if (watchdog_hw_running(wdd) && wdd->ops->ping) {
->  		err = __watchdog_ping(wdd);
-> -		if (err == 0)
-> +		if (err == 0) {
->  			set_bit(WDOG_ACTIVE, &wdd->status);
-> +			watchdog_hrtimer_pretimeout_start(wdd);
+> +static int watchdog_panic_notifier(struct notifier_block *nb,
+> +	unsigned long code, void *data)
+> +{
+> +	struct watchdog_device *wdd;
+> +	int ret = 0;
+> +	unsigned int time_out = wdt_panic_timeout;
+
+Please use timeout as variable name.
+
+> +
+> +	if (wdt_panic_timeout == 0)
+> +		return NOTIFY_DONE;
+> +
+> +	wdd = container_of(nb, struct watchdog_device, panic_nb);
+> +
+> +	if (watchdog_timeout_invalid(wdd, wdt_panic_timeout)) {
+> +		time_out = min(wdt_panic_timeout, wdd->max_timeout);
+> +		pr_err("watchdog%d: timeout extension value "
+> +			" invalid. Falling back to %d seconds\n", wdd->id,
+
+String in single line, please.
+
+> +			time_out);
+> +	}
+> +
+> +	if (kexec_crash_image && watchdog_active(wdd)) {
+> +		int ping_ret = 0;
+
+Unnecessary assignment.
+
+> +
+> +		pr_info("watchdog%d: Extending watchdog timeout to "
+> +			"%d seconds\n", wdd->id, time_out);
+> +
+> +		ret = watchdog_set_timeout(wdd, time_out);
+> +
+Unnecessary empty line
+
+> +		if (ret) {
+> +			pr_err("watchdog%d: Unable to extend watchdog timeout "
+> +				"before starting crash kernel (%d)",
+> +				wdd->id, ret);
 > +		}
->  	} else {
->  		err = wdd->ops->start(wdd);
->  		if (err == 0) {
-> @@ -284,6 +266,7 @@ static int watchdog_start(struct watchdog_device *wdd)
->  			wd_data->last_keepalive = started_at;
->  			wd_data->last_hw_keepalive = started_at;
->  			watchdog_update_worker(wdd);
-> +			watchdog_hrtimer_pretimeout_start(wdd);
->  		}
->  	}
->  
-> @@ -325,6 +308,7 @@ static int watchdog_stop(struct watchdog_device *wdd)
->  	if (err == 0) {
->  		clear_bit(WDOG_ACTIVE, &wdd->status);
->  		watchdog_update_worker(wdd);
-> +		watchdog_hrtimer_pretimeout_stop(wdd);
->  	}
->  
->  	return err;
-> @@ -361,6 +345,9 @@ static unsigned int watchdog_get_status(struct watchdog_device *wdd)
->  	if (test_and_clear_bit(_WDOG_KEEPALIVE, &wd_data->status))
->  		status |= WDIOF_KEEPALIVEPING;
->  
-> +	if (IS_ENABLED(CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT))
-> +		status |= WDIOF_PRETIMEOUT;
 > +
->  	return status;
->  }
->  
-> @@ -408,7 +395,7 @@ static int watchdog_set_pretimeout(struct watchdog_device *wdd,
+> +		/* Many watchdog implementations will reset the timer
+> +		* when the timeout is changed, but ping again to be
+> +		* safe.
+> +		*/
+
+This needs to call __watchdog_ping(). Some watchdog ping functions have
+a minimum time between calls of the ping function, and others may not
+have a ping function but use the start function instead.
+
+> +		if (wdd->ops->ping) {
+> +			ping_ret = wdd->ops->ping(wdd);
+> +			if (ping_ret) {
+> +				pr_warn("watchdog%d: Unable to ping "
+> +					"watchdog before starting "
+> +					"crash kernel (%d)\n",
+> +					wdd->id, ping_ret);
+> +			}
+> +		}
+> +
+> +
+Please drop those unnecessary empty lines.
+
+> +	}
+> +
+> +	return notifier_from_errno(ret);
+
+Are you sure about that ? I don't know the implication when NOTIFY_BAD is returned.
+
+> +}
+> +
+>  static ssize_t watchdog_write(struct file *file, const char __user *data,
+>  						size_t len, loff_t *ppos)
 >  {
->  	int err = 0;
+> @@ -1118,8 +1174,25 @@ int watchdog_dev_register(struct watchdog_device *wdd)
+>  		return ret;
 >  
-> -	if (!(wdd->info->options & WDIOF_PRETIMEOUT))
-> +	if (!watchdog_have_pretimeout(wdd))
->  		return -EOPNOTSUPP;
->  
->  	if (watchdog_pretimeout_invalid(wdd, timeout))
-> @@ -594,13 +581,11 @@ static umode_t wdt_is_visible(struct kobject *kobj, struct attribute *attr,
->  
->  	if (attr == &dev_attr_timeleft.attr && !wdd->ops->get_timeleft)
->  		mode = 0;
-> -	else if (attr == &dev_attr_pretimeout.attr &&
-> -		 !(wdd->info->options & WDIOF_PRETIMEOUT))
-> +	else if (attr == &dev_attr_pretimeout.attr && !watchdog_have_pretimeout(wdd))
->  		mode = 0;
->  	else if ((attr == &dev_attr_pretimeout_governor.attr ||
->  		  attr == &dev_attr_pretimeout_available_governors.attr) &&
-> -		 (!(wdd->info->options & WDIOF_PRETIMEOUT) ||
-> -		  !IS_ENABLED(CONFIG_WATCHDOG_PRETIMEOUT_GOV)))
-> +		 (!watchdog_have_pretimeout(wdd) || !IS_ENABLED(CONFIG_WATCHDOG_PRETIMEOUT_GOV)))
->  		mode = 0;
->  
->  	return mode;
-> @@ -1009,6 +994,7 @@ static int watchdog_cdev_register(struct watchdog_device *wdd)
->  	kthread_init_work(&wd_data->work, watchdog_ping_work);
->  	hrtimer_init(&wd_data->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_HARD);
->  	wd_data->timer.function = watchdog_timer_expired;
-> +	watchdog_hrtimer_pretimeout_init(wdd);
->  
->  	if (wdd->id == 0) {
->  		old_wd_data = wd_data;
-> @@ -1096,6 +1082,7 @@ static void watchdog_cdev_unregister(struct watchdog_device *wdd)
->  
->  	hrtimer_cancel(&wd_data->timer);
->  	kthread_cancel_work_sync(&wd_data->work);
-> +	watchdog_hrtimer_pretimeout_stop(wdd);
->  
->  	put_device(&wd_data->dev);
->  }
-> diff --git a/drivers/watchdog/watchdog_hrtimer_pretimeout.c b/drivers/watchdog/watchdog_hrtimer_pretimeout.c
-> new file mode 100644
-> index 00000000..940b537
-> --- /dev/null
-> +++ b/drivers/watchdog/watchdog_hrtimer_pretimeout.c
-> @@ -0,0 +1,44 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * (c) Copyright 2021 Hewlett Packard Enterprise Development LP.
-> + */
+>  	ret = watchdog_register_pretimeout(wdd);
+> -	if (ret)
+> +	if (ret) {
+>  		watchdog_cdev_unregister(wdd);
+> +		return ret;
+> +	}
 > +
-> +#include <linux/hrtimer.h>
-> +#include <linux/watchdog.h>
+> +	/*
+> +	 * Setting panic_nb priority to minimum ensures the watchdog device
+> +	 * panic callback runs last in the chain of kernel panic callbacks.
+> +	 * This way, the watchdog device will still fire in the event another
+> +	 * panic callback hangs.
+> +	 */
+> +	wdd->panic_nb.priority = INT_MIN;
+> +	wdd->panic_nb.notifier_call = watchdog_panic_notifier;
 > +
-> +#include "watchdog_core.h"
-> +#include "watchdog_pretimeout.h"
-> +
-> +static enum hrtimer_restart watchdog_hrtimer_pretimeout(struct hrtimer *timer)
-> +{
-> +	struct watchdog_core_data *wd_data;
-> +
-> +	wd_data = container_of(timer, struct watchdog_core_data, pretimeout_timer);
-> +
-> +	watchdog_notify_pretimeout(wd_data->wdd);
-> +	return HRTIMER_NORESTART;
-> +}
-> +
-> +void watchdog_hrtimer_pretimeout_init(struct watchdog_device *wdd)
-> +{
-> +	struct watchdog_core_data *wd_data = wdd->wd_data;
-> +
-> +	hrtimer_init(&wd_data->pretimeout_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> +	wd_data->pretimeout_timer.function = watchdog_hrtimer_pretimeout;
-> +}
-> +
-> +void watchdog_hrtimer_pretimeout_start(struct watchdog_device *wdd)
-> +{
-> +	if (!(wdd->info->options & WDIOF_PRETIMEOUT) &&
-> +	    !watchdog_pretimeout_invalid(wdd, wdd->pretimeout))
-> +		hrtimer_start(&wdd->wd_data->pretimeout_timer,
-> +			      ktime_set(wdd->timeout - wdd->pretimeout, 0),
-> +			      HRTIMER_MODE_REL);
-> +	else
-> +		hrtimer_cancel(&wdd->wd_data->pretimeout_timer);
-> +}
-> +
-> +void watchdog_hrtimer_pretimeout_stop(struct watchdog_device *wdd)
-> +{
-> +	hrtimer_cancel(&wdd->wd_data->pretimeout_timer);
-> +}
-> diff --git a/drivers/watchdog/watchdog_pretimeout.c b/drivers/watchdog/watchdog_pretimeout.c
-> index 01ca84b..4d1c223 100644
-> --- a/drivers/watchdog/watchdog_pretimeout.c
-> +++ b/drivers/watchdog/watchdog_pretimeout.c
-> @@ -9,6 +9,7 @@
->  #include <linux/string.h>
->  #include <linux/watchdog.h>
+> +	ret = atomic_notifier_chain_register(&panic_notifier_list,
+> +					&wdd->panic_nb);
+> +	if (ret)
+> +		pr_err("watchdog%d: Cannot register panic notifier (%d)\n",
+> +			wdd->id, ret);
+
+Either make this a warning and ignore the error (return 0),
+or this needs a proper cleanup.
+
 >  
-> +#include "watchdog_core.h"
->  #include "watchdog_pretimeout.h"
->  
->  /* Default watchdog pretimeout governor */
-> @@ -177,7 +178,7 @@ int watchdog_register_pretimeout(struct watchdog_device *wdd)
->  {
->  	struct watchdog_pretimeout *p;
->  
-> -	if (!(wdd->info->options & WDIOF_PRETIMEOUT))
-> +	if (!watchdog_have_pretimeout(wdd))
->  		return 0;
->  
->  	p = kzalloc(sizeof(*p), GFP_KERNEL);
-> @@ -197,7 +198,7 @@ void watchdog_unregister_pretimeout(struct watchdog_device *wdd)
->  {
->  	struct watchdog_pretimeout *p, *t;
->  
-> -	if (!(wdd->info->options & WDIOF_PRETIMEOUT))
-> +	if (!watchdog_have_pretimeout(wdd))
->  		return;
->  
->  	spin_lock_irq(&pretimeout_lock);
-> -- 
-> 2.7.4
+>  	return ret;>  }
+> @@ -1228,3 +1301,8 @@ module_param(open_timeout, uint, 0644);
+>  MODULE_PARM_DESC(open_timeout,
+>  	"Maximum time (in seconds, 0 means infinity) for userspace to take over a running watchdog (default="
+>  	__MODULE_STRING(CONFIG_WATCHDOG_OPEN_TIMEOUT) ")");
+> +
+> +module_param(wdt_panic_timeout, uint, 0444);
+> +MODULE_PARM_DESC(wdt_panic_timeout,
+> +	"Watchdog timeout extension duration upon kernel panic. (default="
+> +	__MODULE_STRING(CONFIG_DEFAULT_WATCHDOG_CRASH_KERNEL_TIMEOUT) " seconds)");
+> diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
+> index 9b19e6bb68b5..bc7e6e8aa7ab 100644
+> --- a/include/linux/watchdog.h
+> +++ b/include/linux/watchdog.h
+> @@ -107,6 +107,7 @@ struct watchdog_device {
+>  	unsigned int max_hw_heartbeat_ms;
+>  	struct notifier_block reboot_nb;
+>  	struct notifier_block restart_nb;
+> +	struct notifier_block panic_nb;
+>  	void *driver_data;
+>  	struct watchdog_core_data *wd_data;
+>  	unsigned long status;
 > 
+
