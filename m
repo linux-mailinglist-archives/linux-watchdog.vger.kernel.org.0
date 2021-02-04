@@ -2,123 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D68BA30F8FE
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Feb 2021 18:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D4C30F901
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Feb 2021 18:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238315AbhBDRBj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 4 Feb 2021 12:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S238251AbhBDRCh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 4 Feb 2021 12:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238169AbhBDRAm (ORCPT
+        with ESMTP id S238327AbhBDRCS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 4 Feb 2021 12:00:42 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89899C061786;
-        Thu,  4 Feb 2021 08:59:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=wbVme97LTyZtZvghkEGRoTiuc1SViBhjvsMeN4jw9jo=; b=PWpDFRnC/pQI+UGrPjtu0HbEN
-        L43RKr1nxKtBjtMtRi4xXHxwvekb3ibhraif6lER0dky75uQXrGFEXQG6NhjCA1fCxUTz+ddAydTm
-        bKGNXkikKkpPPxYKlnRpcmercjWMc157NMyq5VGBlktOBU4v01FOUgoDwrAz/6rmXKc3s5uGItTGb
-        dNZ/w+Dn4u+hez+MLEwKJ4lcAEjJtpMn+NmpWK3E6iHfHaP25TIOZvIkmdEqS/QgEh2MDEP2cCleD
-        QaNVcBSlDNa3dxdHeD+0ZqIiVN2POoOv7P4kP6Hmp/WoLdRJMDuQzDE1oihQUuFsLZjY16MLN5oha
-        hd1Wb2fKg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39166)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        Thu, 4 Feb 2021 12:02:18 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27401C06178C
+        for <linux-watchdog@vger.kernel.org>; Thu,  4 Feb 2021 09:01:38 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1l7hyz-0006q2-Je; Thu, 04 Feb 2021 16:59:53 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1l7hyx-0005Kk-Sm; Thu, 04 Feb 2021 16:59:51 +0000
-Date:   Thu, 4 Feb 2021 16:59:51 +0000
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
-        alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-input@vger.kernel.org, Mike Leach <mike.leach@linaro.org>,
-        linux-watchdog@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, Leo Yan <leo.yan@linaro.org>,
-        dmaengine@vger.kernel.org, Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        (envelope-from <afa@pengutronix.de>)
+        id 1l7i0Q-0002jT-Qu; Thu, 04 Feb 2021 18:01:22 +0100
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1l7i0P-0001Lm-U3; Thu, 04 Feb 2021 18:01:21 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [GIT PULL] immutable branch for amba changes targeting v5.12-rc1
-Message-ID: <20210204165951.GB1463@shell.armlinux.org.uk>
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
- <20210202135350.36nj3dmcoq3t7gcf@pengutronix.de>
- <YBlcTXlxemmC2lgr@kroah.com>
- <20210204165224.GA1463@shell.armlinux.org.uk>
- <YBwnUrQqlAz2LDPI@kroah.com>
+        linux-kernel@vger.kernel.org
+Cc:     kernel@pengutronix.de, linux-watchdog@vger.kernel.org
+Subject: [PATCH v3 0/3] watchdog: f71808e_wdt: migrate to new kernel API
+Date:   Thu,  4 Feb 2021 18:00:47 +0100
+Message-Id: <cover.dedd9f1159389b0a438076ef5e5a46aded186463.1612457906.git-series.a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YBwnUrQqlAz2LDPI@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Feb 04, 2021 at 05:56:50PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Feb 04, 2021 at 04:52:24PM +0000, Russell King - ARM Linux admin wrote:
-> > On Tue, Feb 02, 2021 at 03:06:05PM +0100, Greg Kroah-Hartman wrote:
-> > > I'm glad to take this through my char/misc tree, as that's where the
-> > > other coresight changes flow through.  So if no one else objects, I will
-> > > do so...
-> > 
-> > Greg, did you end up pulling this after all? If not, Uwe produced a v2.
-> > I haven't merged v2 yet as I don't know what you've done.
-> 
-> I thought you merged this?
+This series migrates the driver to the new kernel watchdog API and
+then to the driver model.
 
-I took v1, and put it in a branch I've promised in the past not to
-rebase/rewind. Uwe is now asking for me to take a v2 or apply a patch
-on top.
+Main feedback from Guenther on v2 was that I need to split it up to
+enable review. I have done so by removing the extra refactoring for
+now and focused on the functional changes described above. The diff
+is now much better readable.
 
-The only reason to produce an "immutable" branch is if it's the basis
-for some dependent work and you need that branch merged into other
-people's trees... so the whole "lets produce a v2" is really odd
-workflow... I'm confused about what I should do, and who has to be
-informed which option I take.
+I tested it on a f81866.
 
-I'm rather lost here too.
+v2 -> v3:
+  https://lore.kernel.org/linux-watchdog/20201020062112.6762-1-a.fatoum@pengutronix.de/
+  - factored out identifier renaming again for easier review
+  - reordered commits
+  - removed refactoring that can go in later. Focusing now on kernel watchdog
+    API and platform device/driver migration
+  - removed platform_device_id and changed code to match by name
 
+v1 -> v2:
+  https://lore.kernel.org/linux-watchdog/20200611191750.28096-1-a.fatoum@pengutronix.de/
+  - reworked to platform device/driver pair (Guenther)
+  - squashed identifier renaming into the patches that touch
+    the respective lines anyway
+  - fixed checkpatch.pl nitpicks (Guenther)
+  - fixed locally used variable declared without static (0-day)
+  - fixed unneded line break due to old line limit (Guenther)
+  - renamed struct fintek_wdog_data to struct fintek_wdt
+
+Ahmad Fatoum (3):
+  watchdog: f71808e_wdt: rename variant-independent identifiers appropriately
+  watchdog: f71808e_wdt: migrate to new kernel watchdog API
+  watchdog: f71808e_wdt: refactor to platform device/driver pair
+
+ drivers/watchdog/Kconfig       |   1 +-
+ drivers/watchdog/f71808e_wdt.c | 450 +++++++---------------------------
+ 2 files changed, 100 insertions(+), 351 deletions(-)
+
+base-commit: 1048ba83fb1c00cd24172e23e8263972f6b5d9ac
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+git-series 0.9.1
