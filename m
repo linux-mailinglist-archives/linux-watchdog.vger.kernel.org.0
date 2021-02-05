@@ -2,157 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1553D31136B
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Feb 2021 22:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF8231149A
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Feb 2021 23:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbhBEVW7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 5 Feb 2021 16:22:59 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:34834 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbhBEVWR (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 5 Feb 2021 16:22:17 -0500
-Received: by mail-oi1-f171.google.com with SMTP id w8so9025962oie.2;
-        Fri, 05 Feb 2021 13:22:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jocZMba4zIL2h1yCNatGbik1KvXn4y8YG1xTFpkN/Co=;
-        b=VYbwU+vjRnQ7LryvnO+z0mcRvOWam2Wjao4Ve3IVQO8pt2uo7BCFcAm/QujniCledz
-         F/6mA8yDoZyuacvHlhZmJvWdpjphTVydip/2lVzIWi/BcJ9KMthpGjd5UPX5hoWRfPHw
-         LQ7ClVsvV/jAkdX9Ril49c04Zq+NznRGU21aLLvH04O9sRnQX4PKCVW+Jz4/lFNi4/xe
-         9vTJhk+ug4mSNV8xE3g2vSq4qrjcAkJOn2X44bSGka1etyOFG065bqUzeJZpyz2idYaT
-         TGY4mvT6igAz0rYfer2AMduhb5KYC/KMrp/8ztfV5aMBZw9owRM4Gp1onWmGHQ8cwQmj
-         9f7g==
-X-Gm-Message-State: AOAM531H1OtySxBpce/jqYViYIMkWoFXQwVfyWytNTuwUzQFkjGE2OAM
-        0woi7ZoVWWwYj8UtgP+qSu3iHalBAA==
-X-Google-Smtp-Source: ABdhPJyBctuEa2lJbXV3As6EdaWOf8hcdJvn9AQoelXaG4VA2D6LMqtHhVNUj/qEHT7t+fAFVfQWEA==
-X-Received: by 2002:aca:3b06:: with SMTP id i6mr4363448oia.81.1612560095487;
-        Fri, 05 Feb 2021 13:21:35 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q20sm2040441otf.2.2021.02.05.13.21.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 13:21:34 -0800 (PST)
-Received: (nullmailer pid 3765901 invoked by uid 1000);
-        Fri, 05 Feb 2021 21:21:33 -0000
-Date:   Fri, 5 Feb 2021 15:21:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Campion Kang <campion.kang@advantech.com.tw>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        id S232824AbhBEWI3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 5 Feb 2021 17:08:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44342 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232881AbhBEOwM (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 5 Feb 2021 09:52:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36E5C64FC9;
+        Fri,  5 Feb 2021 14:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612533851;
+        bh=T1jLO24sF0pYkT3lQr2onlwV1fj0AbfnrcXXdUAochg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BZOBBDws+/yhmPTxNLP4zonarclKLQMtK4MPPXtDYExmUzHRLjxXcJnfGq14VQa4L
+         yZhVB9oNHiU0DzaVx6si8j0aXHMHTj1MM3VS8xDsEeLmU5/b+5mHQBkgW7cT1CQKhX
+         bLMDr8tZSM1SipNLwaZFpx+i2Ki4uOTJ99+ziw0o=
+Date:   Fri, 5 Feb 2021 15:04:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kvm@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Eric Anholt <eric@anholt.net>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Takashi Iwai <tiwai@suse.com>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Guenter Roeck <linux@roeck-us.net>,
+        Mike Leach <mike.leach@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        alsa-devel@alsa-project.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, Vladimir Zapolskiy <vz@mleia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        AceLan Kao <chia-lin.kao@canonical.com>
-Subject: Re: [PATCH v6 3/6] dt-bindings: mfd: ahc1ec0.yaml: Add Advantech
- embedded controller - AHC1EC0
-Message-ID: <20210205212133.GA3759495@robh.at.kernel.org>
-References: <20210118123749.4769-1-campion.kang@advantech.com.tw>
- <20210118123749.4769-3-campion.kang@advantech.com.tw>
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org
+Subject: Re: [PATCH] coresight: etm4x: Fix merge resolution for amba rework
+Message-ID: <YB1QWFWPennQZmjw@kroah.com>
+References: <20210205130848.20009-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210118123749.4769-3-campion.kang@advantech.com.tw>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210205130848.20009-1-uwe@kleine-koenig.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 08:37:46PM +0800, Campion Kang wrote:
-> Add DT binding schema for Advantech embedded controller AHC1EC0.
+On Fri, Feb 05, 2021 at 02:08:47PM +0100, Uwe Kleine-König wrote:
+> This was non-trivial to get right because commits
+> c23bc382ef0e ("coresight: etm4x: Refactor probing routine") and
+> 5214b563588e ("coresight: etm4x: Add support for sysreg only devices")
+> changed the code flow considerably. With this change the driver can be
+> built again.
 > 
-> Changed since V5:
-> 	- rename dt-bindings/mfd/ahc1ec0.h to dt-bindings/mfd/ahc1ec0-dt.h
-> 	that found errors by bot 'make dt_binding_check'
-> 
-> Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
-> ---
->  .../devicetree/bindings/mfd/ahc1ec0.yaml      | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml b/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
-> new file mode 100644
-> index 000000000000..40af14bb9c0a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ahc1ec0.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Advantech Embedded Controller (AHC1EC0)
-> +
-> +maintainers:
-> +  - Campion Kang <campion.kang@advantech.com.tw>
-> +
-> +description: |
-> +  AHC1EC0 is one of the embedded controllers used by Advantech to provide several
-> +  functions such as watchdog, hwmon, brightness, etc. Advantech related applications
-> +  can control the whole system via these functions.
-> +
-> +properties:
-> +  compatible:
-> +    const: advantech,ahc1ec0
-> +
-> +  advantech,sub-dev-nb:
-> +    description:
-> +      The number of sub-devices specified in the platform.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maxItems: 1
+> Fixes: 0573d3fa4864 ("Merge branch 'devel-stable' of git://git.armlinux.org.uk/~rmk/linux-arm into char-misc-next")
+> Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
 
-You don't need this, just count the length of the next property:
+Now queued up, thanks!
 
-> +
-> +  advantech,sub-dev:
-> +    description:
-> +      A list of the sub-devices supported in the platform. Defines for the
-> +      appropriate values can found in dt-bindings/mfd/ahc1ec0-dt.h.
-> +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
-> +    minItems: 1
-> +    maxItems: 6
-
-But as I said before, this binding is odd. It doesn't look like how we 
-do any other MFD. Either we have child nodes or they are implicit.
-
-> +
-> +  advantech,hwmon-profile:
-> +    description:
-> +      The number of sub-devices specified in the platform. Defines for the
-> +      hwmon profiles can found in dt-bindings/mfd/ahc1ec0-dt.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - advantech,sub-dev-nb
-> +  - advantech,sub-dev
-> +
-> +if:
-> +  properties:
-> +    advantech,sub-dev:
-> +      contains:
-> +        const: 0x3
-> +then:
-> +  required:
-> +    - advantech,hwmon-profile
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/mfd/ahc1ec0-dt.h>
-> +    ahc1ec0 {
-> +        compatible = "advantech,ahc1ec0";
-> +
-> +        advantech,sub-dev-nb = <2>;
-> +        advantech,sub-dev = <AHC1EC0_SUBDEV_HWMON
-> +                             AHC1EC0_SUBDEV_WDT>;
-> +
-> +        advantech,hwmon-profile = <AHC1EC0_HWMON_PRO_UNO2271G>;
-> +    };
-> -- 
-> 2.17.1
-> 
+greg k-h
