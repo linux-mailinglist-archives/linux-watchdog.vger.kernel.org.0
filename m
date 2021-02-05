@@ -2,15 +2,15 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF8231149A
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Feb 2021 23:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD83031159B
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Feb 2021 23:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbhBEWI3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 5 Feb 2021 17:08:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44342 "EHLO mail.kernel.org"
+        id S232336AbhBEWfI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 5 Feb 2021 17:35:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53650 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232881AbhBEOwM (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 5 Feb 2021 09:52:12 -0500
+        id S231969AbhBEOEy (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 5 Feb 2021 09:04:54 -0500
 Received: by mail.kernel.org (Postfix) with ESMTPSA id 36E5C64FC9;
         Fri,  5 Feb 2021 14:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
