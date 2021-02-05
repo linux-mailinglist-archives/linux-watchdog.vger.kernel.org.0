@@ -2,162 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 026B2310A75
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Feb 2021 12:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E313D310B99
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Feb 2021 14:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbhBELlv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 5 Feb 2021 06:41:51 -0500
-Received: from mga11.intel.com ([192.55.52.93]:41709 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231993AbhBELGW (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 5 Feb 2021 06:06:22 -0500
-IronPort-SDR: +quWYs+1qEUT0mAnMnDklmfDERnIljsrphKfZOnhjU0xJTVv5U1QF5JufLswsTsnuHjtLgIBEB
- rTbNPprzrOFA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="177910412"
-X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
-   d="scan'208";a="177910412"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 03:04:33 -0800
-IronPort-SDR: Cxzp55PpzeUD9i/Kte3fSg4CUmi4X/l8dGo2DHPyppHKFOpkcL7MgkO9TyEqdZswJjsvKaiwOF
- D0Es2fUJ+2sQ==
-X-IronPort-AV: E=Sophos;i="5.81,154,1610438400"; 
-   d="scan'208";a="373361847"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 03:04:31 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1l7yua-0028bP-Ca; Fri, 05 Feb 2021 13:04:28 +0200
-Date:   Fri, 5 Feb 2021 13:04:28 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-acpi@vger.kernel.org
-Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        id S229763AbhBENNN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 5 Feb 2021 08:13:13 -0500
+Received: from antares.kleine-koenig.org ([94.130.110.236]:34562 "EHLO
+        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231284AbhBENJ7 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 5 Feb 2021 08:09:59 -0500
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id D67A7AED6A1; Fri,  5 Feb 2021 14:08:50 +0100 (CET)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kvm@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Eric Anholt <eric@anholt.net>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Takashi Iwai <tiwai@suse.com>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org
-Subject: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-2
-Message-ID: <YB0mPPgpIpQzhNXS@smile.fi.intel.com>
+        Mike Leach <mike.leach@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        alsa-devel@alsa-project.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, Vladimir Zapolskiy <vz@mleia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org
+Subject: [PATCH] coresight: etm4x: Fix merge resolution for amba rework
+Date:   Fri,  5 Feb 2021 14:08:47 +0100
+Message-Id: <20210205130848.20009-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Linus,
+This was non-trivial to get right because commits
+c23bc382ef0e ("coresight: etm4x: Refactor probing routine") and
+5214b563588e ("coresight: etm4x: Add support for sysreg only devices")
+changed the code flow considerably. With this change the driver can be
+built again.
 
-This is first part of Intel MID outdated platforms removal. It's collected into
-immutable branch with a given tag, please pull to yours subsystems.
+Fixes: 0573d3fa4864 ("Merge branch 'devel-stable' of git://git.armlinux.org.uk/~rmk/linux-arm into char-misc-next")
+Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
+---
+On Fri, Feb 05, 2021 at 12:07:09PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Feb 05, 2021 at 11:56:15AM +0100, Uwe Kleine-König wrote:
+> > I didn't compile test, but I'm willing to bet your resolution is wrong.
+> > You have no return statement in etm4_remove_dev() but its return type is
+> > int and etm4_remove_amba() still returns int but should return void.
+> 
+> Can you send a patch to fix this up?
 
-(All changes are tagged by the respective maintainers)
+Sure, here it comes. As I'm unsure if you want to squash it into the
+merge or want to keep it separate I crafted a commit message. If you
+prefer squashing feel free to do so.
 
-Thanks,
+This change corresponds to the merge resolution I suggested before.
 
-With Best Regards,
-Andy Shevchenko
+Best regards
+Uwe
 
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.infradead.org/linux-platform-drivers-x86.git tags/ib-drm-gpio-pdx86-rtc-wdt-v5.12-2
-
-for you to fetch changes up to ca338fed2a5fce66660904d7ab50bec061d2c8a2:
-
-  platform/x86: intel_scu_wdt: Drop mistakenly added const (2021-02-05 12:54:27 +0200)
-
-----------------------------------------------------------------
-ib-drm-gpio-pdx86-rtc-wdt for v5.12-2
-
-First part of Intel MID outdated platforms removal.
-
-The following is an automated git shortlog grouped by driver:
-
-drm/gma500:
- -  Get rid of duplicate NULL checks
- -  Convert to use new SCU IPC API
-
-gpio:
- -  msic: Remove driver for deprecated platform
- -  intel-mid: Remove driver for deprecated platform
-
-intel_mid_powerbtn:
- -  Remove driver for deprecated platform
-
-intel_mid_thermal:
- -  Remove driver for deprecated platform
-
-intel_scu_wdt:
- -  Drop mistakenly added const
- -  Get rid of custom x86 model comparison
- -  Drop SCU notification
- -  Move driver from arch/x86
-
-rtc:
- -  mrst: Remove driver for deprecated platform
-
-watchdog:
- -  intel-mid_wdt: Postpone IRQ handler registration till SCU is ready
- -  intel_scu_watchdog: Remove driver for deprecated platform
-
-----------------------------------------------------------------
-Andy Shevchenko (13):
-      drm/gma500: Convert to use new SCU IPC API
-      drm/gma500: Get rid of duplicate NULL checks
-      gpio: intel-mid: Remove driver for deprecated platform
-      gpio: msic: Remove driver for deprecated platform
-      platform/x86: intel_mid_thermal: Remove driver for deprecated platform
-      platform/x86: intel_mid_powerbtn: Remove driver for deprecated platform
-      rtc: mrst: Remove driver for deprecated platform
-      watchdog: intel_scu_watchdog: Remove driver for deprecated platform
-      watchdog: intel-mid_wdt: Postpone IRQ handler registration till SCU is ready
-      platform/x86: intel_scu_wdt: Move driver from arch/x86
-      platform/x86: intel_scu_wdt: Drop SCU notification
-      platform/x86: intel_scu_wdt: Get rid of custom x86 model comparison
-      platform/x86: intel_scu_wdt: Drop mistakenly added const
-
- MAINTAINERS                                        |   2 -
- arch/x86/platform/intel-mid/device_libs/Makefile   |   1 -
- drivers/gpio/Kconfig                               |  14 -
- drivers/gpio/Makefile                              |   1 -
- drivers/gpio/TODO                                  |   2 +-
- drivers/gpio/gpio-intel-mid.c                      | 414 ---------------
- drivers/gpio/gpio-msic.c                           | 314 ------------
- drivers/gpu/drm/gma500/Kconfig                     |   1 +
- drivers/gpu/drm/gma500/mdfld_device.c              |   2 -
- drivers/gpu/drm/gma500/mdfld_dsi_output.c          |   2 -
- drivers/gpu/drm/gma500/mdfld_output.c              |   8 +-
- drivers/gpu/drm/gma500/oaktrail_device.c           |   3 -
- drivers/gpu/drm/gma500/psb_drv.h                   |   3 +
- drivers/gpu/drm/gma500/tc35876x-dsi-lvds.c         |  30 +-
- drivers/platform/x86/Kconfig                       |  23 +-
- drivers/platform/x86/Makefile                      |   3 +-
- drivers/platform/x86/intel_mid_powerbtn.c          | 233 ---------
- drivers/platform/x86/intel_mid_thermal.c           | 560 ---------------------
- .../platform/x86/intel_scu_wdt.c                   |  41 +-
- drivers/rtc/Kconfig                                |  12 -
- drivers/rtc/Makefile                               |   1 -
- drivers/rtc/rtc-mrst.c                             | 521 -------------------
- drivers/watchdog/Kconfig                           |   9 -
- drivers/watchdog/Makefile                          |   1 -
- drivers/watchdog/intel-mid_wdt.c                   |   8 +-
- drivers/watchdog/intel_scu_watchdog.c              | 533 --------------------
- drivers/watchdog/intel_scu_watchdog.h              |  50 --
- 27 files changed, 54 insertions(+), 2738 deletions(-)
- delete mode 100644 drivers/gpio/gpio-intel-mid.c
- delete mode 100644 drivers/gpio/gpio-msic.c
- delete mode 100644 drivers/platform/x86/intel_mid_powerbtn.c
- delete mode 100644 drivers/platform/x86/intel_mid_thermal.c
- rename arch/x86/platform/intel-mid/device_libs/platform_mrfld_wdt.c => drivers/platform/x86/intel_scu_wdt.c (69%)
- delete mode 100644 drivers/rtc/rtc-mrst.c
- delete mode 100644 drivers/watchdog/intel_scu_watchdog.c
- delete mode 100644 drivers/watchdog/intel_scu_watchdog.h
-
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index bc55b261af23..c8ecd91e289e 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -1906,15 +1906,16 @@ static int __exit etm4_remove_dev(struct etmv4_drvdata *drvdata)
+ 	cpus_read_unlock();
+ 
+ 	coresight_unregister(drvdata->csdev);
++
++	return 0;
+ }
+ 
+-static int __exit etm4_remove_amba(struct amba_device *adev)
++static void __exit etm4_remove_amba(struct amba_device *adev)
+ {
+ 	struct etmv4_drvdata *drvdata = dev_get_drvdata(&adev->dev);
+ 
+ 	if (drvdata)
+-		return etm4_remove_dev(drvdata);
+-	return 0;
++		etm4_remove_dev(drvdata);
+ }
+ 
+ static int __exit etm4_remove_platform_dev(struct platform_device *pdev)
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.29.2
 
