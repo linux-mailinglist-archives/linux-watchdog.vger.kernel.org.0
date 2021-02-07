@@ -2,70 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FCD311E22
-	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Feb 2021 15:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF0B3127D4
+	for <lists+linux-watchdog@lfdr.de>; Sun,  7 Feb 2021 23:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbhBFO4t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 6 Feb 2021 09:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbhBFO4o (ORCPT
+        id S229631AbhBGWYd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 7 Feb 2021 17:24:33 -0500
+Received: from antares.kleine-koenig.org ([94.130.110.236]:48874 "EHLO
+        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229623AbhBGWYd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 6 Feb 2021 09:56:44 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C81C06121F
-        for <linux-watchdog@vger.kernel.org>; Sat,  6 Feb 2021 06:55:48 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id w1so17581714ejf.11
-        for <linux-watchdog@vger.kernel.org>; Sat, 06 Feb 2021 06:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=a4+4vyj22C/DEQrEuAF+XhR6YRUcSGIBop8elolrLMk23ittXiPyhFprfPldUGfJUu
-         2KPCRhKJt3ahNzmobmw920IaFG+hMy+Zh2WEjPe3zjcuiICPyAWoCrm0YPMeciOvHc6Y
-         duBcjgbPOxKyKoUNM1iLdcKcBEjv1250PSYPu180ALLnnWeTM1qH8H5fkXnfUr5fwF4Y
-         kftzl4B3yXcPFgmNoO7JBQvUDuARLPSZOT8sZeuWIm1VC3k1uYvVfwmJzPR6UgLpG04J
-         9Gvj6QU0S//a3JjgcsfCNPS6p425psy3OPW8xosDYPlClmw5kFMe7c94GMqOtZQLn7/u
-         sK7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=BbftZSc1jV9GF+vfAP7o82YqYE5FqiN4Sx+D6VXJBOjLpgs9SdImav6uNX+eZC7x+O
-         74kEa2lWpuXHncW8hr5b+vjOux0AZQmNs4iLUZrZhWut/onVygq4+dAUm3f7ZgBHuFVX
-         CRab6Eu9uKX4nYKWz1bYCXNrqsbq1cKnN0xZGfGZQSRrfgxlunVfFV8A2++jBa9zoBbi
-         WkmPGvqR6EcftknnMI6lv/5mgMkRUD+QzL5GLwRomDi/GAmHVwVbRtYddph2x5XlG2rs
-         nKR6n5g0vXHH2LPMrY5STHNnkdAWbkNUZWFfH1RNSfC4Oz4ums0g+/+REZM6RcLxm/vt
-         /6vw==
-X-Gm-Message-State: AOAM533HPr/Y9n93o91zXMFMHQ6O+WMcQHyEVCR+d7fRpLuihy5AvCgv
-        DKbeoYeNgzRampjWPcRj46NOd+8M5u6r4Pv7xUM=
-X-Google-Smtp-Source: ABdhPJw1yOHIS1DBaSUO32iPWAtI1XCQiXUlHAHL+HhxrGkPlYlqBmoieKA1MzkoTEXTc4hxq9SuD2thnVK4Vor2v+A=
-X-Received: by 2002:a17:906:c00a:: with SMTP id e10mr9355929ejz.501.1612623347778;
- Sat, 06 Feb 2021 06:55:47 -0800 (PST)
+        Sun, 7 Feb 2021 17:24:33 -0500
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id 991A5AF2EE4; Sun,  7 Feb 2021 23:23:51 +0100 (CET)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v1 1/2] mei: bus: simplify mei_cl_device_remove()
+Date:   Sun,  7 Feb 2021 23:22:23 +0100
+Message-Id: <20210207222224.97547-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:55:47
- -0800 (PST)
-Reply-To: lawyer.nba@gmail.com
-From:   Barrister Daven Bango <stephennbada9@gmail.com>
-Date:   Sat, 6 Feb 2021 15:55:47 +0100
-Message-ID: <CAGSHw-Dz=vJYeWqus3OLgqT8w1Di_nTEu4GvjwRM1ysUtgU_Eg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
---=20
-Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
-ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
-MMF)
-u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
-dodatne informacije
+The driver core only calls a bus' remove function when there is actually
+a driver and a device. So drop the needless check and assign cldrv earlier.
 
-Advokat: Daven Bango
-Telefon: +22891667276
-(URED MMF-a LOME TOGO)
+(Side note: The check for cldev being non-NULL is broken anyhow, because
+to_mei_cl_device() is a wrapper around container_of() for a member that is
+not the first one. So cldev only can become NULL if dev is (void *)0xc
+(for archs with 32 bit pointers) or (void *)0x18 (for archs with 64 bit
+pointers).)
+
+Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
+---
+ drivers/misc/mei/bus.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/misc/mei/bus.c b/drivers/misc/mei/bus.c
+index 2907db260fba..50d617e7467e 100644
+--- a/drivers/misc/mei/bus.c
++++ b/drivers/misc/mei/bus.c
+@@ -878,13 +878,9 @@ static int mei_cl_device_probe(struct device *dev)
+ static int mei_cl_device_remove(struct device *dev)
+ {
+ 	struct mei_cl_device *cldev = to_mei_cl_device(dev);
+-	struct mei_cl_driver *cldrv;
++	struct mei_cl_driver *cldrv = to_mei_cl_driver(dev->driver);
+ 	int ret = 0;
+ 
+-	if (!cldev || !dev->driver)
+-		return 0;
+-
+-	cldrv = to_mei_cl_driver(dev->driver);
+ 	if (cldrv->remove)
+ 		ret = cldrv->remove(cldev);
+ 
+
+base-commit: 5c8fe583cce542aa0b84adc939ce85293de36e5e
+-- 
+2.29.2
+
