@@ -2,170 +2,340 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 534B931516B
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Feb 2021 15:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7D631522B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Feb 2021 15:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbhBIOUk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Feb 2021 09:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
+        id S230318AbhBIO4D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Feb 2021 09:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbhBIOUj (ORCPT
+        with ESMTP id S232235AbhBIOzw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Feb 2021 09:20:39 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on0614.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::614])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60FBC061786;
-        Tue,  9 Feb 2021 06:19:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vwv7rZUwjAVjiNbBrQ4ahTFRFOEkJeFPIuI1YEWaaHyNPLv4PgB+sUQGTP15gbmPlfAMnoXVTCO9LxASwMKW8wA2G9o2tE5sqti/RKxCDUI797QfkUtsnrQOXoNGYlzJV0KpOaPzegggUkdHWXkSjOJS73NoZX16ZXDPxqS5ebVd4Wftpe8z1rLmHjj8aDICY2v+PWbsnkyx4RGjOeHGcdpSofTPvzDzvH7RuSq+gHN1X/61bvqrXAxqtTTVvV11GgsjKy+W0japR6Daunb1Ekn9xUKPTYGSHfveZZaHB3vxUaNbKhZXzpkS0JMrVbJvX6o2pOUam5zDLC+h+MNUaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zLyVzYFupTnTS5FZN7DFyYpqALEOpAHCDgZ/bQW0I7U=;
- b=beYYdLcETCL3i0y5sSWG1sLhpaJr74mXPqHxbYFmsgjzE0vMmP1pMWE3XmAeheMC3Hzt811rpdJmv8q6o/f7CTtcs06YaQDxRS8yQSm951kjdN51lqw0gfmZmoVF53mE0TLdY2uQjGrCC34jxxlh96smTYAdV1Wvdn9a5SuIkL5TLB8BlcQ5d9iqc41HLXBQumGwgWUyuxWJE4amJqznCxIfzYkOeGMsV6Zn1KQaJF1oe54fb1YJAhRK/5TwzNCSfy5qJOd2W7sV523e8wqO2hDOa9TosY9mqoGoZsiylbiWuTTBAgVtxiwqa8QQLF/cZguxdFQuQ7vjrkUqQecrCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+        Tue, 9 Feb 2021 09:55:52 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8E9C06178B
+        for <linux-watchdog@vger.kernel.org>; Tue,  9 Feb 2021 06:55:11 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id i5so3449466wmq.2
+        for <linux-watchdog@vger.kernel.org>; Tue, 09 Feb 2021 06:55:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zLyVzYFupTnTS5FZN7DFyYpqALEOpAHCDgZ/bQW0I7U=;
- b=TisBO7MVS+w5mbC0nhqo8dMUiE0ctYVgfmSZJa1W2IKHez+x1MN6v0OCrE6GYZhFntjMy/Pnp+d3KbKxrEvRXr004/4nyfs8cBoq9zdpG017ySOPXNRszHijsoJYxux19j+6UgUVGDYwpKO+I28U+2JUGPKSafWpRyPFREb+Q7M=
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
- HE1PR0302MB2761.eurprd03.prod.outlook.com (2603:10a6:3:f0::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3825.29; Tue, 9 Feb 2021 14:19:31 +0000
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::c18c:4a01:ca24:78c1]) by HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::c18c:4a01:ca24:78c1%5]) with mapi id 15.20.3825.030; Tue, 9 Feb 2021
- 14:19:31 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "Mazziesaccount@gmail.com" <Mazziesaccount@gmail.com>,
-        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-CC:     linux-power <linux-power@fi.rohmeurope.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "yoshihiro.shimoda.uh@renesas.com" <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH v7 0/6] Support ROHM BD9576MUF and BD9573MUF PMICs
-Thread-Topic: [PATCH v7 0/6] Support ROHM BD9576MUF and BD9573MUF PMICs
-Thread-Index: AQHW8MsqjUg9d5N2qUWs4Yp1tdSvQqpP+46A
-Date:   Tue, 9 Feb 2021 14:19:30 +0000
-Message-ID: <f2376878832deab2dad5c40e930b48467b5dde02.camel@fi.rohmeurope.com>
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=41GqsJE0IgbgOx9fGT/tciJEr52uBJmAe5Ibl6UOkXM=;
+        b=ZCwDJGsUuLwNEhPK2MSimhIEOnNjoFiZHdGbeuIASZ8UEP6ueJWGjn+b9JQRJlJvpv
+         WcNjBm4YJeeAiVj5hg9nC0ro4mkNMc5BmwYm/rbOrk44uP0J1/hMPQgNtIh4ERzZlrKX
+         gwHRYh+bcaoD2DV2Y9VWSzEVDm3DonH5v4QmNhPxRpBsGmQozWDxE5JEWbZg91jyG+Qc
+         d62xXVaJ5T/reiEoL2NFEHrmNmh6dNdtmuanHU9VrkxSK9jNQ/2I+z7OIxYTY4/9B2VA
+         5SjotVWjDdAfJ39VPXpqwSYF4kx1dYCQiy6zV77xbj5UFlDQwE1oQ5VB/8nfpV29SN6m
+         UL+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=41GqsJE0IgbgOx9fGT/tciJEr52uBJmAe5Ibl6UOkXM=;
+        b=RP280CUAlgo+uor+5bM+7vB+Lnohhcn0Kyf+rmFOOnXQPg5oSZA//GXlCLt2mP5TVG
+         JiEHPxtb0oevBmscs3Tn3SF50kUgrbA6M3DliqB5jxLR1tQpNwn2WwLAXW6ARVK9c0YD
+         IlfvrZYc9egxZl3ifdveocAL3ut8IvfkErIIpEN+yFlDMtOha6fpiFVEIUI6b7eM2Vaw
+         bextAbmUwGQDIS5crqL+Tc2caJqX6BE0zylBo1FCZ1e+C49P+dSEWDCyUZyHlr7b7fmx
+         DsSsT8/2SiOZun9mPQ+XM7LRsEezmlCsvXKiDDFPaaz4AlDhUymKaQpWsnlEkj2F5Jvs
+         P9QA==
+X-Gm-Message-State: AOAM5337Tk9gIoAJ6ForU2R9N0Uzf1mNCZFJEolwXrPDYD79TW7ksOQR
+        GDh9g35zrErtafT9gFhJWR8KOFQbYWaQQw==
+X-Google-Smtp-Source: ABdhPJx5xoHWBG5urbk7oQExPAnvoYKsVmuv7nrt4+0PVNju/XB97HOdz0pTowi2e0Qnky7lNtyQpA==
+X-Received: by 2002:a05:600c:3588:: with SMTP id p8mr3723020wmq.71.1612882510392;
+        Tue, 09 Feb 2021 06:55:10 -0800 (PST)
+Received: from dell ([91.110.221.187])
+        by smtp.gmail.com with ESMTPSA id i20sm4570491wmq.7.2021.02.09.06.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Feb 2021 06:55:09 -0800 (PST)
+Date:   Tue, 9 Feb 2021 14:55:07 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-watchdog@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH v7 2/6] mfd: Support ROHM BD9576MUF and BD9573MUF
+Message-ID: <20210209145507.GA220368@dell>
 References: <cover.1611324968.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <cover.1611324968.git.matti.vaittinen@fi.rohmeurope.com>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [62.78.225.252]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5705acbc-cd24-43c8-d1e7-08d8cd05b784
-x-ms-traffictypediagnostic: HE1PR0302MB2761:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <HE1PR0302MB2761BC6A46C7EE00B84B2DF6AD8E9@HE1PR0302MB2761.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BuJg2L8ubANgClR2pDkX9SRM9qSlOh7kN3X9dgKcSU2v3Vnj8MbG0c2TjBc2+ANHKV3mfPjWSMw+yypsNpDFaqsaiLVCU7C9g4yKfD4fAvNtEvXn8JD2Z0Fqt9t8T3Slt4cpbifsVPY0+cqCf0R2/7P15ZmFLH95CKlgN6WVg/mfMpNiP1uT2JlB1o+CzE5xpYx172SdRTbUdsW5p7ZE5A0voZMefm08tKSvhKXXw/aDxnGyJtyzruOWiMzSEfDHl7loWmCoXz6WK6uAYUyg+gTq9OMjpB7eRWRODY8y776tQ6vWH601vojccVcW0XDw3FKkQytcmHNBb3dWcNP49SLBaTMRMALiBTeRK6UmPgOQ8Lt0DMzSP5qf1vbx9rlFmbs7I4Twp/0BahL/Bjj2JXQV9aZ+0T4rUVi5t60RWDwhH+2+E48yssOL4QqvPOUF0HD+0EU08GDBNFnQKC0dgiigDPHBPbINqPcoxtqTso+3YqAIPhZIKC8C02KeNvuiuhRZ85OLcxzRXK+bdrTKv9LroO8ErZDr0KAJju5J9uLYPzUSTjj5SW5kea61/61GHIvocKkDHKHgJUDiVWH8qVMai9bac/V/i0u/8Yf9bsQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(346002)(376002)(39850400004)(396003)(316002)(3450700001)(2906002)(110136005)(54906003)(8676002)(83380400001)(186003)(71200400001)(2616005)(26005)(4326008)(6512007)(6486002)(6506007)(7416002)(86362001)(8936002)(5660300002)(66946007)(66446008)(66476007)(66556008)(64756008)(76116006)(478600001)(966005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?eXFSMUh1SXZDbEpwNXlabmpwSzUxb29lbVliSUt0T1NEd0xpRytMNVJaVmVs?=
- =?utf-8?B?b1ZiYS94QzUzVUI2NHdoNEpEdTZxSnd0Uk1FamdGUUxUS3pIWk5tTTBYaVJ0?=
- =?utf-8?B?dHJlRzFoRmRoUVdFUG5tUUYydWxOVSttQmRzMGI1ajRFUEU3SFhieU5nN3Vp?=
- =?utf-8?B?eEdTb0JiSGRFQjNMZE9yc1Q0UWVWdTd0SUlhTnlSdFczRHhGQVhIUHdDRzV5?=
- =?utf-8?B?N1JHREFTbVVPU2tCT2hmZXFISy9iVkx3NUlvSVFVSU4xVm81V05lNXZJbGdC?=
- =?utf-8?B?SjlGdlExaTJvdHl2cG04eU9sOXpNd25GOFMvZjFKb3JhOFhVUlJyTFF5aUho?=
- =?utf-8?B?M3h6KzcrcW54T05yYkcvbnk4QXJYcjNaVzVEUXBJbUp2eFNNR3JIYU9uengz?=
- =?utf-8?B?RTRleGZUcEZwaDVCRFdqZGpWQWszRmI2UHFXODRxbFh5WERFenlkaVd5RDla?=
- =?utf-8?B?SWNmV3ZZdTNDdDdiMUhlMHE3Ti9sbUlpZEN0a1Vpa0VCM2pBR0VjbFA0ekhK?=
- =?utf-8?B?RCsrbFFQZUdMQWpGVUcxVzlxclBMbFl4czNLT21mUmVmTytQa3oyRmd2Yllt?=
- =?utf-8?B?azdKNzR5WkdydWhwSDlFcEVFQThNQUxjNXpYUnVUWWkzTFVJVEJhV2hZM3BH?=
- =?utf-8?B?T0p0UFZ3b05oVjY3NUhMNVlRWDFkNkVLZGZKUWNRZ1U5Wmovc08vbUo2QUw4?=
- =?utf-8?B?bHYvR001ZjB1OTdab05jempnZ0lhcTdvOHpKWWZBVWpZbWRnSG44Uno1R3pK?=
- =?utf-8?B?eEtCQUdjc3BlTmM3WUNqM0x5Z0tYeGRXemhoU1lvUUxHd3FPOTRiQUF1cXhi?=
- =?utf-8?B?SlEwQ2NmM2RMcktwcndiVEtmdmNyTDNCVHcyUEtnLzNnK1BiRVdvRE8rMWNG?=
- =?utf-8?B?bUREKzM2YTU1azJtR1A5aDlqUnlUK1BRZTZoZk1HZlNwMldxMXdjSmRvaHhi?=
- =?utf-8?B?NW9XS2dRYzJKdEZYWlNrV0hyaTZjNE5qbW1FSjBMbDl2dmZLVUVVaWI0czh3?=
- =?utf-8?B?WDdGbFVQbkxVMEJRTTlDakdVOTMrK09FRm5Gdm9hWWxadmFSTkdmaU5TcTJo?=
- =?utf-8?B?cVZQVU9hbnZUMUwzZEhRb3lUTW4yWEM4ZkFnNkpDSkw3aElydVhQV04vZUdi?=
- =?utf-8?B?MzVkL1JUdzBSL1UzTlJuL1VGQWpNYWdpcUViM2t3K21OWHl6aU5SMUF2azFB?=
- =?utf-8?B?ZEpGZDY3aFhLbStDem9RbzhlMjBRRjE0bktPK1lKMmMxbWNQSng2a3lSR1U5?=
- =?utf-8?B?UHMwTlJtalppVkMyc1Q0bzFyUjNuNDZXS3h6REJYMXE4VS9tTTFRU01VREdM?=
- =?utf-8?B?SGdqQUx0ZHhlRDJZVGJFT1VDVGRYV3AwdFBVNHFvYUVRNVpidGFPc2o0RkJl?=
- =?utf-8?B?QWk0Mm5ObkJ3anBvektCMHRITHhHUVh3NDlEN3F0UVlUNGxPaHQrbnlxU3Z0?=
- =?utf-8?B?aDFwVis0RFJ4eTZSVUJLM0pTc3g0MXhvb1kydEtEOGNWbXFXSWdNZE82L3BL?=
- =?utf-8?B?VFZwdE1rVHkzZi9RVXZFQlFYdmw3dVUyS1F0NDhpdFJtYkpSbWpERTRHa2tn?=
- =?utf-8?B?YW5xekJsNVhmVUVGbEoxYnFjK2xyTmRxVEJOZ0tGOWh0ZGtOS2plRkFxYXR2?=
- =?utf-8?B?NmhDa01JZkFRTms0SnRLeEJ4N0lEQTF1RFM5eDh6NVBEUnZGN3l3TDg1WHAz?=
- =?utf-8?B?V0wxU1NOM1M5TkRlK1VTbUJqclpwTXJmdG9wWnVNeXFRQVJsWlpsTGpUS1Yy?=
- =?utf-8?Q?E5X6BT5r1X8SRoSaNp33tNpOUKYo1iYFfVqcSzJ?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EC939CFE337AC74CB475250E8CCCDB99@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <185621c77e5eaecea239e0146ea48bc7a2648b9f.1611324968.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5705acbc-cd24-43c8-d1e7-08d8cd05b784
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2021 14:19:30.9771
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eBzvWfpHozbQq2GYMLNPjmEYOluMTJBEs2Ib65Lh9KAnq+rW8j6D/k2I3wSJboz1VFR8ua8b9oXT33Jwy59oXyESKJs+P2XvVQs5yZmnuHcV8LeKV43yo/1F6kQ2jvvb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0302MB2761
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <185621c77e5eaecea239e0146ea48bc7a2648b9f.1611324968.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGVsbG8gTGVlLCBNYXJrIEFsbCwNCg0KT24gRnJpLCAyMDIxLTAxLTIyIGF0IDE2OjMwICswMjAw
-LCBNYXR0aSBWYWl0dGluZW4gd3JvdGU6DQo+IEluaXRpYWwgc3VwcG9ydCBmb3IgUk9ITSBCRDk1
-NzZNVUYgYW5kIEJEOTU3M01VRiBQTUlDcy4NCj4gDQo+IFRoZXNlIFBNSUNzIGFyZSBwcmltYXJp
-bHkgaW50ZW5kZWQgdG8gYmUgdXNlZCB0byBwb3dlciB0aGUgUi1DYXINCj4gZmFtaWx5DQo+IHBy
-b2Nlc3NvcnMuIEJEOTU3Nk1VRiBpbmNsdWRlcyBzb21lIGFkZGl0aW9uYWwgc2FmZXR5IGZlYXR1
-cmVzIHRoZQ0KPiBCRDk1NzNNVUYgZG9lcyBub3QgaGF2ZS4gVGhpcyBpbml0aWFsIHZlcnNpb24g
-b2YgZHJpdmVycyBwcm92aWRlcw0KPiB0ZW1wZXJhdHVyZSwgb3ZlciB2b2x0YWdlIGFuZCB1bmRl
-ciB2b2x0YWdlIHdhcm5pbmdzIGlzIElSUQ0KPiBpbmZvcm1hdGlvbg0KPiBpcyBwYXNzZWQgdmlh
-IERULg0KPiANCj4gVGhpcyBwYXRjaCBzZXJpZXMgaW5jbHVkZXMgTUZEIGFuZCB3YXRjaGRvZyBk
-cml2ZXJzLiBSZWd1bGF0b3IgcGFydA0KPiB3YXMNCj4gYWxyZWFkeSBhcHBsaWVkIGJ1dCB0aGlz
-IHNlcmllcyBicmluZ3MgdGhlIG92ZXItL3VuZGVydm9sdGFnZSBhbmQNCj4gdGVtcGVyYXR1cmUg
-ZXJyb3Igbm90aWZpY2F0aW9ucyB3aGljaCBjb25zdW1lciBkcml2ZXJzIGNhbiB1dGlsaXplLg0K
-DQpJIGhhZCBzb21lIGRpc2N1c3Npb24gd2l0aCBNYXJrIGFuZCBBbmdlbG8gYWJvdXQgY3JlYXRp
-bmcgYSBoZWxwZXIgZm9yDQpoYW5kbGluZyB0aGlzIGtpbmQgb2YgcmVndWxhdG9yIG5vdGlmaWNh
-dGlvbiBJUlFzLg0KKEZvciBhbnlvbmUgaW50ZXJlc3RlZDogdGhlIGRpc2N1c3Npb24gY2FuIGJl
-IHNlZW4gaGVyZToNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvNjA0NjgzNmUyMmI4MjUy
-OTgzZjA4ZDU2MjFjMzVlY2VjYjk3ODIwZC5jYW1lbEBmaS5yb2htZXVyb3BlLmNvbS8NCikNCg0K
-SSd2ZSBub3cgZHJhZnRlZCBSRkN2MSBmb3IgdGhhdCBzdXBwb3J0IChub3Qgc2VudCBpdCB5ZXQp
-LiBUaGUgUkZDDQpjb252ZXJ0cyB0aGUgQkQ5NTc2IHJlZ3VsYXRvciBkcml2ZXIgdG8gdXNlIHRo
-ZSBuZXcgaGVscGVyIGFuZCBhZGRzDQpzb21lIG5ldyBkZWZpbml0aW9ucyB0byBNRkQgaGVhZGVy
-cy4NCg0KV2hhdCB3b3VsZCBiZSB0aGUgbW9zdCBjb252ZW5pZW50IHdheSBvZiBoYW5kbGluZyB0
-aGlzPyBTaG91bGQgSSBtZXJnZQ0KdGhpcyBzZXJpZXMgaW4gdGhlIFJGQyBhbmQgbWFrZSBpdCBq
-dXN0IG9uZSBiaWcgc2VyaWVzPyBPciBzaG91bGQgSQ0Ka2VlcCB0aGVzZSBhcyB0d28gc2VwYXJh
-dGVkIHNlcmllcz8gSWYgSSBrZWVwIHRoZXNlIGFzIHNlcGFyYXRlIHNlcmllcywNCnNob3VsZCBJ
-IHRoZW4gb21pdCBhbGwgdGhlIE1GRCBwYXRjaGVzIGZyb20gUkZDIHNlcmllcyAtIGFuZCBhZGQN
-CnBvdGVudGlhbCBNRkQgY2hhbmdlcyAobGlrZSBPVkQvVVZEIGNvbmZpZ3VyYXRpb24gcmVnaXN0
-ZXJzKSBpbiB0aGlzDQpzZXJpZXMgKHdoaWNoIG1ha2VzIGJkOTU3NiByZWd1bGF0b3JzIG5vdCBj
-b21waWxpbmcpIC0gb3Igc2hvdWxkIHRoZQ0KTUZEIHBhcnRzIGJlIGluY2x1ZGVkIGluIGJvdGgg
-c2VyaWVzIC0gaW4gd2hpY2ggY2FzZSB3ZSBuZWVkIHRvIHNvbWVob3cNCnN0YXkgb24gdHJhY2sg
-d2hhdCBwYXJ0cyBvZiBNRkQgaXMgcmV2aWV3ZWQuDQoNClNpbXBsZXN0IGZvciBtZSB3b3VsZCBi
-ZSBpZiB3ZSBjb3VsZCBnZXQgdGhlIG9sZGVzdCBwYXRjaGVzIDEsMiw0IGFuZCA1DQpmcm9tIHRo
-aXMgc2VyaWVzIGluLXRyZWUgKG9ubHkgTUZEIGlzIG5vdCBhY2tlZCkgLSBidXQgSSBndWVzcyBp
-dCB3b24ndA0KaGFwcGVuIGF0IHRoaXMgcG9pbnQgb2YgdGhlIGRldmVsb3BtZW50IGN5Y2xlIC0g
-YW5kIGJyaW5nIGluIHRoZSBJUlENCihwYXRjaCAzKSBhbmQgcmVndWxhdG9yIG5vdGlmaWNhdGlv
-bnMgKHBhdGNoIDYpIHVzaW5nIHRoZSBSRkMgc2VyaWVzLg0KDQpIb3cgZG8geW91IHNlZSBpdD8g
-U2hvdWxkIEkgbWVsZCB0aGlzIGluIHRoZSBSRkMgb3Iga2VlcCB0d28gc2VwYXJhdGUNCnNlcmll
-cyAtIGluIHdoaWNoIGNhc2UsIGhvdyBzaG91bGQgSSBoYW5kbGUgdGhlIE1GRCBjaGFuZ2VzIGJy
-b3VnaHQgYnkNCnRoZSBSRkMgc2VyaWVzPw0KDQpCZXN0IFJlZ2FyZHMNCglNYXR0aSBWYWl0dGlu
-ZW4NCg==
+On Fri, 22 Jan 2021, Matti Vaittinen wrote:
+
+> Add core support for ROHM BD9576MUF and BD9573MUF PMICs which are
+> mainly used to power the R-Car series processors.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> ---
+> Changes since v6:
+>  - no changes
+>  drivers/mfd/Kconfig              |  11 ++++
+>  drivers/mfd/Makefile             |   1 +
+>  drivers/mfd/rohm-bd9576.c        | 108 +++++++++++++++++++++++++++++++
+>  include/linux/mfd/rohm-bd957x.h  |  59 +++++++++++++++++
+>  include/linux/mfd/rohm-generic.h |   2 +
+>  5 files changed, 181 insertions(+)
+>  create mode 100644 drivers/mfd/rohm-bd9576.c
+>  create mode 100644 include/linux/mfd/rohm-bd957x.h
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index bdfce7b15621..53c7c96283bd 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1998,6 +1998,17 @@ config MFD_ROHM_BD71828
+>  	  Also included is a Coulomb counter, a real-time clock (RTC), and
+>  	  a 32.768 kHz clock gate.
+>  
+> +config MFD_ROHM_BD957XMUF
+> +	tristate "ROHM BD9576MUF and BD9573MUF Power Management ICs"
+> +	depends on I2C=y
+> +	depends on OF
+> +	select REGMAP_I2C
+> +	select MFD_CORE
+> +	help
+> +	  Select this option to get support for the ROHM BD9576MUF and
+> +	  BD9573MUF Power Management ICs. BD9576 and BD9573 are primarily
+> +	  designed to be used to power R-Car series processors.
+> +
+>  config MFD_STM32_LPTIMER
+>  	tristate "Support for STM32 Low-Power Timer"
+>  	depends on (ARCH_STM32 && OF) || COMPILE_TEST
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 14fdb188af02..e58fae024bb2 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -262,6 +262,7 @@ obj-$(CONFIG_RAVE_SP_CORE)	+= rave-sp.o
+>  obj-$(CONFIG_MFD_ROHM_BD70528)	+= rohm-bd70528.o
+>  obj-$(CONFIG_MFD_ROHM_BD71828)	+= rohm-bd71828.o
+>  obj-$(CONFIG_MFD_ROHM_BD718XX)	+= rohm-bd718x7.o
+> +obj-$(CONFIG_MFD_ROHM_BD957XMUF)	+= rohm-bd9576.o
+>  obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
+>  obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
+>  
+> diff --git a/drivers/mfd/rohm-bd9576.c b/drivers/mfd/rohm-bd9576.c
+> new file mode 100644
+> index 000000000000..f4dd9e438427
+> --- /dev/null
+> +++ b/drivers/mfd/rohm-bd9576.c
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +//
+> +// Copyright (C) 2020 ROHM Semiconductors
+> +//
+> +// ROHM BD9576MUF and BD9573MUF PMIC driver
+
+No C++ comments (save the SPDX line) please.
+
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/ioport.h>
+> +#include <linux/irq.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/rohm-bd957x.h>
+> +#include <linux/mfd/rohm-generic.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/types.h>
+> +
+> +static struct mfd_cell bd9573_mfd_cells[] = {
+> +	{ .name = "bd9573-pmic", },
+> +	{ .name = "bd9576-wdt", },
+> +};
+> +
+> +static struct mfd_cell bd9576_mfd_cells[] = {
+> +	{ .name = "bd9576-pmic", },
+> +	{ .name = "bd9576-wdt", },
+> +};
+
+What is a PMIC in this context?
+
+To me a PMIC is a bunch of devices.  What is this probing?
+
+Maybe this is *-regulator?
+
+> +static const struct regmap_range volatile_ranges[] = {
+> +	regmap_reg_range(BD957X_REG_SMRB_ASSERT, BD957X_REG_SMRB_ASSERT),
+> +	regmap_reg_range(BD957X_REG_PMIC_INTERNAL_STAT,
+> +			 BD957X_REG_PMIC_INTERNAL_STAT),
+> +	regmap_reg_range(BD957X_REG_INT_THERM_STAT, BD957X_REG_INT_THERM_STAT),
+> +	regmap_reg_range(BD957X_REG_INT_OVP_STAT, BD957X_REG_INT_SYS_STAT),
+> +	regmap_reg_range(BD957X_REG_INT_MAIN_STAT, BD957X_REG_INT_MAIN_STAT),
+> +};
+> +
+> +static const struct regmap_access_table volatile_regs = {
+> +	.yes_ranges = &volatile_ranges[0],
+> +	.n_yes_ranges = ARRAY_SIZE(volatile_ranges),
+> +};
+> +
+> +static struct regmap_config bd957x_regmap = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.volatile_table = &volatile_regs,
+> +	.max_register = BD957X_MAX_REGISTER,
+> +	.cache_type = REGCACHE_RBTREE,
+> +};
+> +
+> +static int bd957x_i2c_probe(struct i2c_client *i2c,
+> +			     const struct i2c_device_id *id)
+> +{
+> +	int ret;
+> +	struct regmap *regmap;
+> +	struct mfd_cell *mfd;
+> +	int cells;
+> +	unsigned long chip_type;
+> +
+> +	chip_type = (unsigned long)of_device_get_match_data(&i2c->dev);
+> +
+> +	switch (chip_type) {
+> +	case ROHM_CHIP_TYPE_BD9576:
+> +		mfd = bd9576_mfd_cells;
+> +		cells = ARRAY_SIZE(bd9576_mfd_cells);
+> +		break;
+> +	case ROHM_CHIP_TYPE_BD9573:
+> +		mfd = bd9573_mfd_cells;
+> +		cells = ARRAY_SIZE(bd9573_mfd_cells);
+> +		break;
+> +	default:
+> +		dev_err(&i2c->dev, "Unknown device type");
+> +		return -EINVAL;
+> +	}
+> +
+> +	regmap = devm_regmap_init_i2c(i2c, &bd957x_regmap);
+> +	if (IS_ERR(regmap)) {
+> +		dev_err(&i2c->dev, "Failed to initialize Regmap\n");
+> +		return PTR_ERR(regmap);
+> +	}
+> +
+> +	ret = devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO, mfd, cells,
+
+This nomenclature is confusing.
+
+cells and num_cells would clear it up.
+
+> +				   NULL, 0, NULL);
+> +	if (ret)
+> +		dev_err(&i2c->dev, "Failed to create subdevices\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id bd957x_of_match[] = {
+> +	{ .compatible = "rohm,bd9576", .data = (void *)ROHM_CHIP_TYPE_BD9576, },
+> +	{ .compatible = "rohm,bd9573", .data = (void *)ROHM_CHIP_TYPE_BD9573, },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, bd957x_of_match);
+> +
+> +static struct i2c_driver bd957x_drv = {
+> +	.driver = {
+> +		.name = "rohm-bd957x",
+> +		.of_match_table = bd957x_of_match,
+> +	},
+> +	.probe = &bd957x_i2c_probe,
+> +};
+> +module_i2c_driver(bd957x_drv);
+> +
+> +MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+> +MODULE_DESCRIPTION("ROHM BD9576MUF and BD9573MUF Power Management IC driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/rohm-bd957x.h b/include/linux/mfd/rohm-bd957x.h
+> new file mode 100644
+> index 000000000000..3e7ca6fe5d4f
+> --- /dev/null
+> +++ b/include/linux/mfd/rohm-bd957x.h
+> @@ -0,0 +1,59 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/* Copyright (C) 2020 ROHM Semiconductors */
+> +
+> +#ifndef __LINUX_MFD_BD957X_H__
+> +#define __LINUX_MFD_BD957X_H__
+> +
+> +enum {
+> +	BD957X_VD50,
+> +	BD957X_VD18,
+> +	BD957X_VDDDR,
+> +	BD957X_VD10,
+> +	BD957X_VOUTL1,
+> +	BD957X_VOUTS1,
+> +};
+> +
+> +#define BD957X_REG_SMRB_ASSERT		0x15
+> +#define BD957X_REG_PMIC_INTERNAL_STAT	0x20
+> +#define BD957X_REG_INT_THERM_STAT	0x23
+> +#define BD957X_REG_INT_THERM_MASK 0x24
+> +#define BD957X_REG_INT_OVP_STAT 0x25
+> +#define BD957X_REG_INT_SCP_STAT 0x26
+> +#define BD957X_REG_INT_OCP_STAT 0x27
+> +#define BD957X_REG_INT_OVD_STAT 0x28
+> +#define BD957X_REG_INT_UVD_STAT 0x29
+> +#define BD957X_REG_INT_UVP_STAT 0x2a
+> +#define BD957X_REG_INT_SYS_STAT 0x2b
+> +#define BD957X_REG_INT_SYS_MASK 0x2c
+> +#define BD957X_REG_INT_MAIN_STAT 0x30
+> +#define BD957X_REG_INT_MAIN_MASK 0x31
+> +
+> +#define BD957X_REG_WDT_CONF 0x16
+> +
+> +#define BD957X_REG_POW_TRIGGER1 0x41
+> +#define BD957X_REG_POW_TRIGGER2 0x42
+> +#define BD957X_REG_POW_TRIGGER3 0x43
+> +#define BD957X_REG_POW_TRIGGER4 0x44
+> +#define BD957X_REG_POW_TRIGGERL1 0x45
+> +#define BD957X_REG_POW_TRIGGERS1 0x46
+> +
+> +#define BD957X_REGULATOR_EN_MASK 0xff
+> +#define BD957X_REGULATOR_DIS_VAL 0xff
+> +
+> +#define BD957X_VSEL_REG_MASK	0xff
+> +
+> +#define BD957X_MASK_VOUT1_TUNE	0x87
+> +#define BD957X_MASK_VOUT2_TUNE	0x87
+> +#define BD957X_MASK_VOUT3_TUNE	0x1f
+> +#define BD957X_MASK_VOUT4_TUNE	0x1f
+> +#define BD957X_MASK_VOUTL1_TUNE	0x87
+> +
+> +#define BD957X_REG_VOUT1_TUNE	0x50
+> +#define BD957X_REG_VOUT2_TUNE	0x53
+> +#define BD957X_REG_VOUT3_TUNE	0x56
+> +#define BD957X_REG_VOUT4_TUNE	0x59
+> +#define BD957X_REG_VOUTL1_TUNE	0x5c
+> +
+> +#define BD957X_MAX_REGISTER 0x61
+
+Nit: Can you tab these out for improved readability please?
+
+> +#endif
+> diff --git a/include/linux/mfd/rohm-generic.h b/include/linux/mfd/rohm-generic.h
+> index 4283b5b33e04..58b4f1a0f4af 100644
+> --- a/include/linux/mfd/rohm-generic.h
+> +++ b/include/linux/mfd/rohm-generic.h
+> @@ -12,6 +12,8 @@ enum rohm_chip_type {
+>  	ROHM_CHIP_TYPE_BD71847,
+>  	ROHM_CHIP_TYPE_BD70528,
+>  	ROHM_CHIP_TYPE_BD71828,
+> +	ROHM_CHIP_TYPE_BD9576,
+> +	ROHM_CHIP_TYPE_BD9573,
+>  	ROHM_CHIP_TYPE_AMOUNT
+>  };
+>  
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
