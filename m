@@ -2,80 +2,154 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F68316639
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Feb 2021 13:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E3131876E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Feb 2021 10:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbhBJMMg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 10 Feb 2021 07:12:36 -0500
-Received: from spam.auroraoh.com ([24.56.89.101]:52922 "EHLO
-        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231651AbhBJMK1 (ORCPT
+        id S230185AbhBKJxG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 11 Feb 2021 04:53:06 -0500
+Received: from mail-lj1-f180.google.com ([209.85.208.180]:41421 "EHLO
+        mail-lj1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230003AbhBKJrA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 10 Feb 2021 07:10:27 -0500
-X-ASG-Debug-ID: 1612958957-112c0d6a799d360001-75dY6A
-Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id X7nyYCbXL2pSaaZe; Wed, 10 Feb 2021 07:09:17 -0500 (EST)
-X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
-Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
- (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
- 02:46:18 -0500
-Content-Type: text/plain; charset="iso-8859-1"
-X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
+        Thu, 11 Feb 2021 04:47:00 -0500
+Received: by mail-lj1-f180.google.com with SMTP id e17so6592831ljl.8;
+        Thu, 11 Feb 2021 01:46:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=ZEJ369A6XCWffUy/foTv3zEVJVD61SEeMj7wTUfLcuQ=;
+        b=a4rmfmngJjO5osXDnF+L2QqOfG6/nZgXXSU51PzZrR4D2MSSrE6LBT5qosqaV3v9FU
+         3eWp8oOTeQgp6tpT5NhGjAf9oNVKHQymDVJ2PS5e+m988k5m3GI5kODjVuKhgAX8VeQ5
+         qT8Yg4SzYrslMBrZ6Kfc6IgfaFwlca51YF0rCAHcm1qkufVq0L1TjI6/IClTaccYiG+Y
+         Bbx4zuHNjfqZijGsG0XQ+Z+yWvEciCjO2c5hfGFlvf023Dyz5xv7n+XEuidXEsLv0S/M
+         vLYBhrEhGzzj3Z4h2Xv4C3i6Rn1aSq6/MqqRHTLDQ+2NOgcUcvQuBJkNcf1ENAlmdVy0
+         w3ig==
+X-Gm-Message-State: AOAM533/AgjkivHAipZqyeBT7us78yGfrDWSUV3GY1Cw7GHxwC1a3abm
+        DBxKyZqVQBNVBf9wz5twkbQ=
+X-Google-Smtp-Source: ABdhPJxVtKG5Prh3cGFwkmJcg8W9SNMT4u1ApdrimoEqtDHvSV3l78ZuEpkrTBnwsQXlo9X6EyEXSg==
+X-Received: by 2002:a05:651c:38f:: with SMTP id e15mr4429041ljp.420.1613036776825;
+        Thu, 11 Feb 2021 01:46:16 -0800 (PST)
+Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id e15sm606319lfn.80.2021.02.11.01.46.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Feb 2021 01:46:15 -0800 (PST)
+Date:   Thu, 11 Feb 2021 11:46:09 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-watchdog@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH v8 0/6] Support ROHM BD9576MUF and BD9573MUF PMICs
+Message-ID: <cover.1613031055.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-To:     Recipients <januskad@auroraoh.com>
-X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-From:   <januskad@auroraoh.com>
-Date:   Tue, 9 Feb 2021 15:45:32 +0800
-Reply-To: <cfolimiited@gmail.com>
-X-Priority: 1 (High)
-X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <fcb0cdea-e224-43e7-87c3-ae3968f6d483@COASRV-MAIL2.auroraoh.loc>
-X-Originating-IP: [197.210.29.8]
-X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
- COASRV-MAIL2.auroraoh.loc (10.3.1.15)
-X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
-X-Barracuda-Start-Time: 1612958957
-X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at auroraoh.com
-X-Barracuda-Scan-Msg-Size: 755
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 1.61
-X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87884
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 NO_REAL_NAME           From: does not include a real name
-        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
-                                   Address
-        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
+Initial support for ROHM BD9576MUF and BD9573MUF PMICs.
 
-We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
+These PMICs are primarily intended to be used to power the R-Car family
+processors. BD9576MUF includes some additional safety features the
+BD9573MUF does not have. This initial version of drivers provides
+temperature, over voltage and under voltage warnings is IRQ information
+is passed via DT.
 
-Please contact us for more details;
+This patch series includes MFD and watchdog drivers. Regulator part was
+already applied.
+
+This series brings in the IRQ support which will be utilized by the
+regulator driver(s). The regulator part was splitted in own series as it
+contains some changes to drivers which are not yet in other trees.
+
+WDG supports
+- Enabling and pinging the watchdog
+- configuring watchog timeout / window from device-tree
+
+Please note that not all of the boards are expected to be utilizing the
+warning IRQs. Thus populating the IRQ information from DT is optional.
+
+Changelog v8:
+  - Drop regulator driver changes which are covered by the separate RFC series.
+  - Renamed regulator driver cell. Regulator driver change will be
+    brought in in the RFC series to avoid conflicts.
+  - Add patch introducing register definitions required by the regulator RFC
+    series.
+  - Cleaned comments at MFD as was suggested by Lee
+  - Do not abort MFD probe if IRQ information for BD9573 is populated
+  - MFD driver/header styling
+
+Changelog v7:
+  - Added interrupt handling
+  - Added notifications and error_flag getter to regulators
+
+Changelog v6:
+  - Fixed watchdog timeout
+
+Changelog v5:
+  - rebased on top of v5.10-rc2
+  - few styling fixes in MFD as suggested by Lee
+
+Changelog v4:
+  - rebased on top of 5.10-rc1
+  - Fix typo (repeated word maximum) from the DT binding doc
+
+Changelog v3:
+  - use only one binding to specify watchdog time-out window.
+
+Changelog v2:
+  - dropped already applied regulator part
+  - dt_bindings: Fix case for regulator-names in the example
+  - watchdod: unify probe error check and revise includes
+
+---
 
 
-Kind regards,
+Matti Vaittinen (6):
+  dt_bindings: mfd: Add ROHM BD9576MUF and BD9573MUF PMICs
+  mfd: Support ROHM BD9576MUF and BD9573MUF
+  mfd: bd9576: Add IRQ support
+  wdt: Support wdt on ROHM BD9576MUF and BD9573MUF
+  MAINTAINERS: Add ROHM BD9576MUF and BD9573MUF drivers
+  mfd: bd9576: Add safety limit/monitoring registers
 
-Paul McCann
+ .../bindings/mfd/rohm,bd9576-pmic.yaml        | 123 ++++++++
+ MAINTAINERS                                   |   4 +
+ drivers/mfd/Kconfig                           |  11 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/rohm-bd9576.c                     | 187 +++++++++++
+ drivers/watchdog/Kconfig                      |  13 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/bd9576_wdt.c                 | 291 ++++++++++++++++++
+ include/linux/mfd/rohm-bd957x.h               | 140 +++++++++
+ include/linux/mfd/rohm-generic.h              |   2 +
+ 10 files changed, 773 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+ create mode 100644 drivers/mfd/rohm-bd9576.c
+ create mode 100644 drivers/watchdog/bd9576_wdt.c
+ create mode 100644 include/linux/mfd/rohm-bd957x.h
 
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+2.25.4
 
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
