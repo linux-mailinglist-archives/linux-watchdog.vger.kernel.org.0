@@ -2,105 +2,129 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64F6318778
-	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Feb 2021 10:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CB031AB20
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Feb 2021 12:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbhBKJx4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 11 Feb 2021 04:53:56 -0500
-Received: from mail-lj1-f181.google.com ([209.85.208.181]:42019 "EHLO
-        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbhBKJvA (ORCPT
+        id S229646AbhBML7J (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 13 Feb 2021 06:59:09 -0500
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:33776 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229580AbhBML7I (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 11 Feb 2021 04:51:00 -0500
-Received: by mail-lj1-f181.google.com with SMTP id v6so1971444ljh.9;
-        Thu, 11 Feb 2021 01:50:42 -0800 (PST)
+        Sat, 13 Feb 2021 06:59:08 -0500
+Received: by mail-lf1-f50.google.com with SMTP id b2so3338062lfq.0;
+        Sat, 13 Feb 2021 03:58:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vbzohcwBtlUZH6ZLAK19lQqwlGPGKPmPpTbcsdgTlH8=;
-        b=PN+dW2reBrw9bfhyFvLk9lxq3aBU5cUyEWcq8HYCgO2QcuSujJ5jmlASjzl6kp8KeW
-         AcINxgDXOarJb1fjobb48BJu7oKtjPdDVcM6sBIgYCGWc869qZV45PAH8djsBJJviDqg
-         0GmnPFWDXzvlvdX1O1cBh+1H6rpp08hGHTfH5NpOWw5CtfM7nQiKGlWExnTvw8fU+Zo2
-         Y0PHqO99u9Vp/GLNizOm4wZ8spzljnqer3EflphD2aq9PosnBYTBE3hMzgmTZhKInNf3
-         XuCg20lOkhA/q9YprJ/+8JRP5iHHlrf14dsxS3Poi9Z41/Js3MAI1A1fxDiLy3OloUWP
-         /F0g==
-X-Gm-Message-State: AOAM530QmjdBFzplil2+yr/jZa5CrI6dvRJTAmdgAYds4u6kCLR+m1AP
-        OEemSlnxZhxVLNvNRVoq6dI=
-X-Google-Smtp-Source: ABdhPJxMlQbYT67gpdSvR7zs/H7JjHJFSus6/lp1sBEFdg8/xOFu6QPBso2sW9P85wR7XMmteaS2lg==
-X-Received: by 2002:a2e:9b8e:: with SMTP id z14mr4408634lji.182.1613037017263;
-        Thu, 11 Feb 2021 01:50:17 -0800 (PST)
-Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id d3sm600472lfg.122.2021.02.11.01.50.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=GosurqFqirHdQWyzX6cWeJ6swt8DHy8QXcFDoJi5ZkU=;
+        b=OSpgtWiaMP41tltyjBK9m9F26XZGhn3fjci5HPUz+Dh1HmYxE3YJlwn25YBfr80MVo
+         w9blByx/FQDPVdXecmairzfHmeqCp2j8tjDBHHePneZYXcZ6qPGFPWZs4WuVPTfgrWMi
+         zCVHA2g2TVd+Buc/8SG7QB9mLpq3/LXzJmu6Xzn8p1u32Wrv7bYrZGIRaZenT+0qOayn
+         eZldQUnGvhKXd7+TnyMxy0FxqQ2oQ86pQajeAIxVizLxQW1r2JWPPdTKaBi1w+7VyRMg
+         MubGOrtVNJxBDtXla/J7ag873GWnFd45sRaupzyhUv0LOLT1USmrrZKHk+kiJTagCeSl
+         IeOA==
+X-Gm-Message-State: AOAM533T/+wiY0e1JXAhUiT5BF7l0Dtuw/2umlLJr7MUb9G1nTcWC18N
+        gbNSv7htTlGsGUtWM3QDng4=
+X-Google-Smtp-Source: ABdhPJzkMegmGR3Q1jpC7ira2DsUWneGtFG/3HdAvrJEBdUAnT0Wtr1aUFM0Qwze3n3LrKxXHRY7jw==
+X-Received: by 2002:a05:6512:3741:: with SMTP id a1mr3794390lfs.137.1613217505179;
+        Sat, 13 Feb 2021 03:58:25 -0800 (PST)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
+        by smtp.gmail.com with ESMTPSA id r6sm1853428lfc.8.2021.02.13.03.58.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 01:50:16 -0800 (PST)
-Date:   Thu, 11 Feb 2021 11:50:07 +0200
+        Sat, 13 Feb 2021 03:58:24 -0800 (PST)
+Date:   Sat, 13 Feb 2021 13:58:17 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+To:     mazziesaccount@gmail.com, matti.vaittinen@fi.rohmeurope.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-power@fi.rohmeurope.com, linux-watchdog@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v8 6/6] mfd: bd9576: Add safety limit/monitoring registers
-Message-ID: <f9d76bed70a440036b56be8a0928925d12db8463.1613031055.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1613031055.git.matti.vaittinen@fi.rohmeurope.com>
+        Saravana Kannan <saravanak@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [RFC PATCH 0/7] Add managed version of delayed work init
+Message-ID: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1613031055.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-ROHM BD9576 contains safety features like over/under voltage detection,
-over curren detection and over temperature detection. Add the
-configuration register information.
+It's not rare that device drivers need delayed work.
+It's not rare that this work needs driver's data.
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
+Often this means that driver must ensure the work is not queued when
+driver exits. Usually this is done by ensuring new work is not added and
+then calling cancel_delayed_work_sync() at remove(). In many cases this
+may also require cleanup at probe error path - which is easy to forget.
 
-Changes since v7:
-	New patch
+It might be helpful for (a) few drivers if there was a work init
+function which would ensure cancel_delayed_work_sync() is called at
+driver exit. So this series implements one on top of devm and replaces
+the obvious cases where only thing remove call-back in a driver does is
+cancelling the work. There might be other cases where we could switch
+more than just work cancellation to use managed version and thus get rid
+of remove.
 
- include/linux/mfd/rohm-bd957x.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+Main reson why this is RFC is that I had hard time deciding where this
+function should be introduced. It's not nice to include all device stuff
+in workqueue - because many workqueue users are not interested in
+devices. In same way, not all of the devices are interested in WQs.
+OTOH, adding own file just for this sounds like an overkill.
 
-diff --git a/include/linux/mfd/rohm-bd957x.h b/include/linux/mfd/rohm-bd957x.h
-index 3f351a1ae4ab..2bd35260ee8e 100644
---- a/include/linux/mfd/rohm-bd957x.h
-+++ b/include/linux/mfd/rohm-bd957x.h
-@@ -116,6 +116,25 @@ enum {
- #define BD957X_REG_VOUT4_TUNE		0x59
- #define BD957X_REG_VOUTL1_TUNE		0x5c
- 
-+#define BD9576_REG_VOUT1_OVD		0x51
-+#define BD9576_REG_VOUT1_UVD		0x52
-+#define BD9576_REG_VOUT2_OVD		0x54
-+#define BD9576_REG_VOUT2_UVD		0x55
-+#define BD9576_REG_VOUT3_OVD		0x57
-+#define BD9576_REG_VOUT3_UVD		0x58
-+#define BD9576_REG_VOUT4_OVD		0x5a
-+#define BD9576_REG_VOUT4_UVD		0x5b
-+#define BD9576_REG_VOUTL1_OVD		0x5d
-+#define BD9576_REG_VOUTL1_UVD		0x5e
-+
-+#define BD9576_MASK_XVD			0x7f
-+
-+#define BD9576_REG_VOUT1S_OCW		0x5f
-+#define BD9576_REG_VOUT1S_OCP		0x60
-+
-+#define BD9576_MASK_VOUT1S_OCW		0x3f
-+#define BD9576_MASK_VOUT1S_OCP		0x3f
-+
- #define BD957X_MAX_REGISTER		0x61
- 
- #endif
+This time I decided that it is more correct that devices use WQs than
+that WQs use devices. Hence the function is introduced in
+include/linux/device.h and drivers/base/devres.c
+
+--
+
+Matti Vaittinen (7):
+  drivers: base: Add resource managed version of delayed work init
+  extconn: Clean-up few drivers by using managed work init
+  hwmon: raspberry-pi: Clean-up few drivers by using managed work init
+  platform/x86: gpd pocket fan: Clean-up by using managed work init
+  power: supply: Clean-up few drivers by using managed work init
+  regulator: qcom_spmi-regulator: Clean-up by using managed work init
+  watchdog: retu_wdt: Clean-up by using managed work init
+
+ drivers/base/devres.c                        | 33 ++++++++++++++++++++
+ drivers/extcon/extcon-gpio.c                 | 14 ++-------
+ drivers/extcon/extcon-intel-int3496.c        | 15 ++-------
+ drivers/extcon/extcon-palmas.c               | 16 +++-------
+ drivers/extcon/extcon-qcom-spmi-misc.c       | 16 +++-------
+ drivers/hwmon/raspberrypi-hwmon.c            | 16 +++-------
+ drivers/platform/x86/gpd-pocket-fan.c        | 16 +++-------
+ drivers/power/supply/axp20x_usb_power.c      | 15 +++------
+ drivers/power/supply/bq24735-charger.c       | 17 +++-------
+ drivers/power/supply/ltc2941-battery-gauge.c | 19 ++++-------
+ drivers/power/supply/sbs-battery.c           | 15 +++------
+ drivers/regulator/qcom_spmi-regulator.c      | 33 +++++---------------
+ drivers/watchdog/retu_wdt.c                  | 21 +++----------
+ include/linux/device.h                       |  5 +++
+ 14 files changed, 95 insertions(+), 156 deletions(-)
+
+
+base-commit: 92bf22614b21a2706f4993b278017e437f7785b3
 -- 
 2.25.4
 
