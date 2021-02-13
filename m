@@ -2,154 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA0431AB3D
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Feb 2021 13:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74ECE31AB46
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Feb 2021 13:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbhBMMQt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 13 Feb 2021 07:16:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49262 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229592AbhBMMQs (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 13 Feb 2021 07:16:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CAE7864DD6;
-        Sat, 13 Feb 2021 12:16:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1613218567;
-        bh=4xFxyQXalGrldKkL8r7xY5JedLCnGKpV3hkcAB/m1wc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P1CMoTjyFG+N6rtSr9mS6CNFYhgNtCzBL8hhnGR+JH2R7vCweELe4lRrbbVp6RPiN
-         en8N4dDDqTgnZnQzGSQYwxOSm6ZS746+QT/AOxTto/0mhC5yLC163HMYpnUPGWDmdT
-         +Rd5L3vt5ecVTsaxeRi5phB99KKthyXaLvTdZ5ig=
-Date:   Sat, 13 Feb 2021 13:16:02 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        id S229617AbhBMMTl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 13 Feb 2021 07:19:41 -0500
+Received: from mail-lf1-f41.google.com ([209.85.167.41]:41776 "EHLO
+        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229574AbhBMMTi (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 13 Feb 2021 07:19:38 -0500
+Received: by mail-lf1-f41.google.com with SMTP id d24so3313555lfs.8;
+        Sat, 13 Feb 2021 04:19:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WcoOJgJsCus9j+z1oc3UJY2GBbxvXHxxloSoBiuOvOQ=;
+        b=ALyUcmchCotpVZiWEHetCgW5V8s/vFLxzeI19cBzEuhGO1K9G0x47C4RcfUQ3Ks5Ga
+         L5lHrS6B8BkxdixZBJcfkEku4Ccnx7C6pOfBqr1UHnpL/naYiVI3H34eUKb3rv5CyDW+
+         IdtXu8tfy9Gm5rc7H5iuYJpw0coU2kJVyLhhAiwZnKIGSIhFHCkHdsEgH2kk2kR4Glea
+         ygGrl+/9S5yTdvfJV/m4EjQY0rZTeq0Q8dFPIoEIBG/r8mZTjCbYiGCW/kRqJ5tV/1aX
+         vUbudVwdY9xzwD4fv1NHC08Cn0HhU9Fo/V4GMzPJu8RbCdnMvJviDyXfbGGA/3vjRBkv
+         JSLg==
+X-Gm-Message-State: AOAM5333NjPkPT5UE5MAiVV4YSexGoQ1aln5vtNyq02Wrl/oY7O41Eec
+        wHfzelKjSTPo4qOpLuy2od6yOTLZIWtsOg==
+X-Google-Smtp-Source: ABdhPJyzMxI8YixWXUsIVFeJM31vUFpyRSqjH+GUJFxCARCLS7L5vpJN4Y7JSBaPCVH30CtVdV9WBw==
+X-Received: by 2002:a05:6512:1094:: with SMTP id j20mr4105261lfg.442.1613218735504;
+        Sat, 13 Feb 2021 04:18:55 -0800 (PST)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
+        by smtp.gmail.com with ESMTPSA id z8sm1330907lfr.124.2021.02.13.04.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Feb 2021 04:18:55 -0800 (PST)
+Date:   Sat, 13 Feb 2021 14:18:48 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     mazziesaccount@gmail.com, matti.vaittinen@fi.rohmeurope.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] drivers: base: Add resource managed version of
- delayed work init
-Message-ID: <YCfDAly9b0zHMpJT@kroah.com>
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [RFC PATCH 7/7] watchdog: retu_wdt: Clean-up by using managed work
+ init
+Message-ID: <f157b14a3bd03cb94c9d11e3a6fc995bf4245edf.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
- <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Feb 13, 2021 at 01:58:44PM +0200, Matti Vaittinen wrote:
-> A few drivers which need a delayed work-queue must cancel work at exit.
-> Some of those implement remove solely for this purpose. Help drivers
-> to avoid unnecessary remove and error-branch implementation by adding
-> managed verision of delayed work initialization
-> 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Few drivers implement remove call-back only for ensuring a delayed
+work gets cancelled prior driver removal. Clean-up these by switching
+to use devm_delayed_work_autocancel() instead.
 
-That's not a good idea.  As this would kick in when the device is
-removed from the system, not when it is unbound from the driver, right?
+This change is compile-tested only. All testing is appreciated.
 
-> ---
->  drivers/base/devres.c  | 33 +++++++++++++++++++++++++++++++++
->  include/linux/device.h |  5 +++++
->  2 files changed, 38 insertions(+)
-> 
-> diff --git a/drivers/base/devres.c b/drivers/base/devres.c
-> index fb9d5289a620..2879595bb5a4 100644
-> --- a/drivers/base/devres.c
-> +++ b/drivers/base/devres.c
-> @@ -1231,3 +1231,36 @@ void devm_free_percpu(struct device *dev, void __percpu *pdata)
->  			       (void *)pdata));
->  }
->  EXPORT_SYMBOL_GPL(devm_free_percpu);
-> +
-> +static void dev_delayed_work_drop(struct device *dev, void *res)
-> +{
-> +	cancel_delayed_work_sync(*(struct delayed_work **)res);
-> +}
-> +
-> +/**
-> + * devm_delayed_work_autocancel - Resource-managed work allocation
-> + * @dev: Device which lifetime work is bound to
-> + * @pdata: work to be cancelled when device exits
-> + *
-> + * Initialize work which is automatically cancelled when device exits.
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+---
+ drivers/watchdog/retu_wdt.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
 
-There is no such thing in the driver model as "when device exits".
-Please use the proper terminology as I do not understand what you think
-this is doing here...
+diff --git a/drivers/watchdog/retu_wdt.c b/drivers/watchdog/retu_wdt.c
+index 258dfcf9cbda..3b65bdaf54b4 100644
+--- a/drivers/watchdog/retu_wdt.c
++++ b/drivers/watchdog/retu_wdt.c
+@@ -127,9 +127,12 @@ static int retu_wdt_probe(struct platform_device *pdev)
+ 	wdev->rdev		= rdev;
+ 	wdev->dev		= &pdev->dev;
+ 
+-	INIT_DELAYED_WORK(&wdev->ping_work, retu_wdt_ping_work);
++	ret = devm_delayed_work_autocancel(&pdev->dev, &wdev->ping_work,
++					   retu_wdt_ping_work);
++	if (ret)
++		return ret;
+ 
+-	ret = watchdog_register_device(retu_wdt);
++	ret = devm_watchdog_register_device(&pdev->dev, retu_wdt);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -138,25 +141,11 @@ static int retu_wdt_probe(struct platform_device *pdev)
+ 	else
+ 		retu_wdt_ping_enable(wdev);
+ 
+-	platform_set_drvdata(pdev, retu_wdt);
+-
+-	return 0;
+-}
+-
+-static int retu_wdt_remove(struct platform_device *pdev)
+-{
+-	struct watchdog_device *wdog = platform_get_drvdata(pdev);
+-	struct retu_wdt_dev *wdev = watchdog_get_drvdata(wdog);
+-
+-	watchdog_unregister_device(wdog);
+-	cancel_delayed_work_sync(&wdev->ping_work);
+-
+ 	return 0;
+ }
+ 
+ static struct platform_driver retu_wdt_driver = {
+ 	.probe		= retu_wdt_probe,
+-	.remove		= retu_wdt_remove,
+ 	.driver		= {
+ 		.name	= "retu-wdt",
+ 	},
+-- 
+2.25.4
 
-> + * A few drivers need delayed work which must be cancelled before driver
-> + * is unload to avoid accessing removed resources.
-> + * devm_delayed_work_autocancel() can be used to omit the explicit
-> + * cancelleation when driver is unload.
-> + */
-> +int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w,
-> +				 void (*worker)(struct work_struct *work))
-> +{
-> +	struct delayed_work **ptr;
-> +
-> +	ptr = devres_alloc(dev_delayed_work_drop, sizeof(*ptr), GFP_KERNEL);
-> +	if (!ptr)
-> +		return -ENOMEM;
-> +
-> +	INIT_DELAYED_WORK(w, worker);
-> +	*ptr = w;
-> +	devres_add(dev, ptr);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_delayed_work_autocancel);
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 1779f90eeb4c..192456198de7 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -27,6 +27,7 @@
->  #include <linux/uidgid.h>
->  #include <linux/gfp.h>
->  #include <linux/overflow.h>
-> +#include <linux/workqueue.h>
->  #include <linux/device/bus.h>
->  #include <linux/device/class.h>
->  #include <linux/device/driver.h>
-> @@ -249,6 +250,10 @@ void __iomem *devm_of_iomap(struct device *dev,
->  			    struct device_node *node, int index,
->  			    resource_size_t *size);
->  
-> +/* delayed work which is cancelled when driver exits */
 
-Not when the "driver exits".
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-There is two different lifespans here (well 3).  Code and data*2.  Don't
-confuse them as that will just cause lots of problems.
-
-The move toward more and more "devm" functions is not the way to go as
-they just more and more make things easier to get wrong.
-
-APIs should be impossible to get wrong, this one is going to be almost
-impossible to get right.
-
-thanks,
-
-greg k-h
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
