@@ -2,177 +2,191 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9510931B577
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Feb 2021 07:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F58431B595
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Feb 2021 08:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbhBOG7S (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Feb 2021 01:59:18 -0500
-Received: from mail-lf1-f49.google.com ([209.85.167.49]:36292 "EHLO
-        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbhBOG7Q (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Feb 2021 01:59:16 -0500
-Received: by mail-lf1-f49.google.com with SMTP id f1so8635269lfu.3;
-        Sun, 14 Feb 2021 22:58:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc
-         :in-reply-to:references:mime-version:date:user-agent
-         :content-transfer-encoding;
-        bh=4BH4r71LEBLN/FYC56Md53GFBHnSsqrv3bI2bMVLjMY=;
-        b=NWdVM1yfucxAPBxRS7RY/nxtQPhmSEOJplKZCNyY1xSR1uGQssZ+nzutaabPBKdRoG
-         1cWU1F48Nveu7EkOjtRp5znhupdKMEZ47r3DotwIG7XOEl6YIvo0+lHvKu6JT0t/2pTd
-         XGdhNGJC7ofiFICqIZZRMyEcxBeUmOi3HT/uW6/Hfga1O4R3Rj8dk8Ae5U/cgrSHQFk+
-         VemG1dyy3gA4a6/R81uzfirulFiTF6KVoB6TTlrOSpQ5pZQN8ato888yEqf/kybSlSMc
-         NDRG1lkB2MJO0JkPPGvnvHndhENQtvbJbX0B8eicyd2zTgeuEB8Z7MkiMXqymmveN493
-         JElw==
-X-Gm-Message-State: AOAM5334EmO1CLsdt0iczOHQto4TTDahnv2pcekAWQP69nazG9y5z6CH
-        OYKjlk/U8wLfph0t/MR0wCBkuMdiCz8kbA==
-X-Google-Smtp-Source: ABdhPJxoO4MrtauooOlxH50TwCbt0pujKzTLH9TqAOrNw1CHA0Xl/TC5vi4pS4C/ggVj7vcnRHPNyg==
-X-Received: by 2002:a19:10:: with SMTP id 16mr7936722lfa.497.1613372313252;
-        Sun, 14 Feb 2021 22:58:33 -0800 (PST)
-Received: from dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
-        by smtp.gmail.com with ESMTPSA id d14sm2653860lfg.128.2021.02.14.22.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Feb 2021 22:58:32 -0800 (PST)
-Message-ID: <4fb3a4c93d3db8640deeface4478ab057a3e3f78.camel@fi.rohmeurope.com>
+        id S229945AbhBOHXp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Feb 2021 02:23:45 -0500
+Received: from mail-am6eur05on2058.outbound.protection.outlook.com ([40.107.22.58]:60256
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229944AbhBOHXo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 15 Feb 2021 02:23:44 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SR77qpsZQe0c4wHTzjaeQNG4XuVPuKzKyBx3WRCrwrTiTSmBwNrg6N5JYpxc/tIvc3lC+uTa8ejLgFCkdgh7Q6fnrdYzhljnoa2OE1v8TfCZgFiR27X8A/Bw/mmfZjU/Ki+GHwaQJ9B8Q+cQYqHBt2ZLq5qwKMQvvvjZ4phccmLc7BIlGQzPPW9rOxk+/d2GBie/E0so7FRiheCRA9qCm55nZO1sLCkaD4wtzimH9V7lDpqngDlSjgqLqKCi6Zg2o6GEAew5PEi8wRrkNMcVzWrRb3QBGFoTKFSYuLAtgFIZ+XO6Mq0Ujc0RuDQxXFbXMViKqhdxoh5oOxBqFJ7nzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9gSmW+Dsi6pp0jTnkYnwEMWNHGYx4T7ZTWMrugUejpY=;
+ b=c+5ys6FMYp9x4EafTBFEnul4u1hCPX+cKfNcrV4uTPcLyAJdYSFvq9Wxjqo96AM5oDoOT5fLz5fWrGHCA1Qbz51JNbTrBeaX6kRxLKVlpLsn2YnyknrEthIKlQXOmRCn5qh4VzoyArkHj0FNoC1XNBPrNCovAFXWB3HEHIvMat7BmKIKYNVyUGRztaRpYC5wb+EmBKV8t85WuXiykzSxionKYdIsurFODrH+h3DPdWX+L/x02jSnP6LjCFlSFvOVpTx9sGTU9tkqlQ+Uieslcm1r7hGEx8FAc47OWAousx2yzjgWXv7HWQs/YKIz3ybHW3r5p8lo6R4eAbQT2Cy77g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rohmsemiconductoreurope.onmicrosoft.com;
+ s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9gSmW+Dsi6pp0jTnkYnwEMWNHGYx4T7ZTWMrugUejpY=;
+ b=PViACDB+mESnqVBu8wdzwWLWcZ5xGz7fXiaPMc0E4+ty60aL2mvIHPBjcmMWTJnUPwpYWycDVnyBPKXRay/MLjzskfj6/zjgLyv+XdON16MvqLc9rumXJOYFgS7w2WJYiHNXbGn+v1J8/pFKXK8UZRF0aioL7u3GRpG0zzXC/hw=
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
+ HE1PR03MB2987.eurprd03.prod.outlook.com (2603:10a6:7:5b::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3846.38; Mon, 15 Feb 2021 07:22:52 +0000
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::c18c:4a01:ca24:78c1]) by HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::c18c:4a01:ca24:78c1%5]) with mapi id 15.20.3846.038; Mon, 15 Feb 2021
+ 07:22:52 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "mgross@linux.intel.com" <mgross@linux.intel.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "wens@csie.org" <wens@csie.org>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "cw00.choi@samsung.com" <cw00.choi@samsung.com>
 Subject: Re: [RFC PATCH 1/7] drivers: base: Add resource managed version of
  delayed work init
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reply-To: matti.vaittinen@fi.rohmeurope.com
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-In-Reply-To: <284d4a13-5cc8-e23c-7e99-c03db5415bf1@redhat.com>
+Thread-Topic: [RFC PATCH 1/7] drivers: base: Add resource managed version of
+ delayed work init
+Thread-Index: AQHXAf+bFCY4blJH0Uy048cUlqVjwKpWLt8AgAAGsYCAAAjjgIACk9QA
+Date:   Mon, 15 Feb 2021 07:22:51 +0000
+Message-ID: <74ec29cb5780e93cca3d4cdec221c65e764c8a3e.camel@fi.rohmeurope.com>
 References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
          <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
-         <YCfDAly9b0zHMpJT@kroah.com>
-         <284d4a13-5cc8-e23c-7e99-c03db5415bf1@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+         <2fb4b305-a93f-f91e-3001-dab5057e39cc@redhat.com>
+         <084893a3-0071-13e9-5ce6-b7b027e6cd2a@roeck-us.net>
+         <16140f5b-c504-1c07-9f0c-3813d686d157@redhat.com>
+In-Reply-To: <16140f5b-c504-1c07-9f0c-3813d686d157@redhat.com>
+Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Accept-Language: fi-FI, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+authentication-results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none
+ header.from=fi.rohmeurope.com;
+x-originating-ip: [2001:14ba:16e2:8300::4]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 916c4f4a-d38f-4c32-8b12-08d8d18281a5
+x-ms-traffictypediagnostic: HE1PR03MB2987:
+x-microsoft-antispam-prvs: <HE1PR03MB29874241B0A32F8BCD011F6CAD889@HE1PR03MB2987.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Qz48KPGeUOhiW9+we1vrzw6DKL3VpJWBnGbka7vj1K0MSdd7Abog27ENeRavfqisljFCyCHeZhce4Dr8+ZuxmibfXJbciq16A7pX9hrzeauF6Wn7I2sxNWbu/jgE6r2Kh5R5sNvkvQgoioPx18Y1ZuJC11ZH7Xk5ZPJg3MMwe5B/bc86iOS7sRPFhQA0qHnkQsyIRHMu4RKbwrlC89ejosby/9SNSM9xaJ/h3xBH8Ylqojvs/+lpeVe93cin6mtmkrfaCldNALAU3QGvdL2foveuTy7EOMP6sRKPyhsPmlPRsvImxblnm68DSXX0XbqdophDvQX2VpvA9lnyK3wPvuQ15NKNN3/+YSV8gDFXX3FDFe119RC2wmxoaDKz071AZYDS+VYXIbqCG2N0QleLctpyGxxP1U8Zf890lz9G8xwkDqejiUi/fnhU0Js/AhxVDGJPadC9E1qditYESgRSFzvvWPzcee9sDEC5vj5yYBopM4nuyOvmYsAmlFTxWUPN+k5q2P3rz/aagtMznpcbLQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(39840400004)(136003)(396003)(346002)(110136005)(5660300002)(54906003)(4326008)(6512007)(71200400001)(8936002)(3450700001)(8676002)(66946007)(66556008)(76116006)(66476007)(64756008)(66446008)(2616005)(7416002)(316002)(2906002)(186003)(6506007)(53546011)(6486002)(83380400001)(478600001)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?cDMwZDErQUNRWUxVSTJUc2pvYkt2ZUlQMFlMYzRuZjQrdEI1RUpOcHFoUXp0?=
+ =?utf-8?B?QVh4WjljNzhXWlBKMzJpTEFUQ0U4MzBxNmJoNnZjVEJreHNERWV6dkVtTWg5?=
+ =?utf-8?B?SndEcDYxZVhXY3djUnF1V2hVN1ZwellYQnYyakt5UzNWYWhWNDJjZk9zR1Nu?=
+ =?utf-8?B?SHBUTW13Sm94aGdyMW9hTjJKVUIzQWdNYlNHaVhzdHBhYkR6NVNwWkxMbk5D?=
+ =?utf-8?B?NllJSm9hOHRmbU84TXFZdERvUEFVR1M5c2dBVmNSWlVENDRQNFNJUGRJNm12?=
+ =?utf-8?B?ZG94bFZ0OFFKTjZkM25aa3IyU3BCaWRVQXVlUTRnbnhpMzQwcHNVQVVZT3BT?=
+ =?utf-8?B?WDJuYVJQV0crN1liUGxqZ1k4b1RFY2pKWUw0UDMvZHEza2hDaUJBVjFWOEJR?=
+ =?utf-8?B?ekJRWEVaRlRuRkthMll2Zm1QdzE1M09lcE5LR1BCUEVLcXJ5VVdxVDM5SHlO?=
+ =?utf-8?B?eVczZHVBUVlpYmRnNkFvS1ZwV0wra1BmdGZSYk1CMkJ3QWtGelVYdFdiWlFa?=
+ =?utf-8?B?TUtiUWpQVy9UQ1FKMGRLbThVZ1F3aVhhNldBVmpzR1Q3RmhHMktIZTM5SGNI?=
+ =?utf-8?B?a080SFEzVDk0b1c4M1BpRDZVU2RteTNreWpocHY2NUVqQzNldU9LNlF4OVp1?=
+ =?utf-8?B?eGpucWk1cHlkeHhkV2xTRDVHQ0RIZXYwcHZJS1dWU1FxdC94WlVZdkxmVVRN?=
+ =?utf-8?B?d0crOFpuZG1LTGg5ZEVSWnFYSHBZWDJGa3djYkJqNE44SHV4cUVpU2dLcnM5?=
+ =?utf-8?B?ODZuTEJxSElUQTloTmdTSG5nMjRKR0pwTmpNdm9Ld0RVTHFhU01rRGkvdFd5?=
+ =?utf-8?B?SklnOURvSWY0cWc5MXM4VjllaWFvV2doOVFmemNCYkdXQXFLVDhUaGcxVmt6?=
+ =?utf-8?B?V0dYNXdobUdiYUxFN0Y4OEFQS09jTGVSbzVhOFRkaU13UzhEMTlKanhtUXps?=
+ =?utf-8?B?TmpHaGlMeVg0OE54M0hsUVQrTmU1dzhVM0o0M0JFNms3WWJuYTBMNjhLYU1W?=
+ =?utf-8?B?Zk0wMFNqWXUxSWo3N0J5RzhNNnBEQ29wNTc4Q1YrMDluai80Mi9sOCt6N3BJ?=
+ =?utf-8?B?c2NOY2hGSzlMM05rOHNJVEtqYng4REFZYk52aTJ4Y2p0VDFQTzRRa2RZTm5G?=
+ =?utf-8?B?azdXalNQVDEzNkxCM2FNMW9QQVpKcCtJcEZ1bkFzMnk5Sko3bm9BcUMwZnFp?=
+ =?utf-8?B?ZGU0NFRKV3pQS2dFSUplMUV2TDY5NzVYYUUwVXduUGw4eGh6RWFicGNuMDVQ?=
+ =?utf-8?B?L0k1WWhLelNyMWZoK0ZDbXBmam9HTmNHN0Zueml5QzVFZGloQWExN0Nad2w0?=
+ =?utf-8?B?cHpPbWsxdDlKVHBKSTE1T3hNQ3RndUZwVHNDaUJmQTJIRWtQL2kyM283MUN0?=
+ =?utf-8?B?K1NIYzFmM1BVRDQ4YTdZZ0RZM3FscjBHZlJRRSt2SDRFeGtMVWRmL1VPbzFU?=
+ =?utf-8?B?OEZqcG5zQkxyZUFBRGxYZFJGVERLbVJwRmVRT3dOSWhyMlZRcGVzalhMQXNW?=
+ =?utf-8?B?a2JzdWpWcVA5aXQwdXhJRGpXREM0TXovWkdtUm1KVkthRmY5WllsSW5peFZW?=
+ =?utf-8?B?d0RNdm5YTUJJd1VNYnY5b0NVUHpQejF6cDBZWFFnaWlXVFBBSnBvSW9uNjcv?=
+ =?utf-8?B?WjkzMmlpem5sdWFIcmhDWFlQNHpWUURxTUR0dmZ1VEphRGJ4RTNOa3N6R0RO?=
+ =?utf-8?B?VjhXY0UybnVaalZ4R09lNWx4R3V6Q2RCSytLSHM5bEZnQ3JyaW5FNHN6dEpY?=
+ =?utf-8?B?SzllOUhYd0FEV3hLQWJQNmRxc09zQ3Z1dGVKZHZEQjFZSWVPanhRcFRLMUZu?=
+ =?utf-8?Q?1wniJMUZlVkbrpd7E7x01PpGnJXjQUQVu2Z8s=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <548101C13A256C49B4F9FA657883E12C@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Date:   Mon, 15 Feb 2021 08:58:24 +0200
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 916c4f4a-d38f-4c32-8b12-08d8d18281a5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2021 07:22:52.0830
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KfpE4XeaVqpwLmoA12zMNE5OcFOS11tuxx6bUuk70EeHasNqG+qzMyR+IH7LmeMyBoCHUbh6b7TAG5Jyh5lHjBY3ToEEElomsGlk/smzfhtDA8bG7jMDc0tQiJQROO4E
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR03MB2987
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
-On Sat, 2021-02-13 at 14:18 +0100, Hans de Goede wrote:
-> Hi,
-> 
-> On 2/13/21 1:16 PM, Greg Kroah-Hartman wrote:
-> > On Sat, Feb 13, 2021 at 01:58:44PM +0200, Matti Vaittinen wrote:
-> > > +/**
-> > > + * devm_delayed_work_autocancel - Resource-managed work
-> > > allocation
-> > > + * @dev: Device which lifetime work is bound to
-> > > + * @pdata: work to be cancelled when device exits
-> > > + *
-> > > + * Initialize work which is automatically cancelled when device
-> > > exits.
-> > 
-> > There is no such thing in the driver model as "when device exits".
-> > Please use the proper terminology as I do not understand what you
-> > think
-> > this is doing here...
-> 
-> I agree that this needs better wording I always talk about driver-
-> unbinding
-> because sysfs has /sys/bus/*/drivers/*/bind and
-> /sys/bus/*/drivers/*/unbind
-> attributes. But I see that the relevant driver-core functions all
-> call it
-> driver detaching, so lets be consistent and use that here too.
-
-//Snip
-
-> > > @@ -249,6 +250,10 @@ void __iomem *devm_of_iomap(struct device
-> > > *dev,
-> > >  			    struct device_node *node, int index,
-> > >  			    resource_size_t *size);
-> > >  
-> > > +/* delayed work which is cancelled when driver exits */
-> > 
-> > Not when the "driver exits".
-> 
-> Right this should be detached not exits.
-> 
-
-Thanks guys.
-I am poor with the terminology so I do appreciate your help in getting
-this right. I can change this for the v2.
-
-
-> > There is two different lifespans here (well 3).  Code and
-> > data*2.  Don't
-> > confuse them as that will just cause lots of problems.
-> > 
-> > The move toward more and more "devm" functions is not the way to go
-> > as
-> > they just more and more make things easier to get wrong.
-> > 
-> > APIs should be impossible to get wrong, this one is going to be
-> > almost
-> > impossible to get right.
-> 
-> I have to disagree here devm generally makes it easier to get things
-> right,
-> it is when some devm functions are missing and devm and non devm
-> resources
-> are mixed that things get tricky.
-
-Thanks for the discussion. I hope we can come to some conclusion here.
-Unsurprisingly I agree with Hans here. I did after all send this patch
-series :) I guess I am mostly just repeating what he said.
-
-As Hans pointed out, when all calls are 'undone' by devm the order of
-'undoing' is highly likely to be correct as the unwinding is done in
-reverse order to initializations. I think it is sane to assume in most
-case things are initiated in order where operations which depend on
-something are done last - and when 'unwinding' things those are
-'undone' first. 
-
-My 'gut feeling' for probe / remove related errors is that the most
-usual errors I've seen have been:
-
-a) Tear-down completely forgotten
-b) Tear-down forgotten at error path
-c) Wrong order of initiating things (IRQ requested prior resource
-initialization)
-d) Wrong order of cleann-up at remove.
-
-a) and b) class errors have been the most common ones I've seen. They
-can be completely avoided when devm is used.
-c) is there no matter if we use devm or not.
-d) is mostly avoided when only devm is used - mixing devm and manual
-operations make this more likely as Hans pointed out. As long as we
-have some devm operations we should help avoid mixing devm and manual
-clean-up.
-
-Best Regards
-	Matti Vaittinen
-
-
-
+DQpPbiBTYXQsIDIwMjEtMDItMTMgYXQgMTY6NTkgKzAxMDAsIEhhbnMgZGUgR29lZGUgd3JvdGU6
+DQo+IEhpLA0KPiANCj4gT24gMi8xMy8yMSA0OjI3IFBNLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
+PiA+IE9uIDIvMTMvMjEgNzowMyBBTSwgSGFucyBkZSBHb2VkZSB3cm90ZToNCj4gPiBbIC4uLiBd
+DQo+ID4gPiBJIHRoaW5rIHNvbWV0aGluZyBsaWtlIHRoaXMgc2hvdWxkIHdvcms6DQo+ID4gPiAN
+Cj4gPiA+IHN0YXRpYyBpbnQgZGV2bV9kZWxheWVkX3dvcmtfYXV0b2NhbmNlbChzdHJ1Y3QgZGV2
+aWNlICpkZXYsDQo+ID4gPiBzdHJ1Y3QgZGVsYXllZF93b3JrICp3LA0KPiA+ID4gCQkJCQl2b2lk
+ICgqd29ya2VyKShzdHJ1Y3QNCj4gPiA+IHdvcmtfc3RydWN0ICp3b3JrKSkgew0KPiA+ID4gCUlO
+SVRfREVMQVlFRF9XT1JLKHcsIHdvcmtlcik7DQo+ID4gPiAJcmV0dXJuIGRldm1fYWRkX2FjdGlv
+bihkZXYsICh2b2lkICgqYWN0aW9uKSh2b2lkDQo+ID4gPiAqKSljYW5jZWxfZGVsYXllZF93b3Jr
+X3N5bmMsIHcpOw0KPiA+ID4gfQ0KPiA+ID4gDQo+ID4gPiBJJ20gbm90IHN1cmUgYWJvdXQgdGhl
+IGNhc3QsIHRoYXQgbWF5IG5lZWQgc29tZXRoaW5nIGxpa2UgdGhpcw0KPiA+ID4gaW5zdGVhZDoN
+Cj4gPiA+IA0KPiA+ID4gdHlwZWRlZiB2b2lkICgqZGV2bV9hY3Rpb25fZnVuYykodm9pZCAqKTsN
+Cj4gPiA+IA0KPiA+ID4gc3RhdGljIGludCBkZXZtX2RlbGF5ZWRfd29ya19hdXRvY2FuY2VsKHN0
+cnVjdCBkZXZpY2UgKmRldiwNCj4gPiA+IHN0cnVjdCBkZWxheWVkX3dvcmsgKncsDQo+ID4gPiAJ
+CQkJCXZvaWQgKCp3b3JrZXIpKHN0cnVjdA0KPiA+ID4gd29ya19zdHJ1Y3QgKndvcmspKSB7DQo+
+ID4gPiAJSU5JVF9ERUxBWUVEX1dPUksodywgd29ya2VyKTsNCj4gPiA+IAlyZXR1cm4gZGV2bV9h
+ZGRfYWN0aW9uKGRldiwNCj4gPiA+IChkZXZtX2FjdGlvbl9mdW5jKWNhbmNlbF9kZWxheWVkX3dv
+cmtfc3luYywgdyk7DQo+ID4gDQo+ID4gVW5mb3J0dW5hdGVseSwgeW91IGNhbiBub3QgdHlwZSBj
+YXN0IGZ1bmN0aW9uIHBvaW50ZXJzIGluIEMuIEl0IGlzDQo+ID4gYWdhaW5zdCB0aGUgQyBBQkku
+DQo+ID4gSSBhbSBzdXJlIGl0IGlzIGRvbmUgaW4gYSBmZXcgcGxhY2VzIGluIHRoZSBrZXJuZWwg
+YW55d2F5LCBidXQNCj4gPiB0aG9zZSBhcmUgd3JvbmcuDQo+IA0KPiBJIHNlZSwgYnVtbWVyLg0K
+DQpJIHRoaW5rIHVzaW5nIGRldm1fYWRkX2FjdGlvbigpIGlzIHN0aWxsIGEgZ29vZCBpZGVhLg0K
+DQo+IA0KPiBJZiB3ZSBhZGQgYSBkZXZtX2Nsa19wcmVwYXJlX2VuYWJsZSgpIGhlbHBlciB0aGF0
+IHNob3VsZCBwcm9iYWJseSBiZQ0KPiBhZGRlZA0KPiB0byBkcml2ZXJzL2Nsay9jbGstZGV2cmVz
+LmMgYW5kIG5vdCB0byBkcml2ZXJzL2Jhc2UvZGV2cmVzLmMgLg0KPiANCj4gSSBhbHNvIHN0aWxs
+IHdvbmRlciBpZiB3ZSBjYW5ub3QgZmluZCBhIGJldHRlciBwbGFjZSBmb3IgdGhpcyBuZXcNCj4g
+ZGV2bV9kZWxheWVkX3dvcmtfYXV0b2NhbmNlbCgpIGhlbHBlciBidXQgbm90aGluZyBjb21lcyB0
+byBtaW5kLg0KDQpJIGRvbid0IGxpa2UgdGhlIGlkZWEgb2YgaW5jbHVkaW5nIGRldmljZS5oIGZy
+b20gd29ya3F1ZXVlLmggLSBhbmQgSQ0KdGhpbmsgdGhpcyB3b3VsZCBiZSBuZWNlc3NhcnkgaWYg
+d2UgYWRkZWQNCmRldm1fZGVsYXllZF93b3JrX2F1dG9jYW5jZWwoKSBhcyBpbmxpbmUgaW4gd29y
+a3F1ZXVlLmgsIHJpZ2h0Pw0KDQpJIGFsc28gc2VlIHN0cm9uZyBvYmplY3Rpb24gdG93YXJkcyB0
+aGUgZGV2bSBtYW5hZ2VkIGNsZWFuLXVwcy4NCg0KSG93IGFib3V0IGFkZGluZyBzb21lIGRldm0t
+aGVscGVycy5jIGluIGRyaXZlcnMvYmFzZSAtIHdoZXJlIHdlIGNvdWxkDQpjb2xsZWN0IGRldm0t
+YmFzZWQgaGVscGVycyAtIGFuZCB3aGljaCBjb3VsZCBiZSBlbmFibGVkIGJ5IG93biBDT05GSUcg
+LQ0KYW5kIGxlZnQgb3V0IGJ5IHRob3NlIHdobyBkaXNsaWtlIGl0Pw0KDQpJIGtub3cgSSB3cm90
+ZSB0aGF0IHRoZSBkZXZtX2RlbGF5ZWRfd29ya19hdXRvY2FuY2VsKCkgZG9lcyBwcm9iYWJseQ0K
+bm90IHdhcnJhbnQgb3duIGZpbGUgLSBidXQgaWYgeW91IGNhbiBmb3Jlc2VlIGRldm1fd29ya19h
+dXRvY2FuY2VsKCkNCmFuZCBmZXcgb3RoZXIgZ2VuZXJhbGx5IHVzZWZ1bCBoZWxwZXJzIC0gdGhl
+biB3ZSB3b3VsZCBoYXZlIGEgcGxhY2UgZm9yDQp0aG9zZS4gVGhlIGRldm0gc3R1ZmYgc2hvdWxk
+IGluIG15IG9waW5pb24gbGl2ZSB1bmRlciBkcml2ZXJzLy4NCg0KQmVzdCBSZWdhcmRzDQoJTWF0
+dGkgVmFpdHRpbmVuDQoNCg==
