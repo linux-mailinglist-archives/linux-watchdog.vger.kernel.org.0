@@ -2,44 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F58431B595
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Feb 2021 08:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 503F231B74D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Feb 2021 11:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbhBOHXp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Feb 2021 02:23:45 -0500
-Received: from mail-am6eur05on2058.outbound.protection.outlook.com ([40.107.22.58]:60256
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229944AbhBOHXo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Feb 2021 02:23:44 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SR77qpsZQe0c4wHTzjaeQNG4XuVPuKzKyBx3WRCrwrTiTSmBwNrg6N5JYpxc/tIvc3lC+uTa8ejLgFCkdgh7Q6fnrdYzhljnoa2OE1v8TfCZgFiR27X8A/Bw/mmfZjU/Ki+GHwaQJ9B8Q+cQYqHBt2ZLq5qwKMQvvvjZ4phccmLc7BIlGQzPPW9rOxk+/d2GBie/E0so7FRiheCRA9qCm55nZO1sLCkaD4wtzimH9V7lDpqngDlSjgqLqKCi6Zg2o6GEAew5PEi8wRrkNMcVzWrRb3QBGFoTKFSYuLAtgFIZ+XO6Mq0Ujc0RuDQxXFbXMViKqhdxoh5oOxBqFJ7nzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9gSmW+Dsi6pp0jTnkYnwEMWNHGYx4T7ZTWMrugUejpY=;
- b=c+5ys6FMYp9x4EafTBFEnul4u1hCPX+cKfNcrV4uTPcLyAJdYSFvq9Wxjqo96AM5oDoOT5fLz5fWrGHCA1Qbz51JNbTrBeaX6kRxLKVlpLsn2YnyknrEthIKlQXOmRCn5qh4VzoyArkHj0FNoC1XNBPrNCovAFXWB3HEHIvMat7BmKIKYNVyUGRztaRpYC5wb+EmBKV8t85WuXiykzSxionKYdIsurFODrH+h3DPdWX+L/x02jSnP6LjCFlSFvOVpTx9sGTU9tkqlQ+Uieslcm1r7hGEx8FAc47OWAousx2yzjgWXv7HWQs/YKIz3ybHW3r5p8lo6R4eAbQT2Cy77g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9gSmW+Dsi6pp0jTnkYnwEMWNHGYx4T7ZTWMrugUejpY=;
- b=PViACDB+mESnqVBu8wdzwWLWcZ5xGz7fXiaPMc0E4+ty60aL2mvIHPBjcmMWTJnUPwpYWycDVnyBPKXRay/MLjzskfj6/zjgLyv+XdON16MvqLc9rumXJOYFgS7w2WJYiHNXbGn+v1J8/pFKXK8UZRF0aioL7u3GRpG0zzXC/hw=
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
- HE1PR03MB2987.eurprd03.prod.outlook.com (2603:10a6:7:5b::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3846.38; Mon, 15 Feb 2021 07:22:52 +0000
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::c18c:4a01:ca24:78c1]) by HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::c18c:4a01:ca24:78c1%5]) with mapi id 15.20.3846.038; Mon, 15 Feb 2021
- 07:22:52 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        id S230120AbhBOKjA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Feb 2021 05:39:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55884 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229802AbhBOKi7 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 15 Feb 2021 05:38:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613385452;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qc6c5uDkuHKyGcgNcwsQu/75zJZpP0qScLTmIXfkA7E=;
+        b=UdqzGS/07q7m/25GYHFYhESSlqwkNuqRyOxawzePzOg540/muUXCGCSoXtiRK3HbghHA9N
+        krtU+hNxsestQW+0MdXzfbrHE/aiJEGyIfKgENyBeP+ICAP3xsbmvVJOv4ScPvIi/aKju/
+        iIoybkymNSqlWRTU9k2kqCbni7pNnKk=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-487-B14EKA-oNb-FTt0xlRg59A-1; Mon, 15 Feb 2021 05:37:29 -0500
+X-MC-Unique: B14EKA-oNb-FTt0xlRg59A-1
+Received: by mail-ej1-f69.google.com with SMTP id yd11so4076399ejb.9
+        for <linux-watchdog@vger.kernel.org>; Mon, 15 Feb 2021 02:37:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Qc6c5uDkuHKyGcgNcwsQu/75zJZpP0qScLTmIXfkA7E=;
+        b=O7/Y6qwJ0k41lrdsWkRpkY0UA8pDS48X4a18vIdYjbUNRRaLL02qSHNXTks/tfFe1e
+         4fN6JPVxH/lWvNG0ATvZf2QtfywNOjH8KKcffVIMmVEtDUA/pXJg3yK21/+Rpy7mU+1H
+         6JE6r1KswaTuXhnFly4WYLHFP6Io8HfZ08oX99DvUqepU5QdJe93iS0MlD8e7A6+/UCf
+         7K2mTa7HptTtc8McciM3Qewv+mi95I91/DVEOQ5S3iQ3Ug4x1np/zUYySk0yGRmtkYS0
+         7uEA/BED9MkcNv65EJZvBqXOy0CnpDxLsBj1AhI/URoYsUGD90FgS9m2m/2LOcN7chFk
+         yjUA==
+X-Gm-Message-State: AOAM533Y8uXJuL3TXCDMNwaR6LniF2iyge8WHDs0ATFcgj7MR9kAFHET
+        /wn3XTC4OSTWcbvsKeNipyBnCukwFwVfXnCDWuVF1jA104warzetY4D4y1wW/vCwo1wqVGSvh6a
+        lBxWvD0TY8kdsQWCS5hCJfurFBTQ=
+X-Received: by 2002:a17:906:4c85:: with SMTP id q5mr14729133eju.375.1613385448066;
+        Mon, 15 Feb 2021 02:37:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz48iDFT6icNz/G5V8W+1Gbn7S+71yinDSb0pE+yIHXEoPgTdlObwbV19LXrzwB8QNHY2LTFQ==
+X-Received: by 2002:a17:906:4c85:: with SMTP id q5mr14729106eju.375.1613385447894;
+        Mon, 15 Feb 2021 02:37:27 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id o4sm9693499edw.78.2021.02.15.02.37.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Feb 2021 02:37:27 -0800 (PST)
+Subject: Re: [RFC PATCH 1/7] drivers: base: Add resource managed version of
+ delayed work init
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
         "linux@roeck-us.net" <linux@roeck-us.net>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "broonie@kernel.org" <broonie@kernel.org>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
         "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
@@ -66,127 +83,127 @@ CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         <andriy.shevchenko@linux.intel.com>,
         "agross@kernel.org" <agross@kernel.org>,
         "cw00.choi@samsung.com" <cw00.choi@samsung.com>
-Subject: Re: [RFC PATCH 1/7] drivers: base: Add resource managed version of
- delayed work init
-Thread-Topic: [RFC PATCH 1/7] drivers: base: Add resource managed version of
- delayed work init
-Thread-Index: AQHXAf+bFCY4blJH0Uy048cUlqVjwKpWLt8AgAAGsYCAAAjjgIACk9QA
-Date:   Mon, 15 Feb 2021 07:22:51 +0000
-Message-ID: <74ec29cb5780e93cca3d4cdec221c65e764c8a3e.camel@fi.rohmeurope.com>
 References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
-         <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
-         <2fb4b305-a93f-f91e-3001-dab5057e39cc@redhat.com>
-         <084893a3-0071-13e9-5ce6-b7b027e6cd2a@roeck-us.net>
-         <16140f5b-c504-1c07-9f0c-3813d686d157@redhat.com>
-In-Reply-To: <16140f5b-c504-1c07-9f0c-3813d686d157@redhat.com>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-authentication-results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [2001:14ba:16e2:8300::4]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 916c4f4a-d38f-4c32-8b12-08d8d18281a5
-x-ms-traffictypediagnostic: HE1PR03MB2987:
-x-microsoft-antispam-prvs: <HE1PR03MB29874241B0A32F8BCD011F6CAD889@HE1PR03MB2987.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Qz48KPGeUOhiW9+we1vrzw6DKL3VpJWBnGbka7vj1K0MSdd7Abog27ENeRavfqisljFCyCHeZhce4Dr8+ZuxmibfXJbciq16A7pX9hrzeauF6Wn7I2sxNWbu/jgE6r2Kh5R5sNvkvQgoioPx18Y1ZuJC11ZH7Xk5ZPJg3MMwe5B/bc86iOS7sRPFhQA0qHnkQsyIRHMu4RKbwrlC89ejosby/9SNSM9xaJ/h3xBH8Ylqojvs/+lpeVe93cin6mtmkrfaCldNALAU3QGvdL2foveuTy7EOMP6sRKPyhsPmlPRsvImxblnm68DSXX0XbqdophDvQX2VpvA9lnyK3wPvuQ15NKNN3/+YSV8gDFXX3FDFe119RC2wmxoaDKz071AZYDS+VYXIbqCG2N0QleLctpyGxxP1U8Zf890lz9G8xwkDqejiUi/fnhU0Js/AhxVDGJPadC9E1qditYESgRSFzvvWPzcee9sDEC5vj5yYBopM4nuyOvmYsAmlFTxWUPN+k5q2P3rz/aagtMznpcbLQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(39840400004)(136003)(396003)(346002)(110136005)(5660300002)(54906003)(4326008)(6512007)(71200400001)(8936002)(3450700001)(8676002)(66946007)(66556008)(76116006)(66476007)(64756008)(66446008)(2616005)(7416002)(316002)(2906002)(186003)(6506007)(53546011)(6486002)(83380400001)(478600001)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?cDMwZDErQUNRWUxVSTJUc2pvYkt2ZUlQMFlMYzRuZjQrdEI1RUpOcHFoUXp0?=
- =?utf-8?B?QVh4WjljNzhXWlBKMzJpTEFUQ0U4MzBxNmJoNnZjVEJreHNERWV6dkVtTWg5?=
- =?utf-8?B?SndEcDYxZVhXY3djUnF1V2hVN1ZwellYQnYyakt5UzNWYWhWNDJjZk9zR1Nu?=
- =?utf-8?B?SHBUTW13Sm94aGdyMW9hTjJKVUIzQWdNYlNHaVhzdHBhYkR6NVNwWkxMbk5D?=
- =?utf-8?B?NllJSm9hOHRmbU84TXFZdERvUEFVR1M5c2dBVmNSWlVENDRQNFNJUGRJNm12?=
- =?utf-8?B?ZG94bFZ0OFFKTjZkM25aa3IyU3BCaWRVQXVlUTRnbnhpMzQwcHNVQVVZT3BT?=
- =?utf-8?B?WDJuYVJQV0crN1liUGxqZ1k4b1RFY2pKWUw0UDMvZHEza2hDaUJBVjFWOEJR?=
- =?utf-8?B?ekJRWEVaRlRuRkthMll2Zm1QdzE1M09lcE5LR1BCUEVLcXJ5VVdxVDM5SHlO?=
- =?utf-8?B?eVczZHVBUVlpYmRnNkFvS1ZwV0wra1BmdGZSYk1CMkJ3QWtGelVYdFdiWlFa?=
- =?utf-8?B?TUtiUWpQVy9UQ1FKMGRLbThVZ1F3aVhhNldBVmpzR1Q3RmhHMktIZTM5SGNI?=
- =?utf-8?B?a080SFEzVDk0b1c4M1BpRDZVU2RteTNreWpocHY2NUVqQzNldU9LNlF4OVp1?=
- =?utf-8?B?eGpucWk1cHlkeHhkV2xTRDVHQ0RIZXYwcHZJS1dWU1FxdC94WlVZdkxmVVRN?=
- =?utf-8?B?d0crOFpuZG1LTGg5ZEVSWnFYSHBZWDJGa3djYkJqNE44SHV4cUVpU2dLcnM5?=
- =?utf-8?B?ODZuTEJxSElUQTloTmdTSG5nMjRKR0pwTmpNdm9Ld0RVTHFhU01rRGkvdFd5?=
- =?utf-8?B?SklnOURvSWY0cWc5MXM4VjllaWFvV2doOVFmemNCYkdXQXFLVDhUaGcxVmt6?=
- =?utf-8?B?V0dYNXdobUdiYUxFN0Y4OEFQS09jTGVSbzVhOFRkaU13UzhEMTlKanhtUXps?=
- =?utf-8?B?TmpHaGlMeVg0OE54M0hsUVQrTmU1dzhVM0o0M0JFNms3WWJuYTBMNjhLYU1W?=
- =?utf-8?B?Zk0wMFNqWXUxSWo3N0J5RzhNNnBEQ29wNTc4Q1YrMDluai80Mi9sOCt6N3BJ?=
- =?utf-8?B?c2NOY2hGSzlMM05rOHNJVEtqYng4REFZYk52aTJ4Y2p0VDFQTzRRa2RZTm5G?=
- =?utf-8?B?azdXalNQVDEzNkxCM2FNMW9QQVpKcCtJcEZ1bkFzMnk5Sko3bm9BcUMwZnFp?=
- =?utf-8?B?ZGU0NFRKV3pQS2dFSUplMUV2TDY5NzVYYUUwVXduUGw4eGh6RWFicGNuMDVQ?=
- =?utf-8?B?L0k1WWhLelNyMWZoK0ZDbXBmam9HTmNHN0Zueml5QzVFZGloQWExN0Nad2w0?=
- =?utf-8?B?cHpPbWsxdDlKVHBKSTE1T3hNQ3RndUZwVHNDaUJmQTJIRWtQL2kyM283MUN0?=
- =?utf-8?B?K1NIYzFmM1BVRDQ4YTdZZ0RZM3FscjBHZlJRRSt2SDRFeGtMVWRmL1VPbzFU?=
- =?utf-8?B?OEZqcG5zQkxyZUFBRGxYZFJGVERLbVJwRmVRT3dOSWhyMlZRcGVzalhMQXNW?=
- =?utf-8?B?a2JzdWpWcVA5aXQwdXhJRGpXREM0TXovWkdtUm1KVkthRmY5WllsSW5peFZW?=
- =?utf-8?B?d0RNdm5YTUJJd1VNYnY5b0NVUHpQejF6cDBZWFFnaWlXVFBBSnBvSW9uNjcv?=
- =?utf-8?B?WjkzMmlpem5sdWFIcmhDWFlQNHpWUURxTUR0dmZ1VEphRGJ4RTNOa3N6R0RO?=
- =?utf-8?B?VjhXY0UybnVaalZ4R09lNWx4R3V6Q2RCSytLSHM5bEZnQ3JyaW5FNHN6dEpY?=
- =?utf-8?B?SzllOUhYd0FEV3hLQWJQNmRxc09zQ3Z1dGVKZHZEQjFZSWVPanhRcFRLMUZu?=
- =?utf-8?Q?1wniJMUZlVkbrpd7E7x01PpGnJXjQUQVu2Z8s=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <548101C13A256C49B4F9FA657883E12C@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+ <2fb4b305-a93f-f91e-3001-dab5057e39cc@redhat.com>
+ <084893a3-0071-13e9-5ce6-b7b027e6cd2a@roeck-us.net>
+ <16140f5b-c504-1c07-9f0c-3813d686d157@redhat.com>
+ <74ec29cb5780e93cca3d4cdec221c65e764c8a3e.camel@fi.rohmeurope.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <400d3e82-a76e-136c-0e03-ed7e40608e2a@redhat.com>
+Date:   Mon, 15 Feb 2021 11:37:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 916c4f4a-d38f-4c32-8b12-08d8d18281a5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Feb 2021 07:22:52.0830
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KfpE4XeaVqpwLmoA12zMNE5OcFOS11tuxx6bUuk70EeHasNqG+qzMyR+IH7LmeMyBoCHUbh6b7TAG5Jyh5lHjBY3ToEEElomsGlk/smzfhtDA8bG7jMDc0tQiJQROO4E
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR03MB2987
+In-Reply-To: <74ec29cb5780e93cca3d4cdec221c65e764c8a3e.camel@fi.rohmeurope.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-DQpPbiBTYXQsIDIwMjEtMDItMTMgYXQgMTY6NTkgKzAxMDAsIEhhbnMgZGUgR29lZGUgd3JvdGU6
-DQo+IEhpLA0KPiANCj4gT24gMi8xMy8yMSA0OjI3IFBNLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
-PiA+IE9uIDIvMTMvMjEgNzowMyBBTSwgSGFucyBkZSBHb2VkZSB3cm90ZToNCj4gPiBbIC4uLiBd
-DQo+ID4gPiBJIHRoaW5rIHNvbWV0aGluZyBsaWtlIHRoaXMgc2hvdWxkIHdvcms6DQo+ID4gPiAN
-Cj4gPiA+IHN0YXRpYyBpbnQgZGV2bV9kZWxheWVkX3dvcmtfYXV0b2NhbmNlbChzdHJ1Y3QgZGV2
-aWNlICpkZXYsDQo+ID4gPiBzdHJ1Y3QgZGVsYXllZF93b3JrICp3LA0KPiA+ID4gCQkJCQl2b2lk
-ICgqd29ya2VyKShzdHJ1Y3QNCj4gPiA+IHdvcmtfc3RydWN0ICp3b3JrKSkgew0KPiA+ID4gCUlO
-SVRfREVMQVlFRF9XT1JLKHcsIHdvcmtlcik7DQo+ID4gPiAJcmV0dXJuIGRldm1fYWRkX2FjdGlv
-bihkZXYsICh2b2lkICgqYWN0aW9uKSh2b2lkDQo+ID4gPiAqKSljYW5jZWxfZGVsYXllZF93b3Jr
-X3N5bmMsIHcpOw0KPiA+ID4gfQ0KPiA+ID4gDQo+ID4gPiBJJ20gbm90IHN1cmUgYWJvdXQgdGhl
-IGNhc3QsIHRoYXQgbWF5IG5lZWQgc29tZXRoaW5nIGxpa2UgdGhpcw0KPiA+ID4gaW5zdGVhZDoN
-Cj4gPiA+IA0KPiA+ID4gdHlwZWRlZiB2b2lkICgqZGV2bV9hY3Rpb25fZnVuYykodm9pZCAqKTsN
-Cj4gPiA+IA0KPiA+ID4gc3RhdGljIGludCBkZXZtX2RlbGF5ZWRfd29ya19hdXRvY2FuY2VsKHN0
-cnVjdCBkZXZpY2UgKmRldiwNCj4gPiA+IHN0cnVjdCBkZWxheWVkX3dvcmsgKncsDQo+ID4gPiAJ
-CQkJCXZvaWQgKCp3b3JrZXIpKHN0cnVjdA0KPiA+ID4gd29ya19zdHJ1Y3QgKndvcmspKSB7DQo+
-ID4gPiAJSU5JVF9ERUxBWUVEX1dPUksodywgd29ya2VyKTsNCj4gPiA+IAlyZXR1cm4gZGV2bV9h
-ZGRfYWN0aW9uKGRldiwNCj4gPiA+IChkZXZtX2FjdGlvbl9mdW5jKWNhbmNlbF9kZWxheWVkX3dv
-cmtfc3luYywgdyk7DQo+ID4gDQo+ID4gVW5mb3J0dW5hdGVseSwgeW91IGNhbiBub3QgdHlwZSBj
-YXN0IGZ1bmN0aW9uIHBvaW50ZXJzIGluIEMuIEl0IGlzDQo+ID4gYWdhaW5zdCB0aGUgQyBBQkku
-DQo+ID4gSSBhbSBzdXJlIGl0IGlzIGRvbmUgaW4gYSBmZXcgcGxhY2VzIGluIHRoZSBrZXJuZWwg
-YW55d2F5LCBidXQNCj4gPiB0aG9zZSBhcmUgd3JvbmcuDQo+IA0KPiBJIHNlZSwgYnVtbWVyLg0K
-DQpJIHRoaW5rIHVzaW5nIGRldm1fYWRkX2FjdGlvbigpIGlzIHN0aWxsIGEgZ29vZCBpZGVhLg0K
-DQo+IA0KPiBJZiB3ZSBhZGQgYSBkZXZtX2Nsa19wcmVwYXJlX2VuYWJsZSgpIGhlbHBlciB0aGF0
-IHNob3VsZCBwcm9iYWJseSBiZQ0KPiBhZGRlZA0KPiB0byBkcml2ZXJzL2Nsay9jbGstZGV2cmVz
-LmMgYW5kIG5vdCB0byBkcml2ZXJzL2Jhc2UvZGV2cmVzLmMgLg0KPiANCj4gSSBhbHNvIHN0aWxs
-IHdvbmRlciBpZiB3ZSBjYW5ub3QgZmluZCBhIGJldHRlciBwbGFjZSBmb3IgdGhpcyBuZXcNCj4g
-ZGV2bV9kZWxheWVkX3dvcmtfYXV0b2NhbmNlbCgpIGhlbHBlciBidXQgbm90aGluZyBjb21lcyB0
-byBtaW5kLg0KDQpJIGRvbid0IGxpa2UgdGhlIGlkZWEgb2YgaW5jbHVkaW5nIGRldmljZS5oIGZy
-b20gd29ya3F1ZXVlLmggLSBhbmQgSQ0KdGhpbmsgdGhpcyB3b3VsZCBiZSBuZWNlc3NhcnkgaWYg
-d2UgYWRkZWQNCmRldm1fZGVsYXllZF93b3JrX2F1dG9jYW5jZWwoKSBhcyBpbmxpbmUgaW4gd29y
-a3F1ZXVlLmgsIHJpZ2h0Pw0KDQpJIGFsc28gc2VlIHN0cm9uZyBvYmplY3Rpb24gdG93YXJkcyB0
-aGUgZGV2bSBtYW5hZ2VkIGNsZWFuLXVwcy4NCg0KSG93IGFib3V0IGFkZGluZyBzb21lIGRldm0t
-aGVscGVycy5jIGluIGRyaXZlcnMvYmFzZSAtIHdoZXJlIHdlIGNvdWxkDQpjb2xsZWN0IGRldm0t
-YmFzZWQgaGVscGVycyAtIGFuZCB3aGljaCBjb3VsZCBiZSBlbmFibGVkIGJ5IG93biBDT05GSUcg
-LQ0KYW5kIGxlZnQgb3V0IGJ5IHRob3NlIHdobyBkaXNsaWtlIGl0Pw0KDQpJIGtub3cgSSB3cm90
-ZSB0aGF0IHRoZSBkZXZtX2RlbGF5ZWRfd29ya19hdXRvY2FuY2VsKCkgZG9lcyBwcm9iYWJseQ0K
-bm90IHdhcnJhbnQgb3duIGZpbGUgLSBidXQgaWYgeW91IGNhbiBmb3Jlc2VlIGRldm1fd29ya19h
-dXRvY2FuY2VsKCkNCmFuZCBmZXcgb3RoZXIgZ2VuZXJhbGx5IHVzZWZ1bCBoZWxwZXJzIC0gdGhl
-biB3ZSB3b3VsZCBoYXZlIGEgcGxhY2UgZm9yDQp0aG9zZS4gVGhlIGRldm0gc3R1ZmYgc2hvdWxk
-IGluIG15IG9waW5pb24gbGl2ZSB1bmRlciBkcml2ZXJzLy4NCg0KQmVzdCBSZWdhcmRzDQoJTWF0
-dGkgVmFpdHRpbmVuDQoNCg==
+Hi,
+
+On 2/15/21 8:22 AM, Vaittinen, Matti wrote:
+> 
+> On Sat, 2021-02-13 at 16:59 +0100, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 2/13/21 4:27 PM, Guenter Roeck wrote:
+>>> On 2/13/21 7:03 AM, Hans de Goede wrote:
+>>> [ ... ]
+>>>> I think something like this should work:
+>>>>
+>>>> static int devm_delayed_work_autocancel(struct device *dev,
+>>>> struct delayed_work *w,
+>>>> 					void (*worker)(struct
+>>>> work_struct *work)) {
+>>>> 	INIT_DELAYED_WORK(w, worker);
+>>>> 	return devm_add_action(dev, (void (*action)(void
+>>>> *))cancel_delayed_work_sync, w);
+>>>> }
+>>>>
+>>>> I'm not sure about the cast, that may need something like this
+>>>> instead:
+>>>>
+>>>> typedef void (*devm_action_func)(void *);
+>>>>
+>>>> static int devm_delayed_work_autocancel(struct device *dev,
+>>>> struct delayed_work *w,
+>>>> 					void (*worker)(struct
+>>>> work_struct *work)) {
+>>>> 	INIT_DELAYED_WORK(w, worker);
+>>>> 	return devm_add_action(dev,
+>>>> (devm_action_func)cancel_delayed_work_sync, w);
+>>>
+>>> Unfortunately, you can not type cast function pointers in C. It is
+>>> against the C ABI.
+>>> I am sure it is done in a few places in the kernel anyway, but
+>>> those are wrong.
+>>
+>> I see, bummer.
+> 
+> I think using devm_add_action() is still a good idea.
+
+Yes, we could also just have a 1 line static inline function to do
+the function-cast. Like this:
+
+static inline void devm_delayed_work_autocancel_func(void *work)
+{
+	cancel_delayed_work_sync(work);
+}
+
+static inline int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w, void (*worker)(struct work_struct *work))
+{
+	INIT_DELAYED_WORK(w, worker);
+	return devm_add_action(dev, devm_delayed_work_autocancel_func, w);
+}
+
+Both functions will then simply be compiled out in files which do not
+use them.
+
+>> If we add a devm_clk_prepare_enable() helper that should probably be
+>> added
+>> to drivers/clk/clk-devres.c and not to drivers/base/devres.c .
+>>
+>> I also still wonder if we cannot find a better place for this new
+>> devm_delayed_work_autocancel() helper but nothing comes to mind.
+> 
+> I don't like the idea of including device.h from workqueue.h - and I
+> think this would be necessary if we added
+> devm_delayed_work_autocancel() as inline in workqueue.h, right?
+
+Yes.
+
+> I also see strong objection towards the devm managed clean-ups.
+
+Yes it seems that there are some people who don't like this, where as
+others do like them.
+
+> How about adding some devm-helpers.c in drivers/base - where we could
+> collect devm-based helpers - and which could be enabled by own CONFIG -
+> and left out by those who dislike it?
+
+I would make this something configurable through Kconfig, but if
+go the static inline route, which I'm in favor of then we could just
+have a:
+
+include/linux/devm-cleanup-helpers.h
+
+And put everything (including kdoc texts) there.
+
+This way the functionality is 100% opt-in (by explicitly including
+the header if you want the helpers) which hopefully makes this a
+bit more acceptable to people who don't like this style of cleanups.
+
+I would be even happy to act as the upstream maintainer for such a
+include/linux/devm-cleanup-helpers.h file, I can maintain it as part
+of the platform-drivers-x86 tree (with its own MAINTAINERS entry).
+
+Greg, would this be an acceptable solution to you ?
+
+Regards,
+
+Hans
+
