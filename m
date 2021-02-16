@@ -2,187 +2,79 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 822DC31C015
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Feb 2021 18:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD54131CBAB
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Feb 2021 15:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbhBORGa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Feb 2021 12:06:30 -0500
-Received: from www.linux-watchdog.org ([185.87.125.42]:46510 "EHLO
-        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbhBOREX (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Feb 2021 12:04:23 -0500
-X-Greylist: delayed 345 seconds by postgrey-1.27 at vger.kernel.org; Mon, 15 Feb 2021 12:04:21 EST
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id 9C57540A02; Mon, 15 Feb 2021 16:47:27 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 9C57540A02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1613404047;
-        bh=RAkjUrT3GbrONj0NvI/rvrfCWar1jasun15o7Y8raWo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GLEWW66KXPCRQW/mJZVz08mpKCFBSyUSnLfHz/iZrYr6VgTUEmgpbWWRXxxmc3emK
-         1c8SUiPYWRvGUiipJuN68XRvYfU7ewZ2SQN96R1AcclfavFjdjve2QxvE6FgeRIOEU
-         eXFF/9zPLAT/lNlgNQfCnNeaVLS7FqBrOlog413w=
-Date:   Mon, 15 Feb 2021 16:47:27 +0100
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        id S229713AbhBPOSh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 16 Feb 2021 09:18:37 -0500
+Received: from smtp.asem.it ([151.1.184.197]:61312 "EHLO smtp.asem.it"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229830AbhBPOSf (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 16 Feb 2021 09:18:35 -0500
+Received: from webmail.asem.it
+        by asem.it (smtp.asem.it)
+        (SecurityGateway 6.5.2)
+        with ESMTP id SG000810734.MSG 
+        for <linux-watchdog@vger.kernel.org>; Tue, 16 Feb 2021 15:17:34 +0100S
+Received: from ASAS044.asem.intra (172.16.16.44) by ASAS044.asem.intra
+ (172.16.16.44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 16
+ Feb 2021 15:17:32 +0100
+Received: from flavio-x.asem.intra (172.16.17.208) by ASAS044.asem.intra
+ (172.16.16.44) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Tue, 16 Feb 2021 15:17:32 +0100
+From:   Flavio Suligoi <f.suligoi@asem.it>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Crystal Guo <crystal.guo@mediatek.com>,
-        "freddy.hsin" <freddy.hsin@mediatek.com>,
-        Jiapeng Zhong <abaci-bugfix@linux.alibaba.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Tian Tao <tiantao6@hisilicon.com>, Tom Rix <trix@redhat.com>,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Zhao Qiang <qiang.zhao@nxp.com>
-Subject: [GIT PULL REQUEST] watchdog - v5.12 Merge window
-Message-ID: <20210215154727.GA30814@www.linux-watchdog.org>
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Flavio Suligoi <f.suligoi@asem.it>
+Subject: [PATCH] watchdog: wdat_wdg: fix typo
+Date:   Tue, 16 Feb 2021 15:17:27 +0100
+Message-ID: <20210216141727.641224-1-f.suligoi@asem.it>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.20 (2009-12-10)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-SGHeloLookup-Result: pass smtp.helo=webmail.asem.it (ip=172.16.16.44)
+X-SGSPF-Result: none (smtp.asem.it)
+X-SGOP-RefID: str=0001.0A782F18.602BD3FC.00F3,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0 (_st=1 _vt=0 _iwf=0)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Linus,
+Fix the following typo:
 
-Please pull the watchdog changes for the v5.12 release cycle.
+"recommeded" --> "recommended"
+"firmare"    --> "firmware"
 
-This series contains:
-* Add watchdog driver for Intel Keembay Soc
-* Add sun4i: Add H616 compatible string
-* Add mt8192 wdt support
-* add more Rockchip compatibles to snps,dw-wdt.yaml
-* Add binding for Qcom SDX55
-* add r8a779a0 (V3U) support
-* removal of sirf prima watchdog driver
-* removal of sirf atlas watchdog driver
-* removal of zte zx watchdog driver
-* removal of tango watchdog driver
-* removal of coh901 watchdog driver
-* several fixes and clean-ups
+Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+---
+ drivers/watchdog/wdat_wdt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
-
-  Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.12-rc1
-
-for you to fetch changes up to a4f3407c41605d14f09e490045d0609990cd5d94:
-
-  watchdog: qcom: Remove incorrect usage of QCOM_WDT_ENABLE_IRQ (2021-02-07 14:41:28 +0100)
-
-----------------------------------------------------------------
-linux-watchdog 5.12-rc1 tag
-
-----------------------------------------------------------------
-Alexan der Usyskin (1):
-      watchdog: mei_wdt: request stop on unregister
-
-Andre Przywara (1):
-      dt-bindings: watchdog: sun4i: Add H616 compatible string
-
-Arnd Bergmann (5):
-      watchdog: remove sirf prima driver
-      watchdog: remove sirf atlas driver
-      watchdog: remove zte zx driver
-      watchdog: remove tango driver
-      watchdog: remove coh901 driver
-
-Crystal Guo (4):
-      dt-binding: mediatek: watchdog: fix the description of compatible
-      dt-binding: mediatek: mt8192: update mtk-wdt document
-      dt-binding: mt8192: add toprgu reset-controller head file
-      watchdog: mt8192: add wdt support
-
-Jiapeng Zhong (1):
-      watchdog: hpwdt: Assign boolean values to a bool variable
-
-Johan Jonker (1):
-      dt-binding: watchdog: add more Rockchip compatibles to snps,dw-wdt.yaml
-
-Manivannan Sadhasivam (1):
-      dt-bindings: watchdog: Add binding for Qcom SDX55
-
-Sai Prakash Ranjan (1):
-      watchdog: qcom: Remove incorrect usage of QCOM_WDT_ENABLE_IRQ
-
-Tian Tao (1):
-      watchdog: ziirave_wdt: remove unused including <linux/version.h>
-
-Tom Rix (1):
-      watchdog: it8712f_wdt: remove definition of DEBUG
-
-Vijayakannan Ayyathurai (2):
-      dt-bindings: watchdog: Add bindings for Intel Keem Bay SoC
-      watchdog: Add watchdog driver for Intel Keembay Soc
-
-Wolfram Sang (3):
-      watchdog: renesas_wdt: don't sleep in atomic context
-      dt-bindings: watchdog: renesas,wdt: add r8a779a0 (V3U) support
-      watchdog: renesas_wdt: add grace period before rebooting
-
-Zhao Qiang (1):
-      watchdog: stop wdd when watchdog hw running in reboot_notifier
-
-freddy.hsin (1):
-      watchdog: mtk_wdt: Remove mtk_wdt_stop() in probe() to prevent the system freeze and it doesn't reboot by watchdog problem
-
- .../bindings/watchdog/allwinner,sun4i-a10-wdt.yaml |  12 +-
- .../bindings/watchdog/intel,keembay-wdt.yaml       |  57 +++
- .../devicetree/bindings/watchdog/mtk-wdt.txt       |   5 +-
- .../devicetree/bindings/watchdog/qcom-wdt.yaml     |   1 +
- .../devicetree/bindings/watchdog/renesas,wdt.yaml  |   1 +
- .../bindings/watchdog/sigma,smp8642-wdt.txt        |  18 -
- .../devicetree/bindings/watchdog/sirfsoc_wdt.txt   |  18 -
- .../devicetree/bindings/watchdog/snps,dw-wdt.yaml  |   6 +
- .../bindings/watchdog/stericsson-coh901327.txt     |  19 -
- .../bindings/watchdog/zte,zx2967-wdt.txt           |  32 --
- drivers/watchdog/Kconfig                           |  65 +---
- drivers/watchdog/Makefile                          |   6 +-
- drivers/watchdog/atlas7_wdt.c                      | 221 -----------
- drivers/watchdog/coh901327_wdt.c                   | 408 ---------------------
- drivers/watchdog/hpwdt.c                           |   6 +-
- drivers/watchdog/it8712f_wdt.c                     |   1 -
- drivers/watchdog/keembay_wdt.c                     | 286 +++++++++++++++
- drivers/watchdog/mei_wdt.c                         |   1 +
- drivers/watchdog/mtk_wdt.c                         |  23 +-
- drivers/watchdog/qcom-wdt.c                        |  13 +-
- drivers/watchdog/renesas_wdt.c                     |  33 +-
- drivers/watchdog/sirfsoc_wdt.c                     | 216 -----------
- drivers/watchdog/tangox_wdt.c                      | 209 -----------
- drivers/watchdog/watchdog_core.c                   |   2 +-
- drivers/watchdog/ziirave_wdt.c                     |   1 -
- drivers/watchdog/zx2967_wdt.c                      | 279 --------------
- .../dt-bindings/reset-controller/mt8192-resets.h   |  30 ++
- 27 files changed, 457 insertions(+), 1512 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/intel,keembay-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/sigma,smp8642-wdt.txt
- delete mode 100644 Documentation/devicetree/bindings/watchdog/sirfsoc_wdt.txt
- delete mode 100644 Documentation/devicetree/bindings/watchdog/stericsson-coh901327.txt
- delete mode 100644 Documentation/devicetree/bindings/watchdog/zte,zx2967-wdt.txt
- delete mode 100644 drivers/watchdog/atlas7_wdt.c
- delete mode 100644 drivers/watchdog/coh901327_wdt.c
- create mode 100644 drivers/watchdog/keembay_wdt.c
- delete mode 100644 drivers/watchdog/sirfsoc_wdt.c
- delete mode 100644 drivers/watchdog/tangox_wdt.c
- delete mode 100644 drivers/watchdog/zx2967_wdt.c
- create mode 100644 include/dt-bindings/reset-controller/mt8192-resets.h
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
+diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+index cec7917790e5..195c8c004b69 100644
+--- a/drivers/watchdog/wdat_wdt.c
++++ b/drivers/watchdog/wdat_wdt.c
+@@ -208,7 +208,7 @@ static int wdat_wdt_enable_reboot(struct wdat_wdt *wdat)
+ 	/*
+ 	 * WDAT specification says that the watchdog is required to reboot
+ 	 * the system when it fires. However, it also states that it is
+-	 * recommeded to make it configurable through hardware register. We
++	 * recommended to make it configurable through hardware register. We
+ 	 * enable reboot now if it is configurable, just in case.
+ 	 */
+ 	ret = wdat_wdt_run_action(wdat, ACPI_WDAT_SET_REBOOT, 0, NULL);
+@@ -475,7 +475,7 @@ static int wdat_wdt_suspend_noirq(struct device *dev)
+ 		return 0;
+ 
+ 	/*
+-	 * We need to stop the watchdog if firmare is not doing it or if we
++	 * We need to stop the watchdog if firmware is not doing it or if we
+ 	 * are going suspend to idle (where firmware is not involved). If
+ 	 * firmware is stopping the watchdog we kick it here one more time
+ 	 * to give it some time.
+-- 
+2.25.1
 
