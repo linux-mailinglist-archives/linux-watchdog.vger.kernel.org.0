@@ -2,151 +2,146 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE5331EBFA
-	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Feb 2021 17:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2E231EE6E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Feb 2021 19:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbhBRP75 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 18 Feb 2021 10:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbhBRMge (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 18 Feb 2021 07:36:34 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200AFC061788;
-        Thu, 18 Feb 2021 04:35:54 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id do6so5285501ejc.3;
-        Thu, 18 Feb 2021 04:35:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=t4SVuRKcikSaYMH4hIjPelECXJT6CpS2pg3slTGowks=;
-        b=WGc6mJPUoEnaAjKoSGbbZB7Mo6/LLlrcF38Y/T6Aa0VSU7uUB3gu8qZ72s5FtfkyD3
-         9vKt3muYb3al+dxDA/n6D3W9D04oDh5tFQifh/DiNqVilxeSWB6P2pOuhjLfB2cMg0nP
-         UTPbNvZyEezg8DmvIUTZJPqTQB/yOU1tw/ND4OIsyzLRRc0ZqbsJMEPRQTEPIf7QV5NY
-         vxqYxU5/0gzZOHHJVskYoKthrKM6AOoH7OUtQR5zMXWznkHngiiC/ldgt0hN1t8ah7/t
-         PZQuPx8nc4PWKvtm6ZjgiUE+keop1PeDJC3/O/DIxK2AEDtcuxNH/riwPqHW5BnaSu+S
-         SvLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=t4SVuRKcikSaYMH4hIjPelECXJT6CpS2pg3slTGowks=;
-        b=rCmNlt9Sx9bvlaFHENssPckvSxF6+K4gjNvpc7Ft+5qZ3FcebTRUIJxqyK0KTlJ5Dy
-         ssG6VONswZ3vUb18JA35gANRUR1+EyjEVhgG2abaHOrcXQJVPeAzkia+wz04rM1hjm5J
-         KmeqkBsAOZGE1xCYTQkBuc/NxdX9naF1h9XWqb1ZiACMU12kzRlMrx4i2BXQOr+bJQZ8
-         DwRMoL7Me7XD5ex0ghXsKr8TSYTYxphcARZbfMkpUfXA/ORpnpRSi0JiixlBegNywgPR
-         D05eT4Zrr67RkO+zVYAVOg5+XYbrr6wo0fexHQZBIEm3XDJGjfKLoUMLVzi02h/eUsZ+
-         ARAQ==
-X-Gm-Message-State: AOAM530VEZHzoUcX0Ued/q1LoQNXL4b4NpkcyliIw5EK/CssWY+IxzMV
-        BgS6fQWkojHSPwaJQRY+mL/9X/EoAFdqjK93tfzAXlJtWEY=
-X-Google-Smtp-Source: ABdhPJwZbk/NBE2euJ9iK6wtVcAYtf08q6TK50s66L9l5xmtlGfVx897E+V4ZCOeWBSK0Fo9XxdEB2lx3/afci8h8HI=
-X-Received: by 2002:a17:906:1682:: with SMTP id s2mr3855566ejd.110.1613651752408;
- Thu, 18 Feb 2021 04:35:52 -0800 (PST)
-MIME-Version: 1.0
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Thu, 18 Feb 2021 13:35:36 +0100
-Message-ID: <CAH+2xPDs8f=bR7y5QYCpYpJTE1KJPfuiML1og3S9TfSFtOFBHw@mail.gmail.com>
-Subject: watchdog: pcf2127: systemd fails on 5.11
-To:     linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Lars Alex Pedersen <laa@kamstrup.com>,
-        Bruno Thomsen <bth@kamstrup.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        id S232468AbhBRSfT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 18 Feb 2021 13:35:19 -0500
+Received: from mga18.intel.com ([134.134.136.126]:24502 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233602AbhBRQbv (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 18 Feb 2021 11:31:51 -0500
+IronPort-SDR: bEyzum6oA3kRNfGD43MyymPdSDcJ+YLrFnc3BUYF/gw9kptZX4OG1ZwNBsD3WxCrvDUs5uAT7K
+ NywfAw+4poJQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9898"; a="171226748"
+X-IronPort-AV: E=Sophos;i="5.81,187,1610438400"; 
+   d="scan'208";a="171226748"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2021 08:28:22 -0800
+IronPort-SDR: 8wV6FNxP8SE0d4WHFpdRVuaFuCTVydh3gBnRbO6D/bXLTESQYwmiHqSvYcvTGhorUg/aee8is/
+ q6876h3NGC7Q==
+X-IronPort-AV: E=Sophos;i="5.81,187,1610438400"; 
+   d="scan'208";a="367582619"
+Received: from smtp.ostc.intel.com ([10.54.29.231])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2021 08:28:21 -0800
+Received: from localhost (mtg-dev.jf.intel.com [10.54.74.10])
+        by smtp.ostc.intel.com (Postfix) with ESMTP id 25BFD6365;
+        Thu, 18 Feb 2021 08:28:21 -0800 (PST)
+Date:   Thu, 18 Feb 2021 08:28:21 -0800
+From:   mark gross <mgross@linux.intel.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bruno Thomsen <bruno.thomsen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] Add managed version of delayed work init
+Message-ID: <20210218162821.GP154917@linux.intel.com>
+Reply-To: mgross@linux.intel.com
+References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+On Sat, Feb 13, 2021 at 01:58:17PM +0200, Matti Vaittinen wrote:
+> It's not rare that device drivers need delayed work.
+> It's not rare that this work needs driver's data.
+> 
+> Often this means that driver must ensure the work is not queued when
+> driver exits. Usually this is done by ensuring new work is not added and
+> then calling cancel_delayed_work_sync() at remove(). In many cases this
+> may also require cleanup at probe error path - which is easy to forget.
+> 
+> It might be helpful for (a) few drivers if there was a work init
+ why the (a) and not just a?
 
-After updating the kernel from 5.8.17 to 5.11 systemd (246.6) is
-unable to init watchdog in pcf2127 during boot. Kernel option
-CONFIG_WATCHDOG_OPEN_TIMEOUT=300 is working as expected.
-It's possible to get watchdog from userspace working in
-the following 2 ways.
-1) Disable watchdog in systemd and use busybox watchdog.
-2) Restart systemd after boot with "kill 1".
+> function which would ensure cancel_delayed_work_sync() is called at
+> driver exit. So this series implements one on top of devm and replaces
+> the obvious cases where only thing remove call-back in a driver does is
+> cancelling the work. There might be other cases where we could switch
+> more than just work cancellation to use managed version and thus get rid
+> of remove.
+> 
+> Main reson why this is RFC is that I had hard time deciding where this
+> function should be introduced. It's not nice to include all device stuff
+> in workqueue - because many workqueue users are not interested in
+> devices. In same way, not all of the devices are interested in WQs.
+> OTOH, adding own file just for this sounds like an overkill.
+s/own/one
 
-During boot setting the system clock from RTC is working.
-RTC read/write from userland with hwclock is also working.
+--mark
 
-DTS: imx7d-flex-concentrator-mfg.dts
-SOC: NXP i.MX7D
-Drivers: rtc-pcf2127, spi-imx
-Communication: SPI
-
-There are no patches applied to the kernel.
-
-When systemd changes watchdog timeout it receives an
-error that to our best knowledge comes from spi-imx[1].
-
-We suspect it's a race condition between drivers or
-incompatible error handling.
-
-Any help in investigating the issue is appreciated.
-
-/Bruno
-
-[1] https://elixir.bootlin.com/linux/v5.11/source/drivers/spi/spi-imx.c#L1424
-
-Relevant boot trace of pcf2127 and systemd:
-
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: pcf2127_probe
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
-pcf2127_rtc_read_time: raw data is cr3=08, sec=37, min=26, hr=09,
-mday=18, wday=04, mon=02, year=21
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
-pcf2127_rtc_read_time: tm is secs=37, mins=26, hours=9, mday=18,
-mon=1, year=121, wday=4
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: char device (252:0)
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: registered as rtc0
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
-pcf2127_rtc_read_time: raw data is cr3=08, sec=37, min=26, hr=09,
-mday=18, wday=04, mon=02, year=21
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
-pcf2127_rtc_read_time: tm is secs=37, mins=26, hours=9, mday=18,
-mon=1, year=121, wday=4
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: setting system
-clock to 2021-02-18T09:26:37 UTC (1613640397)
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: I/O Error in PIO
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: SPI transfer failed: -110
-Feb 18 09:26:46 tqma7 kernel: spi_master spi1: failed to transfer one
-message from queue
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: I/O Error in PIO
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: SPI transfer failed: -110
-Feb 18 09:26:46 tqma7 kernel: spi_master spi1: failed to transfer one
-message from queue
-Feb 18 09:26:46 tqma7 systemd[1]: Hardware watchdog 'NXP
-PCF2127/PCF2129 Watchdog', version 0
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: new watchdog
-timeout: 120s (old: 60s)
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: I/O Error in PIO
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: SPI transfer failed: -110
-Feb 18 09:26:46 tqma7 kernel: spi_master spi1: failed to transfer one
-message from queue
-Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
-pcf2127_wdt_active_ping: watchdog restart failed, ret=-110
-Feb 18 09:26:46 tqma7 systemd[1]: Failed to set timeout to 120s:
-Connection timed out
-
-
-Relevant trace after systemd restart (kill 1):
-
-Feb 02 10:42:39 tqma7 kernel: watchdog: watchdog0: nowayout prevents
-watchdog being stopped!
-Feb 02 10:42:39 tqma7 kernel: watchdog: watchdog0: nowayout prevents
-watchdog being stopped!
-Feb 02 10:42:39 tqma7 kernel: watchdog: watchdog0: watchdog did not stop!
-Feb 02 10:42:39 tqma7 systemd[1]: systemd 246.6 running in system
-mode. (-PAM -AUDIT -SELINUX -IMA -APPARMOR -SMACK -SYSVINIT -UTMP
--LIBCRYPTSETUP -GCRYPT -GNUTLS -ACL +XZ -LZ4 +ZSTD +SECCOMP +BLKID
-+ELFUTILS +KMOD -IDN2 -IDN -PCRE2 default-hierarchy=unified)
-Feb 02 10:42:39 tqma7 systemd[1]: Detected architecture arm.
-Feb 02 10:42:40 tqma7 systemd[1]: Hardware watchdog 'NXP
-PCF2127/PCF2129 Watchdog', version 0
-Feb 02 10:42:40 tqma7 kernel: rtc-pcf2127-spi spi1.0: new watchdog
-timeout: 30s (old: 30s)
-Feb 02 10:42:40 tqma7 systemd[1]: Set hardware watchdog to 30s.
+> 
+> This time I decided that it is more correct that devices use WQs than
+> that WQs use devices. Hence the function is introduced in
+> include/linux/device.h and drivers/base/devres.c
+> 
+> --
+> 
+> Matti Vaittinen (7):
+>   drivers: base: Add resource managed version of delayed work init
+>   extconn: Clean-up few drivers by using managed work init
+>   hwmon: raspberry-pi: Clean-up few drivers by using managed work init
+>   platform/x86: gpd pocket fan: Clean-up by using managed work init
+>   power: supply: Clean-up few drivers by using managed work init
+>   regulator: qcom_spmi-regulator: Clean-up by using managed work init
+>   watchdog: retu_wdt: Clean-up by using managed work init
+> 
+>  drivers/base/devres.c                        | 33 ++++++++++++++++++++
+>  drivers/extcon/extcon-gpio.c                 | 14 ++-------
+>  drivers/extcon/extcon-intel-int3496.c        | 15 ++-------
+>  drivers/extcon/extcon-palmas.c               | 16 +++-------
+>  drivers/extcon/extcon-qcom-spmi-misc.c       | 16 +++-------
+>  drivers/hwmon/raspberrypi-hwmon.c            | 16 +++-------
+>  drivers/platform/x86/gpd-pocket-fan.c        | 16 +++-------
+>  drivers/power/supply/axp20x_usb_power.c      | 15 +++------
+>  drivers/power/supply/bq24735-charger.c       | 17 +++-------
+>  drivers/power/supply/ltc2941-battery-gauge.c | 19 ++++-------
+>  drivers/power/supply/sbs-battery.c           | 15 +++------
+>  drivers/regulator/qcom_spmi-regulator.c      | 33 +++++---------------
+>  drivers/watchdog/retu_wdt.c                  | 21 +++----------
+>  include/linux/device.h                       |  5 +++
+>  14 files changed, 95 insertions(+), 156 deletions(-)
+> 
+> 
+> base-commit: 92bf22614b21a2706f4993b278017e437f7785b3
+> -- 
+> 2.25.4
+> 
+> 
+> -- 
+> Matti Vaittinen, Linux device drivers
+> ROHM Semiconductors, Finland SWDC
+> Kiviharjunlenkki 1E
+> 90220 OULU
+> FINLAND
+> 
+> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+> Simon says - in Latin please.
+> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+> Thanks to Simon Glass for the translation =] 
