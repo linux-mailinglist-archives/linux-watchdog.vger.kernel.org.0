@@ -2,193 +2,173 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC294322221
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Feb 2021 23:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9787322250
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Feb 2021 23:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbhBVWZa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 22 Feb 2021 17:25:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S231859AbhBVWoe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 22 Feb 2021 17:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbhBVWZ3 (ORCPT
+        with ESMTP id S230483AbhBVWoK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 22 Feb 2021 17:25:29 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6A6C061574;
-        Mon, 22 Feb 2021 14:24:49 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id y21so3340128oou.13;
-        Mon, 22 Feb 2021 14:24:49 -0800 (PST)
+        Mon, 22 Feb 2021 17:44:10 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9C3C06174A;
+        Mon, 22 Feb 2021 14:43:27 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id s107so13692479otb.8;
+        Mon, 22 Feb 2021 14:43:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=C/1tnMH43nbGkpsLudAbobVdUGLdNYCWQFFBhhkg/1A=;
-        b=qG24Lg4C5G7AzYZ4JTHLf6v+I8VKMh0Ejt3TmfhVmyN6SW+5NU+xdqJzw2j5j4wM+4
-         gQbkIVoF1K9rR7A8PN96eaCjU0furVcoftn4HPhY1hXG8umr2gpyDzq7SBqGSX98tRCG
-         OCYUXq0TU0rZeE8z1fRXtQG61bSVmMpTjZSaJiBPGkV76e9u5HzZCsXxRebkgJtrXCCb
-         g2bpR1sO6bFy4fqrBLay8APZSNQ8gA7fmZFG+2L8hTwB2L/fxPfGv7guWLof5zlgjNoc
-         t4kmeSnK4ZgZTSXXWnDvkXpteRkGHDMiYAHjA07c07QRERYdVWxRnvXjTKMTevUTZFi2
-         4aqw==
+         :content-disposition:in-reply-to:user-agent;
+        bh=HiONxAwJhNLIjwGdUzalnPiDVstUCUPoTFFEupHZEV0=;
+        b=i/6PbOhIPSlYOaGXWmmf+12j6vV2o7VueuVJreRV1gUAQ0pC7Z5rnCyTK5noi6tLS5
+         8HooFKqEtZ0EqnqVct9Gd2JO26oift7ZJp1Gff49cSWykp96To4G2S2oglE6p5Pae8rv
+         V1vUmUgzXnpwSlDWsToJgoOaOntatfua9qGGKF9mQrOtL9KzaWkKLvB9UHFgztQS9UFn
+         ZZro2pJ1zfFh+fSSmPd4iVUrSP4JYMxxWm0EDCiS8ngNbe450xoSwdMK3pmlAw5Y3Lm9
+         FTTxj6sT/ocks7qe9MW5nuVsrc3htsW2je2WVgkwTJUQCH4TEBgdGXCC+r7tBoG+CrUC
+         8eHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=C/1tnMH43nbGkpsLudAbobVdUGLdNYCWQFFBhhkg/1A=;
-        b=W67oJedpXK3J/wdIDOvHnWsFX1v8Gq0YPpBQBmLk9wM1bDoUgxuDbs2LBTkUabl7kK
-         UFtBwleWZzz6o+NBL4odJXBqwf1HuJXezIa/Y1OUHOZCP8ZybnJKAlHtSycXX6EIY406
-         Kls0aVZ63DK9ZVvy6CyGEFwTSfrJ2zdAvmwyPBEs0p8m4w8J7a54SB09BtQKqxxDCPTT
-         3+nMSGCTZH3eRa/MSDSXFJfjrBTM0s+j1D9lg8XGt3ZkHHSbhAtkyQ3+uG8CGAf0LYFc
-         4n2Xc6TVifCL5ZCg3Q5qphWWGST07GmyZy7oakBW6BiSDyMZnVeebMTICmEF2Qf8TAaD
-         IkqQ==
-X-Gm-Message-State: AOAM5312CcPTUa8nCiXkoVtGA4CgizznYrNxd8JyYUSISAkNsF5ig8YO
-        ykFtfFNtLXXc8OU/evh0X7s=
-X-Google-Smtp-Source: ABdhPJwgvQEcjg0dOJI9Jkm2W9Ici6m6X9Z9H4m3ITOaGg9JdnFQxoXzTcGSfrKLgPOGkaVBzlPVuw==
-X-Received: by 2002:a4a:94a7:: with SMTP id k36mr2995819ooi.45.1614032689106;
-        Mon, 22 Feb 2021 14:24:49 -0800 (PST)
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HiONxAwJhNLIjwGdUzalnPiDVstUCUPoTFFEupHZEV0=;
+        b=Xff7kVvqrXicVJikK0RF5bz97b59v0Rv5nWBYYic+f/F4oxUpVRrzCUbNVcsk/5ZsL
+         SBP8YQw49jYaQMVit6LkaZAtkLeRHRbErGsvXzN92dZRjCYRHMdBRynLxPFF9rP4ZICw
+         IWs5EaPV2NnnC1AwsO72Ey//jt/eqwGnI6tv295Z52ard5XnRQg/bZ3gQOOzDVMLLoS7
+         MyXAR1RjRqtsRpAArd4075NGuExfHXM2MUnAF2jGI1gO+5WVIy+70u8PfIG/f1sRBIe4
+         J3AdK/9jZtdE6tK4VE/iTVyoD3OPfQrftEciB71OvlH7qhIhVPlndsTwOjgRWANpAN/i
+         2rYA==
+X-Gm-Message-State: AOAM533TYSh+HQTJLfcAv85+0zPHe2V8Aw+jrbTMXuI/Ku1wAYrd+Lo+
+        mRCv0zyipxOrQWVRSmZ/9//u+KJ/lRE=
+X-Google-Smtp-Source: ABdhPJyTwYpDMuYDpmPyg5LTFTSUfsLCpMuuyBWVo+9syQcE8M0gA9aTP00w7VqO7yv4bRBPKlKRzA==
+X-Received: by 2002:a05:6830:2017:: with SMTP id e23mr18958760otp.197.1614033807210;
+        Mon, 22 Feb 2021 14:43:27 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b12sm1600751otp.21.2021.02.22.14.24.48
+        by smtp.gmail.com with ESMTPSA id l202sm1749471oib.16.2021.02.22.14.43.26
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 22 Feb 2021 14:24:48 -0800 (PST)
+        Mon, 22 Feb 2021 14:43:26 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 22 Feb 2021 14:24:47 -0800
+Date:   Mon, 22 Feb 2021 14:43:25 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: bcm7038_wdt: add big endian support
-Message-ID: <20210222222447.GA177866@roeck-us.net>
-References: <9381ef9e-a569-9bcd-5546-a48922e4961d@roeck-us.net>
- <80DB1B7E-D719-4597-A2B7-7CAD592E1B19@gmail.com>
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Lars Alex Pedersen <laa@kamstrup.com>,
+        Bruno Thomsen <bth@kamstrup.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: watchdog: pcf2127: systemd fails on 5.11
+Message-ID: <20210222224325.GB177866@roeck-us.net>
+References: <CAH+2xPDs8f=bR7y5QYCpYpJTE1KJPfuiML1og3S9TfSFtOFBHw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <80DB1B7E-D719-4597-A2B7-7CAD592E1B19@gmail.com>
+In-Reply-To: <CAH+2xPDs8f=bR7y5QYCpYpJTE1KJPfuiML1og3S9TfSFtOFBHw@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 10:48:09PM +0100, Álvaro Fernández Rojas wrote:
-> Hi Guenter,
+On Thu, Feb 18, 2021 at 01:35:36PM +0100, Bruno Thomsen wrote:
+> Hi,
 > 
-> > El 22 feb 2021, a las 22:24, Guenter Roeck <linux@roeck-us.net> escribió:
-> > 
-> > ﻿On 2/22/21 12:03 PM, Álvaro Fernández Rojas wrote:
-> >> bcm7038_wdt can be used on bmips (bcm63xx) devices too.
-> >> 
-> > It might make sense to actually enable it for BCM63XX.
+> After updating the kernel from 5.8.17 to 5.11 systemd (246.6) is
+> unable to init watchdog in pcf2127 during boot. Kernel option
+> CONFIG_WATCHDOG_OPEN_TIMEOUT=300 is working as expected.
+> It's possible to get watchdog from userspace working in
+> the following 2 ways.
+> 1) Disable watchdog in systemd and use busybox watchdog.
+> 2) Restart systemd after boot with "kill 1".
 > 
-> bcm63xx SoCs are supported in bcm63xx and bmips.
-> bcm63xx doesn’t have device tree support, but bmips does and this watchdog is already enabled for bmips.
+> During boot setting the system clock from RTC is working.
+> RTC read/write from userland with hwclock is also working.
 > 
-
-Maybe add a note saying that this will only be supported for devicetree
-based systems.
-
-> > 
-> >> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> >> ---
-> >> drivers/watchdog/bcm7038_wdt.c | 30 ++++++++++++++++++++++++------
-> >> 1 file changed, 24 insertions(+), 6 deletions(-)
-> >> 
-> >> diff --git a/drivers/watchdog/bcm7038_wdt.c b/drivers/watchdog/bcm7038_wdt.c
-> >> index 979caa18d3c8..62494da1ac57 100644
-> >> --- a/drivers/watchdog/bcm7038_wdt.c
-> >> +++ b/drivers/watchdog/bcm7038_wdt.c
-> >> @@ -34,6 +34,24 @@ struct bcm7038_watchdog {                                 
-> >> 
-> >> static bool nowayout = WATCHDOG_NOWAYOUT;
-> >> 
-> >> +static inline void bcm7038_wdt_write(unsigned long data, void __iomem *reg)
-> >> +{
-> >> +#ifdef CONFIG_CPU_BIG_ENDIAN
-> >> +    __raw_writel(data, reg);
-> >> +#else
-> >> +    writel(data, reg);
-> >> +#endif
-> >> +}
-> >> +
-> >> +static inline unsigned long bcm7038_wdt_read(void __iomem *reg)
-> >> +{
-> >> +#ifdef CONFIG_CPU_BIG_ENDIAN
-> >> +    return __raw_readl(reg);
-> >> +#else
-> >> +    return readl(reg);
-> >> +#endif
-> >> +}
-> >> +
-> > 
-> > This needs further explanation. Why not just use __raw_writel() and
-> > __raw_readl() unconditionally ? Also, is it known for sure that,
-> > say, bmips_be_defconfig otherwise uses the wrong endianness
-> > (vs. bmips_stb_defconfig which is a little endian configuration) ?
+> DTS: imx7d-flex-concentrator-mfg.dts
+> SOC: NXP i.MX7D
+> Drivers: rtc-pcf2127, spi-imx
+> Communication: SPI
 > 
-> Because __raw_writel() doesn’t have memory barriers and writel() does.
-> Those configs use the correct endiannes, so I don’t know what you mean...
+> There are no patches applied to the kernel.
 > 
-So are you saying that it already works with bmips_stb_defconfig 
-(because it is little endian), that bmips_stb_defconfig needs memory
-barriers, and that bmips_be_defconfig doesn't need memory barriers ?
-Odd, but I'll take you by your word. And other code does something
-similar, so I guess there must be a reason for it.
+> When systemd changes watchdog timeout it receives an
+> error that to our best knowledge comes from spi-imx[1].
+> 
+> We suspect it's a race condition between drivers or
+> incompatible error handling.
+> 
+> Any help in investigating the issue is appreciated.
+> 
+Difficult to say without access to hardware. The code does have a
+potential problem, though: It calls pcf2127_wdt_ping not only from
+watchdog code but also from various rtc related functions, but there
+is not access protection. This is even more concerning because the ping
+function is called from an interrupt handler.  At the same time, the
+watchdog initialization sets min_hw_heartbeat_ms to 500, which suggests
+that there may be a minimum time between heartbeats (which is clearly
+violated by the current code).
 
-Anyway, after looking into that other code, please use something like
-
-        if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
-                __raw_writel(value, reg);
-        else
-                writel(value, reg);
-
-Thanks,
 Guenter
 
-> > 
-> > Thanks,
-> > Guenter
-> > 
-> >> static void bcm7038_wdt_set_timeout_reg(struct watchdog_device *wdog)
-> >> {
-> >>    struct bcm7038_watchdog *wdt = watchdog_get_drvdata(wdog);
-> >> @@ -41,15 +59,15 @@ static void bcm7038_wdt_set_timeout_reg(struct watchdog_device *wdog)
-> >> 
-> >>    timeout = wdt->rate * wdog->timeout;
-> >> 
-> >> -    writel(timeout, wdt->base + WDT_TIMEOUT_REG);
-> >> +    bcm7038_wdt_write(timeout, wdt->base + WDT_TIMEOUT_REG);
-> >> }
-> >> 
-> >> static int bcm7038_wdt_ping(struct watchdog_device *wdog)
-> >> {
-> >>    struct bcm7038_watchdog *wdt = watchdog_get_drvdata(wdog);
-> >> 
-> >> -    writel(WDT_START_1, wdt->base + WDT_CMD_REG);
-> >> -    writel(WDT_START_2, wdt->base + WDT_CMD_REG);
-> >> +    bcm7038_wdt_write(WDT_START_1, wdt->base + WDT_CMD_REG);
-> >> +    bcm7038_wdt_write(WDT_START_2, wdt->base + WDT_CMD_REG);
-> >> 
-> >>    return 0;
-> >> }
-> >> @@ -66,8 +84,8 @@ static int bcm7038_wdt_stop(struct watchdog_device *wdog)
-> >> {
-> >>    struct bcm7038_watchdog *wdt = watchdog_get_drvdata(wdog);
-> >> 
-> >> -    writel(WDT_STOP_1, wdt->base + WDT_CMD_REG);
-> >> -    writel(WDT_STOP_2, wdt->base + WDT_CMD_REG);
-> >> +    bcm7038_wdt_write(WDT_STOP_1, wdt->base + WDT_CMD_REG);
-> >> +    bcm7038_wdt_write(WDT_STOP_2, wdt->base + WDT_CMD_REG);
-> >> 
-> >>    return 0;
-> >> }
-> >> @@ -88,7 +106,7 @@ static unsigned int bcm7038_wdt_get_timeleft(struct watchdog_device *wdog)
-> >>    struct bcm7038_watchdog *wdt = watchdog_get_drvdata(wdog);
-> >>    u32 time_left;
-> >> 
-> >> -    time_left = readl(wdt->base + WDT_CMD_REG);
-> >> +    time_left = bcm7038_wdt_read(wdt->base + WDT_CMD_REG);
-> >> 
-> >>    return time_left / wdt->rate;
-> >> }
-> >> 
-> > 
+> /Bruno
+> 
+> [1] https://elixir.bootlin.com/linux/v5.11/source/drivers/spi/spi-imx.c#L1424
+> 
+> Relevant boot trace of pcf2127 and systemd:
+> 
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: pcf2127_probe
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
+> pcf2127_rtc_read_time: raw data is cr3=08, sec=37, min=26, hr=09,
+> mday=18, wday=04, mon=02, year=21
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
+> pcf2127_rtc_read_time: tm is secs=37, mins=26, hours=9, mday=18,
+> mon=1, year=121, wday=4
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: char device (252:0)
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: registered as rtc0
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
+> pcf2127_rtc_read_time: raw data is cr3=08, sec=37, min=26, hr=09,
+> mday=18, wday=04, mon=02, year=21
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
+> pcf2127_rtc_read_time: tm is secs=37, mins=26, hours=9, mday=18,
+> mon=1, year=121, wday=4
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: setting system
+> clock to 2021-02-18T09:26:37 UTC (1613640397)
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: I/O Error in PIO
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: SPI transfer failed: -110
+> Feb 18 09:26:46 tqma7 kernel: spi_master spi1: failed to transfer one
+> message from queue
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: I/O Error in PIO
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: SPI transfer failed: -110
+> Feb 18 09:26:46 tqma7 kernel: spi_master spi1: failed to transfer one
+> message from queue
+> Feb 18 09:26:46 tqma7 systemd[1]: Hardware watchdog 'NXP
+> PCF2127/PCF2129 Watchdog', version 0
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: new watchdog
+> timeout: 120s (old: 60s)
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: I/O Error in PIO
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0: SPI transfer failed: -110
+> Feb 18 09:26:46 tqma7 kernel: spi_master spi1: failed to transfer one
+> message from queue
+> Feb 18 09:26:46 tqma7 kernel: rtc-pcf2127-spi spi1.0:
+> pcf2127_wdt_active_ping: watchdog restart failed, ret=-110
+> Feb 18 09:26:46 tqma7 systemd[1]: Failed to set timeout to 120s:
+> Connection timed out
+> 
+> 
+> Relevant trace after systemd restart (kill 1):
+> 
+> Feb 02 10:42:39 tqma7 kernel: watchdog: watchdog0: nowayout prevents
+> watchdog being stopped!
+> Feb 02 10:42:39 tqma7 kernel: watchdog: watchdog0: nowayout prevents
+> watchdog being stopped!
+> Feb 02 10:42:39 tqma7 kernel: watchdog: watchdog0: watchdog did not stop!
+> Feb 02 10:42:39 tqma7 systemd[1]: systemd 246.6 running in system
+> mode. (-PAM -AUDIT -SELINUX -IMA -APPARMOR -SMACK -SYSVINIT -UTMP
+> -LIBCRYPTSETUP -GCRYPT -GNUTLS -ACL +XZ -LZ4 +ZSTD +SECCOMP +BLKID
+> +ELFUTILS +KMOD -IDN2 -IDN -PCRE2 default-hierarchy=unified)
+> Feb 02 10:42:39 tqma7 systemd[1]: Detected architecture arm.
+> Feb 02 10:42:40 tqma7 systemd[1]: Hardware watchdog 'NXP
+> PCF2127/PCF2129 Watchdog', version 0
+> Feb 02 10:42:40 tqma7 kernel: rtc-pcf2127-spi spi1.0: new watchdog
+> timeout: 30s (old: 30s)
+> Feb 02 10:42:40 tqma7 systemd[1]: Set hardware watchdog to 30s.
