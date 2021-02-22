@@ -2,188 +2,131 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0C4321AF4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Feb 2021 16:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C69321B20
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Feb 2021 16:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbhBVPNl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 22 Feb 2021 10:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S231226AbhBVPRB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 22 Feb 2021 10:17:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbhBVPNZ (ORCPT
+        with ESMTP id S231402AbhBVPPX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 22 Feb 2021 10:13:25 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A172C061786;
-        Mon, 22 Feb 2021 07:12:43 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id i9so3926085wml.5;
-        Mon, 22 Feb 2021 07:12:43 -0800 (PST)
+        Mon, 22 Feb 2021 10:15:23 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33AEC061A32;
+        Mon, 22 Feb 2021 07:13:07 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id v1so19443422wrd.6;
+        Mon, 22 Feb 2021 07:13:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W0TOeWb9HGAVOiFV96tO3iwrSfpr1HUMq4Lyw23rID8=;
-        b=FXji/u2iaXY+XOLURddZgd2B9Komiw4Zs+cHylXgLODWE9GujYAMZXOAJt49ncgKkj
-         KXasUXoXmvp4d8wnMqKd80kcI7te+i8Ssj5jDkgEWFuHlI+B6a2sASXp0MxfAR6JnXe8
-         PMBmzH05uvtN8ixL0Xf+EQKCWEzHPeryma2B8WEKKwAVtI0pXqr1NlCyNenHmBJpSL8S
-         /+oAK7AHbhG8Bp1qrmvN2UnpdRZab4b+NfCGuGFlZhbfGdnHHN2BEQP/z7fvhdeo8a9n
-         SKJFfnaPm0+G5TFN4ZPUDwZLEAxSLZT3kXUZZdZbgYAQSBq86aQw+eD/RGBp29tx1xWa
-         GH7Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=24BL/iNm/fhU40HUi/hWtrmxaezcBQ+HXPsyjGQxBIo=;
+        b=aaT0G/6TPkMVKasY0K+CD2HHIphx92WqXSKR482UnNPC/Dw6RTdYUajXcvWj5JxCpW
+         8sfT+13XlreR72oYWOKLWRxOzgMLwot2q8GXpJiWoq7vv8keyNgyGAEXQdIAJZsYFYxu
+         9oozI3VPNhjir/Dc8xRVF1efGRLRax2AL5U3xKZd7hI8ahM6/+EAqOeu+v5ExNEfvU6m
+         YEXviYbfZtFcujSnXKa1vV3/Q31O/Ry8WfSmofK190AjXtfW9k71QJWUCY5NINQpW957
+         9mMzgZFjNzNAd7tyXyKdIA1tfAyIwnDAVCOtXKEkuIkii8yw8fvQhbc2VIO2C2wFJoeR
+         51Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W0TOeWb9HGAVOiFV96tO3iwrSfpr1HUMq4Lyw23rID8=;
-        b=AiJa2u4ZYYG4cGGbUvDlKsPNrYsvn5sC3tbefZHBa1Fet7VYgmMduMZdM6UvoN1GPC
-         S5Z3ig8x9Qa5yh2+itwSGbSgnFMSj3sQQcJlLBHyTGB/o/sGGyxj0hyg1cJxe9jN3KTa
-         yWoiDNiT2DU/alDTIBxJBKNYfcHPbSlcUp4VBZ4obMKn1JzDiTCcKD2dp4bP6384QFVU
-         4UODJjq/Ebe8gqeo6wqkcKzxqh2Lvav9qQyC77kHNvop/ZnlBo6llZhXb7vaNPT2x+87
-         HclkeuZrk5h/tBIIsOGCOOugYCCWMjjxLP2/lbKyUO+v7iAEQMwjZb6LMpL4CZVyjw48
-         irbA==
-X-Gm-Message-State: AOAM531Y+q21hjEBnQGvbOWuWFArByIiEuZ4QoCeH6wPNcMuUr4lHDu1
-        xf9Si1zm2rbgoTrQSCoOO2eztQ63JJXBOhEpv9I=
-X-Google-Smtp-Source: ABdhPJwJjaqNTMZMEqWfwHu3GKPnp7PUpKeoIN2SSKme4SlDCBTSRJD1aRWbEX4S9qfmjT5mjltYPQ==
-X-Received: by 2002:a05:600c:26c4:: with SMTP id 4mr9157865wmv.126.1614006761746;
-        Mon, 22 Feb 2021 07:12:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=24BL/iNm/fhU40HUi/hWtrmxaezcBQ+HXPsyjGQxBIo=;
+        b=mxSpTBxTu2odHRPXz3dO/N5Jxal2uKE+spaAxZY1g2TA5MBbEE72gAtgHnxE7duj8v
+         tRXiG6+A0nqxwsq0Us5SPDHwA92GGyFHnLX/JUdJvffJKu+pmJ9O9QlCod17g7ufoz0Y
+         dG4G/2nbYKr3yUPuuCSnZZ50UFBo2zsM4uk9KdrvYUeq+iWjFEUwINtaIurXUGTq/G5e
+         ofEasL3kFZT3mxyoKZvuq6oUOKkDvFF1hujbMr/aWQu5pCWe4fZa6i5BvyHdCGv0fJ7k
+         x1Mr40ljK9YyhYoPQEYBnpzHix13FOFuGNuNnkCrdEeZg8FnCnbZ0oQZH6gTZuvWr4T6
+         M+lA==
+X-Gm-Message-State: AOAM530NRopw+5KQgzZN3G9z+Uly/VphpyGyqse/j4mFb0YXMdBcdtIQ
+        4m1dVS2jmKSaRiOgNt1xjmUrVOeLUC0JOoOx7uw=
+X-Google-Smtp-Source: ABdhPJxvgxyutQqdF4CzBQ2jUcCdCfMoxXN6O3eh4JjIrCfH4tryUG8CD/8iT/uMuDIoz+kC7pzRqA==
+X-Received: by 2002:a5d:5283:: with SMTP id c3mr21327841wrv.319.1614006786274;
+        Mon, 22 Feb 2021 07:13:06 -0800 (PST)
 Received: from debby (176-141-241-253.abo.bbox.fr. [176.141.241.253])
-        by smtp.gmail.com with ESMTPSA id q25sm20952001wmq.15.2021.02.22.07.12.40
+        by smtp.gmail.com with ESMTPSA id o13sm32313430wro.15.2021.02.22.07.13.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 07:12:41 -0800 (PST)
+        Mon, 22 Feb 2021 07:13:05 -0800 (PST)
 From:   Romain Perier <romain.perier@gmail.com>
 To:     Kees Cook <keescook@chromium.org>,
-        kernel-hardening@lists.openwall.com, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Romain Perier <romain.perier@gmail.com>, cgroups@vger.kernel.org,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-hwmon@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 00/20] Manual replacement of all strlcpy in favor of strscpy
-Date:   Mon, 22 Feb 2021 16:12:11 +0100
-Message-Id: <20210222151231.22572-1-romain.perier@gmail.com>
+        kernel-hardening@lists.openwall.com,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Romain Perier <romain.perier@gmail.com>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 20/20] s390/watchdog: Manual replacement of the deprecated strlcpy() with return values
+Date:   Mon, 22 Feb 2021 16:12:31 +0100
+Message-Id: <20210222151231.22572-21-romain.perier@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210222151231.22572-1-romain.perier@gmail.com>
+References: <20210222151231.22572-1-romain.perier@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-strlcpy() copy a C-String into a sized buffer, the result is always a
-valid NULL-terminated that fits in the buffer, howerver it has severals
-issues. It reads the source buffer first, which is dangerous if it is non
-NULL-terminated or if the corresponding buffer is unbounded. Its safe
-replacement is strscpy(), as suggested in the deprecated interface [1].
+The strlcpy() reads the entire source buffer first, it is dangerous if
+the source buffer lenght is unbounded or possibility non NULL-terminated.
+It can lead to linear read overflows, crashes, etc...
 
-We plan to make this contribution in two steps:
-- Firsly all cases of strlcpy's return value are manually replaced by the
-  corresponding calls of strscpy() with the new handling of the return
-  value (as the return code is different in case of error).
-- Then all other cases are automatically replaced by using coccinelle.
+As recommended in the deprecated interfaces [1], it should be replaced
+by strscpy.
 
-This series covers manual replacements.
+This commit replaces all calls to strlcpy that handle the return values
+by the corresponding strscpy calls with new handling of the return
+values (as it is quite different between the two functions).
 
 [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
 
-Romain Perier (20):
-  cgroup: Manual replacement of the deprecated strlcpy() with return
-    values
-  crypto: Manual replacement of the deprecated strlcpy() with return
-    values
-  devlink: Manual replacement of the deprecated strlcpy() with return
-    values
-  dma-buf: Manual replacement of the deprecated strlcpy() with return
-    values
-  kobject: Manual replacement of the deprecated strlcpy() with return
-    values
-  ima: Manual replacement of the deprecated strlcpy() with return values
-  SUNRPC: Manual replacement of the deprecated strlcpy() with return
-    values
-  kernfs: Manual replacement of the deprecated strlcpy() with return
-    values
-  m68k/atari: Manual replacement of the deprecated strlcpy() with return
-    values
-  module: Manual replacement of the deprecated strlcpy() with return
-    values
-  hwmon: Manual replacement of the deprecated strlcpy() with return
-    values
-  s390/hmcdrv: Manual replacement of the deprecated strlcpy() with
-    return values
-  scsi: zfcp: Manual replacement of the deprecated strlcpy() with return
-    values
-  target: Manual replacement of the deprecated strlcpy() with return
-    values
-  ALSA: usb-audio: Manual replacement of the deprecated strlcpy() with
-    return values
-  tracing/probe: Manual replacement of the deprecated strlcpy() with
-    return values
-  vt: Manual replacement of the deprecated strlcpy() with return values
-  usb: gadget: f_midi: Manual replacement of the deprecated strlcpy()
-    with return values
-  usbip: usbip_host: Manual replacement of the deprecated strlcpy() with
-    return values
-  s390/watchdog: Manual replacement of the deprecated strlcpy() with
-    return values
+Signed-off-by: Romain Perier <romain.perier@gmail.com>
+---
+ drivers/watchdog/diag288_wdt.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
- arch/m68k/emu/natfeat.c                 |  6 +--
- crypto/lrw.c                            |  6 +--
- crypto/xts.c                            |  6 +--
- drivers/dma-buf/dma-buf.c               |  4 +-
- drivers/hwmon/pmbus/max20730.c          | 66 +++++++++++++------------
- drivers/s390/char/diag_ftp.c            |  4 +-
- drivers/s390/char/sclp_ftp.c            |  6 +--
- drivers/s390/scsi/zfcp_fc.c             |  8 +--
- drivers/target/target_core_configfs.c   | 33 ++++---------
- drivers/tty/vt/keyboard.c               |  5 +-
- drivers/usb/gadget/function/f_midi.c    |  4 +-
- drivers/usb/gadget/function/f_printer.c |  8 +--
- drivers/usb/usbip/stub_main.c           |  6 +--
- drivers/watchdog/diag288_wdt.c          | 12 +++--
- fs/kernfs/dir.c                         | 27 +++++-----
- kernel/cgroup/cgroup.c                  |  2 +-
- kernel/module.c                         |  4 +-
- kernel/trace/trace_uprobe.c             | 11 ++---
- lib/kobject_uevent.c                    |  6 +--
- net/core/devlink.c                      |  6 +--
- net/sunrpc/clnt.c                       |  6 ++-
- security/integrity/ima/ima_policy.c     |  8 ++-
- sound/usb/card.c                        |  4 +-
- 23 files changed, 129 insertions(+), 119 deletions(-)
-
--- 
-2.20.1
+diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
+index aafc8d98bf9f..5703f35dd0b7 100644
+--- a/drivers/watchdog/diag288_wdt.c
++++ b/drivers/watchdog/diag288_wdt.c
+@@ -111,7 +111,7 @@ static unsigned long wdt_status;
+ static int wdt_start(struct watchdog_device *dev)
+ {
+ 	char *ebc_cmd;
+-	size_t len;
++	ssize_t len;
+ 	int ret;
+ 	unsigned int func;
+ 
+@@ -126,7 +126,9 @@ static int wdt_start(struct watchdog_device *dev)
+ 			clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+ 			return -ENOMEM;
+ 		}
+-		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
++		len = strscpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
++		if (len == -E2BIG)
++			return -E2BIG;
+ 		ASCEBC(ebc_cmd, MAX_CMDLEN);
+ 		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
+ 
+@@ -163,7 +165,7 @@ static int wdt_stop(struct watchdog_device *dev)
+ static int wdt_ping(struct watchdog_device *dev)
+ {
+ 	char *ebc_cmd;
+-	size_t len;
++	ssize_t len;
+ 	int ret;
+ 	unsigned int func;
+ 
+@@ -173,7 +175,9 @@ static int wdt_ping(struct watchdog_device *dev)
+ 		ebc_cmd = kmalloc(MAX_CMDLEN, GFP_KERNEL);
+ 		if (!ebc_cmd)
+ 			return -ENOMEM;
+-		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
++		len = strscpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
++		if (len == -E2BIG)
++			return -E2BIG;
+ 		ASCEBC(ebc_cmd, MAX_CMDLEN);
+ 		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
+ 
 
