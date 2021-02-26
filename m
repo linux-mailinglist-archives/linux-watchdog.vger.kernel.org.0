@@ -2,105 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4878324169
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Feb 2021 17:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1704632659C
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Feb 2021 17:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235152AbhBXPzv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Feb 2021 10:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S229915AbhBZQgL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 Feb 2021 11:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbhBXP0P (ORCPT
+        with ESMTP id S229993AbhBZQgG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Feb 2021 10:26:15 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBB1C061574;
-        Wed, 24 Feb 2021 07:25:32 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id l133so2762674oib.4;
-        Wed, 24 Feb 2021 07:25:32 -0800 (PST)
+        Fri, 26 Feb 2021 11:36:06 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC88C061788
+        for <linux-watchdog@vger.kernel.org>; Fri, 26 Feb 2021 08:35:23 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id cf12so10926574edb.8
+        for <linux-watchdog@vger.kernel.org>; Fri, 26 Feb 2021 08:35:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PKMBgyiQ3hDdl7FbPyDOO9Us6EgKa0GCpWs3TRxqYBQ=;
-        b=lBcYlcVBOrlhGx/QHSj530pPTtynhE6eKADo+KQDEfgoLH3E4i27/M0KHXblMnDEf2
-         q4yJRoCF/PvZCJmeNhaUra0LLRicYwqV9+7MO3CebD0K9fekfmk/OgNBBFTzSF96bDDh
-         KHx/UbtaNDRjq6SRjP1ieDbncN54WQFtpQoy4YOI9cCBCCygbToeleTFuYNBC0Y7UN/e
-         FyqEJNfknxIuNg32vf6yimH10bRYNXpNov1YYE1Mzxns7D7wnyrqyqIpADNuC8O0WoaW
-         3fjT68fRTCBVbVLF71hlPDW8VCBYKog1Fc1Jxkcyhu65LiFuTN9k2NuoVpr1/hdAbtOV
-         +aew==
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cOneb72+9BMDKFMeXHoHtH5MZRyiWygS1afzq3OOa+o=;
+        b=E4DbkXF/qcHn1t53N2ZY0ECGTpmXtZVoY6SFeeKj+vTG082gR2f+HYW/wmeBaK7HBp
+         4Snk/JOoGLiyEYKKMyvH6jjpQfHqHq2hdqW5M+sUcVlgLtybZXDdfYUr+SZDNtkfkvSb
+         JAK9hzKINrmqy5B8aGnMd6jvnlQo1FETWwF6U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PKMBgyiQ3hDdl7FbPyDOO9Us6EgKa0GCpWs3TRxqYBQ=;
-        b=R0FcEg0/bjXW5darHU7nxxRQxnT5fXyg+xik86fGJyjLRZlBky2ztGWyYqvi/4UUS4
-         7Bfkjk2RFmUS6C93MA9IOFINcFUxouIx1NiXqWRoGdIY8upFXmOSyl2pyxz2RyhSLabH
-         KWRSjN+eLcpcJLH+Mc6GxI2WeoLrx7nwjTLebVN1NAXSMApoTb4tQ1U8wKTo3MbaNmmp
-         SwvCqmER4VrsquqPhhi5WaoHhOOzsqqwo3hB2AxCLK3EGMWLxsUhUJrKp0Ex3ErmF+Dq
-         IrDXoCfkwVKPYXtd3aLEmarC6nXF1FyLdBe/O/mnmJL+GSfTKrmtuvhkePpx4tU4lU3X
-         Gm8g==
-X-Gm-Message-State: AOAM5305pzL4j6VQhZlJeClZP2CrbL4oy1RCBMW7Es3TBLxEvfC2Fcec
-        v9vvr1LY+uEplCf7xQtsFUWIUgMT9lA=
-X-Google-Smtp-Source: ABdhPJyidE9YuERxBbuFixruSokWU5RV/sXMQ+TmXxzQiiS3vKJOQTcnaILEuAlLopArrHxVtvauAA==
-X-Received: by 2002:aca:1119:: with SMTP id 25mr3070505oir.156.1614180331649;
-        Wed, 24 Feb 2021 07:25:31 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e72sm425303ote.26.2021.02.24.07.25.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 24 Feb 2021 07:25:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 24 Feb 2021 07:25:29 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Bruno Thomsen <bruno.thomsen@gmail.com>,
-        linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Lars Alex Pedersen <laa@kamstrup.com>,
-        Bruno Thomsen <bth@kamstrup.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: watchdog: pcf2127: systemd fails on 5.11
-Message-ID: <20210224152529.GA242356@roeck-us.net>
-References: <CAH+2xPDs8f=bR7y5QYCpYpJTE1KJPfuiML1og3S9TfSFtOFBHw@mail.gmail.com>
- <20210222224325.GB177866@roeck-us.net>
- <CAH+2xPDDiUxKk3Y3R=fj0cOU+7vJRSC5yUb_XmfOUXnqoe+2Zg@mail.gmail.com>
- <YDZp/u+fO/8HX8qo@piout.net>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cOneb72+9BMDKFMeXHoHtH5MZRyiWygS1afzq3OOa+o=;
+        b=nn3ACfOMgC3TuOJPDSQ3sNSsGe/cmvaqSdgMt6A6g8GF/K3aqWmhcObuUT6wqFXHqV
+         BR7moYCSq8nCtYOC2afzoyENlX9sYtmTNAifnIvse49OAXMkTynck4gagnwW2nB2Jpc5
+         MJ03yfg3SwMKLySY/K2SuiqpKHcYrfLoUUqPoutHH5U2W+TeLM0gvDmqgPImfmoVzh9l
+         GczkGPSGNb4/alMPcuazkKOa0EbdayyLwNMz1uqJ3oPGLYQ6rAAm1EAoAAkacL0RvDdK
+         qNvJl9BxePt6e/M/EU7T02VVWAXvbLKl4yJBN6GArCyRsLdtT8SgGHy7i2EorS8wr2+3
+         RdAQ==
+X-Gm-Message-State: AOAM5314aUZcYxu0uJNxHaD2oPiu7ztVJRRu5U5hiHfSR+P0ZocbkxHp
+        qqAAFfD+RG0WntuoACblHu6EfBv9ItcYKw==
+X-Google-Smtp-Source: ABdhPJxgWKA9baDmnn7v/NyJDUc1IXanLiIYaaEflz+WN2lJxW3UHkfK6YObK8/eFA/ReW3JQLO+5g==
+X-Received: by 2002:aa7:c386:: with SMTP id k6mr1400939edq.224.1614357321498;
+        Fri, 26 Feb 2021 08:35:21 -0800 (PST)
+Received: from [192.168.1.149] ([80.208.71.141])
+        by smtp.gmail.com with ESMTPSA id u18sm5589671ejc.76.2021.02.26.08.35.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Feb 2021 08:35:21 -0800 (PST)
+Subject: Re: [PATCH 0/2] add ripple counter dt binding and driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
+ <CAK8P3a2=nZ3bbeguXjbFrhz0nWeUOcLM7mRudhPDrcb+jZ4VvQ@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <e5fd7ce3-3ba6-e5de-1cbc-fa31bd46942c@rasmusvillemoes.dk>
+Date:   Fri, 26 Feb 2021 17:35:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YDZp/u+fO/8HX8qo@piout.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAK8P3a2=nZ3bbeguXjbFrhz0nWeUOcLM7mRudhPDrcb+jZ4VvQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 04:00:14PM +0100, Alexandre Belloni wrote:
-> Hi,
+On 26/02/2021 15.35, Arnd Bergmann wrote:
+> On Fri, Feb 26, 2021 at 3:14 PM Rasmus Villemoes
+> <linux@rasmusvillemoes.dk> wrote:
 > 
-> On 24/02/2021 15:55:00+0100, Bruno Thomsen wrote:
-> > You could be right about that, I don't think the watchdog feature should
-> > be available for use if the alarm feature is enabled due to how CTRL2
-> > register behaves.
-> > 
-> > The hardware I am testing on is a custom board, but it's actually
-> > possible to get a Raspberry Pi module called RasClock that has
-> > the chip.
-> > 
+>>
+>> So I'm thinking that the proper way to handle this is to be able to
+>> represent that ripple counter as a clock consumer in DT and have a
+>> driver do the clk_prepare_enable(), even if that driver doesn't and
+>> can't do anything else. But I'm certainly open to other suggestions.
 > 
-> I have an eval board for the PCF2127 (and PCF2129), the OM13513.
-> 
-> > I will test some locking around WD_VAL register access as that is used
-> > in pcf2127_wdt_ping function.
-> > 
-> > My initial test shows that spin_lock_irqsave around regmap calls are not
-> > a good idea as it result in:
-> > BUG: scheduling while atomic: watchdog/70/0x00000002
-> > BUG: scheduling while atomic: systemd/1/0x00000002
-> > 
-> 
-> The issue is not only regmap but the fact that i2C and spi accesses are
-> allowed to sleep.
-> 
-Correct, those would have to be mutexes.
+> How about adding support for the optional clock to the gpio_wdt driver,
+> would that work?
 
-Thanks,
-Guenter
+I think it would _work_ (all I need is some piece of code doing the
+clock_prepare_enable(), and until now we've just stashed that in some
+otherwise unrelated out-of-tree driver, but we're trying to get rid of
+that one), but the watchdog chip isn't really the consumer of the clock
+signal, so in-so-far as DT is supposed to describe the hardware, I don't
+think it's appropriate.
+
+OTOH, one could argue that the watchdog chip and the ripple counter
+together constitute the watchdog circuit.
+
+Cc += watchdog maintainers. Context: I have a gpio-wdt which can
+unfortunately effectively be disabled by disabling a clock output, and
+that happens automatically unless the clock has a consumer in DT. But
+the actual consumer is not the gpio-wdt.
+Please see
+https://lore.kernel.org/lkml/20210226141411.2517368-1-linux@rasmusvillemoes.dk/
+for the original thread.
+
+Rasmus
+
