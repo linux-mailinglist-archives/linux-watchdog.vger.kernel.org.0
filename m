@@ -2,120 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F1232DCC2
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Mar 2021 23:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B024C32DD8D
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Mar 2021 00:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbhCDWM4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 4 Mar 2021 17:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbhCDWMy (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 4 Mar 2021 17:12:54 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC3BC061765
-        for <linux-watchdog@vger.kernel.org>; Thu,  4 Mar 2021 14:12:54 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id p1so32575917edy.2
-        for <linux-watchdog@vger.kernel.org>; Thu, 04 Mar 2021 14:12:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UCo3mKQIbcpollGcJ9PYHtksoboB7Ro207jOYrCfzdo=;
-        b=g1Zn6sewFIleBOXnOHM71n+XqDprG9IKVcU3vrwC/LmP7RiEYZWioiuOo6u8eay8rp
-         1efpcjma6Y7hUyfQyOqliLwpMX7YVcRtMkHFwd4IttHF9G22LrA/mMggvqUZaqDgqmU1
-         133cDV7S24kpbxsZu8wG18e2IJ81VwzKnsak4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UCo3mKQIbcpollGcJ9PYHtksoboB7Ro207jOYrCfzdo=;
-        b=qDgT7F19vDaoorCmWYXAKU5KIvPVsC8eLO5zn35/iW1aQTA+rxkYF7S1rlLVC5xflv
-         IqQGkYo02oFJqsPAgeSY2uiDRpKVNBjBTzwRT1oKtjGkIuBwe/KdiC8g5LSfqu7XNJw7
-         dG7huW8BhVUkrgcNJzG+BdD5Z2UptJLqltVaQoehiho9/A8RM7FRgW+APfY6rQO3CvZP
-         eAv5BnYT1/YBOuwdz2rEDUGouNM/7401IaGt+Qe3Z/aUQtbEf8r5CXwIovEwi/DuIMwI
-         BRITR9YFTrrg8e88P8QkMc5aIFE09f5wdDhuVssskjtuENC0mqXakCmikzgN99oP9B8O
-         8zgw==
-X-Gm-Message-State: AOAM5331CsIJoPMlFmFS1FNrPRFC+Lddyx+sGVQuvBHi7MlFskaRVMPF
-        nXp8nGNoUkyEAmuo1oa9+jRhpw==
-X-Google-Smtp-Source: ABdhPJzme5MAAWpf/zramDLF/Q+YNk0uNjfX+zRiBm3mY5cw1s0ZQPbrq+hYw2HTPbmIl+2U4okoLg==
-X-Received: by 2002:aa7:cd8c:: with SMTP id x12mr6809476edv.355.1614895972903;
-        Thu, 04 Mar 2021 14:12:52 -0800 (PST)
-Received: from prevas-ravi.prevas.se ([80.208.71.141])
-        by smtp.gmail.com with ESMTPSA id q22sm362099ejy.5.2021.03.04.14.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Mar 2021 14:12:52 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH v2 3/3] watchdog: gpio_wdt: implement support for optional "delay" clock
-Date:   Thu,  4 Mar 2021 23:12:47 +0100
-Message-Id: <20210304221247.488173-4-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210304221247.488173-1-linux@rasmusvillemoes.dk>
-References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
- <20210304221247.488173-1-linux@rasmusvillemoes.dk>
+        id S229584AbhCDXEI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 4 Mar 2021 18:04:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42298 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229547AbhCDXEI (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 4 Mar 2021 18:04:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EA6B264FF1;
+        Thu,  4 Mar 2021 23:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614899048;
+        bh=CijpqyykDmZtff1lsC55bZVXDNtVmDJMQ2LDEDPIWQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CszncG+i//sn9HKT8ySiaR1+o5hn8d5cKlC7cKJ5QbqtL7b/Qhl7PmNpXFcgUQINc
+         iADOvGBSqW8ELQF8dqcU846WKfYgbrf4cpc0I5uuVVE04vvyXKBh98H9/LeqqDbHJv
+         O4PoZ0Kz8sSPUprLdNOu4U6UhJxu+SMFUnOgG2+JEknVZ88q0kFz9N3uvO7IkvIuT1
+         qv7iN+Wh3jnvGBj5qKg5dfDgOtqDoDGQ259XiLxguT0ZXgTIvZQDatG3V6lou2jzzx
+         BZNtKe1gBWhZDxGjEDWZtOZdlCGddhLJwpts+QSAI8RgbjfXkfDF1vwvzFXwa+EK4N
+         cuyqauJOTeZQg==
+Date:   Thu, 4 Mar 2021 17:04:06 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 057/141] watchdog: Fix fall-through warnings for Clang
+Message-ID: <20210304230406.GA106291@embeddedor>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <713aa26be06d50dd3bb582a3cb71f04787ad5d5b.1605896059.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <713aa26be06d50dd3bb582a3cb71f04787ad5d5b.1605896059.git.gustavoars@kernel.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-[DO NOT MERGE - see cover letter]
+Hi all,
 
-We have a board where the reset output from the ADM706S is split in
-two: directly routed to an interrupt, and also to start a ripple
-counter, which 64 ms later than pulls the SOC's reset pin. That ripple
-counter only works if the RTC's 32kHz output is enabled, and since
-linux by default disables unused clocks, that effectively renders the
-watchdog useless.
+It's been more than 3 months; who can take this, please? :)
 
-Add driver support for an optional "delay" clock, as documented in the
-preceding patch.
+Thanks
+--
+Gustavo
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/watchdog/gpio_wdt.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
-index 0923201ce874..f812c39bc1e8 100644
---- a/drivers/watchdog/gpio_wdt.c
-+++ b/drivers/watchdog/gpio_wdt.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/err.h>
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/gpio/consumer.h>
-@@ -111,6 +112,7 @@ static int gpio_wdt_probe(struct platform_device *pdev)
- 	enum gpiod_flags gflags;
- 	unsigned int hw_margin;
- 	const char *algo;
-+	struct clk *clk;
- 	int ret;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-@@ -164,6 +166,13 @@ static int gpio_wdt_probe(struct platform_device *pdev)
- 	if (priv->always_running)
- 		gpio_wdt_start(&priv->wdd);
- 
-+	clk = devm_clk_get_optional(dev, "delay");
-+	if (IS_ERR(clk))
-+		return PTR_ERR(clk);
-+	ret = devm_clk_prepare_enable(dev, clk);
-+	if (ret)
-+		return ret;
-+
- 	return devm_watchdog_register_device(dev, &priv->wdd);
- }
- 
--- 
-2.29.2
-
+On Fri, Nov 20, 2020 at 12:32:51PM -0600, Gustavo A. R. Silva wrote:
+> In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
+> by explicitly adding a fallthrough pseudo-keyword instead of letting the
+> code fall through to the next case.
+> 
+> Link: https://github.com/KSPP/linux/issues/115
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/watchdog/machzwd.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/machzwd.c b/drivers/watchdog/machzwd.c
+> index 743377c5b173..73f2221f6222 100644
+> --- a/drivers/watchdog/machzwd.c
+> +++ b/drivers/watchdog/machzwd.c
+> @@ -174,6 +174,7 @@ static inline void zf_set_timer(unsigned short new, unsigned char n)
+>  		fallthrough;
+>  	case WD2:
+>  		zf_writeb(COUNTER_2, new > 0xff ? 0xff : new);
+> +		fallthrough;
+>  	default:
+>  		return;
+>  	}
+> -- 
+> 2.27.0
+> 
