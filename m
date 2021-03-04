@@ -2,313 +2,116 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5697B32DA9E
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Mar 2021 20:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C77E32DCBC
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Mar 2021 23:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235470AbhCDTxz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 4 Mar 2021 14:53:55 -0500
-Received: from gecko.sbs.de ([194.138.37.40]:51328 "EHLO gecko.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232119AbhCDTxs (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 4 Mar 2021 14:53:48 -0500
-Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 124JqiUE006146
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 4 Mar 2021 20:52:44 +0100
-Received: from md1za8fc.ad001.siemens.net ([167.87.11.66])
-        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 124Jghx6027068;
-        Thu, 4 Mar 2021 20:42:43 +0100
-Date:   Thu, 4 Mar 2021 20:42:42 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        id S230431AbhCDWMw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 4 Mar 2021 17:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230053AbhCDWMv (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 4 Mar 2021 17:12:51 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F87C061756
+        for <linux-watchdog@vger.kernel.org>; Thu,  4 Mar 2021 14:12:51 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id w17so4568730ejc.6
+        for <linux-watchdog@vger.kernel.org>; Thu, 04 Mar 2021 14:12:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uVV/5lGgGwVoyFOLAdPK3mAZTTVkR2SgKcDQqmfi5f0=;
+        b=d6eQx8gQ4lAf/nIR6K9Z1w1AR6tECcgQbDMHIM0DKJnp0b/cZyKkmpgU1qKwvxC+Ca
+         L6NGDTaBjBZ1+wNUOUnYRcrCVoPWiU146bdQjrCd6xliDWN1hjGOMAuXHhF7fMGzMM4B
+         oGjrKIox9PScpCqRaE6VCrEHh4JtwF+K/pFis=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uVV/5lGgGwVoyFOLAdPK3mAZTTVkR2SgKcDQqmfi5f0=;
+        b=jTAXYron+jMo7AknBrFbc6tKyM+Tmdb+zx8aIODZgTP8FaOxFNly41emPlh/fZU809
+         pSk57DNl2T2RfyElPZhIHeK4YanwbsYlJwVPpoTn+LWRXnJLT7hFfLGmT7c8+0Aqrd7e
+         oMgZsND9otz5op8RY0mU0VTAVcshunvicMiGHDi+pq6BjamH9sOBdEqgUOZDeK5l0bei
+         hbvIVD5ty2ut25TV157kr7VQfvNgcZg1g/4jdLz2FpunRxDTHvUKwdG8eLOTq9s+oqKT
+         ijIgP7HAWaY/dU/wghYeRdqnpOaSp8zxqhYd2xymBrio3zsPi0FA6q1xcnR3zlBr4V/W
+         q7Vw==
+X-Gm-Message-State: AOAM531Je1Fhkc/6w8cQ5srGu4QFRxf/YsHhMveXfepAsw3KfGeYAPGm
+        7gyRzji4Nla6vFMISo6HNo4+VA==
+X-Google-Smtp-Source: ABdhPJwiESwMPtAfz3YFxc1xkgUfgpYGdvxzTe7pMrbVH8PkUSyTPv7/tTB6Mnqx/O4zqtQ49S2OSg==
+X-Received: by 2002:a17:906:3b99:: with SMTP id u25mr6481602ejf.277.1614895970165;
+        Thu, 04 Mar 2021 14:12:50 -0800 (PST)
+Received: from prevas-ravi.prevas.se ([80.208.71.141])
+        by smtp.gmail.com with ESMTPSA id q22sm362099ejy.5.2021.03.04.14.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Mar 2021 14:12:49 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
-        Srikanth Krishnakar <skrishnakar@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH 1/4] platform/x86: simatic-ipc: add main driver for
- Siemens devices
-Message-ID: <20210304204242.08b4c064@md1za8fc.ad001.siemens.net>
-In-Reply-To: <CAHp75VfDDGxdhP0-yKOCJyJ_+Y2Zu3TmOdvUJmEZ0AvQnceV6A@mail.gmail.com>
-References: <20210302163309.25528-1-henning.schild@siemens.com>
-        <20210302163309.25528-2-henning.schild@siemens.com>
-        <CAHp75VfDDGxdhP0-yKOCJyJ_+Y2Zu3TmOdvUJmEZ0AvQnceV6A@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH v2 0/3] add "delay" clock support to gpio_wdt
+Date:   Thu,  4 Mar 2021 23:12:44 +0100
+Message-Id: <20210304221247.488173-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
+References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Thu, 4 Mar 2021 12:11:12 +0200
-schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
+As Arnd and Guenther suggested, this adds support to the gpio_wdt
+driver for being a consumer of the clock driving the ripple
+counter. However, I don't think it should be merged as-is, see below.
 
-> On Thu, Mar 4, 2021 at 8:36 AM Henning Schild
-> <henning.schild@siemens.com> wrote:
-> >
-> > From: Henning Schild <henning.schild@siemens.com>
-> >
-> > This mainly implements detection of these devices and will allow
-> > secondary drivers to work on such machines.
-> >
-> > The identification is DMI-based with a vendor specific way to tell
-> > them apart in a reliable way.
-> >
-> > Drivers for LEDs and Watchdogs will follow to make use of that
-> > platform detection.  
-> 
-> > Signed-off-by: Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-> > Signed-off-by: Henning Schild <henning.schild@siemens.com>  
-> 
-> The order is wrong taking into account the From line in the body. So,
-> it's not clear who is the author, who is a co-developer, and who is
-> the committer (one person may utilize few roles).
-> Check for the rest of the series as well (basically this is the rule
-> of thumb to recheck entire code for the comment you have got at any
-> single place of it).
+The first patch makes sense on its own, quick grepping suggests plenty
+of places that could benefit from this, and I thought it would be odd
+to have to re-introduce a .remove callback in the gpio_wdt driver.
 
-For some code Gerd is the author, and i am the co-Author. We even have
-Jan in the mix at places. At least in copyright headers.
+Unfortunately, this turns out to be a bit of an "operation succeeded,
+patient (almost) died": We use CONFIG_GPIO_WATCHDOG_ARCH_INITCALL
+because the watchdog has a rather short timeout (1.0-2.25s, 1.6s
+typical according to data sheet). At first, I put the new code right
+after the devm_gpiod_get(), but the problem is that this early, we get
+-EPROBE_DEFER since the clock provider (the RTC which sits off i2c)
+isn't probed yet. But then the board would reset because it takes way
+too long for the rest of the machine to initialize. [The bootloader
+makes sure to turn on the RTC's clock output so the watchdog is
+actually functional, the task here is to figure out the proper way to
+prevent clk_disable_unused() from disabling it.]
 
-I will remain the committer for the three of us. And since i do not
-know exactly what the problem is i will add only my Signed-off to avoid
-confusion.
+Moving the logic to after the first "is it always-running and if so
+give it an initial ping" made the board survive, but unfortunately the
+second, and succesful, probe happens a little more than a second
+later, which happens to work on this particular board, but is
+obviously not suitable for production given that it's already above
+what the spec says, and other random changes in the future might make
+the gap even wider.
 
-Please speak up it that would be wrong as well and point me to the docs
-i missed. Or tell me how it should be done. 
+So I don't know. The hardware is obviously misdesigned, and I don't
+know how far the mainline kernel should stretch to support this; OTOH
+the kernel does contain lots of workarounds for quirks and hardware
+bugs. 
 
-> ...
-> 
-> > +config SIEMENS_SIMATIC_IPC
-> > +       tristate "Siemens Simatic IPC Class driver"
-> > +       depends on PCI
-> > +       help
-> > +         This Simatic IPC class driver is the central of several
-> > drivers. It
-> > +         is mainly used for system identification, after which
-> > drivers in other
-> > +         classes will take care of driving specifics of those
-> > machines.
-> > +         i.e. leds and watchdogs  
-> 
-> LEDs
-> watchdog. (missed period and singular form)
-> 
-> Module name?
-> 
-> >  endif # X86_PLATFORM_DEVICES  
-> 
-> Not sure about the ordering of the section in Kconfig, but it is up to
-> maintainers.
-> 
-> ...
-> 
-> > +# Siemens Simatic Industrial PCs
-> > +obj-$(CONFIG_SIEMENS_SIMATIC_IPC)      += simatic-ipc.o  
-> 
-> Ditto.
 
-I will check both again if a find a pattern, otherwise will wait for
-maintainers to complain and hopefully suggest.
 
-> ...
-> 
-> > + * Siemens SIMATIC IPC driver for LEDs  
-> 
-> It seems to be used in patch 4 which is not LED related. Also, why is
-> it here if it's for LEDs?
-> 
-> ...
-> 
-> > + * This program is free software; you can redistribute it and/or
-> > modify
-> > + * it under the terms of the GNU General Public License version 2
-> > as
-> > + * published by the Free Software Foundation.  
-> 
-> Replace with SPDX
-> 
-> ...
-> 
-> > +#include <linux/module.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/platform_device.h>  
-> 
-> Ordered?
-> 
-> > +#include <linux/platform_data/x86/simatic-ipc.h>  
-> 
-> ...
-> 
-> > +static int register_platform_devices(u32 station_id)
-> > +{
-> > +       int i;
-> > +       u8 ledmode = SIMATIC_IPC_DEVICE_NONE;
-> > +       u8 wdtmode = SIMATIC_IPC_DEVICE_NONE;  
-> 
-> Reversed xmas tree order?
 
-I do not get this, it is almost easter egg order time. Please explain.
+Rasmus Villemoes (3):
+  clk: add devm_clk_prepare_enable() helper
+  dt-bindings: watchdog: add optional "delay" clock to gpio-wdt binding
+  watchdog: gpio_wdt: implement support for optional "delay" clock
 
-> > +       platform_data.devmode = SIMATIC_IPC_DEVICE_NONE;
-> > +
-> > +       for (i = 0; i < ARRAY_SIZE(device_modes); i++) {
-> > +               if (device_modes[i].station_id == station_id) {
-> > +                       ledmode = device_modes[i].led_mode;
-> > +                       wdtmode = device_modes[i].wdt_mode;
-> > +                       break;
-> > +               }
-> > +       }
-> > +
-> > +       if (ledmode != SIMATIC_IPC_DEVICE_NONE) {
-> > +               platform_data.devmode = ledmode;  
-> 
-> > +               ipc_led_platform_device =
-> > platform_device_register_data
-> > +                       (NULL, KBUILD_MODNAME "_leds",
-> > PLATFORM_DEVID_NONE,
-> > +                        &platform_data, sizeof(struct
-> > simatic_ipc_platform));  
-> 
-> Strange indentation (second line).
-> 
-> > +               if (IS_ERR(ipc_led_platform_device))
-> > +                       return PTR_ERR(ipc_led_platform_device);  
-> 
-> > +               pr_debug(KBUILD_MODNAME ": device=%s created\n",
-> > +                        ipc_led_platform_device->name);  
-> 
-> Utilize pr_fmt() instead of adding prefixes like this.
-> 
-> > +       }  
-> 
-> > +       if (wdtmode != SIMATIC_IPC_DEVICE_NONE) {
-> > +               platform_data.devmode = wdtmode;
-> > +               ipc_wdt_platform_device =
-> > platform_device_register_data
-> > +                       (NULL, KBUILD_MODNAME "_wdt",
-> > PLATFORM_DEVID_NONE,
-> > +                        &platform_data, sizeof(struct
-> > simatic_ipc_platform));
-> > +               if (IS_ERR(ipc_wdt_platform_device))
-> > +                       return PTR_ERR(ipc_wdt_platform_device);
-> > +
-> > +               pr_debug(KBUILD_MODNAME ": device=%s created\n",
-> > +                        ipc_wdt_platform_device->name);
-> > +       }  
-> 
-> Same comments as above.
-> 
-> > +       if (ledmode == SIMATIC_IPC_DEVICE_NONE &&
-> > +           wdtmode == SIMATIC_IPC_DEVICE_NONE) {
-> > +               pr_warn(KBUILD_MODNAME
-> > +                       ": unsupported IPC detected, station
-> > id=%08x\n",
-> > +                       station_id);  
-> 
-> Ugly indentation. With pr_fmt() in use will be much better.
-> 
-> > +               return -EINVAL;  
-> 
-> > +       } else {  
-> 
-> Redundant.
-> 
-> > +               return 0;
-> > +       }
-> > +}  
-> 
-> ...
-> 
-> > +/*
-> > + * Get membase address from PCI, used in leds and wdt modul. Here
-> > we read
-> > + * the bar0. The final address calculation is done in the
-> > appropriate modules  
-> 
-> bar -> BAR
-> Missed period.
-> 
-> > + */  
-> 
-> > +  
-> 
-> Unneeded blank line.
-> 
-> > +u32 simatic_ipc_get_membase0(unsigned int p2sb)
-> > +{
-> > +       u32 bar0 = 0;  
-> 
-> > +#ifdef CONFIG_PCI  
-> 
-> It's ugly besides the fact that you have a dependency.
+ .../devicetree/bindings/watchdog/gpio-wdt.txt |  6 ++++
+ .../driver-api/driver-model/devres.rst        |  1 +
+ drivers/clk/clk-devres.c                      | 29 +++++++++++++++++++
+ drivers/watchdog/gpio_wdt.c                   |  9 ++++++
+ include/linux/clk.h                           | 13 +++++++++
+ 5 files changed, 58 insertions(+)
 
-left over from out-of-tree, will be removed
-
-rest is clear, Thanks!
-Henning
-
-> > +       struct pci_bus *bus;  
-> 
-> Missed blank line.
-> 
-> > +       /*
-> > +        * The GPIO memory is bar0 of the hidden P2SB device.
-> > Unhide the device
-> > +        * to have a quick look at it, before we hide it again.
-> > +        * Also grab the pci rescan lock so that device does not
-> > get discovered
-> > +        * and remapped while it is visible.
-> > +        * This code is inspired by drivers/mfd/lpc_ich.c
-> > +        */
-> > +       bus = pci_find_bus(0, 0);
-> > +       pci_lock_rescan_remove();
-> > +       pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x0);
-> > +       pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0,
-> > &bar0); +
-> > +       bar0 &= ~0xf;
-> > +       pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x1);
-> > +       pci_unlock_rescan_remove();
-> > +#endif /* CONFIG_PCI */
-> > +       return bar0;
-> > +}
-> > +EXPORT_SYMBOL(simatic_ipc_get_membase0);  
-> 
-> Oy vey! I know what this is and let's do it differently. I have some
-> (relatively old) patch series I can send you privately for testing.
-> 
-> ...
-> 
-> > + * This program is free software; you can redistribute it and/or
-> > modify
-> > + * it under the terms of the GNU General Public License version 2
-> > as
-> > + * published by the Free Software Foundation.  
-> 
-> Not needed when you have SPDX.
-> 
-> ...
-> 
-> > +#include <linux/pci.h>  
-> 
-> Wrong header. Should be types.h
-> 
-> ...
-> 
-> > +#include <linux/dmi.h>
-> > +#include <linux/platform_data/x86/simatic-ipc-base.h>  
-> 
-> Missed headers. You need to include ones that the code below is a
-> direct user of.
-> 
-> Like types.h
-> 
+-- 
+2.29.2
 
