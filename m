@@ -2,101 +2,185 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0FF32F1A2
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Mar 2021 18:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03F532F277
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Mar 2021 19:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbhCERpe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 5 Mar 2021 12:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbhCERpO (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 5 Mar 2021 12:45:14 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E641C061574;
-        Fri,  5 Mar 2021 09:45:14 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id kx1so2290967pjb.3;
-        Fri, 05 Mar 2021 09:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JyWkAjyLm630j3rLL6KQnp7/1uSINIlHE/tZlt3ZAsw=;
-        b=HA3CJSfIc/D+Dc62KR0OycnXvnBxuf1k++2TQ1WBH3jR5DVqOHop+lPLFMcV6wWdLZ
-         XNVrjlEicxLEp2EbMLKx1YSjwfqX7ukoHWdegWysr3SWbJJbkutW/8s1wWd437O2LL7B
-         Sc3B1Fl9qnoLMTihS2DZRs+82uFezRAu4WVJYQ4PZcjK3VmczG2Y3bWHr6RsXj5HxlWz
-         0Swy1Abu1qnKNJwjkzssMo5iZiG3ZJQ+NCotALB/O6TS1WMf8duzyaIHSAM2yIlKQqTQ
-         JI2LdyBEJdDn2lcWdeqDkD4kv8TEO7nyVoDszKQWD1hUgYv7vh9xWdGxRtIYklw6oebk
-         NIkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JyWkAjyLm630j3rLL6KQnp7/1uSINIlHE/tZlt3ZAsw=;
-        b=Ho2sV4Wv49O5H/jKAIDQPoK4n+aTc2FcxT7ljTGvyU3MeaEmAytgj/n0MP3W4Vqqv2
-         Xn+efYpllm8CtxsCLYHFCBF0V+8UEougtbg2NAehsKxgZlkDJYnRAKf0o9k97vI0/4LX
-         ZgaVXgqNNnxcK/op43bNm/gq8AuvTJGXUV2Qworgt2KXXj2xaWO6cESACTYpaAi5f8eB
-         S8sW/IXNAEbC1Qts44Of/4KL4USljyBsLTVoXpM3TYvqNZxXhCVJj/96Oy21YzF9WCOM
-         ypP5oo//KRL1pDntZnMVNkQRZnTfWTm1zJWInU2lfce9om4xSRqTD//Y1jxB/gn06o7H
-         YQbA==
-X-Gm-Message-State: AOAM53293TAMNMtqu/WjsUxrZN5ESFeA7hmk/C3LXQvUReyZMW5x6MYx
-        eZCcRu0M6mXhlvBdiZl0RfjRy0mqcut62y3UeOk=
-X-Google-Smtp-Source: ABdhPJx/er0WRMxLnQ2slY7MOzmmgjgZmiY2Z4ikPObbAitoBk8o7YNSHxV8F5ayoRXVpqSe5dkVR8+7F1zng/ijC4M=
-X-Received: by 2002:a17:90a:db49:: with SMTP id u9mr11831616pjx.181.1614966313960;
- Fri, 05 Mar 2021 09:45:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20210302163309.25528-1-henning.schild@siemens.com>
- <20210302163309.25528-2-henning.schild@siemens.com> <CAHp75VfDDGxdhP0-yKOCJyJ_+Y2Zu3TmOdvUJmEZ0AvQnceV6A@mail.gmail.com>
- <2fad304a-9e1e-c83d-7a9e-02b35ed22418@redhat.com> <CAHp75VfB8v1n3Hav_oMqG0k4C31NBEUe082i8NrrOGUbSgoESw@mail.gmail.com>
- <20210305174223.11537d42@md1za8fc.ad001.siemens.net> <CAHp75VdssrnvGn+Qs6Ua72MSFrTCHOCMBdPEAfmGFp1RrwdJ+g@mail.gmail.com>
-In-Reply-To: <CAHp75VdssrnvGn+Qs6Ua72MSFrTCHOCMBdPEAfmGFp1RrwdJ+g@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 5 Mar 2021 19:44:57 +0200
-Message-ID: <CAHp75VdcBxo5emWpNy7jHLfSMfN0zWW_L_BW3Hs3_55zyn6WOA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] platform/x86: simatic-ipc: add main driver for
- Siemens devices
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
+        id S229576AbhCES0y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 5 Mar 2021 13:26:54 -0500
+Received: from gecko.sbs.de ([194.138.37.40]:51579 "EHLO gecko.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229781AbhCES0X (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 5 Mar 2021 13:26:23 -0500
+Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 125IPvDI013653
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 5 Mar 2021 19:25:57 +0100
+Received: from md1za8fc.ad001.siemens.net ([167.87.40.210])
+        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 125IPu6r015789;
+        Fri, 5 Mar 2021 19:25:56 +0100
+Date:   Fri, 5 Mar 2021 19:25:55 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
         Srikanth Krishnakar <skrishnakar@gmail.com>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Mark Gross <mgross@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>
-Content-Type: text/plain; charset="UTF-8"
+        "Hans de Goede" <hdegoede@redhat.com>
+Subject: Re: [PATCH 2/4] leds: simatic-ipc-leds: add new driver for Siemens
+ Industial PCs
+Message-ID: <20210305192555.34f7ea0f@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20210303215615.64e45720@md1za8fc.ad001.siemens.net>
+References: <20210302163309.25528-1-henning.schild@siemens.com>
+        <20210302163309.25528-3-henning.schild@siemens.com>
+        <20210302205452.GA32573@duo.ucw.cz>
+        <20210303141052.30641e6b@md1za8fc.ad001.siemens.net>
+        <20210303193134.GB8720@amd>
+        <20210303214810.511ad65a@md1za8fc.ad001.siemens.net>
+        <20210303215615.64e45720@md1za8fc.ad001.siemens.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Mar 5, 2021 at 7:17 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Fri, Mar 5, 2021 at 6:47 PM Henning Schild
-> <henning.schild@siemens.com> wrote:
-> > Am Fri, 5 Mar 2021 17:42:42 +0200
-> > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
-> > > On Thu, Mar 4, 2021 at 3:47 PM Hans de Goede <hdegoede@redhat.com>
-> > > wrote:
->
-> ...
->
-> > > [1]: https://gitlab.com/andy-shev/next/-/tree/p2sb
-> >
-> > That is a little weird, might be a good idea to RFC reply to the cover
-> > letter of this one. To allow review and discussion in a central place.
->
-> I'm now rebasing it to be more presentable.
-> If you can test this approach and it works for you, I'll send a formal
-> RFC series.
+Am Wed, 3 Mar 2021 21:56:15 +0100
+schrieb Henning Schild <henning.schild@siemens.com>:
 
-Okay, [1] now is in presentable shape, each patch with a proper commit
-message and authorship, also all patches are compiled without issues.
+> Am Wed, 3 Mar 2021 21:48:21 +0100
+> schrieb Henning Schild <henning.schild@siemens.com>:
+> 
+> > Am Wed, 3 Mar 2021 20:31:34 +0100
+> > schrieb Pavel Machek <pavel@ucw.cz>:
+> >   
+> > > Hi!
+> > >     
+> > > > > > +static struct simatic_ipc_led simatic_ipc_leds_io[] = {
+> > > > > > +	{1 << 15, "simatic-ipc:green:run-stop"},
+> > > > > > +	{1 << 7,  "simatic-ipc:yellow:run-stop"},
+> > > > > > +	{1 << 14, "simatic-ipc:red:error"},
+> > > > > > +	{1 << 6,  "simatic-ipc:yellow:error"},
+> > > > > > +	{1 << 13, "simatic-ipc:red:maint"},
+> > > > > > +	{1 << 5,  "simatic-ipc:yellow:maint"},
+> > > > > > +	{0, ""},
+> > > > > > +};        
+> > > > > 
+> > > > > Please use names consistent with other systems, this is user
+> > > > > visible. If you have two-color power led, it should be
+> > > > > :green:power... See include/dt-bindings/leds/common.h .      
+> > > > 
+> > > > Well we wanted to pick names that are printed on the devices and
+> > > > would like to stick to those. Has been a discussion ...
+> > > > Can we have symlinks to have multiple names per LED?      
+> > > 
+> > > No symlinks. We plan to have command line tool to manipulate LEDs,
+> > > aliases might be possible there.    
+> > 
+> > Sounds like a future plan. sysfs and "cat" "echo" are mighty tools
+> > and "everything is a file" is the best idea ever. So i would say any
+> > aliasing should live in the kernel, but that is just me. Tools will
+> > just get out of sync, be missing in busybox or a random yocto ... or
+> > whichever distro you like.
+> > On the other hand you have "complexity should be userland" ... i do
+> > not have the answer.  
+> 
+> My personal horror would be systemd-ledd or some dracut snipet for
+> initrd. But that would be a generic led class discussion ... that
+> tool.
+> 
+> > > > How strong would you feel about us using our names?      
+> > > 
+> > > Strongly. :-)    
+> > 
+> > OK, will try to find a match where possible.   
+> 
+> Do we happen to have a description of the existing names, to find a
+> fit for ours? In the header you pointed out i only found names without
+> "meaning"
 
--- 
-With Best Regards,
-Andy Shevchenko
+I had a closer look at the several LED_FUNCTION_ while i could probably
+find a match for the names we had in mind ...
+
+-       {1 << 14, "simatic-ipc:red:error"},
++       {1 << 14, "simatic-ipc:red:" LED_FUNCTION_FAULT },
+
+I still do not understand what those mean. Going over the kernel
+sources many have only one single grep-hit in the tree.
+LED_FUNCTION_ not having a single one in drivers/leds
+Others are found in one dts and in that header ... 2 hits in the tree,
+maybe i should add my favorite strings ;)
+
+LED_FUNCTION_FLASH vs LED_FUNCTION_TORCH ...? Sound like timing, not
+function.
+
+Let us say i match the three "error", "run-stop", "maint" to
+LED_FUNCTION_*
+
+I would have a really hard time finding matches for other LEDs i did
+not even propose. One example being disks ... many of them, would i be
+allowed to 
+
+LED_FUNCTION_DISK "0"
+LED_FUNCTION_DISK "1"
+...
+
+they would all have the same colors.
+
+Maybe you explain the idea behind choosing only from that namespace? My
+guess would be high-level software being able to toggle leds totally
+indep of the device it runs on. Such software would have to do some
+really nasty directory listing, name parsing, dealing with multiple
+hits. Does such generic software already exist, maybe that would help
+me understand my "mapping problems" ?
+
+The current class encodes, color, function and name into "name".
+
+Maybe i am all wrong and should go for
+
+{1 << 14, "simatic-ipc-error:red:" LED_FUNCTION_STATUS }
+{1 << 15, "simatic-ipc-run-stop:green:" LED_FUNCTION_STATUS}
+{...    , "simatic-ipc-hdd0:red:" LED_FUNCTION_DISK }
+{...    , "simatic-ipc-hdd1:red:" LED_FUNCTION_DISK }
+
+so appending my wanted name to the name before the first :, and use
+functions i "understand" after the second :
+
+regards,
+Henning
+
+
+> regards,
+> Henning
+> 
+> >   
+> > > Do you have a picture how the leds look like?    
+> > 
+> > I could even find chassis photos in our internal review but that
+> > would be too much.
+> > 
+> > Our idea is probably the same as yours. We want the same names
+> > across all devices. But we struggle with colors because on some
+> > boxes we have red+green, while other offer yellow ... implemented
+> > in HW and messing with red+green in some cases.
+> > 
+> > But so far we only looked at Siemens devices and thought we could
+> > get our own "namespace".
+> > 
+> > To be honest i could not even tell how our names map on the known
+> > ones, but we will do our best to find a match. They all are
+> > "high-level" so "power" and other basic things are not exposed.
+> > 
+> > regards,
+> > Henning
+> >    
+> > > Best regards,
+> > > 							Pavel    
+> >   
+> 
+
