@@ -2,74 +2,87 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99025330C34
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Mar 2021 12:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1716330ED2
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Mar 2021 14:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbhCHLW1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 Mar 2021 06:22:27 -0500
-Received: from smtp.asem.it ([151.1.184.197]:58542 "EHLO smtp.asem.it"
+        id S229646AbhCHNCy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 Mar 2021 08:02:54 -0500
+Received: from gecko.sbs.de ([194.138.37.40]:46573 "EHLO gecko.sbs.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231963AbhCHLWJ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 Mar 2021 06:22:09 -0500
-Received: from webmail.asem.it
-        by asem.it (smtp.asem.it)
-        (SecurityGateway 6.5.2)
-        with ESMTP id SG000850608.MSG 
-        for <linux-watchdog@vger.kernel.org>; Mon, 08 Mar 2021 12:21:56 +0100S
-Received: from ASAS044.asem.intra (172.16.16.44) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 8 Mar
- 2021 12:21:55 +0100
-Received: from flavio-x.asem.intra (172.16.17.208) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Mon, 8 Mar 2021 12:21:55 +0100
-From:   Flavio Suligoi <f.suligoi@asem.it>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        id S229674AbhCHNCo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 8 Mar 2021 08:02:44 -0500
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 128D2HrM007790
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 8 Mar 2021 14:02:17 +0100
+Received: from md1za8fc.ad001.siemens.net ([167.87.1.188])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 128CvFb0022027;
+        Mon, 8 Mar 2021 13:57:15 +0100
+Date:   Mon, 8 Mar 2021 13:57:14 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Flavio Suligoi <f.suligoi@asem.it>
-Subject: [PATCH v1 2/2] watchdog: wdat: add start_enable global parameter
-Date:   Mon, 8 Mar 2021 12:21:51 +0100
-Message-ID: <20210308112151.716315-3-f.suligoi@asem.it>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210308112151.716315-1-f.suligoi@asem.it>
-References: <20210308112151.716315-1-f.suligoi@asem.it>
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH 1/4] platform/x86: simatic-ipc: add main driver for
+ Siemens devices
+Message-ID: <20210308135714.3cc48c34@md1za8fc.ad001.siemens.net>
+In-Reply-To: <CAHp75VdcBxo5emWpNy7jHLfSMfN0zWW_L_BW3Hs3_55zyn6WOA@mail.gmail.com>
+References: <20210302163309.25528-1-henning.schild@siemens.com>
+        <20210302163309.25528-2-henning.schild@siemens.com>
+        <CAHp75VfDDGxdhP0-yKOCJyJ_+Y2Zu3TmOdvUJmEZ0AvQnceV6A@mail.gmail.com>
+        <2fad304a-9e1e-c83d-7a9e-02b35ed22418@redhat.com>
+        <CAHp75VfB8v1n3Hav_oMqG0k4C31NBEUe082i8NrrOGUbSgoESw@mail.gmail.com>
+        <20210305174223.11537d42@md1za8fc.ad001.siemens.net>
+        <CAHp75VdssrnvGn+Qs6Ua72MSFrTCHOCMBdPEAfmGFp1RrwdJ+g@mail.gmail.com>
+        <CAHp75VdcBxo5emWpNy7jHLfSMfN0zWW_L_BW3Hs3_55zyn6WOA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-SGHeloLookup-Result: pass smtp.helo=webmail.asem.it (ip=172.16.16.44)
-X-SGSPF-Result: none (smtp.asem.it)
-X-SGOP-RefID: str=0001.0A782F1A.604608D3.00BB,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0 (_st=1 _vt=0 _iwf=0)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The "start_enable" global parameter, managed in watchdog_core.c,
-forces the driver to start the watchdog countdown in the same moment of the
-module insertion.
-The driver also updates the watchdog status, setting the WDOG_HW_RUNNING
-flag, to enable the watchdog ping feature managed by the watchdog_core
-itself.
+Am Fri, 5 Mar 2021 19:44:57 +0200
+schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
 
-Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
----
- drivers/watchdog/wdat_wdt.c | 2 ++
- 1 file changed, 2 insertions(+)
+> On Fri, Mar 5, 2021 at 7:17 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Fri, Mar 5, 2021 at 6:47 PM Henning Schild
+> > <henning.schild@siemens.com> wrote:  
+> > > Am Fri, 5 Mar 2021 17:42:42 +0200
+> > > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:  
+> > > > On Thu, Mar 4, 2021 at 3:47 PM Hans de Goede
+> > > > <hdegoede@redhat.com> wrote:  
+> >
+> > ...
+> >  
+> > > > [1]: https://gitlab.com/andy-shev/next/-/tree/p2sb  
+> > >
+> > > That is a little weird, might be a good idea to RFC reply to the
+> > > cover letter of this one. To allow review and discussion in a
+> > > central place.  
+> >
+> > I'm now rebasing it to be more presentable.
+> > If you can test this approach and it works for you, I'll send a
+> > formal RFC series.  
+> 
+> Okay, [1] now is in presentable shape, each patch with a proper commit
+> message and authorship, also all patches are compiled without issues.
 
-diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index cec7917790e5..7304a335227f 100644
---- a/drivers/watchdog/wdat_wdt.c
-+++ b/drivers/watchdog/wdat_wdt.c
-@@ -437,6 +437,8 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 	}
- 
- 	wdat_wdt_boot_status(wdat);
-+	if (watchdog_global_param_start_enabled())
-+		wdat_wdt_start(&wdat->wdd);
- 	wdat_wdt_set_running(wdat);
- 
- 	ret = wdat_wdt_enable_reboot(wdat);
--- 
-2.25.1
+Thank you so much, i will base v2 on that and let you know how that
+works.
 
+regards,
+Henning
