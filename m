@@ -2,56 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4607F331EA6
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Mar 2021 06:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3F8331ECC
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Mar 2021 06:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbhCIF27 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Mar 2021 00:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S229765AbhCIFwH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Mar 2021 00:52:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbhCIF2b (ORCPT
+        with ESMTP id S229829AbhCIFvz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Mar 2021 00:28:31 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB628C06174A;
-        Mon,  8 Mar 2021 21:28:31 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id l5so2768983ooj.7;
-        Mon, 08 Mar 2021 21:28:31 -0800 (PST)
+        Tue, 9 Mar 2021 00:51:55 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08897C06174A;
+        Mon,  8 Mar 2021 21:51:55 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id f8so6694621otp.8;
+        Mon, 08 Mar 2021 21:51:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=OB87Z/fkFmKzuRifmqIHiIBkTD16UmoOu+JztA7Y7bc=;
-        b=XGWm0N4bK3IZsVMo2XV0Qu4IvswF5exGsn0AhoIlxugaNV8QtzDAWGNnbk2zBoE0wG
-         gwtpNfFfPGbW0siWX8CG4zduSMWD5e2ca5GvREsXHRJeAOKnnqUilGpHkS1ZtCRF5/IU
-         zCTOxCxAzoKXfHveu03F+tCG42x7wt3zaD+QjpAlTqnFWBh52R+eniXAhysg8O5lf/Tg
-         3if1Tjf0G+72F5NzkiRaSYeYqVzXcwsYz35O62pvAJU/PHZPGwTcRRknbkjmDBtvPWro
-         xiPik7NJ6hXHBf115v7rtGZvUpBcR8Id+IstYnStq1ZzwzRDCMxfBYaXoRlBnZdGk2la
-         nEXg==
+        bh=P8use5HznHVSTRQHEMf/PO2GeUcJ6pS+jo8eH21EzzA=;
+        b=MFhEXsN/NqptaShWoDt2CvQgZ+3DpRXwRezMOCNCfjB31lf9RDZkGmT+WEoyr9jiD1
+         ROVQ1GdVvfOL7M7ULXPlUkqhSKdo+dJ8T/NZbApQquzaL590C3yNkOHPccu088QBBeMp
+         pOB3rJD4e4yWsIgYPyKq8sJe36+tXOhyU5Hr2NosKvPyFgh5lwBM4HsfR6x4Ax1bGdGp
+         8uDzT2mO7D7zMDdsAjESAR/ZJcRjsrYe0o5jWPqqpX/wACiEj1vmeIapbfAOnT+svJ2j
+         8isQJhUhBg8enKvkiCbJoMxGHCeQwMvsCMktD1iU5DmpHXe1YQbBaQfGS/2+ALnSOU6y
+         VWfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=OB87Z/fkFmKzuRifmqIHiIBkTD16UmoOu+JztA7Y7bc=;
-        b=JaOpDPjbLgkXbrgKjdNTNN6AB3cAPhOKM1C7iSmaRtoainr7vnfWpmPgET9votWwUT
-         CopAaBB/e7JF32Q8M1MDB5CJIDQbwoXjrMvjt3RPzErtHhpIiEd3r1YmdgEoMY/EORq/
-         rm7n4Nsh3fFY0DG/ldteCSSLI5R2YYObLe0kC6Bspap/RECaqdyTESIMk8hopXEXTtcj
-         80bAFgGhsFTpXqlqbuLLZbXBZ4I0TvWEXN+bPbh4clP19hrEKNLl+dwRMWZ+tgY7c11s
-         mxMHE51hPKa74rt0NdqWzvqxm8WiyFWSdBh0E95sk9nsRyB66DEKC1hbzqNDe/89GVmS
-         wijg==
-X-Gm-Message-State: AOAM533vMdsWHgYDTLY9P6q0xGwlRDKOFFdwKRKNIMcidPMpNN3yhYsT
-        A2457siRl/ukXoxRlJvSXc1sGml8T3w=
-X-Google-Smtp-Source: ABdhPJxOc9yChcryOuMC3Kf8kh25fJqb5ZBsiOZlKfZSl3HCRleGCLeC3WqoijdbWURl2KDq8kelRQ==
-X-Received: by 2002:a05:6820:3c8:: with SMTP id s8mr21117712ooj.49.1615267711057;
-        Mon, 08 Mar 2021 21:28:31 -0800 (PST)
+        bh=P8use5HznHVSTRQHEMf/PO2GeUcJ6pS+jo8eH21EzzA=;
+        b=VyS+tt9clC00ypZdHLG8xNhVuzggSheqRQpVge42j4imFYT9rn2Iiifetm9AQ/VCse
+         nyCq96xkE7IAYkX8cOuIhY1xdT2nOBuOpO+iToySRoabPvfmOSBf1dWW1PF+++lPWuwJ
+         QOejexWx/Xa/lbtx6485g9JqLOyW2M/MSwzTyLtdd6exPymABDz6TTbba5kfKGneBdGj
+         9x+hcyYzJ3NmfLIyEOjRI81k+d2OuruVWf+Flq3rzI4y5U6HihuhaYS26YQiEVw6+BYx
+         YiCbuC0/IcokkFmIiEIII5ul4HuQAESKRyexwaap3aigsiAHU0ggXFbqIFyjdTj9gHKU
+         dT9w==
+X-Gm-Message-State: AOAM533NuOkxyy7k0wcvJIHVoZJMm+LCyWMNUPMS5xBOZupC+UhmP8FZ
+        +picvHltLUBgXt3dRYzQVfTIjRXkCJI=
+X-Google-Smtp-Source: ABdhPJz5oVFutlAYPZ5icpEM+7jpjpJ2D0jxP5kqu3uMFieSPbIMKHk4E255CqqIe4ofHvzErsW5mQ==
+X-Received: by 2002:a9d:6545:: with SMTP id q5mr22902859otl.179.1615269114081;
+        Mon, 08 Mar 2021 21:51:54 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f19sm2894581oiw.38.2021.03.08.21.28.29
+        by smtp.gmail.com with ESMTPSA id 53sm1126323oti.77.2021.03.08.21.51.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Mar 2021 21:28:30 -0800 (PST)
+        Mon, 08 Mar 2021 21:51:53 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 1/3] clk: add devm_clk_prepare_enable() helper
+Subject: Re: [PATCH v2 0/3] add "delay" clock support to gpio_wdt
 To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
@@ -59,7 +59,6 @@ Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-watchdog@vger.kernel.org
 References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
  <20210304221247.488173-1-linux@rasmusvillemoes.dk>
- <20210304221247.488173-2-linux@rasmusvillemoes.dk>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -104,28 +103,80 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <4b560502-3885-91a0-3100-4b5506a17b32@roeck-us.net>
-Date:   Mon, 8 Mar 2021 21:28:29 -0800
+Message-ID: <1c0cd771-6067-69be-9838-9d3ab24a2503@roeck-us.net>
+Date:   Mon, 8 Mar 2021 21:51:51 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210304221247.488173-2-linux@rasmusvillemoes.dk>
+In-Reply-To: <20210304221247.488173-1-linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 3/4/21 2:12 PM, Rasmus Villemoes wrote:
-> Add a managed wrapper for clk_prepare_enable().
+> As Arnd and Guenther suggested, this adds support to the gpio_wdt
+> driver for being a consumer of the clock driving the ripple
+> counter. However, I don't think it should be merged as-is, see below.
 > 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> The first patch makes sense on its own, quick grepping suggests plenty
+> of places that could benefit from this, and I thought it would be odd
+> to have to re-introduce a .remove callback in the gpio_wdt driver.
+> 
 
-That has been tried several times, including by yours truly,
-and has always been rejected.
+This has zero chance to be accepted. As suggested in the patch,
+just use devm_add_action(), like many other watchdog drivers.
 
-Just use devm_add_action_or_reset() like many other watchdog
-drivers.
+> Unfortunately, this turns out to be a bit of an "operation succeeded,
+> patient (almost) died": We use CONFIG_GPIO_WATCHDOG_ARCH_INITCALL
+> because the watchdog has a rather short timeout (1.0-2.25s, 1.6s
+> typical according to data sheet). At first, I put the new code right
+> after the devm_gpiod_get(), but the problem is that this early, we get
+> -EPROBE_DEFER since the clock provider (the RTC which sits off i2c)
+> isn't probed yet. But then the board would reset because it takes way
+> too long for the rest of the machine to initialize. [The bootloader
+> makes sure to turn on the RTC's clock output so the watchdog is
+> actually functional, the task here is to figure out the proper way to
+> prevent clk_disable_unused() from disabling it.]
+> 
 
+Is there a property indicating always-on for clocks, similar to
+regulator-always-on ? The idea seems to exist, but it looks like
+it is always explict (ie mentioned somewhere in the code that a clock
+is always on, or "safe"). It would help if the clock in question
+can be marked as always-on without explicit consumer.
+
+Thanks,
 Guenter
+
+> Moving the logic to after the first "is it always-running and if so
+> give it an initial ping" made the board survive, but unfortunately the
+> second, and succesful, probe happens a little more than a second
+> later, which happens to work on this particular board, but is
+> obviously not suitable for production given that it's already above
+> what the spec says, and other random changes in the future might make
+> the gap even wider.
+> 
+> So I don't know. The hardware is obviously misdesigned, and I don't
+> know how far the mainline kernel should stretch to support this; OTOH
+> the kernel does contain lots of workarounds for quirks and hardware
+> bugs. 
+> 
+> 
+> 
+> 
+> Rasmus Villemoes (3):
+>   clk: add devm_clk_prepare_enable() helper
+>   dt-bindings: watchdog: add optional "delay" clock to gpio-wdt binding
+>   watchdog: gpio_wdt: implement support for optional "delay" clock
+> 
+>  .../devicetree/bindings/watchdog/gpio-wdt.txt |  6 ++++
+>  .../driver-api/driver-model/devres.rst        |  1 +
+>  drivers/clk/clk-devres.c                      | 29 +++++++++++++++++++
+>  drivers/watchdog/gpio_wdt.c                   |  9 ++++++
+>  include/linux/clk.h                           | 13 +++++++++
+>  5 files changed, 58 insertions(+)
+> 
+
