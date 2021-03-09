@@ -2,62 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59545331E9E
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Mar 2021 06:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4607F331EA6
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Mar 2021 06:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbhCIFZO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Mar 2021 00:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S229577AbhCIF27 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Mar 2021 00:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbhCIFZD (ORCPT
+        with ESMTP id S229475AbhCIF2b (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Mar 2021 00:25:03 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA373C06175F
-        for <linux-watchdog@vger.kernel.org>; Mon,  8 Mar 2021 21:25:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=L2PrEq9PiQQjCd9Gf1J/rJzNdi3nSORDhWXiEIr8Vag=; b=GPmOB4mFnbeoQaFTYCArcc5Jv/
-        EHlXJ2ww+uKs48V62wnvTECz1YfJCJuJXoyMQYpeKg8INXJEDea0yqBI9aF9nrUVLyYl/WER/5U28
-        UofT1Rwf7IjQtQz0qvwezDf5D3gwFScRkm8cxRV+8k7xiVRajorCjqA/mSnBIv6jzRuxRUQ5z3g6K
-        cW1tRYg08AzTDSkyOeFtzH+hu0x0O6IaZ/VEJtnuo36gbTOEFZ+t14CH/X6VVonZ238CHnisojjbw
-        NRZ6J4eFlx9es/qmQd2eZFSkSQrbsqDyHPFaDJxHGNQNuipgc7BAIVHrV781WDq9DsD25bbPjzwqg
-        4SuYS87Q==;
-Received: from merlin.infradead.org ([2001:8b0:10b:1234::107])
-        by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
-        id 1lJUrc-003o04-Tp
-        for linux-watchdog@vger.kernel.org; Tue, 09 Mar 2021 05:25:01 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=L2PrEq9PiQQjCd9Gf1J/rJzNdi3nSORDhWXiEIr8Vag=; b=EF7SOC8hiwxKua6r+AKdKVvESJ
-        fWJLyQlMCxinCMHHNu9ob6pHoVW4svnNQMg3FIGVRH+6jXNQv09wxjpCMF3pWzqH/IlT3ESpwZnKD
-        3o8lIjurd6v59PZZorDrLBlPUCSroFJr5zQG/kEhE0FO1Ye4tid0IvpbFwwKAtytLEllGJ589n6ia
-        x++JR8LRBks9UfKzIsS1SiRE2MdwliZ6cgOhzCg4Lry2VMHIjaqyUyuzoPnF8TKrRgp5hz5wYxEQa
-        VjyI+5XHCh4QDI45Oophek8sW7aJkSGfuyI0jQuYYwc8AmPA9N703OBJnd0XeH9G6GYlHoHSVAxBk
-        2skAguYg==;
-Received: from [2601:1c0:6280:3f0::3ba4]
-        by merlin.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lJUrE-000cK6-MB; Tue, 09 Mar 2021 05:24:37 +0000
-Subject: Re: [PATCH v1 1/2] watchdog: add global watchdog kernel module
- parameters structure
-To:     Flavio Suligoi <f.suligoi@asem.it>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210308112151.716315-1-f.suligoi@asem.it>
- <20210308112151.716315-2-f.suligoi@asem.it>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <0e203992-cbff-738f-4629-368578cb992d@infradead.org>
-Date:   Mon, 8 Mar 2021 21:24:32 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Tue, 9 Mar 2021 00:28:31 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB628C06174A;
+        Mon,  8 Mar 2021 21:28:31 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id l5so2768983ooj.7;
+        Mon, 08 Mar 2021 21:28:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OB87Z/fkFmKzuRifmqIHiIBkTD16UmoOu+JztA7Y7bc=;
+        b=XGWm0N4bK3IZsVMo2XV0Qu4IvswF5exGsn0AhoIlxugaNV8QtzDAWGNnbk2zBoE0wG
+         gwtpNfFfPGbW0siWX8CG4zduSMWD5e2ca5GvREsXHRJeAOKnnqUilGpHkS1ZtCRF5/IU
+         zCTOxCxAzoKXfHveu03F+tCG42x7wt3zaD+QjpAlTqnFWBh52R+eniXAhysg8O5lf/Tg
+         3if1Tjf0G+72F5NzkiRaSYeYqVzXcwsYz35O62pvAJU/PHZPGwTcRRknbkjmDBtvPWro
+         xiPik7NJ6hXHBf115v7rtGZvUpBcR8Id+IstYnStq1ZzwzRDCMxfBYaXoRlBnZdGk2la
+         nEXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=OB87Z/fkFmKzuRifmqIHiIBkTD16UmoOu+JztA7Y7bc=;
+        b=JaOpDPjbLgkXbrgKjdNTNN6AB3cAPhOKM1C7iSmaRtoainr7vnfWpmPgET9votWwUT
+         CopAaBB/e7JF32Q8M1MDB5CJIDQbwoXjrMvjt3RPzErtHhpIiEd3r1YmdgEoMY/EORq/
+         rm7n4Nsh3fFY0DG/ldteCSSLI5R2YYObLe0kC6Bspap/RECaqdyTESIMk8hopXEXTtcj
+         80bAFgGhsFTpXqlqbuLLZbXBZ4I0TvWEXN+bPbh4clP19hrEKNLl+dwRMWZ+tgY7c11s
+         mxMHE51hPKa74rt0NdqWzvqxm8WiyFWSdBh0E95sk9nsRyB66DEKC1hbzqNDe/89GVmS
+         wijg==
+X-Gm-Message-State: AOAM533vMdsWHgYDTLY9P6q0xGwlRDKOFFdwKRKNIMcidPMpNN3yhYsT
+        A2457siRl/ukXoxRlJvSXc1sGml8T3w=
+X-Google-Smtp-Source: ABdhPJxOc9yChcryOuMC3Kf8kh25fJqb5ZBsiOZlKfZSl3HCRleGCLeC3WqoijdbWURl2KDq8kelRQ==
+X-Received: by 2002:a05:6820:3c8:: with SMTP id s8mr21117712ooj.49.1615267711057;
+        Mon, 08 Mar 2021 21:28:31 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f19sm2894581oiw.38.2021.03.08.21.28.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Mar 2021 21:28:30 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v2 1/3] clk: add devm_clk_prepare_enable() helper
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
+ <20210304221247.488173-1-linux@rasmusvillemoes.dk>
+ <20210304221247.488173-2-linux@rasmusvillemoes.dk>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <4b560502-3885-91a0-3100-4b5506a17b32@roeck-us.net>
+Date:   Mon, 8 Mar 2021 21:28:29 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210308112151.716315-2-f.suligoi@asem.it>
+In-Reply-To: <20210304221247.488173-2-linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -65,205 +117,15 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
-
-On 3/8/21 3:21 AM, Flavio Suligoi wrote:
-> Different watchdog modules frequently require the same type of parameters
-> (for example: timeout, nowayout feature, start wdog on module insertion,
-> etc.).
-> Instead of adding this kind of module parameters independently to each
-> driver, the best solution is declaring each feature only once,
-> in the watchdog core.
+On 3/4/21 2:12 PM, Rasmus Villemoes wrote:
+> Add a managed wrapper for clk_prepare_enable().
 > 
-> In this way, each driver can read these "global" parameters and then,
-> if needed, implements them, according to the particular hw watchdog
-> characteristic.
-> 
-> Using this approach, it will be possible reduce some duplicate code
-> in the _new_ watchdog drivers and simplify the code maintenance.
-> Moreover, the code will be clearer, since the same kind of parameters
-> are often called with different names.
-> Just for example, reading the doc file:
-> 
-> Documentation/watchdog/watchdog-parameters.rst
-> 
-> the "timeout" feature is called in the following ways:
-> 
-...
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-> 
-> Obviously, we cannot remove these customized parameters from the code,
-> for compatibility reasons, but we can use this new "global" parameters
-> structure for the new watchdog drivers.
-> 
-> This patch adds the base structure to add the global parameters, starting
-> with some common integer data (timeout, ioport, irq) and a bitwise
-> "features" flag, where we can store some boolean features (verbose,
-> test_mode, start_enabled, nowayout, etc.)
-> 
-> Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
-> ---
->  Documentation/watchdog/index.rst              |  1 +
->  .../watchdog-core-global-parameters.rst       | 74 +++++++++++++++++++
->  drivers/watchdog/watchdog_core.c              | 74 +++++++++++++++++++
->  include/linux/watchdog.h                      | 42 +++++++++++
->  4 files changed, 191 insertions(+)
->  create mode 100644 Documentation/watchdog/watchdog-core-global-parameters.rst
-> 
+That has been tried several times, including by yours truly,
+and has always been rejected.
 
-> diff --git a/Documentation/watchdog/watchdog-core-global-parameters.rst b/Documentation/watchdog/watchdog-core-global-parameters.rst
-> new file mode 100644
-> index 000000000000..332fe0c6ada0
-> --- /dev/null
-> +++ b/Documentation/watchdog/watchdog-core-global-parameters.rst
-> @@ -0,0 +1,74 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===============================
-> +Watchdog Core Global Parameters
-> +===============================
-> +
-> +Information for watchdog kernel modules developers.
-> +
-> +Introduction
-> +============
-> +
-> +Different watchdog modules frequently require the same type of parameters
-> +(for example: *timeout*, *nowayout* feature, *start_enabled* to start the
-> +watchdog on module insertion, etc.).
-> +Instead of adding this kind of module parameters independently to each driver,
-> +the best solution is declaring each feature only once, in the watchdog core.
-> +
-> +In this way, each driver can read these "global" parameters and then,
-> +if needed, can implement them, according to the particular hw watchdog
+Just use devm_add_action_or_reset() like many other watchdog
+drivers.
 
-Please spell out "hardware" (not "hw").
-
-> +characteristic.
-> +
-> +Using this approach, it is possible reduce some duplicate code in the *new*
-
-                              possible to reduce
-
-> +watchdog drivers and simplify the code maintenance.  Moreover, the code will
-> +be clearer, since the same kind of parameters are often called with different
-> +names (see Documentation/watchdog/watchdog-parameters.rst).
-> +Obviously, for compatibility reasons, we cannot remove the already existing
-> +parameters from the code of the various watchdog modules, but we can use this
-> +"global" approach for the new watchdog drivers.
-> +
-> +
-> +Global parameters declaration
-> +==============================
-> +
-> +The global parameters data structure is declared in include/linux/watchdog.h,
-> +as::
-> +
-> +	struct watchdog_global_parameters_struct {
-> +		int timeout;
-> +		int ioport;
-> +		int irq;
-> +		unsigned long features;
-> +		/* Bit numbers for features flags */
-> +		#define WDOG_GLOBAL_PARAM_VERBOSE	0
-> +		#define WDOG_GLOBAL_PARAM_TEST_MODE	1
-> +		#define WDOG_GLOBAL_PARAM_START_ENABLED	2
-> +		#define WDOG_GLOBAL_PARAM_NOWAYOUT	3
-> +	};
-> +
-> +The variable "feature" is a bitwise flags container, to store boolean
-> +features, such as:
-> +
-> +* nowayout
-> +* start_enable
-
-     start_enabled
-everywhere else.
-
-> +* etc...
-> +
-> +Other variables can be added, to store some numerical values and other data
-> +required.
-> +
-> +The global parameters are declared (as usual for the module parameters) in the
-> +first part of drivers/watchdog/watchdog_core.c file.
-> +The above global data structure is then managed by the function
-> +*void global_parameters_init()*, in the same file.
-> +
-> +Global parameters use
-> +=====================
-> +
-> +Each watchdog driver, to check if one of the global parameters is enabled, can
-> +use the corresponding in-line function declared in include/linux/watchdog.h.
-> +At the moment the following functions are ready to use:
-> +
-> +* watchdog_global_param_verbose_enabled()
-> +* watchdog_global_param_test_mode_enabled()
-> +* watchdog_global_param_start_enabled()
-> +* watchdog_global_param_nowayout_enabled()
-
-> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-> index 5df0a22e2cb4..fd710be22390 100644
-> --- a/drivers/watchdog/watchdog_core.c
-> +++ b/drivers/watchdog/watchdog_core.c
-> @@ -43,6 +43,78 @@ static int stop_on_reboot = -1;
->  module_param(stop_on_reboot, int, 0444);
->  MODULE_PARM_DESC(stop_on_reboot, "Stop watchdogs on reboot (0=keep watching, 1=stop)");
->  
-> +/* verbose - Global parameter */
-> +static bool glob_param_verbose;
-> +module_param_named(verbose, glob_param_verbose, bool, 0);
-> +MODULE_PARM_DESC(verbose, "Add verbosity/debug messages");
-> +
-> +/* test_mode - Global parameter */
-> +static bool glob_param_test_mode;
-> +module_param_named(test_mode, glob_param_test_mode, bool, 0);
-> +MODULE_PARM_DESC(test_mode, "Watchdog testmode (1 = no reboot), default=0");
-> +
-> +/* start_enable - Global parameter */
-> +static bool glob_param_start_enabled;
-> +module_param_named(start_enabled, glob_param_start_enabled, bool, 0);
-> +MODULE_PARM_DESC(start_enabled, "Watchdog is started on module insertion "
-> +		"(default=0)");
-> +
-> +/* nowayout - Global parameter */
-> +static bool glob_param_nowayout = WATCHDOG_NOWAYOUT;
-> +module_param_named(nowayout, glob_param_nowayout, bool, 0);
-> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started "
-> +		"(default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> +/*
-> + * Watchdog "global" kernel parameters, common for all wdog drivers.
-> + *
-> + * Sometimes different watchdog modules need the same type of parameters
-> + * (for example: timeout, nowayout feature, start wdog on module insertion,
-> + * etc.).
-> + * Instead of add this kind of module parameters independently to each driver,
-
-                 adding
-
-> + * the best solution is declare each feature only once, in the watchdog core.
-> + *
-> + * In this way, each driver can read these "global" parameters and then,
-> + * if needed, implements them, according to the particular hw watchdog
-
-s/hw/hardware/
-
-> + * characteristic.
-> + */
-> +struct watchdog_global_parameters_struct watchdog_global_parameters;
-> +EXPORT_SYMBOL_GPL(watchdog_global_parameters);
-
-
-If I were doing (or using) this, I would probably want 'test_mode' and
-'verbosity' to be unsigned int masks instead of a bool, so that there could
-be multiple types of test_mode or verbosity.
-That's something that some other subsystems do, but maybe watchdog is simple
-enough that it's not needed.
-If it is needed, then we are back to each driver doing it its own way (until
-this patch is updated).
-
-
-HTH. thanks.
--- 
-~Randy
-
+Guenter
