@@ -2,118 +2,119 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5FB333B03
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Mar 2021 12:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F7C3348C8
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Mar 2021 21:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbhCJLF2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 10 Mar 2021 06:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbhCJLFN (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 10 Mar 2021 06:05:13 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB063C06174A
-        for <linux-watchdog@vger.kernel.org>; Wed, 10 Mar 2021 03:05:12 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id l22so6836164wme.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 10 Mar 2021 03:05:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=atOYJKiQtVIBmsUBmGwjDSf2ypG69MQgMpofGinBoI0=;
-        b=Mlh0zyh1Ino2/V00s3+M49s+nPBHlpbeYQQX6xgnfD9WRcoEVEUpxqyN7ZKOXj7jNJ
-         taseauMDQ5v2plY79dBSWk9X1VWM/daC/1yL/nZtkKJ8vKKVhYDHPO8hn41aD3c4zn2P
-         qh7R6smDbymWjqQhmjAD6ssxaMXHyuSWApIfcxBDr3GU8Pv0KShHQzUZZrpJ3BZildzd
-         eyvGiBpnFwgtmGcsHqoMxpGnzcpaRT7CaASrWmh1/hXvqBGZZNiYgD6/GNkAtGoHIjH3
-         O+Pb0oOaUWMT71DpJiXOneOFcchp4gm9djkIHBmkU+4WM8GUhA4sQdzyV5xxk3xctfx+
-         tWSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=atOYJKiQtVIBmsUBmGwjDSf2ypG69MQgMpofGinBoI0=;
-        b=l75t/Ws8pqGX5MyfofT0gwi2Lsp4d7ELUgk330Bbalaz4cPUqU1ABDXoE1r0SYhu65
-         5wlvBJnuWTWPK4YpprxLuFZGLJZA5TpCTTSQZHkCqWgpaik73fzabBlBTV/Swe4Xxh3G
-         oGF96N8GzHpO73yBmgSz5EZGil+lPBztPvqLrAqfXGtHx3PSmGDT0uYXv5Rv1B2/fPUW
-         jCDugCYGBnFbc1k/6raelsdn/Fd3ngzhUsJaStNOrqdyxC1t801UNnfiMKY2Lmx08DBT
-         HJoO3tUfFFJcX/2qCNclyNN90tnRrcc4axVB1cBVhQDqNZ6n5TjyaymXdU7TmfWvXkLY
-         VVdA==
-X-Gm-Message-State: AOAM533EtxNJOPuLfrl992TQgfqyYT1EPbnjaQ88MEx8JHDABZamSjJX
-        ZlN2POnTNtRy1CCe635Y1PlGwA==
-X-Google-Smtp-Source: ABdhPJwIN42kKI2urjm5A/VYZZSRhiAcsg0CX8N7w77B4ABoEAk97Hu3APSNPnqi+kElMOv7xpMTqg==
-X-Received: by 2002:a1c:bc56:: with SMTP id m83mr2825755wmf.174.1615374311485;
-        Wed, 10 Mar 2021 03:05:11 -0800 (PST)
-Received: from dell ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id n6sm29772526wrt.1.2021.03.10.03.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 03:05:11 -0800 (PST)
-Date:   Wed, 10 Mar 2021 11:05:09 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        id S231368AbhCJUVI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 10 Mar 2021 15:21:08 -0500
+Received: from z11.mailgun.us ([104.130.96.11]:17248 "EHLO z11.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231264AbhCJUUx (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 10 Mar 2021 15:20:53 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1615407653; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=dxtZkfJ5IYq7cEqVuScsgqcXnLuYpfjLDBXSw8+MHek=; b=vIL8LOb4zthXNBgBdJY8hXPXFaYQeRg/Ygau0677ND5TS8up2jBSTno585Ze46bsqsfsbkov
+ tGNJuq8uQ/YdiQH/fH3VtwkBmR6zcBb1edoymgVjaeW6o+PMjUROCDJw9VKCvF+abroc9CYz
+ nh+OeQQ6XZli5cyZPYgZcaH05v8=
+X-Mailgun-Sending-Ip: 104.130.96.11
+X-Mailgun-Sid: WyJmNTk5OSIsICJsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 60492a05d3a53bc38f144a70 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 10 Mar 2021 20:20:21
+ GMT
+Sender: saiprakash.ranjan=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 14BF2C43465; Wed, 10 Mar 2021 20:20:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: saiprakash.ranjan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A1C96C433C6;
+        Wed, 10 Mar 2021 20:20:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A1C96C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=saiprakash.ranjan@codeaurora.org
+From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
-        linux-watchdog@vger.kernel.org
-Subject: [GIT PULL] Immutable branch between MFD and Watchdog due for the
- v5.13 merge window
-Message-ID: <20210310110509.GK701493@dell>
-References: <cover.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
+        linux-watchdog@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Subject: [PATCH] watchdog: qcom: Move suspend/resume to suspend_late/resume_early
+Date:   Thu, 11 Mar 2021 01:50:04 +0530
+Message-Id: <20210310202004.1436-1-saiprakash.ranjan@codeaurora.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Enjoy!
+During suspend/resume usecases and tests, it is common to see issues
+such as lockups either in suspend path or resume path because of the
+bugs in the corresponding device driver pm handling code. In such cases,
+it is important that watchdog is active to make sure that we either
+receive a watchdog pretimeout notification or a bite causing reset
+instead of a hang causing us to hard reset the machine.
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
+There are good reasons as to why we need this because:
 
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
+* We can have a watchdog pretimeout governor set to panic in which
+  case we can have a backtrace which would help identify the issue
+  with the particular driver and cause a normal reboot.
 
-are available in the Git repository at:
+* Even in case where there is no pretimeout support, a watchdog
+  bite is still useful because some firmware has debug support to dump
+  CPU core context on watchdog bite for post-mortem analysis.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-watchdog-v5.13
+* One more usecase which comes to mind is of warm reboot. In case we
+  hard reset the target, a cold reboot could be induced resulting in
+  lose of ddr contents thereby losing all the debug info.
 
-for you to fetch changes up to 42fc191d60e6d5fd8c52e7afa8bccdc912947ce4:
+Currently, the watchdog pm callback just invokes the usual suspend
+and resume callback which do not have any special ordering in the
+sense that a watchdog can be suspended before the buggy device driver
+suspend callback and watchdog resume can happen after the buggy device
+driver resume callback. This would mean that the watchdog will not be
+active when the buggy driver cause the lockups thereby hanging the
+system. So to make sure this doesn't happen, move the watchdog pm to
+use late/early system pm callbacks which will ensure that the watchdog
+is suspended late and resumed early so that it can catch such issues.
 
-  mfd: bd9576: Add safety limit/monitoring registers (2021-03-10 10:59:03 +0000)
+Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+---
+ drivers/watchdog/qcom-wdt.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-----------------------------------------------------------------
-Immutable branch between MFD and Watchdog due for the v5.13 merge window
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index e38a87ffe5f5..0d2209c5eaca 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -329,7 +329,9 @@ static int __maybe_unused qcom_wdt_resume(struct device *dev)
+ 	return 0;
+ }
+ 
+-static SIMPLE_DEV_PM_OPS(qcom_wdt_pm_ops, qcom_wdt_suspend, qcom_wdt_resume);
++static const struct dev_pm_ops qcom_wdt_pm_ops = {
++	SET_LATE_SYSTEM_SLEEP_PM_OPS(qcom_wdt_suspend, qcom_wdt_resume)
++};
+ 
+ static const struct of_device_id qcom_wdt_of_table[] = {
+ 	{ .compatible = "qcom,kpss-timer", .data = &match_data_apcs_tmr },
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
-----------------------------------------------------------------
-Matti Vaittinen (6):
-      dt_bindings: mfd: Add ROHM BD9576MUF and BD9573MUF PMICs
-      mfd: Support ROHM BD9576MUF and BD9573MUF
-      mfd: bd9576: Add IRQ support
-      wdt: Support wdt on ROHM BD9576MUF and BD9573MUF
-      MAINTAINERS: Add ROHM BD9576MUF and BD9573MUF drivers
-      mfd: bd9576: Add safety limit/monitoring registers
-
- .../devicetree/bindings/mfd/rohm,bd9576-pmic.yaml  | 123 +++++++++
- MAINTAINERS                                        |   4 +
- drivers/mfd/Kconfig                                |  11 +
- drivers/mfd/Makefile                               |   1 +
- drivers/mfd/rohm-bd9576.c                          | 189 +++++++++++++
- drivers/watchdog/Kconfig                           |  13 +
- drivers/watchdog/Makefile                          |   1 +
- drivers/watchdog/bd9576_wdt.c                      | 291 +++++++++++++++++++++
- include/linux/mfd/rohm-bd957x.h                    | 140 ++++++++++
- include/linux/mfd/rohm-generic.h                   |   2 +
- 10 files changed, 775 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
- create mode 100644 drivers/mfd/rohm-bd9576.c
- create mode 100644 drivers/watchdog/bd9576_wdt.c
- create mode 100644 include/linux/mfd/rohm-bd957x.h
-
---
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
