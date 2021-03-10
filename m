@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F99E3336F4
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Mar 2021 09:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE603336F9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Mar 2021 09:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbhCJII1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 10 Mar 2021 03:08:27 -0500
-Received: from mail-lj1-f180.google.com ([209.85.208.180]:38109 "EHLO
-        mail-lj1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbhCJIIJ (ORCPT
+        id S231681AbhCJII7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 10 Mar 2021 03:08:59 -0500
+Received: from mail-lj1-f176.google.com ([209.85.208.176]:46581 "EHLO
+        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230156AbhCJIIn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 10 Mar 2021 03:08:09 -0500
-Received: by mail-lj1-f180.google.com with SMTP id 2so24409722ljr.5;
-        Wed, 10 Mar 2021 00:08:09 -0800 (PST)
+        Wed, 10 Mar 2021 03:08:43 -0500
+Received: by mail-lj1-f176.google.com with SMTP id p15so24356299ljc.13;
+        Wed, 10 Mar 2021 00:08:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=gOInWHSwxlWHdWVJtuCziOyqKsXumKib3XjiXd3SplY=;
-        b=TVIwpqAblxp+9S/TnzK8Uwaxy2zZlnL6cQwM99clftXQwG8ugmRSSQ+Cp1XzrGDSRR
-         XUoFcyTznMCkIJEWmzOK01/TtgT7CEmgqCJ9Gjwlzsjmapr31kE2p2GUv5Ru/yNsGxQD
-         8UcoX8hOcKdSiekbHY1ZoDnCi+fvH6DhNLjg5uiZ4UIZ0YeGitccag25B2jvJo46kpo3
-         +YjjZQNXP5fYuZyePALA3fzt242aZ/Zvod8K5lVlwFK8FEGqW5akqoJl070PGXiU57ja
-         55rwAGM6n6Qfnrus9LMlUz5V5EqcHFNJL4pu6ge92wVIrBdQfGeA/msm6x40/LeH6K48
-         nftw==
-X-Gm-Message-State: AOAM5319/eqlwB+smIGbjcXZ5PiDYx3o8MAyLCcuxEaDKGAdv7Ozqy8/
-        mFqw5SfCaQCx1gjq98kiyqU=
-X-Google-Smtp-Source: ABdhPJxpcOBaPHyZ0Js1gqZV1k/CK0M+AZkk1A98IPgNwr1yt7PdDjsATqQQdpV2G4eOs7HYfmfUyA==
-X-Received: by 2002:a05:651c:512:: with SMTP id o18mr1108462ljp.388.1615363688143;
-        Wed, 10 Mar 2021 00:08:08 -0800 (PST)
+        bh=GT/8W76Gin2e+F3n8VSpHbArTxKPMdnlNLySuLS5wtM=;
+        b=MjAZ3kQf3o9OVOs5lbuUqT/Ofg8zVEhnWk27CKUwUXDGQIAUBr47Bp3AdAdjMNqBJt
+         0UbdgtznSzU6DS29yWLGO1V+rGZmXSaC31oLExQEmE2m17qjjCbPICMy0DKsgg/QsMlp
+         s1c8lQHULD4WvhdPjwetlBC5UHKscBJhaWT/NSqroNpHDdKQTr9nPEDYlp6KkoBeTYEM
+         p9GuD8AcJfxih+OeA5nQ8NTIirt7Tp/tnFZuWbfQdXQ99P/7zRzgvY+BesAJ7l6R1W5Q
+         PRs0jkHm9/vfg4UaaTZMZ8JBM+9LyaWGEzhfgPJhyBAsO4lmPxmaLCXOE8GvUYE1GasI
+         yVaA==
+X-Gm-Message-State: AOAM530CLmXSfO+JF5GeQxvuuL+1GTeTxJisZayT8LsCP4oXhEsGmRrM
+        mmv00qhiQatg4RlhatcxoHQ=
+X-Google-Smtp-Source: ABdhPJzciM7Thqs/PSrrJfNu09rdACbbVmOPZ2n9YUtG1BKoS5y4fbsIvWg0TQBi3OpbWQhBcbD/zQ==
+X-Received: by 2002:a2e:8e70:: with SMTP id t16mr1114206ljk.489.1615363721953;
+        Wed, 10 Mar 2021 00:08:41 -0800 (PST)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
-        by smtp.gmail.com with ESMTPSA id r11sm2716912lfn.30.2021.03.10.00.08.07
+        by smtp.gmail.com with ESMTPSA id h9sm2645441lfj.163.2021.03.10.00.08.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 00:08:07 -0800 (PST)
-Date:   Wed, 10 Mar 2021 10:08:02 +0200
+        Wed, 10 Mar 2021 00:08:41 -0800 (PST)
+Date:   Wed, 10 Mar 2021 10:08:36 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
@@ -43,8 +43,8 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH v9 3/6] mfd: bd9576: Add IRQ support
-Message-ID: <bef8907d4ef2d4e93bf40c6f129fbfcad96b0f37.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v9 4/6] wdt: Support wdt on ROHM BD9576MUF and BD9573MUF
+Message-ID: <40453a58471d83164b066b77540f3d0a3f7d7e96.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -54,248 +54,357 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-BD9573 and BD9576 support set of "protection" interrupts for "fatal"
-issues. Those lead to SOC reset as PMIC shuts the power outputs. Thus
-there is no relevant IRQ handling for them.
-
-Few "detection" interrupts were added to the BD9576 with the idea that
-SOC could take some recovery-action before error gets unrecoverable.
-
-Unfortunately the BD9576 interrupt logic was not re-evaluated. IRQs
-are not designed to be properly acknowleged - and IRQ line is kept
-active for whole duration of error condition (in comparison to
-informing only about state change).
-
-For above reason, do not consider missing IRQ as error.
+Add Watchdog support for ROHM BD9576MUF and BD9573MUF PMICs which are
+mainly used to power the R-Car series processors. The watchdog is
+pinged using a GPIO and enabled using another GPIO. Additionally
+watchdog time-out can be configured to HW prior starting the watchdog.
+Watchdog timeout can be configured to detect only delayed ping or in
+a window mode where also too fast pings are detected.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
-Changes from v8:
- - used designated initializers for MFD cell arrays
- - styling
+No changes from v8
 
- drivers/mfd/rohm-bd9576.c       | 90 +++++++++++++++++++++++++++++++--
- include/linux/mfd/rohm-bd957x.h | 62 +++++++++++++++++++++++
- 2 files changed, 147 insertions(+), 5 deletions(-)
+ drivers/watchdog/Kconfig      |  13 ++
+ drivers/watchdog/Makefile     |   1 +
+ drivers/watchdog/bd9576_wdt.c | 291 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 305 insertions(+)
+ create mode 100644 drivers/watchdog/bd9576_wdt.c
 
-diff --git a/drivers/mfd/rohm-bd9576.c b/drivers/mfd/rohm-bd9576.c
-index 2dbda1f401e2..6661a27d69a8 100644
---- a/drivers/mfd/rohm-bd9576.c
-+++ b/drivers/mfd/rohm-bd9576.c
-@@ -17,14 +17,30 @@
- #include <linux/regmap.h>
- #include <linux/types.h>
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 1fe0042a48d2..355100dad60a 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -172,6 +172,19 @@ config BD70528_WATCHDOG
+ 	  Alternatively say M to compile the driver as a module,
+ 	  which will be called bd70528_wdt.
  
-+enum {
-+	BD957X_REGULATOR_CELL,
-+	BD957X_WDT_CELL,
-+};
++config BD957XMUF_WATCHDOG
++	tristate "ROHM BD9576MUF and BD9573MUF PMIC Watchdog"
++	depends on MFD_ROHM_BD957XMUF
++	select WATCHDOG_CORE
++	help
++	  Support for the watchdog in the ROHM BD9576 and BD9573 PMICs.
++	  These PMIC ICs contain watchdog block which can be configured
++	  to toggle reset line if SoC fails to ping watchdog via GPIO.
 +
++	  Say Y here to include support for the ROHM BD9576 or BD9573
++	  watchdog. Alternatively say M to compile the driver as a module,
++	  which will be called bd9576_wdt.
++
+ config DA9052_WATCHDOG
+ 	tristate "Dialog DA9052 Watchdog"
+ 	depends on PMIC_DA9052 || COMPILE_TEST
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index f3a6540e725e..a7eade8b4d45 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -204,6 +204,7 @@ obj-$(CONFIG_XEN_WDT) += xen_wdt.o
+ 
+ # Architecture Independent
+ obj-$(CONFIG_BD70528_WATCHDOG) += bd70528_wdt.o
++obj-$(CONFIG_BD957XMUF_WATCHDOG) += bd9576_wdt.o
+ obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
+ obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
+ obj-$(CONFIG_DA9062_WATCHDOG) += da9062_wdt.o
+diff --git a/drivers/watchdog/bd9576_wdt.c b/drivers/watchdog/bd9576_wdt.c
+new file mode 100644
+index 000000000000..0b6999f3b6e8
+--- /dev/null
++++ b/drivers/watchdog/bd9576_wdt.c
+@@ -0,0 +1,291 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Due to the BD9576MUF nasty IRQ behaiour we don't always populate IRQs.
-+ * These will be added to regulator resources only if IRQ information for the
-+ * PMIC is populated in device-tree.
++ * Copyright (C) 2020 ROHM Semiconductors
++ *
++ * ROHM BD9576MUF and BD9573MUF Watchdog driver
 + */
-+static const struct resource bd9576_regulator_irqs[] = {
-+	DEFINE_RES_IRQ_NAMED(BD9576_INT_THERM, "bd9576-temp"),
-+	DEFINE_RES_IRQ_NAMED(BD9576_INT_OVD, "bd9576-ovd"),
-+	DEFINE_RES_IRQ_NAMED(BD9576_INT_UVD, "bd9576-uvd"),
++
++#include <linux/err.h>
++#include <linux/gpio/consumer.h>
++#include <linux/mfd/rohm-bd957x.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/watchdog.h>
++
++static bool nowayout;
++module_param(nowayout, bool, 0);
++MODULE_PARM_DESC(nowayout,
++		"Watchdog cannot be stopped once started (default=\"false\")");
++
++#define HW_MARGIN_MIN 2
++#define HW_MARGIN_MAX 4416
++#define BD957X_WDT_DEFAULT_MARGIN 4416
++#define WATCHDOG_TIMEOUT 30
++
++struct bd9576_wdt_priv {
++	struct gpio_desc	*gpiod_ping;
++	struct gpio_desc	*gpiod_en;
++	struct device		*dev;
++	struct regmap		*regmap;
++	bool			always_running;
++	struct watchdog_device	wdd;
 +};
 +
- static struct mfd_cell bd9573_mfd_cells[] = {
--	{ .name = "bd9573-regulator", },
--	{ .name = "bd9576-wdt", },
-+	[BD957X_REGULATOR_CELL]	= { .name = "bd9573-regulator", },
-+	[BD957X_WDT_CELL]	= { .name = "bd9576-wdt", },
- };
- 
- static struct mfd_cell bd9576_mfd_cells[] = {
--	{ .name = "bd9576-regulator", },
--	{ .name = "bd9576-wdt", },
-+	[BD957X_REGULATOR_CELL]	= { .name = "bd9576-regulator", },
-+	[BD957X_WDT_CELL]	= { .name = "bd9576-wdt", },
- };
- 
- static const struct regmap_range volatile_ranges[] = {
-@@ -49,6 +65,29 @@ static struct regmap_config bd957x_regmap = {
- 	.cache_type = REGCACHE_RBTREE,
- };
- 
-+static struct regmap_irq bd9576_irqs[] = {
-+	REGMAP_IRQ_REG(BD9576_INT_THERM, 0, BD957X_MASK_INT_MAIN_THERM),
-+	REGMAP_IRQ_REG(BD9576_INT_OVP, 0, BD957X_MASK_INT_MAIN_OVP),
-+	REGMAP_IRQ_REG(BD9576_INT_SCP, 0, BD957X_MASK_INT_MAIN_SCP),
-+	REGMAP_IRQ_REG(BD9576_INT_OCP, 0, BD957X_MASK_INT_MAIN_OCP),
-+	REGMAP_IRQ_REG(BD9576_INT_OVD, 0, BD957X_MASK_INT_MAIN_OVD),
-+	REGMAP_IRQ_REG(BD9576_INT_UVD, 0, BD957X_MASK_INT_MAIN_UVD),
-+	REGMAP_IRQ_REG(BD9576_INT_UVP, 0, BD957X_MASK_INT_MAIN_UVP),
-+	REGMAP_IRQ_REG(BD9576_INT_SYS, 0, BD957X_MASK_INT_MAIN_SYS),
++static void bd9576_wdt_disable(struct bd9576_wdt_priv *priv)
++{
++	gpiod_set_value_cansleep(priv->gpiod_en, 0);
++}
++
++static int bd9576_wdt_ping(struct watchdog_device *wdd)
++{
++	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
++
++	/* Pulse */
++	gpiod_set_value_cansleep(priv->gpiod_ping, 1);
++	gpiod_set_value_cansleep(priv->gpiod_ping, 0);
++
++	return 0;
++}
++
++static int bd9576_wdt_start(struct watchdog_device *wdd)
++{
++	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
++
++	gpiod_set_value_cansleep(priv->gpiod_en, 1);
++
++	return bd9576_wdt_ping(wdd);
++}
++
++static int bd9576_wdt_stop(struct watchdog_device *wdd)
++{
++	struct bd9576_wdt_priv *priv = watchdog_get_drvdata(wdd);
++
++	if (!priv->always_running)
++		bd9576_wdt_disable(priv);
++	else
++		set_bit(WDOG_HW_RUNNING, &wdd->status);
++
++	return 0;
++}
++
++static const struct watchdog_info bd957x_wdt_ident = {
++	.options	= WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING |
++			  WDIOF_SETTIMEOUT,
++	.identity	= "BD957x Watchdog",
 +};
 +
-+static struct regmap_irq_chip bd9576_irq_chip = {
-+	.name = "bd9576_irq",
-+	.irqs = &bd9576_irqs[0],
-+	.num_irqs = ARRAY_SIZE(bd9576_irqs),
-+	.status_base = BD957X_REG_INT_MAIN_STAT,
-+	.mask_base = BD957X_REG_INT_MAIN_MASK,
-+	.ack_base = BD957X_REG_INT_MAIN_STAT,
-+	.init_ack_masked = true,
-+	.num_regs = 1,
-+	.irq_reg_stride = 1,
++static const struct watchdog_ops bd957x_wdt_ops = {
++	.owner		= THIS_MODULE,
++	.start		= bd9576_wdt_start,
++	.stop		= bd9576_wdt_stop,
++	.ping		= bd9576_wdt_ping,
 +};
 +
- static int bd957x_i2c_probe(struct i2c_client *i2c,
- 			     const struct i2c_device_id *id)
- {
-@@ -57,6 +96,8 @@ static int bd957x_i2c_probe(struct i2c_client *i2c,
- 	struct mfd_cell *cells;
- 	int num_cells;
- 	unsigned long chip_type;
-+	struct irq_domain *domain;
-+	bool usable_irqs;
- 
- 	chip_type = (unsigned long)of_device_get_match_data(&i2c->dev);
- 
-@@ -64,10 +105,16 @@ static int bd957x_i2c_probe(struct i2c_client *i2c,
- 	case ROHM_CHIP_TYPE_BD9576:
- 		cells = bd9576_mfd_cells;
- 		num_cells = ARRAY_SIZE(bd9576_mfd_cells);
-+		usable_irqs = !!i2c->irq;
- 		break;
- 	case ROHM_CHIP_TYPE_BD9573:
- 		cells = bd9573_mfd_cells;
- 		num_cells = ARRAY_SIZE(bd9573_mfd_cells);
-+		/*
-+		 * BD9573 only supports fatal IRQs which we can not handle
-+		 * because SoC is going to lose the power.
-+		 */
-+		usable_irqs = false;
- 		break;
- 	default:
- 		dev_err(&i2c->dev, "Unknown device type");
-@@ -80,8 +127,41 @@ static int bd957x_i2c_probe(struct i2c_client *i2c,
- 		return PTR_ERR(regmap);
- 	}
- 
-+	/*
-+	 * BD9576 behaves badly. It kepts IRQ line asserted for the whole
-+	 * duration of detected HW condition (like over temperature). So we
-+	 * don't require IRQ to be populated.
-+	 * If IRQ information is not given, then we mask all IRQs and do not
-+	 * provide IRQ resources to regulator driver - which then just omits
-+	 * the notifiers.
-+	 */
-+	if (usable_irqs) {
-+		struct regmap_irq_chip_data *irq_data;
-+		struct mfd_cell *regulators;
++/* Unit is hundreds of uS */
++#define FASTNG_MIN 23
 +
-+		regulators = &bd9576_mfd_cells[BD957X_REGULATOR_CELL];
-+		regulators->resources = bd9576_regulator_irqs;
-+		regulators->num_resources = ARRAY_SIZE(bd9576_regulator_irqs);
++static int find_closest_fast(int target, int *sel, int *val)
++{
++	int i;
++	int window = FASTNG_MIN;
 +
-+		ret = devm_regmap_add_irq_chip(&i2c->dev, regmap, i2c->irq,
-+					       IRQF_ONESHOT, 0,
-+					       &bd9576_irq_chip, &irq_data);
++	for (i = 0; i < 8 && window < target; i++)
++		window <<= 1;
++
++	*val = window;
++	*sel = i;
++
++	if (i == 8)
++		return -EINVAL;
++
++	return 0;
++
++}
++
++static int find_closest_slow_by_fast(int fast_val, int target, int *slowsel)
++{
++	int sel;
++	static const int multipliers[] = {2, 3, 7, 15};
++
++	for (sel = 0; sel < ARRAY_SIZE(multipliers) &&
++	     multipliers[sel] * fast_val < target; sel++)
++		;
++
++	if (sel == ARRAY_SIZE(multipliers))
++		return -EINVAL;
++
++	*slowsel = sel;
++
++	return 0;
++}
++
++static int find_closest_slow(int target, int *slow_sel, int *fast_sel)
++{
++	static const int multipliers[] = {2, 3, 7, 15};
++	int i, j;
++	int val = 0;
++	int window = FASTNG_MIN;
++
++	for (i = 0; i < 8; i++) {
++		for (j = 0; j < ARRAY_SIZE(multipliers); j++) {
++			int slow;
++
++			slow = window * multipliers[j];
++			if (slow >= target && (!val || slow < val)) {
++				val = slow;
++				*fast_sel = i;
++				*slow_sel = j;
++			}
++		}
++		window <<= 1;
++	}
++	if (!val)
++		return -EINVAL;
++
++	return 0;
++}
++
++#define BD957X_WDG_TYPE_WINDOW BIT(5)
++#define BD957X_WDG_TYPE_SLOW 0
++#define BD957X_WDG_TYPE_MASK BIT(5)
++#define BD957X_WDG_NG_RATIO_MASK 0x18
++#define BD957X_WDG_FASTNG_MASK 0x7
++
++static int bd957x_set_wdt_mode(struct bd9576_wdt_priv *priv, int hw_margin,
++			       int hw_margin_min)
++{
++	int ret, fastng, slowng, type, reg, mask;
++	struct device *dev = priv->dev;
++
++	/* convert to 100uS */
++	hw_margin *= 10;
++	hw_margin_min *= 10;
++	if (hw_margin_min) {
++		int min;
++
++		type = BD957X_WDG_TYPE_WINDOW;
++		dev_dbg(dev, "Setting type WINDOW 0x%x\n", type);
++		ret = find_closest_fast(hw_margin_min, &fastng, &min);
 +		if (ret) {
-+			dev_err(&i2c->dev, "Failed to add IRQ chip\n");
++			dev_err(dev, "bad WDT window for fast timeout\n");
 +			return ret;
 +		}
-+		domain = regmap_irq_get_domain(irq_data);
-+	} else {
-+		ret = regmap_update_bits(regmap, BD957X_REG_INT_MAIN_MASK,
-+					 BD957X_MASK_INT_ALL,
-+					 BD957X_MASK_INT_ALL);
-+		if (ret)
++
++		ret = find_closest_slow_by_fast(min, hw_margin, &slowng);
++		if (ret) {
++			dev_err(dev, "bad WDT window\n");
 +			return ret;
-+		domain = NULL;
++		}
++
++	} else {
++		type = BD957X_WDG_TYPE_SLOW;
++		dev_dbg(dev, "Setting type SLOW 0x%x\n", type);
++		ret = find_closest_slow(hw_margin, &slowng, &fastng);
++		if (ret) {
++			dev_err(dev, "bad WDT window\n");
++			return ret;
++		}
 +	}
 +
- 	ret = devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO, cells,
--				   num_cells, NULL, 0, NULL);
-+				   num_cells, NULL, 0, domain);
- 	if (ret)
- 		dev_err(&i2c->dev, "Failed to create subdevices\n");
- 
-diff --git a/include/linux/mfd/rohm-bd957x.h b/include/linux/mfd/rohm-bd957x.h
-index a631abb2c101..ddb396ff2da5 100644
---- a/include/linux/mfd/rohm-bd957x.h
-+++ b/include/linux/mfd/rohm-bd957x.h
-@@ -13,6 +13,55 @@ enum {
- 	BD957X_VOUTS1,
- };
- 
-+/*
-+ * The BD9576 has own IRQ 'blocks' for:
-+ *  - I2C/thermal,
-+ *  - Over voltage protection
-+ *  - Short-circuit protection
-+ *  - Over current protection
-+ *  - Over voltage detection
-+ *  - Under voltage detection
-+ *  - Under voltage protection
-+ *  - 'system interrupt'.
-+ *
-+ * Each of the blocks have a status register giving more accurate IRQ source
-+ * information - for example which of the regulators have over-voltage.
-+ *
-+ * On top of this, there is "main IRQ" status register where each bit indicates
-+ * which of sub-blocks have active IRQs. Fine. That would fit regmap-irq main
-+ * status handling. Except that:
-+ *  - Only some sub-IRQs can be masked.
-+ *  - The IRQ informs us about fault-condition, not when fault state changes.
-+ *    The IRQ line it is kept asserted until the detected condition is acked
-+ *    AND cleared in HW. This is annoying for IRQs like the one informing high
-+ *    temperature because if IRQ is not disabled it keeps the CPU in IRQ
-+ *    handling loop.
-+ *
-+ * For now we do just use the main-IRQ register as source for our IRQ
-+ * information and bind the regmap-irq to this. We leave fine-grained sub-IRQ
-+ * register handling to handlers in sub-devices. The regulator driver shall
-+ * read which regulators are source for problem - or if the detected error is
-+ * regulator temperature error. The sub-drivers do also handle masking of "sub-
-+ * IRQs" if this is supported/needed.
-+ *
-+ * To overcome the problem with HW keeping IRQ asserted we do call
-+ * disable_irq_nosync() from sub-device handler and add a delayed work to
-+ * re-enable IRQ roughly 1 second later. This should keep our CPU out of
-+ * busy-loop.
-+ */
-+#define IRQS_SILENT_MS			1000
++	slowng <<= ffs(BD957X_WDG_NG_RATIO_MASK) - 1;
++	reg = type | slowng | fastng;
++	mask = BD957X_WDG_TYPE_MASK | BD957X_WDG_NG_RATIO_MASK |
++	       BD957X_WDG_FASTNG_MASK;
++	ret = regmap_update_bits(priv->regmap, BD957X_REG_WDT_CONF,
++				 mask, reg);
 +
-+enum {
-+	BD9576_INT_THERM,
-+	BD9576_INT_OVP,
-+	BD9576_INT_SCP,
-+	BD9576_INT_OCP,
-+	BD9576_INT_OVD,
-+	BD9576_INT_UVD,
-+	BD9576_INT_UVP,
-+	BD9576_INT_SYS,
++	return ret;
++}
++
++static int bd9576_wdt_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->parent->of_node;
++	struct bd9576_wdt_priv *priv;
++	u32 hw_margin[2];
++	u32 hw_margin_max = BD957X_WDT_DEFAULT_MARGIN, hw_margin_min = 0;
++	int ret;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, priv);
++
++	priv->dev = dev;
++	priv->regmap = dev_get_regmap(dev->parent, NULL);
++	if (!priv->regmap) {
++		dev_err(dev, "No regmap found\n");
++		return -ENODEV;
++	}
++
++	priv->gpiod_en = devm_gpiod_get_from_of_node(dev, dev->parent->of_node,
++						     "rohm,watchdog-enable-gpios",
++						     0, GPIOD_OUT_LOW,
++						     "watchdog-enable");
++	if (IS_ERR(priv->gpiod_en))
++		return dev_err_probe(dev, PTR_ERR(priv->gpiod_en),
++			      "getting watchdog-enable GPIO failed\n");
++
++	priv->gpiod_ping = devm_gpiod_get_from_of_node(dev, dev->parent->of_node,
++						     "rohm,watchdog-ping-gpios",
++						     0, GPIOD_OUT_LOW,
++						     "watchdog-ping");
++	if (IS_ERR(priv->gpiod_ping))
++		return dev_err_probe(dev, PTR_ERR(priv->gpiod_ping),
++				     "getting watchdog-ping GPIO failed\n");
++
++	ret = of_property_read_variable_u32_array(np, "rohm,hw-timeout-ms",
++						  &hw_margin[0], 1, 2);
++	if (ret < 0 && ret != -EINVAL)
++		return ret;
++
++	if (ret == 1)
++		hw_margin_max = hw_margin[0];
++
++	if (ret == 2) {
++		hw_margin_max = hw_margin[1];
++		hw_margin_min = hw_margin[0];
++	}
++
++	ret = bd957x_set_wdt_mode(priv, hw_margin_max, hw_margin_min);
++	if (ret)
++		return ret;
++
++	priv->always_running = of_property_read_bool(np, "always-running");
++
++	watchdog_set_drvdata(&priv->wdd, priv);
++
++	priv->wdd.info			= &bd957x_wdt_ident;
++	priv->wdd.ops			= &bd957x_wdt_ops;
++	priv->wdd.min_hw_heartbeat_ms	= hw_margin_min;
++	priv->wdd.max_hw_heartbeat_ms	= hw_margin_max;
++	priv->wdd.parent		= dev;
++	priv->wdd.timeout		= WATCHDOG_TIMEOUT;
++
++	watchdog_init_timeout(&priv->wdd, 0, dev);
++	watchdog_set_nowayout(&priv->wdd, nowayout);
++
++	watchdog_stop_on_reboot(&priv->wdd);
++
++	if (priv->always_running)
++		bd9576_wdt_start(&priv->wdd);
++
++	return devm_watchdog_register_device(dev, &priv->wdd);
++}
++
++static struct platform_driver bd9576_wdt_driver = {
++	.driver	= {
++		.name = "bd9576-wdt",
++	},
++	.probe	= bd9576_wdt_probe,
 +};
 +
- #define BD957X_REG_SMRB_ASSERT		0x15
- #define BD957X_REG_PMIC_INTERNAL_STAT	0x20
- #define BD957X_REG_INT_THERM_STAT	0x23
-@@ -28,6 +77,19 @@ enum {
- #define BD957X_REG_INT_MAIN_STAT	0x30
- #define BD957X_REG_INT_MAIN_MASK	0x31
- 
-+#define UVD_IRQ_VALID_MASK		0x6F
-+#define OVD_IRQ_VALID_MASK		0x2F
++module_platform_driver(bd9576_wdt_driver);
 +
-+#define BD957X_MASK_INT_MAIN_THERM	BIT(0)
-+#define BD957X_MASK_INT_MAIN_OVP	BIT(1)
-+#define BD957X_MASK_INT_MAIN_SCP	BIT(2)
-+#define BD957X_MASK_INT_MAIN_OCP	BIT(3)
-+#define BD957X_MASK_INT_MAIN_OVD	BIT(4)
-+#define BD957X_MASK_INT_MAIN_UVD	BIT(5)
-+#define BD957X_MASK_INT_MAIN_UVP	BIT(6)
-+#define BD957X_MASK_INT_MAIN_SYS	BIT(7)
-+#define BD957X_MASK_INT_ALL		0xff
-+
- #define BD957X_REG_WDT_CONF		0x16
- 
- #define BD957X_REG_POW_TRIGGER1		0x41
++MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
++MODULE_DESCRIPTION("ROHM BD9576/BD9573 Watchdog driver");
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:bd9576-wdt");
 -- 
 2.25.4
 
