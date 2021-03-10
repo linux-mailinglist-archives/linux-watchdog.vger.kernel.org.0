@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6B43336E7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Mar 2021 09:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB403336EC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Mar 2021 09:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbhCJIFr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 10 Mar 2021 03:05:47 -0500
-Received: from mail-lf1-f43.google.com ([209.85.167.43]:45037 "EHLO
-        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232055AbhCJIFS (ORCPT
+        id S231319AbhCJIGU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 10 Mar 2021 03:06:20 -0500
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:36539 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232321AbhCJIGM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 10 Mar 2021 03:05:18 -0500
-Received: by mail-lf1-f43.google.com with SMTP id p21so31894603lfu.11;
-        Wed, 10 Mar 2021 00:05:17 -0800 (PST)
+        Wed, 10 Mar 2021 03:06:12 -0500
+Received: by mail-lf1-f50.google.com with SMTP id f1so31967340lfu.3;
+        Wed, 10 Mar 2021 00:06:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=q72Cjyra6YRoP3zdgUry2O5a9bKwShn3eMdHhNzQNBU=;
-        b=Y5X+i59oQkqLqIfZ9udWwu8SX3p1Kr5s6ip4Op7fvccl03sF2VS7ASEpfpluiqSPPl
-         v0QrYZdQaJH9m9ZHtB+6GRlxiBls4hni4HbMDqirMZP0pz0f3KEo6m0QlA56Ca89wfeH
-         OLHfyIN0R1ZGRXuj7pdhnEMb4XBeltZjhHNVvB7aFPTOR1t4JkfeJwSTeihyK6P8GsIW
-         mRFhQtpcL8LokWXXyyciMSZ/Y2DmiXyxsJSJUaftg+lgeaqq7CQxdJ+pmwYRoTgtd+jA
-         piVuSAa6xXymvLkebiMtYshKJDW0erqNak8xyu7i4/W/mjHacStpdwaAIlKNW+DshNdc
-         OWMg==
-X-Gm-Message-State: AOAM533Fr/9hpJdwNYFhP2vUGpICkC2uf1h74JnIojzULq4Tt8eJkPnH
-        TCcWQRW7vEoHtXNU64iOEjQ=
-X-Google-Smtp-Source: ABdhPJylSI5m8mO1y+IMzB6sFHidVor1N99iBQqy6CMdXyVxeEPGMqyUFUkSRNGUEHfAn19f0J647Q==
-X-Received: by 2002:ac2:5973:: with SMTP id h19mr1302472lfp.120.1615363516974;
-        Wed, 10 Mar 2021 00:05:16 -0800 (PST)
+        bh=Lp6IA5vGbBl2MmsKvUtrgZMMtSFJRI+lKXi0KF8ZZoM=;
+        b=RnWqi+V1/KK6WC8MVwy5Zi9jaikms3jNmQOv/auYfoZ4D9Ylz6ORj3BV/fqN/bvPTZ
+         JQSeBJ+LTSLLJWnaIf1lDLivh9OhWjRO55rKR865trGx3aYfxSM+nMu4a5A5xLVI88wu
+         y0DStR4BjMaCEBTnMPeGzZwD2pgPXXstVYlF3Ig8SRc9o1mMrt7bid+rdDonRKVH2g2A
+         m3E8VIUvrB0zbxcu+2/00Cl6Z+IKBVT0x/edonggYspmqAbUHQcfQDAxKEfopiGAGLyM
+         PLtYPpiBKeCL7Qx5vIay0S58soxTAsrKAW0n6ga/TBKtwNIWxuSKI5Ni3rnrlLIkOXwV
+         qQ5A==
+X-Gm-Message-State: AOAM533m855NpUKGkgarJPICX+9DgiwZJdCJuqo8cx0OdkFu8r25T5Iy
+        B4//cuv0ujoiRcjxwIxdX2mSCadyHLQ=
+X-Google-Smtp-Source: ABdhPJxUv+xRlHAd/LgY62TCsfX1zaeGwrkK/S7jiy6hw8S6COxG6t4uqIgnIqGqyz1h4q3JKdBawQ==
+X-Received: by 2002:a19:2258:: with SMTP id i85mr1361551lfi.516.1615363571239;
+        Wed, 10 Mar 2021 00:06:11 -0800 (PST)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
-        by smtp.gmail.com with ESMTPSA id t20sm2524825lfr.104.2021.03.10.00.05.15
+        by smtp.gmail.com with ESMTPSA id e8sm2883575ljg.22.2021.03.10.00.06.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 00:05:16 -0800 (PST)
-Date:   Wed, 10 Mar 2021 10:05:08 +0200
+        Wed, 10 Mar 2021 00:06:10 -0800 (PST)
+Date:   Wed, 10 Mar 2021 10:06:05 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
@@ -43,9 +43,8 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH v9 1/6] dt_bindings: mfd: Add ROHM BD9576MUF and BD9573MUF
- PMICs
-Message-ID: <1298c4dd9aef8ff1a6b18b360ddbbfb89512ae59.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v9 2/6] mfd: Support ROHM BD9576MUF and BD9573MUF
+Message-ID: <240ccf87031c45714acaa4979efdad4ab8316cf1.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -55,150 +54,251 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add bindings for ROHM BD9576MUF and BD9573MUF PMICs. These
-PMICs are primarily intended to be used to power the R-Car series
-processors. They provide 6 power outputs, safety features and a
-watchdog with two functional modes.
+Add core support for ROHM BD9576MUF and BD9573MUF PMICs which are
+mainly used to power the R-Car series processors.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 ---
+Changes from v8:
+ - updated copyright
 
-No changes from v8
+ drivers/mfd/Kconfig              |  11 ++++
+ drivers/mfd/Makefile             |   1 +
+ drivers/mfd/rohm-bd9576.c        | 109 +++++++++++++++++++++++++++++++
+ include/linux/mfd/rohm-bd957x.h  |  59 +++++++++++++++++
+ include/linux/mfd/rohm-generic.h |   2 +
+ 5 files changed, 182 insertions(+)
+ create mode 100644 drivers/mfd/rohm-bd9576.c
+ create mode 100644 include/linux/mfd/rohm-bd957x.h
 
- .../bindings/mfd/rohm,bd9576-pmic.yaml        | 123 ++++++++++++++++++
- 1 file changed, 123 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
-
-diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index b74efa469e90..f0c9529e7bfd 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -1989,6 +1989,17 @@ config MFD_ROHM_BD71828
+ 	  Also included is a Coulomb counter, a real-time clock (RTC), and
+ 	  a 32.768 kHz clock gate.
+ 
++config MFD_ROHM_BD957XMUF
++	tristate "ROHM BD9576MUF and BD9573MUF Power Management ICs"
++	depends on I2C=y
++	depends on OF
++	select REGMAP_I2C
++	select MFD_CORE
++	help
++	  Select this option to get support for the ROHM BD9576MUF and
++	  BD9573MUF Power Management ICs. BD9576 and BD9573 are primarily
++	  designed to be used to power R-Car series processors.
++
+ config MFD_STM32_LPTIMER
+ 	tristate "Support for STM32 Low-Power Timer"
+ 	depends on (ARCH_STM32 && OF) || COMPILE_TEST
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 834f5463af28..d93f6f361fd3 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -261,6 +261,7 @@ obj-$(CONFIG_RAVE_SP_CORE)	+= rave-sp.o
+ obj-$(CONFIG_MFD_ROHM_BD70528)	+= rohm-bd70528.o
+ obj-$(CONFIG_MFD_ROHM_BD71828)	+= rohm-bd71828.o
+ obj-$(CONFIG_MFD_ROHM_BD718XX)	+= rohm-bd718x7.o
++obj-$(CONFIG_MFD_ROHM_BD957XMUF)	+= rohm-bd9576.o
+ obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
+ obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
+ obj-$(CONFIG_MFD_ACER_A500_EC)	+= acer-ec-a500.o
+diff --git a/drivers/mfd/rohm-bd9576.c b/drivers/mfd/rohm-bd9576.c
 new file mode 100644
-index 000000000000..6483860da955
+index 000000000000..2dbda1f401e2
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
-@@ -0,0 +1,123 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/rohm,bd9576-pmic.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/mfd/rohm-bd9576.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2021 ROHM Semiconductors
++ *
++ * ROHM BD9576MUF and BD9573MUF PMIC driver
++ */
 +
-+title: ROHM BD9576MUF and BD9573MUF Power Management Integrated Circuit bindings
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/ioport.h>
++#include <linux/irq.h>
++#include <linux/mfd/core.h>
++#include <linux/mfd/rohm-bd957x.h>
++#include <linux/mfd/rohm-generic.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/regmap.h>
++#include <linux/types.h>
 +
-+maintainers:
-+  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++static struct mfd_cell bd9573_mfd_cells[] = {
++	{ .name = "bd9573-regulator", },
++	{ .name = "bd9576-wdt", },
++};
 +
-+description: |
-+  BD9576MUF and BD9573MUF are power management ICs primarily intended for
-+  powering the R-Car series processors.
-+  The IC provides 6 power outputs with configurable sequencing and safety
-+  monitoring. A watchdog logic with slow ping/windowed modes is also included.
++static struct mfd_cell bd9576_mfd_cells[] = {
++	{ .name = "bd9576-regulator", },
++	{ .name = "bd9576-wdt", },
++};
 +
-+properties:
-+  compatible:
-+    enum:
-+      - rohm,bd9576
-+      - rohm,bd9573
++static const struct regmap_range volatile_ranges[] = {
++	regmap_reg_range(BD957X_REG_SMRB_ASSERT, BD957X_REG_SMRB_ASSERT),
++	regmap_reg_range(BD957X_REG_PMIC_INTERNAL_STAT,
++			 BD957X_REG_PMIC_INTERNAL_STAT),
++	regmap_reg_range(BD957X_REG_INT_THERM_STAT, BD957X_REG_INT_THERM_STAT),
++	regmap_reg_range(BD957X_REG_INT_OVP_STAT, BD957X_REG_INT_SYS_STAT),
++	regmap_reg_range(BD957X_REG_INT_MAIN_STAT, BD957X_REG_INT_MAIN_STAT),
++};
 +
-+  reg:
-+    description:
-+      I2C slave address.
-+    maxItems: 1
++static const struct regmap_access_table volatile_regs = {
++	.yes_ranges = &volatile_ranges[0],
++	.n_yes_ranges = ARRAY_SIZE(volatile_ranges),
++};
 +
-+  interrupts:
-+    maxItems: 1
++static struct regmap_config bd957x_regmap = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.volatile_table = &volatile_regs,
++	.max_register = BD957X_MAX_REGISTER,
++	.cache_type = REGCACHE_RBTREE,
++};
 +
-+  rohm,vout1-en-low:
-+    description:
-+      BD9576 and BD9573 VOUT1 regulator enable state can be individually
-+      controlled by a GPIO. This is dictated by state of vout1-en pin during
-+      the PMIC startup. If vout1-en is LOW during PMIC startup then the VOUT1
-+      enable sate is controlled via this pin. Set this property if vout1-en
-+      is wired to be down at PMIC start-up.
-+    type: boolean
++static int bd957x_i2c_probe(struct i2c_client *i2c,
++			     const struct i2c_device_id *id)
++{
++	int ret;
++	struct regmap *regmap;
++	struct mfd_cell *cells;
++	int num_cells;
++	unsigned long chip_type;
 +
-+  rohm,vout1-en-gpios:
-+    description:
-+      GPIO specifier to specify the GPIO connected to vout1-en for vout1 ON/OFF
-+      state control.
-+    maxItems: 1
++	chip_type = (unsigned long)of_device_get_match_data(&i2c->dev);
 +
-+  rohm,ddr-sel-low:
-+    description:
-+      The BD9576 and BD9573 output voltage for DDR can be selected by setting
-+      the ddr-sel pin low or high. Set this property if ddr-sel is grounded.
-+    type: boolean
++	switch (chip_type) {
++	case ROHM_CHIP_TYPE_BD9576:
++		cells = bd9576_mfd_cells;
++		num_cells = ARRAY_SIZE(bd9576_mfd_cells);
++		break;
++	case ROHM_CHIP_TYPE_BD9573:
++		cells = bd9573_mfd_cells;
++		num_cells = ARRAY_SIZE(bd9573_mfd_cells);
++		break;
++	default:
++		dev_err(&i2c->dev, "Unknown device type");
++		return -EINVAL;
++	}
 +
-+  rohm,watchdog-enable-gpios:
-+    description: The GPIO line used to enable the watchdog.
-+    maxItems: 1
++	regmap = devm_regmap_init_i2c(i2c, &bd957x_regmap);
++	if (IS_ERR(regmap)) {
++		dev_err(&i2c->dev, "Failed to initialize Regmap\n");
++		return PTR_ERR(regmap);
++	}
 +
-+  rohm,watchdog-ping-gpios:
-+    description: The GPIO line used to ping the watchdog.
-+    maxItems: 1
++	ret = devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO, cells,
++				   num_cells, NULL, 0, NULL);
++	if (ret)
++		dev_err(&i2c->dev, "Failed to create subdevices\n");
 +
-+  rohm,hw-timeout-ms:
-+    maxItems: 2
-+    description:
-+      Watchog timeout in milliseconds. If single value is given it is
-+      the maximum timeout. Eg. if pinging watchdog is not done within this time
-+      limit the watchdog will be triggered. If two values are given watchdog
-+      is configured in "window mode". Then first value is limit for short-ping
-+      Eg. if watchdog is pinged sooner than that the watchdog will trigger.
-+      When two values is given the second value is the maximum timeout.
-+      # (HW) minimum for short timeout is 2ms, maximum 220 ms.
-+      # (HW) minimum for max timeout is 4ms, maximum 4416 ms.
++	return ret;
++}
 +
-+  regulators:
-+    $ref: ../regulator/rohm,bd9576-regulator.yaml
-+    description:
-+      List of child nodes that specify the regulators.
++static const struct of_device_id bd957x_of_match[] = {
++	{ .compatible = "rohm,bd9576", .data = (void *)ROHM_CHIP_TYPE_BD9576, },
++	{ .compatible = "rohm,bd9573", .data = (void *)ROHM_CHIP_TYPE_BD9573, },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, bd957x_of_match);
 +
-+required:
-+  - compatible
-+  - reg
-+  - regulators
++static struct i2c_driver bd957x_drv = {
++	.driver = {
++		.name = "rohm-bd957x",
++		.of_match_table = bd957x_of_match,
++	},
++	.probe = &bd957x_i2c_probe,
++};
++module_i2c_driver(bd957x_drv);
 +
-+additionalProperties: false
++MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
++MODULE_DESCRIPTION("ROHM BD9576MUF and BD9573MUF Power Management IC driver");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/mfd/rohm-bd957x.h b/include/linux/mfd/rohm-bd957x.h
+new file mode 100644
+index 000000000000..a631abb2c101
+--- /dev/null
++++ b/include/linux/mfd/rohm-bd957x.h
+@@ -0,0 +1,59 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/* Copyright (C) 2021 ROHM Semiconductors */
 +
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/leds/common.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        pmic: pmic@30 {
-+            compatible = "rohm,bd9576";
-+            reg = <0x30>;
-+            rohm,vout1-en-low;
-+            rohm,vout1-en-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
-+            rohm,ddr-sel-low;
-+            rohm,watchdog-enable-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
-+            rohm,watchdog-ping-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
-+            rohm,hw-timeout-ms = <150>, <2300>;
++#ifndef __LINUX_MFD_BD957X_H__
++#define __LINUX_MFD_BD957X_H__
 +
-+            regulators {
-+                boost1: regulator-vd50 {
-+                    regulator-name = "VD50";
-+                };
-+                buck1: regulator-vd18 {
-+                    regulator-name = "VD18";
-+                };
-+                buck2: regulator-vdddr {
-+                    regulator-name = "VDDDR";
-+                };
-+                buck3: regulator-vd10 {
-+                    regulator-name = "VD10";
-+                };
-+                ldo: regulator-voutl1 {
-+                    regulator-name = "VOUTL1";
-+                };
-+                sw: regulator-vouts1 {
-+                    regulator-name = "VOUTS1";
-+                };
-+            };
-+        };
-+    };
++enum {
++	BD957X_VD50,
++	BD957X_VD18,
++	BD957X_VDDDR,
++	BD957X_VD10,
++	BD957X_VOUTL1,
++	BD957X_VOUTS1,
++};
++
++#define BD957X_REG_SMRB_ASSERT		0x15
++#define BD957X_REG_PMIC_INTERNAL_STAT	0x20
++#define BD957X_REG_INT_THERM_STAT	0x23
++#define BD957X_REG_INT_THERM_MASK	0x24
++#define BD957X_REG_INT_OVP_STAT		0x25
++#define BD957X_REG_INT_SCP_STAT		0x26
++#define BD957X_REG_INT_OCP_STAT		0x27
++#define BD957X_REG_INT_OVD_STAT		0x28
++#define BD957X_REG_INT_UVD_STAT		0x29
++#define BD957X_REG_INT_UVP_STAT		0x2a
++#define BD957X_REG_INT_SYS_STAT		0x2b
++#define BD957X_REG_INT_SYS_MASK		0x2c
++#define BD957X_REG_INT_MAIN_STAT	0x30
++#define BD957X_REG_INT_MAIN_MASK	0x31
++
++#define BD957X_REG_WDT_CONF		0x16
++
++#define BD957X_REG_POW_TRIGGER1		0x41
++#define BD957X_REG_POW_TRIGGER2		0x42
++#define BD957X_REG_POW_TRIGGER3		0x43
++#define BD957X_REG_POW_TRIGGER4		0x44
++#define BD957X_REG_POW_TRIGGERL1	0x45
++#define BD957X_REG_POW_TRIGGERS1	0x46
++
++#define BD957X_REGULATOR_EN_MASK	0xff
++#define BD957X_REGULATOR_DIS_VAL	0xff
++
++#define BD957X_VSEL_REG_MASK		0xff
++
++#define BD957X_MASK_VOUT1_TUNE		0x87
++#define BD957X_MASK_VOUT2_TUNE		0x87
++#define BD957X_MASK_VOUT3_TUNE		0x1f
++#define BD957X_MASK_VOUT4_TUNE		0x1f
++#define BD957X_MASK_VOUTL1_TUNE		0x87
++
++#define BD957X_REG_VOUT1_TUNE		0x50
++#define BD957X_REG_VOUT2_TUNE		0x53
++#define BD957X_REG_VOUT3_TUNE		0x56
++#define BD957X_REG_VOUT4_TUNE		0x59
++#define BD957X_REG_VOUTL1_TUNE		0x5c
++
++#define BD957X_MAX_REGISTER		0x61
++
++#endif
+diff --git a/include/linux/mfd/rohm-generic.h b/include/linux/mfd/rohm-generic.h
+index 66f673c35303..ac6787464004 100644
+--- a/include/linux/mfd/rohm-generic.h
++++ b/include/linux/mfd/rohm-generic.h
+@@ -14,6 +14,8 @@ enum rohm_chip_type {
+ 	ROHM_CHIP_TYPE_BD71828,
+ 	ROHM_CHIP_TYPE_BD9571,
+ 	ROHM_CHIP_TYPE_BD9574,
++	ROHM_CHIP_TYPE_BD9576,
++	ROHM_CHIP_TYPE_BD9573,
+ 	ROHM_CHIP_TYPE_AMOUNT
+ };
+ 
 -- 
 2.25.4
 
