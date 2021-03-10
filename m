@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AD63336E2
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Mar 2021 09:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6B43336E7
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Mar 2021 09:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbhCJIEk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 10 Mar 2021 03:04:40 -0500
-Received: from mail-lf1-f47.google.com ([209.85.167.47]:38713 "EHLO
-        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbhCJIDi (ORCPT
+        id S230458AbhCJIFr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 10 Mar 2021 03:05:47 -0500
+Received: from mail-lf1-f43.google.com ([209.85.167.43]:45037 "EHLO
+        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232055AbhCJIFS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 10 Mar 2021 03:03:38 -0500
-Received: by mail-lf1-f47.google.com with SMTP id m22so31920471lfg.5;
-        Wed, 10 Mar 2021 00:03:37 -0800 (PST)
+        Wed, 10 Mar 2021 03:05:18 -0500
+Received: by mail-lf1-f43.google.com with SMTP id p21so31894603lfu.11;
+        Wed, 10 Mar 2021 00:05:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=9neQuQcCRkWdtmxVlPcgyoaGEau3r59VmHEXSLbS1QA=;
-        b=UGvYL0D2abWpiYTirBQMh7gTdh73p0BCke0kEfZdTXcakzObSupaBtHr0TX+DXSKgo
-         sjJFHdB6R/hSV8oKz0XlI80IOhfikabEPxOGebPiPACX7wFZDxEmyNCk8X0AbS+k4vVE
-         KtYBt6a22CRUnQKcO4hdhiYnzqsJZ9gDSz5G6ob45+ORSlXj+5OzEUHTIFrvwAujWq+m
-         XdOL0zQqHdfU/6djXFCxQRDurfHmYwyrbzde0eXfhzGWt6qr/EnLHAAKriDR9BFe6gZW
-         lTnWVj1Nj5gfa2Ip7dE2t5WkS1xnU3KEnHI409LgLu6Q+k2SYU0+UunJlQAC++kroAVq
-         OXSQ==
-X-Gm-Message-State: AOAM530ai6OI8UbuQQ6KAWwSZ7lxWlkWEt8bS1xmAdEKMaF6NUDVXAJF
-        k8j9oHwAMdQvRenIqHbl+ha8jGo4q+Y=
-X-Google-Smtp-Source: ABdhPJzkElfZtzI8QYQp80x3Rt54SrpKes6677h8tcUnsGYrUHeJMRBTEBMGVCpyP6VnDCSIZXbGFA==
-X-Received: by 2002:a05:6512:695:: with SMTP id t21mr1272734lfe.61.1615363417270;
-        Wed, 10 Mar 2021 00:03:37 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q72Cjyra6YRoP3zdgUry2O5a9bKwShn3eMdHhNzQNBU=;
+        b=Y5X+i59oQkqLqIfZ9udWwu8SX3p1Kr5s6ip4Op7fvccl03sF2VS7ASEpfpluiqSPPl
+         v0QrYZdQaJH9m9ZHtB+6GRlxiBls4hni4HbMDqirMZP0pz0f3KEo6m0QlA56Ca89wfeH
+         OLHfyIN0R1ZGRXuj7pdhnEMb4XBeltZjhHNVvB7aFPTOR1t4JkfeJwSTeihyK6P8GsIW
+         mRFhQtpcL8LokWXXyyciMSZ/Y2DmiXyxsJSJUaftg+lgeaqq7CQxdJ+pmwYRoTgtd+jA
+         piVuSAa6xXymvLkebiMtYshKJDW0erqNak8xyu7i4/W/mjHacStpdwaAIlKNW+DshNdc
+         OWMg==
+X-Gm-Message-State: AOAM533Fr/9hpJdwNYFhP2vUGpICkC2uf1h74JnIojzULq4Tt8eJkPnH
+        TCcWQRW7vEoHtXNU64iOEjQ=
+X-Google-Smtp-Source: ABdhPJylSI5m8mO1y+IMzB6sFHidVor1N99iBQqy6CMdXyVxeEPGMqyUFUkSRNGUEHfAn19f0J647Q==
+X-Received: by 2002:ac2:5973:: with SMTP id h19mr1302472lfp.120.1615363516974;
+        Wed, 10 Mar 2021 00:05:16 -0800 (PST)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
-        by smtp.gmail.com with ESMTPSA id p18sm2891316ljo.75.2021.03.10.00.03.36
+        by smtp.gmail.com with ESMTPSA id t20sm2524825lfr.104.2021.03.10.00.05.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 00:03:36 -0800 (PST)
-Date:   Wed, 10 Mar 2021 10:02:58 +0200
+        Wed, 10 Mar 2021 00:05:16 -0800 (PST)
+Date:   Wed, 10 Mar 2021 10:05:08 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
@@ -43,102 +43,162 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH v9 0/6] Support ROHM BD9576MUF and BD9573MUF PMICs
-Message-ID: <cover.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v9 1/6] dt_bindings: mfd: Add ROHM BD9576MUF and BD9573MUF
+ PMICs
+Message-ID: <1298c4dd9aef8ff1a6b18b360ddbbfb89512ae59.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1615219345.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Initial support for ROHM BD9576MUF and BD9573MUF PMICs.
+Add bindings for ROHM BD9576MUF and BD9573MUF PMICs. These
+PMICs are primarily intended to be used to power the R-Car series
+processors. They provide 6 power outputs, safety features and a
+watchdog with two functional modes.
 
-These PMICs are primarily intended to be used to power the R-Car family
-processors. BD9576MUF includes some additional safety features the
-BD9573MUF does not have. This initial version of drivers provides
-temperature, over voltage and under voltage warnings is IRQ information
-is passed via DT.
-
-This patch series includes MFD and watchdog drivers. Regulator part was
-already applied.
-
-This series brings in the IRQ support which will be utilized by the
-regulator driver(s). The regulator part was splitted in own series.
-
-WDG supports
-- Enabling and pinging the watchdog
-- configuring watchog timeout / window from device-tree
-
-Please note that not all of the boards are expected to be utilizing the
-warning IRQs. Thus populating the IRQ information from DT is optional.
-
-Changelog v9: (Changes suggested by Lee)
-  - MFD: Update copyrights
-  - MFD: use designated initializers in MFD cell arrays.
-  - MFD: styling
-
-Changelog v8:
-  - Drop regulator driver changes which are covered by the separate RFC series.
-  - Renamed regulator driver cell. Regulator driver change will be
-    brought in in the RFC series to avoid conflicts.
-  - Add patch introducing register definitions required by the regulator RFC
-    series.
-  - Cleaned comments at MFD as was suggested by Lee
-  - Do not abort MFD probe if IRQ information for BD9573 is populated
-  - MFD driver/header styling
-
-Changelog v7:
-  - Added interrupt handling
-  - Added notifications and error_flag getter to regulators
-
-Changelog v6:
-  - Fixed watchdog timeout
-
-Changelog v5:
-  - rebased on top of v5.10-rc2
-  - few styling fixes in MFD as suggested by Lee
-
-Changelog v4:
-  - rebased on top of 5.10-rc1
-  - Fix typo (repeated word maximum) from the DT binding doc
-
-Changelog v3:
-  - use only one binding to specify watchdog time-out window.
-
-Changelog v2:
-  - dropped already applied regulator part
-  - dt_bindings: Fix case for regulator-names in the example
-  - watchdog: unify probe error check and revise includes
-
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 
-Matti Vaittinen (6):
-  dt_bindings: mfd: Add ROHM BD9576MUF and BD9573MUF PMICs
-  mfd: Support ROHM BD9576MUF and BD9573MUF
-  mfd: bd9576: Add IRQ support
-  wdt: Support wdt on ROHM BD9576MUF and BD9573MUF
-  MAINTAINERS: Add ROHM BD9576MUF and BD9573MUF drivers
-  mfd: bd9576: Add safety limit/monitoring registers
+No changes from v8
 
- .../bindings/mfd/rohm,bd9576-pmic.yaml        | 123 ++++++++
- MAINTAINERS                                   |   4 +
- drivers/mfd/Kconfig                           |  11 +
- drivers/mfd/Makefile                          |   1 +
- drivers/mfd/rohm-bd9576.c                     | 189 ++++++++++++
- drivers/watchdog/Kconfig                      |  13 +
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/bd9576_wdt.c                 | 291 ++++++++++++++++++
- include/linux/mfd/rohm-bd957x.h               | 140 +++++++++
- include/linux/mfd/rohm-generic.h              |   2 +
- 10 files changed, 775 insertions(+)
+ .../bindings/mfd/rohm,bd9576-pmic.yaml        | 123 ++++++++++++++++++
+ 1 file changed, 123 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
- create mode 100644 drivers/mfd/rohm-bd9576.c
- create mode 100644 drivers/watchdog/bd9576_wdt.c
- create mode 100644 include/linux/mfd/rohm-bd957x.h
 
-
-base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+new file mode 100644
+index 000000000000..6483860da955
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+@@ -0,0 +1,123 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/rohm,bd9576-pmic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ROHM BD9576MUF and BD9573MUF Power Management Integrated Circuit bindings
++
++maintainers:
++  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++
++description: |
++  BD9576MUF and BD9573MUF are power management ICs primarily intended for
++  powering the R-Car series processors.
++  The IC provides 6 power outputs with configurable sequencing and safety
++  monitoring. A watchdog logic with slow ping/windowed modes is also included.
++
++properties:
++  compatible:
++    enum:
++      - rohm,bd9576
++      - rohm,bd9573
++
++  reg:
++    description:
++      I2C slave address.
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  rohm,vout1-en-low:
++    description:
++      BD9576 and BD9573 VOUT1 regulator enable state can be individually
++      controlled by a GPIO. This is dictated by state of vout1-en pin during
++      the PMIC startup. If vout1-en is LOW during PMIC startup then the VOUT1
++      enable sate is controlled via this pin. Set this property if vout1-en
++      is wired to be down at PMIC start-up.
++    type: boolean
++
++  rohm,vout1-en-gpios:
++    description:
++      GPIO specifier to specify the GPIO connected to vout1-en for vout1 ON/OFF
++      state control.
++    maxItems: 1
++
++  rohm,ddr-sel-low:
++    description:
++      The BD9576 and BD9573 output voltage for DDR can be selected by setting
++      the ddr-sel pin low or high. Set this property if ddr-sel is grounded.
++    type: boolean
++
++  rohm,watchdog-enable-gpios:
++    description: The GPIO line used to enable the watchdog.
++    maxItems: 1
++
++  rohm,watchdog-ping-gpios:
++    description: The GPIO line used to ping the watchdog.
++    maxItems: 1
++
++  rohm,hw-timeout-ms:
++    maxItems: 2
++    description:
++      Watchog timeout in milliseconds. If single value is given it is
++      the maximum timeout. Eg. if pinging watchdog is not done within this time
++      limit the watchdog will be triggered. If two values are given watchdog
++      is configured in "window mode". Then first value is limit for short-ping
++      Eg. if watchdog is pinged sooner than that the watchdog will trigger.
++      When two values is given the second value is the maximum timeout.
++      # (HW) minimum for short timeout is 2ms, maximum 220 ms.
++      # (HW) minimum for max timeout is 4ms, maximum 4416 ms.
++
++  regulators:
++    $ref: ../regulator/rohm,bd9576-regulator.yaml
++    description:
++      List of child nodes that specify the regulators.
++
++required:
++  - compatible
++  - reg
++  - regulators
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/leds/common.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        pmic: pmic@30 {
++            compatible = "rohm,bd9576";
++            reg = <0x30>;
++            rohm,vout1-en-low;
++            rohm,vout1-en-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
++            rohm,ddr-sel-low;
++            rohm,watchdog-enable-gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
++            rohm,watchdog-ping-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
++            rohm,hw-timeout-ms = <150>, <2300>;
++
++            regulators {
++                boost1: regulator-vd50 {
++                    regulator-name = "VD50";
++                };
++                buck1: regulator-vd18 {
++                    regulator-name = "VD18";
++                };
++                buck2: regulator-vdddr {
++                    regulator-name = "VDDDR";
++                };
++                buck3: regulator-vd10 {
++                    regulator-name = "VD10";
++                };
++                ldo: regulator-voutl1 {
++                    regulator-name = "VOUTL1";
++                };
++                sw: regulator-vouts1 {
++                    regulator-name = "VOUTS1";
++                };
++            };
++        };
++    };
 -- 
 2.25.4
 
