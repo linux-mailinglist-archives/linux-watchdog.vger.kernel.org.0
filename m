@@ -2,133 +2,255 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C0E33B048
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Mar 2021 11:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C501233B050
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Mar 2021 11:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbhCOKsO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Mar 2021 06:48:14 -0400
-Received: from mail-mw2nam12on2052.outbound.protection.outlook.com ([40.107.244.52]:18296
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230115AbhCOKrs (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Mar 2021 06:47:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FNSMcBJ3taDKAkS1Ag5APAzx6Hpau9KerV7+UTTqMKAMOIv3SronLPGzMwToxEuPnphOF0nLRlWhJ/lRrLPqdfkoH5J3jL0F0O4N4Qwth7qg73Sj/rFRnTPh0122r0k2udSeG6L3GKoqBtbdzjGpvfx3viN5YC7Mr+U8HkRSZYq+B6v8mItXrXyLCIQEeaJyd9Hc3QktYRdNmG3briW+ncnjyotF8vZBzzxAYbul/vPTXcgSETN2JN9F3l4030l3zhiqt67QDc1GRQx+qPraBNzlgIt16UlIbtoXw2FTPjzW0bWdD92/37hdzif/+D/gOtDebm6Ib7bcc5N1S8XayA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EfZvIvygELIpyD3Y6TV5MSep40e5DYmsoi6Z/Ufld1Q=;
- b=WeWEJsMqjB+c4WaZGxBS7/YMhaY0wzprLijtN7S1L6WuQwiekCq4IuP/6qxPJC49ZfsuieVfnTzLKPvgA1necpGCUPiLav7Yr7xNSZJky+oQXu/+5d8m6xHe+G7XWAHH4z5rGGifW2UWqCpdfARnMLQ636i3XaISDt/vIInJkq9SmCjyWzPhbPE8jUvjJObGRiRl6P8CNvZs7iTYEMpMCMIAnKO/4Kd4UZvkaoaalQBR7jhj30MrHe6InGo7j+VbKEUj0MyR5vRTslyzk34C+L21Q7YB/epcQhzTptiSNCio0xjGYqjSXKadDZ9DWy+fE6rO3EIAyc/JyiGrG2iNLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        id S230150AbhCOKsp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Mar 2021 06:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229699AbhCOKsg (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 15 Mar 2021 06:48:36 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45547C061574;
+        Mon, 15 Mar 2021 03:48:36 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q6-20020a17090a4306b02900c42a012202so14527517pjg.5;
+        Mon, 15 Mar 2021 03:48:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EfZvIvygELIpyD3Y6TV5MSep40e5DYmsoi6Z/Ufld1Q=;
- b=c6foquGW+fqFhY0NP38CY9GY2TYEvVtjn25fXe9gLfd7ZJrjCnHDEgSdkZ28ITArZed9rTYx6Hkeh3MbjJ9WBDrqCIB5DtUGTt5bJFaAzbN1TyzLxKljHvsEiKGVelAAZwv9RJtaunTLJ9HqfLJ2jOITcDPJovebhbcoBjgjf+A=
-Received: from CY4PR04CA0045.namprd04.prod.outlook.com (2603:10b6:903:c6::31)
- by BY5PR02MB6387.namprd02.prod.outlook.com (2603:10b6:a03:1b5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32; Mon, 15 Mar
- 2021 10:47:45 +0000
-Received: from CY1NAM02FT049.eop-nam02.prod.protection.outlook.com
- (2603:10b6:903:c6:cafe::1e) by CY4PR04CA0045.outlook.office365.com
- (2603:10b6:903:c6::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32 via Frontend
- Transport; Mon, 15 Mar 2021 10:47:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- CY1NAM02FT049.mail.protection.outlook.com (10.152.75.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3933.32 via Frontend Transport; Mon, 15 Mar 2021 10:47:45 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Mon, 15 Mar 2021 03:47:43 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2106.2 via Frontend Transport; Mon, 15 Mar 2021 03:47:43 -0700
-Envelope-to: git@xilinx.com,
- linux@roeck-us.net,
- wim@linux-watchdog.org,
- linux-watchdog@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.40] (port=50876 helo=xhdsivadur40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1lLklC-00055N-16; Mon, 15 Mar 2021 03:47:42 -0700
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     <linux@roeck-us.net>, <michal.simek@xilinx.com>,
-        <shubhrajyoti.datta@xilinx.com>, <sgoud@xilinx.com>
-CC:     <wim@linux-watchdog.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>
-Subject: [PATCH 9/9] watchdog: of_xilinx_wdt: Skip printing pointer value
-Date:   Mon, 15 Mar 2021 16:16:54 +0530
-Message-ID: <1615805214-24857-10-git-send-email-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1615805214-24857-1-git-send-email-srinivas.neeli@xilinx.com>
-References: <1615805214-24857-1-git-send-email-srinivas.neeli@xilinx.com>
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nGWke0czgNYyxSiHwwNFZAryWQ9+29nl3UKGpKstc10=;
+        b=RfTHxJOAs1v6q8YtYod9qtIBNKoLZqKB61qtqNhD1sTAPQLw2R/U2GLWvS3G5ZTDgx
+         taGpWoetfbN9R0Byff/i9kxyuEL0y1j7KDv2oaSuitEje9zXIKq9qVgivSEwdkGEDlam
+         g7KMtY+OBNprKp9J02cvoa/hXfSQJk0x9Wxpvu6vGsiYba3UNFOeAoEMKPHq3IYWZ72N
+         um/X5+wbVpIyWt50AJ6sWnhbhLp0oKDCJp4N+BfMlTOEjabx/LSH3KSMXvdW2U8aA4kE
+         AqWIgF18pyG3KWJrdDBFGVJRXRcs2Zb4+ooW3yNt9vcoyYndq2H1PULKn6Pnv1Sjc9ii
+         bS2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nGWke0czgNYyxSiHwwNFZAryWQ9+29nl3UKGpKstc10=;
+        b=P9HLb0Mc21VD622AtCZDE9FHu7cW8N8EVZgiqNG01iSbGcYN1nwBC+4qqOL6LpTU1o
+         Espz1gr3KAeYq8BeuF/0cdn8WdgiwS+a95cpmoz2QFrPl9NN5AMEfD7uXpLqE/xIRMtX
+         PBxoQOVI5lVLWHqZDPBqezS55OlsSYyr1WGtXN8t6WDEuWdpmkU7x0MBndCnu8+qtfTh
+         JX/o/Yuh+Wc6tz2RWAGRM9hsqQxMSpNjoUScaFdGxiNAZ4pPm6XTwS/utmtkuxJ7w7V6
+         0cD2D4tdqkl+Xzmuo0jMwpLqO2x4kK6pwQauA7TVZ+XjMX5QYldyGoY6CJK9Kn5nOSew
+         7pBg==
+X-Gm-Message-State: AOAM531tY32jxg7KH1YbUaO6eIj6i87JPDN+8kwQlQQPM4945cX/AhCa
+        UFzr8KeCWs7qmtW4A9DtE9e2+dotigmJX4gD+00=
+X-Google-Smtp-Source: ABdhPJxUg6z9VHVuMXl4qieB7QkWMCiDWAxE1J+2udCfiXk0uOsZtWPXCiYNikuRNWvvKdnV4LyQ2+U5C+FaZQe8g5g=
+X-Received: by 2002:a17:902:c808:b029:e6:4204:f62f with SMTP id
+ u8-20020a170902c808b02900e64204f62fmr11467621plx.0.1615805315699; Mon, 15 Mar
+ 2021 03:48:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7caf91c4-bc3e-4f95-3773-08d8e79fc44d
-X-MS-TrafficTypeDiagnostic: BY5PR02MB6387:
-X-Microsoft-Antispam-PRVS: <BY5PR02MB6387D102F48BF0B580C5B69FAF6C9@BY5PR02MB6387.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:1388;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Fpz4ur1LgoNXNOPlDdTaU4b3NneunAiAHpob5h1yAiZaaemdhLXwoRlguvsSTSSBlcDBiMPaRiQ7rC2U26HRGcYpLorjxJsd58AzXubsEHXQfsbWfDvYCGWxCRh32e2Bl5D3KGQHlym2EGNSAKd7pG+FFougD/KegvK9Ki/mFDT6SDinPPBJV74lkTwIyq2mSJ3zBEjOFRdRwMCl9h1BgnYddICdZAfjFVpED3CrGLKCbuWN6oQ88SdILzkR2GvLnfVGxE6B9uU48TP3GFZpJ3fnbISXlGuGODgboDz6cdtMVtWItuENSHb+JunrJMTxqf3eCRDjFOuaKc5HBYITIW8K/GxfKOefMvApI7XmTRb8wR30sk1elwiQKAN+1Wl1l/QJCmDn6PRDdVgw3HoD2ClrrqB/Pnj5sq068i3ZC7CWQhc94hvVyhAUAa5d2K5DyPG2XcypBUKea0sfvAeutx9PyDezweXrP695oVPRSFLMNX1sv7VTmGo9NyhTR3ZWSL7z11o3zosNP0bR+QT1x3TSjOIh5I0H+CRU+jmrXuvpzSUymxun/uwBSqKu7jUSym1Zgz3tK7waMcOTBCbaDIyL3isusUPzXBganN0jrjpZkcOjjZqDKnnn82UrWXoqhJJcjC8MRoLVskBMuhCc1GgHOgqUFif2v3ilt2WcD1KW73Dx57tHk2qHS4VzcZXf
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(136003)(346002)(376002)(396003)(39850400004)(46966006)(36840700001)(82310400003)(110136005)(2616005)(478600001)(54906003)(44832011)(47076005)(70206006)(186003)(356005)(8936002)(8676002)(426003)(7636003)(36906005)(316002)(7696005)(4744005)(9786002)(26005)(82740400003)(2906002)(70586007)(5660300002)(107886003)(336012)(83380400001)(4326008)(36860700001)(36756003)(6636002)(6666004)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2021 10:47:45.1506
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7caf91c4-bc3e-4f95-3773-08d8e79fc44d
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT049.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6387
+References: <20210315095710.7140-1-henning.schild@siemens.com> <20210315095710.7140-3-henning.schild@siemens.com>
+In-Reply-To: <20210315095710.7140-3-henning.schild@siemens.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 15 Mar 2021 12:48:19 +0200
+Message-ID: <CAHp75VcBdR8xqfWqKe+DwGAUYByVL7SBK0p7tHcKPs7m4Ay1iw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] leds: simatic-ipc-leds: add new driver for Siemens
+ Industial PCs
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-"%p" is not printing the pointer value.
-In driver, printing pointer value is not useful so avoiding print.
+On Mon, Mar 15, 2021 at 11:57 AM Henning Schild
+<henning.schild@siemens.com> wrote:
+>
+> This driver adds initial support for several devices from Siemens. It is
+> based on a platform driver introduced in an earlier commit.
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
----
- drivers/watchdog/of_xilinx_wdt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+...
 
-diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
-index ad35c93b7684..df84734eba68 100644
---- a/drivers/watchdog/of_xilinx_wdt.c
-+++ b/drivers/watchdog/of_xilinx_wdt.c
-@@ -578,8 +578,8 @@ static int xwdt_probe(struct platform_device *pdev)
- 
- 	clk_disable(xdev->clk);
- 
--	dev_info(dev, "Xilinx Watchdog Timer at %p with timeout %ds\n",
--		 xdev->base, xilinx_wdt_wdd->timeout);
-+	dev_info(dev, "Xilinx Watchdog Timer with timeout %ds\n",
-+		 xilinx_wdt_wdd->timeout);
- 
- 	platform_set_drvdata(pdev, xdev);
- 
+> +struct simatic_ipc_led {
+> +       unsigned int value; /* mask for io and offset for mem */
+
+> +       char name[32];
+
+Hmm... Dunno if LED framework defines its own constraints for the
+length of the name.
+
+> +       struct led_classdev cdev;
+> +};
+> +
+> +static struct simatic_ipc_led simatic_ipc_leds_io[] = {
+> +       {1 << 15, "simatic-ipc:green:" LED_FUNCTION_STATUS "-1" },
+> +       {1 << 7,  "simatic-ipc:yellow:" LED_FUNCTION_STATUS "-1" },
+> +       {1 << 14, "simatic-ipc:red:" LED_FUNCTION_STATUS "-2" },
+> +       {1 << 6,  "simatic-ipc:yellow:" LED_FUNCTION_STATUS "-2" },
+> +       {1 << 13, "simatic-ipc:red:" LED_FUNCTION_STATUS "-3" },
+> +       {1 << 5,  "simatic-ipc:yellow:" LED_FUNCTION_STATUS "-3" },
+
+Can you use BIT() macro here? And can it be sorted by the bit order?
+
+> +       {0, ""},
+
+{ } is enough (no comma for terminator lines in general, and no need
+to show structure member assignments separately in particular).
+
+> +};
+> +
+> +/* the actual start will be discovered with pci, 0 is a placeholder */
+
+PCI
+
+> +struct resource simatic_ipc_led_mem_res =
+> +       DEFINE_RES_MEM_NAMED(0, SZ_4K, KBUILD_MODNAME);
+
+One line?
+
+...
+
+> +static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
+> +       {0x500 + 0x1A0, "simatic-ipc:red:" LED_FUNCTION_STATUS "-1"},
+> +       {0x500 + 0x1A8, "simatic-ipc:green:" LED_FUNCTION_STATUS "-1"},
+> +       {0x500 + 0x1C8, "simatic-ipc:red:" LED_FUNCTION_STATUS "-2"},
+> +       {0x500 + 0x1D0, "simatic-ipc:green:" LED_FUNCTION_STATUS "-2"},
+> +       {0x500 + 0x1E0, "simatic-ipc:red:" LED_FUNCTION_STATUS "-3"},
+> +       {0x500 + 0x198, "simatic-ipc:green:" LED_FUNCTION_STATUS "-3"},
+> +       {0, ""},
+
+As per above.
+
+> +};
+
+...
+
+> +       struct simatic_ipc_led *led =
+> +               container_of(led_cd, struct simatic_ipc_led, cdev);
+
+One line?
+
+...
+
+> +       struct simatic_ipc_led *led =
+> +               container_of(led_cd, struct simatic_ipc_led, cdev);
+
+One line?
+
+...
+
+> +       struct simatic_ipc_led *led =
+> +               container_of(led_cd, struct simatic_ipc_led, cdev);
+
+Ditto.
+
+
+Btw, usually for such cases we create an inline helper
+... to_simatic_ipc_led(...)
+{
+  return container_of(...);
+}
+
+...
+
+> +static int simatic_ipc_leds_probe(struct platform_device *pdev)
+> +{
+> +       struct simatic_ipc_platform *plat;
+
+const?
+
+> +       struct device *dev = &pdev->dev;
+> +       struct simatic_ipc_led *ipcled;
+> +       struct led_classdev *cdev;
+> +       struct resource *res;
+> +       int err, type;
+> +       u32 *p;
+
+> +       plat = pdev->dev.platform_data;
+
+Can be done directly in the definition block.
+
+> +       switch (plat->devmode) {
+> +       case SIMATIC_IPC_DEVICE_227D:
+> +       case SIMATIC_IPC_DEVICE_427E:
+> +               res = &simatic_ipc_led_io_res;
+> +               ipcled = simatic_ipc_leds_io;
+> +               /* the 227D is high on while 427E is low on, invert the struct
+> +                * we have
+> +                */
+> +               if (plat->devmode == SIMATIC_IPC_DEVICE_227D) {
+
+> +                       while (ipcled->value) {
+> +                               ipcled->value = swab16(ipcled->value);
+> +                               ipcled++;
+> +                       }
+
+This seems fishy. If you have a BE CPU it won't work the same way.
+Better:
+ a) to use cpu_to_le16 / be16
+ b) create this as a helper that we may move to the generic header of byteorder.
+
+But looking at the use of it, perhaps you rather need to redefine IO
+accessors, i.e. ioread16()/iowrite16() vs. ioread16be()/iowrite16be().
+
+> +                       ipcled = simatic_ipc_leds_io;
+> +               }
+> +               type = IORESOURCE_IO;
+> +               if (!devm_request_region(dev, res->start,
+> +                                        resource_size(res),
+> +                                        KBUILD_MODNAME)) {
+> +                       dev_err(dev,
+> +                               "Unable to register IO resource at %pR\n",
+> +                               res);
+> +                       return -EBUSY;
+> +               }
+> +               break;
+> +       case SIMATIC_IPC_DEVICE_127E:
+> +               res = &simatic_ipc_led_mem_res;
+> +               ipcled = simatic_ipc_leds_mem;
+> +               type = IORESOURCE_MEM;
+> +
+> +               /* get GPIO base from PCI */
+> +               res->start = simatic_ipc_get_membase0(PCI_DEVFN(13, 0));
+> +               if (res->start == 0)
+> +                       return -ENODEV;
+> +
+> +               /* do the final address calculation */
+> +               res->start = res->start + (0xC5 << 16);
+
+Magic. As I told you this is an actual offseet in the P2SB's bar for
+GPIO registers.
+I have a question, why we can't provide a GPIO driver which is already
+in the kernel and, with use of the patch series I sent, to convert
+this all magic to GPIO LEDs as it's done for all normal cases?
+
+> +               res->end += res->start;
+> +
+> +               simatic_ipc_led_memory = devm_ioremap_resource(dev, res);
+> +               if (IS_ERR(simatic_ipc_led_memory))
+> +                       return PTR_ERR(simatic_ipc_led_memory);
+> +
+> +               /* initialize power/watchdog LED */
+> +               p = simatic_ipc_led_memory + 0x500 + 0x1D8; /* PM_WDT_OUT */
+> +               *p = (*p & ~1);
+> +               p = simatic_ipc_led_memory + 0x500 + 0x1C0; /* PM_BIOS_BOOT_N */
+> +               *p = (*p | 1);
+> +
+> +               break;
+> +       default:
+> +               return -ENODEV;
+> +       }
+
+> +}
+
 -- 
-2.7.4
-
+With Best Regards,
+Andy Shevchenko
