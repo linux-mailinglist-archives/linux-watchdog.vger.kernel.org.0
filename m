@@ -2,217 +2,219 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F230133C1DE
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Mar 2021 17:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A3233C1E8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Mar 2021 17:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbhCOQbd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Mar 2021 12:31:33 -0400
-Received: from gecko.sbs.de ([194.138.37.40]:52057 "EHLO gecko.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229829AbhCOQbP (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Mar 2021 12:31:15 -0400
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 12FGUqrv013024
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Mar 2021 17:30:52 +0100
-Received: from md1za8fc.ad001.siemens.net ([139.22.41.172])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 12FGUpYB023993;
-        Mon, 15 Mar 2021 17:30:51 +0100
-Date:   Mon, 15 Mar 2021 17:30:49 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        id S233820AbhCOQcC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Mar 2021 12:32:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:38386 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233644AbhCOQby (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 15 Mar 2021 12:31:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615825913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lPHTIHZ4eFEhzbf8Lue71aAKURfHh1P+gutymQ7cPuQ=;
+        b=A3+Ztm7/VALzhpf2xDJ+ksc9Vgj4kzUtCU5yLMi0AFdYZVmun8s18qXFVvNz2VG2Wn7pa6
+        iTQZ1yQCPtH1hbh/mjI56T9V1JwL9Fiqr3hLDkt0HNRLTTwFhGkT9qQR+2mFjErwELOA4b
+        z5QHP2URFjh0jEdSIULgFUXz9C2X5Y0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-544-w_fyqz-YO3WOH8IrnSH4FQ-1; Mon, 15 Mar 2021 12:31:51 -0400
+X-MC-Unique: w_fyqz-YO3WOH8IrnSH4FQ-1
+Received: by mail-ed1-f70.google.com with SMTP id o24so16175759edt.15
+        for <linux-watchdog@vger.kernel.org>; Mon, 15 Mar 2021 09:31:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lPHTIHZ4eFEhzbf8Lue71aAKURfHh1P+gutymQ7cPuQ=;
+        b=toMl+lEuXhxVK6s5YjOJ7zA1TyOYBIrQXfvbjfMOfsQ28FaSzNw83jOb/uclRrgG0L
+         g8kZaRGFLADDDAPDiBuMthTGKHc+xSwbZ+fNiX5Yk0h+sj/5OaqJaIcMY8D2+VYEERXF
+         RvRtq53fLkE3B3cudsCebSdVMRBcRJlvjqqrJHaBDxvlQeftCiPiQtbJ98qcldgQ4uUU
+         UlRiv+DJMk9lCvla6EpHEFyh+P7qh09KfXJuCvczmw+Zf5xl0EDlo8vMCI31SnUfa/jg
+         CuF8yYL3keINlEo1h7iVfXqaNo75KlzACiQbyHSoaBm1J2h5j6ziyfzHqweGfBwmCiOw
+         CvGQ==
+X-Gm-Message-State: AOAM530ZGZge5GASKQhKzgWrBuuszHetwbfM/tV18yP6q3Z7MX4VUB+y
+        bKbB93na2PdiaU7xbP4UIWLh92JnqWReqGh1Q5JpknA3U4+6Unp5iZxhN53nAZ9YHxkPZHGj8x6
+        X5KowChdJ77ZfMz8A7/0IsjF6hRg=
+X-Received: by 2002:a17:906:2dda:: with SMTP id h26mr24314464eji.163.1615825910688;
+        Mon, 15 Mar 2021 09:31:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyoY00PBixaBAq+e0MuGm3mxB4Ev2NqXWIQw0ejZ1fznG1bZlq2PV+RT10l48AjX9urbitjGQ==
+X-Received: by 2002:a17:906:2dda:: with SMTP id h26mr24314448eji.163.1615825910517;
+        Mon, 15 Mar 2021 09:31:50 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id lu26sm7538546ejb.33.2021.03.15.09.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Mar 2021 09:31:50 -0700 (PDT)
+Subject: Re: [PATCH] platform/x86: pmc_atom: use callback for all dmi quirk
+ entries
+To:     Henning Schild <henning.schild@siemens.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Srikanth Krishnakar <skrishnakar@gmail.com>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v2 1/4] platform/x86: simatic-ipc: add main driver for
- Siemens devices
-Message-ID: <20210315173049.1d080129@md1za8fc.ad001.siemens.net>
-In-Reply-To: <CAHp75VdXDcTfNL9QRQ5XE-zVLHacfMKHUxhse3=dAfJbOJdObQ@mail.gmail.com>
-References: <20210315095710.7140-1-henning.schild@siemens.com>
-        <20210315095710.7140-2-henning.schild@siemens.com>
-        <CAHp75VdXDcTfNL9QRQ5XE-zVLHacfMKHUxhse3=dAfJbOJdObQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Pavel Machek <pavel@ucw.cz>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <ef5fe493-285d-145c-8d05-7f9bd0cb47c5@redhat.com>
+ <20210315145855.17174-1-henning.schild@siemens.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <8577f3a8-c5e4-3752-1bc1-5937ee164217@redhat.com>
+Date:   Mon, 15 Mar 2021 17:31:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20210315145855.17174-1-henning.schild@siemens.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Mon, 15 Mar 2021 12:31:11 +0200
-schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
+Hi,
 
-> On Mon, Mar 15, 2021 at 12:02 PM Henning Schild
-> <henning.schild@siemens.com> wrote:
-> >
-> > This mainly implements detection of these devices and will allow
-> > secondary drivers to work on such machines.
-> >
-> > The identification is DMI-based with a vendor specific way to tell
-> > them apart in a reliable way.
-> >
-> > Drivers for LEDs and Watchdogs will follow to make use of that
-> > platform detection.  
+On 3/15/21 3:58 PM, Henning Schild wrote:
+> Introduce a global variable to remember the matching entry for later
+> printing. Also having a callback allows to stop matching after the first
+> hit.
 > 
-> ...
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> ---
+>  drivers/platform/x86/pmc_atom.c | 26 ++++++++++++++++++++------
+>  1 file changed, 20 insertions(+), 6 deletions(-)
 > 
-> > +static int register_platform_devices(u32 station_id)
-> > +{
-> > +       u8 ledmode = SIMATIC_IPC_DEVICE_NONE;
-> > +       u8 wdtmode = SIMATIC_IPC_DEVICE_NONE;
-> > +       int i;
-> > +
-> > +       platform_data.devmode = SIMATIC_IPC_DEVICE_NONE;
-> > +
-> > +       for (i = 0; i < ARRAY_SIZE(device_modes); i++) {
-> > +               if (device_modes[i].station_id == station_id) {
-> > +                       ledmode = device_modes[i].led_mode;
-> > +                       wdtmode = device_modes[i].wdt_mode;
-> > +                       break;
-> > +               }
-> > +       }
-> > +
-> > +       if (ledmode != SIMATIC_IPC_DEVICE_NONE) {
-> > +               platform_data.devmode = ledmode;
-> > +               ipc_led_platform_device =
-> > +                       platform_device_register_data(NULL,
-> > +                               KBUILD_MODNAME "_leds",
-> > PLATFORM_DEVID_NONE,
-> > +                               &platform_data,
-> > +                               sizeof(struct
-> > simatic_ipc_platform));
-> > +               if (IS_ERR(ipc_led_platform_device))
-> > +                       return PTR_ERR(ipc_led_platform_device);
-> > +
-> > +               pr_debug("device=%s created\n",
-> > +                        ipc_led_platform_device->name);
-> > +       }
-> > +
-> > +       if (wdtmode != SIMATIC_IPC_DEVICE_NONE) {
-> > +               platform_data.devmode = wdtmode;
-> > +               ipc_wdt_platform_device =
-> > +                       platform_device_register_data(NULL,
-> > +                               KBUILD_MODNAME "_wdt",
-> > PLATFORM_DEVID_NONE,
-> > +                               &platform_data,
-> > +                               sizeof(struct
-> > simatic_ipc_platform));
-> > +               if (IS_ERR(ipc_wdt_platform_device))
-> > +                       return PTR_ERR(ipc_wdt_platform_device);
-> > +
-> > +               pr_debug("device=%s created\n",
-> > +                        ipc_wdt_platform_device->name);
-> > +       }
-> > +
-> > +       if (ledmode == SIMATIC_IPC_DEVICE_NONE &&
-> > +           wdtmode == SIMATIC_IPC_DEVICE_NONE) {
-> > +               pr_warn("unsupported IPC detected, station
-> > id=%08x\n",
-> > +                       station_id);
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       return 0;
-> > +}  
-> 
-> Why not use MFD here?
-> 
-> ...
-> 
-> > +/*
-> > + * Get membase address from PCI, used in leds and wdt modul. Here
-> > we read
-> > + * the bar0. The final address calculation is done in the
-> > appropriate modules
-> > + */  
-> 
-> No blank line here.
-> 
-> I would add FIXME or REVISIT here to point out that this should be
-> deduplicated in the future.
+> diff --git a/drivers/platform/x86/pmc_atom.c b/drivers/platform/x86/pmc_atom.c
+> index 38542d547f29..d0f74856cd8b 100644
+> --- a/drivers/platform/x86/pmc_atom.c
+> +++ b/drivers/platform/x86/pmc_atom.c
+> @@ -364,8 +364,16 @@ static void pmc_dbgfs_register(struct pmc_dev *pmc)
+>  #endif /* CONFIG_DEBUG_FS */
+>  
+>  static bool pmc_clk_is_critical = true;
+> +static const struct dmi_system_id *dmi_critical;
+>  
+> -static int siemens_clk_is_critical(const struct dmi_system_id *d)
+> +static int dmi_callback(const struct dmi_system_id *d)
+> +{
+> +	dmi_critical = d;
 
-Sure i forgot the mention that ordering problem of the two series here
-again specifically. Was kind of assuming yours would maybe be first and
-that code not being reviewed again ... 
-The code is there to test and propose something "working" not something
-i expect to be merged as is.
+Don't introduce a global variable for this please. Instead just directly
+print the ident of the matching dmi_system_id here.
 
-regards,
-Henning
+Regards,
 
-> > +u32 simatic_ipc_get_membase0(unsigned int p2sb)
-> > +{
-> > +       struct pci_bus *bus;
-> > +       u32 bar0 = 0;
-> > +
-> > +       /*
-> > +        * The GPIO memory is bar0 of the hidden P2SB device.
-> > Unhide the device  
-> 
-> No, it's not a GPIO's bar. It's P2SB's one. GPIO resides in that bar
-> somewhere.
-> 
-> > +        * to have a quick look at it, before we hide it again.
-> > +        * Also grab the pci rescan lock so that device does not
-> > get discovered
-> > +        * and remapped while it is visible.
-> > +        * This code is inspired by drivers/mfd/lpc_ich.c
-> > +        */
-> > +       bus = pci_find_bus(0, 0);
-> > +       pci_lock_rescan_remove();
-> > +       pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x0);
-> > +       pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0,
-> > &bar0); +
-> > +       bar0 &= ~0xf;
-> > +       pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x1);
-> > +       pci_unlock_rescan_remove();
-> > +
-> > +       return bar0;
-> > +}
-> > +EXPORT_SYMBOL(simatic_ipc_get_membase0);  
-> 
-> ...
-> 
-> > +static inline u32 simatic_ipc_get_station_id(u8 *data, int max_len)
-> > +{
-> > +       u32 station_id = SIMATIC_IPC_INVALID_STATION_ID;
-> > +       int i;  
-> 
-> Reversed xmas tree order, please.
-> 
-> > +       struct {
-> > +               u8      type;           /* type (0xff = binary) */
-> > +               u8      len;            /* len of data entry */
-> > +               u8      reserved[3];
-> > +               u32     station_id;     /* station id (LE) */  
-> 
-> > +       } __packed
-> > +       *data_entry = (void *)data + sizeof(struct dmi_header);  
-> 
-> Can be one line.
-> 
-> > +       /* find 4th entry in OEM data */
-> > +       for (i = 0; i < 3; i++)  
-> 
-> 3 is magic!
-> 
-> > +               data_entry = (void *)((u8 *)(data_entry) +
-> > data_entry->len); +
-> > +       /* decode station id */
-> > +       if (data_entry && (u8 *)data_entry < data + max_len &&
-> > +           data_entry->type == 0xff && data_entry->len == 9)
-> > +               station_id = le32_to_cpu(data_entry->station_id);
-> > +
-> > +       return station_id;
-> > +}  
+Hans
+
+
+> +
+> +	return 1;
+> +}
+> +
+> +static int dmi_callback_siemens(const struct dmi_system_id *d)
+>  {
+>  	u32 st_id;
+>  
+> @@ -373,7 +381,7 @@ static int siemens_clk_is_critical(const struct dmi_system_id *d)
+>  		goto out;
+>  
+>  	if (st_id == SIMATIC_IPC_IPC227E || st_id == SIMATIC_IPC_IPC277E)
+> -		return 1;
+> +		return dmi_callback(d);
+>  
+>  out:
+>  	pmc_clk_is_critical = false;
+> @@ -388,6 +396,7 @@ static const struct dmi_system_id critclk_systems[] = {
+>  	{
+>  		/* pmc_plt_clk0 is used for an external HSIC USB HUB */
+>  		.ident = "MPL CEC1x",
+> +		.callback = dmi_callback,
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "MPL AG"),
+>  			DMI_MATCH(DMI_PRODUCT_NAME, "CEC10 Family"),
+> @@ -396,6 +405,7 @@ static const struct dmi_system_id critclk_systems[] = {
+>  	{
+>  		/* pmc_plt_clk0 - 3 are used for the 4 ethernet controllers */
+>  		.ident = "Lex 3I380D",
+> +		.callback = dmi_callback,
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "Lex BayTrail"),
+>  			DMI_MATCH(DMI_PRODUCT_NAME, "3I380D"),
+> @@ -404,6 +414,7 @@ static const struct dmi_system_id critclk_systems[] = {
+>  	{
+>  		/* pmc_plt_clk* - are used for ethernet controllers */
+>  		.ident = "Lex 2I385SW",
+> +		.callback = dmi_callback,
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "Lex BayTrail"),
+>  			DMI_MATCH(DMI_PRODUCT_NAME, "2I385SW"),
+> @@ -412,6 +423,7 @@ static const struct dmi_system_id critclk_systems[] = {
+>  	{
+>  		/* pmc_plt_clk* - are used for ethernet controllers */
+>  		.ident = "Beckhoff CB3163",
+> +		.callback = dmi_callback,
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff Automation"),
+>  			DMI_MATCH(DMI_BOARD_NAME, "CB3163"),
+> @@ -420,6 +432,7 @@ static const struct dmi_system_id critclk_systems[] = {
+>  	{
+>  		/* pmc_plt_clk* - are used for ethernet controllers */
+>  		.ident = "Beckhoff CB4063",
+> +		.callback = dmi_callback,
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff Automation"),
+>  			DMI_MATCH(DMI_BOARD_NAME, "CB4063"),
+> @@ -428,6 +441,7 @@ static const struct dmi_system_id critclk_systems[] = {
+>  	{
+>  		/* pmc_plt_clk* - are used for ethernet controllers */
+>  		.ident = "Beckhoff CB6263",
+> +		.callback = dmi_callback,
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff Automation"),
+>  			DMI_MATCH(DMI_BOARD_NAME, "CB6263"),
+> @@ -436,13 +450,14 @@ static const struct dmi_system_id critclk_systems[] = {
+>  	{
+>  		/* pmc_plt_clk* - are used for ethernet controllers */
+>  		.ident = "Beckhoff CB6363",
+> +		.callback = dmi_callback,
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff Automation"),
+>  			DMI_MATCH(DMI_BOARD_NAME, "CB6363"),
+>  		},
+>  	},
+>  	{
+> -		.callback = siemens_clk_is_critical,
+> +		.callback = dmi_callback_siemens,
+>  		.ident = "SIEMENS AG",
+>  		.matches = {
+>  			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
+> @@ -457,7 +472,6 @@ static int pmc_setup_clks(struct pci_dev *pdev, void __iomem *pmc_regmap,
+>  {
+>  	struct platform_device *clkdev;
+>  	struct pmc_clk_data *clk_data;
+> -	const struct dmi_system_id *d;
+>  
+>  	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
+>  	if (!clk_data)
+> @@ -468,8 +482,8 @@ static int pmc_setup_clks(struct pci_dev *pdev, void __iomem *pmc_regmap,
+>  	if (dmi_check_system(critclk_systems)) {
+>  		clk_data->critical = pmc_clk_is_critical;
+>  		if (clk_data->critical) {
+> -			d = dmi_first_match(critclk_systems);
+> -			pr_info("%s critclks quirk enabled\n", d->ident);
+> +			pr_info("%s critclks quirk enabled\n",
+> +				dmi_critical->ident);
+>  		}
+>  	}
+>  
 > 
 
