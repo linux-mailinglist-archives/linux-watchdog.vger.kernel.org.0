@@ -2,220 +2,220 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EC533AFDC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Mar 2021 11:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D0733B005
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Mar 2021 11:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229467AbhCOKT7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Mar 2021 06:19:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:25235 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229562AbhCOKT3 (ORCPT
+        id S229936AbhCOKby (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Mar 2021 06:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbhCOKb2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Mar 2021 06:19:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615803568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4H0t9R5LNgdt6oohPgmQ6W+xH6IrAfJheLo0PRTerkM=;
-        b=NAlT7673/RJiaRq3KvHTl3eBDdhTP7qPSFfbablBGB9Jpp0iMoehlMxmKwuDiyPLDniSwM
-        pQQI3LsExI7ycMaVjqlHIAnL8EiCEKLvgGpth0c3PRw/V6fG9Kavo+6WLs4lRgtyMqYaCy
-        psQ8ePCDDCgjyDXULfsopzElhB4+GwU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-410-7eEKtiJYOEmwleioWApMyQ-1; Mon, 15 Mar 2021 06:19:27 -0400
-X-MC-Unique: 7eEKtiJYOEmwleioWApMyQ-1
-Received: by mail-ed1-f70.google.com with SMTP id i6so15810102edq.12
-        for <linux-watchdog@vger.kernel.org>; Mon, 15 Mar 2021 03:19:27 -0700 (PDT)
+        Mon, 15 Mar 2021 06:31:28 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0E8C061574;
+        Mon, 15 Mar 2021 03:31:28 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y67so6298025pfb.2;
+        Mon, 15 Mar 2021 03:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6PdMcbuBDVYu4pfnkkEXp7Zeyvz8D3r+uXiYvPZcDso=;
+        b=vDerLbS2szcXcEP6NFNqJJTkBnnr7RjyysW/E0XcGAGLEq0BpSXuB5ojeHGbDNck5P
+         oHvtKNAtnXrkDlbc1aVWKdCrA/FpNP+zClF58ftFJeTZjtjUQ+e8v1DChN3eM23+IMxp
+         Hc4Fyqy4MqaGwTXwy/r7XSiyqvyzWN6EdsQcXpwHrccSGftvjSPPXxUaqPVEUsjqptqf
+         mbPvXMeSSkqZpkYs9bzfbx+gHPEGdiQmKMtl7KViFPhSRWaMo2C6umAB23Gh0km/oUa4
+         aj96y8/66oMP8hUkYG9iVQixNcUJbzEmSH1GbBIW+QKEOzcfG+9Nspe42dSGSH4rZA9J
+         U9Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4H0t9R5LNgdt6oohPgmQ6W+xH6IrAfJheLo0PRTerkM=;
-        b=cE24f2fu3FlmtljvP5HK+VQFOTXoBzpIqPibkaBkWPmvicVdtagD+Ql43I6Qr6uZvw
-         AiIWWYA+NH2Wr3rK2jSZWxFfDlVnv1S3AGM9YBCYDZLuaLxQ85/dnEBXCYhT8jg6sX92
-         rbAkkep+O2HKHcXgQP+dI2+Z04fO7S23fRhsodtDFhmYQRdyCQN/Ndl+c4isWBfi8IS5
-         BSCqTZkKDGb+/YOgzYytFum1Fj8x2VXjT+X+0z12iJNIrgrgU4rYo56rbYAjYCCccGaf
-         WrLxbs11I2YbnQMSaWxwI+hbQG+LBKuAzGwSPUdyoff6SW/M/qE13YtqGEAeYp3zBrIg
-         ec9w==
-X-Gm-Message-State: AOAM530R9M4VeXA5uHsuk3Vahjr1mq13P1iCpHbgJJ5m7ES7urnWEWfw
-        oajNQ/W6d6sdnk4vFW9BEF9/RlwIpMQOeM/9CLuSUMVodeu3ohfFqAlbNW2GtXZeGMKCyoPelRb
-        r2ZO4QRPXK9dFcYek3hScTL023ls=
-X-Received: by 2002:a05:6402:304b:: with SMTP id bu11mr28119345edb.157.1615803566154;
-        Mon, 15 Mar 2021 03:19:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKU1fbWoKqnF953DlzDBdbMwkCPOiePU1adCsKRZqOcav3wtyGBKCQsBBzqea6uLH9+r+/Yg==
-X-Received: by 2002:a05:6402:304b:: with SMTP id bu11mr28119331edb.157.1615803565998;
-        Mon, 15 Mar 2021 03:19:25 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id n6sm2530343eji.37.2021.03.15.03.19.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Mar 2021 03:19:25 -0700 (PDT)
-Subject: Re: [PATCH v2 4/4] platform/x86: pmc_atom: improve critclk_systems
- matching for Siemens PCs
-To:     Henning Schild <henning.schild@siemens.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     Srikanth Krishnakar <skrishnakar@gmail.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6PdMcbuBDVYu4pfnkkEXp7Zeyvz8D3r+uXiYvPZcDso=;
+        b=iL0yqJtqfVLrME6S14byDX/txCmZh0r3MLUdYd4FaeM3My9RZT7XAOAF7/XY/8GRYB
+         kIfG8GAjFKckhILdUQSOjmx5s9VfaRDfQMEyUJxU0Ifnin4P0/kCnMVRPU9RqOdWBwXY
+         VjPuxMPB1sDo4v9NjlmLC9eM/bV+PJh6xl2e5JktiaLN5naZi9BVpMccVMfc7W22+6xG
+         LFrr2P8wL33W853sa49QCzTmgzMCkxllLwIlvTklXH1JrJnesNX1lOE6RPpqdAfpfBCy
+         L8EqAw6XcElqqqz+MhmKS9d0zAooR6PWGgiAUY6bJQzh+9sJr8d8PInMijzzId6cvkk1
+         F7oA==
+X-Gm-Message-State: AOAM5315Inzg5j2V57rQxz6++0kTkySEASm75hpRenEEaev2huw5GUJh
+        10eEIy4IHOdlwltNwlBPKLPRZuGoILySi5tf2BM=
+X-Google-Smtp-Source: ABdhPJyHWGsmCNhd61PqCgK3SsbcfpQfxMOyuLLgU8rBG7ONOLaDWA6yK76yx3cFkaiCa5am1VGB0HU9WFDVffVL/dA=
+X-Received: by 2002:a62:7c43:0:b029:1ef:20ce:ba36 with SMTP id
+ x64-20020a627c430000b02901ef20ceba36mr24341655pfc.40.1615804287645; Mon, 15
+ Mar 2021 03:31:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210315095710.7140-1-henning.schild@siemens.com> <20210315095710.7140-2-henning.schild@siemens.com>
+In-Reply-To: <20210315095710.7140-2-henning.schild@siemens.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 15 Mar 2021 12:31:11 +0200
+Message-ID: <CAHp75VdXDcTfNL9QRQ5XE-zVLHacfMKHUxhse3=dAfJbOJdObQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] platform/x86: simatic-ipc: add main driver for
+ Siemens devices
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Mark Gross <mgross@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Michael Haener <michael.haener@siemens.com>
-References: <20210315095710.7140-1-henning.schild@siemens.com>
- <20210315095710.7140-5-henning.schild@siemens.com>
- <20210315111434.413137b5@md1za8fc.ad001.siemens.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <ef5fe493-285d-145c-8d05-7f9bd0cb47c5@redhat.com>
-Date:   Mon, 15 Mar 2021 11:19:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <20210315111434.413137b5@md1za8fc.ad001.siemens.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+On Mon, Mar 15, 2021 at 12:02 PM Henning Schild
+<henning.schild@siemens.com> wrote:
+>
+> This mainly implements detection of these devices and will allow
+> secondary drivers to work on such machines.
+>
+> The identification is DMI-based with a vendor specific way to tell them
+> apart in a reliable way.
+>
+> Drivers for LEDs and Watchdogs will follow to make use of that platform
+> detection.
 
-On 3/15/21 11:14 AM, Henning Schild wrote:
-> Am Mon, 15 Mar 2021 10:57:10 +0100
-> schrieb Henning Schild <henning.schild@siemens.com>:
-> 
->> Siemens industrial PCs unfortunately can not always be properly
->> identified the way we used to. An earlier commit introduced code that
->> allows proper identification without looking at DMI strings that could
->> differ based on product branding.
->> Switch over to that proper way and revert commits that used to collect
->> the machines based on unstable strings.
->>
->> Fixes: 648e921888ad ("clk: x86: Stop marking clocks as
->> CLK_IS_CRITICAL") Fixes: e8796c6c69d1 ("platform/x86: pmc_atom: Add
->> Siemens CONNECT ...") Fixes: f110d252ae79 ("platform/x86: pmc_atom:
->> Add Siemens SIMATIC ...") Fixes: ad0d315b4d4e ("platform/x86:
->> pmc_atom: Add Siemens SIMATIC ...") Tested-by: Michael Haener
->> <michael.haener@siemens.com> Signed-off-by: Henning Schild
->> <henning.schild@siemens.com> ---
->>  drivers/platform/x86/pmc_atom.c | 47
->> +++++++++++++++++++-------------- 1 file changed, 27 insertions(+),
->> 20 deletions(-)
->>
->> diff --git a/drivers/platform/x86/pmc_atom.c
->> b/drivers/platform/x86/pmc_atom.c index ca684ed760d1..38542d547f29
->> 100644 --- a/drivers/platform/x86/pmc_atom.c
->> +++ b/drivers/platform/x86/pmc_atom.c
->> @@ -13,6 +13,7 @@
->>  #include <linux/io.h>
->>  #include <linux/platform_data/x86/clk-pmc-atom.h>
->>  #include <linux/platform_data/x86/pmc_atom.h>
->> +#include <linux/platform_data/x86/simatic-ipc.h>
->>  #include <linux/platform_device.h>
->>  #include <linux/pci.h>
->>  #include <linux/seq_file.h>
->> @@ -362,6 +363,23 @@ static void pmc_dbgfs_register(struct pmc_dev
->> *pmc) }
->>  #endif /* CONFIG_DEBUG_FS */
->>  
->> +static bool pmc_clk_is_critical = true;
->> +
->> +static int siemens_clk_is_critical(const struct dmi_system_id *d)
->> +{
->> +	u32 st_id;
->> +
->> +	if (dmi_walk(simatic_ipc_find_dmi_entry_helper, &st_id))
->> +		goto out;
->> +
->> +	if (st_id == SIMATIC_IPC_IPC227E || st_id ==
->> SIMATIC_IPC_IPC277E)
->> +		return 1;
->> +
->> +out:
->> +	pmc_clk_is_critical = false;
->> +	return 1;
->> +}
->> +
->>  /*
->>   * Some systems need one or more of their pmc_plt_clks to be
->>   * marked as critical.
->> @@ -424,24 +442,10 @@ static const struct dmi_system_id
->> critclk_systems[] = { },
->>  	},
->>  	{
->> -		.ident = "SIMATIC IPC227E",
->> -		.matches = {
->> -			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
->> -			DMI_MATCH(DMI_PRODUCT_VERSION, "6ES7647-8B"),
->> -		},
->> -	},
->> -	{
->> -		.ident = "SIMATIC IPC277E",
->> -		.matches = {
->> -			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
->> -			DMI_MATCH(DMI_PRODUCT_VERSION, "6AV7882-0"),
->> -		},
->> -	},
->> -	{
->> -		.ident = "CONNECT X300",
->> +		.callback = siemens_clk_is_critical,
->> +		.ident = "SIEMENS AG",
->>  		.matches = {
->>  			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
->> -			DMI_MATCH(DMI_PRODUCT_VERSION,
->> "A5E45074588"), },
->>  	},
->>  
->> @@ -453,7 +457,7 @@ static int pmc_setup_clks(struct pci_dev *pdev,
->> void __iomem *pmc_regmap, {
->>  	struct platform_device *clkdev;
->>  	struct pmc_clk_data *clk_data;
->> -	const struct dmi_system_id *d =
->> dmi_first_match(critclk_systems);
->> +	const struct dmi_system_id *d;
->>  
->>  	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
->>  	if (!clk_data)
->> @@ -461,9 +465,12 @@ static int pmc_setup_clks(struct pci_dev *pdev,
->> void __iomem *pmc_regmap, 
->>  	clk_data->base = pmc_regmap; /* offset is added by client */
->>  	clk_data->clks = pmc_data->clks;
->> -	if (d) {
->> -		clk_data->critical = true;
->> -		pr_info("%s critclks quirk enabled\n", d->ident);
->> +	if (dmi_check_system(critclk_systems)) {
-> 
-> Had to switch to check_system to get the callback to work.
-> 
->> +		clk_data->critical = pmc_clk_is_critical;
->> +		if (clk_data->critical) {
->> +			d = dmi_first_match(critclk_systems);
->> +			pr_info("%s critclks quirk enabled\n",
->> d->ident);
-> 
-> Now need a double match here just to print the ident. Not too happy
-> with that but proposing it like this to keep the ident printing.
-> 
-> I guess it could be improved by not printing the ident or having a
-> global variable and global callback to remember the ident to print
-> later. I would propose to not print the ident if the double-match does
-> not find traction.
+...
 
-IMHO it would be best to add another callback for the non Siemens
-entries which just prints the ideent and returns 1 to avoid needsly
-looping over the rest of the array.
+> +static int register_platform_devices(u32 station_id)
+> +{
+> +       u8 ledmode = SIMATIC_IPC_DEVICE_NONE;
+> +       u8 wdtmode = SIMATIC_IPC_DEVICE_NONE;
+> +       int i;
+> +
+> +       platform_data.devmode = SIMATIC_IPC_DEVICE_NONE;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(device_modes); i++) {
+> +               if (device_modes[i].station_id == station_id) {
+> +                       ledmode = device_modes[i].led_mode;
+> +                       wdtmode = device_modes[i].wdt_mode;
+> +                       break;
+> +               }
+> +       }
+> +
+> +       if (ledmode != SIMATIC_IPC_DEVICE_NONE) {
+> +               platform_data.devmode = ledmode;
+> +               ipc_led_platform_device =
+> +                       platform_device_register_data(NULL,
+> +                               KBUILD_MODNAME "_leds", PLATFORM_DEVID_NONE,
+> +                               &platform_data,
+> +                               sizeof(struct simatic_ipc_platform));
+> +               if (IS_ERR(ipc_led_platform_device))
+> +                       return PTR_ERR(ipc_led_platform_device);
+> +
+> +               pr_debug("device=%s created\n",
+> +                        ipc_led_platform_device->name);
+> +       }
+> +
+> +       if (wdtmode != SIMATIC_IPC_DEVICE_NONE) {
+> +               platform_data.devmode = wdtmode;
+> +               ipc_wdt_platform_device =
+> +                       platform_device_register_data(NULL,
+> +                               KBUILD_MODNAME "_wdt", PLATFORM_DEVID_NONE,
+> +                               &platform_data,
+> +                               sizeof(struct simatic_ipc_platform));
+> +               if (IS_ERR(ipc_wdt_platform_device))
+> +                       return PTR_ERR(ipc_wdt_platform_device);
+> +
+> +               pr_debug("device=%s created\n",
+> +                        ipc_wdt_platform_device->name);
+> +       }
+> +
+> +       if (ledmode == SIMATIC_IPC_DEVICE_NONE &&
+> +           wdtmode == SIMATIC_IPC_DEVICE_NONE) {
+> +               pr_warn("unsupported IPC detected, station id=%08x\n",
+> +                       station_id);
+> +               return -EINVAL;
+> +       }
+> +
+> +       return 0;
+> +}
 
-And then just set the callback member of all the non Siemens entries
-to this new callback. The space for the callback pointer is already
-reserved in the struct anyways, so actually setting it does not take
-up any space.
+Why not use MFD here?
 
-Regards,
+...
 
-Hans
+> +/*
+> + * Get membase address from PCI, used in leds and wdt modul. Here we read
+> + * the bar0. The final address calculation is done in the appropriate modules
+> + */
 
+No blank line here.
+
+I would add FIXME or REVISIT here to point out that this should be
+deduplicated in the future.
+
+> +u32 simatic_ipc_get_membase0(unsigned int p2sb)
+> +{
+> +       struct pci_bus *bus;
+> +       u32 bar0 = 0;
+> +
+> +       /*
+> +        * The GPIO memory is bar0 of the hidden P2SB device. Unhide the device
+
+No, it's not a GPIO's bar. It's P2SB's one. GPIO resides in that bar somewhere.
+
+> +        * to have a quick look at it, before we hide it again.
+> +        * Also grab the pci rescan lock so that device does not get discovered
+> +        * and remapped while it is visible.
+> +        * This code is inspired by drivers/mfd/lpc_ich.c
+> +        */
+> +       bus = pci_find_bus(0, 0);
+> +       pci_lock_rescan_remove();
+> +       pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x0);
+> +       pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0, &bar0);
+> +
+> +       bar0 &= ~0xf;
+> +       pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x1);
+> +       pci_unlock_rescan_remove();
+> +
+> +       return bar0;
+> +}
+> +EXPORT_SYMBOL(simatic_ipc_get_membase0);
+
+...
+
+> +static inline u32 simatic_ipc_get_station_id(u8 *data, int max_len)
+> +{
+> +       u32 station_id = SIMATIC_IPC_INVALID_STATION_ID;
+> +       int i;
+
+Reversed xmas tree order, please.
+
+> +       struct {
+> +               u8      type;           /* type (0xff = binary) */
+> +               u8      len;            /* len of data entry */
+> +               u8      reserved[3];
+> +               u32     station_id;     /* station id (LE) */
+
+> +       } __packed
+> +       *data_entry = (void *)data + sizeof(struct dmi_header);
+
+Can be one line.
+
+> +       /* find 4th entry in OEM data */
+> +       for (i = 0; i < 3; i++)
+
+3 is magic!
+
+> +               data_entry = (void *)((u8 *)(data_entry) + data_entry->len);
+> +
+> +       /* decode station id */
+> +       if (data_entry && (u8 *)data_entry < data + max_len &&
+> +           data_entry->type == 0xff && data_entry->len == 9)
+> +               station_id = le32_to_cpu(data_entry->station_id);
+> +
+> +       return station_id;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
