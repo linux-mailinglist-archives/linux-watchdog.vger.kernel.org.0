@@ -2,21 +2,25 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0227233B1B9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Mar 2021 12:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2D033B295
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Mar 2021 13:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbhCOLtr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Mar 2021 07:49:47 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:47712 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbhCOLtc (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Mar 2021 07:49:32 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0C7F81C0B78; Mon, 15 Mar 2021 12:49:30 +0100 (CET)
-Date:   Mon, 15 Mar 2021 12:49:29 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Henning Schild <henning.schild@siemens.com>
+        id S229843AbhCOMZS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Mar 2021 08:25:18 -0400
+Received: from gecko.sbs.de ([194.138.37.40]:38418 "EHLO gecko.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229831AbhCOMZA (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 15 Mar 2021 08:25:00 -0400
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 12FCOWDw013614
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Mar 2021 13:24:32 +0100
+Received: from md1za8fc.ad001.siemens.net ([139.22.41.172])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 12FC9U82008879;
+        Mon, 15 Mar 2021 13:09:30 +0100
+Date:   Mon, 15 Mar 2021 13:09:28 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
         platform-driver-x86@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
@@ -26,125 +30,170 @@ Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 2/4] leds: simatic-ipc-leds: add new driver for Siemens
- Industial PCs
-Message-ID: <20210315114929.GA17127@duo.ucw.cz>
-References: <20210302163309.25528-1-henning.schild@siemens.com>
- <20210302163309.25528-3-henning.schild@siemens.com>
- <20210302205452.GA32573@duo.ucw.cz>
- <20210303141052.30641e6b@md1za8fc.ad001.siemens.net>
- <20210303193134.GB8720@amd>
- <20210303214810.511ad65a@md1za8fc.ad001.siemens.net>
- <20210303215615.64e45720@md1za8fc.ad001.siemens.net>
- <20210305192555.34f7ea0f@md1za8fc.ad001.siemens.net>
- <20210306135453.6dc186d2@md1za8fc.ad001.siemens.net>
- <20210306140633.57f28b05@md1za8fc.ad001.siemens.net>
+        Pavel Machek <pavel@ucw.cz>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Michael Haener <michael.haener@siemens.com>
+Subject: Re: [PATCH v2 4/4] platform/x86: pmc_atom: improve critclk_systems
+ matching for Siemens PCs
+Message-ID: <20210315130928.42c65655@md1za8fc.ad001.siemens.net>
+In-Reply-To: <ef5fe493-285d-145c-8d05-7f9bd0cb47c5@redhat.com>
+References: <20210315095710.7140-1-henning.schild@siemens.com>
+        <20210315095710.7140-5-henning.schild@siemens.com>
+        <20210315111434.413137b5@md1za8fc.ad001.siemens.net>
+        <ef5fe493-285d-145c-8d05-7f9bd0cb47c5@redhat.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="vtzGhvizbBRQ85DL"
-Content-Disposition: inline
-In-Reply-To: <20210306140633.57f28b05@md1za8fc.ad001.siemens.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Am Mon, 15 Mar 2021 11:19:24 +0100
+schrieb Hans de Goede <hdegoede@redhat.com>:
 
---vtzGhvizbBRQ85DL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hi,
+> 
+> On 3/15/21 11:14 AM, Henning Schild wrote:
+> > Am Mon, 15 Mar 2021 10:57:10 +0100
+> > schrieb Henning Schild <henning.schild@siemens.com>:
+> >   
+> >> Siemens industrial PCs unfortunately can not always be properly
+> >> identified the way we used to. An earlier commit introduced code
+> >> that allows proper identification without looking at DMI strings
+> >> that could differ based on product branding.
+> >> Switch over to that proper way and revert commits that used to
+> >> collect the machines based on unstable strings.
+> >>
+> >> Fixes: 648e921888ad ("clk: x86: Stop marking clocks as
+> >> CLK_IS_CRITICAL") Fixes: e8796c6c69d1 ("platform/x86: pmc_atom: Add
+> >> Siemens CONNECT ...") Fixes: f110d252ae79 ("platform/x86: pmc_atom:
+> >> Add Siemens SIMATIC ...") Fixes: ad0d315b4d4e ("platform/x86:
+> >> pmc_atom: Add Siemens SIMATIC ...") Tested-by: Michael Haener
+> >> <michael.haener@siemens.com> Signed-off-by: Henning Schild
+> >> <henning.schild@siemens.com> ---
+> >>  drivers/platform/x86/pmc_atom.c | 47
+> >> +++++++++++++++++++-------------- 1 file changed, 27 insertions(+),
+> >> 20 deletions(-)
+> >>
+> >> diff --git a/drivers/platform/x86/pmc_atom.c
+> >> b/drivers/platform/x86/pmc_atom.c index ca684ed760d1..38542d547f29
+> >> 100644 --- a/drivers/platform/x86/pmc_atom.c
+> >> +++ b/drivers/platform/x86/pmc_atom.c
+> >> @@ -13,6 +13,7 @@
+> >>  #include <linux/io.h>
+> >>  #include <linux/platform_data/x86/clk-pmc-atom.h>
+> >>  #include <linux/platform_data/x86/pmc_atom.h>
+> >> +#include <linux/platform_data/x86/simatic-ipc.h>
+> >>  #include <linux/platform_device.h>
+> >>  #include <linux/pci.h>
+> >>  #include <linux/seq_file.h>
+> >> @@ -362,6 +363,23 @@ static void pmc_dbgfs_register(struct pmc_dev
+> >> *pmc) }
+> >>  #endif /* CONFIG_DEBUG_FS */
+> >>  
+> >> +static bool pmc_clk_is_critical = true;
+> >> +
+> >> +static int siemens_clk_is_critical(const struct dmi_system_id *d)
+> >> +{
+> >> +	u32 st_id;
+> >> +
+> >> +	if (dmi_walk(simatic_ipc_find_dmi_entry_helper, &st_id))
+> >> +		goto out;
+> >> +
+> >> +	if (st_id == SIMATIC_IPC_IPC227E || st_id ==
+> >> SIMATIC_IPC_IPC277E)
+> >> +		return 1;
+> >> +
+> >> +out:
+> >> +	pmc_clk_is_critical = false;
+> >> +	return 1;
+> >> +}
+> >> +
+> >>  /*
+> >>   * Some systems need one or more of their pmc_plt_clks to be
+> >>   * marked as critical.
+> >> @@ -424,24 +442,10 @@ static const struct dmi_system_id
+> >> critclk_systems[] = { },
+> >>  	},
+> >>  	{
+> >> -		.ident = "SIMATIC IPC227E",
+> >> -		.matches = {
+> >> -			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
+> >> -			DMI_MATCH(DMI_PRODUCT_VERSION,
+> >> "6ES7647-8B"),
+> >> -		},
+> >> -	},
+> >> -	{
+> >> -		.ident = "SIMATIC IPC277E",
+> >> -		.matches = {
+> >> -			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
+> >> -			DMI_MATCH(DMI_PRODUCT_VERSION,
+> >> "6AV7882-0"),
+> >> -		},
+> >> -	},
+> >> -	{
+> >> -		.ident = "CONNECT X300",
+> >> +		.callback = siemens_clk_is_critical,
+> >> +		.ident = "SIEMENS AG",
+> >>  		.matches = {
+> >>  			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
+> >> -			DMI_MATCH(DMI_PRODUCT_VERSION,
+> >> "A5E45074588"), },
+> >>  	},
+> >>  
+> >> @@ -453,7 +457,7 @@ static int pmc_setup_clks(struct pci_dev *pdev,
+> >> void __iomem *pmc_regmap, {
+> >>  	struct platform_device *clkdev;
+> >>  	struct pmc_clk_data *clk_data;
+> >> -	const struct dmi_system_id *d =
+> >> dmi_first_match(critclk_systems);
+> >> +	const struct dmi_system_id *d;
+> >>  
+> >>  	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
+> >>  	if (!clk_data)
+> >> @@ -461,9 +465,12 @@ static int pmc_setup_clks(struct pci_dev
+> >> *pdev, void __iomem *pmc_regmap, 
+> >>  	clk_data->base = pmc_regmap; /* offset is added by client
+> >> */ clk_data->clks = pmc_data->clks;
+> >> -	if (d) {
+> >> -		clk_data->critical = true;
+> >> -		pr_info("%s critclks quirk enabled\n", d->ident);
+> >> +	if (dmi_check_system(critclk_systems)) {  
+> > 
+> > Had to switch to check_system to get the callback to work.
+> >   
+> >> +		clk_data->critical = pmc_clk_is_critical;
+> >> +		if (clk_data->critical) {
+> >> +			d = dmi_first_match(critclk_systems);
+> >> +			pr_info("%s critclks quirk enabled\n",
+> >> d->ident);  
+> > 
+> > Now need a double match here just to print the ident. Not too happy
+> > with that but proposing it like this to keep the ident printing.
+> > 
+> > I guess it could be improved by not printing the ident or having a
+> > global variable and global callback to remember the ident to print
+> > later. I would propose to not print the ident if the double-match
+> > does not find traction.  
+> 
+> IMHO it would be best to add another callback for the non Siemens
+> entries which just prints the ideent and returns 1 to avoid needsly
+> looping over the rest of the array.
+> 
+> And then just set the callback member of all the non Siemens entries
+> to this new callback. The space for the callback pointer is already
+> reserved in the struct anyways, so actually setting it does not take
+> up any space.
 
-Hi!
+Sounds good. I think i will make that another patch on top of the
+series and send it in reply to "v2 4/4". Maybe squash it in a v3.
 
-> > I would also be happy to include a fix to that script. My suggestion
-> > would be to allow bus=3Dplatform, in which case a "devicename" will be
-> > required and is allowed to have any value.
->=20
-> Furthermore it might be good to catch that in the led core instead of
-> that script. Maybe warn() on dev registration when function/color/name
-> seem off. Could later become "return -EINVAL"
+regards,
+Henning
 
-I'm not sure if we want to change _existing_ funny names.
+> Regards,
+> 
+> Hans
+> 
 
-Would document such as below be helpful?
-
-Could you describe the LEDs you have in similar format?
-
-Best regards,
-								Pavel
-
--*- org -*-
-
-It is somehow important to provide consistent interface to the
-userland. LED devices have one problem there, and that is naming of
-directories in /sys/class/leds. It would be nice if userland would
-just know right "name" for given LED function, but situation got more
-complex.
-
-Anyway, if backwards compatibility is not an issue, new code should
-use one of the "good" names from this list, and you should extend the
-list where applicable.
-
-Bad names are listed, too; in case you are writing application that
-wants to use particular feature, you should probe for good name, first,
-but then try the bad ones, too.
-
-* Keyboards
- =20
-Good: "input*:*:capslock"
-Good: "input*:*:scrolllock"
-Good: "input*:*:numlock"
-Bad: "shift-key-light" (Motorola Droid 4, capslock)
-
-Set of common keyboard LEDs, going back to PC AT or so.
-
-Good: "platform::kbd_backlight"
-Bad: "tpacpi::thinklight" (IBM/Lenovo Thinkpads)
-Bad: "lp5523:kb{1,2,3,4,5,6}" (Nokia N900)
-
-Frontlight/backlight of main keyboard.
-
-Bad: "button-backlight" (Motorola Droid 4)
-
-Some phones have touch buttons below screen; it is different from main
-keyboard. And this is their backlight.
-
-* Sound subsystem
-
-Good: "platform:*:mute"
-Good: "platform:*:micmute"
-
-LEDs on notebook body, indicating that sound input / output is muted.
-
-* System notification
-
-Good: "status-led:{red,green,blue}" (Motorola Droid 4)
-Bad: "lp5523:{r,g,b}" (Nokia N900)
-
-Phones usually have multi-color status LED.
-
-* Power management
-
-Good: "platform:*:charging" (allwinner sun50i)
-
-* Screen
-
-Good: ":backlight" (Motorola Droid 4)
-
-
---=20
-http://www.livejournal.com/~pavelmachek
-
---vtzGhvizbBRQ85DL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYE9JyQAKCRAw5/Bqldv6
-8qL1AJ9fhBVoLp9LZkPwJCXTzhKG7oDscwCgvQjgYrt6l9FPpZiyYene5dzSDLY=
-=vid5
------END PGP SIGNATURE-----
-
---vtzGhvizbBRQ85DL--
