@@ -2,56 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 357FF33CB54
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Mar 2021 03:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FD033CB5C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Mar 2021 03:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbhCPCWQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Mar 2021 22:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        id S229703AbhCPCXw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Mar 2021 22:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbhCPCVv (ORCPT
+        with ESMTP id S229644AbhCPCXY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Mar 2021 22:21:51 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8770DC06174A;
-        Mon, 15 Mar 2021 19:21:51 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id m21-20020a9d7ad50000b02901b83efc84a0so6115737otn.10;
-        Mon, 15 Mar 2021 19:21:51 -0700 (PDT)
+        Mon, 15 Mar 2021 22:23:24 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD29C06174A;
+        Mon, 15 Mar 2021 19:23:24 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id h6-20020a0568300346b02901b71a850ab4so6117808ote.6;
+        Mon, 15 Mar 2021 19:23:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=bxKtmihhYc0UuXjqeaacZXMjf+mfXG4W5CX4FRq3LWQ=;
-        b=pDz9MWzrEVA8r+RhQOc/lZpkv4/6F9BdbrRivNqSmXRKMb3OnpOdaLUm56J7c5y7n9
-         Ot9o2lrOWyw+js4X22ALB71aM0wK/Z6Jap2gk1kNqCeL0af3w0sKmCnOyQ1gW2Sme2db
-         Q2DrutnR4CCfC1LspQSDzC27Kl8HmoIqnGh6dmnHZogaYKCSYib/0LWqrKHsZC/d+oAq
-         w+iE5Eei14/bl7/WrSU75vhtu5VH9fmMmjmkeCuK3mrbOA79lhvg3SEYaNuJG0NEH/Y5
-         rVPkxYBb2wAwUHw9LOZAu/nkcKOLjn1VZ3PNiIBvPbdCX/Mbqr/vNbNb1GuZhDTSzNXR
-         eS9g==
+        bh=oG4lAeO7tyf3QKY1d+wD/lnHF3SopRsWHfyiyrtig8Y=;
+        b=P4PwVOmNPAiI8JHJQGjD2MzP6XXBBPIqgKoUn/J2GlWxwoTpxA+f5fo+TRGzbM4UAQ
+         E/tEXzAudakjBUq1gg7YhfYaeMBB6OrAd2bln/rHC7KkoeWIRtyjbKhUDpCNsJvr5+mE
+         xN4QAPtpRWuLeoRbvC8NRf6YW0DQT1PYYxR2NwjJZymPKxHUHC9m950LkfKZQ+ufjI+5
+         xmaZIXwxFLfgMY+QyqIZVBlh3+BnG/TdBqKSBZZmzZ1SGC6LR9iF0lcdRyS2o7bPUVNR
+         R63lpRO8vNKzAIgb5/SIWrH4XlDG6k34ILYXhZPc0PPlvtmTANF6WU+T9VXBT2Hwp44+
+         88Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=bxKtmihhYc0UuXjqeaacZXMjf+mfXG4W5CX4FRq3LWQ=;
-        b=heCDXt4bqA/4avEuzAMXSM/hZeTcu7yLcd6pWhRKox3LGzFz8m89nGn6XjsZfe01cd
-         ggrswc390+YCrEK3qw3vs/AYTyOi1baIykFphEuzfccjZ1hWNAbJZZzPOR26QxCK3uHb
-         LdC9KKdfr/WjWDT5129Urx+hH2wfyp0Mv85BZjf7rmseHf+n8F3OxLADdyCNPUM1ApTu
-         dCl3LXMqkSkvo1IcJriJDIkl91pWnLeT7T95QcgjrcEQaHsnY+RxN579wtrGBmlRwKca
-         OiU5f5jdl2ysISe0EMSl4pZrU2GvrKC3UhwAtL3xdvApoYdLamQ5elagYRXivGxJTOVd
-         Aa8A==
-X-Gm-Message-State: AOAM530tm0w5RViClPfNCuLuhGYCNgUHAw0k7W+s7xDkF8QScJMwLoFg
-        kSh0PVhUpx9//rt9L+3yUok=
-X-Google-Smtp-Source: ABdhPJxJJ3aFz3w10SeWq7HNRB7ayDdxLVyx7VgCrW3g9xRHH67Pl9iEEvOZx8cWGFfYsq5pp5nCIQ==
-X-Received: by 2002:a9d:17ca:: with SMTP id j68mr1675319otj.312.1615861310873;
-        Mon, 15 Mar 2021 19:21:50 -0700 (PDT)
+        bh=oG4lAeO7tyf3QKY1d+wD/lnHF3SopRsWHfyiyrtig8Y=;
+        b=RzC3FHNPFr9/IsKuAMMOqpMonHmv5kGf5hKW/vQxNXv0qQhzJ1TpBwNfGOeHGA2dU0
+         uaoPNcbsB8b+A3wKPeWo64gamV5NIe2dQBl+XgAkiAyAMuwIQi3oBDaFO9eT/JVFVjbf
+         aQLXe8jU20ROzGtF5zqaJs4yNGoapsEuqdW8HhN0kCDhA7gOfVLF8eZ7HcufpTb02WL3
+         rN9bSCbFEmh9DS8PhydLFNqt9O9qnfwoWna2idt1UOBvOJOzKTJrXC40ZmM9NlKqn4Q4
+         Aolguu47/8BseS1IwYVlsTF8bnZ+tS4K34GQTLQ2iXjwhpkyp5pPLbF1Dn8nHq62PgWO
+         T5oA==
+X-Gm-Message-State: AOAM532zun1rKJXs70GX+gEmM4IjWx/8wljPWfvd2XsNQG3sp2nKehL4
+        whk0uasgFbCf4DNg/uQDFso=
+X-Google-Smtp-Source: ABdhPJxS6urIkq/glfi+8CgT0lrgTQyXKTcBCF8OI+30JFZ1vkT2BzIVDJehDHkLlE1hko3vvMNLcw==
+X-Received: by 2002:a05:6830:1515:: with SMTP id k21mr1543506otp.269.1615861403932;
+        Mon, 15 Mar 2021 19:23:23 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l190sm6716114oig.39.2021.03.15.19.21.48
+        by smtp.gmail.com with ESMTPSA id q10sm2899819ooo.34.2021.03.15.19.23.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Mar 2021 19:21:50 -0700 (PDT)
+        Mon, 15 Mar 2021 19:23:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/9] watchdog: of_xilinx_wdt: Add comment to spinlock
+Subject: Re: [PATCH 2/9] watchdog: of_xilinx_wdt: Used BIT macro
 To:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
         michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com,
         sgoud@xilinx.com
@@ -59,7 +59,7 @@ Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         git@xilinx.com, Srinivas Goud <srinivas.goud@xilinx.com>
 References: <1615805214-24857-1-git-send-email-srinivas.neeli@xilinx.com>
- <1615805214-24857-2-git-send-email-srinivas.neeli@xilinx.com>
+ <1615805214-24857-3-git-send-email-srinivas.neeli@xilinx.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -104,12 +104,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <323da8a0-d4d9-6c2d-bbb7-6529e588cdea@roeck-us.net>
-Date:   Mon, 15 Mar 2021 19:21:48 -0700
+Message-ID: <911ea811-9b9d-f2e1-bd0b-74432e652c04@roeck-us.net>
+Date:   Mon, 15 Mar 2021 19:23:21 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1615805214-24857-2-git-send-email-srinivas.neeli@xilinx.com>
+In-Reply-To: <1615805214-24857-3-git-send-email-srinivas.neeli@xilinx.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -120,34 +120,38 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 On 3/15/21 3:46 AM, Srinivas Neeli wrote:
 > From: Srinivas Goud <srinivas.goud@xilinx.com>
 > 
-> Based on checkpatch every spinlock should be documented.
-> The patch is fixing this issue:
-> ./scripts/checkpatch.pl --strict -f drivers/watchdog/of_xilinx_wdt.c
-> CHECK: spinlock_t definition without comment
-> +	spinlock_t spinlock;
+> Used BIT macro instead of mask value.
 > 
 > Signed-off-by: Srinivas Goud <srinivas.goud@xilinx.com>
 > Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 > Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
 > ---
->  drivers/watchdog/of_xilinx_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/watchdog/of_xilinx_wdt.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
-> index 7fe4f7c3f7ce..00549164b3d7 100644
+> index 00549164b3d7..0d7df2370db7 100644
 > --- a/drivers/watchdog/of_xilinx_wdt.c
 > +++ b/drivers/watchdog/of_xilinx_wdt.c
-> @@ -40,7 +40,7 @@
->  struct xwdt_device {
->  	void __iomem *base;
->  	u32 wdt_interval;
-> -	spinlock_t spinlock;
-> +	spinlock_t spinlock; /* spinlock for register handling */
->  	struct watchdog_device xilinx_wdt_wdd;
->  	struct clk		*clk;
->  };
+> @@ -24,12 +24,12 @@
+>  #define XWT_TBR_OFFSET      0x8 /* Timebase Register Offset */
+>  
+>  /* Control/Status Register Masks  */
+> -#define XWT_CSR0_WRS_MASK   0x00000008 /* Reset status */
+> -#define XWT_CSR0_WDS_MASK   0x00000004 /* Timer state  */
+> -#define XWT_CSR0_EWDT1_MASK 0x00000002 /* Enable bit 1 */
+> +#define XWT_CSR0_WRS_MASK	BIT(3) /* Reset status */
+> +#define XWT_CSR0_WDS_MASK	BIT(2) /* Timer state  */
+> +#define XWT_CSR0_EWDT1_MASK	BIT(1) /* Enable bit 1 */
+>  
+>  /* Control/Status Register 0/1 bits  */
+> -#define XWT_CSRX_EWDT2_MASK 0x00000001 /* Enable bit 2 */
+> +#define XWT_CSRX_EWDT2_MASK	BIT(0) /* Enable bit 2 */
+>  
+
+Requires #include <linux/bits.h>
+
+>  /* SelfTest constants */
+>  #define XWT_MAX_SELFTEST_LOOP_COUNT 0x00010000
 > 
 
