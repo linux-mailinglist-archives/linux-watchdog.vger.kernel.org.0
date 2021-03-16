@@ -2,147 +2,219 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8CA33CB7D
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Mar 2021 03:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D70A33CD90
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Mar 2021 06:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbhCPCec (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Mar 2021 22:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbhCPCeV (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Mar 2021 22:34:21 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D4FC06174A;
-        Mon, 15 Mar 2021 19:34:20 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id p24so7907990ota.11;
-        Mon, 15 Mar 2021 19:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=67EeziQUOpgBgP0jt7LS603ReePVfYIE7F4p8gloV3M=;
-        b=vGEqUZi4DAbV4FvKsq4yeybOXlr5HoBwKaQxuxffOInshEe8hsBN7eFXDvO7mJqql9
-         LDNE8f9Xaaw7Cuzv7MlPzrnt0Vm1p+kQe5zSYzRupB+MDaWbhIzCnz7gMvK19fVsrH4K
-         b0kpHtc+QWhHzokWwvgFdUeo/oRuoP8w6tL59NlevPnCli1kV34loq4zZZYC5whq5E72
-         X/8DVbhQf70qsPS+QKkDqMQLZHIF9IowVqcRsycAO8Bzcbc5XAdz1Z3ZfNtowDX/HYqF
-         qM8oJNFql/++xReAthR6OuBJFH2gkj+2iKtvgkcqXQj7cod1vKmfPY0yrOfcUpxonm2Y
-         aTgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=67EeziQUOpgBgP0jt7LS603ReePVfYIE7F4p8gloV3M=;
-        b=O64xRS9pGHuOG9BHWXyUXWotkjYLIWNDzg06elO7cnAZQy47/MnldKf7tmMghpYQsl
-         IPDKh7T6p/qu1gy9FBIalWtL+P4xUuMju/0gmhM31B3rua/CMlthWiPHvOHMJoh/6KW+
-         m35gz9JEsRuH/p6FndCYnwTa2tygaAEElc+SLq6Znr8oQjTT955LHhKFwer2m1GkZZ/9
-         0mbqO76MQRw5xhndE6cu3+jg11UPuEJ30NrtAU5GUTrs9gRPhrJtl4iSxYhSNeXVkzHX
-         DH2CAKrkPuaN2+vN/UeKhz41shyRrcUz+CAuTdSZTJgm3fTSihGgL9uis9ECwTrhT/s9
-         e1XA==
-X-Gm-Message-State: AOAM532y2Li3WZvIq68vPhag7nYcXZkMFQzRw5rUaL8Wv7IOtXac8VzR
-        C+70LJCerrnbRG4MyhU+1f25551FRmA=
-X-Google-Smtp-Source: ABdhPJxBiKUmj36uQZR8Uin4EteLX5tzsMrpFJ472l6OxZBU1JS4Yk7X0stz5WrzRZYfrIZsiexNFg==
-X-Received: by 2002:a9d:6e15:: with SMTP id e21mr1595135otr.77.1615862059826;
-        Mon, 15 Mar 2021 19:34:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t9sm625581otk.27.2021.03.15.19.34.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Mar 2021 19:34:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 9/9] watchdog: of_xilinx_wdt: Skip printing pointer value
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com,
-        sgoud@xilinx.com
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com
-References: <1615805214-24857-1-git-send-email-srinivas.neeli@xilinx.com>
- <1615805214-24857-10-git-send-email-srinivas.neeli@xilinx.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <f8c7801c-9420-48f2-c851-facac02f4964@roeck-us.net>
-Date:   Mon, 15 Mar 2021 19:34:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S235613AbhCPFsZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 16 Mar 2021 01:48:25 -0400
+Received: from gecko.sbs.de ([194.138.37.40]:36921 "EHLO gecko.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235605AbhCPFsN (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 16 Mar 2021 01:48:13 -0400
+Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 12G5llg8020508
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Mar 2021 06:47:48 +0100
+Received: from md1za8fc.ad001.siemens.net ([139.22.41.172])
+        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 12G5llIZ030837;
+        Tue, 16 Mar 2021 06:47:47 +0100
+Date:   Tue, 16 Mar 2021 06:47:43 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH] platform/x86: pmc_atom: use callback for all dmi quirk
+ entries
+Message-ID: <20210316064743.0b5a47cf@md1za8fc.ad001.siemens.net>
+In-Reply-To: <43841119-4839-09d2-b606-7dd40cad4b89@redhat.com>
+References: <ef5fe493-285d-145c-8d05-7f9bd0cb47c5@redhat.com>
+        <20210315145855.17174-1-henning.schild@siemens.com>
+        <8577f3a8-c5e4-3752-1bc1-5937ee164217@redhat.com>
+        <20210315180011.6a3f60b0@md1za8fc.ad001.siemens.net>
+        <43841119-4839-09d2-b606-7dd40cad4b89@redhat.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <1615805214-24857-10-git-send-email-srinivas.neeli@xilinx.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/15/21 3:46 AM, Srinivas Neeli wrote:
-> "%p" is not printing the pointer value.
-> In driver, printing pointer value is not useful so avoiding print.
-> 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+Hoi Hans,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+on a slighly different but also related topic. Did you ever come across
+SMSC SCH5347? Seems to be pretty similar to 56xx, only with spec non
+public ... and probably less often in use
+Maybe you happen to have code, or know the differences. We already have
+it working with a modified copy of sch56xx but that is still rough and
+i thought i ask before we potentially duplicate work.
 
-> ---
->  drivers/watchdog/of_xilinx_wdt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+groetjes,
+Henning
+
+Am Mon, 15 Mar 2021 19:01:13 +0100
+schrieb Hans de Goede <hdegoede@redhat.com>:
+
+> Hi,
 > 
-> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
-> index ad35c93b7684..df84734eba68 100644
-> --- a/drivers/watchdog/of_xilinx_wdt.c
-> +++ b/drivers/watchdog/of_xilinx_wdt.c
-> @@ -578,8 +578,8 @@ static int xwdt_probe(struct platform_device *pdev)
->  
->  	clk_disable(xdev->clk);
->  
-> -	dev_info(dev, "Xilinx Watchdog Timer at %p with timeout %ds\n",
-> -		 xdev->base, xilinx_wdt_wdd->timeout);
-> +	dev_info(dev, "Xilinx Watchdog Timer with timeout %ds\n",
-> +		 xilinx_wdt_wdd->timeout);
->  
->  	platform_set_drvdata(pdev, xdev);
->  
+> On 3/15/21 6:00 PM, Henning Schild wrote:
+> > Am Mon, 15 Mar 2021 17:31:49 +0100
+> > schrieb Hans de Goede <hdegoede@redhat.com>:
+> >   
+> >> Hi,
+> >>
+> >> On 3/15/21 3:58 PM, Henning Schild wrote:  
+> >>> Introduce a global variable to remember the matching entry for
+> >>> later printing. Also having a callback allows to stop matching
+> >>> after the first hit.
+> >>>
+> >>> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> >>> ---
+> >>>  drivers/platform/x86/pmc_atom.c | 26 ++++++++++++++++++++------
+> >>>  1 file changed, 20 insertions(+), 6 deletions(-)
+> >>>
+> >>> diff --git a/drivers/platform/x86/pmc_atom.c
+> >>> b/drivers/platform/x86/pmc_atom.c index 38542d547f29..d0f74856cd8b
+> >>> 100644 --- a/drivers/platform/x86/pmc_atom.c
+> >>> +++ b/drivers/platform/x86/pmc_atom.c
+> >>> @@ -364,8 +364,16 @@ static void pmc_dbgfs_register(struct pmc_dev
+> >>> *pmc) #endif /* CONFIG_DEBUG_FS */
+> >>>  
+> >>>  static bool pmc_clk_is_critical = true;
+> >>> +static const struct dmi_system_id *dmi_critical;
+> >>>  
+> >>> -static int siemens_clk_is_critical(const struct dmi_system_id *d)
+> >>> +static int dmi_callback(const struct dmi_system_id *d)
+> >>> +{
+> >>> +	dmi_critical = d;    
+> >>
+> >> Don't introduce a global variable for this please. Instead just
+> >> directly print the ident of the matching dmi_system_id here.  
+> > 
+> > Sorry, missed that part. Result looks nice and clean, thanks. I
+> > think i will squash it into 4/4 in v3 and not follow up here for
+> > now.  
+> 
+> Ack, that sounds good to me.
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> >>> +
+> >>> +	return 1;
+> >>> +}
+> >>> +
+> >>> +static int dmi_callback_siemens(const struct dmi_system_id *d)
+> >>>  {
+> >>>  	u32 st_id;
+> >>>  
+> >>> @@ -373,7 +381,7 @@ static int siemens_clk_is_critical(const
+> >>> struct dmi_system_id *d) goto out;
+> >>>  
+> >>>  	if (st_id == SIMATIC_IPC_IPC227E || st_id ==
+> >>> SIMATIC_IPC_IPC277E)
+> >>> -		return 1;
+> >>> +		return dmi_callback(d);
+> >>>  
+> >>>  out:
+> >>>  	pmc_clk_is_critical = false;
+> >>> @@ -388,6 +396,7 @@ static const struct dmi_system_id
+> >>> critclk_systems[] = { {
+> >>>  		/* pmc_plt_clk0 is used for an external HSIC USB
+> >>> HUB */ .ident = "MPL CEC1x",
+> >>> +		.callback = dmi_callback,
+> >>>  		.matches = {
+> >>>  			DMI_MATCH(DMI_SYS_VENDOR, "MPL AG"),
+> >>>  			DMI_MATCH(DMI_PRODUCT_NAME, "CEC10
+> >>> Family"), @@ -396,6 +405,7 @@ static const struct dmi_system_id
+> >>> critclk_systems[] = { {
+> >>>  		/* pmc_plt_clk0 - 3 are used for the 4 ethernet
+> >>> controllers */ .ident = "Lex 3I380D",
+> >>> +		.callback = dmi_callback,
+> >>>  		.matches = {
+> >>>  			DMI_MATCH(DMI_SYS_VENDOR, "Lex
+> >>> BayTrail"), DMI_MATCH(DMI_PRODUCT_NAME, "3I380D"),
+> >>> @@ -404,6 +414,7 @@ static const struct dmi_system_id
+> >>> critclk_systems[] = { {
+> >>>  		/* pmc_plt_clk* - are used for ethernet
+> >>> controllers */ .ident = "Lex 2I385SW",
+> >>> +		.callback = dmi_callback,
+> >>>  		.matches = {
+> >>>  			DMI_MATCH(DMI_SYS_VENDOR, "Lex
+> >>> BayTrail"), DMI_MATCH(DMI_PRODUCT_NAME, "2I385SW"),
+> >>> @@ -412,6 +423,7 @@ static const struct dmi_system_id
+> >>> critclk_systems[] = { {
+> >>>  		/* pmc_plt_clk* - are used for ethernet
+> >>> controllers */ .ident = "Beckhoff CB3163",
+> >>> +		.callback = dmi_callback,
+> >>>  		.matches = {
+> >>>  			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff
+> >>> Automation"), DMI_MATCH(DMI_BOARD_NAME, "CB3163"),
+> >>> @@ -420,6 +432,7 @@ static const struct dmi_system_id
+> >>> critclk_systems[] = { {
+> >>>  		/* pmc_plt_clk* - are used for ethernet
+> >>> controllers */ .ident = "Beckhoff CB4063",
+> >>> +		.callback = dmi_callback,
+> >>>  		.matches = {
+> >>>  			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff
+> >>> Automation"), DMI_MATCH(DMI_BOARD_NAME, "CB4063"),
+> >>> @@ -428,6 +441,7 @@ static const struct dmi_system_id
+> >>> critclk_systems[] = { {
+> >>>  		/* pmc_plt_clk* - are used for ethernet
+> >>> controllers */ .ident = "Beckhoff CB6263",
+> >>> +		.callback = dmi_callback,
+> >>>  		.matches = {
+> >>>  			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff
+> >>> Automation"), DMI_MATCH(DMI_BOARD_NAME, "CB6263"),
+> >>> @@ -436,13 +450,14 @@ static const struct dmi_system_id
+> >>> critclk_systems[] = { {
+> >>>  		/* pmc_plt_clk* - are used for ethernet
+> >>> controllers */ .ident = "Beckhoff CB6363",
+> >>> +		.callback = dmi_callback,
+> >>>  		.matches = {
+> >>>  			DMI_MATCH(DMI_SYS_VENDOR, "Beckhoff
+> >>> Automation"), DMI_MATCH(DMI_BOARD_NAME, "CB6363"),
+> >>>  		},
+> >>>  	},
+> >>>  	{
+> >>> -		.callback = siemens_clk_is_critical,
+> >>> +		.callback = dmi_callback_siemens,
+> >>>  		.ident = "SIEMENS AG",
+> >>>  		.matches = {
+> >>>  			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
+> >>> @@ -457,7 +472,6 @@ static int pmc_setup_clks(struct pci_dev
+> >>> *pdev, void __iomem *pmc_regmap, {
+> >>>  	struct platform_device *clkdev;
+> >>>  	struct pmc_clk_data *clk_data;
+> >>> -	const struct dmi_system_id *d;
+> >>>  
+> >>>  	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
+> >>>  	if (!clk_data)
+> >>> @@ -468,8 +482,8 @@ static int pmc_setup_clks(struct pci_dev
+> >>> *pdev, void __iomem *pmc_regmap, if
+> >>> (dmi_check_system(critclk_systems)) { clk_data->critical =
+> >>> pmc_clk_is_critical; if (clk_data->critical) {
+> >>> -			d = dmi_first_match(critclk_systems);
+> >>> -			pr_info("%s critclks quirk enabled\n",
+> >>> d->ident);
+> >>> +			pr_info("%s critclks quirk enabled\n",
+> >>> +				dmi_critical->ident);
+> >>>  		}
+> >>>  	}
+> >>>  
+> >>>     
+> >>  
+> >   
 > 
 
