@@ -2,151 +2,159 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4820B345F64
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Mar 2021 14:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDB7346020
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Mar 2021 14:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbhCWNRd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 23 Mar 2021 09:17:33 -0400
-Received: from mail-eopbgr60082.outbound.protection.outlook.com ([40.107.6.82]:47494
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231466AbhCWNQH (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 23 Mar 2021 09:16:07 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MPrrR/1ggTfBh9zv5/bE/r7cQU6cU6lTIWCCSfoF0YW4nQ/uf1Irbg4xKqFLPHwfPd6UprrjDTgPPfzdb9E6CkoznXnNthEecVi1Y94OimvYZS98Bcz3aI5XE+IiK2qjeigic+IY0i+SF5Yfw3Yvf71i14ArAkOIjXASupxkTNp/g4CNO2lYN3KrqEJXayGQdE0TYFbzPzfzniWME7OHYvUzgoADXpBGDj7Aoxvu6PhVbSR/KpmEHtusPBdpMbeSg8q41A2UuY6J9pn0ByrnhTLUH4pZLc5WAjCyhO8clFLbjfMT2aifEKSL8IXbAeHv/k4UgR/w2HUnLftEIbUUHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R0liIKY5kdjfR/YQPtHnyONRG6l84fJdBlWZw7t7/iQ=;
- b=HazN5Wh1gzrRMITR6GvVHRHz6JC8XSay69iNMn2gINqEb8/52cpOgv7QNYbl4Af/Fku6Wr1f3lsMT3Pv2hEUUNIj26vmXrOjSwQFsHob76b6sjilzxjQRHVB1QwCk//FAeeZL7XE4EMMaTqY3U5EmHArae6toelmQOnQ4pbJ407ZuR+Y/bdGiN6K3kh7LaoR0isIBzgoOn/6vj57jT7C48S64I6bBXVkl2C7mqEdR5N2qxd8nIZ3L/BhNVLf2h0Q6Rjg35EggKStE+gYyGKTVxwlB8Ftxc0CvFpuH5Ye5zMTu+2NDSKq1OqHrhOj6ft3huBAeIC/jCWEFsLzXG790g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R0liIKY5kdjfR/YQPtHnyONRG6l84fJdBlWZw7t7/iQ=;
- b=ioGDLtvoiu9E/S1NaA2rm91xyeypqjDgt5RkMoA9b6oPUgfTvrcLrwYyLDT9GXTBg0Oxx1n6xtNmvcZjwGFAYxiZAm0sAANyJld/Raj7I+5Hf/wzIueRovhX33vRAyvBV+AtwbHX1eRAvrGPR7BpW7fqUcELzgOFdo34SrsaRO0=
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
- HE1PR03MB2985.eurprd03.prod.outlook.com (2603:10a6:7:59::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3955.24; Tue, 23 Mar 2021 13:16:02 +0000
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::f4d0:ee66:d5fb:9cdd]) by HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::f4d0:ee66:d5fb:9cdd%3]) with mapi id 15.20.3955.027; Tue, 23 Mar 2021
- 13:16:01 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "wens@csie.org" <wens@csie.org>,
-        "mgross@linux.intel.com" <mgross@linux.intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "cw00.choi@samsung.com" <cw00.choi@samsung.com>
-Subject: Re: [RFC RESEND PATCH v2 0/8] Add managed version of delayed work
- init
-Thread-Topic: [RFC RESEND PATCH v2 0/8] Add managed version of delayed work
- init
-Thread-Index: AQHXHu4M36CuhYsXxkS/QAtgWtLqIKqRhkgAgAAJIwA=
-Date:   Tue, 23 Mar 2021 13:16:01 +0000
-Message-ID: <9a667ed3167738b3b436d00144154bcb4a64314d.camel@fi.rohmeurope.com>
-References: <cover.1616395565.git.matti.vaittinen@fi.rohmeurope.com>
-         <YFniWnUwQ7CY7wEM@kroah.com>
-In-Reply-To: <YFniWnUwQ7CY7wEM@kroah.com>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [2001:14ba:16e2:8300::2]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 26d67767-63f5-42a8-8d8f-08d8edfdce4f
-x-ms-traffictypediagnostic: HE1PR03MB2985:
-x-microsoft-antispam-prvs: <HE1PR03MB29858D8F7BB48EBC834A5C15AD649@HE1PR03MB2985.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2dlHHD8kmhF0RK4t+uXLHadP5vCCb47rwxgK+9pVy9YnfU/Z//jnBhCOKrObj4/d7TiB5+pkYD+k5WABq/bh0oRuAyObhVVmvXRzbUnQe1LakH3sVzaeYgFgmvYRNAJmCOMm5rR5dQL7kMIWuTNQPyog25lqfzHdNJx3GI+nxgsiLJmaQ/2f85DtRHsLOsMLpfmTvuGU+ASvv0TYvKIq8yZTxCf7DUzhDNK9YQZsA5ypXmi3BF2FJvJ1mJ5FmYjPENEMvLb/q5YNqIg/RcU1VeIYRMOV4FE4YbyWFSf9uyIPvfEudTgD7RijJjzVxv34qb6RIPyViiyOfUaHrupx9aVCWxvFjIbctCeOXrJMRuHzion+us6E++TiZ7l2Ye3azhcVxR4nmp8PwfxLIG93FjFKmnWTVMzTTF8Gws8ft/2Ne9zVy2N427NhqUM/S1HgEufntCf1jj3hMQgFQjI1oGDjopmaRB1+vGHgDcRArwsqbB0dTmn5eASZ7JGOdn/LgpgrtgCyYGnW1/bFePPpQO+H+fqkhlv+vxobClcrXFPUgQthSAl8DEPyK08DfvxjmFQByMTVDgasKooxJ5UGOxIYODu+qr1SKG9hE19aMjwKtWN7/GnrBnXXBadgPwISwOi6JPRllFQ9Q4EnCVDBfudXJFnMW3wVSyv04Cinkl4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(54906003)(498600001)(38100700001)(6512007)(6506007)(4744005)(2616005)(71200400001)(6486002)(3450700001)(76116006)(86362001)(66446008)(64756008)(8936002)(5660300002)(7416002)(2906002)(66556008)(186003)(8676002)(6916009)(66476007)(66946007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?Tm9YSnJ4RExXUmdJVEdFbDhsTDBOTWVneWRrS05VUTdxQ0ZDQ2tnS1BVNTgw?=
- =?utf-8?B?SS9LNmpjOFR3SFZOOGxDTVRIS3JPVWQ2RVBYZDhlYm1sUzkxanRuWEpoS0Qr?=
- =?utf-8?B?R0RGdExvUkV5YjFDR0VhSzlHMUlYendzVmtmS1QwdUhYUG9OTEhYSGdXMnk0?=
- =?utf-8?B?bHpMaVQ0NldWUFRhSWs0RHJ3K0F5Q1habTNuMFh2a0czUDRReEptMGd6TDd5?=
- =?utf-8?B?eCtKS2RVVTlDZ2ZveUxHeHU0WDN0YS96UDM5NExMRTNvOGk2VTVHMVc3REMv?=
- =?utf-8?B?V3ZicEgrNUNpRFBHK3dqbXpEMUFqRW83RXFEdlpSWkdYQ0F0Nmx1WVd6WXNt?=
- =?utf-8?B?UzNZYVJaZ1JEb1hoUGhHeDNMZ3RpV0gyVDV0elBuYXMvVjVrYTNFNTBiQ0JR?=
- =?utf-8?B?TkR3NTd1SVNnL2N6enF1UVpIaFd5ak1KSU01Q3RGVFRJUlAzdmUyWUU2UDBJ?=
- =?utf-8?B?K1gxOVlSS1JPVmxHcjVkTElyNWtNMGJiSXp3YjZNMnNFTTIzNmJPcFd2dEFk?=
- =?utf-8?B?VE1WWlg3N0xYTjlrWGE2MWJaTGRwRXIxNlhtYjV0cWdhMGw3YUNDQ0d4RS9p?=
- =?utf-8?B?RmV2ZlR0VEZhS3FKUHpSMERjOXdlU25CSkJjc202WTNBOE5SZW5RcmtlNHZz?=
- =?utf-8?B?b21tWTl0R2VKMmhlYVJHUXZPVzhNNHJNOFY2cXdweFZqWE55c1RHc0taU1Nh?=
- =?utf-8?B?c1JkM01jSTNiNUVvV1VuT3ZYak9TUXNkcjQ3Y0VMWEw1eStscTVzdlcrUmg3?=
- =?utf-8?B?V2NUNFc3enNLblJ4YnF6YzQvYUM1WVA4Mnk3VjBiV3Rva0Y4dldCUnhlYTVr?=
- =?utf-8?B?ZSs1VEFPbnZUYStTSFFaUGtqL2NZZmVHN3hHSjNuVW1RZmQrRUhYNDBxSldr?=
- =?utf-8?B?YmZuVDRvejZLRVd1dzdwR0JPL3h1bHhZVFU1WnF4a3VyUVVGYnNOSGJLeWRK?=
- =?utf-8?B?bm03WElZeDNjZmxqVE90UkVjc0grb0tlNjVwYVBGc29MRnlQVzNQK3FsVjBP?=
- =?utf-8?B?SnlMWlpEOHBSSXpCVzNMVElsZ3BwaWRaazA1YnRRS1R2d3R4akVxa2U3Rk8x?=
- =?utf-8?B?Q3ZocFN3VzRycU1IenErZ2lQdUtoV0NWK0cydXhNcHI2NGdvZU1NR1NOY2xT?=
- =?utf-8?B?YTloeUVmMXM0WTlBWGJ3YkFYbmFTMVk4QmJyMkc3NHVCODNKaUIxR3BOWGYz?=
- =?utf-8?B?TmpkTkRLdHI1TXp2SGY2OVZNV1BOdngycGMvdU10L01JRGpQZlIzNVdZNVk2?=
- =?utf-8?B?MGR5Z2pxcGRyc3FIS1plejkyRU9sNnBCUXhpZXE3WnhXZWZhQ3ZLQkY1OTVO?=
- =?utf-8?B?YWwrellSbStORXEyVUVKY2NmZm1GZkF4UXhiTnVTV3dvVG9oSzBGcVVyLzkx?=
- =?utf-8?B?cXZza2ZtSFVuSGttY2NmVmYrNTlPa2FRdjdoNG1xN1MyVXhKdkZ0R1BML2Uy?=
- =?utf-8?B?dTIrUUx3T1pUZ09uT2thSjlvMXFYYmJoU0lDNjEwd09HWW9UZlhKNkExdklD?=
- =?utf-8?B?emVkTW52aWdIYUNKa01vMzFGUEVXbTNYV3pmQy9QbG5iMlVmdFdiTGRuU01x?=
- =?utf-8?B?ZmlYdWZ3eDVldUV2eU8vZ2Z3amRPOFNZLyswczl1cHZjUEJSWW9zc2x2SjRO?=
- =?utf-8?B?bFQ5UDBaWHRiMlgzWjBNVkRJYVRSTHE0QTJaZTBxemdTMGlLaVJyM1d5MWRx?=
- =?utf-8?B?YWdITlZ6RlBIY1Z5dWZsVmdwRnNjUDFHRnJIeDFPY3BLQ3JkRjFNY3FKR1l3?=
- =?utf-8?B?a3hiTWZnZ3ZNVW92eEVFczY0ODRmVG1XQmEyRXZCcnYyT093UmJQaXorTENR?=
- =?utf-8?Q?5lPbaFVr0gzRWnzBLGqv/a/dc73wqmrVriBo8=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <ABA65A598D13014C9F2D54331E2611C0@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S231393AbhCWNto (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 23 Mar 2021 09:49:44 -0400
+Received: from mail-lj1-f175.google.com ([209.85.208.175]:42655 "EHLO
+        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230078AbhCWNtb (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 23 Mar 2021 09:49:31 -0400
+Received: by mail-lj1-f175.google.com with SMTP id 184so25677965ljf.9;
+        Tue, 23 Mar 2021 06:49:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=mFWNgc1FW5QaVvw/wsJgMcMblBrOgtay4PdG9vIWiv0=;
+        b=FvVyVQVsLQoE4k5/J1DM8EN5nXrnEwwGou+LREOttVV++wOuq/w19+yy6kvngoIypl
+         b2hwIJqaId0vkehPrAKTy3mmSYFPjdQsLzTD+O3b8SJOKWhz7/ehXJBAduY63o/xCXKF
+         ctl9Bt7CHW66JZ2Lk/sFc+8M762u/3aFRA0hhhgWKxAw8WF8gAIZBRawgRKvS0LFKuxO
+         jb5oloSGf0EE0N4VpkeO4qYcZEdWrqQQfmN8Kparl2f+w6ZQ6d5xAEBZiwTsTb/onUvW
+         O38yvciw4SEqBawanEGzOCOT5KPhBfubQZukp1IvM3p0Pj+mncdXDMIe3P/XHqzJN3f4
+         /6Ug==
+X-Gm-Message-State: AOAM5321c8uPfPcT0FIM4pKrkY04Hx2jMHvLvmOAjLAm7Dm3ayjPBn+K
+        ykfyp6vFGVJLM2rNWf1jg+E=
+X-Google-Smtp-Source: ABdhPJzCrYWUnFHopBuwoTQCnEVSaGjYd/0HCeCkwyJiUJo8kLjKK212FjDHsyFBrcl4geyYwMfp3w==
+X-Received: by 2002:a2e:9b4a:: with SMTP id o10mr3196706ljj.485.1616507369334;
+        Tue, 23 Mar 2021 06:49:29 -0700 (PDT)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
+        by smtp.gmail.com with ESMTPSA id i30sm1079430lfj.206.2021.03.23.06.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Mar 2021 06:49:28 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 15:49:21 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v3 0/8] Add managed version of delayed work init
+Message-ID: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26d67767-63f5-42a8-8d8f-08d8edfdce4f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2021 13:16:01.5524
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SkBvixQZOLUIVhg1/5znCYxgfvZ4dmlp/x2nJWG1+Qs+Cvu7zJbXYgB/nW7nXFTAmD2irHg/gK+N/svHkiYCw+IWX3PNbINpbTB9kedgHr3ZnCCq/FAr84GiKiUnp6M1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR03MB2985
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGkgR3JlZywNCg0KT24gVHVlLCAyMDIxLTAzLTIzIGF0IDEzOjQzICswMTAwLCBHcmVnIEtIIHdy
-b3RlOg0KPiBPbiBNb24sIE1hciAyMiwgMjAyMSBhdCAwOTo0MToxM0FNICswMjAwLCBNYXR0aSBW
-YWl0dGluZW4gd3JvdGU6DQo+ID4gSXQncyBub3QgcmFyZSB0aGF0IGRldmljZSBkcml2ZXJzIG5l
-ZWQgZGVsYXllZCB3b3JrLg0KPiA+IEl0J3Mgbm90IHJhcmUgdGhhdCB0aGlzIHdvcmsgbmVlZHMg
-ZHJpdmVyJ3MgZGF0YS4NCj4gDQo+IEkgZG9uJ3Qgbm9ybWFsbHkgY29tbWVudCBvbiAiUkZDIiBw
-YXRjaCBzZXJpZXMgYXMgSSBjYW4ndCB0YWtlIHRoZW0NCj4gYW5kDQo+IHRoZSBzdWJtaXR0ZXIg
-ZG9lc24ndCBmZWVsIHJpZ2h0IHdpdGggdGhlbSBiZWluZyBtZXJnZWQgYXQgdGhpcyBwb2ludA0K
-PiBpbg0KPiB0aW1lLg0KPiANCj4gU28gaWYgeW91IHRoaW5rIHRoaXMgaXMgYWxsIGNvcnJlY3Qg
-bm93LCBwbGVhc2UgcmVzdWJtaXQgd2l0aG91dCB0aGF0DQo+IHNvDQo+IHdlIGNhbiByZXZpZXcg
-aXQgcHJvcGVybHkgOikNCg0KVGhhbmtzIGZvciB0aGUgZ3VpZGFuY2UgOikNCkknbGwgZHJvcCB0
-aGUgUkZDIGFuZCByZXN1Ym1pdC4NCg0KT3RoZXJzIC0gc29ycnkgZm9yIHRoZSBub2lzZS4NCg0K
-QmVzdCBSZWdhcmRzDQoJTWF0dGkgVmFpdHRpbmVuDQoNCg==
+It's not rare that device drivers need delayed work.
+It's not rare that this work needs driver's data.
+
+Often this means that driver must ensure the work is not queued when
+driver is detached. Often it is done by ensuring new work is not added and
+then calling cancel_delayed_work_sync() at remove(). In many cases this
+may also require cleanup at probe error path - which is easy to forget.
+
+Also the "by ensuring new work is not added" has a gotcha.
+
+It is not strange to see devm managed IRQs scheduling (delayed) work.
+Mixing this with manua wq clean-up is hard to do correctly because the
+devm is likely to free the IRQ only after the remove() is ran. So manual
+wq cancellation and devm-based IRQ management do not mix well - there is
+a short(?) time-window after the wq clean-up when IRQs are still not
+freed and may schedule new work.
+
+When both WQs and IRQs are managed by devm things are likely to just
+work. WQs should be initialized before IRQs (when IRQs need to schedule
+work) and devm unwinds things in "FILO" order.
+
+This series implements delayed wq cancellation on top of devm and replaces
+the obvious cases where only thing remove call-back in a driver does is
+cancelling the work. There might be other cases where we could switch
+more than just work cancellation to use managed version and thus get rid
+of remove or mixed (manual and devm) resource management.
+
+The series introduces include/linux/devm-helpers.h file which
+hopefully works as a place where this kind of helpers can be inlined.
+
+Please see previous discussion here:
+RFC v1:
+https://lore.kernel.org/lkml/cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com/
+
+Changelog v3:
+  - Dropped RFC as advieced by Greg.
+  - No functional changes.
+
+Changelog RFC v2 resend:
+  - rebased on 5.12-rc4
+
+Changelog RFC v2:
+  - used correct terminology ("driver detach" instead of "exit, ...")
+  - inlined the devm_delayed_work_autocancel() in a header
+  - added Hans as a maintainer for the new header + myself as a reviewer
+  - used devm_add_action() instead of using plain devres_add()
+
+---
+
+Matti Vaittinen (8):
+  workqueue: Add resource managed version of delayed work init
+  MAINTAINERS: Add entry for devm helpers
+  extconn: Clean-up few drivers by using managed work init
+  hwmon: raspberry-pi: Clean-up few drivers by using managed work init
+  platform/x86: gpd pocket fan: Clean-up by using managed work init
+  power: supply: Clean-up few drivers by using managed work init
+  regulator: qcom_spmi-regulator: Clean-up by using managed work init
+  watchdog: retu_wdt: Clean-up by using managed work init
+
+ MAINTAINERS                                  |  6 +++
+ drivers/extcon/extcon-gpio.c                 | 15 ++----
+ drivers/extcon/extcon-intel-int3496.c        | 16 ++----
+ drivers/extcon/extcon-palmas.c               | 17 +++----
+ drivers/extcon/extcon-qcom-spmi-misc.c       | 17 +++----
+ drivers/hwmon/raspberrypi-hwmon.c            | 17 +++----
+ drivers/platform/x86/gpd-pocket-fan.c        | 17 +++----
+ drivers/power/supply/axp20x_usb_power.c      | 15 ++----
+ drivers/power/supply/bq24735-charger.c       | 18 +++----
+ drivers/power/supply/ltc2941-battery-gauge.c | 20 +++-----
+ drivers/power/supply/sbs-battery.c           | 16 ++----
+ drivers/regulator/qcom_spmi-regulator.c      | 34 +++----------
+ drivers/watchdog/retu_wdt.c                  | 22 +++-----
+ include/linux/devm-helpers.h                 | 53 ++++++++++++++++++++
+ 14 files changed, 128 insertions(+), 155 deletions(-)
+ create mode 100644 include/linux/devm-helpers.h
+
+
+base-commit: 0d02ec6b3136c73c09e7859f0d0e4e2c4c07b49b
+-- 
+2.25.4
+
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
