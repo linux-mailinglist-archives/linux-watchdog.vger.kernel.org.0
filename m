@@ -2,83 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFCC346158
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Mar 2021 15:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565B434669F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Mar 2021 18:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbhCWOT6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 23 Mar 2021 10:19:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60380 "EHLO mail.kernel.org"
+        id S230280AbhCWRpv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 23 Mar 2021 13:45:51 -0400
+Received: from lizzard.sbs.de ([194.138.37.39]:43918 "EHLO lizzard.sbs.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231718AbhCWOT4 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 23 Mar 2021 10:19:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 29323619A9;
-        Tue, 23 Mar 2021 14:19:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1616509195;
-        bh=Wctfq10oQ7ClbxMnP/cRUCla14+kxy0D+hLSZJhO6qQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mI74jkxW1+48gr1J47uCQ/U+PD6M529yoLtqnveerHk883YTsI+heQhc28xco0MgJ
-         PKKcBbOGSaGDuLGMecQHKpgTpa0rAR1PoLw/Xu90tsI4cYeIbho5FbZnLpv84V+8HQ
-         R0ddXnGY4ghWbux/uODn8JaYEJasNIgnPzUw/92o=
-Date:   Tue, 23 Mar 2021 15:19:53 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        id S230510AbhCWRpi (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 23 Mar 2021 13:45:38 -0400
+Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
+        by lizzard.sbs.de (8.15.2/8.15.2) with ESMTPS id 12NHj4K6020428
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Mar 2021 18:45:04 +0100
+Received: from md1za8fc.ad001.siemens.net ([167.87.18.164])
+        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 12NHj2Dc032073;
+        Tue, 23 Mar 2021 18:45:03 +0100
+Date:   Tue, 23 Mar 2021 18:45:01 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Alexander Dahl <ada@thorsis.com>
+Cc:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux LED Subsystem" <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3 2/8] MAINTAINERS: Add entry for devm helpers
-Message-ID: <YFn5CSB1O3i+SzgR@kroah.com>
-References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
- <eec1797734e3d080662aa732c565ed4a3c261799.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
- <e064fdd7-b276-6732-16fe-2eb2564b2179@redhat.com>
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v2 2/4] leds: simatic-ipc-leds: add new driver for
+ Siemens Industial PCs
+Message-ID: <20210323184501.39c81a97@md1za8fc.ad001.siemens.net>
+In-Reply-To: <1819093001.11427.1616071258857@seven.thorsis.com>
+References: <20210315095710.7140-1-henning.schild@siemens.com>
+        <20210315095710.7140-3-henning.schild@siemens.com>
+        <CAHp75VcBdR8xqfWqKe+DwGAUYByVL7SBK0p7tHcKPs7m4Ay1iw@mail.gmail.com>
+        <e2c6bec5-1f8e-c69a-9219-5c0a9f63ba56@metux.net>
+        <1819093001.11427.1616071258857@seven.thorsis.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e064fdd7-b276-6732-16fe-2eb2564b2179@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Mar 23, 2021 at 02:58:28PM +0100, Hans de Goede wrote:
-> Hi,
+Am Thu, 18 Mar 2021 13:40:58 +0100
+schrieb Alexander Dahl <ada@thorsis.com>:
+
+> Hei hei,
 > 
-> On 3/23/21 2:56 PM, Matti Vaittinen wrote:
-> > Devm helper header containing small inline helpers was added.
-> > Hans promised to maintain it.
+> > Enrico Weigelt, metux IT consult <lkml@metux.net> hat am 18.03.2021
+> > 11:27 geschrieben:
 > > 
-> > Add Hans as maintainer and myself as designated reviewer.
+> >  
+> > On 15.03.21 11:48, Andy Shevchenko wrote:
 > > 
-> > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > Hi,
+> >   
+> > > I have a question, why we can't provide a GPIO driver which is
+> > > already in the kernel and, with use of the patch series I sent,
+> > > to convert this all magic to GPIO LEDs as it's done for all
+> > > normal cases?  
+> > 
+> > Do we alread have a generic led driver that for cases that just
+> > set/clear bits in some mem/io location ? If not, that would be
+> > really great to have.  
 > 
-> Yes I did promise that, didn't I?  FWIW going this route is still
-> fine by me, assuming that having someone else maintain this makes
-> this easier on / more acceptable to Greg.
+> Yes, there is. Look out for compatible "register-bit-led" in device
+> tree. That's from driver in drivers/leds/leds-syscon.c and you can
+> use it inside a syscon node in dts.
 > 
-> Ultimately this is up to Greg though, so lets wait and see what
-> Greg has to say about this.
+> It assumes one bit per LED.
 
-Can we move some of the devm_* calls in include/device.h into here as
-well so that you all can be in charge of them instead of me?
+Sorry guys, i am lost here. Is there a driver i can base mine on, if so
+which one? Maybe you can point me to a good example that is
+conceptually similar.
 
-If so, I'm happy :)
+As i already wrote in the reviews of v1, the ACPI tables will not
+change on the machines in question. So there is a need for a driver.
+Either one like i did propose or maybe something that patches ACPI or
+loads device-tree snippets, again please point me to good examples.
 
-Anyway, this looks sane, I'll queue it up and let's see what breaks in
-linux-next...
+We are talking about x86-only here.
 
-thanks,
+Henning 
 
-greg k-h
+> Greets
+> Alex
+
