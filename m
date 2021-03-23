@@ -2,144 +2,149 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D802E345568
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Mar 2021 03:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593B83455AC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Mar 2021 03:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbhCWCOw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 22 Mar 2021 22:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbhCWCOk (ORCPT
+        id S229804AbhCWCqT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 22 Mar 2021 22:46:19 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:48848 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229760AbhCWCqN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 22 Mar 2021 22:14:40 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F08C061574;
-        Mon, 22 Mar 2021 19:14:28 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id l79so15373177oib.1;
-        Mon, 22 Mar 2021 19:14:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BhScQ3yWiLFHObXc+RqfiRxbs75wFh3XbDpgxT9XN6A=;
-        b=mskdFPY/EU3mbsQ6d2Vdkxg9XMruXSQqOv10G0o7OQYT3cqWSyMwWYGBjXQNEUZ4ua
-         YNVPbYVkpqJTx2pmWuUtVoNxcfUAPEWWQKNTgsX/iMf8nTWQH1alGtt6EmCJRAozTfqc
-         N4XSNxzr1NsNEQ57SwcTFXSG05AGthMQDU96tLodYDr2laPzAlyq6MhB4BmoNAAatqEK
-         B+3mqrPQPTAyVCRqAW7217fxnZfZcJysbfpN0NKhbs3LzS2U9918BbvCqkfkcYrhopxO
-         qY9zr4NYjV2e+yCT9rbMmbyoq8AFjVfQSD6AwQenGOtdnM+i6iMmMZH+PNRFd2pXJGSu
-         Dvaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=BhScQ3yWiLFHObXc+RqfiRxbs75wFh3XbDpgxT9XN6A=;
-        b=iLak0wTRP7fV3TBo/w26BGSwTrjgsJFmRyCWwUf0xwG9yxAnWKOAxpWYSwRLyKgE/V
-         ttZSuZ4Bc2aJZJHfqrHl15zt5HQu875KxKWDjH+43mQu2wcSZgoooxAaiJIVkDoEH0/B
-         aIGRj2V8ndQjbCPo5Xexl/PdGIF+jY35hpprN5+AMb6rnW5K4VWh7kcfaKIRwOgL5kn0
-         dnSdcfzfYICmNy/z0a1NWIhD8pUvbvaR4CueS6Tlm0i/8dWXCqG8FwFUBg5UY4Ayqp1j
-         BNHSNCPU5Ml3nSr/nHB3QiKH3/3+ltTlXpgVkRmV8D0XKjeEEllfPxQMXFdceZjjfaGY
-         HQPw==
-X-Gm-Message-State: AOAM533kLWUpUvZsx6Ps5J9f3KldEmf45IyhoP/qvFXim3QrMV3Hr5lx
-        anyXvJklKFV2N3pS4VtmfuE=
-X-Google-Smtp-Source: ABdhPJzmShO4uzsO5VD3cLxMAc1fa8Uf2SsoG1wiQddR5HTjrClu+ZJyTQCecBrr7qhI/J6teGS5rA==
-X-Received: by 2002:a05:6808:b3b:: with SMTP id t27mr1528092oij.131.1616465668090;
-        Mon, 22 Mar 2021 19:14:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t14sm3609395otj.50.2021.03.22.19.14.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Mar 2021 19:14:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] drivers: watchdog: Remove duplicate include of kernel.h
-To:     Wan Jiabing <wanjiabing@vivo.com>,
+        Mon, 22 Mar 2021 22:46:13 -0400
+X-UUID: 9577ef8d0c2d4a02aae37aff09cc3d66-20210323
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=VpNJ4ysNUi4mHpSUcx9y6Y6iigzBeZb1dOMLDF46zqY=;
+        b=KT1ecux2+wPuPFjbK8WvwMAQ58anUfS9Xk3FAVgp7b2K9Sh2CxmuU9tIoRG//XLubYxemLFLVOWKtTon8NZg8cLLWLUcVnJa0jLlQ+eenOVhvllSop/MfyuTfmcHDEi/5nhn9zeeyYONTvt3d/4lLAee7rf34AcUu7Zn/qfMONU=;
+X-UUID: 9577ef8d0c2d4a02aae37aff09cc3d66-20210323
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 375086942; Tue, 23 Mar 2021 10:46:09 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 23 Mar
+ 2021 10:46:03 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 23 Mar 2021 10:46:02 +0800
+Message-ID: <1616467562.11286.6.camel@mhfsdcap03>
+Subject: Re: [PATCH v2 8/8] arm64: dts: Add Mediatek SoC MT8195 and
+ evaluation board dts and Makefile
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Seiya Wang <seiya.wang@mediatek.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Lars-Peter Clausen" <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net
-References: <20210323014320.136473-1-wanjiabing@vivo.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <a6c9aeff-91d0-9770-f29f-a89b1f3b7f1c@roeck-us.net>
-Date:   Mon, 22 Mar 2021 19:14:25 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Guenter Roeck <linux@roeck-us.net>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        "Chaotian Jing" <chaotian.jing@mediatek.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>
+Date:   Tue, 23 Mar 2021 10:46:02 +0800
+In-Reply-To: <20210319023427.16711-10-seiya.wang@mediatek.com>
+References: <20210319023427.16711-1-seiya.wang@mediatek.com>
+         <20210319023427.16711-10-seiya.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <20210323014320.136473-1-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 28F8593833E94E19A1F4D91ECB4810AD8FDC1801FD7F0C0BF75ACA0B515B35272000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/22/21 6:43 PM, Wan Jiabing wrote:
-> linux/kernel.h has been included at line 17, so remove the 
-> duplicate one at line 22.
-> 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  drivers/watchdog/dw_wdt.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index 32d0e1781e63..b1642e2d9175 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -19,7 +19,6 @@
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/io.h>
-> -#include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
->  #include <linux/interrupt.h>
-> 
+T24gRnJpLCAyMDIxLTAzLTE5IGF0IDEwOjM0ICswODAwLCBTZWl5YSBXYW5nIHdyb3RlOg0KPiBB
+ZGQgYmFzaWMgY2hpcCBzdXBwb3J0IGZvciBNZWRpYXRlayBNVDgxOTUNCj4gDQo+IFNpZ25lZC1v
+ZmYtYnk6IFNlaXlhIFdhbmcgPHNlaXlhLndhbmdAbWVkaWF0ZWsuY29tPg0KPiAtLS0NCj4gIGFy
+Y2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvTWFrZWZpbGUgICAgICAgfCAgIDEgKw0KPiAgYXJj
+aC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTUtZXZiLmR0cyB8ICAyOSArKw0KPiAgYXJj
+aC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTUuZHRzaSAgICB8IDQ2NCArKysrKysrKysr
+KysrKysrKysrKysrKysrKysrDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDQ5NCBpbnNlcnRpb25zKCsp
+DQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgx
+OTUtZXZiLmR0cw0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVk
+aWF0ZWsvbXQ4MTk1LmR0c2kNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL2FybTY0L2Jvb3QvZHRz
+L21lZGlhdGVrL01ha2VmaWxlIGIvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9NYWtlZmls
+ZQ0KPiBpbmRleCBkZWJhMjdhYjc2NTcuLmFlZTRiOTcxNWQyZiAxMDA2NDQNCj4gLS0tIGEvYXJj
+aC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9NYWtlZmlsZQ0KPiArKysgYi9hcmNoL2FybTY0L2Jv
+b3QvZHRzL21lZGlhdGVrL01ha2VmaWxlDQo+IEBAIC0xNiw0ICsxNiw1IEBAIGR0Yi0kKENPTkZJ
+R19BUkNIX01FRElBVEVLKSArPSBtdDgxODMtZXZiLmR0Yg0KPiAgZHRiLSQoQ09ORklHX0FSQ0hf
+TUVESUFURUspICs9IG10ODE4My1rdWt1aS1rcmFuZS1za3UwLmR0Yg0KPiAgZHRiLSQoQ09ORklH
+X0FSQ0hfTUVESUFURUspICs9IG10ODE4My1rdWt1aS1rcmFuZS1za3UxNzYuZHRiDQo+ICBkdGIt
+JChDT05GSUdfQVJDSF9NRURJQVRFSykgKz0gbXQ4MTkyLWV2Yi5kdGINCj4gK2R0Yi0kKENPTkZJ
+R19BUkNIX01FRElBVEVLKSArPSBtdDgxOTUtZXZiLmR0Yg0KPiAgZHRiLSQoQ09ORklHX0FSQ0hf
+TUVESUFURUspICs9IG10ODUxNi1wdW1wa2luLmR0Yg0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02
+NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTUtZXZiLmR0cyBiL2FyY2gvYXJtNjQvYm9vdC9kdHMv
+bWVkaWF0ZWsvbXQ4MTk1LWV2Yi5kdHMNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXgg
+MDAwMDAwMDAwMDAwLi44MmJiMTBlOWE1MzENCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi9hcmNo
+L2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5NS1ldmIuZHRzDQo+IEBAIC0wLDAgKzEsMjkg
+QEANCj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMCBPUiBNSVQpDQo+ICsv
+Kg0KPiArICogQ29weXJpZ2h0IChDKSAyMDIxIE1lZGlhVGVrIEluYy4NCj4gKyAqIEF1dGhvcjog
+U2VpeWEgV2FuZyA8c2VpeWEud2FuZ0BtZWRpYXRlay5jb20+DQo+ICsgKi8NCj4gKy9kdHMtdjEv
+Ow0KPiArI2luY2x1ZGUgIm10ODE5NS5kdHNpIg0KPiArDQpbLi4uXQ0KPiArCQlub3JfZmxhc2g6
+IG5vckAxMTMyYzAwMCB7DQo+ICsJCQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10ODE5NS1ub3Ii
+LCAibWVkaWF0ZWssbXQ4MTczLW5vciI7DQo+ICsJCQlyZWcgPSA8MCAweDExMzJjMDAwIDAgMHgx
+MDAwPjsNCj4gKwkJCWludGVycnVwdHMgPSA8R0lDX1NQSSA4MjUgSVJRX1RZUEVfTEVWRUxfSElH
+SCAwPjsNCj4gKwkJCWNsb2NrcyA9IDwmY2xrMjZtPiwgPCZjbGsyNm0+Ow0KPiArCQkJY2xvY2st
+bmFtZXMgPSAic3BpIiwgInNmIjsNCj4gKwkJCSNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiArCQkJ
+I3NpemUtY2VsbHMgPSA8MD47DQo+ICsJCQlzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiArCQl9Ow0K
+PiArDQo+ICsJCXUzcGh5MjogdC1waHlAMTFjNDAwMDAgew0KPiArCQkJY29tcGF0aWJsZSA9ICJt
+ZWRpYXRlayxtdDgxOTUtdHBoeSIsICJtZWRpYXRlayxnZW5lcmljLXRwaHktdjIiOw0KPiArCQkJ
+I2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ICsJCQkjc2l6ZS1jZWxscyA9IDwxPjsNCj4gKwkJCXJh
+bmdlcyA9IDwwIDAgMHgxMWM0MDAwMCAweDcwMD47DQo+ICsJCQlzdGF0dXMgPSAiZGlzYWJsZWQi
+Ow0KPiArDQo+ICsJCQl1MnBvcnQyOiB1c2ItcGh5QDAgew0KPiArCQkJCXJlZyA9IDwweDAgMHg3
+MDA+Ow0KPiArCQkJCWNsb2NrcyA9IDwmY2xrMjZtPjsNCj4gKwkJCQljbG9jay1uYW1lcyA9ICJy
+ZWYiOw0KPiArCQkJCSNwaHktY2VsbHMgPSA8MT47DQo+ICsJCQl9Ow0KPiArCQl9Ow0KPiArDQo+
+ICsJCXUzcGh5MzogdC1waHlAMTFjNTAwMDAgew0KPiArCQkJY29tcGF0aWJsZSA9ICJtZWRpYXRl
+ayxtdDgxOTUtdHBoeSIsICJtZWRpYXRlayxnZW5lcmljLXRwaHktdjIiOw0KPiArCQkJI2FkZHJl
+c3MtY2VsbHMgPSA8MT47DQo+ICsJCQkjc2l6ZS1jZWxscyA9IDwxPjsNCj4gKwkJCXJhbmdlcyA9
+IDwwIDAgMHgxMWM1MDAwMCAweDcwMD47DQo+ICsJCQlzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiAr
+DQo+ICsJCQl1MnBvcnQzOiB1c2ItcGh5QDAgew0KPiArCQkJCXJlZyA9IDwweDAgMHg3MDA+Ow0K
+PiArCQkJCWNsb2NrcyA9IDwmY2xrMjZtPjsNCj4gKwkJCQljbG9jay1uYW1lcyA9ICJyZWYiOw0K
+PiArCQkJCSNwaHktY2VsbHMgPSA8MT47DQo+ICsJCQl9Ow0KPiArCQl9Ow0KPiArDQo+ICsJCXUz
+cGh5MTogdC1waHlAMTFlMzAwMDAgew0KPiArCQkJY29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdDgx
+OTUtdHBoeSIsICJtZWRpYXRlayxnZW5lcmljLXRwaHktdjIiOw0KPiArCQkJI2FkZHJlc3MtY2Vs
+bHMgPSA8MT47DQo+ICsJCQkjc2l6ZS1jZWxscyA9IDwxPjsNCj4gKwkJCXJhbmdlcyA9IDwwIDAg
+MHgxMWUzMDAwMCAweGUwMD47DQo+ICsJCQlzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiArDQo+ICsJ
+CQl1MnBvcnQxOiB1c2ItcGh5QDAgew0KPiArCQkJCXJlZyA9IDwweDAgMHg3MDA+Ow0KPiArCQkJ
+CWNsb2NrcyA9IDwmY2xrMjZtPjsNCj4gKwkJCQljbG9jay1uYW1lcyA9ICJyZWYiOw0KPiArCQkJ
+CSNwaHktY2VsbHMgPSA8MT47DQo+ICsJCQl9Ow0KPiArDQo+ICsJCQl1M3BvcnQxOiB1c2ItcGh5
+QDcwMCB7DQo+ICsJCQkJcmVnID0gPDB4NzAwIDB4NzAwPjsNCj4gKwkJCQljbG9ja3MgPSA8JmNs
+azI2bT47DQo+ICsJCQkJY2xvY2stbmFtZXMgPSAicmVmIjsNCj4gKwkJCQkjcGh5LWNlbGxzID0g
+PDE+Ow0KPiArCQkJfTsNCj4gKwkJfTsNCj4gKw0KPiArCQl1M3BoeTA6IHQtcGh5QDExZTQwMDAw
+IHsNCj4gKwkJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTk1LXRwaHkiLCAibWVkaWF0ZWss
+Z2VuZXJpYy10cGh5LXYyIjsNCj4gKwkJCSNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiArCQkJI3Np
+emUtY2VsbHMgPSA8MT47DQo+ICsJCQlyYW5nZXMgPSA8MCAwIDB4MTFlNDAwMDAgMHhlMDA+Ow0K
+PiArCQkJc3RhdHVzID0gImRpc2FibGVkIjsNCj4gKw0KPiArCQkJdTJwb3J0MDogdXNiLXBoeUAw
+IHsNCj4gKwkJCQlyZWcgPSA8MHgwIDB4NzAwPjsNCj4gKwkJCQljbG9ja3MgPSA8JmNsazI2bT47
+DQo+ICsJCQkJY2xvY2stbmFtZXMgPSAicmVmIjsNCj4gKwkJCQkjcGh5LWNlbGxzID0gPDE+Ow0K
+PiArCQkJfTsNCj4gKw0KPiArCQkJdTNwb3J0MDogdXNiLXBoeUA3MDAgew0KPiArCQkJCXJlZyA9
+IDwweDcwMCAweDcwMD47DQo+ICsJCQkJY2xvY2tzID0gPCZjbGsyNm0+Ow0KPiArCQkJCWNsb2Nr
+LW5hbWVzID0gInJlZiI7DQo+ICsJCQkJI3BoeS1jZWxscyA9IDwxPjsNCj4gKwkJCX07DQo+ICsJ
+CX07DQo+ICsNCj4gKwkJdWZzcGh5OiBwaHlAMTFmYTAwMDAgew0KPiArCQkJY29tcGF0aWJsZSA9
+ICJtZWRpYXRlayxtdDgxOTUtdWZzcGh5IiwgIm1lZGlhdGVrLG10ODE4My11ZnNwaHkiOw0KPiAr
+CQkJcmVnID0gPDAgMHgxMWZhMDAwMCAwIDB4YzAwMD47DQo+ICsJCQljbG9ja3MgPSA8JmNsazI2
+bT4sIDwmY2xrMjZtPjsNCj4gKwkJCWNsb2NrLW5hbWVzID0gInVuaXBybyIsICJtcCI7DQo+ICsJ
+CQkjcGh5LWNlbGxzID0gPDA+Ow0KPiArCQkJc3RhdHVzID0gImRpc2FibGVkIjsNCj4gKwkJfTsN
+Cj4gKwl9Ow0KPiArfTsNCnBoeSBwYXJ0Og0KDQpSZXZpZXdlZC1ieTogQ2h1bmZlbmcgWXVuIDxj
+aHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KDQpUaGFuayB5b3UNCg0KDQo=
 
-The reason for the duplicate include is the non-alphabetic order of include
-files. I find that worse than the duplicate include. If it is too much effort
-to reorder include files to be in alphabetic order, please at least don't
-make it worse and remove the other include.
-
-Guenter
