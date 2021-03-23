@@ -2,196 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 335FE344F26
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Mar 2021 19:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC458345523
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Mar 2021 02:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbhCVSxf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 22 Mar 2021 14:53:35 -0400
-Received: from mga07.intel.com ([134.134.136.100]:33864 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231240AbhCVSx2 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 22 Mar 2021 14:53:28 -0400
-IronPort-SDR: sX6Mwp74qqn29OXuB+9uO4ZFTCWlFFQp89XIJLMwe4pMhCJXtEB/ZgCs/RvrN5vRv4ajXagEuL
- zYJ4OGOWIRzQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="254327900"
-X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="254327900"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 11:53:26 -0700
-IronPort-SDR: af/hKHDzvfHkYRX+mNeCe2kEG7oqnh3lSxj3DoGOVighvJ/kufegAhj+Vj+q1FtPj9BYgFxCKY
- QwsS9DBg/JEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="604031885"
-Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Mar 2021 11:53:26 -0700
-Received: from lcsmsx602.ger.corp.intel.com (10.109.210.11) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Mon, 22 Mar 2021 11:53:25 -0700
-Received: from hasmsx602.ger.corp.intel.com (10.184.107.142) by
- LCSMSX602.ger.corp.intel.com (10.109.210.11) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Mon, 22 Mar 2021 20:53:23 +0200
-Received: from hasmsx602.ger.corp.intel.com ([10.184.107.142]) by
- HASMSX602.ger.corp.intel.com ([10.184.107.142]) with mapi id 15.01.2106.013;
- Mon, 22 Mar 2021 20:53:23 +0200
-From:   "Winkler, Tomas" <tomas.winkler@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-CC:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] watchdog: fix syntactic kernel-doc issues
-Thread-Topic: [PATCH] watchdog: fix syntactic kernel-doc issues
-Thread-Index: AQHXHyQ8oBrLlx2GoUu0DdXCGph+1KqQWt3A
-Date:   Mon, 22 Mar 2021 18:53:23 +0000
-Message-ID: <55cdc6aa3ef140c0b1e3d6f89f673609@intel.com>
-References: <20210322065337.617-1-lukas.bulwahn@gmail.com>
- <473d7675-f630-63e1-47b7-cefbb0b113e7@roeck-us.net>
-In-Reply-To: <473d7675-f630-63e1-47b7-cefbb0b113e7@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.5.1.3
-x-originating-ip: [10.184.70.1]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S229472AbhCWBvd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 22 Mar 2021 21:51:33 -0400
+Received: from mail-m17637.qiye.163.com ([59.111.176.37]:57876 "EHLO
+        mail-m17637.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229865AbhCWBvJ (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 22 Mar 2021 21:51:09 -0400
+X-Greylist: delayed 454 seconds by postgrey-1.27 at vger.kernel.org; Mon, 22 Mar 2021 21:51:08 EDT
+Received: from wanjb-virtual-machine.localdomain (unknown [36.152.145.182])
+        by mail-m17637.qiye.163.com (Hmail) with ESMTPA id AD1989802CA;
+        Tue, 23 Mar 2021 09:43:31 +0800 (CST)
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] drivers: watchdog: Remove duplicate include of kernel.h
+Date:   Tue, 23 Mar 2021 09:43:20 +0800
+Message-Id: <20210323014320.136473-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZGk4eSh1NTB5PSUNKVkpNSk1PTUhDSkpCTElVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0JITlVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NjY6KQw*UT8TODoePxcLEgww
+        Ig0wC05VSlVKTUpNT01IQ0pJSUhMVTMWGhIXVQwaFRESGhkSFRw7DRINFFUYFBZFWVdZEgtZQVlI
+        TVVKTklVSk9OVUpDSVlXWQgBWUFKTkpNNwY+
+X-HM-Tid: 0a785cc05518d992kuwsad1989802ca
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-PiBPbiAzLzIxLzIxIDExOjUzIFBNLCBMdWthcyBCdWx3YWhuIHdyb3RlOg0KPiA+IFRoZSBjb21t
-YW5kICdmaW5kIGRyaXZlcnMvd2F0Y2hkb2cgfCB4YXJncyAuL3NjcmlwdHMva2VybmVsLWRvYyAt
-bm9uZScNCj4gPiByZXBvcnRzIGEgbnVtYmVyIG9mIGtlcm5lbC1kb2Mgd2FybmluZ3MgaW4gdGhl
-IHdhdGNoZG9nIHN1YnN5c3RlbS4NCj4gPg0KPiA+IEFkZHJlc3MgdGhlIGtlcm5lbC1kb2Mgd2Fy
-bmluZ3MgdGhhdCB3ZXJlIHB1cmVseSBzeW50YWN0aWMgaXNzdWVzIHdpdGgNCj4gPiBrZXJuZWwt
-ZG9jIGNvbW1lbnRzLg0KPiA+DQo+ID4gVGhlIHJlbWFpbmluZyBrZXJuZWwtZG9jIHdhcm5pbmdz
-IGFyZSBvZiB0eXBlICJFeGNlc3MgZnVuY3Rpb24NCj4gcGFyYW1ldGVyIg0KPiA+IGFuZCAiRnVu
-Y3Rpb24gcGFyYW1ldGVyIG9yIG1lbWJlciBub3QgZGVzY3JpYmVkIi4gVGhlc2Ugd2FybmluZ3MN
-Cj4gd291bGQNCj4gPiBuZWVkIHRvIGJlIGFkZHJlc3NlZCBpbiBhIHNlY29uZCBwYXNzIHdpdGgg
-YSBiaXQgbW9yZSBpbnNpZ2h0IGludG8gdGhlDQo+ID4gQVBJcyBhbmQgcHVycG9zZSBvZiB0aGUg
-ZnVuY3Rpb25zIGluIHRoZSB3YXRjaGRvZyBzdWJzeXN0ZW0uDQo+ID4NCj4gPiBTaWduZWQtb2Zm
-LWJ5OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3YWhuQGdtYWlsLmNvbT4NCj4gDQo+IFJldmll
-d2VkLWJ5OiBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+DQpBY2sgZm9yIG1laV93
-ZHQgDQpUb21hcw0KDQo+IA0KPiA+IC0tLQ0KPiA+IEd1ZW50ZXIsIFdpbSwgcGxlYXNlIHBpY2sg
-dGhpcyBtaW5vciBjbGVhbi11cCBwYXRjaC4NCj4gPg0KPiA+ICBkcml2ZXJzL3dhdGNoZG9nL2Jv
-b2tlX3dkdC5jICAgICAgIHwgIDIgKy0NCj4gPiAgZHJpdmVycy93YXRjaGRvZy9ldXJvdGVjaHdk
-dC5jICAgICB8ICAyICstDQo+ID4gIGRyaXZlcnMvd2F0Y2hkb2cvbWVpX3dkdC5jICAgICAgICAg
-fCAgOCArKysrLS0tLQ0KPiA+ICBkcml2ZXJzL3dhdGNoZG9nL29jdGVvbi13ZHQtbWFpbi5jIHwg
-MTIgKysrKysrKy0tLS0tDQo+ID4gIGRyaXZlcnMvd2F0Y2hkb2cvcGM4NzQxM193ZHQuYyAgICAg
-fCAgMiArLQ0KPiA+ICBkcml2ZXJzL3dhdGNoZG9nL3dkdC5jICAgICAgICAgICAgIHwgIDQgKyst
-LQ0KPiA+ICBkcml2ZXJzL3dhdGNoZG9nL3dkdF9wY2kuYyAgICAgICAgIHwgIDIgKy0NCj4gPiAg
-NyBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCAxNSBkZWxldGlvbnMoLSkNCj4gPg0K
-PiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3dhdGNoZG9nL2Jvb2tlX3dkdC5jDQo+ID4gYi9kcml2
-ZXJzL3dhdGNoZG9nL2Jvb2tlX3dkdC5jIGluZGV4IDc4MTdmYjk3NmY5Yy4uNWU0ZGMxYTBmMmM2
-DQo+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvd2F0Y2hkb2cvYm9va2Vfd2R0LmMNCj4gPiAr
-KysgYi9kcml2ZXJzL3dhdGNoZG9nL2Jvb2tlX3dkdC5jDQo+ID4gQEAgLTE0OCw3ICsxNDgsNyBA
-QCBzdGF0aWMgdm9pZCBfX2Jvb2tlX3dkdF9lbmFibGUodm9pZCAqZGF0YSkgIH0NCj4gPg0KPiA+
-ICAvKioNCj4gPiAtICogYm9va2Vfd2R0X2Rpc2FibGUgLSBkaXNhYmxlIHRoZSB3YXRjaGRvZyBv
-biB0aGUgZ2l2ZW4gQ1BVDQo+ID4gKyAqIF9fYm9va2Vfd2R0X2Rpc2FibGUgLSBkaXNhYmxlIHRo
-ZSB3YXRjaGRvZyBvbiB0aGUgZ2l2ZW4gQ1BVDQo+ID4gICAqDQo+ID4gICAqIFRoaXMgZnVuY3Rp
-b24gaXMgY2FsbGVkIG9uIGVhY2ggQ1BVLiAgSXQgZGlzYWJsZXMgdGhlIHdhdGNoZG9nIG9uIHRo
-YXQNCj4gQ1BVLg0KPiA+ICAgKg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3dhdGNoZG9nL2V1
-cm90ZWNod2R0LmMNCj4gPiBiL2RyaXZlcnMvd2F0Y2hkb2cvZXVyb3RlY2h3ZHQuYyBpbmRleCAy
-NDE4ZWJiNzA3YmQuLmNlNjgyOTQyNjYyYw0KPiA+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMv
-d2F0Y2hkb2cvZXVyb3RlY2h3ZHQuYw0KPiA+ICsrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvZXVyb3Rl
-Y2h3ZHQuYw0KPiA+IEBAIC0zOTIsNyArMzkyLDcgQEAgc3RhdGljIHN0cnVjdCBub3RpZmllcl9i
-bG9jayBldXJ3ZHRfbm90aWZpZXIgPSB7DQo+ID4gfTsNCj4gPg0KPiA+ICAvKioNCj4gPiAtICog
-Y2xlYW51cF9tb2R1bGU6DQo+ID4gKyAqIGV1cndkdF9leGl0Og0KPiA+ICAgKg0KPiA+ICAgKiBV
-bmxvYWQgdGhlIHdhdGNoZG9nLiBZb3UgY2Fubm90IGRvIHRoaXMgd2l0aCBhbnkgZmlsZSBoYW5k
-bGVzIG9wZW4uDQo+ID4gICAqIElmIHlvdXIgd2F0Y2hkb2cgaXMgc2V0IHRvIGNvbnRpbnVlIHRp
-Y2tpbmcgb24gY2xvc2UgYW5kIHlvdQ0KPiA+IHVubG9hZCBkaWZmIC0tZ2l0IGEvZHJpdmVycy93
-YXRjaGRvZy9tZWlfd2R0LmMNCj4gPiBiL2RyaXZlcnMvd2F0Y2hkb2cvbWVpX3dkdC5jIGluZGV4
-IGUwMjNkN2Q5MGQ2Ni4uYzdhNzIzNWU2MjI0IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvd2F0
-Y2hkb2cvbWVpX3dkdC5jDQo+ID4gKysrIGIvZHJpdmVycy93YXRjaGRvZy9tZWlfd2R0LmMNCj4g
-PiBAQCAtMTA1LDcgKzEwNSw3IEBAIHN0cnVjdCBtZWlfd2R0IHsNCj4gPiAgI2VuZGlmIC8qIENP
-TkZJR19ERUJVR19GUyAqLw0KPiA+ICB9Ow0KPiA+DQo+ID4gLS8qDQo+ID4gKy8qKg0KPiA+ICAg
-KiBzdHJ1Y3QgbWVpX21jX2hkciAtIE1hbmFnZW1lbnQgQ29udHJvbCBDb21tYW5kIEhlYWRlcg0K
-PiA+ICAgKg0KPiA+ICAgKiBAY29tbWFuZDogTWFuYWdlbWVudCBDb250cm9sICgweDIpIEBAIC0x
-MjEsNyArMTIxLDcgQEAgc3RydWN0DQo+ID4gbWVpX21jX2hkciB7ICB9Ow0KPiA+DQo+ID4gIC8q
-Kg0KPiA+IC0gKiBzdHJ1Y3QgbWVpX3dkdF9zdGFydF9yZXF1ZXN0IHdhdGNoZG9nIHN0YXJ0L3Bp
-bmcNCj4gPiArICogc3RydWN0IG1laV93ZHRfc3RhcnRfcmVxdWVzdCAtIHdhdGNoZG9nIHN0YXJ0
-L3BpbmcNCj4gPiAgICoNCj4gPiAgICogQGhkcjogTWFuYWdlbWVudCBDb250cm9sIENvbW1hbmQg
-SGVhZGVyDQo+ID4gICAqIEB0aW1lb3V0OiB0aW1lb3V0IHZhbHVlDQo+ID4gQEAgLTEzNCw3ICsx
-MzQsNyBAQCBzdHJ1Y3QgbWVpX3dkdF9zdGFydF9yZXF1ZXN0IHsgIH0gX19wYWNrZWQ7DQo+ID4N
-Cj4gPiAgLyoqDQo+ID4gLSAqIHN0cnVjdCBtZWlfd2R0X3N0YXJ0X3Jlc3BvbnNlIHdhdGNoZG9n
-IHN0YXJ0L3BpbmcgcmVzcG9uc2UNCj4gPiArICogc3RydWN0IG1laV93ZHRfc3RhcnRfcmVzcG9u
-c2UgLSB3YXRjaGRvZyBzdGFydC9waW5nIHJlc3BvbnNlDQo+ID4gICAqDQo+ID4gICAqIEBoZHI6
-IE1hbmFnZW1lbnQgQ29udHJvbCBDb21tYW5kIEhlYWRlcg0KPiA+ICAgKiBAc3RhdHVzOiBvcGVy
-YXRpb24gc3RhdHVzDQo+ID4gQEAgLTQ3NCw3ICs0NzQsNyBAQCBzdGF0aWMgdm9pZCBtZWlfd2R0
-X3J4KHN0cnVjdCBtZWlfY2xfZGV2aWNlICpjbGRldikNCj4gPiAgCQljb21wbGV0ZSgmd2R0LT5y
-ZXNwb25zZSk7DQo+ID4gIH0NCj4gPg0KPiA+IC0vKg0KPiA+ICsvKioNCj4gPiAgICogbWVpX3dk
-dF9ub3RpZiAtIGNhbGxiYWNrIGZvciBldmVudCBub3RpZmljYXRpb24NCj4gPiAgICoNCj4gPiAg
-ICogQGNsZGV2OiBidXMgZGV2aWNlDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hkb2cv
-b2N0ZW9uLXdkdC1tYWluLmMNCj4gPiBiL2RyaXZlcnMvd2F0Y2hkb2cvb2N0ZW9uLXdkdC1tYWlu
-LmMNCj4gPiBpbmRleCBmZGU5ZTczOWI0MzYuLjI5OGMwNzA4ODRjNCAxMDA2NDQNCj4gPiAtLS0g
-YS9kcml2ZXJzL3dhdGNoZG9nL29jdGVvbi13ZHQtbWFpbi5jDQo+ID4gKysrIGIvZHJpdmVycy93
-YXRjaGRvZy9vY3Rlb24td2R0LW1haW4uYw0KPiA+IEBAIC0xMTksNyArMTE5LDcgQEAgc3RhdGlj
-IGludCBjcHUyY29yZShpbnQgY3B1KSAgfQ0KPiA+DQo+ID4gIC8qKg0KPiA+IC0gKiBQb2tlIHRo
-ZSB3YXRjaGRvZyB3aGVuIGFuIGludGVycnVwdCBpcyByZWNlaXZlZA0KPiA+ICsgKiBvY3Rlb25f
-d2R0X3Bva2VfaXJxIC0gUG9rZSB0aGUgd2F0Y2hkb2cgd2hlbiBhbiBpbnRlcnJ1cHQgaXMNCj4g
-PiArIHJlY2VpdmVkDQo+ID4gICAqDQo+ID4gICAqIEBjcGw6DQo+ID4gICAqIEBkZXZfaWQ6DQo+
-ID4gQEAgLTE1Myw3ICsxNTMsNyBAQCBzdGF0aWMgaXJxcmV0dXJuX3Qgb2N0ZW9uX3dkdF9wb2tl
-X2lycShpbnQgY3BsLA0KPiA+IHZvaWQgKmRldl9pZCkgIGV4dGVybiBpbnQgcHJvbV9wdXRjaGFy
-KGNoYXIgYyk7DQo+ID4NCj4gPiAgLyoqDQo+ID4gLSAqIFdyaXRlIGEgc3RyaW5nIHRvIHRoZSB1
-YXJ0DQo+ID4gKyAqIG9jdGVvbl93ZHRfd3JpdGVfc3RyaW5nIC0gV3JpdGUgYSBzdHJpbmcgdG8g
-dGhlIHVhcnQNCj4gPiAgICoNCj4gPiAgICogQHN0cjogICAgICAgIFN0cmluZyB0byB3cml0ZQ0K
-PiA+ICAgKi8NCj4gPiBAQCAtMTY1LDcgKzE2NSw3IEBAIHN0YXRpYyB2b2lkIG9jdGVvbl93ZHRf
-d3JpdGVfc3RyaW5nKGNvbnN0IGNoYXINCj4gPiAqc3RyKSAgfQ0KPiA+DQo+ID4gIC8qKg0KPiA+
-IC0gKiBXcml0ZSBhIGhleCBudW1iZXIgb3V0IG9mIHRoZSB1YXJ0DQo+ID4gKyAqIG9jdGVvbl93
-ZHRfd3JpdGVfaGV4KCkgLSBXcml0ZSBhIGhleCBudW1iZXIgb3V0IG9mIHRoZSB1YXJ0DQo+ID4g
-ICAqDQo+ID4gICAqIEB2YWx1ZTogICAgICBOdW1iZXIgdG8gZGlzcGxheQ0KPiA+ICAgKiBAZGln
-aXRzOiAgICAgTnVtYmVyIG9mIGRpZ2l0cyB0byBwcmludCAoMSB0byAxNikNCj4gPiBAQCAtMTky
-LDYgKzE5Miw4IEBAIHN0YXRpYyBjb25zdCBjaGFyIHJlZ19uYW1lW11bM10gPSB7ICB9Ow0KPiA+
-DQo+ID4gIC8qKg0KPiA+ICsgKiBvY3Rlb25fd2R0X25taV9zdGFnZTM6DQo+ID4gKyAqDQo+ID4g
-ICAqIE5NSSBzdGFnZSAzIGhhbmRsZXIuIE5NSXMgYXJlIGhhbmRsZWQgaW4gdGhlIGZvbGxvd2lu
-ZyBtYW5uZXI6DQo+ID4gICAqIDEpIFRoZSBmaXJzdCBOTUkgaGFuZGxlciBlbmFibGVzIENWTVNF
-RyBhbmQgdHJhbnNmZXJzIGZyb20NCj4gPiAgICogdGhlIGJvb3RidXMgcmVnaW9uIGludG8gbm9y
-bWFsIG1lbW9yeS4gSXQgaXMgY2FyZWZ1bCB0byBub3QgQEANCj4gPiAtNTEzLDcgKzUxNSw3IEBA
-IHN0YXRpYyBzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlIG9jdGVvbl93ZHQgPSB7DQo+ID4NCj4gPiAg
-c3RhdGljIGVudW0gY3B1aHBfc3RhdGUgb2N0ZW9uX3dkdF9vbmxpbmU7DQo+ID4gIC8qKg0KPiA+
-IC0gKiBNb2R1bGUvIGRyaXZlciBpbml0aWFsaXphdGlvbi4NCj4gPiArICogb2N0ZW9uX3dkdF9p
-bml0IC0gTW9kdWxlLyBkcml2ZXIgaW5pdGlhbGl6YXRpb24uDQo+ID4gICAqDQo+ID4gICAqIFJl
-dHVybnMgWmVybyBvbiBzdWNjZXNzDQo+ID4gICAqLw0KPiA+IEBAIC01ODUsNyArNTg3LDcgQEAg
-c3RhdGljIGludCBfX2luaXQgb2N0ZW9uX3dkdF9pbml0KHZvaWQpICB9DQo+ID4NCj4gPiAgLyoq
-DQo+ID4gLSAqIE1vZHVsZSAvIGRyaXZlciBzaHV0ZG93bg0KPiA+ICsgKiBvY3Rlb25fd2R0X2Ns
-ZWFudXAgLSBNb2R1bGUgLyBkcml2ZXIgc2h1dGRvd24NCj4gPiAgICovDQo+ID4gIHN0YXRpYyB2
-b2lkIF9fZXhpdCBvY3Rlb25fd2R0X2NsZWFudXAodm9pZCkgIHsgZGlmZiAtLWdpdA0KPiA+IGEv
-ZHJpdmVycy93YXRjaGRvZy9wYzg3NDEzX3dkdC5jIGIvZHJpdmVycy93YXRjaGRvZy9wYzg3NDEz
-X3dkdC5jDQo+ID4gaW5kZXggMmQ0NTA0MzAyYzllLi45ZjlhMzQwNDI3ZmMgMTAwNjQ0DQo+ID4g
-LS0tIGEvZHJpdmVycy93YXRjaGRvZy9wYzg3NDEzX3dkdC5jDQo+ID4gKysrIGIvZHJpdmVycy93
-YXRjaGRvZy9wYzg3NDEzX3dkdC5jDQo+ID4gQEAgLTQ0NSw3ICs0NDUsNyBAQCBzdGF0aWMgbG9u
-ZyBwYzg3NDEzX2lvY3RsKHN0cnVjdCBmaWxlICpmaWxlLA0KPiA+IHVuc2lnbmVkIGludCBjbWQs
-DQo+ID4gIC8qIC0tIE5vdGlmaWVyIGZ1bnRpb25zIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tKi8NCj4gPg0KPiA+ICAvKioNCj4gPiAtICoJbm90aWZ5X3N5czoNCj4g
-PiArICoJcGM4NzQxM19ub3RpZnlfc3lzOg0KPiA+ICAgKglAdGhpczogb3VyIG5vdGlmaWVyIGJs
-b2NrDQo+ID4gICAqCUBjb2RlOiB0aGUgZXZlbnQgYmVpbmcgcmVwb3J0ZWQNCj4gPiAgICoJQHVu
-dXNlZDogdW51c2VkDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hkb2cvd2R0LmMgYi9k
-cml2ZXJzL3dhdGNoZG9nL3dkdC5jIGluZGV4DQo+ID4gYTllNDBiNWM2MzNlLi4xODM4NzYxNTYy
-NDMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy93ZHQuYw0KPiA+ICsrKyBiL2Ry
-aXZlcnMvd2F0Y2hkb2cvd2R0LmMNCj4gPiBAQCAtNDk0LDcgKzQ5NCw3IEBAIHN0YXRpYyBpbnQg
-d2R0X3RlbXBfcmVsZWFzZShzdHJ1Y3QgaW5vZGUgKmlub2RlLA0KPiA+IHN0cnVjdCBmaWxlICpm
-aWxlKSAgfQ0KPiA+DQo+ID4gIC8qKg0KPiA+IC0gKglub3RpZnlfc3lzOg0KPiA+ICsgKgl3ZHRf
-bm90aWZ5X3N5czoNCj4gPiAgICoJQHRoaXM6IG91ciBub3RpZmllciBibG9jaw0KPiA+ICAgKglA
-Y29kZTogdGhlIGV2ZW50IGJlaW5nIHJlcG9ydGVkDQo+ID4gICAqCUB1bnVzZWQ6IHVudXNlZA0K
-PiA+IEBAIC01NTgsNyArNTU4LDcgQEAgc3RhdGljIHN0cnVjdCBub3RpZmllcl9ibG9jayB3ZHRf
-bm90aWZpZXIgPSB7ICB9Ow0KPiA+DQo+ID4gIC8qKg0KPiA+IC0gKgljbGVhbnVwX21vZHVsZToN
-Cj4gPiArICoJd2R0X2V4aXQ6DQo+ID4gICAqDQo+ID4gICAqCVVubG9hZCB0aGUgd2F0Y2hkb2cu
-IFlvdSBjYW5ub3QgZG8gdGhpcyB3aXRoIGFueSBmaWxlIGhhbmRsZXMgb3Blbi4NCj4gPiAgICoJ
-SWYgeW91ciB3YXRjaGRvZyBpcyBzZXQgdG8gY29udGludWUgdGlja2luZyBvbiBjbG9zZSBhbmQg
-eW91IHVubG9hZA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3dhdGNoZG9nL3dkdF9wY2kuYyBi
-L2RyaXZlcnMvd2F0Y2hkb2cvd2R0X3BjaS5jDQo+ID4gaW5kZXggYzMyNTRiYTVhY2U2Li5kNWU1
-NmI2MDEzNTEgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy93ZHRfcGNpLmMNCj4g
-PiArKysgYi9kcml2ZXJzL3dhdGNoZG9nL3dkdF9wY2kuYw0KPiA+IEBAIC01MzcsNyArNTM3LDcg
-QEAgc3RhdGljIGludCB3ZHRwY2lfdGVtcF9yZWxlYXNlKHN0cnVjdCBpbm9kZQ0KPiA+ICppbm9k
-ZSwgc3RydWN0IGZpbGUgKmZpbGUpICB9DQo+ID4NCj4gPiAgLyoqDQo+ID4gLSAqCW5vdGlmeV9z
-eXM6DQo+ID4gKyAqCXdkdHBjaV9ub3RpZnlfc3lzOg0KPiA+ICAgKglAdGhpczogb3VyIG5vdGlm
-aWVyIGJsb2NrDQo+ID4gICAqCUBjb2RlOiB0aGUgZXZlbnQgYmVpbmcgcmVwb3J0ZWQNCj4gPiAg
-ICoJQHVudXNlZDogdW51c2VkDQo+ID4NCg0K
+linux/kernel.h has been included at line 17, so remove the 
+duplicate one at line 22.
+
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/watchdog/dw_wdt.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+index 32d0e1781e63..b1642e2d9175 100644
+--- a/drivers/watchdog/dw_wdt.c
++++ b/drivers/watchdog/dw_wdt.c
+@@ -19,7 +19,6 @@
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/io.h>
+-#include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/interrupt.h>
+-- 
+2.25.1
+
