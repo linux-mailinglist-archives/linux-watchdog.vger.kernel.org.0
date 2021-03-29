@@ -2,138 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C71234D694
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Mar 2021 20:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB88034D9C0
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Mar 2021 23:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhC2SGD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Mar 2021 14:06:03 -0400
-Received: from gecko.sbs.de ([194.138.37.40]:36142 "EHLO gecko.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230506AbhC2SF3 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Mar 2021 14:05:29 -0400
-Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 12TI56ik029191
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Mar 2021 20:05:06 +0200
-Received: from md1za8fc.ad001.siemens.net ([167.87.41.127])
-        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 12TI05Ad030820;
-        Mon, 29 Mar 2021 20:00:05 +0200
-Date:   Mon, 29 Mar 2021 20:00:01 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-Cc:     Srikanth Krishnakar <skrishnakar@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        "Gerd Haeussler" <gerd.haeussler.ext@siemens.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Enrico Weigelt <lkml@metux.net>
-Subject: Re: [PATCH v3 0/4] add device drivers for Siemens Industrial PCs
-Message-ID: <20210329200001.7b65e4af@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20210329174928.18816-1-henning.schild@siemens.com>
-References: <20210329174928.18816-1-henning.schild@siemens.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S229910AbhC2Vyr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Mar 2021 17:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230434AbhC2Vyi (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 29 Mar 2021 17:54:38 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE286C061574;
+        Mon, 29 Mar 2021 14:54:37 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 91-20020a9d08640000b0290237d9c40382so13687058oty.12;
+        Mon, 29 Mar 2021 14:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=63+vlF2FjphVqZ6hemoPd354Yk89yRE4dhfoglq3rLs=;
+        b=RkDS4kjN+WfaRpqGOJ06NLL4zUl1dM5zR2/LIUQmceT/UIQ3ZeQ50x2b0by6QhZ2vp
+         xxTQwCWZ9c5LuaQm4c/iweL+K8ftLoMshVG1aksY7e9bHfCkazzWTmoeSORcdGYnTgxY
+         u24vil+nPbSc2Q2e51+sIE5zn4fXoBr1tEAsiClb0gQrHaXEFjcDUwNfzNRIox7oHT0L
+         8W7iIp9U1R/RccI/RooBBREU6Rh3M+HEBAWQh8t8FdsVcC3c/wbtc7moabmnOOADnm0u
+         w5BtIE2KYRhajdvMvMs6K3eeNyMKGtymdlMxRkdxpS6Or9s0xe89mpsfGHiwyg5ck7Eo
+         SCoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=63+vlF2FjphVqZ6hemoPd354Yk89yRE4dhfoglq3rLs=;
+        b=C/xrDA1Anc9Q/8SAG1Wv9Uxq/liBZyzx3RkSMymENu6pDn5UnSqkwwMcTtuHCFWgcG
+         FASNkrD15OKYKDUiWd3Qv/x39CFECLLbvGJ1un1oVYPWqfPVxPbOO+zarCVF7qV4GTG3
+         axxuzTGdlj80aTwTiKI13SiwONSxdWYromdpwpbJdJoerZbXSZ2bZvXpcRiIhz2VbfRk
+         COCRGdO2dq/0/PJgOvsUXf5mMKZfJ9ixs2ajuwl/9RKG4+nuRe0Z0gB4BeOZhhiJn7aO
+         97hh5xN8Yl3UknxvyvWYTSRqi6E5aOlnEVjoLDGemuN9YRmEZkCZdIOPVLuuYZmfog7r
+         StCg==
+X-Gm-Message-State: AOAM531Y9wIeaePYtMoc5h4BsxQNQUK6Nk650W7rrVEHEGsjUDHjxrgV
+        +7y/DyB8QkI05mst7FFrw3alAr8BD00=
+X-Google-Smtp-Source: ABdhPJyZFThaJGebeSuNpXW/oKIb0V/vfeY/u3VpBNTOcLzgvfmnYpr1DLbYTgiBegvTCScvnMHiYw==
+X-Received: by 2002:a9d:2f24:: with SMTP id h33mr25360898otb.128.1617054877444;
+        Mon, 29 Mar 2021 14:54:37 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f29sm4782673ots.22.2021.03.29.14.54.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Mar 2021 14:54:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 29 Mar 2021 14:54:35 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
+Cc:     shubhraj@xilinx.com, sgoud@xilinx.com, michal.simek@xilinx.com,
+        wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, git@xilinx.com,
+        Srinivas Goud <srinivas.goud@xilinx.com>
+Subject: Re: [PATCH V2 2/5] watchdog: of_xilinx_wdt: Used BIT macro
+Message-ID: <20210329215435.GI220164@roeck-us.net>
+References: <20210329161939.37680-1-srinivas.neeli@xilinx.com>
+ <20210329161939.37680-3-srinivas.neeli@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210329161939.37680-3-srinivas.neeli@xilinx.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Guys,
+On Mon, Mar 29, 2021 at 09:49:36PM +0530, Srinivas Neeli wrote:
+> From: Srinivas Goud <srinivas.goud@xilinx.com>
+> 
+> Used BIT macro instead of mask value.
+> 
+> Signed-off-by: Srinivas Goud <srinivas.goud@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
 
-sorry for the delay. This one did in fact not change too much after all.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-The biggest points that are still kind of open are the naming of the
-LEDs. If what is proposed here is acceptable it is not open from my
-side.
-
-The other big point was "using a generic gpio" driver as a basis. My
-current understanding of that point is, that such a driver does not yet
-exist. Meaning an introduction of the abstractions can and probably
-should wait for a second user. Without the second user it is just hard
-to test and find the right abstraction, plus we will end up with more
-code meaning more work for everyone.
-
-regards,
-Henning
-
-Am Mon, 29 Mar 2021 19:49:24 +0200
-schrieb Henning Schild <henning.schild@siemens.com>:
-
-> changes since v2:
+> ---
+> Changes in V2:
+> -Included bits.h header file.
+> ---
+>  drivers/watchdog/of_xilinx_wdt.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-> - remove "simatic-ipc" prefix from LED names
-> - fix style issues found in v2, mainly LED driver
-> - fix OEM specific dmi code, and remove magic numbers
-> - more "simatic_ipc" name prefixing
-> - improved pmc quirk code using callbacks
+> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+> index 00549164b3d7..f76ec56859a4 100644
+> --- a/drivers/watchdog/of_xilinx_wdt.c
+> +++ b/drivers/watchdog/of_xilinx_wdt.c
+> @@ -6,6 +6,7 @@
+>   * (C) Copyright 2011 (Alejandro Cabrera <aldaya@gmail.com>)
+>   */
+>  
+> +#include <linux/bits.h>
+>  #include <linux/clk.h>
+>  #include <linux/err.h>
+>  #include <linux/module.h>
+> @@ -24,12 +25,12 @@
+>  #define XWT_TBR_OFFSET      0x8 /* Timebase Register Offset */
+>  
+>  /* Control/Status Register Masks  */
+> -#define XWT_CSR0_WRS_MASK   0x00000008 /* Reset status */
+> -#define XWT_CSR0_WDS_MASK   0x00000004 /* Timer state  */
+> -#define XWT_CSR0_EWDT1_MASK 0x00000002 /* Enable bit 1 */
+> +#define XWT_CSR0_WRS_MASK	BIT(3) /* Reset status */
+> +#define XWT_CSR0_WDS_MASK	BIT(2) /* Timer state  */
+> +#define XWT_CSR0_EWDT1_MASK	BIT(1) /* Enable bit 1 */
+>  
+>  /* Control/Status Register 0/1 bits  */
+> -#define XWT_CSRX_EWDT2_MASK 0x00000001 /* Enable bit 2 */
+> +#define XWT_CSRX_EWDT2_MASK	BIT(0) /* Enable bit 2 */
+>  
+>  /* SelfTest constants */
+>  #define XWT_MAX_SELFTEST_LOOP_COUNT 0x00010000
+> -- 
+> 2.9.1
 > 
-> changes since v1:
-> 
-> - fixed lots of style issues found in v1
->   - (debug) printing
->   - header ordering
-> - fixed license issues GPLv2 and SPDX in all files
-> - module_platform_driver instead of __init __exit
-> - wdt simplifications cleanup
-> - lots of fixes in wdt driver, all that was found in v1
-> - fixed dmi length in dmi helper
-> - changed LED names to allowed ones
-> - move led driver to simple/
-> - switched pmc_atom to dmi callback with global variable
-> 
-> --
-> 
-> This series adds support for watchdogs and leds of several x86 devices
-> from Siemens.
-> 
-> It is structured with a platform driver that mainly does
-> identification of the machines. It might trigger loading of the
-> actual device drivers by attaching devices to the platform bus.
-> 
-> The identification is vendor specific, parsing a special binary DMI
-> entry. The implementation of that platform identification is applied
-> on pmc_atom clock quirks in the final patch.
-> 
-> It is all structured in a way that we can easily add more devices and
-> more platform drivers later. Internally we have some more code for
-> hardware monitoring, more leds, watchdogs etc. This will follow some
-> day.
-> 
-> Henning Schild (4):
->   platform/x86: simatic-ipc: add main driver for Siemens devices
->   leds: simatic-ipc-leds: add new driver for Siemens Industial PCs
->   watchdog: simatic-ipc-wdt: add new driver for Siemens Industrial PCs
->   platform/x86: pmc_atom: improve critclk_systems matching for Siemens
->     PCs
-> 
->  drivers/leds/Kconfig                          |   3 +
->  drivers/leds/Makefile                         |   3 +
->  drivers/leds/simple/Kconfig                   |  11 +
->  drivers/leds/simple/Makefile                  |   2 +
->  drivers/leds/simple/simatic-ipc-leds.c        | 202 ++++++++++++++++
->  drivers/platform/x86/Kconfig                  |  12 +
->  drivers/platform/x86/Makefile                 |   3 +
->  drivers/platform/x86/pmc_atom.c               |  57 +++--
->  drivers/platform/x86/simatic-ipc.c            | 169 ++++++++++++++
->  drivers/watchdog/Kconfig                      |  11 +
->  drivers/watchdog/Makefile                     |   1 +
->  drivers/watchdog/simatic-ipc-wdt.c            | 215
-> ++++++++++++++++++ .../platform_data/x86/simatic-ipc-base.h      |
-> 29 +++ include/linux/platform_data/x86/simatic-ipc.h |  72 ++++++
->  14 files changed, 769 insertions(+), 21 deletions(-)
->  create mode 100644 drivers/leds/simple/Kconfig
->  create mode 100644 drivers/leds/simple/Makefile
->  create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
->  create mode 100644 drivers/platform/x86/simatic-ipc.c
->  create mode 100644 drivers/watchdog/simatic-ipc-wdt.c
->  create mode 100644 include/linux/platform_data/x86/simatic-ipc-base.h
->  create mode 100644 include/linux/platform_data/x86/simatic-ipc.h
-> 
-
