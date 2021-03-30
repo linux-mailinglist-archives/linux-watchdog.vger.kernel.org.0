@@ -2,114 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3807934D9C4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Mar 2021 23:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1605434E60A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Mar 2021 13:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbhC2VzU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Mar 2021 17:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S231842AbhC3LFL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Mar 2021 07:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbhC2Vy7 (ORCPT
+        with ESMTP id S231761AbhC3LEw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Mar 2021 17:54:59 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81318C061574;
-        Mon, 29 Mar 2021 14:54:59 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id i81so14502222oif.6;
-        Mon, 29 Mar 2021 14:54:59 -0700 (PDT)
+        Tue, 30 Mar 2021 07:04:52 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67913C061574;
+        Tue, 30 Mar 2021 04:04:52 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id l76so11460058pga.6;
+        Tue, 30 Mar 2021 04:04:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=BjkcwKEqNjJgM0t3MJhPMzYXQdDwGVDT7/k2oMawxgc=;
-        b=mJDF3boChOWtqd1vtfjX2c4/hJpf3zpYe/ZgCgDCy/Z4gqnsdaEcYCKLlSRb5x5k9T
-         WMszl2GmEPNTAxGTzrJVAvtFOKDa12IFJEEsi42WQo19bVUycVVqZ/EllTyTBsGBKmp7
-         S0RhuYDH/gl+/mafuVvWAb7ijoCbtmj66h2kyu82wxfaX9wA7DeWE0Hj/60i/6mWtv5d
-         AWm05vm1pSxmn769Dj/l2X3lNfnmFcKALV1pqJXdA7W+a3zoY8FWiZFRPjK4/sV+bDIw
-         y9hxQuHYpTRweKzB7cha/NfZuFKUl2uEYaq2ti8arC1xP+ydEaNUPmQedRlGHoVePIex
-         I0zA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MLBeoULdugcCnUPIfdbDs+A8k9dizPk/RhGEW8FH4qI=;
+        b=ZY2H8JjGdzPSlsPLMpktphd4H2J8L1GzUZCBlFCNBZFB3VLKxP0qGA4K1+sm+g/cN9
+         DyubWtZkl2gL+3UolES1JuoIYhCg7XUUpx5adse/HTlBfoiRDXFWit/MUqQ2ZNrtVx1Z
+         Tk4M7YxnU4SFpxLtn/7jH3IVurPR1ZrkdmPQH9hxEFEAZBR21NGyxiwIOoPkIG6ubroS
+         /ihOldBcfihI2sHottMzTg1v3O+0y2zDY6F62uCII8E5n9012CIIddIXy0x3vLZ5RuvN
+         n4WGK0+3QZtg8nfZ8HXmy110rUjX1gjnF+IFM1TOJqRZjr4y7xUetDMRMiH0EPHXR+7J
+         QOqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BjkcwKEqNjJgM0t3MJhPMzYXQdDwGVDT7/k2oMawxgc=;
-        b=q/nMDkw5L0pYkTUU7fvR/h6xsm3Bvp+gEC6MvrpKwHirRIuFk3kfJ37UExC32yXVW3
-         0Y2NqqKhbzB3fh38ZPbH7CF+4HXPnfmPGntuDu3yFOAsOKAGRdQHBW2oWiAaxy3NCv5c
-         TkdGhoNfrUuclQloHysehzGsmDodSL85FrRDlpbYXP6Hp4HryL1NsFbjiNgw6/j34RxL
-         H20ZPUZkYXr938TIIvq/qKcyHqBgd3ufg+Zx0r2E0ihobnVFJeS/l+s6MusUrEVJqWR0
-         hIk/l47Q+5ajX5KK606okp5K3xu+J1+o5Wb1aTF6OHSYC43CaO8XpXiPcFMPnqAqHjye
-         y0Ug==
-X-Gm-Message-State: AOAM533gqGPrNPyXz5N7eAutqwZxoJoDFnSGO0ktvOpg3p/1JCqKg16B
-        yv6ciUMrsUFbZdI5I+c0PLatoml0HUs=
-X-Google-Smtp-Source: ABdhPJyxPQZqv7XRV5egRp7Sw7VKfcZL8dGPZQtHn8DOIQHU78TuZ7Ot2oQe1egwryo4UamgXosq/Q==
-X-Received: by 2002:a05:6808:1482:: with SMTP id e2mr873849oiw.138.1617054898919;
-        Mon, 29 Mar 2021 14:54:58 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h12sm4846106ote.75.2021.03.29.14.54.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Mar 2021 14:54:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Mar 2021 14:54:57 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     shubhraj@xilinx.com, sgoud@xilinx.com, michal.simek@xilinx.com,
-        wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com,
-        Srinivas Goud <srinivas.goud@xilinx.com>
-Subject: Re: [PATCH V2 3/5] watchdog: of_xilinx_wdt: Used dev_dbg()
-Message-ID: <20210329215457.GJ220164@roeck-us.net>
-References: <20210329161939.37680-1-srinivas.neeli@xilinx.com>
- <20210329161939.37680-4-srinivas.neeli@xilinx.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MLBeoULdugcCnUPIfdbDs+A8k9dizPk/RhGEW8FH4qI=;
+        b=kz/efTzcNnoaRaSJOybbwcPSZtO7dlN3YF+iYT2Z5MhGb0K1yCILPlaFCYTPTpTQbh
+         tUPNP4eX1/TmDimzeoTuJS/DtFAp+ESyP2kABDLToNzpkHUQy5UY8LjIoHqK5GnoTzoq
+         T/PK2gRNsTJoHA1VIUcZeOJWr17y7RBoPvQl7AJzsbEbBNkisEdo1XtC3gN0tC6to1l1
+         lFJjVej6yLbWGgm/VdgHnmD7MUd4wMKjxUD3q8dbAQAARwS3On8HgIQ/HXPXcloue2Ak
+         jTKn2RXC+CaTgYwaFSFpfZdceEGc9ktBk8htiZhvFSONmvd8jSESAq7C+PWP3w4HR5cZ
+         0IYA==
+X-Gm-Message-State: AOAM531G7g3BCnPuzn3Ax3fkdcbTCRylbQffG9TiYrrCmj0WdYWEwzRW
+        6nKNDip26W3AOjqUfdkXgq6Y+vaxYB/ZyEUxeNs=
+X-Google-Smtp-Source: ABdhPJysXjGeGbF/h718mXjMe4mIMc76BZcAiyOPzxbUiQ4n9tbSaDufcNFAgmiNwEupsnCIP6iHkEq7tgLlEoog8ZE=
+X-Received: by 2002:a63:cb44:: with SMTP id m4mr5367809pgi.4.1617102291959;
+ Tue, 30 Mar 2021 04:04:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210329161939.37680-4-srinivas.neeli@xilinx.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20210329174928.18816-1-henning.schild@siemens.com> <20210329174928.18816-3-henning.schild@siemens.com>
+In-Reply-To: <20210329174928.18816-3-henning.schild@siemens.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 30 Mar 2021 14:04:35 +0300
+Message-ID: <CAHp75Vdh_YAJLE4DWPhxhYY1g5Fc_7EFgr4FED3crpfpzwXeRg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] leds: simatic-ipc-leds: add new driver for Siemens
+ Industial PCs
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>, Enrico Weigelt <lkml@metux.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 09:49:37PM +0530, Srinivas Neeli wrote:
-> From: Srinivas Goud <srinivas.goud@xilinx.com>
-> 
-> This patch removes pr_info in stop function and adds dev_dbg()
-> in start/stop function to display device specific debug info.
-> 
-> Signed-off-by: Srinivas Goud <srinivas.goud@xilinx.com>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+On Mon, Mar 29, 2021 at 8:59 PM Henning Schild
+<henning.schild@siemens.com> wrote:
+>
+> This driver adds initial support for several devices from Siemens. It is
+> based on a platform driver introduced in an earlier commit.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+...
 
-> ---
-> Changes in V2:
-> -Updated minor review comments.
-> ---
->  drivers/watchdog/of_xilinx_wdt.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
-> index f76ec56859a4..5f31fdea517a 100644
-> --- a/drivers/watchdog/of_xilinx_wdt.c
-> +++ b/drivers/watchdog/of_xilinx_wdt.c
-> @@ -71,6 +71,8 @@ static int xilinx_wdt_start(struct watchdog_device *wdd)
->  
->  	spin_unlock(&xdev->spinlock);
->  
-> +	dev_dbg(wdd->parent, "Watchdog Started!\n");
-> +
->  	return 0;
->  }
->  
-> @@ -92,7 +94,7 @@ static int xilinx_wdt_stop(struct watchdog_device *wdd)
->  
->  	clk_disable(xdev->clk);
->  
-> -	pr_info("Stopped!\n");
-> +	dev_dbg(wdd->parent, "Watchdog Stopped!\n");
->  
->  	return 0;
->  }
-> -- 
-> 2.9.1
-> 
+> +#define SIMATIC_IPC_LED_PORT_BASE      0x404E
+
+> +static struct simatic_ipc_led simatic_ipc_leds_io[] = {
+> +       {1 << 15, "green:" LED_FUNCTION_STATUS "-1" },
+> +       {1 << 7,  "yellow:" LED_FUNCTION_STATUS "-1" },
+> +       {1 << 14, "red:" LED_FUNCTION_STATUS "-2" },
+> +       {1 << 6,  "yellow:" LED_FUNCTION_STATUS "-2" },
+> +       {1 << 13, "red:" LED_FUNCTION_STATUS "-3" },
+> +       {1 << 5,  "yellow:" LED_FUNCTION_STATUS "-3" },
+> +       { }
+> +};
+
+> +static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
+> +       {0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
+> +       {0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
+> +       {0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
+> +       {0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
+> +       {0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
+> +       {0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
+> +       { }
+> +};
+
+It seems to me like poking GPIO controller registers directly. This is not good.
+The question still remains: Can we simply register a GPIO (pin
+control) driver and use an LED GPIO driver with an additional board
+file that instantiates it?
+
+-- 
+With Best Regards,
+Andy Shevchenko
