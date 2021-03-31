@@ -2,130 +2,86 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A2634EC90
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Mar 2021 17:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E865734F668
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Mar 2021 03:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbhC3Pdv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Mar 2021 11:33:51 -0400
-Received: from gecko.sbs.de ([194.138.37.40]:57575 "EHLO gecko.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232335AbhC3Pde (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Mar 2021 11:33:34 -0400
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 12UFX7GU024983
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Mar 2021 17:33:07 +0200
-Received: from md1za8fc.ad001.siemens.net ([167.87.2.166])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 12UFN6KW024700;
-        Tue, 30 Mar 2021 17:23:06 +0200
-Date:   Tue, 30 Mar 2021 17:23:05 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Srikanth Krishnakar <skrishnakar@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        id S230160AbhCaBx1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Mar 2021 21:53:27 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:15408 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233072AbhCaBxN (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 30 Mar 2021 21:53:13 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F98S15rdzzlWFn;
+        Wed, 31 Mar 2021 09:51:29 +0800 (CST)
+Received: from [127.0.0.1] (10.174.179.202) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.498.0; Wed, 31 Mar 2021
+ 09:53:09 +0800
+Subject: Re: [PATCH 1/1] watchdog: dw_wdt: Remove duplicated header file
+ inclusion
+To:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>, Enrico Weigelt <lkml@metux.net>
-Subject: Re: [PATCH v3 2/4] leds: simatic-ipc-leds: add new driver for
- Siemens Industial PCs
-Message-ID: <20210330172305.67b6e050@md1za8fc.ad001.siemens.net>
-In-Reply-To: <CAHp75VceCsuANZpib6HXJvxgMdJhmr8KPTZgThxKvXq6Yotymg@mail.gmail.com>
-References: <20210329174928.18816-1-henning.schild@siemens.com>
-        <20210329174928.18816-3-henning.schild@siemens.com>
-        <CAHp75Vdh_YAJLE4DWPhxhYY1g5Fc_7EFgr4FED3crpfpzwXeRg@mail.gmail.com>
-        <20210330135808.373c3308@md1za8fc.ad001.siemens.net>
-        <CAHp75Vc0f0HfAJx0KPyQMWjekkhB_T-1+vuR566qAcYGA2JLJA@mail.gmail.com>
-        <20210330143011.0e8ae4a0@md1za8fc.ad001.siemens.net>
-        <CAHp75VceCsuANZpib6HXJvxgMdJhmr8KPTZgThxKvXq6Yotymg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        linux-watchdog <linux-watchdog@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20210327012028.1606-1-thunder.leizhen@huawei.com>
+ <28b7616a-daa7-e944-8c0f-640eddaaebc8@roeck-us.net>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <fe4808f6-a628-7126-5d9c-d0132a0e97fc@huawei.com>
+Date:   Wed, 31 Mar 2021 09:53:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <28b7616a-daa7-e944-8c0f-640eddaaebc8@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.202]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Tue, 30 Mar 2021 15:41:53 +0300
-schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
 
-> On Tue, Mar 30, 2021 at 3:35 PM Henning Schild
-> <henning.schild@siemens.com> wrote:
-> > Am Tue, 30 Mar 2021 15:15:16 +0300
-> > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:  
-> > > On Tue, Mar 30, 2021 at 2:58 PM Henning Schild
-> > > <henning.schild@siemens.com> wrote:  
-> > > > Am Tue, 30 Mar 2021 14:04:35 +0300
-> > > > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:  
-> > > > > On Mon, Mar 29, 2021 at 8:59 PM Henning Schild
-> > > > > <henning.schild@siemens.com> wrote:  
+
+On 2021/3/28 3:50, Guenter Roeck wrote:
+> On 3/26/21 6:20 PM, Zhen Lei wrote:
+>> The header file <linux/kernel.h> is already included above and can be
+>> removed here.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 > 
-> > > > > > +static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
-> > > > > > +       {0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
-> > > > > > +       {0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
-> > > > > > +       {0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
-> > > > > > +       {0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
-> > > > > > +       {0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
-> > > > > > +       {0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
-> > > > > > +       { }
-> > > > > > +};  
-> > > > >
-> > > > > It seems to me like poking GPIO controller registers directly.
-> > > > > This is not good. The question still remains: Can we simply
-> > > > > register a GPIO (pin control) driver and use an LED GPIO
-> > > > > driver with an additional board file that instantiates it?  
-> > > >
-> > > > I wrote about that in reply to the cover letter. My view is
-> > > > still that it would be an abstraction with only one user, just
-> > > > causing work and likely not ending up as generic as it might
-> > > > eventually have to be.
-> > > >
-> > > > The region is reserved, not sure what the problem with the
-> > > > "poking" is.  
-> > >
-> > >  
-> > > > Maybe i do not understand all the benefits of such a split at
-> > > > this point in time. At the moment i only see work with hardly
-> > > > any benefit, not just work for me but also for maintainers. I
-> > > > sure do not mean to be ignorant. Maybe you go into details and
-> > > > convince me or we wait for other peoples opinions on how to
-> > > > proceed, maybe there is a second user that i am not aware of?
-> > > > Until i am convinced otherwise i will try to argue that a
-> > > > single-user-abstraction is needless work/code, and should be
-> > > > done only when actually needed.  
-> > >
-> > > I have just read your messages (there is a cover letter and
-> > > additional email which was sent lately).
-> > >
-> > > I would like to know what the CPU model number on that board is.
-> > > Than we can continue to see what possibilities we have here.  
-> >
-> > I guess we are talking about the one that uses memory mapped, that
-> > is called an "IPC127E" and seems to have either Intel Atom E3940 or
-> > E3930 which seems to be Apollo Lake.  
+> Already submitted:
 > 
-> Yep. And now the question, in my patch series you should have got the
-> apollolake-pinctrl driver loaded (if not, we have to investigate why
-> it's not being instantiated). This will give you a read GPIO driver.
+> https://patchwork.kernel.org/project/linux-watchdog/patch/20210325112916.865510-1-wanjiabing@vivo.com/
+> 
+> In general, when removing duplicate or unnecessary header files,
+> please retain or improve alphabetic order. This patch makes it worse.
 
-Ok, so there is the existing driver i asked about several times. Thanks
-for pointing it out.
+Okay, thanks for the heads-up. I'll pay attention next time.
 
-> So, you may use regular LED GPIO on top of it
-> (https://elixir.bootlin.com/linux/latest/source/drivers/leds/leds-gpio.c).
-> I would like to understand why it can't be achieved.
+> 
+> Guenter
+> 
+>> ---
+>>  drivers/watchdog/dw_wdt.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>>
+>> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+>> index 32d0e1781e63c4e..b1642e2d9175584 100644
+>> --- a/drivers/watchdog/dw_wdt.c
+>> +++ b/drivers/watchdog/dw_wdt.c
+>> @@ -19,7 +19,6 @@
+>>  #include <linux/delay.h>
+>>  #include <linux/err.h>
+>>  #include <linux/io.h>
+>> -#include <linux/kernel.h>
+>>  #include <linux/module.h>
+>>  #include <linux/moduleparam.h>
+>>  #include <linux/interrupt.h>
+>>
+> 
+> 
+> .
+> 
 
-Will have a look. Unfortunately this one box is missing in my personal
-collection, but let us assume that one can be converted to that
-existing driver.
-I guess that will still mean the PIO-based part of the LED driver will
-have to stay as is.
-
-regards,
-Henning
