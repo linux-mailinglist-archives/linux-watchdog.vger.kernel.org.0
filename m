@@ -2,72 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E5A350CAC
-	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Apr 2021 04:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D505350D09
+	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Apr 2021 05:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbhDACZW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 Mar 2021 22:25:22 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:14659 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbhDACY6 (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 Mar 2021 22:24:58 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F9n546Cbwzmc8K;
-        Thu,  1 Apr 2021 10:22:16 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 1 Apr 2021 10:24:51 +0800
-From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <khilman@baylibre.com>
-CC:     <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH] watchdog: meson_wdt: Use device_get_match_data() helper
-Date:   Thu, 1 Apr 2021 10:25:21 +0800
-Message-ID: <1617243921-56774-1-git-send-email-tiantao6@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+        id S232672AbhDAD2W (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Mar 2021 23:28:22 -0400
+Received: from mga09.intel.com ([134.134.136.24]:17485 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229497AbhDAD1w (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 31 Mar 2021 23:27:52 -0400
+IronPort-SDR: VhZU4aW11Lr1B5MR52mc+8OZDS0agSN+LHyMgn6h+4Nboy1hy5H94fGXF6VLKak8I8DqSAYZWF
+ hI/1n0xr2yQg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9940"; a="192243119"
+X-IronPort-AV: E=Sophos;i="5.81,295,1610438400"; 
+   d="scan'208";a="192243119"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 20:27:50 -0700
+IronPort-SDR: 8jFRhq8W+mfpk4hHL63zW3fuMylS46MdXbFz3Q+kJRNG7ONuSbR+9QqiOK8ZdwEGJUOOKgwxIJ
+ E/+C0SphslYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,295,1610438400"; 
+   d="scan'208";a="439050840"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 31 Mar 2021 20:27:49 -0700
+Received: from glass.png.intel.com (glass.png.intel.com [10.158.65.59])
+        by linux.intel.com (Postfix) with ESMTP id B91985808ED;
+        Wed, 31 Mar 2021 20:27:47 -0700 (PDT)
+From:   Wong Vee Khee <vee.khee.wong@linux.intel.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
+Subject: [PATCH 1/1] watchdog: Fix a typo in Kconfig
+Date:   Thu,  1 Apr 2021 11:32:09 +0800
+Message-Id: <20210401033209.9929-1-vee.khee.wong@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Use the device_get_match_data() helper instead of open coding.
+s/thershold/threshold
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+Cc: Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
+Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
 ---
- drivers/watchdog/meson_wdt.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/watchdog/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/meson_wdt.c b/drivers/watchdog/meson_wdt.c
-index 459f3ae..539feaa 100644
---- a/drivers/watchdog/meson_wdt.c
-+++ b/drivers/watchdog/meson_wdt.c
-@@ -162,7 +162,6 @@ static int meson_wdt_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct meson_wdt_dev *meson_wdt;
--	const struct of_device_id *of_id;
- 	int err;
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 0470dc15c085..aa382e5edfef 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -2111,7 +2111,7 @@ config KEEMBAY_WATCHDOG
+ 	 This option enable support for an In-secure watchdog timer driver for
+ 	 Intel Keem Bay SoC. This WDT has a 32 bit timer and decrements in every
+ 	 count unit. An interrupt will be triggered, when the count crosses
+-	 the thershold configured in the register.
++	 the threshold configured in the register.
  
- 	meson_wdt = devm_kzalloc(dev, sizeof(*meson_wdt), GFP_KERNEL);
-@@ -173,12 +172,7 @@ static int meson_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(meson_wdt->wdt_base))
- 		return PTR_ERR(meson_wdt->wdt_base);
- 
--	of_id = of_match_device(meson_wdt_dt_ids, dev);
--	if (!of_id) {
--		dev_err(dev, "Unable to initialize WDT data\n");
--		return -ENODEV;
--	}
--	meson_wdt->data = of_id->data;
-+	meson_wdt->data = device_get_match_data(dev);
- 
- 	meson_wdt->wdt_dev.parent = dev;
- 	meson_wdt->wdt_dev.info = &meson_wdt_info;
+ 	 To compile this driver as a module, choose M here: the
+ 	 module will be called keembay_wdt.
 -- 
-2.7.4
+2.25.1
 
