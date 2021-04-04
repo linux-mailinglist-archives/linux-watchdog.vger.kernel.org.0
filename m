@@ -2,94 +2,116 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9922351C91
-	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Apr 2021 20:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2B63539C3
+	for <lists+linux-watchdog@lfdr.de>; Sun,  4 Apr 2021 22:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237075AbhDASSr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 1 Apr 2021 14:18:47 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:34391 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237761AbhDASMG (ORCPT
+        id S231533AbhDDUdk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 4 Apr 2021 16:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231478AbhDDUdi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 1 Apr 2021 14:12:06 -0400
-Received: from [192.168.1.155] ([95.114.120.255]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MD9Kj-1lItNN1Tyj-0095AP; Thu, 01 Apr 2021 18:20:52 +0200
-Subject: Re: [PATCH v2 2/4] leds: simatic-ipc-leds: add new driver for Siemens
- Industial PCs
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Srikanth Krishnakar <skrishnakar@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Sun, 4 Apr 2021 16:33:38 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827A2C06178C
+        for <linux-watchdog@vger.kernel.org>; Sun,  4 Apr 2021 13:33:31 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id e18so9267815wrt.6
+        for <linux-watchdog@vger.kernel.org>; Sun, 04 Apr 2021 13:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qLAy95bvS1zAnYuhC/w4xxxlm+O0tzNR1N2BJpqbw5w=;
+        b=Uj0Y5h5dAclSEpTTchKZoN6d6/X2/jxuIIdiY2TiTyk3Va6KgXWEIR7nXrbx2G6DmG
+         DEj8NTV0WHUfrymtdaelg8IdCSbFubY9BkAoUgH6qQf8EqAg7oNdPZikt1hBXz6v20zs
+         A8AaPWXWp0Z2jemWr2KvX3VEPPGU3IlyIZPwCyiC+SenicBH6/PCmHtanTK6GQ1U+Ifg
+         VY2SBWvWpq0G2yymbRGsBY5fsQ3VQ4aGS/FzsLk9krR6A4W7hb8uudpCoMiP1AUhW51x
+         KAc2oi6Fi2BSvj3YthT1WKevVUyAKnRg3u5L4ySofPzK4gqEB2ss/pH/Whz46Pfeo62Z
+         VcVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qLAy95bvS1zAnYuhC/w4xxxlm+O0tzNR1N2BJpqbw5w=;
+        b=txaLDAD3SeBAtuOqXV3WB9WNCaYjh+APyL0CcKvB/UhvAB8SoX4zwenzK5Q+82QjAs
+         GRguD5EXil9DEwxyxEPm4ftinI5d/aGtO+35wmItXcydi/QCHN/tUaYDpI4ZRNJtG7eA
+         lW9KyL+Z+tC+XMVK2KSJFPc/mPb2R5YUCXuoTXLr25ioPcZW0GhlLFIkZoKcsU6UmnNr
+         Xy8Tf2lCcX5v62ZgGu/S15sgK3TnfbeQ9pyU8R7h//XASF8x7Spqz9C5gfDQYHSg83TN
+         T84xUMi9HG52X572bpDAkLKWf5PsaGCVtr6EbqLUtCo17M4ofAD2c9W+XTGFT2FQ31MG
+         iDaw==
+X-Gm-Message-State: AOAM531Rq+T21vtczB6qHb7SNTwgIwdbFJqt5teZR/In1zeLBwhklddc
+        ydyYNfkGVNVMLPO3tmEQXw1DVA==
+X-Google-Smtp-Source: ABdhPJyhT6Ya2IgUD2RMKPgOE6BwHgGaUQpbUoSsELec3O9UxvF/KjbQKc6zYs03mvxBXK/bekFFsg==
+X-Received: by 2002:a05:6000:10c4:: with SMTP id b4mr8456271wrx.386.1617568410016;
+        Sun, 04 Apr 2021 13:33:30 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:6d68:6b9a:7a3c:4a9f? ([2a01:e34:ed2f:f020:6d68:6b9a:7a3c:4a9f])
+        by smtp.googlemail.com with ESMTPSA id u19sm8383785wml.28.2021.04.04.13.33.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Apr 2021 13:33:29 -0700 (PDT)
+Subject: Re: [PATCH v2 1/8] dt-bindings: timer: Add compatible for Mediatek
+ MT8195
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20210315095710.7140-1-henning.schild@siemens.com>
- <20210315095710.7140-3-henning.schild@siemens.com>
- <CAHp75VcBdR8xqfWqKe+DwGAUYByVL7SBK0p7tHcKPs7m4Ay1iw@mail.gmail.com>
- <20210315111915.GA14857@duo.ucw.cz>
- <50836593-d5c9-421f-9140-2c65ac6fabe4@metux.net>
- <20210327104610.344afebc@md1za8fc.ad001.siemens.net>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Message-ID: <647d9b70-4efe-41e6-e592-74331d66b675@metux.net>
-Date:   Thu, 1 Apr 2021 18:20:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Guenter Roeck <linux@roeck-us.net>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, srv_heupstream@mediatek.com
+References: <20210319023427.16711-1-seiya.wang@mediatek.com>
+ <20210319023427.16711-3-seiya.wang@mediatek.com>
+ <bf7ad31e-974a-3e0a-12bd-32973c7c3cbd@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <11bf6761-8902-bfa5-8577-d397846e7638@linaro.org>
+Date:   Sun, 4 Apr 2021 22:33:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210327104610.344afebc@md1za8fc.ad001.siemens.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: tl
+In-Reply-To: <bf7ad31e-974a-3e0a-12bd-32973c7c3cbd@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:mNglDIX27fLWItHQlziK/n+IY7HGTMabBbBP4e/KFtQ0p40i4z/
- Z3bfdaOjDN0xGaksYuJQC78S/UTb0Tx9jleuOfKumDqN6D48g8BPhbcRE3Nl4msCmUz6wGT
- cxB5vTjwyUmUEbCXM9bHndSkbRk94IZhVWNLBwt5iP3My13QtR4XAjtF/6jqDaIx03Lyl7X
- /L/oV8NRT3tOs2Z1AbG/A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zv3heeluCKs=:hpK/+L7wEVi4G//3IOx+9b
- aoRBbL8+G/cOOfzYk9m+TikKMe/bUT+veAFcQdzo2v9AWS3P27rCfDITEf3zQ72Y2y5OAN78C
- 1wHqALJRpv8q6S8CZCA2xJrFMoIWMkmTdbyTpRdHls3TBUANoZpDJeIWA1AOSWBpC9f7b8Hbl
- c/sf7cP25OJC9BkmqX4bhQdQXq5Y4Q19aMTkf08m3B61RZEw5iuPXfySmBwBQ/yAoPJ8OPgts
- h6xNFTa546nd48QPN91x/8t8O513HA2FewPGxi6YQBzu0g+5/4eEo1PLbrviFBy9ca+3pgvyj
- qndEMEnvRFGzEG0Z9Tq/n79a2rqSN9CMsCbGrb/715yjPyaGno7jtRq2F5TNIfqxDM4Y/w5SH
- lmM0NMVfBqdAuqwwDD4/jakzk+D69qL1Syt+Fjifog8zQna6BKbhMn4JmniWHE/v8z+uOPzSV
- jYAvyUw0JEvMdt9IjYC7mXs6r12/zAg=
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 27.03.21 10:46, Henning Schild wrote:
-
->> In this case, they seem to be assigned to certain specific functions
->> (by physical labels on the box), so IMHO the LED names should reflect
->> that in some ways.
+On 29/03/2021 13:52, Matthias Brugger wrote:
 > 
-> The choice for "status" was because of
 > 
->>> /* Miscelleaus functions. Use functions above if you can. */
+> On 19/03/2021 03:34, Seiya Wang wrote:
+>> This commit adds dt-binding documentation of timer for Mediatek MT8195 SoC
+>> Platform.
+>>
+>> Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
 > 
-> And those known names do not really come with an explanation of their
-> meaning. Names like "bluetooth" seem obvious, but "activity" or
-> "indicator" leave a lot of room for speculation.
+> Applied to v5.12-next/dts64
 
-Maybe we should revise these and add more functions ?
+Usually bindings go through the subsystem maintainer.
 
-Can you find out some more details, what these LEDs really had been
-intented for ?
 
---mtx
 -- 
----
-Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
-werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
-GPG/PGP-Schlüssel zu.
----
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
