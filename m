@@ -2,71 +2,110 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D30A353C64
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Apr 2021 10:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51118354237
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Apr 2021 15:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbhDEI2w (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Apr 2021 04:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
+        id S235586AbhDENBm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Apr 2021 09:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbhDEI2w (ORCPT
+        with ESMTP id S229681AbhDENBm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Apr 2021 04:28:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2307C061756
-        for <linux-watchdog@vger.kernel.org>; Mon,  5 Apr 2021 01:28:46 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1lTKbF-00076r-6D; Mon, 05 Apr 2021 10:28:45 +0200
-Subject: Re: [PATCH v3 0/3] watchdog: f71808e_wdt: migrate to new kernel API
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 5 Apr 2021 09:01:42 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C00C061756
+        for <linux-watchdog@vger.kernel.org>; Mon,  5 Apr 2021 06:01:36 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id w3so16697096ejc.4
+        for <linux-watchdog@vger.kernel.org>; Mon, 05 Apr 2021 06:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cXpI45z8prm1S/0gV7wr7IfGG5ighcGpBQdN9DAdQ0c=;
+        b=PeQFaBmbm+gKQUJljLwYHQ+BUqi/6OKt0p+RN0mmb9Rjvn9WmcTIHt8trP35Elp3xS
+         L+i/Fx9IBJZ/HkkrrrSBOKqXuwPisPbCOZXfhNaaiKfrwMPlKbPOex12pTewv12Bs/iB
+         HWoCR1dtijYP/cmaAxy5wcfLppxsHcb8CxQHCKwbD/lc5DZw640EAkyt0Sack+HjAMvg
+         mU3LUuh7ydHyThxEGufEp2bBo9tkSD1bMjcVPI0Ubydt8hqPdG0ROeU42aSfYaBgrWfi
+         RgvmtytW6E5PaBBtVBlPtKVZcHAwXSJw/CYMkyo+3omPyLZYpCISJYWtidxuOEYZqpzL
+         Aojg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cXpI45z8prm1S/0gV7wr7IfGG5ighcGpBQdN9DAdQ0c=;
+        b=Ix9UMkBZ+OTb36dEkTz80YVOC/n+OcILrczf+PYaQ0sM3PQfl+QBjr5fkAIP/z/QGM
+         cSbabKxM1zwqxBQ+TrlfEyiC12wMzTubuq2Ag6t9H4BD4geIS+id50MnAaZ6M9k5DoDu
+         4c6c+5W/lQmvL0ayCs2nfwlNeUSC17KopIGcYwi28ARkHecjnEvh9aJgtYWCaeGNxFr6
+         kEvQSNjhMVmIs7Oh7xKTi1j9+BV6hDqj6EQCXvji/fWQwUlGs0M4uoB0gduvOesTeYcM
+         +nNZDnmG2Z/6BBDGmaMuRq041dtnuPg7z3agtDdnoo8frYaO6dX5LEieTb3jShC5dcgt
+         PMww==
+X-Gm-Message-State: AOAM5334iaQziNZGg1zDDfHlPFkUm4yvlNQTtMmVmISlk3xjl8b5dT/4
+        ytEExtF+487zTf3tEoRLdzRWidI3U8S7UZKq
+X-Google-Smtp-Source: ABdhPJwM9bvq6Udit9rFxxAkerOOZkAQhBnt+GCYPqEMKKsRuGdck3tDUKFwhNSDTLJJAeWIS28pNg==
+X-Received: by 2002:a17:906:2e9a:: with SMTP id o26mr11464091eji.357.1617627694776;
+        Mon, 05 Apr 2021 06:01:34 -0700 (PDT)
+Received: from eichest-laptop.lan (77-57-203-148.dclient.hispeed.ch. [77.57.203.148])
+        by smtp.gmail.com with ESMTPSA id cy5sm11103296edb.46.2021.04.05.06.01.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Apr 2021 06:01:34 -0700 (PDT)
+From:   eichest@gmail.com
+To:     linux-watchdog@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-watchdog@vger.kernel.org, kernel@pengutronix.de
-References: <cover.dedd9f1159389b0a438076ef5e5a46aded186463.1612457906.git-series.a.fatoum@pengutronix.de>
- <d25d96fa-0b88-930b-3160-fda3e69d3cba@pengutronix.de>
-Message-ID: <3b6a33c1-f560-f833-4f8f-21636ae3b76e@pengutronix.de>
-Date:   Mon, 5 Apr 2021 10:28:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Stefan Eichenberger <eichest@gmail.com>
+Subject: [PATCH] watchdog: imx_sc_wdt: fix pretimeout
+Date:   Mon,  5 Apr 2021 14:59:48 +0200
+Message-Id: <20210405125946.369230-1-eichest@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <d25d96fa-0b88-930b-3160-fda3e69d3cba@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello,
+From: Stefan Eichenberger <eichest@gmail.com>
 
-On 16.03.21 18:47, Ahmad Fatoum wrote:
-> On 04.02.21 18:00, Ahmad Fatoum wrote:
->> This series migrates the driver to the new kernel watchdog API and
->> then to the driver model.
->>
->> Main feedback from Guenther on v2 was that I need to split it up to
->> enable review. I have done so by removing the extra refactoring for
->> now and focused on the functional changes described above. The diff
->> is now much better readable.
->>
->> I tested it on a f81866.
-> 
-> Gentle ping.
+If the WDIOF_PRETIMEOUTE flag is not set when registering the device the
+driver will not show the sysfs entries or register the default governor.
+By moving the registering after the decision whether pretimeout is
+supported this gets fixed.
 
-Any news?
+Signed-off-by: Stefan Eichenberger <eichest@gmail.com>
+---
+ drivers/watchdog/imx_sc_wdt.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Cheers,
-Ahmad
-
+diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
+index e9ee22a7cb45..eddb1ae630e0 100644
+--- a/drivers/watchdog/imx_sc_wdt.c
++++ b/drivers/watchdog/imx_sc_wdt.c
+@@ -183,10 +183,6 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
+ 	watchdog_stop_on_reboot(wdog);
+ 	watchdog_stop_on_unregister(wdog);
+ 
+-	ret = devm_watchdog_register_device(dev, wdog);
+-	if (ret)
+-		return ret;
+-
+ 	ret = imx_scu_irq_group_enable(SC_IRQ_GROUP_WDOG,
+ 				       SC_IRQ_WDOG,
+ 				       true);
+@@ -213,6 +209,10 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
+ 	else
+ 		dev_warn(dev, "Add action failed, pretimeout NOT supported\n");
+ 
++	ret = devm_watchdog_register_device(dev, wdog);
++	if (ret)
++		return ret;
++
+ 	return 0;
+ }
+ 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.27.0
+
