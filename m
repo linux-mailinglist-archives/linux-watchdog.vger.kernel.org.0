@@ -2,62 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E153542F5
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Apr 2021 16:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5063542FD
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Apr 2021 16:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236089AbhDEOra (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Apr 2021 10:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S236061AbhDEOtW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Apr 2021 10:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235948AbhDEOr3 (ORCPT
+        with ESMTP id S235948AbhDEOtV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Apr 2021 10:47:29 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB36DC061756;
-        Mon,  5 Apr 2021 07:47:23 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id d12so11826169oiw.12;
-        Mon, 05 Apr 2021 07:47:23 -0700 (PDT)
+        Mon, 5 Apr 2021 10:49:21 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88572C061756
+        for <linux-watchdog@vger.kernel.org>; Mon,  5 Apr 2021 07:49:15 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id v25so11843611oic.5
+        for <linux-watchdog@vger.kernel.org>; Mon, 05 Apr 2021 07:49:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6okAl752DgpfYkd3sTdlqptWs35D1pdtihqbGEvRw0U=;
-        b=lZ9krMZ+16Z5TVqh6qnl1hTmaeoXG+8BOCWHjc81hy7Yo72sSYhadDVGfOsnBxQwJW
-         KLecu2o8gyjcL1HcpSEe8K3MAYb81s61836fCj60XD6lDYo5XO7wgAlm3wxkOKmMvt+R
-         FmTCgaFh8w4h3+5589G+BWT9PQLPsX+I6LE3fTic365gOO5tD0Q4koAxXjkQ2N/K+bdw
-         gcdvOETkft3GANd3hnHUv/7yKJaqY+JDtZy1WiqEj/MfU9T5/2uvaXy7zOlF0uy1UEUa
-         C68ockZoe2KRn5jl1P67gxT6h+FL0pvKHFVpXIe/6xC6EURqafldfZsR7VNhaCAcH8IW
-         g3AQ==
+        bh=Eb3T+cGKWpdh70qCJxM/QeswneGdDjUmPjqhhRYFeQc=;
+        b=ogjp4Ht1+2kTmOfAWs+QkavhVjM/x/JM9qzgQDv8vGF+CDqfhatlA0HUCrNzWzhWwq
+         9oBS2pw98CRQsEeDMHaELrFZ/tRNAZvT3cdQ5m5PYn174pjSphIny7v68Tv+xSf7AyxO
+         4bKlJH3JhTdsHgOH/wtVulSJ9cAzpeLX1XqxtWbcEshx1NtOsw2bcqgNsdCEztm0/+LY
+         i/idqKkuzKW1Gbumo7KDGWVdnS7EDPt0sQ1uw00kakVEw3nkHt0m4c4av2ZEZwXUoBp1
+         skJpeSj+15SGh/be+BDTD6WxZcISPojKDEQnvOoEJr1MGB8OamNkypZmY35L5rMwyE9d
+         r+FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=6okAl752DgpfYkd3sTdlqptWs35D1pdtihqbGEvRw0U=;
-        b=cAZMvEtUakxAeriofZlv14ZnxIKDQX6Bxd5u6qJcMeIzEih2GNa4NdsCr6pDEWILOz
-         KFnMFuhxt/3vngr4O8dAIi3DGYQCkktF+B3C/lNR/W4iG/k093ijMgSmeUNaOTzIegJF
-         QZWwuvPiMPgqwGhxqs8JTGJo0TkB4awnuqgFqjrguCScsSFTnqWk7ytCDunb2oCcemzP
-         VpFPmmrpXMksIIcfsW4RIjBReAWDOws7VN4l9BcjPc0n/Vgu0kh5lKB6QjT7MNOaN269
-         q8mJxSr7q5TjJ5guUWmAQpjhGl9VdP++0RNN2uHXds281QUlsqp4jbSjRChgsToIooqE
-         rCxQ==
-X-Gm-Message-State: AOAM531c7Cy/ZpEGkeXulbxQaNt8SEqqiH/kq+2v9FjvYjefrxZV+dH1
-        dkqQkHRNxR5vINfn6LvGAhS09o6FKkA=
-X-Google-Smtp-Source: ABdhPJyPfSRIUbOtv1icZhMPPEr9A8yiK/YFsf4Rl5w7LcM/YXC4ITdtkU2lQWZEW+MooyiTOXHrAQ==
-X-Received: by 2002:a05:6808:1cb:: with SMTP id x11mr18062621oic.89.1617634043091;
-        Mon, 05 Apr 2021 07:47:23 -0700 (PDT)
+        bh=Eb3T+cGKWpdh70qCJxM/QeswneGdDjUmPjqhhRYFeQc=;
+        b=Sw/o3DzlghzRuY9DF1sJwwkOI5UTLOEHssZAMuMu2n1HHFW9QGPh+OzFPEM8/0zmsv
+         2l9R1DGWdAC8L2SS8wojUN4gorRut8bMYbTNaWYkludy/w7hgOLMU8l7J2lyIZ4GQlws
+         0/UBjmNHSX2E1CG6BieZObKMgMyyD5ldGLnwrAzjHeMQqMsZiswnykLlUGfnuSUfneJs
+         pKPZDQlGmZ5Y/wIqRnWo2Pylv0+eQBpv4p3JNteg//WXtwXKCZ7wMytqyFrBary3PHE8
+         fmYZokA301aNXd1XrobGggGl0x7yOQgyMTEXbnkKS1eJDtiedCV75rdJNf3dNiO0TyDX
+         U8jA==
+X-Gm-Message-State: AOAM532xKWHl9Sth/fasLxmQQN5toq1u8C5/RsKZr9Z8Q1gJCt9/phs4
+        UU94yEuiuybJmuy7UFbVaCg=
+X-Google-Smtp-Source: ABdhPJyuYXEgSSr4Z68eFnNWT9K0I2a3DJUYZN433BHBn8WURVCuhCecBSprsJnaZ/LowFvEgX6vBg==
+X-Received: by 2002:a54:4799:: with SMTP id o25mr18318740oic.20.1617634155037;
+        Mon, 05 Apr 2021 07:49:15 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d97sm3924995otb.78.2021.04.05.07.47.21
+        by smtp.gmail.com with ESMTPSA id n10sm3943567otj.36.2021.04.05.07.49.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Apr 2021 07:47:22 -0700 (PDT)
+        Mon, 05 Apr 2021 07:49:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/1] watchdog: Fix a typo in Kconfig
-To:     Wong Vee Khee <vee.khee.wong@linux.intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wong Vee Khee <vee.khee.wong@intel.com>,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
-References: <20210401033209.9929-1-vee.khee.wong@linux.intel.com>
+Subject: Re: [PATCH] watchdog: meson_wdt: Use device_get_match_data() helper
+To:     Tian Tao <tiantao6@hisilicon.com>, wim@linux-watchdog.org,
+        khilman@baylibre.com
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <1617243921-56774-1-git-send-email-tiantao6@hisilicon.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -102,12 +101,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <0b1d6287-03c3-f23f-f3fc-418914eda372@roeck-us.net>
-Date:   Mon, 5 Apr 2021 07:47:21 -0700
+Message-ID: <61aa8bab-4282-3264-ccae-2b7284f4c9ec@roeck-us.net>
+Date:   Mon, 5 Apr 2021 07:49:13 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210401033209.9929-1-vee.khee.wong@linux.intel.com>
+In-Reply-To: <1617243921-56774-1-git-send-email-tiantao6@hisilicon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -115,30 +114,42 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/31/21 8:32 PM, Wong Vee Khee wrote:
-> s/thershold/threshold
+On 3/31/21 7:25 PM, Tian Tao wrote:
+> Use the device_get_match_data() helper instead of open coding.
 > 
-> Cc: Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
-> Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
+> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/watchdog/meson_wdt.c | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 0470dc15c085..aa382e5edfef 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -2111,7 +2111,7 @@ config KEEMBAY_WATCHDOG
->  	 This option enable support for an In-secure watchdog timer driver for
->  	 Intel Keem Bay SoC. This WDT has a 32 bit timer and decrements in every
->  	 count unit. An interrupt will be triggered, when the count crosses
-> -	 the thershold configured in the register.
-> +	 the threshold configured in the register.
+> diff --git a/drivers/watchdog/meson_wdt.c b/drivers/watchdog/meson_wdt.c
+> index 459f3ae..539feaa 100644
+> --- a/drivers/watchdog/meson_wdt.c
+> +++ b/drivers/watchdog/meson_wdt.c
+> @@ -162,7 +162,6 @@ static int meson_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct meson_wdt_dev *meson_wdt;
+> -	const struct of_device_id *of_id;
+>  	int err;
 >  
->  	 To compile this driver as a module, choose M here: the
->  	 module will be called keembay_wdt.
+>  	meson_wdt = devm_kzalloc(dev, sizeof(*meson_wdt), GFP_KERNEL);
+> @@ -173,12 +172,7 @@ static int meson_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(meson_wdt->wdt_base))
+>  		return PTR_ERR(meson_wdt->wdt_base);
+>  
+> -	of_id = of_match_device(meson_wdt_dt_ids, dev);
+> -	if (!of_id) {
+> -		dev_err(dev, "Unable to initialize WDT data\n");
+> -		return -ENODEV;
+> -	}
+> -	meson_wdt->data = of_id->data;
+> +	meson_wdt->data = device_get_match_data(dev);
+>  
+>  	meson_wdt->wdt_dev.parent = dev;
+>  	meson_wdt->wdt_dev.info = &meson_wdt_info;
 > 
 
