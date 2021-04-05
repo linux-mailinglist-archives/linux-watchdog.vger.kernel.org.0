@@ -2,64 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7767B3542EF
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Apr 2021 16:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E153542F5
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Apr 2021 16:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236080AbhDEOma (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Apr 2021 10:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        id S236089AbhDEOra (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Apr 2021 10:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbhDEOm3 (ORCPT
+        with ESMTP id S235948AbhDEOr3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Apr 2021 10:42:29 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7419C061756
-        for <linux-watchdog@vger.kernel.org>; Mon,  5 Apr 2021 07:42:23 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id w31-20020a9d36220000b02901f2cbfc9743so11535417otb.7
-        for <linux-watchdog@vger.kernel.org>; Mon, 05 Apr 2021 07:42:23 -0700 (PDT)
+        Mon, 5 Apr 2021 10:47:29 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB36DC061756;
+        Mon,  5 Apr 2021 07:47:23 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id d12so11826169oiw.12;
+        Mon, 05 Apr 2021 07:47:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=d40Bwx8riruLamWhBAuILelPIMMmf1IE6PbDqQLkpr0=;
-        b=LzYlDR6Hx14DfIE4H8AnP6owqTc2jcQdHOdOpvpHWAeFXvB6UUT0dVxf267eGgt44o
-         lxEeLnn3ftXlcjQH7GrsSi5WjqtYThD5Z9wTFNYxisR9hn04gQAss5GqqkOGsIS/Ue07
-         6+KR1CB9kOjqoq5Z8LX3senDXcrawvDVijuaDsQpF9sR8wPQeiVfmAxVqrrIB3respZ5
-         QirXWCMuoq7YaU2JY6QyrKwZdTNPYtsaBPdeonprpv+t7/NDVg+G5PENiEysm+0pUXMJ
-         e3jJn7tp0KScVtnVjhb/iTqZo+/02xM8SNYqHBnXkNtzELAHctCNke3h41PMREqsz2Z7
-         UvsQ==
+        bh=6okAl752DgpfYkd3sTdlqptWs35D1pdtihqbGEvRw0U=;
+        b=lZ9krMZ+16Z5TVqh6qnl1hTmaeoXG+8BOCWHjc81hy7Yo72sSYhadDVGfOsnBxQwJW
+         KLecu2o8gyjcL1HcpSEe8K3MAYb81s61836fCj60XD6lDYo5XO7wgAlm3wxkOKmMvt+R
+         FmTCgaFh8w4h3+5589G+BWT9PQLPsX+I6LE3fTic365gOO5tD0Q4koAxXjkQ2N/K+bdw
+         gcdvOETkft3GANd3hnHUv/7yKJaqY+JDtZy1WiqEj/MfU9T5/2uvaXy7zOlF0uy1UEUa
+         C68ockZoe2KRn5jl1P67gxT6h+FL0pvKHFVpXIe/6xC6EURqafldfZsR7VNhaCAcH8IW
+         g3AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=d40Bwx8riruLamWhBAuILelPIMMmf1IE6PbDqQLkpr0=;
-        b=sGZQCjfantuxrf0IQGIfWcPsac8Xg+/aCo8aHDs5jJ2MQWLloM1FCaEVctPtP3NZrk
-         x/M2ioRwD9QCd6wBa7Ou6qmj60IHEZnj+mMTPMTZzdpRDyabYh4+9Kr4vlLkKASvs2Fq
-         /+XpaHamMRS89NO0LyJMHCTlCHkleazSpgRJA0gjAkaVFYES+tj4wb5RGPSC9QNonYMn
-         QneiJNwlml6kj2JBqDl7FzO1qGvfVyZmr3Rgp1Q7rhgQ8TpbIXa87/R+MTDtu2m787ac
-         i/DjV9qvUSMjdHSMLDZpnEiDOEKc+0WuFinOOPMtdfxIM5chx7trymTPlF9sMB/vXUQL
-         vYFA==
-X-Gm-Message-State: AOAM530buAobxExs6MuY6Xo0kT4dGqHBRB4ZYKNEfBT+P7C/bmbMSbQ7
-        FXHT+3HoscEOyP3SHgoMw+U=
-X-Google-Smtp-Source: ABdhPJw404bznuYVKKmFppYTxjnS2ItovyZVTLzQi9ogZCqBdVa5JxOo6LvGrOcQbNkzpg57Tu0lLw==
-X-Received: by 2002:a9d:3a4a:: with SMTP id j68mr22317448otc.4.1617633743143;
-        Mon, 05 Apr 2021 07:42:23 -0700 (PDT)
+        bh=6okAl752DgpfYkd3sTdlqptWs35D1pdtihqbGEvRw0U=;
+        b=cAZMvEtUakxAeriofZlv14ZnxIKDQX6Bxd5u6qJcMeIzEih2GNa4NdsCr6pDEWILOz
+         KFnMFuhxt/3vngr4O8dAIi3DGYQCkktF+B3C/lNR/W4iG/k093ijMgSmeUNaOTzIegJF
+         QZWwuvPiMPgqwGhxqs8JTGJo0TkB4awnuqgFqjrguCScsSFTnqWk7ytCDunb2oCcemzP
+         VpFPmmrpXMksIIcfsW4RIjBReAWDOws7VN4l9BcjPc0n/Vgu0kh5lKB6QjT7MNOaN269
+         q8mJxSr7q5TjJ5guUWmAQpjhGl9VdP++0RNN2uHXds281QUlsqp4jbSjRChgsToIooqE
+         rCxQ==
+X-Gm-Message-State: AOAM531c7Cy/ZpEGkeXulbxQaNt8SEqqiH/kq+2v9FjvYjefrxZV+dH1
+        dkqQkHRNxR5vINfn6LvGAhS09o6FKkA=
+X-Google-Smtp-Source: ABdhPJyPfSRIUbOtv1icZhMPPEr9A8yiK/YFsf4Rl5w7LcM/YXC4ITdtkU2lQWZEW+MooyiTOXHrAQ==
+X-Received: by 2002:a05:6808:1cb:: with SMTP id x11mr18062621oic.89.1617634043091;
+        Mon, 05 Apr 2021 07:47:23 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j72sm3087113oih.46.2021.04.05.07.42.21
+        by smtp.gmail.com with ESMTPSA id d97sm3924995otb.78.2021.04.05.07.47.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Apr 2021 07:42:22 -0700 (PDT)
+        Mon, 05 Apr 2021 07:47:22 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog: imx_sc_wdt: fix pretimeout
-To:     eichest@gmail.com, linux-watchdog@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-References: <20210405125946.369230-1-eichest@gmail.com>
+Subject: Re: [PATCH 1/1] watchdog: Fix a typo in Kconfig
+To:     Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
+References: <20210401033209.9929-1-vee.khee.wong@linux.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -104,72 +102,43 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <2580102e-4459-c55e-0aab-2882af8e9ae7@roeck-us.net>
-Date:   Mon, 5 Apr 2021 07:42:20 -0700
+Message-ID: <0b1d6287-03c3-f23f-f3fc-418914eda372@roeck-us.net>
+Date:   Mon, 5 Apr 2021 07:47:21 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210405125946.369230-1-eichest@gmail.com>
+In-Reply-To: <20210401033209.9929-1-vee.khee.wong@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/5/21 5:59 AM, eichest@gmail.com wrote:
-> From: Stefan Eichenberger <eichest@gmail.com>
+On 3/31/21 8:32 PM, Wong Vee Khee wrote:
+> s/thershold/threshold
 > 
-> If the WDIOF_PRETIMEOUTE flag is not set when registering the device the
+> Cc: Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>
+> Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
 
-WDIOF_PRETIMEOUT
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> driver will not show the sysfs entries or register the default governor.
-> By moving the registering after the decision whether pretimeout is
-> supported this gets fixed.
-> 
-
-This is problematic. If the notifier is called and the watchdog is not yet
-registered, it will call watchdog_notify_pretimeout on an unregistered
-watchdog device which would crash the system. The notifier function needs
-to handle that situation. This is for both registration and removal: On
-removal, the watchdog device would be unregistered first (because of the
-use of devm_ functions) and, again, the notifier could be called on an
-unregistered watchdog device.
-
-> Signed-off-by: Stefan Eichenberger <eichest@gmail.com>
 > ---
->  drivers/watchdog/imx_sc_wdt.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/watchdog/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
-> index e9ee22a7cb45..eddb1ae630e0 100644
-> --- a/drivers/watchdog/imx_sc_wdt.c
-> +++ b/drivers/watchdog/imx_sc_wdt.c
-> @@ -183,10 +183,6 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
->  	watchdog_stop_on_reboot(wdog);
->  	watchdog_stop_on_unregister(wdog);
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 0470dc15c085..aa382e5edfef 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -2111,7 +2111,7 @@ config KEEMBAY_WATCHDOG
+>  	 This option enable support for an In-secure watchdog timer driver for
+>  	 Intel Keem Bay SoC. This WDT has a 32 bit timer and decrements in every
+>  	 count unit. An interrupt will be triggered, when the count crosses
+> -	 the thershold configured in the register.
+> +	 the threshold configured in the register.
 >  
-> -	ret = devm_watchdog_register_device(dev, wdog);
-> -	if (ret)
-> -		return ret;
-> -
->  	ret = imx_scu_irq_group_enable(SC_IRQ_GROUP_WDOG,
->  				       SC_IRQ_WDOG,
->  				       true);
-> @@ -213,6 +209,10 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
->  	else
->  		dev_warn(dev, "Add action failed, pretimeout NOT supported\n");
->  
-> +	ret = devm_watchdog_register_device(dev, wdog);
-> +	if (ret)
-> +		return ret;
-> +
->  	return 0;
-
-This is equivalent to just "return ret;".
-
->  }
->  
+>  	 To compile this driver as a module, choose M here: the
+>  	 module will be called keembay_wdt.
 > 
 
