@@ -2,65 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 648F3355570
-	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Apr 2021 15:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFED355579
+	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Apr 2021 15:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbhDFNlq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 6 Apr 2021 09:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S1344629AbhDFNnC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 6 Apr 2021 09:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbhDFNlm (ORCPT
+        with ESMTP id S229911AbhDFNnC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 6 Apr 2021 09:41:42 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E61C06174A
-        for <linux-watchdog@vger.kernel.org>; Tue,  6 Apr 2021 06:41:31 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso14625244oti.11
-        for <linux-watchdog@vger.kernel.org>; Tue, 06 Apr 2021 06:41:31 -0700 (PDT)
+        Tue, 6 Apr 2021 09:43:02 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B45EC06174A;
+        Tue,  6 Apr 2021 06:42:54 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id x207so15139158oif.1;
+        Tue, 06 Apr 2021 06:42:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=4CWtimK4ZUEE79NDsNs4J9hl7M6HxsBzDDsyySs+MyM=;
-        b=p1Ff7NuY8LF5tr1ZL/9yiAX/mmIEBnLqtEuu5a0U7FyD7jn2laHbtMRdiqTOyf1FTd
-         48nxs2ExRv/6ovg1P18C/HeizfdIe+ev/aPc5SpYQb3iRszR8g4dtwuZtCATryKLUkZ2
-         OSH+DR6SL3AxOircq0zLBnhbLH0wextefDvLkZwYvJkUP252hJpenFqLw5Xd/fuOdK7X
-         /qJItN0p2L3tv2Ne0v/w8KVnwMqmwnDeeMn38DP+156COGWAjpE2M0mu6BcxZGPUb1TN
-         ripCDcngT82aaUnpdh2w7gznGz/+PmVosOo3XYOjhq0X9wyqxrmkUaPaeg0RZK2a4gu4
-         M44g==
+        bh=lt4sv34czLumj9lamFG+hII5iPKl32geBidKJH2Mums=;
+        b=DVVx/9QnzgdY+xu+hKMJ/n444NDQlyvkbhsA4lhRYFPy/y+A58v9EIkIU/o98iuKgW
+         r31lrzpE4WQwYCYCGuB2lfRZBJ1DqeKc9MniSvPxV1ZFCtEr5YoPAx2zBq8qVSkslcx4
+         CclR72qjR37cfxES1IeTrp7ZTAtw06e48MoxMbUkryKD8ajxs7vQf2vDNnxz/k/k4sGQ
+         dHaQUDXED8gKJwqtarjGeZk637wY6RT54ctkPcoljZTmUqDyIHArdP/13r62V75YgeV+
+         OW0dQXwP7dLLWVrKJyJuhIMIe59F2VnyV3x2qewSlDm4Ue/HlBS6Sfi1VF6ePCS100JR
+         VVDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=4CWtimK4ZUEE79NDsNs4J9hl7M6HxsBzDDsyySs+MyM=;
-        b=AFJHC1wFEoylFpP8StwHHYnVmXZ3L4gbJvGP0Q4HOaiIVm6vCgNLZq73LL4RsDHi+b
-         DTnmb+yBgXTrFEdRvtEPm8o8czWaZLR9Q4kDp7NTJCNNlD4Eq5p9fFpKBk7FVm9K0NkE
-         +LwXmJ6zMhYnmFL03a8/0VxcJCxidQ2/TVmT7hlloQ7BftkiS+bLeSwxK68NtfFQhSdy
-         XToxj3dyoGy3gIxcAyeItI3+FZ1ER7Y8Th4UzWQ79e4PUB5VBuRka+izthtt9mJXjYiZ
-         /sXjAWOC9BUeewP4ELKywRWJ+1DFbMKYR+d0dc8dX/M12kcYiepgkZYYANIY+Vsg1aCS
-         stgg==
-X-Gm-Message-State: AOAM53113ofyoKttolCpjnmx+PiK/N+Q1sK5qobsfH4f+B6UsGa1yuD4
-        N0DLgCz4sUkhSEKwzt16by0=
-X-Google-Smtp-Source: ABdhPJz2PIfX7IXpaaIU5t9ZdF65UEKuZYNK5/ko7/FclNWwC72EUrIaQUiaGd2ytpN4JAE5ATXEkg==
-X-Received: by 2002:a9d:67c2:: with SMTP id c2mr27219188otn.343.1617716490927;
-        Tue, 06 Apr 2021 06:41:30 -0700 (PDT)
+        bh=lt4sv34czLumj9lamFG+hII5iPKl32geBidKJH2Mums=;
+        b=AUhPITqg6FHvQBVuCw7i2VxH7sfFOFQRc3E4xwKPUc3N/1/UyVgPh86wjG3KBJliDl
+         +2xZwLmgyTlCu1F3740eA5s9h70elsrWrpN91KujbxfHcVkY/+sX9Vcya+yBDZzgYmr7
+         +TQNh2OmhuvQakZ3qqNP65i89lEX0EIoavA9MULlBuWYa6nQTBsdqQgDa3s8CBs6QULW
+         cgi/KMIUFnt/UVe1mgvwCb0smw4dPT37IXxBkIbgjt8Aa59P+CUtajUq6awVANg5nhsj
+         3F7gNs5zmyUk/2/qtyUUmykHst6rla+LoiLwDHeqpZWcFsYDi1ubDmE9vr0PLoqnldi/
+         RibA==
+X-Gm-Message-State: AOAM533F/AkAZ/W7uP8QO31zfVUkabsBAD3t2lNnt5N5ejSeprrjgsLh
+        cjsDUdibAhXxDXOW5CJQWdbN5aCRfWA=
+X-Google-Smtp-Source: ABdhPJyp1+z8Lc38oa1Q3ULrHflbvJyHenIdEGwnir9Ns2lnBcFW0w1/vDycGAdFoawXGDkciHJs0g==
+X-Received: by 2002:a54:4e08:: with SMTP id a8mr3410167oiy.135.1617716573532;
+        Tue, 06 Apr 2021 06:42:53 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g9sm4170053otk.6.2021.04.06.06.41.29
+        by smtp.gmail.com with ESMTPSA id r15sm4753274ote.27.2021.04.06.06.42.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 06:41:30 -0700 (PDT)
+        Tue, 06 Apr 2021 06:42:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2] watchdog: imx_sc_wdt: fix pretimeout
-To:     eichest@gmail.com, linux-watchdog@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-References: <20210406121246.49335-1-eichest@gmail.com>
+Subject: Re: [PATCH v2 07/10] watchdog: npcm: Add support for WPCM450
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        openbmc@lists.ozlabs.org
+Cc:     Tomer Maimon <tmaimon77@gmail.com>, Joel Stanley <joel@jms.id.au>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
+References: <20210406120921.2484986-1-j.neuschaefer@gmx.net>
+ <20210406120921.2484986-8-j.neuschaefer@gmx.net>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -105,75 +109,48 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <143a39d7-1c4b-e823-e677-a650d1a00443@roeck-us.net>
-Date:   Tue, 6 Apr 2021 06:41:27 -0700
+Message-ID: <6b305447-4873-9bbc-1118-02310919e968@roeck-us.net>
+Date:   Tue, 6 Apr 2021 06:42:51 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210406121246.49335-1-eichest@gmail.com>
+In-Reply-To: <20210406120921.2484986-8-j.neuschaefer@gmx.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/6/21 5:12 AM, eichest@gmail.com wrote:
-> From: Stefan Eichenberger <eichest@gmail.com>
+On 4/6/21 5:09 AM, Jonathan Neuschäfer wrote:
+> Add a compatible string for WPCM450, which has essentially the same
+> watchdog mechanism as NPCM750.
 > 
-> If the WDIOF_PRETIMEOUT flag is not set when registering the device the
-> driver will not show the sysfs entries or register the default governor.
-> By moving the registering after the decision whether pretimeout is
-> supported this gets fixed.
-> 
-> Signed-off-by: Stefan Eichenberger <eichest@gmail.com>
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/imx_sc_wdt.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
-> index e9ee22a7cb45..8ac021748d16 100644
-> --- a/drivers/watchdog/imx_sc_wdt.c
-> +++ b/drivers/watchdog/imx_sc_wdt.c
-> @@ -183,16 +183,12 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
->  	watchdog_stop_on_reboot(wdog);
->  	watchdog_stop_on_unregister(wdog);
->  
-> -	ret = devm_watchdog_register_device(dev, wdog);
-> -	if (ret)
-> -		return ret;
-> -
->  	ret = imx_scu_irq_group_enable(SC_IRQ_GROUP_WDOG,
->  				       SC_IRQ_WDOG,
->  				       true);
->  	if (ret) {
->  		dev_warn(dev, "Enable irq failed, pretimeout NOT supported\n");
-> -		return 0;
-> +		goto register_device;
->  	}
->  
->  	imx_sc_wdd->wdt_notifier.notifier_call = imx_sc_wdt_notify;
-> @@ -203,7 +199,7 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
->  					 false);
->  		dev_warn(dev,
->  			 "Register irq notifier failed, pretimeout NOT supported\n");
-> -		return 0;
-> +		goto register_device;
->  	}
->  
->  	ret = devm_add_action_or_reset(dev, imx_sc_wdt_action,
-> @@ -213,7 +209,8 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
->  	else
->  		dev_warn(dev, "Add action failed, pretimeout NOT supported\n");
->  
-> -	return 0;
-> +register_device:
-> +	return devm_watchdog_register_device(dev, wdog);
->  }
->  
->  static int __maybe_unused imx_sc_wdt_suspend(struct device *dev)
+> v2:
+> - Added patch description
+> ---
+>  drivers/watchdog/npcm_wdt.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
+> index 765577f11c8db..28a24caa2627c 100644
+> --- a/drivers/watchdog/npcm_wdt.c
+> +++ b/drivers/watchdog/npcm_wdt.c
+> @@ -229,6 +229,7 @@ static int npcm_wdt_probe(struct platform_device *pdev)
+> 
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id npcm_wdt_match[] = {
+> +	{.compatible = "nuvoton,wpcm450-wdt"},
+>  	{.compatible = "nuvoton,npcm750-wdt"},
+>  	{},
+>  };
+> --
+> 2.30.2
 > 
 
