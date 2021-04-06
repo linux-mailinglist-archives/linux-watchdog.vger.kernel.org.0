@@ -2,120 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BD1355154
-	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Apr 2021 12:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EBC355345
+	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Apr 2021 14:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245227AbhDFK4d (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 6 Apr 2021 06:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbhDFK4b (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 6 Apr 2021 06:56:31 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5674C06174A;
-        Tue,  6 Apr 2021 03:56:22 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id t140so10047804pgb.13;
-        Tue, 06 Apr 2021 03:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HQT74NVA73GGCdAvd6/1h7+SlTTe9RmIrgBWclsq6k8=;
-        b=oQu/WXmQyuX44ohLqifUNcGDI81yV2/0YSelnio0a819gMpS/5aJVrckQkKHXWooFX
-         ZgvnEp9I6qG9kvZ8AWTfgiPFA6PPdFkEaUkKrLHYuivbQs5w8k1O0Jqgyys+Hxtc4RKK
-         tcJE+Y2QH3n3dDZdlMH0LlxaWeE18lg8pLAOiKlVGvb8WGzx8UdWASp4T2dnVS9bgufv
-         xI14ejB0mrfBwySjM97Zvb6BOewCCRKA320H4oeIaUGCsklWbIOH9yYvCTedcRq0jw2i
-         Pkb6vbQ4ttfKk/Vm676oWazkf1KRR50sGV8vr201pn5wNLeoC9tX4NfcAswhAEVJLVdj
-         nUdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HQT74NVA73GGCdAvd6/1h7+SlTTe9RmIrgBWclsq6k8=;
-        b=F8HOxCqjmsDN4XZmr1/goPATwh/nTuY6XptPQ8yTBtf79+QI7KHsYCXy6wAbdya700
-         Omh+OXBp5ZNV0zX9jMebeBeQB+64Zl172HqY43wGsk8ox7uogZjuOKtWRDvy2D6oPKsM
-         zKqbfkL/OfK2GcadqIa9AMw+RRlru5tmM1z4gAyr096Ah+218NfLHQLeqXxF84UBHdvd
-         JNHHEJsGHO4/12sGM14yKHCvxUH7rjUlZ9oDwZ9rP0vycO9gLR7ftSOobpweanZ/KS4f
-         juxGi33AQjBGJozpJK+Mxg2gBwb4wGtLQpxvR98JVwEWFHxf5Wy9A+LvsCpdcpYyOsmo
-         7mLQ==
-X-Gm-Message-State: AOAM533lhdXs8v/hs94SMl4Dw5h4nodrJMhfaZUbDsHPylhCa4+/03hx
-        CxCjZHT6h9q7YMDq7S/6+L9tKz9NTcx1tA==
-X-Google-Smtp-Source: ABdhPJysFojs7JX3hmvyUz5j1+7J5Z7YRyi0ZSnMOYLcJ2bsm0VfP6FBMz+dTpF3ob+Xk1uWQIx/pA==
-X-Received: by 2002:a62:ce4e:0:b029:225:bcc4:4ee with SMTP id y75-20020a62ce4e0000b0290225bcc404eemr26569506pfg.13.1617706582373;
-        Tue, 06 Apr 2021 03:56:22 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id r1sm20326351pfh.153.2021.04.06.03.56.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 03:56:21 -0700 (PDT)
-Subject: Re: [PATCH v2 3/8] dt-bindings: watchdog: Add compatible for Mediatek
- MT8195
-To:     Rob Herring <robh@kernel.org>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        linux-watchdog@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        id S1343803AbhDFMLT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 6 Apr 2021 08:11:19 -0400
+Received: from mout.gmx.net ([212.227.17.22]:58715 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238665AbhDFMLS (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 6 Apr 2021 08:11:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1617711038;
+        bh=fthXQXzWvCMySNmq6wm38LQ0LqGN8oEvRSStBerzpuU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Xg/9ts60YSdd3/C6in+KG15rIxD4RevfSm7iAB+WGopCwxYxMZiXl2IK1QKl6k5C5
+         yv77tCYEnAa/kCNd5KLxQCOidFJcYid9BL6Q+1DIMI4H/Rj994JcnduqGnH+E7DKSX
+         8V1W10IJn/+YflUWxZOfI6oM4q1Szrfk/sea5Hws=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([37.201.215.134]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfpSb-1m5ZBs3tFp-00gKMF; Tue, 06
+ Apr 2021 14:10:38 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org
+Cc:     Tomer Maimon <tmaimon77@gmail.com>, Joel Stanley <joel@jms.id.au>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        linux-serial@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-References: <20210319023427.16711-1-seiya.wang@mediatek.com>
- <20210319023427.16711-5-seiya.wang@mediatek.com>
- <20210326014037.GA2144901@robh.at.kernel.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <32dd4d40-2dd3-fc58-ae2b-642b877085b4@gmail.com>
-Date:   Tue, 6 Apr 2021 12:56:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Rob Herring <robh@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v2 04/10] dt-bindings: watchdog: npcm: Add nuvoton,wpcm450-wdt
+Date:   Tue,  6 Apr 2021 14:09:15 +0200
+Message-Id: <20210406120921.2484986-5-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210406120921.2484986-1-j.neuschaefer@gmx.net>
+References: <20210406120921.2484986-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-In-Reply-To: <20210326014037.GA2144901@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yIfwVUR13YRMBQna2k6oVWyExk6FvAxtgtrGA4cgaIZWJEAyBsI
+ 0UqJFDwJUzYg1OvkIDG0+uOrS1WoglGzfKeTZEf4fuEXfRxNezopYkZxk/5qo9B6GYRzJyk
+ To7zZlSI2G6+kdkXEF7jIXxeN5jJpw0AI4KjQaHmooLPBbY/hVMeiLt8DKmb0fXZh9P1q0D
+ D2RJZwP5tPENqwcDztg2w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:K6urnD8rZBc=:mc+8NA74aIxaTrKe389mGS
+ wdioQ6Z6T/vZ07iTlnFwrTrxZkqIHt/akxC22dzsbh5LVgaa3l0eACbCnGoGiVvUq0nnbCNY4
+ OAETS0BMrMdxd7K2FcGJKoGAprFI/QRuPFqtdxpuQ6PKCU83jfDL6NWHBF0f3ly1V8Uz7DFAs
+ 5tNPlq/reQTqn0MIkHZsw1EsXeVzV4VIZohB2qfqg5pod96Ksl3vEH43+W9ZjvxQvwoNi4tlX
+ U+saA1H5fzScXroD891bDDk+o8wLIaFTbcPMAHBulwXHAqg38Fi1N3dO7HEkNY7SHv9uXLmOJ
+ XIWfpp+cbiysY0R36kft+xDJtpAEmp/8neH2j3NzGr2F2y7Q8Ap6G9VP0YZi8GUkFIKt/AQix
+ YJ52WfKtDWHWORUU7qENYT2Yz9bTau8y8e6zOz6CIS/jH1yth73nPzBc06jH4dSVGQHToUvQT
+ gFMsCFVzuvbkQd1+PmmGEda4ciheKtizSTzWDVe+IvBkna0q0x9x6jXwAjO5Vknio/kk57wOL
+ +F42aC4juHreCl2kuBSwujUzC5sCE1zjkNjbE89d9D+4cyl+pAXb8mNVzuUtQRRDPXLkanmha
+ HzPe1e0OQund+QAyIl/H+oKZh8mICimYtSDkx7vh1uoEZ3VGhb6nRJH8TxO5yD+O9qlthNRJY
+ jvO642QpTzveTkh5fngje6e5Q//dlhcYJY4dZi0HwE9X+P3YZbOJmHl7segvt0Fz5q90lzpaJ
+ VkGWUI6y2d/e7KrcDc2Xwt4ANyt+zrpdSEkSW7HgnFsMLXKWgseZAJuiuiLS6OW4tOiVi+mxm
+ HLBL6QdvTI2j5NF7oniKqfCW+T8ghm9Rm2KV05yQvVcqRKBw9qVjJ86zOHzt4DBeoVH6a5lnm
+ qWNpsChrD18TUx+aJuT6dhunxPDOKabhxjpBdOKWp4xsZ+WFO/Fx22vI63RsCCfwoEHvpZvy1
+ vkvjkmglBmVBcYefGDHNM9YsPnDK8uKfUCLvX3HaQuP0ExZ47FbFqb5vCjhJ9dK/6gXHEUO0E
+ XtTIXUCeHVtsU+XFPkCp6FzxhDnLg/5oeElZwuc9Ihv3IN3+W1Q/9AVaFroAaKLGJ0B15t1hQ
+ U1qiL7PTdES7/Cgle7QCWeYtrkF+ukkBirdQUhC+sGSMGYz5KE6Rybb1Dn6va/Ef3RXFLmgc0
+ 3n2FMuXXZotJPhtojWEcyYCSgJ5b+OIE51iNcZraosYxUilxQZNAaOXRykJiGHD/KbRhIZkrW
+ 3C8fliv3l88cHwtk5
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wim,
+Add a compatible string for the WPCM450 SoC, which has the same watchdog
+timer.
 
-On 26/03/2021 02:40, Rob Herring wrote:
-> On Fri, 19 Mar 2021 10:34:22 +0800, Seiya Wang wrote:
->> This commit adds dt-binding documentation of watchdog for Mediatek MT8195 SoC
->> Platform.
->>
->> Signed-off-by: Seiya Wang <seiya.wang@mediatek.com>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->>  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
->>  1 file changed, 1 insertion(+)
->>
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+Acked-by: Rob Herring <robh@kernel.org>
+=2D--
 
-I suppose you will take this patch through your tree. If you want me to take it
-through the MediaTek SoC tree, please let me know.
+v2:
+- Added Rob's ACK
+=2D--
+ .../devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt          | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Regards,
-Matthias
+diff --git a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.t=
+xt b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+index 6d593003c933b..9059f54dc023d 100644
+=2D-- a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
++++ b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+@@ -5,7 +5,8 @@ The watchdog supports a pre-timeout interrupt that fires 1=
+0ms before the
+ expiry.
+
+ Required properties:
+=2D- compatible      : "nuvoton,npcm750-wdt" for NPCM750 (Poleg).
++- compatible      : "nuvoton,npcm750-wdt" for NPCM750 (Poleg), or
++                    "nuvoton,wpcm450-wdt" for WPCM450 (Hermon).
+ - reg             : Offset and length of the register set for the device.
+ - interrupts      : Contain the timer interrupt with flags for
+                     falling edge.
+=2D-
+2.30.2
+
