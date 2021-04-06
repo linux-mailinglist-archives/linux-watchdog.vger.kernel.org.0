@@ -2,61 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3BB355538
-	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Apr 2021 15:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648F3355570
+	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Apr 2021 15:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344432AbhDFNdV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 6 Apr 2021 09:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S231461AbhDFNlq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 6 Apr 2021 09:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234917AbhDFNdU (ORCPT
+        with ESMTP id S229911AbhDFNlm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 6 Apr 2021 09:33:20 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F015AC06174A;
-        Tue,  6 Apr 2021 06:33:12 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id h6-20020a0568300346b02901b71a850ab4so14600265ote.6;
-        Tue, 06 Apr 2021 06:33:12 -0700 (PDT)
+        Tue, 6 Apr 2021 09:41:42 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E61C06174A
+        for <linux-watchdog@vger.kernel.org>; Tue,  6 Apr 2021 06:41:31 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso14625244oti.11
+        for <linux-watchdog@vger.kernel.org>; Tue, 06 Apr 2021 06:41:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=+iLnv1t7rndaK/hz8TyA5c0uwu4qvp0/LjTjnFu9otE=;
-        b=JXo0k7egohjPox6fqRLDI27Dmxabxo+C8L+/NjgIpBi43t1zOfGwWVjgF4FItkbONh
-         ChR/mZUYSfohOLaEnCA06lfgkDKqskEfIQfonx6wQrJvBcV1kJbPdLWnyaAvBkxzxlQy
-         saMpQJqVwxHlC0Cv4x10OceknrQGzYBjtDuJTpSA+rcDy5PSjuGGtjd9E1DIAZ51fsKS
-         R4W9Ycin5e5XK3Z8iS+ieCVQy+DVENPQGmOfqv7/8z4NtamR6Q18XCNn0rKRZOWI1xrJ
-         NUJelnDNmfNGKjjzgj6/9FWpDW8lzvjga+gHIACllmtBUw2OPKxXec2zLcYnKHshM2aa
-         ZdZg==
+        bh=4CWtimK4ZUEE79NDsNs4J9hl7M6HxsBzDDsyySs+MyM=;
+        b=p1Ff7NuY8LF5tr1ZL/9yiAX/mmIEBnLqtEuu5a0U7FyD7jn2laHbtMRdiqTOyf1FTd
+         48nxs2ExRv/6ovg1P18C/HeizfdIe+ev/aPc5SpYQb3iRszR8g4dtwuZtCATryKLUkZ2
+         OSH+DR6SL3AxOircq0zLBnhbLH0wextefDvLkZwYvJkUP252hJpenFqLw5Xd/fuOdK7X
+         /qJItN0p2L3tv2Ne0v/w8KVnwMqmwnDeeMn38DP+156COGWAjpE2M0mu6BcxZGPUb1TN
+         ripCDcngT82aaUnpdh2w7gznGz/+PmVosOo3XYOjhq0X9wyqxrmkUaPaeg0RZK2a4gu4
+         M44g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=+iLnv1t7rndaK/hz8TyA5c0uwu4qvp0/LjTjnFu9otE=;
-        b=O7S38aqbmB4U1Oth2sg4L3Dsf1BvCqARgfK3oN9SMJ7wy4ynkTtqoRev6lxx2BPja4
-         Jh9QHWLr+eDA8Gcv+do7nRYvXpdFg8dIxas7uMwdNO1AAOBBT07vs+XV8BnH+IRiPdYB
-         ADxpFoGC41d9ejEoagtkmIZEIHNY+Rgot9rA5BlaNz/H0eOhRuVE90FK0aQgxDhlb8yR
-         PA0dT3yoLpcpX0/rxkrd/ROoAWtOWL5u9dDzq1aktVmqXsu+M9nMcqmi2iQZn7EjL+Nw
-         q37xk2dPTB4Tq3V8l6lca/hlluLE8bCDRebDWGs7RbeIzTpIXWxpeHfKdbFqSIlqMMtS
-         6U7A==
-X-Gm-Message-State: AOAM530tBxrarQ9jwmUNspqsq2PMfRYb/CusTzBKBARQaV3Sm4za2dXq
-        KWiPX5QXUyS977wAIqXYxhMvk+sDfUM=
-X-Google-Smtp-Source: ABdhPJzp3QTV6yb/JWXtcYGSclN6B/GqaxVyNq/3WQRnr7DUjWVZhsKjAOMJs5bFpeVqL0g96hjOmw==
-X-Received: by 2002:a9d:17e7:: with SMTP id j94mr27027942otj.41.1617715991983;
-        Tue, 06 Apr 2021 06:33:11 -0700 (PDT)
+        bh=4CWtimK4ZUEE79NDsNs4J9hl7M6HxsBzDDsyySs+MyM=;
+        b=AFJHC1wFEoylFpP8StwHHYnVmXZ3L4gbJvGP0Q4HOaiIVm6vCgNLZq73LL4RsDHi+b
+         DTnmb+yBgXTrFEdRvtEPm8o8czWaZLR9Q4kDp7NTJCNNlD4Eq5p9fFpKBk7FVm9K0NkE
+         +LwXmJ6zMhYnmFL03a8/0VxcJCxidQ2/TVmT7hlloQ7BftkiS+bLeSwxK68NtfFQhSdy
+         XToxj3dyoGy3gIxcAyeItI3+FZ1ER7Y8Th4UzWQ79e4PUB5VBuRka+izthtt9mJXjYiZ
+         /sXjAWOC9BUeewP4ELKywRWJ+1DFbMKYR+d0dc8dX/M12kcYiepgkZYYANIY+Vsg1aCS
+         stgg==
+X-Gm-Message-State: AOAM53113ofyoKttolCpjnmx+PiK/N+Q1sK5qobsfH4f+B6UsGa1yuD4
+        N0DLgCz4sUkhSEKwzt16by0=
+X-Google-Smtp-Source: ABdhPJz2PIfX7IXpaaIU5t9ZdF65UEKuZYNK5/ko7/FclNWwC72EUrIaQUiaGd2ytpN4JAE5ATXEkg==
+X-Received: by 2002:a9d:67c2:: with SMTP id c2mr27219188otn.343.1617716490927;
+        Tue, 06 Apr 2021 06:41:30 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l191sm3698970oih.16.2021.04.06.06.32.39
+        by smtp.gmail.com with ESMTPSA id g9sm4170053otk.6.2021.04.06.06.41.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 06:32:56 -0700 (PDT)
+        Tue, 06 Apr 2021 06:41:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] softdog: make pretimeout available when
- SOFT_WATCHDOG_PRETIMEOUT enabled
-To:     Wang Qing <wangqing@vivo.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1617702277-17647-1-git-send-email-wangqing@vivo.com>
+Subject: Re: [PATCH v2] watchdog: imx_sc_wdt: fix pretimeout
+To:     eichest@gmail.com, linux-watchdog@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+References: <20210406121246.49335-1-eichest@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,12 +105,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <30170c12-663a-bd5e-05a1-058a1726dc9f@roeck-us.net>
-Date:   Tue, 6 Apr 2021 06:32:34 -0700
+Message-ID: <143a39d7-1c4b-e823-e677-a650d1a00443@roeck-us.net>
+Date:   Tue, 6 Apr 2021 06:41:27 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1617702277-17647-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <20210406121246.49335-1-eichest@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -114,52 +118,62 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/6/21 2:44 AM, Wang Qing wrote:
-> Although softdog supports pretimeout, there is no way to set pretimeout, 
-> so pretimeout will never be processed in softdog_ping(). 
+On 4/6/21 5:12 AM, eichest@gmail.com wrote:
+> From: Stefan Eichenberger <eichest@gmail.com>
 > 
-This is wrong. The pretimeout can be set using WDIOC_SETPRETIMEOUT, as with
-every other driver supporting it. There is no need for a module parameter.
-
-Guenter
-
-> Here add the configuration mechanism for pretimeout and the default value
-> is 1 second, so when CONFIG_SOFT_WATCHDOG_PRETIMEOUT is enabled, the 
-> pretimeout function defaults available.
+> If the WDIOF_PRETIMEOUT flag is not set when registering the device the
+> driver will not show the sysfs entries or register the default governor.
+> By moving the registering after the decision whether pretimeout is
+> supported this gets fixed.
 > 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> Signed-off-by: Stefan Eichenberger <eichest@gmail.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/watchdog/softdog.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  drivers/watchdog/imx_sc_wdt.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/watchdog/softdog.c b/drivers/watchdog/softdog.c
-> index 7a10962..79e52791
-> --- a/drivers/watchdog/softdog.c
-> +++ b/drivers/watchdog/softdog.c
-> @@ -35,6 +35,14 @@ MODULE_PARM_DESC(soft_margin,
->  	"Watchdog soft_margin in seconds. (0 < soft_margin < 65536, default="
->  					__MODULE_STRING(TIMER_MARGIN) ")");
+> diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
+> index e9ee22a7cb45..8ac021748d16 100644
+> --- a/drivers/watchdog/imx_sc_wdt.c
+> +++ b/drivers/watchdog/imx_sc_wdt.c
+> @@ -183,16 +183,12 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
+>  	watchdog_stop_on_reboot(wdog);
+>  	watchdog_stop_on_unregister(wdog);
 >  
-> +#ifdef CONFIG_SOFT_WATCHDOG_PRETIMEOUT
-> +#define PRE_TIMER_MARGIN	1		/* Default is 1 seconds */
-> +static unsigned int soft_pretimeout = PRE_TIMER_MARGIN;	/* in seconds */
-> +module_param(soft_pretimeout, uint, 0);
-> +MODULE_PARM_DESC(soft_pretimeout,
-> +	"Watchdog soft_pretimeout in seconds. (0 < soft_pretimeout < soft_margin, default=1)");
-> +#endif
-> +
->  static bool nowayout = WATCHDOG_NOWAYOUT;
->  module_param(nowayout, bool, 0);
->  MODULE_PARM_DESC(nowayout,
-> @@ -177,6 +185,9 @@ static struct watchdog_device softdog_dev = {
->  	.min_timeout = 1,
->  	.max_timeout = 65535,
->  	.timeout = TIMER_MARGIN,
-> +#ifdef CONFIG_SOFT_WATCHDOG_PRETIMEOUT
-> +	.pretimeout = PRE_TIMER_MARGIN,
-> +#endif
->  };
+> -	ret = devm_watchdog_register_device(dev, wdog);
+> -	if (ret)
+> -		return ret;
+> -
+>  	ret = imx_scu_irq_group_enable(SC_IRQ_GROUP_WDOG,
+>  				       SC_IRQ_WDOG,
+>  				       true);
+>  	if (ret) {
+>  		dev_warn(dev, "Enable irq failed, pretimeout NOT supported\n");
+> -		return 0;
+> +		goto register_device;
+>  	}
 >  
->  static int __init softdog_init(void)
+>  	imx_sc_wdd->wdt_notifier.notifier_call = imx_sc_wdt_notify;
+> @@ -203,7 +199,7 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
+>  					 false);
+>  		dev_warn(dev,
+>  			 "Register irq notifier failed, pretimeout NOT supported\n");
+> -		return 0;
+> +		goto register_device;
+>  	}
+>  
+>  	ret = devm_add_action_or_reset(dev, imx_sc_wdt_action,
+> @@ -213,7 +209,8 @@ static int imx_sc_wdt_probe(struct platform_device *pdev)
+>  	else
+>  		dev_warn(dev, "Add action failed, pretimeout NOT supported\n");
+>  
+> -	return 0;
+> +register_device:
+> +	return devm_watchdog_register_device(dev, wdog);
+>  }
+>  
+>  static int __maybe_unused imx_sc_wdt_suspend(struct device *dev)
 > 
 
