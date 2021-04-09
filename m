@@ -2,139 +2,156 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D90FA359949
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Apr 2021 11:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D675C359B1E
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Apr 2021 12:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbhDIJez (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 9 Apr 2021 05:34:55 -0400
-Received: from smtp.asem.it ([151.1.184.197]:60344 "EHLO smtp.asem.it"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231920AbhDIJex (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 9 Apr 2021 05:34:53 -0400
-Received: from webmail.asem.it
-        by asem.it (smtp.asem.it)
-        (SecurityGateway 8.0.0)
-        with ESMTP id 0f1f874f5440409cb4c03deac448506e.MSG
-        for <linux-watchdog@vger.kernel.org>; Fri, 09 Apr 2021 11:34:37 +0200S
-Received: from ASAS044.asem.intra (172.16.16.44) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 9 Apr
- 2021 11:34:35 +0200
-Received: from flavio-x.asem.intra (172.16.17.208) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Fri, 9 Apr 2021 11:34:35 +0200
-From:   Flavio Suligoi <f.suligoi@asem.it>
+        id S234133AbhDIKHj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 9 Apr 2021 06:07:39 -0400
+Received: from mail-m121145.qiye.163.com ([115.236.121.145]:57540 "EHLO
+        mail-m121145.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234384AbhDIKGL (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 9 Apr 2021 06:06:11 -0400
+X-Greylist: delayed 593 seconds by postgrey-1.27 at vger.kernel.org; Fri, 09 Apr 2021 06:06:10 EDT
+Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.250.176.229])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 4634F8001A9;
+        Fri,  9 Apr 2021 17:56:01 +0800 (CST)
+From:   Wang Qing <wangqing@vivo.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Flavio Suligoi <f.suligoi@asem.it>
-Subject: [PATCH v1] watchdog: add new parameter to start the watchdog on module insertion
-Date:   Fri, 9 Apr 2021 11:34:34 +0200
-Message-ID: <20210409093434.2089459-1-f.suligoi@asem.it>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-SGHeloLookup-Result: pass smtp.helo=webmail.asem.it (ip=172.16.16.44)
-X-SGSPF-Result: none (smtp.asem.it)
-X-SGOP-RefID: str=0001.0A782F16.60701FAC.0082,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0 (_st=1 _vt=0 _iwf=0)
+        Guenter Roeck <linux@roeck-us.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] watchdog: mtk: support pre-timeout when the bark irq is available
+Date:   Fri,  9 Apr 2021 17:55:42 +0800
+Message-Id: <1617962142-28795-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZQ01CGFYeH0kaHktIGUMaGkhVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
+        hKQ1VLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NDI6Nzo5ET8TFhoTCQIuKike
+        CE8KCRVVSlVKTUpMQk1JSk1KQ0NDVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
+        SU5LVUpMTVVJSUJZV1kIAVlBT09LQjcG
+X-HM-Tid: 0a78b60f5596b03akuuu4634f8001a9
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The new parameter "start_enabled" starts the watchdog at the same time
-of the module insertion.
-This feature is very useful in embedded systems, to avoid cases where
-the system hangs before reaching userspace.
+Use the bark interrupt as the pretimeout notifier if available.
 
-This function can be also enabled in the kernel config, so can be
-used when the watchdog driver is build as built-in.
+By default, the pretimeout notification shall occur one second earlier
+than the timeout.
 
-This parameter involves the "core" section of the watchdog driver;
-in this way it is common for all the watchdog hardware implementations.
-
-Note: to use only for watchdog drivers which doesn't support this
-      parameter by itself.
-
-Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
+Signed-off-by: Wang Qing <wangqing@vivo.com>
 ---
- Documentation/watchdog/watchdog-parameters.rst |  5 +++++
- drivers/watchdog/Kconfig                       | 14 ++++++++++++++
- drivers/watchdog/watchdog_core.c               | 12 ++++++++++++
- 3 files changed, 31 insertions(+)
+ drivers/watchdog/mtk_wdt.c | 47 +++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 44 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/watchdog/watchdog-parameters.rst b/Documentation/watchdog/watchdog-parameters.rst
-index 223c99361a30..623fd064df91 100644
---- a/Documentation/watchdog/watchdog-parameters.rst
-+++ b/Documentation/watchdog/watchdog-parameters.rst
-@@ -21,6 +21,11 @@ watchdog core:
- 	timeout. Setting this to a non-zero value can be useful to ensure that
- 	either userspace comes up properly, or the board gets reset and allows
- 	fallback logic in the bootloader to try something else.
-+    start_enabled:
-+	Watchdog is started on module insertion. This option can be also
-+	selected by kernel config (default=kernel config parameter).
-+	Use only for watchdog drivers which doesn't support this parameter
-+	by itself.
+diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+index 97ca993..8b919cc
+--- a/drivers/watchdog/mtk_wdt.c
++++ b/drivers/watchdog/mtk_wdt.c
+@@ -25,6 +25,7 @@
+ #include <linux/reset-controller.h>
+ #include <linux/types.h>
+ #include <linux/watchdog.h>
++#include <linux/interrupt.h>
  
- -------------------------------------------------
+ #define WDT_MAX_TIMEOUT		31
+ #define WDT_MIN_TIMEOUT		1
+@@ -234,18 +235,35 @@ static int mtk_wdt_start(struct watchdog_device *wdt_dev)
+ 	void __iomem *wdt_base = mtk_wdt->wdt_base;
+ 	int ret;
  
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 0470dc15c085..c2a668d6bbbc 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -47,6 +47,20 @@ config WATCHDOG_NOWAYOUT
- 	  get killed. If you say Y here, the watchdog cannot be stopped once
- 	  it has been started.
+-	ret = mtk_wdt_set_timeout(wdt_dev, wdt_dev->timeout);
++	ret = mtk_wdt_set_timeout(wdt_dev, wdt_dev->timeout - wdt_dev->pretimeout);
+ 	if (ret < 0)
+ 		return ret;
  
-+config WATCHDOG_START_ENABLED
-+	bool "Start watchdog on module insertion"
-+	help
-+	  Say Y if you want to start the watchdog at the same time when the
-+	  driver is loaded.
-+	  This feature is very useful in embedded systems, to avoid cases where
-+	  the system could hang before reaching userspace.
-+	  This parameter involves the "core" section of the watchdog driver,
-+	  in this way it is common for all the watchdog hardware
-+	  implementations.
+ 	reg = ioread32(wdt_base + WDT_MODE);
+ 	reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
++	if (wdt_dev->pretimeout)
++		reg |= WDT_MODE_IRQ_EN;
+ 	reg |= (WDT_MODE_EN | WDT_MODE_KEY);
+ 	iowrite32(reg, wdt_base + WDT_MODE);
+ 
+ 	return 0;
+ }
+ 
++static int mtk_wdt_set_pretimeout(struct watchdog_device *wdd,
++				   unsigned int timeout)
++{
++	wdd->pretimeout = timeout;
++	return mtk_wdt_start(wdd);
++}
 +
-+	  Note: to use only for watchdog drivers which doesn't support this
-+	        parameter by itself.
++static irqreturn_t mtk_wdt_isr(int irq, void *arg)
++{
++	struct watchdog_device *wdd = arg;
++	watchdog_notify_pretimeout(wdd);
 +
- config WATCHDOG_HANDLE_BOOT_ENABLED
- 	bool "Update boot-enabled watchdog until userspace takes over"
- 	default y
-diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-index 5df0a22e2cb4..5052ae355219 100644
---- a/drivers/watchdog/watchdog_core.c
-+++ b/drivers/watchdog/watchdog_core.c
-@@ -43,6 +43,11 @@ static int stop_on_reboot = -1;
- module_param(stop_on_reboot, int, 0444);
- MODULE_PARM_DESC(stop_on_reboot, "Stop watchdogs on reboot (0=keep watching, 1=stop)");
- 
-+static bool start_enabled = IS_ENABLED(CONFIG_WATCHDOG_START_ENABLED);
-+module_param(start_enabled, bool, 0444);
-+MODULE_PARM_DESC(start_enabled, "Start watchdog on module insertion (default="
-+	__MODULE_STRING(IS_ENABLED(CONFIG_WATCHDOG_START_ENABLED)) ")");
++	return IRQ_HANDLED;
++}
 +
- /*
-  * Deferred Registration infrastructure.
-  *
-@@ -224,6 +229,13 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
- 	 * corrupted in a later stage then we expect a kernel panic!
- 	 */
+ static const struct watchdog_info mtk_wdt_info = {
+ 	.identity	= DRV_NAME,
+ 	.options	= WDIOF_SETTIMEOUT |
+@@ -253,12 +271,21 @@ static const struct watchdog_info mtk_wdt_info = {
+ 			  WDIOF_MAGICCLOSE,
+ };
  
-+	/* If required, start the watchdog immediately */
-+	if (start_enabled) {
-+		set_bit(WDOG_HW_RUNNING, &wdd->status);
-+		wdd->ops->start(wdd);
-+		pr_info("Watchdog enabled\n");
++static const struct watchdog_info mtk_wdt_pt_info = {
++	.identity	= DRV_NAME,
++	.options	= WDIOF_SETTIMEOUT |
++			  WDIOF_PRETIMEOUT |
++			  WDIOF_KEEPALIVEPING |
++			  WDIOF_MAGICCLOSE,
++};
++
+ static const struct watchdog_ops mtk_wdt_ops = {
+ 	.owner		= THIS_MODULE,
+ 	.start		= mtk_wdt_start,
+ 	.stop		= mtk_wdt_stop,
+ 	.ping		= mtk_wdt_ping,
+ 	.set_timeout	= mtk_wdt_set_timeout,
++	.set_pretimeout	= mtk_wdt_set_pretimeout,
+ 	.restart	= mtk_wdt_restart,
+ };
+ 
+@@ -267,7 +294,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct mtk_wdt_dev *mtk_wdt;
+ 	const struct mtk_wdt_data *wdt_data;
+-	int err;
++	int err,irq;
+ 
+ 	mtk_wdt = devm_kzalloc(dev, sizeof(*mtk_wdt), GFP_KERNEL);
+ 	if (!mtk_wdt)
+@@ -279,7 +306,21 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mtk_wdt->wdt_base))
+ 		return PTR_ERR(mtk_wdt->wdt_base);
+ 
+-	mtk_wdt->wdt_dev.info = &mtk_wdt_info;
++	irq = platform_get_irq(pdev, 0);
++	if (irq > 0) {
++		err = devm_request_irq(&pdev->dev, irq, mtk_wdt_isr, 0, "wdt_bark", &mtk_wdt->wdt_dev);
++		if (err)
++			return err;
++
++		mtk_wdt->wdt_dev.info = &mtk_wdt_pt_info;
++		mtk_wdt->wdt_dev.pretimeout = 1;
++	} else {
++		if (irq == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++
++		mtk_wdt->wdt_dev.info = &mtk_wdt_info;
 +	}
 +
- 	/* Use alias for watchdog id if possible */
- 	if (wdd->parent) {
- 		ret = of_alias_get_id(wdd->parent->of_node, "watchdog");
+ 	mtk_wdt->wdt_dev.ops = &mtk_wdt_ops;
+ 	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
+ 	mtk_wdt->wdt_dev.max_hw_heartbeat_ms = WDT_MAX_TIMEOUT * 1000;
 -- 
-2.25.1
+2.7.4
 
