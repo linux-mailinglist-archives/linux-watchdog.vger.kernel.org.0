@@ -2,27 +2,29 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD8F35C517
-	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Apr 2021 13:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05CA35C5C9
+	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Apr 2021 13:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238121AbhDLL2s (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 12 Apr 2021 07:28:48 -0400
-Received: from gecko.sbs.de ([194.138.37.40]:59782 "EHLO gecko.sbs.de"
+        id S240622AbhDLL50 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 12 Apr 2021 07:57:26 -0400
+Received: from gecko.sbs.de ([194.138.37.40]:35090 "EHLO gecko.sbs.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237626AbhDLL2s (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 12 Apr 2021 07:28:48 -0400
+        id S239202AbhDLL50 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 12 Apr 2021 07:57:26 -0400
 Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 13CBS1CZ003961
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 13CBuhgY004539
         (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Apr 2021 13:28:01 +0200
+        Mon, 12 Apr 2021 13:56:44 +0200
 Received: from md1za8fc.ad001.siemens.net ([139.22.41.180])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 13CBRxfo010289;
-        Mon, 12 Apr 2021 13:27:59 +0200
-Date:   Mon, 12 Apr 2021 13:27:58 +0200
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 13CBugBC024375;
+        Mon, 12 Apr 2021 13:56:42 +0200
+Date:   Mon, 12 Apr 2021 13:56:41 +0200
 From:   Henning Schild <henning.schild@siemens.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Enrico Weigelt <lkml@metux.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
         linux-watchdog@vger.kernel.org,
         Srikanth Krishnakar <skrishnakar@gmail.com>,
         Jan Kiszka <jan.kiszka@siemens.com>,
@@ -30,14 +32,23 @@ Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Mark Gross <mgross@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Enrico Weigelt <lkml@metux.net>
-Subject: Re: [PATCH v3 0/4] add device drivers for Siemens Industrial PCs
-Message-ID: <20210412132758.58cf851c@md1za8fc.ad001.siemens.net>
-In-Reply-To: <857d6cd4-839d-c42a-0aa7-8d45243981ee@redhat.com>
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v3 2/4] leds: simatic-ipc-leds: add new driver for
+ Siemens Industial PCs
+Message-ID: <20210412135641.1173941b@md1za8fc.ad001.siemens.net>
+In-Reply-To: <CAHp75VcU-7-BVum4xuuQcG7NZZc9xXOoXYpfSBUwwPr6iZLWGg@mail.gmail.com>
 References: <20210329174928.18816-1-henning.schild@siemens.com>
-        <857d6cd4-839d-c42a-0aa7-8d45243981ee@redhat.com>
+        <20210329174928.18816-3-henning.schild@siemens.com>
+        <CAHp75Vdh_YAJLE4DWPhxhYY1g5Fc_7EFgr4FED3crpfpzwXeRg@mail.gmail.com>
+        <20210330135808.373c3308@md1za8fc.ad001.siemens.net>
+        <CAHp75Vc0f0HfAJx0KPyQMWjekkhB_T-1+vuR566qAcYGA2JLJA@mail.gmail.com>
+        <20210330143011.0e8ae4a0@md1za8fc.ad001.siemens.net>
+        <CAHp75VceCsuANZpib6HXJvxgMdJhmr8KPTZgThxKvXq6Yotymg@mail.gmail.com>
+        <20210330172305.67b6e050@md1za8fc.ad001.siemens.net>
+        <CAHp75VcSwW42_oQDpxn34gN7+aJNmB=HdJUbaWsYkBokYAHkSA@mail.gmail.com>
+        <20210401124415.3c9321c0@md1za8fc.ad001.siemens.net>
+        <CAHp75VcU-7-BVum4xuuQcG7NZZc9xXOoXYpfSBUwwPr6iZLWGg@mail.gmail.com>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -46,97 +57,145 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Wed, 7 Apr 2021 13:36:40 +0200
-schrieb Hans de Goede <hdegoede@redhat.com>:
+Am Thu, 1 Apr 2021 14:04:51 +0300
+schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
 
-> Hi,
+> On Thu, Apr 1, 2021 at 1:44 PM Henning Schild
+> <henning.schild@siemens.com> wrote:
+> >
+> > Am Wed, 31 Mar 2021 18:40:23 +0300
+> > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
+> >  
+> > > On Tue, Mar 30, 2021 at 6:33 PM Henning Schild
+> > > <henning.schild@siemens.com> wrote:  
+> > > > Am Tue, 30 Mar 2021 15:41:53 +0300
+> > > > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:  
+> > > > > On Tue, Mar 30, 2021 at 3:35 PM Henning Schild
+> > > > > <henning.schild@siemens.com> wrote:  
+> > > > > > Am Tue, 30 Mar 2021 15:15:16 +0300
+> > > > > > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:  
+> > > > > > > On Tue, Mar 30, 2021 at 2:58 PM Henning Schild
+> > > > > > > <henning.schild@siemens.com> wrote:  
+> > > > > > > > Am Tue, 30 Mar 2021 14:04:35 +0300
+> > > > > > > > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:  
+> > > > > > > > > On Mon, Mar 29, 2021 at 8:59 PM Henning Schild
+> > > > > > > > > <henning.schild@siemens.com> wrote:  
+> > > > >  
+> > > > > > > > > > +static struct simatic_ipc_led
+> > > > > > > > > > simatic_ipc_leds_mem[] = {
+> > > > > > > > > > +       {0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS
+> > > > > > > > > > "-1"},
+> > > > > > > > > > +       {0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS
+> > > > > > > > > > "-1"},
+> > > > > > > > > > +       {0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS
+> > > > > > > > > > "-2"},
+> > > > > > > > > > +       {0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS
+> > > > > > > > > > "-2"},
+> > > > > > > > > > +       {0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS
+> > > > > > > > > > "-3"},
+> > > > > > > > > > +       {0x500 + 0x198, "green:" LED_FUNCTION_STATUS
+> > > > > > > > > > "-3"},
+> > > > > > > > > > +       { }
+> > > > > > > > > > +};  
+> > > > > > > > >
+> > > > > > > > > It seems to me like poking GPIO controller registers
+> > > > > > > > > directly. This is not good. The question still
+> > > > > > > > > remains: Can we simply register a GPIO (pin control)
+> > > > > > > > > driver and use an LED GPIO driver with an additional
+> > > > > > > > > board file that instantiates it?  
+> > > > > > > >
+> > > > > > > > I wrote about that in reply to the cover letter. My
+> > > > > > > > view is still that it would be an abstraction with only
+> > > > > > > > one user, just causing work and likely not ending up as
+> > > > > > > > generic as it might eventually have to be.
+> > > > > > > >
+> > > > > > > > The region is reserved, not sure what the problem with
+> > > > > > > > the "poking" is.  
+> > > > > > >
+> > > > > > >  
+> > > > > > > > Maybe i do not understand all the benefits of such a
+> > > > > > > > split at this point in time. At the moment i only see
+> > > > > > > > work with hardly any benefit, not just work for me but
+> > > > > > > > also for maintainers. I sure do not mean to be
+> > > > > > > > ignorant. Maybe you go into details and convince me or
+> > > > > > > > we wait for other peoples opinions on how to proceed,
+> > > > > > > > maybe there is a second user that i am not aware of?
+> > > > > > > > Until i am convinced otherwise i will try to argue that
+> > > > > > > > a single-user-abstraction is needless work/code, and
+> > > > > > > > should be done only when actually needed.  
+> > > > > > >
+> > > > > > > I have just read your messages (there is a cover letter
+> > > > > > > and additional email which was sent lately).
+> > > > > > >
+> > > > > > > I would like to know what the CPU model number on that
+> > > > > > > board is. Than we can continue to see what possibilities
+> > > > > > > we have here.  
+> > > > > >
+> > > > > > I guess we are talking about the one that uses memory
+> > > > > > mapped, that is called an "IPC127E" and seems to have
+> > > > > > either Intel Atom E3940 or E3930 which seems to be Apollo
+> > > > > > Lake.  
+> > > > >
+> > > > > Yep. And now the question, in my patch series you should have
+> > > > > got the apollolake-pinctrl driver loaded (if not, we have to
+> > > > > investigate why it's not being instantiated). This will give
+> > > > > you a read GPIO driver.  
+> > > >
+> > > > Ok, so there is the existing driver i asked about several times.
+> > > > Thanks for pointing it out.  
+> > >
+> > > If you remember, I asked you about the chip twice :-)
+> > > I assumed that we were talking about Apollo Lake and that's why I
+> > > insisted that the driver is in the kernel source tree.  
+> >
+> > Sorry, maybe i did not get the context of your question and which of
+> > the machines you asked about. Now it is clear i guess.
+> >  
+> > >  
+> > > > > So, you may use regular LED GPIO on top of it
+> > > > > (https://elixir.bootlin.com/linux/latest/source/drivers/leds/leds-gpio.c).
+> > > > > I would like to understand why it can't be achieved.  
+> > > >
+> > > > Will have a look. Unfortunately this one box is missing in my
+> > > > personal collection, but let us assume that one can be
+> > > > converted to that existing driver.  
+> > >
+> > > OK!
+> > >  
+> > > > I guess that will still mean the PIO-based part of the LED
+> > > > driver will have to stay as is.  
+> > >
+> > > Probably yes. I haven't looked into that part and I have no idea
+> > > what's going on on that platform(s).
+> > >  
+> >
+> > Which i guess means the series can be reviewed as if the mmio bits
+> > for that apollo lake would not be in it, maybe i will even send a
+> > version without that one box. We have others in the "backlog" might
+> > as well delay that one if it helps sorting out a base-line.  
 > 
-> On 3/29/21 7:49 PM, Henning Schild wrote:
-> > changes since v2:
-> > 
-> > - remove "simatic-ipc" prefix from LED names
-> > - fix style issues found in v2, mainly LED driver
-> > - fix OEM specific dmi code, and remove magic numbers
-> > - more "simatic_ipc" name prefixing
-> > - improved pmc quirk code using callbacks
-> > 
-> > changes since v1:
-> > 
-> > - fixed lots of style issues found in v1
-> >   - (debug) printing
-> >   - header ordering
-> > - fixed license issues GPLv2 and SPDX in all files
-> > - module_platform_driver instead of __init __exit
-> > - wdt simplifications cleanup
-> > - lots of fixes in wdt driver, all that was found in v1
-> > - fixed dmi length in dmi helper
-> > - changed LED names to allowed ones
-> > - move led driver to simple/
-> > - switched pmc_atom to dmi callback with global variable
-> > 
-> > --
-> > 
-> > This series adds support for watchdogs and leds of several x86
-> > devices from Siemens.
-> > 
-> > It is structured with a platform driver that mainly does
-> > identification of the machines. It might trigger loading of the
-> > actual device drivers by attaching devices to the platform bus.
-> > 
-> > The identification is vendor specific, parsing a special binary DMI
-> > entry. The implementation of that platform identification is
-> > applied on pmc_atom clock quirks in the final patch.
-> > 
-> > It is all structured in a way that we can easily add more devices
-> > and more platform drivers later. Internally we have some more code
-> > for hardware monitoring, more leds, watchdogs etc. This will follow
-> > some day.  
-> 
-> IT seems there still is significant discussion surrounding the LED
-> and watchdog drivers which use patch 1/4 as parent-driver.
-> 
-> I'm going to hold of on merging 1/4 and 4/4 until there is more
-> consensus surrounding this series.
+> It depends on the role of P2SB in this case.
+> Shouldn't you drop that completely out from this series?
 
-Yes. Whithout 2 and 3, 1 would be way too big.
+We still have one such GPIO bit in one wdt, might be "sunrisepoint".
+Still have to clarify if that can maybe be dropped for a first step.
+
+> Otherwise we have to understand what to do with it.
+> It seems the best approach can be to expose the P2SB device to Linux,
+> but we have to answer to Bjorn's request about region reservations.
+
+I now have such an apollolake to play with. Having your series applied
+my LEDs driver fails to alloc that mmio memory, so far so correct.
+Still have to figure out how to use those GPIOs.
+
+I was hoping to find a gpiochip in sysfs and be able to export gpios to
+userland.
+
+Enrico, does "gpio_amd_fch" show up under /sys/class/gpio as a
+gpiochip? Or how to interact with that driver before basing another one
+on top?
+
+I am afraid that pinctrl-broxton might be loaded but not working as
+expected.
 
 Henning
-
-> Regards,
-> 
-> Hans
-> 
-> 
-> > 
-> > Henning Schild (4):
-> >   platform/x86: simatic-ipc: add main driver for Siemens devices
-> >   leds: simatic-ipc-leds: add new driver for Siemens Industial PCs
-> >   watchdog: simatic-ipc-wdt: add new driver for Siemens Industrial
-> > PCs platform/x86: pmc_atom: improve critclk_systems matching for
-> > Siemens PCs
-> > 
-> >  drivers/leds/Kconfig                          |   3 +
-> >  drivers/leds/Makefile                         |   3 +
-> >  drivers/leds/simple/Kconfig                   |  11 +
-> >  drivers/leds/simple/Makefile                  |   2 +
-> >  drivers/leds/simple/simatic-ipc-leds.c        | 202
-> > ++++++++++++++++ drivers/platform/x86/Kconfig                  |
-> > 12 + drivers/platform/x86/Makefile                 |   3 +
-> >  drivers/platform/x86/pmc_atom.c               |  57 +++--
-> >  drivers/platform/x86/simatic-ipc.c            | 169 ++++++++++++++
-> >  drivers/watchdog/Kconfig                      |  11 +
-> >  drivers/watchdog/Makefile                     |   1 +
-> >  drivers/watchdog/simatic-ipc-wdt.c            | 215
-> > ++++++++++++++++++ .../platform_data/x86/simatic-ipc-base.h      |
-> > 29 +++ include/linux/platform_data/x86/simatic-ipc.h |  72 ++++++
-> >  14 files changed, 769 insertions(+), 21 deletions(-)
-> >  create mode 100644 drivers/leds/simple/Kconfig
-> >  create mode 100644 drivers/leds/simple/Makefile
-> >  create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
-> >  create mode 100644 drivers/platform/x86/simatic-ipc.c
-> >  create mode 100644 drivers/watchdog/simatic-ipc-wdt.c
-> >  create mode 100644
-> > include/linux/platform_data/x86/simatic-ipc-base.h create mode
-> > 100644 include/linux/platform_data/x86/simatic-ipc.h 
-> 
-
