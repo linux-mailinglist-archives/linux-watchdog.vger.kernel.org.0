@@ -2,135 +2,87 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B009135DC67
-	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Apr 2021 12:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CD535DCB1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Apr 2021 12:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241803AbhDMKU6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 13 Apr 2021 06:20:58 -0400
-Received: from smtp.asem.it ([151.1.184.197]:54000 "EHLO smtp.asem.it"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229835AbhDMKU4 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 13 Apr 2021 06:20:56 -0400
-Received: from webmail.asem.it
-        by asem.it (smtp.asem.it)
-        (SecurityGateway 8.0.0)
-        with ESMTP id 2af592a94e7142a3b507e2107c860276.MSG
-        for <linux-watchdog@vger.kernel.org>; Tue, 13 Apr 2021 12:20:34 +0200S
-Received: from ASAS044.asem.intra (172.16.16.44) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 13
- Apr 2021 12:20:31 +0200
-Received: from flavio-x.asem.intra (172.16.17.208) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Tue, 13 Apr 2021 12:20:31 +0200
-From:   Flavio Suligoi <f.suligoi@asem.it>
+        id S239416AbhDMKrZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 13 Apr 2021 06:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237151AbhDMKrX (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 13 Apr 2021 06:47:23 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A23C061574
+        for <linux-watchdog@vger.kernel.org>; Tue, 13 Apr 2021 03:47:03 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1lWGZR-0001RR-Mv; Tue, 13 Apr 2021 12:47:01 +0200
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1lWGZQ-0006Kx-2l; Tue, 13 Apr 2021 12:47:00 +0200
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Flavio Suligoi <f.suligoi@asem.it>
-Subject: [PATCH v2] watchdog: add new parameter to start the watchdog on module insertion
-Date:   Tue, 13 Apr 2021 12:20:30 +0200
-Message-ID: <20210413102030.3204571-1-f.suligoi@asem.it>
-X-Mailer: git-send-email 2.25.1
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel@pengutronix.de
+Subject: [RESEND PATCH v3 0/3] watchdog: f71808e_wdt: migrate to new kernel API
+Date:   Tue, 13 Apr 2021 12:46:43 +0200
+Message-Id: <cover.dc9133eee56aa67653455928e4de2162e344ce4d.1618310618.git-series.a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-SGHeloLookup-Result: pass smtp.helo=webmail.asem.it (ip=172.16.16.44)
-X-SGSPF-Result: none (smtp.asem.it)
-X-SGOP-RefID: str=0001.0A782F28.60757070.0089,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0 (_st=1 _vt=0 _iwf=0)
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The new parameter "start_enabled" starts the watchdog at the same time
-of the module insertion.
-This feature is very useful in embedded systems, to avoid cases where
-the system hangs before reaching userspace.
+This series migrates the driver to the new kernel watchdog API and
+then to the driver model.
 
-This feature can be enabled in the kernel config, so it can be also
-used when the watchdog driver is build as "built-in".
+Main feedback from Guenther on v2 was that I need to split it up to
+enable review. I have done so by removing the extra refactoring for
+now and focused on the functional changes described above. The diff
+is now much better readable.
 
-This parameter involves the "core" section of the watchdog driver;
-in this way it is common for all the watchdog hardware implementations.
+I tested it on a f81866.
 
-Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
----
+v3 -> RESEND:
+  https://lore.kernel.org/linux-watchdog/cover.dedd9f1159389b0a438076ef5e5a46aded186463.1612457906.git-series.a.fatoum@pengutronix.de/#t
+  Didn't generate any feedback over 2 months. Resending for exposure.
 
-v2: - check WDOG_HW_RUNNING before starting watchdog;
-    - remove useless comments in commit text, watchdog-parameters.rst and
-      Kconfig;
-v1: - first version;
+v2 -> v3:
+  https://lore.kernel.org/linux-watchdog/20201020062112.6762-1-a.fatoum@pengutronix.de/
+  - factored out identifier renaming again for easier review
+  - reordered commits
+  - removed refactoring that can go in later. Focusing now on kernel watchdog
+    API and platform device/driver migration
+  - removed platform_device_id and changed code to match by name
 
- Documentation/watchdog/watchdog-parameters.rst |  3 +++
- drivers/watchdog/Kconfig                       |  9 +++++++++
- drivers/watchdog/watchdog_core.c               | 12 ++++++++++++
- 3 files changed, 24 insertions(+)
+v1 -> v2:
+  https://lore.kernel.org/linux-watchdog/20200611191750.28096-1-a.fatoum@pengutronix.de/
+  - reworked to platform device/driver pair (Guenther)
+  - squashed identifier renaming into the patches that touch
+    the respective lines anyway
+  - fixed checkpatch.pl nitpicks (Guenther)
+  - fixed locally used variable declared without static (0-day)
+  - fixed unneded line break due to old line limit (Guenther)
+  - renamed struct fintek_wdog_data to struct fintek_wdt
 
-diff --git a/Documentation/watchdog/watchdog-parameters.rst b/Documentation/watchdog/watchdog-parameters.rst
-index 223c99361a30..7780d0c1fb4a 100644
---- a/Documentation/watchdog/watchdog-parameters.rst
-+++ b/Documentation/watchdog/watchdog-parameters.rst
-@@ -21,6 +21,9 @@ watchdog core:
- 	timeout. Setting this to a non-zero value can be useful to ensure that
- 	either userspace comes up properly, or the board gets reset and allows
- 	fallback logic in the bootloader to try something else.
-+    start_enabled:
-+	Watchdog is started on module insertion. This option can be also
-+	selected by kernel config (default=kernel config parameter).
- 
- -------------------------------------------------
- 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 0470dc15c085..1c480f4c7f94 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -47,6 +47,15 @@ config WATCHDOG_NOWAYOUT
- 	  get killed. If you say Y here, the watchdog cannot be stopped once
- 	  it has been started.
- 
-+config WATCHDOG_START_ENABLED
-+	bool "Start watchdog on module insertion"
-+	help
-+	  Say Y if you want to start the watchdog at the same time when the
-+	  driver is loaded.
-+	  This feature is very useful in embedded systems, to avoid cases where
-+	  the system could hang before reaching userspace.
-+	  This parameter applies to all watchdog drivers.
-+
- config WATCHDOG_HANDLE_BOOT_ENABLED
- 	bool "Update boot-enabled watchdog until userspace takes over"
- 	default y
-diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-index 5df0a22e2cb4..8a1e2e9331ee 100644
---- a/drivers/watchdog/watchdog_core.c
-+++ b/drivers/watchdog/watchdog_core.c
-@@ -43,6 +43,11 @@ static int stop_on_reboot = -1;
- module_param(stop_on_reboot, int, 0444);
- MODULE_PARM_DESC(stop_on_reboot, "Stop watchdogs on reboot (0=keep watching, 1=stop)");
- 
-+static bool start_enabled = IS_ENABLED(CONFIG_WATCHDOG_START_ENABLED);
-+module_param(start_enabled, bool, 0444);
-+MODULE_PARM_DESC(start_enabled, "Start watchdog on module insertion (default="
-+	__MODULE_STRING(IS_ENABLED(CONFIG_WATCHDOG_START_ENABLED)) ")");
-+
- /*
-  * Deferred Registration infrastructure.
-  *
-@@ -224,6 +229,13 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
- 	 * corrupted in a later stage then we expect a kernel panic!
- 	 */
- 
-+	/* If required, start the watchdog immediately */
-+	if (start_enabled && !watchdog_hw_running(wdd)) {
-+		set_bit(WDOG_HW_RUNNING, &wdd->status);
-+		wdd->ops->start(wdd);
-+		pr_info("Watchdog enabled\n");
-+	}
-+
- 	/* Use alias for watchdog id if possible */
- 	if (wdd->parent) {
- 		ret = of_alias_get_id(wdd->parent->of_node, "watchdog");
+Ahmad Fatoum (3):
+  watchdog: f71808e_wdt: rename variant-independent identifiers appropriately
+  watchdog: f71808e_wdt: migrate to new kernel watchdog API
+  watchdog: f71808e_wdt: refactor to platform device/driver pair
+
+ drivers/watchdog/Kconfig       |   1 +-
+ drivers/watchdog/f71808e_wdt.c | 450 +++++++---------------------------
+ 2 files changed, 100 insertions(+), 351 deletions(-)
+
+base-commit: 1048ba83fb1c00cd24172e23e8263972f6b5d9ac
 -- 
-2.25.1
-
+git-series 0.9.1
