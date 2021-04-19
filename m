@@ -2,151 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAC9363CFB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Apr 2021 09:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEBB363D64
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Apr 2021 10:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbhDSHvd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Apr 2021 03:51:33 -0400
-Received: from mail-m121145.qiye.163.com ([115.236.121.145]:50682 "EHLO
-        mail-m121145.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbhDSHvd (ORCPT
+        id S237670AbhDSIU7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Apr 2021 04:20:59 -0400
+Received: from mail-vs1-f51.google.com ([209.85.217.51]:38652 "EHLO
+        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229635AbhDSIU4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Apr 2021 03:51:33 -0400
-Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.251.74.232])
-        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 5509C8000C5;
-        Mon, 19 Apr 2021 15:51:01 +0800 (CST)
-From:   Wang Qing <wangqing@vivo.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-watchdog@vger.kernel.org,
+        Mon, 19 Apr 2021 04:20:56 -0400
+Received: by mail-vs1-f51.google.com with SMTP id s184so6761409vss.5;
+        Mon, 19 Apr 2021 01:20:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ltv54OOOgcKhPoH7oRaigoXMRi+Z2QqH7bQ4dTNkEvU=;
+        b=Ms0SsPF9J+tPj990DTLxJSvXO3Pmul5WCyeOMIDCVJ6fXcWAb6uJsC52eqzmbxUtMJ
+         Ul7GxKCbZ7tvkEEqDB5miyVfuIPIZ6Wf2fLEOnYrnyzAq9BFRVgE5tawuQnZZ1KvmiLL
+         EF/Qi81vkqZN75KRE3I2Ub033NMXNbhyaWlBPnaDUI/smGHJ8UPy9vAoTfFqPZVmpcjG
+         u+1xfNjeAWaCtnBNzLs677wnayVF3agzAGavKRFiZLiJM0DQwfElLwqOkGkNXKPR+lsq
+         TJLnDZHeX994hG8+Gw6qi4xtQrZg2dB0UisZo4zpBSW648ZZkTOPfDD7+avHhtZh59RH
+         iISg==
+X-Gm-Message-State: AOAM531bR0AI7GyosdsIXdtavR8bqUCmY3mDWUO7awITMHICVomqNNgB
+        TnOox77RR3JpNHchfmmIyY7YFvqX5Aujc9OIMxU=
+X-Google-Smtp-Source: ABdhPJw0QI7XOFx1TPnFrXWAlR/QW1v6zaWS/KnYbAtB/CEX2DsVVO2yNBv9r1VAA3kWmuOXuQwF2fQGH/J1go6B4oc=
+X-Received: by 2002:a67:f503:: with SMTP id u3mr12373252vsn.3.1618820424835;
+ Mon, 19 Apr 2021 01:20:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210419042722.27554-1-alice.guo@oss.nxp.com> <20210419042722.27554-2-alice.guo@oss.nxp.com>
+In-Reply-To: <20210419042722.27554-2-alice.guo@oss.nxp.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 19 Apr 2021 10:20:13 +0200
+Message-ID: <CAMuHMdUbrPxtJ9DCP0_nFrReuuO4vFY2J79LrKY82D7bCOfzRw@mail.gmail.com>
+Subject: Re: [RFC v1 PATCH 1/3] drivers: soc: add support for soc_device_match
+ returning -EPROBE_DEFER
+To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        horia.geanta@nxp.com, aymen.sghaier@nxp.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, tony@atomide.com,
+        geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+        vkoul@kernel.org, peter.ujfalusi@gmail.com, a.hajda@samsung.com,
+        narmstrong@baylibre.com, robert.foss@linaro.org, airlied@linux.ie,
+        daniel@ffwll.ch, khilman@baylibre.com, tomba@kernel.org,
+        jyri.sarha@iki.fi, joro@8bytes.org, will@kernel.org,
+        mchehab@kernel.org, ulf.hansson@linaro.org,
+        adrian.hunter@intel.com, kishon@ti.com, kuba@kernel.org,
+        linus.walleij@linaro.org, Roy.Pledge@nxp.com, leoyang.li@nxp.com,
+        ssantosh@kernel.org, matthias.bgg@gmail.com, edubezval@gmail.com,
+        j-keerthy@ti.com, balbi@kernel.org, linux@prisktech.co.nz,
+        stern@rowland.harvard.edu, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH V4] watchdog: mtk: support dual mode when the bark irq is available
-Date:   Mon, 19 Apr 2021 15:50:56 +0800
-Message-Id: <1618818656-32410-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZQkpKTFZLHUJMGU0YQhlNSB9VEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
-        hKTFVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PCo6ETo6GD8cDhQQKTgBERMq
-        MU4KCyFVSlVKTUpDQ0pDTU1JSklNVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
-        SU5KVUxPVUlISVlXWQgBWUFPT0pNNwY+
-X-HM-Tid: 0a78e91c7d15b03akuuu5509c8000c5
+        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-staging@lists.linux.dev,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Support using irq handling wdt bark first instead of directly resetting.
+Hi Alice,
 
-When the watchdog timer expires in Dual mode, an interrupt will be
-triggered first, then the timing restarts. The reset signal will be
-initiated when the timer expires, to prevent the system is stuck hard.
+CC Arnd (soc_device_match() author)
 
-The dual mode is disabled by default.
+On Mon, Apr 19, 2021 at 6:28 AM Alice Guo (OSS) <alice.guo@oss.nxp.com> wrote:
+> From: Alice Guo <alice.guo@nxp.com>
+>
+> In i.MX8M boards, the registration of SoC device is later than caam
+> driver which needs it. Caam driver needs soc_device_match to provide
+> -EPROBE_DEFER when no SoC device is registered and no
+> early_soc_dev_attr.
 
-V2:
-- panic() by default if WATCHDOG_PRETIMEOUT_GOV is not enabled.
+I'm wondering if this is really a good idea: soc_device_match() is a
+last-resort low-level check, and IMHO should be made available early on,
+so there is no need for -EPROBE_DEFER.
 
-V3:
-- Modify the pretimeout behavior, manually reset after the pretimeout
-- is processed and wait until timeout.
+>
+> Signed-off-by: Alice Guo <alice.guo@nxp.com>
 
-V4:
-- Remove pretimeout related processing. 
-- Add dual mode control separately.
+Thanks for your patch!
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- drivers/watchdog/mtk_wdt.c | 33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+> --- a/drivers/base/soc.c
+> +++ b/drivers/base/soc.c
+> @@ -110,6 +110,7 @@ static void soc_release(struct device *dev)
+>  }
+>
+>  static struct soc_device_attribute *early_soc_dev_attr;
+> +static bool soc_dev_attr_init_done = false;
 
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index 97ca993..a1f34b5
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -25,6 +25,7 @@
- #include <linux/reset-controller.h>
- #include <linux/types.h>
- #include <linux/watchdog.h>
-+#include <linux/interrupt.h>
- 
- #define WDT_MAX_TIMEOUT		31
- #define WDT_MIN_TIMEOUT		1
-@@ -57,6 +58,7 @@
- 
- static bool nowayout = WATCHDOG_NOWAYOUT;
- static unsigned int timeout;
-+static bool dual_mode;
- 
- struct mtk_wdt_dev {
- 	struct watchdog_device wdt_dev;
-@@ -239,13 +241,23 @@ static int mtk_wdt_start(struct watchdog_device *wdt_dev)
- 		return ret;
- 
- 	reg = ioread32(wdt_base + WDT_MODE);
--	reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
-+	if (dual_mode)
-+		reg |= (WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
-+	else
-+		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
- 	reg |= (WDT_MODE_EN | WDT_MODE_KEY);
- 	iowrite32(reg, wdt_base + WDT_MODE);
- 
- 	return 0;
- }
- 
-+static irqreturn_t mtk_wdt_isr(int irq, void *arg)
-+{
-+	panic("wdt bark!\n");
-+
-+	return IRQ_HANDLED;
-+}
-+
- static const struct watchdog_info mtk_wdt_info = {
- 	.identity	= DRV_NAME,
- 	.options	= WDIOF_SETTIMEOUT |
-@@ -267,7 +279,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct mtk_wdt_dev *mtk_wdt;
- 	const struct mtk_wdt_data *wdt_data;
--	int err;
-+	int err, irq;
- 
- 	mtk_wdt = devm_kzalloc(dev, sizeof(*mtk_wdt), GFP_KERNEL);
- 	if (!mtk_wdt)
-@@ -279,6 +291,20 @@ static int mtk_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(mtk_wdt->wdt_base))
- 		return PTR_ERR(mtk_wdt->wdt_base);
- 
-+	if (dual_mode) {
-+		irq = platform_get_irq(pdev, 0);
-+		if (irq > 0) {
-+			err = devm_request_irq(&pdev->dev, irq, mtk_wdt_isr, 0, "wdt_bark",
-+									&mtk_wdt->wdt_dev);
-+			if (err)
-+				return err;
-+		} else {
-+			dual_mode = 0;
-+			dev_err(&pdev->dev,
-+			"couldn't get wdt irq, set dual_mode = 0\n");
-+		}
-+	}
-+
- 	mtk_wdt->wdt_dev.info = &mtk_wdt_info;
- 	mtk_wdt->wdt_dev.ops = &mtk_wdt_ops;
- 	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
-@@ -368,6 +394,9 @@ module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
- 			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
- 
-+module_param(dual_mode, bool, 0);
-+MODULE_PARM_DESC(dual_mode, "Watchdog dual mode triggers irq before reset(default=0)");
-+
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Matthias Brugger <matthias.bgg@gmail.com>");
- MODULE_DESCRIPTION("Mediatek WatchDog Timer Driver");
+Do you need this variable?
+
+>
+>  struct soc_device *soc_device_register(struct soc_device_attribute *soc_dev_attr)
+>  {
+> @@ -157,6 +158,7 @@ struct soc_device *soc_device_register(struct soc_device_attribute *soc_dev_attr
+>                 return ERR_PTR(ret);
+>         }
+>
+> +       soc_dev_attr_init_done = true;
+>         return soc_dev;
+>
+>  out3:
+> @@ -246,6 +248,9 @@ const struct soc_device_attribute *soc_device_match(
+>         if (!matches)
+>                 return NULL;
+>
+> +       if (!soc_dev_attr_init_done && !early_soc_dev_attr)
+
+if (!soc_bus_type.p && !early_soc_dev_attr)
+
+> +               return ERR_PTR(-EPROBE_DEFER);
+> +
+>         while (!ret) {
+>                 if (!(matches->machine || matches->family ||
+>                       matches->revision || matches->soc_id))
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.7.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
