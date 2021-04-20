@@ -2,163 +2,147 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B4A364ED1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 20 Apr 2021 01:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE833651DC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 20 Apr 2021 07:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbhDSXnv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Apr 2021 19:43:51 -0400
-Received: from gw.atmark-techno.com ([13.115.124.170]:42768 "EHLO
-        gw.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbhDSXnq (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Apr 2021 19:43:46 -0400
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
-        by gw.atmark-techno.com (Postfix) with ESMTPS id 2A23B804AC
-        for <linux-watchdog@vger.kernel.org>; Tue, 20 Apr 2021 08:43:09 +0900 (JST)
-Received: by mail-ot1-f71.google.com with SMTP id i19-20020a0568300113b02902907bfc618fso7225559otp.8
-        for <linux-watchdog@vger.kernel.org>; Mon, 19 Apr 2021 16:43:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YfTDNxUjME1kzwn4ONpBlmaWp5uEs0PGjlewRbiJ8O0=;
-        b=jrOtySzztWpviZt5tCfn1YnoAoXsqIwlLzcIc7V9kF8QYFp6Guxl3cUJ26wNrh2Zr9
-         DaTmGIRWKZMe7V5bQYN7nyv6T8Kl9jgWuaafEG5/lwuNk+cLIoWeSBkKwAMcl4ImovnW
-         iP4umCo70jeQ5hnpGQpIHSfgA9pZ36yddxlb8y2Rdin0s7P5+IhdnA0YGVuXgD4e3P+b
-         7Hvy6rgMb+feylqKBYqdwMi+1F2HtpJswDRSyTGK9hxmsbxo+78YA6szvhSUvlYsGR/o
-         jZMV0sxCFoFNOVQBDuL03taHlofhJfF4tt4203/EcyzNShVacS8pvv7ZOQaf3e0tSLrd
-         hFlg==
-X-Gm-Message-State: AOAM530VAcv5d++ueTk6kOTu8J25ZvULaDWb4kzYIqSYysFhPA9Bv2o4
-        rVGPRRAb/MAyBubO4TkjOtD2no79OvdEsZqy0j05WlLJxFDYG0XqqV1im4Ih+0KX5HUDIR9xVtH
-        OFPb6U2IH+B07lTM6II+azb04T6a6UzY=
-X-Received: by 2002:a17:90a:1c1:: with SMTP id 1mr1708199pjd.190.1618875776934;
-        Mon, 19 Apr 2021 16:42:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzRGNIqy2AO5m9iOwuC4N09BxordE8LmUXYTIIeyniOtbCQKfA0MKaQl391n1ZLV3YIJOra8w==
-X-Received: by 2002:a17:90a:1c1:: with SMTP id 1mr1708139pjd.190.1618875776711;
-        Mon, 19 Apr 2021 16:42:56 -0700 (PDT)
-Received: from pc-0115 (76.125.194.35.bc.googleusercontent.com. [35.194.125.76])
-        by smtp.gmail.com with ESMTPSA id r3sm8384971pgn.82.2021.04.19.16.42.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Apr 2021 16:42:55 -0700 (PDT)
-Received: from martinet by pc-0115 with local (Exim 4.94)
-        (envelope-from <martinet@pc-0115>)
-        id 1lYdXa-002mPj-58; Tue, 20 Apr 2021 08:42:54 +0900
-Date:   Tue, 20 Apr 2021 08:42:44 +0900
-From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        aymen.sghaier@nxp.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        David Miller <davem@davemloft.net>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        peter.ujfalusi@gmail.com, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>, tomba@kernel.org,
-        jyri.sarha@iki.fi, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kishon <kishon@ti.com>, Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Roy Pledge <Roy.Pledge@nxp.com>, Leo Li <leoyang.li@nxp.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>, Felipe Balbi <balbi@kernel.org>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>, dmaengine@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:ARM/Amlogic Meson SoC support" 
-        <linux-amlogic@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-staging@lists.linux.dev,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Subject: Re: [RFC v1 PATCH 3/3] driver: update all the code that use
- soc_device_match
-Message-ID: <YH4VdPNO9cdzc5MD@atmark-techno.com>
-References: <20210419042722.27554-1-alice.guo@oss.nxp.com>
- <20210419042722.27554-4-alice.guo@oss.nxp.com>
- <YH0O907dfGY9jQRZ@atmark-techno.com>
- <CAMuHMdVY1SLZ0K30T2pimyrR6Mm=VoSTO=L-xxCy2Bj7_kostw@mail.gmail.com>
- <YH1OeFy+SepIYYG0@atmark-techno.com>
- <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
+        id S229450AbhDTFoP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 20 Apr 2021 01:44:15 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:53373 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229668AbhDTFoO (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 20 Apr 2021 01:44:14 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1618897424; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=7LkHj0VTOUKK/UXJch10kxBz5vG6doxMUBx721m/62w=;
+ b=Aq5Ddb826HHh+RNz3rYg9RjhvDylubp+mxwkiHs83193PLK5FXRLZDLWtLwNlA41W98MQkzN
+ Jh3gN5vJyeieg5Pv+Sb/OZnuafTeo1NqFmLzE2Cuuyqhp/TsVTCe91+NzcrV4ZyTWJeD/C5S
+ OEIPGlWxUGsWF/j0SzuAAz4Gf/0=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNTk5OSIsICJsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 607e69fd853c0a2c4692af76 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 20 Apr 2021 05:43:25
+ GMT
+Sender: saiprakash.ranjan=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5C0CCC4323A; Tue, 20 Apr 2021 05:43:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: saiprakash.ranjan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 41B6DC433F1;
+        Tue, 20 Apr 2021 05:43:23 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 20 Apr 2021 11:13:19 +0530
+From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] watchdog: qcom: Move suspend/resume to
+ suspend_late/resume_early
+In-Reply-To: <20210310202327.GA237124@roeck-us.net>
+References: <20210310202004.1436-1-saiprakash.ranjan@codeaurora.org>
+ <20210310202327.GA237124@roeck-us.net>
+Message-ID: <948130ae3a0781eb19b7431059852c23@codeaurora.org>
+X-Sender: saiprakash.ranjan@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Arnd Bergmann wrote on Mon, Apr 19, 2021 at 02:16:36PM +0200:
-> In some cases, you can use the device_link infrastructure to deal
-> with dependencies between devices. Not sure if this would help
-> in your case, but have a look at device_link_add() etc in drivers/base/core.c
+Hi Guenter,
 
-I'll need to actually try to convince myself but if creating the link
-forces driver registration then it should be workable.
-
-> > In this particular case the problem is that since 7d981405d0fd ("soc:
-> > imx8m: change to use platform driver") the soc probe tries to use the
-> > nvmem driver for ocotp fuses for imx8m devices, which isn't ready yet.
-> > So soc loading gets pushed back to the end of the list because it gets
-> > defered and other drivers relying on soc_device_match get confused
-> > because they wrongly think a device doesn't match a quirk when it
-> > actually does.
-> >
-> > If there is a way to ensure the nvmem driver gets loaded before the soc,
-> > that would also solve the problem nicely, and avoid the need to mess
-> > with all the ~50 drivers which use it.
-> >
-> > Is there a way to control in what order drivers get loaded? Something in
-> > the dtb perhaps?
+On 2021-03-11 01:53, Guenter Roeck wrote:
+> On Thu, Mar 11, 2021 at 01:50:04AM +0530, Sai Prakash Ranjan wrote:
+>> During suspend/resume usecases and tests, it is common to see issues
+>> such as lockups either in suspend path or resume path because of the
+>> bugs in the corresponding device driver pm handling code. In such 
+>> cases,
+>> it is important that watchdog is active to make sure that we either
+>> receive a watchdog pretimeout notification or a bite causing reset
+>> instead of a hang causing us to hard reset the machine.
+>> 
+>> There are good reasons as to why we need this because:
+>> 
+>> * We can have a watchdog pretimeout governor set to panic in which
+>>   case we can have a backtrace which would help identify the issue
+>>   with the particular driver and cause a normal reboot.
+>> 
+>> * Even in case where there is no pretimeout support, a watchdog
+>>   bite is still useful because some firmware has debug support to dump
+>>   CPU core context on watchdog bite for post-mortem analysis.
+>> 
+>> * One more usecase which comes to mind is of warm reboot. In case we
+>>   hard reset the target, a cold reboot could be induced resulting in
+>>   lose of ddr contents thereby losing all the debug info.
+>> 
+>> Currently, the watchdog pm callback just invokes the usual suspend
+>> and resume callback which do not have any special ordering in the
+>> sense that a watchdog can be suspended before the buggy device driver
+>> suspend callback and watchdog resume can happen after the buggy device
+>> driver resume callback. This would mean that the watchdog will not be
+>> active when the buggy driver cause the lockups thereby hanging the
+>> system. So to make sure this doesn't happen, move the watchdog pm to
+>> use late/early system pm callbacks which will ensure that the watchdog
+>> is suspended late and resumed early so that it can catch such issues.
+>> 
+>> Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
 > 
-> For built-in drivers, load order depends on the initcall level and
-> link order (how things are lined listed in the Makefile hierarchy).
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> For loadable modules, this is up to user space in the end.
-> 
-> Which of the drivers in this scenario are loadable modules?
 
-All the drivers involved in my case are built-in (nvmem, soc and final
-soc_device_match consumer e.g. caam_jr that crashes the kernel if soc is
-not identified properly).
-
-I frankly don't like the idea of moving nvmem/ above soc/ in
-drivers/Makefile as a "solution" to this (especially as there is one
-that seems to care about what soc they run on...), so I'll have a look
-at links first, hopefully that will work out.
-
+Gentle Ping. I don't see this in linux-next or linux-watchdog, please 
+let
+me know if anything is pending from my side.
 
 Thanks,
+Sai
+
+>> ---
+>>  drivers/watchdog/qcom-wdt.c | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+>> index e38a87ffe5f5..0d2209c5eaca 100644
+>> --- a/drivers/watchdog/qcom-wdt.c
+>> +++ b/drivers/watchdog/qcom-wdt.c
+>> @@ -329,7 +329,9 @@ static int __maybe_unused qcom_wdt_resume(struct 
+>> device *dev)
+>>  	return 0;
+>>  }
+>> 
+>> -static SIMPLE_DEV_PM_OPS(qcom_wdt_pm_ops, qcom_wdt_suspend, 
+>> qcom_wdt_resume);
+>> +static const struct dev_pm_ops qcom_wdt_pm_ops = {
+>> +	SET_LATE_SYSTEM_SLEEP_PM_OPS(qcom_wdt_suspend, qcom_wdt_resume)
+>> +};
+>> 
+>>  static const struct of_device_id qcom_wdt_of_table[] = {
+>>  	{ .compatible = "qcom,kpss-timer", .data = &match_data_apcs_tmr },
+>> --
+>> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+>> member
+>> of Code Aurora Forum, hosted by The Linux Foundation
+>> 
+
 -- 
-Dominique
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+member
+of Code Aurora Forum, hosted by The Linux Foundation
