@@ -2,109 +2,164 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E93E366672
-	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Apr 2021 09:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E9B3666B3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Apr 2021 10:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237388AbhDUHwA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 21 Apr 2021 03:52:00 -0400
-Received: from mail-lf1-f45.google.com ([209.85.167.45]:43806 "EHLO
-        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237383AbhDUHv7 (ORCPT
+        id S234235AbhDUIFt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 21 Apr 2021 04:05:49 -0400
+Received: from mail-m121145.qiye.163.com ([115.236.121.145]:24048 "EHLO
+        mail-m121145.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234116AbhDUIFs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 21 Apr 2021 03:51:59 -0400
-Received: by mail-lf1-f45.google.com with SMTP id y4so25304504lfl.10;
-        Wed, 21 Apr 2021 00:51:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc
-         :in-reply-to:references:mime-version:date:user-agent
-         :content-transfer-encoding;
-        bh=Pae9yH+KaHgTqO+dxMFR9Vep9F1PrK7GQlrKbtuE/kI=;
-        b=CvAbYW+Bz8Sj728WpXFetqW6sVK536wmR4oKurUcMkA5erGaameUl3ZXR/dsx1IHVk
-         1/ziMfI6Fk7n6yt5RanH+ee6XkzzrH0AzzAqemNA0mVQL4ZYTTKMmunzDkWE474NHYfO
-         v6/k1OiWTPbtwQZkKrFe8z/QlKfsI5SMTT1kxa+0PM++P7m+HQBcxEdylz1HXYU3oKxr
-         x1XRtJehMNQ/qw1ybvAb8Wd2hPLhfz+HRWpDu1oVf0ABhThuSf8xSPXjI25XHEHcbM3l
-         2mQp+RtJv21wmYAYjOgOZkpX3UwG27lAgXPoODN5lpmXZLboiA5Fy9mAg9c4Wf0R81qh
-         YeKw==
-X-Gm-Message-State: AOAM533MPIw2QPOojvjLQv9Cf6tfDktk2az+9p0Qw+ac3LtqVaZHy3YF
-        hrIKN10BL5XtYdSoNNuEnco=
-X-Google-Smtp-Source: ABdhPJyamlH7tMymKn/NliNVTaRv5+NWeF4lqRMi91V4eNBUtbjHXg0IbpR8KG2YkoC6zBsccN0XWg==
-X-Received: by 2002:ac2:4e8c:: with SMTP id o12mr16152092lfr.211.1618991485123;
-        Wed, 21 Apr 2021 00:51:25 -0700 (PDT)
-Received: from dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi (dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::6])
-        by smtp.gmail.com with ESMTPSA id c18sm125078ljd.66.2021.04.21.00.51.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Apr 2021 00:51:24 -0700 (PDT)
-Message-ID: <da0233f3223d7c0816581afe0969caf0abe20378.camel@fi.rohmeurope.com>
-Subject: Re: [PATCH v3 2/8] MAINTAINERS: Add entry for devm helpers
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reply-To: matti.vaittinen@fi.rohmeurope.com
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        Wed, 21 Apr 2021 04:05:48 -0400
+Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.251.74.232])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 90E7D8003C6;
+        Wed, 21 Apr 2021 16:05:12 +0800 (CST)
+From:   Wang Qing <wangqing@vivo.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-In-Reply-To: <YFn5CSB1O3i+SzgR@kroah.com>
-References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
-         <eec1797734e3d080662aa732c565ed4a3c261799.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
-         <e064fdd7-b276-6732-16fe-2eb2564b2179@redhat.com>
-         <YFn5CSB1O3i+SzgR@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-MIME-Version: 1.0
-Date:   Wed, 21 Apr 2021 10:51:13 +0300
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-Content-Transfer-Encoding: 7bit
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH V5] watchdog: mtk: support dual mode when the bark irq is available
+Date:   Wed, 21 Apr 2021 16:05:04 +0800
+Message-Id: <1618992304-18903-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZQkkaS1ZMSUNKTU1DQ01LHh5VEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
+        hKTFVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NEk6MRw6TT8SMAgjPEMLTh8S
+        MBkKFBlVSlVKTUpDQkJJSEpISENCVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
+        SU5KVUxPVUlISVlXWQgBWUFPQ05MNwY+
+X-HM-Tid: 0a78f376321db03akuuu90e7d8003c6
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Support using irq handling wdt bark first instead of directly resetting.
 
-On Tue, 2021-03-23 at 15:19 +0100, Greg KH wrote:
-> On Tue, Mar 23, 2021 at 02:58:28PM +0100, Hans de Goede wrote:
-> > Hi,
-> > 
-> > On 3/23/21 2:56 PM, Matti Vaittinen wrote:
-> > > Devm helper header containing small inline helpers was added.
-> > > Hans promised to maintain it.
-> > > 
-> > > Add Hans as maintainer and myself as designated reviewer.
-> > > 
-> > Ultimately this is up to Greg though, so lets wait and see what
-> > Greg has to say about this.
-> 
-> Can we move some of the devm_* calls in include/device.h into here as
-> well so that you all can be in charge of them instead of me?
+When the watchdog timer expires in dual mode, an interrupt will be
+triggered first, then the timing restarts. The reset signal will be
+initiated when the timer expires again.
 
-Seems like this was left w/o answer. I guess the question was pointed
-to Hans - but what comes to my (not always so humble) opinion - most of
-the devm functions in device.h are tightly related to the device
-interface or devres. Thus the device.h feels like appropriate place for
-most of those. OTOH, the kmalloc/kfree related functions, strdub and
-kmemdub might be candidates for move - those are not really "device
-things".
+The dual mode is disabled by default.
 
-But this is really not my call :)
+V2:
+- panic() by default if WATCHDOG_PRETIMEOUT_GOV is not enabled.
 
-Best Regards
-	Matti Vaittinen
+V3:
+- Modify the pretimeout behavior, manually reset after the pretimeout
+- is processed and wait until timeout.
 
+V4:
+- Remove pretimeout related processing. 
+- Add dual mode control separately.
+
+V5:
+- Fix some formatting and printing problems.
+
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+ drivers/watchdog/mtk_wdt.c | 36 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+index 97ca993..40122f8
+--- a/drivers/watchdog/mtk_wdt.c
++++ b/drivers/watchdog/mtk_wdt.c
+@@ -25,6 +25,7 @@
+ #include <linux/reset-controller.h>
+ #include <linux/types.h>
+ #include <linux/watchdog.h>
++#include <linux/interrupt.h>
+ 
+ #define WDT_MAX_TIMEOUT		31
+ #define WDT_MIN_TIMEOUT		1
+@@ -57,6 +58,7 @@
+ 
+ static bool nowayout = WATCHDOG_NOWAYOUT;
+ static unsigned int timeout;
++static bool dual_mode;
+ 
+ struct mtk_wdt_dev {
+ 	struct watchdog_device wdt_dev;
+@@ -239,13 +241,23 @@ static int mtk_wdt_start(struct watchdog_device *wdt_dev)
+ 		return ret;
+ 
+ 	reg = ioread32(wdt_base + WDT_MODE);
+-	reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
++	if (dual_mode)
++		reg |= (WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
++	else
++		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
+ 	reg |= (WDT_MODE_EN | WDT_MODE_KEY);
+ 	iowrite32(reg, wdt_base + WDT_MODE);
+ 
+ 	return 0;
+ }
+ 
++static irqreturn_t mtk_wdt_isr(int irq, void *arg)
++{
++	panic("wdt bark!\n");
++
++	return IRQ_HANDLED;
++}
++
+ static const struct watchdog_info mtk_wdt_info = {
+ 	.identity	= DRV_NAME,
+ 	.options	= WDIOF_SETTIMEOUT |
+@@ -267,7 +279,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct mtk_wdt_dev *mtk_wdt;
+ 	const struct mtk_wdt_data *wdt_data;
+-	int err;
++	int err, irq;
+ 
+ 	mtk_wdt = devm_kzalloc(dev, sizeof(*mtk_wdt), GFP_KERNEL);
+ 	if (!mtk_wdt)
+@@ -279,6 +291,19 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mtk_wdt->wdt_base))
+ 		return PTR_ERR(mtk_wdt->wdt_base);
+ 
++	if (dual_mode) {
++		irq = platform_get_irq(pdev, 0);
++		if (irq > 0) {
++			err = devm_request_irq(&pdev->dev, irq, mtk_wdt_isr, 0, "wdt_bark",
++						&mtk_wdt->wdt_dev);
++			if (err)
++				return err;
++		} else {
++			dual_mode = 0;
++			dev_info(&pdev->dev, "couldn't get wdt irq, set dual_mode = 0\n");
++		}
++	}
++
+ 	mtk_wdt->wdt_dev.info = &mtk_wdt_info;
+ 	mtk_wdt->wdt_dev.ops = &mtk_wdt_ops;
+ 	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
+@@ -299,8 +324,8 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	if (unlikely(err))
+ 		return err;
+ 
+-	dev_info(dev, "Watchdog enabled (timeout=%d sec, nowayout=%d)\n",
+-		 mtk_wdt->wdt_dev.timeout, nowayout);
++	dev_info(dev, "Watchdog enabled (timeout=%d sec, nowayout=%d,
++		 dual_mode=%d)\n", mtk_wdt->wdt_dev.timeout, nowayout, dual_mode);
+ 
+ 	wdt_data = of_device_get_match_data(dev);
+ 	if (wdt_data) {
+@@ -368,6 +393,9 @@ module_param(nowayout, bool, 0);
+ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+ 			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+ 
++module_param(dual_mode, bool, 0);
++MODULE_PARM_DESC(dual_mode, "Dual mode triggers irq before reset (default=0)");
++
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Matthias Brugger <matthias.bgg@gmail.com>");
+ MODULE_DESCRIPTION("Mediatek WatchDog Timer Driver");
 -- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
+2.7.4
 
