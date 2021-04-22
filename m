@@ -2,225 +2,160 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32BE3681FB
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Apr 2021 15:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674E13684CE
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Apr 2021 18:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbhDVN5I (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 22 Apr 2021 09:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236092AbhDVN5H (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 22 Apr 2021 09:57:07 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFB2C06174A;
-        Thu, 22 Apr 2021 06:56:31 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id l17so14541966oil.11;
-        Thu, 22 Apr 2021 06:56:31 -0700 (PDT)
+        id S236504AbhDVQ3G (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 22 Apr 2021 12:29:06 -0400
+Received: from mail-eopbgr40077.outbound.protection.outlook.com ([40.107.4.77]:28225
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236236AbhDVQ3A (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 22 Apr 2021 12:29:00 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PFYYpSBbtSgLVdyo2uy+TCLnASJnK5KRgdbZsqVnUfFOWD4rku83/qyVFnsNUgR6pQDgVQuVv4p7OphGhJgqBsIiMU5gg3n/0r1elzpwu5DFjYpuGpWlFHXvG029NzCaqo6aH1sUisHY1oFSy2nKN9loHuIut1zHm9/N/9YAnEApn3bnewiqJByT09HYqr8bFPF4CehiMN3JZClXO2OdJO7wvrmrhBbJpNFTmr9PUQiEInYPUDgwJ70W5peqOLEaNUnl3gFpQkgRT8rtphHziQ01nb2OoH5vb6pXcHCx8ihVTiLPwssZ/IzWn8GLRNLEDayjSpQtUPQXOJ6WJn5Ufw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KuodW1vifscfHn0aoKde1pLfMR+536/hpaY+0TrNnBA=;
+ b=LE+iiFCYPsKB42K//WGhtAvBZYNAdyNj0FwO8yFZopM8+AA7VpydKWV58lonzBMQ5yvcxGdLk3XjFVGFff1MuxjUUMAuXGlZZXwQO3HPwLv35bTA0b4sG8UU8po0cfNgGcD0qvJ1ElspxXUwQL6AqVlqzKJ1csTaLw3KRc9MBlq8N33sm8kQst8TTJyw60jbFU4LmwqC6rFp/1/ev5e6LhIfr4UyqVGVgAgE5+v+OUh5ZXIbH70QHgCgMmeYVWCORYwThyLagVYdJi48iMywUWT5tb78gt04Gt+ZHZuwjAJWUbvDLDeHzZB73XWorkbPLtwxnfBIutHJ6cHjdVhdbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vimar.com; dmarc=pass action=none header.from=vimar.com;
+ dkim=pass header.d=vimar.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HZfLafI/IDvNf3tC/EcEnaGMSlDdEftiWqvB2zdaIMs=;
-        b=tMyGr+b2P8/zMWY7Cd2ZzlRPUzRewyV7dpglbKrUhh1IjQuVhp7PigSID7j2F7ufVn
-         F10j2dg8Z5FpUS5NQWbbfLq79eeGr/h3r+1iXJpfpi3AwC+pXta8ausRU/ilbMeK5eMW
-         X3AKtejloWnp9dgv3p10Yc+ujiUnigjIfnsXcXOLl4lbKWKmoJ3acPdnBfPP5QfVM18q
-         P5TGAVYXxLVJseQfKDoQChFMkp3idt1R/rmURsAJrpFZzqAr7HgbCZT9XaRVBy4yJ0oW
-         t4jx5VZCDO4P197bUH0BiqTgZ+G2+oQFuHc7AZFFqOZIgQ/LnnG4RMZ07yzlFVkzCztk
-         ewjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=HZfLafI/IDvNf3tC/EcEnaGMSlDdEftiWqvB2zdaIMs=;
-        b=OShgjYqV0bSjZ0JWSFKhp2bcgsRme0ZZc5nb7BMUyRxlP3iDtiAX2tI4pCnG24XSmR
-         VwWWcmuL+7360KJnH+pHz/GMatW7Ctk++/IlZLw9+ZxqREHmEL5fKXg/2i0oZa/DbRbR
-         rMGqG1OF4E13M+SQsitceh0x5JfzeFbyi8OfQi3L4c3BN+SooIqFSVLGWJ0Q8C0hBEa4
-         FnEJkUIcThWtLRdso0sVOtFdOKwoirsFRgEyKqbpn9m9ek2R/2LRefinAycKZ/WJ5Vqi
-         +XIzix1Hq+c6aPnUhZ4LQMs1CiAo/KCo8BjcBaEPuvBvhEoBO6xoR9mwRDCxCTNsLwEP
-         MQtg==
-X-Gm-Message-State: AOAM532EKJrKEs+FGW9FVhnqOt0OZfi+2h7rDsLfmy/1X/rEioMXRoQi
-        QBIr89zYOaATTX0LnaiCjjEFdQ7T+gs=
-X-Google-Smtp-Source: ABdhPJzNHtXVuCLj7dYY6j0LeN6zhR1wn1tTX5qyZupoVL5zfMqVjQxFSSvo3i78MJcfybtu4Hd+5Q==
-X-Received: by 2002:aca:3286:: with SMTP id y128mr75632oiy.145.1619099790369;
-        Thu, 22 Apr 2021 06:56:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m5sm651589ots.13.2021.04.22.06.56.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Apr 2021 06:56:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH V6 1/2] watchdog: mtk: support pre-timeout when the bark
- irq is available
-To:     =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <AHkAYwDkDhOuqx67*F9EB4r-.3.1619075149689.Hmail.wangqing@vivo.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <56f16371-5342-5c71-2393-41258cecb516@roeck-us.net>
-Date:   Thu, 22 Apr 2021 06:56:27 -0700
+ d=Vimargroup.onmicrosoft.com; s=selector2-Vimargroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KuodW1vifscfHn0aoKde1pLfMR+536/hpaY+0TrNnBA=;
+ b=XJgpTU7Xd55lLZN5XZELL6nBmaAhZBD77Yfw989or8FmObIo700gU/LfzLusXAFyra8FIqLDIeSR4y2UGq76vzU85+alrjZMLAL2eMPjH+2BaaeoU0VbK5iETsn8EkPUDSW2WiQ+Plza38lO/8o+RVRUaiwagQxrlCMvmyMREI0=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=vimar.com;
+Received: from AM6PR08MB2981.eurprd08.prod.outlook.com (2603:10a6:209:44::22)
+ by AM6PR08MB3718.eurprd08.prod.outlook.com (2603:10a6:20b:81::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.19; Thu, 22 Apr
+ 2021 16:28:23 +0000
+Received: from AM6PR08MB2981.eurprd08.prod.outlook.com
+ ([fe80::9de3:7ce3:f155:8eda]) by AM6PR08MB2981.eurprd08.prod.outlook.com
+ ([fe80::9de3:7ce3:f155:8eda%4]) with mapi id 15.20.4065.020; Thu, 22 Apr 2021
+ 16:28:23 +0000
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: gpio-wdt: add "start-at-boot"
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210421162621.24910-1-francesco.zanella@vimar.com>
+ <20210421162621.24910-2-francesco.zanella@vimar.com>
+ <20210421163748.GA110463@roeck-us.net>
+From:   Francesco Zanella <francesco.zanella@vimar.com>
+Message-ID: <49dc0cc4-c86b-3e47-f366-009406bc68a6@vimar.com>
+Date:   Thu, 22 Apr 2021 18:28:16 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <AHkAYwDkDhOuqx67*F9EB4r-.3.1619075149689.Hmail.wangqing@vivo.com>
+In-Reply-To: <20210421163748.GA110463@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [151.71.13.13]
+X-ClientProxiedBy: MR2P264CA0128.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:30::20) To AM6PR08MB2981.eurprd08.prod.outlook.com
+ (2603:10a6:209:44::22)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.1.150] (151.71.13.13) by MR2P264CA0128.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:30::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.21 via Frontend Transport; Thu, 22 Apr 2021 16:28:23 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 924d6800-82fe-4819-e174-08d905aba623
+X-MS-TrafficTypeDiagnostic: AM6PR08MB3718:
+X-Microsoft-Antispam-PRVS: <AM6PR08MB3718F251D49C3AC0766F3515E9469@AM6PR08MB3718.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Tzb1fD5w1T3UuUoc8/fARSKHKIANRg0GK9K5Eu8OZJHBgrrnRbYFTaLvGVWvZ8J1Jh4HNXDXhhz+dqB4J0luCG0mPK/FQcGbIxj2wXUN7UPlpW9vJ5tdiRoeK4sEt3vEgzvI2ekOlAy5c2XBIF8mcJieCKnspgCrGg/AvAkBeSSEUCQWiN32U8ey/Jdr4/bMxAA350I+MtqKzvZP3CK32T2uwvInyJ3KrpN6EAeC+xb/NoVCmFx0G21eDfdJeV2gJf7abOkYYVHSiG6zcm+seeMhZajRQwxnZeceEH2fFNfwi4K5NLiTWXfrTy9URvFz3i9lIiQAG0yeKonU+QMb/0O2psJaaZojVZCulhORo6GJCXBj37sZht3nx1efSYfWoiHu1vEogqzp6ildsu/QxMwnQJJnnX1UYRutR0yB5KpZMnRTrBPJWgS74lYR4T60d2uhNofmM/hg3muX4MPaB1Z4Rv6deHH2BGBg7fRBq53V9JL5al5oABc41LvqqcY2HlKvjoRwrVSsrZbWYWlpHyPpgE5eBHAomKlox0QrH50LuQCQXj3QMQ1th747StPxzh06HTHHev5mZ2mblkZ8wHRlOqr3BXCc1V7RC2ZMN6ptIWvC5B278Dy10R8bQMkuwk+nS1JYuGRwntwze+Pq1CcUbIukyctZe9bUtI8YnCO/tlgn5Hr/uvLkmrds7fQR00ohbCZcG7+MLzF+EXW044wdXIw3DJiLhI3p2ElQw9g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB2981.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(396003)(136003)(376002)(346002)(366004)(8676002)(66946007)(186003)(8936002)(16526019)(44832011)(38350700002)(6666004)(478600001)(316002)(86362001)(66556008)(66476007)(26005)(6916009)(31686004)(2616005)(83380400001)(6486002)(53546011)(31696002)(4326008)(52116002)(16576012)(36756003)(2906002)(5660300002)(956004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?dU85TGUvTjVDQWx2VzJSMU5SNE4vanRoSWl1VTdaOXc5cFEwWHdnMFZheTVV?=
+ =?utf-8?B?VC9xMDJnV0ROYVY1RjQyVXMzbVVnVGd6WUJiSXRlYU1vaURMWnlkZENDNVBX?=
+ =?utf-8?B?Y0xBZ1B4MXVkdFd5UTU5YmtqT0JlVHZPNklNTmNoYWt3TjhjdUxCazQ4Z2ox?=
+ =?utf-8?B?WEphakk3VHVEb25ROGVET0xrL05MdzdJTWFWcVZXM29QbEhsREdOT2ZlRkNy?=
+ =?utf-8?B?aEthNEdvaFlBbmM1QklPU0dObUdPVHpvRE9oVHlxWkJmUGZSbU5Fc0tacXF2?=
+ =?utf-8?B?RkNxUkhPeUM2YmhjNk1pNHhudnM5aVRMSndrWVEya0xYM2VJS0Fvcm9ZNjBm?=
+ =?utf-8?B?WFVhK3M0aDJtbDcwR0pPN0xXNEk1RzhBWlFLc20veHc0cXpVOU16UzNzeWZl?=
+ =?utf-8?B?V2xzODB5LzBnOTNOUFVaYmY1d001RldlejZKYTBZVGF1Vko0SkpZN0tGT1Jp?=
+ =?utf-8?B?c2VQTnpOS1FWb0hoWTI1L3J6NzY5akNCU1NZVlE1a3VnQlFudDc3Q1VUNlJY?=
+ =?utf-8?B?M01wU0prVlVNUElUQmZjZEVCUUcwZVNTcUU5bmZrWnlyeE8vb2pvc1RyelpR?=
+ =?utf-8?B?WWpuUzEraW8ydzlBRndzNzh0cndJV3ArSmIxaHVkRTRWdURIL3IyU2FCWi9M?=
+ =?utf-8?B?MnZsendreHB3TWtZd1JCR1Jyb2U3T0FSQlV4bWVOZG1lY1pyN1R0YzI3UjN2?=
+ =?utf-8?B?QndPSVdiOWx1SXZtVHV2V1BSSUd0THlMWS82Ylk1R0VTODZVQ1FOTXE3eFd5?=
+ =?utf-8?B?S3gxVmpVaGNVMCs1Mk52UklYZy9Ma2RMOEVYanNyVTZJanVlRjVDQWtFVWNC?=
+ =?utf-8?B?bjFvc1RNNDltbkYwcFkrQmovQTV0Z2VSdDdtK0NDRm1yT0pkc3hNWDNxbFBF?=
+ =?utf-8?B?ZzlpaFo5V1JBbUk1WFl3THl5dUJZUjUxV0Q2Y2hCdHYweGNnQ01wVm42RzdX?=
+ =?utf-8?B?czNZU0lQdFpqSGRWUjRDVFMxZXJDaXkyUExtSS9OTjRlcU9WbGgzMnU0TmlP?=
+ =?utf-8?B?cDhtSGUyc3l0TVk4TENOa2xJdlVpcFVuaHRPRUsvSTNYc3EzQ2xJVm9PdGcv?=
+ =?utf-8?B?ODNQTHNHaVMrTXhTOW9QcWw0UWtldGZmSVUzU3hVNEROaW55VXBJTi9EaEtW?=
+ =?utf-8?B?UTBCNElqVjVETmFuNXczYVAydmtiUkxzakRWY2R6N0x4R1pqK1N2eHlFaVNa?=
+ =?utf-8?B?Z0FzZTR1TEpnVWlWbTRpd2ZsckpBOE5YSGd4WndjaHVxeklCMTlTdHdZU2tV?=
+ =?utf-8?B?eHlmK0pNK3BVN1d3cGtNWWpORFJjNDFBOHFPRkpCTG40N25oaUhtTnFGQUpx?=
+ =?utf-8?B?TmZUUFRFY2JtT1NkZ0s0aDhNc3pqT3pDNzF2Qk1lNldEbmNqbEcyRlJ3VGg5?=
+ =?utf-8?B?YUE4Y0IwY00yWHdCaHNlRERYbFBmRDRtMXlZVFpwcHRJNnQ4djFhV1lsL01k?=
+ =?utf-8?B?a2M3TnExSmU1aWpYdzRnVnhOeU1jODJia0w0b0p4b0FwTU03UEwzV3pOczRQ?=
+ =?utf-8?B?eFNOcHFhdXZIbTdTZHhBUTBkRDVpRm9MVW5rTXlWRzQyY1o5RFN4NExrSHJl?=
+ =?utf-8?B?SmZ0dUtxd0FuKzhIdjNyRm9FZnNZSmZwOXJURGhLM0c4aUlXb2U2VDUxakl2?=
+ =?utf-8?B?SldkeGhUV2hoNno4bDB0OEM2V21OWTIvVkhDYWdTa0EwZG5KSVdndlMrWTdT?=
+ =?utf-8?B?ekgwaG5ZZFlDNGo5MXZUenliZng0OXRMajQ2S2VCYTNqK0Fra2puaCsyeGtx?=
+ =?utf-8?Q?AJaG+iOOxHBiO8otD4KYHr5D9hgjf6FfzzTNFd8?=
+X-OriginatorOrg: vimar.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 924d6800-82fe-4819-e174-08d905aba623
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR08MB2981.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2021 16:28:23.5331
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a1f008bc-d59b-4c66-8f87-60fd9af15c7f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CTajzLX0JHB4/+m/enAx9DroMvb2xHVD3jy6Mg3fc8UIdMi+rY8B1Uok+ZbJtVu+JGRQtQn7U0Ik7djwgDGAzugPiANmYpm2pfip+Fc4xhY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB3718
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/22/21 12:05 AM, 王擎 wrote:
-> 
->> On 4/21/21 8:46 PM, 王擎 wrote:
->>>
->>>> On 4/21/21 7:45 PM, Wang Qing wrote:
->>>>> Use the bark interrupt as the pretimeout notifier if available.
->>>>>
->>>>> When the watchdog timer expires in dual mode, an interrupt will be
->>>>> triggered first, then the timing restarts. The reset signal will be
->>>>> initiated when the timer expires again.
->>>>>
->>>>> The pretimeout notification shall occur at timeout-sec/2.
->>>>>
->>>>> V2:
->>>>> - panic() by default if WATCHDOG_PRETIMEOUT_GOV is not enabled.
->>>>>
->>>>> V3:
->>>>> - Modify the pretimeout behavior, manually reset after the pretimeout
->>>>> - is processed and wait until timeout.
->>>>>
->>>>> V4:
->>>>> - Remove pretimeout related processing. 
->>>>> - Add dual mode control separately.
->>>>>
->>>>> V5:
->>>>> - Fix some formatting and printing problems.
->>>>>
->>>>> V6:
->>>>> - Realize pretimeout processing through dualmode.
->>>>>
->>>>> Signed-off-by: Wang Qing <wangqing@vivo.com>
->>>>> ---
->>>>>  drivers/watchdog/mtk_wdt.c | 53 +++++++++++++++++++++++++++++++++++++++++-----
->>>>>  1 file changed, 48 insertions(+), 5 deletions(-)
->>>>>
->>>>> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
->>>>> index 97ca993..ebc648b
->>>>> --- a/drivers/watchdog/mtk_wdt.c
->>>>> +++ b/drivers/watchdog/mtk_wdt.c
->>>>> @@ -25,6 +25,7 @@
->>>>>  #include <linux/reset-controller.h>
->>>>>  #include <linux/types.h>
->>>>>  #include <linux/watchdog.h>
->>>>> +#include <linux/interrupt.h>
->>>>>  
->>>>>  #define WDT_MAX_TIMEOUT		31
->>>>>  #define WDT_MIN_TIMEOUT		1
->>>>> @@ -184,15 +185,22 @@ static int mtk_wdt_set_timeout(struct watchdog_device *wdt_dev,
->>>>>  {
->>>>>  	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
->>>>>  	void __iomem *wdt_base = mtk_wdt->wdt_base;
->>>>> +	unsigned int timeout_interval;
->>>>>  	u32 reg;
->>>>>  
->>>>> -	wdt_dev->timeout = timeout;
->>>>> +	timeout_interval = wdt_dev->timeout = timeout;
->>>>> +	/*
->>>>> +	 * In dual mode, irq will be triggered at timeout/2
->>>>> +	 * the real timeout occurs at timeout
->>>>> +	 */
->>>>> +	if (wdt_dev->pretimeout)
->>>>> +		timeout_interval = wdt_dev->pretimeout = timeout/2;
->>>>
->>>> Please run checkpatch --strict and fix what it reports.
->>>> Also, there should be a set_pretimeout function to set the
->>>> pretimeout. It is ok to update it here, but it should be set
->>>> in its own function to make sure that the actual value
->>>> is reported back to userspace.
->>>>
->>>> Thanks,
->>>> Guenter
->>>
->>> The reason why the set_pretimeout interface is not provided is 
->>> because the pretimeout is fixed after the timeout is set,  we need
->>> to modify timeout after setting pretimeout, which is puzzling.
->>>
+
+
+On 21/04/21 18:37, Guenter Roeck wrote:
+> On Wed, Apr 21, 2021 at 06:26:20PM +0200, Francesco Zanella wrote:
+>> Documentation for new device tree property "start-at-boot".
 >>
->> What you need to do is to set pretimeout = timeout / 2 if a pretimeout
->> is set to a value != 0. Just like we adjust timeout to valid values
->> when set, we adjust pretimeout as well. I don't see a problem with that.
+>> Signed-off-by: Francesco Zanella <francesco.zanella@vimar.com>
+>> ---
+>>  Documentation/devicetree/bindings/watchdog/gpio-wdt.txt | 7 +++++++
+>>  1 file changed, 7 insertions(+)
 >>
->> Guenter
+>> diff --git a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt b/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+>> index 198794963786..cdaf7f0602e8 100644
+>> --- a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+>> +++ b/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+>> @@ -17,6 +17,13 @@ Optional Properties:
+>>  - always-running: If the watchdog timer cannot be disabled, add this flag to
+>>    have the driver keep toggling the signal without a client. It will only cease
+>>    to toggle the signal when the device is open and the timeout elapsed.
+>> +- start-at-boot: Start pinging hw watchdog at probe, in order to take advantage
+>> +  of kernel configs:
+>> +  - WATCHDOG_HANDLE_BOOT_ENABLED: Avoid possible reboot if hw watchdog was been
+>> +    enabled before the kernel (by uboot for example) and userspace doesn't take
+>> +    control of /dev/watchdog in time;
+>> +  - WATCHDOG_OPEN_TIMEOUT: Reboot if userspace doesn't take control of
+>> +    /dev/watchdog within the timeout.
 > 
-> Thanks, Guenter. But this will complicate the situation:
-> First, set_pretimeout will become an interface for dynamically enable and
-> disable the pre-timeout func, instead of adjusting the pretimeout time. 
+> You are not supposed to refer to Linux kernel details in devicetree
+> bindings documents.
 > 
-Effectively yes. That is what it is, based on its limitations. That is
-not a problem, and in true for every pretimeout function. Set it to 0,
-and it is turned off. Set it to a value other than 0, and it is turned on.
-
-> Secondly, when the irq is not registered, the user cannot be allowed to set
-> the pretimeout to non-zero. When irq is registered, it doesn't make any sense
-> to turn off pre-timeout func. 
+> Guenter
 > 
+>>  
+>>  Example:
+>>  	watchdog: watchdog {
+>> -- 
+>> 2.17.1
+>>
 
-That is your opinion. It is still a user decision to turn it on or off,
-just like it is a user decision to set the timeout to a specific value
-or to enable the watchdog in the first place. There is no reason to
-make it mandatory just because an interrupt has been provided
-(or, rather, connected).
+OK, I'm sorry. I will resend the patch series without kernel configs
+references in documents.
 
-Also, if the interrupt is not provided, WDIOF_PRETIMEOUT is not set,
-and trying to set the pretimeout would return -EOPNOTSUPP.
-
-Guenter
+Francesco
