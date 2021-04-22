@@ -2,138 +2,199 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B608367813
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Apr 2021 05:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562F736782C
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Apr 2021 06:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhDVDq6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 21 Apr 2021 23:46:58 -0400
-Received: from m176149.mail.qiye.163.com ([59.111.176.149]:6818 "EHLO
-        m176149.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbhDVDqz (ORCPT
+        id S229571AbhDVECm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 22 Apr 2021 00:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229536AbhDVECm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 21 Apr 2021 23:46:55 -0400
-Received: from vivo.com (wm-9.qy.internal [127.0.0.1])
-        by m176149.mail.qiye.163.com (Hmail) with ESMTP id 25A0E282E70;
-        Thu, 22 Apr 2021 11:46:18 +0800 (CST)
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-Message-ID: <AJYA1QBSDhatYsq-n3vbqqrl.3.1619063178146.Hmail.wangqing@vivo.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        Thu, 22 Apr 2021 00:02:42 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEF3C06174A;
+        Wed, 21 Apr 2021 21:02:06 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id i26-20020a9d625a0000b02902a2119f7613so4146670otk.10;
+        Wed, 21 Apr 2021 21:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ITBmDLLHz4eUEAesx065LH4ASYqLeFzaAtVhvUxkuzo=;
+        b=pxOuQRsIHGzibblHMbiIsI0bVr8qo7MFIzg00Lviq4sYlEIlTCyM1GeESgKrUfWE8Q
+         ZIPr+qUteAuxIGKZud6QfdMvVhOCzaRiFf//VC1LzxzmUrUZWMOJOHJBQVCMyzpGO4b8
+         ra3adM3/Z8+2vYbwk/YnLVgDOhDTunxXJndQR3ZIIrcmFY69oE8xzXomn9aCw7y072Kj
+         NpngQm2pihVTJxFraf3WsEtJ5LrjmJgFvNkCoGp+0mSBQn6cNQzm3smBmRRGSVZ/FgbF
+         YezP31SVAUehk5Z7h9Wvj4jDPY3OAWaI5E6wbhspFKJrslwALC3dpAp1Fnt87GqEiP8n
+         kZUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ITBmDLLHz4eUEAesx065LH4ASYqLeFzaAtVhvUxkuzo=;
+        b=YfI3lgXYx4inr9Gh5fNSnGsYzG9geE92UKkZTs2ZSSQFsgA0Xhq7nC4/57/k6gIvIV
+         pAWb130At7qa84cSciKZZ9gk9KgdQTKua/rYW09bcbSCQ08rNIjobbfXLiFqU9O9ZvCO
+         C6ilXBG7pnEuHLc0MOlMZdu7YHPBCMVcahe4DwA/68diO+8BXQoefscOPpg96O3r65yh
+         t/kYFL3cYl95vJjawesZgO8dLqkOyW2PEgQN8vGrPamq7ajGHBTfmwfRBTfYPZuNNCmb
+         OWlMuGAjMK4NbgWlTB6j6fKEmyhh7U5/yfONpmHBNEdZ+7EwRvEvnixvcEBYfLgoO8nG
+         ftaQ==
+X-Gm-Message-State: AOAM533aLizP3kfMxbaExIKJHIv7M/bQl/WJaKkE5/gLrkiJTzeR4MzC
+        kI3Kezphcd3ELJ62AUMxTe059h2JcJA=
+X-Google-Smtp-Source: ABdhPJwZn+kalZMmuwlslp4kjozhVPGyz+amC40rMJBjJ3+5HjN8KZ84FN09nCgiflwBKIM7LWhZNw==
+X-Received: by 2002:a9d:6749:: with SMTP id w9mr1198603otm.24.1619064125556;
+        Wed, 21 Apr 2021 21:02:05 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e2sm358399otk.70.2021.04.21.21.02.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Apr 2021 21:02:04 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH V6 1/2] watchdog: mtk: support pre-timeout when the bark
+ irq is available
+To:     =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: =?UTF-8?B?UmU6UmU6IFtQQVRDSCBWNiAxLzJdIHdhdGNoZG9nOiBtdGs6IHN1cHBvcnQgcHJlLXRpbWVvdXQgd2hlbiB0aGUgYmFyayBpcnEgaXMgYXZhaWxhYmxl?=
-X-Priority: 3
-X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
-X-Originating-IP: 36.152.145.182
-In-Reply-To: <740481ed-97e0-3439-1af2-bc54cdb28536@roeck-us.net>
+References: <AJYA1QBSDhatYsq-n3vbqqrl.3.1619063178146.Hmail.wangqing@vivo.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <26bed2e5-6ec8-72ae-ff2c-c707c00d5125@roeck-us.net>
+Date:   Wed, 21 Apr 2021 21:02:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Received: from wangqing@vivo.com( [36.152.145.182) ] by ajax-webmail ( [127.0.0.1] ) ; Thu, 22 Apr 2021 11:46:18 +0800 (GMT+08:00)
-From:   =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>
-Date:   Thu, 22 Apr 2021 11:46:18 +0800 (GMT+08:00)
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZGR4ZS1ZJSU8fGUJKS0kYHxlVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
-        hKTFVLWQY+
-X-HM-Sender-Digest: e1kJHlYWEh9ZQU1IS09OS0tDS05CN1dZDB4ZWUEPCQ4eV1kSHx4VD1lB
-        WUc6MSI6Sio5KD8TGg8iCApWFUgNGQoKCRdVSFVKTUpCS01ISkxDTktMVTMWGhIXVQwaFRwKEhUc
-        Ow0SDRRVGBQWRVlXWRILWUFZSE1VSk5JVUpPTlVKQ0lZV1kIAVlBQkhPQjcG
-X-HM-Tid: 0a78f7af83ad9395kuws25a0e282e70
+In-Reply-To: <AJYA1QBSDhatYsq-n3vbqqrl.3.1619063178146.Hmail.wangqing@vivo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Cj5PbiA0LzIxLzIxIDc6NDUgUE0sIFdhbmcgUWluZyB3cm90ZToKPj4gVXNlIHRoZSBiYXJrIGlu
-dGVycnVwdCBhcyB0aGUgcHJldGltZW91dCBub3RpZmllciBpZiBhdmFpbGFibGUuCj4+IAo+PiBX
-aGVuIHRoZSB3YXRjaGRvZyB0aW1lciBleHBpcmVzIGluIGR1YWwgbW9kZSwgYW4gaW50ZXJydXB0
-IHdpbGwgYmUKPj4gdHJpZ2dlcmVkIGZpcnN0LCB0aGVuIHRoZSB0aW1pbmcgcmVzdGFydHMuIFRo
-ZSByZXNldCBzaWduYWwgd2lsbCBiZQo+PiBpbml0aWF0ZWQgd2hlbiB0aGUgdGltZXIgZXhwaXJl
-cyBhZ2Fpbi4KPj4gCj4+IFRoZSBwcmV0aW1lb3V0IG5vdGlmaWNhdGlvbiBzaGFsbCBvY2N1ciBh
-dCB0aW1lb3V0LXNlYy8yLgo+PiAKPj4gVjI6Cj4+IC0gcGFuaWMoKSBieSBkZWZhdWx0IGlmIFdB
-VENIRE9HX1BSRVRJTUVPVVRfR09WIGlzIG5vdCBlbmFibGVkLgo+PiAKPj4gVjM6Cj4+IC0gTW9k
-aWZ5IHRoZSBwcmV0aW1lb3V0IGJlaGF2aW9yLCBtYW51YWxseSByZXNldCBhZnRlciB0aGUgcHJl
-dGltZW91dAo+PiAtIGlzIHByb2Nlc3NlZCBhbmQgd2FpdCB1bnRpbCB0aW1lb3V0Lgo+PiAKPj4g
-VjQ6Cj4+IC0gUmVtb3ZlIHByZXRpbWVvdXQgcmVsYXRlZCBwcm9jZXNzaW5nLiAKPj4gLSBBZGQg
-ZHVhbCBtb2RlIGNvbnRyb2wgc2VwYXJhdGVseS4KPj4gCj4+IFY1Ogo+PiAtIEZpeCBzb21lIGZv
-cm1hdHRpbmcgYW5kIHByaW50aW5nIHByb2JsZW1zLgo+PiAKPj4gVjY6Cj4+IC0gUmVhbGl6ZSBw
-cmV0aW1lb3V0IHByb2Nlc3NpbmcgdGhyb3VnaCBkdWFsbW9kZS4KPj4gCj4+IFNpZ25lZC1vZmYt
-Ynk6IFdhbmcgUWluZyA8d2FuZ3FpbmdAdml2by5jb20+Cj4+IC0tLQo+PiAgZHJpdmVycy93YXRj
-aGRvZy9tdGtfd2R0LmMgfCA1MyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKy0tLS0tCj4+ICAxIGZpbGUgY2hhbmdlZCwgNDggaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlv
-bnMoLSkKPj4gCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3dhdGNoZG9nL210a193ZHQuYyBiL2Ry
-aXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5jCj4+IGluZGV4IDk3Y2E5OTMuLmViYzY0OGIKPj4gLS0t
-IGEvZHJpdmVycy93YXRjaGRvZy9tdGtfd2R0LmMKPj4gKysrIGIvZHJpdmVycy93YXRjaGRvZy9t
-dGtfd2R0LmMKPj4gQEAgLTI1LDYgKzI1LDcgQEAKPj4gICNpbmNsdWRlIDxsaW51eC9yZXNldC1j
-b250cm9sbGVyLmg+Cj4+ICAjaW5jbHVkZSA8bGludXgvdHlwZXMuaD4KPj4gICNpbmNsdWRlIDxs
-aW51eC93YXRjaGRvZy5oPgo+PiArI2luY2x1ZGUgPGxpbnV4L2ludGVycnVwdC5oPgo+PiAgCj4+
-ICAjZGVmaW5lIFdEVF9NQVhfVElNRU9VVAkJMzEKPj4gICNkZWZpbmUgV0RUX01JTl9USU1FT1VU
-CQkxCj4+IEBAIC0xODQsMTUgKzE4NSwyMiBAQCBzdGF0aWMgaW50IG10a193ZHRfc2V0X3RpbWVv
-dXQoc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2R0X2RldiwKPj4gIHsKPj4gIAlzdHJ1Y3QgbXRr
-X3dkdF9kZXYgKm10a193ZHQgPSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSh3ZHRfZGV2KTsKPj4gIAl2
-b2lkIF9faW9tZW0gKndkdF9iYXNlID0gbXRrX3dkdC0+d2R0X2Jhc2U7Cj4+ICsJdW5zaWduZWQg
-aW50IHRpbWVvdXRfaW50ZXJ2YWw7Cj4+ICAJdTMyIHJlZzsKPj4gIAo+PiAtCXdkdF9kZXYtPnRp
-bWVvdXQgPSB0aW1lb3V0Owo+PiArCXRpbWVvdXRfaW50ZXJ2YWwgPSB3ZHRfZGV2LT50aW1lb3V0
-ID0gdGltZW91dDsKPj4gKwkvKgo+PiArCSAqIEluIGR1YWwgbW9kZSwgaXJxIHdpbGwgYmUgdHJp
-Z2dlcmVkIGF0IHRpbWVvdXQvMgo+PiArCSAqIHRoZSByZWFsIHRpbWVvdXQgb2NjdXJzIGF0IHRp
-bWVvdXQKPj4gKwkgKi8KPj4gKwlpZiAod2R0X2Rldi0+cHJldGltZW91dCkKPj4gKwkJdGltZW91
-dF9pbnRlcnZhbCA9IHdkdF9kZXYtPnByZXRpbWVvdXQgPSB0aW1lb3V0LzI7Cj4KPlBsZWFzZSBy
-dW4gY2hlY2twYXRjaCAtLXN0cmljdCBhbmQgZml4IHdoYXQgaXQgcmVwb3J0cy4KPkFsc28sIHRo
-ZXJlIHNob3VsZCBiZSBhIHNldF9wcmV0aW1lb3V0IGZ1bmN0aW9uIHRvIHNldCB0aGUKPnByZXRp
-bWVvdXQuIEl0IGlzIG9rIHRvIHVwZGF0ZSBpdCBoZXJlLCBidXQgaXQgc2hvdWxkIGJlIHNldAo+
-aW4gaXRzIG93biBmdW5jdGlvbiB0byBtYWtlIHN1cmUgdGhhdCB0aGUgYWN0dWFsIHZhbHVlCj5p
-cyByZXBvcnRlZCBiYWNrIHRvIHVzZXJzcGFjZS4KPgo+VGhhbmtzLAo+R3VlbnRlcgoKVGhlIHJl
-YXNvbiB3aHkgdGhlIHNldF9wcmV0aW1lb3V0IGludGVyZmFjZSBpcyBub3QgcHJvdmlkZWQgaXMg
-CmJlY2F1c2UgdGhlIHByZXRpbWVvdXQgaXMgZml4ZWQgYWZ0ZXIgdGhlIHRpbWVvdXQgaXMgc2V0
-LCAgd2UgbmVlZAp0byBtb2RpZnkgdGltZW91dCBhZnRlciBzZXR0aW5nIHByZXRpbWVvdXQsIHdo
-aWNoIGlzIHB1enpsaW5nLgoKSSB3aWxsIHBvaW50IG91dCB0aGlzIGJlaGF2aW9yIGluIHRoZSBk
-b2MgYW5kIGNvbW1lbnRzLApvciBpbXBsZW1lbnQgdGhlIHNldF9wcmV0aW1lb3V0IGludGVyZmFj
-ZSBvbmx5IGFzIGEgcHJpbnQgcHJvbXB0LgpXaGF0IGRvIHlvdSB0aGluayBvZiBpdD8KClRoYW5r
-cywKUWluZwo+Cj4+ICAKPj4gIAkvKgo+PiAgCSAqIE9uZSBiaXQgaXMgdGhlIHZhbHVlIG9mIDUx
-MiB0aWNrcwo+PiAgCSAqIFRoZSBjbG9jayBoYXMgMzIgS0h6Cj4+ICAJICovCj4+IC0JcmVnID0g
-V0RUX0xFTkdUSF9USU1FT1VUKHRpbWVvdXQgPDwgNikgfCBXRFRfTEVOR1RIX0tFWTsKPj4gKwly
-ZWcgPSBXRFRfTEVOR1RIX1RJTUVPVVQodGltZW91dF9pbnRlcnZhbCA8PCA2KSB8IFdEVF9MRU5H
-VEhfS0VZOwo+PiAgCWlvd3JpdGUzMihyZWcsIHdkdF9iYXNlICsgV0RUX0xFTkdUSCk7Cj4+ICAK
-Pj4gIAltdGtfd2R0X3Bpbmcod2R0X2Rldik7Cj4+IEBAIC0yMzksMTMgKzI0NywyNSBAQCBzdGF0
-aWMgaW50IG10a193ZHRfc3RhcnQoc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2R0X2RldikKPj4g
-IAkJcmV0dXJuIHJldDsKPj4gIAo+PiAgCXJlZyA9IGlvcmVhZDMyKHdkdF9iYXNlICsgV0RUX01P
-REUpOwo+PiAtCXJlZyAmPSB+KFdEVF9NT0RFX0lSUV9FTiB8IFdEVF9NT0RFX0RVQUxfRU4pOwo+
-PiArCWlmICh3ZHRfZGV2LT5wcmV0aW1lb3V0KQo+PiArCQlyZWcgfD0gKFdEVF9NT0RFX0lSUV9F
-TiB8IFdEVF9NT0RFX0RVQUxfRU4pOwo+PiArCWVsc2UKPj4gKwkJcmVnICY9IH4oV0RUX01PREVf
-SVJRX0VOIHwgV0RUX01PREVfRFVBTF9FTik7Cj4+ICAJcmVnIHw9IChXRFRfTU9ERV9FTiB8IFdE
-VF9NT0RFX0tFWSk7Cj4+ICAJaW93cml0ZTMyKHJlZywgd2R0X2Jhc2UgKyBXRFRfTU9ERSk7Cj4+
-ICAKPj4gIAlyZXR1cm4gMDsKPj4gIH0KPj4gIAo+PiArc3RhdGljIGlycXJldHVybl90IG10a193
-ZHRfaXNyKGludCBpcnEsIHZvaWQgKmFyZykKPj4gK3sKPj4gKwlzdHJ1Y3Qgd2F0Y2hkb2dfZGV2
-aWNlICp3ZGQgPSBhcmc7Cj4+ICsKPj4gKwl3YXRjaGRvZ19ub3RpZnlfcHJldGltZW91dCh3ZGQp
-Owo+PiArCj4+ICsJcmV0dXJuIElSUV9IQU5ETEVEOwo+PiArfQo+PiArCj4+ICBzdGF0aWMgY29u
-c3Qgc3RydWN0IHdhdGNoZG9nX2luZm8gbXRrX3dkdF9pbmZvID0gewo+PiAgCS5pZGVudGl0eQk9
-IERSVl9OQU1FLAo+PiAgCS5vcHRpb25zCT0gV0RJT0ZfU0VUVElNRU9VVCB8Cj4+IEBAIC0yNTMs
-NiArMjczLDE0IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgd2F0Y2hkb2dfaW5mbyBtdGtfd2R0X2lu
-Zm8gPSB7Cj4+ICAJCQkgIFdESU9GX01BR0lDQ0xPU0UsCj4+ICB9Owo+PiAgCj4+ICtzdGF0aWMg
-Y29uc3Qgc3RydWN0IHdhdGNoZG9nX2luZm8gbXRrX3dkdF9wdF9pbmZvID0gewo+PiArCS5pZGVu
-dGl0eQk9IERSVl9OQU1FLAo+PiArCS5vcHRpb25zCT0gV0RJT0ZfU0VUVElNRU9VVCB8Cj4+ICsJ
-CQkgIFdESU9GX1BSRVRJTUVPVVQgfAo+PiArCQkJICBXRElPRl9LRUVQQUxJVkVQSU5HIHwKPj4g
-KwkJCSAgV0RJT0ZfTUFHSUNDTE9TRSwKPj4gK307Cj4+ICsKPj4gIHN0YXRpYyBjb25zdCBzdHJ1
-Y3Qgd2F0Y2hkb2dfb3BzIG10a193ZHRfb3BzID0gewo+PiAgCS5vd25lcgkJPSBUSElTX01PRFVM
-RSwKPj4gIAkuc3RhcnQJCT0gbXRrX3dkdF9zdGFydCwKPj4gQEAgLTI2Nyw3ICsyOTUsNyBAQCBz
-dGF0aWMgaW50IG10a193ZHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4g
-IAlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2Owo+PiAgCXN0cnVjdCBtdGtfd2R0X2Rl
-diAqbXRrX3dkdDsKPj4gIAljb25zdCBzdHJ1Y3QgbXRrX3dkdF9kYXRhICp3ZHRfZGF0YTsKPj4g
-LQlpbnQgZXJyOwo+PiArCWludCBlcnIsIGlycTsKPj4gIAo+PiAgCW10a193ZHQgPSBkZXZtX2t6
-YWxsb2MoZGV2LCBzaXplb2YoKm10a193ZHQpLCBHRlBfS0VSTkVMKTsKPj4gIAlpZiAoIW10a193
-ZHQpCj4+IEBAIC0yNzksNyArMzA3LDIyIEBAIHN0YXRpYyBpbnQgbXRrX3dkdF9wcm9iZShzdHJ1
-Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+PiAgCWlmIChJU19FUlIobXRrX3dkdC0+d2R0X2Jh
-c2UpKQo+PiAgCQlyZXR1cm4gUFRSX0VSUihtdGtfd2R0LT53ZHRfYmFzZSk7Cj4+ICAKPj4gLQlt
-dGtfd2R0LT53ZHRfZGV2LmluZm8gPSAmbXRrX3dkdF9pbmZvOwo+PiArCWlycSA9IHBsYXRmb3Jt
-X2dldF9pcnEocGRldiwgMCk7Cj4+ICsJaWYgKGlycSA+IDApIHsKPj4gKwkJZXJyID0gZGV2bV9y
-ZXF1ZXN0X2lycSgmcGRldi0+ZGV2LCBpcnEsIG10a193ZHRfaXNyLCAwLCAid2R0X2JhcmsiLAo+
-PiArCQkJCQkJCSZtdGtfd2R0LT53ZHRfZGV2KTsKPj4gKwkJaWYgKGVycikKPj4gKwkJCXJldHVy
-biBlcnI7Cj4+ICsKPj4gKwkJbXRrX3dkdC0+d2R0X2Rldi5pbmZvID0gJm10a193ZHRfcHRfaW5m
-bzsKPj4gKwkJbXRrX3dkdC0+d2R0X2Rldi5wcmV0aW1lb3V0ID0gV0RUX01BWF9USU1FT1VULzI7
-Cj4+ICsJfSBlbHNlIHsKPj4gKwkJaWYgKGlycSA9PSAtRVBST0JFX0RFRkVSKQo+PiArCQkJcmV0
-dXJuIC1FUFJPQkVfREVGRVI7Cj4+ICsKPj4gKwkJbXRrX3dkdC0+d2R0X2Rldi5pbmZvID0gJm10
-a193ZHRfaW5mbzsKPj4gKwl9Cj4+ICsKPj4gIAltdGtfd2R0LT53ZHRfZGV2Lm9wcyA9ICZtdGtf
-d2R0X29wczsKPj4gIAltdGtfd2R0LT53ZHRfZGV2LnRpbWVvdXQgPSBXRFRfTUFYX1RJTUVPVVQ7
-Cj4+ICAJbXRrX3dkdC0+d2R0X2Rldi5tYXhfaHdfaGVhcnRiZWF0X21zID0gV0RUX01BWF9USU1F
-T1VUICogMTAwMDsKPj4gCj4KDQoNCg==
+On 4/21/21 8:46 PM, 王擎 wrote:
+> 
+>> On 4/21/21 7:45 PM, Wang Qing wrote:
+>>> Use the bark interrupt as the pretimeout notifier if available.
+>>>
+>>> When the watchdog timer expires in dual mode, an interrupt will be
+>>> triggered first, then the timing restarts. The reset signal will be
+>>> initiated when the timer expires again.
+>>>
+>>> The pretimeout notification shall occur at timeout-sec/2.
+>>>
+>>> V2:
+>>> - panic() by default if WATCHDOG_PRETIMEOUT_GOV is not enabled.
+>>>
+>>> V3:
+>>> - Modify the pretimeout behavior, manually reset after the pretimeout
+>>> - is processed and wait until timeout.
+>>>
+>>> V4:
+>>> - Remove pretimeout related processing. 
+>>> - Add dual mode control separately.
+>>>
+>>> V5:
+>>> - Fix some formatting and printing problems.
+>>>
+>>> V6:
+>>> - Realize pretimeout processing through dualmode.
+>>>
+>>> Signed-off-by: Wang Qing <wangqing@vivo.com>
+>>> ---
+>>>  drivers/watchdog/mtk_wdt.c | 53 +++++++++++++++++++++++++++++++++++++++++-----
+>>>  1 file changed, 48 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+>>> index 97ca993..ebc648b
+>>> --- a/drivers/watchdog/mtk_wdt.c
+>>> +++ b/drivers/watchdog/mtk_wdt.c
+>>> @@ -25,6 +25,7 @@
+>>>  #include <linux/reset-controller.h>
+>>>  #include <linux/types.h>
+>>>  #include <linux/watchdog.h>
+>>> +#include <linux/interrupt.h>
+>>>  
+>>>  #define WDT_MAX_TIMEOUT		31
+>>>  #define WDT_MIN_TIMEOUT		1
+>>> @@ -184,15 +185,22 @@ static int mtk_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>>>  {
+>>>  	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
+>>>  	void __iomem *wdt_base = mtk_wdt->wdt_base;
+>>> +	unsigned int timeout_interval;
+>>>  	u32 reg;
+>>>  
+>>> -	wdt_dev->timeout = timeout;
+>>> +	timeout_interval = wdt_dev->timeout = timeout;
+>>> +	/*
+>>> +	 * In dual mode, irq will be triggered at timeout/2
+>>> +	 * the real timeout occurs at timeout
+>>> +	 */
+>>> +	if (wdt_dev->pretimeout)
+>>> +		timeout_interval = wdt_dev->pretimeout = timeout/2;
+>>
+>> Please run checkpatch --strict and fix what it reports.
+>> Also, there should be a set_pretimeout function to set the
+>> pretimeout. It is ok to update it here, but it should be set
+>> in its own function to make sure that the actual value
+>> is reported back to userspace.
+>>
+>> Thanks,
+>> Guenter
+> 
+> The reason why the set_pretimeout interface is not provided is 
+> because the pretimeout is fixed after the timeout is set,  we need
+> to modify timeout after setting pretimeout, which is puzzling.
+> 
+
+What you need to do is to set pretimeout = timeout / 2 if a pretimeout
+is set to a value != 0. Just like we adjust timeout to valid values
+when set, we adjust pretimeout as well. I don't see a problem with that.
+
+Guenter
