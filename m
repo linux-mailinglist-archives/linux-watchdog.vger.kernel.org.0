@@ -2,148 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB903677F8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Apr 2021 05:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B608367813
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Apr 2021 05:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbhDVDdC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 21 Apr 2021 23:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234644AbhDVDdB (ORCPT
+        id S230319AbhDVDq6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 21 Apr 2021 23:46:58 -0400
+Received: from m176149.mail.qiye.163.com ([59.111.176.149]:6818 "EHLO
+        m176149.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229536AbhDVDqz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 21 Apr 2021 23:33:01 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA54C06174A;
-        Wed, 21 Apr 2021 20:32:27 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id s1-20020a4ac1010000b02901cfd9170ce2so9659490oop.12;
-        Wed, 21 Apr 2021 20:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=t4JATgNYVP+y6MC8vs7Eht1rI6ywz9pTx+5OML5eawI=;
-        b=ejo7iTgB2CPmu+e98ZgOEqS9DwPgMq/4k662gfkQ9bIw/2JEQ3kjP3M9kMJD4u2L88
-         L6cl7bcTwLVZ4ZQAoVMJzzWn0A+quC0YcanaiBFU0ejB+fehQs7YIOkfYnkesu0JSTdk
-         UW6LOsxVVto99qBRKAICrEiPoyfOmKMYPuIOih36e5h4uym/TmcgyGO/62XsI28ex300
-         JxGt/h/53KFvNm7zAnNyK1Q1SHYrDvVdpFEJ/jar/Hko/gjf5cwZCg26QYOjhxiquOOh
-         QF0xbWgb1KD9T4OENAYMOS0Say3i/9SeWeSZ5qTyOoFtAHuzUesRF74gGgs3IWa558VF
-         L3Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=t4JATgNYVP+y6MC8vs7Eht1rI6ywz9pTx+5OML5eawI=;
-        b=PfMFDMBJ8NrwjTOKcnNC/PGhJo0ZefIuVeE0JcnFZU+f3fHQ0Nn04+GneO2WX89ViG
-         vl/PmAajzytCnReD4WpoHXuGUrHWY60rD4oJDJADCz8y3UfR8Lt/Yh9j7vsHmT/iEY8p
-         XfFTzB7w5JLH0kVZ766G5R+ro3rZD8/k4ONmMIdHLyqzxsUi3ca57Y/oL+1oovGY4Xbv
-         FcWyauDFV2UQCF6MwSGcHdaFvVL+/xyKX3OacXSQ2tUhwQtd2qgPmo9S4DHLbO3P0oBG
-         mLrFCQehhOG/Lz77M5gatZTMDwos+yToxSNxirH+qfMAznCgjhkXWBytsRuv6hf8wm6T
-         ADqw==
-X-Gm-Message-State: AOAM533W6b5vghkr2IlGM80y8qUG06B9q2tJOfdrWoojzIG/Jor0Prvy
-        bpVQv9xWNnQWYuWKGc9xSkRLxDv5DD4=
-X-Google-Smtp-Source: ABdhPJzoJ4z9VtrNCQN7lDYIm23Vgn4Pnjc/xlmO3L4HxQptcdi7CnvaRF8lG/ibSDw7c7IMPfWx2A==
-X-Received: by 2002:a4a:48c2:: with SMTP id p185mr783409ooa.73.1619062346761;
-        Wed, 21 Apr 2021 20:32:26 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h28sm329541oof.47.2021.04.21.20.32.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Apr 2021 20:32:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH V6 2/2] doc: mtk-wdt: support pre-timeout when the bark
- irq is available
-To:     Wang Qing <wangqing@vivo.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wed, 21 Apr 2021 23:46:55 -0400
+Received: from vivo.com (wm-9.qy.internal [127.0.0.1])
+        by m176149.mail.qiye.163.com (Hmail) with ESMTP id 25A0E282E70;
+        Thu, 22 Apr 2021 11:46:18 +0800 (CST)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+Message-ID: <AJYA1QBSDhatYsq-n3vbqqrl.3.1619063178146.Hmail.wangqing@vivo.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1619059532-17805-1-git-send-email-wangqing@vivo.com>
- <1619059532-17805-3-git-send-email-wangqing@vivo.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <c7ec61dc-ae04-6c09-ab26-d432f1d5f13a@roeck-us.net>
-Date:   Wed, 21 Apr 2021 20:32:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Subject: =?UTF-8?B?UmU6UmU6IFtQQVRDSCBWNiAxLzJdIHdhdGNoZG9nOiBtdGs6IHN1cHBvcnQgcHJlLXRpbWVvdXQgd2hlbiB0aGUgYmFyayBpcnEgaXMgYXZhaWxhYmxl?=
+X-Priority: 3
+X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
+X-Originating-IP: 36.152.145.182
+In-Reply-To: <740481ed-97e0-3439-1af2-bc54cdb28536@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <1619059532-17805-3-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: from wangqing@vivo.com( [36.152.145.182) ] by ajax-webmail ( [127.0.0.1] ) ; Thu, 22 Apr 2021 11:46:18 +0800 (GMT+08:00)
+From:   =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>
+Date:   Thu, 22 Apr 2021 11:46:18 +0800 (GMT+08:00)
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZGR4ZS1ZJSU8fGUJKS0kYHxlVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
+        hKTFVLWQY+
+X-HM-Sender-Digest: e1kJHlYWEh9ZQU1IS09OS0tDS05CN1dZDB4ZWUEPCQ4eV1kSHx4VD1lB
+        WUc6MSI6Sio5KD8TGg8iCApWFUgNGQoKCRdVSFVKTUpCS01ISkxDTktMVTMWGhIXVQwaFRwKEhUc
+        Ow0SDRRVGBQWRVlXWRILWUFZSE1VSk5JVUpPTlVKQ0lZV1kIAVlBQkhPQjcG
+X-HM-Tid: 0a78f7af83ad9395kuws25a0e282e70
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/21/21 7:45 PM, Wang Qing wrote:
-> Add description of pre-timeout in mtk-wdt.
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> index e36ba60..ae57d6c
-> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> @@ -1,5 +1,8 @@
->  Mediatek SoCs Watchdog timer
->  
-> +The watchdog supports a pre-timeout interrupt that fires timeout-sec/2
-> +before the expiry.
-> +
-
-Seems to me the interrupt should be listed as optional property.
-
-Guenter
-
->  Required properties:
->  
->  - compatible should contain:
-> 
-
+Cj5PbiA0LzIxLzIxIDc6NDUgUE0sIFdhbmcgUWluZyB3cm90ZToKPj4gVXNlIHRoZSBiYXJrIGlu
+dGVycnVwdCBhcyB0aGUgcHJldGltZW91dCBub3RpZmllciBpZiBhdmFpbGFibGUuCj4+IAo+PiBX
+aGVuIHRoZSB3YXRjaGRvZyB0aW1lciBleHBpcmVzIGluIGR1YWwgbW9kZSwgYW4gaW50ZXJydXB0
+IHdpbGwgYmUKPj4gdHJpZ2dlcmVkIGZpcnN0LCB0aGVuIHRoZSB0aW1pbmcgcmVzdGFydHMuIFRo
+ZSByZXNldCBzaWduYWwgd2lsbCBiZQo+PiBpbml0aWF0ZWQgd2hlbiB0aGUgdGltZXIgZXhwaXJl
+cyBhZ2Fpbi4KPj4gCj4+IFRoZSBwcmV0aW1lb3V0IG5vdGlmaWNhdGlvbiBzaGFsbCBvY2N1ciBh
+dCB0aW1lb3V0LXNlYy8yLgo+PiAKPj4gVjI6Cj4+IC0gcGFuaWMoKSBieSBkZWZhdWx0IGlmIFdB
+VENIRE9HX1BSRVRJTUVPVVRfR09WIGlzIG5vdCBlbmFibGVkLgo+PiAKPj4gVjM6Cj4+IC0gTW9k
+aWZ5IHRoZSBwcmV0aW1lb3V0IGJlaGF2aW9yLCBtYW51YWxseSByZXNldCBhZnRlciB0aGUgcHJl
+dGltZW91dAo+PiAtIGlzIHByb2Nlc3NlZCBhbmQgd2FpdCB1bnRpbCB0aW1lb3V0Lgo+PiAKPj4g
+VjQ6Cj4+IC0gUmVtb3ZlIHByZXRpbWVvdXQgcmVsYXRlZCBwcm9jZXNzaW5nLiAKPj4gLSBBZGQg
+ZHVhbCBtb2RlIGNvbnRyb2wgc2VwYXJhdGVseS4KPj4gCj4+IFY1Ogo+PiAtIEZpeCBzb21lIGZv
+cm1hdHRpbmcgYW5kIHByaW50aW5nIHByb2JsZW1zLgo+PiAKPj4gVjY6Cj4+IC0gUmVhbGl6ZSBw
+cmV0aW1lb3V0IHByb2Nlc3NpbmcgdGhyb3VnaCBkdWFsbW9kZS4KPj4gCj4+IFNpZ25lZC1vZmYt
+Ynk6IFdhbmcgUWluZyA8d2FuZ3FpbmdAdml2by5jb20+Cj4+IC0tLQo+PiAgZHJpdmVycy93YXRj
+aGRvZy9tdGtfd2R0LmMgfCA1MyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKy0tLS0tCj4+ICAxIGZpbGUgY2hhbmdlZCwgNDggaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlv
+bnMoLSkKPj4gCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3dhdGNoZG9nL210a193ZHQuYyBiL2Ry
+aXZlcnMvd2F0Y2hkb2cvbXRrX3dkdC5jCj4+IGluZGV4IDk3Y2E5OTMuLmViYzY0OGIKPj4gLS0t
+IGEvZHJpdmVycy93YXRjaGRvZy9tdGtfd2R0LmMKPj4gKysrIGIvZHJpdmVycy93YXRjaGRvZy9t
+dGtfd2R0LmMKPj4gQEAgLTI1LDYgKzI1LDcgQEAKPj4gICNpbmNsdWRlIDxsaW51eC9yZXNldC1j
+b250cm9sbGVyLmg+Cj4+ICAjaW5jbHVkZSA8bGludXgvdHlwZXMuaD4KPj4gICNpbmNsdWRlIDxs
+aW51eC93YXRjaGRvZy5oPgo+PiArI2luY2x1ZGUgPGxpbnV4L2ludGVycnVwdC5oPgo+PiAgCj4+
+ICAjZGVmaW5lIFdEVF9NQVhfVElNRU9VVAkJMzEKPj4gICNkZWZpbmUgV0RUX01JTl9USU1FT1VU
+CQkxCj4+IEBAIC0xODQsMTUgKzE4NSwyMiBAQCBzdGF0aWMgaW50IG10a193ZHRfc2V0X3RpbWVv
+dXQoc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2R0X2RldiwKPj4gIHsKPj4gIAlzdHJ1Y3QgbXRr
+X3dkdF9kZXYgKm10a193ZHQgPSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSh3ZHRfZGV2KTsKPj4gIAl2
+b2lkIF9faW9tZW0gKndkdF9iYXNlID0gbXRrX3dkdC0+d2R0X2Jhc2U7Cj4+ICsJdW5zaWduZWQg
+aW50IHRpbWVvdXRfaW50ZXJ2YWw7Cj4+ICAJdTMyIHJlZzsKPj4gIAo+PiAtCXdkdF9kZXYtPnRp
+bWVvdXQgPSB0aW1lb3V0Owo+PiArCXRpbWVvdXRfaW50ZXJ2YWwgPSB3ZHRfZGV2LT50aW1lb3V0
+ID0gdGltZW91dDsKPj4gKwkvKgo+PiArCSAqIEluIGR1YWwgbW9kZSwgaXJxIHdpbGwgYmUgdHJp
+Z2dlcmVkIGF0IHRpbWVvdXQvMgo+PiArCSAqIHRoZSByZWFsIHRpbWVvdXQgb2NjdXJzIGF0IHRp
+bWVvdXQKPj4gKwkgKi8KPj4gKwlpZiAod2R0X2Rldi0+cHJldGltZW91dCkKPj4gKwkJdGltZW91
+dF9pbnRlcnZhbCA9IHdkdF9kZXYtPnByZXRpbWVvdXQgPSB0aW1lb3V0LzI7Cj4KPlBsZWFzZSBy
+dW4gY2hlY2twYXRjaCAtLXN0cmljdCBhbmQgZml4IHdoYXQgaXQgcmVwb3J0cy4KPkFsc28sIHRo
+ZXJlIHNob3VsZCBiZSBhIHNldF9wcmV0aW1lb3V0IGZ1bmN0aW9uIHRvIHNldCB0aGUKPnByZXRp
+bWVvdXQuIEl0IGlzIG9rIHRvIHVwZGF0ZSBpdCBoZXJlLCBidXQgaXQgc2hvdWxkIGJlIHNldAo+
+aW4gaXRzIG93biBmdW5jdGlvbiB0byBtYWtlIHN1cmUgdGhhdCB0aGUgYWN0dWFsIHZhbHVlCj5p
+cyByZXBvcnRlZCBiYWNrIHRvIHVzZXJzcGFjZS4KPgo+VGhhbmtzLAo+R3VlbnRlcgoKVGhlIHJl
+YXNvbiB3aHkgdGhlIHNldF9wcmV0aW1lb3V0IGludGVyZmFjZSBpcyBub3QgcHJvdmlkZWQgaXMg
+CmJlY2F1c2UgdGhlIHByZXRpbWVvdXQgaXMgZml4ZWQgYWZ0ZXIgdGhlIHRpbWVvdXQgaXMgc2V0
+LCAgd2UgbmVlZAp0byBtb2RpZnkgdGltZW91dCBhZnRlciBzZXR0aW5nIHByZXRpbWVvdXQsIHdo
+aWNoIGlzIHB1enpsaW5nLgoKSSB3aWxsIHBvaW50IG91dCB0aGlzIGJlaGF2aW9yIGluIHRoZSBk
+b2MgYW5kIGNvbW1lbnRzLApvciBpbXBsZW1lbnQgdGhlIHNldF9wcmV0aW1lb3V0IGludGVyZmFj
+ZSBvbmx5IGFzIGEgcHJpbnQgcHJvbXB0LgpXaGF0IGRvIHlvdSB0aGluayBvZiBpdD8KClRoYW5r
+cywKUWluZwo+Cj4+ICAKPj4gIAkvKgo+PiAgCSAqIE9uZSBiaXQgaXMgdGhlIHZhbHVlIG9mIDUx
+MiB0aWNrcwo+PiAgCSAqIFRoZSBjbG9jayBoYXMgMzIgS0h6Cj4+ICAJICovCj4+IC0JcmVnID0g
+V0RUX0xFTkdUSF9USU1FT1VUKHRpbWVvdXQgPDwgNikgfCBXRFRfTEVOR1RIX0tFWTsKPj4gKwly
+ZWcgPSBXRFRfTEVOR1RIX1RJTUVPVVQodGltZW91dF9pbnRlcnZhbCA8PCA2KSB8IFdEVF9MRU5H
+VEhfS0VZOwo+PiAgCWlvd3JpdGUzMihyZWcsIHdkdF9iYXNlICsgV0RUX0xFTkdUSCk7Cj4+ICAK
+Pj4gIAltdGtfd2R0X3Bpbmcod2R0X2Rldik7Cj4+IEBAIC0yMzksMTMgKzI0NywyNSBAQCBzdGF0
+aWMgaW50IG10a193ZHRfc3RhcnQoc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2R0X2RldikKPj4g
+IAkJcmV0dXJuIHJldDsKPj4gIAo+PiAgCXJlZyA9IGlvcmVhZDMyKHdkdF9iYXNlICsgV0RUX01P
+REUpOwo+PiAtCXJlZyAmPSB+KFdEVF9NT0RFX0lSUV9FTiB8IFdEVF9NT0RFX0RVQUxfRU4pOwo+
+PiArCWlmICh3ZHRfZGV2LT5wcmV0aW1lb3V0KQo+PiArCQlyZWcgfD0gKFdEVF9NT0RFX0lSUV9F
+TiB8IFdEVF9NT0RFX0RVQUxfRU4pOwo+PiArCWVsc2UKPj4gKwkJcmVnICY9IH4oV0RUX01PREVf
+SVJRX0VOIHwgV0RUX01PREVfRFVBTF9FTik7Cj4+ICAJcmVnIHw9IChXRFRfTU9ERV9FTiB8IFdE
+VF9NT0RFX0tFWSk7Cj4+ICAJaW93cml0ZTMyKHJlZywgd2R0X2Jhc2UgKyBXRFRfTU9ERSk7Cj4+
+ICAKPj4gIAlyZXR1cm4gMDsKPj4gIH0KPj4gIAo+PiArc3RhdGljIGlycXJldHVybl90IG10a193
+ZHRfaXNyKGludCBpcnEsIHZvaWQgKmFyZykKPj4gK3sKPj4gKwlzdHJ1Y3Qgd2F0Y2hkb2dfZGV2
+aWNlICp3ZGQgPSBhcmc7Cj4+ICsKPj4gKwl3YXRjaGRvZ19ub3RpZnlfcHJldGltZW91dCh3ZGQp
+Owo+PiArCj4+ICsJcmV0dXJuIElSUV9IQU5ETEVEOwo+PiArfQo+PiArCj4+ICBzdGF0aWMgY29u
+c3Qgc3RydWN0IHdhdGNoZG9nX2luZm8gbXRrX3dkdF9pbmZvID0gewo+PiAgCS5pZGVudGl0eQk9
+IERSVl9OQU1FLAo+PiAgCS5vcHRpb25zCT0gV0RJT0ZfU0VUVElNRU9VVCB8Cj4+IEBAIC0yNTMs
+NiArMjczLDE0IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgd2F0Y2hkb2dfaW5mbyBtdGtfd2R0X2lu
+Zm8gPSB7Cj4+ICAJCQkgIFdESU9GX01BR0lDQ0xPU0UsCj4+ICB9Owo+PiAgCj4+ICtzdGF0aWMg
+Y29uc3Qgc3RydWN0IHdhdGNoZG9nX2luZm8gbXRrX3dkdF9wdF9pbmZvID0gewo+PiArCS5pZGVu
+dGl0eQk9IERSVl9OQU1FLAo+PiArCS5vcHRpb25zCT0gV0RJT0ZfU0VUVElNRU9VVCB8Cj4+ICsJ
+CQkgIFdESU9GX1BSRVRJTUVPVVQgfAo+PiArCQkJICBXRElPRl9LRUVQQUxJVkVQSU5HIHwKPj4g
+KwkJCSAgV0RJT0ZfTUFHSUNDTE9TRSwKPj4gK307Cj4+ICsKPj4gIHN0YXRpYyBjb25zdCBzdHJ1
+Y3Qgd2F0Y2hkb2dfb3BzIG10a193ZHRfb3BzID0gewo+PiAgCS5vd25lcgkJPSBUSElTX01PRFVM
+RSwKPj4gIAkuc3RhcnQJCT0gbXRrX3dkdF9zdGFydCwKPj4gQEAgLTI2Nyw3ICsyOTUsNyBAQCBz
+dGF0aWMgaW50IG10a193ZHRfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPj4g
+IAlzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2Owo+PiAgCXN0cnVjdCBtdGtfd2R0X2Rl
+diAqbXRrX3dkdDsKPj4gIAljb25zdCBzdHJ1Y3QgbXRrX3dkdF9kYXRhICp3ZHRfZGF0YTsKPj4g
+LQlpbnQgZXJyOwo+PiArCWludCBlcnIsIGlycTsKPj4gIAo+PiAgCW10a193ZHQgPSBkZXZtX2t6
+YWxsb2MoZGV2LCBzaXplb2YoKm10a193ZHQpLCBHRlBfS0VSTkVMKTsKPj4gIAlpZiAoIW10a193
+ZHQpCj4+IEBAIC0yNzksNyArMzA3LDIyIEBAIHN0YXRpYyBpbnQgbXRrX3dkdF9wcm9iZShzdHJ1
+Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+PiAgCWlmIChJU19FUlIobXRrX3dkdC0+d2R0X2Jh
+c2UpKQo+PiAgCQlyZXR1cm4gUFRSX0VSUihtdGtfd2R0LT53ZHRfYmFzZSk7Cj4+ICAKPj4gLQlt
+dGtfd2R0LT53ZHRfZGV2LmluZm8gPSAmbXRrX3dkdF9pbmZvOwo+PiArCWlycSA9IHBsYXRmb3Jt
+X2dldF9pcnEocGRldiwgMCk7Cj4+ICsJaWYgKGlycSA+IDApIHsKPj4gKwkJZXJyID0gZGV2bV9y
+ZXF1ZXN0X2lycSgmcGRldi0+ZGV2LCBpcnEsIG10a193ZHRfaXNyLCAwLCAid2R0X2JhcmsiLAo+
+PiArCQkJCQkJCSZtdGtfd2R0LT53ZHRfZGV2KTsKPj4gKwkJaWYgKGVycikKPj4gKwkJCXJldHVy
+biBlcnI7Cj4+ICsKPj4gKwkJbXRrX3dkdC0+d2R0X2Rldi5pbmZvID0gJm10a193ZHRfcHRfaW5m
+bzsKPj4gKwkJbXRrX3dkdC0+d2R0X2Rldi5wcmV0aW1lb3V0ID0gV0RUX01BWF9USU1FT1VULzI7
+Cj4+ICsJfSBlbHNlIHsKPj4gKwkJaWYgKGlycSA9PSAtRVBST0JFX0RFRkVSKQo+PiArCQkJcmV0
+dXJuIC1FUFJPQkVfREVGRVI7Cj4+ICsKPj4gKwkJbXRrX3dkdC0+d2R0X2Rldi5pbmZvID0gJm10
+a193ZHRfaW5mbzsKPj4gKwl9Cj4+ICsKPj4gIAltdGtfd2R0LT53ZHRfZGV2Lm9wcyA9ICZtdGtf
+d2R0X29wczsKPj4gIAltdGtfd2R0LT53ZHRfZGV2LnRpbWVvdXQgPSBXRFRfTUFYX1RJTUVPVVQ7
+Cj4+ICAJbXRrX3dkdC0+d2R0X2Rldi5tYXhfaHdfaGVhcnRiZWF0X21zID0gV0RUX01BWF9USU1F
+T1VUICogMTAwMDsKPj4gCj4KDQoNCg==
