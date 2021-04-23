@@ -2,20 +2,19 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C78368B5C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Apr 2021 05:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A85A368B5E
+	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Apr 2021 05:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240042AbhDWDBO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        id S240166AbhDWDBO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
         Thu, 22 Apr 2021 23:01:14 -0400
-Received: from mail-m17640.qiye.163.com ([59.111.176.40]:34812 "EHLO
+Received: from mail-m17640.qiye.163.com ([59.111.176.40]:34836 "EHLO
         mail-m17640.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbhDWDBN (ORCPT
+        with ESMTP id S238001AbhDWDBN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
         Thu, 22 Apr 2021 23:01:13 -0400
-X-Greylist: delayed 416 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Apr 2021 23:01:12 EDT
 Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.250.176.229])
-        by mail-m17640.qiye.163.com (Hmail) with ESMTPA id A94DF54039F;
-        Fri, 23 Apr 2021 10:53:38 +0800 (CST)
+        by mail-m17640.qiye.163.com (Hmail) with ESMTPA id 3ABE2540162;
+        Fri, 23 Apr 2021 10:53:41 +0800 (CST)
 From:   Wang Qing <wangqing@vivo.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -25,32 +24,197 @@ To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH V7 0/2] watchdog: mtk: support pre-timeout when the bark irq is available
-Date:   Fri, 23 Apr 2021 10:53:21 +0800
-Message-Id: <1619146403-12769-1-git-send-email-wangqing@vivo.com>
+Subject: [PATCH V7 1/2] watchdog: mtk: support pre-timeout when the bark irq is available
+Date:   Fri, 23 Apr 2021 10:53:22 +0800
+Message-Id: <1619146403-12769-2-git-send-email-wangqing@vivo.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1619146403-12769-1-git-send-email-wangqing@vivo.com>
+References: <1619146403-12769-1-git-send-email-wangqing@vivo.com>
 X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZQ0pNHVYeTUIYS05JTEtNTx9VEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
+        oVCBIfWUFZGR8dTFZKH0JPH0hMTxpDTB9VEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
         hKTFVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OCI6TCo*AT8STw00SzI3ECgh
-        Hh4aCh1VSlVKTUpCSk9NT0pCSE5JVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
-        SU5LVUpMTVVJSUJZV1kIAVlBSk1CTzcG
-X-HM-Tid: 0a78fca5ab2fd995kuwsa94df54039f
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NRA6Aww*SD8KHg03FjcxEC5W
+        UU0KCRlVSlVKTUpCSk9NT0lJTkJNVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
+        SU5LVUpMTVVJSUJZV1kIAVlBTU5KTTcG
+X-HM-Tid: 0a78fca5b60fd995kuws3abe2540162
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 Use the bark interrupt as the pretimeout notifier if available.
+
+When the watchdog timer expires in dual mode, an interrupt will be
+triggered first, then the timing restarts. The reset signal will be
+initiated when the timer expires again.
+
 The pretimeout notification shall occur at timeout-sec/2.
 
-Wang Qing (2):
-  watchdog: mtk: support pre-timeout when the bark irq is available
-  doc: mtk-wdt: support pre-timeout when the bark irq is available
+V2:
+- panic() by default if WATCHDOG_PRETIMEOUT_GOV is not enabled.
 
- .../devicetree/bindings/watchdog/mtk-wdt.txt       |  5 ++
- drivers/watchdog/mtk_wdt.c                         | 76 ++++++++++++++++++++--
- 2 files changed, 76 insertions(+), 5 deletions(-)
+V3:
+- Modify the pretimeout behavior, manually reset after the pretimeout
+- is processed and wait until timeout.
 
+V4:
+- Remove pretimeout related processing. 
+- Add dual mode control separately.
+
+V5:
+- Fix some formatting and printing problems.
+
+V6:
+- Realize pretimeout processing through dualmode.
+
+V7:
+- Add set_pretimeout().
+
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+ drivers/watchdog/mtk_wdt.c | 76 +++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 71 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+index 97ca993..ab3ac5d
+--- a/drivers/watchdog/mtk_wdt.c
++++ b/drivers/watchdog/mtk_wdt.c
+@@ -25,6 +25,7 @@
+ #include <linux/reset-controller.h>
+ #include <linux/types.h>
+ #include <linux/watchdog.h>
++#include <linux/interrupt.h>
+ 
+ #define WDT_MAX_TIMEOUT		31
+ #define WDT_MIN_TIMEOUT		1
+@@ -184,15 +185,23 @@ static int mtk_wdt_set_timeout(struct watchdog_device *wdt_dev,
+ {
+ 	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
+ 	void __iomem *wdt_base = mtk_wdt->wdt_base;
++	unsigned int timeout_interval = timeout;
+ 	u32 reg;
+ 
+ 	wdt_dev->timeout = timeout;
+-
++	/*
++	 * In dual mode, irq will be triggered at timeout / 2
++	 * the real timeout occurs at timeout
++	 */
++	if (wdt_dev->pretimeout) {
++		wdt_dev->pretimeout = timeout / 2;
++		timeout_interval = wdt_dev->pretimeout;
++	}
+ 	/*
+ 	 * One bit is the value of 512 ticks
+ 	 * The clock has 32 KHz
+ 	 */
+-	reg = WDT_LENGTH_TIMEOUT(timeout << 6) | WDT_LENGTH_KEY;
++	reg = WDT_LENGTH_TIMEOUT(timeout_interval << 6) | WDT_LENGTH_KEY;
+ 	iowrite32(reg, wdt_base + WDT_LENGTH);
+ 
+ 	mtk_wdt_ping(wdt_dev);
+@@ -239,13 +248,46 @@ static int mtk_wdt_start(struct watchdog_device *wdt_dev)
+ 		return ret;
+ 
+ 	reg = ioread32(wdt_base + WDT_MODE);
+-	reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
++	if (wdt_dev->pretimeout)
++		reg |= (WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
++	else
++		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
+ 	reg |= (WDT_MODE_EN | WDT_MODE_KEY);
+ 	iowrite32(reg, wdt_base + WDT_MODE);
+ 
+ 	return 0;
+ }
+ 
++static int mtk_wdt_set_pretimeout(struct watchdog_device *wdd,
++					unsigned int timeout)
++{
++	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdd);
++	void __iomem *wdt_base = mtk_wdt->wdt_base;
++	u32 reg = ioread32(wdt_base + WDT_MODE);
++
++	if (timeout && !wdd->pretimeout) {
++		wdd->pretimeout = wdd->timeout / 2;
++		reg |= (WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
++	} else if (!timeout && wdd->pretimeout) {
++		wdd->pretimeout = 0;
++		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
++	} else
++		return 0;
++
++	iowrite32(reg, wdt_base + WDT_MODE);
++
++	return mtk_wdt_set_timeout(wdd, wdd->timeout);
++}
++
++static irqreturn_t mtk_wdt_isr(int irq, void *arg)
++{
++	struct watchdog_device *wdd = arg;
++
++	watchdog_notify_pretimeout(wdd);
++
++	return IRQ_HANDLED;
++}
++
+ static const struct watchdog_info mtk_wdt_info = {
+ 	.identity	= DRV_NAME,
+ 	.options	= WDIOF_SETTIMEOUT |
+@@ -253,12 +295,21 @@ static const struct watchdog_info mtk_wdt_info = {
+ 			  WDIOF_MAGICCLOSE,
+ };
+ 
++static const struct watchdog_info mtk_wdt_pt_info = {
++	.identity	= DRV_NAME,
++	.options	= WDIOF_SETTIMEOUT |
++			  WDIOF_PRETIMEOUT |
++			  WDIOF_KEEPALIVEPING |
++			  WDIOF_MAGICCLOSE,
++};
++
+ static const struct watchdog_ops mtk_wdt_ops = {
+ 	.owner		= THIS_MODULE,
+ 	.start		= mtk_wdt_start,
+ 	.stop		= mtk_wdt_stop,
+ 	.ping		= mtk_wdt_ping,
+ 	.set_timeout	= mtk_wdt_set_timeout,
++	.set_pretimeout	= mtk_wdt_set_pretimeout,
+ 	.restart	= mtk_wdt_restart,
+ };
+ 
+@@ -267,7 +318,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct mtk_wdt_dev *mtk_wdt;
+ 	const struct mtk_wdt_data *wdt_data;
+-	int err;
++	int err, irq;
+ 
+ 	mtk_wdt = devm_kzalloc(dev, sizeof(*mtk_wdt), GFP_KERNEL);
+ 	if (!mtk_wdt)
+@@ -279,7 +330,22 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mtk_wdt->wdt_base))
+ 		return PTR_ERR(mtk_wdt->wdt_base);
+ 
+-	mtk_wdt->wdt_dev.info = &mtk_wdt_info;
++	irq = platform_get_irq(pdev, 0);
++	if (irq > 0) {
++		err = devm_request_irq(&pdev->dev, irq, mtk_wdt_isr, 0, "wdt_bark",
++					&mtk_wdt->wdt_dev);
++		if (err)
++			return err;
++
++		mtk_wdt->wdt_dev.info = &mtk_wdt_pt_info;
++		mtk_wdt->wdt_dev.pretimeout = WDT_MAX_TIMEOUT / 2;
++	} else {
++		if (irq == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++
++		mtk_wdt->wdt_dev.info = &mtk_wdt_info;
++	}
++
+ 	mtk_wdt->wdt_dev.ops = &mtk_wdt_ops;
+ 	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
+ 	mtk_wdt->wdt_dev.max_hw_heartbeat_ms = WDT_MAX_TIMEOUT * 1000;
 -- 
 2.7.4
 
