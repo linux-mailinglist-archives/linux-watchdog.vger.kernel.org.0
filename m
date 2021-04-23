@@ -2,130 +2,322 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D4836912C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Apr 2021 13:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE3E369467
+	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Apr 2021 16:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242153AbhDWLhD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 23 Apr 2021 07:37:03 -0400
-Received: from mail-db8eur05on2108.outbound.protection.outlook.com ([40.107.20.108]:51197
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242029AbhDWLhC (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 23 Apr 2021 07:37:02 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZUm2jKt85uEmCPrYpr5xhpJf2nbTDd2B0TpJwf6ukpc/vZ1bF/AbTiGd0n3eNLk9URzQIlqToIQuO+49AA2nr49x2Xf8kNmP+ampO7WoHIPAOMV3SHDuYXbwanqJ1L4ZhaQgT4Pcs+qkf1hM0K1JgwEqeyLGOW3LYX3CluVmmufbsAE6XfJtIdR3wUqALkXcTVQWlbASUqCmun4ZFaye3Ar/qm81wWR2eDKEta5fqsfTdB5u1DQ+SCLVOiIdws5e8LE6UgbPnW/11bv6FN+dCLU+tLdU+NNva/3fVcJsCf/3BzNT37wPP19ZIX/zS2liPF9JoFbKX+nmejRDMFOGIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O4Pm0Y/LxXskvnCvIGdSWE1RZ3KAhyu8chOaYNa/yGU=;
- b=M7Uk1Hzc0JM4PThfmBv4IQDbRI6CSeF+0VSAUgOECQX0bHNt+isWeHtHXuO8PaMqn63Ku13LqEHY+iZAiHh670HnsZAqh07JHWVwerZKpESkgjRKw8FQE9jETKZ1r+KW90vh7+5c17cRbc7CS+x3svx0elj44ryJdLhskBxXOqE4QtSPXxV5UHuOE6KLFKQQva8UvsWkACod94PbMpJUQYq9XNHlVc9JHh0570k/R7W9lGVaL47AZB+cuv5Fq6yJc1G4+M8oXeVBab9wFIgWBcxEpZpv7lLcfUcPzhYzfa1JS9lKj5EDAkquoMj4chwETGEc9Z5Hd27z3+iLqJeeVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
- dkim=pass header.d=prevas.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O4Pm0Y/LxXskvnCvIGdSWE1RZ3KAhyu8chOaYNa/yGU=;
- b=fBzPZwUxKVfet/i5sndq0CmO3slhw+pYjzKJnLoSOdId5oUuQdIM6oC3k+G8xk0m7hgzeRZUZRFXHXd6fttsO4BVO4tfwfemFK4lFeUtAW8AojiV5L8M7vLsWxxH3WAOQwRGzP75HONJzvSxTVqRnOxw/T5afTzxINrpD8ZWR9k=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=prevas.dk;
-Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:3f::10)
- by AM8PR10MB4132.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:1ef::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.22; Fri, 23 Apr
- 2021 11:36:24 +0000
-Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::888d:190b:b3b5:1ad2]) by AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::888d:190b:b3b5:1ad2%3]) with mapi id 15.20.4065.024; Fri, 23 Apr 2021
- 11:36:24 +0000
-Subject: Re: [PATCH 2/2] watchdog: gpio_wdt: add "start-at-boot" feature
-To:     Francesco Zanella <francesco.zanella@vimar.com>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210421162621.24910-1-francesco.zanella@vimar.com>
- <20210421162621.24910-3-francesco.zanella@vimar.com>
-From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Message-ID: <95ee0e48-2214-618a-b351-ec8d4aaf0083@prevas.dk>
-Date:   Fri, 23 Apr 2021 13:36:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-In-Reply-To: <20210421162621.24910-3-francesco.zanella@vimar.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [80.208.71.248]
-X-ClientProxiedBy: AM6P191CA0082.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:209:8a::23) To AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:3f::10)
+        id S229890AbhDWOL3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 23 Apr 2021 10:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229549AbhDWOL2 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 23 Apr 2021 10:11:28 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB74C061574;
+        Fri, 23 Apr 2021 07:10:52 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id g4-20020a9d6b040000b029029debbbb3ecso12431431otp.7;
+        Fri, 23 Apr 2021 07:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=qak1guLsFaVMEg76NWs9738tomTF2Dz1lxZ3efNAG0U=;
+        b=jS9/Z3CCoeecneKXeYcJbiT0ZSETuulNxBA2Rks2IKP0nYOr+IJk/acLov7r0lRWiY
+         XptUVazd19lCfjGWxOKlOwYv5H/G7GCg/0bSxU3mX43YOM4N1uVvQYSn0xm7+g1sP+8A
+         xt3hyaBl4Ymb1qelw5VA44anr6Btfwdfp35/pSy7mbcq+LSdaJSP5+p1lU32MFVXbRUc
+         AUdAfiHADCHTjHbZVkZ8lMqwd9XtqRPJXe/IWnGj40ELcKM1dcWEjtTX+3VzvG7CDR3l
+         oeRa/4wm0eHSR3SagsNkZ1O/6eeO48Uj+uIVPrrt3lWpAd/MZbAVK0nWNfKY4OrW5GbI
+         2YbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=qak1guLsFaVMEg76NWs9738tomTF2Dz1lxZ3efNAG0U=;
+        b=C1/ZipoJijsQ+LDMtprCIFJI3PcX9qT9LkONh/FXgD0V4woODBNe9T8Bzk2B4mptK0
+         9WFa0HzOJu2p0GJfS7lMBTkX9S73L1rAXm1nq1GMh2P+sDJlKWJAoEuiMDBfAceU6TMT
+         3nJPaFzqym9xVXKWcjv/BypZa+mQN1+Tn5hzFsHac0T8HcZ/WuNpVtQeoqzIdk39sY3K
+         pO9KIdY/K0+7hdzeg5EpuFpuUfuDrUcNBIIp2CMeJYC62Qd2Cd406s8sJiAO9lkZwRLa
+         gdK/LTlY1MBOfKkHjLfMnc//2byEkQnYGnw5X4Ed5EUfeEzOfF2KNIcShqC+IOIVH1Y2
+         JgPg==
+X-Gm-Message-State: AOAM532wqkQJLXrkTbfc54YWDhSJdpN4Gv9cgLjYWTWI4L14wGZOF8dp
+        Eu8nqnmsIKMjEdXhj8IDVyYrAe4t6o0=
+X-Google-Smtp-Source: ABdhPJzSVkLH9+HgtRnqrxQZiXB8Wq3cxnjPCT8u2XksDMM50cM6xpu4hbW3pFN1lfgpHrF1XnUuxw==
+X-Received: by 2002:a9d:6842:: with SMTP id c2mr3690276oto.139.1619187051462;
+        Fri, 23 Apr 2021 07:10:51 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v81sm1275222oie.13.2021.04.23.07.10.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 23 Apr 2021 07:10:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 23 Apr 2021 07:10:48 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?utf-8?B?546L5pOO?= <wangqing@vivo.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH V7 1/2] watchdog: mtk: support pre-timeout when the
+ bark irq is available
+Message-ID: <20210423141048.GA135134@roeck-us.net>
+References: <3acb9bb1-763b-5af7-de3c-d7d8d3f5b2f7@roeck-us.net>
+ <AGAAwgADDgCvfda5u2TY64qq.3.1619161944242.Hmail.wangqing@vivo.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.1.149] (80.208.71.248) by AM6P191CA0082.EURP191.PROD.OUTLOOK.COM (2603:10a6:209:8a::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.20 via Frontend Transport; Fri, 23 Apr 2021 11:36:23 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: be9c1464-57b6-4cf7-0c08-08d9064c0632
-X-MS-TrafficTypeDiagnostic: AM8PR10MB4132:
-X-Microsoft-Antispam-PRVS: <AM8PR10MB4132599F9B94337088E784C793459@AM8PR10MB4132.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ObixLHlH1vEOYc/N8+meheLyGoZKkJ4i7B9P5WWTU/1zC4GaJC97+Bau3rR1HUsPmH/LcCl9V9eMyWJXZFXVhczJzrWU3Us09xvGgNg0zZ1d3U1Be3/H+NqAfKqTktdCr8ArOjXyyL9yzCj9NPAo5zm/AZwLBW9RwP7BITRnDZhoHJu3FgT+YmqStkuNqM6A0xgvg9PW1hzjNsQeK9xyVVyvDR0uiaRN+tDl00Hwki7BsRA625sOTtZ1WcnTr4Fvdz6nYltcFihnjuftHFLBhpdqIkGPwhcEEDjbJsIpOf/BqItPJIu232wsQa3aEBqEAFCASlWoUsOwTNBP1+j8gv68o54Ph5BohUaAMCJ0ysdmENVCs+HT9nX8OgLDMIoGIs63fBkhYSCt1fslGGPPcuYRyQ3dUaft7smSjF0lVUcupNOtM0V1l9ruFCKJCJLTzZCkfjPV2H+YDGTkeMQftH7qVM4gihtdnL+ExpfYwHc/Mmy4BO5ehRWK6SHlJwBzbilEGLaBrVnOTMb5C4/JFssWFrze4+8XPkUPk93QhDrhz51pPp9K6q1AOixMhrlTHDxP/bNojyfycyth3bWNBDb7yDlF8vv3FE65HT55bq8t4fkQ+d5150N29O23qXAgf2NLZoKWhSel+dXYM5Q/j+vSwh55P1zTQmxsLgFu4uzm8BJpsGITc3RznLtPmk2xq5X+SUZeuEJrEkx4mpIa1mR4PrLWVd58AMMGvSMxlfyxfE5DnTQpkxo/SK9DHo7ndSeOyFRiiDsB6LddNmB7eKA0ZlKEB+OpQCA0EVv5mCQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(39850400004)(366004)(136003)(346002)(376002)(396003)(956004)(478600001)(2616005)(4326008)(66556008)(26005)(16526019)(186003)(44832011)(86362001)(16576012)(83380400001)(66476007)(4744005)(5660300002)(316002)(966005)(31696002)(66946007)(52116002)(38100700002)(2906002)(8676002)(8976002)(8936002)(31686004)(36756003)(38350700002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?Q3qvz1BXHeaKYSnwW/LjGqUm4kVA6FXHO1meDheXYfVi4be4cKaaCbIE?=
- =?Windows-1252?Q?/c33hTtsuHtuBP0wLWvg75XFtvhjGJN0zozYDEKerB5Jkc7udjIi7BD3?=
- =?Windows-1252?Q?Z7Qip2T26r98KhbCo9d3mQSsbcBln4GmcU/K2IXKXFpz5zFhfNJk79qF?=
- =?Windows-1252?Q?t+GY4VxPyZO2mwdilZTZ0lbPmXK2zjTsWoLhKvDm5ccHg7dC/dNfH7Ni?=
- =?Windows-1252?Q?E3L/kglCIdoY13+xWXO28gyHqXAfTdO5X6EUOiuLOsfwHrIPpYd0VRqH?=
- =?Windows-1252?Q?x6Pd+Bd62ol/RgKxKTTAf0kZBK9xOh/bbRmNBwq6QzMeygTi1efmbYwZ?=
- =?Windows-1252?Q?8xBaPNJh0fPjCjo6UWSBBuoYt4wgPGtUmzDHBryP/z6JGRXTAx2e58aG?=
- =?Windows-1252?Q?ZC9Wtk9Xf0mDbjF/6mmQV6zzrW6HsTNdmfjPncvZwhKufz+yd3qm9xQd?=
- =?Windows-1252?Q?IBEkr6Ufg0JS9mY0D89OK0XABICO4OWd1MQyrNNwXskJFnabAD0m+b6f?=
- =?Windows-1252?Q?jRRpBlhHeLtiEJLFNdSUkeJIP06+14i3pEMWMtv6MlISdXyPJ/XSQHNC?=
- =?Windows-1252?Q?gz5ia6i+7/jEbz4oGW1JZGgMzwrC6jyHmsa4KGwYqlGU0Tq6LZemRzfV?=
- =?Windows-1252?Q?nw82fAtUcCvBAbF4iXcVNWoFMgXpW+wBOID2Pjz01uoq3TXMUUeeC7gD?=
- =?Windows-1252?Q?gLilqTBfaDjNVynSt0VYBsk9GyCpXaoxeEq9b4pBfyohqV27StDhYXkh?=
- =?Windows-1252?Q?Bq1t8Xe0L5WcnvcDycM6UD+mTOzuUXzlcQhvHttVTbNO++NMiYpAdy6C?=
- =?Windows-1252?Q?+IpUN5AJna9rjpriq+stauU148TO341KUhMZImN23jnag7ukIpuV/w07?=
- =?Windows-1252?Q?FZ+SRYM+O9N5ShzZaDAhJanXrQQY0vdvhTnEZn2n0haljAeq4kPM08iB?=
- =?Windows-1252?Q?VVPxVZYFo9OzZH8ilV9WodNBcqOej4BnNQm3+taZpAFKyOoN+nVjLlUo?=
- =?Windows-1252?Q?ui65BV50UiYbQThO3w0I3ZhBQnbZ4B4XTNa48Zcb+1RykqFMdoq0WppV?=
- =?Windows-1252?Q?EyY4GSdIQXiKMp6aekylMYZs74N0J4ilF1eC9pKR3PK5np0bX/0owuBc?=
- =?Windows-1252?Q?8L/EUF3eXaDxo/8uSQ32IKzGuBobzYnhTY3IiUmCB5jHoIfXVjCdoP/F?=
- =?Windows-1252?Q?QPUH9CvJbxJwaTWBDl38YF++Ct7PNpsHAUsMgR1lHzgQDvPBnyutwl3K?=
- =?Windows-1252?Q?DWxzwSG8fHMzm5Q/zMKH8h/dEw3QBPtk/Bxzr/wqt8rwfFmW5RCAzLR7?=
- =?Windows-1252?Q?HvEmm3dXGDswbQQBd6kKBP3GtAQmL6+Zvaf8s6iX6Ir3FXbi+NDR57XB?=
- =?Windows-1252?Q?oaX0+VxTVMlGgE8BEoDlFuZTtb63O1Ke83C1ddBIp2zGBgwKKmpkgXte?=
-X-OriginatorOrg: prevas.dk
-X-MS-Exchange-CrossTenant-Network-Message-Id: be9c1464-57b6-4cf7-0c08-08d9064c0632
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2021 11:36:24.4917
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9zfMDpDnv5SOl/yaeg59zXpIYRo8leDhwg7wPm2jyScwt8XRBufSPCTSVnhC1SADzhF3Y/qylugZIMC1Jq8x3c9ssLE3W333IK/iucD3AUQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR10MB4132
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AGAAwgADDgCvfda5u2TY64qq.3.1619161944242.Hmail.wangqing@vivo.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 21/04/2021 18.26, Francesco Zanella wrote:
-> If "start-at-boot" property is present in the device tree, start pinging
-> hw watchdog at probe, in order to take advantage of kernel configs:
+On Fri, Apr 23, 2021 at 03:12:24PM +0800, 王擎 wrote:
+> 
+> >On 4/22/21 8:48 PM, 王擎 wrote:
+> >> 
+> >>> On 4/22/21 7:53 PM, Wang Qing wrote:
+> >>>> Use the bark interrupt as the pretimeout notifier if available.
+> >>>>
+> >>>> When the watchdog timer expires in dual mode, an interrupt will be
+> >>>> triggered first, then the timing restarts. The reset signal will be
+> >>>> initiated when the timer expires again.
+> >>>>
+> >>>> The pretimeout notification shall occur at timeout-sec/2.
+> >>>>
+> >>>> V2:
+> >>>> - panic() by default if WATCHDOG_PRETIMEOUT_GOV is not enabled.
+> >>>>
+> >>>> V3:
+> >>>> - Modify the pretimeout behavior, manually reset after the pretimeout
+> >>>> - is processed and wait until timeout.
+> >>>>
+> >>>> V4:
+> >>>> - Remove pretimeout related processing. 
+> >>>> - Add dual mode control separately.
+> >>>>
+> >>>> V5:
+> >>>> - Fix some formatting and printing problems.
+> >>>>
+> >>>> V6:
+> >>>> - Realize pretimeout processing through dualmode.
+> >>>>
+> >>>> V7:
+> >>>> - Add set_pretimeout().
+> >>>>
+> >>>> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> >>>> ---
+> >>>>  drivers/watchdog/mtk_wdt.c | 76 +++++++++++++++++++++++++++++++++++++++++++---
+> >>>>  1 file changed, 71 insertions(+), 5 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> >>>> index 97ca993..ab3ac5d
+> >>>> --- a/drivers/watchdog/mtk_wdt.c
+> >>>> +++ b/drivers/watchdog/mtk_wdt.c
+> >>>> @@ -25,6 +25,7 @@
+> >>>>  #include <linux/reset-controller.h>
+> >>>>  #include <linux/types.h>
+> >>>>  #include <linux/watchdog.h>
+> >>>> +#include <linux/interrupt.h>
+> >>>>  
+> >>>>  #define WDT_MAX_TIMEOUT		31
+> >>>>  #define WDT_MIN_TIMEOUT		1
+> >>>> @@ -184,15 +185,23 @@ static int mtk_wdt_set_timeout(struct watchdog_device *wdt_dev,
+> >>>>  {
+> >>>>  	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
+> >>>>  	void __iomem *wdt_base = mtk_wdt->wdt_base;
+> >>>> +	unsigned int timeout_interval = timeout;
+> >>>>  	u32 reg;
+> >>>>  
+> >>>>  	wdt_dev->timeout = timeout;
+> >>>> -
+> >>>> +	/*
+> >>>> +	 * In dual mode, irq will be triggered at timeout / 2
+> >>>> +	 * the real timeout occurs at timeout
+> >>>> +	 */
+> >>>> +	if (wdt_dev->pretimeout) {
+> >>>> +		wdt_dev->pretimeout = timeout / 2;
+> >>>
+> >>> min_timeout is set to 1. I don't this works well if timeout == 1.
+> >>> You'll either need to set min_timeout to 2, or handle that case.
+> >> 
+> >> It is appropriate to change min_timeout  to 2.
+> >> 
+> >>>
+> >>>> +		timeout_interval = wdt_dev->pretimeout;
+> >>>
+> >>> timeout_interval is unnecessary. Just update timeout accordingly.
+> >>> It needs to take the situation of timeout == 1 into account, though.
+> 
+> I plan to remove timeout_interval and directly use (timeout-pretimeout)
+> update timeout.
+> 
+> >> 
+> >> timeout represents the reset time. When the user calls timeout_show, 
+> >> He hopes to get the configured timeout, not the value changed
+> >> by pre-timeout.
+> >> I modify it like this more in line with the original intention.
+> >> 
+> >>>
+> >>>> +	}
+> >>>>  	/*
+> >>>>  	 * One bit is the value of 512 ticks
+> >>>>  	 * The clock has 32 KHz
+> >>>>  	 */
+> >>>> -	reg = WDT_LENGTH_TIMEOUT(timeout << 6) | WDT_LENGTH_KEY;
+> >>>> +	reg = WDT_LENGTH_TIMEOUT(timeout_interval << 6) | WDT_LENGTH_KEY;
+> >>>>  	iowrite32(reg, wdt_base + WDT_LENGTH);
+> >>>>  
+> >>>>  	mtk_wdt_ping(wdt_dev);
+> >>>> @@ -239,13 +248,46 @@ static int mtk_wdt_start(struct watchdog_device *wdt_dev)
+> >>>>  		return ret;
+> >>>>  
+> >>>>  	reg = ioread32(wdt_base + WDT_MODE);
+> >>>> -	reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
+> >>>> +	if (wdt_dev->pretimeout)
+> >>>> +		reg |= (WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
+> >>>> +	else
+> >>>> +		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
+> >>>>  	reg |= (WDT_MODE_EN | WDT_MODE_KEY);
+> >>>>  	iowrite32(reg, wdt_base + WDT_MODE);
+> >>>>  
+> >>>>  	return 0;
+> >>>>  }
+> >>>>  
+> >>>> +static int mtk_wdt_set_pretimeout(struct watchdog_device *wdd,
+> >>>> +					unsigned int timeout)
+> >>>> +{
+> >>>> +	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdd);
+> >>>> +	void __iomem *wdt_base = mtk_wdt->wdt_base;
+> >>>> +	u32 reg = ioread32(wdt_base + WDT_MODE);
+> >>>> +
+> >>>> +	if (timeout && !wdd->pretimeout) {
+> >>>> +		wdd->pretimeout = wdd->timeout / 2;
+> >>>> +		reg |= (WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
+> >>>> +	} else if (!timeout && wdd->pretimeout) {
+> >>>> +		wdd->pretimeout = 0;
+> >>>> +		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
+> >>>> +	} else
+> >>>> +		return 0;
 
-(1) Are you aware of the recent proposal to add a similar feature on
-watchdog core level:
+Please run your patch through checkpatch; the above results
+in a note about a missing { }.
 
-https://lore.kernel.org/lkml/?q=start_enable
+> >>>> +
+> >>>> +	iowrite32(reg, wdt_base + WDT_MODE);
+> >>>
+> >>> What is the point of setting the mode here ? It will
+> >>> be set again in mtk_wdt_set_timeout(). Seems to me all
+> >>> you need to do here is to set wdd->pretimeout,
+> >>> then call mtk_wdt_set_timeout().
+> >> 
+> >> mtk_wdt_set_timeout() only set timeout and ping().
+> >> Here also need to config to the dualmode or not.
+> >> 
+> >Ah, you are correct. Sorry, I confused this with the start function.
+> >That makes me wonder if it would be better to extract a separate
+> >function, mtk_wdt_set_mode(), for that purpose. Thoughts ?
+> 
+> I have done this, but I found there is no good abstract method, 
+> because wdt mode is used in combination, for example：
+> WDT_MODE_EN is included in start(), and here is not.
+> And the judgment of pretimeout here is also different.
+> 
+Ok, makes sense. Another minor comment above, though.
 
-(2) If you set always-running but not nowayout you essentially have what
-you want now: If userspace opens the device [within the limit set by
-OPEN_TIMEOUT if that is in effect], but then does a graceful close (i.e.
-writes 'V' immediately before close()), the kernel will assume
-responsibility for pinging the device. So the device isn't stopped as
-such, but if you can't trust the kernel thread/timer to keep it alive,
-the system is already mostly unusable. [Also, how reliable is that 'the
-timer is stopped if the gpio is set to be an input' anyway].
+Thanks,
+Guenter
 
-Rasmus
+> Thanks,
+> Qing
+> 
+> >
+> >Thanks,
+> >Guenter
+> >
+> >> Thanks,
+> >> Qing
+> >>>
+> >>> Guenter
+> >>>
+> >>>> +
+> >>>> +	return mtk_wdt_set_timeout(wdd, wdd->timeout);
+> >>>> +}
+> >>>> +
+> >>>> +static irqreturn_t mtk_wdt_isr(int irq, void *arg)
+> >>>> +{
+> >>>> +	struct watchdog_device *wdd = arg;
+> >>>> +
+> >>>> +	watchdog_notify_pretimeout(wdd);
+> >>>> +
+> >>>> +	return IRQ_HANDLED;
+> >>>> +}
+> >>>> +
+> >>>>  static const struct watchdog_info mtk_wdt_info = {
+> >>>>  	.identity	= DRV_NAME,
+> >>>>  	.options	= WDIOF_SETTIMEOUT |
+> >>>> @@ -253,12 +295,21 @@ static const struct watchdog_info mtk_wdt_info = {
+> >>>>  			  WDIOF_MAGICCLOSE,
+> >>>>  };
+> >>>>  
+> >>>> +static const struct watchdog_info mtk_wdt_pt_info = {
+> >>>> +	.identity	= DRV_NAME,
+> >>>> +	.options	= WDIOF_SETTIMEOUT |
+> >>>> +			  WDIOF_PRETIMEOUT |
+> >>>> +			  WDIOF_KEEPALIVEPING |
+> >>>> +			  WDIOF_MAGICCLOSE,
+> >>>> +};
+> >>>> +
+> >>>>  static const struct watchdog_ops mtk_wdt_ops = {
+> >>>>  	.owner		= THIS_MODULE,
+> >>>>  	.start		= mtk_wdt_start,
+> >>>>  	.stop		= mtk_wdt_stop,
+> >>>>  	.ping		= mtk_wdt_ping,
+> >>>>  	.set_timeout	= mtk_wdt_set_timeout,
+> >>>> +	.set_pretimeout	= mtk_wdt_set_pretimeout,
+> >>>>  	.restart	= mtk_wdt_restart,
+> >>>>  };
+> >>>>  
+> >>>> @@ -267,7 +318,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+> >>>>  	struct device *dev = &pdev->dev;
+> >>>>  	struct mtk_wdt_dev *mtk_wdt;
+> >>>>  	const struct mtk_wdt_data *wdt_data;
+> >>>> -	int err;
+> >>>> +	int err, irq;
+> >>>>  
+> >>>>  	mtk_wdt = devm_kzalloc(dev, sizeof(*mtk_wdt), GFP_KERNEL);
+> >>>>  	if (!mtk_wdt)
+> >>>> @@ -279,7 +330,22 @@ static int mtk_wdt_probe(struct platform_device *pdev)
+> >>>>  	if (IS_ERR(mtk_wdt->wdt_base))
+> >>>>  		return PTR_ERR(mtk_wdt->wdt_base);
+> >>>>  
+> >>>> -	mtk_wdt->wdt_dev.info = &mtk_wdt_info;
+> >>>> +	irq = platform_get_irq(pdev, 0);
+> >>>> +	if (irq > 0) {
+> >>>> +		err = devm_request_irq(&pdev->dev, irq, mtk_wdt_isr, 0, "wdt_bark",
+> >>>> +					&mtk_wdt->wdt_dev);
+> >>>> +		if (err)
+> >>>> +			return err;
+> >>>> +
+> >>>> +		mtk_wdt->wdt_dev.info = &mtk_wdt_pt_info;
+> >>>> +		mtk_wdt->wdt_dev.pretimeout = WDT_MAX_TIMEOUT / 2;
+> >>>> +	} else {
+> >>>> +		if (irq == -EPROBE_DEFER)
+> >>>> +			return -EPROBE_DEFER;
+> >>>> +
+> >>>> +		mtk_wdt->wdt_dev.info = &mtk_wdt_info;
+> >>>> +	}
+> >>>> +
+> >>>>  	mtk_wdt->wdt_dev.ops = &mtk_wdt_ops;
+> >>>>  	mtk_wdt->wdt_dev.timeout = WDT_MAX_TIMEOUT;
+> >>>>  	mtk_wdt->wdt_dev.max_hw_heartbeat_ms = WDT_MAX_TIMEOUT * 1000;
+> >>>>
+> >>>
+> >> 
+> >> 
+> >
+> 
+> 
