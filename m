@@ -2,189 +2,437 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B8236A152
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Apr 2021 15:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D7536A1A7
+	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Apr 2021 16:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbhDXNFa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 24 Apr 2021 09:05:30 -0400
-Received: from mx08-001d1705.pphosted.com ([185.183.30.70]:18894 "EHLO
-        mx08-001d1705.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232709AbhDXNF2 (ORCPT
+        id S229848AbhDXOmS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 24 Apr 2021 10:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229630AbhDXOmQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 24 Apr 2021 09:05:28 -0400
-Received: from pps.filterd (m0209322.ppops.net [127.0.0.1])
-        by mx08-001d1705.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13OD4RPV032525;
-        Sat, 24 Apr 2021 13:04:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=S1;
- bh=/8r+zlLP87NJpmGb09b/OgJIQ/2BGSfVmEiqq/WN5i0=;
- b=iDuWwpWzIPcXvyi2OkcY3z4tpXtku3BgQrDGuA2clkGQH0fUlbM/W5o0T/aa0IajeeH3
- 507hcoC+Unz6uCfcnPPC389MvRjV4AXLRcNNdiZGz3ieMoxFu4igxF0qq26kpOvDrjgA
- zom3ecHxkS8KCOV7G8EfWMyGyFA1jL4CGxnPX9GE7RlZ0m54h4rrye/vtZDiQpm+cgWf
- PgIlyDJzeJMCLbjyZKbDRLorRGAc8qQR0Fc/Sr4xqLg/27SuIm4FJy11zmpsbdCUFY8N
- mhGxZvrNUtv+lLKTb7xBOnX/GkkI8FSyER+wRqBjorDBrzdxbgQEVZuRAi64aBo1TA8k Iw== 
-Received: from eur03-am5-obe.outbound.protection.outlook.com (mail-am5eur03lp2051.outbound.protection.outlook.com [104.47.8.51])
-        by mx08-001d1705.pphosted.com with ESMTP id 384a49gf21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 24 Apr 2021 13:04:26 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BUN7QyrfTUSOyQlLvlvvkFh+bhYnZ4oP4NKgGsyLqGSdNYLMFJKESmSveaZcgOjCS0ri2hnJPSylfxIVFihL7hXn68i2C3o8SbDIoF6iF/elRlIdGRj0Y+PpbPEEjbwCAR1xlSJCe/vnBPQ4vysF0vPv69y9yhKssXNCvUhDrWUE5BDzywjmISa6tv9YB77nM32Sa7mQbrxleGKgxq0rfUyjcgrCfPJJUBpkH5XAywNKmCl6W/VM/3TRKIVnzDEPWmHBUV2JxqvQBAWB6Lj0Dl6SFvuaXwER85y0nsW6SVbtMHaIblskwNCOdUWvVShoK0o6HRQGjOjAJnCKcLpQ1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/8r+zlLP87NJpmGb09b/OgJIQ/2BGSfVmEiqq/WN5i0=;
- b=ZncDbxW20QxJMGOGzhbaUWVL/A86Wu70iwkUyanbirqrLahS9U/l0d3jW5bakk2rdnbgZisIDW0P3XMA/LYSBe88Po1QOYVx8WjjcPcr/elmucBsFv5N0A63nbxFpVsnyhQyj6VRXKb5Ux9EVY2lT4zbepsk3nIW5Nz+qE4zuGKWNdlYKOss4tRPyfvupSHFsGLEMvMZcSzPnHgBagS3i1XdF7bOVdO/fDY4ndlaOPgOHWOPmPo1JaFkq+sCuU3WCA2Ie8dp9lPQGPKOz9jSSUUFtjLCs58z16EKrBWOWOpyz8vmTHr5aWpXfsJEsXEgrLNJ9ibcJjOoup2uPU3hMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-Received: from AM9P193MB1491.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:306::20)
- by AM9P193MB1080.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:1fc::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.23; Sat, 24 Apr
- 2021 13:04:14 +0000
-Received: from AM9P193MB1491.EURP193.PROD.OUTLOOK.COM
- ([fe80::35b3:3e5e:6533:84e0]) by AM9P193MB1491.EURP193.PROD.OUTLOOK.COM
- ([fe80::35b3:3e5e:6533:84e0%5]) with mapi id 15.20.4065.025; Sat, 24 Apr 2021
- 13:04:13 +0000
-From:   <Peter.Enderborg@sony.com>
-To:     <christophe.leroy@csgroup.eu>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <akpm@linux-foundation.org>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <shakeelb@google.com>
+        Sat, 24 Apr 2021 10:42:16 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626A6C061574;
+        Sat, 24 Apr 2021 07:41:38 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id u16so34793327oiu.7;
+        Sat, 24 Apr 2021 07:41:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xN23ulminwziFA7mXY1KYaWWv1cLqTYFlrrmW7z+zYs=;
+        b=ov4SyxdQveP+qQ1ausN/coDSihqyGNU8I2m9QR7GteExqL4grYhj3AhQCk/n4kkffe
+         kZL9w5XX20vTEbuOsef9kyGwPdOvQ0ufgr+S3vksvnzUK4HTrwzgUh/sdZ5nEZar4701
+         FF48Zf8leX7ijcandmvmfMMJbbOaFiqkaDIlLEoQMOxwa0TBqcnhsW0cRUNQnZljXM5X
+         m0pX51irHFGxcZfs0YEhTdC1rjzZEZ3kCcyE2FCWplXj/tyomuFNrX6Z/pRFH1K9gjTH
+         jJVoem61Nd4AO6dVa73CjcH4tIAm00jYGSX3j7lOUz7MV9hlStOGnh62Y0YFbcow9CZa
+         OASA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=xN23ulminwziFA7mXY1KYaWWv1cLqTYFlrrmW7z+zYs=;
+        b=ryd3Mw3/qUNvjTBu2KXFmoH+BLlQIMFkrPdHcOC6Vy0D29gue1BGY31Rl65ojvXPMK
+         VXiKF9/8aJWX75Rspccd/lZd2+V66fNelWIkRnvS6R5OkudCXscKuFUKFZvXvHEjnXfV
+         ydRYbEbpI1xaD2UCS0PbpT1mM0Rs/+gVFyo9QSncTPck8kx3u9H1vobomAWEIzq6o+7S
+         yIXnfmvShcqAoIxE9mGEmm9G8BHt9dSoiFLBUgNSpIGzhWqmyQ8ujtZkliJ0aM283wls
+         iHeymop7dNm6ugGg3OqaoWvovF/aBcdm2a3R0DlqIxrm/2GRQCo68ImVlHjOW2Qw2vsB
+         ZF6g==
+X-Gm-Message-State: AOAM532AleGwGgTna+OA/Cnb+e/6+AnvXX4nsvPjmgxW80rNfbRfeVRP
+        GZJST7HPLQBocRtGcJwfUNw=
+X-Google-Smtp-Source: ABdhPJxOYAFGV/eZgN+q3xOlggmeaBWpQOxIdkX0eCEsDeVZId69l1+0e2/CijNaYKn9YZ5lK+ISTQ==
+X-Received: by 2002:aca:7558:: with SMTP id q85mr6407206oic.160.1619275297534;
+        Sat, 24 Apr 2021 07:41:37 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o2sm2016999oti.30.2021.04.24.07.41.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Apr 2021 07:41:36 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [RFC PATCH] watchdog: Adding softwatchdog
-Thread-Topic: [RFC PATCH] watchdog: Adding softwatchdog
-Thread-Index: AQHXOPRHJMESqgFAQEC7n9VkV8fdEqrDlraAgAAL/AA=
-Date:   Sat, 24 Apr 2021 13:04:13 +0000
-Message-ID: <d5db6789-78a6-3e48-6383-190c4696e682@sony.com>
+To:     Peter Enderborg <peter.enderborg@sony.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>
 References: <20210424102555.28203-1-peter.enderborg@sony.com>
  <20210424102555.28203-2-peter.enderborg@sony.com>
- <ac949d08-72ff-edf6-6526-fdc9ad602631@csgroup.eu>
-In-Reply-To: <ac949d08-72ff-edf6-6526-fdc9ad602631@csgroup.eu>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <d5db5606-f074-6d0e-2316-8ff41af25cfd@roeck-us.net>
+Date:   Sat, 24 Apr 2021 07:41:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
-authentication-results: csgroup.eu; dkim=none (message not signed)
- header.d=none;csgroup.eu; dmarc=none action=none header.from=sony.com;
-x-originating-ip: [37.139.156.40]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3b8d3319-d505-4058-cc00-08d907217563
-x-ms-traffictypediagnostic: AM9P193MB1080:
-x-microsoft-antispam-prvs: <AM9P193MB1080762779D6B8AE1B07B05986449@AM9P193MB1080.EURP193.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: S5xX9CSEb+m5Kx7Q3NWDm/KJDwN0WkB0rDRa8/seE5bx/nrllNzHvnHVuabNUtAySavJXH4ocH4n/b0neNRlBarpmZq86lE39ziIiVIImaEN75rnwVJhJG98koWfUud/kIH5Bz3WD+Q1ahTVUEtzcezaAZPgWEC1MCpv5wLeS7H/5eUReKhg3SFOdXhMQNMXO8qtivXGaiEwYCvGKDRdCzvbzt+lEQjF7IG2LvAlPM93WT2TYZJqM8YZQx51WcGtWgIiuLFlmEhmhT3Tklr6tmtapRVWdFN83cDvtBkgIKIR0PDgTs60j3c89K7XZ1AML7Dz2pWPggaPoGycfb8+TwdsbiEuCeWMcu0uBz5ABK7HW/f1sxJOD5kFIZAuJlfzwiecPHVxJp3fpUw33G3MP+FBteNjjfqnaLgTMqntFOaKXFFpHz3p+76ICyM/4tBAGtYpmdVhIZcASjbbhIVch50PQ2MNoQW3j6blGoFPZLD1BK6MXGfpN2O7yBlDIqqbT4s5PuExKthZkgJRd9dFZV3c72VAdoV9QOySe7JdAKJTqE9SrQ4uCsjom4m5Wg0AuzrpZRUSLSFDFqIyfYv4Ft3q+PZwpGeAhl1Wwgny1voyx3JWZXOhgVXMv1Y4T9kXUL0y0lsPciBep6mL4c2tDPevcZoeAUEkjmKNMszq1wN7qMPrLZwmxlE1cfENwecZMm5QINiN+veBhnpX5dk4krVzw2CdFl4QLNZg1vt7idYV4inYQIP/E4vY+N0pPfCpKa6TGwZyoeiCDCaV8tIIgw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P193MB1491.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(346002)(376002)(366004)(396003)(136003)(6512007)(2906002)(2616005)(6486002)(186003)(26005)(36756003)(86362001)(31696002)(31686004)(38100700002)(122000001)(53546011)(6506007)(83380400001)(316002)(66574015)(5660300002)(66446008)(66946007)(71200400001)(91956017)(64756008)(76116006)(66476007)(478600001)(66556008)(966005)(8676002)(110136005)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?UkR3UkhGOUhiOTd5YkluczBBNElBT0IySFdxdGwxdjNINGwvdWo2TTdXdGVS?=
- =?utf-8?B?RmtEeUN2cWlkSGZUaWNqZVlVK3ZMVUJrUTlrdGoxUkRSTndlMXh3LzVJa3l0?=
- =?utf-8?B?MXlDRUFJTHR5MTVEdSt0NjRnUnZ0TEt2VW91ZmY2U3Rtc0xMTHloeUxoR0JX?=
- =?utf-8?B?NWQvMndKQlVUbEg4UytFVUxSeGl2aTF2TEdRUlJLZWl2aVRjNkFMK1BaMUFL?=
- =?utf-8?B?WitIK0R2V204RXVEamRBRzRja0FUdmExSFloSkZTS0ttNUFZMnYrQzVKMUJv?=
- =?utf-8?B?UHArRTdkUWIxamUrUWpzTDJDc3JLd1AxTjNFN3ROVzZsT29jQlFXRjVEMXkr?=
- =?utf-8?B?ZDByb3pEY2RoRnpVdFdIWGEzTHhQT2ZLd3NPcXFjSnYvWUlOcUhndnR4bEpk?=
- =?utf-8?B?NStWNGNBNTJtN2duTVl4eE5zR1VaR0pvc3I1em40OW1RZFBEWFZlNXRVMzZZ?=
- =?utf-8?B?SFpYUFFsSTZuaGtwQlYyaHFqMGRDMXZsVTdYUC9seGZ5enJrZGZGL1VRL1pX?=
- =?utf-8?B?MU1aVU5BN1pJcUdDb2RUeDdXZ2FRYU5Wd0srZ2hpaHJnWUlVQk1Ub2pUL0cr?=
- =?utf-8?B?cGJsT2haN0ZXR3h3eUlxYURId255bVlDQlNRbVRSUCs3UGN2SWIxb0xsRTFG?=
- =?utf-8?B?SDI3OEhsNVNSdmZsSnpRaXRiRVZRZHhWbXJZVEw3dlZrSGoraVFjSjFPWFl6?=
- =?utf-8?B?NTVvT3pid1QzK3BJaUdEMXlIQTY4bjAydWR0QU9BSXVqQmpVd3VhMUQzRi95?=
- =?utf-8?B?emV6MFpBOXdMTU41aXp0QU1OUnhMM1NJWGd5U1AxS0VUSnZTbk1OQS9RMGI3?=
- =?utf-8?B?UmV2ay9lNm1IZEV4THdkYlM2S2xCVUxoRCsvRnZRWmMrTWZXcE96MmsxMmtN?=
- =?utf-8?B?WXNIUmp0a0tueVpUL3VvdjR3ZzZkV3l1eS9OUEVERWNKcC94ZThUNHNWTGdk?=
- =?utf-8?B?dkkzd1pIcS9xOTFsUzlPT0pRa3M0RGsxNE5CbGNDZllWY0JJQTExQnBrK3Zp?=
- =?utf-8?B?dXM5WkFOd0RmTHZOUU83MzJFNG1kcXp5Zjh4dmg4R2N6MmVUeTkxTStyMHdq?=
- =?utf-8?B?WHBtbHg2eWM3amg2QXhOMXpYbWRnOUE3VzduQ2xVNUc1RXl4UTg1V1c2ZE82?=
- =?utf-8?B?U0pzV1FOMGxLTXFjbXJ5T0I5SnZCbG50a09ZOUwrenA4MnM2ckZkdkIvcExn?=
- =?utf-8?B?dmRtcnh6Um1wS283dDBmM3VyU0hJVFNITGVDaGg2WVNVdXdsZ1JGYmFibzdU?=
- =?utf-8?B?K1ZiSitlK2wxOXhMQzNLSHFHdWhUSlVtZFh0YnJ0V0ErRHZtTERXdjNVM2tE?=
- =?utf-8?B?ckRJZmZpYUJBdDhvZFZqcUVEKzdRY3V5aE1OekMrQnpHUFZHdGt1azNFSDFP?=
- =?utf-8?B?UU4rRk1UaHoxYTNDelhmek4zenNKOXFMNVFlV0M4dHdRL1RoajlZVFVDNlZ5?=
- =?utf-8?B?UndSL0VuVHFrNFBRQytGNkFRKzRrK2JRZFJHYWhnNVZKNzlWYWNDT04xc0JJ?=
- =?utf-8?B?V3JuclR1VFl5M24rcG1QeGtHd2tndVBBMVJyeksxRGlONkpkNm1OenFZT1pP?=
- =?utf-8?B?K3JzRkJUMGhwRkNWTmNUejBSVnkwbXhqQXRicnVmdStQL2hFaXE0eXlVTjhF?=
- =?utf-8?B?T0RCL292SDFvNE9PejQrbDlLOWJ1dmN2WWdXSUxtb0FWK0NxL1RQaXcxY3N3?=
- =?utf-8?B?MlVHMHhSOVVJTHo0K2JQbUpVTC9yMmtuNEdZdjFDblk5ZE1JMGhhZVh1ZUNC?=
- =?utf-8?Q?Vxieg2Gc5zb/jtsnP4Qif/cl/FFPwL6V2l6kSgo?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <53E90CEB69C2864A880EA437246695DB@EURP193.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9P193MB1491.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b8d3319-d505-4058-cc00-08d907217563
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2021 13:04:13.3449
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Wl0MXUMNUc1JJCA9tERv+f974ILnCQ3RjZShAnuS1hHwpbxfaOFXmqFQnwK89qBjmQX+tsRO6OPoR0Yc5UUJICcnqitm3xRkSYlABx8ZnW8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9P193MB1080
-X-Proofpoint-GUID: gflXZfrTtk6URc_obxEZp42KE9mUkIyU
-X-Proofpoint-ORIG-GUID: gflXZfrTtk6URc_obxEZp42KE9mUkIyU
-X-Sony-Outbound-GUID: gflXZfrTtk6URc_obxEZp42KE9mUkIyU
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-24_04:2021-04-23,2021-04-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
- spamscore=0 phishscore=0 adultscore=0 suspectscore=0 bulkscore=0
- mlxscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104240095
+In-Reply-To: <20210424102555.28203-2-peter.enderborg@sony.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-T24gNC8yNC8yMSAyOjIxIFBNLCBDaHJpc3RvcGhlIExlcm95IHdyb3RlOg0KPg0KPg0KPiBMZSAy
-NC8wNC8yMDIxIMOgIDEyOjI1LCBQZXRlciBFbmRlcmJvcmcgYSDDqWNyaXTCoDoNCj4+IFRoaXMg
-aXMgbm90IGEgcmVib290aW5nIHdhdGNoZG9nLiBJdCdzIGZ1bmN0aW9uIGlzIHRvIHRha2Ugb3Ro
-ZXINCj4+IGFjdGlvbnMgdGhhbiBhIGhhcmQgcmVib290LiBPbiBtYW55IGNvbXBsZXggc3lzdGVt
-IHRoZXJlIGlzIHNvbWUNCj4+IGtpbmQgb2YgbWFuYWdlciB0aGF0IG1vbml0b3IgYW5kIHRha2Ug
-YWN0aW9uIG9uIHNsb3cgc3lzdGVtcy4NCj4+IEFuZHJvaWQgaGFzIGl0J3MgbG93bWVtb3J5a2ls
-bGVyIChsbWtkKSwgZGVza3RvcHMgaGFzIGVhcmx5b29tLg0KPj4gVGhpcyB3YXRjaGRvZyBjYW4g
-YmUgdXNlZCB0byBoZWxwIG1vbml0b3IgdG8gcHJlZm9ybSBzb21lIGJhc2ljDQo+PiBhY3Rpb24g
-dG8ga2VlcCB0aGUgbW9uaXRvciBydW5uaW5nLg0KPj4NCj4+IEl0IGNhbiBhbHNvIGJlIHVzZWQg
-c3RhbmRhbG9uZS4gVGhpcyBhZGQgYSBwb2xpY3kgdGhhdCBpcw0KPj4ga2lsbGluZyB0aGUgcHJv
-Y2VzcyB3aXRoIGhpZ2hlc3Qgb29tX3Njb3JlX2FkaiBhbmQgdXNpbmcNCj4+IG9vbSBmdW5jdGlv
-bnMgdG8gaXQgcXVpY2tseS4gSSB0aGluayBpdCBpcyBhIGdvb2QgdXNlY2FzZQ0KPj4gZm9yIHRo
-ZSBwYXRjaC4gTWVtb3J5IHNpdWF0aW9ucyBjYW4gYmUgcHJvYmxlbWF0aWMgZm9yDQo+PiBzb2Z0
-d2FyZSB0aGF0IG1vbml0b3Igc3lzdGVtLCBidXQgb3RoZXIgcHJvbGljeXMgY2FuDQo+PiBzaG91
-bGQgYWxzbyBiZSBwb3NzaWJsZS4gTGlrZSBwaWNraW5nIHRhc2tzIGZyb20gYSBtZW1jZywgb3IN
-Cj4+IHNwZWNpZmljIFVJRCdzIG9yIHdoYXQgZXZlciBpcyBsb3cgcHJpb3JpdHkuDQo+DQo+DQo+
-IEknbSBub3JlIHN1cmUgSSB1bmRlcnN0YW5kIHRoZSByZWFzb25pbmcgYmVoaW5kIHRoZSBjaG9p
-Y2Ugb2Ygb29tIGxvZ2ljIHRvIGRlY2lkZSB3aGljaCB0YXNrIHRvIGtpbGwuDQo+DQpUaGlzIGlz
-IG5vdCB1c2luZyBvb20gbG9naWMgdG8gcGljayBhIHRhc2sgdG8ga2lsbCwgaXQgaXMgdXNpbmcg
-b29tIGZ1bmN0aW9ucyB0byBmcmVlIHJlc291cmNlcyBmYXN0Lg0KDQpUaGUgb29tIGlzIGFsc28g
-dG8gc2xvdy4gU28gdGhlcmUgYXJlIHVzZXJzcGFjZSBzb2x1dGlvbnMgdG8gc3RhcnQgcmVtb3Zp
-bmcgcHJvY2Vzc2VzIGJlZm9yZSBpdCBzdGFydHMgdG8gc2xvdyBkb3duLg0KDQpJbiBmb3IgZXhh
-bXBsZSBVYnVudHUgYW5kIEZlZG9yYSBhIHByb2Nlc3MgY2FsbGVkIGVhcmx5b29tIGlzIHJ1bm5p
-bmcuIE9uIEFuZHJvaWQgdGhlcmUgaXMgbG1rZC4gSG93ZXZlcg0KYWxsb2NhdGlvbiBjYW4gYmUg
-aHVnZSBmYXN0LiBGb3IgZXhhbXBsZSBzdGFydGluZyBhIGNhbWVyYS4gU28gd2hhdCB0aGVuIGNh
-biBoYXBwZW4gaXMgdGhhdCB0aGUgc2VydmljZSB0aGF0DQppcyB0aGVyZSB0byByZW1vdmUgYXBw
-bGljYXRpb25zIHRoYXQgaXMgbm90IG5lZWRlZCBjYW4gZ2V0IHN0YXJ2ZWQuIFRoZXkgZG8gYSBs
-b3Qgb2Ygb3BlcmF0aW9ucyB0byB0aGF0IG5lZWRzDQptZW1vcnkgYW5kIGJ5IHRoaXMgdGhleSBh
-bHNvIGdldCBzbG93LsKgIEluIHdvcnN0IGNhc2UgaXQgY2FuIGNhdXNlIGEgb29tLiBPb20ga2ls
-bHMgdGhpbmdzIHJhbmRvbWx5IGFuZA0KaXQgd2lsbCBjYXVzZSBhIGFuZHJvaWQgcGhvbmUgdG8g
-cmVib290IGlmIGl0IGtpbGxzIHdyb25nIHRoaW5ncy4gV2hlbiBpdCBnZXQgc2xvdyBpdCBjYW4n
-dCBraWNrIHRoZSB3ZCBhbmQNCndlIGNhbiBmcmVlIHVwIHJlc291cmNlcyBmcm9tIHdpdGhpbiBr
-ZXJuZWwuIFRvIGdldCBjdXJyZW50IHZlcnNpb24gdG8gd29yayB0aGVyZSBpcyB2ZXJ5IGhpZ2gg
-bWFyZ2lucyB3YXN0aW5nDQphIGxvdCBvZiBtZW1vcnkgdG8gYmUgInNhZmUiLg0KDQoNCj4gVXN1
-YWxseSBhIHdhdGNoZG9nIHdpbGwgZGV0ZWN0IGlmIGEgdGFzayBpcyB1c2luZyAxMDAlIG9mIHRo
-ZSBDUFUgdGltZS4gSWYgc3VjaCBhIHRhc2sgZXhpc3RzLCBpdCBpcyB0aGUgb25lIHJ1bm5pbmcs
-IG5vdCBhbm90aGVyIG9uZSB0aGF0IGhhcyBodWdlIGFtb3VudCBvZiBtZW1vcnkgYWxsb2NhdGVk
-IGJ5IHNwZW5kcyBsaWtlIDElIG9mIENQVSB0aW1lLg0KPg0KV2F0Y2hkb2dzIGRldGVjdHMgdGhh
-dCB5b3UgZG9lcyBub3QgZmVlZCBpdC7CoA0KPiBTbyBpZiB0aGVyZSBpcyBhIHRhc2sgdG8ga2ls
-bCBieSBhIHdhdGNoZG9nLCBJIHdvdWxkIHNheSBpdCBpcyB0aGUgY3VycmVudCB0YXNrLg0KDQoN
-CkN1cnJlbnQgdGFzaz/CoCBXZSB1c3VhbGx5IGhhdmUgbWFueSBjcHUncy4gQnV0IHRoZSBpZGVh
-IGlzIHRoYXQgeW91IHNob3VsZCBlYXNpbHkgd3JpdGUgYSBwb2xpY3kgZm9yIHRoYXQgaWYgdGhh
-dCBpcyB3aGF0IHlvdSB3YW50Lg0KDQoNCj4NCj4NCj4NCj4gQW5vdGhlciByZW1hcms6IHlvdSBh
-cmUgdXNpbmcgcmVndWxhciB0aW1lcnMgYXMgZmFyIGFzIEkgdW5kZXJzdGFuZC4gSSByZW1lbWJl
-ciBoYXZpbmcgcHJvYmxlbXMgd2l0aCB0aGF0IGluIHRoZSBwYXN0LCBpdCByZXF1aXJlZCB0aGUg
-dXNlIG9mIGhydGltZXJzLiBJIGNhbid0IHJlbWVtYmVyIHRoZSBkZXRhaWxzIGV4YWN0bHkgYnV0
-IHlvdSBjYW4gbG9vayBhdA0KPiBjb21taXQgaHR0cHM6Ly9naXRodWIuY29tL2xpbnV4cHBjL2xp
-bnV4L2NvbW1pdC8xZmY2ODgyMDkNCg0KDQpUaGF0IEkgZGVmaW5pdGVseSBuZWVkIHRvIGxvb2sg
-aW4gdG8uDQoNCg0KPiBDaHJpc3RvcGhlDQoNCg==
+On 4/24/21 3:25 AM, Peter Enderborg wrote:
+> This is not a rebooting watchdog. It's function is to take other
+> actions than a hard reboot. On many complex system there is some
+> kind of manager that monitor and take action on slow systems.
+> Android has it's lowmemorykiller (lmkd), desktops has earlyoom.
+> This watchdog can be used to help monitor to preform some basic
+> action to keep the monitor running.
+> 
+> It can also be used standalone. This add a policy that is
+> killing the process with highest oom_score_adj and using
+> oom functions to it quickly. I think it is a good usecase
+> for the patch. Memory siuations can be problematic for
+> software that monitor system, but other prolicys can
+> should also be possible. Like picking tasks from a memcg, or
+> specific UID's or what ever is low priority.
+> ---
+
+NACK. Besides this not following the new watchdog API, the task
+of a watchdog is to reset the system on failure. Its task is most
+definitely not to re-implement the oom killer in any way, shape,
+or form.
+
+Guenter
+
+
+>  drivers/watchdog/Makefile       |   2 +
+>  drivers/watchdog/softwatchdog.c | 231 ++++++++++++++++++++++++++++++++
+>  include/uapi/linux/watchdog.h   |   6 +
+>  mm/oom_kill.c                   |   4 +-
+>  4 files changed, 241 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/watchdog/softwatchdog.c
+> 
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index f3a6540e725e..bff8f61fe504 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -221,3 +221,5 @@ obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
+>  obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
+>  obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
+>  obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
+> +
+> +obj-y += softwatchdog.o
+> diff --git a/drivers/watchdog/softwatchdog.c b/drivers/watchdog/softwatchdog.c
+> new file mode 100644
+> index 000000000000..dd7153092da8
+> --- /dev/null
+> +++ b/drivers/watchdog/softwatchdog.c
+> @@ -0,0 +1,231 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Soft watchdog
+> + *  This is a RFC of a watchdog does do not reboot the system.
+> + *  Instead it do a pre defined action
+> + *
+> + *  Author: peter.enderborg@sony.com
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/mm.h>
+> +#include <linux/slab.h>
+> +#include <linux/oom.h>
+> +#include <linux/module.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/types.h>
+> +#include <linux/timer.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/watchdog.h>
+> +#include <linux/notifier.h>
+> +#include <linux/init.h>
+> +#include <linux/fs.h>
+> +
+> +void wake_oom_reaper(struct task_struct *tsk); /* need to public ... */
+> +void __oom_kill_process(struct task_struct *victim, const char *message); /* hmm */
+> +
+> +static struct timer_list swd_timer;
+> +static int heartbeat = 500;
+> +static unsigned long swd_is_open;
+> +static char expect_close;
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +
+> +/* a example policy doing a process kill by calling
+> + *  functions within oom-killer.
+> + */
+> +static int policy_fast_kill_oom_score_adj(void)
+> +{
+> +	struct task_struct *tsk;
+> +	struct task_struct *selected = NULL;
+> +	int highest = 0;
+> +
+> +	rcu_read_lock();
+> +	for_each_process(tsk) {
+> +		struct task_struct *candidate;
+> +
+> +		if (tsk->flags & PF_KTHREAD)
+> +			continue;
+> +
+> +		/* Ignore task if coredump in progress */
+> +		if (tsk->mm && tsk->mm->core_state)
+> +			continue;
+> +		candidate = find_lock_task_mm(tsk);
+> +		if (!candidate)
+> +			continue;
+> +
+> +		if (highest < candidate->signal->oom_score_adj) {
+> +			/* for test dont kill level 0 */
+> +			highest = candidate->signal->oom_score_adj;
+> +			selected = candidate;
+> +			pr_info("new selected %d %d", selected->pid,
+> +				selected->signal->oom_score_adj);
+> +		}
+> +		task_unlock(candidate);
+> +	}
+> +	if (selected)
+> +		get_task_struct(selected);
+> +
+> +	rcu_read_unlock();
+> +	if (selected) {
+> +		int pid = selected->pid;
+> +
+> +		pr_info("swd killing: %d", selected->pid);
+> +		__oom_kill_process(selected, "swd");
+> +		return pid;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void swd_ping(void)
+> +{
+> +	mod_timer(&swd_timer, jiffies + heartbeat);
+> +}
+> +
+> +static long swd_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+> +{
+> +	void __user *argp = (void __user *)arg;
+> +	int __user *p = argp;
+> +	int new_heartbeat;
+> +	int status;
+> +
+> +	struct watchdog_info ident = {
+> +		.options =		WDIOF_SETTIMEOUT|
+> +					WDIOF_MAGICCLOSE|
+> +					WDIOF_OOMKILL |
+> +					WDIOF_AUTOKILL,
+> +		.identity =		"swd",
+> +	};
+> +
+> +	switch (cmd) {
+> +	case WDIOC_GETSUPPORT:
+> +		return copy_to_user(argp, &ident, sizeof(ident)) ? -EFAULT : 0;
+> +	case WDIOC_GETSTATUS:
+> +		status = 0;
+> +		return put_user(status, p);
+> +	case WDIOC_GETBOOTSTATUS:
+> +		return put_user(0, p);
+> +	case WDIOC_KEEPALIVE:
+> +		swd_ping();
+> +		return 0;
+> +	case WDIOC_SETTIMEOUT:
+> +		if (get_user(new_heartbeat, p))
+> +			return -EFAULT;
+> +		heartbeat = new_heartbeat;
+> +		fallthrough;
+> +	case WDIOC_GETTIMEOUT:
+> +		return put_user(heartbeat, p);
+> +	default:
+> +		return -ENOTTY;
+> +	}
+> +	return -ENOTTY;
+> +}
+> +
+> +static void swd_timer_func(struct timer_list *unused)
+> +{
+> +	int res;
+> +
+> +	pr_info("swd timer %d\n", heartbeat);
+> +	res = policy_fast_kill_oom_score_adj();
+> +	if (res)
+> +		pr_info("killed %d\n", res);
+> +
+> +	mod_timer(&swd_timer, jiffies + heartbeat);
+> +}
+> +
+> +static int swd_start(void)
+> +{
+> +	add_timer(&swd_timer);
+> +	return 0;
+> +}
+> +
+> +static int swd_stop(void)
+> +{
+> +	del_timer(&swd_timer);
+> +	return 0;
+> +}
+> +
+> +static int swd_open(struct inode *inode, struct file *file)
+> +{
+> +	if (test_and_set_bit(0, &swd_is_open))
+> +		return -EBUSY;
+> +	swd_start();
+> +	return stream_open(inode, file);
+> +}
+> +
+> +static int swd_release(struct inode *inode, struct file *file)
+> +{
+> +	if (expect_close != 42) {
+> +		swd_stop();
+> +		clear_bit(0, &swd_is_open);
+> +	} else {
+> +		pr_crit("SWD device closed unexpectedly.  SWD will not stop!\n");
+> +		swd_ping();
+> +	}
+> +	expect_close = 0;
+> +	return 0;
+> +}
+> +static ssize_t swd_write(struct file *file, const char __user *buf,
+> +						size_t count, loff_t *ppos)
+> +{
+> +	if (count) {
+> +		if (!nowayout) {
+> +			size_t i;
+> +
+> +			expect_close = 0;
+> +			for (i = 0; i != count; i++) {
+> +				char c;
+> +
+> +				if (get_user(c, buf + i))
+> +					return -EFAULT;
+> +				if (c == 'V')
+> +					expect_close = 42;
+> +			}
+> +		}
+> +		swd_ping();
+> +	}
+> +	return count;
+> +}
+> +
+> +static const struct file_operations swd_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.llseek		= no_llseek,
+> +	 .write		= swd_write,
+> +	.unlocked_ioctl	= swd_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+> +	.open		= swd_open,
+> +	.release	= swd_release,
+> +};
+> +
+> +static struct miscdevice swd_miscdev = {
+> +	.minor	=	WATCHDOG_MINOR,
+> +	.name	=	"soft-watchdog",
+> +	.fops	=	&swd_fops,
+> +};
+> +
+> +int __init swd_register(void)
+> +{
+> +	int ret;
+> +
+> +	pr_info("swd installed with timer");
+> +	ret = misc_register(&swd_miscdev);
+> +	timer_setup(&swd_timer, swd_timer_func, 0);
+> +	return 0;
+> +}
+> +
+> +static int __init swd_init(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +static void __exit swd_unload(void)
+> +{
+> +	return;
+> +}
+> +
+> +subsys_initcall(swd_register);
+> +
+> +module_init(swd_init);
+> +module_exit(swd_unload);
+> +
+> +MODULE_AUTHOR("Peter Enderborg");
+> +MODULE_DESCRIPTION("Memory software watchdog");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/uapi/linux/watchdog.h b/include/uapi/linux/watchdog.h
+> index b15cde5c9054..780987482e2d 100644
+> --- a/include/uapi/linux/watchdog.h
+> +++ b/include/uapi/linux/watchdog.h
+> @@ -48,6 +48,12 @@ struct watchdog_info {
+>  #define	WDIOF_PRETIMEOUT	0x0200  /* Pretimeout (in seconds), get/set */
+>  #define	WDIOF_ALARMONLY		0x0400	/* Watchdog triggers a management or
+>  					   other external alarm not a reboot */
+> +#define WDIOF_OOMKILL		0x0800	/* Watchdog trigger process kill as
+> +					 *  oom kill
+> +					 */
+> +#define WDIOF_AUTOKILL		0x1000	/* Watchdog listen to oom notifiy
+> +					 * and kills with its policy
+> +					 */
+>  #define	WDIOF_KEEPALIVEPING	0x8000	/* Keep alive ping reply */
+>  
+>  #define	WDIOS_DISABLECARD	0x0001	/* Turn off the watchdog timer */
+> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> index fa1cf18bac97..a5f7299af9a3 100644
+> --- a/mm/oom_kill.c
+> +++ b/mm/oom_kill.c
+> @@ -658,7 +658,7 @@ static int oom_reaper(void *unused)
+>  	return 0;
+>  }
+>  
+> -static void wake_oom_reaper(struct task_struct *tsk)
+> +void wake_oom_reaper(struct task_struct *tsk)
+>  {
+>  	/* mm is already queued? */
+>  	if (test_and_set_bit(MMF_OOM_REAP_QUEUED, &tsk->signal->oom_mm->flags))
+> @@ -856,7 +856,7 @@ static bool task_will_free_mem(struct task_struct *task)
+>  	return ret;
+>  }
+>  
+> -static void __oom_kill_process(struct task_struct *victim, const char *message)
+> +void __oom_kill_process(struct task_struct *victim, const char *message)
+>  {
+>  	struct task_struct *p;
+>  	struct mm_struct *mm;
+> 
+
