@@ -2,42 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B94D36BE05
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Apr 2021 05:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF3936C053
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Apr 2021 09:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233361AbhD0Dwq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 26 Apr 2021 23:52:46 -0400
-Received: from regular1.263xmail.com ([211.150.70.198]:58494 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbhD0Dwq (ORCPT
+        id S235011AbhD0Hmf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 27 Apr 2021 03:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235054AbhD0Hmd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 26 Apr 2021 23:52:46 -0400
-X-Greylist: delayed 386 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Apr 2021 23:52:44 EDT
-Received: from localhost (unknown [192.168.167.172])
-        by regular1.263xmail.com (Postfix) with ESMTP id C28E3821;
-        Tue, 27 Apr 2021 11:45:06 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [172.16.12.120] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P18449T140669945366272S1619495102882982_;
-        Tue, 27 Apr 2021 11:45:04 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <22259d9076cbe0cb39d4db175022df51>
-X-RL-SENDER: kever.yang@rock-chips.com
-X-SENDER: yk@rock-chips.com
-X-LOGIN-NAME: kever.yang@rock-chips.com
-X-FST-TO: linux-watchdog@vger.kernel.org
-X-RCPT-COUNT: 29
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
+        Tue, 27 Apr 2021 03:42:33 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F5BC06175F;
+        Tue, 27 Apr 2021 00:41:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id s15so68806286edd.4;
+        Tue, 27 Apr 2021 00:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jOHpNKh1HTjasyN4XJNLgqTp4hVmVQAAzXgA0kDhz08=;
+        b=XilaRLgG4z7jtAP1K1nwwywk6vXmjxVmuHvxQCk5mSk7JfDFK5iAJ4qw9YJyYZVPE4
+         B4CUsFEuFGWCMoxYDIcR1R+oDjYn/rxp/yyde8qWZ2y8BujKLm/rvudYRc1T43br5eEE
+         GA5lNbbCMExfmHzyBLJ4d5+yVpW2O5X6U30g/JDZ4ykGqiHgwnlQfU4pQTshEBNI3HAi
+         /R+7X0wl1D7iF5IU5TwIKJC5UQ8ebt69G/JvzuSH1A6pkZj6j9s0bJOxFlTKA97IBs0J
+         7R32IZUy0KLSxDipYeyUrb1jUDXXjHf1jBN+PzuXadJxH/5Dzp/M8rm0x2BWEVw19WUI
+         YoOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jOHpNKh1HTjasyN4XJNLgqTp4hVmVQAAzXgA0kDhz08=;
+        b=FHhj1aMuk4/1/1RfH/pQ4elePnX02q6s/qv6P302yPOgrCFmRooQud/1o89Y7LV4kQ
+         s5i2eTx0NeRmC0nifUqHVVeWiaNr0Q3/eryhYDHzfIS3SyRDuUe8nm+dEAquVcfGwLfb
+         rnYcXxmQW+X4NAjsw3J4fs8kWlhdQUpzssThXOQBsgKJV7LXjZNx8goN6YD7FYPaVu6g
+         7HQXmqQ3U+uHAi1Ha4nsAzhB+NYNM2UHAUEHgSdrzsK0TklTO4iddwhKM2hHhAvpDQtc
+         vrZ4eBeXUVbyuqKaC0rmzBK25noZoV/2hFk3mnQnZxLl3nhlmk5vvOaymVPsXFg0zfAO
+         GWUw==
+X-Gm-Message-State: AOAM532Q/uHzLz8WmOg/ZbDaqZsMYO9Cahc2j5BV5BSbofATzDOiQBus
+        95xtQKinqVNeWuE3KbkmFJJJSe8QBLAH+aTi
+X-Google-Smtp-Source: ABdhPJxxYgiGZAbNM0IERzUdIhVwLuzii5Ng242BVgzibHt+OJkKlsutNVXxDRLTuGvg6x5UDfJ0nw==
+X-Received: by 2002:a05:6402:51cd:: with SMTP id r13mr2786656edd.116.1619509304721;
+        Tue, 27 Apr 2021 00:41:44 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id t1sm12922627eju.88.2021.04.27.00.41.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Apr 2021 00:41:44 -0700 (PDT)
 Subject: Re: [PATCH v2 6/7] arm64: dts: rockchip: add core dtsi for RK3568 SoC
-To:     Johan Jonker <jbx6244@gmail.com>, cl@rock-chips.com,
-        heiko@sntech.de
+To:     cl@rock-chips.com, heiko@sntech.de
 Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
         uwe@kleine-koenig.org, mail@david-bauer.net,
         linux-arm-kernel@lists.infradead.org,
@@ -53,40 +66,166 @@ Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
         linux-watchdog@vger.kernel.org
 References: <20210425094216.25724-1-cl@rock-chips.com>
  <20210425094439.25895-1-cl@rock-chips.com>
- <3d584cdc-020e-5aae-cae3-59ef45e64a9f@gmail.com>
-From:   Kever Yang <kever.yang@rock-chips.com>
-Message-ID: <c2e96d99-3af5-3f22-78de-f6eff18b9c24@rock-chips.com>
-Date:   Tue, 27 Apr 2021 11:45:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Message-ID: <16908f63-4e20-ba1b-3b5c-39b4c4db242b@gmail.com>
+Date:   Tue, 27 Apr 2021 09:41:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <3d584cdc-020e-5aae-cae3-59ef45e64a9f@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210425094439.25895-1-cl@rock-chips.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Johan, Heiko,
-
-On 2021/4/26 下午8:16, Johan Jonker wrote:
-> ===
->
-> compatible = "rockchip,rk3568";
-> Maybe add this together with other rkXXXX SoCs to rockchip.yaml on top
-> of board list ???
-> Please advise.
-This rockchip.yaml is now describe boards without any sort, it would be 
-better to refactor and sort in two level:
-- soc level
-- board level base on the same soc.
-
-This will need a separate patch to do the clean up, maybe goes after the 
-rk3568.dtsi?
 
 
-Thanks,
-- Kever
+On 4/25/21 11:44 AM, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
+> 
+> RK3568 is a high-performance and low power quad-core application processor
+> designed for personal mobile internet device and AIoT equipments. This patch
+> add basic core dtsi file for it.
+> 
+> We use scmi_clk for cortex-a55 instead of standard ARMCLK, so that
+> kernel/uboot/rtos can change cpu clk with the same code in ATF, and we will
+> enalbe a special high-performacne PLL when high frequency is required. The
+> smci_clk code is in ATF, and clkid for cpu is 0, as below:
+> 
+>     cpu0: cpu@0 {
+>         device_type = "cpu";
+>         compatible = "arm,cortex-a55";
+>         reg = <0x0 0x0>;
+>         clocks = <&scmi_clk 0>;
+>     };
+> 
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> ---
+>  .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 3119 +++++++++++++++++
+>  arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  812 +++++
+>  2 files changed, 3931 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi b/arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+> new file mode 100644
+> index 000000000000..94ee3c2c38af
+> --- /dev/null
+
+[..]
+
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> new file mode 100644
+> index 000000000000..66cb50218ca1
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> @@ -0,0 +1,812 @@
+
+[..]
+
+> +
+> +	pmugrf: syscon@fdc20000 {
+
+> +		compatible = "rockchip,rk3568-pmugrf", "syscon", "simple-mfd";
+
+TODO:
+
+> +		reg = <0x0 0xfdc20000 0x0 0x10000>;
+> +
+> +		reboot_mode: reboot-mode {
+> +			compatible = "syscon-reboot-mode";
+> +			mode-bootloader = <BOOT_BL_DOWNLOAD>;
+> +			mode-fastboot = <BOOT_FASTBOOT>;
+> +			mode-loader = <BOOT_BL_DOWNLOAD>;
+> +			mode-normal = <BOOT_NORMAL>;
+> +			mode-recovery = <BOOT_RECOVERY>;
+> +			offset = <0x200>;
+> +		};
+> +	};
+> +
+> +	grf: syscon@fdc60000 {
+
+> +		compatible = "rockchip,rk3568-grf", "syscon", "simple-mfd";
+
+TODO:
+
+> +		reg = <0x0 0xfdc60000 0x0 0x10000>;
+> +	};
+> +
+> +	pmucru: clock-controller@fdd00000 {
+> +		compatible = "rockchip,rk3568-pmucru";
+> +		reg = <0x0 0xfdd00000 0x0 0x1000>;
+
+> +		rockchip,grf = <&grf>;
+> +		rockchip,pmugrf = <&pmugrf>;
+
+clock-controller@fdd00000: 'rockchip,grf', 'rockchip,pmugrf' do not
+match any of the regexes: 'pinctrl-[0-9]+'
+
+Currently clk.c has only support for:
+
+	ctx->grf = syscon_regmap_lookup_by_phandle(ctx->cru_node,
+						   "rockchip,grf");
+
+Manufacturer tree:
+
+	ctx->pmugrf = syscon_regmap_lookup_by_phandle(ctx->cru_node,
+						   "rockchip,pmugrf");
+		case branch_muxpmugrf:
+			clk = rockchip_clk_register_muxgrf(list->name,
+				list->parent_names, list->num_parents,
+				flags, ctx->pmugrf, list->muxdiv_offset,
+				list->mux_shift, list->mux_width,
+				list->mux_flags);
+			break;
 
 
+	MUXPMUGRF(SCLK_32K_IOE, "clk_32k_ioe", clk_32k_ioe_p,  0,
+			RK3568_PMU_GRF_SOC_CON0, 0, 1, MFLAGS)
+
+Do we need a fix?
+
+> +		#clock-cells = <1>;
+> +		#reset-cells = <1>;
+> +	};
+> +
+> +	cru: clock-controller@fdd20000 {
+> +		compatible = "rockchip,rk3568-cru";
+> +		reg = <0x0 0xfdd20000 0x0 0x1000>;
+
+> +		rockchip,grf = <&grf>;
+
+clock-controller@fdd20000: 'assigned-clock-parents',
+'assigned-clock-rates', 'assigned-clocks', 'rockchip,grf' do not match
+any of the regexes:
+
+Add more properties to rockchip,rk3568-cru.yaml
+
+> +		#clock-cells = <1>;
+> +		#reset-cells = <1>;
+> +
+> +		assigned-clocks =
+> +			<&pmucru CLK_RTC_32K>, <&pmucru PLL_PPLL>,
+> +			<&pmucru PCLK_PMU>, <&cru PLL_CPLL>,
+> +			<&cru PLL_GPLL>, <&cru ACLK_BUS>,
+> +			<&cru PCLK_BUS>, <&cru ACLK_TOP_HIGH>,
+> +			<&cru ACLK_TOP_LOW>, <&cru HCLK_TOP>,
+> +			<&cru PCLK_TOP>, <&cru ACLK_PERIMID>,
+> +			<&cru HCLK_PERIMID>, <&cru PLL_NPLL>,
+> +			<&cru ACLK_PIPE>, <&cru PCLK_PIPE>,
+> +			<&cru ACLK_VOP>;
+> +		assigned-clock-rates =
+> +			<32768>, <200000000>,
+> +			<100000000>, <1000000000>,
+> +			<1188000000>, <150000000>,
+> +			<100000000>, <500000000>,
+> +			<400000000>, <150000000>,
+> +			<100000000>, <300000000>,
+> +			<150000000>, <1200000000>,
+> +			<400000000>, <100000000>,
+> +			<500000000>;
+> +		assigned-clock-parents =
+> +			<&pmucru CLK_RTC32K_FRAC>;
+> +	};
