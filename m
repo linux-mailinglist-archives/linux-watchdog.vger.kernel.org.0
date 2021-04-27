@@ -2,110 +2,91 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 052B336B6F4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Apr 2021 18:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B94D36BE05
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Apr 2021 05:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbhDZQij (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 26 Apr 2021 12:38:39 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:62850 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234472AbhDZQii (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 26 Apr 2021 12:38:38 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619455077; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=MwZtQZwxYVMfvcMJM/LAQDKQUnmrTA2FuuaM3k/nD5U=; b=na7U4kHWilP8hbFXnw1Rv2zkrV9jiiN7upjMOeISH/4LmFeCRqHmlLCuYE/x+SlaPSJdWxbh
- YM6IS2/I5HG7UgT9qjEVUYJZzkWihWfBsYgOHc50PVW0tCyfZJwc1Xehknkx/4SihqdsfuRi
- FX/JSdGBuN5GCZ7qgufFJaUP6z4=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyJmNTk5OSIsICJsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 6086ec56853c0a2c4692ff96 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 26 Apr 2021 16:37:42
- GMT
-Sender: rnayak=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 69833C4360C; Mon, 26 Apr 2021 16:37:41 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.50.4.30] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8FE48C433D3;
-        Mon, 26 Apr 2021 16:37:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8FE48C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH] dt-bindings: watchdog: Add compatible for SC7280 SoC
-To:     Guenter Roeck <linux@roeck-us.net>, wim@linux-watchdog.org
-Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-References: <1615788301-29891-1-git-send-email-rnayak@codeaurora.org>
- <9f28f60b-379b-c384-6049-e5e5294b80b0@roeck-us.net>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <89e34607-0b58-add7-7825-d85f32ab2cb2@codeaurora.org>
-Date:   Mon, 26 Apr 2021 22:07:34 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S233361AbhD0Dwq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 26 Apr 2021 23:52:46 -0400
+Received: from regular1.263xmail.com ([211.150.70.198]:58494 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231363AbhD0Dwq (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 26 Apr 2021 23:52:46 -0400
+X-Greylist: delayed 386 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Apr 2021 23:52:44 EDT
+Received: from localhost (unknown [192.168.167.172])
+        by regular1.263xmail.com (Postfix) with ESMTP id C28E3821;
+        Tue, 27 Apr 2021 11:45:06 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-SKE-CHECKED: 1
+X-ABS-CHECKED: 1
+Received: from [172.16.12.120] (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P18449T140669945366272S1619495102882982_;
+        Tue, 27 Apr 2021 11:45:04 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <22259d9076cbe0cb39d4db175022df51>
+X-RL-SENDER: kever.yang@rock-chips.com
+X-SENDER: yk@rock-chips.com
+X-LOGIN-NAME: kever.yang@rock-chips.com
+X-FST-TO: linux-watchdog@vger.kernel.org
+X-RCPT-COUNT: 29
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+Subject: Re: [PATCH v2 6/7] arm64: dts: rockchip: add core dtsi for RK3568 SoC
+To:     Johan Jonker <jbx6244@gmail.com>, cl@rock-chips.com,
+        heiko@sntech.de
+Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
+        uwe@kleine-koenig.org, mail@david-bauer.net,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org
+References: <20210425094216.25724-1-cl@rock-chips.com>
+ <20210425094439.25895-1-cl@rock-chips.com>
+ <3d584cdc-020e-5aae-cae3-59ef45e64a9f@gmail.com>
+From:   Kever Yang <kever.yang@rock-chips.com>
+Message-ID: <c2e96d99-3af5-3f22-78de-f6eff18b9c24@rock-chips.com>
+Date:   Tue, 27 Apr 2021 11:45:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <9f28f60b-379b-c384-6049-e5e5294b80b0@roeck-us.net>
+In-Reply-To: <3d584cdc-020e-5aae-cae3-59ef45e64a9f@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hi Johan, Heiko,
 
-On 3/15/2021 8:25 PM, Guenter Roeck wrote:
-> On 3/14/21 11:05 PM, Rajendra Nayak wrote:
->> From: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
->>
->> Add compatible for watchdog timer on SC7280 SoC.
->>
->> Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
->> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
->> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
->> Acked-by: Rob Herring <robh@kernel.org>
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 2021/4/26 下午8:16, Johan Jonker wrote:
+> ===
+>
+> compatible = "rockchip,rk3568";
+> Maybe add this together with other rkXXXX SoCs to rockchip.yaml on top
+> of board list ???
+> Please advise.
+This rockchip.yaml is now describe boards without any sort, it would be 
+better to refactor and sort in two level:
+- soc level
+- board level base on the same soc.
 
-I don;t see this in linux-next, any plans to pull this one in?
+This will need a separate patch to do the clean up, maybe goes after the 
+rk3568.dtsi?
 
-> 
->> ---
->> This was earlier posted as part of the entire DT series for sc7280 [1]
->> Rest of the patches are now picked, posting this separately so it can
->> be picked up via the WDT tree.
->>
->> [1] https://lore.kernel.org/patchwork/project/lkml/list/?series=488871
->>
->>   Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->> index b8e4118..ba60bdf 100644
->> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
->> @@ -17,6 +17,7 @@ properties:
->>       enum:
->>         - qcom,apss-wdt-qcs404
->>         - qcom,apss-wdt-sc7180
->> +      - qcom,apss-wdt-sc7280
->>         - qcom,apss-wdt-sdm845
->>         - qcom,apss-wdt-sdx55
->>         - qcom,apss-wdt-sm8150
->>
-> 
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+Thanks,
+- Kever
+
+
