@@ -2,107 +2,143 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F69A36E167
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Apr 2021 00:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9826D36E633
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Apr 2021 09:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbhD1WQD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 28 Apr 2021 18:16:03 -0400
-Received: from mail-oo1-f52.google.com ([209.85.161.52]:33780 "EHLO
-        mail-oo1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbhD1WQC (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 28 Apr 2021 18:16:02 -0400
-Received: by mail-oo1-f52.google.com with SMTP id e9-20020a4ada090000b02901f91091e5acso2162618oou.0;
-        Wed, 28 Apr 2021 15:15:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=gYgk6AJrAYzNx39r/XzjJt1ApfnhLWc9A/uBhzNpze4=;
-        b=H6ZLOvmWBwqKmzA/ixZNzWc2BLcpYJg7abevlAGzxXqk0OdCdOT4x4BD7G/ma8MgN2
-         AnGEhS91OV/33bJ07WFU0ZCr9Eo6T1fibilt6eMQlwPcscQ04pWDpL7TWma1nFl3fnp3
-         RN/nX/AqxtyzJXOGV5nRoiXcV8H2YCXrRKz4i93N+KGuK3coHORarQva+DOOr9JTeS3I
-         1qex8m8VAt+i7DFASSXXQ1oOv3GT5RT2+pGBs5PXTnsa227N27CmoZmq1iOxGqihYJ/S
-         ksGfNJMj7DA/F1XTFwsjTQ8CJu1mvMjeWSbATZ6cDgbrtpI3jUJwy0+DJAfrDyA9XDiy
-         /hdQ==
-X-Gm-Message-State: AOAM530gJeLwg0+tLMGodeqHothMBCxFRHO2YGwckVLj00pvdRsnSMZf
-        DLiWvOAMK2FOxybebZdtjkAyjShLZw==
-X-Google-Smtp-Source: ABdhPJxZArFwbVeIF8l00TfdHEC2VcZYpSALlJgxSt21DhqXruJlYIhnGLdMAytU4YnTNvOcFrdcCw==
-X-Received: by 2002:a05:6820:381:: with SMTP id r1mr24594188ooj.79.1619648115937;
-        Wed, 28 Apr 2021 15:15:15 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w2sm284666oov.23.2021.04.28.15.15.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Apr 2021 15:15:15 -0700 (PDT)
-Received: (nullmailer pid 4061033 invoked by uid 1000);
-        Wed, 28 Apr 2021 22:15:09 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     cl@rock-chips.com
-Cc:     david.wu@rock-chips.com, jagan@amarulasolutions.com,
-        linux-kernel@vger.kernel.org, jay.xu@rock-chips.com,
-        jamie@jamieiles.com, ulf.hansson@linaro.org,
-        jensenhuang@friendlyarm.com, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        gregkh@linuxfoundation.org, huangtao@rock-chips.com,
-        mail@david-bauer.net, linux@roeck-us.net,
-        devicetree@vger.kernel.org, heiko@sntech.de, cnsztl@gmail.com,
-        wim@linux-watchdog.org, michael@amarulasolutions.com,
-        zhangqing@rock-chips.com, maz@kernel.org, robh+dt@kernel.org,
-        uwe@kleine-koenig.org, shawn.lin@rock-chips.com,
-        linux-mmc@vger.kernel.org, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org, wens@csie.org,
-        linux-rockchip@lists.infradead.org
-In-Reply-To: <20210428134938.22383-1-cl@rock-chips.com>
-References: <20210428134759.22076-1-cl@rock-chips.com> <20210428134938.22383-1-cl@rock-chips.com>
-Subject: Re: [PATCH v3 07/10] dt-bindings: soc: rockchip: Convert grf.txt to YAML
-Date:   Wed, 28 Apr 2021 17:15:09 -0500
-Message-Id: <1619648109.786418.4061032.nullmailer@robh.at.kernel.org>
+        id S239210AbhD2Hll convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 29 Apr 2021 03:41:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231889AbhD2Hld (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 29 Apr 2021 03:41:33 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 093BB613BD;
+        Thu, 29 Apr 2021 07:40:47 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lc1Hw-009zNf-QY; Thu, 29 Apr 2021 08:40:44 +0100
+Date:   Thu, 29 Apr 2021 08:40:43 +0100
+Message-ID: <87eeeto7wk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     =?UTF-8?B?6ZmI5Lqu?= <cl@rock-chips.com>
+Cc:     heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
+        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
+        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v3 09/10] arm64: dts: rockchip: add core dtsi for RK3568 SoC
+In-Reply-To: <3401442c-24a1-e8f8-fc4a-fa44d94b903b@rock-chips.com>
+References: <20210428134759.22076-1-cl@rock-chips.com>
+        <20210428135002.22528-1-cl@rock-chips.com>
+        <87h7jqo3d2.wl-maz@kernel.org>
+        <3401442c-24a1-e8f8-fc4a-fa44d94b903b@rock-chips.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: cl@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, jensenhuang@friendlyarm.com, michael@amarulasolutions.com, cnsztl@gmail.com, devicetree@vger.kernel.org, ulf.hansson@linaro.org, linux-mmc@vger.kernel.org, gregkh@linuxfoundation.org, linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org, jay.xu@rock-chips.com, shawn.lin@rock-chips.com, david.wu@rock-chips.com, zhangqing@rock-chips.com, huangtao@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com, linux-watchdog@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 28 Apr 2021 21:49:38 +0800, cl@rock-chips.com wrote:
-> From: Liang Chen <cl@rock-chips.com>
+On Thu, 29 Apr 2021 02:13:35 +0100,
+陈亮 <cl@rock-chips.com> wrote:
 > 
-> Current dts files with 'grf' nodes are manually verified. In order to
-> automate this process grf.txt has to be converted to YAML.
+> Hi Marc,
 > 
-> Signed-off-by: Liang Chen <cl@rock-chips.com>
-> ---
->  .../devicetree/bindings/soc/rockchip/grf.txt  | 61 -------------------
->  .../devicetree/bindings/soc/rockchip/grf.yaml | 61 +++++++++++++++++++
->  2 files changed, 61 insertions(+), 61 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.txt
->  create mode 100644 Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> 在 2021/4/28 下午11:06, Marc Zyngier 写道:
+> > On Wed, 28 Apr 2021 14:50:02 +0100,
+> > <cl@rock-chips.com> wrote:
+> >> From: Liang Chen <cl@rock-chips.com>
+> >> 
+> >> RK3568 is a high-performance and low power quad-core application processor
+> >> designed for personal mobile internet device and AIoT equipment. This patch
+> >> add basic core dtsi file for it.
+> >> 
+> >> We use scmi_clk for cortex-a55 instead of standard ARMCLK, so that
+> >> kernel/uboot/rtos can change cpu clk with the same code in ATF, and we will
+> >> enalbe a special high-performance PLL when high frequency is required. The
+> >> smci_clk code is in ATF, and clkid for cpu is 0, as below:
+> >> 
+> >>      cpu0: cpu@0 {
+> >>          device_type = "cpu";
+> >>          compatible = "arm,cortex-a55";
+> >>          reg = <0x0 0x0>;
+> >>          clocks = <&scmi_clk 0>;
+> >>      };
+> >> 
+> >> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> >> ---
+> >>   .../boot/dts/rockchip/rk3568-pinctrl.dtsi     | 3111 +++++++++++++++++
+> >>   arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  779 +++++
+> >>   2 files changed, 3890 insertions(+)
+> >>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-pinctrl.dtsi
+> >>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3568.dtsi
+> > [...]
+> > 
+> >> +	gic: interrupt-controller@fd400000 {
+> >> +		compatible = "arm,gic-v3";
+> >> +		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
+> >> +		      <0x0 0xfd460000 0 0xc0000>; /* GICR */
+> > If this SoC has 4 CPUs, that's 4 redistributors. Given that GIC600
+> > doesn't implement VLPIs, that's 128kB per redistributors. Why is GICR
+> > large enough for 6 CPUs here? Is that copy-pasted from another SoC?
+> Copy from rk3399, sorry.
+> >> +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> >> +		interrupt-controller;
+> >> +		#interrupt-cells = <3>;
+> >> +		mbi-alias = <0x0 0xfd400000>;
+> >> +		mbi-ranges = <296 24>;
+> >> +		msi-controller;
+> >> +	};
+> > Glad to see that you found some spare SPIs to get MSIs going
+> > 
+> > However, the whole point of mbi-alias (aka GICA in GIC600) is to be
+> > different from GICD and provide some isolation via an IOMMU.  If I
+> > trust the TRM, if should be at 0xfd10000 in your implementation.
 > 
+> But in the ./devicetree/bindings/interrupt-controller/arm,gic-v3.yaml, say:
+> 
+>   mbi-alias:
+>     description:
+>       Address property. Base address of an alias of the *GICD* region
+> containing
+>       only the {SET,CLR}SPI registers to be used if isolation is required,
+>       and if supported by the HW.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-yamllint warnings/errors:
+[recurring theme: I happen to know about this section of the binding,
+having written the original myself]
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/rockchip/grf.example.dt.yaml: example-0: syscon@ff320000:reg:0: [0, 4281466880, 0, 4096] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/rockchip/grf.example.dt.yaml: example-0: syscon@ff770000:reg:0: [0, 4285988864, 0, 65536] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/rockchip/grf.example.dt.yaml: syscon@ff320000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['rockchip,rk3399-pmugrf', 'syscon'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/rockchip/grf.example.dt.yaml: syscon@ff770000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['rockchip,rk3399-grf', 'syscon'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+How does that contradict my comment? GIC600's GICA page only contains
+the four {SET,CLR}_SPI registers, as expected (see section 4.3 in the
+TRM[1]), and the address is computed using table 4-1 "Register map
+pages" of the same document.
 
-See https://patchwork.ozlabs.org/patch/1471171
+Please either fix the DT or explain why the GICA distributor alias
+isn't usable.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+	M.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+[1] https://documentation-service.arm.com/static/5e7ddddacbfe76649ba53034
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+Without deviation from the norm, progress is not possible.
