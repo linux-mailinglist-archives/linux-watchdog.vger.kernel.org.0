@@ -2,81 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 859E837203F
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 May 2021 21:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5B3373E07
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 May 2021 16:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbhECTS5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 3 May 2021 15:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbhECTS4 (ORCPT
+        id S233473AbhEEPAB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 5 May 2021 11:00:01 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:50961 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233518AbhEEO77 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 3 May 2021 15:18:56 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6EEC06174A;
-        Mon,  3 May 2021 12:18:02 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 103-20020a9d0d700000b02902a5baf33f37so5622019oti.9;
-        Mon, 03 May 2021 12:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/3LO6jF/+3BTJn9T2NhTSlpWMbiR8D+8OE3j1TZsbEo=;
-        b=px/1TsIU2wFoIo0/WMWMrK/Snv3viSx85TzoRkQ2TCIcF/6AxXi3RGgneuhtnBgNkn
-         qtRy/gzKgrWf4Z+rym3cGu18G0RCkebmBRkKYN/NOlJd4kyGTtJJhIwKl1YXufe+oY15
-         eBH+n7a6Icm3e2pNRgE/xdQASUzFNBF6lpGH7pSkMWe0TrYuPrDwEMrxy6Y9h6RPbMug
-         vpshKxc/AHRaFdhXCPFh2LvlMgr5tKBQD8q9uY2wyknDKCPrgwDMgqNwbYXUo5SKlsoc
-         R3ApZEOj9gikd1Wp9cgW6J/ECWzfIvXb/qJGB3RKExFuoy65jVynnA9h99UfMyBW5Xvy
-         HsiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=/3LO6jF/+3BTJn9T2NhTSlpWMbiR8D+8OE3j1TZsbEo=;
-        b=iuLVuayOigRgw4VQ+ygAUV4a/DwWAkw5XB4/Fs+pRprrJf2VgV2fX8BoG0bSnJpcpz
-         iI+zZh8v908bAootGVi+nOgYra0yhxqHDh/Ey9A5TmNpZDYZQW5laYj8eoDx9hL3s+xK
-         x/aMePzqFDcxsZCwiYmGgoiu3VX3Xm0OOlXNCwuePbY3DdY5d2+Hc2IkrRBzZgoFGIF1
-         V7oi4/MnG6DAVvlIiibNN6iS7cY6fdagJLd6aD/0Ft6takyTBsq6h//TFk8BSNANXKfk
-         IiLFmVXDpBjcQ7jr3oIFLdaML6LwvhbLywbgNIQ8Lihw/7D7zi6Kcxwo0HF9Ir5ytF/s
-         CF5A==
-X-Gm-Message-State: AOAM530Y92xadXon5cZLb/zE/mEaM0U+6uQ86uMEUSs11vFAVqvaPXcf
-        CPPJsLp30IsY50fQTY3N5p96lQeHs0o=
-X-Google-Smtp-Source: ABdhPJyORtceZklf/t9kWzjJp4IJXY/aq+ybaPt4AB3YPm2gXhsSYBnSP5I0fvN2oEhWNl/RId1pwQ==
-X-Received: by 2002:a9d:425:: with SMTP id 34mr16235618otc.25.1620069481632;
-        Mon, 03 May 2021 12:18:01 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w2sm140733oov.23.2021.05.03.12.18.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 May 2021 12:18:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 3 May 2021 12:17:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
+        Wed, 5 May 2021 10:59:59 -0400
+Received: from [192.168.1.155] ([95.114.117.51]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MRn0U-1m6OWX2shu-00TBd0; Wed, 05 May 2021 16:58:35 +0200
+Subject: Re: [PATCH v3 2/4] leds: simatic-ipc-leds: add new driver for Siemens
+ Industial PCs
+To:     Henning Schild <henning.schild@siemens.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] watchdog: clean up the Kconfig file
-Message-ID: <20210503191759.GA863144@roeck-us.net>
-References: <20210419000704.17745-1-rdunlap@infradead.org>
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>
+References: <20210329174928.18816-1-henning.schild@siemens.com>
+ <20210329174928.18816-3-henning.schild@siemens.com>
+ <CAHp75Vdh_YAJLE4DWPhxhYY1g5Fc_7EFgr4FED3crpfpzwXeRg@mail.gmail.com>
+ <20210330135808.373c3308@md1za8fc.ad001.siemens.net>
+ <CAHp75Vc0f0HfAJx0KPyQMWjekkhB_T-1+vuR566qAcYGA2JLJA@mail.gmail.com>
+ <20210330143011.0e8ae4a0@md1za8fc.ad001.siemens.net>
+ <CAHp75VceCsuANZpib6HXJvxgMdJhmr8KPTZgThxKvXq6Yotymg@mail.gmail.com>
+ <20210330172305.67b6e050@md1za8fc.ad001.siemens.net>
+ <CAHp75VcSwW42_oQDpxn34gN7+aJNmB=HdJUbaWsYkBokYAHkSA@mail.gmail.com>
+ <20210401124415.3c9321c0@md1za8fc.ad001.siemens.net>
+ <CAHp75VcU-7-BVum4xuuQcG7NZZc9xXOoXYpfSBUwwPr6iZLWGg@mail.gmail.com>
+ <20210412135641.1173941b@md1za8fc.ad001.siemens.net>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Message-ID: <c268618b-27f5-5f1d-a3d2-d94e785df0cb@metux.net>
+Date:   Wed, 5 May 2021 16:58:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210419000704.17745-1-rdunlap@infradead.org>
+In-Reply-To: <20210412135641.1173941b@md1za8fc.ad001.siemens.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: tl
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:m7rpyvRWbx2i21vXIFpgzQpQITT3X3V+SHOF8txJtU59XM3pxpJ
+ pAv41dUJE34otqkj+DaIFLTb2IbSSQNRGzHiJv28svPMx0i4FlG46wmv4Zi+NVEg6+ic7j/
+ DtW3eiRzTWK+OI3ymOCoePjHoXNKuQeQquGinc6YpMcjlkNfzPWxx+SWY8geUY2A5ce/BXJ
+ vqER+xcFxmhXhU0sCwgng==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Bef024urxdA=:0ttqYRbPJ/NP5Moi2UDHg7
+ UTAwfvxOP9iBWS+WfjrBSdpMyic7ujXaPxv46JH++uy3ngRtGI1rm51YwwskWFQfruNXzGkX6
+ q4U7CuMiuI9A9WJ0W5Fy+0ZPDrEoSLiNcIqB3gymFdcxmtVa/IXrDw0cFmk4yj/3AFo4WCzA9
+ 2gOM6kBlMLi0XMYkV3G0+a2v1JczAg0WA4CyIoVAjacojHPk0Xxu/H1q73yYv4JMZncZZ1XOK
+ 83Rzj0Ef9DtcyvjiDg7Hjx3qRzvTc/UrvgM+cSwCx2o2MeSG0MO7G4nvxWn9xLVcxsH94Ms22
+ mULJvV0OCH0ME0ZB5YLZwbP4WFJghVRLPi8g0e1oDFKR9Cg1vrB9YYCuFi0bZDqczy/dbdBFm
+ YFBdOdn5boh4x6P6yiYm5AJzEHK5zGbE79BxYIqMifNRbsLtMZCTROZFFdopRKpiOgS4PhpkX
+ 1lUAoOAVlJ5AOSdNbloyD10r5hE8LY06NMVHZX46i6e93QNwoDji0v/2ZtNSSdnH5ZnQdo53e
+ PfGhuJqbQE60I1vfCCQbHA=
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, Apr 18, 2021 at 05:07:03PM -0700, Randy Dunlap wrote:
-> Change a non-working ftp: URL to https:.
-> Wrap long lines earlier.
-> Spell "IP" with capital letters.
-> Change "it`s" to "it's". The backtick (grave accent) is not an apostrophe.
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-watchdog@vger.kernel.org
+On 12.04.21 13:56, Henning Schild wrote:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Enrico, does "gpio_amd_fch" show up under /sys/class/gpio as a
+> gpiochip? Or how to interact with that driver before basing another one
+> on top?
 
-Guenter
+It's not probed on its own, but explicitly by a board specific driver,
+as it needs board specific data.
+
+See drivers/platform/x86/pcengines-apuv2.c
+
+
+--mtx
+
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
