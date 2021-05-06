@@ -2,67 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A441A374D1F
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 May 2021 03:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B102C374D4B
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 May 2021 04:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbhEFB6I (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 5 May 2021 21:58:08 -0400
-Received: from mail-m176231.qiye.163.com ([59.111.176.231]:15368 "EHLO
-        mail-m176231.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbhEFB6I (ORCPT
+        id S230515AbhEFCLX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 5 May 2021 22:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229488AbhEFCLX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 5 May 2021 21:58:08 -0400
-X-Greylist: delayed 338 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 May 2021 21:58:07 EDT
-Received: from vivo.com (localhost [127.0.0.1])
-        by mail-m176231.qiye.163.com (Hmail) with ESMTP id 3D56A6C00CF;
-        Thu,  6 May 2021 09:51:30 +0800 (CST)
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-Message-ID: <APgAqgAuDm48oWX*tq6AkKqd.3.1620265890239.Hmail.wangqing@vivo.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        Wed, 5 May 2021 22:11:23 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E797C061574;
+        Wed,  5 May 2021 19:10:25 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id u25-20020a0568302319b02902ac3d54c25eso3604288ote.1;
+        Wed, 05 May 2021 19:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ze8nHKCTJVPZAxcqvpeEarc+m37v3jnk/1brv6JR/yY=;
+        b=Gh02vDtS3vVZBZrxQ2uZZWT9rXIwcfGmEiDhAXNKbS+6OH7HHljuhLFCb+8ldMvtme
+         bypprO29OhPi12CKA8ueXpH1LxUgnLpv/kY5p5udC7x+VWBKsAKV4egY9iix6sLA7rcu
+         ohgurC4HoMCZZiCLJKPE/WiETqKpVNSfxSPKYVIJERSxz7HaunNfIVp3Iaaco/2UVP6F
+         jek7vBZPuhEc1SO2xBYG0SyitOkAywkdUBA2aU8Rg5+kF52GdH5z5/ps//Iu0oOI53Fw
+         Ri8M07RORs0i3Buk2SDVXvQ3RgxPkJk0z415ws73Q8CnQD1wmNV/Fw3mwEfizLMrC1m4
+         hC9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ze8nHKCTJVPZAxcqvpeEarc+m37v3jnk/1brv6JR/yY=;
+        b=dS7TPrqJ1VxTFAjog0t3Hm7GBVWESKmbwkgk9xTG2Ue0qm87FufTgRS+WmzzOQ0UnA
+         r8QLCLc2P6SnvdlJWwqNjOuMRjD/fJQ1YhWo5+ROHc1XAVqEr5vEUKvYT8JeCTCtln+k
+         o3SYC+YP1UmpMaIBuUDL8ifAeEG5EkJDeYIepBe3QXiEgN1Q5rCL9OgrWyBhAhktQMky
+         aqCtpMB9wzAuKIECDZJkDsjA/C1holvTdL8mOrqPJIL/FgmqzEYR/42QinAPMJlz0wku
+         8tkYvzBcMx52ee/NhU+jbxayvlx/dFF+B3+G7qDlvgpBMRj+BfE+fuHTBCiQDanBjF0y
+         VX0g==
+X-Gm-Message-State: AOAM530eVQpQno4OnkeDmZT7694UZfYfFU6qc0xqHn0MXJYEnZtYZxk9
+        pKBb4+z98HB2wDzcHkPyzRx3nD1I4jw=
+X-Google-Smtp-Source: ABdhPJyDfe/Vr0bIlEEgW1QLVfnkxK0Q+Ez92Z9YkHkRYyp/EYkR5hYMfsCyXLmT+HGErWJNF6gEGQ==
+X-Received: by 2002:a05:6830:411b:: with SMTP id w27mr1398308ott.80.1620267024455;
+        Wed, 05 May 2021 19:10:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x18sm199395oix.28.2021.05.05.19.10.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 May 2021 19:10:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH V9 1/2] watchdog: mtk: support pre-timeout when the bark
+ irq is available
+To:     =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: =?UTF-8?B?UmU6UmU6IFtQQVRDSCBWOSAxLzJdIHdhdGNoZG9nOiBtdGs6IHN1cHBvcnQgcHJlLXRpbWVvdXQgd2hlbiB0aGUgYmFyayBpcnEgaXMgYXZhaWxhYmxl?=
-X-Priority: 3
-X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
-X-Originating-IP: 36.152.145.182
-In-Reply-To: <45ff044d-80ff-9001-1d4f-d39d0ae63060@roeck-us.net>
+References: <APgAqgAuDm48oWX*tq6AkKqd.3.1620265890239.Hmail.wangqing@vivo.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <ac2a3762-0b5d-a406-33e0-fca3073cd5ac@roeck-us.net>
+Date:   Wed, 5 May 2021 19:10:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Received: from wangqing@vivo.com( [36.152.145.182) ] by ajax-webmail ( [127.0.0.1] ) ; Thu, 6 May 2021 09:51:30 +0800 (GMT+08:00)
-From:   =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>
-Date:   Thu, 6 May 2021 09:51:30 +0800 (GMT+08:00)
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZQh0aQlYaGUhPTh5OHkJCHUJVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
-        hKQ1VLWQY+
-X-HM-Sender-Digest: e1kJHlYWEh9ZQU1ISU9KTUlPQ0JON1dZDB4ZWUEPCQ4eV1kSHx4VD1lB
-        WUc6Kxw6Chw6Dj8WT0MULCNRDwpNOhAwCh9VSFVKTUlLSU1OQ0JLTkpLVTMWGhIXVQwaFRwKEhUc
-        Ow0SDRRVGBQWRVlXWRILWUFZSE1VSk5JVUpPTlVKQ0lZV1kIAVlBSExOTDcG
-X-HM-Tid: 0a793f5f71d1d9a9kuws3d56a6c00cf
+In-Reply-To: <APgAqgAuDm48oWX*tq6AkKqd.3.1620265890239.Hmail.wangqing@vivo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Cj5PbiA0LzI0LzIxIDY6NTIgUE0sIFdhbmcgUWluZyB3cm90ZToKPj4gVXNlIHRoZSBiYXJrIGlu
-dGVycnVwdCBhcyB0aGUgcHJldGltZW91dCBub3RpZmllciBpZiBhdmFpbGFibGUuCj4+IAo+PiBX
-aGVuIHRoZSB3YXRjaGRvZyB0aW1lciBleHBpcmVzIGluIGR1YWwgbW9kZSwgYW4gaW50ZXJydXB0
-IHdpbGwgYmUKPj4gdHJpZ2dlcmVkIGZpcnN0LCB0aGVuIHRoZSB0aW1pbmcgcmVzdGFydHMuIFRo
-ZSByZXNldCBzaWduYWwgd2lsbCBiZQo+PiBpbml0aWF0ZWQgd2hlbiB0aGUgdGltZXIgZXhwaXJl
-cyBhZ2Fpbi4KPj4gCj4+IFRoZSBwcmV0aW1lb3V0IG5vdGlmaWNhdGlvbiBzaGFsbCBvY2N1ciBh
-dCB0aW1lb3V0LXNlYy8yLgo+PiAKPj4gVjI6Cj4+IC0gcGFuaWMoKSBieSBkZWZhdWx0IGlmIFdB
-VENIRE9HX1BSRVRJTUVPVVRfR09WIGlzIG5vdCBlbmFibGVkLgo+PiAKPj4gVjM6Cj4+IC0gTW9k
-aWZ5IHRoZSBwcmV0aW1lb3V0IGJlaGF2aW9yLCBtYW51YWxseSByZXNldCBhZnRlciB0aGUgcHJl
-dGltZW91dAo+PiAtIGlzIHByb2Nlc3NlZCBhbmQgd2FpdCB1bnRpbCB0aW1lb3V0Lgo+PiAKPj4g
-VjQ6Cj4+IC0gUmVtb3ZlIHByZXRpbWVvdXQgcmVsYXRlZCBwcm9jZXNzaW5nLiAKPj4gLSBBZGQg
-ZHVhbCBtb2RlIGNvbnRyb2wgc2VwYXJhdGVseS4KPj4gCj4+IFY1Ogo+PiAtIEZpeCBzb21lIGZv
-cm1hdHRpbmcgYW5kIHByaW50aW5nIHByb2JsZW1zLgo+PiAKPj4gVjY6Cj4+IC0gUmVhbGl6ZSBw
-cmV0aW1lb3V0IHByb2Nlc3NpbmcgdGhyb3VnaCBkdWFsbW9kZS4KPj4gCj4+IFY3Ogo+PiAtIEFk
-ZCBzZXRfcHJldGltZW91dCgpLgo+PiAKPj4gVjgvVjk6Cj4+IC0gRml4IHNvbWUgZm9ybWF0dGlu
-ZyBwcm9ibGVtcy4KPj4gCj4+IFNpZ25lZC1vZmYtYnk6IFdhbmcgUWluZyA8d2FuZ3FpbmdAdml2
-by5jb20+Cj4KPlJldmlld2VkLWJ5OiBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+
-Cj4KPk5vdGUgdGhhdCB0aGUgdmVyc2lvbiBoaXN0b3J5IHNob3VsZCBiZSBhZnRlciAiLS0tIi4K
-Pgo+R3VlbnRlcgo+CgpUaGFua3MsIEd1ZW50ZXIuCkFuZCB3aGF0IGRvIEkgbmVlZCB0byBkbyBp
-ZiBJIHdhbnQgbWVyZ2UgaW50byB0aGUgbmV4dC10cmVlPwoKUWluZwoNCg0K
+On 5/5/21 6:51 PM, 王擎 wrote:
+> 
+>> On 4/24/21 6:52 PM, Wang Qing wrote:
+>>> Use the bark interrupt as the pretimeout notifier if available.
+>>>
+>>> When the watchdog timer expires in dual mode, an interrupt will be
+>>> triggered first, then the timing restarts. The reset signal will be
+>>> initiated when the timer expires again.
+>>>
+>>> The pretimeout notification shall occur at timeout-sec/2.
+>>>
+>>> V2:
+>>> - panic() by default if WATCHDOG_PRETIMEOUT_GOV is not enabled.
+>>>
+>>> V3:
+>>> - Modify the pretimeout behavior, manually reset after the pretimeout
+>>> - is processed and wait until timeout.
+>>>
+>>> V4:
+>>> - Remove pretimeout related processing. 
+>>> - Add dual mode control separately.
+>>>
+>>> V5:
+>>> - Fix some formatting and printing problems.
+>>>
+>>> V6:
+>>> - Realize pretimeout processing through dualmode.
+>>>
+>>> V7:
+>>> - Add set_pretimeout().
+>>>
+>>> V8/V9:
+>>> - Fix some formatting problems.
+>>>
+>>> Signed-off-by: Wang Qing <wangqing@vivo.com>
+>>
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> Note that the version history should be after "---".
+>>
+>> Guenter
+>>
+> 
+> Thanks, Guenter.
+> And what do I need to do if I want merge into the next-tree?
+> 
+Wim should take care of that.
+
+Guenter
+
