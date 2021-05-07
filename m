@@ -2,70 +2,82 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E2D3764DA
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 May 2021 14:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCF7376CCD
+	for <lists+linux-watchdog@lfdr.de>; Sat,  8 May 2021 00:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235819AbhEGMFE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 May 2021 08:05:04 -0400
-Received: from aclms3.advantech.com.tw ([125.252.70.86]:49524 "EHLO
-        aclms3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbhEGMFD (ORCPT
+        id S230198AbhEGW1p (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 7 May 2021 18:27:45 -0400
+Received: from bosmailout01.eigbox.net ([66.96.190.1]:36027 "EHLO
+        bosmailout01.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhEGW1h (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 May 2021 08:05:03 -0400
-Received: from taipei09.ADVANTECH.CORP (unverified [172.20.0.236]) by ACLMS4.ADVANTECH.CORP
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Te654d69a59ac14110e2488@ACLMS4.ADVANTECH.CORP>;
- Fri, 7 May 2021 20:03:48 +0800
-Received: from localhost (172.16.13.205) by taipei09.ADVANTECH.CORP
- (172.20.0.236) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 May
- 2021 20:03:48 +0800
-From:   Campion Kang <campion.kang@advantech.com.tw>
-To:     <robh@kernel.org>
-CC:     <campion.kang@advantech.com.tw>, <chia-lin.kao@canonical.com>,
-        <corbet@lwn.net>, <devicetree@vger.kernel.org>,
-        <hdegoede@redhat.com>, <jdelvare@suse.com>, <lee.jones@linaro.org>,
-        <linux-doc@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux@roeck-us.net>, <mgross@linux.intel.com>,
-        <platform-driver-x86@vger.kernel.org>, <wim@linux-watchdog.org>
-Subject: Re: [PATCH v7 1/7] MAINTAINERS: Add Advantech AHC1EC0 embedded controller entry
-Date:   Fri, 7 May 2021 20:03:47 +0800
-Message-ID: <20210507120347.27286-1-campion.kang@advantech.com.tw>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210507005006.GA854303@robh.at.kernel.org>
-References: <20210507005006.GA854303@robh.at.kernel.org>
+        Fri, 7 May 2021 18:27:37 -0400
+X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 18:27:30 EDT
+Received: from bosmailscan09.eigbox.net ([10.20.15.9])
+        by bosmailout01.eigbox.net with esmtp (Exim)
+        id 1lf8QO-00068o-JJ; Fri, 07 May 2021 17:54:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=bjgKomV6NO5Eg5D3qsCBps1llx
+        tj4k2teSfIdfo/duBtOSoC/FW1+C1nXiYJbrvf2JDobx8fDCsgnxHFoPWOCb5eI+OJOIgvnnfKlpl
+        ZqidIuDnjEPTMao1vFwrg6M9FUKU/cz6TT5/KN4ccsk+aQli3Wgs3G1cQz5vdbC1Y2SXULFY8Mu2t
+        1PShwmiDRn71EPzgUHUVu0GG39z6uSTEuRgOXhiNl9ekuZ5QXUAEykoocvC5/DkORRmERAA91o1HY
+        Sl76pPWw9UBVGbuFbfdVPfVcFxJM5xZDrmgt6uCf9J+dn/n7LFOSOxBaL9svxxYdhOkJwdz4uh075
+        2gI+xJSw==;
+Received: from [10.115.3.32] (helo=bosimpout12)
+        by bosmailscan09.eigbox.net with esmtp (Exim)
+        id 1lf8QO-0003aD-AI; Fri, 07 May 2021 17:54:20 -0400
+Received: from boswebmail06.eigbox.net ([10.20.16.6])
+        by bosimpout12 with 
+        id 1xuH2500407qujN01xuLVi; Fri, 07 May 2021 17:54:20 -0400
+X-EN-SP-DIR: OUT
+X-EN-SP-SQ: 1
+Received: from [127.0.0.1] (helo=homestead)
+        by boswebmail06.eigbox.net with esmtp (Exim)
+        id 1lf8QL-0006fx-UG; Fri, 07 May 2021 17:54:17 -0400
+Received: from [197.239.81.229]
+ by emailmg.homestead.com
+ with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 17:54:17 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.16.13.205]
-X-ClientProxiedBy: ACLCAS4.ADVANTECH.CORP (172.20.2.20) To
- taipei09.ADVANTECH.CORP (172.20.0.236)
-X-TM-SNTS-SMTP: 01A26C7359DB37B0FA7B736665FC203ACD2687985A6849E28AE9921DA234C2DE2000:8
+Date:   Fri, 07 May 2021 21:54:17 +0000
+From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
+To:     undisclosed-recipients:;
+Subject: URGENT REPLY NEEDED
+Reply-To: suzara2017malingwan@gmail.com
+Mail-Reply-To: suzara2017malingwan@gmail.com
+Message-ID: <36acfe805efde59f3f399df1324ce6b9@godsofu4.com>
+X-Sender: fast65@godsofu4.com
+User-Agent: Roundcube Webmail/1.3.14
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-EN-AuthUser: fast65@godsofu4.com
+Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
->-----Original Message-----
->From: Rob Herring <robh@kernel.org>
->Sent: Friday, May 7, 2021 8:50 AM
->Subject: Re: [PATCH v7 1/7] MAINTAINERS: Add Advantech AHC1EC0
->embedded controller entry
->
->On Thu, May 06, 2021 at 10:47:22AM +0200, Hans de Goede wrote:
->> Hi,
->>
->> I'm replying here since this series has no cover-letter, for
->> the next version for a series touching so many different
->> sub-systems it would be good to start with a cover-letter
->> providing some background info on the series.
->>
->> I see this is binding to an ACPI device, yet it is also using
->> devicetree bindings and properties.
->>
->> So I take it this means that your ACPI tables are using the
->> optional capability of embedded device-tree blobs inside the
->> ACPI tables ?
->
->Ugg, really. I would have stopped caring if I had realized.
 
-I am very grateful for any comments you have made in the past, and please feel free to give friendly guidance.
 
+My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
+of the Philippine presently base in West Africa B/F, dealing with
+exportation of Gold, I was diagnose of blood Causal decease, and my
+doctor have announce to me that I have few days to leave due to the
+condition of my sickness.
+
+I have a desire to build an orphanage home in your country of which i
+cannot execute the project myself due to my present health condition,
+I am willing to hand over the project under your care for you to help
+me fulfill my dreams and desire of building an orphanage home in your
+country.
+
+Reply in you are will to help so that I can direct you to my bank for
+the urgent transfer of the fund/money require for the project to your
+account as I have already made the fund/money available.
+
+With kind regards
+Mrs Suzara Maling Wan
