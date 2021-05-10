@@ -2,27 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF886377E77
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 May 2021 10:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB79378F56
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 May 2021 15:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbhEJIpg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 10 May 2021 04:45:36 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:2426 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbhEJIpf (ORCPT
+        id S237353AbhEJNnV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 10 May 2021 09:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240405AbhEJNRo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 10 May 2021 04:45:35 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Fdvg10LHBzCr8C;
-        Mon, 10 May 2021 16:41:49 +0800 (CST)
-Received: from [10.67.77.175] (10.67.77.175) by DGGEMS413-HUB.china.huawei.com
- (10.3.19.213) with Microsoft SMTP Server id 14.3.498.0; Mon, 10 May 2021
- 16:44:21 +0800
+        Mon, 10 May 2021 09:17:44 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6C5C06138D
+        for <linux-watchdog@vger.kernel.org>; Mon, 10 May 2021 06:16:22 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id d21so15707910oic.11
+        for <linux-watchdog@vger.kernel.org>; Mon, 10 May 2021 06:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zYlkllCHA8MEYno0PceJLqwYYdjDIXNC8s32eZt7T44=;
+        b=opIo0fj/1cjiUXILCSSNZ1dSsTJYb8ZYzw4Ekjs5iyi7UrlYq7Q1+p6wW+A30ZVENp
+         2MBoav+NtfhbXxb9h+wjZNCkV8Rfiv3f/2cRAsYfiJSFOs7N8lwoPDSErtnQQEsqkBN6
+         R4rsyJoQcS0xVitxLYKqvuRAXBiyGpW9RqRk7AuMSjvYfXV+YMhcJcbrIPJDSamuwh8X
+         OTv8IMva9PfFBlgsmXEXpRGjPzj1RfPY9FuYK7mPB2q/vzy4bTsxppgjh9GW/4TEQJNW
+         XCOfxqs21VxzB0v1ox1JPg2lEcfEhrUHQWUULH7QzItEk9lfPXuEWstp3AWWBuw14irR
+         8/CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zYlkllCHA8MEYno0PceJLqwYYdjDIXNC8s32eZt7T44=;
+        b=TqxWXeTTwqWrOZDUYhbZTLprVr+TxDboCPcfoYsyj7dMxPWYH7hueWQqWRMHZtpvIb
+         XF2uDA1BPfzm4BWcWO6oDel+7HSQpLu/k6Q8l800s0asXa4FpEiZmvlYdDD40ek/mWoC
+         ZEGhV17aDLA0kRWsZxnrthprZE+FTUxNYv/HF+Z1uupjuPH6rOExZGaYzRJ+vpjPoy8k
+         LAJelzuRAWW9Of6Iq3FEVvYeqk4uwIY/NQ7WeFKHDKOyvsWP6dN0o+cQTBR6Q0YgA1CI
+         IWYPfivSvlzqA0Sp/8Dr6Rhs69hMBZaWvlr617BFtDONaVYN/3kiKcLE1MDNhcurMgzz
+         PpfA==
+X-Gm-Message-State: AOAM532l1LsalwT63d6g4YgZ2PcKYfOjMwDpjCcb2p9k2bw9mYGR0FCW
+        yruupfmtRRmGaVPqNEyTx/likZPTrk8=
+X-Google-Smtp-Source: ABdhPJwAI5838VLB0bxysigDJMc5ieSZb9okSh+XgEC2H6wFhW3MgMtsDVNWyXBi4bJSSyZWzVh6uw==
+X-Received: by 2002:aca:c109:: with SMTP id r9mr25236323oif.83.1620652582201;
+        Mon, 10 May 2021 06:16:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r72sm2584184oie.20.2021.05.10.06.16.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 May 2021 06:16:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH] watchdog: sbsa: Support architecture version 1
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>
-CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+To:     Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
         Al Stone <al.stone@linaro.org>,
         Jianchao Hu <hujianchao@hisilicon.com>,
@@ -30,24 +61,21 @@ CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
 References: <1620618117-20135-1-git-send-email-zhangshaokun@hisilicon.com>
  <87833e5a-978a-aac5-fc4b-1a922864066b@roeck-us.net>
  <bf9e1b65-119b-d027-fc3d-8491cbc38cde@hisilicon.com>
-Message-ID: <ec1bb835-3b53-4b17-1918-25975f4413a0@hisilicon.com>
-Date:   Mon, 10 May 2021 16:44:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <669e1175-2eee-6c4b-8524-c672626022b6@roeck-us.net>
+Date:   Mon, 10 May 2021 06:16:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
 In-Reply-To: <bf9e1b65-119b-d027-fc3d-8491cbc38cde@hisilicon.com>
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.77.175]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter,
-
-On 2021/5/10 16:25, Shaokun Zhang wrote:
+On 5/10/21 1:25 AM, Shaokun Zhang wrote:
 > Hi Guenter,
 > 
 > On 2021/5/10 12:25, Guenter Roeck wrote:
@@ -68,195 +96,15 @@ On 2021/5/10 16:25, Shaokun Zhang wrote:
 > a frequency of 1GHz which will set gwdt->clk. If the timeout is
 > greater than 4(second), the 32-bit counter(WOR) is not enough.
 > 
->>
->>> regiter to 48 bit, while other operation of the watchdog remains
->>
->> register
-> 
-> Ok, will fix it.
-> 
->>
->>> the same.
->>> Let's support the feature infered it from the architecture version
->>
->> I can't parse this sentence.
->>
-> 
-> Apologies for sentence, I mean that we can read or write the WOR using
-> readl/writel or readq/writeq depending on the architecture version. If
-> architecture version is 0, readl/writel are used. Otherwise, we use
-> readq/writeq.
-> 
->>> of watchdog in W_IID register. If the version is 0x1, the watchdog
->>
->> W_IIDR ?
->>
-> 
-> Yes
-> 
->>> offset register will be 48 bit, otherwise it will be 32 bit.
->>
->> 48 or 64 ? The code says 64.
->>
-> 
-> The whole WOR is 64-bits: WOR_L and WOR_H. WOR_L[31:0] contains the
-> lower 32 bits;
-> WOR_H[63:32] comprises two parts, Bits[15:0] of WOR_H contains the
-> upper 16 bits; Bits[31:16] of WOR_H is reserved that Read all zero
-> and write has no effect. So the real use is 48-bit.
-> 
->>>
->>> [1] https://developer.arm.com/documentation/den0094/latest
->>>
->>
->> There is no download link at that location. Someone with access
->> to the documentation will have to confirm this.
-> 
-> Can you access this link? If yes, there is a 'Download' label and
-> you can upload the document and check page 47 of 96.
-> 
->>
->>> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
->>> Cc: Guenter Roeck <linux@roeck-us.net>
->>> Cc: Fu Wei <fu.wei@linaro.org>
->>> Cc: Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>
->>> Cc: Al Stone <al.stone@linaro.org>
->>> Cc: Timur Tabi <timur@codeaurora.org>
->>> Cc: Jianchao Hu <hujianchao@hisilicon.com>
->>> Cc: Huiqiang Wang <wanghuiqiang@huawei.com>
->>> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
->>> ---
->>>   drivers/watchdog/sbsa_gwdt.c | 46 +++++++++++++++++++++++++++++++++++++++-----
->>>   1 file changed, 41 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
->>> index f0f1e3b2e463..ca4f7c416f1e 100644
->>> --- a/drivers/watchdog/sbsa_gwdt.c
->>> +++ b/drivers/watchdog/sbsa_gwdt.c
->>> @@ -73,16 +73,21 @@
->>>   #define SBSA_GWDT_WCS_WS0    BIT(1)
->>>   #define SBSA_GWDT_WCS_WS1    BIT(2)
->>>   +#define SBSA_GWDT_VERSION_MASK  0xF
->>> +#define SBSA_GWDT_VERSION_SHIFT 16
->>> +
->>>   /**
->>>    * struct sbsa_gwdt - Internal representation of the SBSA GWDT
->>>    * @wdd:        kernel watchdog_device structure
->>>    * @clk:        store the System Counter clock frequency, in Hz.
->>> + * @version:            store the architecture version
->>>    * @refresh_base:    Virtual address of the watchdog refresh frame
->>>    * @control_base:    Virtual address of the watchdog control frame
->>>    */
->>>   struct sbsa_gwdt {
->>>       struct watchdog_device    wdd;
->>>       u32            clk;
->>> +    int            version;
->>>       void __iomem        *refresh_base;
->>>       void __iomem        *control_base;
->>>   };
->>> @@ -113,6 +118,27 @@ MODULE_PARM_DESC(nowayout,
->>>            __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->>>     /*
->>> + * Read and write are 32 or 64 bits depending on watchdog architecture
->>> + * version: if version is equal 0, its 32-bits operation; otherwise 64-bits
->>> + * operation is chosen.
->>> + */
->>> +static u64 sbsa_gwdt_reg_read(struct sbsa_gwdt *gwdt)
->>> +{
->>> +    if (gwdt->version == 0)
->>> +        return (u64)readl(gwdt->control_base + SBSA_GWDT_WOR);
->>
->> Unnecessary typecast.
->>
-> 
-> Ok.
-> 
->>> +    else
->>> +        return readq(gwdt->control_base + SBSA_GWDT_WOR);
->>> +}
->>> +
->>> +static void sbsa_gwdt_reg_write(u64 val, struct sbsa_gwdt *gwdt)
->>
->> What is the point of making val an u64 variable ? Without changing
-> 
-> Oops, unsigned int is enough.
-> 
 
-Sorry, it shall be 'u64', because it is the value that clock * timeout
-and will be written to WOR register which is 64-bit register in
-architecture version 1.
+The maximuma timeout is limited with
 
-Thanks,
-Shaokun
+wdd->max_hw_heartbeat_ms = U32_MAX / gwdt->clk * 1000;
 
->> the maximum timeout it will never be larger than 0xffffffff.
->>
-> 
-> No, the reason that I have explained that the clock can be 1GHz now.
-> 
-> Thanks,
-> Shaokun
-> 
->>> +{
->>> +    if (gwdt->version == 0)
->>> +        writel((u32)val, gwdt->control_base + SBSA_GWDT_WOR);
->>> +    else
->>> +        writeq(val, gwdt->control_base + SBSA_GWDT_WOR);
->>> +}
->>> +
->>> +/*
->>>    * watchdog operation functions
->>>    */
->>>   static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
->>> @@ -123,16 +149,14 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
->>>       wdd->timeout = timeout;
->>>         if (action)
->>> -        writel(gwdt->clk * timeout,
->>> -               gwdt->control_base + SBSA_GWDT_WOR);
->>> +        sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
->>>       else
->>>           /*
->>>            * In the single stage mode, The first signal (WS0) is ignored,
->>>            * the timeout is (WOR * 2), so the WOR should be configured
->>>            * to half value of timeout.
->>>            */
->>> -        writel(gwdt->clk / 2 * timeout,
->>> -               gwdt->control_base + SBSA_GWDT_WOR);
->>> +        sbsa_gwdt_reg_write(gwdt->clk / 2 * timeout, gwdt);
->>>         return 0;
->>>   }
->>> @@ -149,7 +173,7 @@ static unsigned int sbsa_gwdt_get_timeleft(struct watchdog_device *wdd)
->>>        */
->>>       if (!action &&
->>>           !(readl(gwdt->control_base + SBSA_GWDT_WCS) & SBSA_GWDT_WCS_WS0))
->>> -        timeleft += readl(gwdt->control_base + SBSA_GWDT_WOR);
->>> +        timeleft += sbsa_gwdt_reg_read(gwdt);
->>>         timeleft += lo_hi_readq(gwdt->control_base + SBSA_GWDT_WCV) -
->>>               arch_timer_read_counter();
->>> @@ -172,6 +196,17 @@ static int sbsa_gwdt_keepalive(struct watchdog_device *wdd)
->>>       return 0;
->>>   }
->>>   +static void sbsa_gwdt_get_version(struct watchdog_device *wdd)
->>> +{
->>> +    struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
->>> +    int ver;
->>> +
->>> +    ver = readl(gwdt->control_base + SBSA_GWDT_W_IIDR);
->>> +    ver = (ver >> SBSA_GWDT_VERSION_SHIFT) & SBSA_GWDT_VERSION_MASK;
->>> +
->>> +    gwdt->version = ver;
->>> +}
->>> +
->>>   static int sbsa_gwdt_start(struct watchdog_device *wdd)
->>>   {
->>>       struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
->>> @@ -300,6 +335,7 @@ static int sbsa_gwdt_probe(struct platform_device *pdev)
->>>        * it's also a ping, if watchdog is enabled.
->>>        */
->>>       sbsa_gwdt_set_timeout(wdd, wdd->timeout);
->>> +    sbsa_gwdt_get_version(wdd);
->>>         watchdog_stop_on_reboot(wdd);
->>>       ret = devm_watchdog_register_device(dev, wdd);
->>>
->>
->> .
+You did not update that calculation. That means that the maximuma
+timeout is still U32_MAX / gwdt->clk * 1000, which still fits
+into 32 bit.
+
+Please correct me if I am missing something.
+
+Guenter
