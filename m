@@ -2,82 +2,175 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCF7376CCD
-	for <lists+linux-watchdog@lfdr.de>; Sat,  8 May 2021 00:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAA5377AA7
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 May 2021 05:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbhEGW1p (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 May 2021 18:27:45 -0400
-Received: from bosmailout01.eigbox.net ([66.96.190.1]:36027 "EHLO
-        bosmailout01.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhEGW1h (ORCPT
+        id S230034AbhEJDnG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 9 May 2021 23:43:06 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:2545 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230029AbhEJDnG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 May 2021 18:27:37 -0400
-X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 18:27:30 EDT
-Received: from bosmailscan09.eigbox.net ([10.20.15.9])
-        by bosmailout01.eigbox.net with esmtp (Exim)
-        id 1lf8QO-00068o-JJ; Fri, 07 May 2021 17:54:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=bjgKomV6NO5Eg5D3qsCBps1llx
-        tj4k2teSfIdfo/duBtOSoC/FW1+C1nXiYJbrvf2JDobx8fDCsgnxHFoPWOCb5eI+OJOIgvnnfKlpl
-        ZqidIuDnjEPTMao1vFwrg6M9FUKU/cz6TT5/KN4ccsk+aQli3Wgs3G1cQz5vdbC1Y2SXULFY8Mu2t
-        1PShwmiDRn71EPzgUHUVu0GG39z6uSTEuRgOXhiNl9ekuZ5QXUAEykoocvC5/DkORRmERAA91o1HY
-        Sl76pPWw9UBVGbuFbfdVPfVcFxJM5xZDrmgt6uCf9J+dn/n7LFOSOxBaL9svxxYdhOkJwdz4uh075
-        2gI+xJSw==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan09.eigbox.net with esmtp (Exim)
-        id 1lf8QO-0003aD-AI; Fri, 07 May 2021 17:54:20 -0400
-Received: from boswebmail06.eigbox.net ([10.20.16.6])
-        by bosimpout12 with 
-        id 1xuH2500407qujN01xuLVi; Fri, 07 May 2021 17:54:20 -0400
-X-EN-SP-DIR: OUT
-X-EN-SP-SQ: 1
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail06.eigbox.net with esmtp (Exim)
-        id 1lf8QL-0006fx-UG; Fri, 07 May 2021 17:54:17 -0400
-Received: from [197.239.81.229]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 17:54:17 -0400
+        Sun, 9 May 2021 23:43:06 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Fdmy14Cm2zkYDx;
+        Mon, 10 May 2021 11:39:21 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 10 May 2021 11:41:53 +0800
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+To:     <linux-watchdog@vger.kernel.org>
+CC:     Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Fu Wei <fu.wei@linaro.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        Al Stone <al.stone@linaro.org>,
+        Timur Tabi <timur@codeaurora.org>,
+        "Jianchao Hu" <hujianchao@hisilicon.com>,
+        Huiqiang Wang <wanghuiqiang@huawei.com>
+Subject: [PATCH] watchdog: sbsa: Support architecture version 1
+Date:   Mon, 10 May 2021 11:41:57 +0800
+Message-ID: <1620618117-20135-1-git-send-email-zhangshaokun@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Date:   Fri, 07 May 2021 21:54:17 +0000
-From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
-To:     undisclosed-recipients:;
-Subject: URGENT REPLY NEEDED
-Reply-To: suzara2017malingwan@gmail.com
-Mail-Reply-To: suzara2017malingwan@gmail.com
-Message-ID: <36acfe805efde59f3f399df1324ce6b9@godsofu4.com>
-X-Sender: fast65@godsofu4.com
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: fast65@godsofu4.com
-Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Arm Base System Architecture 1.0[1] has introduced watchdog
+revision 1 that increases the length the watchdog offset
+regiter to 48 bit, while other operation of the watchdog remains
+the same.
+Let's support the feature infered it from the architecture version
+of watchdog in W_IID register. If the version is 0x1, the watchdog
+offset register will be 48 bit, otherwise it will be 32 bit.
 
+[1] https://developer.arm.com/documentation/den0094/latest
 
-My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
-of the Philippine presently base in West Africa B/F, dealing with
-exportation of Gold, I was diagnose of blood Causal decease, and my
-doctor have announce to me that I have few days to leave due to the
-condition of my sickness.
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Fu Wei <fu.wei@linaro.org>
+Cc: Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>
+Cc: Al Stone <al.stone@linaro.org>
+Cc: Timur Tabi <timur@codeaurora.org>
+Cc: Jianchao Hu <hujianchao@hisilicon.com>
+Cc: Huiqiang Wang <wanghuiqiang@huawei.com>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+---
+ drivers/watchdog/sbsa_gwdt.c | 46 +++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 41 insertions(+), 5 deletions(-)
 
-I have a desire to build an orphanage home in your country of which i
-cannot execute the project myself due to my present health condition,
-I am willing to hand over the project under your care for you to help
-me fulfill my dreams and desire of building an orphanage home in your
-country.
+diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+index f0f1e3b2e463..ca4f7c416f1e 100644
+--- a/drivers/watchdog/sbsa_gwdt.c
++++ b/drivers/watchdog/sbsa_gwdt.c
+@@ -73,16 +73,21 @@
+ #define SBSA_GWDT_WCS_WS0	BIT(1)
+ #define SBSA_GWDT_WCS_WS1	BIT(2)
+ 
++#define SBSA_GWDT_VERSION_MASK  0xF
++#define SBSA_GWDT_VERSION_SHIFT 16
++
+ /**
+  * struct sbsa_gwdt - Internal representation of the SBSA GWDT
+  * @wdd:		kernel watchdog_device structure
+  * @clk:		store the System Counter clock frequency, in Hz.
++ * @version:            store the architecture version
+  * @refresh_base:	Virtual address of the watchdog refresh frame
+  * @control_base:	Virtual address of the watchdog control frame
+  */
+ struct sbsa_gwdt {
+ 	struct watchdog_device	wdd;
+ 	u32			clk;
++	int			version;
+ 	void __iomem		*refresh_base;
+ 	void __iomem		*control_base;
+ };
+@@ -113,6 +118,27 @@ MODULE_PARM_DESC(nowayout,
+ 		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+ 
+ /*
++ * Read and write are 32 or 64 bits depending on watchdog architecture
++ * version: if version is equal 0, its 32-bits operation; otherwise 64-bits
++ * operation is chosen.
++ */
++static u64 sbsa_gwdt_reg_read(struct sbsa_gwdt *gwdt)
++{
++	if (gwdt->version == 0)
++		return (u64)readl(gwdt->control_base + SBSA_GWDT_WOR);
++	else
++		return readq(gwdt->control_base + SBSA_GWDT_WOR);
++}
++
++static void sbsa_gwdt_reg_write(u64 val, struct sbsa_gwdt *gwdt)
++{
++	if (gwdt->version == 0)
++		writel((u32)val, gwdt->control_base + SBSA_GWDT_WOR);
++	else
++		writeq(val, gwdt->control_base + SBSA_GWDT_WOR);
++}
++
++/*
+  * watchdog operation functions
+  */
+ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+@@ -123,16 +149,14 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+ 	wdd->timeout = timeout;
+ 
+ 	if (action)
+-		writel(gwdt->clk * timeout,
+-		       gwdt->control_base + SBSA_GWDT_WOR);
++		sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
+ 	else
+ 		/*
+ 		 * In the single stage mode, The first signal (WS0) is ignored,
+ 		 * the timeout is (WOR * 2), so the WOR should be configured
+ 		 * to half value of timeout.
+ 		 */
+-		writel(gwdt->clk / 2 * timeout,
+-		       gwdt->control_base + SBSA_GWDT_WOR);
++		sbsa_gwdt_reg_write(gwdt->clk / 2 * timeout, gwdt);
+ 
+ 	return 0;
+ }
+@@ -149,7 +173,7 @@ static unsigned int sbsa_gwdt_get_timeleft(struct watchdog_device *wdd)
+ 	 */
+ 	if (!action &&
+ 	    !(readl(gwdt->control_base + SBSA_GWDT_WCS) & SBSA_GWDT_WCS_WS0))
+-		timeleft += readl(gwdt->control_base + SBSA_GWDT_WOR);
++		timeleft += sbsa_gwdt_reg_read(gwdt);
+ 
+ 	timeleft += lo_hi_readq(gwdt->control_base + SBSA_GWDT_WCV) -
+ 		    arch_timer_read_counter();
+@@ -172,6 +196,17 @@ static int sbsa_gwdt_keepalive(struct watchdog_device *wdd)
+ 	return 0;
+ }
+ 
++static void sbsa_gwdt_get_version(struct watchdog_device *wdd)
++{
++	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
++	int ver;
++
++	ver = readl(gwdt->control_base + SBSA_GWDT_W_IIDR);
++	ver = (ver >> SBSA_GWDT_VERSION_SHIFT) & SBSA_GWDT_VERSION_MASK;
++
++	gwdt->version = ver;
++}
++
+ static int sbsa_gwdt_start(struct watchdog_device *wdd)
+ {
+ 	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
+@@ -300,6 +335,7 @@ static int sbsa_gwdt_probe(struct platform_device *pdev)
+ 	 * it's also a ping, if watchdog is enabled.
+ 	 */
+ 	sbsa_gwdt_set_timeout(wdd, wdd->timeout);
++	sbsa_gwdt_get_version(wdd);
+ 
+ 	watchdog_stop_on_reboot(wdd);
+ 	ret = devm_watchdog_register_device(dev, wdd);
+-- 
+2.7.4
 
-Reply in you are will to help so that I can direct you to my bank for
-the urgent transfer of the fund/money require for the project to your
-account as I have already made the fund/money available.
-
-With kind regards
-Mrs Suzara Maling Wan
