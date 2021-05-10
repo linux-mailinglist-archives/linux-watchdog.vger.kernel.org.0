@@ -2,125 +2,158 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D159379036
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 May 2021 16:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC4137906C
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 May 2021 16:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbhEJOJD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 10 May 2021 10:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238649AbhEJOEC (ORCPT
+        id S235930AbhEJORP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 10 May 2021 10:17:15 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:46483 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245108AbhEJOPO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 10 May 2021 10:04:02 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650C2C0611AA;
-        Mon, 10 May 2021 06:45:18 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id d25-20020a0568300459b02902f886f7dd43so1007189otc.6;
-        Mon, 10 May 2021 06:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hedE3GT8Rl3Rz//B6pu/A3NCqNNmR97yKYteAby+mXg=;
-        b=URpcRw9JjpPvhG2bydpcqdwp2X4UGZLZ7AKk4p8oCL90Sb6t+VKbadMK/EAiq7v/bB
-         n16eOuoEw3M5BJhyjMjQ45JTjxyhlmX7QmvSfd04gJaUrh5F6Uugd0+w476T0Hjny7i+
-         WQHcsUlg8X+mPtpShFIrhtpNolUv4JbR0PfaifIOErt2atSecaK7YwpELeVbtqE/RUDA
-         7FrY6LH67QdbO46h54/6dEIZ/A3ihuiU66DDUIWSH4eEqqo5XqIPeMh6Gwf12I+ZtiTa
-         mUT3PRDb2n+m1bPkK0QXZs6qb9XhT9W4Ymq5ZDKZ5HF7R7Baxon4VLbyWKWoXnLLYhge
-         SH3w==
+        Mon, 10 May 2021 10:15:14 -0400
+Received: from mail-ed1-f71.google.com ([209.85.208.71])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <juerg.haefliger@canonical.com>)
+        id 1lg6fg-0004Fw-U4
+        for linux-watchdog@vger.kernel.org; Mon, 10 May 2021 14:14:09 +0000
+Received: by mail-ed1-f71.google.com with SMTP id d8-20020a0564020008b0290387d38e3ce0so9129833edu.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 10 May 2021 07:14:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hedE3GT8Rl3Rz//B6pu/A3NCqNNmR97yKYteAby+mXg=;
-        b=c6CN5K7Jl9hgqQ9IQVBpNxl6/PDX5vbdGZeBdr81E9JKiAJpHyCZv/YvBAGjZqFOaa
-         H9xpXfg/OxKNKy0ptxT1eB4K6pvH+ZsNTtVCqA++Sc00TsptR6mbZu8vAO9UofHn4/rj
-         rcoGonSZJroaS3qSDTyeYh1gyCZIGmKPmxcDXtVjAUI2BwMX60/ptoZGMkFBEq86XtIg
-         Si3XoBuIzDmIlOS95faPMhzsSKbj+SYet2S4O8cLe7kDO+x2Dho0GdtSnRpxvWdRVcmb
-         ph22nI75JrHDFpibekG6h237IYtiKZBEvhNSUYhYNdHLwWA4/Y9xfmyS3z3z7D6YJ0Sa
-         SZIQ==
-X-Gm-Message-State: AOAM53116eiu0JgR0TDAeJnpgZQtiEJzHuPhmEM9kk3j/4RRGcWeF7Nj
-        oOYtGZFoFyAR7hn3PfrhkB4=
-X-Google-Smtp-Source: ABdhPJw92pktAl/LolRgtY75mG0KjPVHGiVbVJT4ZH5ZzzUFqD8QuNZZ2woJhiRsc+VG57WoaG21QQ==
-X-Received: by 2002:a05:6830:18f3:: with SMTP id d19mr8334556otf.369.1620654317881;
-        Mon, 10 May 2021 06:45:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x30sm2717960ott.41.2021.05.10.06.45.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 May 2021 06:45:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version;
+        bh=fbZHevFPK4kJ3Oy/1nhCAJSC3PFsFtZgI6Obl9f93YE=;
+        b=FR2xuDqu7qY4veqL7FrLkIKjR4MerqABvZO+JGVlVXr5A6ZrcS+Y6dFIjsKA+ekGyg
+         SjVL31wjcmxIjPDB/UYH4FxAQoLIGUmGixTIEdxTIeEVxzRXGy+SYQqqvzX8aNQ+ZZsH
+         JEjksBtoM9j72l5xlCPefh0xZ8j3mGHTQZ9c2PiLl/DYBWhi/YUJubh1Wo35pyTBL+j1
+         5uq1XivE8Ii7COxyxvbbiG8e+G7sDbrnFtAldXAiYrPNQeQpWdATXPHP6REEpmuwsuUh
+         AkvmhzPPUrxpHIHPxrikphguCFmVflOAhszLpUlYCD5uBcG5W/8jOVpCndbjRd0H0ZzD
+         Vadw==
+X-Gm-Message-State: AOAM531IWD5iC1/Lhf3zi6Z1Np0pbSYAO6oEDntTAOEPnsgAhg3M2QNE
+        G2Wvc8vr/z6adC+SpZN1PSwyHda5OPTrfP3WsVlmOC2sezFjDqRUAdqh1UugI+2rXuOHVWdvIha
+        WG1wxdUl1tFZL+PFlNszX45q4zU+b47z4YHF7gkNYIINQ
+X-Received: by 2002:a17:906:5a83:: with SMTP id l3mr26000937ejq.50.1620656048553;
+        Mon, 10 May 2021 07:14:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJziN7V8IF+eETtey6eCBiXKyTYKjZfq7RMKqvrr5GQJnMf4337zoLzjpbQG+k7mxZa1ZX8iZA==
+X-Received: by 2002:a17:906:5a83:: with SMTP id l3mr26000915ejq.50.1620656048370;
+        Mon, 10 May 2021 07:14:08 -0700 (PDT)
+Received: from gollum ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id l11sm11223540eds.75.2021.05.10.07.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 07:14:07 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+Date:   Mon, 10 May 2021 16:14:06 +0200
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Juerg Haefliger <juerg.haefliger@canonical.com>,
+        wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] watchdog: Add {min,max}_timeout sysfs nodes
-To:     Juerg Haefliger <juerg.haefliger@canonical.com>,
-        wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
+Message-ID: <20210510161406.1b32debd@gollum>
+In-Reply-To: <695dfd0f-f090-653e-7580-e45484228781@roeck-us.net>
 References: <20210510131625.21506-1-juergh@canonical.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <695dfd0f-f090-653e-7580-e45484228781@roeck-us.net>
-Date:   Mon, 10 May 2021 06:45:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        <695dfd0f-f090-653e-7580-e45484228781@roeck-us.net>
+Organization: Canonical Ltd
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20210510131625.21506-1-juergh@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/ryNewuZSjVJeL.p+oeOWUl2";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/10/21 6:16 AM, Juerg Haefliger wrote:
-> The valid range for the 'timeout' value is useful information so expose
-> the min and max timeout values via sysfs.
-> 
-> Signed-off-by: Juerg Haefliger <juergh@canonical.com>
-> ---
->   drivers/watchdog/watchdog_dev.c | 20 ++++++++++++++++++++
->   1 file changed, 20 insertions(+)
-> 
-> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index 2946f3a63110..b84d53a79618 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -525,6 +525,24 @@ static ssize_t timeout_show(struct device *dev, struct device_attribute *attr,
->   }
->   static DEVICE_ATTR_RO(timeout);
->   
-> +static ssize_t min_timeout_show(struct device *dev,
-> +				struct device_attribute *attr, char *buf)
-> +{
-> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
-> +
-> +	return sprintf(buf, "%u\n", wdd->min_timeout);
-> +}
-> +static DEVICE_ATTR_RO(min_timeout);
-> +
-> +static ssize_t max_timeout_show(struct device *dev,
-> +				struct device_attribute *attr, char *buf)
-> +{
-> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
-> +
-> +	return sprintf(buf, "%u\n", wdd->max_timeout);
+--Sig_/ryNewuZSjVJeL.p+oeOWUl2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Makes sense, but please use sysfs_emit().
+On Mon, 10 May 2021 06:45:15 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Guenter
+> On 5/10/21 6:16 AM, Juerg Haefliger wrote:
+> > The valid range for the 'timeout' value is useful information so expose
+> > the min and max timeout values via sysfs.
+> >=20
+> > Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+> > ---
+> >   drivers/watchdog/watchdog_dev.c | 20 ++++++++++++++++++++
+> >   1 file changed, 20 insertions(+)
+> >=20
+> > diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdo=
+g_dev.c
+> > index 2946f3a63110..b84d53a79618 100644
+> > --- a/drivers/watchdog/watchdog_dev.c
+> > +++ b/drivers/watchdog/watchdog_dev.c
+> > @@ -525,6 +525,24 @@ static ssize_t timeout_show(struct device *dev, st=
+ruct device_attribute *attr,
+> >   }
+> >   static DEVICE_ATTR_RO(timeout);
+> >  =20
+> > +static ssize_t min_timeout_show(struct device *dev,
+> > +				struct device_attribute *attr, char *buf)
+> > +{
+> > +	struct watchdog_device *wdd =3D dev_get_drvdata(dev);
+> > +
+> > +	return sprintf(buf, "%u\n", wdd->min_timeout);
+> > +}
+> > +static DEVICE_ATTR_RO(min_timeout);
+> > +
+> > +static ssize_t max_timeout_show(struct device *dev,
+> > +				struct device_attribute *attr, char *buf)
+> > +{
+> > +	struct watchdog_device *wdd =3D dev_get_drvdata(dev);
+> > +
+> > +	return sprintf(buf, "%u\n", wdd->max_timeout); =20
+>=20
+> Makes sense, but please use sysfs_emit().
 
-> +}
-> +static DEVICE_ATTR_RO(max_timeout);
-> +
->   static ssize_t pretimeout_show(struct device *dev,
->   			       struct device_attribute *attr, char *buf)
->   {
-> @@ -609,6 +627,8 @@ static struct attribute *wdt_attrs[] = {
->   	&dev_attr_state.attr,
->   	&dev_attr_identity.attr,
->   	&dev_attr_timeout.attr,
-> +	&dev_attr_min_timeout.attr,
-> +	&dev_attr_max_timeout.attr,
->   	&dev_attr_pretimeout.attr,
->   	&dev_attr_timeleft.attr,
->   	&dev_attr_bootstatus.attr,
-> 
+OK. And maybe I should send a patch to convert the other occurrences of
+sprintf as well?
 
+...Juerg
+
+
+> Guenter
+>=20
+> > +}
+> > +static DEVICE_ATTR_RO(max_timeout);
+> > +
+> >   static ssize_t pretimeout_show(struct device *dev,
+> >   			       struct device_attribute *attr, char *buf)
+> >   {
+> > @@ -609,6 +627,8 @@ static struct attribute *wdt_attrs[] =3D {
+> >   	&dev_attr_state.attr,
+> >   	&dev_attr_identity.attr,
+> >   	&dev_attr_timeout.attr,
+> > +	&dev_attr_min_timeout.attr,
+> > +	&dev_attr_max_timeout.attr,
+> >   	&dev_attr_pretimeout.attr,
+> >   	&dev_attr_timeleft.attr,
+> >   	&dev_attr_bootstatus.attr,
+> >  =20
+>=20
+
+
+--Sig_/ryNewuZSjVJeL.p+oeOWUl2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmCZP64ACgkQD9OLCQum
+QreCZA//WV4QDVPBwEjUkBJk1mhwNSpVnnXN+KP9wLFeHqf6zIBu+LFdULXUNvc5
+lJKoGEXdouTk7Zp7Tfa4GMNJ+sL3AfCuToUpQmKDJaR9Hq27HF1BptBtRAPhP5rQ
+hkQFc00bRyD7aG/MC1xh53R4AGIu97Wn40ZocCZh3EZk0jJnInlhR/gGqUmvqxyX
+ZimWBAFP6gQt9P2HXanB5488tenH9FbbTXjPUzOJY3QcKLTh5rXmF8l2HMqE+B8K
+meM43PFGuDyWK4+2O4VRkY725wrWxqpbNa9VhxYK1gjutteAaCI829ePAOt/fMG3
+Wir2uH8QP7eN4Hc1AaAaPq2QEXIjW9PlMWDTfsCN9FtXMWA1nVr5hx345M0TCaN5
+FQe+w2gD4yvi2aBo29xg93yHO2HXwDhHxDAq+KvHm2raf4OO/17R5KSFDy9ZTdq6
+e63SSs0o1fId9TA0GE5+7x12Wlr6sQyt4HtejGqoC/NQW7u13dakwjdt23Wb2g97
+S89wl5guRHVcheTtDTrmFWoVx4qOKMZfxCI8Ybp4EDPS/L9pqqQupl2P69Flpevn
+p57VQG1dMLIfO8g2P2+vokrqOy3+wRVkml9W9ol6HGkQgghXGDDnRSr0T2ebEZBW
+I/RfTeV9XyQ8xB2LWwpoNmNgVldjfzFJgf6lDImZSnaxXmn37Tc=
+=0plC
+-----END PGP SIGNATURE-----
+
+--Sig_/ryNewuZSjVJeL.p+oeOWUl2--
