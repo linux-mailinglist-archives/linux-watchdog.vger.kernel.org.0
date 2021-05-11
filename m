@@ -2,118 +2,229 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DA0379F7B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 May 2021 08:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3AD379F9F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 May 2021 08:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbhEKGER (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 11 May 2021 02:04:17 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2689 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhEKGEQ (ORCPT
+        id S230349AbhEKGT3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 11 May 2021 02:19:29 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:41660 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229957AbhEKGT3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 11 May 2021 02:04:16 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FfS2Q0M7tz1BLFT;
-        Tue, 11 May 2021 14:00:30 +0800 (CST)
-Received: from [10.67.77.175] (10.67.77.175) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.498.0; Tue, 11 May 2021
- 14:02:59 +0800
-Subject: Re: [PATCH] watchdog: sbsa: Support architecture version 1
-To:     Guenter Roeck <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>
-CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        Al Stone <al.stone@linaro.org>,
-        Jianchao Hu <hujianchao@hisilicon.com>,
-        Huiqiang Wang <wanghuiqiang@huawei.com>
-References: <1620618117-20135-1-git-send-email-zhangshaokun@hisilicon.com>
- <87833e5a-978a-aac5-fc4b-1a922864066b@roeck-us.net>
- <bf9e1b65-119b-d027-fc3d-8491cbc38cde@hisilicon.com>
- <669e1175-2eee-6c4b-8524-c672626022b6@roeck-us.net>
- <fb880396-4c30-78ff-2c1f-62ad4fef935f@hisilicon.com>
- <65876276-ddd5-7e1c-c0e3-d94c316f2d93@roeck-us.net>
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-Message-ID: <ef4ae3e7-21bf-4f47-57a4-7da681fe6a40@hisilicon.com>
-Date:   Tue, 11 May 2021 14:03:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 11 May 2021 02:19:29 -0400
+Received: from mail-ej1-f69.google.com ([209.85.218.69])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <juerg.haefliger@canonical.com>)
+        id 1lgLio-0001yJ-6c
+        for linux-watchdog@vger.kernel.org; Tue, 11 May 2021 06:18:22 +0000
+Received: by mail-ej1-f69.google.com with SMTP id gy20-20020a170906f254b02903cc7a4500bfso333754ejb.4
+        for <linux-watchdog@vger.kernel.org>; Mon, 10 May 2021 23:18:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bbXPgmZrL4Pxh0/t8XE8baUOCONdkg5IyBFSdmqHWjM=;
+        b=eKGEs763ycFEeuyYlUgMlMUzIv3484YU0qZD4P2AR/0ywpXrhif4hiFhqbnhxfaCsG
+         khwRteOHichRPGJY4MYgIcN7xNrD6CZ3s6viYM6lsQHisD6tjP+va0q5sqkxeCSfNBEE
+         r7IKpZn/yoFoV0+m5pe6gDiv/eemTd4aUq4/mZpB2uLe9UefR3BFuJz6ePJIEXVBoBcL
+         p0MVgN9PEqptbLJMq01Nc48xnJx9zm79FSaUlW4nzGW2KuNPLHNBDSViFoKZ8LVqgFN6
+         exuUZB9cd0D6hdJoC6lljT8Ldq0dK/ZcARy2SIaltDhCQl0rrE/H4LwPGg1dKCqshNBl
+         WN5w==
+X-Gm-Message-State: AOAM530iVj3bV1whW1F6cFNtnQ8lZ0IrfABmrnknONi1YEwsV3FltudK
+        vWFp2LlG/rqtkoHOO1BLj0zyqBB7N8OnOoAFiS7LN2hPgwvexjLhwxSgq3SL+KnRLpgzRuu0JQk
+        RWhoBl3tmc8Ux+fD5gOdkzqfg43VuRPC1vFwnwMN5meIu
+X-Received: by 2002:a17:906:9246:: with SMTP id c6mr30337747ejx.10.1620713901801;
+        Mon, 10 May 2021 23:18:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxuFUKxnlEC58W09fcC4t8RpefrIfBsHhh1rU2Dzq5wghcRbv5j9OslBqjPeLytqr3YNEzFFg==
+X-Received: by 2002:a17:906:9246:: with SMTP id c6mr30337730ejx.10.1620713901627;
+        Mon, 10 May 2021 23:18:21 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id gn36sm10616136ejc.23.2021.05.10.23.18.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 23:18:21 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, joel@jms.id.au,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Cc:     andrew@aj.id.au, linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH] watchdog: Use sysfs_emit() and sysfs_emit_at() in "show" functions
+Date:   Tue, 11 May 2021 08:18:12 +0200
+Message-Id: <20210511061812.480172-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <65876276-ddd5-7e1c-c0e3-d94c316f2d93@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.77.175]
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter,
+Convert sprintf() in sysfs "show" functions to sysfs_emit() and
+sysfs_emit_at() in order to check for buffer overruns in sysfs outputs.
 
-On 2021/5/11 11:52, Guenter Roeck wrote:
-> On 5/10/21 7:49 PM, Shaokun Zhang wrote:
->> Hi Guenter,
->>
->> On 2021/5/10 21:16, Guenter Roeck wrote:
->>> On 5/10/21 1:25 AM, Shaokun Zhang wrote:
->>>> Hi Guenter,
->>>>
->>>> On 2021/5/10 12:25, Guenter Roeck wrote:
->>>>> On 5/9/21 8:41 PM, Shaokun Zhang wrote:
->>>>>> Arm Base System Architecture 1.0[1] has introduced watchdog
->>>>>> revision 1 that increases the length the watchdog offset
->>>>>
->>>>> Is that how they call the watchdog count register ?
->>>>>
->>>>
->>>> I think yes.
->>>>
->>>>> Also, doesn't that mean that the maximum timeout supported
->>>>> by the hardware is now larger ?
->>>>
->>>> No, maximum timeout is the same. But the clock can be higher than
->>>> before. For Armv8.6, The frequency of CNTFRQ_EL0 is standardized to
->>>> a frequency of 1GHz which will set gwdt->clk. If the timeout is
->>>> greater than 4(second), the 32-bit counter(WOR) is not enough.
->>>>
->>>
->>> The maximuma timeout is limited with
->>>
->>> wdd->max_hw_heartbeat_ms = U32_MAX / gwdt->clk * 1000;
->>>> You did not update that calculation. That means that the maximuma
->>> timeout is still U32_MAX / gwdt->clk * 1000, which still fits
->>> into 32 bit.
->>
->> Correct, I will fix this in next version.
->>
->>>
->>> Please correct me if I am missing something.
->>>
->>
->> My bad, you are right. The maximum timeout shall be
->> 0xFFFF.FFFF.FFFF / 1000.000.000(1GHz) which is larger than before
->> 0xFFFF.FFFF / 100.000.000(100MHz) by the hardware.
->>
->> Can I do like this, after the version is got and check the version?
->>          sbsa_gwdt_set_timeout(wdd, wdd->timeout);
->> +       sbsa_gwdt_get_version(wdd);
->> +       if (wdd->version > 0)
->> +               wdd->max_hw_heartbeat_ms = GENMASK_ULL(47, 0) / gwdt->clk * 1000;
->>
-> 
-> I would suggest to set max_hw_heartbeat_ms in one place
-> to avoid confusion. Either check the version earlier,
-> or move setting both max_hw_heartbeat_ms values
-> after the call to sbsa_gwdt_get_version().
-> 
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+---
+ drivers/watchdog/aspeed_wdt.c          |  4 ++--
+ drivers/watchdog/watchdog_dev.c        | 19 ++++++++++---------
+ drivers/watchdog/watchdog_pretimeout.c |  4 ++--
+ drivers/watchdog/ziirave_wdt.c         | 12 +++++++-----
+ 4 files changed, 21 insertions(+), 18 deletions(-)
 
-Got it, I will follow the former that many members in @wdd are
-initialized closely.
+diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+index 7e00960651fa..933998e5a9de 100644
+--- a/drivers/watchdog/aspeed_wdt.c
++++ b/drivers/watchdog/aspeed_wdt.c
+@@ -175,8 +175,8 @@ static ssize_t access_cs0_show(struct device *dev,
+ 	struct aspeed_wdt *wdt = dev_get_drvdata(dev);
+ 	u32 status = readl(wdt->base + WDT_TIMEOUT_STATUS);
+ 
+-	return sprintf(buf, "%u\n",
+-		      !(status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY));
++	return sysfs_emit(buf, "%u\n",
++			  !(status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY));
+ }
+ 
+ static ssize_t access_cs0_store(struct device *dev,
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 2946f3a63110..fe68a97973a5 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -451,7 +451,8 @@ static ssize_t nowayout_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct watchdog_device *wdd = dev_get_drvdata(dev);
+ 
+-	return sprintf(buf, "%d\n", !!test_bit(WDOG_NO_WAY_OUT, &wdd->status));
++	return sysfs_emit(buf, "%d\n", !!test_bit(WDOG_NO_WAY_OUT,
++						  &wdd->status));
+ }
+ 
+ static ssize_t nowayout_store(struct device *dev, struct device_attribute *attr,
+@@ -485,7 +486,7 @@ static ssize_t status_show(struct device *dev, struct device_attribute *attr,
+ 	status = watchdog_get_status(wdd);
+ 	mutex_unlock(&wd_data->lock);
+ 
+-	return sprintf(buf, "0x%x\n", status);
++	return sysfs_emit(buf, "0x%x\n", status);
+ }
+ static DEVICE_ATTR_RO(status);
+ 
+@@ -494,7 +495,7 @@ static ssize_t bootstatus_show(struct device *dev,
+ {
+ 	struct watchdog_device *wdd = dev_get_drvdata(dev);
+ 
+-	return sprintf(buf, "%u\n", wdd->bootstatus);
++	return sysfs_emit(buf, "%u\n", wdd->bootstatus);
+ }
+ static DEVICE_ATTR_RO(bootstatus);
+ 
+@@ -510,7 +511,7 @@ static ssize_t timeleft_show(struct device *dev, struct device_attribute *attr,
+ 	status = watchdog_get_timeleft(wdd, &val);
+ 	mutex_unlock(&wd_data->lock);
+ 	if (!status)
+-		status = sprintf(buf, "%u\n", val);
++		status = sysfs_emit(buf, "%u\n", val);
+ 
+ 	return status;
+ }
+@@ -521,7 +522,7 @@ static ssize_t timeout_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct watchdog_device *wdd = dev_get_drvdata(dev);
+ 
+-	return sprintf(buf, "%u\n", wdd->timeout);
++	return sysfs_emit(buf, "%u\n", wdd->timeout);
+ }
+ static DEVICE_ATTR_RO(timeout);
+ 
+@@ -530,7 +531,7 @@ static ssize_t pretimeout_show(struct device *dev,
+ {
+ 	struct watchdog_device *wdd = dev_get_drvdata(dev);
+ 
+-	return sprintf(buf, "%u\n", wdd->pretimeout);
++	return sysfs_emit(buf, "%u\n", wdd->pretimeout);
+ }
+ static DEVICE_ATTR_RO(pretimeout);
+ 
+@@ -539,7 +540,7 @@ static ssize_t identity_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct watchdog_device *wdd = dev_get_drvdata(dev);
+ 
+-	return sprintf(buf, "%s\n", wdd->info->identity);
++	return sysfs_emit(buf, "%s\n", wdd->info->identity);
+ }
+ static DEVICE_ATTR_RO(identity);
+ 
+@@ -549,9 +550,9 @@ static ssize_t state_show(struct device *dev, struct device_attribute *attr,
+ 	struct watchdog_device *wdd = dev_get_drvdata(dev);
+ 
+ 	if (watchdog_active(wdd))
+-		return sprintf(buf, "active\n");
++		return sysfs_emit(buf, "active\n");
+ 
+-	return sprintf(buf, "inactive\n");
++	return sysfs_emit(buf, "inactive\n");
+ }
+ static DEVICE_ATTR_RO(state);
+ 
+diff --git a/drivers/watchdog/watchdog_pretimeout.c b/drivers/watchdog/watchdog_pretimeout.c
+index 01ca84be240f..7f257c3485cd 100644
+--- a/drivers/watchdog/watchdog_pretimeout.c
++++ b/drivers/watchdog/watchdog_pretimeout.c
+@@ -55,7 +55,7 @@ int watchdog_pretimeout_available_governors_get(char *buf)
+ 	mutex_lock(&governor_lock);
+ 
+ 	list_for_each_entry(priv, &governor_list, entry)
+-		count += sprintf(buf + count, "%s\n", priv->gov->name);
++		count += sysfs_emit_at(buf, count, "%s\n", priv->gov->name);
+ 
+ 	mutex_unlock(&governor_lock);
+ 
+@@ -68,7 +68,7 @@ int watchdog_pretimeout_governor_get(struct watchdog_device *wdd, char *buf)
+ 
+ 	spin_lock_irq(&pretimeout_lock);
+ 	if (wdd->gov)
+-		count = sprintf(buf, "%s\n", wdd->gov->name);
++		count = sysfs_emit(buf, "%s\n", wdd->gov->name);
+ 	spin_unlock_irq(&pretimeout_lock);
+ 
+ 	return count;
+diff --git a/drivers/watchdog/ziirave_wdt.c b/drivers/watchdog/ziirave_wdt.c
+index 4297280807ca..6c9414d09684 100644
+--- a/drivers/watchdog/ziirave_wdt.c
++++ b/drivers/watchdog/ziirave_wdt.c
+@@ -445,8 +445,9 @@ static ssize_t ziirave_wdt_sysfs_show_firm(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = sprintf(buf, ZIIRAVE_FW_VERSION_FMT, w_priv->firmware_rev.major,
+-		      w_priv->firmware_rev.minor);
++	ret = sysfs_emit(buf, ZIIRAVE_FW_VERSION_FMT,
++			 w_priv->firmware_rev.major,
++			 w_priv->firmware_rev.minor);
+ 
+ 	mutex_unlock(&w_priv->sysfs_mutex);
+ 
+@@ -468,8 +469,9 @@ static ssize_t ziirave_wdt_sysfs_show_boot(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = sprintf(buf, ZIIRAVE_BL_VERSION_FMT, w_priv->bootloader_rev.major,
+-		      w_priv->bootloader_rev.minor);
++	ret = sysfs_emit(buf, ZIIRAVE_BL_VERSION_FMT,
++			 w_priv->bootloader_rev.major,
++			 w_priv->bootloader_rev.minor);
+ 
+ 	mutex_unlock(&w_priv->sysfs_mutex);
+ 
+@@ -491,7 +493,7 @@ static ssize_t ziirave_wdt_sysfs_show_reason(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = sprintf(buf, "%s", ziirave_reasons[w_priv->reset_reason]);
++	ret = sysfs_emit(buf, "%s", ziirave_reasons[w_priv->reset_reason]);
+ 
+ 	mutex_unlock(&w_priv->sysfs_mutex);
+ 
+-- 
+2.27.0
 
-Thanks again,
-Shaokun
-
-> Thanks,
-> Guenter
-> 
-> .
