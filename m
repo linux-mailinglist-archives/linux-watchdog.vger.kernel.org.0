@@ -2,133 +2,197 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 446FD37A545
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 May 2021 12:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBA637A604
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 May 2021 13:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbhEKK6T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 11 May 2021 06:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbhEKK6Q (ORCPT
+        id S231509AbhEKLtV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 11 May 2021 07:49:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46957 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231465AbhEKLtU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 11 May 2021 06:58:16 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E6CC061761
-        for <linux-watchdog@vger.kernel.org>; Tue, 11 May 2021 03:57:08 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id n61so6198302uan.2
-        for <linux-watchdog@vger.kernel.org>; Tue, 11 May 2021 03:57:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H3TFuIrc3Mj7EWsSB5KHDQrg/psdazR0cVvA5Agy22s=;
-        b=BI5betzphHV53YRAHo1kbf3qtN5EZ+oJQvqpn4XXUNTvjtju9UI5Wxwcu/qn0vpzMa
-         l8lD+g5mD22XYfa4O8a/DkbtdqMxftpPoCgk3EzFxlgMa9475q6tweCGnyLgcCpSu8ue
-         poRgY190B4IYUbsx23WRK7dsxuPfKqFzfOElVB1Ti0fK7UgpND6B/TIlH7Ez2Ztt/UZw
-         X9ChYwX5o5XMrZarBxHM9k9fuDXw7GeXfg0wQeftAJktbg8FdqoErJmdZxTz9ySB9ljp
-         5kzgCqLZ8a1IL5VP4fZ8V/3eoLv/D//8lDoYt4CeIJg/ADMwinFvoAgj3MdlTZUA2vJ8
-         V+KQ==
+        Tue, 11 May 2021 07:49:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1620733694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tCTd+S2Axg2X1q7f2AmsrNqMwgII9y4Yy/+j9XgTu+E=;
+        b=Fj5+kR1LJgadz7sTIhDZjJ2YVjyRGrbmTl4MXsm9A/Ea/t9Mh//IZbpzY9NaZ6SMsEmUja
+        102W88HF+4bboXUXLGFasAymz7fbFtDgG7GIAirIL9PqArLpSeDKAyWXRqwbqxVh42shbo
+        HSEaWuDEMswxEpiWP0urDsJj6s+IPWY=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-481-k_J4sSnDMXqvFULeQhuwKw-1; Tue, 11 May 2021 07:48:12 -0400
+X-MC-Unique: k_J4sSnDMXqvFULeQhuwKw-1
+Received: by mail-ej1-f72.google.com with SMTP id f8-20020a1709068248b02903a8adf1f5c2so4762047ejx.19
+        for <linux-watchdog@vger.kernel.org>; Tue, 11 May 2021 04:48:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H3TFuIrc3Mj7EWsSB5KHDQrg/psdazR0cVvA5Agy22s=;
-        b=KS/GRrZsLSAesamS9AzsAH86DwTlS/yfKcJGNkU7118K9bjqEei+7Kfz4jc1hFUOhc
-         l8GG2koaiVfFHMHLq6BoMyp6nIGxGQeqmAA4FX7k3gb9Wc7tn+CVdoP3fOI/IQM9EOop
-         JmqEA6zd435GePWXb/wH4g3ttNQ9z4HWPtKwZhf4lG8Mx4Mkxk+RDsmAjDzL6dip79P3
-         r7LRNWh7cAkk1BvNhp6gGsuuzNIxSIKJATMFVkdHzZGcb58bYXAg1yn+Hcwal4Y+DCRE
-         yZ6jaomFxSz1t+QtArjwA3se0Wjjf6d2QABn99x4jhqZFZP1S0/97iG3EEveFCKkoKO0
-         Zmjw==
-X-Gm-Message-State: AOAM533bBEk5isLZMIX+huFcuzzxfZP7ncmyKodB1KkpM4YYUg31Z6ve
-        tZ/f29LEMTmSozX+P0zc1+J2EKnTBN95bNPQUGRDMg==
-X-Google-Smtp-Source: ABdhPJwynumHCSzbxs9fEYhSTsTQNyquQmA9nby0MfgarYqJoMGRF7eJ8B5GdcKLxBd8RzpG4b/jdGZAXltAK2YZE4E=
-X-Received: by 2002:ab0:7002:: with SMTP id k2mr25127013ual.104.1620730627962;
- Tue, 11 May 2021 03:57:07 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tCTd+S2Axg2X1q7f2AmsrNqMwgII9y4Yy/+j9XgTu+E=;
+        b=oYmZc76hZH3dcEjaHXQh6L6d1Q68wdJ7y+wD8t/pKUtKYpuAsRS47JFg+3Tqr7NXwU
+         cWe0zcltpc3dSbGmUfmfos5hoP8deHqZ4FL1GpwgDv3JUoedIhNf04NsFseLzMUuMR+K
+         CArqpP6Ca0aQvi1q3tb90Yp7OIlsfySoti+nv8lFX6zj1KDwWqRHSuRsw9qskb+AWWhb
+         V9hWTldVwFpRhaBklNjEAmUtsTdWJqQJxdWH+x6icWDU5IUgGBQKrCWTzQ1WelMPFQd5
+         DyYAbZmjG4mSocIVhwp8Ze5NVajJab/rOitWqPajKYdZUY0i9gmdGYLTOzFSlOnJ/+ML
+         gPPw==
+X-Gm-Message-State: AOAM530PG5x26gtKFrBwlF/+iL7ZciJgRg49dnzMni8BdgUikrWUkckV
+        CsQaTV3gcvp5NyYkOE1cFTLch6wrrnqzTBxL9eJWzvt/dsltZ7Gv/jT8ThXGBATMV3DXHaVDDlS
+        cJXBYXdTT6nGfSZ6XKfcIai99PFA=
+X-Received: by 2002:a17:907:f91:: with SMTP id kb17mr30722708ejc.521.1620733691343;
+        Tue, 11 May 2021 04:48:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyK1wG8GPs1uiWXaXij0uLW/nSHZ5xv/Mp/aP4/ksfEpDozfyQJa04/xi8Vel+362v042qcCA==
+X-Received: by 2002:a17:907:f91:: with SMTP id kb17mr30722691ejc.521.1620733691162;
+        Tue, 11 May 2021 04:48:11 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id ga28sm11316864ejc.20.2021.05.11.04.48.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 May 2021 04:48:10 -0700 (PDT)
+Subject: Re: [PATCH v7 1/7] MAINTAINERS: Add Advantech AHC1EC0 embedded
+ controller entry
+To:     Campion Kang <campion.kang@advantech.com.tw>
+Cc:     andy.shevchenko@gmail.com, chia-lin.kao@canonical.com,
+        corbet@lwn.net, devicetree@vger.kernel.org, jdelvare@suse.com,
+        lee.jones@linaro.org, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
+        mgross@linux.intel.com, platform-driver-x86@vger.kernel.org,
+        robh+dt@kernel.org, wim@linux-watchdog.org
+References: <cf181436-152c-7cd8-76cf-350705cd2bcb@redhat.com>
+ <20210507115319.22109-1-campion.kang@advantech.com.tw>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <0a64dcbd-25d6-ddcd-4a4e-18619e8270ba@redhat.com>
+Date:   Tue, 11 May 2021 13:48:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20210429081151.17558-1-cl@rock-chips.com> <20210429081151.17558-4-cl@rock-chips.com>
-In-Reply-To: <20210429081151.17558-4-cl@rock-chips.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 11 May 2021 12:56:29 +0200
-Message-ID: <CAPDyKFr3cpARwxZPUfnFfJT-=UMynUNK-Jb0NLNJG=k9O-=R9g@mail.gmail.com>
-Subject: Re: [PATCH v4 03/10] dt-bindings: mmc: rockchip-dw-mshc: add
- description for rk3568
-To:     cl@rock-chips.com
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Chen-Yu Tsai <wens@csie.org>, uwe@kleine-koenig.org,
-        mail@david-bauer.net, Johan Jonker <jbx6244@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jensenhuang@friendlyarm.com,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        cnsztl@gmail.com, DTML <devicetree@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        David Wu <david.wu@rock-chips.com>,
-        zhangqing <zhangqing@rock-chips.com>,
-        Tao Huang <huangtao@rock-chips.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jamie Iles <jamie@jamieiles.com>,
-        linux-watchdog@vger.kernel.org, Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210507115319.22109-1-campion.kang@advantech.com.tw>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 29 Apr 2021 at 10:12, <cl@rock-chips.com> wrote:
->
-> From: Liang Chen <cl@rock-chips.com>
->
-> add "rockchip,rk3568-dw-mshc", "rockchip,rk3288-dw-mshc" for mmc nodes on
-> a rk3568 platform to rockchip-dw-mshc.yaml.
->
-> Signed-off-by: Liang Chen <cl@rock-chips.com>
+Hi,
 
-Applied for next (and by amending the commit message according to
-Rob's suggestion), thanks!
+On 5/7/21 1:53 PM, Campion Kang wrote:
+> Hi, Very thanks your time for reviewing.
+> 
+>> -----Original Message-----
+>> From: Hans de Goede <hdegoede@redhat.com>
+>> Sent: Thursday, May 6, 2021 5:39 PM
+>> Subject: Re: [PATCH v7 1/7] MAINTAINERS: Add Advantech AHC1EC0 embedded
+>> controller entry
+>>
+>> Hi,
+>>
+>> On 5/6/21 11:23 AM, Andy Shevchenko wrote:
+>>> On Thu, May 6, 2021 at 11:48 AM Hans de Goede <hdegoede@redhat.com>
+>> wrote:
+>>>> I'm replying here since this series has no cover-letter, for
+>>>> the next version for a series touching so many different
+>>>> sub-systems it would be good to start with a cover-letter
+>>>> providing some background info on the series.
+>>>>
+> 
+> Sorry about that, i will study what is cover-letter and its content.
+> Would you kindly provide me a good reference?
+> Can I resend a [Patch v7 0/7] for these patch or provide it in next version?
 
-Kind regards
-Uffe
+Please add a cover letter to the next version, which will hopefully
+also address some of the other remarks already made.
+
+Regards,
+
+Hans
 
 
-> ---
->  .../devicetree/bindings/mmc/rockchip-dw-mshc.yaml        | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> index 3762f1c8de96..eaa3b0ef24f6 100644
-> --- a/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml
-> @@ -29,21 +29,14 @@ properties:
->        - const: rockchip,rk3288-dw-mshc
->        - items:
->            - enum:
-> -            # for Rockchip PX30
->                - rockchip,px30-dw-mshc
-> -            # for Rockchip RK3036
->                - rockchip,rk3036-dw-mshc
-> -            # for Rockchip RK322x
->                - rockchip,rk3228-dw-mshc
-> -            # for Rockchip RK3308
->                - rockchip,rk3308-dw-mshc
-> -            # for Rockchip RK3328
->                - rockchip,rk3328-dw-mshc
-> -            # for Rockchip RK3368
->                - rockchip,rk3368-dw-mshc
-> -            # for Rockchip RK3399
->                - rockchip,rk3399-dw-mshc
-> -            # for Rockchip RV1108
-> +              - rockchip,rk3568-dw-mshc
->                - rockchip,rv1108-dw-mshc
->            - const: rockchip,rk3288-dw-mshc
->
-> --
-> 2.17.1
->
->
->
+> 
+> 
+>>>> I see this is binding to an ACPI device, yet it is also using
+>>>> devicetree bindings and properties.
+>>>>
+>>>> So I take it this means that your ACPI tables are using the
+>>>> optional capability of embedded device-tree blobs inside the
+>>>> ACPI tables ?
+>>>>
+>>>> That is an unusual combination on a x86 device, note it is
+>>>> not wrong
+>>>
+>>> It's actually not okay. We have agreed at some point with DT people,
+>>> that ACPI should not use non-native variants of natively supported
+>>> things. For example, it shouldn't use "interrupt" property for IOxAPIC
+>>> (or xIC) provided interrupts, rather Interrupt() has to be used and so
+>>> on.
+> 
+> In our experience, most risc platforms are using devicetree, and x86/64 platforms
+> are using ACPI table or grub configure for their specific settings in different HW paltform.
+> In this case, EC chip is a LPC interface that can be integrated in whenever risc or x86/64.
+> So in my understand, I think it is not conflict.
+> (please correct me if i am misunderstanding, i will try to describe more)
+> 
+> If the EC chip is connected to the risc processor, we will bind its properties in the device-tree without modifing the source.
+> If the EC chip is connected to the X86/64 processor, we bind its the properties in the ACPI table and also without modifing the source.
+> Why do we need to bind the properties in ACPI or in the device-tree? Because it is an LPC interface, it cannot automatically load the driver like a USB or PCI device.
+> In the early days, we had to install the EC driver module in our HW platform and manually load it at every boot. Different Advantech HW platforms have different properties for HWMON and others sub-systems. This causes the EC source to be a bit dirty. It is necessary to obtain the hardware platform name from the BIOS DMI table and determine its attributes according to its platform name.
+> Now bind the attributes to ACPI table or device-tree, the EC source is more clear and universal for Advantech devices, and it is important that if the ACPI table matches, it can be automatically loaded.
+> 
+>>
+>> Right, but that is not the case here, they are using 2 device-tree
+>> properties (1), from patch 3/7:
+>>
+>> +properties:
+>> +  compatible:
+>> +    const: advantech,ahc1ec0
+>> +
+>> +  advantech,hwmon-profile:
+>> +    description:
+>> +      The number of sub-devices specified in the platform. Defines for the
+>> +      hwmon profiles can found in dt-bindings/mfd/ahc1ec0-dt.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    maxItems: 1
+>> +
+>> +  advantech,has-watchdog:
+>> +    description:
+>> +      Some implementations of the EC include a watchdog used to monitor
+>> the
+>> +      system. This boolean flag is used to specify whether this watchdog is
+>> +      present or not. Default is true, otherwise set to false.
+>> +    type: boolean
+>>
+>>
+>>>> but AFAIK you are the first to do this on x86.
+>>>
+>>> No, not the first. Once Intel tried to invent the pin control
+>>> configuration and muxing properties in ACPI, it was luckily rejected
+>>> (ACPI 6.x OTOH provides a set of special resources for that).
+>>>
+>>> So, NAK from me, *if* it's really the case. ACPI tables must be revisited.
+>>
+> 
+> I am not sure it supports vendor self-defined attributes for ACPI table?
+> 
+>> AFAIK Advantech are not defining things for which an ACPI standard exists,
+>> although these 2 properties might just as well may be 2 simple ACPI integer
+>> methods, which would actually make things a bit simpler (.e.g it would
+>> allow dropping patch 2/7 and 3/7 from the set).
+>>
+>> Campion, any reason why you went this route; and can the ACPI tables
+>> still be changed?
+>>
+> 
+> If patches 2/7 and 3/7 are removed, it will be even simpler.
+> This means that there is no device-tree binding designed, in fact, the EC chip only be integrated in the x86/64 platform at present.
+> Sorry, ACPI table now is integrated in the BIOS for Advantech UNO device, 
+> it may be revert to previous rule, that is, there is no ACPI table binding and manually loaded the EC driver. If you have any suggestons I would be very grateful.
+> 
+>> Regards,
+>>
+>> Hans
+> 
+
