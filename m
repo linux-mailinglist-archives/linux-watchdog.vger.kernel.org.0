@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB4E37BF03
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 May 2021 15:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5D937BF06
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 May 2021 15:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbhELN7R (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 May 2021 09:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
+        id S230375AbhELN7f (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 May 2021 09:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbhELN7R (ORCPT
+        with ESMTP id S230196AbhELN7f (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 May 2021 09:59:17 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0C2C061574;
-        Wed, 12 May 2021 06:58:09 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso20566540otb.13;
-        Wed, 12 May 2021 06:58:09 -0700 (PDT)
+        Wed, 12 May 2021 09:59:35 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D377C061574;
+        Wed, 12 May 2021 06:58:27 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id n32-20020a9d1ea30000b02902a53d6ad4bdso20610639otn.3;
+        Wed, 12 May 2021 06:58:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=WGXaBS28zz51CK0WFE0Kv69wdQDd8SbaKjqA6EoSxJI=;
-        b=BpGBM/mGowxVCrCqMocUHv5X7QPLZl4OC4fOOmk1jSHxzgESJVNBjZHCFlpyk36DqV
-         1O/yMZIey1I3whwVqT1lX4DmmwMPo2rIJ1cZE+YtINpJV2GRxSKIVLVIqs1nYl/vUrGy
-         uE7255NMWA/PdaugAmjwV8fcFPQ88pS/TcRKrw8Mur2QuxOU8gQGPMuJFAExQ19CrkT7
-         UI+EyHTBa2M/MntzcDDWEvipyHKfr8HUIRsXNzZStq82Pitu+3Zqyi5P0j8Fa4+3OwZb
-         vqYv6IDYCoCxQ8b5Dq+tRcIpIWFxyHNeqBC2iYuFNJS6QGcK3rwrPsyTOsP7hthPzReQ
-         hIxw==
+        bh=/B6RUEws7o/XOq9McZRw6u57e3muv/9j/S/KhBwmylE=;
+        b=ZVCWovKAOrqo0EWbBDE4po7opQmR3tP0kMtsRstWsLufWd1z/jncehAeodkblEGgJR
+         2FWOm7ztG/Gw4il551K2mQ6UtoGesXN4ecSntOQNqxNbiLdFTcKPPrAG7pSS0XBc/Sw6
+         AJ+qq1xgewbrsFD2glDHqxycSUt9ET5uV14ePV96m6XU3fJEioFGZwWFWKkiDD0Xzoeq
+         N4vTFrj4YO2D0GcXSJ1DLuRm9Hu8EE2wr0tvuIYDSqGQcLAUwIm+EVhBblbfh03bA7Zr
+         JQtTIl3pTK2OBTQmdac4QEit45CjhttaynB9E31a/vT47+jnqgJR07fElQcwzCpcHmi9
+         p6YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=WGXaBS28zz51CK0WFE0Kv69wdQDd8SbaKjqA6EoSxJI=;
-        b=sKEZtOJiUwmuE/a+eiqXmgH+fJzIhQw0WK3V4ZHZKIEoMHdzph3w2CoOdhtZZEgh/M
-         m2zz9IQjZ1TTlW68FVr7WIR4gU+93iGiDw2RJc3UBt5V8cXfyb7cUaojrfo51/FKFpIV
-         68Xf6JFjzMVF8j0dZFOxNhhIOlK7jFRdzkumeTz7letI0CbnbbI1QGk5JklymQcTH/YV
-         26Mb/F8zkHBGzp2YPZb914f03/H9wi/SnLTCtwWNorag65BNLOFmiF1o9OpTpH/9Rb3r
-         c6iMkRiYIqntVyVMK8SpjiL1y9ZH/llNfvvhDcT082jzz5hFoV9tSwEts2uswekEWuV/
-         p+2A==
-X-Gm-Message-State: AOAM531TrPtls6dHaCC1XnYMIoTy/IVZQdOB2U2wu32e0f9X+x8tSLpz
-        XkIBnFsLe3aAVtW8dpv93nE=
-X-Google-Smtp-Source: ABdhPJwTsVwr4E7FCdeSrzIC/1Dirq5RBQHWYxwaAztDWOxeaKsDlM5LxphiCfuvyctmpCsCc4W8tQ==
-X-Received: by 2002:a05:6830:4030:: with SMTP id i16mr7194414ots.294.1620827888519;
-        Wed, 12 May 2021 06:58:08 -0700 (PDT)
+        bh=/B6RUEws7o/XOq9McZRw6u57e3muv/9j/S/KhBwmylE=;
+        b=XZpas0pXLsy2XQ1B4c6VT5PXqVzhYSzzCewaixaFMW7Q191WOT2zl3FITklvSaSAJ+
+         E4f6RfiMbLg3yLDUxEbSH8JmHdmzt7X6rMME2dPvPWzvVpXACGsalEK7/JsnH9SkAnEu
+         noOLWWwTyxmSPUq8ZDf6/RfSLvfnIY3wbmQxGQ3V9imeVk1A9fGaOgv81bp5wpFh3vtx
+         Z3aso+OC2RF3n/YaD+mA5obu1OvY+6WfSRLIhThb0AxV+O3d5NNkgh4W1VjzXmIZQRcM
+         X+TRp0pI4qsQuHnsR+g7JboUpuOkEZBZgX9GnoP+JnBGxy80TxAWvb/jbtnb47lKclax
+         t0sQ==
+X-Gm-Message-State: AOAM5308DBw2kiowqPAROthZnStRLPvJcVhTb5TxYfzXcf/qVkElfNjf
+        R45bq5tljfD/fQszftpo/TI=
+X-Google-Smtp-Source: ABdhPJyG3gcRXffyGwHGRWVyNHyxyHIhPXMDjUoy62EqJKQcoT2K4UGa/tHV3pBrG/pfjDHroPkrHA==
+X-Received: by 2002:a05:6830:18d4:: with SMTP id v20mr10425834ote.313.1620827906901;
+        Wed, 12 May 2021 06:58:26 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e20sm17225oot.11.2021.05.12.06.58.07
+        by smtp.gmail.com with ESMTPSA id n37sm4481917otn.9.2021.05.12.06.58.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 06:58:07 -0700 (PDT)
+        Wed, 12 May 2021 06:58:26 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 May 2021 06:58:06 -0700
+Date:   Wed, 12 May 2021 06:58:25 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     shruthi.sanil@intel.com
 Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
@@ -57,29 +57,26 @@ Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
         kris.pan@linux.intel.com, mgross@linux.intel.com,
         srikanth.thokala@intel.com, lakshmi.bai.raja.subramanian@intel.com,
         mallikarjunappa.sangannavar@intel.com
-Subject: Re: [PATCH 01/10] watchdog: keembay: Update WDT pre-timeout during
- the initialization
-Message-ID: <20210512135806.GA1333995@roeck-us.net>
+Subject: Re: [PATCH 02/10] watchdog: keembay: Upadate WDT pretimeout for
+ every update in timeout
+Message-ID: <20210512135825.GB1333995@roeck-us.net>
 References: <20210512084724.14634-1-shruthi.sanil@intel.com>
- <20210512084724.14634-2-shruthi.sanil@intel.com>
+ <20210512084724.14634-3-shruthi.sanil@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210512084724.14634-2-shruthi.sanil@intel.com>
+In-Reply-To: <20210512084724.14634-3-shruthi.sanil@intel.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, May 12, 2021 at 02:17:15PM +0530, shruthi.sanil@intel.com wrote:
+On Wed, May 12, 2021 at 02:17:16PM +0530, shruthi.sanil@intel.com wrote:
 > From: Shruthi Sanil <shruthi.sanil@intel.com>
 > 
-> The pretimeout register has a default reset value. Hence
-> when a smaller WDT timeout is set which would be lesser than the
-> default pretimeout, the system behaves abnormally, starts
-> triggering the pretimeout interrupt even when the WDT is
-> not enabled, most of the times leading to system crash.
-> Hence an update in the pre-timeout is also required for the
-> default timeout that is being configured.
+> The pre-timeout value to be programmed to the register has to be
+> calculated and updated for every change in the timeout value.
+> Else the threshold time wouldn't be calculated to its
+> corresponding timeout.
 > 
 > Fixes: fa0f8d51e90d ("watchdog: Add watchdog driver for Intel Keembay Soc")
 > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
@@ -89,35 +86,21 @@ On Wed, May 12, 2021 at 02:17:15PM +0530, shruthi.sanil@intel.com wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/keembay_wdt.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/watchdog/keembay_wdt.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 > diff --git a/drivers/watchdog/keembay_wdt.c b/drivers/watchdog/keembay_wdt.c
-> index 547d3fea33ff..f2f5c9fae29c 100644
+> index f2f5c9fae29c..b2afeb4a60e3 100644
 > --- a/drivers/watchdog/keembay_wdt.c
 > +++ b/drivers/watchdog/keembay_wdt.c
-> @@ -29,6 +29,7 @@
->  #define WDT_LOAD_MAX		U32_MAX
->  #define WDT_LOAD_MIN		1
->  #define WDT_TIMEOUT		5
-> +#define WDT_PRETIMEOUT		4
+> @@ -109,6 +109,7 @@ static int keembay_wdt_set_timeout(struct watchdog_device *wdog, u32 t)
+>  {
+>  	wdog->timeout = t;
+>  	keembay_wdt_set_timeout_reg(wdog);
+> +	keembay_wdt_set_pretimeout_reg(wdog);
 >  
->  static unsigned int timeout = WDT_TIMEOUT;
->  module_param(timeout, int, 0);
-> @@ -224,11 +225,13 @@ static int keembay_wdt_probe(struct platform_device *pdev)
->  	wdt->wdd.min_timeout	= WDT_LOAD_MIN;
->  	wdt->wdd.max_timeout	= WDT_LOAD_MAX / wdt->rate;
->  	wdt->wdd.timeout	= WDT_TIMEOUT;
-> +	wdt->wdd.pretimeout	= WDT_PRETIMEOUT;
->  
->  	watchdog_set_drvdata(&wdt->wdd, wdt);
->  	watchdog_set_nowayout(&wdt->wdd, nowayout);
->  	watchdog_init_timeout(&wdt->wdd, timeout, dev);
->  	keembay_wdt_set_timeout(&wdt->wdd, wdt->wdd.timeout);
-> +	keembay_wdt_set_pretimeout(&wdt->wdd, wdt->wdd.pretimeout);
->  
->  	ret = devm_watchdog_register_device(dev, &wdt->wdd);
->  	if (ret)
+>  	return 0;
+>  }
 > -- 
 > 2.17.1
 > 
