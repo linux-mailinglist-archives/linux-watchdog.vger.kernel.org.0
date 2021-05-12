@@ -2,120 +2,155 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E453D37BF5E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 May 2021 16:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4528737BF9D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 May 2021 16:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbhELOHt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 May 2021 10:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S230320AbhELOQx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 May 2021 10:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbhELOHs (ORCPT
+        with ESMTP id S231440AbhELOQI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 May 2021 10:07:48 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6556EC061574;
-        Wed, 12 May 2021 07:06:38 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id u16so22357039oiu.7;
-        Wed, 12 May 2021 07:06:38 -0700 (PDT)
+        Wed, 12 May 2021 10:16:08 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9CDC061347;
+        Wed, 12 May 2021 07:14:38 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso20617519otb.13;
+        Wed, 12 May 2021 07:14:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=oy8eUtalMwAbg8wynclRyiPnado/Uo2NJP490ONiUbo=;
-        b=YqY/AB0R84rEUwKjaZ4bw2PWRLi+jjp0/7BAMxwccKlJDOMIAE6YG7sUyJLgd6pFNx
-         /ZUhdk9i3iF/VhFOmtibCfS5gaKljbeSE45G4BthNZlqrUYn9fwW6PLz2TtwpFydqzhG
-         7JjJve/OyBoAQkKLecl3OAZjPSvMkzAtyUys8WpDy+A1/zGG94Y1rFsTR0FzkrL1SoVz
-         +oBoSHlfOUQpACADiPA+xvWRDyUkTTYli4uQ91WHFOkjgmqnA9a/LCOkhNr3mBm8qUuU
-         zdC4Rt/lzqJmdDRDeZk+akwbe4A9BSLCTvvWTayCQKk7v3oO2sVqDj4EFTBXulpQvWYl
-         2LLg==
+        bh=h/2v8S6FtY6HcuVUHrB5RBON1H72Nf5qzZh/OC/rNz0=;
+        b=notmZQ44aCKDeGmL+DT6ijYkyZArYwy/nen6vTCnOMft2JsPO40HrthjgJ7I3gyUIi
+         AyepODpe/c9EAWPTw14AQFpzpVOpKoi/m8tyTezJLRcWdOxCWip58J9yCDbM7DkxXRlv
+         1Ez9PWcv6o8zwEhhA1RAaB6DSzqIo2Zml5kEPQOpJPUpOmvHq3tP3XKIupcPS7gA0dVu
+         2NrQf2Zgz8+QymIYvvqZywJQOqmWFqFBw5VVfmRsiW88vcWiw3UdHwo9PQcBoc+JvcvW
+         cvMJkrNDUqRon83mJ+BtyCg0X4fMxsTOZTGhMfKcGH0cVx+Acxa90MgyjU+dmradJhPj
+         HV8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=oy8eUtalMwAbg8wynclRyiPnado/Uo2NJP490ONiUbo=;
-        b=MKv5z3UueYBeqlL7xqpUbbZys4RfiVXj4IOCVAojg05dRPA7LArS58p6K+tI/J9Zku
-         R1En3/QXrSG/3oG9AIWKPykBGWF3K789t0HMsgaaWjwqVq6r2A6ZHhBePfM6v5VaQ0wW
-         sg4Yb5vaksE0Yb+qz4yRrNg8wLNyn0hXKF5VfNv8iSXilQ+JaI8DbJhhWCt0PbQSVQoR
-         SxqzGCAQhiyS5vyC25i5gbU8VupZBK8xax3jnDoeqz/jegJ7umt6n1czc/dq5a4+1Sr5
-         h+9IRhRcu8TVgYhnrlAL3uDFmPey0WSU31hlAhl8Rs1gPn+Ri21E46Rpnd0awON0ZvNA
-         bRVA==
-X-Gm-Message-State: AOAM533hUN+JWzsNfSEGg03XTs8j8kjyb7xFbGgla4/3F+JTwfJf/Yv4
-        lngU5qANg87LGFxwlwYgmnI=
-X-Google-Smtp-Source: ABdhPJzIAL+lLHZZUFV+qN0AE++7/Z4iD+3nXYuvOIOHXfH55IZIGN/SI2H/YgV3nGRe8aR1O+XgZA==
-X-Received: by 2002:aca:f206:: with SMTP id q6mr7783987oih.80.1620828397887;
-        Wed, 12 May 2021 07:06:37 -0700 (PDT)
+        bh=h/2v8S6FtY6HcuVUHrB5RBON1H72Nf5qzZh/OC/rNz0=;
+        b=VGx+4xjg5Pv7CDimKbA0eT50bm6Pb0slGkJoEQO8VVEaYDfuaqd7ZVId0A6IW/Q9XZ
+         +qMtlJqu47EOHIGPB//49m6sNUMGjxxsq0SnRcvHqEu22CILop5O2tCNo3S8E8xVaLSZ
+         bbSNfNzVk2JL1HiMV8zYMjKljwXNAx1+qciBb8pB6iMWcGRzkdDM0K1AwsmT2bgubwDy
+         v/bs446j2wUdVqFrhaoyVe672wN6gsJoYvD2MxYjN5hFOnP7SHgV3w3u9S8CFxnNLG0a
+         Rlrnc+lVSSqRbugK/3b9wY6vqdnefF5OObjJsM3syRzXLNCJFzwNgscpVkpnQ3z8Xetn
+         NW8g==
+X-Gm-Message-State: AOAM5334q6cCq3uIEefmrSyYJNlxcuhQUMq+Wzb5GXlOaiW4iSw/IsTm
+        TIb2YeztW7Yz5PQIAUXjOVU=
+X-Google-Smtp-Source: ABdhPJwFZion7oe6mvm7vc9ex2JG29Ufe3gjJOw30Wt+ev77WHmd8lSKoEDPcx9RA5OJsGQ3Ee95hw==
+X-Received: by 2002:a9d:2f66:: with SMTP id h93mr26009143otb.188.1620828877708;
+        Wed, 12 May 2021 07:14:37 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r19sm24169ooj.5.2021.05.12.07.06.36
+        by smtp.gmail.com with ESMTPSA id z9sm25659oog.25.2021.05.12.07.14.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 07:06:37 -0700 (PDT)
+        Wed, 12 May 2021 07:14:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 May 2021 07:06:36 -0700
+Date:   Wed, 12 May 2021 07:14:35 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zou Wei <zou_wei@huawei.com>
-Cc:     wim@linux-watchdog.org, vz@mleia.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] watchdog: Fix possible use-after-free by calling
- del_timer_sync()
-Message-ID: <20210512140636.GK1333995@roeck-us.net>
-References: <1620802676-19701-1-git-send-email-zou_wei@huawei.com>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] watchdog: imx2_wdt: clear WDOG_HW_RUNNING before
+ suspend
+Message-ID: <20210512141435.GL1333995@roeck-us.net>
+References: <1620732032-7675-1-git-send-email-yibin.gong@nxp.com>
+ <d5364293-8cba-0d39-aa45-a55c5d6d2af6@roeck-us.net>
+ <VE1PR04MB66889A576AD92D4D789199D489529@VE1PR04MB6688.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1620802676-19701-1-git-send-email-zou_wei@huawei.com>
+In-Reply-To: <VE1PR04MB66889A576AD92D4D789199D489529@VE1PR04MB6688.eurprd04.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, May 12, 2021 at 02:57:56PM +0800, Zou Wei wrote:
-> This driver's remove path calls del_timer(). However, that function
-> does not wait until the timer handler finishes. This means that the
-> timer handler may still be running after the driver's remove function
-> has finished, which would result in a use-after-free.
+On Wed, May 12, 2021 at 11:34:37AM +0000, Robin Gong wrote:
+> On 2021/05/11 11:59 Guenter Roeck <groeck7@gmail.com> wrote: 
+> > On 5/11/21 4:20 AM, Robin Gong wrote:
+> > > Since watchdog_ping_work is not freezable so that it maybe scheduled
+> > > before imx2_wdt_resume where watchdog clock enabled, hence, kernel
+> > > will hang in imx2_wdt_ping without clock, and then watchdog reset
+> > > happen. Prevent the above case by clearing WDOG_HW_RUNNING before
+> > > suspend, and restore it with ping in imx2_wdt_resume.
+> > >
+> > > Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+> > > ---
+> > >   drivers/watchdog/imx2_wdt.c | 8 ++++++++
+> > >   1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> > > index b84f80f..d3751e9 100644
+> > > --- a/drivers/watchdog/imx2_wdt.c
+> > > +++ b/drivers/watchdog/imx2_wdt.c
+> > > @@ -357,6 +357,13 @@ static int __maybe_unused
+> > imx2_wdt_suspend(struct device *dev)
+> > >   		 */
+> > >   		__imx2_wdt_set_timeout(wdog, IMX2_WDT_MAX_TIME);
+> > >   		imx2_wdt_ping(wdog);
+> > > +
+> > > +		/*
+> > > +		 * clear WDOG_HW_RUNNING to prevent watchdog_ping_work
+> > running
+> > > +		 * before imx2_wdt_resume where clock enabled, otherwise kernel
+> > > +		 * will hang and watchdog reset happen then.
+> > > +		 */
+> > > +		clear_bit(WDOG_HW_RUNNING, &wdog->status);
+> > >   	}
+> > >
+> > >   	clk_disable_unprepare(wdev->clk);
+> > > @@ -386,6 +393,7 @@ static int __maybe_unused imx2_wdt_resume(struct
+> > device *dev)
+> > >   	if (imx2_wdt_is_running(wdev)) {
+> > >   		imx2_wdt_set_timeout(wdog, wdog->timeout);
+> > >   		imx2_wdt_ping(wdog);
+> > > +		set_bit(WDOG_HW_RUNNING, &wdog->status);
+> > >   	}
+> > >
+> > >   	return 0;
+> > >
+> > I really don't like this; it depends on assumptions how the watchdog core
+> > works, and it misuses WDOG_HW_RUNNING to indicate that the clock is
+> > stopped (or that the driver is in suspend mode).
+> > 
+> > If ping doesn't work with the clock stopped, I think it would be much better to
+> > have a flag indicating that the clock is stopped, and have the ping function do
+> > nothing if it is called with stopped clock (ie if suspended).
+> > 
+> Understood, but I think that corner case should be a common potential issue
+> in all watchdog drivers which disable clock in suspend with WDOG_HW_RUNNING.
+> So common way looks better than many different specific flags in such different
+> watchdog driver with the similar intention?
 > 
-> Fix by calling del_timer_sync(), which makes sure the timer handler
-> has finished, and unable to re-schedule itself.
+
+We can not assume that the situation is exactly the same for all drivers
+and use a core flag to indicate some driver specific state just to avoid
+a driver-internal flag.
+
+Either case, it looks like you are saying that the watchdog can be stopped
+after all, by disabling its clock.
+
+> BTW, for i.mx2_wdt which watchdog can't be stop unless kernel enter into suspend,
+> that seems like watchdog stop after suspend and clear WDOG_HW_RUNNING makes
+> sense? 
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zou Wei <zou_wei@huawei.com>
 
-If you have more of those, _please_ submit them together to save review time.
+Yes, if you make it official and add a stop function which disables the watchdog
+by stopping its clock. Then the driver should not set WDOG_HW_RUNNING in the
+first place, and use the normal mechanisms to start and stop the watchdog.
+That would include starting the clock in the start function, and stopping it
+in the stop function.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+Thanks,
 Guenter
-
-> ---
->  drivers/watchdog/lpc18xx_wdt.c | 2 +-
->  drivers/watchdog/w83877f_wdt.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/lpc18xx_wdt.c b/drivers/watchdog/lpc18xx_wdt.c
-> index 78cf11c..60b6d74 100644
-> --- a/drivers/watchdog/lpc18xx_wdt.c
-> +++ b/drivers/watchdog/lpc18xx_wdt.c
-> @@ -292,7 +292,7 @@ static int lpc18xx_wdt_remove(struct platform_device *pdev)
->  	struct lpc18xx_wdt_dev *lpc18xx_wdt = platform_get_drvdata(pdev);
->  
->  	dev_warn(&pdev->dev, "I quit now, hardware will probably reboot!\n");
-> -	del_timer(&lpc18xx_wdt->timer);
-> +	del_timer_sync(&lpc18xx_wdt->timer);
->  
->  	return 0;
->  }
-> diff --git a/drivers/watchdog/w83877f_wdt.c b/drivers/watchdog/w83877f_wdt.c
-> index 5772cc5..f265086 100644
-> --- a/drivers/watchdog/w83877f_wdt.c
-> +++ b/drivers/watchdog/w83877f_wdt.c
-> @@ -166,7 +166,7 @@ static void wdt_startup(void)
->  static void wdt_turnoff(void)
->  {
->  	/* Stop the timer */
-> -	del_timer(&timer);
-> +	del_timer_sync(&timer);
->  
->  	wdt_change(WDT_DISABLE);
->  
-> -- 
-> 2.6.2
-> 
