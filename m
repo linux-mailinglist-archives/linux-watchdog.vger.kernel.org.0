@@ -2,102 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E916637F193
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 May 2021 05:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0E537F1B0
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 May 2021 05:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbhEMDQT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 May 2021 23:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbhEMDQS (ORCPT
+        id S230406AbhEMDfR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 May 2021 23:35:17 -0400
+Received: from lucky1.263xmail.com ([211.157.147.131]:43542 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230018AbhEMDfP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 May 2021 23:16:18 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45317C061574;
-        Wed, 12 May 2021 20:15:08 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id w22so10280025oiw.9;
-        Wed, 12 May 2021 20:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KDa68587p2IUB2lntlrtQ9wVaKOr22WxUDp/EQ55LQ0=;
-        b=or1fHz2q7LaWUiHmD//pzIek+uRAu4u/Bpg513PcONaXoPkuOaBVp3hwSxTxk5Uby/
-         1WoF/5Esfpzmyk34GV25W9q+b9W5/KcMkCvhlqAdONR+Uv5FL1YOSfSKUlcvouDlr0Yp
-         GyksBkZ2yu38uR2ZFjacsaUQBurMgrZ4yVXuA8o0X1lTzEnB6dDBrahegWchBF10+DOb
-         MFbbcuDZ5nrPLlN1LepteyaPnxtyfDzdrnBJsPH+QUj5TyIUAEeyI77+D2UP1T4848aj
-         RoqOcfk3E8ElFVs9RBWdn7OasSmYDQPMDPB+RIcliSs7qzCipPS7VQp/Zju5zJw5P0an
-         n2vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KDa68587p2IUB2lntlrtQ9wVaKOr22WxUDp/EQ55LQ0=;
-        b=EErYkDpCU472QJeTaZBiulOOL/OFZ3S8nOJG1JRD45RdmqPTdW3oB1dNTw2cXm3hwa
-         EgHlsZvpn0RGYT70B6kbnmV6UVnzHUGHN5wz+WqwCZAt2iwddv7gdy7j7MshWBukIBnx
-         5tFSwyQytfRg3AOEUXUOpvhiQQadfoCCj+VrPSljwBNQdsfbblEJdvO0MpUlCWfEQwNf
-         2KSklRNCnzfcRrMgaIwVlvfcuJ7KWv0NPz1miA5GgEZqqtRJXxLEfXHqHJRdFNyCDOLO
-         cEuwDA77PnPF2/Xszi8mwafYyxPxq6yW0DX7PlDXZLlezUwFGMeeJ9rydh4cEaXIgHuD
-         QUyg==
-X-Gm-Message-State: AOAM531c2pNWL4c2EeiCpBKP32z+BwP081dIIietHCSVm/qWwk8M6Q9q
-        JRx7RMoI9a+P71ijYX5mXZARLxsYW8U=
-X-Google-Smtp-Source: ABdhPJxHthqNA+D7XuNOx7MR5jyKe9yhgJtCj5lSLm0chP00NOdl0zWrhruPcQQhuPCAecsu/x++3A==
-X-Received: by 2002:aca:f5d0:: with SMTP id t199mr1386947oih.50.1620875706935;
-        Wed, 12 May 2021 20:15:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x14sm397530oic.3.2021.05.12.20.15.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 May 2021 20:15:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog: dw_wdt: Fix duplicate included linux/kernel.h
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        wim@linux-watchdog.org
-Cc:     p.zabel@pengutronix.de, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1620871503-100900-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b885c7ac-2e25-6a03-4434-d0b31f92a15a@roeck-us.net>
-Date:   Wed, 12 May 2021 20:15:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <1620871503-100900-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Wed, 12 May 2021 23:35:15 -0400
+Received: from localhost (unknown [192.168.167.224])
+        by lucky1.263xmail.com (Postfix) with ESMTP id D0640BA0CE;
+        Thu, 13 May 2021 11:33:58 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P12381T139987660035840S1620876834871090_;
+        Thu, 13 May 2021 11:33:57 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <9e628830b7c19a64fdc016674d074f56>
+X-RL-SENDER: cl@rock-chips.com
+X-SENDER: cl@rock-chips.com
+X-LOGIN-NAME: cl@rock-chips.com
+X-FST-TO: heiko@sntech.de
+X-RCPT-COUNT: 30
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   <cl@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
+        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
+        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
+Subject: [RESEND PATCH v4 06/10] dt-bindings: gpio: change items restriction of clock for rockchip,gpio-bank
+Date:   Thu, 13 May 2021 11:33:51 +0800
+Message-Id: <20210513033351.17879-1-cl@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210429081151.17558-1-cl@rock-chips.com>
+References: <20210429081151.17558-1-cl@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/12/21 7:05 PM, Jiapeng Chong wrote:
-> Clean up the following includecheck warning:
-> 
-> ./drivers/watchdog/dw_wdt.c: linux/kernel.h is included more than once.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->   drivers/watchdog/dw_wdt.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index 32d0e17..b1642e2 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -19,7 +19,6 @@
->   #include <linux/delay.h>
->   #include <linux/err.h>
->   #include <linux/io.h>
-> -#include <linux/kernel.h>
->   #include <linux/module.h>
->   #include <linux/moduleparam.h>
->   #include <linux/interrupt.h>
-> 
+From: Liang Chen <cl@rock-chips.com>
 
-When making such changes, please use the opportunity to reorder include files
-in alphabetic order to help ensure that duplicate includes don't happen again.
+The clock property need 2 items on some rockchip chips.
 
-Thanks,
-Guenter
+Signed-off-by: Liang Chen <cl@rock-chips.com>
+---
+ Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
+index d993e00..0df147f 100644
+--- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
++++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
+@@ -22,7 +22,11 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
++    items:
++      - description: APB interface clock source
++      - description: GPIO debounce reference clock source
+ 
+   gpio-controller: true
+ 
+-- 
+2.7.4
+
+
 
