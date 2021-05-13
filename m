@@ -2,95 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4481637F106
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 May 2021 03:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B8737F116
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 May 2021 04:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbhEMByF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 May 2021 21:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbhEMByE (ORCPT
+        id S229854AbhEMCCt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 May 2021 22:02:49 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2718 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229819AbhEMCCs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 May 2021 21:54:04 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D567C061574
-        for <linux-watchdog@vger.kernel.org>; Wed, 12 May 2021 18:52:53 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id s24-20020a4aead80000b02901fec6deb28aso5359649ooh.11
-        for <linux-watchdog@vger.kernel.org>; Wed, 12 May 2021 18:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5mUons8YwS7WKuwWFuuodYjo53U6i9GClHKb5atmwik=;
-        b=b4Yn3zBrTQgwcmM8tCxJ/Yqk/eW3pOl+IB9qhzyCf3HDAaKao6FBpl3xZXyFXJ0JvB
-         Y982gu1s5jeDKFu52YGNYktX5OKygDU8dY9fVa4wEcbt6l+LhrDyz5l7xPATBLAA5e88
-         SJQUleVvuhc2TBIM0BNdAKPn+9BIyavwbaqfgBNc3fsgsY+PDQHp+RguQyqrNa5TFMla
-         jui0K7iG5gF/37br64VNlqDtSU/hHOkflU/zjrCQFhmz96+aXpbMfA2AuuTEFmr5rtr7
-         hYkF7EU3xPSOcp7Q5DeHaMFFsmQKk3IbBj5v4ovvzgpGuKt04g6zIuTCNV8R3ZC5gZ2A
-         NYKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5mUons8YwS7WKuwWFuuodYjo53U6i9GClHKb5atmwik=;
-        b=j0IEdUHS5V4V/4l4nDg7QTPihVp5uUVf3xiqIGwd2NyLVuWFxi8zzeIBa38fWzb7cE
-         adpdd2mC2p0WrDnhckyWOLrYtZgQgftVBmXdayFaHcVND/x7IM5yY9XZV2PV+doj7Nca
-         FwlCMS5QtYG3QudhgJqLQR1YeDmlEc/1jNrDC6ULYdSf8wmihsjruKYTegVjguH7Mb3Q
-         ereJbpE1s+vyzmhCbekMoxjXjthDMrDaLnrvW1Cx5HUJC4+5yIFWwwt872VWb/onF/lt
-         N8fN0jHsKe+nTNtkfWhxCoRuIUS9sk9VK9QNqjvQSHJtpE9L8m7gu1qzn5qxZktc9xtU
-         pIfA==
-X-Gm-Message-State: AOAM530KTSBFlREKfPhhE3khmtRyxTYVJEfK9yRf33ezR4xIsVaPeU7g
-        AjVBNlhtGawJhjc4P3JEv7dt1XiQ6Dw=
-X-Google-Smtp-Source: ABdhPJwPIEKh9xDfSotUR37YMl8NBBzvKM62JL+zB/xsI9SLODHPHLYMZ1hayoCoG09lSJCCmwexzw==
-X-Received: by 2002:a4a:ce8f:: with SMTP id f15mr30262657oos.8.1620870772218;
-        Wed, 12 May 2021 18:52:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f9sm354627otq.27.2021.05.12.18.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 May 2021 18:52:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog/hpwdt: New PCI IDs
-To:     Jerry Hoemann <jerry.hoemann@hpe.com>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org
-References: <1620865548-11895-1-git-send-email-jerry.hoemann@hpe.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <69496131-2509-4c9f-2d4f-3d231fe99a6a@roeck-us.net>
-Date:   Wed, 12 May 2021 18:52:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 12 May 2021 22:02:48 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FgZZn1jbDz1BHsb;
+        Thu, 13 May 2021 09:58:57 +0800 (CST)
+Received: from [10.174.178.208] (10.174.178.208) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 13 May 2021 10:01:36 +0800
+Subject: Re: [PATCH -next] watchdog: Fix possible use-after-free by calling
+ del_timer_sync()
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <wim@linux-watchdog.org>, <vz@mleia.com>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1620802676-19701-1-git-send-email-zou_wei@huawei.com>
+ <20210512140636.GK1333995@roeck-us.net>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <a7e5baa5-519f-cc55-42aa-affa6c72c530@huawei.com>
+Date:   Thu, 13 May 2021 10:01:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <1620865548-11895-1-git-send-email-jerry.hoemann@hpe.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210512140636.GK1333995@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/12/21 5:25 PM, Jerry Hoemann wrote:
-> New hardware with new PCI ID info.
-> ---
+Hi Guenter,
 
-Patches are not acceptable without Signed-off-by: tag, sorry.
+Thanks for your review. If there are similar issues in the future, I 
+will collect them together and submit as one patch.
 
-Guenter
-
-
->   drivers/watchdog/hpwdt.c | 1 +
->   1 file changed, 1 insertion(+)
+On 2021/5/12 22:06, Guenter Roeck wrote:
+> On Wed, May 12, 2021 at 02:57:56PM +0800, Zou Wei wrote:
+>> This driver's remove path calls del_timer(). However, that function
+>> does not wait until the timer handler finishes. This means that the
+>> timer handler may still be running after the driver's remove function
+>> has finished, which would result in a use-after-free.
+>>
+>> Fix by calling del_timer_sync(), which makes sure the timer handler
+>> has finished, and unable to re-schedule itself.
+>>
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Zou Wei <zou_wei@huawei.com>
 > 
-> diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
-> index 22ddba3..a5006a5 100644
-> --- a/drivers/watchdog/hpwdt.c
-> +++ b/drivers/watchdog/hpwdt.c
-> @@ -45,6 +45,7 @@
->   static const struct pci_device_id hpwdt_devices[] = {
->   	{ PCI_DEVICE(PCI_VENDOR_ID_COMPAQ, 0xB203) },	/* iLO2 */
->   	{ PCI_DEVICE(PCI_VENDOR_ID_HP, 0x3306) },	/* iLO3 */
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HP_3PAR, 0x0389) },	/* PCtrl */
->   	{0},			/* terminate list */
->   };
->   MODULE_DEVICE_TABLE(pci, hpwdt_devices);
+> If you have more of those, _please_ submit them together to save review time.
 > 
-
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Guenter
+> >> ---
+>>   drivers/watchdog/lpc18xx_wdt.c | 2 +-
+>>   drivers/watchdog/w83877f_wdt.c | 2 +-
+>>   2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/lpc18xx_wdt.c b/drivers/watchdog/lpc18xx_wdt.c
+>> index 78cf11c..60b6d74 100644
+>> --- a/drivers/watchdog/lpc18xx_wdt.c
+>> +++ b/drivers/watchdog/lpc18xx_wdt.c
+>> @@ -292,7 +292,7 @@ static int lpc18xx_wdt_remove(struct platform_device *pdev)
+>>   	struct lpc18xx_wdt_dev *lpc18xx_wdt = platform_get_drvdata(pdev);
+>>   
+>>   	dev_warn(&pdev->dev, "I quit now, hardware will probably reboot!\n");
+>> -	del_timer(&lpc18xx_wdt->timer);
+>> +	del_timer_sync(&lpc18xx_wdt->timer);
+>>   
+>>   	return 0;
+>>   }
+>> diff --git a/drivers/watchdog/w83877f_wdt.c b/drivers/watchdog/w83877f_wdt.c
+>> index 5772cc5..f265086 100644
+>> --- a/drivers/watchdog/w83877f_wdt.c
+>> +++ b/drivers/watchdog/w83877f_wdt.c
+>> @@ -166,7 +166,7 @@ static void wdt_startup(void)
+>>   static void wdt_turnoff(void)
+>>   {
+>>   	/* Stop the timer */
+>> -	del_timer(&timer);
+>> +	del_timer_sync(&timer);
+>>   
+>>   	wdt_change(WDT_DISABLE);
+>>   
+>> -- 
+>> 2.6.2
+>>
+> .
+> 
