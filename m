@@ -2,88 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D643806E3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 May 2021 12:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9AD380A48
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 May 2021 15:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232952AbhENKIa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 14 May 2021 06:08:30 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:42638 "EHLO gloria.sntech.de"
+        id S232495AbhENNTK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 May 2021 09:19:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52146 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232431AbhENKI3 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 14 May 2021 06:08:29 -0400
-Received: from p5b127fa9.dip0.t-ipconnect.de ([91.18.127.169] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1lhUia-0001yI-9m; Fri, 14 May 2021 12:06:52 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     cl@rock-chips.com
-Cc:     robh+dt@kernel.org, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        cl@rock-chips.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        jamie@jamieiles.com, linux-watchdog@vger.kernel.org, maz@kernel.org
-Subject: Re: [RESEND PATCH v4 06/10] dt-bindings: gpio: change items restriction of clock for rockchip,gpio-bank
-Date:   Fri, 14 May 2021 12:06:51 +0200
-Message-ID: <5026524.44csPzL39Z@phil>
-In-Reply-To: <20210513064606.18397-1-cl@rock-chips.com>
-References: <20210429081151.17558-1-cl@rock-chips.com> <20210513064606.18397-1-cl@rock-chips.com>
+        id S230075AbhENNTJ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 14 May 2021 09:19:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CC3A61451;
+        Fri, 14 May 2021 13:17:56 +0000 (UTC)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, John Crispin <john@phrozen.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] MIPS: ralink: of: fix build of rt2880_wdt watchdog module
+Date:   Fri, 14 May 2021 09:17:50 -0400
+Message-Id: <20210514131750.52867-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+When rt2880_wdt watchdog driver is built as a module, the
+rt_sysc_membase needs to be exported (it is being used via inlined
+rt_sysc_r32):
 
-Am Donnerstag, 13. Mai 2021, 08:46:06 CEST schrieb cl@rock-chips.com:
-> From: Liang Chen <cl@rock-chips.com>
-> 
-> The clock property need 2 items on some rockchip chips.
-> 
-> Signed-off-by: Liang Chen <cl@rock-chips.com>
+  ERROR: modpost: "rt_sysc_membase" [drivers/watchdog/rt2880_wdt.ko] undefined!
 
-this patch should definitly move over to Jianquns gpio driver series,
-as it introduces the usage of these new clocks.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ arch/mips/ralink/of.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Also while the single-clock variant definitly doesn't need it,
-I think we may want clock-names "apb_pclk", "debounce-ref" for the
-2-clock variants?
-
-
-Heiko
-
-> ---
->  Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> index d993e00..0d62c28 100644
-> --- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> @@ -22,7 +22,10 @@ properties:
->      maxItems: 1
->  
->    clocks:
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: APB interface clock source
-> +      - description: GPIO debounce reference clock source
->  
->    gpio-controller: true
->  
-> 
-
-
-
+diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
+index 0c5de07da097..b3ce706426c4 100644
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -24,6 +24,8 @@
+ #include "common.h"
+ 
+ __iomem void *rt_sysc_membase;
++EXPORT_SYMBOL_GPL(rt_sysc_membase);
++
+ __iomem void *rt_memc_membase;
+ 
+ __iomem void *plat_of_remap_node(const char *node)
+-- 
+2.27.0
 
