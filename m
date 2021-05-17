@@ -2,103 +2,111 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793F0386D02
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 May 2021 00:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4B6386E3A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 May 2021 02:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245672AbhEQWh3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 May 2021 18:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236978AbhEQWh2 (ORCPT
+        id S237278AbhERASI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 May 2021 20:18:08 -0400
+Received: from gateway23.websitewelcome.com ([192.185.50.107]:41338 "EHLO
+        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235539AbhERASH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 May 2021 18:37:28 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E99C061573;
-        Mon, 17 May 2021 15:36:10 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id k10so6087080qtp.9;
-        Mon, 17 May 2021 15:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/BL81Zvw47CwZwFDCCckd5WGqcHgC/YA9bmIFVjzNT0=;
-        b=JTNH/INRb5+rdbfSEjXZ/kvPEYZTwfpcpJpgIQCj5G9kViFSAHDWb31Ckhy6Tp13zt
-         GCmgQ9cGbnnwk0UVUHBcHh3xWxvVgQX1Kp212V3oz7Y8j5RZYSqzNQjsU1BO1M+d4XgO
-         Ttk62KvtpkdxjHFLa10cpODOLiuzykNlSazLFJoB1ykjeN9hQVIxTJYIRmhapY2BxyVM
-         swEFhmQPNHpVFbk5vwOBAD32L2dUGV39mGvo5KK0Nik8QlUUX63nhboWLAM7ox0cML98
-         UXJ/CjMiN3p/8G5z4JQ4soahT3tjjfB4Xd/jaEq4VqQmBiE/Zlk5EqK3kZWxkNpnXqqv
-         2+jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=/BL81Zvw47CwZwFDCCckd5WGqcHgC/YA9bmIFVjzNT0=;
-        b=txilG4wYGKQ67a7poMzyQ/YHrj9mB482kCAgy3dG0adx0Fbgzz7n7tPqs4bPO8wO3J
-         JZDLc6ZBqnoCsmRSrnIvsHnPNzP7PQmv1SLERRmzZga8e3gfRFHFa+hPLmmBIR0fwX08
-         Pq/o3Gq6ta7qtHat8p0Zg+kAGLpePJfG0d2QKNrQAD6pQTp0Og4Wqa/jydDF/0/hApoN
-         viDLQSWeqU3NxfVkV6dFFE4SbDADE+I1YXcT5ZmLRSe9lUbS48oZuGqO7EznharnNthD
-         wsl+4Pic4rFvG71VWYt5d6DDwxYOCwgx9/WQT9c5uSZ5QaM9N32k5J6+Rxw0PHXHDMEB
-         NbkA==
-X-Gm-Message-State: AOAM5318lzVVvvQ7bh70vhPC75Xp2QgWPP67kma6UQQDC/9H3OiJbYoW
-        jE3c76RXonqZxS5Ze9AZ7rc=
-X-Google-Smtp-Source: ABdhPJw8fL/eLIB8o69xiooADp1RJIks4Qz1C3Bv3bpYnXa2jFykj0Mlx8098hm+PQz4FqaRP+fxYg==
-X-Received: by 2002:ac8:7956:: with SMTP id r22mr1016958qtt.361.1621290970055;
-        Mon, 17 May 2021 15:36:10 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w7sm11143840qtn.91.2021.05.17.15.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 15:36:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 17 May 2021 15:36:08 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     'Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Mon, 17 May 2021 20:18:07 -0400
+X-Greylist: delayed 1374 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 May 2021 20:18:07 EDT
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id AD4BE15796
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 May 2021 18:53:54 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id in3alol8ZDedfin3al2E2W; Mon, 17 May 2021 18:53:54 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KaZSgQ5AwwL1G4KSoPBBVOyY8ngU6DX5pQRS+K4Gsp8=; b=LXF5j1v8WL1XOaR/22XEPW0FO2
+        sfvoBZirqQhtHjUdNK+prxqKNQNulcOptOMZ14ko798RBwi60avG/wUFWjmFyoBLD8KdmUSvX5Mk+
+        atqBqFXTlae2cb3O9iUwvDrHzyExVIbeKdvnfwDO+TOvUYBsvleDoyK13yDw9Mjp7Pefe57COxB2D
+        oBe0C7bYTeyPaZFf3TXPhBoL/IRqtmwPMGT9E7WUpcMtXy4Q2CjhB3OzPoL/CgCahjpPhJK981rP7
+        rwN/yYrq6x940ofwtq1e4LFAg05fZevh7cJF6zAfVyEaFhcWUJ8aP7X3TDk4LnASfaIljeBNycQnD
+        8bhTS5UA==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:53332 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1lin3Y-001qui-5i; Mon, 17 May 2021 18:53:52 -0500
+Subject: Re: [PATCH 057/141] watchdog: Fix fall-through warnings for Clang
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH -next] watchdog: jz4740: Fix return value check in
- jz4740_wdt_probe()
-Message-ID: <20210517223608.GA3628982@roeck-us.net>
-References: <20210304045909.945799-1-weiyongjun1@huawei.com>
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <713aa26be06d50dd3bb582a3cb71f04787ad5d5b.1605896059.git.gustavoars@kernel.org>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Message-ID: <66f87bbf-3693-3dda-7bf4-12becb16bf31@embeddedor.com>
+Date:   Mon, 17 May 2021 18:54:35 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210304045909.945799-1-weiyongjun1@huawei.com>
+In-Reply-To: <713aa26be06d50dd3bb582a3cb71f04787ad5d5b.1605896059.git.gustavoars@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1lin3Y-001qui-5i
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:53332
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 17
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Mar 04, 2021 at 04:59:09AM +0000, 'Wei Yongjun wrote:
-> From: Wei Yongjun <weiyongjun1@huawei.com>
-> 
-> In case of error, the function device_node_to_regmap() returns
-> ERR_PTR() and never returns NULL. The NULL test in the return
-> value check should be replaced with IS_ERR().
-> 
-> Fixes: 6d532143c915 ("watchdog: jz4740: Use regmap provided by TCU driver")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-> Acked-by: Paul Cercueil <paul@crapouillou.net>
+Hi all,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I'm taking this in my -next[1] branch for v5.14.
 
+Thanks
+--
+Gustavo
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/log/?h=for-next/kspp
+
+On 11/20/20 12:32, Gustavo A. R. Silva wrote:
+> In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
+> by explicitly adding a fallthrough pseudo-keyword instead of letting the
+> code fall through to the next case.
+> 
+> Link: https://github.com/KSPP/linux/issues/115
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 > ---
->  drivers/watchdog/jz4740_wdt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/watchdog/machzwd.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/watchdog/jz4740_wdt.c b/drivers/watchdog/jz4740_wdt.c
-> index bdf9564efa29..395bde79e292 100644
-> --- a/drivers/watchdog/jz4740_wdt.c
-> +++ b/drivers/watchdog/jz4740_wdt.c
-> @@ -176,9 +176,9 @@ static int jz4740_wdt_probe(struct platform_device *pdev)
->  	watchdog_set_drvdata(jz4740_wdt, drvdata);
->  
->  	drvdata->map = device_node_to_regmap(dev->parent->of_node);
-> -	if (!drvdata->map) {
-> +	if (IS_ERR(drvdata->map)) {
->  		dev_err(dev, "regmap not found\n");
-> -		return -EINVAL;
-> +		return PTR_ERR(drvdata->map);
+> diff --git a/drivers/watchdog/machzwd.c b/drivers/watchdog/machzwd.c
+> index 743377c5b173..73f2221f6222 100644
+> --- a/drivers/watchdog/machzwd.c
+> +++ b/drivers/watchdog/machzwd.c
+> @@ -174,6 +174,7 @@ static inline void zf_set_timer(unsigned short new, unsigned char n)
+>  		fallthrough;
+>  	case WD2:
+>  		zf_writeb(COUNTER_2, new > 0xff ? 0xff : new);
+> +		fallthrough;
+>  	default:
+>  		return;
 >  	}
->  
->  	return devm_watchdog_register_device(dev, &drvdata->wdt);
+> 
