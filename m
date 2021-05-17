@@ -2,71 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC03382D99
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 May 2021 15:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5DA382DA6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 May 2021 15:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbhEQNkp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 May 2021 09:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
+        id S237442AbhEQNmo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 May 2021 09:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235562AbhEQNko (ORCPT
+        with ESMTP id S237414AbhEQNml (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 May 2021 09:40:44 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0DEC061573;
-        Mon, 17 May 2021 06:39:28 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id c13so1891659qvx.5;
-        Mon, 17 May 2021 06:39:28 -0700 (PDT)
+        Mon, 17 May 2021 09:42:41 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA58C061573
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 May 2021 06:41:24 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id 197so5666242qkl.12
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 May 2021 06:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=A3NxUbNLMPXTjkL8u55YMZmOt8zksMxOha2crYcJLBA=;
-        b=kmO+qJKsZcLoOF7PGkm7L32EvjE7uvAOFNYHvxVYs+HohMpY3FgbtRFNwYIxunRfy3
-         QF6nFYW+Q1rX8DcIqD/0A1aPDtX8Lc8C6bNEocA1mPYbW0ydnWBkQ2UEE96b7Ptcqmt6
-         rz7+Nf2fSE3WvA5jeNY8Xepddza2/Huo7nU/zH8TgkESOpyqvnDOaYqGiN4snhz+YlDf
-         IoedFzl45I0+r2fcyvlu9EeAA9FBaRLnofRhDy/Cz7yoxKtA9w6BMvXqrccsz8gbts3M
-         doukWLr7clciHBmHFe0/3oJkERLs+GvBkiSCaYnNTvpPVjdLF3R6MWglbb7AUWtlfk/G
-         ambQ==
+        bh=OG7vZEvNBsToH7JZriktJz2uT0xCgopXQHhNB3zh1S4=;
+        b=C8hxr0wNXKrstfUMiWjr8tC3k4nvVPLFaWb+9OlUBe8+XwUmSW1smq/sjq0c9rLBMN
+         +1aCayEJQVOgKkmfvFnuLlzPPhdeYa1P5OeRPF6soc7VN11GchkwX0Z+qQJIL1XKGuhG
+         /uq0Eiv3abmnKYQ1SKwTMz5qW4XW46lmMdWCgTuL8Am9wY8KCDmMxdAFOcV5f9TFm/xx
+         DY9Nr9zhkY2Me+Bjz55wIberCyr1nNeqGNpjFGCQRYesvdqBj8EPSwHHHy7sTF8gNzzm
+         s1zHStyYBsfatPlYghW28pzOyY6VVkSwCIKlwTbVPlXwsjdfvIEY7j+G9Crbovt0M/TP
+         mBcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=A3NxUbNLMPXTjkL8u55YMZmOt8zksMxOha2crYcJLBA=;
-        b=OhZaMO+NeMNE4gde7/18ad2aGEWtjeC9HhFaT8b5DaQMKOXMnNM7bY7vkhxsuJ4Sx/
-         H7tytvchavk6ZQXW5aIXKNmiByy3zQbfY7qWPO9TtON+wtjSPtm9XuZC/8JJuOLwB/rZ
-         Tw/hCWANogKMh2spbZgoUsV5fMA4G22jXGOi42d96VczUpy28Fq3AY3BpyrPor/CwrMl
-         W5YT4GVyaZgYTAnZ3B6EM7Sb14ZdF82EuUHX6DWYxv0sWS001huLyqi0kJKX0NVn9VCY
-         52eQOOL392OFZbjA4hAxj0ysb76OJiitdjlCJex84hQ7lvd8R5wQix6pTGxa2f6Ksw5S
-         BB+Q==
-X-Gm-Message-State: AOAM5328/NSG2GX3vYeSEhd1NX2fMrbqYpY78z0E2FeyjDnKLfGB6JNA
-        /x0y9Y8K2y1EwMG/DHNJ2HeXh/7kxD0=
-X-Google-Smtp-Source: ABdhPJyFpQWas9TnjR3tLUfuTcCLS2v5FkqsbUjFFDtmU1mcdGY0L3TTuO36o/huwbr37WjGdc0i0Q==
-X-Received: by 2002:a0c:9b83:: with SMTP id o3mr32661074qve.4.1621258767420;
-        Mon, 17 May 2021 06:39:27 -0700 (PDT)
+        bh=OG7vZEvNBsToH7JZriktJz2uT0xCgopXQHhNB3zh1S4=;
+        b=oLVPyM2Epb6feqiafd6KmififjTCpRGcArx2wZgrgWn0k3OddXbS+EMDI425uK3sV/
+         mbpud1tJMYQL1wtuElYRiH9uKeWWY4hXU1HFjgbnicq8Xzqd07Xo17dMOx71O1grF/nw
+         /o1FOw9RxaUEUEkGGjDK6J+yxZ6AEdm4mkLHsmVXBHE4S+gTMgOOAUKEEGGQrIH7nQK0
+         pSnmohspOMuEN3qKqLM8FCRDPZ86nH2V7rpf+Y2fXiiJVd4uR8J3xwnJwZ9VthyW3BDY
+         wIB7EW/5n8ZN4DNj/2X17TLWxDp5PkxAj++BwekMpslu4f5m3G2yCG4lJhOTttxVQnwv
+         ZlkQ==
+X-Gm-Message-State: AOAM532PIJXVLUqPLByn8WNzjdjSNFMLNDf/UDevEe/QMZPxLqRX4Pyy
+        1gR3ZAvrf9fK3ls1BMl4RyU=
+X-Google-Smtp-Source: ABdhPJzTve4clbadZFJZoA0oJOgkuvyC5yCnrBG5lO268UNivIINHtN49k5sbaFtM9RRCuH+nI0Q6A==
+X-Received: by 2002:ae9:f310:: with SMTP id p16mr1351714qkg.267.1621258884178;
+        Mon, 17 May 2021 06:41:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j10sm10127053qtn.89.2021.05.17.06.39.25
+        by smtp.gmail.com with ESMTPSA id q13sm10569013qkj.43.2021.05.17.06.41.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 May 2021 06:39:26 -0700 (PDT)
+        Mon, 17 May 2021 06:41:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog: Remove MV64x60 watchdog driver
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org
-References: <9c2952bcfaec3b1789909eaa36bbce2afbfab7ab.1616085654.git.christophe.leroy@csgroup.eu>
- <31d702e5-22d1-1766-76dd-e24860e5b1a4@roeck-us.net>
- <87im3hk3t2.fsf@mpe.ellerman.id.au>
+Subject: Re: [PATCH v2] watchdog: sbsa: Support architecture version 1
+To:     Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        Al Stone <al.stone@linaro.org>,
+        Jianchao Hu <hujianchao@hisilicon.com>,
+        Huiqiang Wang <wanghuiqiang@huawei.com>
+References: <1621253408-23401-1-git-send-email-zhangshaokun@hisilicon.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e2a33fc1-f519-653d-9230-b06506b961c5@roeck-us.net>
-Date:   Mon, 17 May 2021 06:39:25 -0700
+Message-ID: <83bbdf36-a3be-c261-3cd7-76eb208f3ad4@roeck-us.net>
+Date:   Mon, 17 May 2021 06:41:21 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <87im3hk3t2.fsf@mpe.ellerman.id.au>
+In-Reply-To: <1621253408-23401-1-git-send-email-zhangshaokun@hisilicon.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -74,37 +73,157 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/17/21 4:17 AM, Michael Ellerman wrote:
-> Guenter Roeck <linux@roeck-us.net> writes:
->> On 3/18/21 10:25 AM, Christophe Leroy wrote:
->>> Commit 92c8c16f3457 ("powerpc/embedded6xx: Remove C2K board support")
->>> removed the last selector of CONFIG_MV64X60.
->>>
->>> Therefore CONFIG_MV64X60_WDT cannot be selected anymore and
->>> can be removed.
->>>
->>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->>
->>> ---
->>>   drivers/watchdog/Kconfig       |   4 -
->>>   drivers/watchdog/Makefile      |   1 -
->>>   drivers/watchdog/mv64x60_wdt.c | 324 ---------------------------------
->>>   include/linux/mv643xx.h        |   8 -
->>>   4 files changed, 337 deletions(-)
->>>   delete mode 100644 drivers/watchdog/mv64x60_wdt.c
+On 5/17/21 5:10 AM, Shaokun Zhang wrote:
+> For Armv8.6, The frequency of CNTFRQ_EL0 is standardized to a
+> frequency of 1GHz, so Arm Base System Architecture 1.0[1] has
+> introduced watchdog revision 1 that increases the length the
+> watchdog offset register to 48 bit, while other operation of
+> the watchdog remains the same.
 > 
-> I assumed this would go via the watchdog tree, but seems like I
-> misinterpreted.
+> The driver can determine which version of the watchdog is
+> implemented through the watchdog interface identification
+> register (W_IID). If the version is 0x1, the watchdog
+> offset register will be 48 bit, otherwise it will be 32 bit.
 > 
-
-Wim didn't send a pull request this time around.
-
-Guenter
-
-> Should I take this via the powerpc tree for v5.14 ?
+> [1] https://developer.arm.com/documentation/den0094/latest
 > 
-> cheers
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>
+> Cc: Al Stone <al.stone@linaro.org>
+> Cc: Jianchao Hu <hujianchao@hisilicon.com>
+> Cc: Huiqiang Wang <wanghuiqiang@huawei.com>
+> Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+> ChangeLog
+> v1-->v2:
+>      1. Addressed Guenter's comments
+>      2. Remove some dead mailboxs and rewrite comments.
+>      
+>   drivers/watchdog/sbsa_gwdt.c | 54 +++++++++++++++++++++++++++++++++++++++-----
+>   1 file changed, 48 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index f0f1e3b2e463..ee9ff38929eb 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -73,16 +73,21 @@
+>   #define SBSA_GWDT_WCS_WS0	BIT(1)
+>   #define SBSA_GWDT_WCS_WS1	BIT(2)
+>   
+> +#define SBSA_GWDT_VERSION_MASK  0xF
+> +#define SBSA_GWDT_VERSION_SHIFT 16
+> +
+>   /**
+>    * struct sbsa_gwdt - Internal representation of the SBSA GWDT
+>    * @wdd:		kernel watchdog_device structure
+>    * @clk:		store the System Counter clock frequency, in Hz.
+> + * @version:            store the architecture version
+>    * @refresh_base:	Virtual address of the watchdog refresh frame
+>    * @control_base:	Virtual address of the watchdog control frame
+>    */
+>   struct sbsa_gwdt {
+>   	struct watchdog_device	wdd;
+>   	u32			clk;
+> +	int			version;
+>   	void __iomem		*refresh_base;
+>   	void __iomem		*control_base;
+>   };
+> @@ -113,6 +118,30 @@ MODULE_PARM_DESC(nowayout,
+>   		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>   
+>   /*
+> + * Arm Base System Architecture 1.0 introduces watchdog v1 which
+> + * increases the length watchdog offset register to 48 bits.
+> + * - For version 0: WOR is 32 bits;
+> + * - For version 1: WOR is 48 bits which comprises the register
+> + * offset 0x8 and 0xC, and the bits [63:48] are reserved which are
+> + * Read-As-Zero and Writes-Ignored.
+> + */
+> +static u64 sbsa_gwdt_reg_read(struct sbsa_gwdt *gwdt)
+> +{
+> +	if (gwdt->version == 0)
+> +		return readl(gwdt->control_base + SBSA_GWDT_WOR);
+> +	else
+> +		return readq(gwdt->control_base + SBSA_GWDT_WOR);
+> +}
+> +
+> +static void sbsa_gwdt_reg_write(u64 val, struct sbsa_gwdt *gwdt)
+> +{
+> +	if (gwdt->version == 0)
+> +		writel((u32)val, gwdt->control_base + SBSA_GWDT_WOR);
+> +	else
+> +		writeq(val, gwdt->control_base + SBSA_GWDT_WOR);
+> +}
+> +
+> +/*
+>    * watchdog operation functions
+>    */
+>   static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+> @@ -123,16 +152,14 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+>   	wdd->timeout = timeout;
+>   
+>   	if (action)
+> -		writel(gwdt->clk * timeout,
+> -		       gwdt->control_base + SBSA_GWDT_WOR);
+> +		sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
+>   	else
+>   		/*
+>   		 * In the single stage mode, The first signal (WS0) is ignored,
+>   		 * the timeout is (WOR * 2), so the WOR should be configured
+>   		 * to half value of timeout.
+>   		 */
+> -		writel(gwdt->clk / 2 * timeout,
+> -		       gwdt->control_base + SBSA_GWDT_WOR);
+> +		sbsa_gwdt_reg_write(gwdt->clk / 2 * timeout, gwdt);
+>   
+>   	return 0;
+>   }
+> @@ -149,7 +176,7 @@ static unsigned int sbsa_gwdt_get_timeleft(struct watchdog_device *wdd)
+>   	 */
+>   	if (!action &&
+>   	    !(readl(gwdt->control_base + SBSA_GWDT_WCS) & SBSA_GWDT_WCS_WS0))
+> -		timeleft += readl(gwdt->control_base + SBSA_GWDT_WOR);
+> +		timeleft += sbsa_gwdt_reg_read(gwdt);
+>   
+>   	timeleft += lo_hi_readq(gwdt->control_base + SBSA_GWDT_WCV) -
+>   		    arch_timer_read_counter();
+> @@ -172,6 +199,17 @@ static int sbsa_gwdt_keepalive(struct watchdog_device *wdd)
+>   	return 0;
+>   }
+>   
+> +static void sbsa_gwdt_get_version(struct watchdog_device *wdd)
+> +{
+> +	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
+> +	int ver;
+> +
+> +	ver = readl(gwdt->control_base + SBSA_GWDT_W_IIDR);
+> +	ver = (ver >> SBSA_GWDT_VERSION_SHIFT) & SBSA_GWDT_VERSION_MASK;
+> +
+> +	gwdt->version = ver;
+> +}
+> +
+>   static int sbsa_gwdt_start(struct watchdog_device *wdd)
+>   {
+>   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
+> @@ -252,10 +290,14 @@ static int sbsa_gwdt_probe(struct platform_device *pdev)
+>   	wdd->info = &sbsa_gwdt_info;
+>   	wdd->ops = &sbsa_gwdt_ops;
+>   	wdd->min_timeout = 1;
+> -	wdd->max_hw_heartbeat_ms = U32_MAX / gwdt->clk * 1000;
+>   	wdd->timeout = DEFAULT_TIMEOUT;
+>   	watchdog_set_drvdata(wdd, gwdt);
+>   	watchdog_set_nowayout(wdd, nowayout);
+> +	sbsa_gwdt_get_version(wdd);
+> +	if (gwdt->version == 0)
+> +		wdd->max_hw_heartbeat_ms = U32_MAX / gwdt->clk * 1000;
+> +	else
+> +		wdd->max_hw_heartbeat_ms = GENMASK_ULL(47, 0) / gwdt->clk * 1000;
+>   
+>   	status = readl(cf_base + SBSA_GWDT_WCS);
+>   	if (status & SBSA_GWDT_WCS_WS1) {
 > 
 
