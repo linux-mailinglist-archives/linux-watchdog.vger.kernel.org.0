@@ -2,129 +2,106 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B83E8388B3A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 May 2021 11:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C586388E71
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 May 2021 14:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240632AbhESJ5h (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 May 2021 05:57:37 -0400
-Received: from mail-eopbgr150081.outbound.protection.outlook.com ([40.107.15.81]:55838
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239269AbhESJ5f (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 May 2021 05:57:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QzSZBP4hbO+LKpNPE1I7XSmQ4WLvXi6CI7WMVt/llzFqq+fgWubpu5p6O/7UM8L3z+NvNtG9Lc3+QE56USHWEQuWceEoVg1jFPiUz+INI2DTP+CS5Azy9yEn6xtCKwtV4CtxUm2c5sc64B6VgWI9FY65R84yfGGCN4MKVEaFgTiwkh9I8r2gandFToB/Dwfx4DRBpffv6wPPFmDu8KRzQbFOgFe+dSCuW1Tjvf549roZmTfaaYlGzQQ1pNT1NO+ufxNay+pyKUOiGWlPAI0QpnpFmw+mMMYBySmoxPPG3OBgRegHl0MOxsSwWjLYOPRDOvP5HE3UsJ5WDmaSkbHy6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uIMWr/NaX7A+11gldlqKiIOJe/ilHuS7Qui/XEyA7RA=;
- b=ePH48ans/Ep4PpMmLoPPV5qO2fhirQU51SExSTSt5k7linjGwaNdh1itb+IXJXYtIbMkomqX8jZQ5Fhd09bKf1tTlTBHvj0KeiXaHSSDZYZ94yxFAVOeLiDIl+q8i/YzVk6Ibjh+dSYfS+3JVmbXJYIeFCqVmKw3DfT6rE7P8u80nWfNvJPYnFtSt6S4lq56E3gv7wL3KxnuoJyxq5mXCh+k/VjKvR7qEgljGlLDqpdx0gPK1A4oyIZX3ioifEXHfg592yMBsSAdIa1fosOIVeaMAUKXkkNM5LNuM5suTauZ3vIw8wsG+7wfAwL6qGas4C7RsK0WH1CVeYxaeO3aPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uIMWr/NaX7A+11gldlqKiIOJe/ilHuS7Qui/XEyA7RA=;
- b=NlyIir+PaweeqwmjWUQpNkPH/4ELKv8ADcDCBjE0VGetvVQYEOckOy1BcCoOY1KwKdpMOXqvpb9EMboMlOME7OPV0yBJTsxD6A62FFfhTnb8qC4J2auV1Kgs+Cd4DUlprvKO9TMT7uyiWg4tV6Nmpc1kbAKU51wdpaH1+tEh6bw=
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AS8PR04MB7494.eurprd04.prod.outlook.com (2603:10a6:20b:23f::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.28; Wed, 19 May
- 2021 09:56:14 +0000
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::b10a:ad0:a6f5:db9b]) by AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::b10a:ad0:a6f5:db9b%2]) with mapi id 15.20.4129.033; Wed, 19 May 2021
- 09:56:13 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Stefan Eichenberger <eichest@gmail.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: RE: [RESEND PATCH v2] watchdog: imx_sc_wdt: fix pretimeout
-Thread-Topic: [RESEND PATCH v2] watchdog: imx_sc_wdt: fix pretimeout
-Thread-Index: AQHXTIVr23tSDD/EsUGlads0X2xGQqrqkT1g
-Date:   Wed, 19 May 2021 09:56:13 +0000
-Message-ID: <AM6PR04MB4966594044F4F209E00846C7802B9@AM6PR04MB4966.eurprd04.prod.outlook.com>
-References: <20210519080311.142928-1-eichest@gmail.com>
-In-Reply-To: <20210519080311.142928-1-eichest@gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 42e90ea3-0b78-48ba-3a1f-08d91aac5683
-x-ms-traffictypediagnostic: AS8PR04MB7494:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AS8PR04MB7494760E6FD7AE7AEAC8B9B6802B9@AS8PR04MB7494.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1284;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mccsNPew4p0l2xs829KYzjVO/+ExPontQ+FcBIV202r7d7Lo90Qqppg2CnFk1zeCOE6R20ek1ykMfyywRHTIdTa6XLgznb+fO4QiyVskm267+iXlZUgszwoLdW78YiZI2mFR7t85sjpmYqnmfxPQaip6M57bhO23UGpc7FvtljgeugSPFau0PiPAIe42a+zT0xybAMqPC3lKhsSg2XlLlwvgCc08de5zSNrqWhgA3e8q4ckXRfs7Vcrlcy66NlcFMj8dRMuzHCcOUb2lDdOQx45OP0x9qa3zn2wH6pUtg/ThuXgxJBMnGu7uM8KhpRoO5MYzSLf4RFXk5ctv/uMZlp6bxAbzRIYc7+yKBa2yvexSM9Y8YsKRIt9jxMYpYlsZRsuQvGfP81+YUEwAaSLQ+4fZHZ/k96DFB/uuT9wPDMXJ+/NcK5Ucfj+nDdCpemY9K9LdzHOU1HhJfbqMno67b7uq3O6f//4dGQ5Gk8bHDBVUcJPKIc+VzzKVB0r399TRp4J7xoLqLaGuTIATmVbTGrOGXlyXPzxFOlMkt4lvZv4mpjn/Pl+jnWmWwM/YMVA3w6QZEkYhOKXLL15I8r8DIzU8NvjX7vPAexoq92cy4ps=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(39860400002)(376002)(136003)(346002)(4326008)(2906002)(6506007)(7696005)(110136005)(71200400001)(44832011)(55016002)(8936002)(9686003)(54906003)(8676002)(316002)(64756008)(26005)(478600001)(66946007)(52536014)(186003)(122000001)(76116006)(38100700002)(66556008)(33656002)(5660300002)(66446008)(66476007)(4744005)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?OWg4bW95K1F4Z3lyQmNkRGM2QnZ1aGUwVzZBTkNNNGhGcXlPOG4rR0doTXZl?=
- =?utf-8?B?TE9mVlJCdXFPeWV5OEt6MzBHUEdRSjA1N0F5YzVwODlYUnV1b0tYSGpBSzZV?=
- =?utf-8?B?V21xYkJYZ1NvZEFycDlmcFduZWgwcXZpRml4enBRRzhvZW5XWlBhc011eXps?=
- =?utf-8?B?R0xJdmMvVUw4Y1VqQXZRY3lLR3E3bkFldlJ1L1dGeXlZbTBBVkpqMDFNM3hj?=
- =?utf-8?B?eWl2RlA2aU5nZklZZzhhMk9mQnhIMDkwam55QW80dGhHN2kxRGJCcFV5cHZ3?=
- =?utf-8?B?RmNvV2k0NHA2bHFORFdjV1E5bzBWamJTYU1CS3B2UEZmS29EYXU3TDA4OTJ4?=
- =?utf-8?B?SThYRUNxSnoyR1I1RUttWVpGdXFSZDREY2lvOVVNdW9PSlFnOWJDaTVGaGd3?=
- =?utf-8?B?TEludVhLakFLdGFvMmVOcHN3UE1UVXREYTN5UUg0WUtjeGRzVnBLeEp2TFhV?=
- =?utf-8?B?aVU0R0wyMGJnMEl1VFROWVpHK05vcU11RDIxTW44SVp4VWtlNUlMQlpOSW1P?=
- =?utf-8?B?QzkxWU94S3c4WTlWZEUxRjZvU1hqVEdmUEYxbUxuU3czaWFQQnB5MGdpbVJR?=
- =?utf-8?B?cURYNjNobFZVdU5rWkEva1Z1QXJqQVl2RXB2MURxQzlLaVJvTGs1ejZDdDFX?=
- =?utf-8?B?ZkE4OEltSjYxclphVE1xb0o1WDNzT0VkK3FjMllNSWJXam5aaEJxSnFvdkZ6?=
- =?utf-8?B?em40QWdJNXFRd3FIczE2NXRubjI2b0xYTm40cTI1WkJuTG4yRVZtUkIvL3FL?=
- =?utf-8?B?ajhPU1VxV3JwdVAvVzZaUmdxT0hZNnV4THh4aHRiYjJRaFBvWHlPSGRzMjdK?=
- =?utf-8?B?Z1B2djQ4Z0t3OEZBVFA0SzNBd05wVk5oS2FhSFlHQTN6d0VQVWRERTkvMk1l?=
- =?utf-8?B?WHpPSlVNT21aRUJPUVFib3h6TUVKNTU5VFF1UmZUY0RFV1F1QWI0d2wySnQ2?=
- =?utf-8?B?dVd4bk9IV0VHak9jaXFIM0ZFT1h5bkl4TEVtQmZCMStKbjZieHJnbU9HVDBs?=
- =?utf-8?B?THBRcGRQaGw3VFhUTEVsT1VEcUZ2OW9ZSHlIbE5leGt5a0FoVnJrMVgvZW0y?=
- =?utf-8?B?cnloQVkyQXN4MkJSUzhJYTl3N25CR3lTYVNvUlI0eDFYQVo4M1ZIZ1lUcm42?=
- =?utf-8?B?RWN4a28rS0E0K2JqUDRFTTlTMk9NdjdQdExWUzF2N0kvKytXRXNibnVZWXl3?=
- =?utf-8?B?cm9neEd6ZVdvblRnS1RnSjNrQzRINFhHL3gwcGNBak1yMklCTjNQcmZQV2FO?=
- =?utf-8?B?dG8vTURjVkhDeFNuK2VaR0pTK2NlV1VwTGx3R1VOQjdBT2RPNjRURWdiNVhn?=
- =?utf-8?B?ekU5elVKREdGaTZrTFlFM1IvS0Z0MzI3M2hSK294TE1XeFhIREFUemFsRmN2?=
- =?utf-8?B?Zm0raVZEcGwxL2poTUpZS2RFb0RKNmNYWE9WYzdrbEY4b1FST2JQWGJBeUpU?=
- =?utf-8?B?Z0Nyb2FVR3JheFZDODcvT0ZyekVQRHFMRHFzRDN0L250aGRZUzJJYTJXUHRM?=
- =?utf-8?B?bjFMRFlKbi9YVkZkQ2dKU05qLzYwejhLbXdCWWRCSWpPQ3NPVSttSlhZTFdr?=
- =?utf-8?B?RC9rTFh3NWpYdWl3Z1U5aFdPd3FKM0EzUDNDNDdtS0RXV2xlOWVZZml4UTI5?=
- =?utf-8?B?NnV4TDM3dmF4S2JZWTV0dzl4R1pwT1Z0WWx3c3JHVmI0L0lZdTBrSTNTR2RE?=
- =?utf-8?B?TmRCdnJRdGxDUG1ldUczbkp3RUU2eVV2UEFmWmpIYVFXckJ3MEtxS2ZnRHhs?=
- =?utf-8?Q?L5zDNC+4s9n+e5lQ7ka0kFeUlRhZrFrlNY0v8Lx?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1353487AbhESM7F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 May 2021 08:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232671AbhESM7E (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 19 May 2021 08:59:04 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F22C06175F;
+        Wed, 19 May 2021 05:57:45 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id 124so243083qkh.10;
+        Wed, 19 May 2021 05:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aipg9oIDAuCQSbPEUtZjOrYb0WaeP7Y8nbKSRmG50Bc=;
+        b=Pa4ogUhOF7OBZJ6ZHNl0MgR59SkKIlnoGrDNn/lcOBGbuPpPz34+2AOEpjE6KcRep0
+         3rhPml2WgX1tHOgnE1NyFZrFzIlt51EJmUSsfjrkf10trdA60D+Zcz73YlqdI0rdL3D0
+         KrGwfkNaKB0U/YzFPmg3WUmOjWMfEjOBenyI3ohJ8Lx3B0u5X/nxD0NtpdaB9371Y0md
+         dCOkLqkLT/f7QItk5bUjTi6/SI7VFvvOngKItIaipenTMH6IuuHpoeOaIaVv7YRKCb5q
+         /YNW293ujFUdLxhJ07r8jesWtFVEBcPP9Nu7eWr+ikxPxIpnIJhQQ8mwpXU3mKa6ib6s
+         AOpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=aipg9oIDAuCQSbPEUtZjOrYb0WaeP7Y8nbKSRmG50Bc=;
+        b=aitEj7gaMK7SlQFHyL4ZJqICAwNKQ8/sAH8Lajw2UpHAEgDNDm2hvNEGfuZgUfSXZL
+         HF1NM1kZiMEB/drVjZMKQPhtzjqojO97eKKQIPJunGa7Q5rAQa4T26kAxV9j+ihMuYnu
+         rtmhDLYJzbjg9FbQms9XTW/oJgVmNFGucR7LFXvV72Kvsn8/N3RzDKMbQCdlBYRiP1XI
+         zz5W5anZx81TjtZfM3JIZ0EE1bwd7IyAxauDTCiAQc1wiKtuWBbS6kwFcz8H7b3BneO1
+         ZW9XJP8HMu5joxpXGamBK0jbnAXRl7kmLU4lfgt2RVhWmNx23M8p2LuenJ+vMyxUM9X2
+         eGrw==
+X-Gm-Message-State: AOAM531KaiNXRANXgkNXuWTshkUt3O6hLowmUpJIOR2SnLM1OUcBhIzh
+        Uq/3tjjYpriObzEYbYfcPDI=
+X-Google-Smtp-Source: ABdhPJzaymXiwmNRUJ76y5xNhS+pauWT0YHJrip4/vT9Q++zTymq3niN2b7yOKjYqwJx982fyC8aoA==
+X-Received: by 2002:ae9:c016:: with SMTP id u22mr11911036qkk.114.1621429063845;
+        Wed, 19 May 2021 05:57:43 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d11sm15252598qke.61.2021.05.19.05.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 May 2021 05:57:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 19 May 2021 05:57:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     cl@rock-chips.com
+Cc:     heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
+        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
+        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org, maz@kernel.org
+Subject: Re: [PATCH v4 04/10] dt-bindings: watchdog: dw-wdt: add description
+ for rk3568
+Message-ID: <20210519125741.GA2241939@roeck-us.net>
+References: <20210429081151.17558-1-cl@rock-chips.com>
+ <20210429081151.17558-5-cl@rock-chips.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4966.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 42e90ea3-0b78-48ba-3a1f-08d91aac5683
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2021 09:56:13.7004
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zYjzx8EFO6LbmbF3yx/q91DF/PVr3JXKh2oW0VjuI1LDrvMAPq7IE7lmG28ZO8JZiu0rLa3meVEMTpECMepbJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7494
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210429081151.17558-5-cl@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-PiBGcm9tOiBTdGVmYW4gRWljaGVuYmVyZ2VyIDxlaWNoZXN0QGdtYWlsLmNvbT4NCj4gU2VudDog
-V2VkbmVzZGF5LCBNYXkgMTksIDIwMjEgNDowMyBQTQ0KPiANCj4gSWYgdGhlIFdESU9GX1BSRVRJ
-TUVPVVQgZmxhZyBpcyBub3Qgc2V0IHdoZW4gcmVnaXN0ZXJpbmcgdGhlIGRldmljZSB0aGUNCj4g
-ZHJpdmVyIHdpbGwgbm90IHNob3cgdGhlIHN5c2ZzIGVudHJpZXMgb3IgcmVnaXN0ZXIgdGhlIGRl
-ZmF1bHQgZ292ZXJub3IuDQo+IEJ5IG1vdmluZyB0aGUgcmVnaXN0ZXJpbmcgYWZ0ZXIgdGhlIGRl
-Y2lzaW9uIHdoZXRoZXIgcHJldGltZW91dCBpcyBzdXBwb3J0ZWQNCj4gdGhpcyBnZXRzIGZpeGVk
-Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogU3RlZmFuIEVpY2hlbmJlcmdlciA8ZWljaGVzdEBnbWFp
-bC5jb20+DQo+IFJldmlld2VkLWJ5OiBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+
-DQoNClJldmlld2VkLWJ5OiBEb25nIEFpc2hlbmcgPGFpc2hlbmcuZG9uZ0BueHAuY29tPg0KDQpS
-ZWdhcmRzDQpBaXNoZW5nDQo=
+On Thu, Apr 29, 2021 at 04:11:45PM +0800, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
+> 
+> add "rockchip,rk3568-wdt", "snps,dw-wdt" for watchdog nodes on
+> a rk3568 platform to snps,dw-wdt.yaml.
+> 
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> index b58596b1831d..6461eb4f4a27 100644
+> --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> @@ -27,6 +27,7 @@ properties:
+>                - rockchip,rk3328-wdt
+>                - rockchip,rk3368-wdt
+>                - rockchip,rk3399-wdt
+> +              - rockchip,rk3568-wdt
+>                - rockchip,rv1108-wdt
+>            - const: snps,dw-wdt
+>  
