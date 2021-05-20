@@ -2,98 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A786E38B261
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 May 2021 17:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BED738B82F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 May 2021 22:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbhETPDI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 20 May 2021 11:03:08 -0400
-Received: from mail-vs1-f54.google.com ([209.85.217.54]:46986 "EHLO
-        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbhETPDH (ORCPT
+        id S237192AbhETURJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 May 2021 16:17:09 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:43987 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233159AbhETURI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 20 May 2021 11:03:07 -0400
-Received: by mail-vs1-f54.google.com with SMTP id q6so4490171vsp.13;
-        Thu, 20 May 2021 08:01:45 -0700 (PDT)
+        Thu, 20 May 2021 16:17:08 -0400
+Received: by mail-ot1-f45.google.com with SMTP id i12-20020a05683033ecb02903346fa0f74dso5341673otu.10;
+        Thu, 20 May 2021 13:15:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=90v/0p7/QeqsVm7sdtO9eTLLi/cOP7TH9xelXYgqHPI=;
-        b=PvnB74FX7Mg98K15lWC+ZZSU7wQfl4K6OUkGDLo9mAdrN1RKWiic5g0+sTixNpdB0g
-         YmsXn9qwoFqA4HO7U44BtnReNrL2SDhMsUUy2gdXQmVUWcPj/bVbDVZveeDnXkLApdWs
-         pVFZxug136WOXfuQ3jowzEZoqx6YX3XQj2osuvM78YOeqNItpO80MjdbsiEavcPg4Jb4
-         X36F84KKzLm1u/GrjCg/VELKlMpnNQ56/JjS665Ias5PIBGcuFaBcKC1t0OGPdjw0Y1N
-         bm+BIGex5liF1eIo94d+TImihEw1hiostEBgt5wUA1VufhED02FOyEiqoWOaEEZJY6SU
-         7gAw==
-X-Gm-Message-State: AOAM531X3e4R7u6l1wNaZ2I8040HmLkLz0qgpA7EK6K/luqYGUYjPFJ7
-        LhHi5m9bbb00eLHfQozkqT6L3C7M2Wo/K4VJGlM=
-X-Google-Smtp-Source: ABdhPJzjHxh5zy1BiXpMwHIh1Fk3akLbzGJK4h7jyM1wblAEyFSKkG+uSCDAZFFQ7yOQSCFfSFTKHvcynXaK4GxQXNQ=
-X-Received: by 2002:a05:6102:392:: with SMTP id m18mr4592452vsq.40.1621522904921;
- Thu, 20 May 2021 08:01:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <3ccc0cf5319f56e230ee3b8a009f8d63afb114c1.1621521847.git.geert+renesas@glider.be>
-In-Reply-To: <3ccc0cf5319f56e230ee3b8a009f8d63afb114c1.1621521847.git.geert+renesas@glider.be>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 May 2021 17:01:33 +0200
-Message-ID: <CAMuHMdUwOMZy_vFH8QwCxuhy7UCvOX8sw_87CLLueiJdfbkuFw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: timer: arm,twd: Convert to json-schema
-To:     Rob Herring <robh+dt@kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i0L3Bf9fYCkMYOd16cWvLMKW8YoGjgbbmcyX30LR46E=;
+        b=melq6CNlfBuBfdtV4RbqOnne2Ewlgvv708fJYVobBiXxdPUW9ZflDy+0q4GnK19YMl
+         AeC9HeLmnBcFM9j7U2/3+GITyiUHaGOWix9rtnsXKVZh/vl6KHcc62LTwdQmQpxvUEnb
+         QPU2LVURHTZewYhJSewaTrPrNyOOdaUHHEA3PugfUjGHOGpKjESolT0HtX9M9BwNSyfB
+         Y2FusbYVLeImuZgBjDYhtwjV/8KEQZ2WdBuako/SGdIdDhVNGNJcIU/OhVZn8b/b1xYm
+         YJ2Xc41Gj0IALmYxxFgrJfBJ9Iqe6yudwBy+gXyLxQQ35F125ORJ8eVQfW9EU3bIR4O0
+         OOhA==
+X-Gm-Message-State: AOAM531CaEc/nF2EU2ToBX3k/F7tKD+lMSejzSxA2ZWGVd2/rTQgfwoP
+        qk0OGsNfc38LDx8FS1s2Aw==
+X-Google-Smtp-Source: ABdhPJyCT37DcRLhpyUZKPcqLMZqsqxjO8vGZdLajdstj9rRHXvpUApoWucIG5R3g8BiwdDXCF5t8A==
+X-Received: by 2002:a9d:453:: with SMTP id 77mr5471076otc.31.1621541746251;
+        Thu, 20 May 2021 13:15:46 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x5sm791111otg.76.2021.05.20.13.15.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 13:15:45 -0700 (PDT)
+Received: (nullmailer pid 1875910 invoked by uid 1000);
+        Thu, 20 May 2021 20:15:44 -0000
+Date:   Thu, 20 May 2021 15:15:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Marc Zyngier <maz@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: timer: arm,twd: Convert to json-schema
+Message-ID: <20210520201544.GA1858494@robh.at.kernel.org>
+References: <3ccc0cf5319f56e230ee3b8a009f8d63afb114c1.1621521847.git.geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ccc0cf5319f56e230ee3b8a009f8d63afb114c1.1621521847.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, May 20, 2021 at 4:45 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
+On Thu, May 20, 2021 at 04:45:23PM +0200, Geert Uytterhoeven wrote:
 > Convert the ARM Timer-Watchdog Device Tree binding documentation to
 > json-schema.  As the old binding document actually contained two
 > bindings, it is split in two document: one for the timer part, and one
 > for the watchdog part.
->
+> 
 > Document missing properties.
 > Update examples to match reality.
->
+> 
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
 > I have listed Marc as the maintainer, as he wrote the original bindings.
 > Marc: Please scream if this is inappropriate ;-)
+
+I don't think Marc cares... So I'll put myself.
+
+I've done that and fixed up the node names and applied.
+
 > ---
 >  .../bindings/timer/arm,twd-timer.yaml         | 56 +++++++++++++++++++
 >  .../devicetree/bindings/timer/arm,twd.txt     | 53 ------------------
 >  .../bindings/watchdog/arm,twd-wdt.yaml        | 50 +++++++++++++++++
-
-Bummer, forgot to update a reference.  Feel free to apply this fix
-
---- a/Documentation/devicetree/bindings/arm/ux500/boards.txt
-+++ b/Documentation/devicetree/bindings/arm/ux500/boards.txt
-@@ -26,7 +26,7 @@ interrupt-controller:
-        see binding for interrupt-controller/arm,gic.txt
-
- timer:
--       see binding for timer/arm,twd.txt
-+       see binding for timer/arm,twd-timer.yaml
-
- clocks:
-        see binding for clocks/ux500.txt
-
-or wait for v2.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  3 files changed, 106 insertions(+), 53 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/arm,twd-timer.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/timer/arm,twd.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/arm,twd-wdt.yaml
