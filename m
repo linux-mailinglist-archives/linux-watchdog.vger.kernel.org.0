@@ -2,106 +2,158 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C586388E71
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 May 2021 14:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504D6389DF3
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 May 2021 08:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353487AbhESM7F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 May 2021 08:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbhESM7E (ORCPT
+        id S230428AbhETGcS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 May 2021 02:32:18 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:55557 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230423AbhETGcR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 May 2021 08:59:04 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F22C06175F;
-        Wed, 19 May 2021 05:57:45 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id 124so243083qkh.10;
-        Wed, 19 May 2021 05:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aipg9oIDAuCQSbPEUtZjOrYb0WaeP7Y8nbKSRmG50Bc=;
-        b=Pa4ogUhOF7OBZJ6ZHNl0MgR59SkKIlnoGrDNn/lcOBGbuPpPz34+2AOEpjE6KcRep0
-         3rhPml2WgX1tHOgnE1NyFZrFzIlt51EJmUSsfjrkf10trdA60D+Zcz73YlqdI0rdL3D0
-         KrGwfkNaKB0U/YzFPmg3WUmOjWMfEjOBenyI3ohJ8Lx3B0u5X/nxD0NtpdaB9371Y0md
-         dCOkLqkLT/f7QItk5bUjTi6/SI7VFvvOngKItIaipenTMH6IuuHpoeOaIaVv7YRKCb5q
-         /YNW293ujFUdLxhJ07r8jesWtFVEBcPP9Nu7eWr+ikxPxIpnIJhQQ8mwpXU3mKa6ib6s
-         AOpQ==
+        Thu, 20 May 2021 02:32:17 -0400
+Received: from mail-ed1-f72.google.com ([209.85.208.72])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <juerg.haefliger@canonical.com>)
+        id 1ljcCt-0002AX-Rh
+        for linux-watchdog@vger.kernel.org; Thu, 20 May 2021 06:30:55 +0000
+Received: by mail-ed1-f72.google.com with SMTP id h16-20020a0564020950b029038cbdae8cbaso8974159edz.6
+        for <linux-watchdog@vger.kernel.org>; Wed, 19 May 2021 23:30:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=aipg9oIDAuCQSbPEUtZjOrYb0WaeP7Y8nbKSRmG50Bc=;
-        b=aitEj7gaMK7SlQFHyL4ZJqICAwNKQ8/sAH8Lajw2UpHAEgDNDm2hvNEGfuZgUfSXZL
-         HF1NM1kZiMEB/drVjZMKQPhtzjqojO97eKKQIPJunGa7Q5rAQa4T26kAxV9j+ihMuYnu
-         rtmhDLYJzbjg9FbQms9XTW/oJgVmNFGucR7LFXvV72Kvsn8/N3RzDKMbQCdlBYRiP1XI
-         zz5W5anZx81TjtZfM3JIZ0EE1bwd7IyAxauDTCiAQc1wiKtuWBbS6kwFcz8H7b3BneO1
-         ZW9XJP8HMu5joxpXGamBK0jbnAXRl7kmLU4lfgt2RVhWmNx23M8p2LuenJ+vMyxUM9X2
-         eGrw==
-X-Gm-Message-State: AOAM531KaiNXRANXgkNXuWTshkUt3O6hLowmUpJIOR2SnLM1OUcBhIzh
-        Uq/3tjjYpriObzEYbYfcPDI=
-X-Google-Smtp-Source: ABdhPJzaymXiwmNRUJ76y5xNhS+pauWT0YHJrip4/vT9Q++zTymq3niN2b7yOKjYqwJx982fyC8aoA==
-X-Received: by 2002:ae9:c016:: with SMTP id u22mr11911036qkk.114.1621429063845;
-        Wed, 19 May 2021 05:57:43 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d11sm15252598qke.61.2021.05.19.05.57.42
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version;
+        bh=T8MGweMWh8G1Vb1FxsntXZZXVCiDZgcu3o7qGFDrNfw=;
+        b=fmdktWQ8E/uIwawBVGO10EcwCeglmYzma7mmUG5Dkg1qPkQKlVGOZBLFcZAh5zslzv
+         VVdl1PbzcSMfFQzpfwjSU7SPo9oYEmxCwGVD+EgJ4F/jhc3z0tA5ON9pKHhA7MwCR4Kl
+         Qck16af+z24Dk9XZkMMxKYJTEQElb+r2wF37pYc5pMyCn4TujRIuP9NHXZLtET4F/6cq
+         i/GTt1V7YkHajOjzofRJRqMHluhaUMA8BCyVGpfInBKihEgiHWpPafzhBQQFxKO3OGxb
+         31Hy+WsiWN0WHJRyaGQKgbd1DYnADvKjwe0c/7fu632TFRdCYfk+ZcbVkAVjY9qBbwl/
+         loEw==
+X-Gm-Message-State: AOAM5331z0pJVvj/5qdN+e0VTr009vgUn/iyL69TSVouXXXe37p1K1j4
+        k8rqxG0k0x+Wa6gCWoXYr9aN1KkdnqU3b8hM8kSv/emiQ20Gf+qH208zw1Qvbkvmqw1ajbEVMzD
+        XnC+Z6GOZubXj5K+fNuSBs4Bh6EAsZ/Hxr30UTRgarSfU
+X-Received: by 2002:a50:ff13:: with SMTP id a19mr3255218edu.300.1621492255640;
+        Wed, 19 May 2021 23:30:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyNuPb1H6GgcBejEqtfEk4G+6+0hpLo6D3PmJC9QoZVsHwbgkZ+4/XF36vpbR0o9XtSZq3ixA==
+X-Received: by 2002:a50:ff13:: with SMTP id a19mr3255207edu.300.1621492255469;
+        Wed, 19 May 2021 23:30:55 -0700 (PDT)
+Received: from smeagol ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id fb19sm882547ejc.10.2021.05.19.23.30.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 05:57:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 19 May 2021 05:57:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     cl@rock-chips.com
-Cc:     heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
-        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
-        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        wim@linux-watchdog.org, jamie@jamieiles.com,
-        linux-watchdog@vger.kernel.org, maz@kernel.org
-Subject: Re: [PATCH v4 04/10] dt-bindings: watchdog: dw-wdt: add description
- for rk3568
-Message-ID: <20210519125741.GA2241939@roeck-us.net>
-References: <20210429081151.17558-1-cl@rock-chips.com>
- <20210429081151.17558-5-cl@rock-chips.com>
+        Wed, 19 May 2021 23:30:54 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+Date:   Thu, 20 May 2021 08:30:52 +0200
+To:     Joe Perches <joe@perches.com>
+Cc:     Juerg Haefliger <juerg.haefliger@canonical.com>,
+        wim@linux-watchdog.org, linux@roeck-us.net, joel@jms.id.au,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, andrew@aj.id.au,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: Use sysfs_emit() and sysfs_emit_at() in
+ "show" functions
+Message-ID: <20210520083052.68a0e1d9@smeagol>
+In-Reply-To: <f2e616645f311ccaf6e0acb996f8c4360a0480ec.camel@perches.com>
+References: <20210511061812.480172-1-juergh@canonical.com>
+        <f2e616645f311ccaf6e0acb996f8c4360a0480ec.camel@perches.com>
+Organization: Canonical Ltd
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210429081151.17558-5-cl@rock-chips.com>
+Content-Type: multipart/signed; boundary="Sig_/L_fDvoyzrJmgDY0oW_xHuS=";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 04:11:45PM +0800, cl@rock-chips.com wrote:
-> From: Liang Chen <cl@rock-chips.com>
-> 
-> add "rockchip,rk3568-wdt", "snps,dw-wdt" for watchdog nodes on
-> a rk3568 platform to snps,dw-wdt.yaml.
-> 
-> Signed-off-by: Liang Chen <cl@rock-chips.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+--Sig_/L_fDvoyzrJmgDY0oW_xHuS=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On Wed, 12 May 2021 21:48:37 -0700
+Joe Perches <joe@perches.com> wrote:
 
-> ---
->  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> index b58596b1831d..6461eb4f4a27 100644
-> --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-> @@ -27,6 +27,7 @@ properties:
->                - rockchip,rk3328-wdt
->                - rockchip,rk3368-wdt
->                - rockchip,rk3399-wdt
-> +              - rockchip,rk3568-wdt
->                - rockchip,rv1108-wdt
->            - const: snps,dw-wdt
->  
+> On Tue, 2021-05-11 at 08:18 +0200, Juerg Haefliger wrote:
+> > Convert sprintf() in sysfs "show" functions to sysfs_emit() and
+> > sysfs_emit_at() in order to check for buffer overruns in sysfs outputs.=
+ =20
+> []
+> > diff --git a/drivers/watchdog/ziirave_wdt.c b/drivers/watchdog/ziirave_=
+wdt.c =20
+> []
+> > @@ -445,8 +445,9 @@ static ssize_t ziirave_wdt_sysfs_show_firm(struct d=
+evice *dev,
+> > =C2=A0	if (ret)
+> > =C2=A0		return ret;
+> > =C2=A0
+> >=20
+> > -	ret =3D sprintf(buf, ZIIRAVE_FW_VERSION_FMT, w_priv->firmware_rev.maj=
+or,
+> > -		      w_priv->firmware_rev.minor);
+> > +	ret =3D sysfs_emit(buf, ZIIRAVE_FW_VERSION_FMT,
+> > +			 w_priv->firmware_rev.major,
+> > +			 w_priv->firmware_rev.minor);
+> > =C2=A0
+> >=20
+> > =C2=A0	mutex_unlock(&w_priv->sysfs_mutex);
+> > =C2=A0
+> >=20
+> > @@ -468,8 +469,9 @@ static ssize_t ziirave_wdt_sysfs_show_boot(struct d=
+evice *dev,
+> > =C2=A0	if (ret)
+> > =C2=A0		return ret;
+> > =C2=A0
+> >=20
+> > -	ret =3D sprintf(buf, ZIIRAVE_BL_VERSION_FMT, w_priv->bootloader_rev.m=
+ajor,
+> > -		      w_priv->bootloader_rev.minor);
+> > +	ret =3D sysfs_emit(buf, ZIIRAVE_BL_VERSION_FMT,
+> > +			 w_priv->bootloader_rev.major,
+> > +			 w_priv->bootloader_rev.minor);
+> > =C2=A0
+> >=20
+> > =C2=A0	mutex_unlock(&w_priv->sysfs_mutex);
+> > =C2=A0
+> >=20
+> > @@ -491,7 +493,7 @@ static ssize_t ziirave_wdt_sysfs_show_reason(struct=
+ device *dev,
+> > =C2=A0	if (ret)
+> > =C2=A0		return ret;
+> > =C2=A0
+> >=20
+> > -	ret =3D sprintf(buf, "%s", ziirave_reasons[w_priv->reset_reason]);
+> > +	ret =3D sysfs_emit(buf, "%s", ziirave_reasons[w_priv->reset_reason]);=
+ =20
+>=20
+> All of these formats should probably end with a newline
+> and the ZIIRAVE_<FOO>_VERSION_FMT defines are to me unnecessary.
+>=20
+
+I'll send a follow-on patch for that.
+
+...Juerg
+
+--Sig_/L_fDvoyzrJmgDY0oW_xHuS=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmCmAhwACgkQD9OLCQum
+QrdOUhAAhmiMFmidekLXp9pqzm0r5JwSAY1m4G+OnbZpW9WCaxohD8bivxvVa7Xm
+6EQ6SNXkM6joh9iOr0MOawpiWxD2M//Cfuy2XKMSQudbTE4TE8rDD6KbgsBxWzd4
+6z82Nsd56uBA87Hrl3pVuVBHtPffIxHZGIc04GQIP24up9hZRmeZZj74trNOSdSb
+Dtf0zv2qkkWsWNTolj/aVK9oIo/gRYKFYS4Y2pouUyWO9ZKwceJoKdCZtzZjIeUT
+PIRyAFdd0LR4yVUxIF4pZSixNuL1o03ny5jRIBT8ToYxfS1jielPtsvlva7MWLdW
+wBACWcOkS6ZvvKdYyFDBmvi/6MOwkrLzPuoVxeMitWMZKVoyKXwff8pCPOLd+IVk
+qGKNjn1bNT2oi3AgDo6oA13Fl8rrkRpeJPi5aHZtmz0gs/xBsyD55l2tEBuBQREF
+z6hU4+R7FUak99gLvIVDIaKqmJn6k/1fRoCKr9BokKgS9yqJl8DVxkRNXP1LfaQt
+5RO5nsWLmgI5vSW2ScDa8hHBE0eGgaVaLJeRTSyreuTQFNJrAWpgu3Fc4LKUT2JR
+CXyR+PFBZyNQLv4SomVOztXBN83EO4cBYFebZQF3JERAOdzy4FUvwnuDj+cq//fA
+Ra6RAuVCO3+yjoIxNZVXpZiVIdPQlYeIIzBNwiSJJh06OXpovqI=
+=lrYW
+-----END PGP SIGNATURE-----
+
+--Sig_/L_fDvoyzrJmgDY0oW_xHuS=--
