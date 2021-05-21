@@ -2,135 +2,164 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8313738C569
-	for <lists+linux-watchdog@lfdr.de>; Fri, 21 May 2021 13:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4D138C9EE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 21 May 2021 17:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbhEULJN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 21 May 2021 07:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S237388AbhEUPUI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 21 May 2021 11:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbhEULJL (ORCPT
+        with ESMTP id S237398AbhEUPUD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 21 May 2021 07:09:11 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E89C061574
-        for <linux-watchdog@vger.kernel.org>; Fri, 21 May 2021 04:07:49 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id d25-20020a0568300459b02902f886f7dd43so17667887otc.6
-        for <linux-watchdog@vger.kernel.org>; Fri, 21 May 2021 04:07:49 -0700 (PDT)
+        Fri, 21 May 2021 11:20:03 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAB6C0613ED
+        for <linux-watchdog@vger.kernel.org>; Fri, 21 May 2021 08:18:39 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 69-20020a9d0a4b0000b02902ed42f141e1so18326505otg.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 21 May 2021 08:18:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vYyzijE4ZufWYLa1oXEkqIpJ+syCx7ODkHC+mjty7O8=;
-        b=Q7iQhFIx6YulZBRYR6Q2Bf0X42RdCEjw3emAsr38Q6hgek0AjmJYmIXxu7KIw4zCTQ
-         qg2jjimP1HvW+5KThWSmJM1K+9K9ee8jdF6/IfPSyW8i2o2fEP/nMzuuiL2At0sFCUUG
-         vHhtVreNr3g5fRkRvv+hNZhDu/VvfgHJXMjL6u4+WBQKA+c4vZfzLCeiDVHubOlCj+XQ
-         CnfMmrcJ0qrNQ/jLjrZTC+t8ZMDeq/+Na7CcO8sh1p2aYwz9EDyXsSPMNuM5zCc6sn+z
-         C8Kja4I9yQDbeKWW94rScqpu2Oebf+X3mQ8KuUThIxSJiCH0s6c6OOV4i82r/6iai/Mg
-         5jpg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HRC/VpVFfONaN+FQbhJssDDo5ZPp8/zGgIYy53PbjWo=;
+        b=aRtpDHtfp1Oq0T4XeydsnQCEYeSMoFkNpABItJeB/cfuOPCU9ImO3GfMxpjLmVcdXM
+         i2N7vQNL25r0pZnvEjHYvx7X1iWrJXzqqJnh9tCwAIP/5iyxihs9D5Lx2d2or80EQ1EL
+         sCncYM2HCHUU0A+lgXeeTB+GOSkWBDStunnrUTXy+3Ez3VZJFwk4WttyviMicUWmL+CR
+         NIhqsxnTrZvFgDj8exPSaoQQ2lw4Jkg6HPKqb3HN/t8KWCOko8lvxNgxQeRgzKwrghjr
+         SJ6DHpWgyNM7OG1fiuCBbt3Ttb01XaZhqyHpYNAro3x2b8Zhqz2EDTm7waqdTK+Qrj9N
+         sjtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vYyzijE4ZufWYLa1oXEkqIpJ+syCx7ODkHC+mjty7O8=;
-        b=CM6rgtFQOXflQE20O3TpVJ7CAk7sjjhE7uewz1BE20ytsCcTtBIDy+p06trRC6nT8a
-         82eSqBVeI1d4qXl1mmf+8XbJNelPqJ+B4qLFhxV7kncimJBQbcdB12WwvMsiyPBah2Zx
-         BrFhNyISxiANJYrJDJk0fUcz776lb4VYAubw/p9XpqT1q5pxcmwfC6VdzVyVKHcMWr2O
-         Js51BvAOEqqkRA9LtooIFR6SGcG0AtTm5a285gHPOW/2qZvRNRjcOOkm6aOu/O/UXRLe
-         j41pfvKZCgowhduUJ08ztNV2gC29Von8TFKEM1pco/dULd2h923AH78fWCuWJVHDTzda
-         RnSg==
-X-Gm-Message-State: AOAM532A/RZnBvpgfMVl7LDOJbVm+/h1Ekom/tcM6EH64Eedg4yLVoWu
-        vVBctXnd03dKhrfq8m4RnADmMB5dbvE=
-X-Google-Smtp-Source: ABdhPJwij9mNj8EGDaiN6svE+Z8W3P2AkSb9COtcwzzkUF/gheY3iONZ8tYnBI7OAv6OPyOz9VnHzQ==
-X-Received: by 2002:a05:6830:22d3:: with SMTP id q19mr5136603otc.258.1621595268495;
-        Fri, 21 May 2021 04:07:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p3sm1119486oov.2.2021.05.21.04.07.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 May 2021 04:07:48 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=HRC/VpVFfONaN+FQbhJssDDo5ZPp8/zGgIYy53PbjWo=;
+        b=HVHvzPNExUKzQxjQqiT8cO1PaiDw38Kn+LlTe++90a9aNegLdGynfOg23v9zBUvGLm
+         xDARy+uWYT+bYODCPIC2Q+lzjV2e5Qba0+gqtwdVV1Yxr1fZaRyfJg206fZcySuPjPCl
+         JdrIpT/n34S4W6VZQrV+ZvSSzhNA69N/Gdjr2IdXsvgRao7gbCnMv6xmLmkxFEkvuyaV
+         0andL6PZypxdfK30CBes3GbFM1q5GB7h+6DC8qbnUKkSaqqqv87rZjupNlFC2JCYm+Ha
+         y6fVhuNkBqKXmiiO+4QVmpZmzI5nC8/A4nJMiFSb49vSp81oyG053wO8OM/fLqWc5m4L
+         vXTw==
+X-Gm-Message-State: AOAM533jBto6eCVUzK6qXkBUZhP1Jbf8wchL5VyXRq9GKwS21RkSWnsf
+        PxdxCPK3UewuNmzP4/a1R/0=
+X-Google-Smtp-Source: ABdhPJxbqu4tYYzo9X7w2byyzKFiB7b+to6hkE0G2bD3xZQ3Dh2ku5IWQzN+yN8NAFRXCFg4RpKnZQ==
+X-Received: by 2002:a9d:6153:: with SMTP id c19mr8644673otk.341.1621610318407;
+        Fri, 21 May 2021 08:18:38 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s4sm1370351otr.80.2021.05.21.08.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 May 2021 08:18:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [RESEND 1/1] watchdog: simplify devm_watchdog_register_device
-To:     Tian Tao <tiantao6@hisilicon.com>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org,
-        Yicong Yang <yangyicong@hisilicon.com>
-References: <1621581364-31734-1-git-send-email-tiantao6@hisilicon.com>
+Date:   Fri, 21 May 2021 08:18:36 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1652dd02-1fcd-43fa-46ee-308e80b1a018@roeck-us.net>
-Date:   Fri, 21 May 2021 04:07:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+To:     JP Ertola <jp.ertola@hpe.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v5] Extend watchdog timeout during kernel panic.
+Message-ID: <20210521151836.GA2077758@roeck-us.net>
+References: <20210205184620.56103-1-jp.ertola@hpe.com>
 MIME-Version: 1.0
-In-Reply-To: <1621581364-31734-1-git-send-email-tiantao6@hisilicon.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210205184620.56103-1-jp.ertola@hpe.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/21/21 12:16 AM, Tian Tao wrote:
-> Use devm_add_action_or_reset() instead of devres_alloc() and
-> devres_add(), which works the same. This will simplify the
-> code. There is no functional changes.
+On Fri, Feb 05, 2021 at 10:46:20AM -0800, JP Ertola wrote:
+> If the watchdog timeout is set such that the crash kernel does not
+> have time to collect a coredump and the crash kernel is not equipped to
+> ping the watchdog timer itself, then a kernel coredump will not be collected
+> before the watchdog fires. This change registers a panic notifier and
+> callback so the watchdog timeout can be extended if a kernel panic occurs.
+> This timeout extension would give the crash kernel enough time to collect
+> a coredump before the CPU resets. The watchdog timeout is extended if and only
+> if a crash kernel image is loaded in memory, the watchdog is active at the
+> time of the panic, and the kconfig setting is set.
 > 
-> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> A Kconfig option has been added to configure the timeout duration at
+> compile-time. Default is zero seconds.
+> 
+> Signed-off-by: JP Ertola <jp.ertola@hpe.com>
+> ---
+> v5: Clean up variable names and spacing. Call __watchdog_ping() instead of 
+> wdd->ops->ping(). Remove notifier_from_errno() as it could cause unintended
+> behavior in the future if this watchdog extension notifier has its priority
+> elevated above minimum.
+> v4: Remove optional callback mechanism alltogether. I agree with Guenter,
+> not widely used.
+> v3: Fix logic so timeout extension is not longer than wdd->max_timeout
+> v2: Remove dead code and comments.
+> 
+>  drivers/watchdog/Kconfig        | 13 ++++++
+>  drivers/watchdog/watchdog_dev.c | 73 ++++++++++++++++++++++++++++++++-
+>  include/linux/watchdog.h        |  1 +
+>  3 files changed, 85 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index fd7968635e6d..f1055985e100 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -141,6 +141,19 @@ comment "Watchdog Device Drivers"
+>  
+>  # Architecture Independent
+>  
+> +config DEFAULT_WATCHDOG_CRASH_KERNEL_TIMEOUT
+> +	int "Default timeout for watchdog timer before crash kernel starts (seconds)"
+> +	default 0
+> +	help
+> +	  This option allows an extended timeout to be used for the watchdog when
+> +	  the kernel panics and a crash kernel is about to start. This is helpful
+> +	  when the existing WDT timeout value is less than the time required for
+> +	  crash kernel to run and the crash kernel is unable to handle the
+> +	  the watchdog itself. The timeout extension happens last in chain of
+> +	  kernel panic handler callbacks just in case another panic handler
+> +	  hangs unexpectedly. When this value is set to 0, the watchdog timeout
+> +	  will not be changed.
+> +
+>  config SOFT_WATCHDOG
+>  	tristate "Software watchdog"
+>  	select WATCHDOG_CORE
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 2946f3a63110..92d11ef9fbb4 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/init.h>		/* For __init/__exit/... */
+>  #include <linux/hrtimer.h>	/* For hrtimers */
+>  #include <linux/kernel.h>	/* For printk/panic/... */
+> +#include <linux/kexec.h>	/* For checking if crash kernel is loaded */
+>  #include <linux/kthread.h>	/* For kthread_work */
+>  #include <linux/miscdevice.h>	/* For handling misc devices */
+>  #include <linux/module.h>	/* For module stuff/... */
+> @@ -82,6 +83,8 @@ static bool handle_boot_enabled =
+>  
+>  static unsigned open_timeout = CONFIG_WATCHDOG_OPEN_TIMEOUT;
+>  
+> +static unsigned int wdt_panic_timeout = CONFIG_DEFAULT_WATCHDOG_CRASH_KERNEL_TIMEOUT;
+> +
+>  static bool watchdog_past_open_deadline(struct watchdog_core_data *data)
+>  {
+>  	return ktime_after(ktime_get(), data->open_deadline);
+> @@ -658,6 +661,50 @@ static int watchdog_ioctl_op(struct watchdog_device *wdd, unsigned int cmd,
+>   *	off the watchdog (if 'nowayout' is not set).
+>   */
+>  
+> +static int watchdog_panic_notifier(struct notifier_block *nb,
+> +	unsigned long code, void *data)
+> +{
+> +	struct watchdog_device *wdd;
+> +	int ret;
+> +	unsigned int timeout = wdt_panic_timeout;
+> +
+> +	if (wdt_panic_timeout == 0)
+> +		return NOTIFY_DONE;
+> +
+> +	wdd = container_of(nb, struct watchdog_device, panic_nb);
+> +
+> +	if (watchdog_timeout_invalid(wdd, wdt_panic_timeout)) {
+> +		timeout = min(wdt_panic_timeout, wdd->max_timeout);
 
-There is a functional change: With this patch applied, the watchdog
-is registered first, before allocating memory, and then unregistered
-if allocating that memory failed. I do not like that change,
-and I think the code should remain as-is.
+This won't work if  wdd->min_timeout is set to a value larger than the
+requested value. It also won't work if max_timeout is not set at all
+(as is the case for drivers using max_hw_heartbeat_ms instead).
 
 Guenter
-
-> ---
->   drivers/watchdog/watchdog_core.c | 21 ++++++---------------
->   1 file changed, 6 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-> index 5df0a22..cea6080 100644
-> --- a/drivers/watchdog/watchdog_core.c
-> +++ b/drivers/watchdog/watchdog_core.c
-> @@ -364,9 +364,9 @@ void watchdog_unregister_device(struct watchdog_device *wdd)
->   
->   EXPORT_SYMBOL_GPL(watchdog_unregister_device);
->   
-> -static void devm_watchdog_unregister_device(struct device *dev, void *res)
-> +static void devm_watchdog_unregister_device(void *wdd)
->   {
-> -	watchdog_unregister_device(*(struct watchdog_device **)res);
-> +	watchdog_unregister_device(wdd);
->   }
->   
->   /**
-> @@ -381,23 +381,14 @@ static void devm_watchdog_unregister_device(struct device *dev, void *res)
->   int devm_watchdog_register_device(struct device *dev,
->   				struct watchdog_device *wdd)
->   {
-> -	struct watchdog_device **rcwdd;
->   	int ret;
->   
-> -	rcwdd = devres_alloc(devm_watchdog_unregister_device, sizeof(*rcwdd),
-> -			     GFP_KERNEL);
-> -	if (!rcwdd)
-> -		return -ENOMEM;
-> -
->   	ret = watchdog_register_device(wdd);
-> -	if (!ret) {
-> -		*rcwdd = wdd;
-> -		devres_add(dev, rcwdd);
-> -	} else {
-> -		devres_free(rcwdd);
-> -	}
-> +	if (ret)
-> +		return ret;
->   
-> -	return ret;
-> +	return devm_add_action_or_reset(dev, devm_watchdog_unregister_device,
-> +					wdd);
->   }
->   EXPORT_SYMBOL_GPL(devm_watchdog_register_device);
->   
-> 
-
