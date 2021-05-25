@@ -2,105 +2,186 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F06838E7EC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 24 May 2021 15:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB74538FEA1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 May 2021 12:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbhEXNoe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 24 May 2021 09:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbhEXNo3 (ORCPT
+        id S230097AbhEYKPK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 May 2021 06:15:10 -0400
+Received: from mail-lf1-f47.google.com ([209.85.167.47]:42951 "EHLO
+        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230218AbhEYKPG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 24 May 2021 09:44:29 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02506C061756;
-        Mon, 24 May 2021 06:43:01 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id y76so17827362oia.6;
-        Mon, 24 May 2021 06:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nF07paaoG3jGvPxI4nip343c9NWP2ELhNwJytuUtMbI=;
-        b=pp8vSGVbBXgNqo9c8hQQENnz8utSW1ro/pYR1mn3XfB/1hrgyvqQ/JeEe8w71D7E3u
-         laWYwAlw2G047diBzJhfMlCPkzi8XRpuHELXkwPNzBNxJuWZJFEROo968ZUSvZ0Gmiph
-         GS+PNA4LzAS8L2EoEaG+m9ttB0txWtoyZQ8MeIPsXd8DsvKqeREcP6ctyrL2D74XNkxv
-         TcKDB0Tp9D7wJzFBpPdl87Yg/f9rR/Ilw/rPKa4kaIXFc59jp7a1QJEJX3//GAMCTBQV
-         fV8jvC3gX3hRHvugeHLbH+jGH4QeYQ+ufMhD06nleYu43oOJeDNA0Rvng5iW3L+t11fS
-         q89g==
+        Tue, 25 May 2021 06:15:06 -0400
+Received: by mail-lf1-f47.google.com with SMTP id a2so45194131lfc.9;
+        Tue, 25 May 2021 03:13:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nF07paaoG3jGvPxI4nip343c9NWP2ELhNwJytuUtMbI=;
-        b=nHpGM4utOQlDjdh0UmK4gc6iEydO9tYPZBoXQ5x3rOf6koHxdaRHWIWaF0kYkftsPz
-         gc+sXruzzamCRqbWAIn4TQaQmHWZxMpjlCOzy6ofxPPZCNNDacBlbFevsAh8C5gzFNJO
-         EecvK7yp+Ge50Zv/mBx29FKaX2lKGTznnZVHXXzaMNRLST0H+zvDuyh2ZBHyre/QI0no
-         OmtyflwRFuBNF4UMfR9mq3b8VmEF2oZAP5OahH8N+/S6N/niIIS4Qvo9EpT5n5WBDszo
-         1RIwjYCR5K2IJ15pDSGCV8qIsK1Kc0KSffKm8lfNjoTlmDVFdvTgyJhfYY3T0QB9QNDN
-         emfQ==
-X-Gm-Message-State: AOAM530WEu8bBYNyF0fOYxcAcRrI3JOfrCtNkbi0vPSPhzViKWQhkoYm
-        gUM3a49lOBKyz3v5bRossSw=
-X-Google-Smtp-Source: ABdhPJw1qWZNHAl/oNtYKGXvY5CoCsK4IKNju8UmdZeSMgRQERXGZ/cO8E7q+Uwak7Z2w4dtmnIDUw==
-X-Received: by 2002:aca:bc8b:: with SMTP id m133mr10646488oif.10.1621863780404;
-        Mon, 24 May 2021 06:43:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c18sm3111268otm.1.2021.05.24.06.42.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 May 2021 06:42:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 0/9] Intel Keem Bay WDT bug fixes
-To:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Sanil, Shruthi" <shruthi.sanil@intel.com>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kris.pan@linux.intel.com" <kris.pan@linux.intel.com>,
-        "mgross@linux.intel.com" <mgross@linux.intel.com>,
-        "Thokala, Srikanth" <srikanth.thokala@intel.com>,
-        "Raja Subramanian, Lakshmi Bai" 
-        <lakshmi.bai.raja.subramanian@intel.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>
-References: <20210517174953.19404-1-shruthi.sanil@intel.com>
- <BYAPR11MB312848D2D369C78BD2E969F0F1269@BYAPR11MB3128.namprd11.prod.outlook.com>
- <YKuBppIuUHqkiMg4@smile.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <88c07283-981c-b998-59a1-315f94f10f3e@roeck-us.net>
-Date:   Mon, 24 May 2021 06:42:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=bKfxY6mSloECBEhPINl3+vEHZAIdmfDNQyztmX6YrqA=;
+        b=XoyXQFPQPyaib28Fy0xl0TeFElHKa2X+m6JBQSMI8lCUcR8HrZ+pIvBaRDhbgIbkuM
+         LC68jeUwYHB7J7hvlGDz8WhX3rfqcRKEOQ5745bYqKSOXVZicRXX+nqZhBk5HAmFQ8Jy
+         b/VPm3TTsRJJdS+kEzLHoiIgIRlBZenT0otS1HItwlVicRcy11O1d6M66NrbnbeNNWWi
+         iCrYwBul2dI3btIMd8BsZOcDJIcwif7G1lfaUffxK7L6R2XjqoikREV9uYv1h5o+aoJh
+         O9sMNMQ6ka+WXEjpa+0ZpIhQoowHYQtEXvEyUHdgj7GBVLwNWnXGusvmhly/H3mU5IFt
+         njQg==
+X-Gm-Message-State: AOAM5302GvLvtwmaxRYEnxFzIyifz3Njh09+jCdgu99MdF7zwKAEBgDo
+        vNZ1v5Kdyv7vwcG9EbvD9EE=
+X-Google-Smtp-Source: ABdhPJyd/seBDSLExiEdshhwpoFZVPNcW5lavyyG/mPGb5jIxHr/rfjgXrEarA8o4tc3kjdoUcqFQg==
+X-Received: by 2002:ac2:5edb:: with SMTP id d27mr13199748lfq.577.1621937613182;
+        Tue, 25 May 2021 03:13:33 -0700 (PDT)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
+        by smtp.gmail.com with ESMTPSA id c9sm2170474lji.18.2021.05.25.03.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 May 2021 03:13:32 -0700 (PDT)
+Date:   Tue, 25 May 2021 13:13:25 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 0/9] Drop ROHM BD70528 support
+Message-ID: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-In-Reply-To: <YKuBppIuUHqkiMg4@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/24/21 3:36 AM, andriy.shevchenko@linux.intel.com wrote:
-> On Mon, May 24, 2021 at 06:06:35AM +0000, Sanil, Shruthi wrote:
->> Hi Roeck,
->>
->> I have addressed your review comments in the v2 version of this patch series.
->> Could you please review?
->>
->> If no comments, can I get an Acked-by tag?
->> Thanks!
-> 
-> First of all, do not top post!
-> 
->>> From: Sanil, Shruthi <shruthi.sanil@intel.com>
->>> Sent: Monday, May 17, 2021 11:20 PM
-> 
-> AFAICS Guenter had reviewed (as you put his tags into commits). It means that
-> maintainer will pickup patches when they feel it's a good time.
-> 
 
-Yes, and the patches are queued in my own watchdog-next branch.
-At this point we'll have to wait for the Wim to pick up the series.
+--KsGdsel6WgEHnImy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Guenter
+Drop ROHM BD70528 support
+
+Unfortunately there has not been a big demand for ROHM BD70528
+IC. The few users I know control PMIC from separate M4-core,
+which is not running Linux. I am not aware of any users of this
+Linux driver.
+
+While I did really like this IC and writing the drivers for it,
+seems like these drivers are becoming useless burden. So, I see
+no point in maintaining them. Let's just drop the drivers if
+there is no objections to this series. :(
+
+Few notes:
+
+The GPIO, regulator, power-supply and watchdog drivers should be
+only used on BD70528 and depend on the BD70528 MFD Kconfig. I guess
+the removal can be independently merged to the respective subsystems.
+
+The BD70528 RTC driver is still used by BD71815 and BD71828 -
+but the watchdog-hack can be removed and driver is greatly
+simplified. However, it's worth noting that there is dependency
+=66rom the BD70528 RTC driver to the header files - thus the
+RTC driver changes should be merged before MFD changes. Also the
+CLK driver remains in use and needs the BD70528 IC-type.
+
+As a final note - Few improvements/fixes were just applied to the
+regulator tree so this series is likely to conflict. Some fixes
+were also added to RTC Kconfig - which means also the RTC tree
+may have conflicts. Please let me know if you wish me to rebase
+this series or those patches.
+
+---
+
+Matti Vaittinen (9):
+  dt-bindings: mfd: regulator: Drop BD70528 support
+  rtc: bd70528: Drop BD70528 support
+  watchdog: bd70528 drop bd70528 support
+  regulator: bd70528: Drop BD70528 support
+  clk: bd718xx: Drop BD70528 support
+  gpio: bd70528 Drop BD70528 support
+  power: supply: Drop BD70528 support
+  mfd: bd70528: Drop BD70528 support
+  MAINTAINERS: bd70528: Drop ROHM BD70528 drivers
+
+ .../bindings/mfd/rohm,bd70528-pmic.txt        | 102 ---
+ .../regulator/rohm,bd70528-regulator.txt      |  68 --
+ MAINTAINERS                                   |   8 -
+ drivers/clk/Kconfig                           |   6 +-
+ drivers/clk/clk-bd718x7.c                     |  11 +-
+ drivers/gpio/Kconfig                          |  11 -
+ drivers/gpio/Makefile                         |   1 -
+ drivers/gpio/gpio-bd70528.c                   | 230 ------
+ drivers/mfd/Kconfig                           |  17 -
+ drivers/mfd/Makefile                          |   1 -
+ drivers/mfd/rohm-bd70528.c                    | 314 --------
+ drivers/power/supply/Kconfig                  |   9 -
+ drivers/power/supply/Makefile                 |   1 -
+ drivers/power/supply/bd70528-charger.c        | 710 ------------------
+ drivers/regulator/Kconfig                     |  11 -
+ drivers/regulator/Makefile                    |   1 -
+ drivers/regulator/bd70528-regulator.c         | 283 -------
+ drivers/rtc/Kconfig                           |   4 +-
+ drivers/rtc/rtc-bd70528.c                     | 316 +-------
+ drivers/watchdog/Kconfig                      |  12 -
+ drivers/watchdog/Makefile                     |   1 -
+ drivers/watchdog/bd70528_wdt.c                | 291 -------
+ include/linux/mfd/rohm-bd70528.h              | 391 ----------
+ include/linux/mfd/rohm-generic.h              |   1 -
+ 24 files changed, 18 insertions(+), 2782 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd70528-pmic=
+=2Etxt
+ delete mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd7052=
+8-regulator.txt
+ delete mode 100644 drivers/gpio/gpio-bd70528.c
+ delete mode 100644 drivers/mfd/rohm-bd70528.c
+ delete mode 100644 drivers/power/supply/bd70528-charger.c
+ delete mode 100644 drivers/regulator/bd70528-regulator.c
+ delete mode 100644 drivers/watchdog/bd70528_wdt.c
+ delete mode 100644 include/linux/mfd/rohm-bd70528.h
+
+
+base-commit: c4681547bcce777daf576925a966ffa824edd09d
+--=20
+2.25.4
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--KsGdsel6WgEHnImy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmCsza8ACgkQeFA3/03a
+ocVoGwf+O32fpxiyhvf67obU6gAfgVe/c6gTD1F1YVRt7tE4QU0fnJBZKSu+koIh
+TS7j0JMGIqZ2XZqnplgCpiElLge8rHFLn4p/qGY1b8+M8e0yRo6zCx6GecX8pvIt
+UlXRv6CWL2S1f/4ajG/wvmjtMLrpEkXHP9o+0QeXABCbvRzJSkXzw5NsPKrV/9ga
+Pof3oQVhhPII1B5pngglL+gpLdzgpOuxkL2uAgX+ipuXLULqZxy2mnjsakSj+X6G
+qc3kyslrN32OmN68FPL1FjomO4YL6VItDrcx7aaP/4EWICe4q91msdgbu/kI+osC
+OgH7n0Gdbhtpax5YULdpd1jVnSG1Iw==
+=0spF
+-----END PGP SIGNATURE-----
+
+--KsGdsel6WgEHnImy--
