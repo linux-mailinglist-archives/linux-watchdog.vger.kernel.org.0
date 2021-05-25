@@ -2,91 +2,106 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BEC390938
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 May 2021 20:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B1E39096A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 May 2021 21:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbhEYSva (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 May 2021 14:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbhEYSv3 (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 May 2021 14:51:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A8BC061574;
-        Tue, 25 May 2021 11:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=NQ4epcrwJLnOn+Z5Q+JRgBByAlxt8NqaS+qzYMfwous=; b=0+HeAohaTk3nEUm+5ikX4z2xXZ
-        pa6BBSNrXg/D5oWNrR7H0eNcBmJ15laH9jpkcRa/eSa/hVmR6+ScJJX4188g5DyY+GGkfUPRskWSg
-        Z//pXv63+3UihPJKDOC+rMdn1JC89WXVoWeTeSButOCPLLxto6v34QdPCB5J8/emxxucbXr7tqOz2
-        swx6abJ1xdthzoXwZHXDQIXN5xEyJ4uBag220nRUYG1BmGaBM9TQY4KeG2MwmcqjGVljjaBCX5UjF
-        pbNasIRHzeoMOyuBo3/W5Yr+rWX2Rzr74Onqg8cBrgrCbAJCrzmTxeAt0+pcedO8+Mbpm9+/HGMFr
-        IH4H8ybA==;
-Received: from [2601:1c0:6280:3f0::7376]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1llc7m-007QcW-VP; Tue, 25 May 2021 18:49:55 +0000
-Subject: Re: [PATCH 2/3] watchdog: Add Mstar MSC313e WDT driver
-To:     Romain Perier <romain.perier@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Daniel Palmer <daniel@0x0f.com>,
-        Mohammed Billoo <mohammed.billoo@gmail.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210525184449.57703-1-romain.perier@gmail.com>
- <20210525184449.57703-3-romain.perier@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <dfb1173d-7564-9386-10bf-5151ef284635@infradead.org>
-Date:   Tue, 25 May 2021 11:49:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S232107AbhEYTKU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 May 2021 15:10:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45804 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230029AbhEYTKT (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 25 May 2021 15:10:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A4376140E;
+        Tue, 25 May 2021 19:08:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621969729;
+        bh=erpKjGqAF4AJzuEwJKCEvWLbw/VoBc5b49WkYqtFinA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i/OslaSNt1f+WuDzqwZneA+WCVy7F4O2r4E6SxvQqyzVtvoONE8Oms6MxSsMIgNtq
+         Qla5P5gNkT3gVba+Pzicj25w7ka950Z+uebbJHXlNkOiGcof0B+yODgiRtIIRhWvpn
+         Y+XhO/LPekhPoxrMqOcEwCg8xQjBoheTspChn8XnAAs/htgGxFBMwXcP/Wkt21EYSp
+         +1zhoegPIDbPbh/GCcLaEkMAzz/FMWRebCpoYlACVzxSmcCk8fwrfvkFboLa0xNXYs
+         xPbJEJi1K58DRU0iVbUL9FeuhDiW2OYDxt9jKnMKhMuABq2wnXb5OhFFurF1B67L87
+         +wg2M+zrDp4xQ==
+Date:   Tue, 25 May 2021 21:08:46 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     cl@rock-chips.com
+Cc:     heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
+        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
+        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org, maz@kernel.org
+Subject: Re: [PATCH v4 01/10] dt-bindings: i2c: i2c-rk3x: add description for
+ rk3568
+Message-ID: <YK1LPjhjci5jejsD@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, cl@rock-chips.com,
+        heiko@sntech.de, robh+dt@kernel.org, jagan@amarulasolutions.com,
+        wens@csie.org, uwe@kleine-koenig.org, mail@david-bauer.net,
+        jbx6244@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
+        cnsztl@gmail.com, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
+        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
+        zhangqing@rock-chips.com, huangtao@rock-chips.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
+        linux-watchdog@vger.kernel.org, maz@kernel.org
+References: <20210429081151.17558-1-cl@rock-chips.com>
+ <20210429081151.17558-2-cl@rock-chips.com>
 MIME-Version: 1.0
-In-Reply-To: <20210525184449.57703-3-romain.perier@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NCc2q0vIdyd+dXz5"
+Content-Disposition: inline
+In-Reply-To: <20210429081151.17558-2-cl@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
 
-On 5/25/21 11:44 AM, Romain Perier wrote:
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 355100dad60a..f53634ea0de6 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -980,6 +980,19 @@ config VISCONTI_WATCHDOG
->  	  Say Y here to include support for the watchdog timer in Toshiba
->  	  Visconti SoCs.
->  
-> +config MSC313E_WATCHDOG
-> +	tristate "MStar MSC313e watchdog"
-> +	depends on ARCH_MSTARV7 || COMPILE_TEST
-> +	depends on OF
-> +	select WATCHDOG_CORE
-> +	help
-> +	  Say Y here to include support for the Watchdog timer embedded
-> +	  into MStar MSC313e chips. This will reboot your system when the
-> +	  timeout is reached.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called msc313e_wdt.
+--NCc2q0vIdyd+dXz5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-AFAIK, you don't need the "depends on OF" line since
-the of*.h headers provide stubs for the cases of CONFIG_OF
-and/or CONFIG_OF_ADDRESS not set/enabled.
+On Thu, Apr 29, 2021 at 04:11:42PM +0800, cl@rock-chips.com wrote:
+> From: Liang Chen <cl@rock-chips.com>
+>=20
+> add "rockchip,rk3568-i2c", "rockchip,rk3399-i2c" for i2c nodes on
+> a rk3568 platform to i2c-rk3x.yaml.
+>=20
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
 
-Not having that line would also make COMPILE_TEST more effective.
+Applied to for-next, thanks!
 
-Can Rob or anyone else comment on this?
 
-thanks.
--- 
-~Randy
+--NCc2q0vIdyd+dXz5
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmCtSz4ACgkQFA3kzBSg
+KbbpaQ//ZFjmjk57xuPgcUkyVTPY3RLZE602/1iQ5IizdQa2vaxkuYrwoSSg4oH5
+TUhCcfrs3oUrEq0ZvFeHevoBcxNqsz/2V2vEpUqGscwRtJnVVEoWwfWpLEZyp33k
+8XPx/kEWyoiT8vqV8ZCz2kjEbBYxhZ3JESKGU7Jp3hhGTEE7i3OwKzokRgm05bXY
+HRT6XvhR5rQ96Rc4j5YhEAchhDbAnS6TOhUGRzIQlgR/nKZXFUlCIwfozjdpBS+D
+THbvK5W3hDqaSkt5y1ff0hujh/NZGl4jU3cOokSLnO+RdOPIZy833SenTp00VYU7
+MmK4iB5ZI/wKOgTrJ3k3BlEzvrDZLfWyD9ZFa8dnuDR6yiDigOKv8osaGuHYopIF
+fJ2QSMFZ8D0vSEc1nus1Jq5bEacIfMo2ZanOB6ZkImaDKfqajhHaMrNNE0eyhGT0
+dSnsyBDSwRKDQdkGFGV3zeCYaYCs9i+Rv5ep6CwbgvfO9pLo7xnMHBK5+qFJIcv3
+t/vm6cvy26GAUJEMP86XnWKnZirNLexFvfBFjXsg6qpwSjux1dfM8GjSBuLMkbSZ
+Xe0h3C+IfThm2AsHc7LuEXMpiEZ0tlcCkW+vSgr9DG6viM7MLLgQeg3gwxvOAHLb
+EWSrivI969UDnwVqd+Ebq8Yjs7vxjfgNCfflbxXOytLmSRkS9KU=
+=OqI6
+-----END PGP SIGNATURE-----
+
+--NCc2q0vIdyd+dXz5--
