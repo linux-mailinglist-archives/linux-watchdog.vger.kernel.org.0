@@ -2,54 +2,35 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEE039092F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 May 2021 20:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BEC390938
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 May 2021 20:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbhEYSqb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 May 2021 14:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        id S232097AbhEYSva (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 May 2021 14:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbhEYSqa (ORCPT
+        with ESMTP id S231565AbhEYSv3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 May 2021 14:46:30 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDB7C061756;
-        Tue, 25 May 2021 11:44:59 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id n4so7351284wrw.3;
-        Tue, 25 May 2021 11:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bqTv+TFAOMBiEQMLXRI7rx6F3LpfuebvVaCG8zYT/N8=;
-        b=hLav2Q7or125o0zrBzNf5u+ACFiioB2IxHdwFxQ4yGd2FIPHV+8AoIrrXv0y0Am+uR
-         bcXLjdplJ2iz+DIYOkYUlJPj7paVRPy+HceZQXevvK+coIGow13KR08oLVkZ8ykJF85P
-         pyhfmFa1rbU/CCUiAfam8CjjMqioRvEmRiWexQcwh427lx2WmR2y29sRkz6XwwzQrHR7
-         BVDka9IYtZtYiWixr1gwDlr/MN8M/RcYAOVTil4yn5EBreLr1Uxnn/9qz9qv4fwVXCK6
-         uxx73F3lKbVj3hkKKJTx6smZW8m8CFPaXdQ7L5q8Eko60kKhAxgTO8eZfZX2vhQIlimV
-         JzvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bqTv+TFAOMBiEQMLXRI7rx6F3LpfuebvVaCG8zYT/N8=;
-        b=mNvBX8Kxpo3+esVdWHzYAuwQXJ9qArdrlfWp+i+P9Osw3wrvJOTsAnksMb0wfwnCAT
-         hyXtdFbEZQfxZ2KEPw6LErqttgUFMtIjqvoOgB5W2NV74FqwTxv5VQUKueNCqwwC9dB8
-         b8/Vej8BrUZQ49sXv66KbWkY+EBi2Mk5cwEfM/vrM5BkrY4EKEbVaRihwXYvxx2eSQA2
-         EjoYJ/DnVyi1LXRZE1mr4wWOVyLjqp3scPvuozzYl+cTmJyNZGtyJQoggAQoG+paXhRX
-         yWEjq5GsVXviXE7WrH3KWHHyW25D1hT4ZGdIBQ7R1/owzBEEylyDOFRJkSajxATfOXU7
-         OA5A==
-X-Gm-Message-State: AOAM531Yq2MeqjV/l0HgYQcaohwLe6rsAYmrudkhAi0boBYwggZFU8V8
-        RxCHk5XhSAc4kV3tp8HMrmvWMFBhZ6I=
-X-Google-Smtp-Source: ABdhPJwor9nnK+rwJRHqFbttHr3fZpGo8vUcaPhHIaSN5bwKEj7DzM7qdy8y/YeHMvQF+EXoQy5PhQ==
-X-Received: by 2002:a5d:6d83:: with SMTP id l3mr28938777wrs.241.1621968297955;
-        Tue, 25 May 2021 11:44:57 -0700 (PDT)
-Received: from debby (176-141-241-253.abo.bbox.fr. [176.141.241.253])
-        by smtp.gmail.com with ESMTPSA id u14sm3595732wmc.41.2021.05.25.11.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 May 2021 11:44:57 -0700 (PDT)
-From:   Romain Perier <romain.perier@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Tue, 25 May 2021 14:51:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A8BC061574;
+        Tue, 25 May 2021 11:50:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=NQ4epcrwJLnOn+Z5Q+JRgBByAlxt8NqaS+qzYMfwous=; b=0+HeAohaTk3nEUm+5ikX4z2xXZ
+        pa6BBSNrXg/D5oWNrR7H0eNcBmJ15laH9jpkcRa/eSa/hVmR6+ScJJX4188g5DyY+GGkfUPRskWSg
+        Z//pXv63+3UihPJKDOC+rMdn1JC89WXVoWeTeSButOCPLLxto6v34QdPCB5J8/emxxucbXr7tqOz2
+        swx6abJ1xdthzoXwZHXDQIXN5xEyJ4uBag220nRUYG1BmGaBM9TQY4KeG2MwmcqjGVljjaBCX5UjF
+        pbNasIRHzeoMOyuBo3/W5Yr+rWX2Rzr74Onqg8cBrgrCbAJCrzmTxeAt0+pcedO8+Mbpm9+/HGMFr
+        IH4H8ybA==;
+Received: from [2601:1c0:6280:3f0::7376]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1llc7m-007QcW-VP; Tue, 25 May 2021 18:49:55 +0000
+Subject: Re: [PATCH 2/3] watchdog: Add Mstar MSC313e WDT driver
+To:     Romain Perier <romain.perier@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     Daniel Palmer <daniel@0x0f.com>,
@@ -57,58 +38,55 @@ Cc:     Daniel Palmer <daniel@0x0f.com>,
         linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ARM: dts: mstar: Add watchdog device_node definition
-Date:   Tue, 25 May 2021 20:44:49 +0200
-Message-Id: <20210525184449.57703-4-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210525184449.57703-1-romain.perier@gmail.com>
 References: <20210525184449.57703-1-romain.perier@gmail.com>
+ <20210525184449.57703-3-romain.perier@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <dfb1173d-7564-9386-10bf-5151ef284635@infradead.org>
+Date:   Tue, 25 May 2021 11:49:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210525184449.57703-3-romain.perier@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This adds the definition of both an oscillator at 12Mhz required by the
-the watchdog and the watchdog device_node.
+Hi,
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
----
- arch/arm/boot/dts/mstar-v7.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+On 5/25/21 11:44 AM, Romain Perier wrote:
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 355100dad60a..f53634ea0de6 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -980,6 +980,19 @@ config VISCONTI_WATCHDOG
+>  	  Say Y here to include support for the watchdog timer in Toshiba
+>  	  Visconti SoCs.
+>  
+> +config MSC313E_WATCHDOG
+> +	tristate "MStar MSC313e watchdog"
+> +	depends on ARCH_MSTARV7 || COMPILE_TEST
+> +	depends on OF
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Say Y here to include support for the Watchdog timer embedded
+> +	  into MStar MSC313e chips. This will reboot your system when the
+> +	  timeout is reached.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called msc313e_wdt.
 
-diff --git a/arch/arm/boot/dts/mstar-v7.dtsi b/arch/arm/boot/dts/mstar-v7.dtsi
-index 3d5d8c634de3..23dff8fe4731 100644
---- a/arch/arm/boot/dts/mstar-v7.dtsi
-+++ b/arch/arm/boot/dts/mstar-v7.dtsi
-@@ -62,6 +62,14 @@ rtc_xtal: rtc_xtal {
- 			clock-frequency = <32768>;
- 			status = "disabled";
- 		};
-+
-+		xtal_div2: xtal_div2 {
-+			#clock-cells = <0>;
-+			compatible = "fixed-factor-clock";
-+			clocks = <&xtal>;
-+			clock-div = <2>;
-+			clock-mult = <1>;
-+		};
- 	};
- 
- 	soc: soc {
-@@ -119,6 +127,12 @@ pm_irin_pins: pm_irin {
- 				};
- 			};
- 
-+			watchdog: watchdog@6000 {
-+				compatible = "mstar,msc313e-wdt";
-+				reg = <0x6000 0x1f>;
-+				clocks = <&xtal_div2>;
-+			};
-+
- 			intc_fiq: interrupt-controller@201310 {
- 				compatible = "mstar,mst-intc";
- 				reg = <0x201310 0x40>;
+AFAIK, you don't need the "depends on OF" line since
+the of*.h headers provide stubs for the cases of CONFIG_OF
+and/or CONFIG_OF_ADDRESS not set/enabled.
+
+Not having that line would also make COMPILE_TEST more effective.
+
+Can Rob or anyone else comment on this?
+
+thanks.
 -- 
-2.30.2
+~Randy
 
