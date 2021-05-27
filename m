@@ -2,256 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8354B3920CC
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 May 2021 21:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FC7392B37
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 May 2021 11:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbhEZT0D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 26 May 2021 15:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbhEZT0C (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 26 May 2021 15:26:02 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC927C061574;
-        Wed, 26 May 2021 12:24:29 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id y76so2624667oia.6;
-        Wed, 26 May 2021 12:24:29 -0700 (PDT)
+        id S235768AbhE0J7B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 May 2021 05:59:01 -0400
+Received: from mail-dm6nam11on2060.outbound.protection.outlook.com ([40.107.223.60]:30807
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235878AbhE0J7A (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 27 May 2021 05:59:00 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GD9KcBbvRt/p1yt3KWXy524kqAWmvohGcKBS+cGztg/vwXUzsAzGewoD1zTwlj0alnn94UNYdu+7Z/aubtlKg0HojWSG/k6Q56pqBAa3MqH+xEntjyjdis0KncZk9QlzliithxaV9NgbZ+v3mEpn1p4CjugXzyclRVrhYbnpZ8JpyVofL2x1fE1NsoPyoHWoAM/BgvI/h7X2Xi4MgR/C5acYZu5/m36XELSmc/WNzO+Y9GGF1wAtTnffcZ16waGY5j3lE5mfFnk3ajjcMwG3DsTbu9LpHiR91HS6WHX/Yaa6fRyqYybrENYW68kLA0BPmcaR22bCfsJRAOoWDZhYyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y/MEglQgoLPJBFi7ycmZMO6bo7fE9Zfm/PHQqQzrlZw=;
+ b=MjHtmaNn2n4vxL6mgxmUunB0/2DNUd7R8feDNLx6ldkSv0LvA70XQU2PMDYwEhsH4nHXkUdroBs5ysYiYDzgDzs5dgxfBFD2VZEwD83gmGmA3VdgXqxKL7vAZnc6+CRqVmk8GtwsvBEQiDIV4ngZxpW46M2C/JHulIC21yLOBap9bU369FdZv3yZrQHAJpmwHe+14O6/Tcf6RdN9gqbz0Eu4r8wrAz5v/5OrTTly926uFcPlrxtCGRLPW5fZtDPWX+5qlDChsaRkWQk+1QoHdAqdN2O8bcUk/yYdZp5gXnRA2DP3rofr1B3Dz3oMhjr58f/MUTyCyNAo5PUvlPKWBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mMr84wnW79eJ+bLd6qGzg7fkB7rh5OToBUejvhaMQJI=;
-        b=cUPHV+Io0Nsf4MIPPGV6JPdt5NqOOskBJGEx1I/WkMW0nGYdZU48WuSeJm3GamIidT
-         Sy/0/U+Xmd5+2Nk8E0uTtFoZaHHiJazee6qRwCXnx9pw9tkruqPEB4jYR6kv21aAg7VA
-         4kIGjBO+P3xnLFsH6EU4TCAU3Hu7ZjQ5jiogcx7gd8aAgw4oymBjOlOetNEvgPW+/U4X
-         902vgfb8W7OpyXhamNERFfXXbXGehDEUF96W67zxIpCEtRoUf8xW97udmHBQHjv7+VGx
-         +d93zivxGBG+zD5nn9HG7eDpXql1MdFhJdp1XR4/bIW+LAlmRiueJhdOoSFhxeFqKUma
-         qF1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mMr84wnW79eJ+bLd6qGzg7fkB7rh5OToBUejvhaMQJI=;
-        b=QbavI4OOdFDZdH+9ZqhgSye2PmmjJvB9J9bdzwVHQl+xmDRjiwYxZAzlSvNcta22kh
-         GCZoBtXBZj89nsGt9GjxsmWUTaItArdHiCJ9tVW755uTfI41gz93i+mm0AIDF1owUm7a
-         iQ3ClkelRJfvXut855m1j9zd6NkQ3GT+R+8MwEY3llD06fFRtpEnoa2+QtNQVWQx8LVB
-         Tqd74v3+erLn7gRyNX+1kksMaXlJb/pwqX2T1WnKZsLXWnEdB9+Awr/5L/Hu7x28pT1u
-         PhG+e/dEtIUJNC7QWbkT5w/qD2i0lodpJrdIHwRK5HxVM16lzjSjFr5cgBu/UuhSapgP
-         LXWw==
-X-Gm-Message-State: AOAM5306GsR3kSahiGw9mG7wLm6o9cL6qob1ljyaJB+tOJpLgAfS2GmO
-        GFdy+MwSBQYOshXJ3SxJPN4E+V9pdrpKfq3PSpo=
-X-Google-Smtp-Source: ABdhPJxYd77i/ganESJH9u6Q39LnWFqKNrqRv+AIw77ejduNuBhTpthz6X4nRwHGYXpVAnaqohkCrCgb02MSxBnlhOU=
-X-Received: by 2002:aca:2b17:: with SMTP id i23mr3063425oik.87.1622057069090;
- Wed, 26 May 2021 12:24:29 -0700 (PDT)
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y/MEglQgoLPJBFi7ycmZMO6bo7fE9Zfm/PHQqQzrlZw=;
+ b=eO7AwM0Mz9oXe/mXdt7Bdwk83LliiBPeBLhTl19NFoA+pNCcnrb5ULriRqDE5HqCWq3nBoHlJYiFXks9IHSLg8Y0pc/hE2JbgujT/5vWE6/kynw9NXAsSD20R1hEg/48gaJGFLTTdDT5WYO35QuWJl5cNaTRNxwPgcteSuOOxjU=
+Received: from BN6PR19CA0098.namprd19.prod.outlook.com (2603:10b6:404:a0::12)
+ by BY5PR02MB6324.namprd02.prod.outlook.com (2603:10b6:a03:1f6::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.26; Thu, 27 May
+ 2021 09:57:25 +0000
+Received: from BN1NAM02FT012.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:404:a0:cafe::80) by BN6PR19CA0098.outlook.office365.com
+ (2603:10b6:404:a0::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20 via Frontend
+ Transport; Thu, 27 May 2021 09:57:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT012.mail.protection.outlook.com (10.13.2.130) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4150.30 via Frontend Transport; Thu, 27 May 2021 09:57:25 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 27 May 2021 02:57:23 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Thu, 27 May 2021 02:57:23 -0700
+Envelope-to: git@xilinx.com,
+ linux@roeck-us.net,
+ wim@linux-watchdog.org,
+ linux-watchdog@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [172.23.80.241] (port=49918 helo=xhdsneeli40x.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <srinivas.neeli@xilinx.com>)
+        id 1lmClW-0007Zl-7x; Thu, 27 May 2021 02:57:22 -0700
+From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
+To:     <linux@roeck-us.net>, <shubhraj@xilinx.com>, <sgoud@xilinx.com>,
+        <michal.simek@xilinx.com>
+CC:     <wim@linux-watchdog.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>
+Subject: [PATCH 0/3] watchdog: Add window watchdog driver
+Date:   Thu, 27 May 2021 15:27:06 +0530
+Message-ID: <20210527095709.12841-1-srinivas.neeli@xilinx.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20210525184449.57703-1-romain.perier@gmail.com>
- <20210525184449.57703-3-romain.perier@gmail.com> <5ce3b5a5-1500-0d95-623e-299e7b1eb43b@roeck-us.net>
-In-Reply-To: <5ce3b5a5-1500-0d95-623e-299e7b1eb43b@roeck-us.net>
-From:   Romain Perier <romain.perier@gmail.com>
-Date:   Wed, 26 May 2021 21:24:16 +0200
-Message-ID: <CABgxDo+6fORohKH_VAw4ZuYVUYoGbo=a-Ckmv8Q5QkEtEZWGJQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] watchdog: Add Mstar MSC313e WDT driver
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Mohammed Billoo <mohammed.billoo@gmail.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2dc50f46-977f-44ee-d166-08d920f5d473
+X-MS-TrafficTypeDiagnostic: BY5PR02MB6324:
+X-Microsoft-Antispam-PRVS: <BY5PR02MB6324DF71FA4B5EE71E328A29AF239@BY5PR02MB6324.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fg1Ytxc9+s4KvY6MeT3gCdd6FxQKY58ni78FqQvtcYFlVA4fGDXwzdp2OL3TBp55czqz5NHZCmzoWc3g4AVLCYH3NHtMg4LszGdfXBdnswW3SUDUiWw1mlsnYidFFaiZzcVPyLLAYqK6mwYHKgCY51YjJ37h/KJ4qD9tRg7+sZrGmBOKRCwufgCOy6hnVHbCCjSrgf1J0BpyoWFMur1WSCEyxlNpilM0M8ZkZcpTXTpXLSg02m3oNyT8bkcUYQLzcX4a40+n/k3gZmpbecSLmOQ6DPPPkLxCYfL0azfEDE1mmsNh20pkfOTRhOeJ3YD0TfGL3sUzdKJQFAH4edx4PZoEraBLoZSzsqaQlwawffLTBc4uYzoF5GiiGO2zlbCnVPXi3LUTztINtxrNlADsiEhiJGuhk4SYiq+dVY2eMg7XTdU/IK1VMKiofHKAcRJciftg9rAvB+ybz0v9XVo5L1JbLZOS79MWxezEa9t+7VjTgZQMeRWKEI443m2vjADOloJqdaAyZnj4/p9q87qIcbii8i7cWEtaSNsBtI2Mfhk/s7uw/AThjIMnHsfsdd1wlObHYkMP0IkRFODtKlDH8fOqX69sDakX1TzQLs8C/TPWmn/rX4SIvpQO9x6Sf8F3X1KFW+yNyFxaNy8A7Kxre6ORoO2zAYSxSSaSNGnDh8gPQV14C17giPolDx3K5DNd
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(396003)(39860400002)(136003)(346002)(46966006)(36840700001)(8676002)(6666004)(36756003)(6636002)(356005)(110136005)(2616005)(82740400003)(70206006)(426003)(316002)(44832011)(7696005)(36906005)(186003)(70586007)(5660300002)(4326008)(4744005)(47076005)(478600001)(26005)(336012)(36860700001)(1076003)(7636003)(54906003)(2906002)(9786002)(82310400003)(8936002)(107886003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2021 09:57:25.1602
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2dc50f46-977f-44ee-d166-08d920f5d473
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT012.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6324
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+This patch series:
+- Add xilinx window watchdog binding document.
+- Add versal window watchdog feature.
+- Add MAINTAINERS fragment for xilinx watchdog drivers.
 
+Srinivas Neeli (3):
+  watchdog: bindings: xlnx,versal-wwdt: Add binding documentation for
+    xilinx window watchdog device
+  watchdog: xilinx_wwdt: Add Versal Window watchdog mode
+  MAINTAINERS: Add fragment for xilinx watchdog drivers
 
-Le mar. 25 mai 2021 =C3=A0 21:52, Guenter Roeck <linux@roeck-us.net> a =C3=
-=A9crit :
->
-> On 5/25/21 11:44 AM, Romain Perier wrote:
-> > From: Daniel Palmer <daniel@0x0f.com>
-> >
-> > It adds a driver for the IP block handling the watchdog timer found for
-> > Mstar MSC313e SoCs and newer.
-> >
-> > Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> > Co-developed-by: Romain Perier <romain.perier@gmail.com>
-> > Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> > ---
-> >   MAINTAINERS                    |   1 +
-> >   drivers/watchdog/Kconfig       |  13 +++
-> >   drivers/watchdog/Makefile      |   1 +
-> >   drivers/watchdog/msc313e_wdt.c | 173 ++++++++++++++++++++++++++++++++=
-+
-> >   4 files changed, 188 insertions(+)
-> >   create mode 100644 drivers/watchdog/msc313e_wdt.c
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index a0f37adb9e64..fcc10c57298c 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -2177,6 +2177,7 @@ F:      arch/arm/mach-mstar/
-> >   F:  drivers/clk/mstar/
-> >   F:  drivers/gpio/gpio-msc313.c
-> >   F:  drivers/pinctrl/pinctrl-msc313.c
-> > +F:   drivers/watchdog/msc313e_wdt.c
-> >   F:  include/dt-bindings/clock/mstar-*
-> >   F:  include/dt-bindings/gpio/msc313-gpio.h
-> >   F:  include/soc/mstar/
-> > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> > index 355100dad60a..f53634ea0de6 100644
-> > --- a/drivers/watchdog/Kconfig
-> > +++ b/drivers/watchdog/Kconfig
-> > @@ -980,6 +980,19 @@ config VISCONTI_WATCHDOG
-> >         Say Y here to include support for the watchdog timer in Toshiba
-> >         Visconti SoCs.
-> >
-> > +config MSC313E_WATCHDOG
-> > +     tristate "MStar MSC313e watchdog"
-> > +     depends on ARCH_MSTARV7 || COMPILE_TEST
-> > +     depends on OF
-> > +     select WATCHDOG_CORE
-> > +     help
-> > +       Say Y here to include support for the Watchdog timer embedded
-> > +       into MStar MSC313e chips. This will reboot your system when the
-> > +       timeout is reached.
-> > +
-> > +       To compile this driver as a module, choose M here: the
-> > +       module will be called msc313e_wdt.
-> > +
-> >   # X86 (i386 + ia64 + x86_64) Architecture
-> >
-> >   config ACQUIRE_WDT
-> > diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> > index a7eade8b4d45..7fa392ae3000 100644
-> > --- a/drivers/watchdog/Makefile
-> > +++ b/drivers/watchdog/Makefile
-> > @@ -92,6 +92,7 @@ obj-$(CONFIG_SPRD_WATCHDOG) +=3D sprd_wdt.o
-> >   obj-$(CONFIG_PM8916_WATCHDOG) +=3D pm8916_wdt.o
-> >   obj-$(CONFIG_ARM_SMC_WATCHDOG) +=3D arm_smc_wdt.o
-> >   obj-$(CONFIG_VISCONTI_WATCHDOG) +=3D visconti_wdt.o
-> > +obj-$(CONFIG_MSC313E_WATCHDOG) +=3D msc313e_wdt.o
-> >
-> >   # X86 (i386 + ia64 + x86_64) Architecture
-> >   obj-$(CONFIG_ACQUIRE_WDT) +=3D acquirewdt.o
-> > diff --git a/drivers/watchdog/msc313e_wdt.c b/drivers/watchdog/msc313e_=
-wdt.c
-> > new file mode 100644
-> > index 000000000000..434259256967
-> > --- /dev/null
-> > +++ b/drivers/watchdog/msc313e_wdt.c
-> > @@ -0,0 +1,173 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * MStar WDT driver
-> > + *
-> > + * Copyright (C) 2019 - 2021 Daniel Palmer
-> > + * Copyright (C) 2021 Romain Perier
-> > + *
-> > + */
-> > +
-> > +#include <linux/platform_device.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_irq.h>
-> > +#include <linux/module.h>
-> > +#include <linux/watchdog.h>
-> > +#include <linux/io.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/interrupt.h>
->
-> Alphabetic order, please.
+ .../bindings/watchdog/xlnx,versal-wwdt.yaml   |  71 ++++
+ MAINTAINERS                                   |  10 +
+ drivers/watchdog/Kconfig                      |  16 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/xilinx_wwdt.c                | 382 ++++++++++++++++++
+ 5 files changed, 480 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+ create mode 100644 drivers/watchdog/xilinx_wwdt.c
 
-Ack, I will fix it.
+-- 
+2.22.0
 
-> Also, please drop unneeded include files.
-> The driver doesn't support interrupts, so any interrupt related
-> include file is unnecessary. I also don't see any devicetree specific
-> code except for of_device_id, and that is declared in mod_devicetable.h,
-> not in an of_xxx.h include file.
-
-Arf, in fact an interrupt was used previously (it triggers when the
-wdt reaches a specific value
-that is not necessarily the value of the initial timeout), but I have
-decided to remove it because
-not really useful. And I have kept some headers, sorry for that. I will fix=
- it.
-
->
-> > +
-> > +#define REG_WDT_CLR                  0x0
-> > +#define REG_WDT_MAX_PRD_L            0x10
-> > +#define REG_WDT_MAX_PRD_H            0x14
-> > +
-> > +#define MSC313E_WDT_DEFAULT_TIMEOUT  30
-> > +/* Supports 1 - 350 sec */
->
-> Doesn't that depend on the clock freqneucy ?
-> More on that see below.
->
-> > +#define MSC313E_WDT_MIN_TIMEOUT              1
-> > +#define MSC313E_WDT_MAX_TIMEOUT              350
-> > +
-> > +static unsigned int timeout;
-> > +
-> > +module_param(timeout, int, 0);
-> > +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-> > +
-> > +struct msc313e_wdt_priv {
-> > +     void __iomem *base;
-> > +     struct device *dev;
->
-> I don't immediately see where 'dev' is used.
->
-> > +     struct watchdog_device wdev;
-> > +     struct clk *clk;
-> > +};
-> > +
-> > +static int msc313e_wdt_start(struct watchdog_device *wdev)
-> > +{
-> > +     struct msc313e_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
-> > +     u32 timeout;
-> > +     int err;
-> > +
-> > +     err =3D clk_prepare_enable(priv->clk);
-> > +     if (err) {
-> > +             dev_err(priv->dev, "failed to enable clock\n");
->
-> Ah, here. I am not sure if I like that error message - it is going to be
-> persistent and may create a lot of noise if it is ever seen, and pretty m=
-uch
-> useless otherwise. Either case, if you insist on the message, I'd suggest
-> to use wdev->parent.
-
-Honestly ? It is mostly to avoid silent errors, but I can also return
-an error directly, yep (I mean
-just return the error code). The userspace app is supposed to check
-the error code returned by ioctl. No objection
-for removing the message (and so priv->dev too).
-
->
-> > +             return err;
-> > +     }
-> > +     timeout =3D wdev->timeout * clk_get_rate(priv->clk);
->
-> How is it guaranteed that this won't overflow ? The maximum timeout is no=
-t
-> tied to the clock frequency. This will overflow if the clock frequency is
-> above 0xffffffff / 350 =3D 12271335 Hz and the timeout is sufficiently la=
-rge.
->
-
-Ah good catch ! Mhhhhh we could compute max_timeout dynamically
-from the probe function. So, we allow  the maximum possible value just
-before the overflow. The units are different but there is something
-similar in meson_wdt.c  .
-
-Anyway, I will think about it and propose a fix.
-
-
-Thanks,
-Romain
