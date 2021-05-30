@@ -2,87 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C0C395047
-	for <lists+linux-watchdog@lfdr.de>; Sun, 30 May 2021 11:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83A339505F
+	for <lists+linux-watchdog@lfdr.de>; Sun, 30 May 2021 12:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbhE3J23 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 30 May 2021 05:28:29 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:40473 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbhE3J20 (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 30 May 2021 05:28:26 -0400
-Received: from localhost.localdomain ([37.4.249.151]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N6bwO-1lLJgV48Kc-017zow; Sun, 30 May 2021 11:26:26 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 6/6] arm64: dts: broadcom: Add reference to RPi 400
-Date:   Sun, 30 May 2021 11:26:15 +0200
-Message-Id: <1622366775-5309-7-git-send-email-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
-References: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:q/IbM1RlSms3sEeZn3zRYhinPp/899xwqhVcoiG5y1OBVgwsH6O
- e7PYL8xAInkdBGzu1pOE39H3F6P9naNEqYuwAc2mpB1xyVd5yvqvtTi658nyWWz/82oD93a
- 3pkVyQzPykdSjEGnG44qgyV2CFFgG/9NvEtNjADpNfOqWDnJ5sUAZ4jUIhhg8Vrjwyaj2jX
- qIWusPryam50OJwErfRZA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mju3w2jQjGc=:3jeTML6iMxctlGtCXzoSbA
- zwlvr5OyBCNqFLSUOhJ/T9zgQMAH6EOsUeqY5HiuWTYdGgVnVt9hGuRNVie2LZPEh3BGfM3T6
- OqE0716A90G4quNQ7SamvcvomRKgtNRMwamzKI/huIOUbOG4/l+b0gBTscn/w51XsG+vk0eNW
- eTs/GaWkNk9uvmzGmoyn71cwVQK+yF0F0/4/XbaJKScptNnuoqkmEaoIafFwHD/c/5GEAjE3K
- PTFM3oxkCN5cW/UNLVHl+305m1HrqMaeWnLRY3GTm207x/weU0iGoTMfRxnw2BbJaqqYGCNDC
- iIsqV+8//ToAobliW5LFFMr1T15l3PSdWaolSVr5WcS1JxB8yBJKE5y1lNVknMUTfYXjsYLh/
- oCvsi1B+sQKJD66agRWgCW1JHtTxVWiDI9aS/6ceoWvH3+i2KsZ8W3HweNKdE4Y7583atVle0
- nS62CzSjpjRgMiGP0slRljV2RAa91HZ8aDpO+/cx+cq74PfrQf7syfLwxTX6979YRCZAj8Cmf
- chqmXcWOYgNcmADcGiAkbA=
+        id S229579AbhE3KHr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 30 May 2021 06:07:47 -0400
+Received: from gecko.sbs.de ([194.138.37.40]:35904 "EHLO gecko.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229500AbhE3KHq (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sun, 30 May 2021 06:07:46 -0400
+X-Greylist: delayed 407 seconds by postgrey-1.27 at vger.kernel.org; Sun, 30 May 2021 06:07:45 EDT
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 14U9wufY030721
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 30 May 2021 11:58:56 +0200
+Received: from [167.87.72.222] ([167.87.72.222])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 14U9wtEv030019;
+        Sun, 30 May 2021 11:58:55 +0200
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Subject: [PATCH] watchdog: iTCO_wdt: Account for rebooting on second timeout
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Storm <christian.storm@siemens.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Message-ID: <73a36792-28f8-e513-b384-bdbe7d31ca05@siemens.com>
+Date:   Sun, 30 May 2021 11:58:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This adds a reference to the dts of the Raspberry Pi 400,
-so we don't need to maintain the content in arm64.
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+This was already attempted to fix via 1fccb73011ea: If the BIOS did not
+enable TCO SMIs, the timer definitely needs to trigger twice in order to
+cause a reboot. If TCO SMIs are on, we can continue to assume that the
+BIOS will perform a reboot on the first timeout.
+
+QEMU with its ICH9 and related BIOS falls into the former category,
+currently taking twice the configured timeout in order to reboot the
+machine. For iTCO version that fall under turn_SMI_watchdog_clear_off,
+this is also true and was currently only addressed for v1, irrespective
+of the turn_SMI_watchdog_clear_off value.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 ---
- arch/arm64/boot/dts/broadcom/Makefile            | 3 ++-
- arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
+ drivers/watchdog/iTCO_wdt.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-index 998e240..11eae3e 100644
---- a/arch/arm64/boot/dts/broadcom/Makefile
-+++ b/arch/arm64/boot/dts/broadcom/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
--dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-4-b.dtb \
-+dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
-+			      bcm2711-rpi-4-b.dtb \
- 			      bcm2837-rpi-3-a-plus.dtb \
- 			      bcm2837-rpi-3-b.dtb \
- 			      bcm2837-rpi-3-b-plus.dtb \
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
-new file mode 100644
-index 0000000..b9000f5
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dts
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "arm/bcm2711-rpi-400.dts"
+diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+index bf31d7b67a69..091797d12146 100644
+--- a/drivers/watchdog/iTCO_wdt.c
++++ b/drivers/watchdog/iTCO_wdt.c
+@@ -71,6 +71,7 @@
+ #define TCOBASE(p)	((p)->tco_res->start)
+ /* SMI Control and Enable Register */
+ #define SMI_EN(p)	((p)->smi_res->start)
++#define TCO_EN		(1 << 13)
+ 
+ #define TCO_RLD(p)	(TCOBASE(p) + 0x00) /* TCO Timer Reload/Curr. Value */
+ #define TCOv1_TMR(p)	(TCOBASE(p) + 0x01) /* TCOv1 Timer Initial Value*/
+@@ -355,8 +356,11 @@ static int iTCO_wdt_set_timeout(struct watchdog_device *wd_dev, unsigned int t)
+ 
+ 	tmrval = seconds_to_ticks(p, t);
+ 
+-	/* For TCO v1 the timer counts down twice before rebooting */
+-	if (p->iTCO_version == 1)
++	/*
++	 * If TCO SMIs are off, the timer counts down twice before rebooting.
++	 * Otherwise, the BIOS generally reboots when the SMI triggers.
++	 */
++	if (p->smi_res && !(SMI_EN(p) & TCO_EN))
+ 		tmrval /= 2;
+ 
+ 	/* from the specs: */
+@@ -521,7 +525,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+ 		 * Disables TCO logic generating an SMI#
+ 		 */
+ 		val32 = inl(SMI_EN(p));
+-		val32 &= 0xffffdfff;	/* Turn off SMI clearing watchdog */
++		val32 &= ~TCO_EN;	/* Turn off SMI clearing watchdog */
+ 		outl(val32, SMI_EN(p));
+ 	}
+ 
 -- 
-2.7.4
-
+2.26.2
