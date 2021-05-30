@@ -2,92 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C98394423
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 May 2021 16:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F52394FF2
+	for <lists+linux-watchdog@lfdr.de>; Sun, 30 May 2021 09:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235077AbhE1OYu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 May 2021 10:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S229500AbhE3H2s (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 30 May 2021 03:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbhE1OYt (ORCPT
+        with ESMTP id S229550AbhE3H2q (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 May 2021 10:24:49 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9066C06174A
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 May 2021 07:23:13 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id g38so5714609ybi.12
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 May 2021 07:23:13 -0700 (PDT)
+        Sun, 30 May 2021 03:28:46 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BCDC06174A;
+        Sun, 30 May 2021 00:27:08 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id g17so7462655wrs.13;
+        Sun, 30 May 2021 00:27:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=syysfoCLQhlZX4I15Hdgek+czZDdAMbqNxcJPk1EsOQ=;
-        b=Bi4g/rtry3daF+gwc3vRtRNefr36ib+72ReLa3GeeD9O3ybgsW5H+StLvG598fcTA2
-         MxJCazJmuhXChu6NvwkTut4KABCZtDklevvhSdJrjzkGSFpjSB9y1qKrfSy/NJ2F9zqa
-         SZ1tZs0U6q14X/bQF2A24cWdOm+OoG6tGIOcgxXj07e6xNBC4d2gkVJuryB4N0qhMpSv
-         vjosCTpmqAA7DzXW5J9O4/xo9afKZ9gPBnxKBSRuGMrT6i6aZSDO3XwKpRv4Txh494Db
-         xnpj5063UpPa68aZM8xfll+N3FUZukP1ajAbSd7u4yzb1znukr81z6bLt4hdid2Qss8i
-         6bRg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K+tVxOYtByP+ndj4vQlqR1yZg+LmRS1nMw/pCh6v4Xw=;
+        b=RrzxUy6Qb5Q0ZZthV/S6OzS3s+/wl4k/zDfVUHsj/iazi823fBgQr3fqe0f6zPQRZ4
+         VWiObSAdCwh9AswfmC+mK5XHgZqdO0jrFZdeaSRgnrpz5D/Ns+0nNdnY+KSEkOO9nLHU
+         O6jPqxXSFEk3u4PU+XQsfEqbiL4fkQWZDDUrR9IoDPJ1Neq7++SDFhzJVWjdy8xzcbg2
+         4OT4Vz5D7czS7EW8KBGFdAybKVjOkRWF69Cw88Ho2van5LvFb8IfJV9PgnjNAnTXgU/n
+         NwjIkcu8N34b9144wb7TAudilm5MP54jk31Dj4zOgcMt+EiiTtd6r/45pxbarZSK1iMw
+         axdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=syysfoCLQhlZX4I15Hdgek+czZDdAMbqNxcJPk1EsOQ=;
-        b=WsC1qDBsvhBd7XiFqe//8Dh6O078JvCmDBNnuYIugGUCcz0DwE/3647zj67y9emZx0
-         v4jGvA8hoMCgfK6Qu6dsjg3Sds7x6btrqWhJvkYTVJ+RphZQFWSa6kmsu2vLCJXa7x2F
-         Y2OgCosK0Q/Q3l46woafLjs86av/JVtuaaXtZQ1BC3Itpk2zeO0jr2dSvNxa4VQBRGDg
-         2RXk4G6TVkC6fVRfIGN5kz16BjhHNVzLPs4otGB4CiI5BPvhr8HO4xEwonhpiFjKxhhG
-         pVTRIwIv7HqoCApDQaVjRo4lLHQdF+ioKFcBWb787NecYW2V4pIAYlVaZJJpG9s0g9CP
-         UosQ==
-X-Gm-Message-State: AOAM532SiVX+WBtA+y90lj82mgUzYrHmuX/vYIwuutChWnCR/mKn+PuS
-        91wq/d8CXjueS9Pgh5q1qkKgemrf9s7gxhQASJ98Ng==
-X-Google-Smtp-Source: ABdhPJx8mHtOAu17ADz6J7AwfAXA/YIRldt+oDMdzuZLRNE9q/0fTWnkdiCMlbQ3GUS+scmZ1tLW01HbzK50dqSraow=
-X-Received: by 2002:a25:420c:: with SMTP id p12mr9823321yba.25.1622211792670;
- Fri, 28 May 2021 07:23:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com> <dba3927a575645e5bf1ff35edea5ad74ea86885e.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <dba3927a575645e5bf1ff35edea5ad74ea86885e.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Fri, 28 May 2021 16:23:02 +0200
-Message-ID: <CAMpxmJU8GY568LwEyKnxiN3vPgOreyCYYJF_sD2dFKuMOm6A4A@mail.gmail.com>
-Subject: Re: [PATCH 6/9] gpio: bd70528 Drop BD70528 support
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K+tVxOYtByP+ndj4vQlqR1yZg+LmRS1nMw/pCh6v4Xw=;
+        b=SkBK9nXucWHVih5SQjtPZfHHT2Dz9n/FCbWqWT4kkaMuJoEReXQRd/ZGp3wDX9lTSO
+         VJ/tEPME90bbbeSpXSkPOo5geCK8UfpGoyrnZFLvte8o9yvjgLsgU/NLEeIU6NoRYCxB
+         1tfDdR3BUNU3dXV/UIRu2gRdISVfpHzD/4sPXTTGTHe3THn2MgiM6482R65A9rI3nMmS
+         Mo8N7XCYD0D2EGMZGxM5Hjqmye0qlKBEWc2NLES5c+j921614fXHS1CMqTy5EkSqAdOL
+         2Bn4/cGF1wPInx0DVTpcL6alyMU/BUC7essIiyLlmM+VM/j+Om/PR3DL7OjzaKCwcIBV
+         piKA==
+X-Gm-Message-State: AOAM532lfSaXqQIcnEgyoC0MtHDSQ3mo7VZekf5hNmL3N2nGp76fgLE7
+        7dZix11lcLoCNOEb/fNuERihpUFiyvYT1g==
+X-Google-Smtp-Source: ABdhPJxqTI6C9nPfZKNb5HL+zD7FQJTLSPwSIKMaSUmBpukJED4EMX0ve01kmkawxCmdvSgh02NByw==
+X-Received: by 2002:a5d:530c:: with SMTP id e12mr2155482wrv.165.1622359624403;
+        Sun, 30 May 2021 00:27:04 -0700 (PDT)
+Received: from debby (176-141-241-253.abo.bbox.fr. [176.141.241.253])
+        by smtp.gmail.com with ESMTPSA id r4sm13515059wre.84.2021.05.30.00.27.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 May 2021 00:27:03 -0700 (PDT)
+From:   Romain Perier <romain.perier@gmail.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Daniel Palmer <daniel@0x0f.com>,
+        Mohammed Billoo <mohammed.billoo@gmail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Add watchdog for Mstar SoCs
+Date:   Sun, 30 May 2021 09:26:42 +0200
+Message-Id: <20210530072645.10379-1-romain.perier@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, May 25, 2021 at 12:15 PM Matti Vaittinen
-<matti.vaittinen@fi.rohmeurope.com> wrote:
->
-> The only known BD70528 use-cases are such that the PMIC is controlled
-> from separate MCU which is not running Linux. I am not aware of
-> any Linux driver users. Furthermore, it seems there is no demand for
-> this IC. Let's ease the maintenance burden and drop the driver. We can
-> always add it back if there is sudden need for it.
->
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
->
-> ---
+This patches series adds a new driver for the watchdog found in the Mstar
+MSC313e SoCs and newer. It adds a basic watchdog driver, the
+corresponding devicetree bindings and its documentation.
 
-Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+This work has been co-developed with Daniel Palmer.
+
+Changes since v1:
+- Dropped "depends OF" from Kconfig (not required)
+- Dropped unneeded include files
+- Re-ordered include files
+- Compute timeout_max dynamically from the probe function to avoid
+  an overflow in _start().
+
+
+Daniel Palmer (1):
+  watchdog: Add Mstar MSC313e WDT driver
+
+Romain Perier (2):
+  Documentation: watchdog: Add Mstar MSC313e WDT devicetree bindings
+    documentation
+  ARM: dts: mstar: Add watchdog device_node definition
+
+ .../bindings/watchdog/msc313e-wdt.yaml        |  40 +++++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/mstar-v7.dtsi               |  14 ++
+ drivers/watchdog/Kconfig                      |  12 ++
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/msc313e_wdt.c                | 166 ++++++++++++++++++
+ 6 files changed, 234 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/msc313e-wdt.yaml
+ create mode 100644 drivers/watchdog/msc313e_wdt.c
+
+-- 
+2.30.2
+
