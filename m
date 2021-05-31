@@ -2,24 +2,24 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D09395C0C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 31 May 2021 15:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20AE395CF3
+	for <lists+linux-watchdog@lfdr.de>; Mon, 31 May 2021 15:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbhEaN1o (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 31 May 2021 09:27:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33460 "EHLO mail.kernel.org"
+        id S231637AbhEaNkT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 31 May 2021 09:40:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232022AbhEaNZm (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 31 May 2021 09:25:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C335613C1;
-        Mon, 31 May 2021 13:20:57 +0000 (UTC)
+        id S232251AbhEaNhv (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 31 May 2021 09:37:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B515A61406;
+        Mon, 31 May 2021 13:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1622467257;
-        bh=7bfA1jP82NQ2FwXenvFJkxagimlL0jZ0JK6itcjHu1c=;
+        s=korg; t=1622467587;
+        bh=lLdB2C7FvsBE8EVewfRYKHQ7yxsd5rLBd+AkuN39X6Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QC3jNlrT2ectMbwYkBFWvbH4cPXpPzMSlstYN74MPNr037hHoKNqJ1UAxEPbHrMfc
-         8qwyEmIyt/LTjJdnEjncacgktciOFYOg8dDQVwPjtjULcW9ydR8WcqADkjy15hkxAZ
-         ib76WdN3BGebwnsM2F6dBeutwfbSfQgU8cE52gJM=
+        b=UWsp/e6YXL4U9KcaAFAGXzZkC/1CoSLhZfXijiu9uAgufSWm/gNfTzOYJvyZNDpUf
+         fgDE8il/o6O/xIaxv4qpAgcMO1iGYh7eciW0usapaZkIVjb6LblsuhUiPEwHWszbre
+         AHZ0PEK8kzmW0oAVsB0Aj+H5NtPMUk4ubla+LXkI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-watchdog@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 64/66] MIPS: ralink: export rt_sysc_membase for rt2880_wdt.c
-Date:   Mon, 31 May 2021 15:14:37 +0200
-Message-Id: <20210531130638.277030241@linuxfoundation.org>
+Subject: [PATCH 4.19 112/116] MIPS: ralink: export rt_sysc_membase for rt2880_wdt.c
+Date:   Mon, 31 May 2021 15:14:48 +0200
+Message-Id: <20210531130643.911662126@linuxfoundation.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210531130636.254683895@linuxfoundation.org>
-References: <20210531130636.254683895@linuxfoundation.org>
+In-Reply-To: <20210531130640.131924542@linuxfoundation.org>
+References: <20210531130640.131924542@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -70,7 +70,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
-index 0aa67a2d0ae6..6b7226830354 100644
+index 1ada8492733b..92b3d4849996 100644
 --- a/arch/mips/ralink/of.c
 +++ b/arch/mips/ralink/of.c
 @@ -10,6 +10,7 @@
