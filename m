@@ -2,116 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C952395802
-	for <lists+linux-watchdog@lfdr.de>; Mon, 31 May 2021 11:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EDF395B8A
+	for <lists+linux-watchdog@lfdr.de>; Mon, 31 May 2021 15:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbhEaJXx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 31 May 2021 05:23:53 -0400
-Received: from gecko.sbs.de ([194.138.37.40]:47132 "EHLO gecko.sbs.de"
+        id S231927AbhEaNVo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 31 May 2021 09:21:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55014 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229523AbhEaJXw (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 31 May 2021 05:23:52 -0400
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 14V9LnZA016506
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 May 2021 11:21:50 +0200
-Received: from [167.87.247.112] ([167.87.247.112])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 14V9I7T5008408;
-        Mon, 31 May 2021 11:18:08 +0200
-Subject: Re: [PATCH v2] watchdog: iTCO_wdt: Account for rebooting on second
- timeout
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        id S231823AbhEaNUD (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 31 May 2021 09:20:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 234386135D;
+        Mon, 31 May 2021 13:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1622467101;
+        bh=2DKgRIUx3bq4bj2n7TveWOz0TPwQ1RJ+G6bHpOUG4Y0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UldYwMDCEXgBfzPCNJpwLovVefGRYpGncnKVWEwJOEXoOXGYuC+RL2Wnm3Ukhzc//
+         MndCNoybVjc1Y6SGWW7QBb/WcEN9iABFwJnuY6qVSjCk/l0mSIWdnddTASfYMIhy4q
+         F2BKaxf83vjvmk5LmrwAY5o/7WI1mwZbHuVMh+H8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@iguana.be>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Storm <christian.storm@siemens.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <0b8bb307-d08b-41b5-696c-305cdac6789c@siemens.com>
- <20210530131947.GB2483596@roeck-us.net>
- <5bf45bf8-0cd6-a131-fe11-1651ed60e8cc@siemens.com>
-Message-ID: <4e407c28-ab9e-7093-49f4-f9b985269fdc@siemens.com>
-Date:   Mon, 31 May 2021 11:18:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.4 51/54] MIPS: ralink: export rt_sysc_membase for rt2880_wdt.c
+Date:   Mon, 31 May 2021 15:14:17 +0200
+Message-Id: <20210531130636.666522100@linuxfoundation.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210531130635.070310929@linuxfoundation.org>
+References: <20210531130635.070310929@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-In-Reply-To: <5bf45bf8-0cd6-a131-fe11-1651ed60e8cc@siemens.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 31.05.21 10:27, Jan Kiszka wrote:
-> On 30.05.21 15:19, Guenter Roeck wrote:
->> On Sun, May 30, 2021 at 01:24:23PM +0200, Jan Kiszka wrote:
->>> From: Jan Kiszka <jan.kiszka@siemens.com>
->>>
->>> This was already attempted to fix via 1fccb73011ea: If the BIOS did not
->>> enable TCO SMIs, the timer definitely needs to trigger twice in order to
->>> cause a reboot. If TCO SMIs are on, as well as SMIs in general, we can
->>> continue to assume that the BIOS will perform a reboot on the first
->>> timeout.
->>>
->>> QEMU with its ICH9 and related BIOS falls into the former category,
->>> currently taking twice the configured timeout in order to reboot the
->>> machine. For iTCO version that fall under turn_SMI_watchdog_clear_off,
->>> this is also true and was currently only addressed for v1, irrespective
->>> of the turn_SMI_watchdog_clear_off value.
->>>
->>> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
->>> ---
->>>
->>> Changes in v2:
->>>  - consider GBL_SMI_EN as well
->>>
->>>  drivers/watchdog/iTCO_wdt.c | 12 +++++++++---
->>>  1 file changed, 9 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
->>> index bf31d7b67a69..3f1324871cfd 100644
->>> --- a/drivers/watchdog/iTCO_wdt.c
->>> +++ b/drivers/watchdog/iTCO_wdt.c
->>> @@ -71,6 +71,8 @@
->>>  #define TCOBASE(p)	((p)->tco_res->start)
->>>  /* SMI Control and Enable Register */
->>>  #define SMI_EN(p)	((p)->smi_res->start)
->>> +#define TCO_EN		(1 << 13)
->>> +#define GBL_SMI_EN	(1 << 0)
->>>  
->>>  #define TCO_RLD(p)	(TCOBASE(p) + 0x00) /* TCO Timer Reload/Curr. Value */
->>>  #define TCOv1_TMR(p)	(TCOBASE(p) + 0x01) /* TCOv1 Timer Initial Value*/
->>> @@ -355,8 +357,12 @@ static int iTCO_wdt_set_timeout(struct watchdog_device *wd_dev, unsigned int t)
->>>  
->>>  	tmrval = seconds_to_ticks(p, t);
->>>  
->>> -	/* For TCO v1 the timer counts down twice before rebooting */
->>> -	if (p->iTCO_version == 1)
->>> +	/*
->>> +	 * If TCO SMIs are off, the timer counts down twice before rebooting.
->>> +	 * Otherwise, the BIOS generally reboots when the SMI triggers.
->>> +	 */
->>> +	if (p->smi_res &&
->>> +	    (SMI_EN(p) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
->>>  		tmrval /= 2;
->>
->> This expands the scope of this adjustment to all versions, while at the same
->> time making it conditional for v1. Is this correct ? What for systems with v1
->> TCO where the above conditions are not met ?
-> 
-> Yes, this is intended. You find the reference to "reboots on second
-> timeout" even in latest EHL datasheets (v6).
-> 
+From: Randy Dunlap <rdunlap@infradead.org>
 
-To make it clearer: By default, we disabled SMIs on v1, thus had to
-adjust the timeout there unconditionally. In QEMU (v2), the firmware
-does not enable SMI, and we failed to handle that. Conceptually, any
-platform on any (known) version that does not use TCO SMIs is affected.
+[ Upstream commit fef532ea0cd871afab7d9a7b6e9da99ac2c24371 ]
 
-Jan
+rt2880_wdt.c uses (well, attempts to use) rt_sysc_membase. However,
+when this watchdog driver is built as a loadable module, there is a
+build error since the rt_sysc_membase symbol is not exported.
+Export it to quell the build error.
 
--- 
-Siemens AG, T RDA IOT
-Corporate Competence Center Embedded Linux
+ERROR: modpost: "rt_sysc_membase" [drivers/watchdog/rt2880_wdt.ko] undefined!
+
+Fixes: 473cf939ff34 ("watchdog: add ralink watchdog driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Wim Van Sebroeck <wim@iguana.be>
+Cc: John Crispin <john@phrozen.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-watchdog@vger.kernel.org
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/ralink/of.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/io.h>
+ #include <linux/clk.h>
++#include <linux/export.h>
+ #include <linux/init.h>
+ #include <linux/sizes.h>
+ #include <linux/of_fdt.h>
+@@ -27,6 +28,7 @@
+ 
+ __iomem void *rt_sysc_membase;
+ __iomem void *rt_memc_membase;
++EXPORT_SYMBOL_GPL(rt_sysc_membase);
+ 
+ __iomem void *plat_of_remap_node(const char *node)
+ {
+
+
