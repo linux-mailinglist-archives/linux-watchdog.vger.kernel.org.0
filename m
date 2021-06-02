@@ -2,92 +2,137 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA58D3986CE
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Jun 2021 12:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3517F398830
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Jun 2021 13:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbhFBKrg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Jun 2021 06:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S232695AbhFBL0d (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Jun 2021 07:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbhFBKrf (ORCPT
+        with ESMTP id S232470AbhFBL0X (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Jun 2021 06:47:35 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A698C061574;
-        Wed,  2 Jun 2021 03:45:51 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id b25so2269686oic.0;
-        Wed, 02 Jun 2021 03:45:51 -0700 (PDT)
+        Wed, 2 Jun 2021 07:26:23 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16587C061574;
+        Wed,  2 Jun 2021 04:24:39 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id d21so2265908oic.11;
+        Wed, 02 Jun 2021 04:24:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=eXKINWXa0bjDJgK/ywcDJ+ojBskVf7ukQn1t5GiFFaw=;
-        b=oYoulyT2rIcq8A0JTUO9ReBCmTJkNP3CqX8WVjoCNT3Qtwnk5oabTdyWlfx5x9ObsX
-         N5BNsuUqJlBh3SszN5WaVb20Fj87IYi71bU53qQR1UfajYxaiNmqTFA50Oa4Ki6v5EWn
-         eB6+BFqK+mmbA2NxIANCxSfzS43btbRXSFEAN4/JQbK+vLXAG1TVnOM1YSjhLGOWOkmt
-         SkQvUALu1rlUQvd60ar9nY0fKXJR37Dgt31klarABjmfA8y1bDIMoDSUa+jRxIeX9xvx
-         WBfpk6fA0jj8dFKRi6EpjYG5R2QnlNEPqfSwM6Y4KUKdBTTazcQMUleaT9gPzZP+u9H4
-         amGg==
+        bh=lb5hfBQxVsi1Vg1j35N2ywJlavrlJQVrfj0rUb+Ytfc=;
+        b=JQ3H8P4T1qVbdFNFdAvk16t/Jn4BEobrG1ALFG+vpTHZx8CHsRz3vzBWGJBEYlCWS7
+         v4GTuPAq8N5qwRhE49aL1tO7A74BIQ4ddWVK4CBXnlVe8mUa6jSq+o5fuzCN/4UYpOZt
+         lojqe3jBRSJJoBYX7GLDRlswkJhnaEyKSGyv9OXUFrtFNkM6ZJpduW0CtWNj3ITzZ236
+         nt5qNpJEoOSiPm6xNV/AyHVtEBg+CnzvLqXDKJt0p22gz9HWbeI0hbP1mcLBhXVXPXkG
+         BXJL00577voR219BKpMFesPupvjUw6GXaLBoFR0iJPP9+2h8V3/Zxl/K8tKrdcVhV308
+         kY4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=eXKINWXa0bjDJgK/ywcDJ+ojBskVf7ukQn1t5GiFFaw=;
-        b=NQYjKX9i71ku71V1l8SFUm7F6RdFBKnqtaHC4hAi3pw/KRYr1jkl3eb304f0RXpiXM
-         mwpZ3VhU748lkk3ElQcFsrjiKBYOPlwpVj5HJGKIwuR7nsYY9OVVsGXdP6ikNg17j9Xp
-         eIsaVAQoxOq4t/e8H0N4k+cKhxHrW/vcO5JOOCJ0NWplriHbLWtYl7hZzoRupdg4jDvK
-         O9XXrfpYOHgJVZZxWjSdzHKF+rFnh8+YXIe1zmtKfUxqSsn2w2L6wT0jGAsvm0prMkmu
-         YgVWXwqdYOo/jT+44m+9t2+k67OfCyizeYIbO2IEPXjxkXqZz9Hnt9b+iU/qyoz0qJ/v
-         mIUA==
-X-Gm-Message-State: AOAM5308E9DkJr/N9bdRwAMCyGcdccuyHqd6iPLIiP9qz483Y+xdm34v
-        o0MEMNC4W78ATftarPgTeaU=
-X-Google-Smtp-Source: ABdhPJwc6PM8HlyjkbWQi5wLaodwmu3gvioqwFls2B3zprH7RHff/PIsMDTLIl4iHpOVzLqTImUA/A==
-X-Received: by 2002:aca:2b17:: with SMTP id i23mr21517722oik.87.1622630750364;
-        Wed, 02 Jun 2021 03:45:50 -0700 (PDT)
+        bh=lb5hfBQxVsi1Vg1j35N2ywJlavrlJQVrfj0rUb+Ytfc=;
+        b=RzMab3ubNiIa4v+Knewl+pbADCVEIM75YQ4sTs8mJZrHodjaImLBtlesOCc0apa0vz
+         ZW5crRYzQrLsHAzBLePZps01XLso3aP6RnPSNlbaOsjGBhM/T9kuINasgfgbI3tmGskW
+         +vor01BUsmGgLyCbd8ywNk98+82eDXUdEiSs8hHdWMcUK6g6xAWjudyL8+GloLKWCrKo
+         pnJ6eu5wX9q5Xa5Q/YsS3ngK8DV+JmfAAKN6iKfnTFEGMcXMLRrvuwgREtRzJ0kDjcJY
+         bMkrOcGHtGLJ/oS3NOCjqHvwPnJd6bwEerO8AaGluvBuRuSPH/c0pPITm2X/Nk9X4YER
+         Q7gA==
+X-Gm-Message-State: AOAM53376Rfqe6Y3g3YqSXhS1V/Y5P5EW6rtkMzMBIQE/tKaVtI28oQK
+        LVFKgJMUMkSiEvZPMLpottE=
+X-Google-Smtp-Source: ABdhPJzsIxF0MwQrfYP8zCdaBaDHCgc83g0HO1dCwLGKRryQN+oGMWHV5biqIT2U/P8PzZ4SzriofQ==
+X-Received: by 2002:aca:400b:: with SMTP id n11mr20962335oia.111.1622633078417;
+        Wed, 02 Jun 2021 04:24:38 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q1sm3922934oos.32.2021.06.02.03.45.49
+        by smtp.gmail.com with ESMTPSA id t23sm3997565oij.21.2021.06.02.04.24.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 03:45:49 -0700 (PDT)
+        Wed, 02 Jun 2021 04:24:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Jun 2021 03:45:48 -0700
+Date:   Wed, 2 Jun 2021 04:24:36 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wang Qing <wangqing@vivo.com>
+To:     Jan Kiszka <jan.kiszka@siemens.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V9,RESEND,0/2] watchdog: mtk: support pre-timeout when
- the bark irq is available
-Message-ID: <20210602104548.GC1865238@roeck-us.net>
-References: <1622425895-32111-1-git-send-email-wangqing@vivo.com>
+        linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Storm <christian.storm@siemens.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v2] watchdog: iTCO_wdt: Account for rebooting on second
+ timeout
+Message-ID: <20210602112436.GA2280802@roeck-us.net>
+References: <0b8bb307-d08b-41b5-696c-305cdac6789c@siemens.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1622425895-32111-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <0b8bb307-d08b-41b5-696c-305cdac6789c@siemens.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, May 31, 2021 at 09:51:33AM +0800, Wang Qing wrote:
-> Use the bark interrupt as the pretimeout notifier if available.
-> The pretimeout notification shall occur at timeout-sec/2.
+On Sun, May 30, 2021 at 01:24:23PM +0200, Jan Kiszka wrote:
+> From: Jan Kiszka <jan.kiszka@siemens.com>
 > 
-> Wang Qing (2):
->   watchdog: mtk: support pre-timeout when the bark irq is available
->   doc: mtk-wdt: support pre-timeout when the bark irq is available
+> This was already attempted to fix via 1fccb73011ea: If the BIOS did not
+> enable TCO SMIs, the timer definitely needs to trigger twice in order to
+> cause a reboot. If TCO SMIs are on, as well as SMIs in general, we can
+> continue to assume that the BIOS will perform a reboot on the first
+> timeout.
 > 
->  .../devicetree/bindings/watchdog/mtk-wdt.txt       |  5 ++
->  drivers/watchdog/mtk_wdt.c                         | 77 ++++++++++++++++++++--
->  2 files changed, 77 insertions(+), 5 deletions(-)
+> QEMU with its ICH9 and related BIOS falls into the former category,
+> currently taking twice the configured timeout in order to reboot the
+> machine. For iTCO version that fall under turn_SMI_watchdog_clear_off,
+> this is also true and was currently only addressed for v1, irrespective
+> of the turn_SMI_watchdog_clear_off value.
 > 
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 
-The series is already included in my watchdog-next branch, making this just
-noise. On top of that, it is v2 without change log, meaning I have no idea
-what changed since v1 and if it is different to the version I queued.
-If it wasn't queued already, you'd get a message telling you to resubmit
-with change log. As it is, I'll keep my version and drop this one.
-Wim to decide what to do with it.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Guenter
+> ---
+> 
+> Changes in v2:
+>  - consider GBL_SMI_EN as well
+> 
+>  drivers/watchdog/iTCO_wdt.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index bf31d7b67a69..3f1324871cfd 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -71,6 +71,8 @@
+>  #define TCOBASE(p)	((p)->tco_res->start)
+>  /* SMI Control and Enable Register */
+>  #define SMI_EN(p)	((p)->smi_res->start)
+> +#define TCO_EN		(1 << 13)
+> +#define GBL_SMI_EN	(1 << 0)
+>  
+>  #define TCO_RLD(p)	(TCOBASE(p) + 0x00) /* TCO Timer Reload/Curr. Value */
+>  #define TCOv1_TMR(p)	(TCOBASE(p) + 0x01) /* TCOv1 Timer Initial Value*/
+> @@ -355,8 +357,12 @@ static int iTCO_wdt_set_timeout(struct watchdog_device *wd_dev, unsigned int t)
+>  
+>  	tmrval = seconds_to_ticks(p, t);
+>  
+> -	/* For TCO v1 the timer counts down twice before rebooting */
+> -	if (p->iTCO_version == 1)
+> +	/*
+> +	 * If TCO SMIs are off, the timer counts down twice before rebooting.
+> +	 * Otherwise, the BIOS generally reboots when the SMI triggers.
+> +	 */
+> +	if (p->smi_res &&
+> +	    (SMI_EN(p) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
+>  		tmrval /= 2;
+>  
+>  	/* from the specs: */
+> @@ -521,7 +527,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  		 * Disables TCO logic generating an SMI#
+>  		 */
+>  		val32 = inl(SMI_EN(p));
+> -		val32 &= 0xffffdfff;	/* Turn off SMI clearing watchdog */
+> +		val32 &= ~TCO_EN;	/* Turn off SMI clearing watchdog */
+>  		outl(val32, SMI_EN(p));
+>  	}
+>  
+> -- 
+> 2.26.2
