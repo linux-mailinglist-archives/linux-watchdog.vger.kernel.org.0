@@ -2,127 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5965A39C26F
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Jun 2021 23:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E3239C272
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Jun 2021 23:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbhFDVc2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 4 Jun 2021 17:32:28 -0400
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:34568 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbhFDVc1 (ORCPT
+        id S230209AbhFDVdF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 4 Jun 2021 17:33:05 -0400
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:34466 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229668AbhFDVdE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 4 Jun 2021 17:32:27 -0400
-Received: by mail-ot1-f42.google.com with SMTP id v27-20020a056830091bb02903cd67d40070so7361488ott.1;
-        Fri, 04 Jun 2021 14:30:30 -0700 (PDT)
+        Fri, 4 Jun 2021 17:33:04 -0400
+Received: by mail-oi1-f176.google.com with SMTP id u11so11138450oiv.1;
+        Fri, 04 Jun 2021 14:31:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=uPmck88W/M4wuf9C9X0fQJ2ET0+qI2iV7KMjK3PkVSw=;
-        b=LVz/POa/sROMTbquH899GLMQuWgCmqpyYa9YVrMab39G+ET8rjQaSj3+faeIKCDsOs
-         XhacPCu9DnWvv5QaEQiuxcgo+ML3o/Lxy1kJOWgmJSXegfIuE8xJsIp50dzLZsAEWOOD
-         SczHwOi8fU8ZcRFusu01m8uip48gN56p+fNA4MweqymnQW5bUxe884Sm1FNIzt40cnFt
-         oKbSa0FdUVRJCwO1JGa08dET/6UUDN26N9Vr8hC3dYTpAo5vyaLpdQ6kCXiID0UoM0kG
-         6fLL8wq2W20FRAJcFJ+t5p4QVNWZAIj3tzh32HNzMvy0L0TzBqYytjiDGbF/hUhkWbyv
-         X0ZA==
-X-Gm-Message-State: AOAM533Wd7R4IEpumyV1WQ4XqwQwpeOuLUqQ/oN3f2ATIpchXAxLPE2w
-        mgcV9evEr4dkEXB8G7+bsQ==
-X-Google-Smtp-Source: ABdhPJzbC82F9wfKCu/p/rdRvJ2GLyRXyue9H82h6ArpHMhtBu3Szmn28MTSI0J3sGmpYx9yfjAhhA==
-X-Received: by 2002:a05:6830:1e37:: with SMTP id t23mr5215835otr.318.1622842230119;
-        Fri, 04 Jun 2021 14:30:30 -0700 (PDT)
+        bh=G8/6uPjm9zIO07Og3jk4Blee6TytpfNx97cozFtQkXk=;
+        b=sNvHJTfESGpwISCwgWdw1GXP8cRAmtJVzaqx5z3vImYp3ffMh80MNlmPanWSewCEJj
+         8U8yoCl/OC/tDc+CMUe44Sz6bZTwGz7pM2+crzq3HsBNttY2GTfU98hgBLcLkoQdoF/V
+         4GOiQfkTULljduLwnhvWzIpnKqz99AvzvNSQxrz6vrVQSEHWSudhqTi3pDs3oIeGLqI+
+         0hSZ2vJ5/qlPrnZbnLHdzovly2qbrR+XxCP9qz8XVkJUVRGXC5BHBkIMICCu6kqaupLm
+         BOqQU2i0DXG48+onr/kJpq5Lfg/89IgtdKKx8tacCQhdj81scASbe+Yld+NJruacM4S4
+         30VQ==
+X-Gm-Message-State: AOAM531tD4HrF8f7Hf1p/fxo0hvJCjjZnWhtklq1xtOeJYxcLZhiiKpm
+        +2wo6gciNnhmO9A9cpVZTg==
+X-Google-Smtp-Source: ABdhPJwt9RTOBE4geRHCniJZTQYsmuFJN2nxYT9C6QTFn0LP/lZgvq3IYcVDxInRaeGmlUib3nIgRQ==
+X-Received: by 2002:aca:32d5:: with SMTP id y204mr4299396oiy.97.1622842265997;
+        Fri, 04 Jun 2021 14:31:05 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l9sm669637oou.43.2021.06.04.14.30.28
+        by smtp.gmail.com with ESMTPSA id p25sm667895ood.4.2021.06.04.14.31.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 14:30:29 -0700 (PDT)
-Received: (nullmailer pid 3954312 invoked by uid 1000);
-        Fri, 04 Jun 2021 21:30:28 -0000
-Date:   Fri, 4 Jun 2021 16:30:28 -0500
+        Fri, 04 Jun 2021 14:31:05 -0700 (PDT)
+Received: (nullmailer pid 3955311 invoked by uid 1000);
+        Fri, 04 Jun 2021 21:31:04 -0000
+Date:   Fri, 4 Jun 2021 16:31:04 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Mohammed Billoo <mohammed.billoo@gmail.com>,
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, soc@kernel.org,
+        Scott Branden <sbranden@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ray Jui <rjui@broadcom.com>, Arnd Bergmann <arnd@arndb.de>,
         linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] Documentation: watchdog: Add Mstar MSC313e WDT
- devicetree bindings documentation
-Message-ID: <20210604213028.GA3941849@robh.at.kernel.org>
-References: <20210530072645.10379-1-romain.perier@gmail.com>
- <20210530072645.10379-2-romain.perier@gmail.com>
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-rpi-kernel@lists.infradead.org
+Subject: Re: [PATCH 4/6] dt-bindings: arm: bcm2835: Add Raspberry Pi 400 to
+ DT schema
+Message-ID: <20210604213104.GA3955259@robh.at.kernel.org>
+References: <1622366775-5309-1-git-send-email-stefan.wahren@i2se.com>
+ <1622366775-5309-5-git-send-email-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210530072645.10379-2-romain.perier@gmail.com>
+In-Reply-To: <1622366775-5309-5-git-send-email-stefan.wahren@i2se.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, May 30, 2021 at 09:26:43AM +0200, Romain Perier wrote:
-> This adds the documentation for the devicetree bindings of the Mstar
-> MSC313e watchdog driver, found from MSC313e SoCs and newer.
-
-'dt-bindings: watchdog: ...' for the subject.
-
+On Sun, 30 May 2021 11:26:13 +0200, Stefan Wahren wrote:
+> Add new Raspberry Pi 400 to DT schema.
 > 
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 > ---
->  .../bindings/watchdog/msc313e-wdt.yaml        | 40 +++++++++++++++++++
-
-mstar,msc313e-wdt.yaml
-
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/msc313e-wdt.yaml
+>  Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/msc313e-wdt.yaml b/Documentation/devicetree/bindings/watchdog/msc313e-wdt.yaml
-> new file mode 100644
-> index 000000000000..70b8e1be5e8e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/msc313e-wdt.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/msc313e-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MStar Watchdog Device Tree Bindings
-> +
-> +maintainers:
-> +  - Daniel Palmer <daniel@0x0f.com>
-> +  - Romain Perier <romain.perier@gmail.com>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mstar,msc313e-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog: watchdog@6000 {
 
-Drop unused labels.
-
-> +        compatible = "mstar,msc313e-wdt";
-> +        reg = <0x6000 0x1f>;
-> +        clocks = <&xtal_div2>;
-> +    };
-> -- 
-> 2.30.2
+Acked-by: Rob Herring <robh@kernel.org>
