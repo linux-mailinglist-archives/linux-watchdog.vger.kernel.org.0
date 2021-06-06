@@ -2,19 +2,19 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B991839CEFB
-	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Jun 2021 14:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D3B39CEFF
+	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Jun 2021 14:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbhFFMSw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 6 Jun 2021 08:18:52 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:52041 "EHLO
+        id S230088AbhFFMSx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 6 Jun 2021 08:18:53 -0400
+Received: from mout.kundenserver.de ([212.227.17.13]:50627 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbhFFMSt (ORCPT
+        with ESMTP id S230090AbhFFMSv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 6 Jun 2021 08:18:49 -0400
+        Sun, 6 Jun 2021 08:18:51 -0400
 Received: from localhost.localdomain ([37.4.249.157]) by
  mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MGz9p-1ldRVH0QNv-00E4AZ; Sun, 06 Jun 2021 14:16:36 +0200
+ id 1MrhHm-1l2AsK2p88-00ngV6; Sun, 06 Jun 2021 14:16:36 +0200
 From:   Stefan Wahren <stefan.wahren@i2se.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Nicolas Saenz Julienne <nsaenz@kernel.org>
@@ -29,277 +29,108 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-watchdog@vger.kernel.org,
         Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH V2 5/7] ARM: dts: bcm283x: Fix up GPIO LED node names
-Date:   Sun,  6 Jun 2021 14:16:15 +0200
-Message-Id: <1622981777-5023-6-git-send-email-stefan.wahren@i2se.com>
+Subject: [PATCH V2 6/7] ARM: dts: Add Raspberry Pi 400 support
+Date:   Sun,  6 Jun 2021 14:16:16 +0200
+Message-Id: <1622981777-5023-7-git-send-email-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
 References: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
-X-Provags-ID: V03:K1:lj4rkCcAppsQBhrwcqPM0+9yHieqEuKpHjIxgRRN8B25CcTdHmr
- HBWEPc9oP9vcG7j3VaHizzR+URg2qlNH/CbE5YsqYRFlf/mROQNWYY0TM0mjmlpi9okIUVE
- lXhPDD0NOllFujaXDGlgvQJ/uS9+FXKRbJ05MwUIcwc5Ot4nN/Ixtts/Nkh/ETU9WK6DGMB
- 7Ln6lbWjt/hbmsufbvCSA==
+X-Provags-ID: V03:K1:qDXNiQNnXszhu7ZZn9qpiJjEOk/8SKuGCRk5P1O58HSgHSRlMLV
+ 0xTH6Q+aPq28bWe7QSGDeV5lSsliVSiBA3k6TJs3CJKeIAEw7NFeK3ulpqriEj9rG7Kv09V
+ f5yU99ZAK5+2om8JacoafiHBpbVGX9mLuw67b41uH2+buQZXHhd/vEsMYJuZdrkoAqxavb0
+ XZzPZDPPXY9LZ3wix21Rw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bsDfukr2g14=:rcE2QmPOP4CRqd05khF9mL
- c8ZzZLB2fiiuj15XBK589wSIs1ajIvX1EMVYj9IPpoef5yHagjRrIlSTGbYNciZcZn3KttYPJ
- C6WvF3Vv76V+cp7mICP7tcgFM8V8U/tGQiM7pdHMqJeYIICNbbz6GMMrtbZMRpRwW5XyeJVx8
- x0EbL7YRf9mPRWq3IXN6LZ3Vez4DQ4UeGme8i7WVmUy5hAQQGvy3RG3Om3853Sw+esnxufifJ
- xwA6JsLbmqbwvEVFkwio7Eu6glqp3tzXnxeFRQTeHm/3oe+buuh1nzQviF6dacDld/dxBZIK2
- DKpfmdSOyVq+1cJf9J4dqn41/ce8OeAq0bvL4AejAOvK9krT8bhx+2VNnp1n+c6SeIkRAPSWO
- g/yVsf+um/45+fh0VBAsyR167i63uJnGxOj+x41YkeuPVZKCNo5x1nTq38b8wA0+vkjXpvwAL
- iPpp8bt5r3tZv+YjaGG+4wKt9O5bUP9BxK2/G67QTrzR6KmqVD5NkNBlbJH6Qk1p0hynEnKk9
- T1bzEBkmLSpYN5oCmDOXVg=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TznBIvEQkDg=:GcLEDfRD80lGvCBDkMB65D
+ n2NlGC6mkIjaUFrd5E9zZjH4kw+x9NA0hx9T0NWVp1ziEK3LHEL0hbgRb1eGvl867sbWe8Q/e
+ F+/chJU1Mx0LnCpYtoSWFgn78hnQZJhGVxXq5//4mI3VEtfF9AR8GB+3HGCKfwrJIMGBo5Z5C
+ Kbv39tIHz3XTISYrHVYqeoxMUNOZQ33vvSjziiWgEbr8MNV4my2sannMZeUBZQ1rfAUiOwJdE
+ SafIVH+YbqGPYzy6kL1rz9v/wvq8qLcckHQlUI7bRNlhEUMt+smWFRhRRCDF6cnMKFbpNxf8N
+ cBTBrYFLng5QRI23HFhu4XUe22u54bxcSeBToKQ7m/X1ARrVXdad++bxXayrAO+wwp6+KjdsO
+ UGB4w5h4r4fw8SOAfV/4qpN4GcpWhnUdDQGkcIQFY4lXIGnOubFKi8EQK9Nu9O9Ky4v15aqXU
+ wlW2w05R7Nw3UkdBbPiUzlEKUKxOxWAdrONwwMZxYNrKR2vf/cjHXKSLx2b3F9MzPOiS/NmA1
+ J486J/wnFJuU58pVA9Dftc=
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Fix the node names for the GPIO LEDs to conform to the standard node
-name led-..
+The Raspberry Pi 400 is like a Pi 4 B designed into a keyboard. But there
+are some minor differences:
+
+- higher CPU clock rate (1.8 GHz)
+- different Wifi chip (BCM43456)
+- power off is now handled via GPIO
+- no ACT LED
 
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- arch/arm/boot/dts/bcm2711-rpi-4-b.dts      | 4 ++--
- arch/arm/boot/dts/bcm2835-rpi-a-plus.dts   | 4 ++--
- arch/arm/boot/dts/bcm2835-rpi-a.dts        | 2 +-
- arch/arm/boot/dts/bcm2835-rpi-b-plus.dts   | 4 ++--
- arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts   | 2 +-
- arch/arm/boot/dts/bcm2835-rpi-b.dts        | 2 +-
- arch/arm/boot/dts/bcm2835-rpi-cm1.dtsi     | 2 +-
- arch/arm/boot/dts/bcm2835-rpi-zero-w.dts   | 2 +-
- arch/arm/boot/dts/bcm2835-rpi-zero.dts     | 2 +-
- arch/arm/boot/dts/bcm2835-rpi.dtsi         | 2 +-
- arch/arm/boot/dts/bcm2836-rpi-2-b.dts      | 4 ++--
- arch/arm/boot/dts/bcm2837-rpi-3-a-plus.dts | 4 ++--
- arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts | 4 ++--
- arch/arm/boot/dts/bcm2837-rpi-3-b.dts      | 2 +-
- arch/arm/boot/dts/bcm2837-rpi-cm3.dtsi     | 2 +-
- 15 files changed, 21 insertions(+), 21 deletions(-)
+ arch/arm/boot/dts/Makefile            |  1 +
+ arch/arm/boot/dts/bcm2711-rpi-400.dts | 45 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 arch/arm/boot/dts/bcm2711-rpi-400.dts
 
-diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-index c54854a1..f24bdd0 100644
---- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-+++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-@@ -14,11 +14,11 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		pwr {
-+		led-pwr {
- 			label = "PWR";
- 			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
- 			default-state = "keep";
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-a-plus.dts b/arch/arm/boot/dts/bcm2835-rpi-a-plus.dts
-index 6c8ce39..40b9405 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-a-plus.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-a-plus.dts
-@@ -14,11 +14,11 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 47 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		pwr {
-+		led-pwr {
- 			label = "PWR";
- 			gpios = <&gpio 35 GPIO_ACTIVE_HIGH>;
- 			default-state = "keep";
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-a.dts b/arch/arm/boot/dts/bcm2835-rpi-a.dts
-index 17fdd48..11edb58 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-a.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-a.dts
-@@ -14,7 +14,7 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-b-plus.dts b/arch/arm/boot/dts/bcm2835-rpi-b-plus.dts
-index b0355c2..1b435c6 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-b-plus.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-b-plus.dts
-@@ -15,11 +15,11 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 47 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		pwr {
-+		led-pwr {
- 			label = "PWR";
- 			gpios = <&gpio 35 GPIO_ACTIVE_HIGH>;
- 			default-state = "keep";
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts b/arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts
-index 33b3b5c..a23c25c 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts
-@@ -15,7 +15,7 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-b.dts b/arch/arm/boot/dts/bcm2835-rpi-b.dts
-index 2b69957..1b63d6b 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-b.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-b.dts
-@@ -15,7 +15,7 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-cm1.dtsi b/arch/arm/boot/dts/bcm2835-rpi-cm1.dtsi
-index 58059c2..e4e6b6ab 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-cm1.dtsi
-+++ b/arch/arm/boot/dts/bcm2835-rpi-cm1.dtsi
-@@ -5,7 +5,7 @@
- 
- / {
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 47 GPIO_ACTIVE_LOW>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-zero-w.dts b/arch/arm/boot/dts/bcm2835-rpi-zero-w.dts
-index f65448c..33b2b77 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-zero-w.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-zero-w.dts
-@@ -23,7 +23,7 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 47 GPIO_ACTIVE_LOW>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/bcm2835-rpi-zero.dts b/arch/arm/boot/dts/bcm2835-rpi-zero.dts
-index 6dd93c6..6f9b3a9 100644
---- a/arch/arm/boot/dts/bcm2835-rpi-zero.dts
-+++ b/arch/arm/boot/dts/bcm2835-rpi-zero.dts
-@@ -18,7 +18,7 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 47 GPIO_ACTIVE_HIGH>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/bcm2835-rpi.dtsi b/arch/arm/boot/dts/bcm2835-rpi.dtsi
-index d94357b..87ddcad 100644
---- a/arch/arm/boot/dts/bcm2835-rpi.dtsi
-+++ b/arch/arm/boot/dts/bcm2835-rpi.dtsi
-@@ -4,7 +4,7 @@
- 	leds {
- 		compatible = "gpio-leds";
- 
--		act {
-+		led-act {
- 			label = "ACT";
- 			default-state = "keep";
- 			linux,default-trigger = "heartbeat";
-diff --git a/arch/arm/boot/dts/bcm2836-rpi-2-b.dts b/arch/arm/boot/dts/bcm2836-rpi-2-b.dts
-index 0455a68..d8af8ee 100644
---- a/arch/arm/boot/dts/bcm2836-rpi-2-b.dts
-+++ b/arch/arm/boot/dts/bcm2836-rpi-2-b.dts
-@@ -15,11 +15,11 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 47 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		pwr {
-+		led-pwr {
- 			label = "PWR";
- 			gpios = <&gpio 35 GPIO_ACTIVE_HIGH>;
- 			default-state = "keep";
-diff --git a/arch/arm/boot/dts/bcm2837-rpi-3-a-plus.dts b/arch/arm/boot/dts/bcm2837-rpi-3-a-plus.dts
-index 28be033..77099a7 100644
---- a/arch/arm/boot/dts/bcm2837-rpi-3-a-plus.dts
-+++ b/arch/arm/boot/dts/bcm2837-rpi-3-a-plus.dts
-@@ -19,11 +19,11 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 29 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		pwr {
-+		led-pwr {
- 			label = "PWR";
- 			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
- 			default-state = "keep";
-diff --git a/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts b/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
-index 3734314..6101026 100644
---- a/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
-+++ b/arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts
-@@ -20,11 +20,11 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&gpio 29 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		pwr {
-+		led-pwr {
- 			label = "PWR";
- 			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
- 			default-state = "keep";
-diff --git a/arch/arm/boot/dts/bcm2837-rpi-3-b.dts b/arch/arm/boot/dts/bcm2837-rpi-3-b.dts
-index 054ecaa..dd4a486 100644
---- a/arch/arm/boot/dts/bcm2837-rpi-3-b.dts
-+++ b/arch/arm/boot/dts/bcm2837-rpi-3-b.dts
-@@ -20,7 +20,7 @@
- 	};
- 
- 	leds {
--		act {
-+		led-act {
- 			gpios = <&expgpio 2 GPIO_ACTIVE_HIGH>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/bcm2837-rpi-cm3.dtsi b/arch/arm/boot/dts/bcm2837-rpi-cm3.dtsi
-index 925cb37..828a205 100644
---- a/arch/arm/boot/dts/bcm2837-rpi-cm3.dtsi
-+++ b/arch/arm/boot/dts/bcm2837-rpi-cm3.dtsi
-@@ -14,7 +14,7 @@
- 		 * Since there is no upstream GPIO driver yet,
- 		 * remove the incomplete node.
- 		 */
--		/delete-node/ act;
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index f8f09c5..ec00dba 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -88,6 +88,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
+ 	bcm2837-rpi-3-b.dtb \
+ 	bcm2837-rpi-3-b-plus.dtb \
+ 	bcm2837-rpi-cm3-io3.dtb \
++	bcm2711-rpi-400.dtb \
+ 	bcm2711-rpi-4-b.dtb \
+ 	bcm2835-rpi-zero.dtb \
+ 	bcm2835-rpi-zero-w.dtb
+diff --git a/arch/arm/boot/dts/bcm2711-rpi-400.dts b/arch/arm/boot/dts/bcm2711-rpi-400.dts
+new file mode 100644
+index 0000000..f4d2fc2
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm2711-rpi-400.dts
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++#include "bcm2711-rpi-4-b.dts"
++
++/ {
++	compatible = "raspberrypi,400", "brcm,bcm2711";
++	model = "Raspberry Pi 400";
++
++	chosen {
++		/* 8250 auxiliary UART instead of pl011 */
++		stdout-path = "serial1:115200n8";
++	};
++
++	leds {
 +		/delete-node/ led-act;
- 	};
- 
- 	reg_3v3: fixed-regulator {
++
++		led-pwr {
++			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	gpio-poweroff {
++		compatible = "gpio-poweroff";
++		gpios = <&expgpio 5 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&expgpio {
++	gpio-line-names = "BT_ON",
++			  "WL_ON",
++			  "",
++			  "GLOBAL_RESET",
++			  "VDD_SD_IO_SEL",
++			  "CAM_GPIO",
++			  "SD_PWR_ON",
++			  "SD_OC_N";
++};
++
++&genet_mdio {
++	clock-frequency = <1950000>;
++};
++
++&pm {
++	/delete-property/ system-power-controller;
++};
 -- 
 2.7.4
 
