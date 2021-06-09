@@ -2,179 +2,157 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 915883A1D6F
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Jun 2021 21:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903963A1E24
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Jun 2021 22:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbhFITGj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 9 Jun 2021 15:06:39 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:36605 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbhFITGj (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 9 Jun 2021 15:06:39 -0400
-Received: by mail-ot1-f51.google.com with SMTP id h24-20020a9d64180000b029036edcf8f9a6so25008964otl.3;
-        Wed, 09 Jun 2021 12:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FXSEcfB5SUcNxZP0MOeA1wAez5HsP1pj0Jjf8UKVWHY=;
-        b=JCCgWqfs7qQn8jEgQYxvwda8trtx38SU/Nv9e8oZGbjF9CshLJNWWkX7e8jhtUWVsx
-         wlyWuQc3itRTi7ajWwNcPQ3ec0qjecp/m0gkM/TkdE7ATKrWAWy4tuajkqy7c0n9rpey
-         3e/en1fC9fzje22PazEAwM4H7jj1fJBf1ApgeFOKrAvJ/Kbg40snxE4DgnHoVy3vUF86
-         79EGtKL/yQvazbfknmt3VAMq1W/PyG10TU+tS7s3UPHjJn+YWpm5KmppWnl5xSD1JWrY
-         XU2ZJhrFL+20UgU6vy5S0aESQIQb+tVC9Xy03AdagZ8HKP42tYTuknEJwYSium9lU1Ce
-         8NLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=FXSEcfB5SUcNxZP0MOeA1wAez5HsP1pj0Jjf8UKVWHY=;
-        b=b3yfViebt2dUYgmiVYWaUj28gsRwcatWm55ViFO4e+QvdqDIg/JunFg5I6L6sEcGGJ
-         Nkb3Fn8qLGMRZffkRm3UqbkgNf5Pniky6n33j5/LFvTTUEvExRUDVheIxWZYWv/mK/K9
-         tX+WI/YJOBQ9Z2lVEgJam8ZdmX/jS/PYB6oQlfFFsPlsheWY/m/rzmEkgHpOIAuVUynd
-         sYIAN06Zp4e6Wn3gyJtk+U2jN+Tpo511hL3U0uyJH+YARGdEt4sDn4FzlGSQco+PTgSs
-         30QJb2DSTv++2XsBviHbeOhd9vUJaJVvgX499cQbGwNjLDQRyVZ29G2Y0a7cptTYcuAg
-         m+zw==
-X-Gm-Message-State: AOAM532nIdX+mYquR9kyApcrdR7Y0lB+C5uS2a3xsykKdWP1/J6QQl+Y
-        YhfKs3vZs9/SG1vjg4+lod4=
-X-Google-Smtp-Source: ABdhPJxk/8Iv7ad/klVIULIgyrhCmOs1GL+ozOHGVP+tfW2KZ4GyqhuognVhqSkP1E7tO2JB894rZw==
-X-Received: by 2002:a9d:2f62:: with SMTP id h89mr712491otb.225.1623265423442;
-        Wed, 09 Jun 2021 12:03:43 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3sm166016otu.52.2021.06.09.12.03.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 12:03:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 9 Jun 2021 12:03:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fu Wei <fu.wei@linaro.org>, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: Convert arm,sbsa-gwdt to DT schema
-Message-ID: <20210609190341.GB2534956@roeck-us.net>
-References: <20210607194022.3095736-1-robh@kernel.org>
+        id S229519AbhFIUe0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Jun 2021 16:34:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33674 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229517AbhFIUe0 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 9 Jun 2021 16:34:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0407461354;
+        Wed,  9 Jun 2021 20:32:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623270751;
+        bh=cwN1ib5e//5k0TeRbpqXnirj82rEAs0iDe99zClbmEk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sXbT756GWk7nw2Z7clgWCHP5IScIdjBj7/XNuW8X8bOUZlyBVpVoXGWiwBsm3+kB9
+         a0MJgT+5967prN4B+Y6A/X5h8qF7JQ673U5/LzUtSuNt6Y87OUiVLQim6Zm70E85tY
+         StanHUZofak7dTls8zGSPpA0zeuioWtQtqlJz8bCSg7Cb+mt68jwuWbl6jiR+ZiEVt
+         EneLoNcjwRNNah1+nOQBhDqEbYvb0ZaKkpj+TGQSuAmiPS/BtvBhdRk7Ss4vVLub8J
+         CctAF2jY9gmISQMvF9LXc1PufB/lv2nR0+kIJsiOretQ3GqzdV9OSmivk46mwbRI7L
+         YnZgvW/dfx3+Q==
+Date:   Wed, 9 Jun 2021 15:32:29 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 2/3] watchdog: iTCO_wdt: use dev_*() instead of pr_*()
+ for logging
+Message-ID: <20210609203229.GA2664456@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210607194022.3095736-1-robh@kernel.org>
+In-Reply-To: <20201117152214.32244-2-info@metux.net>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 02:40:22PM -0500, Rob Herring wrote:
-> Convert the arm,sbsa-gwdt binding to DT schema format.
+On Tue, Nov 17, 2020 at 04:22:13PM +0100, Enrico Weigelt, metux IT consult wrote:
+> For device log outputs, it's better to have device name / ID
+> prefixed in all messages, so use the proper dev_*() functions here.
 > 
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Fu Wei <fu.wei@linaro.org>
-> Cc: linux-watchdog@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Explicit message on module load/unload don't seem to be really helpful
+> (we have other means to check which modules have been loaded), instead
+> just add noise to the kernel log. So, removing them.
+> 
+> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+I like this patch a lot; thanks for doing it!  It's merged upstream as
+c21172b3a73e ("watchdog: iTCO_wdt: use dev_*() instead of pr_*() for
+logging").
+
+It looks like there are a couple more pr_err() uses, so I wondered if
+they were missed or skipped intentionally:
+
+  if (p->smi_res) {
+          /* The TCO logic uses the TCO_EN bit in the SMI_EN register */
+          if (!devm_request_region(dev, p->smi_res->start,
+                                   resource_size(p->smi_res),
+                                   pdev->name)) {
+                  pr_err("I/O address 0x%04llx already in use, device disabled\n",
+                         (u64)SMI_EN(p));
+                  return -EBUSY;
+          }
+  } else if (iTCO_vendorsupport ||
+             turn_SMI_watchdog_clear_off >= p->iTCO_version) {
+          pr_err("SMI I/O resource is missing\n");
+          return -ENODEV;
+  }
 
 > ---
->  .../bindings/watchdog/arm,sbsa-gwdt.yaml      | 51 +++++++++++++++++++
->  .../bindings/watchdog/sbsa-gwdt.txt           | 31 -----------
->  2 files changed, 51 insertions(+), 31 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/sbsa-gwdt.txt
+>  drivers/watchdog/iTCO_wdt.c | 18 ++++++++----------
+>  1 file changed, 8 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml b/Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml
-> new file mode 100644
-> index 000000000000..6bfa46353c4e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/arm,sbsa-gwdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SBSA (Server Base System Architecture) Generic Watchdog
-> +
-> +maintainers:
-> +  - Fu Wei <fu.wei@linaro.org>
-> +
-> +description: |
-> +  The SBSA Generic Watchdog Timer is used to force a reset of the system after
-> +  two stages of timeout have elapsed. A detailed definition of the watchdog
-> +  timer can be found in the ARM document: ARM-DEN-0029 - Server Base System
-> +  Architecture (SBSA)
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: arm,sbsa-gwdt
-> +
-> +  reg:
-> +    items:
-> +      - description: Watchdog control frame
-> +      - description: Refresh frame
-> +
-> +  interrupts:
-> +    description: The Watchdog Signal 0 (WS0) SPI (Shared Peripheral Interrupt)
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    watchdog@2a440000 {
-> +        compatible = "arm,sbsa-gwdt";
-> +        reg = <0x2a440000 0x1000>,
-> +              <0x2a450000 0x1000>;
-> +        interrupts = <0 27 4>;
-> +        timeout-sec = <30>;
-> +    };
-> +...
-> diff --git a/Documentation/devicetree/bindings/watchdog/sbsa-gwdt.txt b/Documentation/devicetree/bindings/watchdog/sbsa-gwdt.txt
-> deleted file mode 100644
-> index 6f2d5f91964d..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/sbsa-gwdt.txt
-> +++ /dev/null
-> @@ -1,31 +0,0 @@
-> -* SBSA (Server Base System Architecture) Generic Watchdog
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index f2ddc8fc71cd..edc588a06ae6 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -40,8 +40,6 @@
+>   *	Includes, defines, variables, module parameters, ...
+>   */
+>  
+> -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 > -
-> -The SBSA Generic Watchdog Timer is used to force a reset of the system
-> -after two stages of timeout have elapsed.  A detailed definition of the
-> -watchdog timer can be found in the ARM document: ARM-DEN-0029 - Server
-> -Base System Architecture (SBSA)
-> -
-> -Required properties:
-> -- compatible: Should at least contain "arm,sbsa-gwdt".
-> -
-> -- reg: Each entry specifies the base physical address of a register frame
-> -  and the length of that frame; currently, two frames must be defined,
-> -  in this order:
-> -  1: Watchdog control frame;
-> -  2: Refresh frame.
-> -
-> -- interrupts: Should contain the Watchdog Signal 0 (WS0) SPI (Shared
-> -  Peripheral Interrupt) number of SBSA Generic Watchdog.
-> -
-> -Optional properties
-> -- timeout-sec: Watchdog timeout values (in seconds).
-> -
-> -Example for FVP Foundation Model v8:
-> -
-> -watchdog@2a440000 {
-> -	compatible = "arm,sbsa-gwdt";
-> -	reg = <0x0 0x2a440000 0 0x1000>,
-> -	      <0x0 0x2a450000 0 0x1000>;
-> -	interrupts = <0 27 4>;
-> -	timeout-sec = <30>;
-> -};
+>  /* Module and version information */
+>  #define DRV_NAME	"iTCO_wdt"
+>  #define DRV_VERSION	"1.11"
+> @@ -279,7 +277,7 @@ static int iTCO_wdt_start(struct watchdog_device *wd_dev)
+>  	/* disable chipset's NO_REBOOT bit */
+>  	if (p->update_no_reboot_bit(p->no_reboot_priv, false)) {
+>  		spin_unlock(&p->io_lock);
+> -		pr_err("failed to reset NO_REBOOT flag, reboot disabled by hardware/BIOS\n");
+> +		dev_err(wd_dev->dev, "failed to reset NO_REBOOT flag, reboot disabled by hardware/BIOS\n");
+>  		return -EIO;
+>  	}
+>  
+> @@ -510,7 +508,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	/* Check chipset's NO_REBOOT bit */
+>  	if (p->update_no_reboot_bit(p->no_reboot_priv, false) &&
+>  	    iTCO_vendor_check_noreboot_on()) {
+> -		pr_info("unable to reset NO_REBOOT flag, device disabled by hardware/BIOS\n");
+> +		dev_info(dev, "unable to reset NO_REBOOT flag, device disabled by hardware/BIOS\n");
+>  		return -ENODEV;	/* Cannot reset NO_REBOOT bit */
+>  	}
+>  
+> @@ -530,12 +528,12 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	if (!devm_request_region(dev, p->tco_res->start,
+>  				 resource_size(p->tco_res),
+>  				 pdev->name)) {
+> -		pr_err("I/O address 0x%04llx already in use, device disabled\n",
+> +		dev_err(dev, "I/O address 0x%04llx already in use, device disabled\n",
+>  		       (u64)TCOBASE(p));
+>  		return -EBUSY;
+>  	}
+>  
+> -	pr_info("Found a %s TCO device (Version=%d, TCOBASE=0x%04llx)\n",
+> +	dev_info(dev, "Found a %s TCO device (Version=%d, TCOBASE=0x%04llx)\n",
+>  		pdata->name, pdata->version, (u64)TCOBASE(p));
+>  
+>  	/* Clear out the (probably old) status */
+> @@ -558,7 +556,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  		break;
+>  	}
+>  
+> -	p->wddev.info =	&ident,
+> +	p->wddev.info = &ident,
+>  	p->wddev.ops = &iTCO_wdt_ops,
+>  	p->wddev.bootstatus = 0;
+>  	p->wddev.timeout = WATCHDOG_TIMEOUT;
+> @@ -575,7 +573,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	   if not reset to the default */
+>  	if (iTCO_wdt_set_timeout(&p->wddev, heartbeat)) {
+>  		iTCO_wdt_set_timeout(&p->wddev, WATCHDOG_TIMEOUT);
+> -		pr_info("timeout value out of range, using %d\n",
+> +		dev_info(dev, "timeout value out of range, using %d\n",
+>  			WATCHDOG_TIMEOUT);
+>  	}
+>  
+> @@ -583,11 +581,11 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	watchdog_stop_on_unregister(&p->wddev);
+>  	ret = devm_watchdog_register_device(dev, &p->wddev);
+>  	if (ret != 0) {
+> -		pr_err("cannot register watchdog device (err=%d)\n", ret);
+> +		dev_err(dev, "cannot register watchdog device (err=%d)\n", ret);
+>  		return ret;
+>  	}
+>  
+> -	pr_info("initialized. heartbeat=%d sec (nowayout=%d)\n",
+> +	dev_info(dev, "initialized. heartbeat=%d sec (nowayout=%d)\n",
+>  		heartbeat, nowayout);
+>  
+>  	return 0;
 > -- 
-> 2.27.0
+> 2.11.0
 > 
