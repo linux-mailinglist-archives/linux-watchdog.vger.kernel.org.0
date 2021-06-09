@@ -2,42 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5AD39EE07
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Jun 2021 07:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26183A15F6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Jun 2021 15:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhFHFVO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 8 Jun 2021 01:21:14 -0400
-Received: from ip212.ip-51-255-105.eu ([51.255.105.212]:42047 "EHLO
-        mail.ceyrat.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229462AbhFHFVO (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 8 Jun 2021 01:21:14 -0400
-X-Greylist: delayed 26060 seconds by postgrey-1.27 at vger.kernel.org; Tue, 08 Jun 2021 01:21:13 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.ceyrat.fr (Postfix) with ESMTP id 756951AA87EB;
-        Mon,  7 Jun 2021 21:39:54 +0200 (CEST)
-Received: from mail.ceyrat.fr ([127.0.0.1])
-        by localhost (intra-ceyrat.ceyrat.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5w1FbUWECnTd; Mon,  7 Jun 2021 21:39:54 +0200 (CEST)
-Received: from [173.243.112.150] (unknown [109.195.112.207])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mail.ceyrat.fr (Postfix) with ESMTPSA id 5F8791AA8822;
-        Mon,  7 Jun 2021 21:39:47 +0200 (CEST)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Last Note..
-To:     Recipients <toto@ceyrat.fr>
-From:   "Note" <toto@ceyrat.fr>
-Date:   Mon, 07 Jun 2021 12:39:43 -0700
-Reply-To: trustees202000@consultant.com
-Message-Id: <20210607193954.756951AA87EB@mail.ceyrat.fr>
+        id S234646AbhFINtT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Jun 2021 09:49:19 -0400
+Received: from flippie-beckerswealth-sa.xyz ([62.173.147.2]:52244 "EHLO
+        host.flippie-beckerswealth-sa.xyz" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234871AbhFINtS (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 9 Jun 2021 09:49:18 -0400
+X-Greylist: delayed 4735 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Jun 2021 09:49:18 EDT
+Received: from flippie-beckerswealth-sa.xyz (ec2-3-131-99-163.us-east-2.compute.amazonaws.com [3.131.99.163])
+        by host.flippie-beckerswealth-sa.xyz (Postfix) with ESMTPA id D45793120CEF
+        for <linux-watchdog@vger.kernel.org>; Wed,  9 Jun 2021 15:10:29 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz D45793120CEF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240631;
+        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=B05S3PPDQnElltePB3JOMHHrX79zz2rSnPNdqHi9hVbgjktAsZif+hZrth4rTSihZ
+         ABBbLA/cQht+sb0dDCjVhf8mz+eNZnJQTwr8MyGkPfPMfaYDFIqcr0Kdq2w60/Z0cP
+         jWCnsM2fOvG8rRxPm6I/JbVVGxXaj1TS1uhpcEYc=
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz D45793120CEF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240631;
+        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=B05S3PPDQnElltePB3JOMHHrX79zz2rSnPNdqHi9hVbgjktAsZif+hZrth4rTSihZ
+         ABBbLA/cQht+sb0dDCjVhf8mz+eNZnJQTwr8MyGkPfPMfaYDFIqcr0Kdq2w60/Z0cP
+         jWCnsM2fOvG8rRxPm6I/JbVVGxXaj1TS1uhpcEYc=
+Reply-To: jmasuku40@flippiebeckerwealthservices.com
+From:   Jotham Masuku <jmasuku40@flippie-beckerswealth-sa.xyz>
+To:     linux-watchdog@vger.kernel.org
+Subject: Proposal
+Date:   09 Jun 2021 12:10:29 +0000
+Message-ID: <20210609121029.8400BDD4424236C0@flippie-beckerswealth-sa.xyz>
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Once again we are reaching you as regards the estate of Late George Brumley, you were made one of the beneficiaries of his estate. Do get back to me at your earliest convenience. 
+Hello there,
 
-The Trustees
+I hope this message finds you in good spirits especially during=20
+this challenging time of coronavirus pandemic. I hope you and=20
+your family are well and keeping safe. Anyway, I am Jotham=20
+Masuku, a broker working with Flippiebecker Wealth. I got your=20
+contact (along with few other contacts) through an online=20
+business directory and I thought I should contact you to see if=20
+you are interested in this opportunity. I am contacting you=20
+because one of my high profile clients is interested in investing=20
+abroad and has asked me to look for individuals and companies=20
+with interesting business ideas and projects that he can invest=20
+in. He wants to invest a substantial amount of asset abroad.
+
+Please kindly respond back to this email if you are interested in=20
+this opportunity. Once I receive your response, I will give you=20
+more details and we can plan a strategy that will be beneficial=20
+to all parties.
+
+Best regards
+
+J Masuku
+Flippiebecker Wealth
