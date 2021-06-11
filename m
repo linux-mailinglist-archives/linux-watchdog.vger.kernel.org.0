@@ -2,118 +2,111 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 248C63A44B9
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Jun 2021 17:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961973A49E5
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Jun 2021 22:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbhFKPPh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 11 Jun 2021 11:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S231215AbhFKUKO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 11 Jun 2021 16:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbhFKPPf (ORCPT
+        with ESMTP id S230455AbhFKUKL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 11 Jun 2021 11:15:35 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022B7C061574;
-        Fri, 11 Jun 2021 08:13:26 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id t40so6122541oiw.8;
-        Fri, 11 Jun 2021 08:13:25 -0700 (PDT)
+        Fri, 11 Jun 2021 16:10:11 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52409C061574;
+        Fri, 11 Jun 2021 13:08:11 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id y13-20020a1c4b0d0000b02901c20173e165so1359760wma.0;
+        Fri, 11 Jun 2021 13:08:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ufKTvffTzI/MVLuQy56QGZZwmhs4YEswKR70qkvnHFs=;
-        b=hQWILQJ7QXdimjKvxJOOF81rdLgMrRTbatH4gulceMIocMsv0CatpoLO5Kn830/NEk
-         dqR/2s/hKe+kmHjCi3wnpb8m1e3z8UzIEs35/au0oAS0q3vTShJSvMX8OLMm7afAlIk/
-         7xQf17fOCccktl+fE86SSu+glpe+Hnf92mquhS4uy1IlqOcfAzdv+4JqAIk7e/bn6Rfg
-         t7PoGgJ/3IFm05fey3YXMO2dH+Rjb3EO6PSqyWRyN3Jw6HM8s7/Op4y3zMagcw5Otsqs
-         cI6frDabVPwVS21tdGyV/6/TjYIWymgWNc213+lMf31a5n3+jpZGgoHlO9ltD9HlrWJZ
-         jOUg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pQvBGQPM+4w1LJKirfQgMfUIzZPFlCZTOGktZwuQaYc=;
+        b=jNJBfNd8zZ3ivpE/UxiHzzZYXgzlr6uaLwqoXf2DRIYslOfPlxFmUjSlqFOxk0LhUo
+         fmNV84jBpmxEMT0wO95CO9jJVJuaPeEMcAw916ICzJT/bUoeni8d7QL08vCKYuweZe4W
+         DNySCVSj5y62WlbDF8x2HawYxiBVWlwKSFt/bjsyLu7U+PeQAKQVG6rCfnI3CqUzn3BE
+         Bz5t7Qw395Nvd+kGJlk09VNRt26+ic4fncGcFUA7EndBGyOS0rmbnKnsRvVwI4UxO+d3
+         KpAAiMNG0RfXStzNwvFL5YELCC52zDtDQxfKRSUI3icDYjcTQIVnPaGAITwW0iQ+OA3Z
+         oYJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=ufKTvffTzI/MVLuQy56QGZZwmhs4YEswKR70qkvnHFs=;
-        b=R8m8YZ00AvEecYQHmC+weQY/zr5EGwwVi9p4D0dlVZHp6+8AR9XnZ1hf/7goti50mu
-         EKyCu42ukxgqIE4ghFuY8XwESTS2I1stUmbeqjDXYW8LDFYa3tltQYeglGAJTcdV8IJI
-         Fo5wGRf5pAhI0xcf7pqvLD15ZlZp/Da6HjUA/89CIGyscYL5HpwKYRC4MnuPFefXWSOm
-         CurVHLnWM9Mj9aHjhhVISqA96Db39lNq7VT5DsnMJEfU4M74ugAA+ytlCbY2uXEOeJaU
-         LI94qteKAla+vPKhpPggno4aBCnQ+ncR9GS03oP1XeSt38p2jJ5QM+2Cu4614MXmnHUb
-         uv1w==
-X-Gm-Message-State: AOAM533USXQauQWfaqFDMBsuLKHbrQJ0In74kbymi1jIsbmF041RhBgM
-        Z1XgV6Yk/0nkSsctNKTR8Ak=
-X-Google-Smtp-Source: ABdhPJwvJdQ6IyKYjmBYAE/X/77CzNBC3TdBnsmLSSPWCID1TALnPeHZ2SDHliMCKbeFDiqnmBREug==
-X-Received: by 2002:aca:6109:: with SMTP id v9mr13615255oib.65.1623424405445;
-        Fri, 11 Jun 2021 08:13:25 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a78sm1232057oii.42.2021.06.11.08.13.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pQvBGQPM+4w1LJKirfQgMfUIzZPFlCZTOGktZwuQaYc=;
+        b=JW8X+G/kAI9JwhxG6vE/gaqKj3MtdKdtmQycu1rppP+3ouVZv07KqFv2LP/TeDvkum
+         tzjNptOtdbwaTZQy66G9J7eLgjjYfPZ8udXqxYf22ENA179ucV9j6ai8trRIAbn6/nPd
+         Q55mflJma2Jlqei29EzCdyglfdRdLwMxpDxIYotSZkLism/rFsSbSEbbLr8GplAY9YLi
+         Sn+LakN6Z8ntcFUj9zE1LJCW7TZrQ8lvsOj4LsjbVZqCbRzTj64DFhjk72m4kdPIKNKa
+         m1qv7SmZTMuHsDGZ411hJpER+ObKKxfPI2x6d2f0OzriUw+dTOMPtWDpfKvV1XdcrQoo
+         BrGw==
+X-Gm-Message-State: AOAM532qxFXG86Y/MZfzCmmHwyU6HHxsioiCXjrVnBn1pdeit/kTIavi
+        yRhTmbtHe+Alr54z5ZSbbm8CI0xJi0A=
+X-Google-Smtp-Source: ABdhPJzmmt4gAVNToIzO9KFeAllKOw033ujMqZUMWvszjzkU44Fm2edAqQp9/A0HGoQzRhnzlgL8fA==
+X-Received: by 2002:a05:600c:251:: with SMTP id 17mr21757584wmj.137.1623442089640;
+        Fri, 11 Jun 2021 13:08:09 -0700 (PDT)
+Received: from debby (176-141-241-253.abo.bbox.fr. [176.141.241.253])
+        by smtp.gmail.com with ESMTPSA id l16sm14167072wmj.47.2021.06.11.13.08.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 08:13:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 11 Jun 2021 08:13:22 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Palmer <daniel@0x0f.com>,
+        Fri, 11 Jun 2021 13:08:09 -0700 (PDT)
+From:   Romain Perier <romain.perier@gmail.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Daniel Palmer <daniel@0x0f.com>,
         Mohammed Billoo <mohammed.billoo@gmail.com>,
         linux-watchdog@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/3] watchdog: Add Mstar MSC313e WDT driver
-Message-ID: <20210611151322.GA4137959@roeck-us.net>
-References: <20210605170441.33667-1-romain.perier@gmail.com>
- <20210605170441.33667-3-romain.perier@gmail.com>
- <20210611103426.GA3827319@roeck-us.net>
- <CABgxDoJhCiBoyJW3WOF9Jac9QcAfDxE5wND6gg1tvqd74hd+NQ@mail.gmail.com>
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] Add watchdog for Mstar SoCs
+Date:   Fri, 11 Jun 2021 22:07:58 +0200
+Message-Id: <20210611200801.52139-1-romain.perier@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABgxDoJhCiBoyJW3WOF9Jac9QcAfDxE5wND6gg1tvqd74hd+NQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 04:35:33PM +0200, Romain Perier wrote:
-> Le ven. 11 juin 2021 à 12:34, Guenter Roeck <linux@roeck-us.net> a écrit :
-> >
-> > On Sat, Jun 05, 2021 at 07:04:40PM +0200, Romain Perier wrote:
-> > > From: Daniel Palmer <daniel@0x0f.com>
-> > >
-> > > It adds a driver for the IP block handling the watchdog timer found for
-> > > Mstar MSC313e SoCs and newer.
-> > >
-> > > Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> > > Co-developed-by: Romain Perier <romain.perier@gmail.com>
-> > > Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > > ---
-> > >  MAINTAINERS                    |   1 +
-> >
-> > I tried to apply this patch to my tree, but it doesn't apply because ...
-> >
-> > >  drivers/watchdog/Kconfig       |  12 +++
-> > >  drivers/watchdog/Makefile      |   1 +
-> > >  drivers/watchdog/msc313e_wdt.c | 166 +++++++++++++++++++++++++++++++++
-> > >  4 files changed, 180 insertions(+)
-> > >  create mode 100644 drivers/watchdog/msc313e_wdt.c
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index a0f37adb9e64..fcc10c57298c 100644
-> >
-> > a0f37adb9e64 is not an upstream SHA and there is a conflict. Please resend
-> > the series based on some upstream tag.
-> >
-> > Guenter
-> 
-> Arf, I will rebase and resend then, my bad. It is okay if I rebase the
-> series onto https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-> , branch watchdog-next ?
-> 
-Please just base it on the latest upstream release tag (currently v5.13-rc5).
-Git can handle it as long as the base tag is stable.
+This patches series adds a new driver for the watchdog found in the Mstar
+MSC313e SoCs and newer. It adds a basic watchdog driver, the
+corresponding devicetree bindings and its documentation.
 
-Thanks,
-Guenter
+This work has been co-developed with Daniel Palmer.
+
+Changes since v3:
+- Rebased onto v5.13-rc5
+- Added Reviewed-by tags
+
+Changes since v2:
+- Renamed the dt-bindings documentation to mstar,msc313e-wdt.yaml
+- Fixed the subject of the first commit
+- Dropped unused dt labels
+
+Changes since v1:
+- Dropped "depends OF" from Kconfig (not required)
+- Dropped unneeded include files
+- Re-ordered include files
+- Compute timeout_max dynamically from the probe function to avoid
+  an overflow in _start().
+
+Daniel Palmer (1):
+  watchdog: Add Mstar MSC313e WDT driver
+
+Romain Perier (2):
+  dt-bindings: watchdog: Add Mstar MSC313e WDT devicetree bindings
+    documentation
+  ARM: dts: mstar: Add watchdog device_node definition
+
+ .../bindings/watchdog/mstar,msc313e-wdt.yaml  |  40 +++++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/mstar-v7.dtsi               |  14 ++
+ drivers/watchdog/Kconfig                      |  12 ++
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/msc313e_wdt.c                | 166 ++++++++++++++++++
+ 6 files changed, 234 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/mstar,msc313e-wdt.yaml
+ create mode 100644 drivers/watchdog/msc313e_wdt.c
+
+-- 
+2.30.2
+
