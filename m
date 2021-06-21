@@ -2,67 +2,80 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CECF13ADFF3
-	for <lists+linux-watchdog@lfdr.de>; Sun, 20 Jun 2021 21:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A2D3AE2FB
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Jun 2021 08:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbhFTTds (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 20 Jun 2021 15:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
+        id S229641AbhFUGNy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Jun 2021 02:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbhFTTdr (ORCPT
+        with ESMTP id S229618AbhFUGNx (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 20 Jun 2021 15:33:47 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C141C061787
-        for <linux-watchdog@vger.kernel.org>; Sun, 20 Jun 2021 12:31:34 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id r5so26461969lfr.5
-        for <linux-watchdog@vger.kernel.org>; Sun, 20 Jun 2021 12:31:34 -0700 (PDT)
+        Mon, 21 Jun 2021 02:13:53 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB06C061756
+        for <linux-watchdog@vger.kernel.org>; Sun, 20 Jun 2021 23:11:35 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id b5so2265495ilc.12
+        for <linux-watchdog@vger.kernel.org>; Sun, 20 Jun 2021 23:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
-        b=bkPS4yFR98020frGZuTqkshvNSWXl0Z6aTQyqDBQOYRNn8mNj5ss4TtiudbSrK7ff/
-         QNZJY25CiO+MAZJaIbw2u0HDwtyse9WT3A0cEIgMb7BhAc5Gi6ayNLOmqZZccWa+fNBh
-         k61qS4LmcyXeqJul4RPlYtrHntUAvOZQNCldFK4euecaucVDQIZPJo6OCRHDFo8n8io6
-         y/wykfU9I/qPBsaSVZvRbHpzbXcDYmsqOM+wVrXUhyO/jptCVxl1LpxYgYbXKqQg0pGJ
-         jrhELtWISoo7lLKraKAHFp1ru6KpHU4ePpKhtD5yFuFfQm9+elaj+smp5+MyUD/KdPaP
-         Ef2A==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UrVnWD4uqk477BZlRoS6bPA0gBVrgjlmN2CjO1g4ZrY=;
+        b=b7jNAfXK+9+FAA00prZSOHK32v7G04pvd7XGXWaJDoQhAgeyFKeHtahoZQXX8mRdKD
+         w2BtpOuAerm7s4/3jQS5LmioFE0lk9cmsNBWko9c4CIQj3xlFNaWaXL6qtdPNL3RTEiQ
+         HMrTXeM5ULR2LfmbFT5EFF1U/l6oFfhYtJbWVL2VA6FNHdlepozCGYkuT2kI6I4ZZrLv
+         z1wFIIR+feiCuHNLR9McO8u0fhUb7p79WQjUrAKmqOm5G15paYZODcS/63w8bvBVX3nC
+         Xvk5XQbfM/zd9+F7YJZrGCw/mQ2HnyvjUXdSOA0RMBS1pldze0IjLhKiqg0khW199GnH
+         AZvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
-        b=OHwWYzi/qquJkLVICJLcOgp4dUC7dhKJ0VI9AfT97dJwGVK40ZsKKJ/pjA2SZFIjX7
-         Prs403ifrcHDPyg3bXSwbyNdNmqlTkNBgDTSOH5ti+TCRrRLDHoA3dXt0IYmod7S1DeH
-         0qZ8pRzGmy567Qg3T9SfgqriXMLkX4ZECpnd4QRBvxLaNvbf/n1hnYGsp9OUH1mYqunb
-         Wo/CjAeDagnTP8BjNFwgzN9PXuqbohgAbLRUVhHtcHiQEDkG1M4UT/rZ8aRVCdo/9UFQ
-         lTw6gyXi4qhvGGsnc0hNNsY7YOrIlYkZChyAwl7V6IcpHYx/SlFJCTbWFsxVgfzunhz4
-         3HGQ==
-X-Gm-Message-State: AOAM530jE3bRl6bebATrRqwSq10aGqiG698PPhhhFS3UnAOS0Womv29V
-        W4xzZTw19XTWS4kwvAo/aATWpGac04/ak3Wu0W4=
-X-Google-Smtp-Source: ABdhPJyRr8xkKh1v74sSXR4glyEviCtgGMwIox16xrJwn4HhjsAH3AQXF/kC87XZ0K1UcvikGGPprpK4pH75Np6p+uM=
-X-Received: by 2002:ac2:499d:: with SMTP id f29mr6724142lfl.602.1624217492479;
- Sun, 20 Jun 2021 12:31:32 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UrVnWD4uqk477BZlRoS6bPA0gBVrgjlmN2CjO1g4ZrY=;
+        b=bSiDRV3C6vb4Rn9AaN1XBZ8Hfv1OlkL6FQT7w2CuItcv9F0tUb4KiHGH0NEUWs0KA+
+         MaCJZFJOQE1kTaBZ4X3sar7+ZsPWBDHLCWmC9LmkUHuWEik/HIFCkCVjCZyZTAQDIxsR
+         gb7wuuC+pusNVcQjJAKOUoYrQgN4Yh/BsVRUT8Wzkk+M/2nWUl7TUbigH2tLGBgHzw7r
+         DP8QOIEwnqSW8arma1iezou9qcnFoz3sPs9UGdljy233Fz2B76LYpJwkEVlCByc1DtT1
+         kONF0V5Nhy7uVvwFB/6lz3FzV2LFkjO4r7iZ5sDuL44JMrj/g1aKUIv1rcIzoP83yoRm
+         d5ag==
+X-Gm-Message-State: AOAM533uBfpJpWxvNTrHahEMb2396xu2JbKZnUF8BEE323WgK8jHOgJN
+        uvpe1KIgyrsgaSWKKkbzQY+q4NSxj2MqZfLrXcr8WQ==
+X-Google-Smtp-Source: ABdhPJyH1zVl7wIiAFgQ8e1e8lUbGMzodYIhXDk676HPCNCBJlym94W/qbDfS3mva7wU9ICE+EAx0H0frj0pQnM7DGY=
+X-Received: by 2002:a05:6e02:1be1:: with SMTP id y1mr17552207ilv.204.1624255894489;
+ Sun, 20 Jun 2021 23:11:34 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:aa6:da47:0:b029:fa:6d7d:24c with HTTP; Sun, 20 Jun 2021
- 12:31:32 -0700 (PDT)
-Reply-To: contactcenter@gnbinvestorsb.com
-From:   Gnb Investors Bank <sandraquntoo@gmail.com>
-Date:   Sun, 20 Jun 2021 22:31:32 +0300
-Message-ID: <CAPu=tC5n-=M7EGJZV++m9omRBkAZZ+M9gcWgQjJkA4Y9N6hVBQ@mail.gmail.com>
-Subject: Brauchen Sie einen Kredit?
-To:     undisclosed-recipients:;
+References: <20210620134954.15233-1-Christine.Zhu@mediatek.com> <20210620134954.15233-4-Christine.Zhu@mediatek.com>
+In-Reply-To: <20210620134954.15233-4-Christine.Zhu@mediatek.com>
+From:   Tzung-Bi Shih <tzungbi@google.com>
+Date:   Mon, 21 Jun 2021 14:11:23 +0800
+Message-ID: <CA+Px+wXG=KDRKzm-bS95tnmpbBTCD3C72nhi3RJGw6PG6Cj-hQ@mail.gmail.com>
+Subject: Re: [v1,3/3] watchdog: mt8195: add wdt support
+To:     Christine Zhu <christine.zhu@mediatek.com>
+Cc:     linux@roeck-us.net, robh+dt@kernel.org, wim@linux-watchdog.org,
+        matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        seiya.wang@mediatek.com, linux-watchdog@vger.kernel.org,
+        rex-bc.chen@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        srv_heupstream@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
---=20
-Brauchen Sie einen Kredit? Unsere Bank vergibt Kredite zu einem Zinssatz vo=
-n 2%
+On Sun, Jun 20, 2021 at 9:50 PM Christine Zhu
+<Christine.Zhu@mediatek.com> wrote:
+> add support for watchdog device found in MT8195 SoC
+Please write complete sentences.  For example, "Supports MT8195
+watchdog device."
 
-Melden Sie sich f=C3=BCr weitere Informationen bei uns.
+> Change-Id: Ib2434cf2d47a2e14916056f08a4fc630569624ed
+Remove the unneeded tag.
 
-E-Mail: contactcenter@gnbinvestorsb.com
+> +static const struct mtk_wdt_data mt8195_data = {
+> +       .toprgu_sw_rst_num = MT8195_TOPRGU_SW_RST_NUM,
+> +};
+Expect to see the of_device_id (i.e. mtk_wdt_dt_ids) has the newly
+introduced compatible string and use the mt8195_data but failed to
+find it.
