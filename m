@@ -2,110 +2,93 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 828ED3B08FA
-	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Jun 2021 17:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0B63B0AFC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Jun 2021 19:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbhFVP3y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 22 Jun 2021 11:29:54 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:57599 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbhFVP3w (ORCPT
+        id S230167AbhFVRC5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Jun 2021 13:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230076AbhFVRC5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 22 Jun 2021 11:29:52 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lviJK-00027K-ME; Tue, 22 Jun 2021 15:27:34 +0000
-To:     Curtis Klein <curtis.klein@hpe.com>
-From:   Colin Ian King <colin.king@canonical.com>
-Subject: re: watchdog: Add hrtimer-based pretimeout feature
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Tue, 22 Jun 2021 13:02:57 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769E7C061574;
+        Tue, 22 Jun 2021 10:00:40 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id i12-20020a05683033ecb02903346fa0f74dso21860809otu.10;
+        Tue, 22 Jun 2021 10:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CU73LRTmqsTJXC4hCPE4/i0AAwdr3FZJs+LzvR2IcQI=;
+        b=JTfsR1QOxSzlj2vxLZxvTeR8R5YGWW3UbyZl8oBQYsB4CnGDqMUmttCi1cA3uLODi0
+         hkr+ZxmFRcbPXJRyrW+vzjz1HwVRBHabLWiU38taHodnC0+cnmc3xyht3tt9KH0EalnN
+         DyiOe7fQ9u5enXuTprYZcSjW/2Tua3TInECPkJZgtLMnrWUG0UoLqGxuICsn+ZhzAVXM
+         oNqGrxVngIXiktfMWDUn1pkKdwBJYgSok9U2ZwmZ0nzhOmufFksClgO6DKhgd/nws4/P
+         RJu/0vB+Svoau3mbXd7wuDo1OzO1FLR7j8q6fQ3s3A5Xm4hbYApg8bruOUgwTUifLUuT
+         LBlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=CU73LRTmqsTJXC4hCPE4/i0AAwdr3FZJs+LzvR2IcQI=;
+        b=XaL1HPgkRDg5iTkFFeuI9hVo4+VOwUBPSCEFRf0PtBOQ7AX9jrfaXHoHyVLM5oWU17
+         HZkmFScVb7qrQSYD2rKkSJ8L5wD+KoY4++tTfy48xErF1fcDDLL4HBXdrIw7UWhvnJDg
+         VrU+8YdcCfSudeFAakyQp6fCAftbWEt6Hp3z6onSpUH1baESRWhEliljCwuC74pd7YIp
+         kLaSeDYFv9fK9lZTm/VR/j9SnPOZPcAgzu1vlwaFkQvEymqzH5+lnjIwS+jKbz54ZJZ4
+         hUuK/EUgeHlm9jxewl+Xc9dmTx2Ms1GPwmyMZOZOyOThHWFWqsL72wKw5beDkJSZsdkK
+         Qw/A==
+X-Gm-Message-State: AOAM5311Plb+FLe4t0lACX9ln1i3iJsxOOs3Rsh5zuQg95IWQ9tNIebg
+        DmEoYGiBCWWGTkzJ8DPui/0=
+X-Google-Smtp-Source: ABdhPJxoRFAitm/89S9nKTw10yYqZzZlkwIjYq9UXK9WgXuoqd3GuEH7Q8tIHD2Q6N3/SFxKZJ/WVw==
+X-Received: by 2002:a9d:2c67:: with SMTP id f94mr3993356otb.353.1624381239886;
+        Tue, 22 Jun 2021 10:00:39 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s123sm599767oos.12.2021.06.22.10.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jun 2021 10:00:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 22 Jun 2021 10:00:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Art Nikpal <email2tema@gmail.com>, wim@linux-watchdog.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         linux-watchdog@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-ID: <244ef2f1-9dfb-6ac3-3ab8-f8f0cabda93f@canonical.com>
-Date:   Tue, 22 Jun 2021 16:27:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        linux-kernel@vger.kernel.org, Artem Lapkin <art@khadas.com>,
+        Nick Xie <nick@khadas.com>, Gouwa Wang <gouwa@khadas.com>
+Subject: Re: [PATCH] watchdog: meson_gxbb_wdt: improve
+Message-ID: <20210622170037.GA3440464@roeck-us.net>
+References: <20210622095639.1280774-1-art@khadas.com>
+ <bfa12322-bc49-2337-2988-199e87e34b87@baylibre.com>
+ <CAKaHn9JpH2Yh-1njO6jEnFeu-GMhbonftN=-VXdbvjdug16qHA@mail.gmail.com>
+ <0d5e53b2-873e-0ffa-32eb-87e96b51e263@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d5e53b2-873e-0ffa-32eb-87e96b51e263@baylibre.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+On Tue, Jun 22, 2021 at 02:43:45PM +0200, Neil Armstrong wrote:
+> Hi,
+> 
+> On 22/06/2021 13:53, Art Nikpal wrote:
+> >> Neil
+> >> Can you split the patch in 4 distinct changes ?
+> > 
+> > yes  no problem i can try to do it tomorrow !
+> > maybe somebody have other ideas, suggestion, comments ...
+> 
+> The changeset is clean, and overall I'm ok with the changes, but I'm pretty sure the wdt maintainers
+> will prefer separate changes in order to comment of each.
 
-Static analysis using Coverity on linux-next has found an issue in
-function watchdog_cdev_unregister in source
-drivers/watchdog/watchdog_dev.c with the following commit:
+Correct. As per guidelines, "one logical change per patch".
 
-commit 7b7d2fdc8c3e3f9fdb3558d674e1eeddc16c7d9e
-Author: Curtis Klein <curtis.klein@hpe.com>
-Date:   Wed Feb 3 12:11:30 2021 -0800
-
-    watchdog: Add hrtimer-based pretimeout feature
-
-The analysis is as follows:
-
-1084 static void (struct watchdog_device *wdd)
-1085 {
-1086        struct watchdog_core_data *wd_data = wdd->wd_data;
-1087
-1088        cdev_device_del(&wd_data->cdev, &wd_data->dev);
-
-    1. Condition wdd->id == 0, taking true branch.
-
-1089        if (wdd->id == 0) {
-1090                misc_deregister(&watchdog_miscdev);
-1091                old_wd_data = NULL;
-1092        }
-1093
-
-    2. Condition watchdog_active(wdd), taking true branch.
-    3. Condition test_bit(4, &wdd->status), taking true branch.
-
-1094        if (watchdog_active(wdd) &&
-1095            test_bit(WDOG_STOP_ON_UNREGISTER, &wdd->status)) {
-1096                watchdog_stop(wdd);
-1097        }
-1098
-1099        mutex_lock(&wd_data->lock);
-1100        wd_data->wdd = NULL;
-
-    4. assign_zero: Assigning: wdd->wd_data = NULL.
-
-1101        wdd->wd_data = NULL;
-1102        mutex_unlock(&wd_data->lock);
-1103
-1104        hrtimer_cancel(&wd_data->timer);
-1105        kthread_cancel_work_sync(&wd_data->work);
-
-Explicit null dereferenced (FORWARD_NULL)
-
-    5. var_deref_model: Passing wdd to watchdog_hrtimer_pretimeout_stop,
-which dereferences null wdd->wd_data.
-
-1106        watchdog_hrtimer_pretimeout_stop(wdd);
-1107
-1108        put_device(&wd_data->dev);
-1109 }
-
-The call to watchdog_hrtimer_pretimeout_stop dereferences wdd as follows:
-
-41 void watchdog_hrtimer_pretimeout_stop(struct watchdog_device *wdd)
-42 {
-
-  1. deref_parm_field_in_call: Function hrtimer_cancel dereferences an
-offset off wdd->wd_data.
-
-43        hrtimer_cancel(&wdd->wd_data->pretimeout_timer);
-44 }
-
-Since wdd->wd_data is set to NULL on line 1101, the call to
-watchdog_hrtimer_pretimeout_stop will always trip a null pointer
-dereference.  Shall we just remove that call?
-
-Colin
+Guenter
