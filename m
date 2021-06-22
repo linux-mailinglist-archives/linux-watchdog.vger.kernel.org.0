@@ -2,65 +2,110 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D073B0885
-	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Jun 2021 17:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828ED3B08FA
+	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Jun 2021 17:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbhFVPT4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 22 Jun 2021 11:19:56 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:55869 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230047AbhFVPTz (ORCPT
+        id S231552AbhFVP3y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Jun 2021 11:29:54 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57599 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232241AbhFVP3w (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 22 Jun 2021 11:19:55 -0400
-X-UUID: 03eeb335774a4ecf9b5804e5006dd4bc-20210622
-X-UUID: 03eeb335774a4ecf9b5804e5006dd4bc-20210622
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <christine.zhu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1894561052; Tue, 22 Jun 2021 23:17:38 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 22 Jun 2021 23:17:36 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 22 Jun 2021 23:17:35 +0800
-From:   Christine Zhu <Christine.Zhu@mediatek.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <seiya.wang@mediatek.com>
-Subject: [v2,0/3] watchdog: mt8195: add wdt support 
-Date:   Tue, 22 Jun 2021 23:17:31 +0800
-Message-ID: <20210622151734.29429-1-Christine.Zhu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 22 Jun 2021 11:29:52 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212])
+        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <colin.king@canonical.com>)
+        id 1lviJK-00027K-ME; Tue, 22 Jun 2021 15:27:34 +0000
+To:     Curtis Klein <curtis.klein@hpe.com>
+From:   Colin Ian King <colin.king@canonical.com>
+Subject: re: watchdog: Add hrtimer-based pretimeout feature
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <244ef2f1-9dfb-6ac3-3ab8-f8f0cabda93f@canonical.com>
+Date:   Tue, 22 Jun 2021 16:27:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Supports MT8195 watchdog device.
-Supports MT8195 watchdog reset-controller feature.
+Hi,
 
-Change since v1:
-  -Remove the unneeded tag in [v1,1/3] [v1,2/3] [v1,3/3]
-  -Add of_device_id of MT8195 in [v1,3/3]
-  -use more proper prefixes, such as "dt-bindings: mediatek: mt8195:"
-  -provide more information in the cover letter
+Static analysis using Coverity on linux-next has found an issue in
+function watchdog_cdev_unregister in source
+drivers/watchdog/watchdog_dev.c with the following commit:
 
-christine.zhu (3):
-  dt-binding: mediatek: mt8195: update mtk-wdt document
-  dt-binding: reset: mt8195: add toprgu reset-controller head file
-  watchdog: mediatek: mt8195: add wdt support
+commit 7b7d2fdc8c3e3f9fdb3558d674e1eeddc16c7d9e
+Author: Curtis Klein <curtis.klein@hpe.com>
+Date:   Wed Feb 3 12:11:30 2021 -0800
 
- .../devicetree/bindings/watchdog/mtk-wdt.txt       |  2 +-
- drivers/watchdog/mtk_wdt.c                         |  6 +++++
- .../dt-bindings/reset-controller/mt8195-resets.h   | 29 ++++++++++++++++++++++
- 3 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100644 include/dt-bindings/reset-controller/mt8195-resets.h
+    watchdog: Add hrtimer-based pretimeout feature
 
+The analysis is as follows:
 
+1084 static void (struct watchdog_device *wdd)
+1085 {
+1086        struct watchdog_core_data *wd_data = wdd->wd_data;
+1087
+1088        cdev_device_del(&wd_data->cdev, &wd_data->dev);
+
+    1. Condition wdd->id == 0, taking true branch.
+
+1089        if (wdd->id == 0) {
+1090                misc_deregister(&watchdog_miscdev);
+1091                old_wd_data = NULL;
+1092        }
+1093
+
+    2. Condition watchdog_active(wdd), taking true branch.
+    3. Condition test_bit(4, &wdd->status), taking true branch.
+
+1094        if (watchdog_active(wdd) &&
+1095            test_bit(WDOG_STOP_ON_UNREGISTER, &wdd->status)) {
+1096                watchdog_stop(wdd);
+1097        }
+1098
+1099        mutex_lock(&wd_data->lock);
+1100        wd_data->wdd = NULL;
+
+    4. assign_zero: Assigning: wdd->wd_data = NULL.
+
+1101        wdd->wd_data = NULL;
+1102        mutex_unlock(&wd_data->lock);
+1103
+1104        hrtimer_cancel(&wd_data->timer);
+1105        kthread_cancel_work_sync(&wd_data->work);
+
+Explicit null dereferenced (FORWARD_NULL)
+
+    5. var_deref_model: Passing wdd to watchdog_hrtimer_pretimeout_stop,
+which dereferences null wdd->wd_data.
+
+1106        watchdog_hrtimer_pretimeout_stop(wdd);
+1107
+1108        put_device(&wd_data->dev);
+1109 }
+
+The call to watchdog_hrtimer_pretimeout_stop dereferences wdd as follows:
+
+41 void watchdog_hrtimer_pretimeout_stop(struct watchdog_device *wdd)
+42 {
+
+  1. deref_parm_field_in_call: Function hrtimer_cancel dereferences an
+offset off wdd->wd_data.
+
+43        hrtimer_cancel(&wdd->wd_data->pretimeout_timer);
+44 }
+
+Since wdd->wd_data is set to NULL on line 1101, the call to
+watchdog_hrtimer_pretimeout_stop will always trip a null pointer
+dereference.  Shall we just remove that call?
+
+Colin
