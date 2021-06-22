@@ -2,167 +2,175 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E347C3B0502
-	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Jun 2021 14:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29943B0623
+	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Jun 2021 15:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbhFVMqF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 22 Jun 2021 08:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbhFVMqE (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 22 Jun 2021 08:46:04 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A7AC06175F
-        for <linux-watchdog@vger.kernel.org>; Tue, 22 Jun 2021 05:43:49 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso1655272wmh.4
-        for <linux-watchdog@vger.kernel.org>; Tue, 22 Jun 2021 05:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IWa3yvDMZC05F09Gb0TJwUqbgaqCJLtXoPOpUHqNy40=;
-        b=HIImoI6qMkUOuMDOIfq/jhmSoNcFXAmToJNHbsufhKclBs5xgHEnnOOELPRwTvhbOD
-         VGcrS0iSnncjUBPRUPCzW8VXUVo3VPyeqQH2WcXv7uWsaHfjt6DBXYXVlky5ME0XbhiW
-         paEkYrxZk094FkBS2Wqkc5US86GnxzUJaj8wr0ATVa6Gc1wgC1wjisOCaIBdIeKFhaDW
-         h+d6BeC4Ebo+XqYmQGQ5FyayvodsGiLbwrtOb3Nl5VB/jFq5R2FjJxWYCIQLzd3VrRK6
-         FdZuOINbex9KtjIegfbcb3xW5hzoSHANtmujLhsTdltypEBwM5MqocIBRSvPTszZiqyo
-         kExw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=IWa3yvDMZC05F09Gb0TJwUqbgaqCJLtXoPOpUHqNy40=;
-        b=l1it3Bg5H4jRDCpiD1JPD/NeEUsY5a5f/qsPrjK0SYadrDBClABawmbU+/+SLb2Unc
-         aRrCdvjW8mOjTxYmXP28V5qHN483TQ5USOojEFjxreDMSm6sRzYZJdpxr2cVlvO2glY6
-         2+49J6XlarrWUiVmJobUzZZrfTeKYxh0t4yEaW+kzpZQuESu/ONhFlHXdQW20VtKN5KD
-         11yelOGhRK8owEdrlj9pJrK4p/200NRIIP3/h1g4jQQ1H+TNUKEi45VdwEu+jD4zadK3
-         VNdE7RwwzjTrnzKGiTz/uJt3DfqOp0Mv0K5CM87Ld3AVGax5HbjPWiQerCbrEGQBIW+P
-         R5ug==
-X-Gm-Message-State: AOAM532haNMMl1YXG6pFJIqXuGtuhU0aG1ummcWjTEwPMZ68IwJ4QUe7
-        y0aQtrh1WZXLF1o0C/nqZzILKA==
-X-Google-Smtp-Source: ABdhPJy5rQuRGuARhz/vMpwS+ZMRIV5SVmAckD49snpPgMD2hPstEquQIk0YQn0Zld5AvrodGx2snQ==
-X-Received: by 2002:a7b:cb1a:: with SMTP id u26mr4283571wmj.125.1624365827472;
-        Tue, 22 Jun 2021 05:43:47 -0700 (PDT)
-Received: from ?IPv6:2001:861:44c0:66c0:b049:62d0:2ee2:34f7? ([2001:861:44c0:66c0:b049:62d0:2ee2:34f7])
-        by smtp.gmail.com with ESMTPSA id s16sm9517373wrm.36.2021.06.22.05.43.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jun 2021 05:43:47 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: meson_gxbb_wdt: improve
-To:     Art Nikpal <email2tema@gmail.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        linux-kernel@vger.kernel.org, Artem Lapkin <art@khadas.com>,
-        Nick Xie <nick@khadas.com>, Gouwa Wang <gouwa@khadas.com>
-References: <20210622095639.1280774-1-art@khadas.com>
- <bfa12322-bc49-2337-2988-199e87e34b87@baylibre.com>
- <CAKaHn9JpH2Yh-1njO6jEnFeu-GMhbonftN=-VXdbvjdug16qHA@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <0d5e53b2-873e-0ffa-32eb-87e96b51e263@baylibre.com>
-Date:   Tue, 22 Jun 2021 14:43:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231397AbhFVNqN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Jun 2021 09:46:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37118 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229988AbhFVNqJ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 22 Jun 2021 09:46:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC2F861353;
+        Tue, 22 Jun 2021 13:43:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624369432;
+        bh=NqFXh1RzaIB7T3yUivBhV+3jLDLAyj/zzCtWY0JA0SQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=n2C4l95B/w+7fm3Hy/W1ls3BjWTgUnPkeMWPcJwuHNhjALViq36NSNRvf1J+UxXwT
+         W1of8Zg2OiipKGz+JaQJVEN0Rymz9BqpYAiOBzmrtdT5/mgiDbEVBsHlr3gDk+TOBO
+         Fe7qpiKq+UgUir5JlR9fsJDRZtySIEJhB36NWX9yf5t0mO64+Z1mYCq7ew8ZAwg0KI
+         F5hwQr8sPPDgEGs9UTcylTzkdsRMaQyTccf/acpKJhxDJxKtULLFNQYEsUOGj4MJxK
+         B3a0hJqzs9FjH4X1uUrkMDUidT5NSByby5xfUTkfYV6nW2261SSjbz6fXsdgEAv5QU
+         qCbHec6qB4IfA==
+Received: by mail-ed1-f48.google.com with SMTP id t3so23726766edc.7;
+        Tue, 22 Jun 2021 06:43:52 -0700 (PDT)
+X-Gm-Message-State: AOAM530naL8j0CKzvJfrllBmASUFsX2bsI1GjGzC0mAXDpPnd7e/OVpX
+        4EDZT2wnXe4JGzDS7JIUEAN3Ta5uIGiYDz5J5Q==
+X-Google-Smtp-Source: ABdhPJzR0Ub3ZgSNkr3MEhjSHq6x9DynzmvMX7quMzOS1boijoDJs7nsAsYPAJuJ3rupM/aSXMVZuLXS4ayPZR+vCGA=
+X-Received: by 2002:a05:6402:ca2:: with SMTP id cn2mr2897976edb.62.1624369431373;
+ Tue, 22 Jun 2021 06:43:51 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAKaHn9JpH2Yh-1njO6jEnFeu-GMhbonftN=-VXdbvjdug16qHA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210615191543.1043414-1-robh@kernel.org> <CAMuHMdUGXu8yj3JWKwM8mt7axkrzGMiowC1t0PHrbpxRCBME3w@mail.gmail.com>
+In-Reply-To: <CAMuHMdUGXu8yj3JWKwM8mt7axkrzGMiowC1t0PHrbpxRCBME3w@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 22 Jun 2021 07:43:37 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ8jjkufTAmoFHuqpWB0bMUfCCkUR-pFFa2MoyeGzgBvA@mail.gmail.com>
+Message-ID: <CAL_JsqJ8jjkufTAmoFHuqpWB0bMUfCCkUR-pFFa2MoyeGzgBvA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, linux-can@vger.kernel.org,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-phy@lists.infradead.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+On Tue, Jun 22, 2021 at 2:17 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Rob,
+>
+> On Tue, Jun 15, 2021 at 9:16 PM Rob Herring <robh@kernel.org> wrote:
+> > If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> > same size as the list is redundant and can be dropped. Note that is DT
+> > schema specific behavior and not standard json-schema behavior. The tooling
+> > will fixup the final schema adding any unspecified minItems/maxItems.
+> >
+> > This condition is partially checked with the meta-schema already, but
+> > only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> > An improved meta-schema is pending.
+>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+>
+> > --- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+> > @@ -46,7 +46,6 @@ properties:
+> >
+> >    clocks:
+> >      minItems: 3
+> > -    maxItems: 5
+> >      items:
+> >        - description: GMAC main clock
+> >        - description: MAC TX clock
+>
+> While resolving the conflict with commit fea99822914039c6
+> ("dt-bindings: net: document ptp_ref clk in dwmac") in soc/for-next,
+> I noticed the following construct for clock-names:
+>
+>   clock-names:
+>     minItems: 3
+>     maxItems: 6
+>     contains:
+>       enum:
+>         - stmmaceth
+>         - mac-clk-tx
+>         - mac-clk-rx
+>         - ethstp
+>         - eth-ck
+>         - ptp_ref
+>
+> Should this use items instead of enum, and drop maxItems, or is this
+> a valid construct to support specifying the clocks in random order?
+> If the latter, it does mean that the order of clock-names may not
+> match the order of the clock descriptions.
 
-On 22/06/2021 13:53, Art Nikpal wrote:
->> Neil
->> Can you split the patch in 4 distinct changes ?
-> 
-> yes  no problem i can try to do it tomorrow !
-> maybe somebody have other ideas, suggestion, comments ...
+'contains' is true if one or more entries match the strings. So it is
+really saying one of these is required. That's not really much of a
+constraint. There's 'minContains' and 'maxContains' in newer
+json-schema versions (not yet supported) that could add some
+constraints if there has to be at least N entries from contains. An
+'items' schema (as opposed to a list) would say all items have to
+match one of the strings. I'm sure that's too strict.
 
-The changeset is clean, and overall I'm ok with the changes, but I'm pretty sure the wdt maintainers
-will prefer separate changes in order to comment of each.
-Neil
+TLDR: clocks for this binding are a mess and the above is probably all
+we can do here.
 
-> 
-> 
-> On Tue, Jun 22, 2021 at 7:08 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->>
->> Hi Art,
->>
->> On 22/06/2021 11:56, Artem Lapkin wrote:
->>> Improve meson_gxbb_wdt watchdog driver
->>> 1) added module param timeout and nowayout same as other modules
->>> 2) print watchdog driver start status
->>> 3) add watchdog_stop_on_unregister
->>> 4) remove watchdog_stop_on_reboot ( still can be activated by
->>> watchdog.stop_on_reboot=1 ) i think this driver configuration more useful
->>> becouse we can get reboot waranty for abnormal situations on shutdown stage
->>
->> Can you split the patch in 4 distinct changes ?
->>
->> Neil
->>
->>>
->>> Signed-off-by: Artem Lapkin <art@khadas.com>
->>> ---
->>>  drivers/watchdog/meson_gxbb_wdt.c | 20 ++++++++++++++++++--
->>>  1 file changed, 18 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
->>> index 5a9ca10fbcfa..15c889932c13 100644
->>> --- a/drivers/watchdog/meson_gxbb_wdt.c
->>> +++ b/drivers/watchdog/meson_gxbb_wdt.c
->>> @@ -35,6 +35,17 @@ struct meson_gxbb_wdt {
->>>       struct clk *clk;
->>>  };
->>>
->>> +static bool nowayout = WATCHDOG_NOWAYOUT;
->>> +static unsigned int timeout = DEFAULT_TIMEOUT;
->>> +
->>> +module_param(nowayout, bool, 0);
->>> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started default="
->>> +                     __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->>> +
->>> +module_param(timeout, uint, 0);
->>> +MODULE_PARM_DESC(timeout, "Watchdog heartbeat in seconds="
->>> +                     __MODULE_STRING(DEFAULT_TIMEOUT) ")");
->>> +
->>>  static int meson_gxbb_wdt_start(struct watchdog_device *wdt_dev)
->>>  {
->>>       struct meson_gxbb_wdt *data = watchdog_get_drvdata(wdt_dev);
->>> @@ -174,7 +185,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->>>       data->wdt_dev.ops = &meson_gxbb_wdt_ops;
->>>       data->wdt_dev.max_hw_heartbeat_ms = GXBB_WDT_TCNT_SETUP_MASK;
->>>       data->wdt_dev.min_timeout = 1;
->>> -     data->wdt_dev.timeout = DEFAULT_TIMEOUT;
->>> +     data->wdt_dev.timeout = timeout;
->>>       watchdog_set_drvdata(&data->wdt_dev, data);
->>>
->>>       /* Setup with 1ms timebase */
->>> @@ -186,7 +197,12 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->>>
->>>       meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
->>>
->>> -     watchdog_stop_on_reboot(&data->wdt_dev);
->>> +     watchdog_set_nowayout(&data->wdt_dev, nowayout);
->>> +     watchdog_stop_on_unregister(&data->wdt_dev);
->>> +
->>> +     dev_info(dev, "Watchdog enabled (timeout=%d sec, nowayout=%d)",
->>> +             data->wdt_dev.timeout, nowayout);
->>> +
->>>       return devm_watchdog_register_device(dev, &data->wdt_dev);
->>>  }
->>>
->>>
->>
-
+Rob
