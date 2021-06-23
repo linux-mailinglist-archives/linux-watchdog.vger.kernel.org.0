@@ -2,52 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E013B11ED
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Jun 2021 04:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F3E3B11EF
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Jun 2021 04:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhFWCrf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 22 Jun 2021 22:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S231138AbhFWCrm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Jun 2021 22:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbhFWCrf (ORCPT
+        with ESMTP id S231135AbhFWCrl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 22 Jun 2021 22:47:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3FCC061574;
-        Tue, 22 Jun 2021 19:45:18 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g24so636781pji.4;
-        Tue, 22 Jun 2021 19:45:18 -0700 (PDT)
+        Tue, 22 Jun 2021 22:47:41 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE5AC061756;
+        Tue, 22 Jun 2021 19:45:24 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p13so1187051pfw.0;
+        Tue, 22 Jun 2021 19:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ip7ajlGeYj7m17iAVH4CDZ+K9tw9hchuXGcTy/Lm6iQ=;
-        b=ZLHfABsqlgyddU1GXYU9y5z08Y+mthiwFyIpXRHJYRuxFLzMQ87pEBVg79j10WS2qY
-         FiShyYhNhx8+VW+95/cNH4rGhSuBAAmbdjA6dutHC2p26uj1ug1lutM/V+BNia93oByg
-         2FGz4R/kGqk37obq3lHyBVkQg0JD87lvKHgLfCUapD4yrMv0vctofqM31YhBXVCl8tUB
-         pE9sgqKfduGMzqYg6xtrA5J/bH3d6yCwI33BoDzoMOb42bDmByANRj3A9Zh0sKu9MQBY
-         GnVMrXqqaoxd+vdiW1PWVLvjFpWn8V+yrQUV72n3YSzP3UI5g7C+5OfNRbD+xPsMCWGM
-         6Znw==
+        bh=LcifxjeTUDszannHMA8tVPaboMaFqX7AuHfWKGJzjKI=;
+        b=JfkHKlHpvuQg3diepBAJEjojfs8YXzRc3xvNfso0Hrc8GQkFBeLP3EDXjQPI1VIJKl
+         G3al2vMQ032sv0u8H5FTLNHzKYOgQf0ztNuJhK0qQ1eU2zBdjgcEN4NEi8N84b7Y3fex
+         vooAIqWJ+7VWOFZMgiQYNuAP0KbFDkDQsKcKOljozIYft+C+N0BhKUIL3J+3beAdT3kt
+         /bXgDg6S3/9OmwmRt6KpNzDrsE80RtjEM7j3hE0NJDz0qzEQ+HZasZKVYEZduOe42hWT
+         RdZ5oWfGNc41KAieprAHF78H4qqQPQK7Qiv2Y5j2oOVjHSqi/UUgVyoTmRcrdkBPgMxE
+         tTfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ip7ajlGeYj7m17iAVH4CDZ+K9tw9hchuXGcTy/Lm6iQ=;
-        b=pR2G7/c4S4+u6OlTDRnLB74dGdMCl+w9M/0XU/LsKVQpM1Hb8PaIbma2WkweZ6Bptw
-         Ohhi3A9/3DqMe/Jg+ZoWazjeFHv+5LxyP78vlHg47MGu8pvvMYxUOQW2MbS2odw3FErx
-         9BhNACzs1qz0XTmZG8nNcNV/DX8T9cmT6PmwYu3qx5VLoQDkxDvzliZdFYc2yTckKHnP
-         Nhjd/Rxp57E6L+yxCbomD2Rb0W1kPElfB+0zsck7vk9LmG+qEj+LM0wI6013qGq4Z1py
-         rqalGuy3SPVTHtxYjRgHQLGJu9LUexkHPePt2R1DCwTujr0ujG6MZ2NxGzCiOOZ25WXN
-         N1lA==
-X-Gm-Message-State: AOAM533S43QW4ACN4O8ZFWzqj9Ygdq09XLNycW2YGUdQVNc9b6Vbd7Nh
-        9HsZ7fw466gnGYCePC+z4fM=
-X-Google-Smtp-Source: ABdhPJyhCZwjN/m4vhnNitMbn91dSnkTedliyYAJ/e5+IN8eggGCWtWL3XZgZhB48Y3cBOXQ/yZ8uw==
-X-Received: by 2002:a17:90a:c8b:: with SMTP id v11mr7062600pja.114.1624416318293;
-        Tue, 22 Jun 2021 19:45:18 -0700 (PDT)
+        bh=LcifxjeTUDszannHMA8tVPaboMaFqX7AuHfWKGJzjKI=;
+        b=JuqUOhJIPXfDZ5YHTC6VfFiQEs93gmEjq3sucIJU4cTkxpF61iYrdUO2Q2kh9jHG4x
+         gEPPOCvoyYzCTKrAYJ9INy5+INChgO0/fAP4FAFpLFJRhQfrbTUH4WXej4kLUSaq15b1
+         A4g8mBw2WC3abtZoQf+0cPKqrE9X3Kqsd4qNxM0sKbp9r0t4BHgAueUrC2YGzEFaiNGJ
+         Hz/w0li2WtDQJY1nmVzFH+HJHzbwxtNTxQg+Y6uXQTNpQDySczBrvScAlPSq+YuEmuHl
+         NL0UZbet36bPluBaFqEsx7yAoh2yfs9oH5X5+3OKFXXWTdTWrqL8m9koOPoPYS7wNxNT
+         1cnQ==
+X-Gm-Message-State: AOAM533BAwLfCpz+Lco2VPUc+GZ1IWjVylZjoOFGzn1VdpwDMusYE9bX
+        r4vDmENK9GfYsNj3+HZwtQY=
+X-Google-Smtp-Source: ABdhPJzTDkJpnFau8uqxddN6VvWamjN+0zFvBtltEsw/1tOk1RZOua6W2lO++aLSf9yfwQkf8CyYEQ==
+X-Received: by 2002:a63:1709:: with SMTP id x9mr1605486pgl.245.1624416324113;
+        Tue, 22 Jun 2021 19:45:24 -0700 (PDT)
 Received: from localhost.localdomain (104.194.74.249.16clouds.com. [104.194.74.249])
-        by smtp.gmail.com with ESMTPSA id z17sm556307pfq.218.2021.06.22.19.45.12
+        by smtp.gmail.com with ESMTPSA id z17sm556307pfq.218.2021.06.22.19.45.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jun 2021 19:45:18 -0700 (PDT)
+        Tue, 22 Jun 2021 19:45:23 -0700 (PDT)
 From:   Artem Lapkin <email2tema@gmail.com>
 X-Google-Original-From: Artem Lapkin <art@khadas.com>
 To:     narmstrong@baylibre.com
@@ -57,9 +57,9 @@ Cc:     wim@linux-watchdog.org, linux@roeck-us.net, khilman@baylibre.com,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         art@khadas.com, nick@khadas.com, gouwa@khadas.com
-Subject: [PATCH 4/5] watchdog: meson_gxbb_wdt: add stop_on_unregister
-Date:   Wed, 23 Jun 2021 10:44:28 +0800
-Message-Id: <20210623024429.1346349-5-art@khadas.com>
+Subject: [PATCH 5/5] watchdog: meson_gxbb_wdt: add register device status notification
+Date:   Wed, 23 Jun 2021 10:44:29 +0800
+Message-Id: <20210623024429.1346349-6-art@khadas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210623024429.1346349-1-art@khadas.com>
 References: <20210623024429.1346349-1-art@khadas.com>
@@ -69,25 +69,33 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Added missed watchdog_stop_on_unregister call
+Print watchdog success driver start status notification
 
 Signed-off-by: Artem Lapkin <art@khadas.com>
 ---
- drivers/watchdog/meson_gxbb_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/watchdog/meson_gxbb_wdt.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-index 0bf5dccf70b1..2dbe254e5122 100644
+index 2dbe254e5122..750b304b460d 100644
 --- a/drivers/watchdog/meson_gxbb_wdt.c
 +++ b/drivers/watchdog/meson_gxbb_wdt.c
-@@ -196,6 +196,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
- 
- 	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
+@@ -198,7 +198,14 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
  	watchdog_set_nowayout(&data->wdt_dev, nowayout);
-+	watchdog_stop_on_unregister(&data->wdt_dev);
+ 	watchdog_stop_on_unregister(&data->wdt_dev);
  
- 	return devm_watchdog_register_device(dev, &data->wdt_dev);
+-	return devm_watchdog_register_device(dev, &data->wdt_dev);
++	ret = devm_watchdog_register_device(dev, &data->wdt_dev);
++	if (ret)
++		return ret;
++
++	dev_info(dev, "Watchdog enabled (timeout=%d sec, nowayout=%d)",
++		 data->wdt_dev.timeout, nowayout);
++
++	return ret;
  }
+ 
+ static struct platform_driver meson_gxbb_wdt_driver = {
 -- 
 2.25.1
 
