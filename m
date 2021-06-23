@@ -2,80 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 014823B1733
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Jun 2021 11:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90F43B1903
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Jun 2021 13:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbhFWJuo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 23 Jun 2021 05:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
+        id S231144AbhFWLeH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 23 Jun 2021 07:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbhFWJun (ORCPT
+        with ESMTP id S230206AbhFWLeG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 23 Jun 2021 05:50:43 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616F8C061756
-        for <linux-watchdog@vger.kernel.org>; Wed, 23 Jun 2021 02:48:25 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id h15so2975561lfv.12
-        for <linux-watchdog@vger.kernel.org>; Wed, 23 Jun 2021 02:48:25 -0700 (PDT)
+        Wed, 23 Jun 2021 07:34:06 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F78C061574;
+        Wed, 23 Jun 2021 04:31:49 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id n99-20020a9d206c0000b029045d4f996e62so1598749ota.4;
+        Wed, 23 Jun 2021 04:31:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fKjqUJhszdXpyl10YQ4tIa0Xd7F4iUZDn2xLPlegnEI=;
-        b=FE9pvkD16UFCog6pYfw+v3pkk22K4ZVJ0zpA40ZmsTACa8+HUEKertA/5DIJQRH7oZ
-         s/mXcY3jEIW+TEtrd4Q/ywwl3JyabAooIGA70VZESqb8GpqY1Dl0WzM2rpBR+iONY1af
-         xlfT5kjs6Rz5lX4/gGFffB/Kj9SU8ZuHIo/YI=
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bv2OIE88drJYx54rPZawJzllQ5seF6RUH1fKOPSuZ1k=;
+        b=quZT8TN/B1px2LDz44aKHxqTlqdZsT0YcyKFJ9Mt2u1YrxVzQB9GHaI102LbMV9Uv6
+         EMar4xkHFJQv/FDoiFqSh5U7k7nAGO8AfyEJAg/7KoJbpotJZmNMX68ooDCv+XGCvw2p
+         mGfcdD1d90Za0NkPrmvgQYqpSu3RKkCkPy0Jw1BG3jd83OX34RDBq1/PmRSiiz98uoZD
+         /OIyPwZxqau4cBrywhIc/7P/jt8KDA5hy41pXfB5mzSE0PTBv8qli5AmJgG0ryVsePd1
+         1ueVs/8T3GhihjnwasqUmb/GFU7HKP/wNCLL7qQ9MGdJb231ahRNU2X++S2ieTpSgdjL
+         ttSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fKjqUJhszdXpyl10YQ4tIa0Xd7F4iUZDn2xLPlegnEI=;
-        b=TNmnZX5iCfqut62bNEChhAHw0B5G9dHnz4HYE4sn2SWsv9lpY2miJAWNHymO2pi4ae
-         guhM35/GdWNsst1USzih1+doHut+p91v5HTMy652i3SGjQT5+0PF7JJDSP0tXi3J1cII
-         gL0EBdltG98+PPALBV+ScTdHiSzPIe1swDNv+3tQtie9VlAQRGd7iyOoMizex5f2KavD
-         hzV64mOBusoSmLMCDEGDd8JjwD/1Br9LUIp/TN2nqY7qJX6DRcYnYhyZdf64o3AJVZt9
-         ZGCkZJDDIGfI2k/BzWQ7urQJWB5mpa11bM9jqcZ1h58qa5FFgqHk+Hg9SQu0dYLz3FVO
-         AFgA==
-X-Gm-Message-State: AOAM531s+5j9fonGqQxbsI+VKZ8EltWV8/CdwFaQv8v8NhvOjdC62MFt
-        CTxymvw3WG5H6GJN7b2MO8NyksgItGK9n87VSKY5kg==
-X-Google-Smtp-Source: ABdhPJwFufLUGkeN2pDvzmj2Ujaq8TRsFGO5abB0KNvd6vttc1EzSYrcmK6EwOHYKsjU7Jyh6LNg/R9FGuatMvavY5U=
-X-Received: by 2002:a05:6512:3f13:: with SMTP id y19mr6314168lfa.444.1624441703656;
- Wed, 23 Jun 2021 02:48:23 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=bv2OIE88drJYx54rPZawJzllQ5seF6RUH1fKOPSuZ1k=;
+        b=P96g1ZmP0GMY2y5uf9Kx5hRe6y1fJVXuhXMQeP3b1pa4m7RoEX9K/9CqeSpR/RooEH
+         vE3/xqr0vHIuBSxXTL/4Nv9C0huvRcCLfhNMaX9+tBpmgrHG4A2m23B26xnmLs2aPmoz
+         VvzvA7H055Id6bAUaxsSik9DWjkeaUf8nTn/VJGPM9XH51GW4DaTpeIRim/bu8lrESqG
+         JuPf2dFhT+Ho00jjJtf+fG1qXEnU2n971XTXnd17cxy2dUcFlQb1yd1h5wwB9sRlqdcS
+         2aeyx2w9aFDiY0T4a9KyyneivE2vfYPFl6o8KP03QKkPhUqKnjC7QdoV+rU7cv6y4rj/
+         LFXg==
+X-Gm-Message-State: AOAM530ZfImmzbxz0uEoSZ+Btz0NX/6sYTxQHDVU1QOCSRFF+2OqQQwC
+        C9Iq/szRexIBzeKFVe/WNo4=
+X-Google-Smtp-Source: ABdhPJwNRZ8jdDqN5RUZfL3RqJ1gxul7jWp1js7wJOaRZ6W6Dp2Hw1giusqcSA+eEkMCo50d2Ga3eg==
+X-Received: by 2002:a9d:2cf:: with SMTP id 73mr7381852otl.314.1624447908980;
+        Wed, 23 Jun 2021 04:31:48 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x29sm510858ott.68.2021.06.23.04.31.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jun 2021 04:31:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 23 Jun 2021 04:31:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Curtis Klein <curtis.klein@hpe.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: Fix NULL pointer dereference when releasing
+ cdev
+Message-ID: <20210623113146.GA1316730@roeck-us.net>
+References: <1624429583-5720-1-git-send-email-curtis.klein@hpe.com>
 MIME-Version: 1.0
-References: <20210623092917.4447-1-Christine.Zhu@mediatek.com> <20210623092917.4447-2-Christine.Zhu@mediatek.com>
-In-Reply-To: <20210623092917.4447-2-Christine.Zhu@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Wed, 23 Jun 2021 17:48:12 +0800
-Message-ID: <CAGXv+5GXfabPk4NV=d8YxQD1UHeqE9M7bgCeG-FT0Ef1n5ECgw@mail.gmail.com>
-Subject: Re: [v3,1/3] dt-bindings: mediatek: mt8195: update mtk-wdt document
-To:     Christine Zhu <Christine.Zhu@mediatek.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        seiya.wang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1624429583-5720-1-git-send-email-curtis.klein@hpe.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+On Tue, Jun 22, 2021 at 11:26:23PM -0700, Curtis Klein wrote:
+> watchdog_hrtimer_pretimeout_stop needs the watchdog device to have a
+> valid pointer to the watchdog core data to stop the pretimeout hrtimer.
+> Therefore it needs to be called before the pointers are cleared in
+> watchdog_cdev_unregister.
+> 
+> Fixes: 7b7d2fdc8c3e ("watchdog: Add hrtimer-based pretimeout feature")
+> Reported-by: Colin Ian King <colin.king@canonical.com>
+> Signed-off-by: Curtis Klein <curtis.klein@hpe.com>
 
-On Wed, Jun 23, 2021 at 5:30 PM Christine Zhu
-<Christine.Zhu@mediatek.com> wrote:
->
-> From: "christine.zhu" <Christine.Zhu@mediatek.com>
->
-> Update mtk-wdt document for MT8195 platform.
->
-> Signed-off-by: christine.zhu <Christine.Zhu@mediatek.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Please fix your name formatting in your Signed-off-bys and author
-for all the patches, and in your overall git setup.
-
-It should read "Christine Zhu", like your sender info on this
-email, not "christine.zhu" like an account name.
-
-ChenYu
+> ---
+>  drivers/watchdog/watchdog_dev.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 3bab324..ffd8f1a 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -1096,6 +1096,8 @@ static void watchdog_cdev_unregister(struct watchdog_device *wdd)
+>  		watchdog_stop(wdd);
+>  	}
+>  
+> +	watchdog_hrtimer_pretimeout_stop(wdd);
+> +
+>  	mutex_lock(&wd_data->lock);
+>  	wd_data->wdd = NULL;
+>  	wdd->wd_data = NULL;
+> @@ -1103,7 +1105,6 @@ static void watchdog_cdev_unregister(struct watchdog_device *wdd)
+>  
+>  	hrtimer_cancel(&wd_data->timer);
+>  	kthread_cancel_work_sync(&wd_data->work);
+> -	watchdog_hrtimer_pretimeout_stop(wdd);
+>  
+>  	put_device(&wd_data->dev);
+>  }
+> -- 
+> 2.7.4
+> 
