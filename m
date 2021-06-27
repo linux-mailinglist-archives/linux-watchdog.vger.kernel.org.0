@@ -2,55 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1A53B5403
-	for <lists+linux-watchdog@lfdr.de>; Sun, 27 Jun 2021 17:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2BF3B5410
+	for <lists+linux-watchdog@lfdr.de>; Sun, 27 Jun 2021 17:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbhF0PfJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 27 Jun 2021 11:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S230268AbhF0Pjg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 27 Jun 2021 11:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbhF0PfI (ORCPT
+        with ESMTP id S230225AbhF0Pjg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 27 Jun 2021 11:35:08 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B0EC061574;
-        Sun, 27 Jun 2021 08:32:43 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id h9so18582354oih.4;
-        Sun, 27 Jun 2021 08:32:43 -0700 (PDT)
+        Sun, 27 Jun 2021 11:39:36 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF792C061574;
+        Sun, 27 Jun 2021 08:37:10 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id h24-20020a9d64180000b029036edcf8f9a6so15680456otl.3;
+        Sun, 27 Jun 2021 08:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=59hequDqZ0EZ8M0y3xtHrgqpE3wu/Nxv4aJHXZdBkE0=;
-        b=ZmKffNrAS6Am31vp81Nr5z9YoX5qBKEMg0qjI07jV5SmAO8U7KKIJUw55pGIwY4487
-         IT5vy3B4xijfN14HGhix6A1Tv/m5hRbnDdRu7INCP4PC9aECh/xqad+ZYow4vrlwQIyR
-         C0ZAsqsubBIPWuqsLNkgYQgs0jBDw2oLGs0a97PkOi+zzXf3Nwt0m7UqSDABo+BFUIlY
-         6k1xnaE3+Sah7ZVVtPoNfqXcfYwY49U70I31Kcwm2Hv8Clct0iTtMSrB20tS+PbTj9/J
-         WOU+hbmceS/gtADYoCfVZ672XDyrBSpJcu4nDfl6yQTZZQZ9Ix/5jHwMNQcYsCSBxNZA
-         U/ng==
+        bh=lMhRlO1Xkh8gfckvHOGgFo9jg3Vn08GwQISseZ644bQ=;
+        b=kVxSs3rDEIY4IoeHD1OwLDA4DzO0TPRJo/PnBA8j2iHHsvsj26rfq3aR6V1aROpWyD
+         m0ULNbCauErLUUyTKvLqNXnyqCb8iiXWsNQJesH4zQaM1Pr8ZCun+aDiyPBc2tOjS2Y8
+         fz4r5E7fx4dcEr7mQwSuh5ZasyYf1fRiHAK6hcptJMyOHHvV/JgM2ZltcxPF3zC85h3Q
+         K3tx44j/djjxd+kHwU/U9cm6TaIgQ37RKOpg9yd5WbSen0yKCp4Sd646ac7uh/wKQ2PU
+         SKJ6gccrYBPk25xDNTCuqeM485gz7Rxm6RSD9ElF5slOxqHgZm/NF9aRJtpUs8mrPVn5
+         W+Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=59hequDqZ0EZ8M0y3xtHrgqpE3wu/Nxv4aJHXZdBkE0=;
-        b=NHWIbbtyvugEBHVSBRDt1c2rZOMnNiXxh9LSJalm3FA2t9CrWMCldIfr9jmw1YsLdt
-         ePIpgGy2sHwoimWg54+Dhx5qKaf7XeWyUue52v62Lay95ISrcihkQ+n6HAJ4WQhFHPRJ
-         RA7SglyDRdgA62Wny2bd3HvN4Ot5iU42qUBoGOXG243zD677+Bg6aDU8oduHIPHdDfgq
-         UfrOuJp/wAMF5snmMC9uksBUt7aHEo8bRI0ItMgZ/oLuVe0aDowo+mA+3t0DrdfdRnFr
-         h3W0b4Q72NSZPypylpmJ8T6EsA77o9Ifbm3n1LxQjYIajU/bESNtfZs7hHhIIc+ZK7/S
-         UtDg==
-X-Gm-Message-State: AOAM532VPSOx6Yawmp91u4vPBibRYe0a7NfgJAcn6mY2VH9etq1Ne63O
-        gQWym8j088ybEi0WZRjb0n4=
-X-Google-Smtp-Source: ABdhPJz/m9LPxwXU9P6BNkse7ot38gJ9WqZx+oTpUKJzoj/34NxviIaZLf8P2yg/7O06hph6WNM8ug==
-X-Received: by 2002:aca:a812:: with SMTP id r18mr7474599oie.35.1624807963007;
-        Sun, 27 Jun 2021 08:32:43 -0700 (PDT)
+        bh=lMhRlO1Xkh8gfckvHOGgFo9jg3Vn08GwQISseZ644bQ=;
+        b=iT7X7xUUcIhl+igT3gIoWNqYtX4qP+PHuXxWRaf3Fh+UWa2H/fy4M404qdsOPN6wsa
+         H+MNg0psfgNfV9mSEdQDNHsAS1dw5r4KbQ5NixQqEc6J41DBsLCU52S+54/JeoPRuf7P
+         mwIIb2fIdCT8Zc9Ih6vcF2TfRcq4cW0IoqyLunKNh98Wen/61ytfc+eAzjcf3PkTtDjT
+         pTiJu41tyrhEzj1b7gZlmNrlH8xYA52xNoklXg+VtkxS9BdpldbnQsAgvat6Z+TP3jM0
+         7BUsOtFKgdD6Py0WgyTiJZO05d3iAryMGGsPKcE4jKaoY7+qQSzdx5bDOCuaaZZzKJd+
+         32SA==
+X-Gm-Message-State: AOAM533APqjFwhBSYPcOVFa+AyNzI5esU5Zmv33qK0pD8Ajr0V6mVMcw
+        iBIUYcwX/iDSduIt2wd6aKY=
+X-Google-Smtp-Source: ABdhPJwQKc0UelUXUyRAC8U7ItqvSjkrlD1Mxlh5OGIWJN9uNLdvRYLgDukmfrAmcTgM2L+Qt1ZkTQ==
+X-Received: by 2002:a05:6830:270b:: with SMTP id j11mr17422450otu.161.1624808230297;
+        Sun, 27 Jun 2021 08:37:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w132sm2605164oig.38.2021.06.27.08.32.41
+        by smtp.gmail.com with ESMTPSA id j7sm2621507oij.25.2021.06.27.08.37.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Jun 2021 08:32:42 -0700 (PDT)
+        Sun, 27 Jun 2021 08:37:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 2/5] watchdog: meson_gxbb_wdt: add timeout module param
+Subject: Re: [PATCH 3/5] watchdog: meson_gxbb_wdt: add nowayout module param
 To:     Artem Lapkin <email2tema@gmail.com>, narmstrong@baylibre.com
 Cc:     wim@linux-watchdog.org, khilman@baylibre.com, jbrunet@baylibre.com,
         christianshewitt@gmail.com, martin.blumenstingl@googlemail.com,
@@ -59,14 +59,14 @@ Cc:     wim@linux-watchdog.org, khilman@baylibre.com, jbrunet@baylibre.com,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         art@khadas.com, nick@khadas.com, gouwa@khadas.com
 References: <20210623024429.1346349-1-art@khadas.com>
- <20210623024429.1346349-3-art@khadas.com>
+ <20210623024429.1346349-4-art@khadas.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f4bac702-9121-fc84-e138-27f3f662f443@roeck-us.net>
-Date:   Sun, 27 Jun 2021 08:32:40 -0700
+Message-ID: <69f72ce6-dd62-3ffe-b620-50ceb6b318e0@roeck-us.net>
+Date:   Sun, 27 Jun 2021 08:37:07 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210623024429.1346349-3-art@khadas.com>
+In-Reply-To: <20210623024429.1346349-4-art@khadas.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -75,44 +75,45 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 6/22/21 7:44 PM, Artem Lapkin wrote:
-> Added timeout module param same as in other modules
+> Added nowayout module param same as in other moduels
+
+Please use complete sentences and words, check your spelling (modules),
+and refrain from irrelevant statements such as "same as in other moduels".
+
+"Add nowayout module parameter" is sufficient here.
+
 > 
 > Signed-off-by: Artem Lapkin <art@khadas.com>
 > ---
->   drivers/watchdog/meson_gxbb_wdt.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
+>   drivers/watchdog/meson_gxbb_wdt.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
 > 
 > diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-> index 3f86530c33b0..ecd1fc6f48ba 100644
+> index ecd1fc6f48ba..0bf5dccf70b1 100644
 > --- a/drivers/watchdog/meson_gxbb_wdt.c
 > +++ b/drivers/watchdog/meson_gxbb_wdt.c
-> @@ -29,6 +29,11 @@
->   #define GXBB_WDT_TCNT_SETUP_MASK		(BIT(16) - 1)
->   #define GXBB_WDT_TCNT_CNT_SHIFT			16
+> @@ -34,6 +34,11 @@ module_param(timeout, uint, 0);
+>   MODULE_PARM_DESC(timeout, "Watchdog heartbeat in seconds="
+>   		 __MODULE_STRING(DEFAULT_TIMEOUT) ")");
 >   
-> +static unsigned int timeout = DEFAULT_TIMEOUT;
-> +module_param(timeout, uint, 0);
-> +MODULE_PARM_DESC(timeout, "Watchdog heartbeat in seconds="
-> +		 __MODULE_STRING(DEFAULT_TIMEOUT) ")");
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started default="
+
+'(' missing before 'default'
+
+> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 > +
 >   struct meson_gxbb_wdt {
 >   	void __iomem *reg_base;
 >   	struct watchdog_device wdt_dev;
-> @@ -174,7 +179,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->   	data->wdt_dev.ops = &meson_gxbb_wdt_ops;
->   	data->wdt_dev.max_hw_heartbeat_ms = GXBB_WDT_TCNT_SETUP_MASK;
->   	data->wdt_dev.min_timeout = 1;
-> -	data->wdt_dev.timeout = DEFAULT_TIMEOUT;
-> +	data->wdt_dev.timeout = timeout;
-
-This is wrong. A timeout module parameter should be set with a call to
-watchdog_init_timeout(), the initial value should be 0, and data->wdt_dev.timeout
-should be kept as-is. This ensures that the module parameter is validated.
-
-Guenter
-
->   	watchdog_set_drvdata(&data->wdt_dev, data);
+> @@ -190,6 +195,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+>   		data->reg_base + GXBB_WDT_CTRL_REG);
 >   
->   	/* Setup with 1ms timebase */
+>   	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
+> +	watchdog_set_nowayout(&data->wdt_dev, nowayout);
+>   
+>   	return devm_watchdog_register_device(dev, &data->wdt_dev);
+>   }
 > 
 
