@@ -2,125 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8E43B66C9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Jun 2021 18:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE163B66D1
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Jun 2021 18:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbhF1Qde (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Jun 2021 12:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S234258AbhF1Qf7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Jun 2021 12:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbhF1Qde (ORCPT
+        with ESMTP id S234009AbhF1Qf6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Jun 2021 12:33:34 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742B7C061574;
-        Mon, 28 Jun 2021 09:31:07 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id 128-20020a4a11860000b029024b19a4d98eso4899993ooc.5;
-        Mon, 28 Jun 2021 09:31:07 -0700 (PDT)
+        Mon, 28 Jun 2021 12:35:58 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B62C061574;
+        Mon, 28 Jun 2021 09:33:30 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 7-20020a9d0d070000b0290439abcef697so19386916oti.2;
+        Mon, 28 Jun 2021 09:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ORsTqvtDccq70X0poDFX9rVL1vOBMr3BTqbaDtdmVOw=;
-        b=UpMyg2XmV3vDgk1/2xl/Njoh5sd0HHrtg8nc5tD23UII3SHz53Y7HOHf+r2No6ZwUN
-         UXobGMR0FMhAdCcs6sZCBvfdhsN71+tty4c0PGiBk11hNmXfhPyYpUGss5WjNAwW6hU0
-         CXMzp3vt5rsB45GxLyjIlLYxBBe9Y45YLaKNzXydw4QEPN9pHWU7Q8Et8QJH9Uq80Nbz
-         i050jtkDvyf/h9SYMEUFx6TsXbkBn9TFomnbvAVntynS7tR+tkcpzSf8SozokT6zokjJ
-         AbNC+vCKn0n5NQfgTL35k4Z7DeVV/F1+myDmJ2axLVqGlQr7Fslg97WDdtay6duLNdjh
-         peeA==
+        bh=UtUgHWKrOAfPi99gDumnR8kkJQNQB4a0Hv1A5Aua2sk=;
+        b=AXTGCRSqy7PntAOyr4KiYlK8XRbFGNEtx/8y6SZNAt7pkc345ONCgExYRM6rgy7NC3
+         Su3L7D0E/A/zMDcZndlEgTGFMF2qtIbgE4dFtKNovGXAgeUjW3bBdldb7xsXtcgGbPWt
+         sSKBf6oGbU0JL7Cq42kX6lCmW/jtkHKOx1lk7GtSuQSSt0aKY9wuyerVxn7iUlNnWm06
+         OSomIbRQWB78b4VNdXAYOWinRUYh2nrOzTP80tvcn6PbcDQDvAdlbp7dqgyIUTp43iym
+         GWLBQt71xnOkCdCjf3by3m/BFMNhCl5nMJFmJ5Cu/EI2AJAcbLznYHOXj76vUlZ0kADr
+         iAWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=ORsTqvtDccq70X0poDFX9rVL1vOBMr3BTqbaDtdmVOw=;
-        b=rDEGqDz+DUEjoBEBMJQlHrRzhraUG0yj7/xDBq0g0oeD6oTkH5FFiQjKQtH/ozRf6e
-         rFy5sBkmYHw6xpAYpmIV17hqRA7t0TUZzaSiZhV7mYvj9ZdwC10Z1gqilgnYwxCemhqK
-         ZM6bsTRq7GZBKpDl/potK9WMqW8pcIEaYV/L8h7k0r1jKUXTaNTKyVcQvTO5XAkf19qL
-         uZy3esqf9K6cio5U0qvz/C8XPCkYSdIiK3wuym2mCKESupdgUFJ7g+n68vA8GVoj0+bE
-         8KyJ1kbUGiZD/LzlTlki6/7Ei4bzvu1va1CxjU+5IetSoQYwUwLKrvyL/XK7Ufbl8Rzn
-         NMLw==
-X-Gm-Message-State: AOAM533jeiGxPu6J59Mh9s2/XeARJx/TSz0GhhUrwbWO83tgw1i/481q
-        zjv0QyiVO6BQGXZf1RChOUU=
-X-Google-Smtp-Source: ABdhPJwIVZAsPTtdY7s/33Y9IxLRciwKAyNzbotER8p7TZSkeErswPhOGUzXkatH9kbGdaYgY45QCg==
-X-Received: by 2002:a4a:df18:: with SMTP id i24mr247039oou.68.1624897866822;
-        Mon, 28 Jun 2021 09:31:06 -0700 (PDT)
+        bh=UtUgHWKrOAfPi99gDumnR8kkJQNQB4a0Hv1A5Aua2sk=;
+        b=NAIGX18bVEZH2rmIcJ0bjCMiHfmGetO93+UqHmekJZbSAnuevtzV07i1iJcr5FfChx
+         9CAv3uMYk9uIYbFRimFxGp8J54i2hBJq0czoNVtt5lNpOatTcl/QHTjcC+vkAbSyBsCW
+         H25umhrvfwIx15L/XNJSE/R6zLoe4h5SkL2x+i9kuCrhwT9SaKG4rzvBsXqCDHAe+1aj
+         a19yuiE4V6rrIRXDY6TV2vYGs+A6FKIsElgTu1bTR2iHMTzWy3ocQbWsSwUTsvDMg7AM
+         uzLzkGYp/haYixrGu8ICDS5ZSMVNfJWeeiDU1UO5dS6kdwTs61/hCznXsrW/Q3dOd3h7
+         9BEQ==
+X-Gm-Message-State: AOAM530S/ZNGzJNc1EaHO4Y2vBD2M1wIyfnrsuLEJXdiUUUM0qpuSSTR
+        l6Ts7Lluh5C6+puigp8pUBQ=
+X-Google-Smtp-Source: ABdhPJxBa2zVVcTFLRh1nBlV4u/4joB4a7hqMKIshTrYw4hi2/9W+n0K1e3JQo0OAmuNc+k2gHrU3A==
+X-Received: by 2002:a05:6830:3190:: with SMTP id p16mr420934ots.42.1624898010388;
+        Mon, 28 Jun 2021 09:33:30 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l2sm1624382otk.38.2021.06.28.09.31.05
+        by smtp.gmail.com with ESMTPSA id a22sm3589372otq.10.2021.06.28.09.33.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jun 2021 09:31:06 -0700 (PDT)
+        Mon, 28 Jun 2021 09:33:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 28 Jun 2021 09:31:04 -0700
+Date:   Mon, 28 Jun 2021 09:33:28 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH V2 2/7] watchdog: bcm2835_wdt: consider
- system-power-controller property
-Message-ID: <20210628163104.GA444942@roeck-us.net>
-References: <1622981777-5023-1-git-send-email-stefan.wahren@i2se.com>
- <1622981777-5023-3-git-send-email-stefan.wahren@i2se.com>
- <f4e62eec-a1c3-7759-3de3-dec98064dc4a@i2se.com>
+To:     Christine Zhu <Christine.Zhu@mediatek.com>
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        seiya.wang@mediatek.com
+Subject: Re: [v5,3/3] watchdog: mediatek: mt8195: add wdt support
+Message-ID: <20210628163328.GA445250@roeck-us.net>
+References: <20210628113730.26107-1-Christine.Zhu@mediatek.com>
+ <20210628113730.26107-4-Christine.Zhu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f4e62eec-a1c3-7759-3de3-dec98064dc4a@i2se.com>
+In-Reply-To: <20210628113730.26107-4-Christine.Zhu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 09:12:30AM +0200, Stefan Wahren wrote:
-> Hi Guenter,
+On Mon, Jun 28, 2021 at 07:37:31PM +0800, Christine Zhu wrote:
+> From: "Christine Zhu" <Christine.Zhu@mediatek.com>
 > 
-> Am 06.06.21 um 14:16 schrieb Stefan Wahren:
-> > Until now all Raspberry Pi boards used the power off function of the SoC.
-> > But the Raspberry Pi 400 uses gpio-poweroff for the whole board which
-> > possibly cannot register the poweroff handler because the it's
-> > already registered by this watchdog driver. So consider the
-> > system-power-controller property for registering, which is already
-> > defined in soc/bcm/brcm,bcm2835-pm.txt .
-> >
-> > Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> > Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
-> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >  drivers/watchdog/bcm2835_wdt.c | 10 +++++++---
-> >  1 file changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/watchdog/bcm2835_wdt.c b/drivers/watchdog/bcm2835_wdt.c
-> > index dec6ca0..9490717 100644
-> > --- a/drivers/watchdog/bcm2835_wdt.c
-> > +++ b/drivers/watchdog/bcm2835_wdt.c
-> > @@ -205,9 +205,13 @@ static int bcm2835_wdt_probe(struct platform_device *pdev)
-> >  	if (err)
-> >  		return err;
-> >  
-> > -	if (pm_power_off == NULL) {
-> > -		pm_power_off = bcm2835_power_off;
-> > -		bcm2835_power_off_wdt = wdt;
-> > +	if (of_device_is_system_power_controller(pdev->dev.parent->of_node)) {
-> > +		if (!pm_power_off) {
-> > +			pm_power_off = bcm2835_power_off;
-> > +			bcm2835_power_off_wdt = wdt;
-> > +		} else {
-> > +			dev_info(dev, "Poweroff handler already present!\n");
-> > +		}
-> >  	}
-> >  
-> >  	dev_info(dev, "Broadcom BCM2835 watchdog timer");
+> Support MT8195 watchdog device.
 > 
-> this isn't not applied yet. Can this go via the watchdog-next tree into
-> 5.14?
-> 
-I applied it to my watchdog-next branch; it will be up to Wim to send
-it upstream. Note that the patch does not how up in linux-watchdog
-patchwork (no idea why, though), which is why it got lost.
+> Signed-off-by: Christine Zhu <Christine.Zhu@mediatek.com>
 
-Guenter
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/mtk_wdt.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index 97ca993bd009..8231cb9cf5f9 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -12,6 +12,7 @@
+>  #include <dt-bindings/reset-controller/mt2712-resets.h>
+>  #include <dt-bindings/reset-controller/mt8183-resets.h>
+>  #include <dt-bindings/reset-controller/mt8192-resets.h>
+> +#include <dt-bindings/reset-controller/mt8195-resets.h>
+>  #include <linux/delay.h>
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+> @@ -81,6 +82,10 @@ static const struct mtk_wdt_data mt8192_data = {
+>  	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
+>  };
+>  
+> +static const struct mtk_wdt_data mt8195_data = {
+> +	.toprgu_sw_rst_num = MT8195_TOPRGU_SW_RST_NUM,
+> +};
+> +
+>  static int toprgu_reset_update(struct reset_controller_dev *rcdev,
+>  			       unsigned long id, bool assert)
+>  {
+> @@ -341,6 +346,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
+>  	{ .compatible = "mediatek,mt6589-wdt" },
+>  	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+>  	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+> +	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+>  	{ /* sentinel */ }
+>  };
+>  MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
+> -- 
+> 2.18.0
+> 
