@@ -2,68 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74533B56DC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Jun 2021 03:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6C53B5C8B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Jun 2021 12:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbhF1Bp2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 27 Jun 2021 21:45:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231706AbhF1Bp1 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 27 Jun 2021 21:45:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2758C61A1D;
-        Mon, 28 Jun 2021 01:43:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624844582;
-        bh=066YMFHqSGCgkK9gz/RQO+n11OjyRE0FlxJc5NciWS0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=tF2R/1UeKoBw+YfNGIuMni8e/F24wDYu6UgRnJO65rSiuzSqX0ht37aQtoJbB5qTl
-         Gc6cTbF0kJ4ItKbo+MJhSo5w+eRgxBbjlUmK8TKkpBZTlHUFq5ybSUc80gLz4ITKAD
-         13UGSDy3pzuTT84DldFJdRqkIwoibcW8ZegVYGaBbTEC3BDUK+K58TDgyAVekRTRe/
-         KidmuMALXGEVTF+wFE6rnL28ckAqKXwAevmC0CyS9J6t87tC6x+CrmqYCuxWbBmvFM
-         x3lBrQ+m7ZjNE80ZnmhgBZPXCvzUkieUvpxyuy9BPuRTS/xJpFFPtHa3yRm9PYWYP5
-         c/Arh4ZkpATXA==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        id S232556AbhF1Kkd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Jun 2021 06:40:33 -0400
+Received: from flippiebeckerswealthmgr.xyz ([62.173.147.16]:44548 "EHLO
+        host.flippiebeckerswealthmgr.xyz" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232426AbhF1Kkc (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 28 Jun 2021 06:40:32 -0400
+X-Greylist: delayed 1028 seconds by postgrey-1.27 at vger.kernel.org; Mon, 28 Jun 2021 06:40:32 EDT
+Received: from flippiebeckerswealthmgr.xyz (ec2-54-157-176-210.compute-1.amazonaws.com [54.157.176.210])
+        by host.flippiebeckerswealthmgr.xyz (Postfix) with ESMTPA id 132BD1405A
+        for <linux-watchdog@vger.kernel.org>; Mon, 28 Jun 2021 13:13:37 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippiebeckerswealthmgr.xyz 132BD1405A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippiebeckerswealthmgr.xyz; s=default; t=1624875218;
+        bh=G3PrS2ssLE6xKmHDCm5hvScMpvbJPlyTw8R1AuPMkGc=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=voiXcDNcBtp75d3xrWDuUKWuYH61WhuuYJR/tANgsjyhducpejmIaysZgvkm8LDWM
+         07Kq9Iv9dOX4vZtxOS66zOx8YtSLs5gW7oWwg1ZcK0q0wNbLGued6A3wBy3Rdq076s
+         FLqHjD0RZkyFOSAturRM7mO21FcRF1ObWgJilGbQ=
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippiebeckerswealthmgr.xyz 132BD1405A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippiebeckerswealthmgr.xyz; s=default; t=1624875218;
+        bh=G3PrS2ssLE6xKmHDCm5hvScMpvbJPlyTw8R1AuPMkGc=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=voiXcDNcBtp75d3xrWDuUKWuYH61WhuuYJR/tANgsjyhducpejmIaysZgvkm8LDWM
+         07Kq9Iv9dOX4vZtxOS66zOx8YtSLs5gW7oWwg1ZcK0q0wNbLGued6A3wBy3Rdq076s
+         FLqHjD0RZkyFOSAturRM7mO21FcRF1ObWgJilGbQ=
+Reply-To: jmasuku09@flippiebecker.com
+From:   Jotham Masuku <jmasuku09@flippiebeckerswealthmgr.xyz>
+To:     linux-watchdog@vger.kernel.org
+Subject: Projects
+Date:   28 Jun 2021 10:13:37 +0000
+Message-ID: <20210628101337.7C64A487F8AC61F2@flippiebeckerswealthmgr.xyz>
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <937ed0828486a08e2d00bce2815d491c1c9c49b4.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com> <937ed0828486a08e2d00bce2815d491c1c9c49b4.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
-Subject: Re: [PATCH 5/9] clk: bd718xx: Drop BD70528 support
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Date:   Sun, 27 Jun 2021 18:43:00 -0700
-Message-ID: <162484458090.3259633.13766939155374243434@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Quoting Matti Vaittinen (2021-05-25 03:15:10)
-> The only known BD70528 use-cases are such that the PMIC is controlled
-> from separate MCU which is not running Linux. I am not aware of
-> any Linux driver users. Furthermore, it seems there is no demand for
-> this IC. Let's ease the maintenance burden and drop the driver. We can
-> always add it back if there is sudden need for it.
->=20
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
->=20
-> ---
+Hello there,
 
-Applied to clk-next
+I hope this message finds you in good spirits especially during=20
+this challenging time of coronavirus pandemic. I hope you and=20
+your family are well and keeping safe. Anyway, I am Jotham=20
+Masuku, a broker working with Flippiebecker Wealth. I got your=20
+contact through an online business directory and I thought I=20
+should contact you to see if you are interested in this=20
+opportunity. I am contacting you because one of my high profile=20
+clients is interested in investing abroad and has asked me to=20
+look for individuals and companies in your country with=20
+interesting business ideas and projects that he can invest in. He=20
+wants to invest a substantial amount of asset abroad.
+
+I have decided to keep this brief for now but please kindly=20
+respond back to this email if you are interested in this=20
+opportunity. Once I receive your response, I will give you more=20
+details and we can plan a strategy that will be beneficial to all=20
+parties.
+
+Best regards
+
+J Masuku
+Flippiebecker Wealth
