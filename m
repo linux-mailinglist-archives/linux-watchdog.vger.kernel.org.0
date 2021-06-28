@@ -2,64 +2,106 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 919F43B5D7C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Jun 2021 14:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697013B5F87
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Jun 2021 16:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbhF1MDi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Jun 2021 08:03:38 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:58531 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232608AbhF1MDi (ORCPT
+        id S230154AbhF1OFU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Jun 2021 10:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230033AbhF1OFU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Jun 2021 08:03:38 -0400
-X-UUID: cd97d7ea107e435f832f6231cf181a40-20210628
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=glrhrzaIhE7vhNz3vuSdEIfHQkSaoPCRC4KtXtyz+5E=;
-        b=SRQCeNphtjYkTbA9alHnMjs3fZPik3jmTkHA3AZXUqaJkPJozGoW5KYp5sky2/NbjW61lesgSjTyV7p/VMYoCP6cJhjzI9Tsa4vwmmD/QueUGMrDZqbOm/t8FcX4F+ZcTEb8FWwE1nTzH1kvU2u81DT00PZwyQ7yy3eu9WC0LPA=;
-X-UUID: cd97d7ea107e435f832f6231cf181a40-20210628
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <christine.zhu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1307190865; Mon, 28 Jun 2021 20:01:09 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 28 Jun 2021 20:01:08 +0800
-Received: from [10.17.3.153] (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 28 Jun 2021 20:01:07 +0800
-Message-ID: <1624881667.26480.2.camel@mhfsdcap03>
-Subject: Re: [v4,3/3] watchdog: mediatek: mt8195: add wdt support
-From:   Christine Zhu <Christine.Zhu@mediatek.com>
-To:     Tzung-Bi Shih <tzungbi@google.com>
-CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <seiya.wang@mediatek.com>
-Date:   Mon, 28 Jun 2021 20:01:07 +0800
-In-Reply-To: <CA+Px+wX7yBvuzj=KWf0MhLkTQOi4Rfn8F6z_+g-T66K3iMfb=w@mail.gmail.com>
-References: <20210623123854.21941-1-Christine.Zhu@mediatek.com>
-         <20210623123854.21941-4-Christine.Zhu@mediatek.com>
-         <CA+Px+wX7yBvuzj=KWf0MhLkTQOi4Rfn8F6z_+g-T66K3iMfb=w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        Mon, 28 Jun 2021 10:05:20 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34B4C061574;
+        Mon, 28 Jun 2021 07:02:53 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id q10so22090044oij.5;
+        Mon, 28 Jun 2021 07:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=S2kROqwgl8cPNdmfhstU/q/tyoHJM78mDnAPBajYRRc=;
+        b=XAyfTdRx1fUjwI8eru9fqI9scUwfPvnOwgmYHIcOZXFlNHdDFQRGTKAyzbUKujIA4D
+         bY8GrfDMnybMpL6/cqTOTeQCuj+UmE64HNxmU9T5b8hRCZzptiG9Yll5yFzV+LHc4A9Z
+         UsY8dEGrAL+koOm2eCLiCXrvMZsMUuwBnwSW+CghSw9ieNMZbzmMQFgGcC0BDWvxgXHJ
+         Miq8GB64UepZzhA1x/SPddQaY24DszWRmasaY4bMYkc3wa5BIJDStTNBnjEeVkj4OAqA
+         vph7qYNGY+eoogFm5QfRYaw1ZTWOgIVQ101RNdi8WYPR1QEP+CTnngfXDJTEzX95Kxu4
+         YKvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=S2kROqwgl8cPNdmfhstU/q/tyoHJM78mDnAPBajYRRc=;
+        b=rKvSUuOHDWHrYlwgy+A4pbv5mOC53TgrKwQsmLcE+BCuMDRQ9Qu+3lAjkbw62pAXRq
+         3Rli5iM9CRyzpzcu85dZagDVVR/qh/RN3Bf1YOscyuIEH1QuHk8RJoQv5xjik7Li6uaC
+         14M2Gd/3s5K3BtZLmA/QM484kUfyS89BbsVdUQ4zxRMg9jDX4dhiZNBLrbkncdftSLmE
+         RcANwArvMfTGh9ENcS2xFDHn/LK6QaTTzu7in1UPpBPVm/2fCvxecQyd9TWi2NNx9f62
+         UQY8BR3OMYmTnTvztLnK5S7r0GwEmBLg7deLpfC/azvaMdPIlwe28akva7c3lgQxVzOB
+         xxZA==
+X-Gm-Message-State: AOAM531dKCmJVeMxyHP3XENbQW6wU12so4KmrfN/sWpaCjChqTs2XK1i
+        sv8iJ/Tw3x4vD230XCmnsPo=
+X-Google-Smtp-Source: ABdhPJxX65pl2aXCpAaliNKZMvUN0Z8RRBZL5KgBTXUloBQZwhNpj4kIdP4zLSwxQDFN+Qb7L/XVRA==
+X-Received: by 2002:aca:5dc6:: with SMTP id r189mr21033548oib.164.1624888973104;
+        Mon, 28 Jun 2021 07:02:53 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s187sm3235685oig.6.2021.06.28.07.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Jun 2021 07:02:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 28 Jun 2021 07:02:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+Cc:     wim@linux-watchdog.org, shawnguo@kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michal Koziel <michal.koziel@emlogic.no>
+Subject: Re: [PATCH v2 2/2] watchdog: imx2_wdg: notify wdog core to stop ping
+ worker on suspend
+Message-ID: <20210628140251.GA426379@roeck-us.net>
+References: <20210618195033.3209598-1-grzegorz.jaszczyk@linaro.org>
+ <20210618195033.3209598-3-grzegorz.jaszczyk@linaro.org>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210618195033.3209598-3-grzegorz.jaszczyk@linaro.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTA2LTI1IGF0IDEzOjExICswODAwLCBUenVuZy1CaSBTaGloIHdyb3RlOg0K
-PiBPbiBXZWQsIEp1biAyMywgMjAyMSBhdCA4OjQ0IFBNIENocmlzdGluZSBaaHUNCj4gPENocmlz
-dGluZS5aaHVAbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPiBGcm9tOiAiQ2hyaXN0aW5lIFpodSIg
-PENocmlzdGluZS5aaHVAbWVkaWF0ZWsuY29tPg0KPiA+DQo+ID4gU3VwcG9ydCBNVDgxOTUgd2F0
-Y2hkb2cgZGV2aWNlLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogY2hyaXN0aW5lLnpodSA8Q2hy
-aXN0aW5lLlpodUBtZWRpYXRlay5jb20+DQo+IFN0aWxsIG1pc3NlZCB0aGlzIHBhcnQgcGVyIHN1
-Z2dlc3Rpb24gaW4gWzFdLg0KPiANCj4gWzFdOiBodHRwczovL3BhdGNod29yay5rZXJuZWwub3Jn
-L3Byb2plY3QvbGludXgtbWVkaWF0ZWsvcGF0Y2gvMjAyMTA2MjMwOTI5MTcuNDQ0Ny0yLUNocmlz
-dGluZS5aaHVAbWVkaWF0ZWsuY29tLyMyNDI3MDYxOQ0KDQpUaHggZm9yIHlvdXIgYWR2aWNlLEkg
-aGF2ZSB1cGxvYWRlZCB2NSB0byBmaXggaXQuDQo=
+On Fri, Jun 18, 2021 at 09:50:33PM +0200, Grzegorz Jaszczyk wrote:
+> Suspend routine disables wdog clk. Nevertheless, the watchdog subsystem
+> is not aware of that and can still try to ping wdog through
+> watchdog_ping_work. In order to prevent such condition and therefore
+> prevent from system hang (caused by the wdog register access issued
+> while the wdog clock is disabled) notify watchdog core that the ping
+> worker should be canceled during watchdog core suspend and restored
+> during resume.
+> 
+> Signed-off-by: Michal Koziel <michal.koziel@emlogic.no>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+> v1->v2:
+> - Do not use watchdog_dev_suspend/resume directly, instead notify the
+> watchdog core that the ping worker should be canceled during watchdog
+> core suspend and restored during resume.
+> - Commit log was updated accordingly.
+> ---
+>  drivers/watchdog/imx2_wdt.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> index b84f80f7d342..3e8d9c3b6386 100644
+> --- a/drivers/watchdog/imx2_wdt.c
+> +++ b/drivers/watchdog/imx2_wdt.c
+> @@ -311,6 +311,7 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+>  	watchdog_set_nowayout(wdog, nowayout);
+>  	watchdog_set_restart_priority(wdog, 128);
+>  	watchdog_init_timeout(wdog, timeout, dev);
+> +	watchdog_stop_ping_on_suspend(wdog);
+>  
+>  	if (imx2_wdt_is_running(wdev)) {
+>  		imx2_wdt_set_timeout(wdog, wdog->timeout);
