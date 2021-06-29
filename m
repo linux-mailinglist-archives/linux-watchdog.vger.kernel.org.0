@@ -2,117 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE163B66D1
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Jun 2021 18:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C30693B6C69
+	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Jun 2021 04:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbhF1Qf7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Jun 2021 12:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S231598AbhF2CQJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Jun 2021 22:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234009AbhF1Qf6 (ORCPT
+        with ESMTP id S231398AbhF2CQJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Jun 2021 12:35:58 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B62C061574;
-        Mon, 28 Jun 2021 09:33:30 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 7-20020a9d0d070000b0290439abcef697so19386916oti.2;
-        Mon, 28 Jun 2021 09:33:30 -0700 (PDT)
+        Mon, 28 Jun 2021 22:16:09 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E68C061760
+        for <linux-watchdog@vger.kernel.org>; Mon, 28 Jun 2021 19:13:42 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id s19so24784628ioc.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 28 Jun 2021 19:13:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UtUgHWKrOAfPi99gDumnR8kkJQNQB4a0Hv1A5Aua2sk=;
-        b=AXTGCRSqy7PntAOyr4KiYlK8XRbFGNEtx/8y6SZNAt7pkc345ONCgExYRM6rgy7NC3
-         Su3L7D0E/A/zMDcZndlEgTGFMF2qtIbgE4dFtKNovGXAgeUjW3bBdldb7xsXtcgGbPWt
-         sSKBf6oGbU0JL7Cq42kX6lCmW/jtkHKOx1lk7GtSuQSSt0aKY9wuyerVxn7iUlNnWm06
-         OSomIbRQWB78b4VNdXAYOWinRUYh2nrOzTP80tvcn6PbcDQDvAdlbp7dqgyIUTp43iym
-         GWLBQt71xnOkCdCjf3by3m/BFMNhCl5nMJFmJ5Cu/EI2AJAcbLznYHOXj76vUlZ0kADr
-         iAWw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rcncWXlDetcYOR5cxpoHR6LBZHK6k4JsfTUcGr7lEAY=;
+        b=oH0bBjWOO81W8a/L6iXurUAI6ixFtjz6ToQGhDLBOmO7m0qNn2JY8imwqEqkUOsJgb
+         EE/p8bWvP7ak+HW/yUa7XkN0wziLHFqgZiJSSL6UULw1Fp/eDk+sB+njiA4W5jLyLh5m
+         e8NW3GqJ7oR14mpH+E4/IxYmmAVxiCfsohMNN1MqK4jtimirxaBEfUKyq7jOzrRODKTg
+         QwDn6pYZ7qNnFDLc47E/L4bKxpCylujJdIlXVihpxnRNY3vdTqjfeuitvCKuCxkRTQ2q
+         nqtCp3ULPQmKpxG2AS05R+byNzKj7KZhAwVAgOiDkQcKh6FNTA04MRyZEaOfv4BBcZyU
+         XiHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=UtUgHWKrOAfPi99gDumnR8kkJQNQB4a0Hv1A5Aua2sk=;
-        b=NAIGX18bVEZH2rmIcJ0bjCMiHfmGetO93+UqHmekJZbSAnuevtzV07i1iJcr5FfChx
-         9CAv3uMYk9uIYbFRimFxGp8J54i2hBJq0czoNVtt5lNpOatTcl/QHTjcC+vkAbSyBsCW
-         H25umhrvfwIx15L/XNJSE/R6zLoe4h5SkL2x+i9kuCrhwT9SaKG4rzvBsXqCDHAe+1aj
-         a19yuiE4V6rrIRXDY6TV2vYGs+A6FKIsElgTu1bTR2iHMTzWy3ocQbWsSwUTsvDMg7AM
-         uzLzkGYp/haYixrGu8ICDS5ZSMVNfJWeeiDU1UO5dS6kdwTs61/hCznXsrW/Q3dOd3h7
-         9BEQ==
-X-Gm-Message-State: AOAM530S/ZNGzJNc1EaHO4Y2vBD2M1wIyfnrsuLEJXdiUUUM0qpuSSTR
-        l6Ts7Lluh5C6+puigp8pUBQ=
-X-Google-Smtp-Source: ABdhPJxBa2zVVcTFLRh1nBlV4u/4joB4a7hqMKIshTrYw4hi2/9W+n0K1e3JQo0OAmuNc+k2gHrU3A==
-X-Received: by 2002:a05:6830:3190:: with SMTP id p16mr420934ots.42.1624898010388;
-        Mon, 28 Jun 2021 09:33:30 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a22sm3589372otq.10.2021.06.28.09.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jun 2021 09:33:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 28 Jun 2021 09:33:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christine Zhu <Christine.Zhu@mediatek.com>
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rcncWXlDetcYOR5cxpoHR6LBZHK6k4JsfTUcGr7lEAY=;
+        b=YaZxdoE+A3p+nuU91QGJQQ/G8CJGb3yFm6beLSyhbctM7WpunubTOUjJ9HbkYISjuI
+         V0w483QFar2rXoJv2G3+qDLE8iHjipgND+dphHG9icBplkFOz96TF0UG4Cgvjujqz6hD
+         FrTWUrz71niJmRIJSPsSKGhMe6a6vCA9UP9CaU5aIi03YzItgtbnKKVJil4wCHjVwCma
+         JNDWeMuDidTvQVR8aJVGleBlCkcHMypTo6azezF/5xmKD/egeVIOVNuZMl+V4ZB3Ps9u
+         GP7itOgpJ4llpUpi/tIM7R7dtJbRtpZjEQjZy0RY1byNIohZ+iguGKBNIjXVWHSJeMc9
+         MuKQ==
+X-Gm-Message-State: AOAM530tnkJ2Cq0C7q1mxLe7V/omxzz9PyhLB66YCKulenjfhPGZ5dsY
+        n1wcwddrdhsgNy7LfnyedH62f5hQFtB+sCEaBIrc0g==
+X-Google-Smtp-Source: ABdhPJx6MW16x6OLxQk6NypGbyMZlz+0sgCozwnDG28+XM6Z/8kDLeMpPr0LcPhWAxEg/47OFX21/HUOVP6vp4W/Ol4=
+X-Received: by 2002:a6b:2b04:: with SMTP id r4mr1928898ior.195.1624932821270;
+ Mon, 28 Jun 2021 19:13:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210628113730.26107-1-Christine.Zhu@mediatek.com> <20210628113730.26107-4-Christine.Zhu@mediatek.com>
+In-Reply-To: <20210628113730.26107-4-Christine.Zhu@mediatek.com>
+From:   Tzung-Bi Shih <tzungbi@google.com>
+Date:   Tue, 29 Jun 2021 10:13:30 +0800
+Message-ID: <CA+Px+wUDSDjLo4qePN=o6JPb=Tv=y4vqZqjFO2ZBEPJrF8sxKA@mail.gmail.com>
+Subject: Re: [v5,3/3] watchdog: mediatek: mt8195: add wdt support
+To:     Christine Zhu <christine.zhu@mediatek.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         seiya.wang@mediatek.com
-Subject: Re: [v5,3/3] watchdog: mediatek: mt8195: add wdt support
-Message-ID: <20210628163328.GA445250@roeck-us.net>
-References: <20210628113730.26107-1-Christine.Zhu@mediatek.com>
- <20210628113730.26107-4-Christine.Zhu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210628113730.26107-4-Christine.Zhu@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Jun 28, 2021 at 07:37:31PM +0800, Christine Zhu wrote:
+On Mon, Jun 28, 2021 at 7:39 PM Christine Zhu
+<Christine.Zhu@mediatek.com> wrote:
+>
 > From: "Christine Zhu" <Christine.Zhu@mediatek.com>
-> 
+>
 > Support MT8195 watchdog device.
-> 
+>
 > Signed-off-by: Christine Zhu <Christine.Zhu@mediatek.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/watchdog/mtk_wdt.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index 97ca993bd009..8231cb9cf5f9 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -12,6 +12,7 @@
->  #include <dt-bindings/reset-controller/mt2712-resets.h>
->  #include <dt-bindings/reset-controller/mt8183-resets.h>
->  #include <dt-bindings/reset-controller/mt8192-resets.h>
-> +#include <dt-bindings/reset-controller/mt8195-resets.h>
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/init.h>
-> @@ -81,6 +82,10 @@ static const struct mtk_wdt_data mt8192_data = {
->  	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
->  };
->  
-> +static const struct mtk_wdt_data mt8195_data = {
-> +	.toprgu_sw_rst_num = MT8195_TOPRGU_SW_RST_NUM,
-> +};
-> +
->  static int toprgu_reset_update(struct reset_controller_dev *rcdev,
->  			       unsigned long id, bool assert)
->  {
-> @@ -341,6 +346,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
->  	{ .compatible = "mediatek,mt6589-wdt" },
->  	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
->  	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
-> +	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
->  	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
-> -- 
-> 2.18.0
-> 
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
