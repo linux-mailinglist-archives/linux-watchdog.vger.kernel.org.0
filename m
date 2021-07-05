@@ -2,110 +2,98 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C26993BB818
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Jul 2021 09:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1C23BBEB6
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Jul 2021 17:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbhGEHrX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Jul 2021 03:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbhGEHrX (ORCPT
+        id S231622AbhGEPRn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Jul 2021 11:17:43 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:59427 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231477AbhGEPRm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Jul 2021 03:47:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C59EC061574
-        for <linux-watchdog@vger.kernel.org>; Mon,  5 Jul 2021 00:44:46 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m0JGy-0006Vy-Ah; Mon, 05 Jul 2021 09:44:08 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m0JGv-0007oU-K0; Mon, 05 Jul 2021 09:44:05 +0200
-Date:   Mon, 5 Jul 2021 09:44:05 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     cl@rock-chips.com, thierry.reding@gmail.com, robh+dt@kernel.org,
-        heiko@sntech.de, jagan@amarulasolutions.com, wens@csie.org,
-        uwe@kleine-koenig.org, mail@david-bauer.net, jbx6244@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jensenhuang@friendlyarm.com, michael@amarulasolutions.com,
-        cnsztl@gmail.com, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-i2c@vger.kernel.org, jay.xu@rock-chips.com,
-        shawn.lin@rock-chips.com, david.wu@rock-chips.com,
-        zhangqing@rock-chips.com, huangtao@rock-chips.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, jamie@jamieiles.com,
-        linux-watchdog@vger.kernel.org, maz@kernel.org,
-        linux-pwm@vger.kernel.org
-Subject: Re: [RESEND PATCH v5 1/4] dt-bindings: pwm: rockchip: add
- description for rk3568
-Message-ID: <20210705074405.uj62h4evd6htftf3@pengutronix.de>
-References: <20210622020517.13100-1-cl@rock-chips.com>
- <20210623021303.28015-1-cl@rock-chips.com>
- <20210705064914.o2neaiwqndjfdyqd@pengutronix.de>
- <YOK1+pMy+N64eR75@dell>
+        Mon, 5 Jul 2021 11:17:42 -0400
+Received: from mail-ed1-f72.google.com ([209.85.208.72])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1m0QJN-0007Z7-27
+        for linux-watchdog@vger.kernel.org; Mon, 05 Jul 2021 15:15:05 +0000
+Received: by mail-ed1-f72.google.com with SMTP id m10-20020aa7c2ca0000b0290399df423df0so1037537edp.6
+        for <linux-watchdog@vger.kernel.org>; Mon, 05 Jul 2021 08:15:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=efe6yHR5z71JXmxhf6yurL8AKNbm6pbbpEHAWAEFh64=;
+        b=GchvHK8pUh/6fM8TsiJiae5cZD1pXCfHePOZKDs20ZTp4J2tofFnYnsxpFbOx5m//m
+         Sqyb9dFMqPDwdDYJPZdmIpMpy2xRvxQtohobMSG84221rf542z5Kq7ywCImLx+W8aYWG
+         l/YfhZWg6chNpWQT8WL7Zjb+yzVgOO3MYNW0Gxokd8R7HPnNXQtnuQ91mPCFIdDKzQ0z
+         6udrelMw2yVXf9Xb5IFczswCl0XMQwZmRxZQ/Q0Z/UNdPzzVEVtdAi4iTTPJubj0DlsU
+         xgFvYSTIAXHX8D3Wf1bDdiecIztqBQSvQfL/myMGS+lClHCtujByreGNJ00+BGT29T5j
+         2zRw==
+X-Gm-Message-State: AOAM5305enkZj7TaWBlWOSaczZeupU36JIW3dTY3nV0uFpY4RFjJ8YU0
+        r4uA+dVLWqHWFMwtJG9N1iiPZv2w0GcNToe68lcVd2Vlb6nRN661Z1XWgezqEJyshzu+QOnpzsx
+        CLM13hGvmIwt7+11P2Ep0yE1njFMDEEDQIc+bxhyMYoDo
+X-Received: by 2002:a05:6402:1103:: with SMTP id u3mr16952983edv.342.1625498104847;
+        Mon, 05 Jul 2021 08:15:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx6xFYGMtAlemF7Mnm1a0Jlb57D0baYZYLw9jE4rXenURGSf2+vOHsHpxvAJ2rJJtvtmzjhuA==
+X-Received: by 2002:a05:6402:1103:: with SMTP id u3mr16952970edv.342.1625498104737;
+        Mon, 05 Jul 2021 08:15:04 -0700 (PDT)
+Received: from [192.168.3.211] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
+        by smtp.gmail.com with ESMTPSA id gy11sm2166811ejb.105.2021.07.05.08.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jul 2021 08:15:04 -0700 (PDT)
+Subject: Re: [PATCH] MIPS: ralink: of: fix build of rt2880_wdt watchdog module
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, John Crispin <john@phrozen.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, kernel test robot <lkp@intel.com>
+References: <20210514131750.52867-1-krzysztof.kozlowski@canonical.com>
+ <2b427eca-fd6c-d099-337f-39cfbd85cb46@roeck-us.net>
+ <a15e7f62-12a0-1ec7-5104-f01f9e3eccc7@canonical.com>
+Message-ID: <9d98ec40-757d-28c7-1669-a683b2cd3881@canonical.com>
+Date:   Mon, 5 Jul 2021 17:15:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e56be3gekkps4fdv"
-Content-Disposition: inline
-In-Reply-To: <YOK1+pMy+N64eR75@dell>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+In-Reply-To: <a15e7f62-12a0-1ec7-5104-f01f9e3eccc7@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 14/05/2021 16:04, Krzysztof Kozlowski wrote:
+> On 14/05/2021 09:48, Guenter Roeck wrote:
+>> On 5/14/21 6:17 AM, Krzysztof Kozlowski wrote:
+>>> When rt2880_wdt watchdog driver is built as a module, the
+>>> rt_sysc_membase needs to be exported (it is being used via inlined
+>>> rt_sysc_r32):
+>>>
+>>>    ERROR: modpost: "rt_sysc_membase" [drivers/watchdog/rt2880_wdt.ko] undefined!
+>>>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>
+>> Acked-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> I don't see a recent change in the code. Has that problem been there
+>> all along ?
+> 
+> I think the problem was there always but 0-day builder did not hit it
+> until recently:
+> https://lore.kernel.org/lkml/202105082122.yrF7ploN-lkp@intel.com/
 
---e56be3gekkps4fdv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Guenter,
 
-Hello Lee,
+It seems that patch was not applied. Anything to fix here?
 
-On Mon, Jul 05, 2021 at 08:34:18AM +0100, Lee Jones wrote:
-> On Mon, 05 Jul 2021, Uwe Kleine-K=F6nig wrote:
-> > On Wed, Jun 23, 2021 at 10:13:03AM +0800, cl@rock-chips.com wrote:
-> > > From: Liang Chen <cl@rock-chips.com>
-> > >=20
-> > > add "rockchip,rk3568-pwm", "rockchip,rk3328-pwm" for pwm nodes on
-> > > a rk3568 platform to pwm-rockchip.yaml.
-> >=20
-> > [...]
-> >=20
-> > Who is supposed to apply this patch? Does this need blessing by Rob?
->=20
-> There is no standard. [...]
 
-I'm aware of that. That's why I asked to prevent that everybody thinks
-some other maintainer will care for it.
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---e56be3gekkps4fdv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDiuEIACgkQwfwUeK3K
-7AkNrQf9FZHop8yLEFhUvrK0kVFAxxxvzzeTxbeluI3vqxKf7NEpfSi9f/GWjAn+
-oWZMKeL5yq8VOLUpyRVPhG0qMniFktzjagpfSajAYWhAZOhlQA8QGshrDoJ0wzkk
-62P3GDHORCli54O+jMDmrQHpv5ZuoOflAnQlJJdrIw3K26fLDw/jtp4wY8Q9S0Mg
-7A+8SsowcLPLcm/Z/LU4SrH7qAE27vUizpDwKDCWSf38dm5/yMIJZKXWJE8SxylA
-VyUTM7rASnKb8FbPFCpXd4dLrJKZftRnXZY1ObxaZjlSxI3KsiGAJqgWZYlBKg03
-kMCxLi0Hr3xVdIHSffZ6uSRGT7vCLg==
-=6Q0n
------END PGP SIGNATURE-----
-
---e56be3gekkps4fdv--
+Best regards,
+Krzysztof
