@@ -2,163 +2,298 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 118893BEBCD
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Jul 2021 18:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59493BEC87
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Jul 2021 18:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbhGGQOn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 7 Jul 2021 12:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbhGGQOn (ORCPT
+        id S230259AbhGGQuK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 7 Jul 2021 12:50:10 -0400
+Received: from www.linux-watchdog.org ([185.87.125.42]:57050 "EHLO
+        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230121AbhGGQuK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 7 Jul 2021 12:14:43 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F3CC061574
-        for <linux-watchdog@vger.kernel.org>; Wed,  7 Jul 2021 09:12:02 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id w74so3943004oiw.8
-        for <linux-watchdog@vger.kernel.org>; Wed, 07 Jul 2021 09:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xlnYw1ZInqGSlieaoHdkDN82QSLSIkmHNxFbx9XWRK4=;
-        b=DCt3lUBvVmLqb2hA71k3RcRohXvrFyIzXdA7p23SyDGoGQUsUiFLyUhc8DlKqsl9W8
-         L8XHz7puxvwYAYEOHpNRBHJIeG9Vl3Jw1Xo+SSUr1VwvRn89WUuCmmaz/1eD8XVB+tM9
-         4jbTKxq8lygHckm0tk04VmbKwAR9UDuBgEyy09VE1yoHmCDJ+2EUx3mGibOWPRewaTzW
-         EBE/Wm7j2753VTCRmgvxJ9JZFeHErfcYXo8Bbs26rrI5hdM8TtNtNeSjGqLWpOcNC1+b
-         wWs/BWEv414Y8mYXBvrvKHUvcfdYhKXe7kN2KGFYHdlxSJRNMJkMeiVX4g+fdBbkAtro
-         grsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=xlnYw1ZInqGSlieaoHdkDN82QSLSIkmHNxFbx9XWRK4=;
-        b=D6cmq6uHI8VejglyZiIbH4k0eC0FounE2A5H4r+fHlCftmrfjYeUz7Pfz4fxKpHNWT
-         1MtxM36SFu0Vl5WKMt7WLvN4PCLWyZ31X09Pn3MgnfcvxdaaHbXFUzpsmFK+TPqFiwSp
-         9teKSTkxoLCFbwASAuw0+/gsKw0v8/ImKPC4viKSvsqAQyQ8pkmb3sI1v0HmyY7NWF7q
-         8eBssRwZgMxJHaJkoeqCmnQ7RRXvEt/PY8dp+uQ4l+N9Fvz7Oz8b0umVIcZYxM690iB7
-         iGT/8JyNz7xqcNb2zdyrT3EuO5IWDk/PJ8IUfP27i+nlBlNqsSqa4Yx8RC2PYN3DFlUw
-         H9vA==
-X-Gm-Message-State: AOAM531d3jmjtnnKgxizZ0xTTQI41emCe8Yj2zxFcaevQ1/3yoVYMyli
-        pu+H93Z0B+A0nQBzRWuY7S4=
-X-Google-Smtp-Source: ABdhPJyFMjPUwTRS5IM1O4aLDBUWso6NGQSchzTmWMygl8q2orBdHVfZKBxOXcTYo61Ha/bIWzNalA==
-X-Received: by 2002:aca:c041:: with SMTP id q62mr303213oif.158.1625674319022;
-        Wed, 07 Jul 2021 09:11:59 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 186sm3586264ooe.28.2021.07.07.09.11.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jul 2021 09:11:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 7 Jul 2021 09:11:57 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     John Garry <john.garry@huawei.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
-Subject: Re: [report of possible bug] watchdog memory leak
-Message-ID: <20210707161157.GA1454516@roeck-us.net>
-References: <93808c2b-2246-767d-a2d5-cb2e8b1a99c0@huawei.com>
+        Wed, 7 Jul 2021 12:50:10 -0400
+X-Greylist: delayed 589 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Jul 2021 12:50:09 EDT
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 46CB7409F0; Wed,  7 Jul 2021 17:19:42 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 46CB7409F0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1625671182;
+        bh=uuvVTv/CZ3VXSk7ge/T48z70BprWuwW1OSX/UrWRJSU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YKB0jBsX7tVRR8zuYqXHd2LlXCoQgiwVABzrb4UZRIQDtZEXfPm4oNJtE8V8VTxyl
+         WtH9N3jJMzNx/oNUXeJ7NLqmT2Z3R0KWKsaauJAfPcGI6KXoHu+SljFUlmbb52wJbJ
+         13pG6sRFcwUfUyzXxqzqkHsTy4jJwuDg0S7s1t54=
+Date:   Wed, 7 Jul 2021 17:19:42 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Curtis Klein <curtis.klein@hpe.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        EnricoWeigelt@www.linux-watchdog.org,
+        metux IT consult <info@metux.net>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Junlin Yang <yangjunlin@yulong.com>,
+        Liang Chen <cl@rock-chips.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh@kernel.org>, Robin Gong <yibin.gong@nxp.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Shruthi Sanil <shruthi.sanil@intel.com>,
+        Srinivas Goud <srinivas.goud@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Stefan Eichenberger <eichest@gmail.com>,
+        Tao Ren <rentao.bupt@gmail.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Wang Qing <wangqing@vivo.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Zou Wei <zou_wei@huawei.com>
+Subject: [GIT PULL REQUEST] watchdog - v5.14 Merge window
+Message-ID: <20210707151941.GA512@www.linux-watchdog.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <93808c2b-2246-767d-a2d5-cb2e8b1a99c0@huawei.com>
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.5.20 (2009-12-10)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 07, 2021 at 01:38:32PM +0100, John Garry wrote:
-> Hi guys,
-> 
-> Just a heads up in case it's a real issue - I was developing based on Linus'
-> tree at 79160a603bdb, and with KMEMLEAK and DEBUG_TEST_DRIVER_REMOVE configs
-> enabled, I get these warns:
-> 
+Hi Linus,
 
-DEBUG_TEST_DRIVER_REMOVE does odd things, which may well interfer
-with reference counting. I don't think this is a spurious issue
-(and I have no idea if it is a real issue), but at least for my
-part I don't plan to spend any time trying to track this down.
-Others, please feel free to jump in.
+Please pull the watchdog changes for the v5.12 release cycle.
 
-Thanks,
-Guenter
+This series contains:
+* Add Mstar MSC313e WDT driver
+* Add support for sama7g5-wdt
+* Add compatible for SC7280 SoC
+* Add compatible for Mediatek MT8195
+* sbsa: Support architecture version 1
+* Removal of the MV64x60 watchdog driver
+* Extra PCI IDs for hpwdt
+* Add hrtimer-based pretimeout feature
+* Add {min,max}_timeout sysfs nodes
+* keembay timeout and pre-timeout handling
+* Several fixes, cleanups and improvements
 
-> root@(none)$ [  859.608780] kmemleak: 3 new suspected memory leaks (see
-> /sys/kernel/debug/kmemleak)
-> [  859.608780] kmemleak: 3 new suspected memory leaks (see
-> /sys/kernel/debug/kmemleak)
-> 
-> root@(none)$ more /sys/kernel/debug/kmemleak
-> unreferenced object 0xffff0020f9810800 (size 1024):
->   comm "swapper/0", pid 1, jiffies 4294929730 (age 1071.904s)
->   hex dump (first 32 bytes):
->  80 89 48 f8 20 00 ff ff 08 08 81 f9 20 00 ff ff  ..H. ....... ...
->  08 08 81 f9 20 00 ff ff 00 00 00 00 00 00 00 00  .... ...........
->   backtrace:
->  [<(____ptrval____)>] slab_post_alloc_hook+0x9c/0x270
->  [<(____ptrval____)>] kmem_cache_alloc+0x198/0x2e0
->  [<(____ptrval____)>] watchdog_dev_register+0x38/0x428
->  [<(____ptrval____)>] __watchdog_register_device+0x13c/0x400
->  [<(____ptrval____)>] watchdog_register_device+0x9c/0x108
->  [<(____ptrval____)>] devm_watchdog_register_device+0x50/0xe0
->  [<(____ptrval____)>] sbsa_gwdt_probe+0x278/0x488
->  [<(____ptrval____)>] platform_probe+0x8c/0x108
->  [<(____ptrval____)>] really_probe+0x130/0x558
->  [<(____ptrval____)>] __driver_probe_device+0xb8/0x130
->  [<(____ptrval____)>] driver_probe_device+0x60/0x150
->  [<(____ptrval____)>] __driver_attach+0xa0/0x160
->  [<(____ptrval____)>] bus_for_each_dev+0xec/0x160
->  [<(____ptrval____)>] driver_attach+0x34/0x48
->  [<(____ptrval____)>] bus_add_driver+0x1b8/0x2c0
->  [<(____ptrval____)>] driver_register+0xc0/0x1e0
-> unreferenced object 0xffff0020f8488980 (size 64):
->   comm "swapper/0", pid 1, jiffies 4294929730 (age 1071.904s)
->   hex dump (first 32 bytes):
->  77 61 74 63 68 64 6f 67 30 00 00 00 00 00 00 00  watchdog0.......
->  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->  [<(____ptrval____)>] slab_post_alloc_hook+0x9c/0x270
->  [<(____ptrval____)>] __kmalloc_track_caller+0x190/0x2d0
->  [<(____ptrval____)>] kvasprintf+0xe4/0x1a0
->  [<(____ptrval____)>] kvasprintf_const+0xcc/0x178
->  [<(____ptrval____)>] kobject_set_name_vargs+0x54/0xf0
->  [<(____ptrval____)>] dev_set_name+0xa8/0xd8
->  [<(____ptrval____)>] watchdog_dev_register+0x154/0x428
->  [<(____ptrval____)>] __watchdog_register_device+0x13c/0x400
->  [<(____ptrval____)>] watchdog_register_device+0x9c/0x108
->  [<(____ptrval____)>] devm_watchdog_register_device+0x50/0xe0
->  [<(____ptrval____)>] sbsa_gwdt_probe+0x278/0x488
->  [<(____ptrval____)>] platform_probe+0x8c/0x108
->  [<(____ptrval____)>] really_probe+0x130/0x558
->  [<(____ptrval____)>] __driver_probe_device+0xb8/0x130
->  [<(____ptrval____)>] driver_probe_device+0x60/0x150
->  [<(____ptrval____)>] __driver_attach+0xa0/0x160
-> unreferenced object 0xffff00208f9b6000 (size 256):
->   comm "swapper/0", pid 1, jiffies 4294929730 (age 1071.904s)
->   hex dump (first 32 bytes):
->  00 00 00 00 00 00 00 00 08 60 9b 8f 20 00 ff ff  .........`.. ...
->  08 60 9b 8f 20 00 ff ff f8 47 b2 10 00 80 ff ff  .`.. ....G......
->   backtrace:
->  [<(____ptrval____)>] slab_post_alloc_hook+0x9c/0x270
->  [<(____ptrval____)>] kmem_cache_alloc+0x198/0x2e0
->  [<(____ptrval____)>] device_add+0x354/0xcf0
->  [<(____ptrval____)>] cdev_device_add+0x74/0xc0
->  [<(____ptrval____)>] watchdog_dev_register+0x1e0/0x428
->  [<(____ptrval____)>] __watchdog_register_device+0x13c/0x400
->  [<(____ptrval____)>] watchdog_register_device+0x9c/0x108
->  [<(____ptrval____)>] devm_watchdog_register_device+0x50/0xe0
->  [<(____ptrval____)>] sbsa_gwdt_probe+0x278/0x488
->  [<(____ptrval____)>] platform_probe+0x8c/0x108
->  [<(____ptrval____)>] really_probe+0x130/0x558
->  [<(____ptrval____)>] __driver_probe_device+0xb8/0x130
->  [<(____ptrval____)>] driver_probe_device+0x60/0x150
->  [<(____ptrval____)>] __driver_attach+0xa0/0x160
->  [<(____ptrval____)>] bus_for_each_dev+0xec/0x160
->  [<(____ptrval____)>] driver_attach+0x34/0x48
-> root@(none)$
-> root@(none)$
-> root@(none)$
-> 
-> I didn't see a report elsewhere. Maybe just a transient issue on Linus'
-> tree.
-> 
-> Thanks,
-> John
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit c4681547bcce777daf576925a966ffa824edd09d:
+
+  Linux 5.13-rc3 (2021-05-23 11:42:48 -1000)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.14-rc1
+
+for you to fetch changes up to cf813c67d9619fd474c785698cbed543b94209dd:
+
+  watchdog: iTCO_wdt: use dev_err() instead of pr_err() (2021-06-21 08:49:19 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 5.14-rc1 tag
+
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      watchdog: sp805: Use devm_clk_get_optional()
+      watchdog: sp805: Fix kernel doc description
+
+Bhaskar Chowdhury (2):
+      watchdog: sl28cpld_wdt: Fix a typo
+      watchdog: Fix a typo in the file orion_wdt.c
+
+Christophe Leroy (1):
+      watchdog: Remove MV64x60 watchdog driver
+
+Curtis Klein (1):
+      watchdog: Add hrtimer-based pretimeout feature
+
+Daniel Palmer (1):
+      watchdog: Add Mstar MSC313e WDT driver
+
+Enrico Weigelt, metux IT consult (1):
+      watchdog: iTCO_wdt: use dev_err() instead of pr_err()
+
+Eugen Hristev (3):
+      dt-bindings: watchdog: sama5d4-wdt: convert to yaml
+      watchdog: sama5d4_wdt: add support for sama7g5-wdt
+      dt-bindings: watchdog: sama5d4-wdt: add compatible for sama7g5-wdt
+
+Flavio Suligoi (1):
+      watchdog: wdat_wdg: fix typo
+
+Jan Kiszka (1):
+      watchdog: iTCO_wdt: Account for rebooting on second timeout
+
+Jerry Hoemann (1):
+      watchdog/hpwdt: New PCI IDs
+
+Jiapeng Chong (2):
+      watchdog: dw_wdt: Fix duplicate included linux/kernel.h
+      watchdog: it87_wdt: remove useless function
+
+Juerg Haefliger (3):
+      watchdog: Add {min,max}_timeout sysfs nodes
+      watchdog: Use sysfs_emit() and sysfs_emit_at() in "show" functions
+      watchdog: ziirave_wdt: Remove VERSION_FMT defines and add sysfs newlines
+
+Junlin Yang (1):
+      watchdog: diag288_wdt: Remove redundant assignment
+
+Liang Chen (1):
+      dt-bindings: watchdog: dw-wdt: add description for rk3568
+
+Lukas Bulwahn (1):
+      watchdog: fix syntactic kernel-doc issues
+
+Randy Dunlap (2):
+      watchdog: mtx-1: drop au1000.h header file
+      watchdog: clean up the Kconfig file
+
+Rob Herring (1):
+      dt-bindings: watchdog: Convert arm,sbsa-gwdt to DT schema
+
+Robin Gong (1):
+      watchdog: imx2_wdt: avoid to ping before resume back
+
+Romain Perier (1):
+      dt-bindings: watchdog: Add Mstar MSC313e WDT devicetree bindings documentation
+
+Sai Prakash Ranjan (2):
+      watchdog: qcom: Move suspend/resume to suspend_late/resume_early
+      dt-bindings: watchdog: Add compatible for SC7280 SoC
+
+Seiya Wang (1):
+      dt-bindings: watchdog: Add compatible for Mediatek MT8195
+
+Shaokun Zhang (1):
+      watchdog: sbsa: Support architecture version 1
+
+Shruthi Sanil (9):
+      watchdog: keembay: Update WDT pre-timeout during the initialization
+      watchdog: keembay: Upadate WDT pretimeout for every update in timeout
+      watchdog: keembay: Update pretimeout to zero in the TH ISR
+      watchdog: keembay: Clear either the TO or TH interrupt bit
+      watchdog: keembay: Remove timeout update in the WDT start function
+      watchdog: keembay: MACRO for WDT enable and disable values
+      watchdog: keembay: Removed timeout update in the TO ISR
+      watchdog: keembay: WDT SMC handler MACRO name update
+      watchdog: keembay: Typo corrections and other blank operations
+
+Srinivas Goud (3):
+      watchdog: of_xilinx_wdt: Add comment to spinlock
+      watchdog: of_xilinx_wdt: Used BIT macro
+      watchdog: of_xilinx_wdt: Used dev_dbg()
+
+Srinivas Neeli (2):
+      watchdog: of_xilinx_wdt: Remove passing null pointer
+      watchdog: of_xilinx_wdt: Skip printing pointer value
+
+Stefan Eichenberger (1):
+      watchdog: imx_sc_wdt: fix pretimeout
+
+Tao Ren (1):
+      watchdog: aspeed: fix hardware timeout calculation
+
+Tian Tao (1):
+      watchdog: meson_wdt: Use device_get_match_data() helper
+
+Wang Qing (2):
+      watchdog: mtk: support pre-timeout when the bark irq is available
+      doc: mtk-wdt: support pre-timeout when the bark irq is available
+
+Wei Yongjun (1):
+      watchdog: jz4740: Fix return value check in jz4740_wdt_probe()
+
+Wong Vee Khee (1):
+      watchdog: Fix a typo in Kconfig
+
+Zou Wei (3):
+      watchdog: Fix possible use-after-free in wdt_startup()
+      watchdog: sc520_wdt: Fix possible use-after-free in wdt_turnoff()
+      watchdog: Fix possible use-after-free by calling del_timer_sync()
+
+Álvaro Fernández Rojas (1):
+      watchdog: bcm7038_wdt: add big endian support
+
+ .../bindings/watchdog/arm,sbsa-gwdt.yaml           |  51 ++++
+ .../bindings/watchdog/atmel,sama5d4-wdt.yaml       |  74 +++++
+ .../bindings/watchdog/atmel-sama5d4-wdt.txt        |  34 ---
+ .../bindings/watchdog/mstar,msc313e-wdt.yaml       |  40 +++
+ .../devicetree/bindings/watchdog/mtk-wdt.txt       |   6 +
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |   1 +
+ .../devicetree/bindings/watchdog/sbsa-gwdt.txt     |  31 --
+ .../devicetree/bindings/watchdog/snps,dw-wdt.yaml  |   1 +
+ MAINTAINERS                                        |   1 +
+ drivers/watchdog/Kconfig                           |  77 +++--
+ drivers/watchdog/Makefile                          |   3 +-
+ drivers/watchdog/aspeed_wdt.c                      |   6 +-
+ drivers/watchdog/bcm7038_wdt.c                     |  31 +-
+ drivers/watchdog/booke_wdt.c                       |   2 +-
+ drivers/watchdog/diag288_wdt.c                     |   4 -
+ drivers/watchdog/dw_wdt.c                          |   9 +-
+ drivers/watchdog/eurotechwdt.c                     |   2 +-
+ drivers/watchdog/hpwdt.c                           |   1 +
+ drivers/watchdog/iTCO_wdt.c                        |  16 +-
+ drivers/watchdog/imx2_wdt.c                        |  10 +
+ drivers/watchdog/imx_sc_wdt.c                      |  11 +-
+ drivers/watchdog/it87_wdt.c                        |   8 -
+ drivers/watchdog/jz4740_wdt.c                      |   4 +-
+ drivers/watchdog/keembay_wdt.c                     |  34 ++-
+ drivers/watchdog/lpc18xx_wdt.c                     |   2 +-
+ drivers/watchdog/mei_wdt.c                         |   8 +-
+ drivers/watchdog/meson_wdt.c                       |   8 +-
+ drivers/watchdog/msc313e_wdt.c                     | 166 +++++++++++
+ drivers/watchdog/mtk_wdt.c                         |  77 ++++-
+ drivers/watchdog/mtx-1_wdt.c                       |   2 -
+ drivers/watchdog/mv64x60_wdt.c                     | 324 ---------------------
+ drivers/watchdog/octeon-wdt-main.c                 |  12 +-
+ drivers/watchdog/of_xilinx_wdt.c                   |  38 +--
+ drivers/watchdog/orion_wdt.c                       |   2 +-
+ drivers/watchdog/pc87413_wdt.c                     |   2 +-
+ drivers/watchdog/qcom-wdt.c                        |   4 +-
+ drivers/watchdog/sama5d4_wdt.c                     |  10 +-
+ drivers/watchdog/sbc60xxwdt.c                      |   2 +-
+ drivers/watchdog/sbsa_gwdt.c                       |  54 +++-
+ drivers/watchdog/sc520_wdt.c                       |   2 +-
+ drivers/watchdog/sl28cpld_wdt.c                    |   2 +-
+ drivers/watchdog/sp805_wdt.c                       |  43 ++-
+ drivers/watchdog/w83877f_wdt.c                     |   2 +-
+ drivers/watchdog/watchdog_core.h                   |  48 +++
+ drivers/watchdog/watchdog_dev.c                    |  86 +++---
+ drivers/watchdog/watchdog_hrtimer_pretimeout.c     |  44 +++
+ drivers/watchdog/watchdog_pretimeout.c             |   9 +-
+ drivers/watchdog/wdat_wdt.c                        |   4 +-
+ drivers/watchdog/wdt.c                             |   4 +-
+ drivers/watchdog/wdt_pci.c                         |   2 +-
+ drivers/watchdog/ziirave_wdt.c                     |  21 +-
+ include/linux/mv643xx.h                            |   8 -
+ 52 files changed, 825 insertions(+), 618 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-sama5d4-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/mstar,msc313e-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/sbsa-gwdt.txt
+ create mode 100644 drivers/watchdog/msc313e_wdt.c
+ delete mode 100644 drivers/watchdog/mv64x60_wdt.c
+ create mode 100644 drivers/watchdog/watchdog_hrtimer_pretimeout.c
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
