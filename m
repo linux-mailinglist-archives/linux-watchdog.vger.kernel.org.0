@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E613C3894
-	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jul 2021 01:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F8A3C38D1
+	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jul 2021 01:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbhGJXz2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 10 Jul 2021 19:55:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41052 "EHLO mail.kernel.org"
+        id S232979AbhGJX4W (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 10 Jul 2021 19:56:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233711AbhGJXyc (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 10 Jul 2021 19:54:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DEA2D613D2;
-        Sat, 10 Jul 2021 23:51:23 +0000 (UTC)
+        id S233612AbhGJXz2 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 10 Jul 2021 19:55:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2029D613EB;
+        Sat, 10 Jul 2021 23:51:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625961084;
-        bh=tCUh3rEoL7t0V6Q9DxLofggK+iSzdMEzMiUzlyIwDPc=;
+        s=k20201202; t=1625961112;
+        bh=W3YjjptMEBGQZLlHyRQRxy/NRzcHtf1hsTFJCYNcqZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RoD8Y0c+qpsB5OKYw27avvDXSXBDajIRNRHUadxwsHRLY30xXNcn3blEiqhv0GJRO
-         GItiSbVh4Q9OBoKVDzyf5g4iLwdgbzEeS0uB+kRp3xaijU1dC82aWQnnnrA+LLiwqr
-         3HY/+OFBz+fcYMiJOG4PuRFJwtauQveMzQNhm+tRLXXRPd22A+xh4OkoMgVxzEAmd2
-         s05uX+pTaA6C1l4NMpV2T713GRkYB99vkJ3/t+5lkG0hLKFEJDJ0rrx7WTq7u9HhDN
-         F+AntMcgv2exX7qt23NhnPq2jMZ5gOlCXwaEXoFtiCgpPF5aaEpS6Ho86i44DMdByY
-         mdNhABNtGPkxg==
+        b=GCSIMYYcRqomwITVP0SVJiiEBaP341JXkQu6g1qMg6wijpBl5+7e+PtbZMU5jj7DZ
+         HUtHDls15SJ07r8S++EK0QLYtnXIzbjIq2BJXf1wEppgfQAQEW7+hKLgO2QvWZkoHS
+         Zw2mbJQYUIEdMAv+G6Um+Nl5aGu+Vzz68Mbi6qipR9zi5aSfdfb5/ZDOjEFsOsJMab
+         fqyPa8MqoGSK4Cq/GPJrXiXss6i6rH1T5PEz8ZgNUi9s2ByCAh9//hIGxWsitrCT1u
+         hT2N/ZhfipLENxe3pMlypSagaTprxrwPA66ML1YnKIw46KbFWVfwaSm4GsRf8EsqeC
+         hst236AtWOcqg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+Cc:     Zou Wei <zou_wei@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 13/28] watchdog: iTCO_wdt: Account for rebooting on second timeout
-Date:   Sat, 10 Jul 2021 19:50:52 -0400
-Message-Id: <20210710235107.3221840-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 06/22] watchdog: Fix possible use-after-free in wdt_startup()
+Date:   Sat, 10 Jul 2021 19:51:27 -0400
+Message-Id: <20210710235143.3222129-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710235107.3221840-1-sashal@kernel.org>
-References: <20210710235107.3221840-1-sashal@kernel.org>
+In-Reply-To: <20210710235143.3222129-1-sashal@kernel.org>
+References: <20210710235143.3222129-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,69 +43,42 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Jan Kiszka <jan.kiszka@siemens.com>
+From: Zou Wei <zou_wei@huawei.com>
 
-[ Upstream commit cb011044e34c293e139570ce5c01aed66a34345c ]
+[ Upstream commit c08a6b31e4917034f0ed0cb457c3bb209576f542 ]
 
-This was already attempted to fix via 1fccb73011ea: If the BIOS did not
-enable TCO SMIs, the timer definitely needs to trigger twice in order to
-cause a reboot. If TCO SMIs are on, as well as SMIs in general, we can
-continue to assume that the BIOS will perform a reboot on the first
-timeout.
+This module's remove path calls del_timer(). However, that function
+does not wait until the timer handler finishes. This means that the
+timer handler may still be running after the driver's remove function
+has finished, which would result in a use-after-free.
 
-QEMU with its ICH9 and related BIOS falls into the former category,
-currently taking twice the configured timeout in order to reboot the
-machine. For iTCO version that fall under turn_SMI_watchdog_clear_off,
-this is also true and was currently only addressed for v1, irrespective
-of the turn_SMI_watchdog_clear_off value.
+Fix by calling del_timer_sync(), which makes sure the timer handler
+has finished, and unable to re-schedule itself.
 
-Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zou Wei <zou_wei@huawei.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/0b8bb307-d08b-41b5-696c-305cdac6789c@siemens.com
+Link: https://lore.kernel.org/r/1620716495-108352-1-git-send-email-zou_wei@huawei.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/iTCO_wdt.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/watchdog/sbc60xxwdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-index e707c4797f76..08e534fba1bf 100644
---- a/drivers/watchdog/iTCO_wdt.c
-+++ b/drivers/watchdog/iTCO_wdt.c
-@@ -72,6 +72,8 @@
- #define TCOBASE(p)	((p)->tco_res->start)
- /* SMI Control and Enable Register */
- #define SMI_EN(p)	((p)->smi_res->start)
-+#define TCO_EN		(1 << 13)
-+#define GBL_SMI_EN	(1 << 0)
- 
- #define TCO_RLD(p)	(TCOBASE(p) + 0x00) /* TCO Timer Reload/Curr. Value */
- #define TCOv1_TMR(p)	(TCOBASE(p) + 0x01) /* TCOv1 Timer Initial Value*/
-@@ -344,8 +346,12 @@ static int iTCO_wdt_set_timeout(struct watchdog_device *wd_dev, unsigned int t)
- 
- 	tmrval = seconds_to_ticks(p, t);
- 
--	/* For TCO v1 the timer counts down twice before rebooting */
--	if (p->iTCO_version == 1)
-+	/*
-+	 * If TCO SMIs are off, the timer counts down twice before rebooting.
-+	 * Otherwise, the BIOS generally reboots when the SMI triggers.
-+	 */
-+	if (p->smi_res &&
-+	    (SMI_EN(p) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
- 		tmrval /= 2;
- 
- 	/* from the specs: */
-@@ -510,7 +516,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
- 		 * Disables TCO logic generating an SMI#
- 		 */
- 		val32 = inl(SMI_EN(p));
--		val32 &= 0xffffdfff;	/* Turn off SMI clearing watchdog */
-+		val32 &= ~TCO_EN;	/* Turn off SMI clearing watchdog */
- 		outl(val32, SMI_EN(p));
- 	}
- 
+diff --git a/drivers/watchdog/sbc60xxwdt.c b/drivers/watchdog/sbc60xxwdt.c
+index 87333a41f753..1702df7f8c38 100644
+--- a/drivers/watchdog/sbc60xxwdt.c
++++ b/drivers/watchdog/sbc60xxwdt.c
+@@ -152,7 +152,7 @@ static void wdt_startup(void)
+ static void wdt_turnoff(void)
+ {
+ 	/* Stop the timer */
+-	del_timer(&timer);
++	del_timer_sync(&timer);
+ 	inb_p(wdt_stop);
+ 	pr_info("Watchdog timer is now disabled...\n");
+ }
 -- 
 2.30.2
 
