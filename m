@@ -2,101 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 854BF3C3988
-	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jul 2021 01:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6473C3DAE
+	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jul 2021 17:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbhGKAA4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 10 Jul 2021 20:00:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48528 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231183AbhGJX6e (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 10 Jul 2021 19:58:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B5D9E613E5;
-        Sat, 10 Jul 2021 23:53:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625961192;
-        bh=hkADfCiMoQJ+risbIzZYtyX+fRNEebwVd2J4+7NsjoQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K+473WzxsJVlMlI//5oz5nzQQNOxdhQGKBoJNNY//jdtvWq4DTNwPt0D28QWlg1Tj
-         /JYyCnVVdB3W5huPFWyomPPOC8L940caP6iSYMq937iEaXfAkumnUfAED0PoiHF/kE
-         8u+KgFBUUUvJH/E4BXU9Myzl3r56TNmBEne4Qpsk3SR41GhJopQZ1skiJDZ8BragOA
-         dkkGqN20bQCLxd1g9fNKGrM6TE2d2rawFBknjUJPI8BiZ1LcI8bFu6nJV/y12nlb38
-         umQ7pS6ngTCeo/5jc9QXsKdcjhBs2RrI/LJI3sr/HrXPfxGqx8s36z+bwqzI7nn0hm
-         0+kO4yYtJkaXQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zou Wei <zou_wei@huawei.com>, Hulk Robot <hulkci@huawei.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.4 07/12] watchdog: Fix possible use-after-free by calling del_timer_sync()
-Date:   Sat, 10 Jul 2021 19:52:57 -0400
-Message-Id: <20210710235302.3222809-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710235302.3222809-1-sashal@kernel.org>
-References: <20210710235302.3222809-1-sashal@kernel.org>
+        id S235861AbhGKPcK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 11 Jul 2021 11:32:10 -0400
+Received: from mail.07d05.mspz7.gob.ec ([186.46.59.139]:60052 "EHLO
+        mail.07d05.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235858AbhGKPcK (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sun, 11 Jul 2021 11:32:10 -0400
+X-Greylist: delayed 3106 seconds by postgrey-1.27 at vger.kernel.org; Sun, 11 Jul 2021 11:32:10 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id E2E5618461F0;
+        Sun, 11 Jul 2021 09:14:39 -0500 (-05)
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id MFNTb4pEXxNe; Sun, 11 Jul 2021 09:14:39 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id A635F18463E2;
+        Sun, 11 Jul 2021 09:14:39 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 07d05.mspz7.gob.ec
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4N_My-VlqWbi; Sun, 11 Jul 2021 09:14:39 -0500 (-05)
+Received: from cris-PC.wifi (unknown [105.9.79.139])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTPSA id 6EDB718456AF;
+        Sun, 11 Jul 2021 09:14:31 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <maria.coronel@07d05.mspz7.gob.ec>
+From:   ''Tayeb souami'' <maria.coronel@07d05.mspz7.gob.ec>
+Date:   Sun, 11 Jul 2021 16:14:16 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210711141431.6EDB718456AF@mail.07d05.mspz7.gob.ec>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Zou Wei <zou_wei@huawei.com>
+Hallo mein lieber Freund
+Mein Name ist Tayeb Souami aus New Jersey in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an fünf glückliche Personen zu spenden, und Sie wurden als einer der Begünstigten ausgewählt. Bitte klicken Sie auf diesen Link, um mehr über meinen Gewinn zu erfahren.
 
-[ Upstream commit d0212f095ab56672f6f36aabc605bda205e1e0bf ]
 
-This driver's remove path calls del_timer(). However, that function
-does not wait until the timer handler finishes. This means that the
-timer handler may still be running after the driver's remove function
-has finished, which would result in a use-after-free.
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-Fix by calling del_timer_sync(), which makes sure the timer handler
-has finished, and unable to re-schedule itself.
+Bitte kontaktieren Sie mich über diese E-Mail:Tayebsouam.spende@gmail.com
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zou Wei <zou_wei@huawei.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
-Link: https://lore.kernel.org/r/1620802676-19701-1-git-send-email-zou_wei@huawei.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/watchdog/lpc18xx_wdt.c | 2 +-
- drivers/watchdog/w83877f_wdt.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/watchdog/lpc18xx_wdt.c b/drivers/watchdog/lpc18xx_wdt.c
-index ab7b8b185d99..fbdc0f32e666 100644
---- a/drivers/watchdog/lpc18xx_wdt.c
-+++ b/drivers/watchdog/lpc18xx_wdt.c
-@@ -309,7 +309,7 @@ static int lpc18xx_wdt_remove(struct platform_device *pdev)
- 	unregister_restart_handler(&lpc18xx_wdt->restart_handler);
- 
- 	dev_warn(&pdev->dev, "I quit now, hardware will probably reboot!\n");
--	del_timer(&lpc18xx_wdt->timer);
-+	del_timer_sync(&lpc18xx_wdt->timer);
- 
- 	watchdog_unregister_device(&lpc18xx_wdt->wdt_dev);
- 	clk_disable_unprepare(lpc18xx_wdt->wdt_clk);
-diff --git a/drivers/watchdog/w83877f_wdt.c b/drivers/watchdog/w83877f_wdt.c
-index f0483c75ed32..4b52cf321747 100644
---- a/drivers/watchdog/w83877f_wdt.c
-+++ b/drivers/watchdog/w83877f_wdt.c
-@@ -170,7 +170,7 @@ static void wdt_startup(void)
- static void wdt_turnoff(void)
- {
- 	/* Stop the timer */
--	del_timer(&timer);
-+	del_timer_sync(&timer);
- 
- 	wdt_change(WDT_DISABLE);
- 
--- 
-2.30.2
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
 
+Grüße
+Herr Tayeb Souami
