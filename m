@@ -2,80 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B743C79E5
-	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Jul 2021 00:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731303C7B3A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Jul 2021 03:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236754AbhGMXBv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 13 Jul 2021 19:01:51 -0400
-Received: from mail-io1-f43.google.com ([209.85.166.43]:45981 "EHLO
-        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235417AbhGMXBu (ORCPT
+        id S237410AbhGNB7t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 13 Jul 2021 21:59:49 -0400
+Received: from mail-il1-f170.google.com ([209.85.166.170]:36806 "EHLO
+        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237374AbhGNB7s (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 13 Jul 2021 19:01:50 -0400
-Received: by mail-io1-f43.google.com with SMTP id y16so6223805iol.12;
-        Tue, 13 Jul 2021 15:59:00 -0700 (PDT)
+        Tue, 13 Jul 2021 21:59:48 -0400
+Received: by mail-il1-f170.google.com with SMTP id j5so27169ilk.3;
+        Tue, 13 Jul 2021 18:56:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=JTI1ZBR9D1Ugup4282dbl5tw68/bdXRLNL3cR2M36lk=;
-        b=AqXB8tdCYM+JQVy+8YYIEFzjHv1mck4krMtxLlypCIMHXlHptHapmdZ04Nv+/2G1R+
-         ABDe9RnxG2B2gBul2xAUSeYr2LD/c1fU+68YLq61aTqioe24SzjGio3orVW0VUb27ist
-         FOXsrUERQ2JF8iKQvTcAeHnb/YZZhLmnGYlocvRYXT4DHt4jdm5ATQuLzsRZAmHfBzqM
-         25ukl0fg8Bv9DhBtqmJLfP41WVQohFPKZ03uHEZ1N+POWm0u/YQdxHvNDrui0uLq8XTP
-         pz6hmHSIpOeLPurwuWwA56JlUqrkHKlTpfoP7OZ6MILlKmdebXOH2jf8/7v9KHWPtiwN
-         WfaQ==
-X-Gm-Message-State: AOAM533iZbDjaqz8+WfbsgWHElz6mqMlkWAfSPKBUWs89VegWpr3UJ5U
-        4pnZOiPY54cNNiCFnIzX+Q==
-X-Google-Smtp-Source: ABdhPJwqQj4i60dPLCZFJEHdYwTRX+Yhru1/A8V14H871+oGYZI2ex/1qE4HdMBMRRnO95P5eEF3/Q==
-X-Received: by 2002:a02:cace:: with SMTP id f14mr6161797jap.5.1626217139833;
-        Tue, 13 Jul 2021 15:58:59 -0700 (PDT)
+        bh=SzFlmTgHjr8nlAUno22TBO+Fp4BVkU4LSybrQMcw7J0=;
+        b=AK9ECwWuytdkOfClW8EDJ8D843P5YfQsAKe8i5RZEAuXynawYDghMb0bwoq4/FpTZJ
+         mzD9GGciu/DWs/O0pwb1zjPD/SMSyD13t8WK5oEYdUPJlohhUOemG/OafIEhj2NCbiSr
+         kUmD/nxkswocVi6i/Uhg6lRvoJ5cvFbukqlm83xBnEoKC1N9FoW0e0YfGVKf0qOyFpN7
+         ErLd327P3yTJeBZmfDw8gvE3sOdMaW/Icq4Qv45r9uvwgu3bTCp4+0b/EQU63o3D8Tlg
+         Ir3UzNfJDS6xY25Xn4Qd/MS9BcLfZHE0hsn5uTC6YdHFXQwu4LVxP1+G7+jNJTMGQjdl
+         hA8A==
+X-Gm-Message-State: AOAM533DMby8RniDppVvyD47LwlVg1vllduKOR6fNEMcXcMntMQ9Cdiw
+        j5X9MJUTHzwMud4ag4CEkA==
+X-Google-Smtp-Source: ABdhPJxrLTEdobWW2KnlKwGJQE3g45G28/p/hH4Ow2vtL2GnCFPNNi8aepfdovJ3SfMCNM1HxKx4+w==
+X-Received: by 2002:a05:6e02:114e:: with SMTP id o14mr1506070ill.301.1626227816751;
+        Tue, 13 Jul 2021 18:56:56 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b2sm224559iln.5.2021.07.13.15.58.55
+        by smtp.gmail.com with ESMTPSA id f7sm421300ilk.64.2021.07.13.18.56.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 15:58:59 -0700 (PDT)
-Received: (nullmailer pid 1010485 invoked by uid 1000);
-        Tue, 13 Jul 2021 22:58:53 -0000
-Date:   Tue, 13 Jul 2021 16:58:53 -0600
+        Tue, 13 Jul 2021 18:56:56 -0700 (PDT)
+Received: (nullmailer pid 1282996 invoked by uid 1000);
+        Wed, 14 Jul 2021 01:56:53 -0000
+Date:   Tue, 13 Jul 2021 19:56:53 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     cl@rock-chips.com
-Cc:     linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, cnsztl@gmail.com,
-        linux-watchdog@vger.kernel.org, lee.jones@linaro.org,
-        shawn.lin@rock-chips.com, linux-kernel@vger.kernel.org,
-        heiko@sntech.de, huangtao@rock-chips.com, wim@linux-watchdog.org,
-        jensenhuang@friendlyarm.com, linux-serial@vger.kernel.org,
-        maz@kernel.org, zhangqing@rock-chips.com, thierry.reding@gmail.com,
-        jamie@jamieiles.com, ulf.hansson@linaro.org, mail@david-bauer.net,
-        jbx6244@gmail.com, david.wu@rock-chips.com,
-        linux-pwm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
-        linux-mmc@vger.kernel.org, jay.xu@rock-chips.com,
-        uwe@kleine-koenig.org, michael@amarulasolutions.com,
-        linux@roeck-us.net, jagan@amarulasolutions.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org, wens@csie.org,
+To:     Christine Zhu <Christine.Zhu@mediatek.com>
+Cc:     matthias.bgg@gmail.com, linux-watchdog@vger.kernel.org,
+        srv_heupstream@mediatek.com, linux@roeck-us.net,
+        seiya.wang@mediatek.com, linux-mediatek@lists.infradead.org,
+        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [RESEND PATCH v5 1/4] dt-bindings: pwm: rockchip: add
- description for rk3568
-Message-ID: <20210713225853.GA1010426@robh.at.kernel.org>
-References: <20210622020517.13100-1-cl@rock-chips.com>
- <20210623021303.28015-1-cl@rock-chips.com>
+Subject: Re: [v5,1/3] dt-bindings: mediatek: mt8195: update mtk-wdt document
+Message-ID: <20210714015653.GA1282938@robh.at.kernel.org>
+References: <20210628113730.26107-1-Christine.Zhu@mediatek.com>
+ <20210628113730.26107-2-Christine.Zhu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210623021303.28015-1-cl@rock-chips.com>
+In-Reply-To: <20210628113730.26107-2-Christine.Zhu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 23 Jun 2021 10:13:03 +0800, cl@rock-chips.com wrote:
-> From: Liang Chen <cl@rock-chips.com>
+On Mon, 28 Jun 2021 19:37:29 +0800, Christine Zhu wrote:
+> From: "Christine Zhu" <Christine.Zhu@mediatek.com>
 > 
-> add "rockchip,rk3568-pwm", "rockchip,rk3328-pwm" for pwm nodes on
-> a rk3568 platform to pwm-rockchip.yaml.
+> Update mtk-wdt document for MT8195 platform.
 > 
-> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> Signed-off-by: Christine Zhu <Christine.Zhu@mediatek.com>
 > ---
->  Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml | 1 +
+>  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
 >  1 file changed, 1 insertion(+)
 > 
 
