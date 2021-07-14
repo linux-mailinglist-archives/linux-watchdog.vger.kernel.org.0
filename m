@@ -2,129 +2,148 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2193C87C7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Jul 2021 17:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900383C87C9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Jul 2021 17:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239571AbhGNPiL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 14 Jul 2021 11:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
+        id S239615AbhGNPie (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 14 Jul 2021 11:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239567AbhGNPiL (ORCPT
+        with ESMTP id S239571AbhGNPid (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 14 Jul 2021 11:38:11 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0BEC06175F
-        for <linux-watchdog@vger.kernel.org>; Wed, 14 Jul 2021 08:35:18 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id i5so4336107lfe.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 14 Jul 2021 08:35:18 -0700 (PDT)
+        Wed, 14 Jul 2021 11:38:33 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96DDC06175F
+        for <linux-watchdog@vger.kernel.org>; Wed, 14 Jul 2021 08:35:41 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id y7so3624207ljm.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 14 Jul 2021 08:35:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eJaKL3ISTdN+YsCpp2uZ/iZyyKrQcH2+/HmeVpNKc+k=;
-        b=YNM5znqWLu/ak5ElXJ7+tVvApRP533MCiRC/c9M1ul0cQEDdgq5WTuQoibx/TQarn5
-         454GxKvs4QRRAGX1iqDJerVBNSlRNgolsmnqmsvTIbX3gAOVhGSNpjH0O7qAMM4S9JzI
-         KhDTJWUZ0DRvOto8XqImUb/rqzjUnPyVVwFR5AnUOpqlCZqXPoTYR9fLkhYerVp63ThE
-         dduGnV7umYqO/iHXGajnR2sk7K+FKKDRAwe0RfV7pP4+MQiXH0FxKtbD1ZlO3lnEYlMv
-         +kBo+/iasD+B8thv91hyORAyslGjWw5lLvJJnCWKR6BaeJ21Gm/I3w5zKCNuJbxJFChI
-         Gs4A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Rh3lGfHwMJkZvu76gzDf+JL+UpvhGWVQ3c17N4FInmg=;
+        b=PaaNEtURxRHgra3yOhwrjPi6zrrA2/7RkcZfuvN722AEsEjQGnyJu5tJK/b/sPl+0u
+         7wI8SUSvB1CeTZJlo1UJoOVBpMKamqr4QVUmEaqjKglEcpZJYWa/AbAHZaJX2orgoVXN
+         h9w+uL3b/NczNS9s0EZxuEq9HB9TQNPXGx8rmhhGLDHRyLGncG7ufZx9lzXaY5ZnuGWy
+         lgPTfRSTNoCD0ypRMp5Y5NnXxLhBmqrCEP9QZBAQCYPrf28YbVfgJ5V++5W5MlAXjEVd
+         vpVEJbDLZywUab9Zh0EvpweBCFafmBfmCl2npjjUvxREYd5jHrLT54aOPt7rK+j2JBHU
+         2ZXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eJaKL3ISTdN+YsCpp2uZ/iZyyKrQcH2+/HmeVpNKc+k=;
-        b=iYF8leBdzT05LUKF9VCAL9sH0Vw22faKDGMP9vKo7cLVIZA7PWp3C/rS5kK8FoxKe3
-         G/2zbvzJe+V9giZO5+TYITwk4rgggCMBpyMulSlSpe+zyIO0Wc6MQCPYv8x4PaovfG6q
-         rDEoPLLgHvKVvuVGXJKMcXz0/4WVd56aZAs66SNx1ABpOsKrg4FIJ7lTewOmeicXQ26t
-         PzJyOUZALYMGtKYYrGAETOWd5Iz229x24JIss1Kp+4jOee2IhhgOOMMKAd60iOtwQ/0I
-         eljR+ULKZ9n3Nf5hySzcv0eQcdQfxq+RQ0yzB/MbDd6EYgcdLrTs6Qv9phW/L9cqjYXq
-         gswg==
-X-Gm-Message-State: AOAM531t3slRc5T4JkQdhdiKTwkxS2D3Snk0JsBhl/UG/RyHgJnOJ3Yv
-        zj3Uo+vD8vaH6o4x/XWmoQgibg==
-X-Google-Smtp-Source: ABdhPJwEQOZlZOb/n6TqWTOOheo4WuwJ08Xi6CcwgCqMETjN5RHcrIqQ2n1/DGS8mYOsFxnrKuj7uQ==
-X-Received: by 2002:a05:6512:714:: with SMTP id b20mr8349664lfs.488.1626276917236;
-        Wed, 14 Jul 2021 08:35:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Rh3lGfHwMJkZvu76gzDf+JL+UpvhGWVQ3c17N4FInmg=;
+        b=hMpJcmisyL8PWB88XAseA2KKBncdGpivcX1GuPFvR2hSpA4fIg+aicEqBmlJilpYsC
+         C8ANupkp0yFe0rE0e4wx3Hsgk+KuhiwZNlFF1cp1UCZAJ3ZJ+ksyBAFV5HcPzk5s61ew
+         M02vAZoKxl4IQwwau3T5cMurY4xyMUbx0Fr7d46UiCaQSFFeJOLiKy9zEPRlrfHZ8fmf
+         44jP/cye+hFuofrWl8RetNUK5zE1nqPZrMqCRA/sZimdw+kHIBmNLjgh7HIOdjMCRFtb
+         LCg+KVxctH1QEL3NzW/re24UTQVLr2KsiZPAHJcxBy5l3RJ2mpt8KNj76N9ynAYfJd/D
+         tZNg==
+X-Gm-Message-State: AOAM530RB2ePy68WJqx0KxGy+L1t2b/Ygk9eQYxFq6nHlpsORJw2Vn7M
+        iyxyhajVVYY9Pjzm7NlN9E6GuXmZkVdt/A==
+X-Google-Smtp-Source: ABdhPJzPHx3g79z7MbW7jvxcuo2z9KIozAk6uprFGNyZMFkf7J13YxDFZPCw40OTLUfC45w4/hx39A==
+X-Received: by 2002:a2e:8709:: with SMTP id m9mr9826030lji.201.1626276939499;
+        Wed, 14 Jul 2021 08:35:39 -0700 (PDT)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id y3sm269984ljj.121.2021.07.14.08.35.16
+        by smtp.gmail.com with ESMTPSA id y3sm269984ljj.121.2021.07.14.08.35.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 08:35:17 -0700 (PDT)
+        Wed, 14 Jul 2021 08:35:39 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-watchdog@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 1/2] dt-bindings: watchdog: Add Maxim MAX63xx bindings
-Date:   Wed, 14 Jul 2021 17:33:13 +0200
-Message-Id: <20210714153314.1004147-1-linus.walleij@linaro.org>
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 2/2] watchdog: max63xx_wdt: Add device tree probing
+Date:   Wed, 14 Jul 2021 17:33:14 +0200
+Message-Id: <20210714153314.1004147-2-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210714153314.1004147-1-linus.walleij@linaro.org>
+References: <20210714153314.1004147-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This adds devicetree bindings for the Maxim MAX63xx watchdog
-timers.
+This adds device tree probing to the MAX63xx driver so it can be
+instantiated from the device tree. We use the generic fwnode-based
+method to get to the match data and clean up by constifying the
+functions as the match is indeed a const.
 
-Cc: devicetree@vger.kernel.org
 Cc: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- .../bindings/watchdog/maxim,max63xx.yaml      | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+ drivers/watchdog/max63xx_wdt.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-new file mode 100644
-index 000000000000..f2105eedac2c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/maxim,max63xx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
+index 3a899628a834..9e1541cfae0d 100644
+--- a/drivers/watchdog/max63xx_wdt.c
++++ b/drivers/watchdog/max63xx_wdt.c
+@@ -26,6 +26,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/io.h>
+ #include <linux/slab.h>
++#include <linux/property.h>
+ 
+ #define DEFAULT_HEARTBEAT 60
+ #define MAX_HEARTBEAT     60
+@@ -99,8 +100,8 @@ static const struct max63xx_timeout max6373_table[] = {
+ 	{ },
+ };
+ 
+-static struct max63xx_timeout *
+-max63xx_select_timeout(struct max63xx_timeout *table, int value)
++static const struct max63xx_timeout *
++max63xx_select_timeout(const struct max63xx_timeout *table, int value)
+ {
+ 	while (table->twd) {
+ 		if (value <= table->twd) {
+@@ -202,14 +203,17 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct max63xx_wdt *wdt;
+-	struct max63xx_timeout *table;
++	const struct max63xx_timeout *table;
+ 	int err;
+ 
+ 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+ 	if (!wdt)
+ 		return -ENOMEM;
+ 
+-	table = (struct max63xx_timeout *)pdev->id_entry->driver_data;
++	/* Attempt to use fwnode first */
++	table = device_get_match_data(dev);
++	if (!table)
++		table = (struct max63xx_timeout *)pdev->id_entry->driver_data;
+ 
+ 	if (heartbeat < 1 || heartbeat > MAX_HEARTBEAT)
+ 		heartbeat = DEFAULT_HEARTBEAT;
+@@ -255,11 +259,23 @@ static const struct platform_device_id max63xx_id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(platform, max63xx_id_table);
+ 
++static const struct of_device_id max63xx_dt_id_table[] = {
++	{ .compatible = "maxim,max6369", .data = max6369_table, },
++	{ .compatible = "maxim,max6370", .data = max6369_table, },
++	{ .compatible = "maxim,max6371", .data = max6371_table, },
++	{ .compatible = "maxim,max6372", .data = max6371_table, },
++	{ .compatible = "maxim,max6373", .data = max6373_table, },
++	{ .compatible = "maxim,max6374", .data = max6373_table, },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max63xx_dt_id_table);
 +
-+title: Maxim 63xx Watchdog Timers
-+
-+allOf:
-+  - $ref: "watchdog.yaml#"
-+
-+maintainers:
-+  - Marc Zyngier <maz@kernel.org>
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: maxim,max6369
-+      - const: maxim,max6370
-+      - const: maxim,max6371
-+      - const: maxim,max6372
-+      - const: maxim,max6373
-+      - const: maxim,max6374
-+
-+  reg:
-+    description: This is a 1-byte memory-mapped address
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    wdt: watchdog@50000000 {
-+        compatible = "maxim,max6369";
-+        reg = <0x50000000 0x1>;
-+        timeout-sec = <10>;
-+    };
-+
-+...
+ static struct platform_driver max63xx_wdt_driver = {
+ 	.probe		= max63xx_wdt_probe,
+ 	.id_table	= max63xx_id_table,
+ 	.driver		= {
+ 		.name	= "max63xx_wdt",
++		.of_match_table = max63xx_dt_id_table,
+ 	},
+ };
+ 
 -- 
 2.31.1
 
