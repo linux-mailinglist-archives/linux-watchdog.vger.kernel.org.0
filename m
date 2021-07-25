@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C128F3D5033
-	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Jul 2021 23:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6123C3D503B
+	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Jul 2021 23:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbhGYVCD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 25 Jul 2021 17:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
+        id S229543AbhGYVIE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 25 Jul 2021 17:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhGYVCD (ORCPT
+        with ESMTP id S229531AbhGYVID (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 25 Jul 2021 17:02:03 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E14FC061757;
-        Sun, 25 Jul 2021 14:42:32 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id d3so4152192qvq.6;
-        Sun, 25 Jul 2021 14:42:32 -0700 (PDT)
+        Sun, 25 Jul 2021 17:08:03 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B5BC061757;
+        Sun, 25 Jul 2021 14:48:32 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id c18so7108537qke.2;
+        Sun, 25 Jul 2021 14:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=JCowzX/KinFiRxGX4xwbISr7bQW/xef+NRNkdAlMZ/o=;
-        b=QTvVvh4kLEOvSCIU6OvDlKAIWkUM9qd0FQwd2x12OcRIy/G/12Xfz77bRQQaqlcOy0
-         MWUzFwnXgi6+3+9MH6L6Wddo9KLx3JIrW2tbqU5gcNbmjsRDUEXI8H+Ck5QGHloEBwsG
-         s5AxNcqrzYB9Z4MMMZmju5D64qejXWsYGA56yRinTceNBc7IGbsL2nAkFY4surktN63X
-         lsq4EROb/JuI6h95MKIQ5r6mwL3zRC5J9yG5Z5hvwSb567xSAVux28/r48HcmB9Tp8VV
-         iCXkLQS/o6MhZ5YPn69rc5nsrh1msPLbAMR71RdnWpCnetaW/uajuIZHhbkXCu6qkBV8
-         Fewg==
+        bh=ABKMKevEHWFWKoPDDK5G2faUqIuEbxrXlBlb9zRYhEI=;
+        b=OnxF7kIKwDBDEIPjzLxaoJ3hh/GE8cxuXUA9gskp7bkMCSyGWBbIizq0szUSGOBbUV
+         A4sg7D2KbiaJbsc66m9ko6chFA/Zh9esqmnQT+NFf7ZEg5vlqDERfPAsZX0+D5xY9Mhf
+         BhkvBAeTMAxnp+xgR0Vpxr0NTLAbhRKU433DZQym1ZAEHtUcVor+8NmOR+0ORmiO0sFe
+         izyylihQJqPew4ic8tYoYz5wkMxhf5t0ZSmw/uF1w4li4qwEOzc8YGN7rCloL9Sv3Raq
+         XAcCyaiwOHKqjcgCCssv9IsAb0vKT4m8G9QFh9IjSdumDimBtlHeatykAQ5LkYDISEPr
+         ugDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=JCowzX/KinFiRxGX4xwbISr7bQW/xef+NRNkdAlMZ/o=;
-        b=YcndakTlLFmCJ6RZlShSkXg+AYgFbep93YahEktvJhduREUi96nMvsqnxhIIpjqjsj
-         mllawU2CMH5i9Q4KkP6m7sqYwYheUdcgAr1FmgsY1Cex5VsV2k6cm5D9DSaaIhW/JwV1
-         CVe+stBX2Vuv67CCyCVapw/CZf75DNo85seCNBWN5bkDbzoq8phyvqg3uzJ6Uh9N4KlG
-         g+obuwtfnDCbliXYogTp7a0rUjlxLuhy50ZhBF2FjGoVirgtxNRch1InWUO6ewzPi6HA
-         QYd26qtTaHWGvgs0hPNrCmblg7O/wt3JPk0fsFOCTdL5vtLnHSCLC9R8Pv8vyNOP0soC
-         sIGQ==
-X-Gm-Message-State: AOAM530auUeMF8IuODJsIYDHX5kfvKYzPn4LXWs+RIonb0Ldg5+4t98Y
-        ntqdX0aAg6EQFVzugNhp10aC5jno1m4=
-X-Google-Smtp-Source: ABdhPJyUvAV6cVkUuhXBGKbfJenNvupvnTfmaZ0Huh+gpkXO+JQPp9WJSUrz26MTVuoYBeQ150EBBg==
-X-Received: by 2002:a0c:c352:: with SMTP id j18mr15034038qvi.7.1627249351517;
-        Sun, 25 Jul 2021 14:42:31 -0700 (PDT)
+        bh=ABKMKevEHWFWKoPDDK5G2faUqIuEbxrXlBlb9zRYhEI=;
+        b=ib32kn7QYxDZBVcJvB7UeCsJEYyehKJ55fh1yaJmNJdotgVp/fcHbXzb1zs53l1p6l
+         tyb3u1mCv6em7bI+HrmL/Uyt0Y3okHHSsZHH400mhdM14fsYDen+2u0trlaq07AVmz8O
+         6jFyoCQmGMpqrEVgiQxFhxY/eZqnhGgAAwhnQTNDCHi2J0It5B4qaeZl5zJY3EDn153X
+         ZfRfnZO+V/VUEPRQicL4GRjRHo32JQ6JscBViGejB8E6fFCpgPdQlrJaW5pl2PgPj9ES
+         3hgYLUuGBtAe5rMSi+A9G4XxhxZT7wmDig2PkoToMrZ/iFjI9Iq6TpUMdEslMxTw2DeC
+         OWMw==
+X-Gm-Message-State: AOAM531dgH5yZjpbpTa5iQPRxQ7jlKHy8Dw2rI6uYW4nd+L0GKuiQznZ
+        f1NK7xJBtPX3WBgwVttez58=
+X-Google-Smtp-Source: ABdhPJwjKGqvJ4PNOwJimmO73TdEFCHFWA6rkY/G2rbwx4xQm5bh0tyLmw1x1BlZ+MsELsjvpv1SdQ==
+X-Received: by 2002:a37:38c:: with SMTP id 134mr15708374qkd.182.1627249711845;
+        Sun, 25 Jul 2021 14:48:31 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j2sm13784722qtn.46.2021.07.25.14.42.30
+        by smtp.gmail.com with ESMTPSA id g10sm2712074qtp.67.2021.07.25.14.48.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jul 2021 14:42:31 -0700 (PDT)
+        Sun, 25 Jul 2021 14:48:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Jul 2021 14:42:29 -0700
+Date:   Sun, 25 Jul 2021 14:48:30 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -57,7 +57,7 @@ Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v4 2/5] watchdog: f71808e_wdt: rename variant-independent
  identifiers appropriately
-Message-ID: <20210725214229.GB3578169@roeck-us.net>
+Message-ID: <20210725214830.GC3578169@roeck-us.net>
 References: <cover.c711be1db54f4e07c0153266dd1a831e92e3d49d.1626948810.git-series.a.fatoum@pengutronix.de>
  <9ae6ae2ac53cd6f46d3eb32dec35d0c0a7c40ba5.1626948810.git-series.a.fatoum@pengutronix.de>
 MIME-Version: 1.0
@@ -81,9 +81,6 @@ On Thu, Jul 22, 2021 at 12:14:41PM +0200, Ahmad Fatoum wrote:
 > to the kernel watchdog API in a later commit.
 > 
 > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
 > ---
 >  drivers/watchdog/f71808e_wdt.c | 66 +++++++++++++++++------------------
 >  1 file changed, 33 insertions(+), 33 deletions(-)
@@ -98,6 +95,11 @@ Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 >  
 > -static const char *f71808e_names[] = {
 > +static const char *fintek_wdt_names[] = {
+
+Nit: checkpatch rightfully complains that this can be
+
+static const char * const fintek_wdt_names[]
+
 >  	"f71808fg",
 >  	"f71858fg",
 >  	"f71862fg",
