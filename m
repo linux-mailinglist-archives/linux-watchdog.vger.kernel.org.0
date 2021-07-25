@@ -2,111 +2,342 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F173D5031
-	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Jul 2021 23:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C128F3D5033
+	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Jul 2021 23:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbhGYVBD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 25 Jul 2021 17:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S229547AbhGYVCD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 25 Jul 2021 17:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbhGYVBC (ORCPT
+        with ESMTP id S229531AbhGYVCD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 25 Jul 2021 17:01:02 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1979C061760;
-        Sun, 25 Jul 2021 14:41:32 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id b20so7092787qkj.3;
-        Sun, 25 Jul 2021 14:41:32 -0700 (PDT)
+        Sun, 25 Jul 2021 17:02:03 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E14FC061757;
+        Sun, 25 Jul 2021 14:42:32 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id d3so4152192qvq.6;
+        Sun, 25 Jul 2021 14:42:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=QxOlTszS9lefFPg4lTNiOlnATXYl/0WWxviXpQoITfQ=;
-        b=XATwLMymbsZV4PttlajF382i8P33q7mjVRhHUwdZziBZ371iOVR6UMOxGRyNu6niD1
-         aqn/ehfG8TwvzFEfrksecuhftSl6sm20sfV1tjoHPc/w4eUhstJBqTdbcdbOt77DuW8A
-         Sn7/3WT5XAkHfPRGpa2gB9rTD1q6bWvZzG8kIFSQnm+cAk8iOpQyZeo0XW5DxOxhws0k
-         ZP4jD0Pae1cdtAS5X4E+FnDKRnvsbs+G6eUzXkWl4PKQrlnlrlziWsIzthovdIQPSDtr
-         q+vhgd20f5uWbiFSFKgEhuCl4syoiJNaK9/t+OWQqSpqQO66rNjBs42IYxHMJz2uv8l+
-         grVQ==
+        bh=JCowzX/KinFiRxGX4xwbISr7bQW/xef+NRNkdAlMZ/o=;
+        b=QTvVvh4kLEOvSCIU6OvDlKAIWkUM9qd0FQwd2x12OcRIy/G/12Xfz77bRQQaqlcOy0
+         MWUzFwnXgi6+3+9MH6L6Wddo9KLx3JIrW2tbqU5gcNbmjsRDUEXI8H+Ck5QGHloEBwsG
+         s5AxNcqrzYB9Z4MMMZmju5D64qejXWsYGA56yRinTceNBc7IGbsL2nAkFY4surktN63X
+         lsq4EROb/JuI6h95MKIQ5r6mwL3zRC5J9yG5Z5hvwSb567xSAVux28/r48HcmB9Tp8VV
+         iCXkLQS/o6MhZ5YPn69rc5nsrh1msPLbAMR71RdnWpCnetaW/uajuIZHhbkXCu6qkBV8
+         Fewg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=QxOlTszS9lefFPg4lTNiOlnATXYl/0WWxviXpQoITfQ=;
-        b=ZglPVHFepuHXBuXqLoodiMsjqNevGuH1n++GJdqPduvdOeTQY8+2MRW2zrJkKA5grG
-         hF22QOtGYBQ4/Yx/1TH78TRp4YHlWlgsjNU3V9lc7NzHF8J7k6QioSnBNYv16VZUqZoI
-         qzi8SiW8k/fRAJJ7xT9v/lJPUblhaW54qvVfDtTUk7OnYZ18JHgNyNofjApxOSinkuCY
-         A1E4nx7oZ0F3b0qvNCuF8A6I5rft34+mUcCDhgJrCpAU28tqkywhC4cPZR2b09XHUH/y
-         LEJReNuOBWTUfonJuNkRmISbNzSeeFY9mUoQaMS0geCXsqGKGmrPF0uT5DcijU/uFnWy
-         sCkA==
-X-Gm-Message-State: AOAM531ZVPASnK4Fg4vM5B3ElX4tsuuSk99diy9v6xb19Wd2Q2/h/Spb
-        mH685EcwVrMEnSYtIl+LmizkwETxezM=
-X-Google-Smtp-Source: ABdhPJwJC09YTmDe39x8u72YD0k3ayM8qwR9qmQHb4KYMJZffmAoCvE0f1XCJfr4hRfZ1Gejm15zpg==
-X-Received: by 2002:a37:af45:: with SMTP id y66mr15073588qke.466.1627249291476;
-        Sun, 25 Jul 2021 14:41:31 -0700 (PDT)
+        bh=JCowzX/KinFiRxGX4xwbISr7bQW/xef+NRNkdAlMZ/o=;
+        b=YcndakTlLFmCJ6RZlShSkXg+AYgFbep93YahEktvJhduREUi96nMvsqnxhIIpjqjsj
+         mllawU2CMH5i9Q4KkP6m7sqYwYheUdcgAr1FmgsY1Cex5VsV2k6cm5D9DSaaIhW/JwV1
+         CVe+stBX2Vuv67CCyCVapw/CZf75DNo85seCNBWN5bkDbzoq8phyvqg3uzJ6Uh9N4KlG
+         g+obuwtfnDCbliXYogTp7a0rUjlxLuhy50ZhBF2FjGoVirgtxNRch1InWUO6ewzPi6HA
+         QYd26qtTaHWGvgs0hPNrCmblg7O/wt3JPk0fsFOCTdL5vtLnHSCLC9R8Pv8vyNOP0soC
+         sIGQ==
+X-Gm-Message-State: AOAM530auUeMF8IuODJsIYDHX5kfvKYzPn4LXWs+RIonb0Ldg5+4t98Y
+        ntqdX0aAg6EQFVzugNhp10aC5jno1m4=
+X-Google-Smtp-Source: ABdhPJyUvAV6cVkUuhXBGKbfJenNvupvnTfmaZ0Huh+gpkXO+JQPp9WJSUrz26MTVuoYBeQ150EBBg==
+X-Received: by 2002:a0c:c352:: with SMTP id j18mr15034038qvi.7.1627249351517;
+        Sun, 25 Jul 2021 14:42:31 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c197sm17801136qke.33.2021.07.25.14.41.30
+        by smtp.gmail.com with ESMTPSA id j2sm13784722qtn.46.2021.07.25.14.42.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jul 2021 14:41:31 -0700 (PDT)
+        Sun, 25 Jul 2021 14:42:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Jul 2021 14:41:29 -0700
+Date:   Sun, 25 Jul 2021 14:42:29 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org, kernel@pengutronix.de,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] watchdog: f71808e_wdt: fix inaccurate report in
- WDIOC_GETTIMEOUT
-Message-ID: <20210725214129.GA3578169@roeck-us.net>
+Subject: Re: [PATCH v4 2/5] watchdog: f71808e_wdt: rename variant-independent
+ identifiers appropriately
+Message-ID: <20210725214229.GB3578169@roeck-us.net>
 References: <cover.c711be1db54f4e07c0153266dd1a831e92e3d49d.1626948810.git-series.a.fatoum@pengutronix.de>
- <7f2a07eaa7dbd7c3f8162a89d364c3eef45883ea.1626948810.git-series.a.fatoum@pengutronix.de>
+ <9ae6ae2ac53cd6f46d3eb32dec35d0c0a7c40ba5.1626948810.git-series.a.fatoum@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7f2a07eaa7dbd7c3f8162a89d364c3eef45883ea.1626948810.git-series.a.fatoum@pengutronix.de>
+In-Reply-To: <9ae6ae2ac53cd6f46d3eb32dec35d0c0a7c40ba5.1626948810.git-series.a.fatoum@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 12:14:40PM +0200, Ahmad Fatoum wrote:
-> The fintek watchdog timer can configure timeouts of second granularity
-> only up to 255 seconds. Beyond that, the timeout needs to be configured
-> with minute granularity. WDIOC_GETTIMEOUT should report the actual
-> timeout configured, not just echo back the timeout configured by the
-> user. Do so.
+On Thu, Jul 22, 2021 at 12:14:41PM +0200, Ahmad Fatoum wrote:
+> Code for the common parts of the driver either uses watchdog_ as
+> prefix for the watchdog API or f71808e_ for everything else.
 > 
-> Fixes: 96cb4eb019ce ("watchdog: f71808e_wdt: new watchdog driver for Fintek F71808E and F71882FG")
-> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> The driver now supports 9 more variants besides the f71808e,
+> so let's rename the common parts to start with fintek_wdt_ instead.
+> 
+> This makes code browsing easier, because it's readily apparent
+> that functions are not variant-specific. Some watchdog_-prefixed
+> functions remain, but these will be dropped altogether with the move
+> to the kernel watchdog API in a later commit.
+> 
 > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/f71808e_wdt.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/watchdog/f71808e_wdt.c | 66 +++++++++++++++++------------------
+>  1 file changed, 33 insertions(+), 33 deletions(-)
 > 
 > diff --git a/drivers/watchdog/f71808e_wdt.c b/drivers/watchdog/f71808e_wdt.c
-> index f60beec1bbae..f7d82d261913 100644
+> index f7d82d261913..597eaf6905f4 100644
 > --- a/drivers/watchdog/f71808e_wdt.c
 > +++ b/drivers/watchdog/f71808e_wdt.c
-> @@ -228,15 +228,17 @@ static int watchdog_set_timeout(int timeout)
+> @@ -113,7 +113,7 @@ MODULE_PARM_DESC(start_withtimeout, "Start watchdog timer on module load with"
+>  enum chips { f71808fg, f71858fg, f71862fg, f71868, f71869, f71882fg, f71889fg,
+>  	     f81803, f81865, f81866};
 >  
->  	mutex_lock(&watchdog.lock);
+> -static const char *f71808e_names[] = {
+> +static const char *fintek_wdt_names[] = {
+>  	"f71808fg",
+>  	"f71858fg",
+>  	"f71862fg",
+> @@ -136,7 +136,7 @@ static inline int superio_enter(int base);
+>  static inline void superio_select(int base, int ld);
+>  static inline void superio_exit(int base);
 >  
-> -	watchdog.timeout = timeout;
->  	if (timeout > 0xff) {
->  		watchdog.timer_val = DIV_ROUND_UP(timeout, 60);
->  		watchdog.minutes_mode = true;
-> +		timeout = watchdog.timer_val * 60;
->  	} else {
->  		watchdog.timer_val = timeout;
->  		watchdog.minutes_mode = false;
+> -struct watchdog_data {
+> +struct fintek_wdt {
+>  	unsigned short	sioaddr;
+>  	enum chips	type;
+>  	unsigned long	opened;
+> @@ -152,7 +152,7 @@ struct watchdog_data {
+>  	char		caused_reboot;	/* last reboot was by the watchdog */
+>  };
+>  
+> -static struct watchdog_data watchdog = {
+> +static struct fintek_wdt watchdog = {
+>  	.lock = __MUTEX_INITIALIZER(watchdog.lock),
+>  };
+>  
+> @@ -218,7 +218,7 @@ static inline void superio_exit(int base)
+>  	release_region(base, 2);
+>  }
+>  
+> -static int watchdog_set_timeout(int timeout)
+> +static int fintek_wdt_set_timeout(int timeout)
+>  {
+>  	if (timeout <= 0
+>  	 || timeout >  max_timeout) {
+> @@ -244,7 +244,7 @@ static int watchdog_set_timeout(int timeout)
+>  	return 0;
+>  }
+>  
+> -static int watchdog_set_pulse_width(unsigned int pw)
+> +static int fintek_wdt_set_pulse_width(unsigned int pw)
+>  {
+>  	int err = 0;
+>  	unsigned int t1 = 25, t2 = 125, t3 = 5000;
+> @@ -278,7 +278,7 @@ static int watchdog_set_pulse_width(unsigned int pw)
+>  	return err;
+>  }
+>  
+> -static int watchdog_keepalive(void)
+> +static int fintek_wdt_keepalive(void)
+>  {
+>  	int err = 0;
+>  
+> @@ -308,13 +308,13 @@ static int watchdog_keepalive(void)
+>  	return err;
+>  }
+>  
+> -static int watchdog_start(void)
+> +static int fintek_wdt_start(void)
+>  {
+>  	int err;
+>  	u8 tmp;
+>  
+>  	/* Make sure we don't die as soon as the watchdog is enabled below */
+> -	err = watchdog_keepalive();
+> +	err = fintek_wdt_keepalive();
+>  	if (err)
+>  		return err;
+>  
+> @@ -435,7 +435,7 @@ static int watchdog_start(void)
+>  	return err;
+>  }
+>  
+> -static int watchdog_stop(void)
+> +static int fintek_wdt_stop(void)
+>  {
+>  	int err = 0;
+>  
+> @@ -467,7 +467,7 @@ static int watchdog_get_status(void)
+>  	return status;
+>  }
+>  
+> -static bool watchdog_is_running(void)
+> +static bool fintek_wdt_is_running(void)
+>  {
+>  	/*
+>  	 * if we fail to determine the watchdog's status assume it to be
+> @@ -501,7 +501,7 @@ static int watchdog_open(struct inode *inode, struct file *file)
+>  	if (test_and_set_bit(0, &watchdog.opened))
+>  		return -EBUSY;
+>  
+> -	err = watchdog_start();
+> +	err = fintek_wdt_start();
+>  	if (err) {
+>  		clear_bit(0, &watchdog.opened);
+>  		return err;
+> @@ -519,10 +519,10 @@ static int watchdog_release(struct inode *inode, struct file *file)
+>  	clear_bit(0, &watchdog.opened);
+>  
+>  	if (!watchdog.expect_close) {
+> -		watchdog_keepalive();
+> +		fintek_wdt_keepalive();
+>  		pr_crit("Unexpected close, not stopping watchdog!\n");
+>  	} else if (!nowayout) {
+> -		watchdog_stop();
+> +		fintek_wdt_stop();
+>  	}
+>  	return 0;
+>  }
+> @@ -563,7 +563,7 @@ static ssize_t watchdog_write(struct file *file, const char __user *buf,
+>  		}
+>  
+>  		/* someone wrote to us, we should restart timer */
+> -		watchdog_keepalive();
+> +		fintek_wdt_keepalive();
+>  	}
+>  	return count;
+>  }
+> @@ -610,24 +610,24 @@ static long watchdog_ioctl(struct file *file, unsigned int cmd,
+>  			return -EFAULT;
+>  
+>  		if (new_options & WDIOS_DISABLECARD)
+> -			watchdog_stop();
+> +			fintek_wdt_stop();
+>  
+>  		if (new_options & WDIOS_ENABLECARD)
+> -			return watchdog_start();
+> +			return fintek_wdt_start();
+>  		fallthrough;
+>  
+>  	case WDIOC_KEEPALIVE:
+> -		watchdog_keepalive();
+> +		fintek_wdt_keepalive();
+>  		return 0;
+>  
+>  	case WDIOC_SETTIMEOUT:
+>  		if (get_user(new_timeout, uarg.i))
+>  			return -EFAULT;
+>  
+> -		if (watchdog_set_timeout(new_timeout))
+> +		if (fintek_wdt_set_timeout(new_timeout))
+>  			return -EINVAL;
+>  
+> -		watchdog_keepalive();
+> +		fintek_wdt_keepalive();
+>  		fallthrough;
+>  
+>  	case WDIOC_GETTIMEOUT:
+> @@ -643,7 +643,7 @@ static int watchdog_notify_sys(struct notifier_block *this, unsigned long code,
+>  	void *unused)
+>  {
+>  	if (code == SYS_DOWN || code == SYS_HALT)
+> -		watchdog_stop();
+> +		fintek_wdt_stop();
+>  	return NOTIFY_DONE;
+>  }
+>  
+> @@ -681,7 +681,7 @@ static int __init watchdog_init(int sioaddr)
+>  
+>  	snprintf(watchdog.ident.identity,
+>  		sizeof(watchdog.ident.identity), "%s watchdog",
+> -		f71808e_names[watchdog.type]);
+> +		fintek_wdt_names[watchdog.type]);
+>  
+>  	err = superio_enter(sioaddr);
+>  	if (err)
+> @@ -700,10 +700,10 @@ static int __init watchdog_init(int sioaddr)
+>  
+>  	superio_exit(sioaddr);
+>  
+> -	err = watchdog_set_timeout(timeout);
+> +	err = fintek_wdt_set_timeout(timeout);
+>  	if (err)
+>  		return err;
+> -	err = watchdog_set_pulse_width(pulse_width);
+> +	err = fintek_wdt_set_pulse_width(pulse_width);
+>  	if (err)
+>  		return err;
+>  
+> @@ -726,7 +726,7 @@ static int __init watchdog_init(int sioaddr)
+>  			goto exit_miscdev;
+>  		}
+>  
+> -		err = watchdog_start();
+> +		err = fintek_wdt_start();
+>  		if (err) {
+>  			pr_err("cannot start watchdog timer\n");
+>  			goto exit_miscdev;
+> @@ -774,7 +774,7 @@ static int __init watchdog_init(int sioaddr)
+>  	return err;
+>  }
+>  
+> -static int __init f71808e_find(int sioaddr)
+> +static int __init fintek_wdt_find(int sioaddr)
+>  {
+>  	u16 devid;
+>  	int err = superio_enter(sioaddr);
+> @@ -830,14 +830,14 @@ static int __init f71808e_find(int sioaddr)
 >  	}
 >  
-> +	watchdog.timeout = timeout;
-> +
->  	mutex_unlock(&watchdog.lock);
+>  	pr_info("Found %s watchdog chip, revision %d\n",
+> -		f71808e_names[watchdog.type],
+> +		fintek_wdt_names[watchdog.type],
+>  		(int)superio_inb(sioaddr, SIO_REG_DEVREV));
+>  exit:
+>  	superio_exit(sioaddr);
+>  	return err;
+>  }
 >  
->  	return 0;
+> -static int __init f71808e_init(void)
+> +static int __init fintek_wdt_init(void)
+>  {
+>  	static const unsigned short addrs[] = { 0x2e, 0x4e };
+>  	int err = -ENODEV;
+> @@ -849,7 +849,7 @@ static int __init f71808e_init(void)
+>  	}
+>  
+>  	for (i = 0; i < ARRAY_SIZE(addrs); i++) {
+> -		err = f71808e_find(addrs[i]);
+> +		err = fintek_wdt_find(addrs[i]);
+>  		if (err == 0)
+>  			break;
+>  	}
+> @@ -859,11 +859,11 @@ static int __init f71808e_init(void)
+>  	return watchdog_init(addrs[i]);
+>  }
+>  
+> -static void __exit f71808e_exit(void)
+> +static void __exit fintek_wdt_exit(void)
+>  {
+> -	if (watchdog_is_running()) {
+> +	if (fintek_wdt_is_running()) {
+>  		pr_warn("Watchdog timer still running, stopping it\n");
+> -		watchdog_stop();
+> +		fintek_wdt_stop();
+>  	}
+>  	misc_deregister(&watchdog_miscdev);
+>  	unregister_reboot_notifier(&watchdog_notifier);
+> @@ -873,5 +873,5 @@ MODULE_DESCRIPTION("F71808E Watchdog Driver");
+>  MODULE_AUTHOR("Giel van Schijndel <me@mortis.eu>");
+>  MODULE_LICENSE("GPL");
+>  
+> -module_init(f71808e_init);
+> -module_exit(f71808e_exit);
+> +module_init(fintek_wdt_init);
+> +module_exit(fintek_wdt_exit);
 > -- 
 > git-series 0.9.1
