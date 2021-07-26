@@ -2,104 +2,121 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9AB3D659E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Jul 2021 19:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644C53D6535
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Jul 2021 19:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235753AbhGZQoW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 26 Jul 2021 12:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240598AbhGZQoL (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 26 Jul 2021 12:44:11 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13F5C061D74;
-        Mon, 26 Jul 2021 10:00:02 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g23-20020a17090a5797b02901765d605e14so921216pji.5;
-        Mon, 26 Jul 2021 10:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JXUZz3hZeoCPSsyXIn/aU117yRIRTjG03n6CdjN5gdc=;
-        b=CcHZQDN8ByOvS1HE5DGMzQIPzco9Y9Qv/VBBIXLsyxdNzMQjkbeiPPvaHyJZ8LYIx7
-         mIoC8rKc+4SIdOxxng4fXbVhBywIIJKmOHa0JT1GQyxZAotz5U7Mq3McNUnlt3v7eAMb
-         yWeE8Ok7MCckIzr0C3oz9LJVMy0pXy18cw/tFV1hHc17iUTdmMfAmpvSNXewVWgbr6bH
-         BXHIH1FfZiZhSUM0F8yXDEFXilr6VkV9CxA8bshRyWlXCh4V6ES6fues8BLeLfaLYtqX
-         BOkhPoHVbxNUt/2I1tc7lNoPyKrJxskxf/Qy6FQPXT8Kc/ai3L4+XonQVZOaajxiOlot
-         VpNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JXUZz3hZeoCPSsyXIn/aU117yRIRTjG03n6CdjN5gdc=;
-        b=ZfW3aa/v7dKHVcZPe4Hijr/DBD8P7636zSjecIk03RLSrFT/2IwuuEPVJSk3g8mhHI
-         dYZyp+2jxPHysjC1KJU3TGqlTQwXATZ5UWl285jz2H6yvr2MV9dvw6dvXKg062dMvYcF
-         nMBuKpaYrANfF3nPrstQ+soD6BEoIuXigaL0sJBfvOUAbdg8KDXKlnP16W92cFbZBJe3
-         yPHHck4o0QouM7CurR1Sq1w98m9yQuTadaaxZ5o/6vqEqW98eJnXg523kxX+iklCGrXT
-         lOxWKgmakfuDQy2F3NgscGDMvkQhEAiZ/PwFqayOtLzYxOAMa6v11EkD6n325XGDXM0R
-         xBTg==
-X-Gm-Message-State: AOAM530DiRWy7Jk8wX4p1Sw9IGvzKRfyxYP/hQ+ezq9Qmk4yYN3NCeDu
-        LZjJoiqsavIFaM44twM+dXf1EWrStWg8+RX3i9g=
-X-Google-Smtp-Source: ABdhPJxPgwguyDjwaq4hSyrhHpOTsIsXdB/uFSF+sRjlBZJ9R/CmHuZ9Kp/HIYYpGDQZAGxREv1W4nB+wannKq5ZI64=
-X-Received: by 2002:a65:6895:: with SMTP id e21mr18755941pgt.426.1627318802372;
- Mon, 26 Jul 2021 10:00:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <d84f8e06-f646-8b43-d063-fb11f4827044@siemens.com>
-In-Reply-To: <d84f8e06-f646-8b43-d063-fb11f4827044@siemens.com>
-From:   =?UTF-8?Q?Mantas_Mikul=C4=97nas?= <grawity@gmail.com>
-Date:   Mon, 26 Jul 2021 19:59:51 +0300
-Message-ID: <CAPWNY8Uf39v2g8Ln9b917sVPid2ruW86Oc64DwXod9oxgFAzhQ@mail.gmail.com>
+        id S233218AbhGZQaV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 26 Jul 2021 12:30:21 -0400
+Received: from david.siemens.de ([192.35.17.14]:60810 "EHLO david.siemens.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235177AbhGZQaP (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 26 Jul 2021 12:30:15 -0400
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by david.siemens.de (8.15.2/8.15.2) with ESMTPS id 16QHAQW9024999
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Jul 2021 19:10:26 +0200
+Received: from [167.87.33.191] ([167.87.33.191])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 16QHAPq7008761;
+        Mon, 26 Jul 2021 19:10:25 +0200
 Subject: Re: [PATCH] watchdog: iTCO_wdt: Fix detection of SMI-off case
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Christian Storm <christian.storm@siemens.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        =?UTF-8?Q?Mantas_Mikul=c4=97nas?= <grawity@gmail.com>
+References: <d84f8e06-f646-8b43-d063-fb11f4827044@siemens.com>
+ <CAHp75VfCydLguFX=MSoAQ_gayra5ovuwLxcY7m_pHiafvB7b5w@mail.gmail.com>
+ <c1c15112-b102-570b-1432-568ca219ccf9@siemens.com>
+ <CAHp75VdYUUqVi6rd6C-W+1aTXCPs7ehSLDcRfo4RVe7XU+6c+A@mail.gmail.com>
+ <521d14ad-8952-7ef9-3575-b48cefeb8241@roeck-us.net>
+ <84665dcf-f036-f059-61a4-cea5087ace2d@siemens.com>
+ <CAHp75VdqS5QUwq=25RGKOiPRfcNzNxG9kNMtP-2-=z4EAnUi8w@mail.gmail.com>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Message-ID: <175ca7d9-254b-ca35-359c-a077b284c9fa@siemens.com>
+Date:   Mon, 26 Jul 2021 19:10:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+MIME-Version: 1.0
+In-Reply-To: <CAHp75VdqS5QUwq=25RGKOiPRfcNzNxG9kNMtP-2-=z4EAnUi8w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Jul 26, 2021 at 2:46 PM Jan Kiszka <jan.kiszka@siemens.com> wrote:
->
-> From: Jan Kiszka <jan.kiszka@siemens.com>
->
-> Obviously, the test needs to run against the register content, not its
-> address.
->
-> Fixes: cb011044e34c ("watchdog: iTCO_wdt: Account for rebooting on second=
- timeout")
-> Reported-by: Mantas Mikul=C4=97nas <grawity@gmail.com>
-> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-> ---
->  drivers/watchdog/iTCO_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-> index b3f604669e2c..643c6c2d0b72 100644
-> --- a/drivers/watchdog/iTCO_wdt.c
-> +++ b/drivers/watchdog/iTCO_wdt.c
-> @@ -362,7 +362,7 @@ static int iTCO_wdt_set_timeout(struct watchdog_devic=
-e *wd_dev, unsigned int t)
->          * Otherwise, the BIOS generally reboots when the SMI triggers.
->          */
->         if (p->smi_res &&
-> -           (SMI_EN(p) & (TCO_EN | GBL_SMI_EN)) !=3D (TCO_EN | GBL_SMI_EN=
-))
-> +           (inl(SMI_EN(p)) & (TCO_EN | GBL_SMI_EN)) !=3D (TCO_EN | GBL_S=
-MI_EN))
->                 tmrval /=3D 2;
->
->         /* from the specs: */
-> --
-> 2.26.2
+On 26.07.21 16:51, Andy Shevchenko wrote:
+> On Mon, Jul 26, 2021 at 5:05 PM Jan Kiszka <jan.kiszka@siemens.com> wrote:
+>>
+>> On 26.07.21 15:59, Guenter Roeck wrote:
+>>> On 7/26/21 6:40 AM, Andy Shevchenko wrote:
+>>>> On Mon, Jul 26, 2021 at 3:04 PM Jan Kiszka <jan.kiszka@siemens.com>
+>>>> wrote:
+>>>>>
+>>>>> On 26.07.21 14:01, Andy Shevchenko wrote:
+>>>>>> On Mon, Jul 26, 2021 at 2:46 PM Jan Kiszka <jan.kiszka@siemens.com>
+>>>>>> wrote:
+>>>>>>>
+>>>>>>> From: Jan Kiszka <jan.kiszka@siemens.com>
+>>>>>>>
+>>>>>>> Obviously, the test needs to run against the register content, not its
+>>>>>>> address.
+>>>>>>>
+>>>>>>> Fixes: cb011044e34c ("watchdog: iTCO_wdt: Account for rebooting on
+>>>>>>> second timeout")
+>>>>>>> Reported-by: Mantas Mikulėnas <grawity@gmail.com>
+>>>>>>
+>>>>>>> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+>>>>>>
+>>>>>> Missed SoB of the submitter (hint: configure your Git to make sure
+>>>>>> that submitter and author are the same in terms of name-email).
+>>>>>
+>>>>> The signed off is there. Not sure what you are referring to.
+>>>>
+>>>> Nope. It's not. The sign of that is the From: line in the body of the
+>>>> email. It happens when the submitter != author. And SoB of the former
+>>>> one is absent. But what is strange is that reading them here I haven't
+>>>> found the difference. Maybe one is in UTF-8 while the other is not and
+>>>> a unicode character degraded to Latin-1 or so?
+>>>>
+>>>
+>>> I have no idea why there is an additional From:, but both From:
+>>> tags in the e-mail source are exact matches, and both match the
+>>> name and e-mail address in Signed-off-by:. I agree with Jan,
+>>> the SoB is there.
+>>
+>> There is one unknown in this equation, and that is the anti-email system
+>> operated by a our IT and some company in Redmond.
+> 
+> Hmm... The From: in the body is the result of the `git format-patch` I believe.
+> So, two (or more?) possibilities here:
+>  1) your configuration enforces it to always put From: (something new to me);
 
-Tested-by: Mantas Mikul=C4=97nas <grawity@gmail.com>
+Yes, it does, as I explained in my other reply. That's a safety net
+because you never have full control over what some mail servers do to
+the first From.
 
---=20
-Mantas Mikul=C4=97nas
+>  2) the submitter and author are not the same (see also:
+> https://github.com/git/git/commit/a90804752f6ab2b911882d47fafb6c2b78f447c3);
+>  3) ...anything else...?
+> 
+>> But I haven't received
+>> any complaints that my outgoing emails are negatively affected by it
+>> (incoming are, but that's a different story...). If you received
+>> something mangled, Andy, please share the source of that email. I'm
+>> happy to escalate internally - and externally.
+> 
+> I believe I see it in the same way as lore, i.e.
+> https://lore.kernel.org/linux-watchdog/d84f8e06-f646-8b43-d063-fb11f4827044@siemens.com/raw
+
+Perfect, then all is fine as it should be (and no time for O365 bashing,
+today).
+
+Jan
+
+-- 
+Siemens AG, T RDA IOT
+Corporate Competence Center Embedded Linux
