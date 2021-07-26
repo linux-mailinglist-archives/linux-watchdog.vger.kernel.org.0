@@ -2,70 +2,91 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E19443D5985
-	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Jul 2021 14:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49813D59A9
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Jul 2021 14:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbhGZLtt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 26 Jul 2021 07:49:49 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:36184 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233995AbhGZLtt (ORCPT
+        id S234039AbhGZL6m (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 26 Jul 2021 07:58:42 -0400
+Received: from goliath.siemens.de ([192.35.17.28]:44724 "EHLO
+        goliath.siemens.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233859AbhGZL6m (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 26 Jul 2021 07:49:49 -0400
-X-UUID: c6bdd2e5954943319e01f964410c6c68-20210726
-X-UUID: c6bdd2e5954943319e01f964410c6c68-20210726
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <christine.zhu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 910698119; Mon, 26 Jul 2021 20:30:13 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 26 Jul 2021 20:30:12 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 26 Jul 2021 20:30:11 +0800
-From:   Christine Zhu <Christine.Zhu@mediatek.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <seiya.wang@mediatek.com>,
-        Christine Zhu <Christine.Zhu@mediatek.com>
-Subject: [v7,1/3] dt-bindings: mediatek: mt8195: update mtk-wdt document
-Date:   Mon, 26 Jul 2021 20:29:00 +0800
-Message-ID: <20210726122901.12195-2-Christine.Zhu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210726122901.12195-1-Christine.Zhu@mediatek.com>
-References: <20210726122901.12195-1-Christine.Zhu@mediatek.com>
+        Mon, 26 Jul 2021 07:58:42 -0400
+X-Greylist: delayed 2075 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Jul 2021 07:58:41 EDT
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by goliath.siemens.de (8.15.2/8.15.2) with ESMTPS id 16QC4Iac011365
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Jul 2021 14:04:18 +0200
+Received: from [139.22.37.28] ([139.22.37.28])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 16QC4HQP009313;
+        Mon, 26 Jul 2021 14:04:18 +0200
+Subject: Re: [PATCH] watchdog: iTCO_wdt: Fix detection of SMI-off case
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Storm <christian.storm@siemens.com>,
+        =?UTF-8?Q?Mantas_Mikul=c4=97nas?= <grawity@gmail.com>
+References: <d84f8e06-f646-8b43-d063-fb11f4827044@siemens.com>
+ <CAHp75VfCydLguFX=MSoAQ_gayra5ovuwLxcY7m_pHiafvB7b5w@mail.gmail.com>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Message-ID: <c1c15112-b102-570b-1432-568ca219ccf9@siemens.com>
+Date:   Mon, 26 Jul 2021 14:04:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <CAHp75VfCydLguFX=MSoAQ_gayra5ovuwLxcY7m_pHiafvB7b5w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Update mtk-wdt document for MT8195 platform.
+On 26.07.21 14:01, Andy Shevchenko wrote:
+> On Mon, Jul 26, 2021 at 2:46 PM Jan Kiszka <jan.kiszka@siemens.com> wrote:
+>>
+>> From: Jan Kiszka <jan.kiszka@siemens.com>
+>>
+>> Obviously, the test needs to run against the register content, not its
+>> address.
+>>
+>> Fixes: cb011044e34c ("watchdog: iTCO_wdt: Account for rebooting on second timeout")
+>> Reported-by: Mantas Mikulėnas <grawity@gmail.com>
+> 
+>> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+> 
+> Missed SoB of the submitter (hint: configure your Git to make sure
+> that submitter and author are the same in terms of name-email).
 
-Signed-off-by: Christine Zhu <Christine.Zhu@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
- 1 file changed, 1 insertion(+)
+The signed off is there. Not sure what you are referring to.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-index e36ba60de829..ca9b67ab7c44 100644
---- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-+++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-@@ -13,6 +13,7 @@ Required properties:
- 	"mediatek,mt8183-wdt": for MT8183
- 	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
- 	"mediatek,mt8192-wdt": for MT8192
-+	"mediatek,mt8195-wdt": for MT8195
- 
- - reg : Specifies base physical address and size of the registers.
- 
+> 
+> ...
+> 
+>>         if (p->smi_res &&
+>> -           (SMI_EN(p) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
+>> +           (inl(SMI_EN(p)) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
+>>                 tmrval /= 2;
+> 
+> There are so many parentheses, perhaps
+> 
+> #define TCO_GBL_SMI_EN   (TCO_EN | GBL_SMI_EN)
+> ...
+>        if (p->smi_res &&
+>            (inl(SMI_EN(p)) & TCO_GBL_SMI_EN) != TCO_GBL_SMI_EN)
+>                tmrval /= 2;
+> 
+> ?
+> 
+
+Let's focus on the regression fix (and you could have mentioned that on
+the original patch already).
+
+Jan
+
 -- 
-2.18.0
-
+Siemens AG, T RDA IOT
+Corporate Competence Center Embedded Linux
