@@ -2,107 +2,181 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E69A3D5659
-	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Jul 2021 11:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27873D565A
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Jul 2021 11:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbhGZIjd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 26 Jul 2021 04:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S232434AbhGZIjw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 26 Jul 2021 04:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbhGZIjc (ORCPT
+        with ESMTP id S232173AbhGZIjw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 26 Jul 2021 04:39:32 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120FDC061757
-        for <linux-watchdog@vger.kernel.org>; Mon, 26 Jul 2021 02:20:02 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id k1so10704033plt.12
-        for <linux-watchdog@vger.kernel.org>; Mon, 26 Jul 2021 02:20:02 -0700 (PDT)
+        Mon, 26 Jul 2021 04:39:52 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23ACFC061760
+        for <linux-watchdog@vger.kernel.org>; Mon, 26 Jul 2021 02:20:21 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id r26so14250862lfp.5
+        for <linux-watchdog@vger.kernel.org>; Mon, 26 Jul 2021 02:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=jpy0tZLpRHfN1fMfFe5IrdwhQ+g2LPOUWzpB5iP18t0=;
-        b=d6E0qycWjjnAuIPBqbMPBXh+e90BvTHEmBokpoppqFBtb51uifZq8T/6ybM0EcOrmR
-         zJ8z38FREBjR5a0hEsUoJJUSRguW8KA0zCzNVVsMq1gRZ0b3ZWmGoEjCZ/y/H3DnRmRN
-         600dxTZ8+fkLM+XVwM5lwAOcYcsz49AUydP5NnHRk2+zHlpNgfb97tgWp8f3g9oqv5Su
-         2yq1O8o5+98YZ1Ds0hKnmY7ZxOAZy4aott8hSJkt6sTHAaM/RRm52PHVO98+75F+CGCg
-         UxWR9Ci++aE0Dln72PfM0TvlNAMpvSQ9w1ZBuYVxHpbOMw7T1NlP89B0vRzINrQZQkPw
-         lxDA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UyAhVW8SUVdW2juHf4NXSIfTyUpw2d4E9HcLC6UlbsU=;
+        b=PFhaUyyioW4u4jvnVZfDpQc+0BSgWt8O5W+h2/JkXloGBxxa1lz6qvX+LcbuUXQc2N
+         Z/sV52rf44gz4YnpyNlA3a5x50wV6yKSQCx7U00BnemtwgGM+ascTy/4/9Bei7pKU0i6
+         ejhLDXqu6p6hD3mYKZgz79DXesDgefxzliTwg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=jpy0tZLpRHfN1fMfFe5IrdwhQ+g2LPOUWzpB5iP18t0=;
-        b=TT+mgkiD7+l/dIhyCRR4nLRE24dbiPA4l5s2Y0YRSHAE4Sa2Duu46S3HfWQm4p+jgZ
-         C9GAHMZyse7o/gnz65wgwSoz82UTeDleZymx7LiKEjNYAMTnBweKdadQyjYzZ5N1TAVa
-         /bCorSDsBzWKHakYffsXWV+sQFsKN8vYKG8GVnFoFNHc5IH1djUeghZOmFloS1SCjpbh
-         9ZVaA8gpzhJeexaQ7OXBxO1iufmB9nJyQNxwAOkWNnDKzX/pui9jHAkylr8Q2bnXAFxh
-         N8fS7QeeyeqXEQtYMeDDRsTG4ClSibIYhmQNF8W7PoHq5NyHpUE+K4rNIokY1tS5Bxds
-         c2qQ==
-X-Gm-Message-State: AOAM533WesanfWv2RdoSzeIgCZ8yhY9J+xK5dE8uZkQo7JmmtCqp4+Ct
-        x6HCyBEzvZcibVg5L93lSwie+vV8PoUHqYhL1/A=
-X-Google-Smtp-Source: ABdhPJymXiz5KK1BTIc8Ba9LQm6+tbElcBoy5p2TIMH16SpE9ZhvpB4eHEsmFtK7McXky8LCNLoVQM8ekFbBcYwyt/c=
-X-Received: by 2002:a62:6103:0:b029:396:f515:94bf with SMTP id
- v3-20020a6261030000b0290396f51594bfmr5267294pfb.4.1627291201416; Mon, 26 Jul
- 2021 02:20:01 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UyAhVW8SUVdW2juHf4NXSIfTyUpw2d4E9HcLC6UlbsU=;
+        b=FjtY0j39mj4N6z3wbOBrc2lDngxEtfMi9QzBhAnE00FnYzf5fTigShfUXF0P4Z9C12
+         LWvEmLecW336EZkRzWA5sllAb64pf1jnqQb7m63a6DTOZYSDHvE0E8CPr56X/hKU7ZTU
+         hgurvJt6bFDtxKCKkv/INF6S39TT5tLQzDla0XRhiyKxDoZMJVm01v2qBMGo6l4AxH/X
+         09lxNRLnZGmjh0hBvuWewsTUHS7SgU05SMWeBSuF1fOaZ7PJ8cLwpHOodnwQVJJyzURX
+         czvAdDHdLR76DT/9HVjbLNfPskg6QtmLu63XQktMOExePwO+va/vmchIYzg3PKcRLHAY
+         T1HQ==
+X-Gm-Message-State: AOAM532VjFwJKwe/nHtza2ei5tKJxoJQgZylgzKK25Wi17eNKFo89yo8
+        eK2+MLLRuFvs1hQ8ggVikMJh4XkMp9DlAnhEQa7uYQ==
+X-Google-Smtp-Source: ABdhPJxZeDoaO4+lBiCkXyq/2Admv1+kefRfVNjKKrFIMZn357CPp9SKVLhT5mJJhxTofCy8T41M60sD5j6u/8BBBOQ=
+X-Received: by 2002:ac2:48b8:: with SMTP id u24mr12319860lfg.587.1627291219448;
+ Mon, 26 Jul 2021 02:20:19 -0700 (PDT)
 MIME-Version: 1.0
-From:   =?UTF-8?Q?Mantas_Mikul=C4=97nas?= <grawity@gmail.com>
-Date:   Mon, 26 Jul 2021 12:19:50 +0300
-Message-ID: <CAPWNY8XhrutxYzRregOJYQYte87W-wbtf1OoPAfnMVRD1oKzNw@mail.gmail.com>
-Subject: iTCO_wdt regression on Dell laptop
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org
+References: <20210726071439.14248-1-sam.shih@mediatek.com> <20210726071439.14248-2-sam.shih@mediatek.com>
+In-Reply-To: <20210726071439.14248-2-sam.shih@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 26 Jul 2021 17:20:08 +0800
+Message-ID: <CAGXv+5GeEBAkXKfA=S7XGOLYtCRihP5ov6kSiw+eevPAi74GAQ@mail.gmail.com>
+Subject: Re: [PATCH 01/12] dt-bindings: clock: mediatek: document clk bindings
+ for mediatek mt7986 SoC
+To:     Sam Shih <sam.shih@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-gpio@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Ryder Lee <Ryder.Lee@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello,
+On Mon, Jul 26, 2021 at 3:17 PM Sam Shih <sam.shih@mediatek.com> wrote:
+>
+> This patch adds the binding documentation for topckgen, apmixedsys,
+> infracfg, infracfg_ao, and ethernet subsystem clocks.
+>
+> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+> ---
+>  .../devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt    | 1 +
+>  .../devicetree/bindings/arm/mediatek/mediatek,ethsys.txt        | 1 +
+>  .../devicetree/bindings/arm/mediatek/mediatek,infracfg.txt      | 2 ++
+>  .../devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt      | 2 ++
+>  .../devicetree/bindings/arm/mediatek/mediatek,topckgen.txt      | 1 +
+>  5 files changed, 7 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt
+> index ea827e8763de..3fa755866528 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,apmixedsys.txt
+> @@ -14,6 +14,7 @@ Required Properties:
+>         - "mediatek,mt7622-apmixedsys"
+>         - "mediatek,mt7623-apmixedsys", "mediatek,mt2701-apmixedsys"
+>         - "mediatek,mt7629-apmixedsys"
+> +       - "mediatek,mt7986-apmixedsys"
+>         - "mediatek,mt8135-apmixedsys"
+>         - "mediatek,mt8167-apmixedsys", "syscon"
+>         - "mediatek,mt8173-apmixedsys"
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
+> index 6b7e8067e7aa..0502db73686b 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ethsys.txt
+> @@ -10,6 +10,7 @@ Required Properties:
+>         - "mediatek,mt7622-ethsys", "syscon"
+>         - "mediatek,mt7623-ethsys", "mediatek,mt2701-ethsys", "syscon"
+>         - "mediatek,mt7629-ethsys", "syscon"
+> +       - "mediatek,mt7986-ethsys", "syscon"
+>  - #clock-cells: Must be 1
+>  - #reset-cells: Must be 1
+>
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.txt
+> index eb3523c7a7be..5f68c30162bf 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.txt
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.txt
+> @@ -15,6 +15,8 @@ Required Properties:
+>         - "mediatek,mt7622-infracfg", "syscon"
+>         - "mediatek,mt7623-infracfg", "mediatek,mt2701-infracfg", "syscon"
+>         - "mediatek,mt7629-infracfg", "syscon"
+> +       - "mediatek,mt7986-infracfg", "syscon"
+> +       - "mediatek,mt7986-infracfg_ao", "syscon"
+>         - "mediatek,mt8135-infracfg", "syscon"
+>         - "mediatek,mt8167-infracfg", "syscon"
+>         - "mediatek,mt8173-infracfg", "syscon"
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+> index 30cb645c0e54..0e1184392941 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+> @@ -8,6 +8,8 @@ Required Properties:
+>  - compatible: Should be:
+>         - "mediatek,mt7622-sgmiisys", "syscon"
+>         - "mediatek,mt7629-sgmiisys", "syscon"
+> +       - "mediatek,mt7986-sgmiisys", "mediatek,mt7986-sgmiisys_0", "syscon"
+> +       - "mediatek,mt7986-sgmiisys", "mediatek,mt7986-sgmiisys_1", "syscon"
 
-I have a Dell Inspiron 15-5547 laptop, with systemd configured to set
-the watchdog to a 2-minute expiry (due to reasons):
+The order should be: most specific compatible string first, followed by
+fallbacks.
 
-# /etc/systemd/system.conf
-[Manager]
-RuntimeWatchdogSec=3D2min
+Furthermore, based on the driver patch and the fact that they share the
+same compatible string, it seems you shouldn't need to have two compatible
+strings for two identical hardware blocks. The need for separate entries
+to have different clock names is an implementation detail. Please consider
+using and supporting clock-output-names.
 
-So far this setting has worked without problems (including kernels
-5.12.15 and 5.13.1); however, with kernel 5.13.4 the system inevitably
-reboots after a few minutes of uptime.
+Also, please check out the MT8195 clock driver series [1]. I'm guessing
+a lot of the comments apply to this one as well.
 
-I have tracked the issue down to commit 5e65819a006e "watchdog:
-iTCO_wdt: Account for rebooting on second timeout" in the 5.13.x
-branch (commit cb011044e34c upstream). There are no unexpected reboots
-when running 5.13.4 with this commit reverted.
+Regards
+ChenYu
 
-Indeed with the original 5.13.4 kernel, `wdctl` always reports
-"Timeleft:" counting down from 60 seconds (sometimes very nearly
-reaching 0), even though "Timeout" is still reported to be 120.
+[1] https://lore.kernel.org/linux-mediatek/20210616224743.5109-1-chun-jie.chen@mediatek.com/T/#t
 
-(systemd pokes the watchdog as part of its main loop, trying to so
-approximately "between 1/4 and 1/2" of the configured interval.
-According to wdctl these pings usually happen every 35-50 seconds but
-sometimes nearly at the 60-second mark, and thanks to the kernel now
-also dividing the requested expiry by /2 which systemd is unaware of,
-sometimes this ends up being a *very* close race to 0.)
 
-This is a Haswell-era machine (i7-4510U) and seems to have a "version
-0" watchdog:
-
-Jul 26 11:34:04 archlinux kernel: Linux version 5.13.4-arch2-1
-(linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1
-SMP PREEMPT Thu, 22 Jul 2021 20:46:28 +0000
-Jul 26 11:34:14 frost kernel: iTCO_vendor_support: vendor-support=3D0
-Jul 26 11:34:14 frost kernel: iTCO_wdt iTCO_wdt.3.auto: Found a Lynx
-Point_LP TCO device (Version=3D2, TCOBASE=3D0x1860)
-Jul 26 11:34:14 frost systemd[1]: Using hardware watchdog 'iTCO_wdt',
-version 0, device /dev/watchdog
-Jul 26 11:34:14 frost systemd[1]: Set hardware watchdog to 2min.
-Jul 26 11:34:14 frost kernel: iTCO_wdt iTCO_wdt.3.auto: initialized.
-heartbeat=3D30 sec (nowayout=3D0)
-
---=20
-Mantas Mikul=C4=97nas
+>  - #clock-cells: Must be 1
+>
+>  The SGMIISYS controller uses the common clk binding from
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.txt
+> index 5ce7578cf274..b82422bb717f 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.txt
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,topckgen.txt
+> @@ -14,6 +14,7 @@ Required Properties:
+>         - "mediatek,mt7622-topckgen"
+>         - "mediatek,mt7623-topckgen", "mediatek,mt2701-topckgen"
+>         - "mediatek,mt7629-topckgen"
+> +       - "mediatek,mt7986-topckgen", "syscon"
+>         - "mediatek,mt8135-topckgen"
+>         - "mediatek,mt8167-topckgen", "syscon"
+>         - "mediatek,mt8173-topckgen"
+> --
+> 2.29.2
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
