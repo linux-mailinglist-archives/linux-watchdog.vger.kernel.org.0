@@ -2,73 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAF93D94ED
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jul 2021 20:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513B63D94F1
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jul 2021 20:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbhG1SEV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 28 Jul 2021 14:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        id S231133AbhG1SE3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 28 Jul 2021 14:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbhG1SEV (ORCPT
+        with ESMTP id S230455AbhG1SE3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 28 Jul 2021 14:04:21 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B494C061757;
-        Wed, 28 Jul 2021 11:04:19 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id z24so3099555qkz.7;
-        Wed, 28 Jul 2021 11:04:19 -0700 (PDT)
+        Wed, 28 Jul 2021 14:04:29 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69ECC061757;
+        Wed, 28 Jul 2021 11:04:27 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id w10so1997501qtj.3;
+        Wed, 28 Jul 2021 11:04:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=JfbD5ep0NnF8FbqtBMbVTm96BShvDEthsXDXWrAdkOY=;
-        b=AEDT7MKE9yV9QqWU6GVh/K7nHxaQOcTXwQcgUkBYhtRXDbfrAJ68czr5H6jkh0Bat9
-         RuIMrhEWqBAkNaEMKviNJ8qxECGF4h+yILqxw/yrtzqMfjXz/7u6PdgqPejZ/7p/3Ue1
-         dMmHuNq8hjOhUt4ALnk00Pnp0g4ERTv6QF6Z8IOP0LZbl4L1K10v5UxGLqVdweyVFXgi
-         kr2x55fXzOC3VhzW86VneFM/cr7sTp5NYv79m6pICYHEPwouXxYftQu/9N1bUQRhHFTw
-         FU0GaQVop2t8Fn4iBtOmJaZ46i+Yvve/PysKq9xEB+ATJrB8x17c3W9eqUdPt8xlnkJw
-         bfKw==
+        bh=Eu3sOrRu2dRVm5OFQtLF1th9KrG3VzRFBaqLcVcuQDY=;
+        b=e9B5RKGBARiwAuQbPO8vu2HybvZyeqCbsjCgKalcuInoJG8dVOUxg569NzAh6gRUY1
+         THPUfMhewthFj/6DdxKyu+1RNxO7Iq7bBVYsamgWV8iQJOI4da5x9IM8cRmcou1DP61s
+         aPyT0rWOKnYZuVCieRUN7HXGr5XbYEy5JSZoLcacg+1er6/g3vPXcOel88ZMbyfq47V9
+         aUq8qbEwjWtKn77+qba9ht0cmGk7sNO2Z/NcrEfauSd40yEX931AySve+81ZNlBW5mdV
+         WEC2JNKFbqoKmj/8fD1J+68TMS+P16UvfWz27K8c0PT+Qm9/l0/pH8kPC9rrObmKy7AA
+         HT1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=JfbD5ep0NnF8FbqtBMbVTm96BShvDEthsXDXWrAdkOY=;
-        b=oN0vAehIoplZuCYU6Z/7V1UzQ95K7ADUdRBEcEz23NQb2yV/HeOclLldFGlHMAUUyH
-         J1ERVF0iXF6R/IBTqPICY8blqjmBUM/T++4R39l4zzh2GgjVIfEn+p9EJmiQz9pDbNgJ
-         Zk9JZaeGDajfdQNSsF9fXmMw/YWGavMjOPf1xHLqUu50q2jjZHUNI289vKkWg2cFA1NM
-         YGORBK2j33cCxFKzN7KVBsawttvQACRruJQW8sYC6ByGlJwRkxo1pIhV/AKRoFqvkTaU
-         xIdzVNbJ7su+jgeckjUNPR5dTWsoDVt3TYXcCqNu4OAZ7tlZt8Hy5ArEdXVuEA8WF+1C
-         tOLQ==
-X-Gm-Message-State: AOAM533SGH1gfZTszqW5z45XjJGlD/fGG/JrMEQEb5FO6kpAN/OIoUpc
-        sWxKja4wjlmuzLjmDvoU4ag=
-X-Google-Smtp-Source: ABdhPJwz/qmvv9nYaWpTBUQlDI1rnXJGE8wEfJVgD8wPPsVRfpImcVoefrGkrtd7mKlWatBDNugmxw==
-X-Received: by 2002:a37:6ca:: with SMTP id 193mr912322qkg.484.1627495458512;
-        Wed, 28 Jul 2021 11:04:18 -0700 (PDT)
+        bh=Eu3sOrRu2dRVm5OFQtLF1th9KrG3VzRFBaqLcVcuQDY=;
+        b=qiQ7LU1BjOQ0S+hbHWldYM732ZbuYIujwml/aTyhCEAF+2npaS8WCqXRjvwvP0Ige4
+         wJ5BpbE3N2wzmBJBU2iTu6nUQ+F2XUBmkR6MOXV0iXvq7yeiogCL86NiBfEXlxpwslbb
+         V1CJbjn0CxrdXewt55GRCypMy9DLHkl8eOkUgq1qeq2OwHi7Ex2oid/9XLD2tsi29caI
+         7LGbq9gBU21Y5n9Sc2duBxaFBZzDKTt9y7ey1Qp3ldPQO0ZewnohFJxY9b0Vz8r6JwBj
+         3xpwpvWwTPjePSe+O+IEoJqcjmbqtg8G+BK/f896oZ+4nZ3a9AnzN+m+GOOl53u6b9P8
+         zybQ==
+X-Gm-Message-State: AOAM530HRFf+gZPUtStKd2o4Vhd/bAIkgyjilcjTNvRPFOx1cXUoRZC6
+        gnsr1o5Lt2lz4taMkdrbni0=
+X-Google-Smtp-Source: ABdhPJzuAvt1tc5q0t1Pwd681AOsdeT/mbCaV4s/F4aIRYzhQUMxzj3oZyUPE65x/xNU9yzTQs7Fhg==
+X-Received: by 2002:ac8:5896:: with SMTP id t22mr789999qta.18.1627495466944;
+        Wed, 28 Jul 2021 11:04:26 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d7sm238060qth.70.2021.07.28.11.04.17
+        by smtp.gmail.com with ESMTPSA id a9sm385619qka.32.2021.07.28.11.04.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 11:04:17 -0700 (PDT)
+        Wed, 28 Jul 2021 11:04:26 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 28 Jul 2021 11:04:16 -0700
+Date:   Wed, 28 Jul 2021 11:04:25 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] watchdog: sl28cpld_wdt: Constify static struct
- watchdog_ops
-Message-ID: <20210728180416.GA1663715@roeck-us.net>
+Subject: Re: [PATCH 2/3] watchdog: tqmx86: Constify static struct watchdog_ops
+Message-ID: <20210728180425.GB1663715@roeck-us.net>
 References: <20210727223042.48150-1-rikard.falkeborn@gmail.com>
- <20210727223042.48150-2-rikard.falkeborn@gmail.com>
+ <20210727223042.48150-3-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210727223042.48150-2-rikard.falkeborn@gmail.com>
+In-Reply-To: <20210727223042.48150-3-rikard.falkeborn@gmail.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 12:30:40AM +0200, Rikard Falkeborn wrote:
-> The struct sl28cpld_wdt_ops is only assigned to the ops pointer in the
+On Wed, Jul 28, 2021 at 12:30:41AM +0200, Rikard Falkeborn wrote:
+> The struct tqmx86_wdt_ops is only assigned to the ops pointer in the
 > watchdog_device struct, which is a pointer to const struct watchdog_ops.
 > Make it const to allow the compiler to put it in read-only memory.
 > 
@@ -77,22 +76,22 @@ On Wed, Jul 28, 2021 at 12:30:40AM +0200, Rikard Falkeborn wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/sl28cpld_wdt.c | 2 +-
+>  drivers/watchdog/tqmx86_wdt.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/sl28cpld_wdt.c b/drivers/watchdog/sl28cpld_wdt.c
-> index 2de93298475f..9ce456f09f73 100644
-> --- a/drivers/watchdog/sl28cpld_wdt.c
-> +++ b/drivers/watchdog/sl28cpld_wdt.c
-> @@ -108,7 +108,7 @@ static const struct watchdog_info sl28cpld_wdt_info = {
->  	.identity = "sl28cpld watchdog",
+> diff --git a/drivers/watchdog/tqmx86_wdt.c b/drivers/watchdog/tqmx86_wdt.c
+> index 72d0b0adde38..83860e94ce9d 100644
+> --- a/drivers/watchdog/tqmx86_wdt.c
+> +++ b/drivers/watchdog/tqmx86_wdt.c
+> @@ -62,7 +62,7 @@ static const struct watchdog_info tqmx86_wdt_info = {
+>  	.identity	= "TQMx86 Watchdog",
 >  };
 >  
-> -static struct watchdog_ops sl28cpld_wdt_ops = {
-> +static const struct watchdog_ops sl28cpld_wdt_ops = {
->  	.owner = THIS_MODULE,
->  	.start = sl28cpld_wdt_start,
->  	.stop = sl28cpld_wdt_stop,
+> -static struct watchdog_ops tqmx86_wdt_ops = {
+> +static const struct watchdog_ops tqmx86_wdt_ops = {
+>  	.owner		= THIS_MODULE,
+>  	.start		= tqmx86_wdt_start,
+>  	.set_timeout	= tqmx86_wdt_set_timeout,
 > -- 
 > 2.32.0
 > 
