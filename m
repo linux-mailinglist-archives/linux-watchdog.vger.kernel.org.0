@@ -2,97 +2,245 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3613D94F3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jul 2021 20:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287823D9540
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Jul 2021 20:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbhG1SEj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 28 Jul 2021 14:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbhG1SEj (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 28 Jul 2021 14:04:39 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD68C061757;
-        Wed, 28 Jul 2021 11:04:37 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id d3so1999396qvq.6;
-        Wed, 28 Jul 2021 11:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TsqHP2eJv48LYyN63EkY+vrc7mLl1QwyLFDSt09BABE=;
-        b=GkBIoKjc1e43LlWa7TNCJ7IpKnTHlwwEa3jkoZrmiZ9qWB5osnpo6PUMD1Vb3bV8wU
-         MBmOYxidHKjdfsol/joXC/MnPv5cALhwOvHLGb56s1MyJeZ+ytapgRXWPLfpulmemDVv
-         8U5o/wdadn0XBlTdczr8kHGuqtLJ1POaRCDMgmR+UwjU/XuND/DJzSJXGusXn0lu+oew
-         R62S1/YGimS4drXOR5/HbCuyp8CpPud9rVmzNdG27i4bkuLWDCRapBNBhWZGWynS+FrA
-         hQEk57AIbi//TzVCeAdI5vRUgjhTpbg66Jzn7Pt3xH1eQH5kHNZSe8xVnCe68bMXQtLk
-         Z7Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=TsqHP2eJv48LYyN63EkY+vrc7mLl1QwyLFDSt09BABE=;
-        b=VJm1/p0zpmol+mfhUg2e3MsaPvV7OApvYt0GhbYXn4E1DP2iXkhnA5CnoIsouce2tB
-         jyM3yBdSqi8DDOISjtsCsN4qzx31dgN4w12R/n+zXOhniKh0QDZuqtWVVcZmEk3yN7eR
-         ErEHye3ZsLTCH3VkSzH3HB83R70SalmgYJPxeog7vCU7oTpYkb/eoNbhh3D6iiFU7CU9
-         GBBPksvvP9cK7+IvY6w3PLT/PY5mKIL0jH+zq3Mg/MvqbEL36ag9RRZ/rCckokIAbxLF
-         YCe5YZV3edcD+f4eIiDvdl1V1DHMaQNkf3/Y6PJ2/UPYF50H7aXTNi+npWQKLLv8Rw96
-         jKlA==
-X-Gm-Message-State: AOAM530wM2HN1l8cGTobxmy58SqqDcffY6bH0okGKLecQ4psdCEgXfN8
-        R8mccItV0xAeqw1YMpunAw0=
-X-Google-Smtp-Source: ABdhPJw6DXSZZNibq6XHYzW2P3g7CK82QWS7dLMBk7ZilogCi/KmlHHuvxXegvoSY5Ax0jLybTtSsg==
-X-Received: by 2002:ad4:46e2:: with SMTP id h2mr1287627qvw.24.1627495476586;
-        Wed, 28 Jul 2021 11:04:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a127sm373933qkc.121.2021.07.28.11.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 11:04:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 28 Jul 2021 11:04:34 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] watchdog: mpc8xxx_wdt: Constify static struct
- watchdog_ops
-Message-ID: <20210728180434.GC1663715@roeck-us.net>
-References: <20210727223042.48150-1-rikard.falkeborn@gmail.com>
- <20210727223042.48150-4-rikard.falkeborn@gmail.com>
+        id S229789AbhG1S1Q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 28 Jul 2021 14:27:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57910 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229542AbhG1S1O (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 28 Jul 2021 14:27:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8712360F46;
+        Wed, 28 Jul 2021 18:27:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627496832;
+        bh=P7Nj61y10RxwtvDu8NSjNYumxT5Mu8ftk2gukjRAMpA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RtvVFUSN/PJopXn29kQL/ZCodQf6lPdbtlAQq5eOGXaHdYKTnAw7NQ3p2Kr8a3Nsq
+         dFmVCUzbkdM1L9ol22nRp2rCSZqfBTCHUQoaOKnxm1eNFK4kW5j5u8ZI+W0wUX6EQo
+         Zfy0zlnpbyhOudkVAQUMyGKUiIsNoDwxvSRt8tqm+m8Yv/CnZyfy7f5ohApS3yLIEJ
+         H9ygJBb+kkk0am2jUnepTR4/GgSDOrbwKmKhT10hXpmR4zHXSyZYzi3ewvb1iAyOsi
+         sB+PEX6ygpjA9pRwfqDVl1LLFj0ERle87t06SNXPw2pGhjTtedzf6Lr12gYEXcjFbJ
+         B2QTzZ53/1/xw==
+Received: by mail-ej1-f48.google.com with SMTP id ga41so6062213ejc.10;
+        Wed, 28 Jul 2021 11:27:12 -0700 (PDT)
+X-Gm-Message-State: AOAM531h5pq5vIcdOaC8iN5Zgvkr7Q5bQmgT0T1Ge0mWIqTrMC+FrDR7
+        k8KxDwk4L+i7m5czUEEKj4xcVyJzgVx8lbaS7g8=
+X-Google-Smtp-Source: ABdhPJwMW5TrgITkkwrO7xV+n72DQlxYsctwNVZtDNp+QCHzDRSCcI4DekRwXzXmKxU51+nQz47w8VSo+rzFf/tPNpE=
+X-Received: by 2002:a17:906:c7c2:: with SMTP id dc2mr788351ejb.472.1627496831060;
+ Wed, 28 Jul 2021 11:27:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210727223042.48150-4-rikard.falkeborn@gmail.com>
+References: <20210726071439.14248-1-sam.shih@mediatek.com> <20210726071439.14248-5-sam.shih@mediatek.com>
+In-Reply-To: <20210726071439.14248-5-sam.shih@mediatek.com>
+From:   Sean Wang <sean.wang@kernel.org>
+Date:   Wed, 28 Jul 2021 11:26:59 -0700
+X-Gmail-Original-Message-ID: <CAGp9LzqhseLhM=6aMxUJ2-YuU9sVk-u4gT=kem-o9RwXOAUwxA@mail.gmail.com>
+Message-ID: <CAGp9LzqhseLhM=6aMxUJ2-YuU9sVk-u4gT=kem-o9RwXOAUwxA@mail.gmail.com>
+Subject: Re: [PATCH 04/12] pinctrl: mediatek: moore: use pin number in
+ mtk_pin_desc instead of array index
+To:     Sam Shih <sam.shih@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-clk <linux-clk@vger.kernel.org>,
+        John Crispin <john@phrozen.org>,
+        Ryder Lee <Ryder.Lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 12:30:42AM +0200, Rikard Falkeborn wrote:
-> The struct mpc8xxx_wdt_ops is only assigned to the ops pointer in the
-> watchdog_device struct, which is a pointer to const struct watchdog_ops.
-> Make it const to allow the compiler to put it in read-only memory.
-> 
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+ Hi Sam,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On Mon, Jul 26, 2021 at 12:17 AM Sam Shih <sam.shih@mediatek.com> wrote:
+>
+> Certain SoC are missing the middle part gpios in consecutive pins,
+> it's better to use pin number in mtk_pin_desc instead of array index
+> for the extensibility
 
+Now the driver pin number has to be consistent with the array index
+because the driver would use pin number as the array index to fetch
+the pin descriptor.
+
+For those missing GPIOs, we could just fill out .name in struct
+mtk_pin_desc as NULL to indicate the pin is unavailable for users (pin
+not ballout) on the certain SoC and then allow us to reuse all of the
+pinctrl operations with minimal modification.
+
+>
+> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
 > ---
->  drivers/watchdog/mpc8xxx_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/mpc8xxx_wdt.c b/drivers/watchdog/mpc8xxx_wdt.c
-> index 2f7ded32e878..1c569be72ea2 100644
-> --- a/drivers/watchdog/mpc8xxx_wdt.c
-> +++ b/drivers/watchdog/mpc8xxx_wdt.c
-> @@ -118,7 +118,7 @@ static struct watchdog_info mpc8xxx_wdt_info = {
->  	.identity = "MPC8xxx",
+>  drivers/pinctrl/mediatek/pinctrl-moore.c | 61 ++++++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-moore.c b/drivers/pinctrl/mediatek/pinctrl-moore.c
+> index 3a4a23c40a71..16206254ec3d 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-moore.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-moore.c
+> @@ -35,6 +35,19 @@ static const struct pin_config_item mtk_conf_items[] = {
 >  };
->  
-> -static struct watchdog_ops mpc8xxx_wdt_ops = {
-> +static const struct watchdog_ops mpc8xxx_wdt_ops = {
->  	.owner = THIS_MODULE,
->  	.start = mpc8xxx_wdt_start,
->  	.ping = mpc8xxx_wdt_ping,
-> -- 
-> 2.32.0
-> 
+>  #endif
+>
+> +static int mtk_pin_desc_lookup(struct mtk_pinctrl *hw, int pin)
+> +{
+> +       int idx;
+> +
+> +       for (idx = 0 ; idx < hw->soc->npins ; idx++)
+> +               if (hw->soc->pins[idx].number == pin)
+> +                       break;
+> +       if (idx < hw->soc->npins)
+> +               return idx;
+> +
+> +       return -EINVAL;
+> +}
+> +
+>  static int mtk_pinmux_set_mux(struct pinctrl_dev *pctldev,
+>                               unsigned int selector, unsigned int group)
+>  {
+> @@ -74,6 +87,13 @@ static int mtk_pinmux_gpio_request_enable(struct pinctrl_dev *pctldev,
+>  {
+>         struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
+>         const struct mtk_pin_desc *desc;
+> +       int err;
+> +
+> +       err = mtk_pin_desc_lookup(hw, pin);
+> +       if (err >= 0)
+> +               pin = err;
+> +       else
+> +               return err;
+>
+
+We can drop it and use the following snippet instead
+
+desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
+
+/* !desc->name to show the pin is not ballout */
+if (!desc->name)
+         return -ENOTSUPP;
+
+>         desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
+>
+> @@ -87,6 +107,13 @@ static int mtk_pinmux_gpio_set_direction(struct pinctrl_dev *pctldev,
+>  {
+>         struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
+>         const struct mtk_pin_desc *desc;
+> +       int err;
+> +
+> +       err = mtk_pin_desc_lookup(hw, pin);
+> +       if (err >= 0)
+> +               pin = err;
+> +       else
+> +               return err;
+>
+
+Ditto
+
+>         desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
+>
+> @@ -102,6 +129,12 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
+>         int val, val2, err, reg, ret = 1;
+>         const struct mtk_pin_desc *desc;
+>
+> +       err = mtk_pin_desc_lookup(hw, pin);
+> +       if (err >= 0)
+> +               pin = err;
+> +       else
+> +               return err;
+> +
+
+Ditto
+
+>         desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
+>
+>         switch (param) {
+> @@ -217,6 +250,12 @@ static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+>         u32 reg, param, arg;
+>         int cfg, err = 0;
+>
+> +       err = mtk_pin_desc_lookup(hw, pin);
+> +       if (err >= 0)
+> +               pin = err;
+> +       else
+> +               return err;
+> +
+
+Ditto
+
+>         desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
+>
+>         for (cfg = 0; cfg < num_configs; cfg++) {
+> @@ -434,6 +473,12 @@ static int mtk_gpio_get(struct gpio_chip *chip, unsigned int gpio)
+>         const struct mtk_pin_desc *desc;
+>         int value, err;
+>
+> +       err = mtk_pin_desc_lookup(hw, gpio);
+> +       if (err >= 0)
+> +               gpio = err;
+> +       else
+> +               return err;
+> +
+
+Ditto
+
+>         desc = (const struct mtk_pin_desc *)&hw->soc->pins[gpio];
+>
+>         err = mtk_hw_get_value(hw, desc, PINCTRL_PIN_REG_DI, &value);
+> @@ -447,6 +492,15 @@ static void mtk_gpio_set(struct gpio_chip *chip, unsigned int gpio, int value)
+>  {
+>         struct mtk_pinctrl *hw = gpiochip_get_data(chip);
+>         const struct mtk_pin_desc *desc;
+> +       int err;
+> +
+> +       err = mtk_pin_desc_lookup(hw, gpio);
+> +       if (err >= 0) {
+> +               gpio = err;
+> +       } else {
+> +               dev_err(hw->dev, "Failed to set gpio %d\n", gpio);
+> +               return;
+> +       }
+>
+
+Ditto
+
+>         desc = (const struct mtk_pin_desc *)&hw->soc->pins[gpio];
+>
+> @@ -488,6 +542,13 @@ static int mtk_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
+>         struct mtk_pinctrl *hw = gpiochip_get_data(chip);
+>         const struct mtk_pin_desc *desc;
+>         u32 debounce;
+> +       int err;
+> +
+> +       err = mtk_pin_desc_lookup(hw, offset);
+> +       if (err >= 0)
+> +               offset = err;
+> +       else
+> +               return err;
+>
+
+Ditto
+
+>         desc = (const struct mtk_pin_desc *)&hw->soc->pins[offset];
+>
+> --
+> 2.29.2
+>
