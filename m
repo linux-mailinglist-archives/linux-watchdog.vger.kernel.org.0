@@ -2,92 +2,140 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE253D9E53
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Jul 2021 09:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D3C3DA2F4
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Jul 2021 14:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234664AbhG2HYW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 29 Jul 2021 03:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbhG2HYW (ORCPT
+        id S236285AbhG2MS0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 29 Jul 2021 08:18:26 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:37875 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236916AbhG2MS0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 29 Jul 2021 03:24:22 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64789C061757;
-        Thu, 29 Jul 2021 00:24:19 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id k4-20020a17090a5144b02901731c776526so14191450pjm.4;
-        Thu, 29 Jul 2021 00:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rMswTWDvtI4DXxuELsfIeTapWGrqixV6WaQArp0NDx8=;
-        b=YAJ5HBfu1f8I+IYA4g4kd7SbYHRqr/mqwUKfrup7IAXbGRP44wtjgHAQnarxHE+dJi
-         /lk5rVSR5DNyQ8a1bWFeFM2GtBG/0KKIld0h5HI7Q4xyebFYLS9PhUWkDEWIUj6puxcZ
-         sHxFf22tUAxabG9TT+1jxVPREqtTr1vQjln4vUYXSSkorI0vQtqF8KbQUvEYNl2HoJc6
-         XZngzzgWmejVIEMiPBMWVXezE1ttgb74r9cGcFAwNkejWOkz0N0WYSvCQN6yeGuDsyid
-         XwORDxnCvP3vqm/gSNEwkLsKwQK7o+XxX8K96VKra5AHWyPCAqJ8dAHCX7bLkx1O6H1L
-         z0Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rMswTWDvtI4DXxuELsfIeTapWGrqixV6WaQArp0NDx8=;
-        b=mywq9muLg/uJ8wuasqNlrNQdjgPy4DJy5p4YoRmJR3U4UeyvACRDtHsKlAGvnXYq0/
-         S1X8LU9EzZ3zfQk9bxU9nnVVBkt/H3hI9pbbje9zMzoHr8VRCy/V7GHVQZ14apSGDilJ
-         TY8RgGkYh/1jWlaLDD8icVjqViSQk7nITFtE6Hjn6KZAKYDZMaXKRvLPR4eBFlpw8hHJ
-         c8BHjII/XjdaQbZeGwQ9fl6vDQZmphNf61zWqF12eY9fuNHEVJPrl9+8KiOYUI2eBaax
-         tHR129QhW87rQCVu6MRG3iVCPFlmU13ZNDny7iCYXI2emJ5hiqpPfkZ/pJvEXgaasW3N
-         hnVA==
-X-Gm-Message-State: AOAM5329yKLcVUrSbq6up0FeSV4iIN9DF3+dgSff31TP5hjkRB3sYsr0
-        3N9oDrzNeRP1ISbviUd8Z2s=
-X-Google-Smtp-Source: ABdhPJxjKZYGxl9UmdCm+aHK8JWzKneFtaMZp4OFYm7PF5EkDbyru5cOh1mYJw99LDZEIv0sgFFSsA==
-X-Received: by 2002:aa7:8e51:0:b029:332:920f:1430 with SMTP id d17-20020aa78e510000b0290332920f1430mr3814819pfr.1.1627543459056;
-        Thu, 29 Jul 2021 00:24:19 -0700 (PDT)
-Received: from localhost.localdomain (104.194.74.249.16clouds.com. [104.194.74.249])
-        by smtp.gmail.com with ESMTPSA id r18sm2609648pgk.54.2021.07.29.00.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jul 2021 00:24:18 -0700 (PDT)
-From:   Artem Lapkin <email2tema@gmail.com>
-X-Google-Original-From: Artem Lapkin <art@khadas.com>
-To:     narmstrong@baylibre.com
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, khilman@baylibre.com,
-        jbrunet@baylibre.com, christianshewitt@gmail.com,
-        martin.blumenstingl@googlemail.com, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        art@khadas.com, nick@khadas.com, gouwa@khadas.com
-Subject: [PATCH] watchdog: meson_gxbb_wdt: remove stop_on_reboot
-Date:   Thu, 29 Jul 2021 15:23:08 +0800
-Message-Id: <20210729072308.1908904-4-art@khadas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210729072308.1908904-1-art@khadas.com>
-References: <20210729072308.1908904-1-art@khadas.com>
+        Thu, 29 Jul 2021 08:18:26 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.nyi.internal (Postfix) with ESMTP id E61AD580D2B;
+        Thu, 29 Jul 2021 08:18:21 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 29 Jul 2021 08:18:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm3; bh=c
+        u23+PZRqrAy/6j8rc1XI2CnzOsUmITZAfnFUZNm5jg=; b=LCdYhaZxjmT6YovVi
+        cR85cwO5zt910fZyksOL8KnNtJ0AZ2n0o3K/ScXxburHdly3dTUx6e/gYdvRUyou
+        esAZEopVeVEwzK1ZBB5gN6Of2KADfpYVh6MoG/cW88kIrPcAmddimMdo1OSGZD3x
+        uj3t8VcBY0CC3zPoKyhUTYP/d8rpC6FX+xBNP3Y0NI4fdx5ePMeXDAPHRwLE34W8
+        OPGwG6TVtZqYuxQd0F09aCfLliWJJsbewgUXvs/3l8rervQA4aze0P4J2KQS5hgo
+        htPhX2Y+OvKGob0imm58Y1BJl3j2AIXx0dRmHWY0dn6Ascsuf8uffO7LkZXns1OZ
+        hslxA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=cu23+PZRqrAy/6j8rc1XI2CnzOsUmITZAfnFUZNm5
+        jg=; b=rpe92drOK60Ux41Rj7BmQJ9c8u1gvK8i1QItj/H+7MEtms/YNp+s0rD3G
+        GcC1yt+DOePiG3iacZVCVvkpQQldt9NbdZrHvxOigEjs0FRPETIGgUinIDioNkEk
+        McYH8BvDHOiZuPU+7YUKbj9ldXUdlhYrAUYNN00j606UFOISR8MFLSP8qo0fMV2I
+        aJfZ8MqxAokdiB7ltjWJknk7QlgquSd7rYNNmuq+nfDQ3hSF4KgyUfy0obBzbSGD
+        xr4htAahVV7YKyVKBSFlOS9/ywTJkh11fqy1IAuFpB33/OuiaMvz41IHSNPB+oao
+        dgeAZ2UVFEwHA2CzIj5dRBy8oznVg==
+X-ME-Sender: <xms:jJwCYc6s8wndG5bqI19RtFfgbeOGJy2Hf9IZMV2Og_09v9j9kOZu0w>
+    <xme:jJwCYd7D32OvLW9_X3F2Ii6mOCsVZHYnlJr1M-Aalm7pQGZhUj2gaVQcgA8JT1WIk
+    kbArgtEHlNxzOtwBv4>
+X-ME-Received: <xmr:jJwCYbcxSJzfC3Ef2AXUes0VZgfvyWsXqyKPuwTRVJzVsMPT3jOOZNpPGANDxwX6X6b_c_gTqSDJPKE27hbf1ptbSlOK1cB9g8Aq>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrheefgdduvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfejtedtjefggfffvdetuedthedtheegheeuteekfeeghfdtteejkeeludeg
+    vddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:jJwCYRIB_zIR6Emy1hOEceywGXW_DHl8oT01irWlrLPoZFB2cnUIww>
+    <xmx:jJwCYQJlZablBP-zyxdXAUnb_EqGUUJ7EV5nVNjor0XsEM5fK4xCrQ>
+    <xmx:jJwCYSxqqkzJwL43kX3X_7EUU1FWAxsHnFfPRTHlZIQbcIY4Wejaug>
+    <xmx:jZwCYVWK_kkvvRTvB4MvsqKY9y31RmWU09j4s3ip44CUxkqaL__1Nw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 29 Jul 2021 08:18:20 -0400 (EDT)
+Date:   Thu, 29 Jul 2021 14:18:19 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: watchdog: sunxi: Add compatible for R329
+Message-ID: <20210729121819.oqryiww4mzow3kev@gilmour>
+References: <20210726035143.53132-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210726035143.53132-1-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Remove watchdog_stop_on_reboot()
+Hi,
 
-Signed-off-by: Artem Lapkin <art@khadas.com>
----
- drivers/watchdog/meson_gxbb_wdt.c | 1 -
- 1 file changed, 1 deletion(-)
+On Sun, Jul 25, 2021 at 10:51:41PM -0500, Samuel Holland wrote:
+> On existing SoCs, the watchdog has a single clock input: HOSC (OSC24M)
+> divided by 750.  However, starting with R329, LOSC (OSC32k) is added as
+> an alternative clock source, with a bit to switch between them.
+>=20
+> Since 24 MHz / 750 =3D=3D 32 kHz, not 32.768 kHz, the hardware adjusts the
+> cycle counts to keep the timeouts independent of the clock source. This
+> keeps the programming interface backward-compatible.
+>=20
+> R329 also adds two new registers, to allow software to immediately drive
+> the SoC reset signal.
+>=20
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>  .../watchdog/allwinner,sun4i-a10-wdt.yaml     | 30 ++++++++++++++++++-
+>  1 file changed, 29 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a=
+10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a1=
+0-wdt.yaml
+> index 9aa3c313c49f..853ceb1b7c0f 100644
+> --- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.=
+yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.=
+yaml
+> @@ -24,6 +24,7 @@ properties:
+>                - allwinner,sun50i-a100-wdt
+>                - allwinner,sun50i-h6-wdt
+>                - allwinner,sun50i-h616-wdt
+> +              - allwinner,sun50i-r329-wdt
+>            - const: allwinner,sun6i-a31-wdt
+>        - items:
+>            - const: allwinner,suniv-f1c100s-wdt
+> @@ -33,7 +34,16 @@ properties:
+>      maxItems: 1
+> =20
+>    clocks:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      enum:
+> +        - hosc
+> +        - losc
 
-diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-index 3f3866878..cafc6cdc0 100644
---- a/drivers/watchdog/meson_gxbb_wdt.c
-+++ b/drivers/watchdog/meson_gxbb_wdt.c
-@@ -198,7 +198,6 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
- 
- 	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
- 
--	watchdog_stop_on_reboot(&data->wdt_dev);
- 	return devm_watchdog_register_device(dev, &data->wdt_dev);
- }
- 
--- 
-2.25.1
+So I assume that the expectations are that hosc is first (or the only
+valid choice with older SoCs), and losc second?
 
+If so, we should make it clear using two const instead of an enum. Here
+you state that on older SoCs we could use either the hosc or losc clocks
+as source, which is incorrect.
+
+I guess adding descriptions for clocks would be great too.
+
+Maxime
