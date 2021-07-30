@@ -2,229 +2,136 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 849CF3DB3A1
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Jul 2021 08:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB973DB3F1
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Jul 2021 08:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237264AbhG3GaW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 30 Jul 2021 02:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
+        id S237278AbhG3GxI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 30 Jul 2021 02:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237523AbhG3GaV (ORCPT
+        with ESMTP id S230040AbhG3GxH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 30 Jul 2021 02:30:21 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3AAC0613C1
-        for <linux-watchdog@vger.kernel.org>; Thu, 29 Jul 2021 23:30:16 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id m13so15693025lfg.13
-        for <linux-watchdog@vger.kernel.org>; Thu, 29 Jul 2021 23:30:16 -0700 (PDT)
+        Fri, 30 Jul 2021 02:53:07 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53FDC061765;
+        Thu, 29 Jul 2021 23:53:03 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id r5so8356822ilc.13;
+        Thu, 29 Jul 2021 23:53:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Y7ka3CwK7TI9xBzxluU3C/gLf4NvN2jIso8xOz25IfQ=;
-        b=bl5XlwHkgEdHe6ZG+BwIVuRVbY90hfdaYiqr3kQi7LEBLR9twMNNuDwDSLGlAnHx+m
-         jP794CGQaZf3Y4aWtZm4lEERRlMt4E07A5Kn7njp4s+StAkkpNoQT5iSt8G7DVIK7lT1
-         iydIFnKHW4TKYoutXSDKX8jEI14MNMJiLXcZk=
+         :cc;
+        bh=j6IF2835VrIHwDYkTgZV/+UoCjQH2G1E3gkSxTW7I4w=;
+        b=K8mj6p+ayOG673+GlZiXV/IYCS1RDMIdPmDN71kg7b/4hCa4ztjyAcw1g/VrEPbHVN
+         sva4/ol5hrLN8kJ/VYsfP9v1Cl3LcYvhdg6uY6C821zlozKRO33c9Y3D7fK0O6lJbsT0
+         wSJ60IykQ6HGfBPAszYFiQ8t7ysXukJMWsu4so228rtzlj1Evu0eMjrMFnNj0vikup/y
+         u6xdEAXSfea46EmaaRLT82Yw3SeK1DDA2AGf86vQEFP7Gqdbp3hBCmAZvhjzYVfRzX/J
+         nRxOCqjAzl5OuiB1Z3qPRKcrvIGAzyUWHZH/LESWGcjHyKi0s+UMr30geOc2k0s7qBZt
+         QQ5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Y7ka3CwK7TI9xBzxluU3C/gLf4NvN2jIso8xOz25IfQ=;
-        b=QgU8nSpb/I3ObEkGelEy6d6u162Ch4dxhLHIMXsS7wdSjufFJHjwaTvIA7kz5lyK9x
-         DmxrOcA0AzqNHuWyNXiXVhPAXVo8BwgBm4hjZUAEBZ2Lvb7NPSxR+fBHnwOOwY0+dIYF
-         Kmsvk7r0sFF80y0gszAzPVd1x8BZo2f/Y5bZhMaZtf05GZJ5A39mn1xMTgHzA+R648PM
-         iUoQJ5LjUSEzXh2QooAhoXrYFi1RIF8RefMMhHmAsPiOqnZfLTK2UwHcGULhuAZbzGxE
-         T8cxDtqL7z6oMsNRIoLsPVHyiMBKnxiZqJM4I4VHRH1pdn3mpcwH++XnTzHP2Edrbxji
-         hcyQ==
-X-Gm-Message-State: AOAM533sx9YayQF5YgD/hBLscwgUmcObbhZDB9+YP1sghCa/1YMZbBPW
-        /g47ZeiVFx8bPN1uX0h5woHyy2N8zfdafHyHmcPOJA==
-X-Google-Smtp-Source: ABdhPJwYyuuPrj/8HBRX4lHGh/uO9ITWDrPX5cr8gtxMkE/Q26iTVdXYYA9O7+/O92/bJhVmSAmpGS9Rg1yB2O3Mjyg=
-X-Received: by 2002:a05:6512:a89:: with SMTP id m9mr738473lfu.342.1627626614501;
- Thu, 29 Jul 2021 23:30:14 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=j6IF2835VrIHwDYkTgZV/+UoCjQH2G1E3gkSxTW7I4w=;
+        b=FFRYaj269Er3mNDFSq7n1ugheCwuubGcUodBQG9U4U3UwiSxjjjTgxl1N6oSQimJD6
+         KZ1hqNIvb702Bg3enDaYOUcV7jTWZAjp1+ZTrlf8Aq9SXM/wC7cuI+7k6MqUUpWP0bTL
+         wOfNBi+WxCtgEBRxGcIaABdOOwGJdVLjCMFJe1V1JASRvCZCvx08t7P6GEAWTu+Qo5Hw
+         Ev/3TdvF0NZTPAE3bifvPCnk6N+2l7KFU/KWNiZxDLuYaAcj345R5DFbBlLrXmiBgGVn
+         mZNi5xaxPG8pAJhRcTND6gq9dhe5DqFDML9bzWQ00L3n+nsbIvSpQmRCFKquhN0xQV+w
+         CC5w==
+X-Gm-Message-State: AOAM5325QIlv1lQf2EFZLYOMagtXhRIRFPqxGTdpfmyMP/ayKM8AyI7M
+        gGextEIhxI8J3a/iYr8AE5gxPjLef6AAcAvPEI4=
+X-Google-Smtp-Source: ABdhPJzj4gqNEOi1QeT0MXntI3totaMLSia+EA4wE+PYYt0Fc0LmOB2npBvlj4Pe0hYU2ZzQVHS8mscsCIZZ5BftD3c=
+X-Received: by 2002:a05:6e02:d09:: with SMTP id g9mr72441ilj.153.1627627983180;
+ Thu, 29 Jul 2021 23:53:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210726071439.14248-1-sam.shih@mediatek.com> <20210726071439.14248-2-sam.shih@mediatek.com>
- <CAGXv+5GeEBAkXKfA=S7XGOLYtCRihP5ov6kSiw+eevPAi74GAQ@mail.gmail.com> <083a0e8fdd07c0f940285dce2dc26cb0f5e798a6.camel@mediatek.com>
-In-Reply-To: <083a0e8fdd07c0f940285dce2dc26cb0f5e798a6.camel@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 30 Jul 2021 14:30:03 +0800
-Message-ID: <CAGXv+5F1tPC8W6FcBqn4TdoOrSmFUr4GWpD3hQC9QsPi3o__=g@mail.gmail.com>
-Subject: Re: [PATCH 01/12] dt-bindings: clock: mediatek: document clk bindings
- for mediatek mt7986 SoC
-To:     Sam Shih <sam.shih@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        Devicetree List <devicetree@vger.kernel.org>,
+References: <20210730041355.2810397-1-art@khadas.com> <20210730041355.2810397-4-art@khadas.com>
+ <20210730045857.GC2110311@roeck-us.net>
+In-Reply-To: <20210730045857.GC2110311@roeck-us.net>
+From:   Art Nikpal <email2tema@gmail.com>
+Date:   Fri, 30 Jul 2021 14:52:51 +0800
+Message-ID: <CAKaHn9LjZUFJu9+6B3nEZkAXGeAPkXTNcToRnvtSJjEXBJULKw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] watchdog: meson_gxbb_wdt: remove stop_on_reboot
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>, wim@linux-watchdog.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, linux-gpio@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Ryder Lee <Ryder.Lee@mediatek.com>
+        Artem Lapkin <art@khadas.com>, Nick Xie <nick@khadas.com>,
+        Gouwa Wang <gouwa@khadas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 2:01 PM Sam Shih <sam.shih@mediatek.com> wrote:
+Thank you very much for the helpful and detailed comments
+
+Artem
+
+On Fri, Jul 30, 2021 at 12:59 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> Hi,
->
-> On Mon, 2021-07-26 at 17:20 +0800, Chen-Yu Tsai wrote:
-> > Furthermore, based on the driver patch and the fact that they share
-> > the
-> > same compatible string, it seems you shouldn't need to have two
-> > compatible
-> > strings for two identical hardware blocks. The need for separate
-> > entries
-> > to have different clock names is an implementation detail. Please
-> > consider
-> > using and supporting clock-output-names.
+> On Fri, Jul 30, 2021 at 12:13:55PM +0800, Artem Lapkin wrote:
+> > Remove watchdog_stop_on_reboot()
 > >
-> > Also, please check out the MT8195 clock driver series [1]. I'm
-> > guessing
-> > a lot of the comments apply to this one as well.
+> > Meson platform still have some hardware drivers problems for some
+> > configurations which can freeze device on shutdown/reboot stage and i
+> > think better to have reboot warranty by default.
 > >
-> > Regards
-> > ChenYu
+> > I feel that it is important to keep the watchdog running during the
+> > reboot sequence, in the event that an abnormal driver freezes the reboot
+> > process.
 > >
-> > [1]
-> > https://urldefense.com/v3/__https://lore.kernel.org/linux-mediatek/2021=
-0616224743.5109-1-chun-jie.chen@mediatek.com/T/*t__;Iw!!CTRNKA9wMg0ARbw!29p=
-b4TJiGHLvLbYJgDB2Dhf8Mpw5VU8zV-W3NrMan_RPQrtWT2EdRTyyjWpu0nZE$
+> > This is my personal opinion and I hope the driver authors will agree
+> > with my proposal, or just ignore this commit if not.
 > >
+> > https://lore.kernel.org/linux-watchdog/20210729072308.1908904-1-art@khadas.com/T/#t
 > >
 >
-> I have organized your comments in "Mediatek MT8195 clock support"
-> series into the following list, reply to your here:
+> A much better description would be something like
 >
-> > dt-binding: Move the not-to-be-exposed clock to driver directory or
-> > simply left out
-> Okay, thanks for your comment, I will update this in the next patch set
-
-See the following file for an example:
-
-    https://elixir.bootlin.com/linux/latest/source/drivers/clk/sunxi-ng/ccu=
--sun50i-a64.h
-
-I think this is definitely optional, but it makes it safer in that other
-drivers would not be able to use the non-exported intermediate clocks.
-
-> > describe some of the clock relations between the various clock
-> > controllers
-> I have checked the files in
-> "Documentation/devicetree/bindings/arm/mediatek", It seems that all
-> MediaTek SoC clocks are simply described by each controller, like
-> "mediatek,infracfg.txt" and "mediatek,topckgen.txt", and those document
-> only include compatible strings information and examples.
-> Can we insert the clock relationship of MT7986 directlly in common
-> documents?
-
-What I meant was that since each clock controller hardware block has
-one or many clock inputs, these should be described in the binding
-as required "clocks" and "clock-names" properties.
-
-So it's not about describing the actual relationship or clock tree,
-but just having the inputs accurately described.
-
-> Or we should add a new "mediatek,mt7986-clock.yaml" and move compatible
-> strings information and example to this file, and insert clock
-> relationship descriptions to this file? Wouldn=E2=80=99t it be strange to=
- skip
-> existing files and create a new one?
-
-I think that is a question for the device tree binding maintainer, Rob.
-At least for Mediatek stuff, there seem to be many separate files.
-
-> > external oscillator's case, the oscillator is described in the device
-> > tree
-> Yes, we have "clkxtal" in the DT, which stands for external oscillator,
-> All clocks in apmixedsys use "clkxtal" as the parent clock
-
-So for the apmixedsys device node, it would at least have something like:
-
-    clocks =3D <&clkxtal>;
-    clock-names =3D "xtal";
-
-For topckgen, since it has xtal and some PLLs from apmixedsys as inputs:
-
-    clocks =3D <&clkxtal>, <&apmixedsys CLK_ID_PLLXXX>, <&apmixedsys
-CLK_ID_PLLYYY>;
-    clock-names =3D "xtal", "pllXXX", "pllYYY"
-
-The above is just an example. You should adapt it to fit your hardware
-description. And the bindings should describe what is required. Note
-that the clock names used here are local to this device node. They do
-not need to match what the clock driver uses for the global name. So
-just go with something descriptive.
-
-The point is, cross hardware block dependencies should be clearly described
-in the device tree, instead of implicitly buried in the clock drivers.
-
-> > Dual license please (and the dts files).
-> Okay, thanks for your comment, I will update this in the next patch set
+> "The Meson platform still has some hardware drivers problems for some
+>  configurations which can freeze devices on shutdown/reboot.
+>  Remove watchdog_stop_on_reboot() to catch this situation and ensure
+>  that the reboot happens anyway.
+>  Users who still want to stop the watchdog on reboot can still do so
+>  using the watchdog.stop_on_reboot=1 module parameter.
+>  "
 >
-> > Why are this and other 1:1 factor clks needed? They look like
-> > placeholders. Please remove them.
-> Okay, thanks for your comment, I will update this in the next patch set
-
-Ideally the clock driver would use the device tree to get local references
-for this, but that is going to require some rework to Mediatek's common
-clock code.
-
-> > Merge duplicate parent instances
-> We have considered this in the MT7986 basic clock driver, but I will
-> check again. If corrections are needed, I will make changes in the next
-> patch set.
+> That leaves the personal opinion out of the picture and provides both
+> a rationale for the change and an alternative for people who want
+> to stop the watchdog on reboot anyway.
 >
-> > Leaking clk_data if some function return fail
-> Okay, thanks for your comment, I will update this in the next patch set
+> > Signed-off-by: Artem Lapkin <art@khadas.com>
 >
-> > This file contains four drivers. They do not have depend on each
-> > other, and do not need to be in the same file. Please split them into
-> > differen files and preferably different patches
-> Okay, thanks for your comment, I will separate those clock drivers in
-> the next patch set
+> As mentioned, I'd still like to get an opinion from the driver
+> author and/or some other users of this platform. However, I'll
+> accept the patch with the above description change if I don't get
+> additional feedback.
 >
-> > Is there any particular reason for arch_initcall
-> We have considered this in MT7986 basic clock driver, and use
-> CLK_OF_DECLARE instead of arch_initcall.
-
-Having to sequence clock registration manually is likely a symptom of
-inadequate clock dependency handling. So if the drivers are only using
-global clock names to describe parents, what happens is that even if
-the parent isn't in the system yet, the registration is allowed to
-succeed. However since the parent clock isn't available yet, any
-calculations involving it, such as calculating clock rates, will
-yield invalid results, such as 0 clock rate.
-
-> Another question:
-> Should the clock patches in "Add basic SoC support for MediaTek mt7986"
-> need to be separated into another patch series, such as MT8195
-> "Mediatek MT8195 clock support" ?
-
-Nope. The MT8195 team seems to be splitting things up by module, with
-the device tree being its own separate module. Ideally you want to send
-drivers along with the related device tree changes, so people reviewing
-can get a sense of how things work. And if the hardware is publicly
-available, people can actually test the changes. We can't do that if the
-device tree changes aren't bundled together.
-
-
-Regards
-ChenYu
+> Thanks,
+> Guenter
+>
+> > ---
+> >  drivers/watchdog/meson_gxbb_wdt.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
+> > index 945f5e65db57..d3c9e2f6e63b 100644
+> > --- a/drivers/watchdog/meson_gxbb_wdt.c
+> > +++ b/drivers/watchdog/meson_gxbb_wdt.c
+> > @@ -198,7 +198,6 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+> >
+> >       meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
+> >
+> > -     watchdog_stop_on_reboot(&data->wdt_dev);
+> >       return devm_watchdog_register_device(dev, &data->wdt_dev);
+> >  }
+> >
+> > --
+> > 2.25.1
+> >
