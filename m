@@ -2,106 +2,115 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C553DCAA9
-	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Aug 2021 09:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166193DCCFD
+	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Aug 2021 19:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbhHAH4u (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 1 Aug 2021 03:56:50 -0400
-Received: from mout.web.de ([217.72.192.78]:54463 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229543AbhHAH4u (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 1 Aug 2021 03:56:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1627804586;
-        bh=ybETWJ69FP1eklPrS3Vlls+0FH07W6kXIry6yZLnVHA=;
-        h=X-UI-Sender-Class:From:Subject:To:Cc:Date;
-        b=qIgytIIPaMCwaRq6gt6fgUNEyLKI4IDCgv6epdY8gb1Qf4zOMofj0I8j5tnJ5H+AG
-         Y0hVsyyPRGUvjgDKhAJGdn9Jps0gYzz05m2gTCzM8bcLdCc4o6QPNiVSQeUNwF/bjm
-         InwMEFEkm5tOUYDnozmmLBxlauBD8RBiFGdeajH4=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.10.10] ([88.215.87.227]) by smtp.web.de (mrweb102
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MLgUx-1m9p5F2l9f-000qwY; Sun, 01
- Aug 2021 09:56:26 +0200
-From:   Jan Kiszka <jan.kiszka@web.de>
-Subject: [PATCH v2] watchdog: Start watchdog in watchdog_set_last_hw_keepalive
- only if appropriate
-To:     Guenter Roeck <linux@roeck-us.net>,
+        id S229930AbhHARiF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 1 Aug 2021 13:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229506AbhHARiF (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sun, 1 Aug 2021 13:38:05 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EADC0613D3;
+        Sun,  1 Aug 2021 10:37:56 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id 26so3496191oiy.0;
+        Sun, 01 Aug 2021 10:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zXURQHqoXgoKN7vruCdacQrCsvk2B5NybEl08Qm6AcE=;
+        b=NaAdBi9n4yHz64NFUEEe1bR983uWbwDjtmfv+vDp5lHCZYpSquDf1oQOfMM2gte0bx
+         A+tDJEeUCzBqFXeKzn7TOhWb7+P/9WjWd0Qs5n2Fh2FVehx1/x0INUAYm5+JePjG0kDI
+         c6d+JGagkwImEuudnjfZz/QGJmgQeNAsum7mLOyQUdHTif1Os+03gErL3TBrTlSPTMOC
+         YohqhN+K8o/BRzGwjl1rsoNEbHLVd/6MwqoYZ7gSHz3Nuz5Eq/xKbAF2hwK1goHXyRXF
+         VYXHBR4fylgtOO7ryBtaQo0bmZVUUXn6fe/9ptvuD3nKZYo4JGEUGkCLRkT+XrjFI0CV
+         o41g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zXURQHqoXgoKN7vruCdacQrCsvk2B5NybEl08Qm6AcE=;
+        b=HLximAKNuwQgQKPoVTUapyCHACQtvJGtsJqfsEeTvu2D97fsD5eyWls9/S45GmzV2d
+         fmrI+OVXy0KtbnCa4yFBoohOBCRVycHvMznovf5HnL/rkh8jlO8wrLSQ9iivOYXcbR/U
+         QqZGz+ImQsCwcq8fkMauhJmQJFiK5OvOrXo8hbFGKyT5itWL6+hVwoiwBuwabE/QT+DX
+         EmZIunENUKrAHXIhSh89w6KkHm9TfdE3usJr0393eVP7MT9idOgkD86upzYZgA9n0F+X
+         AEKbry6CKak0mBo9KlA4ASen8mOTZDG5QqW18pW6QDbYdiYCHXEK123Crrdicgz8gH6A
+         Dc2g==
+X-Gm-Message-State: AOAM5307f7TKLwncsm68i812r2tN9muYhlpYL+3/Hkq/egPyNw7VL739
+        ZRwLt2Bshky73Ol3iKaejbbioGc+pgY=
+X-Google-Smtp-Source: ABdhPJxMEH5FVS/gMAgLLI3ShZA1lQh1DRuuEEyUyAwC0tFGxkU6MOW+UMDZQbRFcmGl6/T91mfUyg==
+X-Received: by 2002:aca:6109:: with SMTP id v9mr8182851oib.147.1627839475931;
+        Sun, 01 Aug 2021 10:37:55 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s2sm1302189ooc.15.2021.08.01.10.37.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Aug 2021 10:37:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v2] watchdog: Start watchdog in
+ watchdog_set_last_hw_keepalive only if appropriate
+To:     Jan Kiszka <jan.kiszka@web.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-ID: <93d56386-6e37-060b-55ce-84de8cde535f@web.de>
-Date:   Sun, 1 Aug 2021 09:56:25 +0200
+References: <93d56386-6e37-060b-55ce-84de8cde535f@web.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <7228af51-5390-23e8-1383-b196e44a669a@roeck-us.net>
+Date:   Sun, 1 Aug 2021 10:37:53 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <93d56386-6e37-060b-55ce-84de8cde535f@web.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:nYWxU0jdTKdDADeNmlGW1+5lohCYi/RQrtK1xOW9eNP9iY1+86G
- AHb8onfpMNkJkzx8Xxe2wNipg05gdUVjAI1uUB6hZkbenQzeZ4p2jZZn5yVLzWOd89ysv1T
- ju+1QulrOg8Th6g0G+MC3K3NRifRyrXS9CdnZgiJIhLByDeA2b9dZueIsM+wcf02S6/oN0j
- 39FQ4QOOMC7ab7K1K88Wg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vkaVJBxNU3Q=:8x569OsVVEBvGWom5INHSc
- CYevetlYmZkMM+rYcdd0KNNnashKtSJfLne24uVOC06U/MI2JSS1eyhyE4kpURORypgIlQAL4
- fh5XEfFCKFLfLmMaORtmISNvn98H2Q6vQHVF7ElPdc56ZhqB00Rjt5Hh9UXiMFzbMJRphM+es
- 2dvBBaVgtI9IyYoGvuUNBkvTOQLsQhv/GrP20BZY9m2nTia+mS6ogtvp5OkMwkFFbA/H+/VbD
- 5fFCTLXyog2NqmTwtuw3SMogLVn2adjZVW9dPO6WJWRZVHDCgJ0pvZ3CJ8v4g0v9YTjdZ8Bui
- dKLEogJxri+PtxcuIe5YdPC69QQJcbHVjLOGwrHC2Fq7AsGUeLTJqdzmJtL82+BsjXIuuN3O6
- NvOrqlqlJ1tKLlpiHVr5ekQsmQl2VWexc1HBr+2Rfs47FDB/nN39JYie4LQ3bk1QRM2V72ayB
- TUVgijboREDBJpXMk2VpKkgkAoWqcZrfAHVttkafWe54pwoA/Ad/Gonfuq154fvwqYMJk7pmS
- k4rhoV1Fp34/fw1Ur+whiz+3KSEfe94XaNKxVpzkgetR0m6HHLo1VHEhM3GC+nqFgjdGyDZ5k
- H5RAnDHRtTiUA10V3aQeVKPDJ6MIXm+uxCwL4vfjMjp31TUNb5wIwHuC+6Tp6KlLG4iL5RBHi
- T9AYe2BzO6WpRhnb8J0Eyyqp5mBfulJVAqykvlGlxYp+962V5gNPI69Ji6Pl0DJHyrpIvHhI6
- QX74udClHFmKhSW7VSsnEcXgGvnBgymL51CraiXp5+ucSxVSj4OIwQHorFNf7gfCB3ta013PJ
- XZXT8EIXq7Rg4uTYEdD6x7KhpJrSLywIaALHn2zZM1xJWCR0X2uMqhALXLUKpHqHs3T7gnOLw
- 2C387SbclBHrUilw2KwaOt6LgqTO7tQT8VcvJz84qMmQqjVyb9gy35UclNm5W/JSkggOa3ONy
- soWlBrVfYasIonyDlW9hOUojR5btV0kjp5nEGJaJUE8RbhAYPB6wWtVrvwCBOWFW1IjQszQfa
- UIpWXLO8gRVcb2dT4m4ViHGze2m82W8c+H6ui2lYllK+fTPpQehkYJL0/IMKBpUqyEj1Af8bT
- Yoz2YYuRK5uUsSi9bX56J6NXAmxXHIsm2gr
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Jan Kiszka <jan.kiszka@siemens.com>
+On 8/1/21 12:56 AM, Jan Kiszka wrote:
+> From: Jan Kiszka <jan.kiszka@siemens.com>
+> 
+> We must not pet a running watchdog when handle_boot_enabled is off
+> because this will kick off automatic triggering before userland is
+> running, defeating the purpose of the handle_boot_enabled control.
+> Furthermore, don't ping in case watchdog_set_last_hw_keepalive was
+> called incorrectly when the hardware watchdog is actually not running.
+> 
+> Fixed: cef9572e9af3 ("watchdog: add support for adjusting last known HW keepalive time")
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 
-We must not pet a running watchdog when handle_boot_enabled is off
-because this will kick off automatic triggering before userland is
-running, defeating the purpose of the handle_boot_enabled control.
-Furthermore, don't ping in case watchdog_set_last_hw_keepalive was
-called incorrectly when the hardware watchdog is actually not running.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Fixed: cef9572e9af3 ("watchdog: add support for adjusting last known HW ke=
-epalive time")
-Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-=2D--
+> ---
+> 
+> Changes to v1 ("watchdog: Respect handle_boot_enabled when setting last last_hw_keepalive"):
+>   - add watchdog_hw_running test
+>   - improve commit log
+> 
+>   drivers/watchdog/watchdog_dev.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 3bab32485273..6c73160386b9 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -1172,7 +1172,10 @@ int watchdog_set_last_hw_keepalive(struct watchdog_device *wdd,
+> 
+>   	wd_data->last_hw_keepalive = ktime_sub(now, ms_to_ktime(last_ping_ms));
+> 
+> -	return __watchdog_ping(wdd);
+> +	if (watchdog_hw_running(wdd) && handle_boot_enabled)
+> +		return __watchdog_ping(wdd);
+> +
+> +	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(watchdog_set_last_hw_keepalive);
+> 
+> --
+> 2.31.1
+> 
 
-Changes to v1 ("watchdog: Respect handle_boot_enabled when setting last la=
-st_hw_keepalive"):
- - add watchdog_hw_running test
- - improve commit log
-
- drivers/watchdog/watchdog_dev.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_d=
-ev.c
-index 3bab32485273..6c73160386b9 100644
-=2D-- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -1172,7 +1172,10 @@ int watchdog_set_last_hw_keepalive(struct watchdog_=
-device *wdd,
-
- 	wd_data->last_hw_keepalive =3D ktime_sub(now, ms_to_ktime(last_ping_ms))=
-;
-
--	return __watchdog_ping(wdd);
-+	if (watchdog_hw_running(wdd) && handle_boot_enabled)
-+		return __watchdog_ping(wdd);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(watchdog_set_last_hw_keepalive);
-
-=2D-
-2.31.1
