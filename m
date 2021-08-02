@@ -2,75 +2,116 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB243DCF77
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Aug 2021 06:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB653DD31E
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Aug 2021 11:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbhHBEYn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbhHBEYn (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 2 Aug 2021 00:24:43 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66096C06179E
-        for <linux-watchdog@vger.kernel.org>; Sun,  1 Aug 2021 21:24:33 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id hw6so14837809ejc.10
-        for <linux-watchdog@vger.kernel.org>; Sun, 01 Aug 2021 21:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=WDq9P0bY1AsY9kO7VoQiuEkd/+xeN2uAzVka1J/B7YABFMMcv9zsRMDuUzGU3t7LVq
-         x60AdfwMQPfhhBT91CFmxmNgG6fRcK6BFaIDqx+Ms1vLOgOAYNOd4Xbt+10CNKTcRAMK
-         KeTYcmNC0bNtdVd3yLIRxS8Pr5sLxpts2NC88pKkxuGBDjkmUnJislac8lDy7dNnd85N
-         dz7rwNTEXx7I9NqC47E4asccGsO9/P6huztRZkI4lkvRJ5hB7XcOxioVdhTGqNDSXebW
-         Md0Dh2ya6SQXgvhbdFNsJy7D030uG2HCPIxJG2TxztPigkWx+ZXfNLX+hVWs0ri0sCK7
-         k48A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=t+HwxO+9zjyqcmicPsHCNHJZ0cor1D3i6FhqjEQucGpn8UR7FZCSHhSsrGzw05HjeF
-         PEWiO7e583O30gE9b8lksj2MEz2AXkffdWJ6QZ6ZhLozN7Vn8K3jN+I6nvl21/YKQ5ot
-         whA11AJsVt4K0ENKznFZqtKhpBUR/q64l52DQ1/16VUJfAtAmZuSKwmVaS6UPptfahOR
-         tZ9mn0GdF/2qKDpg4w+JWXZQDrW6gXcVQkCfp7uj7CB/bQoCiDV6BiUi2iuOR5tVHln6
-         WPwQa06loqPVP5zErVNVIJZLQHntjUXXjbiW3k18W05SI60rEDUvxfva4PVRvWQAaZ2m
-         I97w==
-X-Gm-Message-State: AOAM533IITi8vazPIzKSd3keCH8j7MP9ffp8PCaDiREk5GlsCmZvOsUD
-        2iyPUefoHe7Nn7/p2PsTyq/0Wt7QeG3nosE8RaA=
-X-Google-Smtp-Source: ABdhPJyge6CE4/3PK9Ai4ltivb6MMxmm7LTQ2s8bjzS0dUrr9KzpIrZxfzN76q9x5Xx6YjpKdH1irFSuudYhIT6knzs=
-X-Received: by 2002:a17:906:3b87:: with SMTP id u7mr13818454ejf.66.1627878272087;
- Sun, 01 Aug 2021 21:24:32 -0700 (PDT)
+        id S232871AbhHBJlo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 2 Aug 2021 05:41:44 -0400
+Received: from lizzard.sbs.de ([194.138.37.39]:57572 "EHLO lizzard.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231625AbhHBJlo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 2 Aug 2021 05:41:44 -0400
+X-Greylist: delayed 1155 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Aug 2021 05:41:42 EDT
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by lizzard.sbs.de (8.15.2/8.15.2) with ESMTPS id 1729LkuU019819
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Aug 2021 11:21:46 +0200
+Received: from md1za8fc.ad001.siemens.net ([139.25.0.59])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 1729Ljod022415;
+        Mon, 2 Aug 2021 11:21:45 +0200
+Date:   Mon, 2 Aug 2021 11:21:42 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Farooq, Muhammad Hamza" <hamza.farooq@siemens.com>
+Subject: Re: [PATCH v2 0/4] add device drivers for Siemens Industrial PCs
+Message-ID: <20210802112142.065b46a5@md1za8fc.ad001.siemens.net>
+In-Reply-To: <CAHp75Vfu1PoN6bH4ew99Ct9JS=d9KSXtM0EXV_T7VF211TW-Yg@mail.gmail.com>
+References: <20210315095710.7140-1-henning.schild@siemens.com>
+        <CAHp75Vfu1PoN6bH4ew99Ct9JS=d9KSXtM0EXV_T7VF211TW-Yg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:24:31
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:24:31 +0100
-Message-ID: <CAKwBCXtg5uyf7Jb2AAcE1ghxD-+sCDTGfZ6n10fsvHdbE918iA@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
--- 
-Dear Partner,
+Am Mon, 15 Mar 2021 12:55:13 +0200
+schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
 
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
+> On Mon, Mar 15, 2021 at 12:12 PM Henning Schild
+> <henning.schild@siemens.com> wrote:
+> >
+> > changes since v1:
+> >
+> > - fixed lots of style issues found in v1
+> >   - (debug) printing
+> >   - header ordering
+> > - fixed license issues GPLv2 and SPDX in all files
+> > - module_platform_driver instead of __init __exit
+> > - wdt simplifications cleanup
+> > - lots of fixes in wdt driver, all that was found in v1
+> > - fixed dmi length in dmi helper
+> > - changed LED names to allowed ones
+> > - move led driver to simple/
+> > - switched pmc_atom to dmi callback with global variable
+> >
+> > --
+> >
+> > This series adds support for watchdogs and leds of several x86
+> > devices from Siemens.
+> >
+> > It is structured with a platform driver that mainly does
+> > identification of the machines. It might trigger loading of the
+> > actual device drivers by attaching devices to the platform bus.
+> >
+> > The identification is vendor specific, parsing a special binary DMI
+> > entry. The implementation of that platform identification is
+> > applied on pmc_atom clock quirks in the final patch.
+> >
+> > It is all structured in a way that we can easily add more devices
+> > and more platform drivers later. Internally we have some more code
+> > for hardware monitoring, more leds, watchdogs etc. This will follow
+> > some day.  
+> 
+> Thanks for an update!
+> 
+> I did review more thoughtfully the series and realized that you can
+> avoid that P2SB thingy and may the approach be much cleaner if you
+> register the real GPIO driver and convert your LEDs to be a GPIO LEDs.
+> Then you won't need any custom code for it (except some board file, or
+> what would be better to file _DSD in your ACPI tables.
 
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
+For the next generation of these machines i managed to involve the BIOS
+guys. Goal would be to describe as much as possible in a generic and
+standard way in ACPI, to reduce cost on driver dev and maint in the
+long run. Hopefully across OSs.
 
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
+The first thing we wanted to look into is LEDs. The way they can be
+described for leds-gpio does not seem to be standard but at least seems
+generic. At the same time we contemplated whether to model the LEDs
+using the multicolor class.
 
+One thing that seems to speak against using multicolor seems to be
+missing ACPI "support", while regular LEDs can be described in ACPI, it
+does not seem like multicolor can. Or did we miss something?
 
-Regards :  Abdoulahi Kazim
+regards,
+Henning
+
+> --
+> With Best Regards,
+> Andy Shevchenko
+
