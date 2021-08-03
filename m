@@ -2,74 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA723DE63F
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Aug 2021 07:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3487E3DF0C8
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Aug 2021 16:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233869AbhHCFiO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 Aug 2021 01:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbhHCFiN (ORCPT
+        id S235527AbhHCOvY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 3 Aug 2021 10:51:24 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:55646 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234206AbhHCOvX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 Aug 2021 01:38:13 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737C9C0613D5
-        for <linux-watchdog@vger.kernel.org>; Mon,  2 Aug 2021 22:38:03 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id z7so22162589iog.13
-        for <linux-watchdog@vger.kernel.org>; Mon, 02 Aug 2021 22:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vi76Iy2+G7lRArH6vuam1Hfh2GEzigTGHE+mXu3eEQw=;
-        b=qLj1y6fObSImVY0F0di8u/IF17wANqqqgvULYkhwRpKAGIdln28rEco4Riz8tMS4z+
-         3ZfBL+GTgm0I3uYsrPqR38H1ZePcnoxJJA5jHljoEUgk57jKKhKJvmj1uXlK8Fcrcnfw
-         IYoUcNNbQStu/smuDcK/AU7hIRpe5mCbAHIJtLG4wBYq1OiM5cIO1KCjwMHyu3O6SzwR
-         VSrTFDVzKDqdZwOqIY+qk3GT8nxZWCAXeKQiVxkNrWwQKgihwE1nYU1//j0WTbUzxCiw
-         GlEZZTBXyEK8nzark4WGWGiA/azDDniWdirEvCdMJ9NtpU6nygtVUuN0+rQgaX56lt0I
-         pD5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vi76Iy2+G7lRArH6vuam1Hfh2GEzigTGHE+mXu3eEQw=;
-        b=rB2TL3e0zSC3ZvK5TWzKtQjeqHx5zgAh3dxgU8jbvtJsn73rVog0GrV25Gqt5kwjsF
-         W5qLC6G4mNi1ru1iAHglfephgimCDQBZ9zucRD02sEXxN8Fqr6w5hdc49X9F3HOpUi+9
-         dIr9NfPDkfx32sOCHYbPRs0N0IHmQrQ40pL2Sq4zGLaZy1ydpE+Qpg0kZHWL+asJ21sP
-         +F6HVQ/5GXbfFazOcVlYXxdE4AE6vt6oQZz3a5B1CmbdGl0JbvwoCGsT0Fw5iHLqQc4d
-         4YcWXp7GD2NBUyQ3RsyqJ/yttg4mgITozmzZ1McEumSBqRy0XjxolKGPPS8384r1jwbq
-         dmHQ==
-X-Gm-Message-State: AOAM533UF0X5RgHm6kPACLtEWh0HiZSZOQ7eqc09rLzTV6pH9fLxfsUF
-        wVw/GGW7a12wdt/2JXP7OFw6k9Y8KCjR4+LzKIqSMTYnLz/XRw==
-X-Google-Smtp-Source: ABdhPJw/2YigJyn4JYO2+qd6bLRkOERLsf4W8mUBRLblDDC0N6ey6KPmqUc7erPS6iYqy2aN3qVsIE+0gB6rMCfF710=
-X-Received: by 2002:a02:ba87:: with SMTP id g7mr11453418jao.110.1627969081709;
- Mon, 02 Aug 2021 22:38:01 -0700 (PDT)
+        Tue, 3 Aug 2021 10:51:23 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C3FEA2003E;
+        Tue,  3 Aug 2021 14:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1628002271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1PAUuxbm279noUJYK+2TINkJ8jnjsLCKOAQxIlYn3fU=;
+        b=ik3DDOLN3KAwl+H0dQ5f2Dwd9Wvh566q/5UAu7qfixOfdpR1wzexpQMV5k4ei0cDotySWm
+        gdgOg/bqF1L09WxTsYmwnsuyMFpT1zOqfJyrmpza8puJeZYVUD2GmIZZGv5zXp6yX7QINg
+        Vb8q3HA9F4QcdnX8O/6LbLGGC5synVE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1628002271;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1PAUuxbm279noUJYK+2TINkJ8jnjsLCKOAQxIlYn3fU=;
+        b=treT+NlWqGgfkNZ6sNhbOlQmN03hnRauEeb+lioUxMmm5yIm2Vc7uAOEPM7cc0u+H8cufI
+        MUGTO+DcqFO2rFBg==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 5FCB213B74;
+        Tue,  3 Aug 2021 14:51:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id RN9fFN9XCWGObQAAGKfGzw
+        (envelope-from <jdelvare@suse.de>); Tue, 03 Aug 2021 14:51:11 +0000
+Date:   Tue, 3 Aug 2021 16:51:08 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     linux-watchdog@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Michael Marley <michael@michaelmarley.com>
+Subject: Faulty commit "watchdog: iTCO_wdt: Account for rebooting on second
+ timeout"
+Message-ID: <20210803165108.4154cd52@endymion>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20210726122901.12195-1-Christine.Zhu@mediatek.com> <20210726122901.12195-2-Christine.Zhu@mediatek.com>
-In-Reply-To: <20210726122901.12195-2-Christine.Zhu@mediatek.com>
-From:   Tzung-Bi Shih <tzungbi@google.com>
-Date:   Tue, 3 Aug 2021 13:37:50 +0800
-Message-ID: <CA+Px+wX+gy4hV3BsTU81ThS=FUe0HidUV-iZZvQ3qm4WxKXGxQ@mail.gmail.com>
-Subject: Re: [v7,1/3] dt-bindings: mediatek: mt8195: update mtk-wdt document
-To:     Christine Zhu <christine.zhu@mediatek.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        seiya.wang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Jul 26, 2021 at 8:30 PM Christine Zhu
-<Christine.Zhu@mediatek.com> wrote:
-> @@ -13,6 +13,7 @@ Required properties:
->         "mediatek,mt8183-wdt": for MT8183
->         "mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
->         "mediatek,mt8192-wdt": for MT8192
-> +       "mediatek,mt8195-wdt": for MT8195
-Just realized the patch has been applied in commit b326f2c85f3d
-("dt-bindings: watchdog: Add compatible for Mediatek MT8195").  Could
-you rebase the series to the latest tree and resend?
+Hi all,
+
+Commit cb011044e34c ("watchdog: iTCO_wdt: Account for rebooting on
+second timeout") causes a regression on several systems. Symptoms are:
+system reboots automatically after a short period of time if watchdog
+is enabled (by systemd for example). This has been reported in bugzilla:
+
+https://bugzilla.kernel.org/show_bug.cgi?id=213809
+
+Unfortunately this commit was backported to all stable kernel branches
+(4.14, 4.19, 5.4, 5.10, 5.12 and 5.13). I'm not sure why that is the
+case, BTW, as there is no Fixes tag and no Cc to stable@vger either.
+And the fix is not trivial, has apparently not seen enough testing,
+and addresses a problem that has a known and simple workaround. IMHO it
+should never have been accepted as a stable patch in the first place.
+Especially when the previous attempt to fix this issue already ended
+with a regression and a revert.
+
+Anyway... After a glance at the patch, I see what looks like a nice
+thinko:
+
++	if (p->smi_res &&
++	    (SMI_EN(p) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
+
+The author most certainly meant inl(SMI_EN(p)) (the register's value)
+and not SMI_EN(p) (the register's address).
+
+-- 
+Jean Delvare
+SUSE L3 Support
