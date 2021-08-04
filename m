@@ -2,33 +2,26 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E16CE3DF8C2
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Aug 2021 02:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E843DFBA2
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Aug 2021 08:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbhHDAMd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 Aug 2021 20:12:33 -0400
-Received: from 2098.x.rootbsd.net ([208.79.82.66]:55009 "EHLO pilot.trilug.org"
-        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S233118AbhHDAMd (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 Aug 2021 20:12:33 -0400
-X-Greylist: delayed 488 seconds by postgrey-1.27 at vger.kernel.org; Tue, 03 Aug 2021 20:12:32 EDT
-Received: by pilot.trilug.org (Postfix, from userid 8)
-        id 52AC95979A; Tue,  3 Aug 2021 20:04:10 -0400 (EDT)
-Received: from michaelmarley.com (unknown [IPv6:2605:a600:1d05:afa8::1])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by pilot.trilug.org (Postfix) with ESMTPSA id 1B5005838B;
-        Tue,  3 Aug 2021 20:04:07 -0400 (EDT)
-Received: from michaelmarley.com (localhost [IPv6:::1])
-        by michaelmarley.com (Postfix) with ESMTP id 5478C18010B;
-        Tue,  3 Aug 2021 20:04:06 -0400 (EDT)
-Received: from [IPv6:fdda:5f29:421b:3:99bb:f97:ec80:f7a6] ([fdda:5f29:421b:3:99bb:f97:ec80:f7a6])
-        by michaelmarley.com with ESMTPSA
-        id NqdiFHbZCWH5PQAAnAHMIA
-        (envelope-from <michael@michaelmarley.com>); Tue, 03 Aug 2021 20:04:06 -0400
+        id S235235AbhHDG6u (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 4 Aug 2021 02:58:50 -0400
+Received: from goliath.siemens.de ([192.35.17.28]:50999 "EHLO
+        goliath.siemens.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235227AbhHDG6u (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 4 Aug 2021 02:58:50 -0400
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by goliath.siemens.de (8.15.2/8.15.2) with ESMTPS id 1746wHWd023426
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 Aug 2021 08:58:17 +0200
+Received: from [139.22.36.137] ([139.22.36.137])
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 1746wGge023617;
+        Wed, 4 Aug 2021 08:58:17 +0200
 Subject: Re: Faulty commit "watchdog: iTCO_wdt: Account for rebooting on
  second timeout"
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
+To:     Michael Marley <michael@michaelmarley.com>,
         Jean Delvare <jdelvare@suse.de>,
         linux-watchdog@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
@@ -36,26 +29,45 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
 References: <20210803165108.4154cd52@endymion>
  <e13f45c4-70e2-e2c2-9513-ce38c8235b4f@siemens.com>
-From:   Michael Marley <michael@michaelmarley.com>
-Message-ID: <934e0af4-3c4c-3ac5-30e2-958f0725a21d@michaelmarley.com>
-Date:   Tue, 3 Aug 2021 20:04:06 -0400
+ <934e0af4-3c4c-3ac5-30e2-958f0725a21d@michaelmarley.com>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Message-ID: <788533fa-0b77-4c44-2906-d8c9b2b8997d@siemens.com>
+Date:   Wed, 4 Aug 2021 08:58:16 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <e13f45c4-70e2-e2c2-9513-ce38c8235b4f@siemens.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <934e0af4-3c4c-3ac5-30e2-958f0725a21d@michaelmarley.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/3/21 10:59 AM, Jan Kiszka wrote:
+On 04.08.21 02:04, Michael Marley wrote:
+> On 8/3/21 10:59 AM, Jan Kiszka wrote:
+> 
+>> https://lkml.org/lkml/2021/7/26/349
+>>
+> 
+> It fixes the problem for me (the person who opened the Bugzilla report)
+> too, thanks!
+> 
+> Tested-by: Michael Marley <michael@michaelmarley.com>
+> 
 
-> https://lkml.org/lkml/2021/7/26/349
+Thanks for the confirmation!
 
-It fixes the problem for me (the person who opened the Bugzilla report) 
-too, thanks!
+Yeah, sorry, that original mistake is truly mine. In fact, I wrote this
+code twice [1] but only messed it up here. Unfortunate that it spread so
+quickly. I'll try discuss this with stable people eventually, if it was
+a one off or if there are more such cases.
 
-Tested-by: Michael Marley <michael@michaelmarley.com>
+Jan
 
+[1]
+https://github.com/siemens/efibootguard/commit/aa89fe3cbd883198c23eaec43c4448fe9e8ae148
+
+-- 
+Siemens AG, T RDA IOT
+Corporate Competence Center Embedded Linux
