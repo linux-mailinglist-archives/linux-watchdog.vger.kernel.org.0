@@ -2,146 +2,155 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2043E015C
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Aug 2021 14:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A373E0D69
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Aug 2021 06:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238119AbhHDMoo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 4 Aug 2021 08:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236990AbhHDMon (ORCPT
+        id S231272AbhHEE5e (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Aug 2021 00:57:34 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:48745 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230337AbhHEE5d (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 4 Aug 2021 08:44:43 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37815C0613D5
-        for <linux-watchdog@vger.kernel.org>; Wed,  4 Aug 2021 05:44:31 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id t9so4191854lfc.6
-        for <linux-watchdog@vger.kernel.org>; Wed, 04 Aug 2021 05:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
-        b=Gocdf1yXuPX8xeoaYI9oLI1JhocaQp6ZZyVcTlOJdDZI2/0vnch4E5lQGPm3MxwdUM
-         giqLR8+3StPTSF4eaI9QxPRAYgsQPOy3Sgy1vk6QHMGur8WgKk9JiwpBE7Q7NqhIFwt9
-         YVZHv5lFDRw148Wb0r8UWWKNpLe8xrYAqQDWLQuAbt5MPsHwKIZ92D+P+/WX5P4zRRJR
-         snno7CnnmIaYZRGMeNve6R+RMLZT4vIseAntmNcFNMogNI0duS3C7Rhms//adcYhnZ1B
-         JgYUmWHHnqKvaZCBz8Vai7whhh0nzb9P1JFctB31mbxCa5/w7d9XJZYYIGYyiaufHl03
-         +5sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=KThPZotl2MnbNHnYwN0Cur48hqa8t2fsEOoHY+/KM0c=;
-        b=bFxy8wJCWrP+EBjicxuPJd3vSXNV7jnCduqeINTe5rQcjD6sSy+lYfgJyYrpH5O2Kx
-         aMnnWK5kTQ/EQtKvXquhgea4XKMcw0vSmqJsrQq6YaUJbUf6pguTtU1QZ6SypX3NdInF
-         o/uqnOJDHSNVQS85hioGLzWEu0aeI4TkFFZ1KzWNzFMPGaZAXmlpW3hvHLTMDA0Pnlw2
-         Ua01m6GZymeCQr4m1rBcgLebAFK8ZKIEYfO0jQTK2R22G4U4VZMGRJopUxFtEA0LoJAX
-         A4QViPHerf1CKYkFkSipTZnyBEfSrDCuzvM10hZ3/J0whmVA5jNrVSH4OfARNqIH/blI
-         /g4Q==
-X-Gm-Message-State: AOAM531n4yJozknoqUOWaYdmmmLd2HyjmtH0ZpXStZttPcdXPiHD4Mts
-        SJ+cGCQ2bQph+6jsjnmoAAQ7H1jQWX6f8kQ1j66+8A==
-X-Google-Smtp-Source: ABdhPJyDDyEf+9rLZyk+tYny9g+7KdGyN7lm64G/9thaqibRNfBCYr9r5bZvfT70hWlzM4bj90OnDOt9H++74lx9/Q4=
-X-Received: by 2002:ac2:4d0f:: with SMTP id r15mr12222472lfi.649.1628081069590;
- Wed, 04 Aug 2021 05:44:29 -0700 (PDT)
-MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 4 Aug 2021 14:44:18 +0200
-Message-ID: <CACRpkdZaCosXsgp02nuUbd_nEvdxm5-z0+d0oSA97UTWQ0RQQg@mail.gmail.com>
-Subject: [GIT PULL] IXP4xx driver updates for v5.15
-To:     SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
+        Thu, 5 Aug 2021 00:57:33 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id DE3A12B004AB;
+        Thu,  5 Aug 2021 00:57:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 05 Aug 2021 00:57:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm3; bh=E52/j2R5l9gMw0d5KOs9lNmLDB
+        fBSjHZQgpnRrtTk1s=; b=NHPC6tkxnh87VKuo8T9vd7Jc/E/Mx3cEBA3pb+fX4l
+        Qz6wed6s8n1j2Hnx1m+CGxA8gZP2N/FfmLWFkp0epKc0WgwTjEu8/vZD7a7I1X5h
+        zvNynYOQMnxV3+5OHvr4s3t3RSyDIoSkZ++JK47KlQdgP4nnKiRXSuc2N/zmCPTR
+        kZMR+39VC9/ohiFe1sPWBLJQcErk3ADWWP2bwiql3hFzGlYor36aAcuuqJDbtQ0X
+        6VojGZiYRrc25WA5jqg4LtDxTsVyLGhlTHxdi64O1YWtDnG7vXl5uLFxLN/WGIiJ
+        RwZ89lYYkUqOugF/0uaODSDPmNAwHcempcM3+VphQH4Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=E52/j2R5l9gMw0d5K
+        Os9lNmLDBfBSjHZQgpnRrtTk1s=; b=FBhWOgyQ2Ayc62M4Y+Qt85IMXeckICQVy
+        iqmGSPj3hWrL6kvQbige2UKmDTIHwAGV/Tdzvn+XoO3LNqHONb1ynIsnCKE/afyS
+        wBaL7dWs6LmHNgDOyn6hucnmTDkSMToltQecY2anP+fNYbitPyc3PqUfgXT1XgTn
+        llwKoOZwNTf3x5VLSUth7IXrnkk+YxWvvktZSBHjWU6AmeiU6IfsZpf2qOd3V+U1
+        0TZivQebv6174GCb3o2X+rh76fwfcX5MmZb32b6+sL/lvX5NO9XPg4LxW6cf2b+B
+        G4AUuyEAyK3zLTsNKvjWGW6VflZfN+Wy/H2d3ikDVVLEo4vRen4Mg==
+X-ME-Sender: <xms:rW8LYRy7oPwvjhsPaNLPuRPcZZL7DKZX6OzzQ4pLln8_rU3wRLEuIQ>
+    <xme:rW8LYRTvUAY9Q419MzIQQ_trLHNT01PA5CMbP8hX90SevE9mQpf-Iyhk9PPgtTJPS
+    Wz4OgFjHIgwaKDlaQ>
+X-ME-Received: <xmr:rW8LYbUbEh2-3okRdaZ0wswCn7uk1eWp-0RP0GPOmGN_hEo02UMMbewLCi_Nk1-JZr2n7iE2T6NLsqszWH7ve8OEaDyDJlciLIGGCj3l1RmJCCi-rm_uHE3rbC217LSd4699cg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrieekgdekhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
+    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
+    htvghrnhepieetkefhheduudfgledtudefjeejfeegveehkeeufffhhfejkeehiefftdev
+    tdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    grmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:rW8LYTjWWWujfkaoVyLsK4W0AKJMEVS2g3xmT0HdHGqNZIV9bB_G2w>
+    <xmx:rW8LYTBKmrOK7fC3s_xM_r7iMrXjTKQcLp-KUOb966MaT2gkUQLYtA>
+    <xmx:rW8LYcJSf5wID8HepurG2sRnyyWfvkk8whqsE_vb-eIGukgLOu4Jag>
+    <xmx:rm8LYX7I5_zX1DqK7PCNqvbfMp_TURXs8FArdfIgIZsvtL1xlMWzxFlrgbc>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 5 Aug 2021 00:57:16 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v2 1/3] dt-bindings: watchdog: sunxi: Add compatible for R329
+Date:   Wed,  4 Aug 2021 23:57:14 -0500
+Message-Id: <20210805045716.46141-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi SoC maintainers,
+On existing SoCs, the watchdog has a single clock input: HOSC (OSC24M)
+divided by 750.  However, starting with R329, LOSC (OSC32k) is added as
+an alternative clock source, with a bit to switch between them.
 
-this is a set of combined driver updates for IXP4xx targeted for the
-v5.15 merge window.
+Since 24 MHz / 750 == 32 kHz, not 32.768 kHz, the hardware adjusts the
+cycle counts to keep the timeouts independent of the clock source. This
+keeps the programming interface backward-compatible.
 
-I am sending it to the SoC tree because of the cross-subsystem
-dependencies and since the corresponding DTS changes goes
-into SoC. These will be sent separately.
+R329 also adds two new registers, to allow software to immediately drive
+the SoC reset signal.
 
-Note the following:
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+Changes v1 to v2:
+ - Switch from enum to const
+ - Add descriptions to "clocks" items
 
-All new DT bindings in this patch set are ACKed by bindings
-maintainer Rob Herring.
+ .../watchdog/allwinner,sun4i-a10-wdt.yaml     | 32 ++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
-The new expansion bus driver goes in through the SoC tree as is
-custom for bus drivers.
+diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+index 9aa3c313c49f..8fa5b0d32381 100644
+--- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+@@ -24,6 +24,7 @@ properties:
+               - allwinner,sun50i-a100-wdt
+               - allwinner,sun50i-h6-wdt
+               - allwinner,sun50i-h616-wdt
++              - allwinner,sun50i-r329-wdt
+           - const: allwinner,sun6i-a31-wdt
+       - items:
+           - const: allwinner,suniv-f1c100s-wdt
+@@ -33,7 +34,18 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
++    items:
++      - description: High-frequency oscillator input, divided internally
++      - description: Low-frequency oscillator input, only found on some variants
++
++  clock-names:
++    minItems: 1
++    maxItems: 2
++    items:
++      - const: hosc
++      - const: losc
+ 
+   interrupts:
+     maxItems: 1
+@@ -44,6 +56,24 @@ required:
+   - clocks
+   - interrupts
+ 
++if:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - allwinner,sun50i-r329-wdt
++
++then:
++  properties:
++    clocks:
++      minItems: 2
++
++    clock-names:
++      minItems: 2
++
++  required:
++    - clock-names
++
+ unevaluatedProperties: false
+ 
+ examples:
+-- 
+2.31.1
 
-The watchdog maintainer has ACKed the watchdog patch, which
-also briefly affects the timer driver.
-
-The PATA changes also have some mach dependencies.
-I have informed the libata maintainer that I intend to take these
-through ARM SoC.
-https://lore.kernel.org/linux-ide/CACRpkdbf9TfFyObuqCzOEe_QrS=Gru8i6x-1P7v_N-a11g_iiA@mail.gmail.com/
-
-Please pull it in!
-
-Yours,
-Linus Walleij
-
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
-
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/ixp4xx-drivers-arm-soc-v5.15-1
-
-for you to fetch changes up to 47adef20e67d657696c953f4b8023017c6005c1b:
-
-  pata: ixp4xx: Rewrite to use device tree (2021-08-04 12:20:44 +0200)
-
-----------------------------------------------------------------
-IXP4xx driver updates for modernizing the IXP4xx platforms,
-taregeted for v5.15:
-
-- Add DT bindings to the expansion bus and PATA libata driver.
-
-- Add a new expansion bus driver.
-
-- Rewrite the watchdog driver to use the watchdog core and
-  spawn from the timer (clocksource) driver.
-
-- Refactor the PATA/libata driver to probe from the device
-  tree and use the expansion bus driver to manipulate chip
-  select timings directly.
-
-----------------------------------------------------------------
-Linus Walleij (8):
-      bus: ixp4xx: Add DT bindings for the IXP4xx expansion bus
-      bus: ixp4xx: Add a driver for IXP4xx expansion bus
-      watchdog: ixp4xx: Rewrite driver to use core
-      pata: ixp4xx: Use local dev variable
-      pata: ixp4xx: Use IS_ENABLED() to determine endianness
-      pata: ixp4xx: Refer to cmd and ctl rather than csN
-      pata: ixp4xx: Add DT bindings
-      pata: ixp4xx: Rewrite to use device tree
-
- .../bindings/ata/intel,ixp4xx-compact-flash.yaml   |  61 +++
- .../bus/intel,ixp4xx-expansion-bus-controller.yaml | 168 ++++++++
- MAINTAINERS                                        |   2 +
- drivers/ata/pata_ixp4xx_cf.c                       | 264 +++++++++----
- drivers/bus/Kconfig                                |  11 +
- drivers/bus/Makefile                               |   1 +
- drivers/bus/intel-ixp4xx-eb.c                      | 429 +++++++++++++++++++++
- drivers/clocksource/timer-ixp4xx.c                 |  48 ++-
- drivers/watchdog/Kconfig                           |   1 +
- drivers/watchdog/ixp4xx_wdt.c                      | 283 ++++++--------
- include/linux/platform_data/pata_ixp4xx_cf.h       |   4 +-
- 11 files changed, 1014 insertions(+), 258 deletions(-)
- create mode 100644
-Documentation/devicetree/bindings/ata/intel,ixp4xx-compact-flash.yaml
- create mode 100644
-Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
- create mode 100644 drivers/bus/intel-ixp4xx-eb.c
