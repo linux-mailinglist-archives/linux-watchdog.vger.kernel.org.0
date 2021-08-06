@@ -2,28 +2,28 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 191603E21A9
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Aug 2021 04:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02473E21A4
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Aug 2021 04:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243315AbhHFChC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Aug 2021 22:37:02 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:44026 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234568AbhHFChA (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
+        id S242667AbhHFChA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
         Thu, 5 Aug 2021 22:37:00 -0400
-X-UUID: 9015c382bf1140e7a956885ad7be77b1-20210806
-X-UUID: 9015c382bf1140e7a956885ad7be77b1-20210806
+Received: from mailgw01.mediatek.com ([60.244.123.138]:44080 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S239381AbhHFCg7 (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 5 Aug 2021 22:36:59 -0400
+X-UUID: 51c99aaab045412284b68bba01914de7-20210806
+X-UUID: 51c99aaab045412284b68bba01914de7-20210806
 Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
         (envelope-from <christine.zhu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1859341022; Fri, 06 Aug 2021 10:36:41 +0800
+        with ESMTP id 2079219907; Fri, 06 Aug 2021 10:36:41 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 Aug 2021 10:36:39 +0800
+ 15.0.1497.2; Fri, 6 Aug 2021 10:36:40 +0800
 Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 Aug 2021 10:36:39 +0800
+ Transport; Fri, 6 Aug 2021 10:36:40 +0800
 From:   Christine Zhu <Christine.Zhu@mediatek.com>
 To:     <christine.zhu@mediatek.com>, <wim@linux-watchdog.org>,
         <linux@roeck-us.net>, <robh+dt@kernel.org>,
@@ -34,9 +34,9 @@ CC:     <srv_heupstream@mediatek.com>,
         <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <seiya.wang@mediatek.com>,
         Christine Zhu <Christine.Zhu@mediatek.com>
-Subject: [v8,1/2] dt-bindings: reset: mt8195: add toprgu reset-controller header file
-Date:   Fri, 6 Aug 2021 10:36:05 +0800
-Message-ID: <20210806023606.16867-2-Christine.Zhu@mediatek.com>
+Subject: [v8,2/2] watchdog: mediatek: mt8195: add wdt support
+Date:   Fri, 6 Aug 2021 10:36:06 +0800
+Message-ID: <20210806023606.16867-3-Christine.Zhu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20210806023606.16867-1-Christine.Zhu@mediatek.com>
 References: <20210806023606.16867-1-Christine.Zhu@mediatek.com>
@@ -47,50 +47,46 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add toprgu reset-controller header file for MT8195 platform.
+Support MT8195 watchdog device.
 
 Signed-off-by: Christine Zhu <Christine.Zhu@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
 ---
- include/dt-bindings/reset/mt8195-resets.h | 29 +++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 include/dt-bindings/reset/mt8195-resets.h
+ drivers/watchdog/mtk_wdt.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-bindings/reset/mt8195-resets.h
-new file mode 100644
-index 000000000000..a26bccc8b957
---- /dev/null
-+++ b/include/dt-bindings/reset/mt8195-resets.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)*/
-+/*
-+ * Copyright (c) 2021 MediaTek Inc.
-+ * Author: Christine Zhu <christine.zhu@mediatek.com>
-+ */
+diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+index 16b6aff324a7..796fbb048cbe 100644
+--- a/drivers/watchdog/mtk_wdt.c
++++ b/drivers/watchdog/mtk_wdt.c
+@@ -12,6 +12,7 @@
+ #include <dt-bindings/reset-controller/mt2712-resets.h>
+ #include <dt-bindings/reset-controller/mt8183-resets.h>
+ #include <dt-bindings/reset-controller/mt8192-resets.h>
++#include <dt-bindings/reset/mt8195-resets.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
+@@ -82,6 +83,10 @@ static const struct mtk_wdt_data mt8192_data = {
+ 	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
+ };
+ 
++static const struct mtk_wdt_data mt8195_data = {
++	.toprgu_sw_rst_num = MT8195_TOPRGU_SW_RST_NUM,
++};
 +
-+#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8195
-+#define _DT_BINDINGS_RESET_CONTROLLER_MT8195
-+
-+#define MT8195_TOPRGU_CONN_MCU_SW_RST          0
-+#define MT8195_TOPRGU_INFRA_GRST_SW_RST        1
-+#define MT8195_TOPRGU_APU_SW_RST               2
-+#define MT8195_TOPRGU_INFRA_AO_GRST_SW_RST     6
-+#define MT8195_TOPRGU_MMSYS_SW_RST             7
-+#define MT8195_TOPRGU_MFG_SW_RST               8
-+#define MT8195_TOPRGU_VENC_SW_RST              9
-+#define MT8195_TOPRGU_VDEC_SW_RST              10
-+#define MT8195_TOPRGU_IMG_SW_RST               11
-+#define MT8195_TOPRGU_APMIXEDSYS_SW_RST        13
-+#define MT8195_TOPRGU_AUDIO_SW_RST             14
-+#define MT8195_TOPRGU_CAMSYS_SW_RST            15
-+#define MT8195_TOPRGU_EDPTX_SW_RST             16
-+#define MT8195_TOPRGU_ADSPSYS_SW_RST           21
-+#define MT8195_TOPRGU_DPTX_SW_RST              22
-+#define MT8195_TOPRGU_SPMI_MST_SW_RST          23
-+
-+#define MT8195_TOPRGU_SW_RST_NUM               16
-+
-+#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8195 */
+ static int toprgu_reset_update(struct reset_controller_dev *rcdev,
+ 			       unsigned long id, bool assert)
+ {
+@@ -408,6 +413,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
+ 	{ .compatible = "mediatek,mt6589-wdt" },
+ 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+ 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
++	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
 -- 
 2.18.0
 
