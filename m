@@ -2,37 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2F93EAF97
-	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Aug 2021 07:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500D83EAFEC
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Aug 2021 08:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238608AbhHMFWz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 13 Aug 2021 01:22:55 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:51558 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234013AbhHMFWy (ORCPT
+        id S238810AbhHMGQa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 13 Aug 2021 02:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238803AbhHMGQa (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 13 Aug 2021 01:22:54 -0400
-X-UUID: 32b21d2b23274a81972bdaf52ff45cc1-20210813
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=d1iGUgjfLwkDVNjTYAgUPypY9kTOq21tOcsfabF0x98=;
-        b=ERy9x3MMY7o2CrTyVJiNMWRWDQnb4Pq1STfC6L7QwYcrrY7oijpyYe/XyEGxEhij7XEXjpyQbbL2AbVs32/secXGB8+/WF0BFGghlu8LADZSnzsnOO8ihaA7Q20l0o1Eyd7LedCu35Zci6Q8Pwl1XcE95ek5fSNGWFxK+Wve34E=;
-X-UUID: 32b21d2b23274a81972bdaf52ff45cc1-20210813
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1745074859; Fri, 13 Aug 2021 13:22:23 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 13 Aug 2021 13:22:22 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 13 Aug 2021 13:22:21 +0800
-Message-ID: <8b14d7a730bd787a9d162d368a2d3aae64256ca6.camel@mediatek.com>
-Subject: Re: [PATCH 01/12] dt-bindings: clock: mediatek: document clk
- bindings for mediatek mt7986 SoC
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-CC:     Rob Herring <robh+dt@kernel.org>, Sean Wang <sean.wang@kernel.org>,
+        Fri, 13 Aug 2021 02:16:30 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA76C0613A4
+        for <linux-watchdog@vger.kernel.org>; Thu, 12 Aug 2021 23:16:03 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id y34so18042510lfa.8
+        for <linux-watchdog@vger.kernel.org>; Thu, 12 Aug 2021 23:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=q0CBFd9na84lmP7bza9GpqeUSzKKwzK3eea6qsR8An0=;
+        b=TqBJY1/tDDnKmlj97+w2EME2WmiN/lseRVzecoq/BSCI1mo/CQN5jLCRS0Q5TeRo/I
+         trzBn6hM6pgqbsf3N8jOTGu94NyJGFeDVAQiiuUe9D3JD38ziORQPnPKyD/6qGKVJEEs
+         YSJIvwrEuhWc2TD38LJ5QBwlr/3up3mgeWKyU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=q0CBFd9na84lmP7bza9GpqeUSzKKwzK3eea6qsR8An0=;
+        b=nn8EWU17WGCOYTQHtyAohxw67f8IwJiqHZhyLLK6bB0+QTu7w1nM4pUh0x4M56UyTt
+         xN/4LjsNe9cjA0YBOcsAxwSeQuFQ4q9BGG4YfVYhYwO9Cx5Nrz4A2Sga1ra4xZTFZHn5
+         Y4oz4abysvTYA6hG64kf04D5/4lfPXX8HPrTIOYIonqNdOiClPPJabu9e1uMu3YjKOB1
+         MYoX6MwwTyM7ph9xcakar4cn/CauZnp4W0sS/UVB18vRcAttOa2K1rPnWmMbwFI/fmG9
+         UbSZJsx0o76hwxY1AiGAyOUEnvMn57aih9fNw+MI5ebmc84LZgfCslHz17WpT8GhEiCM
+         NEvg==
+X-Gm-Message-State: AOAM532nU39kQsPYzTrZ1673Spj+sCz//FH4Qj9efqBj17hPNZFV8xWb
+        HdSxOyfF3fuNKCfmNl6eXFtdWc1es3yORpt559bFrQ==
+X-Google-Smtp-Source: ABdhPJw15zivG+yR6ZcBLt5nO2U9oRqjjzDBH6fbCvCXTIgd8Z6+4IjcNE8CoXocpYt8itRHCLhZzPj/6lPgNLxoJd0=
+X-Received: by 2002:a19:c202:: with SMTP id l2mr569137lfc.276.1628835361384;
+ Thu, 12 Aug 2021 23:16:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210726071439.14248-1-sam.shih@mediatek.com> <20210726071439.14248-2-sam.shih@mediatek.com>
+ <CAGXv+5GeEBAkXKfA=S7XGOLYtCRihP5ov6kSiw+eevPAi74GAQ@mail.gmail.com>
+ <083a0e8fdd07c0f940285dce2dc26cb0f5e798a6.camel@mediatek.com>
+ <CAGXv+5F1tPC8W6FcBqn4TdoOrSmFUr4GWpD3hQC9QsPi3o__=g@mail.gmail.com> <8b14d7a730bd787a9d162d368a2d3aae64256ca6.camel@mediatek.com>
+In-Reply-To: <8b14d7a730bd787a9d162d368a2d3aae64256ca6.camel@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 13 Aug 2021 14:15:50 +0800
+Message-ID: <CAGXv+5GxXRqJqZURagNc4z=am0jhqP05eq0i64+kf457yfRoAw@mail.gmail.com>
+Subject: Re: [PATCH 01/12] dt-bindings: clock: mediatek: document clk bindings
+ for mediatek mt7986 SoC
+To:     Sam Shih <sam.shih@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Sean Wang <sean.wang@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Matt Mackall <mpm@selenic.com>,
@@ -45,202 +66,324 @@ CC:     Rob Herring <robh+dt@kernel.org>, Sean Wang <sean.wang@kernel.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Fabien Parent <fparent@baylibre.com>,
-        "Seiya Wang" <seiya.wang@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
         Devicetree List <devicetree@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, linux-gpio@vger.kernel.org,
         "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-crypto@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
         John Crispin <john@phrozen.org>,
         Ryder Lee <Ryder.Lee@mediatek.com>
-Date:   Fri, 13 Aug 2021 13:22:21 +0800
-In-Reply-To: <CAGXv+5F1tPC8W6FcBqn4TdoOrSmFUr4GWpD3hQC9QsPi3o__=g@mail.gmail.com>
-References: <20210726071439.14248-1-sam.shih@mediatek.com>
-         <20210726071439.14248-2-sam.shih@mediatek.com>
-         <CAGXv+5GeEBAkXKfA=S7XGOLYtCRihP5ov6kSiw+eevPAi74GAQ@mail.gmail.com>
-         <083a0e8fdd07c0f940285dce2dc26cb0f5e798a6.camel@mediatek.com>
-         <CAGXv+5F1tPC8W6FcBqn4TdoOrSmFUr4GWpD3hQC9QsPi3o__=g@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGksDQoNClNvcnJ5IGZvciB0aGUgbGF0ZSByZXBseSxJIGhhdmUgcHJlcGFyZWQgdjIgcGF0Y2hl
-cywgYnV0IGZvciBzb21lIG9mIHlvdXIgc3VnZ2VzdGlvbnMsIEkgdGhpbmsNCml0IGlzIGEgYml0
-IGRpZmZpY3VsdCB0byBhcHBseSB0byBvdXIgZHJpdmVycy4NCg0KDQpPbiBGcmksIDIwMjEtMDct
-MzAgYXQgMTQ6MzAgKzA4MDAsIENoZW4tWXUgVHNhaSB3cm90ZToNCj4gT24gRnJpLCBKdWwgMzAs
-IDIwMjEgYXQgMjowMSBQTSBTYW0gU2hpaCA8c2FtLnNoaWhAbWVkaWF0ZWsuY29tPg0KPiB3cm90
-ZToNCj4gPiANCj4gPiBIaSwNCj4gPiANCj4gPiBPbiBNb24sIDIwMjEtMDctMjYgYXQgMTc6MjAg
-KzA4MDAsIENoZW4tWXUgVHNhaSB3cm90ZToNCj4gPiA+IEZ1cnRoZXJtb3JlLCBiYXNlZCBvbiB0
-aGUgZHJpdmVyIHBhdGNoIGFuZCB0aGUgZmFjdCB0aGF0IHRoZXkNCj4gPiA+IHNoYXJlDQo+ID4g
-PiB0aGUNCj4gPiA+IHNhbWUgY29tcGF0aWJsZSBzdHJpbmcsIGl0IHNlZW1zIHlvdSBzaG91bGRu
-J3QgbmVlZCB0byBoYXZlIHR3bw0KPiA+ID4gY29tcGF0aWJsZQ0KPiA+ID4gc3RyaW5ncyBmb3Ig
-dHdvIGlkZW50aWNhbCBoYXJkd2FyZSBibG9ja3MuIFRoZSBuZWVkIGZvciBzZXBhcmF0ZQ0KPiA+
-ID4gZW50cmllcw0KPiA+ID4gdG8gaGF2ZSBkaWZmZXJlbnQgY2xvY2sgbmFtZXMgaXMgYW4gaW1w
-bGVtZW50YXRpb24gZGV0YWlsLiBQbGVhc2UNCj4gPiA+IGNvbnNpZGVyDQo+ID4gPiB1c2luZyBh
-bmQgc3VwcG9ydGluZyBjbG9jay1vdXRwdXQtbmFtZXMuDQo+ID4gPiANCj4gPiA+IEFsc28sIHBs
-ZWFzZSBjaGVjayBvdXQgdGhlIE1UODE5NSBjbG9jayBkcml2ZXIgc2VyaWVzIFsxXS4gSSdtDQo+
-ID4gPiBndWVzc2luZw0KPiA+ID4gYSBsb3Qgb2YgdGhlIGNvbW1lbnRzIGFwcGx5IHRvIHRoaXMg
-b25lIGFzIHdlbGwuDQo+ID4gPiANCj4gPiA+IFJlZ2FyZHMNCj4gPiA+IENoZW5ZdQ0KPiA+ID4g
-DQo+ID4gPiBbMV0NCj4gPiA+IA0KaHR0cHM6Ly91cmxkZWZlbnNlLmNvbS92My9fX2h0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2xpbnV4LW1lZGlhdGVrLzIwMjEwNjE2MjI0NzQzLjUxMDktMS1jaHVu
-LWppZS5jaGVuQG1lZGlhdGVrLmNvbS9ULyp0X187SXchIUNUUk5LQTl3TWcwQVJidyEyOXBiNFRK
-aUdITHZMYllKZ0RCMkRoZjhNcHc1VlU4elYtVzNOck1hbl9SUFFydFdUMkVkUlR5eWpXcHUwblpF
-JA0KPiA+ID4gDQo+ID4gPiANCj4gPiANCj4gPiBJIGhhdmUgb3JnYW5pemVkIHlvdXIgY29tbWVu
-dHMgaW4gIk1lZGlhdGVrIE1UODE5NSBjbG9jayBzdXBwb3J0Ig0KPiA+IHNlcmllcyBpbnRvIHRo
-ZSBmb2xsb3dpbmcgbGlzdCwgcmVwbHkgdG8geW91ciBoZXJlOg0KPiA+IA0KPiA+ID4gZHQtYmlu
-ZGluZzogTW92ZSB0aGUgbm90LXRvLWJlLWV4cG9zZWQgY2xvY2sgdG8gZHJpdmVyIGRpcmVjdG9y
-eQ0KPiA+ID4gb3INCj4gPiA+IHNpbXBseSBsZWZ0IG91dA0KPiA+IA0KPiA+IE9rYXksIHRoYW5r
-cyBmb3IgeW91ciBjb21tZW50LCBJIHdpbGwgdXBkYXRlIHRoaXMgaW4gdGhlIG5leHQgcGF0Y2gN
-Cj4gPiBzZXQNCj4gDQo+IFNlZSB0aGUgZm9sbG93aW5nIGZpbGUgZm9yIGFuIGV4YW1wbGU6DQo+
-IA0KPiANCg0KPiBodHRwczovL3VybGRlZmVuc2UuY29tL3YzL19faHR0cHM6Ly9lbGl4aXIuYm9v
-dGxpbi5jb20vbGludXgvbGF0ZXN0L3NvdXJjZS9kcml2ZXJzL2Nsay9zdW54aS1uZy9jY3Utc3Vu
-NTBpLWE2NC5oX187ISFDVFJOS0E5d01nMEFSYnchMy0tVUVwRkZHZVpfV1RDYVdzal85dmJiYjRT
-U0UxdlBDSUxGbGVUaHpwYTFucTdtdmVGZlFNRHFiYWNkVDVJNiQgDQo+IA0KPiBkcml2ZXJzIHdv
-dWxkIG5vdCBiZSBhYmxlIHRvIHVzZSB0aGUgbm9uLWV4cG9ydGVkIGludGVybWVkaWF0ZQ0KPiBj
-bG9ja3MuDQo+IA0KVGhhbmtzLCBJIHdlbGwgZGVsZXRlIHNvbWUgY2xvY2tzIHRoYXQgYXJlIG5v
-dCBleHBlY3RlZCB0byBiZSB1c2UgaW4NCmRldmljZSB0cmVlLg0KDQo+ID4gPiBkZXNjcmliZSBz
-b21lIG9mIHRoZSBjbG9jayByZWxhdGlvbnMgYmV0d2VlbiB0aGUgdmFyaW91cyBjbG9jaw0KPiA+
-ID4gY29udHJvbGxlcnMNCj4gPiANCj4gPiBJIGhhdmUgY2hlY2tlZCB0aGUgZmlsZXMgaW4NCj4g
-PiAiRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9tZWRpYXRlayIsIEl0IHNl
-ZW1zIHRoYXQgYWxsDQo+ID4gTWVkaWFUZWsgU29DIGNsb2NrcyBhcmUgc2ltcGx5IGRlc2NyaWJl
-ZCBieSBlYWNoIGNvbnRyb2xsZXIsIGxpa2UNCj4gPiAibWVkaWF0ZWssaW5mcmFjZmcudHh0IiBh
-bmQgIm1lZGlhdGVrLHRvcGNrZ2VuLnR4dCIsIGFuZCB0aG9zZQ0KPiA+IGRvY3VtZW50DQo+ID4g
-b25seSBpbmNsdWRlIGNvbXBhdGlibGUgc3RyaW5ncyBpbmZvcm1hdGlvbiBhbmQgZXhhbXBsZXMu
-DQo+ID4gQ2FuIHdlIGluc2VydCB0aGUgY2xvY2sgcmVsYXRpb25zaGlwIG9mIE1UNzk4NiBkaXJl
-Y3RsbHkgaW4gY29tbW9uDQo+ID4gZG9jdW1lbnRzPw0KPiANCj4gV2hhdCBJIG1lYW50IHdhcyB0
-aGF0IHNpbmNlIGVhY2ggY2xvY2sgY29udHJvbGxlciBoYXJkd2FyZSBibG9jayBoYXMNCj4gb25l
-IG9yIG1hbnkgY2xvY2sgaW5wdXRzLCB0aGVzZSBzaG91bGQgYmUgZGVzY3JpYmVkIGluIHRoZSBi
-aW5kaW5nDQo+IGFzIHJlcXVpcmVkICJjbG9ja3MiIGFuZCAiY2xvY2stbmFtZXMiIHByb3BlcnRp
-ZXMuDQo+IA0KPiBTbyBpdCdzIG5vdCBhYm91dCBkZXNjcmliaW5nIHRoZSBhY3R1YWwgcmVsYXRp
-b25zaGlwIG9yIGNsb2NrIHRyZWUsDQo+IGJ1dCBqdXN0IGhhdmluZyB0aGUgaW5wdXRzIGFjY3Vy
-YXRlbHkgZGVzY3JpYmVkLg0KPiANCj4gPiBPciB3ZSBzaG91bGQgYWRkIGEgbmV3ICJtZWRpYXRl
-ayxtdDc5ODYtY2xvY2sueWFtbCIgYW5kIG1vdmUNCj4gPiBjb21wYXRpYmxlDQo+ID4gc3RyaW5n
-cyBpbmZvcm1hdGlvbiBhbmQgZXhhbXBsZSB0byB0aGlzIGZpbGUsIGFuZCBpbnNlcnQgY2xvY2sN
-Cj4gPiByZWxhdGlvbnNoaXAgZGVzY3JpcHRpb25zIHRvIHRoaXMgZmlsZT8gV291bGRu4oCZdCBp
-dCBiZSBzdHJhbmdlIHRvDQo+ID4gc2tpcA0KPiA+IGV4aXN0aW5nIGZpbGVzIGFuZCBjcmVhdGUg
-YSBuZXcgb25lPw0KPiANCj4gSSB0aGluayB0aGF0IGlzIGEgcXVlc3Rpb24gZm9yIHRoZSBkZXZp
-Y2UgdHJlZSBiaW5kaW5nIG1haW50YWluZXIsDQo+IFJvYi4NCj4gQXQgbGVhc3QgZm9yIE1lZGlh
-dGVrIHN0dWZmLCB0aGVyZSBzZWVtIHRvIGJlIG1hbnkgc2VwYXJhdGUgZmlsZXMuDQo+IA0KPiA+
-ID4gZXh0ZXJuYWwgb3NjaWxsYXRvcidzIGNhc2UsIHRoZSBvc2NpbGxhdG9yIGlzIGRlc2NyaWJl
-ZCBpbiB0aGUNCj4gPiA+IGRldmljZQ0KPiA+ID4gdHJlZQ0KPiA+IA0KPiA+IFllcywgd2UgaGF2
-ZSAiY2xreHRhbCIgaW4gdGhlIERULCB3aGljaCBzdGFuZHMgZm9yIGV4dGVybmFsDQo+ID4gb3Nj
-aWxsYXRvciwNCj4gPiBBbGwgY2xvY2tzIGluIGFwbWl4ZWRzeXMgdXNlICJjbGt4dGFsIiBhcyB0
-aGUgcGFyZW50IGNsb2NrDQo+IA0KPiBTbyBmb3IgdGhlIGFwbWl4ZWRzeXMgZGV2aWNlIG5vZGUs
-IGl0IHdvdWxkIGF0IGxlYXN0IGhhdmUgc29tZXRoaW5nDQo+IGxpa2U6DQo+IA0KPiAgICAgY2xv
-Y2tzID0gPCZjbGt4dGFsPjsNCj4gICAgIGNsb2NrLW5hbWVzID0gInh0YWwiOw0KPiANCj4gRm9y
-IHRvcGNrZ2VuLCBzaW5jZSBpdCBoYXMgeHRhbCBhbmQgc29tZSBQTExzIGZyb20gYXBtaXhlZHN5
-cyBhcw0KPiBpbnB1dHM6DQo+IA0KPiAgICAgY2xvY2tzID0gPCZjbGt4dGFsPiwgPCZhcG1peGVk
-c3lzIENMS19JRF9QTExYWFg+LCA8JmFwbWl4ZWRzeXMNCj4gQ0xLX0lEX1BMTFlZWT47DQo+ICAg
-ICBjbG9jay1uYW1lcyA9ICJ4dGFsIiwgInBsbFhYWCIsICJwbGxZWVkiDQo+IA0KPiBUaGUgYWJv
-dmUgaXMganVzdCBhbiBleGFtcGxlLiBZb3Ugc2hvdWxkIGFkYXB0IGl0IHRvIGZpdCB5b3VyDQo+
-IGhhcmR3YXJlDQo+IGRlc2NyaXB0aW9uLiBBbmQgdGhlIGJpbmRpbmdzIHNob3VsZCBkZXNjcmli
-ZSB3aGF0IGlzIHJlcXVpcmVkLiBOb3RlDQo+IHRoYXQgdGhlIGNsb2NrIG5hbWVzIHVzZWQgaGVy
-ZSBhcmUgbG9jYWwgdG8gdGhpcyBkZXZpY2Ugbm9kZS4gVGhleSBkbw0KPiBub3QgbmVlZCB0byBt
-YXRjaCB3aGF0IHRoZSBjbG9jayBkcml2ZXIgdXNlcyBmb3IgdGhlIGdsb2JhbCBuYW1lLiBTbw0K
-PiBqdXN0IGdvIHdpdGggc29tZXRoaW5nIGRlc2NyaXB0aXZlLg0KPiANCj4gVGhlIHBvaW50IGlz
-LCBjcm9zcyBoYXJkd2FyZSBibG9jayBkZXBlbmRlbmNpZXMgc2hvdWxkIGJlIGNsZWFybHkNCj4g
-ZGVzY3JpYmVkDQo+IGluIHRoZSBkZXZpY2UgdHJlZSwgaW5zdGVhZCBvZiBpbXBsaWNpdGx5IGJ1
-cmllZCBpbiB0aGUgY2xvY2sNCj4gZHJpdmVycy4NCj4gDQoNCk1ha2UgY3Jvc3MgaGFyZHdhcmUg
-YmxvY2sgZGVwZW5kZW5jaWVzIGNsZWFybHkgZGVzY3JpYmVkIGluIHRoZSBkZXZpY2UNCnRyZWUg
-c2VlbXMgdW5zdWl0YWJsZSBiZXR3ZWVuICJ0b3BjayIgYW5kICJpbmZyYSIgYmxvY2sgb2YgbXQ3
-OTg2Lg0KDQpJbiB5b3VyIGV4YW1wbGUsIHBhc3NpbmcgImNsa3h0YWwiIGZyb20gdGhlIGRldmlj
-ZSB0cmVlIHNlZW1zIG9rLiBFdmVuDQpmb3IgdG9wY2tnZW4sIHBhc3NpbmcgImNsa3h0YWwiLCAi
-cGxsWFhYIiwgInBsbFlZWSIgZnJvbSB0aGUgZGV2aWNlDQp0cmVlIGFuZCB1c2luZyB0aGVzZSBj
-bG9ja3MgYXMgdGhlIHBhcmVudCBjbG9jayBvZiB0b3Bja2dlbiBhbHNvIHNlZW1zDQp0byB3b3Jr
-LiBJdCBpcyBmZWFzaWJsZSBiZWNhdXNlIGl0IGlzIG5vdCBtdWNoIGNsb2NrIGJldHdlZW4gdGhl
-c2UgdHdvDQpoYXJkd2FyZSBibG9ja3MuDQoNCkJ1dCBmb3IgdGhlIGNsb2NrIHJlbGVhdGlvbnNo
-aXAgYmV0d2VlbiAidG9wY2tnIiBhbmQgImluZnJhIiwgdGhleSBhcmUNCnZlcnkgY29tcGxpY2F0
-ZWQgaW4gaGFyZHdhcmUgZGVzaWduLiBUaGVyZSBhcmUgZG96ZW5zIG9mIGNsb2NrcyBhbmQNCmlu
-dGVyYWN0IHdpdGggZWFjaCBvdGhlci4gSWYgd2Ugd2FudCB0byBkZXNjcmliZSB0aGVzZSByZWxh
-dGlvbnNoaXBzIGluDQp0aGUgZGV2aWNlIHRyZWUsIHdlIG5lZWQgdG8gdXNlIGEgYmlnIGFycmF5
-IGluc2lkZSB0aGUgZGV2aWNlIHRyZWUgYW5kDQptYWtlIGRldmljZSB0cmVlIGxvb2tzIHZlcnkg
-bWVzc3kuIFRoZXJlZm9yZSwgb3VyIHByZXZpb3VzIG1ldGhvZCBvZg0Kd3JpdGluZyBhIGNsb2Nr
-IGRyaXZlciBpcyB0byB1c2UgdGhlIGdsb2JhbCBjbG9jayBhbmQgZGVzY3JpcGJlIHRoZQ0KY2xv
-Y2sgcmVsZWF0aW9uc2hpcCBpbnNpZGUgdGhlIGNsb2NrIGRyaXZlci4NCg0KICAgICAgICAgICAg
-ICAgX19fX19fICAgX19fX19fX18gICAgX19fX19fX18NCiAgICBjbGt4dGFsIC0tfCAgICAgIHwg
-IHwgICAgICAgfC54LnwgICAgICAgfA0KICAgICAgICAgICAgICB8YXBtaXgufC0tfCB0b3BjayB8
-LngufCBpbmZyYSB8DQogICAgICAgICAgICAgIHwgICAgICB8LS18ICAgICAgIHwueC58X19fX19f
-X3wNCiAgICAgICAgICAgICAgfCAgICAgIHwgIHwgICAgICAgfCAgIF9fX19fX19fDQogICAgICAg
-ICAgICAgIHxfX19fX198ICB8ICAgICAgIHwtLXwgICAgICAgIHwNCiAgICAgICAgICAgICAgICAg
-ICAgICAgIHwgICAgICAgfC0tfCBldGhzeXMgfA0KICAgICAgICAgICAgICAgICAgICAgICAgfF9f
-X19fX198ICB8X19fX19fX198DQoNCk1heWJlIHdlIHNob3VsZCBrZWVwIHRoZSBjbG9jayByZWxh
-dGlvbnNoaXAgaW4gb3VyIGNsb2NrIGRyaXZlciBsaWtlDQp0aGUgcHJldmlvdXMgbWVkaWF0ZWsg
-Y2xvY2sgZHJpdmVycy4NCg0KDQo+ID4gPiBEdWFsIGxpY2Vuc2UgcGxlYXNlIChhbmQgdGhlIGR0
-cyBmaWxlcykuDQo+ID4gDQo+ID4gT2theSwgdGhhbmtzIGZvciB5b3VyIGNvbW1lbnQsIEkgd2ls
-bCB1cGRhdGUgdGhpcyBpbiB0aGUgbmV4dCBwYXRjaA0KPiA+IHNldA0KPiA+IA0KPiA+ID4gV2h5
-IGFyZSB0aGlzIGFuZCBvdGhlciAxOjEgZmFjdG9yIGNsa3MgbmVlZGVkPyBUaGV5IGxvb2sgbGlr
-ZQ0KPiA+ID4gcGxhY2Vob2xkZXJzLiBQbGVhc2UgcmVtb3ZlIHRoZW0uDQo+ID4gDQo+ID4gT2th
-eSwgdGhhbmtzIGZvciB5b3VyIGNvbW1lbnQsIEkgd2lsbCB1cGRhdGUgdGhpcyBpbiB0aGUgbmV4
-dCBwYXRjaA0KPiA+IHNldA0KPiANCj4gSWRlYWxseSB0aGUgY2xvY2sgZHJpdmVyIHdvdWxkIHVz
-ZSB0aGUgZGV2aWNlIHRyZWUgdG8gZ2V0IGxvY2FsDQo+IHJlZmVyZW5jZXMNCj4gZm9yIHRoaXMs
-IGJ1dCB0aGF0IGlzIGdvaW5nIHRvIHJlcXVpcmUgc29tZSByZXdvcmsgdG8gTWVkaWF0ZWsncw0K
-PiBjb21tb24NCj4gY2xvY2sgY29kZS4NCj4gDQoNClRvIHRyYW5zZmVyIHRoZSBjbG9jayByZWxh
-dGlvbnNoaXAgdGhyb3VnaCB0aGUgZGV2aWNlIHRyZWUsIGl0IGlzDQpuZWNlc3NhcnkgdG8gbWFr
-ZSBtb2RpZmljYXRpb25zIHRvIHRoZSBjb21tb24gcGFydCBvZiB0aGUgbXRrIGNsb2NrDQpkcml2
-ZXIgdGhhdCBoYXMgYmVlbiBtZXJnZWQsIGFuZCBtYXkgYWxzbyBtb2RpZnkgb3RoZXIgbWVkaWF0
-ZWsgY2xvY2sNCmRyaXZlcnMuDQoNCkxldCdzIG1vdmUgdG8gdGhlIHNvdXJjZSBjb2RlOg0KCQ0K
-YXBtaXhlZHN5cyB7DQogICAgLi4uDQp9DQoJDQp0b3Bja2dlbiB7DQogICAgLi4uDQogICAgY2xv
-Y2tzID0gLi4uICwgPCZhcG1peGVkc3lzIE5FVDJQTEw+ICwgLi4uIDsNCiAgICBjbG9jay1uYW1l
-cyA9IC4uLiAsICJuZXQycGxsIiAsIC4uLiA7DQp9DQoNCmNoYXIgKnBhcmVudF9uYW1lOw0KICAg
-IGZvciBlYWNoIGNsayBpbiA8ZGV2aWNlX3RyZWVfbm9kZT46DQogICAgICAgIHBhcmVudF9uYW1l
-ID0gX19jbGtfZ2V0X25hbWUob2ZfY2xrX2dldChucCwgaSkpDQoJDQooYXJtYWRhLTM3eHgtdGJn
-LmMgdXNlIHRoaXMgbWV0aG9kIHRvIGdldCBnbG9iYWwgbmFtZSBvZiBwYXJlbnQgY2xvY2spDQoN
-CklkZWFsbHksIHdlIHNob3VsZCB1c2UgdGhlIHBhcmVudF9uYW1lIHZhcmlhYmxlIGFib3ZlIHRv
-IGNyZWF0ZSBhDQpjbG9jaywgQnV0IG10a19maXhlZF9mYWN0b3IgZXhwZWN0cyBpbnB1dCBjb25z
-dCBzdHJpbmdzDQoJDQp2b2lkIG10a19jbGtfcmVnaXN0ZXJfZmFjdG9ycyhjb25zdCBzdHJ1Y3Qg
-bXRrX2ZpeGVkX2ZhY3RvciAqY2xrcywgLi4uKQ0KCQ0Kc3RydWN0IG10a19maXhlZF9mYWN0b3Ig
-ew0KICAgIC4uLg0KICAgIGNvbnN0IGNoYXIgKm5hbWU7DQogICAgY29uc3QgY2hhciAqcGFyZW50
-Ow0KICAgIC4uLg0KfTsNCg0KU28gd2Ugc3RpbGwgbmVlZCB0byB1c2UgcHJlLWRlZmluZWQgY2xv
-Y2sgbmFtZSBpbiBzdGF0aWMgY29uc3QgY2xvY2sNCnRhYmxlIGV2ZW4gd2UgY2FuIGdldCBjbG9j
-ayBuYW1lIGFzIHZhcmlhYmxlIGZyb20gZGV2aWNlIHRyZWUuDQoNCg0Kc3RhdGljIGNvbnN0IHN0
-cnVjdCBtdGtfZml4ZWRfZmFjdG9yIHRvcF9kaXZzW10gX19pbml0Y29uc3QgPSB7DQogICAgLi4u
-DQogICAgRkFDVE9SKENLX1RPUF9ORVQyX0Q0X0QyLCAibmV0Ml9kNF9kMiIsICJuZXQycGxsIiwg
-MSwgOCksDQogICAgRkFDVE9SKENLX1RPUF9ORVQyX0QzX0QyLCAibmV0Ml9kM19kMiIsICJuZXQy
-cGxsIiwgMSwgMiksDQogICAgLi4uDQp9DQoNCg0KDQo+ID4gPiBNZXJnZSBkdXBsaWNhdGUgcGFy
-ZW50IGluc3RhbmNlcw0KPiA+IA0KPiA+IFdlIGhhdmUgY29uc2lkZXJlZCB0aGlzIGluIHRoZSBN
-VDc5ODYgYmFzaWMgY2xvY2sgZHJpdmVyLCBidXQgSQ0KPiA+IHdpbGwNCj4gPiBjaGVjayBhZ2Fp
-bi4gSWYgY29ycmVjdGlvbnMgYXJlIG5lZWRlZCwgSSB3aWxsIG1ha2UgY2hhbmdlcyBpbiB0aGUN
-Cj4gPiBuZXh0DQo+ID4gcGF0Y2ggc2V0Lg0KPiA+IA0KPiA+ID4gTGVha2luZyBjbGtfZGF0YSBp
-ZiBzb21lIGZ1bmN0aW9uIHJldHVybiBmYWlsDQo+ID4gDQo+ID4gT2theSwgdGhhbmtzIGZvciB5
-b3VyIGNvbW1lbnQsIEkgd2lsbCB1cGRhdGUgdGhpcyBpbiB0aGUgbmV4dCBwYXRjaA0KPiA+IHNl
-dA0KPiA+IA0KPiA+ID4gVGhpcyBmaWxlIGNvbnRhaW5zIGZvdXIgZHJpdmVycy4gVGhleSBkbyBu
-b3QgaGF2ZSBkZXBlbmQgb24gZWFjaA0KPiA+ID4gb3RoZXIsIGFuZCBkbyBub3QgbmVlZCB0byBi
-ZSBpbiB0aGUgc2FtZSBmaWxlLiBQbGVhc2Ugc3BsaXQgdGhlbQ0KPiA+ID4gaW50bw0KPiA+ID4g
-ZGlmZmVyZW4gZmlsZXMgYW5kIHByZWZlcmFibHkgZGlmZmVyZW50IHBhdGNoZXMNCj4gPiANCj4g
-PiBPa2F5LCB0aGFua3MgZm9yIHlvdXIgY29tbWVudCwgSSB3aWxsIHNlcGFyYXRlIHRob3NlIGNs
-b2NrIGRyaXZlcnMNCj4gPiBpbg0KPiA+IHRoZSBuZXh0IHBhdGNoIHNldA0KPiA+IA0KPiA+ID4g
-SXMgdGhlcmUgYW55IHBhcnRpY3VsYXIgcmVhc29uIGZvciBhcmNoX2luaXRjYWxsDQo+ID4gDQo+
-ID4gV2UgaGF2ZSBjb25zaWRlcmVkIHRoaXMgaW4gTVQ3OTg2IGJhc2ljIGNsb2NrIGRyaXZlciwg
-YW5kIHVzZQ0KPiA+IENMS19PRl9ERUNMQVJFIGluc3RlYWQgb2YgYXJjaF9pbml0Y2FsbC4NCj4g
-DQo+IEhhdmluZyB0byBzZXF1ZW5jZSBjbG9jayByZWdpc3RyYXRpb24gbWFudWFsbHkgaXMgbGlr
-ZWx5IGEgc3ltcHRvbSBvZg0KPiBpbmFkZXF1YXRlIGNsb2NrIGRlcGVuZGVuY3kgaGFuZGxpbmcu
-IFNvIGlmIHRoZSBkcml2ZXJzIGFyZSBvbmx5DQo+IHVzaW5nDQo+IGdsb2JhbCBjbG9jayBuYW1l
-cyB0byBkZXNjcmliZSBwYXJlbnRzLCB3aGF0IGhhcHBlbnMgaXMgdGhhdCBldmVuIGlmDQo+IHRo
-ZSBwYXJlbnQgaXNuJ3QgaW4gdGhlIHN5c3RlbSB5ZXQsIHRoZSByZWdpc3RyYXRpb24gaXMgYWxs
-b3dlZCB0bw0KPiBzdWNjZWVkLiBIb3dldmVyIHNpbmNlIHRoZSBwYXJlbnQgY2xvY2sgaXNuJ3Qg
-YXZhaWxhYmxlIHlldCwgYW55DQo+IGNhbGN1bGF0aW9ucyBpbnZvbHZpbmcgaXQsIHN1Y2ggYXMg
-Y2FsY3VsYXRpbmcgY2xvY2sgcmF0ZXMsIHdpbGwNCj4geWllbGQgaW52YWxpZCByZXN1bHRzLCBz
-dWNoIGFzIDAgY2xvY2sgcmF0ZS4NCj4gDQo+ID4gQW5vdGhlciBxdWVzdGlvbjoNCj4gPiBTaG91
-bGQgdGhlIGNsb2NrIHBhdGNoZXMgaW4gIkFkZCBiYXNpYyBTb0Mgc3VwcG9ydCBmb3IgTWVkaWFU
-ZWsNCj4gPiBtdDc5ODYiDQo+ID4gbmVlZCB0byBiZSBzZXBhcmF0ZWQgaW50byBhbm90aGVyIHBh
-dGNoIHNlcmllcywgc3VjaCBhcyBNVDgxOTUNCj4gPiAiTWVkaWF0ZWsgTVQ4MTk1IGNsb2NrIHN1
-cHBvcnQiID8NCj4gDQo+IE5vcGUuIFRoZSBNVDgxOTUgdGVhbSBzZWVtcyB0byBiZSBzcGxpdHRp
-bmcgdGhpbmdzIHVwIGJ5IG1vZHVsZSwgd2l0aA0KPiB0aGUgZGV2aWNlIHRyZWUgYmVpbmcgaXRz
-IG93biBzZXBhcmF0ZSBtb2R1bGUuIElkZWFsbHkgeW91IHdhbnQgdG8NCj4gc2VuZA0KPiBkcml2
-ZXJzIGFsb25nIHdpdGggdGhlIHJlbGF0ZWQgZGV2aWNlIHRyZWUgY2hhbmdlcywgc28gcGVvcGxl
-DQo+IHJldmlld2luZw0KPiBjYW4gZ2V0IGEgc2Vuc2Ugb2YgaG93IHRoaW5ncyB3b3JrLiBBbmQg
-aWYgdGhlIGhhcmR3YXJlIGlzIHB1YmxpY2x5DQo+IGF2YWlsYWJsZSwgcGVvcGxlIGNhbiBhY3R1
-YWxseSB0ZXN0IHRoZSBjaGFuZ2VzLiBXZSBjYW4ndCBkbyB0aGF0IGlmDQo+IHRoZQ0KPiBkZXZp
-Y2UgdHJlZSBjaGFuZ2VzIGFyZW4ndCBidW5kbGVkIHRvZ2V0aGVyLg0KPiANCk9LLCBJIHdpbGwg
-a2VlcCBjbG9jayBwYXRjaGVzIGFuZCBiYXNpYyBwYXJ0IHBhdGNoZXMgaW4gdGhlIHNhbWUgc2Vy
-aWVzDQoocGF0Y2hlcyB2MikNCg0KDQpSZWdhcmRzLA0KU2FtDQpUaGFua3MsIEkgd2lsbCBkZWxl
-dGUgc29tZSBjbG9ja3MgdGhhdCBhcmUgbm90IGV4cGVjdGVkIHRvIGINCg==
+On Fri, Aug 13, 2021 at 1:22 PM Sam Shih <sam.shih@mediatek.com> wrote:
+>
+> Hi,
+>
+> Sorry for the late reply,I have prepared v2 patches, but for some of your=
+ suggestions, I think
+> it is a bit difficult to apply to our drivers.
+>
+>
+> On Fri, 2021-07-30 at 14:30 +0800, Chen-Yu Tsai wrote:
+> > On Fri, Jul 30, 2021 at 2:01 PM Sam Shih <sam.shih@mediatek.com>
+> > wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Mon, 2021-07-26 at 17:20 +0800, Chen-Yu Tsai wrote:
+> > > > Furthermore, based on the driver patch and the fact that they
+> > > > share
+> > > > the
+> > > > same compatible string, it seems you shouldn't need to have two
+> > > > compatible
+> > > > strings for two identical hardware blocks. The need for separate
+> > > > entries
+> > > > to have different clock names is an implementation detail. Please
+> > > > consider
+> > > > using and supporting clock-output-names.
+> > > >
+> > > > Also, please check out the MT8195 clock driver series [1]. I'm
+> > > > guessing
+> > > > a lot of the comments apply to this one as well.
+> > > >
+> > > > Regards
+> > > > ChenYu
+> > > >
+> > > > [1]
+> > > >
+> https://urldefense.com/v3/__https://lore.kernel.org/linux-mediatek/202106=
+16224743.5109-1-chun-jie.chen@mediatek.com/T/*t__;Iw!!CTRNKA9wMg0ARbw!29pb4=
+TJiGHLvLbYJgDB2Dhf8Mpw5VU8zV-W3NrMan_RPQrtWT2EdRTyyjWpu0nZE$
+> > > >
+> > > >
+> > >
+> > > I have organized your comments in "Mediatek MT8195 clock support"
+> > > series into the following list, reply to your here:
+> > >
+> > > > dt-binding: Move the not-to-be-exposed clock to driver directory
+> > > > or
+> > > > simply left out
+> > >
+> > > Okay, thanks for your comment, I will update this in the next patch
+> > > set
+> >
+> > See the following file for an example:
+> >
+> >
+>
+> > https://urldefense.com/v3/__https://elixir.bootlin.com/linux/latest/sou=
+rce/drivers/clk/sunxi-ng/ccu-sun50i-a64.h__;!!CTRNKA9wMg0ARbw!3--UEpFFGeZ_W=
+TCaWsj_9vbbb4SSE1vPCILFleThzpa1nq7mveFfQMDqbacdT5I6$
+> >
+> > drivers would not be able to use the non-exported intermediate
+> > clocks.
+> >
+> Thanks, I well delete some clocks that are not expected to be use in
+> device tree.
+>
+> > > > describe some of the clock relations between the various clock
+> > > > controllers
+> > >
+> > > I have checked the files in
+> > > "Documentation/devicetree/bindings/arm/mediatek", It seems that all
+> > > MediaTek SoC clocks are simply described by each controller, like
+> > > "mediatek,infracfg.txt" and "mediatek,topckgen.txt", and those
+> > > document
+> > > only include compatible strings information and examples.
+> > > Can we insert the clock relationship of MT7986 directlly in common
+> > > documents?
+> >
+> > What I meant was that since each clock controller hardware block has
+> > one or many clock inputs, these should be described in the binding
+> > as required "clocks" and "clock-names" properties.
+> >
+> > So it's not about describing the actual relationship or clock tree,
+> > but just having the inputs accurately described.
+> >
+> > > Or we should add a new "mediatek,mt7986-clock.yaml" and move
+> > > compatible
+> > > strings information and example to this file, and insert clock
+> > > relationship descriptions to this file? Wouldn=E2=80=99t it be strang=
+e to
+> > > skip
+> > > existing files and create a new one?
+> >
+> > I think that is a question for the device tree binding maintainer,
+> > Rob.
+> > At least for Mediatek stuff, there seem to be many separate files.
+> >
+> > > > external oscillator's case, the oscillator is described in the
+> > > > device
+> > > > tree
+> > >
+> > > Yes, we have "clkxtal" in the DT, which stands for external
+> > > oscillator,
+> > > All clocks in apmixedsys use "clkxtal" as the parent clock
+> >
+> > So for the apmixedsys device node, it would at least have something
+> > like:
+> >
+> >     clocks =3D <&clkxtal>;
+> >     clock-names =3D "xtal";
+> >
+> > For topckgen, since it has xtal and some PLLs from apmixedsys as
+> > inputs:
+> >
+> >     clocks =3D <&clkxtal>, <&apmixedsys CLK_ID_PLLXXX>, <&apmixedsys
+> > CLK_ID_PLLYYY>;
+> >     clock-names =3D "xtal", "pllXXX", "pllYYY"
+> >
+> > The above is just an example. You should adapt it to fit your
+> > hardware
+> > description. And the bindings should describe what is required. Note
+> > that the clock names used here are local to this device node. They do
+> > not need to match what the clock driver uses for the global name. So
+> > just go with something descriptive.
+> >
+> > The point is, cross hardware block dependencies should be clearly
+> > described
+> > in the device tree, instead of implicitly buried in the clock
+> > drivers.
+> >
+>
+> Make cross hardware block dependencies clearly described in the device
+> tree seems unsuitable between "topck" and "infra" block of mt7986.
+>
+> In your example, passing "clkxtal" from the device tree seems ok. Even
+> for topckgen, passing "clkxtal", "pllXXX", "pllYYY" from the device
+> tree and using these clocks as the parent clock of topckgen also seems
+> to work. It is feasible because it is not much clock between these two
+> hardware blocks.
+>
+> But for the clock releationship between "topckg" and "infra", they are
+> very complicated in hardware design. There are dozens of clocks and
+> interact with each other. If we want to describe these relationships in
+> the device tree, we need to use a big array inside the device tree and
+> make device tree looks very messy. Therefore, our previous method of
+> writing a clock driver is to use the global clock and descripbe the
+> clock releationship inside the clock driver.
+>
+>                ______   ________    ________
+>     clkxtal --|      |  |       |.x.|       |
+>               |apmix.|--| topck |.x.| infra |
+>               |      |--|       |.x.|_______|
+>               |      |  |       |   ________
+>               |______|  |       |--|        |
+>                         |       |--| ethsys |
+>                         |_______|  |________|
+>
+> Maybe we should keep the clock relationship in our clock driver like
+> the previous mediatek clock drivers.
 
+Are you saying that some clocks in topck have inputs from infra?
+If so, then that's a nasty circular dependency to deal with.
+
+And to be fair, many Mediatek device tree bindings already take a large
+number of clocks, so I think adding a few more isn't too bad.
+
+> > > > Dual license please (and the dts files).
+> > >
+> > > Okay, thanks for your comment, I will update this in the next patch
+> > > set
+> > >
+> > > > Why are this and other 1:1 factor clks needed? They look like
+> > > > placeholders. Please remove them.
+> > >
+> > > Okay, thanks for your comment, I will update this in the next patch
+> > > set
+> >
+> > Ideally the clock driver would use the device tree to get local
+> > references
+> > for this, but that is going to require some rework to Mediatek's
+> > common
+> > clock code.
+> >
+>
+> To transfer the clock relationship through the device tree, it is
+> necessary to make modifications to the common part of the mtk clock
+> driver that has been merged, and may also modify other mediatek clock
+> drivers.
+>
+> Let's move to the source code:
+>
+> apmixedsys {
+>     ...
+> }
+>
+> topckgen {
+>     ...
+>     clocks =3D ... , <&apmixedsys NET2PLL> , ... ;
+>     clock-names =3D ... , "net2pll" , ... ;
+> }
+>
+> char *parent_name;
+>     for each clk in <device_tree_node>:
+>         parent_name =3D __clk_get_name(of_clk_get(np, i))
+>
+> (armada-37xx-tbg.c use this method to get global name of parent clock)
+>
+> Ideally, we should use the parent_name variable above to create a
+> clock, But mtk_fixed_factor expects input const strings
+>
+> void mtk_clk_register_factors(const struct mtk_fixed_factor *clks, ...)
+>
+> struct mtk_fixed_factor {
+>     ...
+>     const char *name;
+>     const char *parent;
+>     ...
+> };
+>
+> So we still need to use pre-defined clock name in static const clock
+> table even we can get clock name as variable from device tree.
+>
+>
+> static const struct mtk_fixed_factor top_divs[] __initconst =3D {
+>     ...
+>     FACTOR(CK_TOP_NET2_D4_D2, "net2_d4_d2", "net2pll", 1, 8),
+>     FACTOR(CK_TOP_NET2_D3_D2, "net2_d3_d2", "net2pll", 1, 2),
+>     ...
+> }
+
+Right. I'm not asking you to do this right away. This will end up being
+a long migration over multiple releases. But it makes sense to get the
+device tree bindings sorted out first.
+
+I believe the solution is to move to `struct clk_parent_data` to replace
+the pure strings. New internal APIs for the Mediatek clock driver would
+need to be added, and all the drivers slowly migrated over. Probably also
+a good time to migrate to clk_hw_*_register.
+
+
+ChenYu
+
+
+
+
+> > > > Merge duplicate parent instances
+> > >
+> > > We have considered this in the MT7986 basic clock driver, but I
+> > > will
+> > > check again. If corrections are needed, I will make changes in the
+> > > next
+> > > patch set.
+> > >
+> > > > Leaking clk_data if some function return fail
+> > >
+> > > Okay, thanks for your comment, I will update this in the next patch
+> > > set
+> > >
+> > > > This file contains four drivers. They do not have depend on each
+> > > > other, and do not need to be in the same file. Please split them
+> > > > into
+> > > > differen files and preferably different patches
+> > >
+> > > Okay, thanks for your comment, I will separate those clock drivers
+> > > in
+> > > the next patch set
+> > >
+> > > > Is there any particular reason for arch_initcall
+> > >
+> > > We have considered this in MT7986 basic clock driver, and use
+> > > CLK_OF_DECLARE instead of arch_initcall.
+> >
+> > Having to sequence clock registration manually is likely a symptom of
+> > inadequate clock dependency handling. So if the drivers are only
+> > using
+> > global clock names to describe parents, what happens is that even if
+> > the parent isn't in the system yet, the registration is allowed to
+> > succeed. However since the parent clock isn't available yet, any
+> > calculations involving it, such as calculating clock rates, will
+> > yield invalid results, such as 0 clock rate.
+> >
+> > > Another question:
+> > > Should the clock patches in "Add basic SoC support for MediaTek
+> > > mt7986"
+> > > need to be separated into another patch series, such as MT8195
+> > > "Mediatek MT8195 clock support" ?
+> >
+> > Nope. The MT8195 team seems to be splitting things up by module, with
+> > the device tree being its own separate module. Ideally you want to
+> > send
+> > drivers along with the related device tree changes, so people
+> > reviewing
+> > can get a sense of how things work. And if the hardware is publicly
+> > available, people can actually test the changes. We can't do that if
+> > the
+> > device tree changes aren't bundled together.
+> >
+> OK, I will keep clock patches and basic part patches in the same series
+> (patches v2)
+>
+>
+> Regards,
+> Sam
+> Thanks, I will delete some clocks that are not expected to b
