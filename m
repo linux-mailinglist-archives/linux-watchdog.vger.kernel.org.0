@@ -2,60 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8C53EFFF6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Aug 2021 11:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6435D3EFFF9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Aug 2021 11:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbhHRJIi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 18 Aug 2021 05:08:38 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:43543 "EHLO
+        id S231652AbhHRJI5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 18 Aug 2021 05:08:57 -0400
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:38955 "EHLO
         wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229864AbhHRJIh (ORCPT
+        by vger.kernel.org with ESMTP id S231719AbhHRJI4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 18 Aug 2021 05:08:37 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id BC56D2B0091B;
-        Wed, 18 Aug 2021 05:08:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 18 Aug 2021 05:08:03 -0400
+        Wed, 18 Aug 2021 05:08:56 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id C6E882B0094B;
+        Wed, 18 Aug 2021 05:08:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 18 Aug 2021 05:08:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=6ook4MNkbbxDqFEkYPBEIeliWHD
-        k8Xp4O+ulRq92OBM=; b=4hwpTJmibMI/Fr7KaOeRB7/okcgFkxI2BcI+Ip8Jzwc
-        5vrKY1W9DyQNUZxx+I6fnyYEpF5cSOP/5zJw+LgAAFmeWQdB33kdxKmkwSvp1V5E
-        r0LGnEd/sFR8Y3wg7U/tCWE5vrr00vlbugt507rACZw8H5o7CUOqdY6fqsCajwPj
-        c8ySOHu7PmAJL6Gs2EaQcj/HbmgbwlcepjqVZ4vNYqv9ZkLevjGGT7IO3GU5OUM/
-        reD8+JL8XSCxEChGPEiNjTLsENncU7q1V49HNQBkTOsNThgw9AbmaobcBDEVo6cf
-        flXZ+2IpKy0wHt4cN+4BxpE0PAnHHm3m9mTlQrXj+ZQ==
+        :content-type:in-reply-to; s=fm3; bh=u9bG+4wNqQW8Q6ftF5wHQm+W0Hy
+        eApI0kU8bT7jSU/c=; b=m1Adjwfyy82QgScHp5ILIDVbEAsjmFORFv9pNabBwPJ
+        F1/P+tk4/cU8T3soyPdWUKm4JQ/iq21hmkUwP1pAlKaA7P3cVrAgATLPi0hczis8
+        UKs86hdgn7GnPslnnFqoJdLgQ96c02uDzPcsiaeeH8oocsH8Pj90PfDEtkrVj5pH
+        Ndn6xSVUIjVeKIYNc84kt7Nqdx7Dg/f1fg8kRTvfKe7+60PUzkZTO6BneE7fsRSd
+        sKoqPANqKN+mp5D1SJn+qbOoczQHr/MLq/RytpzIRceLjfRHCzpHvFrqm6EqV1kw
+        1BDpZ5dchtjnRZ1Rs6Xs+eQCDOy6Sx7uehvJAWuCeEQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=6ook4M
-        NkbbxDqFEkYPBEIeliWHDk8Xp4O+ulRq92OBM=; b=RsA5oxGfxq2CVjdnEH9JZ3
-        4FK+CaNIf+d6916cheUqytS7JdNIZZLX/AOEkLaoYpOt3ndIAFxqnJERbcJAD95F
-        kjXS+5mUN+RlJia3QU22hI+VtnQNWJcDKR+KMZ8xvJ+0cT9dSFsfxMP5R/9rpvTo
-        VL5KpQPjKORiOCCnlV64zyzoz4kGC0N8WP1Y3pLooQuaR3bhQhPrVz9IMfGAMCXe
-        jxigS6r+ZYVGfdr7SIvqQqMDN6HSe76/x8Om0uODdMXYWBTy4RugBRUef0rYiYwW
-        gTCKcIUQ+GPi56WrSFbNq6vt9ngbW+3hCPi9YyuYOPVK3Fpa6hPA5Ia0JjWjeUoA
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=u9bG+4
+        wNqQW8Q6ftF5wHQm+W0HyeApI0kU8bT7jSU/c=; b=YDs2dIaOKPv/sslas828D5
+        kvFzgLVrgGzXTYZ5oXjIaLf4ddCH+L756U2tcFu5WTXMRniVIQV8ERt405RfMbMc
+        lXc/gi9xKEIkGuKA8RtvvG5AlIoXdsUIRpr5Sh4rdvoL/dJxMZ6jIUBOYoMR8yei
+        Go5smI8B0r7DzmUzMoQosTplEZOO7rT++WDiheThaJmAVpZs3WEfVbnhUiBIfmMh
+        9SxO1O6nXlrTfKKJ7hYnV8yzd8Vd7w84Igx6o6Hq0aa12XhhO78+BDFHcDO8Oocf
+        2+ICa5PtP8G2Oa1i+Gj2JAZQqm0VTe2bIoK/kdRKRQXBZmzlR1wMyFyHKPiiACFQ
         ==
-X-ME-Sender: <xms:8M0cYZTy6r-Ht52DouEqmNkKZoWJnNfC839WRbw5tbbtkPUCGJH-LA>
-    <xme:8M0cYSxdYA25x75VLozkhb3d7dvJ6Hd3wS1RecyWLiZu2z3TGgyveEMEmYgtDr5XV
-    j1_KyjuCTWraH6PYs0>
-X-ME-Received: <xmr:8M0cYe2LrUmBCvVvaJ6qK56E0BrARiZyw2OdYF6Ae3QDgt_xgz5CymelMqMQYJd0slzg4Ek_WZ57JovSGO4GEu8jr954GLmGpuij>
+X-ME-Sender: <xms:_c0cYSHxGm-VlMJWwlGdTr-GFhemQ58ALHOkOWMbUsy-J_lmxTnjPg>
+    <xme:_c0cYTVtfrOzspPvJdEwYd2FVZeogHDuBd8q4xFJAXvVVogmkIavMeKymDpimpHuu
+    bEYrsIvk3pOmHy9hh4>
+X-ME-Received: <xmr:_c0cYcJ1Lp3BFCzz4vqD9nNhDsODUSF9mH2xK27OVGTgKVc2UNiLMQpLvwNkY_ek-w1tvezUFwIYxpxGgxicT_T600giK53InMIv>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrleehgdduvdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
     ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
     gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    udenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
     igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:8M0cYRDu-hMzrhLGhUSliLIgIHPxfT8cIuJUDatJSz72QyFDVlZ8tw>
-    <xmx:8M0cYSiBvYbmfXmCnO397uTtAA8iiYFfyALziMc1ItivMZ9azzMpBQ>
-    <xmx:8M0cYVqKgOLdnm3A25hUo65i1UcTi2U4CFd7q_xDBvPyvsam7eI8DQ>
-    <xmx:8s0cYXatpsdOwsE9ubrWuKE9AUfWBdh5d3qpJhNZkTYE7gt9j5KXOB_N82A>
+X-ME-Proxy: <xmx:_c0cYcHbT7oAWrqrbf9Jsk4UtW4NCvgs98uoyEhJzKeOF1BipxJscA>
+    <xmx:_c0cYYW7n0Oz6Jrs4CLzSFOW2pU7cA_tt1rjLipTLoheDEDuOdgE5A>
+    <xmx:_c0cYfPx_gIG2QwWSChIAjdX8zT9KrPH_fYScK_a6T8JxYtuGcEGbQ>
+    <xmx:_c0cYcRuh_4RYZNrCOx82xJUDI2MPJa54_SfA2IgHD01gCZlOf1pZ-MeHMU>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Aug 2021 05:08:00 -0400 (EDT)
-Date:   Wed, 18 Aug 2021 11:07:59 +0200
+ 18 Aug 2021 05:08:12 -0400 (EDT)
+Date:   Wed, 18 Aug 2021 11:08:11 +0200
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Samuel Holland <samuel@sholland.org>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -64,48 +64,47 @@ Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings: watchdog: sunxi: Add compatible for
- D1
-Message-ID: <20210818090759.defewtmx3l3ku3rd@gilmour>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] watchdog: sunxi_wdt: Add support for D1
+Message-ID: <20210818090811.fl7u4jtxh4ko7j3c@gilmour>
 References: <20210805045716.46141-1-samuel@sholland.org>
- <20210805045716.46141-2-samuel@sholland.org>
+ <20210805045716.46141-3-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bpctm2rk2nphsa2v"
+        protocol="application/pgp-signature"; boundary="4cs6fzq5kbpskuj3"
 Content-Disposition: inline
-In-Reply-To: <20210805045716.46141-2-samuel@sholland.org>
+In-Reply-To: <20210805045716.46141-3-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
---bpctm2rk2nphsa2v
+--4cs6fzq5kbpskuj3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 04, 2021 at 11:57:15PM -0500, Samuel Holland wrote:
-> D1 keeps the same register layout and clock sources as the R329, but it
-> adds a key field which must be set to update the watchdog's "CFG" and
-> "MODE" registers. Therefore it is not backward-compatible.
+On Wed, Aug 04, 2021 at 11:57:16PM -0500, Samuel Holland wrote:
+> D1 adds a key field to the "CFG" and "MODE" registers, that must be set
+> to change the other bits. Add logic to set the key when updating those
+> registers.
 >=20
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 
 Acked-by: Maxime Ripard <maxime@cerno.tech>
 
 Maxime
 
---bpctm2rk2nphsa2v
+--4cs6fzq5kbpskuj3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYRzN7wAKCRDj7w1vZxhR
-xYgzAQDAb+DgUneWjV0G22QdPTXGnpq0NkLpcPcAhyZCiPrr3AD/efKGbxKNrLy7
-avaTFG36E8DVB3AG3GxBogPcwmGwPQ4=
-=47S9
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYRzN+wAKCRDj7w1vZxhR
+xYLRAPoC8/IXiSXIcg2lYUl8qma4+EbErj5NI79KPiJaHThQRQD/Xiy5hmEcNhit
+wILOH0oJ88MjIB57FIGoZGAHDBETIQg=
+=999a
 -----END PGP SIGNATURE-----
 
---bpctm2rk2nphsa2v--
+--4cs6fzq5kbpskuj3--
