@@ -2,45 +2,45 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D0B3EFFF3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Aug 2021 11:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8C53EFFF6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Aug 2021 11:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbhHRJIO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 18 Aug 2021 05:08:14 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:59265 "EHLO
+        id S230176AbhHRJIi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 18 Aug 2021 05:08:38 -0400
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:43543 "EHLO
         wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230412AbhHRJIN (ORCPT
+        by vger.kernel.org with ESMTP id S229864AbhHRJIh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 18 Aug 2021 05:08:13 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 7458E2B0094B;
-        Wed, 18 Aug 2021 05:07:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 18 Aug 2021 05:07:37 -0400
+        Wed, 18 Aug 2021 05:08:37 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id BC56D2B0091B;
+        Wed, 18 Aug 2021 05:08:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 18 Aug 2021 05:08:03 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=z7ZxsuepG3y8/7tCBq9V+CXM2sV
-        9UAdzMVufzaRE13k=; b=Edlj8+3EALgXlGDt/c0FFAzN16mWjgVHIVPBd6D7AZb
-        FQLnqcYIirILU73d7SerLVWsiVNHE8vPs9mHJUJOEcFzfAYtQtxA1GZRgrnMjHKV
-        /xB4yhl8/vL4PCC/8+cCqjnjmjbSaGayS0cVlkJVBNlz7xk7aSmI3ynf7vhz60LB
-        U22K3+8bmlSl8lEggpjf617/dLwt7X6hCAHz6lueGluIU/LQmNSpr+uo94bqGHak
-        9klMALhepCdOccROUin0a+4MKHWY8ECUBN7zLmTYJ1JyZePePDnnsveM6cZL3O8x
-        kLU903noWfVl7B7wDJPuYHiC2N78s/w7BTBNS4layNg==
+        :content-type:in-reply-to; s=fm3; bh=6ook4MNkbbxDqFEkYPBEIeliWHD
+        k8Xp4O+ulRq92OBM=; b=4hwpTJmibMI/Fr7KaOeRB7/okcgFkxI2BcI+Ip8Jzwc
+        5vrKY1W9DyQNUZxx+I6fnyYEpF5cSOP/5zJw+LgAAFmeWQdB33kdxKmkwSvp1V5E
+        r0LGnEd/sFR8Y3wg7U/tCWE5vrr00vlbugt507rACZw8H5o7CUOqdY6fqsCajwPj
+        c8ySOHu7PmAJL6Gs2EaQcj/HbmgbwlcepjqVZ4vNYqv9ZkLevjGGT7IO3GU5OUM/
+        reD8+JL8XSCxEChGPEiNjTLsENncU7q1V49HNQBkTOsNThgw9AbmaobcBDEVo6cf
+        flXZ+2IpKy0wHt4cN+4BxpE0PAnHHm3m9mTlQrXj+ZQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=z7Zxsu
-        epG3y8/7tCBq9V+CXM2sV9UAdzMVufzaRE13k=; b=iIDqJv8vFvUmdMHfHICawC
-        T9+GMiZ7jmgZnQez3LVGbSJHMRX5oCSbwndYpOPjFOptH5evus3eJHTLMKiWkPxN
-        TXpsW2g72GOY5CGgg+NCr3YRCVIVUwy2c1hebCI4/Hvt/iKYeVLlrCIF+d9ViMqC
-        1rXO6J5Y+NXu5OJhhxTtooPgXjHkMj/E/mio7DdY2ivq0/MHKrzU5QRhmAkmzRql
-        gjF9fFrV8cUF3YBzZEkPAbYWQJGooSyBeWl2CLOzlNRyb4DB4TlekSXHyL6GpV9r
-        xOx/tiM6Qp6123DK7M/uNv6oP+LeoKbtE8H19fdWvD5NYIErfHKSiqWDEpnEi8Ww
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=6ook4M
+        NkbbxDqFEkYPBEIeliWHDk8Xp4O+ulRq92OBM=; b=RsA5oxGfxq2CVjdnEH9JZ3
+        4FK+CaNIf+d6916cheUqytS7JdNIZZLX/AOEkLaoYpOt3ndIAFxqnJERbcJAD95F
+        kjXS+5mUN+RlJia3QU22hI+VtnQNWJcDKR+KMZ8xvJ+0cT9dSFsfxMP5R/9rpvTo
+        VL5KpQPjKORiOCCnlV64zyzoz4kGC0N8WP1Y3pLooQuaR3bhQhPrVz9IMfGAMCXe
+        jxigS6r+ZYVGfdr7SIvqQqMDN6HSe76/x8Om0uODdMXYWBTy4RugBRUef0rYiYwW
+        gTCKcIUQ+GPi56WrSFbNq6vt9ngbW+3hCPi9YyuYOPVK3Fpa6hPA5Ia0JjWjeUoA
         ==
-X-ME-Sender: <xms:1s0cYeSY1VoDbvj8v1hwYiTkSN_bdm-p6ejhsshfocOJWHAPSNgYaQ>
-    <xme:1s0cYTwNdYap25FigqYS6YAmK-H88VV8XHGod-hplOPmEl50w8pXMhctRH1UKftZR
-    Ugz2UtlgNaAB7GJX1w>
-X-ME-Received: <xmr:1s0cYb3iapy_85xh0Q6EAruoublXzVjY3xVzA2Rnoh7sKZMi7Wy5h52SzCEv8iyGJYhONrk0-T0j0BNHzWGoY-0oO3JNWfL3brm->
+X-ME-Sender: <xms:8M0cYZTy6r-Ht52DouEqmNkKZoWJnNfC839WRbw5tbbtkPUCGJH-LA>
+    <xme:8M0cYSxdYA25x75VLozkhb3d7dvJ6Hd3wS1RecyWLiZu2z3TGgyveEMEmYgtDr5XV
+    j1_KyjuCTWraH6PYs0>
+X-ME-Received: <xmr:8M0cYe2LrUmBCvVvaJ6qK56E0BrARiZyw2OdYF6Ae3QDgt_xgz5CymelMqMQYJd0slzg4Ek_WZ57JovSGO4GEu8jr954GLmGpuij>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrleehgdduvdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -49,13 +49,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrleehgdduvdcutefuodetggdote
     gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
     udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
     igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:1s0cYaDEV9KA2JuQWiv-DnuUBNLx_3dMYTFWXQndvDWcyG7j2IJlpQ>
-    <xmx:1s0cYXg8yqki-J9Y-brp5tjEz8uJAyBvzliiiXyvAbqP6nOlORVtcQ>
-    <xmx:1s0cYWor9kybvC5ygdOBtG-EHz3u-he516QYVleA3XNXFnJVww0cwA>
-    <xmx:2M0cYWNNZ029ZIW4uQRJX-a2BmU823_XEkUHg0r9Waf1MWx42zzvDjmoUc4>
+X-ME-Proxy: <xmx:8M0cYRDu-hMzrhLGhUSliLIgIHPxfT8cIuJUDatJSz72QyFDVlZ8tw>
+    <xmx:8M0cYSiBvYbmfXmCnO397uTtAA8iiYFfyALziMc1ItivMZ9azzMpBQ>
+    <xmx:8M0cYVqKgOLdnm3A25hUo65i1UcTi2U4CFd7q_xDBvPyvsam7eI8DQ>
+    <xmx:8s0cYXatpsdOwsE9ubrWuKE9AUfWBdh5d3qpJhNZkTYE7gt9j5KXOB_N82A>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Aug 2021 05:07:34 -0400 (EDT)
-Date:   Wed, 18 Aug 2021 11:07:32 +0200
+ 18 Aug 2021 05:08:00 -0400 (EDT)
+Date:   Wed, 18 Aug 2021 11:07:59 +0200
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Samuel Holland <samuel@sholland.org>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -64,126 +64,48 @@ Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: sunxi: Add compatible for
- R329
-Message-ID: <20210818090732.wdickyw67oc4zqpt@gilmour>
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 2/3] dt-bindings: watchdog: sunxi: Add compatible for
+ D1
+Message-ID: <20210818090759.defewtmx3l3ku3rd@gilmour>
 References: <20210805045716.46141-1-samuel@sholland.org>
+ <20210805045716.46141-2-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="eamo24t6pkxxpznb"
+        protocol="application/pgp-signature"; boundary="bpctm2rk2nphsa2v"
 Content-Disposition: inline
-In-Reply-To: <20210805045716.46141-1-samuel@sholland.org>
+In-Reply-To: <20210805045716.46141-2-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
---eamo24t6pkxxpznb
+--bpctm2rk2nphsa2v
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Wed, Aug 04, 2021 at 11:57:14PM -0500, Samuel Holland wrote:
-> On existing SoCs, the watchdog has a single clock input: HOSC (OSC24M)
-> divided by 750.  However, starting with R329, LOSC (OSC32k) is added as
-> an alternative clock source, with a bit to switch between them.
+On Wed, Aug 04, 2021 at 11:57:15PM -0500, Samuel Holland wrote:
+> D1 keeps the same register layout and clock sources as the R329, but it
+> adds a key field which must be set to update the watchdog's "CFG" and
+> "MODE" registers. Therefore it is not backward-compatible.
 >=20
-> Since 24 MHz / 750 =3D=3D 32 kHz, not 32.768 kHz, the hardware adjusts the
-> cycle counts to keep the timeouts independent of the clock source. This
-> keeps the programming interface backward-compatible.
->=20
-> R329 also adds two new registers, to allow software to immediately drive
-> the SoC reset signal.
->=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> Changes v1 to v2:
->  - Switch from enum to const
->  - Add descriptions to "clocks" items
->=20
->  .../watchdog/allwinner,sun4i-a10-wdt.yaml     | 32 ++++++++++++++++++-
->  1 file changed, 31 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a=
-10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a1=
-0-wdt.yaml
-> index 9aa3c313c49f..8fa5b0d32381 100644
-> --- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.=
-yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.=
-yaml
-> @@ -24,6 +24,7 @@ properties:
->                - allwinner,sun50i-a100-wdt
->                - allwinner,sun50i-h6-wdt
->                - allwinner,sun50i-h616-wdt
-> +              - allwinner,sun50i-r329-wdt
->            - const: allwinner,sun6i-a31-wdt
->        - items:
->            - const: allwinner,suniv-f1c100s-wdt
-> @@ -33,7 +34,18 @@ properties:
->      maxItems: 1
-> =20
->    clocks:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - description: High-frequency oscillator input, divided internally
-> +      - description: Low-frequency oscillator input, only found on some =
-variants
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - const: hosc
-> +      - const: losc
-> =20
->    interrupts:
->      maxItems: 1
-> @@ -44,6 +56,24 @@ required:
->    - clocks
->    - interrupts
-> =20
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - allwinner,sun50i-r329-wdt
-> +
-> +then:
-> +  properties:
-> +    clocks:
-> +      minItems: 2
-> +
-> +    clock-names:
-> +      minItems: 2
-> +
-> +  required:
-> +    - clock-names
-> +
 
-We should also make sure through an else clause that all the other SoCs
-have a length of one for both clocks and clock-names
-
-Also, it looks like you forgot the patch to enable the compatible in the
-driver?
+Acked-by: Maxime Ripard <maxime@cerno.tech>
 
 Maxime
 
---eamo24t6pkxxpznb
+--bpctm2rk2nphsa2v
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYRzN1AAKCRDj7w1vZxhR
-xYXsAQDr5ekVM8uJrcHoLhj+ppOK2mKe5bJpApZXEwpgvVkFyQEA9cQNKQuAw8iE
-ndCLVdSf+DZW+tJkbTU4D1eAS22W5wA=
-=tBH9
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYRzN7wAKCRDj7w1vZxhR
+xYgzAQDAb+DgUneWjV0G22QdPTXGnpq0NkLpcPcAhyZCiPrr3AD/efKGbxKNrLy7
+avaTFG36E8DVB3AG3GxBogPcwmGwPQ4=
+=47S9
 -----END PGP SIGNATURE-----
 
---eamo24t6pkxxpznb--
+--bpctm2rk2nphsa2v--
