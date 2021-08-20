@@ -2,136 +2,174 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 045E03F0CD5
-	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Aug 2021 22:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455B93F2582
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Aug 2021 06:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbhHRUf0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 18 Aug 2021 16:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233425AbhHRUf0 (ORCPT
+        id S229652AbhHTEFf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 20 Aug 2021 00:05:35 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:47489 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229457AbhHTEFf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 18 Aug 2021 16:35:26 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65641C061764;
-        Wed, 18 Aug 2021 13:34:51 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id n1-20020a4ac7010000b0290262f3c22a63so1090975ooq.9;
-        Wed, 18 Aug 2021 13:34:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4Ve2qXUvVG1g/FHypMlz1AcAcLOtOAXueWHwDO5ReDY=;
-        b=cY0Go6/qB3WGaGerkculzpd1mi7htexGDJ8vjhkyrIHCIxgE4R2XL5SLmD5ndYz3Iq
-         9qW41cuGb51KIidZ2NBKOAJtxDicQrJ/LIoFgACGDNejv0DujMakf7+v6jNkRfWkjJ3e
-         0YcfuHrb/yIiXa0YFmq5UaqVpv539DcPCnoxC1zKDBLK/BLl96zJVZjK4JzPedNJJKJy
-         Y/2/oHJQVm3iZ62nA18DL9jJZMkDQdo/oCXsFyINq84h5jpjC3e6V13uMZJGRM35RPrk
-         8B7dObnoStCEWIFokiOYBe+AqCPwcANOb3ty7wcHjwspcNho9QfYR95w6tJwqHKGmcK1
-         tW8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4Ve2qXUvVG1g/FHypMlz1AcAcLOtOAXueWHwDO5ReDY=;
-        b=EHxC71IHTbgzDFDOqkxyAyOIyU7uYR0ZD1e9joy+m8M4UgyboI/q1b0NsgBDuppbWo
-         Hbgqih1LLeT3c7Zh0m3frUMq/xZrcoeL+xZVhqfUpn10SHl9wPhci2+pR0ZNfkzfHHyO
-         QSOCoerxbi63gjFoj1Su6GwU2xVYGtSXyI+aSFocbIUJr4X/c1UDgopu57Tcb68aNY+t
-         J6+gg1xsRT4CbET1gBEz5vyKPjdFm3CLJw31KraxcDfn1W13xwzby+2Q11OV2yRS9jrC
-         b7jFowLfpIkNI4Fw5dNrJ2mShMlG9f0a2xxxBta0wM0TRT6fTtQLOram/hQXMl2fbXJV
-         QexQ==
-X-Gm-Message-State: AOAM530ajWJJ5BS8/x5fHkbhzhAB1I797NBSjDezG6ohryeoihpxHxir
-        SgictUMv7KuM5hBeRBCSRxx13zIfxDQ=
-X-Google-Smtp-Source: ABdhPJzZjs7NkPCLV2PjCE4YhE7Nkzpq/+l/UxNvtoQzVqp7hxQaN0vWEqsCA30AQbvD/Ngks3+oiA==
-X-Received: by 2002:a4a:b601:: with SMTP id z1mr8160473oon.7.1629318890688;
-        Wed, 18 Aug 2021 13:34:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v29sm179058ooe.31.2021.08.18.13.34.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Aug 2021 13:34:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] Watchdog: sp5100_tco: Replace watchdog cd6h/cd7h port I/O
- accesses with MMIO accesses
-To:     Terry Bowman <Terry.Bowman@amd.com>, linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        rrichter@amd.com, thomas.lendacky@amd.com
-References: <20210813213216.54780-1-Terry.Bowman@amd.com>
- <416a67a7-646b-eb8d-b617-80cbbbc028c6@roeck-us.net>
- <396d4558-9ddf-55e8-75bf-cb1a15de393a@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b32c2263-94a1-fef5-4455-6d7bef40a968@roeck-us.net>
-Date:   Wed, 18 Aug 2021 13:34:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 20 Aug 2021 00:05:35 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id 16E592B01222;
+        Fri, 20 Aug 2021 00:04:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 20 Aug 2021 00:04:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=b
+        9n8FHHgB7n5u9D8RC9mb2DdWFB5BNJvEHs32+cU4qs=; b=qJqaqGL6pvo9EXe29
+        js30k3msoz5yqpOxMzJvXJuXPP77IcK/QYEgNX3wJcmy+B3uAxBOKL/Dmu+qb5Hs
+        IgjrI7z7H0xm4fJmhosRB09ZvRYrSSZXy5APwYbH9Ucz4GBdCdvuY2qbp8yYXATn
+        CeIA1AHUc3mxaVpwzcG0dU6MxPR+/lpwIaB3asF5NkotSKtNQLyCjgMJ6gLLSyaH
+        JYC2mAvz/Xcv4HBr64DKcR49+ky0y4SOPeaO5KyL82NhRcXMwNGFDDwf2aNO2MOR
+        he5+FywrmsDx83NSj0H1T3YSq1Cn/N072quKKxbXyltlsBOI6g0WWn8buoAU1/is
+        MCkHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=b9n8FHHgB7n5u9D8RC9mb2DdWFB5BNJvEHs32+cU4
+        qs=; b=GQv/zb2BvjDnXsLzad63nSdXBfCS0IXLUfgfmJNtsxlhY3HG9OdBXrRCy
+        mX94NHVXw/YiBUE3IokZEpLa3b/IsBz6LF42nSEQqZZEyPisIkSYIKifbRE8Gs7w
+        fR3UtoGKMfnNbm69bxOzFZ4JmgW9JiPuVxVLgJPZo0nlw8WBgLyUvZZa5nT+tx3s
+        Bckvg/0zNxJmhd+f9fMjOacU31SoH4x5m7PAAZmimpmympXGpAX3NlHpP9NY7F5S
+        NsW4nFgwL1ci5mOyZDkw1bLMrEAbqLfZwWWx3Q9z8eAUwJ8ot+K7WthrDphOqc94
+        +DXctOpPMWp9n6iTD5meB0vQQM5wg==
+X-ME-Sender: <xms:5ikfYYsxSEmzEnuJqa8Y2AcqufbUWw_4Hk2gSPVwTDjI1W0Uz-ekiQ>
+    <xme:5ikfYVcWWo6vhP2OyMhnmCc-QVw8-AfN2zJgESSgAnusL7n8JFGWI5xeuL4svgzbr
+    xe1Pm4IF-3fbnDLwg>
+X-ME-Received: <xmr:5ikfYTwFAo6QvXPHHKDsOL43o2UuyN3XI9KWcYy3DQgnDZlCFUZMnioMJnD-q3JSnM_8bevMG_sng0MTErMHDD-fOoAZaqA0rQBEiUfgQfn3AZyLAZS3hTOxTQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrleekgdejiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
+    gfettdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:5ikfYbOOw2ep0wGByRHzma11LZDXi9zLrlUuKzfIBpcWauOoVmJn7A>
+    <xmx:5ikfYY9YwOPZlh4-PErgUOehQ-Mybq-_OjKijqkdJQt5Kna0Wl2YUA>
+    <xmx:5ikfYTXLMO_lSu8q9lkyXvLTURMHYPnIyMyJ9ptNC_8XkN4m5i53KQ>
+    <xmx:6CkfYTbC9cXYJ-vHOpchVNp1H6hwRtOu9GvTL8h4RpExaBRT2XTA3Wmb79Y>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 Aug 2021 00:04:53 -0400 (EDT)
+Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: sunxi: Add compatible for
+ R329
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210805045716.46141-1-samuel@sholland.org>
+ <20210818090732.wdickyw67oc4zqpt@gilmour>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <791b7548-cd7b-6cdf-8364-671f6a2029a9@sholland.org>
+Date:   Thu, 19 Aug 2021 23:04:52 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <396d4558-9ddf-55e8-75bf-cb1a15de393a@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210818090732.wdickyw67oc4zqpt@gilmour>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/16/21 2:29 PM, Terry Bowman wrote:
+On 8/18/21 4:07 AM, Maxime Ripard wrote:
+> Hi,
 > 
-> 
-> On 8/13/21 5:37 PM, Guenter Roeck wrote:
->> On 8/13/21 2:32 PM, Terry Bowman wrote:
->>> Use MMIO instead of port I/O during SMBus controller address discovery.
->>> Also, update how EFCH capability is determined by replacing a family check
->>> with a PCI revision ID check.
->>>
->>> cd6h/cd7h port I/O can be disabled on recent AMD hardware. Read accesses to
->>> disabled cd6h/cd7h port I/O will return F's and written data is dropped.
->>> The recommended workaround to handle disabled cd6h/cd7h port I/O is
->>> replacing port I/O with MMIO accesses. The MMIO access method has been
->>> available since at least SMBus controllers using PCI revision 0x59.
->>>
->>> The sp5100_tco driver uses a CPU family match of 17h to determine
->>> EFCH_PM_DECODEEN_WDT_TMREN register support. Using a family check requires
->>> driver updates for each new AMD CPU family following 17h. This patch
->>> replaces the family check with a check for SMBus PCI revision ID 0x59 and
->>> later. Note: Family 17h processors use SMBus PCI revision ID 0x59. The
->>> intent is to use the PCI revision ID check to support future AMD processors
->>> while minimizing required driver changes. The caveat with this change is
->>> the sp5100_tco driver must be updated if a new AMD processor family changes
->>> the EFCH design or the SMBus PCI ID value doesn't follow this pattern.
->>>
->>> Tested with forced WDT reset using `cat >> /dev/watchdog`.
->>>
+> On Wed, Aug 04, 2021 at 11:57:14PM -0500, Samuel Holland wrote:
+>> On existing SoCs, the watchdog has a single clock input: HOSC (OSC24M)
+>> divided by 750.  However, starting with R329, LOSC (OSC32k) is added as
+>> an alternative clock source, with a bit to switch between them.
 >>
->> I am sorry, I don't understand why the new code can not use devm functions,
->> why the new data structure is necessary in the first place, and why it is
->> not possible to improve alignment with the existing code. This will require
->> a substantial amount of time to review to ensure that the changes are not
->> excessive (at first glance it for sure looks like that to me).
+>> Since 24 MHz / 750 == 32 kHz, not 32.768 kHz, the hardware adjusts the
+>> cycle counts to keep the timeouts independent of the clock source. This
+>> keeps the programming interface backward-compatible.
 >>
->> Guenter
+>> R329 also adds two new registers, to allow software to immediately drive
+>> the SoC reset signal.
 >>
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>> Changes v1 to v2:
+>>  - Switch from enum to const
+>>  - Add descriptions to "clocks" items
+>>
+>>  .../watchdog/allwinner,sun4i-a10-wdt.yaml     | 32 ++++++++++++++++++-
+>>  1 file changed, 31 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+>> index 9aa3c313c49f..8fa5b0d32381 100644
+>> --- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+>> +++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+>> @@ -24,6 +24,7 @@ properties:
+>>                - allwinner,sun50i-a100-wdt
+>>                - allwinner,sun50i-h6-wdt
+>>                - allwinner,sun50i-h616-wdt
+>> +              - allwinner,sun50i-r329-wdt
+>>            - const: allwinner,sun6i-a31-wdt
+>>        - items:
+>>            - const: allwinner,suniv-f1c100s-wdt
+>> @@ -33,7 +34,18 @@ properties:
+>>      maxItems: 1
+>>  
+>>    clocks:
+>> -    maxItems: 1
+>> +    minItems: 1
+>> +    maxItems: 2
+>> +    items:
+>> +      - description: High-frequency oscillator input, divided internally
+>> +      - description: Low-frequency oscillator input, only found on some variants
+>> +
+>> +  clock-names:
+>> +    minItems: 1
+>> +    maxItems: 2
+>> +    items:
+>> +      - const: hosc
+>> +      - const: losc
+>>  
+>>    interrupts:
+>>      maxItems: 1
+>> @@ -44,6 +56,24 @@ required:
+>>    - clocks
+>>    - interrupts
+>>  
+>> +if:
+>> +  properties:
+>> +    compatible:
+>> +      contains:
+>> +        enum:
+>> +          - allwinner,sun50i-r329-wdt
+>> +
+>> +then:
+>> +  properties:
+>> +    clocks:
+>> +      minItems: 2
+>> +
+>> +    clock-names:
+>> +      minItems: 2
+>> +
+>> +  required:
+>> +    - clock-names
+>> +
 > 
-> Hi Guenter,
-> 
-> I can change the patch to use devm functions as you mentioned. My
-> understanding is the patch's reservation and mapping related functions
-> are the focus. I originally chose not to use devm functions because the
-> patch's MMIO reserved and mapped resources are not held for the driver
-> lifetime as is the case for most device managed resources. The
-> sp5100_tco driver must only hold these MMIO resources briefly because
-> other drivers use the same EFCH MMIO registers. An example of another
-> driver using the same registers is the piix4_smbus driver (drivers/i2c
-> /busses/i2c-piix4.c). This patch can be changed to use the devm
-> functions but the driver may not benefit from the device management.
-> 
-> The 'struct efch_cfg' addition is needed for MMIO reads/writes as well
-> as during cleanup when leaving sp5100_region_setup(). This structure was
-> chosen to contain the data instead of passing multiple parameters to
-> each EFCH function called.
-> 
-> Do you have any recommendations for how to best improve the alignment?
-> 
+> We should also make sure through an else clause that all the other SoCs
+> have a length of one for both clocks and clock-names
 
-Overall it seems to me that it might make more sense to implement this
-as new driver instead of messing with the existing driver. Have you
-thought about that ?
+Yes, I'll do that for v3.
 
-Guenter
+> Also, it looks like you forgot the patch to enable the compatible in the
+> driver?
+
+R329 has a fallback to A31, so it doesn't need any changes to the driver.
+
+Regards,
+Samuel
