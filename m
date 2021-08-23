@@ -2,79 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6FD3F2D5E
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Aug 2021 15:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDD53F42B3
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Aug 2021 02:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235334AbhHTNqF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 20 Aug 2021 09:46:05 -0400
-Received: from thoth.sbs.de ([192.35.17.2]:42417 "EHLO thoth.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232209AbhHTNqF (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 20 Aug 2021 09:46:05 -0400
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by thoth.sbs.de (8.15.2/8.15.2) with ESMTPS id 17KDj7Ds007907
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 Aug 2021 15:45:07 +0200
-Received: from [167.87.0.29] ([167.87.0.29])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 17KDj6ZU022537;
-        Fri, 20 Aug 2021 15:45:06 +0200
-Subject: Re: [PATCH] watchdog: iTCO_wdt: Fix detection of SMI-off case
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Storm <christian.storm@siemens.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?Q?Mantas_Mikul=c4=97nas?= <grawity@gmail.com>
-References: <d84f8e06-f646-8b43-d063-fb11f4827044@siemens.com>
-Message-ID: <1444efd5-b778-949b-34e8-99d2541350e9@siemens.com>
-Date:   Fri, 20 Aug 2021 15:45:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S234465AbhHWAzu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 22 Aug 2021 20:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234429AbhHWAzu (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sun, 22 Aug 2021 20:55:50 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B950DC061575
+        for <linux-watchdog@vger.kernel.org>; Sun, 22 Aug 2021 17:55:08 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id t1so15108956pgv.3
+        for <linux-watchdog@vger.kernel.org>; Sun, 22 Aug 2021 17:55:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=BNlN3fGsUDW43BQvVxYN3PctkB4Igv6SS2e5crePAdQ=;
+        b=Ljbv4TbeZ5Egr/NjABxRcB4vXCFp9cIqyEQzDfMlTQjxfH70iSj3aQipGDlY76W7Sz
+         mccXe24EU232byjQK1xWTpANWN691+VnZVVF+3+WHuAW7Jt/i4kpY9UaldZc2o5BQvRs
+         QGEA2f0iLddL0u+SeNub9g0uZZss3S4y33KdTQHAJvensml67pcBCh6/jWMRibFigd3i
+         do2xMCz2UC2GbiQyebwSDKASo3JDuwXj1W8NZ7m8vyGbPjuTazX8W0CvJUaf5bQwwZQW
+         ZFdXqeY8HGaMYTBB751nadGkfegBRlQQ7FG5rU3CvmusRwRTXwwhdTXW7NZLsKkgLkJ0
+         Hm6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=BNlN3fGsUDW43BQvVxYN3PctkB4Igv6SS2e5crePAdQ=;
+        b=M3Mb+X6IU6FEqp4iYrZ2MEd5VsqrqEsGWwF3ZixWLiatG0A91328QxdZLE6icRRi9a
+         iExvi0GCEHGDk5/tBGBTHjP72UEOSoqb31rZLEcGVoWQAVTP0/iba6T/R1sHTyO1x44d
+         o5sljGpQ5flGcnpKTKUJZth9sHnW98DqzYySyjMbp7za5WM6p4f2Hw+6ws27tau+JpUV
+         VxffAq6AZSvhDw9LUOYwnSswBVzrDwNb/Kg9nh1b4/cbDahjODRy/LEYo7mAbFXZXFIG
+         mg0Ql3ffv+b4UqnMJe/AH41sTjbDuMxV/np6zIiGzECNIOSureJWqwoKr63RvVy1sPTd
+         bwow==
+X-Gm-Message-State: AOAM5333LzuCbrlMWt0ti3zyFvRjcg2UiIfnDSGPRkLr538Qg4yrZpsm
+        2pJg+7qeawgBMVTD2rZFHW41iklibW73F1z0D4grgJqgGdI=
+X-Google-Smtp-Source: ABdhPJxqIxZrhRHQqhL63DZS0GgFc7gQiYazcfLlfMHPCRmX/9LEvfsPLae2/eMuhfu30f8nhHYBhBhCfoPKJSQ9cG4=
+X-Received: by 2002:a92:7f03:: with SMTP id a3mr21664555ild.254.1629680097649;
+ Sun, 22 Aug 2021 17:54:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <d84f8e06-f646-8b43-d063-fb11f4827044@siemens.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a6b:5803:0:0:0:0:0 with HTTP; Sun, 22 Aug 2021 17:54:57
+ -0700 (PDT)
+Reply-To: Bill.Chantal.Lawrence@mail.com
+From:   "mrs.Bill Chantal" <cxdrgg055@gmail.com>
+Date:   Sun, 22 Aug 2021 17:54:57 -0700
+Message-ID: <CANsWq32=d-rB9XyZ6ivQXavO9E1O__dRW9WXkqqXBT3rttceMg@mail.gmail.com>
+Subject: Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 26.07.21 13:46, Jan Kiszka wrote:
-> From: Jan Kiszka <jan.kiszka@siemens.com>
-> 
-> Obviously, the test needs to run against the register content, not its
-> address.
-> 
-> Fixes: cb011044e34c ("watchdog: iTCO_wdt: Account for rebooting on second timeout")
-> Reported-by: Mantas Mikulėnas <grawity@gmail.com>
-> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-> ---
->  drivers/watchdog/iTCO_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-> index b3f604669e2c..643c6c2d0b72 100644
-> --- a/drivers/watchdog/iTCO_wdt.c
-> +++ b/drivers/watchdog/iTCO_wdt.c
-> @@ -362,7 +362,7 @@ static int iTCO_wdt_set_timeout(struct watchdog_device *wd_dev, unsigned int t)
->  	 * Otherwise, the BIOS generally reboots when the SMI triggers.
->  	 */
->  	if (p->smi_res &&
-> -	    (SMI_EN(p) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
-> +	    (inl(SMI_EN(p)) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
->  		tmrval /= 2;
->  
->  	/* from the specs: */
-> 
+Dear Friend
 
-Ping, this is still missing in master. Stable kernels had the revert,
-but 5.14 will need this.
+You have been compensated with the sum of 4.4 million dollars in this
+united nation the payment will be Issue into ATM visa card and send to
+you from the Santander bank in Spain we need your address passport and
+your Whatsapp Number.
 
-Jan
+Thanks
 
--- 
-Siemens AG, T RDA IOT
-Corporate Competence Center Embedded Linux
+Mrs. bill Chantal
