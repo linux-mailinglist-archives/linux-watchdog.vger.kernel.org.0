@@ -2,43 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 735CE3F582F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Aug 2021 08:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C503F5B11
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Aug 2021 11:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbhHXG2q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 24 Aug 2021 02:28:46 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:59812 "EHLO
+        id S235804AbhHXJaH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 24 Aug 2021 05:30:07 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:51962 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230350AbhHXG2k (ORCPT
+        with ESMTP id S235642AbhHXJaF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 24 Aug 2021 02:28:40 -0400
-X-UUID: df95c4a56db34735997babdbaf67c88f-20210824
-X-UUID: df95c4a56db34735997babdbaf67c88f-20210824
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <christine.zhu@mediatek.com>)
+        Tue, 24 Aug 2021 05:30:05 -0400
+X-UUID: 7e43988e7f59449eaada16ee93508e5c-20210824
+X-UUID: 7e43988e7f59449eaada16ee93508e5c-20210824
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <sam.shih@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1593886783; Tue, 24 Aug 2021 14:27:54 +0800
+        with ESMTP id 19402614; Tue, 24 Aug 2021 17:29:17 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 24 Aug 2021 14:27:53 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 24 Aug 2021 17:29:15 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 24 Aug 2021 14:27:52 +0800
-From:   Christine Zhu <Christine.Zhu@mediatek.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
+ Transport; Tue, 24 Aug 2021 17:29:15 +0800
+From:   Sam Shih <sam.shih@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>, Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <seiya.wang@mediatek.com>,
-        Christine Zhu <Christine.Zhu@mediatek.com>
-Subject: [RESEND v8,2/2] watchdog: mediatek: mt8195: add wdt support
-Date:   Tue, 24 Aug 2021 14:26:36 +0800
-Message-ID: <20210824062633.14374-3-Christine.Zhu@mediatek.com>
+        <linux-crypto@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     John Crispin <john@phrozen.org>,
+        Ryder Lee <Ryder.Lee@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>
+Subject: [v3,04/12] pinctrl: mediatek: moore: check if pin_desc is valid before use
+Date:   Tue, 24 Aug 2021 17:29:03 +0800
+Message-ID: <20210824092904.25439-1-sam.shih@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210824062633.14374-1-Christine.Zhu@mediatek.com>
-References: <20210824062633.14374-1-Christine.Zhu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -46,46 +58,99 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Support MT8195 watchdog device.
+Certain SoC are missing the middle part gpios in consecutive pins,
+it's better to check if mtk_pin_desc is a valid pin for the extensibility
 
-Signed-off-by: Christine Zhu <Christine.Zhu@mediatek.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+Acked-by: Sean Wang <sean.wang@mediatek.com>
+
 ---
- drivers/watchdog/mtk_wdt.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+v3: added an Acked-by tag.
+v2: applied the comment suggested by reviewers:
+    - for the pins not ballout, we can fill .name in struct mtk_pin_desc
+      as NULL and return -ENOTSUPP in gpio/pinconf ops.
+---
+ drivers/pinctrl/mediatek/pinctrl-moore.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index 16b6aff324a7..796fbb048cbe 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -12,6 +12,7 @@
- #include <dt-bindings/reset-controller/mt2712-resets.h>
- #include <dt-bindings/reset-controller/mt8183-resets.h>
- #include <dt-bindings/reset-controller/mt8192-resets.h>
-+#include <dt-bindings/reset/mt8195-resets.h>
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/init.h>
-@@ -82,6 +83,10 @@ static const struct mtk_wdt_data mt8192_data = {
- 	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
- };
+diff --git a/drivers/pinctrl/mediatek/pinctrl-moore.c b/drivers/pinctrl/mediatek/pinctrl-moore.c
+index 3a4a23c40a71..ad3b67163973 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-moore.c
++++ b/drivers/pinctrl/mediatek/pinctrl-moore.c
+@@ -60,6 +60,8 @@ static int mtk_pinmux_set_mux(struct pinctrl_dev *pctldev,
+ 		int pin = grp->pins[i];
  
-+static const struct mtk_wdt_data mt8195_data = {
-+	.toprgu_sw_rst_num = MT8195_TOPRGU_SW_RST_NUM,
-+};
-+
- static int toprgu_reset_update(struct reset_controller_dev *rcdev,
- 			       unsigned long id, bool assert)
- {
-@@ -408,6 +413,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
- 	{ .compatible = "mediatek,mt6589-wdt" },
- 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
- 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
-+	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
+ 		desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
++		if (!desc->name)
++			return -ENOTSUPP;
+ 
+ 		mtk_hw_set_value(hw, desc, PINCTRL_PIN_REG_MODE,
+ 				 pin_modes[i]);
+@@ -76,6 +78,8 @@ static int mtk_pinmux_gpio_request_enable(struct pinctrl_dev *pctldev,
+ 	const struct mtk_pin_desc *desc;
+ 
+ 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
++	if (!desc->name)
++		return -ENOTSUPP;
+ 
+ 	return mtk_hw_set_value(hw, desc, PINCTRL_PIN_REG_MODE,
+ 				hw->soc->gpio_m);
+@@ -89,6 +93,8 @@ static int mtk_pinmux_gpio_set_direction(struct pinctrl_dev *pctldev,
+ 	const struct mtk_pin_desc *desc;
+ 
+ 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
++	if (!desc->name)
++		return -ENOTSUPP;
+ 
+ 	/* hardware would take 0 as input direction */
+ 	return mtk_hw_set_value(hw, desc, PINCTRL_PIN_REG_DIR, !input);
+@@ -103,6 +109,8 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
+ 	const struct mtk_pin_desc *desc;
+ 
+ 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
++	if (!desc->name)
++		return -ENOTSUPP;
+ 
+ 	switch (param) {
+ 	case PIN_CONFIG_BIAS_DISABLE:
+@@ -218,6 +226,8 @@ static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+ 	int cfg, err = 0;
+ 
+ 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[pin];
++	if (!desc->name)
++		return -ENOTSUPP;
+ 
+ 	for (cfg = 0; cfg < num_configs; cfg++) {
+ 		param = pinconf_to_config_param(configs[cfg]);
+@@ -435,6 +445,8 @@ static int mtk_gpio_get(struct gpio_chip *chip, unsigned int gpio)
+ 	int value, err;
+ 
+ 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[gpio];
++	if (!desc->name)
++		return -ENOTSUPP;
+ 
+ 	err = mtk_hw_get_value(hw, desc, PINCTRL_PIN_REG_DI, &value);
+ 	if (err)
+@@ -449,6 +461,10 @@ static void mtk_gpio_set(struct gpio_chip *chip, unsigned int gpio, int value)
+ 	const struct mtk_pin_desc *desc;
+ 
+ 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[gpio];
++	if (!desc->name) {
++		dev_err(hw->dev, "Failed to set gpio %d\n", gpio);
++		return;
++	}
+ 
+ 	mtk_hw_set_value(hw, desc, PINCTRL_PIN_REG_DO, !!value);
+ }
+@@ -490,6 +506,8 @@ static int mtk_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
+ 	u32 debounce;
+ 
+ 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[offset];
++	if (!desc->name)
++		return -ENOTSUPP;
+ 
+ 	if (!hw->eint ||
+ 	    pinconf_to_config_param(config) != PIN_CONFIG_INPUT_DEBOUNCE ||
 -- 
-2.18.0
+2.29.2
 
