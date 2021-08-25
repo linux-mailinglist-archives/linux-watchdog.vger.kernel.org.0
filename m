@@ -2,80 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4710F3F6142
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Aug 2021 17:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6461E3F7311
+	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Aug 2021 12:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238056AbhHXPHE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 24 Aug 2021 11:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        id S240037AbhHYK1b (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 25 Aug 2021 06:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237966AbhHXPHE (ORCPT
+        with ESMTP id S239975AbhHYK10 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 24 Aug 2021 11:07:04 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9F9C061757;
-        Tue, 24 Aug 2021 08:06:19 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id i3-20020a056830210300b0051af5666070so37144677otc.4;
-        Tue, 24 Aug 2021 08:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=atzFJRXRbCbQFJp+Cx+oxoNlg0fdbGcCA11T+Oo8BfQ=;
-        b=rcMgLQ/niWzQ63BA59QilTaas8j32JoOgGcgNT+tsSgfqFJ1WRBukFpKrazCE+Nvxb
-         +FU9JyWunrSUSAp2sQuKjnhwFBmqKq4Q7BP+rfkFlDTwZcrOnDDNDJj1nyf8Dlbp3tpt
-         TGH+trQWboaPiSN9SVpdSJhhMvbHVAnk/XajpFLbLlZIqeoemVHLu21RZTCwLQdh8IYA
-         JifdjUAYwePcCGSuZ6KSSQrzElW3ZrUV0IQu6gNhIf0R1d0cLkIi1k6iWpaCSwvwdF5U
-         Rs9cNX53+Mb3l43WYD+WSuPr3vCMR0xex1ksWDAAhlSIPGyRBXjR2mTg9WBGpd1xEl/m
-         8pOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=atzFJRXRbCbQFJp+Cx+oxoNlg0fdbGcCA11T+Oo8BfQ=;
-        b=OJQzun3WrQkNlgEW9VlL4re45LuJUW83NwShAPW+AwrS+QPOY+ORTUSkrRh+8dKKrO
-         1gRQoC7kQCy3lsKeB3STgIWugWJpCxus5DuoglyyA913YzKGlbwhxZIqYnHe/bIktQjx
-         9mckWbrJmtDnNWhiuapn0DM10q92mBcDGoa+6so4SaanesAcvXRQfEfC3vUbuwakZTt2
-         jaQ4vr3Yv514f6Ljd8az0Zr4uM4XWdnahUSOq5wMig917WmO4+I2FhIARnhu5D/WCEMn
-         maN0H21KkiD89PQK82kxPKit16IMgOVwmIasZjXM86+it7tl20vLoOjclrjHkKRFSPy1
-         PhFQ==
-X-Gm-Message-State: AOAM533tXP1bHIEpIhkwZXU2Py6ViTMBlf3XFn07Bxo82nrSc0+uLJIx
-        3qsDweRgxLoJP40Qp7UvLb0=
-X-Google-Smtp-Source: ABdhPJwT1EFS3KoLFxituJ+ofchSqtIKpCCv/eOETdOlQdsZA4Hkq0g2vsZi1mRcstTmhpJpqAvYvQ==
-X-Received: by 2002:a05:6808:208b:: with SMTP id s11mr3085370oiw.95.1629817579204;
-        Tue, 24 Aug 2021 08:06:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a15sm4569159otq.13.2021.08.24.08.06.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 08:06:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 24 Aug 2021 08:06:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christine Zhu <Christine.Zhu@mediatek.com>
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        seiya.wang@mediatek.com
-Subject: Re: [RESEND v8,0/2] watchdog: mt8195: add wdt support
-Message-ID: <20210824150617.GA3394785@roeck-us.net>
-References: <20210824062633.14374-1-Christine.Zhu@mediatek.com>
+        Wed, 25 Aug 2021 06:27:26 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EF5C061757;
+        Wed, 25 Aug 2021 03:26:40 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 14CAE1F436E0
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     matthias.bgg@gmail.com, hsinyi@chromium.org,
+        linux-mediatek@lists.infradead.org, jitao.shi@mediatek.com,
+        eizan@chromium.org, drinkcat@chromium.org, chunkuang.hu@kernel.org,
+        kernel@collabora.com, Crystal Guo <crystal.guo@mediatek.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Fabien Parent <fparent@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v3 0/7] Add support to the mmsys driver to be a reset controller
+Date:   Wed, 25 Aug 2021 12:26:25 +0200
+Message-Id: <20210825102632.601614-1-enric.balletbo@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210824062633.14374-1-Christine.Zhu@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+Dear all,
 
-On Tue, Aug 24, 2021 at 02:26:32PM +0800, Christine Zhu wrote:
-> Supports MT8195 watchdog device. Supports MT8195 watchdog reset-controller feature.
-> 
+The following patchset is a reimplementation of the patch sent by Jitao
+Shi [1] some time ago. As suggested by Chun-Kuang Hu, this time the
+reset is done using the reset API, where the mmsys driver is the reset
+controller and the mtk_dsi driver is the reset consumer.
 
-The series is already queued in my watchdog-next branch; no need to resend.
-We'll have to wait for Wim to pick it up from there.
+Note that the first patch is kind of unrelated change, it's just a
+cleanup but is needed if you want to apply all the following patches
+cleanly.
 
-Thanks,
-Guenter
+This patchset is important in order to have the DSI panel working on some
+kukui MT8183 Chromebooks (i.e Lenovo IdeaPad Duet). Without it, you just
+get a black screen.
+
+Best regards,
+  Enric
+
+[1] https://lore.kernel.org/linux-arm-kernel/20210420132614.150242-4-jitao.shi@mediatek.com/
+
+
+Changes in v3:
+- Based on top of the patch that converts mmsys to schema
+- Fix typo in the commit description
+
+Changes in v2:
+- Fix build test ERROR Reported-by: kernel test robot <lkp@intel.com>
+- Added a new patch to describe the dsi reset optional property.
+
+Enric Balletbo i Serra (7):
+  arm64: dts: mediatek: Move reset controller constants into common
+    location
+  dt-bindings: mediatek: Add #reset-cells to mmsys system controller
+  dt-bindings: display: mediatek: add dsi reset optional property
+  arm64: dts: mt8173: Add the mmsys reset bit to reset the dsi0
+  arm64: dts: mt8183: Add the mmsys reset bit to reset the dsi0
+  soc: mediatek: mmsys: Add reset controller support
+  drm/mediatek: mtk_dsi: Reset the dsi0 hardware
+
+ .../bindings/arm/mediatek/mediatek,mmsys.yaml |  4 ++
+ .../display/mediatek/mediatek,dsi.txt         |  6 ++
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi      |  2 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  5 +-
+ drivers/gpu/drm/mediatek/mtk_dsi.c            |  5 +-
+ drivers/soc/mediatek/mtk-mmsys.c              | 69 +++++++++++++++++++
+ drivers/soc/mediatek/mtk-mmsys.h              |  2 +
+ drivers/watchdog/mtk_wdt.c                    |  6 +-
+ .../mt2712-resets.h                           |  0
+ include/dt-bindings/reset/mt8173-resets.h     |  2 +
+ .../mt8183-resets.h                           |  3 +
+ .../mt8192-resets.h                           |  0
+ 12 files changed, 98 insertions(+), 6 deletions(-)
+ rename include/dt-bindings/{reset-controller => reset}/mt2712-resets.h (100%)
+ rename include/dt-bindings/{reset-controller => reset}/mt8183-resets.h (98%)
+ rename include/dt-bindings/{reset-controller => reset}/mt8192-resets.h (100%)
+
+-- 
+2.30.2
+
