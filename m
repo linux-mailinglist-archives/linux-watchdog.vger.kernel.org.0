@@ -2,108 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B8E3F730F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Aug 2021 12:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350EA3F926A
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Aug 2021 04:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240002AbhHYK13 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 25 Aug 2021 06:27:29 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48046 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239967AbhHYK11 (ORCPT
+        id S231712AbhH0CmL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 26 Aug 2021 22:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243033AbhH0CmK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 25 Aug 2021 06:27:27 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 795431F436E1
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     matthias.bgg@gmail.com, hsinyi@chromium.org,
-        linux-mediatek@lists.infradead.org, jitao.shi@mediatek.com,
-        eizan@chromium.org, drinkcat@chromium.org, chunkuang.hu@kernel.org,
-        kernel@collabora.com, Guenter Roeck <linux@roeck-us.net>,
-        Crystal Guo <crystal.guo@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v3 1/7] arm64: dts: mediatek: Move reset controller constants into common location
-Date:   Wed, 25 Aug 2021 12:26:26 +0200
-Message-Id: <20210825122613.v3.1.I514d9aafff3a062f751b37d3fea7402f67595b86@changeid>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210825102632.601614-1-enric.balletbo@collabora.com>
-References: <20210825102632.601614-1-enric.balletbo@collabora.com>
+        Thu, 26 Aug 2021 22:42:10 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3E4C06179A
+        for <linux-watchdog@vger.kernel.org>; Thu, 26 Aug 2021 19:41:22 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id n24so6588066ion.10
+        for <linux-watchdog@vger.kernel.org>; Thu, 26 Aug 2021 19:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=hePZR6l3xkStPPzaZuEEI5aAsDiq5dQtzNWNyjWzrepGL3zDg5RRM5jmzv3hA8Qe8s
+         U5eUSbP2BQ7A45zN3gKzMQbxc2I7TBQ+WGjJw07Ca+N4SD7OgsCT4ZKEmx6x2fsD6OqX
+         sDvMxBGlSNKZbvz0OZuVA0WFxvTs+J+u862pdllDKBdFdGgib9ZiPj9FP+K5yMejz9W4
+         OuAlWF0fiIbSrR3GjuzqKB/+JO2AcrVVCdco4KgUAztF/I1ojRBAGLgKYgf3zRYK3mCq
+         atYBVOANeHK8VXipDb5RywYKh0b5pA6B9IAIIuUon7ytDHQT/+sb7hMNDgkjIhtqobzS
+         9yGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=WdfazhfxdB5YZEU+xWz/hnYTwZ1Osr32IOVGXDVzuQRWjVJsFPOLOYf581sKPtTFu0
+         bW6A1dx83dX9ehfjOBtYqjqP6UDCga7SphnkmFW0wL3Z3jF7xmP8BdwNUUInGtzivPzf
+         Ma/I2u4+rI4cHkQV+1YxKykZAk9hP+liXwHXp/toaXq65XQqytVI59eh/B5bOMkM23KJ
+         5/P6zBjMQ9PpYFxrukD4FDhR2XpvywZ32EE4awzZWMjsbwi2yMP4paH34jH/IttBxdD8
+         eExqJ4bKmntaINKZjSh6fkXP9c3WzL7QdSQp0xK75uOdIp9ZLBoeCpkhI+gndXG2les1
+         P9dQ==
+X-Gm-Message-State: AOAM532Oepnv1KPiveWjjypHABCoaaArQgvUSoSGIwUvPunAo05qEUKf
+        tPIaWj83M6Xcj5XEbPaIHS7rjwcN0StiEw+DSDE=
+X-Google-Smtp-Source: ABdhPJy2KvQ1y9lDWFCt4tUkVLyCqygzMboFgevi6gaXvHUugKzDyPWXP8Dr7Y84OXabbw7jN7/E9JfzCpuZS4GffJY=
+X-Received: by 2002:a05:6602:26cb:: with SMTP id g11mr5610199ioo.110.1630032081852;
+ Thu, 26 Aug 2021 19:41:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a02:c6bc:0:0:0:0:0 with HTTP; Thu, 26 Aug 2021 19:41:21
+ -0700 (PDT)
+From:   john williams <jw626521@gmail.com>
+Date:   Thu, 26 Aug 2021 14:41:21 -1200
+Message-ID: <CAA3cKDMLeZp=ywZ5d2MXfHebbUuYzsTJ67QeWGpBio58+vGPUA@mail.gmail.com>
+Subject: CONFIRM YOUR DETAILS TO ENABLE US START,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The DT binding includes for reset controllers are located in
-include/dt-bindings/reset/. Move the Mediatek reset constants in there.
+Dear Beneficiary,
 
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
----
+Following your pending fund for years and the delay you imposed in
+receiving it,We have called back your fund to this office as directed
+by the Finance Office and we will be paying you directly through the
+BANK OF AMERICA.(BOA) NEW YORK BRANCH AND ALL YOU NEED NOW IS TO
+RE-CONFIRM YOUR BANKING DETAILS FOR THE TRANSFER IMMEDIATELY WITHOUT
+ANY FURTHER DELAY.
 
-(no changes since v2)
+NOTE THAT WE WILL PAY ALL THE EXPENSES INVOLVED FOR YOU TO RECEIVE
+THIS FUND AND ALL WE NEED FROM YOU IS YOUR CO-OPERATION.
 
-Changes in v2:
-- Fix build test ERROR Reported-by: kernel test robot <lkp@intel.com>
+Send your full details with Banking details to enable us commence the
+transfer process immediately through the BOA BANK IN NEW YORK,USA OR
+DO YOU WANT TO RECEIVE THIS FUND VIA ATM CARD ????????.
 
- arch/arm64/boot/dts/mediatek/mt8183.dtsi                    | 2 +-
- drivers/watchdog/mtk_wdt.c                                  | 6 +++---
- .../dt-bindings/{reset-controller => reset}/mt2712-resets.h | 0
- .../dt-bindings/{reset-controller => reset}/mt8183-resets.h | 0
- .../dt-bindings/{reset-controller => reset}/mt8192-resets.h | 0
- 5 files changed, 4 insertions(+), 4 deletions(-)
- rename include/dt-bindings/{reset-controller => reset}/mt2712-resets.h (100%)
- rename include/dt-bindings/{reset-controller => reset}/mt8183-resets.h (100%)
- rename include/dt-bindings/{reset-controller => reset}/mt8192-resets.h (100%)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index d1efc4a38a41..9f72701a3b2e 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -11,7 +11,7 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/memory/mt8183-larb-port.h>
- #include <dt-bindings/power/mt8183-power.h>
--#include <dt-bindings/reset-controller/mt8183-resets.h>
-+#include <dt-bindings/reset/mt8183-resets.h>
- #include <dt-bindings/phy/phy.h>
- #include <dt-bindings/thermal/thermal.h>
- #include "mt8183-pinfunc.h"
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index 16b6aff324a7..6986bc740465 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -9,9 +9,9 @@
-  * Based on sunxi_wdt.c
-  */
- 
--#include <dt-bindings/reset-controller/mt2712-resets.h>
--#include <dt-bindings/reset-controller/mt8183-resets.h>
--#include <dt-bindings/reset-controller/mt8192-resets.h>
-+#include <dt-bindings/reset/mt2712-resets.h>
-+#include <dt-bindings/reset/mt8183-resets.h>
-+#include <dt-bindings/reset/mt8192-resets.h>
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/init.h>
-diff --git a/include/dt-bindings/reset-controller/mt2712-resets.h b/include/dt-bindings/reset/mt2712-resets.h
-similarity index 100%
-rename from include/dt-bindings/reset-controller/mt2712-resets.h
-rename to include/dt-bindings/reset/mt2712-resets.h
-diff --git a/include/dt-bindings/reset-controller/mt8183-resets.h b/include/dt-bindings/reset/mt8183-resets.h
-similarity index 100%
-rename from include/dt-bindings/reset-controller/mt8183-resets.h
-rename to include/dt-bindings/reset/mt8183-resets.h
-diff --git a/include/dt-bindings/reset-controller/mt8192-resets.h b/include/dt-bindings/reset/mt8192-resets.h
-similarity index 100%
-rename from include/dt-bindings/reset-controller/mt8192-resets.h
-rename to include/dt-bindings/reset/mt8192-resets.h
--- 
-2.30.2
-
+John O.Williams.
