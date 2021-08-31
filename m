@@ -2,120 +2,88 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8EE3FBD3D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Aug 2021 22:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792803FC291
+	for <lists+linux-watchdog@lfdr.de>; Tue, 31 Aug 2021 08:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbhH3UBU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 30 Aug 2021 16:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
+        id S232355AbhHaGQR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 31 Aug 2021 02:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233423AbhH3UBT (ORCPT
+        with ESMTP id S231995AbhHaGQQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 30 Aug 2021 16:01:19 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE867C061575;
-        Mon, 30 Aug 2021 13:00:25 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id i8-20020a056830402800b0051afc3e373aso19914668ots.5;
-        Mon, 30 Aug 2021 13:00:25 -0700 (PDT)
+        Tue, 31 Aug 2021 02:16:16 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8CCC06175F
+        for <linux-watchdog@vger.kernel.org>; Mon, 30 Aug 2021 23:15:21 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id q21so29805493ljj.6
+        for <linux-watchdog@vger.kernel.org>; Mon, 30 Aug 2021 23:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mA95KUP0dYKYEnYZnEFeu7CCPib9IonakfUcwEE/oNw=;
-        b=pOjLWxcC6TZyp0PNKbMFVHrbtffNwVR+PSEUdvVN96tugh2yf6nPx4fuxjYjBknWxo
-         wIuG2VQoerR3QSoZ85GLtgByveplnptziB2bAxZOL9JVN245t71ZklyaB5XyGvHS+EJK
-         jYIkBnEHmkUvyJgmbJ85EM2L4/VDQ0C0mPQd8qBGklaI2LxM1hJcIiKWRKJ1PjHiEZ57
-         ojM67wIRS3PRPQojQQuIe9ePPEjmDIyuxtliAyMz0dR7gZZtO1bUddhKJyfxnpu98aAr
-         DakS/V2V7aj+d/ZshZU53eT+WKvBfGKTjj+J6XQzlyOrIdDxOXyBGMe561GyoGVrbpRi
-         8Q3Q==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=RzIkdEm5aJl66a3p0t6hmEQ+Qv+8MFJLxj5JlLxnEbs=;
+        b=Un3iM4CwUhGBtUHLzrPW3q+/lxLEmEGK5Wz+UWdhDSQfPVKppG0rxTk7udCSOa5pOe
+         m7q7ptBDkm/Nobh6ZGed7NFDcl7AGNXHTIJD6UBqYqgRgXnyfD+0rg0ACcX8taHU1oHe
+         guHxvhVhooykZCREmoVOPjVZ8V+c1Z8oXGLAkew4lFhRqIMWIdD2QH9/ObBmMiNkT96j
+         +JwjeORrfN7XUUDk5wDOOFuZt4DcR1aFkMHz8SCWtFHoQ1IljIsBNyjbOxrnmpzVnHvV
+         nc1KNDZSRsSsMjh7Ly8SZR3gYLksilecRPofzq7lVVcOdE/8I02Yqh8aUnLhmiH+K1hh
+         3cLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mA95KUP0dYKYEnYZnEFeu7CCPib9IonakfUcwEE/oNw=;
-        b=KiYvjmkixOWzRs+hIYSMDOEg3y+ipn0LrEJFzIj2c3/1XFZ7VLf7SNBJcVkp6W7jlx
-         1A6Dpq5P1tM2GQwLMbQ0rNcQiypGUTy3a3j24Q+BwsF4adc1stnjB2NkpgHUa+Uppra/
-         UNwPSid/zis3woJ2MRrlm3ua2g8IIgIl9XfH+T1NOYvql/QUZ5t4yJvfz16axB70PZER
-         pwzCXEA6g3Le3VCp7Rl4VmGOVuX1l+vsYb4xIeB8An2s8Rx1ET87/hMfOgumB5bDkWMU
-         BX+rwqGk2QzdZ1921exPhStDqbJ/uIdgCUHTMO98u1SZuAC94LyUXcmDcZfjoMAJL4xC
-         jJAg==
-X-Gm-Message-State: AOAM530OZg+CxPJbdT2IoOj8dYi2e0K0kHy2ye6XTnXWFfgbDio3oo3R
-        kCaceV3RB2/3NBYxh4fWYpE=
-X-Google-Smtp-Source: ABdhPJzu9t6ULQDN9iPuR1EwZkartl+sZ7v42aI2K8dwtEpW2CpzhjgTbqrl3Dog7smMDFurjtOKzA==
-X-Received: by 2002:a05:6830:4124:: with SMTP id w36mr21016879ott.72.1630353625041;
-        Mon, 30 Aug 2021 13:00:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z78sm3106348ooa.29.2021.08.30.13.00.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Aug 2021 13:00:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog: iTCO_wdt: Fix detection of SMI-off case
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Storm <christian.storm@siemens.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?Q?Mantas_Mikul=c4=97nas?= <grawity@gmail.com>
-References: <d84f8e06-f646-8b43-d063-fb11f4827044@siemens.com>
- <1444efd5-b778-949b-34e8-99d2541350e9@siemens.com>
- <85c2c85e-147c-b54e-e84d-10b989610979@siemens.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <904ea225-e7de-a11a-419a-0c7ac05e9b6e@roeck-us.net>
-Date:   Mon, 30 Aug 2021 13:00:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=RzIkdEm5aJl66a3p0t6hmEQ+Qv+8MFJLxj5JlLxnEbs=;
+        b=Jp+vuXrdo9N7IkbMv3oM0l3hi4H+Z6mAO0Dxk6UnSAnWjRKXb79XlaDZmBk1TUjlPD
+         jq7PdFT4TnD7A8mRT/TbUbsuKf/y0ZX5LOFDEMhVOb/1JaPaxsjfnLlYH2+bC5HtslHq
+         4gLdy4orYSrLPUFxFYoQRl1PEBWG65p3dx+f9QUhs7nabQCn3mCaAEAVZ5bJbF5fBaw/
+         xX6aQtdQnuCYCp6+JzKhYZ0vhpnEentUZ7iA/5C1UWNJ+e7U7XsAdjorseJBT0u7lErH
+         aZqwfthIK5Pi0dpF4uINAu3VYSWD4cVjdUR4s9PavT5BGqAjnDXWSOR/3t+Yc+EF1a7g
+         NnyQ==
+X-Gm-Message-State: AOAM532Q+Ik1Y1c6eeUQnQJ8oSamD64rKs2XA1yb7MmkYNEEZ5f+2yjz
+        +Xk2PIYIXYF2bEFz3U6rSP3DRDncqoEhT9iTa4U=
+X-Google-Smtp-Source: ABdhPJzAO7i3awEePYpre09c9maidsTEig554XWdh3qUalLvH6MtJ/h853oKLsiZ6z599JxDGh4c3OhOJzpy8l9xNW8=
+X-Received: by 2002:a2e:9dcb:: with SMTP id x11mr14058003ljj.137.1630390519514;
+ Mon, 30 Aug 2021 23:15:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <85c2c85e-147c-b54e-e84d-10b989610979@siemens.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Reply-To: godwinppter@gmail.com
+Sender: anitaholdings1860@gmail.com
+Received: by 2002:a9a:7407:0:b029:c8:dbb9:6b13 with HTTP; Mon, 30 Aug 2021
+ 23:15:18 -0700 (PDT)
+From:   Godwin Pete <godwinnpeter@gmail.com>
+Date:   Tue, 31 Aug 2021 08:15:18 +0200
+X-Google-Sender-Auth: ZHl4ZYpoHERJXD2kHSka44uP8_4
+Message-ID: <CAJ9gDnf1zakUN0uOBd9TKN5aPC+ma89ntQbaOjC1dCsC5ipnZA@mail.gmail.com>
+Subject: I just want to furnish you with this good news
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/30/21 12:47 PM, Jan Kiszka wrote:
-> On 20.08.21 15:45, Jan Kiszka wrote:
->> On 26.07.21 13:46, Jan Kiszka wrote:
->>> From: Jan Kiszka <jan.kiszka@siemens.com>
->>>
->>> Obviously, the test needs to run against the register content, not its
->>> address.
->>>
->>> Fixes: cb011044e34c ("watchdog: iTCO_wdt: Account for rebooting on second timeout")
->>> Reported-by: Mantas Mikulėnas <grawity@gmail.com>
->>> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
->>> ---
->>>   drivers/watchdog/iTCO_wdt.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
->>> index b3f604669e2c..643c6c2d0b72 100644
->>> --- a/drivers/watchdog/iTCO_wdt.c
->>> +++ b/drivers/watchdog/iTCO_wdt.c
->>> @@ -362,7 +362,7 @@ static int iTCO_wdt_set_timeout(struct watchdog_device *wd_dev, unsigned int t)
->>>   	 * Otherwise, the BIOS generally reboots when the SMI triggers.
->>>   	 */
->>>   	if (p->smi_res &&
->>> -	    (SMI_EN(p) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
->>> +	    (inl(SMI_EN(p)) & (TCO_EN | GBL_SMI_EN)) != (TCO_EN | GBL_SMI_EN))
->>>   		tmrval /= 2;
->>>   
->>>   	/* from the specs: */
->>>
->>
->> Ping, this is still missing in master. Stable kernels had the revert,
->> but 5.14 will need this.
->>
-> 
-> Second reminder: 5.14 is out and now broken. Is the patch queued
-> somewhere? I do not see it in the watchdog staging branch.
-> 
+Hi,
 
-I had it in my own watchdog-next branch for about a month.
-Usually Wim picks it up from there or from the mainling list;
-he handles all upstreaming. Wim ?
+I just want to use this little opportunity to inform you about my
+success towards the transfer. I'm currently out of the country for an
+investment with part of my share, after completing the transfer with
+an Indian business man. But i will visit your country, next year.
+After the completion of my project. Please, contact my secretary to
+send you the (ATM) card which I've already credited with the sum of
+($500,000.00). Just contact her to help you in receiving the (ATM)
+card. I've explained everything to her before my trip. This is what I
+can do for you because, you couldn't help in the transfer, but for the
+fact that you're the person whom I've contacted initially, for the
+transfer. I decided to give this ($500,000.00) as a compensation for
+being contacted initially for the transfer. I always try to make the
+difference, in dealing with people any time I come in contact with
+them. I'm also trying to show that I'm quite a different person from
+others whose may have a different purpose within them. I believe that
+you will render some help to me when I, will visit your country, for
+another investment there. So contact my secretary for the card, Her
+contact are as follows,
 
-Guenter
+Full name: Mrs, Jovita Dumuije,
+Country: Burkina Faso
+Email: jovitadumuije@gmail.com
+
+Thanks, and hope for a good corporation with you in future.
+
+Godwin Peter,
