@@ -2,91 +2,166 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 553E23FCDD4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 31 Aug 2021 22:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4ABF3FD888
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Sep 2021 13:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240803AbhHaT2b (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 31 Aug 2021 15:28:31 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:38868 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240607AbhHaT20 (ORCPT
+        id S234940AbhIALQZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Sep 2021 07:16:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31368 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234640AbhIALQY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 31 Aug 2021 15:28:26 -0400
-Received: by mail-oi1-f180.google.com with SMTP id u25so567486oiv.5;
-        Tue, 31 Aug 2021 12:27:31 -0700 (PDT)
+        Wed, 1 Sep 2021 07:16:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630494927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kk4W4K9MQ9ua2+zgx8bPqDZ+eX9GszTN0dZY5t310is=;
+        b=AT0aSqJ/37owBL8HJIyTwr9jMuEjSGnCbojAx7sLKfIcLDJ/9L+sbJy2NjTROjx1zd4ZXX
+        r1HdM8BBZODgoO1FaM0R5x4DTpBB98Gc6HlQPY9B7jha416Zi5PZgREBlqoLcezk3EfHo2
+        nHPpJ0ev01tDPAEUopqs0TIR97qYZCk=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-125-hMHXNTbYMcOvf0GltmWkcw-1; Wed, 01 Sep 2021 07:15:26 -0400
+X-MC-Unique: hMHXNTbYMcOvf0GltmWkcw-1
+Received: by mail-wr1-f70.google.com with SMTP id d10-20020adffbca000000b00157bc86d94eso659733wrs.20
+        for <linux-watchdog@vger.kernel.org>; Wed, 01 Sep 2021 04:15:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B18XCxdh5roXXYBkgIgsolQaF3/RyCT+RYjyoh97Brk=;
-        b=p/K7gazXe3lixbGJQhpSlMMBsSaHaLL9r11KMAZPuYN6euzDBiqxKMoPvLu397c0Fx
-         0Yjhxb7elnwVI+RgLm0KersY5tqv1Rn3KROfZfKxND20+0QCkXuP3JFfZxcVpMz1CZbY
-         +V7xCMOeN4zKnCvltLRJLyV48jfcJzBAzL8N0BA5WtNoeaJy7OhTjINMYi78FGsiwEo9
-         st42Pp1rtkSUYeb/kvshA/f4l7aYkJN3TnjEQgTErml7RKRAxGgG+QkQGadiLe3rE6Jk
-         aYBMpz17HUCKL/FONrAzgqigRS4N3MR3OojosvZv9lJS6rsfW41gOdrgh9eoQD+doIMT
-         k10g==
-X-Gm-Message-State: AOAM532L1Ck3ANTACeGOZLg6bMaXtLx0U3s460Y6JEANYkSIwjxNqYhX
-        3tvAg7MDFWyFsVd5Ezq+mjwbX5pO7g==
-X-Google-Smtp-Source: ABdhPJyISGNvUkiwv/aZwGtTy7OmqleXpitzw8KMrZYdmigKN/S7wGPQvq/Drjnoa3iN8bG0Uc6OpA==
-X-Received: by 2002:a54:4182:: with SMTP id 2mr4533320oiy.66.1630438050741;
-        Tue, 31 Aug 2021 12:27:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o8sm3712041oiw.55.2021.08.31.12.27.29
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=kk4W4K9MQ9ua2+zgx8bPqDZ+eX9GszTN0dZY5t310is=;
+        b=ctuSxuBu45om64GswFuhSUt0Rt/GjgiX22EoQHx3tcRY73wSFQwPJ10Naoaq9gBQeP
+         RP+yBejnAF4tvNjJtWaDVd9IvMpMsPhR5+AOVPl/KMJiTedD+QCaxgPNHMlxR4xNYCtJ
+         9IfcX8Fg4dTh/V47PusnEYcfTfqlGTmTvrtvB6FlhW7m5ZyNwOVEFhh5PjlTLCIPkHv2
+         bmBQEoEixMLksqxbCJrEuNDHWjBU8F6sCgEHERwDcflFquXb39FpEOjxcR98TVhCEKDE
+         7TTOpXnt4OQV/FRAEmgZKJrdyH4FgmtE6fey8Pgxcu5xZ1z770+JFZlzbXbJXWHWc7R/
+         JJbQ==
+X-Gm-Message-State: AOAM533/t89KdSxALFz9zWMgF+gDA4porYKF9mOw7gO0LV6Y5nsPVXvI
+        ZtUN0HheQmFuHDXow+4mO663XnCyPGlStZXdppM0g/w+1YHFRaKPnegi5Rta2GyzXcnb3u/bMgr
+        IsaszXa+5LnCEGs7aRT46X7e3C9Y=
+X-Received: by 2002:a05:600c:219:: with SMTP id 25mr8926970wmi.157.1630494925315;
+        Wed, 01 Sep 2021 04:15:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzsAhcL5Q/tNxsf8q1PSTmDvInUuurABvWhyX4FKAw3F08cXef5JP80ilzhnyQPzSX/DmDMJg==
+X-Received: by 2002:a05:600c:219:: with SMTP id 25mr8926950wmi.157.1630494925131;
+        Wed, 01 Sep 2021 04:15:25 -0700 (PDT)
+Received: from morpheus.roving-it.com (f.c.9.1.f.e.c.d.1.e.0.0.2.b.5.5.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681:55b2:e1:dcef:19cf])
+        by smtp.gmail.com with ESMTPSA id d6sm19018155wra.5.2021.09.01.04.15.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 12:27:30 -0700 (PDT)
-Received: (nullmailer pid 515234 invoked by uid 1000);
-        Tue, 31 Aug 2021 19:27:28 -0000
-Date:   Tue, 31 Aug 2021 14:27:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sam Shih <sam.shih@mediatek.com>
-Cc:     Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-clk@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Ryder Lee <Ryder.Lee@mediatek.com>
-Subject: Re: [v2,05/12] dt-bindings: pinctrl: update bindings for MT7986 SoC
-Message-ID: <YS6CoAxnarhqdTl+@robh.at.kernel.org>
-References: <20210817074557.30953-1-sam.shih@mediatek.com>
- <20210817074557.30953-6-sam.shih@mediatek.com>
+        Wed, 01 Sep 2021 04:15:24 -0700 (PDT)
+Message-ID: <2c8c29d811c470f1df69ce5bb370f3f493fc55c2.camel@redhat.com>
+Subject: Re: [Watchdog drivers] - WDIOC_GETSUPPORT clarification
+From:   Peter Robinson <perobins@redhat.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jose Noguera <jnoguera@redhat.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org
+Date:   Wed, 01 Sep 2021 12:15:23 +0100
+In-Reply-To: <3d7ec88a-8756-9a22-9e85-ab3b8c9953d2@roeck-us.net>
+References: <CAKu6O181WOq36RCDO0VPcsZZoUFAJ88BMqv0Hqf+qYCeZsMJtQ@mail.gmail.com>
+         <9866b7d2-1d43-db77-fa79-0be4bed51f5f@roeck-us.net>
+         <0db70d23-d15c-e485-2600-439dc5d55d47@redhat.com>
+         <3d7ec88a-8756-9a22-9e85-ab3b8c9953d2@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210817074557.30953-6-sam.shih@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 03:45:50PM +0800, Sam Shih wrote:
-> This updates bindings for MT7986 pinctrl driver.
-> The difference of pinctrl between mt7986a and mt7986b
-> is that pin-41 to pin-65 do not exist on mt7986b
+On Wed, 2021-08-18 at 07:53 -0700, Guenter Roeck wrote:
+> On 8/18/21 7:49 AM, Hans de Goede wrote:
+> > Hi,
+> > 
+> > On 8/18/21 4:13 PM, Guenter Roeck wrote:
+> > > On 8/18/21 2:57 AM, Jose Noguera wrote:
+> > > > Hello all!
+> > > > 
+> > > > I’m Jose, working in Red Hat on Fedora IoT and RHEL For Edge
+> > > > related projects.
+> > > > 
+> > > > While trying to add the feature of figuring out whether the
+> > > > current boot was triggered or not by a hardware watchdog using
+> > > > wdctl, we’ve found an odd behaviour in the drivers definition
+> > > > that we would like to check with you.
+> > > > 
+> > > > Looking specifically for the flag WDIOF_CARDRESET, we can find
+> > > > 40 files that contain it:
+> > > > 
+> > > > $ grep -rl CARDRESET drivers/watchdog/ | wc -l
+> > > > 40
+> > > > 
+> > > > but only 19 of them have the flag advertised in the options
+> > > > field of the watchdog_info struct returned by the
+> > > > WDIOC_GETSUPPORT ioctl.
+> > > > 
+> > > > This leads to wdctl not showing WDIOF_CARDRESET for drivers
+> > > > like i6300esb, even when the board had been reset this way:
+> > > > 
+> > > > $ sudo wdctl
+> > > > Device: /dev/watchdog0
+> > > > Identity: i6300ESB timer [version 0]
+> > > > Timeout: 30 seconds
+> > > > Pre-timeout: 0 seconds
+> > > > 
+> > > > FLAG DESCRIPTION STATUS BOOT-STATUS
+> > > > KEEPALIVEPING Keep alive ping reply 1 0
+> > > > MAGICCLOSE Supports magic close char 0 0
+> > > > SETTIMEOUT Set timeout (in seconds) 0 0
+> > > > 
+> > > > Working with Hans (in CC), we added a little patch (BugZilla
+> > > > ticket: 1993983) on wdctl and this would be the output of the
+> > > > command when it was a card reset triggered boot:
+> > > > 
+> > > > $ sudo wdctl
+> > > > Device: /dev/watchdog0
+> > > > Identity: i6300ESB timer [version 0]
+> > > > Thank you all for your time,
+> > > > 
+> > > > Jose
+> > > 
+> > > > Timeout: 30 seconds
+> > > > Pre-timeout: 0 seconds
+> > > > 
+> > > > FLAG DESCRIPTION STATUS BOOT-STATUS
+> > > > CARDRESET Card previously reset the CPU 1 1
+> > > > KEEPALIVEPING Keep alive ping reply 1 0
+> > > > MAGICCLOSE Supports magic close char 0 0
+> > > > SETTIMEOUT Set timeout (in seconds) 0 0
+> > > > 
+> > > > So our question is, may we know what is intended to be present
+> > > > in ident.options? What should the API call WDIOC_GETSUPPORT
+> > > > return in the options field?
+> > > > 
+> > > 
+> > > Search for WDIOC_GETSUPPORT in Documentation/watchdog/watchdog-
+> > > api.rst.
+> > > I don't see any ambiguity there. Patches welcome.
+> > 
+> > Ok, so drivers which may set CARDRESET in their GETBOOTSTATUS
+> > reply, but
+> > don't advertise this in their GETSUPPORT watchdog_info.options
+> > reply
+> > are buggy and should be fixed, got it. Thanks.
+> > 
+> > I've made a note about fixing this in a possible-kernel-projects
+> > document
+> > which I keep for when people who are interested in kernel
+> > development
+> > ask me for projects.
+> > 
 > 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> 
-> ---
-> v2 : deleted the redundant description of mt7986a/mt7986b
-> 
-> ---
->  .../bindings/pinctrl/pinctrl-mt7622.txt       | 170 ++++++++++++++++++
->  1 file changed, 170 insertions(+)
+> With an add-on: If the driver in question is an old-style driver,
+> anyone
+> affected by the problem should really convert the driver to support
+> the watchdog subsystem.
 
-This is adding a lot to not be in schema format. I imagine this will 
-need to be a separate file if the pin and function names are different 
-for each SoC.
+Would you have a link to any docs/posts outlining what needs to be done
+for conversion to the watchdog subsystem?
 
-Rob
+Regards,
+Peter
+
