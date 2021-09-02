@@ -2,74 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 508523FF6D7
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Sep 2021 00:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6425D3FF776
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Sep 2021 00:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347592AbhIBWGn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 2 Sep 2021 18:06:43 -0400
-Received: from mail.repatriados.gov.py ([168.90.176.63]:21672 "EHLO
-        mail.repatriados.gov.py" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234028AbhIBWGn (ORCPT
+        id S239414AbhIBW6y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Sep 2021 18:58:54 -0400
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:38897 "EHLO
+        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232013AbhIBW6x (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 2 Sep 2021 18:06:43 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.repatriados.gov.py (Postfix) with ESMTP id A115C1C258A;
-        Wed,  1 Sep 2021 10:14:40 -0400 (-04)
-Received: from mail.repatriados.gov.py ([127.0.0.1])
-        by localhost (mail.repatriados.gov.py [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id K6_CLnrxTiyC; Wed,  1 Sep 2021 10:14:38 -0400 (-04)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.repatriados.gov.py (Postfix) with ESMTP id 310286D93A;
-        Wed,  1 Sep 2021 00:15:52 -0400 (-04)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.repatriados.gov.py 310286D93A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=repatriados.gov.py;
-        s=66AB3A4C-4957-11E8-AF15-073A956E488A; t=1630469753;
-        bh=re+Bi7IjhFEavKutGVOnSLzHkgr9hnVuewhYSbG4AUw=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=u/qcMIytJcFXmbthqzpK4Hgngnl9qj+3d3jswia4d9SRgI6rVl4nXnGfsYyqDviHJ
-         7cGZCp+1pqxCBh0QCexyOqZminxYG1geBG9BllTEllvXw8abCw7hPz0BwhCbdJH539
-         lgLU0kvcFKhLpbBc3V6fEOuAGh6nRL5vByNmEBUbbV1WPaIjBnFWYpa2G/YYDZ3rPm
-         2q/k4ObKsP0v93s8klRMRpxGlAH6Baczs1/EGFmvPOejKiC0udU3DvAlA+mRRSdWd5
-         87I6uqU7SgULJmyGpWosWMK00kNrzAeiX/8FKDtuxPlFsSn9cb2kw+WWDuGLO10G1/
-         ryYjgSGqeJoIg==
-X-Virus-Scanned: amavisd-new at repatriados.gov.py
-Received: from mail.repatriados.gov.py ([127.0.0.1])
-        by localhost (mail.repatriados.gov.py [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NXmqxV7K_p4Q; Wed,  1 Sep 2021 00:15:52 -0400 (-04)
-Received: from cris-PC.www.huaweimobilewifi.com (unknown [105.4.4.195])
-        by mail.repatriados.gov.py (Postfix) with ESMTPSA id 3C4C4697DE;
-        Tue, 31 Aug 2021 22:32:33 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 2 Sep 2021 18:58:53 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id B432F2B00053;
+        Thu,  2 Sep 2021 18:57:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Thu, 02 Sep 2021 18:57:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm3; bh=qq4KILFhNX+2NAhG1FBp30Jzcd
+        dxrR8B8njvflWfJ6A=; b=KhShorhRUwKNfiawh29mCc5Sv+rnnfMFOqqAzye8/r
+        tv2aNK9UoS/Q48AtWMqbmyxt2GQJsqm0qKOdMrT3o0eh6n7DoBVPDg+gNj6V+BGk
+        tx9+MgUJbO3efNX+PCuABuuR6D/uQNaNim/14EN28dqpz4AQ4pZiMBa5BNV1vMlB
+        4rfn1/cXzlrY+4fQnaA6V/0NxgA/hACqFGv6WuZ0511bTldm2OIZgNeGXp+eAoQq
+        IQ9IMnfy97bVsGyDcdJ1agsLcX8dl+Bm9L92b7JmHeN1cy3r1ugc2UiIjxjQRZGj
+        UyydlLz24SlPVST3oO/76/t2XNRtDnIamyvKziXt+JAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=qq4KILFhNX+2NAhG1
+        FBp30JzcddxrR8B8njvflWfJ6A=; b=YfpSJUlsU3ac/rsKwHUdmgZnaBmcSumEf
+        dtP1E/xsAz3iapA8mYEE0HNqxAsEH2PlRmtDjNN51OGpr1ggrBHBTKeDXk8JwEd7
+        vDEmDzyPRqfQMe78ZZpg3R/n+GD1M8CYN8ZdWVwOR3OZlWWCMC5mZZl+9dkCZFzJ
+        rsTrde6b4LhJjCV4QF2Angai8gmdtf0Uut8XiMgftKunNvRv1QGiWh9L/lXJm570
+        OLort5l+sUXwXu12T8e0RxpmOaD1b7+o4M50AwcDBRsU8FUmnsqCL/V1DIk1VG6y
+        5oe3An2PJ1kJd/jPH/uF7bc+uNLTf+PVEwCs4ESXxjshevpDFVgEw==
+X-ME-Sender: <xms:71YxYR-73ia2Hwla52-EYzCtHeJQdoMC5g33vOSmL3f0E66EfPtsNw>
+    <xme:71YxYVuifVNyfZz1Ak6VjLSevtEwGqS7kM0k0GhMdkPZbjz1kf61ssw9Mm-tBSvo1
+    y71TtCv6Lzkkvdghw>
+X-ME-Received: <xmr:71YxYfA6oPnnIm1A9ZMHB-rF7Zt-RBnM61OWzILP6OYsQDNIEfqRYMK1OuBWPKfxc--GoaeurmLkomb4fJt-BXEDvCIkMhMWJCdNcb2kuYKGIzMSVdD47ZA-oW4oo2hazUe85g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddruddviedgudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:71YxYVckUPhwQ5xAJwnCdzEzPnRFh2XCcKI1a5nEhKSBIPZRHXxc6A>
+    <xmx:71YxYWNnPengs6f9ne6TIukFYz3Qm2rdyPbDoPVWfUy_KXHJHCjxxw>
+    <xmx:71YxYXmTMiRMiUFPSinOmgjV0xZmnPVlD_UMKf1vq7AiCgRYd_kKMg>
+    <xmx:8VYxYXl2aAcVg8ONqX91NFi5mcFZBXRgcI0oMNbpGdCDH1B9jdJz7yjBkFA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 Sep 2021 18:57:51 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Icenowy Zheng <icenowy@aosc.io>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v3 0/3] Allwinner R329 and D1 watchdog support
+Date:   Thu,  2 Sep 2021 17:57:47 -0500
+Message-Id: <20210902225750.29313-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Euro?=
-To:     Recipients <mdominguez@repatriados.gov.py>
-From:   ''Charles jackon'' <mdominguez@repatriados.gov.py>
-Date:   Wed, 01 Sep 2021 04:33:06 +0200
-Reply-To: charlesjacksonjr001@gmail.com
-Message-Id: <20210901023235.3C4C4697DE@mail.repatriados.gov.py>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hallo
+This series adds bindings and driver support for the R329 and D1
+watchdogs. The R329 is fully backward-compatible, so no driver changes
+are needed for it.
 
-Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Ameri=
-ka, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen =
-US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der H=
-ilfsgelder f=FCr das Corona-Virus.
+v3 of this series adds two new compatibles, as I discovered that the
+immediate "soft reset" functionality was specific to the watchdog that
+is part of the same block as the sun4i timer, and is not available in
+the RISC-V or DSP watchdog instances.
 
-Dies ist Ihr Spendencode: [CJ530342019]
+My intention is to use the soft reset function as OpenSBI's system reset
+backend, so it needs to know which watchdog instance has that feature.
 
-www.youtube.com/watch?v=3DBSr8myiLPMQ
+Samuel Holland (3):
+  dt-bindings: watchdog: sunxi: Add compatibles for R329
+  dt-bindings: watchdog: sunxi: Add compatibles for D1
+  watchdog: sunxi_wdt: Add support for D1
 
+ .../watchdog/allwinner,sun4i-a10-wdt.yaml     | 48 ++++++++++++++++++-
+ drivers/watchdog/sunxi_wdt.c                  | 20 +++++++-
+ 2 files changed, 66 insertions(+), 2 deletions(-)
 
-Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
+-- 
+2.31.1
 
-charlesjacksonjr001@gmail.com
-
-Ich hoffe, dass Sie und Ihre Familie dies durchkommen
-
-
-Herr Charles Jackson
