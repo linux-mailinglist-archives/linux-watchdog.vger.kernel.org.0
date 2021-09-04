@@ -2,90 +2,123 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FE64002F3
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Sep 2021 18:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25467400A5E
+	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Sep 2021 10:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349763AbhICQIt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Sep 2021 12:08:49 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:45926 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235671AbhICQIt (ORCPT
+        id S233278AbhIDISA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 4 Sep 2021 04:18:00 -0400
+Received: from mail-wr1-f43.google.com ([209.85.221.43]:36700 "EHLO
+        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233068AbhIDIR7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Sep 2021 12:08:49 -0400
-Received: by mail-ot1-f44.google.com with SMTP id l7-20020a0568302b0700b0051c0181deebso7084369otv.12;
-        Fri, 03 Sep 2021 09:07:49 -0700 (PDT)
+        Sat, 4 Sep 2021 04:17:59 -0400
+Received: by mail-wr1-f43.google.com with SMTP id q14so1879976wrp.3
+        for <linux-watchdog@vger.kernel.org>; Sat, 04 Sep 2021 01:16:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X9EoctdCi61dxF0sN3RYUh7Sq1ZZ1hgqyk+aajCi77E=;
-        b=rJlp6zMF2xZNKzQ4xplCUEAAGPkGL6bXYfDKj6Kp7LaK+enFq2lj+MBL50E1FauSli
-         YT8hy+JHeRohL5zQBwzFCoh9dWP20y0bTqGWip9RPdj3T2HwirUoilRgZgdAO5JR9RQE
-         qYFnl4vRQrW5gzZ+GtRM3DQjLbRn9ArR2qxEaKYW2STz1Wv/WW2Lf9th1ev/q0fQg+YA
-         IFQx7jEKWul2MaM/WJFG3J/p7pzI+SQzaL/vDpVqNIGKBYtXnuM/xTCsCXC9ykbQIpC+
-         wEINTE401WdCILWjykbJDiVjPGy9O4NfVX+y7PJ0QjSdziu0RPhv5ejDwokS2bHMJihV
-         qd6Q==
-X-Gm-Message-State: AOAM531kuDbvY3b/ZvgLF6KQ1R5Cbu/GvJiOcgOtGKazkJi99zrhwXbn
-        k00PZGTGaLN6P2lYQSai8w==
-X-Google-Smtp-Source: ABdhPJx6fVy45NUm19V4s1kfkPU3oDPESzTSfZcum5Yriq84uuncy+0f+/TnPB6bRmWPuRaP4J69Ew==
-X-Received: by 2002:a9d:7006:: with SMTP id k6mr3874778otj.181.1630685268668;
-        Fri, 03 Sep 2021 09:07:48 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e11sm1090605oiw.18.2021.09.03.09.07.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Sep 2021 09:07:47 -0700 (PDT)
-Received: (nullmailer pid 3026291 invoked by uid 1000);
-        Fri, 03 Sep 2021 16:07:46 -0000
-Date:   Fri, 3 Sep 2021 11:07:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-watchdog@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: watchdog: sunxi: Add compatibles for
- R329
-Message-ID: <YTJIUocojn3h4R25@robh.at.kernel.org>
-References: <20210902225750.29313-1-samuel@sholland.org>
- <20210902225750.29313-2-samuel@sholland.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7an6f31DgE6xeQrZ3d8mQUGGVz2z21es8AtooXxO4hI=;
+        b=Uqs4A++HFM7BYa4CR2JqLqSK01g+O7fm/PXzkfSMx3Nfix4h9yiiULKIp3Ogg7eZkp
+         jUdstHyZSvEqPHcvvsJttyAgrZZxb33Xoq4Wj6BHHXECodflsPx65Eg4i1u5J6ZvmKOO
+         E/loS3upXqHYfIvFFEfZAt/DpXOGAfkxyEDoqp03bXcJxB7cQUpEiyyiw4EPaZ6uknUn
+         ichOjJL8gmblcIGndp3WWxAx313sY2H5BAlTh1c37w33CF/wpzem3Ctm9Q32q/Nq6EKs
+         n0G7csdbV53PSsxN4n5mItad4t8qRn7/3lohV6dp5EPrqgRZus17GN381J1hv5eWyMEN
+         zTcQ==
+X-Gm-Message-State: AOAM531Fg4lPODVnf/c/cadfcMxOVkM7e6cQGGfPo0A5kQ7kzpy5uD96
+        buwx7pGocYZf+CV9/DkRzT0=
+X-Google-Smtp-Source: ABdhPJyzO08RZL0px+6WlZk+vQghMMq/9cU+cr+znL4oKRtSCA7jhkipzn+bxgiJZo32a+hHn13XuA==
+X-Received: by 2002:adf:c510:: with SMTP id q16mr2897611wrf.203.1630743417831;
+        Sat, 04 Sep 2021 01:16:57 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with UTF8SMTPSA id b15sm1588204wru.1.2021.09.04.01.16.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Sep 2021 01:16:56 -0700 (PDT)
+Message-ID: <85ce6068-c98e-dbe0-a4b6-5c877b460f64@kernel.org>
+Date:   Sat, 4 Sep 2021 10:16:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210902225750.29313-2-samuel@sholland.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.1
+Subject: was [Re: [PATCH v3] watchdog: Add hrtimer-based pretimeout feature]
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Curtis Klein <curtis.klein@hpe.com>, wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org
+References: <1612383090-27110-1-git-send-email-curtis.klein@hpe.com>
+ <67d601c9-8f95-cb10-40df-4d962ec6f9ba@kernel.org>
+ <7fdd262e-84fb-0c34-baa9-162130f1e109@roeck-us.net>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <7fdd262e-84fb-0c34-baa9-162130f1e109@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 02 Sep 2021 17:57:48 -0500, Samuel Holland wrote:
-> On existing SoCs, the watchdog has a single clock input: HOSC (OSC24M)
-> divided by 750.  However, starting with R329, LOSC (OSC32k) is added as
-> an alternative clock source, with a bit to switch between them.
+On 02. 09. 21, 16:05, Guenter Roeck wrote:
+> On 9/1/21 11:55 PM, Jiri Slaby wrote:
+>> On 03. 02. 21, 21:11, Curtis Klein wrote:
+>>> This adds the option to use a hrtimer to generate a watchdog pretimeout
+>>> event for hardware watchdogs that do not natively support watchdog
+>>> pretimeouts.
+>>>
+>>> With this enabled, all watchdogs will appear to have pretimeout support
+>>> in userspace. If no pretimeout value is set, there will be no change in
+>>> the watchdog's behavior.
+>>
+>> Hi,
+>>
+>> on my Dell Latitude 7280, CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT=y causes 
+>> all reboot, kexec, suspend to panic. Disabling that option makes it 
+>> all work again. Provided it happens very late in the process, I don't 
+>> know how to grab some logs...
+>>
+>> Any ideas?
+>>
 > 
-> Since 24 MHz / 750 == 32 kHz, not 32.768 kHz, the hardware adjusts the
-> cycle counts to keep the timeouts independent of the clock source. This
-> keeps the programming interface backward-compatible.
-> 
-> Furthermore, the R329 has two watchdogs: one for use by the ARM CPUs
-> at 0x20000a0, and a second one for use by the DSPs at 0x7020400. The
-> first of these adds two more new registers, to allow software to
-> immediately assert the SoC reset signal. Add an additional "-reset"
-> suffix to signify the presence of this feature.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> Changes v2 to v3:
->  - Add else case
->  - Add additional allwinner,sun50i-r329-wdt-reset compatible
-> Changes v1 to v2:
->  - Switch clock-names from enum to const
->  - Add descriptions to "clocks" items
-> 
->  .../watchdog/allwinner,sun4i-a10-wdt.yaml     | 42 ++++++++++++++++++-
->  1 file changed, 41 insertions(+), 1 deletion(-)
-> 
+> AFAICS the timer does not stop on reboot. I think we'll need to augment 
+> the code
+> to do that.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+No, it is stopped via device unregister -> watchdog_dev_unregister -> 
+watchdog_cdev_unregister -> watchdog_hrtimer_pretimeout_stop.
+
+But look:
+watchdog_cdev_unregister
+   -> wdd->wd_data = NULL;
+   -> watchdog_hrtimer_pretimeout_stop
+     -> hrtimer_cancel(&wdd->wd_data->pretimeout_timer);
+
+The diff below obviously fixes the issue, but I don't know what the 
+consequences are. The other possibility would be to pass wd_data 
+directly to watchdog_hrtimer_pretimeout_stop.
+
+I don't know how this can work on some machines (I verified it does).
+
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -1096,6 +1096,8 @@ static void watchdog_cdev_unregister(struct 
+watchdog_device *wdd)
+                 watchdog_stop(wdd);
+         }
+
++       watchdog_hrtimer_pretimeout_stop(wdd);
++
+         mutex_lock(&wd_data->lock);
+         wd_data->wdd = NULL;
+         wdd->wd_data = NULL;
+@@ -1103,7 +1105,6 @@ static void watchdog_cdev_unregister(struct 
+watchdog_device *wdd)
+
+         hrtimer_cancel(&wd_data->timer);
+         kthread_cancel_work_sync(&wd_data->work);
+-       watchdog_hrtimer_pretimeout_stop(wdd);
+
+         put_device(&wd_data->dev);
+  }
+
+thanks,
+-- 
+js
+suse labs
