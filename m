@@ -2,71 +2,146 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AD940302E
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Sep 2021 23:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81438406FFC
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Sep 2021 18:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344914AbhIGVXb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Sep 2021 17:23:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34840 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243883AbhIGVXa (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Sep 2021 17:23:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id CE1B761090;
-        Tue,  7 Sep 2021 21:22:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631049743;
-        bh=Cq5pTTVkFcKzGc0spQ9Osp3QQ6EbOWj5aydK3apxAv0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=QFxwk01jZrpnFm7eRyDfcnv2wl28tADolx/i9X3DYVyjIsE1wwWhyPNjqVaw+hX/t
-         fWYa4yQC0kIx+u4EvxCBtjnTR9vKat5GoqsqnL8i45M+A/WXhA7c1dklrsU0ESs4Ab
-         gkwICB25SVbFu1AKoa27IBMK/z3lAYE5Wv5qFHmIwp+brVwJ9CbwZG6oC36/CaY/NV
-         5cVbntFKClW7MtsoTSxxlIoFw/Wh5EQ6zMusdMkB3E/Ai2bZ+yZAX102dKAi8uFPS1
-         2LcizSHhAcGKe+k4bg+1DOT9n2EAoPBIfr2+c4RKpO5hpz++xqOiAzi+pBxCDzi5O6
-         KOL0aNso8y+eQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B35E0609F5;
-        Tue,  7 Sep 2021 21:22:23 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v5.12 Merge window
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210907191139.GA18865@www.linux-watchdog.org>
-References: <20210907191139.GA18865@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210907191139.GA18865@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.15-rc1
-X-PR-Tracked-Commit-Id: 41e73feb1024929e75eaf2f7cd93f35a3feb331b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4c00e1e2e58eefb288ba9ef585b6f19e1f33bf1e
-Message-Id: <163104974367.25074.3468919296051123154.pr-tracker-bot@kernel.org>
-Date:   Tue, 07 Sep 2021 21:22:23 +0000
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        id S229503AbhIJQxH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 10 Sep 2021 12:53:07 -0400
+Received: from mail-oo1-f46.google.com ([209.85.161.46]:46733 "EHLO
+        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229448AbhIJQxH (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 10 Sep 2021 12:53:07 -0400
+Received: by mail-oo1-f46.google.com with SMTP id q26-20020a4adc5a000000b002918a69c8eeso798724oov.13;
+        Fri, 10 Sep 2021 09:51:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3fjHrC7rWcF9dMNWywAFcF4cWpH6lABHS4xRvn07uCE=;
+        b=dNFaDpNMFJNecRWRJQccpVQZqT0iJ55YOZ4EhgDzP6NSeOSENF4ROMh4nR+C7N0cHg
+         LdQn6KFFKK6QMjf3rsHimze4elDhCgcCGy/tL51i2MsLV/sYx/9M/z6yF/E7hOfYTYgL
+         G229yZgtF6mQ080/svhcmpiBFpanOrnQqDKODCBfzuj26tCE4opjPs5kjDR/bwMuwk9y
+         UUDsX5dQggDl6HhS2kxtcqcV8h7MN/T6QTylBfX4Q1884r40vHxIPZ/YChYLpk4hLgxO
+         d77nufkOrIflIVy/K0kx/7lHIVdCzPSYXZ+dCrjBZa8K8D0LmhGeKByiTcIGljo2MzUO
+         IUdg==
+X-Gm-Message-State: AOAM531b6SC+Ont4jEbAduuwwSQKDTnRxd14j4R9k1c4tUdv+fzv38hv
+        r9lQLD6a1+GxQUATarJ8cnDDLfhQ/w==
+X-Google-Smtp-Source: ABdhPJyUedNY2XQSRkDXYf15LP5DG4AvPSI+WgwkX0ecJs/T2gYdw2UpbTWOv/R1eADi4gUxBwt0FQ==
+X-Received: by 2002:a4a:33d6:: with SMTP id q205mr5077583ooq.83.1631292714765;
+        Fri, 10 Sep 2021 09:51:54 -0700 (PDT)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id f17sm1347223otl.24.2021.09.10.09.51.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Sep 2021 09:51:54 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Christine Zhu <Christine.Zhu@mediatek.com>,
-        Curtis Klein <curtis.klein@hpe.com>,
-        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Marc Zyngier <maz@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH] dt-bindings: More use 'enum' instead of 'oneOf' plus 'const' entries
+Date:   Fri, 10 Sep 2021 11:51:53 -0500
+Message-Id: <20210910165153.2843871-1-robh@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The pull request you sent on Tue, 7 Sep 2021 21:11:39 +0200:
+'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
+is more concise and yields better error messages.
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.15-rc1
+Fix a couple more cases which have appeared.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4c00e1e2e58eefb288ba9ef585b6f19e1f33bf1e
+Cc: Rob Clark <robdclark@gmail.com>
+Cc: Sean Paul <sean@poorly.run>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jonathan Marek <jonathan@marek.ca>
+Cc: Aswath Govindraju <a-govindraju@ti.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: dri-devel@lists.freedesktop.org
+Cc: freedreno@lists.freedesktop.org
+Cc: linux-spi@vger.kernel.org
+Cc: linux-watchdog@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/display/msm/dsi-phy-7nm.yaml          |  8 ++++----
+ .../devicetree/bindings/spi/omap-spi.yaml          |  6 +++---
+ .../bindings/watchdog/maxim,max63xx.yaml           | 14 +++++++-------
+ 3 files changed, 14 insertions(+), 14 deletions(-)
 
-Thank you!
-
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
+index 4265399bb154..c851770bbdf2 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-7nm.yaml
+@@ -14,10 +14,10 @@ allOf:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: qcom,dsi-phy-7nm
+-      - const: qcom,dsi-phy-7nm-8150
+-      - const: qcom,sc7280-dsi-phy-7nm
++    enum:
++      - qcom,dsi-phy-7nm
++      - qcom,dsi-phy-7nm-8150
++      - qcom,sc7280-dsi-phy-7nm
+ 
+   reg:
+     items:
+diff --git a/Documentation/devicetree/bindings/spi/omap-spi.yaml b/Documentation/devicetree/bindings/spi/omap-spi.yaml
+index e55538186cf6..9952199cae11 100644
+--- a/Documentation/devicetree/bindings/spi/omap-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/omap-spi.yaml
+@@ -84,9 +84,9 @@ unevaluatedProperties: false
+ if:
+   properties:
+     compatible:
+-      oneOf:
+-        - const: ti,omap2-mcspi
+-        - const: ti,omap4-mcspi
++      enum:
++        - ti,omap2-mcspi
++        - ti,omap4-mcspi
+ 
+ then:
+   properties:
+diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+index f2105eedac2c..ab9641e845db 100644
+--- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
++++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+@@ -15,13 +15,13 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: maxim,max6369
+-      - const: maxim,max6370
+-      - const: maxim,max6371
+-      - const: maxim,max6372
+-      - const: maxim,max6373
+-      - const: maxim,max6374
++    enum:
++      - maxim,max6369
++      - maxim,max6370
++      - maxim,max6371
++      - maxim,max6372
++      - maxim,max6373
++      - maxim,max6374
+ 
+   reg:
+     description: This is a 1-byte memory-mapped address
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.30.2
+
