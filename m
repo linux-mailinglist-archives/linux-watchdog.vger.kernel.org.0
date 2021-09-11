@@ -2,99 +2,84 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 899D9407533
-	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Sep 2021 06:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9540740770D
+	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Sep 2021 15:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbhIKEao (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 11 Sep 2021 00:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbhIKEan (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 11 Sep 2021 00:30:43 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B27C061574;
-        Fri, 10 Sep 2021 21:29:30 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id l17-20020a4ae391000000b00294ad0b1f52so1269200oov.10;
-        Fri, 10 Sep 2021 21:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tRCcdM81EEYiYZkpOOdI8A5If1TLi9jMkP3YynEYVVQ=;
-        b=OJ+T+BjLsu0TTQCLUapemwtxyAO8dGvnGiSxYtTIcTXMKvf2qEylV3ADREKwZYyUd0
-         vo+S1rfQIFhNRm0bVnf9EOzYkxzZ92k2YxiLmmOXZE4y3p/J/yba8wRBR0S9L3eEHEb1
-         pRswhthnvIBB14KrOAubkh2+JFMSX9ykucQ1emLoVx/waAIiYVVe+yaTdX6jbI4fi6sc
-         94nvdrhwO0RuNMcUGWst3EKIdF/SRsCr5mQSxIF+f1LyGyYs8JWmbrSd9B9s2rKeYz+O
-         ZNupu29eyXZkYx6WNJldez8uC9HI5uUJs/yXdKh6waqcJUtXcmbYb+Z9U/F9Q5R3VV6p
-         NCPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=tRCcdM81EEYiYZkpOOdI8A5If1TLi9jMkP3YynEYVVQ=;
-        b=l2CDjmKYyR1TPbnFIQTwcVH/4HTjit1k8wgS/28he6ZwRxFcSdXTJveGqjnBQdd6A4
-         Qb5y0JlEgyG+3hULaOlkymI6fu3Ubr90BfpJZvGl1m6VhxDys/QXkp2Kz4QSrX/tGrRP
-         0vKLOxneby60aieEl0gyYgAByd3STDahVe8JWqvrhClmp8x+xD8u16X8oWsUO4STMf8G
-         F5WDYtmQu8zI2500VFkZFQHN1WP4DLnTgcEfNgQeF5KM0Lw17JlGo92QYFDl++b3omBU
-         970pxkDwPFPaiJT+eqwk7aNcE6k3KnFs+LO93DpD4IlgcnqXLhk4/IO9j4TZ6V8MzdbC
-         3xGA==
-X-Gm-Message-State: AOAM532mIPk6xOTrTWh+HHX95MLUaRWSaAe8IipxcFGqj7wX0gGB7JTo
-        B7AtqHtO6uJ88Nqq1/QyQu4=
-X-Google-Smtp-Source: ABdhPJweg5kvOp4gg7hY1T6W0mVeWSFNP3rseAlCRBAlkJ3HJsuDnzK7/MerOFIva8/jPw5aDwr6mQ==
-X-Received: by 2002:a05:6820:235:: with SMTP id j21mr833106oob.75.1631334569872;
-        Fri, 10 Sep 2021 21:29:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j10sm206875oog.13.2021.09.10.21.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Sep 2021 21:29:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S236153AbhIKNOl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 11 Sep 2021 09:14:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37632 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236152AbhIKNN3 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 11 Sep 2021 09:13:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6ECD961153;
+        Sat, 11 Sep 2021 13:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631365937;
+        bh=a2GYrwtribkspGkRHkt0yQ2etdjNv4Afdw4PoYL+LCA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fgYNEbkLz93d95vbXGI8ID/WvF8F5XoqbZRtpY/FaeFQdgok8deJtL6zsOWu0sfSH
+         Z8dbLOnopXOtmnsOnipJQTFtuauCAghByWiDKtwp1zSQ0vvQRa9A4SoIPhb93tKM7M
+         N9SSBCCfuM6f035tVyAC2oti+HsFRBQRO6xxy3bp0TDLJdq0z6EceQ/fBNTCTZZJew
+         mOc+bL9f5QRo1j6g7/mJzG6eRwuUkwfrwYrt37Vjdf4F3Mkb3DkfE4+W5noaTVR8u9
+         lNq4knVscBmyR4lUsZEYFGwSR6D4k1ahSrAARx2Y7C60+IKsOEcUf1wRxwetZk62fy
+         MWKkd06XBWywQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] watchdog: ixp4xx_wdt: Fix address space warning
-Date:   Fri, 10 Sep 2021 21:29:25 -0700
-Message-Id: <20210911042925.556889-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 20/32] watchdog: Start watchdog in watchdog_set_last_hw_keepalive only if appropriate
+Date:   Sat, 11 Sep 2021 09:11:37 -0400
+Message-Id: <20210911131149.284397-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210911131149.284397-1-sashal@kernel.org>
+References: <20210911131149.284397-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-sparse reports the following address space warning.
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-drivers/watchdog/ixp4xx_wdt.c:122:20: sparse:
-	incorrect type in assignment (different address spaces)
-drivers/watchdog/ixp4xx_wdt.c:122:20: sparse:
-	expected void [noderef] __iomem *base
-drivers/watchdog/ixp4xx_wdt.c:122:20: sparse:
-	got void *platform_data
+[ Upstream commit dbe80cf471f940db3063197b7adb1169f89be9ed ]
 
-Add a typecast to solve the problem.
+We must not pet a running watchdog when handle_boot_enabled is off
+because this will kick off automatic triggering before userland is
+running, defeating the purpose of the handle_boot_enabled control.
+Furthermore, don't ping in case watchdog_set_last_hw_keepalive was
+called incorrectly when the hardware watchdog is actually not running.
 
-Fixes: 21a0a29d16c6 ("watchdog: ixp4xx: Rewrite driver to use core")
-Cc: Linus Walleij <linus.walleij@linaro.org>
+Fixed: cef9572e9af3 ("watchdog: add support for adjusting last known HW keepalive time")
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/93d56386-6e37-060b-55ce-84de8cde535f@web.de
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/ixp4xx_wdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/watchdog/watchdog_dev.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
-index 2693ffb24ac7..31b03fa71341 100644
---- a/drivers/watchdog/ixp4xx_wdt.c
-+++ b/drivers/watchdog/ixp4xx_wdt.c
-@@ -119,7 +119,7 @@ static int ixp4xx_wdt_probe(struct platform_device *pdev)
- 	iwdt = devm_kzalloc(dev, sizeof(*iwdt), GFP_KERNEL);
- 	if (!iwdt)
- 		return -ENOMEM;
--	iwdt->base = dev->platform_data;
-+	iwdt->base = (void __iomem *)dev->platform_data;
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 3bab32485273..6c73160386b9 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -1172,7 +1172,10 @@ int watchdog_set_last_hw_keepalive(struct watchdog_device *wdd,
  
- 	/*
- 	 * Retrieve rate from a fixed clock from the device tree if
+ 	wd_data->last_hw_keepalive = ktime_sub(now, ms_to_ktime(last_ping_ms));
+ 
+-	return __watchdog_ping(wdd);
++	if (watchdog_hw_running(wdd) && handle_boot_enabled)
++		return __watchdog_ping(wdd);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(watchdog_set_last_hw_keepalive);
+ 
 -- 
-2.33.0
+2.30.2
 
