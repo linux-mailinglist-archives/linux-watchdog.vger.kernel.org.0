@@ -2,109 +2,157 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012BD40FAE8
-	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Sep 2021 16:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1ED40FB15
+	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Sep 2021 17:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238586AbhIQO6z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 17 Sep 2021 10:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238372AbhIQO6y (ORCPT
+        id S244176AbhIQPFx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Sep 2021 11:05:53 -0400
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.4]:34261 "EHLO
+        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244662AbhIQPFw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 17 Sep 2021 10:58:54 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4180C061574;
-        Fri, 17 Sep 2021 07:57:32 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id c42-20020a05683034aa00b0051f4b99c40cso13260743otu.0;
-        Fri, 17 Sep 2021 07:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HommjSZU0AKAIbij2iHpVnnWLtjGW54TVbe+ijcsoYw=;
-        b=lPb2rV/oAhgrjCYBZIlVrsCzk27usUH6Yr7w+t8cGylQD0VOR3/Pmsxbq2fEGwfNdQ
-         z1+MqIDv0+bW4yGCjhbK+oF3cvoQzQAu8pU3I6btsvwt/XTDQuqnLeD+47FEHtN1Ir2H
-         wuUHXMXmWcjN36cLM7T6OJzFRy/EeVjWxX2U2kQh+bX/sPCuqXNxgKWQagLcIITkn/ao
-         +BLA46DoNiQ48YYZqUrEL4S16gS0dTqTZ00gIPrrGy14Fy5D2n+i8gS8/NfnzBZTq18r
-         zvLlU8QRVQ/aLyyygpq4qIZ9hq2VLdSJy78JjqlQ677wJmq8q4PJZSDPxh7i5AjEp6IW
-         x5Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=HommjSZU0AKAIbij2iHpVnnWLtjGW54TVbe+ijcsoYw=;
-        b=iYIxaa09YJVVMy/Gu5S4gqyTkSaYTT6Abknsyjx4m55B+rVVyy6G9Xt9mXund/RH6r
-         ceByruqRlwanMenc/RQxtGFWTd3q5OjJWJiqeMtCx90tfAhffP0GqaoodLmQqJtD6qct
-         dP5Aa3qQgSy3x/zQJFRZp7v+yopsjedYywi29nFUjxxw51k0Ij3bQELk6Pxoj38zDqPI
-         CkDjrdi4fdwXdh7TemrCYNTHjx0lLnw/zwv0z9xesWUMJ/hZiwZHp+4jXPmwxFXGbXyb
-         F2QzxQeN2O7cS3pwvp+J9q8NSx8AwN095aZXPlx6h1iQs5HgKSz6QMkJcRpTzTe0ovAv
-         oNew==
-X-Gm-Message-State: AOAM531WBXkOrPJnvHxKBvGmDz0BxN8PPkZqemkl2AL1aDIfEW/ZshI+
-        k0NsUrcd1J2nqW4WD78Wt9c=
-X-Google-Smtp-Source: ABdhPJw0nznUgbbF88p8qquwhDmGqe5hPv4Kaux6JWVLLmnsuidDV0EnAGbUS1FS3wxGLB4XdBXpzg==
-X-Received: by 2002:a9d:4a88:: with SMTP id i8mr9347177otf.290.1631890652285;
-        Fri, 17 Sep 2021 07:57:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v11sm1571613oto.22.2021.09.17.07.57.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 07:57:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 17 Sep 2021 07:57:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Fengquan Chen <Fengquan.Chen@mediatek.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tinghan.shen@mediatek.com, randy.wu@mediatek.com,
-        rex-bc.chen@mediatek.com, christine.zhu@mediatek.com,
-        joe.yang@mediatek.com, zhishuang.zhang@mediatek.com,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [v3,1/2] dt-bindings: watchdog: mtk-wdt: add disable_wdt_extrst
- support
-Message-ID: <20210917145729.GA1426468@roeck-us.net>
-References: <20210914123454.32603-1-Fengquan.Chen@mediatek.com>
- <20210914123454.32603-2-Fengquan.Chen@mediatek.com>
+        Fri, 17 Sep 2021 11:05:52 -0400
+Received: from [100.113.3.182] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-4.bemta.az-a.eu-central-1.aws.symcld.net id 7F/13-29868-D7EA4416; Fri, 17 Sep 2021 15:04:29 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFKsWRWlGSWpSXmKPExsWi1/P8kG7NOpd
+  Eg3VnTC1urNvHbvFk4Rkmi8cv/zE7MHusXLOG1WPn9wZ2j8+b5AKYo1gz85LyKxJYMw7M38ZU
+  MNWg4tnp9UwNjEf0uxi5OIQEVjJKXLw7n6WLkRPI2cwo8XCJGIjNJqAjcaxzEiOILSIQJXGpZ
+  xoTiM0s4Coxb/8PIJuDQ1jATuLufweIEnuJ5UdesEDYRhIrL74BK2cRUJV40PyGDcTmFXCUOH
+  tkKiPEqjKJjs4ZzCBjOAUcJJbvYQcJMwrISvSdOMIGsUlcYtOz76wgtoSAgMSSPeeZIWxRiZe
+  P/7GCtEoIaEgsvewFEZaQ2Le7lw3CNpDYunQfC4QtLzF7xg2oOKdE97/HbCCtzAKaEut36UNs
+  UpSY0v2QHeJIQYmTM5+wTGCUmIXkiFkIHbOQdMxC0rGAkWUVo2VSUWZ6RkluYmaOrqGBga6ho
+  bGuga6RqZFeYpVuol5qqW5yal5JUSJQVi+xvFivuDI3OSdFLy+1ZBMjMGpTChn+7GBc/eaD3i
+  FGSQ4mJVFe5SkuiUJ8SfkplRmJxRnxRaU5qcWHGGU4OJQkeP+tAcoJFqWmp1akZeYAEwhMWoK
+  DR0mEt2AlUJq3uCAxtzgzHSJ1itGSY8LLuYuYOQ4enQckj8xduohZiCUvPy9VSpz31RKgBgGQ
+  hozSPLhxsCR3iVFWSpiXkYGBQYinILUoN7MEVf4VozgHo5Iwr9haoCk8mXklcFtfAR3EBHTQk
+  f0OIAeVJCKkpBqYqlXua53WTVZ4d959xe0ZOxMU6mWLSg33T1oxs09HdNuvntWtp6T2pYgHzG
+  C+Wxkzv6FyMoNy6OU/JVbGcxJFDAp2zBMPVTVJvJJV4iwrIbyBZR6/1DLD3tuXN03Wc1eUO9I
+  9w2rXpPm7uWROie/5e5b/0vZSHQvhTXz7/TdJ71BNXi8Uz3ZHI3yW5eQU9htqd2d07z76t/N7
+  zYP7nWcntkm+Nkw+ZDHP0Fe8KNHgePgiJq0m0xtJV5csX/7YI2/PlfMczXI8u2wmWcSYGn4Pm
+  W/3sqk63viXzt5Ts5f19xSWfDrL/WfSMr3tymLHLk99veBNlpZqF3cdv+vawMs/ygqsYjPMxa
+  Le66cH+EQpsRRnJBpqMRcVJwIALzf1Vu0DAAA=
+X-Env-Sender: Walter.Stoll@duagon.com
+X-Msg-Ref: server-9.tower-233.messagelabs.com!1631891068!306439!1
+X-Originating-IP: [46.140.231.194]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.81.4; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 32489 invoked from network); 17 Sep 2021 15:04:28 -0000
+Received: from 46-140-231-194.static.upc.ch (HELO chdua14.duagon.ads) (46.140.231.194)
+  by server-9.tower-233.messagelabs.com with ECDHE-RSA-AES256-SHA384 encrypted SMTP; 17 Sep 2021 15:04:28 -0000
+Received: from chdua14.duagon.ads (172.16.90.14) by chdua14.duagon.ads
+ (172.16.90.14) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Fri, 17 Sep
+ 2021 17:00:03 +0200
+Received: from chdua14.duagon.ads ([fe80::4058:63e9:621d:cb5]) by
+ chdua14.duagon.ads ([fe80::4058:63e9:621d:cb5%12]) with mapi id
+ 15.00.1497.023; Fri, 17 Sep 2021 17:00:03 +0200
+From:   Walter Stoll <Walter.Stoll@duagon.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>
+CC:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: AW: [BUG] omap_wdt.c: Watchdog not serviced by kernel
+Thread-Topic: [BUG] omap_wdt.c: Watchdog not serviced by kernel
+Thread-Index: AQHXq8qGf0PLiCXYFkiiOCruirtZ6auoSVvQ
+Date:   Fri, 17 Sep 2021 15:00:03 +0000
+Message-ID: <cd9db72b69964157b3e36e22ab1e542f@chdua14.duagon.ads>
+References: <cb068bbba92347b2ab3190fda5d85ebf@chdua14.duagon.ads>
+ <49fe3ca1-2243-f007-92b2-3c2d3430417f@roeck-us.net>
+In-Reply-To: <49fe3ca1-2243-f007-92b2-3c2d3430417f@roeck-us.net>
+Accept-Language: en-US, de-CH
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-codetwo-clientsignature-inserted: true
+x-codetwoprocessed: true
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.17.0.41]
+x-loop: 1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210914123454.32603-2-Fengquan.Chen@mediatek.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Sep 14, 2021 at 08:34:53PM +0800, Fengquan Chen wrote:
-> This patch add a description and example of disable_wdt_extrst
-> element for watchdog on MTK Socs
-> 
-> Signed-off-by: Fengquan Chen <fengquan.chen@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> index a4e31ce96e0e..0114871f887a 100644
-> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> @@ -22,6 +22,7 @@ Required properties:
->  - reg : Specifies base physical address and size of the registers.
->  
->  Optional properties:
-> +- mediatek,disable-extrst: disable send output reset signal
->  - interrupts: Watchdog pre-timeout (bark) interrupt.
->  - timeout-sec: contains the watchdog timeout in seconds.
->  - #reset-cells: Should be 1.
-> @@ -31,6 +32,7 @@ Example:
->  watchdog: watchdog@10007000 {
->  	compatible = "mediatek,mt8183-wdt",
->  		     "mediatek,mt6589-wdt";
-> +	mediatek,disable-extrst;
->  	reg = <0 0x10007000 0 0x100>;
->  	interrupts = <GIC_SPI 139 IRQ_TYPE_NONE>;
->  	timeout-sec = <10>;
+PiAtLS0tLVVyc3Byw7xuZ2xpY2hlIE5hY2hyaWNodC0tLS0tDQo+IFZvbjogR3VlbnRlciBSb2Vj
+ayA8Z3JvZWNrN0BnbWFpbC5jb20+IEltIEF1ZnRyYWcgdm9uIEd1ZW50ZXIgUm9lY2sNCj4gR2Vz
+ZW5kZXQ6IEZyZWl0YWcsIDE3LiBTZXB0ZW1iZXIgMjAyMSAxNTo0Nw0KPiBBbjogV2FsdGVyIFN0
+b2xsIDxXYWx0ZXIuU3RvbGxAZHVhZ29uLmNvbT47IHdpbUBsaW51eC13YXRjaGRvZy5vcmcNCj4g
+Q2M6IGxpbnV4LXdhdGNoZG9nQHZnZXIua2VybmVsLm9yZw0KPiBCZXRyZWZmOiBSZTogW0JVR10g
+b21hcF93ZHQuYzogV2F0Y2hkb2cgbm90IHNlcnZpY2VkIGJ5IGtlcm5lbA0KPiANCj4gT24gOS8x
+Ny8yMSAxOjM2IEFNLCBXYWx0ZXIgU3RvbGwgd3JvdGU6DQo+ID4gRWZmZWN0IG9ic2VydmVkDQo+
+ID4gLS0tLS0tLS0tLS0tLS0tDQo+ID4NCj4gPiBXZSB1c2UgdGhlIHdhdGNoZG9nIHRpbWVyIG9u
+IGEgQU0zMzV4IGNvbnRyb2xsZXIuIFdoZW4gVS1Cb290IHJ1bnMsIHdlIGVuYWJsZQ0KPiA+IHRo
+ZSB3YXRjaGRvZyBhbmQgd2FudCB0aGUga2VybmVsIHRvIHNlcnZpY2UgdGhlIHdhdGNoZG9nIHVu
+dGlsIHVzZXJzcGFjZSB0YWtlcw0KPiA+IGl0IG92ZXIuDQo+ID4NCj4gPiBXZSBjb21waWxlIHRo
+ZSB3YXRjaGRvZyBkaXJlY3RseSBpbnRvIHRoZSBrZXJuZWwgYW5kIGFkZCB0aGUgcGFyYW1ldGVy
+DQo+ID4gIm9tYXBfd2R0LmVhcmx5X2VuYWJsZT0xIiB0byB0aGUga2VybmVsIGNvbW1hbmQgbGlu
+ZS4gV2UgZnVydGhlcm1vcmUgc2V0DQo+ID4gIkNPTkZJR19XQVRDSERPR19IQU5ETEVfQk9PVF9F
+TkFCTEVEPXkiIGluIHRoZSBrZXJuZWwgY29uZmlndXJhdGlvbi4NCj4gPg0KPiA+IE91ciBleHBl
+Y3RhdGlvbiBpcywgdGhhdCB0aGUgd2F0Y2hkb2cgaXMgc2VydmljZWQgYnkgdGhlIGtlcm5lbCBh
+cyBsb25nIGFzDQo+ID4gdXNlcnNwYWNlIGRvZXMgbm90IHRvdWNoIHRoZSBkZXZpY2UgL2Rldi93
+YXRjaGRvZy4gSG93ZXZlciwgdGhpcyBpcyBub3QgdGhlDQo+ID4gY2FzZS4gVGhlIHdhdGNoZG9n
+IGFsd2F5cyBleHBpcmVzLiBJdCBpcyBvYnZpb3VzbHkgbm90IHNlcnZpY2VkIGJ5IHRoZSBrZXJu
+ZWwuDQo+ID4NCj4gPiBXZSBvYnNlcnZlZCB0aGUgZWZmZWN0IHdpdGgga2VybmVsIHZlcnNpb24g
+djUuNC4xMzgtcnQ2Mi4gSG93ZXZlciwgd2UgdGhpbmsNCj4gPiB0aGF0IHRoZSBtb3N0IHJlY2Vu
+dCBrZXJuZWwgZXhoaWJpdHMgdGhlIHNhbWUgYmVoYXZpb3IgYmVjYXVzZSB0aGUgc3RydWN0dXJl
+IG9mDQo+ID4gdGhlIHNvdXJjZXMgaW4gcXVlc3Rpb24gKHNlZSBiZWxvdykgZGlkIG5vdCBjaGFu
+Z2UuIFRoaXMgYWxzbyBob2xkcyBmb3IgdGhlIG5vbg0KPiA+IHJlYWx0aW1lIGtlcm5lbC4NCj4g
+Pg0KPiA+DQo+ID4gUm9vdCBjYXVzZQ0KPiA+IC0tLS0tLS0tLS0NCj4gPg0KPiA+IFRoZSBDT05G
+SUdfV0FUQ0hET0dfSEFORExFX0JPT1RfRU5BQkxFRCBjb25maWd1cmF0aW9uIG9wdGlvbiBpcyBu
+b3QgaW1wbGVtZW50ZWQNCj4gPiBpbiBvbWFwX3dkdC5jLg0KPiA+DQo+ID4NCj4gPiBGaXggcHJv
+cG9zYWwNCj4gPiAtLS0tLS0tLS0tLS0NCj4gPg0KPiA+IEludGVyZXN0aW5nbHkgd2UgZm91bmQg
+b25seSBvbmUgc2luZ2xlIGRyaXZlciB0aGF0IGltcGxlbWVudHMgdGhpcyBmZWF0cnVlLA0KPiA+
+IG5hbWVseSB0aGUgZHJpdmVyIGZyb20gU1RNLCBzZWUNCj4gPiBodHRwczovL2VsaXhpci5ib290
+bGluLmNvbS9saW51eC92NS40LjEzOC9zb3VyY2UvZHJpdmVycy93YXRjaGRvZy9zdG0zMl9pd2Rn
+LmMjTDI3NA0KPiA+DQo+ID4gVGhpcyBtYWtlcyB1cyB3b25kZXIgaWYgdGhlcmUgbWlnaHQgYmUg
+YSBnb29kIHJlYXNvbiBub3QgdG8gaW1wbGVtZW50IGl0Pz8/DQo+ID4NCj4gSXQgaXMgcHJpbWFy
+aWx5IGEgd2F0Y2hkb2cgY29yZSBmZWF0dXJlLiBIYW5kbGluZyBydW5uaW5nIHdhdGNoZG9ncyBp
+biB0aGUgY29yZQ0KPiB1c2VkIHRvIGJlIGVuYWJsZWQgYnkgZGVmYXVsdC4gTm90IGV2ZXJ5b25l
+IHdhcyBoYXBweSB3aXRoIHRoYXQsIHNvDQo+IFdBVENIRE9HX0hBTkRMRV9CT09UX0VOQUJMRUQg
+d2FzIGFkZGVkIHRvIGJlIGFibGUgdG8gX2Rpc2FibGVfIHRoYXQgZnVuY3Rpb25hbGl0eS4NCj4g
+SXQgd2FzIG5ldmVyIGludGVuZGVkIHRvIGJlIGEgZHJpdmVyIGZlYXR1cmUuIFRoZSBTVE0gZHJp
+dmVyIChtaXMpdXNlcyBpdA0KPiBiZWNhdXNlIGl0IHdhbnRzIHRvIGJlIGFibGUgdG8gc3VwcG9y
+dCBXRE9HX0hXX1JVTk5JTkcsIGJ1dCB0aGUgSFcgaGFzIG5vIG1lYW5zDQo+IHRvIGRldGVjdCBp
+ZiBpdCBpcyBydW5uaW5nLiBUaGF0IGRvZXNuJ3QgbWVhbiB0aGF0IG90aGVyIGRyaXZlcnMgbmVl
+ZCB0byBkbw0KPiB0aGUgc2FtZS4NCj4gDQo+ID4gSG93ZXZlciB3ZSB0aGluayB0aGlzIGZlYXR1
+cmUgc2hvdWxkIGJlIGF2YWlsYWJsZS4gT3VyIHVzZSBjYXNlIGlzIHRvIG1ha2UNCj4gPiBzb2Z0
+d2FyZSB1cGRhdGVzIG1vcmUgcm9idXN0LiBJZiBhbiB1cGRhdGVkIGtlcm5lbCBoYW5ncyBmb3Ig
+d2hhdGV2ZXIgcmVhc29uLA0KPiA+IHRoZW4gVS1Cb290IGdldHMgdGhlIGNoYW5jZSB0byBib290
+IHRoZSBvbGQgb25lIHByb3ZpZGVkIHRoZXJlIGlzIGEgcmVib290Lg0KPiA+DQo+ID4gQmFzZWQg
+b24gdGhlIFNUTSBpbXBsZW1lbnRhdGlvbiwgd2UgY3JlYXRlZCBhIHBhdGNoIChzZWUgYmVsb3cp
+IHdoaWNoIHJlc29sdmVzDQo+ID4gdGhlIGlzc3VlLiBUaGUgd2F0Y2hkb2cgaXMgbm93IGNvcnJl
+Y3RseSBoYW5kbGVkIGJ5IHRoZSBrZXJuZWwgdW50aWwgdXNlcnNwYWNlDQo+ID4gZmlyc3QgYWNj
+ZXNzZXMgaXQuDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy93YXRjaGRvZy9vbWFwX3dk
+dC5jIGIvZHJpdmVycy93YXRjaGRvZy9vbWFwX3dkdC5jDQo+ID4gaW5kZXggOWI5MTg4MmZlM2M0
+Li45NGUyZTFiNDk0ZDIgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy9vbWFwX3dk
+dC5jDQo+ID4gKysrIGIvZHJpdmVycy93YXRjaGRvZy9vbWFwX3dkdC5jDQo+ID4gQEAgLTI3MSw2
+ICsyNzEsMTEgQEAgc3RhdGljIGludCBvbWFwX3dkdF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2
+aWNlICpwZGV2KQ0KPiA+ICAgCWlmICghZWFybHlfZW5hYmxlKQ0KPiA+ICAgCQlvbWFwX3dkdF9k
+aXNhYmxlKHdkZXYpOw0KPiA+DQo+ID4gKwlpZiAoSVNfRU5BQkxFRChDT05GSUdfV0FUQ0hET0df
+SEFORExFX0JPT1RfRU5BQkxFRCkpIHsNCj4gPiArCQkvKiBNYWtlIHN1cmUgdGhlIHdhdGNoZG9n
+IGlzIHNlcnZpY2VkICovDQo+ID4gKwkJc2V0X2JpdChXRE9HX0hXX1JVTk5JTkcsICZ3ZGV2LT53
+ZG9nLnN0YXR1cyk7DQo+ID4gKwl9DQo+ID4gKw0KPiANCj4gTm8sIHRoaXMgaXMgd3JvbmcuIFRo
+ZSBkcml2ZXIgc2hvdWxkIHNldCBXRE9HX0hXX1JVTk5JTkcgaWYgdGhlIHdhdGNoZG9nIGlzIHJ1
+bm5pbmcsDQo+IGluZGVwZW5kZW50bHkgb2YgQ09ORklHX1dBVENIRE9HX0hBTkRMRV9CT09UX0VO
+QUJMRUQuDQo+IA0KPiBUaGUgb21hcF93ZHQgZHJpdmVyIGhhcyBhIGJvb3Qgb3B0aW9uICJlYXJs
+eV9lbmFibGUiIHdoaWNoIGRvZXMgc3RhcnQgdGhlIHdhdGNoZG9nDQo+IGR1cmluZyBwcm9iZSwg
+YnV0IGl0IGRvZXNuJ3Qgc2V0IFdET0dfSFdfUlVOTklORyAod2hpY2ggaXMgdGhlIHJlYWwgcHJv
+YmxlbSkuDQo+IFBsdXMsIGlmIGVhcmx5X2VuYWJsZSBpcyBub3Qgc2V0LCB0aGUgZHJpdmVyIGV4
+cGxpY2l0bHkgZGlzYWJsZXMgdGhlIHdhdGNoZG9nDQo+IChzZWUgY29kZSBhYm92ZSksIGFuZCBz
+ZXR0aW5nIFdET0dfSFdfUlVOTklORyB3b3VsZCBiZSB3cm9uZyBpbiB0aGF0IGNhc2UuDQo+IA0K
+PiBUaGUgZml4IHdvdWxkIGJlIHNvbWV0aGluZyBsaWtlDQo+IA0KPiAgICAgICAgICBpZiAoZWFy
+bHlfZW5hYmxlKSB7DQo+ICAgICAgICAgICAgICAgICAgb21hcF93ZHRfc3RhcnQoJndkZXYtPndk
+b2cpOw0KPiAJCXNldF9iaXQoV0RPR19IV19SVU5OSU5HLCAmd2Rldi0+d2RvZy5zdGF0dXMpOw0K
+PiAJfSBlbHNlIHsNCj4gCQlvbWFwX3dkdF9kaXNhYmxlKHdkZXYpOw0KPiAJfQ0KPiANCj4gVGhh
+dCBuZWVkcyB0byBiZSBhaGVhZCBvZiB3YXRjaGRvZ19yZWdpc3Rlcl9kZXZpY2UoKSwgYW5kIGlz
+IGluZGVwZW5kZW50DQo+IG9mIENPTkZJR19XQVRDSERPR19IQU5ETEVfQk9PVF9FTkFCTEVELg0K
+PiANCj4gR3VlbnRlcg0KPiANCj4gPiAgIAlyZXQgPSB3YXRjaGRvZ19yZWdpc3Rlcl9kZXZpY2Uo
+JndkZXYtPndkb2cpOw0KPiA+ICAgCWlmIChyZXQpIHsNCj4gPiAgIAkJcG1fcnVudGltZV9kaXNh
+YmxlKHdkZXYtPmRldik7DQo+ID4NCg0KSGVsbG8gR3VlbnRlcg0KDQpUaGFuayB5b3UgdmVyeSBt
+dWNoIGZvciB5b3VyIGZhc3QgcmVzcG9uc2UuIEkgY2hlY2tlZCB5b3VyIGZpeCB3aXRoIGFsbA0K
+Y29tYmluYXRpb25zIG9mIGVhcmx5X2VuYWJsZSBhbmQgQ09ORklHX1dBVENIRE9HX0hBTkRMRV9C
+T09UX0VOQUJMRUQuDQoNCkZyb20gbXkgcG9pbnQgb2YgdmlldywgdGhpcyB3b3JrcyBleGFjdGx5
+IGFzIGV4cGVjdGVkLiBBbnkgY2hhbmNlIHRvIGdldA0KdGhhdCBtYWlubGluZSA/DQoNCldhbHRl
+cg0K
