@@ -2,68 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFB840FA33
-	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Sep 2021 16:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC0D40FAAC
+	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Sep 2021 16:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242786AbhIQOcs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 17 Sep 2021 10:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        id S231148AbhIQOrF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Sep 2021 10:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243174AbhIQOcn (ORCPT
+        with ESMTP id S231356AbhIQOqr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 17 Sep 2021 10:32:43 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72783C061764
-        for <linux-watchdog@vger.kernel.org>; Fri, 17 Sep 2021 07:31:21 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id p2so14252364oif.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 17 Sep 2021 07:31:21 -0700 (PDT)
+        Fri, 17 Sep 2021 10:46:47 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C623DC0613C1;
+        Fri, 17 Sep 2021 07:45:25 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so13163609otf.6;
+        Fri, 17 Sep 2021 07:45:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:to:cc:references:from:subject:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=m766qPsvjFavz7iVJfkteg7JeDV8Yx0v5jn/PfoicFU=;
-        b=h1uUFFyzLzG0rC1zrrfuZqu7DhNOZVv7jY5DTJi4zhI1BhH77RwF1M1JJitDNMbPTS
-         ymED412BtiHeZpH3uTI9pgSy/PJOLkUcpXfFudkYUhi0RuPlU8YqKMV+kf74td6aey7D
-         ckWfdFtg+n75+ecZt19E5jexTKjzkwTjbep/8qQKtAB9F1QBTy6stXHvjGtROsVUYF8M
-         QnUYevOOdLK+DSlkySP1zOvyRklSbmmj5QoYXG8R0tMdKXKsirbWot56Vp8R+YCX1PK6
-         Yf8ec1xqqDNNpuzqd3C9b8gkpZk83FqJ0US0QR1jfBIllbXxtymNME0Kt9LBpIRvNB0O
-         nwxg==
+        bh=roiF3YcRhUjnf2NCsKXbbc/WoH7g37avMkw51REyDPc=;
+        b=XX7ixocDHmNUoczxbkBm+kuXLJhOUxCxIDwcfoqtpMBniTNw+ft44wbUoqtn8vHvjG
+         E0Ma5JLSHE3YD6EcyzlpK8o+17FKagwfA6nKjtJfE+QcKHwH41ZouSbzolktJnSYeBkA
+         43//I9Gbbk8OvBu6Fz3Vlo4NWTtcBjcT3HqSGNqjnLm5WAFNi7BwWHb5SSHL/khIddA8
+         pk9JgX7UdxjA/kgY8pht79UgLEF3NcpHskaRwi+TEwp0B/k5lt0/7FslS0XRJmin7SAu
+         yqrfVl4kFpeo2WvirAOA4pLWB/3kaUps/WmhNg+x3esyp1xHZ+wLAyoj2QzE7ZtW5pKa
+         tXcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=m766qPsvjFavz7iVJfkteg7JeDV8Yx0v5jn/PfoicFU=;
-        b=lrXaAFqEem8UPJrziAHLfnMSA2h/QscSm4y+0j7hNZUNQVe7GIjGQemOFMyDn1VFgK
-         0eGY+002cFBduNZAshnPfepI3zl1obc09GYNKwC7dWwxYuFnTdtJD6cZkyOPCXWfcjND
-         d4ZCP7O9N8TPZFN9DcrU34PJO6r1wYMUvc8nwmR3v7hF95kVIo6VjJW+dHKVYgDbtR8D
-         SWRhSdSt4Amx4KsG2GGd39Chtt4E0puumzw3iCUXLwah4b+PGW9TNy5A0hjXwEcQNGhc
-         1fNE9E0s1EaFeonIuDuy6zVFEBZf3xE1RIPhcX6h1oN9Ygof8aU70qBqWFsPNHuBT+Q1
-         JY2A==
-X-Gm-Message-State: AOAM532/5HvqDIa50nvO2/c8NvY/O4AxL/bN/zIza7FC+O7ts6ZlbGtd
-        iUK8pVs9a6vt2SS3LyPTl04S3nX/Qfs=
-X-Google-Smtp-Source: ABdhPJwLJwly6pbriS70yX2jxXjspnXeInsWkXJzi1GKSakdEzasbpJUL+Jt0BsEMYt29rNtahq//w==
-X-Received: by 2002:a05:6808:f0b:: with SMTP id m11mr13528210oiw.46.1631889080519;
-        Fri, 17 Sep 2021 07:31:20 -0700 (PDT)
+        bh=roiF3YcRhUjnf2NCsKXbbc/WoH7g37avMkw51REyDPc=;
+        b=CXEP/ZAcDRHX/VXFsnoT7LKGmVI0i2HOmGVbPUpyX1suZGIY7s8c9JQElO/J4RXDdX
+         ohdWlCNb9GXX/3QMtI/1S9vn2CgG0CVt6n20nWUfdA3Qy6yY/OKicdc6huxqJyxhcWKC
+         m6Ad3TE22dw6Sbk4+tH2qKqftKJXwCbZJc0Y3yWVH0z2sdW1LkP8Ud3nY9S/RdEjydKq
+         oDHe8zvu8Lh2VWCftMzsPV5PhKd/ylLic+EmIjmj6Ss5SIMQpVlVKuOHQsZyy8ZUPJ2o
+         jGBB/BZBgIDXHYIjkRK3rG0p/8wHgnpIf8eA7/GGDgW8h0mYpJqaStNx7Ia72vZPKfDt
+         SEJQ==
+X-Gm-Message-State: AOAM531vYJ4AlCMqpjif/UCi2SVakWPzpBI8tr6h7hXfeYpATWhWOhjL
+        dWfBYFFhLVUhZQAZrak4ay+PqmNr5XY=
+X-Google-Smtp-Source: ABdhPJyvPYkpaTsFXdACQBU4ydb3kccrRzJa8mQrTfg3COrbdsjOwHpV+t+1ByB12zvPcqo1TqI25g==
+X-Received: by 2002:a9d:701b:: with SMTP id k27mr9751432otj.286.1631889924891;
+        Fri, 17 Sep 2021 07:45:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p21sm1450599oip.28.2021.09.17.07.31.18
+        by smtp.gmail.com with ESMTPSA id b11sm1494810ooi.0.2021.09.17.07.45.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Sep 2021 07:31:19 -0700 (PDT)
+        Fri, 17 Sep 2021 07:45:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+To:     Flavio Suligoi <f.suligoi@asem.it>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Malin Jonsson <malin.jonsson@ericsson.com>, john.jacques@intel.com,
-        linux-watchdog@vger.kernel.org
-References: <20210917101533.9722-1-mika.westerberg@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210916144001.1713508-1-f.suligoi@asem.it>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] watchdog: iTCO_wdt: Leave running if the watchdog core
- ping thread is enabled
-Message-ID: <375dbb7a-d89c-def4-0283-606a7a33f6b6@roeck-us.net>
-Date:   Fri, 17 Sep 2021 07:31:17 -0700
+Subject: Re: [PATCH v3] watchdog: add new parameter to start the watchdog on
+ module insertion
+Message-ID: <36f5e976-e6d4-7e24-f971-0895ab6b1762@roeck-us.net>
+Date:   Fri, 17 Sep 2021 07:45:22 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210917101533.9722-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <20210916144001.1713508-1-f.suligoi@asem.it>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -71,107 +71,111 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 9/17/21 3:15 AM, Mika Westerberg wrote:
-> The watchdog core can handle pinging of the watchdog before userspace
-> gets control so we can take advantage of that in iTCO_wdt. This also
-> allows users to disable the watchdog core ping thread by passing
-> watchdog.handle_boot_enabled=0 in the kernel command line if needed.
+On 9/16/21 7:40 AM, Flavio Suligoi wrote:
+> The new parameter "start_enabled" starts the watchdog at the same time
+> of the module insertion.
+> This feature is very useful in embedded systems, to avoid cases where
+> the system hangs before reaching userspace.
 > 
-> To avoid any unexpected resets we keep the existing functionality of
-> stopping the watchdog on probe if the watchdog core ping thread is not
-> enabled in the Kconfig (CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED=n).
+> This feature can be enabled in the kernel config, so it can be also
+> used when the watchdog driver is build as "built-in".
 > 
-
-CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is enabled by default, and it should be
-enabled for all normal use cases, so this is a bit misleading.
-
-> Cc: Malin Jonsson <malin.jonsson@ericsson.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> This parameter involves the "core" section of the watchdog driver;
+> in this way it is common for all the watchdog hardware implementations.
+> 
+> Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
 > ---
->   drivers/watchdog/iTCO_wdt.c | 42 ++++++++++++++++++++++++++++++-------
->   1 file changed, 34 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-> index 643c6c2d0b72..234494c03df3 100644
-> --- a/drivers/watchdog/iTCO_wdt.c
-> +++ b/drivers/watchdog/iTCO_wdt.c
-> @@ -430,6 +430,27 @@ static unsigned int iTCO_wdt_get_timeleft(struct watchdog_device *wd_dev)
->   	return time_left;
->   }
+> v3: - add check for the returned error of wdog start function
+> v2: - check WDOG_HW_RUNNING before starting watchdog;
+>      - remove useless comments in commit text, watchdog-parameters.rst and
+>        Kconfig;
+> v1: - first version;
+> 
+>   Documentation/watchdog/watchdog-parameters.rst |  3 +++
+>   drivers/watchdog/Kconfig                       |  9 +++++++++
+>   drivers/watchdog/watchdog_core.c               | 16 ++++++++++++++++
+>   3 files changed, 28 insertions(+)
+> 
+> diff --git a/Documentation/watchdog/watchdog-parameters.rst b/Documentation/watchdog/watchdog-parameters.rst
+> index 223c99361a30..7780d0c1fb4a 100644
+> --- a/Documentation/watchdog/watchdog-parameters.rst
+> +++ b/Documentation/watchdog/watchdog-parameters.rst
+> @@ -21,6 +21,9 @@ watchdog core:
+>   	timeout. Setting this to a non-zero value can be useful to ensure that
+>   	either userspace comes up properly, or the board gets reset and allows
+>   	fallback logic in the bootloader to try something else.
+> +    start_enabled:
+> +	Watchdog is started on module insertion. This option can be also
+> +	selected by kernel config (default=kernel config parameter).
 >   
-> +static bool iTCO_wdt_set_running(struct iTCO_wdt_private *p)
-> +{
-> +	/*
-> +	 * If the watchdog core is enabled to handle pinging the
-> +	 * watchdog before userspace takes control we can leave the
-> +	 * hardware as is.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED)) {
-
-This is neither necessary nor appropriate. Just set the flag. The core
-won't handle boot enabled if CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED=n
-even if WDOG_HW_RUNNING is set.
-
-CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is not a driver configuration option.
-It is a core option, and its description says:
-
-" ... is to ping watchdog devices that were enabled before the driver has
-  been loaded until control is taken over from userspace using the
-  /dev/watchdog file."
-
-This is not what is implemented here. Yes, there is a driver using
-the option, but that hardware does not support the ability to detect
-if the watchdog is running. That is not the case here.
-
-If you want to have the ability to both keep the watchdog running or
-to stop it at boot, you'll need to add a module option.
-
-Guenter
-
-> +		u16 val;
+>   -------------------------------------------------
+>   
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index b81fe4f7d434..19be709e01ac 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -47,6 +47,15 @@ config WATCHDOG_NOWAYOUT
+>   	  get killed. If you say Y here, the watchdog cannot be stopped once
+>   	  it has been started.
+>   
+> +config WATCHDOG_START_ENABLED
+> +	bool "Start watchdog on module insertion"
+> +	help
+> +	  Say Y if you want to start the watchdog at the same time when the
+> +	  driver is loaded.
+> +	  This feature is very useful in embedded systems, to avoid cases where
+> +	  the system could hang before reaching userspace.
+> +	  This parameter applies to all watchdog drivers.
 > +
-> +		/* Bit 11: TCO Timer Halt -> 0 = The TCO timer is * enabled */
-> +		val = inw(TCO1_CNT(p));
-> +		if (!(val & BIT(11)))
-> +			set_bit(WDOG_HW_RUNNING, &p->wddev.status);
-> +
-> +		return true;
-> +	}
-> +
-> +	return false;
-> +}
+>   config WATCHDOG_HANDLE_BOOT_ENABLED
+>   	bool "Update boot-enabled watchdog until userspace takes over"
+>   	default y
+> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+> index 3fe8a7edc252..cb530b097223 100644
+> --- a/drivers/watchdog/watchdog_core.c
+> +++ b/drivers/watchdog/watchdog_core.c
+> @@ -44,6 +44,11 @@ static int stop_on_reboot = -1;
+>   module_param(stop_on_reboot, int, 0444);
+>   MODULE_PARM_DESC(stop_on_reboot, "Stop watchdogs on reboot (0=keep watching, 1=stop)");
+>   
+> +static bool start_enabled = IS_ENABLED(CONFIG_WATCHDOG_START_ENABLED);
+> +module_param(start_enabled, bool, 0444);
+> +MODULE_PARM_DESC(start_enabled, "Start watchdog on module insertion (default="
+> +	__MODULE_STRING(IS_ENABLED(CONFIG_WATCHDOG_START_ENABLED)) ")");
 > +
 >   /*
->    *	Kernel Interfaces
->    */
-> @@ -572,15 +593,20 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
->   	watchdog_set_drvdata(&p->wddev, p);
->   	platform_set_drvdata(pdev, p);
+>    * Deferred Registration infrastructure.
+>    *
+> @@ -252,6 +257,17 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+>   	 * corrupted in a later stage then we expect a kernel panic!
+>   	 */
 >   
-> -	/* Make sure the watchdog is not running */
-> -	iTCO_wdt_stop(&p->wddev);
-> +	if (!iTCO_wdt_set_running(p)) {
-> +		/* Make sure the watchdog is not running */
-> +		iTCO_wdt_stop(&p->wddev);
->   
-> -	/* Check that the heartbeat value is within it's range;
-> -	   if not reset to the default */
-> -	if (iTCO_wdt_set_timeout(&p->wddev, heartbeat)) {
-> -		iTCO_wdt_set_timeout(&p->wddev, WATCHDOG_TIMEOUT);
-> -		dev_info(dev, "timeout value out of range, using %d\n",
-> -			WATCHDOG_TIMEOUT);
-> +		/*
-> +		 * Check that the heartbeat value is within it's range;
-> +		 * if not reset to the default.
-> +		 */
-> +		if (iTCO_wdt_set_timeout(&p->wddev, heartbeat)) {
-> +			iTCO_wdt_set_timeout(&p->wddev, WATCHDOG_TIMEOUT);
-> +			dev_info(p->wddev.parent,
-> +				 "timeout value out of range, using %d\n",
-> +				 WATCHDOG_TIMEOUT);
+> +	/* If required, start the watchdog immediately */
+> +	if (start_enabled && !watchdog_hw_running(wdd)) {
+> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
+> +		ret = wdd->ops->start(wdd);
+> +		if (ret == 0) {
+> +			pr_info("Watchdog enabled\n");
+> +		} else {
+> +			return ret;
 > +		}
->   	}
->   
->   	watchdog_stop_on_reboot(&p->wddev);
+
+This should be
+		if (ret)
+			return ret;
+		pr_info("Watchdog enabled\n");
+
+Also, this needs an error handler to stop the watchdog if driver registration
+fails (if the driver supports stopping the watchdog).
+
+Thanks,
+Guenter
+
+> +	}
+> +
+>   	/* Use alias for watchdog id if possible */
+>   	if (wdd->parent) {
+>   		ret = of_alias_get_id(wdd->parent->of_node, "watchdog");
 > 
 
