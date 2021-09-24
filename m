@@ -2,255 +2,384 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 222444153D1
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Sep 2021 01:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2FD4170BF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Sep 2021 13:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238428AbhIVXUI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 22 Sep 2021 19:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238431AbhIVXUH (ORCPT
+        id S245290AbhIXLWI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 24 Sep 2021 07:22:08 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42618 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S245092AbhIXLWC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 22 Sep 2021 19:20:07 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88FBC061574
-        for <linux-watchdog@vger.kernel.org>; Wed, 22 Sep 2021 16:18:36 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id p29so18231249lfa.11
-        for <linux-watchdog@vger.kernel.org>; Wed, 22 Sep 2021 16:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8c9lieVpqkGq0z+P8vsTZtzmbllYE5v1S+LgyE8LNrw=;
-        b=zh3XIZHo2w2ehA36vPOdCSaMSbb+oPTq0RLy73mETSRmAbhrwp+HrA88uzR2Xb7ZQF
-         03SDVBJe9Hqe8m3NEWaqz7UJYcXOzRK0fJkTJLQSQiuzK43D8/8vDVF2yRZWURxg1IKr
-         Hobsu9grYjTXtgFZkRAiM3cFzFEiH7MNAxr5nLDCrmKRd19YpUdecDP6pZQLNqIs3f7+
-         z78czD5UCu96Hl3KRaZnvtvU5F98X2mQuOD7DcvH2hm1aDnGr+WVxLTcJBv0WvYEzDuB
-         17tbTMligu1bKja2cmR/k1wlws8XdP4Zj02L3oqyM361oQGuOaGrRQLc7ffqgr4Q736m
-         F35g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8c9lieVpqkGq0z+P8vsTZtzmbllYE5v1S+LgyE8LNrw=;
-        b=s95xLCA7oBHm7UtaPs21Hf5rd8v06gzmCFZdzpiKdObWIJaK7go0gWV2TTJugsNJQc
-         ZI+gUB8mOxSjEFDtUNZ0/PuIE0kQ7jbH6zy08ZZ+lJTefe3QJsf50LKi92pQgBJmL2Iw
-         pORfutw4OzpBHdOfP3SrHlwWrzGNWEGaPmLMMVIpLJ9993QN0N1IqKB2uvLm6xcUedRP
-         lhuDoapwCAy+RNIU19JYeZKqjOR+aKWPxm+N+K3Epi1U6TPohneESYMg7PL0dQqMPI+0
-         jHZRWuUUJZPwibpmExZgH4lGk4oJIPxrgCIdSZUvOPdyqvUggKYY0KitOqyaiDIw/12p
-         eKxA==
-X-Gm-Message-State: AOAM530x8z0CMpumHdBZyt8lkXCSDzFveBYwJAoxZqNStPTcsLMR9/Kf
-        bYzs3YlRGiznut9ma8m+RA+bPQ==
-X-Google-Smtp-Source: ABdhPJwm2ZKlQPyJFMLnleYfOEhjR2e4hhccJ2AEsfx3u7uYH+JtIGKljufhXBCKbYWGYI93lC37Gw==
-X-Received: by 2002:a05:6512:3407:: with SMTP id i7mr1366457lfr.149.1632352715212;
-        Wed, 22 Sep 2021 16:18:35 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id u28sm288044lfo.47.2021.09.22.16.18.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Sep 2021 16:18:34 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 3/3] watchdog: db8500_wdt: Rename symbols
-Date:   Thu, 23 Sep 2021 01:09:47 +0200
-Message-Id: <20210922230947.1864357-3-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210922230947.1864357-1-linus.walleij@linaro.org>
-References: <20210922230947.1864357-1-linus.walleij@linaro.org>
+        Fri, 24 Sep 2021 07:22:02 -0400
+X-UUID: 9070012a59ae4a318f958232e274e1bf-20210924
+X-UUID: 9070012a59ae4a318f958232e274e1bf-20210924
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <sam.shih@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 150204854; Fri, 24 Sep 2021 19:20:27 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 24 Sep 2021 19:20:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 24 Sep 2021 19:20:25 +0800
+From:   Sam Shih <sam.shih@mediatek.com>
+To:     <matthias.bgg@gmail.com>
+CC:     <Ryder.Lee@mediatek.com>, <devicetree@vger.kernel.org>,
+        <enric.balletbo@collabora.com>, <fparent@baylibre.com>,
+        <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>,
+        <hsinyi@chromium.org>, <john@phrozen.org>,
+        <linus.walleij@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux@roeck-us.net>, <mpm@selenic.com>, <mturquette@baylibre.com>,
+        <robh+dt@kernel.org>, <sam.shih@mediatek.com>, <sboyd@kernel.org>,
+        <sean.wang@kernel.org>, <seiya.wang@mediatek.com>,
+        <wim@linux-watchdog.org>
+Subject: [v3,8/9] arm64: dts: mediatek: add mt7986a support
+Date:   Fri, 24 Sep 2021 19:20:17 +0800
+Message-ID: <20210924112017.14107-1-sam.shih@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <016b501b-a4bf-c74d-9f7f-8145800ca6e0@gmail.com>
+References: <016b501b-a4bf-c74d-9f7f-8145800ca6e0@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-For conistency and clarity, rename all symbols and strings from
-ux500 to db8500 in the driver.
+Add basic chip support for Mediatek mt7986a, include
+uart nodes with correct clocks, rng node with correct clock,
+and watchdog node and mt7986a pinctrl node.
 
-Cc: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-Lee it would be perfect if you could ACK the oneliner in
-this patch along with the rest.
----
- drivers/mfd/db8500-prcmu.c    |  2 +-
- drivers/watchdog/db8500_wdt.c | 76 +++++++++++++++++------------------
- 2 files changed, 39 insertions(+), 39 deletions(-)
+Add cpu node, timer node, gic node, psci and reserved-memory node
+for ARM Trusted Firmware,
 
-diff --git a/drivers/mfd/db8500-prcmu.c b/drivers/mfd/db8500-prcmu.c
-index ccf6be922b39..56c61c99eb23 100644
---- a/drivers/mfd/db8500-prcmu.c
-+++ b/drivers/mfd/db8500-prcmu.c
-@@ -2939,7 +2939,7 @@ static struct regulator_init_data db8500_regulators[DB8500_NUM_REGULATORS] = {
- };
- 
- static const struct mfd_cell common_prcmu_devs[] = {
--	MFD_CELL_NAME("ux500_wdt"),
-+	MFD_CELL_NAME("db8500_wdt"),
- 	MFD_CELL_NAME("db8500-cpuidle"),
- };
- 
-diff --git a/drivers/watchdog/db8500_wdt.c b/drivers/watchdog/db8500_wdt.c
-index 40f8cf1cb234..6ed8b63d310d 100644
---- a/drivers/watchdog/db8500_wdt.c
-+++ b/drivers/watchdog/db8500_wdt.c
-@@ -35,60 +35,60 @@ MODULE_PARM_DESC(nowayout,
- 	"Watchdog cannot be stopped once started (default="
- 				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
- 
--static int ux500_wdt_start(struct watchdog_device *wdd)
-+static int db8500_wdt_start(struct watchdog_device *wdd)
- {
- 	return prcmu_enable_a9wdog(PRCMU_WDOG_ALL);
- }
- 
--static int ux500_wdt_stop(struct watchdog_device *wdd)
-+static int db8500_wdt_stop(struct watchdog_device *wdd)
- {
- 	return prcmu_disable_a9wdog(PRCMU_WDOG_ALL);
- }
- 
--static int ux500_wdt_keepalive(struct watchdog_device *wdd)
-+static int db8500_wdt_keepalive(struct watchdog_device *wdd)
- {
- 	return prcmu_kick_a9wdog(PRCMU_WDOG_ALL);
- }
- 
--static int ux500_wdt_set_timeout(struct watchdog_device *wdd,
-+static int db8500_wdt_set_timeout(struct watchdog_device *wdd,
- 				 unsigned int timeout)
- {
--	ux500_wdt_stop(wdd);
-+	db8500_wdt_stop(wdd);
- 	prcmu_load_a9wdog(PRCMU_WDOG_ALL, timeout * 1000);
--	ux500_wdt_start(wdd);
-+	db8500_wdt_start(wdd);
- 
- 	return 0;
- }
- 
--static const struct watchdog_info ux500_wdt_info = {
-+static const struct watchdog_info db8500_wdt_info = {
- 	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
--	.identity = "Ux500 WDT",
-+	.identity = "DB8500 WDT",
- 	.firmware_version = 1,
- };
- 
--static const struct watchdog_ops ux500_wdt_ops = {
-+static const struct watchdog_ops db8500_wdt_ops = {
- 	.owner = THIS_MODULE,
--	.start = ux500_wdt_start,
--	.stop  = ux500_wdt_stop,
--	.ping  = ux500_wdt_keepalive,
--	.set_timeout = ux500_wdt_set_timeout,
-+	.start = db8500_wdt_start,
-+	.stop  = db8500_wdt_stop,
-+	.ping  = db8500_wdt_keepalive,
-+	.set_timeout = db8500_wdt_set_timeout,
- };
- 
--static struct watchdog_device ux500_wdt = {
--	.info = &ux500_wdt_info,
--	.ops = &ux500_wdt_ops,
-+static struct watchdog_device db8500_wdt = {
-+	.info = &db8500_wdt_info,
-+	.ops = &db8500_wdt_ops,
- 	.min_timeout = WATCHDOG_MIN,
- 	.max_timeout = WATCHDOG_MAX28,
- };
- 
--static int ux500_wdt_probe(struct platform_device *pdev)
-+static int db8500_wdt_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	int ret;
- 
- 	timeout = 600; /* Default to 10 minutes */
--	ux500_wdt.parent = dev;
--	watchdog_set_nowayout(&ux500_wdt, nowayout);
-+	db8500_wdt.parent = dev;
-+	watchdog_set_nowayout(&db8500_wdt, nowayout);
- 
- 	/* disable auto off on sleep */
- 	prcmu_config_a9wdog(PRCMU_WDOG_CPU1, false);
-@@ -96,7 +96,7 @@ static int ux500_wdt_probe(struct platform_device *pdev)
- 	/* set HW initial value */
- 	prcmu_load_a9wdog(PRCMU_WDOG_ALL, timeout * 1000);
- 
--	ret = devm_watchdog_register_device(dev, &ux500_wdt);
-+	ret = devm_watchdog_register_device(dev, &db8500_wdt);
- 	if (ret)
- 		return ret;
- 
-@@ -106,47 +106,47 @@ static int ux500_wdt_probe(struct platform_device *pdev)
- }
- 
- #ifdef CONFIG_PM
--static int ux500_wdt_suspend(struct platform_device *pdev,
-+static int db8500_wdt_suspend(struct platform_device *pdev,
- 			     pm_message_t state)
- {
--	if (watchdog_active(&ux500_wdt)) {
--		ux500_wdt_stop(&ux500_wdt);
-+	if (watchdog_active(&db8500_wdt)) {
-+		db8500_wdt_stop(&db8500_wdt);
- 		prcmu_config_a9wdog(PRCMU_WDOG_CPU1, true);
- 
- 		prcmu_load_a9wdog(PRCMU_WDOG_ALL, timeout * 1000);
--		ux500_wdt_start(&ux500_wdt);
-+		db8500_wdt_start(&db8500_wdt);
- 	}
- 	return 0;
- }
- 
--static int ux500_wdt_resume(struct platform_device *pdev)
-+static int db8500_wdt_resume(struct platform_device *pdev)
- {
--	if (watchdog_active(&ux500_wdt)) {
--		ux500_wdt_stop(&ux500_wdt);
-+	if (watchdog_active(&db8500_wdt)) {
-+		db8500_wdt_stop(&db8500_wdt);
- 		prcmu_config_a9wdog(PRCMU_WDOG_CPU1, false);
- 
- 		prcmu_load_a9wdog(PRCMU_WDOG_ALL, timeout * 1000);
--		ux500_wdt_start(&ux500_wdt);
-+		db8500_wdt_start(&db8500_wdt);
- 	}
- 	return 0;
- }
- #else
--#define ux500_wdt_suspend NULL
--#define ux500_wdt_resume NULL
-+#define db8500_wdt_suspend NULL
-+#define db8500_wdt_resume NULL
- #endif
- 
--static struct platform_driver ux500_wdt_driver = {
--	.probe		= ux500_wdt_probe,
--	.suspend	= ux500_wdt_suspend,
--	.resume		= ux500_wdt_resume,
-+static struct platform_driver db8500_wdt_driver = {
-+	.probe		= db8500_wdt_probe,
-+	.suspend	= db8500_wdt_suspend,
-+	.resume		= db8500_wdt_resume,
- 	.driver		= {
--		.name	= "ux500_wdt",
-+		.name	= "db8500_wdt",
- 	},
- };
- 
--module_platform_driver(ux500_wdt_driver);
-+module_platform_driver(db8500_wdt_driver);
- 
- MODULE_AUTHOR("Jonas Aaberg <jonas.aberg@stericsson.com>");
--MODULE_DESCRIPTION("Ux500 Watchdog Driver");
-+MODULE_DESCRIPTION("DB8500 Watchdog Driver");
- MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:ux500_wdt");
-+MODULE_ALIAS("platform:db8500_wdt");
+Add clock controller nodes, include 40M clock source, topckgen, infracfg,
+apmixedsys and ethernet subsystem.
+
+Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+---
+v3: used the stdout-path instead of console=ttyS0
+v2: modified clock and uart node due to clock driver updated
+---
+ arch/arm64/boot/dts/mediatek/Makefile        |   1 +
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts |  54 +++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 227 +++++++++++++++++++
+ 3 files changed, 282 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+
+diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+index 4f68ebed2e31..e6c3a73b9e4a 100644
+--- a/arch/arm64/boot/dts/mediatek/Makefile
++++ b/arch/arm64/boot/dts/mediatek/Makefile
+@@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
++dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-rfb.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8167-pumpkin.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-elm.dtb
+ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-elm-hana.dtb
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+new file mode 100644
+index 000000000000..e210d03ba70a
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright (C) 2021 MediaTek Inc.
++ * Author: Sam.Shih <sam.shih@mediatek.com>
++ */
++
++/dts-v1/;
++#include "mt7986a.dtsi"
++
++/ {
++	model = "MediaTek MT7986a RFB";
++	compatible = "mediatek,mt7986a-rfb";
++
++	aliases {
++		serial0 = &uart0;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++		bootargs = "earlycon=uart8250,mmio32,0x11002000 swiotlb=512";
++	};
++};
++
++&uart0 {
++	status = "okay";
++};
++
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart1_pins>;
++	status = "okay";
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart2_pins>;
++	status = "okay";
++};
++
++&pio {
++	uart1_pins: uart1-pins-42-to-45 {
++		mux {
++			function = "uart";
++			groups = "uart1";
++		};
++	};
++
++	uart2_pins: uart1-pins-46-to-49 {
++		mux {
++			function = "uart";
++			groups = "uart2";
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+new file mode 100644
+index 000000000000..dfe3e7101031
+--- /dev/null
++++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+@@ -0,0 +1,227 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Copyright (C) 2021 MediaTek Inc.
++ * Author: Sam.Shih <sam.shih@mediatek.com>
++ */
++
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/clock/mt7986-clk.h>
++
++/ {
++	compatible = "mediatek,mt7986a";
++	interrupt-parent = <&gic>;
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	clk40m: oscillator@0 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <40000000>;
++		clock-output-names = "clkxtal";
++	};
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			enable-method = "psci";
++			reg = <0x0>;
++			#cooling-cells = <2>;
++		};
++
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			enable-method = "psci";
++			reg = <0x1>;
++			#cooling-cells = <2>;
++		};
++
++		cpu2: cpu@2 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			enable-method = "psci";
++			reg = <0x2>;
++			#cooling-cells = <2>;
++		};
++
++		cpu3: cpu@3 {
++			device_type = "cpu";
++			enable-method = "psci";
++			compatible = "arm,cortex-a53";
++			reg = <0x3>;
++			#cooling-cells = <2>;
++		};
++	};
++
++	psci {
++		compatible  = "arm,psci-0.2";
++		method      = "smc";
++	};
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++		/* 192 KiB reserved for ARM Trusted Firmware (BL31) */
++		secmon_reserved: secmon@43000000 {
++			reg = <0 0x43000000 0 0x30000>;
++			no-map;
++		};
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupt-parent = <&gic>;
++		clock-frequency = <13000000>;
++		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
++			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	soc {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		compatible = "simple-bus";
++		ranges;
++
++		gic: interrupt-controller@c000000 {
++			compatible = "arm,gic-v3";
++			#interrupt-cells = <3>;
++			interrupt-parent = <&gic>;
++			interrupt-controller;
++			reg = <0 0x0c000000 0 0x40000>,
++			      <0 0x0c080000 0 0x200000>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++		};
++
++		infracfg: infracfg@10001000 {
++			compatible = "mediatek,mt7986-infracfg", "syscon";
++			reg = <0 0x10001000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		topckgen: topckgen@1001b000 {
++			compatible = "mediatek,mt7986-topckgen", "syscon";
++			reg = <0 0x1001B000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		watchdog: watchdog@1001c000 {
++			compatible = "mediatek,mt7986-wdt",
++				     "mediatek,mt6589-wdt";
++			reg = <0 0x1001c000 0 0x1000>;
++			interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>;
++			#reset-cells = <1>;
++			status = "disabled";
++		};
++
++		apmixedsys: apmixedsys@1001e000 {
++			compatible = "mediatek,mt7986-apmixedsys";
++			reg = <0 0x1001E000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		pio: pinctrl@1001f000 {
++			compatible = "mediatek,mt7986a-pinctrl";
++			reg = <0 0x1001f000 0 0x1000>,
++			      <0 0x11c30000 0 0x1000>,
++			      <0 0x11c40000 0 0x1000>,
++			      <0 0x11e20000 0 0x1000>,
++			      <0 0x11e30000 0 0x1000>,
++			      <0 0x11f00000 0 0x1000>,
++			      <0 0x11f10000 0 0x1000>,
++			      <0 0x1000b000 0 0x1000>;
++			reg-names = "gpio_base", "iocfg_rt_base", "iocfg_rb_base",
++				    "iocfg_lt_base", "iocfg_lb_base", "iocfg_tr_base",
++				    "iocfg_tl_base", "eint";
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&pio 0 0 100>;
++			interrupt-controller;
++			interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-parent = <&gic>;
++			#interrupt-cells = <2>;
++		};
++
++		sgmiisys0: syscon@10060000 {
++			compatible = "mediatek,mt7986-sgmiisys_0",
++				     "syscon";
++			reg = <0 0x10060000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		sgmiisys1: syscon@10070000 {
++			compatible = "mediatek,mt7986-sgmiisys_1",
++				     "syscon";
++			reg = <0 0x10070000 0 0x1000>;
++			#clock-cells = <1>;
++		};
++
++		trng: trng@1020f000 {
++			compatible = "mediatek,mt7986-rng",
++				     "mediatek,mt7623-rng";
++			reg = <0 0x1020f000 0 0x100>;
++			clocks = <&infracfg CLK_INFRA_TRNG_CK>;
++			clock-names = "rng";
++			status = "disabled";
++		};
++
++		uart0: serial@11002000 {
++			compatible = "mediatek,mt7986-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11002000 0 0x400>;
++			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&infracfg CLK_INFRA_UART0_SEL>,
++				 <&infracfg CLK_INFRA_UART0_CK>;
++			clock-names = "baud", "bus";
++			assigned-clocks = <&topckgen CLK_TOP_UART_SEL>,
++					  <&infracfg CLK_INFRA_UART0_SEL>;
++			assigned-clock-parents = <&topckgen CLK_TOP_XTAL>,
++						 <&topckgen CLK_TOP_UART_SEL>;
++			status = "disabled";
++		};
++
++		uart1: serial@11003000 {
++			compatible = "mediatek,mt7986-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11003000 0 0x400>;
++			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&infracfg CLK_INFRA_UART1_SEL>,
++				 <&infracfg CLK_INFRA_UART1_CK>;
++			clock-names = "baud", "bus";
++			assigned-clocks = <&infracfg CLK_INFRA_UART1_SEL>;
++			assigned-clock-parents = <&topckgen CLK_TOP_F26M_SEL>;
++			status = "disabled";
++		};
++
++		uart2: serial@11004000 {
++			compatible = "mediatek,mt7986-uart",
++				     "mediatek,mt6577-uart";
++			reg = <0 0x11004000 0 0x400>;
++			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&infracfg CLK_INFRA_UART2_SEL>,
++				 <&infracfg CLK_INFRA_UART2_CK>;
++			clock-names = "baud", "bus";
++			assigned-clocks = <&infracfg CLK_INFRA_UART2_SEL>;
++			assigned-clock-parents = <&topckgen CLK_TOP_F26M_SEL>;
++			status = "disabled";
++		};
++
++		ethsys: syscon@15000000 {
++			 #address-cells = <1>;
++			 #size-cells = <1>;
++			 compatible = "mediatek,mt7986-ethsys",
++				      "syscon";
++			 reg = <0 0x15000000 0 0x1000>;
++			 #clock-cells = <1>;
++			 #reset-cells = <1>;
++		};
++
++	};
++
++};
 -- 
-2.31.1
+2.29.2
 
