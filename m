@@ -2,428 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6C2417112
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Sep 2021 13:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B174175B8
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Sep 2021 15:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343577AbhIXLql (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 24 Sep 2021 07:46:41 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48028 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1343557AbhIXLqj (ORCPT
+        id S1346035AbhIXNbo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 24 Sep 2021 09:31:44 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37526
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345067AbhIXNbk (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 24 Sep 2021 07:46:39 -0400
-X-UUID: d61e54fb04d4449c93b2292c9c883c15-20210924
-X-UUID: d61e54fb04d4449c93b2292c9c883c15-20210924
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1896708004; Fri, 24 Sep 2021 19:45:01 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 24 Sep 2021 19:45:01 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 24 Sep 2021 19:45:01 +0800
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     <matthias.bgg@gmail.com>
-CC:     <Ryder.Lee@mediatek.com>, <devicetree@vger.kernel.org>,
-        <enric.balletbo@collabora.com>, <fparent@baylibre.com>,
-        <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>,
-        <hsinyi@chromium.org>, <john@phrozen.org>,
-        <linus.walleij@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux@roeck-us.net>, <mpm@selenic.com>, <mturquette@baylibre.com>,
-        <robh+dt@kernel.org>, <sam.shih@mediatek.com>, <sboyd@kernel.org>,
-        <sean.wang@kernel.org>, <seiya.wang@mediatek.com>,
-        <wim@linux-watchdog.org>
-Subject: [v4,5/9] dt-bindings: pinctrl: update bindings for MT7986 SoC
-Date:   Fri, 24 Sep 2021 19:44:59 +0800
-Message-ID: <20210924114459.28664-1-sam.shih@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <9aa66a93-4d0c-176e-ea35-b5aa33751d51@gmail.com>
-References: <9aa66a93-4d0c-176e-ea35-b5aa33751d51@gmail.com>
+        Fri, 24 Sep 2021 09:31:40 -0400
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 13F0840816
+        for <linux-watchdog@vger.kernel.org>; Fri, 24 Sep 2021 13:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1632490205;
+        bh=F70yOyVZZjxlDll0pjQntOrMr5BdXyTooQkEjSqxu5A=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=bvCkdON6OON/xBy62aiuJxacxTkgplY0rBmUrOanIX1Xu1K/gkwKXs5eR1vJ08HfM
+         bdN3fTBvvcDh/5qIsLXB4adTs0j6lu/vNkHa4N5OErS13df68u62Wy3NacpMu8+SpH
+         00HDu5CIQWIUEjAd23EaTKAuhhJ7quSzEE5AgU3PqnWlp486ycMUclgIRksbDHCIhN
+         Fymy+df5zABlva8XS8F+xVZT0WEs8zbmh2NUC36h9aprb5Qdw40onknHz0bPXfuSSb
+         BGu84Pzo8U5pcylatiIg1q8Vjj4f6rJLOgVxqA9FDIbbNYMTprXYhSRRsfLmdT+/q5
+         wYq1yXGoQjxDQ==
+Received: by mail-wr1-f71.google.com with SMTP id f11-20020adfc98b000000b0015fedc2a8d4so8154604wrh.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 24 Sep 2021 06:30:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F70yOyVZZjxlDll0pjQntOrMr5BdXyTooQkEjSqxu5A=;
+        b=wgJCnh1FubULQTBY1STZo66Zh2RPKnzu1ZvTgEUlM26JnRib8ISEHFt4oJBUTYRZTs
+         RE4b1aKvVSVFKP65eOlaYdNfF4YcX3P1kA1KmLb7oiyVdaWr2xZR03Dt+IFglkftZ+E0
+         C8hUOHqfsLYeyf5yzfIESmyL6w2egy3x3UerXYnFgVtx1KzcscIsoLHmsQo9UxrekS+D
+         WTsbfP2z0VvQ5VLpoMmvDRut5f/h4m0N7b0ZkGH4U4VVhULH7F18O5U21vJQtjN0coyL
+         JD1aFEdH4H5qNWMbH34Xo3O/IuykJndTp30Qc52kInyHRyuqJc4DSdz4FoWWV//G4Tr0
+         RgVA==
+X-Gm-Message-State: AOAM531IZ9s7AsGpe40PyeFhR1aYkrDn481SNu+bTgmNchWjHMC5ORtj
+        oLsmN6jylBBSM1baR8Jv1qm47dG3Cb7SiUmPLilVYh2ZpAzezbEMOIDtY9ddmJ6fvEv37xTd7T6
+        OELrc+9xUiRdIdOqQcWy3HkZf1pQKCZQxacQ+xEaaBqXf
+X-Received: by 2002:a5d:4d01:: with SMTP id z1mr11248671wrt.209.1632490204793;
+        Fri, 24 Sep 2021 06:30:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzkbc8Da6V2TsZslzItTVmktEElS+30iL6GeasX73+gONH6uwFQeCmkiLeu5/Bg32tsZMpPnw==
+X-Received: by 2002:a5d:4d01:: with SMTP id z1mr11248655wrt.209.1632490204659;
+        Fri, 24 Sep 2021 06:30:04 -0700 (PDT)
+Received: from localhost.localdomain (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
+        by smtp.gmail.com with ESMTPSA id i2sm8034262wrq.78.2021.09.24.06.30.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Sep 2021 06:30:04 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH] watchdog: s3c2410: describe driver in KConfig
+Date:   Fri, 24 Sep 2021 15:29:30 +0200
+Message-Id: <20210924132930.111443-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This updates bindings for MT7986 pinctrl driver. The
-difference of pinctrl between mt7986a and mt7986b is that pin-41 to pin-65
-do not exist on mt7986b
+Describe better which driver applies to which SoC, to make configuring
+kernel for Samsung SoC easier.
 
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
-v4 : used yaml format instead of txt format document
-v3 : make mt7986 pinctrl bindings as a separate file
-v2 : deleted the redundant description of mt7986a/mt7986b
----
- .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 350 ++++++++++++++++++
- 1 file changed, 350 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+ drivers/watchdog/Kconfig | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-new file mode 100644
-index 000000000000..e59aada817af
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-@@ -0,0 +1,350 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/mediatek,mt7986-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek MT7986 Pin Controller Device Tree Bindings
-+
-+maintainers:
-+  - Sean Wang <sean.wang@kernel.org>
-+
-+description: |+
-+  The MediaTek's MT7986 Pin controller is used to control SoC pins.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt7986a-pinctrl
-+      - mediatek,mt7986b-pinctrl
-+
-+  reg:
-+    minItems: 8
-+    maxItems: 8
-+
-+  reg-names:
-+    items:
-+      - const: gpio_base
-+      - const: iocfg_rt_base
-+      - const: iocfg_rb_base
-+      - const: iocfg_lt_base
-+      - const: iocfg_lb_base
-+      - const: iocfg_tr_base
-+      - const: iocfg_tl_base
-+      - const: eint
-+
-+  gpio-controller: true
-+
-+  "#gpio-cells":
-+    const: 2
-+    description: |
-+      Number of cells in GPIO specifier. Since the generic GPIO
-+      binding is used, the amount of cells must be specified as 2. See the below
-+      mentioned gpio binding representation for description of particular cells.
-+
-+  interrupt-controller: true
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  "#interrupt-cells":
-+    const: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - gpio-controller
-+  - "#gpio-cells"
-+
-+patternProperties:
-+  '-[0-9]+$':
-+    type: object
-+    additionalProperties: false
-+
-+    patternProperties:
-+      'mux':
-+        type: object
-+        additionalProperties: false
-+        description: |
-+          pinmux configuration nodes.
-+        $ref: "/schemas/pinctrl/pinmux-node.yaml"
-+        properties:
-+          function:
-+            description: |
-+              A string containing the name of the function to mux to the group.
-+              There is no "audio", "pcie" functions on mt7986b, you can only use
-+              those functions on mt7986a.
-+            enum: [audio, emmc, eth, i2c, led, flash, pcie, pwm, spi, uart,
-+                   watchdog, wifi]
-+          groups:
-+            description: |
-+              An array of strings. Each string contains the name of a group.
-+              There is no "pcie_pereset", "uart1", "uart2" "emmc_51", "pcm",
-+              and "i2s" groups on mt7986b, you can only use those groups on
-+              mt7986a.
-+        required:
-+          - function
-+          - groups
-+
-+        allOf:
-+          - if:
-+              properties:
-+                function:
-+                  const: audio
-+            then:
-+              properties:
-+                groups:
-+                  enum: [pcm, i2s]
-+          - if:
-+              properties:
-+                function:
-+                  const: emmc
-+            then:
-+              properties:
-+                groups:
-+                  enum: [emmc, emmc_rst]
-+          - if:
-+              properties:
-+                function:
-+                  const: eth
-+            then:
-+              properties:
-+                groups:
-+                  enum: [switch_int, mdc_mdio]
-+          - if:
-+              properties:
-+                function:
-+                  const: i2c
-+            then:
-+              properties:
-+                groups:
-+                  enum: [i2c]
-+          - if:
-+              properties:
-+                function:
-+                  const: led
-+            then:
-+              properties:
-+                groups:
-+                  enum: [wifi_led]
-+          - if:
-+              properties:
-+                function:
-+                  const: flash
-+            then:
-+              properties:
-+                groups:
-+                  enum: [snfi]
-+          - if:
-+              properties:
-+                function:
-+                  const: pcie
-+            then:
-+              properties:
-+                groups:
-+                  enum: [pcie_clk, pcie_wake, pcie_pereset]
-+          - if:
-+              properties:
-+                function:
-+                  const: pwm
-+            then:
-+              properties:
-+                groups:
-+                  enum: [pwm0, pwm1_0, pwm1_1]
-+          - if:
-+              properties:
-+                function:
-+                  const: spi
-+            then:
-+              properties:
-+                groups:
-+                  enum: [spi0, spi0_wp_hold, spi1_0, spi1_1, spi1_2, spi1_3]
-+          - if:
-+              properties:
-+                function:
-+                  const: uart
-+            then:
-+              properties:
-+                groups:
-+                  enum: [uart1_0, uart1_1, uart1_2, uart1_3_rx_tx,
-+                         uart1_3_cts_rts, uart2_0, uart2_1, uart0, uart1, uart2]
-+          - if:
-+              properties:
-+                function:
-+                  const: watchdog
-+            then:
-+              properties:
-+                groups:
-+                  enum: [watchdog]
-+          - if:
-+              properties:
-+                function:
-+                  const: wifi
-+            then:
-+              properties:
-+                groups:
-+                  enum: [wf_2g, wf_5g, wf_dbdc]
-+      'conf':
-+        type: object
-+        additionalProperties: false
-+        description: |
-+          pinconf configuration nodes.
-+        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-+
-+        properties:
-+          pins:
-+            description: |
-+              An array of strings. Each string contains the name of a pin.
-+              There is no PIN 41 to PIN 65 above on mt7686b, you can only use
-+              those pins on mt7986a.
-+            enum: [SYS_WATCHDOG, WF2G_LED, WF5G_LED, I2C_SCL, I2C_SDA, GPIO_0,
-+                   GPIO_1, GPIO_2, GPIO_3, GPIO_4, GPIO_5, GPIO_6, GPIO_7,
-+                   GPIO_8, GPIO_9, GPIO_10, GPIO_11, GPIO_12, GPIO_13, GPIO_14,
-+                   GPIO_15, PWM0, PWM1, SPI0_CLK, SPI0_MOSI, SPI0_MISO, SPI0_CS,
-+                   SPI0_HOLD, SPI0_WP, SPI1_CLK, SPI1_MOSI, SPI1_MISO, SPI1_CS,
-+                   SPI2_CLK, SPI2_MOSI, SPI2_MISO, SPI2_CS, SPI2_HOLD, SPI2_WP,
-+                   UART0_RXD, UART0_TXD, PCIE_PERESET_N, UART1_RXD, UART1_TXD,
-+                   UART1_CTS, UART1_RTS, UART2_RXD, UART2_TXD, UART2_CTS,
-+                   UART2_RTS, EMMC_DATA_0, EMMC_DATA_1, EMMC_DATA_2,
-+                   EMMC_DATA_3, EMMC_DATA_4, EMMC_DATA_5, EMMC_DATA_6,
-+                   EMMC_DATA_7, EMMC_CMD, EMMC_CK, EMMC_DSL, EMMC_RSTB, PCM_DTX,
-+                   PCM_DRX, PCM_CLK, PCM_FS, MT7531_INT, SMI_MDC, SMI_MDIO,
-+                   WF0_DIG_RESETB, WF0_CBA_RESETB, WF0_XO_REQ, WF0_TOP_CLK,
-+                   WF0_TOP_DATA, WF0_HB1, WF0_HB2, WF0_HB3, WF0_HB4, WF0_HB0,
-+                   WF0_HB0_B, WF0_HB5, WF0_HB6, WF0_HB7, WF0_HB8, WF0_HB9,
-+                   WF0_HB10, WF1_DIG_RESETB, WF1_CBA_RESETB, WF1_XO_REQ,
-+                   WF1_TOP_CLK, WF1_TOP_DATA, WF1_HB1, WF1_HB2, WF1_HB3,
-+                   WF1_HB4, WF1_HB0, WF1_HB0_B, WF1_HB5, WF1_HB6, WF1_HB7,
-+                   WF1_HB8]
-+
-+          bias-disable: true
-+
-+          bias-pull-up: true
-+
-+          bias-pull-down: true
-+
-+          input-enable: true
-+
-+          input-disable: true
-+
-+          output-enable: true
-+
-+          output-low: true
-+
-+          output-high: true
-+
-+          input-schmitt-enable: true
-+
-+          input-schmitt-disable: true
-+
-+          drive-strength:
-+            enum: [2, 4, 6, 8, 10, 12, 14, 16]
-+
-+          mediatek,pull-up-adv:
-+            description: |
-+              Valid arguments for 'mediatek,pull-up-adv' are '0', '1', '2', '3'
-+              Pull up setings for 2 pull resistors, R0 and R1. Valid arguments
-+              are described as below:
-+              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-+              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-+              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-+              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
-+
-+          mediatek,pull-down-adv:
-+            description: |
-+              Valid arguments for 'mediatek,pull-up-adv' are '0', '1', '2', '3'
-+              Pull down setings for 2 pull resistors, R0 and R1. Valid arguments
-+              are described as below:
-+              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
-+              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
-+              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
-+              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
-+
-+        required:
-+          - pins
-+
-+additionalProperties: false
-+
-+pin_group_table:
-+  - |
-+    Valid values for groups are:
-+
-+    There is no "pcie_pereset", "uart1", "uart2" "emmc_51", "pcm", and "i2s"
-+    groups on mt7986b, you can only use those groups on mt7986a.
-+
-+    Valid value	      function    pins (in pin#)
-+    -------------------------------------------------------------------------
-+    "watchdog"        "watchdog"  0
-+    "wifi_led"        "led"       1, 2
-+    "i2c"             "i2c"       3, 4
-+    "uart1_0"         "uart"      7, 8, 9, 10
-+    "pcie_clk"        "pcie"      9
-+    "pcie_wake"       "pcie"      10
-+    "spi1_0"          "spi"       11, 12, 13, 14
-+    "pwm1_1"          "pwm"       20,
-+    "pwm0"            "pwm"       21,
-+    "pwm1_0"          "pwm"       22,
-+    "snfi"            "flash"     23, 24, 25, 26, 27, 28
-+    "spi1_2"          "spi"       29, 30, 31, 32
-+    "emmc_45"         "emmc"      22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
-+    "spi1_1"          "spi"       23, 24, 25, 26
-+    "uart1_2"         "uart"      29, 30, 31, 32
-+    "uart1_1"         "uart"      23, 24, 25, 26
-+    "uart2_0"         "uart"      29, 30, 31, 32
-+    "spi0"            "spi"       33, 34, 35, 36
-+    "spi0_wp_hold"    "spi"       37, 38
-+    "uart1_3_rx_tx"   "uart"      35, 36
-+    "uart1_3_cts_rts" "uart"      37, 38
-+    "uart2_1"         "uart"      33, 34, 35, 36
-+    "spi1_3"          "spi"       33, 34, 35, 36
-+    "uart0"           "uart"      39, 40
-+    "pcie_pereset"    "pcie"      41
-+    "uart1"           "uart"      42, 43, 44, 45
-+    "uart2"           "uart"      46, 47, 48, 49
-+    "emmc_51"         "emmc"      50, 51, 52, 53, 54, 55, 56, 57, 57, 59, 60, 61
-+    "pcm"             "audio"     62, 63, 64, 65
-+    "i2s"             "audio"     62, 63, 64, 65
-+    "switch_int"      "eth"       66
-+    "mdc_mdio"        "eth"       67
-+
-+examples:
-+  - |
-+    soc {
-+      pio: pinctrl@1001f000 {
-+        compatible = "mediatek,mt7986a-pinctrl";
-+        reg = <0 0x1001f000 0 0x1000>,
-+              <0 0x11c30000 0 0x1000>,
-+              <0 0x11c40000 0 0x1000>,
-+              <0 0x11e20000 0 0x1000>,
-+              <0 0x11e30000 0 0x1000>,
-+              <0 0x11f00000 0 0x1000>,
-+              <0 0x11f10000 0 0x1000>,
-+              <0 0x1000b000 0 0x1000>;
-+        reg-names = "gpio_base", "iocfg_rt_base", "iocfg_rb_base",
-+              "iocfg_lt_base", "iocfg_lb_base", "iocfg_tr_base",
-+              "iocfg_tl_base", "eint";
-+        gpio-controller;
-+        #gpio-cells = <2>;
-+        gpio-ranges = <&pio 0 0 100>;
-+        interrupt-controller;
-+        interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-parent = <&gic>;
-+        #interrupt-cells = <2>;
-+
-+        uart1_pins: uart1-pins-42-to-45 {
-+          mux {
-+            function = "uart";
-+            groups = "uart1";
-+          };
-+        };
-+
-+        uart2_pins: uart1-pins-46-to-49 {
-+          mux {
-+            function = "uart";
-+            groups = "uart2";
-+          };
-+        };
-+
-+      };
-+    };
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index b81fe4f7d434..75591ba261e2 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -496,16 +496,18 @@ config S3C2410_WATCHDOG
+ 	select WATCHDOG_CORE
+ 	select MFD_SYSCON if ARCH_EXYNOS
+ 	help
+-	  Watchdog timer block in the Samsung SoCs. This will reboot
+-	  the system when the timer expires with the watchdog enabled.
++	  Watchdog timer block in the Samsung S3C24xx, S3C64xx, S5Pv210 and
++	  Exynos SoCs. This will reboot the system when the timer expires with
++	  the watchdog enabled.
+ 
+ 	  The driver is limited by the speed of the system's PCLK
+ 	  signal, so with reasonably fast systems (PCLK around 50-66MHz)
+ 	  then watchdog intervals of over approximately 20seconds are
+ 	  unavailable.
+ 
++	  Choose Y/M here only if you build for such Samsung SoC.
+ 	  The driver can be built as a module by choosing M, and will
+-	  be called s3c2410_wdt
++	  be called s3c2410_wdt.
+ 
+ config SA1100_WATCHDOG
+ 	tristate "SA1100/PXA2xx watchdog"
 -- 
-2.29.2
+2.30.2
 
