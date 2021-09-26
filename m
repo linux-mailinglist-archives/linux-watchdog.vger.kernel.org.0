@@ -2,138 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C28041766C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Sep 2021 15:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA31341888F
+	for <lists+linux-watchdog@lfdr.de>; Sun, 26 Sep 2021 14:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346547AbhIXOBT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 24 Sep 2021 10:01:19 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:34728 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346576AbhIXOA6 (ORCPT
+        id S231186AbhIZMP3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 26 Sep 2021 08:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230160AbhIZMP2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 24 Sep 2021 10:00:58 -0400
-Received: by mail-ot1-f43.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so7550139otb.1;
-        Fri, 24 Sep 2021 06:59:24 -0700 (PDT)
+        Sun, 26 Sep 2021 08:15:28 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A66C061570;
+        Sun, 26 Sep 2021 05:13:52 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id z11so21633358oih.1;
+        Sun, 26 Sep 2021 05:13:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3Pf5rU/TB/BW2ajTVjYWCJhuzdNpYKVst0ZSbg4WjX0=;
+        b=Kev7foseiXhcccruFzCzWbqnt/nsv0uHCpvE0dQDu7iJzyBuIV1iYpanAaJT22iWNB
+         4Q+z4EDr11ihcgv4MSTnxm2Vis4dIG8ub79lA7s4z6rZQUbaQMl8dp3Sbr5+6EaL28+E
+         LNkPgWOID13CjiFB34mcXjIZ8efFKUbqTJoOHW1tW5Enk+qGh0MKp85ErS6sqAzi1XfB
+         vvV9xOv64F5hx0LMdXYrZkkLaYsb1QDIsDZw7VvxvWizX+23NlChmAW92+jJPbXr1ZSc
+         gKoy3NldeJKwGloeIJ7OV4MRRnWqyI4V6cU3kAcGRvK50i6qvTZiV+FE429uTLgUpFpp
+         hcHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=WcWh55mrnHlrmpS4bF3C6RTmMv+GgWp8tjxqVJlKmm8=;
-        b=h2myBCc2FwFUN06kisWSp/YQ0aVRvz+hEb5xr9ECMZuoxMh92+MKS5mJP3gDL66i3l
-         Bs8LQR/BrxNedoDcR/ztIG49Zw564F1W7vfgO7HEl/J7W1VIDZtQn//0FGsPLljrTAzY
-         doITC9ItLvksSN64wEl7A5Vvs4Ei5U7BN4lvoxGQVXVGDNKh+UedE6+lmgt8KL7e8TXB
-         EAQnSIhA54GDUAm5jNqY4O4SR4S7NqPHVO7AGf8WuuTMEBig8T8sK12JSr3rsaoWUtgT
-         rMyw3T0c5sg6w+WvYBK2dKtW1lWkXZun2rYn047Y6OqNR+0DLL8sWGL4GSfXd8HkVwFY
-         iPkw==
-X-Gm-Message-State: AOAM532ZChB0NhmEBJYrXQ8JZkdkyRgvaOovQ7y7o6we6eVXHZ8u9fC3
-        IXYbvcFqfopwKGdR8sn++g==
-X-Google-Smtp-Source: ABdhPJwu5vf62gkghKqrJp812TiqZCJ5L14q4YY1lFn4pkmkXKCEkfSFSlIERBrP2Win5Yi3GNO6Sw==
-X-Received: by 2002:a9d:4a83:: with SMTP id i3mr4246791otf.385.1632491964290;
-        Fri, 24 Sep 2021 06:59:24 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d26sm2075540oij.49.2021.09.24.06.59.22
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3Pf5rU/TB/BW2ajTVjYWCJhuzdNpYKVst0ZSbg4WjX0=;
+        b=ncKWSZ5L4uax6F7ylpzLfhxpmeUeqryHh5lYT1NB5qDVFnv3MhXIAO9KsbQI8rLnY5
+         5KXBT4+AoUldONDyPp8KR7TC3EoUTJNF/VW5GxjAqqQcwJHXFgWP2BWCNthgDnBrpMgB
+         pfj+ftMOPqhR2VfMvqMaYrZol4pmBUBclRAW4WBzHqYLXL3tnPxjZtNpiATzPdlCHOj4
+         jZk1wXZglE/2wjWGQbGXDDtD7ImNspSBvcSlK4siImojwfgfx09tOGFryt6LEFb8Xs43
+         NXwoFc08YE0l8DNNP8s0x+DbAajjZnH+yrv9iuj0v7zSp0EXYSqi3LE7JdKLzAESw7AG
+         nYEA==
+X-Gm-Message-State: AOAM533/PjgU4ot96O3swyCiqGyOcLGYNR4k0wuiXu/WsKuFE9JshCI6
+        7jRbdWyFhk8B6Vzy0ObTJoovbR+Lr+k=
+X-Google-Smtp-Source: ABdhPJwAa//K6Y7U71YSn4FZ+9A9LY11mS6IHLh9n+yS2sdRbI3E6yBmIp4Z4k4xHnPoGv3cZZGVRA==
+X-Received: by 2002:a05:6808:2016:: with SMTP id q22mr8231106oiw.19.1632658432046;
+        Sun, 26 Sep 2021 05:13:52 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i23sm3229040oof.4.2021.09.26.05.13.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 06:59:23 -0700 (PDT)
-Received: (nullmailer pid 1195979 invoked by uid 1000);
-        Fri, 24 Sep 2021 13:59:21 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Sam Shih <sam.shih@mediatek.com>
-Cc:     matthias.bgg@gmail.com, linux-clk@vger.kernel.org,
-        Ryder.Lee@mediatek.com, fparent@baylibre.com,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        seiya.wang@mediatek.com, sean.wang@kernel.org, robh+dt@kernel.org,
-        enric.balletbo@collabora.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, wim@linux-watchdog.org,
-        linux-mediatek@lists.infradead.org, herbert@gondor.apana.org.au,
-        mturquette@baylibre.com, linux-watchdog@vger.kernel.org,
-        linux-serial@vger.kernel.org, mpm@selenic.com, linux@roeck-us.net,
-        john@phrozen.org, sboyd@kernel.org, hsinyi@chromium.org,
-        linus.walleij@linaro.org
-In-Reply-To: <20210924114459.28664-1-sam.shih@mediatek.com>
-References: <9aa66a93-4d0c-176e-ea35-b5aa33751d51@gmail.com> <20210924114459.28664-1-sam.shih@mediatek.com>
-Subject: Re: [v4,5/9] dt-bindings: pinctrl: update bindings for MT7986 SoC
-Date:   Fri, 24 Sep 2021 08:59:21 -0500
-Message-Id: <1632491961.645727.1195978.nullmailer@robh.at.kernel.org>
+        Sun, 26 Sep 2021 05:13:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 26 Sep 2021 05:13:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] watchdog: s3c2410: describe driver in KConfig
+Message-ID: <20210926121350.GA3174183@roeck-us.net>
+References: <20210924132930.111443-1-krzysztof.kozlowski@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210924132930.111443-1-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 24 Sep 2021 19:44:59 +0800, Sam Shih wrote:
-> This updates bindings for MT7986 pinctrl driver. The
-> difference of pinctrl between mt7986a and mt7986b is that pin-41 to pin-65
-> do not exist on mt7986b
+On Fri, Sep 24, 2021 at 03:29:30PM +0200, Krzysztof Kozlowski wrote:
+> Describe better which driver applies to which SoC, to make configuring
+> kernel for Samsung SoC easier.
 > 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
-> v4 : used yaml format instead of txt format document
-> v3 : make mt7986 pinctrl bindings as a separate file
-> v2 : deleted the redundant description of mt7986a/mt7986b
-> ---
->  .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 350 ++++++++++++++++++
->  1 file changed, 350 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+>  drivers/watchdog/Kconfig | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml: 'pin_group_table' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'patternProperties', 'properties', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml: patternProperties:-[0-9]+$:patternProperties:conf:properties:mediatek,pull-up-adv: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml: patternProperties:-[0-9]+$:patternProperties:conf:properties:mediatek,pull-up-adv: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml: patternProperties:-[0-9]+$:patternProperties:conf:properties:mediatek,pull-up-adv: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml: patternProperties:-[0-9]+$:patternProperties:conf:properties:mediatek,pull-down-adv: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml: patternProperties:-[0-9]+$:patternProperties:conf:properties:mediatek,pull-down-adv: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml: patternProperties:-[0-9]+$:patternProperties:conf:properties:mediatek,pull-down-adv: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml: ignoring, error in schema: 
-warning: no schema found in file: ./Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-Error: Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.example.dts:37.27-28 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1441: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1532240
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index b81fe4f7d434..75591ba261e2 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -496,16 +496,18 @@ config S3C2410_WATCHDOG
+>  	select WATCHDOG_CORE
+>  	select MFD_SYSCON if ARCH_EXYNOS
+>  	help
+> -	  Watchdog timer block in the Samsung SoCs. This will reboot
+> -	  the system when the timer expires with the watchdog enabled.
+> +	  Watchdog timer block in the Samsung S3C24xx, S3C64xx, S5Pv210 and
+> +	  Exynos SoCs. This will reboot the system when the timer expires with
+> +	  the watchdog enabled.
+>  
+>  	  The driver is limited by the speed of the system's PCLK
+>  	  signal, so with reasonably fast systems (PCLK around 50-66MHz)
+>  	  then watchdog intervals of over approximately 20seconds are
+>  	  unavailable.
+>  
+> +	  Choose Y/M here only if you build for such Samsung SoC.
+>  	  The driver can be built as a module by choosing M, and will
+> -	  be called s3c2410_wdt
+> +	  be called s3c2410_wdt.
+>  
+>  config SA1100_WATCHDOG
+>  	tristate "SA1100/PXA2xx watchdog"
+> -- 
+> 2.30.2
+> 
