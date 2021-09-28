@@ -2,119 +2,86 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA58B419476
-	for <lists+linux-watchdog@lfdr.de>; Mon, 27 Sep 2021 14:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0907E41A929
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Sep 2021 08:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbhI0Mm6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 27 Sep 2021 08:42:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60550 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234333AbhI0Mm5 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 27 Sep 2021 08:42:57 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C64260F46;
-        Mon, 27 Sep 2021 12:41:19 +0000 (UTC)
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mUpwb-00DF4m-GL; Mon, 27 Sep 2021 13:41:17 +0100
+        id S239104AbhI1G7l (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Sep 2021 02:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239116AbhI1G7a (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 28 Sep 2021 02:59:30 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6192FC061604;
+        Mon, 27 Sep 2021 23:57:51 -0700 (PDT)
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1632812268;
+        bh=5SWZyzA521WWQk9YTYVm2Mdu+LIwCBNb7lp4LyA75Jk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=r+jxOP1/u9niWBn9LKuOFrPS+ujmSHdyBGMjAuT1ytivnFws7vg08U5cJmDwwc7D0
+         yZixcjRo4NMtViGVnWFtp9F4NPT/nXlUKCJdP+swz/P/GeleZkN7y+YfOWcrnMWsU/
+         ETUgUnnYT4nqFiHlQLZTPzbkvN8Pv/fZBXQZwDxw=
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org
+Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: sp5100_tco: Add support for get_timeleft
+Date:   Tue, 28 Sep 2021 08:57:35 +0200
+Message-Id: <20210928065735.548966-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Date:   Mon, 27 Sep 2021 13:41:17 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Sam Shih <sam.shih@mediatek.com>
-Cc:     matthias.bgg@gmail.com, Ryder.Lee@mediatek.com,
-        devicetree@vger.kernel.org, enric.balletbo@collabora.com,
-        fparent@baylibre.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, hsinyi@chromium.org, john@phrozen.org,
-        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
-        mpm@selenic.com, mturquette@baylibre.com, robh+dt@kernel.org,
-        sboyd@kernel.org, sean.wang@kernel.org, seiya.wang@mediatek.com,
-        wim@linux-watchdog.org
-Subject: Re: [v3,8/9] arm64: dts: mediatek: add mt7986a support
-In-Reply-To: <20210924112017.14107-1-sam.shih@mediatek.com>
-References: <016b501b-a4bf-c74d-9f7f-8145800ca6e0@gmail.com>
- <20210924112017.14107-1-sam.shih@mediatek.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <0459da08cddc579f069a28e659e614fd@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: sam.shih@mediatek.com, matthias.bgg@gmail.com, Ryder.Lee@mediatek.com, devicetree@vger.kernel.org, enric.balletbo@collabora.com, fparent@baylibre.com, gregkh@linuxfoundation.org, herbert@gondor.apana.org.au, hsinyi@chromium.org, john@phrozen.org, linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org, linux@roeck-us.net, mpm@selenic.com, mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org, sean.wang@kernel.org, seiya.wang@mediatek.com, wim@linux-watchdog.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2021-09-24 12:20, Sam Shih wrote:
-> Add basic chip support for Mediatek mt7986a, include
-> uart nodes with correct clocks, rng node with correct clock,
-> and watchdog node and mt7986a pinctrl node.
-> 
-> Add cpu node, timer node, gic node, psci and reserved-memory node
-> for ARM Trusted Firmware,
-> 
-> Add clock controller nodes, include 40M clock source, topckgen, 
-> infracfg,
-> apmixedsys and ethernet subsystem.
-> 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> ---
-> v3: used the stdout-path instead of console=ttyS0
-> v2: modified clock and uart node due to clock driver updated
-> ---
->  arch/arm64/boot/dts/mediatek/Makefile        |   1 +
->  arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts |  54 +++++
->  arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 227 +++++++++++++++++++
->  3 files changed, 282 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+Tested on a Gigabyte X570 I AORUS PRO WIFI.
 
-[...]
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/watchdog/sp5100_tco.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupt-parent = <&gic>;
-> +		clock-frequency = <13000000>;
+diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+index a730ecbf78cd..dd9a744f82f8 100644
+--- a/drivers/watchdog/sp5100_tco.c
++++ b/drivers/watchdog/sp5100_tco.c
+@@ -10,6 +10,7 @@
+  *				https://www.kernelconcepts.de
+  *
+  *	See AMD Publication 43009 "AMD SB700/710/750 Register Reference Guide",
++ *	    AMD Publication 44413 "AMD SP5100 Register Reference Guide"
+  *	    AMD Publication 45482 "AMD SB800-Series Southbridges Register
+  *	                                                      Reference Guide"
+  *	    AMD Publication 48751 "BIOS and Kernel Developer’s Guide (BKDG)
+@@ -144,6 +145,13 @@ static int tco_timer_set_timeout(struct watchdog_device *wdd,
+ 	return 0;
+ }
+ 
++static unsigned int tco_timer_get_timeleft(struct watchdog_device *wdd)
++{
++	struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
++
++	return readl(SP5100_WDT_COUNT(tco->tcobase));
++}
++
+ static u8 sp5100_tco_read_pm_reg8(u8 index)
+ {
+ 	outb(index, SP5100_IO_PM_INDEX_REG);
+@@ -386,6 +394,7 @@ static const struct watchdog_ops sp5100_tco_wdt_ops = {
+ 	.stop = tco_timer_stop,
+ 	.ping = tco_timer_ping,
+ 	.set_timeout = tco_timer_set_timeout,
++	.get_timeleft = tco_timer_get_timeleft,
+ };
+ 
+ static int sp5100_tco_probe(struct platform_device *pdev)
 
-No. Please fix your firmware to program CNTFRQ_EL0 on all CPUs.
-This may have been OK in 2011, but not anymore.
-
-> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +
-> +	soc {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		compatible = "simple-bus";
-> +		ranges;
-> +
-> +		gic: interrupt-controller@c000000 {
-> +			compatible = "arm,gic-v3";
-> +			#interrupt-cells = <3>;
-> +			interrupt-parent = <&gic>;
-> +			interrupt-controller;
-> +			reg = <0 0x0c000000 0 0x40000>,
-> +			      <0 0x0c080000 0 0x200000>;
-
-This looks wrong. 128kB per redistributor frames and 4 CPUs do
-no result in 2MB worth of MMIO.
-
-This is also missing the GICV/GICV/GICH regions that are exposed
-by the CPUs directly.
-
-         M.
+base-commit: 41e73feb1024929e75eaf2f7cd93f35a3feb331b
 -- 
-Jazz is not dead. It just smells funny...
+2.33.0
+
