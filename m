@@ -2,112 +2,151 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C466441D570
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Sep 2021 10:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A5C41DF38
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Sep 2021 18:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348485AbhI3Idm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 30 Sep 2021 04:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S1352181AbhI3QlW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Sep 2021 12:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348364AbhI3Idl (ORCPT
+        with ESMTP id S1352188AbhI3QlV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 30 Sep 2021 04:33:41 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6356DC06176A;
-        Thu, 30 Sep 2021 01:31:59 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 32D581F449EB
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mediatek@lists.infradead.org, eizan@chromium.org,
-        kernel@collabora.com, drinkcat@chromium.org,
-        jitao.shi@mediatek.com, chunkuang.hu@kernel.org,
-        hsinyi@chromium.org, matthias.bgg@gmail.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Crystal Guo <crystal.guo@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v4 1/7] arm64: dts: mediatek: Move reset controller constants into common location
-Date:   Thu, 30 Sep 2021 10:31:44 +0200
-Message-Id: <20210930103105.v4.1.I514d9aafff3a062f751b37d3fea7402f67595b86@changeid>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210930083150.3317003-1-enric.balletbo@collabora.com>
-References: <20210930083150.3317003-1-enric.balletbo@collabora.com>
+        Thu, 30 Sep 2021 12:41:21 -0400
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A02C061773
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Sep 2021 09:39:37 -0700 (PDT)
+Received: by mail-ua1-x942.google.com with SMTP id b34so4694215uad.8
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Sep 2021 09:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=o3SZ3/8xgB3svMq+UXE3vgW9sKtG91px1UYnaI00T4dLP05ECFH5EVSAWUR78xdR5n
+         ebHrIeHXVPRJa791OB2s/aZJdtzWdPaX5sbadOL24EflkgZ6O2rEvsBWvojGxJeeST6T
+         eb+k8lxZZa/bWNfHNPwQHvNUM1YEFh4fUMO861Pe8Wc6pfqqL72s+8eCO53Msweav+mv
+         XfoVjVScWXWc0hGgmBVMNFkqROc3jDhXxKvwZxz1ZkBwNJLCRx7xYOcAqQ0tzz+Q5cSM
+         PuhaOVDUO2vb8ybQ6jSikOKS/AFhEN/8Lz75PuCS5qgomh+uSMNWQBtsXYMKNbf3IvW6
+         pZbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=RM/AjpOSh4nNN6KCmQHzDxsHBMMCXsxwUo/wvKmt08rEz4rthKvynF9Wy2iILF+XdW
+         BQMLWKUvV0bkKp6kG1/8gSSQhvH+vDq27uLOLNHT67mkV+qYFONRDV89MclO54eYb8Lf
+         8uAFO9cMjdtbdje1C0Fh8+rNQAtI8UIqWkeMyZ7cj3cTnUNXgwLddHspd2d3IK+5DGp5
+         lQq52e9oZxZocGtNbR/JdKp6OEISYOY3I2o0NgZhPKFtRvGrywwDOwL90sAGjJ1voiKm
+         NDbFmhtZGpTNisHXiZekK0k6cnvv4ibbLUHhnyTIJQH0oXCiJKd7QZ5biVEdbmdUOUr2
+         7I+A==
+X-Gm-Message-State: AOAM5307dGr3UmNc/AsZcL2QX9zj8pvS8YdGjLpwQ4xugt28BIf8gijE
+        2l/ZLKtp7VOKjGIRYVI11mjg20OsiPdx4fMMDH8=
+X-Google-Smtp-Source: ABdhPJx0AmgkV9cE7YZrAYTucsDxPOj7iGMkrooBstJ2APLp74YQnUFP0J0PcWONym4DRiNtFFvbKXZFoRlaXsy60JM=
+X-Received: by 2002:ab0:5602:: with SMTP id y2mr6724983uaa.120.1633019977032;
+ Thu, 30 Sep 2021 09:39:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a59:ab2e:0:b0:22d:7f44:603a with HTTP; Thu, 30 Sep 2021
+ 09:39:36 -0700 (PDT)
+Reply-To: irenezakari24@gmail.com
+From:   Irene zakari <irenezakari88@gmail.com>
+Date:   Thu, 30 Sep 2021 09:39:36 -0700
+Message-ID: <CAFT8PFG_8981ivC4O1EnUpb=bxUAD3b8Ry0XqxnGDqbSoBpVzQ@mail.gmail.com>
+Subject: PLEASE I NEED YOUR HELP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The DT binding includes for reset controllers are located in
-include/dt-bindings/reset/. Move the Mediatek reset constants in there.
+Hello   ..
 
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
----
+How do you do over there? I hope you are doing well?
 
-(no changes since v2)
+My name is Irene. (24 years), i am single, from Gambia, the only child
+of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
+(Building Construction Company in The Gambia) also the CEO of Bernard
+Import and Export (GAMBIA).
 
-Changes in v2:
-- Fix build test ERROR Reported-by: kernel test robot <lkp@intel.com>
+As a matter of fact my mother died when i was barely 4 years old
+according to my late father and because of the type of love he had for
+my mother made him to remain UN-married till he left the ghost..
 
- arch/arm64/boot/dts/mediatek/mt8183.dtsi                    | 2 +-
- drivers/watchdog/mtk_wdt.c                                  | 6 +++---
- .../dt-bindings/{reset-controller => reset}/mt2712-resets.h | 0
- .../dt-bindings/{reset-controller => reset}/mt8183-resets.h | 0
- .../dt-bindings/{reset-controller => reset}/mt8192-resets.h | 0
- 5 files changed, 4 insertions(+), 4 deletions(-)
- rename include/dt-bindings/{reset-controller => reset}/mt2712-resets.h (100%)
- rename include/dt-bindings/{reset-controller => reset}/mt8183-resets.h (100%)
- rename include/dt-bindings/{reset-controller => reset}/mt8192-resets.h (100%)
+So after the death of my father as a result of assassinate, his brother (My
+Uncle) who is the purchasing and marketing sale manager of my late
+fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
+convert all the properties and resources of my late father into his
+which i quarreled with him and it made him to lay his anger on me to
+the extent of hiring an assassins to kill me but to God be the glory i
+succeeded by making a way to Burkina faso for my dear life.
+Honestly i do live a fearful life even here in Burkina faso because of
+those Assassins coming after me .
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 494f6fdbd603..9639ca17638e 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -11,7 +11,7 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/memory/mt8183-larb-port.h>
- #include <dt-bindings/power/mt8183-power.h>
--#include <dt-bindings/reset-controller/mt8183-resets.h>
-+#include <dt-bindings/reset/mt8183-resets.h>
- #include <dt-bindings/phy/phy.h>
- #include <dt-bindings/thermal/thermal.h>
- #include <dt-bindings/pinctrl/mt8183-pinfunc.h>
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index 796fbb048cbe..3d208d627fb0 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -9,9 +9,9 @@
-  * Based on sunxi_wdt.c
-  */
- 
--#include <dt-bindings/reset-controller/mt2712-resets.h>
--#include <dt-bindings/reset-controller/mt8183-resets.h>
--#include <dt-bindings/reset-controller/mt8192-resets.h>
-+#include <dt-bindings/reset/mt2712-resets.h>
-+#include <dt-bindings/reset/mt8183-resets.h>
-+#include <dt-bindings/reset/mt8192-resets.h>
- #include <dt-bindings/reset/mt8195-resets.h>
- #include <linux/delay.h>
- #include <linux/err.h>
-diff --git a/include/dt-bindings/reset-controller/mt2712-resets.h b/include/dt-bindings/reset/mt2712-resets.h
-similarity index 100%
-rename from include/dt-bindings/reset-controller/mt2712-resets.h
-rename to include/dt-bindings/reset/mt2712-resets.h
-diff --git a/include/dt-bindings/reset-controller/mt8183-resets.h b/include/dt-bindings/reset/mt8183-resets.h
-similarity index 100%
-rename from include/dt-bindings/reset-controller/mt8183-resets.h
-rename to include/dt-bindings/reset/mt8183-resets.h
-diff --git a/include/dt-bindings/reset-controller/mt8192-resets.h b/include/dt-bindings/reset/mt8192-resets.h
-similarity index 100%
-rename from include/dt-bindings/reset-controller/mt8192-resets.h
-rename to include/dt-bindings/reset/mt8192-resets.h
--- 
-2.30.2
+I would want to live and study in your country for my better future.
+because my father same blood brother wanted to force me into undecided
+marriage, just for me to leave my father home and went and live with
+another man I never know as he want to occupied all my father home
+and maybe to sold it as my father no longer alive, I'm the only child
+daughter my father born, '' but he don't know that i am not
+interesting in any of my father properties or early marriage for now,
+because i still have future to think about and to focus on my studies
+first as i was doing my first year in the University before the death
+of my father.
 
+Actually what I want to discuss with you is about my personal issue
+concern funds my late father deposited in a bank outside my country,
+worth $4.5 million united state dollars. i need your assistance to
+receive and invest this funds in your country.
+
+Please help me, I am sincere to you and I want to be member of your
+family as well if you wouldn't mind to accept me and lead me to better
+future in your country.
+
+All the documents the bank issue to my father during time of deposit
+is with me now.
+I already notify the bank on phone about the death of my father and
+they are surprise for the news and accept that my father is their good
+customer.
+I will be happy if this money can be invested in any business of your
+choice and it will be under your control till i finished my education,
+also I'm assuring you good relationship and I am ready to discuss the
+amount of money to give you from this money for your help.
+
+Therefore, I shall give you the bank contact and other necessary
+information in my next email if you will only promise me that you will
+not/never betray and disclosed this matter to anybody, because, this
+money is the only hope i have for survival on earth since I have lost
+my parents.
+
+Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
+CERTIFICATE here with me, but before I give you further information, i
+will like to know your full data
+
+1. Full Name: ........................
+2. Address: ..................
+3. Nationality: ........... Sex................
+4. Age:........... Date of Birth:................
+5. Occupation:...................
+.....
+6. Phone: ........... Fax:.........................
+7. State of Origin: .......Country:..............
+8. Occupation:...................
+................
+9. Marital status........... E-mail address's: ............
+10. Scan copy of your ID card or Driving License/Photo:............
+DECLARATION:
+
+so that i will be fully sure that i am not trusting the wrong person.
+and it will also give me the mind to send you the bank contact for you
+to communicate with them for more verification about this money. and
+to know you more better.
+
+Meanwhile, you can reach me through my pastor,his name is Pastor Paul
+any time you call, tell him that you want to speak with me because
+right now i am living in the church here in Burkina faso and i don't
+want to stay here any longer,
+send for me to speak with you his phone number is this(+226 75213646)
+
+I will stop here and i will be waiting for your reply and feel free
+ask any thing you want to know about me.
+Please help me, I would be highly appreciated
+Have nice day.
+From Irene
