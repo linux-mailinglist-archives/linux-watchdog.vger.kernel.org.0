@@ -2,72 +2,129 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA3541EC1C
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Oct 2021 13:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D1D41FB6F
+	for <lists+linux-watchdog@lfdr.de>; Sat,  2 Oct 2021 14:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353992AbhJALgh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 1 Oct 2021 07:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S232971AbhJBMF2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 2 Oct 2021 08:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353976AbhJALgh (ORCPT
+        with ESMTP id S232935AbhJBMF1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 1 Oct 2021 07:36:37 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17689C06177D
-        for <linux-watchdog@vger.kernel.org>; Fri,  1 Oct 2021 04:34:53 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id x27so37150346lfa.9
-        for <linux-watchdog@vger.kernel.org>; Fri, 01 Oct 2021 04:34:53 -0700 (PDT)
+        Sat, 2 Oct 2021 08:05:27 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41C3C061570;
+        Sat,  2 Oct 2021 05:03:41 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id z184so1532206iof.5;
+        Sat, 02 Oct 2021 05:03:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=UOLbJNv/PHcWOU6Z4rzzgus9xotes2ecLAW3m0Y6kDPTOjFVwFz4/NRCuiUc/AjV39
-         70shoNLlGtW2zJKiJK8gWF1ZVghHqNU0FYvYoPopWEQ+fHy4PMJvg/rPa7XOjHzx5+I8
-         Xe7YeiWNQ2x44H4dPlVOE6Ah0lUroynwj/qWhWvYMyQ5kBZOuJhQVhc3aP+Fl6qaCTTC
-         uMrRxUPJ3wsFo+uvtThbmIiq0+6yFUOE4prZ7QcU8rJP7m7ajkacKs1kWI1OpkOo3grw
-         EL6Sbr67jUVUBegOHPesQ5yrtjLicwMzSf4ZTlJn80mKLZXzPrStel0YHAEyxcF5xL+2
-         tHhg==
+        h=mime-version:reply-to:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
+        b=YxWIlaBSYFvjD6wxI3Im7HD0DUa8SKawF0d7t45AEzKjL6m83eOsT6rgZdQRGCng74
+         6RLcJMZhzHbNym1o2udNgSV2epSTH0qAv/gDWDsxACfpBL7vOUGDwWmGmUaO2SE5P8uY
+         T63X4axLx9vlrJbw970R//6K5CXkIsOYNNanoWJo6B81ZE00DEyRoVjZrAUA3RQ+9ju3
+         SZYoVWN+Ed+cukZyyntSGlKOmbEpXAJVn5nVjU9PttbC0fy1k1kkmOWz1VvVx3VvX7FT
+         7VoKZi/ug9VIcJXMy54+WPXzQ6H5V7BFKbJ6aHn+8SZElmbcl8wcN4j53q3jHLdvow5u
+         jyoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=b0ib8JTltvBvGhLlCSPNnv/h4UaRZq9kjYTraY6I9fPn4jRvlOeKj+mxsbOhGvbjj6
-         rlnQlKrWY6KBySmUXdJ1iV0TX2Kd7gRtBVqA6Um9lhwP6rKUivfRmXZn2onITKcu4ike
-         wZNBYHYYfjQnH2YlNYt4FQEV/g4GKJisc7iC4QKdr//lPoH5webgd3c0bVI+vuXi21VI
-         QRueD2J90YGw7Z22cf2OxnuJNMrPnXuoRJ1KvNz53hjq+Fn4kMsEJjZktgGjtQHoI7vx
-         DaoS8kz2qQlSguJGmEmmzvS/fAQP7TQNl0OUyibMTSvnGYDRxShJxJd0MMmoC0q5XOhh
-         WfdQ==
-X-Gm-Message-State: AOAM533sUzh6M/+gUUBJgmJ47iiBoNs4exUkWwp7qEA2EZA08cwqqJgC
-        XgNEGf4G4FHqzzY1J0vruconeZ27iXZCcTJpzzDtDWwl9PsD/A==
-X-Google-Smtp-Source: ABdhPJzk33LSFp+PeISm+eJBQbbjD4Um0GnvAV/blvchXzlEurQQitZPK5UL59BP+L6PnQP4Ag8ozt5qB2PABb7m0KY=
-X-Received: by 2002:a17:906:1749:: with SMTP id d9mr5442671eje.178.1633088080796;
- Fri, 01 Oct 2021 04:34:40 -0700 (PDT)
+         :subject:to:cc:content-transfer-encoding;
+        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
+        b=LmOqDwxqDDyQv8S5r8mgiOrkAdVuYjTHRPeL3SEcVCmf7iltEE+9E/WZ/p4a/Rn6OK
+         r3NIfiwPWf7KMH2N8E7aj9oaEc65LBtP0zvNSXYapgvfoiGp/gn4pQr6YnnJ321thhXg
+         UPVYssUs2StzWAD4Fo7masaaFkiOnbLL5nVv/dCZJIbtpy0aOis4w8Sq2+zDrQJpYgJ2
+         BgAockzdWQXrw276F+kR1NCbmuusK8c+G5aTErF1zxB/C4qJBdeiCmLoNqfxrhcADHs1
+         C+A9TlKq/pvb05UIgyvRzQeVCHUz2Vc2jXMdDry12eLQagUSqyM6oyQG9mzJutcKherx
+         5Ckw==
+X-Gm-Message-State: AOAM531n/GcSWL+Qoyf2OX/kqSmiAkrV6zyLjg67Vu5E6w2n/478Pi66
+        /U4B72F0Qpia4whCxpJUMQqm5jkVFMT4Yf+6K6E=
+X-Google-Smtp-Source: ABdhPJz2q09A+517W2EVe9dbDivdnk3AEH6BZaUlyYLwJiT4IN/1ySl0KWhD1PmrDJ75/9gz6SNXe4y+mLeDTP26TSo=
+X-Received: by 2002:a05:6638:104:: with SMTP id x4mr2547380jao.145.1633176221400;
+ Sat, 02 Oct 2021 05:03:41 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:906:724a:0:0:0:0 with HTTP; Fri, 1 Oct 2021 04:34:39
- -0700 (PDT)
-Reply-To: joymat52@gmail.com
-From:   Joyce Thomas <tjoyc1234@gmail.com>
-Date:   Fri, 1 Oct 2021 04:34:39 -0700
-Message-ID: <CAF-RpUgaUkMbj2QzyBnkOuwEe=PmUv5qivCYUGKtEUkg1Z6r2w@mail.gmail.com>
-Subject: ATTN:
-To:     undisclosed-recipients:;
+Received: by 2002:a4f:f90d:0:0:0:0:0 with HTTP; Sat, 2 Oct 2021 05:03:41 -0700 (PDT)
+Reply-To: unitednnation0@gmail.com
+From:   "U.n" <wadebaye33@gmail.com>
+Date:   Sat, 2 Oct 2021 00:03:41 -1200
+Message-ID: <CACE0T5XLJ2ZM5W28B0Dyv4Rc8vqA8pN78J4Aso6XvTW_kxoNmQ@mail.gmail.com>
+Subject: Attention
+To:     unitednnation0@gmail.com
+Cc:     pberger@brimson.com, alborchers@steinerpoint.com,
+        xavyer@ix.netcom.com, support@connecttech.com,
+        steve.glendinning@shawell.net, luca.risolia@studio.unibo.it,
+        stern@rowland.harvard.edu, oneukum@suse.de,
+        linux-uvc-devel@lists.sourceforge.net,
+        laurent.pinchart@ideasonboard.com, jussi.kivilinna@mbnet.fi,
+        sarah.a.sharp@linux.intel.com, royale@zerezo.com,
+        jdike@addtoit.com, richard@nod.at,
+        user-mode-linux-devel@lists.sourceforge.net,
+        user-mode-linux-user@lists.sourceforge.net, hjk@hansjkoch.de,
+        kzak@redhat.com, util-linux@vger.kernel.org, spock@gentoo.org,
+        hirofumi@mail.parknet.co.jp, alex.williamson@redhat.com,
+        pawel@osciak.com, m.szyprowski@samsung.com,
+        kyungmin.park@samsung.com, amit.shah@redhat.com,
+        rusty@rustcorp.com.au, mst@redhat.com, kvm@vger.kernel.org,
+        rl@hellgate.ch, brucechang@via.com.tw, HaraldWelte@viatech.com,
+        FlorianSchandinat@gmx.de, linux-fbdev@vger.kernel.org,
+        romieu@fr.zoreil.com, kaber@trash.net, florian@openwrt.org,
+        openwrt-devel@lists.openwrt.org, martyn.welch@ge.com,
+        manohar.vanga@gmail.com, gregkh@linuxfoundation.org,
+        devel@driverdev.osuosl.org, sbhatewara@vmware.com,
+        arvindkumar@vmware.com, pv-drivers@vmware.com, lrg@ti.com,
+        juergh@gmail.com, vt8231@hiddenengine.co.uk,
+        tony.olech@elandigitalsystems.com, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, zbr@ioremap.net, m.hulsman@tudelft.nl,
+        r.marek@assembler.cz, khali@linux-fr.org,
+        lm-sensors@lm-sensors.org, pierre@ossman.eu, wim@iguana.be,
+        linux-watchdog@vger.kernel.org, zaga@fly.cc.fer.hr,
+        linux-scsi@vger.kernel.org, dh.herrmann@googlemail.com,
+        david@hardeman.nu, inaky.perez-gonzalez@intel.com,
+        linux-wimax@intel.com, wimax@linuxwimax.org, mitr@volny.cz,
+        acme@ghostprotocols.net, lrg@slimlogic.co.uk,
+        linux-input@vger.kernel.org, broonie@opensource.wolfsonmicro.com,
+        patches@opensource.wolfsonmicro.com, tj@kernel.org,
+        andrew.hendry@gmail.com, linux-x25@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, mjg@redhat.com,
+        platform-driver-x86@vger.kernel.org, tony.luck@intel.com,
+        bp@alien8.de, linux-edac@vger.kernel.org, mchehab@redhat.com,
+        jeremy@goop.org, virtualization@lists.linux-foundation.org,
+        stefano.stabellini@eu.citrix.com, ian.campbell@citrix.com,
+        netdev@vger.kernel.org, konrad.wilk@oracle.com,
+        xen-devel@lists.xensource.com, bpm@sgi.com, elder@kernel.org,
+        xfs@oss.sgi.com, anirudh@xilinx.com, John.Linn@xilinx.com,
+        grant.likely@secretlab.ca, jacmet@sunsite.dk
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello Dear
-My Name is Mr. Joyce Thomas. Contact me for more information on the
-transfer of ($7.9 million dollars) left by my late client from your
-Country. I want to present you as a business partner and next of kin
-of the fund. I will give you the details of this transaction, as soon
-as I hear from you. I need the information below:
-Full Name:
+--=20
+
+
+Attention Sir/Madam
+This is the United Nation (UN). We the United Nations (UN) Globally
+has approved (US$2.500,000)( two Million Five hundred thousand
+dollars) compensation as part of our responsibilities for humanitarian
+Aid for fighting against CoronaVirus and you are among the lucky ones.
+
+
+This compensation is for the most affected countries, communities and
+families across the global. Your funds were deposited with Bank in USA
+to transfer your funds to you via Internet Banking. You have to send
+your full details as state below:with this email Address
+  ( unitednnation0@gmail.com )
+Your full names:
 Address:
+Telephone:
 Occupation:
-Age:
-Personal Email:
-Personal Telephone:
-Best Regards,
-Mr.Joyce  Thomas
+
+
+
+Yours Sincerely
+Mr. Ant=C3=B3nio Guterres
+United Nations (UN).
