@@ -2,30 +2,30 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A01420814
-	for <lists+linux-watchdog@lfdr.de>; Mon,  4 Oct 2021 11:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA031420893
+	for <lists+linux-watchdog@lfdr.de>; Mon,  4 Oct 2021 11:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbhJDJSR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 4 Oct 2021 05:18:17 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:55108 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229716AbhJDJSQ (ORCPT
+        id S232351AbhJDJnp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 4 Oct 2021 05:43:45 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:54038 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231849AbhJDJno (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 4 Oct 2021 05:18:16 -0400
-X-UUID: 60e116a8f75a4354a23f68056b49f6b0-20211004
-X-UUID: 60e116a8f75a4354a23f68056b49f6b0-20211004
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        Mon, 4 Oct 2021 05:43:44 -0400
+X-UUID: 6150238aa31f415a94b0ee62d6008387-20211004
+X-UUID: 6150238aa31f415a94b0ee62d6008387-20211004
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <sam.shih@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1590306773; Mon, 04 Oct 2021 17:16:22 +0800
+        with ESMTP id 1366200985; Mon, 04 Oct 2021 17:41:50 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 4 Oct 2021 17:16:20 +0800
+ 15.0.1497.2; Mon, 4 Oct 2021 17:41:49 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 4 Oct 2021 17:16:20 +0800
+ Transport; Mon, 4 Oct 2021 17:41:48 +0800
 From:   Sam Shih <sam.shih@mediatek.com>
-To:     <matthias.bgg@gmail.com>
+To:     <robh@kernel.org>
 CC:     <Ryder.Lee@mediatek.com>, <devicetree@vger.kernel.org>,
         <enric.balletbo@collabora.com>, <fparent@baylibre.com>,
         <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>,
@@ -35,16 +35,17 @@ CC:     <Ryder.Lee@mediatek.com>, <devicetree@vger.kernel.org>,
         <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-serial@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux@roeck-us.net>, <mpm@selenic.com>, <mturquette@baylibre.com>,
-        <robh+dt@kernel.org>, <sboyd@kernel.org>, <sean.wang@kernel.org>,
-        <seiya.wang@mediatek.com>, <wim@linux-watchdog.org>,
-        Sam Shih <sam.shih@mediatek.com>
-Subject: [v4,9/9] arm64: dts: mediatek: add mt7986b support
-Date:   Mon, 4 Oct 2021 17:16:17 +0800
-Message-ID: <20211004091617.31436-1-sam.shih@mediatek.com>
+        <linux@roeck-us.net>, <matthias.bgg@gmail.com>, <mpm@selenic.com>,
+        <mturquette@baylibre.com>, <robh+dt@kernel.org>,
+        <sam.shih@mediatek.com>, <sboyd@kernel.org>,
+        <sean.wang@kernel.org>, <seiya.wang@mediatek.com>,
+        <wim@linux-watchdog.org>
+Subject: [v6,5/9] dt-bindings: pinctrl: update bindings for MT7986 SoC
+Date:   Mon, 4 Oct 2021 17:41:40 +0800
+Message-ID: <20211004094140.32014-1-sam.shih@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210924112701.18459-1-sam.shih@mediatek.com>
-References: <20210924112701.18459-1-sam.shih@mediatek.com>
+In-Reply-To: <1632745399.256353.3097151.nullmailer@robh.at.kernel.org>
+References: <1632745399.256353.3097151.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -52,309 +53,390 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add basic chip support for Mediatek mt7986b, include
-uart nodes with correct clocks, rng node with correct clock,
-and watchdog node and mt7986b pinctrl node.
-
-Add cpu node, timer node, gic node, psci and reserved-memory node
-for ARM Trusted Firmware,
-
-Add clock controller nodes, include 40M clock source, topckgen, infracfg,
-apmixedsys and ethernet subsystem.
+This updates bindings for MT7986 pinctrl driver. The
+difference of pinctrl between mt7986a and mt7986b is that pin-41 to pin-65
+do not exist on mt7986b
 
 Signed-off-by: Sam Shih <sam.shih@mediatek.com>
----
-v4: added missing gic register bases, and fixed range of GICR
-v3: used the stdout-path instead of console=ttyS0
-v2: modified clock and uart node due to clock driver updated
----
- arch/arm64/boot/dts/mediatek/Makefile        |   1 +
- arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts |  26 +++
- arch/arm64/boot/dts/mediatek/mt7986b.dtsi    | 230 +++++++++++++++++++
- 3 files changed, 257 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986b.dtsi
 
-diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index e6c3a73b9e4a..d555e43d1ccc 100644
---- a/arch/arm64/boot/dts/mediatek/Makefile
-+++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -8,6 +8,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-rfb.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986b-rfb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8167-pumpkin.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-elm.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8173-elm-hana.dtb
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+---
+v6 : fixed yamllint warnings/errors v2
+v5 : fixed yamllint warnings/errors v1
+v4 : used yaml format instead of txt format document
+v3 : make mt7986 pinctrl bindings as a separate file
+v2 : deleted the redundant description of mt7986a/mt7986b
+---
+ .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 361 ++++++++++++++++++
+ 1 file changed, 361 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
 new file mode 100644
-index 000000000000..95a202505bb2
+index 000000000000..cde842d093dc
 --- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (C) 2021 MediaTek Inc.
-+ * Author: Sam.Shih <sam.shih@mediatek.com>
-+ */
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+@@ -0,0 +1,361 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/mediatek,mt7986-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+/dts-v1/;
-+#include "mt7986b.dtsi"
++title: Mediatek MT7986 Pin Controller Device Tree Bindings
 +
-+/ {
-+	model = "MediaTek MT7986b RFB";
-+	compatible = "mediatek,mt7986b-rfb";
++maintainers:
++  - Sean Wang <sean.wang@kernel.org>
 +
-+	aliases {
-+		serial0 = &uart0;
-+	};
++description: |+
++  The MediaTek's MT7986 Pin controller is used to control SoC pins.
 +
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+		bootargs = "earlycon=uart8250,mmio32,0x11002000 swiotlb=512";
-+	};
-+};
++properties:
++  compatible:
++    enum:
++      - mediatek,mt7986a-pinctrl
++      - mediatek,mt7986b-pinctrl
 +
-+&uart0 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986b.dtsi b/arch/arm64/boot/dts/mediatek/mt7986b.dtsi
-new file mode 100644
-index 000000000000..06c3381a5170
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt7986b.dtsi
-@@ -0,0 +1,230 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (C) 2021 MediaTek Inc.
-+ * Author: Sam.Shih <sam.shih@mediatek.com>
-+ */
++  reg:
++    minItems: 8
++    maxItems: 8
 +
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/mt7986-clk.h>
++  reg-names:
++    items:
++      - const: gpio_base
++      - const: iocfg_rt_base
++      - const: iocfg_rb_base
++      - const: iocfg_lt_base
++      - const: iocfg_lb_base
++      - const: iocfg_tr_base
++      - const: iocfg_tl_base
++      - const: eint
 +
-+/ {
-+	compatible = "mediatek,mt7986b";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
++  gpio-controller: true
 +
-+	clk40m: oscillator@0 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <40000000>;
-+		clock-output-names = "clkxtal";
-+	};
++  "#gpio-cells":
++    const: 2
++    description: |
++      Number of cells in GPIO specifier. Since the generic GPIO
++      binding is used, the amount of cells must be specified as 2. See the below
++      mentioned gpio binding representation for description of particular cells.
 +
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			enable-method = "psci";
-+			reg = <0x0>;
-+			#cooling-cells = <2>;
-+		};
++  gpio-ranges:
++    minItems: 1
++    maxItems: 5
++    description: |
++      GPIO valid number range.
 +
-+		cpu1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			enable-method = "psci";
-+			reg = <0x1>;
-+			#cooling-cells = <2>;
-+		};
++  interrupt-controller: true
 +
-+		cpu2: cpu@2 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a53";
-+			enable-method = "psci";
-+			reg = <0x2>;
-+			#cooling-cells = <2>;
-+		};
++  interrupts:
++    maxItems: 1
 +
-+		cpu3: cpu@3 {
-+			device_type = "cpu";
-+			enable-method = "psci";
-+			compatible = "arm,cortex-a53";
-+			reg = <0x3>;
-+			#cooling-cells = <2>;
-+		};
-+	};
++  "#interrupt-cells":
++    const: 2
 +
-+	psci {
-+		compatible  = "arm,psci-0.2";
-+		method      = "smc";
-+	};
++required:
++  - compatible
++  - reg
++  - reg-names
++  - gpio-controller
++  - "#gpio-cells"
 +
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+		/* 192 KiB reserved for ARM Trusted Firmware (BL31) */
-+		secmon_reserved: secmon@43000000 {
-+			reg = <0 0x43000000 0 0x30000>;
-+			no-map;
-+		};
-+	};
++patternProperties:
++  '-[0-9]+$':
++    type: object
++    additionalProperties: false
 +
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupt-parent = <&gic>;
-+		clock-frequency = <13000000>;
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-+	};
++    patternProperties:
++      'mux':
++        type: object
++        additionalProperties: false
++        description: |
++          pinmux configuration nodes.
 +
-+	soc {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		compatible = "simple-bus";
-+		ranges;
++          Valid value	      function    pins (in pin#)
++          ---------------------------------------------------------------------
++          "watchdog"        "watchdog"  0
++          "wifi_led"        "led"       1, 2
++          "i2c"             "i2c"       3, 4
++          "uart1_0"         "uart"      7, 8, 9, 10
++          "pcie_clk"        "pcie"      9
++          "pcie_wake"       "pcie"      10
++          "spi1_0"          "spi"       11, 12, 13, 14
++          "pwm1_1"          "pwm"       20,
++          "pwm0"            "pwm"       21,
++          "pwm1_0"          "pwm"       22,
++          "snfi"            "flash"     23, 24, 25, 26, 27, 28
++          "spi1_2"          "spi"       29, 30, 31, 32
++          "emmc_45"         "emmc"      22, 23, 24, 25, 26, 27, 28, 29, 30,
++                                        31, 32
++          "spi1_1"          "spi"       23, 24, 25, 26
++          "uart1_2"         "uart"      29, 30, 31, 32
++          "uart1_1"         "uart"      23, 24, 25, 26
++          "uart2_0"         "uart"      29, 30, 31, 32
++          "spi0"            "spi"       33, 34, 35, 36
++          "spi0_wp_hold"    "spi"       37, 38
++          "uart1_3_rx_tx"   "uart"      35, 36
++          "uart1_3_cts_rts" "uart"      37, 38
++          "uart2_1"         "uart"      33, 34, 35, 36
++          "spi1_3"          "spi"       33, 34, 35, 36
++          "uart0"           "uart"      39, 40
++          "pcie_pereset"    "pcie"      41
++          "uart1"           "uart"      42, 43, 44, 45
++          "uart2"           "uart"      46, 47, 48, 49
++          "emmc_51"         "emmc"      50, 51, 52, 53, 54, 55, 56, 57, 57,
++                                        59, 60, 61
++          "pcm"             "audio"     62, 63, 64, 65
++          "i2s"             "audio"     62, 63, 64, 65
++          "switch_int"      "eth"       66
++          "mdc_mdio"        "eth"       67
 +
-+		gic: interrupt-controller@c000000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <3>;
-+			interrupt-parent = <&gic>;
-+			interrupt-controller;
-+			reg = <0 0x0c000000 0 0x40000>,  /* GICD */
-+			      <0 0x0c080000 0 0x80000>,  /* GICR */
-+			      <0 0x0c400000 0 0x2000>,   /* GICC */
-+			      <0 0x0c410000 0 0x1000>,   /* GICH */
-+			      <0 0x0c420000 0 0x2000>;   /* GICV */
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+		};
++        $ref: "/schemas/pinctrl/pinmux-node.yaml"
++        properties:
++          function:
++            description: |
++              A string containing the name of the function to mux to the group.
++              There is no "audio", "pcie" functions on mt7986b, you can only use
++              those functions on mt7986a.
++            enum: [audio, emmc, eth, i2c, led, flash, pcie, pwm, spi, uart,
++                   watchdog, wifi]
++          groups:
++            description: |
++              An array of strings. Each string contains the name of a group.
++              There is no "pcie_pereset", "uart1", "uart2" "emmc_51", "pcm",
++              and "i2s" groups on mt7986b, you can only use those groups on
++              mt7986a.
++        required:
++          - function
++          - groups
 +
-+		infracfg: infracfg@10001000 {
-+			compatible = "mediatek,mt7986-infracfg", "syscon";
-+			reg = <0 0x10001000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
++        allOf:
++          - if:
++              properties:
++                function:
++                  const: audio
++            then:
++              properties:
++                groups:
++                  enum: [pcm, i2s]
++          - if:
++              properties:
++                function:
++                  const: emmc
++            then:
++              properties:
++                groups:
++                  enum: [emmc, emmc_rst]
++          - if:
++              properties:
++                function:
++                  const: eth
++            then:
++              properties:
++                groups:
++                  enum: [switch_int, mdc_mdio]
++          - if:
++              properties:
++                function:
++                  const: i2c
++            then:
++              properties:
++                groups:
++                  enum: [i2c]
++          - if:
++              properties:
++                function:
++                  const: led
++            then:
++              properties:
++                groups:
++                  enum: [wifi_led]
++          - if:
++              properties:
++                function:
++                  const: flash
++            then:
++              properties:
++                groups:
++                  enum: [snfi]
++          - if:
++              properties:
++                function:
++                  const: pcie
++            then:
++              properties:
++                groups:
++                  enum: [pcie_clk, pcie_wake, pcie_pereset]
++          - if:
++              properties:
++                function:
++                  const: pwm
++            then:
++              properties:
++                groups:
++                  enum: [pwm0, pwm1_0, pwm1_1]
++          - if:
++              properties:
++                function:
++                  const: spi
++            then:
++              properties:
++                groups:
++                  enum: [spi0, spi0_wp_hold, spi1_0, spi1_1, spi1_2, spi1_3]
++          - if:
++              properties:
++                function:
++                  const: uart
++            then:
++              properties:
++                groups:
++                  enum: [uart1_0, uart1_1, uart1_2, uart1_3_rx_tx,
++                         uart1_3_cts_rts, uart2_0, uart2_1, uart0, uart1, uart2]
++          - if:
++              properties:
++                function:
++                  const: watchdog
++            then:
++              properties:
++                groups:
++                  enum: [watchdog]
++          - if:
++              properties:
++                function:
++                  const: wifi
++            then:
++              properties:
++                groups:
++                  enum: [wf_2g, wf_5g, wf_dbdc]
++      'conf':
++        type: object
++        additionalProperties: false
++        description: |
++          pinconf configuration nodes.
++        $ref: "/schemas/pinctrl/pincfg-node.yaml"
 +
-+		topckgen: topckgen@1001b000 {
-+			compatible = "mediatek,mt7986-topckgen", "syscon";
-+			reg = <0 0x1001B000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
++        properties:
++          pins:
++            description: |
++              An array of strings. Each string contains the name of a pin.
++              There is no PIN 41 to PIN 65 above on mt7686b, you can only use
++              those pins on mt7986a.
++            enum: [SYS_WATCHDOG, WF2G_LED, WF5G_LED, I2C_SCL, I2C_SDA, GPIO_0,
++                   GPIO_1, GPIO_2, GPIO_3, GPIO_4, GPIO_5, GPIO_6, GPIO_7,
++                   GPIO_8, GPIO_9, GPIO_10, GPIO_11, GPIO_12, GPIO_13, GPIO_14,
++                   GPIO_15, PWM0, PWM1, SPI0_CLK, SPI0_MOSI, SPI0_MISO, SPI0_CS,
++                   SPI0_HOLD, SPI0_WP, SPI1_CLK, SPI1_MOSI, SPI1_MISO, SPI1_CS,
++                   SPI2_CLK, SPI2_MOSI, SPI2_MISO, SPI2_CS, SPI2_HOLD, SPI2_WP,
++                   UART0_RXD, UART0_TXD, PCIE_PERESET_N, UART1_RXD, UART1_TXD,
++                   UART1_CTS, UART1_RTS, UART2_RXD, UART2_TXD, UART2_CTS,
++                   UART2_RTS, EMMC_DATA_0, EMMC_DATA_1, EMMC_DATA_2,
++                   EMMC_DATA_3, EMMC_DATA_4, EMMC_DATA_5, EMMC_DATA_6,
++                   EMMC_DATA_7, EMMC_CMD, EMMC_CK, EMMC_DSL, EMMC_RSTB, PCM_DTX,
++                   PCM_DRX, PCM_CLK, PCM_FS, MT7531_INT, SMI_MDC, SMI_MDIO,
++                   WF0_DIG_RESETB, WF0_CBA_RESETB, WF0_XO_REQ, WF0_TOP_CLK,
++                   WF0_TOP_DATA, WF0_HB1, WF0_HB2, WF0_HB3, WF0_HB4, WF0_HB0,
++                   WF0_HB0_B, WF0_HB5, WF0_HB6, WF0_HB7, WF0_HB8, WF0_HB9,
++                   WF0_HB10, WF1_DIG_RESETB, WF1_CBA_RESETB, WF1_XO_REQ,
++                   WF1_TOP_CLK, WF1_TOP_DATA, WF1_HB1, WF1_HB2, WF1_HB3,
++                   WF1_HB4, WF1_HB0, WF1_HB0_B, WF1_HB5, WF1_HB6, WF1_HB7,
++                   WF1_HB8]
 +
-+		watchdog: watchdog@1001c000 {
-+			compatible = "mediatek,mt7986-wdt",
-+				     "mediatek,mt6589-wdt";
-+			reg = <0 0x1001c000 0 0x1000>;
-+			interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>;
-+			#reset-cells = <1>;
-+			status = "disabled";
-+		};
++          bias-disable: true
 +
-+		apmixedsys: apmixedsys@1001e000 {
-+			compatible = "mediatek,mt7986-apmixedsys";
-+			reg = <0 0x1001E000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
++          bias-pull-up: true
 +
-+		pio: pinctrl@1001f000 {
-+			compatible = "mediatek,mt7986b-pinctrl";
-+			reg = <0 0x1001f000 0 0x1000>,
-+			      <0 0x11c30000 0 0x1000>,
-+			      <0 0x11c40000 0 0x1000>,
-+			      <0 0x11e20000 0 0x1000>,
-+			      <0 0x11e30000 0 0x1000>,
-+			      <0 0x11f00000 0 0x1000>,
-+			      <0 0x11f10000 0 0x1000>,
-+			      <0 0x1000b000 0 0x1000>;
-+			reg-names = "gpio_base", "iocfg_rt_base", "iocfg_rb_base",
-+				    "iocfg_lt_base", "iocfg_lb_base", "iocfg_tr_base",
-+				    "iocfg_tl_base", "eint";
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&pio 0 0 41>, <&pio 66 66 35>;
-+			interrupt-controller;
-+			interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-parent = <&gic>;
-+			#interrupt-cells = <2>;
-+		};
++          bias-pull-down: true
 +
-+		sgmiisys0: syscon@10060000 {
-+			compatible = "mediatek,mt7986-sgmiisys_0",
-+				     "syscon";
-+			reg = <0 0x10060000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
++          input-enable: true
 +
-+		sgmiisys1: syscon@10070000 {
-+			compatible = "mediatek,mt7986-sgmiisys_1",
-+				     "syscon";
-+			reg = <0 0x10070000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
++          input-disable: true
 +
-+		trng: trng@1020f000 {
-+			compatible = "mediatek,mt7986-rng",
-+				     "mediatek,mt7623-rng";
-+			reg = <0 0x1020f000 0 0x100>;
-+			clocks = <&infracfg CLK_INFRA_TRNG_CK>;
-+			clock-names = "rng";
-+			status = "disabled";
-+		};
++          output-enable: true
 +
-+		uart0: serial@11002000 {
-+			compatible = "mediatek,mt7986-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11002000 0 0x400>;
-+			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg CLK_INFRA_UART0_SEL>,
-+				 <&infracfg CLK_INFRA_UART0_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&topckgen CLK_TOP_UART_SEL>,
-+					  <&infracfg CLK_INFRA_UART0_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_XTAL>,
-+						 <&topckgen CLK_TOP_UART_SEL>;
-+			status = "disabled";
-+		};
++          output-low: true
 +
-+		uart1: serial@11003000 {
-+			compatible = "mediatek,mt7986-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11003000 0 0x400>;
-+			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg CLK_INFRA_UART1_SEL>,
-+				 <&infracfg CLK_INFRA_UART1_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&infracfg CLK_INFRA_UART1_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_F26M_SEL>;
-+			status = "disabled";
-+		};
++          output-high: true
 +
-+		uart2: serial@11004000 {
-+			compatible = "mediatek,mt7986-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11004000 0 0x400>;
-+			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg CLK_INFRA_UART2_SEL>,
-+				 <&infracfg CLK_INFRA_UART2_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&infracfg CLK_INFRA_UART2_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_F26M_SEL>;
-+			status = "disabled";
-+		};
++          input-schmitt-enable: true
 +
-+		ethsys: syscon@15000000 {
-+			 #address-cells = <1>;
-+			 #size-cells = <1>;
-+			 compatible = "mediatek,mt7986-ethsys",
-+				      "syscon";
-+			 reg = <0 0x15000000 0 0x1000>;
-+			 #clock-cells = <1>;
-+			 #reset-cells = <1>;
-+		};
++          input-schmitt-disable: true
 +
-+	};
++          drive-strength:
++            enum: [2, 4, 6, 8, 10, 12, 14, 16]
 +
-+};
++          mediatek,pull-up-adv:
++            description: |
++              Valid arguments for 'mediatek,pull-up-adv' are '0', '1', '2', '3'
++              Pull up setings for 2 pull resistors, R0 and R1. Valid arguments
++              are described as below:
++              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
++              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
++              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
++              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
++            $ref: /schemas/types.yaml#/definitions/uint32
++            enum: [0, 1, 2, 3]
++
++          mediatek,pull-down-adv:
++            description: |
++              Valid arguments for 'mediatek,pull-up-adv' are '0', '1', '2', '3'
++              Pull down setings for 2 pull resistors, R0 and R1. Valid arguments
++              are described as below:
++              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
++              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
++              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
++              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
++            $ref: /schemas/types.yaml#/definitions/uint32
++            enum: [0, 1, 2, 3]
++
++        required:
++          - pins
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++      pio: pinctrl@1001f000 {
++        compatible = "mediatek,mt7986a-pinctrl";
++        reg = <0 0x1001f000 0 0x1000>,
++              <0 0x11c30000 0 0x1000>,
++              <0 0x11c40000 0 0x1000>,
++              <0 0x11e20000 0 0x1000>,
++              <0 0x11e30000 0 0x1000>,
++              <0 0x11f00000 0 0x1000>,
++              <0 0x11f10000 0 0x1000>,
++              <0 0x1000b000 0 0x1000>;
++        reg-names = "gpio_base", "iocfg_rt_base", "iocfg_rb_base",
++              "iocfg_lt_base", "iocfg_lb_base", "iocfg_tr_base",
++              "iocfg_tl_base", "eint";
++        gpio-controller;
++        #gpio-cells = <2>;
++        gpio-ranges = <&pio 0 0 100>;
++        interrupt-controller;
++        interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-parent = <&gic>;
++        #interrupt-cells = <2>;
++
++        uart1_pins: uart1-pins-42-to-45 {
++          mux {
++            function = "uart";
++            groups = "uart1";
++          };
++        };
++
++        uart2_pins: uart1-pins-46-to-49 {
++          mux {
++            function = "uart";
++            groups = "uart2";
++          };
++        };
++
++      };
++    };
 -- 
 2.29.2
 
