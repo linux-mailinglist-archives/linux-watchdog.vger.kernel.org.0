@@ -2,152 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A0B426B91
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Oct 2021 15:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E89426C09
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Oct 2021 15:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbhJHNSn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 8 Oct 2021 09:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S234081AbhJHNzV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 8 Oct 2021 09:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbhJHNSn (ORCPT
+        with ESMTP id S232599AbhJHNzU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 8 Oct 2021 09:18:43 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED41C061570;
-        Fri,  8 Oct 2021 06:16:48 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id r18so29835032wrg.6;
-        Fri, 08 Oct 2021 06:16:47 -0700 (PDT)
+        Fri, 8 Oct 2021 09:55:20 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF714C061570;
+        Fri,  8 Oct 2021 06:53:24 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id m22so30224458wrb.0;
+        Fri, 08 Oct 2021 06:53:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Gr1byabWHn1PUa1m+Lt+dKzXId3ni3LSSa9lwDSa3gk=;
-        b=TJwvim7w+eQFFfurbsl40FGMPwvnfLNLF3mqkVbNUxpugKorDKYZpgJ6ppC/PTEfU/
-         zOILl/qFEGzOdn6zfkCqtCzngeViZPdhvYzMHbM3IFZjQGHrra/zDS/6TMIKgTnVc55t
-         FcMxubz12x29/ajr4yg/4IapyvyKUFNo3xqRhsRdQeIVc4OPAXyzrkZY81y6rOdHomht
-         hqzwPEcVHx/WmerpaSHDHB18z/kd2XNccqlNpJydYkZY9xgv9A3ahUCBrPFCZeng3Ptm
-         jP6ttiHbfEf7muJb0bTHpjXuPa4qjwlq/IFgZ8831A1pXDw+R+PUitOMme4fSBTH9oWk
-         WxPg==
+        bh=yYWsu0Rg4yRualNrYxMIo7dnaqfU/YPo4u7hxec75RQ=;
+        b=bbohXNY2pN0tG0VfoSJkDk8zsi8ByEGKv47t0+GqCwHguogMWEq0doeEkGAiHLue74
+         tzC3QRTIA9xm3y4nVI7dd05PRfn/yIDLwRTgiUoOH6BzZkknS0tAZpy9gypIagpgixoK
+         0jw3ZjfgZnlMoA7m3VVroeT/TyFmLDmwP7qB32TkscZoDHF5+tUc97n0B582epeuiHVA
+         XEkdmZHdrlEVSr9tym+Wl60MDNgwCWOGQLuFAD7q9V07eDrrdtaETK75mBUjkBvfL78/
+         n4No8br5zx7Wed0F30CPolSvsbqHq7Fc6UQ1F+Pp/FqnvTnAiiWCxJWEEb18deIuqviO
+         vRfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Gr1byabWHn1PUa1m+Lt+dKzXId3ni3LSSa9lwDSa3gk=;
-        b=iFs4jdEOVja953VOS/7c6Nmef6OKoxLGerjQlvVaYtTnnCbFxerO+qAedYx9EU/YZD
-         b2Y2fTlT/kvv+SVYlS+j1W92y6wup2HixbFe4BMuJ5nbNMUT6pLN5slTpUp1wds2FiEY
-         tMr4xRmVEEkSE/DyV5L9gBP8JnsRM0QNnJ952EC+HqwwOjcQFwXZoMwIEIpm/1bShNFk
-         2WtX23Sb28V1V39vyr9FEoV7F619dWR4Ybv/4jkTzYsmS2ODOEo0wNFsEoiu/ivgdziR
-         ECGeayWmzSVdX9EifSXPnKe0z8g2Co6KEkoWgbWvfUi2aXGE4l9oUAG5LV1Udqbq1WTR
-         YSrg==
-X-Gm-Message-State: AOAM530bkpknxGv0vP6iIos2jPh5VxIhkVMEki+ucWW1lj6EzutPD+53
-        An4blNrZbdu1GOr7t1CkhCE=
-X-Google-Smtp-Source: ABdhPJwchweLQBjxy6TkxOtLDsNz1AODqVJ3fWsbZRISUfWyoArhAgv4Go21sBR80xsRmqCQwndA7w==
-X-Received: by 2002:a5d:6245:: with SMTP id m5mr4099639wrv.148.1633699006563;
-        Fri, 08 Oct 2021 06:16:46 -0700 (PDT)
+        bh=yYWsu0Rg4yRualNrYxMIo7dnaqfU/YPo4u7hxec75RQ=;
+        b=wP3gN/+XWRsYbvnNMJsYtYfIvInb1ty+E70LgnRGe7VgMcYVPfCnEB2gsJ4x1+l3k9
+         BEQaAFSelT5mW+TDTm9q2M2glN6zEH/Vd/7uMmHPK5yBlzlsV4YB3KpkoMhEBtgc6vF6
+         wNcK8xnbRmOUnw7pTVUegmVjwZyfDhcqMJ0P3fztYV4LpiBbltgDmWV9TpGOyfYVCjOA
+         Sq1UkB+deen7n8KFAtfxrfmlXALjOZGch4EGdQVCtK56jIC0zRbq8LcZE1+HKPC7wGoi
+         pCkkgeiUkBcmmtUnVTNDUeogkFXNEzk+th5C9taqwegHt14IeC514gWr77GvsVCDKRaw
+         V0VQ==
+X-Gm-Message-State: AOAM5316C85u+dWnkqIhR0R9pnzXdZWhceBMwzwcAWdq/qneNx3Mc1bO
+        GQ/LZWJW58eChqcZHKnnYTA=
+X-Google-Smtp-Source: ABdhPJwCCsh7mGFTBgvB/ol1kIoTWolzftm8yGGomZgw7NW71Awlwc9f6CNm1UOrwC/9jfT/DR6yCQ==
+X-Received: by 2002:a1c:7c02:: with SMTP id x2mr3427289wmc.165.1633701203204;
+        Fri, 08 Oct 2021 06:53:23 -0700 (PDT)
 Received: from [192.168.2.177] ([206.204.146.29])
-        by smtp.gmail.com with ESMTPSA id g2sm2642909wrb.20.2021.10.08.06.16.44
+        by smtp.gmail.com with ESMTPSA id c7sm3794235wmq.13.2021.10.08.06.53.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Oct 2021 06:16:45 -0700 (PDT)
-Message-ID: <266143bd-6135-adf6-8a80-537f9d6ea3ff@gmail.com>
-Date:   Fri, 8 Oct 2021 15:16:43 +0200
+        Fri, 08 Oct 2021 06:53:19 -0700 (PDT)
+Message-ID: <bc29d5bc-9ce7-6147-a708-e6304249b600@gmail.com>
+Date:   Fri, 8 Oct 2021 15:53:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.2
-Subject: Re: [PATCH v4 0/7] Add support to the mmsys driver to be a reset
- controller
+Subject: Re: [v3,7/9] dt-bindings: arm64: dts: mediatek: Add mt7986 series
 Content-Language: en-US
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-mediatek@lists.infradead.org, eizan@chromium.org,
-        kernel@collabora.com, drinkcat@chromium.org,
-        jitao.shi@mediatek.com, chunkuang.hu@kernel.org,
-        hsinyi@chromium.org, Crystal Guo <crystal.guo@mediatek.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Fabien Parent <fparent@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org
-References: <20210930083150.3317003-1-enric.balletbo@collabora.com>
+To:     Sam Shih <sam.shih@mediatek.com>
+Cc:     Ryder.Lee@mediatek.com, devicetree@vger.kernel.org,
+        enric.balletbo@collabora.com, fparent@baylibre.com,
+        gregkh@linuxfoundation.org, herbert@gondor.apana.org.au,
+        hsinyi@chromium.org, john@phrozen.org, linus.walleij@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux@roeck-us.net, mpm@selenic.com, mturquette@baylibre.com,
+        robh+dt@kernel.org, sboyd@kernel.org, sean.wang@kernel.org,
+        seiya.wang@mediatek.com, wim@linux-watchdog.org
+References: <9552b0dc-337f-7edc-2997-50603dfe8bcd@gmail.com>
+ <20210924114046.26070-1-sam.shih@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20210930083150.3317003-1-enric.balletbo@collabora.com>
+In-Reply-To: <20210924114046.26070-1-sam.shih@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hi Sam,
 
+I'd advise to split this series in parts for:
+- basic device support via dts.
+- pinctrl driver + dts
+- clk driver + dts
 
-On 30/09/2021 10:31, Enric Balletbo i Serra wrote:
-> Dear all,
-> 
-> The following patchset is a reimplementation of the patch sent by Jitao
-> Shi [1] some time ago. As suggested by Chun-Kuang Hu, this time the
-> reset is done using the reset API, where the mmsys driver is the reset
-> controller and the mtk_dsi driver is the reset consumer.
-> 
-> Note that the first patch is kind of unrelated change, it's just a
-> cleanup but is needed if you want to apply all the following patches
-> cleanly.
-> 
-> This patchset is important in order to have the DSI panel working on some
-> kukui MT8183 Chromebooks (i.e Lenovo IdeaPad Duet). Without it, you just
-> get a black screen.
-> 
+I would also advise to not send new versions of patches as new threads and don't 
+respond in the same thread. At least for me that breaks my workflow as I use b4.
 
-Patch 1-5 pushed to v5.15-next/dts64
-Patch 6-7 pushed to v5.15-next/soc
-
-Thanks!
+Regards,
 Matthias
 
-> Best regards,
->    Enric
+
+On 24/09/2021 13:40, Sam Shih wrote:
+> MT7986 series is Mediatek's new 4-core SoC, which is mainly for
+> wifi-router application. The difference between mt7986a and mt7986b
+> is that some pins do not exist on mt7986b.
 > 
-> [1] https://lore.kernel.org/linux-arm-kernel/20210420132614.150242-4-jitao.shi@mediatek.com/
+> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 > 
+> ---
+> v3: changed 'MT7986' to 'MT7986 series' in the commit message
+> v2: added an Acked-by tag
+> ---
+>   Documentation/devicetree/bindings/arm/mediatek.yaml | 8 ++++++++
+>   1 file changed, 8 insertions(+)
 > 
-> Changes in v4:
-> - Remove unnused variable as pointed by Hsin-Yi
-> 
-> Changes in v3:
-> - Based on top of the patch that converts mmsys to schema
-> - Fix typo in the commit description
-> 
-> Changes in v2:
-> - Fix build test ERROR Reported-by: kernel test robot <lkp@intel.com>
-> - Added a new patch to describe the dsi reset optional property.
-> 
-> Enric Balletbo i Serra (7):
->    arm64: dts: mediatek: Move reset controller constants into common
->      location
->    dt-bindings: mediatek: Add #reset-cells to mmsys system controller
->    dt-bindings: display: mediatek: add dsi reset optional property
->    arm64: dts: mt8173: Add the mmsys reset bit to reset the dsi0
->    arm64: dts: mt8183: Add the mmsys reset bit to reset the dsi0
->    soc: mediatek: mmsys: Add reset controller support
->    drm/mediatek: mtk_dsi: Reset the dsi0 hardware
-> 
->   .../bindings/arm/mediatek/mediatek,mmsys.yaml |  4 ++
->   .../display/mediatek/mediatek,dsi.txt         |  6 ++
->   arch/arm64/boot/dts/mediatek/mt8173.dtsi      |  2 +
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  5 +-
->   drivers/gpu/drm/mediatek/mtk_dsi.c            |  5 +-
->   drivers/soc/mediatek/mtk-mmsys.c              | 68 +++++++++++++++++++
->   drivers/soc/mediatek/mtk-mmsys.h              |  2 +
->   drivers/watchdog/mtk_wdt.c                    |  6 +-
->   .../mt2712-resets.h                           |  0
->   include/dt-bindings/reset/mt8173-resets.h     |  2 +
->   .../mt8183-resets.h                           |  3 +
->   .../mt8192-resets.h                           |  0
->   12 files changed, 97 insertions(+), 6 deletions(-)
->   rename include/dt-bindings/{reset-controller => reset}/mt2712-resets.h (100%)
->   rename include/dt-bindings/{reset-controller => reset}/mt8183-resets.h (98%)
->   rename include/dt-bindings/{reset-controller => reset}/mt8192-resets.h (100%)
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> index 80a05f6fee85..a9a778269684 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> @@ -76,6 +76,14 @@ properties:
+>             - enum:
+>                 - mediatek,mt7629-rfb
+>             - const: mediatek,mt7629
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7986a-rfb
+> +          - const: mediatek,mt7986a
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7986b-rfb
+> +          - const: mediatek,mt7986b
+>         - items:
+>             - enum:
+>                 - mediatek,mt8127-moose
 > 
