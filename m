@@ -2,81 +2,105 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C73C428B75
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Oct 2021 12:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B2C429540
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Oct 2021 19:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236174AbhJKK6Z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 11 Oct 2021 06:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236162AbhJKK6U (ORCPT
+        id S233463AbhJKRJE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 11 Oct 2021 13:09:04 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58126 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233520AbhJKRJD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 11 Oct 2021 06:58:20 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFCCC0613DF
-        for <linux-watchdog@vger.kernel.org>; Mon, 11 Oct 2021 03:56:12 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id i12so42137271wrb.7
-        for <linux-watchdog@vger.kernel.org>; Mon, 11 Oct 2021 03:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
-        b=km/+rwE10MGCG3K0BNjxD+A2l394aMlSCDFqBEiDyrs45mObKwVEkOccUp5BPFftJU
-         5cB06txNzUPVxcrxQnkqMq9zaxAqQeR9eoa3+7DqnAg3rX7wMze/dloERdrhczopiGET
-         PvxtLks7kWCMKTs5Q8Mmq12LwUKUT5cPH1x1mszpEwl0kuXWAYNTl0kX4+cL3oWAj8+a
-         6an2wLimFEmscCT9jtQf7FGYav0q/UTa6GRCeFihab7mYp8KZTVzyAi9ONxHllw1wfay
-         OSS3CoE7RnQ2PFKTnc/5Yya8gHnSshWvMzermo1msudbBS7MTk09iY8fA6ci8A/KmFSk
-         +E4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
-        b=JuFXNs01m3nnT4AolS/TOUnFq0X+3PWYcxoKjqwKaJ62cjCOyCab2jYinfTM9+6zfF
-         l/hvsIk75zresKmuknt9AMZo7fZtMjNA/6RfTVBd6dB9wiU5xjWDNkrirdTP6E5rZl95
-         nNHLkERlaEjzabtGZxd7rsrEcLqEqBo3H7Y0kbBPWhRZZLXqM2slAd86pFCvbY9l8HIV
-         6mFL6dlMOePiQfiM0VdSk1LJ0GHNZqqTUN/ZiBIcKjneYZTCRWimqwd73ZgT0tQ4iLDy
-         79XWiB7rXQmMtbv0dgNYGmQElCSnRVNvhjppwbgXBjN1glK+hzJdtr4CXcg5Gel6CiIL
-         WFaQ==
-X-Gm-Message-State: AOAM530uJ/Bv5E3ekV8Xlxet53bOMHs3H5fhiCe3mwjyDMBkHQwbGJP9
-        vGlvE/Kaw0CPmx4r6busyMMJogWDFbgDyzNuY4G2xnZOPZ/0xQ==
-X-Google-Smtp-Source: ABdhPJxWYMUVxuj7Tly9azrkWxEMXzTPZAklmoVIH4V2ykknMMiBN9imOFz2zTqxux/zk/7pzvFSRlX+C6mfjc7ADy4=
-X-Received: by 2002:adf:8b9a:: with SMTP id o26mr24377548wra.109.1633949760323;
- Mon, 11 Oct 2021 03:56:00 -0700 (PDT)
+        Mon, 11 Oct 2021 13:09:03 -0400
+Received: from [77.244.183.192] (port=63592 helo=melee.dev.aim)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mZxfB-00DXft-T2; Mon, 11 Oct 2021 17:56:29 +0200
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: [PATCH 0/8] Add MAX77714 PMIC minimal driver (RTC and watchdog only)
+Date:   Mon, 11 Oct 2021 17:56:07 +0200
+Message-Id: <20211011155615.257529-1-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:adf:dd8c:0:0:0:0:0 with HTTP; Mon, 11 Oct 2021 03:55:59
- -0700 (PDT)
-Reply-To: ramcharan9910@outlook.com
-From:   "Cr.David Ramcharan" <convy0101@gmail.com>
-Date:   Mon, 11 Oct 2021 03:55:59 -0700
-Message-ID: <CADDRs95718H=K3tUjphEHH_C96xYhoJw7jeCMpt_FfZZjhEXrA@mail.gmail.com>
-Subject: Thank You
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Please I am writing to notify you again on my intention to list your
-name as a beneficiary to the total sum of GBP6.350 million (Six
-million, Three hundred and fifty thousand British Pounds Sterlings) in
-the intent of the deceased (name now withheld since this is my second
-letter to you).
+Hi,
 
-I contacted you because you bear the surname identity and therefore
-can present you as the beneficiary to inherit the account proceeds of
-the deceased since there is no written "WILL" or trace to the deceased
-family relatives. My aim is to present you to my Bank Authorities as
-the Next of Kin to our deceased client. I will guide you all through
-the Claim procedure by providing all relevant Information and guiding
-you in your decisions and response to the Bank Management. All the
-papers will be processed after your acceptance.
+this series adds minimal drivers for the Maxim Semiconductor MAX77714
+(https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+Only RTC and watchdog are implemented by these patches.
 
-In your acceptance of this deal, I request that you kindly forward to
-me your letter of acceptance; your current telephone and fax numbers
-,age, occupational status and a forwarding address to enable me submit
-to the Bank Management the details as the Next of Kin to their
-deceased customer. Reply strictly through: ramcharancrdavid@gmail.com
+Note! Something seems wrong in the interrupt management code. Due to the
+fact that I'm not using interrupts on my hardware and since this is my
+first addition of an MFD driver, I was unable to understand what is wrong
+after studying the code for other MFD drivers. More details in reply to
+patch 8. Advice would be greatly appreciated on this topic.
 
-Yours faithfully,
-Cr.David Ramcharan
+Except for that, all implemented functionality is tested and working: RTC
+read/write, watchdog start/stop/ping/set_timeout.
+
+The first 4 patches are trivial cleanups to the max77686 drivers and can
+probably be applied easily.
+
+Patches 5-8 add: dt bindings, mfd driver, watchdog driver and rtc driver.
+
+Luca
+
+Luca Ceresoli (8):
+  mfd: max77686: Correct tab-based alignment of register addresses
+  rtc: max77686: convert comments to kernel-doc format
+  rtc: max77686: rename day-of-month defines
+  rtc: max77686: remove useless variable
+  dt-bindings: mfd: add Maxim MAX77714 PMIC
+  mfd: max77714: Add driver for Maxim MAX77714 PMIC
+  watchdog: max77714: add driver for the watchdog in the MAX77714 PMIC
+  rtc: max77686: add MAX77714 support
+
+ .../bindings/mfd/maxim,max77714.yaml          |  58 ++++++
+ MAINTAINERS                                   |   8 +
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77714.c                        | 151 ++++++++++++++++
+ drivers/rtc/Kconfig                           |   2 +-
+ drivers/rtc/rtc-max77686.c                    |  72 +++++---
+ drivers/watchdog/Kconfig                      |   9 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/max77714_wdt.c               | 171 ++++++++++++++++++
+ include/linux/mfd/max77686-private.h          |  28 +--
+ include/linux/mfd/max77714.h                  |  68 +++++++
+ 12 files changed, 541 insertions(+), 42 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 drivers/watchdog/max77714_wdt.c
+ create mode 100644 include/linux/mfd/max77714.h
+
+-- 
+2.25.1
+
