@@ -2,125 +2,180 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1134C429FF4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Oct 2021 10:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E20D42A21F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Oct 2021 12:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235109AbhJLIeu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 12 Oct 2021 04:34:50 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:40120
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235087AbhJLIet (ORCPT
+        id S235937AbhJLKbi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 12 Oct 2021 06:31:38 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:45944 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235153AbhJLKbh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 12 Oct 2021 04:34:49 -0400
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A0DD240010
-        for <linux-watchdog@vger.kernel.org>; Tue, 12 Oct 2021 08:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1634027567;
-        bh=rxpJUqkEVuFsAxhh0zAsqbW2aumtYMUwejgjgmIhak4=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=uoI55WidR1GHHfUqTl2VIUbfiKyWRpWVDsZWROzMsJk7hwsPAYccQw1TX+yk9wKEl
-         RQJzZ4Se5nO0fO3jPPkIAVpZbPaglFBRiIY8AKMZhXijSG+EAWNNPRvxa24WHO0FUD
-         nUEEKnGrygeTPDzWek0yMOKkPCl4DKQav6OKe8zKDruuK5QhTmapYY4/VZfnwzs3yB
-         2qlz6w2GGML4gDrThupZBXRChxBvpcRSrreaVeVAh7CeUN6LrcVXxWKKwoBBSSCT6k
-         EpIE+RUoMrlFDYpJh/vK/FnW0X/360SGkFEtIoi2ytClHez8aE4hqdovamJIyqp0Z4
-         GJXD12/tLDKXQ==
-Received: by mail-lf1-f72.google.com with SMTP id br42-20020a056512402a00b003fd94a74905so3079248lfb.7
-        for <linux-watchdog@vger.kernel.org>; Tue, 12 Oct 2021 01:32:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rxpJUqkEVuFsAxhh0zAsqbW2aumtYMUwejgjgmIhak4=;
-        b=yBkLx/W5YNajVWC0re6KJOfmLoFhQJDn/DYqT4ykUm6g8z7o/pnayHBQBHZfxZTxAB
-         bP1RapD1TuC/99BXzBWGndmSMDT1qjZbKVxRajWRMUgz3rThTvBPxWhA4vjPm47dbbz2
-         IIcnD0+Ue3uHtJru0kLmJismqTNO/c4kbMkJy9G4uAerPz6cvraPSiJ5YqolhWUIM7SJ
-         SjwQTrghAf3/hzSC21cZvLI4ZxnIN9HlJoE5h2xU7vJUfptpenZ1dzj6WUyu0OolkJGC
-         dpd9R9/iHSlF7MOtG3C3Q99VHsnHv1e9favQZZqTvFYbv2DVRcDhAm143T+lpKzW2sad
-         uo6A==
-X-Gm-Message-State: AOAM532dHJoaP6R8KUAGHAYb2Uq+lhV0feLSs9Mm1t87W4GZuc1eKCSR
-        8ib6LoSg2CkeKjb3bL7xCtoJ205rCFRqGtW0dpN0WGoIq5EdBHAWorDiS74KKb+HgbToE3RbI9u
-        Bmt4WYKdo6wyz2/OGG3zjpkpbatQh2IMrgt77ceY7ScoL
-X-Received: by 2002:a2e:bf28:: with SMTP id c40mr28374549ljr.127.1634027566893;
-        Tue, 12 Oct 2021 01:32:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyJx050qTkZ1ZsS32VRk99r1cu/L1Up0p9CveWPlBdkJAuC2Wh/kH0zOSMzK0MEQG0M19ACzw==
-X-Received: by 2002:a2e:bf28:: with SMTP id c40mr28374534ljr.127.1634027566708;
-        Tue, 12 Oct 2021 01:32:46 -0700 (PDT)
-Received: from [192.168.0.20] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p18sm965940lfc.6.2021.10.12.01.32.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Oct 2021 01:32:46 -0700 (PDT)
-Subject: Re: [PATCH 6/8] mfd: max77714: Add driver for Maxim MAX77714 PMIC
-To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-References: <20211011155615.257529-1-luca@lucaceresoli.net>
- <20211011155615.257529-7-luca@lucaceresoli.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <b2355acf-94a5-1acf-122b-d661c6d9bb1b@canonical.com>
-Date:   Tue, 12 Oct 2021 10:32:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 12 Oct 2021 06:31:37 -0400
+X-UUID: 4408c824a8f947aaa53b05f088e8147e-20211012
+X-UUID: 4408c824a8f947aaa53b05f088e8147e-20211012
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <sam.shih@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 869037599; Tue, 12 Oct 2021 18:29:30 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 12 Oct 2021 18:29:29 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 12 Oct 2021 18:29:28 +0800
+Message-ID: <315d7823aa108c909a3d36464fe54763b76ab2f4.camel@mediatek.com>
+Subject: Re: [v3,7/9] dt-bindings: arm64: dts: mediatek: Add mt7986 series
+From:   Sam Shih <sam.shih@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <Ryder.Lee@mediatek.com>, <devicetree@vger.kernel.org>,
+        <enric.balletbo@collabora.com>, <fparent@baylibre.com>,
+        <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>,
+        <hsinyi@chromium.org>, <john@phrozen.org>,
+        <linus.walleij@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux@roeck-us.net>, <mpm@selenic.com>, <mturquette@baylibre.com>,
+        <robh+dt@kernel.org>, <sboyd@kernel.org>, <sean.wang@kernel.org>,
+        <seiya.wang@mediatek.com>, <wim@linux-watchdog.org>
+Date:   Tue, 12 Oct 2021 18:29:28 +0800
+In-Reply-To: <bc29d5bc-9ce7-6147-a708-e6304249b600@gmail.com>
+References: <9552b0dc-337f-7edc-2997-50603dfe8bcd@gmail.com>
+         <20210924114046.26070-1-sam.shih@mediatek.com>
+         <bc29d5bc-9ce7-6147-a708-e6304249b600@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <20211011155615.257529-7-luca@lucaceresoli.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/10/2021 17:56, Luca Ceresoli wrote:
-> Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
-> watchdog only.
+Hi
+
+On Fri, 2021-10-08 at 15:53 +0200, Matthias Brugger wrote:
+> Hi Sam,
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  MAINTAINERS                  |   2 +
->  drivers/mfd/Kconfig          |  14 ++++
->  drivers/mfd/Makefile         |   1 +
->  drivers/mfd/max77714.c       | 151 +++++++++++++++++++++++++++++++++++
->  include/linux/mfd/max77714.h |  68 ++++++++++++++++
->  5 files changed, 236 insertions(+)
->  create mode 100644 drivers/mfd/max77714.c
->  create mode 100644 include/linux/mfd/max77714.h
+> I'd advise to split this series in parts for:
+> - basic device support via dts.
+> - pinctrl driver + dts
+> - clk driver + dts
+
+Okay, I will split the patches that are still under review into the
+above patch series.
+
+But I have a dumb question, currently, we have some patches that have
+been assigned version numbers.
+If I want to seprate original patch series, and resend 3 new patch
+series (basic / pinctrl / clock) according to your comment, if I want
+to keep the preview change log, tags in the patch set: 
+
+like:
+---
+v3: changed 'MT7986' to 'MT7986 series' in the commit message
+v2: added an Acked-by tag
+---
+
+Which version number should I use for these new patch series ?
+
+Does the version number in corver-letter and the version number in each
+patch need to be the same in the entire patch series ?
+
+// (Original patch series/thread, version number is v3)
+[PATCH v3 0/3] Add basic SoC support for mediatek mt7986
+  [PATCH v3 1/3] dt-bindings: arm64: dts: mediatek: Add mt7986 series
+  // (the version number has been updated to v5 previously)
+  // (basic part only, not include pinctrl and clock nodes)
+  [PATCH v5 2/3] arm64: dts: mediatek: add mt7986a support
+  [PATCH v5 3/3] arm64: dts: mediatek: add mt7986b support
+
+// (New clock driver patch series)
+[PATCH 0/3] Add clock driver support for mediatek mt7986
+  [PATCH v3,1/3] dt-bindings: clock: mediatek: document clk bindings   
+for mediatek mt7986 SoC
+  // (the version number has been updated to v3 previously)
+  [PATCH v3 2/3] clk: mediatek: add mt7986 clock IDs
+  [PATCH v2 3/3] clk: mediatek: add mt7986 clock support
+
+// (New pinctrl driver patch series)
+[PATCH 0/4] Add pinctrl driver support for mediatek mt7986
+  // (the version number has been updated to v6 previously)
+  [PATCH v6 1/4] dt-bindings: pinctrl: update bindings for MT7986 SoC
+  // (the version number has been updated to v2 previously)
+  [PATCH v2 2/4] pinctrl: mediatek: add support for MT7986 SoC
+  [PATCH 3/4] arm64: dts: mediatek: add mt7986a pinctrl support
+  [PATCH 3/4] arm64: dts: mediatek: add mt7986b pinctrl support
+
 > 
+> I would also advise to not send new versions of patches as new
+> threads and don't 
+> respond in the same thread. At least for me that breaks my workflow
+> as I use b4.
 
-(...)
+If I don't respond to the next patch set in the same thread, should I
+create an entire new patch series ?
 
-> +
-> +static const struct of_device_id max77714_dt_match[] = {
-> +	{ .compatible = "maxim,max77714" },
-> +	{},
-> +};
+For example, if I want to update PATCH 2/3 in the bellows patch series,
+and my PATCH 1/3 has been accepted by reviewer previously
 
-When converting to module - don't forget the MODULE_DEVICE_TABLE
+[PATCH v2 0/3] Add basic SoC support for mediatek mt7986
+  [PATCH v2 1/3] ...   (patch set v1, applied by matainer)
+  [PATCH v2 2/3] ...   (patch set v2, need to be upgrade to v3)
+  [PATCH v2 3/3] ...   (patch set v1, waiting for review)
 
-> +
-> +static struct i2c_driver max77714_driver = {
-> +	.driver = {
-> +		.name = "max77714",
-> +		.of_match_table = of_match_ptr(max77714_dt_match),
+Is this correct to send patch mail to maintaiers for the above
+situation ?
 
-Kbuild robot pointed it out - of_matc_ptr should not be needed, even for
-compile testing without OF.
+[PATCH v3 0/2] Add basic SoC support for mediatek mt7986
+  [PATCH v3 1/2] ...   (patch set v3)
+  [PATCH v3 2/2] ...   (still patch set v1, waiting for review)
 
-> +	},
-> +	.probe_new = max77714_probe,
-> +};
 
-Best regards,
-Krzysztof
+> 
+> Regards,
+> Matthias
+> 
+> 
+> On 24/09/2021 13:40, Sam Shih wrote:
+> > MT7986 series is Mediatek's new 4-core SoC, which is mainly for
+> > wifi-router application. The difference between mt7986a and mt7986b
+> > is that some pins do not exist on mt7986b.
+> > 
+> > Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+> > Acked-by: Rob Herring <robh@kernel.org>
+> > 
+> > ---
+> > v3: changed 'MT7986' to 'MT7986 series' in the commit message
+> > v2: added an Acked-by tag
+> > ---
+> >   Documentation/devicetree/bindings/arm/mediatek.yaml | 8 ++++++++
+> >   1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml
+> > b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> > index 80a05f6fee85..a9a778269684 100644
+> > --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> > @@ -76,6 +76,14 @@ properties:
+> >             - enum:
+> >                 - mediatek,mt7629-rfb
+> >             - const: mediatek,mt7629
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt7986a-rfb
+> > +          - const: mediatek,mt7986a
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt7986b-rfb
+> > +          - const: mediatek,mt7986b
+> >         - items:
+> >             - enum:
+> >                 - mediatek,mt8127-moose
+> > 
+
+Thanks,
+Sam
+
