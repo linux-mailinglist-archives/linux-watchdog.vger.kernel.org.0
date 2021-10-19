@@ -2,84 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B8C4337B8
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Oct 2021 15:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300F7433968
+	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Oct 2021 16:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235741AbhJSNug (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 19 Oct 2021 09:50:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47162 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235774AbhJSNuf (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 19 Oct 2021 09:50:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E70560724;
-        Tue, 19 Oct 2021 13:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634651303;
-        bh=XMC/wPCLR3CBhhlT5pdzczydUVy9/N9xDjzMYHJpisA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XVz3/x1A/lWTu+niZXy+0StJv8L0IQUVZCiEkvfOa2MSgPYviTFsMQRTwZ3RVMjAP
-         DzH/cm9o/LLbuqUW6I9Le6IwMuAXwMhqLFqjhJCnSHqXs+ypzZZwxBLjSJ0Ll2E62x
-         o8rufTm7qtEo9zHjmTQQ0NtwVzZht+5ULI1kM9DQVVME+xBOISQk10mcnTp6u7yxgj
-         dyaV2siNXZ1TUw6pCpxOAdRhmEyo+7KjmHmTk/NR/46CZrXDS1YWGb4sj5ZH41yB2x
-         kkUdq6HwbVs+sxWqgsUvVOCoP/4u8QqgRd0Vg0A3iNMFXv/claKAiPQpQTGq4xQDJM
-         76mZsOYYP/Jpg==
-Received: by mail-ed1-f46.google.com with SMTP id w19so13222362edd.2;
-        Tue, 19 Oct 2021 06:48:23 -0700 (PDT)
-X-Gm-Message-State: AOAM531Rx4oghoBppGP3mW3OpOcqtQD7QIqZB9WvXAEJmSIDQRvVkau4
-        e6D+6hNG5xIcIAOyPFaq4jiTZIbXi0DTdavz8g==
-X-Google-Smtp-Source: ABdhPJyAfrYlSPnzjG28JymfwvH0BP3fn74QUTfI0oe+sTUWy23ijNdMN4gs6ujRiJQN0RszPk5QghJDBRsUY0PgyKY=
-X-Received: by 2002:a05:6402:1778:: with SMTP id da24mr53073940edb.318.1634651259310;
- Tue, 19 Oct 2021 06:47:39 -0700 (PDT)
+        id S229702AbhJSPBt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 19 Oct 2021 11:01:49 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:59832 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229641AbhJSPBs (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 19 Oct 2021 11:01:48 -0400
+Received: from [77.244.183.192] (port=62116 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mcqaT-00D5qd-Mz; Tue, 19 Oct 2021 16:59:33 +0200
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v2 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog only)
+Date:   Tue, 19 Oct 2021 16:59:10 +0200
+Message-Id: <20211019145919.7327-1-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211018101608.3818840-1-tzungbi@google.com>
-In-Reply-To: <20211018101608.3818840-1-tzungbi@google.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 19 Oct 2021 08:47:28 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK9UQ9K+GseF5QtiPW_sHMiupq1HAwDArN6P+H8iBwJ-Q@mail.gmail.com>
-Message-ID: <CAL_JsqK9UQ9K+GseF5QtiPW_sHMiupq1HAwDArN6P+H8iBwJ-Q@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: dt-bindings: mediatek: rename reset controller
- headers in DT example
-To:     Tzung-Bi Shih <tzungbi@google.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        devicetree@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 5:16 AM Tzung-Bi Shih <tzungbi@google.com> wrote:
->
-> Commit f07c776f6d7e ("arm64: dts: mediatek: Move reset controller
-> constants into common location") moves the reset controller headers.
-> However, it forgot to rename the DT example in mt8192-afe-pcm.yaml.
->
-> Renames the DT example to pass dt_binding_check.
->
-> Fixes: f07c776f6d7e ("arm64: dts: mediatek: Move reset controller constants into common location")
-> Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
-> ---
-> The patch bases on next-20211018.
->
-> In Mark's tree[1], the commit f07c776f6d7e hasn't shown up.
-> In Matthias's tree[2], mt8192-afe-pcm.yaml hasn't applied.
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git/
-> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/
->
-> Also, I am not sure if the commit hash "f07c776f6d7e" would change
-> or not after it applies to mainline.
->
->  Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-Not great as things will break again in the merge window temporarily.
-You could just not use the 1 reset define in the example and avoid all
-that, but this is fine:
+this series adds minimal drivers for the Maxim Semiconductor MAX77714
+(https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+Only RTC and watchdog are implemented by these patches.
 
-Acked-by: Rob Herring <robh@kernel.org>
+All implemented functionality is tested and working: RTC read/write,
+watchdog start/stop/ping/set_timeout.
+
+Patches 1-4 + 7 are trivial cleanups to the max77686 drivers and can
+probably be applied easily.
+
+Patches 5, 6, 8 and 9 add: dt bindings, mfd driver, watchdog driver and rtc
+driver.
+
+Changes in v2:
+ - fixed all issues reported on v1 patches
+ - added patch 7 ("watchdog: Kconfig: fix help text indentation")
+ - additional minor improvements
+
+Luca
+
+Luca Ceresoli (9):
+  mfd: max77686: Correct tab-based alignment of register addresses
+  rtc: max77686: convert comments to kernel-doc format
+  rtc: max77686: rename day-of-month defines
+  rtc: max77686: remove unused code to read in 12-hour mode
+  dt-bindings: mfd: add Maxim MAX77714 PMIC
+  mfd: max77714: Add driver for Maxim MAX77714 PMIC
+  watchdog: Kconfig: fix help text indentation
+  watchdog: max77714: add driver for the watchdog in the MAX77714 PMIC
+  rtc: max77686: add MAX77714 support
+
+ .../bindings/mfd/maxim,max77714.yaml          |  58 ++++++
+ MAINTAINERS                                   |   8 +
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77686.c                        |   2 +-
+ drivers/mfd/max77714.c                        | 165 ++++++++++++++++
+ drivers/rtc/Kconfig                           |   2 +-
+ drivers/rtc/rtc-max77686.c                    |  75 +++++---
+ drivers/watchdog/Kconfig                      |  57 +++---
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/max77714_wdt.c               | 179 ++++++++++++++++++
+ include/linux/mfd/max77686-private.h          |  28 +--
+ include/linux/mfd/max77714.h                  |  60 ++++++
+ 13 files changed, 580 insertions(+), 70 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 drivers/watchdog/max77714_wdt.c
+ create mode 100644 include/linux/mfd/max77714.h
+
+-- 
+2.25.1
+
