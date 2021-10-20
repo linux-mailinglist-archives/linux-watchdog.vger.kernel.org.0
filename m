@@ -2,1485 +2,937 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8701434485
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Oct 2021 07:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFDB434580
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Oct 2021 08:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbhJTFLm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Oct 2021 01:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbhJTFLl (ORCPT
+        id S230020AbhJTGxV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 20 Oct 2021 02:53:21 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:46114 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229591AbhJTGxQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Oct 2021 01:11:41 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E417C06161C;
-        Tue, 19 Oct 2021 22:09:28 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id l16-20020a9d6a90000000b0054e7ab56f27so6821535otq.12;
-        Tue, 19 Oct 2021 22:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZYFDxXyB+iDRIc7daewSGkmOFvkfKRcOQaO+hoKFVEU=;
-        b=TokxIlSFaWT8avrNOpGNR/PIKsDE3Jcqir4M5zwwBngoBaAWr9Z8ImRwSTTLcwo0xd
-         mFw8SC0Vdm01GNkvvEOaQzl5FAXE3uN6hAMsGSXOZ3LULUrSktp81f9lsXG4cdOmFwQi
-         p1oqDYvD+TykQgv6khdrEW0R1vNua8t6MAeyXWB2hoYcC5KHQ/Db7SfVCA3edwhKJFA7
-         xTD3vkHP8wzEYT9MylFfYCgAT6fnmVmSgrY//+DnaYdeQzJ53iA7xfLq/8fi37nQCp7k
-         zcdyCWCdDYZ0N4cscyTSr5g1qmt1TCh2h4uY+2LY4rQkZedeZPsz7nbkNfj4qKV3mo3w
-         wXhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=ZYFDxXyB+iDRIc7daewSGkmOFvkfKRcOQaO+hoKFVEU=;
-        b=Il2uxRL348kRkh4niEJeCKTG5Kdcjjn6CQgh635TcgFb0i2fNdtnLsdaXoELJFbzJf
-         4VbCxGaNz24e1f1ZR3Va9l799amSWjU8LkqLwYVTYTh1xUsHVDl20W/1LnRqgNUbGZhs
-         xfZgCal/GrlZGcR16zFksmHOauoIS2dxGH1yYevlPhpdgGqaL2nJBO7G+diRDASZ3VV1
-         ZctkwuooeK3rXf/4c+2mm9mwuds7E57kzgwDgDMRAPCmf5MjZs7NgCCNeCS6WkpZ1nA3
-         ly4aTRtNBhyJOl386xoBrT8okPTaMN1CfmmsiQaBXSMrKsJlEbHRQkCwx72NFjuRPz8e
-         cmWA==
-X-Gm-Message-State: AOAM532vx+4TdltUSXCb1GeW21Csn6IeZrUngCo5FwbrdOV9jFZU+ONH
-        3MHQGquPPxiZKOC78to4Ei7zrYS+j2c=
-X-Google-Smtp-Source: ABdhPJy5jAJko2+wBPCSx+EyWC+Fi57hOD55cxcgufcUHRUelrmCx3kHtzvKtOP11AhEAUPoA3VQEg==
-X-Received: by 2002:a9d:72d8:: with SMTP id d24mr8771583otk.149.1634706567312;
-        Tue, 19 Oct 2021 22:09:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o80sm265086ota.68.2021.10.19.22.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Oct 2021 22:09:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 19 Oct 2021 22:09:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Srinivas Neeli <sneeli@xilinx.com>
-Cc:     Shubhrajyoti Datta <shubhraj@xilinx.com>,
-        Srinivas Goud <sgoud@xilinx.com>,
-        Michal Simek <michals@xilinx.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>
-Subject: Re: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal Window watchdog
- mode
-Message-ID: <20211020050924.GA844012@roeck-us.net>
-References: <20210527095709.12841-1-srinivas.neeli@xilinx.com>
- <20210527095709.12841-3-srinivas.neeli@xilinx.com>
- <fb83065e-7870-c830-7dde-efb3af8cc25c@roeck-us.net>
- <DM6PR02MB538635505ABE30C42100E059AF369@DM6PR02MB5386.namprd02.prod.outlook.com>
- <DM6PR02MB5386C805459902F9C28391AAAF139@DM6PR02MB5386.namprd02.prod.outlook.com>
- <e6f75042-3b49-46f9-8679-572044eee17f@roeck-us.net>
- <DM6PR02MB5386027ED2C41CA05B3751FCAFA99@DM6PR02MB5386.namprd02.prod.outlook.com>
- <DM6PR02MB5386B179BBD56A8E7D4E13C0AFBC9@DM6PR02MB5386.namprd02.prod.outlook.com>
+        Wed, 20 Oct 2021 02:53:16 -0400
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19K4uMIC032519;
+        Wed, 20 Oct 2021 08:50:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=d4eDhb7LwUr1Kug0aDxGf6CJ3t+uXvLurRzDSaMbW7g=;
+ b=OEn+f9/hZj3FzXfsnJPDeyg6v7rBprfMNT4KoFVtT3fsKLrcQ8SXFiokNvehuB7+bCK/
+ LHTGAeNx5noKjMy+JXB8kGrYunskzqNKCwQWTv7+sfi1AunpeFPCaI0xHKx4NcC7NUOe
+ t7/GUVbJVjl6dHdO/S/onUHU4psId1KUOF7LbqcfzcK3i5FGG20XC74bWyK1Vq1NRTut
+ wryzcAqEkti2SMa0eCXfC/JcEOV2AUv/QFfcvXfGOhkuNTUApNM4Ah6SIs5DTwcpzwgG
+ ggBJAuJ2kwlSZBo3uKoU/Ep4WEzW2gpgNaU5e3LBmZUTovDQTft+g8imm3SzIGFJH1XF Vg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3bt22k3fgy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Oct 2021 08:50:20 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1EA0510002A;
+        Wed, 20 Oct 2021 08:50:17 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CAF27212311;
+        Wed, 20 Oct 2021 08:50:17 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 20 Oct 2021 08:50:17
+ +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        michael turquette <mturquette@baylibre.com>,
+        stephen boyd <sboyd@kernel.org>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        "david s . miller" <davem@davemloft.net>,
+        david airlie <airlied@linux.ie>,
+        daniel vetter <daniel@ffwll.ch>,
+        thierry reding <thierry.reding@gmail.com>,
+        sam ravnborg <sam@ravnborg.org>,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        "philippe cornu" <philippe.cornu@foss.st.com>,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        vinod koul <vkoul@kernel.org>,
+        ohad ben-cohen <ohad@wizery.com>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        baolin wang <baolin.wang7@gmail.com>,
+        jonathan cameron <jic23@kernel.org>,
+        "lars-peter clausen" <lars@metafoo.de>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matt Mackall <mpm@selenic.com>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        "dillon min" <dillon.minfei@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        pascal Paillet <p.paillet@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        "Jose Abreu" <joabreu@synopsys.com>,
+        Le Ray <erwan.leray@foss.st.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <dmaengine@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-media@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+Subject: dt-bindings: treewide: Update @st.com email address to @foss.st.com
+Date:   Wed, 20 Oct 2021 08:50:00 +0200
+Message-ID: <20211020065000.21312-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DM6PR02MB5386B179BBD56A8E7D4E13C0AFBC9@DM6PR02MB5386.namprd02.prod.outlook.com>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-20_02,2021-10-19_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 09:23:23AM +0000, Srinivas Neeli wrote:
-> Hi Guenter,
-> 
-> Could you please share your comments on below limitations.
-> 
-> 
-> Thanks
-> Srinivas Neeli
-> 
-> > -----Original Message-----
-> > From: Srinivas Neeli <sneeli@xilinx.com>
-> > Sent: Wednesday, September 29, 2021 12:32 PM
-> > To: Guenter Roeck <linux@roeck-us.net>; Shubhrajyoti Datta
-> > <shubhraj@xilinx.com>; Srinivas Goud <sgoud@xilinx.com>; Michal Simek
-> > <michals@xilinx.com>
-> > Cc: wim@linux-watchdog.org; linux-watchdog@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; git <git@xilinx.com>
-> > Subject: RE: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal Window
-> > watchdog mode
-> > 
-> > Hi Guenter,
-> > 
-> > I went through reference "rti_wdt.c" driver. It implemented Window
-> > watchdog with few limitations.
-> > Limitations:
-> > ---------------
-> > 1) Not able to configure Closed window and Open window separately.
-> > 	Because of xilinx window watchdog supports separate configurable
-> > closed and open windows.
-> > 2) In case of rti driver, if any bad event(error event) occur due to any user
-> > space event like ping then
-> >    the watchdog core bypassing the ping call.
-> >     But in case of xilinx watchdog there are separate register bits for counting
-> > error events.
-> > 	So if I implement driver in similar to rti-wdt.c driver, then we can not
-> > be able read the error events from
-> > 	the registers.
-> > 	So is this ok because we are not notifying the errors to user.
-> > 
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-I can only repeat: You can not misuse pretimeout to configure the minimum
-window size. If you want that configurable, maybe you can use a module
-parameter. Not sure I understand the comment about error events. If an
-error event is userspace pinging the watchdog within the closed window,
-sure, then you can not use min_hw_heartbeat_ms to indicate the minimum
-window size. I don't really understand the point of this (or why anyone
-would want such a "window" watchdog in the first place), but then I don't
-have to understand it. Just remember to explain to your customers and
-document in the driver what happens if userspace pings the watchdog too
-early (eg that the ping will be ignored and that the watchdog will reboot
-the system unless another ping happens within the configured window).
-Either case, again, you can not (mis-)use pretimeout for anything
-but for configuring a pretimeout.
+Not all @st.com email address are concerned, only people who have
+a specific @foss.st.com email will see their entry updated.
+For some people, who left the company, remove their email.
 
-Guenter
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ Documentation/devicetree/bindings/arm/sti.yaml                | 2 +-
+ Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml     | 4 ++--
+ .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml        | 4 ++--
+ Documentation/devicetree/bindings/arm/stm32/stm32.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml  | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml    | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml   | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml   | 2 +-
+ .../devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml  | 2 +-
+ .../devicetree/bindings/display/panel/orisetech,otm8009a.yaml | 2 +-
+ .../devicetree/bindings/display/panel/raydium,rm68200.yaml    | 2 +-
+ Documentation/devicetree/bindings/display/st,stm32-dsi.yaml   | 4 ++--
+ Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml  | 4 ++--
+ Documentation/devicetree/bindings/dma/st,stm32-dma.yaml       | 2 +-
+ Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml    | 2 +-
+ Documentation/devicetree/bindings/dma/st,stm32-mdma.yaml      | 2 +-
+ .../devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml       | 3 +--
+ Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       | 2 +-
+ .../devicetree/bindings/iio/adc/sigma-delta-modulator.yaml    | 2 +-
+ Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml   | 2 +-
+ .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml       | 4 ++--
+ Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml   | 2 +-
+ .../bindings/interrupt-controller/st,stm32-exti.yaml          | 4 ++--
+ Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml  | 4 ++--
+ Documentation/devicetree/bindings/media/st,stm32-cec.yaml     | 3 +--
+ Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml    | 2 +-
+ .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml        | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml   | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml    | 3 +--
+ Documentation/devicetree/bindings/mfd/st,stmfx.yaml           | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stpmic1.yaml         | 2 +-
+ Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml | 2 +-
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml         | 2 +-
+ Documentation/devicetree/bindings/net/stm32-dwmac.yaml        | 4 ++--
+ Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml   | 2 +-
+ Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml  | 2 +-
+ .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml         | 2 +-
+ .../devicetree/bindings/regulator/st,stm32-booster.yaml       | 2 +-
+ .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml       | 2 +-
+ .../devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml    | 2 +-
+ .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml        | 4 ++--
+ Documentation/devicetree/bindings/rng/st,stm32-rng.yaml       | 2 +-
+ Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml       | 2 +-
+ Documentation/devicetree/bindings/serial/st,stm32-uart.yaml   | 2 +-
+ Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml   | 2 +-
+ Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml     | 2 +-
+ Documentation/devicetree/bindings/sound/st,stm32-sai.yaml     | 2 +-
+ Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml | 2 +-
+ Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml      | 4 ++--
+ Documentation/devicetree/bindings/spi/st,stm32-spi.yaml       | 4 ++--
+ .../devicetree/bindings/thermal/st,stm32-thermal.yaml         | 2 +-
+ Documentation/devicetree/bindings/timer/st,stm32-timer.yaml   | 3 ++-
+ Documentation/devicetree/bindings/usb/st,stusb160x.yaml       | 2 +-
+ Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml | 4 ++--
+ 54 files changed, 67 insertions(+), 69 deletions(-)
 
-> > Thanks
-> > Srinivas Neeli
-> > 
-> > > -----Original Message-----
-> > > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> > > Sent: Wednesday, July 14, 2021 5:01 PM
-> > > To: Srinivas Neeli <sneeli@xilinx.com>; Shubhrajyoti Datta
-> > > <shubhraj@xilinx.com>; Srinivas Goud <sgoud@xilinx.com>; Michal Simek
-> > > <michals@xilinx.com>
-> > > Cc: wim@linux-watchdog.org; linux-watchdog@vger.kernel.org; linux-
-> > > kernel@vger.kernel.org; git <git@xilinx.com>
-> > > Subject: Re: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal Window
-> > > watchdog mode
-> > >
-> > > On 7/13/21 10:29 PM, Srinivas Neeli wrote:
-> > > > Hi Guenter,
-> > > >
-> > > > If you are fine with my justification, I will send v2 with update code.
-> > > >
-> > >
-> > > We have at least one more watchdog driver with open/closed window
-> > > concepts.
-> > > This is not a "pretimeout". Please see drivers/watchdog/rti_wdt.c for
-> > > an example on how to handle this; essentially you have to set
-> > > min_hw_heartbeat_ms to the value of the closed window timeout. The
-> > > watchdog core then handles the mechanics.
-> > >
-> > > You can not use "pretimeout" to set the "closed" window size; this is
-> > > an ABI abuse. There is no standard ABI for this, so if you want to
-> > > have it configurable it would have to be a module parameter.
-> > >
-> > > Guenter
-> > >
-> > > > Thanks
-> > > > Srinivas Neeli.
-> > > >
-> > > > *From:* Srinivas Neeli <sneeli@xilinx.com>
-> > > > *Sent:* Wednesday, June 9, 2021 12:57 PM
-> > > > *To:* Guenter Roeck <linux@roeck-us.net>; Shubhrajyoti Datta
-> > > > <shubhraj@xilinx.com>; Srinivas Goud <sgoud@xilinx.com>; Michal
-> > > > Simek <michals@xilinx.com>
-> > > > *Cc:* wim@linux-watchdog.org; linux-watchdog@vger.kernel.org;
-> > > > linux-kernel@vger.kernel.org; git <git@xilinx.com>
-> > > > *Subject:* RE: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal Window
-> > > > watchdog mode
-> > > >
-> > > > Hi Guenter Roeck,
-> > > >
-> > > > Thanks for review.
-> > > >
-> > > > Versal platform contain System watchdog Timer. It supports two
-> > > > functions, Those are
-> > > >
-> > > > 1) Generic watchdog mode
-> > > >
-> > > > 2) Window watchdog mode
-> > > >
-> > > > Right now we are implementing window watchdog timer functionality in
-> > > driver.
-> > > >
-> > > > Features of Window watchdog mode:
-> > > >
-> > > > - The timer contains two configurable windows( closed and open).
-> > > >
-> > > > - The timer has to restart only in open window.
-> > > >
-> > > > - If software tries to restart out side of open window it will
-> > > > generate a
-> > > reset.
-> > > >
-> > > > We have a requirement for window watchdog driver, So I  implemented
-> > > window watchdog in two scenarios.
-> > > >
-> > > > 1) With Pre-timeout
-> > > >
-> > > > 2) With without Pre-timeout
-> > > >
-> > > > *Scenario 1:*
-> > > >
-> > > > With pre-timeout:
-> > > >
-> > > > Here we will get two window concept.
-> > > >
-> > > > 1) closed window
-> > > >
-> > > > 2) Open window
-> > > >
-> > > > start to pre-timeout, we are calling "*closed*" window.
-> > > >
-> > > >  From pre-timeout to timeout we are calling “*Open*” window.
-> > > >
-> > > > *Operations:*
-> > > >
-> > > > start
-> > > >
-> > > > keep alive(only in open window,  closed window we are ignoring)
-> > > >
-> > > > stop
-> > > >
-> > > > we don't have permission to refresh/restart our timer in closed
-> > > > window, So
-> > > ignoring the keepalive.
-> > > >
-> > > > Adjusted code to generate interrupt after completion of closed window.
-> > > once we cross the closed window we can restart our time anytime.
-> > > >
-> > > > Once we reaches to timeout , will get reset signal.
-> > > >
-> > > > *Advantage:*
-> > > >
-> > > > After getting pre-timeout notification we can reset our timer or can
-> > > > collect
-> > > our log.
-> > > >
-> > > > once we get interrupt we can conclude our task is not working as
-> > expected.
-> > > >
-> > > > So we can takecare of our tasks.
-> > > >
-> > > > *Scenario 2:*
-> > > >
-> > > > with out pre-timeout:
-> > > >
-> > > > It will work like general watchdog timer.
-> > > >
-> > > > we can run keepalive anytime(as there is no closed window, only open
-> > > window present).
-> > > >
-> > > > Once we reaches to time out, will get reset.
-> > > >
-> > > > *Operations:*
-> > > >
-> > > > start
-> > > >
-> > > > keep alive
-> > > >
-> > > > stop
-> > > >
-> > > > For more details:
-> > > >
-> > > > https://www.xilinx.com/support/documentation/architecture-
-> > > manuals/am01
-> > > > 1-versal-acap-trm.pdf
-> > > > <https://www.xilinx.com/support/documentation/architecture-
-> > > manuals/am0
-> > > > 11-versal-acap-trm.pdf>
-> > > >
-> > > > major comments will update in V2.
-> > > >
-> > > >  > -----Original Message-----
-> > > >
-> > > >  > From: Guenter Roeck <groeck7@gmail.com
-> > > <mailto:groeck7@gmail.com>>
-> > > > On Behalf Of Guenter Roeck
-> > > >
-> > > >  > Sent: Thursday, May 27, 2021 8:09 PM
-> > > >
-> > > >  > To: Srinivas Neeli <sneeli@xilinx.com
-> > > > <mailto:sneeli@xilinx.com>>; Shubhrajyoti Datta
-> > > >
-> > > >  > <shubhraj@xilinx.com <mailto:shubhraj@xilinx.com>>; Srinivas Goud
-> > > > <sgoud@xilinx.com <mailto:sgoud@xilinx.com>>; Michal Simek
-> > > >
-> > > >  > <michals@xilinx.com <mailto:michals@xilinx.com>>
-> > > >
-> > > >  > Cc: wim@linux-watchdog.org <mailto:wim@linux-watchdog.org>;
-> > > > linux-watchdog@vger.kernel.org
-> > > > <mailto:linux-watchdog@vger.kernel.org>; linux-
-> > > >
-> > > >  > kernel@vger.kernel.org <mailto:kernel@vger.kernel.org>; git
-> > > > <git@xilinx.com <mailto:git@xilinx.com>>
-> > > >
-> > > >  > Subject: Re: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal Window
-> > > >
-> > > >  > watchdog mode
-> > > >
-> > > >  >
-> > > >
-> > > >  > The subject is confusing. This patch does not add "Versal Window
-> > > > watchdog
-> > > >
-> > > >  > mode", it adds a driver which supports the Versal Window watchdog.
-> > > > The
-> > > >
-> > > >  > subject should be something like "watchdog: Add Versal Window
-> > > > watchdog
-> > > >
-> > > >  > driver".
-> > > >
-> > > >  >
-> > > >
-> > > >  > On 5/27/21 2:57 AM, Srinivas Neeli wrote:
-> > > >
-> > > >  > > Versal watchdog driver uses Window watchdog mode. Window
-> > > watchdog
-> > > >
-> > > >  > > timer(WWDT) contains closed(first) and open(second) window with
-> > > >
-> > > >  > > 32 bit width. WWDT will generate an interrupt after the first
-> > > > window
-> > > >
-> > > >  > > timeout and reset signal after the second window timeout.
-> > > > Timeout and
-> > > >
-> > > >  > > Pre-timeout configuration, Stop and Refresh trigger only in
-> > > > open
-> > > >
-> > > >  > > window.
-> > > >
-> > > >  >
-> > > >
-> > > >  > Does that mean that userspace can not send a keepalive before the
-> > > >
-> > > >  > pretimeout expires ? That is not how this is supposed to work. If
-> > > > that is the
-> > > >
-> > > >  > case, this is not a pretimeout. Pretimeout is supposed to be used
-> > > > for
-> > > >
-> > > >  > emergency handling, such as triggering a crash dump. The above
-> > > > description
-> > > >
-> > > >  > as well as the code suggests that an interrupt is all but mandatory.
-> > > >
-> > > >  >
-> > > >
-> > > >  > Assuming that is all the case, ie that keepalive is only possible
-> > > > after the
-> > > >
-> > > >  > interrupt was received, and that timeout updates are also only
-> > > > possible after
-> > > >
-> > > >  > an interrupt was received, one possible handling would to record
-> > > > that a
-> > > >
-> > > >  > keepalive was received, and to record that a request to update
-> > > > the timeout
-> > > >
-> > > >  > was received if that happens while the window is closed. Then,
-> > > > when the
-> > > >
-> > > >  > interrupt is received, those actions can be applied. Otherwise,
-> > > > if there was
-> > > >
-> > > >  > no keepalive request prior to the interrupt, the interrupt
-> > > > handler would call
-> > > >
-> > > >  > watchdog_notify_pretimeout().
-> > > >
-> > > >  >
-> > > >
-> > > >  > Of course, this is all just guesswork.
-> > > >
-> > > >  >
-> > > >
-> > > >  > More comments below.
-> > > >
-> > > >  >
-> > > >
-> > > >  > Guenter
-> > > >
-> > > >  >
-> > > >
-> > > >  > >
-> > > >
-> > > >  > > Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com
-> > > > <mailto:srinivas.neeli@xilinx.com>>
-> > > >
-> > > >  > > ---
-> > > >
-> > > >  > >   drivers/watchdog/Kconfig       |  16 ++
-> > > >
-> > > >  > >   drivers/watchdog/Makefile      |   1 +
-> > > >
-> > > >  > >   drivers/watchdog/xilinx_wwdt.c | 382
-> > > >
-> > > >  > +++++++++++++++++++++++++++++++++
-> > > >
-> > > >  > >   3 files changed, 399 insertions(+)
-> > > >
-> > > >  > >   create mode 100644 drivers/watchdog/xilinx_wwdt.c
-> > > >
-> > > >  > >
-> > > >
-> > > >  > > diff --git a/drivers/watchdog/Kconfig
-> > > > b/drivers/watchdog/Kconfig index
-> > > >
-> > > >  > > 355100dad60a..2ed17f278783 100644
-> > > >
-> > > >  > > --- a/drivers/watchdog/Kconfig
-> > > >
-> > > >  > > +++ b/drivers/watchdog/Kconfig
-> > > >
-> > > >  > > @@ -307,6 +307,22 @@ config XILINX_WATCHDOG
-> > > >
-> > > >  > >            To compile this driver as a module, choose M here:
-> > > > the
-> > > >
-> > > >  > >            module will be called of_xilinx_wdt.
-> > > >
-> > > >  > >
-> > > >
-> > > >  > > +config XILINX_WINDOW_WATCHDOG
-> > > >
-> > > >  > > +      tristate "Xilinx Window Watchdog timer"
-> > > >
-> > > >  > > +      depends on HAS_IOMEM
-> > > >
-> > > >  > > +      select WATCHDOG_CORE
-> > > >
-> > > >  > > +      help
-> > > >
-> > > >  > > +        Window Watchdog driver for the versal_wwdt ip core.
-> > > >
-> > > >  > > +        Window watchdog timer(WWDT) contains closed(first) and
-> > > >
-> > > >  > > +        open(second) window with 32 bit width. WWDT will
-> > > > generate
-> > > >
-> > > >  > > +        an interrupt after the first window timeout and reset
-> > > >
-> > > >  > > +        signal after the second window timeout. Timeout and
-> > > >
-> > > >  > > +        Pre-timeout configuration, Stop and Refresh trigger
-> > > >
-> > > >  > > +        only in open window.
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +        To compile this driver as a module, choose M here: the
-> > > >
-> > > >  > > +        module will be called xilinx_wwdt.
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > >   config ZIIRAVE_WATCHDOG
-> > > >
-> > > >  > >          tristate "Zodiac RAVE Watchdog Timer"
-> > > >
-> > > >  > >          depends on I2C
-> > > >
-> > > >  > > diff --git a/drivers/watchdog/Makefile
-> > > > b/drivers/watchdog/Makefile
-> > > >
-> > > >  > > index a7eade8b4d45..97d10c3d39c7 100644
-> > > >
-> > > >  > > --- a/drivers/watchdog/Makefile
-> > > >
-> > > >  > > +++ b/drivers/watchdog/Makefile
-> > > >
-> > > >  > > @@ -148,6 +148,7 @@ obj-$(CONFIG_M54xx_WATCHDOG) +=
-> > > >
-> > > >  > m54xx_wdt.o
-> > > >
-> > > >  > >
-> > > >
-> > > >  > >   # MicroBlaze Architecture
-> > > >
-> > > >  > >   obj-$(CONFIG_XILINX_WATCHDOG) += of_xilinx_wdt.o
-> > > >
-> > > >  > > +obj-$(CONFIG_XILINX_WINDOW_WATCHDOG) += xilinx_wwdt.o
-> > > >
-> > > >  > >
-> > > >
-> > > >  > >   # MIPS Architecture
-> > > >
-> > > >  > >   obj-$(CONFIG_ATH79_WDT) += ath79_wdt.o diff --git
-> > > >
-> > > >  > > a/drivers/watchdog/xilinx_wwdt.c
-> > > > b/drivers/watchdog/xilinx_wwdt.c new
-> > > >
-> > > >  > > file mode 100644 index 000000000000..8fa2cb2225e8
-> > > >
-> > > >  > > --- /dev/null
-> > > >
-> > > >  > > +++ b/drivers/watchdog/xilinx_wwdt.c
-> > > >
-> > > >  > > @@ -0,0 +1,382 @@
-> > > >
-> > > >  > > +// SPDX-License-Identifier: GPL-2.0
-> > > >
-> > > >  > > +/*
-> > > >
-> > > >  > > + * Window Watchdog Device Driver for Xilinx Versal WWDT
-> > > >
-> > > >  > > + *
-> > > >
-> > > >  > > + * (C) Copyright 2021 Xilinx, Inc.
-> > > >
-> > > >  > > + */
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +#include <linux/clk.h>
-> > > >
-> > > >  > > +#include <linux/interrupt.h>
-> > > >
-> > > >  > > +#include <linux/io.h>
-> > > >
-> > > >  > > +#include <linux/ioport.h>
-> > > >
-> > > >  > > +#include <linux/of_device.h>
-> > > >
-> > > >  > > +#include <linux/of_address.h>
-> > > >
-> > > >  > > +#include <linux/module.h>
-> > > >
-> > > >  > > +#include <linux/watchdog.h>
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +#define XWWDT_DEFAULT_TIMEOUT           40
-> > > >
-> > > >  > > +#define XWWDT_MIN_TIMEOUT    1
-> > > >
-> > > >  > > +#define XWWDT_MAX_TIMEOUT   42
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +/* Register offsets for the WWdt device */
-> > > >
-> > > >  > > +#define XWWDT_MWR_OFFSET      0x00
-> > > >
-> > > >  > > +#define XWWDT_ESR_OFFSET          0x04
-> > > >
-> > > >  > > +#define XWWDT_FCR_OFFSET          0x08
-> > > >
-> > > >  > > +#define XWWDT_FWR_OFFSET        0x0c
-> > > >
-> > > >  > > +#define XWWDT_SWR_OFFSET        0x10
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +/* Master Write Control Register Masks */
-> > > >
-> > > >  > > +#define XWWDT_MWR_MASK                         BIT(0)
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +/* Enable and Status Register Masks */
-> > > >
-> > > >  > > +#define XWWDT_ESR_WINT_MASK BIT(16)
-> > > >
-> > > >  > > +#define XWWDT_ESR_WSW_MASK BIT(8)
-> > > >
-> > > >  > > +#define XWWDT_ESR_WEN_MASK BIT(0)
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +/* Function control Register Masks */
-> > > >
-> > > >  > > +#define XWWDT_SBC_MASK                            0xFF00
-> > > >
-> > > >  > > +#define XWWDT_SBC_SHIFT                             16
-> > > >
-> > > >  > > +#define XWWDT_BSS_MASK                             0xC0
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static int wwdt_timeout;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +module_param(wwdt_timeout, int, 0644);
-> > > >
-> > > >  > MODULE_PARM_DESC(wwdt_timeout,
-> > > >
-> > > >  > > +                      "Watchdog time in seconds. (default="
-> > > >
-> > > >  > > +                      __MODULE_STRING(XWWDT_DEFAULT_TIMEOUT)
-> > > > ")");
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +struct xwwdt_device {
-> > > >
-> > > >  > > +      void __iomem *base;
-> > > >
-> > > >  > > +      spinlock_t spinlock; /* spinlock for register handling
-> > > > */
-> > > >
-> > > >  > > +      struct watchdog_device xilinx_wwdt_wdd;
-> > > >
-> > > >  > > +      struct clk *clk;
-> > > >
-> > > >  > > +      int irq;
-> > > >
-> > > >  > > +};
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static int is_wwdt_in_closed_window(struct watchdog_device
-> > > > *wdd)
-> > > >
-> > > >  >
-> > > >
-> > > >  > should return bool
-> > > >
-> > > > Will update in V2.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +{
-> > > >
-> > > >  > > +      u32 control_status_reg;
-> > > >
-> > > >  > > +      struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      spin_lock(&xdev->spinlock);
-> > > >
-> > > >  > > +      control_status_reg = ioread32(xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +      spin_unlock(&xdev->spinlock);
-> > > >
-> > > >  > > +      if (control_status_reg & XWWDT_ESR_WEN_MASK)
-> > > >
-> > > >  > > +                      if (!(control_status_reg &
-> > > > XWWDT_ESR_WSW_MASK))
-> > > >
-> > > >  > > +                                      return 0;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      return 1;
-> > > >
-> > > >  >
-> > > >
-> > > >  > Can be written as expresion without if statement
-> > > >
-> > > > Will update in V2
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static int xilinx_wwdt_start(struct watchdog_device *wdd) {
-> > > >
-> > > >  > > +      struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
-> > > >
-> > > >  > > +      struct watchdog_device *xilinx_wwdt_wdd = &xdev-
-> > > >
-> > > >  > >xilinx_wwdt_wdd;
-> > > >
-> > > >  > > +      u64 time_out, pre_timeout, count;
-> > > >
-> > > >  > > +      u32 control_status_reg, fcr;
-> > > >
-> > > >  > > +      int ret;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      count = clk_get_rate(xdev->clk);
-> > > >
-> > > >  > > +      if (!count)
-> > > >
-> > > >  > > +                      return -EINVAL;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > Is there a reason to believe that the clock rate can change ?
-> > > >
-> > > >  > If not I would suggest to read it once and store it in struct
-> > xwwdt_device.
-> > > >
-> > > > Will update in V2.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      /* Calculate timeout count */
-> > > >
-> > > >  > > +      pre_timeout = count * wdd->pretimeout;
-> > > >
-> > > >  > > +      time_out = count * wdd->timeout;
-> > > >
-> > > >  > > +      if (!watchdog_active(xilinx_wwdt_wdd)) {
-> > > >
-> > > >  > > +                      ret  = clk_enable(xdev->clk);
-> > > >
-> > > >  >
-> > > >
-> > > >  > This is at the very least confusing.
-> > > >
-> > > >  > The last action in the probe function is to call
-> > > > clk_disable_unprepare(),
-> > > >
-> > > >  > meaning the clock should not be prepared here. How can it be
-> > > > enabled
-> > > >
-> > > >  > without being prepared ?
-> > > >
-> > > > Will update in V2
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +                      if (ret) {
-> > > >
-> > > >  > > +                                      dev_err(wdd->parent,
-> > > > "Failed to enable clock\n");
-> > > >
-> > > >  > > +                                      return ret;
-> > > >
-> > > >  > > +                      }
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > I think it would be better to separate the functions to
-> > > > start/stop the clock
-> > > >
-> > > >  > from the function to update/enable the watchdog. The use of
-> > > >
-> > > >  > watchdog_active() combined with
-> > > >
-> > > >  > clk_enable/clk_disable/clk_prepare_enable/clk_disable_unprepare
-> > > >
-> > > >  > is confusing and makes it all but impossible to review the driver.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      spin_lock(&xdev->spinlock);
-> > > >
-> > > >  > > +      iowrite32(XWWDT_MWR_MASK, xdev->base +
-> > > >
-> > > >  > XWWDT_MWR_OFFSET);
-> > > >
-> > > >  > > +      iowrite32(~(u32)XWWDT_ESR_WEN_MASK,
-> > > >
-> > > >  > > +                        xdev->base + XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (pre_timeout) {
-> > > >
-> > > >  > > +                      iowrite32((u32)(time_out - pre_timeout),
-> > > >
-> > > >  > > +                                        xdev->base +
-> > > > XWWDT_FWR_OFFSET);
-> > > >
-> > > >  > > +                      iowrite32((u32)pre_timeout, xdev->base +
-> > > >
-> > > >  > XWWDT_SWR_OFFSET);
-> > > >
-> > > >  > > +                      fcr = ioread32(xdev->base +
-> > > > XWWDT_SWR_OFFSET);
-> > > >
-> > > >  > > +                      fcr = (fcr >> XWWDT_SBC_SHIFT) &
-> > > > XWWDT_SBC_MASK;
-> > > >
-> > > >  > > +                      fcr = fcr | XWWDT_BSS_MASK;
-> > > >
-> > > >  > > +                      iowrite32(fcr, xdev->base +
-> > > > XWWDT_FCR_OFFSET);
-> > > >
-> > > >  > > +      } else {
-> > > >
-> > > >  > > +                      iowrite32((u32)pre_timeout,
-> > > >
-> > > >  > > +                                        xdev->base +
-> > > > XWWDT_FWR_OFFSET);
-> > > >
-> > > >  > > +                      iowrite32((u32)time_out, xdev->base +
-> > > >
-> > > >  > XWWDT_SWR_OFFSET);
-> > > >
-> > > >  > > +                      iowrite32(0x0, xdev->base +
-> > > > XWWDT_FCR_OFFSET);
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      /* Enable the window watchdog timer */
-> > > >
-> > > >  > > +      control_status_reg = ioread32(xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +      control_status_reg |= XWWDT_ESR_WEN_MASK;
-> > > >
-> > > >  > > +      iowrite32(control_status_reg, xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      spin_unlock(&xdev->spinlock);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      dev_dbg(xilinx_wwdt_wdd->parent, "Watchdog Started!\n");
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      return 0;
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static int xilinx_wwdt_stop(struct watchdog_device *wdd) {
-> > > >
-> > > >  > > +      struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
-> > > >
-> > > >  > > +      struct watchdog_device *xilinx_wwdt_wdd = &xdev-
-> > > >
-> > > >  > >xilinx_wwdt_wdd;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (!is_wwdt_in_closed_window(wdd)) {
-> > > >
-> > > >  > > +                      dev_warn(xilinx_wwdt_wdd->parent, "timer
-> > > > in closed
-> > > >
-> > > >  > window");
-> > > >
-> > > >  > > +                      return -EINVAL;
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      spin_lock(&xdev->spinlock);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      iowrite32(XWWDT_MWR_MASK, xdev->base +
-> > > >
-> > > >  > XWWDT_MWR_OFFSET);
-> > > >
-> > > >  > > +      /* Disable the Window watchdog timer */
-> > > >
-> > > >  > > +      iowrite32(~(u32)XWWDT_ESR_WEN_MASK,
-> > > >
-> > > >  > > +                        xdev->base + XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      spin_unlock(&xdev->spinlock);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (watchdog_active(xilinx_wwdt_wdd))
-> > > >
-> > > >  > > +                      clk_disable(xdev->clk);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  >
-> > > >
-> > > >  > The stop function won't be called if the watchdog is not running,
-> > > > ie if
-> > > >
-> > > >  > watchdog_active() returns false.
-> > > >
-> > > >  > I don't undeerstand the logic of clock handling in this driver.
-> > > >
-> > > >  > More on that below.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      dev_dbg(xilinx_wwdt_wdd->parent, "Watchdog Stopped!\n");
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      return 0;
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static int xilinx_wwdt_keepalive(struct watchdog_device *wdd)
-> > > > {
-> > > >
-> > > >  > > +      u32 control_status_reg;
-> > > >
-> > > >  > > +      struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      /* Refresh in open window is ignored */
-> > > >
-> > > >  > > +      if (!is_wwdt_in_closed_window(wdd))
-> > > >
-> > > >  > > +                      return 0;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > This is dangerous. There is no reason for userspace to adhere to
-> > > > these
-> > > >
-> > > >  > restrictions.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      spin_lock(&xdev->spinlock);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      iowrite32(XWWDT_MWR_MASK, xdev->base +
-> > > >
-> > > >  > XWWDT_MWR_OFFSET);
-> > > >
-> > > >  > > +      control_status_reg = ioread32(xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +      control_status_reg |= XWWDT_ESR_WINT_MASK;
-> > > >
-> > > >  > > +      control_status_reg &= ~XWWDT_ESR_WSW_MASK;
-> > > >
-> > > >  > > +      iowrite32(control_status_reg, xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +      control_status_reg = ioread32(xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +      control_status_reg |= XWWDT_ESR_WSW_MASK;
-> > > >
-> > > >  > > +      iowrite32(control_status_reg, xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      spin_unlock(&xdev->spinlock);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      return 0;
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static int xilinx_wwdt_set_timeout(struct watchdog_device
-> > > > *wdd,
-> > > >
-> > > >  > > +
-> > > > unsigned int new_time)
-> > > >
-> > > >  > > +{
-> > > >
-> > > >  > > +      u32 ret = 0;
-> > > >
-> > > >  > > +      struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
-> > > >
-> > > >  > > +      struct watchdog_device *xilinx_wwdt_wdd = &xdev-
-> > > >
-> > > >  > >xilinx_wwdt_wdd;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (!is_wwdt_in_closed_window(wdd)) {
-> > > >
-> > > >  > > +                      dev_warn(xilinx_wwdt_wdd->parent, "timer
-> > > > in closed
-> > > >
-> > > >  > window");
-> > > >
-> > > >  > > +                      return -EINVAL;
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +
-> > > >
-> > > >  >
-> > > >
-> > > >  > So userspace can clog the log by continuously trying to set the timeout
-> > ?
-> > > >
-> > > >  >
-> > > >
-> > > >  > Also, again, this is dangerous. Userspace does not know the window
-> > size.
-> > > >
-> > > > user can configure window size.
-> > > >
-> > > >  >
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      if (new_time < XWWDT_MIN_TIMEOUT ||
-> > > >
-> > > >  > > +          new_time > XWWDT_MAX_TIMEOUT) {
-> > > >
-> > > >  > > +                      dev_warn(xilinx_wwdt_wdd->parent,
-> > > >
-> > > >  > > +                                      "timeout value must be
-> > > > %d<=x<=%d, using %d\n",
-> > > >
-> > > >  > > +                                      XWWDT_MIN_TIMEOUT,
-> > > >
-> > > >  > > +                                      XWWDT_MAX_TIMEOUT,
-> > > > new_time);
-> > > >
-> > > >  > > +                      return -EINVAL;
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  >
-> > > >
-> > > >  > This is handled by the watchdog core.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      wdd->timeout = new_time;
-> > > >
-> > > >  > > +      wdd->pretimeout = 0;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (watchdog_active(xilinx_wwdt_wdd)) {
-> > > >
-> > > >  > > +                      ret = xilinx_wwdt_start(wdd);
-> > > >
-> > > >  > > +                      if (ret)
-> > > >
-> > > >  > > +
-> > > > dev_dbg(xilinx_wwdt_wdd->parent, "timer start
-> > > >
-> > > >  > failed");
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      return ret;
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static int xilinx_wwdt_set_pretimeout(struct watchdog_device
-> > > > *wdd,
-> > > >
-> > > >  > > +
-> > > > u32
-> > > > new_pretimeout)
-> > > >
-> > > >  > > +{
-> > > >
-> > > >  > > +      u32 ret = 0;
-> > > >
-> > > >  > > +      struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
-> > > >
-> > > >  > > +      struct watchdog_device *xilinx_wwdt_wdd = &xdev-
-> > > >
-> > > >  > >xilinx_wwdt_wdd;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (!is_wwdt_in_closed_window(wdd)) {
-> > > >
-> > > >  > > +                      dev_warn(xilinx_wwdt_wdd->parent, "timer
-> > > > in closed
-> > > >
-> > > >  > window");
-> > > >
-> > > >  > > +                      return -EINVAL;
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  >
-> > > >
-> > > >  > This restriction is not only dangerous but confusing, and simply
-> > > unacceptable.
-> > > >
-> > > >  > Userspace will get -EINVAL with no idea what is wrong.
-> > > >
-> > > >  > A watchdog daemon will bail out for no good reason.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (new_pretimeout < wdd->min_timeout ||
-> > > >
-> > > >  > > +          new_pretimeout >= wdd->timeout)
-> > > >
-> > > >  > > +                      return -EINVAL;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > This is handled by the watchdog core.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      wdd->pretimeout = new_pretimeout;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (watchdog_active(xilinx_wwdt_wdd)) {
-> > > >
-> > > >  > > +                      ret = xilinx_wwdt_start(wdd);
-> > > >
-> > > >  > > +                      if (ret)
-> > > >
-> > > >  > > +
-> > > > dev_dbg(xilinx_wwdt_wdd->parent, "timer start
-> > > >
-> > > >  > failed");
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      return ret;
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static void xwwdt_clk_disable_unprepare(void *data) {
-> > > >
-> > > >  > > +      clk_disable_unprepare(data);
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static irqreturn_t xilinx_wwdt_isr(int irq, void *wdog_arg) {
-> > > >
-> > > >  > > +      struct xwwdt_device *xdev = wdog_arg;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      watchdog_notify_pretimeout(&xdev->xilinx_wwdt_wdd);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      return IRQ_HANDLED;
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static const struct watchdog_info xilinx_wwdt_ident = {
-> > > >
-> > > >  > > +      .options = WDIOF_MAGICCLOSE |
-> > > >
-> > > >  > > +                         WDIOF_KEEPALIVEPING |
-> > > >
-> > > >  > > +                         WDIOF_SETTIMEOUT,
-> > > >
-> > > >  > > +      .firmware_version = 1,
-> > > >
-> > > >  > > +      .identity = "xlnx_window watchdog",
-> > > >
-> > > >  > > +};
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static const struct watchdog_info xilinx_wwdt_pretimeout_ident
-> > > > = {
-> > > >
-> > > >  > > +      .options = WDIOF_MAGICCLOSE |
-> > > >
-> > > >  > > +                         WDIOF_KEEPALIVEPING |
-> > > >
-> > > >  > > +                         WDIOF_PRETIMEOUT |
-> > > >
-> > > >  > > +                         WDIOF_SETTIMEOUT,
-> > > >
-> > > >  > > +      .firmware_version = 1,
-> > > >
-> > > >  > > +      .identity = "xlnx_window watchdog",
-> > > >
-> > > >  > > +};
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static const struct watchdog_ops xilinx_wwdt_ops = {
-> > > >
-> > > >  > > +      .owner = THIS_MODULE,
-> > > >
-> > > >  > > +      .start = xilinx_wwdt_start,
-> > > >
-> > > >  > > +      .stop = xilinx_wwdt_stop,
-> > > >
-> > > >  > > +      .ping = xilinx_wwdt_keepalive,
-> > > >
-> > > >  > > +      .set_timeout = xilinx_wwdt_set_timeout,
-> > > >
-> > > >  > > +      .set_pretimeout = xilinx_wwdt_set_pretimeout, };
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static int xwwdt_probe(struct platform_device *pdev) {
-> > > >
-> > > >  > > +      struct device *dev = &pdev->dev;
-> > > >
-> > > >  > > +      struct watchdog_device *xilinx_wwdt_wdd;
-> > > >
-> > > >  > > +      struct xwwdt_device *xdev;
-> > > >
-> > > >  > > +      u32 pre_timeout = 0;
-> > > >
-> > > >  > > +      int ret;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      xdev = devm_kzalloc(dev, sizeof(*xdev), GFP_KERNEL);
-> > > >
-> > > >  > > +      if (!xdev)
-> > > >
-> > > >  > > +                      return -ENOMEM;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      xilinx_wwdt_wdd = &xdev->xilinx_wwdt_wdd;
-> > > >
-> > > >  > > +      xilinx_wwdt_wdd->info = &xilinx_wwdt_ident;
-> > > >
-> > > >  > > +      xilinx_wwdt_wdd->ops = &xilinx_wwdt_ops;
-> > > >
-> > > >  > > +      xilinx_wwdt_wdd->parent = dev;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      xdev->base = devm_platform_ioremap_resource(pdev, 0);
-> > > >
-> > > >  > > +      if (IS_ERR(xdev->base))
-> > > >
-> > > >  > > +                      return PTR_ERR(xdev->base);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      ret = of_property_read_u32(dev->of_node,
-> > > > "pretimeout-sec",
-> > > >
-> > > >  > > +
-> > > > &pre_timeout);
-> > > >
-> > > >  > > +      if (ret)
-> > > >
-> > > >  > > +                      dev_dbg(dev,
-> > > >
-> > > >  > > +                                      "Parameter
-> > > > \"pretimeout-sec\" not found\n");
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      xdev->clk = devm_clk_get(dev, NULL);
-> > > >
-> > > >  > > +      if (IS_ERR(xdev->clk))
-> > > >
-> > > >  > > +                      return PTR_ERR(xdev->clk);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      ret = clk_get_rate(xdev->clk);
-> > > >
-> > > >  > > +      if (!ret)
-> > > >
-> > > >  > > +                      return -EINVAL;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      ret = clk_prepare_enable(xdev->clk);
-> > > >
-> > > >  > > +      if (ret) {
-> > > >
-> > > >  > > +                      dev_err(dev, "unable to enable
-> > > > clock\n");
-> > > >
-> > > >  > > +                      return ret;
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +      ret = devm_add_action_or_reset(dev,
-> > > >
-> > > >  > xwwdt_clk_disable_unprepare,
-> > > >
-> > > >  > > +
-> > > > xdev->clk);
-> > > >
-> > > >  > > +      if (ret)
-> > > >
-> > > >  > > +                      goto err_clk_disable;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  >
-> > > >
-> > > >  > Seems pointless. What happens when you unload the driver ?
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      xilinx_wwdt_wdd->pretimeout = pre_timeout;
-> > > >
-> > > >  > > +      xilinx_wwdt_wdd->timeout = XWWDT_DEFAULT_TIMEOUT;
-> > > >
-> > > >  > > +      xilinx_wwdt_wdd->min_timeout = XWWDT_MIN_TIMEOUT;
-> > > >
-> > > >  > > +      xilinx_wwdt_wdd->max_timeout = XWWDT_MAX_TIMEOUT;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      xdev->irq = platform_get_irq_byname(pdev, "wdt");
-> > > >
-> > > >  > > +      if (xdev->irq < 0) {
-> > > >
-> > > >  > > +                      ret = xdev->irq;
-> > > >
-> > > >  > > +                      goto err_clk_disable;
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      if (!devm_request_irq(dev, xdev->irq, xilinx_wwdt_isr,
-> > > >
-> > > >  > > +                                            0, dev_name(dev),
-> > > > xdev)) {
-> > > >
-> > > >  > > +                      xilinx_wwdt_wdd->info =
-> > > > &xilinx_wwdt_pretimeout_ident;
-> > > >
-> > > >  > > +      }
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      ret = watchdog_init_timeout(xilinx_wwdt_wdd,
-> > > >
-> > > >  > > +
-> > > > wwdt_timeout, &pdev->dev);
-> > > >
-> > > >  > > +      if (ret)
-> > > >
-> > > >  > > +                      dev_info(&pdev->dev, "Configured default
-> > > > timeout
-> > > >
-> > > >  > value\n");
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      spin_lock_init(&xdev->spinlock);
-> > > >
-> > > >  > > +      watchdog_set_drvdata(xilinx_wwdt_wdd, xdev);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      ret = devm_watchdog_register_device(dev,
-> > > > xilinx_wwdt_wdd);
-> > > >
-> > > >  > > +      if (ret)
-> > > >
-> > > >  > > +                      goto err_clk_disable;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > At this point the watchdog is fully instantiated, and userspace
-> > > > may have
-> > > >
-> > > >  > enabled it.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      clk_disable_unprepare(xdev->clk);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > And now its clock is getting stopped. Actually, it is getting unprepared.
-> > > >
-> > > >  > Does this even work ?
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      dev_info(dev, "Xilinx Window Watchdog Timer with timeout
-> > > > %ds\n",
-> > > >
-> > > >  > > +                      xilinx_wwdt_wdd->timeout);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +      return 0;
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +err_clk_disable:
-> > > >
-> > > >  > > +      clk_disable_unprepare(xdev->clk);
-> > > >
-> > > >  >
-> > > >
-> > > >  > devm_add_action_or_reset() already handles this.
-> > > >
-> > > >  >
-> > > >
-> > > >  > > +      return ret;
-> > > >
-> > > >  > > +}
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +/* Mat for of_platform binding */
-> > > >
-> > > >  > > +static const struct of_device_id xwwdt_of_match[] = {
-> > > >
-> > > >  > > +      { .compatible = "xlnx,versal-wwdt-1.0", },
-> > > >
-> > > >  > > +      {},
-> > > >
-> > > >  > > +};
-> > > >
-> > > >  > > +MODULE_DEVICE_TABLE(of, xwwdt_of_match);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +static struct platform_driver xwwdt_driver = {
-> > > >
-> > > >  > > +      .probe = xwwdt_probe,
-> > > >
-> > > >  > > +      .driver = {
-> > > >
-> > > >  > > +                      .name = "Xilinx Window Watchdog",
-> > > >
-> > > >  > > +                      .of_match_table = xwwdt_of_match,
-> > > >
-> > > >  > > +      },
-> > > >
-> > > >  > > +};
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +module_platform_driver(xwwdt_driver);
-> > > >
-> > > >  > > +
-> > > >
-> > > >  > > +MODULE_AUTHOR("Neeli Srinivas <sneeli@xilinx.com
-> > > > <mailto:sneeli@xilinx.com>>");
-> > > >
-> > > >  > > +MODULE_DESCRIPTION("Xilinx Window Watchdog driver");
-> > > >
-> > > >  > > +MODULE_LICENSE("GPL");
-> > > >
-> > > >  > >
-> > > >
-> > > > Thanks
-> > > >
-> > > > Srinivas Neeli.
-> > > >
-> 
+diff --git a/Documentation/devicetree/bindings/arm/sti.yaml b/Documentation/devicetree/bindings/arm/sti.yaml
+index b1f28d16d3fb..a41cd8764885 100644
+--- a/Documentation/devicetree/bindings/arm/sti.yaml
++++ b/Documentation/devicetree/bindings/arm/sti.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ST STi Platforms Device Tree Bindings
+ 
+ maintainers:
+-  - Patrice Chotard <patrice.chotard@st.com>
++  - Patrice Chotard <patrice.chotard@foss.st.com>
+ 
+ properties:
+   $nodename:
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
+index 8e711bd202fd..ecb28e90fd11 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
+@@ -7,8 +7,8 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: STMicroelectronics STM32 ML-AHB interconnect bindings
+ 
+ maintainers:
+-  - Fabien Dessenne <fabien.dessenne@st.com>
+-  - Arnaud Pouliquen <arnaud.pouliquen@st.com>
++  - Fabien Dessenne <fabien.dessenne@foss.st.com>
++  - Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+ 
+ description: |
+   These bindings describe the STM32 SoCs ML-AHB interconnect bus which connects
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index 149afb5df5af..6f846d69c5e1 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -7,8 +7,8 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: STMicroelectronics STM32 Platforms System Controller bindings
+ 
+ maintainers:
+-  - Alexandre Torgue <alexandre.torgue@st.com>
+-  - Christophe Roullier <christophe.roullier@st.com>
++  - Alexandre Torgue <alexandre.torgue@foss.st.com>
++  - Christophe Roullier <christophe.roullier@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+index 9a77ab74be99..e33fbb62b430 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 Platforms Device Tree Bindings
+ 
+ maintainers:
+-  - Alexandre Torgue <alexandre.torgue@st.com>
++  - Alexandre Torgue <alexandre.torgue@foss.st.com>
+ 
+ properties:
+   $nodename:
+diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+index 8b1ecb2ecdd5..a0ae4867ed27 100644
+--- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
++++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Reset Clock Controller Binding
+ 
+ maintainers:
+-  - Gabriel Fernandez <gabriel.fernandez@st.com>
++  - Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+ 
+ description: |
+   The RCC IP is both a reset and a clock controller.
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
+index cee624c14f07..b72e4858f9aa 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 CRC bindings
+ 
+ maintainers:
+-  - Lionel Debieve <lionel.debieve@st.com>
++  - Lionel Debieve <lionel.debieve@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
+index a4574552502a..ed23bf94a8e0 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 CRYP bindings
+ 
+ maintainers:
+-  - Lionel Debieve <lionel.debieve@st.com>
++  - Lionel Debieve <lionel.debieve@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+index 6dd658f0912c..10ba94792d95 100644
+--- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
++++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 HASH bindings
+ 
+ maintainers:
+-  - Lionel Debieve <lionel.debieve@st.com>
++  - Lionel Debieve <lionel.debieve@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml b/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
+index 3c3e51af154b..11fd68a70dca 100644
+--- a/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Synopsys DesignWare MIPI DSI host controller
+ 
+ maintainers:
+-  - Philippe CORNU <philippe.cornu@st.com>
++  - Philippe CORNU <philippe.cornu@foss.st.com>
+ 
+ description: |
+   This document defines device tree properties for the Synopsys DesignWare MIPI
+diff --git a/Documentation/devicetree/bindings/display/panel/orisetech,otm8009a.yaml b/Documentation/devicetree/bindings/display/panel/orisetech,otm8009a.yaml
+index 4b6dda6dbc0f..17cbd0ad32bf 100644
+--- a/Documentation/devicetree/bindings/display/panel/orisetech,otm8009a.yaml
++++ b/Documentation/devicetree/bindings/display/panel/orisetech,otm8009a.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Orise Tech OTM8009A 3.97" 480x800 TFT LCD panel (MIPI-DSI video mode)
+ 
+ maintainers:
+-  - Philippe CORNU <philippe.cornu@st.com>
++  - Philippe CORNU <philippe.cornu@foss.st.com>
+ 
+ description: |
+              The Orise Tech OTM8009A is a 3.97" 480x800 TFT LCD panel connected using
+diff --git a/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml b/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
+index 39477793d289..e8ce2315631a 100644
+--- a/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
++++ b/Documentation/devicetree/bindings/display/panel/raydium,rm68200.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Raydium Semiconductor Corporation RM68200 5.5" 720p MIPI-DSI TFT LCD panel
+ 
+ maintainers:
+-  - Philippe CORNU <philippe.cornu@st.com>
++  - Philippe CORNU <philippe.cornu@foss.st.com>
+ 
+ description: |
+   The Raydium Semiconductor Corporation RM68200 is a 5.5" 720x1280 TFT LCD
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml b/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
+index ed310bbe3afe..ce1ef93cce93 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
+@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 DSI host controller
+ 
+ maintainers:
+-  - Philippe Cornu <philippe.cornu@st.com>
+-  - Yannick Fertre <yannick.fertre@st.com>
++  - Philippe Cornu <philippe.cornu@foss.st.com>
++  - Yannick Fertre <yannick.fertre@foss.st.com>
+ 
+ description:
+   The STMicroelectronics STM32 DSI controller uses the Synopsys DesignWare MIPI-DSI host controller.
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml b/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
+index 4ae3d75492d3..01e2da23790b 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
+@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 lcd-tft display controller
+ 
+ maintainers:
+-  - Philippe Cornu <philippe.cornu@st.com>
+-  - Yannick Fertre <yannick.fertre@st.com>
++  - Philippe Cornu <philippe.cornu@foss.st.com>
++  - Yannick Fertre <yannick.fertre@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/dma/st,stm32-dma.yaml b/Documentation/devicetree/bindings/dma/st,stm32-dma.yaml
+index 4bf676fd25dc..55faab6a468e 100644
+--- a/Documentation/devicetree/bindings/dma/st,stm32-dma.yaml
++++ b/Documentation/devicetree/bindings/dma/st,stm32-dma.yaml
+@@ -50,7 +50,7 @@ description: |
+ 
+ 
+ maintainers:
+-  - Amelie Delaunay <amelie.delaunay@st.com>
++  - Amelie Delaunay <amelie.delaunay@foss.st.com>
+ 
+ allOf:
+   - $ref: "dma-controller.yaml#"
+diff --git a/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml b/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
+index c8d2b51d8410..f751796531c9 100644
+--- a/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
++++ b/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 DMA MUX (DMA request router) bindings
+ 
+ maintainers:
+-  - Amelie Delaunay <amelie.delaunay@st.com>
++  - Amelie Delaunay <amelie.delaunay@foss.st.com>
+ 
+ allOf:
+   - $ref: "dma-router.yaml#"
+diff --git a/Documentation/devicetree/bindings/dma/st,stm32-mdma.yaml b/Documentation/devicetree/bindings/dma/st,stm32-mdma.yaml
+index c30be840be1c..87b4afd2cf62 100644
+--- a/Documentation/devicetree/bindings/dma/st,stm32-mdma.yaml
++++ b/Documentation/devicetree/bindings/dma/st,stm32-mdma.yaml
+@@ -50,7 +50,7 @@ description: |
+        if no HW ack signal is used by the MDMA client
+ 
+ maintainers:
+-  - Amelie Delaunay <amelie.delaunay@st.com>
++  - Amelie Delaunay <amelie.delaunay@foss.st.com>
+ 
+ allOf:
+   - $ref: "dma-controller.yaml#"
+diff --git a/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
+index 47cf9c8d97e9..b18c616035a8 100644
+--- a/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
++++ b/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
+@@ -7,8 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 Hardware Spinlock bindings
+ 
+ maintainers:
+-  - Benjamin Gaignard <benjamin.gaignard@st.com>
+-  - Fabien Dessenne <fabien.dessenne@st.com>
++  - Fabien Dessenne <fabien.dessenne@foss.st.com>
+ 
+ properties:
+   "#hwlock-cells":
+diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+index d747f4990ad8..c07289a643d8 100644
+--- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: I2C controller embedded in STMicroelectronics STM32 I2C platform
+ 
+ maintainers:
+-  - Pierre-Yves MORDRET <pierre-yves.mordret@st.com>
++  - Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+ 
+ allOf:
+   - $ref: /schemas/i2c/i2c-controller.yaml#
+diff --git a/Documentation/devicetree/bindings/iio/adc/sigma-delta-modulator.yaml b/Documentation/devicetree/bindings/iio/adc/sigma-delta-modulator.yaml
+index a390343d0c2a..2287697f1f61 100644
+--- a/Documentation/devicetree/bindings/iio/adc/sigma-delta-modulator.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/sigma-delta-modulator.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Device-Tree bindings for sigma delta modulator
+ 
+ maintainers:
+-  - Arnaud Pouliquen <arnaud.pouliquen@st.com>
++  - Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+index a58334c3bb76..a055c78cc047 100644
+--- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+@@ -19,7 +19,7 @@ description: |
+   Each STM32 ADC block can have up to 3 ADC instances.
+ 
+ maintainers:
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+index 733351dee252..7c260f209687 100644
+--- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 DFSDM ADC device driver
+ 
+ maintainers:
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
+-  - Olivier Moysan <olivier.moysan@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
++  - Olivier Moysan <olivier.moysan@foss.st.com>
+ 
+ description: |
+   STM32 DFSDM ADC is a sigma delta analog-to-digital converter dedicated to
+diff --git a/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml b/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
+index 393f7005941a..6adeda4087fc 100644
+--- a/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
++++ b/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
+@@ -15,7 +15,7 @@ description: |
+   current.
+ 
+ maintainers:
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+index 6d3e68eb2e8b..d19c881b4abc 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
+@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STM32 External Interrupt Controller Device Tree Bindings
+ 
+ maintainers:
+-  - Alexandre Torgue <alexandre.torgue@st.com>
+-  - Ludovic Barre <ludovic.barre@st.com>
++  - Alexandre Torgue <alexandre.torgue@foss.st.com>
++  - Ludovic Barre <ludovic.barre@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
+index b15da9ba90b2..8eb4bf52ea27 100644
+--- a/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
++++ b/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
+@@ -13,8 +13,8 @@ description:
+   channels (N) can be read from a dedicated register.
+ 
+ maintainers:
+-  - Fabien Dessenne <fabien.dessenne@st.com>
+-  - Arnaud Pouliquen <arnaud.pouliquen@st.com>
++  - Fabien Dessenne <fabien.dessenne@foss.st.com>
++  - Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-cec.yaml b/Documentation/devicetree/bindings/media/st,stm32-cec.yaml
+index d75019c093a4..77144cc6f7db 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-cec.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-cec.yaml
+@@ -7,8 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 CEC bindings
+ 
+ maintainers:
+-  - Benjamin Gaignard <benjamin.gaignard@st.com>
+-  - Yannick Fertre <yannick.fertre@st.com>
++  - Yannick Fertre <yannick.fertre@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
+index 41e1d0cd80e5..9c1262a276b5 100644
+--- a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
++++ b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 Digital Camera Memory Interface (DCMI) binding
+ 
+ maintainers:
+-  - Hugues Fruchet <hugues.fruchet@st.com>
++  - Hugues Fruchet <hugues.fruchet@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
+index cba74205846a..6b516d3895af 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
+@@ -19,7 +19,7 @@ description: |
+   Select. The FMC2 performs only one access at a time to an external device.
+ 
+ maintainers:
+-  - Christophe Kerello <christophe.kerello@st.com>
++  - Christophe Kerello <christophe.kerello@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+index 8bcea8dd7d90..ec7f0190f46e 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
+@@ -17,7 +17,7 @@ description: |
+      - simple counter from IN1 input signal.
+ 
+ maintainers:
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
+index dace35362a7a..10b330d42901 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
+@@ -17,8 +17,7 @@ description: |
+       programmable prescaler.
+ 
+ maintainers:
+-  - Benjamin Gaignard <benjamin.gaignard@st.com>
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mfd/st,stmfx.yaml b/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
+index 19e9afb385ac..b2a4e4aa7ff6 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stmfx.yaml
+@@ -12,7 +12,7 @@ description: ST Multi-Function eXpander (STMFX) is a slave controller using I2C
+                through VDD) and resistive touchscreen controller.
+ 
+ maintainers:
+-  - Amelie Delaunay <amelie.delaunay@st.com>
++  - Amelie Delaunay <amelie.delaunay@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+index 305123e74a58..426658ad81d4 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+@@ -9,7 +9,7 @@ title: STMicroelectonics STPMIC1 Power Management IC bindings
+ description: STMicroelectronics STPMIC1 Power Management IC
+ 
+ maintainers:
+-  - pascal Paillet <p.paillet@st.com>
++  - pascal Paillet <p.paillet@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml b/Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml
+index 29c5ef24ac6a..eab8ea3da1fa 100644
+--- a/Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml
++++ b/Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics Flexible Memory Controller 2 (FMC2) Bindings
+ 
+ maintainers:
+-  - Christophe Kerello <christophe.kerello@st.com>
++  - Christophe Kerello <christophe.kerello@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index 42689b7d03a2..a5c55127cc44 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Synopsys DesignWare MAC Device Tree Bindings
+ 
+ maintainers:
+-  - Alexandre Torgue <alexandre.torgue@st.com>
++  - Alexandre Torgue <alexandre.torgue@foss.st.com>
+   - Giuseppe Cavallaro <peppe.cavallaro@st.com>
+   - Jose Abreu <joabreu@synopsys.com>
+ 
+diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+index d3f05d5934d5..577f4e284425 100644
+--- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
+@@ -8,8 +8,8 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: STMicroelectronics STM32 / MCU DWMAC glue layer controller
+ 
+ maintainers:
+-  - Alexandre Torgue <alexandre.torgue@st.com>
+-  - Christophe Roullier <christophe.roullier@st.com>
++  - Alexandre Torgue <alexandre.torgue@foss.st.com>
++  - Christophe Roullier <christophe.roullier@foss.st.com>
+ 
+ description:
+   This file documents platform glue layer for stmmac.
+diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+index 0b80ce22a2f8..a48c8fa56bce 100644
+--- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+@@ -13,7 +13,7 @@ description: |
+   internal vref (VREFIN_CAL), unique device ID...
+ 
+ maintainers:
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ allOf:
+   - $ref: "nvmem.yaml#"
+diff --git a/Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml b/Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml
+index 3329f1d33a4f..7bae8dff3ef6 100644
+--- a/Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml
++++ b/Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml
+@@ -24,7 +24,7 @@ description:
+   |_ UTMI switch_______|          OTG controller
+ 
+ maintainers:
+-  - Amelie Delaunay <amelie.delaunay@st.com>
++  - Amelie Delaunay <amelie.delaunay@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+index dfee6d38a701..ac88e01ec430 100644
+--- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+@@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STM32 GPIO and Pin Mux/Config controller
+ 
+ maintainers:
+-  - Alexandre TORGUE <alexandre.torgue@st.com>
++  - Alexandre TORGUE <alexandre.torgue@foss.st.com>
+ 
+ description: |
+   STMicroelectronics's STM32 MCUs intregrate a GPIO and Pin mux/config hardware
+diff --git a/Documentation/devicetree/bindings/regulator/st,stm32-booster.yaml b/Documentation/devicetree/bindings/regulator/st,stm32-booster.yaml
+index 9f1c70381b82..df0191b1ceba 100644
+--- a/Documentation/devicetree/bindings/regulator/st,stm32-booster.yaml
++++ b/Documentation/devicetree/bindings/regulator/st,stm32-booster.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 booster for ADC analog input switches bindings
+ 
+ maintainers:
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ description: |
+   Some STM32 devices embed a 3.3V booster supplied by Vdda, that can be used
+diff --git a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
+index 3cd4a254e4cb..836d4156d54c 100644
+--- a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
++++ b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
+@@ -12,7 +12,7 @@ description: |
+   components through the dedicated VREF+ pin.
+ 
+ maintainers:
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ allOf:
+   - $ref: "regulator.yaml#"
+diff --git a/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml b/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
+index e6322bc3e447..bd07b9c81570 100644
+--- a/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
++++ b/Documentation/devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STM32MP1 PWR voltage regulators
+ 
+ maintainers:
+-  - Pascal Paillet <p.paillet@st.com>
++  - Pascal Paillet <p.paillet@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+index 1e6225677e00..b587c97c282b 100644
+--- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+@@ -11,8 +11,8 @@ description:
+   boots firmwares on the ST32MP family chipset.
+ 
+ maintainers:
+-  - Fabien Dessenne <fabien.dessenne@st.com>
+-  - Arnaud Pouliquen <arnaud.pouliquen@st.com>
++  - Fabien Dessenne <fabien.dessenne@foss.st.com>
++  - Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
+index 82bb2e97e889..9a6e4eaf4d3c 100644
+--- a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
++++ b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
+@@ -11,7 +11,7 @@ description: |
+   IP and is fully separated from other crypto functions.
+ 
+ maintainers:
+-  - Lionel Debieve <lionel.debieve@st.com>
++  - Lionel Debieve <lionel.debieve@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+index 5456604b1c14..2359f541b770 100644
+--- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 Real Time Clock Bindings
+ 
+ maintainers:
+-  - Gabriel Fernandez <gabriel.fernandez@st.com>
++  - Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
+index f50f4ca893a0..333dc42722d2 100644
+--- a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
+@@ -5,7 +5,7 @@ $id: http://devicetree.org/schemas/serial/st,stm32-uart.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ maintainers:
+-  - Erwan Le Ray <erwan.leray@st.com>
++  - Erwan Le Ray <erwan.leray@foss.st.com>
+ 
+ title: STMicroelectronics STM32 USART bindings
+ 
+diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
+index 0d87e2c86a42..963a871e74da 100644
+--- a/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
++++ b/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: CS42L51 audio codec DT bindings
+ 
+ maintainers:
+-  - Olivier Moysan <olivier.moysan@st.com>
++  - Olivier Moysan <olivier.moysan@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
+index 6feb5a09c184..d3966ae04ad0 100644
+--- a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
++++ b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 SPI/I2S Controller
+ 
+ maintainers:
+-  - Olivier Moysan <olivier.moysan@st.com>
++  - Olivier Moysan <olivier.moysan@foss.st.com>
+ 
+ description:
+   The SPI/I2S block supports I2S/PCM protocols when configured on I2S mode.
+diff --git a/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml b/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
+index f97132400bb6..1538d11ce9a8 100644
+--- a/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
++++ b/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 Serial Audio Interface (SAI)
+ 
+ maintainers:
+-  - Olivier Moysan <olivier.moysan@st.com>
++  - Olivier Moysan <olivier.moysan@foss.st.com>
+ 
+ description:
+   The SAI interface (Serial Audio Interface) offers a wide set of audio
+diff --git a/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml b/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
+index b7f7dc452231..837e830c47ac 100644
+--- a/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
++++ b/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 S/PDIF receiver (SPDIFRX)
+ 
+ maintainers:
+-  - Olivier Moysan <olivier.moysan@st.com>
++  - Olivier Moysan <olivier.moysan@foss.st.com>
+ 
+ description: |
+   The SPDIFRX peripheral, is designed to receive an S/PDIF flow compliant with
+diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+index 983c4e54c0be..6ec6f556182f 100644
+--- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
+@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 Quad Serial Peripheral Interface (QSPI) bindings
+ 
+ maintainers:
+-  - Christophe Kerello <christophe.kerello@st.com>
+-  - Patrice Chotard <patrice.chotard@st.com>
++  - Christophe Kerello <christophe.kerello@foss.st.com>
++  - Patrice Chotard <patrice.chotard@foss.st.com>
+ 
+ allOf:
+   - $ref: "spi-controller.yaml#"
+diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+index 2d9af4c506bb..3d64bed266ac 100644
+--- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+@@ -13,8 +13,8 @@ description: |
+   from 4 to 32-bit data size.
+ 
+ maintainers:
+-  - Erwan Leray <erwan.leray@st.com>
+-  - Fabrice Gasnier <fabrice.gasnier@st.com>
++  - Erwan Leray <erwan.leray@foss.st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+ 
+ allOf:
+   - $ref: "spi-controller.yaml#"
+diff --git a/Documentation/devicetree/bindings/thermal/st,stm32-thermal.yaml b/Documentation/devicetree/bindings/thermal/st,stm32-thermal.yaml
+index c0f59c56003d..bee41cff5142 100644
+--- a/Documentation/devicetree/bindings/thermal/st,stm32-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/st,stm32-thermal.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 digital thermal sensor (DTS) binding
+ 
+ maintainers:
+-  - David Hernandez Sanchez <david.hernandezsanchez@st.com>
++  - Pascal Paillet <p.paillet@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/timer/st,stm32-timer.yaml b/Documentation/devicetree/bindings/timer/st,stm32-timer.yaml
+index 176aa3c9baf8..937aa8a56366 100644
+--- a/Documentation/devicetree/bindings/timer/st,stm32-timer.yaml
++++ b/Documentation/devicetree/bindings/timer/st,stm32-timer.yaml
+@@ -7,7 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 general-purpose 16 and 32 bits timers bindings
+ 
+ maintainers:
+-  - Benjamin Gaignard <benjamin.gaignard@st.com>
++  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
++  - Patrice Chotard <patrice.chotard@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/usb/st,stusb160x.yaml b/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
+index 9a51efa9d101..ead1571e0e43 100644
+--- a/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
++++ b/Documentation/devicetree/bindings/usb/st,stusb160x.yaml
+@@ -7,7 +7,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ title: STMicroelectronics STUSB160x Type-C controller bindings
+ 
+ maintainers:
+-  - Amelie Delaunay <amelie.delaunay@st.com>
++  - Amelie Delaunay <amelie.delaunay@foss.st.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+index 481bf91f988a..39736449ba64 100644
+--- a/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
++++ b/Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml
+@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: STMicroelectronics STM32 Independent WatchDoG (IWDG) bindings
+ 
+ maintainers:
+-  - Yannick Fertre <yannick.fertre@st.com>
+-  - Christophe Roullier <christophe.roullier@st.com>
++  - Yannick Fertre <yannick.fertre@foss.st.com>
++  - Christophe Roullier <christophe.roullier@foss.st.com>
+ 
+ allOf:
+   - $ref: "watchdog.yaml#"
+-- 
+2.17.1
+
