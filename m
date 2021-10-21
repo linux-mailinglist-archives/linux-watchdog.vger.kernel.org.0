@@ -2,95 +2,175 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C743F4353FA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Oct 2021 21:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8458A435E1E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Oct 2021 11:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbhJTTq2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Oct 2021 15:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbhJTTq1 (ORCPT
+        id S231520AbhJUJpS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 21 Oct 2021 05:45:18 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:46605 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231391AbhJUJpS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Oct 2021 15:46:27 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4505AC06161C;
-        Wed, 20 Oct 2021 12:44:13 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so7476011otb.1;
-        Wed, 20 Oct 2021 12:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=BnN9MIlNnNEHe3vFSBOy65YT0/zTtejLPjp21ON54XM=;
-        b=f9nQVf2giN3wJxDfbtUTUJkqnEgsHMIAhBRDKRgfJmWICvBJUySo5eN6lnLB1C2bOv
-         EbKO8rhhnyUcWl6uPXB1xydamDaueXTZvJieRoImRhKYleEoNuO2i4hBfgubF6inUk88
-         e+WopyjhmntiepwIvBu/NI8RqXLYv7gNRN6+nVhmrun35wEBIzQCX1GR9d7g41ZoSZDa
-         u4QZqMKaf9hcjRpDou18NtIyrfp5ZlLGSeWvFppe/nUPlYTAMZhWQmqxtHrNJu16VdVI
-         L3i2YP7hw+kDpo9zthUb7MSdenqBciY52p4F9VkV6IfHxIcElZl02oZQw3EfiYGVvwVF
-         R71Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=BnN9MIlNnNEHe3vFSBOy65YT0/zTtejLPjp21ON54XM=;
-        b=P6XqZ0fq2v1zSyThJwiTCQ0JAm2MfDMEGtAyVz5pmKuukD3weHZd0F7wq8e6eicYYL
-         blx2W/3fSPybgOb224NriEDGOraMdiBjcGrUVLeB/ZPaj4CvYRX21l3XFaVXqHudSqnt
-         CIlS4/zfTIt5j35xAmCe7RxaRRNIKjv5BYOiRw5wUecnXMrkgKnJvFRlv8r7VbFfrwi6
-         P1GeXTq1vZ/BNe5hpt2z6q8YN/99YXLPphEG7h1IbSt4uBR28UY5xmsF6p09g0Z+Oh0k
-         wtVbBx17HpvdHN5uTr4lHrdqCK+P7AfhYUTd/8nyRhmGrCHn3GrXSQhxYIKdBUkhk+kt
-         GxPw==
-X-Gm-Message-State: AOAM5327/+4aZ2e4jlbQcT04JCYZknCFbBoF4h4MkyUd6vvgASPEMrmU
-        7DazPUhiN/EQLJCcGRLA5M0=
-X-Google-Smtp-Source: ABdhPJxL4kBEQ8gUV5nBs+kclyHcheCDaeGr/7iHXTpx9JD+NbtcFCTZWeb2l9Q5LpNao1cSG01V2A==
-X-Received: by 2002:a9d:63ca:: with SMTP id e10mr1015031otl.175.1634759052687;
-        Wed, 20 Oct 2021 12:44:12 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w69sm642977otb.16.2021.10.20.12.44.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Oct 2021 12:44:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 20 Oct 2021 12:44:08 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Mantas =?utf-8?Q?Mikul=C4=97nas?= <grawity@gmail.com>,
-        "Javier S . Pedro" <debbugs@javispedro.com>
-Subject: Re: [PATCH] Revert "watchdog: iTCO_wdt: Account for rebooting on
- second timeout"
-Message-ID: <20211020194408.GA2882870@roeck-us.net>
-References: <20211008003302.1461733-1-linux@roeck-us.net>
+        Thu, 21 Oct 2021 05:45:18 -0400
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 4EEC820007;
+        Thu, 21 Oct 2021 09:42:59 +0000 (UTC)
+Date:   Thu, 21 Oct 2021 11:42:59 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 3/9] rtc: max77686: rename day-of-month defines
+Message-ID: <YXE2I39qoA1REoVj@piout.net>
+References: <20211019145919.7327-1-luca@lucaceresoli.net>
+ <20211019145919.7327-4-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211008003302.1461733-1-linux@roeck-us.net>
+In-Reply-To: <20211019145919.7327-4-luca@lucaceresoli.net>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Wim,
-
-On Thu, Oct 07, 2021 at 05:33:02PM -0700, Guenter Roeck wrote:
-> This reverts commit cb011044e34c ("watchdog: iTCO_wdt: Account for
-> rebooting on second timeout") and commit aec42642d91f ("watchdog: iTCO_wdt:
-> Fix detection of SMI-off case") since those patches cause a regression
-> on certain boards (https://bugzilla.kernel.org/show_bug.cgi?id=213809).
+On 19/10/2021 16:59:13+0200, Luca Ceresoli wrote:
+> RTC_DATE and REG_RTC_DATE are used for the registers holding the day of
+> month. Rename these constants to mean what they mean.
 > 
-> While this revert may result in some boards to only reset after twice
-> the configured timeout value, that is still better than a watchdog reset
-> after half the configured value.
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
 > 
-> Fixes: cb011044e34c ("watchdog: iTCO_wdt: Account for rebooting on second timeout")
-> Fixes: aec42642d91f ("watchdog: iTCO_wdt: Fix detection of SMI-off case")
-> Cc: Jan Kiszka <jan.kiszka@siemens.com>
-> Cc: Mantas Mikulėnas <grawity@gmail.com>
-> Reported-by: Javier S. Pedro <debbugs@javispedro.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> 
+> Changes in v2:
+>  - fix drivers/mfd/max77686.c build failure due to missing rename
+>    (Reported-by: kernel test robot <lkp@intel.com>)
+> ---
+>  drivers/mfd/max77686.c               |  2 +-
+>  drivers/rtc/rtc-max77686.c           | 16 ++++++++--------
+>  include/linux/mfd/max77686-private.h |  4 ++--
+>  3 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/mfd/max77686.c b/drivers/mfd/max77686.c
+> index 2ad554b921d9..b1048ab25120 100644
+> --- a/drivers/mfd/max77686.c
+> +++ b/drivers/mfd/max77686.c
+> @@ -87,7 +87,7 @@ static bool max77802_rtc_is_volatile_reg(struct device *dev, unsigned int reg)
+>  		reg == MAX77802_RTC_WEEKDAY ||
+>  		reg == MAX77802_RTC_MONTH ||
+>  		reg == MAX77802_RTC_YEAR ||
+> -		reg == MAX77802_RTC_DATE);
+> +		reg == MAX77802_RTC_MONTHDAY);
+>  }
+>  
+>  static bool max77802_is_volatile_reg(struct device *dev, unsigned int reg)
+> diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
+> index bac52cdea97d..7e765207f28e 100644
+> --- a/drivers/rtc/rtc-max77686.c
+> +++ b/drivers/rtc/rtc-max77686.c
+> @@ -57,7 +57,7 @@ enum {
+>  	RTC_WEEKDAY,
+>  	RTC_MONTH,
+>  	RTC_YEAR,
+> -	RTC_DATE,
+> +	RTC_MONTHDAY,
+>  	RTC_NR_TIME
+>  };
+>  
+> @@ -119,7 +119,7 @@ enum max77686_rtc_reg_offset {
+>  	REG_RTC_WEEKDAY,
+>  	REG_RTC_MONTH,
+>  	REG_RTC_YEAR,
+> -	REG_RTC_DATE,
+> +	REG_RTC_MONTHDAY,
+>  	REG_ALARM1_SEC,
+>  	REG_ALARM1_MIN,
+>  	REG_ALARM1_HOUR,
+> @@ -150,7 +150,7 @@ static const unsigned int max77686_map[REG_RTC_END] = {
+>  	[REG_RTC_WEEKDAY]    = MAX77686_RTC_WEEKDAY,
+>  	[REG_RTC_MONTH]      = MAX77686_RTC_MONTH,
+>  	[REG_RTC_YEAR]       = MAX77686_RTC_YEAR,
+> -	[REG_RTC_DATE]       = MAX77686_RTC_DATE,
+> +	[REG_RTC_MONTHDAY]   = MAX77686_RTC_MONTHDAY,
+>  	[REG_ALARM1_SEC]     = MAX77686_ALARM1_SEC,
+>  	[REG_ALARM1_MIN]     = MAX77686_ALARM1_MIN,
+>  	[REG_ALARM1_HOUR]    = MAX77686_ALARM1_HOUR,
+> @@ -233,7 +233,7 @@ static const unsigned int max77802_map[REG_RTC_END] = {
+>  	[REG_RTC_WEEKDAY]    = MAX77802_RTC_WEEKDAY,
+>  	[REG_RTC_MONTH]      = MAX77802_RTC_MONTH,
+>  	[REG_RTC_YEAR]       = MAX77802_RTC_YEAR,
+> -	[REG_RTC_DATE]       = MAX77802_RTC_DATE,
+> +	[REG_RTC_MONTHDAY]   = MAX77802_RTC_MONTHDAY,
+>  	[REG_ALARM1_SEC]     = MAX77802_ALARM1_SEC,
+>  	[REG_ALARM1_MIN]     = MAX77802_ALARM1_MIN,
+>  	[REG_ALARM1_HOUR]    = MAX77802_ALARM1_HOUR,
+> @@ -288,7 +288,7 @@ static void max77686_rtc_data_to_tm(u8 *data, struct rtc_time *tm,
+>  
+>  	/* Only a single bit is set in data[], so fls() would be equivalent */
+>  	tm->tm_wday = ffs(data[RTC_WEEKDAY] & mask) - 1;
+> -	tm->tm_mday = data[RTC_DATE] & 0x1f;
+> +	tm->tm_mday = data[RTC_MONTHDAY] & 0x1f;
+>  	tm->tm_mon = (data[RTC_MONTH] & 0x0f) - 1;
+>  	tm->tm_year = data[RTC_YEAR] & mask;
+>  	tm->tm_yday = 0;
+> @@ -309,7 +309,7 @@ static int max77686_rtc_tm_to_data(struct rtc_time *tm, u8 *data,
+>  	data[RTC_MIN] = tm->tm_min;
+>  	data[RTC_HOUR] = tm->tm_hour;
+>  	data[RTC_WEEKDAY] = 1 << tm->tm_wday;
+> -	data[RTC_DATE] = tm->tm_mday;
+> +	data[RTC_MONTHDAY] = tm->tm_mday;
+>  	data[RTC_MONTH] = tm->tm_mon + 1;
+>  
+>  	if (info->drv_data->alarm_enable_reg) {
+> @@ -565,8 +565,8 @@ static int max77686_rtc_start_alarm(struct max77686_rtc_info *info)
+>  			data[RTC_MONTH] |= (1 << ALARM_ENABLE_SHIFT);
+>  		if (data[RTC_YEAR] & info->drv_data->mask)
+>  			data[RTC_YEAR] |= (1 << ALARM_ENABLE_SHIFT);
+> -		if (data[RTC_DATE] & 0x1f)
+> -			data[RTC_DATE] |= (1 << ALARM_ENABLE_SHIFT);
+> +		if (data[RTC_MONTHDAY] & 0x1f)
+> +			data[RTC_MONTHDAY] |= (1 << ALARM_ENABLE_SHIFT);
+>  
+>  		ret = regmap_bulk_write(info->rtc_regmap, map[REG_ALARM1_SEC],
+>  					data, ARRAY_SIZE(data));
+> diff --git a/include/linux/mfd/max77686-private.h b/include/linux/mfd/max77686-private.h
+> index b1482b3cf353..3acceeedbaba 100644
+> --- a/include/linux/mfd/max77686-private.h
+> +++ b/include/linux/mfd/max77686-private.h
+> @@ -152,7 +152,7 @@ enum max77686_rtc_reg {
+>  	MAX77686_RTC_WEEKDAY		= 0x0A,
+>  	MAX77686_RTC_MONTH		= 0x0B,
+>  	MAX77686_RTC_YEAR		= 0x0C,
+> -	MAX77686_RTC_DATE		= 0x0D,
+> +	MAX77686_RTC_MONTHDAY		= 0x0D,
+>  	MAX77686_ALARM1_SEC		= 0x0E,
+>  	MAX77686_ALARM1_MIN		= 0x0F,
+>  	MAX77686_ALARM1_HOUR		= 0x10,
+> @@ -352,7 +352,7 @@ enum max77802_rtc_reg {
+>  	MAX77802_RTC_WEEKDAY		= 0xCA,
+>  	MAX77802_RTC_MONTH		= 0xCB,
+>  	MAX77802_RTC_YEAR		= 0xCC,
+> -	MAX77802_RTC_DATE		= 0xCD,
+> +	MAX77802_RTC_MONTHDAY		= 0xCD,
+>  	MAX77802_RTC_AE1		= 0xCE,
+>  	MAX77802_ALARM1_SEC		= 0xCF,
+>  	MAX77802_ALARM1_MIN		= 0xD0,
+> -- 
+> 2.25.1
+> 
 
-Any chance you can send a pull request with this patch prior to the v5.15
-release ?
-
-Thanks,
-Guenter
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
