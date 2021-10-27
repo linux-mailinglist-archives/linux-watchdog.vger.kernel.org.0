@@ -2,140 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 218DE43C7B6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 12:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300E643C9BE
+	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 14:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241455AbhJ0KfD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 27 Oct 2021 06:35:03 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:59162 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241452AbhJ0KfC (ORCPT
+        id S236316AbhJ0MeM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 27 Oct 2021 08:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231497AbhJ0MeL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 27 Oct 2021 06:35:02 -0400
-Received: from [79.2.93.196] (port=39116 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mfgEV-00G4kG-C9; Wed, 27 Oct 2021 12:32:35 +0200
-Subject: Re: [PATCH v2 6/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211019145919.7327-1-luca@lucaceresoli.net>
- <20211019145919.7327-7-luca@lucaceresoli.net> <YXG060evUw8rnR3O@google.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <3520ff3d-1ec0-5500-7fee-538afa25d413@lucaceresoli.net>
-Date:   Wed, 27 Oct 2021 12:32:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Wed, 27 Oct 2021 08:34:11 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E52BC061570
+        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 05:31:46 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id o26so4467581ljj.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 05:31:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DBJEXKjPWdO6SQsEQrFSVQShmKG4dPUMxntiNdrcVaw=;
+        b=aOPjhWiaR3deogJbrFTwA0+Vuy9fA0rAwd1z7fyKb7tLwU6CgCJcIjHl8bu4ie76M7
+         0YoHNVIhKiLGxjSxgvPCIpN7AV3NTeTmBrZf0cvmATQ5tAnHghoFVGU2EagSpz+QKpNL
+         Jv7D/gB8MtZr1vo7JBcxrF2fPxQlcOlTXzuPjNcfsA5KLCk3+QSlYPOYlJaNVsC1D1yE
+         Byk6pfuw+2cWvOnn6sAWvLHc+slqHZ9df/uaKyE1E4Epw4siNrLHxg18mZPc0TQkdy9Y
+         TQHJGLlykLWrXJMLr9fIGObElKfV2d9l31VDDsdTOpsko9mvApDkS4SuVPz3g6lwyMbL
+         Ux2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DBJEXKjPWdO6SQsEQrFSVQShmKG4dPUMxntiNdrcVaw=;
+        b=IYz0xvCDOm2eqSuLccnhUKpCQ+QbKOy/1vuChvmZm8NBMR3QUHC5ScUkgu0EJzS4Gf
+         7BXB4ADB5BAj+SqTJB8ljFdu0FgR7yIMPJUaaLKOT1TuckVMcj9LKTxtdwFd/0v0MWpH
+         I2pUtlcizoM4xM0lvsGphVSARDMLsgSRcwrB0fHtyYd0pY9BHGelToJ68hh3SpgJiGVw
+         giwfCQuaqTWET8JFpSonDGGvQKK8cI0Nvr/NaTX3rScEMEeISZnJtAn4dZPbeRCf8y1h
+         MuxmB58NtkBHr56STNcB4ZfqykotR24AT430vJWv2jyyeUq7oAnQ4/oBFwoBhaMeXe+L
+         slig==
+X-Gm-Message-State: AOAM530TDhlN9dEOkfLB7ZtVWaogdTm/cefKGTbUuJppGfU2EbCMyE54
+        oDVuOL27rDVMHlamf+G578g=
+X-Google-Smtp-Source: ABdhPJwDIz24rQAI4I4K1Pz3/R8jRw/r7P665fu0NsKwc5huVWS0DWYY/l2UDQGXRSdP1RClp4Q/sA==
+X-Received: by 2002:a05:651c:889:: with SMTP id d9mr33454617ljq.198.1635337904770;
+        Wed, 27 Oct 2021 05:31:44 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id t192sm523409lff.52.2021.10.27.05.31.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 05:31:43 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] watchdog: bcm63xx_wdt: fix fallthrough warning
+Date:   Wed, 27 Oct 2021 14:31:35 +0200
+Message-Id: <20211027123135.27458-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <YXG060evUw8rnR3O@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Lee,
+From: Rafał Miłecki <rafal@milecki.pl>
 
-On 21/10/21 20:43, Lee Jones wrote:
-> On Tue, 19 Oct 2021, Luca Ceresoli wrote:
-[...]
->> diff --git a/drivers/mfd/max77714.c b/drivers/mfd/max77714.c
->> new file mode 100644
->> index 000000000000..4b49d16fe199
->> --- /dev/null
->> +++ b/drivers/mfd/max77714.c
->> @@ -0,0 +1,165 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Maxim MAX77714 MFD Driver
->> + *
->> + * Copyright (C) 2021 Luca Ceresoli
->> + * Author: Luca Ceresoli <luca@lucaceresoli.net>
->> + */
->> +
->> +#include <linux/i2c.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/mfd/core.h>
->> +#include <linux/mfd/max77714.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/regmap.h>
->> +
->> +struct max77714 {
->> +	struct device *dev;
->> +	struct regmap *regmap;
->> +	struct regmap_irq_chip_data *irq_data;
-> 
-> Is this used outside of .probe()?
+This fixes:
+drivers/watchdog/bcm63xx_wdt.c: In function 'bcm63xx_wdt_ioctl':
+drivers/watchdog/bcm63xx_wdt.c:208:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
 
-No.
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ drivers/watchdog/bcm63xx_wdt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->> +/*
->> + * MAX77714 initially uses the internal, low precision oscillator. Enable
->> + * the external oscillator by setting the XOSC_RETRY bit. If the external
->> + * oscillator is not OK (probably not installed) this has no effect.
->> + */
->> +static int max77714_setup_xosc(struct max77714 *chip)
-> 
-> May as well just pass 'dev' and 'regmap' to this function and do away
-> with the superfluous struct along with all of it's memory management
-> handling requirements.
-
-Good idea!
-
->> +{
->> +	/* Internal Crystal Load Capacitance, indexed by value of 32KLOAD bits */
->> +	static const unsigned int load_cap[4] = {0, 10, 12, 22};
-> 
-> Probably best to define these magic numbers.
-
-Since these numbers do not appear anywhere else I don't find added value in:
-
-  #define MAX77714_LOAD_CAP_0   0
-  #define MAX77714_LOAD_CAP_10  10
-  #define MAX77714_LOAD_CAP_12  12
-  #define MAX77714_LOAD_CAP_22  22
-  [...]
-  static const unsigned int load_cap[4] = {
-      MAX77714_LOAD_CAP_0,
-      MAX77714_LOAD_CAP_10,
-      MAX77714_LOAD_CAP_12,
-      MAX77714_LOAD_CAP_12,
-  };
-
-besides adding lots of lines and lots of "MAX77714_LOAD_CAP_". Even
-worse, there is potential for copy-paste errors -- can you spot it? ;)
-Finally, consider this is not even global but local to a small function.
-
-But I'd rather add the unit ("pF") to either the comment line of the
-array name (load_cap -> load_cap_pf) for clarity. Would that be OK for you?
-
-Apart from this coding style topic I'm OK with all the other
-improvements you proposed to this patch, all of them will be in v3.
-
-Thank you for the detailed review!
+diff --git a/drivers/watchdog/bcm63xx_wdt.c b/drivers/watchdog/bcm63xx_wdt.c
+index 7cdb25363ea0..56cc262571a5 100644
+--- a/drivers/watchdog/bcm63xx_wdt.c
++++ b/drivers/watchdog/bcm63xx_wdt.c
+@@ -207,6 +207,8 @@ static long bcm63xx_wdt_ioctl(struct file *file, unsigned int cmd,
+ 
+ 		bcm63xx_wdt_pet();
+ 
++		fallthrough;
++
+ 	case WDIOC_GETTIMEOUT:
+ 		return put_user(wdt_time, p);
+ 
 -- 
-Luca
+2.31.1
+
