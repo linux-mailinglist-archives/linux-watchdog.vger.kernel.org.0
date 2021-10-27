@@ -2,76 +2,82 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA4043C9CA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 14:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B300243CA58
+	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 15:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240192AbhJ0Mid (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 27 Oct 2021 08:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236394AbhJ0Mid (ORCPT
+        id S236897AbhJ0NLx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 27 Oct 2021 09:11:53 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:53170 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234339AbhJ0NLx (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 27 Oct 2021 08:38:33 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A9CC061570
-        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 05:36:07 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:441:6c1a:bc30:46e])
-        by xavier.telenet-ops.be with bizsmtp
-        id B0c52600C2hfXWm010c5nf; Wed, 27 Oct 2021 14:36:05 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mfiA1-008TvA-0j; Wed, 27 Oct 2021 14:36:05 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mfiA0-00DsVi-8M; Wed, 27 Oct 2021 14:36:04 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
+        Wed, 27 Oct 2021 09:11:53 -0400
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D986F596;
+        Wed, 27 Oct 2021 15:09:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1635340167;
+        bh=nSBBdtY5RhYIZtueCATbtovl6jxRm2CUdgwXLZX9OJg=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=GyENAem8SFatgBxmn368G5y7yWnjGEgs1MOTSNCdRKls4mwtdQ9vF72N+/HHiZgK2
+         GM+/H6yUrXgjStMuWcf74ZtUFmQto6fHeKKNMHgElJLaBmy92RyX7SY8G28xvXttIt
+         fFLjquHqFVMuIfmsOIct7jNY0hOWYCdBufsfnDaQ=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <dc4e3692480a136f5c2efdd38862ff2c8741f93c.1635338097.git.geert+renesas@glider.be>
+References: <dc4e3692480a136f5c2efdd38862ff2c8741f93c.1635338097.git.geert+renesas@glider.be>
+Subject: Re: [PATCH v2] watchdog: rza_wdt: Use semicolons instead of commas
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
 Cc:     Julia Lawall <julia.lawall@inria.fr>,
         linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] watchdog: rza_wdt: Use semicolons instead of commas
-Date:   Wed, 27 Oct 2021 14:36:03 +0200
-Message-Id: <dc4e3692480a136f5c2efdd38862ff2c8741f93c.1635338097.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Date:   Wed, 27 Oct 2021 14:09:24 +0100
+Message-ID: <163534016415.1184428.1151584448808244621@Monstersaurus>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This code works, but it is cleaner to use semicolons at the end of
-statements instead of commas.
+Quoting Geert Uytterhoeven (2021-10-27 13:36:03)
+> This code works, but it is cleaner to use semicolons at the end of
+> statements instead of commas.
+>=20
+> Extracted from a big anonymous patch by Julia Lawall
+> <julia.lawall@inria.fr>.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Extracted from a big anonymous patch by Julia Lawall
-<julia.lawall@inria.fr>.
+Yikes, that's subtle, the fun you can have with valid C code ;-)
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
-v2:
-  - Add Reviewed-by.
----
- drivers/watchdog/rza_wdt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-diff --git a/drivers/watchdog/rza_wdt.c b/drivers/watchdog/rza_wdt.c
-index 7b6c365f7cd36297..fe6c2ed35e04cc4b 100644
---- a/drivers/watchdog/rza_wdt.c
-+++ b/drivers/watchdog/rza_wdt.c
-@@ -189,8 +189,8 @@ static int rza_wdt_probe(struct platform_device *pdev)
- 		return -ENOENT;
- 	}
- 
--	priv->wdev.info = &rza_wdt_ident,
--	priv->wdev.ops = &rza_wdt_ops,
-+	priv->wdev.info = &rza_wdt_ident;
-+	priv->wdev.ops = &rza_wdt_ops;
- 	priv->wdev.parent = dev;
- 
- 	priv->cks = (u8)(uintptr_t) of_device_get_match_data(dev);
--- 
-2.25.1
-
+> ---
+> v2:
+>   - Add Reviewed-by.
+> ---
+>  drivers/watchdog/rza_wdt.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/watchdog/rza_wdt.c b/drivers/watchdog/rza_wdt.c
+> index 7b6c365f7cd36297..fe6c2ed35e04cc4b 100644
+> --- a/drivers/watchdog/rza_wdt.c
+> +++ b/drivers/watchdog/rza_wdt.c
+> @@ -189,8 +189,8 @@ static int rza_wdt_probe(struct platform_device *pdev)
+>                 return -ENOENT;
+>         }
+> =20
+> -       priv->wdev.info =3D &rza_wdt_ident,
+> -       priv->wdev.ops =3D &rza_wdt_ops,
+> +       priv->wdev.info =3D &rza_wdt_ident;
+> +       priv->wdev.ops =3D &rza_wdt_ops;
+>         priv->wdev.parent =3D dev;
+> =20
+>         priv->cks =3D (u8)(uintptr_t) of_device_get_match_data(dev);
+> --=20
+> 2.25.1
+>
