@@ -2,78 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C71243CFAD
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 19:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A018A43CFBC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 19:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243262AbhJ0RbU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 27 Oct 2021 13:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        id S232365AbhJ0Rdn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 27 Oct 2021 13:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243261AbhJ0RbU (ORCPT
+        with ESMTP id S229612AbhJ0Rdm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 27 Oct 2021 13:31:20 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DCFC061745
-        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 10:28:54 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id om14so2575033pjb.5
-        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 10:28:54 -0700 (PDT)
+        Wed, 27 Oct 2021 13:33:42 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C88C061570
+        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 10:31:17 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id l16-20020a9d6a90000000b0054e7ab56f27so4597238otq.12
+        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 10:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iEm9Mle5D12dB30vBWcu+Ln5yiaTtDZ5pi5U6Rhemqg=;
-        b=O3Sa4V0acymRvx/g92yxRn2rhM0M2SSh9jLGU2+JA3KLpfGd0Kmi1UCsatQUA62NKx
-         jtQe3YjASRG5HUJKI3wvGU5bVZWJBmV6EFsSGrkgquMZXzJhesj/RtZ/Zw1txUsoolZn
-         6UJ8HhIZh92tUo0RVuX4zWlc5T6gjR+nDtD2S9DgcAC1sN05IXQBrfiJgqLcy8XrNa1O
-         4AhKXaAjxXhapxtxfPWOCDy30gV7pMijfEUUI7ijGH8tQ3ZAH95kqXYpnTvjrYpsllYV
-         bDXmz0fBxjykJEoF5iWZdpNhE+o690EphlU6v41z2qglxM1DnRAd5DYSSu11njXTbgJw
-         9uzA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ksexwST9qvDN27qOTH0J9Yh/ySFh1ON/feQFJjqLtaQ=;
+        b=gQfO2S+1hPhLfGAdoibSdj0DZYNtd8wzumasWLGMhTxc/eygCIHlilGD/k1nskJWLM
+         d3E5M+XmP23bOs9BPOfbbrB6WSO+xnDmGVOHoj8HvdaZoxSldp/+pZbD5tSmRyh9LAvw
+         V7o65zK/F0YKeNprjKACwtDQkDmTPbHeoJJY/BXYzMchp8H7VXzzCjT62HPylgSz8G5v
+         JgU13IqajqxITaaCBLS74JgnDBxdfRCJJJW0Q65Q8lSt91jz/Gpkul6aNJiGvXhPCK+e
+         VwFgIvG/S/MoXClXlOUeifRgGS6FrltQrH+Q+nPQzWqHjZerwI4qVWW5/z03qlAjnGuL
+         YGGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=iEm9Mle5D12dB30vBWcu+Ln5yiaTtDZ5pi5U6Rhemqg=;
-        b=0iiw0zNCHKZP8T4RdV0naoAOa8NIgpOSkLIlMIYxyqxgac5upjkBeaqLF2u9yI+F+p
-         k0lM4CViv5d/JFGVBvTM9rWe/8MYV2t3nUy1iZ5DTZYfFYL6eujA/ELrcVs8Uey4CIbl
-         vtZOik+D6iRL1Y8jqmueCgWLQtlgdcrPSNRgltz06p60Vi4XvyY4NzxABeuxsIDaJyPc
-         F5gTEYbIh/Z0hqB2UylOW71hK2xB6To23JHKJIVj3YuRYuy5H2+j2kXspvUJOvpWx2FZ
-         Y04brr85F4X2fkPAeW2dupIWFdoIR/Y6A+oosL7WYHPSjUXOCoGuKuDi9ILEoFDi1bII
-         v01A==
-X-Gm-Message-State: AOAM532azy9uMLVOH9IBZo2FzKM32WFz98mfdKAq/7NmbGOC/KSmkgS6
-        krsYzvv7Wk962z2X87fPDebCDkitN/w=
-X-Google-Smtp-Source: ABdhPJxOSp/LFMBV4hwaz1GDiHnK3Bf1Wb2o3JJiOYD2Mwbjt2JsWxqAkwuurlXev16NCgiP4HeUmA==
-X-Received: by 2002:a17:902:e741:b0:140:9a0b:1918 with SMTP id p1-20020a170902e74100b001409a0b1918mr14145316plf.72.1635355733999;
-        Wed, 27 Oct 2021 10:28:53 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id t13sm347034pgn.94.2021.10.27.10.28.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 10:28:53 -0700 (PDT)
-Subject: Re: [PATCH] watchdog: bcm63xx_wdt: fix fallthrough warning
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=ksexwST9qvDN27qOTH0J9Yh/ySFh1ON/feQFJjqLtaQ=;
+        b=mxD50h9MI4wU1Y+EX7Sf8FvG2TSMnyowikMmd1XNcuv4nq37fFMq3PA++NpycAW8Y1
+         iXo87UimW4xsdXdOH2ioU/koYfv8IInXPQkmlq4KyAIXhTOm1xdKmAvLrSW0Ju/Evx2M
+         mGWTyUzSCEZbnGol66o4ffW1cRiN6TGcn1+riIcUdATjsHy8tn+xPozczCALEuxpaVZa
+         cgLct5xWKML0+zQtFXpYPoCV3JgAUAC16n2687hYIvIGsrcmwrb+ZKvcFr2ubi68uzTM
+         xQ/G53oAYqkmwCbByvxTnCC7cSvBuufc4PIf5z/rDf1nZOswA7EWTFZ2LXiJ5g1Ysl+S
+         TMbQ==
+X-Gm-Message-State: AOAM533TTi/rzXqkU+8G0cJPMceCsaFG85OfOOkvaKSqtEX2Acv9mAGU
+        ZNedFULkiFzWXBRN9Oun5kLstnOjd9o=
+X-Google-Smtp-Source: ABdhPJyRzF35cy3HgXrrMwQ4+8WxObDZ53yQIqHn8yhOFAWVT8NGjtRELy7W9uMENmIsx8WKCiS8Ug==
+X-Received: by 2002:a05:6830:410e:: with SMTP id w14mr26287876ott.256.1635355876637;
+        Wed, 27 Oct 2021 10:31:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x14sm191587oon.32.2021.10.27.10.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 10:31:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 27 Oct 2021 10:31:14 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
         linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH] watchdog: bcm63xx_wdt: fix fallthrough warning
+Message-ID: <20211027173114.GA2327649@roeck-us.net>
 References: <20211027123135.27458-1-zajec5@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <9434740d-968f-9aea-bbf0-721130cd9364@gmail.com>
-Date:   Wed, 27 Oct 2021 10:28:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211027123135.27458-1-zajec5@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211027123135.27458-1-zajec5@gmail.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/27/21 5:31 AM, Rafał Miłecki wrote:
+On Wed, Oct 27, 2021 at 02:31:35PM +0200, Rafał Miłecki wrote:
 > From: Rafał Miłecki <rafal@milecki.pl>
 > 
 > This fixes:
@@ -82,6 +80,31 @@ On 10/27/21 5:31 AM, Rafał Miłecki wrote:
 > 
 > Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+[reluctantly]
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+... because the driver should really be converted to use the watchdog subsystem,
+by someone with the necessary hardware to test it.
+
+Guenter
+> ---
+>  drivers/watchdog/bcm63xx_wdt.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/watchdog/bcm63xx_wdt.c b/drivers/watchdog/bcm63xx_wdt.c
+> index 7cdb25363ea0..56cc262571a5 100644
+> --- a/drivers/watchdog/bcm63xx_wdt.c
+> +++ b/drivers/watchdog/bcm63xx_wdt.c
+> @@ -207,6 +207,8 @@ static long bcm63xx_wdt_ioctl(struct file *file, unsigned int cmd,
+>  
+>  		bcm63xx_wdt_pet();
+>  
+> +		fallthrough;
+> +
+>  	case WDIOC_GETTIMEOUT:
+>  		return put_user(wdt_time, p);
+>  
+> -- 
+> 2.31.1
+> 
