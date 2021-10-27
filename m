@@ -2,95 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 300E643C9BE
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 14:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA4043C9CA
+	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 14:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbhJ0MeM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 27 Oct 2021 08:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S240192AbhJ0Mid (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 27 Oct 2021 08:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbhJ0MeL (ORCPT
+        with ESMTP id S236394AbhJ0Mid (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 27 Oct 2021 08:34:11 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E52BC061570
-        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 05:31:46 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id o26so4467581ljj.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 05:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DBJEXKjPWdO6SQsEQrFSVQShmKG4dPUMxntiNdrcVaw=;
-        b=aOPjhWiaR3deogJbrFTwA0+Vuy9fA0rAwd1z7fyKb7tLwU6CgCJcIjHl8bu4ie76M7
-         0YoHNVIhKiLGxjSxgvPCIpN7AV3NTeTmBrZf0cvmATQ5tAnHghoFVGU2EagSpz+QKpNL
-         Jv7D/gB8MtZr1vo7JBcxrF2fPxQlcOlTXzuPjNcfsA5KLCk3+QSlYPOYlJaNVsC1D1yE
-         Byk6pfuw+2cWvOnn6sAWvLHc+slqHZ9df/uaKyE1E4Epw4siNrLHxg18mZPc0TQkdy9Y
-         TQHJGLlykLWrXJMLr9fIGObElKfV2d9l31VDDsdTOpsko9mvApDkS4SuVPz3g6lwyMbL
-         Ux2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DBJEXKjPWdO6SQsEQrFSVQShmKG4dPUMxntiNdrcVaw=;
-        b=IYz0xvCDOm2eqSuLccnhUKpCQ+QbKOy/1vuChvmZm8NBMR3QUHC5ScUkgu0EJzS4Gf
-         7BXB4ADB5BAj+SqTJB8ljFdu0FgR7yIMPJUaaLKOT1TuckVMcj9LKTxtdwFd/0v0MWpH
-         I2pUtlcizoM4xM0lvsGphVSARDMLsgSRcwrB0fHtyYd0pY9BHGelToJ68hh3SpgJiGVw
-         giwfCQuaqTWET8JFpSonDGGvQKK8cI0Nvr/NaTX3rScEMEeISZnJtAn4dZPbeRCf8y1h
-         MuxmB58NtkBHr56STNcB4ZfqykotR24AT430vJWv2jyyeUq7oAnQ4/oBFwoBhaMeXe+L
-         slig==
-X-Gm-Message-State: AOAM530TDhlN9dEOkfLB7ZtVWaogdTm/cefKGTbUuJppGfU2EbCMyE54
-        oDVuOL27rDVMHlamf+G578g=
-X-Google-Smtp-Source: ABdhPJwDIz24rQAI4I4K1Pz3/R8jRw/r7P665fu0NsKwc5huVWS0DWYY/l2UDQGXRSdP1RClp4Q/sA==
-X-Received: by 2002:a05:651c:889:: with SMTP id d9mr33454617ljq.198.1635337904770;
-        Wed, 27 Oct 2021 05:31:44 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id t192sm523409lff.52.2021.10.27.05.31.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 05:31:43 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+        Wed, 27 Oct 2021 08:38:33 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A9CC061570
+        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 05:36:07 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:441:6c1a:bc30:46e])
+        by xavier.telenet-ops.be with bizsmtp
+        id B0c52600C2hfXWm010c5nf; Wed, 27 Oct 2021 14:36:05 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mfiA1-008TvA-0j; Wed, 27 Oct 2021 14:36:05 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mfiA0-00DsVi-8M; Wed, 27 Oct 2021 14:36:04 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] watchdog: bcm63xx_wdt: fix fallthrough warning
-Date:   Wed, 27 Oct 2021 14:31:35 +0200
-Message-Id: <20211027123135.27458-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
+Cc:     Julia Lawall <julia.lawall@inria.fr>,
+        linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2] watchdog: rza_wdt: Use semicolons instead of commas
+Date:   Wed, 27 Oct 2021 14:36:03 +0200
+Message-Id: <dc4e3692480a136f5c2efdd38862ff2c8741f93c.1635338097.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+This code works, but it is cleaner to use semicolons at the end of
+statements instead of commas.
 
-This fixes:
-drivers/watchdog/bcm63xx_wdt.c: In function 'bcm63xx_wdt_ioctl':
-drivers/watchdog/bcm63xx_wdt.c:208:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
+Extracted from a big anonymous patch by Julia Lawall
+<julia.lawall@inria.fr>.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/watchdog/bcm63xx_wdt.c | 2 ++
- 1 file changed, 2 insertions(+)
+v2:
+  - Add Reviewed-by.
+---
+ drivers/watchdog/rza_wdt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/watchdog/bcm63xx_wdt.c b/drivers/watchdog/bcm63xx_wdt.c
-index 7cdb25363ea0..56cc262571a5 100644
---- a/drivers/watchdog/bcm63xx_wdt.c
-+++ b/drivers/watchdog/bcm63xx_wdt.c
-@@ -207,6 +207,8 @@ static long bcm63xx_wdt_ioctl(struct file *file, unsigned int cmd,
+diff --git a/drivers/watchdog/rza_wdt.c b/drivers/watchdog/rza_wdt.c
+index 7b6c365f7cd36297..fe6c2ed35e04cc4b 100644
+--- a/drivers/watchdog/rza_wdt.c
++++ b/drivers/watchdog/rza_wdt.c
+@@ -189,8 +189,8 @@ static int rza_wdt_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 	}
  
- 		bcm63xx_wdt_pet();
+-	priv->wdev.info = &rza_wdt_ident,
+-	priv->wdev.ops = &rza_wdt_ops,
++	priv->wdev.info = &rza_wdt_ident;
++	priv->wdev.ops = &rza_wdt_ops;
+ 	priv->wdev.parent = dev;
  
-+		fallthrough;
-+
- 	case WDIOC_GETTIMEOUT:
- 		return put_user(wdt_time, p);
- 
+ 	priv->cks = (u8)(uintptr_t) of_device_get_match_data(dev);
 -- 
-2.31.1
+2.25.1
 
