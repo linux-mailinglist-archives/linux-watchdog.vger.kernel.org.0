@@ -2,152 +2,86 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B9743CC0A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 16:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C71243CFAD
+	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Oct 2021 19:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236746AbhJ0O00 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 27 Oct 2021 10:26:26 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58642 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238272AbhJ0O00 (ORCPT
+        id S243262AbhJ0RbU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 27 Oct 2021 13:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243261AbhJ0RbU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 27 Oct 2021 10:26:26 -0400
-Received: from [79.2.93.196] (port=40416 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mfjqQ-000JQb-LM; Wed, 27 Oct 2021 16:23:58 +0200
-Subject: Re: [PATCH v2 6/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Wed, 27 Oct 2021 13:31:20 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DCFC061745
+        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 10:28:54 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id om14so2575033pjb.5
+        for <linux-watchdog@vger.kernel.org>; Wed, 27 Oct 2021 10:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iEm9Mle5D12dB30vBWcu+Ln5yiaTtDZ5pi5U6Rhemqg=;
+        b=O3Sa4V0acymRvx/g92yxRn2rhM0M2SSh9jLGU2+JA3KLpfGd0Kmi1UCsatQUA62NKx
+         jtQe3YjASRG5HUJKI3wvGU5bVZWJBmV6EFsSGrkgquMZXzJhesj/RtZ/Zw1txUsoolZn
+         6UJ8HhIZh92tUo0RVuX4zWlc5T6gjR+nDtD2S9DgcAC1sN05IXQBrfiJgqLcy8XrNa1O
+         4AhKXaAjxXhapxtxfPWOCDy30gV7pMijfEUUI7ijGH8tQ3ZAH95kqXYpnTvjrYpsllYV
+         bDXmz0fBxjykJEoF5iWZdpNhE+o690EphlU6v41z2qglxM1DnRAd5DYSSu11njXTbgJw
+         9uzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iEm9Mle5D12dB30vBWcu+Ln5yiaTtDZ5pi5U6Rhemqg=;
+        b=0iiw0zNCHKZP8T4RdV0naoAOa8NIgpOSkLIlMIYxyqxgac5upjkBeaqLF2u9yI+F+p
+         k0lM4CViv5d/JFGVBvTM9rWe/8MYV2t3nUy1iZ5DTZYfFYL6eujA/ELrcVs8Uey4CIbl
+         vtZOik+D6iRL1Y8jqmueCgWLQtlgdcrPSNRgltz06p60Vi4XvyY4NzxABeuxsIDaJyPc
+         F5gTEYbIh/Z0hqB2UylOW71hK2xB6To23JHKJIVj3YuRYuy5H2+j2kXspvUJOvpWx2FZ
+         Y04brr85F4X2fkPAeW2dupIWFdoIR/Y6A+oosL7WYHPSjUXOCoGuKuDi9ILEoFDi1bII
+         v01A==
+X-Gm-Message-State: AOAM532azy9uMLVOH9IBZo2FzKM32WFz98mfdKAq/7NmbGOC/KSmkgS6
+        krsYzvv7Wk962z2X87fPDebCDkitN/w=
+X-Google-Smtp-Source: ABdhPJxOSp/LFMBV4hwaz1GDiHnK3Bf1Wb2o3JJiOYD2Mwbjt2JsWxqAkwuurlXev16NCgiP4HeUmA==
+X-Received: by 2002:a17:902:e741:b0:140:9a0b:1918 with SMTP id p1-20020a170902e74100b001409a0b1918mr14145316plf.72.1635355733999;
+        Wed, 27 Oct 2021 10:28:53 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id t13sm347034pgn.94.2021.10.27.10.28.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Oct 2021 10:28:53 -0700 (PDT)
+Subject: Re: [PATCH] watchdog: bcm63xx_wdt: fix fallthrough warning
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211019145919.7327-1-luca@lucaceresoli.net>
- <20211019145919.7327-7-luca@lucaceresoli.net> <YXG060evUw8rnR3O@google.com>
- <3520ff3d-1ec0-5500-7fee-538afa25d413@lucaceresoli.net>
- <YXlXvovUsvOIPYyV@google.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <d5674e8e-34c9-86ca-94cc-dca79ed82496@lucaceresoli.net>
-Date:   Wed, 27 Oct 2021 16:23:57 +0200
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20211027123135.27458-1-zajec5@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <9434740d-968f-9aea-bbf0-721130cd9364@gmail.com>
+Date:   Wed, 27 Oct 2021 10:28:51 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <YXlXvovUsvOIPYyV@google.com>
+In-Reply-To: <20211027123135.27458-1-zajec5@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Lee,
+On 10/27/21 5:31 AM, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> This fixes:
+> drivers/watchdog/bcm63xx_wdt.c: In function 'bcm63xx_wdt_ioctl':
+> drivers/watchdog/bcm63xx_wdt.c:208:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
-On 27/10/21 15:44, Lee Jones wrote:
-> On Wed, 27 Oct 2021, Luca Ceresoli wrote:
-> 
->> Hi Lee,
->>
->> On 21/10/21 20:43, Lee Jones wrote:
->>> On Tue, 19 Oct 2021, Luca Ceresoli wrote:
->> [...]
->>>> diff --git a/drivers/mfd/max77714.c b/drivers/mfd/max77714.c
->>>> new file mode 100644
->>>> index 000000000000..4b49d16fe199
->>>> --- /dev/null
->>>> +++ b/drivers/mfd/max77714.c
->>>> @@ -0,0 +1,165 @@
->>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>> +/*
->>>> + * Maxim MAX77714 MFD Driver
->>>> + *
->>>> + * Copyright (C) 2021 Luca Ceresoli
->>>> + * Author: Luca Ceresoli <luca@lucaceresoli.net>
->>>> + */
->>>> +
->>>> +#include <linux/i2c.h>
->>>> +#include <linux/interrupt.h>
->>>> +#include <linux/mfd/core.h>
->>>> +#include <linux/mfd/max77714.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/of.h>
->>>> +#include <linux/regmap.h>
->>>> +
->>>> +struct max77714 {
->>>> +	struct device *dev;
->>>> +	struct regmap *regmap;
->>>> +	struct regmap_irq_chip_data *irq_data;
->>>
->>> Is this used outside of .probe()?
->>
->> No.
-> 
-> Then you don't need to store it in a struct.
-> 
-> [...]
-> 
->>>> +	/* Internal Crystal Load Capacitance, indexed by value of 32KLOAD bits */
->>>> +	static const unsigned int load_cap[4] = {0, 10, 12, 22};
->>>
->>> Probably best to define these magic numbers.
->>
->> Since these numbers do not appear anywhere else I don't find added value in:
->>
->>   #define MAX77714_LOAD_CAP_0   0
->>   #define MAX77714_LOAD_CAP_10  10
->>   #define MAX77714_LOAD_CAP_12  12
->>   #define MAX77714_LOAD_CAP_22  22
->>   [...]
->>   static const unsigned int load_cap[4] = {
->>       MAX77714_LOAD_CAP_0,
->>       MAX77714_LOAD_CAP_10,
->>       MAX77714_LOAD_CAP_12,
->>       MAX77714_LOAD_CAP_12,
->>   };
-> 
-> I don't find value in that nomenclature either! :)
-> 
-> I was suggesting that you used better, more forthcoming names.
-> 
->  LOAD_CAPACITANCE_00_pF
->  LOAD_CAPACITANCE_10_pF
->  LOAD_CAPACITANCE_12_pF
->  LOAD_CAPACITANCE_22_pF
-> 
->> besides adding lots of lines and lots of "MAX77714_LOAD_CAP_". Even
->> worse, there is potential for copy-paste errors -- can you spot it? ;)
-> 
-> Yes.  Straight away.
-> 
->> Finally, consider this is not even global but local to a small function.
->>
->> But I'd rather add the unit ("pF") to either the comment line of the
->> array name (load_cap -> load_cap_pf) for clarity. Would that be OK for you?
-> 
-> I did have to read the code again to get a handle on things (probably
-> not a good sign).  To keep things simple, just add "/* pF */" onto the
-> end of the load_cap line for now.  That should clear things up at
-> first glance.
-
-Ok, let's see how it works. I'm sending v3 in the next few days.
-
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Luca
+Florian
