@@ -2,281 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCDE43DDC7
-	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Oct 2021 11:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7002C43DF57
+	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Oct 2021 12:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbhJ1Jdo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 28 Oct 2021 05:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S230271AbhJ1Kyv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 28 Oct 2021 06:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbhJ1Jdo (ORCPT
+        with ESMTP id S230225AbhJ1Kyt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 28 Oct 2021 05:33:44 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F63CC061570;
-        Thu, 28 Oct 2021 02:31:17 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u21so12213318lff.8;
-        Thu, 28 Oct 2021 02:31:17 -0700 (PDT)
+        Thu, 28 Oct 2021 06:54:49 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEC3C06122B
+        for <linux-watchdog@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id h7so23460427ede.8
+        for <linux-watchdog@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5SCRR+E6hGA2qUYlZFUC09MM/t1uJnD/XLaVJ8yfNfk=;
-        b=DIPttbwdnzYKTfXlI6MpZLACsySVnJjafi/Cj4futVxmFjkow5Tup11a5aSutu7COq
-         FatUpMi61V6yWEoPZzhaBLMIXpJWkOFJ4R+UESLPOZ+yCzoPeZQZ67U6ElGS2o2lr7rE
-         fMtMgxdDn0w3ksR0+aWxjPBJOlR548utKKa4PAuURNr4s35RCgHTMCjB3Wn4lAe5U2cZ
-         jR4DTITlTVOjxWRBvn0JNWcPycCnS9KJm8vkHqYSeb6oVj1a3+klyPhFaTeiSiT+TYO4
-         3gJ54Mz2nm1fC7pQOAYxjRhgP+vOvEV4mdPOK/sRPID8Q/nkyXa77hGmLf8w7wffQy5/
-         /7Sw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
+        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
+         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
+         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
+         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
+         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
+         gaRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5SCRR+E6hGA2qUYlZFUC09MM/t1uJnD/XLaVJ8yfNfk=;
-        b=6hlUpvT6CClcYTKlpuW7JswIbrlPpz+HVNFrzw4xBVQ0AgeC07vQ7havNIgxrcMwSP
-         J60jKR5CKQa7Q/Zdrb9KcYFL7vSImV3LKkHyAocgzES1nbg/0MosW6mLlGYRM2qTI5/E
-         Ib8K5/RRuMacLyvwsh/YEI21RAkRIFO88ig13fVrUQYKs//VWajWq8oUehTaIGzzQcL7
-         jlLEjcHPSTOhZvlCndCuX3RazI5IrZAmpbuZqrzVa3CCQQo3s6ZD04rlD/2aR42ojp6A
-         Sp8HSthPDybrdiS9XlujbK56SY5gCpnXIBXtS9rXtq46QZQbsbAKACZmjllcoNTox97L
-         DrwA==
-X-Gm-Message-State: AOAM533YrF0QmnvsYJYj+q6TtjQJOaIvnBlO3fIp9D+XmbCwxNvreVoH
-        +RtRnJ5/RYTs5jT+DCopsUQ=
-X-Google-Smtp-Source: ABdhPJzHdKxqhsU7CoH1gvpFRrC1HQosEE7pvQ3GRH5o89V/kvy/XsJXdCk2D7WOcoxrEq+EL13rlQ==
-X-Received: by 2002:a05:6512:3049:: with SMTP id b9mr3103568lfb.660.1635413475449;
-        Thu, 28 Oct 2021 02:31:15 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id o26sm231548ljg.92.2021.10.28.02.31.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 02:31:15 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
-Date:   Thu, 28 Oct 2021 11:30:59 +0200
-Message-Id: <20211028093059.32535-3-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211028093059.32535-1-zajec5@gmail.com>
-References: <20211028093059.32535-1-zajec5@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
+        b=QJYHn8oNDIjX9R3YFVTj+1FLa7KHBsZOr0Ed8Mp7mjZf74K7r7xUXtpWfj69jhmvH7
+         pWf5LYVj+8Epz0KvWzklGh7tv3IyKuvoseDHDMfYuvhjpgYimPIYFKuerBhv9cZ8eXrb
+         4IwB0NB92ljSPdwbkUFJAbT7S3QDcC0y8c+oW4l5osxKEVgYgZIPXrQVSbDxN9cQbsH0
+         OHOCT3BwRbl6jsbFRFxO3HMGAI7r9S3u81hTq9PhKTCq2XwRloUQncuLO0I2FrMKAo+j
+         8KKPVvphz3rARKEo4KkOF/93/cKE0JOnaVkaDw7dvhEMl4d8oIWUrD+OUzLR0J++kwTz
+         9apQ==
+X-Gm-Message-State: AOAM531eq+pqRyd2IK1c38d7Hw81ILwCIMekSro7E14k/PdicjV+n+WJ
+        ejrUYBrdyk3ce1wtT7mV/rf+03hd8T1FSrs8B8TTYDRA27uhaUiV
+X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
+X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
+ Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
+ -0700 (PDT)
+Reply-To: aabdulwalialhashmi@gmail.com
+From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
+Date:   Thu, 28 Oct 2021 03:52:09 -0700
+Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
+Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
-
-Hardware supported by this driver goes back to the old bcm63xx days. It
-was then reused in BCM7038 and later also in BCM4908.
-
-Depending on SoC model registers layout differs a bit. This commit
-introduces support for per-chipset registers offsets & adds BCM4908
-layout.
-
-Later on BCM63xx SoCs support should be added too (probably as platform
-devices due to missing DT). Eventually this driver should replace
-bcm63xx_wdt.c.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/watchdog/Kconfig       |  2 +-
- drivers/watchdog/bcm7038_wdt.c | 89 ++++++++++++++++++++++++++--------
- 2 files changed, 69 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index bf59faeb3de1..324aa942b182 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1756,7 +1756,7 @@ config BCM7038_WDT
- 	tristate "BCM7038 Watchdog"
- 	select WATCHDOG_CORE
- 	depends on HAS_IOMEM
--	depends on ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
-+	depends on ARCH_BCM4908 || ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
- 	help
- 	 Watchdog driver for the built-in hardware in Broadcom 7038 and
- 	 later SoCs used in set-top boxes.  BCM7038 was made public
-diff --git a/drivers/watchdog/bcm7038_wdt.c b/drivers/watchdog/bcm7038_wdt.c
-index acaaa0005d5b..352689f869c1 100644
---- a/drivers/watchdog/bcm7038_wdt.c
-+++ b/drivers/watchdog/bcm7038_wdt.c
-@@ -9,6 +9,7 @@
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/watchdog.h>
-@@ -18,14 +19,17 @@
- #define WDT_STOP_1		0xee00
- #define WDT_STOP_2		0x00ee
- 
--#define WDT_TIMEOUT_REG		0x0
--#define WDT_CMD_REG		0x4
--
- #define WDT_MIN_TIMEOUT		1 /* seconds */
- #define WDT_DEFAULT_TIMEOUT	30 /* seconds */
- #define WDT_DEFAULT_RATE	27000000
- 
-+enum bcm63xx_wdt_soc {
-+	BCM63XX_WDT_SOC_BCM4908,
-+	BCM63XX_WDT_SOC_BCM7038,
-+};
-+
- struct bcm7038_watchdog {
-+	enum bcm63xx_wdt_soc	soc;
- 	void __iomem		*base;
- 	struct watchdog_device	wdd;
- 	u32			rate;
-@@ -34,8 +38,52 @@ struct bcm7038_watchdog {
- 
- static bool nowayout = WATCHDOG_NOWAYOUT;
- 
--static inline void bcm7038_wdt_write(u32 value, void __iomem *addr)
-+static const struct of_device_id bcm7038_wdt_match[] = {
-+	{ .compatible = "brcm,bcm4908-wdt", .data = (const void *)BCM63XX_WDT_SOC_BCM4908, },
-+	{ .compatible = "brcm,bcm7038-wdt", .data = (const void *)BCM63XX_WDT_SOC_BCM7038, },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, bcm7038_wdt_match);
-+
-+enum bcm7038_wdt_regs {
-+	BCM63XX_WDT_REG_DEFVAL = 0,
-+	BCM63XX_WDT_REG_CTL,
-+	BCM63XX_WDT_REG_SOFTRESET,
-+};
-+
-+static const u16 bcm7038_wdt_regs_bcm4908[] = {
-+	[BCM63XX_WDT_REG_DEFVAL]	= 0x28,
-+	[BCM63XX_WDT_REG_CTL]		= 0x2c,
-+	[BCM63XX_WDT_REG_SOFTRESET]	= 0x34,
-+};
-+
-+static const u16 bcm7038_wdt_regs_bcm7038[] = {
-+	[BCM63XX_WDT_REG_DEFVAL]	= 0x00,
-+	[BCM63XX_WDT_REG_CTL]		= 0x04,
-+};
-+
-+static void __iomem *bcm7038_wdt_reg_addr(struct watchdog_device *wdog,
-+					  enum bcm7038_wdt_regs reg)
- {
-+	struct bcm7038_watchdog *wdt = watchdog_get_drvdata(wdog);
-+	void __iomem *addr = wdt->base;
-+
-+	switch (wdt->soc) {
-+	case BCM63XX_WDT_SOC_BCM4908:
-+		return addr + bcm7038_wdt_regs_bcm4908[reg];
-+	case BCM63XX_WDT_SOC_BCM7038:
-+		return addr + bcm7038_wdt_regs_bcm7038[reg];
-+	default:
-+		WARN_ON(1);
-+		return NULL;
-+	}
-+}
-+
-+static void bcm7038_wdt_write(struct watchdog_device *wdog,
-+			      enum bcm7038_wdt_regs reg, u32 value)
-+{
-+	void __iomem *addr = bcm7038_wdt_reg_addr(wdog, reg);
-+
- 	/* MIPS chips strapped for BE will automagically configure the
- 	 * peripheral registers for CPU-native byte order.
- 	 */
-@@ -45,8 +93,11 @@ static inline void bcm7038_wdt_write(u32 value, void __iomem *addr)
- 		writel_relaxed(value, addr);
- }
- 
--static inline u32 bcm7038_wdt_read(void __iomem *addr)
-+static inline u32 bcm7038_wdt_read(struct watchdog_device *wdog,
-+				   enum bcm7038_wdt_regs reg)
- {
-+	void __iomem *addr = bcm7038_wdt_reg_addr(wdog, reg);
-+
- 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
- 		return __raw_readl(addr);
- 	else
-@@ -60,15 +111,13 @@ static void bcm7038_wdt_set_timeout_reg(struct watchdog_device *wdog)
- 
- 	timeout = wdt->rate * wdog->timeout;
- 
--	bcm7038_wdt_write(timeout, wdt->base + WDT_TIMEOUT_REG);
-+	bcm7038_wdt_write(wdog, BCM63XX_WDT_REG_DEFVAL, timeout);
- }
- 
- static int bcm7038_wdt_ping(struct watchdog_device *wdog)
- {
--	struct bcm7038_watchdog *wdt = watchdog_get_drvdata(wdog);
--
--	bcm7038_wdt_write(WDT_START_1, wdt->base + WDT_CMD_REG);
--	bcm7038_wdt_write(WDT_START_2, wdt->base + WDT_CMD_REG);
-+	bcm7038_wdt_write(wdog, BCM63XX_WDT_REG_CTL, WDT_START_1);
-+	bcm7038_wdt_write(wdog, BCM63XX_WDT_REG_CTL, WDT_START_2);
- 
- 	return 0;
- }
-@@ -83,10 +132,8 @@ static int bcm7038_wdt_start(struct watchdog_device *wdog)
- 
- static int bcm7038_wdt_stop(struct watchdog_device *wdog)
- {
--	struct bcm7038_watchdog *wdt = watchdog_get_drvdata(wdog);
--
--	bcm7038_wdt_write(WDT_STOP_1, wdt->base + WDT_CMD_REG);
--	bcm7038_wdt_write(WDT_STOP_2, wdt->base + WDT_CMD_REG);
-+	bcm7038_wdt_write(wdog, BCM63XX_WDT_REG_CTL, WDT_STOP_1);
-+	bcm7038_wdt_write(wdog, BCM63XX_WDT_REG_CTL, WDT_STOP_2);
- 
- 	return 0;
- }
-@@ -107,7 +154,7 @@ static unsigned int bcm7038_wdt_get_timeleft(struct watchdog_device *wdog)
- 	struct bcm7038_watchdog *wdt = watchdog_get_drvdata(wdog);
- 	u32 time_left;
- 
--	time_left = bcm7038_wdt_read(wdt->base + WDT_CMD_REG);
-+	time_left = bcm7038_wdt_read(wdog, BCM63XX_WDT_REG_CTL);
- 
- 	return time_left / wdt->rate;
- }
-@@ -134,6 +181,7 @@ static void bcm7038_clk_disable_unprepare(void *data)
- static int bcm7038_wdt_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	const struct of_device_id *of_id;
- 	struct bcm7038_watchdog *wdt;
- 	int err;
- 
-@@ -143,6 +191,11 @@ static int bcm7038_wdt_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, wdt);
- 
-+	of_id = of_match_device(bcm7038_wdt_match, dev);
-+	if (!of_id)
-+		return -EINVAL;
-+	wdt->soc = (enum bcm63xx_wdt_soc)of_id->data;
-+
- 	wdt->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(wdt->base))
- 		return PTR_ERR(wdt->base);
-@@ -211,12 +264,6 @@ static int bcm7038_wdt_resume(struct device *dev)
- static SIMPLE_DEV_PM_OPS(bcm7038_wdt_pm_ops, bcm7038_wdt_suspend,
- 			 bcm7038_wdt_resume);
- 
--static const struct of_device_id bcm7038_wdt_match[] = {
--	{ .compatible = "brcm,bcm7038-wdt" },
--	{},
--};
--MODULE_DEVICE_TABLE(of, bcm7038_wdt_match);
--
- static struct platform_driver bcm7038_wdt_driver = {
- 	.probe		= bcm7038_wdt_probe,
- 	.driver		= {
 -- 
-2.31.1
+Greetings,
 
+Firstly, I apologize for encroaching into your privacy in this manner
+as it may seem unethical though it is a matter of great importance.
+
+I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
+
+I am contacting you because my status would not permit me to do this
+alone as it is concerning our customer and an investment placed under
+our bank's management over 5 years ago.
+
+I have a proposal I would love to discuss with you which will be very
+beneficial to both of us. It's regarding my late client who has a huge
+deposit with my bank.
+
+He is from your country and shares the same last name with you.
+
+I want to seek your consent to present you as the next of kin to my
+late client who died and left a huge deposit with my bank.
+
+I would respectfully request that you keep the contents of this mail
+confidential and respect the integrity of the information you come by
+as a result of this mail.
+
+Please kindly get back to me for more details if I can TRUST YOU.{
+aabdulwalialhashmi@gmail.com }
+
+Regards
+Abdulwali Alhashmi
+Treasury and Deposit Management,
+Cayman National Bank Cayman Islands
