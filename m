@@ -2,460 +2,131 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC82440227
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 20:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 976B7440291
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 20:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbhJ2ShQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 Oct 2021 14:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        id S230221AbhJ2SzR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Oct 2021 14:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbhJ2ShN (ORCPT
+        with ESMTP id S230084AbhJ2SzP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 Oct 2021 14:37:13 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D807C061570;
-        Fri, 29 Oct 2021 11:34:44 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id l203so10016422pfd.2;
-        Fri, 29 Oct 2021 11:34:44 -0700 (PDT)
+        Fri, 29 Oct 2021 14:55:15 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1675FC061570;
+        Fri, 29 Oct 2021 11:52:47 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id y128so14664202oie.8;
+        Fri, 29 Oct 2021 11:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zWHBIEcvoeupNEkr+7OvuNvuzEArssjhvYw0m7qAAEk=;
-        b=kIIeB4esScXEFsvrUoZDME8FYdVf1VWGPtUumBrrm+Xh+na1/8qW7O/nXQWQ13jAMK
-         6FSoOcNvQyuTuw/PX75A8+lYfogAA2+m6iUtGEvAzept23UBttI9KXGTIWqdEUNO1AG6
-         r4EAsXJmZwWMRB3ASKVLfao3Qy5zLESoGnVYsJdJW5koQIuASFCGmYJpO48aLA6bGLte
-         LO7puKutboac/ONoti+zzJ8R4Gyj5f+iLChNi8bQhM4nzQxwuY9GiKq/UjYi8U2DLJHH
-         kF+u4Afmk96W8XDDH33aQL/z+4dGQh34+WZ5LK1qFm7TjKODXSZgkBrx1Uz2TjPKc2tf
-         VAcQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ldSSeVAlvOj4l8QLMah9LAJhWoH7wMHLjFmgtahfoQ0=;
+        b=KoXyKwkCjQp9WMUR5gh503BBhGxyWKs0Gg4Wgi+EkPP3TcpjRH1EAzJ3glxkaOIsp1
+         ZB2bQii6UKEccvcgY/nFkiu2iHTnzhrrCWbqTNjsWoTjj6y2Vd20ycyuXp80CKWGWgTy
+         DVYNCHEWb2YSZxwvIBW/hTNVHtqVUy7UCbT3/SxPwlHx2cG36TxAZJ7HTWeGGYMx96cM
+         8KgRjX9fv8oEcPiplRu/SsoQd1dyRkJxwdDDrZRzIGYGxj0nMWTyS41yUG4EDwStF+oS
+         zI7230e0M/lZWyO1n4PsTdtAJAucu63vs7ye3o3RfvbaywofjCN/FLGixQG2sJXYOKO0
+         HAkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zWHBIEcvoeupNEkr+7OvuNvuzEArssjhvYw0m7qAAEk=;
-        b=qkuCYqeC9FSkKsHdiaV96frir6txDYUGNu7haROnYpTLmB3mxXzrqVtsTWA24Vono1
-         fXKAZMMjWHSjMm5Gnih40l9op5oTKl9d05oOHzyC64N8uD0mahcibazkBqwbOgJBmxTz
-         AGs8MzdQKLKxQVufFdo/fennvVHw27wZIzZE15lihzXJrb3BpTRkBR0yJSSHwmHSDjlW
-         qSVCNWnxxqwdbyPvU9HQuX6xOYdxviVnd8/578yZE4nTgZS+ayR/Hok7x3ey/xvXaOh0
-         R1wiMH0CVsNv4AWHQeH+KtjLewF9IJPh+Mx8yYZb2Pl0J8wneqkpCzuqDQZEDM5ei5fI
-         1sMw==
-X-Gm-Message-State: AOAM5313yHjatpM8pwT6ncECdUWIBlIQZiem8wUE8FiM3xoC7LbPEugP
-        y1aTRahfwf6Sm1xMTzXUddiMYTKA+Ow=
-X-Google-Smtp-Source: ABdhPJwy0TJVYrNtoCTVMmU9GaGIF5hKicBn4y2EIbWmg+yquzZ9HGS4j+RZswwFNLqlQEqedrqusQ==
-X-Received: by 2002:a62:ab14:0:b0:47b:e126:ea50 with SMTP id p20-20020a62ab14000000b0047be126ea50mr12562259pff.58.1635532483497;
-        Fri, 29 Oct 2021 11:34:43 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j15sm7730868pfh.35.2021.10.29.11.34.42
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ldSSeVAlvOj4l8QLMah9LAJhWoH7wMHLjFmgtahfoQ0=;
+        b=CND9qkrFNDMKAhmaXI8JPFhfY9Hn89Yc9644loz63/Aauw6hm7BDBD5n+PrlkJrtMf
+         aQhIeZrQwAYlezTuvJGg7sAatfuYXpbDckZZL5GidihY0gJnhPH7wlhiPw29W+2UgJa+
+         b/eK/JDBOHS/JveURsWIbr5nc0rb+gQskcw2Qxfr/CO6axr5UGqBpKC8unNPpca+jfQI
+         pB2GwQ7j0O4SdFqBHORrcHn93plh5e1V/sjeLyKYwjCJ4SBH9f9XJiycJdzZZJVN9LLV
+         JYrE1S32J6xPwMwTtw/QLhsbxm6EfDyVAbfckSVHdP83qtlR8ltf8d8soHAbAWXb/16e
+         yu1w==
+X-Gm-Message-State: AOAM530YISFz8spGz900lsTHMdYxeYD0EpGOUhRNHM+GzgbTveqfspe8
+        7KyU8Ew1t9Me9iWgGJEJucs=
+X-Google-Smtp-Source: ABdhPJyjEjslkxWcZG5a7lHRh11XgnWlPh8v6MplDYzTY9R31CsIogZW4U690v8sDlzB0w21uomSlA==
+X-Received: by 2002:aca:6703:: with SMTP id z3mr9530433oix.131.1635533566474;
+        Fri, 29 Oct 2021 11:52:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p14sm1890114oov.0.2021.10.29.11.52.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Oct 2021 11:34:42 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Fri, 29 Oct 2021 11:52:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 29 Oct 2021 11:52:43 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, rafal@milecki.pl,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM63XX ARM
-        ARCHITECTURE), Justin Chen <justinpopo6@gmail.com>,
-        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-mips@vger.kernel.org (open list:MIPS),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM63XX
-        ARM ARCHITECTURE)
-Subject: [PATCH v2 7/7] watchdog: Remove BCM63XX_WDT
-Date:   Fri, 29 Oct 2021 11:34:30 -0700
-Message-Id: <20211029183430.4086765-8-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211029183430.4086765-1-f.fainelli@gmail.com>
+        "maintainer:BROADCOM BCM63XX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "moderated list:BROADCOM BCM63XX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 6/7] MIPS: BCM63XX: Provide platform data to watchdog
+ device
+Message-ID: <20211029185243.GA1722149@roeck-us.net>
 References: <20211029183430.4086765-1-f.fainelli@gmail.com>
+ <20211029183430.4086765-7-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211029183430.4086765-7-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Now that we can utilize the BCM7038_WDT driver, remove that one which
-was not converted to the watchdog APIs. There are a couple of notable
-differences with how the bcm7038_wdt driver proceeds:
-
-- bcm63xx_wdt would register with the ad-hoc BCM63xx hardware timer API,
-  but this would only be used in order to catch the interrupt *before* a
-  SoC reset and make the kernel "die"
-
-- bcm6xx_wdt would register a software timer and kick it every second in
-  order to pet the watchdog, thus offering a two step watchdog process.
-  This is not something that is brought over to the bcm7038_wdt as it is
-  deemed unnecessary. If user-space cannot pet the watchdog, but a
-  kernel timer can, the system is still in a bad shape anyway.
-
-bcm7038_wdt is simpler in its behavior and behaves as a standard
-watchdog driver and is not making use of any specific platform APIs,
-therefore making it more maintainable and extensible.
+On Fri, Oct 29, 2021 at 11:34:29AM -0700, Florian Fainelli wrote:
+> In order to utilize the bcm7038_wdt.c driver which needs to know the
+> clock name to obtain, pass it via platform data using the
+> bcm7038_wdt_platform_data structure.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/watchdog/Kconfig       |  10 --
- drivers/watchdog/Makefile      |   1 -
- drivers/watchdog/bcm63xx_wdt.c | 315 ---------------------------------
- 3 files changed, 326 deletions(-)
- delete mode 100644 drivers/watchdog/bcm63xx_wdt.c
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 24a775dd2bf1..acebf9caf6d1 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1709,16 +1709,6 @@ config OCTEON_WDT
- 	  from the first interrupt, it is then only poked when the
- 	  device is written.
- 
--config BCM63XX_WDT
--	tristate "Broadcom BCM63xx hardware watchdog"
--	depends on BCM63XX
--	help
--	  Watchdog driver for the built in watchdog hardware in Broadcom
--	  BCM63xx SoC.
--
--	  To compile this driver as a loadable module, choose M here.
--	  The module will be called bcm63xx_wdt.
--
- config BCM2835_WDT
- 	tristate "Broadcom BCM2835 hardware watchdog"
- 	depends on ARCH_BCM2835 || (OF && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 1bd2d6f37c53..9811c4b1cd16 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -154,7 +154,6 @@ obj-$(CONFIG_XILINX_WATCHDOG) += of_xilinx_wdt.o
- # MIPS Architecture
- obj-$(CONFIG_ATH79_WDT) += ath79_wdt.o
- obj-$(CONFIG_BCM47XX_WDT) += bcm47xx_wdt.o
--obj-$(CONFIG_BCM63XX_WDT) += bcm63xx_wdt.o
- obj-$(CONFIG_RC32434_WDT) += rc32434_wdt.o
- obj-$(CONFIG_INDYDOG) += indydog.o
- obj-$(CONFIG_JZ4740_WDT) += jz4740_wdt.o
-diff --git a/drivers/watchdog/bcm63xx_wdt.c b/drivers/watchdog/bcm63xx_wdt.c
-deleted file mode 100644
-index 7cdb25363ea0..000000000000
---- a/drivers/watchdog/bcm63xx_wdt.c
-+++ /dev/null
-@@ -1,315 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--/*
-- *  Broadcom BCM63xx SoC watchdog driver
-- *
-- *  Copyright (C) 2007, Miguel Gaio <miguel.gaio@efixo.com>
-- *  Copyright (C) 2008, Florian Fainelli <florian@openwrt.org>
-- *
-- */
--
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
--#include <linux/bitops.h>
--#include <linux/errno.h>
--#include <linux/fs.h>
--#include <linux/io.h>
--#include <linux/kernel.h>
--#include <linux/miscdevice.h>
--#include <linux/module.h>
--#include <linux/moduleparam.h>
--#include <linux/types.h>
--#include <linux/uaccess.h>
--#include <linux/watchdog.h>
--#include <linux/timer.h>
--#include <linux/jiffies.h>
--#include <linux/interrupt.h>
--#include <linux/ptrace.h>
--#include <linux/resource.h>
--#include <linux/platform_device.h>
--
--#include <bcm63xx_cpu.h>
--#include <bcm63xx_io.h>
--#include <bcm63xx_regs.h>
--#include <bcm63xx_timer.h>
--
--#define PFX KBUILD_MODNAME
--
--#define WDT_HZ		50000000 /* Fclk */
--#define WDT_DEFAULT_TIME	30      /* seconds */
--#define WDT_MAX_TIME		256     /* seconds */
--
--static struct {
--	void __iomem *regs;
--	struct timer_list timer;
--	unsigned long inuse;
--	atomic_t ticks;
--} bcm63xx_wdt_device;
--
--static int expect_close;
--
--static int wdt_time = WDT_DEFAULT_TIME;
--static bool nowayout = WATCHDOG_NOWAYOUT;
--module_param(nowayout, bool, 0);
--MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
--	__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
--
--/* HW functions */
--static void bcm63xx_wdt_hw_start(void)
--{
--	bcm_writel(0xfffffffe, bcm63xx_wdt_device.regs + WDT_DEFVAL_REG);
--	bcm_writel(WDT_START_1, bcm63xx_wdt_device.regs + WDT_CTL_REG);
--	bcm_writel(WDT_START_2, bcm63xx_wdt_device.regs + WDT_CTL_REG);
--}
--
--static void bcm63xx_wdt_hw_stop(void)
--{
--	bcm_writel(WDT_STOP_1, bcm63xx_wdt_device.regs + WDT_CTL_REG);
--	bcm_writel(WDT_STOP_2, bcm63xx_wdt_device.regs + WDT_CTL_REG);
--}
--
--static void bcm63xx_wdt_isr(void *data)
--{
--	struct pt_regs *regs = get_irq_regs();
--
--	die(PFX " fire", regs);
--}
--
--static void bcm63xx_timer_tick(struct timer_list *unused)
--{
--	if (!atomic_dec_and_test(&bcm63xx_wdt_device.ticks)) {
--		bcm63xx_wdt_hw_start();
--		mod_timer(&bcm63xx_wdt_device.timer, jiffies + HZ);
--	} else
--		pr_crit("watchdog will restart system\n");
--}
--
--static void bcm63xx_wdt_pet(void)
--{
--	atomic_set(&bcm63xx_wdt_device.ticks, wdt_time);
--}
--
--static void bcm63xx_wdt_start(void)
--{
--	bcm63xx_wdt_pet();
--	bcm63xx_timer_tick(0);
--}
--
--static void bcm63xx_wdt_pause(void)
--{
--	del_timer_sync(&bcm63xx_wdt_device.timer);
--	bcm63xx_wdt_hw_stop();
--}
--
--static int bcm63xx_wdt_settimeout(int new_time)
--{
--	if ((new_time <= 0) || (new_time > WDT_MAX_TIME))
--		return -EINVAL;
--
--	wdt_time = new_time;
--
--	return 0;
--}
--
--static int bcm63xx_wdt_open(struct inode *inode, struct file *file)
--{
--	if (test_and_set_bit(0, &bcm63xx_wdt_device.inuse))
--		return -EBUSY;
--
--	bcm63xx_wdt_start();
--	return stream_open(inode, file);
--}
--
--static int bcm63xx_wdt_release(struct inode *inode, struct file *file)
--{
--	if (expect_close == 42)
--		bcm63xx_wdt_pause();
--	else {
--		pr_crit("Unexpected close, not stopping watchdog!\n");
--		bcm63xx_wdt_start();
--	}
--	clear_bit(0, &bcm63xx_wdt_device.inuse);
--	expect_close = 0;
--	return 0;
--}
--
--static ssize_t bcm63xx_wdt_write(struct file *file, const char *data,
--				size_t len, loff_t *ppos)
--{
--	if (len) {
--		if (!nowayout) {
--			size_t i;
--
--			/* In case it was set long ago */
--			expect_close = 0;
--
--			for (i = 0; i != len; i++) {
--				char c;
--				if (get_user(c, data + i))
--					return -EFAULT;
--				if (c == 'V')
--					expect_close = 42;
--			}
--		}
--		bcm63xx_wdt_pet();
--	}
--	return len;
--}
--
--static struct watchdog_info bcm63xx_wdt_info = {
--	.identity       = PFX,
--	.options        = WDIOF_SETTIMEOUT |
--				WDIOF_KEEPALIVEPING |
--				WDIOF_MAGICCLOSE,
--};
--
--
--static long bcm63xx_wdt_ioctl(struct file *file, unsigned int cmd,
--				unsigned long arg)
--{
--	void __user *argp = (void __user *)arg;
--	int __user *p = argp;
--	int new_value, retval = -EINVAL;
--
--	switch (cmd) {
--	case WDIOC_GETSUPPORT:
--		return copy_to_user(argp, &bcm63xx_wdt_info,
--			sizeof(bcm63xx_wdt_info)) ? -EFAULT : 0;
--
--	case WDIOC_GETSTATUS:
--	case WDIOC_GETBOOTSTATUS:
--		return put_user(0, p);
--
--	case WDIOC_SETOPTIONS:
--		if (get_user(new_value, p))
--			return -EFAULT;
--
--		if (new_value & WDIOS_DISABLECARD) {
--			bcm63xx_wdt_pause();
--			retval = 0;
--		}
--		if (new_value & WDIOS_ENABLECARD) {
--			bcm63xx_wdt_start();
--			retval = 0;
--		}
--
--		return retval;
--
--	case WDIOC_KEEPALIVE:
--		bcm63xx_wdt_pet();
--		return 0;
--
--	case WDIOC_SETTIMEOUT:
--		if (get_user(new_value, p))
--			return -EFAULT;
--
--		if (bcm63xx_wdt_settimeout(new_value))
--			return -EINVAL;
--
--		bcm63xx_wdt_pet();
--
--	case WDIOC_GETTIMEOUT:
--		return put_user(wdt_time, p);
--
--	default:
--		return -ENOTTY;
--
--	}
--}
--
--static const struct file_operations bcm63xx_wdt_fops = {
--	.owner		= THIS_MODULE,
--	.llseek		= no_llseek,
--	.write		= bcm63xx_wdt_write,
--	.unlocked_ioctl	= bcm63xx_wdt_ioctl,
--	.compat_ioctl	= compat_ptr_ioctl,
--	.open		= bcm63xx_wdt_open,
--	.release	= bcm63xx_wdt_release,
--};
--
--static struct miscdevice bcm63xx_wdt_miscdev = {
--	.minor	= WATCHDOG_MINOR,
--	.name	= "watchdog",
--	.fops	= &bcm63xx_wdt_fops,
--};
--
--
--static int bcm63xx_wdt_probe(struct platform_device *pdev)
--{
--	int ret;
--	struct resource *r;
--
--	timer_setup(&bcm63xx_wdt_device.timer, bcm63xx_timer_tick, 0);
--
--	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
--		dev_err(&pdev->dev, "failed to get resources\n");
--		return -ENODEV;
--	}
--
--	bcm63xx_wdt_device.regs = devm_ioremap(&pdev->dev, r->start,
--							resource_size(r));
--	if (!bcm63xx_wdt_device.regs) {
--		dev_err(&pdev->dev, "failed to remap I/O resources\n");
--		return -ENXIO;
--	}
--
--	ret = bcm63xx_timer_register(TIMER_WDT_ID, bcm63xx_wdt_isr, NULL);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "failed to register wdt timer isr\n");
--		return ret;
--	}
--
--	if (bcm63xx_wdt_settimeout(wdt_time)) {
--		bcm63xx_wdt_settimeout(WDT_DEFAULT_TIME);
--		dev_info(&pdev->dev,
--			": wdt_time value must be 1 <= wdt_time <= 256, using %d\n",
--			wdt_time);
--	}
--
--	ret = misc_register(&bcm63xx_wdt_miscdev);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "failed to register watchdog device\n");
--		goto unregister_timer;
--	}
--
--	dev_info(&pdev->dev, " started, timer margin: %d sec\n",
--						WDT_DEFAULT_TIME);
--
--	return 0;
--
--unregister_timer:
--	bcm63xx_timer_unregister(TIMER_WDT_ID);
--	return ret;
--}
--
--static int bcm63xx_wdt_remove(struct platform_device *pdev)
--{
--	if (!nowayout)
--		bcm63xx_wdt_pause();
--
--	misc_deregister(&bcm63xx_wdt_miscdev);
--	bcm63xx_timer_unregister(TIMER_WDT_ID);
--	return 0;
--}
--
--static void bcm63xx_wdt_shutdown(struct platform_device *pdev)
--{
--	bcm63xx_wdt_pause();
--}
--
--static struct platform_driver bcm63xx_wdt_driver = {
--	.probe	= bcm63xx_wdt_probe,
--	.remove = bcm63xx_wdt_remove,
--	.shutdown = bcm63xx_wdt_shutdown,
--	.driver = {
--		.name = "bcm63xx-wdt",
--	}
--};
--
--module_platform_driver(bcm63xx_wdt_driver);
--
--MODULE_AUTHOR("Miguel Gaio <miguel.gaio@efixo.com>");
--MODULE_AUTHOR("Florian Fainelli <florian@openwrt.org>");
--MODULE_DESCRIPTION("Driver for the Broadcom BCM63xx SoC watchdog");
--MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:bcm63xx-wdt");
--- 
-2.25.1
+We'll need an Ack from a MIPS maintainer for this patch to
+be able to apply it through the watchdog tree.
 
+Guenter
+
+> ---
+>  arch/mips/bcm63xx/dev-wdt.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/mips/bcm63xx/dev-wdt.c b/arch/mips/bcm63xx/dev-wdt.c
+> index 2a2346a99bcb..42130914a3c2 100644
+> --- a/arch/mips/bcm63xx/dev-wdt.c
+> +++ b/arch/mips/bcm63xx/dev-wdt.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/platform_data/bcm7038_wdt.h>
+>  #include <bcm63xx_cpu.h>
+>  
+>  static struct resource wdt_resources[] = {
+> @@ -19,11 +20,18 @@ static struct resource wdt_resources[] = {
+>  	},
+>  };
+>  
+> +static struct bcm7038_wdt_platform_data bcm63xx_wdt_pdata = {
+> +	.clk_name	= "periph",
+> +};
+> +
+>  static struct platform_device bcm63xx_wdt_device = {
+>  	.name		= "bcm63xx-wdt",
+>  	.id		= -1,
+>  	.num_resources	= ARRAY_SIZE(wdt_resources),
+>  	.resource	= wdt_resources,
+> +	.dev		= {
+> +		.platform_data = &bcm63xx_wdt_pdata,
+> +	},
+>  };
+>  
+>  int __init bcm63xx_wdt_register(void)
+> -- 
+> 2.25.1
+> 
