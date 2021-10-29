@@ -2,92 +2,158 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3EC44048A
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 22:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A627440400
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 22:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbhJ2U7t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 Oct 2021 16:59:49 -0400
-Received: from 5.mo583.mail-out.ovh.net ([87.98.173.103]:60443 "EHLO
-        5.mo583.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbhJ2U7s (ORCPT
+        id S230411AbhJ2U1j (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Oct 2021 16:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbhJ2U1i (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 Oct 2021 16:59:48 -0400
-X-Greylist: delayed 27601 seconds by postgrey-1.27 at vger.kernel.org; Fri, 29 Oct 2021 16:59:48 EDT
-Received: from player770.ha.ovh.net (unknown [10.110.208.115])
-        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 0717722063
-        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 12:38:02 +0000 (UTC)
-Received: from RCM-web10.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player770.ha.ovh.net (Postfix) with ESMTPSA id 5DEA823DC6CDD;
-        Fri, 29 Oct 2021 12:37:51 +0000 (UTC)
-MIME-Version: 1.0
-Date:   Fri, 29 Oct 2021 14:37:51 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
+        Fri, 29 Oct 2021 16:27:38 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A567AC061570;
+        Fri, 29 Oct 2021 13:25:09 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id u5so18674405ljo.8;
+        Fri, 29 Oct 2021 13:25:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uwSQ5O46XQWq/lDnechLXeMde+M4E9bl0BI41ywS9so=;
+        b=qFHa+Y0nq19Wnz1rYDkGGnQ7CPH8tO2/O/fq8Kwcy7a/S7ublc/0U1PsykHPMEjRBV
+         mJCZop8bzU6RGKjK7x686hQZBcHhBAehEraBgbAtnzqyGJ0stJ2QZm6ayAXA7lqRUJrn
+         v4QWRBaHpRadOFfU3eyb6qfRMzYoXEQVQ8U+rAoiCXo3y/q2IzhivXi4Ds9yXi/3sst0
+         ozqUaeT4xVto5IVVligZHVrxdkcRDXX3+WgYrdY86uJ8Fdt9rNkpw3CcSNxjXCAr+Kay
+         SZo4eQOQkHbsn2rPmP9MHtcsENy6zxtxT+izm2LtibT304gStT13ERDGAqRR5oY24s5Y
+         sC4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uwSQ5O46XQWq/lDnechLXeMde+M4E9bl0BI41ywS9so=;
+        b=NwyJh03Jmv8VLvqwNMchp8gI6pRHmYugwu9q3xlr0ciLkeoRBV9o+DlYxfs8+9d7iA
+         akNAZIhja7UoV6Pd/VZn3C1J7+ROknS47YWwY8aCuEumuDoNDNTbESRL8T+6cbTvd6ma
+         +FDVhRcGATkwEv36znBjY/PdXWsP+ZlBc9ji7X/m7ENoqsNGcxZQxRxaKTM93JjTO/qk
+         uRCT1DoqxkfJUXtB8s2jrt8Qlz6EA/4VblqvKQlTlSR4kwVkPvAIOnYRj3BE1lu1TF9s
+         kA45BEujRzNYJkeLGZmBnUR7MStF51y0lo2MgQjmLM/YlJGMsYbaNSesWT+Wqa9s9WPN
+         QFhw==
+X-Gm-Message-State: AOAM530zPc8ZziO4VQZKYxiM2CEk5Xue4TxseuzsjCt2LfIOy7FTQXi/
+        UCq49EPa+MB3k5QnxcJNBC0=
+X-Google-Smtp-Source: ABdhPJwM7qQIaQzjKAfq7HyW7IxgXBps3wCGWHUVtI6GyptFa1yoEs+L5X/1tC8iQmGC3lWoaniORA==
+X-Received: by 2002:a05:651c:510:: with SMTP id o16mr14152214ljp.359.1635539107957;
+        Fri, 29 Oct 2021 13:25:07 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id c19sm692715lfv.225.2021.10.29.13.25.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Oct 2021 13:25:07 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        bcm-kernel-feedback-list@broadcom.com,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Justin Chen <justinpopo6@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 5/7] watchdog: bcm7038_wdt: Add platform device id for
- bcm63xx-wdt
-In-Reply-To: <20211028172322.4021440-6-f.fainelli@gmail.com>
-References: <20211028172322.4021440-1-f.fainelli@gmail.com>
- <20211028172322.4021440-6-f.fainelli@gmail.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <02cb3c1a160854c92895d024e59a831b@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 16945356551679290136
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvdeghedgheduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvufgjfhgfkfigihgtgfesthejjhdttdervdenucfhrhhomheptfgrfhgrlhgpofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepveefvdetjeffueefkeeuuedvgefhgeegjefgvedvgeeiteduueeivdeltedthfetnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejtddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdprhgtphhtthhopehlihhnuhigqdifrghttghhughoghesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 1/2] dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
+Date:   Fri, 29 Oct 2021 22:25:04 +0200
+Message-Id: <20211029202505.7106-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2021-10-28 19:23, Florian Fainelli wrote:
-> In order to phase out bcm63xx_wdt and use bcm7038_wdt instead, 
-> introduce
-> a platform_device_id table that allows both names to be matched.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  drivers/watchdog/bcm7038_wdt.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/watchdog/bcm7038_wdt.c 
-> b/drivers/watchdog/bcm7038_wdt.c
-> index 506cd7ef9c77..2535f450e8a1 100644
-> --- a/drivers/watchdog/bcm7038_wdt.c
-> +++ b/drivers/watchdog/bcm7038_wdt.c
-> @@ -223,6 +223,13 @@ static const struct of_device_id 
-> bcm7038_wdt_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, bcm7038_wdt_match);
-> 
-> +static const struct platform_device_id bcm7038_wdt_devtype[] = {
-> +	{ .name = "bcm7038-wdt" },
-> +	{ .name = "bcm63xx-wdt" },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(platform, bcm7038_wdt_devtype);
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Do we really want "bcm7038-wdt" here? I don't think it will ever be used
-as apparently BCM7038 uses DT.
+This helps validating DTS files.
 
-I'd also prefer to have Rob's comment on mapping blocks vs. mapping
-registers.
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../bindings/watchdog/brcm,bcm7038-wdt.txt    | 19 ---------
+ .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 40 +++++++++++++++++++
+ 2 files changed, 40 insertions(+), 19 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
 
-If we were to map whole hardware blocks, we should have per-SoC
-bindings and handling registers layouts in a driver. Right now
-bcm63xx arch code maps selected part of hardware block that is
-meant to match driver's logic (offsets 0x00 and 0x04).
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+deleted file mode 100644
+index 84122270be8f..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
++++ /dev/null
+@@ -1,19 +0,0 @@
+-BCM7038 Watchdog timer
+-
+-Required properties:
+-
+-- compatible : should be "brcm,bcm7038-wdt"
+-- reg : Specifies base physical address and size of the registers.
+-
+-Optional properties:
+-
+-- clocks: The clock running the watchdog. If no clock is found the
+-	  driver will default to 27000000 Hz.
+-
+-Example:
+-
+-watchdog@f040a7e8 {
+-	compatible = "brcm,bcm7038-wdt";
+-	clocks = <&upg_fixed>;
+-	reg = <0xf040a7e8 0x16>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+new file mode 100644
+index 000000000000..69e5a1ef6a1f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+@@ -0,0 +1,40 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/brcm,bcm63xx-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: BCM7038 watchdog timer
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++  - Justin Chen <justinpopo6@gmail.com>
++  - Rafał Miłecki <rafal@milecki.pl>
++
++properties:
++  compatible:
++    const: brcm,bcm7038-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description: >
++      The clock running the watchdog. If no clock is found the driver will
++      default to 27000000 Hz.
++
++unevaluatedProperties: false
++
++required:
++  - reg
++
++examples:
++  - |
++    watchdog@f040a7e8 {
++      compatible = "brcm,bcm7038-wdt";
++      reg = <0xf040a7e8 0x16>;
++      clocks = <&upg_fixed>;
++    };
+-- 
+2.31.1
+
