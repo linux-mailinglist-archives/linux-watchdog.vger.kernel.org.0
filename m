@@ -2,55 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A196943F3D3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 02:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B1543F3EC
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 02:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbhJ2AXw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 28 Oct 2021 20:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
+        id S231378AbhJ2AdZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 28 Oct 2021 20:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhJ2AXv (ORCPT
+        with ESMTP id S231361AbhJ2AdY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 28 Oct 2021 20:23:51 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD84C061570;
-        Thu, 28 Oct 2021 17:21:23 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id t7-20020a4aadc7000000b002b8733ab498so2753587oon.3;
-        Thu, 28 Oct 2021 17:21:23 -0700 (PDT)
+        Thu, 28 Oct 2021 20:33:24 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CD4C061570;
+        Thu, 28 Oct 2021 17:30:57 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id x27-20020a9d459b000000b0055303520cc4so11116002ote.13;
+        Thu, 28 Oct 2021 17:30:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hkISm2XQKHK0ZSZ3i+ztII2UptzAIeO96Q6bGgxxNrg=;
-        b=Br6M5j0tpkSgGtf7MMDs1LqU46PDGPRLUwuKd3n39tlbKGGKim18R6fuq5QHKbJa5Z
-         xglkyT+iThEp02rKXHo4pyktZCV7TFLB5mJXvZnQ0/ec0/N8fr9qsid7NLTCH3J00ihv
-         qfJEAtjoo+97YPBqqF3Xm/6Fhe0w4rfx3WJbjwP3RtZ979D+i6EAtqf2o+kQuPE6Qvl2
-         e+aj0whV9Xvgoevp0ItcCt/W3eH8Wg7vqKY2YgYUoHdHyU7j0KytxzGyVqbe8jxARmMD
-         2xBNnX+9cZLNK/XacRbXDR9VFodIq0MdAwtozoyJBelXVhvKjQCAj7Y8NsxV/7REbpE8
-         4ezQ==
+        bh=bvmi8DsyrWipthpn0ItITFLCLn9V8U2XeLVX9tq1EWI=;
+        b=UdhoI8+i5oUFI2wil6UpdvMWaICsJYyJ9oyQXmxsLos4lvVwRweK1YbKtGoyXHy/eK
+         Y0xcRdpJ0JSx1Q0waYIC924kb17fWxsyzTQSsWsBvzk+cpLn/rLw7sr87+7azqaZe+XT
+         Hb8C33JdEQf3DH5W6cit2sigGnayLge0WWxH/V/oFA6NmoKBWBlpZGPg88GOZW+ZDHOa
+         0Z1jXxOc0W5cyu+F1ZXYMrYcZcE26OV9olC6TG//XhNEh2kQrmi9hM9E3URs/FhARUtd
+         fXiXnDQnK9LiqBgMdDb8uRAtqBuH2q3CjKwj8NxbUNcBD4FDVBNypzbsDr/vSP9iqvll
+         E2dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=hkISm2XQKHK0ZSZ3i+ztII2UptzAIeO96Q6bGgxxNrg=;
-        b=5aCsmMbT5oGtAcTLJCs4SqAt3bmHC/HsLgq2B48v+qWSQtLcMG9QbDlSaLTfEKRvpl
-         ZKXtuvY+T1xOXpbXHe7YO5HCjmW/gZDu4JcxoKaeICpGhUo6Vwn4xbNZaiuugzX3fRkZ
-         sISyskTE4Tp0RC02rmR6RYKce4rcDXDDC5FgYQGRBE545LS6fbRzlb7/UzPD+x6S4Ls3
-         dJP58Yi4rjlJZqGGVh1+FaueeN3Do6fH8Q60th8JM0+KUGW9d5Ncss8aNo8M+hK4ZVov
-         UQB2I7ySzOeeWf9CRCPT7FNzzHhvXubWHfy56YI2DJCaLMtZ0pBHA6RE9chKud61SM6B
-         vgNw==
-X-Gm-Message-State: AOAM533Y26RyLoc0UxzGu5OVflTeV1Jo9gvUGH5hFj4YLp6mzmBnxzAu
-        eX65V/uNuO+et7reYA77gfNDVOcgl74=
-X-Google-Smtp-Source: ABdhPJzsfsqS32TLHTj3+SSLozXuQ4XtOR4hsfFwSwzl6PJDg3deazVRYIKPw1O5HwjI/9g8yQIXZg==
-X-Received: by 2002:a4a:6f59:: with SMTP id i25mr5467536oof.78.1635466882869;
-        Thu, 28 Oct 2021 17:21:22 -0700 (PDT)
+        bh=bvmi8DsyrWipthpn0ItITFLCLn9V8U2XeLVX9tq1EWI=;
+        b=WB6USDvTgi+R0cr7rHTI/4YCiQ3nDd7O4Vbtl/rAYqd7ASEVgdxGldIk0Lk89wbWkb
+         3jbo6OH/rjQ4QEIs7SgKX8tMh3V3kmIZ0YAad3ndDCiqeUnlg7PcZ+xiTIiw25R9P2mL
+         D30lki1AzhKglY8UhvWjhazbZS0aVoV3ZX2mS8NMZlRVDVOmr+b2cliFMEihUAnaFUoa
+         re0PEonGv4bIJ6fCvY1eDJ6sFRjnwDybFc/rBYDaDWRNdJt2BoGOrJKb25xVTZBiNSGq
+         aHRT05cI3k1sD3jtSQy0YkbLAuHHn9Fzjr+E6khSzQA6R4uhntMTHBpzaT1q4jbb522r
+         2KLQ==
+X-Gm-Message-State: AOAM530yFujMvkT+kxwLLL8EJejsvLXvQDoyCBbdvRUGIwFJfEoyJEOL
+        iGLynNkPFVNfgEYH35DSOqZzla0BpVI=
+X-Google-Smtp-Source: ABdhPJwMWsxKBhaxoxjCqeI93dO9gfkpiTRMtByD/pm5SiVR8iDKiAHnAw7GnFd3+ltydMOt687HHQ==
+X-Received: by 2002:a05:6830:1af0:: with SMTP id c16mr5905034otd.16.1635467456422;
+        Thu, 28 Oct 2021 17:30:56 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w22sm1392938oie.26.2021.10.28.17.21.21
+        by smtp.gmail.com with ESMTPSA id w12sm1350126oop.19.2021.10.28.17.30.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Oct 2021 17:21:22 -0700 (PDT)
+        Thu, 28 Oct 2021 17:30:55 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 5/7] watchdog: s3c2410: Introduce separate source clock
 To:     Sam Protsenko <semen.protsenko@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,123 +58,85 @@ Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
 References: <20211028183527.3050-1-semen.protsenko@linaro.org>
- <20211028183527.3050-6-semen.protsenko@linaro.org>
+ <20211028183527.3050-8-semen.protsenko@linaro.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <51128b74-de5d-1758-282b-1d4c5250a38d@roeck-us.net>
-Date:   Thu, 28 Oct 2021 17:21:20 -0700
+Subject: Re: [PATCH 7/7] watchdog: s3c2410: Let kernel kick watchdog
+Message-ID: <1ad6b625-4388-bc78-e258-eae0b9357b96@roeck-us.net>
+Date:   Thu, 28 Oct 2021 17:30:54 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211028183527.3050-6-semen.protsenko@linaro.org>
+In-Reply-To: <20211028183527.3050-8-semen.protsenko@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 10/28/21 11:35 AM, Sam Protsenko wrote:
-> Some Exynos chips (like Exynos850) have dedicated source clock. That
-> clock is provided from device tree as "watchdog_src" clock. In such
-> case, "watchdog" clock is just a peripheral clock used for register
-> interface. If "watchdog_src" is present, use its rate instead of
-> "watchdog" for all timer related calculations.
+> When "tmr_atboot" module param is set, the watchdog is started in
+> driver's probe. In that case, also set WDOG_HW_RUNNING bit to let
+> watchdog core driver know it's running. This way wathcdog core can kick
+> the watchdog for us (if CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED option is
+> enabled), until user space takes control.
 > 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>   drivers/watchdog/s3c2410_wdt.c | 26 +++++++++++++++-----------
+>   1 file changed, 15 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index ca082b1226e3..9af014ff1468 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -732,6 +732,21 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>   	wdt->wdt_device.bootstatus = s3c2410wdt_get_bootstatus(wdt);
+>   	wdt->wdt_device.parent = dev;
+>   
+> +	/*
+> +	 * If "tmr_atboot" param is non-zero, start the watchdog right now. Also
+> +	 * set WDOG_HW_RUNNING bit, so that watchdog core can kick the watchdog.
+> +	 *
+> +	 * If we're not enabling the watchdog, then ensure it is disabled if it
+> +	 * has been left running from the bootloader or other source.
+> +	 */
+> +	if (tmr_atboot && started == 0) {
+> +		dev_info(dev, "starting watchdog timer\n");
+> +		s3c2410wdt_start(&wdt->wdt_device);
+> +		set_bit(WDOG_HW_RUNNING, &wdt->wdt_device.status);
+> +	} else if (!tmr_atboot) {
+> +		s3c2410wdt_stop(&wdt->wdt_device);
+> +	}
+> +
 
-If the "watchdog_src" clock is present, is "watchdog" clock still needed ?
-Please state that explicitly, since it is kind of unusual.
+This doesn't cover the case where the watchdog is already enabled by the BIOS.
+In that case, WDOG_HW_RUNNING won't be set, and the watchdog will time out
+if the userspace handler is not loaded fast enough. The code should consistently
+set WDOG_HW_RUNNING if the watchdog is running.
 
 Guenter
 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->   drivers/watchdog/s3c2410_wdt.c | 33 +++++++++++++++++++++++++++------
->   1 file changed, 27 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> index a5ef7171a90e..bfc5872ca497 100644
-> --- a/drivers/watchdog/s3c2410_wdt.c
-> +++ b/drivers/watchdog/s3c2410_wdt.c
-> @@ -126,6 +126,8 @@ struct s3c2410_wdt_variant {
->   struct s3c2410_wdt {
->   	struct device		*dev;
->   	struct clk		*clock;
-> +	struct clk		*clock_src;
-> +	unsigned long		freq_src;
->   	void __iomem		*reg_base;
->   	unsigned int		count;
->   	spinlock_t		lock;
-> @@ -213,10 +215,8 @@ MODULE_DEVICE_TABLE(platform, s3c2410_wdt_ids);
+>   	ret = watchdog_register_device(&wdt->wdt_device);
+>   	if (ret)
+>   		goto err_cpufreq;
+> @@ -740,17 +755,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>   	if (ret < 0)
+>   		goto err_unregister;
 >   
->   /* functions */
->   
-> -static inline unsigned int s3c2410wdt_max_timeout(struct clk *clock)
-> +static inline unsigned int s3c2410wdt_max_timeout(unsigned long freq)
->   {
-> -	unsigned long freq = clk_get_rate(clock);
+> -	if (tmr_atboot && started == 0) {
+> -		dev_info(dev, "starting watchdog timer\n");
+> -		s3c2410wdt_start(&wdt->wdt_device);
+> -	} else if (!tmr_atboot) {
+> -		/* if we're not enabling the watchdog, then ensure it is
+> -		 * disabled if it has been left running from the bootloader
+> -		 * or other source */
 > -
->   	return S3C2410_WTCNT_MAXCNT / (freq / (S3C2410_WTCON_PRESCALE_MAX + 1)
->   				       / S3C2410_WTCON_MAXDIV);
->   }
-> @@ -364,7 +364,7 @@ static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
->   				    unsigned int timeout)
->   {
->   	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
-> -	unsigned long freq = clk_get_rate(wdt->clock);
-> +	unsigned long freq = wdt->freq_src;
->   	unsigned int count;
->   	unsigned int divisor = 1;
->   	unsigned long wtcon;
-> @@ -627,13 +627,27 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
->   		return ret;
->   	}
+> -		s3c2410wdt_stop(&wdt->wdt_device);
+> -	}
+> -
+>   	platform_set_drvdata(pdev, wdt);
 >   
-> +	/* "watchdog_src" clock is optional; if it's not present -- just skip */
-> +	wdt->clock_src = devm_clk_get(dev, "watchdog_src");
-> +	if (!IS_ERR(wdt->clock_src)) {
-> +		ret = clk_prepare_enable(wdt->clock_src);
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to enable source clock\n");
-> +			ret = PTR_ERR(wdt->clock_src);
-> +			goto err_clk;
-> +		}
-> +		wdt->freq_src = clk_get_rate(wdt->clock_src);
-> +	} else {
-> +		wdt->freq_src = clk_get_rate(wdt->clock);
-> +	}
-> +
->   	wdt->wdt_device.min_timeout = 1;
-> -	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt->clock);
-> +	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt->freq_src);
->   
->   	ret = s3c2410wdt_cpufreq_register(wdt);
->   	if (ret < 0) {
->   		dev_err(dev, "failed to register cpufreq\n");
-> -		goto err_clk;
-> +		goto err_clk_src;
->   	}
->   
->   	watchdog_set_drvdata(&wdt->wdt_device, wdt);
-> @@ -707,6 +721,10 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
->    err_cpufreq:
->   	s3c2410wdt_cpufreq_deregister(wdt);
->   
-> + err_clk_src:
-> +	if (!IS_ERR(wdt->clock_src))
-> +		clk_disable_unprepare(wdt->clock_src);
-> +
->    err_clk:
->   	clk_disable_unprepare(wdt->clock);
->   
-> @@ -727,6 +745,9 @@ static int s3c2410wdt_remove(struct platform_device *dev)
->   
->   	s3c2410wdt_cpufreq_deregister(wdt);
->   
-> +	if (!IS_ERR(wdt->clock_src))
-> +		clk_disable_unprepare(wdt->clock_src);
-> +
->   	clk_disable_unprepare(wdt->clock);
->   
->   	return 0;
+>   	/* print out a statement of readiness */
 > 
 
