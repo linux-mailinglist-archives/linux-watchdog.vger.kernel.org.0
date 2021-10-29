@@ -2,127 +2,170 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CFE43E883
-	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Oct 2021 20:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D3343F3C1
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 02:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbhJ1Sia (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 28 Oct 2021 14:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
+        id S231177AbhJ2ASp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 28 Oct 2021 20:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbhJ1SiT (ORCPT
+        with ESMTP id S230227AbhJ2ASo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 28 Oct 2021 14:38:19 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E8EC061226
-        for <linux-watchdog@vger.kernel.org>; Thu, 28 Oct 2021 11:35:41 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bq11so15501663lfb.10
-        for <linux-watchdog@vger.kernel.org>; Thu, 28 Oct 2021 11:35:41 -0700 (PDT)
+        Thu, 28 Oct 2021 20:18:44 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19067C061570;
+        Thu, 28 Oct 2021 17:16:17 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 107-20020a9d0a74000000b00553bfb53348so11187566otg.0;
+        Thu, 28 Oct 2021 17:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PW+Xu5KR0LGnC5ZiTBKpf+hcc7E/gJL7mbWD5u2IRSI=;
-        b=xuSKeHbbC4nc+EU9CT3wXw3es14n16X3aTlTv7hYY/KFi/EOzkDwotp+e4efrBTknK
-         yoXUrbGpXJzKzCjzaG1j2A3XS7QA6Vkku+P+25hkokJOcLpEg5IgS+CIUUThzgLyOZot
-         ixdiNjWNwZmL59+5KZVYYBlD3pFB6IDde6RQnFqssxwjfOYYhvoqkGqK1FW0UmcvsAro
-         lUJxahpkhEtl55/8fKE6OJjf2oOTWxcLIbh2gZIIHqmPO/st30RnIKXXfNs+U95VwAJ+
-         2eOpm/1W5muC8xWhRfJnskHvK66/3RjGJX991wlDnnhdOURT5Bk7nNdLzwNfv6K4ijIh
-         OnUA==
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=UDNsthRDfQMdy5Xi4IJABZmUUiTqa8/5eXuKi4F/AG0=;
+        b=a7WSvFBLa2mgCXrzxhxUDHvgRfgkAhzfymRUKWtTgFGLNnXvm3HT2ay4nM2NSiB+EI
+         hoSlC4xnD5eXpv55CC2RoYF3/rJuf3KFvzNtYA2rV96UjjRGIXetPOWRbnBKnj39btuR
+         oOQ8xYWrEvpXXr3jGvspghinUXMkxiaznlk/yj2mexTmlNxgIkM2Q71Fe0PBG21pLo+Z
+         CbJcFcI5IFvw4Z24M5IvX+Fjkls2jcU7NY9XUE14UE5fTlhE9/UP3pH9vkBatqfC/t17
+         810aqmLxqi5S5LC0w9e+crNtqyXehveUIXExsA8ubPNXRx0B+BBpT77p6KkA9f1wDWog
+         Hj1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PW+Xu5KR0LGnC5ZiTBKpf+hcc7E/gJL7mbWD5u2IRSI=;
-        b=moVIrb/CICqPGvfpK0IZsWURbCKhT05Y52qGMfD/WemK9eD9C/2NByQyq3FKUTOWfs
-         DZNGsLG6pI5cGtrKAUf5LeBdOknCoOTei/fjhorGMSSL/c/Iv8piKg5tTmFMJB8ruWQd
-         tVETBi5omqm8HSkrToZgYlKvAjDZd9eiVGK/TLG6yVmGies8XuF8iCg9f0Ik5Sr7IHCe
-         xlntNGJNiiy+GkYeiLBhCgVxPz/uv+98KRTWTRsZDmzyOrkSkmjQZ3ZaKw2IZOdUhCgP
-         wny1xHqZt5xuVfM01BQlnJmic4p91lQnbx5LOfjPdwzL5CCC6U2keBQgOMx2u/fAaeFq
-         ZZnw==
-X-Gm-Message-State: AOAM531i/S/rEdqHArpTODZFjfvHKNZX3t7LF1N1LcxjJPFR8uq09hHn
-        IhyPJJIZKifp4iAklp3F5vc46g==
-X-Google-Smtp-Source: ABdhPJwOsTrd35+23hcuPbz+sZ6ig7/NhHcGSWEcNkbNR9PlXij1vTP5BSLOqRqr2hbykWMc+rOx2Q==
-X-Received: by 2002:a05:6512:1294:: with SMTP id u20mr5634502lfs.218.1635446139796;
-        Thu, 28 Oct 2021 11:35:39 -0700 (PDT)
-Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id d20sm388979lfg.8.2021.10.28.11.35.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 11:35:39 -0700 (PDT)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UDNsthRDfQMdy5Xi4IJABZmUUiTqa8/5eXuKi4F/AG0=;
+        b=B5usOeSdnF94x+dvyCwU9+FoOlgXg3+iiSxUjE4z9Aog4itPQRWXSjozFg0uc64Nuj
+         d0Ikp2UH07TVnlk5WLnK+NkHR8Mp9SK3BLXZ3uwEC1JfgJd+99g/BC54lry+Diz3TqMQ
+         Kmd7XWEq/vwipRf+6wGUqQZJqzbUlbr09rkqZMhu5ZgYDnPLMMs7QnIFVwq0KM9wghHu
+         CeErG0DcJZHPkotFTcg75qxEM6UY8CZhOfmO4MuSvw9vH1s7J1o7ApmCt1IMzR00hedo
+         VMUqANZK/kQCk59W4sj4nN07x/IOI3KhGiPyoOFHpThkNK1nXIDEKX0+O8tva5fJpX8H
+         kQJA==
+X-Gm-Message-State: AOAM530lmKVEZ5pwT9R4gQLFJOgDcEnnVCKeWVQEjkTX/9DZQ3/Wi/Ja
+        MuF+dnjg/qL0Prao4dQxb58/sWvQsoQ=
+X-Google-Smtp-Source: ABdhPJwdY9EbvZtq4Rt8XxQ+XVKVZJn1nxNjBs5WqSUmWVnE4tN85eFEdcmN4KRFOrOESsKSWFtrGA==
+X-Received: by 2002:a9d:5541:: with SMTP id h1mr6025457oti.229.1635466576180;
+        Thu, 28 Oct 2021 17:16:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f14sm1340879oop.8.2021.10.28.17.16.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Oct 2021 17:16:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 4/7] watchdog: s3c2410: Add support for WDT counter enable
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 7/7] watchdog: s3c2410: Let kernel kick watchdog
-Date:   Thu, 28 Oct 2021 21:35:27 +0300
-Message-Id: <20211028183527.3050-8-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211028183527.3050-1-semen.protsenko@linaro.org>
 References: <20211028183527.3050-1-semen.protsenko@linaro.org>
+ <20211028183527.3050-5-semen.protsenko@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <e69282af-738b-e56e-026a-1e3adcec6a51@roeck-us.net>
+Date:   Thu, 28 Oct 2021 17:16:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211028183527.3050-5-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-When "tmr_atboot" module param is set, the watchdog is started in
-driver's probe. In that case, also set WDOG_HW_RUNNING bit to let
-watchdog core driver know it's running. This way wathcdog core can kick
-the watchdog for us (if CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED option is
-enabled), until user space takes control.
+On 10/28/21 11:35 AM, Sam Protsenko wrote:
+> On new Exynos chips (like Exynos850) WDT counter must be enabled to make
+> WDT functional. It's done via CLUSTERx_NONCPU_OUT register, in
+> CNT_EN_WDT bit. Add infrastructure needed to enable that counter.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>   drivers/watchdog/s3c2410_wdt.c | 28 ++++++++++++++++++++++++++++
+>   1 file changed, 28 insertions(+)
+> 
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index 7c163a257d3c..a5ef7171a90e 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -97,12 +97,16 @@ struct s3c2410_wdt;
+>    * @rst_stat_reg: Offset in pmureg for the register that has the reset status.
+>    * @rst_stat_bit: Bit number in the rst_stat register indicating a watchdog
+>    * reset.
+> + * @cnt_en_reg: Offset in pmureg for the register that enables WDT counter.
+> + * @cnt_en_bit: Bit number for "watchdog counter enable" in cnt_en register.
+>    * @quirks: A bitfield of quirks.
+>    * @disable_auto_reset: If set, this function will be called to disable
+>    * automatic setting the WDT as a reset reason in RST_STAT on CPU reset; uses
+>    * disable_reg field.
+>    * @mask_reset: If set, this function will be called to mask WDT reset request;
+>    * uses mask_reset_reg and mask_bit fields.
+> + * @enable_counter: If set, this function will be called to enable WDT counter;
+> + * uses cnt_en_reg and cnt_en_bit fields.
+>    */
+>   
+>   struct s3c2410_wdt_variant {
+> @@ -111,9 +115,12 @@ struct s3c2410_wdt_variant {
+>   	int mask_bit;
+>   	int rst_stat_reg;
+>   	int rst_stat_bit;
+> +	int cnt_en_reg;
+> +	int cnt_en_bit;
+>   	u32 quirks;
+>   	int (*disable_auto_reset)(struct s3c2410_wdt *wdt, bool mask);
+>   	int (*mask_reset)(struct s3c2410_wdt *wdt, bool mask);
+> +	int (*enable_counter)(struct s3c2410_wdt *wdt, bool mask);
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
----
- drivers/watchdog/s3c2410_wdt.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
+Unless there are different enable functions in the future,
+the function is unnecessary. This can be handled as feature bit.
 
-diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index ca082b1226e3..9af014ff1468 100644
---- a/drivers/watchdog/s3c2410_wdt.c
-+++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -732,6 +732,21 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 	wdt->wdt_device.bootstatus = s3c2410wdt_get_bootstatus(wdt);
- 	wdt->wdt_device.parent = dev;
- 
-+	/*
-+	 * If "tmr_atboot" param is non-zero, start the watchdog right now. Also
-+	 * set WDOG_HW_RUNNING bit, so that watchdog core can kick the watchdog.
-+	 *
-+	 * If we're not enabling the watchdog, then ensure it is disabled if it
-+	 * has been left running from the bootloader or other source.
-+	 */
-+	if (tmr_atboot && started == 0) {
-+		dev_info(dev, "starting watchdog timer\n");
-+		s3c2410wdt_start(&wdt->wdt_device);
-+		set_bit(WDOG_HW_RUNNING, &wdt->wdt_device.status);
-+	} else if (!tmr_atboot) {
-+		s3c2410wdt_stop(&wdt->wdt_device);
-+	}
-+
- 	ret = watchdog_register_device(&wdt->wdt_device);
- 	if (ret)
- 		goto err_cpufreq;
-@@ -740,17 +755,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_unregister;
- 
--	if (tmr_atboot && started == 0) {
--		dev_info(dev, "starting watchdog timer\n");
--		s3c2410wdt_start(&wdt->wdt_device);
--	} else if (!tmr_atboot) {
--		/* if we're not enabling the watchdog, then ensure it is
--		 * disabled if it has been left running from the bootloader
--		 * or other source */
--
--		s3c2410wdt_stop(&wdt->wdt_device);
--	}
--
- 	platform_set_drvdata(pdev, wdt);
- 
- 	/* print out a statement of readiness */
--- 
-2.30.2
+>   };
+>   
+>   struct s3c2410_wdt {
+> @@ -132,6 +139,7 @@ struct s3c2410_wdt {
+>   
+>   static int s3c2410wdt_disable_wdt_reset(struct s3c2410_wdt *wdt, bool mask);
+>   static int s3c2410wdt_mask_wdt_reset(struct s3c2410_wdt *wdt, bool mask);
+> +static int s3c2410wdt_enable_counter(struct s3c2410_wdt *wdt, bool en);
+>   
+>   static const struct s3c2410_wdt_variant drv_data_s3c2410 = {
+>   	.quirks = 0
+> @@ -246,6 +254,20 @@ static int s3c2410wdt_mask_wdt_reset(struct s3c2410_wdt *wdt, bool mask)
+>   	return ret;
+>   }
+>   
+> +static int s3c2410wdt_enable_counter(struct s3c2410_wdt *wdt, bool en)
+> +{
+> +	const u32 mask_val = 1 << wdt->drv_data->cnt_en_bit;
+
+BIT()
+
+> +	const u32 val = en ? mask_val : 0;
+> +	int ret;
+> +
+> +	ret = regmap_update_bits(wdt->pmureg, wdt->drv_data->cnt_en_reg,
+> +				 mask_val, val);
+> +	if (ret < 0)
+> +		dev_err(wdt->dev, "failed to update reg(%d)\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+>   static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
+>   {
+>   	int ret;
+> @@ -262,6 +284,12 @@ static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
+>   			return ret;
+>   	}
+>   
+> +	if (wdt->drv_data->enable_counter) {
+> +		ret = wdt->drv_data->enable_counter(wdt, en);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+>   	return 0;
+>   }
+>   
+> 
 
