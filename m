@@ -2,219 +2,143 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B924440164
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 19:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC6E44016E
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 19:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbhJ2RqP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 Oct 2021 13:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S229900AbhJ2Rum (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Oct 2021 13:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbhJ2RqO (ORCPT
+        with ESMTP id S229489AbhJ2Rul (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 Oct 2021 13:46:14 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E335BC061570;
-        Fri, 29 Oct 2021 10:43:45 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id k8so1349597oik.7;
-        Fri, 29 Oct 2021 10:43:45 -0700 (PDT)
+        Fri, 29 Oct 2021 13:50:41 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7826C061570
+        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 10:48:12 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id b17so9474242uas.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 10:48:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FTkcYmcnvDVDfmqYNOsTg+b+QGCCyVr4hlpcZtSPOrQ=;
-        b=oGDyHdhFcwMN8OMqxQMJYnpurQ5JEeNVMbxMCSuGR6D1D7d148pxNFbo/tY6uypssX
-         sNQZ/yssDRRPinJECJh/8IorxcKG/VRt/L7KA6ei5WHhQ2nmu7bKSz+3Hd09QpJyVhdU
-         rzg9LCpSCNn6yFYGSwm6r3L1b4Es+M+ff01ezNqB/DD6bm0zmTcvuU6uCtXyYTuYsepT
-         5dBTQXlzr5gbHdKYEyn5MMsMtohpE7W6LJTFUIczZI7XtqAgWyxffdG5ihRH7mLMpNCw
-         0vPtzEVqC+X6NLX5ytxB7Xr3rWoV5rnVlyiEGUU6XoO2vONpoowDRVuYLuP2WpumXICc
-         oF5A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DrOGKgquGj68N+FzRII+Lf58KuCAUe89IwujQcdy/4Q=;
+        b=HQ4VxrHDRaWBn9eDthLXPXVvvyfIh/htD08SuAKthmuVBXQrCKkQLCwdyBg969fbvf
+         LjMi/zuSUuX4kUKfrJLt6P8ftpEPQC8ftBcZbby43fTJ8Mts8pVv++gc+c0cCKUEL+WC
+         HLYwCZCoJvHhdF6lc3m3bVgfeisMVLDgnd+vzBFvPqcnSRuDQSjmYqww1Jxx8ImIuVkE
+         JB0uD7+mg6yUzT9wLJ+NxBMfLGSBM4heaGcsZ3YCilGeabXphmMlv+afuxqP690OgK6+
+         3GpCd/N2BENphVwV6nvNRA1cdx2fdMxTbnyqlsn6hxj0nEJlruuv30j/Hs+YhOlnyWZf
+         ElTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FTkcYmcnvDVDfmqYNOsTg+b+QGCCyVr4hlpcZtSPOrQ=;
-        b=LSOFfmN2fEqjHa13wBKmMaRvj4+UdczPjpk37oTaAuWtMYfoQqgT/1ut4fT/PO/viv
-         Cun/VYQgS6r7vHS+LOTDHRsSJyBMwoZBhn8zKBjfm/rS+t9RlxIkiH9jvB1Re7kmuqby
-         BqODYOmY9yv53Gxmuz6+SQrD+rzn09OTA17slAZsuRhCb1+liFycz824jz6mDVOEhAwD
-         m8zf9cjPgsrm/alHdbqcNVGU7FI7OxLVN36z5DfU2W1Tlqm5cg4X1x1W+5VSiBL33udB
-         F7B6JX3pBRnrwoJGvImEfoRG92YUSMDBwkSJMcSX+A/ptH+YA2Kuvqx1DHMKnLMfV7bB
-         IMYA==
-X-Gm-Message-State: AOAM533kT6SokEVAnHBAtdQTEhmAtetGq9YzaMFne5vKNVNH3bghqRF7
-        8DA/4HIgq2qqqrhE5cIrDFc=
-X-Google-Smtp-Source: ABdhPJzPjENVKzxG5XA4KtpqzFkHdaXPa/nygQKueAJoDVo2yvi7LjhDpgYdY81HwWPXj7YMnbLrkQ==
-X-Received: by 2002:aca:3e86:: with SMTP id l128mr14865109oia.120.1635529425253;
-        Fri, 29 Oct 2021 10:43:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e32sm1935914oow.30.2021.10.29.10.43.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Oct 2021 10:43:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20211028093059.32535-1-zajec5@gmail.com>
- <20211028093059.32535-3-zajec5@gmail.com>
- <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com>
- <9d57d026-19f3-e92d-4c02-d7e8e2c2bc25@gmail.com>
- <YXvxMHmx2i56sXdI@robh.at.kernel.org>
- <1df7e7cd-aa4c-c692-ff7f-8ee27780a6a9@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
-Message-ID: <a14d1265-9e8f-6011-3f34-0881c0c49dd5@roeck-us.net>
-Date:   Fri, 29 Oct 2021 10:43:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DrOGKgquGj68N+FzRII+Lf58KuCAUe89IwujQcdy/4Q=;
+        b=QQ3p4Mct7mmcWvB4zQ5kUTm6SCKcZPHUQCg9U2zAyUXvEOMvAvXQVonNRkKPkxR29I
+         I0ND4sfRIaLn3P311D4gynQXRtwB8xWYykpY7+iBmBcg7zWEZAcb0Zr9fCi0T/+PmLzi
+         JDH2PBhmY4MDxFOoHtoXvRmvYzgHJIr4hlQgtG9KnXoiOO1ed9B9FIgrerN8YCekZ8y8
+         b2M4XikE6TxnBbife+5M1zyAVkTGJ7gBVI6fFagSqy65bCQvJ1GptFtZzWk1Z2ld3+ya
+         gwBt6p9ZXHXNaRF/N64EG/sIQBe2U3ec+WTXyYzpeMke6ecJVEoUkH9YY7wuNmpmFY/M
+         dgTA==
+X-Gm-Message-State: AOAM533IZQITEGVUaN1NEtmmsA4tMbYVZ7GsSuvfavHCAqdFh3+Ai1IM
+        qMOPic87/V3L+Qab3s3OmUwMWOSv9FdCgi70Ny9stQ==
+X-Google-Smtp-Source: ABdhPJw97ZjpQ0khx27sW5CU8qv/wx3PQSG1suN1B0G6saGqCBxs3G2r/DljwpOifB0xpTrP681p2yZFn/UPb86FepQ=
+X-Received: by 2002:a67:ed5a:: with SMTP id m26mr14451872vsp.35.1635529691793;
+ Fri, 29 Oct 2021 10:48:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1df7e7cd-aa4c-c692-ff7f-8ee27780a6a9@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211028183527.3050-1-semen.protsenko@linaro.org>
+ <20211028183527.3050-3-semen.protsenko@linaro.org> <33c823c6-c105-68f1-e7c8-de6c27c5c33c@canonical.com>
+In-Reply-To: <33c823c6-c105-68f1-e7c8-de6c27c5c33c@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 29 Oct 2021 20:48:00 +0300
+Message-ID: <CAPLW+4k+1-A-gbjG+DGD2SxL-mrzWHQUKnpUXwc_Tw73CTGK-Q@mail.gmail.com>
+Subject: Re: [PATCH 2/7] dt-bindings: watchdog: Document Exynos850 watchdog bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/29/21 9:45 AM, Florian Fainelli wrote:
-> On 10/29/21 6:03 AM, Rob Herring wrote:
->> On Fri, Oct 29, 2021 at 01:39:02PM +0200, Rafał Miłecki wrote:
->>> [Rob: please kindly comment on this]
->>>
->>> On 28.10.2021 18:29, Florian Fainelli wrote:
->>>> On 10/28/21 2:30 AM, Rafał Miłecki wrote:
->>>>> From: Rafał Miłecki <rafal@milecki.pl>
->>>>>
->>>>> Hardware supported by this driver goes back to the old bcm63xx days. It
->>>>> was then reused in BCM7038 and later also in BCM4908.
->>>>>
->>>>> Depending on SoC model registers layout differs a bit. This commit
->>>>> introduces support for per-chipset registers offsets & adds BCM4908
->>>>> layout.
->>>>>
->>>>> Later on BCM63xx SoCs support should be added too (probably as platform
->>>>> devices due to missing DT). Eventually this driver should replace
->>>>> bcm63xx_wdt.c.
->>>>>
->>>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->>>>> ---
->>>>
->>>> [snip]
->>>>
->>>>> +
->>>>> +static const u16 bcm7038_wdt_regs_bcm4908[] = {
->>>>> +	[BCM63XX_WDT_REG_DEFVAL]	= 0x28,
->>>>> +	[BCM63XX_WDT_REG_CTL]		= 0x2c,
->>>>> +	[BCM63XX_WDT_REG_SOFTRESET]	= 0x34,
->>>>
->>>> I don't understand what you are doing here and why you are not
->>>> offsetting the "reg" property appropriately when you create your
->>>> bcm4908-wdt Device Tree node such that the base starts at 0, and the
->>>> existing driver becomes usable as-is. This does not make any sense to me
->>>> when it is obviously the simplest way to make the driver "accept" the
->>>> resource being passed.
->>>
->>> I believe that DT binding should cover the whole hardware block and
->>> describe it (here: use proper compatible to allow recognizing block
->>> variant).
->>>
->>> That's because (as far as I understand) DT should be used to describe
->>> hardware as closely as possible. I think it shouldn't be adjusted to
->>> make mapping match Linux's driver implementation.
->>>
->>>
->>> So if:
->>> 1. Hardware block is mapped at 0xff800400
->>> 2. It has interesting registers at 0xff800428 and 0xff80042c
->>>
->>> I think mapping should use:
->>> reg = <0xff800400 0x3c>;
->>> even if we don't use the first N registers.
->>>
->>> That way, at some point, you can extend Linux (or whatever) driver to
->>> use extra registers without reworking the whole binding. That's why I
->>> think we need to map whole hardware block & handle different registers
->>> layouts in a driver.
->>
->> Yes, that's the correct thing to do.
-> 
-> So in the future if we happen to want to manage the hardware timers in
-> that block, they would be part of the watchdog driver? I am fairly sure
-> they won't be, so you will be creating a composite driver/MFD to
-> separate out the functions, more likely. So you might as well create
-> sub-nodes.
-> 
->>
->> The question is whether you'd need sub nodes for the other functions.
->> Folks tend to want to have sub nodes for convenience which isn't really
->> needed and then requires a DT update ('cause they add nodes as adding
->> drivers).
-> 
-> Sorry but not, this is getting completely ridiculous, the
-> 
->>
->> Based on the registers, you really don't need sub nodes here.
-> 
-> I sort of disagree here, the watchdog is a part of a sundry timer block
-> here, but it is logically broken up into different parts and if if I
-> were to imagine how this would map into different drivers, I can easily
-> see that we would have:
-> 
-> - a driver to manage the timer interrupt controller
-> - a driver to manage each of the 3 hardware timers, be they clockevent
-> or else
-> - a driver to manage the watchdog
-> 
-> The simplest way to get there, and also because these same timer blocks
-> are actually spread in other parts of STB chips just like the watchdog
-> is, but in a different layout where they stand on their own was the main
-> drive for defining the bcm7038_wdt binding the way it was.
-> 
-> Rafal, I appreciate that you are trying to leverage the bcm7038_wdt
-> driver and this is better than the previous patch set, but I really do
-> not see why having the watchdog driver not manage the *exact* subset of
-> the register space needed (starting at 0x28) is not being done.
+On Fri, 29 Oct 2021 at 11:02, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 28/10/2021 20:35, Sam Protsenko wrote:
+> > Exynos850 SoC has two CPU clusters:
+> >   - cluster 0: contains CPUs #0, #1, #2, #3
+> >   - cluster 1: contains CPUs #4, #5, #6, #7
+> >
+> > Each cluster has its own dedicater watchdog timer. Those WDT instances
+> > are controlled using different bits in PMU registers, so there should be
+> > two different compatible strings (for each cluster), to tell the driver
+> > which bits to use for each WDT instance.
+> >
+> > Also on Exynos850 the peripheral clock and the source clock are two
+> > different clocks. Provide a way to specify two clocks in watchdog device
+> > tree node.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  .../devicetree/bindings/watchdog/samsung-wdt.yaml  | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+> > index 93cd77a6e92c..19c7f7767559 100644
+> > --- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+> > +++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+> > @@ -22,16 +22,24 @@ properties:
+> >        - samsung,exynos5250-wdt                # for Exynos5250
+> >        - samsung,exynos5420-wdt                # for Exynos5420
+> >        - samsung,exynos7-wdt                   # for Exynos7
+> > +      - samsung,exynos850-cl0-wdt             # for Exynos850 (CPU cluster 0)
+> > +      - samsung,exynos850-cl1-wdt             # for Exynos850 (CPU cluster 1)
+>
+> I would prefer to have one compatible and additional u32 property
+> pointing to cluster index. The driver would use this property to adjust
+> the PMU register offsets or bits.
+>
+> Why? Because if next time you have three clusters, you will need to make
+> three compatibles for something which differs by only two register
+> offsets. Both watchdog instances (or three in some unspecified future)
+> are here the same, they just control different blocks, therefore should
+> accept some parameter instead of making them different compatibles.
+>
 
-Agreed, especially since other sub-devices of bcm4908 are alredy modeled
-this way. See arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi.
-At this point, before accepting anything, I'll want to have an explanation
-how and why the watchdog interface is handled differently than, say,
-its reset controller. Also, I'd like to understand the memory region
-assigned to bcm7038, which happens to be something like:
+Agreed. I considered both cases, both looked ugly to me. But having
+one compatible is probably better in the end, although it'll require
+some additional code in the driver. Anyway, will be done in v2, will
+send it soon.
 
-     compatible = "brcm,bcm7038-wdt";
-         reg = <0xf040a7e8 0x16>;
+> >
+> >    reg:
+> >      maxItems: 1
+> >
+> >    clocks:
+> > -    maxItems: 1
+> > +    minItems: 1
+> > +    items:
+> > +      - description: Peripheral clock used for register interface; if it's the
+> > +                     only clock, it's also a source clock
+> > +      - description: Source clock (optional)
+> >
+> >    clock-names:
+> > +    minItems: 1
+> >      items:
+> >        - const: watchdog
+> > +      - const: watchdog_src
+>
+> Don't you require src clock on Exynos850?
+>
 
-because it seems unlikely that this is a chip subsystem that just happens
-to start at such an odd boundary. More specifically, I see in actual
-.dtsi files data such as:
+Will be addressed in v2 properly, thanks.
 
-                 watchdog: watchdog@4066a8 {
-                         clocks = <&upg_clk>;
-                         compatible = "brcm,bcm7038-wdt";
-                         reg = <0x4066a8 0x14>;
-                         status = "disabled";
-                 };
-...
-                 timers: timer@406680 {
-                         compatible = "brcm,brcmstb-timers";
-                         reg = <0x406680 0x40>;
-                 };
-
-So there happen to be timers in the same region, and the offset
-between timer and watchdog registers is 0x28. Coincidentally, that
-just happens to be the extra offset defined in this patch for the
-bcm4908 watchdog. Really ? Sorry, this sounds very inconsistent
-and arbitrary to me.
-
-Overall, I suspect I'll have to see datasheets if we really end up
-having different offsets for each chip, because I'll want to confirm
-that the watchdog subsystem isn't treated differently than other
-subsystems, and that the offset calculations are appropriate and
-consistent across the different chips.
-
-Guenter
+>
+>
+> Best regards,
+> Krzysztof
