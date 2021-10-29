@@ -2,158 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F4D43F4E6
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 04:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A5F43F845
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 09:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbhJ2CSX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 28 Oct 2021 22:18:23 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:40583 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbhJ2CSW (ORCPT
+        id S232258AbhJ2H6d (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Oct 2021 03:58:33 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:38598
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232243AbhJ2H6c (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 28 Oct 2021 22:18:22 -0400
-Received: by mail-ot1-f45.google.com with SMTP id 71-20020a9d034d000000b00553e24ce2b8so6805333otv.7;
-        Thu, 28 Oct 2021 19:15:54 -0700 (PDT)
+        Fri, 29 Oct 2021 03:58:32 -0400
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6DB7F3F165
+        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 07:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1635494161;
+        bh=LyyBRaeBvGMAnLsFN/eJuaykDGWSSKpKnsQjNh6rDIk=;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=GyCZ7ZC60+Km16be+ADFcNX4LoEhwUoHYI4LEml4EyWvmRXzWjn/z90KbO04iZJfM
+         lWNILUoqaDGRhWFrZSkSg6ACt5542NM8e6hIPmoW6xybhsUIdsEn8ZjGWs0vEH/tLf
+         ZtiJRPsAPaWkTVOTIkrWqEiFDLb+NOtZcB/kMk4dDK0/4iGlwmLFDRAfE7a1k9hTrz
+         hzKRz8iWtzu1pAjhVoFCxBVvBsc/LwJWOvF1LHG7iRRtZmH4h1Fkgq64Li2tipjaRC
+         Gv0AwR+09QpfxAwMu4jXXeveZsYxfjI8+27yC+r6AQeu9sosve4p/tIlfp1yedTtPc
+         Q0mO1uBbPJ1XQ==
+Received: by mail-lj1-f199.google.com with SMTP id f6-20020a2e9e86000000b00211349f9ce3so2777769ljk.3
+        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 00:56:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=MhaSmrBQtbkr94LNt4h9AKG7WEafonEBYR5HwoAlJj4=;
-        b=lZwor3BntJGQKEndhkySeNCanzidsLCCGyk+ylbNlnNmstKOq7KgTk1ca1HBsQQGfP
-         FBNDx0zkkarsW7kohHnEB030sNkTj8mwyOBzx9W+TncH9F9ragpsQFMfunOTFReDaYik
-         73hpW3qAvsdGprKBc/HrLHmdHQ8IdGGIkdbiVXr78HV+C5Ag4QYujSmleNymFqX1wiAh
-         Nu+NWa8sLjEcmcpgr72ZZ2Th1PFqus6LVw5TTV7QM8i2U5K1Y2EBiwLs/Zk5JBCcyAs3
-         fflhA5l2p4CGMYfvVsP0iB70CymeEuLY+q0lNivJ49pswSRg6/NwP61tJ9M+vsSeZySl
-         eA4w==
-X-Gm-Message-State: AOAM531zThi8RueCtwq7902Oxhj7JlLVKFm1q7TnABgrj9qkfG74UU3v
-        gcVC1227BbaagBRkCWzn9Q==
-X-Google-Smtp-Source: ABdhPJyG+qFnBhbco3mrdQyViSYz7rqmTLqsNjPQ1D0awRhHYjyg4z/RIbOckcnBQFDQHEifKWuygw==
-X-Received: by 2002:a05:6830:268f:: with SMTP id l15mr6470222otu.59.1635473754477;
-        Thu, 28 Oct 2021 19:15:54 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o2sm1503321otl.34.2021.10.28.19.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 19:15:53 -0700 (PDT)
-Received: (nullmailer pid 1025965 invoked by uid 1000);
-        Fri, 29 Oct 2021 02:15:52 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LyyBRaeBvGMAnLsFN/eJuaykDGWSSKpKnsQjNh6rDIk=;
+        b=mNlstWKChG3Nhoro6n2I0Q7VyjRkHtAnb+o/1c4dNtTzXxGr6YUU0ys59ZEGAddkU6
+         AfPPbhrCGT0ljY8QDqyJbKQKkLklXtlvofz9iQaKqy4z+DisDlvqX+jo4u3swmNTdDI0
+         EjJBwEyyp7e8+t5NqrAliEwXjnCaffCVWWiSvhCwZIpSTr1y4G8h0/r2aLLb001snY/e
+         yqu2JP5gI52CraHBzQNLqq8qejnooATlNV88iHEpEcJeXoeYWUyZKKqQ7t4IzIq7hYY+
+         tHEUbYodmHHeunWp0q3dp+QiIJK9eppxuTvJrfMMey5xnSBrpF/JXjJo2p8834UBbQK7
+         bMMw==
+X-Gm-Message-State: AOAM5337lLGf+plpGx0OXT41VsdcExzWkaDsxJNsTopRxcR34ia4uOaa
+        YQSgzqKBNzrn3Z6hXK3IOJahSM+nOl8GV7HsLglwVlnhZ6Bimo1jYozMEDe1U425aQ0aJ5a6JJ5
+        p9oDOBdk/Zy+/u17o5+Ltrjt16RDR0yjQwWMmweHXs+Cg
+X-Received: by 2002:a05:651c:88d:: with SMTP id d13mr9891263ljq.399.1635494160905;
+        Fri, 29 Oct 2021 00:56:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjD+ZyZDA5TH1MYDJvmel7PgaO0VMDmzw3+uqvozcCuzMQMxxuuiC2S7FaeIi+F7wLIc61Fw==
+X-Received: by 2002:a05:651c:88d:: with SMTP id d13mr9891235ljq.399.1635494160646;
+        Fri, 29 Oct 2021 00:56:00 -0700 (PDT)
+Received: from [192.168.3.161] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id o1sm533211lfk.159.2021.10.29.00.55.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Oct 2021 00:56:00 -0700 (PDT)
+Subject: Re: [PATCH 1/7] dt-bindings: watchdog: Require samsung,syscon-phandle
+ for Exynos7
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, rafal@milecki.pl,
-        Justin Chen <justinpopo6@gmail.com>,
-        linux-watchdog@vger.kernel.org
-In-Reply-To: <20211028172322.4021440-3-f.fainelli@gmail.com>
-References: <20211028172322.4021440-1-f.fainelli@gmail.com> <20211028172322.4021440-3-f.fainelli@gmail.com>
-Subject: Re: [PATCH 2/7] dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding
-Date:   Thu, 28 Oct 2021 21:15:52 -0500
-Message-Id: <1635473752.980618.1025964.nullmailer@robh.at.kernel.org>
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20211028183527.3050-1-semen.protsenko@linaro.org>
+ <20211028183527.3050-2-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <99f7e45d-7c27-1ad9-edf5-a5075e8e323b@canonical.com>
+Date:   Fri, 29 Oct 2021 09:55:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211028183527.3050-2-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 28 Oct 2021 10:23:17 -0700, Florian Fainelli wrote:
-> The BCM7038 watchdog binding is updated to include a "brcm,bcm6345-wdt"
-> compatible string which is the first instance of a DSL (BCM63xx) SoC
-> seeing the integration of such a watchdog timer block.
+On 28/10/2021 20:35, Sam Protsenko wrote:
+> Exynos7 watchdog driver is clearly indicating that its dts node must
+> define syscon phandle property. That was probably forgotten, so add it.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
->  .../devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml         | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Fixes: 2b9366b66967 ("watchdog: s3c2410_wdt: Add support for Watchdog
+device on Exynos7")
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml:19:5: [error] duplication of key "const" in mapping (key-duplicates)
-
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 45, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 122, in get_single_data
-    return self.construct_document(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 132, in construct_document
-    for _dummy in generator:
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 722, in construct_yaml_map
-    value = self.construct_mapping(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 446, in construct_mapping
-    return BaseConstructor.construct_mapping(self, node, deep=deep)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 264, in construct_mapping
-    if self.check_mapping_key(node, key_node, mapping, key, value):
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 295, in check_mapping_key
-    raise DuplicateKeyError(*args)
-ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-  in "<unicode string>", line 18, column 5
-found duplicate key "const" with value "brcm,bcm7038-wdt" (original value: "brcm,bcm6345-wdt")
-  in "<unicode string>", line 19, column 5
-
-To suppress this check see:
-    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-
-make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
-    testtree = dtschema.load(filename, line_number=line_number)
-  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 612, in load
-    return yaml.load(f.read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 122, in get_single_data
-    return self.construct_document(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 132, in construct_document
-    for _dummy in generator:
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 722, in construct_yaml_map
-    value = self.construct_mapping(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 446, in construct_mapping
-    return BaseConstructor.construct_mapping(self, node, deep=deep)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 264, in construct_mapping
-    if self.check_mapping_key(node, key_node, mapping, key, value):
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 295, in check_mapping_key
-    raise DuplicateKeyError(*args)
-ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-  in "<unicode string>", line 18, column 5
-found duplicate key "const" with value "brcm,bcm7038-wdt" (original value: "brcm,bcm6345-wdt")
-  in "<unicode string>", line 19, column 5
-
-To suppress this check see:
-    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 67, in <module>
-    ret = check_doc(f)
-  File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
-    print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
-AttributeError: 'DuplicateKeyError' object has no attribute 'path'
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml: ignoring, error parsing file
-warning: no schema found in file: ./Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-make: *** [Makefile:1441: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1547626
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Best regards,
+Krzysztof
