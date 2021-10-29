@@ -2,158 +2,168 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C07440405
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 22:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678E9440448
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 22:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbhJ2U1m (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 Oct 2021 16:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S230411AbhJ2UrW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Oct 2021 16:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhJ2U1m (ORCPT
+        with ESMTP id S229897AbhJ2UrW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 Oct 2021 16:27:42 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46075C061570;
-        Fri, 29 Oct 2021 13:25:13 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id h11so18737349ljk.1;
-        Fri, 29 Oct 2021 13:25:13 -0700 (PDT)
+        Fri, 29 Oct 2021 16:47:22 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533E2C061570
+        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 13:44:53 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id e10so20426045uab.3
+        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 13:44:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=icQv5eiQ4N6GYDvJ5duXwfTCf93mcDCEx7og4XM7esA=;
-        b=IXkz1om3NpB5zv4dJBBE2GmC+Ltq/MAlRQNwAfS9IhGREYLy0t3Qh1oADFBcsiyb3Q
-         xrKrVqlYU7LuU/qEsl5/R1uVUdRtOOMMa7YjqtoP0f9ksDURtgvxZDnJgxl/ye4sO3Pt
-         gheufj7hI03dYX9pBN/zdzXccZ/xmhxw6MEk2SVEFF4ZL+DSFSwqfXZslAhk+wleFki4
-         mnT8yAPA02o7S0t2lxcReTT2JIgt7xj5zhHCxeqF+VS5WKjZbg4SsmhAfgOTWkycNLwL
-         pvmi2Ni7BJoKPbDVjcgzS07ZCR0xdIf3fLA6KezsuwtL9wa2w3cLN3TFQVv2yu6lNAqy
-         TGyw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=khwee+o4BIEXlURemAxOIdbb1MWFYFtT0vHvBw+Nksk=;
+        b=fYHPHD1cpSxD1HuX6GBkp650+K5AQeXGHiyXjEqXajyjaNdVOFxAbt7T8l21wpClyT
+         J9di4Hv7YTgnZOlpN+ge3ymXROyrvAYtful4TOmblnfCk2B+IIEkWDnz6VgcS9qa1l7L
+         Dl9ReFkbVhSU9XPojwjYSjv3yjv/v6N8YlmivGXQ7bRXChw4p4Hgl7vZBrmB93+NT+T/
+         dfZhvGyp2jhkBPbxdue5NLMG1+IsB0zMbQK5ymHqv4HkDbbK2Gy8PCPGATnCcTfslSIK
+         0nAECJPlasKxAvdil6RETd4qYR+eq9EJdQRW74O8g+2KL5/pHVgpi5ZQtDT3TuQ4cJ7G
+         oTAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=icQv5eiQ4N6GYDvJ5duXwfTCf93mcDCEx7og4XM7esA=;
-        b=SoiZh0BoZPGPa5yvRFHqPzrltvf09a6OinzXbGbjrJGOwuIJVKNu6q49g2eUVSqEMn
-         FG+FYdllPvsnV4hNacTxuW/2C3kBwu5cNnZ0TP3g3Dp5Hp858/WffQVRfA80C/jsAhEu
-         FN1H/OimDUQ2RWnzKNjZFs+JCU5SLKATULphHtBSs+oUL2ZQgrsnesWDX++5sYiq9YLE
-         IHGYKBWv6m3FBTi78B8WxcyGdRu9DG8p0xcjvBpKZqY//aVUQuVGAOx0zWMzyiv13v9f
-         92n98tLEGcD9IpUPO5S/PJH2FUE4IRrpJz6yvWePyUDeL17NGIxFgvyar1ptAyNlS3kR
-         LzTg==
-X-Gm-Message-State: AOAM533pCxBAH98qLF7FSIkkCa0kKfbfYnJe+LdnctUdWfwhTM5we4Fl
-        rIeu5G0mTcN4hVcDMBaZV1c=
-X-Google-Smtp-Source: ABdhPJxQUKhYPuhvCOhPz9Bhjj+MDj+4vHsJbyFZgdln8yL7AW/e7iq2kSug9mvKs7vdEdOn+SVRWA==
-X-Received: by 2002:a05:651c:4c6:: with SMTP id e6mr5974781lji.447.1635539111354;
-        Fri, 29 Oct 2021 13:25:11 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id c19sm692715lfv.225.2021.10.29.13.25.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Oct 2021 13:25:10 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH 2/2] dt-bindings: mfd: add Broadcom's timer MFD block
-Date:   Fri, 29 Oct 2021 22:25:05 +0200
-Message-Id: <20211029202505.7106-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211029202505.7106-1-zajec5@gmail.com>
-References: <20211029202505.7106-1-zajec5@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=khwee+o4BIEXlURemAxOIdbb1MWFYFtT0vHvBw+Nksk=;
+        b=h/rsNUH9oE0qsMs4CTaeLvc5NZmAWsTW7uXmsy32RO6Ee56rkfr+9OBEwUlor63cZn
+         qyBencEU9mY7utQDK4zOHg2QsJ4cbohAQDBxIk+CfGsPzwZWBQmK5ZbdNpvsmLBuWzUJ
+         Zr07n8AMTq48bFGZIIW97VTYjHNE94eHeY+Sr2nJJ3hREi44lgVnrTnG7aMpzvAwylhu
+         ieLTSFz4TGD+xBRQeKUyHKQ6DmPv6ZGqRDAQ+4kPk/qoQmzd0XmzGBdpPRkNAa8W2M3P
+         s9lg2pCgBJO65XGN2L+L+c6fUs9BHZLDnTwXFE55T9oOom6abxLdpXE0RTiN5LweUO2I
+         ttWA==
+X-Gm-Message-State: AOAM530xxzZJynCNOTGd/U+ecsWL0zYKRaWdZmb4854m1g1K+03l1Uj9
+        eqFZidcdUd4VV5u+F7kPAqRft7FL/6xzrE19njf18A==
+X-Google-Smtp-Source: ABdhPJw3mDqd696wBkxMTGZ2S5RsKu9UN9jviWzgRv7mo5KIhIFNWcJZjahUk6mPGJocTM+tXQPlbXOHE/f6tlVxbjg=
+X-Received: by 2002:a67:1781:: with SMTP id 123mr15453627vsx.1.1635540292507;
+ Fri, 29 Oct 2021 13:44:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211028183527.3050-1-semen.protsenko@linaro.org>
+ <20211028183527.3050-5-semen.protsenko@linaro.org> <e69282af-738b-e56e-026a-1e3adcec6a51@roeck-us.net>
+In-Reply-To: <e69282af-738b-e56e-026a-1e3adcec6a51@roeck-us.net>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 29 Oct 2021 23:44:40 +0300
+Message-ID: <CAPLW+4nn522iRbPViTybhN8=-pQBaQPCiAQAufzBHgnEMW3HmA@mail.gmail.com>
+Subject: Re: [PATCH 4/7] watchdog: s3c2410: Add support for WDT counter enable
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-watchdog@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Fri, 29 Oct 2021 at 03:16, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 10/28/21 11:35 AM, Sam Protsenko wrote:
+> > On new Exynos chips (like Exynos850) WDT counter must be enabled to make
+> > WDT functional. It's done via CLUSTERx_NONCPU_OUT register, in
+> > CNT_EN_WDT bit. Add infrastructure needed to enable that counter.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >   drivers/watchdog/s3c2410_wdt.c | 28 ++++++++++++++++++++++++++++
+> >   1 file changed, 28 insertions(+)
+> >
+> > diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> > index 7c163a257d3c..a5ef7171a90e 100644
+> > --- a/drivers/watchdog/s3c2410_wdt.c
+> > +++ b/drivers/watchdog/s3c2410_wdt.c
+> > @@ -97,12 +97,16 @@ struct s3c2410_wdt;
+> >    * @rst_stat_reg: Offset in pmureg for the register that has the reset status.
+> >    * @rst_stat_bit: Bit number in the rst_stat register indicating a watchdog
+> >    * reset.
+> > + * @cnt_en_reg: Offset in pmureg for the register that enables WDT counter.
+> > + * @cnt_en_bit: Bit number for "watchdog counter enable" in cnt_en register.
+> >    * @quirks: A bitfield of quirks.
+> >    * @disable_auto_reset: If set, this function will be called to disable
+> >    * automatic setting the WDT as a reset reason in RST_STAT on CPU reset; uses
+> >    * disable_reg field.
+> >    * @mask_reset: If set, this function will be called to mask WDT reset request;
+> >    * uses mask_reset_reg and mask_bit fields.
+> > + * @enable_counter: If set, this function will be called to enable WDT counter;
+> > + * uses cnt_en_reg and cnt_en_bit fields.
+> >    */
+> >
+> >   struct s3c2410_wdt_variant {
+> > @@ -111,9 +115,12 @@ struct s3c2410_wdt_variant {
+> >       int mask_bit;
+> >       int rst_stat_reg;
+> >       int rst_stat_bit;
+> > +     int cnt_en_reg;
+> > +     int cnt_en_bit;
+> >       u32 quirks;
+> >       int (*disable_auto_reset)(struct s3c2410_wdt *wdt, bool mask);
+> >       int (*mask_reset)(struct s3c2410_wdt *wdt, bool mask);
+> > +     int (*enable_counter)(struct s3c2410_wdt *wdt, bool mask);
+>
+> Unless there are different enable functions in the future,
+> the function is unnecessary. This can be handled as feature bit.
+>
 
-This block is called timer in documentation but it actually behaves like
-a MFD.
+Thanks for review. I've reworked all patches to use quirk bits instead
+of callbacks. Will send v2 soon.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- .../bindings/mfd/brcm,timer-mfd.yaml          | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/brcm,timer-mfd.yaml
-
-diff --git a/Documentation/devicetree/bindings/mfd/brcm,timer-mfd.yaml b/Documentation/devicetree/bindings/mfd/brcm,timer-mfd.yaml
-new file mode 100644
-index 000000000000..0060b6c443a7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/brcm,timer-mfd.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/brcm,timer-mfd.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom's timer MFD
-+
-+maintainers:
-+  - Rafał Miłecki <rafal@milecki.pl>
-+
-+description: |
-+  Broadcom's timer is a block used in multiple SoCs (e.g., BCM4908, BCM63xx,
-+  BCM7038). Despite its name it's not strictly a timer device. It consists of:
-+  timers, watchdog and software reset handler.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: brcm,timer-mfd
-+      - const: simple-mfd
-+      - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+  ranges: true
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+patternProperties:
-+  '^watchdog@[a-f0-9]+$':
-+    $ref: ../watchdog/brcm,bcm7038-wdt.yaml
-+
-+additionalProperties: false
-+
-+required:
-+  - reg
-+
-+examples:
-+  - |
-+    timer_mfd: timer-mfd@ff800400 {
-+        compatible = "brcm,timer-mfd", "simple-mfd", "syscon";
-+        reg = <0xff800400 0x4c>;
-+        ranges = <0x0 0xff800400 0x4c>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        watchdog@28 {
-+            compatible = "brcm,bcm7038-wdt";
-+            reg = <0x28 0x8>;
-+        };
-+    };
-+
-+    reboot {
-+        compatible = "syscon-reboot";
-+        regmap = <&timer_mfd>;
-+        offset = <0x34>;
-+        mask = <1>;
-+    };
--- 
-2.31.1
-
+> >   };
+> >
+> >   struct s3c2410_wdt {
+> > @@ -132,6 +139,7 @@ struct s3c2410_wdt {
+> >
+> >   static int s3c2410wdt_disable_wdt_reset(struct s3c2410_wdt *wdt, bool mask);
+> >   static int s3c2410wdt_mask_wdt_reset(struct s3c2410_wdt *wdt, bool mask);
+> > +static int s3c2410wdt_enable_counter(struct s3c2410_wdt *wdt, bool en);
+> >
+> >   static const struct s3c2410_wdt_variant drv_data_s3c2410 = {
+> >       .quirks = 0
+> > @@ -246,6 +254,20 @@ static int s3c2410wdt_mask_wdt_reset(struct s3c2410_wdt *wdt, bool mask)
+> >       return ret;
+> >   }
+> >
+> > +static int s3c2410wdt_enable_counter(struct s3c2410_wdt *wdt, bool en)
+> > +{
+> > +     const u32 mask_val = 1 << wdt->drv_data->cnt_en_bit;
+>
+> BIT()
+>
+> > +     const u32 val = en ? mask_val : 0;
+> > +     int ret;
+> > +
+> > +     ret = regmap_update_bits(wdt->pmureg, wdt->drv_data->cnt_en_reg,
+> > +                              mask_val, val);
+> > +     if (ret < 0)
+> > +             dev_err(wdt->dev, "failed to update reg(%d)\n", ret);
+> > +
+> > +     return ret;
+> > +}
+> > +
+> >   static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
+> >   {
+> >       int ret;
+> > @@ -262,6 +284,12 @@ static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
+> >                       return ret;
+> >       }
+> >
+> > +     if (wdt->drv_data->enable_counter) {
+> > +             ret = wdt->drv_data->enable_counter(wdt, en);
+> > +             if (ret < 0)
+> > +                     return ret;
+> > +     }
+> > +
+> >       return 0;
+> >   }
+> >
+> >
+>
