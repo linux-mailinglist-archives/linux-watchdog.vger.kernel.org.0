@@ -2,98 +2,92 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3923044031B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 21:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3EC44048A
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Oct 2021 22:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbhJ2T1q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 Oct 2021 15:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbhJ2T1p (ORCPT
+        id S231575AbhJ2U7t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Oct 2021 16:59:49 -0400
+Received: from 5.mo583.mail-out.ovh.net ([87.98.173.103]:60443 "EHLO
+        5.mo583.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231484AbhJ2U7s (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 Oct 2021 15:27:45 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364E9C061767
-        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 12:25:16 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id f4so20037721uad.4
-        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 12:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iOhkeO72w3GegdH+UyM0cQ4je/Oq7dw9gY0y8l00Dps=;
-        b=BpYkTOMfIuxl1LvyX+8FrzDYBlDk2ILzW92lnelWdll4LauIavVrbIPnAdsBba0Bay
-         9GJPOu/gc7iBsuroJcRmM5lFQTkB4KMxWzntnKzRtuF6APyI1rZYLwj1RWgS2b3AqL28
-         W1ZOYWW/N2Ert+OifD7ruHFgHUxPG7dTZIav8RyjyScTzUYcLo9O3a45doCe1j8rvHTM
-         4cJz19rDuihHt7YuFsYSwrKnZzIwaThqghVxPcpbJmMU2HXGA+43vMqONmFbciTK/TYL
-         GaZsyRWAUFJafjTZ4bOeV8XLUAVo7C+kccYIKaEwihABlZwGP36nNgrQTvIGBKkyl5nc
-         gx1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iOhkeO72w3GegdH+UyM0cQ4je/Oq7dw9gY0y8l00Dps=;
-        b=GVDOhMNK8HcNhnSZwB1YpSZ+BReZTr8SL0GOfEsk9YXSkJX52QzwnZaaJCPatmsH2U
-         yDaPYdWMkx2VKquPE8RiuPYZSjg0yDMm65H8bgxlBuyPsDpBN3nfZL65s8jfUcR33p1J
-         e6JXDI0lMLtbUwPCi+H/Naropj5DMJqQ3ywJH55wfGtovK77/BER+ySNiWVYLM2xj7dp
-         cfaTpuMWH339DmOofDG7HVy/tH/Gb7SSv+Zzj6fmZHp8+8np3wSlc5zePcgOFTfNWF+K
-         zG60LVAw6DbUnkMz2EXoWazUI9JVxnVDLsmlap1CojJqEfIkLCmEHJDUxLwiAqJ97izo
-         /Hcg==
-X-Gm-Message-State: AOAM533wWvW24IllS9deQjIlv5OfFOtKl6lwzMHAVcujxRTZipErrHvT
-        Wx+v+xHzGtIllxmu6H0xFz4ZnsVcKTdERFcpwdEceQ==
-X-Google-Smtp-Source: ABdhPJxLz+zekne4P7GYaeUWmfz8nQqPqtIf+Pn0XUP0NhGOqQedWV6arFH39XiTpXDM/Najz07v14Z2+6erQK70Hlg=
-X-Received: by 2002:a67:f1ca:: with SMTP id v10mr15087571vsm.55.1635535515312;
- Fri, 29 Oct 2021 12:25:15 -0700 (PDT)
+        Fri, 29 Oct 2021 16:59:48 -0400
+X-Greylist: delayed 27601 seconds by postgrey-1.27 at vger.kernel.org; Fri, 29 Oct 2021 16:59:48 EDT
+Received: from player770.ha.ovh.net (unknown [10.110.208.115])
+        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 0717722063
+        for <linux-watchdog@vger.kernel.org>; Fri, 29 Oct 2021 12:38:02 +0000 (UTC)
+Received: from RCM-web10.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player770.ha.ovh.net (Postfix) with ESMTPSA id 5DEA823DC6CDD;
+        Fri, 29 Oct 2021 12:37:51 +0000 (UTC)
 MIME-Version: 1.0
-References: <20211028183527.3050-1-semen.protsenko@linaro.org>
- <20211028183527.3050-4-semen.protsenko@linaro.org> <b9c33def-6b12-1e5a-4449-b1e0869a0e3a@roeck-us.net>
- <2a5ff8d0-c665-e25e-cb40-51326db2e26a@canonical.com>
-In-Reply-To: <2a5ff8d0-c665-e25e-cb40-51326db2e26a@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 29 Oct 2021 22:25:03 +0300
-Message-ID: <CAPLW+4kd0Woxenf2DUJTRD2zCn9gSg6Wq0Vbt+EjSM5zeTDvHQ@mail.gmail.com>
-Subject: Re: [PATCH 3/7] watchdog: s3c2410: Make reset disable optional
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+Date:   Fri, 29 Oct 2021 14:37:51 +0200
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Justin Chen <justinpopo6@gmail.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 5/7] watchdog: bcm7038_wdt: Add platform device id for
+ bcm63xx-wdt
+In-Reply-To: <20211028172322.4021440-6-f.fainelli@gmail.com>
+References: <20211028172322.4021440-1-f.fainelli@gmail.com>
+ <20211028172322.4021440-6-f.fainelli@gmail.com>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <02cb3c1a160854c92895d024e59a831b@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 16945356551679290136
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvdeghedgheduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvufgjfhgfkfigihgtgfesthejjhdttdervdenucfhrhhomheptfgrfhgrlhgpofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepveefvdetjeffueefkeeuuedvgefhgeegjefgvedvgeeiteduueeivdeltedthfetnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejtddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdprhgtphhtthhopehlihhnuhigqdifrghttghhughoghesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 29 Oct 2021 at 11:04, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 29/10/2021 02:16, Guenter Roeck wrote:
-> > On 10/28/21 11:35 AM, Sam Protsenko wrote:
-> >> Not all SoCs have AUTOMATIC_WDT_RESET_DISABLE register, examples are
-> >> Exynos850 and Exynos9. On such chips reset disable register shouldn't be
-> >> accessed. Provide a way to avoid handling that register. This is done by
-> >> introducing separate callbacks to driver data structure: one for reset
-> >> disable register, and one for mask reset register. Now those callbacks
-> >> can be checked and called only when those were set in driver data.
-> >>
-> >> This commit doesn't bring any functional change to existing devices, but
-> >> merely provides an infrastructure for upcoming chips support.
-> >>
-> >
-> > That doesn't explain why the callbacks are needed instead of additional
-> > feature flags.
-> >
->
-> Or why not skipping the disable operations if disable_reg is not provided?
->
+On 2021-10-28 19:23, Florian Fainelli wrote:
+> In order to phase out bcm63xx_wdt and use bcm7038_wdt instead, 
+> introduce
+> a platform_device_id table that allows both names to be matched.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  drivers/watchdog/bcm7038_wdt.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/watchdog/bcm7038_wdt.c 
+> b/drivers/watchdog/bcm7038_wdt.c
+> index 506cd7ef9c77..2535f450e8a1 100644
+> --- a/drivers/watchdog/bcm7038_wdt.c
+> +++ b/drivers/watchdog/bcm7038_wdt.c
+> @@ -223,6 +223,13 @@ static const struct of_device_id 
+> bcm7038_wdt_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, bcm7038_wdt_match);
+> 
+> +static const struct platform_device_id bcm7038_wdt_devtype[] = {
+> +	{ .name = "bcm7038-wdt" },
+> +	{ .name = "bcm63xx-wdt" },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(platform, bcm7038_wdt_devtype);
 
-Yeah, that was my first thought too :) Then I figured disable_reg is
-offset, and 0x0 is a valid offset too. Anyway, I'll rework this patch
-using quirks, as discussed above. Will send v2 soon.
+Do we really want "bcm7038-wdt" here? I don't think it will ever be used
+as apparently BCM7038 uses DT.
 
->
-> Best regards,
-> Krzysztof
+I'd also prefer to have Rob's comment on mapping blocks vs. mapping
+registers.
+
+If we were to map whole hardware blocks, we should have per-SoC
+bindings and handling registers layouts in a driver. Right now
+bcm63xx arch code maps selected part of hardware block that is
+meant to match driver's logic (offsets 0x00 and 0x04).
