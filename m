@@ -2,52 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48218440E3E
-	for <lists+linux-watchdog@lfdr.de>; Sun, 31 Oct 2021 13:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A4C440E44
+	for <lists+linux-watchdog@lfdr.de>; Sun, 31 Oct 2021 13:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbhJaMZB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 31 Oct 2021 08:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S232195AbhJaMZE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 31 Oct 2021 08:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232131AbhJaMY7 (ORCPT
+        with ESMTP id S232093AbhJaMZB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 31 Oct 2021 08:24:59 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE07C061746
-        for <linux-watchdog@vger.kernel.org>; Sun, 31 Oct 2021 05:22:27 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id w15so55105590edc.9
-        for <linux-watchdog@vger.kernel.org>; Sun, 31 Oct 2021 05:22:27 -0700 (PDT)
+        Sun, 31 Oct 2021 08:25:01 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282CFC061766
+        for <linux-watchdog@vger.kernel.org>; Sun, 31 Oct 2021 05:22:29 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id w15so55105705edc.9
+        for <linux-watchdog@vger.kernel.org>; Sun, 31 Oct 2021 05:22:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=l/1LxvCuuFDJGwtjOtmgZOfuOt8wH/h/0UaZ8nhlwUA=;
-        b=r4WYK47YXxinnVjs/tkpEUTNJ56wjldwJfKCnLmWtvZT8cXGvQRKsuqa6qan/AtFzK
-         /r2stn+pTKVjVGdo1Rj+umP6K1FkHMvmoHHjfNEUmXwmktle0xwAGgRC5uowsZQ1Gh3I
-         l0uR3EW3bnZJLUdIaB3/DV6en/syF2WV1ldeOb6stll8DWEe/+eOX1vMQFhqtDXY6Wvk
-         9dBkkgvuwNAIJpoGr2cb/Z1RkL/wT+/d9Q6dMv2zixItvDWepAVSxMTKpIg7P4ll6TNk
-         tau9XXLfFuMaizVosPJ2LsUtkKHrM3RrWQk7r67DJT+6DJ/geilxYhpN+1IdYzZku7qp
-         1cSA==
+        bh=z4vMRg1vAVSeQbV55CTlWjlCDqRPB9slwpTyoiHK4A0=;
+        b=f3T/rIi/etVAeX8RmKrzHok3GaBewveAiH3ErcVAIfklb18owG4ueG2/FWkCDdhNv8
+         FHYPoeBsceadrDGC1wh0rbDWA/U2RsIgPcPxnGSt230vdwOBRw7m5dJczhjd2VbVKPsN
+         h6x8PUONefWFZalp1YFTHT8zh4Uusyt7FHN8Ks2IBzzmipWR9T63JoeczOYb/WZ0qM9z
+         SHk3/DcDztBJLnlnP60fNoCCENo/25dwEy4ndyCK2dQUckeiRE06mELC46UiRNXPF4KY
+         CSCt21qBG2R4L3YI6JiRLzQhcvhqZGD5YD62smWhpnYJFIywFD3mLoqwmIJGehViaB6I
+         0Abg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=l/1LxvCuuFDJGwtjOtmgZOfuOt8wH/h/0UaZ8nhlwUA=;
-        b=aUHJncmqwg+pSZXeZLAUUWPl9ScFTCPdLJ23hL0k9AcNaCi1fKx0fSXFRrGla0UFad
-         Ap0q8piLJGgNmK6+r7uolC0Q6qmNY8bBQNakOz1MVEiH4MWQ76DWUbAH7Veq7946jmiN
-         /9f9uLOi2+dnlyrAzdSNJdAkVNLWtlxla/woebkccf4WBziWTFNpbLaZBDXuTYq3YlCu
-         kau2drKi5deZoCdyd3a2VNspxloY7tp4yLbnYMg0p2Zfd2DnHP/RCMP08drMVecpw+RE
-         pYTutF0eq/vHOBseRVrugtI6ASr2M343MZYsDBqNCl4s4MGUEvIVTcQ8xJcprYadDXV6
-         BqCg==
-X-Gm-Message-State: AOAM530+bX9n8TZBDP50cXpPeri8sAttbB6V5990xuuGc5mUJzK7gKdm
-        aK4Ntfkam9u0BmBol0LD98I6RQ==
-X-Google-Smtp-Source: ABdhPJwdxXzOyQrZCUIk6ItBBUXusTHqCFBfjHyfm5iiwuVPEuhCYVnaqavTp82n047YIr5IUAdvhQ==
-X-Received: by 2002:a05:6402:3588:: with SMTP id y8mr31603322edc.285.1635682946076;
-        Sun, 31 Oct 2021 05:22:26 -0700 (PDT)
+        bh=z4vMRg1vAVSeQbV55CTlWjlCDqRPB9slwpTyoiHK4A0=;
+        b=teRHts4E5Jj4urS+vK2fZhdkYQEkYf8o3YKwAO2nD1ueS1WncDvi94eJnM1Z3UbX1m
+         VnjUH29toLUxpMuqGxEN+8Stte2eldoqiFsLXZ/8zL/T6paRzy1Ru82IvD09F1OSGXJd
+         1gLH4jnI5TpBmyJt2bA/ptHnSxamaN/6QfrlZf7Jn6ADVaxm5wYBm9x3N+J0A712sFiu
+         T3YGjA1Gy+cMVY2MKoE8+s/gUCdr41ujCCcokLUp95kig3YYSOn8sSi1zkKVxOFNG8d7
+         gUHEOVxqMROjSrjX9Iy2/QqboorcpVtMq3E1i13887KrocFM5IXT25ADv4UHxsgENgqF
+         yuPw==
+X-Gm-Message-State: AOAM5311SRXtL51ySmWo1776sOOdoL71Y6bV8a+G+i50R8DlRCHZlBh/
+        K13FPFay3EC1rX/VFQlm4kmj2KIrr9UYMe+9
+X-Google-Smtp-Source: ABdhPJyhYWF0HOiJ5n/yQOlDbNXcWBm2pC8rDr77g+qHLPKEx318aNlgaTK/AUPkfTNwj/y5Ei3bag==
+X-Received: by 2002:a17:906:7304:: with SMTP id di4mr28024439ejc.179.1635682947741;
+        Sun, 31 Oct 2021 05:22:27 -0700 (PDT)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id m9sm5539310eje.102.2021.10.31.05.22.25
+        by smtp.gmail.com with ESMTPSA id sh36sm5597473ejc.113.2021.10.31.05.22.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Oct 2021 05:22:25 -0700 (PDT)
+        Sun, 31 Oct 2021 05:22:27 -0700 (PDT)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -56,9 +56,9 @@ To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
 Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 05/12] watchdog: s3c2410: Make reset disable register optional
-Date:   Sun, 31 Oct 2021 14:22:09 +0200
-Message-Id: <20211031122216.30212-6-semen.protsenko@linaro.org>
+Subject: [PATCH v2 06/12] watchdog: s3c2410: Extract disable and mask code into separate functions
+Date:   Sun, 31 Oct 2021 14:22:10 +0200
+Message-Id: <20211031122216.30212-7-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211031122216.30212-1-semen.protsenko@linaro.org>
 References: <20211031122216.30212-1-semen.protsenko@linaro.org>
@@ -68,10 +68,10 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On new Exynos chips (e.g. Exynos850 and Exynos9) the
-AUTOMATIC_WDT_RESET_DISABLE register was removed, and its value can be
-thought of as "always 0x0". Add correspondig quirk bit, so that the
-driver can omit accessing it if it's not present.
+The s3c2410wdt_mask_and_disable_reset() function content is bound to be
+changed further. Prepare it for upcoming changes by splitting into
+separate "mask reset" and "disable reset" functions. But keep
+s3c2410wdt_mask_and_disable_reset() function present as a facade.
 
 This commit doesn't bring any functional change to existing devices, but
 merely provides an infrastructure for upcoming chips support.
@@ -79,80 +79,88 @@ merely provides an infrastructure for upcoming chips support.
 Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 ---
 Changes in v2:
-  - Used quirks instead of callbacks for all added PMU registers
-  - Used BIT() macro
-  - Extracted splitting the s3c2410wdt_mask_and_disable_reset() function
-    to separate patch
-  - Extracted cleanup code to separate patch to minimize changes and
-    ease the review and porting
+  - (none): it's a new patch
 
- drivers/watchdog/s3c2410_wdt.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+ drivers/watchdog/s3c2410_wdt.c | 54 ++++++++++++++++++++++------------
+ 1 file changed, 35 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index 0845c05034a1..048ca47d0b8a 100644
+index 048ca47d0b8a..4ac0a30e835e 100644
 --- a/drivers/watchdog/s3c2410_wdt.c
 +++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -59,10 +59,12 @@
- #define QUIRK_HAS_PMU_CONFIG			(1 << 0)
- #define QUIRK_HAS_RST_STAT			(1 << 1)
- #define QUIRK_HAS_WTCLRINT_REG			(1 << 2)
-+#define QUIRK_HAS_PMU_AUTO_DISABLE		(1 << 3)
+@@ -202,37 +202,53 @@ static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
+ 	return container_of(nb, struct s3c2410_wdt, freq_transition);
+ }
  
- /* These quirks require that we have a PMU register map */
- #define QUIRKS_HAVE_PMUREG			(QUIRK_HAS_PMU_CONFIG | \
--						 QUIRK_HAS_RST_STAT)
-+						 QUIRK_HAS_RST_STAT | \
-+						 QUIRK_HAS_PMU_AUTO_DISABLE)
+-static int s3c2410wdt_mask_and_disable_reset(struct s3c2410_wdt *wdt, bool mask)
++static int s3c2410wdt_disable_wdt_reset(struct s3c2410_wdt *wdt, bool mask)
+ {
++	const u32 mask_val = BIT(wdt->drv_data->mask_bit);
++	const u32 val = mask ? mask_val : 0;
+ 	int ret;
+-	u32 mask_val = 1 << wdt->drv_data->mask_bit;
+-	u32 val = 0;
  
- static bool nowayout	= WATCHDOG_NOWAYOUT;
- static int tmr_margin;
-@@ -137,7 +139,7 @@ static const struct s3c2410_wdt_variant drv_data_exynos5250  = {
- 	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
- 	.rst_stat_bit = 20,
- 	.quirks = QUIRK_HAS_PMU_CONFIG | QUIRK_HAS_RST_STAT \
--		  | QUIRK_HAS_WTCLRINT_REG,
-+		  | QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_AUTO_DISABLE,
- };
+-	/* No need to do anything if no PMU CONFIG needed */
+-	if (!(wdt->drv_data->quirks & QUIRK_HAS_PMU_CONFIG))
+-		return 0;
++	ret = regmap_update_bits(wdt->pmureg, wdt->drv_data->disable_reg,
++				 mask_val, val);
++	if (ret < 0)
++		dev_err(wdt->dev, "failed to update reg(%d)\n", ret);
  
- static const struct s3c2410_wdt_variant drv_data_exynos5420 = {
-@@ -147,7 +149,7 @@ static const struct s3c2410_wdt_variant drv_data_exynos5420 = {
- 	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
- 	.rst_stat_bit = 9,
- 	.quirks = QUIRK_HAS_PMU_CONFIG | QUIRK_HAS_RST_STAT \
--		  | QUIRK_HAS_WTCLRINT_REG,
-+		  | QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_AUTO_DISABLE,
- };
+-	if (mask)
+-		val = mask_val;
++	return ret;
++}
  
- static const struct s3c2410_wdt_variant drv_data_exynos7 = {
-@@ -157,7 +159,7 @@ static const struct s3c2410_wdt_variant drv_data_exynos7 = {
- 	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
- 	.rst_stat_bit = 23,	/* A57 WDTRESET */
- 	.quirks = QUIRK_HAS_PMU_CONFIG | QUIRK_HAS_RST_STAT \
--		  | QUIRK_HAS_WTCLRINT_REG,
-+		  | QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_AUTO_DISABLE,
- };
- 
- static const struct of_device_id s3c2410_wdt_match[] = {
-@@ -213,11 +215,13 @@ static int s3c2410wdt_mask_and_disable_reset(struct s3c2410_wdt *wdt, bool mask)
- 	if (mask)
- 		val = mask_val;
+-	if (wdt->drv_data->quirks & QUIRK_HAS_PMU_AUTO_DISABLE) {
+-		ret = regmap_update_bits(wdt->pmureg,
+-				wdt->drv_data->disable_reg,
+-				mask_val, val);
+-		if (ret < 0)
+-			goto error;
+-	}
++static int s3c2410wdt_mask_wdt_reset(struct s3c2410_wdt *wdt, bool mask)
++{
++	const u32 mask_val = BIT(wdt->drv_data->mask_bit);
++	const u32 val = mask ? mask_val : 0;
++	int ret;
  
 -	ret = regmap_update_bits(wdt->pmureg,
--			wdt->drv_data->disable_reg,
+-			wdt->drv_data->mask_reset_reg,
 -			mask_val, val);
--	if (ret < 0)
--		goto error;
-+	if (wdt->drv_data->quirks & QUIRK_HAS_PMU_AUTO_DISABLE) {
-+		ret = regmap_update_bits(wdt->pmureg,
-+				wdt->drv_data->disable_reg,
-+				mask_val, val);
-+		if (ret < 0)
-+			goto error;
-+	}
+- error:
++	ret = regmap_update_bits(wdt->pmureg, wdt->drv_data->mask_reset_reg,
++				 mask_val, val);
+ 	if (ret < 0)
+ 		dev_err(wdt->dev, "failed to update reg(%d)\n", ret);
  
- 	ret = regmap_update_bits(wdt->pmureg,
- 			wdt->drv_data->mask_reset_reg,
+ 	return ret;
+ }
+ 
++static int s3c2410wdt_mask_and_disable_reset(struct s3c2410_wdt *wdt, bool mask)
++{
++	int ret;
++
++	if (wdt->drv_data->quirks & QUIRK_HAS_PMU_AUTO_DISABLE) {
++		ret = s3c2410wdt_disable_wdt_reset(wdt, mask);
++		if (ret < 0)
++			return ret;
++	}
++
++	if (wdt->drv_data->quirks & QUIRK_HAS_PMU_CONFIG) {
++		ret = s3c2410wdt_mask_wdt_reset(wdt, mask);
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static int s3c2410wdt_keepalive(struct watchdog_device *wdd)
+ {
+ 	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
 -- 
 2.30.2
 
