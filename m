@@ -2,76 +2,169 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A97E442053
-	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Nov 2021 19:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D2E44209C
+	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Nov 2021 20:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbhKASzK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 1 Nov 2021 14:55:10 -0400
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:37418 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbhKASzK (ORCPT
+        id S232093AbhKATSJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 1 Nov 2021 15:18:09 -0400
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:46977 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229549AbhKATSD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 1 Nov 2021 14:55:10 -0400
-Received: by mail-oo1-f54.google.com with SMTP id j6-20020a4aab46000000b002bb88bfb594so3958170oon.4;
-        Mon, 01 Nov 2021 11:52:36 -0700 (PDT)
+        Mon, 1 Nov 2021 15:18:03 -0400
+Received: by mail-oi1-f171.google.com with SMTP id bd30so6660918oib.13;
+        Mon, 01 Nov 2021 12:15:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ez0ExjaNOgPztd9ik8mcUgxIwkY6xjgLzAofxYvSIf0=;
-        b=lZ3Qmmp3JtejhNAz8hcLMBNXyZKTBtm9QhclHA8ju5r+TttQAbfRr+pqtTZ9L99wJi
-         JAl/DwLwV/i1QvwRsZ7tOoRR8fua3Hzyvj212UlFhwH8Ffuhg2qotQbuS5cSZrfSyvcx
-         UAI4vgMvwWDK5Pam3wD1q9+oWBeG77BvtO1SmQDJDIGLORROVRlibtlyykLNKDtWee79
-         P9m6mwcUU7td+6MlUOYtN/s71FYN1kbkDbA7cpCdgUMb1+lzNTcYrKPwMKMrzZ02sqcw
-         EgV4NYgDtUraMUQO+MQ1Jj/qFKUIv4F9ZUCTlcm7HRjPRzv0FWFWUBRkdQmW91zOy9og
-         eIzA==
-X-Gm-Message-State: AOAM531c4FIE6fC8q1qV0zWjCS827dlA6kxS187z76e2PTfgp1j/ch6r
-        DSllG92cda00WricyVB2Ag==
-X-Google-Smtp-Source: ABdhPJxtoXJxZs7lFaY7FEDIKbY6oPUmYGlccuoUr1jfHm2e1MPRxljcAxM8pevk4tFiQE5bW3btvA==
-X-Received: by 2002:a4a:e681:: with SMTP id u1mr10019234oot.75.1635792756553;
-        Mon, 01 Nov 2021 11:52:36 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=DqIH/19WB5yGkWAd62vmxTju2mfY4URIJiT2axl3O5E=;
+        b=3TP0cNw3sTZt2H/Q0y8HwQHcoW7EdfI5CrHNb4FIIta7RBr1Twg5Z6xH7NGY/FKfUk
+         egoi4UQs2P9L9J91E5pK/Z7F/lFy81Um8JD9EVgSbgLm4S18YFLcCsjO6n/6iNIcwajE
+         HmijlSntdk7Fu3CdkiLxN1mpM7IH0v9PKTP6KNgM9AFNfI1E+MG9+d/J6nWDQuXoiw++
+         GkPxE4/zNH97DrRnGBWjK+CYB3Gse5icNq5Qv408grkqut6ZCRjZscN457fJbV0cxLuQ
+         GV6Ajnn2ESr3TQJ9p1QqaFhi0WQvqDv5pgf+v5PoWpPX0Z/XVpLXNwKENl7foYIuTPlP
+         afCQ==
+X-Gm-Message-State: AOAM531kW9W9efRBOjPyaIP8Sp6kU+XOW1HMntd6DXK2CpdTqd4a0IZX
+        UpBYqf5ErWMUnNFW0EM2nA==
+X-Google-Smtp-Source: ABdhPJz5r3kgiovu/5/K6XyflpoY5iiU6kz8sgO3oNNlaG86JQ8NQI5dQhARDgQzYudNxb2Il1LJmQ==
+X-Received: by 2002:a54:4e98:: with SMTP id c24mr798395oiy.144.1635794129865;
+        Mon, 01 Nov 2021 12:15:29 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id s23sm4364436oie.20.2021.11.01.11.52.35
+        by smtp.gmail.com with ESMTPSA id a13sm4317605oiy.9.2021.11.01.12.15.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 11:52:35 -0700 (PDT)
-Received: (nullmailer pid 819012 invoked by uid 1000);
-        Mon, 01 Nov 2021 18:52:34 -0000
-Date:   Mon, 1 Nov 2021 13:52:34 -0500
+        Mon, 01 Nov 2021 12:15:29 -0700 (PDT)
+Received: (nullmailer pid 858303 invoked by uid 1000);
+        Mon, 01 Nov 2021 19:15:28 -0000
+Date:   Mon, 1 Nov 2021 14:15:28 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, ~okias/devicetree@lists.sr.ht
-Subject: Re: [PATCH] dt-bindings: watchdog: sunxi: fix error in schema
-Message-ID: <YYA3cqxn7k6p8Iti@robh.at.kernel.org>
-References: <20211029142443.68779-1-david@ixit.cz>
+        Guenter Roeck <linux@roeck-us.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 2/2] dt-bindings: mfd: add Broadcom's timer MFD block
+Message-ID: <YYA80E2/JUm01fGw@robh.at.kernel.org>
+References: <20211029202505.7106-1-zajec5@gmail.com>
+ <20211029202505.7106-2-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211029142443.68779-1-david@ixit.cz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211029202505.7106-2-zajec5@gmail.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 29 Oct 2021 16:24:42 +0200, David Heidelberg wrote:
-> "maxItems" is not needed with an "items" list
+On Fri, Oct 29, 2021 at 10:25:05PM +0200, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Fixes:
-> $ DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml make dtbs_check
-> Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml: properties:clocks: {'required': ['maxItems']} is not allowed for {'minItems': 1, 'maxItems': 2, 'items': [{'description': 'High-frequency oscillator input, divided internally'}, {'description': 'Low-frequency oscillator input, only found on some variants'}]}
-> 	hint: "maxItems" is not needed with an "items" list
-> 	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-> ...
+> This block is called timer in documentation but it actually behaves like
+> a MFD.
 > 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
->  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 --
->  1 file changed, 2 deletions(-)
+>  .../bindings/mfd/brcm,timer-mfd.yaml          | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/brcm,timer-mfd.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/mfd/brcm,timer-mfd.yaml b/Documentation/devicetree/bindings/mfd/brcm,timer-mfd.yaml
+> new file mode 100644
+> index 000000000000..0060b6c443a7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/brcm,timer-mfd.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/brcm,timer-mfd.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom's timer MFD
+> +
+> +maintainers:
+> +  - Rafał Miłecki <rafal@milecki.pl>
+> +
+> +description: |
+> +  Broadcom's timer is a block used in multiple SoCs (e.g., BCM4908, BCM63xx,
+> +  BCM7038). Despite its name it's not strictly a timer device. It consists of:
+> +  timers, watchdog and software reset handler.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: brcm,timer-mfd
 
-Acked-by: Rob Herring <robh@kernel.org>
+'mfd' is a Linuxism. Name it what Broadcom calls the block. There should 
+be at least as many compatibles as there are variations of register 
+layouts.
+
+> +      - const: simple-mfd
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ranges: true
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +patternProperties:
+> +  '^watchdog@[a-f0-9]+$':
+> +    $ref: ../watchdog/brcm,bcm7038-wdt.yaml
+
+/schema/watchdog/...
+
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    timer_mfd: timer-mfd@ff800400 {
+> +        compatible = "brcm,timer-mfd", "simple-mfd", "syscon";
+> +        reg = <0xff800400 0x4c>;
+> +        ranges = <0x0 0xff800400 0x4c>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        watchdog@28 {
+> +            compatible = "brcm,bcm7038-wdt";
+> +            reg = <0x28 0x8>;
+> +        };
+
+Don't you need a timer node? Make the binding complete.
+
+> +    };
+> +
+> +    reboot {
+> +        compatible = "syscon-reboot";
+> +        regmap = <&timer_mfd>;
+
+Make this a child node of the timer.
+
+> +        offset = <0x34>;
+
+Use 'reg'. If "syscon-reboot" doesn't allow that, add it.
+
+> +        mask = <1>;
+
+
+> +    };
+> -- 
+> 2.31.1
+> 
+> 
