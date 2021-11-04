@@ -2,79 +2,91 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C4D445108
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Nov 2021 10:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7215B445129
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Nov 2021 10:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbhKDJYb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 4 Nov 2021 05:24:31 -0400
-Received: from polaris.svanheule.net ([84.16.241.116]:37704 "EHLO
-        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbhKDJYb (ORCPT
+        id S230335AbhKDJe6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 4 Nov 2021 05:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230495AbhKDJe5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 4 Nov 2021 05:24:31 -0400
-Received: from [10.104.240.139] (unknown [195.176.0.34])
+        Thu, 4 Nov 2021 05:34:57 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C295C061714
+        for <linux-watchdog@vger.kernel.org>; Thu,  4 Nov 2021 02:32:20 -0700 (PDT)
+Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eafe:c901:bf08:f0c1:3ec1:1bfc])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 6A13B26C27B;
-        Thu,  4 Nov 2021 10:21:52 +0100 (CET)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 6134526C287;
+        Thu,  4 Nov 2021 10:32:18 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1636017712;
+        s=mail1707; t=1636018338;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y70bAvqnCv4oVjmWTcG3uLPetllC23Wd0oU9QdEYhIo=;
-        b=E/+HXaAGvMgBUpuiKfMI76bfoc0rO7n3cmhDQCTnvjE6CRMwlGypRTkbxqq2ndIYbz3Sf4
-        wP6xQJ8j93JTBDU5rhrEa8YbFw96yYRcH4yBS+OIX2xOMvvYfKnQbIe8UgMD4DAUHDNGiU
-        IN7AJ0BySc+I90iNHe293EJrXwXvPthYV/oeapyZIVD16UcE72wxNOZTxZAkqn/1BD33qs
-        +AX5FOhrRKkSwCJgRm2wtxrj7SDDCVJQhvQxD93hgCeLehWbOAoPwbahqAjHZHSrCQ9E9W
-        WL7BAFIql5q8TgMAof9ZqlhV5EE/PSpq8aS6VuFdXh1kAfOtEX0REx3x3ykH+A==
-Message-ID: <d8d5f82e89151b09098ed0cf3f5b0827d2868cd7.camel@svanheule.net>
-Subject: Re: [PATCH v2 2/2] watchdog: Add Realtek Otto watchdog timer
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pZ9EPizzeFSRkpDwLY7KKXOLEcwi0h5Q4Ss1gsnf82g=;
+        b=eu4iXdZIECc3KclIIqRZazL25WAloEDARH0YZjjJllm/cHBWOTUQfmK/l8E6f8bVK01ClX
+        QKG3X/6FaYiAyv9Nockdu78lS5U1+NtcwNvY0EzBAslf6l7fUqmF0ekdVCMKPn2bn/pmaq
+        8CuwWmVp++foRGTLzAiX1TMfzYYzSbzfziJfHihErdf1vj9sv4zsvJLZFJvmSmeJVr/rM/
+        KIFGmn1BmksOsdPXOYNn6l2FD0GChJj9XoJjV+MCx+FQowsd6I8f92KzqbCWGYPwhn3IMR
+        VDV944rniuFr4czB7QK3Zad0tUYhMFAsVv2HfHjXuuhwiXJsOr+6VXApYeA3SA==
 From:   Sander Vanheule <sander@svanheule.net>
 To:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-Date:   Thu, 04 Nov 2021 10:21:50 +0100
-In-Reply-To: <20211104085952.13572-3-sander@svanheule.net>
-References: <20211104085952.13572-1-sander@svanheule.net>
-         <20211104085952.13572-3-sander@svanheule.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.0 (3.42.0-1.fc35) 
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Sander Vanheule <sander@svanheule.net>
+Subject: [PATCH v3 0/2] Add Realtek Otto WDT support
+Date:   Thu,  4 Nov 2021 10:32:11 +0100
+Message-Id: <cover.1636018117.git.sander@svanheule.net>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 2021-11-04 at 09:59 +0100, Sander Vanheule wrote:
-> +       do {
-> +               if (prescale > OTTO_WDT_PRESCALE_MAX)
-> +                       return -EINVAL;
-> +
-> +               tick_ms = otto_wdt_tick_ms(ctrl, prescale);
-> +               total_ticks = div_round_ticks(timeout_ms, tick_ms, 2);
-> +               phase1_ticks = div_round_ticks(timeout_ms - pretimeout_ms, tick_ms,
-> 1);
-> +               phase2_ticks = total_ticks - phase1_ticks;
-> +
-> +               prescale++;
-> +       } while (phase1_ticks > OTTO_WDT_PHASE_TICKS_MAX
-> +               || phase2_ticks > OTTO_WDT_PHASE_TICKS_MAX);
-> +
-> +       v = ioread32(ctrl->base + OTTO_WDT_REG_CTRL);
-> +
-> +       v &= ~(OTTO_WDT_CTRL_PRESCALE | OTTO_WDT_CTRL_PHASE1 |
-> OTTO_WDT_CTRL_PHASE2);
-> +       v |= FIELD_PREP(OTTO_WDT_CTRL_PHASE1, phase1_ticks - 1);
-> +       v |= FIELD_PREP(OTTO_WDT_CTRL_PHASE2, phase2_ticks - 1);
-> +       v |= FIELD_PREP(OTTO_WDT_CTRL_PRESCALE, prescale);
+This watchdog timer is found on Realtek's Otto MIPS platforms, including the
+RTL838x, RTL839x, and RTL930x series of ethernet switch SoCs. It has a number
+of reset modes (SoC, CPU, software), and can provide pretimeout interrupts.
 
-I dropped the prescale_next variable here, but now the wrong prescale value is used
-after the loop. I'll send out a v3 shortly.
+The timer has two timeout phases. Both phases have a maximum duration of 32
+prescaled clock ticks, which is ca. 43s with a clock of 200MHz:
+- Phase 1: During this phase, the WDT can be pinged to reset the timeout.
+- Phase 2: Starts after phase 1 has timed out, and only serves to give the
+  system some time to clean up, or notify others that it's going to reset.
+  During this phase, pinging the WDT has no effect, and a reset is unavoidable.
 
-Best,
-Sander
+The driver has been tested on a Zyxel GS1900-8 (RTL8380, mainline kernel and
+OpenWrt), a Zyxel GS1900-48 (RTL8393, mainline), a Netgear GS110TPPv1
+(RTL8381, mainline), and a Zyxel XGS1250-12 (RTL9203B, Openwrt).
+
+Changes since v2:
+Link: https://lore.kernel.org/all/20211104085952.13572-1-sander@svanheule.net/
+- Fix off-by-one error in prescale assignment
+
+Main changes since v1:
+Link: https://lore.kernel.org/all/cover.1634131707.git.sander@svanheule.net/
+- Drop implementation of phase2 irq, since it is only triggered on system reset
+- Drop redundant value checks and lock
+- Add RTL930x compatibility
+
+Sander Vanheule (2):
+  dt-bindings: watchdog: Realtek Otto WDT binding
+  watchdog: Add Realtek Otto watchdog timer
+
+ .../bindings/watchdog/realtek,otto-wdt.yaml   |  91 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/watchdog/Kconfig                      |  13 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/realtek_otto_wdt.c           | 361 ++++++++++++++++++
+ 5 files changed, 473 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
+ create mode 100644 drivers/watchdog/realtek_otto_wdt.c
+
+-- 
+2.31.1
+
