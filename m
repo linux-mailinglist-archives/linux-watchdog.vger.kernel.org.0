@@ -2,52 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3604475CE
-	for <lists+linux-watchdog@lfdr.de>; Sun,  7 Nov 2021 21:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A196B4475D0
+	for <lists+linux-watchdog@lfdr.de>; Sun,  7 Nov 2021 21:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236581AbhKGUdK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 7 Nov 2021 15:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
+        id S236588AbhKGUdR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 7 Nov 2021 15:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236582AbhKGUcv (ORCPT
+        with ESMTP id S236473AbhKGUc7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 7 Nov 2021 15:32:51 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41970C061234
-        for <linux-watchdog@vger.kernel.org>; Sun,  7 Nov 2021 12:30:02 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id 13so7529729ljj.11
-        for <linux-watchdog@vger.kernel.org>; Sun, 07 Nov 2021 12:30:02 -0800 (PST)
+        Sun, 7 Nov 2021 15:32:59 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BBBC061A0E
+        for <linux-watchdog@vger.kernel.org>; Sun,  7 Nov 2021 12:30:03 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id i26so25467900ljg.7
+        for <linux-watchdog@vger.kernel.org>; Sun, 07 Nov 2021 12:30:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=chqQsN2BoHNjDvulXyc7vUHvQRCiJOGxZUcMVnPMO7g=;
-        b=E/GniszCmrj1uMdiF4iuPkf523pTtWoChlNlWa693rork2ecMRjOmXw9Gq7cfotPdB
-         hywHzdohV9tYKXyXdhEYvb6lSzwUozTaY9QCui8bzDyONSVxeFkf2rjTZJgNlxvY1eVH
-         J70QmucpFpgQzZ5ij940gDykPKdozT7bLVmlgp5c61HPI4MZg+4l0VSyfkxK8zZ4tEGd
-         AUO/EzKO01uITmwgUFyqcq4jkrmP/FhBiWH57PVwCdagIGNCG0o6ADnA9w/yaF9QR5od
-         qlfTeLuoiEyWiOvuYrZnKLijmalAtwPvsYHQaRrGShZQ9n4CQO+Spnn+4TMyj5rsRB5c
-         bxtw==
+        bh=cYPbwCTdXSeLj2E8hNZ5xJvTX/oX1QKrup+rCI0n0GU=;
+        b=l7XIsIat7cITBgnm4maENgKMC+Y7J7fJ/mK/sH2dl3eA3h4R/EeX/SuFgaSEJxaJxr
+         B/94BP9ZRfWomvUvwJc1KeJJ8jFd2s32fCyHr8AgLjvXZExUqOP7hDbuzWIsdjlURt13
+         qLPti768pihZbETdBk9U0f8byDfRE2UcsNH5s4OAQ5fgi7wy9Hx8bzXlEbarj+03/rwN
+         buxJ+oHffolblZ7ORH24pah1AhHVWUz+z8Mqh/obQyn88ao9Efc2f9iRqyFkEVneMd5I
+         jM+qBnv2Tz7SikrDz6SgI4nazYLMpbf3llvvf/gmHC2mB9L4RlvhliwCugycZWUEY4so
+         +fKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=chqQsN2BoHNjDvulXyc7vUHvQRCiJOGxZUcMVnPMO7g=;
-        b=HJk9MvuaMTFIVZBoLYzZrQPK5rfL4Jbd8Lg5pTWEcKbDaoZusl3dHyObonhtQpEhLL
-         fblXgLa+87xUnKJD9WW6ti+X+NrE1kEYOY4+rkR2kRK7kINt/RPy9maoukKV6sFhYOxH
-         bpMd/La29zqGBkvhBrli94Vp7Zjr4UMjJQO5y4Fr9YiEYBQg8G78BaF5zgAEnPA3BvZb
-         b1y3tEfkkNGvQMeAT0QDWBIXkWqcmm66J4llv4cBSDH9FRs8y+3np8pSM92KQ2bCx2Xx
-         uWgx95C+f6EW+HlLYRw7M2tmyMXA847RGckL4aB8RslTgpvmDi2af/HpFpvAto7a/2Aw
-         4hwg==
-X-Gm-Message-State: AOAM531Me9e9zl649f7kP+Ze0eSK/xegQo1fHlpS3XIGgdx9yUfhK5RZ
-        e1Y5LwQm4NwKriUfjcbCLgN7LQ==
-X-Google-Smtp-Source: ABdhPJxtUveY/BWcA57HhaAEtu4VP1QLe5RBems9spc+AznVSnpAypW+2ZiXFuq01uefezoTKExXlw==
-X-Received: by 2002:a05:651c:481:: with SMTP id s1mr80458018ljc.279.1636317000643;
-        Sun, 07 Nov 2021 12:30:00 -0800 (PST)
+        bh=cYPbwCTdXSeLj2E8hNZ5xJvTX/oX1QKrup+rCI0n0GU=;
+        b=IKU8zbkXvxeQe5+6l1D9+QNr9b5zf5sj/1CSW+tsj7hlWjr/pQsWUmj7wtRNg7qVF9
+         cb9P8JmpkteGvYYJClavveMbXhKzVhmA0/+GcZ5nYXSHEj4yKuAIC0vTphSbenflBAPW
+         /e1ZVxwPtR3uBxNns3OZF1JI484IDe1o/Vyaonp2wMFbySsJ6IkUvBToiQ2QChOPFvcT
+         w8ey7cm9CIBQFp5QegDjR/bJNL57IY5jE3QFIKGz1qeX/36Mbdt2ZteRVnqKxMSxOEVT
+         BNzgasVCgojn9WS80j74yi+otq9nodkJfvdMDy/tShlh77t+vbSxmkXJ7wJ/wyH4W/g3
+         FdUA==
+X-Gm-Message-State: AOAM532qRaotB//42VYd5fqej+cobrLSShqSsnTkL2VcwzzfJpvDOxWP
+        r2G9DhvamTh0uHrxRyRp7ty09aWfuwTPr1d0
+X-Google-Smtp-Source: ABdhPJwTu42tk2TANGEmYJGt/w4gPIfSQ4+LZa/SlLrThYgnXPaXbWuuGN+wsh0Z9MIecE13uJhsXg==
+X-Received: by 2002:a05:651c:1605:: with SMTP id f5mr74693331ljq.232.1636317002197;
+        Sun, 07 Nov 2021 12:30:02 -0800 (PST)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id i13sm1570037lfb.45.2021.11.07.12.30.00
+        by smtp.gmail.com with ESMTPSA id 13sm1571159lfq.285.2021.11.07.12.30.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Nov 2021 12:30:00 -0800 (PST)
+        Sun, 07 Nov 2021 12:30:01 -0800 (PST)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -56,9 +56,9 @@ To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
 Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v3 09/12] watchdog: s3c2410: Cleanup PMU related code
-Date:   Sun,  7 Nov 2021 22:29:40 +0200
-Message-Id: <20211107202943.8859-10-semen.protsenko@linaro.org>
+Subject: [PATCH v3 10/12] watchdog: s3c2410: Support separate source clock
+Date:   Sun,  7 Nov 2021 22:29:41 +0200
+Message-Id: <20211107202943.8859-11-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211107202943.8859-1-semen.protsenko@linaro.org>
 References: <20211107202943.8859-1-semen.protsenko@linaro.org>
@@ -68,207 +68,151 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Now that PMU enablement code was extended for new Exynos SoCs, it
-doesn't look very cohesive and consistent anymore. Do a bit of renaming,
-grouping and style changes, to make it look good again. While at it, add
-quirks documentation as well.
+Right now all devices supported in the driver have the single clock: it
+acts simultaneously as a bus clock (providing register interface
+clocking) and source clock (driving watchdog counter). Some newer Exynos
+chips, like Exynos850, have two separate clocks for that. In that case
+two clocks will be passed to the driver from the resource provider, e.g.
+Device Tree. Provide necessary infrastructure to support that case:
+  - use source clock's rate for all timer related calculations
+  - use bus clock to gate/ungate the register interface
 
-No functional change, just a refactoring commit.
+All devices that use the single clock are kept intact: if only one clock
+is passed from Device Tree, it will be used for both purposes as before.
 
 Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
 Changes in v3:
-  - Added quirks documentation
-  - Added R-b tag by Krzysztof Kozlowski
+  - Removed has_src_clk field: clk framework can handle NULL clk; added
+    s3c2410wdt_get_freq() function instead, to figure out which clock to
+    use for getting the rate
 
 Changes in v2:
-  - (none): it's a new patch
+  - Reworded commit message to be more formal
+  - Used separate "has_src_clk" trait to tell if source clock is present
+  - Renamed clock variables to match their purpose
+  - Removed caching source clock rate, obtaining it in place each time
+    instead
+  - Renamed err labels for more consistency
 
- drivers/watchdog/s3c2410_wdt.c | 83 ++++++++++++++++++++++++----------
- 1 file changed, 58 insertions(+), 25 deletions(-)
+ drivers/watchdog/s3c2410_wdt.c | 56 +++++++++++++++++++++++++---------
+ 1 file changed, 41 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index ec341c876225..f211be8bf976 100644
+index f211be8bf976..f31bc765a8a5 100644
 --- a/drivers/watchdog/s3c2410_wdt.c
 +++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -56,17 +56,51 @@
- #define EXYNOS5_RST_STAT_REG_OFFSET		0x0404
- #define EXYNOS5_WDT_DISABLE_REG_OFFSET		0x0408
- #define EXYNOS5_WDT_MASK_RESET_REG_OFFSET	0x040c
--#define QUIRK_HAS_PMU_CONFIG			(1 << 0)
--#define QUIRK_HAS_RST_STAT			(1 << 1)
--#define QUIRK_HAS_WTCLRINT_REG			(1 << 2)
+@@ -153,7 +153,8 @@ struct s3c2410_wdt_variant {
+ 
+ struct s3c2410_wdt {
+ 	struct device		*dev;
+-	struct clk		*clock;
++	struct clk		*bus_clk; /* for register interface (PCLK) */
++	struct clk		*src_clk; /* for WDT counter */
+ 	void __iomem		*reg_base;
+ 	unsigned int		count;
+ 	spinlock_t		lock;
+@@ -231,9 +232,14 @@ MODULE_DEVICE_TABLE(platform, s3c2410_wdt_ids);
+ 
+ /* functions */
+ 
+-static inline unsigned int s3c2410wdt_max_timeout(struct clk *clock)
++static inline unsigned long s3c2410wdt_get_freq(struct s3c2410_wdt *wdt)
+ {
+-	unsigned long freq = clk_get_rate(clock);
++	return clk_get_rate(wdt->src_clk ? wdt->src_clk : wdt->bus_clk);
++}
 +
-+/**
-+ * Quirk flags for different Samsung watchdog IP-cores.
-+ *
-+ * This driver supports multiple Samsung SoCs, each of which might have
-+ * different set of registers and features supported. As watchdog block
-+ * sometimes requires modifying PMU registers for proper functioning, register
-+ * differences in both watchdog and PMU IP-cores should be accounted for. Quirk
-+ * flags described below serve the purpose of telling the driver about mentioned
-+ * SoC traits, and can be specified in driver data for each particular supported
-+ * device.
-+ *
-+ * %QUIRK_HAS_WTCLRINT_REG: Watchdog block has WTCLRINT register. It's used to
-+ * clear the interrupt once the interrupt service routine is complete. It's
-+ * write-only, writing any values to this register clears the interrupt, but
-+ * reading is not permitted.
-+ *
-+ * %QUIRK_HAS_PMU_MASK_RESET: PMU block has the register for disabling/enabling
-+ * WDT reset request. On old SoCs it's usually called MASK_WDT_RESET_REQUEST,
-+ * new SoCs have CLUSTERx_NONCPU_INT_EN register, which 'mask_bit' value is
-+ * inverted compared to the former one.
-+ *
-+ * %QUIRK_HAS_PMU_RST_STAT: PMU block has RST_STAT (reset status) register,
-+ * which contains bits indicating the reason for most recent CPU reset. If
-+ * present, driver will use this register to check if previous reboot was due to
-+ * watchdog timer reset.
-+ *
-+ * %QUIRK_HAS_PMU_AUTO_DISABLE: PMU block has AUTOMATIC_WDT_RESET_DISABLE
-+ * register. If 'mask_bit' bit is set, PMU will disable WDT reset when
-+ * corresponding processor is in reset state.
-+ *
-+ * %QUIRK_HAS_PMU_CNT_EN: PMU block has some register (e.g. CLUSTERx_NONCPU_OUT)
-+ * with "watchdog counter enable" bit. That bit should be set to make watchdog
-+ * counter running.
-+ */
-+#define QUIRK_HAS_WTCLRINT_REG			(1 << 0)
-+#define QUIRK_HAS_PMU_MASK_RESET		(1 << 1)
-+#define QUIRK_HAS_PMU_RST_STAT			(1 << 2)
- #define QUIRK_HAS_PMU_AUTO_DISABLE		(1 << 3)
- #define QUIRK_HAS_PMU_CNT_EN			(1 << 4)
++static inline unsigned int s3c2410wdt_max_timeout(struct s3c2410_wdt *wdt)
++{
++	const unsigned long freq = s3c2410wdt_get_freq(wdt);
  
- /* These quirks require that we have a PMU register map */
--#define QUIRKS_HAVE_PMUREG			(QUIRK_HAS_PMU_CONFIG | \
--						 QUIRK_HAS_RST_STAT | \
--						 QUIRK_HAS_PMU_AUTO_DISABLE | \
--						 QUIRK_HAS_PMU_CNT_EN)
-+#define QUIRKS_HAVE_PMUREG \
-+	(QUIRK_HAS_PMU_MASK_RESET | QUIRK_HAS_PMU_RST_STAT | \
-+	 QUIRK_HAS_PMU_AUTO_DISABLE | QUIRK_HAS_PMU_CNT_EN)
+ 	return S3C2410_WTCNT_MAXCNT / (freq / (S3C2410_WTCON_PRESCALE_MAX + 1)
+ 				       / S3C2410_WTCON_MAXDIV);
+@@ -383,7 +389,7 @@ static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
+ 				    unsigned int timeout)
+ {
+ 	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
+-	unsigned long freq = clk_get_rate(wdt->clock);
++	unsigned long freq = s3c2410wdt_get_freq(wdt);
+ 	unsigned int count;
+ 	unsigned int divisor = 1;
+ 	unsigned long wtcon;
+@@ -632,26 +638,42 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 		goto err;
+ 	}
  
- static bool nowayout	= WATCHDOG_NOWAYOUT;
- static int tmr_margin;
-@@ -146,8 +180,8 @@ static const struct s3c2410_wdt_variant drv_data_exynos5250  = {
- 	.mask_bit = 20,
- 	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
- 	.rst_stat_bit = 20,
--	.quirks = QUIRK_HAS_PMU_CONFIG | QUIRK_HAS_RST_STAT \
--		  | QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_AUTO_DISABLE,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_AUTO_DISABLE,
- };
+-	wdt->clock = devm_clk_get(dev, "watchdog");
+-	if (IS_ERR(wdt->clock)) {
+-		dev_err(dev, "failed to find watchdog clock source\n");
+-		ret = PTR_ERR(wdt->clock);
++	wdt->bus_clk = devm_clk_get(dev, "watchdog");
++	if (IS_ERR(wdt->bus_clk)) {
++		dev_err(dev, "failed to find bus clock\n");
++		ret = PTR_ERR(wdt->bus_clk);
+ 		goto err;
+ 	}
  
- static const struct s3c2410_wdt_variant drv_data_exynos5420 = {
-@@ -156,8 +190,8 @@ static const struct s3c2410_wdt_variant drv_data_exynos5420 = {
- 	.mask_bit = 0,
- 	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
- 	.rst_stat_bit = 9,
--	.quirks = QUIRK_HAS_PMU_CONFIG | QUIRK_HAS_RST_STAT \
--		  | QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_AUTO_DISABLE,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_AUTO_DISABLE,
- };
+-	ret = clk_prepare_enable(wdt->clock);
++	ret = clk_prepare_enable(wdt->bus_clk);
+ 	if (ret < 0) {
+-		dev_err(dev, "failed to enable clock\n");
++		dev_err(dev, "failed to enable bus clock\n");
+ 		return ret;
+ 	}
  
- static const struct s3c2410_wdt_variant drv_data_exynos7 = {
-@@ -166,8 +200,8 @@ static const struct s3c2410_wdt_variant drv_data_exynos7 = {
- 	.mask_bit = 23,
- 	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
- 	.rst_stat_bit = 23,	/* A57 WDTRESET */
--	.quirks = QUIRK_HAS_PMU_CONFIG | QUIRK_HAS_RST_STAT \
--		  | QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_AUTO_DISABLE,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_AUTO_DISABLE,
- };
++	/*
++	 * "watchdog_src" clock is optional; if it's not present -- just skip it
++	 * and use "watchdog" clock as both bus and source clock.
++	 */
++	wdt->src_clk = devm_clk_get(dev, "watchdog_src");
++	if (!IS_ERR(wdt->src_clk)) {
++		ret = clk_prepare_enable(wdt->src_clk);
++		if (ret < 0) {
++			dev_err(dev, "failed to enable source clock\n");
++			ret = PTR_ERR(wdt->src_clk);
++			goto err_bus_clk;
++		}
++	} else {
++		wdt->src_clk = NULL;
++	}
++
+ 	wdt->wdt_device.min_timeout = 1;
+-	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt->clock);
++	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt);
  
- static const struct of_device_id s3c2410_wdt_match[] = {
-@@ -253,24 +287,24 @@ static int s3c2410wdt_enable_counter(struct s3c2410_wdt *wdt, bool en)
+ 	ret = s3c2410wdt_cpufreq_register(wdt);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to register cpufreq\n");
+-		goto err_clk;
++		goto err_src_clk;
+ 	}
+ 
+ 	watchdog_set_drvdata(&wdt->wdt_device, wdt);
+@@ -729,8 +751,11 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+  err_cpufreq:
+ 	s3c2410wdt_cpufreq_deregister(wdt);
+ 
+- err_clk:
+-	clk_disable_unprepare(wdt->clock);
++ err_src_clk:
++	clk_disable_unprepare(wdt->src_clk);
++
++ err_bus_clk:
++	clk_disable_unprepare(wdt->bus_clk);
+ 
+  err:
  	return ret;
+@@ -749,7 +774,8 @@ static int s3c2410wdt_remove(struct platform_device *dev)
+ 
+ 	s3c2410wdt_cpufreq_deregister(wdt);
+ 
+-	clk_disable_unprepare(wdt->clock);
++	clk_disable_unprepare(wdt->src_clk);
++	clk_disable_unprepare(wdt->bus_clk);
+ 
+ 	return 0;
  }
- 
--static int s3c2410wdt_mask_and_disable_reset(struct s3c2410_wdt *wdt, bool mask)
-+static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
- {
- 	int ret;
- 
- 	if (wdt->drv_data->quirks & QUIRK_HAS_PMU_AUTO_DISABLE) {
--		ret = s3c2410wdt_disable_wdt_reset(wdt, mask);
-+		ret = s3c2410wdt_disable_wdt_reset(wdt, !en);
- 		if (ret < 0)
- 			return ret;
- 	}
- 
--	if (wdt->drv_data->quirks & QUIRK_HAS_PMU_CONFIG) {
--		ret = s3c2410wdt_mask_wdt_reset(wdt, mask);
-+	if (wdt->drv_data->quirks & QUIRK_HAS_PMU_MASK_RESET) {
-+		ret = s3c2410wdt_mask_wdt_reset(wdt, !en);
- 		if (ret < 0)
- 			return ret;
- 	}
- 
- 	if (wdt->drv_data->quirks & QUIRK_HAS_PMU_CNT_EN) {
--		ret = s3c2410wdt_enable_counter(wdt, !mask);
-+		ret = s3c2410wdt_enable_counter(wdt, en);
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -531,7 +565,7 @@ static inline unsigned int s3c2410wdt_get_bootstatus(struct s3c2410_wdt *wdt)
- 	unsigned int rst_stat;
- 	int ret;
- 
--	if (!(wdt->drv_data->quirks & QUIRK_HAS_RST_STAT))
-+	if (!(wdt->drv_data->quirks & QUIRK_HAS_PMU_RST_STAT))
- 		return 0;
- 
- 	ret = regmap_read(wdt->pmureg, wdt->drv_data->rst_stat_reg, &rst_stat);
-@@ -672,7 +706,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_cpufreq;
- 
--	ret = s3c2410wdt_mask_and_disable_reset(wdt, false);
-+	ret = s3c2410wdt_enable(wdt, true);
- 	if (ret < 0)
- 		goto err_unregister;
- 
-@@ -707,7 +741,7 @@ static int s3c2410wdt_remove(struct platform_device *dev)
- 	int ret;
- 	struct s3c2410_wdt *wdt = platform_get_drvdata(dev);
- 
--	ret = s3c2410wdt_mask_and_disable_reset(wdt, true);
-+	ret = s3c2410wdt_enable(wdt, false);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -724,8 +758,7 @@ static void s3c2410wdt_shutdown(struct platform_device *dev)
- {
- 	struct s3c2410_wdt *wdt = platform_get_drvdata(dev);
- 
--	s3c2410wdt_mask_and_disable_reset(wdt, true);
--
-+	s3c2410wdt_enable(wdt, false);
- 	s3c2410wdt_stop(&wdt->wdt_device);
- }
- 
-@@ -740,7 +773,7 @@ static int s3c2410wdt_suspend(struct device *dev)
- 	wdt->wtcon_save = readl(wdt->reg_base + S3C2410_WTCON);
- 	wdt->wtdat_save = readl(wdt->reg_base + S3C2410_WTDAT);
- 
--	ret = s3c2410wdt_mask_and_disable_reset(wdt, true);
-+	ret = s3c2410wdt_enable(wdt, false);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -760,7 +793,7 @@ static int s3c2410wdt_resume(struct device *dev)
- 	writel(wdt->wtdat_save, wdt->reg_base + S3C2410_WTCNT);/* Reset count */
- 	writel(wdt->wtcon_save, wdt->reg_base + S3C2410_WTCON);
- 
--	ret = s3c2410wdt_mask_and_disable_reset(wdt, false);
-+	ret = s3c2410wdt_enable(wdt, true);
- 	if (ret < 0)
- 		return ret;
- 
 -- 
 2.30.2
 
