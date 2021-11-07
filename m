@@ -2,52 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A196B4475D0
-	for <lists+linux-watchdog@lfdr.de>; Sun,  7 Nov 2021 21:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126ED4475D6
+	for <lists+linux-watchdog@lfdr.de>; Sun,  7 Nov 2021 21:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236588AbhKGUdR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 7 Nov 2021 15:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S236603AbhKGUdV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 7 Nov 2021 15:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236473AbhKGUc7 (ORCPT
+        with ESMTP id S236569AbhKGUdJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 7 Nov 2021 15:32:59 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BBBC061A0E
-        for <linux-watchdog@vger.kernel.org>; Sun,  7 Nov 2021 12:30:03 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id i26so25467900ljg.7
-        for <linux-watchdog@vger.kernel.org>; Sun, 07 Nov 2021 12:30:03 -0800 (PST)
+        Sun, 7 Nov 2021 15:33:09 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B42C07978C
+        for <linux-watchdog@vger.kernel.org>; Sun,  7 Nov 2021 12:30:05 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id p16so31613147lfa.2
+        for <linux-watchdog@vger.kernel.org>; Sun, 07 Nov 2021 12:30:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cYPbwCTdXSeLj2E8hNZ5xJvTX/oX1QKrup+rCI0n0GU=;
-        b=l7XIsIat7cITBgnm4maENgKMC+Y7J7fJ/mK/sH2dl3eA3h4R/EeX/SuFgaSEJxaJxr
-         B/94BP9ZRfWomvUvwJc1KeJJ8jFd2s32fCyHr8AgLjvXZExUqOP7hDbuzWIsdjlURt13
-         qLPti768pihZbETdBk9U0f8byDfRE2UcsNH5s4OAQ5fgi7wy9Hx8bzXlEbarj+03/rwN
-         buxJ+oHffolblZ7ORH24pah1AhHVWUz+z8Mqh/obQyn88ao9Efc2f9iRqyFkEVneMd5I
-         jM+qBnv2Tz7SikrDz6SgI4nazYLMpbf3llvvf/gmHC2mB9L4RlvhliwCugycZWUEY4so
-         +fKQ==
+        bh=I+qK7/brq27ekH8nrj1tS/lSC1KVkFATkys6si61XPg=;
+        b=emsUoD0UPMXYEQnBBNozpHlD8Lp5cBTMi6QYw/WDxeqBn9y+8GFBD1r36kPaiuQvMR
+         4voUCS62JqA4az0uDfsUIUkJHxB8U4QUepoqIMIoxPV6SaBEzwEsZZ7LsX/kiMvKd1FD
+         hSzRU1TbUfmG5Asg7n2/tfvkY3WgFEJlYsMJ61AGBPloAp52GGMrA1esxOEeirZoAAUW
+         zOciY5PePC1qHhO+1RUsAT9IB3OC1Ike55ExGpzlg3h4gF3RCjeIq9V0O6SP3+XAmI19
+         z8PNZSVZV1Gjec8YdVM0EVlf4SLAC3Ua5qpp4hhD0e/4CMRj/TyJ/Eo0uVx5ElAt/Jmr
+         Q//w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cYPbwCTdXSeLj2E8hNZ5xJvTX/oX1QKrup+rCI0n0GU=;
-        b=IKU8zbkXvxeQe5+6l1D9+QNr9b5zf5sj/1CSW+tsj7hlWjr/pQsWUmj7wtRNg7qVF9
-         cb9P8JmpkteGvYYJClavveMbXhKzVhmA0/+GcZ5nYXSHEj4yKuAIC0vTphSbenflBAPW
-         /e1ZVxwPtR3uBxNns3OZF1JI484IDe1o/Vyaonp2wMFbySsJ6IkUvBToiQ2QChOPFvcT
-         w8ey7cm9CIBQFp5QegDjR/bJNL57IY5jE3QFIKGz1qeX/36Mbdt2ZteRVnqKxMSxOEVT
-         BNzgasVCgojn9WS80j74yi+otq9nodkJfvdMDy/tShlh77t+vbSxmkXJ7wJ/wyH4W/g3
-         FdUA==
-X-Gm-Message-State: AOAM532qRaotB//42VYd5fqej+cobrLSShqSsnTkL2VcwzzfJpvDOxWP
-        r2G9DhvamTh0uHrxRyRp7ty09aWfuwTPr1d0
-X-Google-Smtp-Source: ABdhPJwTu42tk2TANGEmYJGt/w4gPIfSQ4+LZa/SlLrThYgnXPaXbWuuGN+wsh0Z9MIecE13uJhsXg==
-X-Received: by 2002:a05:651c:1605:: with SMTP id f5mr74693331ljq.232.1636317002197;
-        Sun, 07 Nov 2021 12:30:02 -0800 (PST)
+        bh=I+qK7/brq27ekH8nrj1tS/lSC1KVkFATkys6si61XPg=;
+        b=qn37eSF3f2W2uoErKWHPfCT5BlAwQ1jzzgI0YqFwrYYcYxWD7DY4utnYfTBmcnLWzp
+         5LRVAUkDAfAWEvbdQckeS80sjqJCvrGUGDtVbN2X0DuD5a1ifWI10d5cylcABrLZ5CrH
+         f6My/cbKz/f6a7mcCZAgHakF5YDrOOLHsjk2uPtMklrMO4c523GwukRpgWz33EnbzSq0
+         k3VsIe6KEBPqjDF7ZEvkAjkeBEoSZEbihXLqgv8HzLZZb8JAiZAdDoL2Z8OzC9V0p+ya
+         iqW/C1fPmsD9QECr6umWhSbgsv/xFpJoY9or82bnkFHrwAU6QaPF1BaCpN0dpMG/gMDX
+         dIjw==
+X-Gm-Message-State: AOAM531ZMm3ug8iZK3qM5ox1NEobOxNM47qOcFzJZ/CDZllWFMeDl2gl
+        G1JUIVJfHaDWXdPPo38xvF+xuA==
+X-Google-Smtp-Source: ABdhPJx7pniBfJ046V9vGEp2NO/Qje5fxun851MFD75SQmupF8hRyft85IIKB+QhHAxj/ZusubgkMw==
+X-Received: by 2002:a05:6512:261f:: with SMTP id bt31mr68786209lfb.506.1636317003797;
+        Sun, 07 Nov 2021 12:30:03 -0800 (PST)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id 13sm1571159lfq.285.2021.11.07.12.30.01
+        by smtp.gmail.com with ESMTPSA id h13sm1114714lfv.90.2021.11.07.12.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Nov 2021 12:30:01 -0800 (PST)
+        Sun, 07 Nov 2021 12:30:03 -0800 (PST)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -56,9 +56,9 @@ To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
 Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v3 10/12] watchdog: s3c2410: Support separate source clock
-Date:   Sun,  7 Nov 2021 22:29:41 +0200
-Message-Id: <20211107202943.8859-11-semen.protsenko@linaro.org>
+Subject: [PATCH v3 11/12] watchdog: s3c2410: Remove superfluous err label
+Date:   Sun,  7 Nov 2021 22:29:42 +0200
+Message-Id: <20211107202943.8859-12-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211107202943.8859-1-semen.protsenko@linaro.org>
 References: <20211107202943.8859-1-semen.protsenko@linaro.org>
@@ -68,151 +68,63 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Right now all devices supported in the driver have the single clock: it
-acts simultaneously as a bus clock (providing register interface
-clocking) and source clock (driving watchdog counter). Some newer Exynos
-chips, like Exynos850, have two separate clocks for that. In that case
-two clocks will be passed to the driver from the resource provider, e.g.
-Device Tree. Provide necessary infrastructure to support that case:
-  - use source clock's rate for all timer related calculations
-  - use bus clock to gate/ungate the register interface
+'err' label in probe function is not really need, it just returns.
+Remove it and replace all 'goto' statements with actual returns in
+place.
 
-All devices that use the single clock are kept intact: if only one clock
-is passed from Device Tree, it will be used for both purposes as before.
+No functional change here, just a cleanup patch.
 
 Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
 Changes in v3:
-  - Removed has_src_clk field: clk framework can handle NULL clk; added
-    s3c2410wdt_get_freq() function instead, to figure out which clock to
-    use for getting the rate
+  - Added R-b tag by Krzysztof Kozlowski
 
 Changes in v2:
-  - Reworded commit message to be more formal
-  - Used separate "has_src_clk" trait to tell if source clock is present
-  - Renamed clock variables to match their purpose
-  - Removed caching source clock rate, obtaining it in place each time
-    instead
-  - Renamed err labels for more consistency
+  - (none): it's a new patch
 
- drivers/watchdog/s3c2410_wdt.c | 56 +++++++++++++++++++++++++---------
- 1 file changed, 41 insertions(+), 15 deletions(-)
+ drivers/watchdog/s3c2410_wdt.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index f211be8bf976..f31bc765a8a5 100644
+index f31bc765a8a5..96aa5d9c6ed4 100644
 --- a/drivers/watchdog/s3c2410_wdt.c
 +++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -153,7 +153,8 @@ struct s3c2410_wdt_variant {
- 
- struct s3c2410_wdt {
- 	struct device		*dev;
--	struct clk		*clock;
-+	struct clk		*bus_clk; /* for register interface (PCLK) */
-+	struct clk		*src_clk; /* for WDT counter */
- 	void __iomem		*reg_base;
- 	unsigned int		count;
- 	spinlock_t		lock;
-@@ -231,9 +232,14 @@ MODULE_DEVICE_TABLE(platform, s3c2410_wdt_ids);
- 
- /* functions */
- 
--static inline unsigned int s3c2410wdt_max_timeout(struct clk *clock)
-+static inline unsigned long s3c2410wdt_get_freq(struct s3c2410_wdt *wdt)
- {
--	unsigned long freq = clk_get_rate(clock);
-+	return clk_get_rate(wdt->src_clk ? wdt->src_clk : wdt->bus_clk);
-+}
-+
-+static inline unsigned int s3c2410wdt_max_timeout(struct s3c2410_wdt *wdt)
-+{
-+	const unsigned long freq = s3c2410wdt_get_freq(wdt);
- 
- 	return S3C2410_WTCNT_MAXCNT / (freq / (S3C2410_WTCON_PRESCALE_MAX + 1)
- 				       / S3C2410_WTCON_MAXDIV);
-@@ -383,7 +389,7 @@ static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
- 				    unsigned int timeout)
- {
- 	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
--	unsigned long freq = clk_get_rate(wdt->clock);
-+	unsigned long freq = s3c2410wdt_get_freq(wdt);
- 	unsigned int count;
- 	unsigned int divisor = 1;
- 	unsigned long wtcon;
-@@ -632,26 +638,42 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 		goto err;
+@@ -627,22 +627,18 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 	wdt_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+ 	if (wdt_irq == NULL) {
+ 		dev_err(dev, "no irq resource specified\n");
+-		ret = -ENOENT;
+-		goto err;
++		return -ENOENT;
  	}
  
--	wdt->clock = devm_clk_get(dev, "watchdog");
--	if (IS_ERR(wdt->clock)) {
--		dev_err(dev, "failed to find watchdog clock source\n");
--		ret = PTR_ERR(wdt->clock);
-+	wdt->bus_clk = devm_clk_get(dev, "watchdog");
-+	if (IS_ERR(wdt->bus_clk)) {
-+		dev_err(dev, "failed to find bus clock\n");
-+		ret = PTR_ERR(wdt->bus_clk);
- 		goto err;
+ 	/* get the memory region for the watchdog timer */
+ 	wdt->reg_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(wdt->reg_base)) {
+-		ret = PTR_ERR(wdt->reg_base);
+-		goto err;
+-	}
++	if (IS_ERR(wdt->reg_base))
++		return PTR_ERR(wdt->reg_base);
+ 
+ 	wdt->bus_clk = devm_clk_get(dev, "watchdog");
+ 	if (IS_ERR(wdt->bus_clk)) {
+ 		dev_err(dev, "failed to find bus clock\n");
+-		ret = PTR_ERR(wdt->bus_clk);
+-		goto err;
++		return PTR_ERR(wdt->bus_clk);
  	}
  
--	ret = clk_prepare_enable(wdt->clock);
-+	ret = clk_prepare_enable(wdt->bus_clk);
- 	if (ret < 0) {
--		dev_err(dev, "failed to enable clock\n");
-+		dev_err(dev, "failed to enable bus clock\n");
- 		return ret;
- 	}
+ 	ret = clk_prepare_enable(wdt->bus_clk);
+@@ -757,7 +753,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+  err_bus_clk:
+ 	clk_disable_unprepare(wdt->bus_clk);
  
-+	/*
-+	 * "watchdog_src" clock is optional; if it's not present -- just skip it
-+	 * and use "watchdog" clock as both bus and source clock.
-+	 */
-+	wdt->src_clk = devm_clk_get(dev, "watchdog_src");
-+	if (!IS_ERR(wdt->src_clk)) {
-+		ret = clk_prepare_enable(wdt->src_clk);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable source clock\n");
-+			ret = PTR_ERR(wdt->src_clk);
-+			goto err_bus_clk;
-+		}
-+	} else {
-+		wdt->src_clk = NULL;
-+	}
-+
- 	wdt->wdt_device.min_timeout = 1;
--	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt->clock);
-+	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt);
- 
- 	ret = s3c2410wdt_cpufreq_register(wdt);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to register cpufreq\n");
--		goto err_clk;
-+		goto err_src_clk;
- 	}
- 
- 	watchdog_set_drvdata(&wdt->wdt_device, wdt);
-@@ -729,8 +751,11 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
-  err_cpufreq:
- 	s3c2410wdt_cpufreq_deregister(wdt);
- 
-- err_clk:
--	clk_disable_unprepare(wdt->clock);
-+ err_src_clk:
-+	clk_disable_unprepare(wdt->src_clk);
-+
-+ err_bus_clk:
-+	clk_disable_unprepare(wdt->bus_clk);
- 
-  err:
+- err:
  	return ret;
-@@ -749,7 +774,8 @@ static int s3c2410wdt_remove(struct platform_device *dev)
- 
- 	s3c2410wdt_cpufreq_deregister(wdt);
- 
--	clk_disable_unprepare(wdt->clock);
-+	clk_disable_unprepare(wdt->src_clk);
-+	clk_disable_unprepare(wdt->bus_clk);
- 
- 	return 0;
  }
+ 
 -- 
 2.30.2
 
