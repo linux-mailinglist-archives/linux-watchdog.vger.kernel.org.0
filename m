@@ -2,151 +2,156 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D65FF44A85A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Nov 2021 09:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B63C44AB06
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Nov 2021 10:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244068AbhKIId1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Nov 2021 03:33:27 -0500
-Received: from mail-vk1-f174.google.com ([209.85.221.174]:33718 "EHLO
-        mail-vk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbhKIId0 (ORCPT
+        id S243681AbhKIJ7U convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Nov 2021 04:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241704AbhKIJ7O (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Nov 2021 03:33:26 -0500
-Received: by mail-vk1-f174.google.com with SMTP id d130so9622088vke.0;
-        Tue, 09 Nov 2021 00:30:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gGstnhGZbRY0Qd8//rKyVCZDyuB1qDxTjF/eZkOvFlU=;
-        b=H0Upa6jU4LDLBG1zP0XUZO7vMowA3FOAW++BBkVon2LoDWSegz4g8ox3L5UPVKgscy
-         j5IN9wwM3Wec2IxV66dBek177UI0BMo36hG4ItnqYBMbnTz8S6u9gyIQgKTW3tqWKcmr
-         w87llQX4KJt9qO8XcXjww5cw9W3bjcm5CchWG4b6dlCUZNkJDqeRwQdjtPcMgH9oKaFd
-         JFaB4EBPSTXldrKHlVfHDZkzhSwDaIXXCnKK7miuxWCpLD1YCf/8l4DlxUa6AAn+0Xvc
-         hqYWDRKCe3eVoMARuAynsOqVQn4idt5EZQqUOSnP1PyGMW3RyDaiucBAJVYZZp5qqkBu
-         vvIQ==
-X-Gm-Message-State: AOAM530QotiJAHqja77y6IFOmZwRUBvC7gWPfETJQKEDz0r06+Z25+Pa
-        yjPRuaUsczdl9ujYNgu07K+m2KBWkLsEu3SS
-X-Google-Smtp-Source: ABdhPJz3uA//hLkDB1L1TCC+Y689SiR00uwWOCHBsVUHmdIGEHW5mDV8iyUTrcTpoGsIgeIKd8wwsQ==
-X-Received: by 2002:a05:6122:ca7:: with SMTP id ba39mr8457930vkb.25.1636446640710;
-        Tue, 09 Nov 2021 00:30:40 -0800 (PST)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id f188sm48432vsc.16.2021.11.09.00.30.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Nov 2021 00:30:40 -0800 (PST)
-Received: by mail-ua1-f45.google.com with SMTP id s13so21466615uaj.11;
-        Tue, 09 Nov 2021 00:30:39 -0800 (PST)
-X-Received: by 2002:ab0:3154:: with SMTP id e20mr7912090uam.14.1636446639734;
- Tue, 09 Nov 2021 00:30:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20211104160858.15550-1-biju.das.jz@bp.renesas.com>
- <20211104160858.15550-5-biju.das.jz@bp.renesas.com> <70ba0c57-aca5-4822-631b-1eb7e7b9b3a2@roeck-us.net>
- <CAMuHMdXrqkowJnQAT2DvcJx6jsEoMcrEUN6k=NNcqoxc8-aKFw@mail.gmail.com> <OS0PR01MB59222E6080E92731DD66A03586929@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB59222E6080E92731DD66A03586929@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 9 Nov 2021 09:30:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXnyTPB2bo5PS=A4iwUfLivJa=KC7u7urWb0jDvpnuc+g@mail.gmail.com>
-Message-ID: <CAMuHMdXnyTPB2bo5PS=A4iwUfLivJa=KC7u7urWb0jDvpnuc+g@mail.gmail.com>
+        Tue, 9 Nov 2021 04:59:14 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D35C061764
+        for <linux-watchdog@vger.kernel.org>; Tue,  9 Nov 2021 01:56:28 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mkNrR-0002z2-9N; Tue, 09 Nov 2021 10:56:13 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mkNrP-000Vmq-9F; Tue, 09 Nov 2021 10:56:11 +0100
+Message-ID: <9ac6629d3fb4002b51c7b39eda4648d8845795a3.camel@pengutronix.de>
 Subject: Re: [RFC 4/4] watchdog: Add Watchdog Timer driver for RZ/G2L
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das@bp.renesas.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+        linux-renesas-soc@vger.kernel.org
+Date:   Tue, 09 Nov 2021 10:56:11 +0100
+In-Reply-To: <20211104160858.15550-5-biju.das.jz@bp.renesas.com>
+References: <20211104160858.15550-1-biju.das.jz@bp.renesas.com>
+         <20211104160858.15550-5-biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Biju,
+On Thu, 2021-11-04 at 16:08 +0000, Biju Das wrote:
+[...]
+> +static int rzg2l_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct rzg2l_wdt_priv *priv;
+> +	struct clk *wdt_clk;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	/* Get watchdog main clock */
+> +	wdt_clk = devm_clk_get(&pdev->dev, "oscclk");
+> +	if (IS_ERR(wdt_clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no oscclk");
+> +
+> +	priv->osc_clk_rate = clk_get_rate(wdt_clk);
+> +	if (!priv->osc_clk_rate)
+> +		return dev_err_probe(&pdev->dev, -EINVAL, "oscclk rate is 0");
+> +
+> +	/* Get Peripheral clock */
+> +	wdt_clk = devm_clk_get(&pdev->dev, "pclk");
+> +	if (IS_ERR(wdt_clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no pclk");
+> +
+> +	priv->pclk_rate = clk_get_rate(wdt_clk);
+> +	if (!priv->pclk_rate)
+> +		return dev_err_probe(&pdev->dev, -EINVAL, "pclk rate is 0");
+> +
+> +	priv->delay = F2CYCLE_NSEC(priv->osc_clk_rate) * 6 + F2CYCLE_NSEC(priv->pclk_rate) * 9;
+> +
+> +	priv->rstc = devm_reset_control_get(&pdev->dev, NULL);
 
-On Tue, Nov 9, 2021 at 9:22 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > Subject: Re: [RFC 4/4] watchdog: Add Watchdog Timer driver for RZ/G2L
-> > On Mon, Nov 8, 2021 at 7:38 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > On 11/4/21 9:08 AM, Biju Das wrote:
-> > > > Add Watchdog Timer driver for RZ/G2L SoC.
-> > > >
-> > > > WDT IP block supports normal watchdog timer function and reset
-> > > > request function due to CPU parity error.
-> > > >
-> > > > This driver currently supports normal watchdog timer function and
-> > > > later will add support for reset request function due to CPU parity
-> > > > error.
-> > > >
-> > > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> >
-> > > > --- /dev/null
-> > > > +++ b/drivers/watchdog/rzg2l_wdt.c
-> >
-> > > > +struct rzg2l_wdt_priv {
-> > > > +     void __iomem *base;
-> > > > +     struct watchdog_device wdev;
-> > > > +     struct reset_control *rstc;
-> > > > +     unsigned long osc_clk_rate;
-> > > > +     unsigned long pclk_rate;
-> > >
-> > > pclk_rate is only used in the probe function and thus not needed here.
-> >
-> > Indeed...
-> OK.
-> >
-> > > > +static int rzg2l_wdt_probe(struct platform_device *pdev) {
-> > > > +     struct device *dev = &pdev->dev;
-> > > > +     struct rzg2l_wdt_priv *priv;
-> > > > +     struct clk *wdt_clk;
-> > > > +     int ret;
-> > > > +
-> > > > +     priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > > > +     if (!priv)
-> > > > +             return -ENOMEM;
-> > > > +
-> > > > +     priv->base = devm_platform_ioremap_resource(pdev, 0);
-> > > > +     if (IS_ERR(priv->base))
-> > > > +             return PTR_ERR(priv->base);
-> > > > +
-> > > > +     /* Get watchdog main clock */
-> > > > +     wdt_clk = devm_clk_get(&pdev->dev, "oscclk");
-> > > > +     if (IS_ERR(wdt_clk))
-> > > > +             return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no
-> > > > + oscclk");
-> > > > +
-> > > > +     priv->osc_clk_rate = clk_get_rate(wdt_clk);
-> > > > +     if (!priv->osc_clk_rate)
-> > > > +             return dev_err_probe(&pdev->dev, -EINVAL, "oscclk rate
-> > > > + is 0");
-> > > > +
-> > > > +     /* Get Peripheral clock */
-> > > > +     wdt_clk = devm_clk_get(&pdev->dev, "pclk");
-> > > > +     if (IS_ERR(wdt_clk))
-> > > > +             return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no
-> > > > + pclk");
-> > > > +
-> > > > +     priv->pclk_rate = clk_get_rate(wdt_clk);
-> > > > +     if (!priv->pclk_rate)
-> > > > +             return dev_err_probe(&pdev->dev, -EINVAL, "pclk rate
-> > > > + is 0");
-> >
-> > ... and this can't really happen, can it?
->
-> But I need pclk frequency  for delay calculation. That is the reason I am doing a get. Probably after
-> Getting the rate, I should do a "put". So that Run time PM will be in full control for the clocks.
-> Same for oscillator clk. Is it ok?
+Please use devm_reset_control_get_exclusive().
 
-Oops, I missed that.  Please ignore my comment, I'll grab a coffee
-soon ;-)
+> +	if (IS_ERR(priv->rstc))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(priv->rstc),
+> +			"failed to get cpg reset");
+> +
+> +	reset_control_deassert(priv->rstc);
+> +	ret = devm_add_action_or_reset(&pdev->dev,
+> +				       rzg2l_wdt_reset_assert_clock_disable,
 
-Gr{oetje,eeting}s,
+I suppose rzg2l_wdt_reset_assert_clock_disable should be renamed to
+rzg2l_wdt_reset_assert given that it does not disable a clock.
 
-                        Geert
+> +				       &priv->wdev);
+> +	if (ret < 0)
+> +		return dev_err_probe(&pdev->dev, ret, "failed to get reset");
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I think this should just return ret, as the only possible failure from
+devm_add_action_or_reset() is -ENOMEM.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +
+> +	pm_runtime_enable(&pdev->dev);
+> +	ret = pm_runtime_resume_and_get(&pdev->dev);
+> +	if (ret < 0) {
+> +		dev_err(dev, "pm_runtime_resume_and_get failed");
+
+Consider printing ret with %pe.
+
+> +		goto out_pm_get;
+> +	}
+> +
+> +	priv->wdev.info = &rzg2l_wdt_ident;
+> +	priv->wdev.ops = &rzg2l_wdt_ops;
+> +	priv->wdev.parent = dev;
+> +	priv->wdev.min_timeout = 1;
+> +	priv->wdev.max_timeout = WDT_CYCLE_MSEC(priv->osc_clk_rate, 0xfff);
+> +	priv->wdev.timeout = WDT_DEFAULT_TIMEOUT;
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +	watchdog_set_drvdata(&priv->wdev, priv);
+> +	watchdog_set_nowayout(&priv->wdev, nowayout);
+> +	watchdog_set_restart_priority(&priv->wdev, 0);
+> +	watchdog_stop_on_unregister(&priv->wdev);
+> +
+> +	ret = watchdog_init_timeout(&priv->wdev, 0, dev);
+> +	if (ret)
+> +		dev_warn(dev, "Specified timeout invalid, using default");
+> +
+> +	ret = devm_watchdog_register_device(&pdev->dev, &priv->wdev);
+> +	if (ret < 0)
+> +		goto out_pm_disable;
+> +
+> +	return 0;
+> +
+> +out_pm_disable:
+> +	pm_runtime_put(dev);
+> +out_pm_get:
+> +	pm_runtime_disable(dev);
+> +
+> +	return ret;
+> +}
+
+regards
+Philipp
