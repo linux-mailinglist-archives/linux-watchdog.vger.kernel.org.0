@@ -2,57 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA8D44A800
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Nov 2021 08:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B438A44A803
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Nov 2021 08:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235038AbhKIIBb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Nov 2021 03:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S243874AbhKIICC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Nov 2021 03:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243886AbhKIIB2 (ORCPT
+        with ESMTP id S241329AbhKIICA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Nov 2021 03:01:28 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374B4C06120B;
-        Mon,  8 Nov 2021 23:58:42 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id f9so21532636ioo.11;
-        Mon, 08 Nov 2021 23:58:42 -0800 (PST)
+        Tue, 9 Nov 2021 03:02:00 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21A7C061764;
+        Mon,  8 Nov 2021 23:59:14 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id 14so3827796ioe.2;
+        Mon, 08 Nov 2021 23:59:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mwjsBGGCD6Y+on4qfMjaXA33EoSJBoNN2vPwpqcskAw=;
-        b=IUrbL9AlXk0fdCuMK9JGzIsT37RIpNJ6ScHSRTi1DByphfQvE3lOk9ocM3uDuXg7PB
-         gnVVwQte6EMSeXZV05BV+85MANq9JJEED/KtO8xUVV9cBYhTpIGQSEdIAYbZ3JTmd4+o
-         /AfJf7g08Ob4VHcZbz7jlBiffZgU37nw4B9cBuyTemakQuTrzlGZV4kuoYYpVwa8cXYP
-         WjhgnHc8NN2jefYORH+ysnkAsjkb/z1VNKYjDqNfwTpqQJGKn/6IJinYvBGG4XUtgG7b
-         Atj4Uo+cPIFWbwlF2gJLrTr24uiTTz4tfhvXx8gNTylOLSe6t9r0Im+jbdYumsXSuZ5Z
-         jJvw==
+        bh=3dqwTZmCriG4FBtW0Dj6eQjJQwrJD1vpEOEBYRc03hQ=;
+        b=l9t7XJJQyuTms6XdlpuI3CXb8lhtPGmNo/2GOP86zR7v4reD/UwlbevzwkwWBwslGK
+         bbV2kQLqFrYUtkx320JM3asdIJ07W18N4Cj61nW/nWorcAOzxve9FLTDVIFWlpzvxU7b
+         MVGECHR1bMn1jkUed9sKZOL7pUd8+IN6OoIKpU7jtp8tmL8gnj8P/Z6tIAEaXE34llry
+         xsSczdQovB0c4fgPSg0/oXF4DS03Kxpx8EclpIiWiUzoJlluZpMcPBdVnK7wvtdo9aN5
+         zrH0a5W0irYJcsBYRJ5TQx1Feghzzsr6YINpcw9Sphn+m9uDgSwC7GApDg6iFPXi+XBa
+         ZHCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mwjsBGGCD6Y+on4qfMjaXA33EoSJBoNN2vPwpqcskAw=;
-        b=gHQ5SPZyfY7ZbXI6qQrMsxxh4Ss0Bcm76bvpipaHA6aGlJc9UH4PkkABxVbcMbb5Gx
-         MbwivNA2/GoCQxQfLyoHjuegBWwFwlC4YadU34aTs1hsM72RHwPzfQ5XUp7azsdzuQ7G
-         vmnAKUHjWqt3e20kdEXSjmbGHZMaLW42VHE2MCoa26tgnclECNm7tXNCtw0yoLrfMkFf
-         nBnsMWLCafV8zvFKk1L2uywGSfMSI0HDRHgHsk7RuIiVkVW63THDEB3BjuQO97XJDjdC
-         mDlbQMuE/gm+ngPw+DZxp2jFlQt6D/0HxnsP4okus3jKbfXajXyUD9uAjF4qoFWCk3En
-         BLHQ==
-X-Gm-Message-State: AOAM533+4ljyvadmeXdFiqW9VRzFIIV799tyWzH0znWqPFj0Wh0iS83V
-        CNIa1/7MO4isPf4tBIjizrgAbLyzj5iDy4a9i4g=
-X-Google-Smtp-Source: ABdhPJycZ82/dQ2znBgL0pLuCJ13f6SPkBhb/onDv2o3TeaSMpKRDUvadmLYqNTD72F5RNua1MGHp83w166OTPswtPQ=
-X-Received: by 2002:a05:6638:348e:: with SMTP id t14mr3805695jal.145.1636444716827;
- Mon, 08 Nov 2021 23:58:36 -0800 (PST)
+        bh=3dqwTZmCriG4FBtW0Dj6eQjJQwrJD1vpEOEBYRc03hQ=;
+        b=WIZno3+/CiE68EJgfZUULRzMXUgTNotGQcf4xBlgcOlXD7VY9E8KIedgRyDPgKgLLj
+         VDO5tl+qD22pBfn4Dt/C6KlTyrkwoPn/LnEbZuwAlZbxAmmTfZ0hHrYUQXwXE16AXRJT
+         wysD/1xDTSQp1mvQbFkjR8/+A6jZZvU1a2L+aEMY3QEvBXhyIRopCDdPwTTjw/NVXIFn
+         F2iQlcmNZVFJrZiS3l2R/PhqDWL9zwZVp8y/MjSywlTMtHRxCK+01ngWrMxfEl5R5YV2
+         BlafebIR0VYSMXbaY74w40hHIpevgHEvCXBDKXvsENbQ3byKFUbxGpbt24O+gfnWYWPZ
+         CAMw==
+X-Gm-Message-State: AOAM531BWduoFJWX09yJ2XX+sEf3cmMLqEyUAFsftaNhU6tUikttHnd3
+        iGLV74/9cdMUJOFbZZRNTP9TP2Mr9Tf0ugIY/VY=
+X-Google-Smtp-Source: ABdhPJxbSrFiGYk9Uu30K4T24GGtAKXGSf5L5IRpY6dpQETbJb4emTri0zTlJHUZIvH4Fvf4igTuMFeD3YvFAoHMvCg=
+X-Received: by 2002:a6b:b886:: with SMTP id i128mr3746017iof.151.1636444754272;
+ Mon, 08 Nov 2021 23:59:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20210730041355.2810397-1-art@khadas.com>
-In-Reply-To: <20210730041355.2810397-1-art@khadas.com>
+References: <20210730041355.2810397-1-art@khadas.com> <20210730041355.2810397-2-art@khadas.com>
+ <20210730044538.GA2110311@roeck-us.net>
+In-Reply-To: <20210730044538.GA2110311@roeck-us.net>
 From:   Art Nikpal <email2tema@gmail.com>
-Date:   Tue, 9 Nov 2021 15:58:25 +0800
-Message-ID: <CAKaHn9+sgFXtOXFNx=BGVyaoh6B_ZmVOS0RcWw49tvpJyNcgow@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] watchdog: meson_gxbb_wdt: improve
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     wim@linux-watchdog.org, Guenter Roeck <linux@roeck-us.net>,
+Date:   Tue, 9 Nov 2021 15:59:03 +0800
+Message-ID: <CAKaHn9L5h98XgndA+xBP2MUrRevVM7pRPJN6zFh4fBaUdv7QZA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] watchdog: meson_gxbb_wdt: add nowayout parameter
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>, wim@linux-watchdog.org,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Christian Hewitt <christianshewitt@gmail.com>,
@@ -71,22 +72,59 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 hi Guenter Roeck
 why still not merged to upstream ?
 
-On Fri, Jul 30, 2021 at 12:14 PM Artem Lapkin <email2tema@gmail.com> wrote:
+On Fri, Jul 30, 2021 at 12:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> * Added nowayout module parameter
-> * Added timeout module parameter
-> * Removed watchdog_stop_on_reboot
+> On Fri, Jul 30, 2021 at 12:13:53PM +0800, Artem Lapkin wrote:
+> > Add nowayout module parameter
+> >
+> > Signed-off-by: Artem Lapkin <art@khadas.com>
+> > ---
 >
-> https://lore.kernel.org/linux-watchdog/20210729072308.1908904-1-art@khadas.com/T/#t
+> <Formletter>
+> Change log goes here. If it is missing, I won't know what changed.
+> That means I will have to dig out older patch versions to compare.
+> That costs time and would hold up both this patch as well as all other
+> patches which I still have to review.
 >
-> Artem Lapkin (3):
->   watchdog: meson_gxbb_wdt: add nowayout parameter
->   watchdog: meson_gxbb_wdt: add timeout parameter
->   watchdog: meson_gxbb_wdt: remove stop_on_reboot
+> For this reason, I will not review patches without change log.
+> </Formletter>
 >
->  drivers/watchdog/meson_gxbb_wdt.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+> The change is small and recent enough that I remember, so
 >
-> --
-> 2.25.1
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 >
+> but please keep this in mind for future submissions.
+>
+> Thanks,
+> Guenter
+>
+> >  drivers/watchdog/meson_gxbb_wdt.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
+> > index 5a9ca10fbcfa..5aebc3a09652 100644
+> > --- a/drivers/watchdog/meson_gxbb_wdt.c
+> > +++ b/drivers/watchdog/meson_gxbb_wdt.c
+> > @@ -29,6 +29,11 @@
+> >  #define GXBB_WDT_TCNT_SETUP_MASK             (BIT(16) - 1)
+> >  #define GXBB_WDT_TCNT_CNT_SHIFT                      16
+> >
+> > +static bool nowayout = WATCHDOG_NOWAYOUT;
+> > +module_param(nowayout, bool, 0);
+> > +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started default="
+> > +              __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> > +
+> >  struct meson_gxbb_wdt {
+> >       void __iomem *reg_base;
+> >       struct watchdog_device wdt_dev;
+> > @@ -175,6 +180,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+> >       data->wdt_dev.max_hw_heartbeat_ms = GXBB_WDT_TCNT_SETUP_MASK;
+> >       data->wdt_dev.min_timeout = 1;
+> >       data->wdt_dev.timeout = DEFAULT_TIMEOUT;
+> > +     watchdog_set_nowayout(&data->wdt_dev, nowayout);
+> >       watchdog_set_drvdata(&data->wdt_dev, data);
+> >
+> >       /* Setup with 1ms timebase */
+> > --
+> > 2.25.1
+> >
