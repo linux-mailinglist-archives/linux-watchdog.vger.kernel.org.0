@@ -2,109 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CA344A808
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Nov 2021 08:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3BD44A81A
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Nov 2021 09:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236160AbhKIICn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Nov 2021 03:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236082AbhKIICm (ORCPT
+        id S243831AbhKIIHB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Nov 2021 03:07:01 -0500
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:37861 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236699AbhKIIHA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Nov 2021 03:02:42 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E30C061764;
-        Mon,  8 Nov 2021 23:59:57 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id i11so10595608ilv.13;
-        Mon, 08 Nov 2021 23:59:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iGTLUmZFXXi8TM5i97jxZTDNrNCsnanJmw2eZUcoYuo=;
-        b=Mmz2mTVK2B6vz/4KEGe+N1RhRqNQK5ZN7luaXzJDbU6gddP/cEKQiM9rQeFq7D3sUd
-         VBndsUntcjqvVqRVWkzoPIbDb3EsUIG9B7uSlf0cgMb2zpch5ia1Vt5JD/TooD+UzOZd
-         KVy2NND5QEIvRxJfbdpcm0i3kwuchsBYADCUVtxlk9Oyo5W9d0SMnge8BHDoDyGe+z0E
-         ttwJHTNQVFP1YxPML5iMMWSM1Pktx6K1vYOk9APdtEjp0wGxF6PUJvm3psLadF5wunnH
-         49H+MUW9QQkU3w4ZslNOIzFpKR/H2RG9gQefLCrJf3q6pIOTUf6BlKVv6sWjF3nvcRv3
-         nB0w==
+        Tue, 9 Nov 2021 03:07:00 -0500
+Received: by mail-ua1-f54.google.com with SMTP id l43so36881739uad.4;
+        Tue, 09 Nov 2021 00:04:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iGTLUmZFXXi8TM5i97jxZTDNrNCsnanJmw2eZUcoYuo=;
-        b=fdKQBPu0o0jYlk0XS4N/NZSYmRMSkQvuSByqJangvEr8zdET1HPPu4cxRqSj2vU8Sz
-         mhaKcU60ROcp9co6OkDlwOTcehBRVVG/SOsT3nhGK3pIg8+M+5PrhXHuxYySEwasMLDf
-         zz7BMsvUrFhFO1lyNb9U+V1iT4cxU1LK4gw1LX/WWseL9TdTh7OIgCnxFw3TIvClZreI
-         H7CKD49ZKv8/0AUJiBSDAQgvqwX88U1XC73TvfRwOfsMuVXECME2ZvkhOkxsWKQA0+Ju
-         uFtqLKsum6fA1aOBbgxF5GJad+DfrF4U9r0jWdYlmLQlWOrTUZWd0Iwe+R4UI6dJTzKh
-         HjBg==
-X-Gm-Message-State: AOAM532b2m7MR2z7YX3qjzKX2iaANBUlkDv4mlqelQklJ4uEHrjK3GD1
-        Fk7tKYJ3dsZm8jwDFyb+2lP87ZCfQVNGcYOpD7s=
-X-Google-Smtp-Source: ABdhPJw2TWFh/34/tIN/mpZc8hZh2FjBcNIqCxxOwKS7eIeYvSqIuNEpPcJHt5ssTq+ZApXvVAd/8WM4QDc8HTZEttM=
-X-Received: by 2002:a05:6e02:b42:: with SMTP id f2mr3874183ilu.93.1636444796818;
- Mon, 08 Nov 2021 23:59:56 -0800 (PST)
+        bh=6/VUCaCbmYd5eG70UdhdrMxO7JHAC6pRXvIV7ydAWZU=;
+        b=0m7ewwO+GqJyy5mqEkYJn5MBdqiyo5lbfwOzhyiyMmz0VGkk/njAkEw1gy0Loi1QWL
+         nkLrqOutCo3TkVaylqYN9AOFqvXnHihlFwpdEQT9RNtE4CBxTxaFJwTG1X7jiVuHsQo1
+         sfU7+chX/bgqe02IDTDqmKH4qg2/XYTkxWkoN4c5bRRg6IFz/IbxegRVe/Ux5U0+rDOu
+         zkvZxVQKTRqQPPIIPBZyUbWGsnvn7OHqpuFbJoXjuOcpZcEE+kB3PBsiYc+6WIUsVIrY
+         tFMkWn+F5F/M2hTZ5n+djZ+j/Il3IFFhiTIlb1hVbpmGD3wmhLlhurCcgSI8GzBN/k++
+         FK9w==
+X-Gm-Message-State: AOAM532VTH8/WuVPfuHSent7Hj2Z+spfvVjMrwCxfOC5DP6O4ZUN//+E
+        KS3gUvIIrEsaOhXgrnarsu6dz86Zr8N/R3BF
+X-Google-Smtp-Source: ABdhPJxc0U6Ei3cRX1pDvSeiFD+yrZCjYwFO4Xp8VMPIC5P39phwdRECalg2PBAFTzwNuLe3kArfpA==
+X-Received: by 2002:a67:ca10:: with SMTP id z16mr8395328vsk.52.1636445054417;
+        Tue, 09 Nov 2021 00:04:14 -0800 (PST)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id 128sm692566vsx.19.2021.11.09.00.04.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Nov 2021 00:04:13 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id az37so36894971uab.13;
+        Tue, 09 Nov 2021 00:04:13 -0800 (PST)
+X-Received: by 2002:a05:6102:3a07:: with SMTP id b7mr84277679vsu.35.1636445053306;
+ Tue, 09 Nov 2021 00:04:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20210730041355.2810397-1-art@khadas.com> <20210730041355.2810397-4-art@khadas.com>
-In-Reply-To: <20210730041355.2810397-4-art@khadas.com>
-From:   Art Nikpal <email2tema@gmail.com>
-Date:   Tue, 9 Nov 2021 15:59:46 +0800
-Message-ID: <CAKaHn9KxZDAHdKGZg3-Pi3jZO5E3knESHCFjgaV09u5QYe074A@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] watchdog: meson_gxbb_wdt: remove stop_on_reboot
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     wim@linux-watchdog.org, Guenter Roeck <linux@roeck-us.net>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Artem Lapkin <art@khadas.com>, Nick Xie <nick@khadas.com>,
-        Gouwa Wang <gouwa@khadas.com>
+References: <20211104160858.15550-1-biju.das.jz@bp.renesas.com>
+ <20211104160858.15550-5-biju.das.jz@bp.renesas.com> <70ba0c57-aca5-4822-631b-1eb7e7b9b3a2@roeck-us.net>
+In-Reply-To: <70ba0c57-aca5-4822-631b-1eb7e7b9b3a2@roeck-us.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 9 Nov 2021 09:04:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXrqkowJnQAT2DvcJx6jsEoMcrEUN6k=NNcqoxc8-aKFw@mail.gmail.com>
+Message-ID: <CAMuHMdXrqkowJnQAT2DvcJx6jsEoMcrEUN6k=NNcqoxc8-aKFw@mail.gmail.com>
+Subject: Re: [RFC 4/4] watchdog: Add Watchdog Timer driver for RZ/G2L
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-hi Guenter Roeck
-why still not merged to upstream ?
+On Mon, Nov 8, 2021 at 7:38 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 11/4/21 9:08 AM, Biju Das wrote:
+> > Add Watchdog Timer driver for RZ/G2L SoC.
+> >
+> > WDT IP block supports normal watchdog timer function and reset
+> > request function due to CPU parity error.
+> >
+> > This driver currently supports normal watchdog timer function
+> > and later will add support for reset request function due to
+> > CPU parity error.
+> >
+> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-On Fri, Jul 30, 2021 at 12:14 PM Artem Lapkin <email2tema@gmail.com> wrote:
+> > --- /dev/null
+> > +++ b/drivers/watchdog/rzg2l_wdt.c
+
+> > +struct rzg2l_wdt_priv {
+> > +     void __iomem *base;
+> > +     struct watchdog_device wdev;
+> > +     struct reset_control *rstc;
+> > +     unsigned long osc_clk_rate;
+> > +     unsigned long pclk_rate;
 >
-> Remove watchdog_stop_on_reboot()
->
-> Meson platform still have some hardware drivers problems for some
-> configurations which can freeze device on shutdown/reboot stage and i
-> think better to have reboot warranty by default.
->
-> I feel that it is important to keep the watchdog running during the
-> reboot sequence, in the event that an abnormal driver freezes the reboot
-> process.
->
-> This is my personal opinion and I hope the driver authors will agree
-> with my proposal, or just ignore this commit if not.
->
-> https://lore.kernel.org/linux-watchdog/20210729072308.1908904-1-art@khadas.com/T/#t
->
-> Signed-off-by: Artem Lapkin <art@khadas.com>
-> ---
->  drivers/watchdog/meson_gxbb_wdt.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-> index 945f5e65db57..d3c9e2f6e63b 100644
-> --- a/drivers/watchdog/meson_gxbb_wdt.c
-> +++ b/drivers/watchdog/meson_gxbb_wdt.c
-> @@ -198,7 +198,6 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->
->         meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
->
-> -       watchdog_stop_on_reboot(&data->wdt_dev);
->         return devm_watchdog_register_device(dev, &data->wdt_dev);
->  }
->
-> --
-> 2.25.1
->
+> pclk_rate is only used in the probe function and thus not needed here.
+
+Indeed...
+
+> > +static int rzg2l_wdt_probe(struct platform_device *pdev)
+> > +{
+> > +     struct device *dev = &pdev->dev;
+> > +     struct rzg2l_wdt_priv *priv;
+> > +     struct clk *wdt_clk;
+> > +     int ret;
+> > +
+> > +     priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> > +     if (!priv)
+> > +             return -ENOMEM;
+> > +
+> > +     priv->base = devm_platform_ioremap_resource(pdev, 0);
+> > +     if (IS_ERR(priv->base))
+> > +             return PTR_ERR(priv->base);
+> > +
+> > +     /* Get watchdog main clock */
+> > +     wdt_clk = devm_clk_get(&pdev->dev, "oscclk");
+> > +     if (IS_ERR(wdt_clk))
+> > +             return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no oscclk");
+> > +
+> > +     priv->osc_clk_rate = clk_get_rate(wdt_clk);
+> > +     if (!priv->osc_clk_rate)
+> > +             return dev_err_probe(&pdev->dev, -EINVAL, "oscclk rate is 0");
+> > +
+> > +     /* Get Peripheral clock */
+> > +     wdt_clk = devm_clk_get(&pdev->dev, "pclk");
+> > +     if (IS_ERR(wdt_clk))
+> > +             return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no pclk");
+> > +
+> > +     priv->pclk_rate = clk_get_rate(wdt_clk);
+> > +     if (!priv->pclk_rate)
+> > +             return dev_err_probe(&pdev->dev, -EINVAL, "pclk rate is 0");
+
+... and this can't really happen, can it?
+
+So you don't need to get pclk at all.  It will be controlled through
+Runtime PM anyway.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
