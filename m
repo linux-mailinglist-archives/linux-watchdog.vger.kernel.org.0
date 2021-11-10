@@ -2,131 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF1A44B05D
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Nov 2021 16:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBB444BA4F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Nov 2021 03:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236974AbhKIPdB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 Nov 2021 10:33:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S229756AbhKJC2e (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 Nov 2021 21:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236981AbhKIPc6 (ORCPT
+        with ESMTP id S229717AbhKJC2d (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 Nov 2021 10:32:58 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979BEC061766;
-        Tue,  9 Nov 2021 07:30:12 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id q33-20020a056830442100b0055abeab1e9aso31408386otv.7;
-        Tue, 09 Nov 2021 07:30:12 -0800 (PST)
+        Tue, 9 Nov 2021 21:28:33 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2963C061764;
+        Tue,  9 Nov 2021 18:25:46 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id g28so833621pgg.3;
+        Tue, 09 Nov 2021 18:25:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0WsRLZzA+8WjebZk6MQ2yQcE7NyK/cID66AG50nvoVc=;
-        b=A3ZlGo23Y03n58pNlCX3VHiJ9bXqoKSn3wUaTr67d7afWz8UbNpvScGMEqMCV7Jrc3
-         ok3KIcMo7mXQa1KYm88SQyBLo0JasHLfF3gsxxPQzzGiFMQNeMcepBY/b1+ABOWJccMZ
-         yEwJARs6Iw9+PC8vu3aYoO+PDoqfy4XmCnc+lQ8PxgEw3H1hTiS/eJkab3JtQ+Ge3okZ
-         dxe8K3sEr4J/uAUbu89GY4vZmdJOM+d1QBM1CaGyNIUQTpx8XLeV/yGVbXj7gGLELnon
-         w3CNPvIQ9gEWjQ823XGQR7SbNZ35FdiaGj3qk5jRITqIIFEcdRUPOnmr6Ee5UVVT296X
-         Af2w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q5hdjzL4fx6MCYrF1luLAHmrqgFH4sajhljBKE+bpBg=;
+        b=Wp+933VhmWr8dtWw/LmFTkCFPa157nh6dtoQBDi+ZbQOVf3NDHU9wcEzgG+H7BEI7K
+         NLYHDVZoKBLpaQJMIEjYvlK3Bd/AHs17vskCadVZyTFRr0VdRi86b5RAMizT5UzaxWAs
+         EkwfgaYc5n9QNImDflB5KLxL1KBdZC+2VEwXtYeo6zHrUxyzP7xy0NYs8GW6Iwd/ygzs
+         RtdBVGVE6Ed7qcZCeUd4S6mfbS77ZXzIix9Gxlv/wp7h70D7WejVaL1L2g/x2nNxNIyO
+         GnxU/Sd+s3ZebXJTQtOSNnIJTTvMvoS766KbPjeb1HLUWB4XnAc9i05bwChVHxjLIqDW
+         SsOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0WsRLZzA+8WjebZk6MQ2yQcE7NyK/cID66AG50nvoVc=;
-        b=MEhWEEc8u+AVbLf3g2RHCFZ8wAwYh4IlrvZnotBipHNvit9bKUhFBwcsgFRb9kbYjJ
-         BnJXPPLintfvXtH0fALWJryEag8URjTDoF07hQXdQENMLy5S4m3jXLPzl304BX59q67c
-         vPLBLaqh90I/AWLmJbLZE/HfumrATzevPM/m9xgtMR/b0L8KsI+s7V2Dzs0QWMkZLFqd
-         fHUUeB41RqBVKbux70VUAvr+Dpce9DrC6kRhVV4yqZHaUdgqC4kCAhJO8zrWTA+6wg7p
-         zimPziYnmqYHEP3alrck2c94DYV5k81/rmzcVerroLhqjQXdCrHmmAqthkNtB8Z3T/fV
-         VZ+g==
-X-Gm-Message-State: AOAM533RnKJ+qWeUDLac2fJLd2knYtVI8eXG2wligJq9K1lQqo/mkzM9
-        dZHOE+goSMeNd3naZ96sCqV+tQ8TJ6g=
-X-Google-Smtp-Source: ABdhPJxpyLpi4skiHMAK0ayI3zl7zHHQ5Xt5N5DUoX1F1aZAsG4RL86djvldh6Ns7Zr1Ru4loTZMow==
-X-Received: by 2002:a9d:2ab:: with SMTP id 40mr6894622otl.208.1636471811989;
-        Tue, 09 Nov 2021 07:30:11 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f12sm3292856ote.75.2021.11.09.07.30.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Nov 2021 07:30:07 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v4 3/3] watchdog: meson_gxbb_wdt: remove stop_on_reboot
-To:     Art Nikpal <email2tema@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     wim@linux-watchdog.org, Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Artem Lapkin <art@khadas.com>, Nick Xie <nick@khadas.com>,
-        Gouwa Wang <gouwa@khadas.com>
-References: <20210730041355.2810397-1-art@khadas.com>
- <20210730041355.2810397-4-art@khadas.com>
- <CAKaHn9KxZDAHdKGZg3-Pi3jZO5E3knESHCFjgaV09u5QYe074A@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <24363743-48fb-c01f-eb5d-0cd486d099f7@roeck-us.net>
-Date:   Tue, 9 Nov 2021 07:30:04 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        bh=q5hdjzL4fx6MCYrF1luLAHmrqgFH4sajhljBKE+bpBg=;
+        b=UV/lu9zhEl4W04gNbWPubqKN1qMC+LjCzMteE3sxPA5ruA6dNAAN6ExZpO8m7xR1lB
+         f4iT5/V3Iz51ZdxckK0sWrwGt2gav6EPpkPBe3jG1dv/ZR4ttM0RucykuCwm2TZr0DI0
+         tqsGLpmgi29C8YFjBWzlQU3MnZ9SiB78NzXYnzaxx9QLFEybf85G/Aq2gXq2k6LQugvM
+         VqmmIvcPvWX0iEQSk8xJRO8xfomKNrIUEpzbV1iLqbXG4dJONgNM8aAaXkf6RU5ETsKp
+         ePB1mMzImyB8yYwZZAxleEr5XMBkKujeSaC1GUMZryE4DbyVRd5lsdiBg4frP4wIej3Z
+         FyjQ==
+X-Gm-Message-State: AOAM530N1s7IMrR3zMwc1h61dedBCPWPdwvZj6KbuUN5oZsHFmb/BWhI
+        DRNKB1ZWCTsBb8luHESiKAM=
+X-Google-Smtp-Source: ABdhPJz1UTTIA0xBXm0xDek+ozp9l2COtEg6hY65GnBGdHEijkLASf7Z9daKMsPvfSp9vInmptn37A==
+X-Received: by 2002:a63:b50d:: with SMTP id y13mr9418770pge.286.1636511146444;
+        Tue, 09 Nov 2021 18:25:46 -0800 (PST)
+Received: from localhost.localdomain (199.19.111.227.16clouds.com. [199.19.111.227])
+        by smtp.gmail.com with ESMTPSA id ns21sm3647887pjb.37.2021.11.09.18.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Nov 2021 18:25:46 -0800 (PST)
+From:   Artem Lapkin <email2tema@gmail.com>
+X-Google-Original-From: Artem Lapkin <art@khadas.com>
+To:     narmstrong@baylibre.com
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, khilman@baylibre.com,
+        jbrunet@baylibre.com, christianshewitt@gmail.com,
+        martin.blumenstingl@googlemail.com, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        art@khadas.com, nick@khadas.com, gouwa@khadas.com
+Subject: [PATCH] watchdog: meson_gxbb_wdt: remove stop_on_reboot
+Date:   Wed, 10 Nov 2021 10:25:18 +0800
+Message-Id: <20211110022518.1676834-1-art@khadas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAKaHn9KxZDAHdKGZg3-Pi3jZO5E3knESHCFjgaV09u5QYe074A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/8/21 11:59 PM, Art Nikpal wrote:
-> hi Guenter Roeck
-> why still not merged to upstream ?
-> 
+Remove watchdog_stop_on_reboot()
 
-I had asked you to provide an updated description, without the "personal
-opinion" part which does not belong into a commit log. The other two
-patches wait for Wim to send them upstream.
+The Meson platform still has some hardware drivers problems for some
+configurations which can freeze devices on shutdown/reboot.
 
-Guenter
+Remove watchdog_stop_on_reboot() to catch this situation and ensure that
+the reboot happens anyway. Users who still want to stop the watchdog on
+reboot can still do so using the watchdog.stop_on_reboot=1 module
+parameter.
 
+https://lore.kernel.org/linux-watchdog/20210729072308.1908904-1-art@khadas.com/T/#t
 
-> On Fri, Jul 30, 2021 at 12:14 PM Artem Lapkin <email2tema@gmail.com> wrote:
->>
->> Remove watchdog_stop_on_reboot()
->>
->> Meson platform still have some hardware drivers problems for some
->> configurations which can freeze device on shutdown/reboot stage and i
->> think better to have reboot warranty by default.
->>
->> I feel that it is important to keep the watchdog running during the
->> reboot sequence, in the event that an abnormal driver freezes the reboot
->> process.
->>
->> This is my personal opinion and I hope the driver authors will agree
->> with my proposal, or just ignore this commit if not.
->>
->> https://lore.kernel.org/linux-watchdog/20210729072308.1908904-1-art@khadas.com/T/#t
->>
->> Signed-off-by: Artem Lapkin <art@khadas.com>
->> ---
->>   drivers/watchdog/meson_gxbb_wdt.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
->> index 945f5e65db57..d3c9e2f6e63b 100644
->> --- a/drivers/watchdog/meson_gxbb_wdt.c
->> +++ b/drivers/watchdog/meson_gxbb_wdt.c
->> @@ -198,7 +198,6 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->>
->>          meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
->>
->> -       watchdog_stop_on_reboot(&data->wdt_dev);
->>          return devm_watchdog_register_device(dev, &data->wdt_dev);
->>   }
->>
->> --
->> 2.25.1
->>
+Signed-off-by: Artem Lapkin <art@khadas.com>
+---
+ drivers/watchdog/meson_gxbb_wdt.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
+index 5a9ca10fbcfa..3f86530c33b0 100644
+--- a/drivers/watchdog/meson_gxbb_wdt.c
++++ b/drivers/watchdog/meson_gxbb_wdt.c
+@@ -186,7 +186,6 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+ 
+ 	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
+ 
+-	watchdog_stop_on_reboot(&data->wdt_dev);
+ 	return devm_watchdog_register_device(dev, &data->wdt_dev);
+ }
+ 
+-- 
+2.25.1
 
