@@ -2,77 +2,177 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 448C744E0FB
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Nov 2021 05:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC9744E278
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Nov 2021 08:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbhKLEWe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 11 Nov 2021 23:22:34 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:37666 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbhKLEWe (ORCPT
+        id S233955AbhKLHpe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 12 Nov 2021 02:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233125AbhKLHpd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 11 Nov 2021 23:22:34 -0500
-Received: by mail-ot1-f47.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so11245155otg.4;
-        Thu, 11 Nov 2021 20:19:42 -0800 (PST)
+        Fri, 12 Nov 2021 02:45:33 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB14DC061766
+        for <linux-watchdog@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id f7-20020a1c1f07000000b0032ee11917ceso6161185wmf.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
+        b=L0G7vqzIu4OmVtWPcfcfA5NzLtPk2i0H7s2BzObNlHQTFEkm03sqk/2QHQ4kjpk9BH
+         XMXouE5QpmwrxFfo6B5ZLvuccwWWhT/w9Ko9Yi7L+7BfDDnicqyRLnT+TM8ck5H5bQEY
+         cyD6P6qfh9iWldNqTQR7o5UJ+sXkSMXyDzLNU6kkBq7ka/+ZuUqEk/qcSbQ3GxXC7kiU
+         cm9dyledHK9n0gr3crraQGaAfhd3vfTQwfXVu/kwmwojjE1dRCSgNEVgeiJJB70r7ke9
+         OYePQHHEPa/usZJXytv516/nCeAGVXFsmZBOHnIcNaOTOhsULeXowN7ikvsxKqOo/gxw
+         3O2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qxOn87ULPwV2ERYJX91GmCv249cvAtIa56rKI6JKMzk=;
-        b=IxVceATxm+PuainVHnaDeB6OZus2Xuofm3ooeNiE/FMTeP/SoE3dM8jG3mAQ5Z26jS
-         xZswqxfepRxz0qi//mmt7qfdtVpHPAGT3LUlGdrtGvUMU+X6ds3y9L5mBXek00ppHlk7
-         79UfzKm1lkuKM9K1SBCP9DtG/T0NV+Dfb6Qx3NGGQM4BnqiN6t72pC0HcDyoI8eSHqfC
-         SF6UPrUDmuuhZKmb9YHrgOj5LwphUcWYCoSBw+0E769s1F2JuEqx9bxFe056vJxJfyd0
-         bDJcHa3bVzcXtRDjR9r5zMGG528/3G+S5x82D17KZ7+BiDzoK/00e97i970x9+3KiEJS
-         ssYg==
-X-Gm-Message-State: AOAM530AE3qb3ly2o9SdSKo1vqKerFWi4RQLkuuNXbVSjPxNfDjPDnjU
-        RpyAQod6H8Z0BKuRuuOHbTGvmGav0A==
-X-Google-Smtp-Source: ABdhPJwcK2aLTenLOImwG5si5qgq36w7YMDwGzNedczDclnQAxDotdfG+bzfTYlQD4IWl7Ex88oHCw==
-X-Received: by 2002:a05:6830:22d8:: with SMTP id q24mr9908105otc.170.1636690782006;
-        Thu, 11 Nov 2021 20:19:42 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 62sm922824ooa.47.2021.11.11.20.19.40
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
+        b=7MVSouTV/IdyiGB1ZkiNvGbHJQ0PmARFvQ5pRnm2E7GtbOra/Fw00YpodgYsGJGP1N
+         4Hg0pmtuOLwIgeTTT3/kU1rWbBwtiI6ogItu1+HdKMXO5dTJRZFNgHswbZWM9b/BGL8a
+         Uupzjp7Vg/00YPIGnfcWuVdYQ61ZtQ7dwaJ0cXBYqh+myl/EZk5eAxDu6oqHwhq3ekRH
+         rvcWPMAMm2SAxN2stIgM+f5z8uB1wWaGhiABgaHKvcnlja0LEma3r9vfWcw5BIZR658J
+         MI6toixzYc/Jxt5bDta52IlDUGJlz2w9M+nC6f2jJw3xDW7oh6vVREr0xatB2wsNnust
+         jkLA==
+X-Gm-Message-State: AOAM532IoNPxPqr2i64j709pgo75hyvujbrMVOk3vr4gGp5mLUdO/rR4
+        XBleome/JxvS/uThAWuRU6YSKw==
+X-Google-Smtp-Source: ABdhPJyYtg+MHn61GMl0MRFqSO/sm1wnHgrm7yORmq7WT7ihtvN7d0mp317CBhRDaom5mAlXGDszmg==
+X-Received: by 2002:a05:600c:2107:: with SMTP id u7mr32377342wml.82.1636702961238;
+        Thu, 11 Nov 2021 23:42:41 -0800 (PST)
+Received: from google.com ([95.148.6.174])
+        by smtp.gmail.com with ESMTPSA id q8sm4978469wrx.71.2021.11.11.23.42.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 20:19:41 -0800 (PST)
-Received: (nullmailer pid 756536 invoked by uid 1000);
-        Fri, 12 Nov 2021 04:19:39 -0000
-Date:   Thu, 11 Nov 2021 22:19:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     linux-sunxi@lists.linux.dev,
+        Thu, 11 Nov 2021 23:42:40 -0800 (PST)
+Date:   Fri, 12 Nov 2021 07:42:37 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     patrice.chotard@foss.st.com, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        jonathan cameron <jic23@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        Matt Mackall <mpm@selenic.com>, vinod koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        baolin wang <baolin.wang7@gmail.com>,
+        linux-spi@vger.kernel.org, david airlie <airlied@linux.ie>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        netdev@vger.kernel.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        ohad ben-cohen <ohad@wizery.com>, linux-gpio@vger.kernel.org,
+        Jose Abreu <joabreu@synopsys.com>,
+        Le Ray <erwan.leray@foss.st.com>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        michael turquette <mturquette@baylibre.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        linux-serial@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        "david s . miller" <davem@davemloft.net>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        linux-i2c@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        thierry reding <thierry.reding@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        philippe cornu <philippe.cornu@foss.st.com>,
+        linux-rtc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        alsa-devel@alsa-project.org, Zhang Rui <rui.zhang@intel.com>,
+        linux-crypto@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-iio@vger.kernel.org, pascal Paillet <p.paillet@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        stephen boyd <sboyd@kernel.org>,
+        dillon min <dillon.minfei@gmail.com>,
+        devicetree@vger.kernel.org,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        linux-kernel@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Chen-Yu Tsai <wens@csie.org>, ~okias/devicetree@lists.sr.ht,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: watchdog: sunxi: fix error in schema
-Message-ID: <YY3rWykk1lIjPVe8@robh.at.kernel.org>
-References: <20211029142443.68779-1-david@ixit.cz>
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        linux-phy@lists.infradead.org,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        sam ravnborg <sam@ravnborg.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
+        daniel vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        lars-peter clausen <lars@metafoo.de>
+Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for
+ st,stm32-timers
+Message-ID: <YY4a7ZxzhNq6Or+t@google.com>
+References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
+ <20211110150144.18272-3-patrice.chotard@foss.st.com>
+ <YYwjPAoCtuM6iycz@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211029142443.68779-1-david@ixit.cz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YYwjPAoCtuM6iycz@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 29 Oct 2021 16:24:42 +0200, David Heidelberg wrote:
-> "maxItems" is not needed with an "items" list
-> 
-> Fixes:
-> $ DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml make dtbs_check
-> Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml: properties:clocks: {'required': ['maxItems']} is not allowed for {'minItems': 1, 'maxItems': 2, 'items': [{'description': 'High-frequency oscillator input, divided internally'}, {'description': 'Low-frequency oscillator input, only found on some variants'}]}
-> 	hint: "maxItems" is not needed with an "items" list
-> 	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-> ...
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 --
->  1 file changed, 2 deletions(-)
-> 
+On Wed, 10 Nov 2021, Rob Herring wrote:
 
-Applied, thanks!
+> On Wed, 10 Nov 2021 16:01:41 +0100, patrice.chotard@foss.st.com wrote:
+> > From: Patrice Chotard <patrice.chotard@foss.st.com>
+> > 
+> > Benjamin has left the company, remove his name from maintainers.
+> > 
+> > Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> > ---
+> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> 
+> Lee indicated he was going to pick this one up, so:
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Since you already merged the treewide patch, you may as well take
+this too.  We'll work through any conflicts that may occur as a
+result.
+
+Acked-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
