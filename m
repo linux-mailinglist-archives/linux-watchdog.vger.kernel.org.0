@@ -2,83 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF6644DE63
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Nov 2021 00:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448C744E0FB
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Nov 2021 05:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234194AbhKKXTA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 11 Nov 2021 18:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbhKKXTA (ORCPT
+        id S230281AbhKLEWe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 11 Nov 2021 23:22:34 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:37666 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229698AbhKLEWe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 11 Nov 2021 18:19:00 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E46C061766;
-        Thu, 11 Nov 2021 15:16:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=OMbw+oaZmEcVelygW8bdZY2jU8q1S+0riVAueUdEN6s=; b=U+jxZ2+m3hBxpo5Zt3SVuGqQhZ
-        VmlK2K24WrVlTWFA9hP2OxGmQYWpdVAzZD9FP7sza58Rv8I199fwe6B8RGjNqUFjKBM505c0Hj/3P
-        LzyvU+36DFMloDq4JgBBJrktx/yFNu6SVoyfxnKhdyvELcHznAorTdO9MqW5OBmkFc3geBdvRcq0W
-        /Aa6FdcP4HmfKU1sRMC1vy7MKNITCuKirtVPK7K8W6YnYrhN8uk7ZS1FMzqLNL9i5r7KgfM1+Xttn
-        UfB3oZUm0aK5RYdFye5XwTWAdh8hy9iL2Tp3aKQaaIm9oYPfW1d1zQh3loyYm0dgSdE4cqlBqDvc8
-        d2R3ZJvg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mlJIe-008xFX-7F; Thu, 11 Nov 2021 23:16:08 +0000
-Subject: Re: [PATCH v3 1/8] rtc: max77686: convert comments to kernel-doc
- format
-To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thu, 11 Nov 2021 23:22:34 -0500
+Received: by mail-ot1-f47.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so11245155otg.4;
+        Thu, 11 Nov 2021 20:19:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qxOn87ULPwV2ERYJX91GmCv249cvAtIa56rKI6JKMzk=;
+        b=IxVceATxm+PuainVHnaDeB6OZus2Xuofm3ooeNiE/FMTeP/SoE3dM8jG3mAQ5Z26jS
+         xZswqxfepRxz0qi//mmt7qfdtVpHPAGT3LUlGdrtGvUMU+X6ds3y9L5mBXek00ppHlk7
+         79UfzKm1lkuKM9K1SBCP9DtG/T0NV+Dfb6Qx3NGGQM4BnqiN6t72pC0HcDyoI8eSHqfC
+         SF6UPrUDmuuhZKmb9YHrgOj5LwphUcWYCoSBw+0E769s1F2JuEqx9bxFe056vJxJfyd0
+         bDJcHa3bVzcXtRDjR9r5zMGG528/3G+S5x82D17KZ7+BiDzoK/00e97i970x9+3KiEJS
+         ssYg==
+X-Gm-Message-State: AOAM530AE3qb3ly2o9SdSKo1vqKerFWi4RQLkuuNXbVSjPxNfDjPDnjU
+        RpyAQod6H8Z0BKuRuuOHbTGvmGav0A==
+X-Google-Smtp-Source: ABdhPJwcK2aLTenLOImwG5si5qgq36w7YMDwGzNedczDclnQAxDotdfG+bzfTYlQD4IWl7Ex88oHCw==
+X-Received: by 2002:a05:6830:22d8:: with SMTP id q24mr9908105otc.170.1636690782006;
+        Thu, 11 Nov 2021 20:19:42 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 62sm922824ooa.47.2021.11.11.20.19.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Nov 2021 20:19:41 -0800 (PST)
+Received: (nullmailer pid 756536 invoked by uid 1000);
+        Fri, 12 Nov 2021 04:19:39 -0000
+Date:   Thu, 11 Nov 2021 22:19:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     linux-sunxi@lists.linux.dev,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-References: <20211111225852.3128201-1-luca@lucaceresoli.net>
- <20211111225852.3128201-2-luca@lucaceresoli.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <79d99962-0243-d6b8-936d-ffd50270fbbe@infradead.org>
-Date:   Thu, 11 Nov 2021 15:16:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Chen-Yu Tsai <wens@csie.org>, ~okias/devicetree@lists.sr.ht,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: watchdog: sunxi: fix error in schema
+Message-ID: <YY3rWykk1lIjPVe8@robh.at.kernel.org>
+References: <20211029142443.68779-1-david@ixit.cz>
 MIME-Version: 1.0
-In-Reply-To: <20211111225852.3128201-2-luca@lucaceresoli.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211029142443.68779-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/11/21 2:58 PM, Luca Ceresoli wrote:
-> Convert the comments documenting this struct to kernel-doc format for
-> standardization and readability.
+On Fri, 29 Oct 2021 16:24:42 +0200, David Heidelberg wrote:
+> "maxItems" is not needed with an "items" list
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Fixes:
+> $ DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml make dtbs_check
+> Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml: properties:clocks: {'required': ['maxItems']} is not allowed for {'minItems': 1, 'maxItems': 2, 'items': [{'description': 'High-frequency oscillator input, divided internally'}, {'description': 'Low-frequency oscillator input, only found on some variants'}]}
+> 	hint: "maxItems" is not needed with an "items" list
+> 	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+> ...
 > 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
-> 
-> Changes in v3: none
-> 
-> Changes in v2: none
-> ---
->   drivers/rtc/rtc-max77686.c | 21 ++++++++++++---------
->   1 file changed, 12 insertions(+), 9 deletions(-)
+>  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 --
+>  1 file changed, 2 deletions(-)
 > 
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
--- 
-~Randy
+Applied, thanks!
