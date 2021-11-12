@@ -2,168 +2,157 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE16E44ED38
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Nov 2021 20:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B57244ED61
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Nov 2021 20:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235580AbhKLT0f (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 12 Nov 2021 14:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbhKLT0e (ORCPT
+        id S235142AbhKLTlr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 12 Nov 2021 14:41:47 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:46910 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230101AbhKLTlq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 12 Nov 2021 14:26:34 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A32C061767;
-        Fri, 12 Nov 2021 11:23:43 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id q124so19751933oig.3;
-        Fri, 12 Nov 2021 11:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WrJ2FS7TORtddR51pqZ41XSBhGPCEKrQUsKpP2xmt9E=;
-        b=qLidZt7X5l4IKHTiM0YIZtltiXZbayCcQmqaU0BMui+Yq5iW0SeIcSsK2rLlFMtduV
-         smucjb+yldFORB/dcUTNs4RBgNkFQQRMok4XcTucMd+y3LBX9U5ZQe77pt2WiLknBy4l
-         LBFIZAoINpBbhk5o33f93ImvfDMZiILcUrHY9S9iZZeiHmfXInukNelahQh3z8EB7bNN
-         DqYpefPKU3FizSpxW+gnzFmVfaDF6Q4NK5YII/doT8LhvsYT0evszfEG6hzANiJeXmfg
-         TYqupOztxgpwpCq/lcKvhFR1V9cnGHfHeIkx3jVQswB1W+VK43vrFTVP0IVnfEZrg1OH
-         wMeg==
+        Fri, 12 Nov 2021 14:41:46 -0500
+Received: by mail-oi1-f176.google.com with SMTP id s139so19714934oie.13;
+        Fri, 12 Nov 2021 11:38:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WrJ2FS7TORtddR51pqZ41XSBhGPCEKrQUsKpP2xmt9E=;
-        b=vKWC9/YciZIhJJJiEi4OnrtOnrWfGbbZD7Y3fO/8Ym7hb4pKduK77kvYiSFihQa8/c
-         qMnNVUgaRYYYCWCGgjiZ+EMC3A7zM4MWhkKuXvOFQBRxOUhYGrHCmR9A7KhTuNNDspd3
-         547a4D7V+Js++anOhvF+thQedeHc7SO2HzM+f66WQksQ2vs9NfeVG444/BZGke0Xn8A9
-         dPSo6saqGfHaSVc7mqEvg4WnIS1CZ97nJZCSPL2f7m8O4I/U6Hl+YHQSuzvUhHIFvRr1
-         p000y1jJf0F7m5obH2ywKXZu/CF8hnugVpTW30i2ApzwMNCiAsrugw/i9nQBnPsqK4Hy
-         yD+Q==
-X-Gm-Message-State: AOAM530O8MZFMjIy7tni01vOyPda3vrIPfDtoJXKwumNhocoklPBqqi+
-        rvcNlAued9rGZGK88sl3yuA=
-X-Google-Smtp-Source: ABdhPJwzWyksEBlMAXYzd4nQG2O5luIKtybhOlHS3E20s2wTaegpZmMaDH3pDoTMK0vDufUlB/crKw==
-X-Received: by 2002:a05:6808:2287:: with SMTP id bo7mr20199336oib.177.1636745023073;
-        Fri, 12 Nov 2021 11:23:43 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bd6sm1217414oib.53.2021.11.12.11.23.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Nov 2021 11:23:42 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 7/8] watchdog: max77714: add driver for the watchdog in
- the MAX77714 PMIC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qAZHfyWnmCfvgr8D21qxD2guTWMUKbQ6N/3+eAIuaOs=;
+        b=728Yq4T9xyYY5jlbzwoLctix/Nw5lPn+Lm4qFzMGHMaXVnGks0q3btWI3j9iOCCk/8
+         GVrTh40T3WwQpQBtaxZQBTm2568loEVX2gFswf7wbPKyybYJmJM/tL5BQXlnZxXpP8MH
+         Us/YPysX3cX3IAneGDIjpHxtlKcyJ56re1sCGrQGdQVlLwfprvfFvXy7o/Q//xyTurC6
+         pQzl8k8b56HZbx22pKhg4nHAor/tI8HYXr9YqBXvFOMou8TrmCf5Y18mYlI8XZXczROr
+         7EJX1QDJmXb96QwFjnejFaiANz06pSuh+wn5GTVI6OgX0nBa/UvvoHVR8ygiAq3nQbGF
+         Oo/w==
+X-Gm-Message-State: AOAM533pNXl90dN2bU+pjjs0nu4m9w7bIirta0h32SzwnnmdjBtNICgy
+        Qe0j0wyLsR1wAHQKDwAUVA==
+X-Google-Smtp-Source: ABdhPJwaYFhUy+7cFhoLxnliRVH2YXrCxGg4o8dXc1XtfE0fFoDJbIfDC41E6PUkLRkqvnn2hdql/A==
+X-Received: by 2002:a05:6808:120e:: with SMTP id a14mr15682125oil.63.1636745935365;
+        Fri, 12 Nov 2021 11:38:55 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e28sm1559665oiy.10.2021.11.12.11.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Nov 2021 11:38:54 -0800 (PST)
+Received: (nullmailer pid 3239457 invoked by uid 1000);
+        Fri, 12 Nov 2021 19:38:53 -0000
+Date:   Fri, 12 Nov 2021 13:38:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
         linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211111225852.3128201-1-luca@lucaceresoli.net>
- <20211111225852.3128201-8-luca@lucaceresoli.net>
- <0f278280-27d0-4d43-8065-76ec1f7c19b5@roeck-us.net>
- <7584d85a-5050-2b9d-1648-7d3bed2d10ea@lucaceresoli.net>
- <2af4073a-a5d9-e878-d622-b757b082359b@canonical.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f1cbbc17-7a06-2d57-bf3d-c8133dcd30f7@roeck-us.net>
-Date:   Fri, 12 Nov 2021 11:23:39 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V2 2/2] dt-bindings: mfd: add Broadcom's Timer-Watchdog
+ block
+Message-ID: <YY7CzWtWATAZH5As@robh.at.kernel.org>
+References: <20211102160615.14672-1-zajec5@gmail.com>
+ <20211102160615.14672-2-zajec5@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <2af4073a-a5d9-e878-d622-b757b082359b@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211102160615.14672-2-zajec5@gmail.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/12/21 8:07 AM, Krzysztof Kozlowski wrote:
-> On 12/11/2021 17:02, Luca Ceresoli wrote:
->> Hi Guenter,
->>
->> On 12/11/21 15:57, Guenter Roeck wrote:
->>> On 11/11/21 2:58 PM, Luca Ceresoli wrote:
->>>> Add a simple driver to support the watchdog embedded in the Maxim
->>>> MAX77714
->>>> PMIC.
->>>>
->>>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>>>
->>>
->>> I just realized that this is effectively a rewrite of
->>> drivers/watchdog/max77620_wdt.c.
->>> The only difference I can see is is the register offsets (0x91 and 0x92
->>> vs. 1 and 2) and some implementation details. Please add support for this
->>> watchdog to the other driver or provide a _really_ good reason why that
->>> is not possible.
->>
->> I initially started developing MAX77714 watchdog support as an addition
->> to max77620_wdt.c as the procedures look identical at least for the
->> basic features.
->>
->> But the register content seems completely different. Here are the notes
->> I took at that time:
->>
->> -------------------------8<-------------------------
->>
->> MAX77620 has reg ONOFFCNFG1  at 0x41, ONOFFCNFG2  at 0x42.
->> MAX77714 has reg CNFG1_ONOFF at 0x93, CNFG2_ONOFF at 0x94.
->> OK, we can handle this with a register indirection table, indexed by
->> chip model.
->>
->> MAX77620 has MAX77620_REG_FPS_CFG0 register.
->> On MAX77714 I was unable to find any such register (I haven't looked at
->> FPS in detail though).
->> OK, we can handle this with some if()s or entirely disable PM on the
->> 77714 until anybody cares.
->>
->> MAX77620 ONOFFCNFG1  has SFT_RST in bit 7.
->> MAX77714 CNFG1_ONOFF has SFT_RST is bit 6.
->> Uhm, should we have a _bit_ indirection table in addition to the
->> _register_ indirection table?
->>
->> MAX77620 ONOFFCNFG2  bit 5 is SLP_LPM_MSK, involved in FPS.
->> MAX77620 ONOFFCNFG2  bit 6 is WD_RTS_WK, configures the watchdog timer.
->> MAX77714 CNFG2_ONOFF bit 5 is WD_RTS_WK, configures the watchdog timer.
->> On MAX77714 I haven't found SLP_LPM_MSK.
->>
->> MAX77620 has 6 CID registers with "ES version" in CID5.
->> MAX77714 has 5 CID registers with "DEVICE id" in CID3.
->> CID registers would be useful to get the chip model directly from the
->> chip, if only they had the same structure.
->>
->> Almost all of the registers I have been looking into have similar
->> differences.
->>
->> -------------------------8<-------------------------
->>
->> When I started adding indirection tables the driver started growing
->> bigger and uglier, and that little simple driver started being big and
->> complex. So I opted to add a new driver.
->>
+On Tue, Nov 02, 2021 at 05:06:15PM +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> The register offset differences are trivial and we do it in several
-> drivers. Also in rtc-max77686 used by you here.
-> Lack of features as well - just have a variant/driver data which defines
-> certain features (true/false) or quirk bits (see s3c2410_wdt).
+> It's a block implementing few time related functions depending on a
+> (SoC specific) variant. At this point there is ready binding for a
+> watchdog only. Work on remaining subblocks (e.g. "reg" based reboot) is
+> in progress.
 > 
-> The second driver - s3c2410_wdt - also customizes the bits.
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> V2: Update $id, description, compatible, example & commit message
+> ---
+>  .../devicetree/bindings/mfd/brcm,twd.yaml     | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/brcm,twd.yaml
 > 
-> Therefore if the generic device operating configuration is similar (same
-> generic control flow) and differences are in bits and offsets, then it
-> should be one driver.
-> 
+> diff --git a/Documentation/devicetree/bindings/mfd/brcm,twd.yaml b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+> new file mode 100644
+> index 000000000000..ed167055be06
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/brcm,twd.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom's Timer-Watchdog (aka TWD)
+> +
+> +maintainers:
+> +  - Rafał Miłecki <rafal@milecki.pl>
+> +
+> +description: |
+> +  Broadcom has a Timer-Watchdog block used in multiple SoCs (e.g., BCM4908,
+> +  BCM63xx, BCM7038). There are few variants available (they differ slightly in
+> +  registers layout). This block consists of: timers, watchdog and optionally a
+> +  software reset handler.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +        - brcm,bcm4908-twd
+> +        - brcm,bcm7038-twd
+> +      - const: brcm,twd
 
-Exactly.
+I don't think you need this given you don't expect to have a driver for 
+this other than syscon driver.
 
-Thanks,
-Guenter
-
+> +      - const: simple-mfd
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ranges: true
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +patternProperties:
+> +  '^watchdog@[a-f0-9]+$':
+> +    $ref: /schemas/watchdog/brcm,bcm7038-wdt.yaml
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    timer-mfd@ff800400 {
+> +        compatible = "brcm,bcm4908-twd", "brcm,twd", "simple-mfd", "syscon";
+> +        reg = <0xff800400 0x4c>;
+> +        ranges = <0x00000000 0xff800400 0x4c>;
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        watchdog@28 {
+> +            compatible = "brcm,bcm7038-wdt";
+> +            reg = <0x28 0x8>;
+> +        };
+> +    };
+> -- 
+> 2.31.1
+> 
+> 
