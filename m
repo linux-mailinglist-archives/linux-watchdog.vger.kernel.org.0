@@ -2,108 +2,165 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E6444F2B6
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Nov 2021 12:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4969A44F2DD
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Nov 2021 12:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233765AbhKMLWu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 13 Nov 2021 06:22:50 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:36585 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231735AbhKMLWt (ORCPT
+        id S235634AbhKMLtz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 13 Nov 2021 06:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232651AbhKMLtx (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 13 Nov 2021 06:22:49 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1C2D7580AD8;
-        Sat, 13 Nov 2021 06:19:57 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute3.internal (MEProxy); Sat, 13 Nov 2021 06:19:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm2; bh=cGhqfy13haD7LzgLYmXe59yMHYPr
-        xi1YR0jX4iy4R5I=; b=cDwBkIuUEm5HCYb0VkTZXHCrGjdG4XHz6ARTtu9y6RDn
-        odKxTSrlX+uxjMdWKvFY7iNJ62j1A594J7RGfmDCeIdNIvPrsGv5v7vbIF2Py2Ob
-        3DUSI0BLwmSQMS6q3MZ7hfOqJWMNlTsnwubtiKsW6+YTXefQkoarYQoyC631jB5m
-        vNdPLYtgHPmoc/k9wda/mmd1K6feEgfVCS76kgGkJGc8qMqaVWjzOmdPdK6EhHw1
-        urJqlvOLDLS9aQPORkFkd6rEEBUTJorOuDHiqOB9LT5AJSitDpc512/Ret5aq+dx
-        1W0rBZ3C0ehHnlb/UFaK/cOy50yeGNGdY2Fgai3zrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=cGhqfy
-        13haD7LzgLYmXe59yMHYPrxi1YR0jX4iy4R5I=; b=YPlWDAc2KT1EKlvZpiKh/E
-        IvyZOoLWLOaO0XJ1TcwbHtTO1MOU+Npx3uZOnRw/WTIUjw9P48WeSweyAxolAw7r
-        5u44DZ/plcV+3mpZGlU6WktmSSL3ltE6ZAShlTkbHoD5g5AJgDjvvmwq9fyC8bFA
-        BmVhXmFmH4RV4lnNKIG9rcOsSfUAIqLGhM15cxVO/OpIGPQ6BgVd8q11Gv1TBSuR
-        kk3UJXvzXI/VaFVsIsLpC1nsS6TVdMsQ4gOXjFYrYAt3uXfPjp7RrPu13WltgqGU
-        YIINZe0rOTHWJiSv78pIuBkglMaFJzYnJE8sueeDRhLPi3ABrh84BqXMj+mCxJIQ
-        ==
-X-ME-Sender: <xms:XJ-PYTVIC-bnLLwWQzdADdmcMeGnWwMkWmFrHdKwTraLc4uIS7P5-A>
-    <xme:XJ-PYbl4f-RRDIpIAbdFOfaJValX5vptSazhZbO2jKWJpgMSXMHGjO2GZE6SvxoIi
-    OSYVBQdA1uLgOVidns>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrvdehgddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhvvghn
-    ucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
-    htvghrnhepgfeigeeiffeuhfettdejgfetjeetfeelfefgfefgvddvtdfghfffudehvdef
-    keffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
-    hvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:XJ-PYfb0qICOBlSdNRDPvQcJmfIQiaduCPzrc6xS1KnWVBw8uLRpkw>
-    <xmx:XJ-PYeW8sP_rBYGDNDGT9-z7Ev8upH-aiIiO7ldEYQpDxZoEeA0niw>
-    <xmx:XJ-PYdnvVZ3ShlIH_pU0cN5izE-PdCgAkgFxpRlv2m-clyPevhL0BA>
-    <xmx:XZ-PYf4G93PsR1J8lvUvxWdB8t43qQsFbr9fgqhfi2pmM-CGtTtoxA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 65F5F27400FB; Sat, 13 Nov 2021 06:19:56 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1371-g2296cc3491-fm-20211109.003-g2296cc34
-Mime-Version: 1.0
-Message-Id: <0fc06d43-fcca-4cc5-a0e2-9a066bfb7702@www.fastmail.com>
-In-Reply-To: <20211113111410.GB10073@jannau.net>
-References: <20211113094732.73889-1-sven@svenpeter.dev>
- <20211113094732.73889-2-sven@svenpeter.dev>
- <20211113111410.GB10073@jannau.net>
-Date:   Sat, 13 Nov 2021 12:19:35 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Janne Grunau" <j@jannau.net>
-Cc:     "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sat, 13 Nov 2021 06:49:53 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3305EC061766;
+        Sat, 13 Nov 2021 03:47:01 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id z8so23837144ljz.9;
+        Sat, 13 Nov 2021 03:47:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7KkUIV1LwFCMjUl/KiUeHScGU6JLrELrF5Hve79Ozkg=;
+        b=Tiq/Vq0YRfm7QAGYOD6YtRdJihK9+CoePNBVXFNNVxfaUpqEnlEG4OspmsyVUoVy/o
+         vTroDEKfVz9f+pZ2V8CKrQrI3o/qV9fg2tZNAuDf3/t9xz7xDcJYq0hFBA0VJFCh2Fm4
+         Gbh/Tx/ya+rWtbO+OwBBOMTtfKeVJxq0FTtoRnhTtTuJooexTFfafVmp2/co3tIFrW74
+         YjBDimlBPxrdjQPwhiTSvGVsBXEUx7QDCFnKXbCEQBvHD1fpH/TLyhsw0D/bCbQ5Qeo+
+         xaYYzpumSwwIWhtJ4mDAh4AKkphCyIQHyVg4IeXZB+dmn+9pU1zTJTsh2ilGUUOvc6IY
+         mA0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7KkUIV1LwFCMjUl/KiUeHScGU6JLrELrF5Hve79Ozkg=;
+        b=GWzhtlCSCXxz45UI0736D3Q1ScDWVNEH1rAi3fw3tc4LD5mqdnpyhi82qSUjIZtL6f
+         b9tVm5886fG8oLAtw/kcdLTKfxMproN20AWOX/kSMuf9rEbT2nsEcNKOZRT4YkqF3C+s
+         aZPnjNK+9wpqQYk3cVHFkeDXBGu46zOWxSbFxZ1xNBM4uIGoEWs+CLeFZmoMhQnMHg+S
+         TP/fwv4Xiz4uyd6QKja1B1ZDiIcRUNBDrcVyM8C0MIriS3AkePwvICxzFICLwsVHkvzX
+         rvdUZo84ZP2SRKO5/jw8oN9nX1zNNv/zCRHRUs/TX33jmXxpbgWseWCpafBnYrPGnitg
+         RyDw==
+X-Gm-Message-State: AOAM530PNG/x2Dn0lFQf+zsFaKbCKj8V3uiL8VLTG4piSvmRvp5v9RNf
+        HpQZunkzgWGAup5hzEvBcQM=
+X-Google-Smtp-Source: ABdhPJxDvsFT7jq2E3FeQ+QBy8tzZ3rJlzya8Tm+RUV+xahNrNmGKPkDEZaWcBeAiVVGeCMKMpNj5w==
+X-Received: by 2002:a2e:890d:: with SMTP id d13mr22127238lji.396.1636804019397;
+        Sat, 13 Nov 2021 03:46:59 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id m8sm941676lfg.140.2021.11.13.03.46.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Nov 2021 03:46:58 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
         linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] watchdog: Add Apple SoC watchdog driver
-Content-Type: text/plain
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH V4 1/2] dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
+Date:   Sat, 13 Nov 2021 12:46:44 +0100
+Message-Id: <20211113114645.27360-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Janne,
+From: Rafał Miłecki <rafal@milecki.pl>
 
-On Sat, Nov 13, 2021, at 12:14, Janne Grunau wrote:
-> On 2021-11-13 10:47:32 +0100, Sven Peter wrote:
->> Add support for the watchdog timer found in Apple SoCs. This driver is
->> also required to reboot these machines.
->
-> Tested on a M1 Max with
-> compatibe = "apple,t6000-wdt", "apple,wdt";
-> MacOS 12 on the same machine does not use the watchdog for reset. MacOS 
-> log output suggests that it uses a "pgmr" call for reset.
->
-> Feel free to add
-> Tested-by: Janne Grunau <j@jannau.net>
+This helps validating DTS files.
 
-Awesome, thanks for testing this!
-I suspect that they added an additional reset path for the Pro/Max variants.
-On my M1 macOS seems to only use this watchdog to reset the machine.
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+V2: Use valid $id
+V3: Add "clocks" maxItems and include Rob's Reviewed-by
+---
+ .../bindings/watchdog/brcm,bcm7038-wdt.txt    | 19 ---------
+ .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 41 +++++++++++++++++++
+ 2 files changed, 41 insertions(+), 19 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
 
-And if I understand the linux reset infrastructure correctly it's still fine
-to have this as a "fallback" reset notifier even on the Pro/Max and add support
-for the proper "pmgr" reset notifier eventually with a higher priority. 
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+deleted file mode 100644
+index 84122270be8f..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
++++ /dev/null
+@@ -1,19 +0,0 @@
+-BCM7038 Watchdog timer
+-
+-Required properties:
+-
+-- compatible : should be "brcm,bcm7038-wdt"
+-- reg : Specifies base physical address and size of the registers.
+-
+-Optional properties:
+-
+-- clocks: The clock running the watchdog. If no clock is found the
+-	  driver will default to 27000000 Hz.
+-
+-Example:
+-
+-watchdog@f040a7e8 {
+-	compatible = "brcm,bcm7038-wdt";
+-	clocks = <&upg_fixed>;
+-	reg = <0xf040a7e8 0x16>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+new file mode 100644
+index 000000000000..ed6210666ead
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/brcm,bcm7038-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: BCM7038 watchdog timer
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++  - Justin Chen <justinpopo6@gmail.com>
++  - Rafał Miłecki <rafal@milecki.pl>
++
++properties:
++  compatible:
++    const: brcm,bcm7038-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++    description: >
++      The clock running the watchdog. If no clock is found the driver will
++      default to 27000000 Hz.
++
++unevaluatedProperties: false
++
++required:
++  - reg
++
++examples:
++  - |
++    watchdog@f040a7e8 {
++      compatible = "brcm,bcm7038-wdt";
++      reg = <0xf040a7e8 0x16>;
++      clocks = <&upg_fixed>;
++    };
+-- 
+2.31.1
 
-
-Best,
-
-Sven
