@@ -2,131 +2,93 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C443944F569
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Nov 2021 22:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCE244F7A3
+	for <lists+linux-watchdog@lfdr.de>; Sun, 14 Nov 2021 12:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236006AbhKMVRS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 13 Nov 2021 16:17:18 -0500
-Received: from sibelius.xs4all.nl ([83.163.83.176]:50106 "EHLO
-        sibelius.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbhKMVRR (ORCPT
+        id S233170AbhKNLlF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 14 Nov 2021 06:41:05 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:59709 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230267AbhKNLlA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 13 Nov 2021 16:17:17 -0500
-X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Nov 2021 16:17:16 EST
-Received: from localhost (bloch.sibelius.xs4all.nl [local])
-        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id 56ef4aee;
-        Sat, 13 Nov 2021 22:07:42 +0100 (CET)
-Date:   Sat, 13 Nov 2021 22:07:42 +0100 (CET)
-From:   Mark Kettenis <mark.kettenis@xs4all.nl>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org, sven@svenpeter.dev,
-        wim@linux-watchdog.org, linux@roeck-us.net, marcan@marcan.st,
-        alyssa@rosenzweig.io, linux-kernel@vger.kernel.org,
+        Sun, 14 Nov 2021 06:41:00 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 17D0A3200A1E;
+        Sun, 14 Nov 2021 06:38:04 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Sun, 14 Nov 2021 06:38:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm2; bh=kVt32bRdunDSKqz99dZa5ReeKAhQ
+        4s8YMHBQ8vywbDo=; b=fBVrOulOiJoFHb37TPRaCs1N6eOE70DoTFBd3yN/eiR0
+        ylw4nnaDlba/dKa7zBXs4ohHl7UP8OEfjxWiiCwiexBXdHmMZIHlngnWy80CThun
+        pMrGtEcHzkNqPBKabL70kLXbWmmqv5vndPQA5Ygqv0AT4AK2zqx3QkiyCuYSxVHg
+        h5fjTvKldf664cTeO9gnH8paVzOhnKWzmWeNNwqwfos1oMS1aj61/f7KHWe1F5iP
+        XWssULDdvERD6XLYmKNhB5vg4mjqcWxa2FoF/3Aq4Dmh4BFAm8HbIiGYB7Ud/f+a
+        cpaa/RLUy7pAiYM9eB6AiK/BaAp0/rwVGoiCiVyckQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=kVt32b
+        RdunDSKqz99dZa5ReeKAhQ4s8YMHBQ8vywbDo=; b=dqGPyo+y47tSBq1K4MI9zw
+        1LhJQAXWHbkABKDavhowrb4rhKAPI3suSiQOrcuGjch+yKagPE6WorAAkXdgUKYV
+        dAub7yavzDWXkz5jsB7i89NMoyJrd7/buPaUboNKlMJiyHrQrC5TE0zXegWMP69P
+        v5E7o6b6ubbzr8DDHPq93uwMe3Ou/a0gM9EVo0rQh8xHHsFr7KMTfTW/Ziv7WS0y
+        LfJtRtZyvqZun6zPEUJ7APOGdkoNb2hiNCZNUVbtgXFD4dUYJjG3FRNj7pdPYOc9
+        6Ti4AdoKYe65zCK3AWU1XFMZxhfR5M/wKq1ETYv4DFGXH99S659CGCbJd5iYlbrg
+        ==
+X-ME-Sender: <xms:GvWQYb2mVNl-VY1R32yYkmsr-SqSc5gmyBpuNiOQ1-At41NLp1F9kg>
+    <xme:GvWQYaHoCntibUmcptsZf0kYcNuBWbCRI9kRDfYjdOUPhPRO0loq2gfxmRZcu_lyu
+    7hAFC9PJmobg9wga2o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrvdejgddvlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhvvghn
+    ucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
+    htvghrnhepgfeigeeiffeuhfettdejgfetjeetfeelfefgfefgvddvtdfghfffudehvdef
+    keffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    hvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:GvWQYb4KcjpfOE5hWg94gLD1HPxLXdGOu08FQow4y-G6jW8EnRXnnQ>
+    <xmx:GvWQYQ2zQEg22caSzrafeEJH326hCrfwFmjLus-MGks31oNBauaE2Q>
+    <xmx:GvWQYeGuqXbC1ZPeZxR9H1rG7A6TpimlTVStYrqHB16Yfvrpfznrvg>
+    <xmx:G_WQYR3d8w4eFA6xs5hPPdcm3yy53zAe0qxxErvC1uIE0dJVeYzQ4g>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6E365274013E; Sun, 14 Nov 2021 06:38:02 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1371-g2296cc3491-fm-20211109.003-g2296cc34
+Mime-Version: 1.0
+Message-Id: <95dea968-f452-4ba0-9b66-c9bc4269a52c@www.fastmail.com>
+In-Reply-To: <YY/YnlCxLqdw/zAo@sunset>
+References: <20211113094732.73889-1-sven@svenpeter.dev>
+ <20211113094732.73889-2-sven@svenpeter.dev> <YY/YnlCxLqdw/zAo@sunset>
+Date:   Sun, 14 Nov 2021 12:37:42 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
+Cc:     "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20211113094732.73889-1-sven@svenpeter.dev> (message from Sven
-        Peter on Sat, 13 Nov 2021 10:47:31 +0100)
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Apple Watchdog
-References: <20211113094732.73889-1-sven@svenpeter.dev>
-Message-ID: <d3cad37524f7debf@bloch.sibelius.xs4all.nl>
+Subject: Re: [PATCH 2/2] watchdog: Add Apple SoC watchdog driver
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-> From: Sven Peter <sven@svenpeter.dev>
-> Date: Sat, 13 Nov 2021 10:47:31 +0100
-> 
-> Apple SoCs come with a simple embedded watchdog. This watchdog is also
-> required in order to reset the SoC.
-> 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
->  .../bindings/watchdog/apple,wdt.yaml          | 52 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-> new file mode 100644
-> index 000000000000..e58c56a6fdf6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/apple,wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Apple SoC Watchdog
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-
-I believew this should be:
-
-  - $ref: /schemas/watchdog/watchdog.yaml#
-
-with that fixed:
-
-Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
 
 
-> +
-> +maintainers:
-> +  - Sven Peter <sven@svenpeter.dev>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - apple,t8103-wdt
-> +          - apple,t6000-wdt
-> +      - const: apple,wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    wdt: watchdog@50000000 {
-> +        compatible = "apple,t8103-wdt", "apple,wdt";
-> +        reg = <0x50000000 0x4000>;
-> +        clocks = <&clk>;
-> +        interrupts = <AIC_IRQ 123 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5b7a13f706fa..ba480837724d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1749,6 +1749,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
->  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
->  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
->  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
-> +F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->  F:	arch/arm64/boot/dts/apple/
->  F:	drivers/i2c/busses/i2c-pasemi-core.c
->  F:	drivers/i2c/busses/i2c-pasemi-platform.c
-> -- 
-> 2.25.1
-> 
-> 
+On Sat, Nov 13, 2021, at 16:24, Alyssa Rosenzweig wrote:
+>> + * This HW block has three separate watchdogs. WD0 resets the machine
+>> + * to recovery mode and is not very useful for us. WD1 and WD2 trigger a normal
+>> + * machine reset. WD0 additionally supports a configurable interrupt.
+>
+> Do we have any idea what the difference between WD1 and WD2 is?
+
+I've never seen macOS write to WD2 when running in our hypervisor and only
+found that one when I was looking at the rest of the MMIO region.
+From what I can tell it works exactly like WD1.
+
+Sven
