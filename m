@@ -2,106 +2,166 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC1444FCE5
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Nov 2021 03:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BE744FE7A
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Nov 2021 06:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236232AbhKOCNa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 14 Nov 2021 21:13:30 -0500
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:44648 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236191AbhKOCN3 (ORCPT
+        id S230180AbhKOF5S (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Nov 2021 00:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230093AbhKOF5I (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 14 Nov 2021 21:13:29 -0500
-Received: by mail-oo1-f45.google.com with SMTP id t9-20020a4a8589000000b002c5c4d19723so1081941ooh.11;
-        Sun, 14 Nov 2021 18:10:34 -0800 (PST)
+        Mon, 15 Nov 2021 00:57:08 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400DCC061746;
+        Sun, 14 Nov 2021 21:54:09 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id 1so33060356ljv.2;
+        Sun, 14 Nov 2021 21:54:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8qflnB7MYgfziBXsT+LtjTucbsoWLob914EY3p4OTsQ=;
+        b=K+ISysR7l4RTt12UPbkyLNCunsqekRgtKdrbxcG72ND5Uqvd/bVx8YI+spx3ccPa3+
+         cnBCAk/Z0ZVY1XkesS5Fm3Jy6/Ey7n+XsXxYtqqCx3RkKf5XqETAcA3nTqvUGyPcdII8
+         07w6fXgUewxdWbBezCFEVk+o9Dv/H0GhXH2tAWORwu1Sg7m75OWs9N0udMT2+XDMgYQa
+         9S07cYCS0SXawTtmZXZFUkrPXzSdiFFayOycnuTNlMyV65oDHQghrN8G0RlUYq5NNaCH
+         srPK7M8dSunw+8e5FzmE3B+rOf/PoRTXHMfxk5gO6sQLrRw/D/b+M91yZTuocf3ntSFl
+         IjwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=EcWazStHMBzkeUqUKg871NcAh5km8nD2bxzBNAKhSts=;
-        b=sjEr3aPBiEvX5PP+vKYRuTZ2OcFTeZazHUHB/o3jmv3xIBJ0zTsbIZWRWbg9DnvgXr
-         NzhDuvQ2KWCkGqYXd99Ssyw6fqEIJNDMMgNgCGFdj/VxUH1j5DPTIFRl5tPytEpGr4xo
-         poYyClwpDlqxz3Hq/G3OEwfJqyPZ6l/JhnuaeuOXJ1xWIkghA6eRVDs/tNJTKtsjWncZ
-         RFcC4VJKQN8hnCrHcgx86SajoVSOW6GhJ2BJEyr+HEBerj3MgEMdgRA4fSkVt9ErCZmW
-         Zk7HbvKXvU6hgQ9DiMScfJlKmDNX35tfan9wfTeolGU/YS9ci3YyCCXQup4SAnp13/kd
-         yYwg==
-X-Gm-Message-State: AOAM530RqRxEQk2xYpShYk2MDHo18tVAaatn3sQ8x2KQBV2NaYKDG/jr
-        2vDreYTpyOnSEBVyHrRZYk+eBXnYXw==
-X-Google-Smtp-Source: ABdhPJyQC8PXrpS/2xNBLC9mcCg4j3oZwxmowhchO5VctfLmSSbKl9dqq5AzmhwQB31Tgnq9HhS7Gw==
-X-Received: by 2002:a4a:da1a:: with SMTP id e26mr3719912oou.79.1636942234563;
-        Sun, 14 Nov 2021 18:10:34 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l2sm2731307otl.61.2021.11.14.18.10.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8qflnB7MYgfziBXsT+LtjTucbsoWLob914EY3p4OTsQ=;
+        b=IqVJ86OPQI6EnF4dBw9c9K6kL5NGZtNtlasTCGSTYr3K7hyLGbdKyVx2hqCBH8DUAH
+         +Fmxezz7fePMWV8LEH4CaU99BEi+bR50zRlzPl6sUTub5mPwhQ5QkQH5N2Qbz2JkUznm
+         QQ+oG80krbD85wYWJ7xu15O9Ah0H3JxMkFnSxlpTC7yYN/M2c2bysFdbkzEi3vrEHEfb
+         eXxAxDQSCM0Nx0ulzWhlnkKo3Tpr4vs1kx7TM/aETQk95uirj3hGfK6Y+rn/1Q3nuAD3
+         1ezxN0U8fXwNTnW+kZUDeDgSIQMmpQF8OfTD4PR3JsTRd02qF21gQXRoYikhfFTu+pPU
+         QEEg==
+X-Gm-Message-State: AOAM533pnKE/mqFZo6WmkIrM+hY0zoLh9OItN0vyqNqnp3IrjhyWIJqY
+        QseZLZn1hjWJQJKei2s1gV7aLTtiTrU=
+X-Google-Smtp-Source: ABdhPJyZaHVXNgDAuGbMz7OLoG2mleARlbDaV7o3MGSGjKAWPeHcioFgyl4hXtX9R5+er/99PjoKig==
+X-Received: by 2002:a2e:4952:: with SMTP id b18mr36117251ljd.352.1636955645266;
+        Sun, 14 Nov 2021 21:54:05 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id i13sm1308668lfb.45.2021.11.14.21.54.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 18:10:34 -0800 (PST)
-Received: (nullmailer pid 3712867 invoked by uid 1000);
-        Mon, 15 Nov 2021 02:10:32 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        Sun, 14 Nov 2021 21:54:04 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Justin Chen <justinpopo6@gmail.com>,
-        =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20211113114645.27360-2-zajec5@gmail.com>
-References: <20211113114645.27360-1-zajec5@gmail.com> <20211113114645.27360-2-zajec5@gmail.com>
-Subject: Re: [PATCH V4 2/2] dt-bindings: mfd: add Broadcom's Timer-Watchdog block
-Date:   Sun, 14 Nov 2021 20:10:32 -0600
-Message-Id: <1636942232.944025.3712866.nullmailer@robh.at.kernel.org>
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH V4 RESEND 1/2] dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
+Date:   Mon, 15 Nov 2021 06:53:53 +0100
+Message-Id: <20211115055354.6089-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, 13 Nov 2021 12:46:45 +0100, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> It's a block implementing few time related functions depending on a
-> (SoC specific) variant. At this point there is ready binding for a
-> watchdog only. Work on remaining subblocks (e.g. "reg" based reboot) is
-> in progress.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V2: Update $id, description, compatible, example & commit message
-> V3: Drop "brcm,twd" from compatible list per Rob's review
-> ---
->  .../devicetree/bindings/mfd/brcm,twd.yaml     | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/brcm,twd.yaml
-> 
+From: Rafał Miłecki <rafal@milecki.pl>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This helps validating DTS files.
 
-yamllint warnings/errors:
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+V2: Use valid $id
+V4: Add "clocks" maxItems and include Rob's Reviewed-by
+RESEND: Patchwork lost 1/2, marc.info lost 2/2
+---
+ .../bindings/watchdog/brcm,bcm7038-wdt.txt    | 19 ---------
+ .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 41 +++++++++++++++++++
+ 2 files changed, 41 insertions(+), 19 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
 
-dtschema/dtc warnings/errors:
-Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/watchdog/brcm,bcm7038-wdt.yaml'
-xargs: dt-doc-validate: exited with status 255; aborting
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/mfd/brcm,twd.example.dt.yaml'
-Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/watchdog/brcm,bcm7038-wdt.yaml'
-make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/mfd/brcm,twd.example.dt.yaml] Error 255
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1441: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1554679
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+deleted file mode 100644
+index 84122270be8f..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
++++ /dev/null
+@@ -1,19 +0,0 @@
+-BCM7038 Watchdog timer
+-
+-Required properties:
+-
+-- compatible : should be "brcm,bcm7038-wdt"
+-- reg : Specifies base physical address and size of the registers.
+-
+-Optional properties:
+-
+-- clocks: The clock running the watchdog. If no clock is found the
+-	  driver will default to 27000000 Hz.
+-
+-Example:
+-
+-watchdog@f040a7e8 {
+-	compatible = "brcm,bcm7038-wdt";
+-	clocks = <&upg_fixed>;
+-	reg = <0xf040a7e8 0x16>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+new file mode 100644
+index 000000000000..ed6210666ead
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/brcm,bcm7038-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: BCM7038 watchdog timer
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++  - Justin Chen <justinpopo6@gmail.com>
++  - Rafał Miłecki <rafal@milecki.pl>
++
++properties:
++  compatible:
++    const: brcm,bcm7038-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++    description: >
++      The clock running the watchdog. If no clock is found the driver will
++      default to 27000000 Hz.
++
++unevaluatedProperties: false
++
++required:
++  - reg
++
++examples:
++  - |
++    watchdog@f040a7e8 {
++      compatible = "brcm,bcm7038-wdt";
++      reg = <0xf040a7e8 0x16>;
++      clocks = <&upg_fixed>;
++    };
+-- 
+2.31.1
 
