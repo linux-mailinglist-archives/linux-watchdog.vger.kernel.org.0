@@ -2,161 +2,118 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEA444FE7C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Nov 2021 06:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225E245079E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Nov 2021 15:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbhKOF5W (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Nov 2021 00:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S231967AbhKOO6V (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 Nov 2021 09:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbhKOF5T (ORCPT
+        with ESMTP id S231910AbhKOO6K (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Nov 2021 00:57:19 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68C9C061766;
-        Sun, 14 Nov 2021 21:54:17 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id f18so40544914lfv.6;
-        Sun, 14 Nov 2021 21:54:17 -0800 (PST)
+        Mon, 15 Nov 2021 09:58:10 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D02BC061207
+        for <linux-watchdog@vger.kernel.org>; Mon, 15 Nov 2021 06:55:11 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id m27so19930656lfj.12
+        for <linux-watchdog@vger.kernel.org>; Mon, 15 Nov 2021 06:55:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0ITzm3kF2CTjx8s3ujmiTGO0Uq6IhLwpCFtlE2jGWfg=;
-        b=aoOj9BmpH4wlK0zab+wtjijrWVmtQ4xi1jOJjv6ytq5zQIwDHB6j4PWiuHdABmMAcG
-         jKkeKBOVQcpGKbpNuZkWc0NUiLq4eKXBe+zVpph/2LNCibt51n6StqGRS7WUuntduyYJ
-         edgGphqzQ770deGyxl7M4vH+dtoHbw2SD6hPQWt1kVNbrbJMf5nwA65epAfG+VwRElK6
-         4pQzNoJGasQgeJcKcfS+KRIr7YrDzlnxXYSRnLI+SAWz1Wh8SBtpasyn2FaGBK2Z6qsW
-         GvjJh42UCIDnyYIcZ1NkeQhHV0R8KVR6som0znoFT35XVMs85XQUl0VjgwxigTxI/V9c
-         0BVQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gHoS2QIQL9jiqdDjkTDeK4x6Tmu2ipOUCUNpKzNE59E=;
+        b=e9U5TdTPp4xKy1kJcXwDzSC8tbSpVywEYH9Z+sUjf4G9L8eFHtx5l3hWhed7rd1Ajz
+         ebxts1R/3Vp3BD3fmiIs8ijW3vwxCRNKKrpAMPOT4NK7HnryzYPTd9dWWqyCBM/3mHnA
+         vTVpkSClOFZnaQA1Ggw0m1qKX5z9BFeyCSc4VjSaCn4xvJCaKykOcCzMkrUu/7sEAMyj
+         DCGbe70UQxZRmBIWafqA3pLWLk2Lx7W2zU1CZkBTpErb5uREerVsGeElEyyT8+u6f//7
+         cKqncI+6LUB4ho/pCz33S0HvvdKcK7yNiEWVK9N5MT9zepjoT0gjtQYQ+6o7aVhzRCiv
+         8/zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0ITzm3kF2CTjx8s3ujmiTGO0Uq6IhLwpCFtlE2jGWfg=;
-        b=JZz9i29H9FPVcJiN6vgaV7mdDyrVrpZrjjZSaG7uxLd7TskG7hIu9SxhRTPIsAZky9
-         QiF/Vl5HQ7lPs8C/yY9BdWcpQbU/qJP1ZBl7Ov5U/7bszBmnGA3qgyr4WTg0vqVJFHuj
-         iBh/Mn0ub7QFhHTyA6AhAvIBmNv6asJ5Zn8fyBym3C8CiYirDF5pdXvH2jLWsj0Vt8gc
-         40xrQDRGwGgVVHC8wDtlYENk9ZTQOdPvuudbpMFjqWd6a7o2oMj4IgbzMeEBmHoreLi7
-         NNM/uHnRqf/7VtbJZLhjuDy4aq06UatyH25hvkKPvkgkU6An3S2VlB6jejt2ytCceDZU
-         V4wA==
-X-Gm-Message-State: AOAM533iR0o/H5QdohdfyyGhGmxga9Ku54YWlHP8ynMxHD5PHHsbdzn7
-        AIqVfhRdtXjGI7TVbpo5Fq0=
-X-Google-Smtp-Source: ABdhPJxaH7HFu5Imhc8iMFDJJWTHVcWL9DV95cUFtBv5nGIoWSJEtBa9ewhxIb4K6hGUEIFHuLRjxw==
-X-Received: by 2002:ac2:4e11:: with SMTP id e17mr32541121lfr.126.1636955655599;
-        Sun, 14 Nov 2021 21:54:15 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id i13sm1308668lfb.45.2021.11.14.21.54.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 21:54:15 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V4 RESEND 2/2] dt-bindings: mfd: add Broadcom's Timer-Watchdog block
-Date:   Mon, 15 Nov 2021 06:53:54 +0100
-Message-Id: <20211115055354.6089-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211115055354.6089-1-zajec5@gmail.com>
-References: <20211115055354.6089-1-zajec5@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gHoS2QIQL9jiqdDjkTDeK4x6Tmu2ipOUCUNpKzNE59E=;
+        b=ho84dm+etNXdBnYrXm+Bg9hOL1MTEVRmpCvqC/XUV1rr46AZse4XJrDpExVSrT8BBs
+         BlSrV2WNFpWlSkyS7DRKmBn8aNWudGDBp2cpOE9h5QU/pYud46nCgfHT2GFaklMyMrU0
+         bVilz7fBJloqPC3dsUBsthj9clzKGWbU94L7gHqm2uQC8FTL5H55Bj0TtDy8IlCttXL4
+         vAJgyss1YRehr3PwQBhGnzZJC7p3K04JvFIcnvZKqp5nXCaISDpgt2i/sWrWS2yYfpwP
+         uUpDdyArH2A//12GMsfIK4zh8CNbEQAQ5gq/SCHnZ3ZuaGi1YQfUMGYr1q+D6eisI/R6
+         zirA==
+X-Gm-Message-State: AOAM533Bir3MHstYlVldolU95PjtUTiXMCByJeaO69haYS5BP1gpn+Fs
+        GiWQwRXyx+0SRe3DJHrYCpUyFysT2/KU8oKqCp7gew==
+X-Google-Smtp-Source: ABdhPJyFimQg7KkOTLtcJuBiGvEEcKgbemK/wWoYIOj4AkODv0WaiGPYUVNn88xx+gbks93TFVmDWvukiTbSyXAzBIA=
+X-Received: by 2002:a19:8c4d:: with SMTP id i13mr37079711lfj.254.1636988109753;
+ Mon, 15 Nov 2021 06:55:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211112082930.3809351-1-peng.fan@oss.nxp.com> <20211112082930.3809351-3-peng.fan@oss.nxp.com>
+In-Reply-To: <20211112082930.3809351-3-peng.fan@oss.nxp.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 15 Nov 2021 15:54:33 +0100
+Message-ID: <CAPDyKFq=7aiRhKw5f3EqoTq3Npyjs+L1xJBxjjqtTwh03GuXow@mail.gmail.com>
+Subject: Re: [PATCH V4 2/9] dt-bindings: mmc: imx-esdhc: Add imx8ulp
+ compatible string
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, broonie@kernel.org, linux@roeck-us.net,
+        wim@linux-watchdog.org, linux@rempel-privat.de,
+        Kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
+        Rob Herring <robh@kernel.org>, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Fri, 12 Nov 2021 at 09:30, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Jacky Bai <ping.bai@nxp.com>
+>
+> The USDHC on i.MX8ULP is derived from i.MX8MM, it uses two
+> compatible strings, so update the compatible string for i.MX8ULP.
+>
+> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-It's a block implementing few time related functions depending on a
-(SoC specific) variant. At this point there is ready binding for a
-watchdog only. Work on remaining subblocks (e.g. "reg" based reboot) is
-in progress.
+Applied for next, thanks!
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-V2: Update $id, description, compatible, example & commit message
-V3: Drop "brcm,twd" from compatible list per Rob's review
-RESEND: Patchwork lost 1/2, marc.info lost 2/2
----
- .../devicetree/bindings/mfd/brcm,twd.yaml     | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+Kind regards
+Uffe
 
-diff --git a/Documentation/devicetree/bindings/mfd/brcm,twd.yaml b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
-new file mode 100644
-index 000000000000..634526f790b8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
-@@ -0,0 +1,61 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/brcm,twd.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom's Timer-Watchdog (aka TWD)
-+
-+maintainers:
-+  - Rafał Miłecki <rafal@milecki.pl>
-+
-+description: |
-+  Broadcom has a Timer-Watchdog block used in multiple SoCs (e.g., BCM4908,
-+  BCM63xx, BCM7038). There are few variants available (they differ slightly in
-+  registers layout). This block consists of: timers, watchdog and optionally a
-+  software reset handler.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - brcm,bcm4908-twd
-+          - brcm,bcm7038-twd
-+      - const: simple-mfd
-+      - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+  ranges: true
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+patternProperties:
-+  '^watchdog@[a-f0-9]+$':
-+    $ref: /schemas/watchdog/brcm,bcm7038-wdt.yaml
-+
-+additionalProperties: false
-+
-+required:
-+  - reg
-+
-+examples:
-+  - |
-+    timer-mfd@ff800400 {
-+        compatible = "brcm,bcm4908-twd", "simple-mfd", "syscon";
-+        reg = <0xff800400 0x4c>;
-+        ranges = <0x00000000 0xff800400 0x4c>;
-+
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        watchdog@28 {
-+            compatible = "brcm,bcm7038-wdt";
-+            reg = <0x28 0x8>;
-+        };
-+    };
--- 
-2.31.1
 
+> ---
+>  - v4 changes:
+>    no
+>
+>  - v3 changes:
+>    no
+>
+>  - v2 changes:
+>    refine the commit message
+>
+>  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> index 19621a2f8beb..d5be9863009c 100644
+> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> @@ -44,6 +44,10 @@ properties:
+>                - fsl,imx8qm-usdhc
+>                - fsl,imx8qxp-usdhc
+>            - const: fsl,imx7d-usdhc
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8ulp-usdhc
+> +          - const: fsl,imx8mm-usdhc
+>
+>    reg:
+>      maxItems: 1
+> --
+> 2.25.1
+>
