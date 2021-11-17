@@ -2,184 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E16F74547AC
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Nov 2021 14:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7123E4547B9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Nov 2021 14:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237860AbhKQNqX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 17 Nov 2021 08:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
+        id S233975AbhKQNvU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 17 Nov 2021 08:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237857AbhKQNqX (ORCPT
+        with ESMTP id S233343AbhKQNvT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 17 Nov 2021 08:46:23 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933AFC061570;
-        Wed, 17 Nov 2021 05:43:24 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id 7so6417542oip.12;
-        Wed, 17 Nov 2021 05:43:24 -0800 (PST)
+        Wed, 17 Nov 2021 08:51:19 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18D3C061570;
+        Wed, 17 Nov 2021 05:48:20 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id u74so6486362oie.8;
+        Wed, 17 Nov 2021 05:48:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=M2K2pmwHVDblW0TtsORwx2aCcnpmPhudBPPkgio4B7A=;
-        b=ibIs+ciMDGpkO3zdOfClgZiXfHaUiUi6wMNSsct7W3dX/vQkwx2qSyyIuyYWpmCr6n
-         bDEfw4JRsg6OJDLeEZ4J3kvrH2YZCRdjyi9eMGmKbPEbCOHe24iZn49WtbMwTeC6eS4Z
-         V7AqjvrYEFKnrBXZPCcPUC7b9OuoiZtZoK5L/bsQUjrBARo0NYaxnvVG8PawQH4IAWo2
-         affw5i/B5UiSamgn01TQX9uIhg8ElbvmzSyjJCEqcRBwJ+U+7FA0U6AtQZCUbZfzv7zR
-         MuW2Jy4n8TpVHN7trFAr3QV2GhMJNj2dJWY7Qysfk2LExINfNOcCR9zn48SU8RkFlwQn
-         NqlA==
+        bh=3mebJzVN9HcHpEGD2QX+VgGKB5YKEkPOK0FE0bHbIP4=;
+        b=ci5T3FUt/5hepMHdWVA9TlN0kHsoEBg9Vuu4c4np1oHUeGbDY6oLySQ0wPwudmQSpg
+         TcAtZSgCt3/rrd3PgXWAr53eBVmr8KS+4STKC5xKEwXOAB0wmn28SNrE0/wKsSMhyHyK
+         xQb9pzBK5rfACmZwLjseiNpNPTdOV34we6Wf+c+yXndonV/S3uG6qlQi6Bvt0VsEfZHp
+         gdhXweRSP/v8XcJOzlbI0IsSM1IQRXzHKBEYq8WEHM1+HCl04MVvlOeyiPVENiPs5jnz
+         B+0sJku2BNgCOs0GUl3R/OrcP+wb8vvu9HSaVLyI7BGEYxCVN4dx9K93V7CCCl7Mrim7
+         rnKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=M2K2pmwHVDblW0TtsORwx2aCcnpmPhudBPPkgio4B7A=;
-        b=PDz03GfoN1EbJ7t2XUlYgPgAkOJagCHML5WvCOP2NfWHyRASxmuAfQOKbuKh4VvMs2
-         b+aZgEmqpzbThzRRqR1dVbdWpICEXdMtYaFYVTXpDKQRCXZpjLm4zjvATd4gWhbWNkbb
-         0k0UyoHRkR9AyHfI4GrPdVwMDNixJ1T+jNsfcnT5wGkKY0yTxBYBhxE1TdkLn7/WDr82
-         oZU5Gb+kI2qPiiHDUmEsu81Uyx7UZG4PGYPFt87q275lx9L6GDrwrxC2g5mwzpBvkp2D
-         DO3bdd9SC5pQq4Ds0QyBQD6U6gl/6Kuurb8X+2Ue20cvozTXJe+D4vjc/PyHMqIkjJJs
-         u3JA==
-X-Gm-Message-State: AOAM531dlSW9TNDezFNwHOS2m0Y0l+355dPdAqhzE+iHhahVrANoLnQ7
-        YvkuFT+I0OpOiwMq6iuN6q4=
-X-Google-Smtp-Source: ABdhPJxeFDI6vUcgTBRgOWhNfzOK15Fhlw5ayhwGVs2a4zpmus5wHzSKAbJ4rMClXEpyEd4u3auCqA==
-X-Received: by 2002:aca:de07:: with SMTP id v7mr13812436oig.28.1637156603999;
-        Wed, 17 Nov 2021 05:43:23 -0800 (PST)
+        bh=3mebJzVN9HcHpEGD2QX+VgGKB5YKEkPOK0FE0bHbIP4=;
+        b=6Tr3RwE94H6UsvnBrHZcX7Qhz2UkuFk9hePPCHunnWtx0u1XlpPX5xtNMWzhPefKEl
+         NzaoZco9p3tSQipIfSqbF4SWmcsWuz/kyK8/8lwjVjXWSI8+b5srH857GnifbG6VNj4t
+         LcvtdUmXPIcCSEzMnCB7EyDgrmvqpU++SjMqVrz8T8UUh6n+8Sdv2ZIc3hhWvrNKPaQC
+         xPNflEG0wD5x1NZw+VjvB0QUaNgB404C8C0TlUFVXLHw0It522iOlqul1TBO4Un8JF18
+         /geGWOmCjd+uOWjvtIYP2TTtm7puXaICNuGrea6n/CS5qgZIIj3EQjbGw6l40SHeVkM0
+         il8A==
+X-Gm-Message-State: AOAM532jBbU4IlxPrkxW1Pg3tPBmBSepLCVpNT2gZjVVsaoBx0AfFMSH
+        FPyGc6bcI3wRWaawAWA9Be0=
+X-Google-Smtp-Source: ABdhPJwWNtGrgxl6HdtyBfu5X9p0ZKyR8nj0IVJIWojeaK1jDLmxky4nGpBSFHz5fJKRASzIoYqilw==
+X-Received: by 2002:aca:2412:: with SMTP id n18mr14113342oic.119.1637156900323;
+        Wed, 17 Nov 2021 05:48:20 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bg38sm5069080oib.40.2021.11.17.05.43.23
+        by smtp.gmail.com with ESMTPSA id w71sm4550911oiw.6.2021.11.17.05.48.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Nov 2021 05:43:23 -0800 (PST)
+        Wed, 17 Nov 2021 05:48:19 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 Nov 2021 05:43:22 -0800
+Date:   Wed, 17 Nov 2021 05:48:18 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v3 6/8] watchdog: Kconfig: fix help text indentation
-Message-ID: <20211117134322.GA2613433@roeck-us.net>
-References: <20211111225852.3128201-1-luca@lucaceresoli.net>
- <20211111225852.3128201-7-luca@lucaceresoli.net>
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "maintainer:BROADCOM BCM63XX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "moderated list:BROADCOM BCM63XX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v5 2/7] dt-bindings: watchdog: Add BCM6345 compatible to
+ BCM7038 binding
+Message-ID: <20211117134818.GA2724345@roeck-us.net>
+References: <20211112224636.395101-1-f.fainelli@gmail.com>
+ <20211112224636.395101-3-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211111225852.3128201-7-luca@lucaceresoli.net>
+In-Reply-To: <20211112224636.395101-3-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 11:58:50PM +0100, Luca Ceresoli wrote:
-> Some entries indent their help text with 1 tab + 1 space or 1 tab only
-> instead of 1 tab + 2 spaces. Add the missing spaces.
+On Fri, Nov 12, 2021 at 02:46:31PM -0800, Florian Fainelli wrote:
+> The BCM7038 watchdog binding is updated to include a "brcm,bcm6345-wdt"
+> compatible string which is the first instance of a DSL (BCM63xx) SoC
+> seeing the integration of such a watchdog timer block.
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
+>  .../devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml      | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> Changes in v3: none
-> ---
->  drivers/watchdog/Kconfig | 48 ++++++++++++++++++++--------------------
->  1 file changed, 24 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 9d222ba17ec6..a6d97f30325a 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -680,10 +680,10 @@ config MAX77620_WATCHDOG
->  	depends on MFD_MAX77620 || COMPILE_TEST
->  	select WATCHDOG_CORE
->  	help
-> -	 This is the driver for the Max77620 watchdog timer.
-> -	 Say 'Y' here to enable the watchdog timer support for
-> -	 MAX77620 chips. To compile this driver as a module,
-> -	 choose M here: the module will be called max77620_wdt.
-> +	  This is the driver for the Max77620 watchdog timer.
-> +	  Say 'Y' here to enable the watchdog timer support for
-> +	  MAX77620 chips. To compile this driver as a module,
-> +	  choose M here: the module will be called max77620_wdt.
+> diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> index ed6210666ead..a926809352b8 100644
+> --- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/watchdog/brcm,bcm7038-wdt.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
 >  
->  config IMX2_WDT
->  	tristate "IMX2+ Watchdog"
-> @@ -1440,26 +1440,26 @@ config TQMX86_WDT
->  	depends on X86
->  	select WATCHDOG_CORE
->  	help
-> -	This is the driver for the hardware watchdog timer in the TQMX86 IO
-> -	controller found on some of their ComExpress Modules.
-> +	  This is the driver for the hardware watchdog timer in the TQMX86 IO
-> +	  controller found on some of their ComExpress Modules.
+> -title: BCM7038 watchdog timer
+> +title: BCM63xx and BCM7038 watchdog timer
 >  
-> -	To compile this driver as a module, choose M here; the module
-> -	will be called tqmx86_wdt.
-> +	  To compile this driver as a module, choose M here; the module
-> +	  will be called tqmx86_wdt.
+>  allOf:
+>    - $ref: "watchdog.yaml#"
+> @@ -16,7 +16,9 @@ maintainers:
 >  
-> -	Most people will say N.
-> +	  Most people will say N.
+>  properties:
+>    compatible:
+> -    const: brcm,bcm7038-wdt
+> +    enum:
+> +      - brcm,bcm6345-wdt
+> +      - brcm,bcm7038-wdt
 >  
->  config VIA_WDT
->  	tristate "VIA Watchdog Timer"
->  	depends on X86 && PCI
->  	select WATCHDOG_CORE
->  	help
-> -	This is the driver for the hardware watchdog timer on VIA
-> -	southbridge chipset CX700, VX800/VX820 or VX855/VX875.
-> +	  This is the driver for the hardware watchdog timer on VIA
-> +	  southbridge chipset CX700, VX800/VX820 or VX855/VX875.
->  
-> -	To compile this driver as a module, choose M here; the module
-> -	will be called via_wdt.
-> +	  To compile this driver as a module, choose M here; the module
-> +	  will be called via_wdt.
->  
-> -	Most people will say N.
-> +	  Most people will say N.
->  
->  config W83627HF_WDT
->  	tristate "Watchdog timer for W83627HF/W83627DHG and compatibles"
-> @@ -1745,10 +1745,10 @@ config BCM7038_WDT
->  	depends on HAS_IOMEM
->  	depends on ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
->  	help
-> -	 Watchdog driver for the built-in hardware in Broadcom 7038 and
-> -	 later SoCs used in set-top boxes.  BCM7038 was made public
-> -	 during the 2004 CES, and since then, many Broadcom chips use this
-> -	 watchdog block, including some cable modem chips.
-> +	  Watchdog driver for the built-in hardware in Broadcom 7038 and
-> +	  later SoCs used in set-top boxes.  BCM7038 was made public
-> +	  during the 2004 CES, and since then, many Broadcom chips use this
-> +	  watchdog block, including some cable modem chips.
->  
->  config IMGPDC_WDT
->  	tristate "Imagination Technologies PDC Watchdog Timer"
-> @@ -2109,12 +2109,12 @@ config KEEMBAY_WATCHDOG
->  	depends on ARCH_KEEMBAY || (ARM64 && COMPILE_TEST)
->  	select WATCHDOG_CORE
->  	help
-> -	 This option enable support for an In-secure watchdog timer driver for
-> -	 Intel Keem Bay SoC. This WDT has a 32 bit timer and decrements in every
-> -	 count unit. An interrupt will be triggered, when the count crosses
-> -	 the threshold configured in the register.
-> +	  This option enable support for an In-secure watchdog timer driver for
-> +	  Intel Keem Bay SoC. This WDT has a 32 bit timer and decrements in every
-> +	  count unit. An interrupt will be triggered, when the count crosses
-> +	  the threshold configured in the register.
->  
-> -	 To compile this driver as a module, choose M here: the
-> -	 module will be called keembay_wdt.
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called keembay_wdt.
->  
->  endif # WATCHDOG
+>    reg:
+>      maxItems: 1
