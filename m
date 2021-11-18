@@ -2,124 +2,180 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3649454E94
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Nov 2021 21:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA95B455761
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Nov 2021 09:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbhKQUea (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 17 Nov 2021 15:34:30 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:38011 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbhKQUe3 (ORCPT
+        id S244921AbhKRI4T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 18 Nov 2021 03:56:19 -0500
+Received: from mail-ua1-f52.google.com ([209.85.222.52]:34695 "EHLO
+        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244812AbhKRIz2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 17 Nov 2021 15:34:29 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 6563140004;
-        Wed, 17 Nov 2021 20:31:27 +0000 (UTC)
-Date:   Wed, 17 Nov 2021 21:31:27 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v3 3/8] rtc: max77686: remove unused code to read in
- 12-hour mode
-Message-ID: <YZVmnwFDrXPA0nzC@piout.net>
-References: <20211111225852.3128201-1-luca@lucaceresoli.net>
- <20211111225852.3128201-4-luca@lucaceresoli.net>
+        Thu, 18 Nov 2021 03:55:28 -0500
+Received: by mail-ua1-f52.google.com with SMTP id n6so12100754uak.1;
+        Thu, 18 Nov 2021 00:52:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sG7wL8TsbltsCDKNOjp/aOqgHWLi22mmX04ZIv1op4w=;
+        b=DQGxo71X8TsIkNx+s1YqlxD5vvZjZRCdkP5Qx9ZfueDtHG8USQ6ArP91Wn6x0IuddO
+         FKgsHiyx1QdeWRGzgPBhmvtNpkY2rqYNsqAhR6mWjYupnoADqwoshpke6hd7NxTXOYPb
+         io5IeL+nmbFq+RZU/i2OrpWfqs4aMJYUHdsjUvnlXgjzwv+CqY0BoSqcHAbiGPbdj65u
+         2Rljesxa/+UFq7YuIBi5fC5TzcmSN9dD4uY5jI6/4OCg3mnQ9JjRoV5oB0xVxPmS/DtE
+         0QWAb2qoZmS7zziFSuimoi54++o5uedEdzggBAzAPcG0Cy1fdJ7enB45aiBSocHV+Px/
+         5kFQ==
+X-Gm-Message-State: AOAM530O5DOFbfVNTyT6OEMEoL+s0P5TIrWQgcHSq+OljOcsJWqCXpgn
+        Fpx0rEq2YCEK5ZhRs+mnpsmTaGiAE/JXnw==
+X-Google-Smtp-Source: ABdhPJwMUFr/XOZVDWcK9nmoRxXYa36qERqYhkI6DGF+3yxdwuUc6KhFR/EuhG4PdrtJYxDFXnDRng==
+X-Received: by 2002:a9f:21d7:: with SMTP id 81mr34036907uac.39.1637225548394;
+        Thu, 18 Nov 2021 00:52:28 -0800 (PST)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id r2sm1219305vsk.28.2021.11.18.00.52.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Nov 2021 00:52:28 -0800 (PST)
+Received: by mail-ua1-f47.google.com with SMTP id o1so12069139uap.4;
+        Thu, 18 Nov 2021 00:52:27 -0800 (PST)
+X-Received: by 2002:a67:af0a:: with SMTP id v10mr78881504vsl.35.1637225547663;
+ Thu, 18 Nov 2021 00:52:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211111225852.3128201-4-luca@lucaceresoli.net>
+References: <20211111115427.8228-1-biju.das.jz@bp.renesas.com> <20211111115427.8228-2-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20211111115427.8228-2-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 18 Nov 2021 09:52:16 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUxNFamJznWVrFNNm21P=hP9btibSN7NSh43O8AK4MLOQ@mail.gmail.com>
+Message-ID: <CAMuHMdUxNFamJznWVrFNNm21P=hP9btibSN7NSh43O8AK4MLOQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] clk: renesas: rzg2l: Add support for watchdog
+ reset selection
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/11/2021 23:58:47+0100, Luca Ceresoli wrote:
-> The MAX77714 RTC chip is explicitly set to 24-hour mode in
-> max77686_rtc_probe() -> max77686_rtc_init_reg() and never changed back to
-> 12-hour mode. Accordingly info->rtc_24hr_mode is set to 1 in the same place
-> and never modified later, so it is de facto a constant. Yet there is code
-> to read 12-hour time, which is unreachable.
-> 
-> Remove the unused variable, the unreachable code to manage 12-hour mode and
-> the defines that become unused due to the above changes.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Hi Biju,
 
-> 
-> ---
-> 
-> Changes in v3: none
-> 
-> Changes in v2:
->  - remove the now-unused defines too (Alexandre Belloni)
->  - improve the commit message
-> ---
->  drivers/rtc/rtc-max77686.c | 14 +-------------
->  1 file changed, 1 insertion(+), 13 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-> index 7e765207f28e..5c64d08c0732 100644
-> --- a/drivers/rtc/rtc-max77686.c
-> +++ b/drivers/rtc/rtc-max77686.c
-> @@ -34,9 +34,6 @@
->  #define RTC_UDR_MASK			BIT(RTC_UDR_SHIFT)
->  #define RTC_RBUDR_SHIFT			4
->  #define RTC_RBUDR_MASK			BIT(RTC_RBUDR_SHIFT)
-> -/* RTC Hour register */
-> -#define HOUR_PM_SHIFT			6
-> -#define HOUR_PM_MASK			BIT(HOUR_PM_SHIFT)
->  /* RTC Alarm Enable */
->  #define ALARM_ENABLE_SHIFT		7
->  #define ALARM_ENABLE_MASK		BIT(ALARM_ENABLE_SHIFT)
-> @@ -99,7 +96,6 @@ struct max77686_rtc_info {
->  
->  	int rtc_irq;
->  	int virq;
-> -	int rtc_24hr_mode;
+Thanks for your patch!
+
+On Thu, Nov 11, 2021 at 12:54 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> This patch adds support for watchdog reset selection.
+
+Please explain what this patch really does, and why it is needed,
+instead of repeating the one-line summary.
+
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+
+> --- a/drivers/clk/renesas/r9a07g044-cpg.c
+> +++ b/drivers/clk/renesas/r9a07g044-cpg.c
+
+> @@ -295,7 +296,28 @@ static const unsigned int r9a07g044_crit_mod_clks[] __initconst = {
+>         MOD_CLK_BASE + R9A07G044_DMAC_ACLK,
 >  };
->  
->  enum MAX77686_RTC_OP {
-> @@ -278,13 +274,7 @@ static void max77686_rtc_data_to_tm(u8 *data, struct rtc_time *tm,
->  
->  	tm->tm_sec = data[RTC_SEC] & mask;
->  	tm->tm_min = data[RTC_MIN] & mask;
-> -	if (info->rtc_24hr_mode) {
-> -		tm->tm_hour = data[RTC_HOUR] & 0x1f;
-> -	} else {
-> -		tm->tm_hour = data[RTC_HOUR] & 0x0f;
-> -		if (data[RTC_HOUR] & HOUR_PM_MASK)
-> -			tm->tm_hour += 12;
-> -	}
-> +	tm->tm_hour = data[RTC_HOUR] & 0x1f;
->  
->  	/* Only a single bit is set in data[], so fls() would be equivalent */
->  	tm->tm_wday = ffs(data[RTC_WEEKDAY] & mask) - 1;
-> @@ -662,8 +652,6 @@ static int max77686_rtc_init_reg(struct max77686_rtc_info *info)
->  	data[0] = (1 << BCD_EN_SHIFT) | (1 << MODEL24_SHIFT);
->  	data[1] = (0 << BCD_EN_SHIFT) | (1 << MODEL24_SHIFT);
->  
-> -	info->rtc_24hr_mode = 1;
-> -
->  	ret = regmap_bulk_write(info->rtc_regmap,
->  				info->drv_data->map[REG_RTC_CONTROLM],
->  				data, ARRAY_SIZE(data));
-> -- 
-> 2.25.1
-> 
+>
+> +#define CPG_WDTRST_SEL                 0xb14
+> +#define CPG_WDTRST_SEL_WDTRSTSEL(n)    BIT(n)
+> +
+> +#define CPG_WDTRST_SEL_WDTRST  (CPG_WDTRST_SEL_WDTRSTSEL(0) | \
+> +                                CPG_WDTRST_SEL_WDTRSTSEL(1) | \
+> +                                CPG_WDTRST_SEL_WDTRSTSEL(2))
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You might as well use BIT() directly. Or GENMASK().
+
+> +
+> +int r9a07g044_wdt_rst_setect(void __iomem *base)
+> +{
+> +       writel((CPG_WDTRST_SEL_WDTRST << 16) | CPG_WDTRST_SEL_WDTRST,
+> +              base + CPG_WDTRST_SEL);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct rzg2l_cpg_soc_operations r9a07g044_cpg_ops = {
+> +       .wdt_rst_setect = r9a07g044_wdt_rst_setect,
+
+As you use a function pointer, I assume different SoCs need different
+handling, and you can't just store e.g. a bitmask of bits to set in info?
+
+
+> +};
+> +
+>  const struct rzg2l_cpg_info r9a07g044_cpg_info = {
+> +       .ops = &r9a07g044_cpg_ops,
+> +
+>         /* Core Clocks */
+>         .core_clks = r9a07g044_core_clks,
+>         .num_core_clks = ARRAY_SIZE(r9a07g044_core_clks),
+> diff --git a/drivers/clk/renesas/rzg2l-cpg.c b/drivers/clk/renesas/rzg2l-cpg.c
+> index a77cb47b75e7..f9dfee14a33e 100644
+> --- a/drivers/clk/renesas/rzg2l-cpg.c
+> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+> @@ -932,6 +932,12 @@ static int __init rzg2l_cpg_probe(struct platform_device *pdev)
+>         if (error)
+>                 return error;
+>
+> +       if (info->ops && info->ops->wdt_rst_setect) {
+> +               error = info->ops->wdt_rst_setect(priv->base);
+> +               if (error)
+> +                       return error;
+> +       }
+> +
+>         return 0;
+>  }
+>
+> diff --git a/drivers/clk/renesas/rzg2l-cpg.h b/drivers/clk/renesas/rzg2l-cpg.h
+> index 484c7cee2629..e1b1497002ed 100644
+> --- a/drivers/clk/renesas/rzg2l-cpg.h
+> +++ b/drivers/clk/renesas/rzg2l-cpg.h
+> @@ -156,9 +156,20 @@ struct rzg2l_reset {
+>                 .bit = (_bit) \
+>         }
+>
+> +/**
+> + * struct rzg2l_cpg_soc_operations - SoC-specific CPG Operations
+> + *
+> + * @wdt_rst_setect: WDT reset selection
+> + */
+> +struct rzg2l_cpg_soc_operations {
+> +       int (*wdt_rst_setect)(void __iomem *base); /* Platform specific WDT reset selection */
+
+Do you plan to add more operations?
+
+> +};
+> +
+>  /**
+>   * struct rzg2l_cpg_info - SoC-specific CPG Description
+>   *
+> + * @ops: SoC-specific CPG Operations
+> + *
+>   * @core_clks: Array of Core Clock definitions
+>   * @num_core_clks: Number of entries in core_clks[]
+>   * @last_dt_core_clk: ID of the last Core Clock exported to DT
+> @@ -176,6 +187,9 @@ struct rzg2l_reset {
+>   * @num_crit_mod_clks: Number of entries in crit_mod_clks[]
+>   */
+>  struct rzg2l_cpg_info {
+> +       /* CPG Operations */
+> +       const struct rzg2l_cpg_soc_operations *ops;
+> +
+>         /* Core Clocks */
+>         const struct cpg_core_clk *core_clks;
+>         unsigned int num_core_clks;
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
