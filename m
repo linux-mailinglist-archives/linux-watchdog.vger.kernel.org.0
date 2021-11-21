@@ -2,221 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8AC45851F
-	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Nov 2021 17:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7025E458563
+	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Nov 2021 18:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238616AbhKURAo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 21 Nov 2021 12:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238630AbhKURAS (ORCPT
+        id S238304AbhKURXr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 21 Nov 2021 12:23:47 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:49658
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236719AbhKURXq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 21 Nov 2021 12:00:18 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A174C0613D7
-        for <linux-watchdog@vger.kernel.org>; Sun, 21 Nov 2021 08:57:10 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id c32so69252477lfv.4
-        for <linux-watchdog@vger.kernel.org>; Sun, 21 Nov 2021 08:57:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mZgxr5VWcKzaOese34CdY82dfHZfhVgGZXKjQ6A5UTA=;
-        b=ThPBptw5FVZvd0ax7ZISjqsp4n/h95JFxBmvbZUOrUehNfGjrD2zGTT2nJnyu6g1Bo
-         1a38Z0AFmei8eEwiisuDW0Rll1Y/ikX3Rt9j/XskeulD0rgTB0tCgPvwq5b7SbrTssIY
-         U6Ppb0qp2bWnkianF5gNk9tIBBHNQDIoO8cgakXS3D0WQXn81R6ajzcF/sbGwnnrpd+R
-         qQbf3fXk3a4lFNEmSZok+4DyT8s3bDMMZ6zxgQz0vKQ9aC07wfIRRoKrVbx0NN+0km8K
-         OGAyJDqldFTymhbzk+whTfgVwGUhUdSbf2EtiipLnysSKHwB3WZZI/+YlIBWCOt4zyFN
-         RqSw==
+        Sun, 21 Nov 2021 12:23:46 -0500
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A86063F1C0
+        for <linux-watchdog@vger.kernel.org>; Sun, 21 Nov 2021 17:20:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1637515240;
+        bh=NhrY2YoYU8o49TvBH2U7Xc9BTYaL2Sw0oQZK6cM53jg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=A790Fe7d5Pgr4WRmbxlyDsOGjRddmKqGwOMTmQxiWXNZew6AO3HSTQi0xA7QXb0Dx
+         hmNXHB9/QmjKlRYGTwOVm2o7fWVcnlC/bKIHrSeiOgXUhHyIBAdV/Flc0ebjx8DhAf
+         IgSWMLr6UtXeoV2V1ZvpCGv0Gabme1r+kvMK/wBgI53dO+SwOli91pib9xB4KSAg6K
+         kVvUPmC+qOtRmup8H/GpkWsbdMaoivXvmF9cAVjY9i9yW4c0rjoP0yPZPhLqAkHL+W
+         30ADOV0kFUtwM52dgrERdvW4q2gEwGZhlWro/smYJVzMtOogIG/rohMYiCSo0/tZ9t
+         doEwsPohFB8AA==
+Received: by mail-lf1-f71.google.com with SMTP id c40-20020a05651223a800b004018e2f2512so10359121lfv.11
+        for <linux-watchdog@vger.kernel.org>; Sun, 21 Nov 2021 09:20:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mZgxr5VWcKzaOese34CdY82dfHZfhVgGZXKjQ6A5UTA=;
-        b=G4ebM53jDfVuo8/TIxpCOfJAJ9Oln4pRod2qWjUXg/vK/k4lyjrlo+KegJgwMBwQOu
-         WSMgozQRo25AnpMfWjSajh4YjQ60EOGSooU8L+Wypwn+/Wc9bosrare4ND1MRyRFnBE2
-         NTot9LWuPrYCYUzrU+lyFYEqicWkjDw6vmsRT2o3/2I7CEYlu6dpGn7Q3s1gO8xmAWC+
-         fXGPTEzuG4MLAZ4o98jSh4lNA668ILtQeYhmFNPnYeGCXMWOkEvKzgAigor1/pgehDtG
-         oLLv8Z+r7/8Uby/C17jFy/X7sLIcufLOKh1UFn+/vcdpoBW3HpE1tirJh28gS7upSjnU
-         aaFg==
-X-Gm-Message-State: AOAM530WPzTUg5oyHf6toBuSXUwrjSgSqgg/7BfR98sbE3Ea2ZuCvaOq
-        jTfQCBv2zJ5bVW+u4FD4NGXB0g==
-X-Google-Smtp-Source: ABdhPJyU682mJ5O2LiJiCidyP7BqjcYSRFpzAWaMKbqJLrmF5XMdKWkauBsf7zI7TgoaeSLm8gs23w==
-X-Received: by 2002:a05:6512:3404:: with SMTP id i4mr50002428lfr.689.1637513828927;
-        Sun, 21 Nov 2021 08:57:08 -0800 (PST)
-Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id e5sm695726lfs.51.2021.11.21.08.57.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Nov 2021 08:57:08 -0800 (PST)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v4 12/12] watchdog: s3c2410: Add Exynos850 support
-Date:   Sun, 21 Nov 2021 18:56:47 +0200
-Message-Id: <20211121165647.26706-13-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211121165647.26706-1-semen.protsenko@linaro.org>
-References: <20211121165647.26706-1-semen.protsenko@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NhrY2YoYU8o49TvBH2U7Xc9BTYaL2Sw0oQZK6cM53jg=;
+        b=n2vyfWJU/3lsCw+dQGK0G4du3iDDfArz6Rp0zdJJvTfSR5k+pjX2t5NGmA+M+eAJJ2
+         d380CTbP6AG1Fyiz4Axc6oAHInnDO+xMJIp240GQVUL2fJnTA/pliN6c+Mud8kAHAWXu
+         k9ifed6lCUc5o3EQWqt6/HrYrbHXBKIYfHWjeEJVibRbmyqOi8zQErT/CFK5A1MwhyzO
+         GjZE6wQviO8MW8AXwZ3+67w54pVextEZeldk71wQ9CCaEeAY0BkMM78ttkWQ3wOEOnFW
+         dX/jA3vV8ynR5oPxsNRkqR0vfdipcGnWnLqtlt/Y2qb8a08m7xQn6GEAFWe+0X8ZQ1o1
+         ClBw==
+X-Gm-Message-State: AOAM532nd8JWhdcpvqHfe4a4qYpDkBbPer89mT0fX/h86Xhe8aksR6Wk
+        rKb0CLgM6nBXSHSkMw0d6MP1xDNhxZE2ez4P111tAnOaVtKQhyTB/bBXJAcDsPHiAU4ZnfTQNFJ
+        ryFBdMo1v3ZwbD3fEUirjGvgfibj0NWBM1oGVuBcXur+M
+X-Received: by 2002:a05:6512:3996:: with SMTP id j22mr52673219lfu.637.1637515239414;
+        Sun, 21 Nov 2021 09:20:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw3OJlK6L++IcfAoz7b9WAy/3faXnNWTTp/ncrpwEtPTPXJ5uUwkzUh2rlxkju/Nt2T4ynj0w==
+X-Received: by 2002:a05:6512:3996:: with SMTP id j22mr52673176lfu.637.1637515239152;
+        Sun, 21 Nov 2021 09:20:39 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id m8sm799964lfg.140.2021.11.21.09.20.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 Nov 2021 09:20:36 -0800 (PST)
+Message-ID: <42516013-3b4e-0c05-5e4a-5a1fe9ff942b@canonical.com>
+Date:   Sun, 21 Nov 2021 18:20:34 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v4 5/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
+Content-Language: en-US
+To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20211120155707.4019487-1-luca@lucaceresoli.net>
+ <20211120155707.4019487-6-luca@lucaceresoli.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211120155707.4019487-6-luca@lucaceresoli.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Exynos850 is a bit different from SoCs already supported in WDT driver:
-  - AUTOMATIC_WDT_RESET_DISABLE register is removed, so its value is
-    always 0; .disable_auto_reset callback is not set for that reason
-  - MASK_WDT_RESET_REQUEST register is replaced with
-    CLUSTERx_NONCPU_IN_EN register; instead of masking (disabling) WDT
-    reset interrupt it's now enabled with the same value; .mask_reset
-    callback is reused for that functionality though
-  - To make WDT functional, WDT counter needs to be enabled in
-    CLUSTERx_NONCPU_OUT register; it's done using .enable_counter
-    callback
+On 20/11/2021 16:57, Luca Ceresoli wrote:
+> Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
+> watchdog only.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> ---
+> 
+> Changes in v4: none
+> 
+> Changes in v3:
+>  - Suggested by Lee Jones:
+>    - move struct mfd_cell to top of file
+>    - remove struct max77714 and its kmalloc, not used after probe
+>    - reword error messages
+>    - add "/* pF */" onto the end of the load_cap line
+> 
+> Changes in v2:
+>  - fix "watchdog" word in heading comment (Guenter Roeck)
+>  - move struct max77714 to .c file (Krzysztof Kozlowski)
+>  - change include guard format (Krzysztof Kozlowski)
+>  - allow building as a module (Krzysztof Kozlowski)
+>  - remove of_match_ptr usage (Krzysztof Kozlowski / lkp)
+>    (Reported-by: kernel test robot <lkp@intel.com>)
+> ---
+>  MAINTAINERS                  |   2 +
+>  drivers/mfd/Kconfig          |  14 ++++
+>  drivers/mfd/Makefile         |   1 +
+>  drivers/mfd/max77714.c       | 152 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/max77714.h |  60 ++++++++++++++
+>  5 files changed, 229 insertions(+)
+>  create mode 100644 drivers/mfd/max77714.c
+>  create mode 100644 include/linux/mfd/max77714.h
+> 
 
-Also Exynos850 has two CPU clusters, each has its own dedicated WDT
-instance. Different PMU registers and bits are used for each cluster. So
-driver data is now modified in probe, adding needed info depending on
-cluster index passed from device tree.
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
-Changes in v4:
-  - Fixed build error when CONFIG_OF is disabled (found by 0-day):
-    added #ifdef CONFIG_OF guard in s3c2410_get_wdt_drv_data()
-  - Added R-b tag by Guenter Roeck
 
-Changes in v3:
-  - Renamed "samsung,index" property to more descriptive
-    "samsung,cluster-index"
-  - Used pre-defined and completely set driver data for cluster0 and
-    cluster1
 
-Changes in v2:
-  - Used single compatible for Exynos850, populating missing driver data
-    in probe
-  - Added "index" property to specify CPU cluster index
-
- drivers/watchdog/s3c2410_wdt.c | 64 +++++++++++++++++++++++++++++++++-
- 1 file changed, 63 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index 96aa5d9c6ed4..115a6fe7da57 100644
---- a/drivers/watchdog/s3c2410_wdt.c
-+++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -56,6 +56,13 @@
- #define EXYNOS5_RST_STAT_REG_OFFSET		0x0404
- #define EXYNOS5_WDT_DISABLE_REG_OFFSET		0x0408
- #define EXYNOS5_WDT_MASK_RESET_REG_OFFSET	0x040c
-+#define EXYNOS850_CLUSTER0_NONCPU_OUT		0x1220
-+#define EXYNOS850_CLUSTER0_NONCPU_INT_EN	0x1244
-+#define EXYNOS850_CLUSTER1_NONCPU_OUT		0x1620
-+#define EXYNOS850_CLUSTER1_NONCPU_INT_EN	0x1644
-+
-+#define EXYNOS850_CLUSTER0_WDTRESET_BIT		24
-+#define EXYNOS850_CLUSTER1_WDTRESET_BIT		23
- 
- /**
-  * Quirk flags for different Samsung watchdog IP-cores.
-@@ -205,6 +212,30 @@ static const struct s3c2410_wdt_variant drv_data_exynos7 = {
- 		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_AUTO_DISABLE,
- };
- 
-+static const struct s3c2410_wdt_variant drv_data_exynos850_cl0 = {
-+	.mask_reset_reg = EXYNOS850_CLUSTER0_NONCPU_INT_EN,
-+	.mask_bit = 2,
-+	.mask_reset_inv = true,
-+	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-+	.rst_stat_bit = EXYNOS850_CLUSTER0_WDTRESET_BIT,
-+	.cnt_en_reg = EXYNOS850_CLUSTER0_NONCPU_OUT,
-+	.cnt_en_bit = 7,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-+};
-+
-+static const struct s3c2410_wdt_variant drv_data_exynos850_cl1 = {
-+	.mask_reset_reg = EXYNOS850_CLUSTER1_NONCPU_INT_EN,
-+	.mask_bit = 2,
-+	.mask_reset_inv = true,
-+	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-+	.rst_stat_bit = EXYNOS850_CLUSTER1_WDTRESET_BIT,
-+	.cnt_en_reg = EXYNOS850_CLUSTER1_NONCPU_OUT,
-+	.cnt_en_bit = 7,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-+};
-+
- static const struct of_device_id s3c2410_wdt_match[] = {
- 	{ .compatible = "samsung,s3c2410-wdt",
- 	  .data = &drv_data_s3c2410 },
-@@ -216,6 +247,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
- 	  .data = &drv_data_exynos5420 },
- 	{ .compatible = "samsung,exynos7-wdt",
- 	  .data = &drv_data_exynos7 },
-+	{ .compatible = "samsung,exynos850-wdt",
-+	  .data = &drv_data_exynos850_cl0 },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
-@@ -587,14 +620,40 @@ static inline const struct s3c2410_wdt_variant *
- s3c2410_get_wdt_drv_data(struct platform_device *pdev)
- {
- 	const struct s3c2410_wdt_variant *variant;
-+	struct device *dev = &pdev->dev;
- 
--	variant = of_device_get_match_data(&pdev->dev);
-+	variant = of_device_get_match_data(dev);
- 	if (!variant) {
- 		/* Device matched by platform_device_id */
- 		variant = (struct s3c2410_wdt_variant *)
- 			   platform_get_device_id(pdev)->driver_data;
- 	}
- 
-+#ifdef CONFIG_OF
-+	/* Choose Exynos850 driver data w.r.t. cluster index */
-+	if (variant == &drv_data_exynos850_cl0) {
-+		u32 index;
-+		int err;
-+
-+		err = of_property_read_u32(dev->of_node,
-+					   "samsung,cluster-index", &index);
-+		if (err) {
-+			dev_err(dev, "failed to get cluster index\n");
-+			return NULL;
-+		}
-+
-+		switch (index) {
-+		case 0:
-+			return &drv_data_exynos850_cl0;
-+		case 1:
-+			return &drv_data_exynos850_cl1;
-+		default:
-+			dev_err(dev, "wrong cluster index: %u\n", index);
-+			return NULL;
-+		}
-+	}
-+#endif
-+
- 	return variant;
- }
- 
-@@ -615,6 +674,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
- 	wdt->wdt_device = s3c2410_wdd;
- 
- 	wdt->drv_data = s3c2410_get_wdt_drv_data(pdev);
-+	if (!wdt->drv_data)
-+		return -EINVAL;
-+
- 	if (wdt->drv_data->quirks & QUIRKS_HAVE_PMUREG) {
- 		wdt->pmureg = syscon_regmap_lookup_by_phandle(dev->of_node,
- 						"samsung,syscon-phandle");
--- 
-2.30.2
-
+Best regards,
+Krzysztof
