@@ -2,371 +2,226 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 003DE458D8C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Nov 2021 12:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71EF459114
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Nov 2021 16:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239167AbhKVLj1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 22 Nov 2021 06:39:27 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:27932 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239170AbhKVLj1 (ORCPT
+        id S239037AbhKVPRy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 22 Nov 2021 10:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238381AbhKVPRy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 22 Nov 2021 06:39:27 -0500
-X-IronPort-AV: E=Sophos;i="5.87,254,1631545200"; 
-   d="scan'208";a="101061590"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 22 Nov 2021 20:36:20 +0900
-Received: from localhost.localdomain (unknown [10.226.92.178])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id F0B58417C66B;
-        Mon, 22 Nov 2021 20:36:16 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-watchdog@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 2/2] watchdog: Add Watchdog Timer driver for RZ/G2L
-Date:   Mon, 22 Nov 2021 11:35:54 +0000
-Message-Id: <20211122113554.15990-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211122113554.15990-1-biju.das.jz@bp.renesas.com>
-References: <20211122113554.15990-1-biju.das.jz@bp.renesas.com>
+        Mon, 22 Nov 2021 10:17:54 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0506C061574
+        for <linux-watchdog@vger.kernel.org>; Mon, 22 Nov 2021 07:14:47 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id l24so37320309uak.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 22 Nov 2021 07:14:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=poS5/ZkkPxvtzD22F0lVSI3r9e0b9RG+7VJETyoPoIg=;
+        b=TywNwI4xVcUHaTxzzNsfna40gripLivuJ7MFTK83mECnSR4WEvMLG4GGh/WxqLhgSQ
+         iVNbugZvKmwY34OT7zb+LLIevaJIMtjOXZbQLsVQEV72+tmu2G3E/x2v7aIrcu318Pnh
+         LKurfoWikwicl+phNM17yy1abyVKwWOmz56eASAScq5NSXcZfZBkmDcT5MgqIofw0dA2
+         knCYy+4qh1KV15oU/bG3fVjj3zwQY/ZZ3cNevac5AT+TzKwCBKYg1J2NOwpGK53yZmKk
+         0Hj/314aubMIvQhOxEjydfa9oKJPmY20KcwEz/WGVLtg1aHKb2EZ4+9tpfDK7vSt9C1Q
+         1tJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=poS5/ZkkPxvtzD22F0lVSI3r9e0b9RG+7VJETyoPoIg=;
+        b=0EvHyV43VxYJ+DdDPtamaoBgeHLYKMCN0XOxNJIODB3bJhKjBut+CIU4sOmVjP/n1z
+         xTVtKy3+kG6QXq1/tKIcM4EaudH+YTgvUxv7o+gOHtRBoguY0F2BEPSy8ABbahcUcFFM
+         Ts1Ny3k6vqskgsbc9esjUoDbwKAXbYEyg1PxqSKIRdZA6gi2JTkyVTSXYpxxv9HmnmJ3
+         DGYh91Icryhk1wUHN2Vu0UH3iI48wkvybPVXjaAOp2xL2gee5qUu9GfY4ggUNZFQJWUl
+         KbFlrFu9EBF7bn6FBxUA+88PMQ1PksoXFcId7Sj9iIGlIaoknEP6y+RuWPhOnfnxF3zW
+         ImtQ==
+X-Gm-Message-State: AOAM533ruyGOUIAqLtj3F5//NZ0a4/slgwsR35t1IrldrvOkMxB5WrGA
+        m4V3FjxoqQGEWEnDD9TBGYzOy35YEF3Efs4xGo3Ipg==
+X-Google-Smtp-Source: ABdhPJw1wNxRm9yPXD1GQ+f/A1NtWJ2Stf4A605YHIA5GbkNnFK9OsunsY4bFzRgCO2pMCIgmqkZo9kmM3qJVwwLmhY=
+X-Received: by 2002:a05:6102:4192:: with SMTP id cd18mr132128250vsb.35.1637594086878;
+ Mon, 22 Nov 2021 07:14:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20211121165647.26706-1-semen.protsenko@linaro.org> <20211121165647.26706-13-semen.protsenko@linaro.org>
+In-Reply-To: <20211121165647.26706-13-semen.protsenko@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 22 Nov 2021 17:14:35 +0200
+Message-ID: <CAPLW+4myd2JDEKmv+E1HsxK_yNaLC+iUWSo99+Lqujof3MGpCg@mail.gmail.com>
+Subject: Re: [PATCH v4 12/12] watchdog: s3c2410: Add Exynos850 support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add Watchdog Timer driver for RZ/G2L SoC.
+On Sun, 21 Nov 2021 at 18:57, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+>
+> Exynos850 is a bit different from SoCs already supported in WDT driver:
+>   - AUTOMATIC_WDT_RESET_DISABLE register is removed, so its value is
+>     always 0; .disable_auto_reset callback is not set for that reason
+>   - MASK_WDT_RESET_REQUEST register is replaced with
+>     CLUSTERx_NONCPU_IN_EN register; instead of masking (disabling) WDT
+>     reset interrupt it's now enabled with the same value; .mask_reset
+>     callback is reused for that functionality though
+>   - To make WDT functional, WDT counter needs to be enabled in
+>     CLUSTERx_NONCPU_OUT register; it's done using .enable_counter
+>     callback
+>
+> Also Exynos850 has two CPU clusters, each has its own dedicated WDT
+> instance. Different PMU registers and bits are used for each cluster. So
+> driver data is now modified in probe, adding needed info depending on
+> cluster index passed from device tree.
+>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> ---
 
-WDT IP block supports normal watchdog timer function and reset
-request function due to CPU parity error.
+Hi Guenter,
 
-This driver currently supports normal watchdog timer function
-and later will add support for reset request function due to
-CPU parity error.
+I've resent the whole series, but I can see you already applied my
+previous series to your watchdog-next branch. So this patch is the
+only one that actually changed in the whole series (with fixes for
+0-day warning).
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
-V2->V3:
- * Added Rb tag from Guenter Roeck
-V1->V2:
- * started using clk_get/put instead of devm_clk_get/put
- * Moved devm_add_action_or_reset after set_drvdata() and 
- * removed redundant action on devm_add_action_or_reset() failure.
-RFC->V1
- * Removed pclk_rate from priv.
- * rzg2l_wdt_write() returns void and Removed tiemout related to register update 
- * rzg2l_wdt_init_timeout() returns void and removed delays.
- * removed set_bit(WDOG_HW_RUNNING,..) as we can stop watchdog
- * renamed reset_assert_clock_disable->reset_assert_pm_disable_put
- * started using devm_reset_control_get_exclusive()
- * removed platform_set_drvdata(pdev, priv) as there is no user
- * removed watchdog_set_restart_priority(&priv->wdev, 0) as 0 is the default.
- * removed remove callback as it is empty.
----
- drivers/watchdog/Kconfig     |   8 ++
- drivers/watchdog/Makefile    |   1 +
- drivers/watchdog/rzg2l_wdt.c | 255 +++++++++++++++++++++++++++++++++++
- 3 files changed, 264 insertions(+)
- create mode 100644 drivers/watchdog/rzg2l_wdt.c
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 9d222ba17ec6..4760ee981263 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -881,6 +881,14 @@ config RENESAS_RZAWDT
- 	  This driver adds watchdog support for the integrated watchdogs in the
- 	  Renesas RZ/A SoCs. These watchdogs can be used to reset a system.
- 
-+config RENESAS_RZG2LWDT
-+	tristate "Renesas RZ/G2L WDT Watchdog"
-+	depends on ARCH_RENESAS || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  This driver adds watchdog support for the integrated watchdogs in the
-+	  Renesas RZ/G2L SoCs. These watchdogs can be used to reset a system.
-+
- config ASPEED_WATCHDOG
- 	tristate "Aspeed BMC watchdog support"
- 	depends on ARCH_ASPEED || COMPILE_TEST
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 2ee97064145b..9a3dc0bd271b 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -84,6 +84,7 @@ obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
- obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
- obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
- obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
-+obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
- obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
- obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
- obj-$(CONFIG_UNIPHIER_WATCHDOG) += uniphier_wdt.o
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-new file mode 100644
-index 000000000000..77f1cfc5ecf6
---- /dev/null
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -0,0 +1,255 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Renesas RZ/G2L WDT Watchdog Driver
-+ *
-+ * Copyright (C) 2021 Renesas Electronics Corporation
-+ */
-+#include <linux/bitops.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <linux/watchdog.h>
-+
-+#define WDTCNT		0x00
-+#define WDTSET		0x04
-+#define WDTTIM		0x08
-+#define WDTINT		0x0C
-+#define WDTCNT_WDTEN	BIT(0)
-+#define WDTINT_INTDISP	BIT(0)
-+
-+#define WDT_DEFAULT_TIMEOUT		60U
-+
-+/* Setting period time register only 12 bit set in WDTSET[31:20] */
-+#define WDTSET_COUNTER_MASK		(0xFFF00000)
-+#define WDTSET_COUNTER_VAL(f)		((f) << 20)
-+
-+#define F2CYCLE_NSEC(f)			(1000000000 / (f))
-+#define WDT_CYCLE_MSEC(f, wdttime)	((1024 * 1024 * (((u64)wdttime) + 1)) / \
-+					 ((f) / 1000000))
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+struct rzg2l_wdt_priv {
-+	void __iomem *base;
-+	struct watchdog_device wdev;
-+	struct reset_control *rstc;
-+	unsigned long osc_clk_rate;
-+	unsigned long delay;
-+};
-+
-+static void rzg2l_wdt_wait_delay(struct rzg2l_wdt_priv *priv)
-+{
-+	/* delay timer when change the setting register */
-+	ndelay(priv->delay);
-+}
-+
-+static void rzg2l_wdt_write(struct rzg2l_wdt_priv *priv, u32 val, unsigned int reg)
-+{
-+	if (reg == WDTSET)
-+		val &= WDTSET_COUNTER_MASK;
-+
-+	writel_relaxed(val, priv->base + reg);
-+	/* Registers other than the WDTINT is always synchronized with WDT_CLK */
-+	if (reg != WDTINT)
-+		rzg2l_wdt_wait_delay(priv);
-+}
-+
-+static void rzg2l_wdt_init_timeout(struct watchdog_device *wdev)
-+{
-+	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u32 time_out;
-+
-+	/* Clear Lapsed Time Register and clear Interrupt */
-+	rzg2l_wdt_write(priv, WDTINT_INTDISP, WDTINT);
-+	/* 2 consecutive overflow cycle needed to trigger reset */
-+	time_out = (wdev->timeout / 2 * 1000000) / WDT_CYCLE_MSEC(priv->osc_clk_rate, 0);
-+	rzg2l_wdt_write(priv, WDTSET_COUNTER_VAL(time_out), WDTSET);
-+}
-+
-+static int rzg2l_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	reset_control_deassert(priv->rstc);
-+	pm_runtime_get_sync(wdev->parent);
-+
-+	/* Initialize time out */
-+	rzg2l_wdt_init_timeout(wdev);
-+
-+	/* Initialize watchdog counter register */
-+	rzg2l_wdt_write(priv, 0, WDTTIM);
-+
-+	/* Enable watchdog timer*/
-+	rzg2l_wdt_write(priv, WDTCNT_WDTEN, WDTCNT);
-+
-+	return 0;
-+}
-+
-+static int rzg2l_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	pm_runtime_put(wdev->parent);
-+	reset_control_assert(priv->rstc);
-+
-+	return 0;
-+}
-+
-+static int rzg2l_wdt_restart(struct watchdog_device *wdev,
-+			     unsigned long action, void *data)
-+{
-+	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	/* Reset the module before we modify any register */
-+	reset_control_reset(priv->rstc);
-+	pm_runtime_get_sync(wdev->parent);
-+
-+	/* smallest counter value to reboot soon */
-+	rzg2l_wdt_write(priv, WDTSET_COUNTER_VAL(1), WDTSET);
-+
-+	/* Enable watchdog timer*/
-+	rzg2l_wdt_write(priv, WDTCNT_WDTEN, WDTCNT);
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_info rzg2l_wdt_ident = {
-+	.options = WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
-+	.identity = "Renesas RZ/G2L WDT Watchdog",
-+};
-+
-+static int rzg2l_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	rzg2l_wdt_write(priv, WDTINT_INTDISP, WDTINT);
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_ops rzg2l_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = rzg2l_wdt_start,
-+	.stop = rzg2l_wdt_stop,
-+	.ping = rzg2l_wdt_ping,
-+	.restart = rzg2l_wdt_restart,
-+};
-+
-+static void rzg2l_wdt_reset_assert_pm_disable_put(void *data)
-+{
-+	struct watchdog_device *wdev = data;
-+	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	pm_runtime_put(wdev->parent);
-+	pm_runtime_disable(wdev->parent);
-+	reset_control_assert(priv->rstc);
-+}
-+
-+static int rzg2l_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct rzg2l_wdt_priv *priv;
-+	unsigned long pclk_rate;
-+	struct clk *wdt_clk;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	/* Get watchdog main clock */
-+	wdt_clk = clk_get(&pdev->dev, "oscclk");
-+	if (IS_ERR(wdt_clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no oscclk");
-+
-+	priv->osc_clk_rate = clk_get_rate(wdt_clk);
-+	clk_put(wdt_clk);
-+	if (!priv->osc_clk_rate)
-+		return dev_err_probe(&pdev->dev, -EINVAL, "oscclk rate is 0");
-+
-+	/* Get Peripheral clock */
-+	wdt_clk = clk_get(&pdev->dev, "pclk");
-+	if (IS_ERR(wdt_clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(wdt_clk), "no pclk");
-+
-+	pclk_rate = clk_get_rate(wdt_clk);
-+	clk_put(wdt_clk);
-+	if (!pclk_rate)
-+		return dev_err_probe(&pdev->dev, -EINVAL, "pclk rate is 0");
-+
-+	priv->delay = F2CYCLE_NSEC(priv->osc_clk_rate) * 6 + F2CYCLE_NSEC(pclk_rate) * 9;
-+
-+	priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(priv->rstc))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->rstc),
-+				     "failed to get cpg reset");
-+
-+	reset_control_deassert(priv->rstc);
-+	pm_runtime_enable(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret < 0) {
-+		dev_err(dev, "pm_runtime_resume_and_get failed ret=%pe", ERR_PTR(ret));
-+		goto out_pm_get;
-+	}
-+
-+	priv->wdev.info = &rzg2l_wdt_ident;
-+	priv->wdev.ops = &rzg2l_wdt_ops;
-+	priv->wdev.parent = dev;
-+	priv->wdev.min_timeout = 1;
-+	priv->wdev.max_timeout = WDT_CYCLE_MSEC(priv->osc_clk_rate, 0xfff);
-+	priv->wdev.timeout = WDT_DEFAULT_TIMEOUT;
-+
-+	watchdog_set_drvdata(&priv->wdev, priv);
-+	ret = devm_add_action_or_reset(&pdev->dev,
-+				       rzg2l_wdt_reset_assert_pm_disable_put,
-+				       &priv->wdev);
-+	if (ret < 0)
-+		return ret;
-+
-+	watchdog_set_nowayout(&priv->wdev, nowayout);
-+	watchdog_stop_on_unregister(&priv->wdev);
-+
-+	ret = watchdog_init_timeout(&priv->wdev, 0, dev);
-+	if (ret)
-+		dev_warn(dev, "Specified timeout invalid, using default");
-+
-+	return devm_watchdog_register_device(&pdev->dev, &priv->wdev);
-+
-+out_pm_get:
-+	pm_runtime_disable(dev);
-+	reset_control_assert(priv->rstc);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id rzg2l_wdt_ids[] = {
-+	{ .compatible = "renesas,rzg2l-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, rzg2l_wdt_ids);
-+
-+static struct platform_driver rzg2l_wdt_driver = {
-+	.driver = {
-+		.name = "rzg2l_wdt",
-+		.of_match_table = rzg2l_wdt_ids,
-+	},
-+	.probe = rzg2l_wdt_probe,
-+};
-+module_platform_driver(rzg2l_wdt_driver);
-+
-+MODULE_DESCRIPTION("Renesas RZ/G2L WDT Watchdog Driver");
-+MODULE_AUTHOR("Biju Das <biju.das.jz@bp.renesas.com>");
-+MODULE_LICENSE("GPL v2");
--- 
-2.17.1
-
+> Changes in v4:
+>   - Fixed build error when CONFIG_OF is disabled (found by 0-day):
+>     added #ifdef CONFIG_OF guard in s3c2410_get_wdt_drv_data()
+>   - Added R-b tag by Guenter Roeck
+>
+> Changes in v3:
+>   - Renamed "samsung,index" property to more descriptive
+>     "samsung,cluster-index"
+>   - Used pre-defined and completely set driver data for cluster0 and
+>     cluster1
+>
+> Changes in v2:
+>   - Used single compatible for Exynos850, populating missing driver data
+>     in probe
+>   - Added "index" property to specify CPU cluster index
+>
+>  drivers/watchdog/s3c2410_wdt.c | 64 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 63 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index 96aa5d9c6ed4..115a6fe7da57 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -56,6 +56,13 @@
+>  #define EXYNOS5_RST_STAT_REG_OFFSET            0x0404
+>  #define EXYNOS5_WDT_DISABLE_REG_OFFSET         0x0408
+>  #define EXYNOS5_WDT_MASK_RESET_REG_OFFSET      0x040c
+> +#define EXYNOS850_CLUSTER0_NONCPU_OUT          0x1220
+> +#define EXYNOS850_CLUSTER0_NONCPU_INT_EN       0x1244
+> +#define EXYNOS850_CLUSTER1_NONCPU_OUT          0x1620
+> +#define EXYNOS850_CLUSTER1_NONCPU_INT_EN       0x1644
+> +
+> +#define EXYNOS850_CLUSTER0_WDTRESET_BIT                24
+> +#define EXYNOS850_CLUSTER1_WDTRESET_BIT                23
+>
+>  /**
+>   * Quirk flags for different Samsung watchdog IP-cores.
+> @@ -205,6 +212,30 @@ static const struct s3c2410_wdt_variant drv_data_exynos7 = {
+>                   QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_AUTO_DISABLE,
+>  };
+>
+> +static const struct s3c2410_wdt_variant drv_data_exynos850_cl0 = {
+> +       .mask_reset_reg = EXYNOS850_CLUSTER0_NONCPU_INT_EN,
+> +       .mask_bit = 2,
+> +       .mask_reset_inv = true,
+> +       .rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
+> +       .rst_stat_bit = EXYNOS850_CLUSTER0_WDTRESET_BIT,
+> +       .cnt_en_reg = EXYNOS850_CLUSTER0_NONCPU_OUT,
+> +       .cnt_en_bit = 7,
+> +       .quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
+> +                 QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_exynos850_cl1 = {
+> +       .mask_reset_reg = EXYNOS850_CLUSTER1_NONCPU_INT_EN,
+> +       .mask_bit = 2,
+> +       .mask_reset_inv = true,
+> +       .rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
+> +       .rst_stat_bit = EXYNOS850_CLUSTER1_WDTRESET_BIT,
+> +       .cnt_en_reg = EXYNOS850_CLUSTER1_NONCPU_OUT,
+> +       .cnt_en_bit = 7,
+> +       .quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
+> +                 QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
+> +};
+> +
+>  static const struct of_device_id s3c2410_wdt_match[] = {
+>         { .compatible = "samsung,s3c2410-wdt",
+>           .data = &drv_data_s3c2410 },
+> @@ -216,6 +247,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
+>           .data = &drv_data_exynos5420 },
+>         { .compatible = "samsung,exynos7-wdt",
+>           .data = &drv_data_exynos7 },
+> +       { .compatible = "samsung,exynos850-wdt",
+> +         .data = &drv_data_exynos850_cl0 },
+>         {},
+>  };
+>  MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
+> @@ -587,14 +620,40 @@ static inline const struct s3c2410_wdt_variant *
+>  s3c2410_get_wdt_drv_data(struct platform_device *pdev)
+>  {
+>         const struct s3c2410_wdt_variant *variant;
+> +       struct device *dev = &pdev->dev;
+>
+> -       variant = of_device_get_match_data(&pdev->dev);
+> +       variant = of_device_get_match_data(dev);
+>         if (!variant) {
+>                 /* Device matched by platform_device_id */
+>                 variant = (struct s3c2410_wdt_variant *)
+>                            platform_get_device_id(pdev)->driver_data;
+>         }
+>
+> +#ifdef CONFIG_OF
+> +       /* Choose Exynos850 driver data w.r.t. cluster index */
+> +       if (variant == &drv_data_exynos850_cl0) {
+> +               u32 index;
+> +               int err;
+> +
+> +               err = of_property_read_u32(dev->of_node,
+> +                                          "samsung,cluster-index", &index);
+> +               if (err) {
+> +                       dev_err(dev, "failed to get cluster index\n");
+> +                       return NULL;
+> +               }
+> +
+> +               switch (index) {
+> +               case 0:
+> +                       return &drv_data_exynos850_cl0;
+> +               case 1:
+> +                       return &drv_data_exynos850_cl1;
+> +               default:
+> +                       dev_err(dev, "wrong cluster index: %u\n", index);
+> +                       return NULL;
+> +               }
+> +       }
+> +#endif
+> +
+>         return variant;
+>  }
+>
+> @@ -615,6 +674,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>         wdt->wdt_device = s3c2410_wdd;
+>
+>         wdt->drv_data = s3c2410_get_wdt_drv_data(pdev);
+> +       if (!wdt->drv_data)
+> +               return -EINVAL;
+> +
+>         if (wdt->drv_data->quirks & QUIRKS_HAVE_PMUREG) {
+>                 wdt->pmureg = syscon_regmap_lookup_by_phandle(dev->of_node,
+>                                                 "samsung,syscon-phandle");
+> --
+> 2.30.2
+>
