@@ -2,226 +2,88 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D71EF459114
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Nov 2021 16:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F924598D6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Nov 2021 01:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239037AbhKVPRy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 22 Nov 2021 10:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238381AbhKVPRy (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 22 Nov 2021 10:17:54 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0506C061574
-        for <linux-watchdog@vger.kernel.org>; Mon, 22 Nov 2021 07:14:47 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id l24so37320309uak.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 22 Nov 2021 07:14:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=poS5/ZkkPxvtzD22F0lVSI3r9e0b9RG+7VJETyoPoIg=;
-        b=TywNwI4xVcUHaTxzzNsfna40gripLivuJ7MFTK83mECnSR4WEvMLG4GGh/WxqLhgSQ
-         iVNbugZvKmwY34OT7zb+LLIevaJIMtjOXZbQLsVQEV72+tmu2G3E/x2v7aIrcu318Pnh
-         LKurfoWikwicl+phNM17yy1abyVKwWOmz56eASAScq5NSXcZfZBkmDcT5MgqIofw0dA2
-         knCYy+4qh1KV15oU/bG3fVjj3zwQY/ZZ3cNevac5AT+TzKwCBKYg1J2NOwpGK53yZmKk
-         0Hj/314aubMIvQhOxEjydfa9oKJPmY20KcwEz/WGVLtg1aHKb2EZ4+9tpfDK7vSt9C1Q
-         1tJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=poS5/ZkkPxvtzD22F0lVSI3r9e0b9RG+7VJETyoPoIg=;
-        b=0EvHyV43VxYJ+DdDPtamaoBgeHLYKMCN0XOxNJIODB3bJhKjBut+CIU4sOmVjP/n1z
-         xTVtKy3+kG6QXq1/tKIcM4EaudH+YTgvUxv7o+gOHtRBoguY0F2BEPSy8ABbahcUcFFM
-         Ts1Ny3k6vqskgsbc9esjUoDbwKAXbYEyg1PxqSKIRdZA6gi2JTkyVTSXYpxxv9HmnmJ3
-         DGYh91Icryhk1wUHN2Vu0UH3iI48wkvybPVXjaAOp2xL2gee5qUu9GfY4ggUNZFQJWUl
-         KbFlrFu9EBF7bn6FBxUA+88PMQ1PksoXFcId7Sj9iIGlIaoknEP6y+RuWPhOnfnxF3zW
-         ImtQ==
-X-Gm-Message-State: AOAM533ruyGOUIAqLtj3F5//NZ0a4/slgwsR35t1IrldrvOkMxB5WrGA
-        m4V3FjxoqQGEWEnDD9TBGYzOy35YEF3Efs4xGo3Ipg==
-X-Google-Smtp-Source: ABdhPJw1wNxRm9yPXD1GQ+f/A1NtWJ2Stf4A605YHIA5GbkNnFK9OsunsY4bFzRgCO2pMCIgmqkZo9kmM3qJVwwLmhY=
-X-Received: by 2002:a05:6102:4192:: with SMTP id cd18mr132128250vsb.35.1637594086878;
- Mon, 22 Nov 2021 07:14:46 -0800 (PST)
+        id S233115AbhKWAD6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 22 Nov 2021 19:03:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44224 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232678AbhKWADo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 22 Nov 2021 19:03:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF3DB61027;
+        Tue, 23 Nov 2021 00:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637625635;
+        bh=01cYwVbEdh0X7Ig5gVg6S/mgZIzXX2UFJSaD0Nf/IgU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=U1nmBoWjhnKgcYW1P9S5O0K0Rs11K/69Wj8qIMIwjMYyqTSq9SSAFIvwKX46MCafv
+         bzKXJmvlxQfZ96AyBeB+jN1NZHMYBe1gJ7eNUTWvU7RFnJQFeQsHUNTWr2I2h6zLDs
+         gH6aaEAr75ufBXmH79TfSd8EAGD3NX716TmMcNtk8csTCVWeFZkWmIzJBBp9k7ASdG
+         K2PuMIsmI99E0MK1tlq8fKQ5hQrpmALZjV5BmVplWZXNKDZaIKvK4uNe8TxtotADZv
+         H2Sln2ND0ACs8GbYP6iiLLWccxe9xFzttrBoEXugXv3gYH6EuehNCPKvRhbOQeOHqf
+         Uta6pbTYeOIbA==
+From:   Mark Brown <broonie@kernel.org>
+To:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
+        wim@linux-watchdog.org, s.hauer@pengutronix.de,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, ulf.hansson@linaro.org,
+        linux@rempel-privat.de, linux@roeck-us.net
+Cc:     kernel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, daniel.lezcano@linaro.org,
+        linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        festevam@gmail.com, Peng Fan <peng.fan@nxp.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+References: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+Subject: Re: (subset) [PATCH V5 0/8] dt-bindinds/dts: support i.MX8ULP
+Message-Id: <163762563048.2472045.8052329194047350725.b4-ty@kernel.org>
+Date:   Tue, 23 Nov 2021 00:00:30 +0000
 MIME-Version: 1.0
-References: <20211121165647.26706-1-semen.protsenko@linaro.org> <20211121165647.26706-13-semen.protsenko@linaro.org>
-In-Reply-To: <20211121165647.26706-13-semen.protsenko@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 22 Nov 2021 17:14:35 +0200
-Message-ID: <CAPLW+4myd2JDEKmv+E1HsxK_yNaLC+iUWSo99+Lqujof3MGpCg@mail.gmail.com>
-Subject: Re: [PATCH v4 12/12] watchdog: s3c2410: Add Exynos850 support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, 21 Nov 2021 at 18:57, Sam Protsenko <semen.protsenko@linaro.org> wrote:
->
-> Exynos850 is a bit different from SoCs already supported in WDT driver:
->   - AUTOMATIC_WDT_RESET_DISABLE register is removed, so its value is
->     always 0; .disable_auto_reset callback is not set for that reason
->   - MASK_WDT_RESET_REQUEST register is replaced with
->     CLUSTERx_NONCPU_IN_EN register; instead of masking (disabling) WDT
->     reset interrupt it's now enabled with the same value; .mask_reset
->     callback is reused for that functionality though
->   - To make WDT functional, WDT counter needs to be enabled in
->     CLUSTERx_NONCPU_OUT register; it's done using .enable_counter
->     callback
->
-> Also Exynos850 has two CPU clusters, each has its own dedicated WDT
-> instance. Different PMU registers and bits are used for each cluster. So
-> driver data is now modified in probe, adding needed info depending on
-> cluster index passed from device tree.
->
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> ---
+On Sat, 20 Nov 2021 19:34:46 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> 
+> V5:
+>  only fix patch 8/8 "arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board"
+>   - Correct bus-width to 8 for eMMC
+>   - Drop pinctrl enet which no user
+>  Drop patch 1/9 in V4, since in merged in linux-next
+>  Add A-b/R-b tag
+> 
+> [...]
 
-Hi Guenter,
+Applied to
 
-I've resent the whole series, but I can see you already applied my
-previous series to your watchdog-next branch. So this patch is the
-only one that actually changed in the whole series (with fixes for
-0-day warning).
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Changes in v4:
->   - Fixed build error when CONFIG_OF is disabled (found by 0-day):
->     added #ifdef CONFIG_OF guard in s3c2410_get_wdt_drv_data()
->   - Added R-b tag by Guenter Roeck
->
-> Changes in v3:
->   - Renamed "samsung,index" property to more descriptive
->     "samsung,cluster-index"
->   - Used pre-defined and completely set driver data for cluster0 and
->     cluster1
->
-> Changes in v2:
->   - Used single compatible for Exynos850, populating missing driver data
->     in probe
->   - Added "index" property to specify CPU cluster index
->
->  drivers/watchdog/s3c2410_wdt.c | 64 +++++++++++++++++++++++++++++++++-
->  1 file changed, 63 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> index 96aa5d9c6ed4..115a6fe7da57 100644
-> --- a/drivers/watchdog/s3c2410_wdt.c
-> +++ b/drivers/watchdog/s3c2410_wdt.c
-> @@ -56,6 +56,13 @@
->  #define EXYNOS5_RST_STAT_REG_OFFSET            0x0404
->  #define EXYNOS5_WDT_DISABLE_REG_OFFSET         0x0408
->  #define EXYNOS5_WDT_MASK_RESET_REG_OFFSET      0x040c
-> +#define EXYNOS850_CLUSTER0_NONCPU_OUT          0x1220
-> +#define EXYNOS850_CLUSTER0_NONCPU_INT_EN       0x1244
-> +#define EXYNOS850_CLUSTER1_NONCPU_OUT          0x1620
-> +#define EXYNOS850_CLUSTER1_NONCPU_INT_EN       0x1644
-> +
-> +#define EXYNOS850_CLUSTER0_WDTRESET_BIT                24
-> +#define EXYNOS850_CLUSTER1_WDTRESET_BIT                23
->
->  /**
->   * Quirk flags for different Samsung watchdog IP-cores.
-> @@ -205,6 +212,30 @@ static const struct s3c2410_wdt_variant drv_data_exynos7 = {
->                   QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_AUTO_DISABLE,
->  };
->
-> +static const struct s3c2410_wdt_variant drv_data_exynos850_cl0 = {
-> +       .mask_reset_reg = EXYNOS850_CLUSTER0_NONCPU_INT_EN,
-> +       .mask_bit = 2,
-> +       .mask_reset_inv = true,
-> +       .rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-> +       .rst_stat_bit = EXYNOS850_CLUSTER0_WDTRESET_BIT,
-> +       .cnt_en_reg = EXYNOS850_CLUSTER0_NONCPU_OUT,
-> +       .cnt_en_bit = 7,
-> +       .quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
-> +                 QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-> +};
-> +
-> +static const struct s3c2410_wdt_variant drv_data_exynos850_cl1 = {
-> +       .mask_reset_reg = EXYNOS850_CLUSTER1_NONCPU_INT_EN,
-> +       .mask_bit = 2,
-> +       .mask_reset_inv = true,
-> +       .rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-> +       .rst_stat_bit = EXYNOS850_CLUSTER1_WDTRESET_BIT,
-> +       .cnt_en_reg = EXYNOS850_CLUSTER1_NONCPU_OUT,
-> +       .cnt_en_bit = 7,
-> +       .quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET | \
-> +                 QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-> +};
-> +
->  static const struct of_device_id s3c2410_wdt_match[] = {
->         { .compatible = "samsung,s3c2410-wdt",
->           .data = &drv_data_s3c2410 },
-> @@ -216,6 +247,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
->           .data = &drv_data_exynos5420 },
->         { .compatible = "samsung,exynos7-wdt",
->           .data = &drv_data_exynos7 },
-> +       { .compatible = "samsung,exynos850-wdt",
-> +         .data = &drv_data_exynos850_cl0 },
->         {},
->  };
->  MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
-> @@ -587,14 +620,40 @@ static inline const struct s3c2410_wdt_variant *
->  s3c2410_get_wdt_drv_data(struct platform_device *pdev)
->  {
->         const struct s3c2410_wdt_variant *variant;
-> +       struct device *dev = &pdev->dev;
->
-> -       variant = of_device_get_match_data(&pdev->dev);
-> +       variant = of_device_get_match_data(dev);
->         if (!variant) {
->                 /* Device matched by platform_device_id */
->                 variant = (struct s3c2410_wdt_variant *)
->                            platform_get_device_id(pdev)->driver_data;
->         }
->
-> +#ifdef CONFIG_OF
-> +       /* Choose Exynos850 driver data w.r.t. cluster index */
-> +       if (variant == &drv_data_exynos850_cl0) {
-> +               u32 index;
-> +               int err;
-> +
-> +               err = of_property_read_u32(dev->of_node,
-> +                                          "samsung,cluster-index", &index);
-> +               if (err) {
-> +                       dev_err(dev, "failed to get cluster index\n");
-> +                       return NULL;
-> +               }
-> +
-> +               switch (index) {
-> +               case 0:
-> +                       return &drv_data_exynos850_cl0;
-> +               case 1:
-> +                       return &drv_data_exynos850_cl1;
-> +               default:
-> +                       dev_err(dev, "wrong cluster index: %u\n", index);
-> +                       return NULL;
-> +               }
-> +       }
-> +#endif
-> +
->         return variant;
->  }
->
-> @@ -615,6 +674,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
->         wdt->wdt_device = s3c2410_wdd;
->
->         wdt->drv_data = s3c2410_get_wdt_drv_data(pdev);
-> +       if (!wdt->drv_data)
-> +               return -EINVAL;
-> +
->         if (wdt->drv_data->quirks & QUIRKS_HAVE_PMUREG) {
->                 wdt->pmureg = syscon_regmap_lookup_by_phandle(dev->of_node,
->                                                 "samsung,syscon-phandle");
-> --
-> 2.30.2
->
+Thanks!
+
+[3/8] dt-bindings: spi: fsl-lpspi: Add imx8ulp compatible string
+      commit: 49cd1eb37b487036f51bd57b591f7b5760a10e02
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
