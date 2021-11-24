@@ -2,151 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE3D45B882
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Nov 2021 11:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9BA45B88D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Nov 2021 11:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241523AbhKXKnv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Nov 2021 05:43:51 -0500
-Received: from [113.204.237.245] ([113.204.237.245]:34508 "EHLO
+        id S241578AbhKXKqO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 24 Nov 2021 05:46:14 -0500
+Received: from [113.204.237.245] ([113.204.237.245]:34578 "EHLO
         test.cqplus1.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233492AbhKXKns (ORCPT
+        with ESMTP id S241576AbhKXKqO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Nov 2021 05:43:48 -0500
-X-MailGates: (compute_score:DELIVER,40,3)
-Received: from 172.27.96.203
-        by cqmailgates with MailGates ESMTP Server V5.0(1217:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Wed, 24 Nov 2021 18:31:56 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 24 Nov 2021 18:31:56 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.017; Wed, 24 Nov 2021 18:31:55 +0800
-From:   =?utf-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-Subject: RE: [PATCH 1/2] watchdog: Add watchdog driver for Sunplus SP7021
-Thread-Topic: [PATCH 1/2] watchdog: Add watchdog driver for Sunplus SP7021
-Thread-Index: AQHX17Svth3nM1SKBEqNlYgSTKjRuav/cmsAgBKJveA=
-Date:   Wed, 24 Nov 2021 10:31:55 +0000
-Message-ID: <5ed3659b2cbd4227b8c2563b24bbd3be@cqplus1.com>
+        Wed, 24 Nov 2021 05:46:14 -0500
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by cqmailgates with MailGates ESMTP Server V5.0(1213:0:AUTH_RELAY)
+        (envelope-from <xt.hu@cqplus1.com>); Wed, 24 Nov 2021 18:42:23 +0800 (CST)
+From:   Xiantao Hu <xt.hu@cqplus1.com>
+To:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
+        Xiantao Hu <xt.hu@cqplus1.com>
+Subject: [PATCH v2 0/2] Add watchdog driver for Sunplus SP7021 SoC
+Date:   Wed, 24 Nov 2021 18:41:47 +0800
+Message-Id: <20211124104149.361019-1-xt.hu@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211112105952.216280-1-xt.hu@cqplus1.com>
 References: <20211112105952.216280-1-xt.hu@cqplus1.com>
- <20211112105952.216280-2-xt.hu@cqplus1.com>
- <1f2c5cf0-808d-92d5-487e-a3134f5d130a@roeck-us.net>
-In-Reply-To: <1f2c5cf0-808d-92d5-487e-a3134f5d130a@roeck-us.net>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.16]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGksIEd1ZW50ZXIgUm9lY2sgOg0KDQpUaGFua3MgZm9yIHlvdXIgcmV2aWV3LiBTb3JyeSBJIHdh
-cyBzbyBmb2N1c2VkIG9uIGZpeGluZyBjb2RlIGFuZCANCkkgZm9yZ290IHRvIHJlc3BvbmQgdG8g
-dGhlIGVtYWlsLiBJIG1vZGlmeSB0aGUgY29kZSBhcyB5b3UgY29tbWVudA0KYW5kIGFuc3dlciB0
-aGUgcXVlc3Rpb24uDQoNClRoYW5rcw0KQmVzdCBSZWdhcmRzLA0KWGlhbnRhbyBIdQ0KDQo+IC0t
-LS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEd1ZW50ZXIgUm9lY2sgW21haWx0bzpn
-cm9lY2s3QGdtYWlsLmNvbV0gT24gQmVoYWxmIE9mIEd1ZW50ZXIgUm9lY2sNCj4gU2VudDogRnJp
-ZGF5LCBOb3ZlbWJlciAxMiwgMjAyMSAxMDo0NiBQTQ0KPiBUbzogeHQuaHVb6IOh5YWI6Z+sXSA8
-eHQuaHVAY3FwbHVzMS5jb20+OyB3aW1AbGludXgtd2F0Y2hkb2cub3JnOyBwLnphYmVsQHBlbmd1
-dHJvbml4LmRlOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC13YXRjaGRv
-Z0B2Z2VyLmtlcm5lbC5vcmc7IHJvYmgrZHRAa2VybmVsLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2Vy
-Lmtlcm5lbC5vcmcNCj4gQ2M6IFdlbGxzIEx1IOWRguiKs+mosCA8d2VsbHMubHVAc3VucGx1cy5j
-b20+OyBxaW5qaWFuW+img+WBpV0gPHFpbmppYW5AY3FwbHVzMS5jb20+DQo+IFN1YmplY3Q6IFJl
-OiBbUEFUQ0ggMS8yXSB3YXRjaGRvZzogQWRkIHdhdGNoZG9nIGRyaXZlciBmb3IgU3VucGx1cyBT
-UDcwMjENCj4gDQo+IE9uIDExLzEyLzIxIDI6NTkgQU0sIFhpYW50YW8gSHUgd3JvdGU6DQo+ID4g
-U3VucGx1cyBTUDcwMjEgcmVxdWlyZXMgd2F0Y2hkb2cgdGltZXIgc3VwcG9ydC4NCj4gPiBBZGQg
-d2F0Y2hkb2cgZHJpdmVyIHRvIGVuYWJsZSB0aGlzLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTog
-WGlhbnRhbyBIdSA8eHQuaHVAY3FwbHVzMS5jb20+DQouLi4NCj4gPiArc3RydWN0IHNwX3dkdF9w
-cml2IHsNCj4gPiArCXN0cnVjdCB3YXRjaGRvZ19kZXZpY2Ugd2RldjsNCj4gPiArCXZvaWQgX19p
-b21lbSAqYmFzZTsNCj4gPiArCXZvaWQgX19pb21lbSAqbWlzY2VsbGFuZW91czsNCj4gDQo+IFBs
-ZWFzZSBmaW5kIGEgYmV0dGVyIG5hbWUgZm9yIHRoaXMgdmFyaWFibGUuIEFsc28sIHVubGVzcyBJ
-IGFtDQo+IG1pc3Npbmcgc29tZXRoaW5nLCBpdCBpcyBvbmx5IHVzZWQgaW4gdGhlIGluaXQgZnVu
-Y3Rpb24uIFRoYXQgbWVhbnMNCj4gaXQgY2FuIGJlIHBhc3NlZCB0byB0aGF0IGZ1bmN0aW9uIGFz
-IHBhcmFtZXRlciBhbmQgZG9lc24ndCBuZWVkDQo+IHRvIGJlIHN0b3JlZCBpbiBzcF93ZHRfcHJp
-di4NCj4gDQoNCkkgd2lsbCByZW1vdmUgdGhlIG1pc2NlbGxhbmVvdXMgZnJvbSBzcF93ZHRfcHJp
-diBhbmQgcGFzcw0KdG8gdGhhdCBmdW5jdGlvbiBhcyBwYXJhbWV0ZXIuDQoNCj4gPiArCXN0cnVj
-dCBjbGsgKmNsazsNCj4gPiArCXN0cnVjdCByZXNldF9jb250cm9sICpyc3RjOw0KPiA+ICt9Ow0K
-Li4uDQo+ID4gK3N0YXRpYyBpbnQgc3Bfd2R0X3NldF90aW1lb3V0KHN0cnVjdCB3YXRjaGRvZ19k
-ZXZpY2UgKndkZXYsDQo+ID4gKwkJCQkgICB1bnNpZ25lZCBpbnQgdGltZW91dCkNCj4gPiArew0K
-PiA+ICsJd2Rldi0+dGltZW91dCA9IHRpbWVvdXQ7DQo+ID4gKw0KPiANCj4gSSB3b3VsZCBhc3N1
-bWUgdGhpcyBhbHNvIG5lZWRzIHRvIHNldCB0aGUgbmV3IHRpbWVvdXQgaW4gSFcgaWYNCj4gdGhl
-IHdhdGNoZG9nIGlzIHJ1bm5pbmcsIG9yIHRoZSB3YXRjaGRvZyBjb3VsZCB0aW1lIG91dCBiZWZv
-cmUNCj4gdXNlcnNwYWNlIHNlbmRzIGFub3RoZXIgcGluZy4NCj4gDQoNCkkgd2lsbCBjYWxsIHRo
-ZSBwaW5nKCkgYWZ0ZXIgYXNzaWduaW5nIHRpbWVvdXQuDQoNCj4gPiArCXJldHVybiAwOw0KPiA+
-ICt9DQo+ID4gKw0KLi4uDQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IHNwX3dkdF9zdGFydChzdHJ1
-Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3ZGV2KQ0KPiA+ICt7DQo+ID4gKwlpbnQgcmV0Ow0KPiA+ICsN
-Cj4gPiArCXJldCA9IHNwX3dkdF9zZXRfdGltZW91dCh3ZGV2LCB3ZGV2LT50aW1lb3V0KTsNCj4g
-DQo+IFRoYXQgZnVuY3Rpb24gbmV2ZXIgcmV0dXJucyBhbiBlcnJvciwgc28gY2hlY2tpbmcgZm9y
-IGl0IGlzDQo+IHBvaW50bGVzcyBoZXJlLg0KPiANCg0KSSB3aWxsIHJlbW92ZSB0aGUgdmFyaWFi
-bGUgcmV0Lg0KDQo+ID4gKwlpZiAocmV0IDwgMCkNCj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+ICsN
-Ci4uLg0KPiA+ICsvKg0KPiA+ICsgKiAxLldlIG5lZWQgdG8gcmVzZXQgd2F0Y2hkb2cgZmxhZyhj
-bGVhciB3YXRjaGRvZyBpbnRlcnJ1cHQpIGhlcmUNCj4gPiArICogYmVjYXVzZSB3YXRjaGRvZyB0
-aW1lciBkcml2ZXIgZG9lcyBub3QgaGF2ZSBhbiBpbnRlcnJ1cHQgaGFuZGxlciwNCj4gPiArICog
-YW5kIGJlZm9yZSBlbmFsYmUgU1RDIGFuZCBSQlVTIHdhdGNoZG9nIHRpbWVvdXQuIE90aGVyd2lz
-ZSwNCj4gDQo+IGVuYWJsZQ0KPiANCg0KSSB3aWxsIGZpeCBpdC4NCg0KPiA+ICsgKiB0aGUgaW50
-ciBpcyBhbHdheXMgaW4gdGhlIHRyaWdnZXJlZCBzdGF0ZS4NCj4gPiArICogMi5lbmFibGUgU1RD
-IGFuZCBSQlVTIHdhdGNoZG9nIHRpbWVvdXQgdHJpZ2dlci4NCj4gPiArICogMy53YXRjaGRvZyBj
-b251dGVyIGlzIHJ1bm5pbmcsIG5lZWQgdG8gYmUgc3RvcHBlZC4NCj4gDQo+IGNvdW50ZXINCj4g
-DQoNCkkgd2lsbCBmaXggaXQuDQoNCj4gPiArICovDQouLi4NCj4gPiArDQo+ID4gKwl3ZHRfcmVz
-ID0gcGxhdGZvcm1fZ2V0X3Jlc291cmNlKHBkZXYsIElPUkVTT1VSQ0VfTUVNLCAxKTsNCj4gPiAr
-CXByaXYtPm1pc2NlbGxhbmVvdXMgPQ0KPiA+ICsJICAgIGRldm1faW9yZW1hcChkZXYsIHdkdF9y
-ZXMtPnN0YXJ0LCByZXNvdXJjZV9zaXplKHdkdF9yZXMpKTsNCj4gDQo+IFdoeSBub3QgdXNlIGRl
-dm1faW9yZW1hcF9yZXNvdXJjZSgpID8gT3IsIGZvciB0aGF0IG1hdHRlciwNCj4gZGV2bV9wbGF0
-Zm9ybV9pb3JlbWFwX3Jlc291cmNlKCkgbGlrZSBhYm92ZSA/DQo+IA0KDQpUaGUgZnVuY3Rpb24g
-b2YgdGhpcyByZWdpc3RlciBpcyBtaXNjZWxsYW5lb3VzLiBUaGUgcmVnaXN0ZXIgDQphY2Nlc3Nl
-ZCBoZXJlIHNoYXJlZCBieSBtdWx0aXBsZSBkcml2ZXJzLiBVc2UgdGhlIGZ1bmN0aW9uIA0Kb2Yg
-ZGV2bV9wbGF0Zm9ybV9pb3JlbWFwX3Jlc291cmNlKCkgd2hpY2ggaW50ZXJuYWxseQ0KY2FsbCBy
-ZXF1ZXN0X21lbV9yZWdpb24oKSBjYXVzZXMgYW4gZXJyb3IuIFNvIEkgaGFuZGxlIGl0IA0KaW4g
-dGhpcyB3YXkuIEFueSBiZXR0ZXIgd2F5cz8NCg0KPiA+ICsJaWYgKElTX0VSUihwcml2LT5taXNj
-ZWxsYW5lb3VzKSkNCj4gPiArCQlyZXR1cm4gUFRSX0VSUihwcml2LT5taXNjZWxsYW5lb3VzKTsN
-Cj4gPiArDQo+ID4gKwlwcml2LT53ZGV2LmluZm8gPSAmc3Bfd2R0X2luZm87DQo+ID4gKwlwcml2
-LT53ZGV2Lm9wcyA9ICZzcF93ZHRfb3BzOw0KPiA+ICsJcHJpdi0+d2Rldi50aW1lb3V0ID0gU1Bf
-V0RUX01BWF9USU1FT1VUOw0KPiA+ICsJcHJpdi0+d2Rldi5tYXhfdGltZW91dCA9IFNQX1dEVF9N
-QVhfVElNRU9VVDsNCj4gPiArCXByaXYtPndkZXYubWluX3RpbWVvdXQgPSBTUF9XRFRfTUlOX1RJ
-TUVPVVQ7DQo+IA0KPiBUSGlzIHNob3VsZCByZWFsbHkgdXNlIG1heF9od19oZWFydGJlYXRfbXMg
-dG8gbGV0IHRoZSBjb3JlDQo+IHBpbmcgdGhlIHdhdGNoZG9nIGlmIGxhcmdlciB0aW1lb3V0cyBh
-cmUgZGVzaXJlZC4NCj4gDQoNCkkgd2lsbCBhZGQgdGhlIG1heF9od19oZWFydGJlYXRfbXMgYW5k
-IG1vZGlmeSB0aGUgDQpwaW5nICgpLg0KDQo+ID4gKwlwcml2LT53ZGV2LnBhcmVudCA9IGRldjsN
-Cj4gPiArDQo+ID4gKwl3YXRjaGRvZ19zZXRfZHJ2ZGF0YSgmcHJpdi0+d2RldiwgcHJpdik7DQo+
-ID4gKwlzcF93ZHRfaHdfaW5pdCgmcHJpdi0+d2Rldik7DQo+ID4gKw0KPiA+ICsJd2F0Y2hkb2df
-aW5pdF90aW1lb3V0KCZwcml2LT53ZGV2LCB0aW1lb3V0LCBkZXYpOw0KPiA+ICsJd2F0Y2hkb2df
-c2V0X25vd2F5b3V0KCZwcml2LT53ZGV2LCBub3dheW91dCk7DQo+ID4gKwl3YXRjaGRvZ19zdG9w
-X29uX3JlYm9vdCgmcHJpdi0+d2Rldik7DQo+ID4gKw0KPiA+ICsJZXJyID0gZGV2bV93YXRjaGRv
-Z19yZWdpc3Rlcl9kZXZpY2UoZGV2LCAmcHJpdi0+d2Rldik7DQo+IA0KPiBTaW5jZSB5b3UgY2Fs
-bCB3YXRjaGRvZ191bnJlZ2lzdGVyX2RldmljZSgpIGJlbG93IHlvdSBjYW4gbm90IHVzZQ0KPiB0
-aGUgZGV2bV8gZnVuY3Rpb24gaGVyZS4NCj4gDQoNCkkgd2lsbCBkcm9wIHRoZSBmdW5jdGlvbiBy
-ZW1vdmUoKSBhbmQgbm90IGNhbGwgd2F0Y2hkb2dfdW5yZWdpc3Rlcl9kZXZpY2UoKSAuDQpVc2Ug
-dGhlIGRldm1fYWRkX2FjdGlvbl9vcl9yZXNldCgpIGFkZCByZXNldF9jb250cm9sX2Fzc2VydCgp
-IGFuZA0KY2xrX2Rpc2FibGVfdW5wcmVwYXJlKCkuDQoNCj4gPiArCWlmICh1bmxpa2VseShlcnIp
-KQ0KPiANCj4gVGhpcyBpcyBub3QgdGltZSBjcml0aWNhbC4gRHJvcCB0aGUgdW5saWtlbHkuDQo+
-IA0KDQpJIHdpbGwgZml4IGl0Lg0KDQo+ID4gKwkJcmV0dXJuIGVycjsNCj4gPiArDQo+ID4gKwlk
-ZXZfaW5mbyhkZXYsICJXYXRjaGRvZyBlbmFibGVkICh0aW1lb3V0PSVkIHNlYyVzLilcbiIsDQo+
-ID4gKwkJIHByaXYtPndkZXYudGltZW91dCwgbm93YXlvdXQgPyAiLCBub3dheW91dCIgOiAiIik7
-DQo+ID4gKw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQg
-c3Bfd2R0X3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiA+ICt7DQo+ID4g
-KwlzdHJ1Y3Qgc3Bfd2R0X3ByaXYgKnByaXYgPSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShwZGV2KTsN
-Cj4gPiArDQo+ID4gKwl3YXRjaGRvZ191bnJlZ2lzdGVyX2RldmljZSgmcHJpdi0+d2Rldik7DQo+
-ID4gKw0KPiA+ICsJcmVzZXRfY29udHJvbF9hc3NlcnQocHJpdi0+cnN0Yyk7DQo+ID4gKwljbGtf
-ZGlzYWJsZV91bnByZXBhcmUocHJpdi0+Y2xrKTsNCj4gPiArDQo+ID4gKwlyZXR1cm4gMDsNCj4g
-PiArfQ0KPiA+ICsNCi4uLg0KPiA+ICsNCj4gPiArc3RhdGljIGludCBfX21heWJlX3VudXNlZCBz
-cF93ZHRfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCj4gPiArew0KPiA+ICsJc3RydWN0IHNw
-X3dkdF9wcml2ICpwcml2ID0gZGV2X2dldF9kcnZkYXRhKGRldik7DQo+ID4gKw0KPiA+ICsJaWYg
-KHdhdGNoZG9nX2FjdGl2ZSgmcHJpdi0+d2RldikpDQo+ID4gKwkJc3Bfd2R0X3N0YXJ0KCZwcml2
-LT53ZGV2KTsNCj4gPiArDQo+IFNob3VsZG4ndCB0aGUgb3JkZXIgYmUgdGhlIG9wcG9zaXRlIG9m
-IHRoZSBvcmRlciBpbiB0aGUgc3VzcGVuZCBmdW5jdGlvbiA/DQo+DQogDQpJIHdpbGwgZml4IGl0
-Lg0KDQo+ID4gKwlyZXNldF9jb250cm9sX2RlYXNzZXJ0KHByaXYtPnJzdGMpOw0KPiA+ICsJY2xr
-X3ByZXBhcmVfZW5hYmxlKHByaXYtPmNsayk7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4g
-K30NCj4gPg0KLi4uDQo+ID4NCg0K
+This is a patch series for watchdog driver for Sunplus SP7021 SoC.
+
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
+
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
+
+Xiantao Hu (2):
+  watchdog: Add watchdog driver for Sunplus SP7021
+  dt-bindings: watchdog: Add Sunplus SP7021 WDT devicetree bindings
+    documentation
+
+ .../bindings/watchdog/sunplus,sp7021-wdt.yaml |  47 +++
+ MAINTAINERS                                   |   7 +
+ drivers/watchdog/Kconfig                      |  11 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/sunplus_wdt.c                | 322 ++++++++++++++++++
+ 5 files changed, 388 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+ create mode 100644 drivers/watchdog/sunplus_wdt.c
+
+-- 
+2.33.1
+
