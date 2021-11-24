@@ -2,84 +2,93 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FB445C7D9
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Nov 2021 15:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2801C45C7E6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Nov 2021 15:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347025AbhKXOqL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Nov 2021 09:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
+        id S1352655AbhKXOtI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 24 Nov 2021 09:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240993AbhKXOqE (ORCPT
+        with ESMTP id S1354790AbhKXOsR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Nov 2021 09:46:04 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45929C06175D;
-        Wed, 24 Nov 2021 06:17:44 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id bf8so5625379oib.6;
-        Wed, 24 Nov 2021 06:17:44 -0800 (PST)
+        Wed, 24 Nov 2021 09:48:17 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58D9C05569D;
+        Wed, 24 Nov 2021 06:25:24 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso4492419ots.6;
+        Wed, 24 Nov 2021 06:25:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=1bTyT2WPKZr5i6ZzvwJQ6FSjU066tTSM0A1BNoRZhrI=;
-        b=GjKyzKX1rzk7ASEz6L48pqKxHWWwlGh6v5M59UVkuasWtShJ8FKsoabWyFciUO2wxS
-         7BQROiLYeWUMoqI8ZZSbnZY4EGRj6G3BAESYcwjv+ErLyEFhnhjBbHuYtZWo0IdMZ9GG
-         TWkfSz+dvrGKnVdjlRiT1jzxK01oWnZbA7Dp/DLoOByzjZQFdm20/IbFOmARvJnkyhYb
-         iYWaY9465y8OMdeoKY7PqphZZhnqRvizpuntgiw2uVUumzqeNj7ZCyHNNKFTHej9q1FW
-         R9aKKMScSWytss+qMZY0rnDQyADnRaZ+JE7I67VWUc62iIocvdWVMJ1JJOjJBB+WrV4A
-         Wd1A==
+        bh=5F5sj4/1b+BhaqAKB9fJInMpLlCSl9KUhZUokJjmkpc=;
+        b=CR4v2six5AEkANEmxeYlLG2LlGbDkQDAAhnYjSmuzthlftU0Y/Yv7EKhuA6VgAb2+8
+         5AD63rQ+/juycneXGNuISMnOTUTRIsldoyI06n1bQqZlso5zDzURlYoGWlKn2Bta49mU
+         WwZjvNwbFzpuHoPW3CHFDxk2FhQHQlblPto5bv7z0KMNr8I/nL2jJLsrZFpmZewOJY7g
+         Ytjg9AtmWvbhMkIujC0JIk48p5uddG0IoKEMo7BiK8EO1RKNKq8hybLIsBjZsFbQzNkr
+         n5JDX/6Tup+LDmLvY/fQDJVEh+VX/LrRFtSfjDwU9OSzQgj1a0hKjsQo/PPz02yuJ24n
+         atrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=1bTyT2WPKZr5i6ZzvwJQ6FSjU066tTSM0A1BNoRZhrI=;
-        b=xRZvm46hwMeD3CstuevWKPzFfFZ0wCCiYPdutzeriAv7ajoKz+zLBDhh7BNwRS9PHt
-         ymVA4sJjx5+d2S3X7oD+vt0V3pEGDA2uxoJegiSGwCnJCQmjmEumcUxRVsgdRP7QHzlO
-         o38kWjPPRzDTkRinxetBiieUuyi0Ia7YP/HQr63v+OVwihyRw6R9qKRCWFaoHya6Mrj1
-         4d8dMjnbtmwrWveISFAYuopCkg47RzG4zGkCKWxRjlWbkfoTcqRpFOC5wLAgndF7VhRi
-         fJjFHU97WjsWELZ3hSRtd6QhFkaAJWl9hzmQC3AKkhCTas047wcioF7V+6pJSZY1KDK6
-         eEzw==
-X-Gm-Message-State: AOAM530ozhmi0cPZrsYFAz3bya4IsvqWQO7ncxmbTkOdTtRpFv5ziKKr
-        tbl1MSDIwItVPkN/KL/ForQ=
-X-Google-Smtp-Source: ABdhPJzf3Jnskau+AwFmmL97KgcfKyfNSqrLxIzFMLKjipEtXeBjK9jLvoSAw72SXstT+7hP5HesXQ==
-X-Received: by 2002:aca:af50:: with SMTP id y77mr6361180oie.134.1637763460077;
-        Wed, 24 Nov 2021 06:17:40 -0800 (PST)
+        bh=5F5sj4/1b+BhaqAKB9fJInMpLlCSl9KUhZUokJjmkpc=;
+        b=ouHUZdd5ueOx82m75K9VhvDW9PKCCXqM7EM/vwojhwreemU8WfLUIUg9UGwxW+/PTD
+         UmXlpbWF2UwnDUL1cJXpSv+vAqFkcrbtxxif51kpgOjdR1ypOC99/XK6YOKSrhzagCbi
+         3obXqoOyg2njvXmxNn5exTwmjcwrGih7nI3Hjr+F5PhIZVyP8HdXxcreMWAoWxfvrO11
+         wQ8JIHVVR5f3OPD6h54L63BBXcr8ckVoJlUjP8iv5YD3vGvh9AehgLkqfYblDwtnjSFG
+         lV7nlwsGC8QdHwXmUlTW7Q6Y0ed2KH064+RUuTGky9TB7MnEaqw9G4Nh+cAWwY7jKud1
+         KHQw==
+X-Gm-Message-State: AOAM532r35MBuDkbsyJJy939odRDg7vMeBdQCOE+jF0PuDz5aQ0luFuk
+        ag34ulFTmaO3e02YWt3SrXU=
+X-Google-Smtp-Source: ABdhPJzx7sf89K+TQKZaxJUYWW1IxL59/cS0xWqipJHJ7ue/v5DKHugLim6067vYiw/y3uZXvPyR3g==
+X-Received: by 2002:a05:6830:4d6:: with SMTP id s22mr13746550otd.270.1637763924260;
+        Wed, 24 Nov 2021 06:25:24 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k16sm2791019otp.21.2021.11.24.06.17.39
+        by smtp.gmail.com with ESMTPSA id bh12sm5442oib.25.2021.11.24.06.25.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 06:17:39 -0800 (PST)
+        Wed, 24 Nov 2021 06:25:23 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 24 Nov 2021 06:17:38 -0800
+Date:   Wed, 24 Nov 2021 06:25:22 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Xiantao Hu <xt.hu@cqplus1.com>
 Cc:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
         robh+dt@kernel.org, devicetree@vger.kernel.org,
         wells.lu@sunplus.com, qinjian@cqplus1.com
-Subject: Re: [PATCH v2 0/2] Add watchdog driver for Sunplus SP7021 SoC
-Message-ID: <20211124141738.GA3802978@roeck-us.net>
+Subject: Re: [PATCH v2 1/2] watchdog: Add watchdog driver for Sunplus SP7021
+Message-ID: <20211124142522.GA3939252@roeck-us.net>
 References: <20211112105952.216280-1-xt.hu@cqplus1.com>
  <20211124104149.361019-1-xt.hu@cqplus1.com>
+ <20211124104149.361019-2-xt.hu@cqplus1.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211124104149.361019-1-xt.hu@cqplus1.com>
+In-Reply-To: <20211124104149.361019-2-xt.hu@cqplus1.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 06:41:47PM +0800, Xiantao Hu wrote:
-> This is a patch series for watchdog driver for Sunplus SP7021 SoC.
+On Wed, Nov 24, 2021 at 06:41:48PM +0800, Xiantao Hu wrote:
+> Sunplus SP7021 requires watchdog timer support.
+> Add watchdog driver to enable this.
 > 
-> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
-> many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
-> etc.) into a single chip. It is designed for industrial control.
-> 
+> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
+> ---
+> +
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	/* The registers accessed here shared by multiple drivers. */
+> +	wdt_res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
 
-Why are more and more people sending patches or patch series as reply to
-previous patches ? This all by ensures that patches get lost.
+This is unusual. Why would other drivers access WDT_CTRL and WDT_CNT
+registers, and how is it ensured that the other drivers do not interfer
+with the accesses by this driver ?
 
-Is that promoted somewhere ?
+Normally such a resource would be shared through a parent driver with
+appropriate access functions to ensure that accesses are synchronized.
 
 Thanks,
 Guenter
