@@ -2,115 +2,121 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CE445B88E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Nov 2021 11:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CF245C7C1
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Nov 2021 15:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241576AbhKXKqO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Nov 2021 05:46:14 -0500
-Received: from [113.204.237.245] ([113.204.237.245]:34584 "EHLO
-        test.cqplus1.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241577AbhKXKqO (ORCPT
+        id S1354409AbhKXOpK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 24 Nov 2021 09:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354308AbhKXOpF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Nov 2021 05:46:14 -0500
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by cqmailgates with MailGates ESMTP Server V5.0(1213:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Wed, 24 Nov 2021 18:42:24 +0800 (CST)
-From:   Xiantao Hu <xt.hu@cqplus1.com>
-To:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
-        Xiantao Hu <xt.hu@cqplus1.com>
-Subject: [PATCH v2 2/2] dt-bindings: watchdog: Add Sunplus SP7021 WDT devicetree bindings documentation
-Date:   Wed, 24 Nov 2021 18:41:49 +0800
-Message-Id: <20211124104149.361019-3-xt.hu@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211124104149.361019-1-xt.hu@cqplus1.com>
-References: <20211112105952.216280-1-xt.hu@cqplus1.com>
- <20211124104149.361019-1-xt.hu@cqplus1.com>
+        Wed, 24 Nov 2021 09:45:05 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3934C08C5D1
+        for <linux-watchdog@vger.kernel.org>; Wed, 24 Nov 2021 06:10:52 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso4534800otf.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 24 Nov 2021 06:10:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lJIm0bw74VxJSfIPoqgkJ4NYaOfkN1Su9+TbhoIwsF8=;
+        b=QpTUVm19qBEuGLlnxBlJgiIxxJ55vgbjq4FWMXfGm/B3l5nIN1YX2OSLyIayGvcktV
+         2r4PPmlfspEASNQYZH79LK5s+MEuKwKWPd06X3DOEZ1roMH3xHSCFYy9O7+WXSUDTGCK
+         4TRsUgUU0UtJua357tZYDrY/o9LXLR2eHZMNyZzvlw0al3vBZwfl1lVgbhKXpP903din
+         7cym/eSefuq/vzmQOx66nQ0PRogisVHp/cTU7w37Cj8Z5hByCQBMJDBqWAf/i37cZRLZ
+         wfAJL1S28KnaRMEqk154hYe4VKBeECg5TpUHgC0pKgItB+RqU/+9qX3yAwix8SB98zSG
+         T1ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=lJIm0bw74VxJSfIPoqgkJ4NYaOfkN1Su9+TbhoIwsF8=;
+        b=IMD1AUH62ddoYs/5PumQM58l35hAzMb3PsXWv/n5mshaX1F6yQcW4ZxVHMwsdJey0O
+         Eg1nVMkT1qkiPfZDp3XmiUz2nJDPEZz+sEKAaox95jPN0v/y0oazhiztuu6glaYUEnlZ
+         NTDtdvkWcKB9LPVz63knrRkgaaE/9CkN90rw+s2DoWFCIDTzj/RYpytuF/ePVmveI3NS
+         q99fYbIMxZSw7uDQkZAZU3GEMx7L5xAVO64qo0OS78w0vfcOZpexiPdUw2VMHnhqR4kP
+         uvXDa03lcq4TZgtb9sQSrb5I7fvX6cEDydly5/84pwHzHUT9jDMiylpn/vxH9YAP1Pbg
+         uI4g==
+X-Gm-Message-State: AOAM533g9/AU/O1uWffQxyZkSbF1cuiL21KTQRN2PaNULs2s9bdwlKyg
+        3g+BaGSy1hA8iZim76vyjyIVUhPCdRA=
+X-Google-Smtp-Source: ABdhPJxzdVDQVDkAKYvQF32E2SyLTe4mEYNfyN/YqFpWwRn5iy0ULedgYEACxis2zRUsD+4z0t0vjg==
+X-Received: by 2002:a05:6830:3155:: with SMTP id c21mr13262889ots.183.1637763052097;
+        Wed, 24 Nov 2021 06:10:52 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 111sm2815378otu.55.2021.11.24.06.10.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Nov 2021 06:10:51 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 24 Nov 2021 06:10:50 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     support.opensource@diasemi.com, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, y.bas@phytec.de
+Subject: Re: [PATCH] watchdog: da9063: use atomic safe i2c transfer in reset
+ handler
+Message-ID: <20211124141050.GA3668370@roeck-us.net>
+References: <20211124080654.2601135-1-andrej.picej@norik.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124080654.2601135-1-andrej.picej@norik.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This adds the documentation for the devicetree bindings of the Sunplus
-SP7021 watchdog driver, found from SP7021 SoCs and newer.
+On Wed, Nov 24, 2021 at 09:06:54AM +0100, Andrej Picej wrote:
+> From: Yunus Bas <y.bas@phytec.de>
+> 
+> This patch is based on commit 057b52b4b3d5 ("watchdog: da9062: make restart
+> handler atomic safe"), which uses the atomic transfer capability of the
+> i2c framework.
+> 
+> Signed-off-by: Yunus Bas <y.bas@phytec.de>
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 
-Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
----
- .../bindings/watchdog/sunplus,sp7021-wdt.yaml | 47 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml b/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
-new file mode 100644
-index 000000000..bb728f298
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/sunplus,sp7021-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus SoCs Watchdog Device Tree Bindings
-+
-+maintainers:
-+  - XianTao Hu <xt.hu@cqplus1.com>
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    const: sunplus,sp7021-wdt
-+
-+  reg:
-+    items:
-+      - description: Base address and length of the watchdog registers
-+      - description: Base address and length of the miscellaneous control registers
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    watchdog: watchdog@9c000630 {
-+        compatible = "sunplus,sp7021-wdt";
-+        reg = <0x9c000630 0x08>, <0x9C000274 0x04>;
-+        clocks = <&clkc 0x24>;
-+        resets = <&rstc 0x14>;
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f6a328772..d51f0cb1a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17937,6 +17937,7 @@ SUNPLUS WATCHDOG DRIVER
- M:	Xiantao Hu <xt.hu@cqplus1.com>
- L:	linux-watchdog@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
- F:	drivers/watchdog/sunplus_wdt.c
- 
- SUPERH
--- 
-2.33.1
-
+> ---
+>  drivers/watchdog/da9063_wdt.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/da9063_wdt.c b/drivers/watchdog/da9063_wdt.c
+> index d79ce64e26a9..9adad1862bbd 100644
+> --- a/drivers/watchdog/da9063_wdt.c
+> +++ b/drivers/watchdog/da9063_wdt.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/slab.h>
+> +#include <linux/i2c.h>
+>  #include <linux/delay.h>
+>  #include <linux/mfd/da9063/registers.h>
+>  #include <linux/mfd/da9063/core.h>
+> @@ -169,14 +170,19 @@ static int da9063_wdt_restart(struct watchdog_device *wdd, unsigned long action,
+>  			      void *data)
+>  {
+>  	struct da9063 *da9063 = watchdog_get_drvdata(wdd);
+> +	struct i2c_client *client = to_i2c_client(da9063->dev);
+>  	int ret;
+>  
+> -	ret = regmap_write(da9063->regmap, DA9063_REG_CONTROL_F,
+> -			   DA9063_SHUTDOWN);
+> -	if (ret)
+> +	/* Don't use regmap because it is not atomic safe */
+> +	ret = i2c_smbus_write_byte_data(client, DA9063_REG_CONTROL_F,
+> +					DA9063_SHUTDOWN);
+> +	if (ret < 0)
+>  		dev_alert(da9063->dev, "Failed to shutdown (err = %d)\n",
+>  			  ret);
+>  
+> +	/* wait for reset to assert... */
+> +	mdelay(500);
+> +
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.25.1
+> 
