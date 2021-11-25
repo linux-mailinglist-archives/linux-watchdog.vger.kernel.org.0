@@ -2,143 +2,224 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BFC45D3EC
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 05:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCC445D6E9
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 10:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239566AbhKYEbH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Nov 2021 23:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbhKYE3G (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Nov 2021 23:29:06 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4596BC061574;
-        Wed, 24 Nov 2021 20:25:56 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso7657720otr.2;
-        Wed, 24 Nov 2021 20:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DdeJPo6tJcjQ6xie/UumZbsGMzKs8XH6jxPocbq/GOY=;
-        b=owNTj+xoM2efuT1AeqWP7Ar0Ldpyqr7d8VrQAl8M2MHlzo+UE1wtryHpZt/QuxfwW0
-         nJ/z1B7acFQckLtAI4eA9VpI8OM+CtuTLwpmUlH2FkjYuXf/MrFeH+xJJyE/2z1RdlBZ
-         F7Am7bs3KAS2PIwE425Op6eaqcK9UuVzuZjBIyBi5MyOkflpjUIlGS3c+43AiqZ7/Yvx
-         qxdRwZPv7ynB9v/O+5sQCPytpjBwOE4TcskYc9lg0i4rRbQlc6NU1AZjDVVJPlc+byWU
-         zi1ulSfgzFPJyzxby1xsMBpv0IL13PsHpDzMN4J17s1AbfIXO+7B1wcKr/LL/ZYfo9pX
-         P8CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DdeJPo6tJcjQ6xie/UumZbsGMzKs8XH6jxPocbq/GOY=;
-        b=8FpFqItEU+oIA+GswJuGsKqWyzfK6mEshaZVBXFvCtUh4Aaedk15xURvkf7eGYn3Ng
-         sM0dv/fLw4Aa7+wrgpNalVAT1dxbpMSbkfSnGNxbLRJBIXNQb4gez172w3jY+n/m7CaY
-         NiP4RqWbmt+1hJLjtfSKvxxBdJTVyY1ik0SRvY9awWtXZFl1xGaqo5By9T+TiXyhjp7a
-         o0VvxI1syKEQp8gcmSpGHnLJnhSIkfZy4U9sIYrPX675vqeoL3/ak/EVhsjaXlZiq0Im
-         rpAmPMk0+WvGvZjr4NKCLlxLKNajKwyoe7Jh7xg901gXm1rXcvy8cUjqr64YoSvDI+1Y
-         ggAA==
-X-Gm-Message-State: AOAM532wDbdbgq48xCapBxSEMlBlxNVZe6zRN9amV9O121fLFJEy6JdK
-        yXBUyfsjOePwMq6JOdpAE7Q=
-X-Google-Smtp-Source: ABdhPJx2gS9gKHFKnz8bq9xfVY9i16CW/t/zsixskFtXbOTKx6DS6p7Um1R/uDagC8MmuwfGHqfvpQ==
-X-Received: by 2002:a05:6830:2053:: with SMTP id f19mr18054260otp.295.1637814355582;
-        Wed, 24 Nov 2021 20:25:55 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m5sm402026oim.45.2021.11.24.20.25.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Nov 2021 20:25:54 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     =?UTF-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        id S1351183AbhKYJQh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 25 Nov 2021 04:16:37 -0500
+Received: from mail-eopbgr50059.outbound.protection.outlook.com ([40.107.5.59]:7061
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235766AbhKYJOf (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 25 Nov 2021 04:14:35 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FVafO05vA2DO5YjyQSVGQmO4LSjEae9/lE71a8xe0LBymMhGkCwe+WaW6r6Wx5RmA+N5mhX95g/J7wCaJ5c1lOOqJaklw2Grzc2rb+R/ttePRHTxsGDmSGF3h0ZmimbtRDoI8cJF+8IiZi7ymxvhs8fkGizdGJP3p9sxv65qBD4MA7Erz4Mc7ooMczrx4NUPDbE5vNPryiNw3EojHIQRVYB545lPUN4oFvfuzrYoNnPTPmJ5XNM6jA3SOcPxfDwXnrXXue0WrOwmMkOVIuDt+PVnHtkBuDRIyV0fHTF5sUQMfMRpsEQKMBECsRiSKT12Z7zuZZu30Wrbpqb65NiWig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5m60DqPis5oS3pyf9CpjSOjUU3bcidr3uHiGgFiMLbw=;
+ b=kYM+8V2eoJAmF7rE5kXkAfjxTJDlgVtl/C72YKRpc5APaFTyuSnhncDIUtAIk9u8RV5byfm9PtJ+vjHOabJPyRmfxigt2SWWXUYiLCO3yNebeaWpi/yT7lKrqAzqt0Grg37uz6pSM7BnHMhtc0ed3Zud8F/3W5Bx9ArTvdX1UnE+rX+AaH+gb+ihX2+EmyueAmjDVTv3nRStT6KLwRDA8cQE/C9BsisRO6nsHn+1vvp95I3U4ciAES5X+KsnhFWh+I2Bhqbz1A+DWHFiWXuTZlOtGFZsYwmtKATRSZfCiQR51Mhq1C1ImUGxW35i6mbLwRE90U5tPIdPgpENrBL0sQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5m60DqPis5oS3pyf9CpjSOjUU3bcidr3uHiGgFiMLbw=;
+ b=M+E3XrHITMZ4rdP0LtOM8c6xVngzX+4XLxcyrv8YhpOt7FQir56HmOKnsE/EVqtPhTeMawpUL+WcAzpl2jYpb9ZOZPSeNAF5p2pfUg2ZYwZmjKA8qSR4ZMMI3Awi89ONZG/A3Hs9Q1vW3d5bA3mKFkZEJOEALjFmJdWhhEOjsDQ=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU2PR04MB8533.eurprd04.prod.outlook.com (2603:10a6:10:2d4::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Thu, 25 Nov
+ 2021 09:11:20 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4713.027; Thu, 25 Nov 2021
+ 09:11:20 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@rempel-privat.de" <linux@rempel-privat.de>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-References: <20211112105952.216280-1-xt.hu@cqplus1.com>
- <20211124104149.361019-1-xt.hu@cqplus1.com>
- <20211124104149.361019-2-xt.hu@cqplus1.com>
- <20211124142522.GA3939252@roeck-us.net>
- <0024d27919c04c84a3f13ecba86a3c70@cqplus1.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 1/2] watchdog: Add watchdog driver for Sunplus SP7021
-Message-ID: <f69d663a-982b-5876-08c9-b1a4f35e8098@roeck-us.net>
-Date:   Wed, 24 Nov 2021 20:25:52 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <0024d27919c04c84a3f13ecba86a3c70@cqplus1.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: RE: [PATCH V5 0/8] dt-bindinds/dts: support i.MX8ULP
+Thread-Topic: [PATCH V5 0/8] dt-bindinds/dts: support i.MX8ULP
+Thread-Index: AQHX3gLDA+/GY3Dq60eK/KNA/FmZzqwT/MmQ
+Date:   Thu, 25 Nov 2021 09:11:20 +0000
+Message-ID: <DU0PR04MB9417A88AC1808CBEE76A27E188629@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 87aa098e-c757-4ca4-7218-08d9aff38bb3
+x-ms-traffictypediagnostic: DU2PR04MB8533:
+x-microsoft-antispam-prvs: <DU2PR04MB85336E36ABCE7749C14C2DDD88629@DU2PR04MB8533.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: w1pWPTbCF8hdbZvT3aD4sS8XY99/Ar0xyowXCzINeq3uM89eNhFel/EAckBnf1U59h7A1mR5DyA2b4txVVEg4VPa4WeP9TAakPDBvCAW0gRGkns175ifBfNx0GiZHv3rhA0ElZnAnrJBGNVybEdJxUaFJxangG+ygQX1SJ9GnSREFUuuBj432YqtFMo6wDHDtr/D7FsPncvLX7D4lBU5wx22jV25p9eqHwuKqgdpgl4AhA9eovfXOwg7Dj2ybDEY9I0kfRJMXWgNMtgMgsEvx2cZ/eGSnpSQ5fQc0dsCE3mdI9W1j+y1Jc+aQa26i9g4dhFSiXA2u3N8lLtrYcGAN47pPZ6NS8ltfNhewnWSURq3Uy+uDUqPRDgwERGC0O42YdMwKYjtss2AhK+jUrDTxZ4BjnhKwhtJnZvobxNy/uJD7RnAHVjpBPM4rTm50EFBAVL2TQYkV0DazreGDxH6qlK5A9pZOYuTyhbIbDk0jTS5jsUUfURvwr/hpLBe29jPFKvjnnT0zOGgMKT/ftD9vpdJD1TSqA9mdWPxa/QFWTajawmA8x7siGglahHDFcGCPioRk7zPhSvsdUesbaZggar8dr/OyHFUj/uebfk2K+FETfYhophFLyDqEQ0qQSBX6witDwAojg7ylYU7bcfke8foOOpfftwK/4o6/P4wJoLXWe23qWR1zADP5qY1H9c+MT7ZwNV5Ki3uzFbi6ZIPxJ4KVh6SBUS5UQsRN4libnHKtMWnoZQo4+ODJRkThVDq+3Xw8FHOLZH6VyWVr+476TuBh/+0s4w/fUiOxxZzfcqNg0LsA+wt/YxX0izhTDsh/Ldnr9ixXIhOaOqtnpHalm1s5i1BdalS4zCuRCCEgZA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(55016003)(4326008)(38070700005)(71200400001)(186003)(9686003)(508600001)(8676002)(122000001)(7696005)(8936002)(2906002)(26005)(76116006)(66556008)(66476007)(44832011)(66446008)(64756008)(38100700002)(66946007)(54906003)(966005)(921005)(110136005)(7416002)(6506007)(52536014)(316002)(86362001)(5660300002)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1wxXtqSDZYhqUrsi/ZzwVLErkOFz300sVnkD1ALnLpTjXm5THGKSdJX6ShvD?=
+ =?us-ascii?Q?EGUjjIkGY1Rul+TPIAiKGUM0naLJizGd8rdacNy5BxbHbARZzX6xattDyyFi?=
+ =?us-ascii?Q?8nGGV14k5scvKIsGOyFnMYYZySKtx7sssNcNASBTYMtW/uefew/8+PdShuY8?=
+ =?us-ascii?Q?o6lxAjrZ9DBQAWXa64DpaWdGD0QRy1e0ZZBn+IVQbgkxa+dPOLqxiLrCwUmN?=
+ =?us-ascii?Q?/IbGCz44+hX2AApjYzuebyZtIQq7PLh69s6Rc6A7MP5605O54PGX1AnhxhBh?=
+ =?us-ascii?Q?8LoG8jqy/RO8yGpeMG/2JQSObivSIxe6FvzATtDJGTbaHC9wn+QK0IOemRYi?=
+ =?us-ascii?Q?Gv36cI0nD3NDDR3c/eO53y4lXg7/HNQ7doDjS81tNddYnxDBI5KVKAdUvXrp?=
+ =?us-ascii?Q?VwOfw0xXDSfE6li1Oy/M3DgEkH+rYn+3XPBP+CpycmuJiMZ30Nrp88ylflWF?=
+ =?us-ascii?Q?13DiI8KBjN7KvXUwQ0sfKCiqZ41LG6m/VoMGpgMBIY/mkyLP+t/LQ0Ph1Tyu?=
+ =?us-ascii?Q?pRkSZkjsVA3Xc5VsLCmwkgZcAVP/zYlRh2649ICRnf/10Sz6o17j6SAfqBNZ?=
+ =?us-ascii?Q?i6FeFUZEt6fFZwT7p2NCB/TKgod61YHOtNY9YuV4pGc4/SXDeZaa7QrN5ZeW?=
+ =?us-ascii?Q?N4GLHZRYVKjxKpPgSiobiqwK0qvX4vMiQ354ec45fL2pth5pvBk1BFHD4aCE?=
+ =?us-ascii?Q?2ZD6216M0jOGP2bMwzbe0LdlEQ9h2TNXhHt2kuHVKrW15h+KJc+s5UbQOoU2?=
+ =?us-ascii?Q?rJU6+HeS0WYbu9Qg41NHrNfV/AWGfMCymiS/yszen/wUfr8QxB6SnYLBIYVD?=
+ =?us-ascii?Q?3Tec6ty0PujTPcBBiV43lN2Nf4+jKunZWysHrR9MLRO/4/5ONqGfZLwF4DHt?=
+ =?us-ascii?Q?4yTWTG8CNEndU2todLkE14EiIYq8LgyEjHvkYAmmCTzbGGhml3r1Y2z9UILs?=
+ =?us-ascii?Q?mkMPXJKw/8cfj8t8IxQn1NWUCLBVKiEQNFb2ZSix7Gk0Fi7wGi8DHdskYCkv?=
+ =?us-ascii?Q?HEGS7rZkaii55M33vpuZH08E6HIWHYuv8qK4BysC860jZeT9tWTfSCv4i24l?=
+ =?us-ascii?Q?JRV3RfKMYiBHC8VpVoVquXz2pnw5yNvb9z5ncIW3i3eM18sgtYI+oKMDCNEZ?=
+ =?us-ascii?Q?rLWG3sGPE2cvz00pnXU7DAK4Z2A6DMw3hCbls1IlBkXTLyTNxINbUY3lqtoM?=
+ =?us-ascii?Q?9bseEdgsbt9TZp1fEwjVJVJOjo9wW64s+uEjuDVokyF3mHJYCm4W95SAAcSl?=
+ =?us-ascii?Q?bklMdjVKepufLgyIVCpVVrFo+/ript1b9zngtDORAhtam5VZF+m4OjkEcsiQ?=
+ =?us-ascii?Q?MxfkMxwfSVuInHkv00lN6xlmP3p5QyxqMvlwcJRX2Inf+Z3sa1dN1OjeBdya?=
+ =?us-ascii?Q?ZXkYJRbQy5nbD3nA6dJ8jRtzOQ2rVaX6fc4xoFKH6C3LG0cl19FfgoIMpyAi?=
+ =?us-ascii?Q?CGO7mrkOQ1cx2HwMVdAbbO0udRHWIbXQBW1UP+piGoDJ9c45ugAa3cZ3T4nI?=
+ =?us-ascii?Q?LAwFsSI2HkAzZx8Ib0kfwOtKET38mdwoWyh6ixbQ0IB1K0Bh0CxH3PPyPa1D?=
+ =?us-ascii?Q?7v6/dGcaRl8fTdo0WsyR4gCkXWvGe8BZmuwYCX/1QPvVnX5M0/pSqWN5NvU5?=
+ =?us-ascii?Q?g+txICyXK3KHHj69bKC7Vb8=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87aa098e-c757-4ca4-7218-08d9aff38bb3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2021 09:11:20.4098
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BT4WhuVRo69po18wE2JaS2+MMjV3ID7TX+vtxA5PAwCmAVRHdmdF3x+tnyP0SK3z2Ncsp6CAO0blKV29xXx1PA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8533
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/24/21 6:42 PM, xt.hu[胡先韬] wrote:
-> Hi
-> 	Thanks for your review. I explain this in detail below the comment.
-> 
-> Best Regards,
-> Xiantao
->> -----Original Message-----
->> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter Roeck
->> Sent: Wednesday, November 24, 2021 10:25 PM
->> To: xt.hu[胡先韬] <xt.hu@cqplus1.com>
->> Cc: wim@linux-watchdog.org; p.zabel@pengutronix.de; linux-kernel@vger.kernel.org;
->> linux-watchdog@vger.kernel.org; robh+dt@kernel.org; devicetree@vger.kernel.org; Wells Lu 呂芳騰
->> <wells.lu@sunplus.com>; qinjian[覃健] <qinjian@cqplus1.com>
->> Subject: Re: [PATCH v2 1/2] watchdog: Add watchdog driver for Sunplus SP7021
->>
->> On Wed, Nov 24, 2021 at 06:41:48PM +0800, Xiantao Hu wrote:
->>> Sunplus SP7021 requires watchdog timer support.
->>> Add watchdog driver to enable this.
->>>
->>> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
->>> ---
->>> +
->>> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
->>> +	if (IS_ERR(priv->base))
->>> +		return PTR_ERR(priv->base);
->>> +
->>> +	/* The registers accessed here shared by multiple drivers. */
->>> +	wdt_res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
->>
->> This is unusual. Why would other drivers access WDT_CTRL and WDT_CNT registers, and how is it
->> ensured that the other drivers do not interfer with the accesses by this driver ?
->>
->> Normally such a resource would be shared through a parent driver with appropriate access functions to
->> ensure that accesses are synchronized.
->>
-> 
-> The register used by this driver consists of two parts. The first part which contains WDT_CTRL and WDT_CNT
-> registers is exclusive by watchdog.
-> In specially, the second part is belong to a multifunctional register group which control IP and bus. Refer to
-> register manual below:
-> -------------------------------------------------------------------------------------------------------------------------------------------------
-> MO1_STC_WDG_RST_EN	4	RW		STC Watchdog Timeout Trigger System Reset Enable
-> 									0: STC watchdog 2 timeout will not trigger system reset(default)
-> 									1: STC watchdog 2 timeout will trigger system reset
-> MO1_RI_WDG_RST_EN		1	RW		RBUS Watchdog Timeout Trigger System Reset Enable
-> 									0: RBUS watchdog timeout will not trigger system reset(default)
-> 									1: RBUS watchdog timeout will trigger system reset
-> MO1_TIMER_STAND_BY_EN	0	RW		Timer Standby Mode Enable
-> 									0: Disable (default)
-> 									1: Enable Active high to enter timer standby mode,
-> 											default not in standby mode
-> -------------------------------------------------------------------------------------------------------------------------------------------------
-> You can see that in addition to the bits for watchdog there are bit fields for other modules.
-> I use this register bit4 and bit1. Default value is 0 that watchdog internal interrupt signal can't trigger system
-> and RBUS reset. I need set 1 when watchdog probe. Early I implement the operation in
-> arch/arm/mach-sunplus/sp7021.c and configure by macro. But in arch/arm64, directory mach-XXX is removed.
-> So I solve in this way. Any better way?
-> 
-If the register at 0x9C000274 is accessed by other drivers, accesses
-to it must be protected against each other to avoid race conditions.
-How to do that would be up to you.
+Hi Shawn,
 
-Guenter
+> Subject: [PATCH V5 0/8] dt-bindinds/dts: support i.MX8ULP
+>=20
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+>=20
+> V5:
+>  only fix patch 8/8 "arm64: dts: imx8ulp: Add the basic dts for imx8ulp e=
+vk
+> board"
+>   - Correct bus-width to 8 for eMMC
+>   - Drop pinctrl enet which no user
+>  Drop patch 1/9 in V4, since in merged in linux-next  Add A-b/R-b tag
+>=20
+> V4:
+>=20
+> https://lists.infradead.org/pipermail/linux-arm-kernel/2021-November/6960
+> 20.html
+>=20
+> I just pick-up Jacky's work, rebase and send out V4 based on Jacky's V3
+> patchset.
+>=20
+> If you prefer to split the patchset and send single patches, I could rese=
+nd one
+> by one.
+>=20
+> Note: the V3 has a gpio bindings patch, it has been separated and sent to=
+ gpio
+> list in a single one per Linus requested.
+>=20
+> This patchset is to add i.MX8ULP in dt-bindings, introduce basic i.MX8ULP=
+ dtsi
+> and basic evk board support.
+>=20
+> The detailed version changes are in each patch.
+>=20
+> There is checkpatch error in patch 8, but that is for device tree macro a=
+nd we
+> could use use "(xx)".
+>=20
+> In V4, the changes are in patch 8, 9 when rebasing to linux-next/master ,=
+fix
+> build errors after the clk driver in tree and drop a few nodes that not h=
+ave
+> bindings.
+>=20
+> Tested with CONFIG_CLK_IMX8ULP and CONFIG_PINCTRL_IMX8ULP
+> enabled.
+>=20
+> V3:
+>=20
+> https://lore.kernel.org/linux-arm-kernel/20210625011355.3468586-6-ping.b
+> ai@nxp.com/T/
+>=20
+> Jacky Bai (8):
+>   dt-bindings: i2c: imx-lpi2c: Add imx8ulp compatible string
+>   dt-bindings: serial: fsl-lpuart: Add imx8ulp compatible string
+>   dt-bindings: spi: fsl-lpspi: Add imx8ulp compatible string
+>   dt-bindings: timer: tpm-timer: Add imx8ulp compatible string
+>   dt-bindings: watchdog: imx7ulp-wdt: Add imx8ulp compatible string
+>   dt-bindings: arm: fsl: Add binding for imx8ulp evk
+>   arm64: dts: imx8ulp: Add the basic dtsi file for imx8ulp
+>   arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board
+
+For the several dt-bindings, patch 3 has been taken by SPI maintainer,=20
+
+All patches have got R-b or A-b tag.
+
+would you pick others bindings or they should go through subsystem
+maintainer's tree?
+
+Thanks,
+Peng.
+
+>=20
+>  .../devicetree/bindings/arm/fsl.yaml          |   6 +
+>  .../bindings/i2c/i2c-imx-lpi2c.yaml           |   4 +-
+>  .../bindings/serial/fsl-lpuart.yaml           |   4 +-
+>  .../bindings/spi/spi-fsl-lpspi.yaml           |  11 +-
+>  .../bindings/timer/nxp,tpm-timer.yaml         |   6 +-
+>  .../bindings/watchdog/fsl-imx7ulp-wdt.yaml    |   7 +-
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  arch/arm64/boot/dts/freescale/imx8ulp-evk.dts |  64 ++
+>  .../boot/dts/freescale/imx8ulp-pinfunc.h      | 978 ++++++++++++++++++
+>  arch/arm64/boot/dts/freescale/imx8ulp.dtsi    | 396 +++++++
+>  10 files changed, 1468 insertions(+), 9 deletions(-)  create mode 100644
+> arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+>  create mode 100755 arch/arm64/boot/dts/freescale/imx8ulp-pinfunc.h
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+>=20
+> --
+> 2.25.1
+
