@@ -2,23 +2,23 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D44245DF68
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 18:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6CE45DFDB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 18:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237189AbhKYRPz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 Nov 2021 12:15:55 -0500
-Received: from gecko.sbs.de ([194.138.37.40]:44293 "EHLO gecko.sbs.de"
+        id S242263AbhKYRh6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 25 Nov 2021 12:37:58 -0500
+Received: from david.siemens.de ([192.35.17.14]:40208 "EHLO david.siemens.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237265AbhKYRNz (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 Nov 2021 12:13:55 -0500
-Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 1APHAFnL029882
+        id S1349312AbhKYRf6 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 25 Nov 2021 12:35:58 -0500
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by david.siemens.de (8.15.2/8.15.2) with ESMTPS id 1APHBfGI025795
         (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Nov 2021 18:10:15 +0100
+        Thu, 25 Nov 2021 18:11:41 +0100
 Received: from md1za8fc.ad001.siemens.net ([139.25.69.80])
-        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 1APHAEFv000820;
-        Thu, 25 Nov 2021 18:10:14 +0100
-Date:   Thu, 25 Nov 2021 18:10:13 +0100
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 1APHBfdO025876;
+        Thu, 25 Nov 2021 18:11:41 +0100
+Date:   Thu, 25 Nov 2021 18:11:41 +0100
 From:   Henning Schild <henning.schild@siemens.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
         <platform-driver-x86@vger.kernel.org>,
@@ -33,12 +33,12 @@ Cc:     Srikanth Krishnakar <skrishnakar@gmail.com>,
         Pavel Machek <pavel@ucw.cz>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Enrico Weigelt <lkml@metux.net>
-Subject: Re: [PATCH v3 3/4] watchdog: simatic-ipc-wdt: add new driver for
- Siemens Industrial PCs
-Message-ID: <20211125181013.534dc679@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20210329174928.18816-4-henning.schild@siemens.com>
+Subject: Re: [PATCH v3 2/4] leds: simatic-ipc-leds: add new driver for
+ Siemens Industial PCs
+Message-ID: <20211125181141.2325aa1f@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20210329174928.18816-3-henning.schild@siemens.com>
 References: <20210329174928.18816-1-henning.schild@siemens.com>
-        <20210329174928.18816-4-henning.schild@siemens.com>
+        <20210329174928.18816-3-henning.schild@siemens.com>
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -47,289 +47,298 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Mon, 29 Mar 2021 19:49:27 +0200
+Am Mon, 29 Mar 2021 19:49:26 +0200
 schrieb Henning Schild <henning.schild@siemens.com>:
 
 > This driver adds initial support for several devices from Siemens. It
 > is based on a platform driver introduced in an earlier commit.
 > 
 > Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  drivers/watchdog/Kconfig           |  11 ++
->  drivers/watchdog/Makefile          |   1 +
->  drivers/watchdog/simatic-ipc-wdt.c | 215
-> +++++++++++++++++++++++++++++ 3 files changed, 227 insertions(+)
->  create mode 100644 drivers/watchdog/simatic-ipc-wdt.c
+>  drivers/leds/Kconfig                   |   3 +
+>  drivers/leds/Makefile                  |   3 +
+>  drivers/leds/simple/Kconfig            |  11 ++
+>  drivers/leds/simple/Makefile           |   2 +
+>  drivers/leds/simple/simatic-ipc-leds.c | 202
+> +++++++++++++++++++++++++ 5 files changed, 221 insertions(+)
+>  create mode 100644 drivers/leds/simple/Kconfig
+>  create mode 100644 drivers/leds/simple/Makefile
+>  create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 1fe0042a48d2..948497eb4bef 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1575,6 +1575,17 @@ config NIC7018_WDT
->  	  To compile this driver as a module, choose M here: the
-> module will be called nic7018_wdt.
+> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+> index b6742b4231bf..5c8558a4fa60 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -937,4 +937,7 @@ source "drivers/leds/trigger/Kconfig"
+>  comment "LED Blink"
+>  source "drivers/leds/blink/Kconfig"
 >  
-> +config SIEMENS_SIMATIC_IPC_WDT
-> +	tristate "Siemens Simatic IPC Watchdog"
+> +comment "Simple LED drivers"
+> +source "drivers/leds/simple/Kconfig"
+> +
+>  endif # NEW_LEDS
+> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+> index 2a698df9da57..2de7fdd8d629 100644
+> --- a/drivers/leds/Makefile
+> +++ b/drivers/leds/Makefile
+> @@ -111,3 +111,6 @@ obj-$(CONFIG_LEDS_TRIGGERS)		+=
+> trigger/ 
+>  # LED Blink
+>  obj-$(CONFIG_LEDS_BLINK)                += blink/
+> +
+> +# Simple LED drivers
+> +obj-y					+= simple/
+> diff --git a/drivers/leds/simple/Kconfig b/drivers/leds/simple/Kconfig
+> new file mode 100644
+> index 000000000000..9f6a68336659
+> --- /dev/null
+> +++ b/drivers/leds/simple/Kconfig
+> @@ -0,0 +1,11 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config LEDS_SIEMENS_SIMATIC_IPC
+> +	tristate "LED driver for Siemens Simatic IPCs"
+> +	depends on LEDS_CLASS
 > +	depends on SIEMENS_SIMATIC_IPC
-> +	select WATCHDOG_CORE
 > +	help
-> +	  This driver adds support for several watchdogs found in
-> Industrial
-> +	  PCs from Siemens.
+> +	  This option enables support for the LEDs of several
+> Industrial PCs
+> +	  from Siemens.
 > +
 > +	  To compile this driver as a module, choose M here: the
-> module will be
-> +	  called simatic-ipc-wdt.
-> +
->  # M68K Architecture
->  
->  config M54xx_WATCHDOG
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index f3a6540e725e..7f5c73ec058c 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -142,6 +142,7 @@ obj-$(CONFIG_NI903X_WDT) += ni903x_wdt.o
->  obj-$(CONFIG_NIC7018_WDT) += nic7018_wdt.o
->  obj-$(CONFIG_MLX_WDT) += mlx_wdt.o
->  obj-$(CONFIG_KEEMBAY_WATCHDOG) += keembay_wdt.o
-> +obj-$(CONFIG_SIEMENS_SIMATIC_IPC_WDT) += simatic-ipc-wdt.o
->  
->  # M68K Architecture
->  obj-$(CONFIG_M54xx_WATCHDOG) += m54xx_wdt.o
-> diff --git a/drivers/watchdog/simatic-ipc-wdt.c
-> b/drivers/watchdog/simatic-ipc-wdt.c new file mode 100644
-> index 000000000000..e901718d05b9
+> module
+> +	  will be called simatic-ipc-leds.
+> diff --git a/drivers/leds/simple/Makefile
+> b/drivers/leds/simple/Makefile new file mode 100644
+> index 000000000000..8481f1e9e360
 > --- /dev/null
-> +++ b/drivers/watchdog/simatic-ipc-wdt.c
-> @@ -0,0 +1,215 @@
+> +++ b/drivers/leds/simple/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+= simatic-ipc-leds.o
+> diff --git a/drivers/leds/simple/simatic-ipc-leds.c
+> b/drivers/leds/simple/simatic-ipc-leds.c new file mode 100644
+> index 000000000000..043edbf81b76
+> --- /dev/null
+> +++ b/drivers/leds/simple/simatic-ipc-leds.c
+> @@ -0,0 +1,202 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Siemens SIMATIC IPC driver for Watchdogs
+> + * Siemens SIMATIC IPC driver for LEDs
 > + *
-> + * Copyright (c) Siemens AG, 2020-2021
+> + * Copyright (c) Siemens AG, 2018-2021
 > + *
 > + * Authors:
+> + *  Henning Schild <henning.schild@siemens.com>
+> + *  Jan Kiszka <jan.kiszka@siemens.com>
 > + *  Gerd Haeussler <gerd.haeussler.ext@siemens.com>
 > + */
 > +
-> +#include <linux/device.h>
-> +#include <linux/errno.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
 > +#include <linux/ioport.h>
 > +#include <linux/kernel.h>
+> +#include <linux/leds.h>
 > +#include <linux/module.h>
 > +#include <linux/pci.h>
 > +#include <linux/platform_data/x86/simatic-ipc-base.h>
 > +#include <linux/platform_device.h>
 > +#include <linux/sizes.h>
-> +#include <linux/util_macros.h>
-> +#include <linux/watchdog.h>
+> +#include <linux/spinlock.h>
 > +
-> +#define WD_ENABLE_IOADR			0x62
-> +#define WD_TRIGGER_IOADR		0x66
-> +#define GPIO_COMMUNITY0_PORT_ID		0xaf
-> +#define PAD_CFG_DW0_GPP_A_23		0x4b8
-> +#define SAFE_EN_N_427E			0x01
-> +#define SAFE_EN_N_227E			0x04
-> +#define WD_ENABLED			0x01
-> +#define WD_TRIGGERED			0x80
-> +#define WD_MACROMODE			0x02
+> +#define SIMATIC_IPC_LED_PORT_BASE	0x404E
 > +
-> +#define TIMEOUT_MIN	2
-> +#define TIMEOUT_DEF	64
-> +#define TIMEOUT_MAX	64
-> +
-> +#define GP_STATUS_REG_227E	0x404D	/* IO PORT for
-> SAFE_EN_N on 227E */ +
-> +static bool nowayout = WATCHDOG_NOWAYOUT;
-> +module_param(nowayout, bool, 0000);
-> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started
-> (default="
-> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> +
-> +static struct resource gp_status_reg_227e_res =
-> +	DEFINE_RES_IO_NAMED(GP_STATUS_REG_227E, SZ_1,
-> KBUILD_MODNAME); +
-> +static struct resource io_resource =
-> +	DEFINE_RES_IO_NAMED(WD_ENABLE_IOADR, SZ_1,
-> +			    KBUILD_MODNAME " WD_ENABLE_IOADR");
-> +
-> +/* the actual start will be discovered with pci, 0 is a placeholder
-> */ +static struct resource mem_resource =
-> +	DEFINE_RES_MEM_NAMED(0, SZ_4, "WD_RESET_BASE_ADR");
-> +
-> +static u32 wd_timeout_table[] = {2, 4, 6, 8, 16, 32, 48, 64 };
-> +static void __iomem *wd_reset_base_addr;
-> +
-> +static int wd_start(struct watchdog_device *wdd)
-> +{
-> +	outb(inb(WD_ENABLE_IOADR) | WD_ENABLED, WD_ENABLE_IOADR);
-> +	return 0;
-> +}
-> +
-> +static int wd_stop(struct watchdog_device *wdd)
-> +{
-> +	outb(inb(WD_ENABLE_IOADR) & ~WD_ENABLED, WD_ENABLE_IOADR);
-> +	return 0;
-> +}
-> +
-> +static int wd_ping(struct watchdog_device *wdd)
-> +{
-> +	inb(WD_TRIGGER_IOADR);
-> +	return 0;
-> +}
-> +
-> +static int wd_set_timeout(struct watchdog_device *wdd, unsigned int
-> t) +{
-> +	int timeout_idx = find_closest(t, wd_timeout_table,
-> +				       ARRAY_SIZE(wd_timeout_table));
-> +
-> +	outb((inb(WD_ENABLE_IOADR) & 0xc7) | timeout_idx << 3,
-> WD_ENABLE_IOADR);
-> +	wdd->timeout = wd_timeout_table[timeout_idx];
-> +	return 0;
-> +}
-> +
-> +static const struct watchdog_info wdt_ident = {
-> +	.options	= WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING |
-> +			  WDIOF_SETTIMEOUT,
-> +	.identity	= KBUILD_MODNAME,
+> +struct simatic_ipc_led {
+> +	unsigned int value; /* mask for io and offset for mem */
+> +	char *name;
+> +	struct led_classdev cdev;
 > +};
 > +
-> +static const struct watchdog_ops wdt_ops = {
-> +	.owner		= THIS_MODULE,
-> +	.start		= wd_start,
-> +	.stop		= wd_stop,
-> +	.ping		= wd_ping,
-> +	.set_timeout	= wd_set_timeout,
+> +static struct simatic_ipc_led simatic_ipc_leds_io[] = {
+> +	{1 << 15, "green:" LED_FUNCTION_STATUS "-1" },
+> +	{1 << 7,  "yellow:" LED_FUNCTION_STATUS "-1" },
+> +	{1 << 14, "red:" LED_FUNCTION_STATUS "-2" },
+> +	{1 << 6,  "yellow:" LED_FUNCTION_STATUS "-2" },
+> +	{1 << 13, "red:" LED_FUNCTION_STATUS "-3" },
+> +	{1 << 5,  "yellow:" LED_FUNCTION_STATUS "-3" },
+> +	{ }
 > +};
 > +
-> +static void wd_secondary_enable(u32 wdtmode)
-> +{
-> +	u16 resetbit;
+> +/* the actual start will be discovered with PCI, 0 is a placeholder
+> */ +struct resource simatic_ipc_led_mem_res = DEFINE_RES_MEM_NAMED(0,
+> SZ_4K, KBUILD_MODNAME); +
+> +static void *simatic_ipc_led_memory;
 > +
-> +	/* set safe_en_n so we are not just WDIOF_ALARMONLY */
-> +	if (wdtmode == SIMATIC_IPC_DEVICE_227E) {
-> +		/* enable SAFE_EN_N on GP_STATUS_REG_227E */
-> +		resetbit = inw(GP_STATUS_REG_227E);
-> +		outw(resetbit & ~SAFE_EN_N_227E, GP_STATUS_REG_227E);
+> +static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
+> +	{0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
+> +	{0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
+> +	{0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
+> +	{0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
+> +	{0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
+> +	{0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
+> +	{ }
+> +};
+> +
+> +static struct resource simatic_ipc_led_io_res =
+> +	DEFINE_RES_IO_NAMED(SIMATIC_IPC_LED_PORT_BASE, SZ_1,
+> KBUILD_MODNAME);
 
-Should be inb/outb we just have an SZ_1 region.
+Should be SZ_2
 
 Henning
 
-> +	} else {
-> +		/* enable SAFE_EN_N on PCH D1600 */
-> +		resetbit = ioread16(wd_reset_base_addr);
-> +		iowrite16(resetbit & ~SAFE_EN_N_427E,
-> wd_reset_base_addr);
-> +	}
+> +static DEFINE_SPINLOCK(reg_lock);
+> +
+> +static inline struct simatic_ipc_led *cdev_to_led(struct
+> led_classdev *led_cd) +{
+> +	return container_of(led_cd, struct simatic_ipc_led, cdev);
 > +}
 > +
-> +static int wd_setup(u32 wdtmode)
+> +static void simatic_ipc_led_set_io(struct led_classdev *led_cd,
+> +				   enum led_brightness brightness)
 > +{
-> +	unsigned int bootstatus = 0;
-> +	int timeout_idx;
+> +	struct simatic_ipc_led *led = cdev_to_led(led_cd);
+> +	unsigned long flags;
+> +	unsigned int val;
 > +
-> +	timeout_idx = find_closest(TIMEOUT_DEF, wd_timeout_table,
-> +				   ARRAY_SIZE(wd_timeout_table));
+> +	spin_lock_irqsave(&reg_lock, flags);
 > +
-> +	if (inb(WD_ENABLE_IOADR) & WD_TRIGGERED)
-> +		bootstatus |= WDIOF_CARDRESET;
+> +	val = inw(SIMATIC_IPC_LED_PORT_BASE);
+> +	if (brightness == LED_OFF)
+> +		outw(val | led->value, SIMATIC_IPC_LED_PORT_BASE);
+> +	else
+> +		outw(val & ~led->value, SIMATIC_IPC_LED_PORT_BASE);
 > +
-> +	/* reset alarm bit, set macro mode, and set timeout */
-> +	outb(WD_TRIGGERED | WD_MACROMODE | timeout_idx << 3,
-> WD_ENABLE_IOADR); +
-> +	wd_secondary_enable(wdtmode);
-> +
-> +	return bootstatus;
+> +	spin_unlock_irqrestore(&reg_lock, flags);
 > +}
 > +
-> +static struct watchdog_device wdd_data = {
-> +	.info = &wdt_ident,
-> +	.ops = &wdt_ops,
-> +	.min_timeout = TIMEOUT_MIN,
-> +	.max_timeout = TIMEOUT_MAX
-> +};
+> +static enum led_brightness simatic_ipc_led_get_io(struct
+> led_classdev *led_cd) +{
+> +	struct simatic_ipc_led *led = cdev_to_led(led_cd);
 > +
-> +static int simatic_ipc_wdt_probe(struct platform_device *pdev)
+> +	return inw(SIMATIC_IPC_LED_PORT_BASE) & led->value ? LED_OFF
+> : led_cd->max_brightness; +}
+> +
+> +static void simatic_ipc_led_set_mem(struct led_classdev *led_cd,
+> +				    enum led_brightness brightness)
 > +{
-> +	struct simatic_ipc_platform *plat = pdev->dev.platform_data;
+> +	struct simatic_ipc_led *led = cdev_to_led(led_cd);
+> +
+> +	u32 *p;
+> +
+> +	p = simatic_ipc_led_memory + led->value;
+> +	*p = (*p & ~1) | (brightness == LED_OFF);
+> +}
+> +
+> +static enum led_brightness simatic_ipc_led_get_mem(struct
+> led_classdev *led_cd) +{
+> +	struct simatic_ipc_led *led = cdev_to_led(led_cd);
+> +
+> +	u32 *p;
+> +
+> +	p = simatic_ipc_led_memory + led->value;
+> +	return (*p & 1) ? LED_OFF : led_cd->max_brightness;
+> +}
+> +
+> +static int simatic_ipc_leds_probe(struct platform_device *pdev)
+> +{
+> +	const struct simatic_ipc_platform *plat =
+> pdev->dev.platform_data;
 > +	struct device *dev = &pdev->dev;
+> +	struct simatic_ipc_led *ipcled;
+> +	struct led_classdev *cdev;
 > +	struct resource *res;
+> +	int err, type;
+> +	u32 *p;
 > +
 > +	switch (plat->devmode) {
-> +	case SIMATIC_IPC_DEVICE_227E:
-> +		if (!devm_request_region(dev,
-> gp_status_reg_227e_res.start,
-> +
-> resource_size(&gp_status_reg_227e_res),
-> +					 KBUILD_MODNAME)) {
-> +			dev_err(dev,
-> +				"Unable to register IO resource at
-> %pR\n",
-> +				&gp_status_reg_227e_res);
+> +	case SIMATIC_IPC_DEVICE_227D:
+> +	case SIMATIC_IPC_DEVICE_427E:
+> +		res = &simatic_ipc_led_io_res;
+> +		ipcled = simatic_ipc_leds_io;
+> +		/* on 227D the two bytes work the other way araound
+> */
+> +		if (plat->devmode == SIMATIC_IPC_DEVICE_227D) {
+> +			while (ipcled->value) {
+> +				ipcled->value =
+> swab16(ipcled->value);
+> +				ipcled++;
+> +			}
+> +			ipcled = simatic_ipc_leds_io;
+> +		}
+> +		type = IORESOURCE_IO;
+> +		if (!devm_request_region(dev, res->start,
+> resource_size(res), KBUILD_MODNAME)) {
+> +			dev_err(dev, "Unable to register IO resource
+> at %pR\n", res);
 > +			return -EBUSY;
 > +		}
-> +		fallthrough;
-> +	case SIMATIC_IPC_DEVICE_427E:
-> +		wdd_data.parent = dev;
 > +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!devm_request_region(dev, io_resource.start,
-> +				 resource_size(&io_resource),
-> +				 io_resource.name)) {
-> +		dev_err(dev,
-> +			"Unable to register IO resource at %#x\n",
-> +			WD_ENABLE_IOADR);
-> +		return -EBUSY;
-> +	}
-> +
-> +	if (plat->devmode == SIMATIC_IPC_DEVICE_427E) {
-> +		res = &mem_resource;
+> +	case SIMATIC_IPC_DEVICE_127E:
+> +		res = &simatic_ipc_led_mem_res;
+> +		ipcled = simatic_ipc_leds_mem;
+> +		type = IORESOURCE_MEM;
 > +
 > +		/* get GPIO base from PCI */
-> +		res->start =
-> simatic_ipc_get_membase0(PCI_DEVFN(0x1f, 1));
+> +		res->start = simatic_ipc_get_membase0(PCI_DEVFN(13,
+> 0));
 > +		if (res->start == 0)
 > +			return -ENODEV;
 > +
 > +		/* do the final address calculation */
-> +		res->start = res->start + (GPIO_COMMUNITY0_PORT_ID
-> << 16) +
-> +			     PAD_CFG_DW0_GPP_A_23;
+> +		res->start = res->start + (0xC5 << 16);
 > +		res->end += res->start;
 > +
-> +		wd_reset_base_addr = devm_ioremap_resource(dev, res);
-> +		if (IS_ERR(wd_reset_base_addr))
-> +			return PTR_ERR(wd_reset_base_addr);
+> +		simatic_ipc_led_memory = devm_ioremap_resource(dev,
+> res);
+> +		if (IS_ERR(simatic_ipc_led_memory))
+> +			return PTR_ERR(simatic_ipc_led_memory);
+> +
+> +		/* initialize power/watchdog LED */
+> +		p = simatic_ipc_led_memory + 0x500 + 0x1D8; /*
+> PM_WDT_OUT */
+> +		*p = (*p & ~1);
+> +		p = simatic_ipc_led_memory + 0x500 + 0x1C0; /*
+> PM_BIOS_BOOT_N */
+> +		*p = (*p | 1);
+> +
+> +		break;
+> +	default:
+> +		return -ENODEV;
 > +	}
 > +
-> +	wdd_data.bootstatus = wd_setup(plat->devmode);
-> +	if (wdd_data.bootstatus)
-> +		dev_warn(dev, "last reboot caused by watchdog
-> reset\n"); +
-> +	watchdog_set_nowayout(&wdd_data, nowayout);
-> +	watchdog_stop_on_reboot(&wdd_data);
-> +	return devm_watchdog_register_device(dev, &wdd_data);
+> +	while (ipcled->value) {
+> +		cdev = &ipcled->cdev;
+> +		if (type == IORESOURCE_MEM) {
+> +			cdev->brightness_set =
+> simatic_ipc_led_set_mem;
+> +			cdev->brightness_get =
+> simatic_ipc_led_get_mem;
+> +		} else {
+> +			cdev->brightness_set =
+> simatic_ipc_led_set_io;
+> +			cdev->brightness_get =
+> simatic_ipc_led_get_io;
+> +		}
+> +		cdev->max_brightness = LED_ON;
+> +		cdev->name = ipcled->name;
+> +
+> +		err = devm_led_classdev_register(dev, cdev);
+> +		if (err < 0)
+> +			return err;
+> +		ipcled++;
+> +	}
+> +
+> +	return 0;
 > +}
 > +
-> +static struct platform_driver simatic_ipc_wdt_driver = {
-> +	.probe = simatic_ipc_wdt_probe,
+> +static struct platform_driver simatic_ipc_led_driver = {
+> +	.probe = simatic_ipc_leds_probe,
 > +	.driver = {
 > +		.name = KBUILD_MODNAME,
-> +	},
+> +	}
 > +};
 > +
-> +module_platform_driver(simatic_ipc_wdt_driver);
+> +module_platform_driver(simatic_ipc_led_driver);
 > +
 > +MODULE_LICENSE("GPL v2");
 > +MODULE_ALIAS("platform:" KBUILD_MODNAME);
-> +MODULE_AUTHOR("Gerd Haeussler <gerd.haeussler.ext@siemens.com>");
+> +MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
 
