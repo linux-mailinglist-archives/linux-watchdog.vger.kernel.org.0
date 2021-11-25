@@ -2,78 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B3E45D355
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 03:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B299E45D370
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 04:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbhKYDAj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Nov 2021 22:00:39 -0500
-Received: from [113.204.237.245] ([113.204.237.245]:37706 "EHLO
-        test.cqplus1.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S239689AbhKYC6i (ORCPT
+        id S1344985AbhKYDLj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 24 Nov 2021 22:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245421AbhKYDJh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Nov 2021 21:58:38 -0500
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by cqmailgates with MailGates ESMTP Server V5.0(1206:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Thu, 25 Nov 2021 10:52:33 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 25 Nov 2021 10:52:28 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.017; Thu, 25 Nov 2021 10:52:28 +0800
-From:   =?utf-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-Subject: RE: [PATCH v2 0/2] Add watchdog driver for Sunplus SP7021 SoC
-Thread-Topic: [PATCH v2 0/2] Add watchdog driver for Sunplus SP7021 SoC
-Thread-Index: AQHX4SAsaIwYOAFNOkGFl2dRmzd7YKwSM7QAgAFWVBA=
-Date:   Thu, 25 Nov 2021 02:52:28 +0000
-Message-ID: <0d6a4dc2987b41fb8b9a9be2e5598f08@cqplus1.com>
-References: <20211112105952.216280-1-xt.hu@cqplus1.com>
- <20211124104149.361019-1-xt.hu@cqplus1.com>
- <20211124141738.GA3802978@roeck-us.net>
-In-Reply-To: <20211124141738.GA3802978@roeck-us.net>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.16]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 24 Nov 2021 22:09:37 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA95C0619E6;
+        Wed, 24 Nov 2021 18:33:19 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so7240176otv.9;
+        Wed, 24 Nov 2021 18:33:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FzruCpHTuVDhBSIsG1eTOXd9RDdSQPTEZ/7U28aWtgw=;
+        b=gH9gEdqwyXOHMCnta4W3bG65lK1pTrnVSMIIZzyJR1B5/Ew4VqWIJfOqYW0K3SjOLD
+         6CEI7m4MqIH7j5jsEBArVNWBwisK6MW6hH9k5b5uGhfTBKoFGJdPZWC9vaotmaqWFlVR
+         xR2ApiDfOzJmoTvwtBujKXBR8Sj8JDBAKAGsxp2tRGQiXNBhyChn4VQdn2w0AgGm+pgz
+         r8kfxDxwk4gVBIN4aD8qVJpl8X5oSb589NL/5kNtCs/PKj8/rQxYF7A3pVfcW00STQPO
+         wqR8nwSDhTvbo6mxLy6lfiUHd1NL9VGhRDIaKlsNn9y+rKhrkAQ49zBQ+oE15TpPttuj
+         rMmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=FzruCpHTuVDhBSIsG1eTOXd9RDdSQPTEZ/7U28aWtgw=;
+        b=oS1MYd9Dg+lfiBcazTK7+wTfo5QH9AZzNQ61KrLlpmz54wEj5dNLYCGvK25rc7Wkql
+         JI7bfC6rMUVHUt4Mra51I0FpDuBMAns3WjJ7yhvVRdgbMbxAybCXNtphp8P5ruocAk55
+         CZnL3a6YF+qPqNCGwvrgm443+2Oxb1jtUofFn79kAZ0sFJoOZ3ZXsv9MItBhN/h/z/gx
+         OCUBOdZEFKyKuOMQWt7WjnxMFTvHEUUTgfrpgMyLBK0HtVAAunZIzBcEsynWeceCwMzf
+         uiLvdXRiuuXqYvfEs3hhFQ1fgAGAqYHeZlnxy69u2TVcmWCW4OsaUJh2dO+N/hzYh3WM
+         dtpA==
+X-Gm-Message-State: AOAM532fmMWwpV5jrj+JKPZw30jFay2eE+ZhhTdRdnmF3sph3yVoHdDy
+        X1/k5WGdykI0A6zNqCVqGzMeSmcIJIg=
+X-Google-Smtp-Source: ABdhPJzQ/gsw0ESgF4EaGULaMV01pscDEYyj0XKYKKqpHrHESLg1ERw33D6cAIdLj/oIrzaWDnOWrw==
+X-Received: by 2002:a05:6830:44c:: with SMTP id d12mr17809980otc.66.1637807598545;
+        Wed, 24 Nov 2021 18:33:18 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n6sm306100otj.78.2021.11.24.18.33.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Nov 2021 18:33:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 24 Nov 2021 18:33:16 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     cgel.zte@gmail.com
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] watchdog: davinci: Use div64_ul instead of do_div
+Message-ID: <20211125023316.GH851427@roeck-us.net>
+References: <20211125014924.46297-1-deng.changcheng@zte.com.cn>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211125014924.46297-1-deng.changcheng@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGkgR3VlbnRlciwNCglUaGlzIGlzIG15IHNlY29uZCBzdWJtaXR0aW5nLiBJIGFsc28gcmVmZXIg
-dG8gdGhlIGZvcm1hdCBpbiBvdGhlcnMnIGVtYWlscy4NCglJZiB0aGUgZm9ybWF0IGlzIG5vdCBj
-b3JyZWN0LCBJIHdpbGwgZHJvcCAtLWluLXJlcGx5LXRvIHdoZW4gc3VibWl0IHBhdGhjaCBuZXh0
-IHRpbWUuDQoNCkJlc3QgUmVnYXJkcywNClhpYW50YW8NCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdl
-LS0tLS0NCj4gRnJvbTogR3VlbnRlciBSb2VjayBbbWFpbHRvOmdyb2VjazdAZ21haWwuY29tXSBP
-biBCZWhhbGYgT2YgR3VlbnRlciBSb2Vjaw0KPiBTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDI0
-LCAyMDIxIDEwOjE4IFBNDQo+IFRvOiB4dC5odVvog6HlhYjpn6xdIDx4dC5odUBjcXBsdXMxLmNv
-bT4NCj4gQ2M6IHdpbUBsaW51eC13YXRjaGRvZy5vcmc7IHAuemFiZWxAcGVuZ3V0cm9uaXguZGU7
-IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LXdhdGNoZG9nQHZnZXIua2Vy
-bmVsLm9yZzsgcm9iaCtkdEBrZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsg
-V2VsbHMgTHUg5ZGC6Iqz6aiwDQo+IDx3ZWxscy5sdUBzdW5wbHVzLmNvbT47IHFpbmppYW5b6KaD
-5YGlXSA8cWluamlhbkBjcXBsdXMxLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MiAwLzJd
-IEFkZCB3YXRjaGRvZyBkcml2ZXIgZm9yIFN1bnBsdXMgU1A3MDIxIFNvQw0KPiANCj4gT24gV2Vk
-LCBOb3YgMjQsIDIwMjEgYXQgMDY6NDE6NDdQTSArMDgwMCwgWGlhbnRhbyBIdSB3cm90ZToNCj4g
-PiBUaGlzIGlzIGEgcGF0Y2ggc2VyaWVzIGZvciB3YXRjaGRvZyBkcml2ZXIgZm9yIFN1bnBsdXMg
-U1A3MDIxIFNvQy4NCj4gPg0KPiA+IFN1bnBsdXMgU1A3MDIxIGlzIGFuIEFSTSBDb3J0ZXggQTcg
-KDQgY29yZXMpIGJhc2VkIFNvQy4gSXQgaW50ZWdyYXRlcw0KPiA+IG1hbnkgcGVyaXBoZXJhbHMg
-KGV4OiBVQVJULCBJMkMsIFNQSSwgU0RJTywgZU1NQywgVVNCLCBTRCBjYXJkIGFuZA0KPiA+IGV0
-Yy4pIGludG8gYSBzaW5nbGUgY2hpcC4gSXQgaXMgZGVzaWduZWQgZm9yIGluZHVzdHJpYWwgY29u
-dHJvbC4NCj4gPg0KPiANCj4gV2h5IGFyZSBtb3JlIGFuZCBtb3JlIHBlb3BsZSBzZW5kaW5nIHBh
-dGNoZXMgb3IgcGF0Y2ggc2VyaWVzIGFzIHJlcGx5IHRvDQo+IHByZXZpb3VzIHBhdGNoZXMgPyBU
-aGlzIGFsbCBieSBlbnN1cmVzIHRoYXQgcGF0Y2hlcyBnZXQgbG9zdC4NCj4gDQo+IElzIHRoYXQg
-cHJvbW90ZWQgc29tZXdoZXJlID8NCj4gDQo+IFRoYW5rcywNCj4gR3VlbnRlcg0K
+On Thu, Nov 25, 2021 at 01:49:24AM +0000, cgel.zte@gmail.com wrote:
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> 
+> do_div() does a 64-by-32 division. Here the divisor is an unsigned long
+> which on some platforms is 64 bit wide. So use div64_ul instead of do_div
+> to avoid a possible truncation.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/davinci_wdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/davinci_wdt.c b/drivers/watchdog/davinci_wdt.c
+> index e6eaba6bae5b..584a56893b81 100644
+> --- a/drivers/watchdog/davinci_wdt.c
+> +++ b/drivers/watchdog/davinci_wdt.c
+> @@ -134,7 +134,7 @@ static unsigned int davinci_wdt_get_timeleft(struct watchdog_device *wdd)
+>  	timer_counter = ioread32(davinci_wdt->base + TIM12);
+>  	timer_counter |= ((u64)ioread32(davinci_wdt->base + TIM34) << 32);
+>  
+> -	do_div(timer_counter, freq);
+> +	timer_counter = div64_ul(timer_counter, freq);
+>  
+>  	return wdd->timeout - timer_counter;
+>  }
+> -- 
+> 2.25.1
+> 
