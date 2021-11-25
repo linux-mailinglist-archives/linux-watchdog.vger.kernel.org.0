@@ -2,24 +2,23 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D836E45DFBF
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 18:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D44245DF68
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 18:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348075AbhKYReW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 Nov 2021 12:34:22 -0500
-Received: from thoth.sbs.de ([192.35.17.2]:48726 "EHLO thoth.sbs.de"
+        id S237189AbhKYRPz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 25 Nov 2021 12:15:55 -0500
+Received: from gecko.sbs.de ([194.138.37.40]:44293 "EHLO gecko.sbs.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349373AbhKYRcW (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 Nov 2021 12:32:22 -0500
-X-Greylist: delayed 1181 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Nov 2021 12:32:20 EST
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by thoth.sbs.de (8.15.2/8.15.2) with ESMTPS id 1APH8s2V030334
+        id S237265AbhKYRNz (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 25 Nov 2021 12:13:55 -0500
+Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 1APHAFnL029882
         (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Nov 2021 18:08:54 +0100
+        Thu, 25 Nov 2021 18:10:15 +0100
 Received: from md1za8fc.ad001.siemens.net ([139.25.69.80])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 1APH8r6V023783;
-        Thu, 25 Nov 2021 18:08:53 +0100
-Date:   Thu, 25 Nov 2021 18:08:52 +0100
+        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 1APHAEFv000820;
+        Thu, 25 Nov 2021 18:10:14 +0100
+Date:   Thu, 25 Nov 2021 18:10:13 +0100
 From:   Henning Schild <henning.schild@siemens.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
         <platform-driver-x86@vger.kernel.org>,
@@ -36,7 +35,7 @@ Cc:     Srikanth Krishnakar <skrishnakar@gmail.com>,
         Enrico Weigelt <lkml@metux.net>
 Subject: Re: [PATCH v3 3/4] watchdog: simatic-ipc-wdt: add new driver for
  Siemens Industrial PCs
-Message-ID: <20211125180852.190e4eec@md1za8fc.ad001.siemens.net>
+Message-ID: <20211125181013.534dc679@md1za8fc.ad001.siemens.net>
 In-Reply-To: <20210329174928.18816-4-henning.schild@siemens.com>
 References: <20210329174928.18816-1-henning.schild@siemens.com>
         <20210329174928.18816-4-henning.schild@siemens.com>
@@ -157,11 +156,7 @@ schrieb Henning Schild <henning.schild@siemens.com>:
 > +static struct resource io_resource =
 > +	DEFINE_RES_IO_NAMED(WD_ENABLE_IOADR, SZ_1,
 > +			    KBUILD_MODNAME " WD_ENABLE_IOADR");
-
-WD_TRIGGER_IOADR, SZ_1 missing here and in request_region part
-
-Henning
-
+> +
 > +/* the actual start will be discovered with pci, 0 is a placeholder
 > */ +static struct resource mem_resource =
 > +	DEFINE_RES_MEM_NAMED(0, SZ_4, "WD_RESET_BASE_ADR");
@@ -221,6 +216,11 @@ Henning
 > +		/* enable SAFE_EN_N on GP_STATUS_REG_227E */
 > +		resetbit = inw(GP_STATUS_REG_227E);
 > +		outw(resetbit & ~SAFE_EN_N_227E, GP_STATUS_REG_227E);
+
+Should be inb/outb we just have an SZ_1 region.
+
+Henning
+
 > +	} else {
 > +		/* enable SAFE_EN_N on PCH D1600 */
 > +		resetbit = ioread16(wd_reset_base_addr);
