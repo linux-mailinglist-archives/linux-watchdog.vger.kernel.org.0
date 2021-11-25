@@ -2,100 +2,143 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B299E45D370
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 04:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BFC45D3EC
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 05:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344985AbhKYDLj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Nov 2021 22:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        id S239566AbhKYEbH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 24 Nov 2021 23:31:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245421AbhKYDJh (ORCPT
+        with ESMTP id S232676AbhKYE3G (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Nov 2021 22:09:37 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA95C0619E6;
-        Wed, 24 Nov 2021 18:33:19 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so7240176otv.9;
-        Wed, 24 Nov 2021 18:33:19 -0800 (PST)
+        Wed, 24 Nov 2021 23:29:06 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4596BC061574;
+        Wed, 24 Nov 2021 20:25:56 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso7657720otr.2;
+        Wed, 24 Nov 2021 20:25:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FzruCpHTuVDhBSIsG1eTOXd9RDdSQPTEZ/7U28aWtgw=;
-        b=gH9gEdqwyXOHMCnta4W3bG65lK1pTrnVSMIIZzyJR1B5/Ew4VqWIJfOqYW0K3SjOLD
-         6CEI7m4MqIH7j5jsEBArVNWBwisK6MW6hH9k5b5uGhfTBKoFGJdPZWC9vaotmaqWFlVR
-         xR2ApiDfOzJmoTvwtBujKXBR8Sj8JDBAKAGsxp2tRGQiXNBhyChn4VQdn2w0AgGm+pgz
-         r8kfxDxwk4gVBIN4aD8qVJpl8X5oSb589NL/5kNtCs/PKj8/rQxYF7A3pVfcW00STQPO
-         wqR8nwSDhTvbo6mxLy6lfiUHd1NL9VGhRDIaKlsNn9y+rKhrkAQ49zBQ+oE15TpPttuj
-         rMmw==
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DdeJPo6tJcjQ6xie/UumZbsGMzKs8XH6jxPocbq/GOY=;
+        b=owNTj+xoM2efuT1AeqWP7Ar0Ldpyqr7d8VrQAl8M2MHlzo+UE1wtryHpZt/QuxfwW0
+         nJ/z1B7acFQckLtAI4eA9VpI8OM+CtuTLwpmUlH2FkjYuXf/MrFeH+xJJyE/2z1RdlBZ
+         F7Am7bs3KAS2PIwE425Op6eaqcK9UuVzuZjBIyBi5MyOkflpjUIlGS3c+43AiqZ7/Yvx
+         qxdRwZPv7ynB9v/O+5sQCPytpjBwOE4TcskYc9lg0i4rRbQlc6NU1AZjDVVJPlc+byWU
+         zi1ulSfgzFPJyzxby1xsMBpv0IL13PsHpDzMN4J17s1AbfIXO+7B1wcKr/LL/ZYfo9pX
+         P8CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=FzruCpHTuVDhBSIsG1eTOXd9RDdSQPTEZ/7U28aWtgw=;
-        b=oS1MYd9Dg+lfiBcazTK7+wTfo5QH9AZzNQ61KrLlpmz54wEj5dNLYCGvK25rc7Wkql
-         JI7bfC6rMUVHUt4Mra51I0FpDuBMAns3WjJ7yhvVRdgbMbxAybCXNtphp8P5ruocAk55
-         CZnL3a6YF+qPqNCGwvrgm443+2Oxb1jtUofFn79kAZ0sFJoOZ3ZXsv9MItBhN/h/z/gx
-         OCUBOdZEFKyKuOMQWt7WjnxMFTvHEUUTgfrpgMyLBK0HtVAAunZIzBcEsynWeceCwMzf
-         uiLvdXRiuuXqYvfEs3hhFQ1fgAGAqYHeZlnxy69u2TVcmWCW4OsaUJh2dO+N/hzYh3WM
-         dtpA==
-X-Gm-Message-State: AOAM532fmMWwpV5jrj+JKPZw30jFay2eE+ZhhTdRdnmF3sph3yVoHdDy
-        X1/k5WGdykI0A6zNqCVqGzMeSmcIJIg=
-X-Google-Smtp-Source: ABdhPJzQ/gsw0ESgF4EaGULaMV01pscDEYyj0XKYKKqpHrHESLg1ERw33D6cAIdLj/oIrzaWDnOWrw==
-X-Received: by 2002:a05:6830:44c:: with SMTP id d12mr17809980otc.66.1637807598545;
-        Wed, 24 Nov 2021 18:33:18 -0800 (PST)
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DdeJPo6tJcjQ6xie/UumZbsGMzKs8XH6jxPocbq/GOY=;
+        b=8FpFqItEU+oIA+GswJuGsKqWyzfK6mEshaZVBXFvCtUh4Aaedk15xURvkf7eGYn3Ng
+         sM0dv/fLw4Aa7+wrgpNalVAT1dxbpMSbkfSnGNxbLRJBIXNQb4gez172w3jY+n/m7CaY
+         NiP4RqWbmt+1hJLjtfSKvxxBdJTVyY1ik0SRvY9awWtXZFl1xGaqo5By9T+TiXyhjp7a
+         o0VvxI1syKEQp8gcmSpGHnLJnhSIkfZy4U9sIYrPX675vqeoL3/ak/EVhsjaXlZiq0Im
+         rpAmPMk0+WvGvZjr4NKCLlxLKNajKwyoe7Jh7xg901gXm1rXcvy8cUjqr64YoSvDI+1Y
+         ggAA==
+X-Gm-Message-State: AOAM532wDbdbgq48xCapBxSEMlBlxNVZe6zRN9amV9O121fLFJEy6JdK
+        yXBUyfsjOePwMq6JOdpAE7Q=
+X-Google-Smtp-Source: ABdhPJx2gS9gKHFKnz8bq9xfVY9i16CW/t/zsixskFtXbOTKx6DS6p7Um1R/uDagC8MmuwfGHqfvpQ==
+X-Received: by 2002:a05:6830:2053:: with SMTP id f19mr18054260otp.295.1637814355582;
+        Wed, 24 Nov 2021 20:25:55 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n6sm306100otj.78.2021.11.24.18.33.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 18:33:18 -0800 (PST)
+        by smtp.gmail.com with ESMTPSA id m5sm402026oim.45.2021.11.24.20.25.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Nov 2021 20:25:54 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 24 Nov 2021 18:33:16 -0800
+To:     =?UTF-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+References: <20211112105952.216280-1-xt.hu@cqplus1.com>
+ <20211124104149.361019-1-xt.hu@cqplus1.com>
+ <20211124104149.361019-2-xt.hu@cqplus1.com>
+ <20211124142522.GA3939252@roeck-us.net>
+ <0024d27919c04c84a3f13ecba86a3c70@cqplus1.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     cgel.zte@gmail.com
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] watchdog: davinci: Use div64_ul instead of do_div
-Message-ID: <20211125023316.GH851427@roeck-us.net>
-References: <20211125014924.46297-1-deng.changcheng@zte.com.cn>
+Subject: Re: [PATCH v2 1/2] watchdog: Add watchdog driver for Sunplus SP7021
+Message-ID: <f69d663a-982b-5876-08c9-b1a4f35e8098@roeck-us.net>
+Date:   Wed, 24 Nov 2021 20:25:52 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211125014924.46297-1-deng.changcheng@zte.com.cn>
+In-Reply-To: <0024d27919c04c84a3f13ecba86a3c70@cqplus1.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 01:49:24AM +0000, cgel.zte@gmail.com wrote:
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+On 11/24/21 6:42 PM, xt.hu[胡先韬] wrote:
+> Hi
+> 	Thanks for your review. I explain this in detail below the comment.
 > 
-> do_div() does a 64-by-32 division. Here the divisor is an unsigned long
-> which on some platforms is 64 bit wide. So use div64_ul instead of do_div
-> to avoid a possible truncation.
+> Best Regards,
+> Xiantao
+>> -----Original Message-----
+>> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter Roeck
+>> Sent: Wednesday, November 24, 2021 10:25 PM
+>> To: xt.hu[胡先韬] <xt.hu@cqplus1.com>
+>> Cc: wim@linux-watchdog.org; p.zabel@pengutronix.de; linux-kernel@vger.kernel.org;
+>> linux-watchdog@vger.kernel.org; robh+dt@kernel.org; devicetree@vger.kernel.org; Wells Lu 呂芳騰
+>> <wells.lu@sunplus.com>; qinjian[覃健] <qinjian@cqplus1.com>
+>> Subject: Re: [PATCH v2 1/2] watchdog: Add watchdog driver for Sunplus SP7021
+>>
+>> On Wed, Nov 24, 2021 at 06:41:48PM +0800, Xiantao Hu wrote:
+>>> Sunplus SP7021 requires watchdog timer support.
+>>> Add watchdog driver to enable this.
+>>>
+>>> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
+>>> ---
+>>> +
+>>> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+>>> +	if (IS_ERR(priv->base))
+>>> +		return PTR_ERR(priv->base);
+>>> +
+>>> +	/* The registers accessed here shared by multiple drivers. */
+>>> +	wdt_res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>>
+>> This is unusual. Why would other drivers access WDT_CTRL and WDT_CNT registers, and how is it
+>> ensured that the other drivers do not interfer with the accesses by this driver ?
+>>
+>> Normally such a resource would be shared through a parent driver with appropriate access functions to
+>> ensure that accesses are synchronized.
+>>
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> The register used by this driver consists of two parts. The first part which contains WDT_CTRL and WDT_CNT
+> registers is exclusive by watchdog.
+> In specially, the second part is belong to a multifunctional register group which control IP and bus. Refer to
+> register manual below:
+> -------------------------------------------------------------------------------------------------------------------------------------------------
+> MO1_STC_WDG_RST_EN	4	RW		STC Watchdog Timeout Trigger System Reset Enable
+> 									0: STC watchdog 2 timeout will not trigger system reset(default)
+> 									1: STC watchdog 2 timeout will trigger system reset
+> MO1_RI_WDG_RST_EN		1	RW		RBUS Watchdog Timeout Trigger System Reset Enable
+> 									0: RBUS watchdog timeout will not trigger system reset(default)
+> 									1: RBUS watchdog timeout will trigger system reset
+> MO1_TIMER_STAND_BY_EN	0	RW		Timer Standby Mode Enable
+> 									0: Disable (default)
+> 									1: Enable Active high to enter timer standby mode,
+> 											default not in standby mode
+> -------------------------------------------------------------------------------------------------------------------------------------------------
+> You can see that in addition to the bits for watchdog there are bit fields for other modules.
+> I use this register bit4 and bit1. Default value is 0 that watchdog internal interrupt signal can't trigger system
+> and RBUS reset. I need set 1 when watchdog probe. Early I implement the operation in
+> arch/arm/mach-sunplus/sp7021.c and configure by macro. But in arch/arm64, directory mach-XXX is removed.
+> So I solve in this way. Any better way?
+> 
+If the register at 0x9C000274 is accessed by other drivers, accesses
+to it must be protected against each other to avoid race conditions.
+How to do that would be up to you.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/watchdog/davinci_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/davinci_wdt.c b/drivers/watchdog/davinci_wdt.c
-> index e6eaba6bae5b..584a56893b81 100644
-> --- a/drivers/watchdog/davinci_wdt.c
-> +++ b/drivers/watchdog/davinci_wdt.c
-> @@ -134,7 +134,7 @@ static unsigned int davinci_wdt_get_timeleft(struct watchdog_device *wdd)
->  	timer_counter = ioread32(davinci_wdt->base + TIM12);
->  	timer_counter |= ((u64)ioread32(davinci_wdt->base + TIM34) << 32);
->  
-> -	do_div(timer_counter, freq);
-> +	timer_counter = div64_ul(timer_counter, freq);
->  
->  	return wdd->timeout - timer_counter;
->  }
-> -- 
-> 2.25.1
-> 
+Guenter
