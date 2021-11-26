@@ -2,57 +2,25 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F6445F069
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Nov 2021 16:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B7D45F0AB
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Nov 2021 16:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377985AbhKZPPl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 26 Nov 2021 10:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350728AbhKZPNk (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 26 Nov 2021 10:13:40 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185E0C061784;
-        Fri, 26 Nov 2021 07:02:37 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id r11so40134242edd.9;
-        Fri, 26 Nov 2021 07:02:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7WKyxNFeEYKoREkD0c19RFptAww7wbbo/OFZ6cXxB1w=;
-        b=N6uHU5ILrCIQvq7r4K+/wN2arEkieagq8CclQdF596CUIcI44bK1d4yLKV9YUv+fTw
-         kuLTilApbMAkJWcxxrJqmoPbKMd5DF1QiRzVqFCc5Cy+i+6MP4KVI4Y43E8he6AqItIX
-         6mbDEQSazDe1aC3Iz79MEHd3Io/d6uwIlw+eWwuobRcsb7crx28sRolhQUiqjNyAnaRr
-         U58kSJbWKcS+kc7ajUKzA8DTUuZAihUMoNYcQaCAXIhTJ2en9qLMOUjvYHsnWYbv8GtJ
-         j8o4/bcgCHl1hL83JbcKEJG9GPj18QbAPURaxxpAMpL+ikgWGaSjOqQUix4l45gr1z4q
-         A4Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7WKyxNFeEYKoREkD0c19RFptAww7wbbo/OFZ6cXxB1w=;
-        b=wnxJmgvHC675X2JbWbiiFN9l2kVYc8ZSmfIKDYAVga9EKx5RTym9FnbkoN5w1GCW73
-         5aLdgyGQ3g3QbPSKo+VHs+rMh2lRuoVQN6+imbJ8uJ6TndO3NsZ43Xuhj1l4nbOq8P5g
-         xHMp9MjNE+fbggT4sN8ym+qH/pQ7E0+G2dhR/c11ZqaHVa3FdZG0Y/w/bcHovIktbaFF
-         j3sToxzLjybtISnJ6IZZM5ETUgMUPYCyWpfNIJhmS794fb2BrKluPr/ndwGumehaF1i8
-         0ILu3pXHsuDzLKDTKXBu/3DAt2fm9TKxs5HPgKDBE/4vucruRB48IApHkTi1gcZE1NcF
-         Xr4g==
-X-Gm-Message-State: AOAM5336/TIoWzghuyYLYZezVeV0H1eD1v78lj+G9GvRaY2MyoUkSGH9
-        mbLf3ftIDMH7LD+qR/NfKawzi/Gxmfxg4WJE8+8=
-X-Google-Smtp-Source: ABdhPJzdCYVcg2NuZzEDoNjtQDVAN598WW8V35ihTMNpJhv5/C7pXOi35tFFgwaHKlkf0MFcL/NWn3SMeEllabA0jtA=
-X-Received: by 2002:a17:906:ecac:: with SMTP id qh12mr38496156ejb.377.1637938955561;
- Fri, 26 Nov 2021 07:02:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20211126141027.16161-1-henning.schild@siemens.com> <20211126141027.16161-3-henning.schild@siemens.com>
-In-Reply-To: <20211126141027.16161-3-henning.schild@siemens.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 26 Nov 2021 17:02:00 +0200
-Message-ID: <CAHp75VcD0FQuG_AToNkVHHD9e6WV6=18P4U0cSi0qzD3FL=ssw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] leds: simatic-ipc-leds: add new driver for Siemens
- Industial PCs
-To:     Henning Schild <henning.schild@siemens.com>
+        id S235766AbhKZPbL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 Nov 2021 10:31:11 -0500
+Received: from thoth.sbs.de ([192.35.17.2]:40409 "EHLO thoth.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344954AbhKZP3L (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 26 Nov 2021 10:29:11 -0500
+Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
+        by thoth.sbs.de (8.15.2/8.15.2) with ESMTPS id 1AQFPYhY005209
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 Nov 2021 16:25:34 +0100
+Received: from md1za8fc.ad001.siemens.net ([139.22.47.90])
+        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 1AQFPXnP025738;
+        Fri, 26 Nov 2021 16:25:33 +0100
+Date:   Fri, 26 Nov 2021 16:25:32 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux LED Subsystem <linux-leds@vger.kernel.org>,
         Platform Driver <platform-driver-x86@vger.kernel.org>,
@@ -64,36 +32,72 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Mark Gross <mgross@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>, Enrico Weigelt <lkml@metux.net>
-Content-Type: text/plain; charset="UTF-8"
+        Pavel Machek <pavel@ucw.cz>, Enrico Weigelt <lkml@metux.net>,
+        Michael Haener <michael.haener@siemens.com>
+Subject: Re: [PATCH v4 4/4] platform/x86: pmc_atom: improve critclk_systems
+ matching for Siemens PCs
+Message-ID: <20211126162532.1cd42766@md1za8fc.ad001.siemens.net>
+In-Reply-To: <CAHp75Vf6x4-AYPPEMf7qXTi-RF92mdUn6rhghBpJ5avQAjYRzA@mail.gmail.com>
+References: <20211126141027.16161-1-henning.schild@siemens.com>
+        <20211126141027.16161-5-henning.schild@siemens.com>
+        <CAHp75Vf6x4-AYPPEMf7qXTi-RF92mdUn6rhghBpJ5avQAjYRzA@mail.gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 4:10 PM Henning Schild
-<henning.schild@siemens.com> wrote:
->
-> This driver adds initial support for several devices from Siemens. It is
-> based on a platform driver introduced in an earlier commit.
+Am Fri, 26 Nov 2021 16:51:00 +0200
+schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
 
-...
+> On Fri, Nov 26, 2021 at 4:10 PM Henning Schild
+> <henning.schild@siemens.com> wrote:
+> >
+> > Siemens industrial PCs unfortunately can not always be properly
+> > identified the way we used to. An earlier commit introduced code
+> > that allows proper identification without looking at DMI strings
+> > that could differ based on product branding.
+> > Switch over to that proper way and revert commits that used to
+> > collect the machines based on unstable strings.  
+> 
+> Usually we start a series with fixes, but I guess it's fine here since
+> this can be taken separately, right?
+> 
+> ...
 
-> +static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
-> +       {0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
-> +       {0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
-> +       {0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
-> +       {0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
-> +       {0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
-> +       {0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
-> +       { }
-> +};
+It can not be taken because it needs p1 to work. And p1 is mainly here
+for p2 and p3 really. Splitting the patches up into
 
-Like I said, this is not okay.
+p1.1
+p4
+p1.2
+p2
+p3
 
-Why can't you simply enable the pinctrl driver and use it?
+would be possible but a lot of work for just that ordering topic i
+guess.
 
+> > +#include <linux/platform_data/x86/simatic-ipc.h>  
+> 
+> Seems not.  Question is then, what Fixes tags would  mean in this
+> case?
+> 
 
+Which of the several tags confuses you? Maybe i just need to drop a few.
 
--- 
-With Best Regards,
-Andy Shevchenko
+the original problem is
+Fixes: 648e921888ad ("clk: x86: Stop marking clocks as CLK_IS_CRITICAL")
+which introduced the need for several quirks
+Fixes: e8796c6c69d1 ("platform/x86: pmc_atom: Add Siemens CONNECT...")
+Fixes: f110d252ae79 ("platform/x86: pmc_atom: Add Siemens SIMATIC...")
+Fixes: ad0d315b4d4e ("platform/x86: pmc_atom: Add Siemens SIMATIC...")
+These quirks use unstable dmi information. Unstable because the
+DMI_PRODUCT_VERSION can be branded. Yes weird ... we do not allow new
+ACPI entries but do allow custom dmi ...
+p1 introduces the use of stable dmi and p4 brings that into the quirk
+table ... fixing all the quirks based on customizable
+DMI_PRODUCT_VERSION
+
+Henning
