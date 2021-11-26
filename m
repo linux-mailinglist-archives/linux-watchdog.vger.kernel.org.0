@@ -2,343 +2,182 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6CE45DFDB
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Nov 2021 18:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2979245E8A0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Nov 2021 08:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242263AbhKYRh6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 Nov 2021 12:37:58 -0500
-Received: from david.siemens.de ([192.35.17.14]:40208 "EHLO david.siemens.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349312AbhKYRf6 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 Nov 2021 12:35:58 -0500
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by david.siemens.de (8.15.2/8.15.2) with ESMTPS id 1APHBfGI025795
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Nov 2021 18:11:41 +0100
-Received: from md1za8fc.ad001.siemens.net ([139.25.69.80])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 1APHBfdO025876;
-        Thu, 25 Nov 2021 18:11:41 +0100
-Date:   Thu, 25 Nov 2021 18:11:41 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-Cc:     Srikanth Krishnakar <skrishnakar@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        "Gerd Haeussler" <gerd.haeussler.ext@siemens.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Enrico Weigelt <lkml@metux.net>
-Subject: Re: [PATCH v3 2/4] leds: simatic-ipc-leds: add new driver for
- Siemens Industial PCs
-Message-ID: <20211125181141.2325aa1f@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20210329174928.18816-3-henning.schild@siemens.com>
-References: <20210329174928.18816-1-henning.schild@siemens.com>
-        <20210329174928.18816-3-henning.schild@siemens.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1359372AbhKZHqO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 Nov 2021 02:46:14 -0500
+Received: from mail-eopbgr130041.outbound.protection.outlook.com ([40.107.13.41]:41349
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1353060AbhKZHoN (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 26 Nov 2021 02:44:13 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XsWd6RA3gZtCm8M19L26geCXOxqrN4LXtTyc+5/LJbHsXD2xqoVpPehNJ03VwDZghElrEe3jkliJErIeR6VqzJQcPusvO3Pa4zH/nuJSPttixn8w3/SG0qdgM/F2WT5TE6rcu8m3FvUslvx3M0Rzh2P06b+VcldlHFEA88tluRZIEeB3FgLHWis5fAI465iXfcw/7EU+/kZc1xIfZeSEbKwppHauvlxkR8GaQw3zKCSmVkbGcQt8OJ4ujAD3RhDf0EOZly9m5G9CdiGnYAlXSA9Ym6F11qObMlXGtR8no1KVmjaCb4IKh4ngXN1Pwv19372Blk8QE0GSznOcmSyHQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S6R94N/BUh8RXNcg9LbY9ffNEcXS5XvaNsiH1lS7oO8=;
+ b=QSxySTBlpwDZUUxumRBpC/fQ7t+eB65N3pK/1jMOYcbUBbr7GVyVxUdeS8CbdxRw/YIUtcMtaoH6xavvzWQjLEmdmcGf63ekUCaUtLaUp1QiqHCi42I46/E58SAHcRJYpdGX3sQcdY4avaP8y7bfRd+E9TlqRGIHPX77qwvlocKtsGcR47Ty3EIw9xusT1dr0pYo9etpp8jayUUO2AIHpHDNHcyGEyPgn+mjm+e/+26U2mWoyikBikGxBcPI+qdzqEBvcR6uoQD7TQU3BX7wFyIB9Gr65NuFj1d+esfCU6aNgjpudcxtZKKVqLvlXNpeZrbLb3k0ayM0M9XoARCEOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S6R94N/BUh8RXNcg9LbY9ffNEcXS5XvaNsiH1lS7oO8=;
+ b=MSzzZ0DZshAVD3shMSoSBstCMtnqCZ+Uq1vWwhX3haBxaRvk0TcuIgclcul+SaQ4egJ11b19YrVhNQ6D8pnjqHYRYIkjidcz9ZX2mqenEHndIZWRZZuQZR/eMOBJrL1SHEyB8Crn7A55LCuqBfSAohNc2ZqcS41i3Tpo4Ys1l7w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU2PR04MB8790.eurprd04.prod.outlook.com (2603:10a6:10:2e1::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Fri, 26 Nov
+ 2021 07:40:55 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4713.027; Fri, 26 Nov 2021
+ 07:40:55 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, ulf.hansson@linaro.org, broonie@kernel.org,
+        linux@roeck-us.net, wim@linux-watchdog.org, linux@rempel-privat.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V6 0/7] dt-bindinds/dts: support i.MX8ULP
+Date:   Fri, 26 Nov 2021 15:39:55 +0800
+Message-Id: <20211126074002.1535696-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0139.apcprd04.prod.outlook.com
+ (2603:1096:3:16::23) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SG2PR04CA0139.apcprd04.prod.outlook.com (2603:1096:3:16::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend Transport; Fri, 26 Nov 2021 07:40:49 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 53a1dbc5-b2e9-4903-bd6c-08d9b0b01405
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8790:
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DU2PR04MB879070167824185798CFACC9C9639@DU2PR04MB8790.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EhGVejdBIjCpcS/4OQrtMNyi5knYgkcwUhSoLRo+w2+IkhqMdoO4x40qmuwIrSqpb+gsg5kynzXKbccip+SgXu+GIr5Bv5qJxJK+7aMWl+UleXPOV9+dKSLryXi2cuLq3DsgFHb19WWuopkdG4ZLqIEhLlTn27StTXSG1iaTluF49KeWudfEJWfxQmn4Zh+UaSOc7tDS+DAbxDSRFBEZHm7naLMME9jbQnVdhxJwCF+kemhIZWgmqhqYeK8MGuBZQHjJaUZeYtOat6dV4AkJvHItilQJFwNvAwtO4bTObZYxfhrDSowJnvcv38zyDmLZH2yclugbRfjt+7UW4wViJZShWgZyKbEcRaMFDzh0k2v1grdo+l2irU7Vp6FfkdHmlaafKgYV8OgE8FwFozBhZ+TFiGWQlR3sIZwMewmeM+cc5JgtHJHtYaKiQFRSZYa/X8ZYmDm1qCvK2wHiT8CAyEumu30zceQ2ht9r4d9iUA/IgCDpOWf4CMiEYZTQxnGRkgnADGDYMkPo52bERr/xOdOiVmJqbRZW/zwB83tlpsSGmSPuC/+2hpTs40RLzgrGrE3vW3B7jRB2dNfZ3BKwzeFKyHn8PWwK5EDmYhi5SEs7gDETac3kyUBY2xYfZezNuIPR+55PCaAf2V3VuVq3GyzTwYg2MiQig0nbvJbx2dmZoF1Td+nK6h1umE/Qb22ub2xic7LXSX/WvWeuZCvadphOwx9Sdu/LlEeEFHt4Cj2QbgvxIQrp/XW1zXY11SW9HN/bafOwWbtrT29u2W2MiNXGAjlUWEJiEbxL3HpqMR7LjlZdeR/P71uWDTNdUTahHOFNTAEfIpNrXJqqZrqV7Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(66556008)(83380400001)(966005)(6506007)(66476007)(6512007)(316002)(186003)(956004)(86362001)(66946007)(38100700002)(2906002)(1076003)(508600001)(4326008)(8936002)(6666004)(26005)(8676002)(52116002)(5660300002)(2616005)(38350700002)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?70r/oyAWJ2A16Kimj29Ie3lU/mO3Kk6FBP5pd0VMrfAPEZy1dxcCNkqc2BLB?=
+ =?us-ascii?Q?x14KuR3pt11oA/yoI/DEaN+yTauRelSJBKYApZqBjcB3ofyGDFEaQBEW9PyL?=
+ =?us-ascii?Q?rWQcjIWtjnkE7nCYMPRem04Dr0exd0RBPyOnXmpOjWLF5y/Y2KbFh9RCAj3u?=
+ =?us-ascii?Q?wscAhWOASPU8u4DQTAv0Naa8j/5pQTzVFdsqCOrUml+5ZohDMZfThBqX3F0N?=
+ =?us-ascii?Q?lADO5T+V/UAnoEBZNGm3G3z4TdNdxr54C4VIwBe5UelGKRu6YE84ZthdLiQL?=
+ =?us-ascii?Q?vqEFrWNSlAKbxcilVc9/X2zpDD3MFLQmDwTF8HNAZEJSSviPf6v2f5o2dx02?=
+ =?us-ascii?Q?+1r1n/eC7YCa60A/pPFYCZnXkCI78RobBzD0aCV1Md9E8Yrx8P4YP6xmtjLP?=
+ =?us-ascii?Q?F1KTq9Q1qyFifU0KXFcUtcfGHnpRLhN3nXS1Nzt29HAEsWXGd6AdzBUfM1Et?=
+ =?us-ascii?Q?HJgpJ7C+MSUXGQuhSZaqmpWKIkrVpkTIWUbcy11qvdyaRFnsHktKCZurjx8P?=
+ =?us-ascii?Q?fuYGjLSbDf3sWM9ViKQtSg3cH819OF2Ip50/4xci5gViNMm35133J+4u+B6L?=
+ =?us-ascii?Q?LLAeFW6RRO4+VMhO6vesM+9tSP+ZI9vpVeDZcLRvE3+c7l1riqiludFx+TRF?=
+ =?us-ascii?Q?XrLzmry/6h/MuE2EL1NJ5Uz0AXlprn0eqCjHhSevr2SMG94qNG7Pl0Ig8cqn?=
+ =?us-ascii?Q?ME3zv2m+936tEp3YA8FNXesCkHFj4uB5ggEBQbrGMGx2+6zsrOLyrGj71+TI?=
+ =?us-ascii?Q?uQCTLL8CgwPGsqeAqaKRFUK6WUlhxZ00v9BHF2G33y3tDYcLn8RDxEW67PXF?=
+ =?us-ascii?Q?/5u/u6xM/f89pQsXYwFZmZI06C8SsGZNDG0rWjAhXJLHnOkYoM07poNbP9m4?=
+ =?us-ascii?Q?zF1tZ2yhMk2X/D4AQY7QA1bnbUmTAKBUjrVwUA0AjPKDqJQuLjJAI2VofBGJ?=
+ =?us-ascii?Q?HuUcYeVtDUxOkDQHJ+nVeYbAa4dSWkPoIWpjS+cvx7fWYQB1AD6cz2TvdIM0?=
+ =?us-ascii?Q?6V3q73bykrxTwo7q/8LyCSnf/pc4u0Eg3y84eueU0k2V24V8E9Fo+qk7K3w8?=
+ =?us-ascii?Q?QMjNcGLxcp8AURTGnpyrJAH7u4EOhvsY/6CCX/aEVBjCoaiC3C+c/lqaV5qd?=
+ =?us-ascii?Q?Wa3wSSbupsjz6XaJ403aPrbwVZhy42Q8VmpbkEfhKYB2g4LZ7XWXBAUIxER5?=
+ =?us-ascii?Q?lRybmGJ+LNe90R+s1p9EX04yEHvyL2M3lfwrIkfGSI+fwT4mvTQvcqCNZ741?=
+ =?us-ascii?Q?DOG9HpyRNol5LDrUzXRQsg3wSag8r1ntLF26V/JMrtMQphNWwIp+GTrA+8vo?=
+ =?us-ascii?Q?AyCujEHVv+NDY4jCd+nwvzjA640aBpYc5qUb48dRq3D2oVhQVUczmjHos2px?=
+ =?us-ascii?Q?RCFVdNfXBqASPgYUC22US8rw38tOh10bJVrZUuNT32/YzGwOlB/KB5E+EJ61?=
+ =?us-ascii?Q?QWs6Rf3FdwNHCxKoAOWgEhIKSTX0uBq0Ao/tqJL0Fn1S82WamoAMy/2LGih9?=
+ =?us-ascii?Q?oNNpYetBy4G2zFtBDZkpMmxyesZuJ1FHwvUZderjK77TxCNeHZssCDgKIk08?=
+ =?us-ascii?Q?xytjdYkuHCP34m0Lq/534ELw88Zrf1PkExHBytZJhVz/hjRLenhyrKI5I9Cs?=
+ =?us-ascii?Q?BSpRMUFQ/7/CDuN1dYQ0Zlk=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53a1dbc5-b2e9-4903-bd6c-08d9b0b01405
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2021 07:40:55.2262
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KuFqoBoqzY91G++XJ2z95PH8blcNhxws2HeE9OXQdpol+d+jajk32Z2dIEsqE9+flhnYExDOqhbFZczpe99fSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8790
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Mon, 29 Mar 2021 19:49:26 +0200
-schrieb Henning Schild <henning.schild@siemens.com>:
+From: Peng Fan <peng.fan@nxp.com>
 
-> This driver adds initial support for several devices from Siemens. It
-> is based on a platform driver introduced in an earlier commit.
-> 
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/leds/Kconfig                   |   3 +
->  drivers/leds/Makefile                  |   3 +
->  drivers/leds/simple/Kconfig            |  11 ++
->  drivers/leds/simple/Makefile           |   2 +
->  drivers/leds/simple/simatic-ipc-leds.c | 202
-> +++++++++++++++++++++++++ 5 files changed, 221 insertions(+)
->  create mode 100644 drivers/leds/simple/Kconfig
->  create mode 100644 drivers/leds/simple/Makefile
->  create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
-> 
-> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-> index b6742b4231bf..5c8558a4fa60 100644
-> --- a/drivers/leds/Kconfig
-> +++ b/drivers/leds/Kconfig
-> @@ -937,4 +937,7 @@ source "drivers/leds/trigger/Kconfig"
->  comment "LED Blink"
->  source "drivers/leds/blink/Kconfig"
->  
-> +comment "Simple LED drivers"
-> +source "drivers/leds/simple/Kconfig"
-> +
->  endif # NEW_LEDS
-> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-> index 2a698df9da57..2de7fdd8d629 100644
-> --- a/drivers/leds/Makefile
-> +++ b/drivers/leds/Makefile
-> @@ -111,3 +111,6 @@ obj-$(CONFIG_LEDS_TRIGGERS)		+=
-> trigger/ 
->  # LED Blink
->  obj-$(CONFIG_LEDS_BLINK)                += blink/
-> +
-> +# Simple LED drivers
-> +obj-y					+= simple/
-> diff --git a/drivers/leds/simple/Kconfig b/drivers/leds/simple/Kconfig
-> new file mode 100644
-> index 000000000000..9f6a68336659
-> --- /dev/null
-> +++ b/drivers/leds/simple/Kconfig
-> @@ -0,0 +1,11 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config LEDS_SIEMENS_SIMATIC_IPC
-> +	tristate "LED driver for Siemens Simatic IPCs"
-> +	depends on LEDS_CLASS
-> +	depends on SIEMENS_SIMATIC_IPC
-> +	help
-> +	  This option enables support for the LEDs of several
-> Industrial PCs
-> +	  from Siemens.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> module
-> +	  will be called simatic-ipc-leds.
-> diff --git a/drivers/leds/simple/Makefile
-> b/drivers/leds/simple/Makefile new file mode 100644
-> index 000000000000..8481f1e9e360
-> --- /dev/null
-> +++ b/drivers/leds/simple/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+= simatic-ipc-leds.o
-> diff --git a/drivers/leds/simple/simatic-ipc-leds.c
-> b/drivers/leds/simple/simatic-ipc-leds.c new file mode 100644
-> index 000000000000..043edbf81b76
-> --- /dev/null
-> +++ b/drivers/leds/simple/simatic-ipc-leds.c
-> @@ -0,0 +1,202 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Siemens SIMATIC IPC driver for LEDs
-> + *
-> + * Copyright (c) Siemens AG, 2018-2021
-> + *
-> + * Authors:
-> + *  Henning Schild <henning.schild@siemens.com>
-> + *  Jan Kiszka <jan.kiszka@siemens.com>
-> + *  Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-> + */
-> +
-> +#include <linux/ioport.h>
-> +#include <linux/kernel.h>
-> +#include <linux/leds.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/platform_data/x86/simatic-ipc-base.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/sizes.h>
-> +#include <linux/spinlock.h>
-> +
-> +#define SIMATIC_IPC_LED_PORT_BASE	0x404E
-> +
-> +struct simatic_ipc_led {
-> +	unsigned int value; /* mask for io and offset for mem */
-> +	char *name;
-> +	struct led_classdev cdev;
-> +};
-> +
-> +static struct simatic_ipc_led simatic_ipc_leds_io[] = {
-> +	{1 << 15, "green:" LED_FUNCTION_STATUS "-1" },
-> +	{1 << 7,  "yellow:" LED_FUNCTION_STATUS "-1" },
-> +	{1 << 14, "red:" LED_FUNCTION_STATUS "-2" },
-> +	{1 << 6,  "yellow:" LED_FUNCTION_STATUS "-2" },
-> +	{1 << 13, "red:" LED_FUNCTION_STATUS "-3" },
-> +	{1 << 5,  "yellow:" LED_FUNCTION_STATUS "-3" },
-> +	{ }
-> +};
-> +
-> +/* the actual start will be discovered with PCI, 0 is a placeholder
-> */ +struct resource simatic_ipc_led_mem_res = DEFINE_RES_MEM_NAMED(0,
-> SZ_4K, KBUILD_MODNAME); +
-> +static void *simatic_ipc_led_memory;
-> +
-> +static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
-> +	{0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
-> +	{0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
-> +	{0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
-> +	{0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
-> +	{0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
-> +	{0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
-> +	{ }
-> +};
-> +
-> +static struct resource simatic_ipc_led_io_res =
-> +	DEFINE_RES_IO_NAMED(SIMATIC_IPC_LED_PORT_BASE, SZ_1,
-> KBUILD_MODNAME);
+V6:
+ Rebase to avoid conflict.
 
-Should be SZ_2
+V5:
+ only fix patch 8/8 'arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board'
+  - Correct bus-width to 8 for eMMC
+  - Drop pinctrl enet which no user
+ Drop patch 1/9 in V4, since in merged in linux-next
+ Add A-b/R-b tag
 
-Henning
+V4:
+ https://lists.infradead.org/pipermail/linux-arm-kernel/2021-November/696020.html
 
-> +static DEFINE_SPINLOCK(reg_lock);
-> +
-> +static inline struct simatic_ipc_led *cdev_to_led(struct
-> led_classdev *led_cd) +{
-> +	return container_of(led_cd, struct simatic_ipc_led, cdev);
-> +}
-> +
-> +static void simatic_ipc_led_set_io(struct led_classdev *led_cd,
-> +				   enum led_brightness brightness)
-> +{
-> +	struct simatic_ipc_led *led = cdev_to_led(led_cd);
-> +	unsigned long flags;
-> +	unsigned int val;
-> +
-> +	spin_lock_irqsave(&reg_lock, flags);
-> +
-> +	val = inw(SIMATIC_IPC_LED_PORT_BASE);
-> +	if (brightness == LED_OFF)
-> +		outw(val | led->value, SIMATIC_IPC_LED_PORT_BASE);
-> +	else
-> +		outw(val & ~led->value, SIMATIC_IPC_LED_PORT_BASE);
-> +
-> +	spin_unlock_irqrestore(&reg_lock, flags);
-> +}
-> +
-> +static enum led_brightness simatic_ipc_led_get_io(struct
-> led_classdev *led_cd) +{
-> +	struct simatic_ipc_led *led = cdev_to_led(led_cd);
-> +
-> +	return inw(SIMATIC_IPC_LED_PORT_BASE) & led->value ? LED_OFF
-> : led_cd->max_brightness; +}
-> +
-> +static void simatic_ipc_led_set_mem(struct led_classdev *led_cd,
-> +				    enum led_brightness brightness)
-> +{
-> +	struct simatic_ipc_led *led = cdev_to_led(led_cd);
-> +
-> +	u32 *p;
-> +
-> +	p = simatic_ipc_led_memory + led->value;
-> +	*p = (*p & ~1) | (brightness == LED_OFF);
-> +}
-> +
-> +static enum led_brightness simatic_ipc_led_get_mem(struct
-> led_classdev *led_cd) +{
-> +	struct simatic_ipc_led *led = cdev_to_led(led_cd);
-> +
-> +	u32 *p;
-> +
-> +	p = simatic_ipc_led_memory + led->value;
-> +	return (*p & 1) ? LED_OFF : led_cd->max_brightness;
-> +}
-> +
-> +static int simatic_ipc_leds_probe(struct platform_device *pdev)
-> +{
-> +	const struct simatic_ipc_platform *plat =
-> pdev->dev.platform_data;
-> +	struct device *dev = &pdev->dev;
-> +	struct simatic_ipc_led *ipcled;
-> +	struct led_classdev *cdev;
-> +	struct resource *res;
-> +	int err, type;
-> +	u32 *p;
-> +
-> +	switch (plat->devmode) {
-> +	case SIMATIC_IPC_DEVICE_227D:
-> +	case SIMATIC_IPC_DEVICE_427E:
-> +		res = &simatic_ipc_led_io_res;
-> +		ipcled = simatic_ipc_leds_io;
-> +		/* on 227D the two bytes work the other way araound
-> */
-> +		if (plat->devmode == SIMATIC_IPC_DEVICE_227D) {
-> +			while (ipcled->value) {
-> +				ipcled->value =
-> swab16(ipcled->value);
-> +				ipcled++;
-> +			}
-> +			ipcled = simatic_ipc_leds_io;
-> +		}
-> +		type = IORESOURCE_IO;
-> +		if (!devm_request_region(dev, res->start,
-> resource_size(res), KBUILD_MODNAME)) {
-> +			dev_err(dev, "Unable to register IO resource
-> at %pR\n", res);
-> +			return -EBUSY;
-> +		}
-> +		break;
-> +	case SIMATIC_IPC_DEVICE_127E:
-> +		res = &simatic_ipc_led_mem_res;
-> +		ipcled = simatic_ipc_leds_mem;
-> +		type = IORESOURCE_MEM;
-> +
-> +		/* get GPIO base from PCI */
-> +		res->start = simatic_ipc_get_membase0(PCI_DEVFN(13,
-> 0));
-> +		if (res->start == 0)
-> +			return -ENODEV;
-> +
-> +		/* do the final address calculation */
-> +		res->start = res->start + (0xC5 << 16);
-> +		res->end += res->start;
-> +
-> +		simatic_ipc_led_memory = devm_ioremap_resource(dev,
-> res);
-> +		if (IS_ERR(simatic_ipc_led_memory))
-> +			return PTR_ERR(simatic_ipc_led_memory);
-> +
-> +		/* initialize power/watchdog LED */
-> +		p = simatic_ipc_led_memory + 0x500 + 0x1D8; /*
-> PM_WDT_OUT */
-> +		*p = (*p & ~1);
-> +		p = simatic_ipc_led_memory + 0x500 + 0x1C0; /*
-> PM_BIOS_BOOT_N */
-> +		*p = (*p | 1);
-> +
-> +		break;
-> +	default:
-> +		return -ENODEV;
-> +	}
-> +
-> +	while (ipcled->value) {
-> +		cdev = &ipcled->cdev;
-> +		if (type == IORESOURCE_MEM) {
-> +			cdev->brightness_set =
-> simatic_ipc_led_set_mem;
-> +			cdev->brightness_get =
-> simatic_ipc_led_get_mem;
-> +		} else {
-> +			cdev->brightness_set =
-> simatic_ipc_led_set_io;
-> +			cdev->brightness_get =
-> simatic_ipc_led_get_io;
-> +		}
-> +		cdev->max_brightness = LED_ON;
-> +		cdev->name = ipcled->name;
-> +
-> +		err = devm_led_classdev_register(dev, cdev);
-> +		if (err < 0)
-> +			return err;
-> +		ipcled++;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver simatic_ipc_led_driver = {
-> +	.probe = simatic_ipc_leds_probe,
-> +	.driver = {
-> +		.name = KBUILD_MODNAME,
-> +	}
-> +};
-> +
-> +module_platform_driver(simatic_ipc_led_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:" KBUILD_MODNAME);
-> +MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
+I just pick-up Jacky's work, rebase and send out V4 based on
+Jacky's V3 patchset.
+
+If you prefer to split the patchset and send single patches, I could
+resend one by one.
+
+Note: the V3 has a gpio bindings patch, it has been separated and
+sent to gpio list in a single one per Linus requested.
+
+This patchset is to add i.MX8ULP in dt-bindings, introduce
+basic i.MX8ULP dtsi and basic evk board support.
+
+The detailed version changes are in each patch.
+
+There is checkpatch error in patch 8, but that is for device tree macro
+and we could use use "(xx)".
+
+In V4, the changes are in patch 8, 9 when rebasing to linux-next/master
+,fix build errors after the clk driver in tree and drop a few nodes
+that not have bindings.
+
+Tested with CONFIG_CLK_IMX8ULP and CONFIG_PINCTRL_IMX8ULP enabled.
+
+V3:
+ https://lore.kernel.org/linux-arm-kernel/20210625011355.3468586-6-ping.bai@nxp.com/T/
+Jacky Bai (7):
+  dt-bindings: i2c: imx-lpi2c: Add imx8ulp compatible string
+  dt-bindings: serial: fsl-lpuart: Add imx8ulp compatible string
+  dt-bindings: timer: tpm-timer: Add imx8ulp compatible string
+  dt-bindings: watchdog: imx7ulp-wdt: Add imx8ulp compatible string
+  dt-bindings: arm: fsl: Add binding for imx8ulp evk
+  arm64: dts: imx8ulp: Add the basic dtsi file for imx8ulp
+  arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board
+
+ .../devicetree/bindings/arm/fsl.yaml          |   6 +
+ .../bindings/i2c/i2c-imx-lpi2c.yaml           |   1 +
+ .../bindings/serial/fsl-lpuart.yaml           |   4 +-
+ .../bindings/timer/nxp,tpm-timer.yaml         |   6 +-
+ .../bindings/watchdog/fsl-imx7ulp-wdt.yaml    |   7 +-
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ arch/arm64/boot/dts/freescale/imx8ulp-evk.dts |  64 ++
+ .../boot/dts/freescale/imx8ulp-pinfunc.h      | 978 ++++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8ulp.dtsi    | 396 +++++++
+ 9 files changed, 1459 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+ create mode 100755 arch/arm64/boot/dts/freescale/imx8ulp-pinfunc.h
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+
+-- 
+2.25.1
 
