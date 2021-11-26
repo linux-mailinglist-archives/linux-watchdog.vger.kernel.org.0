@@ -2,24 +2,23 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1901D45F32A
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Nov 2021 18:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6577445F395
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Nov 2021 19:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbhKZRyJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 26 Nov 2021 12:54:09 -0500
-Received: from goliath.siemens.de ([192.35.17.28]:49337 "EHLO
-        goliath.siemens.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbhKZRwJ (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 26 Nov 2021 12:52:09 -0500
+        id S239550AbhKZSRr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 Nov 2021 13:17:47 -0500
+Received: from lizzard.sbs.de ([194.138.37.39]:59450 "EHLO lizzard.sbs.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229929AbhKZSPp (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 26 Nov 2021 13:15:45 -0500
 Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
-        by goliath.siemens.de (8.15.2/8.15.2) with ESMTPS id 1AQHmYhL009364
+        by lizzard.sbs.de (8.15.2/8.15.2) with ESMTPS id 1AQIC5RD019147
         (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Nov 2021 18:48:34 +0100
+        Fri, 26 Nov 2021 19:12:05 +0100
 Received: from md1za8fc.ad001.siemens.net ([139.22.47.90])
-        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 1AQHmW4n003945;
-        Fri, 26 Nov 2021 18:48:32 +0100
-Date:   Fri, 26 Nov 2021 18:48:31 +0100
+        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 1AQIC4ie019339;
+        Fri, 26 Nov 2021 19:12:04 +0100
+Date:   Fri, 26 Nov 2021 19:12:03 +0100
 From:   Henning Schild <henning.schild@siemens.com>
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -36,7 +35,7 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Pavel Machek <pavel@ucw.cz>, Enrico Weigelt <lkml@metux.net>
 Subject: Re: [PATCH v4 2/4] leds: simatic-ipc-leds: add new driver for
  Siemens Industial PCs
-Message-ID: <20211126184831.5d2a3787@md1za8fc.ad001.siemens.net>
+Message-ID: <20211126191203.663e0d90@md1za8fc.ad001.siemens.net>
 In-Reply-To: <CAHp75VcD0FQuG_AToNkVHHD9e6WV6=18P4U0cSi0qzD3FL=ssw@mail.gmail.com>
 References: <20211126141027.16161-1-henning.schild@siemens.com>
         <20211126141027.16161-3-henning.schild@siemens.com>
@@ -74,16 +73,13 @@ schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
 > 
 > Why can't you simply enable the pinctrl driver and use it?
 
-What do you mean with enable (=m, =y)? The kernel has it built in ...
-but it does not come up because it does not find an ACPI table entry
-nor a p2sb PCI device.
+I propose we set up a call, that might help clearing up the situation.
+If you agree please send me an email and possibly propose a time-slot.
+I would take it from there and send you a meeting link.
 
-When with enable you mean ... repair the pinctrl drivers with your
-patches, i am afraid i am not qualified and hardly responsible. It is
-not "simple" for me. I will test and switch to pinctrl .... but here i
-am tired of waiting and pushing/asking to turn the order of patches
-around.
-
-Or can i trigger the pinctrl driver to probe from my init/probe?
-
+regards,
 Henning
+
+> 
+> 
+
