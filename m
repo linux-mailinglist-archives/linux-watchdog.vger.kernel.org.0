@@ -2,43 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C6B45EE35
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Nov 2021 13:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A156345EF03
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Nov 2021 14:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377335AbhKZMow (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 26 Nov 2021 07:44:52 -0500
-Received: from thoth.sbs.de ([192.35.17.2]:49800 "EHLO thoth.sbs.de"
+        id S243309AbhKZNYQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 Nov 2021 08:24:16 -0500
+Received: from gecko.sbs.de ([194.138.37.40]:53534 "EHLO gecko.sbs.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377237AbhKZMmv (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 26 Nov 2021 07:42:51 -0500
-Received: from mail1.sbs.de (mail1.sbs.de [192.129.41.35])
-        by thoth.sbs.de (8.15.2/8.15.2) with ESMTPS id 1AQCdC6N001686
+        id S232058AbhKZNWQ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Fri, 26 Nov 2021 08:22:16 -0500
+Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
+        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 1AQDIGi1027289
         (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Nov 2021 13:39:12 +0100
+        Fri, 26 Nov 2021 14:18:16 +0100
 Received: from md1za8fc.ad001.siemens.net ([139.22.47.90])
-        by mail1.sbs.de (8.15.2/8.15.2) with ESMTP id 1AQCdAdV022198;
-        Fri, 26 Nov 2021 13:39:10 +0100
-Date:   Fri, 26 Nov 2021 13:39:09 +0100
+        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 1AQDIF6d021653;
+        Fri, 26 Nov 2021 14:18:15 +0100
+Date:   Fri, 26 Nov 2021 14:18:14 +0100
 From:   Henning Schild <henning.schild@siemens.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-Cc:     Srikanth Krishnakar <skrishnakar@gmail.com>,
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
         Jan Kiszka <jan.kiszka@siemens.com>,
-        "Gerd Haeussler" <gerd.haeussler.ext@siemens.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Mark Gross <mgross@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Enrico Weigelt <lkml@metux.net>
-Subject: Re: [PATCH v3 1/4] platform/x86: simatic-ipc: add main driver for
- Siemens devices
-Message-ID: <20211126133909.33fb1937@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20210329174928.18816-2-henning.schild@siemens.com>
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v3 3/4] watchdog: simatic-ipc-wdt: add new driver for
+ Siemens Industrial PCs
+Message-ID: <20211126141814.044c27ec@md1za8fc.ad001.siemens.net>
+In-Reply-To: <e36d8b9f-42a1-0d8c-a4cc-f497acd155fe@roeck-us.net>
 References: <20210329174928.18816-1-henning.schild@siemens.com>
-        <20210329174928.18816-2-henning.schild@siemens.com>
+        <20210329174928.18816-4-henning.schild@siemens.com>
+        <ffdfe9a9-ab17-18af-300e-062b79d132f3@metux.net>
+        <20210406165247.78791bf7@md1za8fc.ad001.siemens.net>
+        <CAHp75VcOw0WD8s9ZP=-N5Gesmfx0UEkV5s7SSwDwCzYDYoVuPg@mail.gmail.com>
+        <e36d8b9f-42a1-0d8c-a4cc-f497acd155fe@roeck-us.net>
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -47,381 +52,77 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Mon, 29 Mar 2021 19:49:25 +0200
-schrieb Henning Schild <henning.schild@siemens.com>:
+Am Wed, 7 Apr 2021 05:17:12 -0700
+schrieb Guenter Roeck <linux@roeck-us.net>:
 
-> This mainly implements detection of these devices and will allow
-> secondary drivers to work on such machines.
+> On 4/7/21 1:53 AM, Andy Shevchenko wrote:
+> > On Tue, Apr 6, 2021 at 5:56 PM Henning Schild
+> > <henning.schild@siemens.com> wrote:  
+> >>
+> >> Am Thu, 1 Apr 2021 18:15:41 +0200
+> >> schrieb "Enrico Weigelt, metux IT consult" <lkml@metux.net>:
+> >>  
+> >>> On 29.03.21 19:49, Henning Schild wrote:
+> >>>
+> >>> Hi,
+> >>>  
+> >>>> This driver adds initial support for several devices from
+> >>>> Siemens. It is based on a platform driver introduced in an
+> >>>> earlier commit.  
+> >>>
+> >>> Where does the wdt actually come from ?
+> >>>
+> >>> Is it in the SoC ? (which SoC exactly). SoC-builtin wdt is a
+> >>> pretty usual case.
+> >>>
+> >>> Or some external chip ?  
+> >>
+> >> I guess external chip, but again we are talking about multiple
+> >> machines. And the manuals i read so far do not go into that sort of
+> >> detail. In fact on some of the machines you will have two
+> >> watchdogs, one from the SoC and that "special" one.
+> >> That has several reasons, probably not too important here. The HW
+> >> guys are adding another wd not just for fun, and it would be nice
+> >> to have a driver.
+> >>  
+> >>> The code smells a bit like two entirely different wdt's that just
+> >>> have some similarities. If that's the case, I'd rather split it
+> >>> into two separate drivers and let the parent driver (board file)
+> >>> instantiate the correct one.  
+> >>
+> >> Yes, it is two. Just like for the LEDs. One version PIO-based
+> >> another version gpio/p2sb/mmio based.  
+> > 
+> > I tend to agree with Enrico that this should be two separate
+> > drivers. 
 > 
-> The identification is DMI-based with a vendor specific way to tell
-> them apart in a reliable way.
+> Agreed.
 > 
-> Drivers for LEDs and Watchdogs will follow to make use of that
-> platform detection.
-> 
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/platform/x86/Kconfig                  |  12 ++
->  drivers/platform/x86/Makefile                 |   3 +
->  drivers/platform/x86/simatic-ipc.c            | 169
-> ++++++++++++++++++ .../platform_data/x86/simatic-ipc-base.h      |
-> 29 +++ include/linux/platform_data/x86/simatic-ipc.h |  72 ++++++++
->  5 files changed, 285 insertions(+)
->  create mode 100644 drivers/platform/x86/simatic-ipc.c
->  create mode 100644 include/linux/platform_data/x86/simatic-ipc-base.h
->  create mode 100644 include/linux/platform_data/x86/simatic-ipc.h
-> 
-> diff --git a/drivers/platform/x86/Kconfig
-> b/drivers/platform/x86/Kconfig index 461ec61530eb..1eaa03d0d183 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -1289,6 +1289,18 @@ config INTEL_TELEMETRY
->  	  directly via debugfs files. Various tools may use
->  	  this interface for SoC state monitoring.
->  
-> +config SIEMENS_SIMATIC_IPC
-> +	tristate "Siemens Simatic IPC Class driver"
-> +	depends on PCI
-> +	help
-> +	  This Simatic IPC class driver is the central of several
-> drivers. It
-> +	  is mainly used for system identification, after which
-> drivers in other
-> +	  classes will take care of driving specifics of those
-> machines.
-> +	  i.e. LEDs and watchdog.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> module
-> +	  will be called simatic-ipc.
-> +
->  endif # X86_PLATFORM_DEVICES
->  
->  config PMC_ATOM
-> diff --git a/drivers/platform/x86/Makefile
-> b/drivers/platform/x86/Makefile index 60d554073749..26cdebf2e701
-> 100644 --- a/drivers/platform/x86/Makefile
-> +++ b/drivers/platform/x86/Makefile
-> @@ -138,3 +138,6 @@ obj-$(CONFIG_INTEL_TELEMETRY)		+=
-> intel_telemetry_core.o \ intel_telemetry_pltdrv.o \
->  					   intel_telemetry_debugfs.o
->  obj-$(CONFIG_PMC_ATOM)			+= pmc_atom.o
-> +
-> +# Siemens Simatic Industrial PCs
-> +obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
-> diff --git a/drivers/platform/x86/simatic-ipc.c
-> b/drivers/platform/x86/simatic-ipc.c new file mode 100644
-> index 000000000000..52e8596bc63d
-> --- /dev/null
-> +++ b/drivers/platform/x86/simatic-ipc.c
-> @@ -0,0 +1,169 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Siemens SIMATIC IPC platform driver
-> + *
-> + * Copyright (c) Siemens AG, 2018-2021
-> + *
-> + * Authors:
-> + *  Henning Schild <henning.schild@siemens.com>
-> + *  Jan Kiszka <jan.kiszka@siemens.com>
-> + *  Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/dmi.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/platform_data/x86/simatic-ipc.h>
-> +#include <linux/platform_device.h>
-> +
-> +static struct platform_device *ipc_led_platform_device;
-> +static struct platform_device *ipc_wdt_platform_device;
-> +
-> +static const struct dmi_system_id simatic_ipc_whitelist[] = {
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "SIEMENS AG"),
-> +		},
-> +	},
-> +	{}
-> +};
-> +
-> +static struct simatic_ipc_platform platform_data;
-> +
-> +static struct {
-> +	u32 station_id;
-> +	u8 led_mode;
-> +	u8 wdt_mode;
-> +} device_modes[] = {
-> +	{SIMATIC_IPC_IPC127E, SIMATIC_IPC_DEVICE_127E,
-> SIMATIC_IPC_DEVICE_NONE},
-> +	{SIMATIC_IPC_IPC227D, SIMATIC_IPC_DEVICE_227D,
-> SIMATIC_IPC_DEVICE_NONE},
-> +	{SIMATIC_IPC_IPC227E, SIMATIC_IPC_DEVICE_427E,
-> SIMATIC_IPC_DEVICE_227E},
-> +	{SIMATIC_IPC_IPC277E, SIMATIC_IPC_DEVICE_NONE,
-> SIMATIC_IPC_DEVICE_227E},
-> +	{SIMATIC_IPC_IPC427D, SIMATIC_IPC_DEVICE_427E,
-> SIMATIC_IPC_DEVICE_NONE},
-> +	{SIMATIC_IPC_IPC427E, SIMATIC_IPC_DEVICE_427E,
-> SIMATIC_IPC_DEVICE_427E},
-> +	{SIMATIC_IPC_IPC477E, SIMATIC_IPC_DEVICE_NONE,
-> SIMATIC_IPC_DEVICE_427E}, +};
-> +
-> +static int register_platform_devices(u32 station_id)
-> +{
-> +	u8 ledmode = SIMATIC_IPC_DEVICE_NONE;
-> +	u8 wdtmode = SIMATIC_IPC_DEVICE_NONE;
-> +	int i;
-> +
-> +	platform_data.devmode = SIMATIC_IPC_DEVICE_NONE;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(device_modes); i++) {
-> +		if (device_modes[i].station_id == station_id) {
-> +			ledmode = device_modes[i].led_mode;
-> +			wdtmode = device_modes[i].wdt_mode;
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (ledmode != SIMATIC_IPC_DEVICE_NONE) {
-> +		platform_data.devmode = ledmode;
-> +		ipc_led_platform_device =
-> +			platform_device_register_data(NULL,
-> +				KBUILD_MODNAME "_leds",
-> PLATFORM_DEVID_NONE,
-> +				&platform_data,
-> +				sizeof(struct simatic_ipc_platform));
-> +		if (IS_ERR(ipc_led_platform_device))
-> +			return PTR_ERR(ipc_led_platform_device);
-> +
-> +		pr_debug("device=%s created\n",
-> +			 ipc_led_platform_device->name);
-> +	}
-> +
-> +	if (wdtmode != SIMATIC_IPC_DEVICE_NONE) {
-> +		platform_data.devmode = wdtmode;
-> +		ipc_wdt_platform_device =
-> +			platform_device_register_data(NULL,
-> +				KBUILD_MODNAME "_wdt",
-> PLATFORM_DEVID_NONE,
-> +				&platform_data,
-> +				sizeof(struct simatic_ipc_platform));
-> +		if (IS_ERR(ipc_wdt_platform_device))
-> +			return PTR_ERR(ipc_wdt_platform_device);
-> +
-> +		pr_debug("device=%s created\n",
-> +			 ipc_wdt_platform_device->name);
-> +	}
-> +
-> +	if (ledmode == SIMATIC_IPC_DEVICE_NONE &&
-> +	    wdtmode == SIMATIC_IPC_DEVICE_NONE) {
-> +		pr_warn("unsupported IPC detected, station
-> id=%08x\n",
-> +			station_id);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +
+> Guenter
 
-extra newline, should be removed
+I will ignore the wish for a split in v4. Reason is that it would cause
+a lot of duplication are spreading code over many files. like i.e. a
+-common.c
 
-> +/* FIXME: this should eventually be done with generic P2SB discovery
-> code */ +/*
-> + * Get membase address from PCI, used in leds and wdt modul. Here we
-> read
+Internally we have that driver in fact already support a few more
+machines, which could call a split at some point. Or could also upset
+people of the many CONFIG_ knobs and files as we keep pushing machine
+support forward in the upstream drivers.
 
-/modul/module/
+But i would like to discuss that in patch qs coming after a merge and
+not split (maybe not yet).
 
-was pointed out already but forgotten about
+Also splitting wdt and having leds in one file would be inconsistent.
+So when there will be a split it should be on both ends. But please
+allow me to postpone that.
 
+regards,
 Henning
 
-> + * the bar0. The final address calculation is done in the
-> appropriate modules
-> + */
-> +u32 simatic_ipc_get_membase0(unsigned int p2sb)
-> +{
-> +	struct pci_bus *bus;
-> +	u32 bar0 = 0;
-> +	/*
-> +	 * The GPIO memory is in bar0 of the hidden P2SB device.
-> +	 * Unhide the device to have a quick look at it, before we
-> hide it
-> +	 * again.
-> +	 * Also grab the pci rescan lock so that device does not get
-> discovered
-> +	 * and remapped while it is visible.
-> +	 * This code is inspired by drivers/mfd/lpc_ich.c
-> +	 */
-> +	bus = pci_find_bus(0, 0);
-> +	pci_lock_rescan_remove();
-> +	pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x0);
-> +	pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0,
-> &bar0); +
-> +	bar0 &= ~0xf;
-> +	pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x1);
-> +	pci_unlock_rescan_remove();
-> +
-> +	return bar0;
-> +}
-> +EXPORT_SYMBOL(simatic_ipc_get_membase0);
-> +
-> +static int __init simatic_ipc_init_module(void)
-> +{
-> +	const struct dmi_system_id *match;
-> +	u32 station_id;
-> +	int err;
-> +
-> +	match = dmi_first_match(simatic_ipc_whitelist);
-> +	if (!match)
-> +		return 0;
-> +
-> +	err = dmi_walk(simatic_ipc_find_dmi_entry_helper,
-> &station_id); +
-> +	if (err || station_id == SIMATIC_IPC_INVALID_STATION_ID) {
-> +		pr_warn("DMI entry %d not found\n",
-> SIMATIC_IPC_DMI_ENTRY_OEM);
-> +		return 0;
-> +	}
-> +
-> +	return register_platform_devices(station_id);
-> +}
-> +
-> +static void __exit simatic_ipc_exit_module(void)
-> +{
-> +	platform_device_unregister(ipc_led_platform_device);
-> +	ipc_led_platform_device = NULL;
-> +
-> +	platform_device_unregister(ipc_wdt_platform_device);
-> +	ipc_wdt_platform_device = NULL;
-> +}
-> +
-> +module_init(simatic_ipc_init_module);
-> +module_exit(simatic_ipc_exit_module);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("Gerd Haeussler <gerd.haeussler.ext@siemens.com>");
-> +MODULE_ALIAS("dmi:*:svnSIEMENSAG:*");
-> diff --git a/include/linux/platform_data/x86/simatic-ipc-base.h
-> b/include/linux/platform_data/x86/simatic-ipc-base.h new file mode
-> 100644 index 000000000000..62d2bc774067
-> --- /dev/null
-> +++ b/include/linux/platform_data/x86/simatic-ipc-base.h
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Siemens SIMATIC IPC drivers
-> + *
-> + * Copyright (c) Siemens AG, 2018-2021
-> + *
-> + * Authors:
-> + *  Henning Schild <henning.schild@siemens.com>
-> + *  Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-> + */
-> +
-> +#ifndef __PLATFORM_DATA_X86_SIMATIC_IPC_BASE_H
-> +#define __PLATFORM_DATA_X86_SIMATIC_IPC_BASE_H
-> +
-> +#include <linux/types.h>
-> +
-> +#define SIMATIC_IPC_DEVICE_NONE 0
-> +#define SIMATIC_IPC_DEVICE_227D 1
-> +#define SIMATIC_IPC_DEVICE_427E 2
-> +#define SIMATIC_IPC_DEVICE_127E 3
-> +#define SIMATIC_IPC_DEVICE_227E 4
-> +
-> +struct simatic_ipc_platform {
-> +	u8	devmode;
-> +};
-> +
-> +u32 simatic_ipc_get_membase0(unsigned int p2sb);
-> +
-> +#endif /* __PLATFORM_DATA_X86_SIMATIC_IPC_BASE_H */
-> diff --git a/include/linux/platform_data/x86/simatic-ipc.h
-> b/include/linux/platform_data/x86/simatic-ipc.h new file mode 100644
-> index 000000000000..f3b76b39776b
-> --- /dev/null
-> +++ b/include/linux/platform_data/x86/simatic-ipc.h
-> @@ -0,0 +1,72 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Siemens SIMATIC IPC drivers
-> + *
-> + * Copyright (c) Siemens AG, 2018-2021
-> + *
-> + * Authors:
-> + *  Henning Schild <henning.schild@siemens.com>
-> + *  Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-> + */
-> +
-> +#ifndef __PLATFORM_DATA_X86_SIMATIC_IPC_H
-> +#define __PLATFORM_DATA_X86_SIMATIC_IPC_H
-> +
-> +#include <linux/dmi.h>
-> +#include <linux/platform_data/x86/simatic-ipc-base.h>
-> +
-> +#define SIMATIC_IPC_DMI_ENTRY_OEM	129
-> +/* binary type */
-> +#define SIMATIC_IPC_DMI_TYPE		0xff
-> +#define SIMATIC_IPC_DMI_GROUP		0x05
-> +#define SIMATIC_IPC_DMI_ENTRY		0x02
-> +#define SIMATIC_IPC_DMI_TID		0x02
-> +
-> +enum simatic_ipc_station_ids {
-> +	SIMATIC_IPC_INVALID_STATION_ID = 0,
-> +	SIMATIC_IPC_IPC227D = 0x00000501,
-> +	SIMATIC_IPC_IPC427D = 0x00000701,
-> +	SIMATIC_IPC_IPC227E = 0x00000901,
-> +	SIMATIC_IPC_IPC277E = 0x00000902,
-> +	SIMATIC_IPC_IPC427E = 0x00000A01,
-> +	SIMATIC_IPC_IPC477E = 0x00000A02,
-> +	SIMATIC_IPC_IPC127E = 0x00000D01,
-> +};
-> +
-> +static inline u32 simatic_ipc_get_station_id(u8 *data, int max_len)
-> +{
-> +	struct {
-> +		u8	type;		/* type (0xff =
-> binary) */
-> +		u8	len;		/* len of data entry */
-> +		u8	group;
-> +		u8	entry;
-> +		u8	tid;
-> +		__le32	station_id;	/* station id (LE)
-> */
-> +	} __packed * data_entry = (void *)data + sizeof(struct
-> dmi_header); +
-> +	while ((u8 *)data_entry < data + max_len) {
-> +		if (data_entry->type == SIMATIC_IPC_DMI_TYPE &&
-> +		    data_entry->len == sizeof(*data_entry) &&
-> +		    data_entry->group == SIMATIC_IPC_DMI_GROUP &&
-> +		    data_entry->entry == SIMATIC_IPC_DMI_ENTRY &&
-> +		    data_entry->tid == SIMATIC_IPC_DMI_TID) {
-> +			return le32_to_cpu(data_entry->station_id);
-> +		}
-> +		data_entry = (void *)((u8 *)(data_entry) +
-> data_entry->len);
-> +	}
-> +
-> +	return SIMATIC_IPC_INVALID_STATION_ID;
-> +}
-> +
-> +static inline void
-> +simatic_ipc_find_dmi_entry_helper(const struct dmi_header *dh, void
-> *_data) +{
-> +	u32 *id = _data;
-> +
-> +	if (dh->type != SIMATIC_IPC_DMI_ENTRY_OEM)
-> +		return;
-> +
-> +	*id = simatic_ipc_get_station_id((u8 *)dh, dh->length);
-> +}
-> +
-> +#endif /* __PLATFORM_DATA_X86_SIMATIC_IPC_H */
+> >> In fact the latter should very likely be based on that gpio pinctl,
+> >> whether it really needs to be a separate driver will have to be
+> >> seen. There are probably pros and cons for both options.  
+> > 
+> >   
+> 
 
