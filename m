@@ -2,74 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C76461FA6
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 19:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F178461FED
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 20:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379631AbhK2S4z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Nov 2021 13:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        id S1347613AbhK2TNn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Nov 2021 14:13:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379777AbhK2Syz (ORCPT
+        with ESMTP id S233738AbhK2TLl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:54:55 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1A8C0613B4;
-        Mon, 29 Nov 2021 07:14:00 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so25927454otj.7;
-        Mon, 29 Nov 2021 07:14:00 -0800 (PST)
+        Mon, 29 Nov 2021 14:11:41 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC94BC052925;
+        Mon, 29 Nov 2021 07:32:36 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id m6so35334023oim.2;
+        Mon, 29 Nov 2021 07:32:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0LDYpaC1o8xhrXzJKdF3sDv2C843tw6YvVGF0VGCbZM=;
-        b=bcF85LpNFw0MsgEHtmp/Y6p8zwZjTr8H7G6F5FEDhT4dTaXWscORwZypSBmpvDZaL1
-         Bps/23UNJROqP23ubTP4XcFgEJzRWQ2fzGHuVvTdMBTA5iKtDlmGUy67b9Wp3p3dDAhy
-         Rc6qR2iQUtsnzS3mAeCFejz0RvRomqMeqpBVUxVwec2dr01mtypw1OwXP79F++VH9Jwv
-         SaOBM3XjFPlIzxbc398+LIoeZvYIAKdVTN0bWPFUX64tt3ARjAlb0eyw07T01wJOsVz+
-         tP5O4N5R845Celuv6v4mny3i4/kiPbM+kroKb4QlMR/QY8RQw6eaafz3sw5AKSIUeaaK
-         yi6g==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=xn0HWQDqGoSI5N5BzKsI9k86k0ZFmdy7lZiWdeS54vs=;
+        b=HWZpuBpzAWtgOoDnqsVg6oglNAy+4ld48MGugS4I/Td1xYLRZJE9i6cjsfRb4rIFU9
+         PNRKArUz2Ze/L2exNv/p8zD8zpbZV3FetIZajlhczdh9kJEiTbLE6e/r7cJex9icFzm+
+         p914BUBXDHjCLH5c1F6brY3VZQYEcXX4hMNoZAtwMmYXz+RKB0VNXA5QHkx01Sgvdpp+
+         msZVr6PA4+cy5OonS1fiqsfvur8Pd4hJw7Ht4T0+xrq/4iKe3uondgJwFJscBLuHK5v8
+         zfyEpzXFITc4N0aM/SIVGvmC16SnGqxKeljNbnRdVQSnSIPcn0tvJimKxXLsOs06RX4H
+         2xXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0LDYpaC1o8xhrXzJKdF3sDv2C843tw6YvVGF0VGCbZM=;
-        b=NhJQIIsuwXc+IhwgzeHfVDJPvd76WT2my8K4x+bOMUtlKKwE+Fgk7tcdlpST/d+Let
-         yu2jNRxqWtxUZVfr/xz7fXlrDgHglMNEvxbmUc5bN8AIt6+tRpVCYJD5UQGXUIzm8x4Q
-         Hu3mksugkJAlbtLjFkTW9lku2Q172VwTkdUesu1dmEkMBOd5hG/4h0XkyuMpNmjGicIN
-         PSYGZJa0ybOOP1eWuzAuJZvCWotFz2E7PUR0DuuuoNM1jgOOe09BYaAC42Bcfp9ZeSUE
-         Z1VJJbK4JDcYxYyO0B3XK/FCfANSXCLBR/cuaiHLtLL6JRSEOtVIg3fALRA0ok10Ytjn
-         PCvg==
-X-Gm-Message-State: AOAM533Dhq6QT91dfbAR9T3dl9D2SRHrw4RHB+PZ4/MMGPIWOn1wp1Rn
-        r94QM8I0QtaiUtp7R8jjAlCXbuNlJfs=
-X-Google-Smtp-Source: ABdhPJxsDSEMIOjXkRRil9aOGp+LsVtS97a3s1w4ZtAwhn9GDG4WispsZRiqeUQj2osS9nu3NxJo3g==
-X-Received: by 2002:a05:6830:1092:: with SMTP id y18mr43935908oto.119.1638198839353;
-        Mon, 29 Nov 2021 07:13:59 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=xn0HWQDqGoSI5N5BzKsI9k86k0ZFmdy7lZiWdeS54vs=;
+        b=lSEfD16FzYcrovX8m3oZvybpEgexhF3r7Z36geCG4fYQP/5Xlkq61Z8HB5zYIykz7z
+         yWyxHUrUWXwBuWAt3BvKUC5IN8NL10q/Oy+57v/ZcpxK8Gpfvjong6wqQc4KSJCCXrLk
+         6iA3VwKzJ3ErQC6t3syO4018YpAZMAsSIXE5GoJz9NoZagWZEa7jriZNZS5NHrHO499R
+         pqZvgw4t4CWhQYe/6vsL2CIzqma3Ged5OuB66OtgpszZR0NlEmIAHTKRhXKwU95WSfEh
+         Xj/LboWT9+/dMtMvZD8LG/az3mySi+pyDKBs6kl8i+4lIuY9rGobYQoY0cAM8J93a1G+
+         JHbw==
+X-Gm-Message-State: AOAM532FYdK5nfPkqCYVpwptXD5ntgGQW3Vza06wLEsrA1vVSUyAE0vQ
+        fh/zXeMUataqc8aukLBqLBo=
+X-Google-Smtp-Source: ABdhPJxy16yU9FQY4WxueZw8hkgLl864I/mAKQfE9n8/rrWWTh2LZQI01zlQTpGQAqXjDk+mVK8zjg==
+X-Received: by 2002:aca:ab84:: with SMTP id u126mr40568449oie.41.1638199956401;
+        Mon, 29 Nov 2021 07:32:36 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t18sm2679510ott.2.2021.11.29.07.13.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 07:13:58 -0800 (PST)
+        by smtp.gmail.com with ESMTPSA id c4sm1003909ook.16.2021.11.29.07.32.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 07:32:35 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog: da9063: Add hard dependency on I2C
-To:     Andrej Picej <andrej.picej@norik.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org
-Cc:     y.bas@phytec.de, linux-kernel@vger.kernel.org
-References: <20211129134938.3273289-1-andrej.picej@norik.com>
+Date:   Mon, 29 Nov 2021 07:32:34 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bf64b71b-41c1-7a44-9583-c29887bea70b@roeck-us.net>
-Date:   Mon, 29 Nov 2021 07:13:56 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        y.bas@phytec.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: da9063: Add hard dependency on I2C
+Message-ID: <20211129153234.GA2627247@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20211129134938.3273289-1-andrej.picej@norik.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/29/21 5:49 AM, Andrej Picej wrote:
+On Mon, Nov 29, 2021 at 02:49:38PM +0100, Andrej Picej wrote:
 > Commit 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in
 > reset handler") implements atomic save i2c transfer which uses i2c
 > functions directly. Add I2C hard dependency which overrides COMPILE_TEST.
@@ -81,20 +75,21 @@ On 11/29/21 5:49 AM, Andrej Picej wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/watchdog/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
+>  drivers/watchdog/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
 > index 9d222ba17ec6..3207085f799f 100644
 > --- a/drivers/watchdog/Kconfig
 > +++ b/drivers/watchdog/Kconfig
 > @@ -207,6 +207,7 @@ config DA9055_WATCHDOG
->   config DA9063_WATCHDOG
->   	tristate "Dialog DA9063 Watchdog"
->   	depends on MFD_DA9063 || COMPILE_TEST
+>  config DA9063_WATCHDOG
+>  	tristate "Dialog DA9063 Watchdog"
+>  	depends on MFD_DA9063 || COMPILE_TEST
 > +	depends on I2C
->   	select WATCHDOG_CORE
->   	help
->   	  Support for the watchdog in the DA9063 PMIC.
+>  	select WATCHDOG_CORE
+>  	help
+>  	  Support for the watchdog in the DA9063 PMIC.
+> -- 
+> 2.25.1
 > 
-
