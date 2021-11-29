@@ -2,94 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A58D1461B96
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 17:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C76461FA6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 19:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344913AbhK2QOI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Nov 2021 11:14:08 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:42795 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345026AbhK2QMH (ORCPT
+        id S1379631AbhK2S4z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Nov 2021 13:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379777AbhK2Syz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:12:07 -0500
-Received: from [79.2.93.196] (port=58666 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mrjCy-0005C4-EE; Mon, 29 Nov 2021 17:08:48 +0100
-Subject: Re: [PATCH v4 8/9] watchdog: max77620: add comment to clarify
- set_timeout procedure
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211120155707.4019487-1-luca@lucaceresoli.net>
- <20211120155707.4019487-9-luca@lucaceresoli.net>
- <20211129160414.GA3014810@roeck-us.net>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <0e08d0e0-489c-342b-4fa4-d4457af20a65@lucaceresoli.net>
-Date:   Mon, 29 Nov 2021 17:08:45 +0100
+        Mon, 29 Nov 2021 13:54:55 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1A8C0613B4;
+        Mon, 29 Nov 2021 07:14:00 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so25927454otj.7;
+        Mon, 29 Nov 2021 07:14:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0LDYpaC1o8xhrXzJKdF3sDv2C843tw6YvVGF0VGCbZM=;
+        b=bcF85LpNFw0MsgEHtmp/Y6p8zwZjTr8H7G6F5FEDhT4dTaXWscORwZypSBmpvDZaL1
+         Bps/23UNJROqP23ubTP4XcFgEJzRWQ2fzGHuVvTdMBTA5iKtDlmGUy67b9Wp3p3dDAhy
+         Rc6qR2iQUtsnzS3mAeCFejz0RvRomqMeqpBVUxVwec2dr01mtypw1OwXP79F++VH9Jwv
+         SaOBM3XjFPlIzxbc398+LIoeZvYIAKdVTN0bWPFUX64tt3ARjAlb0eyw07T01wJOsVz+
+         tP5O4N5R845Celuv6v4mny3i4/kiPbM+kroKb4QlMR/QY8RQw6eaafz3sw5AKSIUeaaK
+         yi6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0LDYpaC1o8xhrXzJKdF3sDv2C843tw6YvVGF0VGCbZM=;
+        b=NhJQIIsuwXc+IhwgzeHfVDJPvd76WT2my8K4x+bOMUtlKKwE+Fgk7tcdlpST/d+Let
+         yu2jNRxqWtxUZVfr/xz7fXlrDgHglMNEvxbmUc5bN8AIt6+tRpVCYJD5UQGXUIzm8x4Q
+         Hu3mksugkJAlbtLjFkTW9lku2Q172VwTkdUesu1dmEkMBOd5hG/4h0XkyuMpNmjGicIN
+         PSYGZJa0ybOOP1eWuzAuJZvCWotFz2E7PUR0DuuuoNM1jgOOe09BYaAC42Bcfp9ZeSUE
+         Z1VJJbK4JDcYxYyO0B3XK/FCfANSXCLBR/cuaiHLtLL6JRSEOtVIg3fALRA0ok10Ytjn
+         PCvg==
+X-Gm-Message-State: AOAM533Dhq6QT91dfbAR9T3dl9D2SRHrw4RHB+PZ4/MMGPIWOn1wp1Rn
+        r94QM8I0QtaiUtp7R8jjAlCXbuNlJfs=
+X-Google-Smtp-Source: ABdhPJxsDSEMIOjXkRRil9aOGp+LsVtS97a3s1w4ZtAwhn9GDG4WispsZRiqeUQj2osS9nu3NxJo3g==
+X-Received: by 2002:a05:6830:1092:: with SMTP id y18mr43935908oto.119.1638198839353;
+        Mon, 29 Nov 2021 07:13:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t18sm2679510ott.2.2021.11.29.07.13.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 07:13:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] watchdog: da9063: Add hard dependency on I2C
+To:     Andrej Picej <andrej.picej@norik.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org
+Cc:     y.bas@phytec.de, linux-kernel@vger.kernel.org
+References: <20211129134938.3273289-1-andrej.picej@norik.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <bf64b71b-41c1-7a44-9583-c29887bea70b@roeck-us.net>
+Date:   Mon, 29 Nov 2021 07:13:56 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211129160414.GA3014810@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20211129134938.3273289-1-andrej.picej@norik.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter,
-
-On 29/11/21 17:04, Guenter Roeck wrote:
-> On Sat, Nov 20, 2021 at 04:57:06PM +0100, Luca Ceresoli wrote:
->> Clarify why we need to ping the watchdog before changing the timeout by
->> quoting the MAX77714 datasheet.
->>
+On 11/29/21 5:49 AM, Andrej Picej wrote:
+> Commit 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in
+> reset handler") implements atomic save i2c transfer which uses i2c
+> functions directly. Add I2C hard dependency which overrides COMPILE_TEST.
 > 
-> Unless I am missing something, this adds confusion instead of clarifying
-> anything, and it is misleading. The added comment in the code makes it
-> sound like clearing the watchdog timer is only needed for MAX77614.
-> However, the code was in place for MAX77620, suggesting that it was needed
-> for that chip as well and is not MAX77614 specific.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in reset handler")
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 
-You're right, the comment comes from the max77714-only driver, but now
-that it is in a multi-chip  driver the confusion started to exist.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> Please either drop this patch or rephrase it to clarify that it applies
-> to both chips.
+> ---
+>   drivers/watchdog/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 9d222ba17ec6..3207085f799f 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -207,6 +207,7 @@ config DA9055_WATCHDOG
+>   config DA9063_WATCHDOG
+>   	tristate "Dialog DA9063 Watchdog"
+>   	depends on MFD_DA9063 || COMPILE_TEST
+> +	depends on I2C
+>   	select WATCHDOG_CORE
+>   	help
+>   	  Support for the watchdog in the DA9063 PMIC.
+> 
 
-What if I rephrase to:
-
-	/*
-	 * "If the value of TWD needs to be changed, clear the system
-	 * watchdog timer first [...], then change the value of TWD."
--	 * (MAX77714 datasheet)
-+	 * (MAX77714 datasheet but applies to MAX77620 too)
-	 */
-
-?
-
--- 
-Luca
