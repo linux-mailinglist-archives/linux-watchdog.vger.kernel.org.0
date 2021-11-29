@@ -2,121 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF0446211C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 20:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4986F462339
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 22:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350454AbhK2T55 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Nov 2021 14:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbhK2Tz4 (ORCPT
+        id S230110AbhK2V3I (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Nov 2021 16:29:08 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:46802 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231269AbhK2V1I (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:55:56 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682FAC07CA20;
-        Mon, 29 Nov 2021 08:18:38 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id m6so35606913oim.2;
-        Mon, 29 Nov 2021 08:18:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=N417LwmoteEpLw0/alZmqR2O+gPqKzTspenGXxKY7N0=;
-        b=m7UHSKLOVjOM7y+LuL9980vJ30xbpJssiYQbA9wU1ShVfCUFv5x4Mjf/icFLXlRZmG
-         r6J/UPYGDM2ZSil1ot3/kvwDwQAnGchI2PWt3aaEih15jT/1Mv+/EPZtClOiTw1CZAnB
-         IVkddThv03/usS+Vob1eXCySU/8PxrQQ86SB4jvWrOx12DM+Eni39ki1FaVUBb2tsneA
-         p3+qe7dBtaY2pPlOFJKb0lIrKM45E58s2S6zO2PNx06xyptJvfXr/a21/v9XmwVm29p7
-         EERDCpBdhvant2AEZrjWzs14QbwqOAcwMYLa5C5Ew5Vj6kJkVkTH6inOvD3IEa6QbX8g
-         X9aQ==
+        Mon, 29 Nov 2021 16:27:08 -0500
+Received: by mail-ot1-f53.google.com with SMTP id 98-20020a9d086b000000b0057a403bbd4eso2762973oty.13;
+        Mon, 29 Nov 2021 13:23:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=N417LwmoteEpLw0/alZmqR2O+gPqKzTspenGXxKY7N0=;
-        b=d/9lSZ/o1/jTcC3NoIfg2xCJ/XUs18M/L02KqmTtipnwpQiVdddTDKGAMqe0BpPFkQ
-         7PAPgy75g+ZiOfOlxMdH9YCEGOUv2+2xum6H4ew/bjMRdMYsslDezyjuwVPZqkntP4L1
-         ejkPiGuj6ohiN50CICNGnnp5AsufE4npr+MMfQBVd4f8Hn6vx6vpMUuKQh42IQdi0/on
-         Q4E3GFqGVWbEl9tQayKc8GwdRBSSVIGXmHgmDt6XQI7aye6vjoafDVzvYwkICvG+IzFb
-         6McotW3DGLJ5XdnxVrhTW5j64U9Rhu7cxBEvVqnMmwfdxmL8f6NNtF+NI8D8h75aL3Vj
-         zFPg==
-X-Gm-Message-State: AOAM530GvG71ssz2wwkMdBlCwez2nFQLOJRd7mI67gWi87DuCnUvplHe
-        x4Gkq6ox8Lx1La37UsBo2u72LgRI3Ss=
-X-Google-Smtp-Source: ABdhPJyhS4x1H6+R4piCkf/zaDbqnQlCe+fibbDdsjWk/w+3PrsBMQV8sGAxmuzeSioizHmiqXRPPQ==
-X-Received: by 2002:a05:6808:a03:: with SMTP id n3mr40398231oij.125.1638202717249;
-        Mon, 29 Nov 2021 08:18:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w18sm2706411otm.1.2021.11.29.08.18.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 08:18:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v4 8/9] watchdog: max77620: add comment to clarify
- set_timeout procedure
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dmREQEVCQ41yGFn0gHzS27UhG+OxJeV/G0e6YBc3FUI=;
+        b=1NEi8KsdJNNjbfQXCnrcvk934ZVbZzHee/jEJfz9KPMzobXFtgccQLmNrUobWUOqhc
+         dlN0RxzZmYKT6LBhZz0rM+OvmxpJhEdtF5WianyGRqYmdjuLjGRAWECWuGOzBnPmkCPE
+         nHZplgMZtVXT6s3OGyH+370qrnTSvF4Vd2vz4bhJZOV9+hjaWQjLwkZkdGVk4lwbGaA4
+         AXjmp4EI8Hm+mUxu6vSL3Qc1DoNx8ZssFa4FCrf9L2lDp3EfDWt2mMF1K1Cl8NG035iT
+         7YqtGTyh9iNmZTFucLnGH/ahpKU2ooVzEKJqB5DBhJS8o1MeOXheBSVvSDlkNnR8XNJ2
+         jxaA==
+X-Gm-Message-State: AOAM533Vvy4GvFlh0QNb4Erbc88R9cNeAhvfqzGZts9uMLVP6l6lnEVH
+        bjpMATKtvFWoSBZzznSKp/OIt+e3kA==
+X-Google-Smtp-Source: ABdhPJzhJ81ob8F3Ax4aT7ILoDVlOxASMklkW3tRSMVHdzBd6nW5UiTymt1TntIJM64Ho3oULKmUGQ==
+X-Received: by 2002:a05:6830:19c5:: with SMTP id p5mr45778794otp.195.1638221029526;
+        Mon, 29 Nov 2021 13:23:49 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r3sm2811284oti.51.2021.11.29.13.23.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 13:23:48 -0800 (PST)
+Received: (nullmailer pid 634142 invoked by uid 1000);
+        Mon, 29 Nov 2021 21:23:48 -0000
+Date:   Mon, 29 Nov 2021 15:23:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc:     Sven Peter <sven@svenpeter.dev>, devicetree@vger.kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net, marcan@marcan.st,
+        alyssa@rosenzweig.io, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211120155707.4019487-1-luca@lucaceresoli.net>
- <20211120155707.4019487-9-luca@lucaceresoli.net>
- <20211129160414.GA3014810@roeck-us.net>
- <0e08d0e0-489c-342b-4fa4-d4457af20a65@lucaceresoli.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f05f33ae-d0be-fcf2-0774-c7d0dbda3d36@roeck-us.net>
-Date:   Mon, 29 Nov 2021 08:18:34 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Apple Watchdog
+Message-ID: <YaVE5IL7oO3Q4u5h@robh.at.kernel.org>
+References: <20211113094732.73889-1-sven@svenpeter.dev>
+ <d3cad37524f7debf@bloch.sibelius.xs4all.nl>
+ <fc541162-928c-4318-bc2a-06da0cbdf5e8@www.fastmail.com>
+ <d3cad4a2f2f05eef@bloch.sibelius.xs4all.nl>
 MIME-Version: 1.0
-In-Reply-To: <0e08d0e0-489c-342b-4fa4-d4457af20a65@lucaceresoli.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d3cad4a2f2f05eef@bloch.sibelius.xs4all.nl>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/29/21 8:08 AM, Luca Ceresoli wrote:
-> Hi Guenter,
+On Sun, Nov 14, 2021 at 12:58:20PM +0100, Mark Kettenis wrote:
+> > Date: Sun, 14 Nov 2021 12:40:48 +0100
+> > From: "Sven Peter" <sven@svenpeter.dev>
+> > 
+> > On Sat, Nov 13, 2021, at 22:07, Mark Kettenis wrote:
+> > >> From: Sven Peter <sven@svenpeter.dev>
+> > >> Date: Sat, 13 Nov 2021 10:47:31 +0100
+> > >> 
+> > >> Apple SoCs come with a simple embedded watchdog. This watchdog is also
+> > >> required in order to reset the SoC.
+> > >> 
+> > >> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> > >> ---
+> > >>  .../bindings/watchdog/apple,wdt.yaml          | 52 +++++++++++++++++++
+> > >>  MAINTAINERS                                   |  1 +
+> > >>  2 files changed, 53 insertions(+)
+> > >>  create mode 100644 Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> > >> 
+> > >> diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> > >> new file mode 100644
+> > >> index 000000000000..e58c56a6fdf6
+> > >> --- /dev/null
+> > >> +++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> > >> @@ -0,0 +1,52 @@
+> > >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > >> +%YAML 1.2
+> > >> +---
+> > >> +$id: http://devicetree.org/schemas/watchdog/apple,wdt.yaml#
+> > >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > >> +
+> > >> +title: Apple SoC Watchdog
+> > >> +
+> > >> +allOf:
+> > >> +  - $ref: "watchdog.yaml#"
+> > >
+> > > I believew this should be:
+> > >
+> > >   - $ref: /schemas/watchdog/watchdog.yaml#
+> > >
+> > > with that fixed:
+> > >
+> > > Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+> > >
+> > 
+> > Thanks for the review!
+> > Almost all the other YAML watchdog bindings just use '$ref: "watchdog.yaml#"'.
+> > Only arm,sp805.yaml uses '$ref: /schemas/watchdog/watchdog.yaml#'.
 > 
-> On 29/11/21 17:04, Guenter Roeck wrote:
->> On Sat, Nov 20, 2021 at 04:57:06PM +0100, Luca Ceresoli wrote:
->>> Clarify why we need to ping the watchdog before changing the timeout by
->>> quoting the MAX77714 datasheet.
->>>
->>
->> Unless I am missing something, this adds confusion instead of clarifying
->> anything, and it is misleading. The added comment in the code makes it
->> sound like clearing the watchdog timer is only needed for MAX77614.
->> However, the code was in place for MAX77620, suggesting that it was needed
->> for that chip as well and is not MAX77614 specific.
-> 
-> You're right, the comment comes from the max77714-only driver, but now
-> that it is in a multi-chip  driver the confusion started to exist.
-> 
->> Please either drop this patch or rephrase it to clarify that it applies
->> to both chips.
-> 
-> What if I rephrase to:
-> 
-> 	/*
-> 	 * "If the value of TWD needs to be changed, clear the system
-> 	 * watchdog timer first [...], then change the value of TWD."
-> -	 * (MAX77714 datasheet)
-> +	 * (MAX77714 datasheet but applies to MAX77620 too)
-> 	 */
-> 
+> Hmm, maybe it is ok since the file can be found in the same directory.
+> Guess it is up to robh then.  Feel free to keep my Reviewed-by
+> regardless.
 
-Sounds good.
+Either way is fine. It's just ../ paths I want to avoid.
 
-Guenter
-
-
+Rob
