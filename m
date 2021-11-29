@@ -2,53 +2,42 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBACC4614D4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 13:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C1846170B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 14:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbhK2MRg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Nov 2021 07:17:36 -0500
-Received: from cpanel.siel.si ([46.19.9.99]:53930 "EHLO cpanel.siel.si"
+        id S237016AbhK2NzH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Nov 2021 08:55:07 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:49344 "EHLO cpanel.siel.si"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234457AbhK2MPf (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:15:35 -0500
+        id S239971AbhK2NxG (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 29 Nov 2021 08:53:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
-        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=ViBlr2ET0ChVWPO5jDyMBAX+WCiIakHViFVfkY+8k1Q=; b=COWMoJDH7mCbKKjsBARm0O5BYp
-        c+HPp2TUxJs5fWG44WHk08UxzthLjM6ba2Da8c2wIaRVZMv5cys5TL1Oy3ttLfYAG1ywxcxd/5dLM
-        65ZcZNor0vhNBLiEs4MfoRUgp8froUOEi0frnu1M1n7pipQ6+K3eAf0/nauw+rtHQIdleO7Epko4q
-        K2ihjsdoPTGUj9PZyXzOyM+oUH4SOpjEJt7nVJxYApmBW3YwmSEpvEUcC2WejsROXMzREinusx6lm
-        MwTZAfrYixd/rWgNPciZWokMCDBslihPUhKIJ/GhuBVgXw5VH6hKhrqgy67rJmuBpxARgqtx9Mn2B
-        l1W0qO5A==;
-Received: from [89.212.21.243] (port=59668 helo=[192.168.69.215])
+        bh=8EAKb95gtXLKs+U0UB2Day1ckx1nOgESl8vDeQsMJJ4=; b=q/ZnZIy8p8ZOhMLcskFese8k+v
+        Umc6a04g9brQmMyiVcPDuC6orVtf/4a7+7kOuqjuxtId3iF4a5JckuNgmctSvyDscDfnd7mUvs2O3
+        fN8m6llgxVUA9EgPyR17CRY4KIUHxbkfuyulb5QjmgJXJEsRq/+wHtGfAhHqCNzgPTQlj7Wkz59mN
+        BjjqJ5O0yCCZpsht/CivL91Njq7KllvA6b+31qM3G7coHFYK/Ef8MX9M3fHiGCj8vlrF9uyJ1MRsu
+        yTxDRhpuVuB070O3RgeG3mu546wFahVryVpfUYi/0Lp3r9RBIDZQMdPlwA10Wm8aTbQ1QnCDpjGE/
+        qnDYpOUA==;
+Received: from [89.212.21.243] (port=33236 helo=localhost.localdomain)
         by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.94.2)
         (envelope-from <andrej.picej@norik.com>)
-        id 1mrfW0-00F5oN-K6; Mon, 29 Nov 2021 13:12:12 +0100
-Subject: Re: [PATCH 2/2] watchdog: da9062: reset board on watchdog timeout
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Cc:     "y.bas@phytec.de" <y.bas@phytec.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211124083258.2606511-1-andrej.picej@norik.com>
- <20211124083258.2606511-2-andrej.picej@norik.com>
- <DB9PR10MB4652529FAC6253C266B172EF80639@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+        id 1mrh2M-00FLFR-3W; Mon, 29 Nov 2021 14:49:42 +0100
 From:   Andrej Picej <andrej.picej@norik.com>
-Message-ID: <b65c9c58-485d-1735-bda2-e750ee8d8a8a@norik.com>
-Date:   Mon, 29 Nov 2021 13:12:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+To:     wim@linux-watchdog.org, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org
+Cc:     y.bas@phytec.de, linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: da9063: Add hard dependency on I2C
+Date:   Mon, 29 Nov 2021 14:49:38 +0100
+Message-Id: <20211129134938.3273289-1-andrej.picej@norik.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <DB9PR10MB4652529FAC6253C266B172EF80639@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - cpanel.siel.si
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -63,27 +52,29 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Adam,
+Commit 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in
+reset handler") implements atomic save i2c transfer which uses i2c
+functions directly. Add I2C hard dependency which overrides COMPILE_TEST.
 
-On 26. 11. 21 14:28, Adam Thomson wrote:
-> 
-> I'm a little concerned about forcing this change in the driver. There may be
-> platforms which don't want the PMIC to perform a full reset through OTP re-read
-> and if we hard code this change then that's impacting those platforms. If we
-> want/need this then I think it should probably be a DT binding for da9061/2
-> which then indicates the behaviour we want.
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in reset handler")
+Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+---
+ drivers/watchdog/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ok, I see the impact this might have on the platforms that are relying 
-on the current default setting. I will start on the DT binding 
-implementation and submit a new patch.
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 9d222ba17ec6..3207085f799f 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -207,6 +207,7 @@ config DA9055_WATCHDOG
+ config DA9063_WATCHDOG
+ 	tristate "Dialog DA9063 Watchdog"
+ 	depends on MFD_DA9063 || COMPILE_TEST
++	depends on I2C
+ 	select WATCHDOG_CORE
+ 	help
+ 	  Support for the watchdog in the DA9063 PMIC.
+-- 
+2.25.1
 
-> 
-> NRES_MODE bit also plays a part here as it controls whether or not the nRESET
-> line state is changed as part of the power-down/up process. I'm assuming for
-> your setup this bit is 0?
-> 
-We leave NRES_MODE as it is, 0 by default I guess? So do you want a 
-separate dt binding for NRES_MODE?
-
-BR,
-Andrej
