@@ -2,109 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AD646106D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 09:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD5F461273
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 11:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244332AbhK2Isp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Nov 2021 03:48:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58096 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349934AbhK2Iql (ORCPT
+        id S245186AbhK2KiA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Nov 2021 05:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229597AbhK2KgA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Nov 2021 03:46:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D04B5B80DFF;
-        Mon, 29 Nov 2021 08:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADFEDC004E1;
-        Mon, 29 Nov 2021 08:43:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638175400;
-        bh=OixLDAXpSBxsXxksHXG7qO5MHN4k5qolbw7dRTlvO6U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ox5RYRKJswmVjrm6oqkS0sNRRi/xiLhfXeHIViF+l+yylNI1L/Iavs+9S7BfiOU6S
-         Sp1/BEEbT2imRngMlMTbMVrmZcXX2yY6Ut/i2Vk6gywu9+ccQQqrz1ELWH6rkmaSzt
-         anqOT7HJqDGFVQ2r+WZNwYp/IrVYiz44wmtFD9KGNIkr0avPpt+iiSf/KriygNN5Fd
-         uJM5h579F8hidbkad4Bcw8TPt3p75R7bBQ7mkGha5RlrN4sSjtFczi3JmIyRqwNTzD
-         aW6VdapvsdSqVm4r1gwHG1GdTcjjQwqibi9yxA1XJBVE9IEOaTcLy3KYugOB7p1Yzl
-         kxBUm4r6X8niQ==
-Date:   Mon, 29 Nov 2021 09:43:17 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, ulf.hansson@linaro.org, broonie@kernel.org,
-        linux@roeck-us.net, wim@linux-watchdog.org, linux@rempel-privat.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
-        Rob Herring <robh@kernel.org>, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V6 1/7] dt-bindings: i2c: imx-lpi2c: Add imx8ulp
+        Mon, 29 Nov 2021 05:36:00 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFE2C061A1B
+        for <linux-watchdog@vger.kernel.org>; Mon, 29 Nov 2021 02:02:27 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id j3so35494049wrp.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 29 Nov 2021 02:02:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0P1DBQCz6Re487E8k4zSiqVVuB28Lrg52FapbU18jpo=;
+        b=FaMMR9yWiYxcazApHQ/wg9yKC+NVzoM8Vwo2xVOxiFnNQDm0cdh54iKMf/CKTcaVBi
+         3v0V2JSIftMr20OKDj2qRUUxchnnN6VnmRLtkxZXy10G83MeHoqUxhevvdBYaZi54eKe
+         3ORoI2GGQ1BYzjtd8UwdlW+nDkoYEOSE1wRJVYCHLXFv2q5CUH/SwrEQHJDAo0gfhgRi
+         iVII4IF7xmSWTw91dL3E+EkV+gucjbh5wQhMQNwAtnirzBG1yXdjkr+EUD9T0W5Fikou
+         dr+m0d3Y7+cRy0yHzrk+SPJHgUYX0eiJgjgJZDgqoT6K6yUgzwXLqT8mNzYLZciIrPRm
+         cOow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0P1DBQCz6Re487E8k4zSiqVVuB28Lrg52FapbU18jpo=;
+        b=ol/cC3QjwLpw3HksPLOULJGkB/peJUjakNI16+Jz1kz11srvsMJ7Y7sWIA9oy6BExe
+         YImG1Ws1OkQHxQ/AjX5xoxCVbZ4bB7bFqBRNleo74EnpZ1wWIJWx4j496AD1tQ8blVSB
+         4/5CTjDu8ept6Un9tgNsPjDtY+c3DX87KRVo0YcFpczMWWPfYqM2m+psrk+cRJhRiatv
+         lTrrSlcrhOp2+RMTyy0NSEsLOenSrRE4eKbCUiRztTg8CmkEn4m0Yw82GCCZftA1FMqd
+         BfnkBTp762o6lS2Gcmvrn0VnGPFZ6yh7jx5d+FxOzsWdbrF5+NHOI8XCSN2+3bEHC8DD
+         wX7Q==
+X-Gm-Message-State: AOAM532AGHfCc3WYk91kqz4EIWLPSju8d0gJFxdFCgIEMwq1MG+NG2de
+        HJ3zagDz9NVMSC+OdTJ5ScCATw==
+X-Google-Smtp-Source: ABdhPJxW8KDLLi9B5knbiZGRFmjeaSoYfXl8Bf8QIeqm1eg6FgSQrPWaHsYoimlSs5TggZT1/ujJSQ==
+X-Received: by 2002:adf:8010:: with SMTP id 16mr32377814wrk.559.1638180146284;
+        Mon, 29 Nov 2021 02:02:26 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd? ([2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd])
+        by smtp.googlemail.com with ESMTPSA id g5sm17498490wri.45.2021.11.29.02.02.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 02:02:25 -0800 (PST)
+Subject: Re: [PATCH V6 3/7] dt-bindings: timer: tpm-timer: Add imx8ulp
  compatible string
-Message-ID: <YaSSpd9yENnPyxzp@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
         aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
         ulf.hansson@linaro.org, broonie@kernel.org, linux@roeck-us.net,
-        wim@linux-watchdog.org, linux@rempel-privat.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
-        Rob Herring <robh@kernel.org>, Peng Fan <peng.fan@nxp.com>
+        wim@linux-watchdog.org, linux@rempel-privat.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jacky Bai <ping.bai@nxp.com>, Rob Herring <robh@kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
 References: <20211126074002.1535696-1-peng.fan@oss.nxp.com>
- <20211126074002.1535696-2-peng.fan@oss.nxp.com>
+ <20211126074002.1535696-4-peng.fan@oss.nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <d075b19a-c82b-9732-2034-1837a303c072@linaro.org>
+Date:   Mon, 29 Nov 2021 11:02:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4iqRmJHmds4/+yS2"
-Content-Disposition: inline
-In-Reply-To: <20211126074002.1535696-2-peng.fan@oss.nxp.com>
+In-Reply-To: <20211126074002.1535696-4-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
---4iqRmJHmds4/+yS2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Nov 26, 2021 at 03:39:56PM +0800, Peng Fan (OSS) wrote:
+On 26/11/2021 08:39, Peng Fan (OSS) wrote:
 > From: Jacky Bai <ping.bai@nxp.com>
->=20
-> Add the compatible for i.MX8ULP.
->=20
+> 
+> The tpm timer on i.MX8ULP is derived from i.MX7ULP, it use two
+> compatible strings, so update the compatible string for it.
+> 
 > Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
 > Acked-by: Rob Herring <robh@kernel.org>
 > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 > Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-Applied to for-next, thanks!
+Applied, thanks
 
 
---4iqRmJHmds4/+yS2
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkkqUACgkQFA3kzBSg
-KbbT3RAAikYPcjsi+jX0pSwthDtUkz0JCgBtIprTRsoQxHHMn/3MmgtvC8q3HKCu
-5C+u6I2hIZ6Fvi0rt1rH9MCvQzsE8DqQkKI58XCrNO4AbjVhwZbZRSkEsYYCm0ID
-Pqj+rkhRKtRHB9XIuuIts7F1UbmztpvLdV0EKC4ItyBzIYSRNkrbRL3zbXKyXs5U
-+j6HhIL1PjmbRx1+iUX6yfa9Iz9hh41DCEYvHHIDik14VOjQiO7bUswR+mvOX97W
-k0kaulmMlQhok4sLgc2vltz2IucoWBS2jZv/OGXwXCW4X4N0Z3J3ML11JxWkY7pB
-3yhnvEnLrDoKMCMyNmXyCEtTDgDfspUX++eN/4vo3qcr7iFFUfTfOiokyJ/w/oPK
-SpdDo5IVToA8edoyDWN+NJsC0LjeGZkPVEr07xcsax9xlx5ARDGEZiYzX+Lq70Cp
-Ivq0IDQdEjEHgvvwAMUg7ZIozp9k1zB7gpqLBvF8p0liktIWVBKy5RI2fuuGlE5y
-ZREl2BW4GN3utcpER/2eB+pAdEicJMWFa80k2DJSSeWF8miB3qLMS2lM4Ms5gQix
-aowgCti5aF2oL5vvaCZoVxx3sqwKPEbAad+O2JbGpT3KH8Y+hKbx6257gA9gmEsc
-y2SJ8FbCcyY5InCbHvC8+TZ/LqORBgdaDnG/td7tYSuDoMW05JQ=
-=eonB
------END PGP SIGNATURE-----
-
---4iqRmJHmds4/+yS2--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
