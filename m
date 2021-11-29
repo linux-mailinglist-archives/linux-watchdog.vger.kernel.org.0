@@ -2,99 +2,88 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD5F461273
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 11:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBACC4614D4
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Nov 2021 13:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245186AbhK2KiA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Nov 2021 05:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbhK2KgA (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:36:00 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFE2C061A1B
-        for <linux-watchdog@vger.kernel.org>; Mon, 29 Nov 2021 02:02:27 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id j3so35494049wrp.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 29 Nov 2021 02:02:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0P1DBQCz6Re487E8k4zSiqVVuB28Lrg52FapbU18jpo=;
-        b=FaMMR9yWiYxcazApHQ/wg9yKC+NVzoM8Vwo2xVOxiFnNQDm0cdh54iKMf/CKTcaVBi
-         3v0V2JSIftMr20OKDj2qRUUxchnnN6VnmRLtkxZXy10G83MeHoqUxhevvdBYaZi54eKe
-         3ORoI2GGQ1BYzjtd8UwdlW+nDkoYEOSE1wRJVYCHLXFv2q5CUH/SwrEQHJDAo0gfhgRi
-         iVII4IF7xmSWTw91dL3E+EkV+gucjbh5wQhMQNwAtnirzBG1yXdjkr+EUD9T0W5Fikou
-         dr+m0d3Y7+cRy0yHzrk+SPJHgUYX0eiJgjgJZDgqoT6K6yUgzwXLqT8mNzYLZciIrPRm
-         cOow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0P1DBQCz6Re487E8k4zSiqVVuB28Lrg52FapbU18jpo=;
-        b=ol/cC3QjwLpw3HksPLOULJGkB/peJUjakNI16+Jz1kz11srvsMJ7Y7sWIA9oy6BExe
-         YImG1Ws1OkQHxQ/AjX5xoxCVbZ4bB7bFqBRNleo74EnpZ1wWIJWx4j496AD1tQ8blVSB
-         4/5CTjDu8ept6Un9tgNsPjDtY+c3DX87KRVo0YcFpczMWWPfYqM2m+psrk+cRJhRiatv
-         lTrrSlcrhOp2+RMTyy0NSEsLOenSrRE4eKbCUiRztTg8CmkEn4m0Yw82GCCZftA1FMqd
-         BfnkBTp762o6lS2Gcmvrn0VnGPFZ6yh7jx5d+FxOzsWdbrF5+NHOI8XCSN2+3bEHC8DD
-         wX7Q==
-X-Gm-Message-State: AOAM532AGHfCc3WYk91kqz4EIWLPSju8d0gJFxdFCgIEMwq1MG+NG2de
-        HJ3zagDz9NVMSC+OdTJ5ScCATw==
-X-Google-Smtp-Source: ABdhPJxW8KDLLi9B5knbiZGRFmjeaSoYfXl8Bf8QIeqm1eg6FgSQrPWaHsYoimlSs5TggZT1/ujJSQ==
-X-Received: by 2002:adf:8010:: with SMTP id 16mr32377814wrk.559.1638180146284;
-        Mon, 29 Nov 2021 02:02:26 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd? ([2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd])
-        by smtp.googlemail.com with ESMTPSA id g5sm17498490wri.45.2021.11.29.02.02.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 02:02:25 -0800 (PST)
-Subject: Re: [PATCH V6 3/7] dt-bindings: timer: tpm-timer: Add imx8ulp
- compatible string
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        ulf.hansson@linaro.org, broonie@kernel.org, linux@roeck-us.net,
-        wim@linux-watchdog.org, linux@rempel-privat.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jacky Bai <ping.bai@nxp.com>, Rob Herring <robh@kernel.org>,
-        Peng Fan <peng.fan@nxp.com>
-References: <20211126074002.1535696-1-peng.fan@oss.nxp.com>
- <20211126074002.1535696-4-peng.fan@oss.nxp.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <d075b19a-c82b-9732-2034-1837a303c072@linaro.org>
-Date:   Mon, 29 Nov 2021 11:02:23 +0100
+        id S229718AbhK2MRg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Nov 2021 07:17:36 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:53930 "EHLO cpanel.siel.si"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234457AbhK2MPf (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 29 Nov 2021 07:15:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ViBlr2ET0ChVWPO5jDyMBAX+WCiIakHViFVfkY+8k1Q=; b=COWMoJDH7mCbKKjsBARm0O5BYp
+        c+HPp2TUxJs5fWG44WHk08UxzthLjM6ba2Da8c2wIaRVZMv5cys5TL1Oy3ttLfYAG1ywxcxd/5dLM
+        65ZcZNor0vhNBLiEs4MfoRUgp8froUOEi0frnu1M1n7pipQ6+K3eAf0/nauw+rtHQIdleO7Epko4q
+        K2ihjsdoPTGUj9PZyXzOyM+oUH4SOpjEJt7nVJxYApmBW3YwmSEpvEUcC2WejsROXMzREinusx6lm
+        MwTZAfrYixd/rWgNPciZWokMCDBslihPUhKIJ/GhuBVgXw5VH6hKhrqgy67rJmuBpxARgqtx9Mn2B
+        l1W0qO5A==;
+Received: from [89.212.21.243] (port=59668 helo=[192.168.69.215])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1mrfW0-00F5oN-K6; Mon, 29 Nov 2021 13:12:12 +0100
+Subject: Re: [PATCH 2/2] watchdog: da9062: reset board on watchdog timeout
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Cc:     "y.bas@phytec.de" <y.bas@phytec.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211124083258.2606511-1-andrej.picej@norik.com>
+ <20211124083258.2606511-2-andrej.picej@norik.com>
+ <DB9PR10MB4652529FAC6253C266B172EF80639@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+From:   Andrej Picej <andrej.picej@norik.com>
+Message-ID: <b65c9c58-485d-1735-bda2-e750ee8d8a8a@norik.com>
+Date:   Mon, 29 Nov 2021 13:12:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211126074002.1535696-4-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <DB9PR10MB4652529FAC6253C266B172EF80639@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 26/11/2021 08:39, Peng Fan (OSS) wrote:
-> From: Jacky Bai <ping.bai@nxp.com>
+Hi Adam,
+
+On 26. 11. 21 14:28, Adam Thomson wrote:
 > 
-> The tpm timer on i.MX8ULP is derived from i.MX7ULP, it use two
-> compatible strings, so update the compatible string for it.
+> I'm a little concerned about forcing this change in the driver. There may be
+> platforms which don't want the PMIC to perform a full reset through OTP re-read
+> and if we hard code this change then that's impacting those platforms. If we
+> want/need this then I think it should probably be a DT binding for da9061/2
+> which then indicates the behaviour we want.
+
+Ok, I see the impact this might have on the platforms that are relying 
+on the current default setting. I will start on the DT binding 
+implementation and submit a new patch.
+
 > 
-> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> NRES_MODE bit also plays a part here as it controls whether or not the nRESET
+> line state is changed as part of the power-down/up process. I'm assuming for
+> your setup this bit is 0?
+> 
+We leave NRES_MODE as it is, 0 by default I guess? So do you want a 
+separate dt binding for NRES_MODE?
 
-Applied, thanks
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+BR,
+Andrej
