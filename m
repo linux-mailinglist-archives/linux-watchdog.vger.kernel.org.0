@@ -2,103 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AFD4636BF
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Nov 2021 15:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF874639F8
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Nov 2021 16:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbhK3OgM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Nov 2021 09:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbhK3OgL (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:36:11 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A792C061574;
-        Tue, 30 Nov 2021 06:32:52 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id t23so41610652oiw.3;
-        Tue, 30 Nov 2021 06:32:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LLwxz7SFD0/zX8V9RD59BizGhzKcy4KZ67rMTjYc8Kk=;
-        b=OViSCVRoEqVSygJrCSpQyhT6cmkJNP3vr/izo8plBCxe+hFGKi1mczQMVHoIE8FThk
-         E515M3/LE+V602oggPHC+bFFFr2Lll0z5rHarPhn76c4P6WD95UDry944juV3R9rEhOc
-         KJcg8Klm1epavV5fsAwMnByag2pTpjInCqEhmAEgkMGWG7f3Y+z+a7stIj85ZETf0q9u
-         MO6islpSyCflnmXBXgr7gXN2C1kVOpjDUO2t+hlj1NNPCDhvqxgEeVu4kTyyKh+TC5fk
-         8h8UbVa3Lo8AXkH0/6AjwPMD05BmPNxQymfUcQ3qEEsa4NUkZwXomXGMHaVMmPGDQHBZ
-         mKhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LLwxz7SFD0/zX8V9RD59BizGhzKcy4KZ67rMTjYc8Kk=;
-        b=nlTRdA+ZOTqiDUt1n4xTwCrTLDxL4Z3OKFD3ehix6WpF3oz3jSxyIZMLHd5vD956Xj
-         H+myNOxbVkpmzCM2V0RlaaPRDuH9c5+a9P7yyNAw5Via7aidHZMv+n7+KU1IJnX/93KP
-         xodGg3M2VBpJBb2Msfqr5rZZXLe7FhBzTWy6heSp2rBTg79j+qQ6ZwKkySOe9SJiAR6g
-         cC8pLAO5Xd7LPyFoYEPGk/irT5xS9iJ8BF0XasM7JOdSkN6yK0Zh0QGG9szBPtrLKeur
-         tU0jrMP0UCdKCNoFQN1LzRYmJmlV7FVAEBJFzFN/IEnVPFqoP6i7TOPtjfDEF6zpp5XW
-         s8OQ==
-X-Gm-Message-State: AOAM533182JFYwiqzkj9EUhVJX8b8UyQISTz6ciaQfGNqwPAG73ZHN/w
-        nJQWxM8NwChpxtpf8gkvCxwq32rHWyc=
-X-Google-Smtp-Source: ABdhPJy+9kI4mY22RgVBh+6yLQ65HqbIuahK0rru/6vF3iYXu7m6xkerBVmyeHc73/MAWOuGfkYYsA==
-X-Received: by 2002:a05:6808:dc5:: with SMTP id g5mr4462456oic.58.1638282771857;
-        Tue, 30 Nov 2021 06:32:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c3sm3864156oiw.8.2021.11.30.06.32.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 06:32:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 3/4] dt-bindings: watchdog: da9062: add watchdog
- timeout mode
-To:     Andrej Picej <andrej.picej@norik.com>
-Cc:     support.opensource@diasemi.com, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20211130134242.3516619-1-andrej.picej@norik.com>
- <20211130134242.3516619-3-andrej.picej@norik.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <4591cdd6-9a7b-cd1d-817d-8950c8976d10@roeck-us.net>
-Date:   Tue, 30 Nov 2021 06:32:49 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S239706AbhK3P1J (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Nov 2021 10:27:09 -0500
+Received: from mga04.intel.com ([192.55.52.120]:24582 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244310AbhK3PYl (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 30 Nov 2021 10:24:41 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="234958803"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="234958803"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:16:22 -0800
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="540441666"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:16:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1ms4qg-000aHE-IN;
+        Tue, 30 Nov 2021 17:15:14 +0200
+Date:   Tue, 30 Nov 2021 17:15:14 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Henning Schild <henning.schild@siemens.com>, kai.svahn@intel.com
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>, Enrico Weigelt <lkml@metux.net>
+Subject: Re: [PATCH v4 2/4] leds: simatic-ipc-leds: add new driver for
+ Siemens Industial PCs
+Message-ID: <YaZAAgDPquDMpvIn@smile.fi.intel.com>
+References: <20211126141027.16161-1-henning.schild@siemens.com>
+ <20211126141027.16161-3-henning.schild@siemens.com>
+ <CAHp75VcD0FQuG_AToNkVHHD9e6WV6=18P4U0cSi0qzD3FL=ssw@mail.gmail.com>
+ <20211126191203.663e0d90@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
-In-Reply-To: <20211130134242.3516619-3-andrej.picej@norik.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211126191203.663e0d90@md1za8fc.ad001.siemens.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/30/21 5:42 AM, Andrej Picej wrote:
-> Document the watchdog timeout mode property. If this property is used
-> the user can select what happens on watchdog timeout. Set this property
-> to 1 to enable SHUTDOWN (the device resets), set it to 0 and the device
-> will go to POWERDOWN on watchdog timeout.
-> 
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-> ---
->   Documentation/devicetree/bindings/watchdog/da9062-wdt.txt | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt b/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
-> index 950e4fba8dbc..e3e6e56cee21 100644
-> --- a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
-> @@ -10,6 +10,9 @@ Optional properties:
->   - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
->   	Only use this option if you can't use the watchdog automatic suspend
->   	function during a suspend (see register CONTROL_B).
-> +- dlg,wdt-sd: Set what happens on watchdog timeout. If this bit is set the
-> +	watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
-> +	POWERDOWN. Can be 0 or 1.
->   
+On Fri, Nov 26, 2021 at 07:12:03PM +0100, Henning Schild wrote:
+> Am Fri, 26 Nov 2021 17:02:00 +0200
+> schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
+> > On Fri, Nov 26, 2021 at 4:10 PM Henning Schild
+> > <henning.schild@siemens.com> wrote:
+> > >
+> > > This driver adds initial support for several devices from Siemens.
+> > > It is based on a platform driver introduced in an earlier commit.  
+> > 
+> > ...
+> > 
+> > > +static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
+> > > +       {0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
+> > > +       {0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
+> > > +       {0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
+> > > +       {0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
+> > > +       {0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
+> > > +       {0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
+> > > +       { }
+> > > +};  
+> > 
+> > Like I said, this is not okay.
+> > 
+> > Why can't you simply enable the pinctrl driver and use it?
 
-Why does it need a value ? Why not just bool ?
+I have talked to my boss today and I have got an approval to prioritize
+the task, so I'm all yours starting from tomorrow.
 
-Guenter
+Let's finish it once for all!
+
+> I propose we set up a call, that might help clearing up the situation.
+> If you agree please send me an email and possibly propose a time-slot.
+> I would take it from there and send you a meeting link.
+
+Sure!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
