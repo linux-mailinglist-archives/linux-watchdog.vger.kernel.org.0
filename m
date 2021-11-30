@@ -2,311 +2,352 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A56C463D47
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Nov 2021 18:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B05C463D8C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Nov 2021 19:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238860AbhK3R7o (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 Nov 2021 12:59:44 -0500
-Received: from mail-os0jpn01on2138.outbound.protection.outlook.com ([40.107.113.138]:39428
-        "EHLO JPN01-OS0-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238677AbhK3R7j (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:59:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PAc+z/TD8zifFH1uIsHcZQodhgzFLr+tifFxrumZg+a2NrSp1aan3uRyVAo9gexfAqHk3tNU+ITMskbVHpE/QNXbyQDhrbSdO6VmczvjGBICUFaXFgdXy+e8NxzfWZR1eJYrbEUUKtLU2N0aaLrqZJE+qUgONohTq42h0JWu77dtH14py5zBQ9bOHtatfvKMcS/JyR1Cb45XLBeF32zLuTY+J89ajaASkwYZzu62/hfgYIAQdyqg20taKM6OHZl5rOalotCu7/G3xF8CMLPuwV8g2a4kHwiNnosJgONNBR6FlT8g8rgt00S8I5U/zYrwXIsGfGb0aC7kkCVyAWMjpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iINZlHZVqZYv5wF8vGEUzlUE4L+R99sL5B675T4NZII=;
- b=n9uFPJ9SsZMBDEPpViUVtxgGukKhm+jWdz6ibl2Q1Fpka0BwjYhUvKrB4iKQatzSyJqkC/PUy3TxM+S7Vw5aR8wRG0B6UPRFPv3GBvHfBVv4E6BhEg0CEe44F66Y+67NG4m+prl6oz9AqmnbupQm5mJYy7St89brUum8RHYqLRrfRoUOIpOle1n6HbKdW8fg3qjopOrPXxfjPC5YeAklN2vuXyqOx//cCJP0oqy1Mlj9HX5c8fZlhW/wsgw5pG2GAYakmDPepONDB96BZC9biXmPycSyGFggKZZFbmbapubw6CON58hT9HdwxvB2aaEjq+Q6Gd22br8WX1SXb0R/ig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iINZlHZVqZYv5wF8vGEUzlUE4L+R99sL5B675T4NZII=;
- b=BolA8OIqNYdLqWc1Vd4m8b0qS+t2xrJ7hl8JXNWTDKOQofV7tVPaLOVBMcgiOyVlcQz9SmeojweZyjGRMN/ErDb4wynwDEN075Ga0eE/KiyMCYi+H64PjFEo4SZDEmsflI2/FRGx6z1u5SUT/YRHmgRRyFwf3oewaLh9BDLleVk=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OSAPR01MB2531.jpnprd01.prod.outlook.com (2603:1096:603:3c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Tue, 30 Nov
- 2021 17:56:16 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::c0bd:405a:cdd3:f153]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::c0bd:405a:cdd3:f153%9]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
- 17:56:16 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
+        id S239500AbhK3SUy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 Nov 2021 13:20:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245398AbhK3SUx (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 30 Nov 2021 13:20:53 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CCCC061574;
+        Tue, 30 Nov 2021 10:17:34 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id bf8so42965136oib.6;
+        Tue, 30 Nov 2021 10:17:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JPIHgEc9S4b6KVd+YKHLqg4muXniClxP+86jExxJoY0=;
+        b=gGLMNrUeoDD9Mp+nCGowi997Udt3uR1LcV+7/QvraBSZfvIkyuWxI7ZU7Xa+lnkvlE
+         FNOe8mImYuSHMuMJBZQkm1iWjD/6DQ6t/LKTrfKthJU6Pbz1IvstfHFt+S7R419Tolvx
+         1XfABXMKTbTXVjq/GNqVHR5nTrWJYpiU+tGY3gRkLFCkwkTnPwJ2MubPKGnTxI+NrsuT
+         n60awFWevrvx4vDRH3gkS3T1vv9UKSs8KZpzavLylTj4+JQEVUscIv84epcrfLzVtAK2
+         ZoRF8u9GopcNC0WMJ3/GwJ9Aqi6LjM8GM43CRrHOSZxjxTlfHUtEZEaWcyVhw5XHcpGh
+         A8eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JPIHgEc9S4b6KVd+YKHLqg4muXniClxP+86jExxJoY0=;
+        b=KzWUDnLBi5138t7rrOK9+EeRHOuiB8wajFwP++VsXWqR2J1JdfWC+FTFKHvkjhFHK0
+         gH03HcAn5UMp8cr9sUiMoFGH5vbqAQnEd6nzNsYY4HwRWC5HKhWiWJp0XriZxcf+DGdl
+         AeuivwRTXdadyC18PIvfvSPgpPZu4mbGvPE5OkE9TPKZOZzGcOzowWB1VGLA4pZqWxTR
+         hZK2qYGhwOkIi6c5CKRIKs7XDV1vDSqJ5VXg2u7bAsdcokteMLzBR6xpxYfak3G33GAi
+         94EiDQRBjELOsWXdl11OgtnEtt4XX7QKOpUxCNbmkv4qU0+AvM11tU1SvstfXXlL3fBV
+         5sgA==
+X-Gm-Message-State: AOAM533EGUIX5x26XDQkh1jCYfa2v04gB+JMJMCi6R+/DyrW53GUN5Vb
+        YDtqh89dcRXYGWHBZxZzGzrBTUvVt70=
+X-Google-Smtp-Source: ABdhPJzRkguCprsfKsiFYshGQMuF1YVH3s0LHNaZHAB/wO5t1JH/+EQnAdyM0ViTAq9T0YBSgcJUAg==
+X-Received: by 2002:a05:6808:2392:: with SMTP id bp18mr564316oib.89.1638296252986;
+        Tue, 30 Nov 2021 10:17:32 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f9sm68713oto.56.2021.11.30.10.17.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 10:17:32 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
 To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Philipp Zabel <p.zabel@pengutronix.de>
-CC:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+Cc:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das@bp.renesas.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v4 2/2] watchdog: Add Watchdog Timer driver for RZ/G2L
-Thread-Topic: [PATCH v4 2/2] watchdog: Add Watchdog Timer driver for RZ/G2L
-Thread-Index: AQHX5d+AGTTuBiXiMEiv1XRo5AQ42qwcODuAgAACnpCAAB/TAA==
-Date:   Tue, 30 Nov 2021 17:56:15 +0000
-Message-ID: <OS0PR01MB592265E3B345B6290B9CD2B986679@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 References: <20211130114316.16622-1-biju.das.jz@bp.renesas.com>
  <20211130114316.16622-3-biju.das.jz@bp.renesas.com>
  <5ada41f6-68cf-08e8-a773-cfd174bf82a5@roeck-us.net>
  <OS0PR01MB5922DAC8B07B8F4F243E932A86679@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922DAC8B07B8F4F243E932A86679@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b010e1ad-b0e3-43c9-6a27-08d9b42ab49a
-x-ms-traffictypediagnostic: OSAPR01MB2531:
-x-microsoft-antispam-prvs: <OSAPR01MB2531E709D1F331AFDF5ED59886679@OSAPR01MB2531.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FhaGVK+GwFrNGCEYJFst17rb8ev8yQ/WIeDoWsLZHqyEoYaStHwwh1uSzsSXTxlydSXwsfZ3k1AV1bbLoQID6yeQYLG2uB3KLuFya+HzDkiJhOGe5Mr3pUECb+iTW2+fsuQD5MlKUsNANZ6A0Wvh0mBJ8HBvB7YnvhQbEXPcMyEvpJ5sCzg4EU0ZfjHb8MwvoLuhkBKNT3WG2h1YKDrofGr+j3mIiA1a7sy7MdpIdcrbqpxWTIsK+1fVyPTj3+ttiVuchNJydSnxH9TyRR9kdMtqZn+8HrGBw4lrlJbUTZ91YCRimatSUesoUw01MyLGLWZNnQci2sley3WuVy2zQW73C/vFjm3IXBALghfwA1H+aeF4ce15xyy/h5q3+dIVDqxyPLAosAhNNqtc/msr19DMCFCDL/x3lq2E9200QE9thnNApqeJCuFoHJ20GS4V0ITeNiWQQeI+4OQ4AZihLvwgnq5ICbbngyRwl2g5YOHjAQeKK4AHSrEyPcqn9qTRkGfRGlHk03tHEpmDIhfiuzUKRpy5K2DW1a0+BrGPGUDYguMxUQxnLNfg3YgVpvoXRwUx634Z20+AApQ/mVPP5eSPAy1xmYN07LOd3AsCMVKd0+x32O3chu1nT6hJi1ZTLBUNm/5ESL7jXo0etL7Ft2Mb2bV3YJ/CrvR/In0VxhtwBqgTHqPNLUgGJYu4YditoF+Fp4tABYYim9eR9Yuv+A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(52536014)(86362001)(66446008)(7696005)(2906002)(83380400001)(26005)(508600001)(8676002)(2940100002)(8936002)(316002)(38100700002)(76116006)(6506007)(66556008)(64756008)(66476007)(122000001)(66946007)(186003)(4326008)(5660300002)(54906003)(110136005)(53546011)(71200400001)(9686003)(38070700005)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ejZvSjNpZjcyL2FHd2xDeWZRczl0Sm1HTFRZODBHbmN3eVdtTkJSekNKeEFj?=
- =?utf-8?B?Q0ZTcTgrRVF0MHNRZmdVbHRUUDdLbzhkbW9BTjExWGtHVDdBVk5waVlVTDBF?=
- =?utf-8?B?ZU54NWRpd09VSmpUQXU3RzFveXBNaWNxZ25HNzhIM3BCb3REdGVJaVNPK2N5?=
- =?utf-8?B?eWNwOTBCWWh5RG5rL1dEdzB6UzRZU3l0Skp6cGg4bEw5YURDbVdMb2h4RU1z?=
- =?utf-8?B?ZGxhYmhRKzlDS0xPcDhjOUowNytucnp3MmFZMkRPN1NodFFnR2RzZW1VSWV6?=
- =?utf-8?B?S1dqbTRyRElUL0xjaCtvR1l4NnE3QkRxMXgranRWcmN1cWlhaWdkNXE4Q09E?=
- =?utf-8?B?ZjVSWWtlMnJnMkNRckJUNzl0QTdLbHRqSEpyaUw0Z1JaaEc3aDZQam51L2h3?=
- =?utf-8?B?K0tTYjlCY000VFh3WTVRSjVvVHhZS2VQbWpiamRxUnNoZGlQMU1GUU5PVzZ0?=
- =?utf-8?B?VDFaTUVPdlh4TEpneXBROUt6WUZ2Y0xvRUxyODhkUFNFaGpXRUlEL214YmYw?=
- =?utf-8?B?elFFb3hXZVd1b3dJRWtBcm5UajUrdmp3UTZMUTFqYnFrZkpIYk9HVmp2eXFD?=
- =?utf-8?B?QUJjZVpGYlJoRzdxa0RjeDFBdU5BVDVRUDdXeDZZOUlSTGtVRXR2YU5DRXp2?=
- =?utf-8?B?aGJ6WXdOSXJQOGpTc0RKOEtNMlR2UEo4bm9DZ2tnZVc4NWMxejY3ZklLTjVG?=
- =?utf-8?B?bXR5eFlNRjBUMStEWDhwMVNrMzFrMWVvN2hyZy9GcVBhMTIvQ1NxTEVnZ2Ni?=
- =?utf-8?B?ZFZ4Tlhpek9rUEp1ZFR5K1Q2MUtaL1NBWVRPVk9ubEI4VnBsK2pOVndNMzRy?=
- =?utf-8?B?bjlQWE5GUmxyNWJoVUJoaGI5NFFBZTRpdklBZzNpWXdzMWx1ZnV2T0xOWEpi?=
- =?utf-8?B?VnVUd2diazlSa2JUQ3Q5dVBlUjhMMy9qempyeUR6NEU2ejRUVzcyWnh6cGdP?=
- =?utf-8?B?K1JuTTV4UDJFeWh3RUNwM2pqNVV6VXpXanc1Qjlmak45cHlIQWJlaDQwK2dE?=
- =?utf-8?B?emt1QTJScGZDdWUzdTVVLzFEK3dBejRzb0dXL0NhYzRqM0c0SUV1d0tCZlk3?=
- =?utf-8?B?TE9DSjJxLzhoZS9LUUdiYndWVnd6a2x2Qm9IR0VLVVlmdUNUN2NDK0NYeE03?=
- =?utf-8?B?TzNpRGtCU2FYemN5TXdseU44ZS9aaDYxSGRMNnJTZDBaSEY5RVJZUkZVcGox?=
- =?utf-8?B?VWJjZFh6Z0RYNjd0dDJ3Z0FlM1VWTWhmTjhqeWF2OXNpZUdoL2hTY0FLYXBm?=
- =?utf-8?B?NDkxd1hBRDJzN3kxRG9YZUlNSkI3VVVtMWJkYWUrS1VWSy9WT25QZzBDdWRi?=
- =?utf-8?B?emdDMEJpemY4dUZlb0FKbjhOZlRxZTB4VGZ5UzZ3UFRpRGs0ZUtUcUN5YlVV?=
- =?utf-8?B?TVkzbEVGVXBvaVF2NldRU0lrSFFxSld2Y0I2bnVGYnNTUTFRdU13MEQ4cWxT?=
- =?utf-8?B?UDVobEFHTHhSblpuQUFjUzdESG41WVlIVWwrOHJsS0djVTFza0g3TUxFVW9X?=
- =?utf-8?B?cFdIMlJYNzFFSkhoZnZ0dHI1VEFNQS9vSVBOSXYycGRaUWVyV0NxNWZmb3ZH?=
- =?utf-8?B?ZUZjdGtnQVowN29Ldm03dUd0eUZPamtvdTlEY0ZjdEpHNVZuTG1yOW5wZy9F?=
- =?utf-8?B?V1M3a3l0V0Q5Q05iaG0wREJ0OU9JclV0amxYd1JsY1Qvam9Sb0VEb2llSU5Z?=
- =?utf-8?B?ckJIeVlVcGkwZFFjd3Y5UkxMUUpIQ0dadW9GRzJKbGFRbDllb2lGY3dhMTlh?=
- =?utf-8?B?ZVExUG9BTWY5UkJGV2VmM0l5RGZDZ2ZhdGMrbXBuOUM0MTFIS3kxZ21rOXl4?=
- =?utf-8?B?bUZvcnNoWjhjSC9QR280eXZEd3VlYUtHYUF6RCtqSjE2ZWdseU5rZDF1dWo5?=
- =?utf-8?B?THROSXg2bldETmFMSytobXk0elZTWmF5WkErMlJuR0pRUFpKMVUxTUo2TVJk?=
- =?utf-8?B?TUpTY1ZHNDZZOW50alMxNlMwa0VxcXBBYkZtVm95d3psZmlhdmNVUDJTM3I1?=
- =?utf-8?B?RjVxVjdhYU1IOG9xT3RESTRiT1MzbnBNYVJEUjlYZEg4UDZCVjNhZWVwRW8x?=
- =?utf-8?B?SE81b3k0bUdMWWlTSjRYTjJDK0NJc2JDcG9SalY2UUVGUm1FdGd2RmpKaXc1?=
- =?utf-8?B?Ukd1cjREL1pPZndBNEo1WVVxWnNLTkd6a1IxSElXc3YxRDhZUzQ1d3RxRE9x?=
- =?utf-8?B?bFZvKytYWncvRXFTQnVqSlZsNFkwdWJCSG9UZW56VEVtV1VPMmFmdGlUTkJC?=
- =?utf-8?B?MkV0MmdldVJWSXNRQXpOTnJnbmh3PT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v4 2/2] watchdog: Add Watchdog Timer driver for RZ/G2L
+Message-ID: <fa8f920e-42a1-a002-c274-05819ae23d04@roeck-us.net>
+Date:   Tue, 30 Nov 2021 10:17:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b010e1ad-b0e3-43c9-6a27-08d9b42ab49a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2021 17:56:15.9209
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VlI3maqrTPSwEb07TkNB0t8pbWR7LBw8mAwqX7yWk26PTYpYMaMt8W7Rw9KOkN7BISrB9MVcekbFfsMS15jv6ykHrZYGK5j/WtsMc2q5Z2M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB2531
+In-Reply-To: <OS0PR01MB5922DAC8B07B8F4F243E932A86679@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-PiBTdWJqZWN0OiBSRTogW1BBVENIIHY0IDIvMl0gd2F0Y2hkb2c6IEFkZCBXYXRjaGRvZyBUaW1l
-ciBkcml2ZXIgZm9yIFJaL0cyTA0KPiANCj4gSGkgR3VlbnRlciwNCj4gDQo+IFRoYW5rcyBmb3Ig
-dGhlIGZlZWRiYWNrLg0KPiANCj4gPiBTdWJqZWN0OiBSZTogW1BBVENIIHY0IDIvMl0gd2F0Y2hk
-b2c6IEFkZCBXYXRjaGRvZyBUaW1lciBkcml2ZXIgZm9yDQo+ID4gUlovRzJMDQo+ID4NCj4gPiBP
-biAxMS8zMC8yMSAzOjQzIEFNLCBCaWp1IERhcyB3cm90ZToNCj4gPiA+IEFkZCBXYXRjaGRvZyBU
-aW1lciBkcml2ZXIgZm9yIFJaL0cyTCBTb0MuDQo+ID4gPg0KPiA+ID4gV0RUIElQIGJsb2NrIHN1
-cHBvcnRzIG5vcm1hbCB3YXRjaGRvZyB0aW1lciBmdW5jdGlvbiBhbmQgcmVzZXQNCj4gPiA+IHJl
-cXVlc3QgZnVuY3Rpb24gZHVlIHRvIENQVSBwYXJpdHkgZXJyb3IuDQo+ID4gPg0KPiA+ID4gVGhp
-cyBkcml2ZXIgY3VycmVudGx5IHN1cHBvcnRzIG5vcm1hbCB3YXRjaGRvZyB0aW1lciBmdW5jdGlv
-biBhbmQNCj4gPiA+IGxhdGVyIHdpbGwgYWRkIHN1cHBvcnQgZm9yIHJlc2V0IHJlcXVlc3QgZnVu
-Y3Rpb24gZHVlIHRvIENQVSBwYXJpdHkNCj4gPiA+IGVycm9yLg0KPiA+ID4NCj4gPiA+IFNpZ25l
-ZC1vZmYtYnk6IEJpanUgRGFzIDxiaWp1LmRhcy5qekBicC5yZW5lc2FzLmNvbT4NCj4gPiA+IFJl
-dmlld2VkLWJ5OiBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+DQo+ID4gPiAtLS0N
-Cj4gPiA+IFYzLT5WNDoNCj4gPiA+ICAgKiBGaXhlZCB0aGUgYnVpbGQgaXNzdWUgcmVwb3J0ZWQg
-Ynkga2VybmVsIHRlc3Qgcm9ib3QgYnkgUmVwbGFjaW5nDQo+IHRoZQ0KPiA+ID4gICAgIG1hY3Jv
-IFdEVF9DWUNMRV9NU0VDIHdpdGggZGl2NjRfdWwgZm9yIDY0LWJpdCBkaXZpc2lvbiB0byBmaXgg
-MzItDQo+IGJpdA0KPiA+ID4gICAgIGtlcm5lbHMuDQo+ID4gPiBWMi0+VjM6DQo+ID4gPiAgICog
-QWRkZWQgUmIgdGFnIGZyb20gR3VlbnRlciBSb2Vjaw0KPiA+ID4gVjEtPlYyOg0KPiA+ID4gICAq
-IHN0YXJ0ZWQgdXNpbmcgY2xrX2dldC9wdXQgaW5zdGVhZCBvZiBkZXZtX2Nsa19nZXQvcHV0DQo+
-ID4gPiAgICogTW92ZWQgZGV2bV9hZGRfYWN0aW9uX29yX3Jlc2V0IGFmdGVyIHNldF9kcnZkYXRh
-KCkgYW5kDQo+ID4gPiAgICogcmVtb3ZlZCByZWR1bmRhbnQgYWN0aW9uIG9uIGRldm1fYWRkX2Fj
-dGlvbl9vcl9yZXNldCgpIGZhaWx1cmUuDQo+ID4gPiBSRkMtPlYxDQo+ID4gPiAgICogUmVtb3Zl
-ZCBwY2xrX3JhdGUgZnJvbSBwcml2Lg0KPiA+ID4gICAqIHJ6ZzJsX3dkdF93cml0ZSgpIHJldHVy
-bnMgdm9pZCBhbmQgUmVtb3ZlZCB0aWVtb3V0IHJlbGF0ZWQgdG8NCj4gPiByZWdpc3RlciB1cGRh
-dGUNCj4gPiA+ICAgKiByemcybF93ZHRfaW5pdF90aW1lb3V0KCkgcmV0dXJucyB2b2lkIGFuZCBy
-ZW1vdmVkIGRlbGF5cy4NCj4gPiA+ICAgKiByZW1vdmVkIHNldF9iaXQoV0RPR19IV19SVU5OSU5H
-LC4uKSBhcyB3ZSBjYW4gc3RvcCB3YXRjaGRvZw0KPiA+ID4gICAqIHJlbmFtZWQgcmVzZXRfYXNz
-ZXJ0X2Nsb2NrX2Rpc2FibGUtPnJlc2V0X2Fzc2VydF9wbV9kaXNhYmxlX3B1dA0KPiA+ID4gICAq
-IHN0YXJ0ZWQgdXNpbmcgZGV2bV9yZXNldF9jb250cm9sX2dldF9leGNsdXNpdmUoKQ0KPiA+ID4g
-ICAqIHJlbW92ZWQgcGxhdGZvcm1fc2V0X2RydmRhdGEocGRldiwgcHJpdikgYXMgdGhlcmUgaXMg
-bm8gdXNlcg0KPiA+ID4gICAqIHJlbW92ZWQgd2F0Y2hkb2dfc2V0X3Jlc3RhcnRfcHJpb3JpdHko
-JnByaXYtPndkZXYsIDApIGFzIDAgaXMNCj4gPiA+IHRoZQ0KPiA+IGRlZmF1bHQuDQo+ID4gPiAg
-ICogcmVtb3ZlZCByZW1vdmUgY2FsbGJhY2sgYXMgaXQgaXMgZW1wdHkuDQo+ID4gPiAtLS0NCj4g
-PiA+ICAgZHJpdmVycy93YXRjaGRvZy9LY29uZmlnICAgICB8ICAgOCArKw0KPiA+ID4gICBkcml2
-ZXJzL3dhdGNoZG9nL01ha2VmaWxlICAgIHwgICAxICsNCj4gPiA+ICAgZHJpdmVycy93YXRjaGRv
-Zy9yemcybF93ZHQuYyB8IDI2MA0KPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-Kw0KPiA+ID4gICAzIGZpbGVzIGNoYW5nZWQsIDI2OSBpbnNlcnRpb25zKCspDQo+ID4gPiAgIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3dhdGNoZG9nL3J6ZzJsX3dkdC5jDQo+ID4gPg0KPiA+
-ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hkb2cvS2NvbmZpZyBiL2RyaXZlcnMvd2F0Y2hk
-b2cvS2NvbmZpZw0KPiA+ID4gaW5kZXgNCj4gPiA+IDlkMjIyYmExN2VjNi4uNDc2MGVlOTgxMjYz
-IDEwMDY0NA0KPiA+ID4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy9LY29uZmlnDQo+ID4gPiArKysg
-Yi9kcml2ZXJzL3dhdGNoZG9nL0tjb25maWcNCj4gPiA+IEBAIC04ODEsNiArODgxLDE0IEBAIGNv
-bmZpZyBSRU5FU0FTX1JaQVdEVA0KPiA+ID4gICAJICBUaGlzIGRyaXZlciBhZGRzIHdhdGNoZG9n
-IHN1cHBvcnQgZm9yIHRoZSBpbnRlZ3JhdGVkDQo+IHdhdGNoZG9ncw0KPiA+ID4gaW4NCj4gPiB0
-aGUNCj4gPiA+ICAgCSAgUmVuZXNhcyBSWi9BIFNvQ3MuIFRoZXNlIHdhdGNoZG9ncyBjYW4gYmUg
-dXNlZCB0byByZXNldCBhDQo+IHN5c3RlbS4NCj4gPiA+DQo+ID4gPiArY29uZmlnIFJFTkVTQVNf
-UlpHMkxXRFQNCj4gPiA+ICsJdHJpc3RhdGUgIlJlbmVzYXMgUlovRzJMIFdEVCBXYXRjaGRvZyIN
-Cj4gPiA+ICsJZGVwZW5kcyBvbiBBUkNIX1JFTkVTQVMgfHwgQ09NUElMRV9URVNUDQo+ID4gPiAr
-CXNlbGVjdCBXQVRDSERPR19DT1JFDQo+ID4gPiArCWhlbHANCj4gPiA+ICsJICBUaGlzIGRyaXZl
-ciBhZGRzIHdhdGNoZG9nIHN1cHBvcnQgZm9yIHRoZSBpbnRlZ3JhdGVkIHdhdGNoZG9ncw0KPiA+
-ID4gK2luDQo+ID4gdGhlDQo+ID4gPiArCSAgUmVuZXNhcyBSWi9HMkwgU29Dcy4gVGhlc2Ugd2F0
-Y2hkb2dzIGNhbiBiZSB1c2VkIHRvIHJlc2V0IGENCj4gPiBzeXN0ZW0uDQo+ID4gPiArDQo+ID4g
-PiAgIGNvbmZpZyBBU1BFRURfV0FUQ0hET0cNCj4gPiA+ICAgCXRyaXN0YXRlICJBc3BlZWQgQk1D
-IHdhdGNoZG9nIHN1cHBvcnQiDQo+ID4gPiAgIAlkZXBlbmRzIG9uIEFSQ0hfQVNQRUVEIHx8IENP
-TVBJTEVfVEVTVCBkaWZmIC0tZ2l0DQo+ID4gPiBhL2RyaXZlcnMvd2F0Y2hkb2cvTWFrZWZpbGUg
-Yi9kcml2ZXJzL3dhdGNoZG9nL01ha2VmaWxlIGluZGV4DQo+ID4gPiAyZWU5NzA2NDE0NWIuLjlh
-M2RjMGJkMjcxYiAxMDA2NDQNCj4gPiA+IC0tLSBhL2RyaXZlcnMvd2F0Y2hkb2cvTWFrZWZpbGUN
-Cj4gPiA+ICsrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvTWFrZWZpbGUNCj4gPiA+IEBAIC04NCw2ICs4
-NCw3IEBAIG9iai0kKENPTkZJR19MUEMxOFhYX1dBVENIRE9HKSArPSBscGMxOHh4X3dkdC5vDQo+
-ID4gPiAgIG9iai0kKENPTkZJR19CQ003MDM4X1dEVCkgKz0gYmNtNzAzOF93ZHQubw0KPiA+ID4g
-ICBvYmotJChDT05GSUdfUkVORVNBU19XRFQpICs9IHJlbmVzYXNfd2R0Lm8NCj4gPiA+ICAgb2Jq
-LSQoQ09ORklHX1JFTkVTQVNfUlpBV0RUKSArPSByemFfd2R0Lm8NCj4gPiA+ICtvYmotJChDT05G
-SUdfUkVORVNBU19SWkcyTFdEVCkgKz0gcnpnMmxfd2R0Lm8NCj4gPiA+ICAgb2JqLSQoQ09ORklH
-X0FTUEVFRF9XQVRDSERPRykgKz0gYXNwZWVkX3dkdC5vDQo+ID4gPiAgIG9iai0kKENPTkZJR19T
-VE0zMl9XQVRDSERPRykgKz0gc3RtMzJfaXdkZy5vDQo+ID4gPiAgIG9iai0kKENPTkZJR19VTklQ
-SElFUl9XQVRDSERPRykgKz0gdW5pcGhpZXJfd2R0Lm8gZGlmZiAtLWdpdA0KPiA+ID4gYS9kcml2
-ZXJzL3dhdGNoZG9nL3J6ZzJsX3dkdC5jIGIvZHJpdmVycy93YXRjaGRvZy9yemcybF93ZHQuYyBu
-ZXcNCj4gPiA+IGZpbGUgbW9kZSAxMDA2NDQgaW5kZXggMDAwMDAwMDAwMDAwLi42OTUzMGI5MmZm
-ZjkNCj4gPiA+IC0tLSAvZGV2L251bGwNCj4gPiA+ICsrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvcnpn
-Mmxfd2R0LmMNCj4gPiA+IEBAIC0wLDAgKzEsMjYwIEBADQo+ID4gPiArLy8gU1BEWC1MaWNlbnNl
-LUlkZW50aWZpZXI6IEdQTC0yLjANCj4gPiA+ICsvKg0KPiA+ID4gKyAqIFJlbmVzYXMgUlovRzJM
-IFdEVCBXYXRjaGRvZyBEcml2ZXINCj4gPiA+ICsgKg0KPiA+ID4gKyAqIENvcHlyaWdodCAoQykg
-MjAyMSBSZW5lc2FzIEVsZWN0cm9uaWNzIENvcnBvcmF0aW9uICAqLyAjaW5jbHVkZQ0KPiA+ID4g
-KzxsaW51eC9iaXRvcHMuaD4gI2luY2x1ZGUgPGxpbnV4L2Nsay5oPiAjaW5jbHVkZSA8bGludXgv
-ZGVsYXkuaD4NCj4gPiA+ICsjaW5jbHVkZSA8bGludXgvaW8uaD4gI2luY2x1ZGUgPGxpbnV4L2tl
-cm5lbC5oPiAjaW5jbHVkZQ0KPiA+ID4gKzxsaW51eC9tb2R1bGUuaD4gI2luY2x1ZGUgPGxpbnV4
-L29mLmg+ICNpbmNsdWRlDQo+ID4gPiArPGxpbnV4L3BsYXRmb3JtX2RldmljZS5oPiAjaW5jbHVk
-ZSA8bGludXgvcG1fcnVudGltZS5oPiAjaW5jbHVkZQ0KPiA+ID4gKzxsaW51eC9yZXNldC5oPiAj
-aW5jbHVkZSA8bGludXgvd2F0Y2hkb2cuaD4NCj4gPiA+ICsNCj4gPiA+ICsjZGVmaW5lIFdEVENO
-VAkJMHgwMA0KPiA+ID4gKyNkZWZpbmUgV0RUU0VUCQkweDA0DQo+ID4gPiArI2RlZmluZSBXRFRU
-SU0JCTB4MDgNCj4gPiA+ICsjZGVmaW5lIFdEVElOVAkJMHgwQw0KPiA+ID4gKyNkZWZpbmUgV0RU
-Q05UX1dEVEVOCUJJVCgwKQ0KPiA+ID4gKyNkZWZpbmUgV0RUSU5UX0lOVERJU1AJQklUKDApDQo+
-ID4gPiArDQo+ID4gPiArI2RlZmluZSBXRFRfREVGQVVMVF9USU1FT1VUCQk2MFUNCj4gPiA+ICsN
-Cj4gPiA+ICsvKiBTZXR0aW5nIHBlcmlvZCB0aW1lIHJlZ2lzdGVyIG9ubHkgMTIgYml0IHNldCBp
-biBXRFRTRVRbMzE6MjBdICovDQo+ID4gPiArI2RlZmluZSBXRFRTRVRfQ09VTlRFUl9NQVNLCQko
-MHhGRkYwMDAwMCkNCj4gPiA+ICsjZGVmaW5lIFdEVFNFVF9DT1VOVEVSX1ZBTChmKQkJKChmKSA8
-PCAyMCkNCj4gPiA+ICsNCj4gPiA+ICsjZGVmaW5lIEYyQ1lDTEVfTlNFQyhmKQkJCSgxMDAwMDAw
-MDAwIC8gKGYpKQ0KPiA+ID4gKw0KPiA+ID4gK3N0YXRpYyBib29sIG5vd2F5b3V0ID0gV0FUQ0hE
-T0dfTk9XQVlPVVQ7IG1vZHVsZV9wYXJhbShub3dheW91dCwNCj4gPiA+ICtib29sLCAwKTsgTU9E
-VUxFX1BBUk1fREVTQyhub3dheW91dCwgIldhdGNoZG9nIGNhbm5vdCBiZSBzdG9wcGVkDQo+ID4g
-PiArb25jZSBzdGFydGVkIChkZWZhdWx0PSINCj4gPiA+ICsJCQkJX19NT0RVTEVfU1RSSU5HKFdB
-VENIRE9HX05PV0FZT1VUKSAiKSIpOw0KPiA+ID4gKw0KPiA+ID4gK3N0cnVjdCByemcybF93ZHRf
-cHJpdiB7DQo+ID4gPiArCXZvaWQgX19pb21lbSAqYmFzZTsNCj4gPiA+ICsJc3RydWN0IHdhdGNo
-ZG9nX2RldmljZSB3ZGV2Ow0KPiA+ID4gKwlzdHJ1Y3QgcmVzZXRfY29udHJvbCAqcnN0YzsNCj4g
-PiA+ICsJdW5zaWduZWQgbG9uZyBvc2NfY2xrX3JhdGU7DQo+ID4gPiArCXVuc2lnbmVkIGxvbmcg
-ZGVsYXk7DQo+ID4gPiArfTsNCj4gPiA+ICsNCj4gPiA+ICtzdGF0aWMgdm9pZCByemcybF93ZHRf
-d2FpdF9kZWxheShzdHJ1Y3QgcnpnMmxfd2R0X3ByaXYgKnByaXYpIHsNCj4gPiA+ICsJLyogZGVs
-YXkgdGltZXIgd2hlbiBjaGFuZ2UgdGhlIHNldHRpbmcgcmVnaXN0ZXIgKi8NCj4gPiA+ICsJbmRl
-bGF5KHByaXYtPmRlbGF5KTsNCj4gPiA+ICt9DQo+ID4gPiArDQo+ID4gPiArc3RhdGljIHUzMiBy
-emcybF93ZHRfZ2V0X2N5Y2xlX21zZWModW5zaWduZWQgbG9uZyBjeWNsZSwgdTMyDQo+ID4gPiAr
-d2R0dGltZSkgew0KPiA+ID4gKwl1NjQgdGltZXJfY3ljbGVfbXMgPSAxMDI0ICogMTAyNCAqIDEw
-MDAwMDBVTEwgKiAod2R0dGltZSArIDEpOw0KPiA+ID4gKw0KPiA+ID4gKwlyZXR1cm4gZGl2NjRf
-dWwodGltZXJfY3ljbGVfbXMsIGN5Y2xlKTsgfQ0KPiA+DQo+ID4gQSBkZXNjcmlwdGlvbiBtaWdo
-dCBiZSB3YXJyYW50ZWQgaGVyZS4gVGhlIHJldHVybiB2YWx1ZSBhcHBlYXJzIHRvIGJlDQo+ID4g
-YSB0aW1lb3V0IGluIHNlY29uZHMsIGJhc2VkIG9uDQo+ID4gCXByaXYtPndkZXYubWF4X3RpbWVv
-dXQgPSByemcybF93ZHRfZ2V0X2N5Y2xlX21zZWMocHJpdi0NCj4gPiA+b3NjX2Nsa19yYXRlLCAw
-eGZmZik7IGJ1dCB0aGF0IGlzIG5vdCB3aGF0IHRoZSBmdW5jdGlvbiBuYW1lIHN1Z2dlc3RzLg0K
-PiA+DQo+ID4gQWxzbywgdGhlIG1heGltdW0gdGltZW91dHMgc2VlbSB0byBiZSBleGNlc3NpdmUu
-IEZlZWRpbmcgdGhlIGFib3ZlDQo+ID4gZnVuY3Rpb24gaW50byB0ZXN0IGNvZGUsIEkgZ2V0DQo+
-ID4NCj4gDQo+IEFzIHBlciBIVyBtYW51YWwsDQo+IDI0TUh6IGlzIG91ciBTb0MgaW5wdXQgY2xv
-Y2ssDQo+IA0KPiBFcXVhdGlvbiBpcyAxMDI0ICoxMDI0ICogKHQgKzEpICAvKDI0ICogMTAwMDAw
-KSBzZWNvbmRzLg0KPiANCj4gTWluIHZhbHVlIG9mIDAgY29ycmVzcG9uZHMgdG8gLjQzNjlzZWMs
-IGlmIHlvdSBjb252ZXJ0IGl0IGludG8NCj4gbWljcm9zZWNvbmRzIGl0IGJlY29tZXMgMC40MzY5
-MHgxMDAwMDAwID0gNDM2OTA2IG1pY3Jvc2Vjb25kcw0KPiANCj4gTWF4IHZhbHVlIG9mIDB4ZmZm
-IGNvcnJlc3BvbmRzIHRvIDE3ODk5NTYuOTcgbXNlYywgaWYgeW91IGNvbnZlcnQgaXQgaW50bw0K
-PiBtaWNyb3NlY29uZHMgaXQgYmVjb21lcyAxNzg5OTU2OTcwID0gMHg2QUIwOTM2QSAsIEkgYWdy
-ZWUgaXQgaXMgYSBiaWcNCj4gdmFsdWUsIGJ1dCBpdCBpcyB3aXRoIGluIDMyYml0IGxpbWl0cy4N
-Cj4gDQo+ID4gY2xrOiAxMDAwMDAwMCBtYXggdGltZW91dDogNDI5NDk2NzI5DQo+ID4gY2xrOiAy
-MDAwMDAwMCBtYXggdGltZW91dDogMjE0NzQ4MzY0DQo+ID4gY2xrOiA0MDAwMDAwMCBtYXggdGlt
-ZW91dDogMTA3Mzc0MTgyDQo+ID4gY2xrOiA4MDAwMDAwMCBtYXggdGltZW91dDogNTM2ODcwOTEN
-Cj4gPiBjbGs6IDE2MDAwMDAwMCBtYXggdGltZW91dDogMjY4NDM1NDUNCj4gPiBjbGs6IDMyMDAw
-MDAwMCBtYXggdGltZW91dDogMTM0MjE3NzINCj4gPiBjbGs6IDY0MDAwMDAwMCBtYXggdGltZW91
-dDogNjcxMDg4Ng0KPiA+IGNsazogMTI4MDAwMDAwMCBtYXggdGltZW91dDogMzM1NTQ0Mw0KPiA+
-DQo+ID4gVGhhdCByZWFsbHkgZG9lc24ndCBsb29rIGNvcnJlY3QuIEV2ZW4gaW4gbWlsbGktc2Vj
-b25kcywgYSBtYXhpbXVtDQo+ID4gdGltZW91dCBvZiA0Mjk0OTY3MjkgbXMgb3IgNDI5NDk2Ljcy
-OSBzZWNvbmRzIGF0IDEwIE1IeiBjbG9jayByYXRlIHNlZW1zDQo+IGhpZ2guDQo+ID4NCj4gPiA+
-ICsNCj4gPiA+ICtzdGF0aWMgdm9pZCByemcybF93ZHRfd3JpdGUoc3RydWN0IHJ6ZzJsX3dkdF9w
-cml2ICpwcml2LCB1MzIgdmFsLA0KPiA+ID4gK3Vuc2lnbmVkIGludCByZWcpIHsNCj4gPiA+ICsJ
-aWYgKHJlZyA9PSBXRFRTRVQpDQo+ID4gPiArCQl2YWwgJj0gV0RUU0VUX0NPVU5URVJfTUFTSzsN
-Cj4gPiA+ICsNCj4gPiA+ICsJd3JpdGVsX3JlbGF4ZWQodmFsLCBwcml2LT5iYXNlICsgcmVnKTsN
-Cj4gPiA+ICsJLyogUmVnaXN0ZXJzIG90aGVyIHRoYW4gdGhlIFdEVElOVCBpcyBhbHdheXMgc3lu
-Y2hyb25pemVkIHdpdGgNCj4gPiBXRFRfQ0xLICovDQo+ID4gPiArCWlmIChyZWcgIT0gV0RUSU5U
-KQ0KPiA+ID4gKwkJcnpnMmxfd2R0X3dhaXRfZGVsYXkocHJpdik7DQo+ID4gPiArfQ0KPiA+ID4g
-Kw0KPiA+ID4gK3N0YXRpYyB2b2lkIHJ6ZzJsX3dkdF9pbml0X3RpbWVvdXQoc3RydWN0IHdhdGNo
-ZG9nX2RldmljZSAqd2Rldikgew0KPiA+ID4gKwlzdHJ1Y3QgcnpnMmxfd2R0X3ByaXYgKnByaXYg
-PSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSh3ZGV2KTsNCj4gPiA+ICsJdTMyIHRpbWVfb3V0Ow0KPiA+
-ID4gKw0KPiA+ID4gKwkvKiBDbGVhciBMYXBzZWQgVGltZSBSZWdpc3RlciBhbmQgY2xlYXIgSW50
-ZXJydXB0ICovDQo+ID4gPiArCXJ6ZzJsX3dkdF93cml0ZShwcml2LCBXRFRJTlRfSU5URElTUCwg
-V0RUSU5UKTsNCj4gPiA+ICsJLyogMiBjb25zZWN1dGl2ZSBvdmVyZmxvdyBjeWNsZSBuZWVkZWQg
-dG8gdHJpZ2dlciByZXNldCAqLw0KPiA+ID4gKwl0aW1lX291dCA9ICh3ZGV2LT50aW1lb3V0IC8g
-MiAqIDEwMDAwMDApIC8NCj4gPiA+ICtyemcybF93ZHRfZ2V0X2N5Y2xlX21zZWMocHJpdi0+b3Nj
-X2Nsa19yYXRlLCAwKTsNCj4gPg0KPiA+IFRoaXMgY29kZSBlZmZlY3RpdmVseSByZWR1Y2VzIHRp
-bWVyIGdyYW51bGFyaXR5IHRvIDIgc2Vjb25kcy4gSXMgdGhhdA0KPiA+IG9uIHB1cnBvc2UgPw0K
-PiANCj4gWWVzLCBpdCBuZWVkcyAyIGNvbnNlY3V0aXZlIG92ZXJmbG93IGN5Y2xlIGZvciB0cmln
-Z2VyaW5nIHdhdGNoZG9nIHJlc2V0DQo+IA0KPiBBcyBwZXIgdGhlIGFib3ZlIGNhbGN1bGF0aW9u
-LA0KPiANCj4gNjAgc2VjcyBEZWZhdWx0IHRpbWVvdXQsIHRoZSBjb3VudGVyIHZhbHVlID0gMzAw
-MDAwMDAgbWljcm9zZWMvNDM2OTA2DQo+IG1pY3Jvc2VjID0gNjg2DQo+IA0KPiBBbmQgaXQgdHJp
-Z2dlcnMgd2F0Y2hkb2cgYXJvdW5kIDYwIHNlYyB3aXRoIHRoZSBjb21tYW5kIGNhdCAvZGV2L3dh
-dGNoZG9nDQo+ICYgZm9yIGkgaW4gezEuLjYwfTsgZG8gc2xlZXAgMTsgZWNobyAkaTsgZGV2bWVt
-MiAweDEyODAwODA4OyBkb25lDQo+IA0KPiA+IFdoeSBub3Qgc29tZXRoaW5nIGxpa2UNCj4gPiAJ
-dGltZV9vdXQgPSAod2Rldi0+dGltZW91dCAqICgxMDAwMDAwIC8gMikpIC8NCj4gPiByemcybF93
-ZHRfZ2V0X2N5Y2xlX21zZWMocHJpdi0+b3NjX2Nsa19yYXRlLCAwKTsgaW5zdGVhZCA/DQo+IA0K
-PiANCj4gT2suDQo+IA0KPiA+DQo+ID4gQWxzbywgZmVlZGluZyB0aGUgbWF4aW11bSB0aW1lb3V0
-IGFzIGNhbGN1bGF0ZWQgYnkNCj4gPiByemcybF93ZHRfZ2V0X2N5Y2xlX21zZWMocHJpdi0+b3Nj
-X2Nsa19yYXRlLCAweGZmZikgaW50byB0aGlzDQo+ID4gZXhwcmVzc2lvbiB5aWVsZHMgcmVhbGx5
-IGxhcmdlIG51bWJlcnMuIE1ha2luZyB0aGluZ3Mgd29yc2UsIHRob3NlDQo+ID4gbG9uZyB0aW1l
-b3V0cyBjYXVzZQ0KPiA+IAl3ZGV2LT50aW1lb3V0IC8gMiAqIDEwMDAwMDANCj4gPiB0byBvdmVy
-ZmxvdyBlYXNpbHkuIFRoaXMgY2FsY3VsYXRpb24gYWxvbmUgc3VnZ2VzdHMgdGhhdCB0aGUgbWF4
-aW11bQ0KPiA+IHRpbWVvdXQgdmFsdWUgY2FuIG5vdCBiZSBsYXJnZXIgdGhhbiB+ODU4OSB0byBh
-dm9pZCB0aGF0IG92ZXJmbG93Lg0KPiA+DQo+ID4gTW9yZSB0ZXN0IGNvZGUgZ2l2ZXMgbWU6DQo+
-ID4NCj4gPiBjbGs6IDEwMDAwMDAwIG1heCB0aW1lb3V0OiA0Mjk0OTY3MjkNCj4gPiAgICB0aW1l
-b3V0OiAxcyByZWc6IDB4MA0KPiA+ICAgIHRpbWVvdXQ6IDJzIHJlZzogMHg5DQo+ID4gICAgdGlt
-ZW91dDogODU5cyByZWc6IDB4ZmZiDQo+ID4gICAgICBPdmVyZmxvdzogdD0yMTQ3NDgzNjQgdHJl
-ZzogMHgzZDA5MTZkZg0KPiA+ICAgIHRpbWVvdXQ6IDIxNDc0ODM2NHMgcmVnOiAweGZmZmZmZmZm
-DQo+ID4gICAgICBPdmVyZmxvdzogdD00Mjk0OTY3MjkgdHJlZzogMHg3YTEyMmRiZg0KPiA+ICAg
-IHRpbWVvdXQ6IDQyOTQ5NjcyOXMgcmVnOiAweGZmZmZmZmZmDQo+ID4NCj4gPiBjbGs6IDMyMDAw
-MDAwMCBtYXggdGltZW91dDogMTM0MjE3NzINCj4gPiAgICB0aW1lb3V0OiAxcyByZWc6IDB4MA0K
-PiA+ICAgIHRpbWVvdXQ6IDJzIHJlZzogMHgxMzENCj4gPiAgICB0aW1lb3V0OiAyN3MgcmVnOiAw
-eGY4MA0KPiA+ICAgICAgT3ZlcmZsb3c6IHQ9NjcxMDg4NiB0cmVnOiAweDNkMGNkMDkwDQo+ID4g
-ICAgdGltZW91dDogNjcxMDg4NnMgcmVnOiAweGZmZmZmZmZmDQo+ID4gICAgICBPdmVyZmxvdzog
-dD0xMzQyMTc3MiB0cmVnOiAweDdhMTlhMTIwDQo+ID4gICAgdGltZW91dDogMTM0MjE3NzJzIHJl
-ZzogMHhmZmZmZmZmZg0KPiA+DQo+ID4gYW5kIHNpbWlsYXIgZm9yIG90aGVyIGNsb2NrIHJhdGVz
-LiBUaGlzIHNob3dzIGJvdGggdGhlIGltcGFjdCBvZiB0aGUNCj4gPiBhcnRpZmljaWFsIDJzIGdy
-YW51bGFyaXR5IGFuZCB0aGUgdmFsdWUgb3ZlcmZsb3dzLg0KPiA+DQo+ID4gU29tZXRoaW5nIGlu
-IHRoZSBjYWxjdWxhdGlvbiBvZiBtYXhfdGltZW91dCBvciBpbiB0aGUgY2FsY3VsYXRpb24gb2YN
-Cj4gPiB0aGUgcmVnaXN0ZXIgdmFsdWUgb3IgYm90aCBpcyB3cm9uZy4gV2hhdGV2ZXIgaXQgaXMs
-IGl0IG5lZWRzIHRvIGdldA0KPiBmaXhlZC4NCg0KWWVzLCB5b3UgYXJlIHJpZ2h0LCBjYWxjdWxh
-dGlvbiBvZiBtYXhfdGltZW91dCBpcyB3cm9uZy4gQ3VycmVudGx5IGl0IGlzIG1pY3Jvc2Vjb25k
-cw0KTmVlZHMgdG8gY29udmVydCBpdCBpbnRvIHNlY29uZHMuDQoNCkNoZWVycywNCkJpanUNCg==
+On 11/30/21 9:48 AM, Biju Das wrote:
+> Hi Guenter,
+> 
+> Thanks for the feedback.
+> 
+>> Subject: Re: [PATCH v4 2/2] watchdog: Add Watchdog Timer driver for RZ/G2L
+>>
+>> On 11/30/21 3:43 AM, Biju Das wrote:
+>>> Add Watchdog Timer driver for RZ/G2L SoC.
+>>>
+>>> WDT IP block supports normal watchdog timer function and reset request
+>>> function due to CPU parity error.
+>>>
+>>> This driver currently supports normal watchdog timer function and
+>>> later will add support for reset request function due to CPU parity
+>>> error.
+>>>
+>>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+>>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>>> ---
+>>> V3->V4:
+>>>    * Fixed the build issue reported by kernel test robot by Replacing the
+>>>      macro WDT_CYCLE_MSEC with div64_ul for 64-bit division to fix 32-bit
+>>>      kernels.
+>>> V2->V3:
+>>>    * Added Rb tag from Guenter Roeck
+>>> V1->V2:
+>>>    * started using clk_get/put instead of devm_clk_get/put
+>>>    * Moved devm_add_action_or_reset after set_drvdata() and
+>>>    * removed redundant action on devm_add_action_or_reset() failure.
+>>> RFC->V1
+>>>    * Removed pclk_rate from priv.
+>>>    * rzg2l_wdt_write() returns void and Removed tiemout related to
+>> register update
+>>>    * rzg2l_wdt_init_timeout() returns void and removed delays.
+>>>    * removed set_bit(WDOG_HW_RUNNING,..) as we can stop watchdog
+>>>    * renamed reset_assert_clock_disable->reset_assert_pm_disable_put
+>>>    * started using devm_reset_control_get_exclusive()
+>>>    * removed platform_set_drvdata(pdev, priv) as there is no user
+>>>    * removed watchdog_set_restart_priority(&priv->wdev, 0) as 0 is the
+>> default.
+>>>    * removed remove callback as it is empty.
+>>> ---
+>>>    drivers/watchdog/Kconfig     |   8 ++
+>>>    drivers/watchdog/Makefile    |   1 +
+>>>    drivers/watchdog/rzg2l_wdt.c | 260 +++++++++++++++++++++++++++++++++++
+>>>    3 files changed, 269 insertions(+)
+>>>    create mode 100644 drivers/watchdog/rzg2l_wdt.c
+>>>
+>>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig index
+>>> 9d222ba17ec6..4760ee981263 100644
+>>> --- a/drivers/watchdog/Kconfig
+>>> +++ b/drivers/watchdog/Kconfig
+>>> @@ -881,6 +881,14 @@ config RENESAS_RZAWDT
+>>>    	  This driver adds watchdog support for the integrated watchdogs in
+>> the
+>>>    	  Renesas RZ/A SoCs. These watchdogs can be used to reset a system.
+>>>
+>>> +config RENESAS_RZG2LWDT
+>>> +	tristate "Renesas RZ/G2L WDT Watchdog"
+>>> +	depends on ARCH_RENESAS || COMPILE_TEST
+>>> +	select WATCHDOG_CORE
+>>> +	help
+>>> +	  This driver adds watchdog support for the integrated watchdogs in
+>> the
+>>> +	  Renesas RZ/G2L SoCs. These watchdogs can be used to reset a
+>> system.
+>>> +
+>>>    config ASPEED_WATCHDOG
+>>>    	tristate "Aspeed BMC watchdog support"
+>>>    	depends on ARCH_ASPEED || COMPILE_TEST diff --git
+>>> a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile index
+>>> 2ee97064145b..9a3dc0bd271b 100644
+>>> --- a/drivers/watchdog/Makefile
+>>> +++ b/drivers/watchdog/Makefile
+>>> @@ -84,6 +84,7 @@ obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
+>>>    obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
+>>>    obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
+>>>    obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
+>>> +obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
+>>>    obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
+>>>    obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
+>>>    obj-$(CONFIG_UNIPHIER_WATCHDOG) += uniphier_wdt.o diff --git
+>>> a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c new file
+>>> mode 100644 index 000000000000..69530b92fff9
+>>> --- /dev/null
+>>> +++ b/drivers/watchdog/rzg2l_wdt.c
+>>> @@ -0,0 +1,260 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Renesas RZ/G2L WDT Watchdog Driver
+>>> + *
+>>> + * Copyright (C) 2021 Renesas Electronics Corporation  */ #include
+>>> +<linux/bitops.h> #include <linux/clk.h> #include <linux/delay.h>
+>>> +#include <linux/io.h> #include <linux/kernel.h> #include
+>>> +<linux/module.h> #include <linux/of.h> #include
+>>> +<linux/platform_device.h> #include <linux/pm_runtime.h> #include
+>>> +<linux/reset.h> #include <linux/watchdog.h>
+>>> +
+>>> +#define WDTCNT		0x00
+>>> +#define WDTSET		0x04
+>>> +#define WDTTIM		0x08
+>>> +#define WDTINT		0x0C
+>>> +#define WDTCNT_WDTEN	BIT(0)
+>>> +#define WDTINT_INTDISP	BIT(0)
+>>> +
+>>> +#define WDT_DEFAULT_TIMEOUT		60U
+>>> +
+>>> +/* Setting period time register only 12 bit set in WDTSET[31:20] */
+>>> +#define WDTSET_COUNTER_MASK		(0xFFF00000)
+>>> +#define WDTSET_COUNTER_VAL(f)		((f) << 20)
+>>> +
+>>> +#define F2CYCLE_NSEC(f)			(1000000000 / (f))
+>>> +
+>>> +static bool nowayout = WATCHDOG_NOWAYOUT; module_param(nowayout,
+>>> +bool, 0); MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once
+>>> +started (default="
+>>> +				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>>> +
+>>> +struct rzg2l_wdt_priv {
+>>> +	void __iomem *base;
+>>> +	struct watchdog_device wdev;
+>>> +	struct reset_control *rstc;
+>>> +	unsigned long osc_clk_rate;
+>>> +	unsigned long delay;
+>>> +};
+>>> +
+>>> +static void rzg2l_wdt_wait_delay(struct rzg2l_wdt_priv *priv) {
+>>> +	/* delay timer when change the setting register */
+>>> +	ndelay(priv->delay);
+>>> +}
+>>> +
+>>> +static u32 rzg2l_wdt_get_cycle_msec(unsigned long cycle, u32 wdttime)
+>>> +{
+>>> +	u64 timer_cycle_ms = 1024 * 1024 * 1000000ULL * (wdttime + 1);
+>>> +
+>>> +	return div64_ul(timer_cycle_ms, cycle); }
+>>
+>> A description might be warranted here. The return value appears to be a
+>> timeout in seconds, based on
+>> 	priv->wdev.max_timeout = rzg2l_wdt_get_cycle_msec(priv-
+>>> osc_clk_rate, 0xfff); but that is not what the function name suggests.
+>>
+>> Also, the maximum timeouts seem to be excessive. Feeding the above
+>> function into test code, I get
+>>
+> 
+> As per HW manual,
+> 24MHz is our SoC input clock,
+> 
+> Equation is 1024 *1024 * (t +1)  /(24 * 100000) seconds.
+> 
+> Min value of 0 corresponds to .4369sec, if you convert it into microseconds it becomes 0.43690x1000000 = 436906 microseconds
+> 
+> Max value of 0xfff corresponds to 1789956.97 msec, if you convert it into microseconds it becomes 1789956970 = 0x6AB0936A , I agree it is a big value, but it is with in 32bit limits.
+> 
+
+max_timeout is in seconds, not microseconds, and the function has _msec
+in its name which doesn't reflect anything micro.
+
+>> clk: 10000000 max timeout: 429496729
+>> clk: 20000000 max timeout: 214748364
+>> clk: 40000000 max timeout: 107374182
+>> clk: 80000000 max timeout: 53687091
+>> clk: 160000000 max timeout: 26843545
+>> clk: 320000000 max timeout: 13421772
+>> clk: 640000000 max timeout: 6710886
+>> clk: 1280000000 max timeout: 3355443
+>>
+>> That really doesn't look correct. Even in milli-seconds, a maximum timeout
+>> of 429496729 ms or 429496.729 seconds at 10 MHz clock rate seems high.
+>>
+>>> +
+>>> +static void rzg2l_wdt_write(struct rzg2l_wdt_priv *priv, u32 val,
+>>> +unsigned int reg) {
+>>> +	if (reg == WDTSET)
+>>> +		val &= WDTSET_COUNTER_MASK;
+>>> +
+>>> +	writel_relaxed(val, priv->base + reg);
+>>> +	/* Registers other than the WDTINT is always synchronized with
+>> WDT_CLK */
+>>> +	if (reg != WDTINT)
+>>> +		rzg2l_wdt_wait_delay(priv);
+>>> +}
+>>> +
+>>> +static void rzg2l_wdt_init_timeout(struct watchdog_device *wdev) {
+>>> +	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+>>> +	u32 time_out;
+>>> +
+>>> +	/* Clear Lapsed Time Register and clear Interrupt */
+>>> +	rzg2l_wdt_write(priv, WDTINT_INTDISP, WDTINT);
+>>> +	/* 2 consecutive overflow cycle needed to trigger reset */
+>>> +	time_out = (wdev->timeout / 2 * 1000000) /
+>>> +rzg2l_wdt_get_cycle_msec(priv->osc_clk_rate, 0);
+>>
+>> This code effectively reduces timer granularity to 2 seconds. Is that on
+>> purpose ?
+> 
+> Yes, it needs 2 consecutive overflow cycle for triggering watchdog reset
+> 
+> As per the above calculation,
+> 
+> 60 secs Default timeout, the counter value = 30000000 microsec/436906 microsec = 686
+> 
+> And it triggers watchdog around 60 sec with the command
+> cat /dev/watchdog  & for i in {1..60}; do sleep 1; echo $i; devmem2 0x12800808; done
+> 
+That explains the factor itself, which I did not question. I questioned
+the granularity, ie why the timeout was, in practice, set to 0, 2, 4,
+... seconds instead of 1, 2, 3, 4 ...
+
+>> Why not something like
+>> 	time_out = (wdev->timeout * (1000000 / 2)) /
+>> rzg2l_wdt_get_cycle_msec(priv->osc_clk_rate, 0); instead ?
+> 
+> 
+> Ok.
+> 
+>>
+>> Also, feeding the maximum timeout as calculated by
+>> rzg2l_wdt_get_cycle_msec(priv->osc_clk_rate, 0xfff) into this expression
+>> yields really large numbers. Making things worse, those long timeouts
+>> cause
+>> 	wdev->timeout / 2 * 1000000
+>> to overflow easily. This calculation alone suggests that the maximum
+>> timeout value can not be larger than ~8589 to avoid that overflow.
+>>
+>> More test code gives me:
+>>
+>> clk: 10000000 max timeout: 429496729
+>>     timeout: 1s reg: 0x0
+>>     timeout: 2s reg: 0x9
+>>     timeout: 859s reg: 0xffb
+>>       Overflow: t=214748364 treg: 0x3d0916df
+>>     timeout: 214748364s reg: 0xffffffff
+>>       Overflow: t=429496729 treg: 0x7a122dbf
+>>     timeout: 429496729s reg: 0xffffffff
+>>
+>> clk: 320000000 max timeout: 13421772
+>>     timeout: 1s reg: 0x0
+>>     timeout: 2s reg: 0x131
+>>     timeout: 27s reg: 0xf80
+>>       Overflow: t=6710886 treg: 0x3d0cd090
+>>     timeout: 6710886s reg: 0xffffffff
+>>       Overflow: t=13421772 treg: 0x7a19a120
+>>     timeout: 13421772s reg: 0xffffffff
+>>
+>> and similar for other clock rates. This shows both the impact of the
+>> artificial 2s granularity and the value overflows.
+>>
+>> Something in the calculation of max_timeout or in the calculation of the
+>> register value or both is wrong. Whatever it is, it needs to get fixed.
+> 
+> I believe microsecond calculation leads to the confusion.
+> 
+
+Again,
+	priv->wdev.max_timeout = rzg2l_wdt_get_cycle_msec(priv-osc_clk_rate, 0xfff);
+
+and max_timeout is in seconds, not milliseconds or microseconds.
+Maybe it needs to be something like
+
+	priv->wdev.max_timeout = rzg2l_wdt_get_cycle_msec(priv-osc_clk_rate, 0xfff) /
+		(1000000 / 2);
+
+instead (that would limit the range of the register value to 0..0xfff), but
+even then the function name (rzg2l_wdt_get_cycle_msec) doesn't match
+what it returns. Maybe it should be named rzg2l_wdt_get_cycle_usec.
+It might also make sense to use USEC_PER_SEC instead of 1000000 to
+clarify the context.
+
+Guenter
