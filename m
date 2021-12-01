@@ -2,87 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA39464967
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Dec 2021 09:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BB0464CE6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Dec 2021 12:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347917AbhLAIS4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Dec 2021 03:18:56 -0500
-Received: from cpanel.siel.si ([46.19.9.99]:54172 "EHLO cpanel.siel.si"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347892AbhLAISw (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Dec 2021 03:18:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=xdrTiqESD9Grk59I9BTw6TCEauQQQ1XgoZZ8AlUk9+4=; b=AEj7bM395MwdEr3quD5g0zsT5Z
-        NPqde2E8s1Iadoi3ymZpic4N4em6q2fVbsMkY2fyXgbrp96glFUA/57YTUZjPn3k8QpNeowRgsk9y
-        HCXCFgR9b5uMnGvgUie8rNArmIrkJqIprvqJn7GUOMLfxn4wBym9HNJJ8CuYQaDpJirJByUaewbdS
-        YuTDst6sBU9qy+j+grPpPVb4vIfsenf10dJxBpHshVgFtGJ5/+oraGlDvYefqCUTC3zZ++KO3Io+D
-        f1jQEj08f2w8XPkTRG0yfjLRMRgGYgTKs49BPq/Oi6Ly1szaOSmsAszX/S4b06osNnzQpBOQye64q
-        FUnHa1+A==;
-Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:60688 helo=localhost.localdomain)
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1msKls-007fXk-Rz; Wed, 01 Dec 2021 09:15:28 +0100
-From:   Andrej Picej <andrej.picej@norik.com>
-To:     support.opensource@diasemi.com, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org
-Cc:     andrej.picej@norik.com, wim@linux-watchdog.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 4/4] ARM: dts: imx6: phycore-som: set watchdog timeout mode to shutdown
-Date:   Wed,  1 Dec 2021 09:15:12 +0100
-Message-Id: <20211201081512.3580837-4-andrej.picej@norik.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211201081512.3580837-1-andrej.picej@norik.com>
-References: <20211201081512.3580837-1-andrej.picej@norik.com>
+        id S1349052AbhLALhp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Dec 2021 06:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348926AbhLALhh (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 1 Dec 2021 06:37:37 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B68EC061785
+        for <linux-watchdog@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so20801336pjb.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
+         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
+         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
+         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
+         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
+         Af5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=qMvkDCvPEKnRVIjGIy3OSk4HZOsYC44ICiy+bcO80hgptgDV76yNrfGWNI0EdaDkAw
+         Dz5nYlbW7XQTou3DeiFet7dqz18J7uZUR8EEwaxzYaxNUx/SZB9vswlyF026etPsvjLz
+         mzFMVxXEE38blQR2FyYu2KJT2F6prSGgSREqnPMKBFB8Jgj4ZovX5SX/BlOGgzmmPzrQ
+         Dfl/qquL/BFaDfHelGVN0kzxLcIhNsyUWlisogPQsS+VDjkjUrlm7+wLsugDNiOgnOTt
+         lR/anFdSwYqmvqnMXFGGcib6nPJytsmWpsn9OG+ud0KTRgxjmyib25FgfFmfjg52nQaL
+         Z1og==
+X-Gm-Message-State: AOAM531LfThCuLSueh71/1AAqYGWylE7GlCRFUoYGbfCfeFyhEX8aPsO
+        CLAkbn0pglJXyhNyr6okm6Y/9U+kWPvIUYKUuWZ/B3+IrQU=
+X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
+X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
+ Wed, 01 Dec 2021 03:33:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Sender: unitednationawardwinner@gmail.com
+Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 1 Dec 2021 03:33:58 -0800
+X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
+Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
+Subject: Your long awaited part payment of $2.5.000.00Usd
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Enable system restart when the watchdog timeout occurs.
+Attention: Beneficiary, Your long awaited part payment of
+$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
+Dollars) is ready for immediate release to you, and it was
+electronically credited into an ATM Visa Card for easy delivery.
 
-Signed-off-by: Andrej Picej <andrej.picej@norik.com>
----
-Changes in v3:
- - no changes
+Your new Payment Reference No.- 6363836,
+Pin Code No: 1787
+Your Certificate of Merit Payment No: 05872,
 
-Changes in v2:
- - new patch, enable shutdown mode for phytec-phycore (da9062 user)
----
- arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+Your Names: |
+Address: |
 
-diff --git a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-index a80aa08a37cb..743343e525cf 100644
---- a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-@@ -111,6 +111,7 @@ da9062_onkey: onkey {
- 		watchdog {
- 			compatible = "dlg,da9062-watchdog";
- 			dlg,use-sw-pm;
-+			dlg,wdt-sd = <1>;
- 		};
- 
- 		regulators {
--- 
-2.25.1
+Person to Contact:MR KELLY HALL the Director of the International
+Audit unit ATM Payment Center,
 
+Email: uba-bf@e-ubabf.com
+TELEPHONE: +226 64865611 You can whatsApp the bank
+
+Regards.
+Mrs ORGIL BAATAR
