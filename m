@@ -2,152 +2,164 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C95DB466582
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Dec 2021 15:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210D5466593
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Dec 2021 15:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358667AbhLBOoi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 2 Dec 2021 09:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
+        id S1358709AbhLBOqk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Dec 2021 09:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbhLBOoi (ORCPT
+        with ESMTP id S1358717AbhLBOq0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:44:38 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04B0C06174A;
-        Thu,  2 Dec 2021 06:41:15 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so40182133otl.3;
-        Thu, 02 Dec 2021 06:41:15 -0800 (PST)
+        Thu, 2 Dec 2021 09:46:26 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AECC061759;
+        Thu,  2 Dec 2021 06:43:03 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id 7so55820643oip.12;
+        Thu, 02 Dec 2021 06:43:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Y4at8L60EXfC3cEZPxJ2dBLND1wT12N83NGhaALKKS0=;
-        b=nLKe1VXlRjDQoG4ohd4OQO8q80qM2cmlZyZa2LSp2un5q4FcuxASvQZxUfp+cp16/9
-         ea938qTVJPehLvuG7alpoZvd8P1KGq1cgWs0xzqFEpGnBsqOsduCKPdXpBnI8ovKqZZb
-         sWO4fELGA9d5E11bCpUpQEDGE84RStt6gCpELEVhlkwYq66914QqyWLGqkpu57CZak96
-         YmpTYIwvuCu7IX/njU1NEdmeXlug/lhFnHpUizVCjQ9nYYKYh7qIeo5JY2BL7rYYM5he
-         3UIN0+gZ37g0ts4G/FdT0XYJ9UoSY3qs5nLCERtzmnJTHxTe8AQbUAsPPViWFsOMU4fK
-         7xVQ==
+        bh=gdDNZknPlWQXti9kxSRAtYOCyds+UvL28w+exexiozg=;
+        b=OCZ16K/FevUJX4L7LUbXRCWsXmrNw3L1yCZGoNsb6J2OvNRApNkg/VhtLXrnIF4sRb
+         8+zJ5z606yzljnkehQGLmuGmXm3PUvAmekngTZg4AK0Dwzu94tPBm+7sKzAoqUAeFmCg
+         JcrAOcR5rGll6Y8rqWltIN0e17miYMK2wwMujE7LhKutog3G/0IWe2UnXTOoyMMbINka
+         ZKvakAIg6EejIrgz4Hw2LvQ9cNlYNahvXTj03jxuQlIXqyVxbUBtoxtPrRqdAwq0H2ay
+         G5fg+BNcjNNjzm5EjjRAiSof0ImAGOgesIvxYoAOxYJXw9NZJwDOuRAfpSJ1lqHpeQyR
+         VIAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=Y4at8L60EXfC3cEZPxJ2dBLND1wT12N83NGhaALKKS0=;
-        b=jEN7xwRF4oY+rLfBcNtpevWQvoGOP4DtLXI1fgR4f7VegfcyhjAp8Npd4lDn8DXuku
-         DsPX53y90F2325x0WlQDlqAcpGaA0ypuGgnbqOIzTEGzdclbNY1zW49aDBhpcedk9XU6
-         hl5spW6QSKopKgUJMT0N0bST7JuV8NNwYyJhwWLOSFoQl+6AlWA035lZQDrXLNnx6+aW
-         hOxNTqGjLqLCsVC0VJC9DDA7MKgi+IxGiYr4B3cCZjSVRfdVWLiX2IJUmSgEKx32CbV3
-         3HYfWA7OkD9W6gWjq4lYH4C3Nl+ufA3aEsY+53Mwclljt/RzJLXXaAjciJ5A27XinqCm
-         OKfA==
-X-Gm-Message-State: AOAM532aDAu/MrvqnB+fGbWccC3b5VJJaTMopPVdxOTtMJByHq06KiVV
-        mPBdG7uboOEt8Ffw3h+NEZQ=
-X-Google-Smtp-Source: ABdhPJz5xD8isNpVTkMna0LFOmiVRyMKZUrUK9Ae68fME5gRpQzvlI1Yv57sLiKQHGIwBIssBT1i5w==
-X-Received: by 2002:a05:6830:3094:: with SMTP id f20mr11773489ots.201.1638456075329;
-        Thu, 02 Dec 2021 06:41:15 -0800 (PST)
+        bh=gdDNZknPlWQXti9kxSRAtYOCyds+UvL28w+exexiozg=;
+        b=3acfiCaZuRVKDim1vXBILnxUXtfolNkF0IXv6dVtvem79biJS/WwRECpOTh3putKO9
+         TXx4wOTs60xDdbe7elqbnMU2kBJzx2IWuT2RUkwPRkXM9rA478QTzl6NS+/GJJhlTBeE
+         yHeR9cGYxYp9PineH0Lq947hVJVx8DbiUZbEgvUQaVz1mpOI+fdOMhrAanB3KcDshsde
+         mxmnCXhEUE/xocJgg4diEjq5YILx4ghGHSAQEzmWh/AG/CxTcSwaeAIBkYO+KXbco4ld
+         C12KxlmY7Fhkbx7YjrHkFRjCK3t+wjap7o6SPqS5qNqhgt2wrTKJGrzOEP535f8qxfNt
+         qRiA==
+X-Gm-Message-State: AOAM53145INbT4RN4uahankWhDmYm3J/0ENMuHDMs/YoqqOFgk5Ps+Wd
+        nuT8xwEMs7JcCYMIGueepLI=
+X-Google-Smtp-Source: ABdhPJy9d9K8vQfaMrzF0NadviuLFl6VvISc3/6oMkqiDL/F5a7ieaJY8UOOdcxrdm+usctEjtxjvw==
+X-Received: by 2002:aca:d0d:: with SMTP id 13mr4537737oin.107.1638456183251;
+        Thu, 02 Dec 2021 06:43:03 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x12sm1192120oom.44.2021.12.02.06.41.14
+        by smtp.gmail.com with ESMTPSA id bh12sm29018oib.25.2021.12.02.06.43.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 06:41:14 -0800 (PST)
+        Thu, 02 Dec 2021 06:43:02 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 2 Dec 2021 06:41:13 -0800
+Date:   Thu, 2 Dec 2021 06:43:01 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andrej Picej <andrej.picej@norik.com>
-Cc:     support.opensource@diasemi.com, linux-watchdog@vger.kernel.org,
-        wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 2/4] watchdog: da9062: reset board on watchdog timeout
-Message-ID: <20211202144113.GB828760@roeck-us.net>
-References: <20211202093230.3951996-1-andrej.picej@norik.com>
- <20211202093230.3951996-2-andrej.picej@norik.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Janne Grunau <j@jannau.net>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: Add Apple Watchdog
+Message-ID: <20211202144301.GA829000@roeck-us.net>
+References: <20211130161809.64591-1-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211202093230.3951996-2-andrej.picej@norik.com>
+In-Reply-To: <20211130161809.64591-1-sven@svenpeter.dev>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 10:32:28AM +0100, Andrej Picej wrote:
-> Implement a method to change watchdog timeout configuration based on DT
-> binding ("dlg,wdt-sd"). There is a possibility to change the bahaviour
-> of watchdog reset. Setting WATCHDOG_SD bit enables SHUTDOWN mode, and
-> clearing it enables POWERDOWN mode on watchdog timeout.
+On Tue, Nov 30, 2021 at 05:18:08PM +0100, Sven Peter wrote:
+> Apple SoCs come with a simple embedded watchdog. This watchdog is also
+> required in order to reset the SoC.
 > 
-> If no DT binding is specified the WATCHDOG_SD bit stays in default
-> configuration, not breaking behaviour of devices which might depend on
-> default fuse configuration.
-> 
-> Note: This patch requires that the config register CONFIG_I is
-> configured as writable in the da9062 multi function device.
-> 
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> Chnages in v4:
->  - move the code to probe function
+> v1 --> v2:
+>   - add Mark's and Rob's r-b tags
 > 
-> Changes in v3:
->  - no changes
+>  .../bindings/watchdog/apple,wdt.yaml          | 52 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
 > 
-> Changes in v2:
->  - don't force the "reset" for all da9062-watchdog users, instead add DT
->    binding where the behavior can be selected
-> ---
->  drivers/watchdog/da9062_wdt.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-> index f02cbd530538..bd85f84b0fd4 100644
-> --- a/drivers/watchdog/da9062_wdt.c
-> +++ b/drivers/watchdog/da9062_wdt.c
-> @@ -195,8 +195,11 @@ static int da9062_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	unsigned int timeout;
-> +	unsigned int mask;
->  	struct da9062 *chip;
->  	struct da9062_watchdog *wdt;
-> +	int ret;
-> +	u32 val;
->  
->  	chip = dev_get_drvdata(dev->parent);
->  	if (!chip)
-> @@ -236,6 +239,30 @@ static int da9062_wdt_probe(struct platform_device *pdev)
->  		set_bit(WDOG_HW_RUNNING, &wdt->wdtdev.status);
->  	}
->  
-> +	/*
-> +	 * Configure what happens on watchdog timeout. Can be specified with
-> +	 * "dlg,wdt-sd" dt-binding (0 -> POWERDOWN, 1 -> SHUTDOWN).
-> +	 * If "dlg,wdt-sd" dt-binding is NOT set use the default.
-> +	 */
-> +	ret = device_property_read_u32(dev, "dlg,wdt-sd", &val);
-> +	if (!ret) {
-> +		if (val)
-> +			/* Use da9062's SHUTDOWN mode */
-> +			mask = DA9062AA_WATCHDOG_SD_MASK;
-> +		else
-> +			/* Use da9062's POWERDOWN mode. */
-> +			mask = 0x0;
+> diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> new file mode 100644
+> index 000000000000..e58c56a6fdf6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/apple,wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +		ret = regmap_update_bits(wdt->hw->regmap,
-> +						DA9062AA_CONFIG_I,
-> +						DA9062AA_WATCHDOG_SD_MASK,
-> +						mask);
+> +title: Apple SoC Watchdog
 > +
-> +		if (ret)
-> +			dev_err(dev, "failed to set wdt reset mode: %d\n",
-> +				ret);
-> +	}
+> +allOf:
+> +  - $ref: "watchdog.yaml#"
 > +
->  	return devm_watchdog_register_device(dev, &wdt->wdtdev);
->  }
->  
+> +maintainers:
+> +  - Sven Peter <sven@svenpeter.dev>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - apple,t8103-wdt
+> +          - apple,t6000-wdt
+> +      - const: apple,wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    wdt: watchdog@50000000 {
+> +        compatible = "apple,t8103-wdt", "apple,wdt";
+> +        reg = <0x50000000 0x4000>;
+> +        clocks = <&clk>;
+> +        interrupts = <AIC_IRQ 123 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 360e9aa0205d..859201bbd4e8 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1750,6 +1750,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+>  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+>  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+>  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+> +F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+>  F:	arch/arm64/boot/dts/apple/
+>  F:	drivers/i2c/busses/i2c-pasemi-core.c
+>  F:	drivers/i2c/busses/i2c-pasemi-platform.c
 > -- 
 > 2.25.1
 > 
