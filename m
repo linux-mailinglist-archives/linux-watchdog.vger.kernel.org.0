@@ -2,150 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B06A5465859
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Dec 2021 22:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754DB465DB0
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Dec 2021 06:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344134AbhLAVaS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Dec 2021 16:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbhLAVaA (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Dec 2021 16:30:00 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65654C061574;
-        Wed,  1 Dec 2021 13:26:38 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso37101557ots.6;
-        Wed, 01 Dec 2021 13:26:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=k4/I5ZxtyxyEgfQA+ESGmCgKBQsFs6qJF72l96RKoA4=;
-        b=kLCG6otqEVhaUDNA3amJb2CMgftRPwdi4LZjQ/OayeZcxbk24t9MFM7u/W8F1bw76a
-         MO2GB2TFG+TpkokO/JkmzyKf/RRgIYwSOOpURQLpctnmK7++F4jubVUgVCf5PWu5mTYE
-         uDJqGaKLyZua86fR5UutdKUcs/VYcPxZlLflKD//OZHWokuWqCPCJWkyY6br6Kf7O2ZO
-         g2pr1BkeUbU8tv/xrcVXQDtIE6A2gU/idADJZQEotbmzG82TeyWB5NKGSFheuCzxK5kZ
-         M+cBjQe7rDv9yhYsE79qYgo1lrqYZ+O3Zne+FmcebsGBsqzmIQIStVjsO+/s8zakHYqB
-         Xurw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=k4/I5ZxtyxyEgfQA+ESGmCgKBQsFs6qJF72l96RKoA4=;
-        b=MViA0wUoz+iZHWzt7P+jX39a6LInxDop8kkqzQS3BIrTy6mEI8wWD09YsuXnEqTggs
-         yAnsdfOasoDHx8IcRT52agUd7Rl9a9/RjhJgj8y0Var2tmEjHFrbchf0D5dF5PK+/8up
-         csYdQRkGjTgmvV+GF2kBmjHDZRYDEOurf5ssQz4Muh2XT+ZNm3ykTjiPOtXMxRYMWVeW
-         y8hHf6KO45bzS6Loy8T4usnDMtlBArKje/VN+H3WESKS+fqbaVl1XnBRfMqnrg3qT0v9
-         2NnpYUbftaUyQJ8dVoFawWm0nD1CpQxDpwxJNpE6V6BV0edVYQvrl1WOPBa7VML8ACJX
-         JOlA==
-X-Gm-Message-State: AOAM532ZuR9UI75EChxq0y5pwcekkMtYl7bJ6kYBaDqGTayIWtSchSA0
-        zqqv7TgvEeJdHDE7wJ1s8GJJdBnHk5Q=
-X-Google-Smtp-Source: ABdhPJyYRvrtRBtmrxzsseeP+6fU5/sYP0zqPGa07azFC5J/pEfSc7m0nlZ2sR9zmEB88pyfWUn5Cw==
-X-Received: by 2002:a9d:20a1:: with SMTP id x30mr7945277ota.44.1638393997791;
-        Wed, 01 Dec 2021 13:26:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n23sm394235oic.26.2021.12.01.13.26.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 13:26:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 2/4] watchdog: da9062: reset board on watchdog timeout
-To:     Andrej Picej <andrej.picej@norik.com>,
-        support.opensource@diasemi.com, linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
+        id S234651AbhLBFRu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Dec 2021 00:17:50 -0500
+Received: from marcansoft.com ([212.63.210.85]:48452 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229469AbhLBFRt (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Thu, 2 Dec 2021 00:17:49 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id BBE9241F5F;
+        Thu,  2 Dec 2021 05:14:23 +0000 (UTC)
+Subject: Re: [PATCH 2/2] watchdog: Add Apple SoC watchdog driver
+To:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-References: <20211201081512.3580837-1-andrej.picej@norik.com>
- <20211201081512.3580837-2-andrej.picej@norik.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <fa9eb129-a152-4f22-9bf4-07bf27ec441f@roeck-us.net>
-Date:   Wed, 1 Dec 2021 13:26:34 -0800
+References: <20211113094732.73889-1-sven@svenpeter.dev>
+ <20211113094732.73889-2-sven@svenpeter.dev> <YY/YnlCxLqdw/zAo@sunset>
+ <95dea968-f452-4ba0-9b66-c9bc4269a52c@www.fastmail.com>
+ <YZEMmH49D+GZEewi@sunset>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <ca52e4ee-b5f3-b892-1ba5-7c5656e45fdd@marcan.st>
+Date:   Thu, 2 Dec 2021 14:14:21 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211201081512.3580837-2-andrej.picej@norik.com>
+In-Reply-To: <YZEMmH49D+GZEewi@sunset>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Language: es-ES
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12/1/21 12:15 AM, Andrej Picej wrote:
-> Implement a method to change watchdog timeout configuration based on DT
-> binding ("dlg,wdt-sd"). There is a possibility to change the bahaviour
-> of watchdog reset. Setting WATCHDOG_SD bit enables SHUTDOWN mode, and
-> clearing it enables POWERDOWN mode on watchdog timeout.
+On 14/11/2021 22.18, Alyssa Rosenzweig wrote:
+>>>> + * This HW block has three separate watchdogs. WD0 resets the machine
+>>>> + * to recovery mode and is not very useful for us. WD1 and WD2 trigger a normal
+>>>> + * machine reset. WD0 additionally supports a configurable interrupt.
+>>>
+>>> Do we have any idea what the difference between WD1 and WD2 is?
+>>
+>> I've never seen macOS write to WD2 when running in our hypervisor and only
+>> found that one when I was looking at the rest of the MMIO region.
+>> >From what I can tell it works exactly like WD1.
 > 
-> If no DT binding is specified the WATCHDOG_SD bit stays in default
-> configuration, not breaking behaviour of devices which might depend on
-> default fuse configuration.
-> 
-> Note: This patch requires that the config register CONFIG_I is
-> configured as writable in the da9062 multi function device.
-> 
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-> ---
-> Changes in v3:
->   - no changes
-> 
-> Changes in v2:
->   - don't force the "reset" for all da9062-watchdog users, instead add DT
->     binding where the behavior can be selected
-> ---
->   drivers/watchdog/da9062_wdt.c | 25 +++++++++++++++++++++++++
->   1 file changed, 25 insertions(+)
-> 
-> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-> index f02cbd530538..e342e9e50cb1 100644
-> --- a/drivers/watchdog/da9062_wdt.c
-> +++ b/drivers/watchdog/da9062_wdt.c
-> @@ -85,8 +85,33 @@ static int da9062_wdt_start(struct watchdog_device *wdd)
->   {
->   	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
->   	unsigned int selector;
-> +	unsigned int mask;
-> +	u32 val;
->   	int ret;
->   
-> +	/* Configure what happens on watchdog timeout. Can be specified with
-> +	 * "dlg,wdt-sd" dt-binding (0 -> POWERDOWN, 1 -> SHUTDOWN).
-> +	 * If "dlg,wdt-sd" dt-binding is NOT set use the default.
-> +	 */
-
-Please use standard multi-line comments. This is not the networking
-subsystem.
-
-Also, if you think this code should be here and not in the probe function,
-as suggested by Adam, please provide a rationale.
-
-Thanks,
-Guenter
-
-> +	ret = device_property_read_u32(wdd->parent, "dlg,wdt-sd", &val);
-> +	if (!ret) {
-> +		if (val)
-> +			/* Use da9062's SHUTDOWN mode */
-> +			mask = DA9062AA_WATCHDOG_SD_MASK;
-> +		else
-> +			/* Use da9062's POWERDOWN mode. */
-> +			mask = 0x0;
-> +
-> +		ret = regmap_update_bits(wdt->hw->regmap,
-> +						DA9062AA_CONFIG_I,
-> +						DA9062AA_WATCHDOG_SD_MASK,
-> +						mask);
-> +
-> +		if (ret)
-> +			dev_err(wdt->hw->dev, "failed to set wdt reset mode: %d\n",
-> +				ret);
-> +	}
-> +
->   	selector = da9062_wdt_timeout_to_sel(wdt->wdtdev.timeout);
->   	ret = da9062_wdt_update_timeout_register(wdt, selector);
->   	if (ret)
+> Makes sense, thanks.
 > 
 
+Are any of these watchdogs active when we boot, and are we leaving them 
+like that? I'm pretty sure at least some of the coprocessors have their 
+own watchdog (SMC...), which might be one of these. We should make sure 
+we don't clobber that.
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
