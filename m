@@ -2,23 +2,23 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F4546A6AB
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Dec 2021 21:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B2846A6B0
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Dec 2021 21:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349458AbhLFUTi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Dec 2021 15:19:38 -0500
-Received: from mail-eopbgr70049.outbound.protection.outlook.com ([40.107.7.49]:6629
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        id S1349569AbhLFUUY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Dec 2021 15:20:24 -0500
+Received: from mail-db8eur05on2053.outbound.protection.outlook.com ([40.107.20.53]:13056
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1349378AbhLFUTh (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:19:37 -0500
+        id S1349544AbhLFUUX (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 6 Dec 2021 15:20:23 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CfaEVqCNTx+z3SpbTt5Jg6uG0WIg7l7c0bbscfvAbY+p+vvTSBv5hbBaLPNJnd9ZEj1s0EX9zesBTGTr2o629scpHjK4JFna86+vQFStXXrm5/wIwd17hZT/UVODD8IcAbUWEh8FBcVUpYDAsvtGuJY+bsANvyAxNwrMRGJeOI68SE2Wrg4ZL414M/EYGH8II9dKV4I4armek8KLbxvmsmeljUqZXDscjEQHGjPnN4d7gp5QsWxhnhLeZaaeRYS2N7igCHZ7qECdR0wTvaWUNq1NYQWj+SaQLNSd+r8amrjSzOpRYvAWsh3S+ehUyLLtwKEdHiDit7nphp8KYXMbOg==
+ b=MEGLQTLwIsTe915fu7qdtatcMwlm9bdTAgc7QKOM8QETsw4qr9w1KaKBXQIX5hYd1Qd2VSx1WvzAHY/SGshN4pFgiiJYW8FCkEmGwl9RUZfArc/861EuzCumh7ApApzzvKn0woWxuRk2xj/v6hzM+MPCwu+JH8snHuWG51z8tpwo+GB24Q+E9lobg1eWtGEKjiVeN4A2OMwvK5J6C2wtm//MZmC1eOMVwvo0dU2uIzOVPz2Y55Rm5iH7vgFDusEYfdkJAoQACP3ZmL2t03W7f/LR4MbuLcj1R3c9WyDYL2NAwBvpCDB4Di29r4xUKnCajxxWYjCOanP15gSarTUOiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3VmOopAxUjPGQQjz/+73AeQmeyp8XLYAMKBurjcl/No=;
- b=Uz674WvFQ94z0g8Qw1Weu7/wiRTrRWFvdJ7pxBF30BDtZruuVeBLibN2RW+pUy0tFlBWM5yThBWFjhjAQHT2rosmcNJsnLBbuGnAIkD/gVmaDfuHHQ3o9GGIpScb/rWqhejOkYer76hploUgS8f1Up2nU4LdJ31u3ihpqrmnNTq0a6u2LHziIWLSeN+drFTQ15kBYjJvapDK+X1PXEX57QrrfbB5iYCDVlvlHt+lWWXO56m/UobqdOjauh+4Q6Avwxexu+MqbXnDPTq26zBdAbCK1KWhgwEx0YD824T/7KZsooYW3xgjUbbFke9NUDqKk9V6fyRu7uhBq6E+x8a1dA==
+ bh=Z7HWfbNpgjiL5bNEoAN3yMIfgYeQ5fLAdF/Xh6GXnyM=;
+ b=D/9X+cesc7ORgb1j/U6lDCuGxy/5vNkY1wwMHn/xrqetSBoIl60e26ljlzxVNNcRNsJ19aqPUH6ciXzubzsKpUqd5DMeFr9pz3AreqlvInJUCRUOs6ZFyUiQ3iyX3WU3EfqbHVA5ad53ohbbzsTSPJ8nqcuAzmlsiMMxI5iafOoPOKKw06VXjZ0beWiE/p/URGt5yCwqTFAFItPx13qt1aVK5zZ+jvy+ZRVUUVMRLrSKmPBBcKqbtwCtf3MkNMIgGDDPpbua+yCrFXrW2/vm4oI3PO0/vQQ0O4TyKz65XUmTX5krkI2B+qinEnbqk9CKKI4hu0vwLtFskwAs0xx84g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
  dkim=pass header.d=diasemi.com; arc=none
@@ -26,17 +26,17 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=dialogsemiconductor.onmicrosoft.com;
  s=selector1-dialogsemiconductor-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3VmOopAxUjPGQQjz/+73AeQmeyp8XLYAMKBurjcl/No=;
- b=LX4H1Amb/TiLF+2ZZbheMHB4b8CWMhFF0tQ6TXbXRm/kdHZYiUFY5cLvw0q72iQbz5bm1jskq8fGSQu5mBXAdlgGhpFWYCyohyW8KXVhPSsidbjqO9Cu2njnZTdilpT3ah1y/JxtjId52803Qvha7ZPAY+IUIuDsFI6bfaWFAuw=
+ bh=Z7HWfbNpgjiL5bNEoAN3yMIfgYeQ5fLAdF/Xh6GXnyM=;
+ b=q3gmLd+F9ABReRf5BQFcfou9AyO8OFUxp7YanInv+DAPELF615XAiE2sJylnMoxWjU124b9zF/ny3s+q2NLKvPNz0Atn7juyuOAaGBeN22O6YF/Rj7YnEhTieYVQMStBQGbWaC4J44oJVM+ekKB7HGW6zRtS9A6PESBJblBCy5A=
 Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
- by DB6PR1001MB1207.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:66::19) with
+ by DB8PR10MB2988.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:ee::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Mon, 6 Dec
- 2021 20:16:05 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.19; Mon, 6 Dec
+ 2021 20:16:51 +0000
 Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::852d:c54f:8414:3276]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::852d:c54f:8414:3276%4]) with mapi id 15.20.4755.021; Mon, 6 Dec 2021
- 20:16:05 +0000
+ 20:16:51 +0000
 From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
 To:     Andrej Picej <andrej.picej@norik.com>,
         Support Opensource <Support.Opensource@diasemi.com>,
@@ -54,14 +54,16 @@ CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "cniedermaier@dh-electronics.com" <cniedermaier@dh-electronics.com>
-Subject: RE: [PATCH v5 3/5] watchdog: da9062: reset board on watchdog timeout
-Thread-Topic: [PATCH v5 3/5] watchdog: da9062: reset board on watchdog timeout
-Thread-Index: AQHX6m0skg4aZzl2AEWanpI9yMCcYqwl503Q
-Date:   Mon, 6 Dec 2021 20:16:05 +0000
-Message-ID: <DB9PR10MB4652F0C952D173B857308F96806D9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+Subject: RE: [PATCH v5 4/5] dt-bindings: watchdog: da9062: add watchdog
+ timeout mode
+Thread-Topic: [PATCH v5 4/5] dt-bindings: watchdog: da9062: add watchdog
+ timeout mode
+Thread-Index: AQHX6m0sJNh5NEXMwES0MGj1zYa//awl51tA
+Date:   Mon, 6 Dec 2021 20:16:51 +0000
+Message-ID: <DB9PR10MB4652E77469D4E34933E85009806D9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
 References: <20211206064732.280375-1-andrej.picej@norik.com>
- <20211206064732.280375-3-andrej.picej@norik.com>
-In-Reply-To: <20211206064732.280375-3-andrej.picej@norik.com>
+ <20211206064732.280375-4-andrej.picej@norik.com>
+In-Reply-To: <20211206064732.280375-4-andrej.picej@norik.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -70,77 +72,73 @@ authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=diasemi.com;
 x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 155528b7-fd48-46e8-7d10-08d9b8f53b69
-x-ms-traffictypediagnostic: DB6PR1001MB1207:EE_
+x-ms-office365-filtering-correlation-id: 074ad6f7-39de-4d33-d5de-08d9b8f556bc
+x-ms-traffictypediagnostic: DB8PR10MB2988:EE_
 x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-microsoft-antispam-prvs: <DB6PR1001MB1207FA5061532DAD34BFAEE1A76D9@DB6PR1001MB1207.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-microsoft-antispam-prvs: <DB8PR10MB2988CD756BBFE4820695ED45A76D9@DB8PR10MB2988.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:2657;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lyRRCQOzYwDYZAM+R8z1y8h+p7Yvt30h/In+LdHYgbyENKVIO2sOgLysTDTtgR65539RVYXGXX0jKmW6o5jm48+UPRoqaNutTI/HkIwfjqGF9bRPGPYfn3l3mhw/+tW9NzqMGtm7/3HffFOGcel8CuL9leuKMPPG/qlrVLZDFWbq34wAmPvq+rvosw6L2xd6FlTEwbPNWoi2LE3Odpxw/nCdMc61oslE2mfXwJ7CYS8v3P2zfZD57QyyIegGW7fLg592e9BroeBhvVnxN1LFD7lkAoCs3JcyplAu36/njeSNDLNiJNyA/xfRO0JkQEoVFbRL3WcBEfgpKec6Gmjw9+V8RIXn2Dmfk50Gwpnbg+n5a4K9RD/77DWBh6uOld1MlggsVwIO8O1m7axDEMQOf+nG1SC8dhaXfBpCoiOnyXShSoJfRCCn40rgFRtklhZTDV/FoVK3Sar9OIeaOB8kb2SyUeCH45nIma3deMKRixMY4X9m6pMPXeh9jl4iInvYuvPhiIVKXBuZdb2u/4meacVETZDfqn2OWD3AONf4acY+pwTIcW/0E9YIJQcr5VKuHAb1mHBjdTRfTQPusSy7ZlBDY1xHaDI7RbA6p8MnYWyqZ/9oe6hSDNC9btQCesUefBAJz7nxBKfI9ItJlBUz4TfQzWLpp05cAjWkoXyiecUA3OjWPYNVxSfDij7UHKOWlbacrWm0Qe9fwW1sV7t2xg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(86362001)(122000001)(38070700005)(8936002)(64756008)(26005)(7416002)(76116006)(66946007)(8676002)(66476007)(66446008)(508600001)(38100700002)(5660300002)(66556008)(71200400001)(4744005)(52536014)(316002)(7696005)(6506007)(110136005)(54906003)(53546011)(4326008)(55016003)(33656002)(2906002)(55236004)(9686003);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: cJCWKcLjrU1aCWBt5Lq3/XL4IjRLxGYuksKytLIdiFVaU0O/5ZFslqKMVOwDqddxqL5Px4+q5mKbfqXEY0k2xKABJuE0nK9EZ07PfgwMBHzbK6z/yz23cT1t+ILXT3JS15e0jO+T6ZVwzmaTULUGaxE1xAPhkzLfbHnE/+Ij1v8YwG1AEzIOJZN15SFrM/a7TIoWxqwIa2/Yzicf0kzoGEZUXi2/ld7lCfUv+du0ozsGFxxorYaYZgViLNQWXqVomcFmpAN36Xqdx6OqBxHVY0tjTuMg0ugbBOjzmp8pF34KlwmLgN694XAa2Ucyp/J+g1BbxVE634aiK0o3WLWSstMtESCR1TiFJziB8sCON/KhcDS9lV1DTZ191z/KBNPljF9H49yNHRqp8bkzaGdW8krxw/KB03CAW/sCIshymNKUks1DOlEZsNjUDZhWRxRQBDCs2ZBIv4Nk4ZyoaS3H4zRVMpl+BG1o3rMS6PXylVk6okoCBZuYD3gS7yOT1u6/0IV2lMOTB9kGetFwUREq7MSomfEAUdJmKHAJOgjnWgum2xF6ati1nV89GYw4YjLEnkQ6S2wyyNoVOIAvFnhwQ5RVN/B9CCqhsMsL+/5TTLTWF4QYC02eRKolWwwbXxHiajGSTy3z+ZBmLisi6g1aW8J7kRzTPzmTxKE+jpvm83nusGkUNmpFuuCr96YWwT/lphcTWEO7HY8ol3yBL13amw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(5660300002)(508600001)(66446008)(8676002)(53546011)(6506007)(316002)(8936002)(76116006)(38100700002)(186003)(122000001)(66556008)(55236004)(64756008)(110136005)(4744005)(66476007)(26005)(54906003)(2906002)(55016003)(71200400001)(86362001)(7696005)(38070700005)(66946007)(9686003)(4326008)(33656002)(7416002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RFONt3l8OJbvtN1XKd+6CCwPNdTpZUMISuH6Upypbrxf0aR6o/ZzhYiJuC7f?=
- =?us-ascii?Q?epd5KpZFNsiPuRKw799WGrsrIoqRuog/vn6k7/HKYzmEPuswIBhUHvvWCCnR?=
- =?us-ascii?Q?WPXgG42Q3bIQq1Da5jhr+TPNE2BLyz4BEs5yi+R0qSUFyYssBnh961G2N8RB?=
- =?us-ascii?Q?YwKkHZCC49xyqKmhwDd5DsNoTEodsgDK+94kffolF+5Ttx+3VUeoZP7bwZnh?=
- =?us-ascii?Q?L+MzsSoA6UnygNhS3pwEixqfWDmgx/lbiaMOoSTBwRVrkDwdI3z7io6H9j6Q?=
- =?us-ascii?Q?57S1H2ZwLCVnAdI8+eItCrQqHEbsFZTF2yv4rYyWZJ9sjZ3dhjNQrj4X03AA?=
- =?us-ascii?Q?fjNLCK7G21FtJxqTZOR1tNaacnoFVJRfDf+LsHUHujLvsIhJNw854p5NfEnX?=
- =?us-ascii?Q?e/mcKbHl1QWYn+HkziNZLmlUhj9RwDExg12u9ENPOOWxkIAO30Cxi3P7XQ8v?=
- =?us-ascii?Q?0DeJNhzl8ABvq6cxji9K0eKlKKFO8eMfKWoHXYhNAwyeR2Vs3VrOIcAQ2j61?=
- =?us-ascii?Q?UGex1nvzeLAZwedgo3LY3resMVOBKEjwdEEE9p6JXqu19dl6x9KmrOypGc6d?=
- =?us-ascii?Q?lJkBZqD/MJtVeswe876pXwuSoPxSoJxfJePUYBleDEuoqLz9Tir7EVM2m6O3?=
- =?us-ascii?Q?L8H0/6tFd8EjHjfSvOVbJk2OmiP2fCzcyw0ox3EVzUZF/V4ZnbC+S3gFn7v1?=
- =?us-ascii?Q?Bq8pFxx5IX6SujpFyeyn7xtB7QsqgM8+ys6sucPYOrDizQCxcOJ9U9n3uxdP?=
- =?us-ascii?Q?qfU1tjgcDHcCfBFpO2ULTPnwjBxlbcYsctB9oIX0Mz8aL69A9LVWLAVzCJMH?=
- =?us-ascii?Q?RZDbWBgcd8efYDu4CZUVzhYSSfZBit0cN2A094KEb8MXpTyNhQ0tvcDxU9Pz?=
- =?us-ascii?Q?DWfEUQwhINDtVpJ6towjAKlo+eIoGz7OXOUtHYkS2IfH6HBmEs4WOnTsKBN4?=
- =?us-ascii?Q?yxso+JrlnegC6FyXTfb9fr6X/5V5/gj6Tv7ud6pMtQxeh1U+0vMtN6UvBwKQ?=
- =?us-ascii?Q?u64Cg58uGMF+wOfwd9iHJOKHHK/R4Cara3JFB69OS0G/py+m8Xu61RXgPZm5?=
- =?us-ascii?Q?o/s6CpnM4GBfQmAt5YlzMkusYBI3Vtr8WMXRH6qwGrAcT3ICQYOJRmJ2qHCE?=
- =?us-ascii?Q?Prk5pepmY/PFO4Jll+C8A2OwcOiKY25raXb3/vUcblOfPEbTkUpbrGspnz7M?=
- =?us-ascii?Q?pG5OZReuWCev3vaUIDKY8JIPW/5+uGFIkpzKwA0zBsG8d/ZLsx7iIhVPrvha?=
- =?us-ascii?Q?hzTUcYB1s2NxQMVEVU6abgModYwKy1vWRbl++woK72j0Z9n7axL2kKybjvZ+?=
- =?us-ascii?Q?Q0aiqVw++4rOzPc+bSWpUrIjhEHXU5kFWG/YAiDPmJX7x5qC2aIoSkrLl27D?=
- =?us-ascii?Q?sfmQ0zt+ra7yML7i3bTZtm0BxUwo6FpQCbu7b5YsG1Mlie0H9fr3O+9+u0zv?=
- =?us-ascii?Q?lIFw4rkdMSUxZxRaFbHrz95oa0mB2zoKkQn3yZA1ZKlC3RpM1z6C1h77arsg?=
- =?us-ascii?Q?wkglr5zOOQ3FOFAzN+g95QzFzDDzxC10BbyxQsBXQMMsSDXsRAguyAcKB+a2?=
- =?us-ascii?Q?OUsenEAcd/s2vTrofa+e9gmpDNC0c/aEerBlwK+ZV0DKZKAc4Bika3bDWN7g?=
- =?us-ascii?Q?IF7Tjoo2Zd7HdWTw3JAhk5oHVAz7ldRdENV/lcMT/inznUUr2o0MecsoZGhv?=
- =?us-ascii?Q?YAKBFA=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?MVY91VuTNxnAbA8cMLbX+cLATRudFN0nFmBiQG+rPXPwPY8iDe9oCw375UUs?=
+ =?us-ascii?Q?XyhwVBUPx2PKorq8XnB6sFjiBiyFBkfIyldQ4SeYcHNQfRtQR0En07BsDmvP?=
+ =?us-ascii?Q?8rEgAS3n1gg/svz8JASRjRczsKHHQEL9m+7zFSVRguqSspYuYfYKXff1a9zd?=
+ =?us-ascii?Q?uRvx9AK93dDhzhT3xdJYFuL9C/xhCLsgOBEznlnv0YRAQcdb/7ZtywKhgpQt?=
+ =?us-ascii?Q?+DzJmL9q9RcZTdocSVcXwomWAmQc8FImLnXp96p7EhA9wUd8/UxCLvKPdokU?=
+ =?us-ascii?Q?BWEkBbzVhV/kj6Iik3wDkYEe4KMIMpunsK6kWHNQ4uBiFPolDh69pUizvMP2?=
+ =?us-ascii?Q?douYogY4KYrw8zu0Cj196v4hQ3pRjL7APdDSP+sYVA8rxwDuOF49l+Btclx+?=
+ =?us-ascii?Q?gjZjrlri0jIycn/fGBXtE2jP+pbQTrmDTHHE+LjVmxTI4a57ZeNIikaocADp?=
+ =?us-ascii?Q?l5d9fy5qI97rpW4u/U05UXyec+h9h8Mfk04VRMGeT9MDHBz3X7e7DqWrsyyK?=
+ =?us-ascii?Q?79+l83nRomN74a78MtwVqdiotIBZiDOoIYQpOZA/UFsOWL5jeXMflh6ueay5?=
+ =?us-ascii?Q?alRYTWOqyly9c8K7xYa9yme942aQWBOHNCqwF9epxDAKgtTcYFsmmSB+cRef?=
+ =?us-ascii?Q?YEvQgVXQ/hhUBaA+5kP9hiw9mH7x/03ZzuhBrGizz8AigvzP/sAOqX6s874R?=
+ =?us-ascii?Q?FDDjDO+hvobQ9BIskHJM7pAPVHOYwOl0N/lDUHuu0lPjBtFFoPZ2KKOFlZfG?=
+ =?us-ascii?Q?lMSlgbYStQuAr1T42om5vA5UmDtVPE0CsIppdzaMNtAWStp+lc+VUcwOzZId?=
+ =?us-ascii?Q?X3oL4U13RBW6FXZpRs1snq01RXVD9L9z52Al4B2iX06Rf+b5Jm/48adDGO9b?=
+ =?us-ascii?Q?z9hyzPEyWedR5rnfOtQTS/PKYqCv9OY8cylgqJg7rBpXegVYPNwj7xpqSwjm?=
+ =?us-ascii?Q?ryOk5HG5xdn+o+r1z7lCNOvOSSpomosMgoujpDD6B3P+K7iYngd50tKf+0AU?=
+ =?us-ascii?Q?Dymog0zQlqmEekqanU3p2m67eRwFQWdhCpfmohbyXtDzoi8Eq3JPMVOgJ+P5?=
+ =?us-ascii?Q?QRuIBEL3A6npkBECY+qDo1lDL6Z1d5/V0KbBSxA3reDSESnKGFbb1V0EOvP3?=
+ =?us-ascii?Q?BN/m9QrKkiBGCd9/MNB17h8VAHMoniS+U3j1Vx+syyh4zfh4QbbIHpQbKNjs?=
+ =?us-ascii?Q?PElJ0bh6t8yBC4tTRcGH/2yNFMrg3GN4JMAyp2SgFybxpCRacOpKZ/1JBxRQ?=
+ =?us-ascii?Q?dD8KpyoxpISlO8spB8YGAjBI4wHyJ0XsKHCJvDXGUB0cwIXvNe0EQkPLafjy?=
+ =?us-ascii?Q?p7tNLPH43e4FOFl5sudnlL+RKbsYywXLFWg8Cocmj3r/QnwkfC0thltLbcQV?=
+ =?us-ascii?Q?HwScfNJbg3H1Ev28ZZOsZMQdySLv6t8zZ4EoqvHLCtUU20+Xpf+drdFgAuHy?=
+ =?us-ascii?Q?NvThH+HaKq2+5mvNB6sz33r7L8vakDIPMG5ItIHqTU3Ucx265RYchlGNUinG?=
+ =?us-ascii?Q?Ls11C65X5jDinomHWVc94XOfNDKkQmZJE7927SUsPlWCKWIcZqKENfH65Q7G?=
+ =?us-ascii?Q?22tUYQcc/uNI8AqK+Ilc4+JWgUzMuRKRIhdxocx9SmAMZ5UnhH3cQguOoz3n?=
+ =?us-ascii?Q?yXlqim7D8j0OohyJgUBjU7BxmL75nswAEiSSsx8I3gSvpAoMgl0q/w/5jD6+?=
+ =?us-ascii?Q?srx5Pw=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: diasemi.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 155528b7-fd48-46e8-7d10-08d9b8f53b69
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2021 20:16:05.1907
+X-MS-Exchange-CrossTenant-Network-Message-Id: 074ad6f7-39de-4d33-d5de-08d9b8f556bc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2021 20:16:51.0593
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RITBtr6oxEWxmzvpfAXMykzs5o4qNfAJ0NwnEQJRNPCcnG75nscNOO6J/1ID7nilOaxacxby9PUAnkkhJorx4/4Uu1xchUGeDrJZ5DI1UL0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR1001MB1207
+X-MS-Exchange-CrossTenant-userprincipalname: O887iiMr0x/t+wP/THquHX+IhG9+NrCuN0tcSrXaivJB67TUkXf/iQGFZ8q3avr3k0kRYqW4gU+JgAYEleJ0cxD/kf9IDbrt7UWd7d9w+N0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB2988
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 06 December 2021 06:48, Andrej Picej wrote:
 
-> Implement a method to change watchdog timeout configuration based on DT
-> binding ("dlg,wdt-sd"). There is a possibility to change the behaviour
-> of watchdog reset. Setting WATCHDOG_SD bit enables SHUTDOWN mode, and
-> clearing it enables POWERDOWN mode on watchdog timeout.
+> Document the watchdog timeout mode property. If this property is used
+> the user can select what happens on watchdog timeout. Set this property
+> to 1 to enable SHUTDOWN (the device resets), set it to 0 and the device
+> will go to POWERDOWN on watchdog timeout.
 >=20
-> If no DT binding is specified the WATCHDOG_SD bit stays in default
-> configuration, not breaking behaviour of devices which might depend on
-> default fuse configuration.
->=20
-> Note: This patch requires that the config register CONFIG_I is
-> configured as writable in the da9061/2 multi function device.
+> If this property is not set, don't touch the WATCHDOG_SD bit and leave
+> the configuration to OTP. This way backward compatibility is not broken.
 >=20
 > Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 > ---
