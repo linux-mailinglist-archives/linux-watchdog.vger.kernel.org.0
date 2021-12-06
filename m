@@ -2,83 +2,93 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7517B4690F1
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Dec 2021 08:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 911AE4690F5
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Dec 2021 08:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238573AbhLFHwS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Dec 2021 02:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
+        id S233967AbhLFHyV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Dec 2021 02:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237150AbhLFHwR (ORCPT
+        with ESMTP id S229561AbhLFHyV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:52:17 -0500
-Received: from mx3.securetransport.de (mx3.securetransport.de [IPv6:2a01:4f8:c0c:92be::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F041C0613F8;
-        Sun,  5 Dec 2021 23:48:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1638776880;
-        bh=9LjNAMfbHqPPYqfOd0H/bcQt7NiEEMGw6nLCEydrLY8=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=LBqpNm924/sExE8twPWKn1jD74Eg9zFlUHLKoKaMV1vIUKBy1rV5+s1kwoDWLWQQA
-         IO6MGdGuApYNwsHMZDaA5FX6DLq6TDxBZaWHEwp2/3ksGXCGnZj5i5GHsT+tbfmwnj
-         P8qdpnDr51SQypF7wATZGDAbOn+9xJsxrj1TI5vrMxpoCXLCTGaL+DrzptMB+6K3hz
-         vCMj7s5SZmElU4KCRBZDRMN7JrGI2AtYRyzHaleZDCFHXREIYU450OhCCMFT9ZU6zJ
-         Tv4r/OndW4cwR5pKApCQy48NYfSRKXAB9lPbzWt/fykludKxTGS3+f9M199Dmedfbz
-         aDdK/a2UtEHiw==
-X-secureTransport-forwarded: yes
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     Andrej Picej <andrej.picej@norik.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-CC:     Support Opensource <support.opensource@diasemi.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: RE: [RFC PATCH] watchdog: da9062: Correct the timeout values
-Thread-Topic: [RFC PATCH] watchdog: da9062: Correct the timeout values
-Thread-Index: AQHX6GQONgXT05Iq6ke/N4Kseos6o6wg6rAAgAATvjCABAXqAIAAE0gQ
-Date:   Mon, 6 Dec 2021 07:47:51 +0000
-Message-ID: <46136729bb564aa6b9f332fa584b2575@dh-electronics.com>
-References: <20211203163539.91870-1-cniedermaier@dh-electronics.com>
- <dc6a432c-79a3-881c-eac4-32620040d11b@roeck-us.net>
- <4bfb6ab512cd45ee81c55361525987b7@dh-electronics.com>
- <a0b6a801-f911-3371-1067-479b66240bdc@norik.com>
-In-Reply-To: <a0b6a801-f911-3371-1067-479b66240bdc@norik.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 6 Dec 2021 02:54:21 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CA2C0613F8;
+        Sun,  5 Dec 2021 23:50:52 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id b40so23149351lfv.10;
+        Sun, 05 Dec 2021 23:50:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=fCwe1VRxK/j7XJ5dJctRw9LHxIMyo7XPy4yY62+18HM=;
+        b=M59fRZr90st8qyqqdtOhcn+AdgfXwiHNaC8fHzWC4JfnZLhpSNLlV22S7uXKBT5KAZ
+         jwZjtFdLxN6hfqMuwHhI3rNHCxldQOTom5Sry2IcNeYTaMRcy8yBMZMHXMn6e9ZcxQiA
+         R2+2OfPFLWHpL8PD69uNI0scxgi9aaf8xqUTPwk4LASAv+uz5C2dnCN97h+Yto1eiQtl
+         C3g7PLSRYFm56O97j+AgbvynUubf6sxF89Zn8LO+JmNOHS3VH2T35qeXmy7KV5tFSEza
+         PQVq9Vl/Akga0jr9BL2t+EjF+jwA2gyDQyohy2KJXZwfjdazJgbIjhiQcwR6e0r0/Lcf
+         SRCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fCwe1VRxK/j7XJ5dJctRw9LHxIMyo7XPy4yY62+18HM=;
+        b=evFjN8ZV+sIorkpMcu1lNhpmBYB292iom3E67TCtyWMzzoFKRLrC0lVKtE2Ms87r2N
+         5TF+VV31HB3S0pR3FuNUmUb/fYZ4nbfD29Gm7Reu+zQPr8opf0pJeWyLlkpfxKTnYbVA
+         tug6dPyG/eJo5rEx1qDGEqmJEIJwcSFe5uJedUnKLl0rPbU+fNbTKL8KkFi2mbH+3xEn
+         vyRD1LrAsUVlbaromw+iZNfK0AY2BjKYNiWBcuVQijLpFH1scwDll9miFcSTy74fuAn3
+         xQ5Zp49akvHqAKc/D11Ok5wZbsn45RP8Q5GeiEZQgN+CVOlJxExOHgLok/BC6t3B+8eo
+         FSog==
+X-Gm-Message-State: AOAM5312ZmKzEsj6peKo0KpplkIOPf6rmXsXmvOKYff1nJiWfHBc9zmL
+        JZhPlKlvAXBmvuJYTq292EH8JjIL2jE=
+X-Google-Smtp-Source: ABdhPJy30DijDfK6V0+GXiVjwsnOqx1pZ7NzOnBqwGVGlHmU8bXtBXfqbz4fZYgBdvHIWP2Q8ip6Ww==
+X-Received: by 2002:ac2:4c52:: with SMTP id o18mr34063032lfk.372.1638777051090;
+        Sun, 05 Dec 2021 23:50:51 -0800 (PST)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id b6sm1194949ljr.103.2021.12.05.23.50.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Dec 2021 23:50:50 -0800 (PST)
+Message-ID: <78eba629-b0cf-e1db-df73-2b33fb0b4929@gmail.com>
+Date:   Mon, 6 Dec 2021 08:50:48 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:95.0) Gecko/20100101
+ Thunderbird/95.0
+Subject: Re: [PATCH V4 RESEND 1/2] dt-bindings: watchdog: convert Broadcom's
+ WDT to the json-schema
+To:     Lee Jones <lee.jones@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>
+References: <20211115055354.6089-1-zajec5@gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20211115055354.6089-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-RnJvbTogQW5kcmVqIFBpY2VqDQpTZW50OiBNb25kYXksIERlY2VtYmVyIDYsIDIwMjEgODoyOSBB
-TQ0KPj4+PiBJIG1lYXN1cmVkIHRoZSB0aW1lb3V0IHZhbHVlcyBvZiBteSBEQTkwNjEgY2hpcC4g
-QWNjb3JkaW5nIHRvIHRoZQ0KPj4+PiBpbmZvcm1hdGlvbiBpbiB0aGUgZGF0YSBzaGVldCB0aGUg
-Zm9ybXVsYSBzaG91bGQgYmU6DQo+Pj4+DQo+Pj4+IHRpbWVvdXQgPSAyLjA0OCAqIDJeKHJlZ3Zh
-bCAtIDEpDQo+Pj4+DQo+Pj4+IEJ1dCBteSBtZWFzdXJlZCB2YWx1ZXMgZGlmZmVyIGZyb20gdGhh
-dC4NCj4+Pj4gQWNjb3JpbmcgdG8gbXkgbWVhc3VyZWQgdmFsdWVzIHRoZSBmb3JtdWxhIG11c3Qg
-YmU6DQo+Pj4+DQo+Pj4+IHRpbWVvdXQgPSAzLjIgKiAyXihyZWd2YWwgLSAxKQ0KPj4+Pg0KPj4+
-PiBJcyB0aGVyZSBzb21ldGhpbmcgd3Jvbmcgd2l0aCBteSBjaGlwLCBvciBoYXMgYW55b25lIGVs
-c2Ugbm90aWNlZCB0aGlzIGFzIHdlbGw/DQo+Pj4NCj4+PiBUaGUgZHJpdmVyIGFzc3VtZXMgYSBz
-dGF0aWMgYW5kIHdlbGwgZGVmaW5lZCBjbG9jayByYXRlLiBNYXliZSB0aGF0IHJhdGUNCj4+PiBp
-cyBkaWZmZXJlbnQgaW4geW91ciBzeXN0ZW0gKGlmIHRoYXQgaXMgcG9zc2libGUpID8NCj4+Pg0K
-Pj4+IEd1ZW50ZXINCj4+DQo+PiBAQW5kcmVqDQo+PiBEbyB0aGUgdmFsdWVzIGluIHRoZSBkcml2
-ZXIgbWF0Y2ggd2hhdCB5b3VyIGNoaXAgZG9lcz8NCj4+DQo+IA0KPiBKdXN0IGRpZCBhIHF1aWNr
-IHRlc3QuIFRoZSB2YWx1ZXMgaW4gdGhlIGRyaXZlciBtYXRjaCB3aGF0IHRoZSBjaGlwDQo+IGRv
-ZXMuIEkgY2hlY2tlZCBtdWx0aXBsZSB0aW1lb3V0cyAxNiwgMzIsIDY1IGFuZCAxMzEgc2Vjb25k
-cy4gVGhlDQo+IHRpbWVvdXQgdHJpZ2dlcnMgcXVpdGUgYWNjdXJhdGVseS4NCj4gDQo+PiBJIGhh
-dmUgbm90IGNoYW5nZWQgYW55dGhpbmcuIEFmdGVyIHBvd2VyIG9uLCB0aGUgY2hpcCBiZWhhdmVz
-IGxpa2UgdGhpcy4NCj4+IFNvIEkgZ3Vlc3MgaXQgZWl0aGVyIGNvbWUgZnJvbSBhbiBPVFAgdmFs
-dWUgb3IgdGhlIHdpcmluZyBvdXRzaWRlIHRoZSBjaGlwLg0KPj4gRG9lcyBhbnlvbmUga25vdyB3
-aGF0IG5lZWRzIHRvIGJlIGNoZWNrZWQ/DQo+IA0KPiBDYW4ndCBoZWxwIHlvdSBoZXJlLCBzb3Jy
-eS4NCj4gDQoNClRoYW5rcyBhbnl3YXksIHNvIG5vdyBJIGtub3cgaXQgbXVzdCBiZQ0KcHJvYmxl
-bSB3aXRoIG15IERBOTA2MSBjaGlwLg0KDQpAQWRhbQ0KV2hlcmUgY2FuIGl0IGNvbWUgZnJvbT8N
-CkNhbiB5b3UgZ2l2ZSB3ZSBhIGhpbnQgd2hhdCB0byBjaGVjaz8NCg0KDQpUaGFua3MgYW5kIGJl
-c3QgcmVnYXJkcw0KQ2hyaXN0b3BoDQo=
+Wim, Lee,
+
+On 15.11.2021 06:53, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> This helps validating DTS files.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+
+I'm not familiar with handling multi-subsystem patchsets (here: watchdog
+& MFD).
+
+Please kindly let me know: how to proceed with this patchset now to get
+it queued for Linus?
