@@ -2,115 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FCF46A5F3
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Dec 2021 20:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE5546A5FF
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Dec 2021 20:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348688AbhLFTvE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Dec 2021 14:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        id S1348723AbhLFTyr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Dec 2021 14:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348091AbhLFTvE (ORCPT
+        with ESMTP id S1348327AbhLFTyr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:51:04 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C00C061354;
-        Mon,  6 Dec 2021 11:47:35 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so14985731oto.13;
-        Mon, 06 Dec 2021 11:47:35 -0800 (PST)
+        Mon, 6 Dec 2021 14:54:47 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A592C061746;
+        Mon,  6 Dec 2021 11:51:18 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id r26so23483985oiw.5;
+        Mon, 06 Dec 2021 11:51:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ATT3EvusHd12VybkS1nkDnM9ybrEK3U/h9mE/9ewvkI=;
-        b=eFsH5GDdHgWbMo8e43I0HKnDfJwbKNqPKFAl6EHYcC3BnFUEMWqXXqHRITvY8Jql7F
-         /7TmJrnGraK9LlFUqEoc2ru8sD4B1it1B1tdOoCIv5jIpJKX+HK/aHbl9UwkhOX7S62N
-         Cgzxr31nvwaEi5ZYp7+Nho4qNjsqwXYQr4HeWlKbm//ILBsN6KRsIjJbKkK/G1mV8y0J
-         2aivFOPRsNFlNFYJK+mOqJJIkaZXNE9qHxfTAmKQqtk7dVh6BE26TOHmQE7M7w/n6HWu
-         9vxEn3Ta5kTR8pamTWz4YKopWlPzLWdCqc4pNLxE4licC/jiXZ4DBrWJurEIkpH4zJKo
-         qzJQ==
+        bh=GpOk1yAja8xkekw3cS+BtU6PU09LvqDcAjEYwaYoBnw=;
+        b=XnZUU8pXFkpzsY2cKvTpZQ69FMCok6b0I/YHcBAmBFPr/uJcN3IqeWZ8ClWJCCZX98
+         AQacqh2g/uMdA+6TgivYUykhs1bYsnTY7Q42302gmODZaMv44tDLvzpUB/lRtYaWXYr5
+         WxOEWnDzy0M4CQdwCf1Pvf4J71l0iIDoNkzli+ZSNu7Oog47Dgd4GV9/W7xC4My7Wbu5
+         jRbKFJH3SMeJ/SKwo2CP1FlVlfFYdkIRrqL0Xl4t3IF5Lk81EV/z9DDBLthBgUekG0Ah
+         LypeWYIwYAqCkLalqtoemaHI0bV3Y3hzip8XNcg8kvlrj+Y+bFi3ZsX3unPFMeNGCzEA
+         cfeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=ATT3EvusHd12VybkS1nkDnM9ybrEK3U/h9mE/9ewvkI=;
-        b=CmjT1eEn2Zr3PzxFTw+1xmYzVyPsZi7tEDRFpul5C+LJ0LHIYP4eBfOBdWpxmN3unr
-         l3fqfJ9mFGJbtSrK7JH6b5JbU/ZYw39yhd21Mq9Hb1l5xYVV4wZ0LWHfcIU/MIhVXhFz
-         rbTK5c3Hyw4u0i2+QqGCEh224fzHIK0vfenexvdqm7cd5kAm2NfBkDOxDwboE6L2W1uC
-         TbR0adWnsBto3iKN+gHJaMhapDOSNGQ5KCVhR+aKPXqKPi6cMHIfJatbH77oC+6ZWEG7
-         JE7gdYZ1XDTQHWKyzmDWBJraonW/DDDP6Exbp7Lbmwi7R6BD5K1JY/+bcs2yupfaAvCZ
-         K5lw==
-X-Gm-Message-State: AOAM532w4SNiD7U9/Eorip6ogIrpZKM7qioZaI6BE6Z3G9z1dW/R/Xrw
-        0B3pqC+AMj7cNFnZJJCSrNI=
-X-Google-Smtp-Source: ABdhPJx8oGfX6tBchUQmz9HgJwSbEJVF4WzThI5g+QHF2fI0G/8izJTboMOZ1sqSDEaYd4gBqyb4Sw==
-X-Received: by 2002:a9d:7993:: with SMTP id h19mr31994094otm.245.1638820054587;
-        Mon, 06 Dec 2021 11:47:34 -0800 (PST)
+        bh=GpOk1yAja8xkekw3cS+BtU6PU09LvqDcAjEYwaYoBnw=;
+        b=4HY2AK/wab++yca/+QHrt1qLUjVoHo+gIPKOxxB1JhC+Hqdy2m4OdyJiXTDyQ+QFwj
+         CIgCPNo/XPrgRUwaTfYSPH6WDay5HLb5hCKf+veN2movP1rDZL74u061Tlp5SytLOPg2
+         Bb5S42Pp+I07eOkYj1u8cBIrLhTzwiBaCHXXhcTBP8HXVYyXoAlXeB8qNWUAGvxYVTD/
+         NyfwITAIiSg+TEiKH294jbi9DAxWsj02o+ZZStYkYXDJhqCvNTn5t4LIScJ04K3zfvgh
+         NphgkEW/1WxwWCIovqJattgfk23NcWwvDhnFk9c5HDeKip97ocbepVYYZX1gjQqDbYRB
+         g3Tg==
+X-Gm-Message-State: AOAM532R7gG4g3jIfk2AFuqHMeNJ0UBUr9sjQCXOAjDBY+5LpAIzl76v
+        FVBp8C/CfzrYvd3H78hAsFSXDNTGDjo=
+X-Google-Smtp-Source: ABdhPJx06t1hDmzxQYZjanZCyYyWBQ3XwQNfDp+aETxk4+ULDI0JvLkNuMzmax3chtKUvWGwk/vPjg==
+X-Received: by 2002:a05:6808:1686:: with SMTP id bb6mr748230oib.40.1638820277471;
+        Mon, 06 Dec 2021 11:51:17 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m2sm2361341oop.12.2021.12.06.11.47.33
+        by smtp.gmail.com with ESMTPSA id e14sm2433650oow.3.2021.12.06.11.51.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 11:47:34 -0800 (PST)
+        Mon, 06 Dec 2021 11:51:16 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 6 Dec 2021 11:47:32 -0800
+Date:   Mon, 6 Dec 2021 11:51:15 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
         linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: atmel: Add missing 'interrupts'
- property
-Message-ID: <20211206194732.GB3759192@roeck-us.net>
-References: <20211206174045.2294873-1-robh@kernel.org>
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V4 RESEND 1/2] dt-bindings: watchdog: convert Broadcom's
+ WDT to the json-schema
+Message-ID: <20211206195115.GC3759192@roeck-us.net>
+References: <78eba629-b0cf-e1db-df73-2b33fb0b4929@gmail.com>
+ <Ya3NaVKf1NRc8rrx@google.com>
+ <89b9512d-2e5e-c23a-d1f2-62172c8f68f7@gmail.com>
+ <Ya3SU6U6YT6mlFu8@google.com>
+ <f5745952-9e3c-ed7a-cced-ce42d3da2276@gmail.com>
+ <Ya5ctkIU+jNzDfBc@google.com>
+ <f4af4971-7047-80c9-69ae-e6587979ecd5@roeck-us.net>
+ <e1fa1683-a0a6-8ee0-9da5-8e97dd9c820a@gmail.com>
+ <432664af-5660-aaad-bf75-81e4d61cb078@roeck-us.net>
+ <46a88b40-6d92-727c-7adc-5723921d08e3@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211206174045.2294873-1-robh@kernel.org>
+In-Reply-To: <46a88b40-6d92-727c-7adc-5723921d08e3@gmail.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:40:45AM -0600, Rob Herring wrote:
-> With 'unevaluatedProperties' support implemented, the atmel,sama5d4-wdt
-> example has the following warning:
+On Mon, Dec 06, 2021 at 11:43:31AM -0800, Florian Fainelli wrote:
+[ ... ]
+> > 
+> > Your series includes the patch discussed here, and it is the first patch
+> > of your series. The second patch in your series depends on it. Are you
+> > telling me that I should drop those two patches from your series ?
 > 
-> /home/rob/proj/git/linux-dt/.build-arm64/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.example.dt.yaml: watchdog@fc068640: Unevaluated properties are not allowed ('interrupts' was unexpected)
+> No, quite the contrary, I want you to keep the entire 7 patches that
+> converted the bcm7038-wdt binding to YAML and get rid of the bcm63xx-wdt
+> changes, the branch that you have right now is good in that regard.
 > 
-> Document the missing 'interrupts' property.
-> 
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-> Cc: Eugen Hristev <eugen.hristev@microchip.com>
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> I don't see why you should be creating an immutable branch for Lee and
+> not simply merge Rafal's "[PATCH V4 RESEND 2/2] dt-bindings: mfd: add
+> Broadcom's Timer-Watchdog block" patch with Lee's ack directly. This is
+> a new file, so I don't see how it would create conflicts as long as we
+> don't pile up changes on top.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+It sounded to me like Lee wanted an immutable branch for that, which I
+can't do for watchdog. That means the options are to either drop the dt
+changes, or to drop everything until after the dt issues are sorted out.
 
-> ---
->  .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml        | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
-> index 9856cd76c28d..a9635c03761c 100644
-> --- a/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
-> @@ -22,6 +22,9 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  interrupts:
-> +    maxItems: 1
-> +
->    atmel,watchdog-type:
->      $ref: /schemas/types.yaml#/definitions/string
->      description: should be hardware or software.
-> -- 
-> 2.32.0
-> 
+Guenter
