@@ -2,149 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC26546B1EE
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Dec 2021 05:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA2746B5A4
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Dec 2021 09:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbhLGEjV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Dec 2021 23:39:21 -0500
-Received: from marcansoft.com ([212.63.210.85]:48140 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236121AbhLGEjT (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Dec 2021 23:39:19 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 2442942181;
-        Tue,  7 Dec 2021 04:35:44 +0000 (UTC)
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: Add Apple Watchdog
-To:     Guenter Roeck <linux@roeck-us.net>, Sven Peter <sven@svenpeter.dev>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Janne Grunau <j@jannau.net>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Rob Herring <robh@kernel.org>
-References: <20211130161809.64591-1-sven@svenpeter.dev>
- <20211202144301.GA829000@roeck-us.net>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <bd9a52eb-2aca-38a9-e183-2857960a4842@marcan.st>
-Date:   Tue, 7 Dec 2021 13:35:43 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S232388AbhLGI0r (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Dec 2021 03:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232326AbhLGI0q (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 7 Dec 2021 03:26:46 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D614EC061746;
+        Tue,  7 Dec 2021 00:23:15 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so1603787wme.4;
+        Tue, 07 Dec 2021 00:23:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Q7CdkXM5ySsAfZfCm0NSIMCVpyUhKcfZPcd8ceqOy70=;
+        b=hJa1avq7XULBYyh0e3gCW424NuCPlrQ44yC4htKI59AZnRgVjW/1LZZzN65U8joura
+         3Iuz+FJjjk4rL64040Aa4B7TKCu6S2x2eRILCBOWgedcNXmcby5PxN2xmihJ91xJteZ7
+         ZUCVGjaJUZzOvRHajeIPsRdDYdZpfAA+4qs/PKzCePbmVYNXiB10vYKkxz0tE78M4vFv
+         06aL8+zg3heC4UqF6+YrxHIeizGPqLcQUN/dgND1j6pKLhe8PTs5TQjYtyTT4tS8gVMx
+         ywz+bLy0rsCpNGHDC7WPio4FC2C4tK1dnpGmpJOrSBL/RYvFjttVWDgFIECKuATyTOb/
+         9hPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Q7CdkXM5ySsAfZfCm0NSIMCVpyUhKcfZPcd8ceqOy70=;
+        b=K3h46kGwCYDpelYmJ9Z3omyRuBSQ0Eb0rw8nykLmhz4QZwgEIt8eqJWiK6T/I0q0/A
+         ZdRwijRKvXV4+t0ATB82kNxBmeZM/JX8mvl7QOuMcF6/z6RLlInW4Bhc7cGv4VaYw9/3
+         9j3jK9Z2v0Mwc/2ofnR/xy9uZEPyR9KUHDQLT1qyTkFuN8DJG1wUtKNuYhiIJIdiWoNX
+         X1LQn7Vln8TYZBochBKgiElAR7trXC7+o2ERvVjsNk1ewTjxnt7gfqXFrvKoWjcwmGOs
+         ggB1A89N2MAScx5zSsDZPTekQndl0xXPKyjSY0txXNHENOhjP3zChR2uLJLGVQIDU493
+         chXA==
+X-Gm-Message-State: AOAM532/mkKcnXPC+VusgPzx1vFxB8u8YtgAwPPEnz/KPZEdW5Q/wFSw
+        p1s+Rvaa2XjI9ycZ01RPKzI=
+X-Google-Smtp-Source: ABdhPJwWwKOV0/Ek/XuvkDLpi1WCs0EGXw2vL+5HWfDlDGWFdNe7ZH71V4oDoYUPaxD1kzkhqjZkuQ==
+X-Received: by 2002:a05:600c:4f8a:: with SMTP id n10mr4992466wmq.54.1638865394495;
+        Tue, 07 Dec 2021 00:23:14 -0800 (PST)
+Received: from orome.fritz.box ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id l4sm13346813wrv.94.2021.12.07.00.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 00:23:13 -0800 (PST)
+Date:   Tue, 7 Dec 2021 09:23:10 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Tero Kristo <t-kristo@ti.com>, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: watchdog: ti,rti-wdt: Fix
+ assigned-clock-parents
+Message-ID: <Ya8Z7gReKtZA+BGw@orome.fritz.box>
+References: <20211206174028.2294330-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20211202144301.GA829000@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="f2LNv0Yes4TwKbbz"
+Content-Disposition: inline
+In-Reply-To: <20211206174028.2294330-1-robh@kernel.org>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 02/12/2021 23.43, Guenter Roeck wrote:
-> On Tue, Nov 30, 2021 at 05:18:08PM +0100, Sven Peter wrote:
->> Apple SoCs come with a simple embedded watchdog. This watchdog is also
->> required in order to reset the SoC.
->>
->> Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
->> ---
->> v1 --> v2:
->>    - add Mark's and Rob's r-b tags
->>
->>   .../bindings/watchdog/apple,wdt.yaml          | 52 +++++++++++++++++++
->>   MAINTAINERS                                   |  1 +
->>   2 files changed, 53 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->> new file mode 100644
->> index 000000000000..e58c56a6fdf6
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->> @@ -0,0 +1,52 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/watchdog/apple,wdt.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Apple SoC Watchdog
->> +
->> +allOf:
->> +  - $ref: "watchdog.yaml#"
->> +
->> +maintainers:
->> +  - Sven Peter <sven@svenpeter.dev>
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - apple,t8103-wdt
->> +          - apple,t6000-wdt
->> +      - const: apple,wdt
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - interrupts
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +
->> +    wdt: watchdog@50000000 {
->> +        compatible = "apple,t8103-wdt", "apple,wdt";
->> +        reg = <0x50000000 0x4000>;
->> +        clocks = <&clk>;
->> +        interrupts = <AIC_IRQ 123 IRQ_TYPE_LEVEL_HIGH>;
->> +    };
->> +
->> +...
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 360e9aa0205d..859201bbd4e8 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -1750,6 +1750,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
->>   F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
->>   F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
->>   F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
->> +F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
->>   F:	arch/arm64/boot/dts/apple/
->>   F:	drivers/i2c/busses/i2c-pasemi-core.c
->>   F:	drivers/i2c/busses/i2c-pasemi-platform.c
->> -- 
->> 2.25.1
->>
-> 
 
-I've gone ahead and applied this patch to the asahi-soc/dt tree, so we 
-can build off of that to add the DT nodes.
+--f2LNv0Yes4TwKbbz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sven, can you spin a v3 with the MAINTAINERS split and just the driver 
-itself, without this patch? I imagine Guenter will want to take the 
-driver itself through the linux-watchdog tree.
+On Mon, Dec 06, 2021 at 11:40:28AM -0600, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the ti,rti-wdt example
+> has the following warning:
+>=20
+> /home/rob/proj/git/linux-dt/.build-arm64/Documentation/devicetree/binding=
+s/watchdog/ti,rti-wdt.example.dt.yaml: watchdog@2200000: Unevaluated proper=
+ties are not allowed ('assigned-clock-parents' was unexpected)
+>=20
+> The problem is the schema has a typo in 'assigned-clocks-parents'. As
+> it is not required to list assigned clocks in bindings, just drop the
+> property definitions to fix this.
+>=20
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Tero Kristo <t-kristo@ti.com>
+> Cc: linux-watchdog@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml | 6 ------
+>  1 file changed, 6 deletions(-)
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Reviewed-by: Thierry Reding <treding@nvidia.com>
+
+--f2LNv0Yes4TwKbbz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmGvGe4ACgkQ3SOs138+
+s6HfaxAAm9ukYVc7Yiq88IJNZmyMn/KYhRVrwVJUeup3t8MMB775s5wVxrtc2emF
+vS49IaPwwaHzK36kn0PRr6btkSPB66Ejnj+DOz2HSxZHYw86KbifyAmDRCq/LGjP
+KkyW5SbUi0crMWoqTAxLdgLNWeR5DUdHdmuz7HXA0FlQdjvyuRZZeqTqFgz3+c14
+QGjS5nLqrF7xgymXQUGrR+WJYfrh7SDodMGys2Oag2GoXxbdJA6/JNXYmN/iaDmZ
+rXYmWBGGgndPEXjtLgA4gwK+e59k/F5fpbHY9Jr8jz14WlbDVhx5jyZTGiHHhlXW
+X8TbQEWEw6s5EUWAYgHstBOAZRbPAvDl+VbLAWz00rMg1LZub9fz3gyH7wVqwEjn
+UIJRvjz48VHmKsdGRk1patxuQGe2Z8GhNUflhn2wM5mYQ6MoT2kiOEYLm8UMUBlJ
+izY8I5eM10EnkDd8ckhR2YTMTiNUhbNLbVqJL6MRxGTooVH04ZszdXWoNGrlwoIx
+jTpU5b7VlCrcu4mByqROQzrjGjifWorL+vJ05gQzYzTejv2n8G1VpXKi9z+/GV0m
+O/XbvVMw+2kV7pxfjFtOdYctIDB2gikuHJQf6if8zte+aXkpoiZOIF3K9gle1Oxo
+Hc0xCzxndPjejNeF1v/qJju1vkgE83XUXF1jNEFv5fyT0SLGahk=
+=g1+2
+-----END PGP SIGNATURE-----
+
+--f2LNv0Yes4TwKbbz--
