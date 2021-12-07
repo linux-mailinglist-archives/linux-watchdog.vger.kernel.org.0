@@ -2,145 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C743F46B85C
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Dec 2021 11:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B693146B894
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Dec 2021 11:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234651AbhLGKH3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Dec 2021 05:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234650AbhLGKHY (ORCPT
+        id S230267AbhLGKS1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Dec 2021 05:18:27 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:19875 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229818AbhLGKS0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:07:24 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A96C061359
-        for <linux-watchdog@vger.kernel.org>; Tue,  7 Dec 2021 02:03:53 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v11so28275324wrw.10
-        for <linux-watchdog@vger.kernel.org>; Tue, 07 Dec 2021 02:03:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YMXGNl+2STyhxzO3HVuriZuNvccL7QLCPDwSy26sqQI=;
-        b=k31XRrWxV+zeine2/5ZK0CSlMZrpZRSLjBrKRrd8jyX0X4uWq2r9UvB5dRWfBQf8ZY
-         60uqwiAb3a3oYm+p7qxcQ7aduV8SnLgOx1HUnTV8eE9g1Nd+mkxjXE66XXF32SYBW8PS
-         Nwc75fKd6Eb9Ce5MgSETVlJwiCiQ5YXCmLiaIk0QQ1arktl/WSEeDcw56Vn7PH5R9ywW
-         ROWWsBa+UqXhS4rvSsg0hnhYU8w0L0RN3N3dWzcdv5K9bVQQufsrhHViiBZdYAQS5cCU
-         +1U20lxpF4xmGkGuX1tIix41TwCTY6HP/iEAowkXqiy9dHhe7i/0YDkIl64Dnzlft/ZL
-         aTvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YMXGNl+2STyhxzO3HVuriZuNvccL7QLCPDwSy26sqQI=;
-        b=MwoZaqM50sYnrpqR2G/0ANqpLe0HCItPt5+0Oobj/ypwgzMnhaG6KMp0FSSt/be7cj
-         Cu3JDzs+PGK548RIh+RfD/q92JqaXFMG/fdjZjGQknZ4/kWbqzANnc3JraQowO270A/7
-         AKSSfZZV18vcEj5XjUcSYA2+t+M+qcFViAQswPomtKQog62V0rxok4cUdm6p8WimopmY
-         x/H6VBws2oqx0cxbMcZYLoZeEXqlFmcfBYtK0o1vl4I20ZKJ6DxRgds3p8EKc7kbvpLk
-         vJVJDZ7h0cDR4fX0rOAKu7GFeuBeNupE7df7j5RjGwXrlgpPHNEyb2SeJhGEjjbvqboi
-         zkUg==
-X-Gm-Message-State: AOAM5300uztf1b2H721QGQhtxOYaWkk8zZlIh04jKOKh54vEn9gLDzm6
-        wWH0EtkGuEHKnyZZdrbJ5jphIg==
-X-Google-Smtp-Source: ABdhPJwYUZnANnjuqYc9L3SYbaNbTuNKVK7/vPDMWrjfEVPdCx7HOqfB+V2StymL2HCWR8V0Rk3J5A==
-X-Received: by 2002:a5d:588b:: with SMTP id n11mr49739256wrf.344.1638871432163;
-        Tue, 07 Dec 2021 02:03:52 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id c1sm13827383wrt.14.2021.12.07.02.03.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 02:03:51 -0800 (PST)
-Date:   Tue, 7 Dec 2021 10:03:49 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Tue, 7 Dec 2021 05:18:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1638872096; x=1670408096;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=Bo9IYL4ZSYRCBcfdD1wFpX2LdtkM98KISonDXEfcFbE=;
+  b=1e2twhaLiu2uK77sl4qykKtRhxhYNngtlqLw7eWXT1FC09bp+rYryEKA
+   VkfT+RcWI86/5J228bR2/3PYDVaxTrxNIjZWhEzijciikrbAE4NqSwaZZ
+   Y0cY7VVehRFy9TETe3R5GNPhkMdZ4XygzGlMvuHV6CZwhZKYxLMRhPOvP
+   F7Mw2sNxcRrViD96bzKA79uAsZSG1FTMfC4JdTcnyRfiLB1Pg+OMIV0AV
+   KyezyO5uCtrqYPcfNCq5Dr+qRph7vxit3ep2WIRNqsc/JVkdzSFrrzAID
+   bURU+ILIEoQNnl9sQhTkNhdBuv+mPw2//aVdz7ciyc9kkoEQw1rk2XLjv
+   A==;
+IronPort-SDR: Ct9G3iLqJ3ea57o09sbbcmculpE4mZ8xstdTdzWaK1YnmGXTs/AsJuWEP6dI75FAznhgEUO/Dw
+ 2VNiz/LoCZFE1RcazShTme6leRnjYJ/ajGmN0dqwzsfKkQBJO9Ma3qQmBiG4t4UbpSMeGGXiTK
+ /94jj+gWN2wR+lff0rx4Z9QipsG6CXlBs3jYujIGubIIBuVivZm++VeiX+rYlhAuYZ35oA76sY
+ j3/p3PF4ZU7d+XaCKgTCpzSaM4wURvVXbPQcoNy4aeWlSSBHv+4jShdMjDSziVza82RAU7uVjj
+ OjpOibU0cOJusIGV/7CjxNET
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="145783939"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Dec 2021 03:14:56 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 7 Dec 2021 03:14:55 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Tue, 7 Dec 2021 03:14:52 -0700
+Subject: Re: [PATCH] dt-bindings: watchdog: atmel: Add missing 'interrupts'
+ property
+To:     Rob Herring <robh@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Justin Chen <justinpopo6@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V4 RESEND 1/2] dt-bindings: watchdog: convert Broadcom's
- WDT to the json-schema
-Message-ID: <Ya8xhUR5GbTxVE8w@google.com>
-References: <Ya3NaVKf1NRc8rrx@google.com>
- <89b9512d-2e5e-c23a-d1f2-62172c8f68f7@gmail.com>
- <Ya3SU6U6YT6mlFu8@google.com>
- <f5745952-9e3c-ed7a-cced-ce42d3da2276@gmail.com>
- <Ya5ctkIU+jNzDfBc@google.com>
- <f4af4971-7047-80c9-69ae-e6587979ecd5@roeck-us.net>
- <e1fa1683-a0a6-8ee0-9da5-8e97dd9c820a@gmail.com>
- <432664af-5660-aaad-bf75-81e4d61cb078@roeck-us.net>
- <46a88b40-6d92-727c-7adc-5723921d08e3@gmail.com>
- <20211206195115.GC3759192@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+CC:     <devicetree@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211206174045.2294873-1-robh@kernel.org>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <b6944a02-ba13-2a0d-6ed4-7b1330348d68@microchip.com>
+Date:   Tue, 7 Dec 2021 11:14:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211206195115.GC3759192@roeck-us.net>
+In-Reply-To: <20211206174045.2294873-1-robh@kernel.org>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Florian Fainelli wrote:
-> I don't see why you should be creating an immutable branch for Lee and
-> not simply merge Rafal's "[PATCH V4 RESEND 2/2] dt-bindings: mfd: add
-> Broadcom's Timer-Watchdog block" patch with Lee's ack directly. This is
-> a new file, so I don't see how it would create conflicts as long as we
-> don't pile up changes on top.
+On 06/12/2021 at 18:40, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the atmel,sama5d4-wdt
+> example has the following warning:
+> 
+> /home/rob/proj/git/linux-dt/.build-arm64/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.example.dt.yaml: watchdog@fc068640: Unevaluated properties are not allowed ('interrupts' was unexpected)
+> 
+> Document the missing 'interrupts' property.
+> 
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Rafał Miłecki wrote:
-> would that be OK for you to simply ack 2/2? So Guenter can pick my
-> patch without the whole immutable branch & PR thing?                   
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Guenter Roeck wrote:
-> I don't entirely see the point of that complexity for dt changes,    
-> but whatever. Since my tree is not the official watchdog-next tree,  
-> that means I can not take the entire series (which goes way beyond   
-> the dt changes and also drops the bcm63xx driver). Unless I hear     
-> otherwise, I'll drop the series from my tree for the time being      
-> and wait for the dt changes to be sorted out.                        
+Thanks for the fix Rob!
+Best regards,
+   Nicolas
 
-If Rob wants `dt_binding_check` to run cleanly in -next, we have to
-treat the DT documentation in the same manner we do for real code
-when build dependencies exist between patches.  Simply sucking them up
-through a single repo is just dandy until subsequent changes are
-required, which unfortunately is often the case.
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+> Cc: Eugen Hristev <eugen.hristev@microchip.com>
+> Cc: linux-watchdog@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>   .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml        | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
+> index 9856cd76c28d..a9635c03761c 100644
+> --- a/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml
+> @@ -22,6 +22,9 @@ properties:
+>     reg:
+>       maxItems: 1
+> 
+> +  interrupts:
+> +    maxItems: 1
+> +
+>     atmel,watchdog-type:
+>       $ref: /schemas/types.yaml#/definitions/string
+>       description: should be hardware or software.
+> --
+> 2.32.0
+> 
 
-Being the Maintainer of MFD, which is often the centre point of
-cross-subsystems patch sets, I've been bitten by this too many times.
-Hence my hesitancy to 'just Ack it and be done'.
-
-I've been pushing back on the requirement for clean `dt_binding_check`
-runs in -next for a while and would much prefer to treat it the same
-way we do `checkpatch.pl`, whereby a clean run is not a hard
-requirement.  Instead it is used as one of many tools to check for
-inconsistencies prior to submission (as possibly against patch-sets
-once they are posted onto the list).  However, just as we see false
-positives in `checkpatch.pl` we should see them in `dt_binding_check`
-where patches have simply been applied into different trees and may
-lag each other by a week or two.
-
-> It sounded to me like Lee wanted an immutable branch for that
-
-Not exactly, I said:
-
-  "> Suppose we should take patch #2 via [Watchdog] as well.
-
-   If that happens, I would like a PR to an immutable branch."
-
-The alternative is that I take the patch and provide an immutable
-branch to you, which I am in a position to do.
-
-Of course all of this hassle just goes away if the clean
-`dt_binding_check` run on -next requirement is laxed and we can just
-take our own patches without fear of wrath.
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Nicolas Ferre
