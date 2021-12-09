@@ -2,100 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9581046D73F
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Dec 2021 16:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8EC46E07F
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Dec 2021 02:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbhLHPrl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Dec 2021 10:47:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
+        id S238509AbhLIB5a (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Dec 2021 20:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233650AbhLHPri (ORCPT
+        with ESMTP id S235054AbhLIB5a (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Dec 2021 10:47:38 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3047C061746
-        for <linux-watchdog@vger.kernel.org>; Wed,  8 Dec 2021 07:44:06 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id b1-20020a4a8101000000b002c659ab1342so940544oog.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 08 Dec 2021 07:44:06 -0800 (PST)
+        Wed, 8 Dec 2021 20:57:30 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DE2C061746;
+        Wed,  8 Dec 2021 17:53:57 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id x7so3316845pjn.0;
+        Wed, 08 Dec 2021 17:53:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IRArnEbMOztmbyOTj+MWlwJucegmDvjTF1PfafI2nU8=;
-        b=YjKPpH556mUnunfWLwQX9k7x4QLylXJZUiVkVxzIvM1nLMRBmqHT+7XobjEuYaJccG
-         FLJqKrYQeq2j/yDmJRtUkkNHwrs8eMjriypPB5VrvwC52PNKPIpe+Wbt9ME+hG5RFMrt
-         srbmJh8pbtr3KRDCdr5QRikqx3Z9rbdalS7bEa1kRyIYb/SEvyfwNnqj1nbV3h4VLiwE
-         42Fk+LHPQuWvkjBCRYB0CCMdw9sNkFviwR9eupqUtIjPL165syYlDzpQgq95xqspDNJl
-         apwDzIWZv5v2VsKwl9XLag6afOs8noYn19YHYizLPEv2Ts+ovVaM3l0VoYb6Uy/Pg2lw
-         3AeQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E8BO8VV/6qLXRIvEgLOZY3lZVJmNDElsUWxpp8vW694=;
+        b=S/JqkabhtdsxBzqpHLg5YPOvqUYux8W6PNImFWoIDXET491epw7D18lV7nLulO4XZ+
+         vZOo8rGCvPMXUiEScGKqW3qqOzDoj44pDYequnJOr6ZUbtKFPvnu9PPs94fsZEdrQLCF
+         HDUY583dYYzUOv3k/WQBuMMmd4g0rUSdzRBAB8Pv0vypRCf6xyDfB8fOYJD4g8cwTFnB
+         TZzXGP+pNg8gc9NDnGgSjQSuESjw8/ZfjQJLgLq0Db3yMbCCPuuoOU3qlbER2fjzLPb9
+         z24p+jti34KGyuy6y3T7c0b+TKUT+hHUC5y3q1oqthjjXPMZtEp5+u0NdfpPIcOrc9OY
+         iaEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=IRArnEbMOztmbyOTj+MWlwJucegmDvjTF1PfafI2nU8=;
-        b=k2PebrsNmYjbYTz5mqqvADK3kPudi//ffTCGbdfh6fgj68RHpBYQOGd0oRRtf4pxmj
-         3FR/NnYZrXkFFdzpHniwlhOODBrACvYBoNKTg4Foh8rUtaWNSnIDh91AbZuaVKff9gia
-         2a2cevJ4XQTziH2pJ4NMhT9bDvdD3Q40agBVmnOlXUOMkKlJ4qcZRr/zJnUwRgSeUVc1
-         X/c2vd4DYm/ZMHbZyJV6Hl6HLyPFx/jgL08gMqznq9OQEbM65WiBj3rIEb4UG+miuN1F
-         lqd1nTXhmu0RQfXoLYCemO667XV5ANl3NfXc1FwXRRFpxYJxwilQ5XMcV1WXU83nlu5Q
-         ah7g==
-X-Gm-Message-State: AOAM530qyFfprZX2L1lHSYQF+UuCcuDFt6WCinbssdRaFrzVoYrV4FAJ
-        U8/RkoznBukijgr2on75kw93aXIZ03o=
-X-Google-Smtp-Source: ABdhPJx1XEhf8O9VtJfXTVdjxdZSEDndjFeVobBKh/ztIW6ZBlvGLRlnbr7rkZAxxlLe2yLbeLhSsA==
-X-Received: by 2002:a4a:9292:: with SMTP id i18mr190335ooh.90.1638978246227;
-        Wed, 08 Dec 2021 07:44:06 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i29sm543824ots.49.2021.12.08.07.44.04
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E8BO8VV/6qLXRIvEgLOZY3lZVJmNDElsUWxpp8vW694=;
+        b=X7temFfIeBMw2jBZgJf6HZGSI4H0jXxl3OyXtFjvhPoW25CC43E7SeqQMpuUx84gPe
+         +OIXaxVv/+VIyLVnCbMoCJ/hIxfgk2dPu7aJoj3YM7mdgvs5pHmjekotfIXLrAhc9P0C
+         /+tFnghjlFq1KDs1CGe0GeDGkLRHui+CDpLAhbMYxc/CFFze87fmCboT5PBNNzcG5tuy
+         mTb8chkOMNCeZwVqcRMKhC9lcoKjtikWaWblHyCw2CTTXc918hllOICGEIuuVWRako+4
+         ayQNyyEpzgdnrv0y/3xVOSXZ+Tysd00WzdAEPpiHLQONzAr7wb3cMpSux47LmS/YhJVX
+         EA5g==
+X-Gm-Message-State: AOAM530teKlNqOomWMufRp3EeHzoWrYi0n7S2Owrmjj0aJcj3AjNMJWx
+        2cEuaC9a0pa/Rf6qQOd/aoSAWaT5xlQ=
+X-Google-Smtp-Source: ABdhPJz97aD7aBSkPAS/LKuqwOLVSetfZ7089L1ro00cytBI60caR4U9yVTsprn+b1Vo4sz8ALDAUA==
+X-Received: by 2002:a17:902:d491:b0:142:892d:a89 with SMTP id c17-20020a170902d49100b00142892d0a89mr62509652plg.20.1639014837114;
+        Wed, 08 Dec 2021 17:53:57 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y8sm4864899pfi.56.2021.12.08.17.53.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 07:44:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 8 Dec 2021 07:44:03 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Tzung-Bi Shih <tzungbi@google.com>
-Cc:     wim@linux-watchdog.org, matthias.bgg@gmail.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wangqing@vivo.com
-Subject: Re: [PATCH] watchdog: mtk_wdt: use platform_get_irq_optional
-Message-ID: <20211208154403.GA1031331@roeck-us.net>
-References: <20211208095555.4099551-1-tzungbi@google.com>
+        Wed, 08 Dec 2021 17:53:56 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     wim@linux-watchdog.org
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chiminghao <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cm>
+Subject: [PATCH] drivers:watchdog:remove unneeded variable
+Date:   Thu,  9 Dec 2021 01:53:53 +0000
+Message-Id: <20211209015353.409612-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208095555.4099551-1-tzungbi@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 05:55:55PM +0800, Tzung-Bi Shih wrote:
-> The watchdog pre-timeout (bark) interrupt is optional.  Use
-> platform_get_irq_optional() to avoid seeing such following
-> error message:
-> >>> mtk-wdt 10007000.watchdog: IRQ index 0 not found
-> 
-> Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
+From: chiminghao <chi.minghao@zte.com.cn>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+return value form directly instead of
+taking this in another redundant variable.
 
-> ---
-> The patch bases on linux-next next-20211208.
-> 
->  drivers/watchdog/mtk_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index 543cf38bd04e..4577a76dd464 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -339,7 +339,7 @@ static int mtk_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(mtk_wdt->wdt_base))
->  		return PTR_ERR(mtk_wdt->wdt_base);
->  
-> -	irq = platform_get_irq(pdev, 0);
-> +	irq = platform_get_irq_optional(pdev, 0);
->  	if (irq > 0) {
->  		err = devm_request_irq(&pdev->dev, irq, mtk_wdt_isr, 0, "wdt_bark",
->  				       &mtk_wdt->wdt_dev);
-> -- 
-> 2.34.1.173.g76aa8bc2d0-goog
-> 
+Reported-by: Zeal Robot <zealci@zte.com.cm>
+Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
+---
+ drivers/watchdog/pcwd_pci.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/watchdog/pcwd_pci.c b/drivers/watchdog/pcwd_pci.c
+index 54d86fcb1837..edbc0f28d399 100644
+--- a/drivers/watchdog/pcwd_pci.c
++++ b/drivers/watchdog/pcwd_pci.c
+@@ -215,10 +215,7 @@ static inline void pcipcwd_check_temperature_support(void)
+ 
+ static int pcipcwd_get_option_switches(void)
+ {
+-	int option_switches;
+-
+-	option_switches = inb_p(pcipcwd_private.io_addr + 3);
+-	return option_switches;
++	return inb_p(pcipcwd_private.io_addr + 3);
+ }
+ 
+ static void pcipcwd_show_card_info(void)
+-- 
+2.25.1
+
