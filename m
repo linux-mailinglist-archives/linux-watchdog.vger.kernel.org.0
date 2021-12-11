@@ -2,79 +2,106 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4758471708
-	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Dec 2021 22:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D2B47171F
+	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Dec 2021 23:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbhLKV6c (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 11 Dec 2021 16:58:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S231542AbhLKWVR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 11 Dec 2021 17:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbhLKV6a (ORCPT
+        with ESMTP id S229605AbhLKWVR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 11 Dec 2021 16:58:30 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509D3C061D60
-        for <linux-watchdog@vger.kernel.org>; Sat, 11 Dec 2021 13:58:30 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x15so41378851edv.1
-        for <linux-watchdog@vger.kernel.org>; Sat, 11 Dec 2021 13:58:30 -0800 (PST)
+        Sat, 11 Dec 2021 17:21:17 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3633EC061714;
+        Sat, 11 Dec 2021 14:21:17 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso13399277ota.5;
+        Sat, 11 Dec 2021 14:21:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=hD0jfu1MWy/UXBkBYsVvOAZPApZLyir6gKavdc4BceI=;
-        b=SOBkDHN1upt351fJGA10IENq8Lskn6OtfiA/mtFXWwbxNo6rK0VqMIikUbNdR10QL9
-         NEz57nH7+DwD4ui2QjR5G0PDUg/x30DeYlpAViKmfLpj6c8owgTXHIRe2HlXrWJIYspc
-         p1qexb7VgQzyxOs2U317jKWC2PVt5FsJQNP/qzuU8HlodfKZxoIrg2Y5u0+UlgiuF7n+
-         KF6xHlFhNhhV0WZH+n1XpQNFkro1//sIniT/eC7+Qq7omDixZHJ42uWefxucVRQsgqoP
-         MP9jAyQEdDJw2KiXunMshfyB4wcDGfWvxehuLHSr6op0i/Er4qRI4zT2OKxsbV2QjSnP
-         PYpQ==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1HIJrKFo0Uu1bw3AG0MQW+64GpOvanRRdRoeIXAV0hI=;
+        b=Jn6NxRmVW47bMvzgEWBAR80fk13XejLxgQFBLIR043E+FTS2+sh9caCGY3mAFXEUvX
+         rLDbxceT+1WitsLbbv8OEJU4cG/IY5/Znp2hmhh2qCsEUODxRHUhAAYcuDB5a/gho1U7
+         Jv29xIbqyad/TvdsVtsMMNVE80T9mbEwtMvYqw/HaKM9sM3w7SQ2OWjGi6aUIpRctXDT
+         45Be24Jui6NziL6GfNqCmws90MdACJUFg+rIIAWLQSGK12RKOXMpAyX8gSBLY/Nymyg7
+         L2dWswEnIgi5n+iPShjlaVtb5GE2k2rWrXtfXsa3XAvlTkwkley6tib5+P2LH5VtWhqK
+         HNeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=hD0jfu1MWy/UXBkBYsVvOAZPApZLyir6gKavdc4BceI=;
-        b=Gb9UyzsCuWKSTgrXDp+6pP4kvwS+/ujHs4pTlMu5f08VisS0PYZnsdyM5cJ3ze786G
-         bOZo8d092WUsvcRW3egRyJ6IAJ+v3+Xgis2FLAOSnbNYHGjyeNLnIt7UNQ7nN+pJyqyS
-         UaF+gJ1zPlhFZe+gFosjzv85+3/37A9Ot0J8yTyT3oT36bOigM401JWzxTkt+PKWALJ/
-         tuAtZnIFTN1OQe8h1JkTPofzsFU+ZOXYrO84+lvDlq3seeOtFaTv4y4C/aOZN1OKVaXh
-         Bnrm4GSg2d1SLsVT6KrLEVDDufm+coAQ8telT4epVfpmViLtOd1KMkagfiKRNbYY53n/
-         XzEA==
-X-Gm-Message-State: AOAM532MVt7JvaaKQU556AHESdbS1k/g/MPaClHxxDK+JVg+onJFiEH7
-        eLNDyYWnK4F2r0eUlojMMQpjqxAumTBHYlzZRS+VRzc/Jj78uRf9VaE=
-X-Google-Smtp-Source: ABdhPJxTVLquc00JfCv8xmVg6F+Df36Ax6F8m8eI1vWHtjjPBaUzu2dvtxl/29t2QJINStCFpJhLct20UqzajIEroTA=
-X-Received: by 2002:a17:907:6da2:: with SMTP id sb34mr33325880ejc.509.1639259897490;
- Sat, 11 Dec 2021 13:58:17 -0800 (PST)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1HIJrKFo0Uu1bw3AG0MQW+64GpOvanRRdRoeIXAV0hI=;
+        b=whnPTZlL5kVhUZlsfT6HRqWBODaIq4aXUfzP32VSMCPk33NR4+Aw2SRl3w0AYj6Q+G
+         7KSxx4CgqHBsanaSfgbq/m4SCRDlbdtOGzPxWoqWnd0Ccsg+BfrJglbK9KS1/eG/5lGQ
+         nv9L6S/46epfUtum38xtaUHUHFh9DgCy4p2z0vjlD2TK+leQcV6Mf9Gd/niSgMh+R7zq
+         Vw0fcjA0ZbCu8n/JxEyMVaj4kuk+s5pkRAqBMr7+OgFvAQgdL5AfDFeeHfbp6sRdbjV8
+         Mv+LLWxB1fN1kthP6IRe3OBM0H32u5KR1rx25uStbo43x1UGbCsuOJzLklhhZPcBTx3m
+         3eyw==
+X-Gm-Message-State: AOAM530uIwsXwdKWi+Csq98KhvHC16lRa9OKh3bf4LIQURt1R8TamXk3
+        Sp0RjinwqN8Qin5deAd6bP3q1Ez2zKY=
+X-Google-Smtp-Source: ABdhPJxQAtXuHeIILXMEpCS3edUYsiASygX85fAD6A2af5kcRw2U65b5LN3B2qxK/rAiuLz5HbGVWA==
+X-Received: by 2002:a9d:61c1:: with SMTP id h1mr17891501otk.27.1639261276277;
+        Sat, 11 Dec 2021 14:21:16 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w18sm1302893otm.1.2021.12.11.14.21.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Dec 2021 14:21:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 1/4] watchdog: rzg2l_wdt: Fix 32bit overflow issue
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+References: <20211211212617.19639-1-biju.das.jz@bp.renesas.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <ba572513-0dd5-f95e-2bfc-7fe12153cc03@roeck-us.net>
+Date:   Sat, 11 Dec 2021 14:21:14 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Reply-To: martinafrancis022@gmail.com
-Sender: rebeccaalhajidangombe@gmail.com
-Received: by 2002:a17:907:94d3:0:0:0:0 with HTTP; Sat, 11 Dec 2021 13:58:16
- -0800 (PST)
-From:   Martina Francis <martinafrancis61@gmail.com>
-Date:   Sat, 11 Dec 2021 13:58:16 -0800
-X-Google-Sender-Auth: QI6h_ccu4Os7HpLN5lf7FmNkMqQ
-Message-ID: <CANadOMYJBdKak2aObykULF4gdU88=OTR03g+XDqpCofMfFracg@mail.gmail.com>
-Subject: Bom Dia meu querido
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211211212617.19639-1-biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
---=20
-Bom Dia meu querido,
-Como vai voc=C3=AA hoje, meu nome =C3=A9 Dona Martina Francis, uma vi=C3=BA=
-va doente.
-Eu tenho um fundo de doa=C3=A7=C3=A3o de ($ 2.700.000,00 USD) MILH=C3=95ES =
-que quero
-doar atrav=C3=A9s de voc=C3=AA para ajudar os =C3=B3rf=C3=A3os, vi=C3=BAvas=
-, deficientes
-f=C3=ADsicos e casas de caridade.
+On 12/11/21 1:26 PM, Biju Das wrote:
+> The value of timer_cycle_us can be 0 due to 32bit overflow.
+> For eg:- If we assign the counter value "0xfff" for computing
+> maxval.
+> 
+> This patch fixes this issue by appending ULL to 1024, so that
+> it is promoted to 64bit.
+> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Por favor, volte para mim imediatamente ap=C3=B3s ler esta mensagem para
-obter mais detalhes sobre esta agenda humanit=C3=A1ria.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Deus te aben=C3=A7oe enquanto espero sua resposta.
-Sua irm=C3=A3.
+> ---
+>   drivers/watchdog/rzg2l_wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+> index 6b426df34fd6..96f2a018ab62 100644
+> --- a/drivers/watchdog/rzg2l_wdt.c
+> +++ b/drivers/watchdog/rzg2l_wdt.c
+> @@ -53,7 +53,7 @@ static void rzg2l_wdt_wait_delay(struct rzg2l_wdt_priv *priv)
+>   
+>   static u32 rzg2l_wdt_get_cycle_usec(unsigned long cycle, u32 wdttime)
+>   {
+> -	u64 timer_cycle_us = 1024 * 1024 * (wdttime + 1) * MICRO;
+> +	u64 timer_cycle_us = 1024 * 1024ULL * (wdttime + 1) * MICRO;
+>   
+>   	return div64_ul(timer_cycle_us, cycle);
+>   }
+> 
 
-Sra. Martina Francis.
