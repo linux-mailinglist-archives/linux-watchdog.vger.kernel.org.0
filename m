@@ -2,88 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF7D470C49
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Dec 2021 22:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E5F471014
+	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Dec 2021 03:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbhLJVPu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 10 Dec 2021 16:15:50 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:36669 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbhLJVPs (ORCPT
+        id S1345628AbhLKCEP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 10 Dec 2021 21:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345604AbhLKCEO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 10 Dec 2021 16:15:48 -0500
-Received: by mail-ot1-f46.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so10906373otl.3;
-        Fri, 10 Dec 2021 13:12:13 -0800 (PST)
+        Fri, 10 Dec 2021 21:04:14 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDE7C061A72
+        for <linux-watchdog@vger.kernel.org>; Fri, 10 Dec 2021 18:00:38 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id u3so21202067lfl.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 10 Dec 2021 18:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
+        b=JCsw4jOipMM2NQNMZXp6QizwJUHIwDzeO2Y8iQAOjp+Jha/m6XSK1Mp0rSo5X4xj5/
+         ra62wA9M29Kv3v26XdhtYfHl78HWfdHAzWZoawQBmD/f5HctnV3IDOhopHsfUEVKdc3U
+         zjgTs8kaP1GhoPoSSRRMs2H48YL4whQ07Q9gL+TKLR3Ej/+NXmB6gktiiQtCGROuxCip
+         azRcgSpJPEVAmzBSIGs8uTeu5gSEROUAGTlDnvAO293BRFtxBT6pH2u6lqSxSWYO1mdi
+         OgUvbMvACUi3QhA01V+Fa5ongtyngGSTsG3iTMSWnQqmHYynLlOpPl52O41EVB0FfiQa
+         lw2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0hJgzETDIdKVM7uHj3dj5GcAkRRZ6sKwa6wgFkGEWGA=;
-        b=c5bKv+icEN9xwJPmAW0XPYcnaIRb8PTHIRf/R5jss89eSqIbi060On2yYwtrPnOfvB
-         8CoxzX6zYHYtOSNFcfjXAW16eVgBe3xYjgeqgWMT5ZuSARKSFdjMJEvlf9keBBsH+Auz
-         JMW+7tAClSFQ2N/WbjnX4NFoKGXWkTHeRnsSEfjfYxT4qGSBDey+uDce9D7rPKGgRM/L
-         DwKSolDns/GXNgmHqrARanXTVlzCSlCXPY/WL0F8ulQgW0NkBosQFWT9rG/J602Nol9A
-         kkK3GSwQ4o1tcl9rVnA8s2qWt0z+zGyw1diwq3RuRuh5cqSGQ8xFj3mRG6xYb+vJVA7G
-         eLSQ==
-X-Gm-Message-State: AOAM530H1rZCEFujwQtFXaJE7Prl/rCmUKEsdjhxVVHMsOf2kvjibnfJ
-        uSah/8o7cBifj4ZqiW+V+ofGWvTsNg==
-X-Google-Smtp-Source: ABdhPJwjCSZ1SBdQUyVJrnEL1oj0zInKeF/peJSbc/ZqiK4fpnwzu2V5o7tVpmzmRIsAPFtWIiRTMA==
-X-Received: by 2002:a9d:2085:: with SMTP id x5mr13169150ota.228.1639170733015;
-        Fri, 10 Dec 2021 13:12:13 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e16sm739611ook.38.2021.12.10.13.12.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 13:12:12 -0800 (PST)
-Received: (nullmailer pid 1906126 invoked by uid 1000);
-        Fri, 10 Dec 2021 21:12:11 -0000
-Date:   Fri, 10 Dec 2021 15:12:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andrej Picej <andrej.picej@norik.com>
-Cc:     support.opensource@diasemi.com, cniedermaier@dh-electronics.com,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        wim@linux-watchdog.org, kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, festevam@gmail.com
-Subject: Re: [PATCH v5 4/5] dt-bindings: watchdog: da9062: add watchdog
- timeout mode
-Message-ID: <YbPCqz2ON5HgdEnK@robh.at.kernel.org>
-References: <20211206064732.280375-1-andrej.picej@norik.com>
- <20211206064732.280375-4-andrej.picej@norik.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
+        b=kxYRYJz+dgDbmPlRgaHaVLUyhBni79Pb7hiW58m0ehMFSqgSq3N5116dI3znMQRyHp
+         XgArIyrxXv8AizzERynlpDyDk8MCjXHo2nbX8q6cAHvxKExISR7WiZSArAw7eQQHoq7O
+         LkBjdvlayeQr037YMNNvfnBnY0ttDd/dC74z3Zyh1kgyQ6JMVnVdwTms0zrh14Zcdmbl
+         +SKDzlBYwZgm64/98xM821cpGFFpV0UuKJZj0nxUH9HG6VXAIIoVNNalNbIf8Q/dBD3u
+         dVsCJYjoWUhSUJRzIRSKoLQgEd72WzJi7CYnHTnpABdrAzfkpbpwc5eNzcH4Xqg/cWDE
+         lLRA==
+X-Gm-Message-State: AOAM533VnrPjTnGKMWOLVzcqKXixKFaIaeVSC9bOz9lhDaSCcOVSNDbm
+        xg5IKBvsYRmCzFGvWYtJd0s+agQxjYD6dG3rx+0=
+X-Google-Smtp-Source: ABdhPJyhXjcWPQSJn2BIAWx1wPs1aT43EsGt8LpVsp+ZiGbG+YkA+4EsSistpTPGdfJjrWjDwUlXhweFa5fipF4Svk8=
+X-Received: by 2002:a05:6512:6cb:: with SMTP id u11mr15747983lff.626.1639188035818;
+ Fri, 10 Dec 2021 18:00:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206064732.280375-4-andrej.picej@norik.com>
+Received: by 2002:a05:6512:12c7:0:0:0:0 with HTTP; Fri, 10 Dec 2021 18:00:34
+ -0800 (PST)
+Reply-To: internationallmonetary695@gmail.com
+From:   International Monetary fund <abubakarsadiq1297@gmail.com>
+Date:   Fri, 10 Dec 2021 18:00:34 -0800
+Message-ID: <CAHXNoSg31e+rkvOac1aWFWRjy_1TohUzLuRX4cOSGPtScWYE6w@mail.gmail.com>
+Subject: Dear Beneficiary,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 06 Dec 2021 07:47:31 +0100, Andrej Picej wrote:
-> Document the watchdog timeout mode property. If this property is used
-> the user can select what happens on watchdog timeout. Set this property
-> to 1 to enable SHUTDOWN (the device resets), set it to 0 and the device
-> will go to POWERDOWN on watchdog timeout.
-> 
-> If this property is not set, don't touch the WATCHDOG_SD bit and leave
-> the configuration to OTP. This way backward compatibility is not broken.
-> 
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-> ---
-> Changes in v5:
->  - no changes
-> 
-> Changes in v4:
->  - no changes
-> 
-> Changes in v3:
->  - add note about using the default OTP setting if this DT binding is
->    not specified
-> 
-> Changes in v2:
->  - new patch, document new DT binding
-> ---
->  Documentation/devicetree/bindings/watchdog/da9062-wdt.txt | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+-- 
+ I.M.F Head Office
+#1900 Pennsylvania Ave NW,
+Washington, DC 20431
+INTERNATIONAL MONETARY FUND.
+REF:-XVGNN82010
+internationallmonetary695@gmail.com
+Telephone : +12062785473
 
-Acked-by: Rob Herring <robh@kernel.org>
+This message is from International Monetary fund (IMF) I am Mr Bo Li
+deputy to  Kristalina Georgieva the current president of International
+  Monetary fund (IMF) We are aware of the stress you have been passing
+through and how you have lost your money trying to claim your fund ,
+you have to worry no more for the international monetary fund is fully
+ in-charge of your fund now, contact  me for more info on how you will
+receive your fund( internationallmonetary695@gmail.com) or call me
+on-Telephone : +12062785473 for more info.
+
+Regards,
+Mr Bo Li
