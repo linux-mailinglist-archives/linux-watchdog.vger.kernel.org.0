@@ -2,81 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E15F472E49
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Dec 2021 14:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80993472F57
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Dec 2021 15:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbhLMN6h (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Dec 2021 08:58:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbhLMN6b (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:58:31 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6D9C06173F;
-        Mon, 13 Dec 2021 05:58:31 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so17482606otl.8;
-        Mon, 13 Dec 2021 05:58:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mBLhz6A6Q0VH5JV+eiVr4N7Gacdp/EmRBkeIUehBuAc=;
-        b=Lg4T2IY/D/+51o/rU3Rn2puW7wvH+vbgG3k4avOz/pd8ff489KMUuPsGzj7CHvf3q2
-         PlXXIVx0CL3/EWPngY/29y405spODVh6pnVHcREmAKSF0DCYlyOGuOtIX1esKbjbql9N
-         MTT2zUcgYJg0q4c4/A4g5HIv30VoQ7eSBu/AKpP9YL7BUmTk3KJ3Y6RjGn1HnFgdlpz3
-         TVhJ6nf54te0PQFxenL23uy1rEf4vUljFM9OnRMhemaTGg3Q8UFXWM2WkzMzZEbLahQv
-         ySJfJ25TnTHxsVIFzt8X4O0Q9FwAuBKIKJ7hBnknFk4mXGj/hvVEMHO2ymO0XaVcHPdB
-         0EGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mBLhz6A6Q0VH5JV+eiVr4N7Gacdp/EmRBkeIUehBuAc=;
-        b=UF5WmFGPa9ouOX45WrZrPoPC5KuLeI/9NXZOeGu5rEYHgFRatFboUwLKLhOjnQHC0h
-         dQrMUOUfJ4Uos2jrf4aBfYdF+vXc+NzlRohRYnIJ7dxF6yIEKgppXfBdhsIrjn7BXHSw
-         eut87u1vfM6T20cbdPtkmEMMwbgXf7JUqQVMDKSna5xrTrA1WXJGkyXHx0StvefZec2t
-         s6FCHI+kQQlWJdZQigRQs7ATcZtjteRZCJXXCExLsnmK9A8WyZqqrVDjzD0j2eTWTMeE
-         D59M9af8YAbh2qawESpfWLYH4WtH9b8SEHYEE1f2b354uCk/r0BgrI2LlZdzaGtLn93U
-         T4FA==
-X-Gm-Message-State: AOAM531n2qpR24VAFqhBpXXD+4J7WRtyFGtXeuF4Q0eLCsSfrV3VLHw4
-        zzU7syDanoTfDdEzgY59FQth2CcGJE4=
-X-Google-Smtp-Source: ABdhPJyD6v5hbaxoafWopasqzuNC7C2S8LEhwf6aPAvlK/StZtDUj3fikYssXd7JEJ3/Iy95vY5w2g==
-X-Received: by 2002:a9d:12c:: with SMTP id 41mr25283367otu.322.1639403910194;
-        Mon, 13 Dec 2021 05:58:30 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m22sm2317352ooj.8.2021.12.13.05.58.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 05:58:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
+        id S234619AbhLMOb0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Dec 2021 09:31:26 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:39010 "EHLO cpanel.siel.si"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230272AbhLMOb0 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 13 Dec 2021 09:31:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=w4hFH0cahRZMB5bqvXmzS66FpjQlX8PX0GYV9MFWdzc=; b=LmGJgCAW8sFNTmZveTBSaAKsWB
+        FSq2685CkmaJIKdSmLediofEnSB7tzGboegWqrssIUHFBGccJyNfFTtwgodmzRZTfimfHGI2w5Fue
+        5QTGbl3h+tYGgHnCcnzpmZcFsYqZnD2vox6IiBK+9/GoYBUAhHuqaL4NK16NtgCBVMFy0QAw/RUJh
+        bgNR2HYydbvveQftSd0xojW++gBWdAH7o5CE5qSoXFefMdLrQrpFq1nYSMtnBda6JSCNQ0nsJauAQ
+        +e4JATJUGhkaLuffZ2v64aZNnORag4CotTZhoMTHUraUbTZ6J4mwl3kUFvhjrUfo0OxIBj4rZQbA3
+        MLTZap0Q==;
+Received: from [89.212.21.243] (port=60312 helo=[192.168.69.215])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1mwmMJ-001SUO-IC; Mon, 13 Dec 2021 15:31:19 +0100
+Subject: Re: [RFC PATCH] watchdog: da9062: Correct the timeout values
+ [Klartext]
 To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
         Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Andrej Picej <andrej.picej@norik.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
 Cc:     Support Opensource <Support.Opensource@diasemi.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
 References: <4254747d8cde4c5dbcbfdd00a3ecf701@dh-electronics.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH] watchdog: da9062: Correct the timeout values
- [Klartext]
-Message-ID: <03871bd3-ea78-52e1-f57b-3e35724c8934@roeck-us.net>
-Date:   Mon, 13 Dec 2021 05:58:28 -0800
+From:   Andrej Picej <andrej.picej@norik.com>
+Message-ID: <1450af96-f279-c545-20a0-9361a070ca13@norik.com>
+Date:   Mon, 13 Dec 2021 15:31:22 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
 In-Reply-To: <4254747d8cde4c5dbcbfdd00a3ecf701@dh-electronics.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12/13/21 1:11 AM, Christoph Niedermaier wrote:
+
+
+On 13. 12. 21 10:11, Christoph Niedermaier wrote:
 > Resend with [Klartext] to turn off TLS encryption.
 > 
 > From: Adam Thomson
@@ -121,6 +111,9 @@ On 12/13/21 1:11 AM, Christoph Niedermaier wrote:
 > 
 > @Andrej
 > I guess, you are using an external oscillator, aren't you?
+
+You are correct, we are using external oscillator (32,768KHz).
+
 > 
 > @Adam
 > Is there a way to check in the driver which oscillator is in use?
@@ -129,11 +122,7 @@ On 12/13/21 1:11 AM, Christoph Niedermaier wrote:
 > Is in the driver a need to distinguish between an external and an
 > internal oscillator to get the timeout values more accurate?
 > 
-
-It would be very desirable to get timeout values more accurate.
-I would not want to dictate how to implement it, though.
-It could be automatically detected if that is possible, there
-could be a devicetree clock property providing the clock
-frequency, or maybe there is some other solution.
-
-Guenter
+> 
+> Best regards
+> Christoph
+> 
