@@ -2,53 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C730473E67
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Dec 2021 09:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24799475619
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Dec 2021 11:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbhLNIkp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Dec 2021 03:40:45 -0500
-Received: from mail.thebizzie.pl ([192.236.147.111]:41060 "EHLO
-        mail.thebizzie.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbhLNIkm (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:40:42 -0500
-X-Greylist: delayed 467 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Dec 2021 03:40:42 EST
-Received: by mail.thebizzie.pl (Postfix, from userid 1002)
-        id 2AC2318139E; Tue, 14 Dec 2021 08:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=thebizzie.pl; s=mail;
-        t=1639470775; bh=kU+//Lu71IqgcFfjayWXuIc0mZtoyrYJc2YuqyU8eS8=;
-        h=Date:From:To:Subject:From;
-        b=R7POhpewUKN+xR0mviAFpdD/4+hsQd+cmRrLevcj+3sYvuqlSN9eB5lZziRoIcUeW
-         1ggfiM/3kpYXorGIw9UTjSgesr0nm0GB7qGi2L4tGUK1bBfEX8Za3eUNjFOYUz/hkn
-         B0qbDTQPPc6M9kcOhvLLYXsBNvpTwWkw+j8P7lUkvq5Tq5ug/wpiqRu194vBDGWwIF
-         ziQTPra/KwuoIk6ym6x62G+ifdq9P10o6/snboihfj3fkNGQoFO4V1q1o6ii01wDFr
-         PPVzEcTyEpfRiw7OnqKEWyi5kbaoNVRfs/4cMC/GP3iJWcc/Bja/32A5ppgLuOT1z7
-         5KHDAfVKCGVVg==
-Received: by mail.thebizzie.pl for <linux-watchdog@vger.kernel.org>; Tue, 14 Dec 2021 08:32:04 GMT
-Message-ID: <20211214074500-0.1.7.2m5.0.8vtmuo763o@thebizzie.pl>
-Date:   Tue, 14 Dec 2021 08:32:04 GMT
-From:   "Mateusz Adamczyk" <mateusz.adamczyk@thebizzie.pl>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.thebizzie.pl
+        id S241590AbhLOKTn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 15 Dec 2021 05:19:43 -0500
+Received: from mx1.cqplus1.com ([113.204.237.245]:51200 "EHLO test.cqplus1.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241608AbhLOKTn (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 15 Dec 2021 05:19:43 -0500
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by cqmailgates with MailGates ESMTP Server V5.0(17176:0:AUTH_RELAY)
+        (envelope-from <xt.hu@cqplus1.com>); Wed, 15 Dec 2021 18:18:41 +0800 (CST)
+From:   Xiantao Hu <xt.hu@cqplus1.com>
+To:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
+        Xiantao Hu <xt.hu@cqplus1.com>
+Subject: [PATCH v3 0/2] Add watchdog driver for Sunplus SP7021 SoC
+Date:   Wed, 15 Dec 2021 18:18:29 +0800
+Message-Id: <20211215101831.256667-1-xt.hu@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This is a patch series for watchdog driver for Sunplus SP7021 SoC.
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Xiantao Hu (2):
+  dt-bindings: watchdog: Add bindings doc for Sunplus SP7021
+  watchdog: Add driver for Sunplus SP7021
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+ .../bindings/watchdog/sunplus,sp7021-wdt.yaml |  45 +++
+ MAINTAINERS                                   |   7 +
+ drivers/watchdog/Kconfig                      |  11 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/sunplus_wdt.c                | 279 ++++++++++++++++++
+ 5 files changed, 343 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+ create mode 100644 drivers/watchdog/sunplus_wdt.c
 
+-- 
+2.33.1
 
-Pozdrawiam,
-Mateusz Adamczyk
