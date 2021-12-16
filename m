@@ -2,61 +2,141 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1774F477D0B
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Dec 2021 21:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED0D477F83
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Dec 2021 22:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233912AbhLPUG7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Dec 2021 15:06:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
+        id S241840AbhLPVpO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Dec 2021 16:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241247AbhLPUG6 (ORCPT
+        with ESMTP id S242309AbhLPVod (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Dec 2021 15:06:58 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABC3C06173E
-        for <linux-watchdog@vger.kernel.org>; Thu, 16 Dec 2021 12:06:58 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id z29so10890786edl.7
-        for <linux-watchdog@vger.kernel.org>; Thu, 16 Dec 2021 12:06:58 -0800 (PST)
+        Thu, 16 Dec 2021 16:44:33 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D00C08E7B1;
+        Thu, 16 Dec 2021 13:43:25 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id e136so920719ybc.4;
+        Thu, 16 Dec 2021 13:43:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PA5Eb3SKatYFaqsO/40bx9AAytaL07oA6ydkj8EAbzQ=;
-        b=ZrXWblgkMkUeOVMwrHbqPdxUk4Wv8EP/e+TCg8ZthSOEtpHXkCvqz6ArgY8LCiNWRT
-         JbPWJ3GanvDDqJ5dZHUAvrn50IAoYY3nL+jzkSLZiSNEzXM7J73Wkfr9q3g1tPFG8nJU
-         1pViRjrV2exzVkdhaQbIeO1C7Zlkp0ia56QKkb4ISBVGwZnpC8wL8XEEODhp+vzWKgYo
-         V+X7qkXx2ehE43OyUcP4K2F8DjokbDkSUrxS9i4+2A7+yO8C9DhGH+Zh/Q5v5fK45ovZ
-         MfuJYrtj5wBKx0OycQmQ1sISa6ueyrf46MshW8Q4NeSH9MrMM/dit0t5FUk1xo+lqzVA
-         AUNg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MCvRIN88cvRRyNaT6C9m3J4R8+HA36mI5cyJE+PFjmo=;
+        b=gtdSaMh94TK8rrahc+3/8Nzu5QLzB2HC011WXA3oIa3M0p1zxNKfqgvbde25n1EPUI
+         +fwrquEQmW+6xEOkCBYPpzJuQXvsXsBwGxgNuw5vu96xcgD1GZZzqQRU9mzXuKnqrj4D
+         lSNLvnGg4FnqG+OaMAI/CbTBZZmk+3156jFpOkUgjvtXml0ZH4AJNcUmABkCqUJNAnLH
+         kSu8WRMV/imP0v6bxPHVwcaDeir8N1FL3pxwRWHMaUFkpoXzxKE8p0b4tstYMSuzMTOs
+         sVeU7bVANKvCopp7gesCK5gcGLv+c3bf6owL5WNkSx9Of0VCnkoGRKo13JRO6fvb3YC1
+         JhjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PA5Eb3SKatYFaqsO/40bx9AAytaL07oA6ydkj8EAbzQ=;
-        b=gIQUsj1XVj/dOj8a/NFoOeUHDKTb5HYZp2LGpXUIPO5/elj3Jlm1xXd2yGJElHikHe
-         v0vL8kIygIAZojD09MWOvvij3C1/jIm3j4UcFrqXomLkSq3IVmn/Q5Hk+IeiS1dEWG4I
-         w0r/gJcEkNCGjY36N4yCC12A26C/2xzD6zj1XL+6/E3S96pYCWWXVj620ifkEhxcayvF
-         Wk+/trE0VBrjtqzDw1r7nt94YLvt/dgOaSui9/RviBbrnTmRN/aG5i53n8OqL7trvGBE
-         qHMR5RSKxNyfjXB3hSss/nszGMLo/AiL9HvUw989B/+D0S885pi8UVWAgoWfB3x5H4WX
-         JHAA==
-X-Gm-Message-State: AOAM5334J7NldUkLevq7ZWAEBGqNp40Wj201Oe2R3G9Xh4QTlpPqs1dI
-        E8jI1LqWWjvT/a3HO/vmigTXjw2YCJO4PkMx5mk=
-X-Google-Smtp-Source: ABdhPJxY8ZseiOLcF4JhZFN/isY4L65SXfDZijYM7VSjcy9jLEsnUH0r6wFqy+WuGoeKNVzsqP0ALIQnH3cmbYlXFs4=
-X-Received: by 2002:a17:907:2ce7:: with SMTP id hz7mr552143ejc.479.1639685215266;
- Thu, 16 Dec 2021 12:06:55 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MCvRIN88cvRRyNaT6C9m3J4R8+HA36mI5cyJE+PFjmo=;
+        b=c5eSlwYwLEyvke0ly+SYzSQYfxfitYQ7AHD02be0Wzw9Evv0Oj5PABsLZJLwd7i2u/
+         gGibdeolmZX8i8+QteTOyv9DTLpA7U03A8rH7ymDnJjVwljm/9jPgw1OwfXrsOH+rOAS
+         +T/Z7pMRnhjsN93LxtDnr0Ppu8t2E8KP/AdJty8AxJUvQMmqlJYf5bDd/rhpjTrIdEhY
+         0KvsrYoI+e4/6GkqlRSgmLHEhROnDyC+Pn28o9ODwoWHO9PsAupbfTRyeN2mq9wTawXd
+         jKaHF4UgNv39xakrInkHWh5SVEjKsBmRZajOySlZyK7ZC93Fv3MfXOP6Y41S8oCGXcNQ
+         u8Vg==
+X-Gm-Message-State: AOAM533+119miqu7uTfNIBouGqQyyxxU4hEj/VskaoMRDCXIHeAXvyrk
+        1QgPkmVmMHZzMYfHoStg97b/Fr8D65qLSKt94jX4a8QthGA=
+X-Google-Smtp-Source: ABdhPJwKu2cVmo3f5Ohp0DqRDtIJ5E4ZlhFFBipbvdQZt0VyPsDlrQmuE461BA/8qJGBmqJ/msZlaDDfjoki4wAKUXw=
+X-Received: by 2002:a25:abe3:: with SMTP id v90mr15572ybi.315.1639691004872;
+ Thu, 16 Dec 2021 13:43:24 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:906:2c04:0:0:0:0 with HTTP; Thu, 16 Dec 2021 12:06:53
- -0800 (PST)
-Reply-To: revfrpaulwilliams2@gmail.com
-From:   "Rev. Fr. Paul Williams" <fatimamonge75@gmail.com>
-Date:   Fri, 17 Dec 2021 01:36:53 +0530
-Message-ID: <CANO8M73tfggSz8U4JHkR657BL=QDZ8uMOnYj+7g3RUuCOz7XEw@mail.gmail.com>
-Subject: Donation From Williams Foundation.
-To:     undisclosed-recipients:;
+References: <20211216183639.7710-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <3733aa67-8606-58de-69cb-f7a167713da4@roeck-us.net>
+In-Reply-To: <3733aa67-8606-58de-69cb-f7a167713da4@roeck-us.net>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 16 Dec 2021 21:42:58 +0000
+Message-ID: <CA+V-a8v6-zO6rYDHyFsPZ15YyjVaoP9A=WWNLXaVfY=Kkgrr+g@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: s3c2410: Use platform_get_irq() to get the interrupt
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Contact Rev. Fr. Paul Williams Immediately For A Charity Donation Of
-$6,200,000.00 United States Dollars At E-Mail:
-revfrpaulwilliams2@gmail.com
+Hi Guenter,
+
+Thank you for the review.
+
+On Thu, Dec 16, 2021 at 7:01 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 12/16/21 10:36 AM, Lad Prabhakar wrote:
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypassed the hierarchical setup and messed up the
+> > irq chaining.
+> >
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq().
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >   drivers/watchdog/s3c2410_wdt.c | 13 ++++++-------
+> >   1 file changed, 6 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> > index 2395f353e52d..f5aced344b7b 100644
+> > --- a/drivers/watchdog/s3c2410_wdt.c
+> > +++ b/drivers/watchdog/s3c2410_wdt.c
+> > @@ -513,9 +513,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+> >   {
+> >       struct device *dev = &pdev->dev;
+> >       struct s3c2410_wdt *wdt;
+> > -     struct resource *wdt_irq;
+> >       unsigned int wtcon;
+> >       int started = 0;
+> > +     int wdt_irq;
+> >       int ret;
+> >
+> >       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> > @@ -536,10 +536,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+> >               }
+> >       }
+> >
+> > -     wdt_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> > -     if (wdt_irq == NULL) {
+> > -             dev_err(dev, "no irq resource specified\n");
+> > -             ret = -ENOENT;
+> > +     wdt_irq = platform_get_irq(pdev, 0);
+> > +     if (wdt_irq < 0) {
+> > +             ret = wdt_irq;
+> >               goto err;
+>
+> All those "goto err;" statements in this function are pointless since they
+> just return ret. Since this is the first of those goto statements, please
+> replace it with "return wdt_irq;".
+>
+Sure will do and post a v2.
+
+> Thanks,
+> Guenter
+>
+> >       }
+> >
+> > @@ -592,8 +591,8 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+> >                       dev_info(dev, "default timer value is out of range, cannot start\n");
+> >       }
+> >
+> > -     ret = devm_request_irq(dev, wdt_irq->start, s3c2410wdt_irq, 0,
+> > -                             pdev->name, pdev);
+> > +     ret = devm_request_irq(dev, wdt_irq, s3c2410wdt_irq, 0,
+> > +                            pdev->name, pdev);
+> >       if (ret != 0) {
+> >               dev_err(dev, "failed to install irq (%d)\n", ret);
+> >               goto err_cpufreq;
+> >
+>
+Cheers,
+Prabhakar
