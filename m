@@ -2,57 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCAD477969
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Dec 2021 17:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 329FB477975
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Dec 2021 17:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbhLPQkp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Dec 2021 11:40:45 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:43780
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233473AbhLPQkp (ORCPT
+        id S233812AbhLPQlq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Dec 2021 11:41:46 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:46698
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232873AbhLPQlp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:40:45 -0500
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        Thu, 16 Dec 2021 11:41:45 -0500
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 04B1C409F7
-        for <linux-watchdog@vger.kernel.org>; Thu, 16 Dec 2021 16:40:43 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3AA2B3FFD9
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Dec 2021 16:41:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639672843;
-        bh=wzGK8JrM0qK5K+9nNV1QJqS+dRB/4uLBgfT0d3ILjG4=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=cQtlT3utN3EaG2IlL/0ZZOmZpSfG5EKJooSdBfn4rIQiKfruqDbfjU2TYXkZJ5HSg
-         TZ2o5wAycEYCyQv2MDtqk9OXzsStdBHwyB4y7qjeprDyLJCJJkEtATjVFu058bqn+7
-         VTMMXRsoGzg3uIPjfFDuTjVjE/Ed6mvlpZC2WvSIxcTExyTmehL4l5Zup9UjRRhIQg
-         UeuMg7MfT2nOUD8T//NBLDj0ArCmr/TVWxh/1F7L90mY+JR1hHZ5Mb8VT/Iz8cgPl8
-         K3VkYb6N4nvkDMOa0m83RGgrpyJ0KgMiBHR2ijr6m0VBNHMH4VtOGjgg+KIYFkX3DP
-         g3Yo63t8KteHg==
-Received: by mail-wm1-f69.google.com with SMTP id a203-20020a1c7fd4000000b0034574187420so597450wmd.5
-        for <linux-watchdog@vger.kernel.org>; Thu, 16 Dec 2021 08:40:43 -0800 (PST)
+        s=20210705; t=1639672904;
+        bh=JfLJ4CziLh4wHDu8UqBCS+3mFRyC0Pfk57YtxR/Sqww=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=Q3Y0zxePCuXbDvP4CmBazRXBAc1zTgCfHENjbspZGlx+3CAi9YU6pdX6Y2VEpmhMd
+         SpUVwBEBSNHnRZPtRObpgioluiS8a2S1ncyhQX4A5xyAXYOJqcFG0UjZ/F9AFtQ37P
+         245L3ZCMUezSblEQmL3BVb5znOI4kVyr9w3VpPMhGydPo+S2euhu6z121FR9pexjx+
+         oQOKXs6EJK42IubN2OZEeZv1yasOAQSUZ3FuI503HTnLWYeH2tkwpFVmReRvLAUvIE
+         3b9qIJw7qjP8h5+/b7hK4uI8JqWCyiHJmXFX64yn1x+tK4/vzH/tEEz4C2WlF+xc38
+         b6tB7RhKeyLYw==
+Received: by mail-wr1-f69.google.com with SMTP id k11-20020adfc70b000000b001a2333d9406so1492973wrg.3
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Dec 2021 08:41:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wzGK8JrM0qK5K+9nNV1QJqS+dRB/4uLBgfT0d3ILjG4=;
-        b=l7OVinPZNmsp2rw9oA/KpsWMkwxZUQScEHfIZRAUjxP7iSp9mEzw8+AdHGb2OpDYLU
-         bQDhpeJQweqr5SLUkS8mkz2l7U2wNOWAISj40SMKfBWNybdR6mv338ko9TLlI4Vy0+OS
-         yQHZECzI7JR/YgnDfiDbekVtMMDqpiPIawIDX+B8TPFtGvCb9VozlG3HSswcBGc/uBVW
-         8oCC016TDI6ZjxLwAi+iPcBvbTfUTUqFvW17eu2LL1CLBkenQAiiCC2fWUtQOjGT29T1
-         XH4fLlTNAFmO5PvHe8v0xp10Iij42kk0Bn71kji8vxRk2hdQJ4BZTppPDrAm3iSRrLy7
-         3QRw==
-X-Gm-Message-State: AOAM5311WvUJaz1JTLsVOa9qcc8eowgD/5nVL9h6+n84L3Qr1yjatyaB
-        ePv7RgACEfnMGodOWxcP7+4m52MFrQw4K5MwJ/mtUS/bQsFP5C2TRHkBRXWtqPh9FKHTKTnTTLk
-        m+uJEu3K/cM62R7j6yQmpc3etYWbi2md0rt73Yp+mrqwN
-X-Received: by 2002:adf:eb4c:: with SMTP id u12mr4157668wrn.707.1639672842472;
-        Thu, 16 Dec 2021 08:40:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwMEaAfgUDbbHkpgBFCHapS6AIPsW5OiAs1LX+6oRtRz2kYhV8oYHhxxQZU7b3y6qvplc2a+w==
-X-Received: by 2002:adf:eb4c:: with SMTP id u12mr4157652wrn.707.1639672842269;
-        Thu, 16 Dec 2021 08:40:42 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JfLJ4CziLh4wHDu8UqBCS+3mFRyC0Pfk57YtxR/Sqww=;
+        b=r8AscdCkOp/BEi1AYcKdseX7ASlO3pa6Hr/YbdtHelMZuY4o2lC6pdGFQ1nEHeJQsu
+         /w2JM6QJ0zIraRgKNofyZx4QwPdYZDOEiYwvwolBn7VXCUv7DT+Nr4WSQKmZAIXirDA1
+         cpd3bH87STajoEaFN2eLK0RXGQbs5MTJ+H8R0/qAQoVi0pbMqBIkTZrZBWH4z5zRSrAl
+         YiemMRnHS1yDD6HX0rUn3Z4ohTLmsv/dDHd2DFD9X6h7PKKFSCZFaXPDiRyB+biW3l1f
+         2vpNozdBaw9vZTZTOGYyvVWTfcxGOTzNPijnvYBsP2ID1ihigGPUQUlUu4mQc5TzkpFb
+         JDOg==
+X-Gm-Message-State: AOAM533OjCTs1u28S1hi21BCudSwpWFQ+zO5V7yCVDRQ/2Ur505tQ0Fy
+        zyszJ65NkgfTJ/wMnqSPwK8R5scNDiiV/2aJAd7EdBvM+9YlwIyvmFyPEWgbpYbDZR1r2IAbXGu
+        ZEDG2W0JxgohBlxnjPf2rVQGLBklLIADfP/FazDhKJDaw
+X-Received: by 2002:a05:600c:4ed2:: with SMTP id g18mr5766082wmq.18.1639672903688;
+        Thu, 16 Dec 2021 08:41:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJybNZu1IHHUp1mPGGOaQaPtFp+rlseoN/NNYDl1gNaarMkwRFjQl6C0YHI4YeWDd2Z1dR678Q==
+X-Received: by 2002:a05:600c:4ed2:: with SMTP id g18mr5766066wmq.18.1639672903395;
+        Thu, 16 Dec 2021 08:41:43 -0800 (PST)
 Received: from alex.home (lfbn-gre-1-195-1.w90-112.abo.wanadoo.fr. [90.112.158.1])
-        by smtp.gmail.com with ESMTPSA id o4sm3938290wmc.43.2021.12.16.08.40.41
+        by smtp.gmail.com with ESMTPSA id e7sm6453994wrg.31.2021.12.16.08.41.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 08:40:41 -0800 (PST)
+        Thu, 16 Dec 2021 08:41:43 -0800 (PST)
 From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -69,35 +70,445 @@ To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-watchdog@vger.kernel.org
 Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: [PATCH v2 1/2] dt-bindings: mfd: Fix typo "DA9093" -> "DA9063"
-Date:   Thu, 16 Dec 2021 17:40:36 +0100
-Message-Id: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+Subject: [PATCH v2 2/2] dt-bindings: Migrate DA9063 text bindings to YAML
+Date:   Thu, 16 Dec 2021 17:40:37 +0100
+Message-Id: <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+References: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The device described is the "DA9063", not "DA9093", so fix this typo.
+DA9063 devices bindings used text format, so migrate those bindings to YAML
+format before adding any new bindings.
 
 Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 ---
- Documentation/devicetree/bindings/mfd/da9063.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
+Changes in v2:
+- Fix all errors detected with make dt_binding_checks
+
+ .../bindings/input/da9063-onkey.yaml          |  39 ++++++
+ .../devicetree/bindings/mfd/da9063.txt        | 111 ------------------
+ .../devicetree/bindings/mfd/da9063.yaml       | 105 +++++++++++++++++
+ .../bindings/regulator/da9063-regulator.yaml  |  51 ++++++++
+ .../devicetree/bindings/rtc/da9063-rtc.yaml   |  31 +++++
+ .../bindings/watchdog/da9063-watchdog.yaml    |  31 +++++
+ 6 files changed, 257 insertions(+), 111 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/input/da9063-onkey.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/da9063.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/da9063-regulator.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/da9063-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/da9063-watchdog.yaml
+
+diff --git a/Documentation/devicetree/bindings/input/da9063-onkey.yaml b/Documentation/devicetree/bindings/input/da9063-onkey.yaml
+new file mode 100644
+index 000000000000..e49f69f7aaac
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/da9063-onkey.yaml
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/da9063-onkey.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: OnKey driver for Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
++
++maintainers:
++  - Support Opensource <support.opensource@diasemi.com>
++
++description: |
++  This module is part of the DA9063 MFD device. For more details, see
++  Documentation/devicetree/bindings/mfd/da9063.yaml.
++
++  The OnKey controller is represented as a sub-node of the PMIC node
++  on the device tree.
++
++  This node defines the OnKey settings for controlling the key
++  functionality of the device. The node should contain the compatible property
++  with the value "dlg,da9063-onkey".
++
++properties:
++  compatible:
++    const: dlg,da9063-onkey
++
++  dlg,disable-key-power:
++    description: |
++      Disable power-down using a long key-press. If this
++      entry exists the OnKey driver will remove support for the KEY_POWER key
++      press. If this entry does not exist then by default the key-press
++      triggered power down is enabled and the OnKey will support both KEY_POWER
++      and KEY_SLEEP.
++    type: boolean
++
++required:
++  - compatible
++
++additionalProperties: false
 diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt b/Documentation/devicetree/bindings/mfd/da9063.txt
-index 8da879935c59..91b79a21d403 100644
+deleted file mode 100644
+index 91b79a21d403..000000000000
 --- a/Documentation/devicetree/bindings/mfd/da9063.txt
-+++ b/Documentation/devicetree/bindings/mfd/da9063.txt
-@@ -1,6 +1,6 @@
- * Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
- 
--DA9093 consists of a large and varied group of sub-devices (I2C Only):
-+DA9063 consists of a large and varied group of sub-devices (I2C Only):
- 
- Device                   Supply Names    Description
- ------                   ------------    -----------
++++ /dev/null
+@@ -1,111 +0,0 @@
+-* Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
+-
+-DA9063 consists of a large and varied group of sub-devices (I2C Only):
+-
+-Device                   Supply Names    Description
+-------                   ------------    -----------
+-da9063-regulator        :               : LDOs & BUCKs
+-da9063-onkey            :               : On Key
+-da9063-rtc              :               : Real-Time Clock (DA9063 only)
+-da9063-watchdog         :               : Watchdog
+-
+-======
+-
+-Required properties:
+-
+-- compatible : Should be "dlg,da9063" or "dlg,da9063l"
+-- reg : Specifies the I2C slave address (this defaults to 0x58 but it can be
+-  modified to match the chip's OTP settings).
+-- interrupts : IRQ line information.
+-- interrupt-controller
+-
+-Sub-nodes:
+-
+-- regulators : This node defines the settings for the LDOs and BUCKs.
+-  The DA9063(L) regulators are bound using their names listed below:
+-
+-    bcore1    : BUCK CORE1
+-    bcore2    : BUCK CORE2
+-    bpro      : BUCK PRO
+-    bmem      : BUCK MEM
+-    bio       : BUCK IO
+-    bperi     : BUCK PERI
+-    ldo1      : LDO_1	(DA9063 only)
+-    ldo2      : LDO_2	(DA9063 only)
+-    ldo3      : LDO_3
+-    ldo4      : LDO_4	(DA9063 only)
+-    ldo5      : LDO_5	(DA9063 only)
+-    ldo6      : LDO_6	(DA9063 only)
+-    ldo7      : LDO_7
+-    ldo8      : LDO_8
+-    ldo9      : LDO_9
+-    ldo10     : LDO_10	(DA9063 only)
+-    ldo11     : LDO_11
+-
+-  The component follows the standard regulator framework and the bindings
+-  details of individual regulator device can be found in:
+-  Documentation/devicetree/bindings/regulator/regulator.txt
+-
+-- rtc : This node defines settings for the Real-Time Clock associated with
+-  the DA9063 only. The RTC is not present in DA9063L. There are currently
+-  no entries in this binding, however compatible = "dlg,da9063-rtc" should
+-  be added if a node is created.
+-
+-- onkey : This node defines the OnKey settings for controlling the key
+-  functionality of the device. The node should contain the compatible property
+-  with the value "dlg,da9063-onkey".
+-
+-  Optional onkey properties:
+-
+-  - dlg,disable-key-power : Disable power-down using a long key-press. If this
+-    entry exists the OnKey driver will remove support for the KEY_POWER key
+-    press. If this entry does not exist then by default the key-press
+-    triggered power down is enabled and the OnKey will support both KEY_POWER
+-    and KEY_SLEEP.
+-
+-- watchdog : This node defines settings for the Watchdog timer associated
+-  with the DA9063 and DA9063L. There are currently no entries in this
+-  binding, however compatible = "dlg,da9063-watchdog" should be added
+-  if a node is created.
+-
+-
+-Example:
+-
+-	pmic0: da9063@58 {
+-		compatible = "dlg,da9063"
+-		reg = <0x58>;
+-		interrupt-parent = <&gpio6>;
+-		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
+-		interrupt-controller;
+-
+-		rtc {
+-			compatible = "dlg,da9063-rtc";
+-		};
+-
+-		wdt {
+-			compatible = "dlg,da9063-watchdog";
+-		};
+-
+-		onkey {
+-			compatible = "dlg,da9063-onkey";
+-			dlg,disable-key-power;
+-		};
+-
+-		regulators {
+-			DA9063_BCORE1: bcore1 {
+-				regulator-name = "BCORE1";
+-				regulator-min-microvolt = <300000>;
+-				regulator-max-microvolt = <1570000>;
+-				regulator-min-microamp = <500000>;
+-				regulator-max-microamp = <2000000>;
+-				regulator-boot-on;
+-			};
+-			DA9063_LDO11: ldo11 {
+-				regulator-name = "LDO_11";
+-				regulator-min-microvolt = <900000>;
+-				regulator-max-microvolt = <3600000>;
+-				regulator-boot-on;
+-			};
+-		};
+-	};
+-
+diff --git a/Documentation/devicetree/bindings/mfd/da9063.yaml b/Documentation/devicetree/bindings/mfd/da9063.yaml
+new file mode 100644
+index 000000000000..62a8df68bf3f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/da9063.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/da9063.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
++
++maintainers:
++  - Support Opensource <support.opensource@diasemi.com>
++
++description: |
++  DA9063 consists of a large and varied group of sub-devices (I2C Only):
++
++  Device                   Supply Names    Description
++  ------                   ------------    -----------
++  da9063-regulator        :               : LDOs & BUCKs
++  da9063-onkey            :               : On Key
++  da9063-rtc              :               : Real-Time Clock (DA9063 only)
++  da9063-watchdog         :               : Watchdog
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - dlg,da9063
++              - dlg,da9063l
++
++  reg:
++    description:
++      I2C device address.
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  regulators:
++    $ref: ../regulator/da9063-regulator.yaml
++
++  onkey:
++    $ref: ../input/da9063-onkey.yaml
++
++  rtc:
++    $ref: ../rtc/da9063-rtc.yaml
++
++  watchdog:
++    $ref: ../watchdog/da9063-watchdog.yaml
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-controller
++
++additionalProperties: false
++
++examples:
++  - |
++        #include <dt-bindings/interrupt-controller/irq.h>
++
++        i2c1 {
++                #size-cells = <0>;
++                #address-cells = <1>;
++
++                pmic0: da9063@58 {
++                        compatible = "dlg,da9063";
++                        reg = <0x58>;
++                        interrupt-parent = <&gpio6>;
++                        interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
++                        interrupt-controller;
++
++                        rtc {
++                                compatible = "dlg,da9063-rtc";
++                        };
++
++                        wdt {
++                                compatible = "dlg,da9063-watchdog";
++                        };
++
++                        onkey {
++                                compatible = "dlg,da9063-onkey";
++                                dlg,disable-key-power;
++                        };
++
++                        regulators {
++                                DA9063_BCORE1: bcore1 {
++                                        regulator-name = "BCORE1";
++                                        regulator-min-microvolt = <300000>;
++                                        regulator-max-microvolt = <1570000>;
++                                        regulator-min-microamp = <500000>;
++                                        regulator-max-microamp = <2000000>;
++                                        regulator-boot-on;
++                                };
++                                DA9063_LDO11: ldo11 {
++                                        regulator-name = "LDO_11";
++                                        regulator-min-microvolt = <900000>;
++                                        regulator-max-microvolt = <3600000>;
++                                        regulator-boot-on;
++                                };
++                        };
++                };
++        };
+diff --git a/Documentation/devicetree/bindings/regulator/da9063-regulator.yaml b/Documentation/devicetree/bindings/regulator/da9063-regulator.yaml
+new file mode 100644
+index 000000000000..0180b3684c0d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/da9063-regulator.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/da9063-regulator.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Regulator driver for Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
++
++maintainers:
++  - Support Opensource <support.opensource@diasemi.com>
++
++description: |
++  This module is part of the DA9063 MFD device. For more details, see
++  Documentation/devicetree/bindings/mfd/da9063.yaml.
++
++  The regulator controller is represented as a sub-node of the PMIC node
++  on the device tree.
++
++  This node defines the settings for the LDOs and BUCKs.
++  The DA9063(L) regulators are bound using their names listed below:
++
++  bcore1    : BUCK CORE1
++  bcore2    : BUCK CORE2
++  bpro      : BUCK PRO
++  bmem      : BUCK MEM
++  bio       : BUCK IO
++  bperi     : BUCK PERI
++  ldo1      : LDO_1	(DA9063 only)
++  ldo2      : LDO_2	(DA9063 only)
++  ldo3      : LDO_3
++  ldo4      : LDO_4	(DA9063 only)
++  ldo5      : LDO_5	(DA9063 only)
++  ldo6      : LDO_6	(DA9063 only)
++  ldo7      : LDO_7
++  ldo8      : LDO_8
++  ldo9      : LDO_9
++  ldo10     : LDO_10	(DA9063 only)
++  ldo11     : LDO_11
++
++  The component follows the standard regulator framework and the bindings
++  details of individual regulator device can be found in:
++  Documentation/devicetree/bindings/regulator/regulator.txt
++
++properties:
++  compatible:
++    const: dlg,da9063-regulator
++
++required:
++  - compatible
++
++additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/rtc/da9063-rtc.yaml b/Documentation/devicetree/bindings/rtc/da9063-rtc.yaml
+new file mode 100644
+index 000000000000..3db1a9e5b572
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/da9063-rtc.yaml
+@@ -0,0 +1,31 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/da9063-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: RTC driver for Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
++
++maintainers:
++  - Support Opensource <support.opensource@diasemi.com>
++
++description:
++  This module is part of the DA9063 MFD device. For more details, see
++  Documentation/devicetree/bindings/mfd/da9063.yaml.
++
++  The RTC controller is represented as a sub-node of the PMIC node
++  on the device tree.
++
++  This node defines settings for the Real-Time Clock associated with
++  the DA9063 only. The RTC is not present in DA9063L. There are currently
++  no entries in this binding, however compatible = "dlg,da9063-rtc" should
++  be added if a node is created.
++
++properties:
++  compatible:
++    const: dlg,da9063-rtc
++
++required:
++  - compatible
++
++additionalProperties: false
+diff --git a/Documentation/devicetree/bindings/watchdog/da9063-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/da9063-watchdog.yaml
+new file mode 100644
+index 000000000000..d3286f4c04d2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/da9063-watchdog.yaml
+@@ -0,0 +1,31 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/da9063-watchdog.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Watchdog driver for Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
++
++maintainers:
++  - Support Opensource <support.opensource@diasemi.com>
++
++description: |
++  This module is part of the DA9063 MFD device. For more details, see
++  Documentation/devicetree/bindings/mfd/da9063.yaml.
++
++  The watchdog controller is represented as a sub-node of the PMIC node
++  on the device tree.
++
++  This node defines settings for the Watchdog timer associated
++  with the DA9063 and DA9063L. There are currently no entries in this
++  binding, however compatible = "dlg,da9063-watchdog" should be added
++  if a node is created.
++
++properties:
++  compatible:
++    const: dlg,da9063-watchdog
++
++required:
++  - compatible
++
++additionalProperties: false
 -- 
 2.32.0
 
