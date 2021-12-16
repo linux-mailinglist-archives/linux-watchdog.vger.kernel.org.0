@@ -2,87 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B27BC477999
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Dec 2021 17:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF11477BA4
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Dec 2021 19:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235909AbhLPQtK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Dec 2021 11:49:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45534 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbhLPQtJ (ORCPT
+        id S229723AbhLPSgr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Dec 2021 13:36:47 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:6738 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229686AbhLPSgr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:49:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70D9C61EBB;
-        Thu, 16 Dec 2021 16:49:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 084F6C36AE4;
-        Thu, 16 Dec 2021 16:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639673347;
-        bh=1Cn/YaBA1mXDfkWjv49bj322yFYnapcjg344B018UkQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GKBo/uDHNX4zOxMt+onveypXwa9GFl5ANDl+OHlA43ytPl4lDYMFAv3+/HAcR4zz4
-         yePSYt+psIebVP7KeGQvupZL4sVL3/hTRa0zgkmYkhzegu1ICEO3SVVl/z+pjyi0uG
-         BZhT0uLNHUG3OezGLCGGFw6Kh0PtcuvsAYNWkCf93RGKPXhnjiD/c3hOSjd8PKbjbG
-         K4bpXnY4XhBeuDF2CmCM7DB1TnxtD364e/HlKXFSFHH6VhLDtWVWPQY/BSTFydHJDM
-         ETKvk59O5w11yJAKYGQstCpdOWTIxZjWjbszhZx5PitFxpG/wUpVFaOj6MhYSnWlGW
-         FdT6rFbUotVEg==
-Date:   Thu, 16 Dec 2021 16:49:00 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Thu, 16 Dec 2021 13:36:47 -0500
+X-IronPort-AV: E=Sophos;i="5.88,212,1635174000"; 
+   d="scan'208";a="103741790"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 17 Dec 2021 03:36:46 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 34A06400754D;
+        Fri, 17 Dec 2021 03:36:44 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: Migrate DA9063 text bindings to YAML
-Message-ID: <Ybtt/DEpZfuLmbK4@sirena.org.uk>
-References: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
- <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7UPpL9eSKpRqGuyR"
-Content-Disposition: inline
-In-Reply-To: <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
-X-Cookie: No solicitors.
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] watchdog: s3c2410: Use platform_get_irq() to get the interrupt
+Date:   Thu, 16 Dec 2021 18:36:39 +0000
+Message-Id: <20211216183639.7710-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypassed the hierarchical setup and messed up the
+irq chaining.
 
---7UPpL9eSKpRqGuyR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq().
 
-On Thu, Dec 16, 2021 at 05:40:37PM +0100, Alexandre Ghiti wrote:
-> DA9063 devices bindings used text format, so migrate those bindings to YAML
-> format before adding any new bindings.
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/watchdog/s3c2410_wdt.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-Acked-by: Mark Brown <broonie@kernel.org>
+diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+index 2395f353e52d..f5aced344b7b 100644
+--- a/drivers/watchdog/s3c2410_wdt.c
++++ b/drivers/watchdog/s3c2410_wdt.c
+@@ -513,9 +513,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct s3c2410_wdt *wdt;
+-	struct resource *wdt_irq;
+ 	unsigned int wtcon;
+ 	int started = 0;
++	int wdt_irq;
+ 	int ret;
+ 
+ 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+@@ -536,10 +536,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	wdt_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (wdt_irq == NULL) {
+-		dev_err(dev, "no irq resource specified\n");
+-		ret = -ENOENT;
++	wdt_irq = platform_get_irq(pdev, 0);
++	if (wdt_irq < 0) {
++		ret = wdt_irq;
+ 		goto err;
+ 	}
+ 
+@@ -592,8 +591,8 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 			dev_info(dev, "default timer value is out of range, cannot start\n");
+ 	}
+ 
+-	ret = devm_request_irq(dev, wdt_irq->start, s3c2410wdt_irq, 0,
+-				pdev->name, pdev);
++	ret = devm_request_irq(dev, wdt_irq, s3c2410wdt_irq, 0,
++			       pdev->name, pdev);
+ 	if (ret != 0) {
+ 		dev_err(dev, "failed to install irq (%d)\n", ret);
+ 		goto err_cpufreq;
+-- 
+2.17.1
 
---7UPpL9eSKpRqGuyR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG7bfsACgkQJNaLcl1U
-h9AU4wf+NQMl2BzpsI732uzQnsyi7tWtsifci5XFZQKXDbrG+O49GavA7WWKttTs
-hfQAcN7IH/OkUlomNNzudjYA4fNXA7ssYYibtMMYl2XHp65Z5oaWUs7pn8HFbek1
-iP6Ycb2NL8zGP9AHv0hvnjAOGB0LCPHl1AmjE8KjWtu6sAuHX4rkY5b60SOxfHQw
-AKRQ0o10LcHHouIYYbZMfkuZNsKbn1DQCs2bS3ZrrZjoaZ11XirIzZmukL1upU8x
-Kiuz4sReSR4XVd9I0RdkJ//XH73bgLKB2/ftU8JQjsGRIViccgNYtOb8Xe2lOGyj
-jIlD/BGjBvv/SBwpTRVK9ByivuDYCA==
-=ZZh+
------END PGP SIGNATURE-----
-
---7UPpL9eSKpRqGuyR--
