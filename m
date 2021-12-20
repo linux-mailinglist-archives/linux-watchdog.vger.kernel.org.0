@@ -2,23 +2,23 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8B347A589
-	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Dec 2021 08:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7D347A5C7
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Dec 2021 09:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbhLTHyF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 20 Dec 2021 02:54:05 -0500
-Received: from mail-am6eur05on2044.outbound.protection.outlook.com ([40.107.22.44]:65088
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        id S232382AbhLTIOp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 Dec 2021 03:14:45 -0500
+Received: from mail-eopbgr60077.outbound.protection.outlook.com ([40.107.6.77]:23365
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232332AbhLTHyF (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 20 Dec 2021 02:54:05 -0500
+        id S229464AbhLTIOo (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 20 Dec 2021 03:14:44 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JiS8VSZbbFplb6iL/e6rzikMavLR2UWrLaqTs8fmwc9DFOVoVJuT10zwlAr1aNbIJz02mm46+A4L3g5usdEtonWUr91pax2GZpu07kG0kFMLudMd9tYRSSKabwfUqesnIaBbFLKkwokfqsgIIUbbvACAwo/zxiFgz7675DusxihyedwU6vBsQuAQ5SVvGXwJZ2gRBWtyifhc2JQvI5WfDzO7Xbzyc/54VtRBV1lPXZrH/S4MeLRzrPv2bEmB/3u8ynYrRilrjoAZQk4uIMF9DkxKFzzkdaw/n/hFk3sd8LEyEqHm3VaNwatzJGk5sgpYBrLmPue2XJksJFXoQGbgbQ==
+ b=dIKCMeI9+ZHhU5oXhyqWuoZIAd4X4cAIj5eQRj8TA2yDBVFIAs2rP+vchBhuQkk+xKnJla4ViOBNDIXvGfPRoL3BLcMLgFQoUJzhlAxUMX/JwriSH6LebjIe6K/aAvO9EGT+sU+yptFqzhjuuNjK2XQegQke+EIDXt76R21IYhBu4AXbHmzZTOvJpWYqod09B9/4COba8Lqs+I8i1BHkM5yuRNN1CINCbsD0ImNAm/O6P9/XxDBatE6yFe78hADhhZxjbCTcNGiUrmitMD1kNTd2LSNWaJdgrASVqggvG+1UMbW4q4NsNWw5zwJqAW32nCFSGpYzXvHPRMbRwwFhdA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O9uycmDl0blFnq/cTYA6KU7Ub2ALnCuXt+xMZAkctaY=;
- b=loV0y9I6HCh6HnvfRZE6C62XFaOuZHuZP9rY2sLYR1+Jwnayby3dXDD95LL910/P7up+BB9DyGdc4TJ63wywL7F7prpiJgoBctojwVghfC3BEz3F7vHhSXMNg70EWyOucxK+kqCLzj821DPpDs7/YyE3snEqX3H5S4zCle7Xhi3h9rFcM3/zRfWqeHRMFV65EYUVKdky0WyA+BhwPhpjPyiZEGjAl+lh67y8Bqpg3CTPAHustajHEKpzy7K55/PvEMoX7Q0oCHuhxlJc1+ujn2fdJz4TbYBe1h/bS0XUcsxIamcnxVd0Z0hlPfxAEDnSbAoRCnKeYo9+1a9UyHCXRg==
+ bh=qpa+A7wrhzYn8nGGLDa0KODWLsb5jw/swE1l7N8vc7c=;
+ b=JrVTP6X9/MD3cQXyP8xVVd6jfJYa5xJP8TvHG3ohxT8M36XagPXNg/IlMyfMSw9XBoyrcnSoOpyP3p1COCGBHynkggj/OUN8I4+bfWe6u8dvSpHh1aP1AsYTlNJ2wpjcjRfIPEDtoEfvDhnqzUsq4AFIeLIFBO/3fvhIanPQjkWI7PDxz6BOQMRsZu5jDiI554Meh/iIH6RKEdyrxt3TxTd5DuV/9Kcv2mLqIb9ar94Ixq94dT6vtJ+TkbwrFBs7xJ2dXzSJUZTaqODk8y559+XCVl+ji4cf8e5Y39v0xRwBTIpQdzZn6XAVZWpumAWJTGf47CXNHQCspIWE69CaPA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  194.138.21.70) smtp.rcpttodomain=ucw.cz smtp.mailfrom=siemens.com; dmarc=pass
  (p=none sp=none pct=100) action=none header.from=siemens.com; dkim=none
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O9uycmDl0blFnq/cTYA6KU7Ub2ALnCuXt+xMZAkctaY=;
- b=cKq5E8DxXEI7tabjYUixL69Wj+87tBfScC0YFFbMtzsDWw8zXzgWqx1J6TAWeb1SJFYMg96YOssk52TMcHos3+fxcubeUwHRCSzU+R4ZeLWcyp8zbAQp2Um0Vfj6zxkZMKSWv2i4LdySXA81kdQuRqdOnsT7q9mkW8pQFelAhao0ZsMDQXwizz7NPH/eqPaZS1GxHU7w5M+LmG6TXs5bnruZeTuPJpRRvuGmlGygydm1f+EnRn2GmybwWlMcrk0oMxVBwiGU4HR7W1+JDVvSf+2kQZF8YOaxccy+yy+2wWqKNfSpwH55UsH0za0siFHwswa0v8bUJ/5xrkI64YpJRQ==
-Received: from SV0P279CA0056.NORP279.PROD.OUTLOOK.COM (2603:10a6:f10:14::7) by
- AM9PR10MB4385.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:263::16) with
+ bh=qpa+A7wrhzYn8nGGLDa0KODWLsb5jw/swE1l7N8vc7c=;
+ b=XPt1erEm2BqwgW2zgcOR/Bu4DxClXz0ggENI+Dj285LPqY5XLYeooXhyKZVSaGzM0pw2Q5f+K/Xu3fyTSKYRikR7Ok7iWgH3QBACo3O35YjHLQIE9XiRGnNy8Vax0L5/ypIUg/gkEnFzp0broBl5ZGHJkZH7Y3Dkl4yibDr5q8QO177FcLCPFPXIIibKwIJDKHG6tyOf+/ecqzqQ/0vVHcE+cLD/lAmmQfQ5KA4zMDXMGZca8F0vbBlWwzOXoI+Meazo6tO5DIeM0sNHsGvE42GXhDbmVHgNaboET4x+b8ADqqq0JQYMqMvB15laNDWLTtQ2iYyJ/pQKvsWtrCY51A==
+Received: from OL1P279CA0054.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:14::23)
+ by VI1PR10MB3295.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:13a::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.17; Mon, 20 Dec
- 2021 07:54:02 +0000
-Received: from HE1EUR01FT059.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:f10:14:cafe::4a) by SV0P279CA0056.outlook.office365.com
- (2603:10a6:f10:14::7) with Microsoft SMTP Server (version=TLS1_2,
+ 2021 08:14:42 +0000
+Received: from HE1EUR01FT047.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:e10:14:cafe::da) by OL1P279CA0054.outlook.office365.com
+ (2603:10a6:e10:14::23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
- Transport; Mon, 20 Dec 2021 07:54:02 +0000
+ Transport; Mon, 20 Dec 2021 08:14:41 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.70)
  smtp.mailfrom=siemens.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=siemens.com;
@@ -45,18 +45,18 @@ Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
  194.138.21.70 as permitted sender) receiver=protection.outlook.com;
  client-ip=194.138.21.70; helo=hybrid.siemens.com;
 Received: from hybrid.siemens.com (194.138.21.70) by
- HE1EUR01FT059.mail.protection.outlook.com (10.152.0.241) with Microsoft SMTP
+ HE1EUR01FT047.mail.protection.outlook.com (10.152.1.5) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4801.14 via Frontend Transport; Mon, 20 Dec 2021 07:54:01 +0000
+ 15.20.4801.14 via Frontend Transport; Mon, 20 Dec 2021 08:14:41 +0000
 Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
  DEMCHDC9SJA.ad011.siemens.net (194.138.21.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 20 Dec 2021 08:54:01 +0100
+ 15.1.2375.17; Mon, 20 Dec 2021 09:14:40 +0100
 Received: from md1za8fc.ad001.siemens.net (139.22.39.215) by
  DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 20 Dec 2021 08:54:00 +0100
-Date:   Mon, 20 Dec 2021 08:53:55 +0100
+ 15.1.2375.17; Mon, 20 Dec 2021 09:14:39 +0100
+Date:   Mon, 20 Dec 2021 09:14:34 +0100
 From:   Henning Schild <henning.schild@siemens.com>
 To:     Pavel Machek <pavel@ucw.cz>
 CC:     Hans de Goede <hdegoede@redhat.com>,
@@ -73,13 +73,14 @@ CC:     Hans de Goede <hdegoede@redhat.com>,
         Enrico Weigelt <lkml@metux.net>
 Subject: Re: [PATCH v5 2/4] leds: simatic-ipc-leds: add new driver for
  Siemens Industial PCs
-Message-ID: <20211220085220.23753298@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20211219164903.GB28481@duo.ucw.cz>
+Message-ID: <20211220091434.2f696d76@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20211220085220.23753298@md1za8fc.ad001.siemens.net>
 References: <20211213120502.20661-1-henning.schild@siemens.com>
         <20211213120502.20661-3-henning.schild@siemens.com>
         <20211215201800.GA28336@duo.ucw.cz>
         <61983e62-bc3d-a711-c197-7436a2e33531@redhat.com>
         <20211219164903.GB28481@duo.ucw.cz>
+        <20211220085220.23753298@md1za8fc.ad001.siemens.net>
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
@@ -89,112 +90,137 @@ X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
  DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a569fc84-f2cb-49a7-f15b-08d9c38de337
-X-MS-TrafficTypeDiagnostic: AM9PR10MB4385:EE_
-X-Microsoft-Antispam-PRVS: <AM9PR10MB43857EC09F7F1884CF31E85B857B9@AM9PR10MB4385.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Office365-Filtering-Correlation-Id: c588ee29-1ed9-4af6-d063-08d9c390c610
+X-MS-TrafficTypeDiagnostic: VI1PR10MB3295:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR10MB3295E72B820B0E28E9E4A5C9857B9@VI1PR10MB3295.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gH2H8mX89hO00pwhFZqy19zt4FlvmyU3z6MnEwPki1WF/wnD0OhNs13X2SNDRM0B49Beav6bU6QpxpQ7Je+d/ssit26zayYszVsA/xm1ynPLP5rRYCf6HlXD7H9MtQVjvtMce0YI7hhpGbbYUlOHxal/Tr+yn4HWir6svzhPOF2N0vvkbCOw4rwfm954G8mjM+pklodoFovG+weh69blqvUwZUEb9sHZZh25T2OsW/uA0j3WFbxiqhMRXKiiNQ6kI6S5TpfD6OXvG2HdxgJWRSepWx8B2eoDPx1j1uR40BrK+oq/u6rFwvhr4OylJ4He3tk4Wyj6QJfryuUJtS8hljPOI8kAl3Nw++QhNrtSSzacJcgTpu664hU64LBJc4r3A2GZCoXKGs8Nil9DhqOESgXCgdPJLXGQ56ggoS8mwfSCke+AEZeSq5wlhZFOUdfPzqOuo8EOHSkax+GEt1Jovx8FlvFymtCSGoW/YL9sk+8xLcux/leEFRMbu6d0BHXhwiKrBjg89d1LEIO7iYAmgQeLWyQAPbZCOL6QBRKWVa9JgcNzf85G5YuOK4Uw9+BhG4dOldCbzvrzjo0aY6LatULpS2UG5cW0DmAP88aLKz5Na0gQZnCfH5C/GevG1GC9X1LgSxHQhFkG+KaOh9+meoCup80RWa1QgZtTuv7YY1JFSMm8Kh0ekBxfEDrQCe+iImiSu1DZ13io9DdJi3Dz/yqGW/BG0SgwMOXgukyFcfTwBgphwCoP6GqP2/lUuhBi
-X-Forefront-Antispam-Report: CIP:194.138.21.70;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:hybrid.siemens.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(82960400001)(53546011)(47076005)(7416002)(36860700001)(8936002)(186003)(26005)(8676002)(508600001)(2906002)(956004)(316002)(54906003)(44832011)(7696005)(336012)(16526019)(70206006)(70586007)(5660300002)(55016003)(40460700001)(4326008)(6916009)(9686003)(82310400004)(1076003)(4001150100001)(86362001)(7636003)(356005)(6666004)(7596003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ZjTIkOxSR1cpItxOcpJdoAGvkQj4oJ1uBaX5AywRSCJz7wy5pXslsuHrLHnJSQV5eIHetb3K5d7zbFWqqoQIRpSlsMNP0y5Zh4zhB8HeIoLAOqpcskbVUBkQ8yRh/yEtf0hcaawSSez1D1DzEs6xM6ghKE0W0xfmal8bhw1TIriYFQdEyddogtU1I3oEYxE3fR2ddMAxOaWKkHa+Zaryk6OX7qIccK8GyRb1AZIRNzu6YI1kuKxspVG9xV9Lv4nKdoeVLcfMC+T5719c2dBE6twuYTVNnOuDnb5+HueEtD2dPdYNKKC3ArgNRdjHhAf5zn1tWZH5b1eVfCnYSvY4ltb5f+vZFSIwRYgrl87G9XH7XpDtunNVQw+UIvmgPWxDLsO0zxS0eEAe+2M+8+80rWBFB9LhN8u4GSLlWsDpf0frLft0aMcsaMON8oHJGRDhnpUk4h29Gr8Rsl6AGkQXie3BXfeOgdRSg3+nZB1jF78Ab+0lVfgZh9YnhvKRtCfKgzWk+Dni3gcnchBPPX2Kau/9UapiRv4yEFYVVniH2WH0Yc2N78O1t3rEPiDzfjHfiX9u+Xlt6VuEq11dhTcbOjrGWpamC11+PrAfVp54vz2udV2RLAoHKeb/6wAKb0kTbsp2qdw4irBkXJAbR7zGBxrgYKCY3cm9ZUJ4OI5lDEkOJtxlr/olXd34xI7kh5H0Yi3STbuPSWFJNmHC/81xWrEm/oVyuapLiiD6k4Gsc3MIySG2ArpDnbjGQsbYPR7VlIpYKUohc3m3wY6ySNf3tLoFTQecwXAAJ+nclleBye5rZnDo4/zfSA5WaXEU98lF7qGJQI7ypgdefkpQ/w2UexDHW+/zjS0k6N1KBMO86+Q=
+X-Forefront-Antispam-Report: CIP:194.138.21.70;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:hybrid.siemens.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(356005)(4326008)(36860700001)(508600001)(44832011)(47076005)(82310400004)(70206006)(70586007)(40460700001)(55016003)(966005)(956004)(7416002)(5660300002)(26005)(9686003)(336012)(16526019)(186003)(4001150100001)(7696005)(1076003)(53546011)(6916009)(6666004)(7596003)(316002)(86362001)(54906003)(82960400001)(7636003)(2906002)(8936002)(8676002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 07:54:01.8753
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2021 08:14:41.4489
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a569fc84-f2cb-49a7-f15b-08d9c38de337
+X-MS-Exchange-CrossTenant-Network-Message-Id: c588ee29-1ed9-4af6-d063-08d9c390c610
 X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.70];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT059.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT047.eop-EUR01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4385
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3295
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Sun, 19 Dec 2021 17:49:03 +0100
-schrieb Pavel Machek <pavel@ucw.cz>:
+Am Mon, 20 Dec 2021 08:53:55 +0100
+schrieb Henning Schild <henning.schild@siemens.com>:
 
-> On Wed 2021-12-15 21:53:56, Hans de Goede wrote:
-> > Hi,
-> > 
-> > On 12/15/21 21:18, Pavel Machek wrote:  
-> > > On Mon 2021-12-13 13:05:00, Henning Schild wrote:  
-> > >> This driver adds initial support for several devices from
-> > >> Siemens. It is based on a platform driver introduced in an
-> > >> earlier commit.
-> > >>
-> > >> One of the supported machines has GPIO connected LEDs, here we
-> > >> poke GPIO memory directly because pinctrl does not come up.
-> > >>
-> > >> Signed-off-by: Henning Schild <henning.schild@siemens.com>  
+> Am Sun, 19 Dec 2021 17:49:03 +0100
+> schrieb Pavel Machek <pavel@ucw.cz>:
+> 
+> > On Wed 2021-12-15 21:53:56, Hans de Goede wrote:  
+> > > Hi,
 > > > 
-> > > Acked-by: Pavel Machek <pavel@ucw.cz>  
+> > > On 12/15/21 21:18, Pavel Machek wrote:    
+> > > > On Mon 2021-12-13 13:05:00, Henning Schild wrote:    
+> > > >> This driver adds initial support for several devices from
+> > > >> Siemens. It is based on a platform driver introduced in an
+> > > >> earlier commit.
+> > > >>
+> > > >> One of the supported machines has GPIO connected LEDs, here we
+> > > >> poke GPIO memory directly because pinctrl does not come up.
+> > > >>
+> > > >> Signed-off-by: Henning Schild <henning.schild@siemens.com>    
+> > > > 
+> > > > Acked-by: Pavel Machek <pavel@ucw.cz>    
+> > > 
+> > > I see that this patch #includes
+> > > linux/platform_data/x86/simatic-ipc-base.h which gets added by
+> > > patch 1/4.
+> > > 
+> > > Pavel, can I take this patch upstream through the pdx86 tree (with
+> > > you Ack added)? Or shall I prepare an immutable branch with patch
+> > > 1 for you to merge ?    
 > > 
-> > I see that this patch #includes
-> > linux/platform_data/x86/simatic-ipc-base.h which gets added by
-> > patch 1/4.
+> > Yes, you can.
 > > 
-> > Pavel, can I take this patch upstream through the pdx86 tree (with
-> > you Ack added)? Or shall I prepare an immutable branch with patch 1
-> > for you to merge ?  
+> >   
+> > > >> +
+> > > >> +static struct simatic_ipc_led simatic_ipc_leds_io[] = {
+> > > >> +	{1 << 15, "green:" LED_FUNCTION_STATUS "-1" },
+> > > >> +	{1 << 7,  "yellow:" LED_FUNCTION_STATUS "-1" },
+> > > >> +	{1 << 14, "red:" LED_FUNCTION_STATUS "-2" },
+> > > >> +	{1 << 6,  "yellow:" LED_FUNCTION_STATUS "-2" },
+> > > >> +	{1 << 13, "red:" LED_FUNCTION_STATUS "-3" },
+> > > >> +	{1 << 5,  "yellow:" LED_FUNCTION_STATUS "-3" },
+> > > >> +	{ }
+> > > >> +};    
+> > 
+> > But I'd still like better naming than red:status-2.  
 > 
-> Yes, you can.
+> We had the name discussion already several times, and i have to admit
+> i am not too happy either.
 > 
+> But my impression was that this is an acceptable compromise. I am not
+> happy because the names lack scope, which i had in the first round
+> with "simatic-ipc:red:...".
 > 
-> > >> +
-> > >> +static struct simatic_ipc_led simatic_ipc_leds_io[] = {
-> > >> +	{1 << 15, "green:" LED_FUNCTION_STATUS "-1" },
-> > >> +	{1 << 7,  "yellow:" LED_FUNCTION_STATUS "-1" },
-> > >> +	{1 << 14, "red:" LED_FUNCTION_STATUS "-2" },
-> > >> +	{1 << 6,  "yellow:" LED_FUNCTION_STATUS "-2" },
-> > >> +	{1 << 13, "red:" LED_FUNCTION_STATUS "-3" },
-> > >> +	{1 << 5,  "yellow:" LED_FUNCTION_STATUS "-3" },
-> > >> +	{ }
-> > >> +};  
+> Function is also a bit unclear, but with the numbers and the user
+> manual, or looking at the chassis it kind of adds up and should be
+> clear to users which is which.
 > 
-> But I'd still like better naming than red:status-2.
+> But i agree with Hans that we should sort this out before merge. So
+> please say what makes you unhappy, maybe that can be fixed ... might
+> even make me happier about the names i feel i had to choose.
+> 
+> The LEDs are per definition of the manuals meant for
+> users/applications to signal whatever the use-case might want to
+> signal. There are 3 of them numbered 1-3 on the chassis, and next to
+> the number can often (not always) be found a string like "error",
+> "maint", "run-stop" So a function suggestion i would say.
+> 
+> I could envision to use "fault" or "alarm" instead of "status" for the
+> one labeled "error". And maybe "standby" for the one called "maint"
+> but i would really like to keep the numbers.
+> 
+> Which would look like
+> 
+> status-1
+> alarm-2
+> standby-3
+> 
+> But still i have to clue what those names stand for and choosing
+> and of those "undefined" names could just suggest things and break
+> expectations. Calling them all "status" is neutral ... 
+> 
+> Or can you explain the difference between "fault", "panic" and
+> "alarm". Ask 5 people and get at least 3 different expectations ... i
+> guess.
 
-We had the name discussion already several times, and i have to admit i
-am not too happy either.
+Long story short, i am also not happy but the current suggestion is the
+most generic and least "expectation-creating" i could come up with.
+While keeping a mapping between the name and the chassis/manual.
 
-But my impression was that this is an acceptable compromise. I am not
-happy because the names lack scope, which i had in the first round with
-"simatic-ipc:red:...".
+So i will stick with it, unless i get concrete suggestions on how to
+improve.
 
-Function is also a bit unclear, but with the numbers and the user
-manual, or looking at the chassis it kind of adds up and should be
-clear to users which is which.
+The misc functions
+https://elixir.bootlin.com/linux/latest/source/include/dt-bindings/leds/common.h#L63
 
-But i agree with Hans that we should sort this out before merge. So
-please say what makes you unhappy, maybe that can be fixed ... might
-even make me happier about the names i feel i had to choose.
-
-The LEDs are per definition of the manuals meant for users/applications
-to signal whatever the use-case might want to signal. There are 3 of
-them numbered 1-3 on the chassis, and next to the number can often (not
-always) be found a string like "error", "maint", "run-stop"
-So a function suggestion i would say.
-
-I could envision to use "fault" or "alarm" instead of "status" for the
-one labeled "error". And maybe "standby" for the one called "maint" but
-i would really like to keep the numbers.
-
-Which would look like
-
-status-1
-alarm-2
-standby-3
-
-But still i have to clue what those names stand for and choosing
-and of those "undefined" names could just suggest things and break
-expectations. Calling them all "status" is neutral ... 
-
-Or can you explain the difference between "fault", "panic" and "alarm".
-Ask 5 people and get at least 3 different expectations ... i guess.
+do not seem usable. Without a set of conventions they are nothing but
+"allowed but undefined strings". I could however introduce
+FUNCTION_ERROR FUNCTION_MAINT FUNCTION_RUN_STOP ... add more such random
+strings. Which would probably make me happy because it would create a
+better mapping between the names and the chassis ... but it would
+worsen the problem of "what are those misc functions anyway?"
 
 Henning
 
-
-> 								Pavel
+> Henning
+> 
+> 
+> > 								Pavel
+> >  
+> 
 
