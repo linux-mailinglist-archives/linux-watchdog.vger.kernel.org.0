@@ -2,181 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E0547BCFD
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Dec 2021 10:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC26347BF22
+	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Dec 2021 12:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbhLUJiP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 Dec 2021 04:38:15 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:49375 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236423AbhLUJiO (ORCPT
+        id S237285AbhLULwq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 21 Dec 2021 06:52:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233251AbhLULwp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 Dec 2021 04:38:14 -0500
-Received: from host-79-2-93-196.business.telecomitalia.it ([79.2.93.196]:35472 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mzbb1-0007jy-QE; Tue, 21 Dec 2021 10:38:11 +0100
-Subject: Re: [PATCH v5 5/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211211175951.30763-1-luca@lucaceresoli.net>
- <20211211175951.30763-6-luca@lucaceresoli.net> <YcGeZVgqNWDyvovW@google.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <698fb091-6532-7bba-bc14-6275db32c524@lucaceresoli.net>
-Date:   Tue, 21 Dec 2021 10:38:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Dec 2021 06:52:45 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C5DC061574
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Dec 2021 03:52:45 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id s1so8016088vks.9
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Dec 2021 03:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9RoT72BkBIwDwAqtN8oe2VpaBLgcQ2O6BxOPWBuqRYM=;
+        b=Yaff6L0eowfZslFghL3L0+DSTeNFoBmFMyApwJyzayzgA7+4NG91znPZ8pvPKMPZY8
+         mu0DpDMVdeV6j1djFlTZqXp4Rt+AR6H1i1t7KrUvwBOLNiPhNgv5OlrfNznOyJHmCz7q
+         e7/g2RjmmNtbQeSqujQkpiuRxM2k4nnnEkDT3ViwMWseLPa9E/KbJo55C8nV88B1x7Ib
+         ZHGAfPJg9GUyXqz+nH65c8Q6UklGkuIpw5v+xz4TxfH3wwIBx1lXLAPD9bdJROAPu4Zz
+         RokA57qtUAmwzErikWxiAKT4OMZApacbiufUJ2n9uLSc43raXjhS7vXZZxAGYK4WlgLu
+         kMbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9RoT72BkBIwDwAqtN8oe2VpaBLgcQ2O6BxOPWBuqRYM=;
+        b=AvWC15KJXSp5pZlo3Miq1AWA1Yil29B2s7tZy4p9Mem2QrHNI9ZZgh7INiPp4gOHf+
+         3HZD+Uk1N2sTPTENT+PH25qFvqqUqj//bJnos+t5gzvnuZS8/MCxeBoCTVOC8MbuTkMh
+         1Y+k5tJKXQ25L7Mn67h/7iNF2bYcpi6FqYDtkXtGchvlWe5A+perXjB5PZmDBjiXMeu7
+         09iM8pq2A9ukMVUQUOBnx8LpjktQ8likutDQrgL2BRs7BhRrymfGiNUSi1nS/ygCZvoR
+         6jJEJci36qm4szB2L/w9YAvWtdMrSkuJZlZqPs7m7pHn5AfO42aVI+ZDmuoMZKdhS5g0
+         MTAw==
+X-Gm-Message-State: AOAM532opBjjEcu7fbloVv+2aw1mZFu4PzA8tAikAeWjdj1GHH07foYP
+        AvsF+i6JOk7d9RLMEtvmsL8aN2XJCveO6NtHjy26cQ==
+X-Google-Smtp-Source: ABdhPJzfJLWi8OE0M+qbh0Zh3HwMupQUSZ4SkQChlcipU8aJyfmojpU7ziGddb3G0oouhjO/Wu14CkPZXBjT4JAEjXY=
+X-Received: by 2002:a1f:a08c:: with SMTP id j134mr917542vke.35.1640087564344;
+ Tue, 21 Dec 2021 03:52:44 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YcGeZVgqNWDyvovW@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+References: <20211212170247.30646-1-semen.protsenko@linaro.org>
+ <b618ff5b-ee41-2c29-5074-24fd4d0f0933@canonical.com> <CAPLW+4=wcWv4P_M8kQDjB=QfT5N+mFKm0mUdSDjGSgLg=pRGSw@mail.gmail.com>
+ <4ad8719c-1476-3226-e426-a171b46ca568@roeck-us.net>
+In-Reply-To: <4ad8719c-1476-3226-e426-a171b46ca568@roeck-us.net>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Tue, 21 Dec 2021 13:52:32 +0200
+Message-ID: <CAPLW+4=ZoBqhLpNPiknTjqMXK5wJtOJtn4=99_kvaC3DBb_eqQ@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: s3c2410: Fix getting the optional clock
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Lee,
+On Mon, 20 Dec 2021 at 23:08, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 12/20/21 7:15 AM, Sam Protsenko wrote:
+> > On Sun, 12 Dec 2021 at 19:50, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@canonical.com> wrote:
+> >>
+> >> On 12/12/2021 18:02, Sam Protsenko wrote:
+> >>> "watchdog_src" clock is optional and may not be present for some SoCs
+> >>> supported by this driver. Nevertheless, in case the clock is provided
+> >>> but some error happens during its getting, that error should be handled
+> >>> properly. Use devm_clk_get_optional() API for that. Also report possible
+> >>> errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
+> >>> clock provider is not ready by the time WDT probe function is executed).
+> >>>
+> >>> Fixes: a4f3dc8d5fbc ("watchdog: s3c2410: Support separate source clock")
+> >>> Reported-by: kernel test robot <lkp@intel.com>
+> >>> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> >>> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> >>> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> >>> ---
+> >>>   drivers/watchdog/s3c2410_wdt.c | 22 ++++++++++++----------
+> >>>   1 file changed, 12 insertions(+), 10 deletions(-)
+> >>>
+> >>
+> >>
+> >> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >>
+> >
+> > Hi Guenter,
+> >
+> > If there are no outstanding concerns, can you please apply this one?
+> > Would be nice to see it in v5.17 if that's possible.
+> >
+>
+> I added the patch to my watchdog-next tree, but Wim handles all pull
+> requests.
+>
 
-On 21/12/21 10:29, Lee Jones wrote:
-> On Sat, 11 Dec 2021, Luca Ceresoli wrote:
-> 
->> Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
->> watchdog only.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>
->> ---
->>
->> Changes in v5: none
->>
->> Changes in v4: none
->>
->> Changes in v3:
->>  - Suggested by Lee Jones:
->>    - move struct mfd_cell to top of file
->>    - remove struct max77714 and its kmalloc, not used after probe
->>    - reword error messages
->>    - add "/* pF */" onto the end of the load_cap line
->>
->> Changes in v2:
->>  - fix "watchdog" word in heading comment (Guenter Roeck)
->>  - move struct max77714 to .c file (Krzysztof Kozlowski)
->>  - change include guard format (Krzysztof Kozlowski)
->>  - allow building as a module (Krzysztof Kozlowski)
->>  - remove of_match_ptr usage (Krzysztof Kozlowski / lkp)
->>    (Reported-by: kernel test robot <lkp@intel.com>)
->> ---
->>  MAINTAINERS                  |   2 +
->>  drivers/mfd/Kconfig          |  14 ++++
->>  drivers/mfd/Makefile         |   1 +
->>  drivers/mfd/max77714.c       | 152 +++++++++++++++++++++++++++++++++++
->>  include/linux/mfd/max77714.h |  60 ++++++++++++++
->>  5 files changed, 229 insertions(+)
->>  create mode 100644 drivers/mfd/max77714.c
->>  create mode 100644 include/linux/mfd/max77714.h
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index a08f5167dfe0..ef3ffba828af 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11586,6 +11586,8 @@ MAXIM MAX77714 PMIC MFD DRIVER
->>  M:	Luca Ceresoli <luca@lucaceresoli.net>
->>  S:	Maintained
->>  F:	Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
->> +F:	drivers/mfd/max77714.c
->> +F:	include/linux/mfd/max77714.h
->>  
->>  MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
->>  M:	Javier Martinez Canillas <javier@dowhile0.org>
->> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->> index 3fb480818599..1b9d772bdae6 100644
->> --- a/drivers/mfd/Kconfig
->> +++ b/drivers/mfd/Kconfig
->> @@ -855,6 +855,20 @@ config MFD_MAX77693
->>  	  additional drivers must be enabled in order to use the functionality
->>  	  of the device.
->>  
->> +config MFD_MAX77714
->> +	tristate "Maxim Semiconductor MAX77714 PMIC Support"
->> +	depends on I2C
->> +	depends on OF || COMPILE_TEST
->> +	select MFD_CORE
->> +	select REGMAP_I2C
->> +	help
->> +	  Say yes here to add support for Maxim Semiconductor MAX77714.
->> +	  This is a Power Management IC with 4 buck regulators, 9
->> +	  low-dropout regulators, 8 GPIOs, RTC, watchdog etc. This driver
->> +	  provides common support for accessing the device; additional
->> +	  drivers must be enabled in order to use each functionality of the
->> +	  device.
->> +
->>  config MFD_MAX77843
->>  	bool "Maxim Semiconductor MAX77843 PMIC Support"
->>  	depends on I2C=y
->> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
->> index 0b1b629aef3e..03115cf1336b 100644
->> --- a/drivers/mfd/Makefile
->> +++ b/drivers/mfd/Makefile
->> @@ -162,6 +162,7 @@ obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
->>  obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
->>  obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
->>  obj-$(CONFIG_MFD_MAX77693)	+= max77693.o
->> +obj-$(CONFIG_MFD_MAX77714)	+= max77714.o
->>  obj-$(CONFIG_MFD_MAX77843)	+= max77843.o
->>  obj-$(CONFIG_MFD_MAX8907)	+= max8907.o
->>  max8925-objs			:= max8925-core.o max8925-i2c.o
->> diff --git a/drivers/mfd/max77714.c b/drivers/mfd/max77714.c
->> new file mode 100644
->> index 000000000000..08dfb69bc6e8
->> --- /dev/null
->> +++ b/drivers/mfd/max77714.c
->> @@ -0,0 +1,152 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Maxim MAX77714 MFD Driver
-> 
-> I'm only mentioning this because you are still missing some reviews.
-> 
-> But I'd prefer for drivers not to describe themselves as MFD Drivers.
-> 
-> The term Parent or Core driver is usually better.
-> 
-> If you have to respin the set, please fix it.
+Thanks, Guenter! Do I need to take any other actions, or Wim is going
+to take patches from your tree? I just checked [1] (master branch),
+and I can't see my patches there yet.
 
-OK. However No plan for a new iteration, but the wdog patches still need
-a review so it's possible. I don't expect changes for the other patches,
-they are acked and unchanged since a couple iterations.
+[1] git://www.linux-watchdog.org/linux-watchdog-next.git
 
-> If not, please sent a subsequent fix-up.
-
-Sure. Maybe I'll find some good will and reword all drivers which
-currently self-describe as "MFD drivers".
-
-> Acked-by: Lee Jones <lee.jones@linaro.org>
-
-Thanks.
--- 
-Luca
+> Thanks,
+> Guenter
+>
+>
