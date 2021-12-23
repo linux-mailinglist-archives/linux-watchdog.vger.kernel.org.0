@@ -2,74 +2,53 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F66547C455
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Dec 2021 18:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B5B47E019
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Dec 2021 08:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbhLURAh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 Dec 2021 12:00:37 -0500
-Received: from mail-qk1-f169.google.com ([209.85.222.169]:37513 "EHLO
-        mail-qk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbhLURAg (ORCPT
+        id S242720AbhLWH5Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 Dec 2021 02:57:24 -0500
+Received: from mail.BETTERBIZ.PL ([45.86.209.138]:59334 "EHLO
+        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242724AbhLWH5X (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 Dec 2021 12:00:36 -0500
-Received: by mail-qk1-f169.google.com with SMTP id m186so13173261qkb.4;
-        Tue, 21 Dec 2021 09:00:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hppWg+GP3gWKz2SnHpLcfxKFRiULg/7tXUCt9Pb6Dtw=;
-        b=YhNfGJqvR7HmU+SZuRaiqqA3BwOqnDcRKhfrqyVwCsSZ7po+iuOYSKq9NfBx+MlX9w
-         9JntaGYgW0gxakjb17ST6xGalt+yNpffwEqgketLSleSijNp4Cql1kgZhWjvmRybcmmi
-         8zN7SddQjneAh1LzxucLtNDX9wSZB+JVvHWKsdf9O8BQJ6wvP1i3olFfpAZIsd9kpQxN
-         YRB6Cssb5NByluYNoGcH/PXOfyJ0CjfHid8GxsA4ixXRjAYNT0HPx0mKYefFlG99pGse
-         k1ADOCANqlXMKM2xxxwhwrb/RD6VArm3OnFVtU7IfPszwyZQMvI4AFBMOBkzfT56/LN7
-         OGdA==
-X-Gm-Message-State: AOAM531AgzmauqSMsiy7IRt+aEyL7IVsagcotLK9sKW0gkGX2NcAduue
-        S5kG1CDK4UWG0pgTywNOog==
-X-Google-Smtp-Source: ABdhPJy9Ijw3JTHq6M8l2dQq/+DijjJRegt9T5f4n4IacLZGw6vjlaabB9NNgyBoqSHkr1oDMj4OHw==
-X-Received: by 2002:a05:620a:301:: with SMTP id s1mr2645982qkm.771.1640106035583;
-        Tue, 21 Dec 2021 09:00:35 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id h9sm14412295qkp.106.2021.12.21.09.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 09:00:35 -0800 (PST)
-Received: (nullmailer pid 1450837 invoked by uid 1000);
-        Tue, 21 Dec 2021 17:00:32 -0000
-Date:   Tue, 21 Dec 2021 13:00:32 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: mfd: Fix typo "DA9093" -> "DA9063"
-Message-ID: <YcIIMGHA5E2FS2M5@robh.at.kernel.org>
-References: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+        Thu, 23 Dec 2021 02:57:23 -0500
+X-Greylist: delayed 470 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:57:23 EST
+Received: by mail.betterbiz.pl (Postfix, from userid 1001)
+        id C401882D46; Thu, 23 Dec 2021 02:45:54 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
+        t=1640245771; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        h=Date:From:To:Subject:From;
+        b=XwCsodfdSv4GLXrLUMoYJMu1Z7+yAOJX0NWXNTCAeZzt5VwVtjyXgda/fosOGDy3u
+         9yzeJft1Z/wz/s5Z/FLEChkTCvwpc4GbHMdUoo+UvL7e8E/h3fum7Thi6zXggBnH6K
+         ih1WaS9BWz94Na8VFVodFSYTt3oZygNEc5T9ZLWWrTCSCRCp/oEAFY6HFiEWOCTtwD
+         z31QZPjiTjclUpQZYJojMt/VflP8Bxv3gtQCiJ657ZThqvZXHtm/uEyxLIfu55uYHN
+         Hi3I6XDujbrK0EZJBwAl5KvAesYMXQHxQlONoIViALqWgHIiJAcIDNmLoONcNu/T2h
+         Rb3BrM2pqXqnQ==
+Received: by mail.betterbiz.pl for <linux-watchdog@vger.kernel.org>; Thu, 23 Dec 2021 07:45:53 GMT
+Message-ID: <20211223024500-0.1.f.106g.0.zpbdcqtig3@betterbiz.pl>
+Date:   Thu, 23 Dec 2021 07:45:53 GMT
+From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.betterbiz.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 16 Dec 2021 17:40:36 +0100, Alexandre Ghiti wrote:
-> The device described is the "DA9063", not "DA9093", so fix this typo.
-> 
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> ---
->  Documentation/devicetree/bindings/mfd/da9063.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+Dzie=C5=84 dobry,
 
-Acked-by: Rob Herring <robh@kernel.org>
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
+
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Jakub Daroch
