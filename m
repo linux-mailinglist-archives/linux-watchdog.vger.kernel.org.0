@@ -2,35 +2,36 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B5B47E019
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Dec 2021 08:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E2747E07A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Dec 2021 09:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242720AbhLWH5Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 Dec 2021 02:57:24 -0500
-Received: from mail.BETTERBIZ.PL ([45.86.209.138]:59334 "EHLO
-        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242724AbhLWH5X (ORCPT
+        id S1347228AbhLWIiM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 Dec 2021 03:38:12 -0500
+Received: from mail.tomediacase.pl ([151.236.18.187]:59564 "EHLO
+        mail.tomediacase.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242760AbhLWIiL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 Dec 2021 02:57:23 -0500
-X-Greylist: delayed 470 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:57:23 EST
-Received: by mail.betterbiz.pl (Postfix, from userid 1001)
-        id C401882D46; Thu, 23 Dec 2021 02:45:54 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
-        t=1640245771; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        Thu, 23 Dec 2021 03:38:11 -0500
+X-Greylist: delayed 431 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 03:38:11 EST
+Received: by mail.tomediacase.pl (Postfix, from userid 1001)
+        id DB84D40AE0; Thu, 23 Dec 2021 09:30:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tomediacase.pl;
+        s=mail; t=1640248258;
+        bh=1KDTsB3nJcWAjbNGIw57IBVNLXBfvIhwZJ5safZoOHQ=;
         h=Date:From:To:Subject:From;
-        b=XwCsodfdSv4GLXrLUMoYJMu1Z7+yAOJX0NWXNTCAeZzt5VwVtjyXgda/fosOGDy3u
-         9yzeJft1Z/wz/s5Z/FLEChkTCvwpc4GbHMdUoo+UvL7e8E/h3fum7Thi6zXggBnH6K
-         ih1WaS9BWz94Na8VFVodFSYTt3oZygNEc5T9ZLWWrTCSCRCp/oEAFY6HFiEWOCTtwD
-         z31QZPjiTjclUpQZYJojMt/VflP8Bxv3gtQCiJ657ZThqvZXHtm/uEyxLIfu55uYHN
-         Hi3I6XDujbrK0EZJBwAl5KvAesYMXQHxQlONoIViALqWgHIiJAcIDNmLoONcNu/T2h
-         Rb3BrM2pqXqnQ==
-Received: by mail.betterbiz.pl for <linux-watchdog@vger.kernel.org>; Thu, 23 Dec 2021 07:45:53 GMT
-Message-ID: <20211223024500-0.1.f.106g.0.zpbdcqtig3@betterbiz.pl>
-Date:   Thu, 23 Dec 2021 07:45:53 GMT
-From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+        b=U1CuLl1oTzHLMeahh0YyT0PmMScWYPWutCv/Ste49WMmzOmmiaiRmKo17mpHq7xzd
+         pUUw6uI5WZm6ws+j5cIh/2jJn9i7xsFyIlJmdiT6WxqBbjh8+BeO4bh3ec0WomAqVs
+         trpVTXZDPuCvKUiTVvXVc502atb3i+o8rBTAx8Etq8fRcXLoVuS1NvOAk8N29zH/Go
+         u2ju9cyXgnkGuIXfvbzsFcoI7AYQFVfJ5fWndq+6gd+hibmxVG6L+YJ4k51ikkW2xT
+         7MpK5Rs/4TVuucwPiF2JuWlkHcKwNF+RJbYyecEaL+D1hd/aXC3I9MyY03Bjcllr13
+         nrvbZyYjZ2RXA==
+Received: by mail.tomediacase.pl for <linux-watchdog@vger.kernel.org>; Thu, 23 Dec 2021 08:30:47 GMT
+Message-ID: <20211223084500-0.1.u.2i2l.0.r8hnf21o47@tomediacase.pl>
+Date:   Thu, 23 Dec 2021 08:30:47 GMT
+From:   "Adam Charachuta" <adam.charachuta@tomediacase.pl>
 To:     <linux-watchdog@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.betterbiz.pl
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.tomediacase.pl
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -40,15 +41,17 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 Dzie=C5=84 dobry,
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
 
 Pozdrawiam,
-Jakub Daroch
+Adam Charachuta
