@@ -2,102 +2,235 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F59D480B11
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Dec 2021 17:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DD6480BFD
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Dec 2021 18:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbhL1QGR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Dec 2021 11:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235489AbhL1QGO (ORCPT
+        id S236723AbhL1RNX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Dec 2021 12:13:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55424 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233056AbhL1RNU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Dec 2021 11:06:14 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2071EC061574;
-        Tue, 28 Dec 2021 08:06:14 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id w7so9937577oiw.0;
-        Tue, 28 Dec 2021 08:06:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qatF57jpU+SCdFsFak5TocjA6SmuzgsHZB8nddmDgyI=;
-        b=HMQq4QUPCUmpBoElYxK0iKmL4nb9IjRdsjsYfspvm+2y3hH3BJ0t2vb9dVydSNk4lz
-         2edhKjNTwFN8edacMg1Q21r57DofAoXh1c05UT/EYTP+atXEIfjHjq5VCd5EMUjSBlmj
-         qRfkkBJdQUIlVZDrgJN0XuY1+ZVVQRr6px5yTh0dil975zybX5Ok+1m+WAs0d2qYn7XF
-         WIonsuCKhlUKZh4OcL2d9HCg3REwVdkKk3qRi9OI8iXKCuIrFXtw61Kh5tavg2o3Glfd
-         mLzoFFItNE1MnkkW6FyOojCVORBU/+lbsc0EfgEZhkUTBffqu78HSdYpvSe07Mtsfh8B
-         sPmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qatF57jpU+SCdFsFak5TocjA6SmuzgsHZB8nddmDgyI=;
-        b=bLzJ5W2GV+UjoPnWHlodIkVSJb2gNqpswI2K2DT5fbbq82dmJzSOKoxijggyqmM8k9
-         YeZuy7YWv8fhjfzSTu2YOo03qCwzaOMxJ2iV/UlFxQ5MsgLVjyh8v66VOAwVtfnXF8pM
-         zGKeRDVuGzeyeNw4DA44IYcKyBVpKATCgyYc3C8q4Mie+/0Z9N10piWzhZlO/Z9hSspA
-         VCa4uxugQC7AuFfwPmdzpxdbdgt/3DvtMeacXK58TBJrnD9Qwt7RhZQoq3Ue/8OoEiSW
-         0vE6Rbr/XibpWOCPeMy7bgCR2HzR2UW16lAj7mHWkCE+MHyUe37j8eQQHq+ykLQ3zuQ8
-         bTrQ==
-X-Gm-Message-State: AOAM532YgauUOhM/ztMOXPcY4tc3ZI3P8CREBkMt6JFmatfnGlDwtfnb
-        hTOUOTUxZtwqJJs/54MMEGDuS/F1kjY=
-X-Google-Smtp-Source: ABdhPJwSgbGrG3P6bD5wS8Q8ezsGwLrD4WLYAOPi8AltXOEYGkoC4HPpcUhn+mEu95A9FbuUPbKQxg==
-X-Received: by 2002:aca:3148:: with SMTP id x69mr15651323oix.95.1640707573315;
-        Tue, 28 Dec 2021 08:06:13 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t31sm3669197oiw.30.2021.12.28.08.06.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Dec 2021 08:06:12 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] watchdog: msc313e: Check if the WDT was running at boot
-To:     Daniel Palmer <daniel@0x0f.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org
-Cc:     romain.perier@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20211228073427.2443174-1-daniel@0x0f.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1f60c5ac-b262-2b8f-6bf1-c1c7f2b20699@roeck-us.net>
-Date:   Tue, 28 Dec 2021 08:06:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 28 Dec 2021 12:13:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B9F3B8168C;
+        Tue, 28 Dec 2021 17:13:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC36C36AF0;
+        Tue, 28 Dec 2021 17:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640711595;
+        bh=T3HUEllg1Pw7vYBFjSPgjWTc0i5UwlDCIB5VYMi9zQk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aC2AgnEYsVn8ajMr8WXjrdgvYdxaICxzBEIqsQvRNJDdSNTmgYKxxE13ldY57jvt6
+         wtSnEDHwfFeP7WPa1v2BXHsL164j0gjjc1waprQ7FxnadoJwpFcS8YPlJ1fRUUEgNG
+         1n8B6ybs2qiYbmmANluzHzAR+HA2JhBdfnB5r0OInhaGxnhy9LnnhUQ0kSAmYqyjvt
+         U8WA12Q8XWC6B4+2O+Uw+3c+bVIkQEInrB+E4lsE9bM/HIbStWglKd4TfiZn9oNjTC
+         71qzDaDkiqAQz8JEolGNowQ5U8m10M955+gDpfmp1KuoHVnN/ysNieqn8T0FB5YrhX
+         IQJmZwEC33MlQ==
+Date:   Tue, 28 Dec 2021 18:12:58 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+Message-ID: <20211228181107.2d476028@coco.lan>
+In-Reply-To: <4b630b7b87bd983291f628c42a1394fc0d2d86bd.camel@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+        <20211227164317.4146918-2-schnelle@linux.ibm.com>
+        <YcrJAwsKIxxX18pW@kroah.com>
+        <20211228101435.3a55b983@coco.lan>
+        <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
+        <20211228135425.0a69168c@coco.lan>
+        <4b630b7b87bd983291f628c42a1394fc0d2d86bd.camel@linux.ibm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20211228073427.2443174-1-daniel@0x0f.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12/27/21 11:34 PM, Daniel Palmer wrote:
-> Check if the WDT was running at boot and set the running
-> flag if it was. This prevents the system from getting
-> rebooted if the userland daemon doesn't take over soon enough
-> or there isn't a userland daemon at all.
-> 
-> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+Em Tue, 28 Dec 2021 16:06:44 +0100
+Niklas Schnelle <schnelle@linux.ibm.com> escreveu:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+(on a side note: the c/c list of this patch is too long. I would try to
+avoid using a too long list, as otherwise this e-mail may end being rejected
+by mail servers)
 
-> ---
->   drivers/watchdog/msc313e_wdt.c | 4 ++++
->   1 file changed, 4 insertions(+)
+> On Tue, 2021-12-28 at 13:54 +0100, Mauro Carvalho Chehab wrote:
+> >  
+> ---8<---
+> >     
+> > > > > All you really care about is the "legacy" I/O spaces here, this isn't
+> > > > > tied to PCI specifically at all, right?
+> > > > > 
+> > > > > So why not just have a OLD_STYLE_IO config option or something like
+> > > > > that, to show that it's the i/o functions we care about here, not PCI at
+> > > > > all?
+> > > > > 
+> > > > > And maybe not call it "old" or "legacy" as time constantly goes forward,
+> > > > > just describe it as it is, "DIRECT_IO"?    
+> > > > 
+> > > > Agreed. HAVE_PCI_DIRECT_IO (or something similar) seems a more appropriate
+> > > > name for it.
+> > > > 
+> > > > Thanks,
+> > > > Mauro    
+> > > 
+> > > Hmm, I might be missing something here but that sounds a lot like the
+> > > HAS_IOPORT option added in patch 02.
+> > > 
+> > > We add both LEGACY_PCI and HAS_IOPORT to differentiate between two
+> > > cases. HAS_IOPORT is for PC-style devices that are not on a PCI card
+> > > while LEGACY_PCI is for PCI drivers that require port I/O.   
+> > 
+> > I didn't look at the other patches on this series, but why it is needed
+> > to deal with them on a separate way? Won't "PCI" and "HAS_IOPORT" be enough? 
+> > 
+> > I mean, are there any architecture where HAVE_PCI=y and HAS_IOPORT=y
+> > where LEGACY_PCI shall be "n"?  
 > 
-> diff --git a/drivers/watchdog/msc313e_wdt.c b/drivers/watchdog/msc313e_wdt.c
-> index 0d497aa0fb7d..90171431fc59 100644
-> --- a/drivers/watchdog/msc313e_wdt.c
-> +++ b/drivers/watchdog/msc313e_wdt.c
-> @@ -120,6 +120,10 @@ static int msc313e_wdt_probe(struct platform_device *pdev)
->   	priv->wdev.max_timeout = U32_MAX / clk_get_rate(priv->clk);
->   	priv->wdev.timeout = MSC313E_WDT_DEFAULT_TIMEOUT;
->   
-> +	/* If the period is non-zero the WDT is running */
-> +	if (readw(priv->base + REG_WDT_MAX_PRD_L) | (readw(priv->base + REG_WDT_MAX_PRD_H) << 16))
-> +		set_bit(WDOG_HW_RUNNING, &priv->wdev.status);
-> +
->   	watchdog_set_drvdata(&priv->wdev, priv);
->   
->   	watchdog_init_timeout(&priv->wdev, timeout, dev);
+> In the current patch set LEGACY_PCI is not currently selected by
+> architectures, though of course it could be if we know that an
+> architecture requires it. We should probably also set it in any
+> defconfig that has devices depending on it so as not to break these.
 > 
+> Other than that it would be set during kernel configuration if one
+> wants/needs support for legacy PCI devices. For testing I ran with
+> HAVE_PCI=y, HAS_IOPORT=y and LEGACY_PCI=n on both my local Ryzen 3990X
+> based workstation and Raspberry Pi 4 (DT). I guess at the moment it
+> would make most sense for special configs such as those tailored for
+> vitualization guets but in the end that would be something for
+> distributions to decide.
 
+IMO, it makes sense to have a "default y" there, as on systems that
+support I/O space, disabling it will just randomly disable some drivers
+that could be required by some hardware. I won't doubt that some of 
+those could be ported from using inb/outb to use, instead, readb/writeb.
+
+> 
+> Arnd described the options here:
+> https://lore.kernel.org/lkml/CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com/
+
+Based on Arnd's description, LEGACY_PCI should depend on HAS_IOPORT.
+This is missing on patch 1. You should probably reorder your patch
+series to first create HAS_IOPORT and then add LEGACY_PCI with
+depends on, as otherwise it may cause randconfig build issues
+at robots and/or git bisect.
+
+I would also suggest to first introduce such change and then send
+a per-subsystem LEGACY_PCI patch, as it would be a lot easier for
+maintainers to review.
+
+> 
+> >   
+> > > This
+> > > includes pre-PCIe devices as well as PCIe devices which require
+> > > features like I/O spaces. The "legacy" naming is comes from the PCIe
+> > > spec which in section 2.1.1.2 says "PCI Express supports I/O Space for
+> > > compatibility with legacy devices which require their use. Future
+> > > revisions of this specification may deprecate the use of I/O Space."  
+> > 
+> > I would still avoid calling it LEGACY_PCI, as this sounds too generic.
+> > 
+> > I didn't read the PCI/PCIe specs, but I suspect that are a lot more
+> > features that were/will be deprecated on PCI specs as time goes by.
+> > 
+> > So, I would, instead, use something like PCI_LEGACY_IO_SPACE or 
+> > HAVE_PCI_LEGACY_IO_SPACE, in order to let it clear what "legacy"
+> > means.  
+> 
+> Hmm, I'd like to hear Bjorn's opinion on this. Personally I feel like
+> LEGACY_PCI is pretty clear since most devices are either pre-PCIe
+> devices or a compatibility feature allowing drivers for a pre-PCIe
+> device to work with a PCIe device.
+
+That's the main point: it is *not* disabling pre-PCIe devices or
+even legacy PCI drivers. It just disables a random set of drivers just
+because they use inb/outb instead of readb/writeb. It keeps several pure 
+PCI drivers selected, and disables some PCIe for no real reason.
+
+Just to give one example, this symbol:
+
+> diff --git a/drivers/media/cec/platform/Kconfig b/drivers/media/cec/platform/Kconfig
+> index b672d3142eb7..5e92ece5b104 100644
+> --- a/drivers/media/cec/platform/Kconfig
+> +++ b/drivers/media/cec/platform/Kconfig
+> @@ -100,7 +100,7 @@ config CEC_TEGRA
+>  config CEC_SECO
+>  	tristate "SECO Boards HDMI CEC driver"
+>  	depends on (X86 || IA64) || COMPILE_TEST
+> -	depends on PCI && DMI
+> +	depends on LEGACY_PCI && DMI
+>  	select CEC_CORE
+>  	select CEC_NOTIFIER
+>  	help
+
+Disables HDMI CEC support on some Intel motherboards.
+Any distro meant to run on generic hardware should keep it selected.
+
+I can see some value of a "PCI_LEGACY" option to disable all
+non-PCIe drivers, but this is not the case here.
+
+Thanks,
+Mauro
