@@ -2,94 +2,152 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 185E1481475
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Dec 2021 16:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B334814D6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Dec 2021 17:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240503AbhL2P1k (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Dec 2021 10:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237058AbhL2P1k (ORCPT
+        id S237298AbhL2QDZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Dec 2021 11:03:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54328 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229528AbhL2QDU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Dec 2021 10:27:40 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80A6C06173F
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Dec 2021 07:27:39 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id v7so45020294wrv.12
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Dec 2021 07:27:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WHa8Jyh6c89t9dPID2nZm5LqqV4uIWhGTO8DKv0H6Ao=;
-        b=PJOEOwqEqa2fEdtdWRkd1eiOel6ilsVpbyFJdZbhB7fzeELs8O2xsQIssnE4UEh+I7
-         Lcl7EhwhdzV43KdE9doEGv/HmUAQ+IGnSDMS/H+41qwp7iTXj0uLSmIvfMLFCqTHCYpx
-         8VFArzE0XbPkdNQ6ml8Fn9n+2LeZ8Kj3+JZgzuqtkVq+naSaO9wRfXB4TPKO3R8eNoY2
-         lf3AOIhjJwlxHzRWCwql522offjA2wXLMsNG1zyTgS7Cwqqx3J22RhJkQVk1lHGFd44B
-         uWXeaL8T7UQhehfYTJ/pR09w9TYV5PjxzgqpKtSm6Y4lnNrLapgSWFsjejGtfImF+4d2
-         9Mlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WHa8Jyh6c89t9dPID2nZm5LqqV4uIWhGTO8DKv0H6Ao=;
-        b=PlFSbanKYVByJwMUOYj2o51pzL5ptCp0EPfN71+CHNRxD/OlsexQtflJtuip6RXonz
-         mU6+8uXLeNsfH8gHz10ZyE7Q071TkIpd2p7AHqMvTx4vJ36dTE5CE2uxQIe1zs+s84Ry
-         oqCwQ51T44PQLx4M00A+Nn/iWL1rZmMX8u0A8U7u0u4WEEQUmxINlltro8NlV4hLmJb8
-         ZHObtcZ8fghPz38OCbgmxiCHpk5MiLjr01XgZZ+HCuXkPjV7fnjxA4yPK1JQ5/lqFW75
-         wipSnuDpBooaQrgvuYrSpqfwmSl1BfcqLGYHPfUQ5qFiKvwkM9l8LwCAAKFpz8782tG5
-         7D5A==
-X-Gm-Message-State: AOAM530uqqS0uJQ1e+RjK7QY9ql6GUGJux5Tidy0AvkeTnZGclw8r/3d
-        Kq/+aDyUiKqEZ1aZXgV4qHOU9g==
-X-Google-Smtp-Source: ABdhPJxUsRB6IangB9deRG2yXTmRk0Pg7TrNIFOe0nWjvnXVOUPrpq4N2LGQiDWxSUY8ra+GTM++8w==
-X-Received: by 2002:a05:6000:1112:: with SMTP id z18mr20750612wrw.129.1640791658229;
-        Wed, 29 Dec 2021 07:27:38 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id g6sm21576891wri.67.2021.12.29.07.27.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 07:27:37 -0800 (PST)
-Date:   Wed, 29 Dec 2021 15:27:35 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wed, 29 Dec 2021 11:03:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C75F16151F;
+        Wed, 29 Dec 2021 16:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8504C36AE7;
+        Wed, 29 Dec 2021 16:03:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640793799;
+        bh=JjpeFlX1D08ft528esGQ/Dmp3d8gak2dGxLVU5277kI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=JpP2t1WEsiIyRq1md3yeDJqKD5b+v6vPK3dQL5KYtPRU6IzcCE2hfeoejuHeG11gd
+         lC8IFpViEh+GNBkNBx4n5nW244Tql53dIjOETTsQ8i+5UfJvW9Ilc8EhjCT4Q4lOA4
+         QM42sYWxI3kXC/do4dsN3O/F/5QTnKyWIH4D+TjWyd3Qv8ZelIjD6sZhRig841ypqR
+         mTWsO71n3E7t2fJyuxqamjyrcVx+C0YBZwG9aCQStF11NC5RlZEPgKB5Mk28JwNuWp
+         wwR/on9msDkJi5KBJfEq5mX9Wm2DfRpIzk3oUTTCtQJyiHOzO2W6s1m8x+iPToCIeX
+         pL3LlEJMF3ouw==
+Date:   Wed, 29 Dec 2021 10:03:17 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: mfd: Fix typo "DA9093" -> "DA9063"
-Message-ID: <Ycx+Z4qpbDSIqBSX@google.com>
-References: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+Message-ID: <20211229160317.GA1681139@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+In-Reply-To: <20211229131207.1ac25424@coco.lan>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 16 Dec 2021, Alexandre Ghiti wrote:
+On Wed, Dec 29, 2021 at 01:12:07PM +0100, Mauro Carvalho Chehab wrote:
+> Em Wed, 29 Dec 2021 12:45:38 +0100
+> Niklas Schnelle <schnelle@linux.ibm.com> escreveu:
+> > ...
 
-> The device described is the "DA9063", not "DA9093", so fix this typo.
+> > I do think we agree that once done correctly there is value in
+> > such an option independent of HAS_IOPORT only gating inb() etc uses.
+
+I'm not sure I'm convinced about this.  For s390, you could do this
+patch series, where you don't define inb() at all, and you add new
+dependencies to prevent compile errors.  Or you could define inb() to
+return ~0, which is what happens on other platforms when the device is
+not present.
+
+> Personally, I don't see much value on a Kconfig var for legacy PCI I/O 
+> space. From maintenance PoV, bots won't be triggered if someone use
+> HAS_IOPORT instead of the PCI specific one - or vice-versa. So, we
+> could end having a mix of both at the wrong places, in long term.
 > 
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> ---
->  Documentation/devicetree/bindings/mfd/da9063.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Also, assuming that PCIe hardware will some day abandon support for 
+> "legacy" PCI I/O space, I guess some runtime logic would be needed, 
+> in order to work with both kinds of PCIe controllers. So, having a
+> Kconfig option won't help much, IMO.
+> 
+> So, my personal preference would be to have just one Kconfig var, but
+> I'm ok if the PCI maintainers decide otherwise.
 
-Applied, thanks.
+I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
+means something old and out of favor; it doesn't say *what* that
+something is.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+I think you're specifically interested in I/O port space usage, and it
+seems that you want all PCI drivers that *only* use I/O port space to
+depend on LEGACY_PCI?  Drivers that can use either I/O or memory
+space or both would not depend on LEGACY_PCI?  This seems a little
+murky and error-prone.
+
+What if you used the approach from [1] but just dropped the warning?
+The inb() would return ~0 if the platform doesn't support I/O port
+space.  Drivers should be prepared to handle that because that's what
+happens if the device doesn't exist.  
+
+HAS_IOPORT and LEGACY_PCI is a lot of Kconfiggery that basically just
+avoids building drivers that aren't useful on s390.  I'm not sure the
+benefit outweighs the complication.
+
+Bjorn
+
+[1] https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+
