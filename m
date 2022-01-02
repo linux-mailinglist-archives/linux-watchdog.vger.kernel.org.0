@@ -2,95 +2,431 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E172D482776
-	for <lists+linux-watchdog@lfdr.de>; Sat,  1 Jan 2022 13:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A95D482BA0
+	for <lists+linux-watchdog@lfdr.de>; Sun,  2 Jan 2022 16:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbiAAMFt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 1 Jan 2022 07:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S233248AbiABPAb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 2 Jan 2022 10:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiAAMFt (ORCPT
+        with ESMTP id S232286AbiABPAb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 1 Jan 2022 07:05:49 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2142EC061574
-        for <linux-watchdog@vger.kernel.org>; Sat,  1 Jan 2022 04:05:49 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso19740839pje.0
-        for <linux-watchdog@vger.kernel.org>; Sat, 01 Jan 2022 04:05:49 -0800 (PST)
+        Sun, 2 Jan 2022 10:00:31 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CA5C061761;
+        Sun,  2 Jan 2022 07:00:30 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id v30-20020a4a315e000000b002c52d555875so10068996oog.12;
+        Sun, 02 Jan 2022 07:00:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
-        b=oo2A+04vMxz6FLXl9iXHOLNQfIitEPl2ZSnaI4d0HT9KnTzqvf1bkWls+FpyR+hOYm
-         gGNQowOKzeDNZDSy9bUwryL2dlFcTP8t6Ox5CrKlgVb+hgIMCxzaje9lk9b6WTuOmjYY
-         ME61hi2qlAnB+qDibs3jthIzhq14wpSp5AXCs91wn5ZXGpO6ytiE00BJCzeHyscUdoGt
-         QhGNzpbX9A4y3N/VPOX0FgRFkECfPul0GHD3FEtLgcWHW8ZGRBjHHR23n/DQHyjT7g6i
-         KZqgh+waPTD6MZqzphnPbngfdU5l/ctopNEepkt1EAVAWz4uPM3EC6ObEFDmGA76jKdC
-         xJXQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P2NunqPsfwbLHCBKpeZX3P1PQn+/3HUxFOV6Kmc9akI=;
+        b=Z01d9CETBQ3K00M5qbSdyfq5DTo/WrDODAymff8bBatISpKIBJW07UzL57tUjBsBC1
+         k6mI8MA1trvjKKs7jCqPuC2f3YkzkiPLDQDp5VSfXgxkVbq7QecS8X1Pyj8CEFD8rKxn
+         r6GgcfC/qmJckDjXDqDEysTe+W16X6BoytN/t9Id284Tig5bfHFMx/tqpkNOkYxjFmsp
+         P/lSOsY1dME9qVT6vUbwxyqRTZNQcWpuWr4+VdRPbH4EcFxhlAlQUvOmr45+A5yMb7cq
+         PTZfQG5K05Vzf5lPAXsiVl7ugjXHV90RnPiNsbH10wRWslI0nIGJzQB9nBpX+JQb+4FD
+         zJnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
-        b=dW5+jV0JmiDmh7Z2hJ+32W4PE1kskQd3r6IqQzmHvkaWi7o5jHWc2kiJnFcLTGWfcI
-         u11UvQdO14snvI7g6QyNNa3+kwG5GOdloYiiPzWxegWSzWIEzWqIbvbGYlJKEW+Go4lq
-         T0quJLwMjpzYakTUcF5WxhQFPr+Qa02X4BxR312eRVLoDl3hDGU4sF7D813TqIxxGU3r
-         L3gmclZkwpbH8ih5zv6NIbevinBmCqPtDPsSszfCs0u716ABksgsiabcvqYQhkATY7QA
-         y5DFWQAki7foznwPvNzDjFhmO1wfXJAsy3ur5iA2Hxq5yilZsHUNtUPFGyI4PA0fUNh9
-         828g==
-X-Gm-Message-State: AOAM530nNN16qq28uqbUhDNdy8g7Gh8hsVafxA6ZFYkGhPB6LJCrdj90
-        alfmWVcVo+hBhTKRf2i296w=
-X-Google-Smtp-Source: ABdhPJyM1zIfit9eKveeGOZiz1PAxQ1IXx+/dJTn43yM+KcgaYA/naq/SIAVFTbW5oYEqCzloxeH3g==
-X-Received: by 2002:a17:902:6a88:b0:149:848f:1e8b with SMTP id n8-20020a1709026a8800b00149848f1e8bmr25296289plk.124.1641038748761;
-        Sat, 01 Jan 2022 04:05:48 -0800 (PST)
-Received: from [192.168.0.153] ([143.244.48.136])
-        by smtp.gmail.com with ESMTPSA id w13sm27606619pgm.5.2022.01.01.04.05.39
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sat, 01 Jan 2022 04:05:48 -0800 (PST)
-Message-ID: <61d0439c.1c69fb81.c547a.d7e3@mx.google.com>
-From:   yalaiibrahim818@gmail.com
-X-Google-Original-From: suport.prilend@gmail.com
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=P2NunqPsfwbLHCBKpeZX3P1PQn+/3HUxFOV6Kmc9akI=;
+        b=vs+YpLoOh2DKw1r5ncRb6TokB0OvMxtQaaQMt31Ku/b0IBQk8yn7o1OHeinLwyyDm/
+         Zls4AhuzYcuBWdQ4bxU8lQ8a3MrZ9TFs0Ty4dh9/dZZLPj/qylBQiJzD+mlSMCKIJra0
+         NSZR0kU0BEVEf5xL7Dmj+jZN1Azyu0cgzIA/CYARuFGT2aKOo7NAQsHLz6juJ89mh/q3
+         FOfiJnCDpZg/4J1Y/Zk/1qIiu4UFl0CPWVm05jeiH14zhRFgRtRRsNPKIcI//QJ4s+Ag
+         b78eaIvWCpN/hfbU5fYw13XR4Oii0PV1tTqyyBcpXh8GUAAXo6E0gWoePMHDdee3vDCX
+         u6Ew==
+X-Gm-Message-State: AOAM5319dmlL11q/GlEf0inuFRep412Mzg98vGBb5oMRqcPCAkB9CCVZ
+        oVYKuhLPErtzXN/41Ue0BE0=
+X-Google-Smtp-Source: ABdhPJyYBr/1YdYL4wroqspT5NA2JC7m+YvYQKHc0OEOd6JveJE6DMszxm9vZ39h1C90+5tdzBovxw==
+X-Received: by 2002:a4a:96f1:: with SMTP id t46mr26367625ooi.53.1641135630115;
+        Sun, 02 Jan 2022 07:00:30 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q5sm8777670oiv.2.2022.01.02.07.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jan 2022 07:00:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 2 Jan 2022 07:00:27 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Xiantao Hu <xt.hu@cqplus1.com>
+Cc:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com, qinjian@cqplus1.com
+Subject: Re: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
+Message-ID: <20220102150027.GA2806117@roeck-us.net>
+References: <20211229054308.63168-1-xt.hu@cqplus1.com>
+ <20211229054308.63168-3-xt.hu@cqplus1.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: RE:
-To:     Recipients <suport.prilend@gmail.com>
-Date:   Sat, 01 Jan 2022 14:05:30 +0200
-Reply-To: andres.stemmet1@gmail.com
-X-Mailer: TurboMailer 2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229054308.63168-3-xt.hu@cqplus1.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-I want to confide in you to finalize this transaction of mutual benefits. I=
-t may seem strange to you, but it is real. This is a transaction that has n=
-o risk at all, due process shall be followed and it shall be carried out un=
-der the ambit of the financial laws. Being the Chief Financial Officer, BP =
-Plc. I want to trust and put in your care Eighteen Million British Pounds S=
-terling, The funds were acquired from an over-invoiced payment from a past =
-contract executed in one of my departments. I can't successfully achieve th=
-is transaction without presenting you as foreign contractor who will provid=
-e a bank account to receive the funds.
+On Wed, Dec 29, 2021 at 01:43:08PM +0800, Xiantao Hu wrote:
+> Sunplus SP7021 requires watchdog timer support.
+> Add watchdog driver to enable this.
+> 
+> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
+> ---
+> Changes in v4
+>  - Drop the unused varible struct resource *wdt_res.
+>  - Drop the operations related to address 0x9c000274.
+>    Put it in bootloader before entry kernel boot in v3.
+> 
+>  MAINTAINERS                    |   1 +
+>  drivers/watchdog/Kconfig       |  11 ++
+>  drivers/watchdog/Makefile      |   1 +
+>  drivers/watchdog/sunplus_wdt.c | 278 +++++++++++++++++++++++++++++++++
+>  4 files changed, 291 insertions(+)
+>  create mode 100644 drivers/watchdog/sunplus_wdt.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fe6cc971c..a1b3d76e2 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18247,6 +18247,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
+>  L:	linux-watchdog@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> +F:	drivers/watchdog/sunplus_wdt.c
+>  
+>  SUPERH
+>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 9d222ba17..d3dbe8695 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -976,6 +976,17 @@ config MSC313E_WATCHDOG
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called msc313e_wdt.
+>  
+> +config SUNPLUS_WATCHDOG
+> +	tristate "Sunplus watchdog support"
+> +	depends on ARCH_SUNPLUS || COMPILE_TEST
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Say Y here to include support for the watchdog timer
+> +	  in Sunplus SoCs.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called sunplus_wdt.
+> +
+>  # X86 (i386 + ia64 + x86_64) Architecture
+>  
+>  config ACQUIRE_WDT
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 2ee970641..0fa548ee6 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -93,6 +93,7 @@ obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
+>  obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
+>  obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
+>  obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
+> +obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
+>  
+>  # X86 (i386 + ia64 + x86_64) Architecture
+>  obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
+> diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
+> new file mode 100644
+> index 000000000..9fae7a14b
+> --- /dev/null
+> +++ b/drivers/watchdog/sunplus_wdt.c
+> @@ -0,0 +1,278 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * sunplus Watchdog Driver
+> + *
+> + * Copyright (C) 2021 Sunplus Technology Co., Ltd.
+> + *
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define WDT_CTRL                0x00
+> +#define WDT_CNT                 0x04
+> +
+> +#define WDT_STOP				0x3877
+> +#define WDT_RESUME				0x4A4B
+> +#define WDT_CLRIRQ				0x7482
+> +#define WDT_UNLOCK				0xAB00
+> +#define WDT_LOCK				0xAB01
+> +#define WDT_CONMAX				0xDEAF
+> +
+> +#define SP_WDT_MAX_TIMEOUT		11U
+> +#define SP_WDT_DEFAULT_TIMEOUT	10
+> +
+> +#define STC_CLK				90000
+> +
+> +#define DEVICE_NAME		"sunplus-wdt"
+> +
+> +static unsigned int timeout;
+> +module_param(timeout, int, 0);
+> +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+> +			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> +
+> +struct sp_wdt_priv {
+> +	struct watchdog_device wdev;
+> +	void __iomem *base;
+> +	struct clk *clk;
+> +	struct reset_control *rstc;
+> +};
+> +
+> +static int sp_wdt_restart(struct watchdog_device *wdev,
+> +			  unsigned long action, void *data)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +
+> +	writel(WDT_STOP, base + WDT_CTRL);
+> +	writel(WDT_UNLOCK, base + WDT_CTRL);
+> +	writel(0x0001, base + WDT_CNT);
+> +	writel(WDT_LOCK, base + WDT_CTRL);
+> +	writel(WDT_RESUME, base + WDT_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +/* TIMEOUT_MAX = ffff0/90kHz =11.65,so longer than 11 seconds will time out */
+> +static int sp_wdt_ping(struct watchdog_device *wdev)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +	u32 count;
+> +	u32 actual;
+> +
+> +	actual = min(wdev->timeout, SP_WDT_MAX_TIMEOUT);
+> +
+> +	if (actual > SP_WDT_MAX_TIMEOUT) {
+> +		writel(WDT_CONMAX, base + WDT_CTRL);
+> +	} else {
+> +		writel(WDT_UNLOCK, base + WDT_CTRL);
+> +		/* tiemrw_cnt[3:0]can't be write,only [19:4] can be write. */
+> +		count = (actual * STC_CLK) >> 4;
+> +		writel(count, base + WDT_CNT);
+> +		writel(WDT_LOCK, base + WDT_CTRL);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_wdt_set_timeout(struct watchdog_device *wdev,
+> +			      unsigned int timeout)
+> +{
+> +	wdev->timeout = timeout;
+> +	sp_wdt_ping(wdev);
 
-Documentation for the claim of the funds will be legally processed and docu=
-mented, so I will need your full cooperation on this matter for our mutual =
-benefits. We will discuss details if you are interested to work with me to =
-secure this funds. I will appreciate your prompt response in every bit of o=
-ur communication. Stay Blessed and Stay Safe.
+This is exactly what the calling code does if there is no set_timeout
+function, so you can just drop this function,
 
-Best Regards
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_wdt_stop(struct watchdog_device *wdev)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +
+> +	writel(WDT_STOP, base + WDT_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_wdt_start(struct watchdog_device *wdev)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +
+> +	writel(WDT_RESUME, base + WDT_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +	u32 val;
+> +
+> +	val = readl(base + WDT_CNT);
+> +	val &= 0xffff;
+> +	val = val << 4;
+> +
+> +	return val;
+> +}
+> +
+> +static const struct watchdog_info sp_wdt_info = {
+> +	.identity	= DEVICE_NAME,
+> +	.options	= WDIOF_SETTIMEOUT |
+> +			  WDIOF_MAGICCLOSE |
+> +			  WDIOF_KEEPALIVEPING,
+> +};
+> +
+> +static const struct watchdog_ops sp_wdt_ops = {
+> +	.owner		= THIS_MODULE,
+> +	.start		= sp_wdt_start,
+> +	.stop		= sp_wdt_stop,
+> +	.ping		= sp_wdt_ping,
+> +	.set_timeout	= sp_wdt_set_timeout,
+> +	.get_timeleft	= sp_wdt_get_timeleft,
+> +	.restart	= sp_wdt_restart,
+> +};
+> +
+> +static void sp_clk_disable_unprepare(void *data)
+> +{
+> +	clk_disable_unprepare(data);
+> +}
+> +
+> +static void sp_reset_control_assert(void *data)
+> +{
+> +	reset_control_assert(data);
+> +}
+> +
+> +static int sp_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct sp_wdt_priv *priv;
+> +	int err;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(priv->clk)) {
+> +		dev_err(dev, "Can't find clock source\n");
+> +		return PTR_ERR(priv->clk);
+> +	}
+> +
+> +	err = clk_prepare_enable(priv->clk);
+> +	if (err) {
+> +		dev_err(dev, "Clock can't be enabled correctly\n");
+> +		return err;
+> +	}
+> +
+> +	/* The timer and watchdog shared the STC reset */
+> +	priv->rstc = devm_reset_control_get_shared(dev, NULL);
+> +	if (!IS_ERR(priv->rstc))
+> +		reset_control_deassert(priv->rstc);
+> +
+> +	err = devm_add_action_or_reset(dev, sp_reset_control_assert,
+> +				       priv->rstc);
+> +	if (err)
+> +		return err;
+> +
 
+devm_add_action_or_reset() above should only be called if 
+devm_reset_control_get_shared succeeds.
 
-Tel: +44 7537 185910
-Andres  Stemmet
-Email: andres.stemmet1@gmail.com  =
+> +	err = devm_add_action_or_reset(dev, sp_clk_disable_unprepare,
+> +				       priv->clk);
 
-Chief financial officer
-BP Petroleum p.l.c.
+This should be called immediately after clk_prepare_enable().
 
-                                                                           =
-                        Copyright =A9 1996-2021
-
+> +	if (err)
+> +		return err;
+> +
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	priv->wdev.info = &sp_wdt_info;
+> +	priv->wdev.ops = &sp_wdt_ops;
+> +	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
+> +	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
+> +	priv->wdev.min_timeout = 1;
+> +	priv->wdev.parent = dev;
+> +
+> +	watchdog_init_timeout(&priv->wdev, timeout, dev);
+> +	watchdog_set_nowayout(&priv->wdev, nowayout);
+> +	watchdog_set_restart_priority(&priv->wdev, 128);
+> +
+> +	watchdog_set_drvdata(&priv->wdev, priv);
+> +
+> +	watchdog_stop_on_reboot(&priv->wdev);
+> +	err = devm_watchdog_register_device(dev, &priv->wdev);
+> +	if (err)
+> +		return err;
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	dev_info(dev, "Watchdog enabled (timeout=%d sec%s.)\n",
+> +		 priv->wdev.timeout, nowayout ? ", nowayout" : "");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sp_wdt_of_match[] = {
+> +	{.compatible = "sunplus,sp7021-wdt", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
+> +
+> +static int __maybe_unused sp_wdt_suspend(struct device *dev)
+> +{
+> +	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&priv->wdev))
+> +		sp_wdt_stop(&priv->wdev);
+> +
+> +	reset_control_assert(priv->rstc);
+> +	clk_disable_unprepare(priv->clk);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused sp_wdt_resume(struct device *dev)
+> +{
+> +	int err;
+> +
+> +	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
+> +
+> +	err = clk_prepare_enable(priv->clk);
+> +	if (err) {
+> +		dev_err(dev, "Clock can't be enabled correctly\n");
+> +		return err;
+> +	}
+> +
+> +	reset_control_deassert(priv->rstc);
+> +
+> +	if (watchdog_active(&priv->wdev))
+> +		sp_wdt_start(&priv->wdev);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(sp_wdt_pm_ops, sp_wdt_suspend, sp_wdt_resume);
+> +
+> +static struct platform_driver sp_wdt_driver = {
+> +	.probe = sp_wdt_probe,
+> +	.driver = {
+> +		   .name = DEVICE_NAME,
+> +		   .of_match_table = sp_wdt_of_match,
+> +		   .pm = &sp_wdt_pm_ops,
+> +	},
+> +};
+> +
+> +module_platform_driver(sp_wdt_driver);
+> +
+> +MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
+> +MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.33.1
+> 
