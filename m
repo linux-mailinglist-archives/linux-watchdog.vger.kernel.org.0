@@ -2,415 +2,228 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8BA482BD2
-	for <lists+linux-watchdog@lfdr.de>; Sun,  2 Jan 2022 17:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 737BE48312B
+	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Jan 2022 13:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbiABQOu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 2 Jan 2022 11:14:50 -0500
-Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:61784 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbiABQOt (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 2 Jan 2022 11:14:49 -0500
-Received: from [192.168.1.18] ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 43VLnduQPIEdl43VLn5pOd; Sun, 02 Jan 2022 17:14:48 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 02 Jan 2022 17:14:48 +0100
-X-ME-IP: 86.243.171.122
-Message-ID: <6dea4d95-17bc-66fc-590d-3f1351fbe363@wanadoo.fr>
-Date:   Sun, 2 Jan 2022 17:14:42 +0100
+        id S232059AbiACMxo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 3 Jan 2022 07:53:44 -0500
+Received: from mail-eopbgr50078.outbound.protection.outlook.com ([40.107.5.78]:34784
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229514AbiACMxn (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 3 Jan 2022 07:53:43 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fJkK5f3VWuXNcgsoUi6xIS1CchIHS24/Ub6G3ATkjwZSADgiGjEUm1ANRVGPwSR/9E/RfgVE05L0up8WUm6aYMUuhcH8SB4bZnltcR5rfJveXmUluM5nGrEEYCdwtMBb29UosPifNF8rWgQIp6ebAruwSHUYjuHAoulFzWymXeB7bRqZmqIaVB8a0kM0GVd+2NknXg9efoIu0ccpi80J7yA09gbuAzJ648ioGATGEUogO3ndO1cj7T1I3SHbE28OW00vUE5hjZtPRrk9e4l4F1BDjxESV5a/dQDnRzIcSphjEnps8J5NYdp45sfLTqj8iNVCalnIm8Eh7r3TxuV3Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CmfGATzxK4wh9jah5VIVxLK23QoSNKCzIMwEN4QDHV0=;
+ b=Qz1FkW0bhv0cJRto8+SMIMoDZFP8iSiDpXazXsqHsqbhfUzGXe+RXvKuUm1TGpker+Wab3veJLYVf8/hMpuwet1Ms/YKpfatRJlpWmZCfZSQsI4+tGB4rRl8O6g+xgQDlajlsXQnN8jDrDeEok9bBhtIvPfIXekDqCUYPvnkAwTW+kxc3LheYgyAWHEzDY6HkVer0qRR+DOuNwI+STOXxprYJGlA9gL+NTyrg+WE39TmI4JuWk+JzUGTQYxc6akjt7IFz9DPi053dn4V35FVVOP/XansKdmP8JKkWY2J8O1z4BAwe2dmrHXs6xRwFEBth5pi7bJB2ekv/M9WkinJSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.73) smtp.rcpttodomain=redhat.com smtp.mailfrom=siemens.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CmfGATzxK4wh9jah5VIVxLK23QoSNKCzIMwEN4QDHV0=;
+ b=G7/khJJg/YpyXEaMyjlC9ChOoDQlp0WmfTszDIUTu9gqyq40DBOPOlnZuFfyfsW2Rd6mkdEWjD7Zp1UEHw5izvndg8VJKdHWMruTg48Iv/9uIAYt/4sBLorH8tvQhGA843kXXZDAy+VVde5ARoAjFiYjUzNdGQ7YpeTfD4eLYvj5CnnJcD/jPs2Xuq9LETPylk9ZNggF+t97IRtCoXYuyAUZeebanOV/Lfr8iyVSoeZAkJl2moX9GWHP9qbpmUE+vePqH78enXF+m9dZLns9FqhJ++XwkSWQwDA6WiMEPBYoMxGJD9k2o7ZY/U8jxc02TAFSo0I5dSbhWposbRPbUQ==
+Received: from AM6P191CA0091.EURP191.PROD.OUTLOOK.COM (2603:10a6:209:8a::32)
+ by DB6PR1001MB0982.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:62::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Mon, 3 Jan
+ 2022 12:53:40 +0000
+Received: from VE1EUR01FT051.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:209:8a:cafe::37) by AM6P191CA0091.outlook.office365.com
+ (2603:10a6:209:8a::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14 via Frontend
+ Transport; Mon, 3 Jan 2022 12:53:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.73; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.73) by
+ VE1EUR01FT051.mail.protection.outlook.com (10.152.3.8) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4844.14 via Frontend Transport; Mon, 3 Jan 2022 12:53:40 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 3 Jan 2022 13:53:39 +0100
+Received: from md1za8fc.ad001.siemens.net (139.25.68.217) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 3 Jan 2022 13:53:39 +0100
+Date:   Mon, 3 Jan 2022 13:53:36 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Enrico Weigelt <lkml@metux.net>
+Subject: Re: [PATCH v5 0/4] add device drivers for Siemens Industrial PCs
+Message-ID: <20220103135336.2fc44711@md1za8fc.ad001.siemens.net>
+In-Reply-To: <674e8c50-ece7-9aad-7876-c739dbc96498@redhat.com>
+References: <20211213120502.20661-1-henning.schild@siemens.com>
+        <674e8c50-ece7-9aad-7876-c739dbc96498@redhat.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
-Content-Language: fr
-To:     Guenter Roeck <linux@roeck-us.net>, Xiantao Hu <xt.hu@cqplus1.com>
-Cc:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com, qinjian@cqplus1.com
-References: <20211229054308.63168-1-xt.hu@cqplus1.com>
- <20211229054308.63168-3-xt.hu@cqplus1.com>
- <20220102150027.GA2806117@roeck-us.net>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220102150027.GA2806117@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [139.25.68.217]
+X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5c345395-5d8a-4c8a-463f-08d9ceb810fc
+X-MS-TrafficTypeDiagnostic: DB6PR1001MB0982:EE_
+X-Microsoft-Antispam-PRVS: <DB6PR1001MB0982144A230A3AE180FC1E6285499@DB6PR1001MB0982.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ++lpG6zy3PgI++p7ydQBNDHpBVqvm3Z1E5p49aCXF954LB0gn4GXK9ochMwGnyba7908t2A8F3I2ZIS/O7+XTBoQIdSngw+5tHbmmCRE2apY7FhinTfeZBXwHv650Z5DMLu9EXQlP8iiJtPto5LxK5yMC+UQD9JClnbtwuUUQcr+xsc7r/+pC14T1bCJDWoGOV5brnsCV5g6lB9Z03knTRviFuVj6fZ2Zgo7AQ8y+jfK8h3/kKEQEHU0WRKwSKbhhXsF1r00U865zGVLO3PXpOqnzRDHPbIVRLXjyLLShs4ogaReUgetqujtG4+3y17dxM/i38ryFgiP4NCMg6+egTuwqZtjG72+XiqoaXuPBhkUHUSUGWNfaRTS+9jQmLqM57k4Cj9GPsRXIWSQ7QvxS2ViLsgfoCgbViG+xT1xL8vBs+fe3DrsW6lpXZM8JOQKGQJBsDZKG7q89/XWA3uBPMILm3io/hU9NE7EfzMNlSX4+tSd5m4VbYSzZpfRowSnUOcskiAnr6DHpjmxnFv+eSuBcPsA883xdA65HHiKMPb5Y55VHkAG3NOXoVR7N8GGHwuClOb3+W1z/VWuFQR2Wwk2WJozuMlsVs7PJlURPgt0U8vk+bNWTKuDSv6B/ztKZBm4totYnrGfDOQdpba0W5nPgrT6U0ScZEYdam1xsWh4WN7mvhF7fRSweEL309IgYkaEfHaqy92TaMdAEzECyupuy+k470ApXz40tRkyIGrUvlGmsp7OJf8aV/1ODXuIHAHjFLr0oXM/br5qG1f36RnZUmkpQRkSWeh8bFKDOo8L4c1rc2A+TotOUZEZntcM6btvWJUZkDuPc7R62pYAKOa2FSx5BOoe7WCvSXPkyQzrbza7tJN6+TYiCIZxQft8
+X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(336012)(8936002)(508600001)(7416002)(47076005)(16526019)(40460700001)(82960400001)(1076003)(186003)(9686003)(2906002)(44832011)(26005)(5660300002)(956004)(70206006)(6916009)(53546011)(70586007)(81166007)(82310400004)(55016003)(7696005)(54906003)(966005)(4326008)(356005)(36860700001)(316002)(6666004)(8676002)(83380400001)(86362001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2022 12:53:40.3283
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c345395-5d8a-4c8a-463f-08d9ceb810fc
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT051.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR1001MB0982
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Le 02/01/2022 à 16:00, Guenter Roeck a écrit :
-> On Wed, Dec 29, 2021 at 01:43:08PM +0800, Xiantao Hu wrote:
->> Sunplus SP7021 requires watchdog timer support.
->> Add watchdog driver to enable this.
->>
->> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
->> ---
->> Changes in v4
->>   - Drop the unused varible struct resource *wdt_res.
->>   - Drop the operations related to address 0x9c000274.
->>     Put it in bootloader before entry kernel boot in v3.
->>
->>   MAINTAINERS                    |   1 +
->>   drivers/watchdog/Kconfig       |  11 ++
->>   drivers/watchdog/Makefile      |   1 +
->>   drivers/watchdog/sunplus_wdt.c | 278 +++++++++++++++++++++++++++++++++
->>   4 files changed, 291 insertions(+)
->>   create mode 100644 drivers/watchdog/sunplus_wdt.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index fe6cc971c..a1b3d76e2 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -18247,6 +18247,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
->>   L:	linux-watchdog@vger.kernel.org
->>   S:	Maintained
->>   F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
->> +F:	drivers/watchdog/sunplus_wdt.c
->>   
->>   SUPERH
->>   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
->> index 9d222ba17..d3dbe8695 100644
->> --- a/drivers/watchdog/Kconfig
->> +++ b/drivers/watchdog/Kconfig
->> @@ -976,6 +976,17 @@ config MSC313E_WATCHDOG
->>   	  To compile this driver as a module, choose M here: the
->>   	  module will be called msc313e_wdt.
->>   
->> +config SUNPLUS_WATCHDOG
->> +	tristate "Sunplus watchdog support"
->> +	depends on ARCH_SUNPLUS || COMPILE_TEST
->> +	select WATCHDOG_CORE
->> +	help
->> +	  Say Y here to include support for the watchdog timer
->> +	  in Sunplus SoCs.
->> +
->> +	  To compile this driver as a module, choose M here: the
->> +	  module will be called sunplus_wdt.
->> +
->>   # X86 (i386 + ia64 + x86_64) Architecture
->>   
->>   config ACQUIRE_WDT
->> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
->> index 2ee970641..0fa548ee6 100644
->> --- a/drivers/watchdog/Makefile
->> +++ b/drivers/watchdog/Makefile
->> @@ -93,6 +93,7 @@ obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
->>   obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
->>   obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
->>   obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
->> +obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
->>   
->>   # X86 (i386 + ia64 + x86_64) Architecture
->>   obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
->> diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
->> new file mode 100644
->> index 000000000..9fae7a14b
->> --- /dev/null
->> +++ b/drivers/watchdog/sunplus_wdt.c
->> @@ -0,0 +1,278 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * sunplus Watchdog Driver
->> + *
->> + * Copyright (C) 2021 Sunplus Technology Co., Ltd.
->> + *
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/io.h>
->> +#include <linux/module.h>
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/reset.h>
->> +#include <linux/watchdog.h>
->> +
->> +#define WDT_CTRL                0x00
->> +#define WDT_CNT                 0x04
->> +
->> +#define WDT_STOP				0x3877
->> +#define WDT_RESUME				0x4A4B
->> +#define WDT_CLRIRQ				0x7482
->> +#define WDT_UNLOCK				0xAB00
->> +#define WDT_LOCK				0xAB01
->> +#define WDT_CONMAX				0xDEAF
->> +
->> +#define SP_WDT_MAX_TIMEOUT		11U
->> +#define SP_WDT_DEFAULT_TIMEOUT	10
->> +
->> +#define STC_CLK				90000
->> +
->> +#define DEVICE_NAME		"sunplus-wdt"
->> +
->> +static unsigned int timeout;
->> +module_param(timeout, int, 0);
->> +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
->> +
->> +static bool nowayout = WATCHDOG_NOWAYOUT;
->> +module_param(nowayout, bool, 0);
->> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
->> +			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->> +
->> +struct sp_wdt_priv {
->> +	struct watchdog_device wdev;
->> +	void __iomem *base;
->> +	struct clk *clk;
->> +	struct reset_control *rstc;
->> +};
->> +
->> +static int sp_wdt_restart(struct watchdog_device *wdev,
->> +			  unsigned long action, void *data)
->> +{
->> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
->> +	void __iomem *base = priv->base;
->> +
->> +	writel(WDT_STOP, base + WDT_CTRL);
->> +	writel(WDT_UNLOCK, base + WDT_CTRL);
->> +	writel(0x0001, base + WDT_CNT);
->> +	writel(WDT_LOCK, base + WDT_CTRL);
->> +	writel(WDT_RESUME, base + WDT_CTRL);
->> +
->> +	return 0;
->> +}
->> +
->> +/* TIMEOUT_MAX = ffff0/90kHz =11.65,so longer than 11 seconds will time out */
->> +static int sp_wdt_ping(struct watchdog_device *wdev)
->> +{
->> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
->> +	void __iomem *base = priv->base;
->> +	u32 count;
->> +	u32 actual;
->> +
->> +	actual = min(wdev->timeout, SP_WDT_MAX_TIMEOUT);
->> +
->> +	if (actual > SP_WDT_MAX_TIMEOUT) {
->> +		writel(WDT_CONMAX, base + WDT_CTRL);
->> +	} else {
->> +		writel(WDT_UNLOCK, base + WDT_CTRL);
->> +		/* tiemrw_cnt[3:0]can't be write,only [19:4] can be write. */
->> +		count = (actual * STC_CLK) >> 4;
->> +		writel(count, base + WDT_CNT);
->> +		writel(WDT_LOCK, base + WDT_CTRL);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int sp_wdt_set_timeout(struct watchdog_device *wdev,
->> +			      unsigned int timeout)
->> +{
->> +	wdev->timeout = timeout;
->> +	sp_wdt_ping(wdev);
-> 
-> This is exactly what the calling code does if there is no set_timeout
-> function, so you can just drop this function,
-> 
->> +
->> +	return 0;
->> +}
->> +
->> +static int sp_wdt_stop(struct watchdog_device *wdev)
->> +{
->> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
->> +	void __iomem *base = priv->base;
->> +
->> +	writel(WDT_STOP, base + WDT_CTRL);
->> +
->> +	return 0;
->> +}
->> +
->> +static int sp_wdt_start(struct watchdog_device *wdev)
->> +{
->> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
->> +	void __iomem *base = priv->base;
->> +
->> +	writel(WDT_RESUME, base + WDT_CTRL);
->> +
->> +	return 0;
->> +}
->> +
->> +static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
->> +{
->> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
->> +	void __iomem *base = priv->base;
->> +	u32 val;
->> +
->> +	val = readl(base + WDT_CNT);
->> +	val &= 0xffff;
->> +	val = val << 4;
->> +
->> +	return val;
->> +}
->> +
->> +static const struct watchdog_info sp_wdt_info = {
->> +	.identity	= DEVICE_NAME,
->> +	.options	= WDIOF_SETTIMEOUT |
->> +			  WDIOF_MAGICCLOSE |
->> +			  WDIOF_KEEPALIVEPING,
->> +};
->> +
->> +static const struct watchdog_ops sp_wdt_ops = {
->> +	.owner		= THIS_MODULE,
->> +	.start		= sp_wdt_start,
->> +	.stop		= sp_wdt_stop,
->> +	.ping		= sp_wdt_ping,
->> +	.set_timeout	= sp_wdt_set_timeout,
->> +	.get_timeleft	= sp_wdt_get_timeleft,
->> +	.restart	= sp_wdt_restart,
->> +};
->> +
->> +static void sp_clk_disable_unprepare(void *data)
->> +{
->> +	clk_disable_unprepare(data);
->> +}
->> +
->> +static void sp_reset_control_assert(void *data)
->> +{
->> +	reset_control_assert(data);
->> +}
->> +
->> +static int sp_wdt_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct sp_wdt_priv *priv;
->> +	int err;
->> +
->> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->> +	if (!priv)
->> +		return -ENOMEM;
->> +
->> +	priv->clk = devm_clk_get(dev, NULL);
->> +	if (IS_ERR(priv->clk)) {
->> +		dev_err(dev, "Can't find clock source\n");
->> +		return PTR_ERR(priv->clk);
->> +	}
->> +
->> +	err = clk_prepare_enable(priv->clk);
->> +	if (err) {
->> +		dev_err(dev, "Clock can't be enabled correctly\n");
->> +		return err;
->> +	}
->> +
->> +	/* The timer and watchdog shared the STC reset */
->> +	priv->rstc = devm_reset_control_get_shared(dev, NULL);
->> +	if (!IS_ERR(priv->rstc))
->> +		reset_control_deassert(priv->rstc);
->> +
->> +	err = devm_add_action_or_reset(dev, sp_reset_control_assert,
->> +				       priv->rstc);
->> +	if (err)
->> +		return err;
->> +
-> 
-> devm_add_action_or_reset() above should only be called if
-> devm_reset_control_get_shared succeeds.
+Am Thu, 23 Dec 2021 18:17:03 +0100
+schrieb Hans de Goede <hdegoede@redhat.com>:
 
-I also think that the same "if (!IS_ERR(priv->rstc))" should be done in 
-the suspend/resume function before calling reset_control_[de]assert()
-Otherwise it will WARN.
+> Hi,
+> 
+> On 12/13/21 13:04, Henning Schild wrote:
+> > changes since v4:
+> > - make everything around GPIO memory usage more verbose
+> >   - commit messages, FIXME in p1, cover-letter
+> > 
+> > changes since v3:
+> > 
+> > - fix io access width and region reservations
+> > - fix style in p1
+> > 
+> > changes since v2:
+> > 
+> > - remove "simatic-ipc" prefix from LED names
+> > - fix style issues found in v2, mainly LED driver
+> > - fix OEM specific dmi code, and remove magic numbers
+> > - more "simatic_ipc" name prefixing
+> > - improved pmc quirk code using callbacks
+> > 
+> > changes since v1:
+> > 
+> > - fixed lots of style issues found in v1
+> >   - (debug) printing
+> >   - header ordering
+> > - fixed license issues GPLv2 and SPDX in all files
+> > - module_platform_driver instead of __init __exit
+> > - wdt simplifications cleanup
+> > - lots of fixes in wdt driver, all that was found in v1
+> > - fixed dmi length in dmi helper
+> > - changed LED names to allowed ones
+> > - move led driver to simple/
+> > - switched pmc_atom to dmi callback with global variable
+> > 
+> > 
+> > This series adds support for watchdogs and leds of several x86
+> > devices from Siemens.
+> > 
+> > It is structured with a platform driver that mainly does
+> > identification of the machines. It might trigger loading of the
+> > actual device drivers by attaching devices to the platform bus.
+> > 
+> > The identification is vendor specific, parsing a special binary DMI
+> > entry. The implementation of that platform identification is
+> > applied on pmc_atom clock quirks in the final patch.
+> > 
+> > It is all structured in a way that we can easily add more devices
+> > and more platform drivers later. Internally we have some more code
+> > for hardware monitoring, more leds, watchdogs etc. This will follow
+> > some day.
+> > 
+> > The LED as well as the watchdog drivers access GPIO memory directly.
+> > Using pinctrl is not possible because the machines lack ACPI
+> > entries for the pinctrl drivers. Updates to the ACPI tables are not
+> > expected. So we can rule out a conflict where two drivers would try
+> > and access that GPIO memory.
+> > So we do not use those pins as "general purpose" but as "Siemens
+> > purpose", after having identified the devices very clearly. 
+> > 
+> > Henning Schild (4):
+> >   platform/x86: simatic-ipc: add main driver for Siemens devices
+> >   leds: simatic-ipc-leds: add new driver for Siemens Industial PCs
+> >   watchdog: simatic-ipc-wdt: add new driver for Siemens Industrial
+> > PCs platform/x86: pmc_atom: improve critclk_systems matching for
+> > Siemens PCs  
+> 
+> 
+> Thank you for your patch-series, I've applied the series to my
+> review-hans branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+> 
+> Note it will show up in my review-hans branch once I've pushed my
+> local branch there, which might take a while.
+> 
+> Once I've run some tests on this branch the patches there will be
+> added to the platform-drivers-x86/for-next branch and eventually
+> will be included in the pdx86 pull-request to Linus for the next
+> merge-window.
 
-CJ
+Cool! Thanks all for the reviews and for allowing the drivers in. Stay
+tuned for more.
 
+regards,
+Henning
+
+> Regards,
 > 
->> +	err = devm_add_action_or_reset(dev, sp_clk_disable_unprepare,
->> +				       priv->clk);
+> Hans
 > 
-> This should be called immediately after clk_prepare_enable().
 > 
->> +	if (err)
->> +		return err;
->> +
->> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(priv->base))
->> +		return PTR_ERR(priv->base);
->> +
->> +	priv->wdev.info = &sp_wdt_info;
->> +	priv->wdev.ops = &sp_wdt_ops;
->> +	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
->> +	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
->> +	priv->wdev.min_timeout = 1;
->> +	priv->wdev.parent = dev;
->> +
->> +	watchdog_init_timeout(&priv->wdev, timeout, dev);
->> +	watchdog_set_nowayout(&priv->wdev, nowayout);
->> +	watchdog_set_restart_priority(&priv->wdev, 128);
->> +
->> +	watchdog_set_drvdata(&priv->wdev, priv);
->> +
->> +	watchdog_stop_on_reboot(&priv->wdev);
->> +	err = devm_watchdog_register_device(dev, &priv->wdev);
->> +	if (err)
->> +		return err;
->> +
->> +	platform_set_drvdata(pdev, priv);
->> +
->> +	dev_info(dev, "Watchdog enabled (timeout=%d sec%s.)\n",
->> +		 priv->wdev.timeout, nowayout ? ", nowayout" : "");
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct of_device_id sp_wdt_of_match[] = {
->> +	{.compatible = "sunplus,sp7021-wdt", },
->> +	{ /* sentinel */ }
->> +};
->> +MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
->> +
->> +static int __maybe_unused sp_wdt_suspend(struct device *dev)
->> +{
->> +	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
->> +
->> +	if (watchdog_active(&priv->wdev))
->> +		sp_wdt_stop(&priv->wdev);
->> +
->> +	reset_control_assert(priv->rstc);
->> +	clk_disable_unprepare(priv->clk);
->> +
->> +	return 0;
->> +}
->> +
->> +static int __maybe_unused sp_wdt_resume(struct device *dev)
->> +{
->> +	int err;
->> +
->> +	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
->> +
->> +	err = clk_prepare_enable(priv->clk);
->> +	if (err) {
->> +		dev_err(dev, "Clock can't be enabled correctly\n");
->> +		return err;
->> +	}
->> +
->> +	reset_control_deassert(priv->rstc);
->> +
->> +	if (watchdog_active(&priv->wdev))
->> +		sp_wdt_start(&priv->wdev);
->> +
->> +	return 0;
->> +}
->> +
->> +static SIMPLE_DEV_PM_OPS(sp_wdt_pm_ops, sp_wdt_suspend, sp_wdt_resume);
->> +
->> +static struct platform_driver sp_wdt_driver = {
->> +	.probe = sp_wdt_probe,
->> +	.driver = {
->> +		   .name = DEVICE_NAME,
->> +		   .of_match_table = sp_wdt_of_match,
->> +		   .pm = &sp_wdt_pm_ops,
->> +	},
->> +};
->> +
->> +module_platform_driver(sp_wdt_driver);
->> +
->> +MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
->> +MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
->> +MODULE_LICENSE("GPL v2");
->> -- 
->> 2.33.1
->>
+> > 
+> >  drivers/leds/Kconfig                          |   3 +
+> >  drivers/leds/Makefile                         |   3 +
+> >  drivers/leds/simple/Kconfig                   |  11 +
+> >  drivers/leds/simple/Makefile                  |   2 +
+> >  drivers/leds/simple/simatic-ipc-leds.c        | 202
+> > ++++++++++++++++ drivers/platform/x86/Kconfig                  |
+> > 12 + drivers/platform/x86/Makefile                 |   3 +
+> >  drivers/platform/x86/pmc_atom.c               |  54 +++--
+> >  drivers/platform/x86/simatic-ipc.c            | 176 ++++++++++++++
+> >  drivers/watchdog/Kconfig                      |  11 +
+> >  drivers/watchdog/Makefile                     |   1 +
+> >  drivers/watchdog/simatic-ipc-wdt.c            | 228
+> > ++++++++++++++++++ .../platform_data/x86/simatic-ipc-base.h      |
+> > 29 +++ include/linux/platform_data/x86/simatic-ipc.h |  72 ++++++
+> >  14 files changed, 786 insertions(+), 21 deletions(-)
+> >  create mode 100644 drivers/leds/simple/Kconfig
+> >  create mode 100644 drivers/leds/simple/Makefile
+> >  create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
+> >  create mode 100644 drivers/platform/x86/simatic-ipc.c
+> >  create mode 100644 drivers/watchdog/simatic-ipc-wdt.c
+> >  create mode 100644
+> > include/linux/platform_data/x86/simatic-ipc-base.h create mode
+> > 100644 include/linux/platform_data/x86/simatic-ipc.h 
 > 
 
