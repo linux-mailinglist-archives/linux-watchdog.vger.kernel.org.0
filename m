@@ -2,95 +2,85 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A92D44850AD
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jan 2022 11:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE4F4851A1
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jan 2022 12:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239222AbiAEKF7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 5 Jan 2022 05:05:59 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:37580 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S239228AbiAEKF6 (ORCPT
+        id S239597AbiAELKG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 5 Jan 2022 06:10:06 -0500
+Received: from www.linux-watchdog.org ([185.87.125.42]:44606 "EHLO
+        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231725AbiAELKF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:05:58 -0500
-X-UUID: ea627bca6ff9491ea4060e6c29625a44-20220105
-X-UUID: ea627bca6ff9491ea4060e6c29625a44-20220105
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1437236007; Wed, 05 Jan 2022 18:05:53 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 5 Jan 2022 18:05:52 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 5 Jan
- 2022 18:05:52 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 5 Jan 2022 18:05:51 +0800
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wed, 5 Jan 2022 06:10:05 -0500
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 8A91B409E9; Wed,  5 Jan 2022 10:42:04 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 8A91B409E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1641375724;
+        bh=9N04zDKHmWi/Ax4vZBHgaCc9+vFD2bgpCFA4bgoWL7Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eXtfdWRcIh9Vdq3Ttnx+/l8VRJto+CkgyA8h9OXDu1EC378Nop6A43HUJgMyJV/vR
+         6hRDquX680Cvorhjv7aaFVtDVGRO3CmkjTn62x1OasryG7XOJbZ9b8BkWSa5A1dfDy
+         m6ey9ak5cq0pvnbYFNi+E+Ni1n1cohOjJzk5X5E0=
+Date:   Wed, 5 Jan 2022 10:42:04 +0100
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Sander Vanheule <sander@svanheule.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     John Crispin <john@phrozen.org>, Sam Shih <sam.shih@mediatek.com>
-Subject: [PATCH 2/2] watchdog: mtk_wdt: mt7986: Add toprgu reset controller support
-Date:   Wed, 5 Jan 2022 18:04:56 +0800
-Message-ID: <20220105100456.7126-3-sam.shih@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220105100456.7126-1-sam.shih@mediatek.com>
-References: <20220105100456.7126-1-sam.shih@mediatek.com>
+        linux-watchdog@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: remove typo from REALTEK OTTO WATCHDOG
+ section
+Message-ID: <20220105094204.GA7303@www.linux-watchdog.org>
+References: <20220104154414.21496-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104154414.21496-1-lukas.bulwahn@gmail.com>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Besides watchdog, the mt7986 toprgu module also provides software reset
-functionality for various peripheral subsystems
-(eg, ethernet, pcie, and connectivity)
+Hi Lukas,
 
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
----
- drivers/watchdog/mtk_wdt.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> Commit 489119bf75e6 ("watchdog: Add Realtek Otto watchdog timer") adds the
+> REALTEK OTTO WATCHDOG section in MAINTAINERS and one file entry refers to
+> driver/watchdog/realtek_otto_wdt.c. The actual top-level directory name is
+> drivers, not driver, though.
+> 
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
+> 
+>     warning: no file matches	F:	driver/watchdog/realtek_otto_wdt.c
+> 
+> Remove this obvious typo in the file entry.
+> 
+> Fixes: 489119bf75e6 ("watchdog: Add Realtek Otto watchdog timer")
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f7bf491409cf..b4fcc2bb7c54 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16307,7 +16307,7 @@ M:	Sander Vanheule <sander@svanheule.net>
+>  L:	linux-watchdog@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
+> -F:	driver/watchdog/realtek_otto_wdt.c
+> +F:	drivers/watchdog/realtek_otto_wdt.c
+>  
+>  REALTEK RTL83xx SMI DSA ROUTER CHIPS
+>  M:	Linus Walleij <linus.walleij@linaro.org>
+> -- 
+> 2.17.1
+> 
 
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index 543cf38bd04e..c6437fe1f4c0 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -10,6 +10,7 @@
-  */
- 
- #include <dt-bindings/reset/mt2712-resets.h>
-+#include <dt-bindings/reset/mt7986-resets.h>
- #include <dt-bindings/reset/mt8183-resets.h>
- #include <dt-bindings/reset/mt8192-resets.h>
- #include <dt-bindings/reset/mt8195-resets.h>
-@@ -76,6 +77,10 @@ static const struct mtk_wdt_data mt2712_data = {
- 	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
- };
- 
-+static const struct mtk_wdt_data mt7986_data = {
-+	.toprgu_sw_rst_num = MT7986_TOPRGU_SW_RST_NUM,
-+};
-+
- static const struct mtk_wdt_data mt8183_data = {
- 	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
- };
-@@ -418,6 +423,7 @@ static int mtk_wdt_resume(struct device *dev)
- static const struct of_device_id mtk_wdt_dt_ids[] = {
- 	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
- 	{ .compatible = "mediatek,mt6589-wdt" },
-+	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
- 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
- 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
- 	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
--- 
-2.29.2
+Since I had to do some other changes on the tree, I changed it directly in the original patch.
+
+Kind regards,
+Wim.
 
