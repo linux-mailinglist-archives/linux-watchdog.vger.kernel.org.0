@@ -2,85 +2,161 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE4F4851A1
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jan 2022 12:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B5D48563D
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jan 2022 16:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239597AbiAELKG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 5 Jan 2022 06:10:06 -0500
-Received: from www.linux-watchdog.org ([185.87.125.42]:44606 "EHLO
-        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbiAELKF (ORCPT
+        id S241711AbiAEPxG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 5 Jan 2022 10:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231191AbiAEPxG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:10:05 -0500
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id 8A91B409E9; Wed,  5 Jan 2022 10:42:04 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 8A91B409E9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1641375724;
-        bh=9N04zDKHmWi/Ax4vZBHgaCc9+vFD2bgpCFA4bgoWL7Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eXtfdWRcIh9Vdq3Ttnx+/l8VRJto+CkgyA8h9OXDu1EC378Nop6A43HUJgMyJV/vR
-         6hRDquX680Cvorhjv7aaFVtDVGRO3CmkjTn62x1OasryG7XOJbZ9b8BkWSa5A1dfDy
-         m6ey9ak5cq0pvnbYFNi+E+Ni1n1cohOjJzk5X5E0=
-Date:   Wed, 5 Jan 2022 10:42:04 +0100
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Sander Vanheule <sander@svanheule.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: remove typo from REALTEK OTTO WATCHDOG
- section
-Message-ID: <20220105094204.GA7303@www.linux-watchdog.org>
-References: <20220104154414.21496-1-lukas.bulwahn@gmail.com>
+        Wed, 5 Jan 2022 10:53:06 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AF8C061245;
+        Wed,  5 Jan 2022 07:53:05 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id r131so1047674oig.1;
+        Wed, 05 Jan 2022 07:53:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kxTc5oF0m/jCeg55cpMiw03himnlyOBY5YgtcF+TpkE=;
+        b=cP+Sb9AkokqDWUbUOITE/CvWQ01hkKy1Ai2BUFuMaDvTq8dwlA68ARR8ZuLKkJHW/p
+         i5WyCncILBT4e/xGFwLZ5ENbGQ8W0dB0+3pknmHRqHcbFF6hq15ZmsM/eZDwX0pdTepS
+         EEEE/JyHjlm7XV6ELZ3NRV6N5sq5kxeCB0DCQzYdwvtAMxz5kIOnhbgLR0OxaKLkO1dV
+         iGCCX1JKtH1WGTabDqaBZUcbOWf4/Nfhs2Z9+VziUxtPZ/Ys2iMjtXcB5LmNCNJbY1v2
+         MjRGoKOUzjYF9xGsRviz3gIxJ8fbvB3Q+BK+x06XZhHl8IxK4oWIdcxmRpR+txXVjGoU
+         fLcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kxTc5oF0m/jCeg55cpMiw03himnlyOBY5YgtcF+TpkE=;
+        b=fSr8YmbiB0b6k6VuIw6Wls6csvedCEPOrp9SEmzrtgFGaPz025tKdS3oYIU8vY4+LT
+         JpaKYx3rMQz0hi3TBpc1EEhCF3i2aM4pO7bgNxnjGfh9+SWs1mG/PU2tvg+R5tRZtqou
+         w1wt8+/nkh12jMsItrc6eP23V7xl8ibEjidwQl3gWrK1WcbU5Ke4UGqQfYi/4HxN+XN2
+         ujgNU1RZZJmgyg6CgW/Pxegdyavc+lAZ9xTaWk6R14JEw+7RJAo1j8oOwzP06Y9CW8H5
+         1hoqFUmMBSXlapH+bG1xCTnr9tHIPf0UsYxjF8OW7rv9oleUdTu83Q6BsVljpx3LC9dy
+         o4iQ==
+X-Gm-Message-State: AOAM533OREPBRRH3LwgCpWEkasZRNFbLQUQMuUeka1TJV3GwhF0e/g/7
+        mkaFvPItxUTn+ZGQCX8X9VLR/lDmmdw=
+X-Google-Smtp-Source: ABdhPJwhivJ5YLULoVD5dbqH9mpAxQYe5aAc6j/IbPIYAOEgXPM+qpMMxw7M2Pb7YQ9mGZxuXEHaRA==
+X-Received: by 2002:a05:6808:1246:: with SMTP id o6mr2986307oiv.73.1641397985056;
+        Wed, 05 Jan 2022 07:53:05 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w29sm8489493ooe.25.2022.01.05.07.53.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 07:53:04 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
+To:     =?UTF-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>,
+        Rob Herring <robh@kernel.org>
+References: <17803809bef1499fb051cf79fc3c7245@cqplus1.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <8af9cf3d-c048-b9ed-0bac-832ee262917d@roeck-us.net>
+Date:   Wed, 5 Jan 2022 07:53:02 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104154414.21496-1-lukas.bulwahn@gmail.com>
-User-Agent: Mutt/1.5.20 (2009-12-10)
+In-Reply-To: <17803809bef1499fb051cf79fc3c7245@cqplus1.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Lukas,
+On 12/30/21 6:50 PM, xt.hu[胡先韬] wrote:
+> Hi Chrustophe,
+> 
+> 	Thanks for your respond.
+> 
+> Best Regards,
+> Xiantao
+>> -----Original Message-----
+>> From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> To: Xiantao Hu <xt.hu@cqplus1.com>,
+>> 	wim@linux-watchdog.org, p.zabel@pengutronix.de,
+>> 	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+>> 	linux@roeck-us.net, robh+dt@kernel.org,
+>> 	devicetree@vger.kernel.org
+>> Cc: wells.lu@sunplus.com, qinjian@cqplus1.com
+>> Subject: Re: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
+>> Date: Wed, 29 Dec 2021 10:39:08 +0100	[thread overview]
+>> Message-ID: <0b102fa0-cbfc-a97e-8e7f-cce8146450bc@wanadoo.fr> (raw)
+>> In-Reply-To: <20211229054308.63168-3-xt.hu@cqplus1.com>
+>>
+>> ...
+>>
+>>> +static int sp_wdt_probe(struct platform_device *pdev)
+>>> +{
+>>> +	struct device *dev = &pdev->dev;
+>>> +	struct sp_wdt_priv *priv;
+>>> +	int err;
+>>> +
+>>> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>>> +	if (!priv)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	priv->clk = devm_clk_get(dev, NULL);
+>>> +	if (IS_ERR(priv->clk)) {
+>>> +		dev_err(dev, "Can't find clock source\n");
+>>> +		return PTR_ERR(priv->clk);
+>>> +	}
+>>> +
+>>> +	err = clk_prepare_enable(priv->clk);
+>>> +	if (err) {
+>>> +		dev_err(dev, "Clock can't be enabled correctly\n");
+>>> +		return err;
+>>> +	}
+>>> +
+>>> +	/* The timer and watchdog shared the STC reset */
+>>> +	priv->rstc = devm_reset_control_get_shared(dev, NULL);
+>>> +	if (!IS_ERR(priv->rstc))
+>>> +		reset_control_deassert(priv->rstc);
+>>> +
+>>> +	err = devm_add_action_or_reset(dev, sp_reset_control_assert,
+>>> +				       priv->rstc);
+>>> +	if (err)
+>>> +		return err;
+>> This looks odd.
+>> We could undo something that was not done. (if IS_ERR(priv->rstc))
+>> This is also not really consistent with what is done in suspedn/resume.
+>> In these functions, we don't check for IS_ERR(priv->rstc).
+>>
+> 
+> Here I refer to mt7621_wdt.c. I'm sure I need deassert reset to reset
+> watchdog register value when driver probe. accordingly I assert reset
+> in devm_add_action_or_reset() to ensure that the registers of watchdog
+> can't be operated after module remove.
+> 
 
-> Commit 489119bf75e6 ("watchdog: Add Realtek Otto watchdog timer") adds the
-> REALTEK OTTO WATCHDOG section in MAINTAINERS and one file entry refers to
-> driver/watchdog/realtek_otto_wdt.c. The actual top-level directory name is
-> drivers, not driver, though.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
-> 
->     warning: no file matches	F:	driver/watchdog/realtek_otto_wdt.c
-> 
-> Remove this obvious typo in the file entry.
-> 
-> Fixes: 489119bf75e6 ("watchdog: Add Realtek Otto watchdog timer")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f7bf491409cf..b4fcc2bb7c54 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16307,7 +16307,7 @@ M:	Sander Vanheule <sander@svanheule.net>
->  L:	linux-watchdog@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
-> -F:	driver/watchdog/realtek_otto_wdt.c
-> +F:	drivers/watchdog/realtek_otto_wdt.c
->  
->  REALTEK RTL83xx SMI DSA ROUTER CHIPS
->  M:	Linus Walleij <linus.walleij@linaro.org>
-> -- 
-> 2.17.1
-> 
+You are missing the point here. This is called even after
+devm_reset_control_get_shared() failed, and it is called even though
+the reset was not yet deasserted. The above code should be called after
+(and only after) deasserting the reset.
 
-Since I had to do some other changes on the tree, I changed it directly in the original patch.
+>>> +
+>>> +	err = devm_add_action_or_reset(dev, sp_clk_disable_unprepare,
+>>> +				       priv->clk);
+>>> +	if (err)
+>>> +		return err;
+>> Shouldn't this be just after clk_prepare_enable()?
+> 
+> I tested the order of execution of the added functions which is similar to
+> push and pop. First in, last out. I think I should disable clock last.
+> 
+Correct. That is why you have to call devm_add_action_or_reset on disable_unprepare
+first, because on driver removal the devm_ cleanup will be called in reverse order.
 
-Kind regards,
-Wim.
-
+Guenter
