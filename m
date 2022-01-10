@@ -2,131 +2,84 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8EE4895B2
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Jan 2022 10:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2FD489663
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Jan 2022 11:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243278AbiAJJvo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 10 Jan 2022 04:51:44 -0500
-Received: from mail-ua1-f47.google.com ([209.85.222.47]:34658 "EHLO
-        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243319AbiAJJvo (ORCPT
+        id S243962AbiAJKbs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 10 Jan 2022 05:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243967AbiAJKbW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:51:44 -0500
-Received: by mail-ua1-f47.google.com with SMTP id y4so22391647uad.1;
-        Mon, 10 Jan 2022 01:51:43 -0800 (PST)
+        Mon, 10 Jan 2022 05:31:22 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AB6C061751;
+        Mon, 10 Jan 2022 02:31:21 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z22so6529276edd.12;
+        Mon, 10 Jan 2022 02:31:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=SGJVFwbtcacUQay73yW9oHCDfqGazDMwGqllKcglAwM=;
+        b=YfzjfiayfKRHqWbMdh+LjQ6JzzlIHaYVGKUXcvqA2xTHKnGJx0fxILIJZ6pTsfyrUb
+         9Tthl4FrSIiUeu1hdobFfLESfSCfkEHl0VkK+Svri0JBF4ZeFh9/qvz57uCho7BX4i85
+         UjkFo1v6gsgRW7h/02b4Vvfn8NmDKLnUaizMTFZhwAPwhL5zHS1cXQ8WRDtgrqVRdd+N
+         l2WFTC2YRwayCge6CUrv75NBpOTMqMWnPo0H3KJTbNDlXBcP7eGfQGU0/qrdUq9sfJtI
+         v8BPOngvuITbIx8+TppkOc3ijXT/QLE7h9BvCas0hO5ObrOKORW3biohsfIdlqS79unU
+         kfdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qd6wvXlawcNgcy1EVtGWbQcMf+35s16SS0EMotVrcqs=;
-        b=XWznAewQ82PAIbURXshfb7h2OwMjOkv9xnaeZ2W9lGqqT6Nq7wvJkUvvO2tQ5ZwjUZ
-         Oi8NDSilyEKmT9nFY6G05KTaiRA0lFqN2xZnMINw5m6rn29zw/MT5M3gpfmaYWqzVFuJ
-         x5vgtMGML6Oz6GUpTlHQe0oBJYKfVotkEkp/rdzFWj41AeLMG/7t+Ac24Meko/s1cQAX
-         Q+hvqUtTMuLCmGKym6yVSgDnRn3w+dg8GOhs3zQ1d+KmsA6XmCR0jmi5XAKyPUoyr6ji
-         MWLbVfIpbSM1g/eDm1PqHDnKcN9OS8CCHBmXE4pbXM5caVRoFYUzGPUvx4nK9AFffzsq
-         BJvw==
-X-Gm-Message-State: AOAM5326GHi8D2LS4ugfBdnf//kkJakv6xbBNxsRELIG+WP1uUHeARFI
-        cnYDhFg/7Lez8qwLFaH8orpoKWQWXpEt4w==
-X-Google-Smtp-Source: ABdhPJyrJivNVVv50S0ECykDdBuwZKVrp9JtAjOhAoKD05i1s7kmK4mPar7tMLM6Aq/HzD/OgRzglw==
-X-Received: by 2002:a67:d485:: with SMTP id g5mr25528315vsj.14.1641808303141;
-        Mon, 10 Jan 2022 01:51:43 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id m8sm3444828uae.8.2022.01.10.01.51.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 01:51:42 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id y4so22391601uad.1;
-        Mon, 10 Jan 2022 01:51:42 -0800 (PST)
-X-Received: by 2002:a9f:3e09:: with SMTP id o9mr1690817uai.114.1641808302517;
- Mon, 10 Jan 2022 01:51:42 -0800 (PST)
+         :message-id:subject:to;
+        bh=SGJVFwbtcacUQay73yW9oHCDfqGazDMwGqllKcglAwM=;
+        b=0m2Z8IpqH2YnkBwVnnqINCwnhVhdpku9ZYY6cDmP8L+xyXJudNfZwWqNZ/IxJNMcrl
+         An/QzJiOyr8ykk8KatjSWef1fzWqYNXNCd3VjG0+f0jLac/U3+sfXW1AsZ5PkVgbAg+T
+         AnqsRlwxZIQgRuJapbfgCtkQAnjc7l5uw6tj6QbPDcxy7oyUv8KCP1VqteJu/a3m8pa2
+         uZDEsh3zWP/5EnBw4R+dNT1u2DUUWCzjpGa/+CkTN9SmRkMWs4CIyFuIEsXAzUJ1AMEV
+         kBbFeGi27L1Umcd8WfsbUfM2PL4cvALo5wSO+852qXGYaX1sRNQwOHUDjj0/YCPTTY0z
+         SxcA==
+X-Gm-Message-State: AOAM533ZqIKYDnpigXz41ynNh3TnYRNveIC2pCZ5kJW5y9c8jW/kyjdl
+        HAEvRC7aXVQSdppfjsUkLjK5F1JniKdC96TXevI=
+X-Google-Smtp-Source: ABdhPJxPcliPurdz/fhXogPo8OwgELGvNjZ+jctPk48uYdAWg/6N1n5HYVegEJnc9suEGJrLnytPpNCfCNdmuBEpF0E=
+X-Received: by 2002:a05:6402:4c5:: with SMTP id n5mr8102608edw.122.1641810679971;
+ Mon, 10 Jan 2022 02:31:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20220104181249.3174-1-biju.das.jz@bp.renesas.com> <20220104181249.3174-2-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20220104181249.3174-2-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jan 2022 10:51:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWYQXsiik3z63UX4fXNfOFqGFt4VnkwOzr9mHkPMZiyWA@mail.gmail.com>
-Message-ID: <CAMuHMdWYQXsiik3z63UX4fXNfOFqGFt4VnkwOzr9mHkPMZiyWA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] watchdog: rzg2l_wdt: Use force reset for WDT reset
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+References: <20210715221828.244536-1-Terry.Bowman@amd.com> <20210907183720.6e0be6b6@endymion>
+ <20211105170550.746443b9@endymion> <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
+ <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com> <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net>
+ <YdoG+en5Z/MaS/wu@ninjato>
+In-Reply-To: <YdoG+en5Z/MaS/wu@ninjato>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 10 Jan 2022 12:29:32 +0200
+Message-ID: <CAHp75VfC2XsF2j=obXu7RLNZkKSsZ20eOH2-UMA9AoMAemKa9Q@mail.gmail.com>
+Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
+ io accesses with mmio accesses
+To:     Wolfram Sang <wsa@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+        Terry.Bowman@amd.com, Jean Delvare <jdelvare@suse.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Biju,
-
-On Tue, Jan 4, 2022 at 7:12 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> This patch uses the force reset(WDTRSTB) for triggering WDT reset for
-> restart callback. This method is faster compared to the overflow method
-> for triggering watchdog reset.
+On Mon, Jan 10, 2022 at 6:25 AM Wolfram Sang <wsa@kernel.org> wrote:
 >
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-
-Thanks for your patch!
-
-> --- a/drivers/watchdog/rzg2l_wdt.c
-> +++ b/drivers/watchdog/rzg2l_wdt.c
-> @@ -21,8 +21,11 @@
->  #define WDTSET         0x04
->  #define WDTTIM         0x08
->  #define WDTINT         0x0C
-> +#define PECR           0x10
-> +#define PEEN           0x14
->  #define WDTCNT_WDTEN   BIT(0)
->  #define WDTINT_INTDISP BIT(0)
-> +#define PEEN_FORCE_RST BIT(0)
-
-PEEN_FORCE, as this can trigger either a reset or interrupt?
-
+> > I think you'll need approval from someone with authority to accept the
+> > suggested change in include/linux/ioport.h. No idea who that would be.
 >
->  #define WDT_DEFAULT_TIMEOUT            60U
->
-> @@ -116,15 +119,11 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
->  {
->         struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
->
-> -       /* Reset the module before we modify any register */
-> -       reset_control_reset(priv->rstc);
-> -       pm_runtime_get_sync(wdev->parent);
+> ioport.h has no dedicated maintainer. I would modify it via my tree if
+> we have enough review. I'd think Guenter, me, and maybe Andy
+> (Shevchenko), and Rafael should be a good crowd. So, I suggest to do
+> your v2 and add all these people to CC. It is usually easier to talk
+> about existing code.
 
-Why are these no longer needed?
-Because .probe() takes care of that? Then why do .start() and .stop()
-have reset and Runtime PM handling, too?
+I have briefly read the discussion by the link you provided above in
+this thread. I'm not sure I understand the issue and if Intel hardware
+is affected. Is there any summary of the problem?
 
-> -
-> -       /* smallest counter value to reboot soon */
-> -       rzg2l_wdt_write(priv, WDTSET_COUNTER_VAL(1), WDTSET);
-> +       /* Generate Reset (WDTRSTB) Signal */
-
-... on parity error
-
-> +       rzg2l_wdt_write(priv, 0, PECR);
->
-> -       /* Enable watchdog timer*/
-> -       rzg2l_wdt_write(priv, WDTCNT_WDTEN, WDTCNT);
-> +       /* Force reset (WDTRSTB) */
-
-s/reset/parity error/
-
-> +       rzg2l_wdt_write(priv, PEEN_FORCE_RST, PEEN);
->
->         return 0;
->  }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+With Best Regards,
+Andy Shevchenko
