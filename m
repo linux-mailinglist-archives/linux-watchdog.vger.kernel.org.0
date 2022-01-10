@@ -2,183 +2,199 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAAF48951E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Jan 2022 10:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4033648955D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Jan 2022 10:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242842AbiAJJXG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 10 Jan 2022 04:23:06 -0500
-Received: from mail-dm3nam07on2063.outbound.protection.outlook.com ([40.107.95.63]:64065
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242821AbiAJJXE (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 10 Jan 2022 04:23:04 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hXU9iPGOqzF9nfWFOw7jcTZ1nyaPmSG59DLlmjnzWJfiIr4a5Z8Bh0kUYhQ3OloJOoznOuHsj0osz03ECajTRF1AqRtc0kTUNT3VammDgrusIKx1iXdh223AJvQ6SCcbqPdNZHS4FTSm+r/oShgu7Zd1dFUW2IwNZ4jUQM/31iShHN8UTBnH1i2UNyug1/0gRRnldln6mYKDWrEZYh4M2yaNN0fihuxPScmfnvLORTG/+e7gYwcwW/2Zweq4ni/tPKS0CGvvUx/+IToyN9cHiZ1ggcNul1mNJp4UD+PIq75W78z2BKMoTGtPbOlp+oZyajVEAV7lHbTcqeqhcuAZSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5QDoW4/NLNoejItU69c37B8/Ai+AUU2f4XFMIArRQAI=;
- b=ZO1U/ZaIJJk6Wj0YZsoYPVZnMpJAHsVRLm0tao+xINLSYWl+YrhVY2CzXf68sV16GtOhvoacrnzKHkj7nSo5uKOtQR8XFO2xovNn1And7pkR98w3Vxd9KkFe+bHEHvAEmc5IoHrmlYCVKR20qrz7oC4fICV1XDkQZgjqL/saIRaCrHZWNmAl2HkaXJVbpqZdbT6zoQ+fG1RMHeaz5mqSXLTrBIpnS6VrgktndVtsAcxZwroXF5o+oArWi0qTdXcS+rH6fiZxpWpOQ2dB/4mcIZwzNKSDTQGj7b4e2hDRI7+MMiNB5jY7tDm1zDR2B7CbM3YBrir/SV6z+o8BQwq7Cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5QDoW4/NLNoejItU69c37B8/Ai+AUU2f4XFMIArRQAI=;
- b=lnoUF65hbNvdvPxRlIffHHDvZYBX79DXSMcOLINk3ppiPzbLxPRk1leX8rEbM2n+mO66KFyQeaiqFwxeuuygt8PPjrBcOfiAC5iQJ0uLlVnUYH/0PcWrDG2Uz4PRI0XB8cH75jvyyX2dmssq2jCn3p86449lWoLUsnLO/l/Brd0=
-Received: from DM6PR02CA0061.namprd02.prod.outlook.com (2603:10b6:5:177::38)
- by BN8PR12MB3075.namprd12.prod.outlook.com (2603:10b6:408:67::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Mon, 10 Jan
- 2022 09:22:58 +0000
-Received: from DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:177:cafe::71) by DM6PR02CA0061.outlook.office365.com
- (2603:10b6:5:177::38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
- Transport; Mon, 10 Jan 2022 09:22:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT023.mail.protection.outlook.com (10.13.173.96) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4867.7 via Frontend Transport; Mon, 10 Jan 2022 09:22:58 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 10 Jan
- 2022 03:22:55 -0600
-Date:   Mon, 10 Jan 2022 10:22:53 +0100
-From:   Robert Richter <rrichter@amd.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Terry Bowman <Terry.Bowman@amd.com>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wim@linux-watchdog.org>, <ssg.sos.patches@amd.com>,
-        <sudheesh.mavila@amd.com>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v2 3/4] Watchdog: sp5100_tco: Add EFCH SMBus controller
- initialization using MMIO
-Message-ID: <Ydv67VKcrCk81Y9R@rric.localdomain>
-References: <20211103161521.43447-1-terry.bowman@amd.com>
- <20211103161521.43447-4-terry.bowman@amd.com>
- <20220106181809.GA240027@roeck-us.net>
- <9afabe55-6429-2284-cafd-d59ce481f067@amd.com>
- <YdgeU2p+i5hN1XCU@rric.localdomain>
- <ac8e1173-3002-54f1-0264-6f0cdf26c475@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ac8e1173-3002-54f1-0264-6f0cdf26c475@roeck-us.net>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 91c126a9-5302-4deb-e3a8-08d9d41aca8f
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3075:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB30755F697B8069BBC4E050DD9C509@BN8PR12MB3075.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BjElTJPUGcWeU6Db2KtwBlnMigHMkoRzadeVxYO2YmZYEicx6QB6ghB5Fb6v1a6ZTjN42sfEOCS/WWlB30bbkZqzzBuIDqW8gaHoZkouGnRcm1DTMl0qTwJHH91+a0GDBs9bb3lBN0npDUnj+ktrB2/Sbsf0FWCJqSVyZldEomqfPx6hWlFRZkoBzuSfM6pGnV/hwK9/qCbmIxCXXTTgrMXAhIxZCTpNzWsdOC4sJLj05QA69WBADmlrbwtPSqDitKNpWs1zEHO+87i7wP8AQtPKXHdAtlYI8U5Poah3qGxskcqT7DrTv7gu5T3q5V+Hl7GnhBBGhU0ZikX8NW+UHqattzfLjsQmimMQE2h0sNqk1Eqw6CVTY/YzkyYNdQXhgPpzC20b96PmIdyNCtTQGicM6mGVIPgK2ADZWyFNmniMTkMwN/XhEV+sZpKZumicGDMr1ZSSepNhFOHMZj26+sKHtulxZOoupdIriQWnrGFJ19ke7HwqKZJKiLn2F+g0liwfZywaFI79WKa4bNSYlFgy6RPfRoi48Uhmb4Duf7JdASgEBNgIlKPj7eCNkxs/87hqBYtSxsuG7c/KmwLixdiFeZlZTERCV+M8yYjr4210z83FntnJCZw2GWFgTEG2LiChnj6POTYBnoUm/P5f0+ZwWiGY0GTWoCYZPhmRSgKqIk6nAoe2sB4phCeYL1FZzH49gX3OZXJub8gtCVR0dfAKioL1j/uKdpHWzAmj/vvpM00LeLiuKsMGm7HAC6Py+7wFyLruPwr05UJXcbLauAxM6rdtZmrop5y9YUF8GQGYaea6vcQzC45dafRy63i3OcKgkg/kiKJXcOpQu+8gfC03XJbOXfgV8zLyMJI9DfgalAp6sT/pgbcHSGu6sjFT
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(356005)(186003)(966005)(16526019)(8936002)(508600001)(26005)(426003)(81166007)(70206006)(70586007)(53546011)(7696005)(8676002)(336012)(4326008)(83380400001)(36860700001)(316002)(5660300002)(40460700001)(2906002)(47076005)(6916009)(9686003)(54906003)(55016003)(82310400004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2022 09:22:58.1520
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91c126a9-5302-4deb-e3a8-08d9d41aca8f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3075
+        id S243157AbiAJJgr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 10 Jan 2022 04:36:47 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43238 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S243029AbiAJJgH (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 10 Jan 2022 04:36:07 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20A8SpK3001224;
+        Mon, 10 Jan 2022 09:34:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=LTgj9BMo0PeVOTmHS425bgS3Erf/sk7QZhpGDMjgyhM=;
+ b=ZeBWbN0MuX3/AcZ5RKWxlntTjtiYf7I8s1BDSqtpXcjWdKYreu00C0yIuS54bslUb+Qr
+ i8eYw95JaW/kRkoSt2zAHTinIjB+A7CPiMdtyB681hPeHcfgnzR85uHf321nrRQFc1lp
+ la9fqV0TOWpjT+vO0xEhhgF1o49lWVqwByJ8qBn2XaRUDR7r5LiwvirD3oVxz1l/G8aA
+ GGCXA11FLJGWT7f5iLejA1BYwhyVqSkuX7XlV9iM6xmQILJKk4eoCpwa9+QQDTpFWY9O
+ RafQfotY4ReY1g/9giu+qtTtTZzWY7egugKozzrEpyohVjle6LQRR+kd516WluIEvvXn Gw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dfm1hp8jh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jan 2022 09:34:44 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20A9Rlj5003316;
+        Mon, 10 Jan 2022 09:34:41 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3df1vj2baj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Jan 2022 09:34:41 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20A9Ydft44106206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Jan 2022 09:34:39 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CCEA2A405B;
+        Mon, 10 Jan 2022 09:34:38 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F191AA4065;
+        Mon, 10 Jan 2022 09:34:34 +0000 (GMT)
+Received: from sig-9-145-16-13.uk.ibm.com (unknown [9.145.16.13])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Jan 2022 09:34:34 +0000 (GMT)
+Message-ID: <822ad0da702f0953b7aae1febd2c4dfcc4707864.camel@linux.ibm.com>
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     John Garry <john.garry@huawei.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-watchdog@vger.kernel.org
+Date:   Mon, 10 Jan 2022 10:34:34 +0100
+In-Reply-To: <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
+References: <20220105194748.GA215560@bhelgaas>
+         <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RBwht8yqbe4Zp6W3roxBtkr5zQL4IA2M
+X-Proofpoint-ORIG-GUID: RBwht8yqbe4Zp6W3roxBtkr5zQL4IA2M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-10_04,2022-01-07_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
+ phishscore=0 adultscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201100067
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 07.01.22 09:12:32, Guenter Roeck wrote:
-> On 1/7/22 3:05 AM, Robert Richter wrote:
-> > On 06.01.22 13:07:11, Terry Bowman wrote:
-> > > On 1/6/22 12:18 PM, Guenter Roeck wrote:
-> > > > On Wed, Nov 03, 2021 at 11:15:20AM -0500, Terry Bowman wrote:
+On Thu, 2022-01-06 at 17:41 +0000, John Garry wrote:
+> On 05/01/2022 19:47, Bjorn Helgaas wrote:
+> > > > > >   ok if the PCI maintainers decide otherwise.
+> > > > > I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
+> > > > > means something old and out of favor; it doesn't say*what*  that
+> > > > > something is.
+> > > > > 
+> > > > > I think you're specifically interested in I/O port space usage, and it
+> > > > > seems that you want all PCI drivers that*only*  use I/O port space to
+> > > > > depend on LEGACY_PCI?  Drivers that can use either I/O or memory
+> > > > > space or both would not depend on LEGACY_PCI?  This seems a little
+> > > > > murky and error-prone.
+> > > > I'd like to hear Arnd's opinion on this but you're the PCI maintainer
+> > > > so of course your buy-in would be quite important for such an option.
+> > I'd like to hear Arnd's opinion, too.  If we do add LEGACY_PCI, I
+> > think we need a clear guide for when to use it, e.g., "a PCI driver
+> > that uses inb() must depend on LEGACY_PCI" or whatever it is.
 > > 
-> > > > > diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
-> > > > > index 80ae42ae7aaa..4777e672a8ad 100644
-> > > > > --- a/drivers/watchdog/sp5100_tco.c
-> > > > > +++ b/drivers/watchdog/sp5100_tco.c
-> > > > > @@ -48,12 +48,14 @@
-> > > > >   /* internal variables */
-> > > > >   enum tco_reg_layout {
-> > > > > -	sp5100, sb800, efch
-> > > > > +	sp5100, sb800, efch, efch_mmio
-> > > > >   };
-> > > > >   struct sp5100_tco {
-> > > > >   	struct watchdog_device wdd;
-> > > > >   	void __iomem *tcobase;
-> > > > > +	void __iomem *addr;
-> > > > > +	struct resource *res;
-> > > > 
-> > > > I must admit that I really don't like this code. Both res and
-> > > > addr are only used during initialization, yet their presence suggests
-> > > > runtime usage. Any chance to reqork this to not require those variables ?
+> > I must be missing something because I don't see what we gain from
+> > this.  We have PCI drivers, e.g., megaraid [1], for devices that have
+> > either MEM or I/O BARs.  I think we want to build drivers like that on
+> > any arch that supports PCI.
 > > 
-> > We did that in an earlier version, see struct efch_cfg of:
+> > If the arch doesn't support I/O port space, devices that only have I/O
+> > BARs won't work, of course, and hopefully the PCI core and driver can
+> > figure that out and gracefully fail the probe.
 > > 
-> >   https://patchwork.kernel.org/project/linux-watchdog/patch/20210813213216.54780-1-Terry.Bowman@amd.com/
-> > 
-> > The motivation of it was the same as you suggested to only use it
-> > during init.
-> > 
-> > Having it in struct sp5100_tco made things simpler esp. in the
-> > definition of the function interfaces where those new members are
-> > used.
+> > But that same driver should still work with devices that have MEM
+> > BARs.  If inb() isn't always present, I guess we could litter these
+> > drivers with #ifdefs, but that would be pretty ugly.
 
-> So, no, I neither see the need for having the information in struct
-> sp5100_tco nor for keeping it in its own structure. If you'd merge
-> sp5100_request_region_mmio() and sp5100_release_region_mmio() into
-> sp5100_tco_setupdevice_mmio() you would not even need any pointers
-> to pass the values from sp5100_request_region_mmio(). Otherwise you
-> could have sp5100_request_region_mmio() return a pointer to res or
-> an ERR_PTR, and pass the address as pointer parameter.
+I think this is the big question here. If we do go with a compile-time
+solution as requested by Linus we will either get a lot of #ifdeffery,
+coarse driver dependencies or as proposed by Alan Stern for the USB
+#ifdefs might end up turning inb() into a compile-time nop.
 
-Yes, that is feasible, in fact it is option 2) I suggested.
+The originally proposed change that returned ~0 from inb() and printed
+a warning clearly is the simpler change and sure we could also drop the
+warning. I'm honestly torn, I do agree with Linus that we shouldn't
+have run-time things that we know at compile-time will not work but I
+also dislike all the #ifdeffery a compile-time solution requires. Sadly
+C really doesn't give us any better tools here.
 
--Robert
+Also I 100% agree with you Bjorn how likely it is to see a device on a
+platform really shouldn't matter. Without going into details, on s390
+we have already beneffited from PCI drivers working with 0 changes to
+support devices we previously didn't have on the platform or
+anticipated we would get in the future. Consequently drivers that could
+work in principle should be built.
 
-> > If that init vars are no longer in struct sp5100_tco then callers of
-> > efch_read_pm_reg8() and efch_update_pm_reg8() will need to carry a
-> > pointer to them. To avoid this I see those options:
-> > 
-> > 1) Implement them as global (or a single global struct) and possibly
-> > protect it by a mutex. There is only a single device anyway and we
-> > wouldn't need a protection.
-> > 
-> > 2) Have an own mmio implementation of tco_timer_enable() and/or
-> > sp5100_tco_timer_init().
-> > 
-> > > Yes, v3 will include refactoring to remove 'res' and 'addr'. I will also
-> > > correct the trailing newline you mentioned in an earlier email.
-> > > 
-> > > Regards,
-> > > Terry
-> > > 
-> > > > >   	enum tco_reg_layout tco_reg_layout;
-> > 
-> > While at it, tco_reg_layout is also only used during initialization
-> > and can be moved there too. This would raise option 3:
-> > 
-> > 3) Add a pointer of struct sp5100_tco to struct efch_cfg and use that
-> > struct instead in init funtions only. But that causes the most rework
-> > (which would be ok to me).
-> > 
-> > Going with 3) looks the cleanest way, I would try that. But all
-> > options have its advantages.
-> > 
-> > -Robert
-> > 
-> > > > >   };
+> >  
 > 
+> There were some ifdefs added to the 8250 drivers in Arnd's original 
+> patch [0], but it does not seem included here.
+> 
+> Niklas, what happened to the 8250 and the other driver changes?
+
+I missed it during the rebase, likely because the changed files compile
+depend on !S390 via config SERIAL_8250 and thus didn't cause any errors
+for my allyesconfig. That !S390 dependency is of course not really what
+we want if the driver can use MEM BARs.
+
+
