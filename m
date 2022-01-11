@@ -2,52 +2,85 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1709648A8AB
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Jan 2022 08:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B151B48AB10
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Jan 2022 11:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348612AbiAKHrv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 11 Jan 2022 02:47:51 -0500
-Received: from mail.BETTERBIZ.PL ([45.86.209.138]:38764 "EHLO
-        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348620AbiAKHru (ORCPT
+        id S1348388AbiAKKKM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 11 Jan 2022 05:10:12 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58829 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237384AbiAKKKL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:47:50 -0500
-Received: by mail.betterbiz.pl (Postfix, from userid 1001)
-        id DADF682796; Tue, 11 Jan 2022 02:45:55 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
-        t=1641887269; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
-        h=Date:From:To:Subject:From;
-        b=RNfagV6xGJg4LjjXxdf/wx0u6pEaWqAbxMmHBYv/JikvmTW9H8tw27zFA901yYdOX
-         qQoNfLkoy16tHKtq4BfDkY6VoWqTNBtrk1gO6FaIdLFSdg3X0Rp/fFnd2nrZI7e/Wn
-         GC3Re4XKK/EYKGo0jx8ZKENGN0MSKCtItSgAmR/MUK4MYGcUkw2fFbILHc+yQ93Q28
-         2OI5DvqIOfPtDdsrZuQ8GVaK1reES9EBF84XVIotv4/gW8Nii0fRHcDGWRLYqu1s9E
-         PSuf6tY3GwGcLzNB9g+5dKeGSEpnNvCs1Xox45EJuYxteub2mHcDZP0Fs8UccO+Pw2
-         RSIZ7DTVzRW7g==
-Received: by mail.betterbiz.pl for <linux-watchdog@vger.kernel.org>; Tue, 11 Jan 2022 07:45:52 GMT
-Message-ID: <20220111024500-0.1.o.106g.0.umlrbb17lk@betterbiz.pl>
-Date:   Tue, 11 Jan 2022 07:45:52 GMT
-From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.betterbiz.pl
+        Tue, 11 Jan 2022 05:10:11 -0500
+Received: from [77.244.183.192] (port=64326 helo=[192.168.178.41])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1n7E6T-000ER6-CL; Tue, 11 Jan 2022 11:10:09 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog
+ only)
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20211211175951.30763-1-luca@lucaceresoli.net>
+Message-ID: <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
+Date:   Tue, 11 Jan 2022 11:10:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211211175951.30763-1-luca@lucaceresoli.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi All,
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+On 11/12/21 18:59, Luca Ceresoli wrote:
+> Hi,
+> 
+> this series adds minimal drivers for the Maxim Semiconductor MAX77714
+> (https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+> Only RTC and watchdog are implemented by these patches.
+> 
+> All implemented functionality is tested and working: RTC read/write,
+> watchdog start/stop/ping/set_timeout.
+> 
+> Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and Kconfig
+> indentation and can probably be applied easily.
+> 
+> Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog driver and
+> rtc driver.
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+A gentle ping about this series. It's at v5, all patches have at least
+one ack/review tag and most patches are unchanged since ~v2. It applies
+cleanly on current master.
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Is there anything I should do to help making progress?
 
-
-Pozdrawiam,
-Jakub Daroch
+Regards,
+-- 
+Luca
