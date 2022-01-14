@@ -2,64 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8930D48EA32
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jan 2022 13:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CAA48EBBF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jan 2022 15:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235150AbiANM4z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 14 Jan 2022 07:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
+        id S237597AbiANOgE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 Jan 2022 09:36:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235107AbiANM4z (ORCPT
+        with ESMTP id S233926AbiANOgE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 14 Jan 2022 07:56:55 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED37AC061574;
-        Fri, 14 Jan 2022 04:56:54 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id e9so15514385wra.2;
-        Fri, 14 Jan 2022 04:56:54 -0800 (PST)
+        Fri, 14 Jan 2022 09:36:04 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5D0C061574;
+        Fri, 14 Jan 2022 06:36:03 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id w188so12389718oib.7;
+        Fri, 14 Jan 2022 06:36:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6+XPkUMm8vPCVvtG6187AZZdz7kVpOT0XAljAcndVfk=;
-        b=Eqg+rdI5PROleZ3u1XK+eavtOp/BrisKa7wo005r7keuzmuHSUz6liVg6QTxaYkyqo
-         Yp4BFeYRkA5LXxdICXYIVXKhQ6qR3vCF8K7e1xaDLsIGO8FM4N7296gUrFz2MRYfjy3w
-         +oi/Z5QgaTrlwoIBWlOBtM0ayzGUITrPdRM7l156eQ5JIr41gRk7TpbMjSQJCSgP544f
-         EZoDekBitnOjoth4pPa4nNcSskD7/k2tgkYzs4hicXjavrrxbMRmSp2+r3r/fvid3luk
-         71c31olVXKfqCrm/zZNckMgotH0QuAeziowJyW79BD0J2YeJD8GbzlGoQ3sSokHJCywi
-         /ubg==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lD1Jt5HPXkkJLqLAECNA5LcmSI3wdXLzJYaLp3IBqKE=;
+        b=DhViUY9Z0mT9rsuJto9tllmgMtiy1HosH8oeA3M1/0PZ89p7v7nhZDFp0UHHeXHdf0
+         TucO4pLCWCAng/aXDyLKNL+REJYGoH1Wpc5sYhlJDsGEyQNDpUg2tNfJGk9tjNtM0XV3
+         EIti+2dShywaR4VqNxVkp3/a1eApnsKRaFluBLXyGnWLcmWMccKMIOgPD0XDeuGq4jQR
+         NOfon0xLmUs0BfnYylg8u+4KUdJYAKEJOpbw+v+meSu5CSRb18yfu+JiH1qXNbXnGoUz
+         g1Cf3SiAN2Akh83YcBtnC1T7Ke1HDTq0MztdWfhC62mT8I9XbD4t4UCV6OUl71rbPVUo
+         8FIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6+XPkUMm8vPCVvtG6187AZZdz7kVpOT0XAljAcndVfk=;
-        b=ANcuorFdySsFLi1MBnOSMSNCb3GI+GOVnZbRCu+GNvQ3dNSQPwIaUQuS5hMX2d+9rl
-         8iRDsbWB63g+lmwpcKM0bHSaaDb9GoCKkubTJc5vxFqUUQMxh5E3pdlmgGm5cxOaFIBo
-         JjcvjmKjTYEc6oF/GCR+cADuIpVZnkgddoH9iQbIRvId34ENxlP9Kaq3WTO6aaGBh38e
-         qh0K0ztYMkmbX6voQCzxhllaawkQm4Bs6moXxempGDmUvX6RqtjP0wBvEueznl1yUpTQ
-         9rQV7Y2rIF/ZbQ87V2i8k30f00F+aHrkcD92FyHTkv96Jyeos6jbCOghXoGMhADxcBvi
-         HISA==
-X-Gm-Message-State: AOAM5304PUxvgEP2AOm/00pgjrpwGv+53Y5k3U2xs6lErBv5wJzgfVA7
-        hh/0lfUhCg55qoeiqXatn7H/yOcUXXo=
-X-Google-Smtp-Source: ABdhPJyKccl9MD30RAV7WANDNOdgbomQjWho6NuISKT5xLydQxgrnwNACK6FKuKi1T+gqMjy4w8E8g==
-X-Received: by 2002:adf:eed1:: with SMTP id a17mr8236811wrp.306.1642165013521;
-        Fri, 14 Jan 2022 04:56:53 -0800 (PST)
-Received: from [192.168.0.22] ([37.223.145.74])
-        by smtp.gmail.com with ESMTPSA id b14sm6170924wri.112.2022.01.14.04.56.52
+        bh=lD1Jt5HPXkkJLqLAECNA5LcmSI3wdXLzJYaLp3IBqKE=;
+        b=hUsncOlYpFyirqa1xvpJO3RazmqsJbUMwtOQBIKgWxex5BhNQsaHh9xsKJDZP4dmRd
+         ZXaL0p5gccOwh7iNXSozlbb151FzI5qiZawSygd5E7Vjf0k++THQ3BQH46k8uUj3WdXL
+         +EAmHpk5tAPU1qP4mUy59bMWkqp/yycYdyumUKDHJb8DdgwEhhdTtAO+aZKPxRvmTcow
+         9Z2gSsrkGeIKXOr4ceGN2+It7BNWODVePT70scbv+fkPcmhMljwY5xqhp+3ftP7YNFmZ
+         IRKnhfv6hJAQ2Uj6daUFkoq3Nb9IbQ1Ms9/fG6+vzm/+xd6yMsn/nuSDkdZx3GerDa3/
+         0PDw==
+X-Gm-Message-State: AOAM531Id1X0ivFiGgMj+f/jAoJDELwrRNHv0ek62fnURe0vJGT/jBGk
+        wf2oZgEy8JTmRJ46kGLHLUo5gUPukcA=
+X-Google-Smtp-Source: ABdhPJxppYZYgjqq3e+BsBvQ1kr8/VEfzj/laCRWiZfcUvHcPYan7+c/SinPBRfZvGrzUeS7rFADug==
+X-Received: by 2002:aca:1204:: with SMTP id 4mr3967201ois.85.1642170962978;
+        Fri, 14 Jan 2022 06:36:02 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q38sm1430873oiw.27.2022.01.14.06.36.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 04:56:52 -0800 (PST)
-Message-ID: <6719557c-b5a3-e6f4-3046-b53e5c229cf8@gmail.com>
-Date:   Fri, 14 Jan 2022 13:56:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
+        Fri, 14 Jan 2022 06:36:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH 2/2] watchdog: mtk_wdt: mt7986: Add toprgu reset
  controller support
-Content-Language: en-US
 To:     Sam Shih <sam.shih@mediatek.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Ryder Lee <ryder.lee@kernel.org>, linux-kernel@vger.kernel.org,
@@ -69,24 +64,28 @@ To:     Sam Shih <sam.shih@mediatek.com>,
 Cc:     John Crispin <john@phrozen.org>
 References: <20220105100456.7126-1-sam.shih@mediatek.com>
  <20220105100456.7126-3-sam.shih@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <8e6ed2b7-b4e7-733a-579f-e1536f68ea2f@roeck-us.net>
+Date:   Fri, 14 Jan 2022 06:35:59 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
 In-Reply-To: <20220105100456.7126-3-sam.shih@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
-
-On 05/01/2022 11:04, Sam Shih wrote:
+On 1/5/22 2:04 AM, Sam Shih wrote:
 > Besides watchdog, the mt7986 toprgu module also provides software reset
 > functionality for various peripheral subsystems
 > (eg, ethernet, pcie, and connectivity)
 > 
 > Signed-off-by: Sam Shih <sam.shih@mediatek.com>
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
 >   drivers/watchdog/mtk_wdt.c | 6 ++++++
@@ -124,3 +123,4 @@ Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 >   	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
 >   	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
 > 
+
