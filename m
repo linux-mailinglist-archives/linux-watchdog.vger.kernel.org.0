@@ -2,107 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D851148DE32
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Jan 2022 20:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8930D48EA32
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jan 2022 13:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbiAMTnL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 13 Jan 2022 14:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S235150AbiANM4z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 Jan 2022 07:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiAMTnL (ORCPT
+        with ESMTP id S235107AbiANM4z (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 13 Jan 2022 14:43:11 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1484AC061574;
-        Thu, 13 Jan 2022 11:43:11 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id t4-20020a05683022e400b00591aaf48277so7497202otc.13;
-        Thu, 13 Jan 2022 11:43:11 -0800 (PST)
+        Fri, 14 Jan 2022 07:56:55 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED37AC061574;
+        Fri, 14 Jan 2022 04:56:54 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id e9so15514385wra.2;
+        Fri, 14 Jan 2022 04:56:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IXMwcl+QcM2wMaO7JbXzvSnZgamU5JCCsChOe3k8LsU=;
-        b=HqBDq8MgHi+aHcHw5EnmS0wctN8WC3Ug+LS0ptPiiV2p+JCN0ya5G3igEmE8JkpJwc
-         abkaLyddzfroejtxWFIj40Q4qD0Z0N4DPeegTDHHxZiURl4iQYV1mx5mstbPwbHQ3+8C
-         SbMz17h9r7SIMO80iVipx/mFXk/1Gj9OauFhoFaG/2qyb6FAeNgm6BB4tr7eQiMsG9Ws
-         FUc3LBoiDMKReqbhEKYf77TJof9YvH13UZx4Jr25I37VAomw/R3JLkoXfwrDiGaRShPH
-         Owdu+Ya/VKSamOGtSuIMu1WEDl0BiQWqXCHDWIJTlMxQbpFPatBxi1lpVLar9yUuj2aY
-         ba4A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6+XPkUMm8vPCVvtG6187AZZdz7kVpOT0XAljAcndVfk=;
+        b=Eqg+rdI5PROleZ3u1XK+eavtOp/BrisKa7wo005r7keuzmuHSUz6liVg6QTxaYkyqo
+         Yp4BFeYRkA5LXxdICXYIVXKhQ6qR3vCF8K7e1xaDLsIGO8FM4N7296gUrFz2MRYfjy3w
+         +oi/Z5QgaTrlwoIBWlOBtM0ayzGUITrPdRM7l156eQ5JIr41gRk7TpbMjSQJCSgP544f
+         EZoDekBitnOjoth4pPa4nNcSskD7/k2tgkYzs4hicXjavrrxbMRmSp2+r3r/fvid3luk
+         71c31olVXKfqCrm/zZNckMgotH0QuAeziowJyW79BD0J2YeJD8GbzlGoQ3sSokHJCywi
+         /ubg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=IXMwcl+QcM2wMaO7JbXzvSnZgamU5JCCsChOe3k8LsU=;
-        b=oY3bFREllhPdr47w4OSTOHNt2ThQ0RGPOFE2Mjw3Uv95igp08fYjyZGqCm7y25rWbg
-         HDBSxOmlpUvJcNfxRX8VJngvdOvJJtc4GmITNRyJHTEwe5eev8woailgJzzQDum2tdbk
-         eurIjZaouFwuNz3XMFK+8wVIn1cb+iss23uswauF7ayXN9JzGeX1774esRL22J+jLW2V
-         iKFu01GbG1+fTAqMWbHwsBp5QsqNbNY1VcmF1yagLtmXktXhKtfnkYcoisbuGG/mQJH5
-         4YeeYXOTfSTOUujCChviSohn8rRajfZWIvFUgQlTZV1P4AbmOQxYiJXwFnXKQX2mEjcs
-         MFVQ==
-X-Gm-Message-State: AOAM531iK2095HSJHqzpTFRKVeQnYXpQJgBYLR9Av+EA4V+pTDEpD4P+
-        QOIpGHgRvIGWnfWLGrGS4xiKlpgsQWo=
-X-Google-Smtp-Source: ABdhPJwm6ycn6J6CmU/AA+/zA6a9vBO1J55W9HR9kD+Z0+OvmgJyENswgkGfhrSqBaPEHdlj1ADT7Q==
-X-Received: by 2002:a05:6830:11d8:: with SMTP id v24mr4162005otq.123.1642102990376;
-        Thu, 13 Jan 2022 11:43:10 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i7sm785287oot.17.2022.01.13.11.43.08
+        bh=6+XPkUMm8vPCVvtG6187AZZdz7kVpOT0XAljAcndVfk=;
+        b=ANcuorFdySsFLi1MBnOSMSNCb3GI+GOVnZbRCu+GNvQ3dNSQPwIaUQuS5hMX2d+9rl
+         8iRDsbWB63g+lmwpcKM0bHSaaDb9GoCKkubTJc5vxFqUUQMxh5E3pdlmgGm5cxOaFIBo
+         JjcvjmKjTYEc6oF/GCR+cADuIpVZnkgddoH9iQbIRvId34ENxlP9Kaq3WTO6aaGBh38e
+         qh0K0ztYMkmbX6voQCzxhllaawkQm4Bs6moXxempGDmUvX6RqtjP0wBvEueznl1yUpTQ
+         9rQV7Y2rIF/ZbQ87V2i8k30f00F+aHrkcD92FyHTkv96Jyeos6jbCOghXoGMhADxcBvi
+         HISA==
+X-Gm-Message-State: AOAM5304PUxvgEP2AOm/00pgjrpwGv+53Y5k3U2xs6lErBv5wJzgfVA7
+        hh/0lfUhCg55qoeiqXatn7H/yOcUXXo=
+X-Google-Smtp-Source: ABdhPJyKccl9MD30RAV7WANDNOdgbomQjWho6NuISKT5xLydQxgrnwNACK6FKuKi1T+gqMjy4w8E8g==
+X-Received: by 2002:adf:eed1:: with SMTP id a17mr8236811wrp.306.1642165013521;
+        Fri, 14 Jan 2022 04:56:53 -0800 (PST)
+Received: from [192.168.0.22] ([37.223.145.74])
+        by smtp.gmail.com with ESMTPSA id b14sm6170924wri.112.2022.01.14.04.56.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 11:43:09 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/2] watchdog: imx2_wdg: Alow ping on suspend
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Alistair Francis <alistair@alistair23.me>,
-        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
-        wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        s.hauer@pengutronix.de, linux-arm-kernel@lists.infradead.org
-Cc:     linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-References: <20220109114120.386013-1-alistair@alistair23.me>
- <20220109114120.386013-2-alistair@alistair23.me>
- <4c5df296-b930-f65f-1106-c00889f1cdc1@i2se.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <4c3056df-2ae6-04d7-30cb-cd478f089266@roeck-us.net>
-Date:   Thu, 13 Jan 2022 11:43:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 14 Jan 2022 04:56:52 -0800 (PST)
+Message-ID: <6719557c-b5a3-e6f4-3046-b53e5c229cf8@gmail.com>
+Date:   Fri, 14 Jan 2022 13:56:52 +0100
 MIME-Version: 1.0
-In-Reply-To: <4c5df296-b930-f65f-1106-c00889f1cdc1@i2se.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 2/2] watchdog: mtk_wdt: mt7986: Add toprgu reset
+ controller support
 Content-Language: en-US
+To:     Sam Shih <sam.shih@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ryder Lee <ryder.lee@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     John Crispin <john@phrozen.org>
+References: <20220105100456.7126-1-sam.shih@mediatek.com>
+ <20220105100456.7126-3-sam.shih@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220105100456.7126-3-sam.shih@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 1/13/22 10:55 AM, Stefan Wahren wrote:
-> Hi,
-> 
-> Am 09.01.22 um 12:41 schrieb Alistair Francis:
->> The i.MX watchdog cannot be disabled by softwrae once it has been
-> s/softwrae/software/
->> enabled. This means that it can't be stopped before suspend.
->>
->> For systems that enter low power mode this is fine, as the watchdog will
->> be automatically stopped by hardwrae in low power mode. Not all i.MX
-> s/hardwrae/hardware/
->> platforms support low power mode in the mainline kernel. For example the
->> i.MX7D does not enter low power mode and so will be rebooted 2 minutes
->> after entering freeze or mem sleep states.
->>
->> This patch introduces a device tree property "fsl,ping-during-suspend"
->> that can be used to enable ping on suspend support for these systems.
-> 
-> Introducing vendor specific properties for Linux behavior should be
-> avoided. The DT should describe just the hardware.
-> 
-> In case i.mx7d is affected, how about enabling this workaround for
-> compatible fsl,imx7d-wdt? This has the advantage that in case low power
-> mode will be implemented
-> <https://elixir.bootlin.com/linux/latest/B/ident/fsl%2Cimx7d-wdt>, we
-> don't have to care about DTB files.
-> 
 
-Agreed.
 
-Guenter
+On 05/01/2022 11:04, Sam Shih wrote:
+> Besides watchdog, the mt7986 toprgu module also provides software reset
+> functionality for various peripheral subsystems
+> (eg, ethernet, pcie, and connectivity)
+> 
+> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   drivers/watchdog/mtk_wdt.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index 543cf38bd04e..c6437fe1f4c0 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -10,6 +10,7 @@
+>    */
+>   
+>   #include <dt-bindings/reset/mt2712-resets.h>
+> +#include <dt-bindings/reset/mt7986-resets.h>
+>   #include <dt-bindings/reset/mt8183-resets.h>
+>   #include <dt-bindings/reset/mt8192-resets.h>
+>   #include <dt-bindings/reset/mt8195-resets.h>
+> @@ -76,6 +77,10 @@ static const struct mtk_wdt_data mt2712_data = {
+>   	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
+>   };
+>   
+> +static const struct mtk_wdt_data mt7986_data = {
+> +	.toprgu_sw_rst_num = MT7986_TOPRGU_SW_RST_NUM,
+> +};
+> +
+>   static const struct mtk_wdt_data mt8183_data = {
+>   	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
+>   };
+> @@ -418,6 +423,7 @@ static int mtk_wdt_resume(struct device *dev)
+>   static const struct of_device_id mtk_wdt_dt_ids[] = {
+>   	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+>   	{ .compatible = "mediatek,mt6589-wdt" },
+> +	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+>   	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+>   	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+>   	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+> 
