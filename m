@@ -2,125 +2,206 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CAA48EBBF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jan 2022 15:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C41748F65F
+	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Jan 2022 11:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237597AbiANOgE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 14 Jan 2022 09:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiANOgE (ORCPT
+        id S232830AbiAOKX4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 15 Jan 2022 05:23:56 -0500
+Received: from www.linux-watchdog.org ([185.87.125.42]:45348 "EHLO
+        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbiAOKX4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:36:04 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5D0C061574;
-        Fri, 14 Jan 2022 06:36:03 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id w188so12389718oib.7;
-        Fri, 14 Jan 2022 06:36:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lD1Jt5HPXkkJLqLAECNA5LcmSI3wdXLzJYaLp3IBqKE=;
-        b=DhViUY9Z0mT9rsuJto9tllmgMtiy1HosH8oeA3M1/0PZ89p7v7nhZDFp0UHHeXHdf0
-         TucO4pLCWCAng/aXDyLKNL+REJYGoH1Wpc5sYhlJDsGEyQNDpUg2tNfJGk9tjNtM0XV3
-         EIti+2dShywaR4VqNxVkp3/a1eApnsKRaFluBLXyGnWLcmWMccKMIOgPD0XDeuGq4jQR
-         NOfon0xLmUs0BfnYylg8u+4KUdJYAKEJOpbw+v+meSu5CSRb18yfu+JiH1qXNbXnGoUz
-         g1Cf3SiAN2Akh83YcBtnC1T7Ke1HDTq0MztdWfhC62mT8I9XbD4t4UCV6OUl71rbPVUo
-         8FIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lD1Jt5HPXkkJLqLAECNA5LcmSI3wdXLzJYaLp3IBqKE=;
-        b=hUsncOlYpFyirqa1xvpJO3RazmqsJbUMwtOQBIKgWxex5BhNQsaHh9xsKJDZP4dmRd
-         ZXaL0p5gccOwh7iNXSozlbb151FzI5qiZawSygd5E7Vjf0k++THQ3BQH46k8uUj3WdXL
-         +EAmHpk5tAPU1qP4mUy59bMWkqp/yycYdyumUKDHJb8DdgwEhhdTtAO+aZKPxRvmTcow
-         9Z2gSsrkGeIKXOr4ceGN2+It7BNWODVePT70scbv+fkPcmhMljwY5xqhp+3ftP7YNFmZ
-         IRKnhfv6hJAQ2Uj6daUFkoq3Nb9IbQ1Ms9/fG6+vzm/+xd6yMsn/nuSDkdZx3GerDa3/
-         0PDw==
-X-Gm-Message-State: AOAM531Id1X0ivFiGgMj+f/jAoJDELwrRNHv0ek62fnURe0vJGT/jBGk
-        wf2oZgEy8JTmRJ46kGLHLUo5gUPukcA=
-X-Google-Smtp-Source: ABdhPJxppYZYgjqq3e+BsBvQ1kr8/VEfzj/laCRWiZfcUvHcPYan7+c/SinPBRfZvGrzUeS7rFADug==
-X-Received: by 2002:aca:1204:: with SMTP id 4mr3967201ois.85.1642170962978;
-        Fri, 14 Jan 2022 06:36:02 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q38sm1430873oiw.27.2022.01.14.06.36.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 06:36:01 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 2/2] watchdog: mtk_wdt: mt7986: Add toprgu reset
- controller support
-To:     Sam Shih <sam.shih@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ryder Lee <ryder.lee@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     John Crispin <john@phrozen.org>
-References: <20220105100456.7126-1-sam.shih@mediatek.com>
- <20220105100456.7126-3-sam.shih@mediatek.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <8e6ed2b7-b4e7-733a-579f-e1536f68ea2f@roeck-us.net>
-Date:   Fri, 14 Jan 2022 06:35:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sat, 15 Jan 2022 05:23:56 -0500
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id B1329409DF; Sat, 15 Jan 2022 09:55:22 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org B1329409DF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1642236922;
+        bh=EhF7XCT8OITSpJzSm8nvd+ttt5yypWkqJKw0oK/bOcc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BZ1d5Z3Tqyg3Nq6VLxpLIuDu0D6fKmdveU5QcClkTQhRjvvtFnob4pnyfY1TjRF1u
+         0jm08JSN2xxXtlYaDjd5rljlVU/y/THQMauq+Hw5T2ctwDZonvYaZx7uZBiCs3wCQe
+         Ge3pGUcZ1+6NKCQO1FdO/tdPeIt7mEO2ixuoB350=
+Date:   Sat, 15 Jan 2022 09:55:22 +0100
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        AaeonIot <sophiehu@aaeon.com.tw>,
+        Andrej Picej <andrej.picej@norik.com>,
+        Artem Lapkin <email2tema@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Sven Peter <sven@svenpeter.dev>,
+        Tzung-Bi Shih <tzungbi@google.com>, Yunus Bas <y.bas@phytec.de>
+Subject: [GIT PULL REQUEST] watchdog - v5.17 Merge window
+Message-ID: <20220115085522.GA30865@www.linux-watchdog.org>
 MIME-Version: 1.0
-In-Reply-To: <20220105100456.7126-3-sam.shih@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.5.20 (2009-12-10)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 1/5/22 2:04 AM, Sam Shih wrote:
-> Besides watchdog, the mt7986 toprgu module also provides software reset
-> functionality for various peripheral subsystems
-> (eg, ethernet, pcie, and connectivity)
-> 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+Hi Linus,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Please pull the watchdog changes for the v5.17 release cycle.
 
-> ---
->   drivers/watchdog/mtk_wdt.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index 543cf38bd04e..c6437fe1f4c0 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -10,6 +10,7 @@
->    */
->   
->   #include <dt-bindings/reset/mt2712-resets.h>
-> +#include <dt-bindings/reset/mt7986-resets.h>
->   #include <dt-bindings/reset/mt8183-resets.h>
->   #include <dt-bindings/reset/mt8192-resets.h>
->   #include <dt-bindings/reset/mt8195-resets.h>
-> @@ -76,6 +77,10 @@ static const struct mtk_wdt_data mt2712_data = {
->   	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
->   };
->   
-> +static const struct mtk_wdt_data mt7986_data = {
-> +	.toprgu_sw_rst_num = MT7986_TOPRGU_SW_RST_NUM,
-> +};
-> +
->   static const struct mtk_wdt_data mt8183_data = {
->   	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
->   };
-> @@ -418,6 +423,7 @@ static int mtk_wdt_resume(struct device *dev)
->   static const struct of_device_id mtk_wdt_dt_ids[] = {
->   	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
->   	{ .compatible = "mediatek,mt6589-wdt" },
-> +	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
->   	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
->   	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
->   	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
-> 
+This series contains:
+* Addition of the following new devices:
+  - Watchdog Timer driver for RZ/G2L
+  - Realtek Otto watchdog timer
+  - Apple SoC watchdog driver
+  - Fintek F81966
+* Removal of BCM63XX_WDT after support for this SOC was added to BCM7038_WDT
+* Improvements of the BCM7038_WDT and s3c2410_wdt code
+* several other fixes and improvements
+
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
+
+  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.17-rc1
+
+for you to fetch changes up to ffd264bd152cbf88fcf5ced04d3d380c77020231:
+
+  watchdog: msc313e: Check if the WDT was running at boot (2022-01-05 10:38:51 +0100)
+
+----------------------------------------------------------------
+linux-watchdog 5.17-rc1 tag
+
+----------------------------------------------------------------
+AaeonIot (1):
+      watchdog: f71808e_wdt: Add F81966 support
+
+Andrej Picej (1):
+      watchdog: da9063: Add hard dependency on I2C
+
+Artem Lapkin (1):
+      watchdog: meson_gxbb_wdt: remove stop_on_reboot
+
+Biju Das (2):
+      dt-bindings: watchdog: renesas,wdt: Add support for RZ/G2L
+      watchdog: Add Watchdog Timer driver for RZ/G2L
+
+Changcheng Deng (1):
+      watchdog: davinci: Use div64_ul instead of do_div
+
+Daniel Palmer (1):
+      watchdog: msc313e: Check if the WDT was running at boot
+
+Florian Fainelli (6):
+      dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding
+      watchdog: bcm7038_wdt: Support platform data configuration
+      watchdog: Allow building BCM7038_WDT for BCM63XX
+      watchdog: bcm7038_wdt: Add platform device id for bcm63xx-wdt
+      MIPS: BCM63XX: Provide platform data to watchdog device
+      watchdog: Remove BCM63XX_WDT
+
+Jacky Bai (1):
+      dt-bindings: watchdog: imx7ulp-wdt: Add imx8ulp compatible string
+
+Kevin Hilman (1):
+      watchdog: Kconfig: enable MTK watchdog
+
+Lad Prabhakar (1):
+      watchdog: s3c2410: Use platform_get_irq() to get the interrupt
+
+Luca Ceresoli (1):
+      watchdog: Kconfig: fix help text indentation
+
+Luca Weiss (1):
+      dt-bindings: watchdog: Add SM6350 and SM8250 compatible
+
+Rafał Miłecki (1):
+      dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
+
+Rob Herring (1):
+      dt-bindings: watchdog: atmel: Add missing 'interrupts' property
+
+Sam Protsenko (13):
+      dt-bindings: watchdog: Require samsung,syscon-phandle for Exynos7
+      dt-bindings: watchdog: Document Exynos850 watchdog bindings
+      watchdog: s3c2410: Fail probe if can't find valid timeout
+      watchdog: s3c2410: Let kernel kick watchdog
+      watchdog: s3c2410: Make reset disable register optional
+      watchdog: s3c2410: Extract disable and mask code into separate functions
+      watchdog: s3c2410: Implement a way to invert mask reg value
+      watchdog: s3c2410: Add support for WDT counter enable register
+      watchdog: s3c2410: Cleanup PMU related code
+      watchdog: s3c2410: Support separate source clock
+      watchdog: s3c2410: Remove superfluous err label
+      watchdog: s3c2410: Add Exynos850 support
+      watchdog: s3c2410: Fix getting the optional clock
+
+Sander Vanheule (2):
+      dt-bindings: watchdog: Realtek Otto WDT binding
+      watchdog: Add Realtek Otto watchdog timer
+
+Sven Peter (1):
+      watchdog: Add Apple SoC watchdog driver
+
+Tzung-Bi Shih (1):
+      watchdog: mtk_wdt: use platform_get_irq_optional
+
+Yunus Bas (1):
+      watchdog: da9063: use atomic safe i2c transfer in reset handler
+
+ .../bindings/watchdog/atmel,sama5d4-wdt.yaml       |   3 +
+ .../bindings/watchdog/brcm,bcm7038-wdt.txt         |  19 -
+ .../bindings/watchdog/brcm,bcm7038-wdt.yaml        |  43 +++
+ .../bindings/watchdog/fsl-imx7ulp-wdt.yaml         |   7 +-
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |   2 +
+ .../bindings/watchdog/realtek,otto-wdt.yaml        |  91 +++++
+ .../devicetree/bindings/watchdog/renesas,wdt.yaml  |  75 +++-
+ .../devicetree/bindings/watchdog/samsung-wdt.yaml  |  48 ++-
+ MAINTAINERS                                        |   7 +
+ arch/mips/bcm63xx/dev-wdt.c                        |   8 +
+ drivers/watchdog/Kconfig                           |  98 ++++--
+ drivers/watchdog/Makefile                          |   4 +-
+ drivers/watchdog/apple_wdt.c                       | 226 ++++++++++++
+ drivers/watchdog/bcm63xx_wdt.c                     | 317 -----------------
+ drivers/watchdog/bcm7038_wdt.c                     |  15 +-
+ drivers/watchdog/da9063_wdt.c                      |  12 +-
+ drivers/watchdog/davinci_wdt.c                     |   2 +-
+ drivers/watchdog/f71808e_wdt.c                     |  10 +-
+ drivers/watchdog/meson_gxbb_wdt.c                  |   1 -
+ drivers/watchdog/msc313e_wdt.c                     |   4 +
+ drivers/watchdog/mtk_wdt.c                         |   2 +-
+ drivers/watchdog/realtek_otto_wdt.c                | 384 +++++++++++++++++++++
+ drivers/watchdog/rzg2l_wdt.c                       | 263 ++++++++++++++
+ drivers/watchdog/s3c2410_wdt.c                     | 338 +++++++++++++-----
+ include/linux/platform_data/bcm7038_wdt.h          |   8 +
+ 25 files changed, 1495 insertions(+), 492 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
+ create mode 100644 drivers/watchdog/apple_wdt.c
+ delete mode 100644 drivers/watchdog/bcm63xx_wdt.c
+ create mode 100644 drivers/watchdog/realtek_otto_wdt.c
+ create mode 100644 drivers/watchdog/rzg2l_wdt.c
+ create mode 100644 include/linux/platform_data/bcm7038_wdt.h
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
 
