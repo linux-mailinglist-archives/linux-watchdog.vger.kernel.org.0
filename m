@@ -2,89 +2,86 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4877490221
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jan 2022 07:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564AA490C15
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jan 2022 17:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbiAQGyx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Jan 2022 01:54:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237214AbiAQGyw (ORCPT
+        id S240744AbiAQQIu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Jan 2022 11:08:50 -0500
+Received: from eu-shark1.inbox.eu ([195.216.236.81]:48054 "EHLO
+        eu-shark1.inbox.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235180AbiAQQIu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Jan 2022 01:54:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F0EC061574;
-        Sun, 16 Jan 2022 22:54:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C948560F33;
-        Mon, 17 Jan 2022 06:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 390D0C36AE3;
-        Mon, 17 Jan 2022 06:54:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642402491;
-        bh=IIoGIZsu8TZOhpPFqABcuqaKklkGbS8xoA9L90Whlf4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=pMEwLZpCzFvsKy3XIHZk1u8f16sZ4g7nBcseGCvKYimPCIQHM0QiSnuOtv5cX9tLD
-         nZVuuPLhXwaP7XqNe1nEi545n0pM1KpHg/zdBwtQ8EjQiur+DOewDU8+qYg0mxv3Y2
-         iarAcKV9FfziorapKqW+cCnLbSymSdoiY+0sNmdyAJ0lrtfN1pAQLruY8daOfiwQx+
-         IyxjG3CyDgYHuFtv/9AvtwoPvZgquzyKMHF1lHyAUE9LnZH6aumDAjKW2ny7nmm3Et
-         foE0C5wtQVZbGSiv3l7Rht7grZYJBuT1Fb93m8dije8aonIivwHXlLckSrLdHuVlR3
-         zs0X1MhHmF9dw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 26E37F60799;
-        Mon, 17 Jan 2022 06:54:51 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v5.17 Merge window
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220115085522.GA30865@www.linux-watchdog.org>
-References: <20220115085522.GA30865@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220115085522.GA30865@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.17-rc1
-X-PR-Tracked-Commit-Id: ffd264bd152cbf88fcf5ced04d3d380c77020231
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2225acc32275085d5e0ce5845c6fd18d61204b49
-Message-Id: <164240249114.26213.1224292278462004383.pr-tracker-bot@kernel.org>
-Date:   Mon, 17 Jan 2022 06:54:51 +0000
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        AaeonIot <sophiehu@aaeon.com.tw>,
-        Andrej Picej <andrej.picej@norik.com>,
-        Artem Lapkin <email2tema@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rob Herring <robh@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Sven Peter <sven@svenpeter.dev>,
-        Tzung-Bi Shih <tzungbi@google.com>, Yunus Bas <y.bas@phytec.de>
+        Mon, 17 Jan 2022 11:08:50 -0500
+X-Greylist: delayed 448 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 11:08:48 EST
+Received: from eu-shark1.inbox.eu (localhost [127.0.0.1])
+        by eu-shark1-out.inbox.eu (Postfix) with ESMTP id A7AE66C007B8;
+        Mon, 17 Jan 2022 18:01:18 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.ee; s=20150108;
+        t=1642435278; bh=8eZy1CPKhQvMCMzsnEkM0QJ5WK+Ngz6mR4luFdgMGvc=;
+        h=Date:From:To:Subject:Message-ID:Content-Type:X-ESPOL:from:date;
+        b=jgOX3FcGFDjImxPXV4lSZmrIfpN+RYm1YiACSBUeOMlnuE+UVrisrt1qIe5hSobMB
+         pRW7zoW0tBUSJWHIqydyNgGDLRFh6ToMfJwrueG4nRbBOJcOYlZ0dZ0l3h7tzI/5DP
+         ifcZvpNKyCjvSBaiGp9cPvQomxhN83JtXteCIcvA=
+Received: from localhost (localhost [127.0.0.1])
+        by eu-shark1-in.inbox.eu (Postfix) with ESMTP id 984126C007B7;
+        Mon, 17 Jan 2022 18:01:18 +0200 (EET)
+Received: from eu-shark1.inbox.eu ([127.0.0.1])
+        by localhost (eu-shark1.inbox.eu [127.0.0.1]) (spamfilter, port 35)
+        with ESMTP id w-pItSQyIShD; Mon, 17 Jan 2022 18:01:18 +0200 (EET)
+Received: from mail.inbox.eu (eu-pop1 [127.0.0.1])
+        by eu-shark1-in.inbox.eu (Postfix) with ESMTP id 564D06C007A9;
+        Mon, 17 Jan 2022 18:01:18 +0200 (EET)
+Date:   Mon, 17 Jan 2022 19:01:12 +0300
+From:   Boris Lysov <arzamas-16@mail.ee>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Missing ARM TWD Watchdog driver?
+Message-ID: <20220117190112.2b2c2f53@pc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: OK
+X-ESPOL: 6N1mkJY3ejOnjUCgRn3ABwcxsStMXfGWiOrAsAEq4na6bm6YHDwAURW+m25+SXi8vSM=
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The pull request you sent on Sat, 15 Jan 2022 09:55:22 +0100:
+Hello everyone,
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.17-rc1
+I stumbled upon the ARM TWD Watchdog driver which seems to be missing (or I'm
+just blind).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2225acc32275085d5e0ce5845c6fd18d61204b49
+As per commit a33f5c380c4bd3fa5278d690421b72052456d9fe ("Merge tag
+'xfs-5.17-merge-3' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux"), multiple
+device trees declare usage of arm-twd:
 
-Thank you!
+arch/arm/boot/dts/arm-realview-eb-mp.dtsi
+arch/arm/boot/dts/arm-realview-pb11mp.dts
+arch/arm/boot/dts/arm-realview-pbx-a9.dts
+arch/arm/boot/dts/bcm5301x.dtsi
+arch/arm/boot/dts/bcm63138.dtsi
+arch/arm/boot/dts/bcm-hr2.dtsi
+arch/arm/boot/dts/bcm-nsp.dtsi
+arch/arm/boot/dts/berlin2cd.dtsi
+arch/arm/boot/dts/highbank.dts
+arch/arm/boot/dts/mmp3.dtsi
+arch/arm/boot/dts/owl-s500.dtsi
+arch/arm/boot/dts/spear13xx.dtsi
+arch/arm/boot/dts/ste-dbx5x0.dtsi
+arch/arm/boot/dts/vexpress-v2p-ca5s.dts
+arch/arm/boot/dts/vexpress-v2p-ca9.dts
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+and it is documented in
+Documentation/devicetree/bindings/watchdog/arm,twd-wdt.yaml
+
+However I could not find the driver itself. I tried running case-insensitive
+grep and ripgrep to no avail. Does this driver actually exist? Is it gone?
+
+I'm not well experienced with LKML yet and I apologize for if I asked
+the question on the inappropriate mailing list. As per 3.3 of [1], I'm kindly
+asking to CC me with answers.
+
+Thanks!
+
+[1] The linux-kernel mailing list FAQ http://vger.kernel.org/lkml/
