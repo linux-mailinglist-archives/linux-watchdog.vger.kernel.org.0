@@ -2,105 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C14A49135D
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jan 2022 02:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43613492227
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jan 2022 10:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbiARBZV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Jan 2022 20:25:21 -0500
-Received: from eu-shark2.inbox.eu ([195.216.236.82]:41150 "EHLO
-        eu-shark2.inbox.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiARBZU (ORCPT
+        id S1345307AbiARJHF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 18 Jan 2022 04:07:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345311AbiARJG7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Jan 2022 20:25:20 -0500
-Received: from eu-shark2.inbox.eu (localhost [127.0.0.1])
-        by eu-shark2-out.inbox.eu (Postfix) with ESMTP id 4BE4B1E005F5;
-        Tue, 18 Jan 2022 03:25:18 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.ee; s=20150108;
-        t=1642469118; bh=Cbmo9zzdZXPewDMITMeQMfnHGjPMBioKlh1IQUhsBxQ=;
-        h=Date:From:To:Subject:Message-ID:In-Reply-To:References:
-         Content-Type:X-ESPOL:from:date;
-        b=MlXWID5ySVJJLPQhj/Lei5OCIAAYySnUfHFyzB/PLJhndtigEpcg+IYiSOUGLA4vN
-         E07e+IerxIeiTvOQTOS/fkvC6RPniMHY02Lo5n0e2AVK8jQ7g0tMe5xTEKbLY5EGIn
-         GKzWswZdwgW+NzR9vBzh0MfqZcJTaICiH8Z8dS2s=
-Received: from localhost (localhost [127.0.0.1])
-        by eu-shark2-in.inbox.eu (Postfix) with ESMTP id 3E4991E005F4;
-        Tue, 18 Jan 2022 03:25:18 +0200 (EET)
-Received: from eu-shark2.inbox.eu ([127.0.0.1])
-        by localhost (eu-shark2.inbox.eu [127.0.0.1]) (spamfilter, port 35)
-        with ESMTP id sc4amGnhCHPH; Tue, 18 Jan 2022 03:25:18 +0200 (EET)
-Received: from mail.inbox.eu (eu-pop1 [127.0.0.1])
-        by eu-shark2-in.inbox.eu (Postfix) with ESMTP id E78C91E005E9;
-        Tue, 18 Jan 2022 03:25:17 +0200 (EET)
-Date:   Tue, 18 Jan 2022 04:25:12 +0300
-From:   Boris Lysov <arzamas-16@mail.ee>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: Missing ARM TWD Watchdog driver?
-Message-ID: <20220118042512.360ee83a@pc>
-In-Reply-To: <20220117170225.GB94025@C02TD0UTHF1T.local>
-References: <20220117190112.2b2c2f53@pc>
-        <60dceae6-5c7c-9f2d-9fcb-5e849f1d8ce5@roeck-us.net>
-        <20220117170225.GB94025@C02TD0UTHF1T.local>
+        Tue, 18 Jan 2022 04:06:59 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70B1C06175E
+        for <linux-watchdog@vger.kernel.org>; Tue, 18 Jan 2022 01:06:58 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id g81so53674989ybg.10
+        for <linux-watchdog@vger.kernel.org>; Tue, 18 Jan 2022 01:06:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
+        b=MwuXI9bo/bHhmwSiZow429zo8aSB+O2GLUej+IgcXI5RO/o3AqH4CSQ9NAWjmHtI2V
+         CWHWHodvspT0TuHM5gPO3+DsIPBfj5I7xK86tBODXNXUNaTSYWM44YSISAFFoUBCT0Gg
+         kUseC6gV2vHxvawS1hqRt36sr5ZHyfG2404GVbLMHZFIWJloN2l0uLLpE9xGpmX+gvFt
+         T/SKBR85N56dXCUtLtefGn/VyQ5YHcl7r/PL/CN8dJjeVXQr6S8XtfLgDxWiWVeFp/uz
+         rUPQ/vWjjy9uE0DFDcQNAXccnZrg9yq5ahPtbYdtOe2x2ilhAjqIuZxj1Am01Jk0eYRx
+         TdaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
+        b=3bxQ6Dxic50fanGd5clowOocYKKzGpszWanD/r/GxUyl7T2AO3qOsMfNXPnWuAHWI3
+         b+Eh+3xqe5V+WKfRpfMxFkcitWogq0C+VVM9zJ3HG6AWgFQ/4U2N+XxrGBX4eONTtZCn
+         zRQKhudZYSttOfKKV+AfT+Vi0nO2d5ID8FPbZrRIFhnb+6KOaKmfiFM3uiurFkiHP+jX
+         dLZqc5iks7UzqnEyg4LpRhRC236UCLMShnQKF52aL8uzwCGQnLdSAxZ2pDCMqKKyuNw+
+         ZZVR/zELJmbQz15+P5udN4eZ/H5l95Gt4AZ2XtCrHBXNC4dxrenDpYB+beEJiVIgoMEn
+         eYmQ==
+X-Gm-Message-State: AOAM530byl5EPrCsvt/mVWm5WAKdRJLjs5HDgbuz/5SuaDIjdCe36wLq
+        SeUTYAc+wTxMEclh8VQWWmn2oQZmIymQf0b/B9o=
+X-Google-Smtp-Source: ABdhPJxA0wzoWLcZT1OxNrAcI8XNQh1NLzUcYEY6tZP9fJ+XZhak2v8hM5rDGFWcpfNwqZAdykwmchO/6gc3Jodrd8o=
+X-Received: by 2002:a25:bb49:: with SMTP id b9mr31607636ybk.0.1642496817798;
+ Tue, 18 Jan 2022 01:06:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: OK
-X-ESPOL: 6NpmlY9HHDysjlqlQGetewt38GpVJY3o+OCk0Rhfgnn7NzCFfUoRMmO6mHAFPnHC3iM=
+Received: by 2002:a05:7108:3655:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:06:57
+ -0800 (PST)
+Reply-To: asil.ajwad@gmail.com
+From:   Asil Ajwad <graceyaogokamboule@gmail.com>
+Date:   Mon, 17 Jan 2022 21:06:57 -1200
+Message-ID: <CA+Yy_gCScGafLu0JmRT2o26eNt1J5S_DUo_G2xwuVh0p3r+Daw@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Mark and Guenter,
+-- 
+Greetings,
 
-On Mon, 17 Jan 2022 17:02:25 +0000,
-Mark Rutland <mark.rutland@arm.com> wrote:
+I am Mr.Asil Ajwad, I work with United Bank of Africa, can you use
+an ATM Visa Card to withdraw money at, ATM Cash Machine in your
+country, if yes I want to transfer abounded fund the sum of $10.5million
+US-Dollars, to you from my country, this is part of the money that was
+abounded by our late old client a politician who unfortunately lost
+his life and was forced out of power Du to his greedy act, the bank will
 
-> On Mon, Jan 17, 2022 at 08:34:57AM -0800, Guenter Roeck wrote:
-> > On 1/17/22 8:01 AM, Boris Lysov wrote:
-> > > Hello everyone,
-> > > 
-> > > I stumbled upon the ARM TWD Watchdog driver which seems to be missing (or
-> > > I'm just blind).
-> > > 
-> > > As per commit a33f5c380c4bd3fa5278d690421b72052456d9fe ("Merge tag
-> > > 'xfs-5.17-merge-3' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux"),
-> > > multiple device trees declare usage of arm-twd:
-> > > 
-> > > (...)
-> > > 
-> > > and it is documented in
-> > > Documentation/devicetree/bindings/watchdog/arm,twd-wdt.yaml
-> > > 
-> > > However I could not find the driver itself. I tried running
-> > > case-insensitive grep and ripgrep to no avail. Does this driver actually
-> > > exist? Is it gone?
-> > > 
-> > 
-> > I may be missing it, but I do not see any evidence that it ever existed.
-> 
-> Likewise, AFAICT we added the binding but never the driver.
-> 
-> Looking at the git history, that schema was introduced in commit:
-> 
->   50e02e9a030a9ae3 ("dt-bindings: timer: arm,twd: Convert to json-schema")
-> 
-> ... and replaced Documentation/devicetree/bindings/timer/arm,twd.txt
-> 
-> Per:
-> 
->   $ git log --follow Documentation/devicetree/bindings/timer/arm,twd.txt
-> 
-> That was introduced alongside a driver in commit:
-> 
->   d8e0364364d333fe ("ARM: smp_twd: add device tree support")
-> 
-> ... which only introduced a driver for the timer, and not the watchdog,
-> as the commit message notes.
-> 
-> Thanks.
-> Mark.
+change the account details to your name, and apply for a Visa Card
+with your details, the Visa Card will be send to you, and you can be
+withdrawing money with it always, whatever any amount you withdraw
+daily, you will send 60% to me and you will take 40%, the Visa Card
+and the bank account will be on your name, I will be waiting for your
+response for more details, thanks to you a lot for giving me your time.
 
-Now I understand there's no ARM TWD Watchdog driver.
-TYVM for your replies!
+regards,
+Mr.Asil Ajwad.
