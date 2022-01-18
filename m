@@ -2,77 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43613492227
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jan 2022 10:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38131492357
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jan 2022 10:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345307AbiARJHF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 18 Jan 2022 04:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345311AbiARJG7 (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:06:59 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70B1C06175E
-        for <linux-watchdog@vger.kernel.org>; Tue, 18 Jan 2022 01:06:58 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id g81so53674989ybg.10
-        for <linux-watchdog@vger.kernel.org>; Tue, 18 Jan 2022 01:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
-        b=MwuXI9bo/bHhmwSiZow429zo8aSB+O2GLUej+IgcXI5RO/o3AqH4CSQ9NAWjmHtI2V
-         CWHWHodvspT0TuHM5gPO3+DsIPBfj5I7xK86tBODXNXUNaTSYWM44YSISAFFoUBCT0Gg
-         kUseC6gV2vHxvawS1hqRt36sr5ZHyfG2404GVbLMHZFIWJloN2l0uLLpE9xGpmX+gvFt
-         T/SKBR85N56dXCUtLtefGn/VyQ5YHcl7r/PL/CN8dJjeVXQr6S8XtfLgDxWiWVeFp/uz
-         rUPQ/vWjjy9uE0DFDcQNAXccnZrg9yq5ahPtbYdtOe2x2ilhAjqIuZxj1Am01Jk0eYRx
-         TdaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
-        b=3bxQ6Dxic50fanGd5clowOocYKKzGpszWanD/r/GxUyl7T2AO3qOsMfNXPnWuAHWI3
-         b+Eh+3xqe5V+WKfRpfMxFkcitWogq0C+VVM9zJ3HG6AWgFQ/4U2N+XxrGBX4eONTtZCn
-         zRQKhudZYSttOfKKV+AfT+Vi0nO2d5ID8FPbZrRIFhnb+6KOaKmfiFM3uiurFkiHP+jX
-         dLZqc5iks7UzqnEyg4LpRhRC236UCLMShnQKF52aL8uzwCGQnLdSAxZ2pDCMqKKyuNw+
-         ZZVR/zELJmbQz15+P5udN4eZ/H5l95Gt4AZ2XtCrHBXNC4dxrenDpYB+beEJiVIgoMEn
-         eYmQ==
-X-Gm-Message-State: AOAM530byl5EPrCsvt/mVWm5WAKdRJLjs5HDgbuz/5SuaDIjdCe36wLq
-        SeUTYAc+wTxMEclh8VQWWmn2oQZmIymQf0b/B9o=
-X-Google-Smtp-Source: ABdhPJxA0wzoWLcZT1OxNrAcI8XNQh1NLzUcYEY6tZP9fJ+XZhak2v8hM5rDGFWcpfNwqZAdykwmchO/6gc3Jodrd8o=
-X-Received: by 2002:a25:bb49:: with SMTP id b9mr31607636ybk.0.1642496817798;
- Tue, 18 Jan 2022 01:06:57 -0800 (PST)
+        id S235235AbiARJzN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 18 Jan 2022 04:55:13 -0500
+Received: from mx1.cqplus1.com ([113.204.237.245]:46632 "EHLO mx1.cqplus1.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235396AbiARJzL (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Tue, 18 Jan 2022 04:55:11 -0500
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(24948:0:AUTH_RELAY)
+        (envelope-from <xt.hu@cqplus1.com>); Tue, 18 Jan 2022 17:53:40 +0800 (CST)
+From:   Xiantao Hu <xt.hu@cqplus1.com>
+To:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
+        Xiantao Hu <xt.hu@cqplus1.com>
+Subject: [PATCH v5 0/2] Add watchdog driver for Sunplus SP7021 SoC
+Date:   Tue, 18 Jan 2022 17:53:40 +0800
+Message-Id: <20220118095342.186612-1-xt.hu@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Received: by 2002:a05:7108:3655:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:06:57
- -0800 (PST)
-Reply-To: asil.ajwad@gmail.com
-From:   Asil Ajwad <graceyaogokamboule@gmail.com>
-Date:   Mon, 17 Jan 2022 21:06:57 -1200
-Message-ID: <CA+Yy_gCScGafLu0JmRT2o26eNt1J5S_DUo_G2xwuVh0p3r+Daw@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+This is a patch series for watchdog driver for Sunplus SP7021 SoC.
+
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
+
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
+
+Xiantao Hu (2):
+  watchdog: Add Sunplus SP7021 WDT devicetree bindings documentation
+  watchdog: Add watchdog driver for Sunplus SP7021
+
+ .../bindings/watchdog/sunplus,sp7021-wdt.yaml |  47 +++
+ MAINTAINERS                                   |   7 +
+ drivers/watchdog/Kconfig                      |  11 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/sunplus_wdt.c                | 268 ++++++++++++++++++
+ 5 files changed, 334 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+ create mode 100644 drivers/watchdog/sunplus_wdt.c
+
 -- 
-Greetings,
+2.33.1
 
-I am Mr.Asil Ajwad, I work with United Bank of Africa, can you use
-an ATM Visa Card to withdraw money at, ATM Cash Machine in your
-country, if yes I want to transfer abounded fund the sum of $10.5million
-US-Dollars, to you from my country, this is part of the money that was
-abounded by our late old client a politician who unfortunately lost
-his life and was forced out of power Du to his greedy act, the bank will
-
-change the account details to your name, and apply for a Visa Card
-with your details, the Visa Card will be send to you, and you can be
-withdrawing money with it always, whatever any amount you withdraw
-daily, you will send 60% to me and you will take 40%, the Visa Card
-and the bank account will be on your name, I will be waiting for your
-response for more details, thanks to you a lot for giving me your time.
-
-regards,
-Mr.Asil Ajwad.
