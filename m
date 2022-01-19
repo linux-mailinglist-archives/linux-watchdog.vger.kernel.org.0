@@ -2,156 +2,257 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DE2494021
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jan 2022 19:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D0B494367
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jan 2022 00:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344383AbiASSp5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Jan 2022 13:45:57 -0500
-Received: from mail-bn1nam07on2045.outbound.protection.outlook.com ([40.107.212.45]:11142
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        id S1344052AbiASXGm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Jan 2022 18:06:42 -0500
+Received: from mail-dm6nam08on2087.outbound.protection.outlook.com ([40.107.102.87]:5708
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241670AbiASSp4 (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Jan 2022 13:45:56 -0500
+        id S243284AbiASXGi (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Wed, 19 Jan 2022 18:06:38 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mX5PXIJzPPAAEKxHb9Bjo5IOzi9UeTcnzDVNpyiqugVrV1FhRRVs4y+TFbcoo9GsfgkxZi6yjcRzmdjrVsSJcOq930M/luD5Ot7NzMK1g0cA+dotHmQBd04eqe5EA9VTi2L/rpwmdhID2yLp69RKutOGXMfZ9tb7jrJMnEQnYrJEfRn0FRrhI4/5RIu9ub2JLwV1pWQwYkN1DtocYKjvYMC/4X3o0tMvTKPDdNFh4FiTAONZ9gknT5gVum3udWlajtw1DN7fezzaziRIZE/Gya7m8WmsWwmrIsT4uQOI0fEgRvZ/Of9nkTr+2fqyUMttGU1aTKAF335bnhr/C7AmEA==
+ b=i+GJkjF5S50YP3MTfYy8E+qEP1ecZ6iGwBPvyCeUaqkwnY+zBauK8+4TWPOIqQLyFJ7mTb6iIIF8WQTKRhrJr4sgmdd5qe/aUpNH/FrPZt/0zIO+T7mQ9XNTGUT/LNN4aFuUwXSHZMcFDzAF8tobE07EkR4KmmVGroKXEQc5Yxdt/SrpQ043Ddw+VGEPuglfwG8vmCZ34yfH1k3s75vg/Ph2l/Etv3I77haSWpIZE5122C9DLf8CR6TWldwjeEhdqY1fDT6Bd9MTlLLQxhemKPLyYvMKlDetua7l/y2t2XotjWICmPIUU4lVwl+Lx7o/9XEcoOGtSdOo/+qWcCfGcQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=duvyqQs2cMiJDul46ZsU9evOqHeDORYl9uxrxTo8DcA=;
- b=FaPNS4MFxivvhuYmESbXVjxgAOLEi6hvsODplx9TC6x79YFue17cBpN0L/iVVeaM+eIl3VK9oojF7PS8cIw+8C94QWx99EEJwXWCQUqvR8Y/4FAzd+IjKBzFvqTEMtSQKKG+ncE9HJAyQNKGmDfuOPg9FqWaEQg7lGjRh2M0xSWOfh0orF4y7k7v2cq9DXCF2sp/cebNiO1jGeqWkxxBHMxeO1L4mp3H5sq83tPkaFYr6QgmPOixM+q8F6liV1NNotQZccr/bGgLPQJqxPHYLZpz89sVSoSOAY4rqpnAUYfimbsmAV1i/9jdmdRUbYhCbfFr+qjLjo+hmBenSGbGDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+ bh=gqPJqNc8FZB8qnjbVMcObxCFvWCjhltMfKWNDxCZOSM=;
+ b=cHtm4KI/BcEuDEZi+i01T1YJVqa5s3KyUD/2TRgtUv3EpVa2M/NWqrrCpm6zJen83dKJDkwmkWGA5f6o3uC0GTzSpR2F5SgWNtZDgrw4Co0ttq6QhbbTAbAq5Hvc80R0OkuLhFrn9CT0xE6XqfGw3oVM1VjO1sXYVBPlcXvZZNoQikhqFHqVxf7VTBcyuM4Lc9rSuehqNFvU9FGt0FGaEi+5L8qpSXLL5R782FMYIRre83S0lMy4NzPdQdadH8cQxTkcsWd/14JSEJCuCuTDSmcFdYsAE9ZSPBa8g7303rigYldfbtBMxXTac+jXNqnmigm9AcEK5z6xvz7H0z/fuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=duvyqQs2cMiJDul46ZsU9evOqHeDORYl9uxrxTo8DcA=;
- b=3fxxSi6U7iljo1KPKtZ5uDUwg9a/Mre1u9NoSXmr7W79jLCIkYgfjxEjT/5cY7TrDnShrw8+U2nQeFbZaow/ZrpToTk8CTVYb+ST93n91tYOgCj1o7HfvKZdfKQI5E66JOMiIXDlI8OqM84ojfM6ViJiOMpXdOWVjERk4I14Wv0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH0PR12MB5346.namprd12.prod.outlook.com (2603:10b6:610:d5::24)
- by MWHPR1201MB0206.namprd12.prod.outlook.com (2603:10b6:301:55::21) with
+ bh=gqPJqNc8FZB8qnjbVMcObxCFvWCjhltMfKWNDxCZOSM=;
+ b=Tx0yBfxWArMPRdfvgW1eASvYKL6YFr56ntW0HqDiWQz7S+ysb5mY8mfsuASTfqTv3u4pnwh8BMx8XHL1zeXp9A4VLPVEQE5aVa7EdfX9R+0rALGDytS80YrRxXN2HLQKRAGLZsoIjIsGdoGllzQYPEDnsg7rFqDblX6IyhPtVPY=
+Received: from DM6PR03CA0067.namprd03.prod.outlook.com (2603:10b6:5:100::44)
+ by MWHPR12MB1357.namprd12.prod.outlook.com (2603:10b6:300:b::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Wed, 19 Jan
- 2022 18:45:54 +0000
-Received: from CH0PR12MB5346.namprd12.prod.outlook.com
- ([fe80::ad10:b9b4:d5cb:af1e]) by CH0PR12MB5346.namprd12.prod.outlook.com
- ([fe80::ad10:b9b4:d5cb:af1e%4]) with mapi id 15.20.4909.008; Wed, 19 Jan 2022
- 18:45:54 +0000
-Subject: Re: [PATCH v3 0/4] Watchdog: sp5100_tco: Replace cd6h/cd7h port I/O
- accesses with MMIO accesses
-To:     Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
-        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-References: <20220118202234.410555-1-terry.bowman@amd.com>
- <20220119163012.4274665d@endymion>
- <dda39f1f-b683-35ac-d810-d4759c4f8448@amd.com> <YehOmuqA008XuBHI@kunai>
- <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
-From:   Terry Bowman <Terry.Bowman@amd.com>
-Message-ID: <efa8606e-7a9d-e970-1367-91dd0332c122@amd.com>
-Date:   Wed, 19 Jan 2022 12:45:51 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <160d12ca-8493-7536-036c-9dd5af7b4ce0@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0182.namprd03.prod.outlook.com
- (2603:10b6:610:e4::7) To CH0PR12MB5346.namprd12.prod.outlook.com
- (2603:10b6:610:d5::24)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Wed, 19 Jan
+ 2022 23:06:33 +0000
+Received: from DM6NAM11FT044.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:100:cafe::2c) by DM6PR03CA0067.outlook.office365.com
+ (2603:10b6:5:100::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8 via Frontend
+ Transport; Wed, 19 Jan 2022 23:06:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT044.mail.protection.outlook.com (10.13.173.185) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4909.7 via Frontend Transport; Wed, 19 Jan 2022 23:06:33 +0000
+Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 19 Jan
+ 2022 17:06:32 -0600
+From:   Terry Bowman <terry.bowman@amd.com>
+To:     <terry.bowman@amd.com>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <jdelvare@suse.com>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <Mario.Limonciello@amd.com>
+Subject: [PATCH v3 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses with MMIO accesses
+Date:   Wed, 19 Jan 2022 17:06:17 -0600
+Message-ID: <20220119230626.31560-1-terry.bowman@amd.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fe738ff9-8325-46aa-6139-08d9db7bec0b
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0206:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB0206380D56A3E61E238A85FB83599@MWHPR1201MB0206.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1284;
+X-MS-Office365-Filtering-Correlation-Id: 45da288f-d73d-48f6-7278-08d9dba05604
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1357:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1357461D15DAFC01D5FB8CBE83599@MWHPR12MB1357.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Sm6l0eziz707SSRixmF2kwPXXaDV3Q5tfodXexbLLa9GZo91xenpW6tnNrZz06tyEMljzI6f+aIsYRZGi4orUoUviz9Zz2nD9Of2A9fAm4zbBlLjNTgNZ9efpvc9NCVjJljG+8WIngDiMJzOc/VDUi4UgVWM1FEyEBmemQYXZWIzl8xZNioxzXHfFkulXPZO7QEdomwEENYrLRi8bWOCJE8l+YBGqOqHrtPDI+gUkkXQ6WLkT+QvLbUzbhayZBgN3OJ12P+/LNIX+GTg5Uds9pN8j+Pe7vkLJZfxOqCYp+pLn6TSj3t1MBJNnas2r9ObcCUj0ktcdKcm0xUi1zBST3XhdLeKiHGv/qRGETyrfAUQGPCPSzG8YnZ6nvUk2GOMI+zf3ngGJmpDHJ/QAyjMsmP9KTY/Ey31SLajHKjOQWEazRfMZxCtIrsVQ92KQPb23LEJesRvySaPS8K+uF+GNp+I1nDpYiBF6+4Td9HaEINedWBImJMAp1qqVHsj8ykJYfios+60yHH0Z+1ME6z+P0wMkOHpZtvQLhb6oltDHBur9PSJvA9o3KHo0wiLtAlgoS0Z9yam2ZBo5IxUEwuTHFntOAIhzQznCl0maG/TOfCAhXLgFiaJl5SZfYs01EBf/gvE2uJMi+zQ8I/3cwRqdlyL594YBPyHOh4bXxqCZrtPtwBwW0UOzY/W1EIeXWwJYvOZvX0MDch9QOMxb7Ohs9FeYvfiWCgYoyw2wPzJDB9eR/oJFRvkWnpc4c2TjII/QGWub1wzeecSt18aQ5cHYA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5346.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(66556008)(26005)(921005)(66946007)(508600001)(2906002)(53546011)(8676002)(6486002)(7416002)(31696002)(8936002)(6512007)(2616005)(5660300002)(6506007)(83380400001)(31686004)(6666004)(110136005)(316002)(6636002)(38100700002)(186003)(36756003)(86362001)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?Windows-1252?Q?YD/cR7EEfEjepsMWzjEQ4qCgPVoXQOVJAznM6dUQsvmUHRBvRsjZiBVD?=
- =?Windows-1252?Q?IWzyGxFg6bwnORE9Lb5pJF+0z1yQtA6/FHxnzBeXBkCNQ3Cjw/5DGW5o?=
- =?Windows-1252?Q?1U82zMGbg/iVux+TK9kFJ2vrwIk1az7v+1utO/I+NaDzvxGaafXO1n7f?=
- =?Windows-1252?Q?+2t9lPTW4PYH/JZ5Bdn9HB1kVcDY2+zFW0aqt+Qe/VE6FCpE0fzl4Ots?=
- =?Windows-1252?Q?JvlcxRJwIrnLHTxrE1pl+oJ3BTP1K8wL+ViYks5+hAN+nvRCzAkHZ3HS?=
- =?Windows-1252?Q?smKUofA9lMFWvAZ3Y+Ktrzt6B5ZIpPeWN2FnCpCef7q55Lo0XVuYdGXv?=
- =?Windows-1252?Q?+XUycQUehPju9yhMP6BG5EJ9/4XZ6HhJeBtjTahlAlc3opAlwvBF+Nna?=
- =?Windows-1252?Q?T8wfXjqnHxaunnulzlXos5CQ3eqQVWXI4tSIoTo7jfn7KyMM0puIm+Zg?=
- =?Windows-1252?Q?MvaZoUqF1Idy8SXyzIJ3DS4Lmp3Pg6n0gi67xKHo491tzz0UNeIPd92I?=
- =?Windows-1252?Q?gF77CkNJMp5NxDkHiUxtOSd2Ia3NlstdKBEuSSsGErNX/lZwwaRqAOSB?=
- =?Windows-1252?Q?bKEO1X/l8RsxA+TmfKZW2f4dY6JKW8VeQVnwRovLB1J1d+HbaLUGsKJB?=
- =?Windows-1252?Q?Qy6u+zmWDT9xCLD49W3z5GsO3Qq6By3sSUiqfDE0Dk7K74N8N08RfPSG?=
- =?Windows-1252?Q?EVLPyNC617TtgtlEVXSFVO3qR4i1DrXTnuxwGJD/3dWIdgYyvXf9H7kz?=
- =?Windows-1252?Q?N6Ecs1oJ3Vg7axwy2tB6LoIhmSV8rnjLlt9k7PfydaUtldxb4ZXZIPef?=
- =?Windows-1252?Q?lOPJJloprZhYjVf2f0nwOlVkr7JPsPfdSTADLo8dxfXT2f0zwlRKe0ZW?=
- =?Windows-1252?Q?te0/ICV7t7fDj1060N5gW0SruIWlUlYLUNz4vT6FsZ/QrPKIfNu7cBSv?=
- =?Windows-1252?Q?g0euhYdkg86d8cc3E3FOVxOomjXkCwtEUCR1Xf8xjJflZbcnuekkJ5HA?=
- =?Windows-1252?Q?+p5UxPA7T39P9E1AKXDp2P2BLJOeDXhOGWwxDLT06ogFhKJRMcjaLXYD?=
- =?Windows-1252?Q?/LNmL7fkzibI6byNE+1mNJ+wXz4sNLpVJtUYnyFzfciVI3++B/2bE+59?=
- =?Windows-1252?Q?A1jFRa4HtCgkVEMxXo1Tf0pZTV6uTX07BLAoW+i93LCQjT386MvqrEFp?=
- =?Windows-1252?Q?eMzvXtibKUtWEDRfK9EKAW8cxOLhbMCrcGtnPHwX3T0VcLpXViqLlULK?=
- =?Windows-1252?Q?BcESjwV5Aqo2Z9+ExdERoSxbHDmOv6nQctFVDTQobh5Rs+QiW6xNvlwH?=
- =?Windows-1252?Q?LIizcrI1iyYdtzhRyuNFl+pvaQCj4jfRkI5l0jahuyL3Inl86EiXPif+?=
- =?Windows-1252?Q?urGQIkX92WrtVBhEJwmdV8T0FW2px3WkqOss2A6BxbbpAXDBgXpLlrbF?=
- =?Windows-1252?Q?FCtSllpOKuH5+O7S2ZiudzM0QdtiIs5Q3/L7X+ASUs9AigwLOka/P29k?=
- =?Windows-1252?Q?nz2k228MNgIUvcT5U7VetGfaG3J0DwPr24s+cJcqyxvdqkMRhY3qjAvp?=
- =?Windows-1252?Q?DrV9KmJmy6PkDwWBFk99FZYbJ4MsoIuBlEjuUI1b8hwDgKgLaV3KLrVB?=
- =?Windows-1252?Q?gmVWhij87lck/JIDZZf1DuZ36PQt9w3amhn7xZluTTMQIqkVQ3ptFV30?=
- =?Windows-1252?Q?0OZYW3n01dC/plu3BddHNVlkJeJwekguf1wm1wKdLl+7aV1glyRUw8ax?=
- =?Windows-1252?Q?4ahie5fjpouVY1DGBvE=3D?=
+X-Microsoft-Antispam-Message-Info: SFh4iSUca1P3rN/31tG87uwij6ISxVg3Ye2510MMI88Ze/LDXH1p539gR3gTQiWgaaQkLiQp1RNS57PssjN+YeMWZrtCZaqLCl08tR7VfgfJ2j5Eu314J18xJkKDd1/6F+qUzjgFGAtzZIr1T5QslR87NX6KO/ZRjncoGOUnzjwdNOpZGyIMu13WFuecjfz3JOmo0mz6OuQNQ0uXiSiHybaexSPohBq8BbZFmS3NbgOB8TqeH9G/09HkG16DZaK1MZRsAehUCg4+ceSk1n0ZK5BKIk8yi0NiDAq9mLHxdHa0PsGKa8LrZ/wQ9mGATxFnDr1kDDLZLRWdjhx6ZQ1d0gFeM3FiX+00kLlNnXIsmnc5Bo8zQ8UooKsUKKepljlTCE4nuyEMN3pFBXW44Z857J8j9TlLfOQ3GZhZeDM09lp8ICNoMozCXBwilyMKFWMreJARB6v1YI+iaHv6mygRAnfPvWfR3y8yJoQEw8jkO0Wdhm6qZGWqN0c/YL7XI1Im9R0L27Et4Uv/G32wB8q7zctpKm9FYIt3TudV2X/1rn5Q19oyk78WV1D1D4fm+n5T5aKKjVJeys2uXS4ArNq01F0pNbB4NH4vnCz5l70Z03WmneombIWsUvn8F8a2lJyUyJjoLVPgyftBNpDBVIGjvBcC3zqHVohq4CLkWXaEZBzV86Tsif3EFrIGsxtY0o76V/Ijg4CMMB+7idW31KCBpwdL5q1zizBLLLRDbmwXN8iXwz78EjsqHN+Rp4aXwM/ou10anm1UpHZZSorsV75jM7kjQdeZgyiLkGjys3IUJvSGSncYSwhVJSgJOKzDxZxNhNC2VJZSpqhQM6urhzxkDOcdJ3l+kpEVkYC73lC7tPbgth14RLb4Lq769aJUo6ezhtmrabJ3RF6WVr0s1yy+oJMsKNRtWQC9KIiKWpAq3bk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(81166007)(54906003)(47076005)(83380400001)(5660300002)(2616005)(4326008)(1076003)(508600001)(110136005)(426003)(8676002)(2906002)(40460700001)(44832011)(336012)(7696005)(8936002)(36756003)(82310400004)(316002)(186003)(16526019)(26005)(86362001)(6666004)(966005)(70206006)(356005)(70586007)(36860700001)(32563001)(2101003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe738ff9-8325-46aa-6139-08d9db7bec0b
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5346.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 18:45:53.8983
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2022 23:06:33.3236
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45da288f-d73d-48f6-7278-08d9dba05604
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ye5pMiFAme+09cj6fsVwMmDIWr3Cyg//zbMY+TA/sD5+db1tvX/tW1g1HGMDjFJ2/hDnHNdS/b0g61KdRJBF7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0206
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT044.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1357
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
+to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
+disabled on later AMD processors.
 
+This series includes patches with MMIO accesses to registers
+FCH::PM::DECODEEN and FCH::PM::ISACONTROL. The same registers are also
+accessed by the sp5100_tco driver.[1] Synchronization to the MMIO
+registers is required in both drivers.
 
-On 1/19/22 12:39 PM, Guenter Roeck wrote:
-> On 1/19/22 9:47 AM, Wolfram Sang wrote:
->>
->>> I considered sending the request_muxed_mem_region() patch series first but
->>> was concerned the patch might not be accepted without a need or usage. I
->>> didn't see an obvious path forward for the order of submissions because of
->>> the dependencies.
->>
->> My suggestion: make the request_muxed_mem_region() patch the new patch 1
->> of the piix4 series. Then, the user will directly come in the following
->> patches. From this series, I will create an immutable branch which can
->> be pulled in by the watchdog tree. It will then have the dependency for
->> your watchdog series. During next merge window, we (the maintainers)
->> will make sure that I2C will hit Linus' tree before the watchdog tree.
->>
->> This works the other way around as well, if needed. Make
->> request_muxed_mem_region() the first patch of the watchdog series and
->> let me pull an immutable branch from watchdog into I2C.
->>
-> 
-> Creating an immutable branch from i2c is fine. Also, typically Wim sends
-> his pull request late in the commit window, so i2c first should be no
-> problem either.
-> 
-> Also, if the immutable branch only includes the patch introducing
-> request_muxed_mem_region(), the pull order should not really matter.
-> 
-> Guenter
+The first patch creates a macro to request MMIO region using the 'muxed'
+retry logic. This is used in patch 6 to synchronize accesses to EFCH MMIO.
 
-Ok, I'll add the request_muxed_mem_region() patch to the i2c v3 series
-as the first patch.
+The second patch replaces a hardcoded region size with a #define. This is
+to improve maintainability and was requested from v2 review.
 
-Reqards,
-Terry
+The third patch moves duplicated region request/release code into
+functions. This locates related code into functions and reduces code line
+count. This will also make adding MMIO support in patch 6 easier.
+
+The fourth patch moves SMBus controller address detection into a function. 
+This is in preparation for adding MMIO region support.
+
+The fifth patch moves EFCH port selection into a function. This is in
+preparation for adding MMIO region support.
+
+The sixth patch adds MMIO support for region requesting/releasing and
+mapping. This is necessary for using MMIO to detect SMBus controller
+address, enable SMBbus controller region, and control the port select.
+
+The seventh patch updates the SMBus controller address detection to support
+using MMIO. This is necessary because the driver accesses registers
+FCH::PM::DECODEEN and FCH::PM::ISACONTOL during initialization and they are
+only available using MMIO on later AMD processors.
+
+The eighth patch updates the SMBus port selection to support MMIO. This is
+required because port selection control resides in the
+FCH::PM::DECODEEN[smbus0sel] and is only accessible using MMIO on later AMD
+processors.
+
+The ninth patch enables the EFCH MMIO functionality added earlier in this
+series. The SMBus controller's PCI revision ID is used to check if EFCH
+MMIO is supported by HW and should be enabled in the driver.
+
+Based on v5.16.
+
+Testing:
+  Tested on family 19h using:
+    i2cdetect -y 0
+    i2cdetect -y 1
+    i2cdetect -y 2
+
+  - Results using v5.16 and this series applied:
+    # i2cdetect -y 0 
+         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: 10 11 -- -- -- -- -- -- 18 -- -- -- -- -- -- -- 
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: 30 -- -- -- -- 35 36 -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- 4a -- -- -- -- -- 
+    50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    70: -- -- -- 73 -- -- -- --                         
+    # i2cdetect -y 1
+         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: 10 11 -- -- -- -- -- -- 18 -- -- -- -- -- -- -- 
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: 30 -- -- -- -- 35 36 -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- 4a -- -- -- -- -- 
+    50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    70: -- -- -- 73 -- -- -- --                         
+    # i2cdetect -y 2
+         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- -- -- 4c -- -- -- 
+    50: -- 51 -- -- 54 -- -- -- -- -- -- -- -- -- -- -- 
+    60: 60 -- -- 63 -- -- 66 -- -- -- -- 6b -- -- 6e -- 
+    70: 70 71 72 73 74 75 -- 77
+    
+  - Results using v5.16 (w/o this series applied):
+    # i2cdetect -y 0
+         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    70: -- -- -- -- -- -- -- --                         
+    # i2cdetect -y 1
+         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    70: -- -- -- -- -- -- -- --                         
+    # i2cdetect -y 2
+         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    70: -- -- -- -- -- -- -- --
+
+  Also tested using sp5100_tco submitted series listed below.[1]
+  I applied the sp5100_tco v3 series and ran:
+    cat  >> /dev/watchdog
+
+[1] sp5100_tco v3 upstream review:
+Link: https://lore.kernel.org/linux-watchdog/20220118202234.410555-1-terry.bowman@amd.com/
+
+Changes in v3:
+ - Added request_muxed_mem_region() patch (Wolfram, Guenter)
+ - Reduced To/Cc list length. (Andy)
+ 
+Changes in v2:
+ - Split single patch. (Jean Delvare)
+ - Replace constant 2 with SB800_PIIX4_SMB_MAP_SIZE where appropriate.
+   (Jean Delvare)
+ - Shorten SB800_PIIX4_FCH_PM_DECODEEN_MMIO_EN name length to
+   SB800_PIIX4_FCH_PM_DECODEEN_MMIO. (Jean Delvare)
+ - Change AMD_PCI_SMBUS_REVISION_MMIO from 0x59 to 0x51. (Terry Bowman)
+ - Change piix4_sb800_region_setup() to piix4_sb800_region_request().
+   (Jean Delvare)
+ - Change 'SMB' text in  logging to 'SMBus' (Jean Delvare)
+ - Remove unnecessary NULL assignment in piix4_sb800_region_release().
+   (Jean Delvare)
+ - Move 'u8' variable definitions to single line. (Jean Delvare)
+ - Hardcode piix4_setup_sb800_smba() return value to 0 since it is always
+   0. (Jean Delvare)
+
+Terry Bowman (9):
+  kernel/resource: Introduce request_muxed_mem_region()
+  i2c: piix4: Replace hardcoded memory map size with a #define
+  i2c: piix4: Move port I/O region request/release code into functions
+  i2c: piix4: Move SMBus controller base address detect into function
+  i2c: piix4: Move SMBus port selection into function
+  i2c: piix4: Add EFCH MMIO support to region request and release
+  i2c: piix4: Add EFCH MMIO support to SMBus base address detect
+  i2c: piix4: Add EFCH MMIO support for SMBus port select
+  i2c: piix4: Enable EFCH MMIO for Family 17h+
+
+ drivers/i2c/busses/i2c-piix4.c | 208 ++++++++++++++++++++++++++-------
+ include/linux/ioport.h         |   2 +
+ 2 files changed, 165 insertions(+), 45 deletions(-)
+
+-- 
+2.30.2
+
