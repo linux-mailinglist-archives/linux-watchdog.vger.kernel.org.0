@@ -2,56 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 671DD4939BD
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jan 2022 12:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CF84939F6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jan 2022 12:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354249AbiASLmF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Jan 2022 06:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
+        id S1354315AbiASLy6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Jan 2022 06:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236274AbiASLmE (ORCPT
+        with ESMTP id S1346033AbiASLy6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Jan 2022 06:42:04 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5845AC061574;
-        Wed, 19 Jan 2022 03:42:04 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id cx27so9989980edb.1;
-        Wed, 19 Jan 2022 03:42:04 -0800 (PST)
+        Wed, 19 Jan 2022 06:54:58 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B85C061574;
+        Wed, 19 Jan 2022 03:54:57 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id j23so4884016edp.5;
+        Wed, 19 Jan 2022 03:54:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1+B4sq8/6TEaBWgWEnV3mLAtHSqc2KRS8IDGfcK24Xo=;
-        b=n8nJ15XTj9DsA1iPCd3e/D3UZrS/N4+PGtIrYUgw7kROEgh1GxwowG6HwoXX05BAWO
-         sGHJLzDS1rKJs2Zq9cY3XgtXlLUMtVgVUwQDxzzNEx/xehkXRQCxquUBWZYqfSiP9hE/
-         Gtazz9zgEhcnGsHP4RzwMwa5/D7CrJQeQUnFLOsfwcucW4paZmomSPA5K9m3KEoj1Aon
-         JYcDxhzUyq/FmN7uF4ivkqMna+1myZndfJNRlBkO9Sk17KACxC3VStABrGHFzVveCUE7
-         8mo7rZWl+ruqq0X4iZ+2adcfVUZyvYfv98Z0qxROLZ2oZNgpL2kZ/kZ1hgIK02YA9UTG
-         3QNA==
+        bh=PS6rF1/qC7hs4eJz9gJcqA6Dx/xMCX3EO5vU88DfZZc=;
+        b=M7CPAyDLJkK51lli8eGjFkvNRTyy8qp3E++q68zhCMEl86F8fz18sa0Yx7gGvlOIoX
+         yPFtEjvq0TbGkGBVu02onAkQI6LBbYynWWfkRyy+d2U4Tc03AAW1ysx2pA1Coer3Dg0T
+         DFIuCMs+GHVrkJ469lLT8f/wSbYP7HSYAqOBPS6RXjvqdy3ngibKBIgy/291aNvKeAiv
+         uwOtASk4ZQhAZXtbsVrEnQ5LlQSD4/Hy4RAUh5xAeM7W8uZ6Aj12ugMfZg9kDRFfVMWT
+         oJfEI4iGB8yGaRaIy5BD3RCcSnPSIQkbrdpmfw4OSE9l6Z2BvkSNF5MO73+cC+ufgEpk
+         kY/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1+B4sq8/6TEaBWgWEnV3mLAtHSqc2KRS8IDGfcK24Xo=;
-        b=OsPBZXGMcv2utlYGGjKUF6dKR6kUvsu2qlGOKQw7DCAgU3fnzkTQIc3Ou3J7CTlJHr
-         Zv14AM12bIv0STKM9XiWZEl/ChcYKv6q3iAZdKz8pCoNMD4Flr7GayKbHoyPSX5JSwuJ
-         yrrnHtKUwmgUrZ/hzz8FdfNAiZ/rLmsOSLP8TK1VL0KReFFDosCwtwiER2TeFJrK/DmA
-         WxtQlyWLHRbC3ED8hx+1JxJSTVa+duy29aP8ivB4rr3kq88ZFp7ls9yRfuZVsPn3fNZH
-         nIvTSOLvrzPAwDpm1xwbdMJRCZJkqgjZ54Ouv0JnPlpBLxfj44BJ8Hz/NHvNcAjMgS2Z
-         BP6g==
-X-Gm-Message-State: AOAM530qBGwCDosPGICgCx+nYtTXmoocuToI+mEpqWSjEM+6MHrE/82F
-        aFioK0zf7x3ks3P+rPsm/cjT3cMfTbeBoCFJrtw=
-X-Google-Smtp-Source: ABdhPJzAQTlv0R11jEPsza2Ux5Y3MNDCkdqf0w81jskUcd0V7TchTarD2HHgi0MIvTsTn5aA4xMiP5RJxiqLIh+bn+c=
-X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr23728698ejc.639.1642592522875;
- Wed, 19 Jan 2022 03:42:02 -0800 (PST)
+        bh=PS6rF1/qC7hs4eJz9gJcqA6Dx/xMCX3EO5vU88DfZZc=;
+        b=YhEFx4/de4oBebjLG6XRMi5wjAaeZpsErANTilzM1leNmUpmv8g1MMujzky7v7xVNs
+         aAhOs08wfGQ8XFgD8M8WsQRGqpkjn569FQcM7efP3qpqkZwuAyx1c7SVIJ4aGmUYpQfx
+         5fYXLx4VDGtL+J1BL8hqrn293G0cZOZoM2EX/nJ1PFULpJX9suVyGZyE186psB/S1pnD
+         xftWWVAFkyOn7dmJm6rTQFC7GjA4E8OrOb06LGQG4ZENPMZIK64Br8rJEDe4jjLEIhvs
+         5Bh3g6eBiNbgcPackuMs/uNS2bTg83paRoZhtXYRhdpAKiK7N0Z3m4Ng6oXSaH304vSd
+         61vg==
+X-Gm-Message-State: AOAM533RHu8PnN3FOAyCHurJTacZwGsp6RTTX4DaZU11QWaB3MEqLeNp
+        9wmSNaQAv/Vqa4vZBdbt3AlxVd6h9jVoqwer9b+s2wz9YClbwQ==
+X-Google-Smtp-Source: ABdhPJwcCyUxQdrXrMBzu5TYLkAIRDj9GnezxNnu4HntlsC0d3wCBQImpqxaj+4/OZU4XNNp4Rz3aGe6kdVP/nVTdJM=
+X-Received: by 2002:a50:c388:: with SMTP id h8mr24181980edf.218.1642593295904;
+ Wed, 19 Jan 2022 03:54:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118202234.410555-1-terry.bowman@amd.com> <20220118202234.410555-2-terry.bowman@amd.com>
-In-Reply-To: <20220118202234.410555-2-terry.bowman@amd.com>
+References: <20220118202234.410555-1-terry.bowman@amd.com> <20220118202234.410555-3-terry.bowman@amd.com>
+In-Reply-To: <20220118202234.410555-3-terry.bowman@amd.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 19 Jan 2022 13:40:20 +0200
-Message-ID: <CAHp75VfD2iOF+nkCtOGyAd7sadxJWL2yFKo+zXcrv6E-ADU98g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] Watchdog: sp5100_tco: Move timer initialization
- into function
+Date:   Wed, 19 Jan 2022 13:53:13 +0200
+Message-ID: <CAHp75VdBFN+QMJpYDp8ytGGrBKYyjxU8u=Xrn44Lc3UGLPRQOA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] Watchdog: sp5100_tco: Refactor MMIO base address initialization
 To:     Terry Bowman <terry.bowman@amd.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>,
@@ -71,15 +70,17 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:22 PM Terry Bowman <terry.bowman@amd.com> wrote:
+On Tue, Jan 18, 2022 at 10:23 PM Terry Bowman <terry.bowman@amd.com> wrote:
 >
-> Refactor driver's timer initialization into new function. This is needed
-> inorder to support adding new device layouts while using common timer
-> initialization.
+> Combine MMIO base address and alternate base address detection. Combine
+> based on layout type. This will simplify the function by eliminating
+> a switch case.
+>
+> Move existing request/release code into functions. This currently only
+> supports port I/O request/release. The move into a separate function
+> will make it ready for adding MMIO region support.
 
-> Co-developed-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+...
 
 > To: Guenter Roeck <linux@roeck-us.net>
 > To: linux-watchdog@vger.kernel.org
@@ -93,21 +94,120 @@ On Tue, Jan 18, 2022 at 10:22 PM Terry Bowman <terry.bowman@amd.com> wrote:
 > Cc: Robert Richter <rrichter@amd.com>
 > Cc: Thomas Lendacky <thomas.lendacky@amd.com>
 
-Please, do not pollute commit messages with this rather unnecessary
-list of recipients. There are (at least?) two possibilities:
-- use --cc and --to whe run `git send-email`
-- move them under the cutter '--- ' line below
+Same comment to all your patches.
 
-> ---
+...
 
-> +       val = readl(SP5100_WDT_CONTROL(tco->tcobase));
-> +       if (val & SP5100_WDT_DISABLED) {
-> +               dev_err(dev, "Watchdog hardware is disabled\n");
-> +               return(-ENODEV);
+> +static int __sp5100_tco_prepare_base(struct sp5100_tco *tco,
+> +                                    u32 mmio_addr,
+> +                                    const char *dev_name)
+> +{
+> +       struct device *dev = tco->wdd.parent;
 
-Missed space, too many parentheses.
+> +       int ret = 0;
 
+Not really used variable.
+
+> +       if (!mmio_addr)
+> +               return -ENOMEM;
+> +
+> +       if (!devm_request_mem_region(dev, mmio_addr,
+> +                                   SP5100_WDT_MEM_MAP_SIZE,
+> +                                   dev_name)) {
+> +               dev_dbg(dev, "MMIO address 0x%08x already in use\n",
+> +                       mmio_addr);
+> +               return -EBUSY;
 > +       }
+> +
+> +       tco->tcobase = devm_ioremap(dev, mmio_addr,
+> +                                   SP5100_WDT_MEM_MAP_SIZE);
+> +       if (!tco->tcobase) {
+> +               dev_dbg(dev, "MMIO address 0x%08x failed mapping.\n",
+> +                       mmio_addr);
+
+> +               devm_release_mem_region(dev, mmio_addr,
+> +                                       SP5100_WDT_MEM_MAP_SIZE);
+
+Why? If it's a short live mapping, do not use devm.
+
+> +               return -ENOMEM;
+> +       }
+
+> +       dev_info(dev, "Using 0x%08x for watchdog MMIO address\n",
+> +                mmio_addr);
+
+Unneeded noise.
+
+> +       return ret;
+
+On top of above it's a NIH devm_ioremap_resource().
+
+> +}
+
+
+...
+
+> +       int ret = 0;
+
+Redundant assignment.
+
+...
+
+> +       /* Check MMIO address conflict */
+> +       ret = __sp5100_tco_prepare_base(tco, mmio_addr, dev_name);
+
+> +
+> +       /* Check alternate MMIO address conflict */
+
+Unify this with the previous comment.
+
+> +       if (ret)
+> +               ret = __sp5100_tco_prepare_base(tco, alt_mmio_addr,
+> +                                               dev_name);
+
+...
+
+> +               if (alt_mmio_addr & ((SB800_ACPI_MMIO_DECODE_EN |
+> +                                     SB800_ACPI_MMIO_SEL) !=
+> +                                    SB800_ACPI_MMIO_DECODE_EN)) {
+
+The split looks ugly. Consider to use temporary variables or somehow
+rearrange the condition that it doesn't break in the middle of the one
+logical token.
+
+> +                       alt_mmio_addr &= ~0xFFF;
+
+Why capital letters?
+
+> +                       alt_mmio_addr += SB800_PM_WDT_MMIO_OFFSET;
+> +               }
+
+...
+
+> +               if (!(alt_mmio_addr & (((SB800_ACPI_MMIO_DECODE_EN |
+> +                                      SB800_ACPI_MMIO_SEL)) !=
+> +                     SB800_ACPI_MMIO_DECODE_EN))) {
+
+Ditto.
+
+> +                       alt_mmio_addr &= ~0xFFF;
+
+Ditto.
+
+> +                       alt_mmio_addr += SB800_PM_WDT_MMIO_OFFSET;
+
+...
+
+Okay, I see this is the original code like this... Perhaps it makes
+sense to reshuffle them (indentation-wise) at the same time and
+mention this in the changelog.
+
+...
+
+>         release_region(SP5100_IO_PM_INDEX_REG, SP5100_PM_IOPORTS_SIZE);
+
+Is it still needed? I have no context to say if devm_iomap() and this
+are not colliding, please double check the correctness.
 
 -- 
 With Best Regards,
