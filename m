@@ -2,55 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAB8494CA7
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jan 2022 12:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9F2494CEF
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jan 2022 12:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiATLS3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 20 Jan 2022 06:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
+        id S231424AbiATL26 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 Jan 2022 06:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiATLS2 (ORCPT
+        with ESMTP id S231429AbiATL25 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:18:28 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F192DC061574;
-        Thu, 20 Jan 2022 03:18:27 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id b13so27401866edn.0;
-        Thu, 20 Jan 2022 03:18:27 -0800 (PST)
+        Thu, 20 Jan 2022 06:28:57 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FACCC061574;
+        Thu, 20 Jan 2022 03:28:56 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cx27so27485995edb.1;
+        Thu, 20 Jan 2022 03:28:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wYznKRiK5g7CfFmaVdNvA0d2kFj3axg/oPfOo8yHfjI=;
-        b=dN1JxNjzaE6UypiJKF16uylqBOqi3bSxi3++gJeedb4nf+GlXG/9wwYo90YWmgQr3X
-         dLV4hYuvI8QOJnTVGYYznGTVPYs64OOhUq5jERz7xSJv1ZzQAlCcQzjabSrd48mUmPQX
-         CTYWzGzZgBPllFmp9xlrwlZgHxP4Zdvukenk3Cc7gdCLD0vuOn7ObG0dbrFJbwucgSMq
-         XHfCYUm9pyLsJjkq9MTD6t+ojBV0zLrGmYnAsdyYEhvejybXobZ3fqB8SCDwC8hM+S/Y
-         eiidnynCUtj9jxVrBhb8voK3veTIDFDMbeoNhUcQNCj7Fxl4/gZtKSVWCeBQayj/fXuc
-         uN9A==
+        bh=J6y8+5t4F/LCJNkfdsMp+nnf4MqRvaxiESOJ3ybHvPw=;
+        b=SgM/dH91ICYCcYnNb7IV7V9oZriDjfwDicuk18lZoWa9vZ443JLUFhz7kHA/QhnRy/
+         z0ZVYdQ97Va0dWHdG+GQmk42q+HD3QxHjGfSb837/DI7t7RzBB3FC3iJ5KXWeUHMSctd
+         XW+5vGorvITDJ25N3m/wgEuo9FAkRArEGAdrUWyuJm74v9JicIi/30KomqfPDJPMdTNS
+         lzfmg0xGQt0FYaDBilNDX3LdKdBTZk/kTN2jT1PZRX1XCP3MZ0lbRta/dGV0O5PwTcb3
+         omVUPKMyidUyav4bjNXiRh/nqj9aSrKoBrzH2p+D5qQxm6L9T6Q4748yDNBIEsz5Mfzu
+         2OgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wYznKRiK5g7CfFmaVdNvA0d2kFj3axg/oPfOo8yHfjI=;
-        b=d+Z6jnKGckaCdi0jGdHdDvPMbO7yGGw70BDiVmdwTRELtpTB2AZ5rnK1r1Q6kastT7
-         bxV3sr4+erkEWBPvl9nuJF+2fRk8SIFU8Q0zwpYLjM2y8SAFkWbwe4/kAtqscYvNDJWw
-         QsV7ZAWGQv/LSR7te76r0bkRkm6xaw+A5YnLF2vowEN96TJtKa8x9yvTWs7TKeM4oqqI
-         8256IAW9pQpF91wg+G2sEAOxv7j1B2uftv00vwMQ7g+9ypxWHQZjB22LacYs07ms3biL
-         icF8F1kPAafOKGZekZXTVgtFRLmX6eCaYaXtipP9QPM2eVRiYoR8f2JF0B8ZQiMM1tj8
-         HVhA==
-X-Gm-Message-State: AOAM531LnZGTRzJE93T7+H3ZT8dI+kbm2lvsoaa7PKDXR8lp7Hnst/L0
-        M+SZ3jfybuxfb0mqI1hhiEM3toYfrKj26YtZGzU=
-X-Google-Smtp-Source: ABdhPJx767rJLMA6eTAcCaq9p5AJkD+2oVe3jWOiDHLuHzoCUpNyU5SrSAyKwHIGM9AHUpjcTTRQU4a/hfKE05d8Gb8=
-X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr20435289edc.29.1642677506548;
- Thu, 20 Jan 2022 03:18:26 -0800 (PST)
+        bh=J6y8+5t4F/LCJNkfdsMp+nnf4MqRvaxiESOJ3ybHvPw=;
+        b=6ARQwdt/wCtA/YbzTGgUq7YmZfjewtq+oSnG9+Q8d5TvRTfdi8RXK+BYEVq5jBQOF6
+         WB3Fu4OkZGUZ5wjeqlivVu69JDOEghNVTIKAPBWkGdQbkz470K5rZPDcDoK0KYVTHiYd
+         pcK3Te8fZ8iMuDUsd3lnAUBaNUbQ8v/nZlML3k+xdsH+xE7JRp4KKXTsyZJHYb25D0pc
+         YJTI0BUdQiV6k20s5rm9yR3h1kZAWbBfn+nn93C730V4kce/0mXd70xnrkegbbm5mb2V
+         SMwfrXX83WzCuhIizTyvPNRcbYqCMEe7dwNlDLQtniBIIwz6KHIVdt/sPD5b7yUaS7B+
+         DBwQ==
+X-Gm-Message-State: AOAM5337v4b3New8SZpdGU6WBhIsyOjUbhRmdMQZfaQQkzbJI9a6aWp9
+        EKMhLJIRM3I9UBS7mIirHXZEHh/ql5x80oxYs4o=
+X-Google-Smtp-Source: ABdhPJzEt+GzgW0s3PWtot4l1D1Q1PRworkf99qw3GztE5q26pmtd20jAkRtxsynk4b6ltxK3m9ph/MsG6QZbgn/qBk=
+X-Received: by 2002:a17:907:948d:: with SMTP id dm13mr3986568ejc.497.1642678135077;
+ Thu, 20 Jan 2022 03:28:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220119230626.31560-1-terry.bowman@amd.com> <20220119230626.31560-2-terry.bowman@amd.com>
-In-Reply-To: <20220119230626.31560-2-terry.bowman@amd.com>
+References: <20220119230626.31560-1-terry.bowman@amd.com> <20220119230626.31560-8-terry.bowman@amd.com>
+In-Reply-To: <20220119230626.31560-8-terry.bowman@amd.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 13:16:44 +0200
-Message-ID: <CAHp75VcA56fe2Q=LGbmNDknbsupkKnxGqLBvm3ADPBJRAy6rsw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/9] kernel/resource: Introduce request_muxed_mem_region()
+Date:   Thu, 20 Jan 2022 13:27:12 +0200
+Message-ID: <CAHp75VdtnOuBK1ctkjO59vujopCrQ+MQ_LyBB+Mi2HJk4HaJuQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/9] i2c: piix4: Add EFCH MMIO support to SMBus base
+ address detect
 To:     Terry Bowman <terry.bowman@amd.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>,
@@ -71,36 +72,41 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 1:06 AM Terry Bowman <terry.bowman@amd.com> wrote:
+On Thu, Jan 20, 2022 at 1:07 AM Terry Bowman <terry.bowman@amd.com> wrote:
 >
-> Support for requesting muxed memory region is implemented but not
-> currently callable as a macro. Add the request muxed memory
-> region macro.
->
-> MMIO memory accesses can be synchronized using request_mem_region() which
-> is already available. This call will return failure if the resource is
-> busy. The 'muxed' version of this macro will handle a busy resource by
-> using a wait queue to retry until the resource is available.
+> The EFCH SMBus controller's base address is determined using details in
+> FCH::PM::DECODEEN[smbusasfiobase] and FCH::PM::DECODEEN[smbusasfioen].
+> This code also writes to FCH::PM::ISACONTROL[mmioen] to enable MMIO
+> decoding. These register fields were accessed using cd6h/cd7h port I/O.
+> cd6h/cd7h port I/O is no longer available in later AMD processors.
+> Change base address detection to use MMIO instead of port I/O cd6h/cd7h.
 
 ...
 
-> @@ -262,6 +262,8 @@ resource_union(struct resource *r1, struct resource *r2, struct resource *r)
->  #define request_muxed_region(start,n,name)     __request_region(&ioport_resource, (start), (n), (name), IORESOURCE_MUXED)
->  #define __request_mem_region(start,n,name, excl) __request_region(&iomem_resource, (start), (n), (name), excl)
->  #define request_mem_region(start,n,name) __request_region(&iomem_resource, (start), (n), (name), 0)
+> +       if (mmio_cfg.use_mmio) {
 
-> +#define request_muxed_mem_region(start, n, name) \
-> +       __request_region(&iomem_resource, (start), (n), (name), IORESOURCE_MUXED)
+> +               iowrite32(ioread32(mmio_cfg.addr + 4) | SB800_PIIX4_FCH_PM_DECODEEN_MMIO,
+> +                         mmio_cfg.addr + 4);
 
-Looking around tells me that this name is inconsistent, I would expect it to be
+Can you split this to three lines (with the help of a temporary variable)?
 
-request_mem_region_muxed()
+> +               smba_en_lo = ioread8(mmio_cfg.addr);
+> +               smba_en_hi = ioread8(mmio_cfg.addr + 1);
 
->  #define request_mem_region_exclusive(start,n,name) \
->         __request_region(&iomem_resource, (start), (n), (name), IORESOURCE_EXCLUSIVE)
+This makes me wonder if we can replace these two by defining
 
-If you are fine with this, take my
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+  u16 smba_en;
+
+(below also may be easily adjusted for it).
+
+> +       } else {
+> +               outb_p(smb_en, SB800_PIIX4_SMB_IDX);
+> +               smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
+> +               outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
+> +               smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
+> +       }
+>
+>         piix4_sb800_region_release(&PIIX4_dev->dev, &mmio_cfg);
 
 -- 
 With Best Regards,
