@@ -2,55 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 899C4494CF4
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jan 2022 12:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C872494D0B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jan 2022 12:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiATL3x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 20 Jan 2022 06:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S231615AbiATLc0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 Jan 2022 06:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiATL3x (ORCPT
+        with ESMTP id S230322AbiATLcZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 20 Jan 2022 06:29:53 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4163C061574;
-        Thu, 20 Jan 2022 03:29:52 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id p12so27286549edq.9;
-        Thu, 20 Jan 2022 03:29:52 -0800 (PST)
+        Thu, 20 Jan 2022 06:32:25 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96DBC061574;
+        Thu, 20 Jan 2022 03:32:24 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b13so27561886edn.0;
+        Thu, 20 Jan 2022 03:32:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2rVXPQD+T4dndPhuh05MprEXrNciF2+Oy8j9nTyFCUU=;
-        b=QVtMGBcmw7aIRGePBEkEDBybAaTba4c9oKg0m+dy2+YSl7IMLCDYs96kWOoxRs+Ozm
-         R31b9zmEK+EI1Uz+qOnmmT2lxRaU2KW5K+uzqZzp8g93KB54daAxOd+M3k05sHm6kpXx
-         Y71niBy0iiaqP8mOVcK6zkCsXnumnqKgX0w1k+pGni/lwP92sdT9De7yHzNf/G+TNgkp
-         t2SW9zKM/Z74Fe88tzJehDdkReAZFrrgVN5w4E/oWL4xjSdpJHqj0Vo7hkR5+BYOlCuX
-         1IsIwNqHm6H975vfEz8Va+30i9dxoqjpJ6A6ucWPsWsqqLnnzgB3uPavKe+jmwufFJkH
-         RBWw==
+        bh=WwqLFdAqbjzHEvpW1UH/4aQ0iDawRpJsHatZKSEMOk8=;
+        b=cPo6jp4f0KIo9GC4MryHnLdBB3d79OC04LySscCUQzgVHJfgRsxvDxRifOMMyXN2YA
+         2HangN6G4bO4nSooM8s4WBgTcZek0iITbEU29p7sMmNfZNKTqdF+9ElkC1qG7yP88uxa
+         xQYbqNGp15diaAd9PY0pubkt1juVJWACWzjRCP+9rHRHwNlXPwzcKQu8MBrTX3Ln3+Yd
+         rbm4K1nrPXeMLfQljPCtLY+QX9+UGPI3DKWT6WGeKylTs/BwjFCRwssodWGezi4rEe1E
+         o45RslrdeczWVZjSH1NRdUYijqE6TTW+okrp76moFno6wqtlNOFKCymyCHVCkGp6p5ZB
+         rNkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2rVXPQD+T4dndPhuh05MprEXrNciF2+Oy8j9nTyFCUU=;
-        b=PYOQHalu4jmYxjvfppoLJh3GgcBc4KWIkzQGqn50HlL2h3PRx2JeOo3P+6GR79AcOh
-         OMCEZYapWm45IsTJgfLT64EEB+jjGUSZvGUTvuBo1HjeQIes90fGh+G8+k9NYT7kQLBb
-         7F831kuy4SzMxktniTM1VXWNPAAtF4kU4Dho1D307yRT7AOdZ16ACxsNftQqE7d6WJds
-         fTMxZskU5ipGiCSMAdincCgChAu5q8AJ3IMwXROgcOg2HYwF4m/x+TIZFAAk6zbET8Yq
-         QTqwEifSzHTrjJVXNiz+/DqI6G57Cj05UXJyjislCWb9xP8zI+7vmrO3D9Nul3FusKuf
-         fqfg==
-X-Gm-Message-State: AOAM530JL6670+6m1HcaWz/XZIbtPBTFbpVHFxqnYVVSF3YJYDaF6fHF
-        jCtCTq9uLkGQCOXhHVx2y8uSe6Y1paCa/uXbm3g=
-X-Google-Smtp-Source: ABdhPJzeUYMA/JTG3LubYn41e+ve59DUy98mnVmG5v1k9gvkPJC/WxFIwzH8g5bIDVZC9YAX6ECcI1ZwwtUo9+neCZ8=
-X-Received: by 2002:a17:907:6e0b:: with SMTP id sd11mr29384847ejc.132.1642678191307;
- Thu, 20 Jan 2022 03:29:51 -0800 (PST)
+        bh=WwqLFdAqbjzHEvpW1UH/4aQ0iDawRpJsHatZKSEMOk8=;
+        b=PNGn8xzUzewLsY3OP3wVIIfrARFF7Yvfw4dmzP2wjmY4YxVKJSZ9LhG1TjHPqvdVmw
+         Don0WMKSf4xjOBdrnyR9Z6g7sVayvKEA4Db+JywjrKXDO2vK+4M4gSTPVV1VH+rihe+P
+         chKu7FQj6cd5RDnWylpUcoKlku48NtDI0R+SHTLVddRb1XuXanXykrADffRKDrJANXEC
+         Er4o6EIy4obq9WdDt4+RVA0cmY2i0wM16ItBrEvE58pHw7x6nQ+gFtuFv12jX1I6zgqf
+         BOoGROaqsNDF5JQAa9kfU5no5g6l0kAhTLOrK1P4X2d8iprGHwTRje8GXMe4P4/4u0YM
+         CmTw==
+X-Gm-Message-State: AOAM531ThnBVsq5MI+QNR3FF7WCojlpGwWTZId87lXqAQu9D6zDa3qKI
+        3ggT+1Hv7XqYQOay95sD1LDZoIiuaEoRKrxsjL7/VGy/OgdZhw==
+X-Google-Smtp-Source: ABdhPJwb6RqXpYiaUV3x8IjDCNXLKolMSHKJFWmmgMamNK4UgHoa7a/w+4nlHP/suS2cjf2Pt1JVcTChIVOUEa/jsGo=
+X-Received: by 2002:a17:906:8693:: with SMTP id g19mr23021785ejx.579.1642678343371;
+ Thu, 20 Jan 2022 03:32:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20220119230626.31560-1-terry.bowman@amd.com> <20220119230626.31560-9-terry.bowman@amd.com>
-In-Reply-To: <20220119230626.31560-9-terry.bowman@amd.com>
+References: <20220119230626.31560-1-terry.bowman@amd.com>
+In-Reply-To: <20220119230626.31560-1-terry.bowman@amd.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 13:28:09 +0200
-Message-ID: <CAHp75VcGmmRpRD99tFHd7WOPs6uyz3uWuTEoc=G+VmbPYAUvuA@mail.gmail.com>
-Subject: Re: [PATCH v3 8/9] i2c: piix4: Add EFCH MMIO support for SMBus port select
+Date:   Thu, 20 Jan 2022 13:30:40 +0200
+Message-ID: <CAHp75VcUVY+51o0DFhvYTjpydfF=L_rTGan74sZRMPDMmXtsQg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
 To:     Terry Bowman <terry.bowman@amd.com>
 Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>,
@@ -71,22 +72,55 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 1:08 AM Terry Bowman <terry.bowman@amd.com> wrote:
+On Thu, Jan 20, 2022 at 1:06 AM Terry Bowman <terry.bowman@amd.com> wrote:
 >
-> AMD processors include registers capable of selecting between 2 SMBus
-> ports. Port selection is made during each user access by writing to
-> FCH::PM::DECODEEN[smbus0sel]. Change the driver to use MMIO during
-> SMBus port selection because cd6h/cd7h port I/O is not available on
-> later AMD processors.
+> This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
+> to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
+> disabled on later AMD processors.
+>
+> This series includes patches with MMIO accesses to registers
+> FCH::PM::DECODEEN and FCH::PM::ISACONTROL. The same registers are also
+> accessed by the sp5100_tco driver.[1] Synchronization to the MMIO
+> registers is required in both drivers.
+>
+> The first patch creates a macro to request MMIO region using the 'muxed'
+> retry logic. This is used in patch 6 to synchronize accesses to EFCH MMIO.
+>
+> The second patch replaces a hardcoded region size with a #define. This is
+> to improve maintainability and was requested from v2 review.
+>
+> The third patch moves duplicated region request/release code into
+> functions. This locates related code into functions and reduces code line
+> count. This will also make adding MMIO support in patch 6 easier.
+>
+> The fourth patch moves SMBus controller address detection into a function.
+> This is in preparation for adding MMIO region support.
+>
+> The fifth patch moves EFCH port selection into a function. This is in
+> preparation for adding MMIO region support.
+>
+> The sixth patch adds MMIO support for region requesting/releasing and
+> mapping. This is necessary for using MMIO to detect SMBus controller
+> address, enable SMBbus controller region, and control the port select.
+>
+> The seventh patch updates the SMBus controller address detection to support
+> using MMIO. This is necessary because the driver accesses registers
+> FCH::PM::DECODEEN and FCH::PM::ISACONTOL during initialization and they are
+> only available using MMIO on later AMD processors.
+>
+> The eighth patch updates the SMBus port selection to support MMIO. This is
+> required because port selection control resides in the
+> FCH::PM::DECODEEN[smbus0sel] and is only accessible using MMIO on later AMD
+> processors.
+>
+> The ninth patch enables the EFCH MMIO functionality added earlier in this
+> series. The SMBus controller's PCI revision ID is used to check if EFCH
+> MMIO is supported by HW and should be enabled in the driver.
 
-...
-
->  }
-> +
->  /*
-
-Stray change.
-
+In general looks good to me, but I believe it will be much better if
+we agreed on converting driver to use iomap_port() +
+ioreadXX()/iowriteXX() (means dropping I/O accessor _p variants for
+good). This would make the series cleaner and less invasive.
 
 -- 
 With Best Regards,
