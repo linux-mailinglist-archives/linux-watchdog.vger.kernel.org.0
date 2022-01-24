@@ -2,74 +2,53 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0407497289
-	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Jan 2022 16:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F37497AF5
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jan 2022 10:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237609AbiAWP3Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 23 Jan 2022 10:29:24 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:42949 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237622AbiAWP3W (ORCPT
-        <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 23 Jan 2022 10:29:22 -0500
-Received: by mail-ot1-f49.google.com with SMTP id z25-20020a0568301db900b005946f536d85so18770399oti.9;
-        Sun, 23 Jan 2022 07:29:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vBtMdDkgEqeEoPHKPJWwoHxHtflqXLir/arxsM9yH3c=;
-        b=WxlYZ4VXlcBnknyMw4OJk3jValljIGXKJn1cWIcrYQAXXvfDaGOnRxf+3Vu9wmcI9h
-         /FofjJFzDG6LH9ZntUXY/xgFmClv1Ou/CriWKpoD0kuV2vnoAasLe9Y0xEcZfzJopx5g
-         vLpsgQXzeOipJGor/G+Z7gXTOxOebyBMJBLaING4qSrelIRutjbpO7BxYiFe+H9OBV+a
-         oPg1YGPQL9BfK4I1ltLZq3GF+nPdNgGPgp2PpkN/Ng5vigURNijSP6bjyI1lwyNUnHmS
-         oSP79fiaX39xADEy/KySguhX9Tpdl8G9hd1KY5amyZ+Pg2oNs5NpHPUW9c5dCQ7+7Ipp
-         HhEg==
-X-Gm-Message-State: AOAM532KCVjCybNdP9LXWzLO6Nt/rWLQIDNooblcFZaymYrcYPm7K7ME
-        mf0QjqGYLONW6o12We+sIm9Vblqrhw==
-X-Google-Smtp-Source: ABdhPJx7Tv3l6W2Jzt32MCAl8L7wdnDDZsXmhKpUpmfVvuHRqLbW4QxCzmIF3zxFhQqI/B7glrPFfA==
-X-Received: by 2002:a9d:816:: with SMTP id 22mr9119261oty.297.1642951761581;
-        Sun, 23 Jan 2022 07:29:21 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id z1sm3723001oti.29.2022.01.23.07.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 07:29:20 -0800 (PST)
-Received: (nullmailer pid 1429531 invoked by uid 1000);
-        Sun, 23 Jan 2022 15:29:20 -0000
-Date:   Sun, 23 Jan 2022 09:29:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anson Huang <Anson.Huang@nxp.com>,
-        linux-watchdog@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH] dt-bindings: watchdog: fsl-imx7ulp-wdt: Fix
- assigned-clock-parents
-Message-ID: <Ye10TywgYxByt4rE@robh.at.kernel.org>
-References: <20220120172333.1628990-1-robh@kernel.org>
+        id S236269AbiAXJGQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 24 Jan 2022 04:06:16 -0500
+Received: from mail.portyid.pl ([192.36.61.58]:47326 "EHLO mail.portyid.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233232AbiAXJGQ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 24 Jan 2022 04:06:16 -0500
+Received: by mail.portyid.pl (Postfix, from userid 1001)
+        id 04570412E2; Mon, 24 Jan 2022 10:06:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=portyid.pl; s=mail;
+        t=1643015173; bh=+PMi7irkA4XlRgpdW2HqpqcJeZNxKGysf407T0katTE=;
+        h=Date:From:To:Subject:From;
+        b=1DrxQ+LxnDbzrUljwP8S3u+PqP71Kzz1xJHK/a+XgjHFUDJkxz2xwWQm6jVCb3d0i
+         ZPEFSWp++waZYj0CGks6XCTFDVRi/2gtJMsW7/l0hDDOemX69dBlUyBbDGRtJSwCDh
+         en4reDRIZQC6WrN4jZAF58i7NatfhJwbcKP0jdGq57RoUB3ZVIX2vapOHIHMt5dG4H
+         P0j0jQqI1D2IIVc+1qHhpMTr563JAxPJAVdtJXeWOKOyVsMWwu8mBa2lfDlCYexbMe
+         YMeJbVnoQMbWGNHmyaMmUBhYo450swsk60N4rJA4hk68iDac/FWEKsPS9IkjBdgqGJ
+         a9/xlZcQs6c9A==
+Received: by mail.portyid.pl for <linux-watchdog@vger.kernel.org>; Mon, 24 Jan 2022 09:06:07 GMT
+Message-ID: <20220124084500-0.1.1b.5eud.0.11hverhdpc@portyid.pl>
+Date:   Mon, 24 Jan 2022 09:06:07 GMT
+From:   =?UTF-8?Q? "Pawe=C5=82_Jasi=C5=84ski" ?= 
+        <pawel.jasinski@portyid.pl>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: Fotowoltaika - nowe warunki
+X-Mailer: mail.portyid.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220120172333.1628990-1-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 20 Jan 2022 11:23:32 -0600, Rob Herring wrote:
-> The schema has a typo with 'assigned-clocks-parents'. As it is not
-> required to list assigned clocks in bindings, just drop the assigned-clocks
-> property definitions to fix this.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml     | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
+Dzie=C5=84 dobry,
 
-Applied, thanks!
+jeszcze w pierwszej po=C5=82owie 2022 roku wzrosn=C4=85 ceny za wykup ene=
+rgii dla posiadaczy fotowoltaiki.=20
+
+Aby unikn=C4=85=C4=87 umowy na nowych zasadach trzeba zdecydowa=C4=87 si=C4=
+=99 na instalacj=C4=99 paneli PV do ko=C5=84ca marca.=20
+
+Jako firma specjalizuj=C4=85ca si=C4=99 w monta=C5=BCu i serwisie fotowol=
+taiki ch=C4=99tnie podejmiemy si=C4=99 realizacji ca=C5=82ego projektu. S=
+=C4=85 Pa=C5=84stwo zainteresowani?
+
+
+Pozdrawiam
+Pawe=C5=82 Jasi=C5=84ski
