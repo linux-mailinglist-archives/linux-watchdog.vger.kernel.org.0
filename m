@@ -2,53 +2,168 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F37497AF5
-	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jan 2022 10:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B73497E67
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jan 2022 13:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236269AbiAXJGQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 24 Jan 2022 04:06:16 -0500
-Received: from mail.portyid.pl ([192.36.61.58]:47326 "EHLO mail.portyid.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233232AbiAXJGQ (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:06:16 -0500
-Received: by mail.portyid.pl (Postfix, from userid 1001)
-        id 04570412E2; Mon, 24 Jan 2022 10:06:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=portyid.pl; s=mail;
-        t=1643015173; bh=+PMi7irkA4XlRgpdW2HqpqcJeZNxKGysf407T0katTE=;
-        h=Date:From:To:Subject:From;
-        b=1DrxQ+LxnDbzrUljwP8S3u+PqP71Kzz1xJHK/a+XgjHFUDJkxz2xwWQm6jVCb3d0i
-         ZPEFSWp++waZYj0CGks6XCTFDVRi/2gtJMsW7/l0hDDOemX69dBlUyBbDGRtJSwCDh
-         en4reDRIZQC6WrN4jZAF58i7NatfhJwbcKP0jdGq57RoUB3ZVIX2vapOHIHMt5dG4H
-         P0j0jQqI1D2IIVc+1qHhpMTr563JAxPJAVdtJXeWOKOyVsMWwu8mBa2lfDlCYexbMe
-         YMeJbVnoQMbWGNHmyaMmUBhYo450swsk60N4rJA4hk68iDac/FWEKsPS9IkjBdgqGJ
-         a9/xlZcQs6c9A==
-Received: by mail.portyid.pl for <linux-watchdog@vger.kernel.org>; Mon, 24 Jan 2022 09:06:07 GMT
-Message-ID: <20220124084500-0.1.1b.5eud.0.11hverhdpc@portyid.pl>
-Date:   Mon, 24 Jan 2022 09:06:07 GMT
-From:   =?UTF-8?Q? "Pawe=C5=82_Jasi=C5=84ski" ?= 
-        <pawel.jasinski@portyid.pl>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: Fotowoltaika - nowe warunki
-X-Mailer: mail.portyid.pl
+        id S238035AbiAXMAh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 24 Jan 2022 07:00:37 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:50995 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234568AbiAXMAg (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:00:36 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id EC18258031C;
+        Mon, 24 Jan 2022 07:00:35 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 24 Jan 2022 07:00:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=OV6gLk/OEfbUZtYAocx2+toTLnr6A1apdN5v+9
+        F9RTY=; b=fLd2Y+V1a0vi9JcgwuaDt2CN8S3I07gWyFgb+e8X8bOGJz9esjhrU5
+        N4dH5Avtno0kPNTrNM3r2gIDa+4E9VtbP27oEYTjJ897w4XU/TZA5y8pJ+gH/qzC
+        r3aPkvNukErE2++GQ1LCs0ILULlf7B2HSS4oEPE76uoUT9MVBQE2XJ/j8gAptbFD
+        mIS1xVC4tUp8OvdgvXPnt/7jqLZ/7BZ3UZ8/IMOa43qgJE/w/K5w81IM7LEz0zKP
+        CpClrOGWaU89rSljURh53xfDHbPqJk7lWRCDLKvjrE6im8DBT2D5tYyFF+R4Iu2s
+        yDR03+rNfWwuwaDerWsYvjop6CEsvT4g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; bh=OV6gLk/OEfbUZtYAocx2+toTLnr6A
+        1apdN5v+9F9RTY=; b=R5+Qhcet9Ig/qaYUGm9RwNGuyU2SxlsZBrMPwdvFy+qqN
+        TYjgONMtXtYdq4iirYS2/z7NpCzNCgmDNNEim8R3L3Z8YqcbPGyOHTmXfU7Vs2t4
+        S17yR5hDY+a3NR51jQrum1y3ThFaoXTwUtim7185KSk/fo2mF3fw8xoowWm4QNrm
+        Ggkn1hw9uavN8JFLfne3ov2oSmDftANOU0XyMqYbtKrd0iLgczq7ovefMXeEn1em
+        QbURZEK8CnjEXkbVMG2MBrBhDs9Gv5GqOMXh0HuyReRG3For8wQFHjblT7KuKc/O
+        JccGHR6r+fqoWuv3qAIXqhi7xvdDoC8we8DOaliwQ==
+X-ME-Sender: <xms:45TuYTcXjbyCKyeGiFkzeVIPn2ljDtXRmVCCjiL53dCSFzYgikLjOw>
+    <xme:45TuYZNomGvhDc2gj1jI6EKuUQgaFi73vpxK6Wao9uE4KoSH97D_QegdW9qbfVIEw
+    FRW4xsv-I18vfN3MeU>
+X-ME-Received: <xmr:45TuYcjwvJZFDgJ065_m-xC3Peeb9eTsSNfKzVX7VJ7YS1xt8OFROdQrcLpRhlMP1J3wMeRUQUvuoltoQxzO7Xse7zEeH_qw57rRgQ_p3Klt>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdeigdefiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghirhes
+    rghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepjeeliefhvdetgfdtte
+    fhtdegffdtiefffeejiefffeevueeljeehjeevhfffueeknecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhishhtrg
+    hirhdvfedrmhgv
+X-ME-Proxy: <xmx:45TuYU-hCZzld1ZY6aDbsctGrwMSXVTknhNHK7WyjIKlgSxyaKFjXQ>
+    <xmx:45TuYftsHoqSv478OZbWy37arpvNM0stEpjNm527FSXg6myV0CzaMQ>
+    <xmx:45TuYTGFKMdV67MqSoA5kKUfYdeOdEWdJiynvNJ_68Jr4QxU1F564Q>
+    <xmx:45TuYTFGHtt4blJX2oT6J_nq7aM7bl-K33K-y_POj8gzrVixYF6vqg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Jan 2022 07:00:30 -0500 (EST)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     linux-arm-kernel@lists.infradead.org, linux@roeck-us.net,
+        shawnguo@kernel.org, linux-kernel@vger.kernel.org,
+        s.hauer@pengutronix.de, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org
+Cc:     devicetree@vger.kernel.org, festevam@gmail.com, linux-imx@nxp.com,
+        robh+dt@kernel.org, kernel@pengutronix.de,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v2] watchdog: imx2_wdg: Alow ping on suspend
+Date:   Mon, 24 Jan 2022 22:00:27 +1000
+Message-Id: <20220124120027.106754-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dzie=C5=84 dobry,
+The i.MX watchdog cannot be disabled by softwrae once it has been
+enabled. This means that it can't be stopped before suspend.
 
-jeszcze w pierwszej po=C5=82owie 2022 roku wzrosn=C4=85 ceny za wykup ene=
-rgii dla posiadaczy fotowoltaiki.=20
+For systems that enter low power mode this is fine, as the watchdog will
+be automatically stopped by hardwrae in low power mode. Not all i.MX
+platforms support low power mode in the mainline kernel. For example the
+i.MX7D does not enter low power mode and so will be rebooted 2 minutes
+after entering freeze or mem sleep states.
 
-Aby unikn=C4=85=C4=87 umowy na nowych zasadach trzeba zdecydowa=C4=87 si=C4=
-=99 na instalacj=C4=99 paneli PV do ko=C5=84ca marca.=20
+This patch introduces a device tree property "fsl,ping-during-suspend"
+that can be used to enable ping on suspend support for these systems.
 
-Jako firma specjalizuj=C4=85ca si=C4=99 w monta=C5=BCu i serwisie fotowol=
-taiki ch=C4=99tnie podejmiemy si=C4=99 realizacji ca=C5=82ego projektu. S=
-=C4=85 Pa=C5=84stwo zainteresowani?
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ drivers/watchdog/imx2_wdt.c | 27 ++++++++++++++++++++-------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+index 51bfb796898b..d0c5d47ddede 100644
+--- a/drivers/watchdog/imx2_wdt.c
++++ b/drivers/watchdog/imx2_wdt.c
+@@ -66,6 +66,7 @@ struct imx2_wdt_device {
+ 	struct watchdog_device wdog;
+ 	bool ext_reset;
+ 	bool clk_is_on;
++	bool no_ping;
+ };
+ 
+ static bool nowayout = WATCHDOG_NOWAYOUT;
+@@ -312,12 +313,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+ 
+ 	wdev->ext_reset = of_property_read_bool(dev->of_node,
+ 						"fsl,ext-reset-output");
++	/*
++	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
++	 * during suspend.
++	 */
++	wdev->no_ping = !of_device_is_compatible(dev->of_node, "fsl,imx7d-wdt");
+ 	platform_set_drvdata(pdev, wdog);
+ 	watchdog_set_drvdata(wdog, wdev);
+ 	watchdog_set_nowayout(wdog, nowayout);
+ 	watchdog_set_restart_priority(wdog, 128);
+ 	watchdog_init_timeout(wdog, timeout, dev);
+-	watchdog_stop_ping_on_suspend(wdog);
++	if (wdev->no_ping)
++		watchdog_stop_ping_on_suspend(wdog);
+ 
+ 	if (imx2_wdt_is_running(wdev)) {
+ 		imx2_wdt_set_timeout(wdog, wdog->timeout);
+@@ -366,9 +373,11 @@ static int __maybe_unused imx2_wdt_suspend(struct device *dev)
+ 		imx2_wdt_ping(wdog);
+ 	}
+ 
+-	clk_disable_unprepare(wdev->clk);
++	if (wdev->no_ping) {
++		clk_disable_unprepare(wdev->clk);
+ 
+-	wdev->clk_is_on = false;
++		wdev->clk_is_on = false;
++	}
+ 
+ 	return 0;
+ }
+@@ -380,11 +389,14 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
+ 	struct imx2_wdt_device *wdev = watchdog_get_drvdata(wdog);
+ 	int ret;
+ 
+-	ret = clk_prepare_enable(wdev->clk);
+-	if (ret)
+-		return ret;
++	if (wdev->no_ping) {
++		ret = clk_prepare_enable(wdev->clk);
+ 
+-	wdev->clk_is_on = true;
++		if (ret)
++			return ret;
++
++		wdev->clk_is_on = true;
++	}
+ 
+ 	if (watchdog_active(wdog) && !imx2_wdt_is_running(wdev)) {
+ 		/*
+@@ -407,6 +419,7 @@ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
+ 
+ static const struct of_device_id imx2_wdt_dt_ids[] = {
+ 	{ .compatible = "fsl,imx21-wdt", },
++	{ .compatible = "fsl,imx7d-wdt", },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, imx2_wdt_dt_ids);
+-- 
+2.31.1
 
-Pozdrawiam
-Pawe=C5=82 Jasi=C5=84ski
