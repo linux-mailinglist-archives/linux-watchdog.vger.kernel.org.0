@@ -2,53 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF4249AFE3
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Jan 2022 10:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDAE49B43F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Jan 2022 13:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457847AbiAYJRM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 Jan 2022 04:17:12 -0500
-Received: from mail.belongsenergy.pl ([185.45.112.191]:34158 "EHLO
-        mail.belongsenergy.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456037AbiAYJJC (ORCPT
+        id S1454955AbiAYMpo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 Jan 2022 07:45:44 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:34030 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1453058AbiAYMmr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:09:02 -0500
-Received: by mail.belongsenergy.pl (Postfix, from userid 1001)
-        id B251C26649; Tue, 25 Jan 2022 09:00:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=belongsenergy.pl;
-        s=mail; t=1643101235;
-        bh=JAEkA4FCBmQ7T7M+WVau75EdqeDf4MEEr9hE2/l61BA=;
-        h=Date:From:To:Subject:From;
-        b=S+HCql7stNXXaD7f8KkaY/y8ImFQ+V5h+OkfPQHuE+t4jcUL01lZhRRusg9/cZD9+
-         R/4kbYfcpEEhI59HJGpzELjVPH9XUYzk9rDGSg4wPDdeVt+6o91YDQJyIbiv8vEylC
-         kLsOFR2+oWQILKNwQwueTyVepCJOtORbM6K6AGurhIG3jHWNzr7rd8q+18UEl+Tr5S
-         H51BH1S5VoD+qYKxxGGppjFjZatz/mN3ttwfkCS7YX8OOqDfG0WfWAbOBaZVFXDQn0
-         1uLPJpsJ6ctxUHgDNQi1AivSPvqVLzM2aPKcr0TJ4zgccC7xx3KHHK/j8JgSCjgkqb
-         cXY48HblpsMrA==
-Received: by mail.belongsenergy.pl for <linux-watchdog@vger.kernel.org>; Tue, 25 Jan 2022 09:00:32 GMT
-Message-ID: <20220125074500-0.1.7.1xe.0.0qla1rerbo@belongsenergy.pl>
-Date:   Tue, 25 Jan 2022 09:00:32 GMT
-From:   "Maciej Nitycz" <maciej.nitycz@belongsenergy.pl>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.belongsenergy.pl
+        Tue, 25 Jan 2022 07:42:47 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B63912190B;
+        Tue, 25 Jan 2022 12:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643114546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L4S5NdclChYm+37M35o9nCi399I97TtP6PnVsYu3Luo=;
+        b=cn6UKb3+e3xOuCyZLA/JXbztoZ72fKvqnARMBeFm2LtB8oSaRdQv5F908O1I2wDf08gzxH
+        /EizippsU7g68gIdlikKFU6XCnO10lc4UDum7s7w+82iI2zAcbhls18YG/70VMM7hsHTqC
+        q6jErn1qXfNvaX9Fpod+HsGZAGkz6LE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643114546;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L4S5NdclChYm+37M35o9nCi399I97TtP6PnVsYu3Luo=;
+        b=Nn+awNBnaWa92hfYNULDfUwjRuQtUW6Kaii9n2zm2cONe5JlxQeX88E7Ei2skQsvvUC534
+        QneO9FDOr/95mNBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 01BBC13DDC;
+        Tue, 25 Jan 2022 12:42:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GmGoOTHw72E5NAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 25 Jan 2022 12:42:25 +0000
+Date:   Tue, 25 Jan 2022 13:42:24 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v3 3/4] Watchdog: sp5100_tco: Add initialization using
+ EFCH MMIO
+Message-ID: <20220125134224.233b1f80@endymion>
+In-Reply-To: <2b6c9dbb-08c9-e28e-a18c-89f215567c7b@amd.com>
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+        <20220118202234.410555-4-terry.bowman@amd.com>
+        <20220124183651.62d5a97d@endymion>
+        <2b6c9dbb-08c9-e28e-a18c-89f215567c7b@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Mon, 24 Jan 2022 16:36:33 -0600, Terry Bowman wrote:
+> Is your "Tested-by" for patch 3/4 or the sp5100_tco series?
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+For the whole series actually, I only tested with all patches applied,
+not the individual patches.
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
-
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
-
-
-Pozdrawiam,
-Maciej Nitycz
+-- 
+Jean Delvare
+SUSE L3 Support
