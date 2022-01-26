@@ -2,130 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3747E49CAA4
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jan 2022 14:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED0849D505
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jan 2022 23:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238730AbiAZNVW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 26 Jan 2022 08:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238674AbiAZNVV (ORCPT
+        id S232562AbiAZWK4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 26 Jan 2022 17:10:56 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:42512 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbiAZWKz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:21:21 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B40C06161C;
-        Wed, 26 Jan 2022 05:21:21 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id u6so31277024lfm.10;
-        Wed, 26 Jan 2022 05:21:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YPco95DK76ST2okLDtvmb7ONmjJ60F5CP6XpsCcLwEE=;
-        b=IiwOaRq8UgqtFuGmvEUmBRFvzl4BBBZJfV/2aA546FBj9RjSy5YriWH8Ij/uPxhlMF
-         GzkZIMFVgve2fjbpSsLCzDu3xVVwd36KxD0A4AiHKopeH3GTbYNxtceBuVbJ5Hssy1+o
-         CrfrsN0ivl1qp3bfKsd7XYjUKcl1fKueaGXmIbdY4C4Xyx5JE6YXY4070PdeThkvEiz4
-         TIBQGX2wD7f7UkF1MucshaM6LDHL9krimC+ZXIF8OKmckCfwQpVXxy942rZEqtRRD+PK
-         EydeayvTc3XzS/6+X+hxTxO2DNo49vMu8uqr0L0lYuXU4Ek9dGxBrfAZ0xgJeRECXQm4
-         WPGg==
+        Wed, 26 Jan 2022 17:10:55 -0500
+Received: by mail-oi1-f169.google.com with SMTP id v67so2307257oie.9;
+        Wed, 26 Jan 2022 14:10:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YPco95DK76ST2okLDtvmb7ONmjJ60F5CP6XpsCcLwEE=;
-        b=iAKnjvnWJ5XGqt4ICgOztDu/BopFXSMISk9z00TpkxF6dOetsb6QdMK/QizVdR9RcW
-         KD+s15Kx4DKmdYMb98ay2/4W6Z1WtfRMlzJPq4pN4qOvWprPE5r8v3eDi9flt2YGw6KO
-         J+9m5KeyA1vKUacXYnPCXLm2Tv3VoJ1qJSVDtjZaRWG/FGP2X//1exGFpeRgstmL7xE5
-         UJnST3NxIpqpM0gZbc6yq4qhW/IuAI0VVASF6eRCJ+FPWD32WUpQ4fr1PTSQyhh/jGKT
-         56TSAUnq2rK7s9TLPRS6yRH3WvvQb3HgznBKm5YMbg1t/SG4NgYBmWOsYAKy5sVKPWWJ
-         t18Q==
-X-Gm-Message-State: AOAM533bi/T4qpdVXt/+iLLFd7XBhzh0mPIeecwX/4y8wJChFE9RA1A2
-        eFyzocNWJHblwX3X8e2Fn9M=
-X-Google-Smtp-Source: ABdhPJwvfYIYlhGineRB2Z3R2kzRKdspRIwhE1w0KrCVXzH3SX98//6P4de2AQYB1GKHUM16b8graA==
-X-Received: by 2002:a05:6512:3f82:: with SMTP id x2mr19745236lfa.40.1643203279647;
-        Wed, 26 Jan 2022 05:21:19 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id x20sm1234483lfa.252.2022.01.26.05.21.18
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=sbTUBGua5GOv+mh2pAJ2hJl8A5cbSwDu8kHG9Q1vons=;
+        b=H5LBwSD3G9ATR0PGrEm+Z8rXbrV4aBVcBDVIrCKGggnEj4nBPDbySgZWm0m2IA5dRS
+         xQecA+psl1SeBsy1mNHVeRH5K9lEywOTO/pxqEi7jxbDhHL93fjeYdNGHprjd3/8NTCY
+         6Fghv0u186uaE4Aaef4v53tvUwVzm7NEnjpNZR60frwwqgr6WF3XPlEPX8B+6sJzY43W
+         WMLaD0gjgScOfxbtZIhsvYz0jpKHxeRTWBxRUyv6+flEtnQ1ZbdJPMwa48LPHZjbKVhl
+         gr42qNm+nkGLuNRtkKhXUX0pc5/III3Y4bmgpOWFC6HxE55+2BN3XebgSP7oe3Fe+xRb
+         i2tw==
+X-Gm-Message-State: AOAM531OYa+RtY5xkngwQUMifjt26hzJODmfsr8OjCPPlj3/OBRzRMYH
+        5rRNKJRk1wBTn1vx9z2YjFURP1RVzw==
+X-Google-Smtp-Source: ABdhPJyVq86ugfcILsWRaaxFiTHEhQDDDsECW1YhRLC9JSSPSEn6Pz960Q503bvR6Bi+NA7r6zXR8w==
+X-Received: by 2002:a05:6808:13d1:: with SMTP id d17mr5360856oiw.62.1643235054553;
+        Wed, 26 Jan 2022 14:10:54 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id h27sm5107802ote.57.2022.01.26.14.10.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 05:21:19 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 26 Jan 2022 14:10:53 -0800 (PST)
+Received: (nullmailer pid 1535093 invoked by uid 1000);
+        Wed, 26 Jan 2022 22:10:52 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
         bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: watchdog: brcm,bcm7038: add more compatible strings
-Date:   Wed, 26 Jan 2022 14:21:16 +0100
-Message-Id: <20220126132116.11070-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Justin Chen <justinpopo6@gmail.com>,
+        linux-watchdog@vger.kernel.org
+In-Reply-To: <20220126132116.11070-1-zajec5@gmail.com>
+References: <20220126132116.11070-1-zajec5@gmail.com>
+Subject: Re: [PATCH] dt-bindings: watchdog: brcm,bcm7038: add more compatible strings
+Date:   Wed, 26 Jan 2022 16:10:52 -0600
+Message-Id: <1643235052.838468.1535092.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Wed, 26 Jan 2022 14:21:16 +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> This hardware block is used on almost all BCM63xx family chipsets and
+> BCM4908 which reuses a lot of BCM63xx parts. Add relevant compatible
+> strings and also include a generic one.
+> 
+> The only SoC with a different block I found is BCM6838 (thus not included
+> in this change).
+> 
+> It may be worth noting that BCM6338, BCM6345, BCM6348 and BCM63268 don't
+> include "SoftRst" register but that can be handled by drivers based on
+> precise compatible string.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+>  .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 21 +++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
 
-This hardware block is used on almost all BCM63xx family chipsets and
-BCM4908 which reuses a lot of BCM63xx parts. Add relevant compatible
-strings and also include a generic one.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-The only SoC with a different block I found is BCM6838 (thus not included
-in this change).
+yamllint warnings/errors:
 
-It may be worth noting that BCM6338, BCM6345, BCM6348 and BCM63268 don't
-include "SoftRst" register but that can be handled by drivers based on
-precise compatible string.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/brcm,twd.example.dt.yaml: timer-mfd@ff800400: watchdog@28:compatible: ['brcm,bcm7038-wdt'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/brcm,twd.example.dt.yaml: watchdog@28: compatible: ['brcm,bcm7038-wdt'] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 21 +++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+doc reference errors (make refcheckdocs):
 
-diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-index a926809352b8..b663f360f571 100644
---- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-@@ -16,9 +16,22 @@ maintainers:
- 
- properties:
-   compatible:
--    enum:
--      - brcm,bcm6345-wdt
--      - brcm,bcm7038-wdt
-+    items:
-+      - enum:
-+          - brcm,bcm4908-wdt
-+          - brcm,bcm60333-wdt
-+          - brcm,bcm63138-wdt
-+          - brcm,bcm63148-wdt
-+          - brcm,bcm63268-wdt
-+          - brcm,bcm63381-wdt
-+          - brcm,bcm6848-wdt
-+          - brcm,bcm6858-wdt
-+          - brcm,bcm68360-wdt
-+          - brcm,bcm6338-wdt
-+          - brcm,bcm6345-wdt
-+          - brcm,bcm6348-wdt
-+          - brcm,bcm7038-wdt
-+      - const: brcm,bcm63xx-wdt
- 
-   reg:
-     maxItems: 1
-@@ -37,7 +50,7 @@ required:
- examples:
-   - |
-     watchdog@f040a7e8 {
--      compatible = "brcm,bcm7038-wdt";
-+      compatible = "brcm,bcm7038-wdt", "brcm,bcm63xx-wdt";
-       reg = <0xf040a7e8 0x16>;
-       clocks = <&upg_fixed>;
-     };
--- 
-2.31.1
+See https://patchwork.ozlabs.org/patch/1584464
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
