@@ -2,106 +2,130 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6330649BB22
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Jan 2022 19:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3747E49CAA4
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jan 2022 14:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiAYSUM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 Jan 2022 13:20:12 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57752 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiAYSTu (ORCPT
+        id S238730AbiAZNVW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 26 Jan 2022 08:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238674AbiAZNVV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:19:50 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6EEA5212C7;
-        Tue, 25 Jan 2022 18:19:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643134788; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EYunZ4RoY71WcGBVjnlfH7Jsnj8a/5x/WLZYISnv5kU=;
-        b=Yg8a8A43+qs0iROXuqiyEkMGn/gt0w8kSmTijRc6ZqlTwE8ZvkqTefGuSDVjw0Vfsp4UdG
-        +hDL5is/9dHFbj/RElOSckgzFSlS4Hp5E83di20qWVC+gzW+zNNhyn/6YP5ym7n6idgP7v
-        X6cBKnnyLfX98b79hwQtn5CNO8OzcF0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643134788;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EYunZ4RoY71WcGBVjnlfH7Jsnj8a/5x/WLZYISnv5kU=;
-        b=7l03trux4+nWlamKzW+e/bLWCKzT/PbMLeyoxhC8+qS+xpL6pgw853Co4dfjkAVJUErS3n
-        fETsHoSYLylRgfDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ADE8613EE1;
-        Tue, 25 Jan 2022 18:19:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ASHZJ0M/8GHJawAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 25 Jan 2022 18:19:47 +0000
-Date:   Tue, 25 Jan 2022 19:19:46 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-Subject: Re: [PATCH v3 2/4] Watchdog: sp5100_tco: Refactor MMIO base address
- initialization
-Message-ID: <20220125191946.4213cbee@endymion>
-In-Reply-To: <717b02cc-ba0c-ddd4-d15d-cc0828fbb3fd@amd.com>
-References: <20220118202234.410555-1-terry.bowman@amd.com>
-        <20220118202234.410555-3-terry.bowman@amd.com>
-        <20220125144520.17a220bc@endymion>
-        <a55ca093-d8d1-6821-1cb9-18343c6f1fd0@amd.com>
-        <20220125173857.1c85fddc@endymion>
-        <717b02cc-ba0c-ddd4-d15d-cc0828fbb3fd@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Wed, 26 Jan 2022 08:21:21 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B40C06161C;
+        Wed, 26 Jan 2022 05:21:21 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id u6so31277024lfm.10;
+        Wed, 26 Jan 2022 05:21:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YPco95DK76ST2okLDtvmb7ONmjJ60F5CP6XpsCcLwEE=;
+        b=IiwOaRq8UgqtFuGmvEUmBRFvzl4BBBZJfV/2aA546FBj9RjSy5YriWH8Ij/uPxhlMF
+         GzkZIMFVgve2fjbpSsLCzDu3xVVwd36KxD0A4AiHKopeH3GTbYNxtceBuVbJ5Hssy1+o
+         CrfrsN0ivl1qp3bfKsd7XYjUKcl1fKueaGXmIbdY4C4Xyx5JE6YXY4070PdeThkvEiz4
+         TIBQGX2wD7f7UkF1MucshaM6LDHL9krimC+ZXIF8OKmckCfwQpVXxy942rZEqtRRD+PK
+         EydeayvTc3XzS/6+X+hxTxO2DNo49vMu8uqr0L0lYuXU4Ek9dGxBrfAZ0xgJeRECXQm4
+         WPGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YPco95DK76ST2okLDtvmb7ONmjJ60F5CP6XpsCcLwEE=;
+        b=iAKnjvnWJ5XGqt4ICgOztDu/BopFXSMISk9z00TpkxF6dOetsb6QdMK/QizVdR9RcW
+         KD+s15Kx4DKmdYMb98ay2/4W6Z1WtfRMlzJPq4pN4qOvWprPE5r8v3eDi9flt2YGw6KO
+         J+9m5KeyA1vKUacXYnPCXLm2Tv3VoJ1qJSVDtjZaRWG/FGP2X//1exGFpeRgstmL7xE5
+         UJnST3NxIpqpM0gZbc6yq4qhW/IuAI0VVASF6eRCJ+FPWD32WUpQ4fr1PTSQyhh/jGKT
+         56TSAUnq2rK7s9TLPRS6yRH3WvvQb3HgznBKm5YMbg1t/SG4NgYBmWOsYAKy5sVKPWWJ
+         t18Q==
+X-Gm-Message-State: AOAM533bi/T4qpdVXt/+iLLFd7XBhzh0mPIeecwX/4y8wJChFE9RA1A2
+        eFyzocNWJHblwX3X8e2Fn9M=
+X-Google-Smtp-Source: ABdhPJwvfYIYlhGineRB2Z3R2kzRKdspRIwhE1w0KrCVXzH3SX98//6P4de2AQYB1GKHUM16b8graA==
+X-Received: by 2002:a05:6512:3f82:: with SMTP id x2mr19745236lfa.40.1643203279647;
+        Wed, 26 Jan 2022 05:21:19 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id x20sm1234483lfa.252.2022.01.26.05.21.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 05:21:19 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] dt-bindings: watchdog: brcm,bcm7038: add more compatible strings
+Date:   Wed, 26 Jan 2022 14:21:16 +0100
+Message-Id: <20220126132116.11070-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 25 Jan 2022 12:02:45 -0600, Terry Bowman wrote:
-> On 1/25/22 10:38 AM, Jean Delvare wrote:
-> > On Tue, 25 Jan 2022 09:18:59 -0600, Terry Bowman wrote:  
-> >> On 1/25/22 7:45 AM, Jean Delvare wrote:  
-> >>> On Tue, 18 Jan 2022 14:22:32 -0600, Terry Bowman wrote:    
-> >>>> (...)
-> >>>> +	if (ret)
-> >>>> +		dev_err(dev, "Failed to reserve-map MMIO (%X) and alternate MMIO (%X) regions. ret=%X",
-> >>>> +			mmio_addr, alt_mmio_addr, ret);    
-> > 
-> > ... I think that should be a "or" rather than "and", and singular
-> > "region", in this error message? I mean, the plan was never to
-> > reserve-map both of them, if I understand correctly.
-> >   
-> 
-> This dev_err() is executed when both mmio_addr and alt_mmio_addr addresses failed either 
-> devm_request_mem_region() or failed devm_ioremap(). I think the following would be most accurate:
-> 
-> dev_err(dev, 
->         "Failed to reserve or map the MMIO (0x%X) and alternate MMIO (0x%X) regions, ret=%d",
->         mmio_addr, alt_mmio_addr, ret);  
-> 
-> Above is my preference but I don't have a strong opinion. Providing the address and error code 
-> information in the message is most important. I will make the change as you requested. 
+From: Rafał Miłecki <rafal@milecki.pl>
 
-I agree, fine with me, no worry.
+This hardware block is used on almost all BCM63xx family chipsets and
+BCM4908 which reuses a lot of BCM63xx parts. Add relevant compatible
+strings and also include a generic one.
 
+The only SoC with a different block I found is BCM6838 (thus not included
+in this change).
+
+It may be worth noting that BCM6338, BCM6345, BCM6348 and BCM63268 don't
+include "SoftRst" register but that can be handled by drivers based on
+precise compatible string.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 21 +++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+index a926809352b8..b663f360f571 100644
+--- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+@@ -16,9 +16,22 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - brcm,bcm6345-wdt
+-      - brcm,bcm7038-wdt
++    items:
++      - enum:
++          - brcm,bcm4908-wdt
++          - brcm,bcm60333-wdt
++          - brcm,bcm63138-wdt
++          - brcm,bcm63148-wdt
++          - brcm,bcm63268-wdt
++          - brcm,bcm63381-wdt
++          - brcm,bcm6848-wdt
++          - brcm,bcm6858-wdt
++          - brcm,bcm68360-wdt
++          - brcm,bcm6338-wdt
++          - brcm,bcm6345-wdt
++          - brcm,bcm6348-wdt
++          - brcm,bcm7038-wdt
++      - const: brcm,bcm63xx-wdt
+ 
+   reg:
+     maxItems: 1
+@@ -37,7 +50,7 @@ required:
+ examples:
+   - |
+     watchdog@f040a7e8 {
+-      compatible = "brcm,bcm7038-wdt";
++      compatible = "brcm,bcm7038-wdt", "brcm,bcm63xx-wdt";
+       reg = <0xf040a7e8 0x16>;
+       clocks = <&upg_fixed>;
+     };
 -- 
-Jean Delvare
-SUSE L3 Support
+2.31.1
+
