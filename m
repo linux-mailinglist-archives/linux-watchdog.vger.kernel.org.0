@@ -2,148 +2,202 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5980549D55C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jan 2022 23:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1FF49DF8B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Jan 2022 11:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbiAZWUp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 26 Jan 2022 17:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiAZWUo (ORCPT
+        id S239538AbiA0Kf4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 Jan 2022 05:35:56 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:48121 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232813AbiA0Kf4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:20:44 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5666EC06161C;
-        Wed, 26 Jan 2022 14:20:44 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id e9so1613977ljq.1;
-        Wed, 26 Jan 2022 14:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ViD0j19dHef/zxX98qfPF+km5BPG0kg59ySbOeuNW+U=;
-        b=KGSd6IOK0bfDwRYKeFHEH4Z3IGs/2ZGUUYT2BzeclZobE4Tx8TLI8l84f7p4r6njKM
-         T0NPADtZN/S0yUbfd2cpJcCgt8UTJAecVoLEy+A1f6yCUgbB5m5lJFgOycFR53doNsiz
-         4IADPCQ/Oz9BxhxvmQ9J6DpRunORI+DcWQ+ddABCT0TZQ6Shk6PPQtnddNAEcHkLh6Hz
-         JVZpROVCASPeuIn35QHfSL/ub9Lzr2FIivBb4XphfMm3DlQ3NlaLaK/AecRCL5MfPe8n
-         5VbVfz7ytfWl2zkxiHWcc1Ay08nJWQmx0DgWpYGb6Yt1Y9Mo2OeHfe6FRtkSHs9lAay/
-         Lq7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ViD0j19dHef/zxX98qfPF+km5BPG0kg59ySbOeuNW+U=;
-        b=SJRSMXWaIrkvTO5+oAeUbBCJ25ZhbwoEND64JmSMJcd7JcXPBVweBnm5AXfEVVLXhi
-         Gk84bPHR01TdT5eg0baj/gfhrvfNHBK1Cf1hbk0VhSexd4RkQtyo/vS3Gs+XQbFoTUPs
-         zF/xaB1ExFzvHTpdR1VfT7RUXzXvqHAiwx/i8Tp1IC1Smkjb44FA6DJqPQIPGW4x1c5Z
-         y63nHO5hrkhdGlfAzRW5KeUhmgEAoANOYIczdRedBHV3KVbIzHc4/mqq5U7rtruiWoMx
-         0Zz3LS8KnutBETfTOYYFp3lHPEbeCaL78Ol1m8SE3KhIOJurbf9wLvQi1mNY5hGLz0d6
-         JvAg==
-X-Gm-Message-State: AOAM5335hAlJ+gZOXl0+7xrs6NTGmOffXzOpgHecbEDuCyQENpLWwh/C
-        Y8RFFbOTpDolp4G9wfonfYM=
-X-Google-Smtp-Source: ABdhPJyg4kvoA6GP7aZiAZQFNBQJuCF03pPCjpStrURQGY9lXF/mmHU+jNdAl/UXUjKw0U7lIshcwA==
-X-Received: by 2002:a2e:9915:: with SMTP id v21mr807913lji.299.1643235642502;
-        Wed, 26 Jan 2022 14:20:42 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id k17sm1966499lfb.147.2022.01.26.14.20.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:20:42 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2] dt-bindings: watchdog: brcm,bcm7038: add more compatible strings
-Date:   Wed, 26 Jan 2022 23:20:34 +0100
-Message-Id: <20220126222034.16889-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220126132116.11070-1-zajec5@gmail.com>
-References: <20220126132116.11070-1-zajec5@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Thu, 27 Jan 2022 05:35:56 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 16F5E58038C;
+        Thu, 27 Jan 2022 05:35:55 -0500 (EST)
+Received: from imap43 ([10.202.2.93])
+  by compute3.internal (MEProxy); Thu, 27 Jan 2022 05:35:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; bh=dxzJ5fUeSjprnyTxgK84tca3YXNVyE
+        W4kzNdT3N7XRs=; b=WYSm6JGlUapjy+ROB6Osl2/uNm93ldLYQEGkzRKfQWetv1
+        yB5AECNMo7sjYvVH3Y6Ng2RYZ9vq/sHX7NnAC5lkoQrfc+yVRZFn7F80Squ1/jct
+        xpLA7x6NFzCCUQAA5QbIdd1le2HIop9xy/cW7HICJ54Vww21Iw3N3NKamYwvUcEJ
+        ZHVc7mqpwiXxFbplCmLcRTgWWpjV14pdicfS4y685c3glP78TAyiyVqM08DxmVfU
+        n1XiTYPLSl3DXyDtMMrkIj2HNAqlNlNSuLI9IQGD+GDMlxu2tI21e3+7bODoUEU0
+        fosjq5PJLKLUOs9zJEQB6xZVOLtzyTsAagsop/GQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=dxzJ5fUeSjprnyTxg
+        K84tca3YXNVyEW4kzNdT3N7XRs=; b=BBQ9Y1HO5N9/5XJkaJt1E+0HhrJEx4Rwu
+        TlH7DnO0dJ47/B9tfRFEE46LHEUXH8f9QG481w4CxX6uuAUvtRgor9efAN9Fxma7
+        mm84XSfro5yYAawYC8+6XtC0rte/zPAiEfPJiWzBcNkyhAxN5hocZm14ZBKueOLf
+        YTMPmddhG1ETE+oUTuBn2+a9NPEzD1kPec/AFvcnYzSNvjCPgaUI2IAKk0M4yk6+
+        NkrWqtWy5LIafYrjevrSy+d8UlG+rlHf6mtwRp86plkdYM1Od09PSGjI7KndCKWK
+        eDhJ2VzEYMXGhj8WJ9qsRXH6aBcGj+eUMxH1rvVwQVrSKXx+pRD5Q==
+X-ME-Sender: <xms:inXyYRtKBFnbtkyc_ZSUk0s4UvK4WQ3pSBz7WPE04VzYpqd3i2nEog>
+    <xme:inXyYafrQcT3kLlk2v7mA8QcRFzllOQIkGDZWsb8eI9UUTTKHOTlNwpxBE1HF0gix
+    8TnEl54api8Dz43CR4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeefgddukecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpeetlhhishht
+    rghirhcuoegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrth
+    htvghrnhepueffkeevheejledtueevieekleekjefhjeehudfhtdfgtdfgjeejkedvveej
+    veeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:inXyYUy4HdHQrsbzB6HyGapnUWk5HaayeuNjd-IxvfuGj2PlzrSwCQ>
+    <xmx:inXyYYMsL9BtTAkTNwQhJCucFLjecZz3lmuCLsKAlJcbEkHPtf1eTg>
+    <xmx:inXyYR9qG-UjMiwpg9a-cUVvt4rbgOmMTf5KjUMJXYQKwEcytFYtEw>
+    <xmx:i3XyYQZ0xKJ2_6Yw09xuAijegF6L1nSO5_Vl6x0HnkyQtY_ZbvOfGg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 74C71AC0E99; Thu, 27 Jan 2022 05:35:54 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4585-ga9d9773056-fm-20220113.001-ga9d97730
+Mime-Version: 1.0
+Message-Id: <6b0d3b85-a3a3-4f06-a6c1-88fa0a4113f0@www.fastmail.com>
+In-Reply-To: <1a8ee480-b066-8da9-cd63-079e07b7d88a@roeck-us.net>
+References: <20220124120027.106754-1-alistair@alistair23.me>
+ <1a8ee480-b066-8da9-cd63-079e07b7d88a@roeck-us.net>
+Date:   Thu, 27 Jan 2022 20:35:33 +1000
+From:   Alistair <alistair@alistair23.me>
+To:     "Guenter Roeck" <linux@roeck-us.net>,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        s.hauer@pengutronix.de, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org
+Cc:     devicetree@vger.kernel.org, festevam@gmail.com, linux-imx@nxp.com,
+        "Rob Herring" <robh+dt@kernel.org>, kernel@pengutronix.de
+Subject: Re: [PATCH v2] watchdog: imx2_wdg: Alow ping on suspend
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On Tue, 25 Jan 2022, at 2:21 AM, Guenter Roeck wrote:
+> On 1/24/22 04:00, Alistair Francis wrote:
+> > The i.MX watchdog cannot be disabled by softwrae once it has been
+> 
+> s/softwrae/software/
+> 
+> > enabled. This means that it can't be stopped before suspend.
+> > 
+> > For systems that enter low power mode this is fine, as the watchdog will
+> > be automatically stopped by hardwrae in low power mode. Not all i.MX
+> 
+> s/hardwrae/hardware/
+> 
+> > platforms support low power mode in the mainline kernel. For example the
+> > i.MX7D does not enter low power mode and so will be rebooted 2 minutes
+> > after entering freeze or mem sleep states.
+> 
+> I don't think "mem" adds any value here. Just make it sleep states.
+> 
+> > 
+> > This patch introduces a device tree property "fsl,ping-during-suspend"
+> > that can be used to enable ping on suspend support for these systems.
+> > 
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > ---
+> 
+> Change log goes here.
+> 
+> >   drivers/watchdog/imx2_wdt.c | 27 ++++++++++++++++++++-------
+> >   1 file changed, 20 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> > index 51bfb796898b..d0c5d47ddede 100644
+> > --- a/drivers/watchdog/imx2_wdt.c
+> > +++ b/drivers/watchdog/imx2_wdt.c
+> > @@ -66,6 +66,7 @@ struct imx2_wdt_device {
+> >   struct watchdog_device wdog;   
+> >   bool ext_reset;
+> >   bool clk_is_on;
+> 
+> I don't see the purpose of this variable. Unless I am missing something is is set
+> but never used.
 
-This hardware block is used on almost all BCM63xx family chipsets and
-BCM4908 which reuses a lot of BCM63xx parts. Add relevant compatible
-strings and also include a generic one.
+clk_is_on is used in imx2_wdt_ping(), it disables the access if
+the clock isn't running.
 
-The only SoC with a different block I found is BCM6838 (thus not included
-in this change).
+> 
+> > + bool no_ping;
+> >   };
+> >   
+> >   static bool nowayout = WATCHDOG_NOWAYOUT;
+> > @@ -312,12 +313,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+> >   
+> >   wdev->ext_reset = of_property_read_bool(dev->of_node,
+> >   "fsl,ext-reset-output");
+> > + /*
+> > + * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
+> > + * during suspend.
+> > + */
+> > + wdev->no_ping = !of_device_is_compatible(dev->of_node, "fsl,imx7d-wdt");
+> 
+> This is ok as long as there is only a single chip requiring this change.
+> If there are more, the 'data' field in struct of_device_id should be used
+> instead.
 
-It may be worth noting that BCM6338, BCM6345, BCM6348 and BCM63268 don't
-include "SoftRst" register but that can be handled by drivers based on
-precise compatible string.
+I only know of one now, so this should be fine then.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-V2: Sort enum entries & update brcm,twd.yaml
----
- .../devicetree/bindings/mfd/brcm,twd.yaml     |  2 +-
- .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 21 +++++++++++++++----
- 2 files changed, 18 insertions(+), 5 deletions(-)
+Alistair
 
-diff --git a/Documentation/devicetree/bindings/mfd/brcm,twd.yaml b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
-index 634526f790b8..3f5db1990aba 100644
---- a/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
-+++ b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
-@@ -55,7 +55,7 @@ examples:
-         #size-cells = <1>;
- 
-         watchdog@28 {
--            compatible = "brcm,bcm7038-wdt";
-+            compatible = "brcm,bcm4908-wdt", "brcm,bcm63xx-wdt";
-             reg = <0x28 0x8>;
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-index a926809352b8..4d848442913c 100644
---- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-@@ -16,9 +16,22 @@ maintainers:
- 
- properties:
-   compatible:
--    enum:
--      - brcm,bcm6345-wdt
--      - brcm,bcm7038-wdt
-+    items:
-+      - enum:
-+          - brcm,bcm4908-wdt
-+          - brcm,bcm6338-wdt
-+          - brcm,bcm6345-wdt
-+          - brcm,bcm6348-wdt
-+          - brcm,bcm6848-wdt
-+          - brcm,bcm6858-wdt
-+          - brcm,bcm7038-wdt
-+          - brcm,bcm60333-wdt
-+          - brcm,bcm63138-wdt
-+          - brcm,bcm63148-wdt
-+          - brcm,bcm63268-wdt
-+          - brcm,bcm63381-wdt
-+          - brcm,bcm68360-wdt
-+      - const: brcm,bcm63xx-wdt
- 
-   reg:
-     maxItems: 1
-@@ -37,7 +50,7 @@ required:
- examples:
-   - |
-     watchdog@f040a7e8 {
--      compatible = "brcm,bcm7038-wdt";
-+      compatible = "brcm,bcm7038-wdt", "brcm,bcm63xx-wdt";
-       reg = <0xf040a7e8 0x16>;
-       clocks = <&upg_fixed>;
-     };
--- 
-2.31.1
-
+> 
+> >   platform_set_drvdata(pdev, wdog);
+> >   watchdog_set_drvdata(wdog, wdev);
+> >   watchdog_set_nowayout(wdog, nowayout);
+> >   watchdog_set_restart_priority(wdog, 128);
+> >   watchdog_init_timeout(wdog, timeout, dev);
+> > - watchdog_stop_ping_on_suspend(wdog);
+> > + if (wdev->no_ping)
+> > + watchdog_stop_ping_on_suspend(wdog);
+> >   
+> >   if (imx2_wdt_is_running(wdev)) {
+> >   imx2_wdt_set_timeout(wdog, wdog->timeout);
+> > @@ -366,9 +373,11 @@ static int __maybe_unused imx2_wdt_suspend(struct device *dev)
+> >   imx2_wdt_ping(wdog);
+> >   }
+> >   
+> > - clk_disable_unprepare(wdev->clk);
+> > + if (wdev->no_ping) {
+> > + clk_disable_unprepare(wdev->clk);
+> >   
+> > - wdev->clk_is_on = false;
+> > + wdev->clk_is_on = false;
+> > + }
+> >   
+> >   return 0;
+> >   }
+> > @@ -380,11 +389,14 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
+> >   struct imx2_wdt_device *wdev = watchdog_get_drvdata(wdog);
+> >   int ret;
+> >   
+> > - ret = clk_prepare_enable(wdev->clk);
+> > - if (ret)
+> > - return ret;
+> > + if (wdev->no_ping) {
+> > + ret = clk_prepare_enable(wdev->clk);
+> >   
+> > - wdev->clk_is_on = true;
+> > + if (ret)
+> > + return ret;
+> > +
+> > + wdev->clk_is_on = true;
+> > + }
+> >   
+> >   if (watchdog_active(wdog) && !imx2_wdt_is_running(wdev)) {
+> >   /*
+> > @@ -407,6 +419,7 @@ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
+> >   
+> >   static const struct of_device_id imx2_wdt_dt_ids[] = {
+> >   { .compatible = "fsl,imx21-wdt", },
+> > + { .compatible = "fsl,imx7d-wdt", },
+> >   { /* sentinel */ }
+> >   };
+> >   MODULE_DEVICE_TABLE(of, imx2_wdt_dt_ids);
+> 
+> 
