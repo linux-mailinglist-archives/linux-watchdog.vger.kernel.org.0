@@ -2,105 +2,174 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB0B49F583
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jan 2022 09:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B10F64A0249
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jan 2022 21:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243184AbiA1InI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Jan 2022 03:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S230245AbiA1UtH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Jan 2022 15:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiA1InH (ORCPT
+        with ESMTP id S235304AbiA1UtG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:43:07 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551E2C061714
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 Jan 2022 00:43:07 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id k18so9405319wrg.11
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 Jan 2022 00:43:07 -0800 (PST)
+        Fri, 28 Jan 2022 15:49:06 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C9EC061714
+        for <linux-watchdog@vger.kernel.org>; Fri, 28 Jan 2022 12:49:06 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id d138-20020a1c1d90000000b0034e043aaac7so6401576wmd.5
+        for <linux-watchdog@vger.kernel.org>; Fri, 28 Jan 2022 12:49:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
-        b=PgVdTwaLev95hAnaSzXYTDrpZ7jRvS3I/CsU7mm90mlG2eDqG7ukjwqUhyglhPiMtV
-         6/O7+8dzKAuCsNKfZr3djPCG8Vl61sVAxUTB0tAdsqlgo+BgHOowwEk04qpdFyU4uFU8
-         JiJ27vf5HXcKZEyHWPFGmb4c4sQjoyS3TnUbhH3zm2ppHE3CDA9OL+vPTNcBhkZc0nLe
-         938KkhYiYz6tvd0fpRIonvvPkZn7CVg6IpoomvU7es4iVjMEO4yRzAnuZo7s7xwBI/JM
-         pl7YoV4DRcp+vel0TpOn3b3D6jUHkw0BsayJ9nn89ltaFFxqt6p2T1+M9kQLENW05HLQ
-         NjZQ==
+        bh=ESpslK+beLC9Gzg3G2enDgpikVrsMthhnTttwFurZUU=;
+        b=RP0QkJu8mO0x6vjhFhpMD0CnzenWOihV+I6CsFJCVRy1BUBlML6BMv5TM79Q6UwVzV
+         Q49gSU5/RYQINK6HLaS5CXWV3+8gDGaSMWIHm/ccFn/BRCXaIOpv10z43Agz3ChPuvul
+         3RXA5KAwqmXE6cdaADXIegXtdIqwlWYcpe0SLKrVgRMwzPUc9X9C08MF/UzWhBd3dG8i
+         S3T72uFAR+EnJuBdZm1HYdzgaIvKDCI52JDclgzSjeiNiC2MNQqVCcPUi9qr8nU46E4S
+         GGjiWSElUEP+4eoS2KPXkIJ5BuboqXsCAWqTi4pWs/QmGi02kjrzhXRoAGYb+fygo8c3
+         DXUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
-        b=KpFbjGkCZYr1Jun/4LzJwZkxyw04Fxzxe0DsoX/QY+eI/tNwMtsyZCdqE3//NrWaZV
-         PSgzM66G2r/8Hh83RPTMVWQXOzurdRjOE9kxSFJUFCgCoZRamPYsbAMzgNxtO4FofrFS
-         hvA/nKylvytiNAlsMYjC5sZ0RjD3XVI9Uc2et8expdXrjcumgTzSCHBe1kEk1pSf5VOO
-         qNFFKZZipd9erJihFSptVDjNQdMWDIbjTJTZZ+DRVRfmxATiu8BO7A4MDGOST28w6bKc
-         HpLwrap8dPqAHqzwmRZhWI561XilnPaiegwdPcgtepaAjOXXBTU5C52aX2GLhfSYti3H
-         Ry0g==
-X-Gm-Message-State: AOAM533g3Ee4JdVDNXWCxNxE+S2SUYASAOuE7qaUGbs+UXtJBpl1jT7C
-        YfliyEXDqADkgb6JzBAN+4bnZ38I2ysWm+o7AmQ=
-X-Google-Smtp-Source: ABdhPJwsfuoMuZOlFdEMeTv+QPSL7m7neUqXmqA5sOXRjh4lHudjUBrmitl00heeVnj0tVHaC9FYv0MH+lGVMmUKWWI=
-X-Received: by 2002:a5d:434f:: with SMTP id u15mr6301210wrr.153.1643359385733;
- Fri, 28 Jan 2022 00:43:05 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ESpslK+beLC9Gzg3G2enDgpikVrsMthhnTttwFurZUU=;
+        b=epxtUjbQqT15kNta0fwMkCv49cDkSPgPzMBAu7NqCGbX5323hWWguwH+jz7IE4dHi3
+         dZxeuRxs6ZdJNyCK2SszVg7rROGo/G8G0PcZS2TyhWpRA1zjRi0psASfxmlW8eFP0g20
+         mcuLM61cl2ZBWohZpAW3W86e2HY96nBTcrQaFzGIoEZWKFZXUnNrlLIQWnvaA829KgNW
+         umGN8FbJ/NwKJE+qO7KZ2jdBukElQTVdSkt3cdoXJUCc7SyxsUxJvKVAIrxrpguU5YKT
+         Rk52HA1Fa2gxsOzMf0fdEc49m7n2AlVXWyo2CfF5Nt5GSEIZka1//k16rLoGJ5NwAQNG
+         xTNw==
+X-Gm-Message-State: AOAM530xIIEBuUuU3iVakc2rhJ0GnZTBrZl6i0QS6FUuA9fRhQIPBq7C
+        frfNCHcvYcmS7WyHCEXWc16k4g==
+X-Google-Smtp-Source: ABdhPJyRLqDpTjXu1yxfsjJq5ifIjnvy4f+FrKjjZCvZEITvEPBmieIMqU1Z4SOsk40t9IJp++Qv3w==
+X-Received: by 2002:a05:600c:4f8d:: with SMTP id n13mr17088213wmq.45.1643402944959;
+        Fri, 28 Jan 2022 12:49:04 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id l10sm5453398wrz.20.2022.01.28.12.49.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 12:49:04 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     linux@roeck-us.net, robh+dt@kernel.org, linus.walleij@linaro.org,
+        wim@linux-watchdog.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
+Date:   Fri, 28 Jan 2022 20:48:56 +0000
+Message-Id: <20220128204856.494643-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Sender: donnalouisemchince@gmail.com
-Received: by 2002:a5d:6dc8:0:0:0:0:0 with HTTP; Fri, 28 Jan 2022 00:43:05
- -0800 (PST)
-From:   DINA MCKENNA <dinamckennahowley@gmail.com>
-Date:   Fri, 28 Jan 2022 08:43:05 +0000
-X-Google-Sender-Auth: HbGmDEJd3Wpu-JwCY5hqVK8kA6g
-Message-ID: <CA+4RuvuSrU21TgbWKHaEqKbLeGiCeP1macjM7W-rCJJ1WGb+9A@mail.gmail.com>
-Subject: Calvary greetings.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello my dear,
+Converts watchdog/faraday,ftwdt010.txt to yaml.
+This permits to detect missing properties like clocks and resets or
+compatible like moxa,moxart-watchdog.
 
- I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
-suffering from a long time brain tumor, It has defiled all forms of
-medical treatment, and right now I have about a few months to leave,
-according to medical experts. The situation has gotten complicated
-recently with my inability to hear proper, am communicating with you
-with the help of the chief nurse herein the hospital, from all
-indication my conditions is really deteriorating and it is quite
-obvious that, according to my doctors they have advised me that I may
-not live too long, Because this illness has gotten to a very bad
-stage. I plead that you will not expose or betray this trust and
-confidence that I am about to repose on you for the mutual benefit of
-the orphans and the less privilege. I have some funds I inherited from
-my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
-Having known my condition, I decided to donate this fund to you
-believing that you will utilize it the way i am going to instruct
-herein. I need you to assist me and reclaim this money and use it for
-Charity works therein your country  for orphanages and gives justice
-and help to the poor, needy and widows says The Lord." Jeremiah
-22:15-16.=E2=80=9C and also build schools for less privilege that will be
-named after my late husband if possible and to promote the word of God
-and the effort that the house of God is maintained. I do not want a
-situation where this money will be used in an ungodly manner. That's
-why I'm taking this decision. I'm not afraid of death, so I know where
-I'm going. I accept this decision because I do not have any child who
-will inherit this money after I die.. Please I want your sincerely and
-urgent answer to know if you will be able to execute this project for
-the glory of God, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of God be with you and all those that you
-love and care for.
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ .../bindings/watchdog/faraday,ftwdt010.txt    | 22 -------
+ .../bindings/watchdog/faraday,ftwdt010.yaml   | 60 +++++++++++++++++++
+ 2 files changed, 60 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
 
-I'm waiting for your immediate reply..
+diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+deleted file mode 100644
+index 9ecdb502e605..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Faraday Technology FTWDT010 watchdog
+-
+-This is an IP part from Faraday Technology found in the Gemini
+-SoCs and others.
+-
+-Required properties:
+-- compatible : must be one of
+-  "faraday,ftwdt010"
+-  "cortina,gemini-watchdog", "faraday,ftwdt010"
+-- reg : shall contain base register location and length
+-- interrupts : shall contain the interrupt for the watchdog
+-
+-Optional properties:
+-- timeout-sec : the default watchdog timeout in seconds.
+-
+-Example:
+-
+-watchdog@41000000 {
+-	compatible = "faraday,ftwdt010";
+-	reg = <0x41000000 0x1000>;
+-	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+new file mode 100644
+index 000000000000..377529b21267
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Faraday Technology FTWDT010 watchdog
++
++maintainers:
++  - Linus Walleij <linus.walleij@linaro.org>
++
++description: |
++  This is an IP part from Faraday Technology found in the Gemini
++  SoCs and others.
++
++properties:
++  compatible:
++    oneOf:
++      - const: "faraday,ftwdt010"
++      - items:
++          - const: "cortina,gemini-watchdog"
++          - const: "faraday,ftwdt010"
++      - items:
++          - const: "moxa,moxart-watchdog"
++          - const: "faraday,ftwdt010"
++  reg:
++    maxItems: 1
++  resets:
++    maxItems: 1
++  clocks:
++    maxItems: 1
++  clock-names:
++    const: PCLK
++  interrupts:
++    maxItems: 1
++  timeout-sec:
++    description: the default watchdog timeout in seconds.
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    watchdog@41000000 {
++      compatible = "faraday,ftwdt010";
++      reg = <0x41000000 0x1000>;
++      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
++    };
++  - |
++    watchdog: watchdog@98500000 {
++      compatible = "moxa,moxart-watchdog", "faraday,ftwdt010";
++      reg = <0x98500000 0x10>;
++      clocks = <&clk_apb>;
++      clock-names = "PCLK";
++    };
++...
+-- 
+2.34.1
 
-May God Bless you,
-Mrs. Dina. Howley Mckenna.
