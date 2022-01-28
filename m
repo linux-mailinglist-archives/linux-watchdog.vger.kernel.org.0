@@ -2,110 +2,105 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B89E649ED74
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Jan 2022 22:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB0B49F583
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jan 2022 09:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344383AbiA0Vfh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 27 Jan 2022 16:35:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37872 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344382AbiA0Vfe (ORCPT
+        id S243184AbiA1InI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Jan 2022 03:43:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231838AbiA1InH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 27 Jan 2022 16:35:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6350FB8235A;
-        Thu, 27 Jan 2022 21:35:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D5E4C340E4;
-        Thu, 27 Jan 2022 21:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643319332;
-        bh=ZOy4cVJA1BbVLKHYo7U0M4xJy3LtHwHCgHuQBsugCEE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MkqdQm40rU2640o7ii+zKdxu1PyVT+dnjNDKb31tlXi69hKooYzZVjiM6SQr0cQaV
-         hty2UXyrlyz3BFhxjLMfMe9uVS7Yx9f+pU4ls3IDI+9et2W5yGp0A1/2U6SUSfTLZX
-         FfWhg3ckFL5hDCnEKX9ONzdEBc4WQLaWjUnrZyJiDkGViAml2dnjxT5MJdM/BNMLbj
-         T55CcdqTtEE/Legh2uGmcSvAD26QNjTbCoWitUsT9ExVL8kXDzWO3kpw+MOif/PfeP
-         NmMbEmvwWYZHjpff31iPkPp8A5nBtTMr/JEp/dyJi9gfwMED5oMVG7AuwNIV8Xh5Cb
-         BTOzMAwjQN5Qw==
-Date:   Thu, 27 Jan 2022 22:35:28 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        sudheesh.mavila@amd.com,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v3 7/9] i2c: piix4: Add EFCH MMIO support to SMBus base
- address detect
-Message-ID: <YfMQIERpNPUtm8Qg@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <Terry.Bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, sudheesh.mavila@amd.com,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-References: <20220119230626.31560-1-terry.bowman@amd.com>
- <20220119230626.31560-8-terry.bowman@amd.com>
- <CAHp75VdtnOuBK1ctkjO59vujopCrQ+MQ_LyBB+Mi2HJk4HaJuQ@mail.gmail.com>
- <67071cd7-b1b1-7647-3090-365b45b3b1f6@amd.com>
+        Fri, 28 Jan 2022 03:43:07 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551E2C061714
+        for <linux-watchdog@vger.kernel.org>; Fri, 28 Jan 2022 00:43:07 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id k18so9405319wrg.11
+        for <linux-watchdog@vger.kernel.org>; Fri, 28 Jan 2022 00:43:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=PgVdTwaLev95hAnaSzXYTDrpZ7jRvS3I/CsU7mm90mlG2eDqG7ukjwqUhyglhPiMtV
+         6/O7+8dzKAuCsNKfZr3djPCG8Vl61sVAxUTB0tAdsqlgo+BgHOowwEk04qpdFyU4uFU8
+         JiJ27vf5HXcKZEyHWPFGmb4c4sQjoyS3TnUbhH3zm2ppHE3CDA9OL+vPTNcBhkZc0nLe
+         938KkhYiYz6tvd0fpRIonvvPkZn7CVg6IpoomvU7es4iVjMEO4yRzAnuZo7s7xwBI/JM
+         pl7YoV4DRcp+vel0TpOn3b3D6jUHkw0BsayJ9nn89ltaFFxqt6p2T1+M9kQLENW05HLQ
+         NjZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=KpFbjGkCZYr1Jun/4LzJwZkxyw04Fxzxe0DsoX/QY+eI/tNwMtsyZCdqE3//NrWaZV
+         PSgzM66G2r/8Hh83RPTMVWQXOzurdRjOE9kxSFJUFCgCoZRamPYsbAMzgNxtO4FofrFS
+         hvA/nKylvytiNAlsMYjC5sZ0RjD3XVI9Uc2et8expdXrjcumgTzSCHBe1kEk1pSf5VOO
+         qNFFKZZipd9erJihFSptVDjNQdMWDIbjTJTZZ+DRVRfmxATiu8BO7A4MDGOST28w6bKc
+         HpLwrap8dPqAHqzwmRZhWI561XilnPaiegwdPcgtepaAjOXXBTU5C52aX2GLhfSYti3H
+         Ry0g==
+X-Gm-Message-State: AOAM533g3Ee4JdVDNXWCxNxE+S2SUYASAOuE7qaUGbs+UXtJBpl1jT7C
+        YfliyEXDqADkgb6JzBAN+4bnZ38I2ysWm+o7AmQ=
+X-Google-Smtp-Source: ABdhPJwsfuoMuZOlFdEMeTv+QPSL7m7neUqXmqA5sOXRjh4lHudjUBrmitl00heeVnj0tVHaC9FYv0MH+lGVMmUKWWI=
+X-Received: by 2002:a5d:434f:: with SMTP id u15mr6301210wrr.153.1643359385733;
+ Fri, 28 Jan 2022 00:43:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EYvDka3TInQc7Mtl"
-Content-Disposition: inline
-In-Reply-To: <67071cd7-b1b1-7647-3090-365b45b3b1f6@amd.com>
+Sender: donnalouisemchince@gmail.com
+Received: by 2002:a5d:6dc8:0:0:0:0:0 with HTTP; Fri, 28 Jan 2022 00:43:05
+ -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Fri, 28 Jan 2022 08:43:05 +0000
+X-Google-Sender-Auth: HbGmDEJd3Wpu-JwCY5hqVK8kA6g
+Message-ID: <CA+4RuvuSrU21TgbWKHaEqKbLeGiCeP1macjM7W-rCJJ1WGb+9A@mail.gmail.com>
+Subject: Calvary greetings.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hello my dear,
 
---EYvDka3TInQc7Mtl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
+I'm waiting for your immediate reply..
 
-> I'll leave as-is if Ok with you.
-
-Yes, it is OK.
-
-
---EYvDka3TInQc7Mtl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHzEB8ACgkQFA3kzBSg
-KbblYhAAprdLH9goT16zYOlebtVUGbzdVXBxS+AFY82JBO+svDGPAq1mvKgTKEFY
-x4EobR9aVGdWILLXVK7T4YWE8vgH00U7JRDJE7+rYpRcAnQnk4x0j7G59wyMon+b
-D3yHeSduTgECgg5pUFb1Eeds9gXLfqwC8OhM5oZoxaG1o4fnp32wudg/uFsJrnBZ
-pGDOZc7vctlyeJF129Tuhb4C6L67EqymZLHLIgzW8fs+J4CtyEXPeaP4mpEjSfd2
-D9iWNfmlcf4n2Uc9xYN6CKWQkrnTp6pj1pIjjPoJbelRhLhVrG1dXr3Wrdpm6V7U
-3ucnMpF/cCZeepNGGdRBv+RNVwX+kle8pujN/jBhiZghsNy9V3K50jm+xAV85gGI
-2bsh11kZsBmzijOudFgW0cDUyi6Re3spaD9GhaSk/+FqGL5SHNWMxvlX3S+LHmrk
-Mrnq2WI5Ih68nEozYL9S0V+CRa08avetWtzPevqT3J8OOB+XutNIV94jtbygHvuB
-fJY09pYIs1QLjgBjBF8BZEo4YM7H4/gCAfhLiXwYqHCsn0U0dw9GaCNsjJ9tV8oV
-cL2uDE7Y+lCHy1m03niIOc0EcO7m6XWeDj9v8jNZf6jq8X3M0BIuysTqPhScUy33
-MNC5aEfWLRCYeM7QVLemmRpt7yn6d/3sCrkQIFXowcwuJVNpN74=
-=u+ce
------END PGP SIGNATURE-----
-
---EYvDka3TInQc7Mtl--
+May God Bless you,
+Mrs. Dina. Howley Mckenna.
