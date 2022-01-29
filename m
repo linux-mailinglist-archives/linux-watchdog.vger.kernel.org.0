@@ -2,79 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F86A4A2AF8
-	for <lists+linux-watchdog@lfdr.de>; Sat, 29 Jan 2022 02:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 217694A2D33
+	for <lists+linux-watchdog@lfdr.de>; Sat, 29 Jan 2022 09:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352003AbiA2B2g (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Jan 2022 20:28:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344738AbiA2B2f (ORCPT
+        id S1352581AbiA2IkN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 29 Jan 2022 03:40:13 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:38579 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352565AbiA2IkM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Jan 2022 20:28:35 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F079FC061714
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 Jan 2022 17:28:34 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id v186so23689185ybg.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 28 Jan 2022 17:28:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YnL408yl5E7oe6lK7AUbaC/GDNScIkIXY9EvlQAW0Ao=;
-        b=eqVF1lg3pgzakXT6xOZkIF2xXDPP6UxE3KR/JV3NGoqMX7vhjSbcveki1nyWgAWu4R
-         eldMyOl0RfxTIW/myUjNNSHiAyuVXyU4vrr5xoU4tYDKIt8aDEqKIvd+dSzAh35Jzs+l
-         HiM4COEvb3q5jSMslPPyhDPcO0a/Yv7jvJa78gScDhIBuR+sY/xes1i0uIKvXALYzpBW
-         HP35tOO3xD/RsmLS/E/XY5LAkVvvZGqiYaH8c1nVEhF7djFkdbxc2gfVYYP11c9Nq+sZ
-         2HqadhG+K2u0VAlnWB2//JiSWoBlSWlL/vgA+qRRi0jIXr/hGoJrmYx9IYcGo/z56N+u
-         BfXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YnL408yl5E7oe6lK7AUbaC/GDNScIkIXY9EvlQAW0Ao=;
-        b=Xvj/pxC4ORnGTiLZWCtWwUxMt96Dm4qDxzOMKDzb91DXpxMPlT9MEUDwq5sXVrg4RR
-         s3cyMvdSC5DBG2QcUjsDHvjjbl+CfG5IhB+H2hA6XXiieXe+M/IE23iDLLjHOmjyltXG
-         EjeXkS9dny6BxmcopthFHHSZD912QXJ3is8sJFULm2v1h/h2gwmyZjIo5Fa5xjg2iqzG
-         hoyTSOFe9BtlkwGhFpDMbs3Zhgb+UH+anIuAADJb/YGwrZxagf30r9+AJXota4mxZIpc
-         xVk7+O8R9JmgJi0AhUpv7d6e0N5yXE7+he4aHEC7R9cKBLwG6uRu6MRb9U/3AgVxUjUx
-         aoSg==
-X-Gm-Message-State: AOAM5333i9LQi9TEgmXztm9kNiDhDrAUxaTRjgwIfInsqir3fR+mxS7j
-        9gNAcMFW5T8Ij1ofbrK+zbz4Z0zTRpjdoTi8eSGVmQ==
-X-Google-Smtp-Source: ABdhPJyOxR/hLfY/YW/CPAAvPyRzF39DSYZYHe8e6GLXH7Udm3NqkrcFJgLx5/dxpfnPIxL/ulmqAmeeGzOHj1EKjOw=
-X-Received: by 2002:a25:8c3:: with SMTP id 186mr15532059ybi.587.1643419714207;
- Fri, 28 Jan 2022 17:28:34 -0800 (PST)
+        Sat, 29 Jan 2022 03:40:12 -0500
+Received: from [77.244.183.192] (port=65236 helo=[192.168.178.41])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nDjHF-000AeJ-QV; Sat, 29 Jan 2022 09:40:09 +0100
+Message-ID: <4532b372-f16a-7658-623d-71af93306e44@lucaceresoli.net>
+Date:   Sat, 29 Jan 2022 09:40:06 +0100
 MIME-Version: 1.0
-References: <20220128204856.494643-1-clabbe@baylibre.com>
-In-Reply-To: <20220128204856.494643-1-clabbe@baylibre.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 29 Jan 2022 02:28:23 +0100
-Message-ID: <CACRpkdavwgUxGtraAphscqMBvram-=g_quy0+7x33ZQStZgzFg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux@roeck-us.net, robh+dt@kernel.org, wim@linux-watchdog.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog
+ only)
+Content-Language: en-US
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org
+References: <20211211175951.30763-1-luca@lucaceresoli.net>
+ <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
+In-Reply-To: <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 9:49 PM Corentin Labbe <clabbe@baylibre.com> wrote:
+Hi Lee, all,
 
-> Converts watchdog/faraday,ftwdt010.txt to yaml.
-> This permits to detect missing properties like clocks and resets or
-> compatible like moxa,moxart-watchdog.
->
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+On 11/01/22 11:10, Luca Ceresoli wrote:
+> Hi All,
+> 
+> On 11/12/21 18:59, Luca Ceresoli wrote:
+>> Hi,
+>>
+>> this series adds minimal drivers for the Maxim Semiconductor MAX77714
+>> (https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+>> Only RTC and watchdog are implemented by these patches.
+>>
+>> All implemented functionality is tested and working: RTC read/write,
+>> watchdog start/stop/ping/set_timeout.
+>>
+>> Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and Kconfig
+>> indentation and can probably be applied easily.
+>>
+>> Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog driver and
+>> rtc driver.
+> 
+> A gentle ping about this series. It's at v5, all patches have at least
+> one ack/review tag and most patches are unchanged since ~v2. It applies
+> cleanly on current master.
+> 
+> Is there anything I should do to help making progress?
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Apologies for pinging again... but as I got no further comments about
+these patches I guess I can really do nothing at the moment.
 
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
+Lee, is this series completely in charge to you or should it be applied
+by the respective subsystem maintainers?
 
-It's fine if you also add yourself on these, the more maintainers
-the better.
-
-Yours,
-Linus Walleij
+Thanks.
+-- 
+Luca
