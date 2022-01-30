@@ -2,67 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6624C4A33E9
-	for <lists+linux-watchdog@lfdr.de>; Sun, 30 Jan 2022 05:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF8E4A3652
+	for <lists+linux-watchdog@lfdr.de>; Sun, 30 Jan 2022 13:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354223AbiA3E2o (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 29 Jan 2022 23:28:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354221AbiA3E2a (ORCPT
+        id S1354688AbiA3Mp0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 30 Jan 2022 07:45:26 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:59659 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240805AbiA3MpZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 29 Jan 2022 23:28:30 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F9EC061779
-        for <linux-watchdog@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id i10so30409932ybt.10
-        for <linux-watchdog@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
-        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
-         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
-         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
-         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
-         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
-         5U2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
-        b=o7ClnKxdiJdaLl/JSNyYOXuY2F5v3++oYrUgqKmZAsIjTspa8+dVEd/oAgsi0oDgps
-         yP/zTCoLoCtWu6/Ly+bSQUsI8+mRyIVDRluOWDMO2ogNPOsC1jQnjD9Y2CuKV7CVkL/n
-         TzZFfOsreaYE0sWbLLLyxSSHruiOY20AGA9CDDselUuX74TKJD9Km5soKdDmoyQUWkGM
-         Z7CdBmGQQJAXKOtccEhBBx0mPwhN6r4pvZ8aoqSvEY4RxiVGGciRmCbiBa88jWCM14hd
-         dEH9bEd+vCJs6+kPxekwgTaWEjhrMzddTPAioz3P6iEuIhVwSW1KmmQESzxYBag54x/V
-         7TOQ==
-X-Gm-Message-State: AOAM5316OnUHE0ZlONJKNFKKpjJ4opGSRmeJeG09sCUg2aDn/Qq7TLiW
-        j/PPiU4wDpMPc5/rY8lzu9Z5lov+W6qZmaot/RQNBD/hJaU=
-X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
-X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
- Sat, 29 Jan 2022 20:28:13 -0800 (PST)
+        Sun, 30 Jan 2022 07:45:25 -0500
+Received: from [77.244.183.192] (port=61998 helo=[192.168.178.41])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nE9a7-0009fc-63; Sun, 30 Jan 2022 13:45:23 +0100
+Message-ID: <3a186067-50e9-ce20-0ed6-696ca658de4a@lucaceresoli.net>
+Date:   Sun, 30 Jan 2022 13:45:18 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
- 20:28:13 -0800 (PST)
-Reply-To: mrs.bill.chantalone01@gmail.com
-From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
-Date:   Sun, 30 Jan 2022 05:28:13 +0100
-Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
-Subject: Hello....
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog
+ only)
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org
+References: <20211211175951.30763-1-luca@lucaceresoli.net>
+ <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
+ <4532b372-f16a-7658-623d-71af93306e44@lucaceresoli.net>
+ <900e896a-f1c3-aafa-2ed4-a23104d65b74@roeck-us.net>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <900e896a-f1c3-aafa-2ed4-a23104d65b74@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-You have been compensated with the sum of 9.5 million dollars in this
-united nation the payment will be issue into atm visa  card and send
-to you from the santander bank we need your address and your
-Whatsapp number  + 1 6465853907  this my email.ID
-( mrs.bill.chantal.roland@gmail.com )  contact  me
+Hi Guenter,
 
-Thanks my
+On 30/01/22 02:48, Guenter Roeck wrote:
+> On 1/29/22 00:40, Luca Ceresoli wrote:
+>> Hi Lee, all,
+>>
+>> On 11/01/22 11:10, Luca Ceresoli wrote:
+>>> Hi All,
+>>>
+>>> On 11/12/21 18:59, Luca Ceresoli wrote:
+>>>> Hi,
+>>>>
+>>>> this series adds minimal drivers for the Maxim Semiconductor MAX77714
+>>>> (https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+>>>>
+>>>> Only RTC and watchdog are implemented by these patches.
+>>>>
+>>>> All implemented functionality is tested and working: RTC read/write,
+>>>> watchdog start/stop/ping/set_timeout.
+>>>>
+>>>> Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and
+>>>> Kconfig
+>>>> indentation and can probably be applied easily.
+>>>>
+>>>> Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog
+>>>> driver and
+>>>> rtc driver.
+>>>
+>>> A gentle ping about this series. It's at v5, all patches have at least
+>>> one ack/review tag and most patches are unchanged since ~v2. It applies
+>>> cleanly on current master.
+>>>
+>>> Is there anything I should do to help making progress?
+>>
+>> Apologies for pinging again... but as I got no further comments about
+>> these patches I guess I can really do nothing at the moment.
+>>
+>> Lee, is this series completely in charge to you or should it be applied
+>> by the respective subsystem maintainers?
+>>
+> 
+> I hesitated to take the watchdog patches because an earlier patch of the
+> series
+> introduces MFD_MAX77714 and the watchdog Kconfig entry lists it as
+> dependency.
+> I now added patch 7/9 and 8/9 to my watchdog-next tree anyway. If the
+> mfd part
+> doesn't make it we can still decide to take it out at some point.
 
-mrs bill chantal
+OK, thank you! In the meanwhile the kernel test robot also reported a
+build failure due to missing max77714.h file, which is added by patch 5.
+
+> Note that patch 6/9 has already been applied.
+
+Indeed, it's in Linus' master already.
+
+Regards.
+-- 
+Luca
