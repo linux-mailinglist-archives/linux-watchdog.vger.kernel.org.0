@@ -2,185 +2,80 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E76844A3D88
-	for <lists+linux-watchdog@lfdr.de>; Mon, 31 Jan 2022 06:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD284A413B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 31 Jan 2022 12:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbiAaF7N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 31 Jan 2022 00:59:13 -0500
-Received: from mga05.intel.com ([192.55.52.43]:29021 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232130AbiAaF7N (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 31 Jan 2022 00:59:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643608753; x=1675144753;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qSMFveX5lVTif1dekQa1h/+KX8io6E0LwxZv+DKJcis=;
-  b=Vfs+DEMAfzgmsz5ZiOxc6g8yardRZalNNWHKYd/zQxkPhAt+qzEoJt5p
-   0FsdZK0UfUawfHskhRHTHEKEwSq4Ozf+GuiX00NMZCWurYDW/AHs026gr
-   Jf1eCVu6SEwr8HIdQ5ea8Zx1gVrUg4JevF8QyY7+AQuU0lcYKyDN34rim
-   wfu+BrFVZCnz/9YP5hCcuWTrKZzZ1F50y75JuIWytUT+0gozLkV5C0FE9
-   BH4f2AFyjC8ifoo+aoQl96uKRatVooai0E9trs28xyBEONTq0nY/hM6l3
-   u0FrhH4DePNcPizl7Yxh5EOPK/ylsG366x7SC60+U6xaRvT3qYnvd4Biq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="333763378"
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="333763378"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 21:59:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,330,1635231600"; 
-   d="scan'208";a="522530559"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 30 Jan 2022 21:59:09 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEPiW-000RUE-Mz; Mon, 31 Jan 2022 05:59:08 +0000
-Date:   Mon, 31 Jan 2022 13:58:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org
-Subject: Re: [PATCH v4 3/4] Watchdog: sp5100_tco: Add initialization using
- EFCH MMIO
-Message-ID: <202201311323.CdxiFZ8V-lkp@intel.com>
-References: <20220130191225.303115-4-terry.bowman@amd.com>
+        id S1348655AbiAaLDV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 31 Jan 2022 06:03:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358865AbiAaLBz (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Mon, 31 Jan 2022 06:01:55 -0500
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54D9C0613BB
+        for <linux-watchdog@vger.kernel.org>; Mon, 31 Jan 2022 03:00:08 -0800 (PST)
+Received: by mail-il1-x144.google.com with SMTP id z7so11019851ilb.6
+        for <linux-watchdog@vger.kernel.org>; Mon, 31 Jan 2022 03:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
+        b=Ozk//2swZ4n+9EW8l8AJE1MTLlpoaCXK3xzfpPFLIseBsOa2jBlUIXPufJKZWOZJb1
+         LZYSIA+qJrwb7cNfMphudC5bBa0wGV8S3gL6kVVbqGkOdt0B4XP1yUbpKkdrSgOk4SCw
+         v1C0S0LKRkjJnU7f896SEI1wlEalwFx9Rgq5irerJa96uqZolG/hVsfTboEhp5Wo262X
+         Bw5DjIfp6f3BMZuUcN/21CQmX+e0cBVKV6O17yhSY33CkiO9iN1/rQChZ0P/9curfp6q
+         4Ae69srjWBiOD2IQLksGh38ZmWapdFwCTJxNZE6Fdwc1T0xvGWym84r63rPu354BmJN+
+         Mxew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
+        b=SwQmCGy1jiD5ZxYAH+rHwvCdDArJnrnPJc4yhF0Sevq1xmTMD2ZOlu9SOeNACclskU
+         hCT1WSlpChIBoVbDSEfRztKVZzufGPYbDNKuKiOjaN560jh/2qkEGuf7PLMIgtYhaATu
+         LEFe5zUint3EeIivV0NNF6sRu4TuuB/ZUL2uyVlcdKy8JHfOCxO1j5EvPf2o2yydwsLr
+         AnoUo3qOc2zfIumH+hj1MTXM4PeaGyT5ib2ul71+n9X/u/9ZfTJw4IznEQCBLMXrQ5Ym
+         9vU6j05vLak9ScFfaF/Nal2HaXGqCyGHADe7IcOjT2kgp8JyLK38gyN00F2rm35QrRmN
+         xmoA==
+X-Gm-Message-State: AOAM533xzuu0RcULfMyn7w8kk9MfHdyGTRRD+OORgndghz6fAd1NL9x3
+        MkeShXvh3gIca0QAZqlz6LMSMZp6A9x09A55PfY=
+X-Google-Smtp-Source: ABdhPJwTER/p0YcvOwwJid91RzPvkEw8DmHtUlVRny5nV0kksgWcR6ScIqwhpLtpjii0MFHZVgmhnLw6wJn43CXNw30=
+X-Received: by 2002:a92:ca4f:: with SMTP id q15mr10723189ilo.181.1643626807913;
+ Mon, 31 Jan 2022 03:00:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130191225.303115-4-terry.bowman@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Reply-To: daniellakyle60@gmail.com
+Sender: drdanielmorris11111@gmail.com
+Received: by 2002:a05:6638:1248:0:0:0:0 with HTTP; Mon, 31 Jan 2022 03:00:07
+ -0800 (PST)
+From:   Mrs daniell akyle <daniellakyle60@gmail.com>
+Date:   Mon, 31 Jan 2022 12:00:07 +0100
+X-Google-Sender-Auth: juhwXopT4FowK4J6T8rApuMl0w4
+Message-ID: <CAKFcj-OsHQc6b32Puiy4zbkpRh0TFP-Vu0BdoENoHiCXtxRwQQ@mail.gmail.com>
+Subject: Ahoj
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Terry,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220131/202201311323.CdxiFZ8V-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f1c18acb07aa40f42b87b70462a6d1ab77a4825c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Terry-Bowman/Watchdog-sp5100_tco-Replace-cd6h-cd7h-port-I-O-accesses-with-MMIO-accesses/20220131-031525
-        git checkout 92f6f8c644fc7df3d1f3f8e32f8b1f4efc3f321f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/watchdog/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/watchdog/sp5100_tco.c:272:60: warning: format specifies type 'unsigned int' but the argument has type 'void *' [-Wformat]
-           dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
-                                  ~~~~                               ^~~~~~~~~~~~
-   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
-           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                    ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/watchdog/sp5100_tco.c:345:8: error: implicit declaration of function 'request_mem_region_muxed' [-Werror,-Wimplicit-function-declaration]
-           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-                 ^
->> drivers/watchdog/sp5100_tco.c:345:6: warning: incompatible integer to pointer conversion assigning to 'struct resource *' from 'int' [-Wint-conversion]
-           res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 1 error generated.
-
-
-vim +345 drivers/watchdog/sp5100_tco.c
-
-   333	
-   334	static int sp5100_tco_setupdevice_mmio(struct device *dev,
-   335					       struct watchdog_device *wdd)
-   336	{
-   337		struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
-   338		const char *dev_name = SB800_DEVNAME;
-   339		u32 mmio_addr = 0, alt_mmio_addr = 0;
-   340		struct resource *res;
-   341		void __iomem *addr;
-   342		int ret;
-   343		u32 val;
-   344	
- > 345		res = request_mem_region_muxed(EFCH_PM_ACPI_MMIO_PM_ADDR,
-   346					       EFCH_PM_ACPI_MMIO_PM_SIZE,
-   347					       "sp5100_tco");
-   348	
-   349		if (!res) {
-   350			dev_err(dev,
-   351				"Memory region 0x%08x already in use\n",
-   352				EFCH_PM_ACPI_MMIO_PM_ADDR);
-   353			return -EBUSY;
-   354		}
-   355	
-   356		addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR, EFCH_PM_ACPI_MMIO_PM_SIZE);
-   357		if (!addr) {
-   358			dev_err(dev, "Address mapping failed\n");
-   359			ret = -ENOMEM;
-   360			goto out;
-   361		}
-   362	
-   363		/*
-   364		 * EFCH_PM_DECODEEN_WDT_TMREN is dual purpose. This bitfield
-   365		 * enables sp5100_tco register MMIO space decoding. The bitfield
-   366		 * also starts the timer operation. Enable if not already enabled.
-   367		 */
-   368		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
-   369		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-   370			efch_update_pm_reg8(addr, EFCH_PM_DECODEEN, 0xff,
-   371					    EFCH_PM_DECODEEN_WDT_TMREN);
-   372		}
-   373	
-   374		/* Error if the timer could not be enabled */
-   375		val = efch_read_pm_reg8(addr, EFCH_PM_DECODEEN);
-   376		if (!(val & EFCH_PM_DECODEEN_WDT_TMREN)) {
-   377			dev_err(dev, "Failed to enable the timer\n");
-   378			ret = -EFAULT;
-   379			goto out;
-   380		}
-   381	
-   382		mmio_addr = EFCH_PM_WDT_ADDR;
-   383	
-   384		/* Determine alternate MMIO base address */
-   385		val = efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL);
-   386		if (val & EFCH_PM_ISACONTROL_MMIOEN)
-   387			alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
-   388				EFCH_PM_ACPI_MMIO_WDT_OFFSET;
-   389	
-   390		ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
-   391		if (!ret) {
-   392			tco_timer_enable_mmio(addr);
-   393			ret = sp5100_tco_timer_init(tco);
-   394		}
-   395	
-   396	out:
-   397		if (addr)
-   398			iounmap(addr);
-   399	
-   400		release_resource(res);
-   401	
-   402		return ret;
-   403	}
-   404	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Pozdravy
+Jmenuji se pan=C3=AD Daniella Kyleov=C3=A1, je mi 58 let
+Filip=C3=ADny. V sou=C4=8Dasn=C3=A9 dob=C4=9B jsem hospitalizov=C3=A1n na F=
+ilip=C3=ADn=C3=A1ch, kde jsem
+podstupuje l=C3=A9=C4=8Dbu akutn=C3=ADho karcinomu j=C3=ADcnu. jsem um=C3=
+=ADraj=C3=ADc=C3=AD,
+vdova, kter=C3=A1 se rozhodla darovat =C4=8D=C3=A1st sv=C3=A9ho majetku spo=
+lehliv=C3=A9 osob=C4=9B
+kter=C3=A1 tyto pen=C3=ADze pou=C5=BEije na pomoc chud=C3=BDm a m=C3=A9n=C4=
+=9B privilegovan=C3=BDm. Chci
+poskytnout dar ve v=C3=BD=C5=A1i 3 700 000 =C2=A3 na sirotky nebo charitati=
+vn=C3=AD organizace
+ve va=C5=A1=C3=AD oblasti. Zvl=C3=A1dne=C5=A1 to? Pokud jste ochotni tuto n=
+ab=C3=ADdku p=C5=99ijmout
+a ud=C4=9Blejte p=C5=99esn=C4=9B tak, jak v=C3=A1m =C5=99=C3=ADk=C3=A1m, pa=
+k se mi vra=C5=A5te pro dal=C5=A1=C3=AD vysv=C4=9Btlen=C3=AD.
+pozdravy
+Pan=C3=AD Daniella Kyleov=C3=A1
