@@ -2,59 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAA84A6F55
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Feb 2022 12:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CF14A7305
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Feb 2022 15:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343627AbiBBLCM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Feb 2022 06:02:12 -0500
-Received: from mail.profitfirm24.com.pl ([212.237.10.110]:58952 "EHLO
-        mail.profitfirm24.com.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343621AbiBBLCL (ORCPT
+        id S1344933AbiBBO1T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Feb 2022 09:27:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59336 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237320AbiBBO1S (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:02:11 -0500
-Received: by mail.profitfirm24.com.pl (Postfix, from userid 1001)
-        id 30A61AA5DC; Tue,  1 Feb 2022 09:17:35 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitfirm24.com.pl;
-        s=mail; t=1643707290;
-        bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
-        h=Date:From:To:Subject:From;
-        b=cyOMrAyZCBO0ATjkMg6xwebBNxeAo6oA6Boct9U7y/b7dag+NIAZdHBtIpsMjo6J6
-         soo5rEezMs+3QhIDjzPA09tLsil9KdaP0mTo2PCxWSd3p4FD07xvuHfDhOBBJ15YqJ
-         PQYL2Gs8WidB8PM7+Rdsd8VQMp1gA12JJb7rVUEUu0acIk8xdXq3aPVm4V+Moj1Ytu
-         SoH6aCtolUEfQwZn/tv6k7ZaG9LJIYXI79MmBSFENnKQtUahQjMZTcJfK0KbzQP0lh
-         cvHNjXytSwjgxjdiYsAL0wQ7vJtMCpk/Ve8le4uXGdaIPUizWzXs7Twa7pF/KeYsYb
-         1Rs90cEuO+s4A==
-Received: by profitfirm24.com.pl for <linux-watchdog@vger.kernel.org>; Tue,  1 Feb 2022 09:17:20 GMT
-Message-ID: <20220201074652-0.1.b.2yyf.0.06asbm1gjn@profitfirm24.com.pl>
-Date:   Tue,  1 Feb 2022 09:17:20 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@profitfirm24.com.pl>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.profitfirm24.com.pl
+        Wed, 2 Feb 2022 09:27:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29FA1B83104;
+        Wed,  2 Feb 2022 14:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28731C340EB;
+        Wed,  2 Feb 2022 14:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643812035;
+        bh=Py5hbDI7QFg9kVgjWXWbp00X8G2g7PgLmwuqyEPZHcE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y6WNv3ThAYd/x/EDjfwGovlFMA408t9XdMxIed4ZEGXGGpud+xxJI10oeC77BeuxT
+         a8D20GPdAXdKobH+GNm/wjm4/k84/hKbkkVpcr/8Ain/mfz3ouSWBV/HxVZpE3aTDh
+         8oTVBs/oGBCEGCGFlwtdEbxD2NsOsDGuRcNMDL38Y0IoqkriqecZJrcpI7TO7OCcu0
+         BfKet0eHIx60TX4k7cyj770tBbY09hCqcDa1Xh5eeE0wTqxiYyxAjUG++Ios4P0O0f
+         PRf6TuUm6Qf5Eq9CHvgVAI4MlGgFRGGs81AWgSF1iDDxccoxLJaxdZw+bBui1IESoC
+         76Phn4iNqZyiA==
+Date:   Wed, 2 Feb 2022 19:57:12 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, hsinyi@chromium.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] dt-bindings: phy: Add compatible for Mediatek
+ MT8186
+Message-ID: <YfqUwO16KxmBE7vP@matsya>
+References: <20220128062050.23978-1-allen-kh.cheng@mediatek.com>
+ <20220128062050.23978-6-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128062050.23978-6-allen-kh.cheng@mediatek.com>
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 28-01-22, 14:20, allen-kh.cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> 
+> This commit adds dt-binding documentation of T-Phy for Mediatek MT8186 SoC
+> Platform.
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+Applied, thanks
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
-
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
-
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
-
-
-Pozdrawiam
-Arkadiusz Soko=C5=82owski
+-- 
+~Vinod
