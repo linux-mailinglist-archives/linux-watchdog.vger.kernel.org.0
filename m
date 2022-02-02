@@ -1,169 +1,143 @@
 Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 459E74AA01A
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Feb 2022 20:31:48 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id C4CDF4AAD9D
+	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Feb 2022 04:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233906AbiBDTbq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 4 Feb 2022 14:31:46 -0500
-Received: from mga11.intel.com ([192.55.52.93]:62070 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233868AbiBDTbp (ORCPT <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:31:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644003105; x=1675539105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KEUCBTML5VbcmuMzVJyi8tE4jl/Fqu9D9myYJv94nJo=;
-  b=D84xJE6hbqb3Ffx2IpteircOx4ffxmhtaAjPH7oP8Mjc2xoe7iHSp/wb
-   xfxmf6/BwW3KgPdM2hKjsW520ADiy2YA8GGE6YEQXdMdShQr+2nXbJrYM
-   ZMZ6bj9cS3n/GgARde/gTWhN6wT+2RLLhRKKvU6MF9+/zqbtB3QXFbC0g
-   PTpmrjsI9uoHud5fZ4+pcsCCeMnigD+tOjRV2pYjZAiGj1xWP5JrmmX8G
-   SROtxrypaCV7PvNFpWmFuR2RAvbQ4ZmBJOM6XOKpQ4MaTvs6riG+/6/6A
-   1APIoc04qU/VpdtLmpf65t211yPJu/7TS8CA/tPAvDnd6S/0D9je9f/+0
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="246018741"
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="246018741"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:31:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="620916838"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Feb 2022 11:31:42 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nG4J4-000Y4Q-9u; Fri, 04 Feb 2022 19:31:42 +0000
-Date:   Sat, 5 Feb 2022 03:30:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
-        geert+renesas@glider.be, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     kbuild-all@lists.01.org, Phil Edworthy <phil.edworthy@renesas.com>,
-        Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 6/6] watchdog: Add Renesas RZ/N1 Watchdog driver
-Message-ID: <202202050309.wemilTv5-lkp@intel.com>
-References: <20220204161806.3126321-7-jjhiblot@traphandler.com>
+        id S1381160AbiBFDao (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 5 Feb 2022 22:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232973AbiBFDan (ORCPT
+        <rfc822;linux-watchdog@vger.kernel.org>);
+        Sat, 5 Feb 2022 22:30:43 -0500
+X-Greylist: delayed 10802 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Feb 2022 19:30:41 PST
+Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C4FC043189
+        for <linux-watchdog@vger.kernel.org>; Sat,  5 Feb 2022 19:30:41 -0800 (PST)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx2.smtp.larsendata.com (Halon) with ESMTPS
+        id 12f502cb-8454-11ec-ac19-0050568cd888;
+        Wed, 02 Feb 2022 18:15:17 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 67A6F194BFA;
+        Wed,  2 Feb 2022 19:14:11 +0100 (CET)
+Date:   Wed, 2 Feb 2022 19:14:08 +0100
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Message-ID: <YfrJ8JWjyH9ptV4z@ravnborg.org>
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204161806.3126321-7-jjhiblot@traphandler.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Jean-Jacques,
+Hi Nick,
 
-Thank you for the patch! Yet something to improve:
+good to see all this stuff coming mainline,
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on geert-renesas-devel/next geert-renesas-drivers/renesas-clk linus/master v5.17-rc2 next-20220204]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> GXP is the name of the HPE SoC.
+> This SoC is used to implement BMC features of HPE servers
+> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
+> It does support many features including:
+> 	ARMv7 architecture, and it is based on a Cortex A9 core
+> 	Use an AXI bus to which
+> 		a memory controller is attached, as well as
+>                  multiple SPI interfaces to connect boot flash,
+>                  and ROM flash, a 10/100/1000 Mac engine which
+>                  supports SGMII (2 ports) and RMII
+> 		Multiple I2C engines to drive connectivity with a host infrastructure
+> 		A video engine which support VGA and DP, as well as
+>                  an hardware video encoder
+> 		Multiple PCIe ports
+> 		A PECI interface, and LPC eSPI
+> 		Multiple UART for debug purpose, and Virtual UART for host connectivity
+> 		A GPIO engine
+> This Patch Includes:
+> 	Documentation for device tree bindings
+> 	Device Tree Bindings
+> 	GXP Timer Support
+> 	GXP Architecture Support
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
+>  .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
+...
 
-url:    https://github.com/0day-ci/linux/commits/Jean-Jacques-Hiblot/ARM-r9a06g032-add-support-for-the-watchdogs/20220205-001909
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220205/202202050309.wemilTv5-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/12248ab8278751ebab4bf211becde9db4956ca5a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jean-Jacques-Hiblot/ARM-r9a06g032-add-support-for-the-watchdogs/20220205-001909
-        git checkout 12248ab8278751ebab4bf211becde9db4956ca5a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+All new bindings must be in the DT-schema format (yaml files).
+This enables a lot of syntax checks and validation.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+We are slowly migrating away from the .txt based bindings.
 
-All errors (new ones prefixed by >>):
+Also, for new bindings please follow the guide lines listed in
+Documentation/devicetree/bindings/submitting-patches.rst
 
-   drivers/watchdog/rzn1_wdt.c: In function 'rzn1_wdt_probe':
->> drivers/watchdog/rzn1_wdt.c:134:25: error: 'NO_IRQ' undeclared (first use in this function); did you mean 'NR_IRQS'?
-     134 |         if (wdt->irq == NO_IRQ) {
-         |                         ^~~~~~
-         |                         NR_IRQS
-   drivers/watchdog/rzn1_wdt.c:134:25: note: each undeclared identifier is reported only once for each function it appears in
+Consider including the bindings with the drivers using the bindings so
+things have a more natural split.
 
-
-vim +134 drivers/watchdog/rzn1_wdt.c
-
-   112	
-   113	static int rzn1_wdt_probe(struct platform_device *pdev)
-   114	{
-   115		struct rzn1_watchdog *wdt;
-   116		int ret;
-   117		struct device_node *np = pdev->dev.of_node;
-   118		int err;
-   119		struct clk *clk;
-   120	
-   121		wdt = devm_kzalloc(&pdev->dev, sizeof(*wdt), GFP_KERNEL);
-   122		if (!wdt)
-   123			return -ENOMEM;
-   124		wdt->dev = &pdev->dev;
-   125		wdt->wdt = rzn1_wdt_dev;
-   126		platform_set_drvdata(pdev, wdt);
-   127	
-   128		wdt->base = devm_platform_ioremap_resource(pdev, 0);
-   129		if (IS_ERR(wdt->base)) {
-   130			dev_err(wdt->dev, "unable to get register bank\n");
-   131			return PTR_ERR(wdt->base);
-   132		}
-   133		wdt->irq = irq_of_parse_and_map(np, 0);
- > 134		if (wdt->irq == NO_IRQ) {
-   135			dev_err(wdt->dev, "failed to get IRQ from DT\n");
-   136			return -EINVAL;
-   137		}
-   138	
-   139		err = devm_request_irq(wdt->dev, wdt->irq, rzn1_wdt_irq, 0,
-   140				       np->name, wdt);
-   141		if (err) {
-   142			dev_err(wdt->dev, "failed to request irq %d\n", wdt->irq);
-   143			return err;
-   144		}
-   145		clk = devm_clk_get(wdt->dev, NULL);
-   146		if (!IS_ERR(clk) && clk_prepare_enable(clk))
-   147			return PTR_ERR(clk);
-   148	
-   149		wdt->clk_rate = clk_get_rate(clk);
-   150		if (!wdt->clk_rate) {
-   151			err = -EINVAL;
-   152			goto err_clk_disable;
-   153		}
-   154	
-   155		wdt->reload_val = RZN1_WDT_MAX;
-   156		wdt->wdt.max_hw_heartbeat_ms = (RZN1_WDT_MAX * 1000) /
-   157						(wdt->clk_rate / RZN1_WDT_PRESCALER);
-   158	
-   159		ret = watchdog_init_timeout(&wdt->wdt, 0, &pdev->dev);
-   160		if (ret)
-   161			dev_warn(&pdev->dev, "Specified timeout invalid, using default");
-   162	
-   163		ret = devm_watchdog_register_device(&pdev->dev, &wdt->wdt);
-   164		if (ret)
-   165			goto error;
-   166	
-   167		dev_info(wdt->dev, "Initialized\n");
-   168	
-   169		return 0;
-   170	
-   171	error:
-   172	err_clk_disable:
-   173		clk_disable_unprepare(clk);
-   174		dev_warn(wdt->dev, "Initialization failed\n");
-   175		return err;
-   176	}
-   177	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+	Sam
