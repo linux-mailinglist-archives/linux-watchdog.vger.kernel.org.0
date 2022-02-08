@@ -2,30 +2,29 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3024AD8FE
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Feb 2022 14:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 298644AD909
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Feb 2022 14:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350221AbiBHNQM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 8 Feb 2022 08:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S1350283AbiBHNQN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 8 Feb 2022 08:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357980AbiBHMj1 (ORCPT
+        with ESMTP id S1358696AbiBHMle (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:39:27 -0500
-X-Greylist: delayed 65 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 04:39:25 PST
+        Tue, 8 Feb 2022 07:41:34 -0500
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA165C03FECE
-        for <linux-watchdog@vger.kernel.org>; Tue,  8 Feb 2022 04:39:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028E1C03FECE
+        for <linux-watchdog@vger.kernel.org>; Tue,  8 Feb 2022 04:41:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=9smJiqXDXeoe+SY+ky2K+yevWbS3
-        UyGERBjmQzbmvjE=; b=Q2Nbt+4rcsnBl9GGOYdEzjfIzRDRBV2k1d8E/bjmUNvc
-        H8XM3E8A2X3w/B9k4jgiY99RmTzLc6cYdoCCukilGuHcc20u/JydqmEHoUqgF1uk
-        QGEJ87H0T2eY57MyWcCHtdlnWgZMaq9D2ErjMq8UitH38lEFYVIDJ3sXgKmZivE=
-Received: (qmail 251800 invoked from network); 8 Feb 2022 13:39:23 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Feb 2022 13:39:23 +0100
-X-UD-Smtp-Session: l3s3148p1@rkm4AYHXYskgAQnoAF1FAEKPHF9sYOFO
-Date:   Tue, 8 Feb 2022 13:39:23 +0100
+        :content-type:in-reply-to; s=k1; bh=rZxX6PxDnfPx/2JFBanzqX5QT78k
+        2L1qceRaKg4IR2Q=; b=uuKaMDd3c8AFTbItAyYgFiVDyY3UKRKSkVbCDXSi76KY
+        7qlM6sy5CEfxRiiDP/qdx2sUuTHcNPoc1y5ZGuDfPMWef8taIjP1wj/U/jZVXinj
+        4SZ79gngGzVwfD93cqdS8RVySGKF1PfjzWCwEBIDYQcUiJX0AAw4r87XdNX57Yo=
+Received: (qmail 253067 invoked from network); 8 Feb 2022 13:41:31 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Feb 2022 13:41:31 +0100
+X-UD-Smtp-Session: l3s3148p1@pzFXCYHXZMkgAQnoAF1FAEKPHF9sYOFO
+Date:   Tue, 8 Feb 2022 13:41:30 +0100
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
@@ -38,9 +37,8 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
         Thanh Quan <thanh.quan.xn@renesas.com>
-Subject: Re: [PATCH 2/5] dt-bindings: watchdog: renesas-wdt: Document
- r8a779f0 support
-Message-ID: <YgJke+iXkwn0VSM9@ninjato>
+Subject: Re: [PATCH 3/5] watchdog: renesas_wdt: Add R-Car Gen4 support
+Message-ID: <YgJk+vCoVUDcYhqd@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -54,12 +52,12 @@ Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-renesas-soc@vger.kernel.org,
         Thanh Quan <thanh.quan.xn@renesas.com>
 References: <cover.1642525158.git.geert+renesas@glider.be>
- <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
+ <cc395105e1d34aab2c076d368c0737833970b9d2.1642525158.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4lz/16p7tLSRDwdp"
+        protocol="application/pgp-signature"; boundary="HJiBpFA1l5l7FAGc"
 Content-Disposition: inline
-In-Reply-To: <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
+In-Reply-To: <cc395105e1d34aab2c076d368c0737833970b9d2.1642525158.git.geert+renesas@glider.be>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
@@ -71,16 +69,16 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
---4lz/16p7tLSRDwdp
+--HJiBpFA1l5l7FAGc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 18, 2022 at 06:09:02PM +0100, Geert Uytterhoeven wrote:
+On Tue, Jan 18, 2022 at 06:09:03PM +0100, Geert Uytterhoeven wrote:
 > From: Thanh Quan <thanh.quan.xn@renesas.com>
 >=20
-> Document support for the Watchdog Timer (WDT) Controller in the Renesas
-> R-Car S4-8 (R8A779F0) SoC.
+> Add the compatible string for the R-Car Gen4 family.
+> No further driver changes are needed.
 >=20
 > Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
@@ -88,24 +86,24 @@ On Tue, Jan 18, 2022 at 06:09:02PM +0100, Geert Uytterhoeven wrote:
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---4lz/16p7tLSRDwdp
+--HJiBpFA1l5l7FAGc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmICZHoACgkQFA3kzBSg
-KbYB5BAAr5DGS+Sh/754QQlhwRYnCKENrRVAFJYuVYROnsSBOwvVTeldZx3IHO3P
-DYt+Ll13SSY0enGextSAzIrHoIVxXOQ524VyZedqmj0mdv3g7mwO98pxDbIAyVFk
-m9Z0u/ECwKRsKu8nZSFVfwN1iMUwBThWk6k6tSZK/OelRQ5M798k7hFsvCRVOXX3
-tvTehufUkFOUVGMP3fKO+BW+iRuqGwwZI1xY07zFIZmiM09bR6NjCTi0JXy6yKWD
-vt2nouZRXWYiWMwSEIf1i3jiF1vRG6uwXbrfpLlZD24OOQpvGV6sAY7GprsK1gBd
-Ti7sph7gfX/Elj9qveo8AoXgfTAmCyVSJ0NJ/V5zMp3qSlHXaQYOfxrmwzSxZv5J
-W1bKOCkfW2w4n/NX7sGqqT3dPfyDLyef7PVtU3/5XDZtq46mIApZpqZnq7xVyHom
-KpQwK0EAYNxCblN9DmtRXRxw8kflFkCMw1XS5g/eo9ds3qfwOsJV2QJrCC4d5FM1
-B5xplsruGT2wW+DbM5fFqPO5uiofO9DRbDhur7ucQGn6OPjcHXK1yLlQFb3S/Ab6
-5iikxxcIqMEu2rjO3+QocQZl/ppXKiI8x4cP7AY//p3bc35DbTd5f9bPUBdC5esQ
-1CxNgry/A4gfEtnJZwk3212shJ96pDb2AFOzsaS8BxIjlw9r6SE=
-=LCvS
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmICZPoACgkQFA3kzBSg
+KbaCZQ/9EA3c/vQ5ZSk0jbK+InOLOctAtYAZZjQpFqbjgoPJc0roIe9JO7D27FHw
+9TxmwPCnIsd53LWM+kyepTyb/HO7co7361gbSPB9cjb+grnNP4b3R/QN1A/em6oz
+qNTcTZK2z0yIpGrcMenacsQfB94hdJsvpU7+qJF7yB7nAfvCVDvj5YLXTpH+Gy/o
+bZair4Dh3+UtaEQVTKTFZL6aBDxX1/X0gtSNa21WA5Wn3J2y2fe8IKJx1SHfHPy/
+96jbALQ/KIOMFxmAjg3G1F8TcuWEvkEQ7kfuxAq4xc3EqYtdJztqm/JHJTgL/mxI
+g0jWuDHiG2iBMXAyyKpXEST9Z1TgiwRJNuKtJ8EcVin4tcXHVDgf1b6KyIONFtFN
+xoCSkBFoafbqtvwkwkTh03FmiL82zbXzMDTRPoPXhO5gbw1RXf96is7Vymexv5Zr
+Iob6zzoFbtbbuNHmm69hZ5+jXymoemnVehuCs2X9P1EcOqBiuPndbls7evJc38E/
+D4FJwIxhXUrTjQKmi2Rxcb6lbGT/RJn7EsiWF77HqfNvZAZSKplU8E5rilAW3eZe
+wpuksprRb7RUN5s51/up/q7od6BfPuad71h9pS0HYg1DwjYVMMI074ujcMIbRTLP
+vWbJ6FcPJCEhaPeWf096XFszrJJB5VSjnPCdy1GO3XQEN5hkcaU=
+=AcGs
 -----END PGP SIGNATURE-----
 
---4lz/16p7tLSRDwdp--
+--HJiBpFA1l5l7FAGc--
