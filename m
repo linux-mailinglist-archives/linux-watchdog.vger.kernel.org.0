@@ -2,102 +2,255 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D0F4AEAB9
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Feb 2022 08:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106014AEC59
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Feb 2022 09:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235652AbiBIHEL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 9 Feb 2022 02:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S241324AbiBII3J (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Feb 2022 03:29:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbiBIHEK (ORCPT
+        with ESMTP id S241253AbiBII3H (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:04:10 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE184C0613CB;
-        Tue,  8 Feb 2022 23:04:13 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AF6A1F390;
-        Wed,  9 Feb 2022 07:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644390252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
-        b=j+9Jdm6onqPTFjKCVI/vgmxCixrmBCPIPSs9hcZJ6QhQyR2P2njU8D4k7eh+89C8Pm/AbO
-        yXN75K04SjBYTM7YPgq4xjd1Apn/J9pdlCslZ6oqIFXDF6GkxP4OQFbUoSQiE3D/pVFvst
-        iDB+sBufU64r0Ek4BR/FB4Aqrwfq9xc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644390252;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
-        b=Jp+95xuu4T8ipI1FBSyp5W5LN9QQESji3skTAg1hN2dQc6d2qagkl1dRhZu0585/ic2+eI
-        faQEpSFsGgRBuXCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0149913487;
-        Wed,  9 Feb 2022 07:04:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FNi2OWtnA2L0fQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 09 Feb 2022 07:04:11 +0000
-Date:   Wed, 9 Feb 2022 08:04:10 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
- with MMIO accesses
-Message-ID: <20220209080410.1e7dddd9@endymion.delvare>
-In-Reply-To: <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
-References: <20220130184130.176646-1-terry.bowman@amd.com>
-        <20220208181114.180a99ba@endymion.delvare>
-        <4ae57999-0f23-7578-008d-2009bc36d46b@amd.com>
-        <20220208224653.6a62ba22@endymion.delvare>
-        <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Wed, 9 Feb 2022 03:29:07 -0500
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C853C05CBBE;
+        Wed,  9 Feb 2022 00:28:55 -0800 (PST)
+Received: by mail-vs1-f41.google.com with SMTP id f6so1731987vsa.5;
+        Wed, 09 Feb 2022 00:28:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dfJBTLXzI7eyNZEn87oG5nH5B0aw/JRn1EB0ZDzVuOc=;
+        b=0z5BLcjtUo+t9I9YQ2Qhc91zLqn1IDcK47A5ad3FCygnfMELZ3BXgQUmLlOMVNHuTz
+         fKBKdlcjWR1DmZlgZeVjYsxgqjHfIJlzq1mLOAyRTpt6PiuswfEzkQfRDGzwaB3j5Yy8
+         kSLRB/lr6QjjYQpHNFNqeq7Jh6gIvkEzH+MndWIYQltn9ijo4u6qdL1xjIl/el2QTt8y
+         SwttbiJ92xdTQ+DEoDQyp87V/G93XOR5uqtv5MJ2B9P4JNmUe03KyrI0sxQ7tVqOHoAz
+         MkvRk6NWVBvYFMRMPE/RpIwa9LPAxsPIhreXrMcwlYsi/sT268bKhpDvrC+9EgscGCGo
+         9FfQ==
+X-Gm-Message-State: AOAM530+1eM0W9sPIE0i7XG/84fMDxE9zAFMLCpVRrbMIwMxFxS5g6uw
+        mVvDEejYVyTcA4Ku+CBt3X49JTaiW3k49w==
+X-Google-Smtp-Source: ABdhPJzIMhigm0wwsjiTQmt+wWOcd9W46b4Pk94/YNum4RScjfDOeMskaNJE2G181RnOrcK6OShxPg==
+X-Received: by 2002:a67:ea4e:: with SMTP id r14mr290996vso.51.1644395334432;
+        Wed, 09 Feb 2022 00:28:54 -0800 (PST)
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
+        by smtp.gmail.com with ESMTPSA id b191sm3239091vkb.32.2022.02.09.00.28.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 00:28:54 -0800 (PST)
+Received: by mail-vs1-f53.google.com with SMTP id w6so1320851vsf.3;
+        Wed, 09 Feb 2022 00:28:54 -0800 (PST)
+X-Received: by 2002:a05:6102:34d9:: with SMTP id a25mr379149vst.68.1644395333887;
+ Wed, 09 Feb 2022 00:28:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220208183511.2925304-1-jjhiblot@traphandler.com> <20220208183511.2925304-6-jjhiblot@traphandler.com>
+In-Reply-To: <20220208183511.2925304-6-jjhiblot@traphandler.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Feb 2022 09:28:42 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV4PM9gC2wDZJKXKUt7AG2wS+adub=M+d0BrOedZ9ENPg@mail.gmail.com>
+Message-ID: <CAMuHMdV4PM9gC2wDZJKXKUt7AG2wS+adub=M+d0BrOedZ9ENPg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] watchdog: Add Renesas RZ/N1 Watchdog driver
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 8 Feb 2022 17:03:09 -0600, Terry Bowman wrote:
-> On 2/8/22 15:46, Jean Delvare wrote:
-> > If so, while there's indeed nothing to be done for the most recent
-> > systems where only MMIO access is possible, you may still need to
-> > enable MMIO access through legacy I/O if you try to use MMIO on
-> > chipsets where both are possible. I'm not sure what exactly where you
-> > set the limit. In the last patch you say that 0x51 is the first
-> > revision of the family 17h CPUs, but is family 17h the first where MMIO
-> > is available, or the first where legacy I/O isn't?
+Hi Jean-Jacques,
+
+On Tue, Feb 8, 2022 at 7:35 PM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+> From: Phil Edworthy <phil.edworthy@renesas.com>
 >
-> Family 17h, SMBus PCI ID >= 0x51 is the first where cd6h/cd7h port I/O is disabled. 
-> If SMBus PCI ID < 0x51 then cd6h/cd7h port I/O is used. 
+> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
+> very limited timeout capabilities. However, it can reset the device.
+> To do so, the corresponding bits in the SysCtrl RSTEN register need to
+> be enabled. This is not done by this driver.
+>
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
 
-OK, we are safe then :-)
+Thanks for your patch!
 
--- 
-Jean Delvare
-SUSE L3 Support
+> --- /dev/null
+> +++ b/drivers/watchdog/rzn1_wdt.c
+> @@ -0,0 +1,208 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Renesas RZ/N1 Watchdog timer.
+> + * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
+> + * cope with 2 seconds.
+> + *
+> + * Copyright 2018 Renesas Electronics Europe Ltd.
+> + *
+> + * Derived from Ralink RT288x watchdog timer.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define DEFAULT_TIMEOUT                60
+> +
+> +#define RZN1_WDT_RETRIGGER                     0x0
+> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL          0
+> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK     0xfff
+> +#define RZN1_WDT_RETRIGGER_PRESCALE            BIT(12)
+> +#define RZN1_WDT_RETRIGGER_ENABLE              BIT(13)
+> +#define RZN1_WDT_RETRIGGER_WDSI                        (0x2 << 14)
+> +
+> +#define RZN1_WDT_PRESCALER                     16384
+> +#define RZN1_WDT_MAX                           4095
+> +
+> +struct rzn1_watchdog {
+> +       struct watchdog_device          wdt;
+> +       void __iomem                    *base;
+> +       unsigned long                   clk_rate;
+> +};
+> +
+> +#define to_rzn1_watchdog(_ptr) \
+> +       container_of(_ptr, struct rzn1_watchdog, wdt)
+> +
+> +static inline uint32_t get_max_heart_beat(uint32_t clk_rate)
+
+unsigned long clk_rate
+
+> +{
+> +       return (RZN1_WDT_MAX * RZN1_WDT_PRESCALER) / (clk_rate / 1000);
+
+Is clk_rate always a multiple of 1000? If not, you want to reorder
+this to avoid losing precision.
+
+> +}
+> +static inline uint32_t compute_reload_value(uint32_t tick_ms, uint32_t clk)
+
+unsigned long clk_rate
+
+> +{
+> +       return (tick_ms * (clk / 1000)) / RZN1_WDT_PRESCALER;
+
+Likewise.
+
+> +}
+
+> +static int rzn1_wdt_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct rzn1_watchdog *wdt;
+> +       struct device_node *np = dev->of_node;
+> +       struct clk *clk;
+> +       int ret;
+> +       int irq;
+> +
+> +       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> +       if (!wdt)
+> +               return -ENOMEM;
+> +
+> +       wdt->wdt = rzn1_wdt;
+> +       wdt->wdt.parent = dev;
+> +
+> +       wdt->base = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(wdt->base))
+> +               return PTR_ERR(wdt->base);
+> +
+> +       irq = platform_get_irq(pdev, 0);
+> +       if (irq < 0) {
+> +               dev_err(dev, "failed to get the irq\n");
+
+No need to print a message, platform_get_irq() already does that.
+
+> +               return irq;
+> +       }
+> +
+> +       ret = devm_request_irq(dev, irq, rzn1_wdt_irq, 0,
+> +                              np->name, wdt);
+> +       if (ret) {
+> +               dev_err(dev, "failed to request irq %d\n", irq);
+> +               return ret;
+> +       }
+> +
+> +       clk = devm_clk_get(dev, NULL);
+> +       if (IS_ERR(clk)) {
+> +               dev_err(dev, "failed to get the clock\n");
+> +               return PTR_ERR(clk);
+> +       }
+> +
+> +       ret = clk_prepare_enable(clk);
+> +       if (ret) {
+> +               dev_err(dev, "failed to prepare/enable the clock\n");
+> +               return ret;
+> +       }
+> +
+> +       ret = devm_add_action_or_reset(dev, rzn1_wdt_clk_disable_unprepare,
+> +                                      clk);
+> +       if (ret) {
+> +               dev_err(dev, "failed to register clock unprepare callback\n");
+> +               clk_disable_unprepare(clk);
+
+Please drop this, as devm_add_action_or_reset() calls the
+action on failure.
+
+> +               return ret;
+> +       }
+> +
+> +       wdt->clk_rate = clk_get_rate(clk);
+> +       if (!wdt->clk_rate) {
+> +               dev_err(dev, "failed to get the clock rate\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       /*
+> +        * The period of the watchdog cannot be changed once set
+> +        * and is limited to a very short period.
+> +        * Configure it for a 1s period once and for all, and
+> +        * rely on the heart-beat provided by the watchdog core
+> +        * to make this usable by the user-space.
+> +        */
+> +       wdt->wdt.max_hw_heartbeat_ms = get_max_heart_beat(wdt->clk_rate);
+> +       if (wdt->wdt.max_hw_heartbeat_ms > 1000)
+> +               wdt->wdt.max_hw_heartbeat_ms = 1000;
+> +
+> +       wdt->wdt.timeout = DEFAULT_TIMEOUT;
+> +       ret = watchdog_init_timeout(&wdt->wdt, 0, dev);
+> +
+> +       return devm_watchdog_register_device(dev, &wdt->wdt);
+> +}
+> +
+> +
+> +static const struct of_device_id rzn1_wdt_match[] = {
+> +       { .compatible = "renesas,r9a06g032-wdt" },
+
+No need to match on the soc-specific compatible value, as the
+family-specific value should be present in the DTB, too.
+
+> +       { .compatible = "renesas,rzn1-wdt" },
+> +       {},
+> +};
+> +MODULE_DEVICE_TABLE(of, rzn1_wdt_match);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
