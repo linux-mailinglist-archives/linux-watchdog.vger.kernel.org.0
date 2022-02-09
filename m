@@ -2,87 +2,102 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EC04AE788
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Feb 2022 04:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D0F4AEAB9
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Feb 2022 08:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343904AbiBIDDh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 8 Feb 2022 22:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S235652AbiBIHEL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Feb 2022 02:04:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359817AbiBICyF (ORCPT
+        with ESMTP id S235596AbiBIHEK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:54:05 -0500
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2CEC0613CC;
-        Tue,  8 Feb 2022 18:54:04 -0800 (PST)
-Received: by mail-ot1-f48.google.com with SMTP id b12-20020a9d754c000000b0059eb935359eso602925otl.8;
-        Tue, 08 Feb 2022 18:54:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=skqCq82J8AGqsey0T3Vd7A5Yn+vbCdU5Y8vvi49uTAk=;
-        b=hl5itkNBybgR3hyVgqCW0OGB6HNWmzyyE3/6qiy2dwyZN9tl+ahOtIEg3G4aFKN5Ke
-         ZqosVQrL1Q0MoxP4ZRxEMniiK0CDin39SUinX4KKHhxR6K+c/CFdjPU64Bvl4xreeh4l
-         Ka9E8FNeKWMp7Et8d03EKKfbu5TLAvGgFgFPUPNp6bZDym57uaNkGb26DQN98AV6+lT6
-         xzW74PeFc+MxBN0JGyYYn/FRIUSpYmmrBmsAdXOU361bWUjvmbW0BpnREycSZRfK0C5T
-         Ym2hERTzu5SBfgwh/444WfsOFbCUfns7n4wV45ujndfePPc7ECgpfYPe2ZMuQ/luiQfz
-         HDDQ==
-X-Gm-Message-State: AOAM5331+bAGRIU8N6BLDD8uUKQqMDIMS84dO2HlaWTWDdrj5gTme4qt
-        OAoqCxivquEuy5w5eLCQvrosnd8YTQ==
-X-Google-Smtp-Source: ABdhPJy2QaQUl/RAvttcJuhEQY0MCPtoZdPYnaR2fra+R96SMMD1BJQCyC6KSGgqR5XEv4bqHQEGTw==
-X-Received: by 2002:a9d:24c5:: with SMTP id z63mr135034ota.365.1644375244288;
-        Tue, 08 Feb 2022 18:54:04 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d2sm6142162ook.33.2022.02.08.18.54.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 18:54:03 -0800 (PST)
-Received: (nullmailer pid 3526598 invoked by uid 1000);
-        Wed, 09 Feb 2022 02:54:02 -0000
-Date:   Tue, 8 Feb 2022 20:54:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Thanh Quan <thanh.quan.xn@renesas.com>,
-        LUU HOAI <hoai.luu.ub@renesas.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>
-Subject: Re: [PATCH 2/5] dt-bindings: watchdog: renesas-wdt: Document
- r8a779f0 support
-Message-ID: <YgMsymvddRTDCYVr@robh.at.kernel.org>
-References: <cover.1642525158.git.geert+renesas@glider.be>
- <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
+        Wed, 9 Feb 2022 02:04:10 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE184C0613CB;
+        Tue,  8 Feb 2022 23:04:13 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AF6A1F390;
+        Wed,  9 Feb 2022 07:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644390252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
+        b=j+9Jdm6onqPTFjKCVI/vgmxCixrmBCPIPSs9hcZJ6QhQyR2P2njU8D4k7eh+89C8Pm/AbO
+        yXN75K04SjBYTM7YPgq4xjd1Apn/J9pdlCslZ6oqIFXDF6GkxP4OQFbUoSQiE3D/pVFvst
+        iDB+sBufU64r0Ek4BR/FB4Aqrwfq9xc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644390252;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
+        b=Jp+95xuu4T8ipI1FBSyp5W5LN9QQESji3skTAg1hN2dQc6d2qagkl1dRhZu0585/ic2+eI
+        faQEpSFsGgRBuXCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0149913487;
+        Wed,  9 Feb 2022 07:04:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FNi2OWtnA2L0fQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 09 Feb 2022 07:04:11 +0000
+Date:   Wed, 9 Feb 2022 08:04:10 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
+Message-ID: <20220209080410.1e7dddd9@endymion.delvare>
+In-Reply-To: <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
+References: <20220130184130.176646-1-terry.bowman@amd.com>
+        <20220208181114.180a99ba@endymion.delvare>
+        <4ae57999-0f23-7578-008d-2009bc36d46b@amd.com>
+        <20220208224653.6a62ba22@endymion.delvare>
+        <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 18 Jan 2022 18:09:02 +0100, Geert Uytterhoeven wrote:
-> From: Thanh Quan <thanh.quan.xn@renesas.com>
-> 
-> Document support for the Watchdog Timer (WDT) Controller in the Renesas
-> R-Car S4-8 (R8A779F0) SoC.
-> 
-> Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+On Tue, 8 Feb 2022 17:03:09 -0600, Terry Bowman wrote:
+> On 2/8/22 15:46, Jean Delvare wrote:
+> > If so, while there's indeed nothing to be done for the most recent
+> > systems where only MMIO access is possible, you may still need to
+> > enable MMIO access through legacy I/O if you try to use MMIO on
+> > chipsets where both are possible. I'm not sure what exactly where you
+> > set the limit. In the last patch you say that 0x51 is the first
+> > revision of the family 17h CPUs, but is family 17h the first where MMIO
+> > is available, or the first where legacy I/O isn't?
+>
+> Family 17h, SMBus PCI ID >= 0x51 is the first where cd6h/cd7h port I/O is disabled. 
+> If SMBus PCI ID < 0x51 then cd6h/cd7h port I/O is used. 
 
-Acked-by: Rob Herring <robh@kernel.org>
+OK, we are safe then :-)
+
+-- 
+Jean Delvare
+SUSE L3 Support
