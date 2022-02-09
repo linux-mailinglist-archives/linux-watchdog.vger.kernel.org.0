@@ -2,249 +2,155 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EABC4AF9DD
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Feb 2022 19:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1604AFCF1
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Feb 2022 20:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238971AbiBISWM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 9 Feb 2022 13:22:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S229683AbiBITLE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Feb 2022 14:11:04 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239495AbiBISV3 (ORCPT
+        with ESMTP id S232034AbiBITKw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:21:29 -0500
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C51C0613C9;
-        Wed,  9 Feb 2022 10:21:30 -0800 (PST)
-Received: from pro2.mail.ovh.net (unknown [10.109.146.130])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id BF120E3FA3BB;
-        Wed,  9 Feb 2022 19:21:28 +0100 (CET)
-Received: from [192.168.1.103] (88.125.132.78) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 9 Feb
- 2022 19:21:28 +0100
-Message-ID: <bebb25da-d046-6f84-08c8-c744dd18261d@traphandler.com>
-Date:   Wed, 9 Feb 2022 19:21:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 5/6] watchdog: Add Renesas RZ/N1 Watchdog driver
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wed, 9 Feb 2022 14:10:52 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF384C043182;
+        Wed,  9 Feb 2022 11:10:44 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id q8so3497745oiw.7;
+        Wed, 09 Feb 2022 11:10:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uGBQszRjKuZjfc1lBS7mhBr8HyjSkkpwuKdOPsga/3M=;
+        b=pKv8+XFK13RTaXtbIjs3u6u9nWC7A35k42HB8hxxuTqp4989vPgqUrpWBqwt+IPPhx
+         UIhLVgAhXlbmjByENR73CskQa2Mp8fTgUVpQZUx2OKj5HtD//csGDVmt4lPM/aGJDOGU
+         Z5rBOnVgTFUSVeRTQzw5GC2fc/UYoP+6uNXBwC94fcSLj0gYTPrXpvXJXMljIkGRO+Li
+         nsTngiIMZ7luSEF10iYSOQxQhbfksEUgGr+zyRt0/tVZJx1kJvEhLf+0vxLJp8+m+az7
+         rStMBbt7zZXMC4dndWQoHoZuYLDgHolElm7PjlmevYs89B6qxOr//aUDuxHttrx45YXd
+         IR8w==
+X-Gm-Message-State: AOAM533/W8MDnmxxedj0Et1GxTCxQx6e7mRNpaqbsuiyH1emY03yPV5c
+        MVlRl9HYQ9zXI+Z69q/lww==
+X-Google-Smtp-Source: ABdhPJzpD9FzpWjsNjCly3kjImd1uYrlVR8YlnuOwd+KPQyw5wIjoOhj08QDwExTKNuhrLRLVlIcwg==
+X-Received: by 2002:a05:6808:218f:: with SMTP id be15mr1691567oib.136.1644433772303;
+        Wed, 09 Feb 2022 11:09:32 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r204sm7155587oih.1.2022.02.09.11.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 11:09:31 -0800 (PST)
+Received: (nullmailer pid 709550 invoked by uid 1000);
+        Wed, 09 Feb 2022 19:09:30 -0000
+Date:   Wed, 9 Feb 2022 13:09:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-References: <20220208183511.2925304-1-jjhiblot@traphandler.com>
- <20220208183511.2925304-6-jjhiblot@traphandler.com>
- <CAMuHMdV4PM9gC2wDZJKXKUt7AG2wS+adub=M+d0BrOedZ9ENPg@mail.gmail.com>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <CAMuHMdV4PM9gC2wDZJKXKUt7AG2wS+adub=M+d0BrOedZ9ENPg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [88.125.132.78]
-X-ClientProxiedBy: CAS2.emp2.local (172.16.1.2) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 443886039216961876
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdduuddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtjeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpefhiedthedttdegueeggfdtjeegtdeileeftdegheeutdetjeeuieehtdevvdefieenucfkpheptddrtddrtddrtddpkeekrdduvdehrddufedvrdejkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqfigrthgthhguohhgsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V2] dt-bindings: watchdog: brcm,bcm7038: add more
+ compatible strings
+Message-ID: <YgQRam1RFim1AMMf@robh.at.kernel.org>
+References: <20220126132116.11070-1-zajec5@gmail.com>
+ <20220126222034.16889-1-zajec5@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220126222034.16889-1-zajec5@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Geert,
+On Wed, Jan 26, 2022 at 11:20:34PM +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> This hardware block is used on almost all BCM63xx family chipsets and
+> BCM4908 which reuses a lot of BCM63xx parts. Add relevant compatible
+> strings and also include a generic one.
+> 
+> The only SoC with a different block I found is BCM6838 (thus not included
+> in this change).
+> 
+> It may be worth noting that BCM6338, BCM6345, BCM6348 and BCM63268 don't
+> include "SoftRst" register but that can be handled by drivers based on
+> precise compatible string.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> V2: Sort enum entries & update brcm,twd.yaml
+> ---
+>  .../devicetree/bindings/mfd/brcm,twd.yaml     |  2 +-
+>  .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 21 +++++++++++++++----
+>  2 files changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/brcm,twd.yaml b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+> index 634526f790b8..3f5db1990aba 100644
+> --- a/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+> @@ -55,7 +55,7 @@ examples:
+>          #size-cells = <1>;
+>  
+>          watchdog@28 {
+> -            compatible = "brcm,bcm7038-wdt";
+> +            compatible = "brcm,bcm4908-wdt", "brcm,bcm63xx-wdt";
+>              reg = <0x28 0x8>;
+>          };
+>      };
+> diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> index a926809352b8..4d848442913c 100644
+> --- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> @@ -16,9 +16,22 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - brcm,bcm6345-wdt
+> -      - brcm,bcm7038-wdt
+> +    items:
+> +      - enum:
+> +          - brcm,bcm4908-wdt
+> +          - brcm,bcm6338-wdt
+> +          - brcm,bcm6345-wdt
+> +          - brcm,bcm6348-wdt
+> +          - brcm,bcm6848-wdt
+> +          - brcm,bcm6858-wdt
+> +          - brcm,bcm7038-wdt
+> +          - brcm,bcm60333-wdt
+> +          - brcm,bcm63138-wdt
+> +          - brcm,bcm63148-wdt
+> +          - brcm,bcm63268-wdt
+> +          - brcm,bcm63381-wdt
+> +          - brcm,bcm68360-wdt
+> +      - const: brcm,bcm63xx-wdt
 
-On 09/02/2022 09:28, Geert Uytterhoeven wrote:
-> Hi Jean-Jacques,
->
-> On Tue, Feb 8, 2022 at 7:35 PM Jean-Jacques Hiblot
-> <jjhiblot@traphandler.com> wrote:
->> From: Phil Edworthy <phil.edworthy@renesas.com>
->>
->> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
->> very limited timeout capabilities. However, it can reset the device.
->> To do so, the corresponding bits in the SysCtrl RSTEN register need to
->> be enabled. This is not done by this driver.
->>
->> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
->> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> Thanks for your patch!
->
->> --- /dev/null
->> +++ b/drivers/watchdog/rzn1_wdt.c
->> @@ -0,0 +1,208 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Renesas RZ/N1 Watchdog timer.
->> + * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
->> + * cope with 2 seconds.
->> + *
->> + * Copyright 2018 Renesas Electronics Europe Ltd.
->> + *
->> + * Derived from Ralink RT288x watchdog timer.
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of_address.h>
->> +#include <linux/of_irq.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/watchdog.h>
->> +
->> +#define DEFAULT_TIMEOUT                60
->> +
->> +#define RZN1_WDT_RETRIGGER                     0x0
->> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL          0
->> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK     0xfff
->> +#define RZN1_WDT_RETRIGGER_PRESCALE            BIT(12)
->> +#define RZN1_WDT_RETRIGGER_ENABLE              BIT(13)
->> +#define RZN1_WDT_RETRIGGER_WDSI                        (0x2 << 14)
->> +
->> +#define RZN1_WDT_PRESCALER                     16384
->> +#define RZN1_WDT_MAX                           4095
->> +
->> +struct rzn1_watchdog {
->> +       struct watchdog_device          wdt;
->> +       void __iomem                    *base;
->> +       unsigned long                   clk_rate;
->> +};
->> +
->> +#define to_rzn1_watchdog(_ptr) \
->> +       container_of(_ptr, struct rzn1_watchdog, wdt)
->> +
->> +static inline uint32_t get_max_heart_beat(uint32_t clk_rate)
-> unsigned long clk_rate
->
->> +{
->> +       return (RZN1_WDT_MAX * RZN1_WDT_PRESCALER) / (clk_rate / 1000);
-> Is clk_rate always a multiple of 1000? If not, you want to reorder
-> this to avoid losing precision.
+Is it really worthwhile to update all these DTs?:
 
-The clock is 62.5 MHz, so dividing by 1000 doesn't cause a big precision 
-loss.
+arch/mips/boot/dts/brcm/bcm63268.dtsi:                  compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm6328.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm6358.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm6362.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm6368.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm7125.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm7346.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm7358.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm7360.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm7362.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm7420.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm7425.dtsi:                   compatible = "brcm,bcm7038-wdt";
+arch/mips/boot/dts/brcm/bcm7435.dtsi:                   compatible = "brcm,bcm7038-wdt";
 
-I could use the 64bit division but it seemed less readable and the 
-watchdog is
+I don't think so.
 
-not used as a precise timer anyway.
-
->
->> +}
->> +static inline uint32_t compute_reload_value(uint32_t tick_ms, uint32_t clk)
-> unsigned long clk_rate
->
->> +{
->> +       return (tick_ms * (clk / 1000)) / RZN1_WDT_PRESCALER;
-> Likewise.
->
->> +}
->> +static int rzn1_wdt_probe(struct platform_device *pdev)
->> +{
->> +       struct device *dev = &pdev->dev;
->> +       struct rzn1_watchdog *wdt;
->> +       struct device_node *np = dev->of_node;
->> +       struct clk *clk;
->> +       int ret;
->> +       int irq;
->> +
->> +       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
->> +       if (!wdt)
->> +               return -ENOMEM;
->> +
->> +       wdt->wdt = rzn1_wdt;
->> +       wdt->wdt.parent = dev;
->> +
->> +       wdt->base = devm_platform_ioremap_resource(pdev, 0);
->> +       if (IS_ERR(wdt->base))
->> +               return PTR_ERR(wdt->base);
->> +
->> +       irq = platform_get_irq(pdev, 0);
->> +       if (irq < 0) {
->> +               dev_err(dev, "failed to get the irq\n");
-> No need to print a message, platform_get_irq() already does that.
->
->> +               return irq;
->> +       }
->> +
->> +       ret = devm_request_irq(dev, irq, rzn1_wdt_irq, 0,
->> +                              np->name, wdt);
->> +       if (ret) {
->> +               dev_err(dev, "failed to request irq %d\n", irq);
->> +               return ret;
->> +       }
->> +
->> +       clk = devm_clk_get(dev, NULL);
->> +       if (IS_ERR(clk)) {
->> +               dev_err(dev, "failed to get the clock\n");
->> +               return PTR_ERR(clk);
->> +       }
->> +
->> +       ret = clk_prepare_enable(clk);
->> +       if (ret) {
->> +               dev_err(dev, "failed to prepare/enable the clock\n");
->> +               return ret;
->> +       }
->> +
->> +       ret = devm_add_action_or_reset(dev, rzn1_wdt_clk_disable_unprepare,
->> +                                      clk);
->> +       if (ret) {
->> +               dev_err(dev, "failed to register clock unprepare callback\n");
->> +               clk_disable_unprepare(clk);
-> Please drop this, as devm_add_action_or_reset() calls the
-> action on failure.
->
->> +               return ret;
->> +       }
->> +
->> +       wdt->clk_rate = clk_get_rate(clk);
->> +       if (!wdt->clk_rate) {
->> +               dev_err(dev, "failed to get the clock rate\n");
->> +               return -EINVAL;
->> +       }
->> +
->> +       /*
->> +        * The period of the watchdog cannot be changed once set
->> +        * and is limited to a very short period.
->> +        * Configure it for a 1s period once and for all, and
->> +        * rely on the heart-beat provided by the watchdog core
->> +        * to make this usable by the user-space.
->> +        */
->> +       wdt->wdt.max_hw_heartbeat_ms = get_max_heart_beat(wdt->clk_rate);
->> +       if (wdt->wdt.max_hw_heartbeat_ms > 1000)
->> +               wdt->wdt.max_hw_heartbeat_ms = 1000;
->> +
->> +       wdt->wdt.timeout = DEFAULT_TIMEOUT;
->> +       ret = watchdog_init_timeout(&wdt->wdt, 0, dev);
->> +
->> +       return devm_watchdog_register_device(dev, &wdt->wdt);
->> +}
->> +
->> +
->> +static const struct of_device_id rzn1_wdt_match[] = {
->> +       { .compatible = "renesas,r9a06g032-wdt" },
-> No need to match on the soc-specific compatible value, as the
-> family-specific value should be present in the DTB, too.
->
->> +       { .compatible = "renesas,rzn1-wdt" },
->> +       {},
->> +};
->> +MODULE_DEVICE_TABLE(of, rzn1_wdt_match);
-> Gr{oetje,eeting}s,
->
->                          Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+Rob
