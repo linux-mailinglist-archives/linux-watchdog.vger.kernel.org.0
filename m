@@ -2,225 +2,258 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218144B1281
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 17:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137784B17D6
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 22:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244103AbiBJQR3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Feb 2022 11:17:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37342 "EHLO
+        id S1344770AbiBJVt3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 10 Feb 2022 16:49:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243990AbiBJQR3 (ORCPT
+        with ESMTP id S245076AbiBJVt2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:17:29 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2874FC29
-        for <linux-watchdog@vger.kernel.org>; Thu, 10 Feb 2022 08:17:30 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 10 Feb 2022 16:49:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF60EF23;
+        Thu, 10 Feb 2022 13:49:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E6CF8405EC
-        for <linux-watchdog@vger.kernel.org>; Thu, 10 Feb 2022 16:17:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644509848;
-        bh=g6QE7ds2byVUPRAmXXnezb98jQ3Ciok2epjMz+QKaeU=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=dRZamUyrGx8NR+qUQf83iV2S7VF/EfDykN05GI2AC/z3iIx5D1/pRS/NghVPOpgkY
-         XsYBdpJW8vBqUYXBsV5vdO/tLQHXNs/3GHTqvQ5YJnk5+AS0U1XrbB4qXnr9X8/Zsf
-         erMKEBUo//CIq9gyLnu74WiNW0i36pUgAt6gx/stBJjXzHgOuSXZhS1EPs2sl0aQo1
-         yxqm8PFcJVs1uWjl6g8O6wm51d+0s+5EMrDxqkiTlpqff+RNA7TJKHnrN5qLVqhm7K
-         UMVTvidAy65U0KSV2kRNwkFxz3NWhISJd8GNtO6Zej1bN3Pn7Tj4qXugQZMQZc0gxA
-         DCryOj2c0TEYw==
-Received: by mail-ed1-f71.google.com with SMTP id dn20-20020a05640222f400b0040f8cdfb542so3613208edb.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 10 Feb 2022 08:17:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g6QE7ds2byVUPRAmXXnezb98jQ3Ciok2epjMz+QKaeU=;
-        b=mQYhvIRZOEc83KN58UNJatIPYJJaZfmCoc/L4d0pCWjBJy/AnACpzBSTpUleglO1PU
-         YvDvOgr8eMolojANAA13V654serkM12s4WxEwcjZ8H2HfGJTH1Qgz3e9NlautqI/hMe7
-         0rhKcJ2ePT3Uk3Rys5SNz9Yst3B9jRQqAD0ssNREALzWAF3ZZj+LHJ9anxrVWw+WDbTz
-         U58+UpjIqzhKd3SfvmSueYRWvSsc22ceEv61fYeEeE1rIlSbZijstwo3B/Exzpz+fh0r
-         b57PZIRZFsSiUt8IUdVx1a8dU7ESa+XafRdsGkOP5Hdp8pTbsXLJf92wLlaRjaRVafuC
-         OdDQ==
-X-Gm-Message-State: AOAM533JrJOKMSHp90wBpj0mN6zLi02/R9z85mbgJXe0NYg5eNKzagkJ
-        V9LnoDK8evK+TU4gDouyOy/K26Ay5i+EvIfh1ZI91ToFIZVvaLaJraVxHA6g3JapiPRx/H0xAiL
-        mp4Ecu41qXUAxiZzI2vvRznKSnCpacgOTvvRDn8qQmcp6
-X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr9198286edc.345.1644509846144;
-        Thu, 10 Feb 2022 08:17:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz022B9e0ZAfVuWMzgucY3m74/1+NS8nZSUh8fsyf0+32xhVV6P2uT+MCE0To8/aXu94C79eA==
-X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr9198269edc.345.1644509845938;
-        Thu, 10 Feb 2022 08:17:25 -0800 (PST)
-Received: from [192.168.0.99] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id h15sm3179019ejz.134.2022.02.10.08.17.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 08:17:25 -0800 (PST)
-Message-ID: <373b87ad-8bcf-e3f3-60fd-14d933fb2f4f@canonical.com>
-Date:   Thu, 10 Feb 2022 17:17:24 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E99EB8277F;
+        Thu, 10 Feb 2022 21:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F8EC004E1;
+        Thu, 10 Feb 2022 21:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644529766;
+        bh=mBlKdnmPcBD68cbrky1GB/7GaWbt94JXLwJNBU+phTc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gvbduKbG0nKZnFZQ+hIbDlz07R7ivreBGWdiXmAsg28jJcMb65VybnHnqMKVUY08K
+         T7JPqc6iM3Yx8eyHBvJHu4I2mc5CA1BNCbH2rd7nOc+mXixwGb+5b+l1YDK0smB1e4
+         Ji0aPsazN9utsUjvMQ9qroRhaV9C0olxwX8VGJrS+SAqToINYIT/osZHysbbpuQ+d1
+         9+Z4sLcZpkrKcd+JT9ncJ9lxC/74Gx2WQ3eyf5ovZ6ENc8QULLpkp3nM4LPkhTYISX
+         fSgX/is9XdXapCfI5pxitNyJs9sP0+XvubokAcCwh5HhwCqqsoOb2oahfYD6EUwWBR
+         UAG2Z7C9/M3WQ==
+Date:   Thu, 10 Feb 2022 22:49:22 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        jdelvare@suse.com, linux-i2c@vger.kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v5 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
+Message-ID: <YgWIYiQG8NPmcrbl@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, andy.shevchenko@gmail.com,
+        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
+        wim@linux-watchdog.org, rrichter@amd.com, thomas.lendacky@amd.com,
+        sudheesh.mavila@amd.com, Nehal-bakulchandra.Shah@amd.com,
+        Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com,
+        Mario.Limonciello@amd.com
+References: <20220209172717.178813-1-terry.bowman@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] dt-bindings: watchdog: convert faraday,ftwdt010 to
- yaml
-Content-Language: en-US
-To:     Corentin Labbe <clabbe@baylibre.com>, linux@roeck-us.net,
-        robh+dt@kernel.org, wim@linux-watchdog.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20220210155450.2939129-1-clabbe@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220210155450.2939129-1-clabbe@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/ksDgt2nnkFtgRNi"
+Content-Disposition: inline
+In-Reply-To: <20220209172717.178813-1-terry.bowman@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/02/2022 16:54, Corentin Labbe wrote:
-> Converts watchdog/faraday,ftwdt010.txt to yaml.
-> This permits to detect missing properties like clocks and resets or
-> compatible like moxa,moxart-watchdog.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> Changes since v1:
-> - Added myself as maintainer as requested by Linus
-> - Added $ref to watchdog.yaml
-> - Removed useless quotes
-> - Added blank lines between properties
-> - Removed timeout-sec as already provided by watchdog.yaml
-> 
-> Change since v2:
-> - rewrite compatible section
-> 
->  .../bindings/watchdog/faraday,ftwdt010.txt    | 22 -------
->  .../bindings/watchdog/faraday,ftwdt010.yaml   | 66 +++++++++++++++++++
->  2 files changed, 66 insertions(+), 22 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
-> deleted file mode 100644
-> index 9ecdb502e605..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -Faraday Technology FTWDT010 watchdog
-> -
-> -This is an IP part from Faraday Technology found in the Gemini
-> -SoCs and others.
-> -
-> -Required properties:
-> -- compatible : must be one of
-> -  "faraday,ftwdt010"
-> -  "cortina,gemini-watchdog", "faraday,ftwdt010"
-> -- reg : shall contain base register location and length
-> -- interrupts : shall contain the interrupt for the watchdog
-> -
-> -Optional properties:
-> -- timeout-sec : the default watchdog timeout in seconds.
-> -
-> -Example:
-> -
-> -watchdog@41000000 {
-> -	compatible = "faraday,ftwdt010";
-> -	reg = <0x41000000 0x1000>;
-> -	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> new file mode 100644
-> index 000000000000..e7b90ba41093
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Faraday Technology FTWDT010 watchdog
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +  - Corentin Labbe <clabbe@baylibre.com>
-> +
-> +description: |
-> +  This is an IP part from Faraday Technology found in the Gemini
-> +  SoCs and others.
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: faraday,ftwdt010
-> +      - items:
-> +        - enum:
-> +          - cortina,gemini-watchdog
-> +          - moxa,moxart-watchdog
-> +        - const: faraday,ftwdt010
 
-I think you have indentation warnings.
+--/ksDgt2nnkFtgRNi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: PCLK
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
+On Wed, Feb 09, 2022 at 11:27:08AM -0600, Terry Bowman wrote:
+> This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
+> to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
+> disabled on later AMD processors.
+>=20
+> This series includes patches with MMIO accesses to register
+> FCH::PM::DECODEEN. The same register is also accessed by the sp5100_tco
+> driver.[1] Synchronization to the MMIO register is required in both
+> drivers.
+>=20
+> The first patch creates a macro to request MMIO region using the 'muxed'
+> retry logic. This is used in patch 6 to synchronize accesses to EFCH MMIO.
+>=20
+> The second patch replaces a hardcoded region size with a #define. This is
+> to improve maintainability and was requested from v2 review.
+>=20
+> The third patch moves duplicated region request/release code into
+> functions. This locates related code into functions and reduces code line
+> count. This will also make adding MMIO support in patch 6 easier.
+>=20
+> The fourth patch moves SMBus controller address detection into a function=
+=2E=20
+> This is in preparation for adding MMIO region support.
+>=20
+> The fifth patch moves EFCH port selection into a function. This is in
+> preparation for adding MMIO region support.
+>=20
+> The sixth patch adds MMIO support for region requesting/releasing and
+> mapping. This is necessary for using MMIO to detect SMBus controller
+> address, enable SMBbus controller region, and control the port select.
+>=20
+> The seventh patch updates the SMBus controller address detection to suppo=
+rt
+> using MMIO. This is necessary because the driver accesses register
+> FCH::PM::DECODEEN during initialization and only available using MMIO on
+> later AMD processors.
+>=20
+> The eighth patch updates the SMBus port selection to support MMIO. This is
+> required because port selection control resides in the
+> FCH::PM::DECODEEN[smbus0sel] and is only accessible using MMIO on later A=
+MD
+> processors.
+>=20
+> The ninth patch enables the EFCH MMIO functionality added earlier in this
+> series. The SMBus controller's PCI revision ID is used to check if EFCH
+> MMIO is supported by HW and should be enabled in the driver.
+>=20
+> Based on v5.17-rc2.
+>=20
+> Testing:
+>   Tested on family 19h using:
+>     i2cdetect -y 0
+>     i2cdetect -y 2
+>=20
+>   - Results using v5.16 and this pachset applied. Below
+>     shows the devices detected on the busses:
+>    =20
+>     # i2cdetect -y 0=20
+>          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+>     00:                         -- -- -- -- -- -- -- --=20
+>     10: 10 11 -- -- -- -- -- -- 18 -- -- -- -- -- -- --=20
+>     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     30: 30 -- -- -- -- 35 36 -- -- -- -- -- -- -- -- --=20
+>     40: -- -- -- -- -- -- -- -- -- -- 4a -- -- -- -- --=20
+>     50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     70: -- -- -- 73 -- -- -- --                        =20
+>     # i2cdetect -y 2
+>          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+>     00:                         -- -- -- -- -- -- -- --=20
+>     10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+>     40: -- -- -- -- -- -- -- -- -- -- -- -- 4c -- -- --=20
+>     50: -- 51 -- -- 54 -- -- -- -- -- -- -- -- -- -- --=20
+>     60: 60 -- -- 63 -- -- 66 -- -- -- -- 6b -- -- 6e --=20
+>     70: 70 71 72 73 74 75 -- 77
+>=20
+>   Also tested using sp5100_tco submitted series listed below.[1]
+>   I applied the sp5100_tco v4 series and ran:
+>     cat  >> /dev/watchdog
+>=20
+> [1] sp5100_tco v4 patchset can be found here:
+> Link: https://lore.kernel.org/linux-watchdog/20220130191225.303115-1-terr=
+y.bowman@amd.com/
+>=20
+> Changes in v5:
+>  - Use request/release helper function for sb800 device in
+>    piix4_setup_sb800(). Patch 3. (Jean Delvare)    =20
+>  - Revert 'piix4_smba' variable definition ordering back as it was in
+>    piix4_setup_sb800(). Patch 4. (Jean Delvare)
+>  - Add newline after piix4_sb800_port_sel(). Patch 5. (Jean Delvare)
+>  - Remove unnecessary initialization in piix4_add_adapter(). Patch 6.
+>    (Jean Delvare)
+>  - Remove unnecessary #define AMD_PCI_SMBUS_REVISION_MMIO. Patch 9.
+>    (Jean Delvare)
+>  - Add description for 0x51 constant moved in the above item. This is
+>    in piix4_sb800_use_mmio(). Patch 9. (Andy Shevchenko)
+>  - Rebase to v5.17-rc2. (Andy Shevchenko)
+>  - Update patch 9 description. (Terry Bowman)
+> =20
+> Changes in v4:
+>  - Changed request_muxed_mem_region() macro to request_mem_region_muxed()
+>    in patch 1. (Andy Shevchenko)
+>  - Removed unnecessary newline where possible in calls to
+>    request_muxed_region() in patch 2. (Terry Bowman)
+>  - Changed piix4_sb800_region_setup() to piix4_sb800_region_request().
+>    Patch 3. (Jean Delvare)
+>  - Reordered piix4_setup_sb800() local variables from longest name length
+>    to shortest name length. Patch 4. (Terry Bowman)
+>  - Changed piix4_sb800_region_request() and piix4_sb800_region_release() =
+by
+>    adding early return() to remove 'else' improving readability. Patch 6.
+>    (Terry Bowman)
+>  - Removed iowrite32(ioread32(...), ...). Unnecessary because MMIO is
+>    already enabled. (Terry Bowman)
+>  - Refactored piix4_sb800_port_sel() to simplify the 'if' statement using
+>    temp variable. Patch 8. (Terry Bowman)
+>  - Added mmio_cfg.use_mmio assignment in piix4_add_adapter(). This is
+>    needed for calls to piix4_sb800_port_sel() after initialization during
+>    normal operation. Patch 9. (Terry Bowman)
+> =20
+> Changes in v3:
+>  - Added request_muxed_mem_region() patch (Wolfram, Guenter)
+>  - Reduced To/Cc list length. (Andy)
+> =20
+> Changes in v2:
+>  - Split single patch. (Jean Delvare)
+>  - Replace constant 2 with SB800_PIIX4_SMB_MAP_SIZE where appropriate.
+>    (Jean Delvare)
+>  - Shorten SB800_PIIX4_FCH_PM_DECODEEN_MMIO_EN name length to
+>    SB800_PIIX4_FCH_PM_DECODEEN_MMIO. (Jean Delvare)
+>  - Change AMD_PCI_SMBUS_REVISION_MMIO from 0x59 to 0x51. (Terry Bowman)
+>  - Change piix4_sb800_region_setup() to piix4_sb800_region_request().
+>    (Jean Delvare)
+>  - Change 'SMB' text in  logging to 'SMBus' (Jean Delvare)
+>  - Remove unnecessary NULL assignment in piix4_sb800_region_release().
+>    (Jean Delvare)
+>  - Move 'u8' variable definitions to single line. (Jean Delvare)
+>  - Hardcode piix4_setup_sb800_smba() return value to 0 since it is always
+>    0. (Jean Delvare)
+>=20
+> Terry Bowman (9):
+>   kernel/resource: Introduce request_mem_region_muxed()
+>   i2c: piix4: Replace hardcoded memory map size with a #define
+>   i2c: piix4: Move port I/O region request/release code into functions
+>   i2c: piix4: Move SMBus controller base address detect into function
+>   i2c: piix4: Move SMBus port selection into function
+>   i2c: piix4: Add EFCH MMIO support to region request and release
+>   i2c: piix4: Add EFCH MMIO support to SMBus base address detect
+>   i2c: piix4: Add EFCH MMIO support for SMBus port select
+>   i2c: piix4: Enable EFCH MMIO for Family 17h+
+>=20
 
-Are you sure your DTSes don't have warnings? You include watchdog.yaml
-schema (good) so here should be unevaluatedProperties to accept ones
-mentioned there.
-
-Just add "timeout-sec" to example below to see the error.
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    watchdog@41000000 {
-> +      compatible = "faraday,ftwdt010";
-> +      reg = <0x41000000 0x1000>;
-> +      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +  - |
-> +    watchdog: watchdog@98500000 {
-> +      compatible = "moxa,moxart-watchdog", "faraday,ftwdt010";
-> +      reg = <0x98500000 0x10>;
-> +      clocks = <&clk_apb>;
-> +      clock-names = "PCLK";
-> +    };
-> +...
+Applied the series to for-next, thank you Terry for keeping at it and
+Jean and Andy for the review. I'll send the pull request containing the
+ioport update to the WDT maintainers now. All further changes should be
+based on top of this now.
 
 
-Best regards,
-Krzysztof
+--/ksDgt2nnkFtgRNi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFiF0ACgkQFA3kzBSg
+KbY8ORAAiR2qPdf3doez6yl+qy2erLsx5HiDXkQHEl8VwsuNji4Npr07bSsUgF64
+c5rM0czyZWPoGfwST6YBzjLsHliG+IniKhFIC5/wC0BsnyuTuw3xCK8iXSDlXW5g
+J6NrPK5RUuZZF/kVmhp5TfY/8oe3vMRwNhG2Cy1jj8OGD/m/TSOfNSEww8f+wtvn
+Dw0xFGm3lWIpXbd8Qpg6dvNX5lIsRtbvguly0bG+qK107mObwNjnYNCjrEggoDo6
++0HiY/yPpceVrgrGUFCOq6ArRJyIIsSFvFVm1QnYuFOJaWDQW74NJRvLRK7JsLPX
+nKLgFq5BC6o6JZu+LxTrdDLwWpzr1x7FSR+e6NM1gancW4qTW/Amx4VEVALxds7k
+hEf4LsrrM75qC1x2WUj+5WzhDLPffVe6sayJNjhk//Jk0iHmo7ZMruNoL78o+NWA
+5EjHFLTVZmmrNtc/jvu/9IWEMqiLNC+8+H84kaVPTPnSgWUPTMWfSem9V31tL5EV
+MCOmcg/7akbkMyYA0zl+OV6qFn9T7qHOn8uLqQ57wux/TF9RX/slkCWLyLltGa8v
+811xn9yAYuGf0iufUCEIovajONaZsaHZV0w2/5L8hFv6rng40iDJSWzKm//Nol2f
+shTZjpK/6FGss9uSMFqw+WLLuB9Pv02ygc2lCNJgDGyiBLLiizo=
+=cYnD
+-----END PGP SIGNATURE-----
+
+--/ksDgt2nnkFtgRNi--
