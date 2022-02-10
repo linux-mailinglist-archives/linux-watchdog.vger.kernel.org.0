@@ -2,122 +2,112 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941964B17E1
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 23:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5FD4B1817
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 23:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243896AbiBJWCE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Feb 2022 17:02:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41536 "EHLO
+        id S245077AbiBJWZq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 10 Feb 2022 17:25:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236817AbiBJWCD (ORCPT
+        with ESMTP id S242123AbiBJWZp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:02:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A59EBBC;
-        Thu, 10 Feb 2022 14:02:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC44361BCD;
-        Thu, 10 Feb 2022 22:02:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94026C340ED;
-        Thu, 10 Feb 2022 22:02:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644530522;
-        bh=FuA/vqugt280wWCxhxZPTSLe70pjFP3XNTWK4mjkZK8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SpDKy7QRhMlA9bXNKBRu4KtjJa8jIRmRvxhf6VP1avsbU6/DPJu0u5/CeMZvmV9QW
-         bf5IY4iX+2nnDvIyjJNDc/qBgA0oP8PpizL06ElHs4DKXrTNaczpA8efdh0EW+Jrb5
-         6SRtWtj2Edaq+H7SGjL8VXIEUcY2yqiY56gE766rVJFxuYumV+iGvUlRwSBqJ4ZyQr
-         zhMWHZr+Uz76Mm7XbupcxyrXAqxyZp/tpl1KG/9pF8+uwj9bB87ix6AoPWUkHlz3qW
-         RbrwCYC5ipYPzPDsUhrwpmCEmEGNPLAIG2j+s/MQwjrEgTKr0TPQBjvKN1RpR3ZC6p
-         zMx989cHvwN0Q==
-Date:   Thu, 10 Feb 2022 23:01:58 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-watchdog@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PULL REQUEST] immutable branch
- "i2c/add-request_mem_region_muxed-20220210"
-Message-ID: <YgWLVmSsav7XULiC@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="upvdmhasOsfGQAmT"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Feb 2022 17:25:45 -0500
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEE425CC;
+        Thu, 10 Feb 2022 14:25:46 -0800 (PST)
+Received: by mail-oo1-f43.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso8207151oop.0;
+        Thu, 10 Feb 2022 14:25:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=bi0xxaYvyCZbPDNk/x9kYcmKT4Bfk4GrdJcxp5giOSA=;
+        b=gDyO324ndxNpJS24Z8dPOds+eZQBpw+aGssRr1TyPu8sUpXE1qho4UIh35WWTNbMM2
+         v89YyTvfvhA0WxwtQt7OIo4rP/C9SX7H6hiMEdJHCf74q/nuzfKLsbY60y1FPMKog370
+         k8tg+1x+zSZVJ/kOnyYi20eQbw1KF+Jkwg8miJBXEUSxZUydYwxikio2GWRsCCII/6oX
+         j1IlDwl084cUlzP+pwOpesmN3IjTmJ6rrhioPDgB+irGG27Qmqt0r6oHw4jR6jTK67SL
+         rqISzr/FZw0+BC/WP0DCqFNx7XrTI+0qC/h1Izc1WjdUhkCwK6kVDe/SEyLvt+9IU6hq
+         nbjA==
+X-Gm-Message-State: AOAM5339kLi/432fLs74yo77SHd0JFOJMEXVLCTiRvtW7zxrRfsffTHH
+        JHgtDgVBnRcUKAH4/7D9HYiIHNGvRg==
+X-Google-Smtp-Source: ABdhPJwrVekJrzjgQ/9yYiHIMcwIFxnZL/6zvQzwUNx14/DTrV495dnI67C+qdTQ88ZtqEUt9JYtXQ==
+X-Received: by 2002:a05:6820:353:: with SMTP id m19mr3483384ooe.36.1644531945357;
+        Thu, 10 Feb 2022 14:25:45 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 71sm8556446otn.43.2022.02.10.14.25.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 14:25:44 -0800 (PST)
+Received: (nullmailer pid 3262538 invoked by uid 1000);
+        Thu, 10 Feb 2022 22:25:43 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     krzysztof.kozlowski@canonical.com, wim@linux-watchdog.org,
+        robh+dt@kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux@roeck-us.net,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220210155450.2939129-1-clabbe@baylibre.com>
+References: <20220210155450.2939129-1-clabbe@baylibre.com>
+Subject: Re: [PATCH v3] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
+Date:   Thu, 10 Feb 2022 16:25:43 -0600
+Message-Id: <1644531943.376766.3262537.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Thu, 10 Feb 2022 15:54:50 +0000, Corentin Labbe wrote:
+> Converts watchdog/faraday,ftwdt010.txt to yaml.
+> This permits to detect missing properties like clocks and resets or
+> compatible like moxa,moxart-watchdog.
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+> Changes since v1:
+> - Added myself as maintainer as requested by Linus
+> - Added $ref to watchdog.yaml
+> - Removed useless quotes
+> - Added blank lines between properties
+> - Removed timeout-sec as already provided by watchdog.yaml
+> 
+> Change since v2:
+> - rewrite compatible section
+> 
+>  .../bindings/watchdog/faraday,ftwdt010.txt    | 22 -------
+>  .../bindings/watchdog/faraday,ftwdt010.yaml   | 66 +++++++++++++++++++
+>  2 files changed, 66 insertions(+), 22 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> 
 
---upvdmhasOsfGQAmT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Guenter, Wim
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml:25:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml:26:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
 
-here are the ioport changes needed for the WDT series by Terry Bowman.
-Please pull them into your branch.
+dtschema/dtc warnings/errors:
 
-Thanks,
+doc reference errors (make refcheckdocs):
 
-   Wolfram
+See https://patchwork.ozlabs.org/patch/1591202
 
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+pip3 install dtschema --upgrade
 
-are available in the Git repository at:
+Please check and re-submit.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/add-request_mem_region_muxed
-
-for you to fetch changes up to 27c196c7b73cb70bbed3a9df46563bab60e63415:
-
-  kernel/resource: Introduce request_mem_region_muxed() (2022-02-10 22:40:00 +0100)
-
-----------------------------------------------------------------
-Terry Bowman (1):
-      kernel/resource: Introduce request_mem_region_muxed()
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      (Rev.) kernel/resource: Introduce request_mem_region_muxed()
-
- include/linux/ioport.h | 2 ++
- 1 file changed, 2 insertions(+)
-
---upvdmhasOsfGQAmT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFi1YACgkQFA3kzBSg
-KbZROBAAo05toUcrtIJud8wqybjTg4u6VcLsPHYNmXwQrIL6630BeyYEWsMbN/0n
-inXhBriOTRq21Rjb5XQk0ftXVKZPiZiutHAHi75XD7VqpSo23BE3wPZ/WK4r8NcT
-nOTXojj8ISEfDwEr1ZTUNL1oZBoH6/9mnx6ZmYFTqcCAxN/jCOy6oMCxDjSuVA33
-LguH97rDUYZbqTLlcq+MJZlpd6ep+v362gAPsTawPrIi/C1aSUqDMqInWHRwJD2L
-TwroPT0Sq6QFmV9zCqwzSGD7cVWybYgo3+5MfdhEeEJZewPhxw1L/U2IxIhXvREc
-EQ3FlEr5Zp9exsaVhmap3ToL2RMHCaIvKhx0cbIB5BTSgRakp7DiRK9SJScVljFe
-Fev3HejCcXXa31v8OflMdaKnTJxjH4WhOgPgKool0tAsXBR/vJ/kv+Sl+O8R2Yrj
-+MlwxRr3JV3X3IMkl3OJycyo7fLdnXI+oEAZx9LfzppTYic2qrGft4VrZPP/JTxu
-rx2qhRuUtSe7YraJrq0cCmanWwuRfdnP+mzTBlKTOLK6u6EOYFSVwrGc7D4Rdvwd
-6kPlwg33zOHc4P/GabxOuMqiFODirirzwDy+FQxrw4h3jChG1kACWxZD34nV0uv6
-4m1+dUExWETsFHcYBPUYpfdatd5OvNOcD+RTu4lgtJuhW9lVx2k=
-=pTXp
------END PGP SIGNATURE-----
-
---upvdmhasOsfGQAmT--
