@@ -2,110 +2,189 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B3D4B00F2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 00:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2974B02C7
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 03:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbiBIXIO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 9 Feb 2022 18:08:14 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35554 "EHLO
+        id S234139AbiBJB6C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Feb 2022 20:58:02 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237033AbiBIXIN (ORCPT
+        with ESMTP id S233113AbiBJB5W (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:08:13 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072E3C1038D3
-        for <linux-watchdog@vger.kernel.org>; Wed,  9 Feb 2022 15:08:16 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso4298763oon.5
-        for <linux-watchdog@vger.kernel.org>; Wed, 09 Feb 2022 15:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IxTs4h/FRUFbzW6czo+aoWDvjC71EGWWMx0uUtQqUlQ=;
-        b=a4c8Ug9ueeylLtnwbPEfNpw+sqA8+8AoX6MDG8CxVgBHx2F4klICkLgr8evEcLXno5
-         a0zrQYD1hMjbHw+l/AqXJLUSgKU5cE4ns4o8Yi6TxpdbPUJUszAVe1YHnGwOu97Y2aT3
-         BzGL2JLxBNQLRHhAwiNfjZrkun/aNoPI5d9sWS9Sn/li6n7DWP9vtD6iQtwyOvBSaC8g
-         oTE8kCzgJ8Hwi3M1Ef7zzGyYeBExqIgRoPv6MTIfctrqVadxBmyk2rplBzDqLL1scoRz
-         X7O8VDYjfrROJyWRWsf6bhBYwXnIpGdUoyEAFn5TXwL/lCQlHpLU7bPNN7hnEE5BnnMI
-         7sNQ==
+        Wed, 9 Feb 2022 20:57:22 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A53027D4C;
+        Wed,  9 Feb 2022 17:34:18 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so4657239oot.4;
+        Wed, 09 Feb 2022 17:34:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IxTs4h/FRUFbzW6czo+aoWDvjC71EGWWMx0uUtQqUlQ=;
-        b=iPikIt21cReAfcmuBIjgOA1DC9QGcgiMhNNI+7cj33co3A7UVO3Psuw4QsIDl12d1M
-         JJs7aZcdo0+gKshf0CgUgrzzyJHEB2Qltz8DKmlm9sL5pV+JrsywdwrgYrKEVk/nq2Z4
-         pCIs7I5b5sUBkvHQPXBR979HeBXaRnLqbR+cxcMOCxl9oAgzOXLj7RInJzhwji9VtRSg
-         jYTQbydVj/1SS+Y/ASImVAHSUR1XnWERy4+SKzo6YZE2+Vmnh9Tv2YQeDxleoaf/4WXD
-         Xy+KOoFybbRJNm6IWTVuTLHGet9FmpuSx/I+ro5r5RwgaofbB8Qe72MrHFPOsJps+DrX
-         SuEw==
-X-Gm-Message-State: AOAM531bE+7yVAUhlfY28nKwdVvkBN6VYLoJOwJ4RS1Nys5z1Cg28Nqe
-        7hkX/HAAuTiZtE62ywI87HSlkUKzkOfXoQ==
-X-Google-Smtp-Source: ABdhPJzNPjukAo1dNx5Fa9xfaR2xxVlZ5Hg2YVCLRKQn3oB47Jl4KfOomHDSkFhhfmTayzhCOi0Bow==
-X-Received: by 2002:a05:6870:b143:: with SMTP id a3mr1757971oal.255.1644448095207;
-        Wed, 09 Feb 2022 15:08:15 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f14sm1985603oiw.22.2022.02.09.15.08.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 15:08:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3f3426bc-974e-1864-a68f-463e627cbc7a@roeck-us.net>
-Date:   Wed, 9 Feb 2022 15:08:12 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XNiOWPd36obXvgkEnxsQWaURMDInYrYIQkiEeqpKVQA=;
+        b=w4KGe1YvxshAcnK70ia1WX59OOtFo8YOs5a015MLNg9nmHEYtu4V7Z4c9WffagoaJ8
+         Wi4rAK5BwC5KiApC1o21aeaMOudCyhSTwSAzbIIcct7NExmi7m7ZGBNE4nsmRPfz8yFd
+         YlRE3ZYNlIwxwIrRUcDTNd2OMHFPzFAxqCU25eJ508Y/zZuYrWEdH/wcb+HabZxWirtm
+         R4oKRXEgc0fZCP4IzK7jCUpdNwrNFXsTSOagatOeby8VrC8nZpasuz4FVpk65LUDP4Ub
+         NPHDmJFcsMMpdwCly6VtUlVCg1Xu4ppIVqee3F4xMreBzfqM5vnTcZdMVqdCFM1qdzCd
+         NqpQ==
+X-Gm-Message-State: AOAM5305Kd2S1NvoIAy+KniFAmBEB4tJRSPOW10zN+RJcaxN023TkOwo
+        UVfrUOMr0qZzMe3P22mm9dNIasN8MVvo
+X-Google-Smtp-Source: ABdhPJyzaCGC5eLQBASxyTGmEs5hjG9Z5P2Np9DRVceWLWDDoZhFzxyTV+VDN+pMiqQnGuiyEqs6xw==
+X-Received: by 2002:a05:6871:581:: with SMTP id u1mr1833250oan.5.1644453499047;
+        Wed, 09 Feb 2022 16:38:19 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c13sm7199740otf.5.2022.02.09.16.38.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 16:38:18 -0800 (PST)
+Received: (nullmailer pid 1270516 invoked by uid 1000);
+        Thu, 10 Feb 2022 00:38:17 -0000
+Date:   Wed, 9 Feb 2022 18:38:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     linux@roeck-us.net, linus.walleij@linaro.org,
+        wim@linux-watchdog.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
+Message-ID: <YgReeZX3pc9G8yWp@robh.at.kernel.org>
+References: <20220128204856.494643-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] watchdog: allow building BCM7038_WDT for BCM4908
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220209203202.26395-1-zajec5@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220209203202.26395-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128204856.494643-1-clabbe@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2/9/22 12:32, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+On Fri, Jan 28, 2022 at 08:48:56PM +0000, Corentin Labbe wrote:
+> Converts watchdog/faraday,ftwdt010.txt to yaml.
+> This permits to detect missing properties like clocks and resets or
+> compatible like moxa,moxart-watchdog.
 > 
-> BCM4908 is a SoCs family that shares a lot of hardware with BCM63xx
-> including the watchdog block. Allow building this driver for it.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 > ---
->   drivers/watchdog/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/watchdog/faraday,ftwdt010.txt    | 22 -------
+>  .../bindings/watchdog/faraday,ftwdt010.yaml   | 60 +++++++++++++++++++
+>  2 files changed, 60 insertions(+), 22 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index c8fa79da23b3..ee9c57a5fafa 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1779,7 +1779,7 @@ config BCM7038_WDT
->   	tristate "BCM63xx/BCM7038 Watchdog"
->   	select WATCHDOG_CORE
->   	depends on HAS_IOMEM
-> -	depends on ARCH_BRCMSTB || BMIPS_GENERIC || BCM63XX || COMPILE_TEST
-> +	depends on ARCH_BCM4908 || ARCH_BRCMSTB || BMIPS_GENERIC || BCM63XX || COMPILE_TEST
->   	help
->   	  Watchdog driver for the built-in hardware in Broadcom 7038 and
->   	  later SoCs used in set-top boxes.  BCM7038 was made public
+> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+> deleted file mode 100644
+> index 9ecdb502e605..000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -Faraday Technology FTWDT010 watchdog
+> -
+> -This is an IP part from Faraday Technology found in the Gemini
+> -SoCs and others.
+> -
+> -Required properties:
+> -- compatible : must be one of
+> -  "faraday,ftwdt010"
+> -  "cortina,gemini-watchdog", "faraday,ftwdt010"
+> -- reg : shall contain base register location and length
+> -- interrupts : shall contain the interrupt for the watchdog
+> -
+> -Optional properties:
+> -- timeout-sec : the default watchdog timeout in seconds.
+> -
+> -Example:
+> -
+> -watchdog@41000000 {
+> -	compatible = "faraday,ftwdt010";
+> -	reg = <0x41000000 0x1000>;
+> -	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> new file mode 100644
+> index 000000000000..377529b21267
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Faraday Technology FTWDT010 watchdog
+> +
+> +maintainers:
+> +  - Linus Walleij <linus.walleij@linaro.org>
+> +
+> +description: |
+> +  This is an IP part from Faraday Technology found in the Gemini
+> +  SoCs and others.
+> +
 
+Need a $ref to watchdog.yaml
+
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: "faraday,ftwdt010"
+> +      - items:
+> +          - const: "cortina,gemini-watchdog"
+> +          - const: "faraday,ftwdt010"
+> +      - items:
+> +          - const: "moxa,moxart-watchdog"
+> +          - const: "faraday,ftwdt010"
+
+Don't need quotes
+
+blank line
+
+> +  reg:
+> +    maxItems: 1
+
+blank line...
+
+> +  resets:
+> +    maxItems: 1
+> +  clocks:
+> +    maxItems: 1
+> +  clock-names:
+> +    const: PCLK
+> +  interrupts:
+> +    maxItems: 1
+> +  timeout-sec:
+> +    description: the default watchdog timeout in seconds.
+
+Don't need to describe common properties.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    watchdog@41000000 {
+> +      compatible = "faraday,ftwdt010";
+> +      reg = <0x41000000 0x1000>;
+> +      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +  - |
+> +    watchdog: watchdog@98500000 {
+> +      compatible = "moxa,moxart-watchdog", "faraday,ftwdt010";
+> +      reg = <0x98500000 0x10>;
+> +      clocks = <&clk_apb>;
+> +      clock-names = "PCLK";
+> +    };
+> +...
+> -- 
+> 2.34.1
+> 
+> 
