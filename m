@@ -2,189 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2974B02C7
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 03:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 177E14B08FB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 09:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbiBJB6C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 9 Feb 2022 20:58:02 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60384 "EHLO
+        id S238089AbiBJI4w (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 10 Feb 2022 03:56:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiBJB5W (ORCPT
+        with ESMTP id S238093AbiBJI4w (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:57:22 -0500
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A53027D4C;
-        Wed,  9 Feb 2022 17:34:18 -0800 (PST)
-Received: by mail-oo1-f45.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so4657239oot.4;
-        Wed, 09 Feb 2022 17:34:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XNiOWPd36obXvgkEnxsQWaURMDInYrYIQkiEeqpKVQA=;
-        b=w4KGe1YvxshAcnK70ia1WX59OOtFo8YOs5a015MLNg9nmHEYtu4V7Z4c9WffagoaJ8
-         Wi4rAK5BwC5KiApC1o21aeaMOudCyhSTwSAzbIIcct7NExmi7m7ZGBNE4nsmRPfz8yFd
-         YlRE3ZYNlIwxwIrRUcDTNd2OMHFPzFAxqCU25eJ508Y/zZuYrWEdH/wcb+HabZxWirtm
-         R4oKRXEgc0fZCP4IzK7jCUpdNwrNFXsTSOagatOeby8VrC8nZpasuz4FVpk65LUDP4Ub
-         NPHDmJFcsMMpdwCly6VtUlVCg1Xu4ppIVqee3F4xMreBzfqM5vnTcZdMVqdCFM1qdzCd
-         NqpQ==
-X-Gm-Message-State: AOAM5305Kd2S1NvoIAy+KniFAmBEB4tJRSPOW10zN+RJcaxN023TkOwo
-        UVfrUOMr0qZzMe3P22mm9dNIasN8MVvo
-X-Google-Smtp-Source: ABdhPJyzaCGC5eLQBASxyTGmEs5hjG9Z5P2Np9DRVceWLWDDoZhFzxyTV+VDN+pMiqQnGuiyEqs6xw==
-X-Received: by 2002:a05:6871:581:: with SMTP id u1mr1833250oan.5.1644453499047;
-        Wed, 09 Feb 2022 16:38:19 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c13sm7199740otf.5.2022.02.09.16.38.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 16:38:18 -0800 (PST)
-Received: (nullmailer pid 1270516 invoked by uid 1000);
-        Thu, 10 Feb 2022 00:38:17 -0000
-Date:   Wed, 9 Feb 2022 18:38:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux@roeck-us.net, linus.walleij@linaro.org,
-        wim@linux-watchdog.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
-Message-ID: <YgReeZX3pc9G8yWp@robh.at.kernel.org>
-References: <20220128204856.494643-1-clabbe@baylibre.com>
+        Thu, 10 Feb 2022 03:56:52 -0500
+X-Greylist: delayed 364 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 00:56:53 PST
+Received: from mail.trixen.pl (mail.trixen.pl [192.71.213.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07A1FE0
+        for <linux-watchdog@vger.kernel.org>; Thu, 10 Feb 2022 00:56:53 -0800 (PST)
+Received: by mail.trixen.pl (Postfix, from userid 1001)
+        id 6A6FD40BCC; Thu, 10 Feb 2022 09:50:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trixen.pl; s=mail;
+        t=1644483048; bh=J50dbWEn9x62xyxY1PWPtYxMwNMcDFoILqXfzM3his0=;
+        h=Date:From:To:Subject:From;
+        b=lmVZvGioLbTY/Nxol07KX6luccse3Q0qPx8HP3KZgmJq7bRY2k2obYYQvN8KZhzCD
+         kU6dP38UXellHVq7O0TSGEBbl3jNKyHgBws5Vqfp4qfw+UzUBul9q2/Mh4sU1X+2qP
+         XVSziEc6FnBQ9OLhjIb3kUeFG7YPmr06W1usdkrnU4185XegZU5O+25Rjc5Yd1abYV
+         8XOgmlEJv6PXGkXg7mycARTfc0xkLvQzFh2YfrDpBbWr//2yLivObjXQVxYjXsTBsi
+         ImZMCgLpdQPHidWm/P1xSSORRM6KvqXUnKAXuKm75vyEojuDl/Em+/ctclTOS1uldr
+         AUGAgMGLTYHmg==
+Received: by mail.trixen.pl for <linux-watchdog@vger.kernel.org>; Thu, 10 Feb 2022 08:50:34 GMT
+Message-ID: <20220210084500-0.1.t.1u9d.0.du9lm5g8nt@trixen.pl>
+Date:   Thu, 10 Feb 2022 08:50:34 GMT
+From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
+        <radoslaw.grabowski@trixen.pl>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: Monitorowanie samochodu
+X-Mailer: mail.trixen.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128204856.494643-1-clabbe@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 08:48:56PM +0000, Corentin Labbe wrote:
-> Converts watchdog/faraday,ftwdt010.txt to yaml.
-> This permits to detect missing properties like clocks and resets or
-> compatible like moxa,moxart-watchdog.
-> 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->  .../bindings/watchdog/faraday,ftwdt010.txt    | 22 -------
->  .../bindings/watchdog/faraday,ftwdt010.yaml   | 60 +++++++++++++++++++
->  2 files changed, 60 insertions(+), 22 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
-> deleted file mode 100644
-> index 9ecdb502e605..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -Faraday Technology FTWDT010 watchdog
-> -
-> -This is an IP part from Faraday Technology found in the Gemini
-> -SoCs and others.
-> -
-> -Required properties:
-> -- compatible : must be one of
-> -  "faraday,ftwdt010"
-> -  "cortina,gemini-watchdog", "faraday,ftwdt010"
-> -- reg : shall contain base register location and length
-> -- interrupts : shall contain the interrupt for the watchdog
-> -
-> -Optional properties:
-> -- timeout-sec : the default watchdog timeout in seconds.
-> -
-> -Example:
-> -
-> -watchdog@41000000 {
-> -	compatible = "faraday,ftwdt010";
-> -	reg = <0x41000000 0x1000>;
-> -	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> new file mode 100644
-> index 000000000000..377529b21267
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Faraday Technology FTWDT010 watchdog
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +description: |
-> +  This is an IP part from Faraday Technology found in the Gemini
-> +  SoCs and others.
-> +
+Dzie=C5=84 dobry,
 
-Need a $ref to watchdog.yaml
+Chcia=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re poprzez wyko=
+rzystanie GPS monitoruje samochody w czasie rzeczywistym.=20
 
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: "faraday,ftwdt010"
-> +      - items:
-> +          - const: "cortina,gemini-watchdog"
-> +          - const: "faraday,ftwdt010"
-> +      - items:
-> +          - const: "moxa,moxart-watchdog"
-> +          - const: "faraday,ftwdt010"
+Dzi=C4=99ki temu mog=C4=85 Pa=C5=84stwo odczytywa=C4=87 wszelkie warto=C5=
+=9Bci dotycz=C4=85ce np. zu=C5=BCycia paliwa czy obrot=C3=B3w silnika.
 
-Don't need quotes
+System automatycznie generuje rozbudowane raporty i pozwala dokonywa=C4=87=
+ istotnych analiz.
 
-blank line
+Je=C5=BCeli interesuje Pa=C5=84stwa zwi=C4=99kszenie wydajno=C5=9Bci prac=
+y i kontrola wszelkich parametr=C3=B3w floty - prosz=C4=99 o kontakt.
 
-> +  reg:
-> +    maxItems: 1
 
-blank line...
-
-> +  resets:
-> +    maxItems: 1
-> +  clocks:
-> +    maxItems: 1
-> +  clock-names:
-> +    const: PCLK
-> +  interrupts:
-> +    maxItems: 1
-> +  timeout-sec:
-> +    description: the default watchdog timeout in seconds.
-
-Don't need to describe common properties.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    watchdog@41000000 {
-> +      compatible = "faraday,ftwdt010";
-> +      reg = <0x41000000 0x1000>;
-> +      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +  - |
-> +    watchdog: watchdog@98500000 {
-> +      compatible = "moxa,moxart-watchdog", "faraday,ftwdt010";
-> +      reg = <0x98500000 0x10>;
-> +      clocks = <&clk_apb>;
-> +      clock-names = "PCLK";
-> +    };
-> +...
-> -- 
-> 2.34.1
-> 
-> 
+Pozdrawiam,
+Rados=C5=82aw Grabowski
