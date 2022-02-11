@@ -2,120 +2,209 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202C94B1A76
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Feb 2022 01:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F62B4B227F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Feb 2022 10:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346373AbiBKAdI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Feb 2022 19:33:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59120 "EHLO
+        id S242412AbiBKJx0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 11 Feb 2022 04:53:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242533AbiBKAdI (ORCPT
+        with ESMTP id S232289AbiBKJx0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:33:08 -0500
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFE95F72
-        for <linux-watchdog@vger.kernel.org>; Thu, 10 Feb 2022 16:33:07 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        Fri, 11 Feb 2022 04:53:26 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801FEC4F;
+        Fri, 11 Feb 2022 01:53:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6D7EA2C0CC1;
-        Fri, 11 Feb 2022 00:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1644539583;
-        bh=9AoyTmrNG1bFwKaC2bK2uvY6+BloeSm9RcgQuQxez3M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GDGb+BFivrnojGAWg0yNCMSdEnlKISaDpNh+PYVOAqUfECfOOaZhzztZHfE/H2aVd
-         JV1pGxUJfkgmz7D1emSfd7twrvOHK1Zrv5RDE/0VOMj8NDS2K7FRrTmtWpLO35Av7A
-         YZBo/AT9aa2Bb4BPNEDyxw1d9pViKLH+CAN6YYTYC4XqWRmayXzfcIBVn6agrq/jAR
-         waIGxcKRe1nEBwvalO5tTCKKkfvTCNyMf/RZYXg5WF6ssitusfr7in0zEJIpR1m874
-         YvNxcpdXPba3XuKUUShQ9KGHNEYf1F9+UryqYMQx1fbb+IYl6HlOn/JyNKoJM8u8PY
-         45shPTpJjFepw==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6205aec00002>; Fri, 11 Feb 2022 13:33:04 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 54F5F13ECE9;
-        Fri, 11 Feb 2022 13:33:03 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 3BAE82A00D0; Fri, 11 Feb 2022 13:32:59 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     andrew@lunn.ch, gregory.clement@bootlin.com, robh+dt@kernel.org,
-        wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 2/2] watchdog: orion_wdt: support pretimeout on Armada-XP
-Date:   Fri, 11 Feb 2022 13:32:57 +1300
-Message-Id: <20220211003257.2037332-3-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220211003257.2037332-1-chris.packham@alliedtelesis.co.nz>
-References: <20220211003257.2037332-1-chris.packham@alliedtelesis.co.nz>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 333EB1F3A2;
+        Fri, 11 Feb 2022 09:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644573204; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W62L88+zcZHOeh2jlIvhoTBCBvPlWiH1lU+vLtZUc/k=;
+        b=KfZxou1t9z35AvGMqZANlog57oVxaQtBtsvqwxztAB1fhwLWbGh7WM+5ECf9wq+nAXyTve
+        cFBOAHWHU7MrfxKBSaR9sGrpWv+sF25DH+hBtJhjSl+IXbg7iERdRAGsd9WaH8PyGtyicY
+        AJvuBg9EmIS0t2QFry9FgeQYghC2xiY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644573204;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W62L88+zcZHOeh2jlIvhoTBCBvPlWiH1lU+vLtZUc/k=;
+        b=6SzhxnS+9p6k94x5ix65ydYlTHFzYd+EVX0laWZF+8PPAbMYbkGK3XzaJ/skfzahZJkaTX
+        cP+G+Y/coJsswMBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD8A313BC3;
+        Fri, 11 Feb 2022 09:53:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 65POKBMyBmKBIAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 11 Feb 2022 09:53:23 +0000
+Date:   Fri, 11 Feb 2022 10:53:22 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
+        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <Mario.Limonciello@amd.com>
+Subject: Re: [PATCH v5 3/9] i2c: piix4: Move port I/O region request/release
+ code into functions
+Message-ID: <20220211105322.180ad89d@endymion.delvare>
+In-Reply-To: <20220209172717.178813-4-terry.bowman@amd.com>
+References: <20220209172717.178813-1-terry.bowman@amd.com>
+        <20220209172717.178813-4-terry.bowman@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=c43Vvi1l c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=oGFeUVbbRNcA:10 a=Moq0AktbSBU1Ap_EwrUA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Commit e07a4c79ca75 ("watchdog: orion_wdt: use timer1 as a pretimeout")
-added support for a pretimeout on Armada-38x variants. Because the
-Armada-XP variants use armada370_start/armada370_stop (due to missing an
-explicit RSTOUT mask bit for the watchdog). Add the required pretimeout
-support to armada370_start/armada370_stop for Armada-XP.
+On Wed, 09 Feb 2022 11:27:11 -0600, Terry Bowman wrote:
+> Move duplicated region request and release code into a function. Move is
+> in preparation for following MMIO changes.
+> 
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> ---
+>  drivers/i2c/busses/i2c-piix4.c | 48 ++++++++++++++++++++++------------
+>  1 file changed, 31 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+> index 3ff68967034e..cc488b1e92c3 100644
+> --- a/drivers/i2c/busses/i2c-piix4.c
+> +++ b/drivers/i2c/busses/i2c-piix4.c
+> @@ -165,6 +165,24 @@ struct i2c_piix4_adapdata {
+>  	u8 port;		/* Port number, shifted */
+>  };
+>  
+> +static int piix4_sb800_region_request(struct device *dev)
+> +{
+> +	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> +				  "sb800_piix4_smb")) {
+> +		dev_err(dev,
+> +			"SMBus base address index region 0x%x already in use.\n",
+> +			SB800_PIIX4_SMB_IDX);
+> +		return -EBUSY;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void piix4_sb800_region_release(struct device *dev)
+> +{
+> +	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +}
+> +
+>  static int piix4_setup(struct pci_dev *PIIX4_dev,
+>  		       const struct pci_device_id *id)
+>  {
+> @@ -270,6 +288,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  	unsigned short piix4_smba;
+>  	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
+>  	u8 i2ccfg, i2ccfg_offset = 0x10;
+> +	int retval;
+>  
+>  	/* SB800 and later SMBus does not support forcing address */
+>  	if (force || force_addr) {
+> @@ -291,20 +310,16 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  	else
+>  		smb_en = (aux) ? 0x28 : 0x2c;
+>  
+> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> -				  "sb800_piix4_smb")) {
+> -		dev_err(&PIIX4_dev->dev,
+> -			"SMB base address index region 0x%x already in use.\n",
+> -			SB800_PIIX4_SMB_IDX);
+> -		return -EBUSY;
+> -	}
+> +	retval = piix4_sb800_region_request(&PIIX4_dev->dev);
+> +	if (retval)
+> +		return retval;
+>  
+>  	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
+>  	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
+>  	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
+>  	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
+>  
+> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +	piix4_sb800_region_release(&PIIX4_dev->dev);
+>  
+>  	if (!smb_en) {
+>  		smb_en_status = smba_en_lo & 0x10;
+> @@ -373,11 +388,10 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  			piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
+>  		}
+>  	} else {
+> -		if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
+> -					  SB800_PIIX4_SMB_MAP_SIZE,
+> -					  "sb800_piix4_smb")) {
+> +		retval = piix4_sb800_region_request(&PIIX4_dev->dev);
+> +		if (retval)
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- drivers/watchdog/orion_wdt.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+Missing curly brace here, breaks the build.
 
-diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
-index 127eefc9161d..e25e6bf4647f 100644
---- a/drivers/watchdog/orion_wdt.c
-+++ b/drivers/watchdog/orion_wdt.c
-@@ -238,8 +238,10 @@ static int armada370_start(struct watchdog_device *w=
-dt_dev)
- 	atomic_io_modify(dev->reg + TIMER_A370_STATUS, WDT_A370_EXPIRED, 0);
-=20
- 	/* Enable watchdog timer */
--	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit,
--						dev->data->wdt_enable_bit);
-+	reg =3D dev->data->wdt_enable_bit;
-+	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
-+		reg |=3D TIMER1_ENABLE_BIT;
-+	atomic_io_modify(dev->reg + TIMER_CTRL, reg, reg);
-=20
- 	/* Enable reset on watchdog */
- 	reg =3D readl(dev->rstout);
-@@ -312,7 +314,7 @@ static int armada375_stop(struct watchdog_device *wdt=
-_dev)
- static int armada370_stop(struct watchdog_device *wdt_dev)
- {
- 	struct orion_watchdog *dev =3D watchdog_get_drvdata(wdt_dev);
--	u32 reg;
-+	u32 reg, mask;
-=20
- 	/* Disable reset on watchdog */
- 	reg =3D readl(dev->rstout);
-@@ -320,7 +322,10 @@ static int armada370_stop(struct watchdog_device *wd=
-t_dev)
- 	writel(reg, dev->rstout);
-=20
- 	/* Disable watchdog timer */
--	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit, 0);
-+	mask =3D dev->data->wdt_enable_bit;
-+	if (wdt_dev->info->options & WDIOF_PRETIMEOUT)
-+		mask |=3D TIMER1_ENABLE_BIT;
-+	atomic_io_modify(dev->reg + TIMER_CTRL, mask, 0);
-=20
- 	return 0;
- }
---=20
-2.35.1
+>  			release_region(piix4_smba, SMBIOSIZE);
+> -			return -EBUSY;
+> +			return retval;
+>  		}
+>  
+>  		outb_p(SB800_PIIX4_PORT_IDX_SEL, SB800_PIIX4_SMB_IDX);
+> @@ -387,7 +401,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  				       SB800_PIIX4_PORT_IDX;
+>  		piix4_port_mask_sb800 = SB800_PIIX4_PORT_IDX_MASK;
+>  		piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
+> -		release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +		piix4_sb800_region_release(&PIIX4_dev->dev);
+>  	}
+>  
+>  	dev_info(&PIIX4_dev->dev,
+> @@ -685,9 +699,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+>  	u8 port;
+>  	int retval;
+>  
+> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> -				  "sb800_piix4_smb"))
+> -		return -EBUSY;
+> +	retval = piix4_sb800_region_request(&adap->dev);
+> +	if (retval)
+> +		return retval;
+>  
+>  	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
+>  	smbslvcnt  = inb_p(SMBSLVCNT);
+> @@ -762,7 +776,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+>  		piix4_imc_wakeup();
+>  
+>  release:
+> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +	piix4_sb800_region_release(&adap->dev);
+>  	return retval;
+>  }
+>  
 
+
+-- 
+Jean Delvare
+SUSE L3 Support
