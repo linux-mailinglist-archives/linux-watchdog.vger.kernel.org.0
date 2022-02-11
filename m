@@ -2,112 +2,82 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5FD4B1817
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Feb 2022 23:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEEE4B1A74
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Feb 2022 01:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245077AbiBJWZq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Feb 2022 17:25:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50902 "EHLO
+        id S1346369AbiBKAdI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 10 Feb 2022 19:33:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242123AbiBJWZp (ORCPT
+        with ESMTP id S1346360AbiBKAdI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:25:45 -0500
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEE425CC;
-        Thu, 10 Feb 2022 14:25:46 -0800 (PST)
-Received: by mail-oo1-f43.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso8207151oop.0;
-        Thu, 10 Feb 2022 14:25:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=bi0xxaYvyCZbPDNk/x9kYcmKT4Bfk4GrdJcxp5giOSA=;
-        b=gDyO324ndxNpJS24Z8dPOds+eZQBpw+aGssRr1TyPu8sUpXE1qho4UIh35WWTNbMM2
-         v89YyTvfvhA0WxwtQt7OIo4rP/C9SX7H6hiMEdJHCf74q/nuzfKLsbY60y1FPMKog370
-         k8tg+1x+zSZVJ/kOnyYi20eQbw1KF+Jkwg8miJBXEUSxZUydYwxikio2GWRsCCII/6oX
-         j1IlDwl084cUlzP+pwOpesmN3IjTmJ6rrhioPDgB+irGG27Qmqt0r6oHw4jR6jTK67SL
-         rqISzr/FZw0+BC/WP0DCqFNx7XrTI+0qC/h1Izc1WjdUhkCwK6kVDe/SEyLvt+9IU6hq
-         nbjA==
-X-Gm-Message-State: AOAM5339kLi/432fLs74yo77SHd0JFOJMEXVLCTiRvtW7zxrRfsffTHH
-        JHgtDgVBnRcUKAH4/7D9HYiIHNGvRg==
-X-Google-Smtp-Source: ABdhPJwrVekJrzjgQ/9yYiHIMcwIFxnZL/6zvQzwUNx14/DTrV495dnI67C+qdTQ88ZtqEUt9JYtXQ==
-X-Received: by 2002:a05:6820:353:: with SMTP id m19mr3483384ooe.36.1644531945357;
-        Thu, 10 Feb 2022 14:25:45 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 71sm8556446otn.43.2022.02.10.14.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 14:25:44 -0800 (PST)
-Received: (nullmailer pid 3262538 invoked by uid 1000);
-        Thu, 10 Feb 2022 22:25:43 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     krzysztof.kozlowski@canonical.com, wim@linux-watchdog.org,
-        robh+dt@kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux@roeck-us.net,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220210155450.2939129-1-clabbe@baylibre.com>
-References: <20220210155450.2939129-1-clabbe@baylibre.com>
-Subject: Re: [PATCH v3] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
-Date:   Thu, 10 Feb 2022 16:25:43 -0600
-Message-Id: <1644531943.376766.3262537.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 10 Feb 2022 19:33:08 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDE45F66
+        for <linux-watchdog@vger.kernel.org>; Thu, 10 Feb 2022 16:33:07 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 413AE2C00C4;
+        Fri, 11 Feb 2022 00:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1644539583;
+        bh=zn/yu2lMb6LsMc4qbLeNBM9b0Jo0d/eKfyNo33ad2UE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MWtbpllMPBy0A2tq0OKIXwSyIqKL7hgDNCQtZvnlcKJsVwHpJsclqpBVJI3N3qJ+m
+         oP39nCMgI+W+yJK8fgez6N4/uI6FNdjsaPE7DlMpg8nvX+H/aOFZnAkEA+sqQHG9uJ
+         kSbiwTULABoO4+2d+C1lOXQf+w/HRod10FHbx8I2q7bnzpIe1bHSGMoaUIoLRnsP/L
+         pEXhkfCjmu2zV1tzq8ARszJLql131sQ5vAagBjzzCcdVUHxLEXr0cHOVDaJP9l1WjP
+         nYmrBFeDcm84AWI/+93O39QiRL2/UUUIS+IvgMU9QC9l9YHdMPu4hr9WXKV7ujKDo8
+         hki+92oeZx91w==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6205aec00000>; Fri, 11 Feb 2022 13:33:04 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 18E3C13ECE9;
+        Fri, 11 Feb 2022 13:33:03 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id F1C052A00D0; Fri, 11 Feb 2022 13:32:58 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     andrew@lunn.ch, gregory.clement@bootlin.com, robh+dt@kernel.org,
+        wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 0/2] watchdog: Pretimeout support for Armada-XP
+Date:   Fri, 11 Feb 2022 13:32:55 +1300
+Message-Id: <20220211003257.2037332-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=c43Vvi1l c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=oGFeUVbbRNcA:10 a=Dj44Gz3Sirx6rMiEHMMA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 10 Feb 2022 15:54:50 +0000, Corentin Labbe wrote:
-> Converts watchdog/faraday,ftwdt010.txt to yaml.
-> This permits to detect missing properties like clocks and resets or
-> compatible like moxa,moxart-watchdog.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> Changes since v1:
-> - Added myself as maintainer as requested by Linus
-> - Added $ref to watchdog.yaml
-> - Removed useless quotes
-> - Added blank lines between properties
-> - Removed timeout-sec as already provided by watchdog.yaml
-> 
-> Change since v2:
-> - rewrite compatible section
-> 
->  .../bindings/watchdog/faraday,ftwdt010.txt    | 22 -------
->  .../bindings/watchdog/faraday,ftwdt010.yaml   | 66 +++++++++++++++++++
->  2 files changed, 66 insertions(+), 22 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> 
+This series extends and enables support for using timer1 as a pretimeout =
+for
+the watchdog which allows for getting some additional debug out before th=
+e
+watchdog triggers a system reset.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Chris Packham (2):
+  ARM: dts: armada-xp: add interrupts for watchdog
+  watchdog: orion_wdt: support pretimeout on Armada-XP
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml:25:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml:26:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
+ arch/arm/boot/dts/armada-xp-98dx3236.dtsi |  1 +
+ arch/arm/boot/dts/armada-xp.dtsi          |  1 +
+ drivers/watchdog/orion_wdt.c              | 13 +++++++++----
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1591202
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+--=20
+2.35.1
 
