@@ -2,78 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F62B4B227F
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Feb 2022 10:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EAE4B24E3
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Feb 2022 12:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242412AbiBKJx0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 11 Feb 2022 04:53:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35866 "EHLO
+        id S1349724AbiBKLzo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 11 Feb 2022 06:55:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbiBKJx0 (ORCPT
+        with ESMTP id S1349720AbiBKLzn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:53:26 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801FEC4F;
-        Fri, 11 Feb 2022 01:53:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 333EB1F3A2;
-        Fri, 11 Feb 2022 09:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644573204; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W62L88+zcZHOeh2jlIvhoTBCBvPlWiH1lU+vLtZUc/k=;
-        b=KfZxou1t9z35AvGMqZANlog57oVxaQtBtsvqwxztAB1fhwLWbGh7WM+5ECf9wq+nAXyTve
-        cFBOAHWHU7MrfxKBSaR9sGrpWv+sF25DH+hBtJhjSl+IXbg7iERdRAGsd9WaH8PyGtyicY
-        AJvuBg9EmIS0t2QFry9FgeQYghC2xiY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644573204;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W62L88+zcZHOeh2jlIvhoTBCBvPlWiH1lU+vLtZUc/k=;
-        b=6SzhxnS+9p6k94x5ix65ydYlTHFzYd+EVX0laWZF+8PPAbMYbkGK3XzaJ/skfzahZJkaTX
-        cP+G+Y/coJsswMBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD8A313BC3;
-        Fri, 11 Feb 2022 09:53:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 65POKBMyBmKBIAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 11 Feb 2022 09:53:23 +0000
-Date:   Fri, 11 Feb 2022 10:53:22 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
-        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
-        <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v5 3/9] i2c: piix4: Move port I/O region request/release
- code into functions
-Message-ID: <20220211105322.180ad89d@endymion.delvare>
-In-Reply-To: <20220209172717.178813-4-terry.bowman@amd.com>
-References: <20220209172717.178813-1-terry.bowman@amd.com>
-        <20220209172717.178813-4-terry.bowman@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Fri, 11 Feb 2022 06:55:43 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C460EEBD
+        for <linux-watchdog@vger.kernel.org>; Fri, 11 Feb 2022 03:55:40 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id j26so3969362wrb.7
+        for <linux-watchdog@vger.kernel.org>; Fri, 11 Feb 2022 03:55:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FFTn8zwjTX2hFzTgJT6QAjUmkuMKVR409IkO5bq/6Ns=;
+        b=RUkCmM49DAHtqyXh3m1sKwckw6Y6y9JmMteiPJ6JQbjWqNHPEBamE2o3viBwED7twG
+         oIK8QLR5pGVyK+5yqzzMZgBS0dG6CyUIEA+lxD2Ev2ol3VTtINq54YfZLHGKdF39t7Bg
+         h/21GMI6cxKFu61g42kLzomBwLky19G0jO1nR32qbtOH4exjR3FY797knQmp+2mNtXkD
+         ZrQKSIW8JMSV4fNytzMYj4m2vH/7/yWbcXQuBSSIf+71kHNqVOHjRwLjq+SSjpZxuP/3
+         ANfn87g3lpDVUZxSk4/VcT5cqZqMH9PBbRIgWWwCqX1dW2cq/jq66dAGxcXO2o8LqbQ0
+         fX6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FFTn8zwjTX2hFzTgJT6QAjUmkuMKVR409IkO5bq/6Ns=;
+        b=DF6BTpFBZgRIYSJewHd5p9bp2iYud/1KgzQ5LEX02UyX4f5EV0sOKzt5i+09o1etBC
+         QDjozKR6C8ovJ/oDqEsBJe5u4FpKRQjJpOGG0KKHFPHiLAYYf5QdJi1pD4Ss7vOL+zlY
+         DHqdYNCaq0zjf26zod8RVqIuzsNr3hMDwK4hV1ZI9YBjGmSNkmU+1BNs8ZieIz+u6ymk
+         KxMsuXC1/JtSvwqpyLRjtgK/iIBHA0wQpPYJ9ppBvxiGChUstf8ZZm04H9oZkV2NfRjL
+         /HOVeN8JhYDAZDcqedEXFXRcP2yfciSxkvhdLuCF3UuK6YyDO5RCS0xH7etTwGkZY7x0
+         r7Yg==
+X-Gm-Message-State: AOAM5307nQm+GXShfbnWfXJBYQnrICiCZRM+yTHoTImJC5vIRVzmJLTe
+        l7DA2IKyG7I5TihV/9Qgnuz2sg==
+X-Google-Smtp-Source: ABdhPJwt7XPCUknMlwxpa45RJ3Vt8/4BhE5nZWfzZzlmQGaNHfBBEXQ3be5TsTPXfbcgYuQDQ/D8aw==
+X-Received: by 2002:a05:6000:128d:: with SMTP id f13mr1062625wrx.675.1644580539259;
+        Fri, 11 Feb 2022 03:55:39 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id bg23sm4899482wmb.5.2022.02.11.03.55.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 03:55:38 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     krzysztof.kozlowski@canonical.com, linux@roeck-us.net,
+        robh+dt@kernel.org, wim@linux-watchdog.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v4] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
+Date:   Fri, 11 Feb 2022 11:55:28 +0000
+Message-Id: <20220211115528.3382374-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,130 +71,135 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 09 Feb 2022 11:27:11 -0600, Terry Bowman wrote:
-> Move duplicated region request and release code into a function. Move is
-> in preparation for following MMIO changes.
-> 
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> ---
->  drivers/i2c/busses/i2c-piix4.c | 48 ++++++++++++++++++++++------------
->  1 file changed, 31 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-> index 3ff68967034e..cc488b1e92c3 100644
-> --- a/drivers/i2c/busses/i2c-piix4.c
-> +++ b/drivers/i2c/busses/i2c-piix4.c
-> @@ -165,6 +165,24 @@ struct i2c_piix4_adapdata {
->  	u8 port;		/* Port number, shifted */
->  };
->  
-> +static int piix4_sb800_region_request(struct device *dev)
-> +{
-> +	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> +				  "sb800_piix4_smb")) {
-> +		dev_err(dev,
-> +			"SMBus base address index region 0x%x already in use.\n",
-> +			SB800_PIIX4_SMB_IDX);
-> +		return -EBUSY;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void piix4_sb800_region_release(struct device *dev)
-> +{
-> +	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +}
-> +
->  static int piix4_setup(struct pci_dev *PIIX4_dev,
->  		       const struct pci_device_id *id)
->  {
-> @@ -270,6 +288,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  	unsigned short piix4_smba;
->  	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
->  	u8 i2ccfg, i2ccfg_offset = 0x10;
-> +	int retval;
->  
->  	/* SB800 and later SMBus does not support forcing address */
->  	if (force || force_addr) {
-> @@ -291,20 +310,16 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  	else
->  		smb_en = (aux) ? 0x28 : 0x2c;
->  
-> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> -				  "sb800_piix4_smb")) {
-> -		dev_err(&PIIX4_dev->dev,
-> -			"SMB base address index region 0x%x already in use.\n",
-> -			SB800_PIIX4_SMB_IDX);
-> -		return -EBUSY;
-> -	}
-> +	retval = piix4_sb800_region_request(&PIIX4_dev->dev);
-> +	if (retval)
-> +		return retval;
->  
->  	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
->  	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
->  	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
->  	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
->  
-> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +	piix4_sb800_region_release(&PIIX4_dev->dev);
->  
->  	if (!smb_en) {
->  		smb_en_status = smba_en_lo & 0x10;
-> @@ -373,11 +388,10 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  			piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
->  		}
->  	} else {
-> -		if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
-> -					  SB800_PIIX4_SMB_MAP_SIZE,
-> -					  "sb800_piix4_smb")) {
-> +		retval = piix4_sb800_region_request(&PIIX4_dev->dev);
-> +		if (retval)
+Converts watchdog/faraday,ftwdt010.txt to yaml.
+This permits to detect missing properties like clocks and resets or
+compatible like moxa,moxart-watchdog.
 
-Missing curly brace here, breaks the build.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+Changes since v1:
+- Added myself as maintainer as requested by Linus
+- Added $ref to watchdog.yaml
+- Removed useless quotes
+- Added blank lines between properties
+- Removed timeout-secs as already provided by watchdog.yaml
 
->  			release_region(piix4_smba, SMBIOSIZE);
-> -			return -EBUSY;
-> +			return retval;
->  		}
->  
->  		outb_p(SB800_PIIX4_PORT_IDX_SEL, SB800_PIIX4_SMB_IDX);
-> @@ -387,7 +401,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
->  				       SB800_PIIX4_PORT_IDX;
->  		piix4_port_mask_sb800 = SB800_PIIX4_PORT_IDX_MASK;
->  		piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
-> -		release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +		piix4_sb800_region_release(&PIIX4_dev->dev);
->  	}
->  
->  	dev_info(&PIIX4_dev->dev,
-> @@ -685,9 +699,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  	u8 port;
->  	int retval;
->  
-> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
-> -				  "sb800_piix4_smb"))
-> -		return -EBUSY;
-> +	retval = piix4_sb800_region_request(&adap->dev);
-> +	if (retval)
-> +		return retval;
->  
->  	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
->  	smbslvcnt  = inb_p(SMBSLVCNT);
-> @@ -762,7 +776,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
->  		piix4_imc_wakeup();
->  
->  release:
-> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
-> +	piix4_sb800_region_release(&adap->dev);
->  	return retval;
->  }
->  
+Change since v2:
+- rewrite compatible section
 
+Changes since v3:
+- Fix indent errors reported by yamllint
+- Change additionalProperties to unevaluatedProperties
+- Added timeout-secs in example
 
+ .../bindings/watchdog/faraday,ftwdt010.txt    | 22 ------
+ .../bindings/watchdog/faraday,ftwdt010.yaml   | 67 +++++++++++++++++++
+ 2 files changed, 67 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+deleted file mode 100644
+index 9ecdb502e605..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Faraday Technology FTWDT010 watchdog
+-
+-This is an IP part from Faraday Technology found in the Gemini
+-SoCs and others.
+-
+-Required properties:
+-- compatible : must be one of
+-  "faraday,ftwdt010"
+-  "cortina,gemini-watchdog", "faraday,ftwdt010"
+-- reg : shall contain base register location and length
+-- interrupts : shall contain the interrupt for the watchdog
+-
+-Optional properties:
+-- timeout-sec : the default watchdog timeout in seconds.
+-
+-Example:
+-
+-watchdog@41000000 {
+-	compatible = "faraday,ftwdt010";
+-	reg = <0x41000000 0x1000>;
+-	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+new file mode 100644
+index 000000000000..ca9e1beff76b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Faraday Technology FTWDT010 watchdog
++
++maintainers:
++  - Linus Walleij <linus.walleij@linaro.org>
++  - Corentin Labbe <clabbe@baylibre.com>
++
++description: |
++  This is an IP part from Faraday Technology found in the Gemini
++  SoCs and others.
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++properties:
++  compatible:
++    oneOf:
++      - const: faraday,ftwdt010
++      - items:
++          - enum:
++              - cortina,gemini-watchdog
++              - moxa,moxart-watchdog
++          - const: faraday,ftwdt010
++
++  reg:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: PCLK
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    watchdog@41000000 {
++      compatible = "faraday,ftwdt010";
++      reg = <0x41000000 0x1000>;
++      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
++      timeout-secs = <5>;
++    };
++  - |
++    watchdog: watchdog@98500000 {
++      compatible = "moxa,moxart-watchdog", "faraday,ftwdt010";
++      reg = <0x98500000 0x10>;
++      clocks = <&clk_apb>;
++      clock-names = "PCLK";
++    };
++...
 -- 
-Jean Delvare
-SUSE L3 Support
+2.34.1
+
