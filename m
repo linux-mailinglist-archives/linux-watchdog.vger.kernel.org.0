@@ -2,65 +2,51 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5474B2ACA
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Feb 2022 17:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D5E4B2C6B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Feb 2022 19:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351690AbiBKQpa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 11 Feb 2022 11:45:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46348 "EHLO
+        id S1352495AbiBKSIT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 11 Feb 2022 13:08:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351591AbiBKQp3 (ORCPT
+        with ESMTP id S1343603AbiBKSIT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:45:29 -0500
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C3CD65;
-        Fri, 11 Feb 2022 08:45:28 -0800 (PST)
-Received: by mail-oi1-f169.google.com with SMTP id 4so10115231oil.11;
-        Fri, 11 Feb 2022 08:45:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0VuDosrPtUOxSIQIeO4Bd7qCohEltoGRKuxLMbZLM04=;
-        b=Sn/FODfW6BKjek5S2Cd0zhyeSLLngPxTaGikTtKVPNHYbzC2VCa/rWBOJcf1hP4Fnp
-         MEhBtLugHs4R/iF7TYpSRm/BynYH/rja1aveZhyEvJsXPsRZYlfFEp5F6qOvY/Fdc00x
-         Ow5+6nrkk+VnAAGVBnFMAaphEMBQw31vBL6hf3nIgQFs0IPGW2GX0XxE4MO4T+kQQw9Q
-         f0fDS+SIaU5ukWLRyBv8/K6bNmJ1S2FnJVo0KoQ0QwLp0BHAXkhCa0a95JaIqyS73GGj
-         7QcwYzg7+At9W6g0EdGZPZZ+NES0FBnQaUoQHqjEKkTnA5cZrWs6IgWNi0dEHh0H6goF
-         SKqA==
-X-Gm-Message-State: AOAM53020MC94TyL7vb/J6FHNM9pXrda6Nbn7/kJ4OD4GYyvgajylwrr
-        KaFzU6CI0qZdDcfzyOJ+0Q==
-X-Google-Smtp-Source: ABdhPJziC2VqP8+N4WTAV17wp3i/jlaevPineRvJCejH6FV67JNjTaptkyRRDeBa1IjMmpvGKkncsA==
-X-Received: by 2002:a05:6808:2086:: with SMTP id s6mr597613oiw.236.1644597928312;
-        Fri, 11 Feb 2022 08:45:28 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
-        by smtp.gmail.com with ESMTPSA id x1sm9355800oto.38.2022.02.11.08.45.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:45:27 -0800 (PST)
-Received: (nullmailer pid 497474 invoked by uid 1000);
-        Fri, 11 Feb 2022 16:45:25 -0000
-Date:   Fri, 11 Feb 2022 10:45:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        geert+renesas@glider.be, linux-watchdog@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] dt-bindings: watchdog: renesas,wdt: Add support
- for RZ/N1
-Message-ID: <YgaSpW4QsVDKgIFo@robh.at.kernel.org>
-References: <20220208183511.2925304-1-jjhiblot@traphandler.com>
- <20220208183511.2925304-3-jjhiblot@traphandler.com>
+        Fri, 11 Feb 2022 13:08:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB1013A;
+        Fri, 11 Feb 2022 10:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=Ujdmirxmv9J+xYKwu/KpZa9Pjtl6WCpcTWo64lQCL/Y=; b=Iz5TYEtx4Jt5k1HufobAB3vhVM
+        kyUQZAHhc44BGy8iRMMFPbUqCRDgMjTW6lkhbxOGkW5DGq0NX3yiYNQ0y2p+tfn19UYnhe1hPj1EL
+        7g7d/6c/JWeXkUJ0Y8LzXbor1Iwkcn92Ok4n3eUUJI5Kybv/bg6CwPZk+iV6B973mAkwamQYX8X2y
+        r6H6wHv2SvaiQX+dRT1FkBcXGIkEsrXdpYHfwZpDB99ktTDEv7XRLBThydTeTc2RH79E0fFI0k/og
+        zg6sta1tzg28uOw+Acx9WJRbBQXi86ZP6Vv3CNGNZE61iGGkBUbYfSS6InIdE9a2auGQsucfJWIZ6
+        DgUX2dKw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIaL4-00AcW0-RO; Fri, 11 Feb 2022 18:08:11 +0000
+Message-ID: <87137253-82a8-a070-2378-5e965987a34f@infradead.org>
+Date:   Fri, 11 Feb 2022 10:08:06 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208183511.2925304-3-jjhiblot@traphandler.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH V2] watchdog: Improve watchdog_dev function documentation
+Content-Language: en-US
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <30378a03e9cd9b5f6e92ec9bf512edc38bad8627.1644589712.git.bristot@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <30378a03e9cd9b5f6e92ec9bf512edc38bad8627.1644589712.git.bristot@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,13 +54,71 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 08 Feb 2022 19:35:06 +0100, Jean-Jacques Hiblot wrote:
-> Describe the WDT hardware in the RZ/N1 series.
-> 
-> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> ---
->  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+Hi Daniel,
 
-Acked-by: Rob Herring <robh@kernel.org>
+On 2/11/22 06:30, Daniel Bristot de Oliveira wrote:
+> Adjust function comments to the kernel doc format. It
+> also adjusts some variable names and adds return values.
+> 
+> No functional change.
+> 
+> Changes from V1:
+>   Change "Returns" to "Return:" (Randy Dunlap)
+> 
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: linux-watchdog@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+
+
+scripts/kernel-doc throws one warning:
+watchdog_dev.c:1194: warning: contents before sections
+
+which is a bug in the script IMO.
+I would just ignore this one.
+(see more below)
+
+
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  drivers/watchdog/watchdog_dev.c | 244 ++++++++++++++++----------------
+>  1 file changed, 125 insertions(+), 119 deletions(-)
+> 
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 3a3d8b5c7ad5..54903f3c851e 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+
+
+scripts/kernel-doc does not nicely handle a function that has
+no parameters (hence no @param descriptions) that is followed
+by a function description.
+
+Adding one line (I am not suggesting this as a patch) stops the
+warning:
+
+ * @void: none
+
+
+This is the function that kernel-doc complains about
+(nothing wrong with it):
+
+/**
+ * watchdog_dev_init - init dev part of watchdog core
+ *
+ * Allocate a range of chardev nodes to use for watchdog devices.
+ *
+ * Return: 0 if successful, error otherwise.
+ */
+int __init watchdog_dev_init(void)
+{
+
+
+-- 
+~Randy
