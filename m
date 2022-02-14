@@ -2,113 +2,116 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516194B54F8
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Feb 2022 16:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DCA4B5526
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Feb 2022 16:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236840AbiBNPjQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Feb 2022 10:39:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36450 "EHLO
+        id S1346797AbiBNPsw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Feb 2022 10:48:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236000AbiBNPjP (ORCPT
+        with ESMTP id S1346014AbiBNPsw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:39:15 -0500
-X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 07:39:06 PST
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCDA40A35;
-        Mon, 14 Feb 2022 07:39:05 -0800 (PST)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6E231240008;
-        Mon, 14 Feb 2022 15:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644853144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yd4h8qG0bOZ43U9tdtwFQ5VmXb5hOehL8q+jzFS2vS4=;
-        b=MWGYl1SVktk3dJzE/XVK7PfBGHJwxRS99HyvdnnxQLCw2UbxKVvkYxQ2eQWTlEW9C0mwTM
-        3iT2psJxpLV1oGfFwciU2Id/dgdoxp6h8OAc35Bs83LqtjTEC8QaGq8FPcHzz7fHnCHNsQ
-        SCd4Gau2Kh/7jNfDyAM1s+C2ct6kFkfKzRBZRHnuqZ470WA4mE3UxN/58xJ6KvHMUy0s4c
-        3/kOPO2TkbSigRBPJ4cjg9k79B1PmJ4+09jVfK8ARSrnTMCBIHQvQKOLrGl74RKXPMftE1
-        vyu+rZ/IvazvsscTVenPpRktLNUIzYTWAIKcPTRpx6704Wu55iLJ6o5sYvsd/g==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>, andrew@lunn.ch,
-        robh+dt@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [PATCH 1/2] ARM: dts: armada-xp: add interrupts for watchdog
-In-Reply-To: <20220211003257.2037332-2-chris.packham@alliedtelesis.co.nz>
-References: <20220211003257.2037332-1-chris.packham@alliedtelesis.co.nz>
- <20220211003257.2037332-2-chris.packham@alliedtelesis.co.nz>
-Date:   Mon, 14 Feb 2022 16:39:02 +0100
-Message-ID: <87o839jw4p.fsf@BL-laptop>
+        Mon, 14 Feb 2022 10:48:52 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D214C60A94;
+        Mon, 14 Feb 2022 07:48:44 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so19733396oor.12;
+        Mon, 14 Feb 2022 07:48:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eNNtqm8EpmpM3533I3FfPpJ0jXPvy/LfN0oxAHh3x3M=;
+        b=EI+aGyX21Q8PfcNohLpV4XGV+abyjxsipwep0JcybqAGDvqFYQeXfqJ7gFegBzd7L7
+         Dswir/ivkF3yIy0wTnzyfUFnNyQDRjuZuNWo3JfkuF8MaRqWYhEMifEP9U79VK8nmRdk
+         a04I3YtRx6aC88R8ewLtlQ3ph2zD68oesh+UwotboudNujD1pEEtq0WQLLACWpzmIeQr
+         bMrpQp/Hq5obBWumz8K5luW7c2GBXA3Mgbjtllc0GVEIPf6TJwMtjcOKVdoa5i7VtWA/
+         U6WeBsoq0XhHkp3nRgPQN0hu0WZVBKD0R5RwJs4XxgVgVBWER7xXzZfhU9RDT89M0OpL
+         gkCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=eNNtqm8EpmpM3533I3FfPpJ0jXPvy/LfN0oxAHh3x3M=;
+        b=HNez435M6BLH+EzyYwMnk698dhpgPxsAHZ8b2jUgAzzKmY1ghSQSqPBJ0BPpC8k6V6
+         hc3DRnPP/DPkY6JV9Vk+5NI0CxPBtz257yljOV8Sdizi32ObShG/NyGiH+tF2iB8ERxo
+         HFVGdu7lecIZuV778MHceEcS6tiP0nLEAjnldXr1IzN6GvAq7+murD6Lb+y742ZjbuWx
+         Q5CNpOqU9kN3V5du19F+CTl7H6r5eplFzLixK7W5tcayiEogqCkv+ruv42u9lbF/kGRq
+         Wq5AxpoAQUw+nUtOE+H/5679vsOXPMghr+lZYTQ6dE7ggWnee4NvNGwbZdlqpBApXR1p
+         0qyg==
+X-Gm-Message-State: AOAM530uQnN2sKY+2K8yO7z9Upk6RnXgKrhrZZf5JXWo7KaWYN9/92C3
+        cAuOInTlLEG8xWcm3RCcQvw=
+X-Google-Smtp-Source: ABdhPJzkywkhm7Rq6NsxeJ2BNJkNSdrH42e5c/sMzjJ4wifWqh1sy4XWOc5vypLnNe3xPZSd3VubIg==
+X-Received: by 2002:a05:6870:a11e:: with SMTP id m30mr36609oae.260.1644853724274;
+        Mon, 14 Feb 2022 07:48:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v32sm1930812oaa.4.2022.02.14.07.48.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 07:48:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 14 Feb 2022 07:48:42 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        LUU HOAI <hoai.luu.ub@renesas.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Thanh Quan <thanh.quan.xn@renesas.com>
+Subject: Re: [PATCH 2/5] dt-bindings: watchdog: renesas-wdt: Document
+ r8a779f0 support
+Message-ID: <20220214154842.GA4172444@roeck-us.net>
+References: <cover.1642525158.git.geert+renesas@glider.be>
+ <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello Chris,
+On Tue, Jan 18, 2022 at 06:09:02PM +0100, Geert Uytterhoeven wrote:
+> From: Thanh Quan <thanh.quan.xn@renesas.com>
+> 
+> Document support for the Watchdog Timer (WDT) Controller in the Renesas
+> R-Car S4-8 (R8A779F0) SoC.
+> 
+> Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-> The first interrupt is for the regular watchdog timeout. Normally the
-> RSTOUT line will trigger a reset before this interrupt fires but on
-> systems with a non-standard reset it may still trigger.
->
-> The second interrupt is for a timer1 which is used as a pre-timeout for
-> the watchdog.
->
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-
-Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-
-To keep bisectability this patch should be merged after the driver
-patch.
-
-Thanks,
-
-Gregory
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  arch/arm/boot/dts/armada-xp-98dx3236.dtsi | 1 +
->  arch/arm/boot/dts/armada-xp.dtsi          | 1 +
->  2 files changed, 2 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/armada-xp-98dx3236.dtsi b/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
-> index 38a052a0312d..0e561dfc0ca9 100644
-> --- a/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
-> +++ b/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
-> @@ -286,6 +286,7 @@ &watchdog {
->  	compatible = "marvell,armada-xp-wdt";
->  	clocks = <&coreclk 2>, <&refclk>;
->  	clock-names = "nbclk", "fixed";
-> +	interrupts = <93>, <38>;
->  };
+>  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> index 91a98ccd4226f505..d060438e1402d502 100644
+> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> @@ -55,6 +55,11 @@ properties:
+>                - renesas,r8a779a0-wdt     # R-Car V3U
+>            - const: renesas,rcar-gen3-wdt # R-Car Gen3 and RZ/G2
 >  
->  &cpurst {
-> diff --git a/arch/arm/boot/dts/armada-xp.dtsi b/arch/arm/boot/dts/armada-xp.dtsi
-> index 6c19984d668e..4297482da62f 100644
-> --- a/arch/arm/boot/dts/armada-xp.dtsi
-> +++ b/arch/arm/boot/dts/armada-xp.dtsi
-> @@ -260,6 +260,7 @@ &watchdog {
->  	compatible = "marvell,armada-xp-wdt";
->  	clocks = <&coreclk 2>, <&refclk>;
->  	clock-names = "nbclk", "fixed";
-> +	interrupts = <93>, <38>;
->  };
+> +      - items:
+> +          - enum:
+> +              - renesas,r8a779f0-wdt     # R-Car S4-8
+> +          - const: renesas,rcar-gen4-wdt # R-Car Gen4
+> +
+>    reg:
+>      maxItems: 1
 >  
->  &cpurst {
-> -- 
-> 2.35.1
->
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
