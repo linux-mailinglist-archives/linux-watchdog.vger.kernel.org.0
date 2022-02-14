@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54794B554E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Feb 2022 16:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702A04B5552
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Feb 2022 16:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236017AbiBNPu7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Feb 2022 10:50:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43370 "EHLO
+        id S236137AbiBNPvj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Feb 2022 10:51:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234841AbiBNPu7 (ORCPT
+        with ESMTP id S229718AbiBNPvi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:50:59 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7964C5FF0B;
-        Mon, 14 Feb 2022 07:50:51 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso19718401oop.9;
-        Mon, 14 Feb 2022 07:50:51 -0800 (PST)
+        Mon, 14 Feb 2022 10:51:38 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1097449275;
+        Mon, 14 Feb 2022 07:51:31 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso19732524ooi.1;
+        Mon, 14 Feb 2022 07:51:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Ip8OUFOC+QQfZkTO8wkjCzFOKh1ma3GgYvGWr5tDs5w=;
-        b=SIJ+vdbbAKHwkzK73EJ23NxPN8TBz9v5hqFW/dkplRRJ9ipTdV+aqEIAE8XU706pV1
-         ILUDt46T0BBNwWq7G43KBEbrrQV7jfxqtm4RXWUP8pV1Mxdr+BwOYSEvEOrql/GYUmbE
-         uvQrlKFRtvvB5H4+jN1drwpEQHxEYf/c7TMBXbxbfajQ/TmetOJ2MnFFGkqJjrJwzl3v
-         DrHx6+ZCP9Ircu8P8jwJxhEVUPU9kv5jp3Y+t1Iktoz+VgHEXIHOHC2N+baD+7D8L70O
-         fQHcMXwl3hPkjnOaZh0P1JF6f3OWAuzv6bXWPc/MhmqoJehiB536PbcDfwyKTBFO6WuT
-         hlMg==
+        bh=93awWPSLOLHCSsywlBhIZubcOu6uImvQP2Eyrh2/H2Y=;
+        b=SlWZHmVRn2ZL3YItm7H/bIg0N/t3riHntRZoNd4ygaR8fyH7ps0pimSqAY9uDjqWd6
+         d7h/uYGUtR427j5mXX0XgFaYo0pojDz+yI8f3JUgZWtM61AIkhVqZalhg7bs7DNb5F/z
+         AoXG9/Rfc8YoAVlUnsQbpKyWuQNiyidu/Mwq7yPs44xGQHP5zhcMhr63/KkFqX8dPD06
+         ypTuk1XALOEmjWVsMc6UROb5GgnoxlJr/QhJabJCP+/AnXuVufdzXNbiIxibT63uhSK7
+         PjFvWGAzvLmixOeR1WqBeqQMZuLP13cSAlXtE3i29HLy+BlpeMyp88f79aXrOW2noBr4
+         Jctg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=Ip8OUFOC+QQfZkTO8wkjCzFOKh1ma3GgYvGWr5tDs5w=;
-        b=edZlJg1kL2/4rSjLtIvpZ1n+iG5sKN+x/eV25soy2Tkv3w1j9X/5oCFvFwu5P2ptzZ
-         HsimrOHLoNH8KMZlXeiqpBQooSXamKBC3wkZab3rGcDxzKsNiLwlHApEa6RkfBbXZfNh
-         qoIdUDZhN7kHwxwKHeSX0ZxznWKZu3NzvPYtALr9CNQnilQfg4AY//KYGIb8HVVdhG+z
-         hYgt4DRu8QQLpdpdDCWJKapwcr++iqxf5tngQ/qd5a0dxl+CX29Eg9N2xaKbGv/Wq23v
-         mOkTZcV6qHJFoymNtJLnc+yG9PkjBrhojlh+/jszdOc8WcTpl7mz9vztsmf4E2FF1INf
-         eE1A==
-X-Gm-Message-State: AOAM530ZE3dYfX/HgCJECLygHojjRwgD4324O7xUkDF3N6bTFJx2jBfq
-        WujDLheDcxGlglrvFTm+FLM=
-X-Google-Smtp-Source: ABdhPJzZRtNhR9zntREDVNntbwmQd4y4gF2J6WY3UxEH6j8JF/s9gtYSx6KqynJemRVGHMbfPWVTXg==
-X-Received: by 2002:a05:6870:e28c:: with SMTP id v12mr42282oad.178.1644853850905;
-        Mon, 14 Feb 2022 07:50:50 -0800 (PST)
+        bh=93awWPSLOLHCSsywlBhIZubcOu6uImvQP2Eyrh2/H2Y=;
+        b=VcsgU96zhf+mRw3FG0VHmx3dfM95IUSUK89+A/mSrwjZE1rPriz3JvsErDlozPSiB6
+         SZ9/v5B4SGLUuQH9he3qTmL8NIeIFLz6LqkEL6vXLkYhFwVzhex/ol5TesFNJK7eiH9w
+         qG0yrG02OGgm+1VpbyBHqoP1R60H1LkrJlku1E40uHnqBNRVWj5WgQ934awLurOs0pq/
+         PMolQ8bIfNbI75Ph2GunHBvLG4Z33kt16Hk/6W/zSkVotB9QuMnVku36Ai985HlpKoWc
+         BFmv0HGYfR9qfdvFNua0aEDK33xMdLMyhdmux/MJW3pzf2UgEakzc0Zfkask9/3LfbPo
+         74/Q==
+X-Gm-Message-State: AOAM531csmy4QnkMS7S3IuiZ0ojHWFoBg9THgHqM6QxP/g2ENVb0DNAh
+        leDcfSZIfWTsjBC4UGK9bcQ=
+X-Google-Smtp-Source: ABdhPJwZgPJK35jhIBYuXxiRd5c+QY7PplfyFRwRwdzvscMyIofl6BY6z9hMXNqAw305zsXw/2+New==
+X-Received: by 2002:a05:6870:818a:: with SMTP id k10mr73072oae.17.1644853890136;
+        Mon, 14 Feb 2022 07:51:30 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k19sm12462718oot.41.2022.02.14.07.50.49
+        by smtp.gmail.com with ESMTPSA id k13sm13061401ots.48.2022.02.14.07.51.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 07:50:50 -0800 (PST)
+        Mon, 14 Feb 2022 07:51:29 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 14 Feb 2022 07:50:49 -0800
+Date:   Mon, 14 Feb 2022 07:51:28 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
@@ -61,14 +61,14 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         LUU HOAI <hoai.luu.ub@renesas.com>, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/5] clk: renesas: r8a779f0: Add WDT clock
-Message-ID: <20220214155049.GA78279@roeck-us.net>
+Subject: Re: [PATCH 4/5] arm64: dts: renesas: r8a779f0: Add RWDT node
+Message-ID: <20220214155128.GA101460@roeck-us.net>
 References: <cover.1642525158.git.geert+renesas@glider.be>
- <8d9b280065a663f2cf31db7b21a010aa781a0af1.1642525158.git.geert+renesas@glider.be>
+ <556a7f41bdadceecbe8b59b79ac7e9f592ca17a2.1642525158.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8d9b280065a663f2cf31db7b21a010aa781a0af1.1642525158.git.geert+renesas@glider.be>
+In-Reply-To: <556a7f41bdadceecbe8b59b79ac7e9f592ca17a2.1642525158.git.geert+renesas@glider.be>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -80,10 +80,11 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 06:09:01PM +0100, Geert Uytterhoeven wrote:
-> Add the module clock used by the RCLK Watchdog Timer (RWDT) on the
-> Renesas R-Car S4-8 (r8a779f0) SoC.  Mark it as a critical clock, to
-> ensure uninterrupted watchdog operation.
+On Tue, Jan 18, 2022 at 06:09:04PM +0100, Geert Uytterhoeven wrote:
+> Add a device node for the RCLK Watchdog Timer (RWDT) on the Renesas
+> R-Car S4-8 (R8A779F0) SoC.
+> 
+> Extracted from a larger patch in the BSP by LUU HOAI.
 > 
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
@@ -91,33 +92,27 @@ On Tue, Jan 18, 2022 at 06:09:01PM +0100, Geert Uytterhoeven wrote:
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/clk/renesas/r8a779f0-cpg-mssr.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  arch/arm64/boot/dts/renesas/r8a779f0.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/drivers/clk/renesas/r8a779f0-cpg-mssr.c b/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-> index 4100078406d67073..e48c5af7341454a7 100644
-> --- a/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-> +++ b/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-> @@ -121,6 +121,11 @@ static const struct mssr_mod_clk r8a779f0_mod_clks[] __initconst = {
->  	DEF_MOD("scif4",	705,	R8A779F0_CLK_S0D12_PER),
->  	DEF_MOD("sys-dmac0",	709,	R8A779F0_CLK_S0D3_PER),
->  	DEF_MOD("sys-dmac1",	710,	R8A779F0_CLK_S0D3_PER),
-> +	DEF_MOD("wdt",		907,	R8A779F0_CLK_R),
-> +};
-> +
-> +static const unsigned int r8a779f0_crit_mod_clks[] __initconst = {
-> +	MOD_CLK_ID(907),	/* WDT */
->  };
+> diff --git a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
+> index 5426532d10e2a472..0ac8c345558efc17 100644
+> --- a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
+> @@ -59,6 +59,16 @@ soc: soc {
+>  		#size-cells = <2>;
+>  		ranges;
 >  
->  /*
-> @@ -177,6 +182,10 @@ const struct cpg_mssr_info r8a779f0_cpg_mssr_info __initconst = {
->  	.num_mod_clks = ARRAY_SIZE(r8a779f0_mod_clks),
->  	.num_hw_mod_clks = 28 * 32,
->  
-> +	/* Critical Module Clocks */
-> +	.crit_mod_clks = r8a779f0_crit_mod_clks,
-> +	.num_crit_mod_clks = ARRAY_SIZE(r8a779f0_crit_mod_clks),
+> +		rwdt: watchdog@e6020000 {
+> +			compatible = "renesas,r8a779f0-wdt",
+> +				     "renesas,rcar-gen4-wdt";
+> +			reg = <0 0xe6020000 0 0x0c>;
+> +			clocks = <&cpg CPG_MOD 907>;
+> +			power-domains = <&sysc R8A779F0_PD_ALWAYS_ON>;
+> +			resets = <&cpg 907>;
+> +			status = "disabled";
+> +		};
 > +
->  	/* Callbacks */
->  	.init = r8a779f0_cpg_mssr_init,
->  	.cpg_clk_register = rcar_gen4_cpg_clk_register,
+>  		cpg: clock-controller@e6150000 {
+>  			compatible = "renesas,r8a779f0-cpg-mssr";
+>  			reg = <0 0xe6150000 0 0x4000>;
