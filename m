@@ -2,118 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E9F4B5508
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Feb 2022 16:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 516194B54F8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Feb 2022 16:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240384AbiBNPkv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Feb 2022 10:40:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37482 "EHLO
+        id S236840AbiBNPjQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Feb 2022 10:39:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbiBNPku (ORCPT
+        with ESMTP id S236000AbiBNPjP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:40:50 -0500
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DBE60AA5
-        for <linux-watchdog@vger.kernel.org>; Mon, 14 Feb 2022 07:40:42 -0800 (PST)
-Received: from relay8-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::228])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 452ABCCC27
-        for <linux-watchdog@vger.kernel.org>; Mon, 14 Feb 2022 15:36:08 +0000 (UTC)
+        Mon, 14 Feb 2022 10:39:15 -0500
+X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 07:39:06 PST
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCDA40A35;
+        Mon, 14 Feb 2022 07:39:05 -0800 (PST)
 Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E74B61BF206;
-        Mon, 14 Feb 2022 15:36:01 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6E231240008;
+        Mon, 14 Feb 2022 15:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644852963;
+        t=1644853144;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wZaVsNZfL1Y9JFue2k1wM/baHSjDOG975omNd7JZ0b8=;
-        b=aqQuBbvuyYLqCNZtSOtTuL3CX+GcC3c1knhe2FBkGI27DstNgcmIo8dkzUj/I2g4J8TYyF
-        EhbnU/edAwqFoVwmDRxyHAECs2UI4JIpwRIBIRaU/UeZD9p/osq9HR9WlAb03yBwTuZM2b
-        w1tvyXusl4cS7GwmsD0ueu6zvHf1OLII2BSkzggnWkFOmV7YZECIm0zYRwfumU51KdgTS+
-        NnmMuX9PDCkZBoGIjmXxUU1K2IiL4oZ4VFt0wOP7pGqJOP8oOq3I6gOLHbE0Ei7nhNgR00
-        3LwTisFaYjlmxha4VWUbVHCjnOm0FeGnUBZzBFBUpOXmMFvASN+ABniCj/HzNg==
+        bh=Yd4h8qG0bOZ43U9tdtwFQ5VmXb5hOehL8q+jzFS2vS4=;
+        b=MWGYl1SVktk3dJzE/XVK7PfBGHJwxRS99HyvdnnxQLCw2UbxKVvkYxQ2eQWTlEW9C0mwTM
+        3iT2psJxpLV1oGfFwciU2Id/dgdoxp6h8OAc35Bs83LqtjTEC8QaGq8FPcHzz7fHnCHNsQ
+        SCd4Gau2Kh/7jNfDyAM1s+C2ct6kFkfKzRBZRHnuqZ470WA4mE3UxN/58xJ6KvHMUy0s4c
+        3/kOPO2TkbSigRBPJ4cjg9k79B1PmJ4+09jVfK8ARSrnTMCBIHQvQKOLrGl74RKXPMftE1
+        vyu+rZ/IvazvsscTVenPpRktLNUIzYTWAIKcPTRpx6704Wu55iLJ6o5sYvsd/g==
 From:   Gregory CLEMENT <gregory.clement@bootlin.com>
 To:     Chris Packham <chris.packham@alliedtelesis.co.nz>, andrew@lunn.ch,
         robh+dt@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net
 Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH 2/2] watchdog: orion_wdt: support pretimeout on Armada-XP
-In-Reply-To: <20220211003257.2037332-3-chris.packham@alliedtelesis.co.nz>
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Subject: Re: [PATCH 1/2] ARM: dts: armada-xp: add interrupts for watchdog
+In-Reply-To: <20220211003257.2037332-2-chris.packham@alliedtelesis.co.nz>
 References: <20220211003257.2037332-1-chris.packham@alliedtelesis.co.nz>
- <20220211003257.2037332-3-chris.packham@alliedtelesis.co.nz>
-Date:   Mon, 14 Feb 2022 16:36:01 +0100
-Message-ID: <87r185jw9q.fsf@BL-laptop>
+ <20220211003257.2037332-2-chris.packham@alliedtelesis.co.nz>
+Date:   Mon, 14 Feb 2022 16:39:02 +0100
+Message-ID: <87o839jw4p.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Chris Packham <chris.packham@alliedtelesis.co.nz> writes:
+Hello Chris,
 
-> Commit e07a4c79ca75 ("watchdog: orion_wdt: use timer1 as a pretimeout")
-> added support for a pretimeout on Armada-38x variants. Because the
-> Armada-XP variants use armada370_start/armada370_stop (due to missing an
-> explicit RSTOUT mask bit for the watchdog). Add the required pretimeout
-> support to armada370_start/armada370_stop for Armada-XP.
+> The first interrupt is for the regular watchdog timeout. Normally the
+> RSTOUT line will trigger a reset before this interrupt fires but on
+> systems with a non-standard reset it may still trigger.
+>
+> The second interrupt is for a timer1 which is used as a pre-timeout for
+> the watchdog.
 >
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+
+To keep bisectability this patch should be merged after the driver
+patch.
 
 Thanks,
 
 Gregory
 
 > ---
->  drivers/watchdog/orion_wdt.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
+>  arch/arm/boot/dts/armada-xp-98dx3236.dtsi | 1 +
+>  arch/arm/boot/dts/armada-xp.dtsi          | 1 +
+>  2 files changed, 2 insertions(+)
 >
-> diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
-> index 127eefc9161d..e25e6bf4647f 100644
-> --- a/drivers/watchdog/orion_wdt.c
-> +++ b/drivers/watchdog/orion_wdt.c
-> @@ -238,8 +238,10 @@ static int armada370_start(struct watchdog_device *wdt_dev)
->  	atomic_io_modify(dev->reg + TIMER_A370_STATUS, WDT_A370_EXPIRED, 0);
+> diff --git a/arch/arm/boot/dts/armada-xp-98dx3236.dtsi b/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
+> index 38a052a0312d..0e561dfc0ca9 100644
+> --- a/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
+> +++ b/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
+> @@ -286,6 +286,7 @@ &watchdog {
+>  	compatible = "marvell,armada-xp-wdt";
+>  	clocks = <&coreclk 2>, <&refclk>;
+>  	clock-names = "nbclk", "fixed";
+> +	interrupts = <93>, <38>;
+>  };
 >  
->  	/* Enable watchdog timer */
-> -	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit,
-> -						dev->data->wdt_enable_bit);
-> +	reg = dev->data->wdt_enable_bit;
-> +	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
-> +		reg |= TIMER1_ENABLE_BIT;
-> +	atomic_io_modify(dev->reg + TIMER_CTRL, reg, reg);
+>  &cpurst {
+> diff --git a/arch/arm/boot/dts/armada-xp.dtsi b/arch/arm/boot/dts/armada-xp.dtsi
+> index 6c19984d668e..4297482da62f 100644
+> --- a/arch/arm/boot/dts/armada-xp.dtsi
+> +++ b/arch/arm/boot/dts/armada-xp.dtsi
+> @@ -260,6 +260,7 @@ &watchdog {
+>  	compatible = "marvell,armada-xp-wdt";
+>  	clocks = <&coreclk 2>, <&refclk>;
+>  	clock-names = "nbclk", "fixed";
+> +	interrupts = <93>, <38>;
+>  };
 >  
->  	/* Enable reset on watchdog */
->  	reg = readl(dev->rstout);
-> @@ -312,7 +314,7 @@ static int armada375_stop(struct watchdog_device *wdt_dev)
->  static int armada370_stop(struct watchdog_device *wdt_dev)
->  {
->  	struct orion_watchdog *dev = watchdog_get_drvdata(wdt_dev);
-> -	u32 reg;
-> +	u32 reg, mask;
->  
->  	/* Disable reset on watchdog */
->  	reg = readl(dev->rstout);
-> @@ -320,7 +322,10 @@ static int armada370_stop(struct watchdog_device *wdt_dev)
->  	writel(reg, dev->rstout);
->  
->  	/* Disable watchdog timer */
-> -	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit, 0);
-> +	mask = dev->data->wdt_enable_bit;
-> +	if (wdt_dev->info->options & WDIOF_PRETIMEOUT)
-> +		mask |= TIMER1_ENABLE_BIT;
-> +	atomic_io_modify(dev->reg + TIMER_CTRL, mask, 0);
->  
->  	return 0;
->  }
+>  &cpurst {
 > -- 
 > 2.35.1
 >
