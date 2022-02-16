@@ -2,102 +2,94 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221924B80D0
-	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Feb 2022 07:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBE24B8F55
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Feb 2022 18:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiBPGso (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 16 Feb 2022 01:48:44 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36604 "EHLO
+        id S234555AbiBPRkm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 16 Feb 2022 12:40:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiBPGsn (ORCPT
+        with ESMTP id S236547AbiBPRkl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 16 Feb 2022 01:48:43 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5A4205779
-        for <linux-watchdog@vger.kernel.org>; Tue, 15 Feb 2022 22:48:24 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id q17so2223742edd.4
-        for <linux-watchdog@vger.kernel.org>; Tue, 15 Feb 2022 22:48:24 -0800 (PST)
+        Wed, 16 Feb 2022 12:40:41 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188B62B0B1F
+        for <linux-watchdog@vger.kernel.org>; Wed, 16 Feb 2022 09:40:28 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 139so2775379pge.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 16 Feb 2022 09:40:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rC8eSdmDcVP3N8Qli+Q8TtO59DrQuKVP62/JDY7Qnqg=;
-        b=IfGmEtdc533Z9eVnGX4vSB2HgiZrcZoUQ/DNsHLDMQ8tV98F7Hjtgs3DRVEHUnYRg0
-         lufFDrwsrxg4YkNKWSSpN/vXgru14avSg6G6dv1W236dav/4vgGzdVXJm03pAA1jUcz4
-         P8/ywUPyfd4w3EThotugbc3cwzzAxM/e91Q3RqRl8WU5/wXBhnrQy0YrVQMPzBzPx1n6
-         yOtsrcpfvDIwxn8FnlM5MN0AsasgDu48ddb3A2EShQgs21QIyDbJt0mCV9r48keoAWNl
-         QewMI9SagOxyROWA9LCoSMNrjz6Jp+ksn16B2pisTmzpNArmesiCNeqcgEg8E+YejtIn
-         dsiQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YmCC7nF0mE+4T4RrkLtybxlvgHhQZV1AzU8dDBkwRk8=;
+        b=YZux4ZydX2FmDXDxeFD4c1uIw/E3iPaVkd5pC3KwAWh7KkT/bhAxkNR7/276xEVtXW
+         /7tTbWiZcOmIotd+vQx2yFQ1YlZB97gHlq0xC5jyMPE1O0ONcGByaRVlnv/FOuBeZQi1
+         NLsg27gNaYNAB1FUv1Q45uhb3/bkHy4EbcArDl8x+jSJaX/1QYSJRogTF6k336B3XI8b
+         zG2bNYk4TJL0QI4IRObXHMqI5Ry5CZFrufQYX8RIrnA/D3mIGLZ1jCG5nEOGhL4L4QMX
+         oqmu3aXBzaDu8S4O3H7aORF8Sx6p3l0hifstkPomxbHkZi7/v0OT8c+wdObaWxeHV+u3
+         Wnmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=rC8eSdmDcVP3N8Qli+Q8TtO59DrQuKVP62/JDY7Qnqg=;
-        b=xQacNsE+oIxsSpvgoYSDqmvanLMS53W97fT9+/+7gAJnuI9urxPtxdqo5BIJNRKhRC
-         1el1XFVKJjj4v3yDH/bETvn3qIY23A0A0yPIBR0j3c49IBD1CdEIkyaN+wACNM3Z87DX
-         uhCdxkda7KZg5dRQhabP1kx2vIsp2xNa8h7O7SATAHxDNIivxFSeU534x1QnXok+xpSc
-         8xVmzdBLjUWnGnMTqV3lzjBgxcLSwcsTAgTpqp5cFjW3v8QbMslNT1NR1HXGVg0NiLFl
-         Chfq3P7g2E80jtVt7GDZt9SFErxVzY1GIpJkbZbXAlxJfFSDwaP4M0udhY8QKgV7Tzj1
-         dTsg==
-X-Gm-Message-State: AOAM533JtLhNRonKji0ypUtTAA4xvMB/CTad44jh0lRD/vq0A6X3jsu5
-        4un0lJ2q8QoAjrC2fNwntA4ycSOYxFY=
-X-Google-Smtp-Source: ABdhPJx4+wQA2aaC255EY+dEEqh/3wdt25IGbdHPRlldnLn6rVv5+3Pf0lJtp7tHcFtxYokaAMqJbw==
-X-Received: by 2002:a05:6512:3e29:b0:442:3cbd:a2b1 with SMTP id i41-20020a0565123e2900b004423cbda2b1mr1015601lfv.550.1644993256766;
-        Tue, 15 Feb 2022 22:34:16 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id br18sm4719588lfb.302.2022.02.15.22.34.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 22:34:16 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        bh=YmCC7nF0mE+4T4RrkLtybxlvgHhQZV1AzU8dDBkwRk8=;
+        b=DaQxomqvacDebYWTE7VaRsLfJwuxmRAXjQkw88FZo3WdBlnSZ1bgOQreEI+SCC7ExX
+         +qO0cjM//x5ErtqPvYgqcs4ewu/w3+Yluinye54U/6AnS85hWEoCuZlnoxA5xir95I4j
+         BrS/7ssGH78wwBkqVS71xIEocKOWoAnf3mfYjXvhOaTaTMoqzcWKvgbb/nK1IdjvcP3e
+         Y8N/86QstHiLvBU+TRSbH2IJjCgLlUuT1GEoyEDXn2vkj3z+x3uQ9JCtO9kzPZR/E2wh
+         OFaZYkdwP3OzJ8Id78q4oQQy5tMwmzAhY+gZ/S/LHRcsXFdULck4AB6l99g2EKV+TFWA
+         wbjQ==
+X-Gm-Message-State: AOAM531SxKlso4mVRwtUrpwpUCcmwmSn9xCjC5mw0/+Vz4ox6RZv78LB
+        9BXMJJmWnxdnUCp3xBmDTOk=
+X-Google-Smtp-Source: ABdhPJxvZDjAtt79qQsnV6Pt6JgR+pxG/sgDAryElvT3H0qSwaaf+Ky7Mf2RCcoBvGRqlyd03MTU6g==
+X-Received: by 2002:a05:6a00:c95:b0:4e1:3259:f7ad with SMTP id a21-20020a056a000c9500b004e13259f7admr4229697pfv.43.1645033228041;
+        Wed, 16 Feb 2022 09:40:28 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id s29sm7636892pfg.146.2022.02.16.09.40.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 09:40:27 -0800 (PST)
+Subject: Re: [PATCH] watchdog: bcm7038_wdt: Support BCM6345 compatible string
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] watchdog: bcm7038_wdt: Support BCM6345 compatible string
-Date:   Wed, 16 Feb 2022 07:34:08 +0100
-Message-Id: <20220216063408.23168-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220216063408.23168-1-zajec5@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <6a2901ed-17bb-1eb5-a24c-b229db309ad0@gmail.com>
+Date:   Wed, 16 Feb 2022 09:40:22 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220216063408.23168-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On 2/15/22 10:34 PM, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> A new "compatible" value has been added in the commit 17fffe91ba36
+> ("dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding").
+> It's meant to be used for BCM63xx SoCs family but hardware block can be
+> programmed just like the 7038 one.
+> 
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
-A new "compatible" value has been added in the commit 17fffe91ba36
-("dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding").
-It's meant to be used for BCM63xx SoCs family but hardware block can be
-programmed just like the 7038 one.
-
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- drivers/watchdog/bcm7038_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/watchdog/bcm7038_wdt.c b/drivers/watchdog/bcm7038_wdt.c
-index 8656a137e9a4..1ffcf6aca6ae 100644
---- a/drivers/watchdog/bcm7038_wdt.c
-+++ b/drivers/watchdog/bcm7038_wdt.c
-@@ -218,6 +218,7 @@ static SIMPLE_DEV_PM_OPS(bcm7038_wdt_pm_ops, bcm7038_wdt_suspend,
- 			 bcm7038_wdt_resume);
- 
- static const struct of_device_id bcm7038_wdt_match[] = {
-+	{ .compatible = "brcm,bcm6345-wdt" },
- 	{ .compatible = "brcm,bcm7038-wdt" },
- 	{},
- };
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.34.1
-
+Florian
