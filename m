@@ -2,52 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D0A4B7CA3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Feb 2022 02:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7344B7DCC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Feb 2022 03:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245600AbiBPBps (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 15 Feb 2022 20:45:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58690 "EHLO
+        id S1343874AbiBPCqR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 15 Feb 2022 21:46:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245618AbiBPBpk (ORCPT
+        with ESMTP id S1343868AbiBPCqQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:45:40 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86847FA218;
-        Tue, 15 Feb 2022 17:45:28 -0800 (PST)
-X-UUID: 6af3a39fced34740b99e1e1ee75b6b69-20220216
-X-UUID: 6af3a39fced34740b99e1e1ee75b6b69-20220216
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
+        Tue, 15 Feb 2022 21:46:16 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9A7FBA74;
+        Tue, 15 Feb 2022 18:46:04 -0800 (PST)
+X-UUID: 11f221bd83bf42e288ace2ff2ff6b487-20220216
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=hDrxhPxjQENGAHEi4n1oPYu6PsljPhzDv0c7ynvHbXY=;
+        b=Hr5wceSmSREZHLDnvA/oUCSY2KPYMlJHpB3cbGt1YVlkviw/fmLyfWpbUQ3irEYRqhZZq4D6+viuYJurPPlazojLQEu6rP8VCIHbInS1711VfzgFtnKbxotPa+CCL25Cs4ft0hug+3LMiDf1YtPFbEvi1LejLGMt7ja5azjiaAg=;
+X-UUID: 11f221bd83bf42e288ace2ff2ff6b487-20220216
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 73449647; Wed, 16 Feb 2022 09:45:21 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Feb 2022 09:45:20 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+        with ESMTP id 683217625; Wed, 16 Feb 2022 10:45:59 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Feb 2022 10:45:58 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Feb 2022 09:45:20 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>
+ Transport; Wed, 16 Feb 2022 10:45:58 +0800
+Subject: Re: [0/4] Add watchdog support for MT8186 SoC
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <matthias.bgg@gmail.com>,
+        <robh+dt@kernel.org>, <p.zabel@pengutronix.de>
 CC:     <runyang.chen@mediatek.com>, <linux-watchdog@vger.kernel.org>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [4/4] watchdog: mediatek: mt8186: add wdt support
-Date:   Wed, 16 Feb 2022 09:45:05 +0800
-Message-ID: <20220216014505.28428-5-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
 References: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+Message-ID: <a680164d-9be2-8f96-abe3-27e93e5c2ad2@mediatek.com>
+Date:   Wed, 16 Feb 2022 10:45:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,47 +62,21 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Runyang Chen <runyang.chen@mediatek.com>
-
-Support MT8186 watchdog device.
-
-Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
----
- drivers/watchdog/mtk_wdt.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index 4577a76dd464..fe5a2ecba97a 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -11,6 +11,7 @@
- 
- #include <dt-bindings/reset/mt2712-resets.h>
- #include <dt-bindings/reset/mt8183-resets.h>
-+#include <dt-bindings/reset/mt8186-resets.h>
- #include <dt-bindings/reset/mt8192-resets.h>
- #include <dt-bindings/reset/mt8195-resets.h>
- #include <linux/delay.h>
-@@ -80,6 +81,10 @@ static const struct mtk_wdt_data mt8183_data = {
- 	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
- };
- 
-+static const struct mtk_wdt_data mt8186_data = {
-+	.toprgu_sw_rst_num = MT8186_TOPRGU_SW_RST_NUM,
-+};
-+
- static const struct mtk_wdt_data mt8192_data = {
- 	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
- };
-@@ -419,6 +424,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
- 	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
- 	{ .compatible = "mediatek,mt6589-wdt" },
- 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
-+	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
- 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
- 	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
- 	{ /* sentinel */ }
--- 
-2.18.0
+DQoNCk9uIDIvMTYvMjIgOTo0NSBBTSwgUmV4LUJDIENoZW4gd3JvdGU6DQo+IHYxOg0KPiAxLiBB
+ZGQgbXQ4MTg2LXJlc2V0cy5oIHRvIGRlZmluZSBkZWZpbml0aW9uIG9mIHJlc2V0IGJpdHMuDQo+
+IDIuIEFkZCB3ZHQgY29tcGF0aWJsZSBmb3IgTVQ4MTg2Lg0KPiANCj4gUmV4LUJDIENoZW4gKDIp
+Og0KPiAgICBkdC1iaW5kaW5nczogd2F0Y2hkb2c6IEFkZCBjb21wYXRpYmxlIGZvciBNZWRpYVRl
+ayBNVDgxODYNCj4gICAgZHQtYmluZGluZ3M6IHJlc2V0OiBtdDgxODY6IGFkZCBEU0kgcmVzZXQg
+Yml0IGZvciBNTVNZUw0KPiANCj4gUnVueWFuZyBDaGVuICgyKToNCj4gICAgZHQtYmluZGluZ3M6
+IHJlc2V0OiBtdDgxODY6IGFkZCB0b3ByZ3UgcmVzZXQtY29udHJvbGxlciBoZWFkZXIgZmlsZQ0K
+PiAgICB3YXRjaGRvZzogbWVkaWF0ZWs6IG10ODE4NjogYWRkIHdkdCBzdXBwb3J0DQo+IA0KPiAg
+IC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL210ay13ZHQudHh0ICB8ICAxICsNCj4g
+ICBkcml2ZXJzL3dhdGNoZG9nL210a193ZHQuYyAgICAgICAgICAgICAgICAgICAgfCAgNiArKysr
+DQo+ICAgaW5jbHVkZS9kdC1iaW5kaW5ncy9yZXNldC9tdDgxODYtcmVzZXRzLmggICAgIHwgMzYg
+KysrKysrKysrKysrKysrKysrKw0KPiAgIDMgZmlsZXMgY2hhbmdlZCwgNDMgaW5zZXJ0aW9ucygr
+KQ0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0L210ODE4
+Ni1yZXNldHMuaA0KPiANCg0KV2h5IGRpZCB5b3UgZHJvcCBbUEFUQ0hdIHRhZyBpbiB0aGUgc3Vi
+amVjdCBvZiB5b3VyIHBhdGNoIHNlcmllcz8NClBsZWFzZSBrZWVwIGl0IGZvciBkaXN0aW5ndWlz
+aGluZyBpdCBmcm9tIFJGQyBhbmQgb3RoZXIgbWVhbmluZ2Z1bCB0YWdzIA0KbmV4dCB0aW1lLg0K
+DQpUaGFua3MNCk1hY3BhdWwgTGlu
 
