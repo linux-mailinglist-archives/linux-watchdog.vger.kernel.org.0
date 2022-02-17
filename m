@@ -2,112 +2,193 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA51B4B9038
-	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Feb 2022 19:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450614B9C4F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 17 Feb 2022 10:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiBPSag (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 16 Feb 2022 13:30:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46454 "EHLO
+        id S233791AbiBQJpO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 17 Feb 2022 04:45:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbiBPSae (ORCPT
+        with ESMTP id S230106AbiBQJpN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:30:34 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E4E295FFE
-        for <linux-watchdog@vger.kernel.org>; Wed, 16 Feb 2022 10:30:19 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id e19-20020a4ab993000000b0031a98fe3a9dso2869458oop.6
-        for <linux-watchdog@vger.kernel.org>; Wed, 16 Feb 2022 10:30:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y0GJuntoqSVUEDvZrlgVoz04fBw6kaXCpGL04Udmi08=;
-        b=gr6N5zZgDhRZjrRWjpvCra3xKPXaZ5NYXp1uVSt4gggPxsywkabkHUNBdNr+qF/MS2
-         vJ1ZJiIMCNdncsQojU+LDIhJYPQzJ83cbhTVy6jlKyoRRZIGuwJHNLHEUGJ7gxhXEpsL
-         Xx5ir7mXuYAfH6ooAHLAmplmIuewqX9qnnfEY74KT7tif+YMcOM0BywXLLRXGMjRFQdF
-         IIFkr0ugQBJAuxGXDWEGe9NHGfzPwBj39L7GRatkUUcQZuA5VaYi8LIq/vuF+9RAg0e+
-         JV+NYMVWlJ3tzJ1/gqgGbBm+pfZfzBTELL033jetEgXcuWz0QZ8tks/jq3LYCBi2PggO
-         oM8g==
+        Thu, 17 Feb 2022 04:45:13 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A533F15A3D
+        for <linux-watchdog@vger.kernel.org>; Thu, 17 Feb 2022 01:44:59 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 72CB93F339
+        for <linux-watchdog@vger.kernel.org>; Thu, 17 Feb 2022 09:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645091098;
+        bh=/6BRQwo9F2YRhb8CCreWYd07yVTpbMqy24rXfG8Cqa0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=wExrARZiqKQ2l55eNJt6LginpSvSUiNa7sdSc54N+PuLrxRv4v1xMJX0yp/HJmcU7
+         yEWd3NYQ31osq9nV9sP3+0nUjte1g1D0mPiW1pAHmDCDbAQZ2nG4QehwjEqYfddfio
+         dmraQpFTtO11X9f9CUyGOoWRUBxwUufeOWlRBBYADP+S4JeMSgOqB+rkdfN7NiIH8k
+         ibXw3QYI5hWJwBQhUK39eWzcWg6sfToFF6H3EQRbPZfikulXEFBqI/YWJvDLbDo3U8
+         AmD84Di6E0Bc0c4J4sfVAGlARBwf/BS4r+CUMQ75ad90p2V+oJ5cR0sS0pIMe9jRm/
+         gHZkevolbTAXQ==
+Received: by mail-ej1-f71.google.com with SMTP id o4-20020a170906768400b006a981625756so1295024ejm.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 17 Feb 2022 01:44:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Y0GJuntoqSVUEDvZrlgVoz04fBw6kaXCpGL04Udmi08=;
-        b=j9b1b1mjn0yXYdKVLOQBbM4P/ZeDAfvN0lUMocEIqt2eT+fF7MRsJkVmNUA5UgeKnD
-         Dw3USqPB2cgpma+n1HF6g4w/9rRyH9BsiflTCN/9+sb6m6ydO/XDZpjRRIGt5oS1tQN2
-         EqCYxJdfm82J2n2sxSiVrPlyaRnkg2gSkvvUh1k+BvZkgRloEUgASmcDAoC5np+tgeEZ
-         qjvL8JTibzxCmwdQBfF2VLr8BX/mfoy5DpLcwp1aOThXH8kSBH5dfIGbbidCIJmNH7oS
-         tAuOcMXIBe49y665WQTGvMwU/w0whMSKNYTOAJfg5AWjVe6/CTYef0Ubvv/h2Z3l1eRd
-         zQrQ==
-X-Gm-Message-State: AOAM533mk8CuiwIJkct4NSkHriucKiKp3qTNs83jUuemXZO1vSvzqCEb
-        6GUHaapkAer6ICpgvJWPTFE=
-X-Google-Smtp-Source: ABdhPJwta9CoE+LWXGHs59qqqKfw3qXwcr4DYOK/tweA740yRftD9bxhDs1aaJ0e4FKJIhjlHKS7hw==
-X-Received: by 2002:a05:6870:6691:b0:ce:c0c9:5c0 with SMTP id ge17-20020a056870669100b000cec0c905c0mr983138oab.18.1645036219211;
-        Wed, 16 Feb 2022 10:30:19 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bq16sm11461720oib.33.2022.02.16.10.30.17
+        bh=/6BRQwo9F2YRhb8CCreWYd07yVTpbMqy24rXfG8Cqa0=;
+        b=XCnJFS8HX0guFkCKe7hTMf4ZCflyTGaOgeecllupD0OFKPHpXqn3iWWTsk8xRw+wwR
+         WdHcGQaVvPO530KGrRyf2VKkg53YUX05nIzZsaojGkitSydEyHQ4GtNa2Yt7VjZbxiGk
+         zhXPHAxktX36leHMR3LvhM/1hDxrTx/c78N1YHHYy1es5wOG8j1RA2+Oe/jC07dwSIos
+         uTAzN9+wfofGkvt/mXh4/80iclmnW7eCn7lgCw17CP9ctTga6zzH13sT6uhIjuNmEAft
+         QQ/mLXx7SAoWsm90gASrfMlboVUOP2LSlTy0tVQG48xVU1NrZWg2dDwvPT4XjS64JZT6
+         85JA==
+X-Gm-Message-State: AOAM533yEdlkUIsI8cgExdsyo2RBugFg0W/+Sza/bz1lCLI1YFCulLYo
+        l5j1baVnv5wYkCvIDgMp9P7KtTGaxzIOhb4qypsSZdKJ2jjcEnsCVxI/sjEuxohkX/TPH0CzCDi
+        mTUoY4FO9h4z38zlnr5vsbIolU1mMGtu4yrnD3Q9tlcar
+X-Received: by 2002:a50:fc05:0:b0:408:4d18:5070 with SMTP id i5-20020a50fc05000000b004084d185070mr1687916edr.365.1645091095451;
+        Thu, 17 Feb 2022 01:44:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw4HEhNYvN/1dbYjwwFvdfSqvPJagGu9NoMyYbc/Z0Rqg0vqOwN6P+MvYMdO9RtArG/+LyFyw==
+X-Received: by 2002:a50:fc05:0:b0:408:4d18:5070 with SMTP id i5-20020a50fc05000000b004084d185070mr1687899edr.365.1645091095209;
+        Thu, 17 Feb 2022 01:44:55 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id l7sm3171222edb.53.2022.02.17.01.44.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 10:30:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b5dfc149-e43f-66d7-26fe-4f3b1f0beee3@roeck-us.net>
-Date:   Wed, 16 Feb 2022 10:30:16 -0800
+        Thu, 17 Feb 2022 01:44:54 -0800 (PST)
+Message-ID: <dde7c475-e44f-c464-ee4f-afe9346f16e3@canonical.com>
+Date:   Thu, 17 Feb 2022 10:44:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] watchdog: bcm7038_wdt: Support BCM6345 compatible string
+Subject: Re: [PATCH] [v1] dt-bindings: watchdog: Add HPE GXP Watchdog timer
+ binding
 Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220216063408.23168-1-zajec5@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220216063408.23168-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+To:     nick.hawkins@hpe.com, verdun@hpe.com
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <nick.hawkins@hpe.com>
+ <20220215184039.41882-1-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220215184039.41882-1-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2/15/22 22:34, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+On 15/02/2022 19:40, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> A new "compatible" value has been added in the commit 17fffe91ba36
-> ("dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding").
-> It's meant to be used for BCM63xx SoCs family but hardware block can be
-> programmed just like the 7038 one.
+> Description: Creating binding for the GXP watchdog timer to be used in
+>  the device tree. This along with the
+>   dt-bindings: timer: Add HPE GXP Timer binding patch will be used to
+>    create the basic dts and dtsi for GXP.
+> Information: GXP is the name of the HPE SoC.
+>  This SoC is used to implement BMC features of HPE servers
+>   (all ProLiant, Synergy, and many Apollo, and Superdome machines)
+>    It does support many features including:
+>         ARMv7 architecture, and it is based on a Cortex A9 core
+>         Use an AXI bus to which
+>                 a memory controller is attached, as well as
+>                  multiple SPI interfaces to connect boot flash,
+>                  and ROM flash, a 10/100/1000 Mac engine which
+>                  supports SGMII (2 ports) and RMII
+>                 Multiple I2C engines to drive connectivity with a
+> 				 host infrastructure
+>                 A video engine which support VGA and DP, as well as
+>                  an hardware video encoder
+>                 Multiple PCIe ports
+>                 A PECI interface, and LPC eSPI
+>                 Multiple UART for debug purpose, and Virtual UART for
+>                  host connectivity
+>                 A GPIO engine.
+
+All this commit msg looks irrelevant, obfuscating and duplicating the
+same message.
+
 > 
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 > ---
->   drivers/watchdog/bcm7038_wdt.c | 1 +
->   1 file changed, 1 insertion(+)
+>  .../bindings/watchdog/hpe,gxp-wdt.yaml        | 37 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
 > 
-> diff --git a/drivers/watchdog/bcm7038_wdt.c b/drivers/watchdog/bcm7038_wdt.c
-> index 8656a137e9a4..1ffcf6aca6ae 100644
-> --- a/drivers/watchdog/bcm7038_wdt.c
-> +++ b/drivers/watchdog/bcm7038_wdt.c
-> @@ -218,6 +218,7 @@ static SIMPLE_DEV_PM_OPS(bcm7038_wdt_pm_ops, bcm7038_wdt_suspend,
->   			 bcm7038_wdt_resume);
->   
->   static const struct of_device_id bcm7038_wdt_match[] = {
-> +	{ .compatible = "brcm,bcm6345-wdt" },
->   	{ .compatible = "brcm,bcm7038-wdt" },
->   	{},
->   };
+> diff --git a/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+> new file mode 100644
+> index 000000000000..6044496b4968
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+> @@ -0,0 +1,37 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/hpe,gxp-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE GXP Controlled Watchdog
+> +
+> +allOf:
+> +  - $ref: "watchdog.yaml#"
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +  - Jean-Marie Verdun <verdun@hpe.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: hpe,gxp-wdt
+> +
+> +  reg:
+> +    items:
+> +      - description: WDGRST register
+> +      - description: WDGCS register
+> +
 
+Quite ascetic bindings - no clocks? no power-domains? interrupts?
+
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog0:  watchdog@c0000090 {
+> +      compatible = "hpe,gxp-wdt";
+> +      reg = <0xc0000090 0x02>, <0xc0000096 0x01>;
+> +    };
+> +
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f41088418aae..8c96f4db900c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8385,6 +8385,12 @@ L:	linux-efi@vger.kernel.org
+>  S:	Maintained
+>  F:	block/partitions/efi.*
+>  
+> +GXP WATCHDOG TIMER
+> +M:	Nick Hawkins <nick.hawkins@hpe.com>
+> +M:	Jean-Marie Verdun <verdun@hpe.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+
+If you have the same maintainers for each of your drivers, it's actually
+easier to keep them in one entry - HPE GXP ARCHITECTURE. There is little
+benefit in having per-block entries which are the same as your main entry.
+
+Best regards,
+Krzysztof
