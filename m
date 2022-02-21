@@ -2,317 +2,404 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6D04BDF58
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Feb 2022 18:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A97DA4BE1DF
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Feb 2022 18:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354940AbiBUKam (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 21 Feb 2022 05:30:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41284 "EHLO
+        id S1354983AbiBUKhh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Feb 2022 05:37:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiBUKaf (ORCPT
+        with ESMTP id S1354984AbiBUKha (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:30:35 -0500
-Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C114312745;
-        Mon, 21 Feb 2022 01:51:44 -0800 (PST)
-Received: from pro2.mail.ovh.net (unknown [10.109.156.177])
-        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id AF31023F5F6;
-        Mon, 21 Feb 2022 09:51:14 +0000 (UTC)
-Received: from localhost.localdomain (88.125.132.78) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 21 Feb
- 2022 10:51:13 +0100
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-To:     <linux-renesas-soc@vger.kernel.org>, <geert+renesas@glider.be>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-Subject: [PATCH v3 5/5] watchdog: Add Renesas RZ/N1 Watchdog driver
-Date:   Mon, 21 Feb 2022 10:50:31 +0100
-Message-ID: <20220221095032.95054-6-jjhiblot@traphandler.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220221095032.95054-1-jjhiblot@traphandler.com>
-References: <20220221095032.95054-1-jjhiblot@traphandler.com>
+        Mon, 21 Feb 2022 05:37:30 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60057.outbound.protection.outlook.com [40.107.6.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AE338D9C;
+        Mon, 21 Feb 2022 01:59:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=To7FWiheBd/kzXznayqX9ROXITQy94YS7Py5VINT2HR3Z+G9iNpZ7iLA1wVQ05dumINI3gLow1V6OP0PRG0b6gyUaZeiBvnPAh3IIDWRVprz+zCAWe/PqlaF94VMCgKp4BcJo9XwEUBnU6GrotaV3iYgQtvIiC6/AKFmJR75nETAh0di3RUrn8Sz0cdkHcNFAitYO6AfFqRTUYT0SXkDgNTG7yV9yKD9qagVDIGi8N+uhXt7B2WMKO3KB5cvTiy6h5I10Bj48ny+Qs1r2SMhu+ODMRxy3qoptSyjaAGYD6pgxy84cGhQzJh3C6guFRtCX74rxrhH2yE77Rj0x+al5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UIQnhSjjFF2b9m2I1v7Di3zlASRbBr5XMkvi1x/ei/w=;
+ b=I6ys6CTaZG+cuehwucp6vUGQK+HXONWq+FUHiRCHxgXrNYgCSgoyQPB6NyffZoCJE1QiOSpeJdcySaJ5nMslXCoiM4ffoUBC5Ici1ZG1+fgCpNv6gRw8vWCkYkkL6bIt2Uq6svTfUEaMQxg5zuPW6bMlw71JJkjQUKhZKVfpwM9N2elMRWqolMEnoDp8DvY1mt/ctTFU5TUZPn4K814rNWE7b8zFE0SKkoQNe+5DEvELyN6yqyJqa0m5Gxlk4d2sSt8HuMUgZGqadQni+8wbpP+Awcv8frVpTyFLFELcSm1JE2m3LhlLsiF92ya34ipZ+xMf72rFTOA24eUUGQFxtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.73) smtp.rcpttodomain=linux-watchdog.org
+ smtp.mailfrom=siemens.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=siemens.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UIQnhSjjFF2b9m2I1v7Di3zlASRbBr5XMkvi1x/ei/w=;
+ b=mHkY3ygPUXi1Ut03O66lR2gZhJtNcp31DdJ2Pgu+KzOYIGbvkX/qtre7fOOdlgpycAXigYMWzeabD9ihyXnG3dXaG8H9tix/v6n64rNcAZtyO8PyShokgQqT/Fgop57aMov81pP7FbZ4P19ubcOJKm7KnaC5zspBqXKKnesA4ol6tupDdVWwNFQP9rRRtZ20FywWVkM5JaeKLsHW6yp6KwgJKhw+U5I+DScW4R7bZh1J9Rd8XJUQ0giXbdO80ElU8ykkcbam+U8jtkAiL46kf1R00NcFSRRReXFVy0faNNQB31tVWqZ7iClf4RiYthbLKf2rdPEdXtUfk0RIKisGqw==
+Received: from AS8PR04CA0091.eurprd04.prod.outlook.com (2603:10a6:20b:31e::6)
+ by PR3PR10MB4318.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:ad::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.17; Mon, 21 Feb
+ 2022 09:59:22 +0000
+Received: from VE1EUR01FT055.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:20b:31e:cafe::80) by AS8PR04CA0091.outlook.office365.com
+ (2603:10a6:20b:31e::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.27 via Frontend
+ Transport; Mon, 21 Feb 2022 09:59:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.73; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.73) by
+ VE1EUR01FT055.mail.protection.outlook.com (10.152.3.104) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.15 via Frontend Transport; Mon, 21 Feb 2022 09:59:22 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Mon, 21 Feb 2022 10:59:21 +0100
+Received: from [167.87.32.158] (167.87.32.158) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Mon, 21 Feb 2022 10:59:21 +0100
+Message-ID: <bdecc38d-2b1a-9605-0978-5ad1e8b39e6b@siemens.com>
+Date:   Mon, 21 Feb 2022 10:59:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [88.125.132.78]
-X-ClientProxiedBy: CAS3.emp2.local (172.16.1.3) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 6958905852988111188
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeigddtkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgjfhgggfgtihesthekredtredttdenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepfeeugefgieeutdfhvdegveetvdeuvefgveegleeileevveehfeejjeffgfduudeknecukfhppedtrddtrddtrddtpdekkedruddvhedrudefvddrjeeknecuvehluhhsthgvrhfuihiivgepgeenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdifrghttghhughoghesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCHv4 3/4] watchdog: rti-wdt: attach to running watchdog
+ during probe
+Content-Language: en-US
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20200717132958.14304-1-t-kristo@ti.com>
+ <20200717132958.14304-4-t-kristo@ti.com>
+ <a80b83c6-cca5-f95c-6930-a6f3e79c6f15@siemens.com>
+In-Reply-To: <a80b83c6-cca5-f95c-6930-a6f3e79c6f15@siemens.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.87.32.158]
+X-ClientProxiedBy: DEMCHDC8A1A.ad011.siemens.net (139.25.226.107) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 90ca5808-9bca-465b-5ab4-08d9f520d592
+X-MS-TrafficTypeDiagnostic: PR3PR10MB4318:EE_
+X-Microsoft-Antispam-PRVS: <PR3PR10MB4318659CC1CF5FBD41FBBD4B953A9@PR3PR10MB4318.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1guPrb6nEJh0QbRATG9+0GT2a1d3U0NdNtLpiybSzjRvuPKv8NlnMU4CaaVlDk/EaMgmum3FXclgQuif3xYh7ehDV9A2MDGXxmHe48fAhvIr5W7LFz552oCqyrR1bijTdec+W9KQ3bdXnklvbUDrBOBCkAi39BH3UxHDhDOZhu3KDtK/gFqEZUUEJsH6RBpy62otZmIyGiQDXEvujMtzNFhMX6S4dyW+Mpjhhda0Spfful83iQrAVaiqCwKPDZOfpczM78ZOBYgBHR79fIWYDprcwm23k1YPqpP+zNlqqMYBlDkEJaSzum8xBLuSEfXrWJBOd4kGRkYZTvvWqI73Be2hJ45kXUEHG2mqR7MvU2FqbJFLPixLVdIbC7k6EcEP8Pz1/Rs4MlZd17MFMsCKY+MWgb5yN9lqp1l3IW4C6xrpRA0y9bzbM/8COUM2pgcJOTQryhTpVw85nIb8cR4jTx38J49pol/O20q5ilfkDm4//uTUgLLfT2awFqR7urFgi6Rku+LPRScfMD2fT3P4EbNvRah+fOuYNkrUIAWVlBP5UmNKoX+R4Cp5gpn0ZvBdzRIIIHWofxiGaYsLIcpPoxDpuNo8qhBrq20vyrOUrRt+XTAAGeIDJP3g23yZsb50ufOXDHW8H0w1Ezm1EU5S02QsWmp3t4+YLD4Y2ZTwPJXJJ/8vladNliAmP4IjmE1JTkoU1ZVFHDa8pu/CTdKqTdGk5iFL0zl+zPQ1SGvdLUwgSnTG1WWcYVovHBrRSWb5ktNKQSrL8Qzz/Jsn7rBzf5CzL1T6gInoZPqF/Mb256g=
+X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(36756003)(40460700003)(508600001)(31686004)(53546011)(2616005)(47076005)(956004)(2906002)(36860700001)(16526019)(5660300002)(186003)(110136005)(6706004)(8936002)(26005)(16576012)(316002)(44832011)(356005)(31696002)(82310400004)(86362001)(82960400001)(81166007)(336012)(70586007)(70206006)(83380400001)(4326008)(8676002)(3940600001)(2101003)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 09:59:22.0013
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90ca5808-9bca-465b-5ab4-08d9f520d592
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT055.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR10MB4318
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Phil Edworthy <phil.edworthy@renesas.com>
+On 21.02.22 10:10, Jan Kiszka wrote:
+> On 17.07.20 15:29, Tero Kristo wrote:
+>> If the RTI watchdog is running already during probe, the driver must
+>> configure itself to match the HW. Window size and timeout is probed from
+>> hardware, and the last keepalive ping is adjusted to match it also.
+>>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> ---
+>>  drivers/watchdog/rti_wdt.c | 112 +++++++++++++++++++++++++++++++++----
+>>  1 file changed, 102 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+>> index d456dd72d99a..7cbdc178ffe8 100644
+>> --- a/drivers/watchdog/rti_wdt.c
+>> +++ b/drivers/watchdog/rti_wdt.c
+>> @@ -35,7 +35,11 @@
+>>  
+>>  #define RTIWWDRX_NMI	0xa
+>>  
+>> -#define RTIWWDSIZE_50P	0x50
+>> +#define RTIWWDSIZE_50P		0x50
+>> +#define RTIWWDSIZE_25P		0x500
+>> +#define RTIWWDSIZE_12P5		0x5000
+>> +#define RTIWWDSIZE_6P25		0x50000
+>> +#define RTIWWDSIZE_3P125	0x500000
+>>  
+>>  #define WDENABLE_KEY	0xa98559da
+>>  
+>> @@ -48,7 +52,7 @@
+>>  
+>>  #define DWDST			BIT(1)
+>>  
+>> -static int heartbeat;
+>> +static int heartbeat = DEFAULT_HEARTBEAT;
+>>  
+>>  /*
+>>   * struct to hold data for each WDT device
+>> @@ -79,11 +83,9 @@ static int rti_wdt_start(struct watchdog_device *wdd)
+>>  	 * be petted during the open window; not too early or not too late.
+>>  	 * The HW configuration options only allow for the open window size
+>>  	 * to be 50% or less than that; we obviouly want to configure the open
+>> -	 * window as large as possible so we select the 50% option. To avoid
+>> -	 * any glitches, we accommodate 5% safety margin also, so we setup
+>> -	 * the min_hw_hearbeat at 55% of the timeout period.
+>> +	 * window as large as possible so we select the 50% option.
+>>  	 */
+>> -	wdd->min_hw_heartbeat_ms = 11 * wdd->timeout * 1000 / 20;
+>> +	wdd->min_hw_heartbeat_ms = 500 * wdd->timeout;
+>>  
+>>  	/* Generate NMI when wdt expires */
+>>  	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
+>> @@ -110,7 +112,48 @@ static int rti_wdt_ping(struct watchdog_device *wdd)
+>>  	return 0;
+>>  }
+>>  
+>> -static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
+>> +static int rti_wdt_setup_hw_hb(struct watchdog_device *wdd, u32 wsize)
+>> +{
+>> +	/*
+>> +	 * RTI only supports a windowed mode, where the watchdog can only
+>> +	 * be petted during the open window; not too early or not too late.
+>> +	 * The HW configuration options only allow for the open window size
+>> +	 * to be 50% or less than that.
+>> +	 */
+>> +	switch (wsize) {
+>> +	case RTIWWDSIZE_50P:
+>> +		/* 50% open window => 50% min heartbeat */
+>> +		wdd->min_hw_heartbeat_ms = 500 * heartbeat;
+>> +		break;
+>> +
+>> +	case RTIWWDSIZE_25P:
+>> +		/* 25% open window => 75% min heartbeat */
+>> +		wdd->min_hw_heartbeat_ms = 750 * heartbeat;
+>> +		break;
+>> +
+>> +	case RTIWWDSIZE_12P5:
+>> +		/* 12.5% open window => 87.5% min heartbeat */
+>> +		wdd->min_hw_heartbeat_ms = 875 * heartbeat;
+>> +		break;
+>> +
+>> +	case RTIWWDSIZE_6P25:
+>> +		/* 6.5% open window => 93.5% min heartbeat */
+>> +		wdd->min_hw_heartbeat_ms = 935 * heartbeat;
+>> +		break;
+>> +
+>> +	case RTIWWDSIZE_3P125:
+>> +		/* 3.125% open window => 96.9% min heartbeat */
+>> +		wdd->min_hw_heartbeat_ms = 969 * heartbeat;
+>> +		break;
+>> +
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static unsigned int rti_wdt_get_timeleft_ms(struct watchdog_device *wdd)
+>>  {
+>>  	u64 timer_counter;
+>>  	u32 val;
+>> @@ -123,11 +166,18 @@ static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
+>>  
+>>  	timer_counter = readl_relaxed(wdt->base + RTIDWDCNTR);
+>>  
+>> +	timer_counter *= 1000;
+>> +
+>>  	do_div(timer_counter, wdt->freq);
+>>  
+>>  	return timer_counter;
+>>  }
+>>  
+>> +static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
+>> +{
+>> +	return rti_wdt_get_timeleft_ms(wdd) / 1000;
+>> +}
+>> +
+>>  static const struct watchdog_info rti_wdt_info = {
+>>  	.options = WDIOF_KEEPALIVEPING,
+>>  	.identity = "K3 RTI Watchdog",
+>> @@ -148,6 +198,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>>  	struct watchdog_device *wdd;
+>>  	struct rti_wdt_device *wdt;
+>>  	struct clk *clk;
+>> +	u32 last_ping = 0;
+>>  
+>>  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>>  	if (!wdt)
+>> @@ -169,6 +220,14 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>>  		return -EINVAL;
+>>  	}
+>>  
+>> +	/*
+>> +	 * If watchdog is running at 32k clock, it is not accurate.
+>> +	 * Adjust frequency down in this case so that we don't pet
+>> +	 * the watchdog too often.
+>> +	 */
+>> +	if (wdt->freq < 32768)
+>> +		wdt->freq = wdt->freq * 9 / 10;
+>> +
+> 
+> This seems broken: You are only adjusting the frequency value used by
+> the driver. What has been programmed into the hardware already is still
+> based on real frequency. Moreover, this path is not only taken when the
+> watchdog is already running - but the latter case is what the subject
+> and commit message suggests. I've noticed this by comparing
+> bootloader-programmed values with those the driver assumes to see - 10%
+> off, obviously.
+> 
+> So, what is actually supposed to happen here?
+> 
+> Jan
+> 
+>>  	pm_runtime_enable(dev);
+>>  	ret = pm_runtime_get_sync(dev);
+>>  	if (ret) {
+>> @@ -185,11 +244,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>>  	wdd->min_timeout = 1;
+>>  	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
+>>  		wdt->freq * 1000;
+>> -	wdd->timeout = DEFAULT_HEARTBEAT;
+>>  	wdd->parent = dev;
+>>  
+>> -	watchdog_init_timeout(wdd, heartbeat, dev);
+>> -
+>>  	watchdog_set_drvdata(wdd, wdt);
+>>  	watchdog_set_nowayout(wdd, 1);
+>>  	watchdog_set_restart_priority(wdd, 128);
+>> @@ -201,12 +257,48 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>>  		goto err_iomap;
+>>  	}
+>>  
+>> +	if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
+>> +		u32 time_left_ms;
+>> +		u64 heartbeat_ms;
+>> +		u32 wsize;
+>> +
+>> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
+>> +		time_left_ms = rti_wdt_get_timeleft_ms(wdd);
+>> +		heartbeat_ms = readl(wdt->base + RTIDWDPRLD);
+>> +		heartbeat_ms <<= WDT_PRELOAD_SHIFT;
+>> +		heartbeat_ms *= 1000;
+>> +		do_div(heartbeat_ms, wdt->freq);
+>> +		if (heartbeat_ms != heartbeat * 1000)
+>> +			dev_warn(dev, "watchdog already running, ignoring heartbeat config!\n");
+>> +
+>> +		heartbeat = heartbeat_ms;
+>> +		heartbeat /= 1000;
+>> +
+>> +		wsize = readl(wdt->base + RTIWWDSIZECTRL);
+>> +		ret = rti_wdt_setup_hw_hb(wdd, wsize);
+>> +		if (ret) {
+>> +			dev_err(dev, "bad window size.\n");
+>> +			goto err_iomap;
+>> +		}
+>> +
+>> +		last_ping = heartbeat_ms - time_left_ms;
+>> +		if (time_left_ms > heartbeat_ms) {
+>> +			dev_warn(dev, "time_left > heartbeat? Assuming last ping just before now.\n");
+>> +			last_ping = 0;
+>> +		}
+>> +	}
+>> +
+>> +	watchdog_init_timeout(wdd, heartbeat, dev);
+>> +
+>>  	ret = watchdog_register_device(wdd);
+>>  	if (ret) {
+>>  		dev_err(dev, "cannot register watchdog device\n");
+>>  		goto err_iomap;
+>>  	}
+>>  
+>> +	if (last_ping)
+>> +		watchdog_set_last_hw_keepalive(wdd, last_ping);
+>> +
+>>  	return 0;
+>>  
+>>  err_iomap:
+> 
 
-This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
-very limited timeout capabilities. However, it can reset the device.
-To do so, the corresponding bits in the SysCtrl RSTEN register need to
-be enabled. This is not done by this driver.
+There is actually more "inaccurate". For now, I would try to address it 
+like this:
 
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
----
- drivers/watchdog/Kconfig    |   8 ++
- drivers/watchdog/Makefile   |   1 +
- drivers/watchdog/rzn1_wdt.c | 206 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 215 insertions(+)
- create mode 100644 drivers/watchdog/rzn1_wdt.c
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index c8fa79da23b3..ba6e4ebef404 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -883,6 +883,14 @@ config RENESAS_RZAWDT
- 	  This driver adds watchdog support for the integrated watchdogs in the
- 	  Renesas RZ/A SoCs. These watchdogs can be used to reset a system.
+diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+index 88815419ad1a..1b6629fa5bfc 100644
+--- a/drivers/watchdog/rti_wdt.c
++++ b/drivers/watchdog/rti_wdt.c
+@@ -231,14 +231,6 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
  
-+config RENESAS_RZN1WDT
-+	tristate "Renesas RZ/N1 watchdog"
-+	depends on ARCH_RENESAS || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  This driver adds watchdog support for the integrated watchdogs in the
-+	  Renesas RZ/N1 SoCs. These watchdogs can be used to reset a system.
-+
- config RENESAS_RZG2LWDT
- 	tristate "Renesas RZ/G2L WDT Watchdog"
- 	depends on ARCH_RENESAS || COMPILE_TEST
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index f7da867e8782..38d38564f47b 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -84,6 +84,7 @@ obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
- obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
- obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
- obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
-+obj-$(CONFIG_RENESAS_RZN1WDT) += rzn1_wdt.o
- obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
- obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
- obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
-diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
-new file mode 100644
-index 000000000000..7f5884e5d460
---- /dev/null
-+++ b/drivers/watchdog/rzn1_wdt.c
-@@ -0,0 +1,206 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Renesas RZ/N1 Watchdog timer.
-+ * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
-+ * cope with 2 seconds.
-+ *
-+ * Copyright 2018 Renesas Electronics Europe Ltd.
-+ *
-+ * Derived from Ralink RT288x watchdog timer.
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_irq.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
-+
-+#define DEFAULT_TIMEOUT		60
-+
-+#define RZN1_WDT_RETRIGGER			0x0
-+#define RZN1_WDT_RETRIGGER_RELOAD_VAL		0
-+#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK	0xfff
-+#define RZN1_WDT_RETRIGGER_PRESCALE		BIT(12)
-+#define RZN1_WDT_RETRIGGER_ENABLE		BIT(13)
-+#define RZN1_WDT_RETRIGGER_WDSI			(0x2 << 14)
-+
-+#define RZN1_WDT_PRESCALER			16384
-+#define RZN1_WDT_MAX				4095
-+
-+struct rzn1_watchdog {
-+	struct watchdog_device		wdt;
-+	void __iomem			*base;
-+	unsigned long			clk_rate;
-+};
-+
-+#define to_rzn1_watchdog(_ptr) \
-+	container_of(_ptr, struct rzn1_watchdog, wdt)
-+
-+static inline uint32_t get_max_heart_beat(unsigned long clk_rate)
-+{
-+	return (RZN1_WDT_MAX * RZN1_WDT_PRESCALER) / (clk_rate / 1000);
-+}
-+
-+static inline uint32_t compute_reload_value(uint32_t tick_ms,
-+					    unsigned long clk_rate)
-+{
-+	return (tick_ms * (clk_rate / 1000)) / RZN1_WDT_PRESCALER;
-+}
-+
-+static int rzn1_wdt_ping(struct watchdog_device *w)
-+{
-+	struct rzn1_watchdog *wdt = to_rzn1_watchdog(w);
-+
-+	/* Any value retrigggers the watchdog */
-+	writel(0, wdt->base + RZN1_WDT_RETRIGGER);
-+
-+	return 0;
-+}
-+
-+static int rzn1_wdt_start(struct watchdog_device *w)
-+{
-+	struct rzn1_watchdog *wdt = to_rzn1_watchdog(w);
-+	u32 val;
-+
+-	/*
+-	 * If watchdog is running at 32k clock, it is not accurate.
+-	 * Adjust frequency down in this case so that we don't pet
+-	 * the watchdog too often.
+-	 */
+-	if (wdt->freq < 32768)
+-		wdt->freq = wdt->freq * 9 / 10;
+-
+ 	pm_runtime_enable(dev);
+ 	ret = pm_runtime_get_sync(dev);
+ 	if (ret) {
+@@ -252,8 +244,6 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 	wdd->info = &rti_wdt_info;
+ 	wdd->ops = &rti_wdt_ops;
+ 	wdd->min_timeout = 1;
+-	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
+-		wdt->freq * 1000;
+ 	wdd->parent = dev;
+ 
+ 	watchdog_set_drvdata(wdd, wdt);
+@@ -280,7 +270,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 		if (heartbeat_ms != heartbeat * 1000)
+ 			dev_warn(dev, "watchdog already running, ignoring heartbeat config!\n");
+ 
+-		heartbeat = heartbeat_ms;
++		heartbeat = heartbeat_ms + 500;
+ 		heartbeat /= 1000;
+ 
+ 		wsize = readl(wdt->base + RTIWWDSIZECTRL);
+@@ -297,6 +287,17 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
 +	/*
-+	 * The hardware allows you to write to this reg only once.
-+	 * Since this includes the reload value, there is no way to change the
-+	 * timeout once started. Also note that the WDT clock is half the bus
-+	 * fabric clock rate, so if the bus fabric clock rate is changed after
-+	 * the WDT is started, the WDT interval will be wrong.
++	 * If watchdog is running at 32k clock, it is not accurate.
++	 * Adjust frequency down in this case so that we don't pet
++	 * the watchdog too often.
 +	 */
-+	val = RZN1_WDT_RETRIGGER_WDSI;
-+	val |= RZN1_WDT_RETRIGGER_ENABLE;
-+	val |= RZN1_WDT_RETRIGGER_PRESCALE;
-+	val |= compute_reload_value(w->max_hw_heartbeat_ms, wdt->clk_rate);
-+	writel(val, wdt->base + RZN1_WDT_RETRIGGER);
++	if (wdt->freq < 32768)
++		wdt->freq = wdt->freq * 9 / 10;
 +
-+	return 0;
-+}
++	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
++		wdt->freq * 1000;
 +
-+static irqreturn_t rzn1_wdt_irq(int irq, void *_wdt)
-+{
-+	struct rzn1_watchdog *wdt = (struct rzn1_watchdog *)_wdt;
-+
-+	dev_info(wdt->wdt.parent, "%s triggered\n", __func__);
-+	return IRQ_HANDLED;
-+}
-+
-+static struct watchdog_info rzn1_wdt_info = {
-+	.identity = "RZ/N1 Watchdog",
-+	.options = WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-+};
-+
-+static const struct watchdog_ops rzn1_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = rzn1_wdt_start,
-+	.ping = rzn1_wdt_ping,
-+};
-+
-+static const struct watchdog_device rzn1_wdt = {
-+	.info = &rzn1_wdt_info,
-+	.ops = &rzn1_wdt_ops,
-+	.status = WATCHDOG_NOWAYOUT_INIT_STATUS,
-+};
-+
-+static void rzn1_wdt_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static int rzn1_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct rzn1_watchdog *wdt;
-+	struct device_node *np = dev->of_node;
-+	struct clk *clk;
-+	int ret;
-+	int irq;
-+
-+	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-+	if (!wdt)
-+		return -ENOMEM;
-+
-+	wdt->wdt = rzn1_wdt;
-+	wdt->wdt.parent = dev;
-+
-+	wdt->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(wdt->base))
-+		return PTR_ERR(wdt->base);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_irq(dev, irq, rzn1_wdt_irq, 0,
-+			       np->name, wdt);
-+	if (ret) {
-+		dev_err(dev, "failed to request irq %d\n", irq);
-+		return ret;
-+	}
-+
-+	clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(clk)) {
-+		dev_err(dev, "failed to get the clock\n");
-+		return PTR_ERR(clk);
-+	}
-+
-+	ret = clk_prepare_enable(clk);
-+	if (ret) {
-+		dev_err(dev, "failed to prepare/enable the clock\n");
-+		return ret;
-+	}
-+
-+	ret = devm_add_action_or_reset(dev, rzn1_wdt_clk_disable_unprepare,
-+				       clk);
-+	if (ret) {
-+		dev_err(dev, "failed to register clock unprepare callback\n");
-+		return ret;
-+	}
-+
-+	wdt->clk_rate = clk_get_rate(clk);
-+	if (!wdt->clk_rate) {
-+		dev_err(dev, "failed to get the clock rate\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * The period of the watchdog cannot be changed once set
-+	 * and is limited to a very short period.
-+	 * Configure it for a 1s period once and for all, and
-+	 * rely on the heart-beat provided by the watchdog core
-+	 * to make this usable by the user-space.
-+	 */
-+	wdt->wdt.max_hw_heartbeat_ms = get_max_heart_beat(wdt->clk_rate);
-+	if (wdt->wdt.max_hw_heartbeat_ms > 1000)
-+		wdt->wdt.max_hw_heartbeat_ms = 1000;
-+
-+	wdt->wdt.timeout = DEFAULT_TIMEOUT;
-+	ret = watchdog_init_timeout(&wdt->wdt, 0, dev);
-+
-+	return devm_watchdog_register_device(dev, &wdt->wdt);
-+}
-+
-+
-+static const struct of_device_id rzn1_wdt_match[] = {
-+	{ .compatible = "renesas,rzn1-wdt" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, rzn1_wdt_match);
-+
-+static struct platform_driver rzn1_wdt_driver = {
-+	.probe		= rzn1_wdt_probe,
-+	.driver		= {
-+		.name		= KBUILD_MODNAME,
-+		.of_match_table	= rzn1_wdt_match,
-+	},
-+};
-+
-+module_platform_driver(rzn1_wdt_driver);
-+
-+MODULE_DESCRIPTION("Renesas RZ/N1 hardware watchdog");
-+MODULE_AUTHOR("Phil Edworthy <phil.edworthy@renesas.com>");
-+MODULE_LICENSE("GPL v2");
--- 
-2.25.1
+ 	watchdog_init_timeout(wdd, heartbeat, dev);
+ 
+ 	ret = watchdog_register_device(wdd);
 
+
+This moves the virtual frequency tweaking after reading back the 
+programmed timeout. It also properly rounds that up to full seconds so 
+that, e.g., bootloader-programmed programmed 60s will become 59s in the 
+driver. That could have led to too short min_hw_heartbeat_ms.
+
+I can send this out as real patch, but I'd still like to understand the 
+freq fiddling first. Is that addressing a real hardware issue? Or was it 
+actually papering over that round-up problem?
+
+Jan
+
+-- 
+Siemens AG, Technology
+Competence Center Embedded Linux
