@@ -2,231 +2,116 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059754BE710
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Feb 2022 19:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4F14BE471
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Feb 2022 18:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350309AbiBUJd4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 21 Feb 2022 04:33:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37490 "EHLO
+        id S1354666AbiBUKbo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Feb 2022 05:31:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236978AbiBUJdP (ORCPT
+        with ESMTP id S1354834AbiBUKa2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:33:15 -0500
+        Mon, 21 Feb 2022 05:30:28 -0500
 Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F13F28997;
-        Mon, 21 Feb 2022 01:13:54 -0800 (PST)
-Received: from pro2.mail.ovh.net (unknown [10.109.138.12])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id C3F61E720712;
-        Mon, 21 Feb 2022 10:13:23 +0100 (CET)
-Received: from [192.168.1.103] (88.125.132.78) by DAG1EX2.emp2.local
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217D263EE;
+        Mon, 21 Feb 2022 01:51:39 -0800 (PST)
+Received: from pro2.mail.ovh.net (unknown [10.108.1.79])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id CC381E72481C;
+        Mon, 21 Feb 2022 10:51:09 +0100 (CET)
+Received: from localhost.localdomain (88.125.132.78) by DAG1EX2.emp2.local
  (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 21 Feb
- 2022 10:13:22 +0100
-Message-ID: <e4b4fbc7-53ee-987b-7849-bf625fc2155e@traphandler.com>
-Date:   Mon, 21 Feb 2022 10:13:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 6/6] clk: renesas: r9a06g032: Disable the watchdog
- reset sources when halting
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     <linux-renesas-soc@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20220208183511.2925304-1-jjhiblot@traphandler.com>
- <20220208183511.2925304-7-jjhiblot@traphandler.com>
- <CAMuHMdUCT-qwhN53mRnAUox2pqw+Y5-7Gw5EbC+-HCF054kkgQ@mail.gmail.com>
- <4595fbfe-da0b-1b1a-2478-6d537012a2bf@roeck-us.net>
+ 2022 10:51:08 +0100
 From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <4595fbfe-da0b-1b1a-2478-6d537012a2bf@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     <linux-renesas-soc@vger.kernel.org>, <geert+renesas@glider.be>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/5] ARM: r9a06g032: add support for the watchdogs
+Date:   Mon, 21 Feb 2022 10:50:26 +0100
+Message-ID: <20220221095032.95054-1-jjhiblot@traphandler.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [88.125.132.78]
-X-ClientProxiedBy: CAS4.emp2.local (172.16.1.4) To DAG1EX2.emp2.local
+X-ClientProxiedBy: CAS3.emp2.local (172.16.1.3) To DAG1EX2.emp2.local
  (172.16.2.2)
-X-Ovh-Tracer-Id: 6319676177827838292
+X-Ovh-Tracer-Id: 6957217000239806939
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeeufeeggeevkefguedtheeufefftdehkeegkeetudetjeehjedtudeuveffkeehteenucfkpheptddrtddrtddrtddpkeekrdduvdehrddufedvrdejkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqfigrthgthhguohhgsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeigddtkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgggfgtihesthekredtredttdenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepjedugfffleelheehveevuedtjeffgfejkedukeekudfguedtfeefuefhueevheeinecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkpheptddrtddrtddrtddpkeekrdduvdehrddufedvrdejkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+Hi all,
 
-On 14/02/2022 16:34, Guenter Roeck wrote:
-> On 2/14/22 02:45, Geert Uytterhoeven wrote:
->> Hi Jean-Jacques,
->>
->> CC watchdog people, who only received some patches.
->>
->> On Tue, Feb 8, 2022 at 7:35 PM Jean-Jacques Hiblot
->> <jjhiblot@traphandler.com> wrote:
->>> The watchdog reset sources must be disabled when the system is halted.
->>> Otherwise the watchdogs will trigger a reset if they have been armed.
->>>
->>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
->>
->> Thanks for your patch!
->>
->> [inserting changelog]
->>
->> | Changes v1 -> v2:
->> | * Modified the clock driver to not enable the watchdog reset sources.
->> |   On other renesas platforms, those bits are by the bootloader. The
->> |   watchdog reset sources are still disabled when the platform is 
->> halted
->> |   to prevent a watchdog reset.
->>
->> I still have my doubts about this part. So on halt, you override the
->> policy configured by the boot loader, which means the watchdog is no
->> longer triggered on halt.
->>
->>> From a system perspective, the system can be in five states:
->>    1. Running,
->>    2. Crashed/lock-ed up,
->>    3. Halt,
->>    4. Reboot,
->>    5. Poweroff.
->>
->> Now, from a policy perspective, what is the difference between a
->> system that crashes or locks up, and a system that halts?
->> I.e. should the system reboot on halt, or not?
->>
->> I think halting a system where the watchdog has been activated makes
->> no sense, and the user either wants to explicitly reboot the system, or
->> power it off, but never halt it.  So I think this patch is not needed.
+This series adds support for the watchdog timers of the RZ/N1.
+The watchdog driver (rzn1-wdt.c) is derived from the driver available at
+https://github.com/renesas-rz/rzn1_linux.git with a few modifications
 
-I don't see halting the machine as a must-have feature either, but it 
-seemed to me
+In order to be able to reset the board when a watchdog timer expires,
+the RSTEN register must be configured. it is the responsability of the
+bootloader to set those bits (or not, depending on the chosen policy).
 
-that there could be other people relying on it. I'll remove this patch 
-from the series.
+If the watchdog reset source is not enabled, an interrupt is triggered
+when the watchdog expires. Currently this interrupt doesn't much apart
+from printing a message.
 
->>
->> Watchdog people: what is your opinion?
->
-> In my understanding the shutdown code is always executed, ie also for
-> restarts and poweroff. Disabling the watchdog in that situation is not
-> always desirable, though sometimes necessary depending on the hardware.
-> Disabling it through the backdoor (instead of calling 
-> watchdog_stop_on_reboot)
-> seems odd, though.
+Changes v2 -> v3:
+* dts: changed compatible strings to include "renesas,r9a06g032-wdt" and
+  "renesas,rzn1-wdt".
+* driver: removed the SOC-specific "renesas,r9a06g032-wdt".
+* removed all the changes in the clock driver: the watchdog reset source
+  are not disabled anymore when the machine is halted.
+* fixed the clock rate type in the computations.
+* removed unnecessary printout and call to clk_disable_unprepare() in the
+  driver probe().
+    
+Changes v1 -> v2:
+* Modified the clock driver to not enable the watchdog reset sources.
+  On other renesas platforms, those bits are by the bootloader. The
+  watchdog reset sources are still disabled when the platform is halted
+  to prevent a watchdog reset.
+* Added a SOC-specific compatible "renesas,r9a06g032-wdt"
+* reordered the dts/i entries
+* default timeout is 60 seconds
+* reworked the probe function of the wdt driver to better error cases
+* removed the set_timeout() and use a fixed period computed in probe().
+  This removes the confusion and makes it clear that the period defined
+  by the user space in indeed handled by the watchdog core
 
+Jean-Jacques Hiblot (4):
+  dt-bindings: clock: r9a06g032: Add the definition of the watchdog
+    clock
+  dt-bindings: watchdog: renesas,wdt: Add support for RZ/N1
+  ARM: dts: r9a06g032: Add the watchdog nodes
+  ARM: dts: r9a06g032-rzn1d400-db: Enable watchdog0 with a 60s timeout
 
-Unfortunately, in this case it is not possible to stop the watchdog once 
-started.
+Phil Edworthy (1):
+  watchdog: Add Renesas RZ/N1 Watchdog driver
 
-The only way to halt the machine is to disable the watchdog reset source.
+ .../bindings/watchdog/renesas,wdt.yaml        |   6 +
+ arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts   |   5 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |  16 ++
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/rzn1_wdt.c                   | 206 ++++++++++++++++++
+ include/dt-bindings/clock/r9a06g032-sysctrl.h |   1 +
+ 7 files changed, 243 insertions(+)
+ create mode 100644 drivers/watchdog/rzn1_wdt.c
 
+-- 
+2.25.1
 
-JJ
-
-
->
-> Guenter
->
->> Thanks!
->>
->>> --- a/drivers/clk/renesas/r9a06g032-clocks.c
->>> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
->>> @@ -129,6 +129,11 @@ enum { K_GATE = 0, K_FFC, K_DIV, K_BITSEL, 
->>> K_DUALGATE };
->>>
->>>   #define R9A06G032_CLOCK_COUNT (R9A06G032_UART_GROUP_34567 + 1)
->>>
->>> +#define R9A06G032_SYSCTRL_REG_RSTEN            0x120
->>> +#define WDA7RST1       BIT(2)
->>> +#define WDA7RST0       BIT(1)
->>> +#define MRESET         BIT(0)
->>> +
->>>   static const struct r9a06g032_clkdesc r9a06g032_clocks[] = {
->>>          D_ROOT(CLKOUT, "clkout", 25, 1),
->>>          D_ROOT(CLK_PLL_USB, "clk_pll_usb", 12, 10),
->>> @@ -893,6 +898,19 @@ static void 
->>> r9a06g032_clocks_del_clk_provider(void *data)
->>>          of_clk_del_provider(data);
->>>   }
->>>
->>> +static void r9a06g032_reset_sources(struct r9a06g032_priv *clocks,
->>> +                       uint32_t mask, uint32_t value)
->>> +{
->>> +       uint32_t rsten;
->>> +       unsigned long flags;
->>> +
->>> +       spin_lock_irqsave(&clocks->lock, flags);
->>> +       rsten = readl(clocks->reg);
->>> +       rsten = (rsten & ~mask) | (value & mask);
->>> +       writel(rsten, clocks->reg + R9A06G032_SYSCTRL_REG_RSTEN);
->>> +       spin_unlock_irqrestore(&clocks->lock, flags);
->>> +}
->>> +
->>>   static int __init r9a06g032_clocks_probe(struct platform_device 
->>> *pdev)
->>>   {
->>>          struct device *dev = &pdev->dev;
->>> @@ -910,6 +928,8 @@ static int __init r9a06g032_clocks_probe(struct 
->>> platform_device *pdev)
->>>          if (!clocks || !clks)
->>>                  return -ENOMEM;
->>>
->>> +       platform_set_drvdata(pdev, clocks);
->>> +
->>>          spin_lock_init(&clocks->lock);
->>>
->>>          clocks->data.clks = clks;
->>> @@ -963,9 +983,18 @@ static int __init r9a06g032_clocks_probe(struct 
->>> platform_device *pdev)
->>>          if (error)
->>>                  return error;
->>>
->>> +
->>>          return r9a06g032_add_clk_domain(dev);
->>>   }
->>>
->>> +static void r9a06g032_clocks_shutdown(struct platform_device *pdev)
->>> +{
->>> +       struct r9a06g032_priv *clocks = platform_get_drvdata(pdev);
->>> +
->>> +       /* Disable the watchdog reset sources */
->>> +       r9a06g032_reset_sources(clocks, WDA7RST0 | WDA7RST1, 0);
->>> +}
->>> +
->>>   static const struct of_device_id r9a06g032_match[] = {
->>>          { .compatible = "renesas,r9a06g032-sysctrl" },
->>>          { }
->>> @@ -976,6 +1005,7 @@ static struct platform_driver 
->>> r9a06g032_clock_driver = {
->>>                  .name   = "renesas,r9a06g032-sysctrl",
->>>                  .of_match_table = r9a06g032_match,
->>>          },
->>> +       .shutdown = r9a06g032_clocks_shutdown,
->>>   };
->>>
->>>   static int __init r9a06g032_clocks_init(void)
->>
->> Gr{oetje,eeting}s,
->>
->>                          Geert
->>
->> -- 
->> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- 
->> geert@linux-m68k.org
->>
->> In personal conversations with technical people, I call myself a 
->> hacker. But
->> when I'm talking to journalists I just say "programmer" or something 
->> like that.
->>                                  -- Linus Torvalds
->
