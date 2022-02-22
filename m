@@ -2,106 +2,101 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783644BE86E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Feb 2022 19:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77A54BF5B1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Feb 2022 11:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349795AbiBUQaC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 21 Feb 2022 11:30:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37146 "EHLO
+        id S230056AbiBVKZN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Feb 2022 05:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349831AbiBUQaB (ORCPT
+        with ESMTP id S231147AbiBVKZJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:30:01 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BA61D0C5;
-        Mon, 21 Feb 2022 08:29:36 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21LGTLYg127812;
-        Mon, 21 Feb 2022 10:29:21 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645460961;
-        bh=06jOtXI4rzCzz8wUf9ZOcz62rwmanvbVaynL0eLkoGs=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=EHb1XOncE8G6tEuQe9TkcoGNaB4bjwYqpKB7qWiQ8OI1FAiSnr80PTZFJF0/Z46ua
-         Bn7cKoTSZuG+e8Yf2v38ZA+IZnkV7rPjdW7V9RWI7wxjZmLnuJVSdbCjJgiikZZLE/
-         ZZ0s6geRJVEUS+6J0Wceg9j/TdURUuDYfuYdUu5U=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21LGTLEB020497
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Feb 2022 10:29:21 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 21
- Feb 2022 10:29:21 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 21 Feb 2022 10:29:21 -0600
-Received: from [10.249.40.134] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21LGTKtH063338;
-        Mon, 21 Feb 2022 10:29:21 -0600
-Message-ID: <c96bffda-73bc-0cdf-c77a-39d57abe1a95@ti.com>
-Date:   Mon, 21 Feb 2022 10:29:20 -0600
+        Tue, 22 Feb 2022 05:25:09 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB88A159E80;
+        Tue, 22 Feb 2022 02:24:44 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id 8so4277855qvf.2;
+        Tue, 22 Feb 2022 02:24:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZwVsXW12gm3VwwhPmVGdM4QmytARwditCmcefz+2r74=;
+        b=Z1mQiaGgxCb9cd9lkH/PWqaC7V+yMwbi8iDmq2TQ4kPMn+Dhm9OXlqeFFF+rMvgQZE
+         8/b7D5EtYdkfjwwtrUAf7pUFKB2+NgTSsiVs2WbKyMoYVQ69FLQdzDOFEa2MghOF06jO
+         M/JBE0U0abxWVXw8mRF0MX4CV6fcS3JfA+R6qMUqmkOKLT+v+N2kt2nlDEYeaIJuu+jR
+         xJ02RjQCyzFBjewl4i3R6pRfjFHD09KEOHWd+wDAjMiBe/kvBX4tRYIMhNuHZdRCXRIm
+         703qF9SZZX+aDIspAJafIAXDPQca+8eflHkw3Uve9aGUzOgMh6foCNCgOAn9M5JKmznP
+         Y1hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZwVsXW12gm3VwwhPmVGdM4QmytARwditCmcefz+2r74=;
+        b=b4DExrUS1MUbJiuB4G+axJ022v8Iw2xk4dbgJalgN7tI8EUNAL9PcoUHWk3w2Gdw5c
+         ziIxCOfFZKsvh3+cju+w7DOh7hm6n8hFGFaGFj41HcsEqkZHFqi0b6NTrmI7iOIoOxZT
+         9atS/DzJooPTHAZnJ4BRCTMgk3GkeYRFC3rJVsC3wiMBv09GwAPluopTwCcIqZnSkq5U
+         VQtrj1zC7kHjOW4ksvnAg3pPL3A+eDx+E9sV+CR8pwmajPBoM8q2lsGyX6xxbudDNVFo
+         yhrNc8cfdFpJAP72CTVx7oRcSNT3FG1tDULzf2XPEn1vrln5SMWq6zIwJgDfDyQ/ZFml
+         XCSg==
+X-Gm-Message-State: AOAM532u/rlF+L4lF92a+QBONRyk94bPwQT+GxqvmjbvUwiD+CFHROBq
+        tovKTdX+/fkML4MDumIKhiI=
+X-Google-Smtp-Source: ABdhPJwY72MpP1R5Ah7WW2R4pXSYtRWIGk0/fr7S/30d7VWzLmNB/IjZkS1+K5fOokHdqM4wX5Slow==
+X-Received: by 2002:a05:6214:4a1:b0:432:3676:f227 with SMTP id w1-20020a05621404a100b004323676f227mr2877021qvz.25.1645525483968;
+        Tue, 22 Feb 2022 02:24:43 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y18sm32215141qtj.33.2022.02.22.02.24.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 02:24:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6534b889-41c5-dd7a-578b-27dc6668064a@roeck-us.net>
+Date:   Tue, 22 Feb 2022 02:24:40 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCHv4 3/4] watchdog: rti-wdt: attach to running watchdog
- during probe
+Subject: Re: [PATCH] MIPS: Remove TX39XX support
 Content-Language: en-US
-To:     Jan Kiszka <jan.kiszka@siemens.com>, Nishanth Menon <nm@ti.com>
-CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200717132958.14304-1-t-kristo@ti.com>
- <20200717132958.14304-4-t-kristo@ti.com>
- <a80b83c6-cca5-f95c-6930-a6f3e79c6f15@siemens.com>
- <bdecc38d-2b1a-9605-0978-5ad1e8b39e6b@siemens.com>
- <20220221124405.o7vda3zaswi6ycrh@favored>
- <8a3f83be-172b-a0c8-d4ba-befa531e52f6@siemens.com>
- <dae15cec-5d05-a48d-8c3b-392559d8bfb7@siemens.com>
-From:   Hari Nagalla <hnagalla@ti.com>
-In-Reply-To: <dae15cec-5d05-a48d-8c3b-392559d8bfb7@siemens.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, dmaengine@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20220222090435.62571-1-tsbogend@alpha.franken.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220222090435.62571-1-tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2/21/22 10:03, Jan Kiszka wrote:
->> K, so we do want a safety margin for min_hw_heartbeat_ms, make it
->> larger. But I still don't think it is best achieved by bending the
->> frequency. That will also affect other values, e.g. returning a wrong
->> programmed timeout to userspace if that was programmed earlier, using
->> the original frequency.
->>
-> I think I'm starting to get the original logic, and the result now works
-> here:
+On 2/22/22 01:04, Thomas Bogendoerfer wrote:
+> No (active) developer owns this hardware, so let's remove Linux support.
 > 
-> The clock driving the watchdog might be slower than thought, and then we
-> may time out later than intended - generally not an issue. But it may
-> also be faster, and then we will see an expiry earlier than what is
-> supposed to be configured via "heartbeat". For the latter case, we lower
-> the frequency virtually by 10%, crossing fingers that this is enough.
-> 
-Humm.. To me it appears the intent is to adjust when the input 32KHz 
-clock is slower? when it is slower we reduce the pulse count by 10% 
-(assuming the crystals are with 10% off clock) so that the desired 
-timeout is achieved with lesser pulse count?
-> The problems are now:
->   - U-Boot (as a known early watchdog starter) does not do that as well,
->     and we will cause at least confusion on Linux side (60s will become
->     66s from Linux POV e.g., and we may expire at 54s already)
->      => U-Boot should add the same 10%, patch will be sent
-Yes, i see that we need similar adjustment in u-boot as well.
->   - even with U-Boot on the same page, the rounding issue will prevent
->     accurate calculations of derived values, namely min_hw_heartbeat_ms.
->      => patch to come
->   - and ...
-> 
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+[ ... ]
 
+>   drivers/watchdog/Kconfig                      |   2 +-
+
+For watchdog:
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
