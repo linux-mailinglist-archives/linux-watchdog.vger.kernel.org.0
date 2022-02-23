@@ -2,113 +2,132 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBCE4C181E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Feb 2022 17:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C688C4C1B79
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Feb 2022 20:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240645AbiBWQGw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 23 Feb 2022 11:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S244149AbiBWTKC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 23 Feb 2022 14:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240492AbiBWQGu (ORCPT
+        with ESMTP id S229913AbiBWTKB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:06:50 -0500
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC5D6C4850
-        for <linux-watchdog@vger.kernel.org>; Wed, 23 Feb 2022 08:06:22 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="5.88,391,1635174000"; 
-   d="scan'208";a="111356446"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 24 Feb 2022 01:01:21 +0900
-Received: from localhost.localdomain (unknown [10.226.93.140])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id D249E4004923;
-        Thu, 24 Feb 2022 01:01:18 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-watchdog@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 6/6] watchdog: rzg2l_wdt: Add set_timeout callback
-Date:   Wed, 23 Feb 2022 16:01:00 +0000
-Message-Id: <20220223160100.23543-7-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220223160100.23543-1-biju.das.jz@bp.renesas.com>
-References: <20220223160100.23543-1-biju.das.jz@bp.renesas.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 23 Feb 2022 14:10:01 -0500
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D1F3BF91;
+        Wed, 23 Feb 2022 11:09:34 -0800 (PST)
+Received: from [77.244.183.192] (port=62116 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nMvv3-00039p-3o; Wed, 23 Feb 2022 18:59:17 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH v6 0/8] Add MAX77714 PMIC minimal driver (RTC and watchdog only)
+Date:   Wed, 23 Feb 2022 18:59:00 +0100
+Message-Id: <20220223175908.191618-1-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This patch adds support for set_timeout callback.
+Hi,
 
-Once WDT is started, the WDT cycle setting register(WDTSET) can be updated
-only after issuing a module reset. Otherwise, it will ignore the writes
-and will hold the previous value. This patch updates the WDTSET register
-if it is active.
+this series adds minimal drivers for the Maxim Semiconductor MAX77714
+(https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+Only RTC and watchdog are implemented by these patches.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-V3->v4:
- * Updated commit description
- * Simplified the logic for updating timeout register, if wdt is active.
-v2->v3:
- * Patch reodering Patch 3 -> patch 4
- * Updated commit description.
-V1->V2:
- * Updated commit description
- * Removed stop/start and started using reset() instead.
- * After reset, Start WDT based on watchdog timer state.
----
- drivers/watchdog/rzg2l_wdt.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+This is almost a bare resend of v5. Changes are minimal, trivial and only
+in comments (see list below).
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 4e7107655cc2..6eea0ee4af49 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -115,6 +115,25 @@ static int rzg2l_wdt_stop(struct watchdog_device *wdev)
- 	return 0;
- }
- 
-+static int rzg2l_wdt_set_timeout(struct watchdog_device *wdev, unsigned int timeout)
-+{
-+	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	wdev->timeout = timeout;
-+
-+	/*
-+	 * If the watchdog is active, reset the module for updating the WDTSET
-+	 * register so that it is updated with new timeout values.
-+	 */
-+	if (watchdog_active(wdev)) {
-+		pm_runtime_put(wdev->parent);
-+		reset_control_reset(priv->rstc);
-+		rzg2l_wdt_start(wdev);
-+	}
-+
-+	return 0;
-+}
-+
- static int rzg2l_wdt_restart(struct watchdog_device *wdev,
- 			     unsigned long action, void *data)
- {
-@@ -151,6 +170,7 @@ static const struct watchdog_ops rzg2l_wdt_ops = {
- 	.start = rzg2l_wdt_start,
- 	.stop = rzg2l_wdt_stop,
- 	.ping = rzg2l_wdt_ping,
-+	.set_timeout = rzg2l_wdt_set_timeout,
- 	.restart = rzg2l_wdt_restart,
- };
- 
+All implemented functionality is tested and working: RTC read/write,
+watchdog start/stop/ping/set_timeout.
+
+Patches 1-3 are trivial cleanups to the max77686 drivers.
+
+Patches 4-8 add dt bindings, mfd driver, watchdog driver and rtc driver.
+
+Changes in v6:
+ - patch 6: removed, now in mainline
+ - patch 5: describe as "Core driver", not "MFD driver" in comment
+   (Lee Jones)
+ - update copyright years
+ - add review tags
+
+Changes in v5:
+ - patch 7: fix (and simplify) watchdog_info code
+ - patch 8: remove amibguity in comment
+
+Changes in v4:
+ - do not add a new wdog driver for MAX77714, extend the MAX77620 wdog
+   driver; this means removing v3 patch 7, now replaced by patches 7+8
+ - added review tags
+
+Changes in v3:
+ - fixed all issues reported on v1 patches
+ - removed patch 1 of v2, already applied
+   ("mfd: max77686: Correct tab-based alignment of register addresses")
+
+Changes in v2:
+ - fixed all issues reported on v1 patches
+ - added patch 7 ("watchdog: Kconfig: fix help text indentation")
+ - additional minor improvements
+
+Luca
+
+Luca Ceresoli (8):
+  rtc: max77686: convert comments to kernel-doc format
+  rtc: max77686: rename day-of-month defines
+  rtc: max77686: remove unused code to read in 12-hour mode
+  dt-bindings: mfd: add Maxim MAX77714 PMIC
+  mfd: max77714: Add driver for Maxim MAX77714 PMIC
+  watchdog: max77620: add support for the max77714 variant
+  watchdog: max77620: add comment to clarify set_timeout procedure
+  rtc: max77686: add MAX77714 support
+
+ .../bindings/mfd/maxim,max77714.yaml          |  68 ++++++++
+ MAINTAINERS                                   |   7 +
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77686.c                        |   2 +-
+ drivers/mfd/max77714.c                        | 152 ++++++++++++++++++
+ drivers/rtc/Kconfig                           |   2 +-
+ drivers/rtc/rtc-max77686.c                    |  75 +++++----
+ drivers/watchdog/Kconfig                      |   2 +-
+ drivers/watchdog/max77620_wdt.c               |  85 ++++++++--
+ include/linux/mfd/max77686-private.h          |   4 +-
+ include/linux/mfd/max77714.h                  |  60 +++++++
+ 12 files changed, 421 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 include/linux/mfd/max77714.h
+
 -- 
-2.17.1
+2.25.1
 
