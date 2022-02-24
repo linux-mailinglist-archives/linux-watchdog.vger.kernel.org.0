@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2278E4C2828
-	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Feb 2022 10:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E79E4C284A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Feb 2022 10:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiBXJfg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 24 Feb 2022 04:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S231679AbiBXJif (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 24 Feb 2022 04:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbiBXJff (ORCPT
+        with ESMTP id S232678AbiBXJia (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:35:35 -0500
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415BB27AFFB;
-        Thu, 24 Feb 2022 01:34:56 -0800 (PST)
-Received: by mail-vk1-f171.google.com with SMTP id l42so846669vkd.7;
-        Thu, 24 Feb 2022 01:34:56 -0800 (PST)
+        Thu, 24 Feb 2022 04:38:30 -0500
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C183F27AA31;
+        Thu, 24 Feb 2022 01:38:00 -0800 (PST)
+Received: by mail-vs1-f45.google.com with SMTP id y4so1446224vsd.11;
+        Thu, 24 Feb 2022 01:38:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9wyjbz4XhiO4ffL5jyK5bZEf+e5lTiC1fLwLtqpE7a4=;
-        b=XT5JtJkip1eeD7Bret6h8/H+p9hdXs5eL5tRW3ruwym0iILS/AzBzHmYQ3z0pGWmSP
-         VhlYTrId8ev2I1nACepO6yDJ0yPnd2A3HmrUPwYcswjVVC+NFJQwYfqJ6gFW51yHit1i
-         II/sDInt17TW5C0QOU62cPRj971uj2cJhqwSqT8l4cHefKybUG6ccFmJYBT2FatwlXJt
-         G7MFY/MtjNfVuD+EOWj3IterjbXQEWxVHGQivgZ+te9Ft4Avo7qSbm0u6TCt1KAMdXMt
-         IOTJWLJNkeoPGo3UKJlLJyv2XOWMjVncoeriTF7qM7xx2q7s2TeAZMdHcl0ZDyuxykuL
-         2WYQ==
-X-Gm-Message-State: AOAM531vpknGnla6eNfgCMAym6fgmxQ0Cj0QSi48GjZD9wvD7n2Ix5fZ
-        c0Gg7NLNp/7mncBFBtxaQz8OON8kyJN2+Q==
-X-Google-Smtp-Source: ABdhPJxeCyt+Scg1Y82VUL0vFGWa/tS0AigZU2TWej2nvjiVkGi6bo1qo3oiLYCDvvtFXhczZOsCSw==
-X-Received: by 2002:a1f:a8d8:0:b0:32f:7362:c169 with SMTP id r207-20020a1fa8d8000000b0032f7362c169mr720247vke.16.1645695294825;
-        Thu, 24 Feb 2022 01:34:54 -0800 (PST)
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
-        by smtp.gmail.com with ESMTPSA id n77sm313502vkn.29.2022.02.24.01.34.54
+        bh=2NkiPKWL2DYT9Xb29beY6JtzlhRGsFPJr2sVrGZy28c=;
+        b=MdBj5HlQB6qWch8EsdMNOPIjgeyNx3NyoUeixMS9uD5tfcf5FG4L5b34JwmnDKcGEq
+         BkYonNJmL/YmjlHtAhFnps+zoUMWpoLgensGkr6MNN4kmxBKv5pZDTiRvSwNKdIspAWn
+         3HcFtFLD0B3uOsRdcYHlgO6Aya4tS3DDK8tM1MvxucrnSX8JUjDak8ATZvq/V7muQCyZ
+         gk/uAS0j0WMAnhV34yZdxaGR6kgBcM1BoLmzEcUpi69xFlCVy/nTYnoxhRfZdS40rHUb
+         T3TBAj/LDvJgXJngH+JSm/8X7l/VMeTo49cPLYog5jWbgvIHCQMzQHXCx5hnw5SDIVm9
+         sGNA==
+X-Gm-Message-State: AOAM533XeA2VQsN15foj2GwK+lfXnRegCRklYNIdjM7SOE7R7Ji95zPv
+        AxvlxiRqexnUsh4UfcsxYTcsorMa4XkTSA==
+X-Google-Smtp-Source: ABdhPJw2tLnaR9wtewctfCkckqTZjQA3paM+cUNPvigK4QgMzHTCDfLznNpYFaF/Daal5Mys/V48/g==
+X-Received: by 2002:a67:d98f:0:b0:31b:65c3:765b with SMTP id u15-20020a67d98f000000b0031b65c3765bmr626148vsj.69.1645695479864;
+        Thu, 24 Feb 2022 01:37:59 -0800 (PST)
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com. [209.85.217.52])
+        by smtp.gmail.com with ESMTPSA id bk26sm325811vkb.3.2022.02.24.01.37.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 01:34:54 -0800 (PST)
-Received: by mail-vs1-f53.google.com with SMTP id d26so1526182vsh.0;
-        Thu, 24 Feb 2022 01:34:54 -0800 (PST)
-X-Received: by 2002:a67:e113:0:b0:30e:303d:d1d6 with SMTP id
- d19-20020a67e113000000b0030e303dd1d6mr702091vsl.38.1645695293897; Thu, 24 Feb
- 2022 01:34:53 -0800 (PST)
+        Thu, 24 Feb 2022 01:37:59 -0800 (PST)
+Received: by mail-vs1-f52.google.com with SMTP id q9so1499310vsg.2;
+        Thu, 24 Feb 2022 01:37:59 -0800 (PST)
+X-Received: by 2002:a67:af08:0:b0:31b:9451:bc39 with SMTP id
+ v8-20020a67af08000000b0031b9451bc39mr638958vsl.68.1645695479083; Thu, 24 Feb
+ 2022 01:37:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20220223160100.23543-1-biju.das.jz@bp.renesas.com> <20220223160100.23543-5-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20220223160100.23543-5-biju.das.jz@bp.renesas.com>
+References: <20220223160100.23543-1-biju.das.jz@bp.renesas.com> <20220223160100.23543-6-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220223160100.23543-6-biju.das.jz@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 24 Feb 2022 10:34:42 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV80cvBCP-zOH-opy5hviXZiO6Xf43RCF-ah9kZXgPdAQ@mail.gmail.com>
-Message-ID: <CAMuHMdV80cvBCP-zOH-opy5hviXZiO6Xf43RCF-ah9kZXgPdAQ@mail.gmail.com>
-Subject: Re: [PATCH v4 4/6] watchdog: rzg2l_wdt: Add error check for reset_control_deassert
+Date:   Thu, 24 Feb 2022 10:37:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXnLOVSi62_kiZBr2Fze_jr2wNxLfz3ZC8SXU1ei3yecw@mail.gmail.com>
+Message-ID: <CAMuHMdXnLOVSi62_kiZBr2Fze_jr2wNxLfz3ZC8SXU1ei3yecw@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] watchdog: rzg2l_wdt: Use force reset for WDT reset
 To:     Biju Das <biju.das.jz@bp.renesas.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -74,13 +74,19 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 Hi Biju,
 
 On Wed, Feb 23, 2022 at 5:01 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> If reset_control_deassert() fails, then we won't be able to
-> access the device registers. Therefore check the return code of
-> reset_control_deassert() and bailout in case of error.
+> This patch uses the force reset(WDTRSTB) for triggering WDT reset for
+> restart callback. This method(ie, Generate Reset (WDTRSTB) Signal on
+> parity error)is faster compared to the overflow method for triggering
+> watchdog reset.
 >
-> While at it change reset_control_assert->reset_control_reset in
-> rzg2l_wdt_stop() and remove unnecessary reset_control_deassert()
-> from rzg2l_wdt_start().
+> Overflow method:
+>         reboot: Restarting system
+>         Reboot failed -- System halted
+>         NOTICE:  BL2: v2.5(release):v2.5/rzg2l-1.00-27-gf48f1440c
+>
+> Parity error method:
+>         reboot: Restarting system
+>         NOTICE:  BL2: v2.5(release):v2.5/rzg2l-1.00-27-gf48f1440c
 >
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
@@ -88,45 +94,34 @@ Thanks for your patch!
 
 > --- a/drivers/watchdog/rzg2l_wdt.c
 > +++ b/drivers/watchdog/rzg2l_wdt.c
-> @@ -88,7 +88,6 @@ static int rzg2l_wdt_start(struct watchdog_device *wdev)
+
+> @@ -117,17 +120,14 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
 >  {
 >         struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
 >
-> -       reset_control_deassert(priv->rstc);
+> -       /* Reset the module before we modify any register */
+> -       reset_control_reset(priv->rstc);
+> -
 
-So before, we had a reset control imbalance?
-  - After probe, reset was deasserted.
-  - After start, reset was deasserted twice. Oops.
-You probably want to mention this in the commit description, too.
+I think this part belongs in patch 4/6.
 
->         pm_runtime_get_sync(wdev->parent);
+>         clk_prepare_enable(priv->pclk);
+>         clk_prepare_enable(priv->osc_clk);
 >
->         /* Initialize time out */
-> @@ -108,7 +107,7 @@ static int rzg2l_wdt_stop(struct watchdog_device *wdev)
->         struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> -       /* smallest counter value to reboot soon */
+> -       rzg2l_wdt_write(priv, WDTSET_COUNTER_VAL(1), WDTSET);
+> +       /* Generate Reset (WDTRSTB) Signal on parity error */
+> +       rzg2l_wdt_write(priv, 0, PECR);
 >
->         pm_runtime_put(wdev->parent);
-> -       reset_control_assert(priv->rstc);
-> +       reset_control_reset(priv->rstc);
-
-As the reset is now deasserted after probe(), stop(), and start(),
-I think the reset_control_reset() in .restart() can now be removed?
-
+> -       /* Enable watchdog timer*/
+> -       rzg2l_wdt_write(priv, WDTCNT_WDTEN, WDTCNT);
+> +       /* Force parity error */
+> +       rzg2l_wdt_write(priv, PEEN_FORCE, PEEN);
 >
 >         return 0;
->  }
-> @@ -204,7 +203,10 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
->                 return dev_err_probe(&pdev->dev, PTR_ERR(priv->rstc),
->                                      "failed to get cpg reset");
->
-> -       reset_control_deassert(priv->rstc);
-> +       ret = reset_control_deassert(priv->rstc);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "failed to deassert");
-> +
->         pm_runtime_enable(&pdev->dev);
->
->         priv->wdev.info = &rzg2l_wdt_ident;
+
+The rest LGTM, to
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
