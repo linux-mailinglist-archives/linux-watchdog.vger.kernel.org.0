@@ -2,61 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332A04C4AEC
-	for <lists+linux-watchdog@lfdr.de>; Fri, 25 Feb 2022 17:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED304C4AF0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 25 Feb 2022 17:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243069AbiBYQgu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 25 Feb 2022 11:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S243092AbiBYQhN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 25 Feb 2022 11:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243080AbiBYQgr (ORCPT
+        with ESMTP id S243090AbiBYQhN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:36:47 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8209920A96F;
-        Fri, 25 Feb 2022 08:36:15 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id 12so7950055oix.12;
-        Fri, 25 Feb 2022 08:36:15 -0800 (PST)
+        Fri, 25 Feb 2022 11:37:13 -0500
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB7A2118D5;
+        Fri, 25 Feb 2022 08:36:41 -0800 (PST)
+Received: by mail-oo1-xc32.google.com with SMTP id u47-20020a4a9732000000b00316d0257de0so6897618ooi.7;
+        Fri, 25 Feb 2022 08:36:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=niaOyKFRTLM4nq6p91pTJy+BgOVTpwhZEheiPnsTKW0=;
-        b=njphU4SgCOeE1f6MWWYJwpInbIET4zmkTohQOWwD4Q9qCNfs4RqdFN5jbmZzafN8Pc
-         VNlUi8NwVsvtHA/EBjWVVHawtRv2OZSHx9mO690DMac36GHIwN3fRPu/uTvdQ4zBv4wr
-         /1gY0YjmPEDvlZpkurRE0d3cmltJEW2yGJxp9QO853qYRiUL0gO1IdG/8Y6/ev/QIGk7
-         +qMHuZNl0I6VClkELq1oGpNlicuIrTcMsvrVlBc1tK06KRlqxhDQkrotroFmZTyyOq12
-         zLP8FqeY09VQg58xpGa5DSoaxibdmLLLksHZviHqSNogHNPvvZ1KgGQJZJHTaELY4Dub
-         +GSQ==
+        bh=Dec347SrLgLC0WzRa99gVMTjXKUpk4Dvu/3QxlLX+o8=;
+        b=nvww4HMzNa6UycY1GsxwFWPWcM8UpfXCl2UfRTrLIhK88PagqbSGkxKg+8i77qgZZZ
+         xeWoZjKtihIEhJaLW4InwiPD7yaniXPiF6Dg3mcOSTRkVA9kKC24v2IwMfPNiWwUgs5F
+         xjStS4WqjZy4xo1NGL11Z8kZlbK9EJM6rBvB5WypPGCKD78ATM65zcoEX4LNu42t5OV+
+         TQtPqz/Uhe7lCandWDzCXTywQytdQVv2Ae+irpuovJVVi/76MKUPtu9duX7C4W6UYNdy
+         dVd65bg3aeFjIHpflgAWayYB0MOeVYc2FRRPFtW3uk31IsLv3+J26tj0aCo7mVU0DM6/
+         SrZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=niaOyKFRTLM4nq6p91pTJy+BgOVTpwhZEheiPnsTKW0=;
-        b=FB2KFrhBsFLOzPs1KGoIzr9EAUYKVd5rZFkFjP4f7s8rCyi/s9VCaMIOk6gGZ/fyGy
-         e7DpyyWyBqFi0HuNgSXiTuH4bjT61Fzd4884NXMRBRDl4uGI7i+K2FFsX3PWxkra046Q
-         aek9XDTZT1ALXNzCe3e7Uz/QGJC1Jtbac5ngdSzJctDr91B2KDvLUtwWLONKrEemGESF
-         kRsxeyObEkOGyNrri38Zt42wSVKPElptMSwEoU3LPSls1E5pn0y4vP0dsACogQ7hVRlV
-         X+7B7qCwa4QXNFhVcaUTzkKI1iZbENza9luMJ/Vv7zUT2xLMsmbvA+TelloLh++T+/vx
-         91Iw==
-X-Gm-Message-State: AOAM531KP4c8C1xLis6nr61kC80HPrqP8IxvFK5WAhPfdJa85kc8D2tB
-        qoQhto+NkoUwHe3NSqv5Y2rtEwXOSTc=
-X-Google-Smtp-Source: ABdhPJwGU24ldVXUVF0yTKU6iyVpDQgNrpuF3eu0sc35FMtjpWmbCQaUXCpa0iDMVke9oEjrTSJaDA==
-X-Received: by 2002:a05:6808:d46:b0:2d7:27c0:17d3 with SMTP id w6-20020a0568080d4600b002d727c017d3mr81864oik.84.1645806974885;
-        Fri, 25 Feb 2022 08:36:14 -0800 (PST)
+        bh=Dec347SrLgLC0WzRa99gVMTjXKUpk4Dvu/3QxlLX+o8=;
+        b=fbQG5hzTcgFQDx7F7kDmdUqXCIpzVbYBImMHRJQ2Mr32Ff10mjGGB9ivasi90JXB7q
+         cqsxcJpPgQMKOS827CWrxlHOWbVYwqpsNYGXI9n7Y3yW+ucmApTAmDDdTOHJe9dio1C3
+         XwHDHUUkcADABrsZqWwx+f3+XD6rKHqxcdnXRL0YwdaJrRKrJa+Z2DANqnPyiiZP+zb0
+         yLgxZTOYEAnX9iEdNErPWPI+958m+9iefbs5JcYFQQzvUgGCH6y/YpsCRW/6a5ebtKhv
+         16rqqIyELrE/SnaFupQqevwGHaDIIpgB/0O2Wx1Pvck3YXuprpCMT14eli2kL2KtCw0i
+         KSGA==
+X-Gm-Message-State: AOAM533YJvylNFKXRNOweqPyRQ/DkCgn1rpuSA/R+2a5sabjeURnvRQB
+        /wmJUT7j2knyUeQqTjwr0m4=
+X-Google-Smtp-Source: ABdhPJyxqhDz+2w1gzC/91KjRDvnzqhF1bQndLV6JOsMPUvDBDCfL5o+OiSGr/Y56tpLQ++UJpUE4A==
+X-Received: by 2002:a05:6870:971f:b0:d6:c8bf:43fe with SMTP id n31-20020a056870971f00b000d6c8bf43femr1648758oaq.258.1645807000840;
+        Fri, 25 Feb 2022 08:36:40 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k13-20020a056830150d00b005af8c9f399esm1275129otp.50.2022.02.25.08.36.13
+        by smtp.gmail.com with ESMTPSA id t7-20020a9d5907000000b005afa4058a4csm1384070oth.1.2022.02.25.08.36.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 08:36:14 -0800 (PST)
+        Fri, 25 Feb 2022 08:36:40 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3501d9dd-b3d4-525b-995c-520b637f712f@roeck-us.net>
-Date:   Fri, 25 Feb 2022 08:36:12 -0800
+Message-ID: <6e3a67fc-6030-540d-ff97-13ce0a147992@roeck-us.net>
+Date:   Fri, 25 Feb 2022 08:36:38 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [4/4] watchdog: mediatek: mt8186: add wdt support
+Subject: Re: [PATCH 1/4] dt-bindings: watchdog: Add compatible for MediaTek
+ MT8186
 Content-Language: en-US
 To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, wim@linux-watchdog.org,
         matthias.bgg@gmail.com, robh+dt@kernel.org, p.zabel@pengutronix.de
@@ -65,9 +66,9 @@ Cc:     runyang.chen@mediatek.com, linux-watchdog@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
- <20220216014505.28428-5-rex-bc.chen@mediatek.com>
+ <20220216014505.28428-2-rex-bc.chen@mediatek.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220216014505.28428-5-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220216014505.28428-2-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,48 +83,26 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 2/15/22 17:45, Rex-BC Chen wrote:
-> From: Runyang Chen <runyang.chen@mediatek.com>
+> Add dt-binding documentation of watchdog for MediaTek MT8186 SoC.
 > 
-> Support MT8186 watchdog device.
-> 
-> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
 > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/watchdog/mtk_wdt.c | 6 ++++++
->   1 file changed, 6 insertions(+)
+>   Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index 4577a76dd464..fe5a2ecba97a 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -11,6 +11,7 @@
->   
->   #include <dt-bindings/reset/mt2712-resets.h>
->   #include <dt-bindings/reset/mt8183-resets.h>
-> +#include <dt-bindings/reset/mt8186-resets.h>
->   #include <dt-bindings/reset/mt8192-resets.h>
->   #include <dt-bindings/reset/mt8195-resets.h>
->   #include <linux/delay.h>
-> @@ -80,6 +81,10 @@ static const struct mtk_wdt_data mt8183_data = {
->   	.toprgu_sw_rst_num = MT8183_TOPRGU_SW_RST_NUM,
->   };
->   
-> +static const struct mtk_wdt_data mt8186_data = {
-> +	.toprgu_sw_rst_num = MT8186_TOPRGU_SW_RST_NUM,
-> +};
-> +
->   static const struct mtk_wdt_data mt8192_data = {
->   	.toprgu_sw_rst_num = MT8192_TOPRGU_SW_RST_NUM,
->   };
-> @@ -419,6 +424,7 @@ static const struct of_device_id mtk_wdt_dt_ids[] = {
->   	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
->   	{ .compatible = "mediatek,mt6589-wdt" },
->   	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
-> +	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
->   	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
->   	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
->   	{ /* sentinel */ }
+> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> index 0114871f887a..74db01e3658b 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> @@ -15,6 +15,7 @@ Required properties:
+>   	"mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for MT7629
+>   	"mediatek,mt7986-wdt", "mediatek,mt6589-wdt": for MT7986
+>   	"mediatek,mt8183-wdt": for MT8183
+> +	"mediatek,mt8186-wdt", "mediatek,mt6589-wdt": for MT8186
+>   	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
+>   	"mediatek,mt8192-wdt": for MT8192
+>   	"mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
 
