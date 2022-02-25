@@ -2,95 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A077A4C4AAD
-	for <lists+linux-watchdog@lfdr.de>; Fri, 25 Feb 2022 17:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DC94C4ADF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 25 Feb 2022 17:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242882AbiBYQ1O (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 25 Feb 2022 11:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S241428AbiBYQfg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 25 Feb 2022 11:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242974AbiBYQ1M (ORCPT
+        with ESMTP id S242689AbiBYQff (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:27:12 -0500
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA061CF098;
-        Fri, 25 Feb 2022 08:26:39 -0800 (PST)
-Received: by mail-oo1-f51.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so6833757oot.11;
-        Fri, 25 Feb 2022 08:26:39 -0800 (PST)
+        Fri, 25 Feb 2022 11:35:35 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C90D1DA02C;
+        Fri, 25 Feb 2022 08:35:02 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id p12-20020a05683019cc00b005af1442c9e9so3952982otp.13;
+        Fri, 25 Feb 2022 08:35:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9GsfwK/nnIuvlsQePdP4EURIXceQzXyDH1BCPBGoi+U=;
+        b=Vv/M8ZG32wzw1rrwR/d4eeKsaEy0VF0bJ73vy+vyM2M+21IrgGjszCep9Yo2UT3viw
+         OjFxygiHOfxLn080ne1912tyaI+k670e47U8LhaHEKb15ztkLBIzTsriBz8eE7D1kFo4
+         JFZy315oqAxtsgKVbtkeF0wC6uO+m5Zcuu1+8RV6JH96YEriTer3tsEez8VAa70UCt7c
+         OA7YUgbvb73aljPFidzliv7aMF3YFJzDKuU/qiV488JIlAS55ydZ9DGlT9/SbIxJJoo6
+         CydHabNmRz2AJuNsS4xl1Eiaukg/Jmz2PU7s8gVNhYObuN6un5p84GTGl7CXtSfgBgd4
+         mIXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X+JqfUsqraXHT66jiXxwdmiSs8aXoZzc7qj34oZ5zw0=;
-        b=anUy5naoZFfCvjPIj07QLnMDQq55ZURQjRjWedrUrZZdhYraLoXDaet4FMJvZAVM6P
-         CPepwoxeZ26+5yR2iPOhoMguyF995dVjUM+iD6sNkRq3DI14ULgvLs38oKyi1zEcTSCc
-         U/ghgefqlE9GNxbpyWi6vjoWmoq+V4ntWKUT+uY8sMTtY9VER5e1+SZbzzzgym+cKVvy
-         +qDwOGyMT+srp/ST9bofydPopG+Iyh29WHi1kJMlbC+DjCjBMSBQcH44asGGd2fiYF0m
-         2eMUl4oPVCahJI8N85koBEqB1P4ArlvCXS20lKx4Ry2YoeLmfhBz+0qr01Uslxr5s2Cb
-         XzBA==
-X-Gm-Message-State: AOAM530bgWHwVIrQNnEExjhz2ml8FRqK5XtRUweau/FlfDZ7Sj8siiXw
-        ZnCdhJWl55zru/0q4QLdaaH8xz2RJw==
-X-Google-Smtp-Source: ABdhPJw/vcrFI/CjF4cimyIVyp6KlPE/kC0dGCY0QDWKVaSEMQmUHALL39y0AM6WyQ4p/4kwWTKUHQ==
-X-Received: by 2002:a05:6870:88b:b0:d6:eac9:56d9 with SMTP id fx11-20020a056870088b00b000d6eac956d9mr1000147oab.56.1645806399005;
-        Fri, 25 Feb 2022 08:26:39 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f8-20020a4ab648000000b0031d1cf9aef6sm789502ooo.48.2022.02.25.08.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:26:38 -0800 (PST)
-Received: (nullmailer pid 1039466 invoked by uid 1000);
-        Fri, 25 Feb 2022 16:26:37 -0000
-Date:   Fri, 25 Feb 2022 10:26:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, matthias.bgg@gmail.com,
-        p.zabel@pengutronix.de, runyang.chen@mediatek.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [3/4] dt-bindings: reset: mt8186: add DSI reset bit for MMSYS
-Message-ID: <YhkDPe3KuaRW6b2Y@robh.at.kernel.org>
-References: <20220216014505.28428-1-rex-bc.chen@mediatek.com>
- <20220216014505.28428-4-rex-bc.chen@mediatek.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9GsfwK/nnIuvlsQePdP4EURIXceQzXyDH1BCPBGoi+U=;
+        b=vu8xwv78c952GFmZLrV9y0Jf+9srsN9rtOguayDzYwYMFtpvDfVTj5LaAGs55+52rP
+         W1atQfyVqlGJeRrok1oj0L6qPGvZoUEM8zQ6xdnwJsjSmF130ou2TgXDb2rYGH4nJtFI
+         Uvkhu2gw9EWJkk7NucAjOWy8C/NiZrV+GlzDOTrsZ0MtwhYXKVuwY8fKVxLiifE0UKon
+         s+mbgbO2jVNxLZSbD7VR5edgdq9nddaOcvo2/xkUI8p5B7xHdpim5FAJW3xlDcmwcYJu
+         HzJITnT9JnP1jvGs/f0MHDny4nBFlMkHaHwzqQRgA8TjkpkOV+TFu2sOhfNppuUTqjX3
+         cs9w==
+X-Gm-Message-State: AOAM533iZEYT+XEHPCXr6eWf63Pk6Nrn28mvfWkWIkyrQ4hjeEnNBKXR
+        HzwyTK/KG7jFHGSKgg4gKTw=
+X-Google-Smtp-Source: ABdhPJwqYObN05dUBNTk7kp/IjdAMHXp6A8IHvo5mIvhsd8df6mIkGQ1utinVKYHlbSfR0JwbAYNjg==
+X-Received: by 2002:a05:6830:1087:b0:5af:3e61:509c with SMTP id y7-20020a056830108700b005af3e61509cmr3084399oto.57.1645806901356;
+        Fri, 25 Feb 2022 08:35:01 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w5-20020a4a5d05000000b0031c67a9b54bsm1284414ooa.45.2022.02.25.08.34.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 08:35:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <31ac0f93-f52a-f2d0-60f1-3a34c485f014@roeck-us.net>
+Date:   Fri, 25 Feb 2022 08:34:58 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216014505.28428-4-rex-bc.chen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: watchdog: imx7ulp-wdt: Add imx93 compatible
+ string
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, wim@linux-watchdog.org,
+        robh+dt@kernel.org, shawnguo@kernel.org
+Cc:     kernel@pengutronix.de, festevam@gmail.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+References: <20220215081202.787853-1-peng.fan@oss.nxp.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220215081202.787853-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 09:45:04AM +0800, Rex-BC Chen wrote:
-> Add DSI software reset bit which is controlled by MMSYS for MT8186.
+On 2/15/22 00:12, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> The wdog on i.MX93 is modified from i.MX8ULP with some changes,
+> it uses one compatible string, so add i.MX93 support.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  include/dt-bindings/reset/mt8186-resets.h | 3 +++
->  1 file changed, 3 insertions(+)
+>   Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/include/dt-bindings/reset/mt8186-resets.h b/include/dt-bindings/reset/mt8186-resets.h
-> index 36e5764e2e6c..5f850370c42c 100644
-> --- a/include/dt-bindings/reset/mt8186-resets.h
-> +++ b/include/dt-bindings/reset/mt8186-resets.h
-> @@ -30,4 +30,7 @@
->  #define MT8186_TOPRGU_IMG2_SW_RST				22
->  #define MT8186_TOPRGU_SW_RST_NUM				23
->  
-> +/* MMSYS resets */
-> +#define MT8186_MMSYS_SW0_RST_B_DISP_DSI0			19
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> index fb603a20e396..12da179ed6c0 100644
+> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+> @@ -19,6 +19,7 @@ properties:
+>         - items:
+>             - const: fsl,imx8ulp-wdt
+>             - const: fsl,imx7ulp-wdt
+> +      - const: fsl,imx93-wdt
+>   
+>     reg:
+>       maxItems: 1
 
-This can just be squashed into the previous patch.
-
-> +
->  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8186 */
-> -- 
-> 2.18.0
-> 
-> 
