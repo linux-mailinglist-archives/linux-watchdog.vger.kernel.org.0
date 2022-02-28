@@ -2,94 +2,119 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA96C4C66CF
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Feb 2022 11:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA824C6A58
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Feb 2022 12:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiB1KG3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Feb 2022 05:06:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S232630AbiB1L1N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Feb 2022 06:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiB1KGZ (ORCPT
+        with ESMTP id S229695AbiB1L1M (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Feb 2022 05:06:25 -0500
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54E9E2D1FB
-        for <linux-watchdog@vger.kernel.org>; Mon, 28 Feb 2022 02:05:39 -0800 (PST)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26018:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Mon, 28 Feb 2022 18:04:15 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Mon, 28 Feb 2022 18:04:34 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.018; Mon, 28 Feb 2022 18:04:34 +0800
-From:   =?utf-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-Subject: RE: [PATCH v6 2/2] watchdog: Add watchdog driver for Sunplus SP7021
-Thread-Topic: [PATCH v6 2/2] watchdog: Add watchdog driver for Sunplus SP7021
-Thread-Index: AQHYKVJTp9Up30rwj02N8d6jm1zUlayj+OgAgATCP5A=
-Date:   Mon, 28 Feb 2022 10:04:34 +0000
-Message-ID: <f61d99bff64e4a49b2a2943d01d9b6d2@cqplus1.com>
-References: <20220224074242.6944-1-xt.hu@cqplus1.com>
- <20220224074242.6944-3-xt.hu@cqplus1.com>
- <6620b35b-5475-fe6d-5149-d8cb4fb834d5@roeck-us.net>
-In-Reply-To: <6620b35b-5475-fe6d-5149-d8cb4fb834d5@roeck-us.net>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.16]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 28 Feb 2022 06:27:12 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5DA43ECF;
+        Mon, 28 Feb 2022 03:26:33 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id d17so14856118wrc.9;
+        Mon, 28 Feb 2022 03:26:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0nOl9Gu2cS+40aKnl77MAdTBzkl+e2ajXLPqa1328c4=;
+        b=RF4z69yluICtYu1fuLZaU5ixtaQDPyAtJIV6s7TbYCPDKfko8sreM/MwfRn1VCiVB0
+         TSDCP5j9Bnpu2IOzh061GbVz6HMuZpuN1R0Vg3dYvBkElL2SqQ+XsqzJS/AaEkhVxfw8
+         wjb/fCMdjSlcZ3gLtLUiAjcGxqyIgkLiSdPfg+MVpcYvPygMabCcQirectYD9SNiQcC7
+         fB60JFiWqd2xEG7hLjg/wCYtRsDbH6QLwiQ9J5RvnUl6+lgM0nvbbnxwSaHUGPVp7fQK
+         56bQlW4K55lgpwfxgKyCGG7EdXEhk/UsWnq8TC5BCaqrtBDDWNQ6IyZV0/E/JCHjALLN
+         Qhig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0nOl9Gu2cS+40aKnl77MAdTBzkl+e2ajXLPqa1328c4=;
+        b=OQ6nHNInaNeEhA1OeT+jT8rX6pJrkTWX1/yI/HOpUtZ6KnQYFHRTjDNzQo3OOmeV0A
+         GHIrA+8tNCfJgJoir/Aifoyag3BlIGnv0+5LOPItWbIljH5K2fMOAWaAA9JfZ89ZvWUR
+         SmjYaZ/5T3iunaO1ZIvCn5o0JKY0hBxtAB84X/YLo79EKzvU/pj9Ca33vprLUMsKFlEU
+         ovGsq1/xm4t9SIEv4AnhW0IQUhBxd1inGPaUmPRXfsJZOxXMfSK96iSpvchoS0Wu4oOh
+         oYf4duIMPMtfwLIOQ/pxRUDH7p89uNAg0y9fJcmlJflTbRbTqUm4NJfrWBaRA6q6H718
+         +EJg==
+X-Gm-Message-State: AOAM530QV0klwOa0eu3ahINz8/R7sMDJD2c6HJo4RyqQEkVsrBq320Sw
+        JwvUCeCQS4BdpInXYmHzLI8=
+X-Google-Smtp-Source: ABdhPJyEN3IVhZ9CqchTTNuRDYhwp5BAWHwjBXE4AYXcGoAFKxxj9OkPswk656aj1zqS3OkJFo7PcQ==
+X-Received: by 2002:a05:6000:1c0b:b0:1ef:f0cc:6e53 with SMTP id ba11-20020a0560001c0b00b001eff0cc6e53mr1225544wrb.715.1646047592597;
+        Mon, 28 Feb 2022 03:26:32 -0800 (PST)
+Received: from [192.168.0.14] (static-63-182-85-188.ipcom.comunitel.net. [188.85.182.63])
+        by smtp.gmail.com with ESMTPSA id z2-20020a056000110200b001e7140ddb44sm9847832wrw.49.2022.02.28.03.26.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 03:26:31 -0800 (PST)
+Message-ID: <530f6169-afdb-8242-f4b4-54a54a73948b@gmail.com>
+Date:   Mon, 28 Feb 2022 12:26:30 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/7] dt-bindings: timer: Add compatible for Mediatek
+ MT8186
+Content-Language: en-US
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     hsinyi@chromium.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20220128062050.23978-1-allen-kh.cheng@mediatek.com>
+ <20220128062050.23978-2-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220128062050.23978-2-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Li4uDQo+ID4gKw0KPiA+ICsvKiBUSU1FT1VUX01BWCA9IGZmZmYwLzkwa0h6ID0xMS42NSxzbyBs
-b25nZXIgdGhhbiAxMSBzZWNvbmRzIHdpbGwgdGltZSBvdXQgKi8NCj4gPiArc3RhdGljIGludCBz
-cF93ZHRfcGluZyhzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3ZGV2KQ0KPiA+ICt7DQo+ID4gKwlz
-dHJ1Y3Qgc3Bfd2R0X3ByaXYgKnByaXYgPSB3YXRjaGRvZ19nZXRfZHJ2ZGF0YSh3ZGV2KTsNCj4g
-PiArCXZvaWQgX19pb21lbSAqYmFzZSA9IHByaXYtPmJhc2U7DQo+ID4gKwl1MzIgY291bnQ7DQo+
-ID4gKwl1MzIgYWN0dWFsOw0KPiA+ICsNCj4gPiArCWFjdHVhbCA9IG1pbih3ZGV2LT50aW1lb3V0
-LCBTUF9XRFRfTUFYX1RJTUVPVVQpOw0KPiA+ICsNCj4gPiArCWlmIChhY3R1YWwgPiBTUF9XRFRf
-TUFYX1RJTUVPVVQpIHsNCj4gDQo+IFRoaXMgaXMgbmV2ZXIgdHJ1ZS4gYmVjYXVzZSBhY3R1YWwg
-aXMgc2V0IHRvIHRoZSBtaW5pbXVtIG9mIHdkZXYtPnRpbWVvdXQNCj4gYW5kIFNQX1dEVF9NQVhf
-VElNRU9VVC4gSXQgaXMgYWxzbyBub3QgY2xlYXIgdG8gbWUgd2hhdCB0aGlzIGNvZGUgcGF0aA0K
-PiBpcyBzdXBwb3NlZCB0byBiZSBkb2luZywgY29tcGFyZWQgdG8gdGhlIGNvZGUgYmVsb3cuIFBs
-ZWFzZSBmaXggYW5kIGFkZA0KPiBhIGNvbW1lbnQgZXhwbGFpbmluZyB0aGUgY29kZSAoaWUgd2hh
-dCBkb2VzIHdyaXRpbmcgV0RUX0NPTk1BWCBpbnRvDQo+IHRoZSBjb250cm9sIHJlZ2lzdGVyIGRv
-ID8pDQo+IA0KDQpJIHdpbGwgZml4ICJpZiAoYWN0dWFsID4gU1BfV0RUX01BWF9USU1FT1VUKSIg
-dG8gImlmICh3ZGV2LT50aW1lb3V0ID4gDQpTUF9XRFRfTUFYX1RJTUVPVVQpIi4gSSB3aWxsIGFk
-ZCBjb21tZW50ICJXRFRfQ09OTUFYIHNldHMgdGhlIA0KY291bnQgdG8gdGhlIG1heGltdW0gKGRv
-d24tY291bnRpbmcpLiINCldoZW4gdGltZW91dCA+IFNQX1dEVF9NQVhfVElNRU9VVCwgSSB0cnkg
-dG8gc2V0IGEgc21hbGxlciB2YWx1ZSBvciANCmRvIG5vdGhpbmcuIFdhdGNoZG9nIGRyaXZlciBk
-b24ndCB3b3JrIHByb3Blcmx5Lg0KDQo+ID4gKwkJd3JpdGVsKFdEVF9DT05NQVgsIGJhc2UgKyBX
-RFRfQ1RSTCk7DQo+ID4gKwl9IGVsc2Ugew0KPiA+ICsJCXdyaXRlbChXRFRfVU5MT0NLLCBiYXNl
-ICsgV0RUX0NUUkwpOw0KPiA+ICsJCS8qIHRpZW1yd19jbnRbMzowXWNhbid0IGJlIHdyaXRlLG9u
-bHkgWzE5OjRdIGNhbiBiZSB3cml0ZS4gKi8NCj4gDQo+IHRpbWVyd19jbmQgPywgc3BhY2UgYmVm
-b3JlIGNhbid0LCBhbmQgcy93cml0ZS93cml0dGVuL2cuDQo+IA0KPiA+ICsJCWNvdW50ID0gKGFj
-dHVhbCAqIFNUQ19DTEspID4+IDQ7DQo+IA0KPiBzbyB0aGlzIGlzIChhY3R1YWwgKiA5MDAwMCkg
-Pj4gNCBhbmQgZG9lcyBzZXQgYml0IDAuLjMuIElzIHRoYXQgaW50ZW50aW9uYWwNCj4gb3IgaXMg
-aXQgc3VwcG9zZWQgdG8gYmUgPDwgNCA/IFRoZSBjb21tZW50IGFib3ZlIGRvZXMgbm90IHJlYWxs
-eSBleHBsYWluDQo+IHRoZSBjYWxjdWxhdGlvbjsgaWYgYW55dGhpbmcsIGl0IGp1c3QgY3JlYXRl
-cyBjb25mdXNpb24uDQo+IA0KDQpJIHdpbGwgYWRkIGNvbW1lbnQgIldhdGNoZG9nIHRpbWVyIGlz
-IGEgMjAtYml0IGRvd24tY291bnRpbmcgYmFzZWQgDQpvbiBTVENfQ0xLLiBUaGlzIHJlZ2lzdGVy
-IGJpdHNbMTZdflswXSBpcyBmcm9tIGJpdFsxOV1+Yml0WzRdIG9mIHRoZSANCndhdGNoZG9nIHRp
-bWVyIGNvdW50ZXIuICINCg0KVGhhbmtzLA0KQmVzdCBSZWdhcmRzDQo=
+
+
+On 28/01/2022 07:20, allen-kh.cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> 
+> This commit adds dt-binding documentation of timer for Mediatek MT8186 SoC
+> Platform.
+> 
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+> index e5c57d6e0186..e0d20d6adf81 100644
+> --- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+> +++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
+> @@ -22,6 +22,7 @@ Required properties:
+>   
+>   	For those SoCs that use SYST
+>   	* "mediatek,mt8183-timer" for MT8183 compatible timers (SYST)
+> +	* "mediatek,mt8186-timer" for MT8186 compatible timers (SYST)
+>   	* "mediatek,mt8192-timer" for MT8192 compatible timers (SYST)
+>   	* "mediatek,mt8195-timer" for MT8195 compatible timers (SYST)
+>   	* "mediatek,mt7629-timer" for MT7629 compatible timers (SYST)
