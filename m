@@ -2,119 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA824C6A58
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Feb 2022 12:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E809A4C6F64
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Feb 2022 15:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbiB1L1N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Feb 2022 06:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
+        id S236174AbiB1O1a (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Feb 2022 09:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiB1L1M (ORCPT
+        with ESMTP id S229845AbiB1O13 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:27:12 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5DA43ECF;
-        Mon, 28 Feb 2022 03:26:33 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id d17so14856118wrc.9;
-        Mon, 28 Feb 2022 03:26:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0nOl9Gu2cS+40aKnl77MAdTBzkl+e2ajXLPqa1328c4=;
-        b=RF4z69yluICtYu1fuLZaU5ixtaQDPyAtJIV6s7TbYCPDKfko8sreM/MwfRn1VCiVB0
-         TSDCP5j9Bnpu2IOzh061GbVz6HMuZpuN1R0Vg3dYvBkElL2SqQ+XsqzJS/AaEkhVxfw8
-         wjb/fCMdjSlcZ3gLtLUiAjcGxqyIgkLiSdPfg+MVpcYvPygMabCcQirectYD9SNiQcC7
-         fB60JFiWqd2xEG7hLjg/wCYtRsDbH6QLwiQ9J5RvnUl6+lgM0nvbbnxwSaHUGPVp7fQK
-         56bQlW4K55lgpwfxgKyCGG7EdXEhk/UsWnq8TC5BCaqrtBDDWNQ6IyZV0/E/JCHjALLN
-         Qhig==
+        Mon, 28 Feb 2022 09:27:29 -0500
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C51373061;
+        Mon, 28 Feb 2022 06:26:50 -0800 (PST)
+Received: by mail-vs1-f53.google.com with SMTP id t22so13134748vsa.4;
+        Mon, 28 Feb 2022 06:26:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0nOl9Gu2cS+40aKnl77MAdTBzkl+e2ajXLPqa1328c4=;
-        b=OQ6nHNInaNeEhA1OeT+jT8rX6pJrkTWX1/yI/HOpUtZ6KnQYFHRTjDNzQo3OOmeV0A
-         GHIrA+8tNCfJgJoir/Aifoyag3BlIGnv0+5LOPItWbIljH5K2fMOAWaAA9JfZ89ZvWUR
-         SmjYaZ/5T3iunaO1ZIvCn5o0JKY0hBxtAB84X/YLo79EKzvU/pj9Ca33vprLUMsKFlEU
-         ovGsq1/xm4t9SIEv4AnhW0IQUhBxd1inGPaUmPRXfsJZOxXMfSK96iSpvchoS0Wu4oOh
-         oYf4duIMPMtfwLIOQ/pxRUDH7p89uNAg0y9fJcmlJflTbRbTqUm4NJfrWBaRA6q6H718
-         +EJg==
-X-Gm-Message-State: AOAM530QV0klwOa0eu3ahINz8/R7sMDJD2c6HJo4RyqQEkVsrBq320Sw
-        JwvUCeCQS4BdpInXYmHzLI8=
-X-Google-Smtp-Source: ABdhPJyEN3IVhZ9CqchTTNuRDYhwp5BAWHwjBXE4AYXcGoAFKxxj9OkPswk656aj1zqS3OkJFo7PcQ==
-X-Received: by 2002:a05:6000:1c0b:b0:1ef:f0cc:6e53 with SMTP id ba11-20020a0560001c0b00b001eff0cc6e53mr1225544wrb.715.1646047592597;
-        Mon, 28 Feb 2022 03:26:32 -0800 (PST)
-Received: from [192.168.0.14] (static-63-182-85-188.ipcom.comunitel.net. [188.85.182.63])
-        by smtp.gmail.com with ESMTPSA id z2-20020a056000110200b001e7140ddb44sm9847832wrw.49.2022.02.28.03.26.30
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rHVfZaJmFUUxRDQIT5T7S/1vPYYPoz8peXZ1+ZnXKGg=;
+        b=2Ws8LTW2VKWXPa5VjufKbtaRdPmDehrgKSygWsYKb/qQl1633kYsmu2Q7eOCLqZgsp
+         0E5b0JDL0iPydM9/j0tRkfYUjrmb9TmNyRzKmElmHHN1ExDoV18N6XFTfmDaEL7g0/qU
+         kdufsBeU/QPJCpDfU4x0ZniVVARxhBjRnjE8E4AeSCiaYuOo0e/3uqKF32lsXL1+vS6k
+         23f5gGDfRbH2AsYjHiwST/AG98AtD6UGW5HECM9YlBwrB7vkOmACre6DDjEJzdXHRlpW
+         DR0qMl0buDlSnTLvvb3kxBn22n1FiVBDMSe8gM4lImDJKBCLplX9kOXmvrAtkg4BKajk
+         4R+w==
+X-Gm-Message-State: AOAM531b5Kh5kn7H2F9yQyWocGr030JhP2HokjCJ3YUBUG3OzfbKcSpF
+        nekBEKrtKE6asfTiVl/2tETMqfDL6xJ6eg==
+X-Google-Smtp-Source: ABdhPJxJBe8kFwXiLQ0in7GgJKfoSIk0LfgsB1/plJqIaBs3tfbN45or2P5Izdcb+/e6CGDN7KLC0Q==
+X-Received: by 2002:a67:4284:0:b0:31c:1e12:bc0f with SMTP id p126-20020a674284000000b0031c1e12bc0fmr7127346vsa.23.1646058409578;
+        Mon, 28 Feb 2022 06:26:49 -0800 (PST)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id a25-20020a056102025900b0031c34d0f8d5sm1332033vsq.3.2022.02.28.06.26.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 03:26:31 -0800 (PST)
-Message-ID: <530f6169-afdb-8242-f4b4-54a54a73948b@gmail.com>
-Date:   Mon, 28 Feb 2022 12:26:30 +0100
+        Mon, 28 Feb 2022 06:26:49 -0800 (PST)
+Received: by mail-vs1-f41.google.com with SMTP id u10so13093928vsu.13;
+        Mon, 28 Feb 2022 06:26:49 -0800 (PST)
+X-Received: by 2002:a67:b00e:0:b0:30d:dc98:6024 with SMTP id
+ z14-20020a67b00e000000b0030ddc986024mr8274728vse.57.1646058408965; Mon, 28
+ Feb 2022 06:26:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/7] dt-bindings: timer: Add compatible for Mediatek
- MT8186
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+References: <20220227225309.28098-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227225309.28098-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Feb 2022 15:26:37 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWn=jvt_6rt_Z5OpdfStNT2B6sz_WhZvKrptHqOkqe5mg@mail.gmail.com>
+Message-ID: <CAMuHMdWn=jvt_6rt_Z5OpdfStNT2B6sz_WhZvKrptHqOkqe5mg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: watchdog: renesas,wdt: Document RZ/V2L SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     hsinyi@chromium.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20220128062050.23978-1-allen-kh.cheng@mediatek.com>
- <20220128062050.23978-2-allen-kh.cheng@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220128062050.23978-2-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Sun, Feb 27, 2022 at 11:53 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document RZ/V2L WDT bindings. RZ/V2L WDT is identical to one found
+> on the RZ/G2L SoC. No driver changes are required as generic compatible
+> string "renesas,rzg2l-wdt" will be used as a fallback.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 28/01/2022 07:20, allen-kh.cheng wrote:
-> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-> 
-> This commit adds dt-binding documentation of timer for Mediatek MT8186 SoC
-> Platform.
-> 
-> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+Gr{oetje,eeting}s,
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+                        Geert
 
-> ---
->   Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-> index e5c57d6e0186..e0d20d6adf81 100644
-> --- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-> +++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-> @@ -22,6 +22,7 @@ Required properties:
->   
->   	For those SoCs that use SYST
->   	* "mediatek,mt8183-timer" for MT8183 compatible timers (SYST)
-> +	* "mediatek,mt8186-timer" for MT8186 compatible timers (SYST)
->   	* "mediatek,mt8192-timer" for MT8192 compatible timers (SYST)
->   	* "mediatek,mt8195-timer" for MT8195 compatible timers (SYST)
->   	* "mediatek,mt7629-timer" for MT7629 compatible timers (SYST)
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
