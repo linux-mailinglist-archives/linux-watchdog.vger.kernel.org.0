@@ -2,97 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D5D4CE24F
-	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Mar 2022 03:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2E44CE50C
+	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Mar 2022 14:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiCECml (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 4 Mar 2022 21:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S231433AbiCENr0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 5 Mar 2022 08:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiCECml (ORCPT
+        with ESMTP id S229575AbiCENrZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 4 Mar 2022 21:42:41 -0500
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C295A24F866;
-        Fri,  4 Mar 2022 18:41:52 -0800 (PST)
-Received: by mail-vk1-xa29.google.com with SMTP id x62so5318394vkg.6;
-        Fri, 04 Mar 2022 18:41:52 -0800 (PST)
+        Sat, 5 Mar 2022 08:47:25 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BA53B3EA
+        for <linux-watchdog@vger.kernel.org>; Sat,  5 Mar 2022 05:46:35 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2dc0364d2ceso119852517b3.7
+        for <linux-watchdog@vger.kernel.org>; Sat, 05 Mar 2022 05:46:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KkcNCtjpcO8rVm8LUzoHbBDqzf+JRgklTyG6XGrgh2A=;
-        b=n3v5g4r26iSDUpyH/15c34qb0OSlTQqGD+1AH+W+Ewm3Q8qbcr6ZF6eVUJqPxPg4AK
-         v1GMcYCik7Q682YyBSUSvzc4tarHahIlPrBHLKlVNZ6xWcydkFrucAajd29dD6DrJJwB
-         KTzCOgZpQjNn+KApVn46AtG6+ybOyLOhA9IoX4hMorNwLui+negdc5M2M9uoYiNIs9yd
-         rBlpV3llDOutr17RMr5lWoEb9FOXiZ9lIk79HMyeVyH1CJcoAt+fTwQEcMbyduPCmZax
-         Ew3hwauqxhC3lmJkK/c1qRQHdxy6tAj+6Hq97iFEV2MNzbiVNsP8nR/6Cf4PLyfkf3T6
-         J5CA==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=k6NYZQl2rxZhVB/aKDQvMsV5vW2gUENZyGD3qWaMtBI=;
+        b=exe3gh+u5bF8l1dRSyODrKd+EUl5T+bKxMTDSPzrX4cPY+eUQ9kWP8p4RWTiiNWMYR
+         PD1aIlL4bNQ/jEyYBe8oHh9Hh+VtJjbbaOkgoWLGe3qPVwDWsTcXTOxxoElMt9kZbBVd
+         9XR8J3GtYCV8wQvm3bLV+0SPJohdxCEnwjvzBSwbAOL6WfKAPtWXO+VcOJMFkC+LeD+Z
+         zOx1QpJcI/Fa2aeGNpCxPWC3oWMt3E6cKSsJ+ZHdDOba07GTeEgpvsXwG0To6Bom0mXY
+         jYYp49g+oGW2xV1t4pMW26uRPS9r4S7LZo1EnZbrQ+g0GSn2zHrLa+qRZuZ2LPMfaKwn
+         FJhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KkcNCtjpcO8rVm8LUzoHbBDqzf+JRgklTyG6XGrgh2A=;
-        b=xdZXcN9ndX6kIjQSkktOsaEWTkfV/+JtGBe5Tiy4wCcYZjhq2uxKVQ0TQMNAFTSNoD
-         29ckoy8axEIFoc7y4PEQm5uaFXxCAgPPnb1iqcio403cY4MNpoDFqSH7xUTztYTStCI/
-         Y9dn0fTy+jO6U630wuOY4Ci2+sx//kcZH6s0Me0oksnu0ZZTUy/ClYSoM9vSTBsOn0kS
-         ZegBiwEgNgCk+jmyVWy7EAxBIwap5CuQOtqfUS/kT9O9ebsc9HdWhrhnTwzxYXafus++
-         bYDD5jPFxxarNP2ON8gOqRSLUkRzKrcgqMXElCcKSWhhkNfrXObLB5aDM6OhmK9PkSQD
-         2TNg==
-X-Gm-Message-State: AOAM531VMTI4FhWRyCvpHzxIQA0Z+62a7ky8EVFagBAXlNCwHd1lNwH4
-        G5ykantArbgyJyL3RVa8f+3N2rDE+9Im3KVt00iZBH3z
-X-Google-Smtp-Source: ABdhPJxOsN2RrE8cJHgE60PZbU5R7UZ2J4YCIf+ekeTLJwL7RE7YXmJekBtVPUrks2W4I8GY7/R3s05NmLLJnOyQapA=
-X-Received: by 2002:a1f:ee4a:0:b0:336:e616:82c6 with SMTP id
- m71-20020a1fee4a000000b00336e61682c6mr603775vkh.8.1646448111552; Fri, 04 Mar
- 2022 18:41:51 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=k6NYZQl2rxZhVB/aKDQvMsV5vW2gUENZyGD3qWaMtBI=;
+        b=BG7Hgf6gEn+uadliHE+2bGuHLFUlek7I24AUwA6/IsGSb/yPl329bZfxEre/HjRmcf
+         xT7NpditughACwZbpMAvOmvlHKVY/XhkTlfWVjcVq4bJkIS5Tz4R8MwaqKInN2qcfCMM
+         c8967vcjgjxut6dMrQuy2tGu/BDmY2Q14Yw9UXDomUCQoyG024FbYcpI8D+cSakGL/WD
+         1jEGgfWtRFjAhdfJAXgv04spbrDBHg+jHOd9Y81qjSHtkRImGnTi1vKRKRp4ARrgU8Z8
+         SdEH4AUpWdWAxuhfwae59aO1taGvqGyEeAXktHDgbWRLEovpeB8AXy069jV4IKGt0+VS
+         7VbQ==
+X-Gm-Message-State: AOAM532LVaT0eCm6DfQ5y16ZUVcjNMtgaNXxRcYcH/H1D08fkyhjbWzc
+        hXmMoLQChnBhOr3ca3+oNfk5nRdMIFJOlqDWR+U=
+X-Google-Smtp-Source: ABdhPJzL93gJpeaR3JQg3Uhmv0Np3h0s5YqMRJNCS6vlUvP7J3OGqhWVJiKaGPYILO52Wb0rZfcHGo/zIzyNofteqbE=
+X-Received: by 2002:a81:19c5:0:b0:2dc:a22f:80ab with SMTP id
+ 188-20020a8119c5000000b002dca22f80abmr502912ywz.229.1646487995020; Sat, 05
+ Mar 2022 05:46:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
- <20210304221247.488173-1-linux@rasmusvillemoes.dk> <20210304221247.488173-2-linux@rasmusvillemoes.dk>
- <4b560502-3885-91a0-3100-4b5506a17b32@roeck-us.net>
-In-Reply-To: <4b560502-3885-91a0-3100-4b5506a17b32@roeck-us.net>
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date:   Fri, 4 Mar 2022 18:41:39 -0800
-Message-ID: <CAKdAkRQj9fTv-g03__ncNrnyNh5x+4uG2_yioyrc-iFAd22c3Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] clk: add devm_clk_prepare_enable() helper
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Sender: edithbrown0257@gmail.com
+Received: by 2002:a05:7010:cc8a:b0:210:741f:4d30 with HTTP; Sat, 5 Mar 2022
+ 05:46:34 -0800 (PST)
+From:   Rose Funk Williams <rosefunkwilliams02577@gmail.com>
+Date:   Sat, 5 Mar 2022 14:46:34 +0100
+X-Google-Sender-Auth: YoxlCIp1P0MGBsM1jL_BYXGKb8A
+Message-ID: <CAEbKRu2r343HkC8Nxbsdm1SiJgGgbsKqvZ0WS+T-uyyRUNVNSw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 9:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 3/4/21 2:12 PM, Rasmus Villemoes wrote:
-> > Add a managed wrapper for clk_prepare_enable().
-> >
-> > Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->
-> That has been tried several times, including by yours truly,
-> and has always been rejected.
->
-> Just use devm_add_action_or_reset() like many other watchdog
-> drivers.
-
-Can we apply the devm version for crying out loud? I do not see what
-benefit there is to force everyone open-code it with
-devm_add_action_or_reset(). By simply blocking it we are not making
-the kernel better and it's been stalled for a very long time.
-
-Thanks.
-
 -- 
-Dmitry
+Hello,
+
+My name is Rose Funk Williams, I will be honored if we talk and know
+something about ourselves, share pictures and life experiences, I look
+forward to your reply, thank you.
