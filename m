@@ -2,72 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2E44CE50C
-	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Mar 2022 14:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8C64CE9C9
+	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Mar 2022 07:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiCENr0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 5 Mar 2022 08:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S232547AbiCFGw2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 6 Mar 2022 01:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiCENrZ (ORCPT
+        with ESMTP id S233125AbiCFGwD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 5 Mar 2022 08:47:25 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BA53B3EA
-        for <linux-watchdog@vger.kernel.org>; Sat,  5 Mar 2022 05:46:35 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2dc0364d2ceso119852517b3.7
-        for <linux-watchdog@vger.kernel.org>; Sat, 05 Mar 2022 05:46:35 -0800 (PST)
+        Sun, 6 Mar 2022 01:52:03 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE058390
+        for <linux-watchdog@vger.kernel.org>; Sat,  5 Mar 2022 22:51:09 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id bn33so16297884ljb.6
+        for <linux-watchdog@vger.kernel.org>; Sat, 05 Mar 2022 22:51:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=k6NYZQl2rxZhVB/aKDQvMsV5vW2gUENZyGD3qWaMtBI=;
-        b=exe3gh+u5bF8l1dRSyODrKd+EUl5T+bKxMTDSPzrX4cPY+eUQ9kWP8p4RWTiiNWMYR
-         PD1aIlL4bNQ/jEyYBe8oHh9Hh+VtJjbbaOkgoWLGe3qPVwDWsTcXTOxxoElMt9kZbBVd
-         9XR8J3GtYCV8wQvm3bLV+0SPJohdxCEnwjvzBSwbAOL6WfKAPtWXO+VcOJMFkC+LeD+Z
-         zOx1QpJcI/Fa2aeGNpCxPWC3oWMt3E6cKSsJ+ZHdDOba07GTeEgpvsXwG0To6Bom0mXY
-         jYYp49g+oGW2xV1t4pMW26uRPS9r4S7LZo1EnZbrQ+g0GSn2zHrLa+qRZuZ2LPMfaKwn
-         FJhA==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=iTCez46YUJuZ59VH5w4gKXHisiIo6y2u3FxRWYTVHtf//k2/cr92j8m4m3YNnOu/5x
+         VY8uAvGwFuBfV7Mrc/W0HKjKs0H8RFXfDFa5bZAEwjPLs/eIQVGvLLhkfWvV5lbw5qRn
+         kxraYDuro739plh13ZCdkLi8Xdm2LO4VwFAVCAVhwnZpqrYnqE7c3VEM+AVAidaJilZq
+         2b8dKUL6QluXsdnPbARiHyYvi6lfjaikwCGBn+AQiJaxig5+gueqCNQIVPHxz1bHmnyA
+         cEozUn1HGynbdH5xanGdyZvZ8eRbX2t4gKZfVdnWU7qRHqdWnTpM/VBAvPiDsUQbFhOw
+         mjLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=k6NYZQl2rxZhVB/aKDQvMsV5vW2gUENZyGD3qWaMtBI=;
-        b=BG7Hgf6gEn+uadliHE+2bGuHLFUlek7I24AUwA6/IsGSb/yPl329bZfxEre/HjRmcf
-         xT7NpditughACwZbpMAvOmvlHKVY/XhkTlfWVjcVq4bJkIS5Tz4R8MwaqKInN2qcfCMM
-         c8967vcjgjxut6dMrQuy2tGu/BDmY2Q14Yw9UXDomUCQoyG024FbYcpI8D+cSakGL/WD
-         1jEGgfWtRFjAhdfJAXgv04spbrDBHg+jHOd9Y81qjSHtkRImGnTi1vKRKRp4ARrgU8Z8
-         SdEH4AUpWdWAxuhfwae59aO1taGvqGyEeAXktHDgbWRLEovpeB8AXy069jV4IKGt0+VS
-         7VbQ==
-X-Gm-Message-State: AOAM532LVaT0eCm6DfQ5y16ZUVcjNMtgaNXxRcYcH/H1D08fkyhjbWzc
-        hXmMoLQChnBhOr3ca3+oNfk5nRdMIFJOlqDWR+U=
-X-Google-Smtp-Source: ABdhPJzL93gJpeaR3JQg3Uhmv0Np3h0s5YqMRJNCS6vlUvP7J3OGqhWVJiKaGPYILO52Wb0rZfcHGo/zIzyNofteqbE=
-X-Received: by 2002:a81:19c5:0:b0:2dc:a22f:80ab with SMTP id
- 188-20020a8119c5000000b002dca22f80abmr502912ywz.229.1646487995020; Sat, 05
- Mar 2022 05:46:35 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=qzCXKV6JhIZOxIiECsdLQHycWrf+Eqpx0zeHIRB4sd//JgHvaGw2HcVGJ2qWJaubmz
+         211dW5yMQdgwCxJWdfHZJ5h+9JExidgraYFMJEQ3/rdkI+DLGD8zu/fSkccW+8iuwtaZ
+         ynWYhCj3V7g5rSVvqbYA90BdrfYqRHOHXcx4Ugy0tB+Eyb19effPkiUCLbgdqE9ZoFzp
+         RofInVQFk2N2SfYKaZPjcOpCH7pMBUicoDAxYmE3cCNNImcaigq3q8ifyadANYKvw5aK
+         ZJA+HKCqbzthQu0ZySug1nVZEIkyXohWgREtCAnPiprCXf3wcS+cMABHX02JM6rsuHDL
+         9Sbg==
+X-Gm-Message-State: AOAM532hjuXBTr6DqdKKLCv7v13vFnptf3kg8WaMLz+7bXszN37tZQ/x
+        ciDmQvySFehqzQKRUGFYRyx47uEfQj0cQozSQP0=
+X-Google-Smtp-Source: ABdhPJximaKc2DuZ4eKDuKmGQ5B/VLHvzOMG/SuEznp2MF7MCDySDvf7od2ggUlZ6xZn8qkMV7NDwnC5K6rNKHdgzfE=
+X-Received: by 2002:a05:651c:2cb:b0:23e:9985:518 with SMTP id
+ f11-20020a05651c02cb00b0023e99850518mr3882088ljo.18.1646549467918; Sat, 05
+ Mar 2022 22:51:07 -0800 (PST)
 MIME-Version: 1.0
-Sender: edithbrown0257@gmail.com
-Received: by 2002:a05:7010:cc8a:b0:210:741f:4d30 with HTTP; Sat, 5 Mar 2022
- 05:46:34 -0800 (PST)
-From:   Rose Funk Williams <rosefunkwilliams02577@gmail.com>
-Date:   Sat, 5 Mar 2022 14:46:34 +0100
-X-Google-Sender-Auth: YoxlCIp1P0MGBsM1jL_BYXGKb8A
-Message-ID: <CAEbKRu2r343HkC8Nxbsdm1SiJgGgbsKqvZ0WS+T-uyyRUNVNSw@mail.gmail.com>
-Subject: Hello
+Reply-To: mrs.susanelwoodhara17@gmail.com
+Sender: mrs.arawyann@gmail.com
+Received: by 2002:ab3:7d89:0:0:0:0:0 with HTTP; Sat, 5 Mar 2022 22:51:07 -0800 (PST)
+From:   Mrs Susan Elwood Hara <mrs.susanelwoodhara17@gmail.com>
+Date:   Sun, 6 Mar 2022 06:51:07 +0000
+X-Google-Sender-Auth: gB-i3oPiTFvFbKKhfBi1HD0hNQ4
+Message-ID: <CACppo45h3xLoqDdBmWyFac6YQk-7j3d1wR-NA_BVuta5RwbZiw@mail.gmail.com>
+Subject: GOD BLESS YOU AS YOU REPLY URGENTLY
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
--- 
-Hello,
+GOD BLESS YOU AS YOU REPLY URGENTLY
 
-My name is Rose Funk Williams, I will be honored if we talk and know
-something about ourselves, share pictures and life experiences, I look
-forward to your reply, thank you.
+ Hello Dear,
+Greetings, I am contacting you regarding an important information i
+have for you please reply to confirm your email address and for more
+details Thanks
+Regards
+Mrs Susan Elwood Hara.
