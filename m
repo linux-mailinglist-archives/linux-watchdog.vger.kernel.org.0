@@ -2,50 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CDD4D0160
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Mar 2022 15:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183114D02D5
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Mar 2022 16:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243255AbiCGOfa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 7 Mar 2022 09:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
+        id S239323AbiCGP2k (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 7 Mar 2022 10:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiCGOf1 (ORCPT
+        with ESMTP id S243823AbiCGP2b (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:35:27 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0721F7D02A;
-        Mon,  7 Mar 2022 06:34:33 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B23BA113E;
-        Mon,  7 Mar 2022 06:34:32 -0800 (PST)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.196.172])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C0C23F66F;
-        Mon,  7 Mar 2022 06:34:30 -0800 (PST)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mesih Kilinc <mesihkilinc@gmail.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Jesse Taube <mr.bossman075@gmail.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        George Hilliard <thirtythreeforty@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
+        Mon, 7 Mar 2022 10:28:31 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B91C630B
+        for <linux-watchdog@vger.kernel.org>; Mon,  7 Mar 2022 07:27:33 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id t11so23908849wrm.5
+        for <linux-watchdog@vger.kernel.org>; Mon, 07 Mar 2022 07:27:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jaYKUyHTSA7NJB35LAiYvBbaB9ao0d9w011LT+nuUm4=;
+        b=I24QTCqFvFoh7ihUG6Nrnh0U6I7FrXodb2oPjmTPrG+TsmBEC5V9FhCJxfr9cWkIKO
+         1T/clYRnUgJeytYtdBqRLwJJrcK9Br37wh8lLef8hEECFb9WIg25klf374BTbpusGGyG
+         qLcMl3eEcA9SZpaT06fqSQ+3ZrAmK0QSVknTvss1FNBLeIsLSH+hWapV+mOqWPVwz+g0
+         NjPm9suyQf2EfBx1u95grF7ENkM3KMXv9Wh5UEjPdPgJcX4zZcpzWsA64q7eALo98dbu
+         XbvYMPSWfiviEflexKrFN3iJKtnoCuOyc4NfQs0x7+RYuyTo8rVqOyNlANSUyg5x5RKz
+         vMtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jaYKUyHTSA7NJB35LAiYvBbaB9ao0d9w011LT+nuUm4=;
+        b=IhQueAVGDWfuJB/l5pRHCZIY8rgXye4+NVMo6dcW6UCWhz32zauFPkvpbVF1sw8HlN
+         1Jmak/7o+ZpjSXNKF1yeNBkGabvKkdMPpSLOZE+ktDSq8XXt26iDDUWFORHqmdAOp385
+         U+Txf/Mta75eh3teGF6sRkGAxMS3eTyXX3RnB6kQpYNLD9G5Jz4aO4r0sksbxU7eZpuP
+         rLrXMfhhHYsEOlS4lxR99NsgFPaYSEMkAghrfcMRDFNeVA4DIYD3Ym3X98NebTX/W7bq
+         fQSHMUzlLB8drUB6h8rEleRS6ulbFsh5x7XXKfUtxhnkBQcY3jOoIFWbsh2lTh84bfy4
+         4/PQ==
+X-Gm-Message-State: AOAM5339RmYGLeCOdgpSwm4b4V1B2Ob9ekCNw4rAEbfSZLS1UVl+J9Bd
+        8b8AQiKZD2zhrfXqhLOJRmBtaw==
+X-Google-Smtp-Source: ABdhPJwxDd5egt0DySXxFusLdNc/Aj/TuHpfZ+WsZIIHRSt4kpBS45As0tN5J1pfwjSW3/ajE3hgXA==
+X-Received: by 2002:a05:6000:1446:b0:1e9:e378:71c5 with SMTP id v6-20020a056000144600b001e9e37871c5mr8561036wrx.128.1646666851656;
+        Mon, 07 Mar 2022 07:27:31 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id k12-20020adfb34c000000b001f1e13df54dsm6210417wrd.89.2022.03.07.07.27.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 07:27:31 -0800 (PST)
+Date:   Mon, 7 Mar 2022 15:27:29 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH 02/14] ARM: dts: suniv: F1C100: fix watchdog compatible
-Date:   Mon,  7 Mar 2022 14:34:09 +0000
-Message-Id: <20220307143421.1106209-3-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220307143421.1106209-1-andre.przywara@arm.com>
-References: <20220307143421.1106209-1-andre.przywara@arm.com>
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [GIT PULL] Immutable branch between MFD, RTC and Watchdog due for
+ the v5.18 merge window
+Message-ID: <YiYkYZjGsRIeklfh@google.com>
+References: <20220223175908.191618-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220223175908.191618-1-luca@lucaceresoli.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,42 +80,53 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The F1C100 series of SoCs actually have their watchdog IP being
-compatible with the newer Allwinner generation, not the older one.
+Enjoy!
 
-The currently described sun4i-a10-wdt actually does not work, neither
-the watchdog functionality (just never fires), nor the reset part
-(reboot hangs).
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-Replace the compatible string with the one used by the newer generation.
-Verified to work with both the watchdog and reboot functionality on a
-LicheePi Nano.
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-Also add the missing interrupt line and clock source, to make it binding
-compliant.
+are available in the Git repository at:
 
-Fixes: 4ba16d17efdd ("ARM: dts: suniv: add initial DTSI file for F1C100s")
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- arch/arm/boot/dts/suniv-f1c100s.dtsi | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-rtc-watchdog-v5.18
 
-diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-index 6100d3b75f61..def830101448 100644
---- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
-+++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-@@ -104,8 +104,10 @@ timer@1c20c00 {
- 
- 		wdt: watchdog@1c20ca0 {
- 			compatible = "allwinner,suniv-f1c100s-wdt",
--				     "allwinner,sun4i-a10-wdt";
-+				     "allwinner,sun6i-a31-wdt";
- 			reg = <0x01c20ca0 0x20>;
-+			interrupts = <16>;
-+			clocks = <&osc32k>;
- 		};
- 
- 		uart0: serial@1c25000 {
+for you to fetch changes up to c58e496311a50c087eeeaaae81083cd643fe5128:
+
+  rtc: max77686: Add MAX77714 support (2022-03-07 13:55:04 +0000)
+
+----------------------------------------------------------------
+Immutable branch between MFD, RTC and Watchdog due for the v5.18 merge window
+
+----------------------------------------------------------------
+Luca Ceresoli (8):
+      rtc: max77686: Convert comments to kernel-doc format
+      rtc: max77686: Rename day-of-month defines
+      rtc: max77686: Remove unused code to read in 12-hour mode
+      dt-bindings: mfd: Add Maxim MAX77714 PMIC
+      mfd: max77714: Add driver for Maxim MAX77714 PMIC
+      watchdog: max77620: Add support for the max77714 variant
+      watchdog: max77620: Add comment to clarify set_timeout procedure
+      rtc: max77686: Add MAX77714 support
+
+ .../devicetree/bindings/mfd/maxim,max77714.yaml    |  68 +++++++++
+ MAINTAINERS                                        |   7 +
+ drivers/mfd/Kconfig                                |  14 ++
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/max77686.c                             |   2 +-
+ drivers/mfd/max77714.c                             | 152 +++++++++++++++++++++
+ drivers/rtc/Kconfig                                |   2 +-
+ drivers/rtc/rtc-max77686.c                         |  75 ++++++----
+ drivers/watchdog/Kconfig                           |   2 +-
+ drivers/watchdog/max77620_wdt.c                    |  85 +++++++++---
+ include/linux/mfd/max77686-private.h               |   4 +-
+ include/linux/mfd/max77714.h                       |  60 ++++++++
+ 12 files changed, 421 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 include/linux/mfd/max77714.h
+
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
