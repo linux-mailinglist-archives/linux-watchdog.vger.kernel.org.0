@@ -2,131 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183114D02D5
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Mar 2022 16:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 120E94D12A1
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Mar 2022 09:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239323AbiCGP2k (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 7 Mar 2022 10:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S1345115AbiCHIt3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 8 Mar 2022 03:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243823AbiCGP2b (ORCPT
+        with ESMTP id S1345116AbiCHIt3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:28:31 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B91C630B
-        for <linux-watchdog@vger.kernel.org>; Mon,  7 Mar 2022 07:27:33 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id t11so23908849wrm.5
-        for <linux-watchdog@vger.kernel.org>; Mon, 07 Mar 2022 07:27:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jaYKUyHTSA7NJB35LAiYvBbaB9ao0d9w011LT+nuUm4=;
-        b=I24QTCqFvFoh7ihUG6Nrnh0U6I7FrXodb2oPjmTPrG+TsmBEC5V9FhCJxfr9cWkIKO
-         1T/clYRnUgJeytYtdBqRLwJJrcK9Br37wh8lLef8hEECFb9WIg25klf374BTbpusGGyG
-         qLcMl3eEcA9SZpaT06fqSQ+3ZrAmK0QSVknTvss1FNBLeIsLSH+hWapV+mOqWPVwz+g0
-         NjPm9suyQf2EfBx1u95grF7ENkM3KMXv9Wh5UEjPdPgJcX4zZcpzWsA64q7eALo98dbu
-         XbvYMPSWfiviEflexKrFN3iJKtnoCuOyc4NfQs0x7+RYuyTo8rVqOyNlANSUyg5x5RKz
-         vMtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jaYKUyHTSA7NJB35LAiYvBbaB9ao0d9w011LT+nuUm4=;
-        b=IhQueAVGDWfuJB/l5pRHCZIY8rgXye4+NVMo6dcW6UCWhz32zauFPkvpbVF1sw8HlN
-         1Jmak/7o+ZpjSXNKF1yeNBkGabvKkdMPpSLOZE+ktDSq8XXt26iDDUWFORHqmdAOp385
-         U+Txf/Mta75eh3teGF6sRkGAxMS3eTyXX3RnB6kQpYNLD9G5Jz4aO4r0sksbxU7eZpuP
-         rLrXMfhhHYsEOlS4lxR99NsgFPaYSEMkAghrfcMRDFNeVA4DIYD3Ym3X98NebTX/W7bq
-         fQSHMUzlLB8drUB6h8rEleRS6ulbFsh5x7XXKfUtxhnkBQcY3jOoIFWbsh2lTh84bfy4
-         4/PQ==
-X-Gm-Message-State: AOAM5339RmYGLeCOdgpSwm4b4V1B2Ob9ekCNw4rAEbfSZLS1UVl+J9Bd
-        8b8AQiKZD2zhrfXqhLOJRmBtaw==
-X-Google-Smtp-Source: ABdhPJwxDd5egt0DySXxFusLdNc/Aj/TuHpfZ+WsZIIHRSt4kpBS45As0tN5J1pfwjSW3/ajE3hgXA==
-X-Received: by 2002:a05:6000:1446:b0:1e9:e378:71c5 with SMTP id v6-20020a056000144600b001e9e37871c5mr8561036wrx.128.1646666851656;
-        Mon, 07 Mar 2022 07:27:31 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id k12-20020adfb34c000000b001f1e13df54dsm6210417wrd.89.2022.03.07.07.27.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 07:27:31 -0800 (PST)
-Date:   Mon, 7 Mar 2022 15:27:29 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [GIT PULL] Immutable branch between MFD, RTC and Watchdog due for
- the v5.18 merge window
-Message-ID: <YiYkYZjGsRIeklfh@google.com>
-References: <20220223175908.191618-1-luca@lucaceresoli.net>
+        Tue, 8 Mar 2022 03:49:29 -0500
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552DA3701A
+        for <linux-watchdog@vger.kernel.org>; Tue,  8 Mar 2022 00:48:33 -0800 (PST)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id A1F5E42C31; Tue,  8 Mar 2022 09:45:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1646729182; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
+        h=Date:From:To:Subject:From;
+        b=gY+8j1NtvgurF71GN1RtRsvf2depmhxGORDUKy+vMqorLs3Ud3NMQpmio81BWqVk5
+         YcpqlpQMp56+BYmeojs1vExIQbbGQg8ABd8jepXlPqW4v5pOIGolCUpc/6eHUJ3PbH
+         NCz3yPOAdgC8HGu2IULuUCgkN7WBLUNs5eBW9angYJXNB9G3VTYCqti5I0f2wLF5KD
+         xaH0E3hU1ppATFmG78IcFqnqVB5DsCq5Gty/siC8LZgPNgrWNslLfg2Qv3ofmMG9Fb
+         jEDJG0MHvbCYHdBRsdAncFTS4ypFwWQF8AEpJsAo/PaJq8MA2LDBCHvQODSr/JPiAe
+         KTe113G39jXqw==
+Received: by mail.olerise.pl for <linux-watchdog@vger.kernel.org>; Tue,  8 Mar 2022 08:45:41 GMT
+Message-ID: <20220308084500-0.1.26.ms54.0.sxg1vr8olg@olerise.pl>
+Date:   Tue,  8 Mar 2022 08:45:41 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220223175908.191618-1-luca@lucaceresoli.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Enjoy!
+Dzie=C5=84 dobry,
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-are available in the Git repository at:
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-rtc-watchdog-v5.18
 
-for you to fetch changes up to c58e496311a50c087eeeaaae81083cd643fe5128:
-
-  rtc: max77686: Add MAX77714 support (2022-03-07 13:55:04 +0000)
-
-----------------------------------------------------------------
-Immutable branch between MFD, RTC and Watchdog due for the v5.18 merge window
-
-----------------------------------------------------------------
-Luca Ceresoli (8):
-      rtc: max77686: Convert comments to kernel-doc format
-      rtc: max77686: Rename day-of-month defines
-      rtc: max77686: Remove unused code to read in 12-hour mode
-      dt-bindings: mfd: Add Maxim MAX77714 PMIC
-      mfd: max77714: Add driver for Maxim MAX77714 PMIC
-      watchdog: max77620: Add support for the max77714 variant
-      watchdog: max77620: Add comment to clarify set_timeout procedure
-      rtc: max77686: Add MAX77714 support
-
- .../devicetree/bindings/mfd/maxim,max77714.yaml    |  68 +++++++++
- MAINTAINERS                                        |   7 +
- drivers/mfd/Kconfig                                |  14 ++
- drivers/mfd/Makefile                               |   1 +
- drivers/mfd/max77686.c                             |   2 +-
- drivers/mfd/max77714.c                             | 152 +++++++++++++++++++++
- drivers/rtc/Kconfig                                |   2 +-
- drivers/rtc/rtc-max77686.c                         |  75 ++++++----
- drivers/watchdog/Kconfig                           |   2 +-
- drivers/watchdog/max77620_wdt.c                    |  85 +++++++++---
- include/linux/mfd/max77686-private.h               |   4 +-
- include/linux/mfd/max77714.h                       |  60 ++++++++
- 12 files changed, 421 insertions(+), 51 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
- create mode 100644 drivers/mfd/max77714.c
- create mode 100644 include/linux/mfd/max77714.h
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Pozdrawiam
+Miko=C5=82aj Rudzik
