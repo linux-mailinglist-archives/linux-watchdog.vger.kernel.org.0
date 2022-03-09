@@ -2,25 +2,25 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A965A4D3DB8
+	by mail.lfdr.de (Postfix) with ESMTP id 132414D3DB6
 	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Mar 2022 00:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbiCIXqr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 9 Mar 2022 18:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S238007AbiCIXqq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Mar 2022 18:46:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234529AbiCIXqq (ORCPT
+        with ESMTP id S233366AbiCIXqq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
         Wed, 9 Mar 2022 18:46:46 -0500
 Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F6C11D7B4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95036119416
         for <linux-watchdog@vger.kernel.org>; Wed,  9 Mar 2022 15:45:46 -0800 (PST)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id 0108B13DB1
-        for <linux-watchdog@vger.kernel.org>; Wed,  9 Mar 2022 17:23:15 -0600 (CST)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id 70CDEACD3
+        for <linux-watchdog@vger.kernel.org>; Wed,  9 Mar 2022 17:25:25 -0600 (CST)
 Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
         by cmsmtp with SMTP
-        id S5cIn4a59HnotS5cInS2M3; Wed, 09 Mar 2022 17:21:14 -0600
+        id S5gLn2UeDdx86S5gLn7QeX; Wed, 09 Mar 2022 17:25:25 -0600
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
@@ -28,32 +28,38 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4sY1MYouI2yDENvehlFaI2WACHcKwdLFIJ9kPx6lQQE=; b=5eS9fEZjHpnSTPBA77XG4fIq1G
-        CZ/FGLeEdjmGw3krFFank3f0iIGARfEeDGtmyt8mF5/hWcKgaA1jkqv+y1Iv/DB/8iXkm4oYzfq5+
-        10kei1w4874hur3ogx8Ti4WGNlzFPP1qf5oLYzpjHjHN2GOH8NoWf2kkkAqRwqG2I37PZZBhhYnV5
-        +DQv47TLhCbGjEWWETIXbuxv7RwoTC9pL8Xr2pr5FKGpqMtWpmzfWxe6hxkPJ5tPeZJVGG4rQXX6t
-        1rGWfSczImgRN3zP88dXUVbgMXQYy3I/TgIo6+ypxnFSSdko+cO2ve1rGy90Nr+/g9TiaYzvVwG/W
-        gOxux2SQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57412 helo=localhost)
+        bh=j2oKgn9eLs375qgfE96Bspnkel26NAPBR0e3aVigLuw=; b=VCjIdmK58ynNO/iJx0ibGOYrGa
+        Xz6VUjXhlFYjVIKSabx4AgiaYKW/pZuFAINqpRTo1en+nDXx8LaG7u095SUH7ntqjrjQEVQcPLSpB
+        mjExvyJQ+k36LQfCMBZQN4C3mDnIUdcPki3diEXSZ9WjOz5r5rQ6Jo6P4llFXS3JAKVmFk/BfonG7
+        IMzq0DZa62vEuUy2PVzwIh2pxz9dhTHIWiQpNLUFL9QyPAm46dG2jhEjyWcAhDSC8XT9G7Mk4LZDc
+        w3jffoxYlBhkZe1nDzeWZraDQp4ffh64VwFQwPBNUS6Sj3UNYlgDIAz3INC2gNW3qYrC33qOES3eo
+        zaj0V5hg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57414 helo=localhost)
         by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@roeck-us.net>)
-        id 1nS5cH-000Sd7-MC; Wed, 09 Mar 2022 23:21:13 +0000
-Date:   Wed, 9 Mar 2022 15:21:12 -0800
+        id 1nS5gK-000V88-Nj; Wed, 09 Mar 2022 23:25:24 +0000
+Date:   Wed, 9 Mar 2022 15:25:23 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        wim@linux-watchdog.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v4] dt-bindings: watchdog: convert faraday,ftwdt010 to
- yaml
-Message-ID: <20220309232112.GA3803602@roeck-us.net>
-References: <20220211115528.3382374-1-clabbe@baylibre.com>
+To:     Sam Shih <sam.shih@mediatek.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ryder Lee <ryder.lee@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        John Crispin <john@phrozen.org>
+Subject: Re: [PATCH 1/2] dt-bindings: reset: mt7986: Add reset-controller
+ header file
+Message-ID: <20220309232523.GA3804043@roeck-us.net>
+References: <20220105100456.7126-1-sam.shih@mediatek.com>
+ <20220105100456.7126-2-sam.shih@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211115528.3382374-1-clabbe@baylibre.com>
+In-Reply-To: <20220105100456.7126-2-sam.shih@mediatek.com>
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -62,13 +68,13 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1nS5cH-000Sd7-MC
+X-Exim-ID: 1nS5gK-000V88-Nj
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57412
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57414
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 74
+X-Email-Count: 85
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,138 +87,78 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 11:55:28AM +0000, Corentin Labbe wrote:
-> Converts watchdog/faraday,ftwdt010.txt to yaml.
-> This permits to detect missing properties like clocks and resets or
-> compatible like moxa,moxart-watchdog.
+On Wed, Jan 05, 2022 at 06:04:55PM +0800, Sam Shih wrote:
+> Add infracfg, toprgu, and ethsys reset-controller header file
+> for MT7986 platform.
 > 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
 > Acked-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> Changes since v1:
-> - Added myself as maintainer as requested by Linus
-> - Added $ref to watchdog.yaml
-> - Removed useless quotes
-> - Added blank lines between properties
-> - Removed timeout-secs as already provided by watchdog.yaml
+>  include/dt-bindings/reset/mt7986-resets.h | 55 +++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 include/dt-bindings/reset/mt7986-resets.h
 > 
-> Change since v2:
-> - rewrite compatible section
-> 
-> Changes since v3:
-> - Fix indent errors reported by yamllint
-> - Change additionalProperties to unevaluatedProperties
-> - Added timeout-secs in example
-> 
->  .../bindings/watchdog/faraday,ftwdt010.txt    | 22 ------
->  .../bindings/watchdog/faraday,ftwdt010.yaml   | 67 +++++++++++++++++++
->  2 files changed, 67 insertions(+), 22 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
-> deleted file mode 100644
-> index 9ecdb502e605..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -Faraday Technology FTWDT010 watchdog
-> -
-> -This is an IP part from Faraday Technology found in the Gemini
-> -SoCs and others.
-> -
-> -Required properties:
-> -- compatible : must be one of
-> -  "faraday,ftwdt010"
-> -  "cortina,gemini-watchdog", "faraday,ftwdt010"
-> -- reg : shall contain base register location and length
-> -- interrupts : shall contain the interrupt for the watchdog
-> -
-> -Optional properties:
-> -- timeout-sec : the default watchdog timeout in seconds.
-> -
-> -Example:
-> -
-> -watchdog@41000000 {
-> -	compatible = "faraday,ftwdt010";
-> -	reg = <0x41000000 0x1000>;
-> -	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> diff --git a/include/dt-bindings/reset/mt7986-resets.h b/include/dt-bindings/reset/mt7986-resets.h
 > new file mode 100644
-> index 000000000000..ca9e1beff76b
+> index 000000000000..af3d16c81192
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/include/dt-bindings/reset/mt7986-resets.h
+> @@ -0,0 +1,55 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
+> +/*
+> + * Copyright (c) 2022 MediaTek Inc.
+> + * Author: Sam Shih <sam.shih@mediatek.com>
+> + */
 > +
-> +title: Faraday Technology FTWDT010 watchdog
+> +#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT7986
+> +#define _DT_BINDINGS_RESET_CONTROLLER_MT7986
 > +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +  - Corentin Labbe <clabbe@baylibre.com>
+> +/* INFRACFG resets */
+> +#define MT7986_INFRACFG_PEXTP_MAC_SW_RST	6
+> +#define MT7986_INFRACFG_SSUSB_SW_RST		7
+> +#define MT7986_INFRACFG_EIP97_SW_RST		8
+> +#define MT7986_INFRACFG_AUDIO_SW_RST		13
+> +#define MT7986_INFRACFG_CQ_DMA_SW_RST		14
 > +
-> +description: |
-> +  This is an IP part from Faraday Technology found in the Gemini
-> +  SoCs and others.
+> +#define MT7986_INFRACFG_TRNG_SW_RST		17
+> +#define MT7986_INFRACFG_AP_DMA_SW_RST		32
+> +#define MT7986_INFRACFG_I2C_SW_RST		33
+> +#define MT7986_INFRACFG_NFI_SW_RST		34
+> +#define MT7986_INFRACFG_SPI0_SW_RST		35
+> +#define MT7986_INFRACFG_SPI1_SW_RST		36
+> +#define MT7986_INFRACFG_UART0_SW_RST		37
+> +#define MT7986_INFRACFG_UART1_SW_RST		38
+> +#define MT7986_INFRACFG_UART2_SW_RST		39
+> +#define MT7986_INFRACFG_AUXADC_SW_RST		43
 > +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
+> +#define MT7986_INFRACFG_APXGPT_SW_RST		66
+> +#define MT7986_INFRACFG_PWM_SW_RST		68
 > +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: faraday,ftwdt010
-> +      - items:
-> +          - enum:
-> +              - cortina,gemini-watchdog
-> +              - moxa,moxart-watchdog
-> +          - const: faraday,ftwdt010
+> +#define MT7986_INFRACFG_SW_RST_NUM		69
 > +
-> +  reg:
-> +    maxItems: 1
+> +/* TOPRGU resets */
+> +#define MT7986_TOPRGU_APMIXEDSYS_SW_RST		0
+> +#define MT7986_TOPRGU_SGMII0_SW_RST		1
+> +#define MT7986_TOPRGU_SGMII1_SW_RST		2
+> +#define MT7986_TOPRGU_INFRA_SW_RST		3
+> +#define MT7986_TOPRGU_U2PHY_SW_RST		5
+> +#define MT7986_TOPRGU_PCIE_SW_RST		6
+> +#define MT7986_TOPRGU_SSUSB_SW_RST		7
+> +#define MT7986_TOPRGU_ETHDMA_SW_RST		20
+> +#define MT7986_TOPRGU_CONSYS_SW_RST		23
 > +
-> +  resets:
-> +    maxItems: 1
+> +#define MT7986_TOPRGU_SW_RST_NUM		24
 > +
-> +  clocks:
-> +    maxItems: 1
+> +/* ETHSYS Subsystem resets */
+> +#define MT7986_ETHSYS_FE_SW_RST			6
+> +#define MT7986_ETHSYS_PMTR_SW_RST		8
+> +#define MT7986_ETHSYS_GMAC_SW_RST		23
+> +#define MT7986_ETHSYS_PPE0_SW_RST		30
+> +#define MT7986_ETHSYS_PPE1_SW_RST		31
 > +
-> +  clock-names:
-> +    const: PCLK
+> +#define MT7986_ETHSYS_SW_RST_NUM		32
 > +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    watchdog@41000000 {
-> +      compatible = "faraday,ftwdt010";
-> +      reg = <0x41000000 0x1000>;
-> +      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> +      timeout-secs = <5>;
-> +    };
-> +  - |
-> +    watchdog: watchdog@98500000 {
-> +      compatible = "moxa,moxart-watchdog", "faraday,ftwdt010";
-> +      reg = <0x98500000 0x10>;
-> +      clocks = <&clk_apb>;
-> +      clock-names = "PCLK";
-> +    };
-> +...
+> +#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT7986 */
