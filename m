@@ -2,142 +2,143 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555654D3DE3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Mar 2022 01:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8728E4D3E7A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Mar 2022 01:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238914AbiCJAIB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 9 Mar 2022 19:08:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S237820AbiCJA4v (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Mar 2022 19:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238908AbiCJAIA (ORCPT
+        with ESMTP id S229889AbiCJA4u (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:08:00 -0500
-X-Greylist: delayed 1491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Mar 2022 16:06:59 PST
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.50.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC08123412
-        for <linux-watchdog@vger.kernel.org>; Wed,  9 Mar 2022 16:06:59 -0800 (PST)
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 544124D
-        for <linux-watchdog@vger.kernel.org>; Wed,  9 Mar 2022 17:42:08 -0600 (CST)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id S5wWnMP0D9AGSS5wWncTcl; Wed, 09 Mar 2022 17:42:08 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GPyJkkzP2b2Zzo0Mi+hbVkx7KDeH96AGeS0W7v+SO+s=; b=OuoQIRyOFs0Tpv9h58tBwa6OLI
-        /i0153JtPSaqeGelbVsHSf8+BC2QA17NWy+NgwcM12ZOUJwFsENUO/jYvsw+StsyPbGz85gPSU3Aj
-        tEOHfnVv4isZ47YsK9o8XakEgMkOj1xDjrG8M6Pe1QL02BqPyGkzgO/AUPMAzOscZkuO6TYVvbmgB
-        SAKEaQCAeEXw4zMfAVEGViVmLMKEerLw2UqG8P5WbsJfTPAqMIQMvn9GPvxxLp5+LehH4tsGG3Rhg
-        UILWSV6fqvjoYsCmLgSB3L6Av56XbiyldfDa1DhQexhU64f+S2n012MkSFsAQlXRc1Zyz51F6AuqU
-        juofjcWw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54206)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nS5wV-000dtB-Om; Wed, 09 Mar 2022 23:42:07 +0000
-Message-ID: <53821770-23b0-11ef-a76a-1e0beda01c42@roeck-us.net>
-Date:   Wed, 9 Mar 2022 15:42:06 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 0/7] RZG2L_WDT Fixes and Improvements
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Wed, 9 Mar 2022 19:56:50 -0500
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Mar 2022 16:55:51 PST
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E89AB0C50
+        for <linux-watchdog@vger.kernel.org>; Wed,  9 Mar 2022 16:55:51 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 56ABD3200A6A;
+        Wed,  9 Mar 2022 19:46:49 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 09 Mar 2022 19:46:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=qMB067cjzKW0O+
+        0cerGYMqbUb9WGf9tnnpdSgxJ6Iuc=; b=sCNxXDgHCFLSYJ/1eFeMj6bZIiWNwl
+        dRukwkAEM8cDpQph80Ic/1h/Mg2Bd26QgA2LB+olvFfRBDEkJ3XGw/drAJzvD59M
+        xRw/RspdCFYPylBPqbYP6JWC4VZWl+iqh0iHZ/ExY3CRTRYhK/9BABg0gS8f4Va0
+        SsrPtyM+re1TSDOyPCgnGfPEJLH3X4FxwlY8ov7OHrGLDHbD31fXlV0ZIb82MnBR
+        /LC2ZroXGNA3HQWU3CTKsYiMxZJQNfaAWcRHPdTtTm3rpYQJGEJC7UP70IMK+xrh
+        C+1hFjs7dl2IXaT/2qUExOMjfCM8H4g+tCECMIYFfhAXAiWfm32vr2VA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=qMB067cjzKW0O+0cerGYMqbUb9WGf9tnnpdSgxJ6I
+        uc=; b=HCJRd39Hi39pqlsoNzEjEL9sAMfY34B8TpvC9/H6kORkjNrKNFAvO4USh
+        XcHjYRbRQDY/8HURpBOZDRCV0vV51kpwoJAiBROZP4CxzuPHYCinRefYjqck2LPK
+        Vm/kF6cjoUEHiBKK0fKhX0SvOu0wdZPWGQAHnC+V5jjji0/HWYSc8SWZTJyeCvkz
+        dDElsdjRPVd4/o8un3o5aG3bg8JOFrvE/sZ/0rSTNVvknc7caf54YfZbeCmcXY1F
+        9JoN7wu0DeRMVUbQFjpFJm1Zjb36ee6s7IxiGtu3iBBPYKaI5jZ99PFoEEOZ0MeN
+        8keW17lATFeFwyNbmWLXcm148Fs0g==
+X-ME-Sender: <xms:d0opYiQIiTSYXj62HHFu2uiStbvxuYcmknR1Xz0UZquLzgFSoIoANw>
+    <xme:d0opYnzrznzL0Zf9gR2YYni23dDyLberQGKFU00sfiY2ywMf7A_URWkNGgf5te3UP
+    e_4VN6m45DDw9xp9A>
+X-ME-Received: <xmr:d0opYv0DXKGtaPRbHcGTQpVBI_EBt5Io6fUbpxUmwHNPG7pK34A04BzxSJ4pswhD6-VWJRaql0SvmxbjNb7AB7M9WfQyjbtEfXMM9cc_QZljGQeucH7BxVz7YA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudduledgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgfevffetleehffejueekvdekvdeitdehveegfeekheeuieeiueet
+    uefgtedtgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:d0opYuBs4rccbORgiqZb5kwPa8aqymj4X1xEgrad5PMgI7APACt5ZQ>
+    <xmx:d0opYrhf_ZPlAMNpJZZLQBathZ-2KmyugyvClvMexI7AqlgGBc5zkA>
+    <xmx:d0opYqqtZ_WmP-xKV2aPb6M5G5gtqv089_Da3NFKGaeE4RKcFHLgFA>
+    <xmx:eEopYr4tfSP1gOZ6hj3pikuZ-DoJ2RbaGaa84m1gmBL6foAS04vIUg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Mar 2022 19:46:47 -0500 (EST)
+Subject: Re: [PATCH 01/14] dt-bindings: watchdog: sunxi: fix F1C100s
+ compatible
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mesih Kilinc <mesihkilinc@gmail.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Jesse Taube <mr.bossman075@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        George Hilliard <thirtythreeforty@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-References: <20220225175320.11041-1-biju.das.jz@bp.renesas.com>
- <OS0PR01MB5922BE07E79DB3CF32B8D95C86089@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <OS0PR01MB5922BE07E79DB3CF32B8D95C86089@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org
+References: <20220307143421.1106209-1-andre.przywara@arm.com>
+ <20220307143421.1106209-2-andre.przywara@arm.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <661806b7-d63f-a7cf-9192-f67c4cd79f29@sholland.org>
+Date:   Wed, 9 Mar 2022 18:46:46 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220307143421.1106209-2-andre.przywara@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nS5wV-000dtB-Om
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54206
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 101
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/7/22 00:52, Biju Das wrote:
-> Hi All,
-> 
-> Gentle ping. Are we happy with this patch series?
-> 
-> Please let me know.
-> 
+Hi Andre,
 
-Should be good to go. I added the series to my watchdog-next branch.
-Usually Wim picks it up from there.
+On 3/7/22 8:34 AM, Andre Przywara wrote:
+> The F1C100 series actually features a newer generation watchdog IP, so
+> the compatible string was wrong.
 
-Guenter
+The F1C100s watchdog seems to be unique in that it uses LOSC/osc32k as its only
+clock source instead of HOSC/osc24M. The current binding requires that the first
+clock is "hosc", so it seems that the binding needs to be relaxed to allow for
+this case.
 
-> Cheers,
-> Biju
+As long as there's only one clock source available, we don't really care where
+it comes from. They are both divided to be approximately 32 kHz. So I don't
+think this difference prevents using A31 as a fallback compatible.
+
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->> Subject: [PATCH v5 0/7] RZG2L_WDT Fixes and Improvements
->>
->> The first 4 patch in this series fixes the below issues
->> 1) 32 bit overflow issue
->> 2) Runtime PM usage count issue
->> 3) BUG: Invalid context during reset.
->> 4) Reset control imbalance
->>
->> The later 3 patches are enhancements to the WDT driver.
->> 1) Adding error check for reset_control_deassert() and fixing
->> reset_control imbalance.
->> 2) Generate Parity error for WDT reset
->> 3) Add support for set_timeout callback
->>
->> v4->v5:
->>   * Updated commit description of patch#4
->>   * Added Rb tag from Geert.
->>   * Separated reset control imbalance from patch#4
->>
->> Biju Das (7):
->>    watchdog: rzg2l_wdt: Fix 32bit overflow issue
->>    watchdog: rzg2l_wdt: Fix Runtime PM usage
->>    watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait context'
->>    watchdog: rzg2l_wdt: Fix reset control imbalance
->>    watchdog: rzg2l_wdt: Add error check for reset_control_deassert
->>    watchdog: rzg2l_wdt: Use force reset for WDT reset
->>    watchdog: rzg2l_wdt: Add set_timeout callback
->>
->>   drivers/watchdog/rzg2l_wdt.c | 83 ++++++++++++++++++++----------------
->>   1 file changed, 47 insertions(+), 36 deletions(-)
->>
->> --
->> 2.17.1
+> diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> index 43afa24513b9..d90655418d0e 100644
+> --- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> @@ -29,7 +29,7 @@ properties:
+>            - const: allwinner,sun6i-a31-wdt
+>        - items:
+>            - const: allwinner,suniv-f1c100s-wdt
+> -          - const: allwinner,sun4i-a10-wdt
+> +          - const: allwinner,sun6i-a31-wdt
+
+This can be combined with the enum of other compatibles that fall back to
+allwinner,sun6i-a31-wdt (earlier in the file).
+
+Regards,
+Samuel
+
+>        - const: allwinner,sun20i-d1-wdt
+>        - items:
+>            - const: allwinner,sun20i-d1-wdt-reset
 > 
 
