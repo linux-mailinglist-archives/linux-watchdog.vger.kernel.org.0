@@ -2,108 +2,139 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32824D433B
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Mar 2022 10:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A3F4D528B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Mar 2022 20:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237211AbiCJJQu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Mar 2022 04:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
+        id S239692AbiCJTvU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 10 Mar 2022 14:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233039AbiCJJQu (ORCPT
+        with ESMTP id S230352AbiCJTvT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:16:50 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8407A12E9F7;
-        Thu, 10 Mar 2022 01:15:48 -0800 (PST)
-X-UUID: 96bdbec796c24e49bc8fab5fcf09007a-20220310
-X-UUID: 96bdbec796c24e49bc8fab5fcf09007a-20220310
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 47384453; Thu, 10 Mar 2022 17:15:41 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 10 Mar 2022 17:15:40 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 10 Mar 2022 17:15:40 +0800
-Message-ID: <0a05150360b7d5ec075396820ee7339c49fb5367.camel@mediatek.com>
-Subject: Re: [RESEND V2 0/3] Add watchdog support for MT8186 SoC
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>
-CC:     <runyang.chen@mediatek.com>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 10 Mar 2022 17:15:40 +0800
-In-Reply-To: <b2195d5a5d9e7c18eb5e2269a04cb9b8ce431d90.camel@mediatek.com>
-References: <20220301054405.25021-1-rex-bc.chen@mediatek.com>
-         <b2195d5a5d9e7c18eb5e2269a04cb9b8ce431d90.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 10 Mar 2022 14:51:19 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335F0E44A4;
+        Thu, 10 Mar 2022 11:50:18 -0800 (PST)
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22AJWPQa003313;
+        Thu, 10 Mar 2022 19:49:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=dvZA06DuDyz0tHMZ80OSxiUXw+f4gEVK18KS3lO6TN4=;
+ b=RwFqI/0ipyFrmZZKjN8T9L2nPEWwpHM+M+IZCF/UqwkCp5WrmEevqVw6rmtVG2kBc/kx
+ W+sOZw6T+A/z3A6vcE5ZYdfURLf+iXFvkFTncXHKk3aGNIj/GrO+dYVESOsn36v6N7hN
+ ZdXmq+yCrp1+4qseocdOS+d3x57cQ5fqxlgGdhldZu46OEKCRrSr3pPh3aP0fpM1B0gM
+ qeJ8CRlyaKWrisuZVuj/mO3JAE/5DtlCgNujVOh5BtK2Hw6RpuLWbM+RpsxDUxFUf8iU
+ LUn2z9KNU76TANb5mCwdX9VHJ9lz/NPUTMILzAI0cgMf1DwNkDp9jzutEprOpSYPGd5Q BQ== 
+Received: from g4t3426.houston.hpe.com (g4t3426.houston.hpe.com [15.241.140.75])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3eqmhc1rrp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Mar 2022 19:49:10 +0000
+Received: from hpe.com (unknown [15.115.65.69])
+        by g4t3426.houston.hpe.com (Postfix) with ESMTP id 56B5962;
+        Thu, 10 Mar 2022 19:49:08 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        wim@linux-watchdog.org, linux@roeck-us.net, linux@armlinux.org.uk,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 00/10] ARM: Introduce HPE GXP Architecture
+Date:   Thu, 10 Mar 2022 13:51:23 -0600
+Message-Id: <20220310195123.109359-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: WIMPhINOhMsvxEPGgufKBQf-jm8T9HtP
+X-Proofpoint-ORIG-GUID: WIMPhINOhMsvxEPGgufKBQf-jm8T9HtP
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-10_09,2022-03-09_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxlogscore=942 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ clxscore=1011 priorityscore=1501 mlxscore=0 spamscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203100100
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 2022-03-10 at 16:34 +0800, Rex-BC Chen wrote:
-> On Tue, 2022-03-01 at 13:44 +0800, Rex-BC Chen wrote:
-> > resend v2:
-> > 1. Fix topic to V2.
-> > 
-> > v2:
-> > 1. Squash [1] into [2] in v1.
-> > 2. Add tags of acked-by and reviewed-by.
-> > 
-> > [1]: [3/4] dt-bindings: reset: mt8186: add DSI reset bit for MMSYS
-> > [2]: [2/4] dt-bindings: reset: mt8186: add toprgu reset-controller
-> > header file
-> > 
-> > v1:
-> > 1. Add mt8186-resets.h to define definition of reset bits.
-> > 2. Add wdt compatible for MT8186.
-> > 
-> > Rex-BC Chen (1):
-> >   dt-bindings: watchdog: Add compatible for MediaTek MT8186
-> > 
-> > Runyang Chen (2):
-> >   dt-bindings: reset: mt8186: add reset-controller header file
-> >   watchdog: mediatek: mt8186: add wdt support
-> > 
-> >  .../devicetree/bindings/watchdog/mtk-wdt.txt  |  1 +
-> >  drivers/watchdog/mtk_wdt.c                    |  6 ++++
-> >  include/dt-bindings/reset/mt8186-resets.h     | 36
-> > +++++++++++++++++++
-> >  3 files changed, 43 insertions(+)
-> >  create mode 100644 include/dt-bindings/reset/mt8186-resets.h
-> > 
-> 
-> Hello Guenter,
-> 
-> All patches are reviewed-by and acked-by.
-> Do you have any suggestion for this series?
-> 
-> Thanks!
-> 
-> BRs,
-> Rex
-> 
-Hello Guenter,
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-I am sorry that I did not notice this series is in watchdog-next.
-Thanks for accepting this series!
+Changes since v2:
+ *Reduced size of changes, put them into pathset format
 
-BRs,
-Rex
+Changes since v1:
+ *Fix compiler warnings
+
+The GXP is the HPE BMC SoC that is used in the majority
+of HPE Generation 10 servers. Traditionally the asic will
+last multiple generations of server before being replaced.
+
+Info about SoC:
+
+  HPE GXP is the name of the HPE Soc. This SoC is used to implement
+  many BMC features at HPE. It supports ARMv7 architecture based on
+  the Cortex A9 core. It is capable of using an AXI bus to which
+  a memory controller is attached. It has multiple SPI interfaces
+  to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
+  for network connectivity. It has multiple i2c engines to drive
+  connectivity with a host infrastructure. The initial patches
+  enable the watchdog and timer enabling the host to be able to
+  boot.
+
+Nick Hawkins (10):
+  arch: arm: mach-hpe: Introduce the HPE GXP architecture
+  arch: arm: configs: multi_v7_defconfig
+  drivers: wdt: Introduce HPE GXP SoC Watchdog
+  clocksource/drivers: Add HPE GXP timer
+  dt-bindings: timer: Add HPE GXP Timer Binding
+  dt-bindings: watchdog: Add HPE GXP Watchdog timer binding
+  dt-bindings: arm: Add HPE GXP Binding
+  dt-bindings: arm: Add HPE GXP CPU Init
+  arch: arm: boot: dts: Introduce HPE GXP Device tree
+  maintainers: Introduce HPE GXP Architecture
+
+ .../cpu-enable-method/hpe,gxp-cpu-init.yaml   |  31 +++
+ .../devicetree/bindings/arm/gxp.yaml          |  53 +++++
+ .../bindings/timer/hpe,gxp-timer.yaml         |  45 +++++
+ .../bindings/watchdog/hpe,gxp-wdt.yaml        |  37 ++++
+ MAINTAINERS                                   |  14 ++
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  27 +++
+ arch/arm/boot/dts/hpe-gxp.dtsi                | 148 ++++++++++++++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/mach-hpe/Kconfig                     |  20 ++
+ arch/arm/mach-hpe/Makefile                    |   1 +
+ arch/arm/mach-hpe/gxp.c                       |  61 ++++++
+ drivers/clocksource/Kconfig                   |   8 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/gxp-timer.c               | 159 +++++++++++++++
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/gxp-wdt.c                    | 191 ++++++++++++++++++
+ 20 files changed, 813 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/cpu-enable-method/hpe,gxp-cpu-init.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/gxp.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+ create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+ create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+ create mode 100644 arch/arm/mach-hpe/Kconfig
+ create mode 100644 arch/arm/mach-hpe/Makefile
+ create mode 100644 arch/arm/mach-hpe/gxp.c
+ create mode 100644 drivers/clocksource/gxp-timer.c
+ create mode 100644 drivers/watchdog/gxp-wdt.c
+
+-- 
+2.17.1
 
