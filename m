@@ -2,128 +2,110 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0B54D529D
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Mar 2022 20:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029C04D5D3E
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Mar 2022 09:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238027AbiCJTwP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 10 Mar 2022 14:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S229596AbiCKIZr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 11 Mar 2022 03:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343694AbiCJTwG (ORCPT
+        with ESMTP id S229474AbiCKIZq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 10 Mar 2022 14:52:06 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB4518E3F6;
-        Thu, 10 Mar 2022 11:51:04 -0800 (PST)
-Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22AG83qD001086;
-        Thu, 10 Mar 2022 19:50:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version; s=pps0720;
- bh=HT/Zyw2vb5zeoPXjSw9exN+E7/tncwg8EFwBwW430gQ=;
- b=Za+e/P/Y4EdZ43WBs6Pd01r/PvOUKSTsIWjq1eCeeIyetvYixsOxXS1O91L3NMdUwV0a
- /3++QbvGkh6CINhZzFWuSZiVHo/bm7B4qre0QsHvL0kZgtsmtOdGNmjkbE8VauvDpLzT
- x/4PZ0SUBmD3S28YcJkaIvHdX6osLGXjBUhm288UyvSaD4hWKxV3I2xueAYLBDi9hvvD
- +MupEhNQmno56A2rXsRePx/GHtNrNPIrd0k/XF7NJUIdJUB313KqGNH2jauBFPIIQoYe
- Yfiums4KHX2eHTPrf2BrGAX7OcGide+xgSUPeR5K0AxaugF+URB8ZCdBXLgu+Z9qJHZ5 vw== 
-Received: from g2t2353.austin.hpe.com (g2t2353.austin.hpe.com [15.233.44.26])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3eqmk3ss77-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Mar 2022 19:50:44 +0000
-Received: from hpe.com (unknown [15.115.65.69])
-        by g2t2353.austin.hpe.com (Postfix) with ESMTP id 939C265;
-        Thu, 10 Mar 2022 19:50:43 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com
-Cc:     Nick Hawkins <nick.hawkins@hpe.com>,
+        Fri, 11 Mar 2022 03:25:46 -0500
+X-Greylist: delayed 304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Mar 2022 00:24:44 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076CB1B8FCE
+        for <linux-watchdog@vger.kernel.org>; Fri, 11 Mar 2022 00:24:43 -0800 (PST)
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M2w4S-1nRUZB0z4W-003JZk; Fri, 11 Mar 2022 09:19:37 +0100
+Received: by mail-wr1-f52.google.com with SMTP id u1so11711576wrg.11;
+        Fri, 11 Mar 2022 00:19:37 -0800 (PST)
+X-Gm-Message-State: AOAM532rgpXhBShZrOQdXJ4Q6esGn7jjbOndTtDF0yRG1uR96PSmDKQH
+        jJZyp4OOdqJ6yZmlqACUOaMF53SHjoAyeoMghuk=
+X-Google-Smtp-Source: ABdhPJxWyOrVHPAd6W5M2rcxGMy+ZmZs2SFgKCrOVAaFDflfl6gItQqEvF+hSHJSQdSa0qDb39ePN/xMvFTNUGT9Yz4=
+X-Received: by 2002:adf:f606:0:b0:203:8dff:f4ac with SMTP id
+ t6-20020adff606000000b002038dfff4acmr4269722wrp.12.1646986776850; Fri, 11 Mar
+ 2022 00:19:36 -0800 (PST)
+MIME-Version: 1.0
+References: <20220310195123.109359-1-nick.hawkins@hpe.com>
+In-Reply-To: <20220310195123.109359-1-nick.hawkins@hpe.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 11 Mar 2022 09:19:21 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1z6bCfhMUzqjDNaNWky52vH+NjQA5Qpo=0tABv4Z1Ocw@mail.gmail.com>
+Message-ID: <CAK8P3a1z6bCfhMUzqjDNaNWky52vH+NjQA5Qpo=0tABv4Z1Ocw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/10] ARM: Introduce HPE GXP Architecture
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 06/10] dt-bindings: watchdog: Add HPE GXP Watchdog timer binding
-Date:   Thu, 10 Mar 2022 13:52:25 -0600
-Message-Id: <20220310195229.109477-6-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220310195229.109477-1-nick.hawkins@hpe.com>
-References: <20220310195229.109477-1-nick.hawkins@hpe.com>
-X-Proofpoint-GUID: NuClyLi5hTInMg_AMDnuW1R5_6e2pt91
-X-Proofpoint-ORIG-GUID: NuClyLi5hTInMg_AMDnuW1R5_6e2pt91
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-10_08,2022-03-09_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 phishscore=0 clxscore=1015 mlxscore=0 suspectscore=0
- impostorscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203100100
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ziDwfFtTkLuUoe0kpElF7+aylqnFrBKJHdKAQTnZAMeCZiJnoR7
+ vBDunRWTaeqUZazAYYaVO9yFeHFIuRZviwmlZmt3l34REitNEqB0m22M3DIfwKweHQoxl7P
+ xaWYVzknTn+576XmsQjEwHX/VrqfakLliWkK511V4sO+4WQXNCaIYPJiqJGkxa+4KQSMBGy
+ xGe2im0WgMrpNhJ+ycOmA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ejIZzQK4WX0=:p4Yc0vNAXMbnxRDhjWQ31v
+ tP49zgKQqhgilNyDuK3/YctozYfdVVxZkqeYevhEKHhO2Zv0LeZ2qLRJEqUS+bXAUkOW/T+ZK
+ qklwGcFt4CQRvRzTXvIHgQW2OH0jHMoZH87kOlbDo3QpCdo500fWcY0JZaid7TWkaDrSvVuF3
+ gHFHHWribGvH1DYfFXcztux3zv4ieHffM0vz4ER8ACmYk+z0nD2H6yMZ87CIiDpmKeDLY65Kp
+ 8E6hwLE7pTXMK+jEhsxcb+UCc/UHMJvaVSguhWNGZ6ibUp5Yt/Poeg6anUAQiS6WnVvbe84hm
+ 5rrMX2RK2kVReU3AJ2EMjtkVXutIRMh3N7/N/auztgCyq422wN5nzkiwVFuCpzvTFffhphQ+V
+ AmcBYSOuyuKi5XxLUOQjh4poGMpp9OEjBZ0KKPRvGfho6aVvedaYWQqoBcDrKfG/MRrYUO5i8
+ TO0oTPmN2ZPvb0oEgq9y5R1xVlSyABMFUP3t+zkpkl8EK00pWFDvN86bQCQyL1iHg0qFAGp06
+ 3tuC2zC4Bnv6hiNPSzDskODhB9PiXtA/pzfIfkYouyDhwaLJMExpzlwhp4Sz4Y8FG6XdKYlvA
+ 1cBqFBba/d4bGfhdgtIQp7PW4MQIHGorg/nUz9VMkhSflxRlYR2dcb+VMemVpprmFgER2OFnQ
+ MCpce1VBRB5l1zhuFITGVQZ9FO1b+Ock8BFqJP6+h2SMRsuTQwAgJrMLqaBozIomO+GCPPa+N
+ LzZ7eYV6nlYssbbKCrSUsaIOFVnUrOgyWF/ixvVE7vvL9EajyBjNJnSsKG6hVrxdyMjKZ+Xhz
+ +3hJyoxEh817i+ojcolrlil+Vrp3KnAXgrWmntzbjlTexmcW2qSWuUnu9NpAspJsEfyQT5dYf
+ agT1WyQ68CA9lPgL0KSEzSyMPWblB9jbWNUQsxKLbSclTcH2nWGdBzVMlk3ACNPcVsH65INlh
+ u4NZ/rco1eg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+On Thu, Mar 10, 2022 at 8:51 PM <nick.hawkins@hpe.com> wrote:
+>
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> Changes since v2:
+>  *Reduced size of changes, put them into pathset format
+>
+> Changes since v1:
+>  *Fix compiler warnings
+>
+> The GXP is the HPE BMC SoC that is used in the majority
+> of HPE Generation 10 servers. Traditionally the asic will
+> last multiple generations of server before being replaced.
+>
+> Info about SoC:
+>
+>   HPE GXP is the name of the HPE Soc. This SoC is used to implement
+>   many BMC features at HPE. It supports ARMv7 architecture based on
+>   the Cortex A9 core. It is capable of using an AXI bus to which
+>   a memory controller is attached. It has multiple SPI interfaces
+>   to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
+>   for network connectivity. It has multiple i2c engines to drive
+>   connectivity with a host infrastructure. The initial patches
+>   enable the watchdog and timer enabling the host to be able to
+>   boot.
 
-Add the hpe gxp watchdog timer binding hpe,gxp-wdt.
-This will enable support for the HPE GXP Watchdog
+This looks much better already, thanks for following the normal
+submission procedures. With the timing for the merge window, this
+is now too late for 5.18, but let's try to get it into 5.19 then.
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
----
- .../bindings/watchdog/hpe,gxp-wdt.yaml        | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-
-diff --git a/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-new file mode 100644
-index 000000000000..6044496b4968
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-@@ -0,0 +1,37 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/hpe,gxp-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: HPE GXP Controlled Watchdog
-+
-+allOf:
-+  - $ref: "watchdog.yaml#"
-+
-+maintainers:
-+  - Nick Hawkins <nick.hawkins@hpe.com>
-+  - Jean-Marie Verdun <verdun@hpe.com>
-+
-+properties:
-+  compatible:
-+    const: hpe,gxp-wdt
-+
-+  reg:
-+    items:
-+      - description: WDGRST register
-+      - description: WDGCS register
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    watchdog0:  watchdog@c0000090 {
-+      compatible = "hpe,gxp-wdt";
-+      reg = <0xc0000090 0x02>, <0xc0000096 0x01>;
-+    };
-+
--- 
-2.17.1
-
+       Arnd
