@@ -2,94 +2,133 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2554F4DCB36
-	for <lists+linux-watchdog@lfdr.de>; Thu, 17 Mar 2022 17:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0194DD229
+	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Mar 2022 02:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236360AbiCQQZb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 17 Mar 2022 12:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S231322AbiCRBBH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 17 Mar 2022 21:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbiCQQZ1 (ORCPT
+        with ESMTP id S229599AbiCRBBE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:25:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4105EBD7E8;
-        Thu, 17 Mar 2022 09:24:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07AA01576;
-        Thu, 17 Mar 2022 09:24:11 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.196.172])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA6063F7B4;
-        Thu, 17 Mar 2022 09:24:08 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mesih Kilinc <mesihkilinc@gmail.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Jesse Taube <mr.bossman075@gmail.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        George Hilliard <thirtythreeforty@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v2 03/12] ARM: dts: suniv: F1C100: fix watchdog compatible
-Date:   Thu, 17 Mar 2022 16:23:40 +0000
-Message-Id: <20220317162349.739636-4-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220317162349.739636-1-andre.przywara@arm.com>
-References: <20220317162349.739636-1-andre.przywara@arm.com>
+        Thu, 17 Mar 2022 21:01:04 -0400
+X-Greylist: delayed 912 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Mar 2022 17:59:45 PDT
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87D0A2571A2;
+        Thu, 17 Mar 2022 17:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Message-ID:Date:MIME-Version:From:Subject; bh=OR2qj
+        uBQdiWkgI9+K8d0p9HnJUjkc3kdSRx8z/WTN3c=; b=Du6LeQXyxYJdH+Ke1ODng
+        wF5L5ZWfEHcQcyIjVOo3x2qd2CvEzV2NUpHiUmpDKx+loxwE0yuwzxAmFXydRc6Y
+        tgd5ebBeH4D1F5jicXNUvO4yfTny7xurTiTLaDgTbtLBDYt41j7yM4aowA1ayR2j
+        ywjqy4MBVDNXUsrt7OV5Bs=
+Received: from [192.168.3.109] (unknown [218.201.129.19])
+        by smtp10 (Coremail) with SMTP id DsCowABXhGXX1TNiURuyBg--.37789S2;
+        Fri, 18 Mar 2022 08:44:08 +0800 (CST)
+Message-ID: <8cea8d54-bd3c-5892-96d3-4d16e07ba457@163.com>
+Date:   Fri, 18 Mar 2022 08:44:06 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+To:     Bin Liu <b-liu@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+From:   qianfan <qianfanguijin@163.com>
+Subject: dev_WARN_ONCE cause gpio-watchdog reset
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: DsCowABXhGXX1TNiURuyBg--.37789S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxur13Cw1DAw47XF1UGrWxZwb_yoW5Kw4Upr
+        4xAryDArs5Z34Yvw4Skw1Utryrta10kF1DCryxWrnI93W3u34xXFsrtryFkryj9w18A347
+        KF1Dtw42yFWvgw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j7SdgUUUUU=
+X-Originating-IP: [218.201.129.19]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiQgPG7VaEBJMu+AABs4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The F1C100 series of SoCs actually have their watchdog IP being
-compatible with the newer Allwinner generation, not the older one.
+Hi:
 
-The currently described sun4i-a10-wdt actually does not work, neither
-the watchdog functionality (just never fires), nor the reset part
-(reboot hangs).
+I have a custom AM3352 board with linux v5.15 support. I had enabled 
+gpio-watchdog driver and the timeout of gpio-watchdog is 1.6s .
 
-Replace the compatible string with the one used by the newer generation.
-Verified to work with both the watchdog and reboot functionality on a
-LicheePi Nano.
+The system will reboot when AM3352's MUSB driver print warn message: 
+(next is the log)
 
-Also add the missing interrupt line and clock source, to make it binding
-compliant.
+[ 1555.665496] ------------[ cut here ]------------
+[ 1555.670343] WARNING: CPU: 0 PID: 345 at 
+drivers/usb/musb/musb_host.c:115 musb_h_tx_flush_fifo+0x11c/0x13c
+[ 1555.680395] musb-hdrc musb-hdrc.0: Could not flush host TX10 fifo: 
+csr: 2403
+[ 1555.687779] Modules linked in:
+[ 1555.690989] CPU: 0 PID: 345 Comm: kworker/0:1 Not tainted 
+5.15.0-00013-g0ccd7df8f5ad #122
+[ 1555.699560] Hardware name: Generic AM33XX (Flattened Device Tree)
+[ 1555.705946] Workqueue: usb_hub_wq hub_event
+[ 1555.710359] [<c0111438>] (unwind_backtrace) from [<c010b9f4>] 
+(show_stack+0x10/0x14)
+[ 1555.718497] [<c010b9f4>] (show_stack) from [<c0adc24c>] 
+(dump_stack_lvl+0x40/0x4c)
+[ 1555.726453] [<c0adc24c>] (dump_stack_lvl) from [<c0136264>] 
+(__warn+0xf0/0x104)
+[ 1555.734126] [<c0136264>] (__warn) from [<c01362ec>] 
+(warn_slowpath_fmt+0x74/0xbc)
+[ 1555.741973] [<c01362ec>] (warn_slowpath_fmt) from [<c07e8b40>] 
+(musb_h_tx_flush_fifo+0x11c/0x13c)
+[ 1555.751280] [<c07e8b40>] (musb_h_tx_flush_fifo) from [<c07ea024>] 
+(musb_cleanup_urb+0x128/0x204)
+[ 1555.760495] [<c07ea024>] (musb_cleanup_urb) from [<c07ea1e4>] 
+(musb_urb_dequeue+0xe4/0x17c)
+[ 1555.769253] [<c07ea1e4>] (musb_urb_dequeue) from [<c07c33f4>] 
+(usb_hcd_flush_endpoint+0x118/0x130)
+[ 1555.778654] [<c07c33f4>] (usb_hcd_flush_endpoint) from [<c07c66ec>] 
+(usb_disable_endpoint+0x58/0xa4)
+[ 1555.788232] [<c07c66ec>] (usb_disable_endpoint) from [<c07c6828>] 
+(usb_disable_interface+0x3c/0x54)
+[ 1555.797716] [<c07c6828>] (usb_disable_interface) from [<c07c8f3c>] 
+(usb_unbind_interface+0x160/0x224)
+[ 1555.807385] [<c07c8f3c>] (usb_unbind_interface) from [<c06a731c>] 
+(device_release_driver_internal+0x1d0/0x1d8)
+[ 1555.817882] [<c06a731c>] (device_release_driver_internal) from 
+[<c07b062c>] (usbnet_cdc_unbind+0x70/0x78)
+[ 1555.827926] [<c07b062c>] (usbnet_cdc_unbind) from [<c07b2098>] 
+(usbnet_disconnect+0x48/0xd8)
+[ 1555.836780] [<c07b2098>] (usbnet_disconnect) from [<c07c8e40>] 
+(usb_unbind_interface+0x64/0x224)
+[ 1555.845993] [<c07c8e40>] (usb_unbind_interface) from [<c06a731c>] 
+(device_release_driver_internal+0x1d0/0x1d8)
+[ 1555.856480] [<c06a731c>] (device_release_driver_internal) from 
+[<c06a5bf4>] (bus_remove_device+0xc8/0xf8)
+[ 1555.866515] [<c06a5bf4>] (bus_remove_device) from [<c06a0e5c>] 
+(device_del+0x180/0x404)
+[ 1555.874909] [<c06a0e5c>] (device_del) from [<c07c68c8>] 
+(usb_disable_device+0x88/0x130)
+[ 1555.883300] [<c07c68c8>] (usb_disable_device) from [<c07bd410>] 
+(usb_disconnect+0xb0/0x234)
+[ 1555.892057] [<c07bd410>] (usb_disconnect) from [<c07bf968>] 
+(hub_event+0xf3c/0x1288)
+[ 1555.900179] [<c07bf968>] (hub_event) from [<c015306c>] 
+(process_one_work+0x22c/0x55c)
+[ 1555.908401] [<c015306c>] (process_one_work) from [<c01533c8>] 
+(worker_thread+0x2c/0x5cc)
+[ 1555.916889] [<c01533c8>] (worker_thread) from [<c015b028>] 
+(kthread+0x140/0x168)
+[ 1555.924652] [<c015b028>] (kthread) from [<c0100150>] 
+(ret_from_fork+0x14/0x24)
+[ 1555.932226] Exception stack(0▒
+U-Boot SPL 2022.01-rc1-00183-gfa5b4e2d19 (Feb 24 2022 - 15:48:38 +0800)
+Trying to boot from NAND
 
-Fixes: 4ba16d17efdd ("ARM: dts: suniv: add initial DTSI file for F1C100s")
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
- arch/arm/boot/dts/suniv-f1c100s.dtsi | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Could you please give me some advice?
 
-diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-index 6100d3b75f61..def830101448 100644
---- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
-+++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-@@ -104,8 +104,10 @@ timer@1c20c00 {
- 
- 		wdt: watchdog@1c20ca0 {
- 			compatible = "allwinner,suniv-f1c100s-wdt",
--				     "allwinner,sun4i-a10-wdt";
-+				     "allwinner,sun6i-a31-wdt";
- 			reg = <0x01c20ca0 0x20>;
-+			interrupts = <16>;
-+			clocks = <&osc32k>;
- 		};
- 
- 		uart0: serial@1c25000 {
--- 
-2.25.1
+Thanks
+
 
