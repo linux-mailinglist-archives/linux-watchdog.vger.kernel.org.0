@@ -2,257 +2,228 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566A94DD30D
-	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Mar 2022 03:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C816C4DD64D
+	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Mar 2022 09:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiCRCZw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 17 Mar 2022 22:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S233811AbiCRIk4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 18 Mar 2022 04:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbiCRCZw (ORCPT
+        with ESMTP id S232129AbiCRIkz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 17 Mar 2022 22:25:52 -0400
-Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE15D2689BE;
-        Thu, 17 Mar 2022 19:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=3Wqr0
-        LmAc+Tu06Mfqf8Q6sxkTtWGgGka/IG01puW8UQ=; b=lQndHPvuGti6urMNgzhK+
-        exaGyZmMrk7uyjIWCsxTTd7wv29W0u0ts8KyaqYFVKoIIBijPeeFY+T1mY9+m7cj
-        afoSUI7xSLvnQYB/C0+i9+gpS1ILzvdZegcEFgWgugIVbtMRwt327RjVWykZ60q6
-        FI4BYvOqzJVbRSbOOFuCL4=
-Received: from [192.168.3.109] (unknown [218.201.129.19])
-        by smtp9 (Coremail) with SMTP id DcCowADnWlec6TNihxSlBg--.1698S2;
-        Fri, 18 Mar 2022 10:08:29 +0800 (CST)
-Message-ID: <fabca0f0-c901-9cb0-a8ca-974604491d1b@163.com>
-Date:   Fri, 18 Mar 2022 10:08:27 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: dev_WARN_ONCE cause gpio-watchdog reset
-From:   qianfan <qianfanguijin@163.com>
-To:     Bin Liu <b-liu@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Fri, 18 Mar 2022 04:40:55 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Mar 2022 01:39:36 PDT
+Received: from esa4.mentor.iphmx.com (esa4.mentor.iphmx.com [68.232.137.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3C1DCAA6
+        for <linux-watchdog@vger.kernel.org>; Fri, 18 Mar 2022 01:39:36 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="73290026"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+  by esa4.mentor.iphmx.com with ESMTP; 18 Mar 2022 00:38:33 -0800
+IronPort-SDR: s0ytqxMvX7g0ojN1EExyc+iLYbbrufFlTg2raWtA8MCrOmL7KMkdRn+FAkl2tCAgL6/+t9lZZg
+ IFJb1t/4zkfebyqKjYy0Kq+VFfWxGYwiREyoMqHF5cJOD2Bju+KNKO+d33EOj7cfXWt9cTh3Pt
+ OVgGGXwqz29ZbxdfmoaAN54QElL9jjhYWLHD+0CxAZQWgqVnGh1ikJrsYUXY2jcGRWhSrEeZLF
+ uRmJ14BbG33d7uP8f/tFZ3yesUKtoy9tY/ETVo7/FICsCqmk/fOg99/sCmWvxYEt+nKPBRt1A6
+ cZI=
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     qianfan <qianfanguijin@163.com>, Bin Liu <b-liu@ti.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: RE: dev_WARN_ONCE cause gpio-watchdog reset
+Thread-Topic: dev_WARN_ONCE cause gpio-watchdog reset
+Thread-Index: AQHYOmN98lTZYbxRDEC06L+8RZCRVqzEZVWAgABrofA=
+Date:   Fri, 18 Mar 2022 08:38:27 +0000
+Message-ID: <a26854ea42224032aec6758ae7444dc8@SVR-IES-MBX-03.mgc.mentorg.com>
 References: <8cea8d54-bd3c-5892-96d3-4d16e07ba457@163.com>
-In-Reply-To: <8cea8d54-bd3c-5892-96d3-4d16e07ba457@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcCowADnWlec6TNihxSlBg--.1698S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3AF48JryrXr1DtF1DAr47urg_yoWfXFW5pr
-        4Syrn8Crs5Z34Yvw4fK3WUKry8J3y09FnrGryxKr1Du3W3C34UXrZFqryF9ryj9348A347
-        Kr1DKw4qyFWvgw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UBVb9UUUUU=
-X-Originating-IP: [218.201.129.19]
-X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiyh3H7VQHOVkregAAsf
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <fabca0f0-c901-9cb0-a8ca-974604491d1b@163.com>
+In-Reply-To: <fabca0f0-c901-9cb0-a8ca-974604491d1b@163.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
-在 2022/3/18 8:44, qianfan 写道:
-> Hi:
->
-> I have a custom AM3352 board with linux v5.15 support. I had enabled 
-> gpio-watchdog driver and the timeout of gpio-watchdog is 1.6s .
->
-> The system will reboot when AM3352's MUSB driver print warn message: 
-> (next is the log)
->
-> [ 1555.665496] ------------[ cut here ]------------
-> [ 1555.670343] WARNING: CPU: 0 PID: 345 at 
-> drivers/usb/musb/musb_host.c:115 musb_h_tx_flush_fifo+0x11c/0x13c
-> [ 1555.680395] musb-hdrc musb-hdrc.0: Could not flush host TX10 fifo: 
-> csr: 2403
-> [ 1555.687779] Modules linked in:
-> [ 1555.690989] CPU: 0 PID: 345 Comm: kworker/0:1 Not tainted 
-> 5.15.0-00013-g0ccd7df8f5ad #122
-> [ 1555.699560] Hardware name: Generic AM33XX (Flattened Device Tree)
-> [ 1555.705946] Workqueue: usb_hub_wq hub_event
-> [ 1555.710359] [<c0111438>] (unwind_backtrace) from [<c010b9f4>] 
-> (show_stack+0x10/0x14)
-> [ 1555.718497] [<c010b9f4>] (show_stack) from [<c0adc24c>] 
-> (dump_stack_lvl+0x40/0x4c)
-> [ 1555.726453] [<c0adc24c>] (dump_stack_lvl) from [<c0136264>] 
-> (__warn+0xf0/0x104)
-> [ 1555.734126] [<c0136264>] (__warn) from [<c01362ec>] 
-> (warn_slowpath_fmt+0x74/0xbc)
-> [ 1555.741973] [<c01362ec>] (warn_slowpath_fmt) from [<c07e8b40>] 
-> (musb_h_tx_flush_fifo+0x11c/0x13c)
-> [ 1555.751280] [<c07e8b40>] (musb_h_tx_flush_fifo) from [<c07ea024>] 
-> (musb_cleanup_urb+0x128/0x204)
-> [ 1555.760495] [<c07ea024>] (musb_cleanup_urb) from [<c07ea1e4>] 
-> (musb_urb_dequeue+0xe4/0x17c)
-> [ 1555.769253] [<c07ea1e4>] (musb_urb_dequeue) from [<c07c33f4>] 
-> (usb_hcd_flush_endpoint+0x118/0x130)
-> [ 1555.778654] [<c07c33f4>] (usb_hcd_flush_endpoint) from [<c07c66ec>] 
-> (usb_disable_endpoint+0x58/0xa4)
-> [ 1555.788232] [<c07c66ec>] (usb_disable_endpoint) from [<c07c6828>] 
-> (usb_disable_interface+0x3c/0x54)
-> [ 1555.797716] [<c07c6828>] (usb_disable_interface) from [<c07c8f3c>] 
-> (usb_unbind_interface+0x160/0x224)
-> [ 1555.807385] [<c07c8f3c>] (usb_unbind_interface) from [<c06a731c>] 
-> (device_release_driver_internal+0x1d0/0x1d8)
-> [ 1555.817882] [<c06a731c>] (device_release_driver_internal) from 
-> [<c07b062c>] (usbnet_cdc_unbind+0x70/0x78)
-> [ 1555.827926] [<c07b062c>] (usbnet_cdc_unbind) from [<c07b2098>] 
-> (usbnet_disconnect+0x48/0xd8)
-> [ 1555.836780] [<c07b2098>] (usbnet_disconnect) from [<c07c8e40>] 
-> (usb_unbind_interface+0x64/0x224)
-> [ 1555.845993] [<c07c8e40>] (usb_unbind_interface) from [<c06a731c>] 
-> (device_release_driver_internal+0x1d0/0x1d8)
-> [ 1555.856480] [<c06a731c>] (device_release_driver_internal) from 
-> [<c06a5bf4>] (bus_remove_device+0xc8/0xf8)
-> [ 1555.866515] [<c06a5bf4>] (bus_remove_device) from [<c06a0e5c>] 
-> (device_del+0x180/0x404)
-> [ 1555.874909] [<c06a0e5c>] (device_del) from [<c07c68c8>] 
-> (usb_disable_device+0x88/0x130)
-> [ 1555.883300] [<c07c68c8>] (usb_disable_device) from [<c07bd410>] 
-> (usb_disconnect+0xb0/0x234)
-> [ 1555.892057] [<c07bd410>] (usb_disconnect) from [<c07bf968>] 
-> (hub_event+0xf3c/0x1288)
-> [ 1555.900179] [<c07bf968>] (hub_event) from [<c015306c>] 
-> (process_one_work+0x22c/0x55c)
-> [ 1555.908401] [<c015306c>] (process_one_work) from [<c01533c8>] 
-> (worker_thread+0x2c/0x5cc)
-> [ 1555.916889] [<c01533c8>] (worker_thread) from [<c015b028>] 
-> (kthread+0x140/0x168)
-> [ 1555.924652] [<c015b028>] (kthread) from [<c0100150>] 
-> (ret_from_fork+0x14/0x24)
-> [ 1555.932226] Exception stack(0▒
-> U-Boot SPL 2022.01-rc1-00183-gfa5b4e2d19 (Feb 24 2022 - 15:48:38 +0800)
-> Trying to boot from NAND
->
-> Could you please give me some advice?
->
-> Thanks
->
-Adding a printk message on gpio_wdt_ping and redroduce this question:
-
-diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
-index 4102328a522f..fcfd07e0445a 100644
---- a/drivers/watchdog/gpio_wdt.c
-+++ b/drivers/watchdog/gpio_wdt.c
-@@ -57,6 +57,7 @@ static int gpio_wdt_ping(struct watchdog_device *wdd)
-         case HW_ALGO_TOGGLE:
-                 /* Toggle output pin */
-                 priv->state = !priv->state;
-+               printk("gwp\n");
-                 gpiod_set_value_cansleep(priv->gpiod, priv->state);
-                 break;
-         case HW_ALGO_LEVEL:
-
-Next is the log:
-
-[   90.222821] gwp
-[   91.024956] gwp
-[   91.826936] gwp
-[   92.628898] gwp
-[   93.430888] gwp
-[   94.232859] gwp
-[   94.264325] musb-hdrc musb-hdrc.0: ep11 RX three-strikes error
-[   95.034845] gwp
-[   95.836791] gwp
-[   96.164582] gwp
-[   96.269984] usb 1-1: USB disconnect, device number 3
-[   96.275556] rndis_host 1-1:1.0 usb0: unregister 'rndis_host' 
-usb-musb-hdrc.0-1, RNDIS device
-[   97.279609] ------------[ cut here ]------------
-[   97.284455] WARNING: CPU: 0 PID: 67 at 
-drivers/usb/musb/musb_host.c:115 musb_h_tx_flush_fifo+0x11c/0x13c
-[   97.294417] musb-hdrc musb-hdrc.0: Could not flush host TX10 fifo: 
-csr: 2403
-[   97.301801] Modules linked in:
-[   97.305012] CPU: 0 PID: 67 Comm: kworker/0:12 Not tainted 
-5.15.0-00013-g0ccd7df8f5ad-dirty #123
-[   97.314130] Hardware name: Generic AM33XX (Flattened Device Tree)
-[   97.320515] Workqueue: usb_hub_wq hub_event
-[   97.324928] [<c0111438>] (unwind_backtrace) from [<c010b9f4>] 
-(show_stack+0x10/0x14)
-[   97.333066] [<c010b9f4>] (show_stack) from [<c0adc25c>] 
-(dump_stack_lvl+0x40/0x4c)
-[   97.341023] [<c0adc25c>] (dump_stack_lvl) from [<c0136264>] 
-(__warn+0xf0/0x104)
-[   97.348697] [<c0136264>] (__warn) from [<c01362ec>] 
-(warn_slowpath_fmt+0x74/0xbc)
-[   97.356545] [<c01362ec>] (warn_slowpath_fmt) from [<c07e8b40>] 
-(musb_h_tx_flush_fifo+0x11c/0x13c)
-[   97.365854] [<c07e8b40>] (musb_h_tx_flush_fifo) from [<c07ea024>] 
-(musb_cleanup_urb+0x128/0x204)
-[   97.375069] [<c07ea024>] (musb_cleanup_urb) from [<c07ea1e4>] 
-(musb_urb_dequeue+0xe4/0x17c)
-[   97.383829] [<c07ea1e4>] (musb_urb_dequeue) from [<c07c33f4>] 
-(usb_hcd_flush_endpoint+0x118/0x130)
-[   97.393230] [<c07c33f4>] (usb_hcd_flush_endpoint) from [<c07c66ec>] 
-(usb_disable_endpoint+0x58/0xa4)
-[   97.402810] [<c07c66ec>] (usb_disable_endpoint) from [<c07c6828>] 
-(usb_disable_interface+0x3c/0x54)
-[   97.412294] [<c07c6828>] (usb_disable_interface) from [<c07c8f3c>] 
-(usb_unbind_interface+0x160/0x224)
-[   97.421963] [<c07c8f3c>] (usb_unbind_interface) from [<c06a731c>] 
-(device_release_driver_internal+0x1d0/0x1d8)
-[   97.432461] [<c06a731c>] (device_release_driver_internal) from 
-[<c07b062c>] (usbnet_cdc_unbind+0x70/0x78)
-[   97.442505] [<c07b062c>] (usbnet_cdc_unbind) from [<c07b2098>] 
-(usbnet_disconnect+0x48/0xd8)
-[   97.451359] [<c07b2098>] (usbnet_disconnect) from [<c07c8e40>] 
-(usb_unbind_interface+0x64/0x224)
-[   97.460573] [<c07c8e40>] (usb_unbind_interface) from [<c06a731c>] 
-(device_release_driver_internal+0x1d0/0x1d8)
-[   97.471061] [<c06a731c>] (device_release_driver_internal) from 
-[<c06a5bf4>] (bus_remove_device+0xc8/0xf8)
-[   97.481097] [<c06a5bf4>] (bus_remove_device) from [<c06a0e5c>] 
-(device_del+0x180/0x404)
-[   97.489491] [<c06a0e5c>] (device_del) from [<c07c68c8>] 
-(usb_disable_device+0x88/0x130)
-[   97.497882] [<c07c68c8>] (usb_disable_device) from [<c07bd410>] 
-(usb_disconnect+0xb0/0x234)
-[   97.506640] [<c07bd410>] (usb_disconnect) from [<c07bf968>] 
-(hub_event+0xf3c/0x1288)
-[   97.514762] [<c07bf968>] (hub_event) from [<c015306c>] 
-(process_one_work+0x22c/0x55c)
-[   97.522986] [<c015306c>] (process_one_work) from [<c01533c8>] 
-(worker_thread+0x2c/0x5cc)
-[   97.531473] [<c01533c8>] (worker_thread) from [<c015b028>] 
-(kthread+0x140/0x168)
-[   97.539237] [<c015b028>] (kthread) from [<c0100150>] 
-(ret_from_fork+0x14/0x24)
-[   97.546812] Exception stack(0xc3157fb0 to 0xc3157ff8)
-[   97.552106] 7fa0:                                     00000000 
-00000000 00000000 00000000
-[   97.560674] 7fc0: 00000000 00000000 00000000 00000000 00000000 
-00000000 00000000 00000000
-[   97.569241] 7fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[   97.576170] ---[ end trace 96798796855f16a3 ]---
-[   97.582427] gwp
-[   98.384391] gwp
-[   99.186369] gwp
-[   99.988316] gwp
-
-The last time before dev_WARN_ONCE is [   96.164582] and the next time 
-is [   97.582427]. It took about 1.4 seconds.
-
-But It should be 0.8s. Here is my dts configurations about gpio-watchdog:
-
-     watchdog: watchdog {
-         compatible = "linux,wdt-gpio";
-         pinctrl-names = "default";
-         pinctrl-0 = <&gpiowdt_pins>;
-
-         gpios = <&gpio3 8 GPIO_ACTIVE_HIGH>;
-         enable-gpios = <&gpio3 7 GPIO_ACTIVE_LOW>;
-         always-running;
-         hw_algo = "toggle";
-         hw_margin_ms = <1600>;
-     };
-
-The watchdog ping work is trigger by kthread_queue_work, is it means 
-dev_WARN_ONCE delayed kthread_queue_work?
-
-
+SGkgUWlhbmZhbiwNCg0KZG8geW91IGhhdmUgYSBzZXJpYWwgY29uc29sZSBjb25uZWN0ZWQgd2hl
+cmUgdGhlIGRtZXNnIGlzIHNlbnQgdG8/DQpCZSBhd2FyZSB0aGF0IGluIHN1Y2ggYSBjYXNlLCBh
+dCAxMTVrQmF1ZCwgMSBtcyBpcyBuZWVkZWQgdG8NCnByaW50IDEwIGNoYXJhY3RlcnMuDQpXaGVu
+IGkgbG9vayBhdCB0aGUgdGltZXN0YW1wcyBiZXR3ZWVuIHR3byBsaW5lcyBvZiB0aGUgc3RhY2sg
+ZHVtcCwNCmkgY2FuIHNlZSB0aGF0IH4xMG1zIGFyZSBuZWVkZWQgdG8gcHJpbnQgb25lIGxpbmUg
+d2hpY2ggbWVhbnMgMTAwIGNoYXJzLg0KVGhhdHMgcmVhc29uYWJsZS4NCg0KSSBoaXQgdGhhdCBw
+aXRmYWxsIGluIHRoZSBwYXN0IG11bHRpcGxlIHRpbWVzIC4uLi4NCg0KQmVzdCByZWdhcmRzDQpD
+YXJzdGVuDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBxaWFuZmFuIDxxaWFu
+ZmFuZ3VpamluQDE2My5jb20+DQpTZW50OiBGcmVpdGFnLCAxOC4gTcOkcnogMjAyMiAwMzowOA0K
+VG86IEJpbiBMaXUgPGItbGl1QHRpLmNvbT47IFdpbSBWYW4gU2Vicm9lY2sgPHdpbUBsaW51eC13
+YXRjaGRvZy5vcmc+OyBHdWVudGVyIFJvZWNrIDxsaW51eEByb2Vjay11cy5uZXQ+DQpDYzogbGlu
+dXgtdXNiQHZnZXIua2VybmVsLm9yZzsgbGludXgtd2F0Y2hkb2dAdmdlci5rZXJuZWwub3JnDQpT
+dWJqZWN0OiBSZTogZGV2X1dBUk5fT05DRSBjYXVzZSBncGlvLXdhdGNoZG9nIHJlc2V0DQoNCg0K
+5ZyoIDIwMjIvMy8xOCA4OjQ0LCBxaWFuZmFuIOWGmemBkzoNCj4gSGk6DQo+DQo+IEkgaGF2ZSBh
+IGN1c3RvbSBBTTMzNTIgYm9hcmQgd2l0aCBsaW51eCB2NS4xNSBzdXBwb3J0LiBJIGhhZCBlbmFi
+bGVkDQo+IGdwaW8td2F0Y2hkb2cgZHJpdmVyIGFuZCB0aGUgdGltZW91dCBvZiBncGlvLXdhdGNo
+ZG9nIGlzIDEuNnMgLg0KPg0KPiBUaGUgc3lzdGVtIHdpbGwgcmVib290IHdoZW4gQU0zMzUyJ3Mg
+TVVTQiBkcml2ZXIgcHJpbnQgd2FybiBtZXNzYWdlOg0KPiAobmV4dCBpcyB0aGUgbG9nKQ0KPg0K
+PiBbIDE1NTUuNjY1NDk2XSAtLS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0tLS0tLS0tLS0tLS0NCj4g
+WyAxNTU1LjY3MDM0M10gV0FSTklORzogQ1BVOiAwIFBJRDogMzQ1IGF0DQo+IGRyaXZlcnMvdXNi
+L211c2IvbXVzYl9ob3N0LmM6MTE1IG11c2JfaF90eF9mbHVzaF9maWZvKzB4MTFjLzB4MTNjDQo+
+IFsgMTU1NS42ODAzOTVdIG11c2ItaGRyYyBtdXNiLWhkcmMuMDogQ291bGQgbm90IGZsdXNoIGhv
+c3QgVFgxMCBmaWZvOg0KPiBjc3I6IDI0MDMNCj4gWyAxNTU1LjY4Nzc3OV0gTW9kdWxlcyBsaW5r
+ZWQgaW46DQo+IFsgMTU1NS42OTA5ODldIENQVTogMCBQSUQ6IDM0NSBDb21tOiBrd29ya2VyLzA6
+MSBOb3QgdGFpbnRlZA0KPiA1LjE1LjAtMDAwMTMtZzBjY2Q3ZGY4ZjVhZCAjMTIyDQo+IFsgMTU1
+NS42OTk1NjBdIEhhcmR3YXJlIG5hbWU6IEdlbmVyaWMgQU0zM1hYIChGbGF0dGVuZWQgRGV2aWNl
+IFRyZWUpDQo+IFsgMTU1NS43MDU5NDZdIFdvcmtxdWV1ZTogdXNiX2h1Yl93cSBodWJfZXZlbnQN
+Cj4gWyAxNTU1LjcxMDM1OV0gWzxjMDExMTQzOD5dICh1bndpbmRfYmFja3RyYWNlKSBmcm9tIFs8
+YzAxMGI5ZjQ+XQ0KPiAoc2hvd19zdGFjaysweDEwLzB4MTQpDQo+IFsgMTU1NS43MTg0OTddIFs8
+YzAxMGI5ZjQ+XSAoc2hvd19zdGFjaykgZnJvbSBbPGMwYWRjMjRjPl0NCj4gKGR1bXBfc3RhY2tf
+bHZsKzB4NDAvMHg0YykNCj4gWyAxNTU1LjcyNjQ1M10gWzxjMGFkYzI0Yz5dIChkdW1wX3N0YWNr
+X2x2bCkgZnJvbSBbPGMwMTM2MjY0Pl0NCj4gKF9fd2FybisweGYwLzB4MTA0KQ0KPiBbIDE1NTUu
+NzM0MTI2XSBbPGMwMTM2MjY0Pl0gKF9fd2FybikgZnJvbSBbPGMwMTM2MmVjPl0NCj4gKHdhcm5f
+c2xvd3BhdGhfZm10KzB4NzQvMHhiYykNCj4gWyAxNTU1Ljc0MTk3M10gWzxjMDEzNjJlYz5dICh3
+YXJuX3Nsb3dwYXRoX2ZtdCkgZnJvbSBbPGMwN2U4YjQwPl0NCj4gKG11c2JfaF90eF9mbHVzaF9m
+aWZvKzB4MTFjLzB4MTNjKQ0KPiBbIDE1NTUuNzUxMjgwXSBbPGMwN2U4YjQwPl0gKG11c2JfaF90
+eF9mbHVzaF9maWZvKSBmcm9tIFs8YzA3ZWEwMjQ+XQ0KPiAobXVzYl9jbGVhbnVwX3VyYisweDEy
+OC8weDIwNCkNCj4gWyAxNTU1Ljc2MDQ5NV0gWzxjMDdlYTAyND5dIChtdXNiX2NsZWFudXBfdXJi
+KSBmcm9tIFs8YzA3ZWExZTQ+XQ0KPiAobXVzYl91cmJfZGVxdWV1ZSsweGU0LzB4MTdjKQ0KPiBb
+IDE1NTUuNzY5MjUzXSBbPGMwN2VhMWU0Pl0gKG11c2JfdXJiX2RlcXVldWUpIGZyb20gWzxjMDdj
+MzNmND5dDQo+ICh1c2JfaGNkX2ZsdXNoX2VuZHBvaW50KzB4MTE4LzB4MTMwKQ0KPiBbIDE1NTUu
+Nzc4NjU0XSBbPGMwN2MzM2Y0Pl0gKHVzYl9oY2RfZmx1c2hfZW5kcG9pbnQpIGZyb20gWzxjMDdj
+NjZlYz5dDQo+ICh1c2JfZGlzYWJsZV9lbmRwb2ludCsweDU4LzB4YTQpDQo+IFsgMTU1NS43ODgy
+MzJdIFs8YzA3YzY2ZWM+XSAodXNiX2Rpc2FibGVfZW5kcG9pbnQpIGZyb20gWzxjMDdjNjgyOD5d
+DQo+ICh1c2JfZGlzYWJsZV9pbnRlcmZhY2UrMHgzYy8weDU0KQ0KPiBbIDE1NTUuNzk3NzE2XSBb
+PGMwN2M2ODI4Pl0gKHVzYl9kaXNhYmxlX2ludGVyZmFjZSkgZnJvbSBbPGMwN2M4ZjNjPl0NCj4g
+KHVzYl91bmJpbmRfaW50ZXJmYWNlKzB4MTYwLzB4MjI0KQ0KPiBbIDE1NTUuODA3Mzg1XSBbPGMw
+N2M4ZjNjPl0gKHVzYl91bmJpbmRfaW50ZXJmYWNlKSBmcm9tIFs8YzA2YTczMWM+XQ0KPiAoZGV2
+aWNlX3JlbGVhc2VfZHJpdmVyX2ludGVybmFsKzB4MWQwLzB4MWQ4KQ0KPiBbIDE1NTUuODE3ODgy
+XSBbPGMwNmE3MzFjPl0gKGRldmljZV9yZWxlYXNlX2RyaXZlcl9pbnRlcm5hbCkgZnJvbQ0KPiBb
+PGMwN2IwNjJjPl0gKHVzYm5ldF9jZGNfdW5iaW5kKzB4NzAvMHg3OCkNCj4gWyAxNTU1LjgyNzky
+Nl0gWzxjMDdiMDYyYz5dICh1c2JuZXRfY2RjX3VuYmluZCkgZnJvbSBbPGMwN2IyMDk4Pl0NCj4g
+KHVzYm5ldF9kaXNjb25uZWN0KzB4NDgvMHhkOCkNCj4gWyAxNTU1LjgzNjc4MF0gWzxjMDdiMjA5
+OD5dICh1c2JuZXRfZGlzY29ubmVjdCkgZnJvbSBbPGMwN2M4ZTQwPl0NCj4gKHVzYl91bmJpbmRf
+aW50ZXJmYWNlKzB4NjQvMHgyMjQpDQo+IFsgMTU1NS44NDU5OTNdIFs8YzA3YzhlNDA+XSAodXNi
+X3VuYmluZF9pbnRlcmZhY2UpIGZyb20gWzxjMDZhNzMxYz5dDQo+IChkZXZpY2VfcmVsZWFzZV9k
+cml2ZXJfaW50ZXJuYWwrMHgxZDAvMHgxZDgpDQo+IFsgMTU1NS44NTY0ODBdIFs8YzA2YTczMWM+
+XSAoZGV2aWNlX3JlbGVhc2VfZHJpdmVyX2ludGVybmFsKSBmcm9tDQo+IFs8YzA2YTViZjQ+XSAo
+YnVzX3JlbW92ZV9kZXZpY2UrMHhjOC8weGY4KQ0KPiBbIDE1NTUuODY2NTE1XSBbPGMwNmE1YmY0
+Pl0gKGJ1c19yZW1vdmVfZGV2aWNlKSBmcm9tIFs8YzA2YTBlNWM+XQ0KPiAoZGV2aWNlX2RlbCsw
+eDE4MC8weDQwNCkNCj4gWyAxNTU1Ljg3NDkwOV0gWzxjMDZhMGU1Yz5dIChkZXZpY2VfZGVsKSBm
+cm9tIFs8YzA3YzY4Yzg+XQ0KPiAodXNiX2Rpc2FibGVfZGV2aWNlKzB4ODgvMHgxMzApDQo+IFsg
+MTU1NS44ODMzMDBdIFs8YzA3YzY4Yzg+XSAodXNiX2Rpc2FibGVfZGV2aWNlKSBmcm9tIFs8YzA3
+YmQ0MTA+XQ0KPiAodXNiX2Rpc2Nvbm5lY3QrMHhiMC8weDIzNCkNCj4gWyAxNTU1Ljg5MjA1N10g
+WzxjMDdiZDQxMD5dICh1c2JfZGlzY29ubmVjdCkgZnJvbSBbPGMwN2JmOTY4Pl0NCj4gKGh1Yl9l
+dmVudCsweGYzYy8weDEyODgpDQo+IFsgMTU1NS45MDAxNzldIFs8YzA3YmY5Njg+XSAoaHViX2V2
+ZW50KSBmcm9tIFs8YzAxNTMwNmM+XQ0KPiAocHJvY2Vzc19vbmVfd29yaysweDIyYy8weDU1YykN
+Cj4gWyAxNTU1LjkwODQwMV0gWzxjMDE1MzA2Yz5dIChwcm9jZXNzX29uZV93b3JrKSBmcm9tIFs8
+YzAxNTMzYzg+XQ0KPiAod29ya2VyX3RocmVhZCsweDJjLzB4NWNjKQ0KPiBbIDE1NTUuOTE2ODg5
+XSBbPGMwMTUzM2M4Pl0gKHdvcmtlcl90aHJlYWQpIGZyb20gWzxjMDE1YjAyOD5dDQo+IChrdGhy
+ZWFkKzB4MTQwLzB4MTY4KQ0KPiBbIDE1NTUuOTI0NjUyXSBbPGMwMTViMDI4Pl0gKGt0aHJlYWQp
+IGZyb20gWzxjMDEwMDE1MD5dDQo+IChyZXRfZnJvbV9mb3JrKzB4MTQvMHgyNCkNCj4gWyAxNTU1
+LjkzMjIyNl0gRXhjZXB0aW9uIHN0YWNrKDDilpINCj4gVS1Cb290IFNQTCAyMDIyLjAxLXJjMS0w
+MDE4My1nZmE1YjRlMmQxOSAoRmViIDI0IDIwMjIgLSAxNTo0ODozOCArMDgwMCkNCj4gVHJ5aW5n
+IHRvIGJvb3QgZnJvbSBOQU5EDQo+DQo+IENvdWxkIHlvdSBwbGVhc2UgZ2l2ZSBtZSBzb21lIGFk
+dmljZT8NCj4NCj4gVGhhbmtzDQo+DQpBZGRpbmcgYSBwcmludGsgbWVzc2FnZSBvbiBncGlvX3dk
+dF9waW5nIGFuZCByZWRyb2R1Y2UgdGhpcyBxdWVzdGlvbjoNCg0KZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvd2F0Y2hkb2cvZ3Bpb193ZHQuYyBiL2RyaXZlcnMvd2F0Y2hkb2cvZ3Bpb193ZHQuYw0KaW5k
+ZXggNDEwMjMyOGE1MjJmLi5mY2ZkMDdlMDQ0NWEgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3dhdGNo
+ZG9nL2dwaW9fd2R0LmMNCisrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvZ3Bpb193ZHQuYw0KQEAgLTU3
+LDYgKzU3LDcgQEAgc3RhdGljIGludCBncGlvX3dkdF9waW5nKHN0cnVjdCB3YXRjaGRvZ19kZXZp
+Y2UgKndkZCkNCiAgICAgICAgIGNhc2UgSFdfQUxHT19UT0dHTEU6DQogICAgICAgICAgICAgICAg
+IC8qIFRvZ2dsZSBvdXRwdXQgcGluICovDQogICAgICAgICAgICAgICAgIHByaXYtPnN0YXRlID0g
+IXByaXYtPnN0YXRlOw0KKyAgICAgICAgICAgICAgIHByaW50aygiZ3dwXG4iKTsNCiAgICAgICAg
+ICAgICAgICAgZ3Bpb2Rfc2V0X3ZhbHVlX2NhbnNsZWVwKHByaXYtPmdwaW9kLCBwcml2LT5zdGF0
+ZSk7DQogICAgICAgICAgICAgICAgIGJyZWFrOw0KICAgICAgICAgY2FzZSBIV19BTEdPX0xFVkVM
+Og0KDQpOZXh0IGlzIHRoZSBsb2c6DQoNClsgICA5MC4yMjI4MjFdIGd3cA0KWyAgIDkxLjAyNDk1
+Nl0gZ3dwDQpbICAgOTEuODI2OTM2XSBnd3ANClsgICA5Mi42Mjg4OThdIGd3cA0KWyAgIDkzLjQz
+MDg4OF0gZ3dwDQpbICAgOTQuMjMyODU5XSBnd3ANClsgICA5NC4yNjQzMjVdIG11c2ItaGRyYyBt
+dXNiLWhkcmMuMDogZXAxMSBSWCB0aHJlZS1zdHJpa2VzIGVycm9yDQpbICAgOTUuMDM0ODQ1XSBn
+d3ANClsgICA5NS44MzY3OTFdIGd3cA0KWyAgIDk2LjE2NDU4Ml0gZ3dwDQpbICAgOTYuMjY5OTg0
+XSB1c2IgMS0xOiBVU0IgZGlzY29ubmVjdCwgZGV2aWNlIG51bWJlciAzDQpbICAgOTYuMjc1NTU2
+XSBybmRpc19ob3N0IDEtMToxLjAgdXNiMDogdW5yZWdpc3RlciAncm5kaXNfaG9zdCcNCnVzYi1t
+dXNiLWhkcmMuMC0xLCBSTkRJUyBkZXZpY2UNClsgICA5Ny4yNzk2MDldIC0tLS0tLS0tLS0tLVsg
+Y3V0IGhlcmUgXS0tLS0tLS0tLS0tLQ0KWyAgIDk3LjI4NDQ1NV0gV0FSTklORzogQ1BVOiAwIFBJ
+RDogNjcgYXQNCmRyaXZlcnMvdXNiL211c2IvbXVzYl9ob3N0LmM6MTE1IG11c2JfaF90eF9mbHVz
+aF9maWZvKzB4MTFjLzB4MTNjDQpbICAgOTcuMjk0NDE3XSBtdXNiLWhkcmMgbXVzYi1oZHJjLjA6
+IENvdWxkIG5vdCBmbHVzaCBob3N0IFRYMTAgZmlmbzoNCmNzcjogMjQwMw0KWyAgIDk3LjMwMTgw
+MV0gTW9kdWxlcyBsaW5rZWQgaW46DQpbICAgOTcuMzA1MDEyXSBDUFU6IDAgUElEOiA2NyBDb21t
+OiBrd29ya2VyLzA6MTIgTm90IHRhaW50ZWQNCjUuMTUuMC0wMDAxMy1nMGNjZDdkZjhmNWFkLWRp
+cnR5ICMxMjMNClsgICA5Ny4zMTQxMzBdIEhhcmR3YXJlIG5hbWU6IEdlbmVyaWMgQU0zM1hYIChG
+bGF0dGVuZWQgRGV2aWNlIFRyZWUpDQpbICAgOTcuMzIwNTE1XSBXb3JrcXVldWU6IHVzYl9odWJf
+d3EgaHViX2V2ZW50DQpbICAgOTcuMzI0OTI4XSBbPGMwMTExNDM4Pl0gKHVud2luZF9iYWNrdHJh
+Y2UpIGZyb20gWzxjMDEwYjlmND5dDQooc2hvd19zdGFjaysweDEwLzB4MTQpDQpbICAgOTcuMzMz
+MDY2XSBbPGMwMTBiOWY0Pl0gKHNob3dfc3RhY2spIGZyb20gWzxjMGFkYzI1Yz5dDQooZHVtcF9z
+dGFja19sdmwrMHg0MC8weDRjKQ0KWyAgIDk3LjM0MTAyM10gWzxjMGFkYzI1Yz5dIChkdW1wX3N0
+YWNrX2x2bCkgZnJvbSBbPGMwMTM2MjY0Pl0NCihfX3dhcm4rMHhmMC8weDEwNCkNClsgICA5Ny4z
+NDg2OTddIFs8YzAxMzYyNjQ+XSAoX193YXJuKSBmcm9tIFs8YzAxMzYyZWM+XQ0KKHdhcm5fc2xv
+d3BhdGhfZm10KzB4NzQvMHhiYykNClsgICA5Ny4zNTY1NDVdIFs8YzAxMzYyZWM+XSAod2Fybl9z
+bG93cGF0aF9mbXQpIGZyb20gWzxjMDdlOGI0MD5dDQoobXVzYl9oX3R4X2ZsdXNoX2ZpZm8rMHgx
+MWMvMHgxM2MpDQpbICAgOTcuMzY1ODU0XSBbPGMwN2U4YjQwPl0gKG11c2JfaF90eF9mbHVzaF9m
+aWZvKSBmcm9tIFs8YzA3ZWEwMjQ+XQ0KKG11c2JfY2xlYW51cF91cmIrMHgxMjgvMHgyMDQpDQpb
+ICAgOTcuMzc1MDY5XSBbPGMwN2VhMDI0Pl0gKG11c2JfY2xlYW51cF91cmIpIGZyb20gWzxjMDdl
+YTFlND5dDQoobXVzYl91cmJfZGVxdWV1ZSsweGU0LzB4MTdjKQ0KWyAgIDk3LjM4MzgyOV0gWzxj
+MDdlYTFlND5dIChtdXNiX3VyYl9kZXF1ZXVlKSBmcm9tIFs8YzA3YzMzZjQ+XQ0KKHVzYl9oY2Rf
+Zmx1c2hfZW5kcG9pbnQrMHgxMTgvMHgxMzApDQpbICAgOTcuMzkzMjMwXSBbPGMwN2MzM2Y0Pl0g
+KHVzYl9oY2RfZmx1c2hfZW5kcG9pbnQpIGZyb20gWzxjMDdjNjZlYz5dDQoodXNiX2Rpc2FibGVf
+ZW5kcG9pbnQrMHg1OC8weGE0KQ0KWyAgIDk3LjQwMjgxMF0gWzxjMDdjNjZlYz5dICh1c2JfZGlz
+YWJsZV9lbmRwb2ludCkgZnJvbSBbPGMwN2M2ODI4Pl0NCih1c2JfZGlzYWJsZV9pbnRlcmZhY2Ur
+MHgzYy8weDU0KQ0KWyAgIDk3LjQxMjI5NF0gWzxjMDdjNjgyOD5dICh1c2JfZGlzYWJsZV9pbnRl
+cmZhY2UpIGZyb20gWzxjMDdjOGYzYz5dDQoodXNiX3VuYmluZF9pbnRlcmZhY2UrMHgxNjAvMHgy
+MjQpDQpbICAgOTcuNDIxOTYzXSBbPGMwN2M4ZjNjPl0gKHVzYl91bmJpbmRfaW50ZXJmYWNlKSBm
+cm9tIFs8YzA2YTczMWM+XQ0KKGRldmljZV9yZWxlYXNlX2RyaXZlcl9pbnRlcm5hbCsweDFkMC8w
+eDFkOCkNClsgICA5Ny40MzI0NjFdIFs8YzA2YTczMWM+XSAoZGV2aWNlX3JlbGVhc2VfZHJpdmVy
+X2ludGVybmFsKSBmcm9tDQpbPGMwN2IwNjJjPl0gKHVzYm5ldF9jZGNfdW5iaW5kKzB4NzAvMHg3
+OCkNClsgICA5Ny40NDI1MDVdIFs8YzA3YjA2MmM+XSAodXNibmV0X2NkY191bmJpbmQpIGZyb20g
+WzxjMDdiMjA5OD5dDQoodXNibmV0X2Rpc2Nvbm5lY3QrMHg0OC8weGQ4KQ0KWyAgIDk3LjQ1MTM1
+OV0gWzxjMDdiMjA5OD5dICh1c2JuZXRfZGlzY29ubmVjdCkgZnJvbSBbPGMwN2M4ZTQwPl0NCih1
+c2JfdW5iaW5kX2ludGVyZmFjZSsweDY0LzB4MjI0KQ0KWyAgIDk3LjQ2MDU3M10gWzxjMDdjOGU0
+MD5dICh1c2JfdW5iaW5kX2ludGVyZmFjZSkgZnJvbSBbPGMwNmE3MzFjPl0NCihkZXZpY2VfcmVs
+ZWFzZV9kcml2ZXJfaW50ZXJuYWwrMHgxZDAvMHgxZDgpDQpbICAgOTcuNDcxMDYxXSBbPGMwNmE3
+MzFjPl0gKGRldmljZV9yZWxlYXNlX2RyaXZlcl9pbnRlcm5hbCkgZnJvbQ0KWzxjMDZhNWJmND5d
+IChidXNfcmVtb3ZlX2RldmljZSsweGM4LzB4ZjgpDQpbICAgOTcuNDgxMDk3XSBbPGMwNmE1YmY0
+Pl0gKGJ1c19yZW1vdmVfZGV2aWNlKSBmcm9tIFs8YzA2YTBlNWM+XQ0KKGRldmljZV9kZWwrMHgx
+ODAvMHg0MDQpDQpbICAgOTcuNDg5NDkxXSBbPGMwNmEwZTVjPl0gKGRldmljZV9kZWwpIGZyb20g
+WzxjMDdjNjhjOD5dDQoodXNiX2Rpc2FibGVfZGV2aWNlKzB4ODgvMHgxMzApDQpbICAgOTcuNDk3
+ODgyXSBbPGMwN2M2OGM4Pl0gKHVzYl9kaXNhYmxlX2RldmljZSkgZnJvbSBbPGMwN2JkNDEwPl0N
+Cih1c2JfZGlzY29ubmVjdCsweGIwLzB4MjM0KQ0KWyAgIDk3LjUwNjY0MF0gWzxjMDdiZDQxMD5d
+ICh1c2JfZGlzY29ubmVjdCkgZnJvbSBbPGMwN2JmOTY4Pl0NCihodWJfZXZlbnQrMHhmM2MvMHgx
+Mjg4KQ0KWyAgIDk3LjUxNDc2Ml0gWzxjMDdiZjk2OD5dIChodWJfZXZlbnQpIGZyb20gWzxjMDE1
+MzA2Yz5dDQoocHJvY2Vzc19vbmVfd29yaysweDIyYy8weDU1YykNClsgICA5Ny41MjI5ODZdIFs8
+YzAxNTMwNmM+XSAocHJvY2Vzc19vbmVfd29yaykgZnJvbSBbPGMwMTUzM2M4Pl0NCih3b3JrZXJf
+dGhyZWFkKzB4MmMvMHg1Y2MpDQpbICAgOTcuNTMxNDczXSBbPGMwMTUzM2M4Pl0gKHdvcmtlcl90
+aHJlYWQpIGZyb20gWzxjMDE1YjAyOD5dDQooa3RocmVhZCsweDE0MC8weDE2OCkNClsgICA5Ny41
+MzkyMzddIFs8YzAxNWIwMjg+XSAoa3RocmVhZCkgZnJvbSBbPGMwMTAwMTUwPl0NCihyZXRfZnJv
+bV9mb3JrKzB4MTQvMHgyNCkNClsgICA5Ny41NDY4MTJdIEV4Y2VwdGlvbiBzdGFjaygweGMzMTU3
+ZmIwIHRvIDB4YzMxNTdmZjgpDQpbICAgOTcuNTUyMTA2XSA3ZmEwOiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAwMDAwMDAwMA0KMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAN
+ClsgICA5Ny41NjA2NzRdIDdmYzA6IDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAw
+IDAwMDAwMDAwDQowMDAwMDAwMCAwMDAwMDAwMCAwMDAwMDAwMA0KWyAgIDk3LjU2OTI0MV0gN2Zl
+MDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMTMgMDAwMDAwMDAN
+ClsgICA5Ny41NzYxNzBdIC0tLVsgZW5kIHRyYWNlIDk2Nzk4Nzk2ODU1ZjE2YTMgXS0tLQ0KWyAg
+IDk3LjU4MjQyN10gZ3dwDQpbICAgOTguMzg0MzkxXSBnd3ANClsgICA5OS4xODYzNjldIGd3cA0K
+WyAgIDk5Ljk4ODMxNl0gZ3dwDQoNClRoZSBsYXN0IHRpbWUgYmVmb3JlIGRldl9XQVJOX09OQ0Ug
+aXMgWyAgIDk2LjE2NDU4Ml0gYW5kIHRoZSBuZXh0IHRpbWUNCmlzIFsgICA5Ny41ODI0MjddLiBJ
+dCB0b29rIGFib3V0IDEuNCBzZWNvbmRzLg0KDQpCdXQgSXQgc2hvdWxkIGJlIDAuOHMuIEhlcmUg
+aXMgbXkgZHRzIGNvbmZpZ3VyYXRpb25zIGFib3V0IGdwaW8td2F0Y2hkb2c6DQoNCiAgICAgd2F0
+Y2hkb2c6IHdhdGNoZG9nIHsNCiAgICAgICAgIGNvbXBhdGlibGUgPSAibGludXgsd2R0LWdwaW8i
+Ow0KICAgICAgICAgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsNCiAgICAgICAgIHBpbmN0cmwt
+MCA9IDwmZ3Bpb3dkdF9waW5zPjsNCg0KICAgICAgICAgZ3Bpb3MgPSA8JmdwaW8zIDggR1BJT19B
+Q1RJVkVfSElHSD47DQogICAgICAgICBlbmFibGUtZ3Bpb3MgPSA8JmdwaW8zIDcgR1BJT19BQ1RJ
+VkVfTE9XPjsNCiAgICAgICAgIGFsd2F5cy1ydW5uaW5nOw0KICAgICAgICAgaHdfYWxnbyA9ICJ0
+b2dnbGUiOw0KICAgICAgICAgaHdfbWFyZ2luX21zID0gPDE2MDA+Ow0KICAgICB9Ow0KDQpUaGUg
+d2F0Y2hkb2cgcGluZyB3b3JrIGlzIHRyaWdnZXIgYnkga3RocmVhZF9xdWV1ZV93b3JrLCBpcyBp
+dCBtZWFucw0KZGV2X1dBUk5fT05DRSBkZWxheWVkIGt0aHJlYWRfcXVldWVfd29yaz8NCg0KDQot
+LS0tLS0tLS0tLS0tLS0tLQ0KU2llbWVucyBFbGVjdHJvbmljIERlc2lnbiBBdXRvbWF0aW9uIEdt
+Ykg7IEFuc2NocmlmdDogQXJudWxmc3RyYcOfZSAyMDEsIDgwNjM0IE3DvG5jaGVuOyBHZXNlbGxz
+Y2hhZnQgbWl0IGJlc2NocsOkbmt0ZXIgSGFmdHVuZzsgR2VzY2jDpGZ0c2bDvGhyZXI6IFRob21h
+cyBIZXVydW5nLCBGcmFuayBUaMO8cmF1ZjsgU2l0eiBkZXIgR2VzZWxsc2NoYWZ0OiBNw7xuY2hl
+bjsgUmVnaXN0ZXJnZXJpY2h0IE3DvG5jaGVuLCBIUkIgMTA2OTU1DQo=
