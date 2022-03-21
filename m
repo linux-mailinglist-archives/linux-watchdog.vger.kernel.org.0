@@ -2,187 +2,141 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCE54E2150
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Mar 2022 08:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEA44E2504
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Mar 2022 12:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344902AbiCUHZm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 21 Mar 2022 03:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S1346596AbiCULLh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Mar 2022 07:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344870AbiCUHZj (ORCPT
+        with ESMTP id S236566AbiCULLf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 21 Mar 2022 03:25:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D8054681
-        for <linux-watchdog@vger.kernel.org>; Mon, 21 Mar 2022 00:24:05 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nWCND-0006et-Tt; Mon, 21 Mar 2022 08:22:39 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nWCMp-0021t4-Og; Mon, 21 Mar 2022 08:22:16 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nWCMp-00AcZn-OA; Mon, 21 Mar 2022 08:22:15 +0100
-Date:   Mon, 21 Mar 2022 08:22:15 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        =?utf-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
-        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c@vger.kernel.org,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-rtc@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-pwm@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-iio@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Michal Simek <michal.simek@xilinx.com>, kernel@pengutronix.de,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Vladimir Zapolskiy <vz@mleia.com>, linux-gpio@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Fabio Estevam <festevam@gmail.com>,
-        Matt Mackall <mpm@selenic.com>,
-        linux-amlogic@lists.infradead.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        linux-hwmon@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        UNGLinuxDriver@microchip.com, Vinod Koul <vkoul@kernel.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        dmaengine@vger.kernel.org,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>
-Subject: Re: [PATCH v8 02/16] clk: Provide new devm_clk helpers for prepared
- and enabled clocks
-Message-ID: <20220321072215.5lffm7qtpvg5ofk4@pengutronix.de>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
- <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
- <20220319182936.06d75742@jic23-huawei>
+        Mon, 21 Mar 2022 07:11:35 -0400
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8369393C9;
+        Mon, 21 Mar 2022 04:10:09 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id r13so5120473wrr.9;
+        Mon, 21 Mar 2022 04:10:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xJplpyeeR7XtbntRv+MY0xuLRt56XHf4jWPWATDu+vI=;
+        b=p5p1VrQD9bKhdQCZUETMZEKk5ykW53khLtRP6nfFoYbp+DY1LRfxq60DLaNU4Ampe+
+         HACX3QvuUNf0L0ULATa3fZnw1NKTNyA2dCloK0ZeqmnyRlhEzP/egBBLb16ihiFTc7SC
+         Wp6BYtfh6e7vf8vC2b+zLBGRnRWJ1wS8eWunmT7JR5tn9oaK+Q2EqZk1Yh25hEcBjhC6
+         +vex71GzKRomCqifJ/Oo27lqEAREmRTklgJtemxL7y7bjqr8ynMlse1H6E7q2YW7pJBr
+         2N96BOTUF5iA8GWfh3Ay7Rp/O9MZozVy575EoxgNWerVrj9xDJzQMeVYl06vrZJRFVZr
+         V2rg==
+X-Gm-Message-State: AOAM532T4AQ+itq5S3tEdJoY6fVIJTn19KLi81DXgYsqYAs2nx2kK3kj
+        plnw9jZlxMKOKHQmw9jkMVQ=
+X-Google-Smtp-Source: ABdhPJzM1OjuSXGjo2x5zmcICdAszhjqGkZ+2UO1QW+gsRz6L8kueWHNdiqT14Bo2mZm9l9KFmjQNQ==
+X-Received: by 2002:a5d:4892:0:b0:1ed:beaa:778a with SMTP id g18-20020a5d4892000000b001edbeaa778amr17881962wrq.35.1647861008212;
+        Mon, 21 Mar 2022 04:10:08 -0700 (PDT)
+Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id u11-20020a05600c19cb00b00389efe9c512sm18672875wmq.23.2022.03.21.04.10.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 04:10:07 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 12:10:05 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Xiantao Hu <xt.hu@cqplus1.com>
+Cc:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com, qinjian@cqplus1.com,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v7 1/2] dt-bindings: watchdog: Add watchdog yaml file for
+ Sunplus SP7021
+Message-ID: <20220321111005.w27blherwnon6kwk@krzk-bin>
+References: <20220304081209.672-1-xt.hu@cqplus1.com>
+ <20220304081209.672-2-xt.hu@cqplus1.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oterd73bfcoy35ck"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220319182936.06d75742@jic23-huawei>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220304081209.672-2-xt.hu@cqplus1.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Fri, Mar 04, 2022 at 04:12:08PM +0800, Xiantao Hu wrote:
+> This adds the documentation for the devicetree bindings of the Sunplus
+> SP7021 watchdog driver, found from SP7021 SoCs and newer.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
+> ---
+>  .../bindings/watchdog/sunplus,sp7021-wdt.yaml | 47 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
 
---oterd73bfcoy35ck
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please use scripts/get_maintainer.pl on recent kernel (newest mainline or
+recent linux-next) to get the list of people to CC.
 
-On Sat, Mar 19, 2022 at 06:29:36PM +0000, Jonathan Cameron wrote:
-> On Mon, 14 Mar 2022 15:16:29 +0100
-> Uwe Kleine-K=F6nig         <u.kleine-koenig@pengutronix.de> wrote:
->=20
-> > When a driver keeps a clock prepared (or enabled) during the whole
-> > lifetime of the driver, these helpers allow to simplify the drivers.
-> >=20
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> One trivial thing below.
->=20
-> > ---
-> >  drivers/clk/clk-devres.c | 31 ++++++++++++++
-> >  include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 120 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
-> > index fb7761888b30..4707fe718f0b 100644
-> > --- a/drivers/clk/clk-devres.c
-> > +++ b/drivers/clk/clk-devres.c
-> > @@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const =
-char *id)
-> >  }
-> >  EXPORT_SYMBOL(devm_clk_get);
-> > =20
-> > +struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
-> > +{
-> > +	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
->=20
-> Nitpick but this spacing before } in functions is rather unusual and not
-> in keeping with the existing code in this file.
->=20
-> > +
-> > +}
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml b/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> new file mode 100644
+> index 000000000..9a9bfe150
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/sunplus,sp7021-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus SoCs Watchdog Device Tree Bindings
 
-ack, I fixed that in my tree, so this will be part of an v9. I won't
-send it just for this change, though. I fixed three further functions
-that had a similar empty line, too.
+s/Device Tree Bindings//
 
-Thanks for looking
-Uwe
+> +
+> +maintainers:
+> +  - XianTao Hu <xt.hu@cqplus1.com>
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: sunplus,sp7021-wdt
+> +
+> +  reg:
+> +    items:
+> +      - description: watchdog registers regions
+> +      - description: miscellaneous control registers regions
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog: watchdog@9c000630 {
+> +        compatible = "sunplus,sp7021-wdt";
+> +        reg = <0x9c000630 0x08>, <0x9C000274 0x04>;
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+lowercase hex (Second reg)
 
---oterd73bfcoy35ck
-Content-Type: application/pgp-signature; name="signature.asc"
+Can be fixed while applying, so in such case:
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmI4J6MACgkQwfwUeK3K
-7Ak5sAf/aG3oVD1FgzqJLWD3uSmF0uX0/3lky1l56go3LpRjDym8tlGglXT4z7Hl
-Z3q8YXru6LSihHT/n6V4EUdpV6f49dxPfrr9hu9OFU+UY0Cd7NgisKr+0Wi61dbS
-d8IVGHwcCPqBZanHdAEjhle7d7WdWhfukR1oLljd8B2XM6qP2jQgjFWzrSJfZ+hd
-qd6k9TcfIHjy8n8xBtyIYSvYZbywqfa+wJeU54fe4fp4NNPVTmxGtzHFNDipSZGL
-uF+yg7qDqSezst7wO3dNeblEvpVZfG9TZAXvGMCZQLn9x4b35iSmZtLVPN+HZZM4
-WBr/EA6mCSOr4iHXCKfNr4UegGV4/w==
-=gON5
------END PGP SIGNATURE-----
-
---oterd73bfcoy35ck--
+Best regards,
+Krzysztof
