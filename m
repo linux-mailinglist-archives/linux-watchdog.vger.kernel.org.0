@@ -2,407 +2,200 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210784E398E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Mar 2022 08:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C056B4E3B21
+	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Mar 2022 09:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237374AbiCVH2r convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 22 Mar 2022 03:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S230196AbiCVItW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Mar 2022 04:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237400AbiCVH2q (ORCPT
+        with ESMTP id S230054AbiCVItW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:28:46 -0400
-X-Greylist: delayed 334 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Mar 2022 00:27:16 PDT
-Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA08049279;
-        Tue, 22 Mar 2022 00:27:16 -0700 (PDT)
-Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
-        by mail.parknet.co.jp (Postfix) with ESMTPSA id EB22C15F93A;
-        Tue, 22 Mar 2022 16:21:41 +0900 (JST)
-Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
-        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22M7LeWj076792
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 16:21:41 +0900
-Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
-        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22M7LeCa265007
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 16:21:40 +0900
-Received: (from hirofumi@localhost)
-        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 22M7Lecr265006;
-        Tue, 22 Mar 2022 16:21:40 +0900
-From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-To:     qianfan <qianfanguijin@163.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: linux resetting when the usb storage was removed while copying
-References: <1cc135e3-741f-e7d6-5d0a-fef319832a4c@163.com>
-Date:   Tue, 22 Mar 2022 16:21:40 +0900
-In-Reply-To: <1cc135e3-741f-e7d6-5d0a-fef319832a4c@163.com> (qianfan's message
-        of "Mon, 21 Mar 2022 17:58:04 +0800")
-Message-ID: <87pmmee9kr.fsf@mail.parknet.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
+        Tue, 22 Mar 2022 04:49:22 -0400
+X-Greylist: delayed 562 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Mar 2022 01:47:52 PDT
+Received: from mx08-005c9601.pphosted.com (mx08-005c9601.pphosted.com [205.220.185.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE8A6CA56
+        for <linux-watchdog@vger.kernel.org>; Tue, 22 Mar 2022 01:47:52 -0700 (PDT)
+Received: from pps.filterd (m0237837.ppops.net [127.0.0.1])
+        by mx08-005c9601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22M51cV1026155;
+        Tue, 22 Mar 2022 09:38:15 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wago.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=p012021; bh=elVzu5WuorUrXPjdwDvy+4PkktuOvgFO/qlSv0qRYRo=;
+ b=aax12AG/bVG2YQSHk3mcqgjJWdBgGx5xj59zPcHYJ0pxzyUF9RNeIb8TgtdtIzeJem2U
+ hEEDAaQA/2jTL/0pB+l+V+u+/Eb/R2slM9Wo2Z6Q95RMVJONYy6jSqvDbUpD06Uhltsa
+ ri34xZypcMtedFankcqDJpNT84X9N1W7ISHzBoLCWcQKZuvooXkar7mpQNBv1Vkmlcrs
+ F1P0uRsoBcanWPDZwNTHbhlrTu0exczCSKH2TXPwiemjS+nnoSlfCCfBCDk5XFbaTGu6
+ L9K6JiVqEN9GKs2y/onKwVCd6yff1e6/ozyLS3u1YImAttdfM343NiZ2fZKtD6uGPdHw tA== 
+Received: from mail.wago.com ([217.237.185.168])
+        by mx08-005c9601.pphosted.com (PPS) with ESMTPS id 3ew4pcjrdv-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 22 Mar 2022 09:38:15 +0100
+Received: from SVEX01011.wago.local (10.1.103.229) by SVEX01012.wago.local
+ (10.1.103.230) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Mar
+ 2022 09:38:11 +0100
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (10.1.103.197) by
+ outlook.wago.com (10.1.103.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21 via Frontend
+ Transport; Tue, 22 Mar 2022 09:38:11 +0100
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=imSNcRerjLTuE+vw+OcdakaGBL2Os4ZPTFfEoemFqA2B6gkyhToXdBeklJOCaH+SyP+oqoExxpS5k0MvPU0RvIgW6JKh8h6oVvuSywscoou1rDxfZd3nXpdwKQr3KMMIv42OBpOV4pO+f+CiEeCOelMOmZ7xF10Jfn13X6Mjt89aSVMOWmlDHwt/0d4dhld8mUjyaEh0RWmeaPX7Vw/m6W2wOfgqAHX48Wwb8+Y8TXsw+7JFWhYNLlz/EV99ZGNrLaYRxFELybNRqLIDRsqCv1iomCU80jiN7nLKWkVNE6Pa6RK+h/F1uRfeO0or1xs1ePPm+Ju4up85lIAAiuT4pA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=elVzu5WuorUrXPjdwDvy+4PkktuOvgFO/qlSv0qRYRo=;
+ b=mCmMsvH2VeQKn0jXLlt2hamjPdyZSP55ii7i9oz5J6GKzwiLQh5m6+7mkWHIr2vsErHViCxgECz/r6rku2GmXNiuZz2gohH8SkKDFQup7N0JsjXX+9Gz0iZImJGKV2r/jYt7N6MQvCk2vUe8Wag75oz1wx2RphXruklOzdwMnD8Ti1KnJ+MxLzB06jm+eGW2MhO50Q5JunlTweqB0LKoT1I5VxQ+H2Af0qXjSh3cNWH0N5X2arhtJlEX0QZUV+6aaFmOA20X5MzCfZgR8w53p4YGITfzolhFVqbh4xsEzE8Xd+wn+MLotGptF7HVmeYD6BOZsMDwq/b6h8o4UxnLaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wago.com; dmarc=pass action=none header.from=wago.com;
+ dkim=pass header.d=wago.com; arc=none
+Received: from DB8PR08MB5097.eurprd08.prod.outlook.com (2603:10a6:10:38::15)
+ by AM6PR08MB3686.eurprd08.prod.outlook.com (2603:10a6:20b:8d::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.22; Tue, 22 Mar
+ 2022 08:38:10 +0000
+Received: from DB8PR08MB5097.eurprd08.prod.outlook.com
+ ([fe80::cc57:a7c3:cf03:e4cb]) by DB8PR08MB5097.eurprd08.prod.outlook.com
+ ([fe80::cc57:a7c3:cf03:e4cb%6]) with mapi id 15.20.5081.023; Tue, 22 Mar 2022
+ 08:38:10 +0000
+From:   =?iso-8859-1?Q?Sondhau=DF=2C_Jan?= <Jan.Sondhauss@wago.com>
+To:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>
+CC:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        =?iso-8859-1?Q?Sondhau=DF=2C_Jan?= <Jan.Sondhauss@wago.com>
+Subject: [PATCH] drivers: watchdog: omap_wdt: ensure working trigger pattern
+Thread-Topic: [PATCH] drivers: watchdog: omap_wdt: ensure working trigger
+ pattern
+Thread-Index: AQHYPcgpzFMATYhehkq/vc00jmQNSw==
+Date:   Tue, 22 Mar 2022 08:38:10 +0000
+Message-ID: <20220322083754.50322-1-jan.sondhauss@wago.com>
+Accept-Language: en-DE, en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cf5ede94-caf5-4989-ac9c-08da0bdf4bd9
+x-ms-traffictypediagnostic: AM6PR08MB3686:EE_
+x-microsoft-antispam-prvs: <AM6PR08MB368629A39C9AD4D91FB469AB8A179@AM6PR08MB3686.eurprd08.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GI0a18pMvuXIlZiQPiAPJnF3jo0yFy+wd31aHVnPcf3a09i9EL/AR992XdDDZ3TmG3VmEiH2gQAdFcquPRTiCiRzLuwxlmvyVu/UAzEoMUgrHDtjwYFwNVqvp3pUeQUPwGMgLtAq4PygK7fMGQYrOe5CWaKDglAKVMHVWQDYVuTXZkqvsf30zEx0bNzmYwtOWMN0eE7U9Sj09noQcQEoMmgyj9GE+IMzxWQln3fR77vWH98NodBqRFEEyw73LI+1BQ5133x4CDLdH9c/uf3LytYesBbCwgSvb4WZWzdaZWU+XU6id+RSEsi8+baSqrg3Al6T7XUVyzza7g/LnJxYeN61a9DKeXrRDAGcYeAR+OIKkJs+SXn9dqyykbxOFGtAFWXVha8SJw7Io8tZNBKXHoRpMe0KVqvS9dedOvvfsdFsayn4zOvWdiBqiypj77NNQLziQ2JkG6Xm0AbEiT706tB5YXw+OlsjXVLrd4h8dtPIMSUTZ0YfX7KzgHkyCR71tXuX4ZVDUDO1s3AICv5AYnuYOZvVfbY4KG1rw58QzjXc6jhyMOXv230/1CHrQjibUqZi+SsccyYUyQVTdsefRYIV7aQnqjVi3Fo4QJNZFkRh47zVV4NKqfT6YXIvGPmjaiezJiMxTHqQMO9NvXHSNyz/ZJH/upti8CNzhdjOZFtBr1NENzfOgbOjTiUCEKgO6DnYsXUyFGkvqEOq9yO1TQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR08MB5097.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(1076003)(2616005)(8676002)(64756008)(38070700005)(66556008)(76116006)(91956017)(66476007)(38100700002)(66446008)(26005)(4326008)(316002)(8936002)(83380400001)(186003)(5660300002)(86362001)(107886003)(54906003)(2906002)(6506007)(6512007)(71200400001)(122000001)(110136005)(6486002)(508600001)(36756003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?tWHETDR1PVAPOp2kPsn1kGjqvaebeZ59Y8l+FxRkfXcH/1QwX0FpHUySc/?=
+ =?iso-8859-1?Q?iD39U4i3b1EtL+88OAj43OM/Lkcc8AIpCj2zR99ghtSS9uSk3sZXevnFFL?=
+ =?iso-8859-1?Q?oYz6sT5bCBT0jdwnqTI7FYIzXvtASgozQpMLGhqP0Cp+oa2/37qzivRnB8?=
+ =?iso-8859-1?Q?WKthLmOvGAb7DgXC4OlmEWMzPFvHiwe8qbODpchdgNAIRGQ09ChWJ0EvFy?=
+ =?iso-8859-1?Q?RWj7LoBMtEeg+HggLvtcB98xGBwdvQA+23F8RXqJpmCwTpN4934T4L3MCW?=
+ =?iso-8859-1?Q?ChOsqrGqwFXFO7XE+uP6Y7q+PuEis8EZWnptI6XBreZZBXSdNrEgbn0JCQ?=
+ =?iso-8859-1?Q?S+9d09dcHmL1hZRfbJyIfX67asYndZCU270Ni6WZ78KkDf/qu7IzMoSgWm?=
+ =?iso-8859-1?Q?hOt1v7TD1VQ3cG8FXk0adiAgq6vWiD5UJ8GZICe748RzUtJjPj+Vu81IZl?=
+ =?iso-8859-1?Q?6/QNIgqhWaV6w7n4zJbwaMwjcxS/vEdUXae9JEDEIlLTEGSzax6atBYiFp?=
+ =?iso-8859-1?Q?rbu8r4HulWJ1BOzIFHj3T7GWTFFhl9eNyrQEro/+zFfxZ8+cPhE8tQc8mB?=
+ =?iso-8859-1?Q?UwHXcfh8Mlcljq4l9hA2JOFOg6dZpRzwKFTR4Kadnw5DhfTtLVjP8YvVnK?=
+ =?iso-8859-1?Q?ohknHQivZXtdzSdBIfxXX1dFNwfBsOrt7riMc+tR066tDkXFx+NqTRXS5y?=
+ =?iso-8859-1?Q?ZPyWKfivzAWtjjexuOfCY7nf/XO25XrlIm6e+rBK25AnBS2UzQAyVbHCEw?=
+ =?iso-8859-1?Q?+YflaaTX2zW1RMCGBJKPooKTUXVqEkzlIZF06YUscY1DtXkNlY06TuzPB5?=
+ =?iso-8859-1?Q?DEqFz7iLP52xovXp6HZj15i7z6ko/WHEapDBeKiePNBmplXrk14/I1NShX?=
+ =?iso-8859-1?Q?FnPVrBWDGJl1q65Y+RVQxK6alxfhhYrYix/t1dBjqKa8GhccwBf+7SpLfV?=
+ =?iso-8859-1?Q?EoXJ8h04vVxgEknsaTZD+yFbScf1LI7r4vaCAx3yzn2JRV2RjBFgDvYfjV?=
+ =?iso-8859-1?Q?UjHRNZ9zaKzeB5b85E20DMwUvMazjMPN4Z+2sLWlHpYaOL4XmDyWehsCsg?=
+ =?iso-8859-1?Q?7l8SCPPEzPD14Hxwfp86sghj5g7V8tsNRkA+Yeouayi1zh7Ouz+GWBOP5L?=
+ =?iso-8859-1?Q?sezYgUw7Ssk+cZzlToS4bwwATxvtibii9Oh6R2QoYSwRicZlK95qLTKvvW?=
+ =?iso-8859-1?Q?9eBZalbYdE/iwQ3U4/QaO/lhcarFH200TbyRuXbSpM4w0b8C2AQ0DQ3jUk?=
+ =?iso-8859-1?Q?BO2/kQ+5un3IL7+0iYFkL4jlJLVbFj0ZQavueKwZdfgF8eByD+dtQvkdCI?=
+ =?iso-8859-1?Q?myPTgsMHp0hLrltDfG7/XeUCWu4XkdNQ9mPFrvkAkCPvo8UpZiAYBPfs4Z?=
+ =?iso-8859-1?Q?sVxw0TdEjVVjBgKsWNOhtnr73e2DTrOnm8OBzf7Gd83z+JQtbIJoraCFVe?=
+ =?iso-8859-1?Q?5UQw0MS5OuC2ecOGG/W1ZYrO3vyfs7g0zZWaHpoIbMBWJpwYSW1dTjT2OJ?=
+ =?iso-8859-1?Q?GvT6hX2xuB/r8WfVchsgvqaNYhALSo7Zb8YgP4YNu91Q=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR08MB5097.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf5ede94-caf5-4989-ac9c-08da0bdf4bd9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2022 08:38:10.3109
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e211c965-dd84-4c9f-bc3f-4215552a0857
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qPLZNH/Eh0hyqXhtHLzLkmyEwOW9r7fL1p+5mUiDvd2YcbgeLqko5sNjuyDwA1CfQjvjkVrkqMbsjSIYSwxxqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB3686
+X-OriginatorOrg: wago.com
+X-KSE-ServerInfo: SVEX01012.wago.local, 9
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 22.03.2022 06:23:00
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Proofpoint-GUID: 1kd06pYsM9zT21Nebm3FZeg6aIMce3WK
+X-Proofpoint-ORIG-GUID: 1kd06pYsM9zT21Nebm3FZeg6aIMce3WK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-22_02,2022-03-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ clxscore=1011 adultscore=0 mlxlogscore=999 priorityscore=1501
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203220052
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-qianfan <qianfanguijin@163.com> writes:
+When the watchdog is initialized and triggered before the kernel runs,
+it must be ensured that the kernel uses a different trigger pattern.
+Otherwise the watchdog cannot be kicked.
 
-> Hi:
->
-> I am tesing usb storage on linux v5.15, found that the system is resetting when the
-> usb storage(fat32 format) was removed while copying. Besides my custom board
-> has a gpio-watchdog with 1.6s timeout.
+Reading the current counter reload trigger pattern from the watchdog
+hardware during probing makes sure that the trigger pattern is different
+from the one previously used.
 
-Looks like I/O error by unplugging usb while reading data pages for
-readahead, then your watchdog detected some state to reset system.
+Signed-off-by: Jan Sondhauss <jan.sondhauss@wago.com>
+---
+ drivers/watchdog/omap_wdt.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-If you disabled watchdog, it works as normal soon or later? If so, FAT
-would not be able to do much (maybe ratelimit I/O error to mitigate
-serial console overhead), request is from userspace or upper layer in
-kernel.
-
-Thanks.
-
-> Next is the console(ttyS0, 115200) logs when usb disconnected:
->
-> [   62.213788] usb 1-1: USB disconnect, device number 2
-> [   62.221589] blk_update_request: I/O error, dev sda, sector 16447 op 0x1:(WRITE)
-> flags 0x100000 phys_seg 1 prio class 0
-> [   62.232990] Buffer I/O error on dev sda1, logical block 16385, lost async page
-> write
-> [   62.266159] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.271985] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.277828] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.283520] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.289219] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.294930] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.300595] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.306286] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.311964] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.317678] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.323376] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.329078] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.334773] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.340437] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.346139] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.351818] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.357506] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.363184] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.368872] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.374568] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.380233] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.385944] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.391623] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.397309] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.402987] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.408679] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.414384] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.420052] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.425746] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.431424] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.437120] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.442798] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.448501] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.454181] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.459869] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.465558] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.471224] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.476918] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.482598] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.488291] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.493970] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.499670] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.505362] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.511026] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.516715] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.522394] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.528084] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.533762] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.539448] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.545140] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.550804] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.556492] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.562170] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.567861] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.573541] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.579231] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.584923] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.590587] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.596277] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.601955] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.607653] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.613332] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.619018] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.624710] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.630393] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.636086] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.641763] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.647449] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.653127] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.658812] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.664503] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.670167] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.675857] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.681540] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.687227] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.692905] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.698590] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.704268] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.709953] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.715667] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.721333] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.727026] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.732709] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.738396] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.744074] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.749761] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.755451] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.761115] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.766806] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.772485] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.778172] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.783854] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.789540] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.795231] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.800896] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.806601] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.812281] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.817968] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.823646] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.829345] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.835043] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.840710] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.846400] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.852078] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.857766] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.863445] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.869130] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.874822] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.880487] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.886189] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.891869] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.897555] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.903234] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.908919] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.914610] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.920274] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.925963] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.931642] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.937344] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.943023] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.948710] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.954401] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.960065] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.965754] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.971431] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.977116] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.982797] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.988489] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.994168] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   62.999853] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.005541] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.011205] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.016895] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.022573] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.028258] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.033937] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.039635] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.045344] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.051009] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.056700] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.062378] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.068064] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.073742] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.079427] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.085121] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.090813] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.096505] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.102183] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.107869] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.113547] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.119243] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.124943] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.130607] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.136299] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.141982] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.147679] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.153358] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.159057] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.164749] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.170413] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.176112] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.181789] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.187477] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.193158] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.198851] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.204544] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.210208] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.215897] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.221575] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.227260] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.232937] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.238625] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.244325] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.249991] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.255681] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.261345] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.267047] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.272728] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.278415] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.284094] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.289787] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.295484] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.301149] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.306839] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.312516] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.318200] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.323877] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.329563] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.335253] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.340919] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.346612] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.352290] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.357975] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.363653] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.369338] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.375041] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.380706] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.386395] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.392074] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.397765] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.403444] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.409130] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.414820] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.420485] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.426173] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.431850] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.437535] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.443214] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.448911] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.454604] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.460268] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.465957] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.471635] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.477321] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.482998] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.488694] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.494388] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.500058] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.505748] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.511425] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.517110] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.522788] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.528474] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.534152] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.539836] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.545525] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.551194] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.556884] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.562562] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.568247] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.573925] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.579610] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.585301] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.590966] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.596667] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.602350] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.608037] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.613715] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.619400] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.625091] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.630755] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.636445] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.642122] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.647809] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.653491] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.659178] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.664868] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.670532] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.676229] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.681908] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.687594] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.693275] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.698961] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.704668] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.710333] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.716024] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.721701] FAT-fs (sda1): FAT read failed (blocknr 1162)
-> [   63.727387▒
-> U-Boot SPL 2022.01-rc1-00183-gfa5b4e2d19 (Feb 24 2022 - 15:48:38 +0800)
-> Trying to boot from NAND
->
-> I add a backtrace on function "fat_ent_bread", next is the stack:
->
-> [   62.129550] usb 1-1: USB disconnect, device number 2
-> [   62.137279] blk_update_request: I/O error, dev sda, sector 16447 op 0x1:(WRITE)
-> flags 0x100000 phys_seg 1 prio class 0
-> [   62.148725] Buffer I/O error on dev sda1, logical block 16385, lost async page
-> write
-> [   62.179800] ------------[ cut here ]------------
-> [   62.184749] WARNING: CPU: 0 PID: 362 at fs/fat/fatent.c:110
-> fat_ent_bread+0xec/0x104
-> [   62.193072] fat_ent_bread
-> [   62.193081] Modules linked in:
-> [   62.199103] CPU: 0 PID: 362 Comm: gzip Not tainted
-> 5.15.0-00013-g0ccd7df8f5ad-dirty #132
-> [   62.207610] Hardware name: Generic AM33XX (Flattened Device Tree)
-> [   62.214024] [<c0111438>] (unwind_backtrace) from [<c010b9f4>]
-> (show_stack+0x10/0x14)
-> [   62.222186] [<c010b9f4>] (show_stack) from [<c0adc214>]
-> (dump_stack_lvl+0x40/0x4c)
-> [   62.230165] [<c0adc214>] (dump_stack_lvl) from [<c0136264>]
-> (__warn+0xf0/0x104)
-> [   62.237858] [<c0136264>] (__warn) from [<c01362ec>]
-> (warn_slowpath_fmt+0x74/0xbc)
-> [   62.245722] [<c01362ec>] (warn_slowpath_fmt) from [<c042cdd0>]
-> (fat_ent_bread+0xec/0x104)
-> [   62.254321] [<c042cdd0>] (fat_ent_bread) from [<c042d4f8>]
-> (fat_ent_read+0x1c8/0x258)
-> [   62.262550] [<c042d4f8>] (fat_ent_read) from [<c0428b48>]
-> (fat_get_cluster+0x214/0x394)
-> [   62.270982] [<c0428b48>] (fat_get_cluster) from [<c0428d70>]
-> (fat_get_mapped_cluster+0xa8/0x190)
-> [   62.280221] [<c0428d70>] (fat_get_mapped_cluster) from [<c0431cf8>]
-> (fat_get_block+0x60/0x310)
-> [   62.289277] [<c0431cf8>] (fat_get_block) from [<c033622c>]
-> (do_mpage_readpage+0x298/0x92c)
-> [   62.297973] [<c033622c>] (do_mpage_readpage) from [<c0336960>]
-> (mpage_readahead+0xa0/0x154)
-> [   62.306751] [<c0336960>] (mpage_readahead) from [<c02725d4>]
-> (read_pages+0x80/0x244)
-> [   62.314878] [<c02725d4>] (read_pages) from [<c02728f0>]
-> (page_cache_ra_unbounded+0x158/0x210)
-> [   62.323818] [<c02728f0>] (page_cache_ra_unbounded) from [<c02628e4>]
-> (filemap_readahead+0x64/0x8c)
-> [   62.333222] [<c02628e4>] (filemap_readahead) from [<c0268024>]
-> (filemap_read+0x55c/0x9f4)
-> [   62.341802] [<c0268024>] (filemap_read) from [<c02e69d0>]
-> (vfs_read+0x278/0x2f8)
-> [   62.349573] [<c02e69d0>] (vfs_read) from [<c02e6f08>]
-> (ksys_read+0xa8/0xd8)
-> [   62.356878] [<c02e6f08>] (ksys_read) from [<c0100080>]
-> (ret_fast_syscall+0x0/0x48)
-> [   62.364818] Exception stack(0xc2b8dfa8 to 0xc2b8dff0)
-> [   62.370116] dfa0:                   00000000 00000000 00000000 004f1144 00003ffc
-> ffffffff
-> [   62.378685] dfc0: 00000000 00000000 004f1144 00000003 004ee6bc 00000009
-> 00000004 6232e5a0
-> [   62.387252] dfe0: 00000000 be973b4c 0041ea7c b6ec2af8
-> [   62.392732] ---[ end trace 28fb7741fb0db033 ]---
->
-> I can't detect wether this problem is caused by fat(maybe fs) or usb.
->
-> Thanks.
->
-
--- 
-OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+diff --git a/drivers/watchdog/omap_wdt.c b/drivers/watchdog/omap_wdt.c
+index 74d785b2b478..680a34588425 100644
+--- a/drivers/watchdog/omap_wdt.c
++++ b/drivers/watchdog/omap_wdt.c
+@@ -85,6 +85,13 @@ static void omap_wdt_reload(struct omap_wdt_dev *wdev)
+ 	/* reloaded WCRR from WLDR */
+ }
+=20
++static void omap_wdt_init_trgr_pattern(struct omap_wdt_dev *wdev)
++{
++	void __iomem    *base =3D wdev->base;
++
++	wdev->wdt_trgr_pattern =3D readl_relaxed(base + OMAP_WATCHDOG_TGR);
++}
++
+ static void omap_wdt_enable(struct omap_wdt_dev *wdev)
+ {
+ 	void __iomem *base =3D wdev->base;
+@@ -238,7 +245,6 @@ static int omap_wdt_probe(struct platform_device *pdev)
+=20
+ 	wdev->omap_wdt_users	=3D false;
+ 	wdev->dev		=3D &pdev->dev;
+-	wdev->wdt_trgr_pattern	=3D 0x1234;
+ 	mutex_init(&wdev->lock);
+=20
+ 	/* reserve static register mappings */
+@@ -253,6 +259,8 @@ static int omap_wdt_probe(struct platform_device *pdev)
+ 	wdev->wdog.timeout =3D TIMER_MARGIN_DEFAULT;
+ 	wdev->wdog.parent =3D &pdev->dev;
+=20
++	omap_wdt_init_trgr_pattern(wdev);
++
+ 	watchdog_init_timeout(&wdev->wdog, timer_margin, &pdev->dev);
+=20
+ 	watchdog_set_nowayout(&wdev->wdog, nowayout);
+--=20
+2.35.1
