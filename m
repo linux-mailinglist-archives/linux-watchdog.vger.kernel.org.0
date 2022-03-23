@@ -2,154 +2,146 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CDB4E49E4
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Mar 2022 01:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DA04E4EC7
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Mar 2022 09:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240837AbiCWAGZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 22 Mar 2022 20:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
+        id S242972AbiCWI7Z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 23 Mar 2022 04:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236559AbiCWAGY (ORCPT
+        with ESMTP id S237212AbiCWI7Y (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 22 Mar 2022 20:06:24 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9CB5DE75
-        for <linux-watchdog@vger.kernel.org>; Tue, 22 Mar 2022 17:04:55 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 8524F5D131
-        for <linux-watchdog@vger.kernel.org>; Tue, 22 Mar 2022 19:04:54 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id WoUgnD4Vxdx86WoUgnxllg; Tue, 22 Mar 2022 19:04:54 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9qinQlsidghVtceQvZk5+L7j2X96kkQsiTPjZ9J4fcM=; b=IWO9tUoOpc7Z5gIPbS6ezytqOs
-        4XCl8BtLmQHx/kksQGGQxk41pi91aZCOzDs9Q6kkVhAQX0UQwMEoQOLmXAf4iTDqkQKmo/Xh16R7f
-        BliKmD3DMno9dIe2v+y998HTAEg4uzs3djJoqRYsirTAK3ZpuLdaq3CELNxlawOU48I+hAWfIXMEd
-        uZfG+tiBppuXm6wcnCiP80aPkJBui0BSQ9Xrh5CUjZ7FjoPxrkKyqOnLg7E1/xTfw8wwVypnxcjGk
-        hkB+fgXhgHAJuYqHXdbznGKWDrqhqgtyO7Zoza0NAIndPTvUUzDmai3jfpkTElsHT8OSyDVARNzpR
-        fcocgXgA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54408)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nWoUg-002pNL-2q; Wed, 23 Mar 2022 00:04:54 +0000
-Message-ID: <8b41a486-92af-2f2d-ba05-205650a90ee2@roeck-us.net>
-Date:   Tue, 22 Mar 2022 17:04:53 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Tobias Waldekranz <tobias@waldekranz.com>,
+        Wed, 23 Mar 2022 04:59:24 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F55F72E07
+        for <linux-watchdog@vger.kernel.org>; Wed, 23 Mar 2022 01:57:52 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bu29so1603052lfb.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 23 Mar 2022 01:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=+qaXC3e57Tiy30ZXHo3R6JiVE4H5pqyKCj5fJD4m4ys=;
+        b=zqNNso2fFQIURdKn+WCA/vJQdsxFIVL22/L/nbroH9TaQ5BMjR9n+6Qg4QmAR/7Q4b
+         jxP6IL+fSjauUtN0GUsgR5rScJGv/jpBLVydr0e7AG0CmeTB6iIgC8goReiBaudA8nC0
+         lmIS4pgYLY4nqwCxRznov31I79k3xiuaCGMqac26PV9V8Nwp/dA7Ri/tqKwsNpX9OL1W
+         EJuMCxFR4sx2DB+N+ZVNRgrrSfGWuynXnK4FIFTBgC2miCWqxn1o4apcFsxQcoVyQIL7
+         XnhlHsW+2m6Xzvk25IsPVBqYFOCE1YNoPHHrO+PX8+Fa+35BE7DUFrVAyhHOdEoTdF5d
+         9qdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=+qaXC3e57Tiy30ZXHo3R6JiVE4H5pqyKCj5fJD4m4ys=;
+        b=ySsUIwlGPhpI7DHfuFYeRuiWukPXS5kwgccd0/EvSniDGphBQf94u9HTH2pnWuL0ll
+         ixOxUEbhSQ1F+3FrJ4A9fpzcoP9X8vaNY0vt0MUbMYSJLkKU7OFJ96X578jW4E/SU3Pz
+         I2kWeIz2wc5DubppMyCGg/4BSvPUldUVXO7Uu8jCc+5UIzg5Olk0uM2OQtjgAw7ujOGx
+         rn8muro5h5pRk+pGXiGRK/+Tyi1MVpihC0493pKhav1CM2EYcEsT/fdsVe3IH3fM9dka
+         emv2IQXP9NnC4wRtCJS6Ru9UOjMCbILL6pBDzZ+b15C9nJ5Uh9WhKN9dUJDJlwDGWykU
+         T1+w==
+X-Gm-Message-State: AOAM5308e9Z4HWIAcXbXxDaLEN05j1k6kb7sPGK3wbVjp73rmrOgn3Wj
+        DqJQZRKdi/8GfXSzheMJut3FRm31qG/WdQ==
+X-Google-Smtp-Source: ABdhPJx/2cLioJKyQq21MTxnrumXwt4HgT60/HKz/TXrfghvo/u6E3itGwmET3Nei+dOXQ78PmJ4Pw==
+X-Received: by 2002:a05:6512:1585:b0:445:908b:ad71 with SMTP id bp5-20020a056512158500b00445908bad71mr20542778lfb.200.1648025870850;
+        Wed, 23 Mar 2022 01:57:50 -0700 (PDT)
+Received: from wkz-x280 (a124.broadband3.quicknet.se. [46.17.184.124])
+        by smtp.gmail.com with ESMTPSA id y23-20020a2e95d7000000b00247e4e386aasm2684910ljh.121.2022.03.23.01.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 01:57:49 -0700 (PDT)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220322222911.519238-1-tobias@waldekranz.com>
-From:   Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH] watchdog: gpio_wdt: Support GPO lines with the toggle
  algorithm
-In-Reply-To: <20220322222911.519238-1-tobias@waldekranz.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nWoUg-002pNL-2q
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54408
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <8b41a486-92af-2f2d-ba05-205650a90ee2@roeck-us.net>
+References: <20220322222911.519238-1-tobias@waldekranz.com>
+ <8b41a486-92af-2f2d-ba05-205650a90ee2@roeck-us.net>
+Date:   Wed, 23 Mar 2022 09:57:49 +0100
+Message-ID: <87tubphwqa.fsf@waldekranz.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/22/22 15:29, Tobias Waldekranz wrote:
-> Support using GPO lines (i.e. GPIOs that are output-only) with
-> gpio_wdt using the "toggle" algorithm.
-> 
-> Since its inception, gpio_wdt has configured its GPIO line as an input
-> when using the "toggle" algorithm, even though it is used as an output
-> when kicking. This needlessly barred hardware with output-only pins
-> from using the driver.
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
-> 
-> Hi,
-> 
-> This patch has been in our downstream tree for a long time. We need it
-> because our kick GPIO can't be used as an input.
-> 
-> What I really can't figure out is why the driver would request the pin
-> as in input, when it's always going to end up being used as an output
-> anyway.
-> 
-> So I thought I'd send it upstream in the hopes of either getting it
-> merged, or an explanation as to why it is needed.
-> 
+On Tue, Mar 22, 2022 at 17:04, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 3/22/22 15:29, Tobias Waldekranz wrote:
+>> Support using GPO lines (i.e. GPIOs that are output-only) with
+>> gpio_wdt using the "toggle" algorithm.
+>> 
+>> Since its inception, gpio_wdt has configured its GPIO line as an input
+>> when using the "toggle" algorithm, even though it is used as an output
+>> when kicking. This needlessly barred hardware with output-only pins
+>> from using the driver.
+>> 
+>> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+>> ---
+>> 
+>> Hi,
+>> 
+>> This patch has been in our downstream tree for a long time. We need it
+>> because our kick GPIO can't be used as an input.
+>> 
+>> What I really can't figure out is why the driver would request the pin
+>> as in input, when it's always going to end up being used as an output
+>> anyway.
+>> 
+>> So I thought I'd send it upstream in the hopes of either getting it
+>> merged, or an explanation as to why it is needed.
+>> 
+>
+> I _think_ the assumption / idea was that "toggle" implies that the output
+> is connected to a pull-up resistor and that the pin either floats or is
+> pulled down to ground, causing the signal to toggle. I don't know if/how
+> that works in practice, though.
 
-I _think_ the assumption / idea was that "toggle" implies that the output
-is connected to a pull-up resistor and that the pin either floats or is
-pulled down to ground, causing the signal to toggle. I don't know if/how
-that works in practice, though.
+Ah I see. Yeah I'm not sure it has the intended effect. AFAIK, that type
+of connection should be specified using the GPIOD_OUT_LOW_OPEN_DRAIN
+flag, no?
 
-Guenter
+Beyond that though, it seems unnecessary for the driver to impose that
+restriction. If an open drain configuration is required on the GPIO,
+then I think that should be specified via the device tree. Looking at
+some code, gpiod_configure_flags seems to support this:
 
->   drivers/watchdog/gpio_wdt.c | 13 +++++--------
->   1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
-> index 0923201ce874..f7686688e0e2 100644
-> --- a/drivers/watchdog/gpio_wdt.c
-> +++ b/drivers/watchdog/gpio_wdt.c
-> @@ -108,7 +108,6 @@ static int gpio_wdt_probe(struct platform_device *pdev)
->   	struct device *dev = &pdev->dev;
->   	struct device_node *np = dev->of_node;
->   	struct gpio_wdt_priv *priv;
-> -	enum gpiod_flags gflags;
->   	unsigned int hw_margin;
->   	const char *algo;
->   	int ret;
-> @@ -122,17 +121,15 @@ static int gpio_wdt_probe(struct platform_device *pdev)
->   	ret = of_property_read_string(np, "hw_algo", &algo);
->   	if (ret)
->   		return ret;
-> -	if (!strcmp(algo, "toggle")) {
-> +
-> +	if (!strcmp(algo, "toggle"))
->   		priv->hw_algo = HW_ALGO_TOGGLE;
-> -		gflags = GPIOD_IN;
-> -	} else if (!strcmp(algo, "level")) {
-> +	else if (!strcmp(algo, "level"))
->   		priv->hw_algo = HW_ALGO_LEVEL;
-> -		gflags = GPIOD_OUT_LOW;
-> -	} else {
-> +	else
->   		return -EINVAL;
-> -	}
->   
-> -	priv->gpiod = devm_gpiod_get(dev, NULL, gflags);
-> +	priv->gpiod = devm_gpiod_get(dev, NULL, GPIOD_OUT_LOW);
->   	if (IS_ERR(priv->gpiod))
->   		return PTR_ERR(priv->gpiod);
->   
+	if (lflags & GPIO_OPEN_DRAIN)
+		set_bit(FLAG_OPEN_DRAIN, &desc->flags);
+	else if (dflags & GPIOD_FLAGS_BIT_OPEN_DRAIN) {
+		/*
+		 * This enforces open drain mode from the consumer side.
+		 * This is necessary for some busses like I2C, but the lookup
+		 * should *REALLY* have specified them as open drain in the
+		 * first place, so print a little warning here.
+		 */
+		set_bit(FLAG_OPEN_DRAIN, &desc->flags);
+		gpiod_warn(desc,
+			   "enforced open drain please flag it properly in DT/ACPI DSDT/board file\n");
+	}
 
+In other words, a DT node like this...
+
+	&watchdog {
+		compatible = "linux,wdt-gpio";
+        	gpios = <&my-gpio 42 GPIO_ACTIVE_HIGH>;
+	};
+
+...the GPIO will behave like it does with the "level" algo today. If an
+open-drain config is required, using this binding...
+
+	&watchdog {
+		compatible = "linux,wdt-gpio";
+        	gpios = <&my-gpio 42 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>;
+	};
+
+...will give you that.
+
+In other words, with this patch applied, the setup of the GPIO is
+completely deferred to the device tree. In the general case, my guess is
+that who ever wrote that has a better chance of specifying the correct
+flags.
