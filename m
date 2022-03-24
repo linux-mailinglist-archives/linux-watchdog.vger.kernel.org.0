@@ -2,335 +2,179 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3214E5D80
-	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Mar 2022 04:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B1E4E5D98
+	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Mar 2022 04:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245227AbiCXDVg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 23 Mar 2022 23:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
+        id S1348021AbiCXDh5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 23 Mar 2022 23:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347973AbiCXDVX (ORCPT
+        with ESMTP id S1348006AbiCXDhz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 23 Mar 2022 23:21:23 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EE6E1DA55
-        for <linux-watchdog@vger.kernel.org>; Wed, 23 Mar 2022 20:19:41 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7839:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Thu, 24 Mar 2022 11:18:06 +0800 (CST)
-From:   Xiantao Hu <xt.hu@cqplus1.com>
-To:     krzk@kernel.org, wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
-        Xiantao Hu <xt.hu@cqplus1.com>
-Subject: [PATCH v8 2/2] watchdog: Add watchdog driver for Sunplus SP7021
-Date:   Thu, 24 Mar 2022 11:18:05 +0800
-Message-Id: <20220324031805.61316-3-xt.hu@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220324031805.61316-1-xt.hu@cqplus1.com>
-References: <20220324031805.61316-1-xt.hu@cqplus1.com>
+        Wed, 23 Mar 2022 23:37:55 -0400
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0721939AE
+        for <linux-watchdog@vger.kernel.org>; Wed, 23 Mar 2022 20:36:24 -0700 (PDT)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 6EADB40EB56B
+        for <linux-watchdog@vger.kernel.org>; Wed, 23 Mar 2022 22:36:24 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id XEGunkea1dx86XEGunTTy2; Wed, 23 Mar 2022 22:36:24 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=YY7UYODrYfO6ZFztsolGDQLqpCq4yPVE6i5YAfHYLoI=; b=Lu6DKMvESPCdgSTJ80ut4y2GR3
+        nI9Sd3kX26GC0KMddmbyXOkSrwlSGYeWxLJqMgtxRN54PhZGniVjoDaxFO5+0hjXH0Dj4+UxxnUyB
+        PJEOh6US6naSa4YGzH5OSZJf0O32wh5hmcpOwU7KFKQfSUhMbz2ZT03tNUqaSFm4mrNXT9dU7ELla
+        IhVmQ6V3D66/4sAKYWioQQdDr0fW9Bm/APeoqh4/VVjUSl4q8fJo059vKRpudunBjXyPJOo0X4281
+        IK2lZMEs2dp4wLkBLHNDS4SesyUBzREeaNozE1q3SND5hlBuzCSJZtoTDyU/TyYpIkkv2vypJwB9T
+        sDVXStJw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54414)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nXEGt-002d2j-Qp; Thu, 24 Mar 2022 03:36:23 +0000
+Message-ID: <920c9f2a-77b6-4d68-a7c2-08967fab70cc@roeck-us.net>
+Date:   Wed, 23 Mar 2022 20:36:22 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 1/2] dt-bindings: watchdog: Add watchdog yaml file for
+ Sunplus SP7021
+Content-Language: en-US
+To:     Xiantao Hu <xt.hu@cqplus1.com>, krzk@kernel.org,
+        wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
+        Rob Herring <robh@kernel.org>
+References: <20220324031805.61316-1-xt.hu@cqplus1.com>
+ <20220324031805.61316-2-xt.hu@cqplus1.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220324031805.61316-2-xt.hu@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nXEGt-002d2j-Qp
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54414
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 9
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Sunplus SP7021 requires watchdog timer support.
-Add watchdog driver to enable this.
+On 3/23/22 20:18, Xiantao Hu wrote:
+> This adds the documentation for the devicetree bindings of the Sunplus
+> SP7021 watchdog driver, found from SP7021 SoCs and newer.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
----
-Changse in v8:
- - no change.
 
- MAINTAINERS                    |   1 +
- drivers/watchdog/Kconfig       |  11 ++
- drivers/watchdog/Makefile      |   1 +
- drivers/watchdog/sunplus_wdt.c | 220 +++++++++++++++++++++++++++++++++
- 4 files changed, 233 insertions(+)
- create mode 100644 drivers/watchdog/sunplus_wdt.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index efdc618a0..0ba9e5495 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18549,6 +18549,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
- L:	linux-watchdog@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
-+F:	drivers/watchdog/sunplus_wdt.c
- 
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index c8fa79da2..0639a2dab 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1011,6 +1011,17 @@ config APPLE_WATCHDOG
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called apple_wdt.
- 
-+config SUNPLUS_WATCHDOG
-+	tristate "Sunplus watchdog support"
-+	depends on ARCH_SUNPLUS || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  Say Y here to include support for the watchdog timer
-+	  in Sunplus SoCs.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called sunplus_wdt.
-+
- # X86 (i386 + ia64 + x86_64) Architecture
- 
- config ACQUIRE_WDT
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index f7da867e8..71c933a59 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -95,6 +95,7 @@ obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
- obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
- obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
- obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
-+obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
-new file mode 100644
-index 000000000..e2d8c532b
---- /dev/null
-+++ b/drivers/watchdog/sunplus_wdt.c
-@@ -0,0 +1,220 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * sunplus Watchdog Driver
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co., Ltd.
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/watchdog.h>
-+
-+#define WDT_CTRL		0x00
-+#define WDT_CNT			0x04
-+
-+#define WDT_STOP		0x3877
-+#define WDT_RESUME		0x4A4B
-+#define WDT_CLRIRQ		0x7482
-+#define WDT_UNLOCK		0xAB00
-+#define WDT_LOCK		0xAB01
-+#define WDT_CONMAX		0xDEAF
-+
-+/* TIMEOUT_MAX = ffff0/90kHz =11.65, so longer than 11 seconds will time out. */
-+#define SP_WDT_MAX_TIMEOUT	11U
-+#define SP_WDT_DEFAULT_TIMEOUT	10
-+
-+#define STC_CLK			90000
-+
-+#define DEVICE_NAME		"sunplus-wdt"
-+
-+static unsigned int timeout;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+struct sp_wdt_priv {
-+	struct watchdog_device wdev;
-+	void __iomem *base;
-+	struct clk *clk;
-+	struct reset_control *rstc;
-+};
-+
-+static int sp_wdt_restart(struct watchdog_device *wdev,
-+			  unsigned long action, void *data)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+	writel(WDT_UNLOCK, base + WDT_CTRL);
-+	writel(0x0001, base + WDT_CNT);
-+	writel(WDT_LOCK, base + WDT_CTRL);
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 count;
-+
-+	if (wdev->timeout > SP_WDT_MAX_TIMEOUT) {
-+		/* WDT_CONMAX sets the count to the maximum (down-counting). */
-+		writel(WDT_CONMAX, base + WDT_CTRL);
-+	} else {
-+		writel(WDT_UNLOCK, base + WDT_CTRL);
-+		/*
-+		 * Watchdog timer is a 20-bit down-counting based on STC_CLK.
-+		 * This register bits[16:0] is from bit[19:4] of the watchdog
-+		 * timer counter.
-+		 */
-+		count = (wdev->timeout * STC_CLK) >> 4;
-+		writel(count, base + WDT_CNT);
-+		writel(WDT_LOCK, base + WDT_CTRL);
-+	}
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 val;
-+
-+	val = readl(base + WDT_CNT);
-+	val &= 0xffff;
-+	val = val << 4;
-+
-+	return val;
-+}
-+
-+static const struct watchdog_info sp_wdt_info = {
-+	.identity	= DEVICE_NAME,
-+	.options	= WDIOF_SETTIMEOUT |
-+			  WDIOF_MAGICCLOSE |
-+			  WDIOF_KEEPALIVEPING,
-+};
-+
-+static const struct watchdog_ops sp_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= sp_wdt_start,
-+	.stop		= sp_wdt_stop,
-+	.ping		= sp_wdt_ping,
-+	.get_timeleft	= sp_wdt_get_timeleft,
-+	.restart	= sp_wdt_restart,
-+};
-+
-+static void sp_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static void sp_reset_control_assert(void *data)
-+{
-+	reset_control_assert(data);
-+}
-+
-+static int sp_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct sp_wdt_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk))
-+		return dev_err_probe(dev, PTR_ERR(priv->clk), "Failed to get clock\n");
-+
-+	ret = clk_prepare_enable(priv->clk);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to enable clock\n");
-+
-+	ret = devm_add_action_or_reset(dev, sp_clk_disable_unprepare, priv->clk);
-+	if (ret)
-+		return ret;
-+
-+	/* The timer and watchdog shared the STC reset */
-+	priv->rstc = devm_reset_control_get_shared(dev, NULL);
-+	if (IS_ERR(priv->rstc))
-+		return dev_err_probe(dev, PTR_ERR(priv->rstc), "Failed to get reset\n");
-+
-+	reset_control_deassert(priv->rstc);
-+
-+	ret = devm_add_action_or_reset(dev, sp_reset_control_assert, priv->rstc);
-+	if (ret)
-+		return ret;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	priv->wdev.info = &sp_wdt_info;
-+	priv->wdev.ops = &sp_wdt_ops;
-+	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
-+	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
-+	priv->wdev.min_timeout = 1;
-+	priv->wdev.parent = dev;
-+
-+	watchdog_set_drvdata(&priv->wdev, priv);
-+	watchdog_init_timeout(&priv->wdev, timeout, dev);
-+	watchdog_set_nowayout(&priv->wdev, nowayout);
-+	watchdog_stop_on_reboot(&priv->wdev);
-+	watchdog_set_restart_priority(&priv->wdev, 128);
-+
-+	return devm_watchdog_register_device(dev, &priv->wdev);
-+}
-+
-+static const struct of_device_id sp_wdt_of_match[] = {
-+	{.compatible = "sunplus,sp7021-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
-+
-+static struct platform_driver sp_wdt_driver = {
-+	.probe = sp_wdt_probe,
-+	.driver = {
-+		   .name = DEVICE_NAME,
-+		   .of_match_table = sp_wdt_of_match,
-+	},
-+};
-+
-+module_platform_driver(sp_wdt_driver);
-+
-+MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
-+MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.33.1
+> ---
+> Changes in v8:
+>   - Addressed all comments from Krzysztof Kozlowski.
+>     1.fix the title.
+>     2.fix the lowercase hex in examples.
+> 
+>   .../bindings/watchdog/sunplus,sp7021-wdt.yaml | 47 +++++++++++++++++++
+>   MAINTAINERS                                   |  6 +++
+>   2 files changed, 53 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml b/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> new file mode 100644
+> index 000000000..d90271013
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/sunplus,sp7021-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus SoCs Watchdog
+> +
+> +maintainers:
+> +  - XianTao Hu <xt.hu@cqplus1.com>
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: sunplus,sp7021-wdt
+> +
+> +  reg:
+> +    items:
+> +      - description: watchdog registers regions
+> +      - description: miscellaneous control registers regions
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog: watchdog@9c000630 {
+> +        compatible = "sunplus,sp7021-wdt";
+> +        reg = <0x9c000630 0x08>, <0x9c000274 0x04>;
+> +        clocks = <&clkc 0x24>;
+> +        resets = <&rstc 0x14>;
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cd0f68d4a..efdc618a0 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18544,6 +18544,12 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
+>   F:	drivers/rtc/rtc-sunplus.c
+>   
+> +SUNPLUS WATCHDOG DRIVER
+> +M:	Xiantao Hu <xt.hu@cqplus1.com>
+> +L:	linux-watchdog@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> +
+>   SUPERH
+>   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>   M:	Rich Felker <dalias@libc.org>
 
