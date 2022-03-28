@@ -2,72 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60924E7D2F
-	for <lists+linux-watchdog@lfdr.de>; Sat, 26 Mar 2022 01:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C3A4E8D09
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Mar 2022 06:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiCYVMJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 25 Mar 2022 17:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S236437AbiC1EV6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Mar 2022 00:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233160AbiCYVMI (ORCPT
+        with ESMTP id S233804AbiC1EV4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 25 Mar 2022 17:12:08 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC0313F1B;
-        Fri, 25 Mar 2022 14:10:32 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id q129so9514425oif.4;
-        Fri, 25 Mar 2022 14:10:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2TNPm4s2d/avyYNyKgm5CxLZb9xC2asaX7pXzx+AArg=;
-        b=cgy+ob/SRo1Q8TXRDKbL9YzvHkS36vX62SWvhhqgWXz2wrw2Tdun0pNa/ekFC9sPy8
-         cC9M/AxDfBdQUULWnhZJXu9TryTrIlTKRYM7dx3NEPq1t1YUbvawoe3Z57ubCVe/oxn8
-         +HTQDnE4Hu2JZbzTjdsvg+p8MaYdlAUb+G5U6RCnQXz67pDzH7VWgdwv7FWd39pEWH+F
-         5vXrhCGWj0RkWbo1YAtAmmEOQx2JZ3gVE8JtOrgA0LoWUxuqk8AVHj84Vr9UhaPSn3jK
-         Xi/6QpKfwGvDvR7ShQ6w7usEdHQErn/ybLiX6kBv5P6A4+W3nsGbk3TdGyXaZerTyLCV
-         XYsg==
-X-Gm-Message-State: AOAM5319SO71D9ZsWmzsN5N2j1Jvv+VHqFtVDIzbRA48sQfTqhXnsH4t
-        IS4YZ5iojhI+EoPkCeArzPEOnxmZvg==
-X-Google-Smtp-Source: ABdhPJzcixabbXOwrUOVtS0coroIVjXvK0Wc/6jAmqmd0HOfLzrGJXCVH1qVrBh5a/RGQrQbiaYViw==
-X-Received: by 2002:aca:1712:0:b0:2ec:e1a4:1ad1 with SMTP id j18-20020aca1712000000b002ece1a41ad1mr11155141oii.78.1648242632075;
-        Fri, 25 Mar 2022 14:10:32 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m13-20020a9d7acd000000b005cda59325e6sm3069602otn.60.2022.03.25.14.10.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 14:10:31 -0700 (PDT)
-Received: (nullmailer pid 459339 invoked by uid 1000);
-        Fri, 25 Mar 2022 21:10:30 -0000
-Date:   Fri, 25 Mar 2022 16:10:30 -0500
-From:   Rob Herring <robh@kernel.org>
+        Mon, 28 Mar 2022 00:21:56 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF9D4A912;
+        Sun, 27 Mar 2022 21:20:16 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7D4955C0114;
+        Mon, 28 Mar 2022 00:20:14 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 28 Mar 2022 00:20:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=LWULiqUBy94G+z
+        Vt5d3sDbXHmVDkBVmNPR0kMei1vp4=; b=U8FZF16IK/JaTMPDzm9qioZrE4gK1Q
+        QBhTnK833pkrwvJm5hFCE1Hy3hBuw9NJAqAQEYmkPDaxO1oqF0etgf/XolZj1p6W
+        jXq9rzVWWTqDLpMFxD//8dH4mv3X1te/haSTxVbkw8td+FrpQNFh+EIkqCUcUVYH
+        4IvBRktce+VeFD6P0UK2M2JT+ZDjJanOCAl91+aT5MEQeMzFBlJ+9ZN7U1irZbyG
+        +5Dfi/5vYgicE552nlvL5TIRoNS3SGeETgSALOTjYFvGbVOI5iNqUG6Qcn1abHmP
+        DXCItCjijjJYOWSBP0t2ZaPGWnc2W3X0ZwkuddmzaCYLMTywUy59cxmw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=LWULiqUBy94G+zVt5d3sDbXHmVDkBVmNPR0kMei1v
+        p4=; b=iZtYcskpMu7aXQzeDD9Igr/yA3hzLx1qtL8FKN+N3M19VmS3Pxt4lybeK
+        6LwXNDLTkW2PgUDHalDoFkHrajbGzCjhlG2JDskXgrUok8Hw5H07/3hq0YsYHnNz
+        etuPsGhonr9gipBgnUEabww5Nz+UMsRyczmLJ/omMWhrEUrJ/4aXQ0zxVTSojQJg
+        HoFMKYhB+Xbbisc7DbNrIiYqvs690xxc1vV8yTgndrl3amfIrXVrTCHwyyEIqsk7
+        AmxjBe77KSCppOgCxA3CBXAuxM7tYapqY+DcrrtGE3OW/CE5Zt2JrOTdYntpL5sj
+        Cn1ecuFY2F0kp1eHOsiJh0IuHpYvQ==
+X-ME-Sender: <xms:fTdBYijEn6_dqxoawuoBKj0-WciUuUJ3P840iGP8xN7-OXFSEjlY5w>
+    <xme:fTdBYjCRGB4jF2EsAF9UFmuNVePfzFyg9JPQTNtT5OCbVuogKSUV-JZetQBvNqmPj
+    lv9jXt3jEtQVOlSqQ>
+X-ME-Received: <xmr:fTdBYqFJh1IYkIRwdHQN5IWksfVztlq8qkdpD6jIqhxAHysRfMJNpXpMMlJLqu51yEduV3XSFNeQbBg9sLMOFkZVxWS5LAoaTccL5_WHXpXfS10KJwv9uoHylQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehiedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgfevffetleehffejueekvdekvdeitdehveegfeekheeuieeiueet
+    uefgtedtgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:fTdBYrRrEHMC6Ljq8ZbS_bPqxoO5_o14vgN_-MlrMy6IRIHYP26zlg>
+    <xmx:fTdBYvxX9VwGDl67N41o1kWClIH5OfuMwiv6ngrW126QWTYEMA13Fg>
+    <xmx:fTdBYp56uSbFFiByTLC25a-dCImaz7KKdPH65KKEAiKD3NFCixwKCg>
+    <xmx:fjdBYkIPNcg3CWkoxmY5E7sXPan-3VIgcvnp2KmScA8o-K8S53FRkQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Mar 2022 00:20:12 -0400 (EDT)
+Subject: Re: [PATCH v2 01/12] dt-bindings: watchdog: sunxi: fix F1C100s
+ compatible
 To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        devicetree@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Mesih Kilinc <mesihkilinc@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        George Hilliard <thirtythreeforty@gmail.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
         Jesse Taube <mr.bossman075@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        George Hilliard <thirtythreeforty@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Samuel Holland <samuel@sholland.org>,
-        Icenowy Zheng <icenowy@aosc.io>
-Subject: Re: [PATCH v2 02/12] dt-bindings: watchdog: sunxi: clarify clock
- support
-Message-ID: <Yj4vxqRSKR+rcBLO@robh.at.kernel.org>
+        linux-watchdog@vger.kernel.org
 References: <20220317162349.739636-1-andre.przywara@arm.com>
- <20220317162349.739636-3-andre.przywara@arm.com>
+ <20220317162349.739636-2-andre.przywara@arm.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <0a8f1844-55ed-7672-6e95-d919d31f5237@sholland.org>
+Date:   Sun, 27 Mar 2022 23:20:11 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317162349.739636-3-andre.przywara@arm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220317162349.739636-2-andre.przywara@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,26 +98,10 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 17 Mar 2022 16:23:39 +0000, Andre Przywara wrote:
-> Most Allwinner SoCs have just one input clock to drive the watchdog
-> peripheral. So far this is the 24 MHz "HOSC" oscillator, divided down
-> internally to 32 KHz.
-> The F1C100 series watchdog however uses the unchanged 32 KHz "LOSC" as
-> its only clock input, which has the same effect, but let's the binding
-> description mismatch.
-> 
-> Change the binding description to name the clocks more loosely, so both
-> the LOSC and divided HOSC match the description. As the fixed clock names
-> now make less sense, drop them from SoCs supporting just one clock
-> input, they were not used by any DT anyway.
-> 
-> For the newer SoCs, supporting a choice of two input clocks, we keep
-> both the description and clock-names requirement.
+On 3/17/22 11:23 AM, Andre Przywara wrote:
+> The F1C100 series actually features a newer generation watchdog IP, so
+> the compatible string was wrong.
 > 
 > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  .../watchdog/allwinner,sun4i-a10-wdt.yaml     | 20 ++++++++-----------
->  1 file changed, 8 insertions(+), 12 deletions(-)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
