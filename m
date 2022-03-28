@@ -2,95 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FF94E8D0B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Mar 2022 06:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F2E4E8D93
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Mar 2022 07:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237987AbiC1EV7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Mar 2022 00:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S238201AbiC1Fu1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Mar 2022 01:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235838AbiC1EV6 (ORCPT
+        with ESMTP id S232370AbiC1FuW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Mar 2022 00:21:58 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5616D4F9E5;
-        Sun, 27 Mar 2022 21:20:18 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id AB39B5C0102;
-        Mon, 28 Mar 2022 00:20:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 28 Mar 2022 00:20:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=gcxTe7I+b2cXOh
-        r8iL3p+tFExo38rtxcEnrviRHBb0c=; b=Lwfcip6WRZvpBe5iKnUoEcAQOf0NrB
-        FIZD2NAGhQPIoo9fHCFKDcgcXahWVL8mhpCvsPjGu+xfp5g7Bmyrqie6LGAEx0T/
-        8I3OCP7XWGG+Y/g8zZEtE+IJSbAmcUyMqFaSxVBJVtnaD/RcNBP/zSMmEYwFYbyy
-        AA/2BS5mpYvXaSQnJ1s1OmIa5+BzTw/TVQHEZzaw0hrXa9fA8713U0vGlXybQiyy
-        qrPwSTCK42dQPVsiJ4r+eINgYxZFQYnYXIGRHqN8ZHbkkPi7vazqmN3HB37kKM0B
-        ndaA50vSXVUJwFwhMdPV10vDw1i98iLJdDDff1o6WntWrBI+3L4EkPxw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=gcxTe7I+b2cXOhr8iL3p+tFExo38rtxcEnrviRHBb
-        0c=; b=Lm66+Zocfvrts8tNO1wO43dzCSqNpnXLLLbm1yLSXbl4oIXnYB+LbBUUi
-        0Sz5BY0fAZAFUozh3z+/lIioT9aYnVlhmZp8n1jKh6C3ITDgF/zz/FUtGmSa13HV
-        A5iz5npML08vIrllxqC3W5G0bOZvOW+mpjw7flTN1j8UCnN2Va8zkU86ZGYviCWm
-        A3PkZXQIdIEpMDQNJBu9Cl5nQHhq/V8I0AtAAkhAmvla0RAJYox6bpJdx+lkTrHJ
-        00u9IECYHYoGbFrlNvJfrC4qNALLJbyUwOAi0WW022BpWDZOVRCuVav9CFitPYmP
-        iRKdXpLWHZtPpGBVw9QRgRhX1L0Tw==
-X-ME-Sender: <xms:gTdBYs7XNdLjXr-vMkJjNAophmCJZbnjOOAX2tnGtZ7RkOfmwuS3Rg>
-    <xme:gTdBYt4Srr5_5rjlBp6-NeEamLk0ytt2o5i-N_rVeND9NSup5hNJPWKHf_U0JNC-A
-    6wsVFA8uHCo5hJ8Rg>
-X-ME-Received: <xmr:gTdBYrfUGXXhpD7RDyB0Ex5bdIgA5wR8K7AalFdX323JD61hzmG3_JMLea3xVWS5PNrBF-MLBoCabDEg-b4R6nv9Ricq0YlQSchHU8Juub3XGPc41rTddYYm2A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehiedgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgfevffetleehffejueekvdekvdeitdehveegfeekheeuieeiueet
-    uefgtedtgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:gTdBYhJosyAl8bQxLrtc4FswH6fvp1-qhObOqYgHJznTSl4KIYzfMg>
-    <xmx:gTdBYgJAv-Q2MbbWNrJvx88cxIx2cAQ7exVLAubECQ8PkQgvncHHIg>
-    <xmx:gTdBYiyprneBQmMKIHgMM_PTmFuZ_z88qq5DS1H8BzWPhdlBX-ePzg>
-    <xmx:gTdBYigX5XLCI9p8goEIgnirT6j8DUCNSUheGJrdP20HnPC7qQjfsg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Mar 2022 00:20:16 -0400 (EDT)
-Subject: Re: [PATCH v2 02/12] dt-bindings: watchdog: sunxi: clarify clock
- support
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mesih Kilinc <mesihkilinc@gmail.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Jesse Taube <mr.bossman075@gmail.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        George Hilliard <thirtythreeforty@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org
-References: <20220317162349.739636-1-andre.przywara@arm.com>
- <20220317162349.739636-3-andre.przywara@arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <0d53e8c7-aa32-b19b-87b7-3923354f5a3f@sholland.org>
-Date:   Sun, 27 Mar 2022 23:20:16 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 28 Mar 2022 01:50:22 -0400
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ED0451592;
+        Sun, 27 Mar 2022 22:48:42 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id 9EAEB15F93A;
+        Mon, 28 Mar 2022 14:48:40 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22S5mdSq110033
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 14:48:40 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22S5mdTv426820
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 28 Mar 2022 14:48:39 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 22S5mcVN426819;
+        Mon, 28 Mar 2022 14:48:38 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     qianfan <qianfanguijin@163.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: linux resetting when the usb storage was removed while copying
+References: <1cc135e3-741f-e7d6-5d0a-fef319832a4c@163.com>
+        <87pmmee9kr.fsf@mail.parknet.co.jp>
+        <06ebc7fb-e7eb-b994-78fd-df07155ef4b5@163.com>
+        <15b83842-60d9-78b8-54e9-3a27211caded@roeck-us.net>
+Date:   Mon, 28 Mar 2022 14:48:38 +0900
+In-Reply-To: <15b83842-60d9-78b8-54e9-3a27211caded@roeck-us.net> (Guenter
+        Roeck's message of "Tue, 22 Mar 2022 05:31:06 -0700")
+Message-ID: <87pmm6hbk9.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20220317162349.739636-3-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,22 +55,60 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/17/22 11:23 AM, Andre Przywara wrote:
-> Most Allwinner SoCs have just one input clock to drive the watchdog
-> peripheral. So far this is the 24 MHz "HOSC" oscillator, divided down
-> internally to 32 KHz.
-> The F1C100 series watchdog however uses the unchanged 32 KHz "LOSC" as
-> its only clock input, which has the same effect, but let's the binding
-> description mismatch.
-> 
-> Change the binding description to name the clocks more loosely, so both
-> the LOSC and divided HOSC match the description. As the fixed clock names
-> now make less sense, drop them from SoCs supporting just one clock
-> input, they were not used by any DT anyway.
-> 
-> For the newer SoCs, supporting a choice of two input clocks, we keep
-> both the description and clock-names requirement.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
+>> I had changed console to ttynull and the system doesn't reset again.  kernel driver generate lots of error messages when usb storage is disconnected:
+>> 
+>> $ dmesg | grep 'FAT read failed' | wc -l
+>> 
+>> 608
+>> 
+>> usb storage can work again when reconnected.
+>> 
+>> The gpio watchdog depends on hrtimer, maybe printk in ISR delayed hrtimer that cause watchdog reset.
+
+This limits the rate of messages. Can you try if a this patch fixes behavior?
+
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+
+
+[PATCH] fat: Add ratelimit to fat*_ent_bread()
+
+fat*_ent_bread() can be the cause of too many report on I/O error
+path. So use fat_msg_ratelimit() instead.
+
+Signed-off-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+---
+ fs/fat/fatent.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/fs/fat/fatent.c b/fs/fat/fatent.c
+index 978ac67..1db348f 100644
+--- a/fs/fat/fatent.c	2022-03-28 14:34:04.582208819 +0900
++++ b/fs/fat/fatent.c	2022-03-28 14:39:26.884325073 +0900
+@@ -94,7 +94,8 @@ static int fat12_ent_bread(struct super_
+ err_brelse:
+ 	brelse(bhs[0]);
+ err:
+-	fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)", (llu)blocknr);
++	fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
++			  (llu)blocknr);
+ 	return -EIO;
+ }
+ 
+@@ -107,8 +108,8 @@ static int fat_ent_bread(struct super_bl
+ 	fatent->fat_inode = MSDOS_SB(sb)->fat_inode;
+ 	fatent->bhs[0] = sb_bread(sb, blocknr);
+ 	if (!fatent->bhs[0]) {
+-		fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
+-		       (llu)blocknr);
++		fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
++				  (llu)blocknr);
+ 		return -EIO;
+ 	}
+ 	fatent->nr_bhs = 1;
+_
+
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
