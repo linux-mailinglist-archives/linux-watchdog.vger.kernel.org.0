@@ -2,127 +2,184 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427A44EB7A0
-	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Mar 2022 03:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD0D4EBDFD
+	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Mar 2022 11:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241540AbiC3BMS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 29 Mar 2022 21:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
+        id S245013AbiC3Jrq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 30 Mar 2022 05:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241265AbiC3BMR (ORCPT
+        with ESMTP id S245014AbiC3Jrp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 29 Mar 2022 21:12:17 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4003B3204F;
-        Tue, 29 Mar 2022 18:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=atFJa
-        Ri5msGe8CVKy3LOTDOJSQ345/ooI9jAkmzAIiE=; b=jVK9nsIGrt12YRiSDBxGU
-        kprKAsDlDBjIQ1FXS8kOohl9Ivgfl4gOaUvWFOwQkA4iYCcYDiubnULs/UpYYTqb
-        YSGXiInf6GbQAX78GCT5eWhan3VW/RhaX8nCDHSN8OuO/RFFbyTYcEEGX9vIGDeR
-        OCp/i4P6kk1lV3T2PAs8aQ=
-Received: from [192.168.3.109] (unknown [218.201.129.19])
-        by smtp7 (Coremail) with SMTP id C8CowABnCnX0rUNiN1F3AA--.5469S2;
-        Wed, 30 Mar 2022 09:10:13 +0800 (CST)
-Message-ID: <7ea53bf4-9f2f-2120-d7eb-b2292fa9f156@163.com>
-Date:   Wed, 30 Mar 2022 09:10:06 +0800
+        Wed, 30 Mar 2022 05:47:45 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F00E267591;
+        Wed, 30 Mar 2022 02:46:00 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7569C5C0194;
+        Wed, 30 Mar 2022 05:45:59 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 30 Mar 2022 05:45:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; bh=IqPvKyQ6qMpku5I40/8FtZcCMepOPwE59gZVZv
+        4G8ug=; b=GNGeUDzw4n80hqW5Nu15s66q2bN2dPPSpD9CZ3PeCNqqwlE1Yv9NT5
+        lvoOf52XOAbrJ5cWuP7tuyqTnjAowimqbrkT/0BRIL8DT1PdqPPeGX47MjU3wq6s
+        MTSrSpajJAoHt+d4d1KZoVlgP3bt7J33r9orVj+nbeczxek4O/gjb8yWC/45qeG+
+        fm59txCY+cW35cnFMf/D8kMAg9PqsRUYHia7P2q3LkP6Hl7EUeKLxYe4F2AUFi8q
+        msn/GBLhcdRgq86A4FjaEUqn+VsdLtPMskrjfmZjgb5epRiT7tOXSwYVe48UYKnI
+        xbCDwlSVjXEJAzrc+H9s2Oj//81rWGkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; bh=IqPvKyQ6qMpku5I40/8FtZcCMepOP
+        wE59gZVZv4G8ug=; b=AU48Hzmt8oM+KC2lRCEm0YCkQgtjbHkhJglj1RqP4Kf7N
+        9CX+Y/3Irngo/zcmYHwzM2CHPJL6BCxU6mGLp5y4qarIsLALTtsHPIQYUDsqRveP
+        OUfqYbi2Vbwa1KgJlNcwRleT+orprUBe5py0ePcZGo3id88ZueVwz9jFwZr9+eY6
+        yd+ggDvJ0PtZ1R6ATNXK4mYVWOr3ULpsCV85b1ptYB6h8+HQYIa1aOb3KQTbKP7E
+        SRcKnyMH1su9s9OsnRv60+0y+ltiBbHgj747lt4YYvrpL2HBmDFDQDXeL7KBTq4l
+        9E1kzCV6zy/ZKRjewZE4rL41N+UnWeOdEd/vU1IDg==
+X-ME-Sender: <xms:1yZEYirIu29v7RSEI4Tg-FTAvd3zOedq5uGCaP1cYRiYKZyvMoFHKQ>
+    <xme:1yZEYgoSeIPOzGTBKrSx4CAslEsspZ_VNMvzol49Q9jnGt66ooYyF_T6BJH9DuXPm
+    uulbwZyoOusJpa9tBU>
+X-ME-Received: <xmr:1yZEYnMC7R7SWTq6EzIwlKv4Kt47pDnxAzmQlN2kYK5G7i5icIFVbaTHuWgUMe-KH30Cs2wo2Ss>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeivddgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgggfestdekredtre
+    dttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhr
+    segrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeejleeihfdvtefgtd
+    ethfdtgefftdeiffefjeeiffefveeuleejheejvefhffeukeenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsth
+    grihhrvdefrdhmvg
+X-ME-Proxy: <xmx:1yZEYh7JBFzXClwgGjBxMypdpqPPu2WavL84Wfc3AdvJNGpdsc0QgQ>
+    <xmx:1yZEYh5apiKmUz1S0stFCGl-Y6YU251eVrpbRVWxoczXvitG1UFGIg>
+    <xmx:1yZEYhjvWc7sbLSNkqXkA9xjVnXxKXPWj24dxXmrUzXxQCdpKmoevQ>
+    <xmx:1yZEYtj3Ka7gVTmQENDpx5pxOuQYI1dYlrrdMjZp-R2YmFm4ag6N1g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 30 Mar 2022 05:45:54 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
+        shawnguo@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, s.hauer@pengutronix.de,
+        linux@roeck-us.net
+Cc:     festevam@gmail.com, kernel@pengutronix.de, linux-imx@nxp.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v5] watchdog: imx2_wdg: Allow ping on suspend
+Date:   Wed, 30 Mar 2022 19:45:52 +1000
+Message-Id: <20220330094552.31039-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: linux resetting when the usb storage was removed while copying
-Content-Language: en-US
-To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <1cc135e3-741f-e7d6-5d0a-fef319832a4c@163.com>
- <87pmmee9kr.fsf@mail.parknet.co.jp>
- <06ebc7fb-e7eb-b994-78fd-df07155ef4b5@163.com>
- <15b83842-60d9-78b8-54e9-3a27211caded@roeck-us.net>
- <87pmm6hbk9.fsf@mail.parknet.co.jp>
- <e69813b2-9b60-02de-dbec-414c2baf42c8@163.com>
- <87ilrxgibb.fsf@mail.parknet.co.jp>
-From:   qianfan <qianfanguijin@163.com>
-In-Reply-To: <87ilrxgibb.fsf@mail.parknet.co.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowABnCnX0rUNiN1F3AA--.5469S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF1ruF4fuw4fuw1DZryxKrg_yoW5GFykpr
-        W7AF4Fga9Yqrya9F1fJw1kCw1vq3yIkFn5GrnrWas8uan8uF1Fya1DJFyjvFW2kFs5u3Z8
-        XF1qk3srAFWDtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j0XdbUUUUU=
-X-Originating-IP: [218.201.129.19]
-X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiQhHT7VaEBYhpbwABs1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+The i.MX watchdog cannot be disabled by software once it has been
+enabled. This means that it can't be stopped before suspend.
 
-在 2022/3/29 18:32, OGAWA Hirofumi 写道:
-> qianfan <qianfanguijin@163.com> writes:
->
->>> This limits the rate of messages. Can you try if a this patch fixes behavior?
->> Yes, this patch fixed the problem and watchdog doesn't reset again.
->>
->> Next is the console log when usb storage disconnected:
-> [...]
->
->> cp: read error: Input/output error
->> # [  218.253995] FAT-fs (sda1): FAT read failed (blocknr 1130)
->>
->> 'FAT read failed' error message printed only once.
->>
->> Interesting.
-> Hm, message should print 10 times, then is suppressed. So this time, the
-> test may not reproduced. Can your test reproduces the issue reliably?
+For systems that enter low power mode this is fine, as the watchdog will
+be automatically stopped by hardware in low power mode. Not all i.MX
+platforms support low power mode in the mainline kernel. For example the
+i.MX7D does not enter low power mode and so will be rebooted 2 minutes
+after entering sleep states.
 
-Right.
+This patch introduces the "fsl,imx7d-wdt" compatible string
+which enables ping on suspend support. This allows the i.MX7D systems to
+suspend without triggering the watchdog.
 
-I found copy file from usb storage to tmpfs or ubifs has the different 
-behaviors. I got only one error message when copy to tmpfs and got 10 error 
-messages when copy to ubifs. Next is the log when copy to ubifs:
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+---
+v5:
+ - Fixup commit message description
+v4:
+ - Fix spelling on allow/alow in title
 
-[  313.767873] musb-hdrc musb-hdrc.0: ep2 RX three-strikes error
-[  314.594767] sd 0:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x07 
-driverbyte=DRIVER_OK cmd_age=0s
-[  314.604930] sd 0:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 03 92 b6 00 00 
-f0 00
-[  314.612882] blk_update_request: I/O error, dev sda, sector 234166 op 
-0x0:(READ) flags 0x84700 phys_seg 2 prio class 0
-[  314.625613] sd 0:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x07 
-driverbyte=DRIVER_OK cmd_age=0s
-[  314.635768] sd 0:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 03 93 a6 00 00 
-10 00
-[  314.643746] blk_update_request: I/O error, dev sda, sector 234406 op 
-0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
-[  314.656025] usb 1-1: USB disconnect, device number 4
-[  314.674700] blk_update_request: I/O error, dev sda, sector 1405 op 0x0:(READ) 
-flags 0x0 phys_seg 1 prio class 0
-[  314.685673] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.691490] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.697294] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.702987] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.708685] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.714377] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.720074] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.725799] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.731480] FAT-fs (sda1): FAT read failed (blocknr 1343)
-[  314.737186] FAT-fs (sda1): FAT read failed (blocknr 1343)
+ drivers/watchdog/imx2_wdt.c | 27 ++++++++++++++++++++-------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
-My gpio watchdog toggle every 100ms and I sniffer watchdog toggle signal and 
-uart console, watchdog toggle time is 119ms when those message printed, delayed 
-19ms.
-
-This patch can really solve this problem, thanks.
-
->
-> Well, anyway, the patch looks like working.
->
-> Thanks.
+diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+index 51bfb796898b..d0c5d47ddede 100644
+--- a/drivers/watchdog/imx2_wdt.c
++++ b/drivers/watchdog/imx2_wdt.c
+@@ -66,6 +66,7 @@ struct imx2_wdt_device {
+ 	struct watchdog_device wdog;
+ 	bool ext_reset;
+ 	bool clk_is_on;
++	bool no_ping;
+ };
+ 
+ static bool nowayout = WATCHDOG_NOWAYOUT;
+@@ -312,12 +313,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+ 
+ 	wdev->ext_reset = of_property_read_bool(dev->of_node,
+ 						"fsl,ext-reset-output");
++	/*
++	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
++	 * during suspend.
++	 */
++	wdev->no_ping = !of_device_is_compatible(dev->of_node, "fsl,imx7d-wdt");
+ 	platform_set_drvdata(pdev, wdog);
+ 	watchdog_set_drvdata(wdog, wdev);
+ 	watchdog_set_nowayout(wdog, nowayout);
+ 	watchdog_set_restart_priority(wdog, 128);
+ 	watchdog_init_timeout(wdog, timeout, dev);
+-	watchdog_stop_ping_on_suspend(wdog);
++	if (wdev->no_ping)
++		watchdog_stop_ping_on_suspend(wdog);
+ 
+ 	if (imx2_wdt_is_running(wdev)) {
+ 		imx2_wdt_set_timeout(wdog, wdog->timeout);
+@@ -366,9 +373,11 @@ static int __maybe_unused imx2_wdt_suspend(struct device *dev)
+ 		imx2_wdt_ping(wdog);
+ 	}
+ 
+-	clk_disable_unprepare(wdev->clk);
++	if (wdev->no_ping) {
++		clk_disable_unprepare(wdev->clk);
+ 
+-	wdev->clk_is_on = false;
++		wdev->clk_is_on = false;
++	}
+ 
+ 	return 0;
+ }
+@@ -380,11 +389,14 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
+ 	struct imx2_wdt_device *wdev = watchdog_get_drvdata(wdog);
+ 	int ret;
+ 
+-	ret = clk_prepare_enable(wdev->clk);
+-	if (ret)
+-		return ret;
++	if (wdev->no_ping) {
++		ret = clk_prepare_enable(wdev->clk);
+ 
+-	wdev->clk_is_on = true;
++		if (ret)
++			return ret;
++
++		wdev->clk_is_on = true;
++	}
+ 
+ 	if (watchdog_active(wdog) && !imx2_wdt_is_running(wdev)) {
+ 		/*
+@@ -407,6 +419,7 @@ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
+ 
+ static const struct of_device_id imx2_wdt_dt_ids[] = {
+ 	{ .compatible = "fsl,imx21-wdt", },
++	{ .compatible = "fsl,imx7d-wdt", },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, imx2_wdt_dt_ids);
+-- 
+2.35.1
 
