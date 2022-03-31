@@ -2,30 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A827C4EE322
-	for <lists+linux-watchdog@lfdr.de>; Thu, 31 Mar 2022 23:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9454EE349
+	for <lists+linux-watchdog@lfdr.de>; Thu, 31 Mar 2022 23:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232742AbiCaVPA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 31 Mar 2022 17:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S240289AbiCaVXk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 31 Mar 2022 17:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235305AbiCaVO7 (ORCPT
+        with ESMTP id S241840AbiCaVXf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 31 Mar 2022 17:14:59 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Mar 2022 14:13:09 PDT
-Received: from 1.mo576.mail-out.ovh.net (1.mo576.mail-out.ovh.net [178.33.251.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8354C237FE6
-        for <linux-watchdog@vger.kernel.org>; Thu, 31 Mar 2022 14:13:09 -0700 (PDT)
-Received: from player772.ha.ovh.net (unknown [10.109.156.220])
-        by mo576.mail-out.ovh.net (Postfix) with ESMTP id F214123298
-        for <linux-watchdog@vger.kernel.org>; Thu, 31 Mar 2022 20:56:13 +0000 (UTC)
-Received: from RCM-web5.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player772.ha.ovh.net (Postfix) with ESMTPSA id D54FC291025F7;
-        Thu, 31 Mar 2022 20:55:59 +0000 (UTC)
-MIME-Version: 1.0
-Date:   Thu, 31 Mar 2022 22:55:59 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+        Thu, 31 Mar 2022 17:23:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4B0236BB8;
+        Thu, 31 Mar 2022 14:21:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 986B0CE2190;
+        Thu, 31 Mar 2022 21:21:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 03501C34111;
+        Thu, 31 Mar 2022 21:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648761705;
+        bh=3Por+R4u2PfGTrTMD/fhDFrmVc1ptYv9owqBy3MB1eA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=tFMGJD9SSERFecAB2dbnWdX1H9LatUal+OHLCw4poYTVw2Xe7gUlo7o4DdhyXFZsR
+         YOa95XSwfwWLLRRMAm9nLoq9ye6v1EOGXVkmCL6GsynYNHagytln8M6bPS68odwKDS
+         DYqOY9dvO3+rC/g1hIS2uAW9OhIS5VAmhyvZhfDOPltQK02FW4d/PW04EMvhTUI8Pu
+         LaAsE5aED6d7rSVfUq8BZSMm5rF9QKTWT7cN73zWy6Pb8+EHvmEDNGbnjsDV1o5pLn
+         f0T+h1Yx/fwo6Oe0Cjjvl+Mvr3GVi2A0zf3GcT03/ky7q/jDZe+/Vl99ohZ0gUyhv6
+         h12RgAF674arA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E2F1CE7BB0B;
+        Thu, 31 Mar 2022 21:21:44 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v5.18 Merge window
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220331182454.GA14072@www.linux-watchdog.org>
+References: <20220331182454.GA14072@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220331182454.GA14072@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.18-rc1
+X-PR-Tracked-Commit-Id: 826270373f17fd8ebd10753ca0a5fd2ceb1dc38e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 354b8bf222ee15bf9aac3d870ba8e0880dd9bc8d
+Message-Id: <164876170492.29828.10763277260043867037.pr-tracker-bot@kernel.org>
+Date:   Thu, 31 Mar 2022 21:21:44 +0000
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -38,44 +60,28 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Eduardo Valentin <eduval@amazon.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Miaoqian Lin <linmq006@gmail.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
         Terry Bowman <terry.bowman@amd.com>,
         Thanh Quan <thanh.quan.xn@renesas.com>
-Subject: Re: [GIT PULL REQUEST] watchdog - v5.18 Merge window
-In-Reply-To: <20220331182454.GA14072@www.linux-watchdog.org>
-References: <20220331182454.GA14072@www.linux-watchdog.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <174471c557f778c0c5e55ca7f9bc02fc@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 1543890248961010630
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigedgudehhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvffujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeevfedvteejffeufeekueeuvdeghfeggeejgfevvdegieetudeuiedvleettdfhteenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejjedvrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqfigrthgthhguohhgsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wim,
+The pull request you sent on Thu, 31 Mar 2022 20:24:55 +0200:
 
-On 2022-03-31 20:24, Wim Van Sebroeck wrote:
-> This series contains:
-> * Add support for BCM4908
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.18-rc1
 
-It indeed includes
-[PATCH] watchdog: allow building BCM7038_WDT for BCM4908
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/354b8bf222ee15bf9aac3d870ba8e0880dd9bc8d
 
-but somehow misses
-[PATCH] watchdog: bcm7038_wdt: Support BCM6345 compatible string
-(which is Patchwork marked as Accepted).
+Thank you!
 
-This is NOT pull blocker, just sth I'd like to ask you to look at for
-the next release :)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
