@@ -2,62 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109FD4EE647
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Apr 2022 04:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6084EE6D8
+	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Apr 2022 05:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244276AbiDACwn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 31 Mar 2022 22:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S230344AbiDADmO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 31 Mar 2022 23:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244272AbiDACwl (ORCPT
+        with ESMTP id S244675AbiDADmO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:52:41 -0400
-X-Greylist: delayed 1437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Mar 2022 19:50:52 PDT
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AE3217967
-        for <linux-watchdog@vger.kernel.org>; Thu, 31 Mar 2022 19:50:52 -0700 (PDT)
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id A988BF9A65
-        for <linux-watchdog@vger.kernel.org>; Thu, 31 Mar 2022 21:26:52 -0500 (CDT)
+        Thu, 31 Mar 2022 23:42:14 -0400
+X-Greylist: delayed 1697 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Mar 2022 20:40:25 PDT
+Received: from gateway30.websitewelcome.com (gateway30.websitewelcome.com [192.185.147.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9F05AEE1
+        for <linux-watchdog@vger.kernel.org>; Thu, 31 Mar 2022 20:40:24 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 6BFA82EA3
+        for <linux-watchdog@vger.kernel.org>; Thu, 31 Mar 2022 21:47:50 -0500 (CDT)
 Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
         by cmsmtp with SMTP
-        id a700nyT4xb6UBa700nzwEh; Thu, 31 Mar 2022 21:26:52 -0500
+        id a7KInQ6CPRnrra7KInXfgV; Thu, 31 Mar 2022 21:47:50 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JL/R10AFXo3m+8yvx0Z1Ncw51gsFIrGlpCNnWHKID+k=; b=eDj6hmhodlrylz8YNuFxCUdKJ5
-        Abq1JxKySetWQDsQJk++hoyiq3Ct5cK1h05ym8t13TCuAR417Xu05vHoG3tx/KDUjI7zdN3QVjSyX
-        oV8CnCybZBETefM6shab9Pnp0YjimzYR2COrkXuRFZaAb2IM1/j1A4WAHDeNs2jN3EoaZ748hfdlV
-        9oTxMJM8tadTAN2U/P0oazDZhYDIOsVSUEsCIAoda4QH4/ATJC5/5pnYMNSeVYBchgp7iDChzLsWN
-        JY/8Lz1/ENJUG/LRjYktgVPipADWaT4d1XVjvdu3n6I1bnMCRDn58vTjsZOETKaKq4aVS764z3qVK
-        fQA4Qzsw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54610)
+        bh=XPMIYxgvctKhc67UpwQUIZ5z17//+6k0vlaXY6E/1DE=; b=GWt7XBamNm5br0OKlCmLe8A63Y
+        QTB3FgP3uo5CUWsWj5YOfl2cxYI7qVU23Is4JjPPsbKYN6htw20IbixgYhM9EX08P/GZNuAuLAbk2
+        12mvLWvwJj6kiq2JQpk2F6tg7x23iNHHgk+zxvWGNIodsHrJfDW8dUy1xkOmtGfbqXetm8kIkzsVP
+        ECbtcrj+RwSbhwrpU1vxwYmLU84cg1fiK4c58XMFLX8qHRSWXwGG06bhBYowVUEkeWPdZdnx0cplr
+        jjBFbJtVGXb2cNXR3E7EjTVrivbxO9ETjPCne4P40VmC74wQB/1ic1IWVua3XTyxm4eYyqFY5Twrf
+        L7K/Y6Hg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54612)
         by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@roeck-us.net>)
-        id 1na700-0045Hw-7g; Fri, 01 Apr 2022 02:26:52 +0000
-Message-ID: <a12c8a2a-1e8a-bfee-6812-969cccc6366e@roeck-us.net>
-Date:   Thu, 31 Mar 2022 19:26:50 -0700
+        id 1na7KH-004FHU-Qw; Fri, 01 Apr 2022 02:47:49 +0000
+Message-ID: <99c8a2b0-ce78-0874-038e-f7defe15301b@roeck-us.net>
+Date:   Thu, 31 Mar 2022 19:47:48 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
+Subject: Re: [PATCH v5] watchdog: imx2_wdg: Allow ping on suspend
 Content-Language: en-US
-To:     Tzung-Bi Shih <tzungbi@kernel.org>,
-        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     wim@linux-watchdog.org, geert+renesas@glider.be,
-        linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Phil Edworthy <phil.edworthy@renesas.com>
-References: <20220330100829.1000679-1-jjhiblot@traphandler.com>
- <20220330100829.1000679-3-jjhiblot@traphandler.com>
- <YkVFc6Q6/6rxSw89@google.com>
+To:     Alistair Francis <alistair@alistair23.me>, wim@linux-watchdog.org,
+        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, s.hauer@pengutronix.de
+Cc:     festevam@gmail.com, kernel@pengutronix.de, linux-imx@nxp.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+References: <20220330094552.31039-1-alistair@alistair23.me>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v4 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
-In-Reply-To: <YkVFc6Q6/6rxSw89@google.com>
+In-Reply-To: <20220330094552.31039-1-alistair@alistair23.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -68,13 +66,13 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1na700-0045Hw-7g
+X-Exim-ID: 1na7KH-004FHU-Qw
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54610
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54612
 X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 4
+X-Email-Count: 15
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,91 +85,107 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/30/22 23:08, Tzung-Bi Shih wrote:
-> On Wed, Mar 30, 2022 at 12:08:29PM +0200, Jean-Jacques Hiblot wrote:
->> diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
-> [...]
->> +/*
->> + * Renesas RZ/N1 Watchdog timer.
->> + * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
->> + * cope with 2 seconds.
->> + *
->> + * Copyright 2018 Renesas Electronics Europe Ltd.
+On 3/30/22 02:45, Alistair Francis wrote:
+> The i.MX watchdog cannot be disabled by software once it has been
+> enabled. This means that it can't be stopped before suspend.
 > 
-> s/2018/2022/ ?
+> For systems that enter low power mode this is fine, as the watchdog will
+> be automatically stopped by hardware in low power mode. Not all i.MX
+> platforms support low power mode in the mainline kernel. For example the
+> i.MX7D does not enter low power mode and so will be rebooted 2 minutes
+> after entering sleep states.
 > 
->> +#define RZN1_WDT_RETRIGGER			0x0
->> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL		0
->> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK	0xfff
->> +#define RZN1_WDT_RETRIGGER_PRESCALE		BIT(12)
->> +#define RZN1_WDT_RETRIGGER_ENABLE		BIT(13)
->> +#define RZN1_WDT_RETRIGGER_WDSI			(0x2 << 14)
+> This patch introduces the "fsl,imx7d-wdt" compatible string
+> which enables ping on suspend support. This allows the i.MX7D systems to
+> suspend without triggering the watchdog.
 > 
-> Do RZN1_WDT_RETRIGGER_RELOAD_VAL and RZN1_WDT_RETRIGGER_WDSI get 1 more tab
-> indent intentionally?
-> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v5:
+>   - Fixup commit message description
 
-That only looks like it due to the "+" at the beginning of the line.
-If you look at the actual code the alignment is ok.
+Too late ;-)
 
->> +static const struct watchdog_device rzn1_wdt = {
->> +	.info = &rzn1_wdt_info,
->> +	.ops = &rzn1_wdt_ops,
->> +	.status = WATCHDOG_NOWAYOUT_INIT_STATUS,
->> +};
-> [...]
->> +static int rzn1_wdt_probe(struct platform_device *pdev)
->> +{
-> [...]
->> +	wdt->wdt = rzn1_wdt;
-> 
-> Does it really need to copy the memory?  For example,
-> 
-> 1. Use the memory in `wdt` directly and fill the `wdd`.
-> 
-> struct watchdog_device *wdd = &wdt->wdt;
-> wdd->info = &rzn1_wdt_info;
-> wdd->ops = &rzn1_wdt_ops;
-> ...
-> 
-> 2. Use drvdata instead of container_of().
-> 
-> Use watchdog_set_drvdata() in _probe and watchdog_get_drvdata() in the
-> watchdog ops to get struct rzn1_watchdog.
-> 
-That would indeed be preferred. The static data structure isn't really useful.
-
->> +static const struct of_device_id rzn1_wdt_match[] = {
->> +	{ .compatible = "renesas,rzn1-wdt" },
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(of, rzn1_wdt_match);
-> 
-> Doesn't it need to guard by CONFIG_OF?
-> 
-Only if of_match_ptr() is used below, and then I'd prefer __maybe_unused
-
->> +static struct platform_driver rzn1_wdt_driver = {
->> +	.probe		= rzn1_wdt_probe,
->> +	.driver		= {
->> +		.name		= KBUILD_MODNAME,
->> +		.of_match_table	= rzn1_wdt_match,
-> 
-> Does it makes more sense to use of_match_ptr()?
-> 
-
-Usually we leave that up to driver authors.
-
->> +	},
->> +};
->> +
->> +module_platform_driver(rzn1_wdt_driver);
-> 
-> To make it look like a whole thing, I prefer to remove the extra blank line
-> in between struct platform_driver and module_platform_driver().
-
-We usually leave that up to driver authors. Many watchdog driver leave
-an empty line, so it is ok (as long as there are no two empty lines).
-
-Thanks,
 Guenter
+
+> v4:
+>   - Fix spelling on allow/alow in title
+> 
+>   drivers/watchdog/imx2_wdt.c | 27 ++++++++++++++++++++-------
+>   1 file changed, 20 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> index 51bfb796898b..d0c5d47ddede 100644
+> --- a/drivers/watchdog/imx2_wdt.c
+> +++ b/drivers/watchdog/imx2_wdt.c
+> @@ -66,6 +66,7 @@ struct imx2_wdt_device {
+>   	struct watchdog_device wdog;
+>   	bool ext_reset;
+>   	bool clk_is_on;
+> +	bool no_ping;
+>   };
+>   
+>   static bool nowayout = WATCHDOG_NOWAYOUT;
+> @@ -312,12 +313,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+>   
+>   	wdev->ext_reset = of_property_read_bool(dev->of_node,
+>   						"fsl,ext-reset-output");
+> +	/*
+> +	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
+> +	 * during suspend.
+> +	 */
+> +	wdev->no_ping = !of_device_is_compatible(dev->of_node, "fsl,imx7d-wdt");
+>   	platform_set_drvdata(pdev, wdog);
+>   	watchdog_set_drvdata(wdog, wdev);
+>   	watchdog_set_nowayout(wdog, nowayout);
+>   	watchdog_set_restart_priority(wdog, 128);
+>   	watchdog_init_timeout(wdog, timeout, dev);
+> -	watchdog_stop_ping_on_suspend(wdog);
+> +	if (wdev->no_ping)
+> +		watchdog_stop_ping_on_suspend(wdog);
+>   
+>   	if (imx2_wdt_is_running(wdev)) {
+>   		imx2_wdt_set_timeout(wdog, wdog->timeout);
+> @@ -366,9 +373,11 @@ static int __maybe_unused imx2_wdt_suspend(struct device *dev)
+>   		imx2_wdt_ping(wdog);
+>   	}
+>   
+> -	clk_disable_unprepare(wdev->clk);
+> +	if (wdev->no_ping) {
+> +		clk_disable_unprepare(wdev->clk);
+>   
+> -	wdev->clk_is_on = false;
+> +		wdev->clk_is_on = false;
+> +	}
+>   
+>   	return 0;
+>   }
+> @@ -380,11 +389,14 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
+>   	struct imx2_wdt_device *wdev = watchdog_get_drvdata(wdog);
+>   	int ret;
+>   
+> -	ret = clk_prepare_enable(wdev->clk);
+> -	if (ret)
+> -		return ret;
+> +	if (wdev->no_ping) {
+> +		ret = clk_prepare_enable(wdev->clk);
+>   
+> -	wdev->clk_is_on = true;
+> +		if (ret)
+> +			return ret;
+> +
+> +		wdev->clk_is_on = true;
+> +	}
+>   
+>   	if (watchdog_active(wdog) && !imx2_wdt_is_running(wdev)) {
+>   		/*
+> @@ -407,6 +419,7 @@ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
+>   
+>   static const struct of_device_id imx2_wdt_dt_ids[] = {
+>   	{ .compatible = "fsl,imx21-wdt", },
+> +	{ .compatible = "fsl,imx7d-wdt", },
+>   	{ /* sentinel */ }
+>   };
+>   MODULE_DEVICE_TABLE(of, imx2_wdt_dt_ids);
+
