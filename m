@@ -2,25 +2,25 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5284D4F07D5
-	for <lists+linux-watchdog@lfdr.de>; Sun,  3 Apr 2022 07:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9795E4F093E
+	for <lists+linux-watchdog@lfdr.de>; Sun,  3 Apr 2022 14:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238938AbiDCFnY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 3 Apr 2022 01:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S1357232AbiDCMMe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 3 Apr 2022 08:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238584AbiDCFnQ (ORCPT
+        with ESMTP id S1357233AbiDCMMd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 3 Apr 2022 01:43:16 -0400
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8481B340D3
-        for <linux-watchdog@vger.kernel.org>; Sat,  2 Apr 2022 22:41:23 -0700 (PDT)
+        Sun, 3 Apr 2022 08:12:33 -0400
+Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA0A3120E
+        for <linux-watchdog@vger.kernel.org>; Sun,  3 Apr 2022 05:10:39 -0700 (PDT)
 Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id 02BBE2ED34E
-        for <linux-watchdog@vger.kernel.org>; Sun,  3 Apr 2022 00:41:23 -0500 (CDT)
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id 1C8E43F45
+        for <linux-watchdog@vger.kernel.org>; Sun,  3 Apr 2022 06:47:33 -0500 (CDT)
 Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
         by cmsmtp with SMTP
-        id aszKnSl5a22u3aszKnbc0E; Sun, 03 Apr 2022 00:41:23 -0500
+        id ayhgnYHb522u3ayhhngt8M; Sun, 03 Apr 2022 06:47:33 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -28,31 +28,31 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=B8Vpt4j0VXhi1wOCizFRse/0RAuRJNIB4Y5M9/3tKP0=; b=mYp6TGq8N59uC1v2h6Vf7jj7D+
-        M7FdSC6XFvbA79UA4yr2Qtaq6P9zBM2v/0MW/DlR8EWROyUKNOl0V8Z1G8xV96As7/C7yxoQTRjQv
-        GseHfzQgw1uJL9fReeiyvq5hvaEmlGMf92Z0JDxk3Td/Qadktbgh1kjlBIfGov8IsP8bHmzsKhj/i
-        6a/aB1TnmEIPHF5b5LNnVhqfheEzvGyB/b2pyrg4Q1IH2y5gjM609sClhSTPufzLoZ50wWULkV/KW
-        DLIyepDWAPkKr13c/+8GHgwTmgZa4m/EFXeWpL8N89kTg5jUxAL+m/Ko4AGdoZR9nJ8qAy5QHYsts
-        Wh6YZk2Q==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54670)
+        bh=D15xCUb442Ec8EfdAW8hFG2zlSek3cke5HOYPZHtACo=; b=JrnIJLxPj1V/sCCYtYLlgfvSIl
+        PdS0JCw/qQ3wiJgYZlRQZ8Z1Zy81KBQdEkHVO/KUcg7rPEo/TghYsp0gpzSZHuTohrCer79z0zI5T
+        scXbCDakoEBRULRn3NhhKKS+ltKwCX80lvSFhitLeFmkFlzTkyOVZ7IATXJV8Df78Er5spwB+zQ0N
+        Bj0HJ8fUGnsAPMysJq6Pb8mzbFfIzuL3lqCejT+OBxlr7bMUm+cfT4IZv8858OpNAIa0hDYZQXphx
+        q+CRPc17GX9yGTeW35m9Yie0ui15hxeyyYsUDDlvJVZumONcOy8KAu3UcV0XQ+hHVDof7AMAUnoay
+        qX9fWGvQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54672)
         by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@roeck-us.net>)
-        id 1naszK-001qPy-D2; Sun, 03 Apr 2022 05:41:22 +0000
-Message-ID: <1009cf3a-587b-307a-d1c9-efe71cd0a104@roeck-us.net>
-Date:   Sat, 2 Apr 2022 22:41:20 -0700
+        id 1nayhg-001Hwn-Hv; Sun, 03 Apr 2022 11:47:32 +0000
+Message-ID: <24d73707-f0b5-23aa-e7c1-f9f8a72fe5cd@roeck-us.net>
+Date:   Sun, 3 Apr 2022 04:47:30 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] watchdog: sp805: disable watchdog on remove
+Subject: Re: [PATCH] watchdog: sp805: add support for irq
 Content-Language: en-US
 To:     Eliav Farber <farbere@amazon.com>, wim@linux-watchdog.org,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     ronenk@amazon.com, talel@amazon.com, hhhawa@amazon.com,
         jonnyc@amazon.com, hanochu@amazon.com, dwmw@amazon.co.uk
-References: <20220403052249.48784-1-farbere@amazon.com>
+References: <20220403052449.1986-1-farbere@amazon.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220403052249.48784-1-farbere@amazon.com>
+In-Reply-To: <20220403052449.1986-1-farbere@amazon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -63,18 +63,18 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1naszK-001qPy-D2
+X-Exim-ID: 1nayhg-001Hwn-Hv
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54670
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54672
 X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 10
+X-Email-Count: 8
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,32 +82,209 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/2/22 22:22, Eliav Farber wrote:
-> Disable the watchdog if it is active while removing the module.
-> It is necessary in order to prevent a reset in case watchdog
-> hw was running before the removal.
+On 4/2/22 22:24, Eliav Farber wrote:
+> This change adds registration to IRQ for the sp805 watchdog.
+> Before this change there was no notification for watchdog
+> barking and the only thing that the HW watchdog did was to
+> directly restart the CPU.
 > 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->   drivers/watchdog/sp805_wdt.c | 3 +++
->   1 file changed, 3 insertions(+)
+> With this change, upon IRQ the driver will call panic() which
+> in turn might initiate kdump (in case configured). In case the
+> dying process (like kdump collection) will hang, the hardware
+> watchdog will still directly restart the CPU on a second timeout.
 > 
-> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-> index d8876fba686d..d7dc0f3f16ec 100644
-> --- a/drivers/watchdog/sp805_wdt.c
-> +++ b/drivers/watchdog/sp805_wdt.c
-> @@ -311,6 +311,9 @@ static int sp805_wdt_remove(struct amba_device *adev)
->   {
->   	struct sp805_wdt *wdt = amba_get_drvdata(adev);
->   
-> +	if (watchdog_active(&wdt->wdd))
-> +		wdt_disable(&wdt->wdd);
-> +
+> The driver used to cut the specified timeout in half when setting
+> the watchdog timeout, since it was ignoring the IRQ that occurred
+> the first time the timeout expired. We now use the timeout as is
+> since the watchdog IRQ will go off after the configured interval.
+> 
 
-Why not use watchdog_stop_on_unregister() ?
+The functionality is quite similar to pretimeout. dw_wdt implements
+pretty much the same functionality this way. Why not use that mechanism ?
 
 Guenter
 
+> Signed-off-by: Talel Shenhar <talel@amazon.com>
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>   drivers/watchdog/sp805_wdt.c | 102 +++++++++++++++++++++++++++++++----
+>   1 file changed, 93 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
+> index d8876fba686d..09223aed87e3 100644
+> --- a/drivers/watchdog/sp805_wdt.c
+> +++ b/drivers/watchdog/sp805_wdt.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/amba/bus.h>
+>   #include <linux/bitops.h>
+>   #include <linux/clk.h>
+> +#include <linux/interrupt.h>
+>   #include <linux/io.h>
+>   #include <linux/ioport.h>
+>   #include <linux/kernel.h>
+> @@ -78,6 +79,11 @@ module_param(nowayout, bool, 0);
+>   MODULE_PARM_DESC(nowayout,
+>   		"Set to 1 to keep watchdog running after device release");
+>   
+> +static bool skip_panic_skip_reset_on_timeout;
+> +module_param(skip_panic_skip_reset_on_timeout, bool, 0600);
+> +MODULE_PARM_DESC(skip_panic_skip_reset_on_timeout,
+> +		 "For skipping panic and skipping reset on timeout, set this to Y/1");
+> +
+>   /* returns true if wdt is running; otherwise returns false */
+>   static bool wdt_is_running(struct watchdog_device *wdd)
+>   {
+> @@ -87,7 +93,14 @@ static bool wdt_is_running(struct watchdog_device *wdd)
+>   	return (wdtcontrol & ENABLE_MASK) == ENABLE_MASK;
+>   }
+>   
+> -/* This routine finds load value that will reset system in required timout */
+> +/*
+> + * This routine finds load value that will reset or panic the system in the
+> + * required timeout.
+> + * It also calculates the actual timeout, which can differ from the input
+> + * timeout if load value is not in the range of LOAD_MIN and LOAD_MAX.
+> + * When panic is enabled it calculates the timeout till the panic, and when it
+> + * is disabled it calculates the timeout till the reset.
+> + */
+>   static int wdt_setload(struct watchdog_device *wdd, unsigned int timeout)
+>   {
+>   	struct sp805_wdt *wdt = watchdog_get_drvdata(wdd);
+> @@ -98,10 +111,21 @@ static int wdt_setload(struct watchdog_device *wdd, unsigned int timeout)
+>   	/*
+>   	 * sp805 runs counter with given value twice, after the end of first
+>   	 * counter it gives an interrupt and then starts counter again. If
+> -	 * interrupt already occurred then it resets the system. This is why
+> -	 * load is half of what should be required.
+> +	 * interrupt already occurred then it resets the system.
+>   	 */
+> -	load = div_u64(rate, 2) * timeout - 1;
+> +	if (wdt->adev->irq[0]) {
+> +		/*
+> +		 * Set load value based on a single timeout until we handle
+> +		 * the interrupt.
+> +		 */
+> +		load = rate * timeout - 1;
+> +	} else {
+> +		/*
+> +		 * Set load value to half the timeout, since the interrupt is
+> +		 * ignored and counter must expire twice before CPU is reset.
+> +		 */
+> +		load = div_u64(rate, 2) * timeout - 1;
+> +	}
+>   
+>   	load = (load > LOAD_MAX) ? LOAD_MAX : load;
+>   	load = (load < LOAD_MIN) ? LOAD_MIN : load;
+> @@ -109,13 +133,19 @@ static int wdt_setload(struct watchdog_device *wdd, unsigned int timeout)
+>   	spin_lock(&wdt->lock);
+>   	wdt->load_val = load;
+>   	/* roundup timeout to closest positive integer value */
+> -	wdd->timeout = div_u64((load + 1) * 2 + (rate / 2), rate);
+> +	if (wdt->adev->irq[0])
+> +		wdd->timeout = div_u64((load + 1) + (rate / 2), rate);
+> +	else
+> +		wdd->timeout = div_u64((load + 1) * 2 + (rate / 2), rate);
+>   	spin_unlock(&wdt->lock);
+>   
+>   	return 0;
+>   }
+>   
+> -/* returns number of seconds left for reset to occur */
+> +/*
+> + * returns number of seconds left for reset to occur, or returns number of
+> + * seconds left for panic to occur when enabled.
+> + */
+>   static unsigned int wdt_timeleft(struct watchdog_device *wdd)
+>   {
+>   	struct sp805_wdt *wdt = watchdog_get_drvdata(wdd);
+> @@ -124,9 +154,18 @@ static unsigned int wdt_timeleft(struct watchdog_device *wdd)
+>   	spin_lock(&wdt->lock);
+>   	load = readl_relaxed(wdt->base + WDTVALUE);
+>   
+> -	/*If the interrupt is inactive then time left is WDTValue + WDTLoad. */
+> -	if (!(readl_relaxed(wdt->base + WDTRIS) & INT_MASK))
+> -		load += wdt->load_val + 1;
+> +	/*
+> +	 * When panic is enabled, it occurs after the first time that sp805
+> +	 * runs the counter with the given load value.
+> +	 * Otherwise, reset happens after sp805 runs the counter with given
+> +	 * value twice (once before the interrupt and second after the
+> +	 * interrupt), so if the interrupt is inactive (first count) then time
+> +	 * left is WDTValue + WDTLoad.
+> +	 */
+> +	if (!wdt->adev->irq[0])
+> +		if (!(readl_relaxed(wdt->base + WDTRIS) & INT_MASK))
+> +			load += wdt->load_val + 1;
+> +
+>   	spin_unlock(&wdt->lock);
+>   
+>   	return div_u64(load, wdt->rate);
+> @@ -227,6 +266,29 @@ static const struct watchdog_ops wdt_ops = {
+>   	.restart	= wdt_restart,
+>   };
+>   
+> +static irqreturn_t wdt_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct device *dev = dev_id;
+> +	struct sp805_wdt *wdt = dev_get_drvdata(dev);
+> +
+> +	/*
+> +	 * Reset the watchdog timeout to maximize time available to the panic
+> +	 * handler before the watchdog induces a CPU reset.  Without resetting
+> +	 * the watchdog here, it would have a single timeout remaining between
+> +	 * interrupt and hardware reset. By resetting the timeout, the panic
+> +	 * handler can run with interrupts disabled for two watchdog timeouts,
+> +	 * ignoring the interrupt that would occur after the first timeout.
+> +	 */
+> +	wdt_config(&wdt->wdd, true);
+> +
+> +	if (skip_panic_skip_reset_on_timeout)
+> +		dev_warn(dev, "watchdog timeout expired\n");
+> +	else
+> +		panic("watchdog timeout expired");
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+>   static int
+>   sp805_wdt_probe(struct amba_device *adev, const struct amba_id *id)
+>   {
+> @@ -299,9 +361,28 @@ sp805_wdt_probe(struct amba_device *adev, const struct amba_id *id)
+>   	}
+>   	amba_set_drvdata(adev, wdt);
+>   
+> +	if (adev->irq[0]) {
+> +		ret = devm_request_irq(&adev->dev,
+> +				       adev->irq[0],
+> +				       wdt_irq_handler,
+> +				       0,
+> +				       MODULE_NAME,
+> +				       adev);
+> +		if (ret) {
+> +			dev_err(&adev->dev,
+> +				"watchdog irq request failed: %d\n",
+> +				ret);
+> +			goto err_request_irq;
+> +		}
+> +	} else {
+> +		dev_warn(&adev->dev, "no irq exists for watchdog\n");
+> +	}
+> +
+>   	dev_info(&adev->dev, "registration successful\n");
+>   	return 0;
+>   
+> +err_request_irq:
+> +	watchdog_unregister_device(&wdt->wdd);
+>   err:
+>   	dev_err(&adev->dev, "Probe Failed!!!\n");
+>   	return ret;
+> @@ -311,6 +392,9 @@ static int sp805_wdt_remove(struct amba_device *adev)
+>   {
+>   	struct sp805_wdt *wdt = amba_get_drvdata(adev);
+>   
+> +	if (adev->irq[0])
+> +		devm_free_irq(&adev->dev, adev->irq[0], adev);
+> +
 >   	watchdog_unregister_device(&wdt->wdd);
 >   	watchdog_set_drvdata(&wdt->wdd, NULL);
 >   
