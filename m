@@ -2,57 +2,57 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9554F50B2
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Apr 2022 04:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE2A4F50B0
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Apr 2022 04:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236138AbiDFBf6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 5 Apr 2022 21:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
+        id S231758AbiDFBf4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 5 Apr 2022 21:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447345AbiDEPqU (ORCPT
+        with ESMTP id S1447358AbiDEPqU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
         Tue, 5 Apr 2022 11:46:20 -0400
 Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4888A97291
-        for <linux-watchdog@vger.kernel.org>; Tue,  5 Apr 2022 07:21:14 -0700 (PDT)
-Received: by mail-wm1-x34a.google.com with SMTP id z16-20020a05600c0a1000b0038bebbd8548so1418905wmp.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 05 Apr 2022 07:21:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827DE986D6
+        for <linux-watchdog@vger.kernel.org>; Tue,  5 Apr 2022 07:21:16 -0700 (PDT)
+Received: by mail-wm1-x34a.google.com with SMTP id r6-20020a05600c35c600b0038e6db5da9cso1881715wmq.9
+        for <linux-watchdog@vger.kernel.org>; Tue, 05 Apr 2022 07:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=AxU4sa8Q3Vc8i3PPINAb0+zKHHjXN87FdHl8DAkuO3A=;
-        b=FXRzPVIxVwymFA22cVrY4G9XF+i6IJeIFm36Ivz6IzidBy8nhsDs4LElaYBJvgYczS
-         /ZfALuvngPVtoxp2uhnjlCoH8sKQjUd4Y8Z3B74wQ59EnEgYtTtNyvG06VsuftNQpRUM
-         pEEKyJfDF8doBr5LBf/SevUG8rHPEVEselas1nPySjiL3BcYOXg4Dx5/19wwJ+abhGdH
-         yv4MtmZCBEosOU6BkcIM4TKOQOOKuXZzI7m+9w9HXJ9jI6EbpHYvDnSiqkCx+Yn0ObTJ
-         pZEi3NUbwvwcSXvC1wmVQcxJetdUVz59WAgxYVg2CM51mpTtQw+OLRQpBPsi/EVI2ij0
-         QH+g==
+        bh=Hszu94VumpRyr0badDtcfvajy1SNOqO2jgDbf5Z0Nps=;
+        b=qY0N8pmWaAFou+ddSatPmLwRkgrEK8HfEjjNY9XwuXpbTrYXjHbBKu4R4yRmUmBXRm
+         iEP9ODp0DEXN5VfZiCQOXvgkE2NkUBBQzTaSLWBcc5/u6Jw+JQ3ljnwcet/XJTW2xw2z
+         2iQnrtyxQaDF08KV8U42xehWTIXuLFn1p3LOroreAxq89OlfsUbRiT8xi/bmBh/b6hkc
+         WjM9buKc1uEAGnlXsbNj8BtvgMWqnfpId0YpPeEGpl+tHSEXXlD7ZdOD78KkKNNbYsD0
+         5BR5mVpn0Xf3flXizQKT0kycGyAWpumWsd2Mzg0T4UVtHZYzHVP6vP6qFp2QlFQ1pj1B
+         aO4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=AxU4sa8Q3Vc8i3PPINAb0+zKHHjXN87FdHl8DAkuO3A=;
-        b=hqr7TqBq+tEcr37CDYjyrMCPE3kjbQ9AeKYFwJftHcnJkvjhP5UGY1i4BLrixUT/xl
-         8eWh5E4EWVLpN0q+/JJwJ8XPs85yuDvgJK+2zVwVzwQK/JMzRW2zvlqMm6XYyxGHLd5B
-         p6jKu5UWeWK8zo8fpU6VDpvuHpnuL4O+/AO1ebyTN4qVq8ClIpRIN6P9qXpA8wYmuVrA
-         H+b/C8/mT6CfpETUWX3vkeUrdk/XE730i0EsYtXSQC9hX0ij2D4bltazYU9uJaDpLqQM
-         DhnO7oLYLrgCgGsT/i3aULWg1uJmACeNikspfsOND+JKcKmgdJVqdBvygBT+VMMboX+8
-         BPMg==
-X-Gm-Message-State: AOAM5327iiY6a+L4NYiMhKqOC3MzQeUBZt1gcPJ6/8OD57b9t8FPyZNk
-        eSVxP+TJMBcO0EdAU2Bcquui7dwQpciWsItZHIs=
-X-Google-Smtp-Source: ABdhPJy8yRbBfp7JJ9vsoLLwfEai6IIn9u2k9X2YUED5leE66rVPOiM8Nomw1qVKZQ5XYCsabUFPzbI21h5FTwSwa0U=
+        bh=Hszu94VumpRyr0badDtcfvajy1SNOqO2jgDbf5Z0Nps=;
+        b=eaosAYOa76NkGbbZjXjiElDaG4pc8MIUuvY6QPsvZIjC08S1CsuiLWEN3V6mMsGVuv
+         6IygcBX10EAquSv97tvaPaZCiwi9PtgOq90AIHRUkzJPIA3rbP2fQqE8D+crfaXPyVE2
+         UhZ9LIVE+cfVwI0zlvVG9CNY7CLwxCwzdohQyDZT1jbhTpnSpdClQFQhLBAiHh+lPiMI
+         Sw0Afdu4ft3p2NORDs4mqrb0nmota7yGjhG4CcRdo8TvrAyEiQqOAgkvMnapQfS5vYOY
+         A+1JIhkc0lA6n324kVYC5uc2BSfSiZ2KDNAXIvmredUg+/fYfhyuGoqoQmpazXK/uUSF
+         QDjw==
+X-Gm-Message-State: AOAM530xdsADFG30uXHNpqiVFnScBdnZy/OHeEJu+reeMIAx+93HhFd+
+        KhrKab1qKN1ULRi1kSz3oslRyJoxHDXX7atWJ+c=
+X-Google-Smtp-Source: ABdhPJwRBdDJvU4AC+1Sku8Povz+T97wxBKdUdU/7yJd6akYPxtZjUzFK5tch5XSP182VdIbxVKZJvPCXzLBBmxmQ7I=
 X-Received: from sene.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:27c4])
- (user=sebastianene job=sendgmr) by 2002:a05:600c:1c11:b0:38b:4924:9a77 with
- SMTP id j17-20020a05600c1c1100b0038b49249a77mr383558wms.0.1649168472631; Tue,
- 05 Apr 2022 07:21:12 -0700 (PDT)
-Date:   Tue,  5 Apr 2022 14:19:54 +0000
+ (user=sebastianene job=sendgmr) by 2002:a7b:c5d0:0:b0:355:482a:6f44 with SMTP
+ id n16-20020a7bc5d0000000b00355482a6f44mr3294190wmk.58.1649168474859; Tue, 05
+ Apr 2022 07:21:14 -0700 (PDT)
+Date:   Tue,  5 Apr 2022 14:19:55 +0000
 In-Reply-To: <20220405141954.1489782-1-sebastianene@google.com>
-Message-Id: <20220405141954.1489782-2-sebastianene@google.com>
+Message-Id: <20220405141954.1489782-3-sebastianene@google.com>
 Mime-Version: 1.0
 References: <20220405141954.1489782-1-sebastianene@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH 1/2] dt-bindings: watchdog: Add qemu,vm-watchdog compatible
+Subject: [PATCH 2/2] watchdog: Add a mechanism to detect stalls on guest vCPUs
 From:   Sebastian Ene <sebastianene@google.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -72,64 +72,266 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This watchdog can be used to detect stalls on vCPUs.
+This patch adds support for a virtual watchdog which relies on the
+per-cpu hrtimers to pet at regular intervals.
 
 Signed-off-by: Sebastian Ene <sebastianene@google.com>
 ---
- .../devicetree/bindings/watchdog/vm-wdt.yaml  | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/watchdog/vm-wdt.yaml
+ drivers/watchdog/Kconfig  |   8 ++
+ drivers/watchdog/Makefile |   1 +
+ drivers/watchdog/vm-wdt.c | 215 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 224 insertions(+)
+ create mode 100644 drivers/watchdog/vm-wdt.c
 
-diff --git a/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml b/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 01ce3f41cc21..3304d128484e 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -351,6 +351,14 @@ config SL28CPLD_WATCHDOG
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called sl28cpld_wdt.
+ 
++config VM_WATCHDOG
++	tristate "Virtual Machine Watchdog"
++	select LOCKUP_DETECTOR
++	help
++	  Detect CPU locks on the virtual machine.
++	  To compile this driver as a module, choose M here: the
++	  module will be called vm-wdt.
++
+ # ALPHA Architecture
+ 
+ # ARM Architecture
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 071a2e50be98..73206cbc3835 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -227,3 +227,4 @@ obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
+ obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
+ obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
+ obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
++obj-$(CONFIG_VM_WATCHDOG) += vm-wdt.o
+diff --git a/drivers/watchdog/vm-wdt.c b/drivers/watchdog/vm-wdt.c
 new file mode 100644
-index 000000000000..5365c963a7f6
+index 000000000000..ea4351754645
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/vm-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/watchdog/vm-wdt.c
+@@ -0,0 +1,215 @@
++// SPDX-License-Identifier: GPL-2.0+
++//
++// Virtual watchdog driver.
++//  Copyright (C) Google, 2022
 +
-+title: VM watchdog
++#define pr_fmt(fmt) "vm-watchdog: " fmt
 +
-+allOf:
-+  - $ref: "watchdog.yaml#"
++#include <linux/cpu.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
 +
-+maintainers:
-+  - Sebastian Ene <sebastianene@google.com>
++#include <linux/device.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/nmi.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/param.h>
++#include <linux/percpu.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
 +
-+properties:
-+  compatible:
-+    enum:
-+      - qemu,vm-watchdog
-+  clock:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      The watchdog internal clock measure in Hz used to decrement the
-+      watchdog counter register on each tick.
-+      Defaults to 10 if unset.
-+  timeout-sec:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      The watchdog expiration timeout measured in seconds.
-+      Defaults to 8 if unset.
++#define DRV_NAME			"vm_wdt"
++#define DRV_VERSION			"1.0"
 +
-+required:
-+  - compatible
++#define VMWDT_REG_STATUS		(0x00)
++#define VMWDT_REG_LOAD_CNT		(0x04)
++#define VMWDT_REG_CURRENT_CNT		(0x08)
++#define VMWDT_REG_CLOCK_FREQ_HZ		(0x0C)
++#define VMWDT_REG_LEN			(0x10)
 +
-+unevaluatedProperties: false
++#define VMWDT_DEFAULT_CLOCK_HZ		(10)
++#define VMWDT_DEFAULT_TIMEOT_SEC	(8)
 +
-+examples:
-+  - |
-+    watchdog {
-+      compatible = "qemu,vm-watchdog";
-+      clock = <10>;
-+      timeout-sec = <8>;
-+    };
++struct vm_wdt_s {
++	void __iomem *membase;
++	u32 clock_freq;
++	u32 expiration_sec;
++	u32 ping_timeout_ms;
++	struct hrtimer per_cpu_hrtimer;
++	struct platform_device *dev;
++};
 +
-+...
++#define vmwdt_reg_write(wdt, reg, value)	\
++	iowrite32((value), (wdt)->membase + (reg))
++#define vmwdt_reg_read(wdt, reg)		\
++	io32read((wdt)->membase + (reg))
++
++static struct platform_device *virt_dev;
++
++static enum hrtimer_restart vmwdt_timer_fn(struct hrtimer *hrtimer)
++{
++	struct vm_wdt_s *cpu_wdt;
++	u32 ticks;
++
++	cpu_wdt = container_of(hrtimer, struct vm_wdt_s, per_cpu_hrtimer);
++	ticks = cpu_wdt->clock_freq * cpu_wdt->expiration_sec;
++	vmwdt_reg_write(cpu_wdt, VMWDT_REG_LOAD_CNT, ticks);
++	hrtimer_forward_now(hrtimer, ms_to_ktime(cpu_wdt->ping_timeout_ms));
++
++	return HRTIMER_RESTART;
++}
++
++static void vmwdt_start(void *arg)
++{
++	u32 ticks;
++	int cpu = smp_processor_id();
++	struct vm_wdt_s *cpu_wdt = arg;
++	struct hrtimer *hrtimer = &cpu_wdt->per_cpu_hrtimer;
++
++	pr_info("cpu %u vmwdt start\n", cpu);
++	vmwdt_reg_write(cpu_wdt, VMWDT_REG_CLOCK_FREQ_HZ,
++			cpu_wdt->clock_freq);
++
++	/* Compute the number of ticks required for the watchdog counter
++	 * register based on the internal clock frequency and the watchdog
++	 * timeout given from the device tree.
++	 */
++	ticks = cpu_wdt->clock_freq * cpu_wdt->expiration_sec;
++	vmwdt_reg_write(cpu_wdt, VMWDT_REG_LOAD_CNT, ticks);
++
++	/* Enable the internal clock and start the watchdog */
++	vmwdt_reg_write(cpu_wdt, VMWDT_REG_STATUS, 1);
++
++	hrtimer_init(hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	hrtimer->function = vmwdt_timer_fn;
++	hrtimer_start(hrtimer, ms_to_ktime(cpu_wdt->ping_timeout_ms),
++		      HRTIMER_MODE_REL_PINNED);
++}
++
++static void vmwdt_stop(void *arg)
++{
++	int cpu = smp_processor_id();
++	struct vm_wdt_s *cpu_wdt = arg;
++	struct hrtimer *hrtimer = &cpu_wdt->per_cpu_hrtimer;
++
++	hrtimer_cancel(hrtimer);
++
++	/* Disable the watchdog */
++	vmwdt_reg_write(cpu_wdt, VMWDT_REG_STATUS, 0);
++	pr_info("cpu %d vmwdt stop\n", cpu);
++}
++
++static int start_watchdog_on_cpu(unsigned int cpu)
++{
++	struct vm_wdt_s *vm_wdt = platform_get_drvdata(virt_dev);
++
++	vmwdt_start(this_cpu_ptr(vm_wdt));
++	return 0;
++}
++
++static int stop_watchdog_on_cpu(unsigned int cpu)
++{
++	struct vm_wdt_s *vm_wdt = platform_get_drvdata(virt_dev);
++
++	vmwdt_stop(this_cpu_ptr(vm_wdt));
++	return 0;
++}
++
++static int vmwdt_probe(struct platform_device *dev)
++{
++	int cpu, ret, err;
++	void __iomem *membase;
++	struct resource *r;
++	struct vm_wdt_s *vm_wdt;
++	u32 wdt_clock, wdt_timeout_sec = 0;
++
++	r = platform_get_resource(dev, IORESOURCE_MEM, 0);
++	if (r == NULL)
++		return -ENOENT;
++
++	vm_wdt = alloc_percpu(typeof(struct vm_wdt_s));
++	if (!vm_wdt)
++		return -ENOMEM;
++
++	membase = ioremap(r->start, resource_size(r));
++	if (!membase) {
++		ret = -ENXIO;
++		goto err_withmem;
++	}
++
++	virt_dev = dev;
++	platform_set_drvdata(dev, vm_wdt);
++	if (of_property_read_u32(dev->dev.of_node, "clock", &wdt_clock))
++		wdt_clock = VMWDT_DEFAULT_CLOCK_HZ;
++
++	if (of_property_read_u32(dev->dev.of_node, "timeout-sec",
++				 &wdt_timeout_sec))
++		wdt_timeout_sec = VMWDT_DEFAULT_TIMEOT_SEC;
++
++	for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
++		struct vm_wdt_s *cpu_wdt = per_cpu_ptr(vm_wdt, cpu);
++
++		cpu_wdt->membase = membase + cpu * VMWDT_REG_LEN;
++		cpu_wdt->clock_freq = wdt_clock;
++		cpu_wdt->expiration_sec = wdt_timeout_sec;
++		cpu_wdt->ping_timeout_ms = wdt_timeout_sec * MSEC_PER_SEC / 2;
++		smp_call_function_single(cpu, vmwdt_start, cpu_wdt, true);
++	}
++
++	err = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
++					"virt/watchdog:online",
++					start_watchdog_on_cpu,
++					stop_watchdog_on_cpu);
++	if (err < 0) {
++		pr_warn("could not be initialized");
++		ret = err;
++		goto err_withmem;
++	}
++
++	return 0;
++
++err_withmem:
++	free_percpu(vm_wdt);
++	return ret;
++}
++
++static int vmwdt_remove(struct platform_device *dev)
++{
++	int cpu;
++	struct vm_wdt_s *vm_wdt = platform_get_drvdata(dev);
++
++	for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
++		struct vm_wdt_s *cpu_wdt = per_cpu_ptr(vm_wdt, cpu);
++
++		smp_call_function_single(cpu, vmwdt_stop, cpu_wdt, true);
++	}
++
++	free_percpu(vm_wdt);
++	return 0;
++}
++
++static const struct of_device_id vmwdt_of_match[] = {
++	{ .compatible = "qemu,vm-watchdog", },
++	{}
++};
++
++MODULE_DEVICE_TABLE(of, vm_watchdog_of_match);
++
++static struct platform_driver vmwdt_driver = {
++	.probe  = vmwdt_probe,
++	.remove = vmwdt_remove,
++	.driver = {
++		.name           = DRV_NAME,
++		.of_match_table = vmwdt_of_match,
++	},
++};
++
++module_platform_driver(vmwdt_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Sebastian Ene <sebastianene@google.com>");
++MODULE_DESCRIPTION("Virtual watchdog driver");
++MODULE_VERSION(DRV_VERSION);
 -- 
 2.35.1.1094.g7c7d902a7c-goog
 
