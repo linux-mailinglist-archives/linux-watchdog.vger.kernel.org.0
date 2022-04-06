@@ -2,100 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE544F6325
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Apr 2022 17:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706044F67BC
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Apr 2022 19:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235920AbiDFP1C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 6 Apr 2022 11:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S239300AbiDFRlL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 6 Apr 2022 13:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236165AbiDFP0r (ORCPT
+        with ESMTP id S239539AbiDFRkq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:26:47 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A0F567C51;
-        Wed,  6 Apr 2022 05:25:26 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-dacc470e03so2688068fac.5;
-        Wed, 06 Apr 2022 05:25:26 -0700 (PDT)
+        Wed, 6 Apr 2022 13:40:46 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87F6EEA71
+        for <linux-watchdog@vger.kernel.org>; Wed,  6 Apr 2022 09:31:05 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id r13so4033156wrr.9
+        for <linux-watchdog@vger.kernel.org>; Wed, 06 Apr 2022 09:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-description:content-disposition:in-reply-to;
+        bh=qaoX3BjDFO/GNif1Q+vixm8BqZ3Y/mPSstxwcqbf+5M=;
+        b=nzD4KPaDH2mgfvo+qK8CjNMSL2p1TvJqIFu4vK92ISRWzJ3cm4PX5UsaYwqqGRDQwZ
+         1e1gjQLwrvhSRMT8QltmVssl9iPVUls34C2vABSMwE8XVSd3SiRdipGiDkMA7JiIzQ2N
+         39foFjiTmMZsPIT9FRPrWW7m+NKuVGKN6ESZJ19dAV/UBh3HK0qFmm8TNAEzLgA+VhzE
+         BhvG2wQslbHaqK7PeGLRFnmvf3rlRdbDCWLT1aOb0XTzOpadAPWzPyaDcD8+Wsa0tQkK
+         WBqTKT3VZIA80/I13fKAw6dAbfLf3uyJxXU3kk2NMsc1olkgbA9edGb9txNea8q/nwws
+         fB5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=ZAiwNLyOdCqn327S7Lza4+QFCdIZGu76iyxPe00STg8=;
-        b=fEQ/gv2HdE5MFizzHU2tW9pk31Ssp6GcGqPzi5tOmIh4f0YiAaAR5hbmVAYQo+84yL
-         r5oeysMMV81jXpk5F+DsSNNdg8DxhegaNm39LyImOORn0aXL9bIBmqCQEbyHPXSdZkQ+
-         ljHQfubXjpTx7XZS21o0sGQCqjeB1f1gadz/tGwYC0duhYoP8pn95djxwYS8sBGhGbHZ
-         OI5xn/LgFbcbskryauR55Grr+4zgxYTP1bFKTUrRsRhjLfQ3j6gVncoOqR3UObzWIbSq
-         k6pQt5wCtNcPOkZqyDc71GqhEf55F0GtnSfrrOeIAjcaItz+3+KjNxzhDnitbxspDoB3
-         Mo7Q==
-X-Gm-Message-State: AOAM531Qz5UrBB0ImVRUL4jtR6SqtTaQVncJlDbggjWDOX1dqwUC6Ulv
-        f6OW0AbS9CvhCcVCZaKNlXlWwOf/ew==
-X-Google-Smtp-Source: ABdhPJw7dq0Mj6SFn7qO94i5CoOYKOOyYXs9QtdK23qSduHeloMb3lGgbs5sF7l1G1NkfAXjnetxhA==
-X-Received: by 2002:a05:6870:c109:b0:d9:e74e:d09a with SMTP id f9-20020a056870c10900b000d9e74ed09amr3640814oad.142.1649247925324;
-        Wed, 06 Apr 2022 05:25:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s6-20020a4ae546000000b0032480834193sm5902589oot.46.2022.04.06.05.25.24
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-description:content-disposition:in-reply-to;
+        bh=qaoX3BjDFO/GNif1Q+vixm8BqZ3Y/mPSstxwcqbf+5M=;
+        b=akXrrbZmYovwurkEu27a3Ughn/Y/SUvqecDIv8Wa0H3fDwYuopveZcz8kKvkEgtJyj
+         HB/mnxVsAFpwDdDFeX+HcYj0EJlpCHvsWQv28gRNbK9/x3ck2zVJm9OwM7OSHWyxAafq
+         SJAAowi6dm2wmhWy5vn8j7qLrXb2QOZ/5JiT9xP/KBzBY8oBqI86L4/y8Pb424V+nPA2
+         yZ44AXvNiRliX6rSFN6ERlFlfvJNN9XT1ISBvERAFAvtpQrfH75StOW0kOYIqWOyMyMi
+         edFjZqg/2GnSE1Iv+1fK+ifH5r0uo6Jq1oqy5DrFfEb7evGCBuRSjiFm4NCPDRVncpIj
+         RVtA==
+X-Gm-Message-State: AOAM533j+mO6vc6oCa7TIbGXpLiSMqRsu1imLnXi1J3TANN1KOV8brlf
+        QrwB9Glq3Su6I9dsPNLMyluGQg==
+X-Google-Smtp-Source: ABdhPJxIplzr6FuJ/+l8FoWo/Mx+c3Rm9vItr1Sjh/CkS39HFoS7t5tFYfCVDkCFzGH6wfLaKdukEw==
+X-Received: by 2002:a05:6000:144d:b0:205:8905:4cc1 with SMTP id v13-20020a056000144d00b0020589054cc1mr7435082wrx.508.1649262664158;
+        Wed, 06 Apr 2022 09:31:04 -0700 (PDT)
+Received: from google.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
+        by smtp.gmail.com with ESMTPSA id e12-20020a5d6d0c000000b001a65e479d20sm18214727wrq.83.2022.04.06.09.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 05:25:24 -0700 (PDT)
-Received: (nullmailer pid 2048304 invoked by uid 1000);
-        Wed, 06 Apr 2022 12:25:24 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Ene <sebastianene@google.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>, qperret@google.com,
-        maz@kernel.org, linux-watchdog@vger.kernel.org, will@kernel.org
-In-Reply-To: <20220405141954.1489782-2-sebastianene@google.com>
-References: <20220405141954.1489782-1-sebastianene@google.com> <20220405141954.1489782-2-sebastianene@google.com>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add qemu,vm-watchdog compatible
-Date:   Wed, 06 Apr 2022 07:25:24 -0500
-Message-Id: <1649247924.294947.2048303.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 06 Apr 2022 09:31:03 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 16:31:02 +0000
+From:   Sebastian Ene <sebastianene@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        will@kernel.org, qperret@google.com, maz@kernel.org
+Subject: Re: [PATCH 2/2] watchdog: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <Yk3ARqLLPssVIM2/@google.com>
+References: <20220405141954.1489782-1-sebastianene@google.com>
+ <20220405141954.1489782-3-sebastianene@google.com>
+ <20220405211551.GB2121947@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Description: evicetree@vger.kernel.org,
+Content-Disposition: inline
+In-Reply-To: <20220405211551.GB2121947@roeck-us.net>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 05 Apr 2022 14:19:54 +0000, Sebastian Ene wrote:
-> This watchdog can be used to detect stalls on vCPUs.
-> 
-> Signed-off-by: Sebastian Ene <sebastianene@google.com>
-> ---
->  .../devicetree/bindings/watchdog/vm-wdt.yaml  | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/vm-wdt.yaml
+On Tue, Apr 05, 2022 at 02:15:51PM -0700, Guenter Roeck wrote:
+> Sebastian,
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Hello Guenter,
 
-yamllint warnings/errors:
+> On Tue, Apr 05, 2022 at 02:19:55PM +0000, Sebastian Ene wrote:
+> > This patch adds support for a virtual watchdog which relies on the
+> > per-cpu hrtimers to pet at regular intervals.
+> > 
+> 
+> The watchdog subsystem is not intended to detect soft and hard lockups.
+> It is intended to detect userspace issues. A watchdog driver requires
+> a userspace compinent which needs to ping the watchdog on a regular basis
+> to prevent timeouts (and watchdog drivers are supposed to use the
+> watchdog kernel API).
+> 
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml: properties:timeout-sec: '$ref' should not be valid under {'const': '$ref'}
-	hint: Standard unit suffix properties don't need a type $ref
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml: ignoring, error in schema: properties: timeout-sec
-Documentation/devicetree/bindings/watchdog/vm-wdt.example.dtb:0:0: /example-0/watchdog: failed to match any schema with compatible: ['qemu,vm-watchdog']
+Thanks for getting back ! I wanted to create a mechanism to detect
+stalls on vCPUs and I am not sure if the current watchdog subsystem has a way
+to create per-CPU binded watchdogs (in the same way as Power PC has
+kernel/watchdog.c). 
+The per-CPU watchdog is needed to account for time that the guest is not
+running(either scheduled out or waiting for an event) to prevent spurious
+reset events caused by the watchdog.
 
-doc reference errors (make refcheckdocs):
+> What you have here is a CPU stall detection mechanism, similar to the
+> existing soft/hard lockup detection mechanism. This code does not
+> belong into the watchdog subsystem; it is similar to the existing
+> hard/softlockup detection code (kernel/watchdog.c) and should reside
+> at the same location.
+>
 
-See https://patchwork.ozlabs.org/patch/
+I agree that this doesn't belong to the watchdog subsytem but the current
+stall detection mechanism calls through MMIO into a virtual device
+'qemu,virt-watchdog'. Calling a device from (kernel/watchdog.c) isn't
+something that we should avoid ?
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+> Having said that, I could imagine a watchdog driver to be used in VMs,
+> but that would be similar to existing watchdog drivers. The easiest way
+> to get there would probably be to just instantiate one of the watchdog
+> devices already supported by qemu.
+>
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+I am looking forward for your response,
 
-pip3 install dtschema --upgrade
+> Guenter
 
-Please check and re-submit.
-
+Cheers,
+Sebastian
