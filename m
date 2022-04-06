@@ -2,108 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC804F509B
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Apr 2022 04:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE544F6325
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Apr 2022 17:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245322AbiDFBcR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 5 Apr 2022 21:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
+        id S235920AbiDFP1C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 6 Apr 2022 11:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447063AbiDEWWx (ORCPT
+        with ESMTP id S236165AbiDFP0r (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:22:53 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.51.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E453170096
-        for <linux-watchdog@vger.kernel.org>; Tue,  5 Apr 2022 14:16:23 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id D41FB4EFC
-        for <linux-watchdog@vger.kernel.org>; Tue,  5 Apr 2022 16:15:52 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id bqWmnixSm22u3bqWmnnkMz; Tue, 05 Apr 2022 16:15:52 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=RpbIKh1r4/BW29+SALiRPg7XSNqIUw9inRFZ3VtgfiY=; b=rnlkEyAZ4vKF3WOJgUmnyodVrd
-        C9uslS+M0meUurmet+JAVGBKXdhvwkIsWqpuSeJ3EcCqFEYMEjuAqUGDZmtQnL3BCd9vAK27T05Oa
-        7tPV96MzU0+N8l6/JBVEpE2FB90fN6F/nYDinDJWCPLn6wR28z+e6Z0zxJrDOG2YR0wzLBYxMWkg0
-        dR9uykoHq/SLgOZElDtv6iSGL0s4P52SjaEyDGDYrvNa3y//i4/710EKGF3oVJKIuPV9+BEfzMLi2
-        zoDNoDnzROHbpBYgHf9NVeN34NkjbHdapgBTLoJPWoo/3DBJHTwTEStObnVxjVyZCG838QavMbBdM
-        zLCwH4jg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57868 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nbqWm-003GUy-8P; Tue, 05 Apr 2022 21:15:52 +0000
-Date:   Tue, 5 Apr 2022 14:15:51 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
+        Wed, 6 Apr 2022 11:26:47 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A0F567C51;
+        Wed,  6 Apr 2022 05:25:26 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-dacc470e03so2688068fac.5;
+        Wed, 06 Apr 2022 05:25:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=ZAiwNLyOdCqn327S7Lza4+QFCdIZGu76iyxPe00STg8=;
+        b=fEQ/gv2HdE5MFizzHU2tW9pk31Ssp6GcGqPzi5tOmIh4f0YiAaAR5hbmVAYQo+84yL
+         r5oeysMMV81jXpk5F+DsSNNdg8DxhegaNm39LyImOORn0aXL9bIBmqCQEbyHPXSdZkQ+
+         ljHQfubXjpTx7XZS21o0sGQCqjeB1f1gadz/tGwYC0duhYoP8pn95djxwYS8sBGhGbHZ
+         OI5xn/LgFbcbskryauR55Grr+4zgxYTP1bFKTUrRsRhjLfQ3j6gVncoOqR3UObzWIbSq
+         k6pQt5wCtNcPOkZqyDc71GqhEf55F0GtnSfrrOeIAjcaItz+3+KjNxzhDnitbxspDoB3
+         Mo7Q==
+X-Gm-Message-State: AOAM531Qz5UrBB0ImVRUL4jtR6SqtTaQVncJlDbggjWDOX1dqwUC6Ulv
+        f6OW0AbS9CvhCcVCZaKNlXlWwOf/ew==
+X-Google-Smtp-Source: ABdhPJw7dq0Mj6SFn7qO94i5CoOYKOOyYXs9QtdK23qSduHeloMb3lGgbs5sF7l1G1NkfAXjnetxhA==
+X-Received: by 2002:a05:6870:c109:b0:d9:e74e:d09a with SMTP id f9-20020a056870c10900b000d9e74ed09amr3640814oad.142.1649247925324;
+        Wed, 06 Apr 2022 05:25:25 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s6-20020a4ae546000000b0032480834193sm5902589oot.46.2022.04.06.05.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 05:25:24 -0700 (PDT)
+Received: (nullmailer pid 2048304 invoked by uid 1000);
+        Wed, 06 Apr 2022 12:25:24 -0000
+From:   Rob Herring <robh@kernel.org>
 To:     Sebastian Ene <sebastianene@google.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        will@kernel.org, qperret@google.com, maz@kernel.org
-Subject: Re: [PATCH 2/2] watchdog: Add a mechanism to detect stalls on guest
- vCPUs
-Message-ID: <20220405211551.GB2121947@roeck-us.net>
-References: <20220405141954.1489782-1-sebastianene@google.com>
- <20220405141954.1489782-3-sebastianene@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405141954.1489782-3-sebastianene@google.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nbqWm-003GUy-8P
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57868
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 5
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>, qperret@google.com,
+        maz@kernel.org, linux-watchdog@vger.kernel.org, will@kernel.org
+In-Reply-To: <20220405141954.1489782-2-sebastianene@google.com>
+References: <20220405141954.1489782-1-sebastianene@google.com> <20220405141954.1489782-2-sebastianene@google.com>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add qemu,vm-watchdog compatible
+Date:   Wed, 06 Apr 2022 07:25:24 -0500
+Message-Id: <1649247924.294947.2048303.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Sebastian,
-
-On Tue, Apr 05, 2022 at 02:19:55PM +0000, Sebastian Ene wrote:
-> This patch adds support for a virtual watchdog which relies on the
-> per-cpu hrtimers to pet at regular intervals.
+On Tue, 05 Apr 2022 14:19:54 +0000, Sebastian Ene wrote:
+> This watchdog can be used to detect stalls on vCPUs.
+> 
+> Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> ---
+>  .../devicetree/bindings/watchdog/vm-wdt.yaml  | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/vm-wdt.yaml
 > 
 
-The watchdog subsystem is not intended to detect soft and hard lockups.
-It is intended to detect userspace issues. A watchdog driver requires
-a userspace compinent which needs to ping the watchdog on a regular basis
-to prevent timeouts (and watchdog drivers are supposed to use the
-watchdog kernel API).
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-What you have here is a CPU stall detection mechanism, similar to the
-existing soft/hard lockup detection mechanism. This code does not
-belong into the watchdog subsystem; it is similar to the existing
-hard/softlockup detection code (kernel/watchdog.c) and should reside
-at the same location.
+yamllint warnings/errors:
 
-Having said that, I could imagine a watchdog driver to be used in VMs,
-but that would be similar to existing watchdog drivers. The easiest way
-to get there would probably be to just instantiate one of the watchdog
-devices already supported by qemu.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml: properties:timeout-sec: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/vm-wdt.yaml: ignoring, error in schema: properties: timeout-sec
+Documentation/devicetree/bindings/watchdog/vm-wdt.example.dtb:0:0: /example-0/watchdog: failed to match any schema with compatible: ['qemu,vm-watchdog']
 
-Guenter
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
