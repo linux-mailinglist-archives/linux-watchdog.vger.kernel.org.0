@@ -2,172 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB254F9793
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Apr 2022 16:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288D44F9DDC
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Apr 2022 22:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236704AbiDHOF2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 8 Apr 2022 10:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S232974AbiDHUE0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 8 Apr 2022 16:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236673AbiDHOF1 (ORCPT
+        with ESMTP id S231737AbiDHUEY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:05:27 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B4D10F6D9
-        for <linux-watchdog@vger.kernel.org>; Fri,  8 Apr 2022 07:03:22 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id b19so12981237wrh.11
-        for <linux-watchdog@vger.kernel.org>; Fri, 08 Apr 2022 07:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=CAJU3Ppjclja8o7yRvgHZKi2NtEeXwWdxUmSNaygYns=;
-        b=C4S2gyOjm7hdek5UaS2XaGgjMr8pUub4kFbmITm+4lgCbyJ27ExZTID44lf7oA17yN
-         wz7yPBdeZeGWnuBd3GFcyf+fe9mgruhscWbT7RQnYhm1SBg/b5jhFTIhPoQ+/b9yPuUh
-         DgDpTV9KahF1CiahTbABAC3bg99zQVr/Rme3aYDPmk1Kqmt+JEcxknUUERm5wDmFORZz
-         PWfRRv5z3x4b84yPJq3pC7ylGfCa59GDYLHsumQsts5elvPp5K9VdWXagIhR4pKtrGcx
-         Q/c7+RaZ/AD9TJlftVyfLnrEM91Byrr3FoU+Fm9pB0JBvpS70zZxJhbOgjVPwAfKbDrB
-         PxAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=CAJU3Ppjclja8o7yRvgHZKi2NtEeXwWdxUmSNaygYns=;
-        b=g4bhKj616qNUZ2fYT+ynzOBPxt3F9HeVdxFYZdavGl7+Y0YdaulymTTFVdTfEXbbZQ
-         jIvsUEhjvf1TWAQeCOO8MumQI6Xw7tmgB7IlBwiCUsQS9IahiPAMIAX7k30hzplOfRwD
-         F2dlQqjgeotvlh1uNkOCEUcUy4r9lntLEF/IKmN1u/P683seVg7e1UDW2mkBVK2OkikZ
-         kiaYypi/E2Z/ob3JnXlOA2nbc9L3UWY+yUZtVmVPO1KXnED6l6YzxwE5Dj2qWQSrTUKV
-         Gs7e9TFvJ1CKkfM2+XqkmbxCD7bDyheRRiBqeyElXeBYkbKmKXHH1rFN35cCKEPxYYbW
-         Sv3Q==
-X-Gm-Message-State: AOAM531WNV8vrxXI2ImMksvJUeFc8X2ezqNLrRbuCK3ZmQhYmKR2jkyF
-        SGqzzENRtTjVuRDEwNl4f0l16A==
-X-Google-Smtp-Source: ABdhPJxzSNsl97gJmGPQadE3+Yhw4Adqx+WK5eiFZD73CBrsS4jqCqS2ni1cS2RpRJdmHLPq3fU+rw==
-X-Received: by 2002:adf:8066:0:b0:206:1563:8b2b with SMTP id 93-20020adf8066000000b0020615638b2bmr15038183wrk.582.1649426601269;
-        Fri, 08 Apr 2022 07:03:21 -0700 (PDT)
-Received: from google.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with ESMTPSA id e37-20020a5d5965000000b0020610e2631esm13423384wri.107.2022.04.08.07.03.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 07:03:17 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 14:03:16 +0000
-From:   Sebastian Ene <sebastianene@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        will@kernel.org, qperret@google.com, maz@kernel.org
-Subject: Re: [PATCH 2/2] watchdog: Add a mechanism to detect stalls on guest
- vCPUs
-Message-ID: <YlBApO66qMP7oC3c@google.com>
-References: <20220405141954.1489782-1-sebastianene@google.com>
- <20220405141954.1489782-3-sebastianene@google.com>
- <20220405211551.GB2121947@roeck-us.net>
- <Yk3ARqLLPssVIM2/@google.com>
- <ebc0923a-48c1-ccd4-6b89-c4ba9ac48da4@roeck-us.net>
+        Fri, 8 Apr 2022 16:04:24 -0400
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCA55FD8;
+        Fri,  8 Apr 2022 13:02:18 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.109.138.102])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id ACBBB2454A1;
+        Fri,  8 Apr 2022 20:02:16 +0000 (UTC)
+Received: from localhost.localdomain (88.125.132.16) by DAG1EX2.emp2.local
+ (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Apr
+ 2022 22:02:15 +0200
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+To:     <linux@roeck-us.net>, <wim@linux-watchdog.org>,
+        <geert+renesas@glider.be>, <linux-watchdog@vger.kernel.org>
+CC:     <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tzungbi@kernel.org>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Subject: [PATCH v5 0/2] ARM: r9a06g032: add support for the watchdogs
+Date:   Fri, 8 Apr 2022 22:02:03 +0200
+Message-ID: <20220408200205.2833931-1-jjhiblot@traphandler.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ebc0923a-48c1-ccd4-6b89-c4ba9ac48da4@roeck-us.net>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [88.125.132.16]
+X-ClientProxiedBy: CAS1.emp2.local (172.16.1.1) To DAG1EX2.emp2.local
+ (172.16.2.2)
+X-Ovh-Tracer-Id: 10720818915829561691
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudektddgudegfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeejudfgffelleehheevveeutdejfffgjeekudekkedugfeutdeffeeuhfeuveehieenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdekkedruddvhedrudefvddrudeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehtiihunhhgsghisehkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 09:52:05AM -0700, Guenter Roeck wrote:
-> On 4/6/22 09:31, Sebastian Ene wrote:
-> > On Tue, Apr 05, 2022 at 02:15:51PM -0700, Guenter Roeck wrote:
-> > > Sebastian,
-> > > 
-> > 
-> > Hello Guenter,
-> > 
-> > > On Tue, Apr 05, 2022 at 02:19:55PM +0000, Sebastian Ene wrote:
-> > > > This patch adds support for a virtual watchdog which relies on the
-> > > > per-cpu hrtimers to pet at regular intervals.
-> > > > 
-> > > 
-> > > The watchdog subsystem is not intended to detect soft and hard lockups.
-> > > It is intended to detect userspace issues. A watchdog driver requires
-> > > a userspace compinent which needs to ping the watchdog on a regular basis
-> > > to prevent timeouts (and watchdog drivers are supposed to use the
-> > > watchdog kernel API).
-> > > 
-> > 
-> > Thanks for getting back ! I wanted to create a mechanism to detect
-> > stalls on vCPUs and I am not sure if the current watchdog subsystem has a way
-> > to create per-CPU binded watchdogs (in the same way as Power PC has
-> > kernel/watchdog.c).
-> > The per-CPU watchdog is needed to account for time that the guest is not
-> > running(either scheduled out or waiting for an event) to prevent spurious
-> > reset events caused by the watchdog.
-> > 
-> > > What you have here is a CPU stall detection mechanism, similar to the
-> > > existing soft/hard lockup detection mechanism. This code does not
-> > > belong into the watchdog subsystem; it is similar to the existing
-> > > hard/softlockup detection code (kernel/watchdog.c) and should reside
-> > > at the same location.
-> > > 
-> > 
-> > I agree that this doesn't belong to the watchdog subsytem but the current
-> > stall detection mechanism calls through MMIO into a virtual device
-> > 'qemu,virt-watchdog'. Calling a device from (kernel/watchdog.c) isn't
-> > something that we should avoid ?
-> > 
+Hi all,
 
-Hello Guenter,
+This series adds support for the watchdog timers of the RZ/N1.
+The watchdog driver (rzn1-wdt.c) is derived from the driver available at
+https://github.com/renesas-rz/rzn1_linux.git with a few modifications
 
-> 
-> You are introducing qemu,virt-watchdog, so it seems to me that any argument
-> along that line doesn't really apply.
-> 
+In order to be able to reset the board when a watchdog timer expires,
+the RSTEN register must be configured. it is the responsability of the
+bootloader to set those bits (or not, depending on the chosen policy).
 
-I am trying to follow your guidelines to make this work, so I would be grateful
-if you have some time to share your thoughts on this. 
+If the watchdog reset source is not enabled, an interrupt is triggered
+when the watchdog expires. The interrupt handler will trigger an
+emergency restart.
 
-> I think it is more a matter for core kernel developers to discuss and
-> decide how this functionality is best instantiated. It doesn't _have_
-> to be a device, after all, just like the current lockup detection
-> code is not a device. Either case, I am not really the right person
-> to discuss this since it is a matter of core kernel code which I am
-> not sufficiently familiar with. All I can say is that watchdog drivers
-> in the watchdog subsystem have a different scope.
+Changes v4 -> v5:
+* use watchdog_get/set_drvdata() instead of container_of()
+* In probe(), initialize each member of struct watchdog_device separately
+  instead of copying the whole struct from a template.
 
-This watchdog device tracks the elapsed time on a per-cpu basis, since KVM
-schedules vCPUs independently.
-I am attempting to re-write it to use the watchdog-core infrastructure but
-doing this will loose the per-cpu watchdog binding and exposing it to
-userspace would require a strong thread affinity setting. How can I overcome
-this problem ?
+Changes v3 -> v4:
+ * dts: removed the patches that modify the device tree (already taken in
+   the renesas dt tree)
+ * driver: Call emergency_restart() in the interrupt handler.
+ 
+Changes v2 -> v3:
+* dts: changed compatible strings to include "renesas,r9a06g032-wdt" and
+  "renesas,rzn1-wdt".
+* driver: removed the SOC-specific "renesas,r9a06g032-wdt".
+* removed all the changes in the clock driver: the watchdog reset source
+  are not disabled anymore when the machine is halted.
+* fixed the clock rate type in the computations.
+* removed unnecessary printout and call to clk_disable_unprepare() in the
+  driver probe().
+    
+Changes v1 -> v2:
+* Modified the clock driver to not enable the watchdog reset sources.
+  On other renesas platforms, those bits are by the bootloader. The
+  watchdog reset sources are still disabled when the platform is halted
+  to prevent a watchdog reset.
+* Added a SOC-specific compatible "renesas,r9a06g032-wdt"
+* reordered the dts/i entries
+* default timeout is 60 seconds
+* reworked the probe function of the wdt driver to better error cases
+* removed the set_timeout() and use a fixed period computed in probe().
+  This removes the confusion and makes it clear that the period defined
+  by the user space in indeed handled by the watchdog core
 
-Having it like a hard lockup detector mechanism doesn’t work either because
-when the watchdog expires, we rely on crosvm (not the guest kernel) to handle
-this event and reset the machine. We cannot inject the reset event back into
-the guest as we don’t have NMI support on arm64.
 
-> 
-> Guenter
+Jean-Jacques Hiblot (1):
+  dt-bindings: watchdog: renesas,wdt: Add support for RZ/N1
 
-Thanks,
-Sebastian
+Phil Edworthy (1):
+  watchdog: Add Renesas RZ/N1 Watchdog driver
 
-> 
-> > > Having said that, I could imagine a watchdog driver to be used in VMs,
-> > > but that would be similar to existing watchdog drivers. The easiest way
-> > > to get there would probably be to just instantiate one of the watchdog
-> > > devices already supported by qemu.
-> > > 
-> > 
-> > I am looking forward for your response,
-> > 
-> > > Guenter
-> > 
-> > Cheers,
-> > Sebastian
-> 
+ .../bindings/watchdog/renesas,wdt.yaml        |   6 +
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/rzn1_wdt.c                   | 201 ++++++++++++++++++
+ 4 files changed, 216 insertions(+)
+ create mode 100644 drivers/watchdog/rzn1_wdt.c
+
+-- 
+2.25.1
+
