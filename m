@@ -2,72 +2,172 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5B14F780A
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Apr 2022 09:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB254F9793
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Apr 2022 16:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242208AbiDGHsw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 7 Apr 2022 03:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
+        id S236704AbiDHOF2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 8 Apr 2022 10:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242173AbiDGHsv (ORCPT
+        with ESMTP id S236673AbiDHOF1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 7 Apr 2022 03:48:51 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3310E9C8A;
-        Thu,  7 Apr 2022 00:46:51 -0700 (PDT)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 07 Apr 2022 16:46:51 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 24A852058443;
-        Thu,  7 Apr 2022 16:46:51 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 7 Apr 2022 16:46:51 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 5DD5DB62B7;
-        Thu,  7 Apr 2022 16:46:50 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH] dt-bindings: watchdog: uniphier: Use unevaluatedProperties
-Date:   Thu,  7 Apr 2022 16:46:46 +0900
-Message-Id: <1649317606-21267-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 8 Apr 2022 10:05:27 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B4D10F6D9
+        for <linux-watchdog@vger.kernel.org>; Fri,  8 Apr 2022 07:03:22 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id b19so12981237wrh.11
+        for <linux-watchdog@vger.kernel.org>; Fri, 08 Apr 2022 07:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=CAJU3Ppjclja8o7yRvgHZKi2NtEeXwWdxUmSNaygYns=;
+        b=C4S2gyOjm7hdek5UaS2XaGgjMr8pUub4kFbmITm+4lgCbyJ27ExZTID44lf7oA17yN
+         wz7yPBdeZeGWnuBd3GFcyf+fe9mgruhscWbT7RQnYhm1SBg/b5jhFTIhPoQ+/b9yPuUh
+         DgDpTV9KahF1CiahTbABAC3bg99zQVr/Rme3aYDPmk1Kqmt+JEcxknUUERm5wDmFORZz
+         PWfRRv5z3x4b84yPJq3pC7ylGfCa59GDYLHsumQsts5elvPp5K9VdWXagIhR4pKtrGcx
+         Q/c7+RaZ/AD9TJlftVyfLnrEM91Byrr3FoU+Fm9pB0JBvpS70zZxJhbOgjVPwAfKbDrB
+         PxAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=CAJU3Ppjclja8o7yRvgHZKi2NtEeXwWdxUmSNaygYns=;
+        b=g4bhKj616qNUZ2fYT+ynzOBPxt3F9HeVdxFYZdavGl7+Y0YdaulymTTFVdTfEXbbZQ
+         jIvsUEhjvf1TWAQeCOO8MumQI6Xw7tmgB7IlBwiCUsQS9IahiPAMIAX7k30hzplOfRwD
+         F2dlQqjgeotvlh1uNkOCEUcUy4r9lntLEF/IKmN1u/P683seVg7e1UDW2mkBVK2OkikZ
+         kiaYypi/E2Z/ob3JnXlOA2nbc9L3UWY+yUZtVmVPO1KXnED6l6YzxwE5Dj2qWQSrTUKV
+         Gs7e9TFvJ1CKkfM2+XqkmbxCD7bDyheRRiBqeyElXeBYkbKmKXHH1rFN35cCKEPxYYbW
+         Sv3Q==
+X-Gm-Message-State: AOAM531WNV8vrxXI2ImMksvJUeFc8X2ezqNLrRbuCK3ZmQhYmKR2jkyF
+        SGqzzENRtTjVuRDEwNl4f0l16A==
+X-Google-Smtp-Source: ABdhPJxzSNsl97gJmGPQadE3+Yhw4Adqx+WK5eiFZD73CBrsS4jqCqS2ni1cS2RpRJdmHLPq3fU+rw==
+X-Received: by 2002:adf:8066:0:b0:206:1563:8b2b with SMTP id 93-20020adf8066000000b0020615638b2bmr15038183wrk.582.1649426601269;
+        Fri, 08 Apr 2022 07:03:21 -0700 (PDT)
+Received: from google.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
+        by smtp.gmail.com with ESMTPSA id e37-20020a5d5965000000b0020610e2631esm13423384wri.107.2022.04.08.07.03.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 07:03:17 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 14:03:16 +0000
+From:   Sebastian Ene <sebastianene@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        will@kernel.org, qperret@google.com, maz@kernel.org
+Subject: Re: [PATCH 2/2] watchdog: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <YlBApO66qMP7oC3c@google.com>
+References: <20220405141954.1489782-1-sebastianene@google.com>
+ <20220405141954.1489782-3-sebastianene@google.com>
+ <20220405211551.GB2121947@roeck-us.net>
+ <Yk3ARqLLPssVIM2/@google.com>
+ <ebc0923a-48c1-ccd4-6b89-c4ba9ac48da4@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ebc0923a-48c1-ccd4-6b89-c4ba9ac48da4@roeck-us.net>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This refers common bindings, so this is preferred for
-unevaluatedProperties instead of additionalProperties.
+On Wed, Apr 06, 2022 at 09:52:05AM -0700, Guenter Roeck wrote:
+> On 4/6/22 09:31, Sebastian Ene wrote:
+> > On Tue, Apr 05, 2022 at 02:15:51PM -0700, Guenter Roeck wrote:
+> > > Sebastian,
+> > > 
+> > 
+> > Hello Guenter,
+> > 
+> > > On Tue, Apr 05, 2022 at 02:19:55PM +0000, Sebastian Ene wrote:
+> > > > This patch adds support for a virtual watchdog which relies on the
+> > > > per-cpu hrtimers to pet at regular intervals.
+> > > > 
+> > > 
+> > > The watchdog subsystem is not intended to detect soft and hard lockups.
+> > > It is intended to detect userspace issues. A watchdog driver requires
+> > > a userspace compinent which needs to ping the watchdog on a regular basis
+> > > to prevent timeouts (and watchdog drivers are supposed to use the
+> > > watchdog kernel API).
+> > > 
+> > 
+> > Thanks for getting back ! I wanted to create a mechanism to detect
+> > stalls on vCPUs and I am not sure if the current watchdog subsystem has a way
+> > to create per-CPU binded watchdogs (in the same way as Power PC has
+> > kernel/watchdog.c).
+> > The per-CPU watchdog is needed to account for time that the guest is not
+> > running(either scheduled out or waiting for an event) to prevent spurious
+> > reset events caused by the watchdog.
+> > 
+> > > What you have here is a CPU stall detection mechanism, similar to the
+> > > existing soft/hard lockup detection mechanism. This code does not
+> > > belong into the watchdog subsystem; it is similar to the existing
+> > > hard/softlockup detection code (kernel/watchdog.c) and should reside
+> > > at the same location.
+> > > 
+> > 
+> > I agree that this doesn't belong to the watchdog subsytem but the current
+> > stall detection mechanism calls through MMIO into a virtual device
+> > 'qemu,virt-watchdog'. Calling a device from (kernel/watchdog.c) isn't
+> > something that we should avoid ?
+> > 
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- .../devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello Guenter,
 
-diff --git a/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml b/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
-index a059d16cb4f2..90698cfa8f94 100644
---- a/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
-@@ -19,7 +19,7 @@ properties:
- required:
-   - compatible
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
--- 
-2.25.1
+> 
+> You are introducing qemu,virt-watchdog, so it seems to me that any argument
+> along that line doesn't really apply.
+> 
 
+I am trying to follow your guidelines to make this work, so I would be grateful
+if you have some time to share your thoughts on this. 
+
+> I think it is more a matter for core kernel developers to discuss and
+> decide how this functionality is best instantiated. It doesn't _have_
+> to be a device, after all, just like the current lockup detection
+> code is not a device. Either case, I am not really the right person
+> to discuss this since it is a matter of core kernel code which I am
+> not sufficiently familiar with. All I can say is that watchdog drivers
+> in the watchdog subsystem have a different scope.
+
+This watchdog device tracks the elapsed time on a per-cpu basis, since KVM
+schedules vCPUs independently.
+I am attempting to re-write it to use the watchdog-core infrastructure but
+doing this will loose the per-cpu watchdog binding and exposing it to
+userspace would require a strong thread affinity setting. How can I overcome
+this problem ?
+
+Having it like a hard lockup detector mechanism doesn’t work either because
+when the watchdog expires, we rely on crosvm (not the guest kernel) to handle
+this event and reset the machine. We cannot inject the reset event back into
+the guest as we don’t have NMI support on arm64.
+
+> 
+> Guenter
+
+Thanks,
+Sebastian
+
+> 
+> > > Having said that, I could imagine a watchdog driver to be used in VMs,
+> > > but that would be similar to existing watchdog drivers. The easiest way
+> > > to get there would probably be to just instantiate one of the watchdog
+> > > devices already supported by qemu.
+> > > 
+> > 
+> > I am looking forward for your response,
+> > 
+> > > Guenter
+> > 
+> > Cheers,
+> > Sebastian
+> 
