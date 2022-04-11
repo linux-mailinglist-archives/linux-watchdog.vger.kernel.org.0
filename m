@@ -2,79 +2,110 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912F34FB17E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Apr 2022 03:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F0A4FB1EF
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Apr 2022 04:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239969AbiDKBwp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 10 Apr 2022 21:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S238865AbiDKCp4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 10 Apr 2022 22:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244363AbiDKBwi (ORCPT
+        with ESMTP id S237932AbiDKCp4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 10 Apr 2022 21:52:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27595FC4;
-        Sun, 10 Apr 2022 18:50:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8850FB80EE9;
-        Mon, 11 Apr 2022 01:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2DCC385A1;
-        Mon, 11 Apr 2022 01:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649641819;
-        bh=ByY0sdWTAs2XT4Hm/H478dHxYG7AkIMFXZr3r45qlrI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RAI0Z89hW9+Gjd/2InbALkPBGDtGA57UOAQPQW13c2QGIhSJUwLoyGpN+5YzpQTdN
-         0Gp3BNnW2mFXSKf8oNu2LxRGpiYRhpjUmSMwphU2OsIBe6czIhuDoI1jIrd15595dZ
-         UFgPqBw3r0IJ2/QA38pMJmXgYhb3GOaT13gvyD827fK/YVNlechqcH3yMKIgwlXWmA
-         wbyUkjyhgOIW0wZxLWPazqqwIoG0VmUwL30HN/vqP8Q4dFxp3Z4kuxR9j7QXuUM4i8
-         mZVUYTQQu7dhBXsoNBT3FAO80PJHe+UUMFcA4wMAC1T3uCgUC7HarCT/HAA0MyWZWa
-         a3/t3qOyphYKQ==
-Date:   Mon, 11 Apr 2022 01:50:15 +0000
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     linux@roeck-us.net, wim@linux-watchdog.org,
-        geert+renesas@glider.be, linux-watchdog@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Phil Edworthy <phil.edworthy@renesas.com>
+        Sun, 10 Apr 2022 22:45:56 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C2E3F324;
+        Sun, 10 Apr 2022 19:43:43 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id i8-20020a4a6f48000000b00324ada4b9d9so2536068oof.11;
+        Sun, 10 Apr 2022 19:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oLgts9K7UmQuTCuGmocOEoqDhSlWF9Xa8QfC90inKE0=;
+        b=K2F+wfG9CIyclOliTMc4jVzCzPnRoDTxDUkNENWyUMMBuzIdAHfgvviRSjjY94N6Zw
+         RPx3brzZx5xwuItnvfnhJiXVnnpzeUVjdBCWrH70cq9kcd9lz6xj1ZbsJChXjLmgKNhY
+         wtXaIVkYkvg9VW430ltpi4WDyOjEAqIyzfSE6LF9w2LQs1JmVGnNfP05bVU4suB0HTrQ
+         B8dAadp2GmC8OJ987ewFL7Q3atg/ixMqTggM79XSXgcpe6oBqref8c0ibWbtm3mloSPD
+         EGWhJipUIwWFpya0v84TIBekbKhVYn1OKjzY5zvqusWqSgyg0AjWXQoxiBnamjHF7TVM
+         wFTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oLgts9K7UmQuTCuGmocOEoqDhSlWF9Xa8QfC90inKE0=;
+        b=0/KzHYVJT/6HqdjfJFmKBTJeOqkD0P0KrvxFhOIMT7YMBWRUEqNo/dGHvc1YjsCbq6
+         t0+f/dlM2mo+ZK59Ye/tp2OdHurMCfuCi3h2spXqiy+VssDCKgefnTgBdXPXiPkTZMtO
+         VvN/4geakvarMsyR0DalgFgPAA7GyZt/TtHBmXvWJ51RaAV31Co8gdRDJWrvMo47U9eb
+         WxYefHBO0BbYjrRfAiPsZsG6FszKyiINoccGfliiac2kN+yTzy9/3Cf0wy88LIij6zMB
+         omCsfnt6jEXm2MPHTOmJh7GQw2N+gTKyVA/qqazMtGJ2pMSc/RRd0r7BXdh0GEkuUybH
+         JP/g==
+X-Gm-Message-State: AOAM532lx0wXkSHxy9n5AElEcAqgUM9tEOcOYdea0pB/42R6QMMRHrHf
+        EASDxC9POhyZCgVx4L5e0eEXVkclW/c=
+X-Google-Smtp-Source: ABdhPJzIJGXWImyF68fpiDnlRuuK0sDOgGEUgb+42oDasRNYgDOUiLjmWyL/1m/8vLE5nun2zGwgCA==
+X-Received: by 2002:a05:6820:820:b0:329:9fd3:915c with SMTP id bg32-20020a056820082000b003299fd3915cmr5336332oob.0.1649645023048;
+        Sun, 10 Apr 2022 19:43:43 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p18-20020a056830131200b005ccf8ac6207sm11851381otq.80.2022.04.10.19.43.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Apr 2022 19:43:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3d05a866-ea95-7fa3-13de-8baf54f31653@roeck-us.net>
+Date:   Sun, 10 Apr 2022 19:43:40 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
 Subject: Re: [PATCH v5 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
-Message-ID: <YlOJVzA49rTrBDH3@google.com>
+Content-Language: en-US
+To:     Tzung-Bi Shih <tzungbi@kernel.org>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     wim@linux-watchdog.org, geert+renesas@glider.be,
+        linux-watchdog@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Phil Edworthy <phil.edworthy@renesas.com>
 References: <20220408200205.2833931-1-jjhiblot@traphandler.com>
  <20220408200205.2833931-3-jjhiblot@traphandler.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408200205.2833931-3-jjhiblot@traphandler.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <YlOJVzA49rTrBDH3@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YlOJVzA49rTrBDH3@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 10:02:05PM +0200, Jean-Jacques Hiblot wrote:
-> From: Phil Edworthy <phil.edworthy@renesas.com>
+On 4/10/22 18:50, Tzung-Bi Shih wrote:
+> On Fri, Apr 08, 2022 at 10:02:05PM +0200, Jean-Jacques Hiblot wrote:
+>> From: Phil Edworthy <phil.edworthy@renesas.com>
+>>
+>> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
+>> very limited timeout capabilities. However, it can reset the device.
+>> To do so, the corresponding bits in the SysCtrl RSTEN register need to
+>> be enabled. This is not done by this driver.
+>>
+>> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
 > 
-> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
-> very limited timeout capabilities. However, it can reset the device.
-> To do so, the corresponding bits in the SysCtrl RSTEN register need to
-> be enabled. This is not done by this driver.
+> With a minor comment:
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 > 
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>> +static int rzn1_wdt_probe(struct platform_device *pdev)
+>> +{
+> [...]
+>> +	wdt->wdtdev.timeout = DEFAULT_TIMEOUT;
+>> +	ret = watchdog_init_timeout(&wdt->wdtdev, 0, dev);
+> 
+> Could it drop the assignment if `ret` is unused?
 
-With a minor comment:
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Good catch. Yes, that assignment is pretty pointless.
 
-> +static int rzn1_wdt_probe(struct platform_device *pdev)
-> +{
-[...]
-> +	wdt->wdtdev.timeout = DEFAULT_TIMEOUT;
-> +	ret = watchdog_init_timeout(&wdt->wdtdev, 0, dev);
+Guenter
 
-Could it drop the assignment if `ret` is unused?
