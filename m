@@ -2,91 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21EB4FF117
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Apr 2022 09:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B864F4FF3C3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Apr 2022 11:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233554AbiDMH6H (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 13 Apr 2022 03:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S231866AbiDMJof (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 13 Apr 2022 05:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbiDMH6F (ORCPT
+        with ESMTP id S234637AbiDMJoe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 13 Apr 2022 03:58:05 -0400
-Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3518D49694;
-        Wed, 13 Apr 2022 00:55:44 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.108.1.92])
-        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id E1E6D23F7BC;
-        Wed, 13 Apr 2022 07:55:41 +0000 (UTC)
-Received: from [192.168.1.42] (88.125.132.16) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 09:55:40 +0200
-Message-ID: <e433c3b8-5118-47ad-0cfd-8ca79acbf7e0@traphandler.com>
-Date:   Wed, 13 Apr 2022 09:55:39 +0200
+        Wed, 13 Apr 2022 05:44:34 -0400
+Received: from mail.growthmindset24.pl (mail.growthmindset24.pl [212.237.36.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4F855BF4
+        for <linux-watchdog@vger.kernel.org>; Wed, 13 Apr 2022 02:42:12 -0700 (PDT)
+Received: by mail.growthmindset24.pl (Postfix, from userid 1001)
+        id 5EDE88715E; Tue, 12 Apr 2022 08:56:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=growthmindset24.pl;
+        s=mail; t=1649750174;
+        bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=wj0X7iU52aX5a+AXMZt8PiewTKIj5/8Q9tKflgV7AoYRrgaYf39QYZWtNk3Oml+Sa
+         1/EGWesDUnPxwVT6EmDQ/nuwPvJdKDoB9vM2ymSs35CwXDldK91XRa1ol7BDJypoWw
+         KucAECGyCzSOMc36UTaBpXiCE3NIqvE+K98a/vXAN2UyBR2Q/oDce6KmGD65npK6s0
+         zABY07iGOtoftE8Mnqpuy8wwSatV3YU5nDaQxxlZGGLmdvQixvHf60bbir4fzNj9wk
+         qnTs3VJJRlR3wYW4itwFktyjaNHCtUKHG78JtP8TCcXFoNx9uGAK9sDQ6W4J8B00oA
+         C30vhVrdOdqKA==
+Received: by mail.growthmindset24.pl for <linux-watchdog@vger.kernel.org>; Tue, 12 Apr 2022 07:56:00 GMT
+Message-ID: <20220412073001-0.1.2w.d7x7.0.7qb5og55mt@growthmindset24.pl>
+Date:   Tue, 12 Apr 2022 07:56:00 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@growthmindset24.pl>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.growthmindset24.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
-Content-Language: en-US
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-CC:     <linux@roeck-us.net>, <wim@linux-watchdog.org>,
-        <geert+renesas@glider.be>, <linux-watchdog@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>
-References: <20220408200205.2833931-1-jjhiblot@traphandler.com>
- <20220408200205.2833931-3-jjhiblot@traphandler.com>
- <YlOJVzA49rTrBDH3@google.com>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <YlOJVzA49rTrBDH3@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [88.125.132.16]
-X-ClientProxiedBy: DAG3EX2.emp2.local (172.16.2.22) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 9366924277373221365
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekledguddvhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhephfeitdehtddtgeeugefgtdejgedtieelfedtgeehuedtteejueeihedtvedvfeeinecukfhppedtrddtrddtrddtpdekkedruddvhedrudefvddrudeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehphhhilhdrvggufihorhhthhihsehrvghnvghsrghsrdgtohhm
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-On 11/04/2022 03:50, Tzung-Bi Shih wrote:
-> On Fri, Apr 08, 2022 at 10:02:05PM +0200, Jean-Jacques Hiblot wrote:
->> From: Phil Edworthy <phil.edworthy@renesas.com>
->>
->> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
->> very limited timeout capabilities. However, it can reset the device.
->> To do so, the corresponding bits in the SysCtrl RSTEN register need to
->> be enabled. This is not done by this driver.
->>
->> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
->> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> With a minor comment:
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Thanks for the time you took reviewing this.
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
->
->> +static int rzn1_wdt_probe(struct platform_device *pdev)
->> +{
-> [...]
->> +	wdt->wdtdev.timeout = DEFAULT_TIMEOUT;
->> +	ret = watchdog_init_timeout(&wdt->wdtdev, 0, dev);
-> Could it drop the assignment if `ret` is unused?
-
-I'll keep the assignment but check the value: watchdog_timeout_invalid()
-
-will return an error if the dt supplied value is out of range.
-
-JJ
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
 
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
