@@ -2,76 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D702E4FE393
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Apr 2022 16:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21EB4FF117
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Apr 2022 09:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242219AbiDLOVF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 12 Apr 2022 10:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S233554AbiDMH6H (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 13 Apr 2022 03:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiDLOVE (ORCPT
+        with ESMTP id S233332AbiDMH6F (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:21:04 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DE72B257;
-        Tue, 12 Apr 2022 07:18:46 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id k10so19221280oia.0;
-        Tue, 12 Apr 2022 07:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=obv/k21gZE+V92h4u03QULKQ3LtytSGxFnD77czROmA=;
-        b=EAAEBVlOAqOyiW1tC4Ocs2HJi/WOyZDgN6RRcmql+HY0hA5+QGV21TCNUGhH7JNB2l
-         Hk6t4IG8jK1vQQOuNFGfg1JLiYkuTqIwejo1POrVPR0NQlp43e819Jbkm48JQDWYtIjT
-         +lb2T9w+vDUG2AX1oky5qrJhRe0hdu9s0ivy0yDKgOhddOykO60QR8M72Ycf/oqTwpEU
-         2kpvfBakSQK0sCU7mM1O3Q+DQ87dIdJeQDJOVU3r6x5pq6Tnzrq5lx6fo7DdEWnKaSpk
-         m5TxC9gPV6zqyrEAHJyrzOPGzxhDfZ5TIOc2MbkzmF2dVSq2gFWWaEgA4yN7qt+kuG7O
-         ucSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=obv/k21gZE+V92h4u03QULKQ3LtytSGxFnD77czROmA=;
-        b=Yst6+xzFMQtnzGyF1A88qCLANA3/A2nmyODgSIzunPKC9crbNE3FmsNUVxJPsZ9Gmw
-         NuTDgX6HM5VrLYF+IsaKVy3CZXwX+GPV10UHmYUHsGe4Mt55Pqwdl2ASYnvg23U/awII
-         paIMHiiVCqWkDJ45C3ty9fEyW5+OD5yKjKAGlXjt6Im9MPnkAZ0ZRx3JDMDEFeZ10FJf
-         i+7uiRt/Zn4x+H3+hxf/v0jqFnm3bbEXvYfKEfAq59pYUJn4cDLZ8CbJAkPDXNyPekub
-         LqKitoyis8sgUex0vThddQgdVr1JjaIb2STQBobwAbCpOkifHy7e5xuaPIgcbHpXH8+m
-         c/Mg==
-X-Gm-Message-State: AOAM532ZMwemuBdNMqLkUpR87yAH8up4yqVNqFKw68J5JvYBcasQaEC0
-        6yCD3MJRJ1+ludhqu2yXWGA=
-X-Google-Smtp-Source: ABdhPJwwRy1UvOvDwBp6yA+VwcIK7ZVdFBc4qHV4BN+/MjC7zbwOdmbapdiftY1O+qAYdRi6vD4Nuw==
-X-Received: by 2002:a05:6808:4cf:b0:2ef:8af8:4a4 with SMTP id a15-20020a05680804cf00b002ef8af804a4mr1843693oie.159.1649773126149;
-        Tue, 12 Apr 2022 07:18:46 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p1-20020a05683003c100b005c927b6e645sm13487706otc.20.2022.04.12.07.18.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 07:18:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4dc6a76b-cdb4-e43e-cd04-4d77f9133ddf@roeck-us.net>
-Date:   Tue, 12 Apr 2022 07:18:43 -0700
+        Wed, 13 Apr 2022 03:58:05 -0400
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3518D49694;
+        Wed, 13 Apr 2022 00:55:44 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.108.1.92])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id E1E6D23F7BC;
+        Wed, 13 Apr 2022 07:55:41 +0000 (UTC)
+Received: from [192.168.1.42] (88.125.132.16) by DAG1EX2.emp2.local
+ (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
+ 2022 09:55:40 +0200
+Message-ID: <e433c3b8-5118-47ad-0cfd-8ca79acbf7e0@traphandler.com>
+Date:   Wed, 13 Apr 2022 09:55:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] watchdog: rti-wdt: Fix pm_runtime_get_sync() error
- checking
+Subject: Re: [PATCH v5 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
 Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Tero Kristo <t-kristo@ti.com>, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220412070824.23708-1-linmq006@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220412070824.23708-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+CC:     <linux@roeck-us.net>, <wim@linux-watchdog.org>,
+        <geert+renesas@glider.be>, <linux-watchdog@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+References: <20220408200205.2833931-1-jjhiblot@traphandler.com>
+ <20220408200205.2833931-3-jjhiblot@traphandler.com>
+ <YlOJVzA49rTrBDH3@google.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <YlOJVzA49rTrBDH3@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Originating-IP: [88.125.132.16]
+X-ClientProxiedBy: DAG3EX2.emp2.local (172.16.2.22) To DAG1EX2.emp2.local
+ (172.16.2.2)
+X-Ovh-Tracer-Id: 9366924277373221365
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekledguddvhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhephfeitdehtddtgeeugefgtdejgedtieelfedtgeehuedtteejueeihedtvedvfeeinecukfhppedtrddtrddtrddtpdekkedruddvhedrudefvddrudeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehphhhilhdrvggufihorhhthhihsehrvghnvghsrghsrdgtohhm
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,31 +58,35 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/12/22 00:08, Miaoqian Lin wrote:
-> If the device is already in a runtime PM enabled state
-> pm_runtime_get_sync() will return 1, so a test for negative
-> value should be used to check for errors.
-> 
-> Fixes: 2d63908bdbfb ("watchdog: Add K3 RTI watchdog support")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 11/04/2022 03:50, Tzung-Bi Shih wrote:
+> On Fri, Apr 08, 2022 at 10:02:05PM +0200, Jean-Jacques Hiblot wrote:
+>> From: Phil Edworthy <phil.edworthy@renesas.com>
+>>
+>> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
+>> very limited timeout capabilities. However, it can reset the device.
+>> To do so, the corresponding bits in the SysCtrl RSTEN register need to
+>> be enabled. This is not done by this driver.
+>>
+>> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> With a minor comment:
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-> ---
->   drivers/watchdog/rti_wdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-> index db843f825860..00ebeffc674f 100644
-> --- a/drivers/watchdog/rti_wdt.c
-> +++ b/drivers/watchdog/rti_wdt.c
-> @@ -226,7 +226,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
->   
->   	pm_runtime_enable(dev);
->   	ret = pm_runtime_get_sync(dev);
-> -	if (ret) {
-> +	if (ret < 0) {
->   		pm_runtime_put_noidle(dev);
->   		pm_runtime_disable(&pdev->dev);
->   		return dev_err_probe(dev, ret, "runtime pm failed\n");
+Thanks for the time you took reviewing this.
+
+>
+>> +static int rzn1_wdt_probe(struct platform_device *pdev)
+>> +{
+> [...]
+>> +	wdt->wdtdev.timeout = DEFAULT_TIMEOUT;
+>> +	ret = watchdog_init_timeout(&wdt->wdtdev, 0, dev);
+> Could it drop the assignment if `ret` is unused?
+
+I'll keep the assignment but check the value: watchdog_timeout_invalid()
+
+will return an error if the dt supplied value is out of range.
+
+JJ
+
 
