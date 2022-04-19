@@ -2,113 +2,176 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7CD504730
-	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Apr 2022 10:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C599C50672D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Apr 2022 10:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiDQIiH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 17 Apr 2022 04:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        id S236755AbiDSIwX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 19 Apr 2022 04:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbiDQIhz (ORCPT
+        with ESMTP id S234883AbiDSIwX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 17 Apr 2022 04:37:55 -0400
-Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089C32DAA0
-        for <linux-watchdog@vger.kernel.org>; Sun, 17 Apr 2022 01:35:19 -0700 (PDT)
-Received: by mail-qv1-xf44.google.com with SMTP id b17so9182356qvp.6
-        for <linux-watchdog@vger.kernel.org>; Sun, 17 Apr 2022 01:35:19 -0700 (PDT)
+        Tue, 19 Apr 2022 04:52:23 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FA422B23
+        for <linux-watchdog@vger.kernel.org>; Tue, 19 Apr 2022 01:49:36 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id b7so5201638plh.2
+        for <linux-watchdog@vger.kernel.org>; Tue, 19 Apr 2022 01:49:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
-        b=oNJc2INf8Rhr5FB/7dmVLUtXIN32Zpr+JOws5mZo8yLIZkx20k3ktobg4cFsyHfo10
-         opyovUTmrMqZBrjIIPL8dwM3Cl42hbyZvaLR8TbrZDbPh7rgV94AneypUIz7gx5LvazE
-         zDLFkcDX1nbPbvLE1YDjvnnDO6sd+MeRRKk7hJojVtPLOuB8iX7Tisqm37Yqye5BOvOD
-         qrtEmC9HZPFnF8UhgjxviHDBiEkp+KFrjrNS6AiUfUOujeKcrIPlTDjJJypvibkN2ZRc
-         Fcc5bL7t8fX01QLLow126XRV2cU5sFntAnAB/7YbhrXrCEA2hg1PeuWagasZGrwW/+fq
-         MCiw==
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=70eSnGuw9o8loBttndD7gTXARu4TSWQMRPzp0nusFp0=;
+        b=Vft4Q6QcKEB1GhvQwWAvBCqgdhpT/Yt4S++DVamBTvWu0R+3k5aoI1CPP5q5CzqV6a
+         EzdVz0JBQ5nbBL7PUBM1PbRd2zPV4nN5aqwbgcahbXDo3KqzJ9TXtNlpKIqCbdEuhNV+
+         YepYEtDmr2EZw9Ask+8YGOdOMhr/3VcuONjbg17x5lOHSk4Ocx7JKutu8bhVn353Mhbp
+         SKUo210a4lvIVyLOgIEueFoG7lhd8M6LOL3KClLlUVXPS07gYAmp0ntIZstO43TKsyqp
+         NhTD+bfe8xQ0amnpp7y8nNw4actXdi8NV4fK5mN5P/MvQWJZS5YVPB6DDxwbOG7dA2wh
+         5EGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
-        b=FVK6KvaS3ec6Wq0aRsI4Sm+4PUX25SefnQZNijmwaE0uWdiC6crRJ/w5fGVxPVp8sG
-         kS5QIw5faj0nHvLuQjsEDJWnjK4DNSXYWsShMjzn/rE6Px9TQmE1WHacrf4SQanZPxI5
-         tXWPCfBR+Y/cCpHQbgPvhexrBGDREoPtC4bV7P9HV1omDvHSAM5wPvy9j5YTWu//gHL3
-         MmGJRCpzBnEy0SBqFFc9a7Syibnc6zBYMMz+LkJQpvz5mVISSForGwpGs5rhio/m5nih
-         0y/qVrHpeFyqKDITqC43RJ6tGz/W7ZZrHbO2VCEkeAOcchdrEw6sFzedfYiaqCK3aCKS
-         JycA==
-X-Gm-Message-State: AOAM530yKwKJoMku9UwA7yvfqy3irjcnotwgcmCJunM3ULazw8+ipI60
-        x7FAHpX+pHFoOdCUv8c18Md9rhayxewE/nTZYO5nyJEFslyjP+K++T8=
-X-Google-Smtp-Source: ABdhPJw9Xt2OFrIK7hURg4kp9HjRikv5sLzHEzVl1NzDr5ZjkMyPbwTBECFNWcwqZlk35V3UQisOkE0Lf5eHqEkQTho=
-X-Received: by 2002:a1f:5105:0:b0:345:252e:b0f5 with SMTP id
- f5-20020a1f5105000000b00345252eb0f5mr1463329vkb.22.1650184508047; Sun, 17 Apr
- 2022 01:35:08 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=70eSnGuw9o8loBttndD7gTXARu4TSWQMRPzp0nusFp0=;
+        b=RYjSaf3tB7OvPFrkjLkaZrT5805MQPp1qSH4y6zLY0YhYScGooavgCHOd9vPqvLJ8g
+         geD0BpZ57Do5sb0/ZAPMaOneXOIvkoC0RJlP0lX6hWXAYt+b1ZM/DSlH19ZNZGVPSJiW
+         zmuDA6XbjAsxQGXSfzwbtsBMfP32VW6+xOjHDhjOsggCd120g320mMsXm71YcQ2nSpEZ
+         3NxMofBCAkgzNt3EDYa6QZzca8g8dBarGmI7+QMvO9Sh3m7UYcmLYJ5FWnpB2N8oSO/C
+         EWjbBdFVReauS+4xy3uylnQmUH+J0iZrPMXQ8/p9/J2RW/SEXbCpDndVvV3XXrJyYA66
+         XGQQ==
+X-Gm-Message-State: AOAM532SlFA/zyRzoq6XndAgRk37otKq+v3wyfvxv6bB1MQQqj7U+6g7
+        3z24s6AzNb341NQg3PQ4sZoLwg==
+X-Google-Smtp-Source: ABdhPJxgUovYJ3ZolZ5GSrsu8VXLiJX6S4pnWBIYrhAw8oyfYcEzVSt6mZbjSOVu4NsIFWlNGJoigA==
+X-Received: by 2002:a17:902:9b98:b0:156:52b1:b100 with SMTP id y24-20020a1709029b9800b0015652b1b100mr14515089plp.174.1650358175689;
+        Tue, 19 Apr 2022 01:49:35 -0700 (PDT)
+Received: from [192.168.10.153] (203-7-124-83.dyn.iinet.net.au. [203.7.124.83])
+        by smtp.gmail.com with ESMTPSA id c11-20020a056a000acb00b004f35ee129bbsm16683990pfl.140.2022.04.19.01.49.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 01:49:35 -0700 (PDT)
+Message-ID: <6c685640-ebbe-e227-a096-99d60b9d499b@ozlabs.ru>
+Date:   Tue, 19 Apr 2022 18:49:28 +1000
 MIME-Version: 1.0
-Received: by 2002:a05:612c:2303:b0:2a3:2b46:b7d with HTTP; Sun, 17 Apr 2022
- 01:35:07 -0700 (PDT)
-Reply-To: markwillima00@gmail.com
-From:   Mark <muhammadsuleima888@gmail.com>
-Date:   Sun, 17 Apr 2022 01:35:07 -0700
-Message-ID: <CANCcrFBrB3Qw8Ab_hBy19n0Ch6+XNpkXj3PjXKrc26cej7s+Kg@mail.gmail.com>
-Subject: Re: Greetings!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f44 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [markwillima00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [muhammadsuleima888[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [muhammadsuleima888[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
+ Thunderbird/100.0
+Subject: Re: [RFC v1 0/2] Add driver for PAPR watchdog timers
+Content-Language: en-US
+To:     Scott Cheloha <cheloha@linux.ibm.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     bjking@linux.ibm.com, nathanl@linux.ibm.com, npiggin@gmail.com,
+        vaishnavi@linux.ibm.com, wvoigt@us.ibm.com
+References: <20220413165104.179144-1-cheloha@linux.ibm.com>
+From:   Alexey Kardashevskiy <aik@ozlabs.ru>
+In-Reply-To: <20220413165104.179144-1-cheloha@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello,
-
-The HSBC Bank is a financial institution in United Kingdom. We
-promotes long-term,sustainable and broad-based economic growth in
-developing and emerging countries by providing financial support like
-loans and investment to large, small and
-medium-sized companies (SMEs) as well as fast-growing enterprises
-which in turn helps to create secure and permanent jobs and reduce
-poverty.
-
-If you need fund to promotes your business, project(Project Funding),
-Loan, planning, budgeting and expansion of your business(s) , do not
-hesitate to indicate your interest as we are here to serve you better
-by granting your request.
 
 
-Thank you
-Mr:Mark
+On 14/04/2022 02:51, Scott Cheloha wrote:
+> This series adds a driver for PAPR hypercall-based watchdog timers,
+> tentatively named "pseries-wdt".
+> 
+> I wanted to get some clarification on a few things before submitting
+> the series as a patch, hence the RFC.  The first patch adding the
+> hypercall to hvcall.h is straightforward, but I have questions about
+> the second patch (the driver).  In particular:
+> 
+> - In pseries_wdt_probe() we register the watchdog device with
+>    devm_watchdog_register_device().  However, in pseries_wdt_remove(),
+>    calling watchdog_unregister_devce() causes a kernel panic later,
+>    so I assume this is the wrong thing to do.
+
+
+It should have been devm_watchdog_unregister_device() (no difference 
+though) and what was the backtrace? Most watchdog drivers do it this way 
+  :-/
+
+
+>    Do we need to do anything to clean up the watchdog device during
+>    pseries_wdt_remove()?  Or does devm_watchdog_register_device()
+>    ensure the cleanup is handled transparently?
+> 
+> - In pseries_wdt_probe(), is it incorrect to devm_kfree() my
+>    allocation in the event that devm_watchdog_register_device()
+>    fails?
+
+I am pretty sure nothing is going to free the memory you allocated in 
+devm_kzalloc() as you do not even pass the allocated pointer to 
+devm_watchdog_register_device(), it is an offset. The only reason 
+devm_kfree(&pw->wd) won't barf1 is @wd is the first member of the 
+pseries_wdt struct.
+
+
+> - The enormous hypercall input/output comment is mostly for my
+>    edification.  It seems like the sort of thing that will rot over time.
+>    I intend to remove most of it.  However, as far as I know the PAPR
+>    revision containing these details is not published yet.  Should I
+>    leave the comment in to ease review for now and remove it later?
+>    Or should I omit it from the initial commit entirely?
+
+I'd probably remove some empty lines and add shorter comments inline, like:
+
++/* Bits 56-63: "timeoutAction" */
++#define PSERIES_WDTF_ACTION(ac)			SETFIELD(ac, 56, 63)
++#define PSERIES_WDTF_ACTION_HARD_POWEROFF	PSERIES_WDTF_ACTION(0x1) // 
+"Hard poweroff"
++#define PSERIES_WDTF_ACTION_HARD_RESTART	PSERIES_WDTF_ACTION(0x2) // 
+"Hard restart"
++#define PSERIES_WDTF_ACTION_DUMP_RESTART	PSERIES_WDTF_ACTION(0x3) // 
+"Dump restart"
+
+
+The quoted text would tell what to search literally for in the PAPR spec 
+when it is updated.
+
+
+> - Should we print something to the console when probing/removing the
+>    watchdog0 device or is that just noise?
+> 
+>    Most drivers (as distinct from devices) seem to print something
+>    during initialization, so that's what I've done in
+>    pseries_wdt_module_init() when the capability query succeeds.
+
+
+I'd say it is noise but since the watchdog is not represented in the 
+device tree, there is really no other way of knowing if it is running 
+(unless it is a module?).
+
+One line message in pseries_wdt_probe() with 
+PSERIES_WDTQ_MAX_NUMBER/PSERIES_WDTQ_MIN_TIMEOUT should do.
+
+
+> - The timeout action is currently hardcoded to a hard reset.  This
+>    could be made configurable through a module parameter.  I intend
+>    to do this in a later patch unless someone needs it included
+>    in the initial patch.
+
+Make it in the initial patch, it is just a few lines.
+
+
+> - We set EIO if the hypercall fails in pseries_wdt_start() or
+>    pseries_wdt_stop().  There is nothing userspace can do if this
+>    happens.  All hypercall failures in these contexts are unexpected.
+
+The userspace can log the event, send an email, "sync && reboot", dunno.
+
+>    Given all of that, is there is a more appropriate errno than EIO?
+> 
+> - The H_WATCHDOG spec indicates that H_BUSY is possible.  Is it
+>    probable, though?  Should we spin and retry the hypercall in
+>    the event that we see it?  Or is that pointless?
+
+
+Looks like the other parts of pseries do retry after calling cond_resched().
+
+> 
+> 
