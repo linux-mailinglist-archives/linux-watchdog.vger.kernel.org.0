@@ -2,36 +2,37 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654E750B298
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Apr 2022 10:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFE350B2A0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Apr 2022 10:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445436AbiDVIFU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Apr 2022 04:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S1445420AbiDVIDM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Apr 2022 04:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445443AbiDVIFT (ORCPT
+        with ESMTP id S1445394AbiDVIDL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:05:19 -0400
+        Fri, 22 Apr 2022 04:03:11 -0400
+X-Greylist: delayed 1979 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 01:00:17 PDT
 Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37E1527D1;
-        Fri, 22 Apr 2022 01:02:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09519527CB;
+        Fri, 22 Apr 2022 01:00:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=cZWm1q63rwYi32f1VKD80rczQVSL9KwMkpmg6YC11cM=; b=PSkCcqo0nrud4oXCPvekf/9txM
-        5q7ZlWXBzBOIdJ2TETKLOitv6M9pNEhPzeYA9+2BWPVKj5KSh4VGKx7TDGrapMquJQVK3FMKiqHRS
-        HNVbmv4KKEF4po2JmQ/Jp6WQSoK72cxnrPQjghMvNhwl7uhQLANud0gxI1oBrxoo6qVf56OgW7QVV
-        HD5jM2n9TO0fANCHzZlJEK9pRUBMkZhUlg6WBvE7N2E3p7TZlEgHW4H+rVXeiv0SHWsh3JsGNrpZA
-        2h8nZ7tfFiePi8x6QhSGF8WKsi51rV1eAq+ebU5z0+1rI1X8fgyK8pRJk+vvmNBP1FEI0SmQnvJRj
-        1s1KCSCg==;
+        bh=RrUAgaYBGqDlVeJywd9UwMyWVO5BjQ8SP6lbW6haBps=; b=aquPLQ6b42nMo9of3bdebMZYmk
+        8jloNnIWnsmh89f40GGmLqyesubKxt1t9SGZeMwBN+QAcnqvO+iuYRw/pXEnsA/Ka1d5IbKFFNe1E
+        DwdFdWBvqVTfVtd44EAA17G7mDoe19u+6dtfrI3gbRaZDR8fzILnNJxLve1W96ueXEEnEzIY+gbTS
+        nzeqoQdtzr8Q0q12n0H1u6653u3Kcb0bQyL+aHgG9ZEdCn5WoyQ7l6gh4Zx9Mf/d4+bDwObMxGFqK
+        GjO9k+m+aHShSzMP25AA60JpfwX7Ymv0x+eOYAWchN7iHK+GFWv8Q9jQs7oxXb3HXSo/Y+lAX2fdl
+        NokNeHKA==;
 Received: from [89.212.21.243] (port=36186 helo=localhost.localdomain)
         by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.95)
         (envelope-from <primoz.fiser@norik.com>)
-        id 1nhnh2-007P6W-Qh;
+        id 1nhnh2-007P6W-Vq;
         Fri, 22 Apr 2022 09:27:12 +0200
 From:   Primoz Fiser <primoz.fiser@norik.com>
 To:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
@@ -46,10 +47,12 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Primoz Fiser <primoz.fiser@norik.com>,
         Andrej Picej <andrej.picej@norik.com>, upstream@phytec.de
-Subject: [PATCH 1/3] dt-bindings: mfd: da9063: watchdog: add suspend disable option
-Date:   Fri, 22 Apr 2022 09:27:11 +0200
-Message-Id: <20220422072713.3172345-1-primoz.fiser@norik.com>
+Subject: [PATCH 2/3] watchdog: da9063: optionally disable watchdog during suspend
+Date:   Fri, 22 Apr 2022 09:27:12 +0200
+Message-Id: <20220422072713.3172345-2-primoz.fiser@norik.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220422072713.3172345-1-primoz.fiser@norik.com>
+References: <20220422072713.3172345-1-primoz.fiser@norik.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -71,38 +74,98 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Document the watchdog disable option which can be used if the hardware
-automatic suspend option is broken.
+Optionally disable watchdog during suspend (if enabled) and re-enable
+it upon resume.
+This enables boards to sleep without being interrupted by the watchdog.
 
-Based on commit c514430c51ee8 ("dt-bindings: watchdog: da9062: add
-suspend disable option").
+This patch is based on commit f6c98b08381c ("watchdog: da9062: add
+power management ops") and commit 8541673d2a5f ("watchdog: da9062: fix
+power management ops") and brings the same functionality to DA9063.
 
 Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
 ---
- Documentation/devicetree/bindings/mfd/da9063.txt | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/watchdog/da9063_wdt.c | 36 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt b/Documentation/devicetree/bindings/mfd/da9063.txt
-index 91b79a21d403..aa8b800cc4ad 100644
---- a/Documentation/devicetree/bindings/mfd/da9063.txt
-+++ b/Documentation/devicetree/bindings/mfd/da9063.txt
-@@ -64,10 +64,13 @@ Sub-nodes:
-     and KEY_SLEEP.
+diff --git a/drivers/watchdog/da9063_wdt.c b/drivers/watchdog/da9063_wdt.c
+index 9adad1862bbd..09a4af4c58fc 100644
+--- a/drivers/watchdog/da9063_wdt.c
++++ b/drivers/watchdog/da9063_wdt.c
+@@ -18,6 +18,7 @@
+ #include <linux/delay.h>
+ #include <linux/mfd/da9063/registers.h>
+ #include <linux/mfd/da9063/core.h>
++#include <linux/property.h>
+ #include <linux/regmap.h>
  
- - watchdog : This node defines settings for the Watchdog timer associated
--  with the DA9063 and DA9063L. There are currently no entries in this
--  binding, however compatible = "dlg,da9063-watchdog" should be added
--  if a node is created.
-+  with the DA9063 and DA9063L. The node should contain the compatible property
-+  with the value "dlg,da9063-watchdog".
+ /*
+@@ -26,6 +27,8 @@
+  *   others: timeout = 2048 ms * 2^(TWDSCALE-1).
+  */
+ static const unsigned int wdt_timeout[] = { 0, 2, 4, 8, 16, 32, 65, 131 };
++static bool use_sw_pm;
++
+ #define DA9063_TWDSCALE_DISABLE		0
+ #define DA9063_TWDSCALE_MIN		1
+ #define DA9063_TWDSCALE_MAX		(ARRAY_SIZE(wdt_timeout) - 1)
+@@ -218,6 +221,8 @@ static int da9063_wdt_probe(struct platform_device *pdev)
+ 	if (!wdd)
+ 		return -ENOMEM;
  
-+  Optional watchdog properties:
-+  - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
-+  Only use this option if you can't use the watchdog automatic suspend
-+  function during a suspend (see register CONTROL_B).
++	use_sw_pm = device_property_present(dev, "dlg,use-sw-pm");
++
+ 	wdd->info = &da9063_watchdog_info;
+ 	wdd->ops = &da9063_watchdog_ops;
+ 	wdd->min_timeout = DA9063_WDT_MIN_TIMEOUT;
+@@ -228,6 +233,7 @@ static int da9063_wdt_probe(struct platform_device *pdev)
  
- Example:
+ 	watchdog_set_restart_priority(wdd, 128);
+ 	watchdog_set_drvdata(wdd, da9063);
++	dev_set_drvdata(dev, wdd);
  
+ 	wdd->timeout = DA9063_WDG_TIMEOUT;
+ 
+@@ -249,10 +255,40 @@ static int da9063_wdt_probe(struct platform_device *pdev)
+ 	return devm_watchdog_register_device(dev, wdd);
+ }
+ 
++static int __maybe_unused da9063_wdt_suspend(struct device *dev)
++{
++	struct watchdog_device *wdd = dev_get_drvdata(dev);
++
++	if (!use_sw_pm)
++		return 0;
++
++	if (watchdog_active(wdd))
++		return da9063_wdt_stop(wdd);
++
++	return 0;
++}
++
++static int __maybe_unused da9063_wdt_resume(struct device *dev)
++{
++	struct watchdog_device *wdd = dev_get_drvdata(dev);
++
++	if (!use_sw_pm)
++		return 0;
++
++	if (watchdog_active(wdd))
++		return da9063_wdt_start(wdd);
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(da9063_wdt_pm_ops,
++			da9063_wdt_suspend, da9063_wdt_resume);
++
+ static struct platform_driver da9063_wdt_driver = {
+ 	.probe = da9063_wdt_probe,
+ 	.driver = {
+ 		.name = DA9063_DRVNAME_WATCHDOG,
++		.pm = &da9063_wdt_pm_ops,
+ 	},
+ };
+ module_platform_driver(da9063_wdt_driver);
 -- 
 2.25.1
 
