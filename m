@@ -2,100 +2,136 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671B550B286
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Apr 2022 10:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F04150BFED
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Apr 2022 20:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445444AbiDVIGA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Apr 2022 04:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S229890AbiDVSqY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Apr 2022 14:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445443AbiDVIF7 (ORCPT
+        with ESMTP id S229845AbiDVSqY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Apr 2022 04:05:59 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7A1527DB;
-        Fri, 22 Apr 2022 01:03:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=rwpmI405aL91duchnEQbP99H3yfe1UPXHbd9Vu/Vayg=; b=QIXmre30beWxx4rsbcS5WhYA5l
-        I27zSviwbbyiPRFMveb95lxOjLP2ufFsEASx53tRMgp/9HdCUORWOcWoKnb4rX2B75N0EvSeRVTph
-        4uRQ+GLvsuWFcl5fBgC2qksWyfjmz7KyRcC35eZ8rAg2yVfdj22N2ihIzN9J+NN3TpM4VC561aAlu
-        aR7Rucv1zX9ii8WcqrZCgdAWVzwbHfuzMtVaW5AK4fmnuYewPZGpP1PoXeXhvlOaYE74IngljnMxx
-        7SlNZf3VG2Qu4UChVraVD68j9b/Zkl7fGpaI+Xb8IR9qmLI4fpOuQX6vTtc5gviMuxjnyfCVCLWzs
-        FfAxsm5g==;
-Received: from [89.212.21.243] (port=36186 helo=localhost.localdomain)
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <primoz.fiser@norik.com>)
-        id 1nhnh3-007P6W-45;
-        Fri, 22 Apr 2022 09:27:12 +0200
-From:   Primoz Fiser <primoz.fiser@norik.com>
-To:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Support Opensource <support.opensource@diasemi.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fri, 22 Apr 2022 14:46:24 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D02E12758B;
+        Fri, 22 Apr 2022 11:42:27 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id a10so9955294oif.9;
+        Fri, 22 Apr 2022 11:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=hUAGJI7MZIzFGBlWW57hloz6jpEOZG9rptUBKkWEgMk=;
+        b=TVybQ9BGLyIfiMbQ8yLpEWT3buhFfnziUIlE3M+S7kswwHnSHyCXOYVWdTYkMoa2Hp
+         TjLBIFbXJ1L3liznezkxkj4G/lXpyCLk0M1OtcYMhd5FnA/1d4yn2/fBOpfrKsy5GGso
+         pjsxDdCIweB59jQDBnAJRPDmEfjt83ZQ72c182ocNXUK9jFOukuzxg1evZl5xBqcIBGJ
+         b2D9npXg69VFXjCXW1xQTsiAxIFqoH7PgLqGKIkWqv9whdskSrioK/1hgKwu8Ep36xZl
+         p5rUU6Zy44txzPKM2APsYISxbKYIwC8DmJtnav/QxRUAvlW/vmScJRtBYiESVTgBal0z
+         +/9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=hUAGJI7MZIzFGBlWW57hloz6jpEOZG9rptUBKkWEgMk=;
+        b=0pa+WEyotZo02iCoQ5449qaljtmMwLntshQ6GzSg0FwTCSXhYjEOr0MdzU8++qeEPQ
+         aCGMpubYaLOG1qQJ5MKCXIfya+Qr16qfRXmKXNJWo5slqAIbF0cM0TvhLvbocIeDwcAL
+         UixHjCYliJfPott9F8V94OIxLQXykD4y1oM7I1itbMJEl/6eVWWBL++eiTY+DfqEiYeY
+         RmwK6obeBPUSkP1tsyHvby/ziFWmkaf0aLVM+zTuWbPZYtAZl343we6sfvrnjOnvbpHR
+         3nSeekWVmS8nT3u49EmIwUC50t7b8+jOZLKzcId+Y4+71z0nIACFZJqZ14VY5MrT7sow
+         kzBA==
+X-Gm-Message-State: AOAM531HodrqvWRNUpKK7/bMhP1L4/3RdWD8pdkKyVzw5yi7MX5tRNrj
+        FdrX8K7L4sDKK8XthpE3fIs=
+X-Google-Smtp-Source: ABdhPJxXTOlR3CyOaSls0W1PFuow9H3jq2A9kiQEbWk0nPfmXNkGykl0l6n5RNsWtUtRazUUrdDGNA==
+X-Received: by 2002:aca:5c44:0:b0:322:ed86:2c08 with SMTP id q65-20020aca5c44000000b00322ed862c08mr2831409oib.17.1650652459466;
+        Fri, 22 Apr 2022 11:34:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i16-20020a056870d41000b000e1a3a897basm953335oag.26.2022.04.22.11.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 11:34:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 22 Apr 2022 11:34:17 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Primoz Fiser <primoz.fiser@norik.com>,
-        Andrej Picej <andrej.picej@norik.com>, upstream@phytec.de
-Subject: [PATCH 3/3] ARM: dts: imx6: phyFLEX: disable da9063 watchdog during suspend
-Date:   Fri, 22 Apr 2022 09:27:13 +0200
-Message-Id: <20220422072713.3172345-3-primoz.fiser@norik.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220422072713.3172345-1-primoz.fiser@norik.com>
-References: <20220422072713.3172345-1-primoz.fiser@norik.com>
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH 3/7] watchdog: npcm: Enable clock if provided
+Message-ID: <20220422183417.GB2637654@roeck-us.net>
+References: <20220422183012.444674-1-j.neuschaefer@gmx.net>
+ <20220422183012.444674-4-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: primoz.fiser@norik.com
-X-Authenticated-Sender: cpanel.siel.si: primoz.fiser@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422183012.444674-4-j.neuschaefer@gmx.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-If DA9063 PMIC is left enabled during suspend, PMIC's watchdog needs to
-be disabled before entering suspended state to allow board to sleep for
-longer period than the watchdog timeout period. Otherwise board will be
-reset by the watchdog. Thus disable watchdog on suspend and re-enable it
-upon resume.
+On Fri, Apr 22, 2022 at 08:30:08PM +0200, Jonathan Neuschäfer wrote:
+> On the Nuvoton WPCM450 SoC, with its upcoming clock driver, peripheral
+> clocks are individually gated and ungated. Therefore, the watchdog
+> driver must be able to ungate the watchdog clock.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+>  drivers/watchdog/npcm_wdt.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
+> index 28a24caa2627c..6d27f0e16188e 100644
+> --- a/drivers/watchdog/npcm_wdt.c
+> +++ b/drivers/watchdog/npcm_wdt.c
+> @@ -3,6 +3,7 @@
+>  // Copyright (c) 2018 IBM Corp.
+> 
+>  #include <linux/bitops.h>
+> +#include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+> @@ -180,6 +181,7 @@ static int npcm_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct npcm_wdt *wdt;
+> +	struct clk *clk;
+>  	int irq;
+>  	int ret;
+> 
+> @@ -191,6 +193,13 @@ static int npcm_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(wdt->reg))
+>  		return PTR_ERR(wdt->reg);
+> 
+> +	clk = devm_clk_get_optional(&pdev->dev, NULL);
+> +	if (IS_ERR(clk))
+> +		return PTR_ERR(clk);
+> +
+> +	if (clk)
+> +		clk_prepare_enable(clk);
+> +
 
-Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
----
- arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+This needs a matching clk_disable_unprepare().
 
-diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-index 1f2ba6f6254e..56b29c3294c6 100644
---- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-@@ -212,6 +212,7 @@ da9063_rtc: rtc {
- 
- 		da9063_wdog: watchdog {
- 			compatible = "dlg,da9063-watchdog";
-+			dlg,use-sw-pm;
- 		};
- 
- 		onkey {
--- 
-2.25.1
-
+Guenter
