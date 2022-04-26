@@ -2,76 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0D550F0C6
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 08:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C815250F1A7
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 09:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbiDZGQu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Apr 2022 02:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S1343607AbiDZHGf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Apr 2022 03:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiDZGQu (ORCPT
+        with ESMTP id S230173AbiDZHGf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:16:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03958C1CB4;
-        Mon, 25 Apr 2022 23:13:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9640BB81BA9;
-        Tue, 26 Apr 2022 06:13:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFC5C385A4;
-        Tue, 26 Apr 2022 06:13:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650953620;
-        bh=GFpjyTmiYkBRBdDNPRaOg9t7LyIi7H+wRnslzY1RBEU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IkFxJEj+WXxevKG+MAp+SdhjbIw09AkDXknksn3Ua1TjO3l5mmDf73uvtJMsfEW8I
-         Yzy22Wvfoe/t1YpWo9Dcntge6U22ulQAmRVcVUQXJL1inJFzayLHR2ZAAN676EwZ/D
-         qNhuS3ehcZG7xtz7zSrQI30n78+NwfAY/hi8J1iyp1Se49oYDErNSmm7bmOt/mjdQD
-         gInOXeIsJPJWWTBQDkx/M3/LGTs0ZqkxlsxP3JoOjUt65Bfxv/4yW2vt0irNvE3HSo
-         k+UqH/j2YbrsW0WYG+pqBEs+MX9HpncMAbtfiv/IGIrbCnL49XF7KwWfSahqRo1gVW
-         9ZJojcN1bBdCA==
-Date:   Tue, 26 Apr 2022 14:13:36 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] watchdog: iTCO_wdg: Make code more clearly with
- macro definition
-Message-ID: <YmeNkC8B9glPt2S8@google.com>
-References: <1650944120-30954-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650944120-30954-5-git-send-email-liuxp11@chinatelecom.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650944120-30954-5-git-send-email-liuxp11@chinatelecom.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 03:06:35 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6236E6D4C0;
+        Tue, 26 Apr 2022 00:03:28 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.48:51254.2065698957
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id EB35E2800DE;
+        Tue, 26 Apr 2022 15:03:20 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id 9e3d1b3071354b8886c605386b93e40a for wim@linux-watchdog.org;
+        Tue, 26 Apr 2022 15:03:22 CST
+X-Transaction-ID: 9e3d1b3071354b8886c605386b93e40a
+X-Real-From: liuxp11@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: liuxp11@chinatelecom.cn
+From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, tzungbi@kernel.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liu Xinpeng <liuxp11@chinatelecom.cn>
+Subject: [PATCH v3 0/4] Some impovements about watchdog
+Date:   Tue, 26 Apr 2022 15:03:04 +0800
+Message-Id: <1650956588-795-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 11:35:20AM +0800, Liu Xinpeng wrote:
-> @@ -596,7 +596,6 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
->  /*
->   * Suspend-to-idle requires this, because it stops the ticks and timekeeping, so
->   * the watchdog cannot be pinged while in that state.  In ACPI sleep states the
-> @@ -637,20 +636,15 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
->  }
->  
->  static const struct dev_pm_ops iTCO_wdt_pm = {
-> -	.suspend_noirq = iTCO_wdt_suspend_noirq,
-> -	.resume_noirq = iTCO_wdt_resume_noirq,
-> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
-> +				      iTCO_wdt_resume_noirq)
+Changelog:
+v1->v2 Update the commit messages
+v2->v3 - Add the context about why using watchdog_timeout_invalid.
+       - Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code for
+       iTCO watchdog.
+v3->v4 - For patch 1, update commit message, rename WDAT_TIMEOUT_MIN 
+       to WDAT_MIN_TIMEOUT, keeps consistent with WDAT_DEFAULT_TIMEOUT.
+       - For patch 4, iTCO_wdt_suspend_noirq and iTCO_wdt_resume_noirq
+       are possible unused, so keep "ifdef CONFIG_PM_SLEEP ... #endif".
 
-Thus, iTCO_wdt_suspend_noirq and iTCO_wdt_resume_noirq are possible unused.
-Put __maybe_unused attribute to them.
+Liu Xinpeng (4):
+  watchdog: wdat_wdg: Using the existed function to check parameter
+    timeout
+  watchdog: wdat_wdg: Stop watchdog when rebooting the system
+  watchdog: wdat_wdg: Stop watchdog when uninstalling module
+  watchdog: iTCO_wdg: Make code more clearly with macro definition
+
+ drivers/watchdog/iTCO_wdt.c | 12 +++---------
+ drivers/watchdog/wdat_wdt.c |  7 +++++--
+ 2 files changed, 8 insertions(+), 11 deletions(-)
+
+-- 
+2.23.0
+
