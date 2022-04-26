@@ -2,73 +2,111 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078FE510101
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 16:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C63F8510219
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 17:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351754AbiDZO5A (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Apr 2022 10:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
+        id S1352470AbiDZPr0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Apr 2022 11:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351740AbiDZO45 (ORCPT
+        with ESMTP id S1348593AbiDZPrZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:56:57 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED2E964720;
-        Tue, 26 Apr 2022 07:53:47 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.48:49914.31750849
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.38 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id AA711280096;
-        Tue, 26 Apr 2022 22:53:44 +0800 (CST)
-X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id 21e3df7c56364a0393e71f2c8c7eefe9 for wim@linux-watchdog.org;
-        Tue, 26 Apr 2022 22:53:46 CST
-X-Transaction-ID: 21e3df7c56364a0393e71f2c8c7eefe9
-X-Real-From: liuxp11@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: liuxp11@chinatelecom.cn
-From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, tzungbi@kernel.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liu Xinpeng <liuxp11@chinatelecom.cn>
-Subject: [PATCH v8 3/3] watchdog: wdat_wdt: Stop watchdog when uninstalling module
-Date:   Tue, 26 Apr 2022 22:53:30 +0800
-Message-Id: <1650984810-6247-4-git-send-email-liuxp11@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1650984810-6247-1-git-send-email-liuxp11@chinatelecom.cn>
-References: <1650984810-6247-1-git-send-email-liuxp11@chinatelecom.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 11:47:25 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB147E589
+        for <linux-watchdog@vger.kernel.org>; Tue, 26 Apr 2022 08:44:17 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id y3so16537506ejo.12
+        for <linux-watchdog@vger.kernel.org>; Tue, 26 Apr 2022 08:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UtKJOFY/mUl/Tg+ilRJKWK8Hg/J66eiozbJhAIV6Y60=;
+        b=jLV2GfQtaAFXgShKWfnQPBv10gJWj1Wth8eM5zWxrMu7NIoIEYujdRm1v89VNTLfMl
+         H9L1nEpyFj8p8lxgMCf8PazYAwkO5g+8yxzMxlgwhqcj6L+pq97npcibig1u3tZUt1yy
+         uj75ob0ySR8pbD283jo4IPgNG2CBZdpwiVqK/6btGS2YsZluVkkANgqYOoqDG2T7xhbr
+         BPeaun7xyknvKbKhYifZse/wwVTGirS1p8CMTHtp5HmkrAtA8HG0ULHbgZQRj+Pi2/Vh
+         BI2M+ECtuhci0G7+pXlYg6dpHIgTpc4HnwsoYbCeYP7rRrgikarfx/IWqHSLpdN7pPn0
+         52iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UtKJOFY/mUl/Tg+ilRJKWK8Hg/J66eiozbJhAIV6Y60=;
+        b=dXxB6oVMjoiVrgVcyMc6CkZwRfVotbpNUart3pFVYPT1EVW+GQhe9oruyf1XeJRib0
+         kEa1R6Kzoy6lmZxUahjhvyBDFHPPi74wLOnchsp1RTW383Fb2RMIRBNrFBXCrlyU6mVj
+         fwV3+CxY9p7qu1XyPvvriXLpOAwxUsvSgG0qMGKNY7+zcSkQK9byYvIKcDm60K87ErWm
+         G6wZbQjDmfdcty7LuZZqLG5ZkvlNn3UFqYK/hi8qS5zq+rQ6ETuLmmoE6COaentIYQrI
+         mZXpGrEpslldZC3jKJZlxtytkDhxYA5rGhBSZXYYzj9+27KWAGcWgrUmh1wU8zSaal5P
+         52yQ==
+X-Gm-Message-State: AOAM533DEuvm4VxsA3KB4t7BUDYGnfobw/3ZKjAirAfXqFEie0PXDmKb
+        Btjm6uVl/zC4VuT5Jf9mt9yOZA==
+X-Google-Smtp-Source: ABdhPJwxivapUiK2Wt2L37iMSo4dtf4bon9f4q59LEzx+egpPW0vj9YwaSe4VocYKnrvV0mNkFULUQ==
+X-Received: by 2002:a17:906:6a23:b0:6f3:7cf8:d586 with SMTP id qw35-20020a1709066a2300b006f37cf8d586mr14479759ejc.360.1650987855860;
+        Tue, 26 Apr 2022 08:44:15 -0700 (PDT)
+Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id r19-20020a17090638d300b006d6e4fc047bsm5163826ejd.11.2022.04.26.08.44.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 08:44:15 -0700 (PDT)
+Message-ID: <0064f937-1f8d-3d1d-4ea1-bb8d24bd605d@linaro.org>
+Date:   Tue, 26 Apr 2022 17:44:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 06/11] dt-bindings: watchdog: Add HPE GXP Watchdog
+ timer binding
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220421192132.109954-1-nick.hawkins@hpe.com>
+ <20220421192132.109954-7-nick.hawkins@hpe.com>
+ <YmcbCgjD85lIRMSf@robh.at.kernel.org>
+ <PH0PR84MB171845F606BC40AD653BEC8888FB9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <b9d68100-c6f3-4f58-fe42-63f4cdf1dc50@linaro.org>
+ <PH0PR84MB1718D9B549FB0CC6FDDAA19788FB9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <PH0PR84MB1718D9B549FB0CC6FDDAA19788FB9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Test shows that wachdog still reboots machine after the module
-is removed. Use watchdog_stop_on_unregister to stop the watchdog
-on removing.
+On 26/04/2022 15:52, Hawkins, Nick wrote:
+> Apologies, I did miss the comment about the double spacing around the label and the label not being necessary. I will not make this mistake again. I became focused about the comment of mapping an entire register space which indirectly lead me on to the path which I am now having the gxp-timer have the gxp-wdt as a child. To be specific the feedback I was speaking of above was about the gxp-timer which is here: https://lore.kernel.org/all/704ffa56-4bae-fc33-fddf-3e3dd8be0db9@linaro.org/ That is the children must be defined for a simple-mfd device. 
 
-Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
----
- drivers/watchdog/wdat_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+This was comment for this v5, not for previous patches. In this v5, you
+have a child of timer, so it has to be defined in timer schema.
 
-diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index 6f36a653767b..e6f95e99156d 100644
---- a/drivers/watchdog/wdat_wdt.c
-+++ b/drivers/watchdog/wdat_wdt.c
-@@ -463,6 +463,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 
- 	watchdog_set_nowayout(&wdat->wdd, nowayout);
- 	watchdog_stop_on_reboot(&wdat->wdd);
-+	watchdog_stop_on_unregister(&wdat->wdd);
- 	return devm_watchdog_register_device(dev, &wdat->wdd);
- }
- 
--- 
-2.23.0
+This was not a comment whether a child should exist or should not. It
+was made under the assumption that you want to have a child node.
 
+> Hence the plan I have now is to remove the hpe,gxp-wdt.yaml entirely and include it in the hpe,gxp-timer.yaml. I assume that is the correct thing to do?
+
+I would follow here the advice from Rob, so since the blocks are mixed
+significantly (same address space), then let's assume it's actually one
+device with two functions. In such case Rob pointed out that child node
+is not necessary.
+
+The implementation might differ, depending how the features are mixed-up
+with each other. It might be one driver having timer and watchdog, or
+several drivers (usually bound together with a MFD driver which serves
+as parents and binds to the OF node).
+
+Best regards,
+Krzysztof
