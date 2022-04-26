@@ -2,70 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF6850F34E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 10:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F89A50F358
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 10:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344496AbiDZIFE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Apr 2022 04:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S231394AbiDZIJT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Apr 2022 04:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344533AbiDZIE5 (ORCPT
+        with ESMTP id S1344473AbiDZIJN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:04:57 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD872D1DA;
-        Tue, 26 Apr 2022 01:01:41 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-d39f741ba0so18585496fac.13;
-        Tue, 26 Apr 2022 01:01:41 -0700 (PDT)
+        Tue, 26 Apr 2022 04:09:13 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28D032EC6;
+        Tue, 26 Apr 2022 01:06:01 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5ca5c580fso18623636fac.3;
+        Tue, 26 Apr 2022 01:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+k/vWst8QqDFSt1ZAyLvE8FjMbyoQWQixLDB5Dm7QsI=;
-        b=Hp59PvT0XPuyWuOddkSu4ENmY7GjFtNdCn58WSscz4g6VOtKytsOrlOe4h52c5RNS8
-         ow0Y3exeppIMyqoJFD2g3KJDJp76xjq4JIQUVt1ub24NAp2Shv57E9JEMMo2Ddzfi1OF
-         cPiX/Znj4n9UVliSAqaSIGna/ikGAYmdyCVSNgfwiciN+0vXwSCPkfz/YcloqW+/r8QR
-         CEDJUfwdHjuk8onzLFDZWDkpiBYvUQhMr1lZZ51718rMSBjDePDeUeAvf+el0mOpdIcm
-         K1pYEyDAhC92GL7PcOsODs82FAYS14JqlY+HW8rXjVi0CyaSY3VkNWZWo+qkbzQLWuSk
-         V9GQ==
+        bh=Yx4DJC6j8cvTM/tBpp7NRdOzF7TbB+jWhGor2L5SzGU=;
+        b=RALJ0CRBIAAlVZ8KxS1r/ZFduX+cJd2JNfmZN2hRGoVJSH+I3fMFY3KYoVp0LqTsyt
+         3F7mRevxbKUIVX4MOxJ+41XCxFOrL9VsUM+IfpBn2+WJsoRf+qUWJ1VlvyL7NKTso5ps
+         bJLuvL4eBhUcfa8xUqjW77dqBZsVkwA2dHCQThZ7RYpKFVYnHvb0jTzK6onEGToqpDhx
+         EGliTGBfvaeXp16Wl4a7lgWpY7SXdgo09XNl1ZNZyLMTxCkEG2Roumt0urgM65yxETvF
+         rQAfEdVCVDOln34gStg3J7uTa5HKhnpFkEMGNqJeXfA3ZPmMGdEfyphkG+md+xTPFErF
+         7v5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+k/vWst8QqDFSt1ZAyLvE8FjMbyoQWQixLDB5Dm7QsI=;
-        b=MomEbXAJGPk83gxzNLfr4eiaWyH608RsPczmUm4JhqRLy6DNsAVmUk6isgZh/huaLb
-         VUEMGoZ7Qe6JgmjjZ3bNLsQWKyeD4htJ3bFhvJL1Kzm3Y4iwalZs5nJaBns6LBrjM6te
-         oRbYC3upSeQFTOppP30N9nJzmHcTNzJ2UcEdJ1Hun1Lfd1VrV8QTDZMTDCpuu2cU6XGZ
-         4ws4tbjqqFJG14b5gfP3+JFnTa4yNKrvMUg2UHLzPPhYDKJTiV+Qd7QyWmfZASJrpVUS
-         BJa5sFNk2l7jyvZld6v/3RiMK4kn60Ki88h/UyrJbGgIHQZkxe5Q19WBwz68AtaPzU1y
-         /HfA==
-X-Gm-Message-State: AOAM532mfr5NcfLII1Xi6GEN75I3omNX8WEGwU/7liYORF88ajjD+LY3
-        26Rv+zY5iarEqe8qUbVptiG3/knfIvc=
-X-Google-Smtp-Source: ABdhPJyoj3KDX/uI0OjjYkVYttauPzLMsRpHV5Z3cGKt4H+TmaK3IiYsvbcxeMYpyYoJbIs+eyoqdw==
-X-Received: by 2002:a05:6870:4341:b0:d3:1412:8ecb with SMTP id x1-20020a056870434100b000d314128ecbmr8848810oah.36.1650960100917;
-        Tue, 26 Apr 2022 01:01:40 -0700 (PDT)
+        bh=Yx4DJC6j8cvTM/tBpp7NRdOzF7TbB+jWhGor2L5SzGU=;
+        b=O4BmVAJeCZuiro5+hb22ApyZVFHgkSdGS+mXwFDNEwLwBKex9wmDD2xuCrEr81rXWD
+         FIZNUsDLUpG7mdq8JOsjqMkpR3mrFR8TTquMO4lGUHkiXbkMk/R4WVIWW4+1BmF8IsWi
+         HELWd2MiGCkqrGEgITiD+NP34tgZeOem2I8EhrVGZ1/uzUb5x4mp3fHY7MtxYhNDd5yR
+         GNydvQmC11QZ9ZKcDUkH+1ebM46NxOzAPN8/Ai0o+sX1zlwHyvXCdpXWz2X/fqQGjNRS
+         LKYCHZVerx1xqSwBbc0zL/QsKj+jdMy9BbghmtisZb7myTY4g3dlT6kXhb0xqYxd6gjY
+         NaUA==
+X-Gm-Message-State: AOAM531tGOAm7Hx0eJdDsTuKWgqvx/Fs6YtthdK1l4iH7j1CYATf8Squ
+        9UsOOieCj78kPhQvytQ7Egg=
+X-Google-Smtp-Source: ABdhPJxwGxMsRqyvVxDkD1OzPzbtSteHeUo2dmlJwNpwTWBve7JPcd/WUPfrfn95tvyToisoD77sUw==
+X-Received: by 2002:a05:6870:42c7:b0:e9:11d2:b259 with SMTP id z7-20020a05687042c700b000e911d2b259mr6834771oah.272.1650960361120;
+        Tue, 26 Apr 2022 01:06:01 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z5-20020a0568301da500b006054fd8c847sm4698847oti.11.2022.04.26.01.01.38
+        by smtp.gmail.com with ESMTPSA id d21-20020a4a3c15000000b0033364bde9besm5372819ooa.32.2022.04.26.01.05.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:01:39 -0700 (PDT)
+        Tue, 26 Apr 2022 01:06:00 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9f991b4d-8f02-6c07-a8b6-2861837a0224@roeck-us.net>
-Date:   Tue, 26 Apr 2022 01:01:37 -0700
+Message-ID: <f55c7bba-2096-c392-d81f-b04d44ea1175@roeck-us.net>
+Date:   Tue, 26 Apr 2022 01:05:58 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 4/4] watchdog: iTCO_wdg: Make code more clearly with
- macro definition
+Subject: Re: [PATCH v4 1/4] watchdog: wdat_wdg: Using the existed function to
+ check parameter timeout
 Content-Language: en-US
 To:     Liu Xinpeng <liuxp11@chinatelecom.cn>, wim@linux-watchdog.org,
         tzungbi@kernel.org
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1650957029-910-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
+ <1650957029-910-2-git-send-email-liuxp11@chinatelecom.cn>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
+In-Reply-To: <1650957029-910-2-git-send-email-liuxp11@chinatelecom.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,45 +80,58 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 4/26/22 00:10, Liu Xinpeng wrote:
-> Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code.
+> Context: If max_hw_heartbeat_ms is provided, the configured maximum timeout
+
+Drop "Context:".
+
+Also, in the subject, it should be "existing".
+
+> is not limited by it. The limit check in this driver therefore doesn't make
+> much sense. Similar, the watchdog core ensures that minimum timeout limits
+> are met if min_hw_heartbeat_ms is set. Using watchdog_timeout_invalid()
+> makes more sense because it takes this into account.
 > 
 > Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
->   drivers/watchdog/iTCO_wdt.c | 12 ++++--------
->   1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-> index 3f2f4343644f..8d24cf4f4ca3 100644
-> --- a/drivers/watchdog/iTCO_wdt.c
-> +++ b/drivers/watchdog/iTCO_wdt.c
-> @@ -635,22 +635,18 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
->   
->   	return 0;
->   }
-> +#endif /* CONFIG_PM_SLEEP */
->   
->   static const struct dev_pm_ops iTCO_wdt_pm = {
-> -	.suspend_noirq = iTCO_wdt_suspend_noirq,
-> -	.resume_noirq = iTCO_wdt_resume_noirq,
-> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
-> +				      iTCO_wdt_resume_noirq)
->   };
->   
-> -#define ITCO_WDT_PM_OPS	(&iTCO_wdt_pm)
-> -#else
-> -#define ITCO_WDT_PM_OPS	NULL
-> -#endif /* CONFIG_PM_SLEEP */
-> -
->   static struct platform_driver iTCO_wdt_driver = {
->   	.probe          = iTCO_wdt_probe,
->   	.driver         = {
->   		.name   = DRV_NAME,
-> -		.pm     = ITCO_WDT_PM_OPS,
-> +		.pm     = &iTCO_wdt_pm,
->   	},
->   };
->   
-Sorry, I fail to see how this is an improvement.
+
+And you really should not make up Reviewed-by: tags. This is completely
+inappropriate.
 
 Guenter
+
+> ---
+>   drivers/watchdog/wdat_wdt.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+> index 195c8c004b69..9db01d165310 100644
+> --- a/drivers/watchdog/wdat_wdt.c
+> +++ b/drivers/watchdog/wdat_wdt.c
+> @@ -55,6 +55,7 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+>   		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>   
+>   #define WDAT_DEFAULT_TIMEOUT	30
+> +#define WDAT_MIN_TIMEOUT     1
+>   
+>   static int timeout = WDAT_DEFAULT_TIMEOUT;
+>   module_param(timeout, int, 0);
+> @@ -344,6 +345,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   	wdat->period = tbl->timer_period;
+>   	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
+>   	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
+> +	wdat->wdd.min_timeout = WDAT_MIN_TIMEOUT;
+>   	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
+>   	wdat->wdd.info = &wdat_wdt_info;
+>   	wdat->wdd.ops = &wdat_wdt_ops;
+> @@ -450,8 +452,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   	 * watchdog properly after it has opened the device. In some cases
+>   	 * the BIOS default is too short and causes immediate reboot.
+>   	 */
+> -	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
+> -	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
+> +	if (watchdog_timeout_invalid(&wdat->wdd, timeout)) {
+>   		dev_warn(dev, "Invalid timeout %d given, using %d\n",
+>   			 timeout, WDAT_DEFAULT_TIMEOUT);
+>   		timeout = WDAT_DEFAULT_TIMEOUT;
+
