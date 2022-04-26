@@ -2,51 +2,50 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B5350F0BD
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 08:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0D550F0C6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 08:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244894AbiDZGNh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Apr 2022 02:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S233006AbiDZGQu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Apr 2022 02:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244905AbiDZGNg (ORCPT
+        with ESMTP id S229695AbiDZGQu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:13:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1778A1BC;
-        Mon, 25 Apr 2022 23:10:22 -0700 (PDT)
+        Tue, 26 Apr 2022 02:16:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03958C1CB4;
+        Mon, 25 Apr 2022 23:13:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30927612C8;
-        Tue, 26 Apr 2022 06:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1A1C385A4;
-        Tue, 26 Apr 2022 06:10:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9640BB81BA9;
+        Tue, 26 Apr 2022 06:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFC5C385A4;
+        Tue, 26 Apr 2022 06:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650953421;
-        bh=XcR2Lx8r+iZ0vMl4j7K1aWlg1o1EJvZBycJ5g10yOcc=;
+        s=k20201202; t=1650953620;
+        bh=GFpjyTmiYkBRBdDNPRaOg9t7LyIi7H+wRnslzY1RBEU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P+YHoCIuUxRQaJjd/Qc8crcdrfKMgDNbx/62zPKofMXlFg+M+ebRwgyOVZXh8OPh6
-         RsLT3GGv3aejsHQmNtwNEpnQyrBMPGFD0/G8MeNBJDlmV31i2DjNEF3lRgwB39oW0z
-         sCD7u9hZlp9P0c83kVhGqvBVoO1Vjdj6vMP7fMzfWCaobK3vBQE1XvmR/gfKD9ysCd
-         u/bt9aLlTMbRF6xknCoKZJW9IGTCiXex/d0HEmGA15k71aRNSpz6eBCetERqdLNYC5
-         cvj6gzBMVlUjbIRjT3VfPA2fS652kkiYp1Db+s9YBDZBX7d+kvlrI+tud4ac3iaAsh
-         AoczGxFaswpLg==
-Date:   Tue, 26 Apr 2022 14:10:18 +0800
+        b=IkFxJEj+WXxevKG+MAp+SdhjbIw09AkDXknksn3Ua1TjO3l5mmDf73uvtJMsfEW8I
+         Yzy22Wvfoe/t1YpWo9Dcntge6U22ulQAmRVcVUQXJL1inJFzayLHR2ZAAN676EwZ/D
+         qNhuS3ehcZG7xtz7zSrQI30n78+NwfAY/hi8J1iyp1Se49oYDErNSmm7bmOt/mjdQD
+         gInOXeIsJPJWWTBQDkx/M3/LGTs0ZqkxlsxP3JoOjUt65Bfxv/4yW2vt0irNvE3HSo
+         k+UqH/j2YbrsW0WYG+pqBEs+MX9HpncMAbtfiv/IGIrbCnL49XF7KwWfSahqRo1gVW
+         9ZJojcN1bBdCA==
+Date:   Tue, 26 Apr 2022 14:13:36 +0800
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
 Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] watchdog: wdat_wdg: Using the existed function to
- check parameter timeout
-Message-ID: <YmeMyqNqnooVifz1@google.com>
+Subject: Re: [PATCH v3 4/4] watchdog: iTCO_wdg: Make code more clearly with
+ macro definition
+Message-ID: <YmeNkC8B9glPt2S8@google.com>
 References: <1650944120-30954-1-git-send-email-liuxp11@chinatelecom.cn>
- <1650944120-30954-2-git-send-email-liuxp11@chinatelecom.cn>
+ <1650944120-30954-5-git-send-email-liuxp11@chinatelecom.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1650944120-30954-2-git-send-email-liuxp11@chinatelecom.cn>
+In-Reply-To: <1650944120-30954-5-git-send-email-liuxp11@chinatelecom.cn>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,32 +55,23 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 11:35:17AM +0800, Liu Xinpeng wrote:
-> The module arguement timeout is a configured timeout value.
-> “separate minimum and maximum HW timeouts and configured timeout value.”
-> (patch v1 is explained by Guenter Roeck)
-> 
-> So using watchdog_timeout_invalid to check timeout invalid is more justified.
-
-The v3 commit message doesn't help too much for understanding the patch.  You
-could see [1] for some reference sentences.  See also [2].
-
-[1]: https://patchwork.kernel.org/project/linux-watchdog/patch/1650874932-18407-2-git-send-email-liuxp11@chinatelecom.cn/#24831418
-[2]: https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/watchdog/watchdog-kernel-api.rst#L95
-
-> @@ -14,6 +14,7 @@
->  #include <linux/watchdog.h>
+On Tue, Apr 26, 2022 at 11:35:20AM +0800, Liu Xinpeng wrote:
+> @@ -596,7 +596,6 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
 >  
->  #define MAX_WDAT_ACTIONS ACPI_WDAT_ACTION_RESERVED
-> +#define WDAT_TIMEOUT_MIN     1
+> -#ifdef CONFIG_PM_SLEEP
+>  /*
+>   * Suspend-to-idle requires this, because it stops the ticks and timekeeping, so
+>   * the watchdog cannot be pinged while in that state.  In ACPI sleep states the
+> @@ -637,20 +636,15 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops iTCO_wdt_pm = {
+> -	.suspend_noirq = iTCO_wdt_suspend_noirq,
+> -	.resume_noirq = iTCO_wdt_resume_noirq,
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
+> +				      iTCO_wdt_resume_noirq)
 
-To be consistent, would MIN_WDAT_TIMEOUT be a better name?
-
-> @@ -344,6 +345,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
->  	wdat->period = tbl->timer_period;
->  	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
->  	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
-> +	wdat->wdd.min_timeout = WDAT_TIMEOUT_MIN;
-
-Does it really need to configure the `min_timeout`?  What if leave it as is
-(i.e. 0)?
+Thus, iTCO_wdt_suspend_noirq and iTCO_wdt_resume_noirq are possible unused.
+Put __maybe_unused attribute to them.
