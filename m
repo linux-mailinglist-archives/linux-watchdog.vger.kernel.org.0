@@ -2,550 +2,196 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A61F50FB1B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 12:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD03450FED8
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 15:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349238AbiDZKk4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Apr 2022 06:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S1350873AbiDZNZq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Apr 2022 09:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349673AbiDZKj1 (ORCPT
+        with ESMTP id S1350974AbiDZNZm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:39:27 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5B123BF2;
-        Tue, 26 Apr 2022 03:28:25 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id p7-20020a05600c358700b00393e80c59daso1058118wmq.0;
-        Tue, 26 Apr 2022 03:28:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SxJUEuYfElbNAyi6VUakC34OKngPypTgTexAAjBP7JY=;
-        b=mCM+uZv83rSqqW9CvccthNgY54DlSZhZhi3mP8gtZMt3FfoYZVqICru+xS90Ihi/UK
-         DyJwjyLSgY+jPTEOBrW8T08tmOqjfJM4WHO93qJprAQ+cWzyRMYrkyF8keybKx5jLXKe
-         gHgPru3BPSR6AbJIdT8A1T0BFTA+nwvBSM1RQq9MCS5cnM1RYdZL3akgy5CZfe3kqfsK
-         c8mclVACEFrLG6cLhs0Pz5T4ugJOsycLycqt3U5LFhnx2thkh29lRZI/HkX45OCnboqC
-         aNogSg6ZSpEEq17YpYOsbc3581r46epst9MFOWhE7qiIM3e89bdghHIF6O0vNc7Luzth
-         BeWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SxJUEuYfElbNAyi6VUakC34OKngPypTgTexAAjBP7JY=;
-        b=UNhW4Tg6+yvjNTjfHLeqmCmigth0b0l24zJTAY3NdN5UGtTsVjsMMAZ3hhkvi71UvL
-         ZsSIbhptMqy3fwwWPkkf5zWhfn+bWCrI6ppAXq/oNER3N24hOcww+OjUG6Beig1YzSP3
-         U6gRqy0aljxB64xIXjGXnHwctrgt0XmS+9j9i7P7JOhR7Dr5t+wD9akP1T+IRwqDIRGs
-         RiDW/GX9lu7Qf4I38sKo3+3k4FeqpOa3tUjsBQN7P8nJdJBSaeD8dO/7PSgHsM4kTYRR
-         PTIcZyNLQdVvRW/jv5ttqPG+qtMGk9MuLuXi1dYeQJpucgdqHotCIcNIaxj1LBBsNuQx
-         ufRQ==
-X-Gm-Message-State: AOAM531l6dmX27QWolp6sGCMNd00ptT45/E9LNeu3BtXF87gWpYgv2TX
-        6A5MqaUU8/ppOAJFs4/FL28=
-X-Google-Smtp-Source: ABdhPJyb1I0ZdgKngbzk0E/iWW599SuU2LJ0LhZsdbRvBYG6AWTY7Xn6Fm+EzSMAqVMi9gXsr4vB8g==
-X-Received: by 2002:a7b:c201:0:b0:38f:f7f5:f6db with SMTP id x1-20020a7bc201000000b0038ff7f5f6dbmr29808360wmi.191.1650968904003;
-        Tue, 26 Apr 2022 03:28:24 -0700 (PDT)
-Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
-        by smtp.gmail.com with ESMTPSA id o10-20020a5d47ca000000b0020a992ce36esm12918917wrc.1.2022.04.26.03.28.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 03:28:23 -0700 (PDT)
-Message-ID: <4561a64e-0675-8f26-3c0c-53e422b65ab8@gmail.com>
-Date:   Tue, 26 Apr 2022 12:28:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 4/4] arm64: dts: Add Mediatek SoC MT8186 dts and
- evaluation board and Makefile
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Tue, 26 Apr 2022 09:25:42 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89E2186BE5;
+        Tue, 26 Apr 2022 06:22:26 -0700 (PDT)
+Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QCbsg0001664;
+        Tue, 26 Apr 2022 13:21:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=TAyhFX3BlB3ZZ9QsCGlZzAgtLziJW5xYZC1lx9z/B1M=;
+ b=HvtqFn8SxmsV/4ZnWgyK72XnWQaWuDgKn6ahmlMF78mUXfPRCeo6HDTUi4TvXi/BFbTB
+ ykF+qaSBCd7bL4ICDokuXh75V3nFccrYQEEUfO3I1eAR1MM7P1MyYnhRPT1hcPkMc9+E
+ KKsl2VZXilfI4RRKrD2K/uSdSjf8v/WQNzzsyYoFCjp66yJhl1LaROxf1mnVDBD+wsy6
+ yXkIVh4cWUGiXKYfM7EiijsGMyNN4hi5S8YTi9AfzkyJiSTqS5FksN4pXu1P6uWInnDm
+ 0h/6szd5n5ZzQPYD/pilT4U3afR08RTJj4Ke+QyzzalkJtiLCTUvuz4H9k4UnyBPjrmu YQ== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fpf10hmvy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 13:21:41 +0000
+Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id ABBBC13087;
+        Tue, 26 Apr 2022 13:21:39 +0000 (UTC)
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
+ p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 26 Apr 2022 01:21:39 -1200
+Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Tue, 26 Apr 2022 01:21:39 -1200
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 26 Apr 2022 01:21:39 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TW2aLavwFjg8H0I1JJiU7irKQi5tvkgFsueZXLtcM/AcxSi7D2C0Z+kmAwUVCZ/fO+G6Vp4ETJyxb5q+gAfVJzruUjD1A5Nlk07VMLJCGtgYdt4kurHebR2bntBU2X2KpVtWkAOrxa6xBzm+jIHWA9f5aMKyftSWUutgkZPkfn8BLuRFKhI8mKeCo7MzK/yUJ3JYJGZCjHYOczSM8eXo4bncJ+CBzZJs2EFtDA6Aw4coYMvwR5+Vb3l1R4V9TSpN27uLV9Q5HcQZU+Z1nOeuPj8MNHqf8xH7gG+hIn5DPh81AljdRPwaSWAqy7jteRh/JEh+8HvCzjeObyXjBZLHfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TAyhFX3BlB3ZZ9QsCGlZzAgtLziJW5xYZC1lx9z/B1M=;
+ b=P1eGmPX6SLBsLaRH7Xn6jIz08r9wIgTFGeCNaLPecYC7jOfYTccN53zZ0+EDK2t5zlksCOPl5nmpuokr5ZIa5eGOfrCRtGLyq+/3msqODoumpxb53R+mkWJqiKNC7L6rSbY6LISR+boiyV7xHE/u8Q9SJC8iSSxo/uj1Wo1avJCBxsKh2ybo6e4PmS4fUTs2MsJp7Yl0vdtW22Owd+3SZ2iS95BU2qdwSVgbXWtdcYel8NAZu+GWo844S5dsywv/hdtXV/mfkooRMCRbTQC9vuRW/umydky0ZXEEZ0vpTyjhKQZP2CMKWuYgsevuHM9CEGSKgiyj2xwOJubTZhsgAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:172::21)
+ by SJ0PR84MB1649.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:430::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.20; Tue, 26 Apr
+ 2022 13:21:38 +0000
+Received: from PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::6055:1602:5a0a:1562]) by PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::6055:1602:5a0a:1562%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 13:21:37 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     hsinyi@chromium.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org
-References: <20220311130732.22706-1-allen-kh.cheng@mediatek.com>
- <20220311130732.22706-5-allen-kh.cheng@mediatek.com>
- <e06b7f3e-fbc7-63ab-c7b9-0c879cb10807@gmail.com>
- <8c27fbbdf109b53cff5472e89da83741bee4b202.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <8c27fbbdf109b53cff5472e89da83741bee4b202.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v5 06/11] dt-bindings: watchdog: Add HPE GXP Watchdog
+ timer binding
+Thread-Topic: [PATCH v5 06/11] dt-bindings: watchdog: Add HPE GXP Watchdog
+ timer binding
+Thread-Index: AQHYVbTOsVjE6kZL10OpjL+eSsDcLa0BNZcAgAD++BA=
+Date:   Tue, 26 Apr 2022 13:21:37 +0000
+Message-ID: <PH0PR84MB171845F606BC40AD653BEC8888FB9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220421192132.109954-1-nick.hawkins@hpe.com>
+ <20220421192132.109954-7-nick.hawkins@hpe.com>
+ <YmcbCgjD85lIRMSf@robh.at.kernel.org>
+In-Reply-To: <YmcbCgjD85lIRMSf@robh.at.kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f8c5e603-1deb-4a36-a7b9-08da2787b17e
+x-ms-traffictypediagnostic: SJ0PR84MB1649:EE_
+x-microsoft-antispam-prvs: <SJ0PR84MB164918990C10916CC1D4B5B088FB9@SJ0PR84MB1649.NAMPRD84.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: a7XIx7ZUIpy5aupakgyUC28hj8/BTHc9Mu8ZdKYYWB/GK4gbszeo1JxboQ1QCtacV0JR+t2QaQfknMeDgI1FX/ufJrOPXEw33ao2HASfilJWkol1goZBJQ7/LC5k1jQQtB8f6aH8ZV4bsdP68E2DQfhlshlICNSZn+qI4l0V3qlX3N9/+ajtD17v9nCJBy8t05BpOwE/oL691JMgl0++hKNX7Ta1iHiVNd/IR1DsxzFHiPdjEyC/cgMc4fqz02dxL2M8CpYVGHXlJMc4dm8/BA2OtYAo77qsk/ZQJxauGP+/QbL4uw4MY/GF+74leab3Zzrpy/5oln0FAv3J2oGGZg+73f7+ivaAzuQcDMKWrIEInMSmEYyO2VE7K9m1zv8uEouAFjlqduvEJzPRKCbwcnjUYBmmDbvJlF4UQrPMWifjFaLC2cfWFhtQ1YtJlPteCGkfKa+5+Q9/PutyeoXpSXfalGKXSUCH/MUsPvSqGL6NRRhevpB7Mo5KdrgaRZDDXdUopi2Vy+Ha8qOVC2R53cv8F0Yr/cHPGTYDbZE26cxtN/wawNkQc7IaUX+gUeXCY5/yFEb5iz32OdskoObX+GkpzmfMEMc/w3Pz0Jb0QVDETi3sTJQpe9IlQgdbvA3jWiB2BsuMInnKBaW+ojP86lDOSwxW9v/2rT5UpGFTTwnjiUMbuMzaMT1MclTDksfHS7Mz6NgwGDAKKsSYeL5njw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(366004)(66556008)(83380400001)(66446008)(33656002)(508600001)(52536014)(8936002)(2906002)(76116006)(64756008)(82960400001)(316002)(5660300002)(66946007)(66476007)(186003)(71200400001)(4326008)(38070700005)(8676002)(55016003)(38100700002)(7416002)(4744005)(53546011)(7696005)(55236004)(9686003)(26005)(86362001)(6916009)(6506007)(54906003)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GcyYnZz0tfDlsxamULv2JfCKl/DFR3I+TABdpXVCZ3kcODHHKJ2Feawnv7Ei?=
+ =?us-ascii?Q?oUjUQeWvpvSnmBz/M0vnM+qlcI1eyUcuNkDCc3QmLOVJhwRN+/4+GdAj5p5W?=
+ =?us-ascii?Q?sMHz/RAT+C6ionOf6stQ/V+IkiO8S7eCwQgR8NSv9VF1AyrJnbT1mBM7tmAG?=
+ =?us-ascii?Q?8WjF9uRydI+aUdP1t9nPg50CfeHAD/iq7C94M63Pf7tJNHi+7BDMJATY23rE?=
+ =?us-ascii?Q?XKqML/m4RUDGpFxrojShNjDE2NJbIhFUmao7zWsChBrTlA2R3Om+EV/vKeHi?=
+ =?us-ascii?Q?svh7osT9tVo2tTHSIATJns9PG53rwi+7dT23UhxmK1L1P+BanqgRQpTHWEUo?=
+ =?us-ascii?Q?IqOuhB6QoFSGDsk6jS5wAcYjNOshf1mT8I4YBJYJL7cO2DOZSVtpgwMZv/SZ?=
+ =?us-ascii?Q?LJksRrH6LWk+23QyKYehBe1ZVT1Ak6mfXVRmWMNlEG0KgXf8+7oZo4t1zkk9?=
+ =?us-ascii?Q?zYU6n0RvdM1w5lMPpl1I64vQYMHx/DBqvV9wuKsHLJBVJMMUbMWZxn5uNncv?=
+ =?us-ascii?Q?ckKhzRYWbpoKhXhKz+5XN8wFWBQlTZebzLr7S6BEuOVbDCtj1TRBnrcR4XTd?=
+ =?us-ascii?Q?kuVElMruZ9lq2lK+stwB5HYTgsyrzxq4Ub9BpBuoMR6uUdCQZgwxa4cMYytC?=
+ =?us-ascii?Q?gxv1Esz8ZGmsvBoMoYViHqh4AiPjixwbpXyvtMLYSOyAwNebJbbj3uCFIKCb?=
+ =?us-ascii?Q?V2giGiv5OUo6vStVxaxWhYKM5eXBHos2atJFEsnp8KBNd9GLt/yT9StkXSCc?=
+ =?us-ascii?Q?Q7yW6vrly3ui7g7kZpIq6LKJvZpDV4URh85L++gV5TO0k9+IFwTK6Y2SDwxo?=
+ =?us-ascii?Q?J4QW4yUrTMFYoq2boEHjvGfxqWcY4lXw37o9vuMSRRgOAzRV1GxnQKuncXuh?=
+ =?us-ascii?Q?NzfIudXDcnHjHn3d13x3QHVxrJ/faCdKzZP9AzB9Z9XmexTg6eJUGkt/XgIt?=
+ =?us-ascii?Q?QUn1grqTxo+98mlK5uBofVnvUdafDVRXd1VB1WQLqWpN9s6cusufL9yxIQlW?=
+ =?us-ascii?Q?ZCOnmNDzWClA1H3A0lO6gnTR8uyiSjjqbloWvoZqy6OBm9WB7ud5MyOAgtN6?=
+ =?us-ascii?Q?vq1wfFDYAK08WWn0gVMElAGB8TsbdFb+VBkZwuPF4ygm7sLnd7AcZrIX4Vh3?=
+ =?us-ascii?Q?17rf8fjo+X8gz2RjsOJ2qp1sz+8Omu2BVdiT7D1fRbqpILH4sIfKf9zGu879?=
+ =?us-ascii?Q?VBSSvTVTi8QF7grYIx4eCf4aTT1W5Eg9n7X2gsv036Ah8UZRMZJgR4Z4X/wd?=
+ =?us-ascii?Q?+0FOwl5De0IpxKed5DkVzAX/wCjrmW98TIuqA5aEe0FBosMLUw8nu15P9YYx?=
+ =?us-ascii?Q?PfGo+NX+il92oo/BAKDsenfmyxchnNdBqlAqIIBduTeRqABrQOjxxsoCwhtL?=
+ =?us-ascii?Q?yftHSEB3YmbxexZ2nAMlT5D1hN9LNmUTWlKohymMHpm5ha3+7y58ku3qPRzZ?=
+ =?us-ascii?Q?FHRwTECVq/TQJiKbnik+aLwzjSKAGb+gBQXkyyLVbhFROhBdsvBAbyZBh3ji?=
+ =?us-ascii?Q?Lc3sgHs9F3oEOBYihLkMFJkGWu1MqqAhxmeLcbsPP7BEJ3exrvmw5GwkvU+F?=
+ =?us-ascii?Q?ogK4sJrMQ7fyqVd9Xp9L5lYtu4gM2+pvjHxAM0ZpPY+C+hqz5jg3sZQMmPWP?=
+ =?us-ascii?Q?2LG2czSn1Y8OvV8vwuT2D/+TurTR3/2ywx4JD0IG2Tmz+i4Pau42HNym/QCq?=
+ =?us-ascii?Q?OxcLvXKDFYf8L7QwjDO7UMqCbGmSGLWkJPgxoPQ1RECHgr7CzrmJTt8luVTJ?=
+ =?us-ascii?Q?uc9m7FNrpQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8c5e603-1deb-4a36-a7b9-08da2787b17e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2022 13:21:37.8126
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sE36gj6aV0k6ZXIgd1THNAuvusDgBY0qlh4rnWK8L9d5mMbyP+7H5PfCLDgSFwJ2A0twxe8VrzLCWm0TW7UWWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1649
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: s1dG7aHG6O9y_J4eGhMQCDk1pCeU25Tw
+X-Proofpoint-ORIG-GUID: s1dG7aHG6O9y_J4eGhMQCDk1pCeU25Tw
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-26_02,2022-04-26_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxscore=0 mlxlogscore=991 lowpriorityscore=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 spamscore=0 suspectscore=0 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204260084
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Allen,
 
-On 30/03/2022 09:34, allen-kh.cheng wrote:
-> Hi Matthias,
-> 
-> On Tue, 2022-03-29 at 16:56 +0200, Matthias Brugger wrote:
->>
->> On 11/03/2022 14:07, Allen-KH Cheng wrote:
->>> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
->>>
->>> Add basic chip support for Mediatek MT8186.
->>>
->>
->> Thanks for your patch. I would love to wait a bit longer to see if we
->> can get
->> the clock driver accepted. This way we could get rid of all the dummy
->> clocks
->> defined in here.
->>
->> Please send a new version once the clock driver is accepeted by
->> Stephen, or ping
->> this series in a few month.
->>
->> Thanks,
->> Matthias
->>
-> 
-> Sure, that's great.
-> 
-> I will send a new version after the clock driver is accepted.
-> 
 
-I've seen that the clock driver got accepted. Can you please send a new patch 
-adding the correct clocks to the nodes?
+-----Original Message-----
+From: Rob Herring [mailto:robh@kernel.org]=20
+Sent: Monday, April 25, 2022 5:05 PM
+To: Hawkins, Nick <nick.hawkins@hpe.com>
+Cc: Verdun, Jean-Marie <verdun@hpe.com>; joel@jms.id.au; arnd@arndb.de; ope=
+nbmc@lists.ozlabs.org; Wim Van Sebroeck <wim@linux-watchdog.org>; Guenter R=
+oeck <linux@roeck-us.net>; Krzysztof Kozlowski <krzysztof.kozlowski+dt@lina=
+ro.org>; linux-watchdog@vger.kernel.org; devicetree@vger.kernel.org; linux-=
+kernel@vger.kernel.org
+Subject: Re: [PATCH v5 06/11] dt-bindings: watchdog: Add HPE GXP Watchdog t=
+imer binding
 
-Thanks a lot.
-Matthias
+(...)
 
-> Thanks,
-> Allen
-> 
->>> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
->>> ---
->>>    arch/arm64/boot/dts/mediatek/Makefile       |   1 +
->>>    arch/arm64/boot/dts/mediatek/mt8186-evb.dts |  24 ++
->>>    arch/arm64/boot/dts/mediatek/mt8186.dtsi    | 356
->>> ++++++++++++++++++++
->>>    3 files changed, 381 insertions(+)
->>>    create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-evb.dts
->>>    create mode 100644 arch/arm64/boot/dts/mediatek/mt8186.dtsi
->>>
->>> diff --git a/arch/arm64/boot/dts/mediatek/Makefile
->>> b/arch/arm64/boot/dts/mediatek/Makefile
->>> index 8c1e18032f9f..d32fdcf9afc6 100644
->>> --- a/arch/arm64/boot/dts/mediatek/Makefile
->>> +++ b/arch/arm64/boot/dts/mediatek/Makefile
->>> @@ -37,5 +37,6 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-
->>> kodama-sku32.dtb
->>>    dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
->>>    dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
->>>    dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
->>> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8186-evb.dtb
->>>    dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
->>>    dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
->>> b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
->>> new file mode 100644
->>> index 000000000000..eb23d1f19f87
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
->>> @@ -0,0 +1,24 @@
->>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
->>> +/*
->>> + * Copyright (C) 2022 MediaTek Inc.
->>> + */
->>> +/dts-v1/;
->>> +#include "mt8186.dtsi"
->>> +
->>> +/ {
->>> +	model = "MediaTek MT8186 evaluation board";
->>> +	compatible = "mediatek,mt8186-evb", "mediatek,mt8186";
->>> +
->>> +	aliases {
->>> +		serial0 = &uart0;
->>> +	};
->>> +
->>> +	chosen {
->>> +		stdout-path = "serial0:921600n8";
->>> +	};
->>> +
->>> +	memory {
->>> +		device_type = "memory";
->>> +		reg = <0 0x40000000 0 0x80000000>;
->>> +	};
->>> +};
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
->>> b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
->>> new file mode 100644
->>> index 000000000000..aa45c75b18c7
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
->>> @@ -0,0 +1,356 @@
->>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
->>> +/*
->>> + * Copyright (C) 2022 MediaTek Inc.
->>> + * Author: Allen-KH Cheng <allenn-kh.cheng@mediatek.com>
->>> + */
->>> +/dts-v1/;
->>> +
->>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +#include <dt-bindings/interrupt-controller/irq.h>
->>> +#include <dt-bindings/phy/phy.h>
->>> +
->>> +/ {
->>> +	compatible = "mediatek,mt8186";
->>> +	interrupt-parent = <&gic>;
->>> +	#address-cells = <2>;
->>> +	#size-cells = <2>;
->>> +
->>> +	clk13m: oscillator0 {
->>> +		compatible = "fixed-clock";
->>> +		#clock-cells = <0>;
->>> +		clock-frequency = <13000000>;
->>> +		clock-output-names = "clk13m";
->>> +	};
->>> +
->>> +	clk26m: oscillator1 {
->>> +		compatible = "fixed-clock";
->>> +		#clock-cells = <0>;
->>> +		clock-frequency = <26000000>;
->>> +		clock-output-names = "clk26m";
->>> +	};
->>> +
->>> +	clk32k: oscillator2 {
->>> +		compatible = "fixed-clock";
->>> +		#clock-cells = <0>;
->>> +		clock-frequency = <32000>;
->>> +		clock-output-names = "clk32k";
->>> +	};
->>> +
->>> +	cpus {
->>> +		#address-cells = <1>;
->>> +		#size-cells = <0>;
->>> +
->>> +		cpu0: cpu@000 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a55", "arm,armv8";
->>> +			reg = <0x0000>;
->>> +			enable-method = "psci";
->>> +			clock-frequency = <2000000000>;
->>> +			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
->>> +			next-level-cache = <&l2_0>;
->>> +		};
->>> +
->>> +		cpu1: cpu@100 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a55", "arm,armv8";
->>> +			reg = <0x0100>;
->>> +			enable-method = "psci";
->>> +			clock-frequency = <2000000000>;
->>> +			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
->>> +			next-level-cache = <&l2_0>;
->>> +		};
->>> +
->>> +		cpu2: cpu@200 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a55", "arm,armv8";
->>> +			reg = <0x0200>;
->>> +			enable-method = "psci";
->>> +			clock-frequency = <2000000000>;
->>> +			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
->>> +			next-level-cache = <&l2_0>;
->>> +		};
->>> +
->>> +		cpu3: cpu@300 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a55", "arm,armv8";
->>> +			reg = <0x0300>;
->>> +			enable-method = "psci";
->>> +			clock-frequency = <2000000000>;
->>> +			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
->>> +			next-level-cache = <&l2_0>;
->>> +		};
->>> +
->>> +		cpu4: cpu@400 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a55", "arm,armv8";
->>> +			reg = <0x0400>;
->>> +			enable-method = "psci";
->>> +			clock-frequency = <2000000000>;
->>> +			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
->>> +			next-level-cache = <&l2_0>;
->>> +		};
->>> +
->>> +		cpu5: cpu@500 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a55", "arm,armv8";
->>> +			reg = <0x0500>;
->>> +			enable-method = "psci";
->>> +			clock-frequency = <2000000000>;
->>> +			cpu-idle-states = <&cpuoff_l &clusteroff_l>;
->>> +			next-level-cache = <&l2_0>;
->>> +		};
->>> +
->>> +		cpu6: cpu@600 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a75", "arm,armv8";
->>> +			reg = <0x0600>;
->>> +			enable-method = "psci";
->>> +			clock-frequency = <2050000000>;
->>> +			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
->>> +			next-level-cache = <&l2_1>;
->>> +		};
->>> +
->>> +		cpu7: cpu@700 {
->>> +			device_type = "cpu";
->>> +			compatible = "arm,cortex-a75", "arm,armv8";
->>> +			reg = <0x0700>;
->>> +			enable-method = "psci";
->>> +			clock-frequency = <2050000000>;
->>> +			cpu-idle-states = <&cpuoff_b &clusteroff_b>;
->>> +			next-level-cache = <&l2_1>;
->>> +		};
->>> +
->>> +		cpu-map {
->>> +			cluster0 {
->>> +				core0 {
->>> +					cpu = <&cpu0>;
->>> +				};
->>> +
->>> +				core1 {
->>> +					cpu = <&cpu1>;
->>> +				};
->>> +
->>> +				core2 {
->>> +					cpu = <&cpu2>;
->>> +				};
->>> +
->>> +				core3 {
->>> +					cpu = <&cpu3>;
->>> +				};
->>> +
->>> +				core4 {
->>> +					cpu = <&cpu4>;
->>> +				};
->>> +
->>> +				core5 {
->>> +					cpu = <&cpu5>;
->>> +				};
->>> +			};
->>> +
->>> +			cluster1 {
->>> +				core0 {
->>> +					cpu = <&cpu6>;
->>> +				};
->>> +
->>> +				core1 {
->>> +					cpu = <&cpu7>;
->>> +				};
->>> +			};
->>> +		};
->>> +
->>> +		idle-states {
->>> +			entry-method = "arm,psci";
->>> +
->>> +			cpuoff_l: cpu-off-l {
->>> +				compatible = "arm,idle-state";
->>> +				arm,psci-suspend-param = <0x00010001>;
->>> +				local-timer-stop;
->>> +				entry-latency-us = <50>;
->>> +				exit-latency-us = <100>;
->>> +				min-residency-us = <1600>;
->>> +			};
->>> +
->>> +			cpuoff_b: cpu-off-b {
->>> +				compatible = "arm,idle-state";
->>> +				arm,psci-suspend-param = <0x00010001>;
->>> +				local-timer-stop;
->>> +				entry-latency-us = <50>;
->>> +				exit-latency-us = <100>;
->>> +				min-residency-us = <1400>;
->>> +			};
->>> +
->>> +			clusteroff_l: cluster-off-l {
->>> +				compatible = "arm,idle-state";
->>> +				arm,psci-suspend-param = <0x01010001>;
->>> +				local-timer-stop;
->>> +				entry-latency-us = <100>;
->>> +				exit-latency-us = <250>;
->>> +				min-residency-us = <2100>;
->>> +			};
->>> +
->>> +			clusteroff_b: cluster-off-b {
->>> +				compatible = "arm,idle-state";
->>> +				arm,psci-suspend-param = <0x01010001>;
->>> +				local-timer-stop;
->>> +				entry-latency-us = <100>;
->>> +				exit-latency-us = <250>;
->>> +				min-residency-us = <1900>;
->>> +			};
->>> +		};
->>> +
->>> +		l2_0: l2-cache0 {
->>> +			compatible = "cache";
->>> +			next-level-cache = <&l3_0>;
->>> +		};
->>> +
->>> +		l2_1: l2-cache1 {
->>> +			compatible = "cache";
->>> +			next-level-cache = <&l3_0>;
->>> +		};
->>> +
->>> +		l3_0: l3-cache {
->>> +			compatible = "cache";
->>> +		};
->>> +	};
->>> +
->>> +	psci {
->>> +		compatible = "arm,psci-1.0";
->>> +		method = "smc";
->>> +	};
->>> +
->>> +	timer: timer {
->>> +		compatible = "arm,armv8-timer";
->>> +		interrupt-parent = <&gic>;
->>> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
->>> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
->>> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
->>> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
->>> +		clock-frequency = <13000000>;
->>> +	};
->>> +
->>> +	soc {
->>> +		#address-cells = <2>;
->>> +		#size-cells = <2>;
->>> +		compatible = "simple-bus";
->>> +		ranges;
->>> +
->>> +		gic: interrupt-controller@c000000 {
->>> +			compatible = "arm,gic-v3";
->>> +			#interrupt-cells = <3>;
->>> +			#address-cells = <2>;
->>> +			#size-cells = <2>;
->>> +			#redistributor-regions = <1>;
->>> +			interrupt-parent = <&gic>;
->>> +			interrupt-controller;
->>> +			reg = <0 0x0c000000 0 0x40000>, // distributor
->>> +			      <0 0x0c040000 0 0x200000>; //
->>> redistributor
->>> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->>> +		};
->>> +
->>> +		watchdog: watchdog@10007000 {
->>> +			compatible = "mediatek,mt8186-wdt",
->>> +				     "mediatek,mt6589-wdt";
->>> +			mediatek,disable-extrst;
->>> +			reg = <0 0x10007000 0 0x1000>;
->>> +			#reset-cells = <1>;
->>> +		};
->>> +
->>> +		systimer: timer@10017000 {
->>> +			compatible = "mediatek,mt8186-timer",
->>> +				     "mediatek,mt6765-timer";
->>> +			reg = <0 0x10017000 0 0x1000>;
->>> +			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>;
->>> +			clocks = <&clk13m>;
->>> +		};
->>> +
->>> +		uart0: serial@11002000 {
->>> +			compatible = "mediatek,mt8186-uart",
->>> +				     "mediatek,mt6577-uart";
->>> +			reg = <0 0x11002000 0 0x1000>;
->>> +			interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
->>> +			clocks = <&clk26m>, <&clk26m>;
->>> +			clock-names = "baud", "bus";
->>> +		};
->>> +
->>> +		uart1: serial@11003000 {
->>> +			compatible = "mediatek,mt8186-uart",
->>> +				     "mediatek,mt6577-uart";
->>> +			reg = <0 0x11003000 0 0x1000>;
->>> +			interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>;
->>> +			clocks = <&clk26m>, <&clk26m>;
->>> +			clock-names = "baud", "bus";
->>> +			status = "disabled";
->>> +		};
->>> +
->>> +		uart2: serial@11018000 {
->>> +			compatible = "mediatek,mt8186-uart",
->>> +				     "mediatek,mt6577-uart";
->>> +			reg = <0 0x11018000 0 0x1000>;
->>> +			interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
->>> +			clocks = <&clk26m>, <&clk26m>;
->>> +			clock-names = "baud", "bus";
->>> +			status = "disabled";
->>> +		};
->>> +
->>> +		mmc0: mmc@11230000 {
->>> +			compatible = "mediatek,mt8186-mmc",
->>> +				     "mediatek,mt8183-mmc";
->>> +			reg = <0 0x11230000 0 0x1000>,
->>> +			      <0 0x11cd0000 0 0x1000>;
->>> +			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
->>> +			clocks = <&clk26m>, <&clk26m>, <&clk26m>,
->>> +				 <&clk26m>;
->>> +			clock-names = "source", "hclk", "source_cg",
->>> "ahb_clk";
->>> +			status = "disabled";
->>> +		};
->>> +
->>> +		mmc1: mmc@11240000 {
->>> +			compatible = "mediatek,mt8186-mmc",
->>> +				     "mediatek,mt8183-mmc";
->>> +			reg = <0 0x11240000 0 0x1000>,
->>> +			      <0 0x11c90000 0 0x1000>;
->>> +			interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
->>> +			clocks = <&clk26m>, <&clk26m>, <&clk26m>;
->>> +			clock-names = "source", "hclk", "source_cg";
->>> +			status = "disabled";
->>> +		};
->>> +
->>> +		u3phy0: t-phy@11c80000 {
->>> +			compatible = "mediatek,mt8186-tphy",
->>> +				     "mediatek,generic-tphy-v2";
->>> +			#address-cells = <1>;
->>> +			#size-cells = <1>;
->>> +			ranges = <0x0 0x0 0x11c80000 0x1000>;
->>> +
->>> +			u2port1: usb2-phy1@0 {
->>> +				reg = <0x0 0x700>;
->>> +				clocks = <&clk26m>;
->>> +				clock-names = "ref";
->>> +				#phy-cells = <1>;
->>> +			};
->>> +
->>> +			u3port1: usb3-phy1@700 {
->>> +				reg = <0x700 0x900>;
->>> +				clocks = <&clk26m>;
->>> +				clock-names = "ref";
->>> +				#phy-cells = <1>;
->>> +			};
->>> +		};
->>> +
->>> +		u3phy1: t-phy@11ca0000 {
->>> +			compatible = "mediatek,mt8186-tphy",
->>> +				     "mediatek,generic-tphy-v2";
->>> +			#address-cells = <1>;
->>> +			#size-cells = <1>;
->>> +			ranges = <0x0 0x0 0x11ca0000 0x1000>;
->>> +
->>> +			u2port0: usb-phy@0 {
->>> +				reg = <0x0 0x700>;
->>> +				clocks = <&clk26m>;
->>> +				clock-names = "ref";
->>> +				#phy-cells = <1>;
->>> +				mediatek,discth = <0x8>;
->>> +			};
->>> +		};
->>> +	};
->>> +};
-> 
+> How is this h/w controlled? I'm guessing it's part of the timer? If so, y=
+ou don't need this node. A single node can implement multiple functions.
+
+It is associated with the timer because of the shared register set. Based o=
+n feedback from Krzysztof I need to create a child node for gxp-timer. I th=
+erefore will remove this file and move gxp-wdt to the hpe,gxp-timer.yaml as=
+ a child node.
+
+Thank you for the feedback.
+
+-Nick Hawkins
