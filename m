@@ -2,41 +2,41 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB7C50F768
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 11:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112A450F84A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 11:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345623AbiDZJDq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Apr 2022 05:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S244020AbiDZJ1a (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Apr 2022 05:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346732AbiDZJBL (ORCPT
+        with ESMTP id S1347582AbiDZJYL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:01:11 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55C6C78FE6;
-        Tue, 26 Apr 2022 01:43:29 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.48:58142.1056067529
+        Tue, 26 Apr 2022 05:24:11 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 136A41A4331;
+        Tue, 26 Apr 2022 01:54:57 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.218:36282.1079520618
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.39 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id AF1122800B7;
-        Tue, 26 Apr 2022 16:43:24 +0800 (CST)
+Received: from clientip-202.80.192.38 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id 3723E280104;
+        Tue, 26 Apr 2022 16:54:28 +0800 (CST)
 X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id 3abfba636edf49a1a199d8e1085c7956 for wim@linux-watchdog.org;
-        Tue, 26 Apr 2022 16:43:27 CST
-X-Transaction-ID: 3abfba636edf49a1a199d8e1085c7956
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 4180d2837903411b8f63bdeea817e731 for wim@linux-watchdog.org;
+        Tue, 26 Apr 2022 16:54:36 CST
+X-Transaction-ID: 4180d2837903411b8f63bdeea817e731
 X-Real-From: liuxp11@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
+X-Receive-IP: 172.18.0.218
 X-MEDUSA-Status: 0
 Sender: liuxp11@chinatelecom.cn
 From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
 To:     wim@linux-watchdog.org, linux@roeck-us.net, tzungbi@kernel.org
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Liu Xinpeng <liuxp11@chinatelecom.cn>
-Subject: [PATCH v5] watchdog: wdat_wdg: Using the existed function to check parameter timeout
-Date:   Tue, 26 Apr 2022 16:43:09 +0800
-Message-Id: <1650962589-1992-1-git-send-email-liuxp11@chinatelecom.cn>
+Subject: [PATCH v5 1/2] watchdog: wdat_wdg: Stop watchdog when rebooting the system
+Date:   Tue, 26 Apr 2022 16:54:13 +0800
+Message-Id: <1650963254-2138-1-git-send-email-liuxp11@chinatelecom.cn>
 X-Mailer: git-send-email 1.8.3.1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,47 +46,37 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Context: If max_hw_heartbeat_ms is provided, the configured maximum timeout
-is not limited by it. The limit check in this driver therefore doesn't make
-much sense. Similar, the watchdog core ensures that minimum timeout limits
-are met if min_hw_heartbeat_ms is set. Using watchdog_timeout_invalid()
-makes more sense because it takes this into account.
+Executing reboot command several times on the machine "Dell
+PowerEdge R740", UEFI security detection stopped machine
+with the following prompt:
+
+UEFI0082: The system was reset due to a timeout from the watchdog
+timer. Check the System Event Log (SEL) or crash dumps from
+Operating Sysstem to identify the source that triggered the
+watchdog timer reset. Update the firmware or driver for the
+identified device.
+
+iDRAC has warning event: "The watchdog timer reset the system".
+
+This patch fixes this issue by adding the reboot notifier.
 
 Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
 ---
- drivers/watchdog/wdat_wdt.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/watchdog/wdat_wdt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index 195c8c004b69..9db01d165310 100644
+index 9db01d165310..0ef2b918364a 100644
 --- a/drivers/watchdog/wdat_wdt.c
 +++ b/drivers/watchdog/wdat_wdt.c
-@@ -55,6 +55,7 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
- 		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+@@ -463,6 +463,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+ 		return ret;
  
- #define WDAT_DEFAULT_TIMEOUT	30
-+#define WDAT_MIN_TIMEOUT     1
+ 	watchdog_set_nowayout(&wdat->wdd, nowayout);
++	watchdog_stop_on_reboot(&wdat->wdd);
+ 	return devm_watchdog_register_device(dev, &wdat->wdd);
+ }
  
- static int timeout = WDAT_DEFAULT_TIMEOUT;
- module_param(timeout, int, 0);
-@@ -344,6 +345,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 	wdat->period = tbl->timer_period;
- 	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
- 	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
-+	wdat->wdd.min_timeout = WDAT_MIN_TIMEOUT;
- 	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
- 	wdat->wdd.info = &wdat_wdt_info;
- 	wdat->wdd.ops = &wdat_wdt_ops;
-@@ -450,8 +452,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 	 * watchdog properly after it has opened the device. In some cases
- 	 * the BIOS default is too short and causes immediate reboot.
- 	 */
--	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
--	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
-+	if (watchdog_timeout_invalid(&wdat->wdd, timeout)) {
- 		dev_warn(dev, "Invalid timeout %d given, using %d\n",
- 			 timeout, WDAT_DEFAULT_TIMEOUT);
- 		timeout = WDAT_DEFAULT_TIMEOUT;
 -- 
 2.23.0
 
