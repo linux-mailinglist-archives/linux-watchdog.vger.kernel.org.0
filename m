@@ -2,44 +2,42 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB5C50F98A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 12:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675EE50F9D0
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 12:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345041AbiDZKGW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Apr 2022 06:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S1348723AbiDZKOd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Apr 2022 06:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348457AbiDZKFt (ORCPT
+        with ESMTP id S1348592AbiDZKNY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:05:49 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85BF6DAFFA;
-        Tue, 26 Apr 2022 02:27:26 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.48:52296.987177822
+        Tue, 26 Apr 2022 06:13:24 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0EC6229329;
+        Tue, 26 Apr 2022 02:36:11 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.218:47276.50558092
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.39 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id AD8E62800CE;
-        Tue, 26 Apr 2022 17:27:20 +0800 (CST)
+Received: from clientip-202.80.192.38 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id D95CC2800ED;
+        Tue, 26 Apr 2022 17:36:01 +0800 (CST)
 X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id c9ebb7d387624d15902d35f6ff010ce8 for wim@linux-watchdog.org;
-        Tue, 26 Apr 2022 17:27:25 CST
-X-Transaction-ID: c9ebb7d387624d15902d35f6ff010ce8
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id eb70397932ca461d80aeee08fb850ada for wim@linux-watchdog.org;
+        Tue, 26 Apr 2022 17:36:10 CST
+X-Transaction-ID: eb70397932ca461d80aeee08fb850ada
 X-Real-From: liuxp11@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
+X-Receive-IP: 172.18.0.218
 X-MEDUSA-Status: 0
 Sender: liuxp11@chinatelecom.cn
 From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
 To:     wim@linux-watchdog.org, linux@roeck-us.net, tzungbi@kernel.org
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Liu Xinpeng <liuxp11@chinatelecom.cn>
-Subject: [PATCH v6 3/3] watchdog: wdat_wdg: Stop watchdog when uninstalling module
-Date:   Tue, 26 Apr 2022 17:27:01 +0800
-Message-Id: <1650965221-2533-4-git-send-email-liuxp11@chinatelecom.cn>
+Subject: [PATCH v5] watchdog: iTCO_wdg: Using existing macro define covers more scenarios
+Date:   Tue, 26 Apr 2022 17:35:46 +0800
+Message-Id: <1650965746-2685-1-git-send-email-liuxp11@chinatelecom.cn>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1650965221-2533-1-git-send-email-liuxp11@chinatelecom.cn>
-References: <1650965221-2533-1-git-send-email-liuxp11@chinatelecom.cn>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,26 +46,79 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Test shows that wachdog still reboots machine after the module
-is removed. Use watchdog_stop_on_unregister to stop the watchdog
-on removing.
+For power management, SET_NOIRQ_SYSTEM_SLEEP_PM_OPS defined for
+CONFIG_PM_SLEEP, will point ->suspend_noirq, ->freeze_noirq and
+->poweroff_noirq to the same function. Vice versa happens for
+->resume_noirq, ->thaw_noirq and ->restore_noirq.
 
 Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
 ---
- drivers/watchdog/wdat_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/watchdog/iTCO_wdt.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index 0ef2b918364a..6732d7fc4f94 100644
---- a/drivers/watchdog/wdat_wdt.c
-+++ b/drivers/watchdog/wdat_wdt.c
-@@ -464,6 +464,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 
- 	watchdog_set_nowayout(&wdat->wdd, nowayout);
- 	watchdog_stop_on_reboot(&wdat->wdd);
-+	watchdog_stop_on_unregister(&wdat->wdd);
- 	return devm_watchdog_register_device(dev, &wdat->wdd);
+diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+index 3f2f4343644f..34693f11385f 100644
+--- a/drivers/watchdog/iTCO_wdt.c
++++ b/drivers/watchdog/iTCO_wdt.c
+@@ -596,7 +596,6 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+ 	return 0;
  }
+ 
+-#ifdef CONFIG_PM_SLEEP
+ /*
+  * Suspend-to-idle requires this, because it stops the ticks and timekeeping, so
+  * the watchdog cannot be pinged while in that state.  In ACPI sleep states the
+@@ -604,15 +603,15 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+  */
+ 
+ #ifdef CONFIG_ACPI
+-static inline bool need_suspend(void)
++static inline bool __maybe_unused need_suspend(void)
+ {
+ 	return acpi_target_system_state() == ACPI_STATE_S0;
+ }
+ #else
+-static inline bool need_suspend(void) { return true; }
++static inline bool __maybe_unused need_suspend(void) { return true; }
+ #endif
+ 
+-static int iTCO_wdt_suspend_noirq(struct device *dev)
++static int __maybe_unused iTCO_wdt_suspend_noirq(struct device *dev)
+ {
+ 	struct iTCO_wdt_private *p = dev_get_drvdata(dev);
+ 	int ret = 0;
+@@ -626,7 +625,7 @@ static int iTCO_wdt_suspend_noirq(struct device *dev)
+ 	return ret;
+ }
+ 
+-static int iTCO_wdt_resume_noirq(struct device *dev)
++static int __maybe_unused iTCO_wdt_resume_noirq(struct device *dev)
+ {
+ 	struct iTCO_wdt_private *p = dev_get_drvdata(dev);
+ 
+@@ -637,20 +636,15 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops iTCO_wdt_pm = {
+-	.suspend_noirq = iTCO_wdt_suspend_noirq,
+-	.resume_noirq = iTCO_wdt_resume_noirq,
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
++				      iTCO_wdt_resume_noirq)
+ };
+ 
+-#define ITCO_WDT_PM_OPS	(&iTCO_wdt_pm)
+-#else
+-#define ITCO_WDT_PM_OPS	NULL
+-#endif /* CONFIG_PM_SLEEP */
+-
+ static struct platform_driver iTCO_wdt_driver = {
+ 	.probe          = iTCO_wdt_probe,
+ 	.driver         = {
+ 		.name   = DRV_NAME,
+-		.pm     = ITCO_WDT_PM_OPS,
++		.pm     = &iTCO_wdt_pm,
+ 	},
+ };
  
 -- 
 2.23.0
