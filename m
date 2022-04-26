@@ -2,57 +2,57 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD44650F45A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 10:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DEB50F66F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 10:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344896AbiDZIfl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Apr 2022 04:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S242730AbiDZIqB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Apr 2022 04:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345499AbiDZIek (ORCPT
+        with ESMTP id S1346752AbiDZIpU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:40 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6281078933;
-        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-e93ff05b23so5549026fac.9;
-        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:20 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF15B1C9;
+        Tue, 26 Apr 2022 01:35:27 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id r8so19913570oib.5;
+        Tue, 26 Apr 2022 01:35:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=JyWiIRUPQ2EQSPq1mXaopILM4bH8C27NOUyoSKH0Kx0=;
-        b=GnmfzeNbJetLPcgOVIDW167P97CHVrHZEtM+M2S9wFPQjOUEmoHfTfmzpCm2EjZM0K
-         whuvCP9KJpqrXXQUmXikaAC0v8o2lDEi0kjrpgfsFM3y98aKviiAn+MXpe1N3OdOLlRG
-         xl2/UNLA28EBEjDv7j1N04M6Lt+6ZzTPZc265ucTjKj83saennVZrRWbCx5e8sLGMeVx
-         ygCiGroytXMSHv5y6S0AgYw5vDoXwxPkQA4ow2axQs7VAndznkVgZEmwZpgpfWs6aUQR
-         JpArsopYmKPWSPsnzCHLU1XfQePgiqgCJbV3ZMQU1Qw+qjqnQsUghQM+vF4LFb02MSSr
-         4QYg==
+        bh=mn6wvVHUr2ZjEGUHwg6ZBaeE1qpv9Jm8HoWE6ChaE5w=;
+        b=Cjyh57ww3jEqGpCEOjpaagYrIbnQDkIVSg56cj65shwf5FOtqPWIsfKCgOYSnf8+JP
+         OkaRxiKrKynR9oM/7/X9CJf/suN464U7DRxIMwDXVBJvH2oUr/5Ucyr5bTSZ6XKa+XlH
+         s30BaQTKJ4G2fMqTsKqR4RlUItkgeY3xuQjIJ0OAi6dCYv9/6ukkPN/D83E+UAAP4kUv
+         E8rL0Uv4aVP8tsRLYPJlyZxXI2QuTPC9WFGNgvgX6KoX1nwefGAOt5KC1EOE8BAHmEyT
+         FdLBt3j+KUAdm3EX7ZB63fYmszLiYc9pWw5K0/GmbYixLkoc2BSgf8yxsjPhuuaQR3h1
+         QEug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=JyWiIRUPQ2EQSPq1mXaopILM4bH8C27NOUyoSKH0Kx0=;
-        b=SN9wRxAJAO89dU1lPsl1tsqJLkGIoBzbtlKR7C1XwD7eTb4SxFbhJUd1ZjJRvqRDZh
-         3AxfzV8kcmFqcSZlcVIZJzqFpqYlClPulAPGkF+j36pjRuvEZIDBnRsT4H+Nr7lfZai1
-         TvShU8w8+Thwj98I4BYnLsfwFkPZo3wBFCI6PK4ztHNQfgbOx+dPqzMSobF4wQoTuMBr
-         GBg3Y460hdmcQ/1t9jjsjdrJlSY0GlYbDmph0GSOruC/sXO9y7NSm/76qb8tfCPo5ggF
-         Q1EiWBdMoBELRsDdAWvgTYrFiS/DcTp4ZAgsBXU+m7mFhUQVI0lglItqNmZRkOI/eVzT
-         Wqyg==
-X-Gm-Message-State: AOAM533Mc7McIkChWqLPZYlWcSm/9k4pux+E+C+ifj4wiVGcxx1lgewD
-        cC0ncf2SdwSB7NECy5dZ6EC+lWFrWAQ=
-X-Google-Smtp-Source: ABdhPJxI6qYl36Xp+qPV11OmVb8RL5z0QIOZJOtq0tjrrNmAI9DxIvRi55kIn0SC5Jq7y7Xi1v4n/w==
-X-Received: by 2002:a05:6870:5a5:b0:e2:896a:80c with SMTP id m37-20020a05687005a500b000e2896a080cmr8381464oap.131.1650961651221;
-        Tue, 26 Apr 2022 01:27:31 -0700 (PDT)
+        bh=mn6wvVHUr2ZjEGUHwg6ZBaeE1qpv9Jm8HoWE6ChaE5w=;
+        b=b81sfHnLuZuD8r1rvw1moTNsu74M3j++7YfFP3U/7EljJFo2f6WAyuNXd1bT5BfvP2
+         2+Hvdic6hHA2EP6M/hH5msNepH6+RZBCWNV88ZAYH0P1zCMMR7YkmZ/n63h7WHQO0pow
+         3PpSzp5994Pf+/pV0YUI5ZKN1sy9+7HxovssJIhmk+TiJ9FNCkb5ph0LG63IHGUDh0J1
+         612GKlG5EBf2MlJ/TrmyoqdFBi6pWidOJY7i7zj4a8cpeN9y7Zfz08iBkAD/l9NgQrN7
+         YdznlTpKJ2OACKGzOm2hwV6w35gM5t7yjO8FNgcZMJGGVDmkFP2arbLsZAEInyoPxDV6
+         uhmA==
+X-Gm-Message-State: AOAM531BQ2gNk5fl5P17znTRjzAOnTr8sLkmW63k0kv+h9Y9Gi4eGxp1
+        s6mpDs1pDef5N5mGMZwIuFY=
+X-Google-Smtp-Source: ABdhPJx86nfNuiQLtsN7uS6ZBCx9NR+9viNEVO1HJOBKCs5hKA6oKSltL6O7UKG6m6hPSsD0t3LT/g==
+X-Received: by 2002:a54:4010:0:b0:322:4560:1a84 with SMTP id x16-20020a544010000000b0032245601a84mr9736428oie.40.1650962127005;
+        Tue, 26 Apr 2022 01:35:27 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm4718739oig.6.2022.04.26.01.27.29
+        by smtp.gmail.com with ESMTPSA id g11-20020a9d5f8b000000b00605bff9c2dbsm1327902oti.42.2022.04.26.01.35.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:27:30 -0700 (PDT)
+        Tue, 26 Apr 2022 01:35:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <aaccd71a-64f7-7d8f-f5a7-41164ad80f1e@roeck-us.net>
-Date:   Tue, 26 Apr 2022 01:27:28 -0700
+Message-ID: <275d7e40-a4bf-624a-6072-9750c6cb1ff0@roeck-us.net>
+Date:   Tue, 26 Apr 2022 01:35:18 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
@@ -65,12 +65,12 @@ Cc:     linux-watchdog <linux-watchdog@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
 References: <1650957029-910-1-git-send-email-liuxp11@chinatelecom.cn>
  <1650957029-910-5-git-send-email-liuxp11@chinatelecom.cn>
- <9f991b4d-8f02-6c07-a8b6-2861837a0224@roeck-us.net>
- <2022042616173226700718@chinatelecom.cn>
+ <dabd968c-1a03-b67e-0457-3583383f0d2e@roeck-us.net>
+ <2022042616273282549226@chinatelecom.cn>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <2022042616173226700718@chinatelecom.cn>
+In-Reply-To: <2022042616273282549226@chinatelecom.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -82,72 +82,22 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/26/22 01:17, liuxp11@chinatelecom.cn wrote:
+On 4/26/22 01:27, liuxp11@chinatelecom.cn wrote:
 >     On 4/26/22 00:10, Liu Xinpeng wrote:
 >      > Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code.
 >      >
 >      > Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
 >      > Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
->      > ---
->      >   drivers/watchdog/iTCO_wdt.c | 12 ++++--------
->      >   1 file changed, 4 insertions(+), 8 deletions(-)
->      >
->      > diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
->      > index 3f2f4343644f..8d24cf4f4ca3 100644
->      > --- a/drivers/watchdog/iTCO_wdt.c
->      > +++ b/drivers/watchdog/iTCO_wdt.c
->      > @@ -635,22 +635,18 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
->      >
->      >   return 0;
->      >   }
->      > +#endif /* CONFIG_PM_SLEEP */
->      >
->      >   static const struct dev_pm_ops iTCO_wdt_pm = {
->      > - .suspend_noirq = iTCO_wdt_suspend_noirq,
->      > - .resume_noirq = iTCO_wdt_resume_noirq,
->      > + SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
->      > +       iTCO_wdt_resume_noirq)
->      >   };
->      >
->      > -#define ITCO_WDT_PM_OPS (&iTCO_wdt_pm)
->      > -#else
->      > -#define ITCO_WDT_PM_OPS NULL
->      > -#endif /* CONFIG_PM_SLEEP */
->      > -
->      >   static struct platform_driver iTCO_wdt_driver = {
->      >   .probe          = iTCO_wdt_probe,
->      >   .driver         = {
->      >   .name   = DRV_NAME,
->      > - .pm     = ITCO_WDT_PM_OPS,
->      > + .pm     = &iTCO_wdt_pm,
->      >   },
->      >   };
->      >
->     Sorry, I fail to see how this is an improvement.
-> 
+>     Also, Tzung-Bi never sent a Reviewed-by: tag. As with the other patches,
+>     this is completely inappropriate. Really, who gave you that idea ?
+>     You adding such tags without receiving them means we can never trust
+>     your patches again since you are making things up.
 >     Guenter
->     --->
->     #define NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->              .suspend_noirq = pm_sleep_ptr(suspend_fn), \
->              .resume_noirq = pm_sleep_ptr(resume_fn), \
->              .freeze_noirq = pm_sleep_ptr(suspend_fn), \
->              .thaw_noirq = pm_sleep_ptr(resume_fn), \
->              .poweroff_noirq = pm_sleep_ptr(suspend_fn), \
->              .restore_noirq = pm_sleep_ptr(resume_fn),
-> 
->     NOIRQ_SYSTEM_SLEEP_PM_OPS, defined for CONFIG_PM_SLEEP, will
->       point ->suspend_noirq, ->freeze_noirq and ->poweroff_noirq to the same
->       function. Vice versa happens for ->resume_noirq, ->thaw_noirq and ->restore_noirq.
->       (commit 020af89a41c41fd2c92d0da524968dfaba6269f0)
-> 
->     Some power management occasion needs freeze_noirq/thaw_noirq /poweroff_noirq /restore_noirq.
+>     -->Very sorry about this. I am not clearly when need to add "Reviewed-by: tag",
+>     Just expressing thanks.
 > 
 
-That isn't what the commit description and subject say. Change description
-and subject to describe what is actually done, use __maybe_unused instead
-of #ifdef as suggested, and do not invent Reviewed-by: tags.
-
-Also, this is an independent change, and should not be sent together
-with the other patches.
+If you get a Reviewed-by: tag for a patch, you keep it in the next version of
+that patch unless there are substantial changes. You _never_ add one yourself.
 
 Guenter
