@@ -2,135 +2,80 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647B450EBE1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 00:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5562450EEFF
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Apr 2022 05:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238095AbiDYWZP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 25 Apr 2022 18:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S232806AbiDZDHp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 Apr 2022 23:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343672AbiDYWIH (ORCPT
+        with ESMTP id S229805AbiDZDHn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 Apr 2022 18:08:07 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FFA13DF5;
-        Mon, 25 Apr 2022 15:05:00 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-deb9295679so17562657fac.6;
-        Mon, 25 Apr 2022 15:05:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4/357n4d4PC5YAq5NidvohooacKB5fUdQBW6Hucbgps=;
-        b=f9e2kPji76y7S8LW8opig1/hPl0HNqz+V6/gMyw5DoR22aUIGIKC9B4eXQVAz7S7OO
-         +GkqKNXgXF6+4gmCGaK9T7Z9ihQliygU1tjXpJHGQ7U2HrhN0j3pd3MV78ToS1X3ELR4
-         okDyC1qz1Fe7OSQdmg8XmmiJCiLSXh9ncnnN4K6EZJUq/VO6/uVzCplML+E/z7Qrgdr9
-         xnT3e4gaNBBJc6H5vDRcVA8Jo2fM2/Jzlpm9EJYz/av6+gbTPZWU3djV0z/pVj2fz+B+
-         gA8Wmbe5nZdunvQVvBKPSVTv3du36OItWISqxJoSrN/OyYbEo7qHVdkBt5bwKJoRKnDa
-         /muQ==
-X-Gm-Message-State: AOAM533Qw64PXUAaT+9zA5C2GWMipyQdQtEjXmg8PcGSQhjg7iOa6dVF
-        VvtXsaM0gZLo0QcNRZYgzA==
-X-Google-Smtp-Source: ABdhPJw+13gRwqKTE4KCf4uh5v9udRaFyOju2a4GrnrwgI4sxoE14O7swvkeJZIz+clMKl759cYWfQ==
-X-Received: by 2002:a05:6870:e3d1:b0:e9:25a0:f5d8 with SMTP id y17-20020a056870e3d100b000e925a0f5d8mr4284283oad.132.1650924299987;
-        Mon, 25 Apr 2022 15:04:59 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u7-20020a056870440700b000e686d1387asm165030oah.20.2022.04.25.15.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 15:04:59 -0700 (PDT)
-Received: (nullmailer pid 377536 invoked by uid 1000);
-        Mon, 25 Apr 2022 22:04:58 -0000
-Date:   Mon, 25 Apr 2022 17:04:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, joel@jms.id.au, arnd@arndb.de,
-        openbmc@lists.ozlabs.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 06/11] dt-bindings: watchdog: Add HPE GXP Watchdog
- timer binding
-Message-ID: <YmcbCgjD85lIRMSf@robh.at.kernel.org>
-References: <20220421192132.109954-1-nick.hawkins@hpe.com>
- <20220421192132.109954-7-nick.hawkins@hpe.com>
+        Mon, 25 Apr 2022 23:07:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2126D389;
+        Mon, 25 Apr 2022 20:04:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF3A961795;
+        Tue, 26 Apr 2022 03:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D347C385A4;
+        Tue, 26 Apr 2022 03:04:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650942276;
+        bh=FHU3gz2xObNv4v3QdrY1AfApsJIy014Fc2X8Re1ythA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DdiccFTHNCalcLmOF0rUxN36iNX9dix6tqX8jGfvQjTgGarN8wBeOzMyQcLzCrChK
+         0EBc0c+M87olpqdfm3JdzxQPo8dDIWkQ40NSU9Ty2gJXkucy+MEYgf5gjOB5GZTbvH
+         Bw+b6/TG6PZp0X6J5qRQVIm0c7sPAghSqY9LD+gU4pZqhhuobXZV50hQj3JxnkSzK7
+         JlmUKPXxgbiAg+4XFkgZkdMpt1QLWzKxQloNtsUFvRBG9/INS4HPCcuglYmLpKFLOp
+         XBxgxNtBaEppo4wC20de++2jdxBXDOpL3P7GKJu2IB6MoU4H/sxon4mwWuXHIWF+Wb
+         j7z1zg19t90Vg==
+Date:   Tue, 26 Apr 2022 11:04:32 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] watchdog: wdat_wdg: Using the existed function to
+ check parameter timeout
+Message-ID: <YmdhQC6WN/kMnQfD@google.com>
+References: <1650874932-18407-1-git-send-email-liuxp11@chinatelecom.cn>
+ <1650874932-18407-2-git-send-email-liuxp11@chinatelecom.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421192132.109954-7-nick.hawkins@hpe.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1650874932-18407-2-git-send-email-liuxp11@chinatelecom.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 02:21:27PM -0500, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> Add the hpe gxp watchdog timer binding hpe,gxp-wdt.
-> This will enable support for the HPE GXP Watchdog.
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> ---
-> v5:
-> * Fixed version log
-> v4:
-> * Made watchdog a child of timer because of same register
->   area based on review feedback
-> * Simplified the watchdog yaml as it will get information
->   from parent device
-> v3:
-> * Used proper patchset format.
-> v2:
-> * Converted from txt to yaml
-> ---
->  .../bindings/watchdog/hpe,gxp-wdt.yaml        | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-> new file mode 100644
-> index 000000000000..c20da146352f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/hpe,gxp-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: HPE GXP Controlled Watchdog
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-> +
-> +maintainers:
-> +  - Nick Hawkins <nick.hawkins@hpe.com>
-> +  - Jean-Marie Verdun <verdun@hpe.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: hpe,gxp-wdt
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog0:  watchdog {
-> +      compatible = "hpe,gxp-wdt";
+On Mon, Apr 25, 2022 at 04:22:10PM +0800, Liu Xinpeng wrote:
+>  #define MAX_WDAT_ACTIONS ACPI_WDAT_ACTION_RESERVED
+> +#define WDAT_TIMEOUT_MIN     1
+>  
+>  /**
+>   * struct wdat_instruction - Single ACPI WDAT instruction
+> @@ -344,6 +345,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>  	wdat->period = tbl->timer_period;
+>  	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
+>  	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
+> +	wdat->wdd.min_timeout = WDAT_TIMEOUT_MIN;
+>  	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
+>  	wdat->wdd.info = &wdat_wdt_info;
+>  	wdat->wdd.ops = &wdat_wdt_ops;
+> @@ -450,8 +452,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>  	 * watchdog properly after it has opened the device. In some cases
+>  	 * the BIOS default is too short and causes immediate reboot.
+>  	 */
+> -	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
+> -	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
+> +	if (watchdog_timeout_invalid(&wdat->wdd, timeout)) {
 
-How is this h/w controlled? I'm guessing it's part of the timer? If so, 
-you don't need this node. A single node can implement multiple 
-functions.
-
-Rob
+Probably lacking of the context, I failed to see why the checks are
+equivalent.  Could you provide more information?
