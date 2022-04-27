@@ -2,153 +2,178 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773F95117C5
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Apr 2022 14:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1EB511A4B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Apr 2022 16:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234027AbiD0Mfm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 27 Apr 2022 08:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S235260AbiD0NGg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 27 Apr 2022 09:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbiD0Mfl (ORCPT
+        with ESMTP id S235214AbiD0NGf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:35:41 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296C04C42C;
-        Wed, 27 Apr 2022 05:32:29 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id hf18so1000591qtb.0;
-        Wed, 27 Apr 2022 05:32:29 -0700 (PDT)
+        Wed, 27 Apr 2022 09:06:35 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492B7DCB;
+        Wed, 27 Apr 2022 06:03:24 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id r14-20020a9d750e000000b00605446d683eso1013679otk.10;
+        Wed, 27 Apr 2022 06:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=41yunm+lS0x9OKFTJJaFvpJWxmfNu7cbQFvxht2PQ0Y=;
+        b=Djs7ebC36uO25LOxqBbY11JXMOwr462SGowSqkea/WVq2ncQmC+Y88YodCIDDpFAk5
+         y4wbbdSPYwgpfbPDS/uRTUMa0KsU5ok6ZEmTPhT/DN9/HQFsNUn7fTZZqaPfrV4zxeZr
+         tLzfdtQPtJNTUEC/kD6eOqWaaSTEGUfgH0XC1818mgFKPjlhGA3tzxlT+0vVBs1+IMzY
+         lVER6qxEdpXCRh9bPRlvtm2YdiMAAXvudlefNzBZdCd2cxqhDxeojLwFLtcTJD9j6yTX
+         AOTfo1uwOtQT2v+nTD4KDZbcZvzNWAJuL4bf23Pj6rjXOi8gmA/+Wp8hQH6NEkSszi8/
+         WtCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wctzDfDylFmLP2RkMiHxbhLA3WY20vXxkJqi8oigFwE=;
-        b=DIa18UYBpi7afZ9y32eMycTmAj7LpAs0ADmQV4lIt6i+8F+XcWYBriZhTxxkNJm9bx
-         pUt6q06/5z8PciFHjdD/ujhbGct4L4is+yDeZh74btgliUJ0qeLX3LZuN/d6zQbXGzVT
-         y91KVGp9MGLhR4voViM4hK74qnvrr5qhL5a40N3LJB3VQ+c4o+lNv6/3a1YpBYN0gF74
-         SoZ/xp8/dnVxS9NJzQmWP2y+tK1kdYVWAUVPQrmbcfBZtEP6l6lhHKE+iuqmxLwUh5FZ
-         y5zDo6BrLJ4tnCMWpoNKkMFVLS3DFyRi35iV1E6WT/QdZUMcUg62Y+zlL7obElQ/Gz2a
-         6vbQ==
-X-Gm-Message-State: AOAM533Chzzz/scVLGY6b38T2WKpIr7q0IYVLdKkrYim3zLiBGcx+Uxs
-        shGvW9opo0IZxagXLebZDA6nQKqwA7aGJg==
-X-Google-Smtp-Source: ABdhPJxkn6pOj+SI3AIPM2hdprWq5NY/NU8IpVTLl2apJuPjeGdQNoTpaAf8CdJtY7nWfJ+gY6R1vg==
-X-Received: by 2002:a05:622a:589:b0:2f3:5971:80c with SMTP id c9-20020a05622a058900b002f35971080cmr17410085qtb.270.1651062748186;
-        Wed, 27 Apr 2022 05:32:28 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id bq37-20020a05620a46a500b0069f67110f37sm3997353qkb.117.2022.04.27.05.32.27
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=41yunm+lS0x9OKFTJJaFvpJWxmfNu7cbQFvxht2PQ0Y=;
+        b=DfMo2tLlKC9+azDYnVBcoCTF2i84j2KTShAX9d+WN02JJe20fZlGeQ8HhVSrNsmf4M
+         ffbVCukk+XGs1YoNQm3f5C1q4bg24ABk9U0idE4vo8uTLlP9ane7PKRmLIXkoyj8+PGA
+         FodJ2JNanR8SmxN8b8JOARTKAQ4esw0ZTGY3KrBSyMMRegpDNamEFaHOhAaquwZhFvt5
+         s+fSMQEzhTz8YvOeUXEj9RIH4jUxPxxy6ojoX+EenUW7nzEMiD+/TTNMsx12ItSvykKq
+         2gIJ6diepqDo5uBlgnfJZ7p5sDzBDsQosPmnwf4XGDyOld99mcy2tX1XAOJ+kqgE59Jn
+         YOrw==
+X-Gm-Message-State: AOAM530ulemjMg7w+keEYWca9hbx/dtlQMLOh8Akjea+hIs2jidQiVxS
+        bGGZu6xGrBnYTrAKtzSaCIg=
+X-Google-Smtp-Source: ABdhPJzZ0A0wIhQcTXEyYsVLqDGs+FuofT63neIX1W17xL9xJt5oqD/OgzGqWOyz9LH0d3V7yezjTA==
+X-Received: by 2002:a9d:57c9:0:b0:605:4ba7:d01f with SMTP id q9-20020a9d57c9000000b006054ba7d01fmr9814358oti.106.1651064603580;
+        Wed, 27 Apr 2022 06:03:23 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a4-20020a4a80c4000000b0035e62548577sm3974341oog.7.2022.04.27.06.03.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 05:32:28 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id j2so3162567ybu.0;
-        Wed, 27 Apr 2022 05:32:27 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:63f:8c38:676c with SMTP id
- c4-20020a5b0984000000b0063f8c38676cmr26233812ybq.393.1651062747550; Wed, 27
- Apr 2022 05:32:27 -0700 (PDT)
+        Wed, 27 Apr 2022 06:03:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <79a5ec82-da71-57c3-d7bb-11607cb71bb4@roeck-us.net>
+Date:   Wed, 27 Apr 2022 06:03:19 -0700
 MIME-Version: 1.0
-References: <20220413082527.155740-1-jjhiblot@traphandler.com> <20220413082527.155740-3-jjhiblot@traphandler.com>
-In-Reply-To: <20220413082527.155740-3-jjhiblot@traphandler.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 27 Apr 2022 14:32:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXLpuoTiOn7yDwTTnjkqWJ4PXuhdCLiLcOP2uyzyV6==A@mail.gmail.com>
-Message-ID: <CAMuHMdXLpuoTiOn7yDwTTnjkqWJ4PXuhdCLiLcOP2uyzyV6==A@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
 Subject: Re: [PATCH v6 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        tzungbi@kernel.org,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Content-Language: en-US
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+        wim@linux-watchdog.org, geert+renesas@glider.be,
+        tzungbi@kernel.org, linux-watchdog@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Phil Edworthy <phil.edworthy@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+References: <20220413082527.155740-1-jjhiblot@traphandler.com>
+ <20220413082527.155740-3-jjhiblot@traphandler.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220413082527.155740-3-jjhiblot@traphandler.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Jean-Jacques,
-
-On Wed, Apr 13, 2022 at 10:25 AM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
+On 4/13/22 01:25, Jean-Jacques Hiblot wrote:
 > From: Phil Edworthy <phil.edworthy@renesas.com>
->
+> 
 > This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
 > very limited timeout capabilities. However, it can reset the device.
 > To do so, the corresponding bits in the SysCtrl RSTEN register need to
 > be enabled. This is not done by this driver.
->
+> 
 > Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
 > Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
 > Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-
-Thanks for your patch!
-
+> ---
+>   drivers/watchdog/Kconfig    |   8 ++
+>   drivers/watchdog/Makefile   |   1 +
+>   drivers/watchdog/rzn1_wdt.c | 203 ++++++++++++++++++++++++++++++++++++
+>   3 files changed, 212 insertions(+)
+>   create mode 100644 drivers/watchdog/rzn1_wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index c4e82a8d863f..4d5e503c8950 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -883,6 +883,14 @@ config RENESAS_RZAWDT
+>   	  This driver adds watchdog support for the integrated watchdogs in the
+>   	  Renesas RZ/A SoCs. These watchdogs can be used to reset a system.
+>   
+> +config RENESAS_RZN1WDT
+> +	tristate "Renesas RZ/N1 watchdog"
+> +	depends on ARCH_RENESAS || COMPILE_TEST
+> +	select WATCHDOG_CORE
+> +	help
+> +	  This driver adds watchdog support for the integrated watchdogs in the
+> +	  Renesas RZ/N1 SoCs. These watchdogs can be used to reset a system.
+> +
+>   config RENESAS_RZG2LWDT
+>   	tristate "Renesas RZ/G2L WDT Watchdog"
+>   	depends on ARCH_RENESAS || COMPILE_TEST
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index f7da867e8782..38d38564f47b 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -84,6 +84,7 @@ obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
+>   obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
+>   obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
+>   obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
+> +obj-$(CONFIG_RENESAS_RZN1WDT) += rzn1_wdt.o
+>   obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
+>   obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
+>   obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
+> diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
+> new file mode 100644
+> index 000000000000..fa32716727b7
 > --- /dev/null
 > +++ b/drivers/watchdog/rzn1_wdt.c
-
-> +static int rzn1_wdt_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct rzn1_watchdog *wdt;
-> +       struct device_node *np = dev->of_node;
-> +       struct clk *clk;
-> +       int ret;
-> +       int irq;
+> @@ -0,0 +1,203 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Renesas RZ/N1 Watchdog timer.
+> + * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
+> + * cope with 2 seconds.
+> + *
+> + * Copyright 2018 Renesas Electronics Europe Ltd.
+> + *
+> + * Derived from Ralink RT288x watchdog timer.
+> + */
 > +
-> +       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-> +       if (!wdt)
-> +               return -ENOMEM;
+> +#include <linux/clk.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +#include <linux/watchdog.h>
 > +
-> +       wdt->base = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(wdt->base))
-> +               return PTR_ERR(wdt->base);
+> +#define DEFAULT_TIMEOUT		60
 > +
-> +       irq = platform_get_irq(pdev, 0);
-> +       if (irq < 0)
-> +               return irq;
+> +#define RZN1_WDT_RETRIGGER			0x0
+> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL		0
+> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK	0xfff
+> +#define RZN1_WDT_RETRIGGER_PRESCALE		BIT(12)
+> +#define RZN1_WDT_RETRIGGER_ENABLE		BIT(13)
+> +#define RZN1_WDT_RETRIGGER_WDSI			(0x2 << 14)
 > +
-> +       ret = devm_request_irq(dev, irq, rzn1_wdt_irq, 0,
-> +                              np->name, wdt);
-> +       if (ret) {
-> +               dev_err(dev, "failed to request irq %d\n", irq);
-> +               return ret;
-> +       }
+> +#define RZN1_WDT_PRESCALER			16384
+> +#define RZN1_WDT_MAX				4095
 > +
-> +       clk = devm_clk_get(dev, NULL);
-> +       if (IS_ERR(clk)) {
-> +               dev_err(dev, "failed to get the clock\n");
-> +               return PTR_ERR(clk);
-> +       }
-> +
-> +       ret = clk_prepare_enable(clk);
-> +       if (ret) {
-> +               dev_err(dev, "failed to prepare/enable the clock\n");
-> +               return ret;
-> +       }
-> +
-> +       ret = devm_add_action_or_reset(dev, rzn1_wdt_clk_disable_unprepare,
-> +                                      clk);
-> +       if (ret) {
-> +               dev_err(dev, "failed to register clock unprepare callback\n");
+> +struct rzn1_watchdog {
+> +	struct watchdog_device		wdtdev;
+> +	void __iomem			*base;
+> +	unsigned long			clk_rate;
 
-Please remove this error message.
-devm_add_action_or_reset() only fails when running out of memory,
-in which case the memory allocation core has already printed an
-error message.
+Nit: Whenever clk_rate is used, it is divided by 1000.
+It might be better to store and use clk_rate_khz instead.
 
-> +               return ret;
-> +       }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Guenter
