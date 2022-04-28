@@ -2,177 +2,172 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812595130EC
-	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Apr 2022 12:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4345F51349A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Apr 2022 15:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbiD1KMK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 28 Apr 2022 06:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S239497AbiD1NOV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 28 Apr 2022 09:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbiD1KLo (ORCPT
+        with ESMTP id S1346952AbiD1NOP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 28 Apr 2022 06:11:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B4E2CC8E;
-        Thu, 28 Apr 2022 03:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651140147;
-        bh=5RkR0AnFX7vQTXrSZOyaEfFUYVNtE06t7X96bNHnpAk=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=EVZb7nTx/v4hqEQf/0UL39mQpzEJu4VuF3dvdrAbo9fT0Iy7igpqwmPyfEMJBQtY+
-         Pn2PmbzUQek4kJ1q1UIKaX7rOPl7Nf+Z9+fZ7S5dVF162uhqw3qb51QsEG+6vdrbcR
-         mhe7sT9dEFYcunjyIuD3Du0g/9QZgJK5vWxpSLEo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.215.103]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTqW-1nOTRM3hrC-00WUrz; Thu, 28
- Apr 2022 12:02:26 +0200
-Date:   Thu, 28 Apr 2022 12:02:24 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Zev Weiss <zweiss@equinix.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Patrick Venture <venture@google.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: Re: [PATCH 2/7] clocksource: timer-npcm7xx: Enable timer 1 clock
- before use
-Message-ID: <YmpmMGsI2GLrvMg5@latitude>
-References: <20220422183012.444674-1-j.neuschaefer@gmx.net>
- <20220422183012.444674-3-j.neuschaefer@gmx.net>
- <20220428091158.GD11809@packtop>
+        Thu, 28 Apr 2022 09:14:15 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EAA1AF32;
+        Thu, 28 Apr 2022 06:11:00 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id s131so5294718oie.1;
+        Thu, 28 Apr 2022 06:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m1086ZQTgciBDTHOLT4KKyAGoDAeJX2AiJjybJQ5ZuA=;
+        b=LOr1/Kv/sLO4NyKJzb6wqfS6o0gV4djWxJx68mOvZpgzsNuLzwrbG+2V7jAE76zIUj
+         iikJ8X+ovko/EHgij1nBQo/x7Bi/KPoLw5dbFg1zkl+o+xzs/STuev2VguEmliiioU9o
+         aCRBFz40yeAc2H4oCQbOSaMqx4cZT1CU8By5trHyfwPkvOAWyXlHhK8z6XGX/SWIIQLl
+         Q1L2YoO0TcjAiw0rojGcluE6Tex4gTGwkAVShpqBRAL9TZm38Dq0T+qg4j3LtP3jpc5T
+         CCMOla56w5vcgbaVApT13+c8dDBbEjXo0Hng5F4WYel0R7mCQx+yTsPc3q4uQqGQqOeU
+         09+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m1086ZQTgciBDTHOLT4KKyAGoDAeJX2AiJjybJQ5ZuA=;
+        b=4OqAqygbgnAM6NRfolPcwj2dafkw5q6nJwddL4HNmu1oJCi8xAqCNtbsQtB7BiryQs
+         WJ/rSBgVcHuQ33M1IA4zt3hNWdqXIDpCezaqQd3um4G1KpkFKaUBKkFBIo9Z2OF9dtqp
+         aaIpR2PV9zTPDXQAT3Yk4CprDEXH1jfC9iFsB90fcHLAE36d9tNkhZsq27e2shFYl2D8
+         E2kesnTAsRz3URdLKaayZOoK93lcYYW1zuiJK8ZnUmt35lBBixovvma+AkTdeNPv5vYv
+         wZs35F1ZXu+6ZVH5pzk3i+YRDNca12qPiZ/wH+ug9ZsFxQHapEFCKa34X5K9tGBsTFA3
+         xFLA==
+X-Gm-Message-State: AOAM532RIWCtDXP07UUKZJjJhPpMtnLvYozOnZj+bU9NgAAcMaF43B9X
+        D+03HikrJkqQByP5+cGAA+Q=
+X-Google-Smtp-Source: ABdhPJzcMUpV76tKlp2QvspGppKBwEJiHCceRqEhu5DMtQBUZJkt02KlvwVAfbzsG9cuehRDhFmpIQ==
+X-Received: by 2002:aca:782:0:b0:325:4771:90b1 with SMTP id 124-20020aca0782000000b00325477190b1mr8237240oih.236.1651151459806;
+        Thu, 28 Apr 2022 06:10:59 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i16-20020a056870d41000b000e686d1388esm1917184oag.40.2022.04.28.06.10.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 06:10:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b19ce453-1235-689b-8796-fa6cba35c1f0@roeck-us.net>
+Date:   Thu, 28 Apr 2022 06:10:56 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yOapqzkiMt8+dk0+"
-Content-Disposition: inline
-In-Reply-To: <20220428091158.GD11809@packtop>
-X-Provags-ID: V03:K1:z2GOvnE2pOoTKqPS2YNCdWH3PNgLZoY46dfHyKNgxU1cCV0GDMV
- CD5eXdswQsXQqcWJUlISm7/TxvKACGZ4FJS9IDAcStlPoqFOQYnAZI7jcX3dsNtIq+i3Uai
- bV9ZDeHO2mpbW/oJIk5KYUBSGI1btTH9/yVMpNt9Z3sK8JIRqdkp0d4QnB1agCrftN6tB+z
- hl6MQKVaa1728yKtcJiBA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:I6+m8IwNZtM=:6UfzdwNcOAsy6GnUAtfJdl
- 6wW0Ip1MRPMbRrjB6AtLBRlzFqB1TJGg49uanx9G2aDNNU5pL8oveu/t/XhdSZajLVc5avdGp
- NexHpCpVrfm9P39HdsWE+Ys0gF5QOD5VLm3XEWSI5IdTpZsFl7rQ94GZjPGUpWOS5M76yKJQO
- HeWPP47IHdCOxj/g+3/yoa0SYC27v2lijBV9F7FWfqcucbNme9MQT/UxwHB2BLrKQLGcgtP0z
- 5rStsWFJ54Iq9YDnP8b8tVrx/Sc//6o3MXvyIh/OkHoTLP4lYouNjmscUocxJtxtH4CKDs8qB
- cdEK434ilq2GkCAN3j5DoTJi2f2UfvZ9vB5TIiogM1+pA7qjknwRhqo/RIEowtMKxS/PNemy7
- t/aweHpEDnlavP/XMBrSilu1mvq9/MexyqSaj14pLowIvu8DzJCMmo30/9pMkK869u/52W25Q
- ZqZ/AhaY5EgRs+XOFnj08nwmP4HGhxJB8bIkqKo4w40TNY1TIdYEqzuRdH+MlUIulHi6rXNJb
- TGUDj7BY57On5x8ng2FbF2MW5O5fd0dvWacwKvHpXWuzIdm9DIAqi+yxIcVlEvEcKpj+qPxrD
- SBJblxieQUAoPKOQtX8gWNEohdd1rHRawppM1/Z+FI7k/Uon7jxgZC31gGr/Jlqfs6PMHMu+6
- dkAnnrMfloM04cXPGgRYSj2VSeqVByrtPwPz4pk1B7KKU0VCv9a2xIt040qiByoAHM/DaRM58
- 8jzU8vbzjdXK//fpWL3sgAOuwHczM9ehyQmebFImrgk8TS04eqHqLPzFemNgdEFNE4TJSL8Ty
- cPIrK7irweN9tan58XCt1MY5okntg1dfih6GoblOwfDQx15BfNZHr6Wsq7eOWqkBdoCtl71cf
- PmUjzBsd7Biv33otqAby6iBMcSagwzXRKkat4/SDggUsVTbB2j6CM8AGH263eL15nFSXjuLdK
- Qrm32UaVAEYWCUxxY2hQnRutwHuYpvl5gCn65xUAmw3wX7JsNdEk02CsFWSKJ3zVEDIg2pSlj
- 1wEn2oH1yI6FqC7f+fn0la/L81NfleUMxBBcscy6H2UGlh57PD2dm7zmQ7rt/a0GA/1M0avLy
- oo+FpSSyPXgUvQ=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] watchdog: max63xx_wdt: Add support for specifying WDI
+ logic via GPIO
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220428091603.6838-1-pali@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220428091603.6838-1-pali@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 4/28/22 02:16, Pali Rohár wrote:
+> On some boards is WDI logic of max6370 chip connected via GPIO. So extend
+> max63xx_wdt driver and DTS schema to allow specifying WDI logic via GPIO.
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 
---yOapqzkiMt8+dk0+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+How is that different to just using the gpio watchdog driver ?
 
-On Thu, Apr 28, 2022 at 09:11:58AM +0000, Zev Weiss wrote:
-> On Fri, Apr 22, 2022 at 11:30:07AM PDT, Jonathan Neusch=C3=A4fer wrote:
-> >In the WPCM450 SoC, the clocks for each timer can be gated individually.
-> >To prevent the timer 1 clock from being gated, enable it explicitly.
-> >
-> >Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> >---
-> > drivers/clocksource/timer-npcm7xx.c | 14 +++++++++++++-
-> > 1 file changed, 13 insertions(+), 1 deletion(-)
-> >
-> >diff --git a/drivers/clocksource/timer-npcm7xx.c b/drivers/clocksource/t=
-imer-npcm7xx.c
-> >index a00520cbb660a..974269b6b0c36 100644
-> >--- a/drivers/clocksource/timer-npcm7xx.c
-> >+++ b/drivers/clocksource/timer-npcm7xx.c
-> >@@ -188,17 +188,29 @@ static void __init npcm7xx_clocksource_init(void)
-> >
-> > static int __init npcm7xx_timer_init(struct device_node *np)
-> > {
-> >+	struct clk *clk;
-> > 	int ret;
-> >
-> > 	ret =3D timer_of_init(np, &npcm7xx_to);
-> >-	if (ret)
-> >+	if (ret) {
-> >+		pr_warn("timer_of_init failed: %d\n", ret);
->=20
-> This seems like a somewhat opaque message to emit, especially given this
-> file's lack of a pr_fmt() definition -- maybe add a %pOF so it's
-> slightly easier to trace back to the device it stems from?
+Guenter
 
-Now that I look at this code again, I think I should just drop the
-pr_warn entirely, since I didn't mention it in the description, and it's
-unrelated to enabling the clock.
+> ---
+>   .../bindings/watchdog/maxim,max63xx.yaml      |  4 +++
+>   drivers/watchdog/max63xx_wdt.c                | 28 +++++++++++++++++++
+>   2 files changed, 32 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> index ab9641e845db..a97aa0135ef9 100644
+> --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> @@ -27,6 +27,10 @@ properties:
+>       description: This is a 1-byte memory-mapped address
+>       maxItems: 1
+>   
+> +  gpios:
+> +    description: Optional GPIO used for controlling WDI when WDI bit is not mapped to memory
+> +    maxItems: 1
+> +
+>   required:
+>     - compatible
+>     - reg
+> diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
+> index 9e1541cfae0d..eaf00c3f06a5 100644
+> --- a/drivers/watchdog/max63xx_wdt.c
+> +++ b/drivers/watchdog/max63xx_wdt.c
+> @@ -27,6 +27,7 @@
+>   #include <linux/io.h>
+>   #include <linux/slab.h>
+>   #include <linux/property.h>
+> +#include <linux/gpio/consumer.h>
+>   
+>   #define DEFAULT_HEARTBEAT 60
+>   #define MAX_HEARTBEAT     60
+> @@ -53,6 +54,9 @@ struct max63xx_wdt {
+>   	void __iomem *base;
+>   	spinlock_t lock;
+>   
+> +	/* GPIOs */
+> +	struct gpio_desc *gpio_wdi;
+> +
+>   	/* WDI and WSET bits write access routines */
+>   	void (*ping)(struct max63xx_wdt *wdt);
+>   	void (*set)(struct max63xx_wdt *wdt, u8 set);
+> @@ -158,6 +162,17 @@ static const struct watchdog_info max63xx_wdt_info = {
+>   	.identity = "max63xx Watchdog",
+>   };
+>   
+> +static void max63xx_gpio_ping(struct max63xx_wdt *wdt)
+> +{
+> +	spin_lock(&wdt->lock);
+> +
+> +	gpiod_set_value_cansleep(wdt->gpio_wdi, 1);
+> +	udelay(1);
+> +	gpiod_set_value_cansleep(wdt->gpio_wdi, 0);
+> +
+> +	spin_unlock(&wdt->lock);
+> +}
+> +
+>   static void max63xx_mmap_ping(struct max63xx_wdt *wdt)
+>   {
+>   	u8 val;
+> @@ -225,6 +240,19 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
+>   		return -EINVAL;
+>   	}
+>   
+> +	wdt->gpio_wdi = devm_gpiod_get(dev, NULL, GPIOD_FLAGS_BIT_DIR_OUT);
+> +	if (IS_ERR(wdt->gpio_wdi) && PTR_ERR(wdt->gpio_wdi) != -ENOENT) {
+> +		if (PTR_ERR(wdt->gpio_wdi) != -EPROBE_DEFER)
+> +			dev_err(dev, "unable to request gpio: %ld\n",
+> +				PTR_ERR(wdt->gpio_wdi));
+> +		return PTR_ERR(wdt->gpio_wdi);
+> +	}
+> +
+> +	if (!IS_ERR(wdt->gpio_wdi))
+> +		wdt->ping = max63xx_gpio_ping;
+> +	else
+> +		wdt->gpio_wdi = NULL;
+> +
+>   	err = max63xx_mmap_init(pdev, wdt);
+>   	if (err)
+>   		return err;
 
-> > 		return ret;
-> >+	}
-> >
-> > 	/* Clock input is divided by PRESCALE + 1 before it is fed */
-> > 	/* to the counter */
-> > 	npcm7xx_to.of_clk.rate =3D npcm7xx_to.of_clk.rate /
-> > 		(NPCM7XX_Tx_MIN_PRESCALE + 1);
-> >
-> >+	/* Enable the clock for timer1, if it exists */
-> >+	clk =3D of_clk_get(np, 1);
-> >+	if (clk) {
-> >+		if (!IS_ERR(clk))
-> >+			clk_prepare_enable(clk);
-> >+		else
-> >+			pr_warn("Failed to get clock for timer1: %pe", clk);
->=20
-> Likewise here (though to a slightly lesser extent).
-
-I'll add %pOF here.
-
-
-Thanks,
-Jonathan
-
---yOapqzkiMt8+dk0+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJqZg4ACgkQCDBEmo7z
-X9v7UA//XinB73NhiIWuAgNkGTSfPjaFxOvIHuRuFLsnTcJHlorK0w1BmfZHecD+
-ZdHnpqPtkXz3gnReMqx8qJcO/0lHmJTkgvddzHqEu4wcWFROMTNs8Tbrd7TUvaxx
-9jmxWWOE5f9P5EXHCLUlo0c03r6Iq8R7BlMUVSh0wZz6RtPujFoHjw6A8uhE9tbt
-ZzoD4XhdNl4BkUpC/NUNIHSxbb/VYZYy7GxqP4N9yQ0QSYGIJm7ESR3RRGhMFoEO
-BZziQtQiH/zJSj71FbG3q8vnXJF4mVozFqnTk4UHngq5nJrM7ZFmE6tVRBf5EPzY
-aaBOk7Y7gcYdPDFMHszp+TtlxcGk7IuTs3I4lVA1JjCX7YPBfxA6AVt6Haf15YkL
-TmosKy8EOB+QqfwKLwddQafB9FXSkRSWr0fn3WboeAolBa+omi+5NMVfq4X1kbHL
-FNO1MlBA0IdDIuMwgRAm5aVTFiIuDoyYIm7qytMFvve4nSlLS3sL3F7qzT783Dvm
-jbSSOUGrQa4XrQoO/N0HRiYj6FkZGE00Deg7e2qY6mqVi7PT9AIzWakASES0LqSd
-kRiHXIqXlsjp65wuJ6xL/hj0PUg9ziUTurX31k1BXomattaHbz5ZSq+bGBD9vuvI
-muA9b/srdaA7jEkkLs6AqWGSsFl8CXAEwI1Rh5VRZ+MStwIBicg=
-=8ywP
------END PGP SIGNATURE-----
-
---yOapqzkiMt8+dk0+--
