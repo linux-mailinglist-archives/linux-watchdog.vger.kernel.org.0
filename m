@@ -2,33 +2,33 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159B0512ECA
-	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Apr 2022 10:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E12512EFE
+	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Apr 2022 10:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344531AbiD1In6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 28 Apr 2022 04:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S240955AbiD1Iwu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 28 Apr 2022 04:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344072AbiD1ImH (ORCPT
+        with ESMTP id S240617AbiD1Iws (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:42:07 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7FC52B0E;
-        Thu, 28 Apr 2022 01:37:23 -0700 (PDT)
+        Thu, 28 Apr 2022 04:52:48 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9F66364;
+        Thu, 28 Apr 2022 01:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651135011;
-        bh=Q4+3ChFfyhKA+KTPGoIQx0R1D0LMLWXJ6J60qMTKnAc=;
+        s=badeba3b8450; t=1651135740;
+        bh=bLfGt3R90RHCX6880JK5SZuBWa/YQY2ZRYJAYi3rHtk=;
         h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=PHaGpcoZ3WPGPl13ST6Zk8WpnU1HwRAWva6B85NnDWN8fUn+CGlkwNQE27vvfLrK0
-         aOIH8AtugWKH2+SxFNHyLGsY5Stf06uOtjX77Zqs2PETm9tOtrShe65I7usUpueheb
-         b5V3i/MnxKlHgVZtrNE841yh2wEMrGzur3bltfsk=
+        b=EqvyOWXBKQdV5qx4PklF3CHo13tltjabFvlhzWAY9squNAn9iIQ61gIGMsCDzvSzy
+         K9Mvccn8xkcZEVQ/aBQj/MxbMcKpA4R+sRBzO11CGUr3S/zRTdoF08/RypQpR1ZHxI
+         r1YY/u+wubtWzznpshNwS+nZ5U+nB+UPQ4g1ddPI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from longitude ([37.201.215.103]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3lc9-1njiWf3chP-000vpD; Thu, 28
- Apr 2022 10:36:50 +0200
-Date:   Thu, 28 Apr 2022 10:36:48 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N33Il-1ns4un1ooH-013JoB; Thu, 28
+ Apr 2022 10:49:00 +0200
+Date:   Thu, 28 Apr 2022 10:48:59 +0200
 From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
@@ -46,38 +46,40 @@ Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: Re: [PATCH 3/7] watchdog: npcm: Enable clock if provided
-Message-ID: <YmpSIFHTYDsuEm85@latitude>
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 4/7] dt-bindings: clock: Add Nuvoton WPCM450 clock/reset
+ controller
+Message-ID: <YmpU+zATKIgHlJjF@latitude>
 References: <20220422183012.444674-1-j.neuschaefer@gmx.net>
- <20220422183012.444674-4-j.neuschaefer@gmx.net>
- <20220422183417.GB2637654@roeck-us.net>
+ <20220422183012.444674-5-j.neuschaefer@gmx.net>
+ <31cb9af1-173d-bef5-64da-ccf5a01f2485@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3JafQPKgiRq88lVT"
+        protocol="application/pgp-signature"; boundary="CZHfdAoeIHmEJg6q"
 Content-Disposition: inline
-In-Reply-To: <20220422183417.GB2637654@roeck-us.net>
-X-Provags-ID: V03:K1:p7i6FNHfF3FlpnhFKvMhXgLjFljWIjKMJgX4cNG3EwazOtlZlAl
- A9/tr/ov/cUpHkz6Bg5t0ni5NA6BknxyNVNd0m/B4NnYcuwu0Htmg4MLDdwaoCI8648pFVu
- n06WalmbWJ4P5vfDob6h/zirRlfnoXDRXHpm03nRrLFUP6VtjNLPUgcOkdebrLdC7eKaPcf
- ib6FcoTVFY76Fsz2S3fsg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:q6/F/sBWuO0=:DiOMmpBm+d61DOtlcby/Nm
- zuGYlHuDf/HK8+9VYtfu2zKMt6XjZj8gPYnUIkNNgP/whzdTUtOV67Kfclqz3xRg5Pn4WOgmX
- Nw5tbjCeMZWwLM3hRjCJhsbGK4niQHcO8xJwANvNi1AN5xDV6MeA5wUtEzFtKec9bhg2MC7dV
- 6HvTeERhw9fxajcCa0Rysxlf8+hJekY4WlFQjo9L9oFjfHJTs8dchOy6lGGX3WDHISe2B4fBv
- QOSNPUtq/mwGQgX4Np5DXH13xjd5cUvTMzDGY5k0yA9HzT3YESQiJbO2HHFWJGUKpRJ1yWbul
- 3fTi2gwywW53Pu7XKBqmDBsqKOpmftc1xVnk1lYV+wXWme1nQ2aP4KQyceLf07P4Psv6UIAEw
- KG4tQ4dI6/cJ8/+vM2p6rO77aYwYlzVmEa2ePpTKGpByk2WcDPnewmiGtjtQItIFCo/DTNxDB
- rdqA9N0byNxQuKE8dtiGFg76a/Qsg/ce1PUrBWn0DIq8xm/rdJXwM8fbS+GFtTS/OPnNhVnYM
- Lb1JmjB9oi/BbqQKszE8zDsRMmArEdoo5tASXHXb5rroVZ77HDdiTfMqVVrwfiPrK43rfJIR4
- npKB+3T/UvD7kUmC8hWWa/C3DOVtCZ47ub5EVkBobTsQkk3VlU+wZZtfdQd5xLcyjKs0YCk7t
- +kfDXQqLt4CO8zN+eXyPL+OUdvORZuNKWXezwTJ75nkSKKMbQBCmf4WqNqoBa89iHUf3FZvxJ
- EAH6yO7fOvaSMJoobpfUKdyDprQFiJ83OH2pyhEGZAXVLrtJEIAMdMeJ1kTNjPx0Pzvrmhjqf
- VGsCIyvV/bt/xFR5v7hQkQQkwOfkqsvjQzlQGNPev3jWIvNvH/AZTMUv1OhV0V+OMaWm4DV1k
- 6CncbPWocgPLQNv4yAtwBn99a8UDhxZJPl+fTiIQ3Ue9UiXQMeiUhY/yoP9ou+rtWYpfUNYNV
- x7+Ea0t9n/UPKL57VIrJErYEhxADYY3ok+ESPxUKQpjECO7aMhp1ouHf9q5mYGIufhlcV4tTF
- Y/uq3aerx5n8kb6hQHS6RS8P1I0LtQDQhCwwrTygd1cE7uCYKgkjt8tJWjPmSi7JSb8r2nKUV
- 3omH0tDPMUtQro=
+In-Reply-To: <31cb9af1-173d-bef5-64da-ccf5a01f2485@linaro.org>
+X-Provags-ID: V03:K1:nBEmoewX0m4zGMA3/a3yHcdhNWlEnkyZQK6tdFT5oIrkxnj8Jfv
+ dh+5BhJW3MisxUBFMF4xh/ERB6JpydlwuzBohvbfDSV1O0gcNP/2uzihbVvF914FkmE77Hm
+ eBoxOGFMLQGBGKJJYU6tGJezyAUCI66pDwpDLmi1ykLz2s1/057XlZFiq2iDAFlkSJq3ekn
+ vfPlU327v/6BaL6Ow7YTA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:P0wbeQQbqA4=:Yz9w6OZOygUTfgdvqfpKev
+ zh0Sznvp1Mi0X9Gd76Ecj1euzsLJmOqkjVXm3N3XGT5V3S484dCRE5wKw52VNe+iCLyUKOpLx
+ /dybnjnAE/dclj3GMQ1Q50tXii5xc9A2Fy5scwQBjilxPMKX85n0G2hCHT/HRk2ENOvsCy+uw
+ kH71LmGu2+PYsxz3SdPZCuLR+hj/q6mbMaAV7LUgJCYX/i1mA8pNlRqKcSq5Cbbc+hSkk27Ug
+ 5Iw9puL9+lkLh6OTj1acYxgF6A2iljUNZusOLxZgzIv99N76OJx+WcbooIiqvmZPF7VfQPNgh
+ ebvGmg3fYSOJ5H5+J56L/Rw+62GdbFKtA3t0VogkX/HdMrUFCCrRpHDiJshS3c2fCxK1bzO3a
+ nnreGiwNrWDXvHQHtlA8qc449/32ddIg5O8iOfyJMlG3euXt3cCUjVtLQ+mT92Qg3KdnoHwdR
+ QGha+f2X48cwo/em01NnfTgCFni1wrvieiCt7jw71TFhL3up6Bi47Xai0THDmv6l+vTvVc7e8
+ B+ioiorcGQa8vq9PpLYwApuzt0Bhwf9jdBGWrLW/f9B/KIaCAlsknd083MPtfQPrb0KaJ4iyU
+ T4Uxy6UY782PQg/7fU6a9WR/NHMdQjlJrzkv8w3MKArSsWhRfV8mzqje+LWlv6SYbOn5XtHEy
+ b62NG1ktrjlFgi4QtZyy9YQZchku8XnR6MMlucyKtkEcb12SSV80CtmP8z04k+klkfhI5UHi4
+ XOOCGHKm8uQIUNLTdNAPJu4GI4sChUYe6VyKpNNts0j1zl5qv4FT9BDfkbGaXQlVFr/bkRkNb
+ xmonY+uEzYBTBwTjFVvw23Pr2xSnNWBJ8STBOeKT9m8DF2VTXSV3p46aRaQtk0LvZHkQJ5FnL
+ kkPjhu+5dSLvKrGJHLVKe7vufS/4Jnc4J52IJzDFiVAnB7HRKDyVIREQmZbQr6KDyznewzqjp
+ D6/KWPP9AV9+fURw8L+VctmeYoEuRKoKnhWK71u7w7FhC08Tb1n+8jV+xH52fB8598JMF6pL9
+ etoVgoRRcjHyzWK+Q3VWEQvOSK6ySdbXmo3aYzoP7PO1vxelCxbleKAHFFuS+NYueZqYe4748
+ JnJAyEvVcitoJE=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -88,83 +90,111 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
---3JafQPKgiRq88lVT
+--CZHfdAoeIHmEJg6q
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 22, 2022 at 11:34:17AM -0700, Guenter Roeck wrote:
-> On Fri, Apr 22, 2022 at 08:30:08PM +0200, Jonathan Neusch=C3=A4fer wrote:
-> > On the Nuvoton WPCM450 SoC, with its upcoming clock driver, peripheral
-> > clocks are individually gated and ungated. Therefore, the watchdog
-> > driver must be able to ungate the watchdog clock.
+Hello,
+
+On Sat, Apr 23, 2022 at 11:56:42AM +0200, Krzysztof Kozlowski wrote:
+> On 22/04/2022 20:30, Jonathan Neusch=C3=A4fer wrote:
+> > The Nuvoton WPCM450 SoC has a combined clock and reset controller.
+> > Add a devicetree binding for it, as well as definitions for the bit
+> > numbers used by it.
 > >=20
 > > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 > > ---
-> >  drivers/watchdog/npcm_wdt.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >=20
-> > diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
-> > index 28a24caa2627c..6d27f0e16188e 100644
-> > --- a/drivers/watchdog/npcm_wdt.c
-> > +++ b/drivers/watchdog/npcm_wdt.c
-> > @@ -3,6 +3,7 @@
-> >  // Copyright (c) 2018 IBM Corp.
-> >=20
-> >  #include <linux/bitops.h>
-> > +#include <linux/clk.h>
-> >  #include <linux/delay.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/kernel.h>
-> > @@ -180,6 +181,7 @@ static int npcm_wdt_probe(struct platform_device *p=
-dev)
-> >  {
-> >  	struct device *dev =3D &pdev->dev;
-> >  	struct npcm_wdt *wdt;
-> > +	struct clk *clk;
-> >  	int irq;
-> >  	int ret;
-> >=20
-> > @@ -191,6 +193,13 @@ static int npcm_wdt_probe(struct platform_device *=
-pdev)
-> >  	if (IS_ERR(wdt->reg))
-> >  		return PTR_ERR(wdt->reg);
-> >=20
-> > +	clk =3D devm_clk_get_optional(&pdev->dev, NULL);
-> > +	if (IS_ERR(clk))
-> > +		return PTR_ERR(clk);
-> > +
-> > +	if (clk)
-> > +		clk_prepare_enable(clk);
-> > +
 >=20
-> This needs a matching clk_disable_unprepare().
+> Thank you for your patch. There is something to discuss/improve.
+>=20
+> >  .../bindings/clock/nuvoton,wpcm450-clk.yaml   | 74 +++++++++++++++++++
+> >  .../dt-bindings/clock/nuvoton,wpcm450-clk.h   | 67 +++++++++++++++++
+> >  2 files changed, 141 insertions(+)
+[...]
+> > +title: Nuvoton WPCM450 clock controller binding
+>=20
+> s/binding//
 
-Good point. It's probably easiest if I move the clk calls to the
-watchdog start/stop callbacks, then.
+Will change.
+
+
+> > +description:
+> > +  This binding describes the clock controller of the Nuvoton WPCM450 S=
+oC, which
+> > +  supplies clocks and resets to the rest of the chip.
+>=20
+> s/This binding describes//
+>=20
+> Just describe the hardware.
+
+Ok.
+
+
+> > +    clk: clock-controller@b0000200 {
+> > +      reg =3D <0xb0000200 0x100>;
+> > +      compatible =3D "nuvoton,wpcm450-clk";
+> > +      clocks =3D <&refclk>;
+> > +      clock-names =3D "refclk";
+> > +      #clock-cells =3D <1>;
+> > +      #reset-cells =3D <1>;
+> > +    };
+> > +
+> > +    serial@b8000000 {
+> > +      compatible =3D "nuvoton,wpcm450-uart";
+> > +      reg =3D <0xb8000000 0x20>;
+> > +      reg-shift =3D <2>;
+> > +      interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH>;
+> > +      clocks =3D <&clk WPCM450_CLK_UART0>;
+> > +    };
+>=20
+> Skip the consumer example, it's obvious/trivial/duplicating.
+
+Ok.
+
+
+> > +#ifndef _DT_BINDINGS_CLOCK_NUVOTON_WPCM450_CLK_H
+> > +#define _DT_BINDINGS_CLOCK_NUVOTON_WPCM450_CLK_H
+> > +
+> > +/* Clocks based on CLKEN bits */
+> > +#define WPCM450_CLK_FIU            0
+[...]
+> > +/* Other clocks */
+> > +#define WPCM450_CLK_USBPHY        32
+> > +
+> > +#define WPCM450_NUM_CLKS          33
+> > +
+> > +/* Resets based on IPSRST bits */
+>=20
+> All these defines should be in second header in dt-bindings/reset/...
+
+(my reply is further down in the thread)
+>=20
+> > +#define WPCM450_RESET_FIU          0
+
 
 
 Thanks,
 Jonathan
 
---3JafQPKgiRq88lVT
+--CZHfdAoeIHmEJg6q
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJqUhkACgkQCDBEmo7z
-X9utARAApLMgx0770Ai3h8mEawS8c5e/WFuzL9GGC8DU9yxUmSa6RlQk9H3O8lIf
-hiOfIS4Kxvjtmy+mTcgqJK4R37I5eIFC8BKVmHbwqupZGl4Mdzhoa7mvAD/IytUL
-HtRScJ1zyyb5Rlu9J2IHIIVNAUN8ErlA7oJ+evC0ygr+6JySBgdk/0UIfp3ks6Ke
-QxzvAh/VvWNSmcRk2pg61q6VfKks7xr5DEURrUWPJFMpx7SrhdPbaFQ8d7pIAFI3
-Xy/KTzAFwf5Qnpwr5nUkhkpZVPgkKSmTmVj0Ouknm73dt+cnr0XmQ+8mljtlocYs
-Qa8QybxIXqU3leIx6OqbvxTFgBkj90ll3M15b0+Z2KWTrtjZ/E/ng/hzx3X4V5xv
-ZEBgYVTCnZSzOOlU+okXvWwepzR7/w1Zf96TqrXhn/xhB5L6ME+02EVGREJUvT0b
-/kyUXR7krD2tlute5lUQOPnkhgbc8ZecZ9PSWKQ1E/BojQKRxQ9F9GVojZox+9Hx
-8Pgo1J1czreFcFhrAdYv9SR2fWfv8qggYp+cotvhgwTBPLom7ppUrgTPnUYDuvdj
-srCV/12bGLS65rKL7BN6VpkF9hCyi8VUh7qw8XbaiH/rTilA1hWQch7+1MOTA/wG
-EVuRYrnRbWSBOo5GUMtfCrJc8oOWhmWmADLRvO54oPkfjdlUFe4=
-=Ep5M
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJqVOMACgkQCDBEmo7z
+X9vnhw/+N2WvEeFLjx6SYLnNCDrrEq7sZT/nUTF0RwV4z6plsEEsFn+h7n/yuxzK
+Wtm/GauP0Ap2J4ZFMyRXpCdWHWCNyt+j4Vjjl1KXBOEUQ9MwShPT9NbaFE8dQLnN
+ZTBi7Xkobv/5qa9OhtCw5fYpfnqQYiXyjlFmDQmBLl8m8q/AjQutaGthRXxqOWbp
+K0CuC2eDWD2iPuvTaURoTgjbEKP7FGt70Gz9Yq5T8DT7CDWz9ASkhC76SFxDaKgZ
+u2CEu2G3b4KQwpl4cxR+sxuIXzlaX6615BbmDmdIEQJicwy3XCADmlRHdSbsSjoX
+sVSBA5k/Gyji3mbdpxi5uMtexeZooGZxXqBlR8u+PgYa6xK3ZnfJ012zidRFWK62
++AebbaIJ9aIcTcOU+5ZrOXvawHzPndNzMKEVbJyfwZh95kDuGJXPNiM/csPI4gVP
+G27nYNUdzN1go/SkFgEoM+0BXipbnryIKdTt+W1acLY1zbUK8JFqsVozn8RxXdqX
+Xf0T2REw4ym76zbZjOn+aB3BEHXhmYqTj4JKlAhPjgaWbCaPQHT3b5rn8a9ptp03
+FzSkkLu/6KvqTgKVy2ECmLE8JWD/GfYZOpQexZD7dIaiw6+xmVw3p9WN2EkQhsm8
+Ad6XfQKFYFUpXZ+qzxZ+ZoNsE1baknGGwv/l+j2OW2jaTP8Vr6Q=
+=+C+T
 -----END PGP SIGNATURE-----
 
---3JafQPKgiRq88lVT--
+--CZHfdAoeIHmEJg6q--
