@@ -2,136 +2,139 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8630D514A5F
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Apr 2022 15:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AE3514C01
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Apr 2022 15:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359723AbiD2NXu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 Apr 2022 09:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S234026AbiD2N7C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Apr 2022 09:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359753AbiD2NXp (ORCPT
+        with ESMTP id S1376829AbiD2N5V (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:23:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F3EB6478;
-        Fri, 29 Apr 2022 06:20:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54B4FB833F7;
-        Fri, 29 Apr 2022 13:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45B0C385A4;
-        Fri, 29 Apr 2022 13:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651238423;
-        bh=rHVYr57dbOsqQzVGO8ZUi+05f97hAqo5rq0GSWs8oNs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tFon7tQHLarg5gre2seT0mH3cSWZoXUXwW0QTQ+oDGO+HBypTAl7c675rnYZ0/kZt
-         VvXR6Yy4P9islJsz6yqTN9wqXIasqjWT7qL2Co9nCrCqPBOfFZUW+2T9SKdPRU/Ht4
-         yFX+gDj6Y3xndZcMikWHkksAvwZQxZv5S13qMh8Pna/Tn/WqSV2scd4efTL6to0Xgj
-         r2eczmfvtNm8+OBpxL6dSGcTCq1ApnPCd/FSmV58SSxDlgR7/jYtnlSkuDuEqf8nPM
-         qKIezZetKwLoIxjRPh3dhnB7bJIu8FnUqE7Vtxh+kjSLGah99+XzR+cl/SZNAEFCII
-         2a6hyHtdmn3dA==
-Received: by pali.im (Postfix)
-        id 4D5CCCAF; Fri, 29 Apr 2022 15:20:21 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Fri, 29 Apr 2022 09:57:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6944CFB8C;
+        Fri, 29 Apr 2022 06:52:12 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TBjftJ027272;
+        Fri, 29 Apr 2022 13:51:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=+C8FlDhVWJtR+w96yXAxLPw9WZXAz/K2Ln7dWnWiEIo=;
+ b=CPx7e9v83GZ1g/pvUbuUZVqNFk2aW1a7ec8+ZlRY/qM/6L+ahZ+RNCVmKJnRwzqNV++D
+ cxdl6/KXnal3HMjBIqG/0l2kFd8t3mskkR2Qum9g/iqkWDJOeyQ+45TQW5E72UYPl4+N
+ /z2LwxBgI2F5lN3diyCnPqevLJej16CiWu2+sN2AVjw98MKp+gTf6tmacdwY+XMjxj+M
+ oAgTc8vLyi9nUemQ2LmHn+PK+x/zKLZbcZZVL8+zXtFiHhlq+s7ZnlAy/mkX+bBLB1lG
+ oS3em+6Yq+T+5eMyCjAa6H1LvlB0GP+rIqPbQxPH2bxkNLgzuaB3BNRH0ssmpliA53yc nw== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqundujts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 13:51:46 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDSWZU024572;
+        Fri, 29 Apr 2022 13:51:43 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3fm938yac7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 13:51:43 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDpfYQ51904820
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 13:51:41 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4835B4C04E;
+        Fri, 29 Apr 2022 13:51:41 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F13184C040;
+        Fri, 29 Apr 2022 13:51:40 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Apr 2022 13:51:40 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] watchdog: max63xx_wdt: Add support for specifying WDI logic via GPIO
-Date:   Fri, 29 Apr 2022 15:13:49 +0200
-Message-Id: <20220429131349.21229-2-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220429131349.21229-1-pali@kernel.org>
-References: <20220429131349.21229-1-pali@kernel.org>
+        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS)
+Subject: [PATCH 30/37] watchdog: add HAS_IOPORT dependencies
+Date:   Fri, 29 Apr 2022 15:50:52 +0200
+Message-Id: <20220429135108.2781579-55-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: dGJViNfn9kW-AcmsD2uPJMeKTlkEinsO
+X-Proofpoint-GUID: dGJViNfn9kW-AcmsD2uPJMeKTlkEinsO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ adultscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
+ mlxlogscore=836 impostorscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204290078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On some boards is WDI logic of max6370 chip connected via GPIO.
-So extend max63xx_wdt driver to allow specifying WDI logic via GPIO.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
-Changes in v2:
-* Usage of dev_err_probe()
-* Fixing assignment of wdt->ping
-* Remove clearing of wdt->gpio_wdi
-* Move YAML change to separate patch
----
- drivers/watchdog/max63xx_wdt.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/watchdog/Kconfig | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
-index 9e1541cfae0d..6e43f9e6d7eb 100644
---- a/drivers/watchdog/max63xx_wdt.c
-+++ b/drivers/watchdog/max63xx_wdt.c
-@@ -27,6 +27,7 @@
- #include <linux/io.h>
- #include <linux/slab.h>
- #include <linux/property.h>
-+#include <linux/gpio/consumer.h>
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index c4e82a8d863f..3242be37b2d7 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -453,6 +453,7 @@ config 21285_WATCHDOG
+ config 977_WATCHDOG
+ 	tristate "NetWinder WB83C977 watchdog"
+ 	depends on (FOOTBRIDGE && ARCH_NETWINDER) || (ARM && COMPILE_TEST)
++	depends on HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for the WB977 watchdog included in
+ 	  NetWinder machines. Alternatively say M to compile the driver as
+@@ -1235,6 +1236,7 @@ config ITCO_WDT
+ 	select WATCHDOG_CORE
+ 	depends on I2C || I2C=n
+ 	depends on MFD_INTEL_PMC_BXT || !MFD_INTEL_PMC_BXT
++	depends on HAS_IOPORT # for I2C_I801
+ 	select LPC_ICH if !EXPERT
+ 	select I2C_I801 if !EXPERT && I2C
+ 	help
+@@ -2090,7 +2092,7 @@ comment "PCI-based Watchdog Cards"
  
- #define DEFAULT_HEARTBEAT 60
- #define MAX_HEARTBEAT     60
-@@ -53,6 +54,9 @@ struct max63xx_wdt {
- 	void __iomem *base;
- 	spinlock_t lock;
+ config PCIPCWATCHDOG
+ 	tristate "Berkshire Products PCI-PC Watchdog"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	help
+ 	  This is the driver for the Berkshire Products PCI-PC Watchdog card.
+ 	  This card simply watches your kernel to make sure it doesn't freeze,
+@@ -2105,7 +2107,7 @@ config PCIPCWATCHDOG
  
-+	/* GPIOs */
-+	struct gpio_desc *gpio_wdi;
-+
- 	/* WDI and WSET bits write access routines */
- 	void (*ping)(struct max63xx_wdt *wdt);
- 	void (*set)(struct max63xx_wdt *wdt, u8 set);
-@@ -158,6 +162,17 @@ static const struct watchdog_info max63xx_wdt_info = {
- 	.identity = "max63xx Watchdog",
- };
- 
-+static void max63xx_gpio_ping(struct max63xx_wdt *wdt)
-+{
-+	spin_lock(&wdt->lock);
-+
-+	gpiod_set_value_cansleep(wdt->gpio_wdi, 1);
-+	udelay(1);
-+	gpiod_set_value_cansleep(wdt->gpio_wdi, 0);
-+
-+	spin_unlock(&wdt->lock);
-+}
-+
- static void max63xx_mmap_ping(struct max63xx_wdt *wdt)
- {
- 	u8 val;
-@@ -225,10 +240,19 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
-+	wdt->gpio_wdi = devm_gpiod_get(dev, NULL, GPIOD_FLAGS_BIT_DIR_OUT);
-+	if (IS_ERR(wdt->gpio_wdi) && PTR_ERR(wdt->gpio_wdi) != -ENOENT)
-+		return dev_err_probe(dev, PTR_ERR(wdt->gpio_wdi),
-+				     "unable to request gpio: %ld\n",
-+				     PTR_ERR(wdt->gpio_wdi));
-+
- 	err = max63xx_mmap_init(pdev, wdt);
- 	if (err)
- 		return err;
- 
-+	if (!IS_ERR(wdt->gpio_wdi))
-+		wdt->ping = max63xx_gpio_ping;
-+
- 	platform_set_drvdata(pdev, &wdt->wdd);
- 	watchdog_set_drvdata(&wdt->wdd, wdt);
+ config WDTPCI
+ 	tristate "PCI-WDT500/501 Watchdog timer"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	help
+ 	  If you have a PCI-WDT500/501 watchdog board, say Y here, otherwise N.
  
 -- 
-2.20.1
+2.32.0
 
