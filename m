@@ -2,74 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE1051595F
-	for <lists+linux-watchdog@lfdr.de>; Sat, 30 Apr 2022 02:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED050516343
+	for <lists+linux-watchdog@lfdr.de>; Sun,  1 May 2022 10:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381927AbiD3Alc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 Apr 2022 20:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S1344052AbiEAI7M (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 1 May 2022 04:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbiD3Alb (ORCPT
+        with ESMTP id S240829AbiEAI7H (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 Apr 2022 20:41:31 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D5A8CDB5;
-        Fri, 29 Apr 2022 17:38:12 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id l16so2911281oil.6;
-        Fri, 29 Apr 2022 17:38:12 -0700 (PDT)
+        Sun, 1 May 2022 04:59:07 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F36193FE
+        for <linux-watchdog@vger.kernel.org>; Sun,  1 May 2022 01:55:40 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id t5so2926339edw.11
+        for <linux-watchdog@vger.kernel.org>; Sun, 01 May 2022 01:55:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=q7PgXllbhOxNgMzSzXOXHVCmNKBF6g45A0eVH1K0j2U=;
-        b=hqTzrA1Abjeqjk1uuIywMHeKgMXlsnPk64+oJgAYhxTZyG5tcSvnfNptasc6YNAIhX
-         4c9Lx3KtgQ2Luaq4dtkkx/7Uy3YESoyLR6Xt563ajlorQC7qpzhGEV2zK76cDz7cahJS
-         ByxJQiv9VkOXPILaoZFqsWRl/LWwZpbkiLS4Eyb7DGS0zWDPPlQSvobKLfrsjKHsjLdh
-         kfE+P334FpaWBRNC2RwQFNfJXyuO8O3y6maIxzguM0eBSW2zu/72x886qpF4gTpfwZKY
-         1rR4/vQUaacaRaO2uZECZUGb/Dh1JwlfU3t2iwTVBKEnZmdREMkf7t6J1EHEGFCOAjGs
-         2uag==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9Q4D7i4GL8KP5hpGHA7/56lmG9H5Z77KSqaGV3uZPeM=;
+        b=NRJ3Ud1Z3YxwLrFLtiUGSHKmaQQ/gEWMH1cpmTU5i/RMSE/lYjldRIEJfnx80xzGwF
+         nB76PATx5V0L7aI82BrU+nvAqKp6dzYp6rwMKLigl1qoE1/aXy7GJSSypGa531b5On+N
+         5raduwLXLRuYiPE2pwiFe3kB4NMa2pB1GxJcsPELuxbxAreDlahDphEKPIKGikeAwZ08
+         uQKSsFe/dIr0c6xTCn4up4K1mAAGxLL1P4dJPRWtzAiKMLL/t52qk4yfYuponzXYK3Da
+         nG41j1svssmDZ1WcSHXBsXzmDlC3ihEYTADFOTpAcG901AZmeXkdSkf0JZ+Z3A+vUyj3
+         DH2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=q7PgXllbhOxNgMzSzXOXHVCmNKBF6g45A0eVH1K0j2U=;
-        b=nxufSqS/KGS/nCZD/kX1Bz7+raUYD2x5IoSsT6vtVatoJP/h+2U1xVyjRN8QoFofCg
-         CeLX4O3TWhmxi7oImKwLPIqJJ2OBsBg34H4vW6/9F/VAV5yjOCw4JJpb6a4UsgvhW2mt
-         fp3iP6gAFf0a0rm3B7j2qAvX40H8CNmXvoCio4qu39w1RbzWT/uWYkgoQykbBls8HzdY
-         uT2hCRw+qz9ltaUC4ZIwcPsiaLtKVai1dXUzpHWquvOrfJWYvi3J8J50c+ekm0XIVWR9
-         36htX3KroYROk84t0eNqTHtbq8aoJvVshOFxTI8KuuNWvS3L0fFBcEn+mCrIVQh5MYR+
-         Ydvg==
-X-Gm-Message-State: AOAM531QaMnPzKvprPyBC8RBE6gor5qKS3Vpz08atDU+tI29Bo49F1HL
-        L8mxS9QDYScqi8UrSP2lKTTBa1iQCKezyg==
-X-Google-Smtp-Source: ABdhPJz23IcbboOQlzgrMD8ecGs1JP45OtKx9Sbs11gykMKE4owp7iHEqpajqivMwHyMBqKS+UFMmw==
-X-Received: by 2002:a05:6808:140f:b0:322:cbe9:8d29 with SMTP id w15-20020a056808140f00b00322cbe98d29mr2816453oiv.220.1651279091520;
-        Fri, 29 Apr 2022 17:38:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x108-20020a9d37f5000000b006060322123csm298112otb.12.2022.04.29.17.38.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 17:38:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 29 Apr 2022 17:38:09 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>
-Subject: Re: [RFC v2 37/39] watchdog: add HAS_IOPORT dependencies
-Message-ID: <20220430003809.GB2446353@roeck-us.net>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
- <20220429135108.2781579-69-schnelle@linux.ibm.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9Q4D7i4GL8KP5hpGHA7/56lmG9H5Z77KSqaGV3uZPeM=;
+        b=RUNcCJMVjgvh71EVlI680giriVou5R1mp1+IZ1+uItd32+/YxCOjMq9R2rfZxl6l02
+         c1We96YDIohQ2E8Cc9sXgo8bUddQkqCLGvFymGNzRgmpZtg2kwQkyXJbfFrP2pVUOmna
+         qfNxvN+hn9kN01CK9NFUm0Q9bcibkWjD/bNExWfPVkwRI6zUFMer2Ea66JEReEMdl/m9
+         C2s8l0LpYox07QCm5bK6bkXPKI19oakEQM955RYOLQXQa+O3wKOv8wLfQYON/UxP8znd
+         sX+8eBt2asEfdvNpf79v1tx+iGmoQExRUbZ6e2aZ+rWNOfVBzpUcgjii3pz9iZXYMD9z
+         Bp4Q==
+X-Gm-Message-State: AOAM533hBcBBgoVvMNzOj81EQ0bRlNllKMTc5dEExX3cO9OIfyAB0QYb
+        XYl7prf8ZwLgFArC2WN15e7R2Q==
+X-Google-Smtp-Source: ABdhPJzRoUbN7p6a+QsrfdXpuNxUvP73pFrp/NOoq9oxKzcPe6GgKQtTMh5zIkfqEiGB5tCEKhuhTQ==
+X-Received: by 2002:a05:6402:288a:b0:425:c5b2:59d9 with SMTP id eg10-20020a056402288a00b00425c5b259d9mr7923496edb.412.1651395338995;
+        Sun, 01 May 2022 01:55:38 -0700 (PDT)
+Received: from [192.168.0.182] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gv49-20020a1709072bf100b006f3ef214e35sm2374240ejc.155.2022.05.01.01.55.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 May 2022 01:55:38 -0700 (PDT)
+Message-ID: <3c2f2e75-153b-05bf-9878-70fc1c1a81b1@linaro.org>
+Date:   Sun, 1 May 2022 10:55:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429135108.2781579-69-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 4/7] dt-bindings: clock: Add Nuvoton WPCM450
+ clock/reset controller
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220429172030.398011-1-j.neuschaefer@gmx.net>
+ <20220429172030.398011-5-j.neuschaefer@gmx.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220429172030.398011-5-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,16 +92,65 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 03:51:06PM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
+On 29/04/2022 19:20, Jonathan Neuschäfer wrote:
+> The Nuvoton WPCM450 SoC has a combined clock and reset controller.
+> Add a devicetree binding for it, as well as definitions for the bit
+> numbers used by it.
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+> 
+> v2:
+> - Various improvements, suggested by Krzysztof Kozlowski
+> 
+> v1:
+> - https://lore.kernel.org/lkml/20220422183012.444674-5-j.neuschaefer@gmx.net/
+> ---
+>  .../bindings/clock/nuvoton,wpcm450-clk.yaml   | 66 ++++++++++++++++++
+>  .../dt-bindings/clock/nuvoton,wpcm450-clk.h   | 67 +++++++++++++++++++
+>  2 files changed, 133 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,wpcm450-clk.yaml
+>  create mode 100644 include/dt-bindings/clock/nuvoton,wpcm450-clk.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,wpcm450-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,wpcm450-clk.yaml
+> new file mode 100644
+> index 0000000000000..3ed3e40e39637
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,wpcm450-clk.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nuvoton,wpcm450-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton WPCM450 clock controller
+> +
+> +maintainers:
+> +  - Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> +
+> +description:
+> +  The clock controller of the Nuvoton WPCM450 SoC supplies clocks and resets to
+> +  the rest of the chip.
+> +
+> +properties:
+> +  compatible:
+> +    const: nuvoton,wpcm450-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Reference clock oscillator (should be 48 MHz)
+> +
+> +  clock-names:
+> +    items:
+> +      - const: refclk
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Sorry for not bringing it up earlier - this should be just "ref". Names
+in values should not have suffixes (so no "tx-dma", "wake-gpio",
+"ref-clk" etc).
 
-... assuming that the plan is to push those together. If not let me know.
-
-Guenter
+Best regards,
+Krzysztof
