@@ -2,140 +2,177 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8BC51722D
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 May 2022 17:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4491051784D
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 May 2022 22:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238931AbiEBPIy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 2 May 2022 11:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S1382773AbiEBUmy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 2 May 2022 16:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238956AbiEBPIx (ORCPT
+        with ESMTP id S1387227AbiEBUmw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 2 May 2022 11:08:53 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AF7E09C;
-        Mon,  2 May 2022 08:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651503889;
-        bh=aJ3JHLVrs8e6RirYuV2oCs4M43xpWB7y1g+S6XmEMCo=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=XjhgOjrzgackXjMpkVN8D2iIcRvZycxB5NwIM0NIU0QiR4jfJM65PfTGvf9SDQ3Kq
-         5C58iF+NEuPlj/ajI1KiHDod/Rs8vZ2Fb3tDj5N+6lN0P0PEylzC9s5MvOwvxyJo+t
-         Zm9+CRR5dRL5K+a2+16+ISK36939/Wmv2RQZ00NA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.215.103]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MoO6M-1oDxXd392m-00oqAD; Mon, 02
- May 2022 17:04:49 +0200
-Date:   Mon, 2 May 2022 17:04:47 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 4/7] dt-bindings: clock: Add Nuvoton WPCM450
- clock/reset controller
-Message-ID: <Ym/zDx2PQfybo9mm@latitude>
-References: <20220429172030.398011-1-j.neuschaefer@gmx.net>
- <20220429172030.398011-5-j.neuschaefer@gmx.net>
- <3c2f2e75-153b-05bf-9878-70fc1c1a81b1@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iJIm8ItN0stP3fsU"
-Content-Disposition: inline
-In-Reply-To: <3c2f2e75-153b-05bf-9878-70fc1c1a81b1@linaro.org>
-X-Provags-ID: V03:K1:TZdL9LJQvffWCywN7yHsPoZieyCLTqiPONLOMGAo7ZUvz5KCzrs
- aVVfLiCR8XYIq5pRQdqsgtuSzfW5jxFtVgFoJnT+tdw0gHA3PWNL5a/WpBopwDpv31SOXlk
- NO4ZumurZWJA2bVke/3KoB/EpXuqC6NUgr/EeqwVqHjVaPNRPiwfcQGPEvRyY9cvrqadFUU
- OKbY3s4F3KDVkqNZTCwAw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:E7rPTkpJM3M=:THgyq7C721gGP/p0tFEbsg
- t6HkfFPiIqULbvlKleEjFP5yWBm5QbEDrgmSEekDh1y71bWAXqdABZvnDw1D6qhu+JTJ5xnmm
- ssz3Wfhf3Rk2RENrfcqjELA1hVGqD4NwIXXnuWQbBM4rQmPxKgWHswIYDTJq3ChLPA3aL/gX3
- y527ROTiebMuArl6jtyyifasZVjQhl70ibcSw7AfTZX8ByMEQRmgEwwDdwMqYZm1YqxAqi3YQ
- POcu6UPTSIi0hoSI3QWIP5Iemf9NQtpDTc9M4nF2mmN0daOyUEov2ZWtnLRAIrUkLQL3Ydfpj
- UyaFmqPjsWUCWmGKBGNVq9KSVro4hCDG4+MhjB3RCExIGoPXr+QTFWaJ1OrkU3kZXv0yiw+RS
- KzIq62OxYJZEMAAgQOrQmEotd/xX7iNHYapereiOLcswikq0v3kZT9OhptsPuP7xeNa2b24eU
- jcCjnwTKx4DLVTjpzY+wKLi7fcppp1e2WYxdtSX4iwuxwLeOoxBtz/081k00d+jjAE4Qz9KaB
- rGO+Nx3qP913N6Ic5FDI2BQ5gvEjFKWlCqhudgElhyYzeGvrcM2pTSx4Vm+24CnJ47RH2/kgp
- TrYlZ00If+4GTdbTyo4A5bvIkDVZxAurdzZXWR9qt/gFvJw8d0pOzyRACClcNxxncsWbrVjVq
- VhpnO4+CMyYpRm9mZ9kQnfGnHZUbBE2P1VRtRG4pOBEhBqbI6NuAGW4AOyVluuYYBOOnHCSag
- ADYxYotr9Mn9uXn1E5V5cSod8RPmXRXWb9MN69I8Q3bw7zEROdKzWoYQNhpG4W/rm/JLJFtRc
- B7CQu+6zvBlkSVl28kTmVhNWbGKzYrBLAEuh7NwT2kogkgKzXhJHTCmNofENaHq7thhnrXMSW
- z0zA/5LhHIfG5rE1FElMXCzchjxyq740ZyomeanrqmSKkrM1CzNX58f0/JG+LVi/SF95oPECB
- GE37J4dLcKOH2Qw099sLmOsWLbTGc+CSlA3ooNKMXwGi1puZ4SsJJfVMhvG9Jw2SOZECRUXu+
- ZWnnZWI4XnHSLLjgr0VeMn/7N6bM4AS78wwmliS7KfwQTFG3SL8dym+yXZ6mixYbAT5/57YI2
- aZlfrONZ6xSpR0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 2 May 2022 16:42:52 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277BCBC84;
+        Mon,  2 May 2022 13:39:22 -0700 (PDT)
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242H4SDZ029192;
+        Mon, 2 May 2022 20:38:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=0lgM69fOppr6pqtLZNoS0IboU+vfK8goPkZKdLUQYRw=;
+ b=nyWhhrk9+SxkQL05TLyw5qarK/yitmsgLf/WPjLBMLjBszVn5cMc1fgxcyZh/qFR+bDp
+ MefXyLNpatKndweHZoKHJ6DUYq/Jjaf6qwd0Hiwufla0r4eEr/aT5m7p6heviaBRpDit
+ TYhXQu0gW5D0agWKsR/etTjsJGzbWOsOCwJMt2wPAMAzZP8n63txcinwdpeKMSjcwUVb
+ oZYl4U9etiANzhAVE/tr2MI+gTYhOOLGHuMZ1nT1WjHA9mzPGboEYAUKP3uj8bhL2aXV
+ CPvyhaDftEQzIl4yxr9iYTBPnXcAR7lanjxQaQmw5kKiM5+4tNKgthQIjtGySL2g15wX uw== 
+Received: from g4t3425.houston.hpe.com (g4t3425.houston.hpe.com [15.241.140.78])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3ftkcjsr8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 20:38:23 +0000
+Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
+        by g4t3425.houston.hpe.com (Postfix) with ESMTP id 369979D;
+        Mon,  2 May 2022 20:38:22 +0000 (UTC)
+Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
+        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id 5738C46;
+        Mon,  2 May 2022 20:38:20 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, linux@armlinux.org.uk, arnd@arndb.de,
+        olof@lixom.net, soc@kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, joel@jms.id.au
+Subject: [PATCH v6 0/8] Introduce HPE GXP Architecture
+Date:   Mon,  2 May 2022 15:40:12 -0500
+Message-Id: <20220502204012.88268-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: vHUDX6axyP5rl0TDSUiLDaokz0rKINV4
+X-Proofpoint-ORIG-GUID: vHUDX6axyP5rl0TDSUiLDaokz0rKINV4
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-02_06,2022-05-02_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 clxscore=1015 priorityscore=1501 lowpriorityscore=0
+ phishscore=0 malwarescore=0 mlxscore=0 impostorscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205020153
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
---iJIm8ItN0stP3fsU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes since v5:
+ *Removed generic-ohci and generic-ehci from patchset as they were
+ committed to linux-next
+ *Removed watchdog node from device tree and dt-bindings documentation
+ as it is not necessary since the timer creates it
+ *Added cache controller to device tree
+ *Fixed l2c initialization by making l2c_aux_map=~1
+ *Corrected Kconfig punctuation and wording in mach-hpe
+ *Added oneOf to hpe,gxp.yaml
+ *Set additionalProperties to false on hpe,gxp-timer
+ *Added space after "," in compatible lists
+ *Switched hpe,gxp-timer.yaml title to Timer from TIMER
+ *Switched clockname from iopclk to iop
+ *Added clock labels clock-0 and clock-1 to device tree
+ *Added dma-ranges to ahb in device tree
+ *Fixed static device issue in timer-gxp.c with platform_device_alloc
+ *Fixed timer-gxp.c initialization to exit cleanly
+ *Corrected all subjects and descriptions for every commit
+ *Added information about bootloader to mach-hpe patch
 
-On Sun, May 01, 2022 at 10:55:37AM +0200, Krzysztof Kozlowski wrote:
-> On 29/04/2022 19:20, Jonathan Neusch=C3=A4fer wrote:
-> > The Nuvoton WPCM450 SoC has a combined clock and reset controller.
-> > Add a devicetree binding for it, as well as definitions for the bit
-> > numbers used by it.
-> >=20
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > ---
-[...]
-> > +  clock-names:
-> > +    items:
-> > +      - const: refclk
->=20
-> Sorry for not bringing it up earlier - this should be just "ref". Names
-> in values should not have suffixes (so no "tx-dma", "wake-gpio",
-> "ref-clk" etc).
+Changes since v4:
+ *Fixed version mismatch with patchset across all patches
+ *Fixed typos with ochi -> ohci echi -> ehci
+ *Adjusted Watchdog Kconfig file
+ *Adjusted various commit comments
+ *Removed un-necessary include file
+ *Updated outdated base revision to newer one to resolve merge
+  conflicts as well as pickup vendor binding change for hpe.
 
-Ok, I'll fix it throughout the patchset.
+Changes since v3:
+ *Completely redid the dtsi file to represent architecture
+ *Reduced device tree size
+ *Rewrote the timer driver to start the watchdog driver due
+ to similar register region
+ *Made adjustments to timer
+ *Made adjustments to watchdog
+ *Changed gxp.yaml to hpe,gxp.yaml with changes
+ *Updated Maintainers to represent new file names
+ *Added hpe bindings to generic-ehci and generic-ohci
+ *Fixed clock architecture to be accurate
 
+Changes since v2:
+ *Reduced size of changes, put them into patchset format
+ *Changed from txt->yaml
 
-Jonathan
+Changes since v1:
+ *Fixed compiler warnings
 
---iJIm8ItN0stP3fsU
-Content-Type: application/pgp-signature; name="signature.asc"
+The GXP is the HPE BMC SoC that is used in the majority
+of HPE current generation servers. Traditionally the asic will
+last multiple generations of server before being replaced.
 
------BEGIN PGP SIGNATURE-----
+Info about SoC:
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJv8ugACgkQCDBEmo7z
-X9uxvg//SxUnanNqiaNcEGDN/q839nwe+ZlnAB+RHsg3zz5Myd3rFgwg+Or75NZS
-6NXE6b32M0p8QIb8AOLUlQjf2Noqu7u7nuF4gmXTwjlyM+p9GgyX+G2X9IpHAJLd
-vtXj++SbRts2AWM5pcvnW8WR2/gKDFg7cqryVZE60uyuc14pb57xCGqKBmdtUxxn
-K6/wugMsEfhB+UPb7gfQL9Equ0ku03lJRKKtdTQTC5uvozRGy5PXX+yYaTpYiPRw
-MiQ0b/8sFmGmRpWvmyG2eGRyGIpQwPMXfngyAaZ2KyTEZ/qqzV1cw5LunC0IWmLI
-OIL4qcz+StrKlk9foTAniJYMksDeeTtYJVkL0dMx3N17q4sHZlb39MpCxFrqhL05
-wnZnIBCQzAhKJISqasd4wzJPc7SifE3lUTEeIqNUXWG+sG+rTtTrjtFbB5RbdHeW
-7YCmEjKGAZ3+EoWphVrDUkrQa/FJxAaITEsa7D0hnEhfcwjJVMD+WYt1wA7RZhDw
-c5rcEfybgjSzVYLDken1hWRXDqG6SglXUvr75AxAnKiYoIiL3E14jLdGiVuT1/9S
-TQDEGIszP+x/mgzBtq+Y/5ri6CvMZmpzgMd80bYOmXmsQv5JHMUVYGhTTLYZ3QBI
-Yi0zPWd1kLdSL49PU7uQYDGl8JDdoo4KRPblZwnP7fQZ3ljjUf4=
-=BKcw
------END PGP SIGNATURE-----
+ HPE GXP is the name of the HPE Soc. This SoC is used to implement many
+ BMC features at HPE. It supports ARMv7 architecture based on the Cortex
+ A9 core. It is capable of using an AXI bus to which a memory controller
+ is attached. It has multiple SPI interfaces to connect boot flash and
+ BIOS flash. It uses a 10/100/1000 MAC for network connectivity. It has
+ multiple i2c engines to drive connectivity with a host infrastructure.
+ The initial patches enable the watchdog and timer enabling the host to
+ be able to boot.
 
---iJIm8ItN0stP3fsU--
+Nick Hawkins (8):
+  ARM: hpe: Introduce the HPE GXP architecture
+  ARM: configs: multi_v7_defconfig: Add HPE GXP ARCH
+  watchdog: hpe-wdt: Introduce HPE GXP Watchdog
+  clocksource/drivers/timer-gxp: Add HPE GXP Timer
+  dt-bindings: timer: hpe,gxp-timer: Creation
+  dt-bindings: arm: hpe: add GXP Support
+  ARM: dts: Introduce HPE GXP Device tree
+  MAINTAINERS: Introduce HPE GXP Architecture
+
+ .../devicetree/bindings/arm/hpe,gxp.yaml      |  27 +++
+ .../bindings/timer/hpe,gxp-timer.yaml         |  47 ++++
+ MAINTAINERS                                   |  12 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  13 ++
+ arch/arm/boot/dts/hpe-gxp.dtsi                | 132 +++++++++++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/mach-hpe/Kconfig                     |  23 ++
+ arch/arm/mach-hpe/Makefile                    |   1 +
+ arch/arm/mach-hpe/gxp.c                       |  16 ++
+ drivers/clocksource/Kconfig                   |   8 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-gxp.c               | 209 ++++++++++++++++++
+ drivers/watchdog/Kconfig                      |  11 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/gxp-wdt.c                    | 166 ++++++++++++++
+ 18 files changed, 675 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/hpe,gxp.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+ create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+ create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+ create mode 100644 arch/arm/mach-hpe/Kconfig
+ create mode 100644 arch/arm/mach-hpe/Makefile
+ create mode 100644 arch/arm/mach-hpe/gxp.c
+ create mode 100644 drivers/clocksource/timer-gxp.c
+ create mode 100644 drivers/watchdog/gxp-wdt.c
+
+-- 
+2.17.1
+
