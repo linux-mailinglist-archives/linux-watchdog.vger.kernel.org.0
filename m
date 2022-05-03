@@ -2,113 +2,355 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0713C5178AA
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 May 2022 22:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5911C517BE7
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 May 2022 04:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236730AbiEBVAI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 2 May 2022 17:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S230051AbiECCX1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 2 May 2022 22:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234261AbiEBVAG (ORCPT
+        with ESMTP id S229882AbiECCX0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 2 May 2022 17:00:06 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07F06454;
-        Mon,  2 May 2022 13:56:36 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-e93ff05b23so15443959fac.9;
-        Mon, 02 May 2022 13:56:36 -0700 (PDT)
+        Mon, 2 May 2022 22:23:26 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1553324BFA;
+        Mon,  2 May 2022 19:19:55 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso5458695fac.1;
+        Mon, 02 May 2022 19:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=hZdel6P6LAHcpmSVNUVU9qVwHqpr1H9vBfMYaY43DBA=;
+        b=h8sV0MrNed8TnU0I+1dBnKB2ZNLgbWman54USqNpKXBsPaYErM61OpH5hcnr6zz5al
+         cHqJViPucYw3vk4xS0BprxYwOC29JAhwV1Rf9zNZJVNhyPQzBjpNMaoAtLlOagFq2yDd
+         8HzA9i86f7pAs2njhjJFy6RV1YiKUPA3LgxvCXZqFWJqdechZKhvdDv6wKHjmfjrey7C
+         BcT7JaLKWxBi5dnKpwulWvk6Qn3F++5cXPf8cg+95jDyPaOGxX2pwTrkLXuuKkcdRimR
+         /+yZkOVxg/ftXE+S4rWfUzVNUarS8pghzq3obBHoCk6B5cY1c2GK8IHvRVOq+lQMVs90
+         f6zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m8mXd2WXsDw5ZxR8tXdGAkcx5wqJghMKwV/YVSGHE58=;
-        b=QI8Urj93S+cdbzGKuMY3uYXA9wxN/TeeGgEZxV+WGBHwFr64DxEnD8sOkL8KnsEv17
-         hRWXSYID2w2MFHH8dUPaVY79gC5gdxj2j0/l9JMrnmaJHxUcMi8S6u/d0KAwW8N7PUcL
-         EJvNqpg4O9KIntTcogyOSr/s/WbcN6VGVaPDYVB+ELJEylylsX+JNhOdhLaks33vO77m
-         LsZObju9hgPoPV0YkTCVRnYQl4ZoJ3CAK2YaA2HO0LiyZwpup0w2tbc9FP/R8X1+m5hW
-         7mASVQLf04xAyIhVmtGkaOH4E8BdBUyuPVY5wWjhotMuvEV8ckBEbiqB6Ev+36TKEhr4
-         jXTg==
-X-Gm-Message-State: AOAM531mxCPFS6KlhEgsc0sh2GT1hNe7OPcGHIAY2nTwSUBi2C3AsJYU
-        puyc+14pbWrXJcnqT9uucA==
-X-Google-Smtp-Source: ABdhPJybLe+M1VFqkR40g9Ftpvn/1tOwUrBfkSTBgrfUWk6qIHdo4z73Obycbqt9nGGo3H0LIWc2qQ==
-X-Received: by 2002:a05:6870:a9a4:b0:e6:4451:f4b0 with SMTP id ep36-20020a056870a9a400b000e64451f4b0mr464214oab.252.1651524996279;
-        Mon, 02 May 2022 13:56:36 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f11-20020a4ae60b000000b0035eb4e5a6bdsm3993595oot.19.2022.05.02.13.56.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 13:56:35 -0700 (PDT)
-Received: (nullmailer pid 1733995 invoked by uid 1000);
-        Mon, 02 May 2022 20:56:35 -0000
-Date:   Mon, 2 May 2022 15:56:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Primoz Fiser <primoz.fiser@norik.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrej Picej <andrej.picej@norik.com>, upstream@phytec.de
-Subject: Re: [PATCH 1/3] dt-bindings: mfd: da9063: watchdog: add suspend
- disable option
-Message-ID: <YnBFg4exZKkqkxDo@robh.at.kernel.org>
-References: <20220422072713.3172345-1-primoz.fiser@norik.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=hZdel6P6LAHcpmSVNUVU9qVwHqpr1H9vBfMYaY43DBA=;
+        b=wqTqhnUMthbSHHPI8Q3pvIwp3YUS/7Mb3poNR5YxRG2kjbnitndpxD8QygJa11/0va
+         mc0St/5u8M+KVFRmOsNYBNtF9MZF8ySokzm5P3OiSD9t0ds/JlUWoyD8/n1EWwWxL+YM
+         LaaYZr74JmqWB0rMOtLBKxuSgV1he0s3MCc0GgZy8PTNB3J3gC6s0UOh/xM5kBmb0bui
+         itB+IuOaeWeQ0qDbtPon+0Mu4H53uZFR1fsu/f4KO2iJYIyvS4B3fSNuQMM4ho94nBAN
+         kIv03bJUFDMaH++MC7gVR82xHn1Ld//87+fA7WHWZtaGqkjOt5Y2QEqmZCQctznHk0rr
+         u//w==
+X-Gm-Message-State: AOAM5321FhBPY6UUC6tfn3q9DDq5GpF9/Zbi/eIy2bFitejQmcjegYKr
+        6jPAor/9ZCpCwYtsXcf5Wvc=
+X-Google-Smtp-Source: ABdhPJyetv155oU7c71ckhExmz9lKkm/3ZNfPjojAXd1uC+b92B+bj8k/uTUCQpQHh3jw2uMJND8SA==
+X-Received: by 2002:a05:6870:d78d:b0:d4:4b29:7ccc with SMTP id bd13-20020a056870d78d00b000d44b297cccmr952956oab.69.1651544394383;
+        Mon, 02 May 2022 19:19:54 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b21-20020a056870b25500b000eba4901e57sm4008430oam.17.2022.05.02.19.19.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 19:19:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net>
+Date:   Mon, 2 May 2022 19:19:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422072713.3172345-1-primoz.fiser@norik.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, nick@hpe.com, joel@jms.id.au,
+        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
+References: <20220502204050.88316-1-nick.hawkins@hpe.com>
+ <20220502204050.88316-3-nick.hawkins@hpe.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
+In-Reply-To: <20220502204050.88316-3-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 09:27:11AM +0200, Primoz Fiser wrote:
-> Document the watchdog disable option which can be used if the hardware
-> automatic suspend option is broken.
+On 5/2/22 13:40, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> Based on commit c514430c51ee8 ("dt-bindings: watchdog: da9062: add
-> suspend disable option").
+> Adding support for the HPE GXP Watchdog. The GXP asic contains a full
+
+Add
+
+> compliment of timers one of which is the watchdog timer. The watchdog
+
+complement ?
+
+> timer is 16 bit and has 10ms resolution. The watchdog is created as a
+> child device of timer since the same register range is used.
 > 
-> Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> 
 > ---
->  Documentation/devicetree/bindings/mfd/da9063.txt | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> v6:
+> * No code change.
+> * Fixed commit subject line to match the ones in log.
+> * Adjusted commit message to be closer to 75 chars per line.
+> v5:
+> * Fixed version log
+> * Added details to Kconfig for module support.
+> * Adjusted commit messaged
+> v4:
+> * Made watchdog a child of timer as they share the same register region
+>    per change request on dtsi.
+> * Removed extra parenthesis
+> * Fixed u8 u32 u64 usage
+> * Fixed alignment issue
+> * Reconfigured conditional statement for interrupt setup
+> * Removed unused gxp_wdt_remove function
+> v3:
+> * Put into proper patchset format
+> v2:
+> * No change
+> ---
+>   drivers/watchdog/Kconfig   |  11 +++
+>   drivers/watchdog/Makefile  |   1 +
+>   drivers/watchdog/gxp-wdt.c | 166 +++++++++++++++++++++++++++++++++++++
+>   3 files changed, 178 insertions(+)
+>   create mode 100644 drivers/watchdog/gxp-wdt.c
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt b/Documentation/devicetree/bindings/mfd/da9063.txt
-> index 91b79a21d403..aa8b800cc4ad 100644
-> --- a/Documentation/devicetree/bindings/mfd/da9063.txt
-> +++ b/Documentation/devicetree/bindings/mfd/da9063.txt
-> @@ -64,10 +64,13 @@ Sub-nodes:
->      and KEY_SLEEP.
->  
->  - watchdog : This node defines settings for the Watchdog timer associated
-> -  with the DA9063 and DA9063L. There are currently no entries in this
-> -  binding, however compatible = "dlg,da9063-watchdog" should be added
-> -  if a node is created.
-> +  with the DA9063 and DA9063L. The node should contain the compatible property
-> +  with the value "dlg,da9063-watchdog".
->  
-> +  Optional watchdog properties:
-> +  - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index c4e82a8d863f..a591cc6aa152 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1820,6 +1820,17 @@ config RALINK_WDT
+>   	help
+>   	  Hardware driver for the Ralink SoC Watchdog Timer.
+>   
+> +config GXP_WATCHDOG
+> +	tristate "HPE GXP watchdog support"
+> +	depends on ARCH_HPE_GXP
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Say Y here to include support for the watchdog timer
+> +	  in HPE GXP SoCs.
+> +
+> +	  To compile this driver as a module, choose M here.
+> +	  The module will be called gxp-wdt.
+> +
+>   config MT7621_WDT
+>   	tristate "Mediatek SoC watchdog"
+>   	select WATCHDOG_CORE
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index f7da867e8782..e2acf3a0d0fc 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -92,6 +92,7 @@ obj-$(CONFIG_RTD119X_WATCHDOG) += rtd119x_wdt.o
+>   obj-$(CONFIG_SPRD_WATCHDOG) += sprd_wdt.o
+>   obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
+>   obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
+> +obj-$(CONFIG_GXP_WATCHDOG) += gxp-wdt.o
+>   obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
+>   obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
+>   obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
+> diff --git a/drivers/watchdog/gxp-wdt.c b/drivers/watchdog/gxp-wdt.c
+> new file mode 100644
+> index 000000000000..f45ab9a826d6
+> --- /dev/null
+> +++ b/drivers/watchdog/gxp-wdt.c
+> @@ -0,0 +1,166 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_platform.h>
 
-Name the property based on the h/w quirk rather than what to do in 
-response. Something like 'dlg,hw-suspend-broken'
+Where are those of_ includes used ?
 
-> +  Only use this option if you can't use the watchdog automatic suspend
-> +  function during a suspend (see register CONTROL_B).
->  
->  Example:
->  
-> -- 
-> 2.25.1
-> 
-> 
+> +#include <linux/types.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define MASK_WDGCS_ENABLE	0x01
+> +#define MASK_WDGCS_RELOAD	0x04
+> +#define MASK_WDGCS_NMIEN	0x08
+> +#define MASK_WDGCS_WARN		0x80
+> +
+> +#define WDT_MAX_TIMEOUT_MS	655000
+
+Shouldn't that be 655350 ?
+
+> +#define WDT_DEFAULT_TIMEOUT	30
+> +#define SECS_TO_WDOG_TICKS(x) ((x) * 100)
+> +#define WDOG_TICKS_TO_SECS(x) ((x) / 100)
+> +
+> +#define GXP_WDT_CNT_OFS		0x10
+> +#define GXP_WDT_CTRL_OFS	0x16
+> +
+> +struct gxp_wdt {
+> +	void __iomem *base;
+> +	struct watchdog_device wdd;
+> +};
+> +
+> +static void gxp_wdt_enable_reload(struct gxp_wdt *drvdata)
+> +{
+> +	u8 val;
+> +
+> +	val = readb(drvdata->base + GXP_WDT_CTRL_OFS);
+> +	val |= (MASK_WDGCS_ENABLE | MASK_WDGCS_RELOAD);
+> +	writeb(val, drvdata->base + GXP_WDT_CTRL_OFS);
+> +}
+> +
+> +static int gxp_wdt_start(struct watchdog_device *wdd)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +
+> +	writew(SECS_TO_WDOG_TICKS(wdd->timeout), drvdata->base + GXP_WDT_CNT_OFS);
+> +	gxp_wdt_enable_reload(drvdata);
+> +	return 0;
+> +}
+> +
+> +static int gxp_wdt_stop(struct watchdog_device *wdd)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +	u8 val;
+> +
+> +	val = readb_relaxed(drvdata->base + GXP_WDT_CTRL_OFS);
+> +	val &= ~MASK_WDGCS_ENABLE;
+> +	writeb(val, drvdata->base + GXP_WDT_CTRL_OFS);
+> +	return 0;
+> +}
+> +
+> +static int gxp_wdt_set_timeout(struct watchdog_device *wdd,
+> +			       unsigned int timeout)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +	u32 actual;
+> +
+> +	wdd->timeout = timeout;
+> +	actual = min(timeout, wdd->max_hw_heartbeat_ms / 1000);
+> +	writew(SECS_TO_WDOG_TICKS(actual), drvdata->base + GXP_WDT_CNT_OFS);
+
+First, the accuracy of actual is reduced to 1 second, then SECS_TO_WDOG_TICKS()
+multiplies the result with 100, meaning the actual accuracy is 10ms. Why not
+just use 10 ms ?
+
+	actual = min(timeout * 100, wdd->max_hw_heartbeat_ms / 10);
+	writew(actual, drvdata->base + GXP_WDT_CNT_OFS);
+
+I guess it doesn't matter much since max_hw_heartbeat_ms is really a constant
+rounded down to seconds, it just looks odd.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int gxp_wdt_get_timeleft(struct watchdog_device *wdd)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +	u32 val = readw(drvdata->base + GXP_WDT_CNT_OFS);
+> +
+> +	return WDOG_TICKS_TO_SECS(val);
+> +}
+> +
+> +static int gxp_wdt_ping(struct watchdog_device *wdd)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +
+> +	gxp_wdt_enable_reload(drvdata);
+> +	return 0;
+> +}
+> +
+> +static int gxp_restart(struct watchdog_device *wdd, unsigned long action,
+> +		       void *data)
+> +{
+> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+> +
+> +	writew(10, drvdata->base + GXP_WDT_CNT_OFS);
+
+Doesn't that translate to 100 ms timeout ? Why such a large reboot delay
+instead of writing 1 ?
+
+> +	gxp_wdt_enable_reload(drvdata);
+> +	mdelay(100);
+> +	return 0;
+> +}
+> +
+> +static const struct watchdog_ops gxp_wdt_ops = {
+> +	.owner =	THIS_MODULE,
+> +	.start =	gxp_wdt_start,
+> +	.stop =		gxp_wdt_stop,
+> +	.ping =		gxp_wdt_ping,
+> +	.set_timeout =	gxp_wdt_set_timeout,
+> +	.get_timeleft =	gxp_wdt_get_timeleft,
+> +	.restart =	gxp_restart,
+> +};
+> +
+> +static const struct watchdog_info gxp_wdt_info = {
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
+> +	.identity = "HPE GXP Watchdog timer",
+> +};
+> +
+> +static int gxp_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct gxp_wdt *drvdata;
+> +	int err;
+> +	u8 val;
+> +
+> +	drvdata = devm_kzalloc(dev, sizeof(struct gxp_wdt), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	drvdata->base = (void __iomem *)dev->platform_data;
+
+I'd personaly prefer if the address was passed as resource.
+
+> +
+> +	drvdata->wdd.info = &gxp_wdt_info;
+> +	drvdata->wdd.ops = &gxp_wdt_ops;
+> +	drvdata->wdd.max_hw_heartbeat_ms = WDT_MAX_TIMEOUT_MS;
+> +	drvdata->wdd.parent = dev;
+> +	drvdata->wdd.timeout = WDT_DEFAULT_TIMEOUT;
+> +
+> +	watchdog_set_drvdata(&drvdata->wdd, drvdata);
+> +	watchdog_set_nowayout(&drvdata->wdd, WATCHDOG_NOWAYOUT);
+> +
+> +	val = readb(drvdata->base + GXP_WDT_CTRL_OFS);
+> +
+> +	if (val & MASK_WDGCS_ENABLE)
+> +		set_bit(WDOG_HW_RUNNING, &drvdata->wdd.status);
+> +
+> +	watchdog_set_restart_priority(&drvdata->wdd, 128);
+> +
+> +	watchdog_stop_on_reboot(&drvdata->wdd);
+> +	err = devm_watchdog_register_device(dev, &drvdata->wdd);
+> +	if (err) {
+> +		dev_err(dev, "Failed to register watchdog device");
+> +		return err;
+> +	}
+> +
+> +	dev_info(dev, "HPE GXP watchdog timer");
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver gxp_wdt_driver = {
+> +	.probe = gxp_wdt_probe,
+> +	.driver = {
+> +		.name =	"gxp-wdt",
+> +	},
+> +};
+> +module_platform_driver(gxp_wdt_driver);
+> +
+> +MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
+> +MODULE_AUTHOR("Jean-Marie Verdun <verdun@hpe.com>");
+> +MODULE_DESCRIPTION("Driver for GXP watchdog timer");
+
