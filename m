@@ -2,97 +2,101 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFB1518C9F
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 May 2022 20:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFE6519101
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 May 2022 00:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiECSzu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 May 2022 14:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S236784AbiECVzN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 3 May 2022 17:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238360AbiECSzt (ORCPT
+        with ESMTP id S235750AbiECVzM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 May 2022 14:55:49 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A7F3E0E0;
-        Tue,  3 May 2022 11:52:16 -0700 (PDT)
-Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MfpjF-1oInGp2N1F-00gLLA; Tue, 03 May 2022 20:52:14 +0200
-Received: by mail-wm1-f44.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so1769167wme.4;
-        Tue, 03 May 2022 11:52:14 -0700 (PDT)
-X-Gm-Message-State: AOAM531mzLg7si5OAq0avNV7Ha2RpN2utcqpOAAJNsLPB1OYJjpgBt4d
-        vwYVHNzEcBtKbozSwA5OdlfT8VdifWlYpNA3a1I=
-X-Google-Smtp-Source: ABdhPJyFxZHeczulnRk5F/j/XWW7voWgdpSEJbZ4in7QcrhpmS9ObsygrzvxaEaLCYD+JtFscKTMOPnYlEX8WarqA8s=
-X-Received: by 2002:a05:600c:3798:b0:394:454a:df74 with SMTP id
- o24-20020a05600c379800b00394454adf74mr4638390wmr.174.1651603934090; Tue, 03
- May 2022 11:52:14 -0700 (PDT)
+        Tue, 3 May 2022 17:55:12 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AF12F387;
+        Tue,  3 May 2022 14:51:39 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e5e433d66dso18525465fac.5;
+        Tue, 03 May 2022 14:51:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=mufD53y5m93auFkRsBYFt8Hu8B8QkCw7tadNt8CTlQ0=;
+        b=3LaYWsz6BMIS8djNYlGDd3yQkCTaTpRi8dqj+Q1tXtga4aytIjaBjeFTixZw/XkTif
+         G+0RUn95u41IQGeDybWdB8g6t6YHRZCuVys7tqvr7uJhNatVSmxeW40HBfM3aZ6dHifx
+         AGtqYWK/DtzAise/vdV4EP4icbxV6gD5m1Rl+sbNuV66mWBPZLVunzO5/a5oswrMtXQS
+         mxh+iBg0YCFQsJhCFuhKKRd/c4mAgziJB9dbP5/G48/ximn2GItXiBywiTBPCKSRl1IH
+         NgXRcIAcAz0fd5qhniNarS0yk7E8xsZHlhH+2YJb6jP0n9Pb4tuiHKhfjXAxPhPsVLbr
+         JZRQ==
+X-Gm-Message-State: AOAM5319hnwnq6zco8mNduizY84YCKibkwdKCihY4HML2v0mAQ1Zr84C
+        QJ6GL/srorKscUbOXoG+hGIxsBfgVQ==
+X-Google-Smtp-Source: ABdhPJySBesfmCadidVN9N5StqxUW+dbQBwVygP33ZdYIZmO3wRh0veTKXl7gczZh4GqgzYI/r5Big==
+X-Received: by 2002:a05:6870:8920:b0:e5:e38e:fd7c with SMTP id i32-20020a056870892000b000e5e38efd7cmr2563616oao.202.1651614698844;
+        Tue, 03 May 2022 14:51:38 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i13-20020a54408d000000b00325cda1ffb9sm3707611oii.56.2022.05.03.14.51.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 14:51:38 -0700 (PDT)
+Received: (nullmailer pid 95414 invoked by uid 1000);
+        Tue, 03 May 2022 21:51:37 -0000
+Date:   Tue, 3 May 2022 16:51:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
+Message-ID: <YnGj6eZGx+8gVKGW@robh.at.kernel.org>
+References: <20220429131349.21229-1-pali@kernel.org>
 MIME-Version: 1.0
-References: <20220502204050.88316-1-nick.hawkins@hpe.com> <20220502204050.88316-3-nick.hawkins@hpe.com>
- <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net> <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
-In-Reply-To: <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 3 May 2022 20:51:57 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
-Message-ID: <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
-Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:U4Q3GC1XA3xQUfqfYUAqUs40vRqbuQ4M4ZUBsrPkjaagSx/jyAQ
- J3MK6Z/c6xsuExGG6rYPEuC1OzYjwVUoUZQEaw9v4RrefEuaS8OQQLA/B8um/lhv/pnbMOM
- J3c8pUl3Ay7x5rELZK8VeIpt8D6IRWbipD/JSwl6QD/ySHMuIj4R0x4d+K1gULdGqENm4hj
- 6K8U7fcnotJEkw/lX8GHg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mXH/6uPB0SQ=:TQj7BbkSos/c8vFS/FfPZo
- k2+zWJClfrIg25JFLA7FHiSiqLn/vqxyPkXofUHSbowXYlSkDMx9ez5HwQ1lhOo9KF0X2wmf2
- Ts1ucpiGFj628/af05DUOKG1wey72uJrnqyZMSnl9AHOqyRY8cl0qfPMN19hRZJv18RAzK/QV
- p5XQw4sxtkLUOwylzZvXfJiF0PGvQIz0x5/ghdKNPY8EPp8JTWbvhEIDTAPKdOq6b9QKyYWFP
- M8wTaFMtuLGRALxUcL8Rk4vlZj3faYwoo8XE0/CbdyHpnfIN+Kg4mEIUhewGUOcWwGPUfXsIm
- s7uQaqNBAplOd64gUgz7nyz0IoDO7WrcbWh+PbHtc6e7znl4BG3YBo500nUdme+HGVbG6w75A
- MJq9aHg1OHYKEQ89szzkZUDVcIvYiBt9PcFoYQszyxYlA7vgIi1cH2CQbfuGnwhvj5BaTfLc0
- 8lK6mgvjR/UmHvoP+ddbCDT0Ti3e0ZY/T7ViYZFTyR1+dtjNUEMXAreQzoUE25vXmZ/6nCSkP
- OGAT0Oa93kTKu7ejJzQUI0gxKnrNl5o2ZELpqajGRNXekasaxALrcPcGWsqGtrKblxM4/Jf1b
- AQtyVjo1bhjQBT0fNbTz5D9/78LZuXjH3Tn7bw31aycmxH3dd4SoT1RDAGJFeuos6LUQ4iIlo
- 1QQmJTpGFhscOgDAC2oNkeeCrPS95o78N92b0Jq3453My/fxY9OfpsPVdzbKPkr6A8/ga1ROf
- v7l8cm4u+o3HUAhfloMuNi49t4sTsyzLp1B72yrEh7/YJD3LrPZWkolHsFVHe13wbS2NVLinV
- +DrM9bL7hOs9YgGhEj2oPCk0whFqPewVYqkBBddeKBL3artB4Q=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220429131349.21229-1-pali@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, May 3, 2022 at 6:53 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Fri, Apr 29, 2022 at 03:13:48PM +0200, Pali Rohár wrote:
+> GPIO is optional and used for WDI logic.
 
-> > Just to clarify for my understanding are you asking that in the device structure I use the "void *platform_data" to pass "struct *resource"? If I am incorrect here can you elaborate on what you would like to be done? Based on feedback in review for the device tree; the watchdog is being created as a child to the timer. Therefore the conclusion reached was there should not be a gxp-wdt listed in the device tree files. I took this implementation based on what I found in ixp4xx_wdt.c.
-> >
->
-> One bad deed tends to multiply.
->
-> No, I didn't ask to pass a struct resource as platform data.
-> That would be no different to the current code. Resources
-> can be added to a platform device using
-> platform_device_add_resources(), and the platform driver
-> can then use platform_get_resource() to use it. This
-> would make it independent of a "private" mechanism.
+Nowhere is WDI defined.
 
-Unfortunately there is no resource type for __iomem tokens,
-only for physical addresses, so you'd end up having to do
-ioremap() of the same address twice to map it into both the
-timer and the watchdog driver . Not the end of the world
-of course, but that doesn't seem much better than abusing the
-device private data.
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> index ab9641e845db..a97aa0135ef9 100644
+> --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> @@ -27,6 +27,10 @@ properties:
+>      description: This is a 1-byte memory-mapped address
+>      maxItems: 1
+>  
+> +  gpios:
 
-       Arnd
+Usually, we want a name here. Maybe wdi-gpios, but I don't know what WDI 
+is nor have I read the pin name in the datasheet for inspiration.
+
+> +    description: Optional GPIO used for controlling WDI when WDI bit is not mapped to memory
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.20.1
+> 
+> 
