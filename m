@@ -2,162 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B318F518A81
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 May 2022 18:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFB1518C9F
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 May 2022 20:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236361AbiECQ5O (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 May 2022 12:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S234488AbiECSzu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 3 May 2022 14:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiECQ5N (ORCPT
+        with ESMTP id S238360AbiECSzt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 May 2022 12:57:13 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE262C110;
-        Tue,  3 May 2022 09:53:40 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so8955857oty.3;
-        Tue, 03 May 2022 09:53:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=zA84vWARKvdZGoHpmEmoay8CyFxLOyVVP3HiM+T2sbI=;
-        b=ItRJ32KI75VE8T7AZA/VYalA55l8vdvH2W6aaVZrpfkmjn/yAWta3OnDBGJJUNJHQd
-         jN6vb7IFnXo6tb5GL1M7aWCNRsTcQnicfP7WpyahlayjO/YU9M8G8dskmP8lj95UZVw1
-         hctc672evZrYBx0UgL2o8T2J3T8Qp52y65y1gTtrm5XtoKw7BLqEa6SEChiTo7vOvBR6
-         rOmS7EqK+Is9A0PxCpBzeibY/gr328ZE3zUz9TGGhDsgFIr4IkHqSChIfuI7Nb1PPa1k
-         7+sHniY2fQaNhcMTRCmqU0dXyLaC6khbCf/ieYPIqe0HTb+DD66Zcg+DqVSZdOl0Vf/V
-         EDkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=zA84vWARKvdZGoHpmEmoay8CyFxLOyVVP3HiM+T2sbI=;
-        b=CK45Jb/cdEtIlDGw+wE1ZfJFEmo5icf6429J5XnQJj/tepPFxYDbv271tgZb+3nQSb
-         5TiG+Qgjj41TAWfFRAG8bmIE0L102LFBgpIvn5u+2B5sVx4iqIwmNGUooHxhO8fzQPw5
-         DQ21dIrwjhOaqUs1bgE5dqqge7b9jo0p4m05oD4nqp6ld6iAL5xnvwAJPEg/6I5+7222
-         1lg+wjzrOjbIsFn6K9N1IFkfVCSiApdVWemChSwDT2mxxYLGdvDHDStw8ORVG41yYrcU
-         qfKI7joiNQJlLoKvPadFW7L8yMmN5cgqaRaFhhOHUKefbToxHgSJzLtOsktYJOy/SB6Z
-         ulbw==
-X-Gm-Message-State: AOAM533xynR75sLHGMXjZydIJPa47NqMKZz9KAaa+c4borIIrmyoTAgP
-        9/vbwbjwrQo1GvOpkC7g14Q+JRCQgaLIoQ==
-X-Google-Smtp-Source: ABdhPJxZBHwm+TE77pQeUp1Mgc+316/kXgVxtVccMyjZXMe224WqQG6lXJ68YahH61W3HoZTpozTGQ==
-X-Received: by 2002:a9d:129:0:b0:606:1a26:b128 with SMTP id 38-20020a9d0129000000b006061a26b128mr3692590otu.314.1651596819862;
-        Tue, 03 May 2022 09:53:39 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 1-20020a9d0c01000000b006060322127fsm4108965otr.79.2022.05.03.09.53.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 09:53:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
-Date:   Tue, 3 May 2022 09:53:37 -0700
+        Tue, 3 May 2022 14:55:49 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A7F3E0E0;
+        Tue,  3 May 2022 11:52:16 -0700 (PDT)
+Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MfpjF-1oInGp2N1F-00gLLA; Tue, 03 May 2022 20:52:14 +0200
+Received: by mail-wm1-f44.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so1769167wme.4;
+        Tue, 03 May 2022 11:52:14 -0700 (PDT)
+X-Gm-Message-State: AOAM531mzLg7si5OAq0avNV7Ha2RpN2utcqpOAAJNsLPB1OYJjpgBt4d
+        vwYVHNzEcBtKbozSwA5OdlfT8VdifWlYpNA3a1I=
+X-Google-Smtp-Source: ABdhPJyFxZHeczulnRk5F/j/XWW7voWgdpSEJbZ4in7QcrhpmS9ObsygrzvxaEaLCYD+JtFscKTMOPnYlEX8WarqA8s=
+X-Received: by 2002:a05:600c:3798:b0:394:454a:df74 with SMTP id
+ o24-20020a05600c379800b00394454adf74mr4638390wmr.174.1651603934090; Tue, 03
+ May 2022 11:52:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+References: <20220502204050.88316-1-nick.hawkins@hpe.com> <20220502204050.88316-3-nick.hawkins@hpe.com>
+ <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net> <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
+In-Reply-To: <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 3 May 2022 20:51:57 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
+Message-ID: <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
+Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
         "Verdun, Jean-Marie" <verdun@hpe.com>,
         "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-References: <20220502204050.88316-1-nick.hawkins@hpe.com>
- <20220502204050.88316-3-nick.hawkins@hpe.com>
- <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net>
- <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
-In-Reply-To: <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:U4Q3GC1XA3xQUfqfYUAqUs40vRqbuQ4M4ZUBsrPkjaagSx/jyAQ
+ J3MK6Z/c6xsuExGG6rYPEuC1OzYjwVUoUZQEaw9v4RrefEuaS8OQQLA/B8um/lhv/pnbMOM
+ J3c8pUl3Ay7x5rELZK8VeIpt8D6IRWbipD/JSwl6QD/ySHMuIj4R0x4d+K1gULdGqENm4hj
+ 6K8U7fcnotJEkw/lX8GHg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mXH/6uPB0SQ=:TQj7BbkSos/c8vFS/FfPZo
+ k2+zWJClfrIg25JFLA7FHiSiqLn/vqxyPkXofUHSbowXYlSkDMx9ez5HwQ1lhOo9KF0X2wmf2
+ Ts1ucpiGFj628/af05DUOKG1wey72uJrnqyZMSnl9AHOqyRY8cl0qfPMN19hRZJv18RAzK/QV
+ p5XQw4sxtkLUOwylzZvXfJiF0PGvQIz0x5/ghdKNPY8EPp8JTWbvhEIDTAPKdOq6b9QKyYWFP
+ M8wTaFMtuLGRALxUcL8Rk4vlZj3faYwoo8XE0/CbdyHpnfIN+Kg4mEIUhewGUOcWwGPUfXsIm
+ s7uQaqNBAplOd64gUgz7nyz0IoDO7WrcbWh+PbHtc6e7znl4BG3YBo500nUdme+HGVbG6w75A
+ MJq9aHg1OHYKEQ89szzkZUDVcIvYiBt9PcFoYQszyxYlA7vgIi1cH2CQbfuGnwhvj5BaTfLc0
+ 8lK6mgvjR/UmHvoP+ddbCDT0Ti3e0ZY/T7ViYZFTyR1+dtjNUEMXAreQzoUE25vXmZ/6nCSkP
+ OGAT0Oa93kTKu7ejJzQUI0gxKnrNl5o2ZELpqajGRNXekasaxALrcPcGWsqGtrKblxM4/Jf1b
+ AQtyVjo1bhjQBT0fNbTz5D9/78LZuXjH3Tn7bw31aycmxH3dd4SoT1RDAGJFeuos6LUQ4iIlo
+ 1QQmJTpGFhscOgDAC2oNkeeCrPS95o78N92b0Jq3453My/fxY9OfpsPVdzbKPkr6A8/ga1ROf
+ v7l8cm4u+o3HUAhfloMuNi49t4sTsyzLp1B72yrEh7/YJD3LrPZWkolHsFVHe13wbS2NVLinV
+ +DrM9bL7hOs9YgGhEj2oPCk0whFqPewVYqkBBddeKBL3artB4Q=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/3/22 09:22, Hawkins, Nick wrote:
-> On 5/2/22 13:40, nick.hawkins@hpe.com wrote:
->>> +#include <linux/of_address.h>
->>> +#include <linux/of_platform.h>
-> 
->> Where are those of_ includes used ?
-> 
-> They were not used anymore with latest changes. Thank you for pointing this out. I will remember to check in the future for each new commit to double check this.
-> 
->>> +#define WDT_MAX_TIMEOUT_MS	655000
-> 
->> Shouldn't that be 655350 ?
-> 
-> Yes it should be. I will correct this.
-> 
->>> +static int gxp_wdt_set_timeout(struct watchdog_device *wdd,
->>> +			       unsigned int timeout)
->>> +{
->>> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
->>> +	u32 actual;
->>> +
->>> +	wdd->timeout = timeout;
->>> +	actual = min(timeout, wdd->max_hw_heartbeat_ms / 1000);
->>> +	writew(SECS_TO_WDOG_TICKS(actual), drvdata->base + GXP_WDT_CNT_OFS);
-> 
->> First, the accuracy of actual is reduced to 1 second, then SECS_TO_WDOG_TICKS() multiplies the result with 100, meaning the actual accuracy is 10ms. Why not just use 10 ms ?
-> 
->> 	actual = min(timeout * 100, wdd->max_hw_heartbeat_ms / 10);
->> 	writew(actual, drvdata->base + GXP_WDT_CNT_OFS);
-> 
-> I have replaced the mention code with what you recommended above.
-> 
->>> +
->>> +static int gxp_restart(struct watchdog_device *wdd, unsigned long action,
->>> +		       void *data)
->>> +{
->>> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
->>> +
->>> +	writew(10, drvdata->base + GXP_WDT_CNT_OFS);
-> 
->> Doesn't that translate to 100 ms timeout ? Why such a large reboot delay instead of writing 1 ?
-> 
-> This has been changed to 1.
-> 
->>> +	gxp_wdt_enable_reload(drvdata);
->>> +	mdelay(100);
->>> +	return 0;
->>> +}
->>> +
->>> +static int gxp_wdt_probe(struct platform_device *pdev) {
->>> +	struct device *dev = &pdev->dev;
->>> +	struct gxp_wdt *drvdata;
->>> +	int err;
->>> +	u8 val;
->>> +
->>> +	drvdata = devm_kzalloc(dev, sizeof(struct gxp_wdt), GFP_KERNEL);
->>> +	if (!drvdata)
->>> +		return -ENOMEM;
->>> +
->>> +	drvdata->base = (void __iomem *)dev->platform_data;
-> 
->> I'd personaly prefer if the address was passed as resource.
-> 
-> Just to clarify for my understanding are you asking that in the device structure I use the "void *platform_data" to pass "struct *resource"? If I am incorrect here can you elaborate on what you would like to be done? Based on feedback in review for the device tree; the watchdog is being created as a child to the timer. Therefore the conclusion reached was there should not be a gxp-wdt listed in the device tree files. I took this implementation based on what I found in ixp4xx_wdt.c.
-> 
+On Tue, May 3, 2022 at 6:53 PM Guenter Roeck <linux@roeck-us.net> wrote:
 
-One bad deed tends to multiply.
+> > Just to clarify for my understanding are you asking that in the device structure I use the "void *platform_data" to pass "struct *resource"? If I am incorrect here can you elaborate on what you would like to be done? Based on feedback in review for the device tree; the watchdog is being created as a child to the timer. Therefore the conclusion reached was there should not be a gxp-wdt listed in the device tree files. I took this implementation based on what I found in ixp4xx_wdt.c.
+> >
+>
+> One bad deed tends to multiply.
+>
+> No, I didn't ask to pass a struct resource as platform data.
+> That would be no different to the current code. Resources
+> can be added to a platform device using
+> platform_device_add_resources(), and the platform driver
+> can then use platform_get_resource() to use it. This
+> would make it independent of a "private" mechanism.
 
-No, I didn't ask to pass a struct resource as platform data.
-That would be no different to the current code. Resources
-can be added to a platform device using
-platform_device_add_resources(), and the platform driver
-can then use platform_get_resource() to use it. This
-would make it independent of a "private" mechanism.
+Unfortunately there is no resource type for __iomem tokens,
+only for physical addresses, so you'd end up having to do
+ioremap() of the same address twice to map it into both the
+timer and the watchdog driver . Not the end of the world
+of course, but that doesn't seem much better than abusing the
+device private data.
 
-Thanks,
-Guenter
+       Arnd
