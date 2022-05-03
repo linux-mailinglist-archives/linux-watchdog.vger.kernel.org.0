@@ -2,141 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC702517DE4
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 May 2022 08:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2E25184B2
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 May 2022 15:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiECG6L (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 May 2022 02:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S233883AbiECNFM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 3 May 2022 09:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiECG54 (ORCPT
+        with ESMTP id S235667AbiECNFL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 May 2022 02:57:56 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A6A39160;
-        Mon,  2 May 2022 23:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=C7RFMstTl4jwHT+d0u+++fDTzM+3xLA3Xcck8XaP+Cc=; b=MOrBHZB04v/5F6LEURPMJroGIx
-        yugUe6BD5N6xzGYyUcI6hvIcnp/S9VZ5oxE1QzRZIgSG8fZFi8uBIZJevdGEayM+1KPiejtRLiC1F
-        j0CSnWm4TB9uJRYqoEngYOmY5Cpt35VQ+gpLcvGSwM0uHl6zhQ9S5phKW4gJarApLfeJbs5aWoVP3
-        SJwcEj/6An+HoKpOol+0EvNDEdS4eHOs5p9sNT4DMhbOKomw1PjnfdCs4OK0Yod7Rov+357STET+n
-        cK2XR+TLPqjRS/J56rHmS5f48w2hCsf7FyjKHd5f7p0grzNHOatpDCS1Rhynfck9/qIVw+tB60r3L
-        l/2nDliQ==;
-Received: from [89.212.21.243] (port=56156 helo=[192.168.69.116])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <primoz.fiser@norik.com>)
-        id 1nlmPd-004FT6-SU;
-        Tue, 03 May 2022 08:53:41 +0200
-Message-ID: <bdedde60-aba8-5f7f-3a4a-b442e80fbb17@norik.com>
-Date:   Tue, 3 May 2022 08:53:42 +0200
+        Tue, 3 May 2022 09:05:11 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F34C192BC
+        for <linux-watchdog@vger.kernel.org>; Tue,  3 May 2022 06:01:37 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id g20so19744085edw.6
+        for <linux-watchdog@vger.kernel.org>; Tue, 03 May 2022 06:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gG0dwpdZEvdDBuvEs96CRkJ96qnrRXLRezy0ryDW5k4=;
+        b=ALFTAYUx97uyNKW+lAnYdzjZir2++CoTgHbyUjF7Tyu8FB355br9ymFrLHz0yjDrvH
+         DrBwdFc3LklD9yrRb89qLlvZA45swTSbmHuxKgldKlCxDB9G9Bd/rTJMgy2E5BhuXpNG
+         yb3uDyAd0RZWZOAzkIzno8BwG1U9FqEA2iDDfvFQdY1zAtE4mcYmqd0IK3E8B6WW5z6O
+         Il7T85auivSNN1fPpuxtB8GmcDN5yYpug0AHyoO9xlmN/aBKvPJd2Lo3lmc7T3UxTryT
+         aSyIBP9yrCWMYKMi9FYlBuxD7LnSgPuAOlxYmPFIuuY5zYNOFH/jYeetXY4nPgZt1+cp
+         4lTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gG0dwpdZEvdDBuvEs96CRkJ96qnrRXLRezy0ryDW5k4=;
+        b=mTWhM0bNGnHmcugSnVb/cqDfQ8ckPEbQHC43VOh20dkxTrOdMix4WxqGUN0fGmIO3i
+         EgN9WNcFUr7PDsOXmudYOcbfXkwLGdjyXMykoA14Axixd22akWm4m/8BSzbGKCCv8odF
+         CWXNrhcQdwbz95iEi+NUkUiAGp9MhfJF6C7uF4qBUWVLraKASYRIcgu842q0+GCCENeX
+         Q1K5WK23HXL0cgU9IXtH4533Rl4ptDifBBfNLL2EMzNrHzN66jnmlrIBvKLoeJhYS3Vc
+         2nRF99X1+Rt3ABC4KJ+YKN91ccu6V/rQIBVWIqrvZVY3yH1vF5pbiFMYP24FkdA7nS2S
+         78Mg==
+X-Gm-Message-State: AOAM530z5LxYB94JQh5q7wWFienQLQHWYYzuZ7AvGC/7LLn/smlJCNsN
+        K2oK2q1s4uNE2NDMSKKR6XgAdQ==
+X-Google-Smtp-Source: ABdhPJx2Srwjeq9nawpv4x1JuljzsyhT5QkLcbjVFz2bgafQYS+1B1AShuziH+AsAOVKPNcC8AG0zA==
+X-Received: by 2002:aa7:c0c4:0:b0:425:c776:6f17 with SMTP id j4-20020aa7c0c4000000b00425c7766f17mr17610108edp.131.1651582895443;
+        Tue, 03 May 2022 06:01:35 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id hy10-20020a1709068a6a00b006f3ef214dd4sm4687649ejc.58.2022.05.03.06.01.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 06:01:34 -0700 (PDT)
+Message-ID: <9d7514fd-511e-6596-5eb0-6001ead5a081@linaro.org>
+Date:   Tue, 3 May 2022 15:01:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/3] dt-bindings: mfd: da9063: watchdog: add suspend
- disable option
+Subject: Re: [PATCH 1/7] dt-bindings: gpio: renesas,rcar-gpio: R-Car V3U is
+ R-Car Gen4
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrej Picej <andrej.picej@norik.com>, upstream@phytec.de
-References: <20220422072713.3172345-1-primoz.fiser@norik.com>
- <YnBFg4exZKkqkxDo@robh.at.kernel.org>
-From:   Primoz Fiser <primoz.fiser@norik.com>
-In-Reply-To: <YnBFg4exZKkqkxDo@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1651497024.git.geert+renesas@glider.be>
+ <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: primoz.fiser@norik.com
-X-Authenticated-Sender: cpanel.siel.si: primoz.fiser@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Rob,
-
->> Name the property based on the h/w quirk rather than what to do in
->> response. Something like 'dlg,hw-suspend-broken'
-
-Shouldn't we match da9062's property?
-
-As this commit is based on c514430c51ee8 ("dt-bindings: watchdog: 
-da9062: add suspend disable option") which uses "dlg,use-sw-pm" as 
-property to implement the same functionality.
-
-Sure I can spin up v2 with your proposal but I think that would create 
-unnecessary ambiguity and confusion?
-
-For example, phyCORE board uses da9062 PMIC while phyFLEX uses da9063 as 
-PMIC. Boards are from the same SoM vendor. So one board would have to 
-use "dlg,use-sw-pm" and the other one "dlg,hw-suspend-broken" property 
-to achieve the same thing?
-
-
-On 2. 05. 22 22:56, Rob Herring wrote:
-> On Fri, Apr 22, 2022 at 09:27:11AM +0200, Primoz Fiser wrote:
->> Document the watchdog disable option which can be used if the hardware
->> automatic suspend option is broken.
->>
->> Based on commit c514430c51ee8 ("dt-bindings: watchdog: da9062: add
->> suspend disable option").
->>
->> Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
->> ---
->>   Documentation/devicetree/bindings/mfd/da9063.txt | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt b/Documentation/devicetree/bindings/mfd/da9063.txt
->> index 91b79a21d403..aa8b800cc4ad 100644
->> --- a/Documentation/devicetree/bindings/mfd/da9063.txt
->> +++ b/Documentation/devicetree/bindings/mfd/da9063.txt
->> @@ -64,10 +64,13 @@ Sub-nodes:
->>       and KEY_SLEEP.
->>   
->>   - watchdog : This node defines settings for the Watchdog timer associated
->> -  with the DA9063 and DA9063L. There are currently no entries in this
->> -  binding, however compatible = "dlg,da9063-watchdog" should be added
->> -  if a node is created.
->> +  with the DA9063 and DA9063L. The node should contain the compatible property
->> +  with the value "dlg,da9063-watchdog".
->>   
->> +  Optional watchdog properties:
->> +  - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
+On 02/05/2022 15:34, Geert Uytterhoeven wrote:
+> Despite the name, R-Car V3U is the first member of the R-Car Gen4
+> family.  Hence move its compatible value to the R-Car Gen4 section.
 > 
-> Name the property based on the h/w quirk rather than what to do in
-> response. Something like 'dlg,hw-suspend-broken'
-> 
->> +  Only use this option if you can't use the watchdog automatic suspend
->> +  function during a suspend (see register CONTROL_B).
->>   
->>   Example:
->>   
->> -- 
->> 2.25.1
->>
->>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
