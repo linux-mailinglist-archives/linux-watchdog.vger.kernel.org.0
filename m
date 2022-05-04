@@ -2,129 +2,147 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA945190E5
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 May 2022 00:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA765192E2
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 May 2022 02:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243458AbiECWJb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 May 2022 18:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S244724AbiEDAlU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 3 May 2022 20:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbiECWJa (ORCPT
+        with ESMTP id S244720AbiEDAlT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 May 2022 18:09:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E850201BB;
-        Tue,  3 May 2022 15:05:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25834B82028;
-        Tue,  3 May 2022 22:05:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFFEC385A9;
-        Tue,  3 May 2022 22:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651615553;
-        bh=oXRDlcllC0cjULPtqKpnnLAaTtBjrH2yAKjYZHOmxEg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kOgp61XjaLQHEUr+7iCLidSubGhFGYa9ZfqSwTIe88Kaow5K0+WdhIpmXruBl0hJA
-         jOAPSXk5fDbtvCumHKrFR/rbTbt42IZvFALXjqsLVOO4797SHPZmsM38XK7JXYbbZQ
-         HR1y9+53GpK168pLYVviAKv6nD5Jbknho+UWI/sveR8DsXGI3e3i3RHUeYR01HOzy3
-         8veDQD03CMdNrxdDpW1gBWnSrSFunUW8VJXlHnOGJqDcfTBFi3Vu+z+bY586dIfQgy
-         GLhrRsdGut+aqUnxntNe+l/OWXTAsN9JrO6awlelfPG2X+1lQQD5kMgw/wzDfwW7b8
-         2r33J7HeuBZCA==
-Received: by pali.im (Postfix)
-        id CD3D398A; Wed,  4 May 2022 00:05:50 +0200 (CEST)
-Date:   Wed, 4 May 2022 00:05:50 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Tzung-Bi Shih <tzungbi@kernel.org>,
+        Tue, 3 May 2022 20:41:19 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D37E38BC6;
+        Tue,  3 May 2022 17:37:46 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-d39f741ba0so18834822fac.13;
+        Tue, 03 May 2022 17:37:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5KRDlkFXP2wKyJ4meETvXlR/mwbS6ATze02B5zh4M/I=;
+        b=hVS0IObbfK5iuHCRUd75CpLjUKQCmlHDdsC+hMcdDE0wnKST9TZ4m4le204i65fZz6
+         ID1jZaEXD01bDsrvvnpptxYISBuZC2U5C9ieW1ElrswpmjUEDjmxcb82sZmjIeb9sBBL
+         glOx1z0D0kDaWSG/FgL23yV5fwzE++DU64Z4jBRaDqkQhK7zlKsDjOWUgaHAm5Vu9GPQ
+         FhG/9WwOk0CbxNHT9/RQi7JU0oHuL0rYIAt9xpxCCnVgpxzI/h22Z9pJhY+cBU1pSfgd
+         ofCLFhTsUE7gxAbiO+3kxnY97snGD3314Ib1iiBOVqmuiOk3IVPSNfNiaSoRht5cS8oW
+         nPtg==
+X-Gm-Message-State: AOAM530bio/ftB+yyvB6uu/LQLAd5VH0etakho70xKP7i16Cg16FPn+l
+        BID1vlpj5MoCYY6q76nckg==
+X-Google-Smtp-Source: ABdhPJwpbBvVAluIMtMpusacL7lEcNFSGDnzv8haZzTXw2jd+ynaLdOcMnBngErwPMPRXOJgyYqV5g==
+X-Received: by 2002:a05:6870:8996:b0:e2:976c:7732 with SMTP id f22-20020a056870899600b000e2976c7732mr2827995oaq.231.1651624665223;
+        Tue, 03 May 2022 17:37:45 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 13-20020a9d048d000000b006060322124dsm4594491otm.29.2022.05.03.17.37.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 17:37:44 -0700 (PDT)
+Received: (nullmailer pid 325837 invoked by uid 1000);
+        Wed, 04 May 2022 00:37:43 -0000
+Date:   Tue, 3 May 2022 19:37:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Primoz Fiser <primoz.fiser@norik.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] watchdog: max63xx_wdt: Add support for specifying
- WDI logic via GPIO
-Message-ID: <20220503220550.3jczn2hzc5me34qj@pali>
-References: <20220429131349.21229-1-pali@kernel.org>
- <20220429131349.21229-2-pali@kernel.org>
- <YnCoQUGQsXIfbowQ@google.com>
- <6f69677c-18d9-abd9-93d7-cf1f29603ed6@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrej Picej <andrej.picej@norik.com>, upstream@phytec.de
+Subject: Re: [PATCH 1/3] dt-bindings: mfd: da9063: watchdog: add suspend
+ disable option
+Message-ID: <YnHK1xRduqhF2+vh@robh.at.kernel.org>
+References: <20220422072713.3172345-1-primoz.fiser@norik.com>
+ <YnBFg4exZKkqkxDo@robh.at.kernel.org>
+ <bdedde60-aba8-5f7f-3a4a-b442e80fbb17@norik.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6f69677c-18d9-abd9-93d7-cf1f29603ed6@roeck-us.net>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bdedde60-aba8-5f7f-3a4a-b442e80fbb17@norik.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Monday 02 May 2022 21:37:16 Guenter Roeck wrote:
-> On 5/2/22 20:57, Tzung-Bi Shih wrote:
-> > On Fri, Apr 29, 2022 at 03:13:49PM +0200, Pali Rohár wrote:
-> > > @@ -27,6 +27,7 @@
-> > >   #include <linux/io.h>
-> > >   #include <linux/slab.h>
-> > >   #include <linux/property.h>
-> > > +#include <linux/gpio/consumer.h>
-> > 
-> > It would be better to keep them alphabetically.  Anyway, they aren't sorted
-> > originally...
-> > 
-> > > +static void max63xx_gpio_ping(struct max63xx_wdt *wdt)
-> > > +{
-> > > +	spin_lock(&wdt->lock);
-> > 
-> > Does it really need to acquire the lock?  It looks like the lock is to prevent
-> > concurrent accesses to the mmap in max63xx_mmap_ping() and max63xx_mmap_set().
-> > 
-> 
-> Actually, that doesn't work at all. spin_lock() directly contradicts
-> with gpiod_set_value_cansleep().
-> 
-> > > +	gpiod_set_value_cansleep(wdt->gpio_wdi, 1);
-> > > +	udelay(1);
-> > 
-> > Doesn't it need to include <linux/delay.h> for udelay()?
-> > 
-> > > @@ -225,10 +240,19 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
-> > >   		return -EINVAL;
-> > >   	}
-> > > +	wdt->gpio_wdi = devm_gpiod_get(dev, NULL, GPIOD_FLAGS_BIT_DIR_OUT);
-> > > +	if (IS_ERR(wdt->gpio_wdi) && PTR_ERR(wdt->gpio_wdi) != -ENOENT)
-> > 
-> > Use devm_gpiod_get_optional() to make the intent clear.  Also, it gets rid of
-> > the check for -ENOENT.
-> > 
-> > > +		return dev_err_probe(dev, PTR_ERR(wdt->gpio_wdi),
-> > > +				     "unable to request gpio: %ld\n",
-> > > +				     PTR_ERR(wdt->gpio_wdi));
-> > 
-> > It doesn't need to again print for PTR_ERR(wdt->gpio_wdi).  dev_err_probe()
-> > prints the error.
-> > 
-> > >   	err = max63xx_mmap_init(pdev, wdt);
-> > >   	if (err)
-> > >   		return err;
-> > > +	if (!IS_ERR(wdt->gpio_wdi))
-> > > +		wdt->ping = max63xx_gpio_ping;
-> > 
-> > Thus, the max63xx_gpio_ping() overrides max63xx_mmap_ping() if the GPIO was
-> > provided?  It would be better to mention the behavior in the commit message.
-> > 
-> > Also, could both the assignments of `wdt->gpio_wdi` and `wdt->ping` happen
-> > after max63xx_mmap_init()?
+On Tue, May 03, 2022 at 08:53:42AM +0200, Primoz Fiser wrote:
+> Hi Rob,
 > 
 
-Hello! I'm going to look at all these issues. Recently I sent max63
-watchdog driver also into U-Boot and seems that I mixed DTS and driver
-code between U-Boot and Kernel... and tested something mixed.
+Please don't top post. Trim any irrelevant parts and reply below the 
+original quoted text.
 
-I will do new testing again, and will check that I'm testing correct
-code.
+> > > Name the property based on the h/w quirk rather than what to do in
+> > > response. Something like 'dlg,hw-suspend-broken'
+> 
+> Shouldn't we match da9062's property?
+
+Ah, yes. I failed to grasp that from the 'based on commit...' in the 
+commit msg.
+
+
+> 
+> As this commit is based on c514430c51ee8 ("dt-bindings: watchdog: da9062:
+> add suspend disable option") which uses "dlg,use-sw-pm" as property to
+> implement the same functionality.
+
+The 'which uses "dlg,use-sw-pm" as property to implement the same 
+functionality' part would be useful in the commit msg. With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> 
+> Sure I can spin up v2 with your proposal but I think that would create
+> unnecessary ambiguity and confusion?
+> 
+> For example, phyCORE board uses da9062 PMIC while phyFLEX uses da9063 as
+> PMIC. Boards are from the same SoM vendor. So one board would have to use
+> "dlg,use-sw-pm" and the other one "dlg,hw-suspend-broken" property to
+> achieve the same thing?
+> 
+> 
+> On 2. 05. 22 22:56, Rob Herring wrote:
+> > On Fri, Apr 22, 2022 at 09:27:11AM +0200, Primoz Fiser wrote:
+> > > Document the watchdog disable option which can be used if the hardware
+> > > automatic suspend option is broken.
+> > > 
+> > > Based on commit c514430c51ee8 ("dt-bindings: watchdog: da9062: add
+> > > suspend disable option").
+> > > 
+> > > Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
+> > > ---
+> > >   Documentation/devicetree/bindings/mfd/da9063.txt | 9 ++++++---
+> > >   1 file changed, 6 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt b/Documentation/devicetree/bindings/mfd/da9063.txt
+> > > index 91b79a21d403..aa8b800cc4ad 100644
+> > > --- a/Documentation/devicetree/bindings/mfd/da9063.txt
+> > > +++ b/Documentation/devicetree/bindings/mfd/da9063.txt
+> > > @@ -64,10 +64,13 @@ Sub-nodes:
+> > >       and KEY_SLEEP.
+> > >   - watchdog : This node defines settings for the Watchdog timer associated
+> > > -  with the DA9063 and DA9063L. There are currently no entries in this
+> > > -  binding, however compatible = "dlg,da9063-watchdog" should be added
+> > > -  if a node is created.
+> > > +  with the DA9063 and DA9063L. The node should contain the compatible property
+> > > +  with the value "dlg,da9063-watchdog".
+> > > +  Optional watchdog properties:
+> > > +  - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
+> > 
+> > Name the property based on the h/w quirk rather than what to do in
+> > response. Something like 'dlg,hw-suspend-broken'
+> > 
+> > > +  Only use this option if you can't use the watchdog automatic suspend
+> > > +  function during a suspend (see register CONTROL_B).
+> > >   Example:
+> > > -- 
+> > > 2.25.1
+> > > 
+> > > 
