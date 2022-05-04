@@ -2,117 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC1551A5A3
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 May 2022 18:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DEB51ADEE
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 May 2022 21:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353041AbiEDQks (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 4 May 2022 12:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S232529AbiEDTll (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 4 May 2022 15:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbiEDQks (ORCPT
+        with ESMTP id S1354351AbiEDTlk (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 4 May 2022 12:40:48 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087C015711;
-        Wed,  4 May 2022 09:37:11 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id d6so2321472ede.8;
-        Wed, 04 May 2022 09:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xf0XnIUXSUk6cizryQBZy/YJHjA9ZjdH2YsUOzyDnc4=;
-        b=aSXtoSMHDvZNXMhWaihhLP25nQOQhiEHCKB91OUlWvLZD0yCipp8z5dzqA69y0ms61
-         Lq8x67iU3jxnqIMy4JG6m3PIEmXpy6R1DEZDGGSdgtjRu07/Xsd77YBZQ43e6zWVaYQ5
-         MP1lZaWwaOiuqf2Ddf4OPGhE53cKuuXZoPSktz7O+xjodz7Tbtl9invbFlKBgWRh2q8K
-         Bp6XRGmdhMHMvAcPYe5A7MxC9Wu76/YGcQW8qLUMreFTu1O1DCin2OiWNE1GSjYs8Zrx
-         u5Y0jwDXFcbnRPgCQa0UEB7k08nXH/WpKUg6QkZ9ml4hyJYfsm2oLkuNaLHDW36+8h82
-         yAFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xf0XnIUXSUk6cizryQBZy/YJHjA9ZjdH2YsUOzyDnc4=;
-        b=6sExnOamH6OLNhCg3fHPq6eYJ9D9QxOntpKJFDzhMyWSkanhiGiPkL7xoQXvL/Ho0r
-         6jKTvKNeOz2GaHCzGS+4W9iIq75I8BMlFlV04r46rdW0R+7kyBmQV2hRh6T+hAFOrody
-         ZAPXIVeiNQTtuY9+aFQck2kT1ys3xBZ2TDAy+Mu7MoZ3TYxLmqmaaX9j0qcUWKN1XOIw
-         hKO7mpACf/XMWSoHF+ONVoI5JRW+w5Qe4GtuR4fNEpB1clb0NiJkmJEzd+u8ZUY/7f+/
-         WADTG7OCLvkYc3cSBdqLS7spypshN6/z9OTwh+JJJXUSCSu53a1c9YIhFfet3//BrlZW
-         XNdg==
-X-Gm-Message-State: AOAM533l5IG29udDARzm8ZPDqzY/721uaucsVkHqtlgYrIr3aiUr9l2g
-        +abbNDAU0ku3rv6/caEQnCYlyI7k5OlS5o/RwCRBWi4UMYDGAdDp
-X-Google-Smtp-Source: ABdhPJzvVj4QAu2vJSNQvv5AulXPLXlXytMRH0aeuSwaDWF3GIZlKBljGm3kzbhGM2ilk0akA+eSiBvblyYOUScdFNE=
-X-Received: by 2002:a05:6402:54:b0:419:9b58:e305 with SMTP id
- f20-20020a056402005400b004199b58e305mr23790727edu.158.1651682229586; Wed, 04
- May 2022 09:37:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220308193522.26696-1-henning.schild@siemens.com> <YnJ2tYjCpJi7yc4j@smile.fi.intel.com>
- <20220504171951.0d569632@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220504171951.0d569632@md1za8fc.ad001.siemens.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 4 May 2022 18:36:33 +0200
-Message-ID: <CAHp75VfhzYrCRd_Ne_JPdzXgNaaHz8Eg_Rr+n83umWVFtoTzfA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] simatic-ipc additions to p2sb apl lake gpio
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
+        Wed, 4 May 2022 15:41:40 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFD64C795
+        for <linux-watchdog@vger.kernel.org>; Wed,  4 May 2022 12:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=T0SMZXN87mfbGYdslVIzxN731a69
+        yFRI35AcyNOGoKA=; b=cJ05izlUVZhs3a/OGCJhfaEPDq8PXcukKlu8Il9yxvUk
+        yBZmk8Rqb+YW7lWH/akUJAQbXT/au+b1AV3NRXOp9KEdeMM+HxUsj7/PQqiQeXoo
+        gGmCVFhDMdmBFzurUEl0hzInZw8baa9qFG4wqyLb5xlTiZYy8VuOoO3J3wJO6PM=
+Received: (qmail 1529521 invoked from network); 4 May 2022 21:37:56 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 May 2022 21:37:56 +0200
+X-UD-Smtp-Session: l3s3148p1@fBecwjTeCpwgAwDtxwyXAP9dq+3qRUcy
+Date:   Wed, 4 May 2022 21:37:47 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 1/7] dt-bindings: gpio: renesas,rcar-gpio: R-Car V3U is
+ R-Car Gen4
+Message-ID: <YnLWCzLESZ3NwNg7@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1651497024.git.geert+renesas@glider.be>
+ <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YNJ34uo+OPtBXoDU"
+Content-Disposition: inline
+In-Reply-To: <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, May 4, 2022 at 6:16 PM Henning Schild
-<henning.schild@siemens.com> wrote:
-> Am Wed, 4 May 2022 15:51:01 +0300
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > On Tue, Mar 08, 2022 at 08:35:20PM +0100, Henning Schild wrote:
 
-...
+--YNJ34uo+OPtBXoDU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > Second question is could it be possible to split first patch into
-> > three, or it has to be in one?
->
-> I assume one for leds one for wdt and finally drop stuff from platform,
+On Mon, May 02, 2022 at 03:34:53PM +0200, Geert Uytterhoeven wrote:
+> Despite the name, R-Car V3U is the first member of the R-Car Gen4
+> family.  Hence move its compatible value to the R-Car Gen4 section.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
-Yes.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-> and i will go with that assumption for a next round based on your tree
-> directly.
 
-> Can you explain why that will be useful? While it is kind of a
-> separation of concerns and subsystems ... it also kind of all belongs
-> together and needs to be merged in a rather strict order.
+--YNJ34uo+OPtBXoDU
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The main case here is that it's easy to review during upstreaming and
-in case of somebody looking into the history. It keeps each of the
-changes logically isolated. I.o.w. it adds flexibility, for example
-changing ordering of the WDT and LED patches in the series in this
-case.
+-----BEGIN PGP SIGNATURE-----
 
-I admit that for _this_ series my arguments are not strong, but I'm
-speaking out of general approach. The pattern
-  1) add new api
-  2) switch driver #1 to it
-  ...
-  2+n) switch driver #n to it
-  3+n) drop old API
-is how we do in the Linux kernel, even if the changes are coupled
-together from a functional / compile perspective.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy1gUACgkQFA3kzBSg
+Kbacvg/+M5weBbp8eucQzeQfhiSXmoUq8Y085EPJPVnSs9VIxmDp6QiVP3OYgeZb
+mRyvi3cG+gfUGSnZZs+0VDmQBPHCz2V7d731JxT0LVhv/uJz/ItLPzrlIWO50KcD
+Qdeo2KKaVnm99fZLzjh+NLUEz3miB20m16D61q7tdMyJ4RoVPHV4vhks0XO8PBTU
+c/reVsCjoxzwHbhNaRKmDbhzwtvOdLG4HyWDJU98ZD3p//Pakjb3E0ke//Ka6Jwu
+CRVqd4iih7pq/VXCJRQfFihTRcWN6WQFu7CqtJI0zZijuKMRHrFbzB6jmao8D6Oy
+GRiRFwjfgoc+emlOKRGUy8C3puUnn4zBJlSHdnHYjXyMdsHS2W0aCtrT4U1cXBuR
+geyysQdp07zxfSVLA/4c7Ct+wF98JJXFlJ0ccFTRRwtRUrRpcvq0PuWEF0VaWoSM
+t9OvT5PWv3wQAOTcP1En5UP0wZUXOJznRcGOOinvCVVYAlcjP9oDQqDTkdRFwYdz
+HJXj7xpF290VMZh0uC0zleU632ngk5UA8N4mnEKLGRo6jppkZWRrxKt/CU0T4upC
+MGnS/oywZKz2PKoQeO+6QX75pRe8DdVjYNiNHYyiFYMsc/gw1mJ1tKgplWZvdmZU
+Ooarfwc9vDJQX5C4HeXnNLdsIKtmxzspIs2+nAM/tpIcVi3AZz8=
+=k7OO
+-----END PGP SIGNATURE-----
 
--- 
-With Best Regards,
-Andy Shevchenko
+--YNJ34uo+OPtBXoDU--
