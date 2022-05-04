@@ -2,120 +2,98 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1852E51AE5B
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 May 2022 21:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9585F51AF40
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 May 2022 22:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356222AbiEDTzV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 4 May 2022 15:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
+        id S1356096AbiEDUhk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 4 May 2022 16:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377706AbiEDTzU (ORCPT
+        with ESMTP id S1378100AbiEDUhj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 4 May 2022 15:55:20 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB9C4E39D
-        for <linux-watchdog@vger.kernel.org>; Wed,  4 May 2022 12:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=roOe+AeBY7DP+Q6uo/3NlHB6bacD
-        iF8cZtCOKwDNtfY=; b=AVvmqY7D3UH/BWMnn7wIorUCqnrJ/+VLUtw394q8E+Om
-        FcZj38Meag68aRXJMZqBMV/ykDiAbYkJb7JobePTVSDwsJScwk5GU/y4NLU/d2X/
-        TtjYV05OBt+x37dH92tXFElqcjQbmeUxdL9XANm472CsC+dHuhk7AahZPz9ANQE=
-Received: (qmail 1533983 invoked from network); 4 May 2022 21:51:39 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 May 2022 21:51:39 +0200
-X-UD-Smtp-Session: l3s3148p1@aBgC9DTeXJwgAwDtxwyXAP9dq+3qRUcy
-Date:   Wed, 4 May 2022 21:51:36 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wed, 4 May 2022 16:37:39 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3F150056;
+        Wed,  4 May 2022 13:34:02 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-edf3b6b0f2so1997243fac.9;
+        Wed, 04 May 2022 13:34:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PE0/mr3CK6LI2EW3G3CcGXz8d3sJvD5z1eOffL3SZjk=;
+        b=1SP7q/suYRiCPJ3lc0mmXbgPUaHyuKYGEwfYMMAao+6wa4RIEgJiiPmEzNDfJK1tfd
+         Mg4JFdGtKhChF7DThRmVySvv5Bs+qNEghF/zoPcYdQWWshqOsfurFVCIzcXaOWZTZb7Y
+         BYSzQKGYR+TFlsrV4gpPvVEHXugZKrO8fwb/4asmc57JFtXJXNf/sez5hsO6vyh/ytBB
+         AvBf2rHn7YKs3awUTn3pZ9WhFSvhwsl2xCx9EQPPMTsmyLAGtKwGxPcTjirBEasLyhmY
+         W4YYiDug+wAmaqKgRH7QdZXMsr7+s5lHZza/mD+YCc5Hl/Fx7Wiqq8+oVPGt0iJQFHzo
+         iN6A==
+X-Gm-Message-State: AOAM533depqa0A+FlyrJX2wobkkzN8x1sIH4UuBVi7YmIxOy2NhQlWQo
+        HXebyefROCOQuVTiuhHPVKq4o7VvXg==
+X-Google-Smtp-Source: ABdhPJzaPpzsZu9OKNhkox9cq3OHRCZ9ylrNs5rWf3k1HTRCFemLek1wCkKpOsQ6zTmeEYZ9rFdaHA==
+X-Received: by 2002:a05:6870:8896:b0:ed:a31a:fbf7 with SMTP id m22-20020a056870889600b000eda31afbf7mr656809oam.273.1651696441692;
+        Wed, 04 May 2022 13:34:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f11-20020a4ae60b000000b0035eb4e5a6bdsm6217952oot.19.2022.05.04.13.34.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 13:34:01 -0700 (PDT)
+Received: (nullmailer pid 2180122 invoked by uid 1000);
+        Wed, 04 May 2022 20:34:00 -0000
+Date:   Wed, 4 May 2022 15:34:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 2/7] dt-bindings: i2c: renesas,rcar-i2c: R-Car V3U is
- R-Car Gen4
-Message-ID: <YnLZSNJh7rdH77Lp@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        openbmc@lists.ozlabs.org, Benjamin Fair <benjaminfair@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Nancy Yuen <yuenn@google.com>,
+        Tali Perry <tali.perry1@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1651497024.git.geert+renesas@glider.be>
- <a0402ff46027196953fe9c13f60576d40c5aea4c.1651497024.git.geert+renesas@glider.be>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 1/7] dt-bindings: timer: nuvoton,npcm7xx-timer: Allow
+ specifying all clocks
+Message-ID: <YnLjOH+2WMHFV86j@robh.at.kernel.org>
+References: <20220429172030.398011-1-j.neuschaefer@gmx.net>
+ <20220429172030.398011-2-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j/bfMYaLl7xWqyb8"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <a0402ff46027196953fe9c13f60576d40c5aea4c.1651497024.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220429172030.398011-2-j.neuschaefer@gmx.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Fri, 29 Apr 2022 19:20:24 +0200, Jonathan Neuschäfer wrote:
+> The timer module contains multiple timers. In the WPCM450 SoC, each timer
+> runs off a clock can be gated individually. To model this correctly, the
+> timer node in the devicetree needs to take multiple clock inputs.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+> 
+> v2:
+> - no changes
+> ---
+>  .../devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml  | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
 
---j/bfMYaLl7xWqyb8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, May 02, 2022 at 03:34:54PM +0200, Geert Uytterhoeven wrote:
-> Despite the name, R-Car V3U is the first member of the R-Car Gen4
-> family.  I2C on R-Car V3U also supports some extra features (e.g. Slave
-> Clock Stretch Select), which are supported by other R-Car Gen4 SoCs, but
-> not by any other R-Car Gen3 SoC.
->=20
-> Hence move its compatible value to the R-Car Gen4 section.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Applied to for-next, thanks!
-
-
---j/bfMYaLl7xWqyb8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy2UgACgkQFA3kzBSg
-KbbbBQ//bHWIRu7MnsRqfYi9eFC5lxec3M3uiwvykedIMxXDdWQCC2qXlAn6efuH
-qv9GS22D0TLykN9cUMh/mwkF8j4CpK1hxncdTz7//FyzfDcEhuABgks83Z1Z1Vib
-X8oYEjRjx5kRJD+TC6OXer3OVwKfFX8V+6FpRruFVW/LWVEZa/LTKFqlSLw1sO3A
-fy4Mw5pcBbKlDiXWmyTiAjk+Rv+apo2VXaO9nV7UxAJSICixTe0GmOPZzXHCem/z
-GvqpFKcaXWXtQ1FHt1zwxuscEhTf8YD4XDB3S1iCvkh1BXwN7xK0BW5vLQYtwxKJ
-c/F9Zwwg7dz5VHAy8Sf+AFIi3Q5Iv9gBJ7kjt6G4hpYG4itHOpCopBjmfxQu0YcD
-J5bOb/F1jKOVjPHfnE2IFzyH4Alsy+z7hAMk3R90WM/AumDfVB1d1msG/1V3rnFe
-IRRaP3yu9mmcPkG7rRWs3oi/HH3SWzeDCywaqJgIMwJWE0oFHuw5LA8KzKvk5rbD
-lVm+yJTMx0GyyhqV/dl+fyPdLTHj+5O1grgopDg6xjKDiN+2EmbstKJdGKtocA6N
-tHNzcp80bFOHV6eO3j89GhutyTdL0ma8z892LN/+Lk7dQDpyoTKLmC51fvE7BHBK
-+yqozekqkqbqe/qUVYEV0UCB/VkIEgSIoJJP39lRITx/rY2F404=
-=hJCI
------END PGP SIGNATURE-----
-
---j/bfMYaLl7xWqyb8--
+Reviewed-by: Rob Herring <robh@kernel.org>
