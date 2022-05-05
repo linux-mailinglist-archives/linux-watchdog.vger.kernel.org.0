@@ -2,77 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECF251CB01
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 May 2022 23:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C9051CBB5
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 May 2022 23:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385616AbiEEVct (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 May 2022 17:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S1378530AbiEEWBa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 May 2022 18:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385560AbiEEVcs (ORCPT
+        with ESMTP id S233742AbiEEWB1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 May 2022 17:32:48 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901F950050;
-        Thu,  5 May 2022 14:29:08 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-edeb6c3642so5509192fac.3;
-        Thu, 05 May 2022 14:29:08 -0700 (PDT)
+        Thu, 5 May 2022 18:01:27 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A41F5C743;
+        Thu,  5 May 2022 14:57:46 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id h10-20020a056830400a00b00605e92cc450so3792859ots.11;
+        Thu, 05 May 2022 14:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=8oe3sfqDkyfNUlcgiBtlkeMr/xCKR9BR/x7tlYGAaAg=;
-        b=cHpjKpSXs6kKH2wCI+zunweNKPfOCNIAvDTrpHekpLonqSfQxiUbe2GXfiulSuITgt
-         1RfU3k6AdLPHqIN4GdAADkktcMX2Bxba1aPbA/7ThNdj3kq5m2IoXZ/7wURcMGexW2rV
-         T7jcUArbOzAgjQJhJPQ7RZ0qvr9QpruL+6vl7A21eL0SE2PDRs4yE+ZJ8je79f9+Z292
-         imKsIL1OUvBqfY6XBiUzFDMndPHbo4aGspHMmdgyoh+Yw29iBZcWlTIju4waxNV9JKk8
-         YADUp1qbHA/l5s/UqLpSEAKra8v9eGmfvkBEkyJzdsTgQNtWM74KUenL4Qa0is+Kib8c
-         51Gg==
+        bh=509K5q5w5Q3BFRAS70sMGRGeHF3csETOGikobOSYWkA=;
+        b=LcETCIlYbzQXR/6AbUW4QFk5oDcrtbVpfcfzZn3fbYshQ2015TOgGQhFJOtkcd+YSX
+         phcvx3bBu26ZpQzb97JQZ4JiLyZ5CF4uUch7kIeTQl79ygztbGw56OBNbRdRaRkz+0Ff
+         zPCinQils9bxU6DCWRsSG8xQIXAgAvpoQvwGf2Euv9+2UTU48bwfWDCsVPrZIjPHINNY
+         n/RrGeq3w69tT/We5ftF12W8SRFUc51N7w6ouPZAUYVj2+45fs5B0s6A2csCpkbHEUGS
+         eqsXFyg8MsOFDToe8ZCrfzBkGB26yaoZ+ZPvx+CDY5ezQ+8oia++R1X39/U0zQeHsjhD
+         n0DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=8oe3sfqDkyfNUlcgiBtlkeMr/xCKR9BR/x7tlYGAaAg=;
-        b=2zAkF6RoEgqgGsGR4mDIe+f7k2xObyGHpJgxxdCkBc9ny0E3odDns8IW/8DkXHUoTL
-         iY/atcBbHQK6j+ZXHy2iJZxssj8nZ2qlYJg9wq8+iwdTEir41LGgsRNAimIlbt3K0XJZ
-         wOkkQ6GEKirs7+fYBA13NgCnf/NxuAi6Y3HsfPNBKQYTJ0nfFuMB6UGli4nCeyXos3Au
-         heQe2RdGSwi8KJljzc7ahZCMjFP+HJu5/3E/NO3+sndPDYmIseERcIjGpeeNzNBTU25I
-         TUNjRCozrIvlKUlI5gBB8GHzg5QlVKxMtXWxkywmNZloaSHQ+naYa+6a2YBmeY12W7GU
-         WHhg==
-X-Gm-Message-State: AOAM532AiIqEFQt3swPy6PbdwGczoFNnbg3gDu+E+8+b1ME0j6hyqoMs
-        lTJtnfvsceSiUP/xsH1jWeaaD/9g1lcQeg==
-X-Google-Smtp-Source: ABdhPJxGgq1qnFkliFAawJ5WADwR3GbxkWdgTyuWmkSWwp7sBIM74NgVIv9e9rFX7ictyH8ZI1h61w==
-X-Received: by 2002:a05:6870:f206:b0:d6:ca78:94f0 with SMTP id t6-20020a056870f20600b000d6ca7894f0mr119445oao.4.1651786147940;
-        Thu, 05 May 2022 14:29:07 -0700 (PDT)
+        bh=509K5q5w5Q3BFRAS70sMGRGeHF3csETOGikobOSYWkA=;
+        b=xXpvMmZsjVaZQnyJAtp4N+1MwM8ssAmMA9qSzA3lA7PjDic48YK4JaM+ttgOfSN4KV
+         RgbX24GGPq+H7K6zumhX7kzc5JunOMQF6KOTyWMHS6O7eV5dh+1fWgu933G4kcTF749Y
+         dua6jyQNnZ6LbY1v1MzFXTFQv1OKafGoLc9EgCkF+kwC8yG7M2jQaFkYItbsGhbExy8X
+         3Bnil6cf3p17mbTXSVCXJivpFHFFfR/JSFMRcoaThGsgv1o5dyZF71TCzRg0r1xedUX7
+         sg/OrnkJuyREVnM6p58eyxQAgW3tViZQsW3hkEuqqqWFEfxbBnkYGij980ic1zZFpGCL
+         ig/A==
+X-Gm-Message-State: AOAM531sDlZlbO7FJoIxvtzdSpPqzSduSf0bwHOa59967u0bV+FthXcW
+        Mty51X+cfR5rfOfBM3jqewU=
+X-Google-Smtp-Source: ABdhPJydUKSEZXQ8aX/lXkp0HXnuTHboM/MSlzYxQ2HDDlSpXRQkkGTPYfsEsUuJM+u7vm5tDhsnbw==
+X-Received: by 2002:a9d:2ab:0:b0:605:6c58:668c with SMTP id 40-20020a9d02ab000000b006056c58668cmr107150otl.284.1651787865415;
+        Thu, 05 May 2022 14:57:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i19-20020a9d1713000000b006062d346083sm1023918ota.22.2022.05.05.14.29.06
+        by smtp.gmail.com with ESMTPSA id r1-20020a056870e98100b000e686d13890sm900678oao.42.2022.05.05.14.57.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 14:29:07 -0700 (PDT)
+        Thu, 05 May 2022 14:57:44 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 5 May 2022 14:29:05 -0700
+Date:   Thu, 5 May 2022 14:57:43 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
-Message-ID: <20220505212905.GC1988522@roeck-us.net>
-References: <20220502204050.88316-1-nick.hawkins@hpe.com>
- <20220502204050.88316-3-nick.hawkins@hpe.com>
- <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net>
- <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
- <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
- <PH0PR84MB1718D0238BEF9173AF5D5B7688C39@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+Subject: Re: [PATCH 0/2] simatic-ipc additions to p2sb apl lake gpio
+Message-ID: <20220505215743.GE1988936@roeck-us.net>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220308193522.26696-1-henning.schild@siemens.com>
+ <YnJ2tYjCpJi7yc4j@smile.fi.intel.com>
+ <20220504171951.0d569632@md1za8fc.ad001.siemens.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR84MB1718D0238BEF9173AF5D5B7688C39@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <20220504171951.0d569632@md1za8fc.ad001.siemens.net>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -84,27 +80,70 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, May 04, 2022 at 04:25:59PM +0000, Hawkins, Nick wrote:
+On Wed, May 04, 2022 at 05:19:51PM +0200, Henning Schild wrote:
+> Am Wed, 4 May 2022 15:51:01 +0300
+> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 > 
-> On Tue, May 3, 2022 at 6:53 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On Tue, Mar 08, 2022 at 08:35:20PM +0100, Henning Schild wrote:
+> > > This switches the simatic-ipc modules to using the p2sb interface
+> > > introduced by Andy with "platform/x86: introduce p2sb_bar() helper".
+> > > 
+> > > It also switches to one apollo lake device to using gpio leds.
+> > > 
+> > > I am kind of hoping Andy will take this on top and propose it in his
+> > > series.  
+> > 
+> > First of all, they are not applicable to my current version [1] of
+> > the series (it maybe something changed in the Simatic drivers
+> > upstream, because I have got conflicts there. For the record, I'm
+> > using Linux Next as a base.
 > 
-> > > One bad deed tends to multiply.
-> > >
-> > > No, I didn't ask to pass a struct resource as platform data.
-> > > That would be no different to the current code. Resources can be added 
-> > > to a platform device using platform_device_add_resources(), and the 
-> > > platform driver can then use platform_get_resource() to use it. This 
-> > > would make it independent of a "private" mechanism.
+> That is possible, some sparse findings have been fixed lately.
 > 
-> > Unfortunately there is no resource type for __iomem tokens, only for physical addresses, so you'd end up having to do
-> ioremap() of the same address twice to map it into both the timer and the watchdog driver . Not the end of the world of course, but that doesn't seem much better than abusing the device private data.
+> > Second question is could it be possible to split first patch into
+> > three, or it has to be in one?
 > 
-> Hello Guenter,
-> 
-> Given Arnd's feedback would you like me to proceed with this change still or do you have another recommendation?
+> I assume one for leds one for wdt and finally drop stuff from platform,
+> and i will go with that assumption for a next round based on your tree
+> directly.
+> Can you explain why that will be useful? While it is kind of a
+> separation of concerns and subsystems ... it also kind of all belongs
+> together and needs to be merged in a rather strict order.
 > 
 
-Just leave it as is and add a note explaining why it is done
-that way.
+That is not really correct. It should be possible to split
+the patches and only remove simatic_ipc_get_membase0() after the
+other patches have been applied.
+
+On a side note, neither subject nor description of patch 1/2
+mention that the patch touches both LED and watchdog code, which
+is at the very least bad style.
 
 Guenter
+
+> regards,
+> Henning
+> 
+> > [1]: https://gitlab.com/andy-shev/next/-/tree/topic/p2sb-next
+> > It would be nice if you can perform another round of testing.
+> > 
+> > > Henning Schild (2):
+> > >   simatic-ipc: convert to use common P2SB accessor
+> > >   leds: simatic-ipc-leds-gpio: add GPIO version of Siemens driver
+> > > 
+> > >  drivers/leds/simple/Kconfig                   |  11 ++
+> > >  drivers/leds/simple/Makefile                  |   3 +-
+> > >  drivers/leds/simple/simatic-ipc-leds-gpio.c   | 108
+> > > ++++++++++++++++++ drivers/leds/simple/simatic-ipc-leds.c        |
+> > > 77 +------------ drivers/platform/x86/simatic-ipc.c            |
+> > > 43 +------ drivers/watchdog/Kconfig                      |   1 +
+> > >  drivers/watchdog/simatic-ipc-wdt.c            |  15 +--
+> > >  .../platform_data/x86/simatic-ipc-base.h      |   2 -
+> > >  8 files changed, 139 insertions(+), 121 deletions(-)
+> > >  create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.c
+> > > 
+> > > -- 
+> > > 2.34.1
+> > >   
+> > 
+> 
