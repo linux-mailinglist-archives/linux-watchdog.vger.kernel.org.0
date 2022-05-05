@@ -2,117 +2,155 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3214651C031
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 May 2022 15:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A89D51CAF5
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 May 2022 23:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378729AbiEENJG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 May 2022 09:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S231739AbiEEV15 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 May 2022 17:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378754AbiEENIr (ORCPT
+        with ESMTP id S245352AbiEEV15 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 May 2022 09:08:47 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AD25674B
-        for <linux-watchdog@vger.kernel.org>; Thu,  5 May 2022 06:05:07 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id n10so8611188ejk.5
-        for <linux-watchdog@vger.kernel.org>; Thu, 05 May 2022 06:05:07 -0700 (PDT)
+        Thu, 5 May 2022 17:27:57 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD7E5E16C;
+        Thu,  5 May 2022 14:24:12 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id q8so5641782oif.13;
+        Thu, 05 May 2022 14:24:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sxVJoGvxoT/BfORhwUe0lF83tKeGUQ56jY7vzgfAHU4=;
-        b=Y0K2T7eDDIErEPqMy8O6G47SIMuNV/FV2iBabtCwdZYCRksLJj+E+c7fbrSt9ZBBXD
-         DaXJNvwCp8O95B7G3qBBBXd/ZY5LglYP8OcOlRsRkLkFbnOz5YGjf1+Kq+Cej6sf1PKz
-         8jox3zcMMsB69mnVMtXKZEg+/RyB0rS4FojXfONdqL7k9Dw/I4yA/G/3RFFnSgWC8agR
-         bsZsTNdQJo4ur+mN0mOVzXqc/pW10pVTqbvQpkdO4R2oawKCjQrPZ/LhQquGSb8INoG5
-         zUIcx6Usp3yJ11Kt8LC8bG4AgtPbYUl5xx+MqNZTXX94AuUxIh18hRHgvcWzdek9DC0O
-         2i3w==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mYBkCrOjKsNELWgFHk4Rh2mSLPo6p/XEUcMC/Y8n7so=;
+        b=QLx6Dsr5kDEheU2O26ElBO0o5+yVyseG4+bpINUVi2CnDJTcRJmya4mb86DqZPQx0L
+         PdfXpvNlLr3vAoTNwug0VWTYnxn9nvTF8Se/b474gQjhmcmmpmrlM5PYB2v3x9soEJSX
+         1kF26eiHrp1yjRHAsaZ7+hdZdZg7VE4qlOLSu9QOxnVp7DRi/N2DE0Vl7la3s9sasU+D
+         EUQXVUCebHRpBlx2vj0TVqT+UOIfIjLy/PkBRRcO0mjX5cc2cFxAks6T8qNQAn91m+Lg
+         8qZ+NJUi3wCUq+F0eb16vHOFvV9hE7zr24TUhxwE+4hUzo3cHV7KIwnYKXWqBJYfHhXm
+         9dOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sxVJoGvxoT/BfORhwUe0lF83tKeGUQ56jY7vzgfAHU4=;
-        b=gDkq4wz8BgR2hS73h71IE0C7OMkPnQzATaIg7fpLpxCLUYaO5pFxrE72lY0/t0KPvZ
-         ItYe6NW9IuuZgKP/5/aERwOfxeHNQgJL71167PtlOrBpDFUEEbqcjOISMm3MzuMP0A8r
-         8qS3dKrgHhANIgLHE1hqs1cnUrDrtWinxC7ah5oXD9mkOdMg0/5Y3KHQLMrDvqAIyfEt
-         HBTCzjEM/ZAfA4w00bi0wMk0rX/FKYf4wi07J1uP9sp+g07xo9PN+G28gI2N+NGyrMfJ
-         sXrPn2XS1BZLLd+MCmRByB9ooOR9MODre0R/iFzPmLn6CqnrAchkHe2RyMC/UTwiH0SN
-         v3IA==
-X-Gm-Message-State: AOAM530JQ6qYbvVN9K8KI50JhV5W1xRUYMsgPB9ojJMnOK+2vOrHqANm
-        h5tNFWWqSrW10vvZxetsobDgbbpwO7+GGNYAkX5CqQ==
-X-Google-Smtp-Source: ABdhPJxyNkSLwouP3OR63NyFLRxUlmDS+dFIZZqJlV9mcUABNttg9TsG8+o4n8l4yoY3YgwsQa8BiV83N6jWTpdMxkc=
-X-Received: by 2002:a17:907:3e28:b0:6f4:3900:78f8 with SMTP id
- hp40-20020a1709073e2800b006f4390078f8mr21714935ejc.736.1651755905797; Thu, 05
- May 2022 06:05:05 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=mYBkCrOjKsNELWgFHk4Rh2mSLPo6p/XEUcMC/Y8n7so=;
+        b=MEyi4g4oxd/jcttNH7O1SR71kRR9yghkZaXXltwM8BIlJCdz4CpX5ySKehrOVeykma
+         8vT0T9Z++N+0ajYPp9nVRNehuTrGAsFxxc/8Ng5mdaiEAWdbHkw+933/RRSCXQCqlou7
+         wmhiUIKEwwcCNGf+ZzMAo6phshhsdyitLdjQQj+wy6wfwWD82g4r4+UmTcg3ob3lesiZ
+         82mUV2vj0uYNzmIqa4B2MrVbWTD1sZ1Br1/PJ+ZItpvmc8kfh5jdQctGo/4V5OOq89+z
+         q84Es1lNuaBYAwT3NSnENbrVvVzc3k0HMlxbzO2bRmcOBM1a44ibDSCa89Fn6lLBwdZ5
+         YZrg==
+X-Gm-Message-State: AOAM532MI53AIT6d0+njPzfeVkAGCsObWOGE6QRtvXZGueX8QPISOto5
+        ruF2OLuZUPvlnlXEAtiFrDEqwYIw5zwIGQ==
+X-Google-Smtp-Source: ABdhPJzb9+zk/Sp0SpidIkLIL8lnEDsKvmCJ3xNQmU8wf2aCLh8MHh09qJNpiUTPE9bTwWyoCxHsVg==
+X-Received: by 2002:a05:6808:1151:b0:326:479f:4413 with SMTP id u17-20020a056808115100b00326479f4413mr3411562oiu.63.1651785852103;
+        Thu, 05 May 2022 14:24:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l8-20020aca1908000000b00325cda1ffbbsm980249oii.58.2022.05.05.14.24.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 14:24:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 5 May 2022 14:24:09 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
+Cc:     wim@linux-watchdog.org, tzungbi@kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/1] watchdog: iTCO_wdt: Using existing macro define
+ covers more scenarios
+Message-ID: <20220505212409.GA1988522@roeck-us.net>
+References: <1650967905-3199-1-git-send-email-liuxp11@chinatelecom.cn>
 MIME-Version: 1.0
-References: <cover.1651497024.git.geert+renesas@glider.be> <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
-In-Reply-To: <5628a862688bd9d3b4f6c66cb338671211058641.1651497024.git.geert+renesas@glider.be>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 5 May 2022 15:04:55 +0200
-Message-ID: <CAMRc=MeQZ_T_AoHUO3qx7oW68UMC6HH9CaC041vYr7wQisqjHA@mail.gmail.com>
-Subject: Re: [PATCH 1/7] dt-bindings: gpio: renesas,rcar-gpio: R-Car V3U is
- R-Car Gen4
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dmaengine@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        iommu@lists.linux-foundation.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650967905-3199-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, May 2, 2022 at 3:35 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> Despite the name, R-Car V3U is the first member of the R-Car Gen4
-> family.  Hence move its compatible value to the R-Car Gen4 section.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml b/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
-> index 0681a4790cd62e23..75e5da6a7cc04bbd 100644
-> --- a/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/renesas,rcar-gpio.yaml
-> @@ -48,11 +48,9 @@ properties:
->                - renesas,gpio-r8a77995     # R-Car D3
->            - const: renesas,rcar-gen3-gpio # R-Car Gen3 or RZ/G2
->
-> -      - items:
-> -          - const: renesas,gpio-r8a779a0  # R-Car V3U
-> -
->        - items:
->            - enum:
-> +              - renesas,gpio-r8a779a0     # R-Car V3U
->                - renesas,gpio-r8a779f0     # R-Car S4-8
->            - const: renesas,rcar-gen4-gpio # R-Car Gen4
->
-> --
-> 2.25.1
->
+On Tue, Apr 26, 2022 at 06:11:45PM +0800, Liu Xinpeng wrote:
+> For power management, SET_NOIRQ_SYSTEM_SLEEP_PM_OPS defined for
+> CONFIG_PM_SLEEP, will point ->suspend_noirq, ->freeze_noirq and
+> ->poweroff_noirq to the same function. Vice versa happens for
+> ->resume_noirq, ->thaw_noirq and ->restore_noirq.
+> 
+> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/iTCO_wdt.c | 20 +++++++-------------
+>  1 file changed, 7 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index 3f2f4343644f..34693f11385f 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -596,7 +596,6 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  /*
+>   * Suspend-to-idle requires this, because it stops the ticks and timekeeping, so
+>   * the watchdog cannot be pinged while in that state.  In ACPI sleep states the
+> @@ -604,15 +603,15 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>   */
+>  
+>  #ifdef CONFIG_ACPI
+> -static inline bool need_suspend(void)
+> +static inline bool __maybe_unused need_suspend(void)
+>  {
+>  	return acpi_target_system_state() == ACPI_STATE_S0;
+>  }
+>  #else
+> -static inline bool need_suspend(void) { return true; }
+> +static inline bool __maybe_unused need_suspend(void) { return true; }
+>  #endif
+>  
+> -static int iTCO_wdt_suspend_noirq(struct device *dev)
+> +static int __maybe_unused iTCO_wdt_suspend_noirq(struct device *dev)
+>  {
+>  	struct iTCO_wdt_private *p = dev_get_drvdata(dev);
+>  	int ret = 0;
+> @@ -626,7 +625,7 @@ static int iTCO_wdt_suspend_noirq(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int iTCO_wdt_resume_noirq(struct device *dev)
+> +static int __maybe_unused iTCO_wdt_resume_noirq(struct device *dev)
+>  {
+>  	struct iTCO_wdt_private *p = dev_get_drvdata(dev);
+>  
+> @@ -637,20 +636,15 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops iTCO_wdt_pm = {
+> -	.suspend_noirq = iTCO_wdt_suspend_noirq,
+> -	.resume_noirq = iTCO_wdt_resume_noirq,
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
+> +				      iTCO_wdt_resume_noirq)
+>  };
+>  
+> -#define ITCO_WDT_PM_OPS	(&iTCO_wdt_pm)
+> -#else
+> -#define ITCO_WDT_PM_OPS	NULL
+> -#endif /* CONFIG_PM_SLEEP */
+> -
+>  static struct platform_driver iTCO_wdt_driver = {
+>  	.probe          = iTCO_wdt_probe,
+>  	.driver         = {
+>  		.name   = DRV_NAME,
+> -		.pm     = ITCO_WDT_PM_OPS,
+> +		.pm     = &iTCO_wdt_pm,
+>  	},
+>  };
+>  
+> -- 
+> 2.23.0
+> 
