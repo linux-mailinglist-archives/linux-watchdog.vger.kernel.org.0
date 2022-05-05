@@ -2,66 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A89D51CAF5
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 May 2022 23:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECF251CB01
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 May 2022 23:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiEEV15 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 May 2022 17:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S1385616AbiEEVct (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 May 2022 17:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245352AbiEEV15 (ORCPT
+        with ESMTP id S1385560AbiEEVcs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 May 2022 17:27:57 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD7E5E16C;
-        Thu,  5 May 2022 14:24:12 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id q8so5641782oif.13;
-        Thu, 05 May 2022 14:24:12 -0700 (PDT)
+        Thu, 5 May 2022 17:32:48 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901F950050;
+        Thu,  5 May 2022 14:29:08 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-edeb6c3642so5509192fac.3;
+        Thu, 05 May 2022 14:29:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mYBkCrOjKsNELWgFHk4Rh2mSLPo6p/XEUcMC/Y8n7so=;
-        b=QLx6Dsr5kDEheU2O26ElBO0o5+yVyseG4+bpINUVi2CnDJTcRJmya4mb86DqZPQx0L
-         PdfXpvNlLr3vAoTNwug0VWTYnxn9nvTF8Se/b474gQjhmcmmpmrlM5PYB2v3x9soEJSX
-         1kF26eiHrp1yjRHAsaZ7+hdZdZg7VE4qlOLSu9QOxnVp7DRi/N2DE0Vl7la3s9sasU+D
-         EUQXVUCebHRpBlx2vj0TVqT+UOIfIjLy/PkBRRcO0mjX5cc2cFxAks6T8qNQAn91m+Lg
-         8qZ+NJUi3wCUq+F0eb16vHOFvV9hE7zr24TUhxwE+4hUzo3cHV7KIwnYKXWqBJYfHhXm
-         9dOg==
+        bh=8oe3sfqDkyfNUlcgiBtlkeMr/xCKR9BR/x7tlYGAaAg=;
+        b=cHpjKpSXs6kKH2wCI+zunweNKPfOCNIAvDTrpHekpLonqSfQxiUbe2GXfiulSuITgt
+         1RfU3k6AdLPHqIN4GdAADkktcMX2Bxba1aPbA/7ThNdj3kq5m2IoXZ/7wURcMGexW2rV
+         T7jcUArbOzAgjQJhJPQ7RZ0qvr9QpruL+6vl7A21eL0SE2PDRs4yE+ZJ8je79f9+Z292
+         imKsIL1OUvBqfY6XBiUzFDMndPHbo4aGspHMmdgyoh+Yw29iBZcWlTIju4waxNV9JKk8
+         YADUp1qbHA/l5s/UqLpSEAKra8v9eGmfvkBEkyJzdsTgQNtWM74KUenL4Qa0is+Kib8c
+         51Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=mYBkCrOjKsNELWgFHk4Rh2mSLPo6p/XEUcMC/Y8n7so=;
-        b=MEyi4g4oxd/jcttNH7O1SR71kRR9yghkZaXXltwM8BIlJCdz4CpX5ySKehrOVeykma
-         8vT0T9Z++N+0ajYPp9nVRNehuTrGAsFxxc/8Ng5mdaiEAWdbHkw+933/RRSCXQCqlou7
-         wmhiUIKEwwcCNGf+ZzMAo6phshhsdyitLdjQQj+wy6wfwWD82g4r4+UmTcg3ob3lesiZ
-         82mUV2vj0uYNzmIqa4B2MrVbWTD1sZ1Br1/PJ+ZItpvmc8kfh5jdQctGo/4V5OOq89+z
-         q84Es1lNuaBYAwT3NSnENbrVvVzc3k0HMlxbzO2bRmcOBM1a44ibDSCa89Fn6lLBwdZ5
-         YZrg==
-X-Gm-Message-State: AOAM532MI53AIT6d0+njPzfeVkAGCsObWOGE6QRtvXZGueX8QPISOto5
-        ruF2OLuZUPvlnlXEAtiFrDEqwYIw5zwIGQ==
-X-Google-Smtp-Source: ABdhPJzb9+zk/Sp0SpidIkLIL8lnEDsKvmCJ3xNQmU8wf2aCLh8MHh09qJNpiUTPE9bTwWyoCxHsVg==
-X-Received: by 2002:a05:6808:1151:b0:326:479f:4413 with SMTP id u17-20020a056808115100b00326479f4413mr3411562oiu.63.1651785852103;
-        Thu, 05 May 2022 14:24:12 -0700 (PDT)
+        bh=8oe3sfqDkyfNUlcgiBtlkeMr/xCKR9BR/x7tlYGAaAg=;
+        b=2zAkF6RoEgqgGsGR4mDIe+f7k2xObyGHpJgxxdCkBc9ny0E3odDns8IW/8DkXHUoTL
+         iY/atcBbHQK6j+ZXHy2iJZxssj8nZ2qlYJg9wq8+iwdTEir41LGgsRNAimIlbt3K0XJZ
+         wOkkQ6GEKirs7+fYBA13NgCnf/NxuAi6Y3HsfPNBKQYTJ0nfFuMB6UGli4nCeyXos3Au
+         heQe2RdGSwi8KJljzc7ahZCMjFP+HJu5/3E/NO3+sndPDYmIseERcIjGpeeNzNBTU25I
+         TUNjRCozrIvlKUlI5gBB8GHzg5QlVKxMtXWxkywmNZloaSHQ+naYa+6a2YBmeY12W7GU
+         WHhg==
+X-Gm-Message-State: AOAM532AiIqEFQt3swPy6PbdwGczoFNnbg3gDu+E+8+b1ME0j6hyqoMs
+        lTJtnfvsceSiUP/xsH1jWeaaD/9g1lcQeg==
+X-Google-Smtp-Source: ABdhPJxGgq1qnFkliFAawJ5WADwR3GbxkWdgTyuWmkSWwp7sBIM74NgVIv9e9rFX7ictyH8ZI1h61w==
+X-Received: by 2002:a05:6870:f206:b0:d6:ca78:94f0 with SMTP id t6-20020a056870f20600b000d6ca7894f0mr119445oao.4.1651786147940;
+        Thu, 05 May 2022 14:29:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l8-20020aca1908000000b00325cda1ffbbsm980249oii.58.2022.05.05.14.24.09
+        by smtp.gmail.com with ESMTPSA id i19-20020a9d1713000000b006062d346083sm1023918ota.22.2022.05.05.14.29.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 14:24:10 -0700 (PDT)
+        Thu, 05 May 2022 14:29:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 5 May 2022 14:24:09 -0700
+Date:   Thu, 5 May 2022 14:29:05 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
-Cc:     wim@linux-watchdog.org, tzungbi@kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/1] watchdog: iTCO_wdt: Using existing macro define
- covers more scenarios
-Message-ID: <20220505212409.GA1988522@roeck-us.net>
-References: <1650967905-3199-1-git-send-email-liuxp11@chinatelecom.cn>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
+Message-ID: <20220505212905.GC1988522@roeck-us.net>
+References: <20220502204050.88316-1-nick.hawkins@hpe.com>
+ <20220502204050.88316-3-nick.hawkins@hpe.com>
+ <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net>
+ <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
+ <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
+ <PH0PR84MB1718D0238BEF9173AF5D5B7688C39@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1650967905-3199-1-git-send-email-liuxp11@chinatelecom.cn>
+In-Reply-To: <PH0PR84MB1718D0238BEF9173AF5D5B7688C39@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -73,84 +84,27 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 06:11:45PM +0800, Liu Xinpeng wrote:
-> For power management, SET_NOIRQ_SYSTEM_SLEEP_PM_OPS defined for
-> CONFIG_PM_SLEEP, will point ->suspend_noirq, ->freeze_noirq and
-> ->poweroff_noirq to the same function. Vice versa happens for
-> ->resume_noirq, ->thaw_noirq and ->restore_noirq.
+On Wed, May 04, 2022 at 04:25:59PM +0000, Hawkins, Nick wrote:
 > 
-> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+> On Tue, May 3, 2022 at 6:53 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+> > > One bad deed tends to multiply.
+> > >
+> > > No, I didn't ask to pass a struct resource as platform data.
+> > > That would be no different to the current code. Resources can be added 
+> > > to a platform device using platform_device_add_resources(), and the 
+> > > platform driver can then use platform_get_resource() to use it. This 
+> > > would make it independent of a "private" mechanism.
+> 
+> > Unfortunately there is no resource type for __iomem tokens, only for physical addresses, so you'd end up having to do
+> ioremap() of the same address twice to map it into both the timer and the watchdog driver . Not the end of the world of course, but that doesn't seem much better than abusing the device private data.
+> 
+> Hello Guenter,
+> 
+> Given Arnd's feedback would you like me to proceed with this change still or do you have another recommendation?
+> 
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Just leave it as is and add a note explaining why it is done
+that way.
 
-> ---
->  drivers/watchdog/iTCO_wdt.c | 20 +++++++-------------
->  1 file changed, 7 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-> index 3f2f4343644f..34693f11385f 100644
-> --- a/drivers/watchdog/iTCO_wdt.c
-> +++ b/drivers/watchdog/iTCO_wdt.c
-> @@ -596,7 +596,6 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
->  /*
->   * Suspend-to-idle requires this, because it stops the ticks and timekeeping, so
->   * the watchdog cannot be pinged while in that state.  In ACPI sleep states the
-> @@ -604,15 +603,15 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
->   */
->  
->  #ifdef CONFIG_ACPI
-> -static inline bool need_suspend(void)
-> +static inline bool __maybe_unused need_suspend(void)
->  {
->  	return acpi_target_system_state() == ACPI_STATE_S0;
->  }
->  #else
-> -static inline bool need_suspend(void) { return true; }
-> +static inline bool __maybe_unused need_suspend(void) { return true; }
->  #endif
->  
-> -static int iTCO_wdt_suspend_noirq(struct device *dev)
-> +static int __maybe_unused iTCO_wdt_suspend_noirq(struct device *dev)
->  {
->  	struct iTCO_wdt_private *p = dev_get_drvdata(dev);
->  	int ret = 0;
-> @@ -626,7 +625,7 @@ static int iTCO_wdt_suspend_noirq(struct device *dev)
->  	return ret;
->  }
->  
-> -static int iTCO_wdt_resume_noirq(struct device *dev)
-> +static int __maybe_unused iTCO_wdt_resume_noirq(struct device *dev)
->  {
->  	struct iTCO_wdt_private *p = dev_get_drvdata(dev);
->  
-> @@ -637,20 +636,15 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
->  }
->  
->  static const struct dev_pm_ops iTCO_wdt_pm = {
-> -	.suspend_noirq = iTCO_wdt_suspend_noirq,
-> -	.resume_noirq = iTCO_wdt_resume_noirq,
-> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
-> +				      iTCO_wdt_resume_noirq)
->  };
->  
-> -#define ITCO_WDT_PM_OPS	(&iTCO_wdt_pm)
-> -#else
-> -#define ITCO_WDT_PM_OPS	NULL
-> -#endif /* CONFIG_PM_SLEEP */
-> -
->  static struct platform_driver iTCO_wdt_driver = {
->  	.probe          = iTCO_wdt_probe,
->  	.driver         = {
->  		.name   = DRV_NAME,
-> -		.pm     = ITCO_WDT_PM_OPS,
-> +		.pm     = &iTCO_wdt_pm,
->  	},
->  };
->  
-> -- 
-> 2.23.0
-> 
+Guenter
