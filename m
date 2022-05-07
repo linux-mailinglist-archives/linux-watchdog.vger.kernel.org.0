@@ -2,98 +2,161 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D3151E0C3
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 May 2022 23:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DED351E8E8
+	for <lists+linux-watchdog@lfdr.de>; Sat,  7 May 2022 19:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444310AbiEFVNM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 May 2022 17:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S1353028AbiEGR0V (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 7 May 2022 13:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444282AbiEFVNM (ORCPT
+        with ESMTP id S1386389AbiEGR0P (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 May 2022 17:13:12 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77F46F48D
-        for <linux-watchdog@vger.kernel.org>; Fri,  6 May 2022 14:09:27 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id c11so8572332plg.13
-        for <linux-watchdog@vger.kernel.org>; Fri, 06 May 2022 14:09:27 -0700 (PDT)
+        Sat, 7 May 2022 13:26:15 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C692733A09
+        for <linux-watchdog@vger.kernel.org>; Sat,  7 May 2022 10:22:26 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ks9so13269460ejb.2
+        for <linux-watchdog@vger.kernel.org>; Sat, 07 May 2022 10:22:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=DCL4ASSQyWhAON34kE5OIISSqSj3rOCfF8Ciqjh+lsqRdCfgeusA5Vwv0XnJkYI/K8
-         PpoBtZS88yuL3et/lZLKleXxq4URSZD9f6MROtdldcj3gOmiMCUI/6TV1Dl/T+qpwJiw
-         M0N+RaWrDo6cEqXCC4jcgWP8yqP5i27fdlJmL+Z22MNaap80xcYhj1kcUEIwB2pTrZYY
-         bvvbxOCDGxpg/KNpF54H7KtPoC+ybJ/VsbbP4Y4Ldgfhj+OsOwqpuNJpDXQhyZEajcO2
-         TQ+8Ad8csIfLm6I1rNVsM3KaAaNUHUcZcLEHvw01t2/Qn5zFCtxGu68RLxA3LTyrzGSv
-         07+A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zjNtbhJZkCD7x/ngN33A8mLoiActa9teuEHp5A3WQlI=;
+        b=PUJm3rcrmpeRZzIZJJsMojTvU8Sg+/mOTgkl3T+44NGBwBXWjK9VPMMQy8p7BNFHGJ
+         KJE8XQCLrCi9TnjqvCmmveQZQkpATdz5cUX3K3HYxItJCgpZ4PVAhUkRGiiVk9x8ZeCc
+         jiUcPys7YkdAgyDZAf7PKtf31D69QpWHZLFpGamEboDYiIQqoiXNcwoxF0XYAq/UVJOL
+         H06hRxj0tfTeTAvDspSz3Kf0l/eu+8LuabUKHjbBoCmKkyiu0TCj415TvcDOBdDBl61e
+         VNHzdo1GCh+2DkRyvVUj6izcSN4GKKwWwm3jnoJapEJbH/X+4fkXv5b/1ifVhkuofmWN
+         zq/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=aclnDyh0gV8wGb1stPuwU4JUY3H6fN9VPUjqOZ7UnY0hEYndy/TvHkdm3uxOy1JsWi
-         fKlqq6vNYOGm1tCSPXk26e5w6VdXUxM4kgPcKsDrtIsqeJ+ocDHp7kYq/764kxwbFZxw
-         tyaYszUYou4+fBY+qZswdsXAbeuQunmHwfU6AsCQMNGpS79+SogQBD7GOnOvXMAfLByM
-         LhbgZSmNymZUSr1jeu4s2m5MieIItR5tIvUCumzLEnLwCGvKbWBD9yyvL5Kp0DInFIse
-         jig8q0FxQdZzWf4pmrsPWThxu5t2aqhepaJsKLEl+v561t/S0Uup4gXDcMBT7+Hwkbhm
-         rpIw==
-X-Gm-Message-State: AOAM532mTsr7+gmfV/cosd4btESQJn63VvNqT1B7kFMDsD9PucNz5Frj
-        NXshlaY9QDgeByLjo11l4lbVfwesAb2Zce6G5w==
-X-Google-Smtp-Source: ABdhPJwp4Ke3UOg5WGZvnc+9zoj6LuBlmjaWEumAhXp6nyRAoOsi+A9K7QpSIh/DOmfrS0/kdtzDsFQAu7yldmf5qAo=
-X-Received: by 2002:a17:902:a501:b0:153:f956:29f0 with SMTP id
- s1-20020a170902a50100b00153f95629f0mr5613774plq.120.1651871367333; Fri, 06
- May 2022 14:09:27 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zjNtbhJZkCD7x/ngN33A8mLoiActa9teuEHp5A3WQlI=;
+        b=7DjMr0n6VEAk9GWlvf8KxyMb3Y1m4sODoJUKfZ9sWLInhzBEjhHxnHJwj3LmNgGon9
+         8RkMwzilyrnXrV7nBS2Z8m8jWJQhLi82LwV/GPb3D7mLEWhSb5DUzzxZSEP0tt3jUxY/
+         mq2rbpL/Aa33ID6sgcMWOZdDSLpEoNoO4XJNwYsWrZKHF5LQHnyXZVNPxF5ICKvpdTPT
+         h9SEkZlOgCdicbhK763Y9ZxBSlrp5JjO+YhXnA4d9ODVN3TISDKiAo4OcQU2ijVvlZcH
+         nz+59eojwF9Tn54IRBXWQRaip6r0NWRBhe+ARLReXqL8Bp2AENZZ2fJ8xgIo/GS8A0IY
+         l1Fw==
+X-Gm-Message-State: AOAM533xFM+M8bK7q+ZleYu2R7Oy/4NmyIAFmEqxRVyvCHPaHG3e5Ga+
+        N8hWGI7Us7qvggwtzrIiJ4ujwQ==
+X-Google-Smtp-Source: ABdhPJwGYRwQnDVRNO9isAjt5BT0cMvMCkDJOfr1Wfy9Egw4c8XZ1rQxI/fKnZvDZ1EDz2Ls3i8z9Q==
+X-Received: by 2002:a17:907:3e92:b0:6f4:7ab4:20a5 with SMTP id hs18-20020a1709073e9200b006f47ab420a5mr8346124ejc.620.1651944145395;
+        Sat, 07 May 2022 10:22:25 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042617ba63a8sm3904995edu.50.2022.05.07.10.22.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 May 2022 10:22:24 -0700 (PDT)
+Message-ID: <9bcdec7e-2b09-56ac-f798-1c3971a87f46@linaro.org>
+Date:   Sat, 7 May 2022 19:22:23 +0200
 MIME-Version: 1.0
-Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
- 14:09:26 -0700 (PDT)
-Reply-To: warren001buffett@gmail.com
-In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-From:   Warren Buffett <guidayema@gmail.com>
-Date:   Fri, 6 May 2022 21:09:26 +0000
-Message-ID: <CAD_xG_qmkaecRMLoM=8Av+-AOUpQv=7REEM0B2SR_6pXvr6_sQ@mail.gmail.com>
-Subject: Fwd: My name is Warren Buffett, an American businessman.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:643 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4850]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [guidayema[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] dt-bindings: watchdog: improve QCOM compatible parsing
+ for modern chips
+Content-Language: en-US
+To:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Cc:     ~okias/devicetree@lists.sr.ht, Rob Herring <robh@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220111212310.97566-1-david@ixit.cz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220111212310.97566-1-david@ixit.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-My name is Warren Buffett, an American businessman and investor I have
-something important to discuss with you.
+On 11/01/2022 22:23, David Heidelberg wrote:
+> Parse compatible as expected for modern QCOMs.
+> 
+> Fixes warnings as:
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: ['qcom,apss-wdt-sdm845', 'qcom,kpss-wdt'] is too long
+>         From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: Additional items are not allowed ('qcom,kpss-wdt' was unexpected)
+>         From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> 
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+> v2:
+>  - updated compatible list as two compatibles has been added upstream
+>  -> resolve merge conflict
+> ---
+>  .../bindings/watchdog/qcom-wdt.yaml           | 37 +++++++++++--------
+>  1 file changed, 21 insertions(+), 16 deletions(-)
 
-Mr. Warren Buffett
-warren001buffett@gmail.com
-Chief Executive Officer: Berkshire Hathaway
-aphy/Warren-Edward-Buffett
+It seems this patch received three reviews but was not picked up. David,
+do you plan to work on this?
+
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index 16c6f82a13ca..4ff8c59c59ab 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -14,22 +14,27 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - qcom,apss-wdt-qcs404
+> -      - qcom,apss-wdt-sc7180
+> -      - qcom,apss-wdt-sc7280
+> -      - qcom,apss-wdt-sdm845
+> -      - qcom,apss-wdt-sdx55
+> -      - qcom,apss-wdt-sm6350
+> -      - qcom,apss-wdt-sm8150
+> -      - qcom,apss-wdt-sm8250
+> -      - qcom,kpss-timer
+> -      - qcom,kpss-wdt
+> -      - qcom,kpss-wdt-apq8064
+> -      - qcom,kpss-wdt-ipq4019
+> -      - qcom,kpss-wdt-ipq8064
+> -      - qcom,kpss-wdt-msm8960
+> -      - qcom,scss-timer
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - qcom,apss-wdt-qcs404
+> +              - qcom,apss-wdt-sc7180
+> +              - qcom,apss-wdt-sc7280
+> +              - qcom,apss-wdt-sdm845
+> +              - qcom,apss-wdt-sdx55
+> +              - qcom,apss-wdt-sm6350
+> +              - qcom,apss-wdt-sm8150
+> +              - qcom,apss-wdt-sm8250
+> +          - const: qcom,kpss-wdt
+> +      - items:
+> +          - enum:
+> +              - qcom,kpss-wdt
+> +              - qcom,kpss-timer
+> +              - qcom,kpss-wdt-apq8064
+> +              - qcom,kpss-wdt-ipq4019
+> +              - qcom,kpss-wdt-ipq8064
+> +              - qcom,kpss-wdt-msm8960
+
+These do not look correct without appropriate fallback.
+
+> +              - qcom,scss-timer
+>  
+>    reg:
+>      maxItems: 1
+
+
+Best regards,
+Krzysztof
