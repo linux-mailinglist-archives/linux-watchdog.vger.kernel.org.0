@@ -2,62 +2,46 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DED351E8E8
-	for <lists+linux-watchdog@lfdr.de>; Sat,  7 May 2022 19:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C76B51E985
+	for <lists+linux-watchdog@lfdr.de>; Sat,  7 May 2022 21:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353028AbiEGR0V (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 7 May 2022 13:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S231754AbiEGTlF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 7 May 2022 15:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386389AbiEGR0P (ORCPT
+        with ESMTP id S1446892AbiEGTlC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 7 May 2022 13:26:15 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C692733A09
-        for <linux-watchdog@vger.kernel.org>; Sat,  7 May 2022 10:22:26 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id ks9so13269460ejb.2
-        for <linux-watchdog@vger.kernel.org>; Sat, 07 May 2022 10:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zjNtbhJZkCD7x/ngN33A8mLoiActa9teuEHp5A3WQlI=;
-        b=PUJm3rcrmpeRZzIZJJsMojTvU8Sg+/mOTgkl3T+44NGBwBXWjK9VPMMQy8p7BNFHGJ
-         KJE8XQCLrCi9TnjqvCmmveQZQkpATdz5cUX3K3HYxItJCgpZ4PVAhUkRGiiVk9x8ZeCc
-         jiUcPys7YkdAgyDZAf7PKtf31D69QpWHZLFpGamEboDYiIQqoiXNcwoxF0XYAq/UVJOL
-         H06hRxj0tfTeTAvDspSz3Kf0l/eu+8LuabUKHjbBoCmKkyiu0TCj415TvcDOBdDBl61e
-         VNHzdo1GCh+2DkRyvVUj6izcSN4GKKwWwm3jnoJapEJbH/X+4fkXv5b/1ifVhkuofmWN
-         zq/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zjNtbhJZkCD7x/ngN33A8mLoiActa9teuEHp5A3WQlI=;
-        b=7DjMr0n6VEAk9GWlvf8KxyMb3Y1m4sODoJUKfZ9sWLInhzBEjhHxnHJwj3LmNgGon9
-         8RkMwzilyrnXrV7nBS2Z8m8jWJQhLi82LwV/GPb3D7mLEWhSb5DUzzxZSEP0tt3jUxY/
-         mq2rbpL/Aa33ID6sgcMWOZdDSLpEoNoO4XJNwYsWrZKHF5LQHnyXZVNPxF5ICKvpdTPT
-         h9SEkZlOgCdicbhK763Y9ZxBSlrp5JjO+YhXnA4d9ODVN3TISDKiAo4OcQU2ijVvlZcH
-         nz+59eojwF9Tn54IRBXWQRaip6r0NWRBhe+ARLReXqL8Bp2AENZZ2fJ8xgIo/GS8A0IY
-         l1Fw==
-X-Gm-Message-State: AOAM533xFM+M8bK7q+ZleYu2R7Oy/4NmyIAFmEqxRVyvCHPaHG3e5Ga+
-        N8hWGI7Us7qvggwtzrIiJ4ujwQ==
-X-Google-Smtp-Source: ABdhPJwGYRwQnDVRNO9isAjt5BT0cMvMCkDJOfr1Wfy9Egw4c8XZ1rQxI/fKnZvDZ1EDz2Ls3i8z9Q==
-X-Received: by 2002:a17:907:3e92:b0:6f4:7ab4:20a5 with SMTP id hs18-20020a1709073e9200b006f47ab420a5mr8346124ejc.620.1651944145395;
-        Sat, 07 May 2022 10:22:25 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042617ba63a8sm3904995edu.50.2022.05.07.10.22.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 May 2022 10:22:24 -0700 (PDT)
-Message-ID: <9bcdec7e-2b09-56ac-f798-1c3971a87f46@linaro.org>
-Date:   Sat, 7 May 2022 19:22:23 +0200
+        Sat, 7 May 2022 15:41:02 -0400
+X-Greylist: delayed 393 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 07 May 2022 12:37:14 PDT
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A92205FD
+        for <linux-watchdog@vger.kernel.org>; Sat,  7 May 2022 12:37:14 -0700 (PDT)
+Received: from [10.0.0.209] (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id E139C2007F;
+        Sat,  7 May 2022 21:30:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1651951836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cBgrBctusl2KdU51JeeQGLmL27dGU5bCAkAXZtAGtio=;
+        b=hoar1WXaOQHm22+HDxJCebarFpAAnJbBuJsZsiibHs03bj+RCs6LGoSivs1iuoC/SjkQfw
+        4RRSH2f3f0ca7eeZzmFXua2ytpzj8b3OnQ5Y88lJOQ3ceRbDhqm+rljcnhrVtmVDW/R4m+
+        jDiHdtsq2Pp3judabrORYHSGsvM3b4A=
+Message-ID: <dc6a4728-f08d-caa3-29c6-7f4a18e77f11@ixit.cz>
+Date:   Sat, 7 May 2022 21:30:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
 Subject: Re: [PATCH v2] dt-bindings: watchdog: improve QCOM compatible parsing
  for modern chips
 Content-Language: en-US
-To:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -67,13 +51,14 @@ Cc:     ~okias/devicetree@lists.sr.ht, Rob Herring <robh@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220111212310.97566-1-david@ixit.cz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220111212310.97566-1-david@ixit.cz>
-Content-Type: text/plain; charset=UTF-8
+ <9bcdec7e-2b09-56ac-f798-1c3971a87f46@linaro.org>
+From:   David Heidelberg <david@ixit.cz>
+In-Reply-To: <9bcdec7e-2b09-56ac-f798-1c3971a87f46@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,82 +66,101 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/01/2022 22:23, David Heidelberg wrote:
-> Parse compatible as expected for modern QCOMs.
-> 
-> Fixes warnings as:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: ['qcom,apss-wdt-sdm845', 'qcom,kpss-wdt'] is too long
->         From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: Additional items are not allowed ('qcom,kpss-wdt' was unexpected)
->         From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
-> v2:
->  - updated compatible list as two compatibles has been added upstream
->  -> resolve merge conflict
-> ---
->  .../bindings/watchdog/qcom-wdt.yaml           | 37 +++++++++++--------
->  1 file changed, 21 insertions(+), 16 deletions(-)
 
-It seems this patch received three reviews but was not picked up. David,
-do you plan to work on this?
+On 07/05/2022 19:22, Krzysztof Kozlowski wrote:
+> On 11/01/2022 22:23, David Heidelberg wrote:
+>> Parse compatible as expected for modern QCOMs.
+>>
+>> Fixes warnings as:
+>> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: ['qcom,apss-wdt-sdm845', 'qcom,kpss-wdt'] is too long
+>>          From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: watchdog@17980000: compatible: Additional items are not allowed ('qcom,kpss-wdt' was unexpected)
+>>          From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>>
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>> ---
+>> v2:
+>>   - updated compatible list as two compatibles has been added upstream
+>>   -> resolve merge conflict
+>> ---
+>>   .../bindings/watchdog/qcom-wdt.yaml           | 37 +++++++++++--------
+>>   1 file changed, 21 insertions(+), 16 deletions(-)
+> It seems this patch received three reviews but was not picked up. David,
+> do you plan to work on this?
+>
+>> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> index 16c6f82a13ca..4ff8c59c59ab 100644
+>> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> @@ -14,22 +14,27 @@ allOf:
+>>   
+>>   properties:
+>>     compatible:
+>> -    enum:
+>> -      - qcom,apss-wdt-qcs404
+>> -      - qcom,apss-wdt-sc7180
+>> -      - qcom,apss-wdt-sc7280
+>> -      - qcom,apss-wdt-sdm845
+>> -      - qcom,apss-wdt-sdx55
+>> -      - qcom,apss-wdt-sm6350
+>> -      - qcom,apss-wdt-sm8150
+>> -      - qcom,apss-wdt-sm8250
+>> -      - qcom,kpss-timer
+>> -      - qcom,kpss-wdt
+>> -      - qcom,kpss-wdt-apq8064
+>> -      - qcom,kpss-wdt-ipq4019
+>> -      - qcom,kpss-wdt-ipq8064
+>> -      - qcom,kpss-wdt-msm8960
+>> -      - qcom,scss-timer
+>> +    oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - qcom,apss-wdt-qcs404
+>> +              - qcom,apss-wdt-sc7180
+>> +              - qcom,apss-wdt-sc7280
+>> +              - qcom,apss-wdt-sdm845
+>> +              - qcom,apss-wdt-sdx55
+>> +              - qcom,apss-wdt-sm6350
+>> +              - qcom,apss-wdt-sm8150
+>> +              - qcom,apss-wdt-sm8250
+>> +          - const: qcom,kpss-wdt
+>> +      - items:
+>> +          - enum:
+>> +              - qcom,kpss-wdt
+>> +              - qcom,kpss-timer
+>> +              - qcom,kpss-wdt-apq8064
+>> +              - qcom,kpss-wdt-ipq4019
+>> +              - qcom,kpss-wdt-ipq8064
+>> +              - qcom,kpss-wdt-msm8960
+> These do not look correct without appropriate fallback.
 
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 16c6f82a13ca..4ff8c59c59ab 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -14,22 +14,27 @@ allOf:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - qcom,apss-wdt-qcs404
-> -      - qcom,apss-wdt-sc7180
-> -      - qcom,apss-wdt-sc7280
-> -      - qcom,apss-wdt-sdm845
-> -      - qcom,apss-wdt-sdx55
-> -      - qcom,apss-wdt-sm6350
-> -      - qcom,apss-wdt-sm8150
-> -      - qcom,apss-wdt-sm8250
-> -      - qcom,kpss-timer
-> -      - qcom,kpss-wdt
-> -      - qcom,kpss-wdt-apq8064
-> -      - qcom,kpss-wdt-ipq4019
-> -      - qcom,kpss-wdt-ipq8064
-> -      - qcom,kpss-wdt-msm8960
-> -      - qcom,scss-timer
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - qcom,apss-wdt-qcs404
-> +              - qcom,apss-wdt-sc7180
-> +              - qcom,apss-wdt-sc7280
-> +              - qcom,apss-wdt-sdm845
-> +              - qcom,apss-wdt-sdx55
-> +              - qcom,apss-wdt-sm6350
-> +              - qcom,apss-wdt-sm8150
-> +              - qcom,apss-wdt-sm8250
-> +          - const: qcom,kpss-wdt
-> +      - items:
-> +          - enum:
-> +              - qcom,kpss-wdt
-> +              - qcom,kpss-timer
-> +              - qcom,kpss-wdt-apq8064
-> +              - qcom,kpss-wdt-ipq4019
-> +              - qcom,kpss-wdt-ipq8064
-> +              - qcom,kpss-wdt-msm8960
+Yes the situation there isn't optimal and I'm afraid I cannot solve it 
+in scope of this change.
 
-These do not look correct without appropriate fallback.
+Previously I was thinking about also merging MSM timer into this 
+binding, which shares the compatible, but uses different driver. Sadly, 
+currently don't have a time for it (have some WIP patch locally, if 
+anyone interested to take a look).
 
-> +              - qcom,scss-timer
->  
->    reg:
->      maxItems: 1
+I'm (re-)sending v3 with another S-off, but it solves only warnings 
+described in commit message.
 
+David
 
-Best regards,
-Krzysztof
+>
+>> +              - qcom,scss-timer
+>>   
+>>     reg:
+>>       maxItems: 1
+>
+> Best regards,
+> Krzysztof
+
+-- 
+David Heidelberg
+Consultant Software Engineer
+
+Matrix: @okias:matrix.org
+
