@@ -2,74 +2,84 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D2D520A8B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 May 2022 03:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2308C520B45
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 May 2022 04:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbiEJBTj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 9 May 2022 21:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
+        id S234766AbiEJCfd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 9 May 2022 22:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbiEJBTj (ORCPT
+        with ESMTP id S234713AbiEJCfc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 9 May 2022 21:19:39 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC369FF1;
-        Mon,  9 May 2022 18:15:42 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-edeb6c3642so16691283fac.3;
-        Mon, 09 May 2022 18:15:42 -0700 (PDT)
+        Mon, 9 May 2022 22:35:32 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245CA50047;
+        Mon,  9 May 2022 19:31:36 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e93bbb54f9so16788179fac.12;
+        Mon, 09 May 2022 19:31:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=22X08gP2t/xBpwhITJ9mR4vQg1Gu37dtwLleQ2erYOo=;
-        b=StW4qPkcK9RbvFnzZLoWdVk3jigBeXgmsH12XrwYRbOjDYdRC71zb7O9NYfkCaM4mE
-         WYWDNUYrIZ2+eE/fUat9FfFz3K4H9H94Xo3cxHprfDf1VbwjCMb6K/Ca5Ot8YKobnGHQ
-         D6NlWYfCyScO3r3OQCSJbJFDJxiKsXGkl8hw7bAfsKqXazn/0wUViFDfc4bSDRyEqSnT
-         9F/ETu4p3mjRsBR5fD2J36IjYzJXjb1XiGJgWqQjBsmYLWmMoBg9boataIWLQTPfKuk7
-         ZobRb3V3LKRT2KWz3sCe6JQnnx38GTcvya1w5LnUivqv/dNBJ96B6f68Pvi/dhpj36pR
-         5msw==
+        bh=WQ4ekUdvIEeuhghpikQ1JPVbw9/3bfIzB4anGXihbmA=;
+        b=Ad5rH4ZCG1dSL6ZgrZmr4V5ghKezH1r/diKrjXYbe2YHw76OlU0K4LcnOsRp97woni
+         y+Cl15CKjwB1DMvdRVqa8S3gu6ognXfTrPx1Mf9Bf/NWH9s/XhyONYRbDO6RdIgrjalw
+         PWSiTj4Wu4vSv6OomeYhjQRcoxgKlmA3lb+b5YsyunvhqX9ixBlI7aCiTWW7aMVhcYIl
+         XOa9J5Z98aP6VtU6jvGVFFaIo04iNV5rsw8scaYTyA9NtNQoYNhpCrcQoGYXJOg/d0TA
+         zs63UmrzybGb0rrZRmOB9rtd49FO8AEsYgGuniLQ9ofCbCXeUYf9O+HKM/fG0C0egTFh
+         iaJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=22X08gP2t/xBpwhITJ9mR4vQg1Gu37dtwLleQ2erYOo=;
-        b=sqqp/GlY4um1d3+EZ/ycPetZViVk5g9onZEIASKoJZUQyrd2iDDZ9NaQmo5Ta6K9jf
-         AW8MF9SyGKrBbTTaL3ionUqaNDF9pOzVQbdMiRH5g8djrat/PMuJY7MaS2jOR1788+lt
-         L8txW1254DuE/GR0YM8ibd+mNkci1k+RvtAxVnMFO7OehWE5BArL+jy1dvNcbGs/ioyQ
-         0tJiDcqSihcvE9Dmyhmj+vClm7s8iKAQa09sWkHghTsKQMIWi7+GUJdjBn+423vShdoJ
-         1AMNA+pZTrrTYH2i70gNNRnJAwP/2o7VOMfO7mJF7/eV7DOsZbjNvU/ZEXnTHtHA/eUD
-         IdFw==
-X-Gm-Message-State: AOAM5332IEq3vvpxMG82T/04fgo17uJNZJaQq7clYdbjbcaQwHplTib7
-        IvKewubxb50lXLzECWROdwg=
-X-Google-Smtp-Source: ABdhPJycVqB8+h80gi3HgKQjt7NAWhCSBlm+8crCvvvi9tnnLb0Ge/aQTD0/Mu8bEq4aENmTcvSI0Q==
-X-Received: by 2002:a05:6870:a1a0:b0:e2:9331:cc30 with SMTP id a32-20020a056870a1a000b000e29331cc30mr8525902oaf.155.1652145342056;
-        Mon, 09 May 2022 18:15:42 -0700 (PDT)
+        bh=WQ4ekUdvIEeuhghpikQ1JPVbw9/3bfIzB4anGXihbmA=;
+        b=ZYgNb5+ERN8ZhEvVBzqssjIhZMN2z/sS6vVIBrlsXZhA1Q1EHcKtQEGrCjusbpz3ks
+         1PMcGVGBceWoPLOiihYpCgMD45sg3mMwhi7u/J2FJatUabEY/8DGyiF5Ek98OEbAmqyR
+         KhB/OdQRopN8yqEK9JktniWnQ5lNEaSPVj0WqeMv8GAc730phcxSIFYGU+T3vLmD9ni/
+         XxTYE+iTA62xWw+zrSg62sW73yidAyD+60xE6cTUI9wkKrZarhOCXaPOUS9Ld4RvfMsZ
+         daoA0wyp6TANdkSlaxffsSPn2/oK6d0b691lNM7pyummmgOJ8chgwZ1QUkJUw8kl6ZKb
+         HYsw==
+X-Gm-Message-State: AOAM530iTnjoZJGIopPRAkoS+lY2sgFmjuJuAp3gxeAWfhRKPpQaA+tw
+        6KLfahY4tyuc9c3qxaxhzcg=
+X-Google-Smtp-Source: ABdhPJzCPsT/AkGUXnABu+k3dZsWeDaF9p1l07PTyX4dGljF669fkFfK7sPIb7GyrRglVmor+VG5KQ==
+X-Received: by 2002:a05:6870:e40b:b0:ed:a6ac:4ae8 with SMTP id n11-20020a056870e40b00b000eda6ac4ae8mr8698314oag.71.1652149895444;
+        Mon, 09 May 2022 19:31:35 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x35-20020a4a97e6000000b0035eb4e5a6d2sm5516651ooi.40.2022.05.09.18.15.40
+        by smtp.gmail.com with ESMTPSA id f22-20020a056870211600b000e686d13876sm4973331oae.16.2022.05.09.19.31.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 18:15:41 -0700 (PDT)
+        Mon, 09 May 2022 19:31:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e3c78109-8b5e-efe6-b817-2f62c8bc8b1f@roeck-us.net>
-Date:   Mon, 9 May 2022 18:15:39 -0700
+Message-ID: <6c22fe1c-03d9-3a7e-26e8-463b989a02b7@roeck-us.net>
+Date:   Mon, 9 May 2022 19:31:31 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH] Watchdog: sp5100_tco: Lower verbosity of disabled
- watchdog hardware
+Subject: Re: [PATCH v3 3/7] watchdog: npcm: Enable clock if provided
 Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jerry.Hoemann@hpe.com
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, ionut_n2001@yahoo.com
-References: <20220509163304.86-1-mario.limonciello@amd.com>
- <b394bfcf-9f0d-b27c-5bc0-3d628de98755@roeck-us.net>
- <20220510003339.GA2788@perchik.americas.hpqcorp.net>
- <b3e1e442-50ef-abd2-5dc8-1c9943ff34ca@amd.com>
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20220508194333.2170161-1-j.neuschaefer@gmx.net>
+ <20220508194333.2170161-4-j.neuschaefer@gmx.net>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <b3e1e442-50ef-abd2-5dc8-1c9943ff34ca@amd.com>
+In-Reply-To: <20220508194333.2170161-4-j.neuschaefer@gmx.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,47 +93,105 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/9/22 17:37, Mario Limonciello wrote:
-> On 5/9/22 19:33, Jerry Hoemann wrote:
->> On Mon, May 09, 2022 at 03:55:54PM -0700, Guenter Roeck wrote:
->>> On 5/9/22 09:33, Mario Limonciello wrote:
->>>> If watchdog hardware has been disabled, currently the kernel driver
->>>> will show at err level during probe:
->>>>
->>>> "Watchdog hardware is disabled"
->>>>
->>>> This is unnecessarily verbose as there is already a -ENODEV returned.
->>>> Lower the level to debug.
->>>
->>> Is it ? Without this message, a user may try to load the driver,
->>> get an error message, and have no idea why the driver was not
->>> enabled even though the hardware exists. If anything , -ENODEV
->>> is less than perfect. Unfortunately there does not seem to be
->>> a better error code, or at least I don't see one.
->>>
->>> Guenter
->>
->> Coincidentally, I was looking at this code on Friday.
->>
->> Some HPE Proliant servers are disabling the AMD WDT in BIOS.  However,
->> sp5100_tco was still getting configured.  It was the lack of
->> "Watchdog hardware is disabled" message that helped clue us into
->> what was going on (Linux is enabling the WDT anyway.)
->>
->> So, I liked that this message exists.
->>
->> I'll send an RFC patch for this other issue as it orthogonal.
->> But just wanted to point out the message is useful.
+On 5/8/22 12:43, Jonathan Neuschäfer wrote:
+> On the Nuvoton WPCM450 SoC, with its upcoming clock driver, peripheral
+> clocks are individually gated and ungated. Therefore, the watchdog
+> driver must be able to ungate the watchdog clock.
 > 
-> I personally don't have a problem blacklisting on a system I encounter this. I take anything at "err" level as there is a firmware problem or a hardware problem that should be looked at.
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
 > 
-> As the message is genuinely useful as Jerry points out how about meeting in the middle at info or notice?
+> v3:
+> - Add enable/disable calls to npcm_wdt_restart handler
+> - Not applied due to the above change:  Acked-by: Guenter Roeck <linux@roeck-us.net>
 > 
+> v2:
+> - https://lore.kernel.org/lkml/20220429172030.398011-4-j.neuschaefer@gmx.net/
+> - Add clk_disable_unprepare call, suggested by Guenter Roeck
+> 
+> v1:
+> - https://lore.kernel.org/lkml/20220422183012.444674-4-j.neuschaefer@gmx.net/
+> ---
+>   drivers/watchdog/npcm_wdt.c | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
+> index 28a24caa2627c..a1240a906ef2a 100644
+> --- a/drivers/watchdog/npcm_wdt.c
+> +++ b/drivers/watchdog/npcm_wdt.c
+> @@ -3,6 +3,7 @@
+>   // Copyright (c) 2018 IBM Corp.
+> 
+>   #include <linux/bitops.h>
+> +#include <linux/clk.h>
+>   #include <linux/delay.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/kernel.h>
+> @@ -43,6 +44,7 @@
+>   struct npcm_wdt {
+>   	struct watchdog_device  wdd;
+>   	void __iomem		*reg;
+> +	struct clk		*clk;
+>   };
+> 
+>   static inline struct npcm_wdt *to_npcm_wdt(struct watchdog_device *wdd)
+> @@ -66,6 +68,9 @@ static int npcm_wdt_start(struct watchdog_device *wdd)
+>   	struct npcm_wdt *wdt = to_npcm_wdt(wdd);
+>   	u32 val;
+> 
+> +	if (wdt->clk)
+> +		clk_prepare_enable(wdt->clk);
+> +
+>   	if (wdd->timeout < 2)
+>   		val = 0x800;
+>   	else if (wdd->timeout < 3)
+> @@ -100,6 +105,9 @@ static int npcm_wdt_stop(struct watchdog_device *wdd)
+> 
+>   	writel(0, wdt->reg);
+> 
+> +	if (wdt->clk)
+> +		clk_disable_unprepare(wdt->clk);
+> +
+>   	return 0;
+>   }
+> 
+> @@ -147,9 +155,15 @@ static int npcm_wdt_restart(struct watchdog_device *wdd,
+>   {
+>   	struct npcm_wdt *wdt = to_npcm_wdt(wdd);
+> 
+> +	if (wdt->clk)
+> +		clk_prepare_enable(wdt->clk);
+> +
+>   	writel(NPCM_WTR | NPCM_WTRE | NPCM_WTE, wdt->reg);
+>   	udelay(1000);
+> 
+> +	if (wdt->clk)
+> +		clk_disable_unprepare(wdt->clk);
+> +
 
-I really don't want to change it. It does point out a serious issue,
-intentional or not. Anyone concerned or disturbed about the message
-can easily block the module from loading, and others may rely on it.
- From driver perspective it _is_ an error, and it should be treated
-as such.
+I am trying to understand why you stop the clock here.
+If the watchdog didn't reset the system by now, for whatever reason,
+you explicitly don't want it to reset the system ? If so, please add
+a comment describing the reason for stopping the clock here.
 
+Thanks,
 Guenter
+
+>   	return 0;
+>   }
+> 
+> @@ -191,6 +205,10 @@ static int npcm_wdt_probe(struct platform_device *pdev)
+>   	if (IS_ERR(wdt->reg))
+>   		return PTR_ERR(wdt->reg);
+> 
+> +	wdt->clk = devm_clk_get_optional(&pdev->dev, NULL);
+> +	if (IS_ERR(wdt->clk))
+> +		return PTR_ERR(wdt->clk);
+> +
+>   	irq = platform_get_irq(pdev, 0);
+>   	if (irq < 0)
+>   		return irq;
+> --
+> 2.35.1
+> 
+
