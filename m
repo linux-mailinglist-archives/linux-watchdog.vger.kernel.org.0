@@ -2,115 +2,157 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589215220BB
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 May 2022 18:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB7D5220DC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 May 2022 18:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347140AbiEJQKY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 10 May 2022 12:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S243286AbiEJQT1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 10 May 2022 12:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347202AbiEJQJ7 (ORCPT
+        with ESMTP id S1347160AbiEJQTY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 10 May 2022 12:09:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0C32670B7;
-        Tue, 10 May 2022 09:05:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652198737; x=1683734737;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=knKoDSX6XXVi1UoUVL9DwH66JaiGwiaJztWXaAd6inc=;
-  b=XryxLngxqZCXypeKsueZ0AsnkNZ++ArGYWUAOhsrAy7R5n23abIRRjsZ
-   eg8YLcC1nP95DD0AJhuZ6+PC96L7lwOT25Yg5aBDE3A4+Q+7473Lemrpj
-   wJg5SgCrPj44Tu3yLaFimmfHpNdKdbEDvqaTluegaCZ4Tpif+3XcDLqs1
-   o07bfPLT9y7cj+8MXp6TMDAb+AHJ+AcXXHbMZ8A547sQnB5Kzy8ECoqbH
-   wdjeOrRCHPKHP1s4weEy0OaWXrHCjmBeh6i8cOvU+UilOmuMANkGU8nQo
-   iNH3hxghXgrLoIZsCQjqPE0K/JY+u6/jbcAWwr11emAJQ1E/UF98xpn+R
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="269558159"
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="269558159"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 09:05:25 -0700
-X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="738765503"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 09:05:22 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1noSMR-00EOjV-12;
-        Tue, 10 May 2022 19:05:19 +0300
-Date:   Tue, 10 May 2022 19:05:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Subject: Re: [PATCH 0/2] simatic-ipc additions to p2sb apl lake gpio
-Message-ID: <YnqNPpIKFAoLegMr@smile.fi.intel.com>
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220308193522.26696-1-henning.schild@siemens.com>
- <YnJ2tYjCpJi7yc4j@smile.fi.intel.com>
- <20220504171951.0d569632@md1za8fc.ad001.siemens.net>
- <20220510173053.10a14aeb@md1za8fc.ad001.siemens.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510173053.10a14aeb@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 10 May 2022 12:19:24 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ACB270CBD
+        for <linux-watchdog@vger.kernel.org>; Tue, 10 May 2022 09:15:26 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24AFpsGR028407;
+        Tue, 10 May 2022 16:15:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=X7Trc+qJoV8eKz3LAaHRwCxqbw7yQK/52/lEfZijh0c=;
+ b=M/HX8R5aYkvDiOl+dOI1mN3EPaiRKOtiL/bEQaU9540KzjaCIjzg7nudKSBZCdwXhzBX
+ +22ZNgPBGfdF+rF9I1R0RjEvc9Rs9l85PuRK3yA+LnPvzL0GOJnYdAXxRQ7fE2ShQAXC
+ HogcrRqBDLNttq/qs9hj0NRxk42WUEkIXcEh7X7BlNseqtNdIQ0OS+6AocAi721+Dard
+ O0hhTvBt1ZCCrm27nBdFxZJs+6L/NH1uwAa/Dapho13kfBX62dkCO2JStvWigqjGq4Lt
+ YjHlV+auw6kMrImivTW2tkJVEyeO6Nwre1C8zUohBtej1Abk0WxfGpcQ/yNNXd+ILD0v RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fyrvev5ka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 16:15:06 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24AFs8rE032659;
+        Tue, 10 May 2022 16:15:06 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fyrvev5k3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 16:15:06 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24AFx1vD016589;
+        Tue, 10 May 2022 16:15:05 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01dal.us.ibm.com with ESMTP id 3fwgdakmhx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 May 2022 16:15:05 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24AGF3qG25231634
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 May 2022 16:15:03 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1856DB2068;
+        Tue, 10 May 2022 16:15:03 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 84077B2065;
+        Tue, 10 May 2022 16:15:02 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.24.13.37])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Tue, 10 May 2022 16:15:02 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [RFC v2 2/2] watchdog: pseries-wdt: initial support for PAPR
+ virtual watchdog timers
+From:   Scott Cheloha <cheloha@linux.ibm.com>
+In-Reply-To: <628a1540-4768-61ca-27e1-b6507cc00086@roeck-us.net>
+Date:   Tue, 10 May 2022 11:15:01 -0500
+Cc:     Tzung-Bi Shih <tzungbi@kernel.org>, linux-watchdog@vger.kernel.org,
+        brking@linux.ibm.com, Nathan Lynch <nathanl@linux.ibm.com>,
+        aik@ozlabs.ru, npiggin@gmail.com, vaishnavi@linux.ibm.com,
+        wvoigt@us.ibm.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E5A89482-D089-4634-9FC0-78464D00F968@linux.ibm.com>
+References: <20220509174357.5448-1-cheloha@linux.ibm.com>
+ <20220509174357.5448-3-cheloha@linux.ibm.com> <YnnPdv+Hh9UEHMu/@google.com>
+ <7D3AFBE4-ECDF-4CBC-9B3F-55AD62C18A3C@linux.ibm.com>
+ <628a1540-4768-61ca-27e1-b6507cc00086@roeck-us.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ukwdz2xUr72KKj0ttvV634c_5g-iACj8
+X-Proofpoint-GUID: Xo_8q3_GRnsRCeEb05GSxlN92RdxgtTa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-10_04,2022-05-10_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 adultscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 mlxlogscore=999
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205100071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, May 10, 2022 at 05:30:53PM +0200, Henning Schild wrote:
-> Am Wed, 4 May 2022 17:19:51 +0200
-> schrieb Henning Schild <henning.schild@siemens.com>:
-> > Am Wed, 4 May 2022 15:51:01 +0300
-> > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > > On Tue, Mar 08, 2022 at 08:35:20PM +0100, Henning Schild wrote:
 
-...
 
-> > > [1]: https://gitlab.com/andy-shev/next/-/tree/topic/p2sb-next
-> > > It would be nice if you can perform another round of testing.
->
-> Just got around to testing this with my patches on top. My stuff will
-> need some more work before i can send again.
->
-> Is this a rebasing branch?
-> With efc7d77ea372 ("EDAC, pnd2: convert to use common P2SB accessor")
+> On May 10, 2022, at 11:04 AM, Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>=20
+> On 5/10/22 08:48, Scott Cheloha wrote:
+>>> On May 9, 2022, at 9:35 PM, Tzung-Bi Shih <tzungbi@kernel.org> =
+wrote:
+>>>=20
+>>> On Mon, May 09, 2022 at 12:43:57PM -0500, Scott Cheloha wrote:
+>>>> +#define SETFIELD(_v, _b, _e)	\
+>>>> + (((unsigned long)(_v) << PPC_BITLSHIFT(_e)) & PPC_BITMASK((_b), =
+(_e)))
+>>>> +#define GETFIELD(_v, _b, _e)	\
+>>>> + (((unsigned long)(_v) & PPC_BITMASK((_b), (_e))) >> =
+PPC_BITLSHIFT(_e))
+>>>=20
+>>> =46rom `./scripts/checkpatch.pl --strict`:
+>>> WARNING: please, no spaces at the start of a line
+>>>=20
+>>>> +#define PSERIES_WDTQL_MUST_STOP 	1
+>>>=20
+>>> =46rom `./scripts/checkpatch.pl --strict`:
+>>> WARNING: please, no space before tabs
+>>>=20
+>>>> +static const struct kernel_param_ops action_ops =3D { .set =3D =
+action_set };
+>>>> +module_param_cb(action, &action_ops, NULL, S_IRUGO);
+>>>=20
+>>> =46rom `./scripts/checkpatch.pl --strict`:
+>>> WARNING: Symbolic permissions 'S_IRUGO' are not preferred. Consider =
+using
+>>> octal permissions '0444'.
+>>>=20
+>>>> +MODULE_PARM_DESC(action, "Action taken when watchdog expires: =
+\"hard-poweroff\", \"hard-restart\", or \"dump-restart\" =
+(default=3D\"hard-restart\")");
+>>>=20
+>>> The line exceeds 100 columns.
+>> I was under the impression that strings were an exception to the
+>> line-length rule. Is that not the case?
+> You can use
+>=20
+> MODULE_PARM_DESC(action,
+> 		 "Some text");
 
-It's rebased over and over. I just pushed the same version I have sent as v5.
+The line is still over 100 columns if I do this.
 
-> I am seeing problems while booting ... things do work but still error
-> messages which probably should not be there.
+I can shrink the line by removing the valid inputs from the string if =
+100 columns
+is a hard rule.
 
-It's okay. This is not related to my stuff, it's a new series from Marc which
-enables that (harmless) warning.
+If so, where should I document the valid inputs instead?
 
-> [    2.217506] broxton-pinctrl apollolake-pinctrl.1: Failed to attach ACPI GPIO chip
-> [    2.217542] gpio gpiochip1: (apollolake-pinctrl.1): not an immutable chip, please consider fixing it!
-> [    2.217771] i801_smbus 0000:00:1f.1: Failed to enable SMBus PCI device (-22)
-> [    2.217788] i801_smbus: probe of 0000:00:1f.1 failed with error -22
-> [    2.221460] broxton-pinctrl apollolake-pinctrl.2: Failed to attach ACPI GPIO chip
-> [    2.221482] gpio gpiochip2: (apollolake-pinctrl.2): not an immutable chip, please consider fixing it!
-> [    2.222010] broxton-pinctrl apollolake-pinctrl.3: Failed to attach ACPI GPIO chip
-> [    2.222023] gpio gpiochip3: (apollolake-pinctrl.3): not an immutable
-> chip, please consider fixing it!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Is Documentation/watchdog/watchdog-parameters.rst a better place for =
+them?
 
