@@ -2,78 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB308520C23
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 May 2022 05:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4909F521ED9
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 May 2022 17:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbiEJDkr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 9 May 2022 23:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S243484AbiEJPhF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 10 May 2022 11:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234806AbiEJDkU (ORCPT
+        with ESMTP id S1345886AbiEJPfe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 9 May 2022 23:40:20 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAB02A153D
-        for <linux-watchdog@vger.kernel.org>; Mon,  9 May 2022 20:34:30 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id y14-20020a9d460e000000b00605ee347da1so11405977ote.8
-        for <linux-watchdog@vger.kernel.org>; Mon, 09 May 2022 20:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=2O+6ORXtQ1rE3bkyu0by1/dtdeF7ZnVpbD53h8NS3og=;
-        b=lLE9XAu8hmSjSUr073u4nWsZyeJ5Lu/9U5HfpJW3QE7OiZEo3l/Up8MKO0VHiLKeei
-         E3xIXpSeqvHwjxIzUMtoXyYSdKY142adtQiPSGp3Bozb0ZpE9q5ORALUahMz7/SGiHhM
-         FEVpuWP+ybkbJdEXfllg3GvDXsKpogQABTA58u0lhLN69EJ1w3IAUfMp9aFVmyTtXyGW
-         aNWbrJoISWCRDHLCtk1yYJbekfij1TEUUst076dsBsqIPDMuINhc6sbSAEQS2LKXRay3
-         uMsVHQISnCmGVLbaTSj7ROsrZI+ZbwGP7gxwev5WXvj4Mrk9SF3UhfK6QPWVL58DndUs
-         F0+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=2O+6ORXtQ1rE3bkyu0by1/dtdeF7ZnVpbD53h8NS3og=;
-        b=5a96SybwUuXNyPXBfqeyivk0y0HMrN4ITwPdG8gv6M9so4NxGTX0byWnA60O1RPtl5
-         xGONCiDXnECmlS8e9n4j5l2bj13FAa+MM0PcCrR7eo+/zIcYc9QLbvMa4QjqDswdGVad
-         2d0C6VdA4/UjvzsNenePz0vbh4gRIrceLXGdq3OA8Na3TYU3RXcQK0lOWN0Y9YDtwU8A
-         udJRAvySp4e7TO/O4QhZJBEyfGPuEujRpbrD/eJKz6H5k9HMahsV6VTvN3JRNy77HR+A
-         Hw49KjGm+vdxtFYrP2gn5eI7fv/FgXvSPYUXHRKaGZCpbB+EfXrrsD7UbfTMyiHjLXYD
-         chiQ==
-X-Gm-Message-State: AOAM533VMdfZvZ+Ip2iR58KqcAoYDGK8ImqUv8eObNk4K0BrMY7LGg7h
-        ivd3l88yQSHsI5S0H0DNtvg=
-X-Google-Smtp-Source: ABdhPJxMryiykP+Gz447iAPaGqEQ1Jf7MJG3dOqYdzQpk6ysFZokPIC+glktCdYMwhH1CRYxxpHLOg==
-X-Received: by 2002:a05:6830:1af0:b0:605:63c0:3d6f with SMTP id c16-20020a0568301af000b0060563c03d6fmr6866482otd.5.1652153669762;
-        Mon, 09 May 2022 20:34:29 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y23-20020a0568301d9700b006060322126esm5292584oti.62.2022.05.09.20.34.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 20:34:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <052b9903-e405-f6d0-444c-24d22bb85ad4@roeck-us.net>
-Date:   Mon, 9 May 2022 20:34:26 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Tzung-Bi Shih <tzungbi@kernel.org>,
-        Scott Cheloha <cheloha@linux.ibm.com>
-Cc:     linux-watchdog@vger.kernel.org, brking@linux.ibm.com,
-        nathanl@linux.ibm.com, aik@ozlabs.ru, npiggin@gmail.com,
-        vaishnavi@linux.ibm.com, wvoigt@us.ibm.com
-References: <20220509174357.5448-1-cheloha@linux.ibm.com>
- <20220509174357.5448-3-cheloha@linux.ibm.com> <YnnPdv+Hh9UEHMu/@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC v2 2/2] watchdog: pseries-wdt: initial support for PAPR
- virtual watchdog timers
-In-Reply-To: <YnnPdv+Hh9UEHMu/@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 10 May 2022 11:35:34 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60069.outbound.protection.outlook.com [40.107.6.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2773D3B563;
+        Tue, 10 May 2022 08:31:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ls8T2pj67LzSz5d8n7AkvSbnf5xF1hwnL0N5a1P2WH67MQFNhl4sXW5xJeVqzT+w6Ce00Mvfjex4OsRQyKjW+AsB9x9jVcxF9M0KOLHaRXLRHLFGBdMhWgk4vWkmD9V1VxZW6RB66EQwSM4JdijgINpX3ApHGq2sVeKVuU7lvOdbnCtyJZMcgRXjBYuLBl8kTAWfEntvR4LSyc5bDx1M5XgX9yfQ+oohzyhCqWhwooWpEf26abbZvNVbuKbo2SGIkGMT5Ch9pqENF3KhzPa0RMmuh3A4lMeLw7PcK3EaKrqtg8o+nOk/W1fE5p33W6SUsBK6Y74DJdpQSyblogtFDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cw9tzlEbdLAGigUdea9n8mEXoSc7XvrBSZtwqGdeoiA=;
+ b=h05G73e4MU3kicU2NF38bvpM2oqgVTaMTHK2hrt+lgkH6d0m1sCNe+rJoxujs2OPvsUXSVFobs3PnFF+hyQ0jujTbjEHdONngYSGf2zBfv1RUCKFPjXDmzMR2rJojLjzxEnVb1FePREdWeMAuTmk/lypynx800jbWhkdzPD/FuUwNdf5whSoWkNofDErF/pCMjiyB292ThHVJb6mSpBlxLf1GJKbtXpjZhagAsi9bXb0VZoZ1u8xukhnEtzCxRXdDVEpS+x1xAHdDuR4xAqlgyD/xfuWM3zdbv+0aBZxYSLcF1XbPbhnZONsQEHAqlCFXmjBSKNs5GE9YPJ8El6iPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Cw9tzlEbdLAGigUdea9n8mEXoSc7XvrBSZtwqGdeoiA=;
+ b=peToJ4GyMeBysPV/gRc/Fgf/+8QgpuEIW1bEgg0fHID1JrmcFo38HdOMGoOL1CS9+UTNrwooKhmNcpLO1jhBawBt+iv3TroRjqNrNVo71LhYJ2ydOnKxFPHbbQySxQPRXxBjv9egN3772mGwOUUkkOKsoite2IfKT1lboUMe3zptK7A7skgljXbK4VLQardvXzaGAT1dW5oWAR/QXH8r3jYphi1JVfV05ynO/V8ZVm12cizxxdA/NmB6t+RpLSkAF98aME83QDA/zHGxVYKbDmEzsL0pT7/thBIEDdKLXUrsPecmzh40a+PZsvZir3zBDhtbTfiTQU1R8HTKt72QIQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
+ by AM0PR10MB2339.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:dc::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Tue, 10 May
+ 2022 15:30:57 +0000
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::a852:a1:7888:f20f]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::a852:a1:7888:f20f%5]) with mapi id 15.20.5227.023; Tue, 10 May 2022
+ 15:30:57 +0000
+Date:   Tue, 10 May 2022 17:30:53 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+Subject: Re: [PATCH 0/2] simatic-ipc additions to p2sb apl lake gpio
+Message-ID: <20220510173053.10a14aeb@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220504171951.0d569632@md1za8fc.ad001.siemens.net>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+        <20220308193522.26696-1-henning.schild@siemens.com>
+        <YnJ2tYjCpJi7yc4j@smile.fi.intel.com>
+        <20220504171951.0d569632@md1za8fc.ad001.siemens.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-ClientProxiedBy: AM6P193CA0101.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:209:88::42) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:269::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3b264c0f-0eda-4589-ad2d-08da329a1445
+X-MS-TrafficTypeDiagnostic: AM0PR10MB2339:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR10MB23398B557B4BEF80D1ED15D385C99@AM0PR10MB2339.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GbLJ5XP3FO5AZV3RaSVowX6AYz/dGNPkaFuKpi/BCJfeF5o3lLZwhtQq9WHlF80cIf42NpJdfxlGTvWTKLOjglURXQSRJbPBN2MNh55zZjjOsPFJoo7kJOegeQEALAvWFsW8OMbNadCFaTN3jcCRm2ZcAXat1yh5GlqbFy5G9KoQmVV6Pt0rdihWgOOxtb1rYmD/osUns/S+0lXDgXoVTg+w2npS8rIe1gJn4LHtg5uB/u5nAmK7uoOJkVlq029LRNnpdHRIdgu0aEZ/SA4j8XTjwGieJEh63Ameu7Rz7FzBAj/AycRy5oUQCSq818HpIPAnJQnoLzy5V+IALKG0K0rl2FnQxupK4JgVIKicY+6Zr1yTftNTaxAIoVKBIA/tgjqL58Cw6vfAeuLOojjE01XN1W6vF3mBPJ5XqLJwyEz5XiB01gLvmBN65Q9LF+gPW1FYxf3GHSzmnRopevyPxnqiQmkA6HpGFLf8pU0d5yoHjd6zkU/DnxARFA8JebIS1btW2IgW3aHcK5mZ6zPqm2syd9OmefXg/g2OfKvRg744866u1hxV67Pvy5FBiU3moqTKPG+ljgPwHW+gbAM3NwwgFGNBOUKDtoqkDbCS8yLL3l3SpXYpxg+oSWJQTtu2uyQPG9rxYjWgVWV2fsSYydzPIA3VOMzgiphTutO3dRTYX1bFG7B7LzQ32d3ybWt7bRG+bs7jKfXjc9kyKSxkwI7bQsQIX9KUr+mGFqfoNPE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(82960400001)(1076003)(6512007)(107886003)(6506007)(26005)(38100700002)(9686003)(54906003)(66556008)(66946007)(66476007)(2906002)(4326008)(8676002)(186003)(316002)(6916009)(44832011)(966005)(6486002)(6666004)(86362001)(83380400001)(8936002)(5660300002)(508600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kvD55vauXx+L+SpeqlC/jHw1rvOXkYawCt3UEVlaEluNqm8TChGuTH3ir/Yq?=
+ =?us-ascii?Q?zgDkgb9rXXCJT/ydzYSVPNWT8mXOZ8aQ/0HvYxXrMI+aCwieEi2RqOpXQb+L?=
+ =?us-ascii?Q?mG7AoaSEUnwyc010wolBaN60hMaPXyccgygqCWMTE7vfi6P6cTdeK1ofVnT3?=
+ =?us-ascii?Q?SR5FjZpVwdi++QnNwIuTi8cm3RkdLsgbaKHiLH625RZZGg+eYkg6fYt1dc63?=
+ =?us-ascii?Q?BOQUdBhP4NJkGDiZX6kMe+HATN+VP+pP//DNPBX8JkVy8DzuhGMT0Araj/eX?=
+ =?us-ascii?Q?nBSja2R07Mm6tMYXeqVDpAG5DkZWIGDPKjyxWqCcz3yZBrEgh6KbVymci7QQ?=
+ =?us-ascii?Q?i84SLvDKx9Y70GtBsgpTW8Nk02X4gEJEL2XKZ796MDRU6JcDJw6yoyvuqJ3g?=
+ =?us-ascii?Q?9JeyRiufiolFUSJX3q4NQT3iuHdr1ZrNNJ7V+yW2r15lhtourd+VlA+ZFhTi?=
+ =?us-ascii?Q?8gI0aK+oEt/7ZWfLNYe6/WFdg4E5zzEoY4V+2OnK2KJRGVYQsQTNMwOUnMQb?=
+ =?us-ascii?Q?/dPBbaoGnI3L7ejnG0n8jPnD6XdvhJ5mb+kT29a0UZRXZ01iQ1Tg6+MNTXcM?=
+ =?us-ascii?Q?9oyi1Np2ZdSuY3ite33JyidC3lsaXmuit1pVAEAVmL0LE609WjjBp0fsLvhY?=
+ =?us-ascii?Q?l59nrWvLRvRDWZr84xcSxNmVv/B+TbQpLPOuFJQhVjcJ8IG/XvjLP+sej42A?=
+ =?us-ascii?Q?UsOh87Puikza8uLtBCpTabG86+RANg9Xik6hFw4c+rJ1OVCDUCKgTvSmFu6h?=
+ =?us-ascii?Q?BJzShHwfD5JM2XOakpcm8NIE5wrT8xKj025NwdsOMYNNuhGxE5/1XCcUvSTl?=
+ =?us-ascii?Q?T4RxUSU6Jdu9qQBeKvZIkicwjQKoBIGzle8lDhpEFL4pi9u4IQBk7xbZM5vz?=
+ =?us-ascii?Q?s5Nnk4BdKrBgcGmVC86xf55/gBAcn2OM1zfspaVRLNoGzehOpqchQEHcfRvv?=
+ =?us-ascii?Q?JomyRhK7EhJBYJCIO3wDZiLTyqG8Hl1yRMQjbbBPwJVmXSoVrmiHnnkxtYdp?=
+ =?us-ascii?Q?3EpKHuvkvGbGcf8ch6Dx5bRu84jAdSQxLgpDplJErakfp9Ha7h9Pup+jbgKw?=
+ =?us-ascii?Q?UW8InN9eH20rR+BVN0Ga0NzRihTBem15CSkNkKvqpmyBMF3N8JMw4c6QjAdP?=
+ =?us-ascii?Q?R81UGGGs7j8FcXqcDyTmhBVrwBIsNC9b8nwl/UYPWVg/iHERYRyh7sSJbhS2?=
+ =?us-ascii?Q?IjWIvzv2S6Psf1gO7k3omjAm0L81NpJS9Ihw7rLiAP/aXg33ixs9p8Q/T/da?=
+ =?us-ascii?Q?uB8Jd3W8d327TSxFdky3hhgZ7IkVYvPYA81wT9Vzz3fFaHEDouWEjTRbDfXJ?=
+ =?us-ascii?Q?v3NAFUcG5GeszuHvhutLCH1SLUhGWoNo+IoB+qTrPOUNnVZDMD9zT3htLHVt?=
+ =?us-ascii?Q?sXxoMHJa8CIJj15ICFxnWkPndh1OX5wqCRkiTR1Z6StNLlRl4szqGS0/Fbuw?=
+ =?us-ascii?Q?e9JZx4rzfL/CUlwsgjn5kanf8W+DmwgggQ/3VXo6Aaksjn2vacmJKxduU2Dr?=
+ =?us-ascii?Q?luZidfZFbnxaaf1tX9NoVuMiC8gUuj8A1K9szPEKITSuYLhhcCYRzaiTQ0+o?=
+ =?us-ascii?Q?qDiDT4fdHcERouTZhteAD4X5K7AK44lITBbKSwWJFkphVYcH80i1kAFv1WGI?=
+ =?us-ascii?Q?bwGR4exgSLvXsQIzzcy0IPv0ymnbxRYE2eVWMNsOicCym958CZwpDnippRNC?=
+ =?us-ascii?Q?Fdcq3FhonZj4HLEZ8xgHmsaiwrqPmgiHAVb3yLYNhswB3nCB/4aBhu09tMQm?=
+ =?us-ascii?Q?w6f9C9P3voZQRbwJzy1bH2aVzKsONpY=3D?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b264c0f-0eda-4589-ad2d-08da329a1445
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 15:30:57.4059
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iFN7xRD4ZLI6a/iyTyS8R0AgOEi83liAxgSUEEYLP3Le6FZqPmpsBXsOMEcGjX2Bj6pQ+zKf/3CmyRi4niC7E8TimYJ5+fosfMc0EMDt3Mo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2339
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,136 +127,86 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/9/22 19:35, Tzung-Bi Shih wrote:
-> On Mon, May 09, 2022 at 12:43:57PM -0500, Scott Cheloha wrote:
->> +#define SETFIELD(_v, _b, _e)	\
->> +    (((unsigned long)(_v) << PPC_BITLSHIFT(_e)) & PPC_BITMASK((_b), (_e)))
->> +#define GETFIELD(_v, _b, _e)	\
->> +    (((unsigned long)(_v) & PPC_BITMASK((_b), (_e))) >> PPC_BITLSHIFT(_e))
+Am Wed, 4 May 2022 17:19:51 +0200
+schrieb Henning Schild <henning.schild@siemens.com>:
+
+> Am Wed, 4 May 2022 15:51:01 +0300
+> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 > 
->>From `./scripts/checkpatch.pl --strict`:
-> WARNING: please, no spaces at the start of a line
+> > On Tue, Mar 08, 2022 at 08:35:20PM +0100, Henning Schild wrote:  
+> > > This switches the simatic-ipc modules to using the p2sb interface
+> > > introduced by Andy with "platform/x86: introduce p2sb_bar()
+> > > helper".
+> > > 
+> > > It also switches to one apollo lake device to using gpio leds.
+> > > 
+> > > I am kind of hoping Andy will take this on top and propose it in
+> > > his series.    
+> > 
+> > First of all, they are not applicable to my current version [1] of
+> > the series (it maybe something changed in the Simatic drivers
+> > upstream, because I have got conflicts there. For the record, I'm
+> > using Linux Next as a base.  
 > 
->> +#define PSERIES_WDTQL_MUST_STOP       	1
+> That is possible, some sparse findings have been fixed lately.
 > 
->>From `./scripts/checkpatch.pl --strict`:
-> WARNING: please, no space before tabs
+> > Second question is could it be possible to split first patch into
+> > three, or it has to be in one?  
 > 
->> +static const struct kernel_param_ops action_ops = { .set = action_set };
->> +module_param_cb(action, &action_ops, NULL, S_IRUGO);
+> I assume one for leds one for wdt and finally drop stuff from
+> platform, and i will go with that assumption for a next round based
+> on your tree directly.
+> Can you explain why that will be useful? While it is kind of a
+> separation of concerns and subsystems ... it also kind of all belongs
+> together and needs to be merged in a rather strict order.
 > 
->>From `./scripts/checkpatch.pl --strict`:
-> WARNING: Symbolic permissions 'S_IRUGO' are not preferred. Consider using
-> octal permissions '0444'.
+> regards,
+> Henning
 > 
->> +MODULE_PARM_DESC(action, "Action taken when watchdog expires: \"hard-poweroff\", \"hard-restart\", or \"dump-restart\" (default=\"hard-restart\")");
-> 
-> The line exceeds 100 columns.
-> 
->> +static bool nowayout = WATCHDOG_NOWAYOUT;
->> +module_param(nowayout, bool, S_IRUGO);
-> 
->>From `./scripts/checkpatch.pl --strict`:
-> WARNING: Symbolic permissions 'S_IRUGO' are not preferred. Consider using
-> octal permissions '0444'.
-> 
->> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> 
->>From `./scripts/checkpatch.pl --strict`, the line exceeds 100 columns.
-> 
->> +#define WATCHDOG_TIMEOUT 60
->> +static unsigned int timeout = WATCHDOG_TIMEOUT;
->> +module_param(timeout, uint, S_IRUGO);
-> 
->>From `./scripts/checkpatch.pl --strict`:
-> WARNING: Symbolic permissions 'S_IRUGO' are not preferred. Consider using
-> octal permissions '0444'.
-> 
->> +MODULE_PARM_DESC(timeout, "Initial watchdog timeout in seconds (default=" __MODULE_STRING(WATCHDOG_TIMEOUT) ")");
-> 
->>From `./scripts/checkpatch.pl --strict`, the line exceeds 100 columns.
-> 
->> +struct pseries_wdt {
->> +	struct watchdog_device wd;
->> +	unsigned long num;		/* NB: Watchdog numbers are 1-based */
-> 
-> What does NB stand for?  Could it be removed from the comment?
+> > [1]: https://gitlab.com/andy-shev/next/-/tree/topic/p2sb-next
+> > It would be nice if you can perform another round of testing.
+
+Just got around to testing this with my patches on top. My stuff will
+need some more work before i can send again.
+
+Is this a rebasing branch? 
+With efc7d77ea372 ("EDAC, pnd2: convert to use common P2SB accessor")
+I am seeing problems while booting ... things do work but still error
+messages which probably should not be there.
+
+[    2.215715] gpio gpiochip0: (apollolake-pinctrl.0): not an immutable chip, please consider fixing it!
+[    2.217506] broxton-pinctrl apollolake-pinctrl.1: Failed to attach ACPI GPIO chip
+[    2.217542] gpio gpiochip1: (apollolake-pinctrl.1): not an immutable chip, please consider fixing it!
+[    2.217771] i801_smbus 0000:00:1f.1: Failed to enable SMBus PCI device (-22)
+[    2.217788] i801_smbus: probe of 0000:00:1f.1 failed with error -22
+[    2.221460] broxton-pinctrl apollolake-pinctrl.2: Failed to attach ACPI GPIO chip
+[    2.221482] gpio gpiochip2: (apollolake-pinctrl.2): not an immutable chip, please consider fixing it!
+[    2.222010] broxton-pinctrl apollolake-pinctrl.3: Failed to attach ACPI GPIO chip
+[    2.222023] gpio gpiochip3: (apollolake-pinctrl.3): not an immutable
+chip, please consider fixing it!
+
+regards,
+Henning
+
+
+> > > Henning Schild (2):
+> > >   simatic-ipc: convert to use common P2SB accessor
+> > >   leds: simatic-ipc-leds-gpio: add GPIO version of Siemens driver
+> > > 
+> > >  drivers/leds/simple/Kconfig                   |  11 ++
+> > >  drivers/leds/simple/Makefile                  |   3 +-
+> > >  drivers/leds/simple/simatic-ipc-leds-gpio.c   | 108
+> > > ++++++++++++++++++ drivers/leds/simple/simatic-ipc-leds.c        |
+> > > 77 +------------ drivers/platform/x86/simatic-ipc.c            |
+> > > 43 +------ drivers/watchdog/Kconfig                      |   1 +
+> > >  drivers/watchdog/simatic-ipc-wdt.c            |  15 +--
+> > >  .../platform_data/x86/simatic-ipc-base.h      |   2 -
+> > >  8 files changed, 139 insertions(+), 121 deletions(-)
+> > >  create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.c
+> > > 
+> > > -- 
+> > > 2.34.1
+> > >     
+> >   
 > 
 
-Latin "Nota Bene", for "This is important".
-All comments should be important, so I agree, this has little
-if any value.
-
-> Does `timer_id` or some other equivalent names make more sense for the
-> variable?
-> 
->> +static int pseries_wdt_start(struct watchdog_device *wdd)
->> +{
-> [...]
->> +	rc = plpar_hcall_norets(H_WATCHDOG, flags, pw->num, msecs);
->> +	if (rc != H_SUCCESS) {
->> +		dev_crit(dev, "H_WATCHDOG: %ld: failed to start timer %lu",
->> +			 rc, pw->num);
->> +	       	return -EIO;
-> 
->>From `./scripts/checkpatch.pl --strict`:
-> ERROR: code indent should use tabs where possible
-> WARNING: please, no space before tabs
-> 
->> +static struct watchdog_info pseries_wdt_info = {
->> +	.identity = DRV_NAME,
->> +	.options = WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT \
->> +	    | WDIOF_PRETIMEOUT,
-> 
->>From `./scripts/checkpatch.pl --strict`:
-> WARNING: Avoid unnecessary line continuations
-> 
->> +static const struct watchdog_ops pseries_wdt_ops = {
->> +	.owner = THIS_MODULE,
->> +	.ping = pseries_wdt_start,
-> 
-> Does this mean: it needs hard restart for every ping?
-> 
-
-If there is no separate ping function, there is no need to point
-the ping function to the start function. The watchdog core uses
-the start function automatically in this case.
-
->> +static int pseries_wdt_probe(struct platform_device *pdev)
->> +{
-> [...]
->> +	rc = plpar_hcall(H_WATCHDOG, ret, PSERIES_WDTF_OP_QUERY);
->> +	if (rc != H_SUCCESS)
->> +		return (rc == H_FUNCTION) ? -ENODEV : -EIO;
-> 
-> The parentheses can be dropped.
-> 
->> +	pw = devm_kzalloc(&pdev->dev, sizeof *pw, GFP_KERNEL);
->> +	if (pw == NULL)
-> 
->>From `./scripts/checkpatch.pl --strict`:
-> CHECK: Comparison to NULL could be written "!pw"
-> 
->> +	pw->num = pdev->id + 1;		/* 0-based -> 1-based */
-> 
-> Didn't see where the platform device was registered but using the pdev->id as
-> the timer id could be unreliable (e.g. from auto increment).
-
-That is at the beginning of the patch, in arch/powerpc/platforms/pseries/setup.c,
-which calls platform_device_register_simple() with an explicit device ID.
-
-I agree, though, that it is fragile: The code in the probe function
-explicitly checks for a negative ID, which would only be provided if
-platform_device_register() explicitly declares that (ie if it provides
-PLATFORM_DEVID_NONE as device ID). But if that is a concern, there
-might as well be code registering a platform device with
-PLATFORM_DEVID_AUTO as device ID, and then th device id would be automatic
-and more or less random. I think the instantiation code should be more
-explicit: Either assume that PLATFORM_DEVID_NONE or PLATFORM_DEVID_AUTO
-will never be used to register the watchdog devices, or provide other
-information such as platform data to make it explicit.
-
-Also, the changes in arch code need to be made in separate patches.
-
-Thanks,
-Guenter
