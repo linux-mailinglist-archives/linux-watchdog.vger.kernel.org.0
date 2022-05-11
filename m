@@ -2,135 +2,144 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD1C522BCF
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 May 2022 07:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35708522DE3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 May 2022 10:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbiEKFiY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 May 2022 01:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S243325AbiEKIKF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 May 2022 04:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241935AbiEKFiV (ORCPT
+        with ESMTP id S243317AbiEKIKD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 May 2022 01:38:21 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B863C4A0
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 May 2022 22:38:19 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n8so866086plh.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 May 2022 22:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SEXbM79aMpwBO+zlSXHFOKrTHYdv3ZYxP3jk3lbMm1Y=;
-        b=zrgTNjogyOw4X+zVebxxaybfOc4s05F7gAEWDEx9ZLyXe7lOdUNm3oKXs65NrBCwPd
-         /k/nZ/99rkv77qdZoO2D4jLc/jc9fqY7qbckVzEpC1L3qaly1BT6qOawyf7twD+7RceQ
-         NlXjQc7kul++iFpW+MIrPdDZaDbUEamVmE0xkihBf5GvjWDYY95GYv9Bka2P6f5ABzuT
-         mNx6sQj0TuKOqjvchrQAfBqJNtHuUuKG5bJJhTDpPRP7swS6x825qZgyxpBgoX6hjxWN
-         +Pa9bAtBFs2/L8tSl3LDzJtLS+NdVPmwPnTPYMcwlch7hLOitycxHB3S5cWDKvjpSXVJ
-         auHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SEXbM79aMpwBO+zlSXHFOKrTHYdv3ZYxP3jk3lbMm1Y=;
-        b=rcYjBMhk9LpOg9HmsHeJPC1a9dJgm64aMb3qZf/3Fh08v5MlH7VcDNwNiMsfmm8MlH
-         Ubxzt8AQsWXOQ6rvD9E6ZhpNymJVJCF/RN59X2H6/Agsg89+RGaoP5Qe1r3SRSPWJLlQ
-         PuUVIsc2iXM9tyLo/KHrSdGzMsGhPz7/1B2wrTo1+MWNQBiyuqPDueoBhdzH6lqSvBhy
-         ZCUKhyDHASa6GuL3ORUPiCPSuCZ+RxjC0OvO7N8HctJcNqHkHIZrn2k63VjXKMYvjQeX
-         RtyMgMrggd1DzvBM0vVY/Hl1mnJMyn+lF6NC3BucZvCHHV5SR/6H3z160/jjCDuT+sRG
-         VJcg==
-X-Gm-Message-State: AOAM5303nTWDwqGGl6oA+fR6SCjw1WB5gRn33+93zVvk1s+zie6u+t0M
-        3j3jGJHQTbwcDKtNbweo3EhBRw==
-X-Google-Smtp-Source: ABdhPJyfjqXlpkuE7sI2D+xtwtHdknaRDBnVepRwTAUvjnSDRgdpSNTGjKliWkGxIrQPEC0DY3+XRA==
-X-Received: by 2002:a17:902:f652:b0:156:701b:9a2a with SMTP id m18-20020a170902f65200b00156701b9a2amr23726071plg.14.1652247499130;
-        Tue, 10 May 2022 22:38:19 -0700 (PDT)
-Received: from [10.61.2.177] (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
-        by smtp.gmail.com with ESMTPSA id h27-20020aa796db000000b0050dc76281bdsm549163pfq.151.2022.05.10.22.38.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 22:38:18 -0700 (PDT)
-Message-ID: <c3d75681-5c5a-17bc-2f09-c8f40f570b6d@ozlabs.ru>
-Date:   Wed, 11 May 2022 15:38:13 +1000
+        Wed, 11 May 2022 04:10:03 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439EE9C2EE;
+        Wed, 11 May 2022 01:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TGOIv/8rbn1C0gTA16Bjc0o3XPW3/BNE1GSk8qF7UJc=; b=m7rRRCNUuR47fbqTAw/0v6hNeE
+        PjGuic9a+dmtllMp3NrOFSgXlCtNB6Uo8y2fQJD6yLSxClJy/Zb56JUKp+r30ymA16ti6nmyDqux+
+        sYGerUWQ5/5UeHPEPKnTB2snpOryLfOEDhIgdlS7b0NDHEIGm/t+xG/rSXUVtZIKCSXRLFM4JQ3Kg
+        lZ+sLy5mKegfWuCV2X165y7Kvw17MBheChCLzHGdLF7uDBvqq3ypjwZcwbvKJuq91WAlbZu5g35Qp
+        oOV2x7X7T26hVFmv25hbJmQrH7MmQs3nF5FYSmDq3j5IrtiQXwBAX93mX7kEsRYPjbtm8/ImOmqpO
+        8kHgyRBQ==;
+Received: from [89.212.21.243] (port=58198 helo=[192.168.69.116])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <primoz.fiser@norik.com>)
+        id 1nohPm-00ERrq-Qh;
+        Wed, 11 May 2022 10:09:54 +0200
+Message-ID: <cb5b07ea-1c09-1dcb-a4a9-12276647d634@norik.com>
+Date:   Wed, 11 May 2022 10:09:56 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
- Thunderbird/100.0
-Subject: Re: [RFC v2 0/2] Add driver for PAPR watchdog timers
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/3] dt-bindings: mfd: da9063: watchdog: add suspend
+ disable option
 Content-Language: en-US
-To:     Scott Cheloha <cheloha@linux.ibm.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     linux@roeck-us.net, tzungbi@kernel.org, brking@linux.ibm.com,
-        nathanl@linux.ibm.com, npiggin@gmail.com, vaishnavi@linux.ibm.com,
-        wvoigt@us.ibm.com
-References: <20220509174357.5448-1-cheloha@linux.ibm.com>
-From:   Alexey Kardashevskiy <aik@ozlabs.ru>
-In-Reply-To: <20220509174357.5448-1-cheloha@linux.ibm.com>
+To:     DLG Adam Thomson <DLG-Adam.Thomson.Opensource@dm.renesas.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Support Opensource <Support.Opensource@diasemi.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrej Picej <andrej.picej@norik.com>,
+        "upstream@phytec.de" <upstream@phytec.de>
+References: <20220422072713.3172345-1-primoz.fiser@norik.com>
+ <OSAPR01MB5060A0D9B7EB66F108F34AFFB0C69@OSAPR01MB5060.jpnprd01.prod.outlook.com>
+From:   Primoz Fiser <primoz.fiser@norik.com>
+In-Reply-To: <OSAPR01MB5060A0D9B7EB66F108F34AFFB0C69@OSAPR01MB5060.jpnprd01.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: primoz.fiser@norik.com
+X-Authenticated-Sender: cpanel.siel.si: primoz.fiser@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-You should cc: linuxppc-dev@lists.ozlabs.org this. Thanks,
 
-On 5/10/22 03:43, Scott Cheloha wrote:
-> This second RFC incorporates feedback from the previous RFC:
+On 9. 05. 22 10:50, DLG Adam Thomson wrote:
+> On 22 April 2022 08:27, Primoz Fiser wrote:
 > 
-> https://lore.kernel.org/linux-watchdog/20220413165104.179144-1-cheloha@linux.ibm.com/
+>> Document the watchdog disable option which can be used if the hardware
+>> automatic suspend option is broken.
+>>
+>> Based on commit c514430c51ee8 ("dt-bindings: watchdog: da9062: add
+>> suspend disable option").
+>>
+>> Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
+>> ---
+>>   Documentation/devicetree/bindings/mfd/da9063.txt | 9 ++++++---
+>>   1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt
+>> b/Documentation/devicetree/bindings/mfd/da9063.txt
+>> index 91b79a21d403..aa8b800cc4ad 100644
+>> --- a/Documentation/devicetree/bindings/mfd/da9063.txt
+>> +++ b/Documentation/devicetree/bindings/mfd/da9063.txt
+>> @@ -64,10 +64,13 @@ Sub-nodes:
+>>       and KEY_SLEEP.
+>>
+>>   - watchdog : This node defines settings for the Watchdog timer associated
 > 
-> v2 changes of note:
+> I don't know if this is just me, but it looks like you're deleting this line
+> above, but not replacing it.....
+
+I am not deleting this line, please note the leading white-space.
+
+But yeah, if you don't pay close attention it looks a bit confusing 
+indeed :)
+
 > 
-> - Add a firmware feature flag for the H_WATCHDOG feature,
->    FW_FEATURE_WATCHDOG.
+>> -  with the DA9063 and DA9063L. There are currently no entries in this
+>> -  binding, however compatible = "dlg,da9063-watchdog" should be added
+>> -  if a node is created.
 > 
-> - Register a platform_device for the first watchdog timer during a
->    pseries initcall if we have FW_FEATURE_WATCHDOG.  Use id zero, as
->    there could be more than one timer in the future.
+> ....here, if I'm reading this patch correctly. This means we're losing that
+> property description, and starting a text block with the below text.
 > 
-> - Alphabetize Makefile changes.
-> 
-> - Add missing copyright information to pseries-wdt.c.
-> 
-> - Add an 'action' module parameter that configures how the guest is
->    terminated on watchdog expiration.
-> 
-> - Use dev_*() for logging critical errors instead of pr_*().
-> 
-> - Handle the H_NOOP case when trying to stop the watchdog.  If the
->    given watchdog is not actually running, H_WATCHDOG returns H_NOOP.
->    This is harmless, so we should treat it as a success.
-> 
-> - We don't need pseries_wdt_remove() at all.
-> 
-> - Check watchdog_active() before stopping/starting the timer across
->    suspend/resume.
-> 
-> - Consolidate all code from pseries_wdt_module_init() into
->    pseries_wdt_probe().  We can then use module_platform_driver().
-> 
-> I have one lingering question:
-> 
-> - The pseries-wdt module is not "automatically" loaded during boot.
-> 
->    When I do
-> 
-> 	# modprobe pseries-wdt
-> 
->    the driver attaches to the platform bus as expected and the
->    /dev/watchdog* devices for the pseries-wdt.0 platform device
->    are created.
-> 
->    I was under the impression that driver/device matching for
->    the platform bus was simple string comparison.
-> 
->    ... what am I doing wrong?  Is this expected behavior?  Do
->    I need to do additional configuration to get the module to
->    load automatically at boot time?
+>> +  with the DA9063 and DA9063L. The node should contain the compatible
+>> property
+>> +  with the value "dlg,da9063-watchdog".
+>>
+>> +  Optional watchdog properties:
+>> +  - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
+>> +  Only use this option if you can't use the watchdog automatic suspend
+>> +  function during a suspend (see register CONTROL_B).
+>>
+>>   Example:
+>>
+>> --
+>> 2.25.1
 > 
 
--- 
-Alexey
+Would you like:
+
+The node should contain the compatible property with the value 
+compatible = "dlg,da9063-watchdog".
+
+i.e. explicitly adding "compatible =" in front, for v2?
