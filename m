@@ -2,57 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1FB523BF5
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 May 2022 19:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96481523C0E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 May 2022 19:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345882AbiEKRxz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 May 2022 13:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S1345934AbiEKR4T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 May 2022 13:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345868AbiEKRxy (ORCPT
+        with ESMTP id S1345966AbiEKR4M (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 May 2022 13:53:54 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F98621A952;
-        Wed, 11 May 2022 10:53:53 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id m20so5542596ejj.10;
-        Wed, 11 May 2022 10:53:53 -0700 (PDT)
+        Wed, 11 May 2022 13:56:12 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A8A2B1B9;
+        Wed, 11 May 2022 10:56:10 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bv19so5597307ejb.6;
+        Wed, 11 May 2022 10:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=20318/xvPXu2lxX8X9tVBy9ShWnG5kb0p7KIWm6bilY=;
-        b=JhwCo1D5QmYppFs7JgZN+Z1pfDhfm374tctxpKM/EvNUTf8teix+UoxWxHTlqIgQU6
-         p1t5nB782rusQ3nkFO8wA3iFptOukcRDowcFR96BfOF5UDs1dJwN2tBXPsMDiOeofRp3
-         Xb8m22WFI6FbzSbfk7mvNd6koLTB4U0CZITZTpzr7lsDXmKMBr13C4TfUmHULvxXiZT+
-         zMzyOhR6DRohpqj2EbducUCZV2c9nieHO73muzMM3HUp4G5P0mzmgP+EduQsZVrnLkv6
-         XDXPilhxlLJ/MApYsWpaNvCcvPc1g/unY/sjRejpX83J88JbZ5z2nyq7SW///qK4oMEI
-         +uLw==
+        bh=Y4/SAPsJ9f4OXJYDdFhUA/nd1PhxlZKu/Ys21YszRaA=;
+        b=lZEjE+zhrFuarohgPN3uPPp3/1ifjXsr/pHVEE0WklPDTG0muYg+gRfQm2JpIVeLvD
+         clhRYNK89WLQOLEF94OpOfecWz2CWB13B5z9QOXm+oktp5meLYxiZUPtVY4RmjBvnbU3
+         /6S+aX7/uBWmn4YPi3VlznZnHBTIcH+uzmAH44/GYOmx5EzjXaGqEnaUCkbHSsCQfOwQ
+         uiJKgh0Zk6QECVwJKFJJXrHJmbV0GCiYQ1QJ1kjzTUF0Ipw3OmLJmYyhewMiTpW0KmUe
+         lVtK3VEzSqYqWOLRlsoGOs41WyZV7byxDZ95xdgEm5bo3p5E1r9aBwsJMQlreZFFRNUx
+         DGSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=20318/xvPXu2lxX8X9tVBy9ShWnG5kb0p7KIWm6bilY=;
-        b=d3YNWI7aV7+39si42NZxJdm08zsUWIDG4LL2ImYXWLLCxYYVdhEf230Yo/cgQnvCow
-         RJ/Cp9KjCGJ7/dhUyEOarzc0kWV+n2txoB/QdGEOmdmAEY0q/LPjmAx8aT04tVvf9suw
-         kj9VRoSup5EADHmWZgeV5pMJosuDwxX4H3/VcRk/93UGjZeC0Crl+oJS746zNsfc2pjf
-         51C3/Yy9vddJx1S7IJZitpCN9qYikMmvIdSf1+jiGeFGKlFXAQb5FpQiueEAt6DHoFuL
-         MIY537emUW9nOvXw1D/58q2WR49Mi9y6Y6IxNF61p5opgIagt34/ucjfCohkIkp8sdBB
-         uzMw==
-X-Gm-Message-State: AOAM533rnvHaBIQhxIDmfQ7U5GPlUHt2UUOSdQq/5XKmR7bOpllM2DKg
-        4AyDEPGf2FpemFyh+rsGty5am9WsCWqNPELMYEg=
-X-Google-Smtp-Source: ABdhPJxLMXfl6V1uz22UIQH2xA7vQHrxBxFcksWT+mePA5R6lPB9wyRPj6nwxmx2HuPq5Ms9yAFMlx+fSjhE4qq5i34=
-X-Received: by 2002:a17:906:3ce9:b0:6ef:a8aa:ab46 with SMTP id
- d9-20020a1709063ce900b006efa8aaab46mr25724454ejh.579.1652291631524; Wed, 11
- May 2022 10:53:51 -0700 (PDT)
+        bh=Y4/SAPsJ9f4OXJYDdFhUA/nd1PhxlZKu/Ys21YszRaA=;
+        b=XPQ5w/QMa1DkjJQUWuoW3k+gKvWb4tReBAn6K3+fe2/8i2/3xBme3QcLF3l1RraWQT
+         OGKdulsC78ISGHj6XAodhZ/E621PSAlJFJf0KSwbRLH1MrDJp8BCFbaQI5/PJybEWkuI
+         aeE/HpABFEMaIKp2nE18QuoRWFlwccSOzeTtzZz8x3Wvml3hnIyUGEVVEEK0WtKddhHo
+         CHuBKh0HEDuVFZ39H5Npcpe9y/GTz6Lb9qmvuhpRlL3gVAr/s5oa3sSwByKMtjYsFIc9
+         iRII3k15g6ZRHYJUjjXOPMcnqXZWmfvso1+Z7fYs4pYWXNmy0w7R3SFBAd87JAVS0RsP
+         EujA==
+X-Gm-Message-State: AOAM533AgeaBPqGZVtsnNGhXnT6H4S7PDIaeoJ47MQJVkoSWyVerstaQ
+        EsINZ0PVmZCR7aJm2c1Icsv3BHdZRmiB4KEOUamTjPO9mZeA4Q==
+X-Google-Smtp-Source: ABdhPJwVD3U070rN+XeenMtclJ09vcrP7AYcNnGmrmWjBeX2VPQ+rXyde6ML2tgSNrC70rjKc3pedg9gQgeK2xdVdq8=
+X-Received: by 2002:a17:906:c10d:b0:6f4:a770:846e with SMTP id
+ do13-20020a170906c10d00b006f4a770846emr26455803ejc.497.1652291768721; Wed, 11
+ May 2022 10:56:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511153905.13980-1-henning.schild@siemens.com> <20220511153905.13980-5-henning.schild@siemens.com>
-In-Reply-To: <20220511153905.13980-5-henning.schild@siemens.com>
+References: <20220511153905.13980-1-henning.schild@siemens.com>
+In-Reply-To: <20220511153905.13980-1-henning.schild@siemens.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 11 May 2022 19:53:15 +0200
-Message-ID: <CAHp75VdSYgAj-8scpZK1EmiNywuji6cpsCWnCo+6vqqdEvg+5w@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] leds: simatic-ipc-leds-gpio: add GPIO version of
- Siemens driver
+Date:   Wed, 11 May 2022 19:55:30 +0200
+Message-ID: <CAHp75Vc6imwy0faWEtmnnsNh6WfccA2KuJuy2e7+VHuxhQ8VbA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] simatic-ipc additions to p2sb apl lake gpio
 To:     Henning Schild <henning.schild@siemens.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mark Gross <markgross@kernel.org>,
@@ -74,69 +73,23 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, May 11, 2022 at 6:40 PM Henning Schild
+On Wed, May 11, 2022 at 6:50 PM Henning Schild
 <henning.schild@siemens.com> wrote:
 >
-> On Apollo Lake the pinctrl drivers will now come up without ACPI. Use
-> that instead of open coding it.
-> Create a new driver for that which can later be filled with more GPIO
-> based models, and which has different dependencies.
+> changed since v1:
+>  - rebased
+>  - split p1 into p1-3
+>
+> This switches the simatic-ipc modules to using the p2sb interface
+> introduced by Andy with "platform/x86: introduce p2sb_bar() helper".
+>
+> It also switches to one apollo lake device to using gpio leds.
+>
+> I am kind of hoping Andy will take this on top and propose it in his
+> series.
 
-...
-
-> +static struct gpiod_lookup_table simatic_ipc_led_gpio_table = {
-> +       .dev_id = "leds-gpio",
-> +       .table = {
-> +               GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 51, NULL, 0, GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 52, NULL, 1, GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 53, NULL, 2, GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 57, NULL, 3, GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 58, NULL, 4, GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 60, NULL, 5, GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 56, NULL, 6, GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 59, NULL, 7, GPIO_ACTIVE_HIGH),
-
-> +       }
-
-Keeping a comma is good here.
-
-> +};
-
-...
-
-> +       /* PM_BIOS_BOOT_N */
-> +       gpiod = gpiod_get_index(&simatic_leds_pdev->dev, NULL, 6, 0);
-
-This is basically GPIOD_ASIS...
-
-> +       if (IS_ERR(gpiod)) {
-> +               err = PTR_ERR(gpiod);
-> +               goto out;
-> +       }
-
-> +       gpiod_set_value(gpiod, 0);
-
-...but you may apply GPIOD_OUTPUT_LOW there and drop this call.
-
-> +       gpiod_put(gpiod);
-
-Ditto for the rest GPIO requests.
-
-...
-
-> +static struct platform_driver simatic_ipc_led_gpio_driver = {
-> +       .probe = simatic_ipc_leds_gpio_probe,
-> +       .remove = simatic_ipc_leds_gpio_remove,
-> +       .driver = {
-> +               .name = KBUILD_MODNAME,
-> +       }
-> +};
-
-> +
-
-No need to have this blank line.
-
-> +module_platform_driver(simatic_ipc_led_gpio_driver);
+Yes, I will. Since it seems it requires a v6 of my series after
+v5.19-rc1 and will be material for v5.20... we have time.
 
 -- 
 With Best Regards,
