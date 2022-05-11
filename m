@@ -2,68 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEFB5231FC
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 May 2022 13:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE852523415
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 May 2022 15:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236568AbiEKLmY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 May 2022 07:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S243676AbiEKNUq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 May 2022 09:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234436AbiEKLmX (ORCPT
+        with ESMTP id S243735AbiEKNT6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 May 2022 07:42:23 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4D92229D1;
-        Wed, 11 May 2022 04:42:22 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id x23so1737859pff.9;
-        Wed, 11 May 2022 04:42:22 -0700 (PDT)
+        Wed, 11 May 2022 09:19:58 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5BB239D9C;
+        Wed, 11 May 2022 06:19:53 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id w130so2723848oig.0;
+        Wed, 11 May 2022 06:19:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=vR78/0cozBARbfgmLg/xD9wO6VleNhWzZE+8yJ1LpXQ=;
-        b=VACSZeD+XR+ARtHH3HoDnaZS+Y9u1fGwlFPSmy63JxD/kP+30Jq0Bw98Lmoei0v+Bk
-         dLtImgiBpBxS6NLLDcpRIaxfaEh2GQSLkpXGtKFHcusiemYSBHZs70CdReAUi4jZTYb8
-         9RsUGKNJXVDh2GQXNK5pD3IW1dBPpyxJQ9jZkz4aiM9oXTT70rw0BVbYiUqnz5rSMtoJ
-         VU7LRv2E8BiFHSAn/azo2T5/mtArfc7CUOavPLJeakQWlxtZyKY/p7zsttHQ2/LXBChX
-         IZ/govXWVwDH0619SZw/Csb2RPynK/4UldL6zHvUyhYBnToqsPV0xnQqnbyIZeI9By0p
-         lu5g==
+        bh=xTKoqmkJyd5jKlpEWOxjT/YXWFjjUDfLBGo4J9TZy7g=;
+        b=kKYtw5KYvJu3JDMAeeeiZQqbGYik4wVt1sIFGpnkGAZMDSekQOJaQt1FVeZwvRPCmG
+         G+PakaqZkpjmITjjoQLpTwQMI7+ZO9IvF/2NzRDjU9BSR/gafqIkbspnhnUj1OZKVymj
+         b1A4z2AzqbGwV0a64HBw87knlUST8jNwz3NWjKY6JFjPaIy39i+VOSWk9XvAxZ9rI0hh
+         akciP2cBFm9m6NuppgLPV+ajLMEGHhEV4gGe9TwcLwCA/Ezmy273YjF8fPWz1NBTkPnM
+         OMwJ9lK3CLD6axBvSfTqNVTOkPyLep2ZEDKTSwxp3DXU9vQ7HIzZKekkp7L7YAVS68wc
+         umIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=vR78/0cozBARbfgmLg/xD9wO6VleNhWzZE+8yJ1LpXQ=;
-        b=Go6pnwfc/wvgFLRLOpJoxbbkijyyeszARUF1e3d79jxTA8Xd96mc8LI/BVyn8EF2Tf
-         zlYI4bAKOQRPjtDZYW3mUe3ws/YNLgQcWmegn0gvs9fan3JQGTGlzXdxCPtZuUmgvmQD
-         8gQGQvgAfxomExNs5ytX9KHQTBGrsk2EeFfKxKPiC1J9f39ilj6hBGs3PlqEsjozp6zi
-         Z/4wPwucXoYW+yvugh2Y6tfHiz+7eY79ofEZcohReSvEFWrukFc2GpxBBcaue0ze3hoO
-         wxQZyKTTfFMc1X+j+uyRtgaIynjg57BvYAuoSVFlU5Ihx4RpLtnO6uIdUUBG+JmUjuJK
-         /BEQ==
-X-Gm-Message-State: AOAM53339K2q7oxW1zA3ZaYKGO7GIqJCCZ3tH20Ljob/1nRWB3Bn2khA
-        VcexWpk/YLykLkuph1xGqCY=
-X-Google-Smtp-Source: ABdhPJwmoiL/c+C4ECSorOVKxMM33LVv+pl673jYWon4sDaR3WqZS1VElgoX59Aah3WRPCBSqoWfrg==
-X-Received: by 2002:aa7:938c:0:b0:50d:418a:cdfb with SMTP id t12-20020aa7938c000000b0050d418acdfbmr24996286pfe.72.1652269342295;
-        Wed, 11 May 2022 04:42:22 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id g1-20020aa79dc1000000b0050dc76281e1sm1474115pfq.187.2022.05.11.04.42.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 04:42:22 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        bh=xTKoqmkJyd5jKlpEWOxjT/YXWFjjUDfLBGo4J9TZy7g=;
+        b=P7BBEeNvdWUgFMOSXWoSJxppobE+FmTxHxqyT/MIDuR1cHJ9TTp4ASI5HlMiKOZ7Qh
+         C2ZAfm/4gcxOc+zTDuKmBfhUaUja8PxeUWWAv3thRKh9xgdFkgHwIykmVJj/iP6b8mrS
+         oiVZKSn89b9Mf4QE1ZwcjUtS1qhp3nzLdOQU907eY4n3ciebJ/ptaLCsxrKfO4uLwWhu
+         w3BpQK2ifXS09WYF+B2taaIjK27EagXeEP606q3Z0x7qTZq1MS+dG3kSSsXyT0u4F60A
+         CME/M+b+Lkv5TescW70hBpxw4iwHAc4yIeqfx8dcBa3JqyQJkSGSUtCqN8mQrQdVyMrf
+         vqbA==
+X-Gm-Message-State: AOAM532LskvW50cvrZy1NO+of2KaLfDnGXnQAU7aYIpjpqm4d7Jl7Kix
+        0Y6W/pAGlMUYRQj6jsjaxAnGrqTcdC6PYQ==
+X-Google-Smtp-Source: ABdhPJwBIaXef/tEui+TOYaLAsav+BgIvyBQIyRvhutgluQotb5jEVONp6I43z5A0+6UPgrVnek+iA==
+X-Received: by 2002:a05:6808:1ce:b0:325:7a0c:b315 with SMTP id x14-20020a05680801ce00b003257a0cb315mr2346533oic.40.1652275192877;
+        Wed, 11 May 2022 06:19:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r9-20020a056870438900b000e92d5a54ffsm554131oah.26.2022.05.11.06.19.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 06:19:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <31fd924f-0b3e-a47b-1ee5-fd321c5f0f17@roeck-us.net>
+Date:   Wed, 11 May 2022 06:19:50 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] watchdog: ts4800_wdt: Fix refcount leak in
+ ts4800_wdt_probe
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Damien Riegel <damien.riegel@savoirfairelinux.com>,
         Rob Herring <robh@kernel.org>, linux-watchdog@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] watchdog: ts4800_wdt: Fix refcount leak in ts4800_wdt_probe
-Date:   Wed, 11 May 2022 15:42:03 +0400
-Message-Id: <20220511114203.47420-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+References: <20220511114203.47420-1-linmq006@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220511114203.47420-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,38 +80,40 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add  missing of_node_put() in some error paths.
+On 5/11/22 04:42, Miaoqian Lin wrote:
+> of_parse_phandle() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when done.
+> Add  missing of_node_put() in some error paths.
+> 
+> Fixes: bf9006399939 ("watchdog: ts4800: add driver for TS-4800 watchdog")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-Fixes: bf9006399939 ("watchdog: ts4800: add driver for TS-4800 watchdog")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/watchdog/ts4800_wdt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
-index c137ad2bd5c3..0ea554c7cda5 100644
---- a/drivers/watchdog/ts4800_wdt.c
-+++ b/drivers/watchdog/ts4800_wdt.c
-@@ -125,13 +125,16 @@ static int ts4800_wdt_probe(struct platform_device *pdev)
- 	ret = of_property_read_u32_index(np, "syscon", 1, &reg);
- 	if (ret < 0) {
- 		dev_err(dev, "no offset in syscon\n");
-+		of_node_put(syscon_np);
- 		return ret;
- 	}
- 
- 	/* allocate memory for watchdog struct */
- 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
--	if (!wdt)
-+	if (!wdt) {
-+		of_node_put(syscon_np);
- 		return -ENOMEM;
-+	}
- 
- 	/* set regmap and offset to know where to write */
- 	wdt->feed_offset = reg;
--- 
-2.25.1
+> ---
+>   drivers/watchdog/ts4800_wdt.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
+> index c137ad2bd5c3..0ea554c7cda5 100644
+> --- a/drivers/watchdog/ts4800_wdt.c
+> +++ b/drivers/watchdog/ts4800_wdt.c
+> @@ -125,13 +125,16 @@ static int ts4800_wdt_probe(struct platform_device *pdev)
+>   	ret = of_property_read_u32_index(np, "syscon", 1, &reg);
+>   	if (ret < 0) {
+>   		dev_err(dev, "no offset in syscon\n");
+> +		of_node_put(syscon_np);
+>   		return ret;
+>   	}
+>   
+>   	/* allocate memory for watchdog struct */
+>   	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> -	if (!wdt)
+> +	if (!wdt) {
+> +		of_node_put(syscon_np);
+>   		return -ENOMEM;
+> +	}
+>   
+>   	/* set regmap and offset to know where to write */
+>   	wdt->feed_offset = reg;
 
