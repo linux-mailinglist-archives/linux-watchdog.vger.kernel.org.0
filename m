@@ -2,239 +2,135 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82885522BA1
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 May 2022 07:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD1C522BCF
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 May 2022 07:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238666AbiEKF14 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 May 2022 01:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S233701AbiEKFiY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 May 2022 01:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238431AbiEKF1z (ORCPT
+        with ESMTP id S241935AbiEKFiV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 May 2022 01:27:55 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A0012FC00
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 May 2022 22:27:54 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id n24so1444073oie.12
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 May 2022 22:27:54 -0700 (PDT)
+        Wed, 11 May 2022 01:38:21 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B863C4A0
+        for <linux-watchdog@vger.kernel.org>; Tue, 10 May 2022 22:38:19 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n8so866086plh.1
+        for <linux-watchdog@vger.kernel.org>; Tue, 10 May 2022 22:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=qWGxM8AcVbSstzS1YTcot+dFEQPX4lNxBkuhOR/NeDQ=;
-        b=Oz+haNs15YQyEK4SLQMvFfoFkI172rw9/rbMIHfh0VCdWXKR2b5aDxO80jLx8BfOI9
-         yYet5fdm+jj1ss9oRUnjWo9PsfpmfM+ZhxOfKLjRSGTQ/h1zZJZgnw3g2TnWxjZU8y5L
-         IWPobZmKR7TCwZmfdfRDWjdjV6jcenP7QJYde7svcscd1UDayfpFmaD9+0rsYsaWB8b1
-         pjQ31fjturHNUnIBTl8J7z25CATT1VEfWKqaP3Y5tk4AcHNwM+E00PJqgqAQybMTblNv
-         ZVr+cHdSy+OUJdJAXf1dtLiGRZPaRwpOlm5rnscceEeZ+yi9PhyxQ9KGBPpvT7s6LBQh
-         617A==
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SEXbM79aMpwBO+zlSXHFOKrTHYdv3ZYxP3jk3lbMm1Y=;
+        b=zrgTNjogyOw4X+zVebxxaybfOc4s05F7gAEWDEx9ZLyXe7lOdUNm3oKXs65NrBCwPd
+         /k/nZ/99rkv77qdZoO2D4jLc/jc9fqY7qbckVzEpC1L3qaly1BT6qOawyf7twD+7RceQ
+         NlXjQc7kul++iFpW+MIrPdDZaDbUEamVmE0xkihBf5GvjWDYY95GYv9Bka2P6f5ABzuT
+         mNx6sQj0TuKOqjvchrQAfBqJNtHuUuKG5bJJhTDpPRP7swS6x825qZgyxpBgoX6hjxWN
+         +Pa9bAtBFs2/L8tSl3LDzJtLS+NdVPmwPnTPYMcwlch7hLOitycxHB3S5cWDKvjpSXVJ
+         auHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=qWGxM8AcVbSstzS1YTcot+dFEQPX4lNxBkuhOR/NeDQ=;
-        b=foicvRD1urF4j9hkW8KuYXwtCuoMicszN2l6jf36uakx+PodQ+SEOCUqonRdJ+sSxy
-         gKwMFT/wLKR9ZzlLtO52PNM7LnvdDqqvPRtNQlnoR3KptNPYRwg+YxiPXO5VSnzZYldw
-         cUfVxLaPmaCyEO1sCZwWGlcVjFbvqDiatlKC44JOpIAOx4v5Ld7Tqj3K+R5cCgFeCfHv
-         QeTFy6Ds6ptV+7qcxF1NtAUYWkqfJkRsD8274rO5BB08BuvjrRupGEd62m5uOLFNGoYM
-         YNpXAF88ctoYO4duxwhol93C91Etje6Yo6nnRQZNWWIi8ku4di5IAg1SPSNBmI9LiF9b
-         8ROQ==
-X-Gm-Message-State: AOAM530HEldeX5fcTMK5GhcUTWBD6rFZNBzWsOmw7ItOqLtMZZhaSARd
-        TrGloXyCJLpRXy3BtT9dNjA=
-X-Google-Smtp-Source: ABdhPJx+rx4cP+1+sOITxZuVG7Nz465Y7W657IpFhU6flcvdjD9M4Non/MytsCOr4x8QKpgyYWUM2w==
-X-Received: by 2002:aca:2403:0:b0:325:6dae:a63b with SMTP id n3-20020aca2403000000b003256daea63bmr1586305oic.230.1652246873464;
-        Tue, 10 May 2022 22:27:53 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bk14-20020a056820190e00b0035ec65ac944sm583358oob.16.2022.05.10.22.27.51
+        bh=SEXbM79aMpwBO+zlSXHFOKrTHYdv3ZYxP3jk3lbMm1Y=;
+        b=rcYjBMhk9LpOg9HmsHeJPC1a9dJgm64aMb3qZf/3Fh08v5MlH7VcDNwNiMsfmm8MlH
+         Ubxzt8AQsWXOQ6rvD9E6ZhpNymJVJCF/RN59X2H6/Agsg89+RGaoP5Qe1r3SRSPWJLlQ
+         PuUVIsc2iXM9tyLo/KHrSdGzMsGhPz7/1B2wrTo1+MWNQBiyuqPDueoBhdzH6lqSvBhy
+         ZCUKhyDHASa6GuL3ORUPiCPSuCZ+RxjC0OvO7N8HctJcNqHkHIZrn2k63VjXKMYvjQeX
+         RtyMgMrggd1DzvBM0vVY/Hl1mnJMyn+lF6NC3BucZvCHHV5SR/6H3z160/jjCDuT+sRG
+         VJcg==
+X-Gm-Message-State: AOAM5303nTWDwqGGl6oA+fR6SCjw1WB5gRn33+93zVvk1s+zie6u+t0M
+        3j3jGJHQTbwcDKtNbweo3EhBRw==
+X-Google-Smtp-Source: ABdhPJyfjqXlpkuE7sI2D+xtwtHdknaRDBnVepRwTAUvjnSDRgdpSNTGjKliWkGxIrQPEC0DY3+XRA==
+X-Received: by 2002:a17:902:f652:b0:156:701b:9a2a with SMTP id m18-20020a170902f65200b00156701b9a2amr23726071plg.14.1652247499130;
+        Tue, 10 May 2022 22:38:19 -0700 (PDT)
+Received: from [10.61.2.177] (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
+        by smtp.gmail.com with ESMTPSA id h27-20020aa796db000000b0050dc76281bdsm549163pfq.151.2022.05.10.22.38.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 22:27:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3ccf7a2f-4690-5b85-21f1-21df69eb0a8d@roeck-us.net>
-Date:   Tue, 10 May 2022 22:27:50 -0700
+        Tue, 10 May 2022 22:38:18 -0700 (PDT)
+Message-ID: <c3d75681-5c5a-17bc-2f09-c8f40f570b6d@ozlabs.ru>
+Date:   Wed, 11 May 2022 15:38:13 +1000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
+ Thunderbird/100.0
+Subject: Re: [RFC v2 0/2] Add driver for PAPR watchdog timers
 Content-Language: en-US
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Scott Cheloha <cheloha@linux.ibm.com>
-Cc:     linux-watchdog@vger.kernel.org, brking@linux.ibm.com,
+To:     Scott Cheloha <cheloha@linux.ibm.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     linux@roeck-us.net, tzungbi@kernel.org, brking@linux.ibm.com,
         nathanl@linux.ibm.com, npiggin@gmail.com, vaishnavi@linux.ibm.com,
         wvoigt@us.ibm.com
 References: <20220509174357.5448-1-cheloha@linux.ibm.com>
- <20220509174357.5448-3-cheloha@linux.ibm.com> <YnnPdv+Hh9UEHMu/@google.com>
- <052b9903-e405-f6d0-444c-24d22bb85ad4@roeck-us.net>
- <4f829857-5255-58d9-c3f4-7bc33980e4f6@ozlabs.ru>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC v2 2/2] watchdog: pseries-wdt: initial support for PAPR
- virtual watchdog timers
-In-Reply-To: <4f829857-5255-58d9-c3f4-7bc33980e4f6@ozlabs.ru>
+From:   Alexey Kardashevskiy <aik@ozlabs.ru>
+In-Reply-To: <20220509174357.5448-1-cheloha@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/10/22 22:08, Alexey Kardashevskiy wrote:
+You should cc: linuxppc-dev@lists.ozlabs.org this. Thanks,
+
+On 5/10/22 03:43, Scott Cheloha wrote:
+> This second RFC incorporates feedback from the previous RFC:
 > 
+> https://lore.kernel.org/linux-watchdog/20220413165104.179144-1-cheloha@linux.ibm.com/
 > 
-> On 5/10/22 13:34, Guenter Roeck wrote:
->> On 5/9/22 19:35, Tzung-Bi Shih wrote:
->>> On Mon, May 09, 2022 at 12:43:57PM -0500, Scott Cheloha wrote:
->>>> +#define SETFIELD(_v, _b, _e)    \
->>>> +    (((unsigned long)(_v) << PPC_BITLSHIFT(_e)) & PPC_BITMASK((_b), (_e)))
->>>> +#define GETFIELD(_v, _b, _e)    \
->>>> +    (((unsigned long)(_v) & PPC_BITMASK((_b), (_e))) >> PPC_BITLSHIFT(_e))
->>>
->>>> From `./scripts/checkpatch.pl --strict`:
->>> WARNING: please, no spaces at the start of a line
->>>
->>>> +#define PSERIES_WDTQL_MUST_STOP           1
->>>
->>>> From `./scripts/checkpatch.pl --strict`:
->>> WARNING: please, no space before tabs
->>>
->>>> +static const struct kernel_param_ops action_ops = { .set = action_set };
->>>> +module_param_cb(action, &action_ops, NULL, S_IRUGO);
->>>
->>>> From `./scripts/checkpatch.pl --strict`:
->>> WARNING: Symbolic permissions 'S_IRUGO' are not preferred. Consider using
->>> octal permissions '0444'.
->>>
->>>> +MODULE_PARM_DESC(action, "Action taken when watchdog expires: \"hard-poweroff\", \"hard-restart\", or \"dump-restart\" (default=\"hard-restart\")");
->>>
->>> The line exceeds 100 columns.
->>>
->>>> +static bool nowayout = WATCHDOG_NOWAYOUT;
->>>> +module_param(nowayout, bool, S_IRUGO);
->>>
->>>> From `./scripts/checkpatch.pl --strict`:
->>> WARNING: Symbolic permissions 'S_IRUGO' are not preferred. Consider using
->>> octal permissions '0444'.
->>>
->>>> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->>>
->>>> From `./scripts/checkpatch.pl --strict`, the line exceeds 100 columns.
->>>
->>>> +#define WATCHDOG_TIMEOUT 60
->>>> +static unsigned int timeout = WATCHDOG_TIMEOUT;
->>>> +module_param(timeout, uint, S_IRUGO);
->>>
->>>> From `./scripts/checkpatch.pl --strict`:
->>> WARNING: Symbolic permissions 'S_IRUGO' are not preferred. Consider using
->>> octal permissions '0444'.
->>>
->>>> +MODULE_PARM_DESC(timeout, "Initial watchdog timeout in seconds (default=" __MODULE_STRING(WATCHDOG_TIMEOUT) ")");
->>>
->>>> From `./scripts/checkpatch.pl --strict`, the line exceeds 100 columns.
->>>
->>>> +struct pseries_wdt {
->>>> +    struct watchdog_device wd;
->>>> +    unsigned long num;        /* NB: Watchdog numbers are 1-based */
->>>
->>> What does NB stand for?  Could it be removed from the comment?
->>>
->>
->> Latin "Nota Bene", for "This is important".
->> All comments should be important, so I agree, this has little
->> if any value.
->>
->>> Does `timer_id` or some other equivalent names make more sense for the
->>> variable?
->>>
->>>> +static int pseries_wdt_start(struct watchdog_device *wdd)
->>>> +{
->>> [...]
->>>> +    rc = plpar_hcall_norets(H_WATCHDOG, flags, pw->num, msecs);
->>>> +    if (rc != H_SUCCESS) {
->>>> +        dev_crit(dev, "H_WATCHDOG: %ld: failed to start timer %lu",
->>>> +             rc, pw->num);
->>>> +               return -EIO;
->>>
->>>> From `./scripts/checkpatch.pl --strict`:
->>> ERROR: code indent should use tabs where possible
->>> WARNING: please, no space before tabs
->>>
->>>> +static struct watchdog_info pseries_wdt_info = {
->>>> +    .identity = DRV_NAME,
->>>> +    .options = WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT \
->>>> +        | WDIOF_PRETIMEOUT,
->>>
->>>> From `./scripts/checkpatch.pl --strict`:
->>> WARNING: Avoid unnecessary line continuations
->>>
->>>> +static const struct watchdog_ops pseries_wdt_ops = {
->>>> +    .owner = THIS_MODULE,
->>>> +    .ping = pseries_wdt_start,
->>>
->>> Does this mean: it needs hard restart for every ping?
->>>
->>
->> If there is no separate ping function, there is no need to point
->> the ping function to the start function. The watchdog core uses
->> the start function automatically in this case.
->>
->>>> +static int pseries_wdt_probe(struct platform_device *pdev)
->>>> +{
->>> [...]
->>>> +    rc = plpar_hcall(H_WATCHDOG, ret, PSERIES_WDTF_OP_QUERY);
->>>> +    if (rc != H_SUCCESS)
->>>> +        return (rc == H_FUNCTION) ? -ENODEV : -EIO;
->>>
->>> The parentheses can be dropped.
->>>
->>>> +    pw = devm_kzalloc(&pdev->dev, sizeof *pw, GFP_KERNEL);
->>>> +    if (pw == NULL)
->>>
->>>> From `./scripts/checkpatch.pl --strict`:
->>> CHECK: Comparison to NULL could be written "!pw"
->>>
->>>> +    pw->num = pdev->id + 1;        /* 0-based -> 1-based */
->>>
->>> Didn't see where the platform device was registered but using the pdev->id as
->>> the timer id could be unreliable (e.g. from auto increment).
->>
->> That is at the beginning of the patch, in arch/powerpc/platforms/pseries/setup.c,
->> which calls platform_device_register_simple() with an explicit device ID.
->>
->> I agree, though, that it is fragile: The code in the probe function
->> explicitly checks for a negative ID, which would only be provided if
->> platform_device_register() explicitly declares that (ie if it provides
->> PLATFORM_DEVID_NONE as device ID). But if that is a concern, there
->> might as well be code registering a platform device with
->> PLATFORM_DEVID_AUTO as device ID, and then th device id would be automatic
->> and more or less random. I think the instantiation code should be more
->> explicit: Either assume that PLATFORM_DEVID_NONE or PLATFORM_DEVID_AUTO
->> will never be used to register the watchdog devices, or provide other
->> information such as platform data to make it explicit.
->>
->> Also, the changes in arch code need to be made in separate patches.
+> v2 changes of note:
 > 
+> - Add a firmware feature flag for the H_WATCHDOG feature,
+>    FW_FEATURE_WATCHDOG.
 > 
-> Often this is true but in case like this - the driver itself is dead code until the platform enables it and if there is a problem with the driver - bisect will point to the device enablement commit. Backporting becomes a problem as it is going to be 3 apart patches vs. one:
-> 1) define hypercall
-> 2) implement the driver
-> 3) enable the driver + device FW feature flag.
+> - Register a platform_device for the first watchdog timer during a
+>    pseries initcall if we have FW_FEATURE_WATCHDOG.  Use id zero, as
+>    there could be more than one timer in the future.
 > 
-> Instead, either maintainer (powerpc or watchdog) says "ack" and the other one puts it in the tree, I saw this in practice. Thanks,
+> - Alphabetize Makefile changes.
+> 
+> - Add missing copyright information to pseries-wdt.c.
+> 
+> - Add an 'action' module parameter that configures how the guest is
+>    terminated on watchdog expiration.
+> 
+> - Use dev_*() for logging critical errors instead of pr_*().
+> 
+> - Handle the H_NOOP case when trying to stop the watchdog.  If the
+>    given watchdog is not actually running, H_WATCHDOG returns H_NOOP.
+>    This is harmless, so we should treat it as a success.
+> 
+> - We don't need pseries_wdt_remove() at all.
+> 
+> - Check watchdog_active() before stopping/starting the timer across
+>    suspend/resume.
+> 
+> - Consolidate all code from pseries_wdt_module_init() into
+>    pseries_wdt_probe().  We can then use module_platform_driver().
+> 
+> I have one lingering question:
+> 
+> - The pseries-wdt module is not "automatically" loaded during boot.
+> 
+>    When I do
+> 
+> 	# modprobe pseries-wdt
+> 
+>    the driver attaches to the platform bus as expected and the
+>    /dev/watchdog* devices for the pseries-wdt.0 platform device
+>    are created.
+> 
+>    I was under the impression that driver/device matching for
+>    the platform bus was simple string comparison.
+> 
+>    ... what am I doing wrong?  Is this expected behavior?  Do
+>    I need to do additional configuration to get the module to
+>    load automatically at boot time?
 > 
 
-I won't accept this. I don't mind giving an Ack to a patch applied elsewhere,
-and I don't mind applying patches from another subsystem if Acked by affected
-maintainers, but I strongly believe that there should be no cross-subsystem
-patches. Also, I don't consider 2) and 3) to be a single logical change,
-and the rule for patches is "one logical change per patch".
-
-Other maintainers may handle this differently, but that is their call and
-responsibility.
-
-Guenter
+-- 
+Alexey
