@@ -2,75 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA54527171
-	for <lists+linux-watchdog@lfdr.de>; Sat, 14 May 2022 15:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1143F52717B
+	for <lists+linux-watchdog@lfdr.de>; Sat, 14 May 2022 16:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbiENN5n (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 14 May 2022 09:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S231148AbiENOAw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 14 May 2022 10:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiENN5m (ORCPT
+        with ESMTP id S232791AbiENOAv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 14 May 2022 09:57:42 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A42E2603;
-        Sat, 14 May 2022 06:57:41 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-ee1e7362caso13913405fac.10;
-        Sat, 14 May 2022 06:57:41 -0700 (PDT)
+        Sat, 14 May 2022 10:00:51 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E8B13F32;
+        Sat, 14 May 2022 07:00:50 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id k25-20020a056830169900b00605f215e55dso6920332otr.13;
+        Sat, 14 May 2022 07:00:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=4Qm5cv18thUTYWWgXc1NDziQmWO3vUl0gRtWTsdHeOI=;
-        b=aA50R7hnQ5ldr5jXvWGZrTFZHeN7m3xkZAJpAnsB0tlSqiW2eiM0R5t6m6jsfjuiX/
-         6R9n+wBA2C3UZYeB9FseJywxyQkbY84LSwAlwrNwKtBsKS35X8wpvVNjZVLlLSWzM/93
-         7+iL51YfWwtsX61MbxpT/FYxVixHciI4jL+fii0tJd6xUZ2Q9u9by+WQ2/aK4xV3ghQd
-         7ABiN/DGvqcU+Jf/40TIqyAbB6i+Q9Ex32W6uyLk66JiiRvT01ghjeP6O5KkodqMVjCy
-         42sc5SL907m1P46NlMUTN6cK1emNz9iDGJqysFsSywxwBxYouRTvaGOE/KqVlU7thb6M
-         tqAA==
+        bh=r5s+doHcYQWzsPeh1k8QMpiHwn1NutW4RM6Yb0cra0w=;
+        b=WonD9bik2i2LWjMSuw+kATdtO63CjkAXmXLKLK1WFKtqk2grZ5M/XKCyFfVHktQRQc
+         Cj/epoHbr402sgBhVuwUGg7/QQ9HatLD2I2oe52B8y6ETGoMUVHwv45lCncnopx/kEdJ
+         EmjCmjNbXLgCN9OK7qKhpFbofy75pObVsV5EVNoNokzKZukVf6EU4Xmqu2jG6LApJ0s1
+         SgoS/vyc5Yitf92vWOWduSNWtl8HdqopVBkY9PFfbEHlZZnLdoJTYbOzUqTa3cAN4iLj
+         OBHuvrgP4iz6c0KoO8ZAuTSX3lfdHTX1KDqCmIzw2S07yzmA0lEZIGfoCQgaIGPsBQmM
+         kvVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=4Qm5cv18thUTYWWgXc1NDziQmWO3vUl0gRtWTsdHeOI=;
-        b=2Xk+Sf4Hy6xRtwtOHTGhAfSjr4Eoc3oEFZtKXlRe7UukB5nSn00FDswwmL7GawJCki
-         iuM91husyZ2Mb0rsFKLPbAWUfypBR/hFzhXcNaTzfAEyl6NuYxfGavHKxC96Jz5uuXvp
-         v9Ca9itWOKMVnlEyGrm/IDUDTmi6D9er4Jham7Ela+nxLoVwBVomsF0NzncXVtOHU1O1
-         1ePCyfpvXMSVrPonbOoF5lpsvx7pRtCqQ4eiF+MKJNFfMDxr1iccq/75uJULk0LkNYof
-         NtZXXPlk1lTlvFmlM5cz9pVwJOwR+4lHrRsGvhrlXyaDDQFBfv4wVSkvLB0FidXqZ1ui
-         un9w==
-X-Gm-Message-State: AOAM532nHPreeRuEQxS8zcqlE6fHu/pU7T6MNcZzfEvU0GHE6U0dDM+z
-        AVWsWUkB4dQBdjkFlvlo4oY=
-X-Google-Smtp-Source: ABdhPJzRwDB/Hzari+NfnE7XoUEGuEANA3lP+hVTx2+ZnyFc7KugMPfM+Uat3/j5uYflZxjFv+p27g==
-X-Received: by 2002:a05:6870:d29e:b0:de:2438:7a04 with SMTP id d30-20020a056870d29e00b000de24387a04mr5075316oae.139.1652536660395;
-        Sat, 14 May 2022 06:57:40 -0700 (PDT)
+        bh=r5s+doHcYQWzsPeh1k8QMpiHwn1NutW4RM6Yb0cra0w=;
+        b=4dcU2XkERB5QY/FBR3tY/v6wb8efKplG0a/h+MYt9Cp6/Wyddwdy7n6QToGr8V5iZB
+         FX/h/RensifWGj3VIFpfcnOlahmvmPTftcEjMylkqdrsYI0OIOCt5gvVdn3uVIu/Ymf5
+         V4DhSppeJRWQTzOgdv7rUHUYpXS1nsyF8g9QknmdK3uah7PlvZsInno3LsMzPeKJ6uPR
+         +ZyUq/tR7NId6ixe6Ulm8V7SYS8dTneClkSqUOmCJz+z2lVoQs8ctEn5DC1Lxfb9iO1I
+         qIxXUptpHC1YN1Q9kiLe1RdwqalPXunqUkAY+7V58Wb3uf7wRLzp3aLzJftSpHZ77D2H
+         RBrg==
+X-Gm-Message-State: AOAM531a7ip8tvYpXg3741gICsHSG3JsPZDMQo2aiBgSc8QliiAks9d1
+        n16fp/l8OE7+cQ8GpcwZpSpYVHd/ryFJ3w==
+X-Google-Smtp-Source: ABdhPJxY98kAGijVKg0vLPBl2mgcf5CmxD8ZncDkfFie3T/F7As56uNYEJjOprbFasvDcBiCNs/LcQ==
+X-Received: by 2002:a05:6830:1c65:b0:606:3cc:862 with SMTP id s5-20020a0568301c6500b0060603cc0862mr3434882otg.75.1652536848463;
+        Sat, 14 May 2022 07:00:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d67-20020acab446000000b00325cda1ffbbsm2082245oif.58.2022.05.14.06.57.39
+        by smtp.gmail.com with ESMTPSA id r196-20020acaa8cd000000b00325cda1ffa5sm2066306oie.36.2022.05.14.07.00.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 06:57:39 -0700 (PDT)
+        Sat, 14 May 2022 07:00:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 14 May 2022 06:57:38 -0700
+Date:   Sat, 14 May 2022 07:00:46 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Primoz Fiser <primoz.fiser@norik.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Hari Nagalla <hnagalla@ti.com>, Nishanth Menon <nm@ti.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrej Picej <andrej.picej@norik.com>, upstream@phytec.de
-Subject: Re: [PATCH 3/3] ARM: dts: imx6: phyFLEX: disable da9063 watchdog
- during suspend
-Message-ID: <20220514135738.GA1243983@roeck-us.net>
-References: <20220422072713.3172345-1-primoz.fiser@norik.com>
- <20220422072713.3172345-3-primoz.fiser@norik.com>
+        linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] watchdog: rti_wdt: Fix calculation and evaluation of
+ preset heartbeat
+Message-ID: <20220514140046.GA1244552@roeck-us.net>
+References: <6a4b54ac-9588-e172-c4c7-b91d524a851e@siemens.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422072713.3172345-3-primoz.fiser@norik.com>
+In-Reply-To: <6a4b54ac-9588-e172-c4c7-b91d524a851e@siemens.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -82,30 +75,56 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 09:27:13AM +0200, Primoz Fiser wrote:
-> If DA9063 PMIC is left enabled during suspend, PMIC's watchdog needs to
-> be disabled before entering suspended state to allow board to sleep for
-> longer period than the watchdog timeout period. Otherwise board will be
-> reset by the watchdog. Thus disable watchdog on suspend and re-enable it
-> upon resume.
+On Mon, Feb 21, 2022 at 05:22:38PM +0100, Jan Kiszka wrote:
+> From: Jan Kiszka <jan.kiszka@siemens.com>
 > 
-> Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
+> This ensures that the same value is read back as was eventually
+> programmed when using seconds as accuracy. Even then, comparing the more
+> precise heartbeat_ms against heartbeat in seconds will almost never
+> provide a match and will needlessly raise a warning. Fix by comparing
+> apples to apples.
+> 
+> Tested in combination with U-Boot as watchdog starter.
+> 
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> index 1f2ba6f6254e..56b29c3294c6 100644
-> --- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> +++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> @@ -212,6 +212,7 @@ da9063_rtc: rtc {
+> To fully work, it also needs a U-Boot patch to add the same 10% margin 
+> to the clock frequency:
+> 
+> https://patchwork.ozlabs.org/project/uboot/patch/9b3603a3-1bf4-eb57-c378-20d5c2accc34@siemens.com/
+> 
+>  drivers/watchdog/rti_wdt.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+> index 117bc2a8eb0a..3ecd14e180fb 100644
+> --- a/drivers/watchdog/rti_wdt.c
+> +++ b/drivers/watchdog/rti_wdt.c
+> @@ -252,6 +252,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  	}
 >  
->  		da9063_wdog: watchdog {
->  			compatible = "dlg,da9063-watchdog";
-> +			dlg,use-sw-pm;
->  		};
+>  	if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
+> +		int preset_heartbeat;
+>  		u32 time_left_ms;
+>  		u64 heartbeat_ms;
+>  		u32 wsize;
+> @@ -262,11 +263,12 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  		heartbeat_ms <<= WDT_PRELOAD_SHIFT;
+>  		heartbeat_ms *= 1000;
+>  		do_div(heartbeat_ms, wdt->freq);
+> -		if (heartbeat_ms != heartbeat * 1000)
+> +		preset_heartbeat = heartbeat_ms + 500;
+> +		preset_heartbeat /= 1000;
+> +		if (preset_heartbeat != heartbeat)
+>  			dev_warn(dev, "watchdog already running, ignoring heartbeat config!\n");
 >  
->  		onkey {
+> -		heartbeat = heartbeat_ms;
+> -		heartbeat /= 1000;
+> +		heartbeat = preset_heartbeat;
+>  
+>  		wsize = readl(wdt->base + RTIWWDSIZECTRL);
+>  		ret = rti_wdt_setup_hw_hb(wdd, wsize);
