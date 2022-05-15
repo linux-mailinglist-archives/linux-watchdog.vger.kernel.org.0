@@ -2,516 +2,144 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31C052F33B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 May 2022 20:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C5152FEC6
+	for <lists+linux-watchdog@lfdr.de>; Sat, 21 May 2022 20:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352984AbiETShv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 20 May 2022 14:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S1344540AbiEUSXW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 21 May 2022 14:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352966AbiETShs (ORCPT
+        with ESMTP id S1344480AbiEUSXU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 20 May 2022 14:37:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795978A320
-        for <linux-watchdog@vger.kernel.org>; Fri, 20 May 2022 11:37:42 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KHTEt1025679;
-        Fri, 20 May 2022 18:37:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=lEPhqUEkVCpFL31vlocaJqHP12q5U1uRfMK2X6kp+cY=;
- b=j/mqjeanqu/GgTSh9V9O9RoTZWK3y1W7n8bi7pyIUOeT5+M8j+ZZnUN9d5mMG4t29qcS
- /++gxQY+E54iWh+BD45bAdqgoQ/x/9nER5laDEPODA1Rsc/Zihu75wK0ADTEtmVCmdLl
- y6dS8f+Ea5mylm5id8POYHsSImp195s9FfDD+r5sgyNOg7b2gXO5baPu05Gm7KScyHZB
- kVCLo2G1YybEVjkKYhFdwUKWqsfsEK8fM0u6zbdWBnbEBPGsQshaRh+GJKK+SrMWO7N6
- kYs5d9dJugIzlwLlmZywv78KQ/hpjfCbCkBpxSPqUKmhKagsDGen3+kiyIyRCrviHil+ SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g6fe492sc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 18:37:20 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24KIZjVc010522;
-        Fri, 20 May 2022 18:37:19 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g6fe492rw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 18:37:19 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KIGwDR022316;
-        Fri, 20 May 2022 18:37:18 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03wdc.us.ibm.com with ESMTP id 3g242acpj5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 18:37:18 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KIbGjK12255726
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 May 2022 18:37:16 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F246BE04F;
-        Fri, 20 May 2022 18:37:16 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4DA81BE051;
-        Fri, 20 May 2022 18:37:16 +0000 (GMT)
-Received: from localhost (unknown [9.41.178.126])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 20 May 2022 18:37:16 +0000 (GMT)
-From:   Scott Cheloha <cheloha@linux.ibm.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     linux@roeck-us.net, tzungbi@kernel.org, brking@linux.ibm.com,
-        nathanl@linux.ibm.com, aik@ozlabs.ru, npiggin@gmail.com,
-        vaishnavi@linux.ibm.com, wvoigt@us.ibm.com,
-        linuxppc-dev@lists.ozlabs.org,
-        Scott Cheloha <cheloha@linux.ibm.com>
-Subject: [PATCH v1 4/4] watchdog/pseries-wdt: initial support for PAPR H_WATCHDOG timers
-Date:   Fri, 20 May 2022 13:35:52 -0500
-Message-Id: <20220520183552.33426-5-cheloha@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220520183552.33426-1-cheloha@linux.ibm.com>
-References: <20220520183552.33426-1-cheloha@linux.ibm.com>
+        Sat, 21 May 2022 14:23:20 -0400
+X-Greylist: delayed 967 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 May 2022 11:23:16 PDT
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02hn2241.outbound.protection.partner.outlook.cn [139.219.17.241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7459C6543E;
+        Sat, 21 May 2022 11:23:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TuXa36FvAQH/U13fYAVGsvXSNDAlNrHZbBFJV6aA4quzr/HuO01HIW5jNPGRHVOACsTLEE1XEnXFVNahJAwbJw2L0ucrLlDkzBUSo55L4EE7VUOCgWsmEOCrzofMIpF0E3LIhwJq6v5QrRkojH5mG1nqQ1khFJl4Y0WB5FQnmabRNsl+qjCDOsOnFxIhzn9SNomyRk9CazBrV9qc9S6VbVzS/M5YyfZApay53VsCxmUjoPT2pLUdJDgmq7C8OwRWH85sxp+MPoC1O9DkkP3C9v92zMyizyigITzCGaJgP1s2yWFZd4/2ZpHV0RJPjmDiTuR4nrU34F2JgW9UgSXODw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
+ b=B5xYTaJGJOnl/5jIrlRYKKduv8sOzS5MiPRCFx7Lo6VPfcwKtgUbLkOOtM53cAwbP8Cxd1D6aqdxy2ZSBtG6hdMMmHSOE3jtPhT5gVWA9GGfmEU3uLXEU/5VPl/AGyA9gmpU0FUdYpMDLrOcZZYxHFgX6hbzE7oWkxgpUvIFliuEUfJ+TkZWh7rYjSAYbCV0BBiyD832f9QlvGIx+/8OGDSs5toCX2pVC+YwGzkketrwWufMTDRVpj9J8E1zoiNmlCD0iOCPCv6rNEQVjZbvK73HP2mBv++VKBV9VHIH9CofII7wZtKGrz5zYvdmRIGclVZSayl98ecmPeCXVD0mLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=gientech.com; dmarc=pass action=none header.from=gientech.com;
+ dkim=pass header.d=gientech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gientech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
+ b=qjpEOcGdv2D3B/OIEySmRCQUqrhz0cZ8g/ASaluUEqaBX81/6PKwJ4/M+ySq8wyHl8/wXLiRBFNYS3Oiy1d39KA3k3LnXeTw2XPj8cyWYtbkYWdhJFGU/DAoGwO6fVNpQShZx5k55rAj+m26Lx2bX/PXWAuEqzgiXa9v+E+jYdNcv7gq83f2fYbgD9bLyP1n0V2UQgJufjQNNxaKIHf+B0Nm8kbZ1E8OT64sC/TVbva1hZos4/r4H1s7STGEN6Lv4AWiGw9+YR9AY8Qj2n4CI13fIK/v3WXoRcSfJfoXLNv/88v8847FH8qJPUffUJvl6dwq5iMs+yXfxctxUftgtA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=gientech.com;
+Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85) by
+ SH0PR01MB0666.CHNPR01.prod.partner.outlook.cn (10.43.106.146) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.14; Sat, 21 May 2022 18:07:06 +0000
+Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85])
+ by SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85]) with mapi
+ id 15.20.5273.019; Sat, 21 May 2022 18:07:06 +0000
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE..
+To:     Recipients <tianjiao.yang@gientech.com>
+From:   "J Wu" <tianjiao.yang@gientech.com>
+Date:   Sun, 15 May 2022 12:39:25 +0000
+Reply-To: contact@jimmywu.online
+X-ClientProxiedBy: SH2PR01CA037.CHNPR01.prod.partner.outlook.cn (10.41.247.47)
+ To SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85)
+Message-ID: <SH0PR01MB0729F034D32103D3BB41ECF58ACC9@SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cPeixZ3eTftAp7C4WVM0svTbgNVOmJif
-X-Proofpoint-ORIG-GUID: k_bvVyXx9kD9Kk1LcCbGomkt520eM7b_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_05,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0 spamscore=0
- bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205200117
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: faf8bd70-7a88-4c02-cc26-08da366ffec8
+X-MS-TrafficTypeDiagnostic: SH0PR01MB0666:EE_
+X-Microsoft-Antispam-PRVS: <SH0PR01MB0666C243D9C8D8AD563599B18AD29@SH0PR01MB0666.CHNPR01.prod.partner.outlook.cn>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?46p5WoMwwZepa949qQpGR9wGxNGxi8E8RtWBUpB38thyKKv+/DDw6Qgceo?=
+ =?iso-8859-1?Q?cHdTWLvJnsCM9FvrroDcE25ni72QZ49Bkxny7F4F3LqH+GtCj5u07qNLKf?=
+ =?iso-8859-1?Q?tFjXAI9v+r5HnH7yRWXTx5nB+iS/JppFRj/gPMgq3juIGUI7FYqtPLCrQR?=
+ =?iso-8859-1?Q?JpuexNRy6bks0LgCvfG5KmLPA30OfjdNOO2rJubR2H7dyoZRiSc1U7uJQH?=
+ =?iso-8859-1?Q?Wzr8ODAuSqL8l5WbgDMvlpqkf5s4xq/fSPS2UMI9J3eyKcmn/ROsBR/sw2?=
+ =?iso-8859-1?Q?SiVm84cW+jpY4G+u0lwWa+9z11w0oBuuzZUTLS/5HILbQNSWKegMmL2VUa?=
+ =?iso-8859-1?Q?z5l2HEOMmQHvMvZLCQuNpm5M9UAl0d4cvFR+v8GwaB3gTUXKgYsNhopQQa?=
+ =?iso-8859-1?Q?X/2GZEx9kMUEHoRCz7Xn/Lz6oSGk/yNoL5yH3RumNB7f4/kMmb9TQK62YR?=
+ =?iso-8859-1?Q?Y7zQXtULmPS3WQLL5yxvZo/O0ML0Lw/hxTcpqen3Lg3RUD8hIuZTTwQjyY?=
+ =?iso-8859-1?Q?IiTyJAKU1d0WsD/vRj3J4NbIcpECtZJvrnV8Ss3RtHWCrTOsxJTlxtDc93?=
+ =?iso-8859-1?Q?PWQ0UzsfY0Du5MbrroNiC28Wqd+cS5jtmZJogVayU4hQ/XE3qEnzdPXFGt?=
+ =?iso-8859-1?Q?sIzjTuPC2uDIjSDuicravYQJG2isY3ep8kP/sMb4uk7jc0u3vFJL4O6cyr?=
+ =?iso-8859-1?Q?vXDZOQHJlktQSni7VUHfVUT4q/pWmCe2wXQtczC+3ROP5SmbnEtSmt5vVK?=
+ =?iso-8859-1?Q?8bvIllYRQdD6P377SLq999A79H7fxY4kF9XHdjTvyY9GE3DRH1UZHLCcYs?=
+ =?iso-8859-1?Q?4lK+8tXjk7mJmRaMBBSL0n71xDVVn5zAzfKtWoLq6eyoGnQYebrWQv1iSM?=
+ =?iso-8859-1?Q?AqjssusZzCHAzTvS4cOWtfc8mcXvQTCeHWQ7Yrhl+fCU4TygYQl4GdbGMo?=
+ =?iso-8859-1?Q?8U22nepKYH5J/SI+Acs+aRoz2jjeOIza3iiw5m2GYadl+7DQmvfvMQB1+I?=
+ =?iso-8859-1?Q?OxplmhI32dXs67A4f/Ek1MMFIG3p8ZW3Y/otvHjHHpz/Mo+2o6RWkpqEoE?=
+ =?iso-8859-1?Q?zw=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:OSPM;SFS:(13230001)(366004)(6200100001)(508600001)(19618925003)(4270600006)(3480700007)(33656002)(8936002)(38350700002)(38100700002)(2906002)(9686003)(26005)(186003)(40180700001)(66946007)(66476007)(558084003)(40160700002)(7116003)(7366002)(7406005)(7416002)(86362001)(7696005)(52116002)(6666004)(66556008)(8676002)(6862004)(55016003)(62346012);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?gV/BiX7xBq7+a/BwD63fwridp+2yYk158+FDxzxd+zT8uOVJFuGACPmzpL?=
+ =?iso-8859-1?Q?5ATG0N3sHublzULunRSg66ZL5GU7ZMPLqBctGNViGlJyiGKSDM4W/QNCMT?=
+ =?iso-8859-1?Q?pDJ8Xb0RgsPZ61reyinMVBKa/mJ9wRSUfxL8rXpCuPunXUDAx8HIz0ge2T?=
+ =?iso-8859-1?Q?F+yaYrt2bxscU+sIycemH9RogtRwsjOfEpNssa+vgxLVlS/LT91LGPxPIS?=
+ =?iso-8859-1?Q?grzlQHkN8q9SpBTvvf4Twtv69h1bqpsKmJ2QkSk9LMfb+k6jhFTJWXlL/a?=
+ =?iso-8859-1?Q?b3bXUdgPtmpFJn3doX5a719ouYn/2h74fnjUUSyl33c0R/n+D0wPsM+HBe?=
+ =?iso-8859-1?Q?aAe7qS9oG8018mtkNX4i/suOJ2B7SUs1kZOHOYY/oQK7hNtiYQGTBt04OX?=
+ =?iso-8859-1?Q?HZBsOQ2qgdTKlO+PjvUgvYO8FOGpo+gUlMpF5Pgu4lMSvzTEasKlOUVTg9?=
+ =?iso-8859-1?Q?GDGtZsY1wqQH/KfUNoU25OYC/AGbNSIMSP6r8UOIFuSKGZWp4xGnaQOKBm?=
+ =?iso-8859-1?Q?gBO+saR5P0VMTmTRYelG30iZIo+0nE1Cz294dA5fgna3MYc+gvtb9Qx9qB?=
+ =?iso-8859-1?Q?t+Hs2rI/R0Eqgdrdd7NZJqEoO0GidkVEPhX3VKh/odD71Hka00t4AnjYD5?=
+ =?iso-8859-1?Q?3XgPaRQ+vsv6iFquRrCdz3I2QrIII/O7oNWvqVPejsJgES8j6sXDW1/ukX?=
+ =?iso-8859-1?Q?viRoWxHtCmnbhLUCChBFI7s2ohD+kHY+guJ+g/iXs6f/L2NW2H9wf3dIFm?=
+ =?iso-8859-1?Q?+52flTQNRoFI8OIKxG8RbfHSLf1zZd+iJF+V3wD/LKq1KUG6c+BI+W+QI6?=
+ =?iso-8859-1?Q?v/rOo0lIFR445pUP8GKHJ6H2YM1orfp5kTbtoNpwaKp4WHUT8f+23BnkQr?=
+ =?iso-8859-1?Q?bDcbY49xnIDsxqxGztZtz63AjtnlYeh67jrjT0NunU+hkBML9TrWGVrTS3?=
+ =?iso-8859-1?Q?IZRYW819gx7N9K6O8N5SngepzMmhQQ5Y9KFU0PJgkwGYqe8dhcAc9o5rdn?=
+ =?iso-8859-1?Q?arySmrdFf6I8R7Yxn5iGniNdofeH9OyMhT/q1paazAF7cicDMD8k1+S2Kr?=
+ =?iso-8859-1?Q?UievLerwKN3LOM1kEy5VbhPhpW1/wHbEqqEooFSk5WeMj3cuWF+g4KcFs7?=
+ =?iso-8859-1?Q?blBCiFV1JuqdHw1fb1KbQNcJKCKj8rrYWb1Tu9EIMmCFBBnb+m5UX/93on?=
+ =?iso-8859-1?Q?KLb/vyekXUpZzIEW8akMQuMTTPzvmwAstX4G1fZw/Bk4IdOg+jDfPU1QS5?=
+ =?iso-8859-1?Q?H19AkhzatlLRCltmjwT68cNlEm1lQtBxnWgFR6DZhsvTd7NEIFEnfWcsRa?=
+ =?iso-8859-1?Q?9l0IHBSgJ2K/ueN8OdJQwHDGGiSEWj/X0ixsSG8AXl5O9KHtTY+RWeOD6d?=
+ =?iso-8859-1?Q?UMRZL5mfjQlYVVjTgXjhxYr1ME+HSk3VuImoKkvzEgp9QAPp7t++9jGLYG?=
+ =?iso-8859-1?Q?2s4jGE2VpP/MeDmiZ+jMlusowjC6eJ4+LhMgc2pIbkYGRMmsn0KEH1tW2U?=
+ =?iso-8859-1?Q?fFemHBbH2lv/sSK1vg+ErtGHJP5UmzzFSQJUy1jUPUOS34fxJS5gKVpTaV?=
+ =?iso-8859-1?Q?9sD4sNlLm8oG5KAlXd2todkEbv/i2Jjx5pHiDLA9+eFQ3dHcxMOLMB7QS+?=
+ =?iso-8859-1?Q?z21YeZlnDuM7nQ+ROe3LdzmRTM2ht1kehp7yEQZx+cenGYf1VIE/oXdxzq?=
+ =?iso-8859-1?Q?5V4T3bdpEDWEvm9hKL2u8MeeBER/G+IgxohZxCVwNeLYxJfT4q/8gV8xmo?=
+ =?iso-8859-1?Q?NoJs80UZLIYxw2eIInizoiXuc=3D?=
+X-OriginatorOrg: gientech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: faf8bd70-7a88-4c02-cc26-08da366ffec8
+X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2022 12:39:47.1594
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 89592e53-6f9d-4b93-82b1-9f8da689f1b4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8g9EmpQzizJrjFxL6470Mr8XSsngbB4IyYR9bZMHcfHFn0gslr0Q9UTF+zKMGxvRgsyBfppO/gs2EBHZZWNK0Aa1udZzOY8RDGFkrjNOJVs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0666
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DATE_IN_PAST_96_XX,
+        DKIM_INVALID,DKIM_SIGNED,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4895]
+        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  3.4 DATE_IN_PAST_96_XX Date: is 96 hours or more before Received:
+        *      date
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-PAPR v2.12 defines a new hypercall, H_WATCHDOG.  The hypercall permits
-guest control of one or more virtual watchdog timers.  The timers have
-millisecond granularity.  The guest is terminated when a timer
-expires.
-
-This patch adds a watchdog driver for these timers, "pseries-wdt".
-
-pseries_wdt_probe() currently assumes the existence of only one
-platform device and always assigns it watchdogNumber 1.  If we ever
-expose more than one timer to userspace we will need to devise a way
-to assign a distinct watchdogNumber to each platform device at device
-registration time.
-
-Signed-off-by: Scott Cheloha <cheloha@linux.ibm.com>
----
- .../watchdog/watchdog-parameters.rst          |  12 +
- drivers/watchdog/Kconfig                      |   8 +
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/pseries-wdt.c                | 337 ++++++++++++++++++
- 4 files changed, 358 insertions(+)
- create mode 100644 drivers/watchdog/pseries-wdt.c
-
-diff --git a/Documentation/watchdog/watchdog-parameters.rst b/Documentation/watchdog/watchdog-parameters.rst
-index 223c99361a30..4ffe725e796c 100644
---- a/Documentation/watchdog/watchdog-parameters.rst
-+++ b/Documentation/watchdog/watchdog-parameters.rst
-@@ -425,6 +425,18 @@ pnx833x_wdt:
- 
- -------------------------------------------------
- 
-+pseries-wdt:
-+    action:
-+	Action taken when watchdog expires: 1 (power off), 2 (restart),
-+	3 (dump and restart). (default=2)
-+    timeout:
-+	Initial watchdog timeout in seconds. (default=60)
-+    nowayout:
-+	Watchdog cannot be stopped once started.
-+	(default=kernel config parameter)
-+
-+-------------------------------------------------
-+
- rc32434_wdt:
-     timeout:
- 	Watchdog timeout value, in seconds (default=20)
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index c4e82a8d863f..06b412603f3e 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1932,6 +1932,14 @@ config MEN_A21_WDT
- 
- # PPC64 Architecture
- 
-+config PSERIES_WDT
-+	tristate "POWER Architecture Platform Watchdog Timer"
-+	depends on PPC_PSERIES
-+	select WATCHDOG_CORE
-+	help
-+	  Driver for virtual watchdog timers provided by PAPR
-+	  hypervisors (e.g. PowerVM, KVM).
-+
- config WATCHDOG_RTAS
- 	tristate "RTAS watchdog"
- 	depends on PPC_RTAS
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index f7da867e8782..f35660409f17 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -184,6 +184,7 @@ obj-$(CONFIG_BOOKE_WDT) += booke_wdt.o
- obj-$(CONFIG_MEN_A21_WDT) += mena21_wdt.o
- 
- # PPC64 Architecture
-+obj-$(CONFIG_PSERIES_WDT) += pseries-wdt.o
- obj-$(CONFIG_WATCHDOG_RTAS) += wdrtas.o
- 
- # S390 Architecture
-diff --git a/drivers/watchdog/pseries-wdt.c b/drivers/watchdog/pseries-wdt.c
-new file mode 100644
-index 000000000000..f41bc4d3b7a2
---- /dev/null
-+++ b/drivers/watchdog/pseries-wdt.c
-@@ -0,0 +1,337 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (c) 2022 International Business Machines, Inc.
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/kernel.h>
-+#include <linux/limits.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/moduleparam.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
-+
-+#define DRV_NAME "pseries-wdt"
-+
-+/*
-+ * The PAPR's MSB->LSB bit ordering is 0->63.  These macros simplify
-+ * defining bitfields as described in the PAPR without needing to
-+ * transpose values to the more C-like 63->0 ordering.
-+ */
-+#define SETFIELD(_v, _b, _e)	\
-+	(((unsigned long)(_v) << PPC_BITLSHIFT(_e)) & PPC_BITMASK((_b), (_e)))
-+#define GETFIELD(_v, _b, _e)	\
-+	(((unsigned long)(_v) & PPC_BITMASK((_b), (_e))) >> PPC_BITLSHIFT(_e))
-+
-+/*
-+ * H_WATCHDOG Hypercall Input
-+ *
-+ * R4: "flags":
-+ *
-+ *     A 64-bit value structured as follows:
-+ *
-+ *         Bits 0-46: Reserved (must be zero).
-+ */
-+#define PSERIES_WDTF_RESERVED	PPC_BITMASK(0, 46)
-+
-+/*
-+ *         Bit 47: "leaveOtherWatchdogsRunningOnTimeout"
-+ *
-+ *             0  Stop outstanding watchdogs on timeout.
-+ *             1  Leave outstanding watchdogs running on timeout.
-+ */
-+#define PSERIES_WDTF_LEAVE_OTHER	PPC_BIT(47)
-+
-+/*
-+ *         Bits 48-55: "operation"
-+ *
-+ *             0x01  Start Watchdog
-+ *             0x02  Stop Watchdog
-+ *             0x03  Query Watchdog Capabilities
-+ *             0x04  Query Watchdog LPM Requirement
-+ */
-+#define PSERIES_WDTF_OP(op)		SETFIELD((op), 48, 55)
-+#define PSERIES_WDTF_OP_START		PSERIES_WDTF_OP(0x1)
-+#define PSERIES_WDTF_OP_STOP		PSERIES_WDTF_OP(0x2)
-+#define PSERIES_WDTF_OP_QUERY		PSERIES_WDTF_OP(0x3)
-+#define PSERIES_WDTF_OP_QUERY_LPM	PSERIES_WDTF_OP(0x4)
-+
-+/*
-+ *         Bits 56-63: "timeoutAction"
-+ *
-+ *             0x01  Hard poweroff
-+ *             0x02  Hard restart
-+ *             0x03  Dump restart
-+ */
-+#define PSERIES_WDTF_ACTION(ac)			SETFIELD(ac, 56, 63)
-+#define PSERIES_WDTF_ACTION_HARD_POWEROFF	PSERIES_WDTF_ACTION(0x1)
-+#define PSERIES_WDTF_ACTION_HARD_RESTART	PSERIES_WDTF_ACTION(0x2)
-+#define PSERIES_WDTF_ACTION_DUMP_RESTART	PSERIES_WDTF_ACTION(0x3)
-+
-+/*
-+ * R5: "watchdogNumber":
-+ *
-+ *     The target watchdog.  Watchdog numbers are 1-based.  The
-+ *     maximum supported watchdog number may be obtained via the
-+ *     "Query Watchdog Capabilities" operation.
-+ *
-+ *     This input is ignored for the "Query Watchdog Capabilities"
-+ *     operation.
-+ *
-+ * R6: "timeoutInMs":
-+ *
-+ *     The timeout in milliseconds.  The minimum supported timeout may
-+ *     be obtained via the "Query Watchdog Capabilities" operation.
-+ *
-+ *     This input is ignored for the "Stop Watchdog", "Query Watchdog
-+ *     Capabilities", and "Query Watchdog LPM Requirement" operations.
-+ */
-+
-+/*
-+ * H_WATCHDOG Hypercall Output
-+ *
-+ * R3: Return code
-+ *
-+ *     H_SUCCESS    The operation completed.
-+ *
-+ *     H_BUSY	    The hypervisor is too busy; retry the operation.
-+ *
-+ *     H_PARAMETER  The given "flags" are somehow invalid.  Either the
-+ *                  "operation" or "timeoutAction" is invalid, or a
-+ *                  reserved bit is set.
-+ *
-+ *     H_P2         The given "watchdogNumber" is zero or exceeds the
-+ *                  supported maximum value.
-+ *
-+ *     H_P3         The given "timeoutInMs" is below the supported
-+ *                  minimum value.
-+ *
-+ *     H_NOOP       The given "watchdogNumber" is already stopped.
-+ *
-+ *     H_HARDWARE   The operation failed for ineffable reasons.
-+ *
-+ *     H_FUNCTION   The H_WATCHDOG hypercall is not supported by this
-+ *                  hypervisor.
-+ *
-+ * R4:
-+ *
-+ * - For the "Query Watchdog Capabilities" operation, a 64-bit
-+ *   value structured as follows:
-+ *
-+ *       Bits  0-15: The minimum supported timeout in milliseconds.
-+ *       Bits 16-31: The number of watchdogs supported.
-+ *       Bits 32-63: Reserved.
-+ */
-+#define PSERIES_WDTQ_MIN_TIMEOUT(cap)	GETFIELD((cap), 0, 15)
-+#define PSERIES_WDTQ_MAX_NUMBER(cap)	GETFIELD((cap), 16, 31)
-+#define PSERIES_WDTQ_RESERVED		PPC_BITMASK(32, 63)
-+
-+/*
-+ * - For the "Query Watchdog LPM Requirement" operation:
-+ *
-+ *       1  The given "watchdogNumber" must be stopped prior to
-+ *          suspending.
-+ *
-+ *       2  The given "watchdogNumber" does not have to be stopped
-+ *          prior to suspending.
-+ */
-+#define PSERIES_WDTQL_MUST_STOP		1
-+#define PSERIES_WDTQL_NEED_NOT_STOP	2
-+
-+static unsigned long action = PSERIES_WDTF_ACTION_HARD_RESTART;
-+
-+static int action_get(char *buf, const struct kernel_param *kp)
-+{
-+	int val;
-+
-+	switch (action) {
-+	case PSERIES_WDTF_ACTION_HARD_POWEROFF:
-+		val = 1;
-+		break;
-+	case PSERIES_WDTF_ACTION_HARD_RESTART:
-+		val = 2;
-+		break;
-+	case PSERIES_WDTF_ACTION_DUMP_RESTART:
-+		val = 3;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return sprintf(buf, "%d\n", val);
-+}
-+
-+static int action_set(const char *val, const struct kernel_param *kp)
-+{
-+	int choice;
-+
-+	if (kstrtoint(val, 10, &choice))
-+		return -EINVAL;
-+	switch (choice) {
-+	case 1:
-+		action = PSERIES_WDTF_ACTION_HARD_POWEROFF;
-+		return 0;
-+	case 2:
-+		action = PSERIES_WDTF_ACTION_HARD_RESTART;
-+		return 0;
-+	case 3:
-+		action = PSERIES_WDTF_ACTION_DUMP_RESTART;
-+		return 0;
-+	}
-+	return -EINVAL;
-+}
-+
-+static const struct kernel_param_ops action_ops = {
-+	.get = action_get,
-+	.set = action_set,
-+};
-+module_param_cb(action, &action_ops, NULL, 0444);
-+MODULE_PARM_DESC(action, "Action taken when watchdog expires (default=2)");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0444);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+#define WATCHDOG_TIMEOUT 60
-+static unsigned int timeout = WATCHDOG_TIMEOUT;
-+module_param(timeout, uint, 0444);
-+MODULE_PARM_DESC(timeout, "Initial watchdog timeout in seconds (default="
-+		 __MODULE_STRING(WATCHDOG_TIMEOUT) ")");
-+
-+struct pseries_wdt {
-+	struct watchdog_device wd;
-+	unsigned long num;		/* Watchdog numbers are 1-based */
-+};
-+
-+static int pseries_wdt_start(struct watchdog_device *wdd)
-+{
-+	struct device *dev = wdd->parent;
-+	struct pseries_wdt *pw = watchdog_get_drvdata(wdd);
-+	unsigned long flags, msecs;
-+	long rc;
-+
-+	flags = action | PSERIES_WDTF_OP_START;
-+	msecs = wdd->timeout * 1000UL;
-+	rc = plpar_hcall_norets(H_WATCHDOG, flags, pw->num, msecs);
-+	if (rc != H_SUCCESS) {
-+		dev_crit(dev, "H_WATCHDOG: %ld: failed to start timer %lu",
-+			 rc, pw->num);
-+		return -EIO;
-+	}
-+	return 0;
-+}
-+
-+static int pseries_wdt_stop(struct watchdog_device *wdd)
-+{
-+	struct device *dev = wdd->parent;
-+	struct pseries_wdt *pw = watchdog_get_drvdata(wdd);
-+	long rc;
-+
-+	rc = plpar_hcall_norets(H_WATCHDOG, PSERIES_WDTF_OP_STOP, pw->num);
-+	if (rc != H_SUCCESS && rc != H_NOOP) {
-+		dev_crit(dev, "H_WATCHDOG: %ld: failed to stop timer %lu",
-+			 rc, pw->num);
-+		return -EIO;
-+	}
-+	return 0;
-+}
-+
-+static struct watchdog_info pseries_wdt_info = {
-+	.identity = DRV_NAME,
-+	.options = WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT
-+	    | WDIOF_PRETIMEOUT,
-+};
-+
-+static const struct watchdog_ops pseries_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = pseries_wdt_start,
-+	.stop = pseries_wdt_stop,
-+};
-+
-+static int pseries_wdt_probe(struct platform_device *pdev)
-+{
-+	unsigned long ret[PLPAR_HCALL_BUFSIZE] = { 0 };
-+	unsigned long cap, min_timeout_ms;
-+	long rc;
-+	struct pseries_wdt *pw;
-+	int err;
-+
-+	rc = plpar_hcall(H_WATCHDOG, ret, PSERIES_WDTF_OP_QUERY);
-+	if (rc != H_SUCCESS)
-+		return rc == H_FUNCTION ? -ENODEV : -EIO;
-+	cap = ret[0];
-+
-+	pw = devm_kzalloc(&pdev->dev, sizeof(*pw), GFP_KERNEL);
-+	if (!pw)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Assume watchdogNumber 1 for now.  If we ever support
-+	 * multiple timers we will need to devise a way to choose a
-+	 * distinct watchdogNumber for each platform device at device
-+	 * registration time.
-+	 */
-+	pw->num = 1;
-+
-+	pw->wd.parent = &pdev->dev;
-+	pw->wd.info = &pseries_wdt_info;
-+	pw->wd.ops = &pseries_wdt_ops;
-+	min_timeout_ms = PSERIES_WDTQ_MIN_TIMEOUT(cap);
-+	pw->wd.min_timeout = roundup(min_timeout_ms, 1000) / 1000;
-+	pw->wd.max_timeout = UINT_MAX;
-+	watchdog_init_timeout(&pw->wd, timeout, NULL);
-+	watchdog_set_nowayout(&pw->wd, nowayout);
-+	watchdog_stop_on_reboot(&pw->wd);
-+	watchdog_stop_on_unregister(&pw->wd);
-+	watchdog_set_drvdata(&pw->wd, pw);
-+
-+	err = devm_watchdog_register_device(&pdev->dev, &pw->wd);
-+	if (err)
-+		return err;
-+
-+	platform_set_drvdata(pdev, &pw->wd);
-+
-+	return 0;
-+}
-+
-+static int pseries_wdt_suspend(struct platform_device *pdev, pm_message_t state)
-+{
-+	struct watchdog_device *wd = platform_get_drvdata(pdev);
-+
-+	if (watchdog_active(wd))
-+		return pseries_wdt_stop(wd);
-+	return 0;
-+}
-+
-+static int pseries_wdt_resume(struct platform_device *pdev)
-+{
-+	struct watchdog_device *wd = platform_get_drvdata(pdev);
-+
-+	if (watchdog_active(wd))
-+		return pseries_wdt_start(wd);
-+	return 0;
-+}
-+
-+static const struct platform_device_id pseries_wdt_id[] = {
-+	{ .name = "pseries-wdt" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(platform, pseries_wdt_id);
-+
-+static struct platform_driver pseries_wdt_driver = {
-+	.driver = {
-+		.name = DRV_NAME,
-+		.owner = THIS_MODULE,
-+	},
-+	.id_table = pseries_wdt_id,
-+	.probe = pseries_wdt_probe,
-+	.resume = pseries_wdt_resume,
-+	.suspend = pseries_wdt_suspend,
-+};
-+module_platform_driver(pseries_wdt_driver);
-+
-+MODULE_AUTHOR("Alexey Kardashevskiy <aik@ozlabs.ru>");
-+MODULE_AUTHOR("Scott Cheloha <cheloha@linux.ibm.com>");
-+MODULE_DESCRIPTION("POWER Architecture Platform Watchdog Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.27.0
-
+Can we do this together
