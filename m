@@ -2,93 +2,150 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1256852C721
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 May 2022 01:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8414F52E3D7
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 May 2022 06:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiERW6T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 18 May 2022 18:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S1345250AbiETEe7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 20 May 2022 00:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiERW6I (ORCPT
+        with ESMTP id S234666AbiETEe5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 18 May 2022 18:58:08 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBBD17DDDD
-        for <linux-watchdog@vger.kernel.org>; Wed, 18 May 2022 15:57:12 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2fee010f509so39874347b3.11
-        for <linux-watchdog@vger.kernel.org>; Wed, 18 May 2022 15:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
-        b=czYkjWVoP4p/ZkNBJUSmJBfxUUt+Y13DbrrHvBfDUk39swnu2r1R2LMB3wAsUSY8FJ
-         6ZHix6GZx2AHI61Xybet6sdcQlFElibcif9NAvmWTzz0l58WRUD1Pr+/0udl5Tub4w6J
-         meMNyRnYfYgN6d8AQA50exC5S8Br4+BjGl3igVF9bo6vnyZ0caprRk+RWxvnLby0Adqm
-         hPjkVM8mttTA162cBcx8kN6mr4q9cNJsYcLYU7yQFFkOaGBf3QJSI1TLD1TTjQK6bKO2
-         /uQaa7XB0ntetoq2a8c8ZgimsW4075bFpPpigSla9RqML/vkCGJpD6xavnQrqxd781aK
-         ZwFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
-        b=cqf3D7NGHf1jOCBkPazu5nuRiP6jnH2o9l0HJdCHqD/YTQBIaIVrx46q7qz1wwdTZx
-         Uv60Cnuzun1214m4ZTZ034zt0WigRCgoFykkQsEAhfJmUYnTRMM3Rq86rLbIgbOgXxtq
-         mpf/98A2eDsWjyjtfBBMSc95DJv+GVMIinYkxcyGAvTjd8E0XjqTauz2pEGj5THO5Tpk
-         sMG+nO0O4vvfa+W2V9l6zXKUxrwJXibrqIAymOL6gvWT6Y3vpb9yrxVdBfby61JbjzMO
-         Xe1R81/fOG27ervPzt3dda3V/6sr2Ziw2gBQrvzqGVRXd/4inDVrCrBpJZTAqLTLHAEo
-         7Dng==
-X-Gm-Message-State: AOAM530lzeMFHPqns4nzpt4ghv1JYybJ0nTEznQqQJp1pstFWAYPvJXK
-        uKfVuoB1MDlFaJ71Qx4ldN//WEsAX0Jw76hLdyg=
-X-Google-Smtp-Source: ABdhPJwfS30wbsCjPY8UVYlWs7ui3rJia0tAtpKvKb7UJ9kvW7xj8JsSqbuzt2V828J/37SMn7X7nS55vBF2Wrce63I=
-X-Received: by 2002:a0d:ccc3:0:b0:2ff:4e0:2be5 with SMTP id
- o186-20020a0dccc3000000b002ff04e02be5mr1833971ywd.225.1652914631436; Wed, 18
- May 2022 15:57:11 -0700 (PDT)
+        Fri, 20 May 2022 00:34:57 -0400
+X-Greylist: delayed 896 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 May 2022 21:34:54 PDT
+Received: from CN01-SHA-obe.outbound.protection.partner.outlook.cn (mail-shahn0099.outbound.protection.partner.outlook.cn [42.159.164.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB3D11801B;
+        Thu, 19 May 2022 21:34:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U53Sc9W/cvpZF6Zg7ExNgusicyH8UbMZA5IMjXFAW0Knkr6+YZisXkl5gnuskxkeMY73b2OWsvRRqgWfQi9EYYum/AbTIn2R79VZ9f0Pc72AsZbPiPVy0yO1P5VOcVtlDoE1NgmCQ2xFLgfW7dK06x/pW6e40Nqcu0LL8St5fnmDeKpProtr4ujEfdO+EbItJGeSZXodrtPyCq0Wcoh3JaQtZyTG06xsVuLP/L9XBFk623uzSz5Qqx+BVGtLoA+kZlkiqhGuflmP040YHegVuBM52MzEL5Uu5uGbCg+kY4Tj+91p2Xwb8eCy1L54uNL2F9T0+OZCdx+ZGryp51zJxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XHa7Vpxtm/u3S4otqoZTmpXUuVJNGmaT4A6UJUMDuKo=;
+ b=DLVYgyqK1Tc8RT1DzbVlphEZBDaO6ooU+sljOK4Kwe287cZ+jSjSUppqBqgnB6qes1ecG00W2XwxxDRoAyvab7vmBgGqbmASX1oEx6v3/IDji0W6ypwD0LcYFdIqd/VrqQByixYNZ0L4aaCCarSt8qj/4C1l3JASB32HXe4uHKDpATwOmRKDL0NRBtx7b41vBQKmSrsTMCZOzn2zr2VTwktwvNFRtpJ8CIHSSJ0juXvnQZJ4vhxtr+VCr++IewdxAiJR0uAR0A/mLCfdmF06tqJewYUtLaBbmVFDqqalTTB9ZGE5lRLOjP13EWEVtWuMMGk4mT/bXC9lmWi239Klfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=gientech.com; dmarc=pass action=none header.from=gientech.com;
+ dkim=pass header.d=gientech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gientech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XHa7Vpxtm/u3S4otqoZTmpXUuVJNGmaT4A6UJUMDuKo=;
+ b=jDaTucfQIdyn0lcdd6uScrYEtiJuc02Td9uODmxhKEd1s5wWlb2tRet1GckmudstGc4etC01C0MBUQ8g0T7uxBRcv/nGdFIcXNZufFNp5sc99qC7MMjPDvrtHusT0GhKCTy9TSodN49+iA22jDWdnHh3/l4XEp2vEY0e/9EG46FZCi2qol6Nl9wJxEwuplhURDtKHvWE/m4YWQ+WPDZA3/Vh8IbLDh5IoEyJvfAw/IBHTe+3KVnmJXd9N0effb9p4CtQRa3rpycXVGm+s+HcdDyVpslNQnJKqIWW1+DfQU+zDApo2lRdSsapNP9zpaMhhF4Q7tbOjc7JeHB8FsjC4w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=gientech.com;
+Received: from SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn (10.43.110.19) by
+ SHXPR01MB0509.CHNPR01.prod.partner.outlook.cn (10.43.110.12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.14; Fri, 20 May 2022 04:19:56 +0000
+Received: from SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn ([10.43.110.19])
+ by SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn ([10.43.110.19]) with mapi
+ id 15.20.5273.017; Fri, 20 May 2022 04:19:56 +0000
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Ree
+To:     Recipients <cuidong.liu@gientech.com>
+From:   "J Wu" <cuidong.liu@gientech.com>
+Date:   Wed, 18 May 2022 21:19:18 +0000
+Reply-To: contact@jimmywu.online
+X-ClientProxiedBy: BJSPR01CA0015.CHNPR01.prod.partner.outlook.cn
+ (10.43.34.155) To SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn
+ (10.43.110.19)
+Message-ID: <SHXPR01MB0623CDE66AD90B4EBEA7BE6A89D19@SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:57:11
- -0700 (PDT)
-Reply-To: tonywenn@asia.com
-From:   Tony Wen <weboutloock4@gmail.com>
-Date:   Thu, 19 May 2022 06:57:11 +0800
-Message-ID: <CAE2_YrAOSJNMn2masB_R9LowQvWJNrct3SYBUk3PivGhjD0fCA@mail.gmail.com>
-Subject: engage
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1285adc9-e304-4310-661a-08da39141ffa
+X-MS-TrafficTypeDiagnostic: SHXPR01MB0509:EE_
+X-Microsoft-Antispam-PRVS: <SHXPR01MB0509287DC1B285E160A5050789D39@SHXPR01MB0509.CHNPR01.prod.partner.outlook.cn>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?cm1/ZaWoOumpk/++hFlvUcqm3skW0XWmpu6WJXB/0LW5bFZ31KSHayvhM4?=
+ =?iso-8859-1?Q?lt2oZbSoav/xN5qvSf0sfzHiT2D9tt7Bm+kIcNjwIJ/c2NbpFfRLC8IOsd?=
+ =?iso-8859-1?Q?ve7ajqh/gJ9Dir6tvQzfYfR9BR+wI1YvR92Lq4STABN1o8H0sYMB3MWTYw?=
+ =?iso-8859-1?Q?ElIT0d4TgJEnEnx0/dVaaE5+Bqa/cS8tCjxXKonvJXwUpLtjWkQU/pxR45?=
+ =?iso-8859-1?Q?ij9aIuU447nW2tVeYxHhpxyFqi8Pfwc6qv14ox+DI8RkcpVulq0zpuZYRD?=
+ =?iso-8859-1?Q?TN2Jib6Ph3lJsk2jEKfqc2mxMiKh2QpXw8njQXT+TOLdgFneoPhMX5qaWq?=
+ =?iso-8859-1?Q?RN3fVn8RHWzdjdIotiAUXt0qIzyoyXSyXsknI1vpCfKX64lUfrttqaDMNw?=
+ =?iso-8859-1?Q?XjF01X33zP9bS19SSw/hxZnmAfBIqNMpS+C+9iNIMGENcF36G3nfOUK1Z4?=
+ =?iso-8859-1?Q?/EXCgJbUzRltYjWzezJ9DdL+noc3OwXfkqHR5/7yn6CmotZECGKJBnfX46?=
+ =?iso-8859-1?Q?vL3c+TJ/7tYsN+l4OHUj12voP/qg/Y2l122a//wMpCmZa610z5fUpSqrdq?=
+ =?iso-8859-1?Q?mU7rSh6nK4CXd3D/a9TSlIfV6pbQ7SeEm7jqF4yWQYhVe8PUZqPnHCtwwe?=
+ =?iso-8859-1?Q?BLfUBxgYD5qQITq32U+TgG2rbZhRNRVCO7XD0gbgjLsOGwn0DerNBnWIEY?=
+ =?iso-8859-1?Q?uRd4w1iAysc4MndAPlN+8vkTxwO0hCjggEeo+im61bDdeEDwjZe9d/syMw?=
+ =?iso-8859-1?Q?XouLeg9l9GPTsgdt4JCiKkXKdBx2KKF5ZBF3LzMpqSw3aPx19kMy6Qhs+M?=
+ =?iso-8859-1?Q?XcBv4duq0sv2B4hO29OJGdoBPaSJSj30gxXZ02kl6p8KpspowFILWPjEF5?=
+ =?iso-8859-1?Q?q6v16nAu3ns6sWsg6v2W2Ja/D3UF/JD+RlxFvPsOJy9vaQneKtZv6pfNlx?=
+ =?iso-8859-1?Q?n0M+AHaVodmJFd6+EIszRRBBn+ygBa1hpjvNPuEywkSEttFpgj27G9TJcW?=
+ =?iso-8859-1?Q?H5ni7eSpZsvouhs+VnlDRMM1ZwaoMGTLX/XoI1wx7gtYRgg/tufKHespEE?=
+ =?iso-8859-1?Q?iQ=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:OSPM;SFS:(13230001)(366004)(6666004)(52116002)(7116003)(6200100001)(40180700001)(8676002)(33656002)(40160700002)(558084003)(4270600006)(86362001)(66476007)(66556008)(66946007)(9686003)(26005)(3480700007)(8936002)(55016003)(6862004)(19618925003)(7696005)(7416002)(7366002)(7406005)(2906002)(38350700002)(38100700002)(186003)(508600001)(62346012);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?20VE92N5m5+eBcutZCZuePzuuVgjOyWjIIPNE2gmQ7V523KZZlZIgt36Lg?=
+ =?iso-8859-1?Q?yS4mAVvoUaE3k7i8ZRSepYssU8kLzvijtjzlVUtm9+Z5DoFO7LKUGC44Fc?=
+ =?iso-8859-1?Q?oCdjxt4avJXbEYduxwN9jGv9UqCM1W6geDz5LYEHzELe8bZ2J+g2pa6/eA?=
+ =?iso-8859-1?Q?vdmcmATgQMRHdZCkH2/0hgQBBuikmJnPQ7sPnGFsEeEgnIbD+NgiLKpHFU?=
+ =?iso-8859-1?Q?dtKFMSnn8ZciqIE4N7C+gwQKzsenjTI/SFEYkzz5sNXX5FLiSUs1awltYN?=
+ =?iso-8859-1?Q?rl/w83oIPuzJsgrNC0P6gCH45ss3DyrsdwPatveeisLBtk2ZUBxFYhR1hp?=
+ =?iso-8859-1?Q?Ma5dfJHz/KIVpKoinytEZGzoJ5wO8wGaiyCk0O7XNZ0xkSEDp5lM6Unus9?=
+ =?iso-8859-1?Q?lQAxEaVtru/c4qCDP7He2Q5yHkl0y622aXmRpvnFlfT8erefFszHkhaUG2?=
+ =?iso-8859-1?Q?XI8mFg+p0v4b0mUXPOtQ782mlFUnX/j7wEY8shgaQofxPR3xL4nu8YCEut?=
+ =?iso-8859-1?Q?w2ldEHysbGNRHfzkqaTYVSuecqkpncoYdou/0k2h7xgQWKNnbo5pUdRv4O?=
+ =?iso-8859-1?Q?K0JVRqyhcrS6iVMYYOYX/DLvMIrkS6jp+jA0WArk5TNyXb+J4Lmrw4QZux?=
+ =?iso-8859-1?Q?bNLTyGGWJeM41W/4muBitoE+mjITHeWc5ax5XVqNSjmSumSPtdWWek7twX?=
+ =?iso-8859-1?Q?0wX1tIvp1zQir6jziKyHvUMN9DTZHw4YMjhzF1YCJUW6fsA3fE+9Org1EA?=
+ =?iso-8859-1?Q?gdqBxLGZyI+BmISlVD9NrXSfonxV7hRPw/GCxH8yotdpxqEZp7r2lCU+6X?=
+ =?iso-8859-1?Q?eFMA7SIeHCT43JXDQvlEqg8Hs1tQUeWJIIKWINmRAW6rPhAeBXCdNHM3yF?=
+ =?iso-8859-1?Q?CPcO5xT3FOM6peKVPeeIaHApIZ2tkKFe/LL9bMgP+Pg2+JRUxK1aiByH8r?=
+ =?iso-8859-1?Q?Afhoi8jg4kwWaxn0Az6zKQYkNe/XT+MW7K8V4eRa5+QsYcw3wvv/rurdvB?=
+ =?iso-8859-1?Q?jevt91GH+KmQu6/uZ9pP7ODAsUUdP6je8Eoa3UMrV8ehsP+W+F/vBjirTm?=
+ =?iso-8859-1?Q?Q3fIWqhBrhqq+b19pwazZfieR/xEpsV2wzvC9vCHbjMVLxai43aC3kkpYJ?=
+ =?iso-8859-1?Q?oW1yHpU5OJFsVoZNNYxnEfUEKIFVCEROL7EcKOBwkLoMG9PDeuDjKbxMel?=
+ =?iso-8859-1?Q?CokCk1aVI5IgUyX4oQdhGKnUJyFv0BflUEYDL6ewTIAcZvaJxCP5vJNJA7?=
+ =?iso-8859-1?Q?L2n7+OwmUqdQu4E5ehU1Lh5zPzov7O/VHqOqllLqRvg3dBTv5RkR357YfS?=
+ =?iso-8859-1?Q?NaUfCCSMC602Z6jARgwFuQSoeXa4STum75WIN/9U36zYNsCN25Auv/q2MC?=
+ =?iso-8859-1?Q?awzVqw4M9Cw0JJbjZUEOQSmplCF4F/xCqyqDVsDm8v44I1g+voN+sS0Gc7?=
+ =?iso-8859-1?Q?QMdccGdMP1aYYKDOWDtvxIuDneWN4nJM8y2CICB9upkLOIc72wWLuCQKP9?=
+ =?iso-8859-1?Q?/cc9h9GaEBlSuCg9vwa6lSFzr7OFZsCskCM7f2OJSorGpk0ZT+PVs0/hEo?=
+ =?iso-8859-1?Q?O1MXoVU9/jhf+0tuxjJaHMxCKFc1KrflSlwqKXCQsQwY9vCoPs225/+RYa?=
+ =?iso-8859-1?Q?dnoEzhq7nWXwMSbSGusy4u9oPmQB7Kwld9Ud/BYOxM/fI7Mj94X1GMLJGI?=
+ =?iso-8859-1?Q?ED5/y+0NnGno2N9tyeCHz1r0dPcy0j8k2qgDAJ30K5iD3Ryp/vYMa5Ovtn?=
+ =?iso-8859-1?Q?Dq8g=3D=3D?=
+X-OriginatorOrg: gientech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1285adc9-e304-4310-661a-08da39141ffa
+X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0623.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 21:19:42.6073
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 89592e53-6f9d-4b93-82b1-9f8da689f1b4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kPRZmwQ7fsDsbbUNOZ7BcXEHImA3ZnCm/zzwAHOc68LPad8GfhrGXB4JyRAMlyEGVNzImiiNgPIaR8Oo5Qn3yS8oAtj6RY+3OUj2w4wAa2w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0509
+X-Spam-Status: Yes, score=6.4 required=5.0 tests=BAYES_50,DATE_IN_PAST_24_48,
+        DKIM_INVALID,DKIM_SIGNED,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_PSBL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:112a listed in]
-        [list.dnswl.org]
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?42.159.164.99>]
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4054]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [weboutloock4[at]gmail.com]
+        *      [score: 0.4705]
+        *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
+        *      [42.159.164.99 listed in psbl.surriel.com]
         * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [weboutloock4[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  1.3 DATE_IN_PAST_24_48 Date: is 24 to 48 hours before Received:
+        *      date
         *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
         *       valid
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
         * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Can I engage your services?
+Can you do a job with me?
