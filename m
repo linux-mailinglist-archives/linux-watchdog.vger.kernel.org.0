@@ -2,171 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B3752A435
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 May 2022 16:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B6D52B9AA
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 May 2022 14:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348341AbiEQOD3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 17 May 2022 10:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S236342AbiERMNi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 18 May 2022 08:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348339AbiEQODP (ORCPT
+        with ESMTP id S236267AbiERMNW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 17 May 2022 10:03:15 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09044C790;
-        Tue, 17 May 2022 07:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652796160;
-        bh=fNY2b38/lRCFmOcpmYkMr48xo1NJhCPqgD9dKQ1HrOM=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=MOD0wBu2si3IYs33eSdACwDOy4EbDCrJtxcvWgvDjQ4YslUMp4qkP1qhu6LJxjLkv
-         AkAdijPOiSqwgwE0bMJtQtCeW/T9QIjmMcfag4cU/CHjBTj1u7Eg3PDgYVzmTfKDRg
-         mHih7a+pc1Q2bcxwq7P0+qEpTUZfXoEce+X8jj5o=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ3t-1oMdpl1mqb-00WH5f; Tue, 17
- May 2022 16:02:40 +0200
-Date:   Tue, 17 May 2022 16:02:37 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Wed, 18 May 2022 08:13:22 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F7C16647C;
+        Wed, 18 May 2022 05:13:06 -0700 (PDT)
+Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N3K9E-1ninzO3Mm2-010NS2; Wed, 18 May 2022 14:13:05 +0200
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ef5380669cso21757527b3.9;
+        Wed, 18 May 2022 05:13:04 -0700 (PDT)
+X-Gm-Message-State: AOAM533WFZbmctZ48/8LoVTYNDrYAjdAD6HJ5kGa+eFx3AMaBuc1umGx
+        7jIb8a6u6GRTGg8EF51d7NA9eD5doXqswrJsI2k=
+X-Google-Smtp-Source: ABdhPJww4o6KC19Bdx3y+Y9+BEECGSt26A7Urzyyba0OuquV/hIeym4xoshJpgwWoBBDawOH5VaMVVqfZTQGwVugx8c=
+X-Received: by 2002:a81:456:0:b0:2fe:dee5:fbbc with SMTP id
+ 83-20020a810456000000b002fedee5fbbcmr20604776ywe.249.1652875983425; Wed, 18
+ May 2022 05:13:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220516163310.44842-1-nick.hawkins@hpe.com>
+In-Reply-To: <20220516163310.44842-1-nick.hawkins@hpe.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 18 May 2022 13:13:05 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0914=TM9f1CNcg_PXfHvt6nHDPyrvLp=0KO4hZM2GT5w@mail.gmail.com>
+Message-ID: <CAK8P3a0914=TM9f1CNcg_PXfHvt6nHDPyrvLp=0KO4hZM2GT5w@mail.gmail.com>
+Subject: Re: [PATCH v8 0/8] Introduce HPE GXP Architecture
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: Re: [PATCH v3 3/7] watchdog: npcm: Enable clock if provided
-Message-ID: <YoOq/enI6YSplnS5@latitude>
-References: <20220508194333.2170161-1-j.neuschaefer@gmx.net>
- <20220508194333.2170161-4-j.neuschaefer@gmx.net>
- <6c22fe1c-03d9-3a7e-26e8-463b989a02b7@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vQZf1NsHbsdMxgvC"
-Content-Disposition: inline
-In-Reply-To: <6c22fe1c-03d9-3a7e-26e8-463b989a02b7@roeck-us.net>
-X-Provags-ID: V03:K1:suSOJwDkQbNjA5mis1Bopb6tozdowhVxJzoa07b0zru4xZCWGOA
- tsoznaEQDds/YKVMaJzzMaGBODp04lLUdTyFHM9euL564w+DelOmCjgLJDDF3cVbQCO+Neb
- KOZQfLaSwI55oBzMeJ1q9ZUVKDCTcFqaDgvk9SgjR/aAim+tKhdVsllPF5BG/ZVozMGwhHh
- NvwlEx5YR05vTcEL1mbLw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pHsyUMFlhB8=:JmoGOoA3kt1s/STOUO7LAm
- iXaHbERzSnV9p8zPELbsRLWZq7q/kFAm1pusIJAvuF4F9RlCIIEMwPs9vv72NC6wMfmg4PKTf
- ZLm44B7et5A9ShaSC7wkQKclQ7Tq0J/Ljp3L+m3GlHpMUPCtjJtWpU6foeNBFn8FqToKEIIw8
- 8pCGGTCjE7EQ5vpbxjDptpjJr2qUaul+DTj6nQk3zxCrvnBOpDToYot8brs9A6RFzo6h8JxPs
- uKh1+0+tWAEp3CbaNIq0K4DyjtzMM/y6A1cS1lfgVSzeBd9Vvzqm8cj/NNJV026WhVa5V64Yk
- YBmJqzeFWZaRCoL0FgMTGxUN4hJaCnVTWVQuLBaeJGw9G7EMgqVik6agpozYet+wcMP29dw2p
- XFulvkK7Y8PcnMYSN/rP5N8DPJQ94Vrb0qJstF75DpIGE7daly2mZh15McNG5v1E3GIsfavwe
- qqoAB4mdml6kd7ms6T0k8gLihWItNHr+U3jPxqNC3Vskwp2sNPkOWq08O3HwJmbQ1ZjpjbNOC
- NQY7A9tNN9p4EUdfabmQx/+Ek9dGDVAw94fFn/wKmhHq3JMMSadL0nZ+sQ9f+7JjcDKlwWTg+
- xtYW85EKMkTpsjQgF4AOIVz0j/q0r777EWLvjTXTWDSlHZriB/q6XI1QVAW4UYpevMVBn92Aj
- ZSa2JZjy5gnlWPTQEjCBgJagMD/9WOrUdXjLQZOFA8rxEG5Ib6NHLixUEVnThRdJgGFAZ0ski
- IZrvCy7UhGS5IBvx/6xQu6wlNj1juyCob2CpBp3A5n9bp91FvjO9mosZhpGcTfqzXg6dhLnaO
- Tg4qqkf1tEUH5sQGZOyEh4/esDiBMiatOe0ICiqM2/8QULtOwegqzttPPGGmWq4Wb5IOJOALq
- fLmAek0MMrrIfolo/jWMyDwI0c4YvUqPtaYpRyfQWdrEfLHM4zmhS5ul2CyEQOVROyW16Rjsx
- 8YPZPsHf6l9f2qKy9L8CYc9MAwp33iKDukhRC/kk1nyVlp8fBDoMC0dPNk+BK074ShiRxrA6o
- VrJGF5490T7KDxj/khVUP8itVoo0EENnlKApJtTlId381SyIqwNczj/O8Vd9W+mzGiPQQ36sG
- 62cfBgLD30wSZGrOUjYHQMeg40N/gRqdjaGMvZfQiZEjIXHOrZUvWVR7Q==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:bydMuVtSfsxmxw1dETS7deuD573u5VRVlreV62FDWZCuxVkVs5m
+ m/BlQ3z2fTcGSokvu/fL0b1hNvD/SKEjP5bVC2+KL5NTMFY4074kJfHxr0cazzqfKlzLlnX
+ 7deLur69HKUxusSC/uH3fjS1aWnTy9r87dAWEM1GJfDJvz9ZiaCnAAvnrMvZFAQUApy+b5G
+ I8DdgtpQv3ZEinOXv/qNQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bUur6YHxCdI=:t+hhY/5KzTjCZpCa+RWXg1
+ A1+xKDu9yxP7y185JnFxMHYj9CUQHAbxi51w60/V2b3I47x12bIIPxeRFGet7qCN3QXVzfZhb
+ zim6r8NSFZ4ol7kIR+kd172yZiUFcXkrJVnZ7sAFegmiXDTXNPX09dyD9HJllOvN2N7eQuLa1
+ PbF7SQ7jlfkvHseJLc3YtKZHN6/WpyvCf/a1uwRgR0I1TQYtraIg+1l+ZTkVsslxMmNecQKqe
+ nu1wFsGrUACHZjBC1eIXAY1PNaf2B7lHz1003x9qxnLi43W5TmJLfwQofYceXv8Rn7eL2aMAm
+ PWJbvrQX3LPue04TZKETnSoXR5D4ET4ptuRwWPAtjWYZEYTONa+aeFKcPKkQi11luGfXEUsQ9
+ /N6KAdL2XZo7R+BC4RkUmEm7M0T14wZyqv/6gMKcEwLsZUXwFqpxz4G91CvKpz3GVLJMW1ftZ
+ WflWCX9/faS5Jwxfe+FPQc58Fb8xYIv0a3WyiXI0n+Ltw18ifk1xTX4e0e8cyOJyQ1YvVvlPU
+ 1rATssIj1Qb/Kfnt1pvmOQ9VyT/Ts7AQHHDxCqpfvAwZVpTBNVdc+Bo7UDYOKP0IeJag4BfEV
+ Sae8fnGIWpCkZkbnaPKx/hr5CMfmRpECLXqG0ZVwJOcJPJTPnORAxxpLgaEiWKG2y40HDHTWt
+ KpzOTG2/EVJj+c5nniiAlQ+QFWvZ8wD87+KjQCf+JLYXIYBDptl1ILZ8rzjkxBi0jBMY9xScl
+ UclB3I4NSBH61t3wL8FXJ+hiSPB8KmPASnUSxnLCcWaPBGUyA6gC9hDMGqOKa+f1Yw1J8XGNV
+ 1F8WeBawLkS9o2dVpRII7H/FKZMJYeQP2vkYhq21cyTV0cUKZLAZeVlPI3mgNfpshkCk9l4x6
+ GKz2dvsxt8saw2CmZGB14mm/+FtvSX4L1+h0BmrM8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Mon, May 16, 2022 at 5:33 PM <nick.hawkins@hpe.com> wrote:
+>
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> Changes since v7:
+>  *Fixed comment format in watchdog driver
+>  *Added the Acked-by tag to the device tree patch.
+>  *Resubmitted the dt-bindings patches hpe,gxp and hpe,gxp-timer with
+>   Reviewed-by tags from previous patch in descriptions to keep patchset
+>   continuity for v8.
 
---vQZf1NsHbsdMxgvC
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Nick,
 
-On Mon, May 09, 2022 at 07:31:31PM -0700, Guenter Roeck wrote:
-> On 5/8/22 12:43, Jonathan Neusch=C3=A4fer wrote:
-> > On the Nuvoton WPCM450 SoC, with its upcoming clock driver, peripheral
-> > clocks are individually gated and ungated. Therefore, the watchdog
-> > driver must be able to ungate the watchdog clock.
-> >=20
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > ---
-> >=20
-> > v3:
-> > - Add enable/disable calls to npcm_wdt_restart handler
-> > - Not applied due to the above change:  Acked-by: Guenter Roeck <linux@=
-roeck-us.net>
-> >=20
-> > v2:
-> > - https://lore.kernel.org/lkml/20220429172030.398011-4-j.neuschaefer@gm=
-x.net/
-> > - Add clk_disable_unprepare call, suggested by Guenter Roeck
-> >=20
-> > v1:
-> > - https://lore.kernel.org/lkml/20220422183012.444674-4-j.neuschaefer@gm=
-x.net/
-> > ---
-[...]
-> > @@ -147,9 +155,15 @@ static int npcm_wdt_restart(struct watchdog_device=
- *wdd,
-> >   {
-> >   	struct npcm_wdt *wdt =3D to_npcm_wdt(wdd);
-> >=20
-> > +	if (wdt->clk)
-> > +		clk_prepare_enable(wdt->clk);
-> > +
-> >   	writel(NPCM_WTR | NPCM_WTRE | NPCM_WTE, wdt->reg);
-> >   	udelay(1000);
-> >=20
-> > +	if (wdt->clk)
-> > +		clk_disable_unprepare(wdt->clk);
-> > +
->=20
-> I am trying to understand why you stop the clock here.
-> If the watchdog didn't reset the system by now, for whatever reason,
-> you explicitly don't want it to reset the system ? If so, please add
-> a comment describing the reason for stopping the clock here.
+I have preliminarily applied this version into a the arm/late branch,
+but since I'm
+travelling at the moment, I cannot actually push that branch out for linux-next
+before the coming merge window.
 
-It was for symmetry with starting the clock, and in the hope that
-udelay(1000) will be enough to reach timer expiration. (In practice it
-does appear to work, although 1ms is not much.)
+My feeling is that this should just wait until 5.20 now, but if you
+and others others
+feel strongly about it, I could send it during the second half of the
+merge window.
 
-Upon reconsideration, I agree it's better to leave the clock running for
-reset (with a comment pointing out the asymmetry).
+It still needs to pass all the CI build tests, but at least it's
+unlikely that there
+are any runtime regressions for other platforms.
 
-
-Best regards,
-Jonathan
-
---vQZf1NsHbsdMxgvC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmKDqtwACgkQCDBEmo7z
-X9uEnQ/+PieUjR1LsgZzUOsXNS+aAubr0M4s9fyJdH14/eol2H39zy5/Y8ylCJIq
-zzFWjUFI6PVXPKiZ/GkOMMNp25cD2a+vEfFzSaaN/yaeNGv8vkU6q1ABm5PVihpK
-+44o0bPpuy0SHbIxKCy7pGMvBR3UrjVA5Q/1GSxQd5fLQxOMwoziLNzhfXqI3dJb
-s5S1hx8pezpRR9WwAqIX4R6xiyqrwdL8KacjoAiNYQhLLrD/OOQcIlSijCLLnriM
-au59vZK1FzFaYsTI8w5vRgq8C6LtiXQCZsXUT9TJ17hC4OQnzNIlxvls+0O9GHlL
-e6MTmskpf/BLMbPiYUarLVvgFGqUE3FyVvuha3GUNK4nfBM5bjjyhtbDElvAs1j1
-cgBsIyWKbMB2zH5XrTsdTPB3CfQx8+ZZ98sHhzZEYg4C3oynFDNf1Y8g735SZiAq
-7bEqMy+nyrLXxPF55eEuh6AKm6FhZaVjZj9n5YqjxfAfeezDN4K8rCg9xWRy0Oyw
-C16jjVdbEufJWQIWopPzw5zM2uvu3ZTMjYr3kfIULs3wIYwoa2+fW6tiK8yHWB2B
-LFweECTpYkfBYkKGuxfnft4lgzTmSsSK7ggOnkkBjA0GiA0EgJN0JQ0SchBbzlhb
-nOPyAKh9/4LFosqLlGiLyDdZJGX3yaqw3xGK7up7tgfWUiWL+F8=
-=24UD
------END PGP SIGNATURE-----
-
---vQZf1NsHbsdMxgvC--
+         Arnd
