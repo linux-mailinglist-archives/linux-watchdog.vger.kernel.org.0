@@ -2,119 +2,127 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A8D52EEAE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 May 2022 17:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E4C52F172
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 May 2022 19:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238629AbiETPGy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 20 May 2022 11:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S1352127AbiETRVl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 20 May 2022 13:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345608AbiETPGx (ORCPT
+        with ESMTP id S1352125AbiETRVi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 20 May 2022 11:06:53 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12145DD07
-        for <linux-watchdog@vger.kernel.org>; Fri, 20 May 2022 08:06:52 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id c12so11136915eds.10
-        for <linux-watchdog@vger.kernel.org>; Fri, 20 May 2022 08:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=QTCWBzEezgLv+Z2QZNvCkKQgrxXaSDur4w34RcJaRzY=;
-        b=lRRp9ySnP4trb+Nzm/pVcHj8+MaHvoUJ4VMngtFnkb67ZqgWQ8EAQ0UHRniTfO1D1p
-         dC+tMKJtuBYaKCJa8NjyFMBSaIbFvZwnqIyI8PW+rKGjAO8nh6BKlROyMLIjeoB4kSSx
-         FWEYSEoaAthPV2u+BuR3QiSECbfbrPukpG76+hKDcbgkIE0Slgyab//U4OX/rmwSLsee
-         ZzIl8ZvN2KGy7N64IoFQpjN4J+bb0Am3z4un1SZ5ApDGbtC5pBFX0LVzZAp7K787uP1k
-         Du30MZrHInDJKaDBk6bhnndhXsdZxfj/u47te9+iNU32CEJSN19FaTmUyV9SksXzaxxT
-         f5SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=QTCWBzEezgLv+Z2QZNvCkKQgrxXaSDur4w34RcJaRzY=;
-        b=gboX7f2uI9IEji7WOPEVzdD3+vV1TnWOdisiOdfDVMRK+dtWPo/lLe02y8R09FyeeN
-         SFuAF9n3OI6ECWXVnDInVQT2MiT3sLfFrnI8Fpjh5WSa90wxCE6jNShpvBc/I/TYjK7O
-         XjjPGTy4UwhZex37cL78osJZ9DJ7pZZuCr4ATG/QlmGbHNmMjQeWSNKcUJR4O9g6HwFM
-         yldd7tSHtJdoDHH1vSQ83XgaLMKQoDWYzmepDok4OHuBdQnWH27Y/cs+DBsXkcpqytUJ
-         FsD+n8H1rjbP2uCiZhD4+ICGwvG/ittrw7dJb8NnLSncG/vH1S2sb6qVFa9T4Z+5stxV
-         5xcQ==
-X-Gm-Message-State: AOAM533n60Vwf6YAPBrZ3R0KTXbizeFhhQg59PtQXToSqiI4kgo3CUMw
-        sUz08WzC7jnRMu2tStdUSl2wivfQg16eWX3gUSY=
-X-Google-Smtp-Source: ABdhPJwhRxYeSIzHaKT4yQa8QB6yFu3wWocagNCkwNgDk0PVBzpXPzWHvoATVd4jsbrKZvmKCsr6gLRU4Q5pP2Pc47U=
-X-Received: by 2002:a05:6402:50d1:b0:42b:c3e:d71e with SMTP id
- h17-20020a05640250d100b0042b0c3ed71emr6904951edb.144.1653059211226; Fri, 20
- May 2022 08:06:51 -0700 (PDT)
+        Fri, 20 May 2022 13:21:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB295535D
+        for <linux-watchdog@vger.kernel.org>; Fri, 20 May 2022 10:21:36 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KEhZ7C013150;
+        Fri, 20 May 2022 17:21:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=BhHz2NWnv5Thv9erLKDeP0DPuizaqMdQMQYzzbc3UzI=;
+ b=ioTSSDRYDebXueNxwsqnau+k8yWxwJgzBDdArPjtHUdsxTDDu/SHPeHjpKHd8oPWZtw7
+ nxtCpkJOhVsADafy0Pkwps/7TigPsjSRhoQHab23TF3OWOAh5y9aRpfSoXN/FRdw0cjw
+ oiHYp+TJrVW9/kTEE9b9J09zxlNfr0MK7lsHfZ9nRDm6lwVfpLyJRLf/N/r4HuYVIzkD
+ PkKMUI9azBOe5BcTC4nHZtOVfVgF83BvyFoUupQVS2jGp3TgSbJ6cbJqm9QAA0YcSx5G
+ Lvgtu7hEAemIH6eH4/scgXbom0DxUeUlHcHBqXORz+112BkvD1nMc+IBdgwaS3i81Kyz nQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g6d0cu3jy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 17:21:15 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24KGmVTP002510;
+        Fri, 20 May 2022 17:21:15 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g6d0cu3jp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 17:21:15 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KHCWpS024800;
+        Fri, 20 May 2022 17:21:14 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03dal.us.ibm.com with ESMTP id 3g242b75y9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 May 2022 17:21:14 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KHLCTB23265560
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 17:21:12 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DDB11AC060;
+        Fri, 20 May 2022 17:21:12 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B8C28AC059;
+        Fri, 20 May 2022 17:21:12 +0000 (GMT)
+Received: from localhost (unknown [9.41.178.126])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 20 May 2022 17:21:12 +0000 (GMT)
+From:   Scott Cheloha <cheloha@linux.ibm.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     linux@roeck-us.net, tzungbi@kernel.org, brking@linux.ibm.com,
+        nathanl@linux.ibm.com, aik@ozlabs.ru, npiggin@gmail.com,
+        vaishnavi@linux.ibm.com, wvoigt@us.ibm.com,
+        linuxppc-dev@lists.ozlabs.org,
+        Scott Cheloha <cheloha@linux.ibm.com>
+Subject: [PATCH v1 1/4] powerpc/pseries: hvcall.h: add H_WATCHDOG opcode, H_NOOP return code
+Date:   Fri, 20 May 2022 12:20:52 -0500
+Message-Id: <20220520172055.32220-1-cheloha@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a50:6cc7:0:0:0:0:0 with HTTP; Fri, 20 May 2022 08:06:50
- -0700 (PDT)
-Reply-To: illuminatifame157@gmail.com
-From:   illuminati <idrisadamu2029@gmail.com>
-Date:   Fri, 20 May 2022 08:06:50 -0700
-Message-ID: <CAKn-HL1GgP1ziG_im3uRHgiH=Q5vPA8vR-JJTritHe=x1OZjkg@mail.gmail.com>
-Subject: illuminati
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:542 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [idrisadamu2029[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [idrisadamu2029[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [illuminatifame157[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.4 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lKAtRmB4AjGoSE3d5gBIvDJMNWLSoTPc
+X-Proofpoint-GUID: HgNM_YKoyFWGxpdP4Ry7-9hMUhy4N0cq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_05,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ adultscore=0 priorityscore=1501 impostorscore=0 bulkscore=0 mlxscore=0
+ mlxlogscore=999 suspectscore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205200111
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
---=20
-WILLKOMMEN BEI DER ILLUMINATI BROTHERHOOD ORGANISATION, einem Club der
-Reichen und Ber=C3=BChmten, ist die =C3=A4lteste und gr=C3=B6=C3=9Fte Brude=
-rschaft der
-Welt und besteht aus 3 Millionen Mitgliedern. Wir sind eine gro=C3=9Fe
-Familie unter einem Vater, der das h=C3=B6chste Wesen ist. GOTT
-. Ich glaube, wir alle haben einen Traum, einen Traum, etwas Gro=C3=9Fes im
-Leben zu werden, so viele Menschen sterben heute, ohne ihre Tr=C3=A4ume zu
-verwirklichen. Einige von uns sind dazu bestimmt, Pr=C3=A4sident unserer
-verschiedenen L=C3=A4nder zu werden oder zu werden. einer der weltbesten
-Musiker, Fu=C3=9Fballer, Politiker, Gesch=C3=A4ftsmann, Komiker oder ein He=
-lfer
-f=C3=BCr andere Menschen zu sein, die in Not sind E.T.C. M=C3=B6chten Sie
-Mitglied dieser gro=C3=9Fartigen Organisation werden und Ihren ersten
-Vorteil von 1.000.000 Euro erhalten? Wenn JA, antworten Sie bitte auf
-diese E-Mail: illuminatifame157@gmail.com oder WhatsApp the great
-Grandmaster mit +12312246136
+PAPR v2.12 defines a new hypercall, H_WATCHDOG.  The hypercall permits
+guest control of one or more virtual watchdog timers.
+
+Add the opcode for the H_WATCHDOG hypercall to hvcall.h.  While here,
+add a definition for H_NOOP, a possible return code for H_WATCHDOG.
+
+Signed-off-by: Scott Cheloha <cheloha@linux.ibm.com>
+---
+ arch/powerpc/include/asm/hvcall.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/powerpc/include/asm/hvcall.h b/arch/powerpc/include/asm/hvcall.h
+index d92a20a85395..4b4f69c35b4f 100644
+--- a/arch/powerpc/include/asm/hvcall.h
++++ b/arch/powerpc/include/asm/hvcall.h
+@@ -87,6 +87,7 @@
+ #define H_P7		-60
+ #define H_P8		-61
+ #define H_P9		-62
++#define H_NOOP		-63
+ #define H_TOO_BIG	-64
+ #define H_UNSUPPORTED	-67
+ #define H_OVERLAP	-68
+@@ -324,7 +325,8 @@
+ #define H_RPT_INVALIDATE	0x448
+ #define H_SCM_FLUSH		0x44C
+ #define H_GET_ENERGY_SCALE_INFO	0x450
+-#define MAX_HCALL_OPCODE	H_GET_ENERGY_SCALE_INFO
++#define H_WATCHDOG		0x45C
++#define MAX_HCALL_OPCODE	H_WATCHDOG
+ 
+ /* Scope args for H_SCM_UNBIND_ALL */
+ #define H_UNBIND_SCOPE_ALL (0x1)
+-- 
+2.27.0
+
