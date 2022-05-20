@@ -2,59 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8D852ECC1
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 May 2022 14:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0ABC52ECD0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 May 2022 15:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235847AbiETM60 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 20 May 2022 08:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
+        id S236266AbiETNCE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 20 May 2022 09:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236713AbiETM6Y (ORCPT
+        with ESMTP id S236247AbiETNCD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 20 May 2022 08:58:24 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F095169E27
-        for <linux-watchdog@vger.kernel.org>; Fri, 20 May 2022 05:58:22 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id r3so2715825ljd.7
-        for <linux-watchdog@vger.kernel.org>; Fri, 20 May 2022 05:58:22 -0700 (PDT)
+        Fri, 20 May 2022 09:02:03 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD6035DFC
+        for <linux-watchdog@vger.kernel.org>; Fri, 20 May 2022 06:02:00 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id u23so14225653lfc.1
+        for <linux-watchdog@vger.kernel.org>; Fri, 20 May 2022 06:02:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aeapaOijB00yQtCta6NrjrtjqIImLzdoafEOBkLpSjM=;
-        b=KjHR71XVuV4Ub6uPBCHGc/jZyzurj/ailaMNlwtGOOmMqDyBab8A6VpmrJSTqsZhSE
-         MrDo/aj/5llE++qny3f5ZbajbVCfcObaxUdbsKAA8DlXx/amh0O5tcWpmUBzdWj01s2N
-         B9UB3NDOe6oNwnk1LaS9PQpJxpZ2+l5tcfpklWN3acSKa4PGz//qzOK/S5UiWz26g+b4
-         L0F5ri8gCCsNcsXX1iQ8bRTSs2A0W23kny9uCVQzg3gopHiSb6Q71e7USc6oJ1E/UW5O
-         J0XHEuHY0o8iUg2NPmPbFQeuP3QN1bD4pObrDyn7i53no8pA/CHeREtRnOk0CcLo6xhk
-         Vihw==
+        bh=JuZHQ6f7UwG9sEcrBgd7CjvcA+TEESz6YOxMScXKub4=;
+        b=oe7Ihu+Q38xydzIWx7L1VP2mveLIrDlraThtNZ/ZoAz2/WRIXeZBgN41A/MlyIrclb
+         OrX55qBrx2BeXGVMyQKJbo8sTNu1m0W/RI7XqzVOHPKzCVEtYZnvMUGxFIcRe2ku3vab
+         nwDsk93wl9k0K2zNJAs0PP78ghFBgt3k+U/qwe1a+5tmVnQ790bG2ZRF+bm8Og18bq4D
+         qiKQA+S5Bq6mbVtHuUk1zZm0+HdDEDMuIA62eCVS8LFH+eewGz4diDxDPYrnXemlBhfn
+         nhmz/94tEOF8VvLgU7moZKumeAShxaGFQwb50yMb4q+gRqyKCUG2dJw/rM3D6yu14Xb9
+         CWpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=aeapaOijB00yQtCta6NrjrtjqIImLzdoafEOBkLpSjM=;
-        b=q3b1B1LOigHaFohPYexx7lL8eHKtE8mimbt6tWMblj/SqRxY7EMq81AunTgIZtR0cl
-         W0OF1CX/ymmyoKJt5OnU38QAb0AIL2f3Pv/CHNCk5YPoPNFL4n+X77LWwWceTtOR5kRE
-         KGMyqOPJ04Xde+hFvmmUz4joymzL+737O20ngMGlw1wYcFeuIK4eJ6sP6ucxEoPF9TnN
-         uN1hZzazlDZ3BbJX+T68Ax7li9BBYqFDEzUEtogF4lU5AIw0ASI4TdBdlisDwNpUqLmd
-         TNWsJJCJVr0C8WbVCkmVCyOzYLlhvtmqZgJV8ALxAyw5atDwTX3ac/yEf5WDbPZlr8nM
-         +i6Q==
-X-Gm-Message-State: AOAM532wZ4BcL+YY39DnmN05C2uHUuTBS7BsFBmWxEnSEbEQF09XQTO8
-        aZTeOnJF5Hf6g1wrDYPKLosL6w==
-X-Google-Smtp-Source: ABdhPJw1UvwBwLdvxqidDQeWy6ThNK1RdVnumUbK3Ky3x9onS0wk6E+ldWRGtQWBJaZsUAT8uvjFIg==
-X-Received: by 2002:a05:651c:1792:b0:235:1df3:7b8e with SMTP id bn18-20020a05651c179200b002351df37b8emr5506765ljb.464.1653051501002;
-        Fri, 20 May 2022 05:58:21 -0700 (PDT)
+        bh=JuZHQ6f7UwG9sEcrBgd7CjvcA+TEESz6YOxMScXKub4=;
+        b=f4TKT8UjBnzFuzQee529HPgn0kf9vtNmSVhLsk9+y7HkIxdRV4CTLYEFWqagPnw1QM
+         57yuw5EheptrEHXtJNh6XwuZQHaMFU9aN/ImODi08YXCtLm4WGCcxYFtJLPd7D3H2Bj6
+         rBHZLMyY9XgNJD7E7Qs6ipQBYlwWiHWCobORF2GFfBAToC+FjdEw6UoXupU1gGD4Mm6P
+         BNg7y5Awr1w+w/2pQhnpD0+5MXZyDarbqAxD3sWDiLhdZa7Lltf/1WrUWM/p3y4z4IBP
+         OweLyh1gTKnZlH74lMgvCj2j88L/Kyhdy02D5yDvkfaweAQUFJBBeTk9TM4NtdgQPSo+
+         PRaw==
+X-Gm-Message-State: AOAM530u+Hgt4EYrn+mNxhVCbbR/5bRq6QFtznVmw2gqJaKNmUrGvj2d
+        8LZwEzfhM0Hrg1J5DuFaZ0OuUA==
+X-Google-Smtp-Source: ABdhPJxWUauG7t9fEtUHzFuI8dk+jUlB1lV9RhKNo3qpTJb8fi//3+EhuolJeMHUbppfvl9h7cj5gA==
+X-Received: by 2002:a19:4306:0:b0:471:bc59:aeb1 with SMTP id q6-20020a194306000000b00471bc59aeb1mr6715970lfa.566.1653051718531;
+        Fri, 20 May 2022 06:01:58 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m2-20020ac24282000000b0047255d21191sm650978lfh.192.2022.05.20.05.58.20
+        by smtp.gmail.com with ESMTPSA id b9-20020a056512024900b0047255d21148sm653005lfo.119.2022.05.20.06.01.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 05:58:20 -0700 (PDT)
-Message-ID: <02fb065d-5ad9-07df-0e1d-1b47beb883dc@linaro.org>
-Date:   Fri, 20 May 2022 14:58:19 +0200
+        Fri, 20 May 2022 06:01:58 -0700 (PDT)
+Message-ID: <4c0c64ac-df79-f677-c6bb-1ba52af41bea@linaro.org>
+Date:   Fri, 20 May 2022 15:01:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 3/4] arm64: dts: exynosautov9: add watchdog DT nodes
+Subject: Re: [PATCH 2/4] watchdog: s3c2410_wdt: support exynosautov9 watchdog
 Content-Language: en-US
 To:     Chanho Park <chanho61.park@samsung.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -64,10 +64,10 @@ Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
         linux-watchdog@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20220520121750.71473-1-chanho61.park@samsung.com>
- <CGME20220520121722epcas2p169b2669f367e7461fa41663f3e90d303@epcas2p1.samsung.com>
- <20220520121750.71473-4-chanho61.park@samsung.com>
+ <CGME20220520121722epcas2p25b1d7b12db6030b490f191c2ae3e9f9d@epcas2p2.samsung.com>
+ <20220520121750.71473-3-chanho61.park@samsung.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220520121750.71473-4-chanho61.park@samsung.com>
+In-Reply-To: <20220520121750.71473-3-chanho61.park@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,34 +81,25 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 20/05/2022 14:17, Chanho Park wrote:
-> Adds two cpu watchdog devices for ExynosAutov9 SoC.
-> 
-> Signed-off-by: Chanho Park <chanho61.park@samsung.com>
-> ---
->  arch/arm64/boot/dts/exynos/exynosautov9.dtsi | 22 ++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-> index 3e23db8f09d9..34be955dc2d5 100644
-> --- a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-> @@ -400,6 +400,28 @@ ufs_0: ufs0@17e00000 {
->  			samsung,sysreg = <&syscon_fsys2 0x710>;
->  			status = "disabled";
->  		};
-> +
-> +		watchdog_cl0: watchdog@10050000 {
-> +			compatible = "samsung,exynosautov9-wdt";
-> +			reg = <0x10050000 0x100>;
-> +			interrupts = <GIC_SPI 476 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&cmu_peris CLK_GOUT_WDT_CLUSTER0>, <&xtcxo>;
-> +			clock-names = "watchdog", "watchdog_src";
-> +			samsung,syscon-phandle = <&pmu_system_controller>;
-> +			samsung,cluster-index = <0>;
-> +			status = "disabled";
 
-Blocks which do not need board-level resources should be enabled by
-default, so drop status and drop patch #4.
+> @@ -644,9 +675,11 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev)
+>  
+>  		switch (index) {
+>  		case 0:
+> -			return &drv_data_exynos850_cl0;
+> +			return variant;
+>  		case 1:
+> -			return &drv_data_exynos850_cl1;
+> +			return (variant == &drv_data_exynos850_cl0) ?
+> +				&drv_data_exynos850_cl1 :
+> +				&drv_data_exynosautov9_cl1;
+
+This stops scaling... it's fine now, but any next variant will require
+some rework.
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof
