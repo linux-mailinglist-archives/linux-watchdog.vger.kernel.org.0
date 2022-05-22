@@ -2,144 +2,129 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C5152FEC6
-	for <lists+linux-watchdog@lfdr.de>; Sat, 21 May 2022 20:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016D4530442
+	for <lists+linux-watchdog@lfdr.de>; Sun, 22 May 2022 17:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344540AbiEUSXW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 21 May 2022 14:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
+        id S1345654AbiEVP6x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 22 May 2022 11:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344480AbiEUSXU (ORCPT
+        with ESMTP id S1349184AbiEVP6X (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 21 May 2022 14:23:20 -0400
-X-Greylist: delayed 967 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 May 2022 11:23:16 PDT
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02hn2241.outbound.protection.partner.outlook.cn [139.219.17.241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7459C6543E;
-        Sat, 21 May 2022 11:23:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TuXa36FvAQH/U13fYAVGsvXSNDAlNrHZbBFJV6aA4quzr/HuO01HIW5jNPGRHVOACsTLEE1XEnXFVNahJAwbJw2L0ucrLlDkzBUSo55L4EE7VUOCgWsmEOCrzofMIpF0E3LIhwJq6v5QrRkojH5mG1nqQ1khFJl4Y0WB5FQnmabRNsl+qjCDOsOnFxIhzn9SNomyRk9CazBrV9qc9S6VbVzS/M5YyfZApay53VsCxmUjoPT2pLUdJDgmq7C8OwRWH85sxp+MPoC1O9DkkP3C9v92zMyizyigITzCGaJgP1s2yWFZd4/2ZpHV0RJPjmDiTuR4nrU34F2JgW9UgSXODw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
- b=B5xYTaJGJOnl/5jIrlRYKKduv8sOzS5MiPRCFx7Lo6VPfcwKtgUbLkOOtM53cAwbP8Cxd1D6aqdxy2ZSBtG6hdMMmHSOE3jtPhT5gVWA9GGfmEU3uLXEU/5VPl/AGyA9gmpU0FUdYpMDLrOcZZYxHFgX6hbzE7oWkxgpUvIFliuEUfJ+TkZWh7rYjSAYbCV0BBiyD832f9QlvGIx+/8OGDSs5toCX2pVC+YwGzkketrwWufMTDRVpj9J8E1zoiNmlCD0iOCPCv6rNEQVjZbvK73HP2mBv++VKBV9VHIH9CofII7wZtKGrz5zYvdmRIGclVZSayl98ecmPeCXVD0mLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=gientech.com; dmarc=pass action=none header.from=gientech.com;
- dkim=pass header.d=gientech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gientech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
- b=qjpEOcGdv2D3B/OIEySmRCQUqrhz0cZ8g/ASaluUEqaBX81/6PKwJ4/M+ySq8wyHl8/wXLiRBFNYS3Oiy1d39KA3k3LnXeTw2XPj8cyWYtbkYWdhJFGU/DAoGwO6fVNpQShZx5k55rAj+m26Lx2bX/PXWAuEqzgiXa9v+E+jYdNcv7gq83f2fYbgD9bLyP1n0V2UQgJufjQNNxaKIHf+B0Nm8kbZ1E8OT64sC/TVbva1hZos4/r4H1s7STGEN6Lv4AWiGw9+YR9AY8Qj2n4CI13fIK/v3WXoRcSfJfoXLNv/88v8847FH8qJPUffUJvl6dwq5iMs+yXfxctxUftgtA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=gientech.com;
-Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85) by
- SH0PR01MB0666.CHNPR01.prod.partner.outlook.cn (10.43.106.146) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5273.14; Sat, 21 May 2022 18:07:06 +0000
-Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85])
- by SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85]) with mapi
- id 15.20.5273.019; Sat, 21 May 2022 18:07:06 +0000
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: RE..
-To:     Recipients <tianjiao.yang@gientech.com>
-From:   "J Wu" <tianjiao.yang@gientech.com>
-Date:   Sun, 15 May 2022 12:39:25 +0000
-Reply-To: contact@jimmywu.online
-X-ClientProxiedBy: SH2PR01CA037.CHNPR01.prod.partner.outlook.cn (10.41.247.47)
- To SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85)
-Message-ID: <SH0PR01MB0729F034D32103D3BB41ECF58ACC9@SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn>
+        Sun, 22 May 2022 11:58:23 -0400
+Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAB53B296;
+        Sun, 22 May 2022 08:58:17 -0700 (PDT)
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFotZs031609;
+        Sun, 22 May 2022 18:50:55 +0300
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 2AB4663A4A; Sun, 22 May 2022 18:50:55 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1 00/19] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Sun, 22 May 2022 18:50:27 +0300
+Message-Id: <20220522155046.260146-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: faf8bd70-7a88-4c02-cc26-08da366ffec8
-X-MS-TrafficTypeDiagnostic: SH0PR01MB0666:EE_
-X-Microsoft-Antispam-PRVS: <SH0PR01MB0666C243D9C8D8AD563599B18AD29@SH0PR01MB0666.CHNPR01.prod.partner.outlook.cn>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?46p5WoMwwZepa949qQpGR9wGxNGxi8E8RtWBUpB38thyKKv+/DDw6Qgceo?=
- =?iso-8859-1?Q?cHdTWLvJnsCM9FvrroDcE25ni72QZ49Bkxny7F4F3LqH+GtCj5u07qNLKf?=
- =?iso-8859-1?Q?tFjXAI9v+r5HnH7yRWXTx5nB+iS/JppFRj/gPMgq3juIGUI7FYqtPLCrQR?=
- =?iso-8859-1?Q?JpuexNRy6bks0LgCvfG5KmLPA30OfjdNOO2rJubR2H7dyoZRiSc1U7uJQH?=
- =?iso-8859-1?Q?Wzr8ODAuSqL8l5WbgDMvlpqkf5s4xq/fSPS2UMI9J3eyKcmn/ROsBR/sw2?=
- =?iso-8859-1?Q?SiVm84cW+jpY4G+u0lwWa+9z11w0oBuuzZUTLS/5HILbQNSWKegMmL2VUa?=
- =?iso-8859-1?Q?z5l2HEOMmQHvMvZLCQuNpm5M9UAl0d4cvFR+v8GwaB3gTUXKgYsNhopQQa?=
- =?iso-8859-1?Q?X/2GZEx9kMUEHoRCz7Xn/Lz6oSGk/yNoL5yH3RumNB7f4/kMmb9TQK62YR?=
- =?iso-8859-1?Q?Y7zQXtULmPS3WQLL5yxvZo/O0ML0Lw/hxTcpqen3Lg3RUD8hIuZTTwQjyY?=
- =?iso-8859-1?Q?IiTyJAKU1d0WsD/vRj3J4NbIcpECtZJvrnV8Ss3RtHWCrTOsxJTlxtDc93?=
- =?iso-8859-1?Q?PWQ0UzsfY0Du5MbrroNiC28Wqd+cS5jtmZJogVayU4hQ/XE3qEnzdPXFGt?=
- =?iso-8859-1?Q?sIzjTuPC2uDIjSDuicravYQJG2isY3ep8kP/sMb4uk7jc0u3vFJL4O6cyr?=
- =?iso-8859-1?Q?vXDZOQHJlktQSni7VUHfVUT4q/pWmCe2wXQtczC+3ROP5SmbnEtSmt5vVK?=
- =?iso-8859-1?Q?8bvIllYRQdD6P377SLq999A79H7fxY4kF9XHdjTvyY9GE3DRH1UZHLCcYs?=
- =?iso-8859-1?Q?4lK+8tXjk7mJmRaMBBSL0n71xDVVn5zAzfKtWoLq6eyoGnQYebrWQv1iSM?=
- =?iso-8859-1?Q?AqjssusZzCHAzTvS4cOWtfc8mcXvQTCeHWQ7Yrhl+fCU4TygYQl4GdbGMo?=
- =?iso-8859-1?Q?8U22nepKYH5J/SI+Acs+aRoz2jjeOIza3iiw5m2GYadl+7DQmvfvMQB1+I?=
- =?iso-8859-1?Q?OxplmhI32dXs67A4f/Ek1MMFIG3p8ZW3Y/otvHjHHpz/Mo+2o6RWkpqEoE?=
- =?iso-8859-1?Q?zw=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:OSPM;SFS:(13230001)(366004)(6200100001)(508600001)(19618925003)(4270600006)(3480700007)(33656002)(8936002)(38350700002)(38100700002)(2906002)(9686003)(26005)(186003)(40180700001)(66946007)(66476007)(558084003)(40160700002)(7116003)(7366002)(7406005)(7416002)(86362001)(7696005)(52116002)(6666004)(66556008)(8676002)(6862004)(55016003)(62346012);DIR:OUT;SFP:1501;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?gV/BiX7xBq7+a/BwD63fwridp+2yYk158+FDxzxd+zT8uOVJFuGACPmzpL?=
- =?iso-8859-1?Q?5ATG0N3sHublzULunRSg66ZL5GU7ZMPLqBctGNViGlJyiGKSDM4W/QNCMT?=
- =?iso-8859-1?Q?pDJ8Xb0RgsPZ61reyinMVBKa/mJ9wRSUfxL8rXpCuPunXUDAx8HIz0ge2T?=
- =?iso-8859-1?Q?F+yaYrt2bxscU+sIycemH9RogtRwsjOfEpNssa+vgxLVlS/LT91LGPxPIS?=
- =?iso-8859-1?Q?grzlQHkN8q9SpBTvvf4Twtv69h1bqpsKmJ2QkSk9LMfb+k6jhFTJWXlL/a?=
- =?iso-8859-1?Q?b3bXUdgPtmpFJn3doX5a719ouYn/2h74fnjUUSyl33c0R/n+D0wPsM+HBe?=
- =?iso-8859-1?Q?aAe7qS9oG8018mtkNX4i/suOJ2B7SUs1kZOHOYY/oQK7hNtiYQGTBt04OX?=
- =?iso-8859-1?Q?HZBsOQ2qgdTKlO+PjvUgvYO8FOGpo+gUlMpF5Pgu4lMSvzTEasKlOUVTg9?=
- =?iso-8859-1?Q?GDGtZsY1wqQH/KfUNoU25OYC/AGbNSIMSP6r8UOIFuSKGZWp4xGnaQOKBm?=
- =?iso-8859-1?Q?gBO+saR5P0VMTmTRYelG30iZIo+0nE1Cz294dA5fgna3MYc+gvtb9Qx9qB?=
- =?iso-8859-1?Q?t+Hs2rI/R0Eqgdrdd7NZJqEoO0GidkVEPhX3VKh/odD71Hka00t4AnjYD5?=
- =?iso-8859-1?Q?3XgPaRQ+vsv6iFquRrCdz3I2QrIII/O7oNWvqVPejsJgES8j6sXDW1/ukX?=
- =?iso-8859-1?Q?viRoWxHtCmnbhLUCChBFI7s2ohD+kHY+guJ+g/iXs6f/L2NW2H9wf3dIFm?=
- =?iso-8859-1?Q?+52flTQNRoFI8OIKxG8RbfHSLf1zZd+iJF+V3wD/LKq1KUG6c+BI+W+QI6?=
- =?iso-8859-1?Q?v/rOo0lIFR445pUP8GKHJ6H2YM1orfp5kTbtoNpwaKp4WHUT8f+23BnkQr?=
- =?iso-8859-1?Q?bDcbY49xnIDsxqxGztZtz63AjtnlYeh67jrjT0NunU+hkBML9TrWGVrTS3?=
- =?iso-8859-1?Q?IZRYW819gx7N9K6O8N5SngepzMmhQQ5Y9KFU0PJgkwGYqe8dhcAc9o5rdn?=
- =?iso-8859-1?Q?arySmrdFf6I8R7Yxn5iGniNdofeH9OyMhT/q1paazAF7cicDMD8k1+S2Kr?=
- =?iso-8859-1?Q?UievLerwKN3LOM1kEy5VbhPhpW1/wHbEqqEooFSk5WeMj3cuWF+g4KcFs7?=
- =?iso-8859-1?Q?blBCiFV1JuqdHw1fb1KbQNcJKCKj8rrYWb1Tu9EIMmCFBBnb+m5UX/93on?=
- =?iso-8859-1?Q?KLb/vyekXUpZzIEW8akMQuMTTPzvmwAstX4G1fZw/Bk4IdOg+jDfPU1QS5?=
- =?iso-8859-1?Q?H19AkhzatlLRCltmjwT68cNlEm1lQtBxnWgFR6DZhsvTd7NEIFEnfWcsRa?=
- =?iso-8859-1?Q?9l0IHBSgJ2K/ueN8OdJQwHDGGiSEWj/X0ixsSG8AXl5O9KHtTY+RWeOD6d?=
- =?iso-8859-1?Q?UMRZL5mfjQlYVVjTgXjhxYr1ME+HSk3VuImoKkvzEgp9QAPp7t++9jGLYG?=
- =?iso-8859-1?Q?2s4jGE2VpP/MeDmiZ+jMlusowjC6eJ4+LhMgc2pIbkYGRMmsn0KEH1tW2U?=
- =?iso-8859-1?Q?fFemHBbH2lv/sSK1vg+ErtGHJP5UmzzFSQJUy1jUPUOS34fxJS5gKVpTaV?=
- =?iso-8859-1?Q?9sD4sNlLm8oG5KAlXd2todkEbv/i2Jjx5pHiDLA9+eFQ3dHcxMOLMB7QS+?=
- =?iso-8859-1?Q?z21YeZlnDuM7nQ+ROe3LdzmRTM2ht1kehp7yEQZx+cenGYf1VIE/oXdxzq?=
- =?iso-8859-1?Q?5V4T3bdpEDWEvm9hKL2u8MeeBER/G+IgxohZxCVwNeLYxJfT4q/8gV8xmo?=
- =?iso-8859-1?Q?NoJs80UZLIYxw2eIInizoiXuc=3D?=
-X-OriginatorOrg: gientech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: faf8bd70-7a88-4c02-cc26-08da366ffec8
-X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2022 12:39:47.1594
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 89592e53-6f9d-4b93-82b1-9f8da689f1b4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8g9EmpQzizJrjFxL6470Mr8XSsngbB4IyYR9bZMHcfHFn0gslr0Q9UTF+zKMGxvRgsyBfppO/gs2EBHZZWNK0Aa1udZzOY8RDGFkrjNOJVs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0666
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DATE_IN_PAST_96_XX,
-        DKIM_INVALID,DKIM_SIGNED,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,NML_ADSP_CUSTOM_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,SPOOF_GMAIL_MID,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4895]
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  3.4 DATE_IN_PAST_96_XX Date: is 96 hours or more before Received:
-        *      date
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *******
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Can we do this together
+This patchset  adds initial support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family. 
+
+The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
+The NPCM8XX computing subsystem comprises a quadcore ARM 
+Cortex A35 ARM-V8 architecture.
+
+This patchset adds minimal architecture and drivers such as:
+Clocksource, Clock, Reset, and WD.
+
+Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
+
+This patchset was tested on the Arbel NPCM8XX evaluation board.
+
+Tomer Maimon (19):
+  dt-bindings: timer: npcm: Add npcm845 compatible string
+  clocksource: timer-npcm7xx: Add NPCM845 timer support
+  dt-bindings: serial: 8250: Add npcm845 compatible string
+  tty: serial: 8250: Add NPCM845 UART support
+  dt-bindings: watchdog: npcm: Add npcm845 compatible string
+  watchdog: npcm_wdt: Add NPCM845 watchdog support
+  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+  clk: npcm8xx: add clock controller
+  dt-bindings: reset: add syscon property
+  reset: npcm: using syscon instead of device data
+  dt-bindings: reset: npcm: Add support for NPCM8XX
+  reset: npcm: Add NPCM8XX support
+  dt-bindings: arm: npcm: Add maintainer
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+  arm64: dts: nuvoton: Add initial NPCM8XX device tree
+  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+  arm64: defconfig: Add Nuvoton NPCM family support
+
+ .../devicetree/bindings/arm/npcm/npcm.yaml    |   7 +
+ .../bindings/arm/npcm/nuvoton,gcr.yaml        |   2 +
+ .../bindings/clock/nuvoton,npcm845-clk.yaml   |  68 ++
+ .../bindings/reset/nuvoton,npcm-reset.txt     |  19 +-
+ .../devicetree/bindings/serial/8250.yaml      |   1 +
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   2 +
+ .../bindings/watchdog/nuvoton,npcm-wdt.txt    |   3 +-
+ MAINTAINERS                                   |   3 +
+ arch/arm64/Kconfig.platforms                  |  11 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 197 +++++
+ .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  |  50 ++
+ .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  77 ++
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/clk/Kconfig                           |   7 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-npcm8xx.c                     | 767 ++++++++++++++++++
+ drivers/clocksource/timer-npcm7xx.c           |   1 +
+ drivers/reset/reset-npcm.c                    | 164 +++-
+ drivers/tty/serial/8250/8250_of.c             |   1 +
+ drivers/watchdog/npcm_wdt.c                   |   1 +
+ .../dt-bindings/clock/nuvoton,npcm8xx-clock.h |  50 ++
+ .../dt-bindings/reset/nuvoton,npcm8xx-reset.h | 124 +++
+ 24 files changed, 1526 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+ create mode 100644 drivers/clk/clk-npcm8xx.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+ create mode 100644 include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+
+-- 
+2.33.0
+
