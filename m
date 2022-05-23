@@ -2,126 +2,86 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB38C5312E4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 18:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72405314DE
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 18:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238062AbiEWPh4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 11:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        id S238433AbiEWQWd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 12:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238021AbiEWPhw (ORCPT
+        with ESMTP id S236520AbiEWQWb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 11:37:52 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812533056C
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 08:37:49 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id m11so6234908ljc.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 08:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CNVGYK72FSE/DjXuo5FhnaPlB7gNCfpfmdbuSxUtMOc=;
-        b=iau23czuiMXjm0hyqdsK5LqTD+cKYVfnaA9S+hQdET23Y0mX06Yvmm6kF7vXaHTfPy
-         8//i31Rg+IIST3l9Sr0HyecMRQN5OqkZNKc8CS9yKXVH/8RbMhhmXeqzZSfepaj/zkwe
-         ofB4tGj5QcepTEaNJQGL0uCSEQ2ADJPDbE222xkpnEOy/i6hOMC2Gogln7uIOXz1Z2Un
-         eEdA7dxiMWE4KY6pnEhnPDqWZSOM1zSWeijmWVE9dewujOLdGsLSCspFY3jrwHLY5uJy
-         G/qZz7B6FWs1eIB6vxDShca3e0arrF3KoP7sa7f+DQmKL7DLNfpzlnJHap6kywfaaz7X
-         P+oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CNVGYK72FSE/DjXuo5FhnaPlB7gNCfpfmdbuSxUtMOc=;
-        b=nQWLZdwYJX5ap/SyXxpq1en3KoWpvnotialsQyhJ3TwD1C/xajhye6VHn6gdI9axea
-         4NW92CpVnRU3u2aKq9QxBt/gDsbp5CCX+Z9FDCGCGfrHDmXBqlyJjr7a2GiMgpaw5DO8
-         fsvi95VpsMmAeJ6uBw6lGSxQGgmR+PKRdwPKJ/33knzf9WtxJC+cYQ2abdEcRB9NznRl
-         nJkzN7Ytdkmn09K6Tvi0w2fbZWYdB56SFietjZ6O77BXavvQN0fbuZzZZmW0MjMsMQwb
-         kLd0XAtmlO4souv7/kuflh/bwLNdRAXEVNgYoUC4ma8iAY9MrDFrwT43HWDguJ0hyuot
-         OODw==
-X-Gm-Message-State: AOAM5326P+DLDH/VlgtrELTvCH00qlXMJLrExNJfyCKap6wR+fI3Sxu3
-        uPO8PrdXObPa2BHqIn20n+GgHQ==
-X-Google-Smtp-Source: ABdhPJytSX0vw8XiyL0IPRTPz7bNI0Vb5IqxXheMy8cJ6OyJZo+/AZv6Os8PjXd8yRyNcZKkTN4sOg==
-X-Received: by 2002:a05:651c:b06:b0:253:e51a:c507 with SMTP id b6-20020a05651c0b0600b00253e51ac507mr6361505ljr.420.1653320267494;
-        Mon, 23 May 2022 08:37:47 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05651205ce00b0047255d211c2sm2036295lfo.241.2022.05.23.08.37.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 08:37:46 -0700 (PDT)
-Message-ID: <fd52f328-c895-e27e-4807-eb0b8f14a247@linaro.org>
-Date:   Mon, 23 May 2022 17:37:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 18/19] arm64: dts: nuvoton: Add initial NPCM845 EVB
- device tree
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Mon, 23 May 2022 12:22:31 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA5B5BE7D;
+        Mon, 23 May 2022 09:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653322949; x=1684858949;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AgL1ko85PWWvfyTYsuQmaz71teSdVfxl8k4j+ahVxfE=;
+  b=L9LQNrDud0X1e3J51UFsnI413PQlhN5LH8QGXYOyapF+X2SjOo5o++Jm
+   NoHdRMinTK+4aVSH3h09fKaxJ84go95hNYw0seGewz3ZJKz7arzO3DXiA
+   iNPVT6Hl6REEvEOQZbJEXUKrVjCuk998M89L83hit02mtv7EvGD2DOQqf
+   UKw5+LFO6776AjuZup4fIZfvwVgZJ7wUBr2ZWacHcJ8rbAAl18puuOanK
+   yM9OSwc25lxhwxOJI+nV82Uy+rnGVwOcLqgvk5QnotpJ8pDQBmShobniG
+   ixyd1FfpzGsOg6rK2IwJzQTmbBgiX1V3Osz5vtbDVY92xl+vHiL9PBZ6U
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="260878535"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="260878535"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 09:22:28 -0700
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="526013937"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 09:22:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ntAp5-000JLd-8Z;
+        Mon, 23 May 2022 19:22:23 +0300
+Date:   Mon, 23 May 2022 19:22:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Mark Gross <markgross@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        robert.hancock@calian.com,
-        nathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-19-tmaimon77@gmail.com>
- <CAK8P3a1LCkM-w_Oi2qUqgq_Qxsg64uoGg5aaz=X8pBENHBhj0A@mail.gmail.com>
- <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+Subject: Re: [PATCH v3 3/4] platform/x86: simatic-ipc: drop custom P2SB bar
+ code
+Message-ID: <You0vzJDvuO7A1qv@smile.fi.intel.com>
+References: <20220513083652.974-1-henning.schild@siemens.com>
+ <20220513083652.974-4-henning.schild@siemens.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513083652.974-4-henning.schild@siemens.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 23/05/2022 16:17, Tomer Maimon wrote:
-> Hi,
-> 
-> Thanks for your comments.
-> 
-> the patch will modify according to your comments and will be sent in the
-> next kernel revision 5.19.rc1
-> 
+On Fri, May 13, 2022 at 10:36:51AM +0200, Henning Schild wrote:
+> The two drivers that used to use this have been switched over to the
+> common P2SB accessor, so this code is not needed any longer.
 
-None of your emails reach lists because of using HTML. Please use
-appropriate messaging format.
+Hans, in order to minimize the risk of not getting this into next cycle, I
+would like to collect your tag (if you have no objection) and then, when I send
+a new version of the P2SB series with this series together, we would everything
+ready to be taken by Lee.
 
-Best regards,
-Krzysztof
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
