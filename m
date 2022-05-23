@@ -2,66 +2,132 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A961E530B5D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 11:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DD4530B42
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 11:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbiEWIvx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 04:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
+        id S232098AbiEWIyw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 04:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiEWIvD (ORCPT
+        with ESMTP id S232122AbiEWIyv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 04:51:03 -0400
-X-Greylist: delayed 1298 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 01:50:57 PDT
-Received: from mail.tireplot.pl (mail.tireplot.pl [46.183.184.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C5D286
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 01:50:57 -0700 (PDT)
-Received: by mail.tireplot.pl (Postfix, from userid 1001)
-        id 2E96E41935; Mon, 23 May 2022 10:10:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tireplot.pl; s=mail;
-        t=1653293459; bh=Rfzvu4C+yJ1wyuJ4V+t/udh6cgYEQVnY6S5ltO4wdNg=;
-        h=Date:From:To:Subject:From;
-        b=mYeV+deTBn/gCvETEC/WuKYLS8FokVXoHyI4Otk82Zw8ZOB3OHGH8nP3GVZlksj16
-         ZjXIDIgTM2ghRVNse+RSwpEdA7RktsJmnp8XiDtLnoaJ0ovB4bFpVC79H/cRPRD4by
-         e5OBDdicAqUnHC9EoT3VED41zrQfWGDxRPZcgLZmzI91GmyC6NJ7VWGt9fxyanhTnZ
-         6s/i0p93NE9eAS+T6OCpkwBWuQcl0NX+4tcXNMXJcUY/Ht5WzU1AsChHpBk2RQ7TbG
-         KQSQV85BprzFrGtrasVbkc0c8T+NTN99lfQoICK/x4HzkFfd/c0K8Yr6n6wLvMK5BA
-         zJq5yehm4DAEw==
-Received: by mail.tireplot.pl for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 08:10:24 GMT
-Message-ID: <20220523084501-0.1.2k.fz3v.0.v7pswhcnpb@tireplot.pl>
-Date:   Mon, 23 May 2022 08:10:24 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@tireplot.pl>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.tireplot.pl
+        Mon, 23 May 2022 04:54:51 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CDA3DDF4
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 01:54:50 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 27so11432603ljw.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 01:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CfF5/pWdcRI2Sg4Sp9q18Ut3NdSMP2mrbNrUOH4tHpQ=;
+        b=H04E3Qh+zTkrhDtqT1Pf+lm+z90Q1IJDUjrpShL1b6RHtN5BCmOhFU45XgaLzruEAQ
+         A5fMl9wwVZqcALIuVrSlMDFOms32cB0Kh8A9Dra7P1u/TWSRNmJvGaaa9r+W1KiP59QN
+         6Kv4z77ZaR1HOWXOpL9Yy1bVRhACpLfGfO1/ICZdQ8NRjyTunjfH0E3IMxe+YquB8YFL
+         +rblqL3SZACB4oYbDVhmJJ7xeZ5Gcmmw4LsDMfKpzy8RxbLDszX4lGi0PN7CJqeV0wPZ
+         9bDoBwCrs+sFL1Nr/ZQ/kconVYs8bt0QHOyInH/VY0r+0UHAAKzY5Nv10bvgkCO/NOgC
+         gaFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CfF5/pWdcRI2Sg4Sp9q18Ut3NdSMP2mrbNrUOH4tHpQ=;
+        b=a4PHdLcism02yHn04IBLrJIn9JcprvnqLsIHe/KJrJAMRo/KQJ2p+ysoEbYYdj9taf
+         kY/m4GKaSKpfnBaO5K0aXrFS/PGxjhAN5krjWY0m/+zeCXwsfe8A011JwkI5u4TFM0Zb
+         aWcfwbruo3aGJJjN/XbeggL9SJkvb4PZZep/a9ew+LVKccGJGJ7F5Iyt8r1lDCDKp70w
+         EXL5zJKUFidZ6igE0FhVLiuBBhKxNhsgcwLOAyCvb72piDQ2+MEvHzaz8yDL+MDiMprw
+         tcAudmewuvDcNfZPiqRSj0MPPar2k+DuZRCTqF80uQTngPCrNWjMamZp/ZYcJE0IXdeq
+         pLPQ==
+X-Gm-Message-State: AOAM5307PamOKS65AntgFPKFJWlmSDOREOZj/nO7gdjdvkzDp/SCocjs
+        A0JAntqJOiOd4u79vFFjdg6WRg==
+X-Google-Smtp-Source: ABdhPJz8ech4AXIZ3Td603lBQrNaXVjP05GbdjiHzoi9KYn0N5iOo6J7vHouIJSze1sRkg0E6MIyRw==
+X-Received: by 2002:a2e:9797:0:b0:253:ccb1:5868 with SMTP id y23-20020a2e9797000000b00253ccb15868mr12838410lji.162.1653296088444;
+        Mon, 23 May 2022 01:54:48 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id y11-20020a2e7d0b000000b00253d95eebe4sm1692364ljc.21.2022.05.23.01.54.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 01:54:48 -0700 (PDT)
+Message-ID: <973d75b8-0eb6-ff5b-6cd2-9b7d7c5cbcaa@linaro.org>
+Date:   Mon, 23 May 2022 10:54:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 10/19] reset: npcm: using syscon instead of device data
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-11-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220522155046.260146-11-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 22/05/2022 17:50, Tomer Maimon wrote:
+> Using syscon device tree property instead of
+> device data to handle the NPCM GCR registers.
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  drivers/reset/reset-npcm.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
+> index 2ea4d3136e15..0c963b21eddc 100644
+> --- a/drivers/reset/reset-npcm.c
+> +++ b/drivers/reset/reset-npcm.c
+> @@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
+>  }
+>  
+>  static const struct of_device_id npcm_rc_match[] = {
+> -	{ .compatible = "nuvoton,npcm750-reset",
+> -		.data = (void *)"nuvoton,npcm750-gcr" },
+> +	{ .compatible = "nuvoton,npcm750-reset"},
+>  	{ }
+>  };
+>  
+> @@ -155,14 +154,10 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+>  	u32 ipsrst1_bits = 0;
+>  	u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
+>  	u32 ipsrst3_bits = 0;
+> -	const char *gcr_dt;
+>  
+> -	gcr_dt = (const char *)
+> -	of_match_device(dev->driver->of_match_table, dev)->data;
+> -
+> -	gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
+> +	gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
+I think this just broke all existing boards...
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
-
-Pozdrawiam
-Arkadiusz Soko=C5=82owski
+Best regards,
+Krzysztof
