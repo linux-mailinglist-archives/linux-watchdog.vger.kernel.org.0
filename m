@@ -2,87 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8501530CCC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 12:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95326530DBF
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 12:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbiEWJ1T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 05:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S233501AbiEWJkZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 05:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiEWJ1P (ORCPT
+        with ESMTP id S233475AbiEWJkW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 05:27:15 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1D549261
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 02:26:31 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id j10so1043898lfe.12
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 02:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Rall/J8MbFkSCpGGCaytH6f+MPOlebnjwNlb4WkgynY=;
-        b=PaQ05G23J+igp19tyJ0HeXIV2fAILu8L3PMe0F59HpAyJqM3VmyUa+wVPNg3qMMUnv
-         sWAb+WepiWB1EAqlKOT2fDXu131odcFLpJhGd+tVaRzKX0qsrlKUrayRSpvsjRcnUJV3
-         MwSz9l5zWe2sfiwKOqzJqCZiC8Kb9dxQPkbaBVU+ecXvI99qBrpLNu/zNzrufzgMWTQg
-         ueAQIA1QN+jEA4WJK5upxYV7g2InSbnEqtpyIixS6PLOitd8zzBMjSmC1nePJUAXTbSq
-         vww1m3PEvShdykhfB1XL2C+fz8FxDa3zYJuOBF3AlrRtu05Obcfv4NTL2tUaIxdIKc1o
-         QdDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Rall/J8MbFkSCpGGCaytH6f+MPOlebnjwNlb4WkgynY=;
-        b=yn5wSIbKo8hEdRL5Ycqv2qEyCjodqoihAb/4hinr4QZZJX0ciVSlHs/h6XDh1U1BD9
-         Hyvdh8j58IaQD5kQpjOBCr4fL2U+EQsOiSjE20LqmvIx6zR67a5BohIb/vciZwwq4C1B
-         BlvISTHXYccqNxVIxsb8psnvv+BL3nL1yyj9PFZfiGQWV2D0qNaPE1CLgW0+axMmln0x
-         LCZw4CrPBW2BP2J3IHRMJT5TAJcbodum00+fgw9fNbY8Ydb/m77hRNDYNwkaNygId4xp
-         OFEdD7NH9YS6xl32tDy/FjOHcar0jhglq8TiFTWMGR6ycYwwbHDkdFW3CGUtT5XIK34R
-         DuzQ==
-X-Gm-Message-State: AOAM5304o2Jcndu/uVOPMOgFJYIemNhFMqo0OvD28pIlKtAH0CN4r7w2
-        yuLFbWA8SDruCpUqhGqhXjo30w==
-X-Google-Smtp-Source: ABdhPJzJFQjxkp3Wd+qVBwevcO6f0Rflfc4HMB1wNhOBEHg8kVAZSPqPiDDcL3E2aJC2mKHs8fBatQ==
-X-Received: by 2002:a05:6512:2307:b0:478:6ab0:c22f with SMTP id o7-20020a056512230700b004786ab0c22fmr4557286lfu.232.1653297989927;
-        Mon, 23 May 2022 02:26:29 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p1-20020ac246c1000000b0047255d211fasm1870435lfo.297.2022.05.23.02.26.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 02:26:29 -0700 (PDT)
-Message-ID: <25aae69e-fed8-bf69-a110-8e134db1eda1@linaro.org>
-Date:   Mon, 23 May 2022 11:26:27 +0200
+        Mon, 23 May 2022 05:40:22 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC421EED9;
+        Mon, 23 May 2022 02:40:19 -0700 (PDT)
+Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MCayD-1o152Q2tDn-009keD; Mon, 23 May 2022 11:40:17 +0200
+Received: by mail-yb1-f179.google.com with SMTP id x2so24035398ybi.8;
+        Mon, 23 May 2022 02:40:17 -0700 (PDT)
+X-Gm-Message-State: AOAM533jYsDxsPXRyDKVdyfflbydYmIwRi4A/bU3dlBPnBtiArvpWuWn
+        PT6IYiRzFL4Slp6ai/6YYmEjSael8VOAdtFhr9w=
+X-Google-Smtp-Source: ABdhPJwPSWjf0+4YNJaSIgYV3+A8L+w17pCRPMTjSGU6t40/PC+JSliP4KqFNtyVOp/6cKrGh1RaU8G2YIBlaJLXrPQ=
+X-Received: by 2002:a25:c747:0:b0:64f:62fb:f55e with SMTP id
+ w68-20020a25c747000000b0064f62fbf55emr13651825ybe.106.1653298805675; Mon, 23
+ May 2022 02:40:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-19-tmaimon77@gmail.com>
+In-Reply-To: <20220522155046.260146-19-tmaimon77@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 23 May 2022 11:39:48 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1LCkM-w_Oi2qUqgq_Qxsg64uoGg5aaz=X8pBENHBhj0A@mail.gmail.com>
+Message-ID: <CAK8P3a1LCkM-w_Oi2qUqgq_Qxsg64uoGg5aaz=X8pBENHBhj0A@mail.gmail.com>
 Subject: Re: [PATCH v1 18/19] arm64: dts: nuvoton: Add initial NPCM845 EVB
  device tree
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-19-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220522155046.260146-19-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        robert.hancock@calian.com,
+        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:n7zvqzJoyeIQrt0t+bbdn3QVYisX2S5bXfz3u0VUhVzjsm2+x+o
+ 659/sfSLnFqNBG7X7VtbYSKUHJCRzLZl40EszBTEYhCu20ZCEsrGsEmNe7Ab7THLuGp+tMJ
+ grFXdUbW4oucpYzpzItMge4A6IxrrQMX94YKma6DD8XWZYfzC70RbHiunite5+fqf89+eXN
+ LIbl0pJkO4UAdKfAmCifw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2Z5BTVOu2s8=:cPSYfOv2MjhdvbMxTorHlS
+ rLOLv/JIQN8ZNLEEprUL4opOISkNGyOHPLhQKpnatFNPTFFK02SGwqdbwGA0rASndK3H8NgsF
+ LZN/NZTFC3UWBK9dYkR+3nhaYyNEBsujW6GSyVgBo4qjC3thY8Y7VHbAbIq4yKL5TFmEejH/c
+ rxSVFWZNU9ayduqPmLC0YauJf9eSOUEumcaGtfToKFbiLxH3PpzVdPP+mNqVH627ZJPcLyH1/
+ pZWGY73x5YfhQOG8wH2pRENhz2XhpJGDtPYQdOPRI0qEQy9B3feuoXtBT8nk4vs0RthkhUjVG
+ YTMcCHeG+PGuvjeq1PW7hCCppuC56oraAaein7sADyfAA/hkici9fEeglyVbU73OHFNqNrQqC
+ o3QzyBh6ySmIZoIMOt0GNUm8i4QF+zHvhlYKDQb/Bs1WnMv7NIj36tNEJQx6SJ/x7kGE+/+oq
+ n/QUiVPXGaEfRoxpLDRDxk6IYWCAVX0ZTbIryM7UUsH7ZWCpYlPXDmpGUBLDVxXRIMm59HZ1z
+ Pt4zHYKLBv6RwUu/+ybaRsPbj+WCF8QeUz8E+57JEvpuHEuB8dhV3GX6tlUQr4WPzKecDqqz4
+ T32am9CBSUCwexZ1cSPdYtC5Q/Trv951eX9cSIIaoujwBZAOQcvFLVj7djbC/M6ZNUgSm0WMe
+ CRMLZxuiIRLiSk990cWjlHcSxnpkVyf3vjbUChAduqG+XGP2T3WYkoUq0APyG5N4yq1GQr6Tb
+ mq6s0kHhLW6onkYm489d0lZtKdHS3W3AkyjFaMovTV7mqs5ywNjC/fIsp17D1OtR9M6boXjPy
+ OO1nH20/LhOtiqXq99IR9CUpxNLN1GkRgqFVx9OQsVJWROkdKXtTn+ST8u8/5SCfR+l+8/pJs
+ Rgkjp4U1VhoUWZ7g6s3dnRWuluTCjnnmNDLILdiVg=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,95 +100,38 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 22/05/2022 17:50, Tomer Maimon wrote:
-> Add initial Nuvoton NPCM845 evaluation board device tree.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  arch/arm64/boot/dts/nuvoton/Makefile          |  2 +
->  .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  | 50 +++++++++++++++++++
->  2 files changed, 52 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
->  create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
-> 
-> diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
-> new file mode 100644
-> index 000000000000..a99dab90472a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/nuvoton/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_NPCM) += nuvoton-npcm845-evb.dtb
-> diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
-> new file mode 100644
-> index 000000000000..d7a9a85f8075
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
-> @@ -0,0 +1,50 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
-> +
-> +/dts-v1/;
-> +#include "nuvoton-npcm845.dtsi"
-> +
+On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
 > +/ {
-> +	model = "Nuvoton npcm845 Development Board (Device Tree)";
-
-s/ (Device Tree)//
-
-> +	compatible = "nuvoton,npcm845";
-
-This does not match your bindings. Please test your DTS with `make
-dtbs_check`.
-
+> +       model = "Nuvoton npcm845 Development Board (Device Tree)";
+> +       compatible = "nuvoton,npcm845";
 > +
-> +	aliases {
-> +		serial0 = &serial0;
-> +		serial1 = &serial1;
-> +		serial2 = &serial2;
-> +		serial3 = &serial3;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = &serial0;
-> +	};
-> +
-> +	memory {
-> +		reg = <0x0 0x0 0x0 0x40000000>;
-> +	};
-> +
-> +	ahb {
-> +
+> +       aliases {
+> +               serial0 = &serial0;
+> +               serial1 = &serial1;
+> +               serial2 = &serial2;
+> +               serial3 = &serial3;
+> +       };
 
-No need for blank line.
-
-> +		apb {
-> +			serial0: serial@0 {
-> +				status = "okay";
-
-No, override by labels. Here and in places below.
-
-> +			};
+> +               apb {
+> +                       serial0: serial@0 {
+> +                               status = "okay";
+> +                       };
 > +
-> +			serial1: serial@1000 {
-> +				status = "disabled";
-> +			};
+> +                       serial1: serial@1000 {
+> +                               status = "disabled";
+> +                       };
 > +
-> +			serial2: serial@2000 {
-> +				status = "disabled";
-> +			};
+> +                       serial2: serial@2000 {
+> +                               status = "disabled";
+> +                       };
 > +
-> +			serial3: serial@3000 {
-> +				status = "disabled";
-> +			};
-> +
-> +			watchdog1: watchdog@901c {
-> +				status = "okay";
-> +			};
-> +		};
-> +	};
-> +};
+> +                       serial3: serial@3000 {
+> +                               status = "disabled";
+> +                       };
 
+Please drop the aliases for disabled uarts. It probably also makes
+sense to have the status="disabled" properties in the .dtsi file and
+only override them when you explicitly want to enable a uart for a
+board.
 
-Best regards,
-Krzysztof
+       Arnd
