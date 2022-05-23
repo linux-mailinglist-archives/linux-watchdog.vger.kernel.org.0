@@ -2,38 +2,38 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290F2530FDB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 15:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B02530ED2
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 15:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbiEWNO5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 09:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S235088AbiEWLng (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 07:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbiEWNOP (ORCPT
+        with ESMTP id S235074AbiEWLnf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 09:14:15 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FCC544EC;
-        Mon, 23 May 2022 06:13:37 -0700 (PDT)
-Received: from mail-ot1-f46.google.com ([209.85.210.46]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mn2eN-1nSuHP06tz-00kBm7; Mon, 23 May 2022 15:13:36 +0200
-Received: by mail-ot1-f46.google.com with SMTP id g13-20020a9d6b0d000000b0060b13026e0dso2056789otp.8;
-        Mon, 23 May 2022 06:13:35 -0700 (PDT)
-X-Gm-Message-State: AOAM533z+6UxQMa6HNrMHJ6ub7hEcPGwR05V46hFKnbB6o/+jo0u9IyG
-        LZnBzHrKsDwJBdHes8zH0DEuO5OvTstHca1uUyg=
-X-Google-Smtp-Source: ABdhPJww6UI3VHujKsiD4GORINdaaD7sInRUTDtpI+wOKYOknAfrhPLfgU/Tcrezf+twApFr3bW/yO+tBPWuypHA/W0=
-X-Received: by 2002:a25:c747:0:b0:64f:62fb:f55e with SMTP id
- w68-20020a25c747000000b0064f62fbf55emr13692906ybe.106.1653299558644; Mon, 23
- May 2022 02:52:38 -0700 (PDT)
+        Mon, 23 May 2022 07:43:35 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F31506DA;
+        Mon, 23 May 2022 04:43:33 -0700 (PDT)
+Received: from mail-ot1-f42.google.com ([209.85.210.42]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M8yPu-1ny2QH3nh0-0066ng; Mon, 23 May 2022 13:43:32 +0200
+Received: by mail-ot1-f42.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so4418465otr.3;
+        Mon, 23 May 2022 04:43:31 -0700 (PDT)
+X-Gm-Message-State: AOAM530VEDwel10v6P42dzQ6EV0W/ImJ2lYBPfS2Ob6jT5cD6s9b3rRk
+        rep+Z18t15/VrxXwa2LB9oh6NBm7p3HONc7O7mM=
+X-Google-Smtp-Source: ABdhPJxpUCa94Kh6HQKuK56biKlb3vDJKuICvFZFBgpVEpCuri5EfGLbRA6cBhu22Na5oqGEdTcIEn9+H34udGZY6o0=
+X-Received: by 2002:a25:75c5:0:b0:648:dccd:e1c with SMTP id
+ q188-20020a2575c5000000b00648dccd0e1cmr21094709ybc.452.1653299785602; Mon, 23
+ May 2022 02:56:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
-In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-5-tmaimon77@gmail.com>
+In-Reply-To: <20220522155046.260146-5-tmaimon77@gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 23 May 2022 11:52:22 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2CUy17vbd5Go523894vcF_oLz=dAR7JNLsUuR1Gsc9sA@mail.gmail.com>
-Message-ID: <CAK8P3a2CUy17vbd5Go523894vcF_oLz=dAR7JNLsUuR1Gsc9sA@mail.gmail.com>
-Subject: Re: [PATCH v1 00/19] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Mon, 23 May 2022 11:56:09 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0Nh4m7O_WPe1DTWqwWU32C5khOPH0ir7r_=s106mLv5A@mail.gmail.com>
+Message-ID: <CAK8P3a0Nh4m7O_WPe1DTWqwWU32C5khOPH0ir7r_=s106mLv5A@mail.gmail.com>
+Subject: Re: [PATCH v1 04/19] tty: serial: 8250: Add NPCM845 UART support
 To:     Tomer Maimon <tmaimon77@gmail.com>
 Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
@@ -72,27 +72,27 @@ Cc:     Avi Fishman <avifishman70@gmail.com>,
         LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:alt7ILHwRIljPmzaXRDqVUE9bi6SETHTV4oq2XdrPids99Dcq9o
- J4WjEaysTHkRjeSxmZz/RufbdF4iqI0/VHekehJDBoE9t3o7SIfvcuyNbnbtXEDFzM+kbVz
- 1E6oqcxt1zecGBKAtkmIhutZ1tuJY8uQklwv/xUZK6TrzI7vzROOh2oCtCCCR8Hp0b7bqYK
- KKQiul3Lk+0pytYDLADtg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PbgzhMWW664=:J9vzSsqyvMt0MHlGIS691W
- trsdtKEGMQD2JBwjHsF0EP4CwZA16V24LYXkNc9Ly7wD1HqBBpfru5tHygXwQqXKD7zOOmDnn
- Tw+FNS3imeie7iMBhwa0voRhgc79P7AcTikS48euqKO32Mz9l3R1scyzfb3Zo7AB0eTuYVlVF
- 9gbmu6UQ19q5SuIAPGQRgu26QRql5BtVtSWsoP1xe5aNJcYxtdQxUxICUAg4wlhMHHxCRpCnS
- wh5qeu9bRpxqyTMTIUwDo7Q68gfDEijNUb9aiYkU+/ptzYuZv8FSIy7nCwRdca/yfm9GfYDHp
- fIlmPlNn9h5MWbHjN0niOM3OcSnvCXRD15SsTImZYVkCMD9dj490ww3xbbhxHaE8o3LUlTlYw
- SMsdzysG1XyMlNl7J7cRiYJu5wv9Q+m6Nqlt/2UlDfrhbw/AwJfu8fF+LsppZrCXbIeOOaiIO
- +VUBv2v/eG0RlE698XVy3rjFAdvTMQijrsjfbnrtIx6yEEtNJYcIapIVaDVunE1/gYc0ppRSp
- CrT6HsuZk4fMIBr80QStOBClvJEkwAnQhI03mWGXtYDM95Qd8WiH+gi14CnHg2xAgt6DAg3QY
- uEmIEIk81TABkFI9y7Wt4fkl9YH8xnL7UH8Yey1S0hsJXwBcd4pFsme8Lg4w926lUqNqKz3r6
- vG+CDw0ayPCBgwaIyMxyELDxVQSUj5laMsFdvCcHPFcYvh8ej4kPca/Fy1VNzXaPBmM7gx/KD
- wIAJuA2X0o0uSiDhBdtTY/Wy3lhSIZuza925cimnIrzzWjaJAOtErd8Y3qFgHLH48tm8JKZf7
- YH2W0OUe3Dv12doFGkHxG1bT9Q/WxpfZOCQVvJI89FnyHxXI0VeExvHwZL2ElBvN7z3grjNEu
- wAuHauKMIcnRvwrcoHNA==
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:Eh/qW2KznBfSE/OEBWqMPrKe6wGQVBqS5SXsFUcXmZEqSSuDHwT
+ 72VMZAhZPMIqmh+H6lMwP5qwnaEjve33ZMwxkio1HwuhLe3vPgbpqAog7NGZVs3/TT2oIMr
+ eLUmXk8B4w648y9F7Bu1gvCHI+0N3M/eyZ0k53KwRmUDovnzg2msAvsumZTmJi6s5Ya1U3b
+ XfeBYBqjpRFHOFSgvC5YQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MX/kDM8qFJQ=:CvgCpZv4G2zKoUj2z9ehBD
+ q317uwNL18N9Picka94IqPCTYd3CmtXvDVrZ9rwdHuwNOfOByunvQOyYEl5G8UQfzgImVWQBY
+ D2Yk6dIUB06pWAOExUyI9NYclahQzC4GJDaRKjYHAZu+iYEzlL52xKUvBX6ZZGlmZHTPGN8YX
+ Y/5RUBanuZtJvJ3iqaVWmUtMVIHC1WfhHtvERDNttfphhBU/c3itCrYebF2hY4d41zw4KBDkT
+ VwFMXAaE1xna2GBc+ty/P+JeIl+zwKF3spkzznm8v3zF0gKEkK96NRflU70ymEbIXkMlosfa4
+ /L7WeQkkTK3JvD6BDaeGnZMFBbTCwZHTtAefhAKghRvOBIPwyn+k5Xf+ohYGEMt6HOWRLJoLV
+ sMYIWGyABqjBjoF2fu8Bhd4Z/GzoffvZlG5hEUyOiOaXt+LbNNxrFHXrn2ac34cWnfFoQKO7b
+ G/j4oZ1S89kseAeIDBc3zq2pjCdnmeh2aT5VBDIO9EqV7QQNBsGLqHCq6Br+bSWTqOgNqFRiI
+ GYuJRIitstsn3UA3Mg3fSmvVvA5S8zK34xsP4Ig9SNK1InEcSdsHPntJvV0R5CDVYUFHVzpLW
+ 5TL6tb0Qt79u4jxBCx/txPyQ4vCoPHVuj6/UyE13epLYHMwsTW/lbdmg6GxFOoVpPNtKTs2Dt
+ rCVhULYuwi2udYEMOPaNzoEEUAAzZp2AgFWVYAXgWuddQ5uBtMvy3DbQEtX8YYqNOwskHC9Tu
+ ZESP5no+BZ2x6s/vpQD5d2oZmYZ4wWiTMydWlWTqt8UDE1ugbhNkqcKztxF/zTHf/0BIFZrRp
+ 6kpLar02NBXVZfofCQH0YywcWqyCSP+dynb/W3vwBXGDi7cXGOCLkfF8ak/RImCcA+meyBaWP
+ epvJo17x6SJ9CA+eTjtQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,92 +100,17 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
->
-> This patchset  adds initial support for the Nuvoton
-> Arbel NPCM8XX Board Management controller (BMC) SoC family.
->
-> The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
-> The NPCM8XX computing subsystem comprises a quadcore ARM
-> Cortex A35 ARM-V8 architecture.
->
-> This patchset adds minimal architecture and drivers such as:
-> Clocksource, Clock, Reset, and WD.
->
-> Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
->
-> This patchset was tested on the Arbel NPCM8XX evaluation board.
+> +++ b/drivers/tty/serial/8250/8250_of.c
+> @@ -333,6 +333,7 @@ static const struct of_device_id of_platform_serial_table[] = {
+>         { .compatible = "ti,da830-uart", .data = (void *)PORT_DA830, },
+>         { .compatible = "nuvoton,wpcm450-uart", .data = (void *)PORT_NPCM, },
+>         { .compatible = "nuvoton,npcm750-uart", .data = (void *)PORT_NPCM, },
+> +       { .compatible = "nuvoton,npcm845-uart", .data = (void *)PORT_NPCM, },
+>         { /* end of list */ },
 
-Thanks for your submission. Please note a few things about the process here:
+If these are compatible devices, it's usually easier to claim
+compatibility with both the specific chip and the older model
+as a fallback, to avoid driver changes. This seems to apply to
+the timer and watchdog devices as well.
 
-- The merge window is currently open, which means a lo
-
-Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
-
-This patchset was tested on the Arbel NPCM8XX evaluation board.
-
-Tomer Maimon (19):
-  dt-bindings: timer: npcm: Add npcm845 compatible string
-  clocksource: timer-npcm7xx: Add NPCM845 timer support
-  dt-bindings: serial: 8250: Add npcm845 compatible string
-  tty: serial: 8250: Add NPCM845 UART support
-  dt-bindings: watchdog: npcm: Add npcm845 compatible string
-  watchdog: npcm_wdt: Add NPCM845 watchdog support
-  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
-  clk: npcm8xx: add clock controller
-  dt-bindings: reset: add syscon property
-  reset: npcm: using syscon instead of device data
-  dt-bindings: reset: npcm: Add support for NPCM8XX
-  reset: npcm: Add NPCM8XX support
-  dt-bindings: arm: npcm: Add maintainer
-  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
-  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
-  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
-  arm64: dts: nuvoton: Add initial NPCM8XX device tree
-  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
-  arm64: defconfig: Add Nuvoton NPCM family supportt of maintainers
-  won't be reviewing your patches at the moment. It may be better to wait
-  for the -rc1 to be out before sending out v2
-
-- don't send your patches to soc@kernel.org unless you want me to pick
-  them up into the soc tree and they have been reviewed already. The series
-  is clearly still under review at the moment, and I expect it to go through
-  a few revisions first.
-
-- gmail marked your emails as possible spam for me. I don't know what
-  happened here, but you may want to look into this to ensure that
-  everybody receives it.
-
-Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
-
-This patchset was tested on the Arbel NPCM8XX evaluation board.
-
-Tomer Maimon (19):
-  dt-bindings: timer: npcm: Add npcm845 compatible string
-  clocksource: timer-npcm7xx: Add NPCM845 timer support
-  dt-bindings: serial: 8250: Add npcm845 compatible string
-  tty: serial: 8250: Add NPCM845 UART support
-  dt-bindings: watchdog: npcm: Add npcm845 compatible string
-  watchdog: npcm_wdt: Add NPCM845 watchdog support
-  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
-  clk: npcm8xx: add clock controller
-  dt-bindings: reset: add syscon property
-  reset: npcm: using syscon instead of device data
-  dt-bindings: reset: npcm: Add support for NPCM8XX
-  reset: npcm: Add NPCM8XX support
-  dt-bindings: arm: npcm: Add maintainer
-  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
-  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
-  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
-  arm64: dts: nuvoton: Add initial NPCM8XX device tree
-  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
-  arm64: defconfig: Add Nuvoton NPCM family support
-
-- For an initial platform submission, I can merge the
-  clk/clocksource/serial/reset drivers along with the platform if they
-  have an Ack from the subsystem maintainers. I would normally
-  not include the watchdog patch in this as it's not essential, but
-  I suppose that it's fine if you only do a oneline change and it
-  has an Ack. If you have other nonessential drivers that need changes,
-  best submit them separately though.
-
-         Arnd
+       Arnd
