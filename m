@@ -2,65 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5839C531374
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 18:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB38C5312E4
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 18:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237771AbiEWPZF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 11:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S238062AbiEWPh4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 11:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237775AbiEWPZD (ORCPT
+        with ESMTP id S238021AbiEWPhw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 11:25:03 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C849B544F4
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 08:25:00 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id m11so6190703ljc.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 08:25:00 -0700 (PDT)
+        Mon, 23 May 2022 11:37:52 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812533056C
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 08:37:49 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id m11so6234908ljc.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 08:37:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=2w+Ay74cy7OoOg37g3PaLjsP1sHLBt98ivncMEHUTZE=;
-        b=orFcSTvpnjF2Ul0w/eFhjws6UEFRdIdVSVYukzC2tF+nVYSnHFaaxmflPfpw8qz8qF
-         ik6PDz0cc8Oj7SbKnxObem78aoMCd+xjnQdgKZpY6s9du2FQPRFqXEjMx84zUfHaUSK5
-         +5aDtV1uK8iokGkuUohuvW0L7k1LR2OiZl2HdjndCXqss8DzPENH45G9Pn+m8EbPTZWj
-         s+yQdMDgWjXD29XD7VpFK84XPEWt40wdVzAc/6a6ogfXkT3SjLENjQgnwyFLEMwVUB+D
-         l6dZ/senYVrTWPdoKxCU+dfRc+i8YOVwhR0C5kGIt9sZB5w8tkbzjEogHF6UqQKtnniS
-         cVUA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CNVGYK72FSE/DjXuo5FhnaPlB7gNCfpfmdbuSxUtMOc=;
+        b=iau23czuiMXjm0hyqdsK5LqTD+cKYVfnaA9S+hQdET23Y0mX06Yvmm6kF7vXaHTfPy
+         8//i31Rg+IIST3l9Sr0HyecMRQN5OqkZNKc8CS9yKXVH/8RbMhhmXeqzZSfepaj/zkwe
+         ofB4tGj5QcepTEaNJQGL0uCSEQ2ADJPDbE222xkpnEOy/i6hOMC2Gogln7uIOXz1Z2Un
+         eEdA7dxiMWE4KY6pnEhnPDqWZSOM1zSWeijmWVE9dewujOLdGsLSCspFY3jrwHLY5uJy
+         G/qZz7B6FWs1eIB6vxDShca3e0arrF3KoP7sa7f+DQmKL7DLNfpzlnJHap6kywfaaz7X
+         P+oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2w+Ay74cy7OoOg37g3PaLjsP1sHLBt98ivncMEHUTZE=;
-        b=qDnikrqAjuHZSgl2Xab/gaz1xCYL8E5ET/q6LGcx3S6bybwxg04JlTgqJKtvXlLPPy
-         Wk/Owpabhy1Y0lXCediS0/6zMPj1moz1s6kK8HDZH9Fz3oGdn7iEWzntWyPw5w4mPG+G
-         VpCjMJ0IUevb5u0dLuLmmNHi4KJ4LcBdeZeenm3PDixs3XSrB3kAivdDRed3cR8RdNs3
-         TKCvyBsJutXQr57OQeHbG/eGeEOpKwFJLq0g+xsi0RzJ++4nt4VSBcjlv2d6a4I1LjbD
-         NE1pclgl9JuzTjaeQWweh8yk6BLse4QXztz7ZBiruD7SMbOpNFHEI/5jpnNiosTq2w9g
-         zJbA==
-X-Gm-Message-State: AOAM532Lx5E2x7VwAwGfrcsbeJzemm5Iu9P014AAfbWJswwVx9rzxtNs
-        W+tX1wTLHyOg0jQWplu/Taj6bw==
-X-Google-Smtp-Source: ABdhPJwQ7LooGvEvT4dpWheOhDWqxQVg6IroKOSOYNqnIDRYboL3316+ca6IHfgol4Aq3EeOYOdhag==
-X-Received: by 2002:a2e:9c43:0:b0:250:a467:414 with SMTP id t3-20020a2e9c43000000b00250a4670414mr13242328ljj.358.1653319498852;
-        Mon, 23 May 2022 08:24:58 -0700 (PDT)
+        bh=CNVGYK72FSE/DjXuo5FhnaPlB7gNCfpfmdbuSxUtMOc=;
+        b=nQWLZdwYJX5ap/SyXxpq1en3KoWpvnotialsQyhJ3TwD1C/xajhye6VHn6gdI9axea
+         4NW92CpVnRU3u2aKq9QxBt/gDsbp5CCX+Z9FDCGCGfrHDmXBqlyJjr7a2GiMgpaw5DO8
+         fsvi95VpsMmAeJ6uBw6lGSxQGgmR+PKRdwPKJ/33knzf9WtxJC+cYQ2abdEcRB9NznRl
+         nJkzN7Ytdkmn09K6Tvi0w2fbZWYdB56SFietjZ6O77BXavvQN0fbuZzZZmW0MjMsMQwb
+         kLd0XAtmlO4souv7/kuflh/bwLNdRAXEVNgYoUC4ma8iAY9MrDFrwT43HWDguJ0hyuot
+         OODw==
+X-Gm-Message-State: AOAM5326P+DLDH/VlgtrELTvCH00qlXMJLrExNJfyCKap6wR+fI3Sxu3
+        uPO8PrdXObPa2BHqIn20n+GgHQ==
+X-Google-Smtp-Source: ABdhPJytSX0vw8XiyL0IPRTPz7bNI0Vb5IqxXheMy8cJ6OyJZo+/AZv6Os8PjXd8yRyNcZKkTN4sOg==
+X-Received: by 2002:a05:651c:b06:b0:253:e51a:c507 with SMTP id b6-20020a05651c0b0600b00253e51ac507mr6361505ljr.420.1653320267494;
+        Mon, 23 May 2022 08:37:47 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v4-20020a056512096400b0047255d2119bsm2026580lft.202.2022.05.23.08.24.56
+        by smtp.gmail.com with ESMTPSA id o14-20020a05651205ce00b0047255d211c2sm2036295lfo.241.2022.05.23.08.37.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 08:24:58 -0700 (PDT)
-Message-ID: <4a69902f-a545-23a1-1430-e5ece16997e9@linaro.org>
-Date:   Mon, 23 May 2022 17:24:56 +0200
+        Mon, 23 May 2022 08:37:46 -0700 (PDT)
+Message-ID: <fd52f328-c895-e27e-4807-eb0b8f14a247@linaro.org>
+Date:   Mon, 23 May 2022 17:37:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for
- NPCM8XX
+Subject: Re: [PATCH v1 18/19] arm64: dts: nuvoton: Add initial NPCM845 EVB
+ device tree
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Tomer Maimon <tmaimon77@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
+To:     Tomer Maimon <tmaimon77@gmail.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Joel Stanley <joel@jms.id.au>,
         Patrick Venture <venture@google.com>,
@@ -71,44 +69,41 @@ Cc:     Tomer Maimon <tmaimon77@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
+        gregkh <gregkh@linuxfoundation.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
+        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
         Jiri Slaby <jirislaby@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Bj=c3=b6rn_Andersson?= <bjorn.andersson@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Vinod Koul <vkoul@kernel.org>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>, arm-soc <soc@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
+        robert.hancock@calian.com,
+        nathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>,
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-12-tmaimon77@gmail.com>
- <86cd6a37-70ad-3a90-bc8a-dcd8b41f1175@linaro.org>
- <CAP6Zq1i2Wj4FCA4-eseVoJyMof5=ocFCUcitVquJqYJ4Z3JTYQ@mail.gmail.com>
- <CAMuHMdVCCrKTpNHng2_kKGViuEXf=O3MsfpjjzMusuUcKE6HiA@mail.gmail.com>
- <62562cdf-93e3-f642-5bbd-48329eff33ea@linaro.org>
- <CAMuHMdVFV02t+vbwzEpNbpkSP4M3sGnJpzFMPBw7RkrJ9YvyKw@mail.gmail.com>
- <b60f5fd2-dc48-9375-da1c-ffcfe8292683@linaro.org>
-In-Reply-To: <b60f5fd2-dc48-9375-da1c-ffcfe8292683@linaro.org>
+ <20220522155046.260146-19-tmaimon77@gmail.com>
+ <CAK8P3a1LCkM-w_Oi2qUqgq_Qxsg64uoGg5aaz=X8pBENHBhj0A@mail.gmail.com>
+ <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,36 +111,17 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 23/05/2022 17:22, Krzysztof Kozlowski wrote:
->> I think you are taking a too-extremist standpoint.
->> The two extremes are:
->>   1. Numbers correspond to hardware numbers, and are easy to look up
->>     in the hardware documentation (e.g. GIC SPI interrupt numbers).
->>      => Use the hardcoded numbers in DTS.
+On 23/05/2022 16:17, Tomer Maimon wrote:
+> Hi,
 > 
-> And such numbers (like GIC_SPI interrupt numbers) do not go to bindings.
-> They go to DTS only.
+> Thanks for your comments.
 > 
->>   2. Numbers do not correspond to hardware numbers, so we had to
->>      invent our own definitions and numbers, usually loosely
->>      based on some table in the hardware documentation.
->>      The driver will have to look up the numbers in a data
->>      structure, to know how to program the hardware.
->>      The numbers become part of the DT ABI, and cannot be changed
->>      (header file is append-only).
->>      => Use the binding definitions in DTS.
+> the patch will modify according to your comments and will be sent in the
+> next kernel revision 5.19.rc1
 > 
-> Correct.
-> 
-> However this patch is some mixture of both approaches.
-> 
-> The same pointed by Arnd:
-> https://lore.kernel.org/linux-devicetree/CAK8P3a0fDJQvGLEtG0fxLkG08Fh9V7LEMPsx4AaS+2Ldo_xWxw@mail.gmail.com/
 
-...and one more from Arnd:
-https://lore.kernel.org/linux-devicetree/CAK8P3a1APzs74YTcZ=m43G3zrmwJZKcYSTvV5eDDQX-37UY7Tw@mail.gmail.com/
-
-
+None of your emails reach lists because of using HTML. Please use
+appropriate messaging format.
 
 Best regards,
 Krzysztof
