@@ -2,124 +2,139 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8B35311ED
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 18:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB72953141B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 18:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236520AbiEWNpj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 09:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S236649AbiEWN67 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 09:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236499AbiEWNpi (ORCPT
+        with ESMTP id S236604AbiEWN66 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 09:45:38 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82A955227
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 06:45:36 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w14so25614220lfl.13
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 06:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zc+H13M7Untcjwr72zICcQjR3S3/6AC2C3IvRsS1YwE=;
-        b=z8izSdPl0Mu0tqiQDCU131vyaSxZTaquXhrE1uVwkbEE8mczLsr8wjL8/+YYtgKxIy
-         QNYcFlVBCUPUH7rRRGQUGcdiQss40NqB1QxOCvv/+3RZkr0xBNt5zafpeBpj4/UGIaa9
-         Bx+MN+htpLYPg4i8ASbECiSSSiokzLbPte2Cclf/rMOjuuYsH/TJIMNL4iOCUueEowQr
-         qNsiZhJBxTBysmCTSxJw1jp8R051VVOf6ppv+wESpZqyMpF6FkZe304dAvZNJWXfMVSm
-         QtZapxr3CD9mw8T8vWcJS5PTt9Dvj9BHU2idrV8uSN3DzfMsrgpmdrwoOjEbmP2t9DWF
-         PUdA==
+        Mon, 23 May 2022 09:58:58 -0400
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46DE5712F;
+        Mon, 23 May 2022 06:58:55 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id l1so12145540qvh.1;
+        Mon, 23 May 2022 06:58:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zc+H13M7Untcjwr72zICcQjR3S3/6AC2C3IvRsS1YwE=;
-        b=esbvq6sTysrQ01MtfFAoEL/m0CWpxrqQnIdcL/xhNainCpjY28x2j58w9KTEPS51j9
-         A0rVWzMWOQCKdPgHMzT4Lzz1+rmwYCbHr5/D3qgF5kEFgLiz5vdpHSIrn9WlRDJLNyH5
-         +eo/SUT9T1VCBAMrrT4aWFGR9mGquJCu6qs5z+/COqEhUasOhjgcC7N+WOG6VtbhOwOL
-         2wewXZ8tOGcwajcqEPjrZ7bBVVNlmUTbBBy0+Q5iifccJky0OKB6MYwdqVbGhF0S7v19
-         lK4F6UjsRfhMzt+gYDXRyVZWyanB960DYhjevtJIS+GxerVjRW2VPbhz1CzszNZcnegk
-         SlPg==
-X-Gm-Message-State: AOAM533j4lRQ3//S3gbXC0PhiAhCzUjA9GvBW7HKCsYOJ8YvvCaNN+py
-        x+ePzp5XcY/3JOL3dZTU+38Y6A==
-X-Google-Smtp-Source: ABdhPJxvtrvCzlWyYIRa7RH0L8nWT5DlujuzYkpsoahxhweS6xiwwYRH8VmTez+Udy3bnTWkvO6fUQ==
-X-Received: by 2002:ac2:41cf:0:b0:478:69ce:f6ed with SMTP id d15-20020ac241cf000000b0047869cef6edmr5795048lfi.186.1653313535162;
-        Mon, 23 May 2022 06:45:35 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a4-20020ac25204000000b00477a1b603basm1987170lfl.98.2022.05.23.06.45.33
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fYWALA3lJgoSN00lrVAVMkJgNm+QYBYbKEt1Mc7Ujl4=;
+        b=cLcoPu+jy2A84xyELl+PC8QHKnEQom/uR+IZrlblq4jaAQdX5bwIx+YC+v8UuYkKbO
+         euvE1owgn5zLGtmYzYKXgXzxoeWkhKISf0CnKf7QAE41WV4i9EfX0aMu8P1ObNUbTpJS
+         Bfp3V0VEf7XvxdyFrIYwTVHaQa5GAv8h/v/MicPbw5w+mqNHeGRfpXMoK9a29mFBc6Z4
+         WJRHy5d10mxvg+WlGgczVPvWGaCwMx3KxcpsN5rZJHKzCLOCyeb8ugHCiJRP9Ob4uGQW
+         M56BlHBCN2Mjgdd5lrws+XYa42sgUDRCXkO0fMl0ddeHqdMkB6+UNj3dZpuf5qtRnjSf
+         LRhQ==
+X-Gm-Message-State: AOAM530F1GbidAqKZCIzTYHIgQ6K9C64jufU3iPVo6W+yrRev/4xSHJV
+        YFS9Kjf5eYBHSkeisttj96rABJShdxRJzw==
+X-Google-Smtp-Source: ABdhPJxn+zxXbkpHwy/aXTGgQgtstkKudNX1BtloONutSOmdlVuT2flBdrV+6ozu5wuVLi91JmXlCg==
+X-Received: by 2002:ad4:5de6:0:b0:462:180d:7038 with SMTP id jn6-20020ad45de6000000b00462180d7038mr10559956qvb.16.1653314334747;
+        Mon, 23 May 2022 06:58:54 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id bi12-20020a05620a318c00b006a370031c3esm3792652qkb.106.2022.05.23.06.58.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 06:45:34 -0700 (PDT)
-Message-ID: <661ebb3d-f1c1-1a6a-8723-4d3dff2b92b4@linaro.org>
-Date:   Mon, 23 May 2022 15:45:32 +0200
+        Mon, 23 May 2022 06:58:54 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id q135so25551127ybg.10;
+        Mon, 23 May 2022 06:58:53 -0700 (PDT)
+X-Received: by 2002:a81:234b:0:b0:2f8:4082:bbd3 with SMTP id
+ j72-20020a81234b000000b002f84082bbd3mr23570342ywj.47.1653314322494; Mon, 23
+ May 2022 06:58:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 09/19] dt-bindings: reset: add syscon property
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-18-tmaimon77@gmail.com>
+ <c1b86493-d82d-a639-07af-4c979d733786@linaro.org>
+In-Reply-To: <c1b86493-d82d-a639-07af-4c979d733786@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 23 May 2022 15:58:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWSccO3J5OYrFUn+azKyzYBP1wmuHZoRU2t3PUbkZx1wA@mail.gmail.com>
+Message-ID: <CAMuHMdWSccO3J5OYrFUn+azKyzYBP1wmuHZoRU2t3PUbkZx1wA@mail.gmail.com>
+Subject: Re: [PATCH v1 17/19] arm64: dts: nuvoton: Add initial NPCM8XX device tree
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Joel Stanley <joel@jms.id.au>,
         Patrick Venture <venture@google.com>,
         Nancy Yuen <yuenn@google.com>,
         Benjamin Fair <benjaminfair@google.com>,
         Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Greg KH <gregkh@linuxfoundation.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, catalin.marinas@arm.com,
-        will@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, jirislaby@kernel.org,
-        shawnguo@kernel.org, bjorn.andersson@linaro.org,
-        geert+renesas@glider.be, marcel.ziswiler@toradex.com,
-        Vinod Koul <vkoul@kernel.org>, biju.das.jz@bp.renesas.com,
-        nobuhiro1.iwamatsu@toshiba.co.jp, robert.hancock@calian.com,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        lkundrak@v3.sk, soc@kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        =?UTF-8?Q?Bj=C3=B6rn_Andersson?= <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod <vkoul@kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>, arm-soc <soc@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-10-tmaimon77@gmail.com>
- <d02b042c-7f6e-8d2b-a5eb-c7ac4a0eea7d@linaro.org>
- <CAP6Zq1gGZguC9h4A6KL8x1QLf3MAZvvBiA2nmcK_4PS7AdNa+Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1gGZguC9h4A6KL8x1QLf3MAZvvBiA2nmcK_4PS7AdNa+Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 23/05/2022 15:44, Tomer Maimon wrote:
-> On Mon, 23 May 2022 at 10:39, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org <mailto:krzysztof.kozlowski@linaro.org>>
-> wrote:
-> 
->     On 22/05/2022 17:50, Tomer Maimon wrote:
->     > Describe syscon property that handles GCR registers
->     > in Nuvoton BMC NPCM reset driver.
-> 
->     Please wrap according to Linux standards:
->     https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
->     <https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586>
-> 
-> Which problem do you see with the commit explanation body?
+Hi Krzysztof,
 
-It is wrapped not according to Linux standards.
+On Mon, May 23, 2022 at 11:08 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 22/05/2022 17:50, Tomer Maimon wrote:
+> > This adds initial device tree support for the
+> > Nuvoton NPCM845 Board Management controller (BMC) SoC family.
+>
+> Thank you for your patch. There is something to discuss/improve.
+>
+> > The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
+> > have various peripheral IPs.
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 
+> > +             l2: l2-cache {
+> > +                     compatible = "cache";
+>
+> Is this a real compatible? What bindings are you using here?
 
+The compatible value and related properties are defined in the
+Devicetree Specification, v0.4-rc1, Section 3.9 ("Multi-level and
+Shared Cache Nodes (/cpus/cpu*/l?-cache)").
 
-Best regards,
-Krzysztof
+The properties are handled by
+dtschema/schemas/cache-controller.yaml, but the latter seems to lack
+any checking on the compatible value?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
