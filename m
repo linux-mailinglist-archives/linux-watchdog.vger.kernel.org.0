@@ -2,116 +2,409 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB775304BD
-	for <lists+linux-watchdog@lfdr.de>; Sun, 22 May 2022 18:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFCC530A74
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 10:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235482AbiEVQqG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 22 May 2022 12:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S229767AbiEWHYd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 03:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbiEVQqA (ORCPT
+        with ESMTP id S229746AbiEWHYC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 22 May 2022 12:46:00 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98342C3F;
-        Sun, 22 May 2022 09:45:56 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id g13-20020a9d6b0d000000b0060b13026e0dso627337otp.8;
-        Sun, 22 May 2022 09:45:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A3MW2E4hPy/aQENWXOJ2JWZ+xI8KBMasjdB1XQlQXhk=;
-        b=fKUUM7yY2M3lYi3DacllA37dpumIb+5hsm4dGf862dt912aTwJh8O+JEDrr8XE4/Ao
-         /O+xEx8SUbw2Z+V0qTdJmLn/1+t41l7ol0S7LAxefEQMBwC1XJhqQOtfCtIB73JgXOR3
-         OvjT1vbQbn93hcd2cAQdnZVGk8QLX4BxAh2XE/2kB3vu5Gun01Sq2aL6hCWl19gFDqS+
-         lXWmOGGP8f4NAEyrFbYAffWuz9qh/9lkvljoE2Tk7ZAPBhSnGZIGz36rtY1x1R/nCoRr
-         KMy1HxbOp1tN4zmy2vN1V9LnSn1Tz1sizrk7jMXsGuDrFlZBLzLp+P6BMJ3xlz9i09Q4
-         zZ8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A3MW2E4hPy/aQENWXOJ2JWZ+xI8KBMasjdB1XQlQXhk=;
-        b=PsV6Dl6fWHWkcpYhMc6q8FdySKWwq3RV9w6/8IK0SIX6uI7v/20RQf6atR3OjfVy3k
-         xBnlmcmUr/aFHAEbYDAYHBY61G8VQ2ErPneOP1QsK6UQUbpQlraOHApvgy1tP6Zy8a4S
-         4CizkQODhv6OSnvOF8sKvSr0C0zG8Nj3Yt7eOesyLPOhqkpHXeW8xT4RlEp/Af9LpDGa
-         2KmxknrNRAaeu8bqYj9e0FiEMJufvn/VuB0bnCO0UkHQgmb6AXfcpvcWW7cPVL/vW5iV
-         SypR7jHGfCZs+4Xr5kL1/sv86EoDXXshPI5w85RbS+xvGVRPlhsomkwQC8P4c6ubJM+R
-         tVzw==
-X-Gm-Message-State: AOAM533MBEXeGN/fuLr9rOi77m2dBqixXL2YOjsifoIKRBslam3JP245
-        JU6DvbDkmtPiOVg0Hu3UiPc=
-X-Google-Smtp-Source: ABdhPJwF7V+fwRvOwZOSp3lwb6vsxQ0qSZ6aw4g7kZDyU1NwNpYq17KF/k0k72MH8MxbQ3y6RscDVw==
-X-Received: by 2002:a05:6830:124e:b0:60a:fff3:c05b with SMTP id s14-20020a056830124e00b0060afff3c05bmr2616441otp.264.1653237955725;
-        Sun, 22 May 2022 09:45:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m12-20020a4a390c000000b0035eb4e5a6cbsm3423043ooa.33.2022.05.22.09.45.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 09:45:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6d691a7d-7601-a077-fc8e-67e0c4917615@roeck-us.net>
-Date:   Sun, 22 May 2022 09:45:50 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v1 06/19] watchdog: npcm_wdt: Add NPCM845 watchdog support
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org,
+        Mon, 23 May 2022 03:24:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FFB3A1B7;
+        Mon, 23 May 2022 00:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653290258; x=1684826258;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ev8v7cyguP4Weqk3Bhpwe6YaRfyri/aaDhL9TcGpb8I=;
+  b=OE9+ap3Q9zdtnOJxSTb8kEpeo/ZmSvGahLmXghqMz+2ZBkdM1OlqWPf4
+   8X+Ub4xTVj3xYi95Y6jO624KN00aRoDkz44RsrN53MLkNcDknmt4fsA+H
+   8GgzhTNeCaD/LtTjf+uXOhqCYi2y+8k7qXUBcbzBgwNExBBHyTGny5qch
+   rlacEMUZkw8un+JcEFMZyqmOah4Ev0xqF5EtgbbeFkzxC4fuJ+VM/rVFE
+   YIrZZR13c79Pxn7k9GO879Z2cTK+HXafgihEB4iKOMSM/e+YSoF3a33Dq
+   hJacjVpgumve4Bp2ky+QGJ3RBQ3yOuRobZ7YdjK22WWSwXLTch8r/uKON
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="359523924"
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="359523924"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:07:23 -0700
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="600484629"
+Received: from tstralma-mobl1.ger.corp.intel.com ([10.252.55.107])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:07:13 -0700
+Date:   Mon, 23 May 2022 10:07:07 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        wim@linux-watchdog.org, linux@roeck-us.net,
         catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        olof@lixom.net, Jiri Slaby <jirislaby@kernel.org>,
+        shawnguo@kernel.org, bjorn.andersson@linaro.org,
+        geert+renesas@glider.be, marcel.ziswiler@toradex.com,
+        vkoul@kernel.org, biju.das.jz@bp.renesas.com,
+        nobuhiro1.iwamatsu@toshiba.co.jp, robert.hancock@calian.com,
+        j.neuschaefer@gmx.net, lkundrak@v3.sk, soc@kernel.org,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-clk@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-7-tmaimon77@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220522155046.260146-7-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v1 08/19] clk: npcm8xx: add clock controller
+In-Reply-To: <20220522155046.260146-9-tmaimon77@gmail.com>
+Message-ID: <6fa3d94c-294d-1c6c-5738-6d15b2e17e90@linux.intel.com>
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-9-tmaimon77@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/22/22 08:50, Tomer Maimon wrote:
-> Add Nuvoton BMC NPCM845 watchdog support.
-> The NPCM845 uses the same watchdog as the NPCM750.
+On Sun, 22 May 2022, Tomer Maimon wrote:
+
+> Nuvoton Arbel BMC NPCM7XX contains an integrated clock controller, which
+> generates and supplies clocks to all modules within the BMC.
 > 
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->   drivers/watchdog/npcm_wdt.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/npcm_wdt.c b/drivers/watchdog/npcm_wdt.c
-> index 28a24caa2627..0b91a3fbec09 100644
-> --- a/drivers/watchdog/npcm_wdt.c
-> +++ b/drivers/watchdog/npcm_wdt.c
-> @@ -231,6 +231,7 @@ static int npcm_wdt_probe(struct platform_device *pdev)
->   static const struct of_device_id npcm_wdt_match[] = {
->   	{.compatible = "nuvoton,wpcm450-wdt"},
->   	{.compatible = "nuvoton,npcm750-wdt"},
-> +	{.compatible = "nuvoton,npcm845-wdt"},
->   	{},
->   };
->   MODULE_DEVICE_TABLE(of, npcm_wdt_match);
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+> +static struct clk_hw *
+> +npcm8xx_clk_register_pll(void __iomem *pllcon, const char *name,
+> +			 const char *parent_name, unsigned long flags)
+> +{
+> +	struct npcm8xx_clk_pll *pll;
+> +	struct clk_init_data init;
+> +	struct clk_hw *hw;
+> +	int ret;
+> +
+> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
+> +	if (!pll)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	pr_debug("%s reg, name=%s, p=%s\n", __func__, name, parent_name);
+> +
+> +	init.name = name;
+> +	init.ops = &npcm8xx_clk_pll_ops;
+> +	init.parent_names = &parent_name;
+> +	init.num_parents = 1;
+> +	init.flags = flags;
+> +
+> +	pll->pllcon = pllcon;
+> +	pll->hw.init = &init;
+> +
+> +	hw = &pll->hw;
+> +
+> +	ret = clk_hw_register(NULL, hw);
+> +	if (ret) {
+> +		kfree(pll);
+> +		hw = ERR_PTR(ret);
+> +	}
+> +
+> +	return hw;
+> +}
+> +
+> +#define NPCM8XX_CLKEN1          (0x00)
+> +#define NPCM8XX_CLKEN2          (0x28)
+> +#define NPCM8XX_CLKEN3          (0x30)
+> +#define NPCM8XX_CLKEN4          (0x70)
+> +#define NPCM8XX_CLKSEL          (0x04)
+> +#define NPCM8XX_CLKDIV1         (0x08)
+> +#define NPCM8XX_CLKDIV2         (0x2C)
+> +#define NPCM8XX_CLKDIV3         (0x58)
+> +#define NPCM8XX_CLKDIV4         (0x7C)
+> +#define NPCM8XX_PLLCON0         (0x0C)
+> +#define NPCM8XX_PLLCON1         (0x10)
+> +#define NPCM8XX_PLLCON2         (0x54)
+> +#define NPCM8XX_SWRSTR          (0x14)
+> +#define NPCM8XX_IRQWAKECON      (0x18)
+> +#define NPCM8XX_IRQWAKEFLAG     (0x1C)
+> +#define NPCM8XX_IPSRST1         (0x20)
+> +#define NPCM8XX_IPSRST2         (0x24)
+> +#define NPCM8XX_IPSRST3         (0x34)
+> +#define NPCM8XX_WD0RCR          (0x38)
+> +#define NPCM8XX_WD1RCR          (0x3C)
+> +#define NPCM8XX_WD2RCR          (0x40)
+> +#define NPCM8XX_SWRSTC1         (0x44)
+> +#define NPCM8XX_SWRSTC2         (0x48)
+> +#define NPCM8XX_SWRSTC3         (0x4C)
+> +#define NPCM8XX_SWRSTC4         (0x50)
+> +#define NPCM8XX_CORSTC          (0x5C)
+> +#define NPCM8XX_PLLCONG         (0x60)
+> +#define NPCM8XX_AHBCKFI         (0x64)
+> +#define NPCM8XX_SECCNT          (0x68)
+> +#define NPCM8XX_CNTR25M         (0x6C)
+> +#define NPCM8XX_THRTL_CNT       (0xC0)
+> +
+> +struct npcm8xx_clk_gate_data {
+> +	u32 reg;
+> +	u8 bit_idx;
+> +	const char *name;
+> +	const char *parent_name;
+> +	unsigned long flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +};
+> +
+> +struct npcm8xx_clk_mux_data {
+> +	u8 shift;
+> +	u8 mask;
+> +	u32 *table;
+> +	const char *name;
+> +	const char * const *parent_names;
+> +	u8 num_parents;
+> +	unsigned long flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +
+> +};
+> +
+> +struct npcm8xx_clk_div_fixed_data {
+> +	u8 mult;
+> +	u8 div;
+> +	const char *name;
+> +	const char *parent_name;
+> +	u8 clk_divider_flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +};
+> +
+> +struct npcm8xx_clk_div_data {
+> +	u32 reg;
+> +	u8 shift;
+> +	u8 width;
+> +	const char *name;
+> +	const char *parent_name;
+> +	u8 clk_divider_flags;
+> +	unsigned long flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +};
+> +
+> +struct npcm8xx_clk_pll_data {
+> +	u32 reg;
+> +	const char *name;
+> +	const char *parent_name;
+> +	unsigned long flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +};
+> +
+
+
+> +/*
+> + * Single copy of strings used to refer to clocks within this driver indexed by
+> + * above enum.
+> + */
+> +#define NPCM8XX_CLK_S_REFCLK      "refclk"
+> +#define NPCM8XX_CLK_S_SYSBYPCK    "sysbypck"
+> +#define NPCM8XX_CLK_S_MCBYPCK     "mcbypck"
+> +#define NPCM8XX_CLK_S_GFXBYPCK    "gfxbypck"
+> +#define NPCM8XX_CLK_S_PLL0        "pll0"
+> +#define NPCM8XX_CLK_S_PLL1        "pll1"
+> +#define NPCM8XX_CLK_S_PLL1_DIV2   "pll1_div2"
+> +#define NPCM8XX_CLK_S_PLL2        "pll2"
+> +#define NPCM8XX_CLK_S_PLL_GFX     "pll_gfx"
+> +#define NPCM8XX_CLK_S_PLL2_DIV2   "pll2_div2"
+> +#define NPCM8XX_CLK_S_PIX_MUX     "gfx_pixel"
+> +#define NPCM8XX_CLK_S_GPRFSEL_MUX "gprfsel_mux"
+> +#define NPCM8XX_CLK_S_MC_MUX      "mc_phy"
+> +#define NPCM8XX_CLK_S_CPU_MUX     "cpu"  /*AKA system clock.*/
+
+Add spaces around comment.
+
+> +#define NPCM8XX_CLK_S_MC          "mc"
+> +#define NPCM8XX_CLK_S_AXI         "axi"  /*AKA CLK2*/
+> +#define NPCM8XX_CLK_S_AHB         "ahb"  /*AKA CLK4*/
+
+Ditto.
+
+> +static void __init npcm8xx_clk_init(struct device_node *clk_np)
+> +{
+> +	struct clk_hw_onecell_data *npcm8xx_clk_data;
+> +	void __iomem *clk_base;
+> +	struct resource res;
+> +	struct clk_hw *hw;
+> +	int ret;
+> +	int i;
+> +
+> +	ret = of_address_to_resource(clk_np, 0, &res);
+> +	if (ret) {
+> +		pr_err("%pOFn: failed to get resource, ret %d\n", clk_np, ret);
+> +		return;
+> +	}
+> +
+> +	clk_base = ioremap(res.start, resource_size(&res));
+> +	if (!clk_base)
+> +		goto npcm8xx_init_error;
+> +
+> +	npcm8xx_clk_data = kzalloc(struct_size(npcm8xx_clk_data, hws,
+> +					       NPCM8XX_NUM_CLOCKS), GFP_KERNEL);
+> +	if (!npcm8xx_clk_data)
+> +		goto npcm8xx_init_np_err;
+> +
+> +	npcm8xx_clk_data->num = NPCM8XX_NUM_CLOCKS;
+> +
+> +	for (i = 0; i < NPCM8XX_NUM_CLOCKS; i++)
+> +		npcm8xx_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
+> +
+> +	/* Register plls */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_plls); i++) {
+> +		const struct npcm8xx_clk_pll_data *pll_data = &npcm8xx_plls[i];
+> +
+> +		hw = npcm8xx_clk_register_pll(clk_base + pll_data->reg,
+> +					      pll_data->name,
+> +					      pll_data->parent_name,
+> +					      pll_data->flags);
+> +		if (IS_ERR(hw)) {
+
+Who deregisters the already registered plls on error paths?
+
+You might want to consider devm_ variants in npcm8xx_clk_register_pll() to 
+make the cleanup simpler.
+
+Please check the other error path rollbacks from this point onward too.
+
+> +			pr_err("npcm8xx_clk: Can't register pll\n");
+> +			goto npcm8xx_init_fail;
+> +		}
+> +
+> +		if (pll_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[pll_data->onecell_idx] = hw;
+> +	}
+> +
+> +	/* Register fixed dividers */
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PLL1_DIV2,
+> +					  NPCM8XX_CLK_S_PLL1, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register fixed div\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PLL2_DIV2,
+> +					  NPCM8XX_CLK_S_PLL2, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register pll div2\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PRE_CLK,
+> +					  NPCM8XX_CLK_S_CPU_MUX, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register ckclk div2\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_AXI,
+> +					  NPCM8XX_CLK_S_TH, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register axi div2\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_ATB,
+> +					  NPCM8XX_CLK_S_AXI, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register atb div2\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	/* Register muxes */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_muxes); i++) {
+> +		const struct npcm8xx_clk_mux_data *mux_data = &npcm8xx_muxes[i];
+> +
+> +		hw = clk_hw_register_mux_table(NULL, mux_data->name,
+> +					       mux_data->parent_names,
+> +					       mux_data->num_parents,
+> +					       mux_data->flags,
+> +					       clk_base + NPCM8XX_CLKSEL,
+> +					       mux_data->shift,
+> +					       mux_data->mask, 0,
+> +					       mux_data->table,
+> +					       &npcm8xx_clk_lock);
+> +
+> +		if (IS_ERR(hw)) {
+> +			pr_err("npcm8xx_clk: Can't register mux\n");
+> +			goto npcm8xx_init_fail;
+> +		}
+> +
+> +		if (mux_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[mux_data->onecell_idx] = hw;
+> +	}
+> +
+> +	/* Register clock dividers specified in npcm8xx_divs */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_divs); i++) {
+> +		const struct npcm8xx_clk_div_data *div_data = &npcm8xx_divs[i];
+> +
+> +		hw = clk_hw_register_divider(NULL, div_data->name,
+> +					     div_data->parent_name,
+> +					     div_data->flags,
+> +					     clk_base + div_data->reg,
+> +					     div_data->shift, div_data->width,
+> +					     div_data->clk_divider_flags,
+> +					     &npcm8xx_clk_lock);
+> +		if (IS_ERR(hw)) {
+> +			pr_err("npcm8xx_clk: Can't register div table\n");
+> +			goto npcm8xx_init_fail;
+> +		}
+> +
+> +		if (div_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[div_data->onecell_idx] = hw;
+> +	}
+> +
+> +	ret = of_clk_add_hw_provider(clk_np, of_clk_hw_onecell_get,
+> +				     npcm8xx_clk_data);
+> +	if (ret)
+> +		pr_err("failed to add DT provider: %d\n", ret);
+> +
+> +	of_node_put(clk_np);
+> +
+> +	return;
+> +
+> +npcm8xx_init_fail:
+> +	kfree(npcm8xx_clk_data->hws);
+> +npcm8xx_init_np_err:
+> +	iounmap(clk_base);
+> +npcm8xx_init_error:
+> +	of_node_put(clk_np);
+> +}
+> +
+> +CLK_OF_DECLARE(npcm8xx_clk_init, "nuvoton,npcm845-clk", npcm8xx_clk_init);
+> 
+
+-- 
+ i.
+
