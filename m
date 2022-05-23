@@ -2,60 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7AE530C12
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 11:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE548530C09
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 11:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbiEWJBs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 05:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S232474AbiEWJCg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 05:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiEWJBr (ORCPT
+        with ESMTP id S232450AbiEWJCb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 05:01:47 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706B02180B
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 02:01:41 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t25so24413939lfg.7
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 02:01:41 -0700 (PDT)
+        Mon, 23 May 2022 05:02:31 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFF022518
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 02:02:20 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 27so11454772ljw.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 02:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fYCNzd5DZy9e/CqtLhmUm9AQGXVd0bR6NXYTSVtz10Q=;
-        b=tcOPeifid63AxtGOEwUuOCh3+d9GSGk3wioI874kER3GgGNBqrV3zfBI7ONuNNfbo8
-         Q73mPLV0mpOokTTYaYs54OZ9LcS3wULB9HEbQaTP6LN6I/P7pX5moARyVOwijRX/FE+L
-         G2Q4c7lSkcAUSsQEU7lopuTEenP/1oRjNBMP0oXHI8uW7/Ux+5w8jq5qI7G7nQvxS8ZI
-         H88FjxD/65ysDCp6c9KmwguVTtayn/JRxHTDiXLPksBNWTE/sn4M1FQR8FOlgxpCoJNT
-         CcyYuXhSB38KIyJC+24EDDwviFl+mp0sCxkJvSKwndzLb6GQA3cDtbdHehMINZQfnG9l
-         DOZg==
+        bh=dlfET5UONJTRSOldsSXnP8VfMZiQfkrQWEQeer/UsdE=;
+        b=KRLj4pXWt2o7W1VV0l/wVx0AcbODZvZ5qTc9IhTSoe9KF2JM0D3hmubFBImQ9psh3L
+         QCeewgiYglpOJ6XSztimgmABmIIAfOHi9C6YCleGn0wOPmMKQiWDKYqQacc/mULtsGps
+         bDztuXUAauEEaNTT6etJjzh4/o8foOV1NuPa+kw7djgPpD0VuAdoy1raZ+uhnoq2vYPj
+         0CeJfrtNW/1enVLni8bcCj1MLozx1PuYxfhaJDQPucYewE+k+oXIyrdETEmvpNGlAi4G
+         HFwV8opJshXqlZjjy8GbRXkO/cLzfXDloIKAqEhLEfwAfzO4ICqKJn8g8du4spdz3KVE
+         vKzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=fYCNzd5DZy9e/CqtLhmUm9AQGXVd0bR6NXYTSVtz10Q=;
-        b=maG6TlKsMNWiMdXCOmKYXogV2ivvsnu2ycA/aOW3i13zhbxOWvEpgyM/HcCy0+oEsc
-         y7sVSchS8mlIK4Sv4hcO8ppitfIaE4PdgUIXGQsr6QDeyTb9PG3xcFxEwBmSqwP2AToP
-         YKl/bLRLf90I2vc6dufdbPYftSFQnhsKYKiKyQPCOlUZQOhhOSqF8G3Xr+cq43sa4XXi
-         xxYHBMz9ZA9XV4rQWEqxoynmtgIBGj9MmFQP5flFbdyi6m94cpFK43E1FN1ObFgKFQeY
-         4fEbf51+U3HZV5JlA4UgCCfCeABTV13at6/o6ruNP5hRv7pEjc66Vcmqil63mOAXgoK4
-         xFGA==
-X-Gm-Message-State: AOAM53395PKP1bFCfjq36VrXs2ly9H1h2+JmO1o++g3CzhVfy+XmPOZ2
-        9URP96CpOJfDzW1K73Q9lHGpSg==
-X-Google-Smtp-Source: ABdhPJzHHP/+WcFU3Js4/bOYcbZttzRgNemubLuXS7gmbHa8Ppa37s0pp4mI7+q4phqBf5ol2YkDfg==
-X-Received: by 2002:a05:6512:3c84:b0:478:19f2:bc2e with SMTP id h4-20020a0565123c8400b0047819f2bc2emr12055162lfv.324.1653296499290;
-        Mon, 23 May 2022 02:01:39 -0700 (PDT)
+        bh=dlfET5UONJTRSOldsSXnP8VfMZiQfkrQWEQeer/UsdE=;
+        b=6Inoazlim7m2Bwvr2pFM97jDFa+yw9FCVFlb0ad9ktKA15YFRksQW5m4fwjo1lYbU4
+         XTepon6Sq/iuDq0CczdiE+B/zJC4fMo3YPTUhrpN5Bx6HtylmbG6pyEzgci0do+o1hwv
+         nTrUuIIz2oFGfk8Ivk9sQiHiujO/ttzmM4fGS1x1pT722UAxN+cyBs5IzzSckqesP4J3
+         W7oBywpmebaYQkzd9PZI4i707Bn+e5HRYCTQ0h07vghXCnp2k9lwtiANdkA0F54nGqgd
+         cVvk/+0E4Z26x4GHm3Xgjd/I/F/tcujJF/VNGUvX580KiGsm3lYK0q85pmBJ2/Hx6gNw
+         SnFQ==
+X-Gm-Message-State: AOAM531x35nuy7cB99F1WoBX9X9Jii8SiAbeSzW0NJXbX6cBf44m09c3
+        6Bv6ok+Mi8gewxibPWe/dhFFpw==
+X-Google-Smtp-Source: ABdhPJxvLdpCyy9QQcDde8YxjJo46U2wGyCrj9zc+1giCC5FfKz0vl+qvRHh262fNGonLwftr8mNEA==
+X-Received: by 2002:a05:651c:50c:b0:253:e168:f28e with SMTP id o12-20020a05651c050c00b00253e168f28emr6833169ljp.429.1653296538266;
+        Mon, 23 May 2022 02:02:18 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q1-20020ac25fc1000000b0047255d210eesm1863280lfg.29.2022.05.23.02.01.37
+        by smtp.gmail.com with ESMTPSA id y3-20020a2e9d43000000b00253dde4720esm1654866ljj.90.2022.05.23.02.02.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 02:01:38 -0700 (PDT)
-Message-ID: <86cd6a37-70ad-3a90-bc8a-dcd8b41f1175@linaro.org>
-Date:   Mon, 23 May 2022 11:01:36 +0200
+        Mon, 23 May 2022 02:02:17 -0700 (PDT)
+Message-ID: <ec8cb01f-cf9b-2b2d-68ed-96b0b8465537@linaro.org>
+Date:   Mon, 23 May 2022 11:02:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for
- NPCM8XX
+Subject: Re: [PATCH v1 14/19] dt-bindings: arm: npcm: Add nuvoton,npcm845
+ compatible string
 Content-Language: en-US
 To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
         tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
@@ -75,9 +75,9 @@ Cc:     soc@kernel.org, devicetree@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-12-tmaimon77@gmail.com>
+ <20220522155046.260146-15-tmaimon77@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220522155046.260146-12-tmaimon77@gmail.com>
+In-Reply-To: <20220522155046.260146-15-tmaimon77@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,167 +91,12 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 22/05/2022 17:50, Tomer Maimon wrote:
-> Add binding document and device tree binding
-> constants for Nuvoton BMC NPCM8XX reset controller.
+> Add a compatible string for Nuvoton BMC NPCM845 SoC and a board
+> specific device tree for the NPCM845 (Arbel) evaluation board.
 > 
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  .../bindings/reset/nuvoton,npcm-reset.txt     |  17 ++-
->  .../dt-bindings/reset/nuvoton,npcm8xx-reset.h | 124 ++++++++++++++++++
->  2 files changed, 139 insertions(+), 2 deletions(-)
->  create mode 100644 include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-> 
-> diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-> index cb1613092ee7..b7eb8615b68b 100644
-> --- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-> +++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-> @@ -1,14 +1,15 @@
->  Nuvoton NPCM Reset controller
->  
->  Required properties:
-> -- compatible : "nuvoton,npcm750-reset" for NPCM7XX BMC
-> +- compatible : "nuvoton,npcm750-reset" for Poleg NPCM7XX BMC.
-> +               "nuvoton,npcm845-reset" for Arbel NPCM8XX BMC.
->  - reg : specifies physical base address and size of the register.
->  - #reset-cells: must be set to 2
->  - syscon: a phandle to access GCR registers.
->  
->  Optional property:
->  - nuvoton,sw-reset-number - Contains the software reset number to restart the SoC.
-> -  NPCM7xx contain four software reset that represent numbers 1 to 4.
-> +  NPCM7xx and NPCM8xx contain four software reset that represent numbers 1 to 4.
->  
->    If 'nuvoton,sw-reset-number' is not specified software reset is disabled.
->  
-> @@ -32,3 +33,15 @@ example:
->          };
->  
->  The index could be found in <dt-bindings/reset/nuvoton,npcm7xx-reset.h>.
-> +
-> +Specifying reset lines connected to IP NPCM8XX modules
-> +======================================================
 
-No need to document consumers. Just mention the header.
-
-> +example:
-> +
-> +        spi0: spi@..... {
-> +                ...
-> +                resets = <&rstc NPCM8XX_RESET_IPSRST2 NPCM8XX_RESET_PSPI1>;
-> +                ...
-> +        };
-> +
-> +The index could be found in <dt-bindings/reset/nuvoton,npcm8xx-reset.h>.
-> diff --git a/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-> new file mode 100644
-> index 000000000000..4b832a0fd1dd
-> --- /dev/null
-> +++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-> @@ -0,0 +1,124 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-
-Dual license.
-
-> +// Copyright (c) 2022 Nuvoton Technology corporation.
-> +
-> +#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
-> +#define _DT_BINDINGS_NPCM8XX_RESET_H
-> +
-> +#define NPCM8XX_RESET_IPSRST1		0x20
-> +#define NPCM8XX_RESET_IPSRST2		0x24
-> +#define NPCM8XX_RESET_IPSRST3		0x34
-> +#define NPCM8XX_RESET_IPSRST4		0x74
-
-What are these? All IDs should be incremental, decimal and start from 0.
-
-> +
-> +/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
-> +#define NPCM8XX_RESET_GDMA0		3
-
-IDs start from 0 and do not have holes.
-
-
-> +#define NPCM8XX_RESET_UDC1		5
-> +#define NPCM8XX_RESET_GMAC3		6
-> +#define NPCM8XX_RESET_UART_2_3		7
-> +#define NPCM8XX_RESET_UDC2		8
-> +#define NPCM8XX_RESET_PECI		9
-> +#define NPCM8XX_RESET_AES		10
-> +#define NPCM8XX_RESET_UART_0_1		11
-> +#define NPCM8XX_RESET_MC		12
-> +#define NPCM8XX_RESET_SMB2		13
-> +#define NPCM8XX_RESET_SMB3		14
-> +#define NPCM8XX_RESET_SMB4		15
-> +#define NPCM8XX_RESET_SMB5		16
-> +#define NPCM8XX_RESET_PWM_M0		18
-> +#define NPCM8XX_RESET_TIMER_0_4		19
-> +#define NPCM8XX_RESET_TIMER_5_9		20
-> +#define NPCM8XX_RESET_GMAC4		21
-> +#define NPCM8XX_RESET_UDC4		22
-> +#define NPCM8XX_RESET_UDC5		23
-> +#define NPCM8XX_RESET_UDC6		24
-> +#define NPCM8XX_RESET_UDC3		25
-> +#define NPCM8XX_RESET_ADC		27
-> +#define NPCM8XX_RESET_SMB6		28
-> +#define NPCM8XX_RESET_SMB7		29
-> +#define NPCM8XX_RESET_SMB0		30
-> +#define NPCM8XX_RESET_SMB1		31
-> +
-> +/* Reset lines on IP2 reset module (NPCM8XX_RESET_IPSRST2) */
-> +#define NPCM8XX_RESET_MFT0		0
-> +#define NPCM8XX_RESET_MFT1		1
-> +#define NPCM8XX_RESET_MFT2		2
-> +#define NPCM8XX_RESET_MFT3		3
-> +#define NPCM8XX_RESET_MFT4		4
-> +#define NPCM8XX_RESET_MFT5		5
-> +#define NPCM8XX_RESET_MFT6		6
-> +#define NPCM8XX_RESET_MFT7		7
-> +#define NPCM8XX_RESET_MMC		8
-> +#define NPCM8XX_RESET_GFX_SYS		10
-> +#define NPCM8XX_RESET_AHB_PCIBRG	11
-> +#define NPCM8XX_RESET_VDMA		12
-> +#define NPCM8XX_RESET_ECE		13
-> +#define NPCM8XX_RESET_VCD		14
-> +#define NPCM8XX_RESET_VIRUART1		16
-> +#define NPCM8XX_RESET_VIRUART2		17
-> +#define NPCM8XX_RESET_SIOX1		18
-> +#define NPCM8XX_RESET_SIOX2		19
-> +#define NPCM8XX_RESET_BT		20
-> +#define NPCM8XX_RESET_3DES		21
-> +#define NPCM8XX_RESET_PSPI2		23
-> +#define NPCM8XX_RESET_GMAC2		25
-> +#define NPCM8XX_RESET_USBH1		26
-> +#define NPCM8XX_RESET_GMAC1		28
-> +#define NPCM8XX_RESET_CP1		31
-> +
-> +/* Reset lines on IP3 reset module (NPCM8XX_RESET_IPSRST3) */
-> +#define NPCM8XX_RESET_PWM_M1		0
-> +#define NPCM8XX_RESET_SMB12		1
-> +#define NPCM8XX_RESET_SPIX		2
-> +#define NPCM8XX_RESET_SMB13		3
-> +#define NPCM8XX_RESET_UDC0		4
-> +#define NPCM8XX_RESET_UDC7		5
-> +#define NPCM8XX_RESET_UDC8		6
-> +#define NPCM8XX_RESET_UDC9		7
-> +#define NPCM8XX_RESET_USBHUB		8
-> +#define NPCM8XX_RESET_PCI_MAILBOX	9
-> +#define NPCM8XX_RESET_GDMA1		10
-> +#define NPCM8XX_RESET_GDMA2		11
-> +#define NPCM8XX_RESET_SMB14		12
-> +#define NPCM8XX_RESET_SHA		13
-> +#define NPCM8XX_RESET_SEC_ECC		14
-> +#define NPCM8XX_RESET_PCIE_RC		15
-> +#define NPCM8XX_RESET_TIMER_10_14	16
-> +#define NPCM8XX_RESET_RNG		17
-> +#define NPCM8XX_RESET_SMB15		18
-> +#define NPCM8XX_RESET_SMB8		19
-> +#define NPCM8XX_RESET_SMB9		20
-> +#define NPCM8XX_RESET_SMB10		21
-> +#define NPCM8XX_RESET_SMB11		22
-> +#define NPCM8XX_RESET_ESPI		23
-> +#define NPCM8XX_RESET_USB_PHY_1		24
-> +#define NPCM8XX_RESET_USB_PHY_2		25
-> +
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,
