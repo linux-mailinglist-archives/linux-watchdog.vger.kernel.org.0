@@ -2,63 +2,57 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6629E5314B1
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 18:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFE75312DA
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 18:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237048AbiEWOQw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 10:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S236947AbiEWOWg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 10:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236990AbiEWOQw (ORCPT
+        with ESMTP id S236989AbiEWOWf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 10:16:52 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B3859B91
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 07:16:50 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id r3so10507451ljd.7
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 07:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CrtzL5zhabiqk9hD9lwI7Uy9maiCHi/zq6y5oUpElJM=;
-        b=C2Mvl3XTTCqhkSjVzD0w2l9QO2Kn/IFOE5QeIR4irQJY0qRRtW1uDP9cK+fqbtMCee
-         NbsTU1+WzhV3s9eH/SeQkPpmX8yzNP8l3OnYwOFdcW2fIWvrw7IT9SBtSdW6eBdBCug6
-         HAONZInHaFsuPPXCFGxuP1/sWF9NswH+Pw1dnbHeoFRZzPmGsflzMWSxcPangWcHDSsO
-         rZm0pBvhu713hy49A2WG5mm76Vny7U3nMaKdq4bSUiV4bZ7RDUS8P6aVm7Swiy/0UUFV
-         DoeekOeV9OK804PmbLXnTkvg5kcRzpxtl7H50hc4UyuhrnRk6oNWnHWbJmgECt775Fo8
-         29+A==
+        Mon, 23 May 2022 10:22:35 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4952529D;
+        Mon, 23 May 2022 07:22:34 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id e189so17965382oia.8;
+        Mon, 23 May 2022 07:22:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CrtzL5zhabiqk9hD9lwI7Uy9maiCHi/zq6y5oUpElJM=;
-        b=nk5WbjTUX8Ho1GpNTHCB15wQ/+Rh+MRZdLoBlQCMJQoNVJBnGu54eaM758DAoCec1R
-         TO2w9Hzzk71d2MyNQ4Q3W3/yh2+sRXOT7ZXFiAvdz94p6fsMgECNw3BW+b984PukfukV
-         7IgPnHeAgKB2IEvK2ru4TOeV9CV7Edfm0zO/UlfO/0bpypC30Oh0xG72kB9Or5ritGby
-         N8YbLXpNanLBOkNsockjAfOCt7FPlcsZ37VMyxOyhoLGfhfoQ0N10NGbgfI/QwtQnnAf
-         MpC2cpOJbp6pnX7bfhlKYJPz6uze9dhldi3hi8RvtYoa9Al3QHtPjfjv9ckuMapecn2k
-         hD9w==
-X-Gm-Message-State: AOAM531umEE8KOpkdIVxVp/oJQc7NPn4cI3tN+us88fIq16JovwDTpUB
-        1UPdBIt88oK6eYvdnk+RcOWNkA==
-X-Google-Smtp-Source: ABdhPJwX/mZu6eFiAZ1cvg/gMqvNE9X+QhTX6dyxNuJuDiE5oHk1QB7YKhqv9Em/pqf1jVGBl9AlTQ==
-X-Received: by 2002:a2e:a801:0:b0:24a:ff0b:ae7a with SMTP id l1-20020a2ea801000000b0024aff0bae7amr12728605ljq.287.1653315408587;
-        Mon, 23 May 2022 07:16:48 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b9-20020a056512024900b0047255d21148sm1999270lfo.119.2022.05.23.07.16.46
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N6EnHNW72poBEAFOl9gSp7lOZY9kd68M75fXJVPe+FI=;
+        b=n+evG+gbjWhetTxmwEJgCmnp3B/BnCsxA/5gdh2ciYda0uqVoXbz2djuILdZRR9+PB
+         kRBdjeZ3FV0bAsLpxcq8Iz7ho2fVx1STG3hgeup3Lui2vIYfLrsAcgUR0tNdXnEyJQb6
+         DSD8l7bAFUZfbWCodzfc9lTKY9cykBiR+7UmXG/dOdjuOjbxl+4H1IiHS/YNJzpWUfLb
+         HEGszbeP29LXYxs09avSz1OCWRNK/QJboSiAw26qh2GRBRBGv25dxLH3Tn+FSCQR7E4K
+         LOdwWVW0xHpfCiuhdoJJhMVlut4Vl4ChmR1wrX/ZdLeEkT8r+WxyoAkk024HDNDxjQJW
+         K/+Q==
+X-Gm-Message-State: AOAM5301FfpMY5p5neAktAxewZxscOHUXr+moSqEGflRSMPINCPRcrph
+        iYM4f8gGefgSo895KwAN51hZJMnkd++3aw==
+X-Google-Smtp-Source: ABdhPJwr8S214HIjkmgZ5w7m/qBY/O2Rvq4uY069UU3E449igw7SLZajpRd5lwuC075ZlSpXjH9n/w==
+X-Received: by 2002:a05:6808:3097:b0:32b:1198:25ea with SMTP id bl23-20020a056808309700b0032b119825eamr5082893oib.196.1653315754129;
+        Mon, 23 May 2022 07:22:34 -0700 (PDT)
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com. [209.85.210.42])
+        by smtp.gmail.com with ESMTPSA id i12-20020a056830010c00b0060aea5bbc87sm3994359otp.18.2022.05.23.07.22.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 07:16:48 -0700 (PDT)
-Message-ID: <03f0e3b5-8007-2731-62be-6e9fd18b949b@linaro.org>
-Date:   Mon, 23 May 2022 16:16:46 +0200
+        Mon, 23 May 2022 07:22:34 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id g13-20020a9d6b0d000000b0060b13026e0dso2197689otp.8;
+        Mon, 23 May 2022 07:22:33 -0700 (PDT)
+X-Received: by 2002:a25:e04d:0:b0:64d:6f23:b906 with SMTP id
+ x74-20020a25e04d000000b0064d6f23b906mr21745041ybg.380.1653315743376; Mon, 23
+ May 2022 07:22:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 17/19] arm64: dts: nuvoton: Add initial NPCM8XX device
- tree
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Tomer Maimon <tmaimon77@gmail.com>,
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-12-tmaimon77@gmail.com>
+ <86cd6a37-70ad-3a90-bc8a-dcd8b41f1175@linaro.org> <CAP6Zq1i2Wj4FCA4-eseVoJyMof5=ocFCUcitVquJqYJ4Z3JTYQ@mail.gmail.com>
+In-Reply-To: <CAP6Zq1i2Wj4FCA4-eseVoJyMof5=ocFCUcitVquJqYJ4Z3JTYQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 23 May 2022 16:22:12 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVCCrKTpNHng2_kKGViuEXf=O3MsfpjjzMusuUcKE6HiA@mail.gmail.com>
+Message-ID: <CAMuHMdVCCrKTpNHng2_kKGViuEXf=O3MsfpjjzMusuUcKE6HiA@mail.gmail.com>
+Subject: Re: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for NPCM8XX
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Joel Stanley <joel@jms.id.au>,
@@ -80,71 +74,88 @@ Cc:     Tomer Maimon <tmaimon77@gmail.com>,
         Olof Johansson <olof@lixom.net>,
         Jiri Slaby <jirislaby@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Bj=c3=b6rn_Andersson?= <bjorn.andersson@linaro.org>,
+        =?UTF-8?Q?Bj=C3=B6rn_Andersson?= <bjorn.andersson@linaro.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod <vkoul@kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
         Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Robert Hancock <robert.hancock@calian.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         Lubomir Rintel <lkundrak@v3.sk>, arm-soc <soc@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>,
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-18-tmaimon77@gmail.com>
- <c1b86493-d82d-a639-07af-4c979d733786@linaro.org>
- <CAMuHMdWSccO3J5OYrFUn+azKyzYBP1wmuHZoRU2t3PUbkZx1wA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdWSccO3J5OYrFUn+azKyzYBP1wmuHZoRU2t3PUbkZx1wA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 23/05/2022 15:58, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Mon, May 23, 2022 at 11:08 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
+Hi Tomer,
+
+On Mon, May 23, 2022 at 4:03 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> On Mon, 23 May 2022 at 12:01, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 >> On 22/05/2022 17:50, Tomer Maimon wrote:
->>> This adds initial device tree support for the
->>> Nuvoton NPCM845 Board Management controller (BMC) SoC family.
+>> > Add binding document and device tree binding
+>> > constants for Nuvoton BMC NPCM8XX reset controller.
+>> >
+>> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+
+>> > --- /dev/null
+>> > +++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+>> > @@ -0,0 +1,124 @@
+>> > +/* SPDX-License-Identifier: GPL-2.0 */
+>> > +// Copyright (c) 2022 Nuvoton Technology corporation.
+>> > +
+>> > +#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
+>> > +#define _DT_BINDINGS_NPCM8XX_RESET_H
+>> > +
+>> > +#define NPCM8XX_RESET_IPSRST1                0x20
+>> > +#define NPCM8XX_RESET_IPSRST2                0x24
+>> > +#define NPCM8XX_RESET_IPSRST3                0x34
+>> > +#define NPCM8XX_RESET_IPSRST4                0x74
 >>
->> Thank you for your patch. There is something to discuss/improve.
+>> What are these? All IDs should be incremental, decimal and start from 0.
+>
+> Register offset, we use the same method in NPCM7xx. please refer
+> https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/reset/nuvoton,npcm7xx-reset.h
+>
+> and the driver asserts the reset according to the reset include definitions
+
+So if they're easy to look up the values, you could do without the
+definitions? Cfr. the interrupts properties in .dtsi files, where we
+typically just use the hardcoded numbers.
+
+If you do decide to keep them, a comment explaining their origins
+would be useful.
+
+>> > +
+>> > +/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
+>> > +#define NPCM8XX_RESET_GDMA0          3
 >>
->>> The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
->>> have various peripheral IPs.
->>>
->>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> 
->>> +             l2: l2-cache {
->>> +                     compatible = "cache";
->>
->> Is this a real compatible? What bindings are you using here?
-> 
-> The compatible value and related properties are defined in the
-> Devicetree Specification, v0.4-rc1, Section 3.9 ("Multi-level and
-> Shared Cache Nodes (/cpus/cpu*/l?-cache)").
+>> IDs start from 0 and do not have holes.
+>
+> This represents the reset BIT in the reset register.
 
-Indeed, thanks!
+Likewise, I think it's a good idea to document that in a comment, cfr.
+https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/power/r8a7795-sysc.h#L8
 
-> 
-> The properties are handled by
-> dtschema/schemas/cache-controller.yaml, but the latter seems to lack
-> any checking on the compatible value?
+Gr{oetje,eeting}s,
 
+                        Geert
 
-Best regards,
-Krzysztof
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
