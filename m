@@ -2,97 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9679D5310C5
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 15:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531A2530F16
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 15:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbiEWLrC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 07:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37940 "EHLO
+        id S235152AbiEWL5c (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 07:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234998AbiEWLqz (ORCPT
+        with ESMTP id S235148AbiEWL51 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 07:46:55 -0400
+        Mon, 23 May 2022 07:57:27 -0400
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8578445799
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 04:46:45 -0700 (PDT)
-Received: from mail-ot1-f41.google.com ([209.85.210.41]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Msqty-1nZNqW0hXU-00tALn for <linux-watchdog@vger.kernel.org>; Mon, 23 May
- 2022 13:46:44 +0200
-Received: by mail-ot1-f41.google.com with SMTP id s23-20020a9d7597000000b0060ae566f9a1so7370862otk.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 04:46:43 -0700 (PDT)
-X-Gm-Message-State: AOAM531wVSAIspUgFKcPy76smS2uvQmUL36Cc0w1bWAC7Rj3mdh86Z0q
-        O94FgHOA8J6ZSVr5R83TzzMk3HyDIG5Zcparl8c=
-X-Google-Smtp-Source: ABdhPJzbbTU7bxyEy+V6QZ7ro2Wti/wri258NXrp2iXt1Owp7jIbpPdzCSwsk8vjZl8l7XWvxC1S+1Cf8oUw+fAt8d0=
-X-Received: by 2002:a81:6283:0:b0:2ff:2443:6f3c with SMTP id
- w125-20020a816283000000b002ff24436f3cmr22577090ywb.135.1653302662526; Mon, 23
- May 2022 03:44:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B2C5251C;
+        Mon, 23 May 2022 04:57:23 -0700 (PDT)
+Received: from mail-oo1-f46.google.com ([209.85.161.46]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N17gy-1nhb8l2T6I-012XMt; Mon, 23 May 2022 13:57:21 +0200
+Received: by mail-oo1-f46.google.com with SMTP id f2-20020a4a8f42000000b0035e74942d42so2681036ool.13;
+        Mon, 23 May 2022 04:57:21 -0700 (PDT)
+X-Gm-Message-State: AOAM532YIqqlyrk3mbC67RSmeRmG15pMXndJUdh6ynMuzCJmLtYXDxKq
+        XJZRRBLguVyJBUnvoNrQkA/U9AaTMSXtrZ1jwDE=
+X-Google-Smtp-Source: ABdhPJz25Gt24MhXl+E72qufCOdw4x39awhhvsl+Xnqa65r2iahWrusogj8vUUSxWLBZ/N0deY8KYQbSs9eoO99jFuc=
+X-Received: by 2002:a05:6902:1143:b0:64f:9ab6:691e with SMTP id
+ p3-20020a056902114300b0064f9ab6691emr8642845ybu.480.1653303099023; Mon, 23
+ May 2022 03:51:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-13-tmaimon77@gmail.com>
-In-Reply-To: <20220522155046.260146-13-tmaimon77@gmail.com>
+References: <20220516163310.44842-1-nick.hawkins@hpe.com> <CAK8P3a0914=TM9f1CNcg_PXfHvt6nHDPyrvLp=0KO4hZM2GT5w@mail.gmail.com>
+ <DM4PR84MB192761B3970E4934D059C3F188D19@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <DM4PR84MB192761B3970E4934D059C3F188D19@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 23 May 2022 12:44:06 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0PKvqpTjNeKUm6EnxpmJAtmk1jv+b4YXxr+fXFpsWXtw@mail.gmail.com>
-Message-ID: <CAK8P3a0PKvqpTjNeKUm6EnxpmJAtmk1jv+b4YXxr+fXFpsWXtw@mail.gmail.com>
-Subject: Re: [PATCH v1 12/19] reset: npcm: Add NPCM8XX support
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
+Date:   Mon, 23 May 2022 12:51:22 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Pvn46kMoAv+HtRAOGDYcL76jPN2Wk-MqyJSPm--0sGQ@mail.gmail.com>
+Message-ID: <CAK8P3a1Pvn46kMoAv+HtRAOGDYcL76jPN2Wk-MqyJSPm--0sGQ@mail.gmail.com>
+Subject: Re: [PATCH v8 0/8] Introduce HPE GXP Architecture
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        gregkh <gregkh@linuxfoundation.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        robert.hancock@calian.com,
-        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>,
         DTML <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+        Joel Stanley <joel@jms.id.au>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:/rqEHSZBryOAZIcGpbPDUOTvgdhFBkb4tPsOhONXALjIy7Jx950
- +6FcyyUEDmn0TAxqc0FXC+vDFlCSLa7soeIGmi9ER4FtE4yH3JXCm8odVA/iiTDXYxT+fYh
- PzDYDSEaUqXs+NsfWtgVIV4mCyOIlHBRTpKWpApkAJreoCK8mHW+Nk2kZceb0+lmWCb1/ec
- 0Hw8nh2K3Z69BdTtYciWQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b6T8hTIycB0=:wX4m5/Gup648wakltuv3lP
- Z6qSBFLiW94aw/yyXM/OImNWzS7EeU2gpmj9ysyEKUMbn6cTFwCSRz9xN87wFLAfUMHVL7t6j
- qILJ5aBu/G+QFGlL319+y+JSoFhsWhs4sB6r3l3OKO9G8w/j9Y7V7/5oxMCEWkOprbiJD/w/q
- yXZeiEns9XGsGNLZyqTO6H/wN4NqOxu/4yagRGFjRcEm4UNdoOCKC4zHkpQhHXwcDe8F2vc9A
- 3pLaX7LNivkpDczvv88GGaBF7slyhqIHPdeXLz4X87t7VQjQ14kn/cmdf3WyjmCdeCzA9HLei
- 432JVTVPAut6BNUbMKtU2jLUdD6WDV+7wEcvT1ZMmHntPwvfaFPxLHWiTbkDWdvyoDoK5kmjc
- D2QA/muoPh/XVKbhvxbs021EQK5kPqs1MWXjiEeyWAC3ALX3utR/5svfnEK9MqQWBJ1ihsS8Y
- Rg8+eow/EjhxefBgmfqmndBN1rCnJsoIVmQX4cmFKPLmolCJm8/egUj79WbNkz8QIOT7TVg/3
- aPwVBkp7HxUld7svz7Qn9W7uKDXc2AvOkyEBniizQ42pj2Y5ms7FXHksY5BylUUGnZ49Dq9l9
- WVcrzaVFpAsJ8gSX4eRTVnj1eVO1z+vPbcZRC4ufV88fTXh772ykxbxB4PfZ4cZx0Cw8eLQ9w
- NRU/vFIExQ1TAnIcOm0CNVC93U9izwYIrUUPvr36AxCeSddHmk559HH2ZU7WeLQwJaijE+Qw0
- UhYQZRBgwvkEs2zWrFnPIS6a0YPwmq4eQuuhhMEsWyuK68SiDIFbjlX94yyR7yShbTnJcq4Ns
- nAAiTZuDwHTZBrt5HrRZl5UYZBFXxA+DJA/mz+vpHw98ExmljOkuH8ydF7++Exbc9hZn476EW
- VW30arubeGctZgSxX6Uw==
+X-Provags-ID: V03:K1:9PY63lXD/LiNRAm3aMHCQC54S3LsvnAbSYvFl+xG6YXZfXH+xga
+ 6spKXnE5J1vAqgHRnvbccWt75G+TU01YfpRh+4QgITPb7WQFU/fRdLlTAketmmjx1uOIDbA
+ UHbMYSWqFlZh00QZtCrvictXFJBkpLsmTIfLGgqbY9s1op5ACunJ/QUXD3Q9CtS6+ScOjii
+ ty656h5YLqjAiW/sHjiUQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/sJgCILkmTo=:xx5jLIHQD7Mqh6bNiUR1T+
+ Q85BKPvNwu7+zVqGcaZEAIqg2h9SHFk5UCpOcLBt0vKBx0zU1BFT9ZXJ0YT/hO0IYdhllGW9O
+ STGZzfc3Af59x7qhV3jhbW4THTkxpgwMA+RTUpIow2c+6+8dVdG11g/hJ1cUBhPUxWFq6zq4I
+ muZLuW52F2/Bz11BO2X2S/0CQhKNd1WkLxGPcIAxuuRPMIwRyh+7LNeWTvs47/AG97t3Y3p7U
+ jfAg11oAAWMzrTaHjMYdR42805tKjG/cbSzIG3ELyjmtrPmmNexgg6rlbgz/BM6FW+YdTD5KE
+ vkxz77wJX7mOTh7G0krZDCMdI4qsT5I0EZP4kd1XNKtv8X7xFuWQo24dt3Prof/OjDrjapBev
+ 0oeWzaUGGevMXH1nuRs4hDcqQZXW/2jfCD2yoPW1eHD3ZuMuVqr8LbzyroKuwxJgKvFrWSblu
+ 51fOdPwOlJsZzMbi8PqafsdC16YLrmBHdlMJDoc4leMEvt2LQD/QqDKMEb8fN/pvPRww6Vh1f
+ 7pc0dl3EGN5YoYiX6nuseNJ15Xu9ixwAyPGZzN2c7JY04xftbtjIuwn1P2LAcqwEnoQtMmczy
+ YL0LbdCtTA7e7yJposRc1yxEmhmlpy3CSlCzTvbZ86Plg2e1PQz6w6VN6ue0OYdFTxxgh01It
+ UXNYPpJsmhsZFAgsuCMQiWSYltX154i9Lmk6UyUCH6RDiTCrP3Lp0JkUlZDdpQu6FMd0zlH0s
+ RU5SMhN/hJoJdcUWt3uC67lRgIObrS7HmMpF+SwvQrVQxAjIsmmIMGPRPKcmeJ7/LtWWc4d86
+ 1eght4I0CKgXiyas3xT67sBEnc2WFeiHBnsJx0+7J3T8nSOL3Fg/QCv/BG7dYyQAf8UzvhtZk
+ RFbPcUWOXgx/lEMn23QA==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,42 +79,16 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-
->  static const struct of_device_id npcm_rc_match[] = {
->         { .compatible = "nuvoton,npcm750-reset"},
-> +       { .compatible = "nuvoton,npcm845-reset"},
->         { }
->  };
-> +/*
-> + *  The following procedure should be observed in USB PHY, USB device and
-> + *  USB host initialization at BMC boot
-> + */
-> +static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
-> +{
-> +       struct device_node *np = pdev->dev.of_node;
-> +       struct device *dev = &pdev->dev;
-> +
-> +       rc->gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
-> +       if (IS_ERR(rc->gcr_regmap)) {
-> +               dev_err(&pdev->dev, "Failed to find gcr syscon");
-> +               return PTR_ERR(rc->gcr_regmap);
-> +       }
-> +
-> +       if (of_device_is_compatible(np, "nuvoton,npcm750-reset"))
-> +               npcm_usb_reset_npcm7xx(rc);
-> +       else if (of_device_is_compatible(np, "nuvoton,npcm845-reset"))
-> +               npcm_usb_reset_npcm8xx(rc);
-> +       else
-> +               return -ENODEV;
+On Wed, May 18, 2022 at 3:12 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
 >
+> We have a talk planned for the North America Open Source Summit (June 20-24)
+> and it would be great if this patch set could be in Linux by then. If it is not possible
+> we can handle that.
 
-In place of the string comparison in of_device_is_compatible(), maybe just use
-the .data field of the of_device_id structure to point to the actual
-reset function.
+That's a good enough reason for me, I'll see what I can do, and will
+keep it in the
+arm/late branch until next week. If everything goes well with the soc
+tree and your
+patches, I'll send it on then, otherwise it will have to wait a release.
 
-Alternatively, register two separate platform_driver instances here and
-use separate probe functions that do the soc specific bits and call into
-shared functions for the bits that are the same.
-
-       Arnd
+      Arnd
