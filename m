@@ -2,38 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B02530ED2
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 15:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9679D5310C5
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 May 2022 15:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbiEWLng (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 May 2022 07:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S234975AbiEWLrC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 May 2022 07:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbiEWLnf (ORCPT
+        with ESMTP id S234998AbiEWLqz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 May 2022 07:43:35 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F31506DA;
-        Mon, 23 May 2022 04:43:33 -0700 (PDT)
-Received: from mail-ot1-f42.google.com ([209.85.210.42]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M8yPu-1ny2QH3nh0-0066ng; Mon, 23 May 2022 13:43:32 +0200
-Received: by mail-ot1-f42.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so4418465otr.3;
-        Mon, 23 May 2022 04:43:31 -0700 (PDT)
-X-Gm-Message-State: AOAM530VEDwel10v6P42dzQ6EV0W/ImJ2lYBPfS2Ob6jT5cD6s9b3rRk
-        rep+Z18t15/VrxXwa2LB9oh6NBm7p3HONc7O7mM=
-X-Google-Smtp-Source: ABdhPJxpUCa94Kh6HQKuK56biKlb3vDJKuICvFZFBgpVEpCuri5EfGLbRA6cBhu22Na5oqGEdTcIEn9+H34udGZY6o0=
-X-Received: by 2002:a25:75c5:0:b0:648:dccd:e1c with SMTP id
- q188-20020a2575c5000000b00648dccd0e1cmr21094709ybc.452.1653299785602; Mon, 23
- May 2022 02:56:25 -0700 (PDT)
+        Mon, 23 May 2022 07:46:55 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8578445799
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 04:46:45 -0700 (PDT)
+Received: from mail-ot1-f41.google.com ([209.85.210.41]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Msqty-1nZNqW0hXU-00tALn for <linux-watchdog@vger.kernel.org>; Mon, 23 May
+ 2022 13:46:44 +0200
+Received: by mail-ot1-f41.google.com with SMTP id s23-20020a9d7597000000b0060ae566f9a1so7370862otk.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 May 2022 04:46:43 -0700 (PDT)
+X-Gm-Message-State: AOAM531wVSAIspUgFKcPy76smS2uvQmUL36Cc0w1bWAC7Rj3mdh86Z0q
+        O94FgHOA8J6ZSVr5R83TzzMk3HyDIG5Zcparl8c=
+X-Google-Smtp-Source: ABdhPJzbbTU7bxyEy+V6QZ7ro2Wti/wri258NXrp2iXt1Owp7jIbpPdzCSwsk8vjZl8l7XWvxC1S+1Cf8oUw+fAt8d0=
+X-Received: by 2002:a81:6283:0:b0:2ff:2443:6f3c with SMTP id
+ w125-20020a816283000000b002ff24436f3cmr22577090ywb.135.1653302662526; Mon, 23
+ May 2022 03:44:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-5-tmaimon77@gmail.com>
-In-Reply-To: <20220522155046.260146-5-tmaimon77@gmail.com>
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-13-tmaimon77@gmail.com>
+In-Reply-To: <20220522155046.260146-13-tmaimon77@gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 23 May 2022 11:56:09 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0Nh4m7O_WPe1DTWqwWU32C5khOPH0ir7r_=s106mLv5A@mail.gmail.com>
-Message-ID: <CAK8P3a0Nh4m7O_WPe1DTWqwWU32C5khOPH0ir7r_=s106mLv5A@mail.gmail.com>
-Subject: Re: [PATCH v1 04/19] tty: serial: 8250: Add NPCM845 UART support
+Date:   Mon, 23 May 2022 12:44:06 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0PKvqpTjNeKUm6EnxpmJAtmk1jv+b4YXxr+fXFpsWXtw@mail.gmail.com>
+Message-ID: <CAK8P3a0PKvqpTjNeKUm6EnxpmJAtmk1jv+b4YXxr+fXFpsWXtw@mail.gmail.com>
+Subject: Re: [PATCH v1 12/19] reset: npcm: Add NPCM8XX support
 To:     Tomer Maimon <tmaimon77@gmail.com>
 Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
@@ -72,26 +73,26 @@ Cc:     Avi Fishman <avifishman70@gmail.com>,
         LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Eh/qW2KznBfSE/OEBWqMPrKe6wGQVBqS5SXsFUcXmZEqSSuDHwT
- 72VMZAhZPMIqmh+H6lMwP5qwnaEjve33ZMwxkio1HwuhLe3vPgbpqAog7NGZVs3/TT2oIMr
- eLUmXk8B4w648y9F7Bu1gvCHI+0N3M/eyZ0k53KwRmUDovnzg2msAvsumZTmJi6s5Ya1U3b
- XfeBYBqjpRFHOFSgvC5YQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MX/kDM8qFJQ=:CvgCpZv4G2zKoUj2z9ehBD
- q317uwNL18N9Picka94IqPCTYd3CmtXvDVrZ9rwdHuwNOfOByunvQOyYEl5G8UQfzgImVWQBY
- D2Yk6dIUB06pWAOExUyI9NYclahQzC4GJDaRKjYHAZu+iYEzlL52xKUvBX6ZZGlmZHTPGN8YX
- Y/5RUBanuZtJvJ3iqaVWmUtMVIHC1WfhHtvERDNttfphhBU/c3itCrYebF2hY4d41zw4KBDkT
- VwFMXAaE1xna2GBc+ty/P+JeIl+zwKF3spkzznm8v3zF0gKEkK96NRflU70ymEbIXkMlosfa4
- /L7WeQkkTK3JvD6BDaeGnZMFBbTCwZHTtAefhAKghRvOBIPwyn+k5Xf+ohYGEMt6HOWRLJoLV
- sMYIWGyABqjBjoF2fu8Bhd4Z/GzoffvZlG5hEUyOiOaXt+LbNNxrFHXrn2ac34cWnfFoQKO7b
- G/j4oZ1S89kseAeIDBc3zq2pjCdnmeh2aT5VBDIO9EqV7QQNBsGLqHCq6Br+bSWTqOgNqFRiI
- GYuJRIitstsn3UA3Mg3fSmvVvA5S8zK34xsP4Ig9SNK1InEcSdsHPntJvV0R5CDVYUFHVzpLW
- 5TL6tb0Qt79u4jxBCx/txPyQ4vCoPHVuj6/UyE13epLYHMwsTW/lbdmg6GxFOoVpPNtKTs2Dt
- rCVhULYuwi2udYEMOPaNzoEEUAAzZp2AgFWVYAXgWuddQ5uBtMvy3DbQEtX8YYqNOwskHC9Tu
- ZESP5no+BZ2x6s/vpQD5d2oZmYZ4wWiTMydWlWTqt8UDE1ugbhNkqcKztxF/zTHf/0BIFZrRp
- 6kpLar02NBXVZfofCQH0YywcWqyCSP+dynb/W3vwBXGDi7cXGOCLkfF8ak/RImCcA+meyBaWP
- epvJo17x6SJ9CA+eTjtQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Provags-ID: V03:K1:/rqEHSZBryOAZIcGpbPDUOTvgdhFBkb4tPsOhONXALjIy7Jx950
+ +6FcyyUEDmn0TAxqc0FXC+vDFlCSLa7soeIGmi9ER4FtE4yH3JXCm8odVA/iiTDXYxT+fYh
+ PzDYDSEaUqXs+NsfWtgVIV4mCyOIlHBRTpKWpApkAJreoCK8mHW+Nk2kZceb0+lmWCb1/ec
+ 0Hw8nh2K3Z69BdTtYciWQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:b6T8hTIycB0=:wX4m5/Gup648wakltuv3lP
+ Z6qSBFLiW94aw/yyXM/OImNWzS7EeU2gpmj9ysyEKUMbn6cTFwCSRz9xN87wFLAfUMHVL7t6j
+ qILJ5aBu/G+QFGlL319+y+JSoFhsWhs4sB6r3l3OKO9G8w/j9Y7V7/5oxMCEWkOprbiJD/w/q
+ yXZeiEns9XGsGNLZyqTO6H/wN4NqOxu/4yagRGFjRcEm4UNdoOCKC4zHkpQhHXwcDe8F2vc9A
+ 3pLaX7LNivkpDczvv88GGaBF7slyhqIHPdeXLz4X87t7VQjQ14kn/cmdf3WyjmCdeCzA9HLei
+ 432JVTVPAut6BNUbMKtU2jLUdD6WDV+7wEcvT1ZMmHntPwvfaFPxLHWiTbkDWdvyoDoK5kmjc
+ D2QA/muoPh/XVKbhvxbs021EQK5kPqs1MWXjiEeyWAC3ALX3utR/5svfnEK9MqQWBJ1ihsS8Y
+ Rg8+eow/EjhxefBgmfqmndBN1rCnJsoIVmQX4cmFKPLmolCJm8/egUj79WbNkz8QIOT7TVg/3
+ aPwVBkp7HxUld7svz7Qn9W7uKDXc2AvOkyEBniizQ42pj2Y5ms7FXHksY5BylUUGnZ49Dq9l9
+ WVcrzaVFpAsJ8gSX4eRTVnj1eVO1z+vPbcZRC4ufV88fTXh772ykxbxB4PfZ4cZx0Cw8eLQ9w
+ NRU/vFIExQ1TAnIcOm0CNVC93U9izwYIrUUPvr36AxCeSddHmk559HH2ZU7WeLQwJaijE+Qw0
+ UhYQZRBgwvkEs2zWrFnPIS6a0YPwmq4eQuuhhMEsWyuK68SiDIFbjlX94yyR7yShbTnJcq4Ns
+ nAAiTZuDwHTZBrt5HrRZl5UYZBFXxA+DJA/mz+vpHw98ExmljOkuH8ydF7++Exbc9hZn476EW
+ VW30arubeGctZgSxX6Uw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,17 +101,41 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> +++ b/drivers/tty/serial/8250/8250_of.c
-> @@ -333,6 +333,7 @@ static const struct of_device_id of_platform_serial_table[] = {
->         { .compatible = "ti,da830-uart", .data = (void *)PORT_DA830, },
->         { .compatible = "nuvoton,wpcm450-uart", .data = (void *)PORT_NPCM, },
->         { .compatible = "nuvoton,npcm750-uart", .data = (void *)PORT_NPCM, },
-> +       { .compatible = "nuvoton,npcm845-uart", .data = (void *)PORT_NPCM, },
->         { /* end of list */ },
 
-If these are compatible devices, it's usually easier to claim
-compatibility with both the specific chip and the older model
-as a fallback, to avoid driver changes. This seems to apply to
-the timer and watchdog devices as well.
+>  static const struct of_device_id npcm_rc_match[] = {
+>         { .compatible = "nuvoton,npcm750-reset"},
+> +       { .compatible = "nuvoton,npcm845-reset"},
+>         { }
+>  };
+> +/*
+> + *  The following procedure should be observed in USB PHY, USB device and
+> + *  USB host initialization at BMC boot
+> + */
+> +static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+> +{
+> +       struct device_node *np = pdev->dev.of_node;
+> +       struct device *dev = &pdev->dev;
+> +
+> +       rc->gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
+> +       if (IS_ERR(rc->gcr_regmap)) {
+> +               dev_err(&pdev->dev, "Failed to find gcr syscon");
+> +               return PTR_ERR(rc->gcr_regmap);
+> +       }
+> +
+> +       if (of_device_is_compatible(np, "nuvoton,npcm750-reset"))
+> +               npcm_usb_reset_npcm7xx(rc);
+> +       else if (of_device_is_compatible(np, "nuvoton,npcm845-reset"))
+> +               npcm_usb_reset_npcm8xx(rc);
+> +       else
+> +               return -ENODEV;
+>
+
+In place of the string comparison in of_device_is_compatible(), maybe just use
+the .data field of the of_device_id structure to point to the actual
+reset function.
+
+Alternatively, register two separate platform_driver instances here and
+use separate probe functions that do the soc specific bits and call into
+shared functions for the bits that are the same.
 
        Arnd
