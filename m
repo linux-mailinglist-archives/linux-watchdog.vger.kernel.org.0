@@ -2,106 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67252534533
-	for <lists+linux-watchdog@lfdr.de>; Wed, 25 May 2022 22:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDED534845
+	for <lists+linux-watchdog@lfdr.de>; Thu, 26 May 2022 03:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237441AbiEYUsA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 25 May 2022 16:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S1344569AbiEZBlj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 25 May 2022 21:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234279AbiEYUr7 (ORCPT
+        with ESMTP id S240750AbiEZBlh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 25 May 2022 16:47:59 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DD5A88A7
-        for <linux-watchdog@vger.kernel.org>; Wed, 25 May 2022 13:47:57 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-30007f11f88so95686647b3.7
-        for <linux-watchdog@vger.kernel.org>; Wed, 25 May 2022 13:47:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
-        b=PnromsGSl/VyCqJRnnJHQGv2emL8SwMg8ftXDY1M1kfjEHhbW+SFcNbx3DogMg04Y9
-         /oZIr62MobI8ksksf+p9sBio2Dq2yBIBPcLJ3b1SShimWCeBsnvQbeReD0NRZ7Om0Lst
-         q1lisGYBsy1KTkD8a/a+P3V6h5TEOEvizQbKOIY52MNwlZwBpCdF++HQA7VleD8dxYmT
-         47CCQBdH112dj3BW1XZfHpBYhUz6nflHJwVhKJ1dOqZAhIGbRVTP42myeLGtiu1ATKwe
-         DXnDVSRqAyDH9FmgiIci81QGTqI4p/Sz0r5xM/GwgFW8dm98Yai8Vi1EO7F7NXK45ral
-         Mg0Q==
+        Wed, 25 May 2022 21:41:37 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951E6A5031;
+        Wed, 25 May 2022 18:41:35 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id i66so603326oia.11;
+        Wed, 25 May 2022 18:41:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
-        b=ZI5B7JQZDkWWcqQB4ONk9mMqv3N4BrIXiV8dHrzqm3/G/dtnxvc6Pkk6/Cy+OurVxm
-         ABXkItVPcL/s9RuhN3SXXXZUowhmNpUYFv0MhhV2+APGHyzxS3IqPxTutY/dm9Jtgjcg
-         EvQZO7s8AxgzvERz6iPISSYq0++1mvvYV/pV5nbe3pOdUphQ/qJSfnpldaAs4XjEWk/w
-         KQnzfPj8clV2b5LmoJucNByn/oi+t8qAc5YAuRNbVx4NSK9dCKklbbcp6DltPdVVOnCi
-         dbIMZuHKv1n3S5z6B4595heyFR4hG9dLATnvwXcJ0mqSZrFJ7q0QtPLMB7zeuv3ZYDyc
-         uuog==
-X-Gm-Message-State: AOAM531AmGwQvWl9mnYk5/rECAm1b6G9WTd5atyWaEti0/z1DuGawAVT
-        JTVWqSLpK2AUiHFaecUGmbfSkJOhNtFjrlatrkE=
-X-Google-Smtp-Source: ABdhPJwSUXt4OSD1heOIQ3zIbqBs1JquJNu8NtOAfWl74I7duJ3I9S+mgyYgK4KvmN58QkVh9RTAkFFWkd3+8Flvjy4=
-X-Received: by 2002:a81:1f8b:0:b0:2f8:5846:445e with SMTP id
- f133-20020a811f8b000000b002f85846445emr35075611ywf.50.1653511677047; Wed, 25
- May 2022 13:47:57 -0700 (PDT)
+        bh=F+JPAxTs3gGYuDktqiw/Mh4EKh8IPmJtNsO4y7/7FCw=;
+        b=oG6NBxa7bFDAm30HbnRlicf0NQ0Uo2HNzeJneAs2cVsreHZCapxWES3abf2hvtNATL
+         hR08TgMP9TG8Hb0VzBUbwhIvHj3xGQCvdPOoEFuRGMPdZ4DMvSikVO49l2Vj1SzY+X8q
+         VJm//en96f/uxI4Oqmydaui2tFXoYa93CqbWxfH+6MBKVSGI9QdnG9veX1dK0V57InTo
+         BO+wDNs7B8qYgjLtSbUoD37dCxsmIKXJEN8W7ud0HoMouLwsegu7HpiZU8SFem6G3eG2
+         od+FmG4GhUd5FXqeWctGRPneFKP6lXxvfCXIiuey9UzW2HcmSJtRXwK+JTxF9Ok70EqJ
+         Y+4Q==
+X-Gm-Message-State: AOAM532A4LBrUDQDJ694fxW12F2/cI1eLNfMQe0br18fX991LRoK3515
+        Io++ZHy/8evKhqGVQWJnkA==
+X-Google-Smtp-Source: ABdhPJy3PzdlHkQKcyHFXOij/PsiSqwmD91DssTjABPxZ14g3ujTvYPGVo7+RVAlSnghG2aYIiB37g==
+X-Received: by 2002:a05:6808:124f:b0:321:855d:5b19 with SMTP id o15-20020a056808124f00b00321855d5b19mr13287oiv.30.1653529294479;
+        Wed, 25 May 2022 18:41:34 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id h16-20020a056830035000b0060b2972b503sm105573ote.64.2022.05.25.18.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 18:41:33 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: faraday: Fix typo in example 'timeout-sec' property
+Date:   Wed, 25 May 2022 20:41:27 -0500
+Message-Id: <20220526014127.2872254-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:7110:3682:b0:17b:2b7b:c035 with HTTP; Wed, 25 May 2022
- 13:47:56 -0700 (PDT)
-From:   Colina Fernando <colinafernando724@gmail.com>
-Date:   Wed, 25 May 2022 22:47:56 +0200
-Message-ID: <CAP7Hh1-qYQ=wBUq_p5pXQrtkN1XpxJSADCpbiay82rCojSvQDg@mail.gmail.com>
-Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
-To:     contact@firstdiamondbk.com
-Cc:     info@firstdiamondbk.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Guten Tag,
+The 'unevaluatedProperties' schema checks is not fully working and doesn't
+catch some cases where there's a $ref to another schema. A fix is pending,
+but results in new warnings in examples.
 
-Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
+The correct common watchdog property is 'timeout-sec', not 'timeout-secs'.
 
-haben ?
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/watchdog/faraday,ftwdt010.yaml          | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ich habe versucht, Sie per E-Mail zu erreichen.
+diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+index ca9e1beff76b..6ecd429f76b5 100644
+--- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
++++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+@@ -55,7 +55,7 @@ examples:
+       compatible = "faraday,ftwdt010";
+       reg = <0x41000000 0x1000>;
+       interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+-      timeout-secs = <5>;
++      timeout-sec = <5>;
+     };
+   - |
+     watchdog: watchdog@98500000 {
+-- 
+2.34.1
 
-Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
-
-Danke
-
-Fernando Colina
-
-colinafernando724@gmail.com
-
-
-
-
-----------------------------------
-
-
-
-
-Good Afternoon,
-
-I was just wondering if you got my Previous E-mail
-have ?
-
-I tried to reach you by E-mail.
-
-Please come back to me quickly, it is very Important.
-
-Thanks
-
-Fernando Colina
-
-colinafernando724@gmail.com
