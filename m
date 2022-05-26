@@ -2,114 +2,85 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EFA5348D7
-	for <lists+linux-watchdog@lfdr.de>; Thu, 26 May 2022 04:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3425534B32
+	for <lists+linux-watchdog@lfdr.de>; Thu, 26 May 2022 10:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345987AbiEZCXR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 25 May 2022 22:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S232629AbiEZIKp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 26 May 2022 04:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346146AbiEZCXQ (ORCPT
+        with ESMTP id S232257AbiEZIKo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 25 May 2022 22:23:16 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EE038BE4;
-        Wed, 25 May 2022 19:23:14 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id f2-20020a4a8f42000000b0035e74942d42so81773ool.13;
-        Wed, 25 May 2022 19:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gr4uy97+pYiigW6sQfOx7wYx16/DxKqRhykP61GXgd0=;
-        b=a/nRX1klVUuQbmWKwaU8zC4ru9m/jAelEQMOBdIFJdeVK3iSCS3ogBGsSBjyO3Szjp
-         C8lZYsWAA8cXEOBClWjdb/jCnR/i8bGGBpMW86CQMmFBZNydQW7Q8Om4xfjkMZ03cEDF
-         h47yoF5rq7y8f1ENQ3aQm9cbl9ffWvnzjd/werJR5nB5hXXMN+qXetUZBSpQNi1s+YEL
-         nvM/CAaI/cEmgGPI4Da8ze+Qe5Ev5iUhSO5naOIrV/fHTvm0ry8sWbr8to5kkn/3+17Y
-         zjiQhVdhCHtVhPk9jhN4nX5TMVietCK+s1s/Bc9AJojTo8/FkDVIKP1wMTWZVvt0+0qm
-         9Hcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gr4uy97+pYiigW6sQfOx7wYx16/DxKqRhykP61GXgd0=;
-        b=0yt8whYqDkuv20Fq5qb0Yhzt8FB+ouGVQDqmH62qklMFyc0VMn4gho49mFWQ8mMsp7
-         LJGaxaLC9zwbR+RkYNYtxKR6tR24LIv/LFZcF8qB4EWO/eXLGWmCwm2MFA5oNu6thExF
-         iyrEc6YD6yq1AML+uw3ZnTvRtknc2g6MrBZ7ah5KXsZVfw/pyneFpx2tO0XINC7mlnZq
-         IZAZuXJ3k0uXbktfsBnP2ad5G2YTAZ7gCMAF0lL/n6htfke0wYc5heCHPPH1ngnW10Zn
-         RgHGa3tsYrnPk+GnRl+/ts/aYd0ByXCZRHEliXmINBD0MZk6OS6Q0HBHwsmEgTmhafl+
-         6YXg==
-X-Gm-Message-State: AOAM5311KmRU2csAHAeVI1xnXHibKdPDuil8s17ZN/SRrjuyG8n5vrB+
-        MytM0DxUtgjZNb2QZ1Mfk0Y=
-X-Google-Smtp-Source: ABdhPJyxnTq1jPBqZ1PALw4j67SxxRqT7KOlj4RrWZU3aP5SyGp+cQKUizcHa2ZMFyVJeTxghbdruA==
-X-Received: by 2002:a4a:b0cc:0:b0:35e:a2b4:bcf3 with SMTP id l12-20020a4ab0cc000000b0035ea2b4bcf3mr14109655oon.5.1653531794086;
-        Wed, 25 May 2022 19:23:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e3-20020a544f03000000b00325cf57766bsm244913oiy.1.2022.05.25.19.23.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 19:23:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b66103c7-6363-82dc-1e06-a1071b3aa19b@roeck-us.net>
-Date:   Wed, 25 May 2022 19:23:10 -0700
+        Thu, 26 May 2022 04:10:44 -0400
+X-Greylist: delayed 448 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 May 2022 01:10:43 PDT
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79D022314E
+        for <linux-watchdog@vger.kernel.org>; Thu, 26 May 2022 01:10:43 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAD3_ZE5NI9ia9ucCg--.42220S2;
+        Thu, 26 May 2022 16:03:07 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] watchdog: f71808e_wdt: Add check for platform_driver_register
+Date:   Thu, 26 May 2022 16:03:03 +0800
+Message-Id: <20220526080303.1005063-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] dt-bindings: watchdog: faraday: Fix typo in example
- 'timeout-sec' property
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220526014127.2872254-1-robh@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220526014127.2872254-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAD3_ZE5NI9ia9ucCg--.42220S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw18uF43GFy8Kw15uF1xZrb_yoWfAFg_Cr
+        y7WF47uryDKF4fKF15t3Wavw1I9F1rZFs7Zw4rtrZxK34fJry7Wr4UZry7Kw1kCryjvrWq
+        y34DJw1Skry7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbz8FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJV
+        W0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU5WlkUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/25/22 18:41, Rob Herring wrote:
-> The 'unevaluatedProperties' schema checks is not fully working and doesn't
-> catch some cases where there's a $ref to another schema. A fix is pending,
-> but results in new warnings in examples.
-> 
-> The correct common watchdog property is 'timeout-sec', not 'timeout-secs'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+As platform_driver_register() could fail, it should be better
+to deal with the return value in order to maintain the code
+consisitency.
 
-Good find.
+Fixes: 27e0fe00a5c6 ("watchdog: f71808e_wdt: refactor to platform device/driver pair")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/watchdog/f71808e_wdt.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   .../devicetree/bindings/watchdog/faraday,ftwdt010.yaml          | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> index ca9e1beff76b..6ecd429f76b5 100644
-> --- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
-> @@ -55,7 +55,7 @@ examples:
->         compatible = "faraday,ftwdt010";
->         reg = <0x41000000 0x1000>;
->         interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> -      timeout-secs = <5>;
-> +      timeout-sec = <5>;
->       };
->     - |
->       watchdog: watchdog@98500000 {
+diff --git a/drivers/watchdog/f71808e_wdt.c b/drivers/watchdog/f71808e_wdt.c
+index 7f59c680de25..6a16d3d0bb1e 100644
+--- a/drivers/watchdog/f71808e_wdt.c
++++ b/drivers/watchdog/f71808e_wdt.c
+@@ -634,7 +634,9 @@ static int __init fintek_wdt_init(void)
+ 
+ 	pdata.type = ret;
+ 
+-	platform_driver_register(&fintek_wdt_driver);
++	ret = platform_driver_register(&fintek_wdt_driver);
++	if (ret)
++		return ret;
+ 
+ 	wdt_res.name = "superio port";
+ 	wdt_res.flags = IORESOURCE_IO;
+-- 
+2.25.1
 
