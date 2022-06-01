@@ -2,119 +2,106 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A469C53A38A
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jun 2022 13:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEF453A685
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jun 2022 15:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241726AbiFALGI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Jun 2022 07:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
+        id S1353585AbiFANyN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Jun 2022 09:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345880AbiFALGH (ORCPT
+        with ESMTP id S1353599AbiFANx4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Jun 2022 07:06:07 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761F4880EF
-        for <linux-watchdog@vger.kernel.org>; Wed,  1 Jun 2022 04:06:05 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id v19so1667911edd.4
-        for <linux-watchdog@vger.kernel.org>; Wed, 01 Jun 2022 04:06:05 -0700 (PDT)
+        Wed, 1 Jun 2022 09:53:56 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524DA87A02;
+        Wed,  1 Jun 2022 06:53:35 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id h188so2749435oia.2;
+        Wed, 01 Jun 2022 06:53:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zmUkWzeg4eeXLMNd3lfhrjjKEKVUaxqNRQUp3Ckt2Z4=;
-        b=qocjSTMUZH9T2IQW3/obAwuW9pk070LbB8GfsSOVnRtrD9fopdPRvwtZ/JfC2x2L4J
-         s5/HxRxzngbaSRGdruiCod/zCu5dVCoKc7Njqlylpz7FZev1Vq0oO8Ob0TDA/S9e0fyw
-         jPZaEZBDl9f10zp324+0LbUUd6G1CNhCgcyGBGJtqyelHCqjhjGgm7MobkfDjJGItaHW
-         0cVEkxV9zabA0mHtS1vCKHvyUb173mglxwrPfO/75smUNJEHUn4ROWpiZ5pwtUKt5Oik
-         hd6Zz89OHoU3KlvkUQe5g9svtxh4Al9HXjzYeelvrQKXepE9z3xt6+d99zSfaPQzBsCI
-         BOMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=zmUkWzeg4eeXLMNd3lfhrjjKEKVUaxqNRQUp3Ckt2Z4=;
-        b=a7PcIP2BNpWBFTKrAKpMID7znTElCGkHGhqRcNHNrfJ/NXzUDvDz6P4HIm3JBA2zCc
-         k8PliOKg6Ua5A97js83MY8qg9qcXY/5dTbtOxP6WzLYQjpfV7mVJDqEWkI9e9pp/cdHP
-         v2MM8QpmZ6L9Hz9i9qWPo7OH68Vmy6AZnAic0IUfpn8mVXcIemGH3e2fWXgGWXkStbNY
-         aN1mftvgrTBzpqCdot8PmG3biu+8pXtwGgIQiJyEYI2KFlW8ScEKLGzBBmpFJ52Zx6/G
-         op1qIsGB10eCXHlMVEIlsHy8F3GTbaCQDCRpGUk5Q7v4JPpKLTQ3HbZK4Vr9FjI0mL0u
-         2s6A==
-X-Gm-Message-State: AOAM530wX+G2dX+p3W0bsJVf1kTq25/84VB5BnPeIJNCJhcpjlzrU3hn
-        ppiv5JIawe3W800TX8O/3GcDXg==
-X-Google-Smtp-Source: ABdhPJxGZfvPCA32qvZADlQLYkYuCMi7rvAeDhPjUHEigzmSsilnTNVK6tD84n4NNi8pnBGkqXJV0Q==
-X-Received: by 2002:a05:6402:2553:b0:42a:ef31:4444 with SMTP id l19-20020a056402255300b0042aef314444mr69111155edb.46.1654081564014;
-        Wed, 01 Jun 2022 04:06:04 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bk2-20020a170906b0c200b006fef557bb7asm572545ejb.80.2022.06.01.04.06.03
+        bh=50YiMVCaHxbvsoevu/L/Gf+lnMf24rl9MFtsvJQjpng=;
+        b=aQHApTJUSvi2Zf+BjPlqI1i02ehiMQAVRc1uj1cNodTSdVpWmkgphqaPj0ruJ8bsyA
+         34Y6yTT/NA+OICNaDrMN2vF68dvLZShbcsMPvdsnSBQaZRXGzl+ocae8iMWk9IN7yXZ6
+         obfkVsqo50Aia1EY2G/v2i+iXOFCPmQEMg5PnaV+5Bl6s9iksGR98B/aJr9S4ZASTR0w
+         chdDghnoZ3mEuJKKWatzOtQj/YE4rskA5O8NdeJSZcU4kGa0QX6hbEgBRejHdrmecf6B
+         +TCO19SBZblragEU+p/1UT3cvNzmw96De4F9ulSwqt+E2KOpjmLl6ugI/7vvM3OsgVda
+         5J6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=50YiMVCaHxbvsoevu/L/Gf+lnMf24rl9MFtsvJQjpng=;
+        b=3fHzq7M96EmCU0t6Y+99FpqupPLSbFmFtKz7zN+D6xQjefIwnoYTbGRt3AgpslAv88
+         Tzv2shSr1wVQJMftKeSo6uJhHPEsNecqrMsnVX0P4KuVlvqSqiTgw5Bw3xj5RIWm5Ye5
+         xoe7z7F/kbXYivQQz3q05Fq7FHQ6BFPCNn1KGB7x7OHI6n3syZQQ9/WCwi0oDoMEIjSa
+         BlfZ4sXey3CwBSb/b+/mG09ypDVFzZyikXiSPRuLyPUjTWNdWU75Vh8aqcSdiDnyuYTm
+         5lmROXl4viqWh5+Amspz2UGuxN65LU4amQECcaCCv8a0LBfT6wN/DUTqPT6DsomEpXBo
+         0Uww==
+X-Gm-Message-State: AOAM532trMqkykLLNEGkOK/Swjevi1uDX6EudmAJ2puWjqwi3gpa1gv3
+        xP9IpOGzrO2KPDazvmo/Xd8=
+X-Google-Smtp-Source: ABdhPJxLdWwFf3XQYgQrNRPd/KDBoMKbLpPPmVP74Zh9DBdhkpFy4FtSOwyYJDJfAFELGzHiQO1Ntg==
+X-Received: by 2002:a05:6808:13cc:b0:32c:7414:1d76 with SMTP id d12-20020a05680813cc00b0032c74141d76mr5140801oiw.91.1654091587850;
+        Wed, 01 Jun 2022 06:53:07 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t4-20020a056808158400b0032b7b588f3asm874798oiw.46.2022.06.01.06.53.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:06:03 -0700 (PDT)
-Message-ID: <3389a816-0f51-ab83-1026-2201017a2f12@linaro.org>
-Date:   Wed, 1 Jun 2022 13:06:02 +0200
+        Wed, 01 Jun 2022 06:53:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b8d280ed-b04f-e69c-8a0f-81ccaf43b895@roeck-us.net>
+Date:   Wed, 1 Jun 2022 06:53:04 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 08/11] ARM: dts: qcom: sdx65-mtp: Increase the vmalloc
- size
+Subject: Re: [PATCH 09/11] dt-bindings: watchdog: Add binding for Qcom SDX65
 Content-Language: en-US
 To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
         bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net
+        krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
         manivannan.sadhasivam@linaro.org
 References: <1654080312-5408-1-git-send-email-quic_rohiagar@quicinc.com>
- <1654080312-5408-9-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1654080312-5408-9-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+ <1654080312-5408-10-git-send-email-quic_rohiagar@quicinc.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <1654080312-5408-10-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 01/06/2022 12:45, Rohit Agarwal wrote:
-> Increase the size of vmalloc using the bootargs in sdx65
-> mtp board.
-> It is failing to alloacte the size needed for firmware and
-> giving the error logs due to actual vmalloc region lesser than requested.
-> 
-> cat /proc/meminfo shows the size of VmallocTotal as 245760 kB.
-> 
-> [ 10.980356] vmap allocation for size 268439552 failed: use vmalloc=<size> to increase size
-> [ 10.980505] qcom_q6v5_pas 4080000.remoteproc: unable to map memory region: 0x90800000+10000000
-> [ 10.988542] In adsp alloc memory: adsp_probe 482
-> [ 10.988592] remoteproc remoteproc0: releasing 4080000.remoteproc
-> [ 11.001598] qcom_q6v5_pas: probe of 4080000.remoteproc failed with error -16
-> 
-> Thus, increasing the size to 300000000 as modem is not the only one using vmalloc region.
+On 6/1/22 03:45, Rohit Agarwal wrote:
+> Add devicetree binding for watchdog present in Qcom SDX65 platform.
 > 
 > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  arch/arm/boot/dts/qcom-sdx65-mtp.dts | 1 +
->  1 file changed, 1 insertion(+)
+>   Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> index 85ea02d..966385f 100644
-> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> @@ -21,6 +21,7 @@
->  
->  	chosen {
->  		stdout-path = "serial0:115200n8";
-> +		bootargs = "vmalloc=300000000";
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index 16c6f82..e0acbc1 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -20,6 +20,7 @@ properties:
+>         - qcom,apss-wdt-sc7280
+>         - qcom,apss-wdt-sdm845
+>         - qcom,apss-wdt-sdx55
+> +      - qcom,apss-wdt-sdx65
+>         - qcom,apss-wdt-sm6350
+>         - qcom,apss-wdt-sm8150
+>         - qcom,apss-wdt-sm8250
 
-I understand that issue comes from SoC-related driver but this is not a
-property of the hardware. This could be added by bootloader if needed,
-but in regular case this is a system setup parameter, so it does not
-belong to DTS.
-
-Best regards,
-Krzysztof
