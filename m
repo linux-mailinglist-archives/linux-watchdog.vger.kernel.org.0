@@ -2,95 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31C553A99D
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jun 2022 17:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E4953AA60
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jun 2022 17:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346409AbiFAPHx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Jun 2022 11:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S1355889AbiFAPpU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Jun 2022 11:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344567AbiFAPHw (ORCPT
+        with ESMTP id S1355831AbiFAPpJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:07:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80401544C5
-        for <linux-watchdog@vger.kernel.org>; Wed,  1 Jun 2022 08:07:50 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251DD3ip003229;
-        Wed, 1 Jun 2022 15:07:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=+O42x/8CBD53+RWlyeRV0YG0dWcQjNS6JnCOelpiVNs=;
- b=HNhpstEF079KQc+RKkM58WiajmdkcUzhovictdhyh4e6fVlrsaRp/zH7OfN0TBcfbk3G
- uyuX0JiKjpyEEwF163bEbMli06q1zSiMb5VaecDCnCUYIGYE7FgTy1LrHHhGGKNows26
- XOF+axDQ8qpswRS1oZtPCuW7JTqID1oWHh7YMLwP0/A2pqV1JcAWdh83B5VAfduNyypW
- vocu1NLNSHdmII5R3a/wr0l0w18kCuyWsemaRaZL5bixSNN5GKktNkqZDqeh1Gy0XvKi
- 1UL+Cecu2rk+EmZfjoIMXYjJKLbKaHnrVaSHLZo4wf8AKQYTS9ixdSTYu5mODVgoD41j tQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ge8t22yum-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:07:26 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 251Es4SE023907;
-        Wed, 1 Jun 2022 15:07:26 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ge8t22yu8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:07:26 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 251F6Dvf019185;
-        Wed, 1 Jun 2022 15:07:25 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma01wdc.us.ibm.com with ESMTP id 3gbcbj499n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:07:25 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 251F7OGj27066738
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Jun 2022 15:07:24 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B2EEEAC059;
-        Wed,  1 Jun 2022 15:07:24 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7BF59AC05E;
-        Wed,  1 Jun 2022 15:07:24 +0000 (GMT)
-Received: from localhost (unknown [9.41.178.126])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Jun 2022 15:07:24 +0000 (GMT)
-Date:   Wed, 1 Jun 2022 10:07:24 -0500
-From:   Scott Cheloha <cheloha@linux.ibm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
+        Wed, 1 Jun 2022 11:45:09 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD10D12635
+        for <linux-watchdog@vger.kernel.org>; Wed,  1 Jun 2022 08:45:07 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-edeb6c3642so3246376fac.3
+        for <linux-watchdog@vger.kernel.org>; Wed, 01 Jun 2022 08:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=CxGPdJ+d3VmCiVOx15dnO86NTnzcGQYc9otHCDK4uKA=;
+        b=aJ0SNzCGXtaMFOHq+yCghe0IeO4G9Elty0yPxLB77/+1ujGlHW0sINLxyIjdo63SA3
+         JfhoO9EqTsoZDYPbneUjYMp0cnQGRFF8P45SHLX4QE2fsodSq3ZpCnmdKd1lXLEHZqMd
+         hN8DY10MGvZPLx8FLIWCoo45PlKN8B6CHw+Gp+MtjjyLT0mPxQOO1W63diVqH6G0WzUY
+         +i5unjChkPo5khqc9kxy7PC4Wv83cvrbD3FEahAC0xXDjN7Jie1eRHCE4F//t89AspvD
+         Kvq5VNdjEDZm+2duCyA6ViAyDPmdjVC2AUUVWkDiq4piP7gK1O0X0QkaFR8PSJ2NGBNI
+         i6sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=CxGPdJ+d3VmCiVOx15dnO86NTnzcGQYc9otHCDK4uKA=;
+        b=nBQ0v5iIC0IGR/Ci1BcWQ4uHFygkQb+7Yk/DA6WCWFRLU3PUc0BKlTwH/V0XuEyqlw
+         2WnKjdrOM2Tv4cNmwsXjW87oVn9Gao1QiseWx+54YeZQfFDZz9vlcOoucsQBSznfEyhT
+         MRJHWK92GfQb/UJP2Bz/ZNIvtl9bRpDfEZxmwocYDpUt21tLLZmsjzZ5HWR/22XnZk+O
+         1UXO5m3pQFoLEQjMOLz7Bu1R6H8+Gvkq88kvmgSRZ3gRqgBLC2SswOtUGwAZeJRB4nI1
+         /2BW04j/YvKTVmAJ0ngbjnQ3nFfFf03wZg2fxibLXfUjEUET2OaHRl3Qy1GnRMuZtQnZ
+         KDVg==
+X-Gm-Message-State: AOAM5318OiHk5IvlWGeWFxEot91G4ixlhB6j1mpYFK3zoswwHv33ZiBg
+        k3MsuvhqBbbpMLPCCCmTp4S8ZYgsA/s=
+X-Google-Smtp-Source: ABdhPJz6xXrJ8vF6Af+LhH1lpt9jxSDQvqzDv4qVriyQtAWfN/GaC3ZxdDeWydFQdNcUBQ5XUiKldA==
+X-Received: by 2002:a05:6870:65a9:b0:f5:da7a:17d with SMTP id fp41-20020a05687065a900b000f5da7a017dmr39512oab.218.1654098306012;
+        Wed, 01 Jun 2022 08:45:06 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q16-20020a056870e89000b000f337992dfbsm779712oan.53.2022.06.01.08.45.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 08:45:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a6090ef3-f597-e10b-010b-cc32bff08c93@roeck-us.net>
+Date:   Wed, 1 Jun 2022 08:45:03 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Scott Cheloha <cheloha@linux.ibm.com>
 Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
         linux-watchdog@vger.kernel.org, tzungbi@kernel.org,
         brking@linux.ibm.com, nathanl@linux.ibm.com, npiggin@gmail.com,
         vaishnavi@linux.ibm.com, wvoigt@us.ibm.com,
         linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v1 4/4] watchdog/pseries-wdt: initial support for PAPR
- H_WATCHDOG timers
-Message-ID: <YpeArFvOWtk6TQ5r@rascal-austin-ibm-com>
 References: <20220520183552.33426-1-cheloha@linux.ibm.com>
  <20220520183552.33426-5-cheloha@linux.ibm.com>
  <74498c4b-7b6a-3864-1ae8-57e848a1254c@ozlabs.ru>
  <1f007ad5-8367-9593-bb80-d3564f3cf997@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ <YpeArFvOWtk6TQ5r@rascal-austin-ibm-com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 4/4] watchdog/pseries-wdt: initial support for PAPR
+ H_WATCHDOG timers
+In-Reply-To: <YpeArFvOWtk6TQ5r@rascal-austin-ibm-com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1f007ad5-8367-9593-bb80-d3564f3cf997@roeck-us.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: t8RMCBVYhjUeIiA2mMpeQN8UJQ-LS7oG
-X-Proofpoint-GUID: Mk3Oq_XbYEiGtAPMOAOJp0_nnpMkfYnq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-01_05,2022-06-01_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- clxscore=1015 malwarescore=0 adultscore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206010070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,443 +84,122 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, May 25, 2022 at 12:52:09AM -0700, Guenter Roeck wrote:
-> On 5/24/22 23:35, Alexey Kardashevskiy wrote:
-> > 
-> > On 5/21/22 04:35, Scott Cheloha wrote:
-> > > PAPR v2.12 defines a new hypercall, H_WATCHDOG.  The hypercall permits
-> > > guest control of one or more virtual watchdog timers.  The timers have
-> > > millisecond granularity.  The guest is terminated when a timer
-> > > expires.
-> > > 
-> > > This patch adds a watchdog driver for these timers, "pseries-wdt".
-> > > 
-> > > pseries_wdt_probe() currently assumes the existence of only one
-> > > platform device and always assigns it watchdogNumber 1.  If we ever
-> > > expose more than one timer to userspace we will need to devise a way
-> > > to assign a distinct watchdogNumber to each platform device at device
-> > > registration time.
-> > 
-> > This one should go before 4/4 in the series for bisectability.
-> > 
-> > What is platform_device_register_simple("pseries-wdt",...) going to do without the driver?
-> > 
-> > > 
-> > > Signed-off-by: Scott Cheloha <cheloha@linux.ibm.com>
-> > > ---
-> > >   .../watchdog/watchdog-parameters.rst          |  12 +
-> > >   drivers/watchdog/Kconfig                      |   8 +
-> > >   drivers/watchdog/Makefile                     |   1 +
-> > >   drivers/watchdog/pseries-wdt.c                | 337 ++++++++++++++++++
-> > >   4 files changed, 358 insertions(+)
-> > >   create mode 100644 drivers/watchdog/pseries-wdt.c
-> > > 
-> > > diff --git a/Documentation/watchdog/watchdog-parameters.rst b/Documentation/watchdog/watchdog-parameters.rst
-> > > index 223c99361a30..4ffe725e796c 100644
-> > > --- a/Documentation/watchdog/watchdog-parameters.rst
-> > > +++ b/Documentation/watchdog/watchdog-parameters.rst
-> > > @@ -425,6 +425,18 @@ pnx833x_wdt:
-> > >   -------------------------------------------------
-> > > +pseries-wdt:
-> > > +    action:
-> > > +    Action taken when watchdog expires: 1 (power off), 2 (restart),
-> > > +    3 (dump and restart). (default=2)
-> > > +    timeout:
-> > > +    Initial watchdog timeout in seconds. (default=60)
-> > > +    nowayout:
-> > > +    Watchdog cannot be stopped once started.
-> > > +    (default=kernel config parameter)
-> > > +
-> > > +-------------------------------------------------
-> > > +
-> > >   rc32434_wdt:
-> > >       timeout:
-> > >       Watchdog timeout value, in seconds (default=20)
-> > > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> > > index c4e82a8d863f..06b412603f3e 100644
-> > > --- a/drivers/watchdog/Kconfig
-> > > +++ b/drivers/watchdog/Kconfig
-> > > @@ -1932,6 +1932,14 @@ config MEN_A21_WDT
-> > >   # PPC64 Architecture
-> > > +config PSERIES_WDT
-> > > +    tristate "POWER Architecture Platform Watchdog Timer"
-> > > +    depends on PPC_PSERIES
-> > > +    select WATCHDOG_CORE
-> > > +    help
-> > > +      Driver for virtual watchdog timers provided by PAPR
-> > > +      hypervisors (e.g. PowerVM, KVM).
-> > > +
-> > >   config WATCHDOG_RTAS
-> > >       tristate "RTAS watchdog"
-> > >       depends on PPC_RTAS
-> > > diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> > > index f7da867e8782..f35660409f17 100644
-> > > --- a/drivers/watchdog/Makefile
-> > > +++ b/drivers/watchdog/Makefile
-> > > @@ -184,6 +184,7 @@ obj-$(CONFIG_BOOKE_WDT) += booke_wdt.o
-> > >   obj-$(CONFIG_MEN_A21_WDT) += mena21_wdt.o
-> > >   # PPC64 Architecture
-> > > +obj-$(CONFIG_PSERIES_WDT) += pseries-wdt.o
-> > >   obj-$(CONFIG_WATCHDOG_RTAS) += wdrtas.o
-> > >   # S390 Architecture
-> > > diff --git a/drivers/watchdog/pseries-wdt.c b/drivers/watchdog/pseries-wdt.c
-> > > new file mode 100644
-> > > index 000000000000..f41bc4d3b7a2
-> > > --- /dev/null
-> > > +++ b/drivers/watchdog/pseries-wdt.c
-> > > @@ -0,0 +1,337 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > > +/*
-> > > + * Copyright (c) 2022 International Business Machines, Inc.
-> > > + */
-> > > +
-> > > +#include <linux/bitops.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/limits.h>
-> > > +#include <linux/mod_devicetable.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/moduleparam.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/watchdog.h>
-> > > +
-> > > +#define DRV_NAME "pseries-wdt"
-> > > +
-> > > +/*
-> > > + * The PAPR's MSB->LSB bit ordering is 0->63.  These macros simplify
-> > > + * defining bitfields as described in the PAPR without needing to
-> > > + * transpose values to the more C-like 63->0 ordering.
-> > > + */
-> > > +#define SETFIELD(_v, _b, _e)    \
-> > > +    (((unsigned long)(_v) << PPC_BITLSHIFT(_e)) & PPC_BITMASK((_b), (_e)))
-> > > +#define GETFIELD(_v, _b, _e)    \
-> > > +    (((unsigned long)(_v) & PPC_BITMASK((_b), (_e))) >> PPC_BITLSHIFT(_e))
-> > > +
-> > > +/*
-> > > + * H_WATCHDOG Hypercall Input
-> > > + *
-> > > + * R4: "flags":
-> > > + *
-> > > + *     A 64-bit value structured as follows:
-> > > + *
-> > > + *         Bits 0-46: Reserved (must be zero).
-> > > + */
-> > > +#define PSERIES_WDTF_RESERVED    PPC_BITMASK(0, 46)
-> > > +
-> > > +/*
-> > > + *         Bit 47: "leaveOtherWatchdogsRunningOnTimeout"
-> > > + *
-> > > + *             0  Stop outstanding watchdogs on timeout.
-> > > + *             1  Leave outstanding watchdogs running on timeout.
-> > > + */
-> > > +#define PSERIES_WDTF_LEAVE_OTHER    PPC_BIT(47)
-> > > +
-> > > +/*
-> > > + *         Bits 48-55: "operation"
-> > > + *
-> > > + *             0x01  Start Watchdog
-> > > + *             0x02  Stop Watchdog
-> > > + *             0x03  Query Watchdog Capabilities
-> > > + *             0x04  Query Watchdog LPM Requirement
-> > > + */
-> > > +#define PSERIES_WDTF_OP(op)        SETFIELD((op), 48, 55)
-> > > +#define PSERIES_WDTF_OP_START        PSERIES_WDTF_OP(0x1)
-> > > +#define PSERIES_WDTF_OP_STOP        PSERIES_WDTF_OP(0x2)
-> > > +#define PSERIES_WDTF_OP_QUERY        PSERIES_WDTF_OP(0x3)
-> > > +#define PSERIES_WDTF_OP_QUERY_LPM    PSERIES_WDTF_OP(0x4)
-> > > +
-> > > +/*
-> > > + *         Bits 56-63: "timeoutAction"
-> > > + *
-> > > + *             0x01  Hard poweroff
-> > > + *             0x02  Hard restart
-> > > + *             0x03  Dump restart
-> > > + */
-> > > +#define PSERIES_WDTF_ACTION(ac)            SETFIELD(ac, 56, 63)
-> > > +#define PSERIES_WDTF_ACTION_HARD_POWEROFF    PSERIES_WDTF_ACTION(0x1)
-> > > +#define PSERIES_WDTF_ACTION_HARD_RESTART    PSERIES_WDTF_ACTION(0x2)
-> > > +#define PSERIES_WDTF_ACTION_DUMP_RESTART    PSERIES_WDTF_ACTION(0x3)
-> > 
-> > > +
-> > > +/*
-> > > + * R5: "watchdogNumber":
-> > > + *
-> > > + *     The target watchdog.  Watchdog numbers are 1-based.  The
-> > > + *     maximum supported watchdog number may be obtained via the
-> > > + *     "Query Watchdog Capabilities" operation.
-> > > + *
-> > > + *     This input is ignored for the "Query Watchdog Capabilities"
-> > > + *     operation.
-> > > + *
-> > > + * R6: "timeoutInMs":
-> > > + *
-> > > + *     The timeout in milliseconds.  The minimum supported timeout may
-> > > + *     be obtained via the "Query Watchdog Capabilities" operation.
-> > > + *
-> > > + *     This input is ignored for the "Stop Watchdog", "Query Watchdog
-> > > + *     Capabilities", and "Query Watchdog LPM Requirement" operations.
-> > > + */
-> > > +
-> > > +/*
-> > > + * H_WATCHDOG Hypercall Output
-> > > + *
-> > > + * R3: Return code
-> > > + *
-> > > + *     H_SUCCESS    The operation completed.
-> > > + *
-> > > + *     H_BUSY        The hypervisor is too busy; retry the operation.
-> > > + *
-> > > + *     H_PARAMETER  The given "flags" are somehow invalid.  Either the
-> > > + *                  "operation" or "timeoutAction" is invalid, or a
-> > > + *                  reserved bit is set.
-> > > + *
-> > > + *     H_P2         The given "watchdogNumber" is zero or exceeds the
-> > > + *                  supported maximum value.
-> > > + *
-> > > + *     H_P3         The given "timeoutInMs" is below the supported
-> > > + *                  minimum value.
-> > > + *
-> > > + *     H_NOOP       The given "watchdogNumber" is already stopped.
-> > > + *
-> > > + *     H_HARDWARE   The operation failed for ineffable reasons.
-> > > + *
-> > > + *     H_FUNCTION   The H_WATCHDOG hypercall is not supported by this
-> > > + *                  hypervisor.
-> > > + *
-> > > + * R4:
-> > > + *
-> > > + * - For the "Query Watchdog Capabilities" operation, a 64-bit
-> > > + *   value structured as follows:
-> > > + *
-> > > + *       Bits  0-15: The minimum supported timeout in milliseconds.
-> > > + *       Bits 16-31: The number of watchdogs supported.
-> > > + *       Bits 32-63: Reserved.
-> > > + */
-> > > +#define PSERIES_WDTQ_MIN_TIMEOUT(cap)    GETFIELD((cap), 0, 15)
-> > > +#define PSERIES_WDTQ_MAX_NUMBER(cap)    GETFIELD((cap), 16, 31)
-> > > +#define PSERIES_WDTQ_RESERVED        PPC_BITMASK(32, 63)
-> > 
-> > PSERIES_WDTQ_RESERVED is not needed as there is a comment above.
-> > 
-> > > +
-> > > +/*
-> > > + * - For the "Query Watchdog LPM Requirement" operation:
-> > > + *
-> > > + *       1  The given "watchdogNumber" must be stopped prior to
-> > > + *          suspending.
-> > > + *
-> > > + *       2  The given "watchdogNumber" does not have to be stopped
-> > > + *          prior to suspending.
-> > > + */
-> > > +#define PSERIES_WDTQL_MUST_STOP        1
-> > > +#define PSERIES_WDTQL_NEED_NOT_STOP    2
-> > > +
-> > > +static unsigned long action = PSERIES_WDTF_ACTION_HARD_RESTART;
-> > > +
-> > > +static int action_get(char *buf, const struct kernel_param *kp)
-> > > +{
-> > > +    int val;
-> > > +
-> > > +    switch (action) {
-> > > +    case PSERIES_WDTF_ACTION_HARD_POWEROFF:
-> > > +        val = 1;
-> > > +        break;
-> > > +    case PSERIES_WDTF_ACTION_HARD_RESTART:
-> > > +        val = 2;
-> > > +        break;
-> > > +    case PSERIES_WDTF_ACTION_DUMP_RESTART:
-> > > +        val = 3;
-> > > +        break;
-> > > +    default:
-> > > +        return -EINVAL;
-> > > +    }
-> > > +    return sprintf(buf, "%d\n", val);
-> > > +}
-> > > +
-> > > +static int action_set(const char *val, const struct kernel_param *kp)
-> > > +{
-> > > +    int choice;
-> > > +
-> > > +    if (kstrtoint(val, 10, &choice))
-> > > +        return -EINVAL;
-> > > +    switch (choice) {
-> > > +    case 1:
-> > > +        action = PSERIES_WDTF_ACTION_HARD_POWEROFF;
-> > > +        return 0;
-> > > +    case 2:
-> > > +        action = PSERIES_WDTF_ACTION_HARD_RESTART;
-> > > +        return 0;
-> > > +    case 3:
-> > > +        action = PSERIES_WDTF_ACTION_DUMP_RESTART;
-> > > +        return 0;
-> > > +    }
-> > > +    return -EINVAL;
-> > > +}
-> > > +
-> > > +static const struct kernel_param_ops action_ops = {
-> > > +    .get = action_get,
-> > > +    .set = action_set,
-> > > +};
-> > > +module_param_cb(action, &action_ops, NULL, 0444);
-> > 
-> > 
-> > 0644 here and below?
-> > 
+On 6/1/22 08:07, Scott Cheloha wrote:
+[ ... ]
+>>>> +static unsigned long action = PSERIES_WDTF_ACTION_HARD_RESTART;
+>>>> +
+>>>> +static int action_get(char *buf, const struct kernel_param *kp)
+>>>> +{
+>>>> +Â Â Â  int val;
+>>>> +
+>>>> +Â Â Â  switch (action) {
+>>>> +Â Â Â  case PSERIES_WDTF_ACTION_HARD_POWEROFF:
+>>>> +Â Â Â Â Â Â Â  val = 1;
+>>>> +Â Â Â Â Â Â Â  break;
+>>>> +Â Â Â  case PSERIES_WDTF_ACTION_HARD_RESTART:
+>>>> +Â Â Â Â Â Â Â  val = 2;
+>>>> +Â Â Â Â Â Â Â  break;
+>>>> +Â Â Â  case PSERIES_WDTF_ACTION_DUMP_RESTART:
+>>>> +Â Â Â Â Â Â Â  val = 3;
+>>>> +Â Â Â Â Â Â Â  break;
+>>>> +Â Â Â  default:
+>>>> +Â Â Â Â Â Â Â  return -EINVAL;
+>>>> +Â Â Â  }
+>>>> +Â Â Â  return sprintf(buf, "%d\n", val);
+>>>> +}
+>>>> +
+>>>> +static int action_set(const char *val, const struct kernel_param *kp)
+>>>> +{
+>>>> +Â Â Â  int choice;
+>>>> +
+>>>> +Â Â Â  if (kstrtoint(val, 10, &choice))
+>>>> +Â Â Â Â Â Â Â  return -EINVAL;
+>>>> +Â Â Â  switch (choice) {
+>>>> +Â Â Â  case 1:
+>>>> +Â Â Â Â Â Â Â  action = PSERIES_WDTF_ACTION_HARD_POWEROFF;
+>>>> +Â Â Â Â Â Â Â  return 0;
+>>>> +Â Â Â  case 2:
+>>>> +Â Â Â Â Â Â Â  action = PSERIES_WDTF_ACTION_HARD_RESTART;
+>>>> +Â Â Â Â Â Â Â  return 0;
+>>>> +Â Â Â  case 3:
+>>>> +Â Â Â Â Â Â Â  action = PSERIES_WDTF_ACTION_DUMP_RESTART;
+>>>> +Â Â Â Â Â Â Â  return 0;
+>>>> +Â Â Â  }
+>>>> +Â Â Â  return -EINVAL;
+>>>> +}
+>>>> +
+>>>> +static const struct kernel_param_ops action_ops = {
+>>>> +Â Â Â  .get = action_get,
+>>>> +Â Â Â  .set = action_set,
+>>>> +};
+>>>> +module_param_cb(action, &action_ops, NULL, 0444);
+>>>
+>>>
+>>> 0644 here and below?
+>>>
+>>
+>> That would make the module parameters have to be runtime
+>> configurable, which does not make sense at least for
+>> the two parameters below.
 > 
-> That would make the module parameters have to be runtime
-> configurable, which does not make sense at least for
-> the two parameters below.
-
-Agreed.
-
-> I don't know though if it is really valuable to have all the
-> above code instead of just
-> storing the action numbers and doing the conversion to action
-> once in the probe function. The above code really only
-> makes sense if the action is changeable during runtime and more
-> is done that just converting it to another value.
-
-Having a setter that runs exactly once during module attach is
-obvious.  We need a corresponding .get() method to convert on the way
-out anyway.
-
-I don't see any upside to moving the action_set() code into
-pseries_wdt_probe() aside from maybe shaving a few SLOC.  The module
-is already very compact.
-
-> > > +MODULE_PARM_DESC(action, "Action taken when watchdog expires (default=2)");
-> > > +
-> > > +static bool nowayout = WATCHDOG_NOWAYOUT;
-> > > +module_param(nowayout, bool, 0444);
-> > > +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-> > > +         __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> > > +
-> > > +#define WATCHDOG_TIMEOUT 60
-> > > +static unsigned int timeout = WATCHDOG_TIMEOUT;
-> > > +module_param(timeout, uint, 0444);
-> > > +MODULE_PARM_DESC(timeout, "Initial watchdog timeout in seconds (default="
-> > > +         __MODULE_STRING(WATCHDOG_TIMEOUT) ")");
-> > > +
-> > > +struct pseries_wdt {
-> > > +    struct watchdog_device wd;
-> > > +    unsigned long num;        /* Watchdog numbers are 1-based */
-> > > +};
-> > > +
-> > > +static int pseries_wdt_start(struct watchdog_device *wdd)
-> > > +{
-> > > +    struct device *dev = wdd->parent;
-> > > +    struct pseries_wdt *pw = watchdog_get_drvdata(wdd);
-> > > +    unsigned long flags, msecs;
-> > > +    long rc;
-> > > +
-> > > +    flags = action | PSERIES_WDTF_OP_START;
-> > > +    msecs = wdd->timeout * 1000UL;
-> > > +    rc = plpar_hcall_norets(H_WATCHDOG, flags, pw->num, msecs);
-> > > +    if (rc != H_SUCCESS) {
-> > > +        dev_crit(dev, "H_WATCHDOG: %ld: failed to start timer %lu",
-> > > +             rc, pw->num);
-> > > +        return -EIO;
-> > > +    }
-> > > +    return 0;
-> > > +}
-> > > +
-> > > +static int pseries_wdt_stop(struct watchdog_device *wdd)
-> > > +{
-> > > +    struct device *dev = wdd->parent;
-> > > +    struct pseries_wdt *pw = watchdog_get_drvdata(wdd);
-> > > +    long rc;
-> > > +
-> > > +    rc = plpar_hcall_norets(H_WATCHDOG, PSERIES_WDTF_OP_STOP, pw->num);
-> > > +    if (rc != H_SUCCESS && rc != H_NOOP) {
-> > > +        dev_crit(dev, "H_WATCHDOG: %ld: failed to stop timer %lu",
-> > > +             rc, pw->num);
-> > > +        return -EIO;
-> > > +    }
-> > > +    return 0;
-> > > +}
-> > > +
-> > > +static struct watchdog_info pseries_wdt_info = {
-> > > +    .identity = DRV_NAME,
-> > > +    .options = WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT
-> > > +        | WDIOF_PRETIMEOUT,
-> > > +};
-> > > +
-> > > +static const struct watchdog_ops pseries_wdt_ops = {
-> > > +    .owner = THIS_MODULE,
-> > > +    .start = pseries_wdt_start,
-> > > +    .stop = pseries_wdt_stop,
-> > > +};
-> > > +
-> > > +static int pseries_wdt_probe(struct platform_device *pdev)
-> > > +{
-> > > +    unsigned long ret[PLPAR_HCALL_BUFSIZE] = { 0 };
-> > > +    unsigned long cap, min_timeout_ms;
-> > > +    long rc;
-> > > +    struct pseries_wdt *pw;
-> > > +    int err;
-> > > +
-> > > +    rc = plpar_hcall(H_WATCHDOG, ret, PSERIES_WDTF_OP_QUERY);
-> > > +    if (rc != H_SUCCESS)
-> > > +        return rc == H_FUNCTION ? -ENODEV : -EIO;
-> > 
-> > Nit:
-> > 
-> > if (rc == H_FUNCTION)
-> >      return -ENODEV;
-> > if (rc != H_SUCCESS)
-> >      return -EIO;
-> > 
-> > ?
-> > 
-> > > +    cap = ret[0];
-> > > +
-> > > +    pw = devm_kzalloc(&pdev->dev, sizeof(*pw), GFP_KERNEL);
-> > > +    if (!pw)
-> > > +        return -ENOMEM;
-> > > +
-> > > +    /*
-> > > +     * Assume watchdogNumber 1 for now.  If we ever support
-> > > +     * multiple timers we will need to devise a way to choose a
-> > > +     * distinct watchdogNumber for each platform device at device
-> > > +     * registration time.
-> > > +     */
-> > > +    pw->num = 1;
-> > > +
-> > > +    pw->wd.parent = &pdev->dev;
-> > > +    pw->wd.info = &pseries_wdt_info;
-> > > +    pw->wd.ops = &pseries_wdt_ops;
-> > > +    min_timeout_ms = PSERIES_WDTQ_MIN_TIMEOUT(cap);
-> > > +    pw->wd.min_timeout = roundup(min_timeout_ms, 1000) / 1000;
+> Agreed.
 > 
-> Any reason for not using min_hw_heartbeat_ms (or, for that matter,
-> at least DIV_ROUND_UP) ?
-
-I'll use DIV_ROUND_UP() in v2, that's a lot nicer.
-
-I'm not using min_hw_heartbeat_ms because there isn't a minimum
-delta between pings.  You can ping these watchdogs as fast as you
-want.
-
-> > > +    pw->wd.max_timeout = UINT_MAX;
+>> I don't know though if it is really valuable to have all the
+>> above code instead of just
+>> storing the action numbers and doing the conversion to action
+>> once in the probe function. The above code really only
+>> makes sense if the action is changeable during runtime and more
+>> is done that just converting it to another value.
 > 
-> This will overflow on builds with sizeof(int) == sizeof(long).
-
-sizeof(long) is always 64 on PPC_PSERIES builds, which this module
-depends upon in the Kconfig.
-
-Do I need a compile-time assertion or is that sufficient?
-
-> > > +    watchdog_init_timeout(&pw->wd, timeout, NULL);
-> > 
-> > 
-> > If PSERIES_WDTF_OP_QUERY returns 2min and this driver's default is 1min, watchdog_init_timeout() returns an error, don't we want to handle it here? Thanks,
-> > 
+> Having a setter that runs exactly once during module attach is
+> obvious.  We need a corresponding .get() method to convert on the way
+> out anyway.
 > 
-> Normally one would set pw->wd.timeout to WATCHDOG_TIMEOUT
-> and pre-initialize the module parameter with 0. That would
-> take care of the problem and at the same time permit the
-> use of the timeout-sec devicetree property on dt systems
-> (which I guess isn't a concern here).
 
-Ah, I see how it works.  Fixed in v2.
+Why would a get method be needed if the module parameter is just kept as-is ?
 
--Scott
+> I don't see any upside to moving the action_set() code into
+> pseries_wdt_probe() aside from maybe shaving a few SLOC.  The module
+> is already very compact.
+> 
+
+I disagree. The get method is unnecessary. The module parameter values (1..3)
+add unnecessary complexity. It could as well be 0..2, making it easier to convert.
+The actual action could be stored in struct pseries_wdt, or converted using something
+like
+
+u8 pseries_actions[] = {
+	PSERIES_WDTF_ACTION_HARD_POWEROFF,
+	PSERIES_WDTF_ACTION_HARD_RESTART,
+	PSERIES_WDTF_ACTION_DUMP_RESTART
+};
+
+	flags = pseries_actions[action] | PSERIES_WDTF_OP_START;
+
+or, alternatively, in probe
+
+	if (action > 2)
+		return -EINVAL;
+	pw->action = pseries_actions[action];
+and, in the start function,
+	flags = pw->action | PSERIES_WDTF_OP_START;
+
+That not only reduces code size but also improves readability.
+get/set methods are useful, but should be limited to cases where they
+are really needed, ie do something besides converting values. You could argue
+that you want to be able to change the reboot method on the fly, by making
+the module parameter writeable, but then the .set method should actually
+change the method accordingly and not just convert values. And even then
+I'd argue that it would be better not to convert the 'action' value itself
+but to keep it at 0, 1, 2 (or 1, 2, 3 if you prefer) and use param_get_uint
+(or param_get_ulong) for the get method.
+
+Regarding max_timeout, we have calculations such as
+
+	unsigned int t = wdd->timeout * 1000;
+
+in the assumption that timeouts larger than UINT_MAX/1000 seconds (or ~50 days)
+don't really make much sense. watchdog_timeout_invalid() will also return -EINVAL
+if the provided timeout value is larger than UINT_MAX / 1000.
+
+Guenter
