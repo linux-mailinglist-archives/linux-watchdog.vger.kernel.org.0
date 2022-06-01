@@ -2,97 +2,67 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E6F53AA91
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jun 2022 17:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D17653ACD6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jun 2022 20:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiFAP4o (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Jun 2022 11:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S233570AbiFAScc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Jun 2022 14:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349560AbiFAP4n (ORCPT
+        with ESMTP id S229871AbiFAScb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Jun 2022 11:56:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF86DE1
-        for <linux-watchdog@vger.kernel.org>; Wed,  1 Jun 2022 08:56:41 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251EuRne029886;
-        Wed, 1 Jun 2022 15:56:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=1QmtR+/oBnsOjp/G0pmWMmsWs7KUzk6cguOjqVX3Tj4=;
- b=bkI1OIWNIvx1wEFaL2YMdI93tNmoculAVwfzPTgm4diSVAw45hpJLJFysNy8IyqiH77w
- WEb0F5j9nlv1o1MkPNlBhjbhUeRDGNy7VI1Du2To5JzpjZrdHFjE1GL++tNK8LlyK/Bh
- Vdf35toK2GbEbHmbtX54pg147/+A+D0qM6g42IoHDgmhQnQCrdOP7jetJe0vLPhyPMkW
- 8Vi5FZJ8hiOOpYvybCy18MimD58/hhCisW+Mb+52Gb8XPE/2Us2u8yidJMxCNMJKZbxO
- WTOVLSefMK1QrrOn2C1nlWYww9989pRd8j9vo9vf9h1YYZiG/TSxeE6/2zZELaUXbZYJ WQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3geaap9cmw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:56:23 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 251FK1mJ003080;
-        Wed, 1 Jun 2022 15:56:23 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3geaap9cmm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:56:23 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 251FdtvJ021485;
-        Wed, 1 Jun 2022 15:56:22 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma01dal.us.ibm.com with ESMTP id 3gcxt5jrgg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Jun 2022 15:56:22 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 251FuL8O27263268
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Jun 2022 15:56:21 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 333A8B206E;
-        Wed,  1 Jun 2022 15:56:21 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0E662B2066;
-        Wed,  1 Jun 2022 15:56:21 +0000 (GMT)
-Received: from localhost (unknown [9.41.178.126])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Jun 2022 15:56:20 +0000 (GMT)
-Date:   Wed, 1 Jun 2022 10:56:20 -0500
-From:   Scott Cheloha <cheloha@linux.ibm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
-        linux-watchdog@vger.kernel.org, tzungbi@kernel.org,
-        brking@linux.ibm.com, nathanl@linux.ibm.com, npiggin@gmail.com,
-        vaishnavi@linux.ibm.com, wvoigt@us.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v1 4/4] watchdog/pseries-wdt: initial support for PAPR
- H_WATCHDOG timers
-Message-ID: <YpeMJGLDnSK6c7RT@rascal-austin-ibm-com>
-References: <20220520183552.33426-1-cheloha@linux.ibm.com>
- <20220520183552.33426-5-cheloha@linux.ibm.com>
- <74498c4b-7b6a-3864-1ae8-57e848a1254c@ozlabs.ru>
- <1f007ad5-8367-9593-bb80-d3564f3cf997@roeck-us.net>
- <YpeArFvOWtk6TQ5r@rascal-austin-ibm-com>
- <a6090ef3-f597-e10b-010b-cc32bff08c93@roeck-us.net>
+        Wed, 1 Jun 2022 14:32:31 -0400
+X-Greylist: delayed 507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 11:32:28 PDT
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5E1A3E0C9;
+        Wed,  1 Jun 2022 11:32:27 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id D6328409E9; Wed,  1 Jun 2022 18:47:51 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org D6328409E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1654102072;
+        bh=1vj6WJ6ARQ0Bom7Std6lVrJRnQykJGc1MrnHVqM+yFA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pa7tCHB5OBLid/FC29WciT4Cn3OCbTNUa/LAyZ3ApITy7+xE5iVGQZpHDBLJEUurB
+         QkHdpsRqq9qdIm6ToL9jQokvUEff6zfGqbHEnITNMdFS9fqntkSEHvrsPQSIdBaBKL
+         7Z+e/91u6ZcWVap3T3FrwbaymuOWmsWpKdpUwdvM=
+Date:   Wed, 1 Jun 2022 18:47:51 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrej Picej <andrej.picej@norik.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        David Heidelberg <david@ixit.cz>,
+        Eliav Farber <farbere@amazon.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Liu Xinpeng <liuxp11@chinatelecom.cn>,
+        Miaoqian Lin <linmq006@gmail.com>, Peng Fan <peng.fan@nxp.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Primoz Fiser <primoz.fiser@norik.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Runyang Chen <runyang.chen@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Xiantao Hu <xt.hu@cqplus1.com>
+Subject: [GIT PULL REQUEST] watchdog - v5.19 Merge window
+Message-ID: <20220601164751.GA15198@www.linux-watchdog.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a6090ef3-f597-e10b-010b-cc32bff08c93@roeck-us.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: EP2IHfWpC4RNEv34j2bYDMx4PCfjfY1U
-X-Proofpoint-GUID: tMvfRn4o10rhNAy0eQSF0EvDN0ZE6KnB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-01_05,2022-06-01_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- phishscore=0 clxscore=1015 bulkscore=0 spamscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206010072
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,132 +70,158 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 08:45:03AM -0700, Guenter Roeck wrote:
-> On 6/1/22 08:07, Scott Cheloha wrote:
-> [ ... ]
-> > > > > +static unsigned long action = PSERIES_WDTF_ACTION_HARD_RESTART;
-> > > > > +
-> > > > > +static int action_get(char *buf, const struct kernel_param *kp)
-> > > > > +{
-> > > > > +††† int val;
-> > > > > +
-> > > > > +††† switch (action) {
-> > > > > +††† case PSERIES_WDTF_ACTION_HARD_POWEROFF:
-> > > > > +††††††† val = 1;
-> > > > > +††††††† break;
-> > > > > +††† case PSERIES_WDTF_ACTION_HARD_RESTART:
-> > > > > +††††††† val = 2;
-> > > > > +††††††† break;
-> > > > > +††† case PSERIES_WDTF_ACTION_DUMP_RESTART:
-> > > > > +††††††† val = 3;
-> > > > > +††††††† break;
-> > > > > +††† default:
-> > > > > +††††††† return -EINVAL;
-> > > > > +††† }
-> > > > > +††† return sprintf(buf, "%d\n", val);
-> > > > > +}
-> > > > > +
-> > > > > +static int action_set(const char *val, const struct kernel_param *kp)
-> > > > > +{
-> > > > > +††† int choice;
-> > > > > +
-> > > > > +††† if (kstrtoint(val, 10, &choice))
-> > > > > +††††††† return -EINVAL;
-> > > > > +††† switch (choice) {
-> > > > > +††† case 1:
-> > > > > +††††††† action = PSERIES_WDTF_ACTION_HARD_POWEROFF;
-> > > > > +††††††† return 0;
-> > > > > +††† case 2:
-> > > > > +††††††† action = PSERIES_WDTF_ACTION_HARD_RESTART;
-> > > > > +††††††† return 0;
-> > > > > +††† case 3:
-> > > > > +††††††† action = PSERIES_WDTF_ACTION_DUMP_RESTART;
-> > > > > +††††††† return 0;
-> > > > > +††† }
-> > > > > +††† return -EINVAL;
-> > > > > +}
-> > > > > +
-> > > > > +static const struct kernel_param_ops action_ops = {
-> > > > > +††† .get = action_get,
-> > > > > +††† .set = action_set,
-> > > > > +};
-> > > > > +module_param_cb(action, &action_ops, NULL, 0444);
-> > > > 
-> > > > 
-> > > > 0644 here and below?
-> > > > 
-> > > 
-> > > That would make the module parameters have to be runtime
-> > > configurable, which does not make sense at least for
-> > > the two parameters below.
-> > 
-> > Agreed.
-> > 
-> > > I don't know though if it is really valuable to have all the
-> > > above code instead of just
-> > > storing the action numbers and doing the conversion to action
-> > > once in the probe function. The above code really only
-> > > makes sense if the action is changeable during runtime and more
-> > > is done that just converting it to another value.
-> > 
-> > Having a setter that runs exactly once during module attach is
-> > obvious.  We need a corresponding .get() method to convert on the way
-> > out anyway.
-> > 
-> 
-> Why would a get method be needed if the module parameter is just kept as-is ?
 
-In my original plan they weren't kept as-is.  They were converted on
-the way in and on the way out.
+Hi Linus,
 
-> > I don't see any upside to moving the action_set() code into
-> > pseries_wdt_probe() aside from maybe shaving a few SLOC.  The module
-> > is already very compact.
-> 
-> I disagree. The get method is unnecessary. The module parameter values (1..3)
-> add unnecessary complexity. It could as well be 0..2, making it easier to convert.
+Please pull the watchdog changes for the v5.19 release cycle.
 
-Yes, we could do that.
+This series contains:
+* Add MediaTek MT8186 support
+* Add Mediatek MT7986 reset-controller support
+* Add i.MX93 support
+* Add watchdog driver for Sunplus SP7021
+* Add SC8180X and SC8280XP compatibles
+* Add Renesas RZ/N1 Watchdog driver and support for RZ/N1
+* rzg2l_wdt improvements and fixes
+* Several other improvements and fixes
 
-> The actual action could be stored in struct pseries_wdt, or converted using something
-> like
-> 
-> u8 pseries_actions[] = {
-> 	PSERIES_WDTF_ACTION_HARD_POWEROFF,
-> 	PSERIES_WDTF_ACTION_HARD_RESTART,
-> 	PSERIES_WDTF_ACTION_DUMP_RESTART
-> };
-> 
-> 	flags = pseries_actions[action] | PSERIES_WDTF_OP_START;
-> 
-> or, alternatively, in probe
-> 
-> 	if (action > 2)
-> 		return -EINVAL;
-> 	pw->action = pseries_actions[action];
-> and, in the start function,
-> 	flags = pw->action | PSERIES_WDTF_OP_START;
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
 
-I like this, we'll go with this.
+  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
 
-> That not only reduces code size but also improves readability.
-> get/set methods are useful, but should be limited to cases where they
-> are really needed, ie do something besides converting values. You could argue
-> that you want to be able to change the reboot method on the fly, by making
-> the module parameter writeable, but then the .set method should actually
-> change the method accordingly and not just convert values. And even then
-> I'd argue that it would be better not to convert the 'action' value itself
-> but to keep it at 0, 1, 2 (or 1, 2, 3 if you prefer) and use param_get_uint
-> (or param_get_ulong) for the get method.
+are available in the git repository at:
 
-Okay, that makes sense.
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.19-rc1
 
-> Regarding max_timeout, we have calculations such as
-> 
-> 	unsigned int t = wdd->timeout * 1000;
-> 
-> in the assumption that timeouts larger than UINT_MAX/1000 seconds (or ~50 days)
-> don't really make much sense. watchdog_timeout_invalid() will also return -EINVAL
-> if the provided timeout value is larger than UINT_MAX / 1000.
+for you to fetch changes up to 5d24df3d690809952528e7a19a43d84bc5b99d44:
 
-Oh, I see.  Changed in v2.
+  watchdog: ts4800_wdt: Fix refcount leak in ts4800_wdt_probe (2022-05-21 10:09:31 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 5.19-rc1 tag
+
+----------------------------------------------------------------
+Andre Przywara (2):
+      dt-bindings: watchdog: sunxi: fix F1C100s compatible
+      dt-bindings: watchdog: sunxi: clarify clock support
+
+Andrej Picej (1):
+      dt-bindings: watchdog: da9062: add watchdog timeout mode
+
+Biju Das (8):
+      watchdog: rzg2l_wdt: Fix 32bit overflow issue
+      watchdog: rzg2l_wdt: Fix Runtime PM usage
+      watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait context'
+      watchdog: rzg2l_wdt: Fix reset control imbalance
+      watchdog: rzg2l_wdt: Add error check for reset_control_deassert
+      watchdog: rzg2l_wdt: Use force reset for WDT reset
+      watchdog: rzg2l_wdt: Add set_timeout callback
+      dt-bindings: watchdog: renesas,wdt: Document RZ/G2UL SoC
+
+Bjorn Andersson (1):
+      dt-bindings: watchdog: Add SC8180X and SC8280XP compatibles
+
+Corentin Labbe (1):
+      dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
+
+David Heidelberg (1):
+      dt-bindings: watchdog: improve QCOM compatible parsing for modern chips
+
+Eliav Farber (1):
+      watchdog: sp805: disable watchdog on remove
+
+Geert Uytterhoeven (1):
+      dt-bindings: watchdog: renesas,wdt: R-Car V3U is R-Car Gen4
+
+Jan Kiszka (1):
+      watchdog: rti_wdt: Fix calculation and evaluation of preset heartbeat
+
+Jean-Jacques Hiblot (1):
+      dt-bindings: watchdog: renesas,wdt: Add support for RZ/N1
+
+Kunihiko Hayashi (1):
+      dt-bindings: watchdog: uniphier: Use unevaluatedProperties
+
+Lad Prabhakar (1):
+      dt-bindings: watchdog: renesas,wdt: Document RZ/V2L SoC
+
+Liu Xinpeng (4):
+      watchdog: iTCO_wdt: Using existing macro define covers more scenarios
+      watchdog: wdat_wdt: Using the existing function to check parameter timeout
+      watchdog: wdat_wdt: Stop watchdog when rebooting the system
+      watchdog: wdat_wdt: Stop watchdog when uninstalling module
+
+Miaoqian Lin (2):
+      watchdog: rti-wdt: Fix pm_runtime_get_sync() error checking
+      watchdog: ts4800_wdt: Fix refcount leak in ts4800_wdt_probe
+
+Peng Fan (1):
+      dt-bindings: watchdog: imx7ulp-wdt: Add imx93 compatible string
+
+Phil Edworthy (1):
+      watchdog: Add Renesas RZ/N1 Watchdog driver
+
+Primoz Fiser (2):
+      dt-bindings: mfd: da9063: watchdog: add suspend disable option
+      watchdog: da9063: optionally disable watchdog during suspend
+
+Rafa≈Ç Mi≈Çecki (1):
+      watchdog: bcm7038_wdt: Support BCM6345 compatible string
+
+Rex-BC Chen (1):
+      dt-bindings: watchdog: Add compatible for MediaTek MT8186
+
+Runyang Chen (2):
+      dt-bindings: reset: mt8186: add reset-controller header file
+      watchdog: mediatek: mt8186: add wdt support
+
+Sam Shih (2):
+      watchdog: mtk_wdt: mt7986: Add toprgu reset controller support
+      dt-bindings: reset: mt7986: Add reset-controller header file
+
+Xiantao Hu (2):
+      dt-bindings: watchdog: Add watchdog yaml file for Sunplus SP7021
+      watchdog: Add watchdog driver for Sunplus SP7021
+
+ Documentation/devicetree/bindings/mfd/da9063.txt   |   9 +-
+ .../bindings/watchdog/allwinner,sun4i-a10-wdt.yaml |  24 +--
+ .../devicetree/bindings/watchdog/da9062-wdt.txt    |   6 +
+ .../bindings/watchdog/faraday,ftwdt010.txt         |  22 ---
+ .../bindings/watchdog/faraday,ftwdt010.yaml        |  67 +++++++
+ .../bindings/watchdog/fsl-imx7ulp-wdt.yaml         |   1 +
+ .../devicetree/bindings/watchdog/mtk-wdt.txt       |   1 +
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |  39 ++--
+ .../devicetree/bindings/watchdog/renesas,wdt.yaml  |  12 +-
+ .../bindings/watchdog/socionext,uniphier-wdt.yaml  |   2 +-
+ .../bindings/watchdog/sunplus,sp7021-wdt.yaml      |  47 +++++
+ MAINTAINERS                                        |   7 +
+ drivers/watchdog/Kconfig                           |  19 ++
+ drivers/watchdog/Makefile                          |   2 +
+ drivers/watchdog/bcm7038_wdt.c                     |   1 +
+ drivers/watchdog/da9063_wdt.c                      |  36 ++++
+ drivers/watchdog/iTCO_wdt.c                        |  20 +-
+ drivers/watchdog/mtk_wdt.c                         |  12 ++
+ drivers/watchdog/rti_wdt.c                         |  10 +-
+ drivers/watchdog/rzg2l_wdt.c                       |  83 ++++----
+ drivers/watchdog/rzn1_wdt.c                        | 203 +++++++++++++++++++
+ drivers/watchdog/sp805_wdt.c                       |   1 +
+ drivers/watchdog/sunplus_wdt.c                     | 220 +++++++++++++++++++++
+ drivers/watchdog/ts4800_wdt.c                      |   5 +-
+ drivers/watchdog/wdat_wdt.c                        |   6 +-
+ include/dt-bindings/reset/mt7986-resets.h          |  55 ++++++
+ include/dt-bindings/reset/mt8186-resets.h          |  36 ++++
+ 27 files changed, 831 insertions(+), 115 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+ create mode 100644 drivers/watchdog/rzn1_wdt.c
+ create mode 100644 drivers/watchdog/sunplus_wdt.c
+ create mode 100644 include/dt-bindings/reset/mt7986-resets.h
+ create mode 100644 include/dt-bindings/reset/mt8186-resets.h
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
