@@ -2,90 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002BD53B936
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Jun 2022 14:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1497153BD9E
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Jun 2022 19:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235093AbiFBM6w (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 2 Jun 2022 08:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S235859AbiFBRya (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Jun 2022 13:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbiFBM6v (ORCPT
+        with ESMTP id S237750AbiFBRy3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 2 Jun 2022 08:58:51 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF666267CD9;
-        Thu,  2 Jun 2022 05:58:48 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id k11so6369216oia.12;
-        Thu, 02 Jun 2022 05:58:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9Sl40eTqdPmzEKppcJA4FQwmfcLIIy0ie+JY3OH9t8Y=;
-        b=1Kgs5Vr4Qhz/YHIeBZiOW5mBeQ9cwjp8wd+G5DpNxr7cZJMM8JQvM47O2KqnpL/OHX
-         rl6oAp4RQYr73PQPBHs8PVcQDG5FAi9bqn8uuaeO8Cxky1DxrEgYEddRuvnualyHlpcw
-         yhyM/z9hskI2QkgA+O0fMfRO3ZyRQeTYcff+m47UR+iYmbp4oEPTh+fQHwzopqM7JIbh
-         dH00bfST1NCQTitMfNRrPX4ce2rd+rgJpc5SdaqIJilzao15Uluf+B8liJJst27QzJEg
-         MHY+YV911KNZn/vSAUwzBOwPBNUVll1WL8I6sgmVDRdWYpK+bzlVloxw0WG0SKnXRifm
-         Zp4Q==
-X-Gm-Message-State: AOAM532gc15+1k/IMn8TX9rpwNaZ3Dmxo1vnhgc0COzuK9ZNfcegYF+0
-        buAYYNirpuWP2UJVkOFgM00b9QD10w==
-X-Google-Smtp-Source: ABdhPJwH6fy65rUHt6Lx51K//7iArjhtsHzTFqg2VRAtu11CoBlEcwO2/HjeRWn2atnzqNt3dkCjhg==
-X-Received: by 2002:a05:6808:1584:b0:32b:314a:54ef with SMTP id t4-20020a056808158400b0032b314a54efmr17995256oiw.41.1654174727364;
-        Thu, 02 Jun 2022 05:58:47 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 63-20020aca0542000000b00325643bce40sm2314868oif.0.2022.06.02.05.58.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 05:58:46 -0700 (PDT)
-Received: (nullmailer pid 2095464 invoked by uid 1000);
-        Thu, 02 Jun 2022 12:58:45 -0000
-Date:   Thu, 2 Jun 2022 07:58:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        sboyd@kernel.org, olof@lixom.net, venture@google.com,
-        vkoul@kernel.org, jirislaby@kernel.org,
-        nobuhiro1.iwamatsu@toshiba.co.jp, arnd@arndb.de,
-        daniel.lezcano@linaro.org, joel@jms.id.au, soc@kernel.org,
-        devicetree@vger.kernel.org, tali.perry1@gmail.com, will@kernel.org,
-        catalin.marinas@arm.com, linux@roeck-us.net,
-        linux-serial@vger.kernel.org, bjorn.andersson@linaro.org,
-        linux-watchdog@vger.kernel.org, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, j.neuschaefer@gmx.net,
-        wim@linux-watchdog.org, krzysztof.kozlowski+dt@linaro.org,
-        benjaminfair@google.com, mturquette@baylibre.com,
-        p.zabel@pengutronix.de, linux-clk@vger.kernel.org,
-        avifishman70@gmail.com, geert+renesas@glider.be, yuenn@google.com,
-        tglx@linutronix.de, robh+dt@kernel.org,
-        marcel.ziswiler@toradex.com, biju.das.jz@bp.renesas.com,
-        robert.hancock@calian.com, lkundrak@v3.sk
-Subject: Re: [PATCH v1 13/19] dt-bindings: arm: npcm: Add maintainer
-Message-ID: <20220602125845.GA2095431-robh@kernel.org>
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-14-tmaimon77@gmail.com>
+        Thu, 2 Jun 2022 13:54:29 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F1B2B12D3
+        for <linux-watchdog@vger.kernel.org>; Thu,  2 Jun 2022 10:54:28 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252H1Bt1015485;
+        Thu, 2 Jun 2022 17:54:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=/AOMAB4jrHJ7iDP6NhxsrYS7ZS2h10/BDzF5cTYrCvg=;
+ b=AQXfA2se0wOEBJrX3mSTBDOfR0GP+hZc9IcsrbSzfhl9SdpixoscQ/oaP9/PsLDUdoDI
+ y1RsIUYYepnTI7VMyi2QPSEUvUhUT+o6RjyXE/HQCs8hTG8p7fAdwFVFWgv/R2xFdAxB
+ g/M6PMmLoHg4wRLtSwWzOZhQeEYEllzwNESMMX6PKIa9wnUjuj2GCNKc7dckARfvrmrD
+ otsxur7O5PzExYyQ+Ecn74+6KgImKO1wIkPBUpVGwiVkSviCnEQLF/AeX7k1IgQTs3gv
+ OWlVjbkayj7ols18QzGYM4oxmreq0rC32c2wqB+vZ4TVKwVudSxvOU37FQsRTovhdgGL GQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gevu4pq6f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 17:54:07 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 252H9KVc003811;
+        Thu, 2 Jun 2022 17:54:07 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gevu4pq6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 17:54:07 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 252Ho3YB012965;
+        Thu, 2 Jun 2022 17:54:06 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02wdc.us.ibm.com with ESMTP id 3gbc93431x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Jun 2022 17:54:06 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 252Hs58f28180898
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Jun 2022 17:54:05 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B3F4AC605A;
+        Thu,  2 Jun 2022 17:54:05 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 937A3C6059;
+        Thu,  2 Jun 2022 17:54:05 +0000 (GMT)
+Received: from localhost (unknown [9.41.178.126])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Jun 2022 17:54:05 +0000 (GMT)
+From:   Scott Cheloha <cheloha@linux.ibm.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     linux@roeck-us.net, tzungbi@kernel.org, brking@linux.ibm.com,
+        nathanl@linux.ibm.com, aik@ozlabs.ru, npiggin@gmail.com,
+        vaishnavi@linux.ibm.com, wvoigt@us.ibm.com,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 0/4] pseries-wdt: initial support for H_WATCHDOG-based watchdog timers
+Date:   Thu,  2 Jun 2022 12:53:49 -0500
+Message-Id: <20220602175353.68942-1-cheloha@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: t7RTpSfJ-J27zp-xtXlycfpzS_l9hs9b
+X-Proofpoint-GUID: hHBHgXDHIUOzUDb0-w-QkgG5wpWMryyK
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220522155046.260146-14-tmaimon77@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-02_05,2022-06-02_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 suspectscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206020073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, 22 May 2022 18:50:40 +0300, Tomer Maimon wrote:
-> Add Tomer Maimon to the maintainers list.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/npcm/npcm.yaml        | 1 +
->  Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml | 1 +
->  2 files changed, 2 insertions(+)
-> 
+PAPR v2.12 defines a new hypercall, H_WATCHDOG.  This patch series
+adds support for this hypercall to powerpc/pseries kernels and
+introduces a new watchdog driver, "pseries-wdt", for the virtual
+timers exposed by the hypercall.
 
-Acked-by: Rob Herring <robh@kernel.org>
+This series is preceded by the following:
+
+RFC v1: https://lore.kernel.org/linux-watchdog/20220413165104.179144-1-cheloha@linux.ibm.com/
+RFC v2: https://lore.kernel.org/linux-watchdog/20220509174357.5448-1-cheloha@linux.ibm.com/
+PATCH v1: https://lore.kernel.org/linux-watchdog/20220520183552.33426-1-cheloha@linux.ibm.com/
+
+Changes of note from PATCH v1:
+
+- Trim down the large comment documenting the H_WATCHDOG hypercall.
+  The comment is likely to rot, so remove anything we aren't using
+  and anything overly obvious.
+
+- Remove any preprocessor definitions not actually used in the module
+  right now.  If we want to use other features offered by the hypercall
+  we can add them in later.  They're just clutter until then.
+
+- Simplify the "action" module parameter.  The value is now an index
+  into an array of possible timeoutAction values.  This design removes
+  the need for the custom get/set methods used in PATCH v1.
+
+  Now we merely need to check that the "action" value is a valid
+  index during pseries_wdt_probe().  Easy.
+
+- Make the timeoutAction a member of pseries_wdt, "action".  This
+  eliminates the use of a global variable during pseries_wdt_start().
+
+- Use watchdog_init_timeout() idiomatically.  Check its return value
+  and error out of pseries_wdt_probe() if it fails.
+
+
