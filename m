@@ -2,128 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7C053CD15
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Jun 2022 18:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A9053D38B
+	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Jun 2022 00:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343855AbiFCQWo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Jun 2022 12:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S1346651AbiFCWRe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Jun 2022 18:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343813AbiFCQWm (ORCPT
+        with ESMTP id S234075AbiFCWRd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Jun 2022 12:22:42 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF9122519;
-        Fri,  3 Jun 2022 09:22:41 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e93bbb54f9so11162648fac.12;
-        Fri, 03 Jun 2022 09:22:41 -0700 (PDT)
+        Fri, 3 Jun 2022 18:17:33 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA351837B
+        for <linux-watchdog@vger.kernel.org>; Fri,  3 Jun 2022 15:17:29 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id v22so16087840ybd.5
+        for <linux-watchdog@vger.kernel.org>; Fri, 03 Jun 2022 15:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MG4fB5L16PJOB6eygIdqZV5Ksttsv4vvkIROtuQ0QKg=;
-        b=joqdIXgCTJQK6rmOLq9hEzhW5hwG3cLQXUjb+cboAdPNERXpcXFUz62Yn33raBmc3o
-         blplY+PffT0s0Ma3Gjv1Dfji90dnBCQ0JR2M8adnSDl9hJoyKJqgg3aWFvyFxeB5RM+K
-         YoAkXQ88H8i9uUo9rKmbeuT/ZimhUj19/+ld6yWtzKNq1afkr3t3eiBm7Wso6leCedKO
-         cuYkfF5vxJ3xYJodra8xm2bhjpd+/hhXjeu6V0/G4NB9CrRPaFaXSDKbCX7KZsCwi2wh
-         jgjHN74aQl6bGwmJ2pDkbljmkUhKU6f8aC4TFk5T5u6RrZj1ScAJgyYyVZMHyM/ekVkJ
-         64vw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kxzrEA8REDaWwoEI9SXIgLGpIqpF9GSswLISAQIrJrw=;
+        b=i0f4i2hSBuOwU6Z41zZp12Xn6+SOGWUZoafYmhtlRSD81/YGKiB1a3m9qdHb90RuKw
+         qVRQ9b2yETSdL7OWP0uGpezSJSoI1oKCTTrN4ZsFqGvUDpToHAVB4Qpv/GsVsDDF8Wx2
+         eJQ0KBbU3MkUuanKZ+0Bs8ScSTt7loYEkVUyfdYbXrOLue05KM0lxYKXm6UJV4GGXRrb
+         EX+zfLF3pDx5Llz75rqxEW7Y4X7BV+ZZhiCDfugMQiZ10IYeDO9mX9vNM1hSaH4NuRzK
+         3K1yZswoM1W83g6r0fQRP4EgkK7wT79byzWjUbX/MRrrqbb9CW5UNK08uOiKje6SRTOw
+         myRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MG4fB5L16PJOB6eygIdqZV5Ksttsv4vvkIROtuQ0QKg=;
-        b=q4VDddI+QV9bvDivCISA403lqF09R7dQMCssj1lIxbg0tfAg6ncGIVWR33DuCgEoj+
-         0Fa/gc+QI7TQO8SGg+vTZUOrbRA1fNWY3RgQ9WCLSUmJk6LZnN7JX7V46USJNxpJ5UIw
-         7Y/a5e8P+qqkMt6Kg2fPUCG2XYnubceSRHjPkWBkT+g6rasYjFv4zA7Z1HVo+RhMg1CI
-         Y2VlGY6XiktwGC9b2Vlj9H8K8vdbFyiK4XF7qZCT1JEZya9QZPlX99FyMlXllMZPOAjt
-         VkKkerHrydYk7UlogzRMqNnNv+Bf1fDLyMFxpZN+Fr0rpM9cwtaBr3/VcxjjvwvGs8A9
-         MsMg==
-X-Gm-Message-State: AOAM533nIMgvlWy9pSnN3rfYWOyG1ozmMcevcUKoueKdq974HJFzogZ1
-        lRpK1uBW3A/AWJvgNkrv5gBga8wVlcU=
-X-Google-Smtp-Source: ABdhPJx2XtRXI3hkPrfqrFyv7zA3+CCZ1oBRo6S2VY+rDVqlMJ2cFUadZ8sCGk08GLh4x3pQ99KDyw==
-X-Received: by 2002:a05:6870:891f:b0:e1:ec98:3c59 with SMTP id i31-20020a056870891f00b000e1ec983c59mr6325967oao.295.1654273361054;
-        Fri, 03 Jun 2022 09:22:41 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056870530900b000f33b23a030sm3412594oan.57.2022.06.03.09.22.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 09:22:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4ef87536-7a71-0d1b-3121-94e763041562@roeck-us.net>
-Date:   Fri, 3 Jun 2022 09:22:37 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kxzrEA8REDaWwoEI9SXIgLGpIqpF9GSswLISAQIrJrw=;
+        b=mIA1Kvb9AShdVqMz3Nr5GyxlIomPYMWWG4UFgqPKOxzmD3tjvQeNcTgEjDEs3kuMTI
+         LVzPKA1C3nS8KsMOxHIA57Nhk697qFUFqjFMWh2jrgecgx4oSiRuVLgPvtZ00/k3tnPk
+         B20hy6P1uk3IjxtjvZerBadxWja9N5ABkNhtnPm4INSO6gVkI0m/7DaHx6mJ0/AuF1wj
+         V6Uur6kyGwBsC2zoSfpvdkaGfiiVoC0SCl+6eAEeg3ykHrNYtoJMjLQSA/A6kXWbsDY9
+         5VGU7iShnaMXWRBSFQpsBckBPM9luttk4AF6f0hjCbSE5Wv/Qp8fPRqLUmJ/N6F7sVuh
+         9fzw==
+X-Gm-Message-State: AOAM530X3EBen9O+Z2fdF4IdcnrHws1Ml7fFKMvKroDKVMGwhcM/UB3j
+        1/jteGfgw9uhaiGLzh1c1QhW//eEZzx1ynrctK2K2w==
+X-Google-Smtp-Source: ABdhPJwY0Fv0WkN3GP24DF4ef8lrbyIIqDa/jyBs+8pVca4YN0rLWkYrK6fB3G72aScon/VocRlxYEWULbwUdPCqnb8=
+X-Received: by 2002:a5b:302:0:b0:64b:a20a:fcd9 with SMTP id
+ j2-20020a5b0302000000b0064ba20afcd9mr13248417ybp.492.1654294648626; Fri, 03
+ Jun 2022 15:17:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 6/6] watchdog: max77620: update Luca Ceresoli's e-mail
- address
-Content-Language: en-US
-To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20220526014127.2872254-1-robh@kernel.org>
+In-Reply-To: <20220526014127.2872254-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 4 Jun 2022 00:17:17 +0200
+Message-ID: <CACRpkdYRumCbt4tQs2+KeMdVjEt07J=0hAUynTHKeQ3mC1o5kQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: watchdog: faraday: Fix typo in example
+ 'timeout-sec' property
+To:     Rob Herring <robh@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Leon Luo <leonl@leopardimaging.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>
-References: <20220603155727.1232061-1-luca@lucaceresoli.net>
- <20220603155727.1232061-6-luca@lucaceresoli.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220603155727.1232061-6-luca@lucaceresoli.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Corentin Labbe <clabbe@baylibre.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 6/3/22 08:57, Luca Ceresoli wrote:
-> My Bootlin address is preferred from now on.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+On Thu, May 26, 2022 at 3:41 AM Rob Herring <robh@kernel.org> wrote:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> The 'unevaluatedProperties' schema checks is not fully working and doesn't
+> catch some cases where there's a $ref to another schema. A fix is pending,
+> but results in new warnings in examples.
+>
+> The correct common watchdog property is 'timeout-sec', not 'timeout-secs'.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-An entry in .mailmap might be easier, though.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Guenter
+This kind of stuff is exactly what we wanted schema to find and fix.
+And now it is delivering. Success!
 
-> ---
->   drivers/watchdog/max77620_wdt.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
-> index b76ad6ba0915..33835c0b06de 100644
-> --- a/drivers/watchdog/max77620_wdt.c
-> +++ b/drivers/watchdog/max77620_wdt.c
-> @@ -6,7 +6,7 @@
->    * Copyright (C) 2022 Luca Ceresoli
->    *
->    * Author: Laxman Dewangan <ldewangan@nvidia.com>
-> - * Author: Luca Ceresoli <luca@lucaceresoli.net>
-> + * Author: Luca Ceresoli <luca.ceresoli@bootlin.com>
->    */
->   
->   #include <linux/err.h>
-> @@ -260,5 +260,5 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started "
->   	"(default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->   
->   MODULE_AUTHOR("Laxman Dewangan <ldewangan@nvidia.com>");
-> -MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
-> +MODULE_AUTHOR("Luca Ceresoli <luca.ceresoli@bootlin.com>");
->   MODULE_LICENSE("GPL v2");
-
+Yours,
+Linus Walleij
