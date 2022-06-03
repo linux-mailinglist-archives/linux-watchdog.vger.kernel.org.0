@@ -2,85 +2,98 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D8D53C812
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Jun 2022 12:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D7A53CA80
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Jun 2022 15:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiFCKCz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Jun 2022 06:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S244549AbiFCNO1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Jun 2022 09:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242323AbiFCKCy (ORCPT
+        with ESMTP id S241257AbiFCNOY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Jun 2022 06:02:54 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9E26241;
-        Fri,  3 Jun 2022 03:02:53 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id k16so9757761wrg.7;
-        Fri, 03 Jun 2022 03:02:53 -0700 (PDT)
+        Fri, 3 Jun 2022 09:14:24 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59292DA89;
+        Fri,  3 Jun 2022 06:14:22 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id h9-20020a056830400900b0060b03bfe792so5482823ots.12;
+        Fri, 03 Jun 2022 06:14:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=sYHeWkVxny/ObhZoM4brVHTU97s0cgwQP8a4JEenA38=;
-        b=po39md/xI0LwRWCjM4OfXa3aKeZ37Zlfm6fInusj/f9e8DVo6UJGWpNVG9Vkcu+4Et
-         eylZVg2+ExXUBPrhA80RTLuNRfuEz8Wf4kP75oDGPzfHcJcHQadYQrgssxq58jrIGiof
-         WKbZmKZ6wTJ86c9WvCxsCjDn6t+dFP9dmYKpYfn9QSJ5xgIs7WrGTBAwvJr76FeBIreB
-         E5nBlD/3/1hogCaZpnbijWxzy3gj//kmjqCVaBEgl2dVp0ORv6ldrhzIyV4ApnDyFf0Y
-         7Mw4qtrSLTI5rNtvXZ5Jjb3KBFXO9F2MZrJnWwpqU3BYg2IULUAUfNhdAmXkbdQd3Ieo
-         FCqQ==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rCnbF91LIkxHhaVG1Alz8mNBG7NVUai+EV3oRdthdwc=;
+        b=epaLeTStOQVQYmyc06vyKPPmUEuubF/tg7w534cTgzzVx2tPJL/ZnYn1soMrzu57E0
+         nIxFlixwXwZN219KY+LIw7+FTp1qQceiltp3eeumhoeyD4WK9XNO/u2Ik+e6dyz1VgW4
+         Ln2G3FidUo0WLdPf9MNJKjNfR7mg2oB0tuNH1Mj6/brEnJ4sHXK8w0q/Rj8pM/x2mVcd
+         GMd78NM38faYaqn7umXeLkvGJbG0Q/vjg1dc+gw6vME3SdWFGfimEKEhHyks3FYPO5+O
+         FgbEQ2JWTJ2PocwCKTgSIyKt2PxQNQbQtLoDO9KatvCVPeA+0XSA/IGuiBmL2Opj8rCN
+         JdbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=sYHeWkVxny/ObhZoM4brVHTU97s0cgwQP8a4JEenA38=;
-        b=XOoYFBUOgBFfRY+Bqhei3otkDhnpdbhisncJBp8x5ljZ32tM+5tsXn0wanza3azmn5
-         y3cU9oynKCD5dDkLFJXe42rqQOrE/ZXDIqPe/Vc50ZS5iD7AadZ5B5m+M1lbIEz0LMZ8
-         Xuspxo5DI3kC/fba6pXnjsuQQxxVUWCqOaQsUtmu9PCkyMep0HFan8iNgPyYpMvunmoJ
-         U3KQnzZAsy40ozC4/fqEgs/Sc6yD2Lra+E3yBxcfv3J8e1ye5Cy0pUSiHZn0ZpwXrAeP
-         gly005UiygmEA6UE65e38ebkJ/kvSuOvNWMKJfoko/KjCVCOWQEofhN7q6PtjoJATQzw
-         Rgbg==
-X-Gm-Message-State: AOAM531cbcqAK9snJYpsgJE+uEeEydvIYkdF8G/1+wy19gT2eHbh1S3j
-        gPucJ/UVrP67enb1RM4H/YU=
-X-Google-Smtp-Source: ABdhPJwBpGUch9cmU1s88YRUrOBWW2lMWJYsoinsgV5YwUZzOrPJvX0MoVLlzG8Vz9FVPSJd9ghGTg==
-X-Received: by 2002:a5d:6a0e:0:b0:213:1f7f:e1cc with SMTP id m14-20020a5d6a0e000000b002131f7fe1ccmr6255238wru.31.1654250572061;
-        Fri, 03 Jun 2022 03:02:52 -0700 (PDT)
-Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
-        by smtp.gmail.com with ESMTPSA id q7-20020a05600c2e4700b003974860e15esm2879639wmf.40.2022.06.03.03.02.51
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=rCnbF91LIkxHhaVG1Alz8mNBG7NVUai+EV3oRdthdwc=;
+        b=yk5jRnB3xUTggNjvTK82AayYnAlq7+bP1sjcZkZ1bUeiRliS9ap1nMgPQPSE33ofGn
+         39sOwlwlJRJKKgMe0fGCGpL/9bs13kMdMqDv9NaW9CaPdfafhdEp1NxWWqvMQGET201j
+         xFlWBNpBsEgxNJ8YGGbcZwmxrLsxo7UBKcTJhNL5kYy/XcT7VtTFXeAcjFeWeAgMvdim
+         5hZjytIh/oLHJjM9slrfY//p0QOVAfxmJbZwx/INXKkLMTr685Dcmich6gidJJRsgidW
+         oAKoTHlvldXqFaxL3Wz2pt1fQb5EsWXAaEL9Lh1W/2saYXrG9RLk+HMUlwj3RL028ePP
+         pfyg==
+X-Gm-Message-State: AOAM5320RLgZpx+be9eQv80Lm+Crj7RqqfSL08vE78TwoCO2KUczRW1p
+        VDcdVVaUvR8UR3E9tcU+m/g=
+X-Google-Smtp-Source: ABdhPJzLtEwQ/esm74d/F634Zk44P3yo84Oy3SfH5ELpHgfOwaQKdIcDChbPMdKw3xr6O3VY+K5ibA==
+X-Received: by 2002:a9d:6a8f:0:b0:60b:c33f:46f4 with SMTP id l15-20020a9d6a8f000000b0060bc33f46f4mr2881236otq.296.1654262062300;
+        Fri, 03 Jun 2022 06:14:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n13-20020aca240d000000b00326d2cba5d3sm3940151oic.8.2022.06.03.06.14.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 03:02:51 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 11:02:49 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Nick Hawkins <nick.hawkins@hpe.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org
-Subject: mainline build failure due to 6b47441bed49 ("watchdog: hpe-wdt:
- Introduce HPE GXP Watchdog")
-Message-ID: <YpncSXSTTyKGprLi@debian>
+        Fri, 03 Jun 2022 06:14:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Jean-Marie Verdun <verdun@hpe.com>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] watchdog: gxp: Add missing MODULE_LICENSE
+Date:   Fri,  3 Jun 2022 06:14:19 -0700
+Message-Id: <20220603131419.2948578-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi All,
+The build system says:
 
-The latest mainline kernel branch fails to build for "arm allmodconfig"
-with the error:
 ERROR: modpost: missing MODULE_LICENSE() in drivers/watchdog/gxp-wdt.o
-make[1]: *** [scripts/Makefile.modpost:134: modules-only.symvers] Error 1
 
-The file is missing MODULE_LICENSE().
+Add the missing MODULE_LICENSE.
 
+Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/watchdog/gxp-wdt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---
-Regards
-Sudip
+diff --git a/drivers/watchdog/gxp-wdt.c b/drivers/watchdog/gxp-wdt.c
+index b0b2d7a6fdde..2fd85be88278 100644
+--- a/drivers/watchdog/gxp-wdt.c
++++ b/drivers/watchdog/gxp-wdt.c
+@@ -172,3 +172,4 @@ module_platform_driver(gxp_wdt_driver);
+ MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
+ MODULE_AUTHOR("Jean-Marie Verdun <verdun@hpe.com>");
+ MODULE_DESCRIPTION("Driver for GXP watchdog timer");
++MODULE_LICENSE("GPL");
+-- 
+2.35.1
+
