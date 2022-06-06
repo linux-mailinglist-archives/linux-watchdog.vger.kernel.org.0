@@ -2,71 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9047C53DEE2
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jun 2022 01:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51D453EA98
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Jun 2022 19:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351798AbiFEXEM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 5 Jun 2022 19:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S233102AbiFFJz2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Jun 2022 05:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbiFEXEK (ORCPT
+        with ESMTP id S233120AbiFFJz1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 5 Jun 2022 19:04:10 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BDE37BCC;
-        Sun,  5 Jun 2022 16:04:10 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id s10so6132876qvt.8;
-        Sun, 05 Jun 2022 16:04:10 -0700 (PDT)
+        Mon, 6 Jun 2022 05:55:27 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CF3113A14
+        for <linux-watchdog@vger.kernel.org>; Mon,  6 Jun 2022 02:55:22 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id k19so19105301wrd.8
+        for <linux-watchdog@vger.kernel.org>; Mon, 06 Jun 2022 02:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/HGBwVcm94G6hJzxxoyTgU9jvYkuG8KyARLPoR4g984=;
+        b=sSIY/sq3tJH+ruvIsuQApXH81UhkfbHOfABcA9lRdOXBMbUsWyeFwDFrglxz8GfoFY
+         QmStVG7kQyI/Q+/6pzQ1jyZY82gcQ94oe3qAb4fzAxkirKGmyAUaoqUUXub2FoGcDeKV
+         S/Wm7MMIB0Gh1CQX3FHGnak7oG6MzRuQNup0KHkoXlknAeFpQTqPF8kWakz2k1lHJoxZ
+         dthp0Z3elQaJG1D3TE/Vs4VI3xS7Hn4Pu8rhIoTTWWgEf0GTiaogaHkE4OCPgIBPe8BV
+         1InWXF/vn+LEpsxPD/Vb9arMdS+o9J/eS52eFzf2SzeGhMRIomxC+4FZ1I5qKCu7/UsL
+         xuAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PQ86WMtQWZtiSCCUV0t2mZwhMOZMEYWoxSVQTAw8avI=;
-        b=AmRluNomWSrH8h9MrGT3LA4kPVPUGE0frL/6r66BxjjKMiquWjS3IuONJhCcnwUFGF
-         tU3n/C5jZ/5tIYZQ1QaWR+3pet2oZUhP+h7ZDxodxvvR+qwh+y83Q1evk1BVRU40IevH
-         Iqxn1XRxV84iIUOzeGsk7nMfv2UZqBiGPZ9YFPMcqIwSo1g76PgMBTbJAMN1wYPCiFpx
-         jnMS7Ehb0xqphef0W8XBFuGuOe/w8ZZEMh6fvTxwtTvcx5CK9A2lvVSi0ce9EqIZfzXM
-         41K2TTVirM/afUE4cGr2l8nCHlO/BMjkT5MS+RpdM40MyM9xWK2woU5Y+JEy/GaiDE0V
-         pdPA==
-X-Gm-Message-State: AOAM531xbOdoX7UrD/K7LgDvJ51Fqh1WAmcLoJwYe9qEN4Z60WUefwT0
-        OPju4peITtq77e6Lk7OV1Wh3xBQFaw==
-X-Google-Smtp-Source: ABdhPJw8o4qYBHW4CaM8n7loO8vPejDTZL9r68n+Z50Xa/JCRCy726BVnoeF1wKhs0xUySvy2IwPyw==
-X-Received: by 2002:a05:6214:29c6:b0:466:fda7:8279 with SMTP id gh6-20020a05621429c600b00466fda78279mr15387044qvb.32.1654470249321;
-        Sun, 05 Jun 2022 16:04:09 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:1bdb:2e61:f12:452:5315:9c7e])
-        by smtp.gmail.com with ESMTPSA id q19-20020a05620a0d9300b006a68fdc2d18sm7459600qkl.130.2022.06.05.16.04.05
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/HGBwVcm94G6hJzxxoyTgU9jvYkuG8KyARLPoR4g984=;
+        b=uUqw6ghaUkrPxuyTXqSWjjMUGF1SuGROmYwz2JqUiOwH/nK+8Q0rZE+tdRB23Lu3NH
+         g2TRWh4/z/AcTfoyI9i6j5g+GJ6Hsd3u2sIinTZSLlKMhPuVH1y6YmHdNF5nowqzLwYW
+         6vJPIkOSqMwZ2d1Y+wN9WfZX4Ex6Zr9FSEZi376qUoASUw+Gb9ra97JeRdAt1iun5LWP
+         r+NtehN6rE2uqFOELGLZ9qTlDl6qVsl5b0UBCfxMXQjB9vPKwpX3ee4ma3CfdNv736FV
+         vtxasJkZI5zKpO8fTsjnw+jbNhTh2O3PAXerRM5aLpYecap1JrhDQTL7y1SOCYIT2oCi
+         UkyQ==
+X-Gm-Message-State: AOAM532Asr/z6wsXFibyIkD4X4rCTlJBuy46G+dus1K6hmkICUMcV+1I
+        xt3jJKeQbNFneI5/s8+MmlBbkA==
+X-Google-Smtp-Source: ABdhPJxFMRPPs4LSY3Kcwnsvn2fgmQxO/3GAT/dfFczxe2I21JguLlXbCT27NpSSDOKSGZaQZm8pJA==
+X-Received: by 2002:a05:6000:2a9:b0:210:2530:be32 with SMTP id l9-20020a05600002a900b002102530be32mr21432918wry.153.1654509321248;
+        Mon, 06 Jun 2022 02:55:21 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id o10-20020adfeaca000000b0020c5253d8c2sm14659609wrn.14.2022.06.06.02.55.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 16:04:09 -0700 (PDT)
-Received: (nullmailer pid 3694907 invoked by uid 1000);
-        Sun, 05 Jun 2022 23:04:04 -0000
-Date:   Sun, 5 Jun 2022 18:04:04 -0500
-From:   Rob Herring <robh@kernel.org>
+        Mon, 06 Jun 2022 02:55:20 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 10:55:03 +0100
+From:   Lee Jones <lee.jones@linaro.org>
 To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
+Cc:     linux-kernel@vger.kernel.org,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-pm@vger.kernel.org, Leon Luo <leonl@leopardimaging.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-clk@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Leon Luo <leonl@leopardimaging.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 2/6] dt-bindings: update Luca Ceresoli's e-mail address
-Message-ID: <20220605230404.GA3694857-robh@kernel.org>
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
+Subject: Re: [PATCH 4/6] mfd: max77714: update Luca Ceresoli's e-mail address
+Message-ID: <Yp3O92gg9LiIzQTX@google.com>
 References: <20220603155727.1232061-1-luca@lucaceresoli.net>
- <20220603155727.1232061-2-luca@lucaceresoli.net>
+ <20220603155727.1232061-4-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220603155727.1232061-2-luca@lucaceresoli.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220603155727.1232061-4-luca@lucaceresoli.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,16 +84,21 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 03 Jun 2022 17:57:23 +0200, Luca Ceresoli wrote:
+On Fri, 03 Jun 2022, Luca Ceresoli wrote:
+
 > My Bootlin address is preferred from now on.
 > 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 > ---
->  Documentation/devicetree/bindings/clock/idt,versaclock5.yaml    | 2 +-
->  Documentation/devicetree/bindings/mfd/maxim,max77714.yaml       | 2 +-
->  .../devicetree/bindings/power/supply/maxim,max77976.yaml        | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
+>  drivers/mfd/max77714.c       | 4 ++--
+>  include/linux/mfd/max77714.h | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied, thanks!
+Applied, thanks.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
