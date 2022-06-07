@@ -2,106 +2,132 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529DE53F639
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 08:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4110453F9B7
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 11:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237057AbiFGGej (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jun 2022 02:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S239486AbiFGJ2b (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jun 2022 05:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237050AbiFGGeh (ORCPT
+        with ESMTP id S239468AbiFGJ2O (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:34:37 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826D730F6F
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Jun 2022 23:34:34 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u12so33140678eja.8
-        for <linux-watchdog@vger.kernel.org>; Mon, 06 Jun 2022 23:34:34 -0700 (PDT)
+        Tue, 7 Jun 2022 05:28:14 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AA251E65
+        for <linux-watchdog@vger.kernel.org>; Tue,  7 Jun 2022 02:28:12 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id u8-20020a4ae688000000b0041b8dab7f71so530332oot.7
+        for <linux-watchdog@vger.kernel.org>; Tue, 07 Jun 2022 02:28:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BS02hl5lG0fU1teehsFBTzwy9idYtqKSriIvuXGDAVw=;
-        b=a7CXUgo1LhI6a6Wn7l3MjaqsS2nWFcnVUfB+fpGL3Su3s8vvd+hexirjTkuKfqfJku
-         tpNMIqWEqQEc2ykTutSqnsatSkZguMPoVRX3zgp44CcWRwEfmM1O1H6YW+PdMuDF7l1h
-         GQ6t7rKl0oPrV2wyje3dJJlB8t/G+d+oEPBjgNvSx5jNjOGBUUFO1INCvt51Z5vD9upr
-         zpEb/NvfB8O/xEMwCpBTttttkHN5KejGkpvAyS3ebegD2zJBG1dA9Qz1ci0llYeESeo+
-         JMbAguBqPVrXMBWFpgVz6EOSHE3P+6K+R88uzWCgJV4Flf2vyjRbzalZP0Jxm4TrIWS4
-         iuAw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
+        b=gujHBVxqWIlmngbJHwwatlrY6K2BhXGLJOXKENebOL4hOCXVjvoa+7rQ+wCwOuo7nz
+         8e28HbaszMFtjrNu2xJwHUtJo1p0vWs5cPK29M2FpYQX1yrDGputAW1tF1NfmP59wawm
+         4ciGU9SnxDgRMb84mTOs96+/9zN97uENfqj9/+eZfuG77h5pSaMszmbmnWOwi9m+gNzd
+         5NtwsZACk2ULSP0cRt0MdNUxBuwzIbCfzmloCBb/Ue1QhCyZ8f6GEgrTXVIY7durHnKk
+         UWQF6j7yHnTlxlvI9xCgSzii4NusQH9ADfpyzQwiF9b+OrCBSH3adFs9TwqclNBk9aQF
+         O14A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BS02hl5lG0fU1teehsFBTzwy9idYtqKSriIvuXGDAVw=;
-        b=ov/FrcDDWiP3rLhrPHKIHDbFR9EHnPsJsf4BtcfiF2HgEXGXNMvDwjp/4iTS+DbVg8
-         z8HuYPSFInETTxeqLqNg/BDLqTTD0Rxp10Aj5dKIKUIgMFoOcgS+isXES5FHJh9eiQLv
-         DZmyOurzYf19gTnbn60i3dybieJyGwW3lJmIcDk7N33AsU9V/hqX6wC0Sn1g89gHONAF
-         gVcKFeVk8WGCz174+/GEtYm/hpI9smVszsr/wMB+A3KuHrQK6x80jZh6GEjssMPfVxs4
-         r2PuqE/dQEmy5tc64svovpaOOrE9+42KlE4veWZ4nMOhgYwp+huiXTrWl7nzpCVHanyy
-         gtvA==
-X-Gm-Message-State: AOAM5327RE1wJ/DlsEKJ6zXCNRe1AHGEOXr/Ejwwm6gawRTELwXY0iU8
-        LZfmUI9BpBm4FN+Xk/avNHmnBg==
-X-Google-Smtp-Source: ABdhPJxeChl1qKeEil8PnLVpGZrlHOFtfAIS6W5eozpO3H9ZCDC+R/hedgSwKsMBni0ziaZVCtATcQ==
-X-Received: by 2002:a17:907:7e8b:b0:711:e5e6:6694 with SMTP id qb11-20020a1709077e8b00b00711e5e66694mr150753ejc.35.1654583673038;
-        Mon, 06 Jun 2022 23:34:33 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id me3-20020a170906aec300b006ff01fbb7ccsm7153425ejb.40.2022.06.06.23.34.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 23:34:32 -0700 (PDT)
-Message-ID: <717eb4d5-f547-4763-1670-51e90cbe0803@linaro.org>
-Date:   Tue, 7 Jun 2022 08:34:31 +0200
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
+        b=ZbI/MgBWjKTOS00TmG0Me+apPJ9Uo6HFEKM5Ia8IX3GYx8KzccrUUwDFMGIDVL+im/
+         +QCbUR4z+0hnTm4CMmYhdg1hxz+rvFbqVVfROZAi5zLwMJGKynoSbZXHy3yRM/IUSFaj
+         2IssBlmVRmpwvJ0y/f0bpsD5IBek8awhRRGAZvN/77d9ztHCaRanuJZlhFNqGQHvGL5E
+         cy8FNRSRiL0fVFyDAMtGVOmJ6QZeZLOmELOzviHaWLryDpdJaLOyrW9i2P5SPK7NDiAy
+         yG9QTzghDP8gVbno7ZW0k+RKmDXOKMxG9k778+LS1K2soNU5Bask8IjKzSUUjEQo+idH
+         CReQ==
+X-Gm-Message-State: AOAM531ve9qlHcpzXyEHaIx3DM/+BL4YXBSDWgyzAAnCzdeUQtGx15yQ
+        E6wjdVNhJK15MgcdGoWRUajyHR71V+mKJ+e/efTbyVDHZjRV7R9w
+X-Google-Smtp-Source: ABdhPJxTYNOyqQTj+pRtv7B26L++zgaw4oyR9fAzq9Xjy/qi86fDOL5mMOdKcDA6Petw4QZgBH7CHdeaexgYk1On3ls=
+X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id
+ v25-20020a056830091900b0060afe63e321mr11494607ott.227.1654594080399; Tue, 07
+ Jun 2022 02:28:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: Drop more redundant 'maxItems/minItems' in
- if/then schemas
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hu Ziji <huziji@marvell.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20220606225137.1536010-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220606225137.1536010-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6358:99a5:b0:a2:a1fa:9308 with HTTP; Tue, 7 Jun 2022
+ 02:28:00 -0700 (PDT)
+Reply-To: robertbaileys_spende@aol.com
+From:   Robert Baileys <mercymiji.j@gmail.com>
+Date:   Tue, 7 Jun 2022 11:28:00 +0200
+Message-ID: <CAAD1zOZ9bCDqBnjmbC3dQfgC=P2zTqAS=TP3q5qK5TFB5=Q9dQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:c2c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mercymiji.j[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 07/06/2022 00:51, Rob Herring wrote:
-> Another round from new cases in 5.19-rc of removing redundant
-> minItems/maxItems when 'items' list is specified. This time it is in
-> if/then schemas as the meta-schema was failing to check this case.
-> 
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+--=20
+Hallo, lieber Beg=C3=BCnstigter,
 
+Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
+bin ein pensionierter Regierungsangestellter aus Harlem und ein
+Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
+bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
+ttery
+in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
+und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
+Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
+Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
+um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
+Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
+machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
+e
+Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
+gegen=C3=BCberstehen.
+https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
+t-in-new-york-history/Sie
+Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
+Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
+e
+Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
+Euro beginnen kann.
+Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
+Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
+erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
 
-
-Best regards,
-Krzysztof
+Powerball-Jackpot-Gewinner
+E-Mail: robertbaileys_spende@aol.com
