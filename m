@@ -2,48 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93785540A33
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 20:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24410540B45
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 20:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348594AbiFGSSq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jun 2022 14:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        id S1350283AbiFGS1r (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jun 2022 14:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352177AbiFGSQ5 (ORCPT
+        with ESMTP id S1351600AbiFGSYr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B149F11A38;
-        Tue,  7 Jun 2022 10:50:56 -0700 (PDT)
+        Tue, 7 Jun 2022 14:24:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30A2D4104;
+        Tue,  7 Jun 2022 10:54:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44D3C6159C;
-        Tue,  7 Jun 2022 17:50:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C23CDC34115;
-        Tue,  7 Jun 2022 17:50:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67933B8236A;
+        Tue,  7 Jun 2022 17:54:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E929C36AFE;
+        Tue,  7 Jun 2022 17:54:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624255;
+        s=k20201202; t=1654624462;
         bh=4aYV3+qesPToYmG7/6BMlAecFB2vSBxvku6tOzoYkcc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wld6/BxNLRDK7r4OLX95DtKAL1lgwVKjhoVow5/imLJR9E/ROZNwrPGtjAbtNcsJG
-         j/venU8MRo1QNS9oFUjvMxkoY7+v+PgJmjZdEHHYgh65M+k7Nc4QOJ2NCDJQRgLuUI
-         9CzT1L9uvdQHpUzTkLpYNdpnZzBQeucXwP/YxDKgeBvkAOLE/9uryez4MXbCcWF9fo
-         CdRXHenD8vsSAnuUEm1NZ+xkk9112iL4NKdYrkIbkQo7OvPinUMXM9KKq/653EQVoM
-         BcHaQzfz+t/XcyV62T0At6D2fTN9Uq/+3gKIVV4g1v+U1mSN6m1BgLhxDjfUHwbgQl
-         2EcCLh60m565Q==
+        b=mqAAsJpJqDPXUvoFJbdYh494KFrCq3IKikv1ZVpzC8O4oOIkbQwAKd+NXXIrcZSto
+         ALRKCh4r/f9hm8ROWQJScinbKysYJjg+ZYx30oLMb7yeQEjox+IopzxrJw7TA16b8g
+         yrCHp7dp26GfAO+GFVxhdrDhg1JdBka/ZcPA0PA7LUvRBGz1+6w+9ZLg4FE0XqhLpg
+         pS4K6j0VvsuJOTfmm6SI+aNy6wPDSMQlGvE5M9DWGEL9ncMpBcojGeOOHphvLKNj4t
+         vlkFJfjWZhF8RB3t+p9IIbnpbbwelGj1I8oAAL3qW/N0zR7dGtOu9/+B2UM8fnVPvX
+         F8UpUrwnG1rkg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Liu Xinpeng <liuxp11@chinatelecom.cn>,
         Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 33/68] watchdog: wdat_wdt: Stop watchdog when rebooting the system
-Date:   Tue,  7 Jun 2022 13:47:59 -0400
-Message-Id: <20220607174846.477972-33-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.17 31/60] watchdog: wdat_wdt: Stop watchdog when rebooting the system
+Date:   Tue,  7 Jun 2022 13:52:28 -0400
+Message-Id: <20220607175259.478835-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607174846.477972-1-sashal@kernel.org>
-References: <20220607174846.477972-1-sashal@kernel.org>
+In-Reply-To: <20220607175259.478835-1-sashal@kernel.org>
+References: <20220607175259.478835-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
