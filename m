@@ -2,167 +2,191 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820DE540384
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 18:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FEC540486
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 19:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343660AbiFGQPY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jun 2022 12:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S1345443AbiFGRPk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jun 2022 13:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244467AbiFGQPW (ORCPT
+        with ESMTP id S1345456AbiFGRPj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:15:22 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2043.outbound.protection.outlook.com [40.107.22.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E3C10052F;
-        Tue,  7 Jun 2022 09:15:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CmOApgutBInDElnFA/bH6fPEg1MtdgWWmx0S7TMhA1W90axdkrVgxXmdYsy0cAgW9DhkqbnsC/S6qyDuqQPSjb4WLyyveIhcDjX5tgf5rTs4YO3dP0e3sgT42esW+ik374ERo1eRGheagrmBNLNaECYU/cXeOsPvQ6Oj2Jh3OTyjSJt52PoRsTl3E0NUrFQTU3WxPl+fmR8PPA7jnq74Fv8ZOdhKDQLNLKcSjcwiIXfbX0iPoMaPb8QBO9DLJOSL2UMyHWqDZMWSpm+nG90mu6DcZZdso1gofIpBPF/3NOeB+WWZEKJFjy/87cl9o+ySoyGGIE1L70aNRIMZTH5RFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RK4NmpO8yz6vHE8sU9iZQmoHn763QDLJuMaVn+2WPJ0=;
- b=njPThwymyCSeFXzsbpmo1tm5dGI9Dk2gvbRHn38am2E+AR3VS3fBLoVid/l32KCjCzi3IyooR+lgz9rBfs1etB3NxhN1S29QB+hzH/MWPwmpTdSKdd/2m26bVWpId5uEEzwuwyFmDcQT9XvKAmpMhLDcQtqBxjdVzAM72iZ2eezn8nHrCZ4h+b6LENGWDgCxBzqqtKoAExOJisRSIixjNxXHwg/pV5v4aRSJVIyQTVut+tAc6sz7vfBN9vVU7fZm9AgDMaTejGZn20URzgNiE24Q5JfWyUejGtKPtowmo8qgRNRrAq1goL+C5rDzR8krPWhUNsFKZjhbI+d12PNjEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RK4NmpO8yz6vHE8sU9iZQmoHn763QDLJuMaVn+2WPJ0=;
- b=ATlPyh/fBK2k2nmcTsfwrXa7bsJvWKmdagXBeBCZzqvlqzYCb2K/g4Z5CWCOVTaY5rJHiYhTd8ihKdGCth0LxL7aJhQtd+fV8h57aFzcZApLkN1ps+nILHJfKVoyJpT0pvYxmQDyWUozvHC51lliTiEcm0xCfwmxMXxWRkE4p11m2zO+8LhuXwKzfd02ZKXi8oXBnATats6RQmJvLTSMCfLSu/YYH6jeQKUqmsAf2Wh7xtwExtTdh+agU1D8479+pVjuOAwuyEQ9/qFPOfBePmWpyV+mMcb4BJCy8Siz3ab019e+C7GNmWcuRUkPdHopvDVvzNFWdJ/KB00xmyNITw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by AM6PR10MB2325.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:44::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17; Tue, 7 Jun
- 2022 16:15:18 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a949:4d67:8108:3599]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a949:4d67:8108:3599%6]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 16:15:18 +0000
-Date:   Tue, 7 Jun 2022 18:15:15 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Subject: Re: [PATCH v3 0/4] simatic-ipc additions to p2sb apl lake gpio
-Message-ID: <20220607181515.3f1e240c@md1za8fc.ad001.siemens.net>
-In-Reply-To: <Yp9sLePHn9RqcXcU@smile.fi.intel.com>
-References: <20220513083652.974-1-henning.schild@siemens.com>
-        <You1KI78zbXmApm+@smile.fi.intel.com>
-        <Yp9sLePHn9RqcXcU@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM5PR0601CA0026.eurprd06.prod.outlook.com
- (2603:10a6:203:68::12) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+        Tue, 7 Jun 2022 13:15:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F5A5102779
+        for <linux-watchdog@vger.kernel.org>; Tue,  7 Jun 2022 10:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654622137;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ylQrXRxCE5WefGCA0g7YA7OMYNSZuN3Qp/+5VKhMNKM=;
+        b=CkjcwTVtcxZ570Jt/xZj5ju8FPjAmSyNGqP8Zi+oDTU/i7Z7mwimrd/r5ij869x+QxPIx9
+        2kR0geWQhLnAAby4nsX/7GSnGAPHPgcN0pQcfcScSxjfWcqeZsMOKmJFgSVcy7U7VuKW8a
+        crXSOygLf7zvGojsh7yYBYhOcf6cecg=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-530-kDmeQAewMRGXre2L14b5Nw-1; Tue, 07 Jun 2022 13:15:36 -0400
+X-MC-Unique: kDmeQAewMRGXre2L14b5Nw-1
+Received: by mail-ed1-f70.google.com with SMTP id v8-20020a056402348800b004315c52b92cso4370046edc.19
+        for <linux-watchdog@vger.kernel.org>; Tue, 07 Jun 2022 10:15:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ylQrXRxCE5WefGCA0g7YA7OMYNSZuN3Qp/+5VKhMNKM=;
+        b=YXixi/lrUg8De7KqAzmTVK4iW2wMBwojXTPEcBv9RiQOlna9Tw7zQClkNd03Z2tfns
+         4mq7g8LmRFlRq3Lfg7BTk60GUxC3oGZaDA6fcVA3wahazs8UQDuzkr03trN6nejOb8av
+         RoCOVnE6M91pLx/jxBPEVpUhiA2grCI2AncEaphQyEe6jnps2J9bI/HOq5ML1q9nDMhf
+         UV/8RJn/aW/gCIfSyVaQcKxDZDBD6LgT9KV5nUpeUkDYZpPR1NOHTDxZTX1rJDyzynJW
+         QVT4Hj4GuJR+rz65BNSts73vWHN6C6A8EcsbQIE5FUWP1kqZTWwsdcsE+bNvVLbwg4CM
+         AdZg==
+X-Gm-Message-State: AOAM531sYu53zEAEiqtSaffWcc0b/9xvJcNVkBKR4VtpmcD6CfW8yOjs
+        cMrneOuKwfBplgiMnZHRPxi1/llqLhVutY4oMRYZFxosX15uPtQfEVCv9LIoBoJCnJEAEBcwpDw
+        JqNnfYO66Y6cfG6alC7gQLtAEZks=
+X-Received: by 2002:a05:6402:5114:b0:42f:b5f3:1f96 with SMTP id m20-20020a056402511400b0042fb5f31f96mr23188457edd.260.1654622134891;
+        Tue, 07 Jun 2022 10:15:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyzX1Cu3nPKRVmyJ+MDxgaeYIxZau3BfUeQpL7WBwfYfiESgqradh0LlQ1DOcm/hAz2wDsIaw==
+X-Received: by 2002:a05:6402:5114:b0:42f:b5f3:1f96 with SMTP id m20-20020a056402511400b0042fb5f31f96mr23188425edd.260.1654622134615;
+        Tue, 07 Jun 2022 10:15:34 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id b23-20020a17090630d700b0070e1adff390sm5926625ejb.34.2022.06.07.10.15.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 10:15:33 -0700 (PDT)
+Message-ID: <938117aa-001c-9e31-f50c-dbfa2d376d76@redhat.com>
+Date:   Tue, 7 Jun 2022 19:15:32 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1c3267f1-42f7-4ffd-b7c0-08da48a0e9a5
-X-MS-TrafficTypeDiagnostic: AM6PR10MB2325:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR10MB23254C1BCAF628B2247DAE3885A59@AM6PR10MB2325.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iZXqY9C6AawMnPodi4qlSVNAsyxgmXoGM6DIGbvIICl+IrJ1uZpgR/q/0UeAb6uPMu4gtvyB2z9sI6Tr8kd9+vFiJLDse/OYI+xAfY1jtwP1tT+SbmZuuL2fCXR1zdzTTDNKJVAMLxccBkJWOsRAqvPmCUIOFyL1/gYEfnefmka/kASyI83II+JZ23vIRU10LQ5A/UUrXlPhFeWM5fr8LqdEchwd2Q5ffnHgXZTFP5YAWs6QmT82wMJrzRjRjT0SCeDuC5YNExQxnUY2J3Y/gIXFtc4MYcFmA1fKYq9qTLgtUdSdMNc3vk2buO2OvobUYVtMVBk49yZ/AAwX5c3XH4EezmBTtM0omT087/EC2M9Ss2LTEzbXWUHCPbtBS4ELR1p3MQMce1QvRAFzSvZBkvxnH89JmZe1NY+B6gZ3uRfFNa10r9HSpdyifh9asz6vKGgDagLF9faRckUE5lB4YjQgbxVddXYJWOVwSJL0nkWOGgYEKRtQdxS5wh/hQFxe/jot3DaTK9bZkAvBk9j4J9MTgxv8GDTw91sxgG/fzjHQzN2+aTIFjMqBFppTpDxjWiwoU2Dzk/0Yd/OXMO9rRSH+eocaI/1LbdpD7eC8yiIA8cH2j4eP3QYNSHeJZX2eMX0dPcE7QlKwRLAe+7wPe6Mvcaqy8RMhUq6xCk9tZZs8UCq/8v3wz9jbjwYYI1WAPgjh/GVxuu0SsRnztMuTa2C3oBe8ygwJ6pp2bJSxRvI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(6506007)(6512007)(6666004)(2906002)(26005)(9686003)(6486002)(86362001)(316002)(54906003)(966005)(38100700002)(6916009)(508600001)(82960400001)(66946007)(66556008)(66476007)(186003)(8936002)(8676002)(107886003)(1076003)(5660300002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GAJMkJ4CqRM+YBCe3MsgG6puDP5DCQcx0ArSxws+4ssKFrqqLIYQGRljZY3S?=
- =?us-ascii?Q?4ya2RjZNCGaKNITFNofjh4Vr+b1ubGiw7CMZxQ6TMln1c/a7bI6DBlhv7l55?=
- =?us-ascii?Q?mK6zJHCEGFDlGK3XAZUnjLPYw9klAneLP/C6H/Ure0o4BKVkTtvG4tczw5Wz?=
- =?us-ascii?Q?RyQSL0jDKtQFYKuhJoJn2KkSLsGtY4Jzvv1V/o+1rijFALNyoJm+m6SVjzLb?=
- =?us-ascii?Q?sEVBEr1HcbPT1ysoeDgNU4TW0bfZ/w5ojuTB7xjpbNckv1IavIUQcBWxACLx?=
- =?us-ascii?Q?GNrdai7qB6GwN2s83PeGlLj6oEpbQY6YhGLGM/+Az9rSFEQbpMXO6dZ9poET?=
- =?us-ascii?Q?92ioo+Ewv50CocY2n/9EYQi138XUmps/Mf54cZaFgKzNV2unz2dIZDw4T6fj?=
- =?us-ascii?Q?4MMz4lnXMXGvFW8hCKN7a/zL/xVpon5/cNlx2zvRwuZSKs5YjE1Hj0WjVB9V?=
- =?us-ascii?Q?JkFL0F+vOddLlJC5TNHZOZyadIVelg3HGej7HctcV/LGgvbrMrinFOiUYP4u?=
- =?us-ascii?Q?bwaI44XizEp/MERFdyXFO1ftrP5DoJtlyzUdXHSzCMcfc2clLLcqI8mrHeGC?=
- =?us-ascii?Q?C5RmUn1Wrtd7q1z61xbU87ysqbLS4g3Qe7bW8iPg21vvqCtff0CcndSh8dUw?=
- =?us-ascii?Q?/U4DX2L7h/DfKVBZjE2q1q1gWoqZzUOnMDQ9hrxWbljnTQTnZLze5iFVPUtj?=
- =?us-ascii?Q?s1GZz2KJXCz5jxRMOgTisZsR/mjgZZKI3RGUVy4r/0sJfbjPnCWUrMEeQ+sb?=
- =?us-ascii?Q?rrt10+kjyvAculZOkj2jCtEUaU7WXGNJKujeSsXOyIbi44GDxtoxrgxxF9HD?=
- =?us-ascii?Q?o7QyTDwXzqyS7QILAAD0AImnq0awom+K1xy+PowOaEMP1LCk3UHUD1ASeOMm?=
- =?us-ascii?Q?DhFyvqwSclXJokU+NPrw2phYVPu+AslR3SN+fBTcTUczCqPIeCc1p1Ph9/RC?=
- =?us-ascii?Q?9EPX4HDGvFSlzavEV7HcmgTQETlmUc35atCenSWyh5OJp+Tj36zi2loKsWi6?=
- =?us-ascii?Q?dSPIjb+OF8cz6wI2HYeCjnNJoQyrzc0lOasddR1xotrAwsEDv+Df6/RKJfRM?=
- =?us-ascii?Q?T7+fRY0c0uuzjuvwf5h6gBOsucpH5PhFp5pHLVGXNmooC1rqs6Gshp6UFHC3?=
- =?us-ascii?Q?POyFrwXiy7Vk1lEwi3ae2nOcQytC3L6hWI1z8ratLAMfu/XSWdoxXplLnlOW?=
- =?us-ascii?Q?c5IpHn2cL4lUm7ehXuYu7QgomNr/qQK3Ux81b0psmhIZ5KuBRazf8TdcnX28?=
- =?us-ascii?Q?lua/Uex8QRLt5kCIA7rQnBVm0CEsfiU//OT2JCJae8fS6DRYVtqkbzxJYT2L?=
- =?us-ascii?Q?pPiN7o6+mgVsbF1dD8RRUElhpmpllZ2XKWkVSPfrRww7e9xuEtXPRUgEWqGa?=
- =?us-ascii?Q?jkv+IA9CheuA6Ir//SGn7IBsMRNZUHE2A66Zhn1GWi59aKfkmNwwPUk31JTD?=
- =?us-ascii?Q?OeP12IXBuwoI3hwIkf9EzZrFVP1EpfyPapTDsWze8rpmeBWAMQr5uTan349b?=
- =?us-ascii?Q?0MrjvkPV3oyXAhnNFx9jj+dsWfW5tg3RAx7lP5Xak87Pp5OkHEG/BX3OyTQp?=
- =?us-ascii?Q?nAvZimxkNkJkvP+2APt9IIrdGandZUBuQ8Go3JIsUhCiLZK7rGgEnvsCA1OB?=
- =?us-ascii?Q?1qfpTMB1IZBWyZApbQ/XmFaroiG5Bz2Kd4rvvkI2dvjlRs+hFHUUQGW0qgas?=
- =?us-ascii?Q?0NODR90n4WSXsJClQjuKMpkbtBIIWHG0Xprf44vF0S8Q0PqkW81uN3bCYY32?=
- =?us-ascii?Q?RGuAfEmSjCAz2dZ9ruiSYvNIDIEcpgY=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c3267f1-42f7-4ffd-b7c0-08da48a0e9a5
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 16:15:18.0738
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: r1PqwnESrXZ2seLUYrN1rz6+ZmFnW++28tFMFBAKgRq3fsDk7V3iwfVtMMouIhNfqVfs68UbQJrYZ7xLON+PZYDfK/72Bg1pb1V5c6/5BJg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB2325
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v6 11/12] platform/x86: simatic-ipc: drop custom P2SB bar
+ code
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+ <20220606164138.66535-12-andriy.shevchenko@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220606164138.66535-12-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Tue, 7 Jun 2022 18:18:05 +0300
-schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+Hi,
 
-> On Mon, May 23, 2022 at 07:24:08PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 13, 2022 at 10:36:48AM +0200, Henning Schild wrote:  
-> > > changed since v2:
-> > >  - put GPIO led module under same config switch
-> > >  - some style changes from review
-> > >  - init gpios with gpiod_get_index and drop gpiod_set_value
-> > >  - drop bogus "if" from watchdog Kconfig
-> > > 
-> > > changed since v1:
-> > >  - rebased
-> > >  - split p1 into p1-3
-> > > 
-> > > This switches the simatic-ipc modules to using the upcoming p2sb 
-> > > interface introduced by Andy with 
-> > > "platform/x86: introduce p2sb_bar() helper".
-> > > The series relies on these p2sb changes already applied and Andy
-> > > will likely take them into his series at some point.
-> > > 
-> > > It also switches to one apollo lake device to using gpio leds.  
-> > 
-> > Hmm... This series misses LEDS maintainer. Okay, I will include
-> > them when sending v6 after v5.19-rc1.  
+On 6/6/22 18:41, Andy Shevchenko wrote:
+> From: Henning Schild <henning.schild@siemens.com>
 > 
-> I have sent v6 [1], please make sure everything is okay.
+> The two drivers that used to use this have been switched over to the
+> common P2SB accessor, so this code is not needed any longer.
+> 
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I received that and had a quick look over my bits. That all looked like
-i sent it so i have no reason to doubt it would be working as expected.
+Thanks, patch looks good to me:
 
-In the coming two weeks i will not be able to get my hands on hardware,
-so can not test but am pretty sure it is not needed another time.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-regards,
-Henning
- 
-> [1]:
-> https://lore.kernel.org/platform-driver-x86/20220606164138.66535-1-andriy.shevchenko@linux.intel.com/
+Also Ack for merging this through the MFD tree.
 
+Regards,
+
+Hans
+
+> ---
+>  drivers/platform/x86/simatic-ipc.c            | 38 -------------------
+>  .../platform_data/x86/simatic-ipc-base.h      |  2 -
+>  2 files changed, 40 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/simatic-ipc.c b/drivers/platform/x86/simatic-ipc.c
+> index b599cda5ba3c..26c35e1660cb 100644
+> --- a/drivers/platform/x86/simatic-ipc.c
+> +++ b/drivers/platform/x86/simatic-ipc.c
+> @@ -101,44 +101,6 @@ static int register_platform_devices(u32 station_id)
+>  	return 0;
+>  }
+>  
+> -/* FIXME: this should eventually be done with generic P2SB discovery code
+> - * the individual drivers for watchdogs and LEDs access memory that implements
+> - * GPIO, but pinctrl will not come up because of missing ACPI entries
+> - *
+> - * While there is no conflict a cleaner solution would be to somehow bring up
+> - * pinctrl even with these ACPI entries missing, and base the drivers on pinctrl.
+> - * After which the following function could be dropped, together with the code
+> - * poking the memory.
+> - */
+> -/*
+> - * Get membase address from PCI, used in leds and wdt module. Here we read
+> - * the bar0. The final address calculation is done in the appropriate modules
+> - */
+> -u32 simatic_ipc_get_membase0(unsigned int p2sb)
+> -{
+> -	struct pci_bus *bus;
+> -	u32 bar0 = 0;
+> -	/*
+> -	 * The GPIO memory is in bar0 of the hidden P2SB device.
+> -	 * Unhide the device to have a quick look at it, before we hide it
+> -	 * again.
+> -	 * Also grab the pci rescan lock so that device does not get discovered
+> -	 * and remapped while it is visible.
+> -	 * This code is inspired by drivers/mfd/lpc_ich.c
+> -	 */
+> -	bus = pci_find_bus(0, 0);
+> -	pci_lock_rescan_remove();
+> -	pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x0);
+> -	pci_bus_read_config_dword(bus, p2sb, PCI_BASE_ADDRESS_0, &bar0);
+> -
+> -	bar0 &= ~0xf;
+> -	pci_bus_write_config_byte(bus, p2sb, 0xE1, 0x1);
+> -	pci_unlock_rescan_remove();
+> -
+> -	return bar0;
+> -}
+> -EXPORT_SYMBOL(simatic_ipc_get_membase0);
+> -
+>  static int __init simatic_ipc_init_module(void)
+>  {
+>  	const struct dmi_system_id *match;
+> diff --git a/include/linux/platform_data/x86/simatic-ipc-base.h b/include/linux/platform_data/x86/simatic-ipc-base.h
+> index 62d2bc774067..39fefd48cf4d 100644
+> --- a/include/linux/platform_data/x86/simatic-ipc-base.h
+> +++ b/include/linux/platform_data/x86/simatic-ipc-base.h
+> @@ -24,6 +24,4 @@ struct simatic_ipc_platform {
+>  	u8	devmode;
+>  };
+>  
+> -u32 simatic_ipc_get_membase0(unsigned int p2sb);
+> -
+>  #endif /* __PLATFORM_DATA_X86_SIMATIC_IPC_BASE_H */
 
