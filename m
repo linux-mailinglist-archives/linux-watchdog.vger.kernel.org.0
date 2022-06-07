@@ -2,43 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5821E53F244
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 00:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529DE53F639
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 08:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbiFFWvy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Jun 2022 18:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S237057AbiFGGej (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jun 2022 02:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbiFFWvx (ORCPT
+        with ESMTP id S237050AbiFGGeh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Jun 2022 18:51:53 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB81512AAD;
-        Mon,  6 Jun 2022 15:51:52 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id y16so12990688ili.13;
-        Mon, 06 Jun 2022 15:51:52 -0700 (PDT)
+        Tue, 7 Jun 2022 02:34:37 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826D730F6F
+        for <linux-watchdog@vger.kernel.org>; Mon,  6 Jun 2022 23:34:34 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u12so33140678eja.8
+        for <linux-watchdog@vger.kernel.org>; Mon, 06 Jun 2022 23:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BS02hl5lG0fU1teehsFBTzwy9idYtqKSriIvuXGDAVw=;
+        b=a7CXUgo1LhI6a6Wn7l3MjaqsS2nWFcnVUfB+fpGL3Su3s8vvd+hexirjTkuKfqfJku
+         tpNMIqWEqQEc2ykTutSqnsatSkZguMPoVRX3zgp44CcWRwEfmM1O1H6YW+PdMuDF7l1h
+         GQ6t7rKl0oPrV2wyje3dJJlB8t/G+d+oEPBjgNvSx5jNjOGBUUFO1INCvt51Z5vD9upr
+         zpEb/NvfB8O/xEMwCpBTttttkHN5KejGkpvAyS3ebegD2zJBG1dA9Qz1ci0llYeESeo+
+         JMbAguBqPVrXMBWFpgVz6EOSHE3P+6K+R88uzWCgJV4Flf2vyjRbzalZP0Jxm4TrIWS4
+         iuAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=vnL10i9b7RWVPFntTkTs63ETZHkZVU4m6YqQkxBLyPI=;
-        b=Fo4V4TxJE8yaK58bV6lEQWEE+e5d6s6iIpWefgtcd35USpFJOPYRKkmC77JNqSjvQY
-         j4Eocoa2i/PFX4LAy4f/ZVkgfl5zreqsb/nXp1fTSbhJjqwMnbSLNvn009hmRQDz2pOl
-         NsctmPgw5sISeKxhk+q0IGaTGdcS7e1c/3dQRLdaB5R8OPhqTg2hcymem4olI+AfMj7W
-         WNYnImjhvGCqZf3eUMbEcFKaMfHnS2oPcuG76KtN2i0+RVDqamvb+dDmsK47nhUgqdtO
-         RQNUbFQInjd4MZ+vBQRi0MLDf7oWLDx1VMip5Jw56/kYP22z8L1wkVUaZah2mGHmpRf2
-         MRqg==
-X-Gm-Message-State: AOAM532/ktpMSWOKbWSN6imwKHLF749lnUMnJ/VddIVMOEcoXTb8RWNz
-        ujX0sAumV9TNnZmO3euuIA==
-X-Google-Smtp-Source: ABdhPJyAQUX2H8fc0GojDtjC87rM9lUE0xrU9ZS9ZA5TIL7KupIiDXA9szJb+jy1xUCWw/NBrpswhw==
-X-Received: by 2002:a92:cf52:0:b0:2d3:afc7:2379 with SMTP id c18-20020a92cf52000000b002d3afc72379mr15153701ilr.310.1654555911895;
-        Mon, 06 Jun 2022 15:51:51 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.251])
-        by smtp.googlemail.com with ESMTPSA id d18-20020a056e020bf200b002cde6e352d4sm6644019ilu.30.2022.06.06.15.51.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 15:51:51 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        bh=BS02hl5lG0fU1teehsFBTzwy9idYtqKSriIvuXGDAVw=;
+        b=ov/FrcDDWiP3rLhrPHKIHDbFR9EHnPsJsf4BtcfiF2HgEXGXNMvDwjp/4iTS+DbVg8
+         z8HuYPSFInETTxeqLqNg/BDLqTTD0Rxp10Aj5dKIKUIgMFoOcgS+isXES5FHJh9eiQLv
+         DZmyOurzYf19gTnbn60i3dybieJyGwW3lJmIcDk7N33AsU9V/hqX6wC0Sn1g89gHONAF
+         gVcKFeVk8WGCz174+/GEtYm/hpI9smVszsr/wMB+A3KuHrQK6x80jZh6GEjssMPfVxs4
+         r2PuqE/dQEmy5tc64svovpaOOrE9+42KlE4veWZ4nMOhgYwp+huiXTrWl7nzpCVHanyy
+         gtvA==
+X-Gm-Message-State: AOAM5327RE1wJ/DlsEKJ6zXCNRe1AHGEOXr/Ejwwm6gawRTELwXY0iU8
+        LZfmUI9BpBm4FN+Xk/avNHmnBg==
+X-Google-Smtp-Source: ABdhPJxeChl1qKeEil8PnLVpGZrlHOFtfAIS6W5eozpO3H9ZCDC+R/hedgSwKsMBni0ziaZVCtATcQ==
+X-Received: by 2002:a17:907:7e8b:b0:711:e5e6:6694 with SMTP id qb11-20020a1709077e8b00b00711e5e66694mr150753ejc.35.1654583673038;
+        Mon, 06 Jun 2022 23:34:33 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id me3-20020a170906aec300b006ff01fbb7ccsm7153425ejb.40.2022.06.06.23.34.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 23:34:32 -0700 (PDT)
+Message-ID: <717eb4d5-f547-4763-1670-51e90cbe0803@linaro.org>
+Date:   Tue, 7 Jun 2022 08:34:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] dt-bindings: Drop more redundant 'maxItems/minItems' in
+ if/then schemas
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Hu Ziji <huziji@marvell.com>,
@@ -53,16 +72,14 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH] dt-bindings: Drop more redundant 'maxItems/minItems' in if/then schemas
-Date:   Mon,  6 Jun 2022 17:51:36 -0500
-Message-Id: <20220606225137.1536010-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220606225137.1536010-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220606225137.1536010-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,74 +87,21 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Another round from new cases in 5.19-rc of removing redundant
-minItems/maxItems when 'items' list is specified. This time it is in
-if/then schemas as the meta-schema was failing to check this case.
+On 07/06/2022 00:51, Rob Herring wrote:
+> Another round from new cases in 5.19-rc of removing redundant
+> minItems/maxItems when 'items' list is specified. This time it is in
+> if/then schemas as the meta-schema was failing to check this case.
+> 
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-same size as the list is redundant and can be dropped. Note that is DT
-schema specific behavior and not standard json-schema behavior. The tooling
-will fixup the final schema adding any unspecified minItems/maxItems.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/memory-controllers/nvidia,tegra186-mc.yaml        | 3 ---
- Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml | 1 -
- .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml  | 1 -
- 3 files changed, 5 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-index c7cfa6c2cd81..935d63d181d9 100644
---- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-@@ -150,7 +150,6 @@ allOf:
-           description: 5 memory controller channels and 1 for stream-id registers
- 
-         reg-names:
--          maxItems: 6
-           items:
-             - const: sid
-             - const: broadcast
-@@ -170,7 +169,6 @@ allOf:
-           description: 17 memory controller channels and 1 for stream-id registers
- 
-         reg-names:
--          minItems: 18
-           items:
-             - const: sid
-             - const: broadcast
-@@ -202,7 +200,6 @@ allOf:
-           description: 17 memory controller channels and 1 for stream-id registers
- 
-         reg-names:
--          minItems: 18
-           items:
-             - const: sid
-             - const: broadcast
-diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-index c79639e9027e..7a2b22dd6d05 100644
---- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-+++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
-@@ -145,7 +145,6 @@ allOf:
-           items:
-             - description: Xenon IP registers
-             - description: Armada 3700 SoC PHY PAD Voltage Control register
--          minItems: 2
- 
-         marvell,pad-type:
-           $ref: /schemas/types.yaml#/definitions/string
-diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-index cbcf19f51411..ed6c1ca80dcc 100644
---- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-@@ -64,7 +64,6 @@ if:
- then:
-   properties:
-     clocks:
--      minItems: 2
-       items:
-         - description: High-frequency oscillator input, divided internally
-         - description: Low-frequency oscillator input
--- 
-2.34.1
 
+Best regards,
+Krzysztof
