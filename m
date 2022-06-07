@@ -2,132 +2,159 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4110453F9B7
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 11:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25C653FB99
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 12:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239486AbiFGJ2b (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jun 2022 05:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S241290AbiFGKnX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Jun 2022 06:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239468AbiFGJ2O (ORCPT
+        with ESMTP id S241286AbiFGKnV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:28:14 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AA251E65
-        for <linux-watchdog@vger.kernel.org>; Tue,  7 Jun 2022 02:28:12 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id u8-20020a4ae688000000b0041b8dab7f71so530332oot.7
-        for <linux-watchdog@vger.kernel.org>; Tue, 07 Jun 2022 02:28:12 -0700 (PDT)
+        Tue, 7 Jun 2022 06:43:21 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B9B1D316
+        for <linux-watchdog@vger.kernel.org>; Tue,  7 Jun 2022 03:43:17 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id h23so27646854lfe.4
+        for <linux-watchdog@vger.kernel.org>; Tue, 07 Jun 2022 03:43:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
-        b=gujHBVxqWIlmngbJHwwatlrY6K2BhXGLJOXKENebOL4hOCXVjvoa+7rQ+wCwOuo7nz
-         8e28HbaszMFtjrNu2xJwHUtJo1p0vWs5cPK29M2FpYQX1yrDGputAW1tF1NfmP59wawm
-         4ciGU9SnxDgRMb84mTOs96+/9zN97uENfqj9/+eZfuG77h5pSaMszmbmnWOwi9m+gNzd
-         5NtwsZACk2ULSP0cRt0MdNUxBuwzIbCfzmloCBb/Ue1QhCyZ8f6GEgrTXVIY7durHnKk
-         UWQF6j7yHnTlxlvI9xCgSzii4NusQH9ADfpyzQwiF9b+OrCBSH3adFs9TwqclNBk9aQF
-         O14A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8XdRg5mTQzw6nhVkPbcttepeHu1kmSLwBbs3fva93xc=;
+        b=N1DSIYQ2tUBiiR928h/wpbuAkWoyNemmJ20vBlcsKVQyNN84AnPudb55G8X5EEHZc5
+         VrfLCbnWDAtsrhHYhabH4L0BcK6Yj8HILDRD4QS8o9jivIkV09uQ9k8+flwSL9YhpfOf
+         EKIY6RpNWcq9H5P5HOecjEdKbfbUTACnthsEE+FVdO9ZPFQkU20CO5hbDY+TsXwi7Gyk
+         XR89OVy0Qnt+8Lqc8HgO4+mf7B2XbeP3Iw4IkdQhRpmxypzV+y4NmZjw14ztQ0cTRyjV
+         Vc9XiSpbooXYnaIEGWYbXJ0j+c6+AycmpTWR911QhQRT0pklscDEgFFUW/dz8ZLGdIVr
+         VVCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=ohM259uqobJqtM7gttWurWj7P+4iDfPJquHax95olDY=;
-        b=ZbI/MgBWjKTOS00TmG0Me+apPJ9Uo6HFEKM5Ia8IX3GYx8KzccrUUwDFMGIDVL+im/
-         +QCbUR4z+0hnTm4CMmYhdg1hxz+rvFbqVVfROZAi5zLwMJGKynoSbZXHy3yRM/IUSFaj
-         2IssBlmVRmpwvJ0y/f0bpsD5IBek8awhRRGAZvN/77d9ztHCaRanuJZlhFNqGQHvGL5E
-         cy8FNRSRiL0fVFyDAMtGVOmJ6QZeZLOmELOzviHaWLryDpdJaLOyrW9i2P5SPK7NDiAy
-         yG9QTzghDP8gVbno7ZW0k+RKmDXOKMxG9k778+LS1K2soNU5Bask8IjKzSUUjEQo+idH
-         CReQ==
-X-Gm-Message-State: AOAM531ve9qlHcpzXyEHaIx3DM/+BL4YXBSDWgyzAAnCzdeUQtGx15yQ
-        E6wjdVNhJK15MgcdGoWRUajyHR71V+mKJ+e/efTbyVDHZjRV7R9w
-X-Google-Smtp-Source: ABdhPJxTYNOyqQTj+pRtv7B26L++zgaw4oyR9fAzq9Xjy/qi86fDOL5mMOdKcDA6Petw4QZgBH7CHdeaexgYk1On3ls=
-X-Received: by 2002:a05:6830:919:b0:60a:fe63:e321 with SMTP id
- v25-20020a056830091900b0060afe63e321mr11494607ott.227.1654594080399; Tue, 07
- Jun 2022 02:28:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8XdRg5mTQzw6nhVkPbcttepeHu1kmSLwBbs3fva93xc=;
+        b=t8+3zlOsAzJHtC+wFG3xMKW4yEqfOEfn/D9KbYZdd2CznWM86hrnPg08rZhMyUNAVE
+         DRMiRAjY84vZ1Ft9t9BNS7w49KlKuoNg9qNFnpihdzbKqZkoAjEFZcbxmPFMdHeni/VZ
+         Esc6tNPmZxm3oJcH6/98pJ1bG6rr5HR0fyL7PD3C4HGniO6Qs8c3gNyk29Prycorbs3Q
+         3cabnbUniH9/m8Q4GyBoVSuVq576037J9H3gJKpBjkM+rqdytnDCJ5h4jEbrRD4W4hBS
+         jOPPuNVR49enyBGx8/5flihvilVRuKkqIFDRDcZfuEceUbJMVO4dpIkxoH3wm9L2sJUC
+         OcqA==
+X-Gm-Message-State: AOAM532ITcba4E5gJJ20P9nqlQ55Afhvm8H9SCInRq2AxUmFj75qedlD
+        BZIsg9S89OsaU8Z+hFZDKf4OQAkoeojqaXpZRBepOw==
+X-Google-Smtp-Source: ABdhPJzxvjAZjQF6R+Mrr94IoW1X7wi8uwFKBgPf5GLnc+Gvu4doMpfp0SK0kukM6bfhDVOV0zyEW3g+vrtCParwkeY=
+X-Received: by 2002:a05:6512:403:b0:479:1627:a9b7 with SMTP id
+ u3-20020a056512040300b004791627a9b7mr15634227lfk.233.1654598595349; Tue, 07
+ Jun 2022 03:43:15 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6358:99a5:b0:a2:a1fa:9308 with HTTP; Tue, 7 Jun 2022
- 02:28:00 -0700 (PDT)
-Reply-To: robertbaileys_spende@aol.com
-From:   Robert Baileys <mercymiji.j@gmail.com>
-Date:   Tue, 7 Jun 2022 11:28:00 +0200
-Message-ID: <CAAD1zOZ9bCDqBnjmbC3dQfgC=P2zTqAS=TP3q5qK5TFB5=Q9dQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20220606225137.1536010-1-robh@kernel.org>
+In-Reply-To: <20220606225137.1536010-1-robh@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 7 Jun 2022 12:42:38 +0200
+Message-ID: <CAPDyKFqNiJB_2aEaQpBo4=Vzc60-986=aKKw4JZtXvO=X9WTqQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Drop more redundant 'maxItems/minItems' in
+ if/then schemas
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hu Ziji <huziji@marvell.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:c2c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mercymiji.j[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
---=20
-Hallo, lieber Beg=C3=BCnstigter,
+On Tue, 7 Jun 2022 at 00:51, Rob Herring <robh@kernel.org> wrote:
+>
+> Another round from new cases in 5.19-rc of removing redundant
+> minItems/maxItems when 'items' list is specified. This time it is in
+> if/then schemas as the meta-schema was failing to check this case.
+>
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Sie haben diese E-Mail von der Robert Bailey Foundation erhalten. Ich
-bin ein pensionierter Regierungsangestellter aus Harlem und ein
-Powerball-Lotterie-Jackpot-Gewinner von 343,8 Millionen Dollar. Ich
-bin der gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lo=
-ttery
-in Amerika. Ich habe diesen Wettbewerb am 27. Oktober 2018 gewonnen
-und m=C3=B6chte Ihnen mitteilen, dass Google in Kooperation mit Microsoft
-Ihre "E-Mail-Adresse" f=C3=BCr meine Anfrage hat und diese 3.000.000,00
-Millionen Euro kosten wird. Ich spende diese 3 Millionen Euro an Sie,
-um auch Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer
-Gemeinde zu helfen, damit wir die Welt zu einem besseren Ort f=C3=BCr alle
-machen k=C3=B6nnen. Bitte besuchen Sie die folgende Website f=C3=BCr weiter=
-e
-Informationen, damit Sie diesen 3 Mio. EUR Ausgaben nicht skeptisch
-gegen=C3=BCberstehen.
-https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
-t-in-new-york-history/Sie
-Weitere Best=C3=A4tigungen kann ich auch auf meinem Youtube suchen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
-Bitte antworten Sie mir per E-Mail (robertbaileys_spende@aol.com).
-Sie m=C3=BCssen diese E-Mail sofort beantworten, damit die =C3=BCberweisend=
-e
-Bank mit dem Erhalt dieser Spende in H=C3=B6he von 3.000.000,00 Millionen
-Euro beginnen kann.
-Bitte kontaktieren Sie die untenstehende E-Mail-Adresse f=C3=BCr weitere
-Informationen, damit Sie diese Spende von der =C3=BCberweisenden Bank
-erhalten k=C3=B6nnen. E-Mail: robertbaileys_spende@aol.com
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * *
+Kind regards
+Uffe
 
-Powerball-Jackpot-Gewinner
-E-Mail: robertbaileys_spende@aol.com
+> ---
+>  .../bindings/memory-controllers/nvidia,tegra186-mc.yaml        | 3 ---
+>  Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml | 1 -
+>  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml  | 1 -
+>  3 files changed, 5 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> index c7cfa6c2cd81..935d63d181d9 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> @@ -150,7 +150,6 @@ allOf:
+>            description: 5 memory controller channels and 1 for stream-id registers
+>
+>          reg-names:
+> -          maxItems: 6
+>            items:
+>              - const: sid
+>              - const: broadcast
+> @@ -170,7 +169,6 @@ allOf:
+>            description: 17 memory controller channels and 1 for stream-id registers
+>
+>          reg-names:
+> -          minItems: 18
+>            items:
+>              - const: sid
+>              - const: broadcast
+> @@ -202,7 +200,6 @@ allOf:
+>            description: 17 memory controller channels and 1 for stream-id registers
+>
+>          reg-names:
+> -          minItems: 18
+>            items:
+>              - const: sid
+>              - const: broadcast
+> diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+> index c79639e9027e..7a2b22dd6d05 100644
+> --- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+> @@ -145,7 +145,6 @@ allOf:
+>            items:
+>              - description: Xenon IP registers
+>              - description: Armada 3700 SoC PHY PAD Voltage Control register
+> -          minItems: 2
+>
+>          marvell,pad-type:
+>            $ref: /schemas/types.yaml#/definitions/string
+> diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> index cbcf19f51411..ed6c1ca80dcc 100644
+> --- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+> @@ -64,7 +64,6 @@ if:
+>  then:
+>    properties:
+>      clocks:
+> -      minItems: 2
+>        items:
+>          - description: High-frequency oscillator input, divided internally
+>          - description: Low-frequency oscillator input
+> --
+> 2.34.1
+>
