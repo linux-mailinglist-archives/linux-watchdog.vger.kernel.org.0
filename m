@@ -2,102 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06621540D52
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Jun 2022 20:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24B9542817
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jun 2022 09:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346415AbiFGSsS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Jun 2022 14:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
+        id S232518AbiFHHcj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Jun 2022 03:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354421AbiFGSrB (ORCPT
+        with ESMTP id S1354388AbiFHGTd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0890E3BA52;
-        Tue,  7 Jun 2022 11:01:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD3F6B82239;
-        Tue,  7 Jun 2022 18:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF42AC34119;
-        Tue,  7 Jun 2022 18:01:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624866;
-        bh=Qr/a7JxWet4zrfzFhaoHyLcEpfD+S1KNXH/SrrqH+gw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jyhZ5Uduqj4LQsKkXqSSkWzNJxVlSVJ3xLxGJOLN0CXPP9w2LXaO1QbEsvyg89o/N
-         oSmJge2w+4b1xMFEm6fLXEdtPX5jJXseVLLasB/0bpLcdB8sdQsO6m6EvwenvZi9Sa
-         QyVZKjzSo7zCHe9LOkAJStlIn39d2PG+7Z1jNSyjF7uMbXDiT/gM0PONRWO/5LTCOW
-         vOi4IVerF7L83NnMKz80Ay6iYy2h8eushnaJ7r3xPdd7ktAGaAKMSlpC/RMkHtJAfR
-         s5cX7zRaaDoSXuCrYVmkHlb019S8lUYj70LwpsW+GfzgpMUoludpfulEJzRci/vyTE
-         Diw/sjNmmtWRQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Liu Xinpeng <liuxp11@chinatelecom.cn>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 20/34] watchdog: wdat_wdt: Stop watchdog when rebooting the system
-Date:   Tue,  7 Jun 2022 13:59:55 -0400
-Message-Id: <20220607180011.481266-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607180011.481266-1-sashal@kernel.org>
-References: <20220607180011.481266-1-sashal@kernel.org>
+        Wed, 8 Jun 2022 02:19:33 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DAFE2058;
+        Tue,  7 Jun 2022 23:09:39 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id f65so7786752pgc.7;
+        Tue, 07 Jun 2022 23:09:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5XPLdEjhOMoKfPO/4HrcmUy4dcFm1Nhd2plHLfQ24R8=;
+        b=IQuHLDlbIjp9DRwZU/OIR7MWti2kse/Nurh507vTWHUe3/erAaXfyISuSWL+fUD7i7
+         2ayOLC7Gj42Lu/sgu0DMPvlBmZlVf+BM4wkFYtEUTY6Jqb3Yds1APmCl93nEubCX33jP
+         QGaB/ZTVmKrx4aE1mx5tcCVGMyizFvHQLdv5xaVTJ12yXGUN1eh8xChRHZdEPmr8Rr/E
+         do5+xgQpIFQD2ly1A43X+qPR7/h3rJBX7Ch3KlgKR8lzOOooOhwhqEouzZ9BSUZ5WYJe
+         7EuGQcrwa8fHeV7eP/SfJ97Ti3TUPBf+hE+U+y0qZpz/mLh0LJhXd8Ww9YTawcDPtJE+
+         OKDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5XPLdEjhOMoKfPO/4HrcmUy4dcFm1Nhd2plHLfQ24R8=;
+        b=vD+DCwlQgybdvlGD/wkxFYuqI7meZFGAcCULHDgei/ZfUzGEv4DukcGzoIwYRcAp38
+         xwspBJ2a80SdktefWsfxKLJCIVc2RKrmNN4wrkPWk8QF7Y0P8TRTC5DWbGZt/JM6L8kL
+         VWFsQ7d7dbB0HweYw08iGKdups1DvuWoaL0ipkIDT2q7o42Fm/1lrjg3SgL2+t7hsZFZ
+         ocfNYRmYubdwDYzTUbCBy4sY4PiNLER96ggtFuGz8m+uMK97tOnLEy8UikWbnHqhBSpC
+         ugF6+wSq1rV/h2Hb8rHb0eKXGIsmTu8fFma1iyq4pHsh3PZFf2SXiksYvBO10lFAoLs9
+         xteQ==
+X-Gm-Message-State: AOAM531AW3FR5NrY2t6pLEowzonNIR+QG3r4K7BW5/kC/GPBmyApyd3J
+        rXxEilMRNACvwhsvUn7q4r1d9Sbj2zJcLxRGVtEe0g==
+X-Google-Smtp-Source: ABdhPJxsG8KPgBeOiJI4hS9gvx8TWMr04L/5uTmyUY3hJG1NJLpVPAoDPEROSaIapoiX49Od4nzglw==
+X-Received: by 2002:a63:5723:0:b0:3fd:d8b4:c19f with SMTP id l35-20020a635723000000b003fdd8b4c19fmr10089040pgb.137.1654668579316;
+        Tue, 07 Jun 2022 23:09:39 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090a400500b001e30a63ca3asm13193671pjc.2.2022.06.07.23.09.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 23:09:38 -0700 (PDT)
+From:   luoxueqin <luoxueqin66@gmail.com>
+X-Google-Original-From: luoxueqin <937225041@qq.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luoxueqin <luoxueqin@kylinos.cn>
+Subject: [PATCH -next] watchdog:Fix typo in comment
+Date:   Wed,  8 Jun 2022 14:09:33 +0800
+Message-Id: <20220608060933.13062-1-937225041@qq.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Liu Xinpeng <liuxp11@chinatelecom.cn>
+From: luoxueqin <luoxueqin@kylinos.cn>
 
-[ Upstream commit 27fdf84510a1374748904db43f6755f912736d92 ]
+Spelling mistake in comment.
 
-Executing reboot command several times on the machine "Dell
-PowerEdge R740", UEFI security detection stopped machine
-with the following prompt:
-
-UEFI0082: The system was reset due to a timeout from the watchdog
-timer. Check the System Event Log (SEL) or crash dumps from
-Operating Sysstem to identify the source that triggered the
-watchdog timer reset. Update the firmware or driver for the
-identified device.
-
-iDRAC has warning event: "The watchdog timer reset the system".
-
-This patch fixes this issue by adding the reboot notifier.
-
-Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/1650984810-6247-3-git-send-email-liuxp11@chinatelecom.cn
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: luoxueqin <luoxueqin@kylinos.cn>
 ---
- drivers/watchdog/wdat_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/watchdog/pc87413_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index 88c5e6361aa0..fddbb39433be 100644
---- a/drivers/watchdog/wdat_wdt.c
-+++ b/drivers/watchdog/wdat_wdt.c
-@@ -462,6 +462,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 		return ret;
- 
- 	watchdog_set_nowayout(&wdat->wdd, nowayout);
-+	watchdog_stop_on_reboot(&wdat->wdd);
- 	return devm_watchdog_register_device(dev, &wdat->wdd);
+diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
+index 9f9a340427fc..c7f745caf203 100644
+--- a/drivers/watchdog/pc87413_wdt.c
++++ b/drivers/watchdog/pc87413_wdt.c
+@@ -442,7 +442,7 @@ static long pc87413_ioctl(struct file *file, unsigned int cmd,
+ 	}
  }
  
+-/* -- Notifier funtions -----------------------------------------*/
++/* -- Notifier functions -----------------------------------------*/
+ 
+ /**
+  *	pc87413_notify_sys:
 -- 
-2.35.1
+2.25.1
 
