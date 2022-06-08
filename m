@@ -2,80 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0AF542E77
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jun 2022 12:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F0D542F9C
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jun 2022 14:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237066AbiFHKwa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Jun 2022 06:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        id S238404AbiFHMBD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Jun 2022 08:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236974AbiFHKw3 (ORCPT
+        with ESMTP id S230107AbiFHMBC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Jun 2022 06:52:29 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0017F66221
-        for <linux-watchdog@vger.kernel.org>; Wed,  8 Jun 2022 03:52:26 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fu3so39158854ejc.7
-        for <linux-watchdog@vger.kernel.org>; Wed, 08 Jun 2022 03:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=H9gdPAYEu5XJptAc0kQeVYVgl5hWoLoZN5syYTQ5mNM=;
-        b=Qh7Ty68rfizvfaF3qG8UEXEMAt0L3arSPDojNDSN3auo8VlkqDM72cqwFuZziVAsa0
-         plKefXVcxI4k66rDRYoTRRW41rt9bZNsOeumGTlCSWF6NdgTUl6bHDo7dCSMiFfN41m3
-         ouBmkLI4q5sjmmTLuySV7f3HrRmRK5Iq4vu50YsM/ZWBx2Ksr7AuLb7SCZpErlpQUzfE
-         V1fQEd7BVgwnY/mzfQmbnuD9aR6iRklNYslEvhNJ6YfKXeezX1RGHUGLX/hNEbDzDipA
-         bIeLe8zWV+LJSLMvxR2s4DD089CMhg8Zv79vStXTYNP/dQNUB0+dop1eCwqCoC9uP51u
-         LTKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=H9gdPAYEu5XJptAc0kQeVYVgl5hWoLoZN5syYTQ5mNM=;
-        b=BBY4MH4m6S/FjLJWcmn6UxCaCjif+FdkFkbqUvYe16hrjqx0Kax7VZtPzORS77OPm1
-         Z+hw9mDZJFDUrEq2+ng5QYcdMALzSRvhvJGLeJpVYi1SN6WlooQUMypqhymz092lmpZf
-         jmI+OwgmtGDifeGskF4ojhMrR6NvT0TMwzH88+u1z6yKW9YwFVdDkPi7uxlSojEU27qV
-         XefUoS+wHsHLXs+XjdkVnLA6QbOiPMwvEGtOsnUvEdovFrk8QFjDqWqLWFbfyWdaxkta
-         OM7gXj9QM8S5w0Mm3WRFadezQjHhOYHnQn5s8tMn+DGHmqYED8LPeL/QRMppirzo5V7S
-         Ne/w==
-X-Gm-Message-State: AOAM533EjnDP3x+BHdXalFNrcOWgZPb/CZCSA/jD2wjrj+5GbXpY2/Ze
-        /S+xV88cazVmiq5176LkTVTnxw==
-X-Google-Smtp-Source: ABdhPJwWec2s26qVJ689sEFpvOyRFQnCAppG/t70ZsXqIRM6ewBZOhQ5Orpe86cCQG5CBFZlBxQUTw==
-X-Received: by 2002:a17:906:6a1a:b0:711:ec13:b7bc with SMTP id qw26-20020a1709066a1a00b00711ec13b7bcmr4875722ejc.688.1654685545546;
-        Wed, 08 Jun 2022 03:52:25 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b6-20020a17090636c600b006feb6dee4absm9002564ejc.137.2022.06.08.03.52.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 03:52:24 -0700 (PDT)
-Message-ID: <83a8fb86-3311-87fe-c4ca-ab8e6d0cf784@linaro.org>
-Date:   Wed, 8 Jun 2022 12:52:23 +0200
+        Wed, 8 Jun 2022 08:01:02 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B59915C888;
+        Wed,  8 Jun 2022 05:01:00 -0700 (PDT)
+Received: from mail-ot1-f45.google.com ([209.85.210.45]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mf0Jg-1nWjHU3Kck-00gZ9B; Wed, 08 Jun 2022 14:00:59 +0200
+Received: by mail-ot1-f45.google.com with SMTP id y16-20020a9d5190000000b0060c1292a5b9so1986959otg.3;
+        Wed, 08 Jun 2022 05:00:58 -0700 (PDT)
+X-Gm-Message-State: AOAM533i8sFw0DRQnT7qY1cZnfXRnBzcjCpnQv96WS+A+V4f/W0aKYlX
+        dg+cjTFKixlRP4VoLDIg6bbUcaGqWZA3w/ah2YY=
+X-Google-Smtp-Source: ABdhPJzpBRQHOrOjRCxL6NgH9iKMT4129LgubmWT2Bck+iPxdLoQ6gKC8EUoy0gPKu/hz3e4skCIDgwhp1qkekViG9Y=
+X-Received: by 2002:a81:190f:0:b0:313:43b8:155c with SMTP id
+ 15-20020a81190f000000b0031343b8155cmr7988991ywz.495.1654689646278; Wed, 08
+ Jun 2022 05:00:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: renesas,wdt: Add r9a09g011
- (RZ/V2M) support
-Content-Language: en-US
-To:     Phil Edworthy <phil.edworthy@renesas.com>,
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-2-tmaimon77@gmail.com>
+In-Reply-To: <20220608095623.22327-2-tmaimon77@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 8 Jun 2022 14:00:28 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0mHk80oN_uLSif7wSY7x1ZN3bUkfz2xkdqmkxTqqXjeg@mail.gmail.com>
+Message-ID: <CAK8P3a0mHk80oN_uLSif7wSY7x1ZN3bUkfz2xkdqmkxTqqXjeg@mail.gmail.com>
+Subject: Re: [PATCH v2 01/20] clocksource: timer-npcm7xx: Add NPCM845 timer
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220607135619.174110-1-phil.edworthy@renesas.com>
- <20220607135619.174110-2-phil.edworthy@renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220607135619.174110-2-phil.edworthy@renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        robert.hancock@calian.com,
+        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:fpV+MFHVMv+0qZsZKGS/bEt/xhfSvy85PA/AFG7pA5pz/Mm0ReK
+ 1ulAyq86BrsIMPTYf3AGZiTGzcBdl/7sFjvMGjccovyst8Z4hwHQDwHuPsfLfTKLbbuXjKM
+ obYG92npLl/v2iPVClyPLK3gmczkZgMh3geLYY3rhu9TC9CATvT54bfWeLbUOTms1kHYYYF
+ iJkgb7teeMxd2VBAQZSlw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dLM3wY8LwP4=:JVyRRfBpXk4DUqhq96euV6
+ EUKFs+4BMnFBFjJieQWYWRixotk7ZGBxJa3mcoaVWdmNE532ibuqQsX9in+LLwDa2PjOtxQEt
+ ujKnlfIXn+0izewupSxWESUNkXG9lXS9iYbRUBofZTOefz32tPBOUb6yzNVRrSeIv2VloMaGA
+ 5t+pSl5CqRv9O9eVVTn7yjEpUCLuSlHovHNmEXJnY0DsLhDxxA1VHwW+HZHkzfnRJ5ffUfX74
+ QMVThzj/j1FbMu3+7vlGcdpKm/pRy8aU0tZpFmDv217od6jNyPYe7loi+18BwyjlM8Ezazj6Y
+ Sd3dTQTj6YPJf+WOu5z0TGizrTMP/wnNjwb/ttTSpnO39jBuoE0ZLNFpGqlbRK5a/beib6hlh
+ Vj4REmF3XUM+Ot9psGqi0B/s7OvCVUUIdDWsLj7HmNiTnXkXfy7hLx6wusuGoagKmvsjquNqo
+ hsli+dS8umasDQ3oYWdQDyZK93ZcbTpfmYme55li3iD5bg5eKN4ex9yLN2UOJYMs2LYo4BCwJ
+ DmbNHEWliMrZzu6GjbCGJf/wbnR1LJBXxvmVWOFr8n1+ZMKm1rUFWtOkqdakc18Id9Mj0j/nC
+ twVhTu6OfXvUjYdKYzdqP0l3LPG0+cPf8Q1v5/NC+Lv6xYT+9bIKYYP6J7hAMRa+pQ9Wl4XV+
+ 6xNOtr8AcDlVNn6HTkFpF5fIDFpega5mupRxt2OwLj3aKKIMuinHmgjBe95fD7lpbIIWj0qt4
+ mhcugyqB/Bfej1POBdHgy8xQLnEEESgnd6EXbtodbwYAjPZpxIKZuJq+T+ujANvFG5xn1TfpP
+ vexk/SPerAaC27CfYcTOXS455w0SQZDy6msSSgD1chQUKBk8xEanlxXm0ENoJVG2kW+rV5CrD
+ e3xIbQuwezxwxRhugxlQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,71 +99,16 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 07/06/2022 15:56, Phil Edworthy wrote:
-> Add the documentation for the r9a09g011 SoC, but in doing so also
-> reorganise the doc to make it easier to read.
-> Additionally, make the binding require an interrupt to be specified.
-> Whilst the driver does not need an interrupt, all of the SoCs that use
-> this binding actually provide one.
-> 
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+On Wed, Jun 8, 2022 at 11:56 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
+>
+> Add Nuvoton BMC NPCM845 timer support.
+> The NPCM845 uses the same timer controller as the NPCM750.
+>
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  .../bindings/watchdog/renesas,wdt.yaml        | 63 ++++++++++++-------
->  1 file changed, 42 insertions(+), 21 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> index a8d7dde5271b..6473734921e3 100644
-> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> @@ -31,6 +31,11 @@ properties:
->                - renesas,r9a07g054-wdt    # RZ/V2L
->            - const: renesas,rzg2l-wdt
->  
-> +      - items:
-> +          - enum:
-> +              - renesas,r9a09g011-wdt    # RZ/V2M
-> +          - const: renesas,rzv2m-wdt     # RZ/V2M
-> +
->        - items:
->            - enum:
->                - renesas,r8a7742-wdt      # RZ/G1H
-> @@ -70,13 +75,27 @@ properties:
->    reg:
->      maxItems: 1
->  
-> -  interrupts: true
-> +  interrupts:
-> +    minItems: 1
-> +    items:
-> +      - description: Timeout
-> +      - description: Parity error
->  
-> -  interrupt-names: true
-> +  interrupt-names:
+>  drivers/clocksource/timer-npcm7xx.c | 1 +
 
-This also needs minItems
+This one should no longer be needed if the timers are compatible with the
+old ones and correctly described in the DT.
 
-> +    items:
-> +      - const: wdt
-> +      - const: perrout
->  
-> -  clocks: true
-> +  clocks:
-> +    minItems: 1
-> +    items:
-> +      - description: Register access clock
-> +      - description: Main clock
->  
-> -  clock-names: true
-> +  clock-names:
-
-Ditto
-
-> +    items:
-> +      - const: pclk
-> +      - const: oscclk
->  
-
-Best regards,
-Krzysztof
+      Arnd
