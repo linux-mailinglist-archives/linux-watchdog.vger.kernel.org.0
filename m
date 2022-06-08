@@ -2,59 +2,42 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5878F543199
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jun 2022 15:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1A9543271
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jun 2022 16:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240511AbiFHNlC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Jun 2022 09:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S241252AbiFHOXn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Jun 2022 10:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240463AbiFHNk7 (ORCPT
+        with ESMTP id S241217AbiFHOXm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:40:59 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6ED1DA091;
-        Wed,  8 Jun 2022 06:40:53 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id b7so10252490ljr.6;
-        Wed, 08 Jun 2022 06:40:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NLRKDXz6zzjLAXhhR5Ifc+M4GbQQ1QD0rqcPZbvw9Lg=;
-        b=KUMMzEbWouoo5v1rnAw4ROesaaZ+ihQIjVRHapqwGv1U/mRgsb4bSx8YPFiSdGfnjb
-         gJVaOXOmbBBSk9VpwqB0gZ9qitVJP8PiUJw3rBvWsklM808py+k7J2BFcr1ATsofOwth
-         Zb2XhtDiW/MlgwEbzuTnXamBhEEWiSoSKHeyGq7tbTJPBteBAJjWKr/XxtAQf1Hc3ph+
-         foP2AmYGydN0Kiz8fW+cHhsRMcoaMUJNJJQ0ZZGn45AbtigbxMt6N9E6vBft+qHlr20t
-         vRrYwAW71h8h7EwyprxpLLaFRe2yZhcDZSajpDvVJPhAGdegARHe/Sf8XLhYpTDlc86/
-         CSdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NLRKDXz6zzjLAXhhR5Ifc+M4GbQQ1QD0rqcPZbvw9Lg=;
-        b=J/Q8KNvddD/mu2ePrX61tICStRbpdtK3HgQiDEWR0JctAh3Rzd+d5b07lUc0F1BuOU
-         X+6pgtpR6y16ff1cg2hgWo7/KlbNT9/GXTdjy3vv/g5ebVLTTW5ubckYIuhVHUImZOxB
-         GCgegXIep3JBKHvX0pNYg9C5ZAVD14zVQlqGzZmFtEGQNS2Ad8iEf2JkLUXErlHkim+Q
-         nDJEJ7JXxTAg55DcWnuXeDeyaWEaNFqcAhrafaF+nCQIBOKkv4tQ3x7k5qN8zGBkoTOp
-         ssLW00EfcjBvV+t882Zp6hh9YocL+Y3EmiGBjTX9dxGyTgUgJqch7uD0zrrvqS4Cnryo
-         JVGg==
-X-Gm-Message-State: AOAM533f25fH3tmjmWglBTdf1pWGH8ub+AL7JEfCo1vpcPUtPuuFChhe
-        r/mYrzU8N/XQ/aZxz825ROx82LMtFKSEzZv0t20=
-X-Google-Smtp-Source: ABdhPJwY1wyBrMPjLKOD5RHB0u0JbXxcpqguVu5NkKhRMtLnvkKbCkxsvPZdyQLyuzU+FGHvCR8t/ArR3jt2flq+iTk=
-X-Received: by 2002:a2e:81ca:0:b0:255:78c0:cb21 with SMTP id
- s10-20020a2e81ca000000b0025578c0cb21mr16542734ljg.240.1654695651152; Wed, 08
- Jun 2022 06:40:51 -0700 (PDT)
+        Wed, 8 Jun 2022 10:23:42 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFCD3EAA1;
+        Wed,  8 Jun 2022 07:23:39 -0700 (PDT)
+Received: from mail-ot1-f51.google.com ([209.85.210.51]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MFJfN-1nwzNb2gEz-00FlZo; Wed, 08 Jun 2022 16:10:58 +0200
+Received: by mail-ot1-f51.google.com with SMTP id g13-20020a9d6b0d000000b0060b13026e0dso15182192otp.8;
+        Wed, 08 Jun 2022 07:10:57 -0700 (PDT)
+X-Gm-Message-State: AOAM533LIUmsm9H3Oclhp+0JrCNN0SnsNPvBkfUnyChgHsXTQ3vpfWxU
+        tgtQLLcJcIOXrI4k0jyn0vbkfjw820R/YHO48s0=
+X-Google-Smtp-Source: ABdhPJwBT4Iode5kOKhC76/FZM6vkNDd0mUj8egQXTxe3D51vB8jwlVp5dbu3aMS3GpdoWhsQFTccyumCawBGfz8KvY=
+X-Received: by 2002:a25:e64b:0:b0:663:ffad:eac5 with SMTP id
+ d72-20020a25e64b000000b00663ffadeac5mr3074976ybh.550.1654696033002; Wed, 08
+ Jun 2022 06:47:13 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-4-tmaimon77@gmail.com>
- <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com>
-In-Reply-To: <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Wed, 8 Jun 2022 16:40:39 +0300
-Message-ID: <CAP6Zq1hxjDvzkwt3Jf7DVM_iB4EeYBdb3RzjjAjyr5mhD9==Lw@mail.gmail.com>
+ <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com> <CAP6Zq1hxjDvzkwt3Jf7DVM_iB4EeYBdb3RzjjAjyr5mhD9==Lw@mail.gmail.com>
+In-Reply-To: <CAP6Zq1hxjDvzkwt3Jf7DVM_iB4EeYBdb3RzjjAjyr5mhD9==Lw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 8 Jun 2022 15:46:56 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2bjvLaVTcpPNe0D72KGf7ScYAy2mwjd1YzUnEzQvFMmg@mail.gmail.com>
+Message-ID: <CAK8P3a2bjvLaVTcpPNe0D72KGf7ScYAy2mwjd1YzUnEzQvFMmg@mail.gmail.com>
 Subject: Re: [PATCH v2 03/20] tty: serial: 8250: Add NPCM845 UART support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Joel Stanley <joel@jms.id.au>,
         Patrick Venture <venture@google.com>,
@@ -90,44 +73,47 @@ Cc:     Avi Fishman <avifishman70@gmail.com>,
         LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:IvI6t25nEeC7uQyVShm8Xea/jy+s3Ia7twmziy0F3KXXxZyMY2g
+ Om30T+nymXvHEE5XGhWbm3ydgVzPssF30UgMfFvwlfg1t+J+zBpKgVSqaFnHLEOsoKlDjPX
+ mtrD048yFgRAXfKpGch0FgvHi4jY+2LLS67Am9ECqOsxxZ+2p7Qmgs4rVrfcOh0WBOm9oAo
+ LSL9pg6m4fVati5/eGX6A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4B3QsBhfvQk=:72Po+NrhmMPtafCLD97ceq
+ rWExdYzhSn1FoaOxH1lI1sd3XgPWv27bi7KRxOJaMLM8LPhC/Zvkj3drYFrpFxjDxPp1cyAZW
+ ijLBeJ7w94ka1j+5L0b81Xr+TTirWmisu0QiS2DxOxTmJchwNAgVMqczgHFM8ZpLZmV5KgcZ/
+ YnN5ASgoV6EbEYhO0Y7xkyAY4+v8vFgwizwnge628dUTd2mLPVTEDH5/AlNExEobgAH6nkkq4
+ klbyKT0GUKGabQav0i5f6ZRkCSMFSdwhve2YL9d1gQRDgKENbBfhZQ27upRuj0vuC8xi/9xzG
+ W5cB3opJd7Aa8ClCrP8o8joaXVfrYdzAMJ4VTFssRDnH1jyAZMjk0XTxejnI/wF82nd9/j53u
+ baqN+LKNMPlDyD4JY+CQCH2jiF+pk4UPTDz3mFj6UfFl+1sqbDlN9iEnaquJF9Npy4VCjunhN
+ 6rwd/9gbwZYOEZkYUmCdsNV6QeCK+aSZ0fQ/GGEFp+SBLiqWg/Vj/fOnv/WDlznc+nBaKUomM
+ 4/9zo8jnhRYAu+ivyHB70tliY3ICSh2jRE7JjN5IzCkqyLip8IZFLdOlZivOx88dSa60M7Pdl
+ CCVYHt3RMvMldEbH+XuGOHEgLPAGiqTZryaRpSicOeTEBc/5lHhHwgvqW+P1M3vAPcmMr9axd
+ paNsRB1MfgRyxDffDLp03rH9BNBdnH9QijyHRqWSvbwO7cVdgenCyXpU5KFvO6aIcgMSeNcBg
+ N1lpU0wT4J2tiE4/cQ/CYDl8UNemDdCcOr4wo3hiB737MWGSukPEWGq+zKiLiSYjplwJn4uTr
+ 7SGlPusJGQJFpnw2J8v90s22O8bcw5RaDVZcBlZL8U2dJ8tG92jAiUurWpyc4vtz0ZDdyez5O
+ giy2ak4nbaFYK1Q9NoEw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Arnd,
-
-Sorry but Just to clarify, This patch should not be applied and the
-NPCM8XX UART should use nuvoton,npcm750-uart compatible in the device
-tree?
-
-Because I thought that in your comment a few weeks ago
-https://www.spinics.net/lists/linux-serial/msg48179.html
-
-We need only to modify the compatible string in the device tree as we
-did in V2 patchset
-https://www.spinics.net/lists/arm-kernel/msg986480.html
-
-On Wed, 8 Jun 2022 at 15:01, Arnd Bergmann <arnd@arndb.de> wrote:
+On Wed, Jun 8, 2022 at 3:40 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
 >
-> On Wed, Jun 8, 2022 at 11:56 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >
-> > Add Nuvoton BMC NPCM845 UART support.
-> > The NPCM845 uses the same UART as the NPCM750.
-> >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Sorry but Just to clarify, This patch should not be applied and the
+> NPCM8XX UART should use nuvoton,npcm750-uart compatible in the device
+> tree?
 >
+> Because I thought that in your comment a few weeks ago
+> https://www.spinics.net/lists/linux-serial/msg48179.html
 >
-> This one should no longer be needed if the timers are compatible with the
-> old ones and correctly described in the DT.
->
->       Arnd
+> We need only to modify the compatible string in the device tree as we
+> did in V2 patchset
+> https://www.spinics.net/lists/arm-kernel/msg986480.html
 
-Thanks,
+Yes, this is correct: with the DT file from v2, the driver no longer needs to be
+changed, it will just match the fallback value.
 
-Tomer
+       Arnd
