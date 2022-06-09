@@ -2,103 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9956F543ECE
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Jun 2022 23:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D1F54410F
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Jun 2022 03:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236460AbiFHVsa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Jun 2022 17:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S229814AbiFIBaz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Jun 2022 21:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbiFHVsT (ORCPT
+        with ESMTP id S234804AbiFIBay (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Jun 2022 17:48:19 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5C525CA;
-        Wed,  8 Jun 2022 14:48:18 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id u2so16628017iln.2;
-        Wed, 08 Jun 2022 14:48:18 -0700 (PDT)
+        Wed, 8 Jun 2022 21:30:54 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174CB357F8E;
+        Wed,  8 Jun 2022 18:30:51 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id q18so19074433pln.12;
+        Wed, 08 Jun 2022 18:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NbcFqWO7j7XREwqzym411oNkBJtnizas0IMJ4blzmdA=;
+        b=pJfABryT04hjujSVRrSop31+/1O6kUxJT6iilXPda5zYI2JhKvNwMUHRrLT8XuiRcO
+         bYjJO4PDA/K9sJJ3LAPr257pzh+rHPmpKKvtpgA5vP4nRzefh2qIx8ZlsAsPnmSpZkNW
+         HFeP01z5c/6pFNVEPeMFN0DpPndqfiGFgfLhtaTcZDZCIxYqlEewLy+ZUrjHsGX6xHnj
+         N3l8ZcEMEe5PN1HGeLa3d7FnThfhu/onUGtjaGndu0b5aqlV01xuWxiV5b+bnj5ed4li
+         oxSh9YnymgDyGnNKIRkjzOpeSbWPkErFTmTSisD83i7nNDvzf+SN59i1ScDyToywlaSN
+         NQuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=DSD6n7SqIRrkJflyY9v16h++03DHbVndZ5fsmVluVpY=;
-        b=cwi3sgJVbGK5/a5yofj5IsJ0chGPUaZLjhDM9HLBsEAhYnt1ndpzS+0o7+wsETEDN8
-         oaVtaa4KJP99yw/CIs5x/suLSHclZDmyGBqol1FTgXtS38VKiZkcdLFdkh+5mpQCU1Jd
-         xY6Qn3W9yu+IAUM3k9ADqCpyPNRdPAHOf0ISxzN3UbMdI/FkBZT4uD3cBj5Wi4a1eGMX
-         CI0S4tHkkELzjmE86VE/cnqPDOb7R7W7r4K5C/6YAOHsbVhs6Xey+jSApsV45boTRVyq
-         kd18McEtcDogVhLONQQXLFSMag3DBKFzr7dT/YCZE+Bpq0xZa/muRvoS8aPwSOnT509T
-         W04A==
-X-Gm-Message-State: AOAM5333j6Rbz6E7rciuTDZgOzPkprql6GMRWvOzNEACvA9dMbagyaYP
-        opmmhPDwGvAQJVRVCWnz4w==
-X-Google-Smtp-Source: ABdhPJy/TjtIFK2XNa8YJamLmJFJcs1T73KDNKNmv3NgKRZb8+6pL7BKf2zfXN3uean8c2Mkm38reQ==
-X-Received: by 2002:a05:6e02:1c22:b0:2d1:abab:8806 with SMTP id m2-20020a056e021c2200b002d1abab8806mr19448897ilh.300.1654724897688;
-        Wed, 08 Jun 2022 14:48:17 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id k29-20020a02661d000000b0032ead96ee5csm8452867jac.165.2022.06.08.14.48.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NbcFqWO7j7XREwqzym411oNkBJtnizas0IMJ4blzmdA=;
+        b=by3768N8f68A9y5rzH2rCpkLjHz8PmMBn1nwCmhMvmoMBgKkmzgGp39He1c9O258dI
+         Y4wncja9FLS+fve/oPP9BR87FpiCLHRfAQHSNDdMbsZPOknK3uuOnh1RtvRw0tO+6YR5
+         qy1B2kMm86fCtu9g0rRhdFS/u198H/eDvmHIhgJs4vnlZrDd6gTHe2y7IWktEannbNYT
+         qPiD8sbDuP2P4F+5jCZQXfXJ2dJurbC+DQN9nodUJhYe4SZS+AjLhRXokQ1xarusPgNs
+         cb1SCAhSBNRyiEQprF6owr+T5FUDgfJ8w7o4MoTNRCiP2juAZZO8ZgCwCFfl1QCS5O9j
+         2acw==
+X-Gm-Message-State: AOAM532g/74m+3PtDgN74IjHAGlm1fEQ++Wbya8Y/wGOQXt4M+y/jWVY
+        iLbWNuuxqDgL+dC+4APNMzM6YcTvHVwDAf7Gz5dQfg==
+X-Google-Smtp-Source: ABdhPJymgEIFYdVi7qbpayUVn4kKLEWaHeD93CkKHc4vPn/3wLdkAHwcBmblk2fbE92ObydZzs7qeA==
+X-Received: by 2002:a17:90b:4d90:b0:1e3:3025:66fe with SMTP id oj16-20020a17090b4d9000b001e3302566femr827364pjb.145.1654738250915;
+        Wed, 08 Jun 2022 18:30:50 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id jj19-20020a170903049300b00164097a779fsm283114plb.147.2022.06.08.18.30.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 14:48:17 -0700 (PDT)
-Received: (nullmailer pid 2134383 invoked by uid 1000);
-        Wed, 08 Jun 2022 21:48:06 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        venture@google.com, marcel.ziswiler@toradex.com,
-        nobuhiro1.iwamatsu@toshiba.co.jp, p.zabel@pengutronix.de,
-        bjorn.andersson@linaro.org, olof@lixom.net,
-        benjaminfair@google.com, biju.das.jz@bp.renesas.com,
-        linux-serial@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        j.neuschaefer@gmx.net, will@kernel.org, lkundrak@v3.sk,
-        yuenn@google.com, wim@linux-watchdog.org,
-        devicetree@vger.kernel.org, shawnguo@kernel.org,
-        geert+renesas@glider.be, linux-watchdog@vger.kernel.org,
-        gregkh@linuxfoundation.org, sboyd@kernel.org, jirislaby@kernel.org,
-        vkoul@kernel.org, robert.hancock@calian.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org, arnd@arndb.de,
-        linux-clk@vger.kernel.org, mturquette@baylibre.com,
-        avifishman70@gmail.com, joel@jms.id.au, tali.perry1@gmail.com,
-        tglx@linutronix.de
-In-Reply-To: <20220608095623.22327-10-tmaimon77@gmail.com>
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-10-tmaimon77@gmail.com>
-Subject: Re: [PATCH v2 09/20] dt-bindings: reset: npcm: add GCR syscon property
-Date:   Wed, 08 Jun 2022 15:48:06 -0600
-Message-Id: <1654724886.806854.2134382.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 08 Jun 2022 18:30:49 -0700 (PDT)
+From:   luoxueqin <luoxueqin66@gmail.com>
+X-Google-Original-From: luoxueqin <937225041@qq.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luo Xueqin <luoxueqin@kylinos.cn>
+Subject: [PATCH -next] watchdog:Fix typo in comment
+Date:   Thu,  9 Jun 2022 09:30:11 +0800
+Message-Id: <20220609013011.54175-1-937225041@qq.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 08 Jun 2022 12:56:12 +0300, Tomer Maimon wrote:
-> Describe syscon property that handles general
-> control registers(GCR) in Nuvoton BMC NPCM
-> reset driver.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  .../devicetree/bindings/reset/nuvoton,npcm-reset.yaml       | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+From: Luo Xueqin <luoxueqin@kylinos.cn>
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Spelling mistake in comment.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Signed-off-by: Luo Xueqin <luoxueqin@kylinos.cn>
+---
+ drivers/watchdog/pc87413_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
-
-
-rstc@f0801000: 'nuvoton,sysgcr' is a required property
-	arch/arm/boot/dts/nuvoton-npcm730-gbs.dtb
-	arch/arm/boot/dts/nuvoton-npcm730-gsj.dtb
-	arch/arm/boot/dts/nuvoton-npcm730-kudo.dtb
-	arch/arm/boot/dts/nuvoton-npcm750-evb.dtb
-	arch/arm/boot/dts/nuvoton-npcm750-runbmc-olympus.dtb
+diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
+index 9f9a340427fc..c7f745caf203 100644
+--- a/drivers/watchdog/pc87413_wdt.c
++++ b/drivers/watchdog/pc87413_wdt.c
+@@ -442,7 +442,7 @@ static long pc87413_ioctl(struct file *file, unsigned int cmd,
+ 	}
+ }
+ 
+-/* -- Notifier funtions -----------------------------------------*/
++/* -- Notifier functions -----------------------------------------*/
+ 
+ /**
+  *	pc87413_notify_sys:
+-- 
+2.25.1
 
