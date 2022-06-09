@@ -2,87 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10689545790
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 00:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE9754589B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 01:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242061AbiFIWm5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 9 Jun 2022 18:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S238138AbiFIXWi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 9 Jun 2022 19:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345786AbiFIWm4 (ORCPT
+        with ESMTP id S236496AbiFIXWh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:42:56 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA5925A82A;
-        Thu,  9 Jun 2022 15:42:55 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id a2so34047035lfg.5;
-        Thu, 09 Jun 2022 15:42:54 -0700 (PDT)
+        Thu, 9 Jun 2022 19:22:37 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC2A156B6D;
+        Thu,  9 Jun 2022 16:22:36 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id be31so40307151lfb.10;
+        Thu, 09 Jun 2022 16:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=QBqjJZZ0M+7Q/xVRLShZPGqqDGt9J93+4pKuC2SGml0=;
-        b=UNrAa2wkcgxy22e4V2fpziz5kwLT8g5bDgzeWx2lZHm7Ts2YAjqF2gn6eYyuQEmC2Y
-         nIc1AaLG9N8a2eP0KogTlMQD0N0D+3QN3ZvLEJfn0La4yC4AFw6HT0Q10hymcLhmUsG0
-         4X1mixRHlnny/4TsKlD9WIYKDQmKsLU0SK/fJMWD66OqpoGwnj4gXCGk3+2V20YLXPcI
-         VvWsRkTtpSZ4Dyl0H6WZ63pKI7ROMcLhKTuZgGF5XPlkM3YWT88UWZGrzCgGQmgys2bL
-         swXJd8N0IUyLGGlcCXNzqA5AHyq15l2AB1+/LqN9keS8KD96M9cAj7an90eW5KXVKb7y
-         l5Zg==
+        bh=pNn5m4Xk26zmjjZWaXx9gc+yTuD5ZU/xEKvPldY9urA=;
+        b=O2nWaeF/P16IAO05RYFD1FqECAJEYzwHKWQzhUb8Wl1SUnpVfCesfyBI8CG7HR77pl
+         oqHf7sj6TzPra19Ot9mNHCGB2/PTFHzBupaYcAbtDz+X1psql3wsD5ZfUrU3tzX+zA8Y
+         uPSnpAhB+TR7CKbTHRTMJcI+jb21lw45/DKQEQ2yD8HbD8XJ7e5UVidhpdfyqcvYe/bh
+         jk1O6NFP7R4mOLVW6O53rhFaXIATQnFrrQNifZqIjBowAeo9EGUrvqKOOld2JV2aa9Sp
+         3t3nXamQxUKVmfm66CniAOsKfwdxZiiKr3ZlqAyrjtrMbWJf3xcPxn8OeXYn2ug4zY/t
+         b5vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QBqjJZZ0M+7Q/xVRLShZPGqqDGt9J93+4pKuC2SGml0=;
-        b=0dFxBv+GT5OMGJeOtH/FcpFvK162g9dQHAcIuSaCEkm8Z3OmJ6ZKgznEq1H8bWo3Nc
-         DI8XVyMoYYbb0kDnCZdcoKom1QxzUt+zXdm5H937XYChaT/yxhngjhB1639ji1Cosc10
-         5LF1pZBwfbNHNR1QuIpoKMRngiO0UJmLyXwCXmD2H0xKVqH2CGVurLW+19C6xKd3w9mq
-         h+FtpzTXHWJjAWsmnEV34X3/LV+ASpQ2AASM9M+lwchrKfeJJo0u3wMypV0kWT5p3bmL
-         cJefdZv6JLKcCBJZnfOowIRrRcXyhAGL1KC7qtrs+48s13EItymfe42aSEbcXoNTAy+Y
-         AiwQ==
-X-Gm-Message-State: AOAM5307TuhHjQ0sk16qZyRaCLkBWyE7Je3K4JF3wLnRD3NiQN+KB2oP
-        W9IUpIBm2AxN3qeGwuYHcSqq8ktyDcbz7cf6JGY=
-X-Google-Smtp-Source: ABdhPJyOI7btd4GLsQI0ynE+1WP/Zkc4k6P0AL6BWPLkL5+YXG0gRcy8024baT//Y2tbKmYLubYKiii4RTxwufnYJv4=
-X-Received: by 2002:a05:6512:10c5:b0:479:2de0:561c with SMTP id
- k5-20020a05651210c500b004792de0561cmr17131263lfg.536.1654814573393; Thu, 09
- Jun 2022 15:42:53 -0700 (PDT)
+        bh=pNn5m4Xk26zmjjZWaXx9gc+yTuD5ZU/xEKvPldY9urA=;
+        b=2wGnH6wloE51k0kqfDs34IBGaJgU5XQnfMJn00WZZlAiVkGwU7+bLiFQniYifHAcVO
+         kWvFaFqDolGDMr36gNb+nVuq9Q6XT+gjpki4ewsLiIORmq5lNUWGjtsHLZuwsb5juUIV
+         DWsrVhgP6TtTCLkaKyEbKUM/M3OJBQBEXAS0GalhWlKI9Wlz93qkfFLpbXxg5qY7jUJQ
+         R+kWZGryBYNPXqVABPKsLFsqkpvNW16Yd1LsHRyXe6bmK42Cp4XlCFZpVh6BhSYP+EC8
+         JsUlMvK31mXedl/sEaAvRx5A0qaM9ZfZRVvUTkASZHgZ5MOYh5B+W85vo89p32JMz25K
+         lThg==
+X-Gm-Message-State: AOAM532vC867lZocxjX296mkNmvWvd4wk6WnIJhCKewu0trK6KSbmmeM
+        rgu8Y1Y2QMgh8SpDRP8pmvY6SmET7WYFsFqIjII=
+X-Google-Smtp-Source: ABdhPJyj9vLZaljPbA3gWFChXewcit6cy+/TcGFC1IlSTHaMze9MSYP47sdEYio3WJMrJ2QRRDoGLm17Rd36wGtKv88=
+X-Received: by 2002:a05:6512:31cf:b0:479:3fd4:420e with SMTP id
+ j15-20020a05651231cf00b004793fd4420emr15845925lfe.364.1654816954651; Thu, 09
+ Jun 2022 16:22:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-8-tmaimon77@gmail.com>
- <20220609221433.B8990C34114@smtp.kernel.org>
-In-Reply-To: <20220609221433.B8990C34114@smtp.kernel.org>
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-11-tmaimon77@gmail.com>
+ <3aa70c91-d6d7-e2eb-9c45-a1fb0a5751ca@linaro.org> <CAP6Zq1iCJO3AzHnG7RSQ1pyVwayxs+X3iVM4U=6j2k0EgR7psg@mail.gmail.com>
+ <CADKL2t523rdOnm=iUNXcw06Soq3NjbJEsEiPwCXdSx3Np-rNDQ@mail.gmail.com>
+In-Reply-To: <CADKL2t523rdOnm=iUNXcw06Soq3NjbJEsEiPwCXdSx3Np-rNDQ@mail.gmail.com>
 From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Fri, 10 Jun 2022 01:42:42 +0300
-Message-ID: <CAP6Zq1j2+NciZqgYoDZ5DXNs_2NvfErQkKhW5CoePbrC7CQQkQ@mail.gmail.com>
-Subject: Re: [PATCH v2 07/20] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+Date:   Fri, 10 Jun 2022 02:22:23 +0300
+Message-ID: <CAP6Zq1g6XoWmdHPfB+7-EjqRaMfhQD7Zt0J+ChCPTZKykkogsg@mail.gmail.com>
+Subject: Re: [PATCH v2 10/20] ARM: dts: nuvoton: add reset syscon property
+To:     Benjamin Fair <benjaminfair@google.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
         Tali Perry <tali.perry1@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Joel Stanley <joel@jms.id.au>,
         Patrick Venture <venture@google.com>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Nancy Yuen <yuenn@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
         devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>,
@@ -100,49 +102,48 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Stephen,
+Hi Benjamin,
 
-Thanks for your comment, it will be addressed next patch set
+Thanks a lot for your explanation.
 
-On Fri, 10 Jun 2022 at 01:14, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Tomer Maimon (2022-06-08 02:56:10)
-> > diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
-> > new file mode 100644
-> > index 000000000000..40340c3611b5
-> > --- /dev/null
-> > +++ b/drivers/clk/clk-npcm8xx.c
-> > @@ -0,0 +1,756 @@
-> [...]
-> > +
-> > +#define PLLCON_LOKI    BIT(31)
-> > +#define PLLCON_LOKS    BIT(30)
-> > +#define PLLCON_FBDV    GENMASK(27, 16)
-> > +#define PLLCON_OTDV2   GENMASK(15, 13)
-> > +#define PLLCON_PWDEN   BIT(12)
-> > +#define PLLCON_OTDV1   GENMASK(10, 8)
-> > +#define PLLCON_INDV    GENMASK(5, 0)
-> > +
-> > +static unsigned long npcm8xx_clk_pll_recalc_rate(struct clk_hw *hw,
-> > +                                                unsigned long parent_rate)
-> > +{
-> > +       struct npcm8xx_clk_pll *pll = to_npcm8xx_clk_pll(hw);
-> > +       unsigned long fbdv, indv, otdv1, otdv2;
-> > +       unsigned int val;
-> > +       u64 ret;
-> > +
-> > +       if (parent_rate == 0) {
-> > +               pr_debug("%s: parent rate is zero", __func__);
->
-> Missing newline.
->
-> > +               return 0;
-> > +       }
-> > +
-> > +       val = readl_relaxed(pll->pllcon);
-> > +
-> > +       indv = FIELD_GET(PLLCON_INDV, val);
+will be applied in next patch set
 
 Best regards,
 
 Tomer
+
+On Fri, 10 Jun 2022 at 01:11, Benjamin Fair <benjaminfair@google.com> wrote:
+>
+> Hi Tomer,
+>
+> On Thu, 9 Jun 2022 at 14:30, Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >
+> > Hi Krzysztof,
+> >
+> > Thanks for your comments
+> >
+> > On Wed, 8 Jun 2022 at 13:07, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> > >
+> > > On 08/06/2022 11:56, Tomer Maimon wrote:
+> > > > Add nuvoton,sysgcr syscon property to the reset
+> > > > node to handle the general control registers.
+> > >
+> > > Wrong wrapping.
+> > it will be very helpful if you could point me what wrong wrapped in
+> > the commit message, is it the explanation or the header? or something
+> > else?
+>
+> The commit message body should be wrapped at 72 chars. You can fit
+> more on the first line if you reflow:
+>
+> Add nuvoton,sysgcr syscon property to the reset node to handle the
+> general control registers.
+>
+> > >
+> > > Best regards,
+> > > Krzysztof
+> >
+> > Best regards,
+> >
+> > Tomer
