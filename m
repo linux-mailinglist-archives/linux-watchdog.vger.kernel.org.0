@@ -2,136 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9225456F0
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 00:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3015E5456FF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 00:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236396AbiFIWL0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 9 Jun 2022 18:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S240262AbiFIWOh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 9 Jun 2022 18:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiFIWLY (ORCPT
+        with ESMTP id S235102AbiFIWOh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 9 Jun 2022 18:11:24 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F1F15E63F
-        for <linux-watchdog@vger.kernel.org>; Thu,  9 Jun 2022 15:11:23 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so221198wmz.2
-        for <linux-watchdog@vger.kernel.org>; Thu, 09 Jun 2022 15:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=InjL74e+G90ZxHkv8wOPoRjvtkmrCI8/zFa+GegrWrs=;
-        b=ZZ8Pi5On3BCsTOPysE3hM6XnnDucvZsZ0t/ef7wkpsRg8lN4Df2vn+K+Vo563wBfbl
-         UoItTQW5DUWNtuO1hm+hjoXsIUr33oQkeHCIIXk4jUJm0z2AFkkcKQ+oc63iIDC3QkQP
-         fSYvUToL2vsacT6stkdK7JTQtlcItWEs5nt9WANRz4cQSqXVGwJH66iLEirchtjLm4LM
-         DRfhfzeHvWlmGDqVgEFfHiUftWWixFr6digktG25QTfp7eakexLJ6MYV2vt0tNTRUXuo
-         QMh6lWAraDLRyEqPbeCsxEc8jeP8qK9L1MU22uG1iRWItFND0ap49cEM3iPT1IOp5InB
-         c8mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=InjL74e+G90ZxHkv8wOPoRjvtkmrCI8/zFa+GegrWrs=;
-        b=XOJUAmCYQAfGhjN85dP1TwLNFfYGNtWFCS+6xbfv8hr5dlgV2b7d0xxg9t3GCVLFFV
-         1p7AuYaTMnbt/OYtw6ub0lubVaGX2AH8ozhltBdCmcsvm/oWvRIo21gvF7KHXdEtF8TZ
-         CjfV4cFOsDLzY7rnaFncedbEkVWFCWulyYXRuwJLSdHDSr88dSX93l1RCC7k0JHHnvAA
-         GWg0UD7pmCGBnVBal71lxpyYstBQ2NrSv4x3eOSI20RQkw31N51P5FdNXXMhghcAM/Om
-         xtNndoJoXWnGcCBKqPHLT1c8NzbWTCSmCDDidtzfadDFzOo0kjOx5tGe/CaSO4d5GYOb
-         i97Q==
-X-Gm-Message-State: AOAM5306OAMP8yGE6nqGqXJNUPwAC3X4S6gfDjrhWtj4DmR2va/EHZu6
-        4xvoXVj1Y3NXKjV3xz33mnATQKY9F9fuSfChoLqk1Q==
-X-Google-Smtp-Source: ABdhPJz5c1e9+2oQkV6XjK2Ycf7s16aY52v1eiy6DzzvjdPdlELuaZ+jCSVlSpyHhiU80AGroldiHhcBwBe+Ts442Bo=
-X-Received: by 2002:a7b:c392:0:b0:39c:4d27:e698 with SMTP id
- s18-20020a7bc392000000b0039c4d27e698mr5397998wmj.57.1654812681381; Thu, 09
- Jun 2022 15:11:21 -0700 (PDT)
+        Thu, 9 Jun 2022 18:14:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F55160874;
+        Thu,  9 Jun 2022 15:14:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3815CB83099;
+        Thu,  9 Jun 2022 22:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8990C34114;
+        Thu,  9 Jun 2022 22:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654812873;
+        bh=H+jLa2rwFapf2Ofk7AqrjLvwyTI2J1EztZNbf9m0syw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=lEkzbE74y9VKqlOW0aCd+63moxuAPWhVC79dtjZKcpDjP2CRWzAAn1OkGvueerRvC
+         uKlPdp3ZxGJvAawBGHgNz662O022+tnX3ZLy1mx59fK/rwUkh9iDvjDUZLklKVXsrN
+         DiQ4w4Bb/F4Xo97a/Vx7bWD8fQ4LJlqO14LgGrw1qnv4QF/YdnTk72CyZj2mnsxxf2
+         EtfozD9ebbjzLFpM4ySgwRi5zvaCkdec6M/6KuRO16wR3JBPZKCE+SApPXydGqnTSC
+         AC6wSbgTqzA+2amQpeJy45P4jzzzHFCJQHj0VzugzGD23C+85wURnohiar8RROZIkN
+         d5f4f7R5rpLVw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-11-tmaimon77@gmail.com>
- <3aa70c91-d6d7-e2eb-9c45-a1fb0a5751ca@linaro.org> <CAP6Zq1iCJO3AzHnG7RSQ1pyVwayxs+X3iVM4U=6j2k0EgR7psg@mail.gmail.com>
-In-Reply-To: <CAP6Zq1iCJO3AzHnG7RSQ1pyVwayxs+X3iVM4U=6j2k0EgR7psg@mail.gmail.com>
-From:   Benjamin Fair <benjaminfair@google.com>
-Date:   Thu, 9 Jun 2022 15:10:45 -0700
-Message-ID: <CADKL2t523rdOnm=iUNXcw06Soq3NjbJEsEiPwCXdSx3Np-rNDQ@mail.gmail.com>
-Subject: Re: [PATCH v2 10/20] ARM: dts: nuvoton: add reset syscon property
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220608095623.22327-8-tmaimon77@gmail.com>
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-8-tmaimon77@gmail.com>
+Subject: Re: [PATCH v2 07/20] clk: npcm8xx: add clock controller
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Tomer Maimon <tmaimon77@gmail.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>, arnd@arndb.de,
+        avifishman70@gmail.com, benjaminfair@google.com,
+        biju.das.jz@bp.renesas.com, bjorn.andersson@linaro.org,
+        catalin.marinas@arm.com, daniel.lezcano@linaro.org,
+        geert+renesas@glider.be, gregkh@linuxfoundation.org,
+        j.neuschaefer@gmx.net, jirislaby@kernel.org, joel@jms.id.au,
+        krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        lkundrak@v3.sk, marcel.ziswiler@toradex.com,
+        mturquette@baylibre.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        olof@lixom.net, p.zabel@pengutronix.de, robert.hancock@calian.com,
+        robh+dt@kernel.org, shawnguo@kernel.org, tali.perry1@gmail.com,
+        tglx@linutronix.de, venture@google.com, vkoul@kernel.org,
+        will@kernel.org, wim@linux-watchdog.org, yuenn@google.com
+Date:   Thu, 09 Jun 2022 15:14:31 -0700
+User-Agent: alot/0.10
+Message-Id: <20220609221433.B8990C34114@smtp.kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Tomer,
+Quoting Tomer Maimon (2022-06-08 02:56:10)
+> diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
+> new file mode 100644
+> index 000000000000..40340c3611b5
+> --- /dev/null
+> +++ b/drivers/clk/clk-npcm8xx.c
+> @@ -0,0 +1,756 @@
+[...]
+> +
+> +#define PLLCON_LOKI    BIT(31)
+> +#define PLLCON_LOKS    BIT(30)
+> +#define PLLCON_FBDV    GENMASK(27, 16)
+> +#define PLLCON_OTDV2   GENMASK(15, 13)
+> +#define PLLCON_PWDEN   BIT(12)
+> +#define PLLCON_OTDV1   GENMASK(10, 8)
+> +#define PLLCON_INDV    GENMASK(5, 0)
+> +
+> +static unsigned long npcm8xx_clk_pll_recalc_rate(struct clk_hw *hw,
+> +                                                unsigned long parent_rat=
+e)
+> +{
+> +       struct npcm8xx_clk_pll *pll =3D to_npcm8xx_clk_pll(hw);
+> +       unsigned long fbdv, indv, otdv1, otdv2;
+> +       unsigned int val;
+> +       u64 ret;
+> +
+> +       if (parent_rate =3D=3D 0) {
+> +               pr_debug("%s: parent rate is zero", __func__);
 
-On Thu, 9 Jun 2022 at 14:30, Tomer Maimon <tmaimon77@gmail.com> wrote:
->
-> Hi Krzysztof,
->
-> Thanks for your comments
->
-> On Wed, 8 Jun 2022 at 13:07, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 08/06/2022 11:56, Tomer Maimon wrote:
-> > > Add nuvoton,sysgcr syscon property to the reset
-> > > node to handle the general control registers.
-> >
-> > Wrong wrapping.
-> it will be very helpful if you could point me what wrong wrapped in
-> the commit message, is it the explanation or the header? or something
-> else?
+Missing newline.
 
-The commit message body should be wrapped at 72 chars. You can fit
-more on the first line if you reflow:
-
-Add nuvoton,sysgcr syscon property to the reset node to handle the
-general control registers.
-
-> >
-> > Best regards,
-> > Krzysztof
->
-> Best regards,
->
-> Tomer
+> +               return 0;
+> +       }
+> +
+> +       val =3D readl_relaxed(pll->pllcon);
+> +
+> +       indv =3D FIELD_GET(PLLCON_INDV, val);
