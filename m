@@ -2,170 +2,194 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DE0545D15
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 09:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F3D545DE8
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 09:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346738AbiFJHWs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 10 Jun 2022 03:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S1347075AbiFJH5x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 10 Jun 2022 03:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346456AbiFJHWm (ORCPT
+        with ESMTP id S1347055AbiFJH5o (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:22:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C60CE0B;
-        Fri, 10 Jun 2022 00:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654845738;
-        bh=6We94l3lbFtVURMV4QMSE5PpvIk0qqwAzLwUr6CCrCw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=NL+S91NdZDtjFCi8UAx+8CdEsO/P3xL+aRxK8SCTk6/qo5Hc2DLa/4/1WIf8XgZnb
-         n2H+q38MKZRAIw2OSxvUd6+3BMqKCU9CgbUXBZlT4hCoCmBkUtcVvPUF8cPB7YvlN6
-         Q4fFPNbuwbaAeekoxkPVbCMrHWNalXFQeab0TLf8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MG9kC-1nyQNB3YWC-00GWNP; Fri, 10
- Jun 2022 09:22:17 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Fri, 10 Jun 2022 03:57:44 -0400
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C0C1CAD2C;
+        Fri, 10 Jun 2022 00:57:42 -0700 (PDT)
+Received: by mail-vs1-f52.google.com with SMTP id i186so24749692vsc.9;
+        Fri, 10 Jun 2022 00:57:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rhFLG17+HSZFIUtjJ3pglwpyIrcDVcUBh/MHVe0DumU=;
+        b=sY+B+Vk3nEHM3jVdCGYB1HFl5A0SJV4gPxHsHVRKsrDWTNEzCfijgBTVDhOC/zGW85
+         HIDz9LFiwNmYTAKwp4cuCrKp7E8kaMPtOlKIp9lKPqS9w0UMYTmJ6UIkqhz+a75ODmqz
+         ewwDzrr7BYPRJOdaw9fYIFftYMQy/ZfYMjJPojeIw78WONFkgOe0ntfwyk4/defD+mtf
+         kuc+xcEKJ+1lZiHAMSYadiVo8iXvq7w0G3tr7++GTgVGsfILWLzbB8s7s73uSdz65VCj
+         eq+oO4JyMoMoXRO8MnFDy+VqWRmrYYOckSn9LyW+5Bf1sJVwFEcbVJDtNTYFH48aR4/4
+         9xCQ==
+X-Gm-Message-State: AOAM530s5kzeX79Di1g6I+bgliuYH3OkKrWEnDaOoDSNrgSi1BccAmZm
+        yCP3TsVV6uQFg7RkAR3Lgpk6GXOwDLcsvw==
+X-Google-Smtp-Source: ABdhPJx5OLkgVosgsi10qkThxp3GNADF4JBKRaEwg/zDa3CaUkT4XldFhyw3BA65RicH3NjlDY+utQ==
+X-Received: by 2002:a05:6102:3f0f:b0:32a:46dd:a908 with SMTP id k15-20020a0561023f0f00b0032a46dda908mr18912577vsv.48.1654847861764;
+        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id s20-20020a67efd4000000b003483282cf47sm2798674vsp.26.2022.06.10.00.57.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
+Received: by mail-ua1-f43.google.com with SMTP id r9so8800287uaf.13;
+        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
+X-Received: by 2002:a81:1dd2:0:b0:30f:a4fc:315e with SMTP id
+ d201-20020a811dd2000000b0030fa4fc315emr49092228ywd.383.1654847850764; Fri, 10
+ Jun 2022 00:57:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-19-tmaimon77@gmail.com>
+ <24ad8ba0-4244-1159-328d-12d0e67951e1@linaro.org> <CAP6Zq1iXaN8D-g2O=cD-XERGj3BROQO=NJ66mquVsOw8nSM=0A@mail.gmail.com>
+In-Reply-To: <CAP6Zq1iXaN8D-g2O=cD-XERGj3BROQO=NJ66mquVsOw8nSM=0A@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Jun 2022 09:57:18 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU53RWvKXd0cPcPA8SiMA820stcpK4_UsTDGDAfByhcYg@mail.gmail.com>
+Message-ID: <CAMuHMdU53RWvKXd0cPcPA8SiMA820stcpK4_UsTDGDAfByhcYg@mail.gmail.com>
+Subject: Re: [PATCH v2 18/20] arm64: dts: nuvoton: Add initial NPCM8XX device tree
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
         Patrick Venture <venture@google.com>,
         Nancy Yuen <yuenn@google.com>,
         Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: [PATCH v4 6/6] ARM: dts: wpcm450: Switch clocks to clock controller
-Date:   Fri, 10 Jun 2022 09:21:41 +0200
-Message-Id: <20220610072141.347795-7-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220610072141.347795-1-j.neuschaefer@gmx.net>
-References: <20220610072141.347795-1-j.neuschaefer@gmx.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:a+f+h0WVs/fv4wcts19D+GINBFdJUog3YzlAfih/ywvkXDMuV6O
- J03O9XTJW0v348QMAv+oxGA4CgZP2NVhaLr58/c+oaGf2aY079XyF7dycZEj5F9uEY8WuSS
- WGvzILZLGTMf6ea4C2OtAqe0n4vdZuhABnmzln0Ice39p7lrFGIt/lYUmjQQJk5bFHoWD0z
- MrO7bfY2wWt+gbIbCNoaw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0XrQDZfgnAw=:fii0JarWt4mr8rSUZPxTiR
- 03W/bonVOGBCZFyYYvjkQ32o4n6VHB9a30AonqPpRe9QftC/YyoM8f3+W4aIgN5UG2qOeFRJ1
- yqLGnK8HDFW3S4QlBBBbynOAau/eh9MVnd7cwTkXryd/jSTtqX34Lnt7BtV/ZkxKinJtYD+Cn
- PVljnCCEbR2Ar+6Oh9ah62IRHcDC/yJ1HS8+geCHuUeWk15UXgpz+aQlXqMtHJZsGAGuxGiNc
- FVIFTd7rlYcpVF6d9UwJoDEvIuPPmCjbYdlolwoM+7fpO2WKoxvA65GH6OBfeEc0j7Fk8YOFZ
- 9BCC5r74Ioofwb3OWiDsqA2Mk81/njHm1t9ddSNGlI/t/3nyXC0Gg3zhF7v8264x1kVYuowbU
- kaySeHk9OBme5uznoP+VdaZLE1U6Gzb+jC3VMoN+JPPkAsqfmM7ssLYrX6G762xMVz/sRwKfz
- mc8WRFSYi03owDqUdHd/LLcBzIg6Bk+N6xRM+0/HSprq4DenVgCaEHtFt0ujafAtZW0SQ8FPR
- nNY42B8wTSKYx9ox2dxQt6v2J7yyvHdo7yR4kvO2P3vkU7mqEtIvKegI/hZws3bWA+TLQiOcX
- yk5MnrvRPoixjbSRT1Pc02lLddhMSJ8jLTZarPMiZlhGEOfzhuPz+vKdCLKJk46+6fhula5Kn
- 8cWq3nNNLIIb+ijp3HdHkl8tcF3wnwuSVBWY8VYWDnfUM8dTx2E6Yz+VkHQRhKa/glUocq7O6
- kBiyT6H040wPWyY9xyzvAh2+4dM4EJSnL4SXnU+vubEq4vIEk/Y5NIoEVtedaQo1ZzFcU3Kq3
- ODYFPz7CLbk2ks5h9mmUeDn9l/sdNWS6QDEHgwXyGM5mdT3AWLoE7M6CElA3TqHseahKN7L1E
- ib63guKn6o42VIGa2gJlPbkMVtTqOsyz5TOXcIEqlFxfs0dcznPzOAe27ClFr8EZ6Bgc6KlfO
- UioZpvAFA0FObzAKDPVAQG4qkhz3T+b6RHq7CtBCOnC58eOexgEM3vpvdHBZjozhRr/cvsL0t
- BchZ/5UPaj46VNC+MNQVqqsCmUkHh2H9sxZ1N9Mk6KkHGuiEjDoqbA4etqZpa4YuSkXuIwV+j
- 0jxkV60KpSw0iVgSx5kgKLIzotYwnodTYFGYTNYpsg0TubSsKeTVu3hNw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This change is incompatible with older kernels because it requires the
-clock controller driver, but I think that's acceptable because WPCM450
-support is generally still in an early phase.
+Hi Tomer,
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+On Fri, Jun 10, 2022 at 12:30 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> On Wed, 8 Jun 2022 at 13:21, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> > On 08/06/2022 11:56, Tomer Maimon wrote:
+> > > This adds initial device tree support for the
+> > > Nuvoton NPCM845 Board Management controller (BMC) SoC family.
+> > >
+> > > The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
+> > > have various peripheral IPs.
+> > >
+> > > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 
-v2-v4:
-- no changes
-=2D--
- arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+> > > --- /dev/null
+> > > +++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+> > > @@ -0,0 +1,197 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
+> > > +
+> > > +#include <dt-bindings/clock/nuvoton,npcm8xx-clock.h>
+> > > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > +#include <dt-bindings/interrupt-controller/irq.h>
+> > > +
+> > > +/ {
+> > > +     #address-cells = <2>;
+> > > +     #size-cells = <2>;
+> > > +     interrupt-parent = <&gic>;
+> > > +
+> > > +     /* external reference clock */
+> > > +     clk_refclk: clk-refclk {
+> > > +             compatible = "fixed-clock";
+> > > +             #clock-cells = <0>;
+> > > +             clock-frequency = <25000000>;
+> >
+> > Ignored comment.
+> Could we use it as a default clock-frequency?
 
-diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nu=
-voton-wpcm450.dtsi
-index 332cc222c7dc5..439f9047ad651 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-@@ -2,6 +2,7 @@
- // Copyright 2021 Jonathan Neusch=C3=A4fer
+If the oscillator is present on the board, and not an SoC builtin, its
+clock frequency should be described in the board DTS.
+Some clocks may be optional, and left unpopulated.
+Others clocks may be fed with different frequencies than the default.
 
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
+> >
+> > > +             clock-output-names = "refclk";
+> > > +     };
+> > > +
+> > > +     /* external reference clock for cpu. float in normal operation */
+> > > +     clk_sysbypck: clk-sysbypck {
+> > > +             compatible = "fixed-clock";
+> > > +             #clock-cells = <0>;
+> > > +             clock-frequency = <1000000000>;
+> >
+> > Ignored comment.
+> same as above
+> >
+> > > +             clock-output-names = "sysbypck";
+> > > +     };
+> > > +
+> > > +     /* external reference clock for MC. float in normal operation */
+> > > +     clk_mcbypck: clk-mcbypck {
+> > > +             compatible = "fixed-clock";
+> > > +             #clock-cells = <0>;
+> > > +             clock-frequency = <1050000000>;
+> same as above
+> > > +             clock-output-names = "mcbypck";
+> > > +     };
 
- / {
- 	compatible =3D "nuvoton,wpcm450";
-@@ -30,13 +31,6 @@ cpu@0 {
- 		};
- 	};
+>  "+             cpu0: cpu@0 {
+>  +                     device_type = "cpu";
+>  +                     compatible = "arm,cortex-a35";
+>  +                     clocks = <&clk NPCM8XX_CLK_CPU>;
+>  +                     reg = <0x0 0x0>;
+> Why do you have two address cells? A bit more complicated and not
+> necessary, I think."
+> the arm,cortex-a35 is 64 Bit this is why we use  #address-cells = <2>;
+> and therefore reg = <0x0 0x0>;
 
--	clk24m: clock-24mhz {
--		/* 24 MHz dummy clock */
--		compatible =3D "fixed-clock";
--		clock-frequency =3D <24000000>;
--		#clock-cells =3D <0>;
--	};
--
- 	refclk: clock-48mhz {
- 		/* 48 MHz reference oscillator */
- 		compatible =3D "fixed-clock";
-@@ -71,7 +65,7 @@ serial0: serial@b8000000 {
- 			reg =3D <0xb8000000 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART0>;
- 			pinctrl-names =3D "default";
- 			pinctrl-0 =3D <&bsp_pins>;
- 			status =3D "disabled";
-@@ -82,7 +76,7 @@ serial1: serial@b8000100 {
- 			reg =3D <0xb8000100 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART1>;
- 			status =3D "disabled";
- 		};
+These addresses are not addresses on the main memory bus (which
+is indeed 64-bit), but on the logical CPU bus.
+Now, Documentation/devicetree/bindings/arm/cpus.yaml says you can
+have #address-cells = <2> if you have non-zero MPIDR_EL1 high bits.
 
-@@ -90,14 +84,18 @@ timer0: timer@b8001000 {
- 			compatible =3D "nuvoton,wpcm450-timer";
- 			interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb8001000 0x1c>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_TIMER0>,
-+				 <&clk WPCM450_CLK_TIMER1>,
-+				 <&clk WPCM450_CLK_TIMER2>,
-+				 <&clk WPCM450_CLK_TIMER3>,
-+				 <&clk WPCM450_CLK_TIMER4>;
- 		};
+Gr{oetje,eeting}s,
 
- 		watchdog0: watchdog@b800101c {
- 			compatible =3D "nuvoton,wpcm450-wdt";
- 			interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb800101c 0x4>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_WDT>;
- 		};
+                        Geert
 
- 		aic: interrupt-controller@b8002000 {
-=2D-
-2.35.1
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
