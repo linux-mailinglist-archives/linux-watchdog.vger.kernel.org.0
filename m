@@ -2,58 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F3D545DE8
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 09:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998525462C2
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 11:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347075AbiFJH5x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 10 Jun 2022 03:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S1347117AbiFJJuI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 10 Jun 2022 05:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347055AbiFJH5o (ORCPT
+        with ESMTP id S1344745AbiFJJuG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 10 Jun 2022 03:57:44 -0400
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C0C1CAD2C;
-        Fri, 10 Jun 2022 00:57:42 -0700 (PDT)
-Received: by mail-vs1-f52.google.com with SMTP id i186so24749692vsc.9;
-        Fri, 10 Jun 2022 00:57:42 -0700 (PDT)
+        Fri, 10 Jun 2022 05:50:06 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4820754BC4
+        for <linux-watchdog@vger.kernel.org>; Fri, 10 Jun 2022 02:50:01 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id d14so8984356eda.12
+        for <linux-watchdog@vger.kernel.org>; Fri, 10 Jun 2022 02:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Rt0vsBETdsgUvTDEEF7Ic9okr/eCyvwvGWQNcegTZ1U=;
+        b=K/yzPSh9wFBjDJiOA6mpuNoAmJIKYwK3g8Env7ES4l8idYzYh5vHjgqeOxkl5OR6bn
+         IMj7pH0hNN2Hbo7fdFYujHzzlaDKoaPPfHTj7ois4W2c1KFVLn0j1kc8kPreMz+fwBD2
+         8Y7cGMwLibjZGW9UUAyX77himHkESzcNGvtnAlQuUpORd6vmIxb5pD+jpchqbs8DPaIj
+         QJpE1T69z+wZwgdXiAnaQrf79KtOQD3foIrBEiB1NjabSUmVvNpTXF/nBck0nNsBEuBA
+         7BUPkg6E92dCrSV3VCVSZUnCfAbpDLrtjYK2KcdxC1RkfdaaJ1EXR9xblSWsZT6vQHQW
+         b6Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rhFLG17+HSZFIUtjJ3pglwpyIrcDVcUBh/MHVe0DumU=;
-        b=sY+B+Vk3nEHM3jVdCGYB1HFl5A0SJV4gPxHsHVRKsrDWTNEzCfijgBTVDhOC/zGW85
-         HIDz9LFiwNmYTAKwp4cuCrKp7E8kaMPtOlKIp9lKPqS9w0UMYTmJ6UIkqhz+a75ODmqz
-         ewwDzrr7BYPRJOdaw9fYIFftYMQy/ZfYMjJPojeIw78WONFkgOe0ntfwyk4/defD+mtf
-         kuc+xcEKJ+1lZiHAMSYadiVo8iXvq7w0G3tr7++GTgVGsfILWLzbB8s7s73uSdz65VCj
-         eq+oO4JyMoMoXRO8MnFDy+VqWRmrYYOckSn9LyW+5Bf1sJVwFEcbVJDtNTYFH48aR4/4
-         9xCQ==
-X-Gm-Message-State: AOAM530s5kzeX79Di1g6I+bgliuYH3OkKrWEnDaOoDSNrgSi1BccAmZm
-        yCP3TsVV6uQFg7RkAR3Lgpk6GXOwDLcsvw==
-X-Google-Smtp-Source: ABdhPJx5OLkgVosgsi10qkThxp3GNADF4JBKRaEwg/zDa3CaUkT4XldFhyw3BA65RicH3NjlDY+utQ==
-X-Received: by 2002:a05:6102:3f0f:b0:32a:46dd:a908 with SMTP id k15-20020a0561023f0f00b0032a46dda908mr18912577vsv.48.1654847861764;
-        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id s20-20020a67efd4000000b003483282cf47sm2798674vsp.26.2022.06.10.00.57.41
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Rt0vsBETdsgUvTDEEF7Ic9okr/eCyvwvGWQNcegTZ1U=;
+        b=JJ06w3465xhZ9S6uP69FpPHhJLBiayhgCBCtevHIMNoF7AGKF5dp3rfjqXaGsm8Drd
+         SJM4fNRJT9TaxR3GqLusuuUMBPPAwo6exYxf5YdpiPsSr/qLWn64USjsfu4p+v4oF/PY
+         B0obK889iyOubJs5k+Xdpc/xBdv82Nle9uTdB+cSzZkbP6YHMfK6Y+KE2HthL/AN4TdU
+         VsPN12FNKDTLXNCkUgnGaUqXZifkWGMJiftsmCDG2UgN1eQR3hIGTEKQucAJr8JtxvrW
+         njlonDApWR7yJ0BXvLXrMwd4lNcU8XS2bt9zojUIvrJAcf90YUNGWVQxybwwWFTCADFS
+         ujBw==
+X-Gm-Message-State: AOAM532yfCDwXM2FtwNZ1lmKIYYrBg7wpGATBVWcvdEqbQrLe7uIXpAf
+        xxGs5AYVv85LLaivsG5kFgAkiA==
+X-Google-Smtp-Source: ABdhPJwbncSEwRQLaREXRi0rWknK/es2MLMTWpIk6/6WsQooAUY1QVyYSs0C9HIhLSoLy3pXr+xjPQ==
+X-Received: by 2002:a05:6402:3551:b0:431:51e1:856f with SMTP id f17-20020a056402355100b0043151e1856fmr30811673edd.323.1654854599932;
+        Fri, 10 Jun 2022 02:49:59 -0700 (PDT)
+Received: from [192.168.0.201] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id yz17-20020a170906dc5100b0070b1ecdc12bsm10807528ejb.112.2022.06.10.02.49.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
-Received: by mail-ua1-f43.google.com with SMTP id r9so8800287uaf.13;
-        Fri, 10 Jun 2022 00:57:41 -0700 (PDT)
-X-Received: by 2002:a81:1dd2:0:b0:30f:a4fc:315e with SMTP id
- d201-20020a811dd2000000b0030fa4fc315emr49092228ywd.383.1654847850764; Fri, 10
- Jun 2022 00:57:30 -0700 (PDT)
+        Fri, 10 Jun 2022 02:49:59 -0700 (PDT)
+Message-ID: <073fcd16-12ae-ed4f-5eac-534bf73e68fe@linaro.org>
+Date:   Fri, 10 Jun 2022 11:49:57 +0200
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-19-tmaimon77@gmail.com>
- <24ad8ba0-4244-1159-328d-12d0e67951e1@linaro.org> <CAP6Zq1iXaN8D-g2O=cD-XERGj3BROQO=NJ66mquVsOw8nSM=0A@mail.gmail.com>
-In-Reply-To: <CAP6Zq1iXaN8D-g2O=cD-XERGj3BROQO=NJ66mquVsOw8nSM=0A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 10 Jun 2022 09:57:18 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU53RWvKXd0cPcPA8SiMA820stcpK4_UsTDGDAfByhcYg@mail.gmail.com>
-Message-ID: <CAMuHMdU53RWvKXd0cPcPA8SiMA820stcpK4_UsTDGDAfByhcYg@mail.gmail.com>
-Subject: Re: [PATCH v2 18/20] arm64: dts: nuvoton: Add initial NPCM8XX device tree
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 06/20] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
+Content-Language: en-US
 To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Avi Fishman <avifishman70@gmail.com>,
+Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Joel Stanley <joel@jms.id.au>,
         Patrick Venture <venture@google.com>,
@@ -81,7 +86,7 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Robert Hancock <robert.hancock@calian.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
         Lubomir Rintel <lkundrak@v3.sk>,
         devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -89,107 +94,129 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220608095623.22327-1-tmaimon77@gmail.com>
+ <20220608095623.22327-7-tmaimon77@gmail.com>
+ <f4899b6d-fec3-5940-709a-f5fbc7ae6233@linaro.org>
+ <CAP6Zq1geJyaDrP2CBY3FHe5y-L=bCptX1pzAkNypY+TS5vXzMA@mail.gmail.com>
+ <082366b0-6811-b492-c68c-12f9a9ee512e@linaro.org>
+ <CAP6Zq1jaUH9g+xRvgT0Xn---A9S9Linn-TKLMgnoTq+xgbi74Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAP6Zq1jaUH9g+xRvgT0Xn---A9S9Linn-TKLMgnoTq+xgbi74Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Tomer,
-
-On Fri, Jun 10, 2022 at 12:30 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> On Wed, 8 Jun 2022 at 13:21, Krzysztof Kozlowski
+On 09/06/2022 23:21, Tomer Maimon wrote:
+> Hi Krzysztof,
+> 
+> 
+> On Thu, 9 Jun 2022 at 16:22, Krzysztof Kozlowski
 > <krzysztof.kozlowski@linaro.org> wrote:
-> > On 08/06/2022 11:56, Tomer Maimon wrote:
-> > > This adds initial device tree support for the
-> > > Nuvoton NPCM845 Board Management controller (BMC) SoC family.
-> > >
-> > > The NPCM845 based quad-core Cortex-A35 ARMv8 architecture and
-> > > have various peripheral IPs.
-> > >
-> > > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+>>
+>> On 09/06/2022 15:17, Tomer Maimon wrote:
+>>> Hi Krzysztof,
+>>>
+>>> Thanks for your comments.
+>>>
+>>> On Wed, 8 Jun 2022 at 13:03, Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 08/06/2022 11:56, Tomer Maimon wrote:
+>>>>> Add binding for the Arbel BMC NPCM8XX Clock controller.
+>>>>>
+>>>>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+>>>>> ---
+>>>>>  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 63 +++++++++++++++++++
+>>>>>  .../dt-bindings/clock/nuvoton,npcm8xx-clock.h | 50 +++++++++++++++
+>>>>>  2 files changed, 113 insertions(+)
+>>>>>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>>>>>  create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..e1f375716bc5
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>>>>> @@ -0,0 +1,63 @@
+>>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: Nuvoton NPCM8XX Clock Controller Binding
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Tomer Maimon <tmaimon77@gmail.com>
+>>>>> +
+>>>>> +description: |
+>>>>> +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
+>>>>> +  generates and supplies clocks to all modules within the BMC.
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - nuvoton,npcm845-clk
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  clocks:
+>>>>> +    items:
+>>>>> +      - description: 25M reference clock
+>>>>> +      - description: CPU reference clock
+>>>>> +      - description: MC reference clock
+>>>>> +
+>>>>> +  clock-names:
+>>>>> +    items:
+>>>>> +      - const: refclk
+>>>>> +      - const: sysbypck
+>>>>> +      - const: mcbypck
+>>>>> +
+>>>>
+>>>> I asked what is the suffix about and you replied "ck"... ok, so let's
+>>>> make clear. This should be:
+>>>>
+>>>>     items:
+>>>>       - const: ref
+>>>>       - const: sysbyp
+>>>>       - const: mcbyp
+>>>>
+>>>> or something similar, without the same suffix all over.
+>>> The clock names are the same clock name in our spec, this why we
+>>> prefer to leave the clock names as is.
+>>
+>> The naming with useless suffixes does not help. If your spec had
+>> "refclk_really_clock_this_is_a_clock" you also would insist on that? It
+>> does not make sense.
+> Sorry but I don't understand why the clock name cause an issue, we
+> prefer it will be the same as in our spec-clock diagram
+> BTW, the same naming found in NPCM7XX
+> https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/devicetree/bindings/clock/nuvoton,npcm750-clk.txt#L36
 
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
-> > > @@ -0,0 +1,197 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
-> > > +
-> > > +#include <dt-bindings/clock/nuvoton,npcm8xx-clock.h>
-> > > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > > +#include <dt-bindings/interrupt-controller/irq.h>
-> > > +
-> > > +/ {
-> > > +     #address-cells = <2>;
-> > > +     #size-cells = <2>;
-> > > +     interrupt-parent = <&gic>;
-> > > +
-> > > +     /* external reference clock */
-> > > +     clk_refclk: clk-refclk {
-> > > +             compatible = "fixed-clock";
-> > > +             #clock-cells = <0>;
-> > > +             clock-frequency = <25000000>;
-> >
-> > Ignored comment.
-> Could we use it as a default clock-frequency?
+Because the names should not have irrelevant information.
+interrupt-names should have "txirq". dma-names should not have "txdma".
+clock-names should not have "refclock" or "refclk" because it is
+irrelevant duplication. These are bindings, not DTS, so whatever you
+have in your spec matters less. DTS is the representation of hardware
+and there you can name clocks closer to the spec so it is easier for
+you, if that's your preference.
 
-If the oscillator is present on the board, and not an SoC builtin, its
-clock frequency should be described in the board DTS.
-Some clocks may be optional, and left unpopulated.
-Others clocks may be fed with different frequencies than the default.
+And if your spec has "refclk_really_clock_this_is_a_clock" you still
+should not use it.
 
-> >
-> > > +             clock-output-names = "refclk";
-> > > +     };
-> > > +
-> > > +     /* external reference clock for cpu. float in normal operation */
-> > > +     clk_sysbypck: clk-sysbypck {
-> > > +             compatible = "fixed-clock";
-> > > +             #clock-cells = <0>;
-> > > +             clock-frequency = <1000000000>;
-> >
-> > Ignored comment.
-> same as above
-> >
-> > > +             clock-output-names = "sysbypck";
-> > > +     };
-> > > +
-> > > +     /* external reference clock for MC. float in normal operation */
-> > > +     clk_mcbypck: clk-mcbypck {
-> > > +             compatible = "fixed-clock";
-> > > +             #clock-cells = <0>;
-> > > +             clock-frequency = <1050000000>;
-> same as above
-> > > +             clock-output-names = "mcbypck";
-> > > +     };
+Anyway, you should discuss it last time when I pointed it out. Instead
+my comments were ignored and you decided to send v2. That's not how
+discussion works and it will not bring you closer to your point.
 
->  "+             cpu0: cpu@0 {
->  +                     device_type = "cpu";
->  +                     compatible = "arm,cortex-a35";
->  +                     clocks = <&clk NPCM8XX_CLK_CPU>;
->  +                     reg = <0x0 0x0>;
-> Why do you have two address cells? A bit more complicated and not
-> necessary, I think."
-> the arm,cortex-a35 is 64 Bit this is why we use  #address-cells = <2>;
-> and therefore reg = <0x0 0x0>;
 
-These addresses are not addresses on the main memory bus (which
-is indeed 64-bit), but on the logical CPU bus.
-Now, Documentation/devicetree/bindings/arm/cpus.yaml says you can
-have #address-cells = <2> if you have non-zero MPIDR_EL1 high bits.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof
