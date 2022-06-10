@@ -2,62 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4754A5462F1
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 11:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F226E5462F6
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Jun 2022 11:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348019AbiFJJ7J (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 10 Jun 2022 05:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S1344892AbiFJJ7y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 10 Jun 2022 05:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348066AbiFJJ7I (ORCPT
+        with ESMTP id S1347183AbiFJJ7w (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 10 Jun 2022 05:59:08 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08530B040C
-        for <linux-watchdog@vger.kernel.org>; Fri, 10 Jun 2022 02:59:04 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id g7so274769eda.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 10 Jun 2022 02:59:04 -0700 (PDT)
+        Fri, 10 Jun 2022 05:59:52 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDDAAFB31
+        for <linux-watchdog@vger.kernel.org>; Fri, 10 Jun 2022 02:59:51 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id v1so41778329ejg.13
+        for <linux-watchdog@vger.kernel.org>; Fri, 10 Jun 2022 02:59:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Wq9gVVdD1/J4q1/EmaJv8aMnFa3KHaLmU1Qz7ppGNhE=;
-        b=sESAYG8k3Sf9OIqWLT4EVVR1tdBRPzoeATKW1Bbr2Qec6XgtDTd0dLvf3JxpbsdtiN
-         haM4S5D0p35YqjS96SRhlhV9PmgIBeJZRFmqLI2mTKsHDeogxhZjOgQrxOnzy+1/2XtD
-         0eX4ckZuGDw9VkCsjWhZCr46CF8UjrkgRy6bgK/5g382J+YFtdU43gWuOYUyzULLe/G5
-         0oLO+Ocf8dUlYZC2cquCijGI6UDKjYA4U3w5eOjWMvkknznKAeuz19JOqsRhoOxhN3jy
-         C83YXicE7j8ja6i/EwLN5oSrZBoRFP5A1cJViH3BlNc9kFVxMxQaduFcPkr6w8n090DN
-         bvhQ==
+        bh=gDHlNqBe4kROE4J7/F3QmWesLzxh4ZBvnILe171UGCs=;
+        b=oDUOaXR7FzLMWZm3OxcWJ7MJl+lrNYx7qQfEIjW1VPEtcXwKo22y8LG3qxZERYh5D2
+         1/6bktCkaRTFXhZRPn+Tr2xjLHk2tsGAHz227PSTLTEStq6e1c1EnxqsgfASf8KpXtOL
+         ytT4IB96hjk9kQwUL0DYslPXSmrvavbvoAF1Aasp8dsm4RIq3Ofqr0TaG8jKkL6LZoVh
+         HlxckmQQNlM1L/ErpqkpH83MwvKjpne9sdZWGkBHCzSl4/7ohRIBcMy9tzktRd7LIJSw
+         2JXTjIkbSQqyAI9pB5aFcmeh+Wg5uXoi0GnkvRpd5dxQhHR8MuDnOSDfcYiOPFCbQNqo
+         4jYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Wq9gVVdD1/J4q1/EmaJv8aMnFa3KHaLmU1Qz7ppGNhE=;
-        b=1N0OCC1cNvHVkWi411nAyaYJz9YyUQCSHWFoX1ogf858sHvOAIbtuXPyI2cUiS/pkI
-         Tsw5XqwwqXcewT8eNJEqdUtjW2u7ya6HKxqsVXJ+swG+brNlLw/XAefkNp74AhTmKrcC
-         ZIo3pc0+L07Z4BOp3BVTugCHXPRNYLvhHfH+4fjm8m9jYHqWlnuAzPHX5ip9VtB4FgqO
-         BzvPBeMbhvQ3BhjUv2ZTMUZsIdQEw7Hh9BVy88LsCP7mylTZmU/mwSGPvShuq1Z4GKZ8
-         T/UxFPQYlTiHLGTFwRLZEV4bJmHsHsgqw0AKQpp1tJU0/SVNUHe+MX9KgAvhvq1zANsA
-         wNDg==
-X-Gm-Message-State: AOAM532B4bcDtP55u/HJsSdGnhOr5Q1GUIuLO9xN9sYIwOJuruBG8J+V
-        ics+vjeP++3ZOozrEXlvhB3E7Q==
-X-Google-Smtp-Source: ABdhPJznPfBVrxm6drYBka7ZGOrt2dIG3zy2ti6SB08YUWNwJwfIafeTfcbr7B/2U8M4buh900aY3w==
-X-Received: by 2002:a05:6402:500b:b0:431:78d0:bf9d with SMTP id p11-20020a056402500b00b0043178d0bf9dmr22935174eda.184.1654855143357;
-        Fri, 10 Jun 2022 02:59:03 -0700 (PDT)
+        bh=gDHlNqBe4kROE4J7/F3QmWesLzxh4ZBvnILe171UGCs=;
+        b=HPbRxIEy8GeyaNnuyAbzdobrHuGPvM3X5D5+FAPc92phXI2IbpvT5TLHTaKtQtTpXC
+         IZNH5rmWcDoEbJY5AlOYR3Yjnq3oRr5Tp5Arl5g0b2xJMLb8HIHnDTRIXpOrA4HxCjCw
+         QJl+LLLvw5YZ1FotiP8kzdnUit4GEIH/Mh+qs8Z5dbPexsPShTEnCSa0A0jAQv88seTi
+         CFUHbysVBEtaBX7UBBWg5bQrk0xvt6Ttkv6RrhEoYL78cv4SMTWRoZ4xx2vNyVNRPADF
+         VSpD8ZR+HP9vRYDVXxWsc5oJBs/yIDnubzgsgWScSxc5acr64zrxQR02Afqr3XnQ790f
+         Jm7w==
+X-Gm-Message-State: AOAM533uuoNP6Qqi6qKtTK6daZOourhf+B1l9OEs/NgPB6lvMrsCoSrd
+        ZFDAa+FY4q8+gfV0MwCmiQNYCA==
+X-Google-Smtp-Source: ABdhPJwhGh4TDi4lutZR0Redc77UMHZsElUmLjFEgzgCSTtr0oq2PlTyBwfzFCkOUwxt2ruFoM26kA==
+X-Received: by 2002:a17:906:3087:b0:6f4:2901:608a with SMTP id 7-20020a170906308700b006f42901608amr40752732ejv.646.1654855189985;
+        Fri, 10 Jun 2022 02:59:49 -0700 (PDT)
 Received: from [192.168.0.201] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l15-20020a17090615cf00b006f3ef214dd9sm11969760ejd.63.2022.06.10.02.59.01
+        by smtp.gmail.com with ESMTPSA id en22-20020a056402529600b0043120d5f3dcsm11051751edb.14.2022.06.10.02.59.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 02:59:02 -0700 (PDT)
-Message-ID: <11245d23-76a2-1008-eac6-f396954857c7@linaro.org>
-Date:   Fri, 10 Jun 2022 11:59:00 +0200
+        Fri, 10 Jun 2022 02:59:49 -0700 (PDT)
+Message-ID: <2f386fc3-d496-62e3-20b0-ac962169e7a1@linaro.org>
+Date:   Fri, 10 Jun 2022 11:59:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
 Subject: Re: [PATCH v2 18/20] arm64: dts: nuvoton: Add initial NPCM8XX device
  tree
 Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
 Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Joel Stanley <joel@jms.id.au>,
@@ -98,123 +99,39 @@ References: <20220608095623.22327-1-tmaimon77@gmail.com>
  <20220608095623.22327-19-tmaimon77@gmail.com>
  <24ad8ba0-4244-1159-328d-12d0e67951e1@linaro.org>
  <CAP6Zq1iXaN8D-g2O=cD-XERGj3BROQO=NJ66mquVsOw8nSM=0A@mail.gmail.com>
+ <CAMuHMdU53RWvKXd0cPcPA8SiMA820stcpK4_UsTDGDAfByhcYg@mail.gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1iXaN8D-g2O=cD-XERGj3BROQO=NJ66mquVsOw8nSM=0A@mail.gmail.com>
+In-Reply-To: <CAMuHMdU53RWvKXd0cPcPA8SiMA820stcpK4_UsTDGDAfByhcYg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/06/2022 00:29, Tomer Maimon wrote:
->>> +     clk_refclk: clk-refclk {
->>> +             compatible = "fixed-clock";
->>> +             #clock-cells = <0>;
->>> +             clock-frequency = <25000000>;
->>
->> Ignored comment.
-> Could we use it as a default clock-frequency?
-
-In DTS? If my assumption, that this clock is not on SoC itself, is
-correct, then the answer is no, you cannot. The clock physically sits on
-the board, so it is defined by board DTS. Feel free to embed in SoC DTSI
-most of the clock properties, but the core property - frequency - must
-be outside.
-
->>
->>> +             clock-output-names = "refclk";
->>> +     };
->>> +
->>> +     /* external reference clock for cpu. float in normal operation */
->>> +     clk_sysbypck: clk-sysbypck {
->>> +             compatible = "fixed-clock";
->>> +             #clock-cells = <0>;
->>> +             clock-frequency = <1000000000>;
->>
->> Ignored comment.
-> same as above
->>
->>> +             clock-output-names = "sysbypck";
->>> +     };
->>> +
->>> +     /* external reference clock for MC. float in normal operation */
->>> +     clk_mcbypck: clk-mcbypck {
->>> +             compatible = "fixed-clock";
->>> +             #clock-cells = <0>;
->>> +             clock-frequency = <1050000000>;
-> same as above
->>> +             clock-output-names = "mcbypck";
->>> +     };
->>> +
->>> +     soc {
->>> +             #address-cells = <2>;
->>> +             #size-cells = <2>;
->>> +             compatible = "simple-bus";
->>> +             interrupt-parent = <&gic>;
->>> +             ranges;
->>> +
->>> +             gcr: gcr@f0800000 {
-> I understand it sounds generic but I try to be as much compatible with NPCM7XX
-> https://elixir.bootlin.com/linux/v5.19-rc1/source/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi#L91
-
-Then fix NPCM7XX. Please do not multiple bad choices because it looks
-similar. Fix the other wrong one.
-
->>
->> Ignored comment.
->>
->>> +                     compatible = "nuvoton,npcm845-gcr", "syscon",
->>> +                             "simple-mfd";
->>
->> This is not a simple-mfd... I see original bindings defined it that way,
->> but why? I think they should be corrected - remove simple-mfd from the
->> bindings and DTS.
-> will remove in both places in V3
->>
->>
->>> +                     reg = <0x0 0xf0800000 0x0 0x1000>;
->>> +             };
->>> +
->>> +             gic: interrupt-controller@dfff9000 {
->>> +                     compatible = "arm,gic-400";
->>> +                     reg = <0x0 0xdfff9000 0x0 0x1000>,
->>> +                           <0x0 0xdfffa000 0x0 0x2000>,
->>> +                           <0x0 0xdfffc000 0x0 0x2000>,
->>> +                           <0x0 0xdfffe000 0x0 0x2000>;
->>> +                     interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
->>> +                     #interrupt-cells = <3>;
->>> +                     interrupt-controller;
->>> +                     #address-cells = <0>;
->>> +                     ppi-partitions {
->>> +                             ppi_cluster0: interrupt-partition-0 {
->>> +                                     affinity = <&cpu0 &cpu1 &cpu2 &cpu3>;
->>> +                             };
->>> +                     };
->>> +             };
->>> +     };
->>> +
->>> +     ahb {
->>> +             #address-cells = <2>;
->>> +             #size-cells = <2>;
->>> +             compatible = "simple-bus";
->>> +             interrupt-parent = <&gic>;
+On 10/06/2022 09:57, Geert Uytterhoeven wrote:
+>>  "+             cpu0: cpu@0 {
+>>  +                     device_type = "cpu";
+>>  +                     compatible = "arm,cortex-a35";
+>>  +                     clocks = <&clk NPCM8XX_CLK_CPU>;
+>>  +                     reg = <0x0 0x0>;
+>> Why do you have two address cells? A bit more complicated and not
+>> necessary, I think."
+>> the arm,cortex-a35 is 64 Bit this is why we use  #address-cells = <2>;
+>> and therefore reg = <0x0 0x0>;
 > 
->>> +             ranges;
->>> +
->>> +             rstc: rstc@f0801000 {
->>
->> Ignored comment.
->>
-> I understand it sounds generic but I try to be as much compatible with NPCM7XX
-> https://elixir.bootlin.com/linux/v5.19-rc1/source/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi#L109
+> These addresses are not addresses on the main memory bus (which
+> is indeed 64-bit), but on the logical CPU bus.
+> Now, Documentation/devicetree/bindings/arm/cpus.yaml says you can
+> have #address-cells = <2> if you have non-zero MPIDR_EL1 high bits.
+> 
 
-Fix 7xx.
+Thanks Tomer and Geert for explanation. OK for me.
 
 
 Best regards,
