@@ -2,26 +2,26 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4E3549C16
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jun 2022 20:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3EF549C14
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jun 2022 20:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbiFMSrt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jun 2022 14:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
+        id S230014AbiFMSrs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jun 2022 14:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245317AbiFMSr0 (ORCPT
+        with ESMTP id S1344214AbiFMSr2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:47:26 -0400
+        Mon, 13 Jun 2022 14:47:28 -0400
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A35B2D8097;
-        Mon, 13 Jun 2022 08:06:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E6D4D9EA6;
+        Mon, 13 Jun 2022 08:06:11 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.91,297,1647270000"; 
-   d="scan'208";a="122769625"
+   d="scan'208";a="122769637"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 14 Jun 2022 00:05:59 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 14 Jun 2022 00:06:10 +0900
 Received: from localhost.localdomain (unknown [10.226.93.20])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id B4B7D425F851;
-        Tue, 14 Jun 2022 00:05:56 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 6579642130CE;
+        Tue, 14 Jun 2022 00:06:07 +0900 (JST)
 From:   Phil Edworthy <phil.edworthy@renesas.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -31,11 +31,14 @@ Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 0/2] arm64: renesas: Add RZ/V2M watchdog support
-Date:   Mon, 13 Jun 2022 16:05:48 +0100
-Message-Id: <20220613150550.70334-1-phil.edworthy@renesas.com>
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: [PATCH v2 1/2] dt-bindings: watchdog: renesas,wdt: Add r9a09g011 (RZ/V2M) support
+Date:   Mon, 13 Jun 2022 16:05:49 +0100
+Message-Id: <20220613150550.70334-2-phil.edworthy@renesas.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220613150550.70334-1-phil.edworthy@renesas.com>
+References: <20220613150550.70334-1-phil.edworthy@renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -47,24 +50,142 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello all,
+Add the documentation for the r9a09g011 SoC, but in doing so also
+reorganise the doc to make it easier to read.
+Additionally, make the binding require an interrupt to be specified.
+Whilst the driver does not need an interrupt, all of the SoCs that use
+this binding actually provide one.
 
-This patch series adds support for the Watchdog Timer (WDT) in the
-RZ/V2M SoC.
-
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
 v2:
- - dt-bindings: Added minItems for interrupt-names and clock-names
- - driver: Replace use of parity error registers in restart
- - driver: Commit msg modified to reflect different contents
-
-Phil Edworthy (2):
-  dt-bindings: watchdog: renesas,wdt: Add r9a09g011 (RZ/V2M) support
-  watchdog: rzg2l_wdt: Add rzv2m support
-
+ - Added minItems for interrupt-names and clock-names
+---
  .../bindings/watchdog/renesas,wdt.yaml        | 71 ++++++++++++-------
- drivers/watchdog/rzg2l_wdt.c                  | 37 +++++++---
- 2 files changed, 76 insertions(+), 32 deletions(-)
+ 1 file changed, 47 insertions(+), 24 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+index a8d7dde5271b..7bb6ca6af882 100644
+--- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+@@ -31,6 +31,11 @@ properties:
+               - renesas,r9a07g054-wdt    # RZ/V2L
+           - const: renesas,rzg2l-wdt
+ 
++      - items:
++          - enum:
++              - renesas,r9a09g011-wdt    # RZ/V2M
++          - const: renesas,rzv2m-wdt     # RZ/V2M
++
+       - items:
+           - enum:
+               - renesas,r8a7742-wdt      # RZ/G1H
+@@ -70,13 +75,29 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  interrupts: true
+-
+-  interrupt-names: true
+-
+-  clocks: true
+-
+-  clock-names: true
++  interrupts:
++    minItems: 1
++    items:
++      - description: Timeout
++      - description: Parity error
++
++  interrupt-names:
++    minItems: 1
++    items:
++      - const: wdt
++      - const: perrout
++
++  clocks:
++    minItems: 1
++    items:
++      - description: Register access clock
++      - description: Main clock
++
++  clock-names:
++    minItems: 1
++    items:
++      - const: pclk
++      - const: oscclk
+ 
+   power-domains:
+     maxItems: 1
+@@ -89,6 +110,7 @@ properties:
+ required:
+   - compatible
+   - reg
++  - interrupts
+   - clocks
+ 
+ allOf:
+@@ -113,31 +135,30 @@ allOf:
+           contains:
+             enum:
+               - renesas,rzg2l-wdt
++              - renesas,rzv2m-wdt
+     then:
+       properties:
+-        interrupts:
+-          maxItems: 2
+-        interrupt-names:
+-          items:
+-            - const: wdt
+-            - const: perrout
+         clocks:
+-          items:
+-            - description: Register access clock
+-            - description: Main clock
++          minItems: 2
+         clock-names:
+-          items:
+-            - const: pclk
+-            - const: oscclk
++          minItems: 2
+       required:
+         - clock-names
+-        - interrupt-names
+-    else:
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - renesas,rzg2l-wdt
++    then:
+       properties:
+         interrupts:
+-          maxItems: 1
+-        clocks:
+-          maxItems: 1
++          minItems: 2
++        interrupt-names:
++          minItems: 2
++      required:
++        - interrupt-names
+ 
+ additionalProperties: false
+ 
+@@ -145,9 +166,11 @@ examples:
+   - |
+     #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
+     #include <dt-bindings/power/r8a7795-sysc.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
+     wdt0: watchdog@e6020000 {
+             compatible = "renesas,r8a7795-wdt", "renesas,rcar-gen3-wdt";
+             reg = <0xe6020000 0x0c>;
++            interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+             clocks = <&cpg CPG_MOD 402>;
+             power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
+             resets = <&cpg 402>;
 -- 
 2.34.1
 
