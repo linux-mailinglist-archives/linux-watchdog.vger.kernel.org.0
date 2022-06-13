@@ -2,58 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A90548079
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jun 2022 09:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18675483A5
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jun 2022 11:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237407AbiFMHQr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jun 2022 03:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S240814AbiFMJZT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jun 2022 05:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiFMHQr (ORCPT
+        with ESMTP id S229577AbiFMJZS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jun 2022 03:16:47 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261D91A824;
-        Mon, 13 Jun 2022 00:16:46 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id a29so7429112lfk.2;
-        Mon, 13 Jun 2022 00:16:46 -0700 (PDT)
+        Mon, 13 Jun 2022 05:25:18 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BEB12AC1;
+        Mon, 13 Jun 2022 02:25:17 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id a29so7885267lfk.2;
+        Mon, 13 Jun 2022 02:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=buxqDOApbU3iWiCJpKcyX6L2RFQXu0xedhgWabGDF/Y=;
-        b=GAKALYciW0y2QOTLFrqdt7PBg3TAA5HKJHXgZLsLCiOxWXd1xx2sO5wooqJdzGdLxd
-         HKLQByqKQf++zSSKLpVSQEHbxACET4DJIhjto+PQrW8MIGNBA1l22fAq8zAu5a0gYI42
-         x49q6Nj7VXy4LhTWhE87qw3gqinxJZ6SeTuKwP/cqPdBa3dpFnUp4r81VYTGKOYpPuPg
-         a/PybB/saG8GpU7r9IQn/Zod6zYdvwPBsGpMS6DLGdSV6xF6ihlk3w8KtUTvMITMPFUy
-         OvmOoDt4OXc2f1Gg1OoBM4Ad+/a/Pxpz3DN2+Jw+NY5Z/MY39gWzafDnmeFs+tOMGzK4
-         EZqQ==
+        bh=xUYF6Y1hCqd5t8WxA/+uJZZHaISwa+qUcLkVEX3FDtY=;
+        b=OZRK4j4GfMvvujegmLuiiyQfatSbywM4kRdRc1tMAOzluF9+R3ROjAPU3l7ABr8vnN
+         jYtnDvoHI2bSR7Kn4LK8/ztorjpVQXZ2uSDdgpxBZhlEi2T9raelsgwGWpgrCmVTF1ng
+         +jtfpdHxAxBWbneZjvuPphDXeVMYqaI7GuHnfR/C9zsLfnkFjud27cobWdzB8VQCmmf7
+         CUqYCzZDZac86aaP53eZzM6opXQBwDLw0lkE/+JhAnd0rjVfdtJLXqWYI/7dX/nxVL7B
+         6oAE7Xd3AmopNE8kT4f8CY9HGoy/EEkLZuu4y4iGct6vRqeb8A+Agl+ljt2/6CRdvDGF
+         W5cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=buxqDOApbU3iWiCJpKcyX6L2RFQXu0xedhgWabGDF/Y=;
-        b=a6y+3LnOsT+cNSzT80DC4NYBt9Qgnv9i9Kf0TaqJZ/606WzzKvcQAGpSXuUN+fQkOd
-         NfOPmrQEUOZDpIYEdrPp+yB7bpohI1Bo9xtA8CiuXMNZ6VUh0osGv2zEQqZby2IEszk+
-         N1e6QnmwtXMefPAMgmKyEBrUI0MOHNi+1FD0KIKt0F47+fBSiPqdFTrs/XD4sjGH4dna
-         9ooQRKXE7AxeJOLhhoA2ZPIxketHv7xvmmanpQ0HiJsUmZjv6dteyFkfY3ra2ZwCWAI8
-         XhmMjZaug1T26zLY4kpKcgGbOVbN3PtPmoXuB0KLnQQpz68lasOU0LnEJLAjqZSQ5Dda
-         p64Q==
-X-Gm-Message-State: AOAM531rFL5yycWp6xbcRS6R2e5VOHzCZX3lbD+hDydB+6vXsNx+SIaq
-        N67qFo4FaGrOsTu6tL7BVfv67ipIs3jh5jHt5SQ=
-X-Google-Smtp-Source: ABdhPJztUvaIJiyyz/qpSniEl7gEI70W2eqQCEj/oJAsctZd0PsOvAXKEMDSh3jw4ZyybkEAkZuB+NDScf1ujTsP6Jc=
+        bh=xUYF6Y1hCqd5t8WxA/+uJZZHaISwa+qUcLkVEX3FDtY=;
+        b=jCfGaR9EhmtmrGq19XLLS2LQymZPC9QkkvQwyzmTmszJ7aOvm04dsmUt/lYG2dpHDF
+         ACoqEZmr34IDvsexmDrvLt0IFTmKU12aCkskwF7w+ab1Tp2ABAhF3jmT21vcMZad66zu
+         BTKtg6PKcpm7U2jX/u9m1zl2MZ0EC+p3WdQvwn6HgnVEqazrn4kyse0+3CJfuw94cuFn
+         94bJtCYyimjNhfNtGDYUDiuhEGUibgSxFcIs6LymLtXtDDVb7r4lBTxJ867tku+5kSyP
+         h42E43hHXfoARWdpi8kDfRBMDnwYIrcMew6qqJX/yCMkEn0QBOOVINKkpY7XSbAmrL2l
+         u7Sw==
+X-Gm-Message-State: AOAM532FpcBbl+Rs6UmKKv1kfIhbruI1OqPMEM0+kMEePEU1icOV70wl
+        PgJC71w7jNMWxE+p2oim2X8pNgGCRzJ113vZx0o=
+X-Google-Smtp-Source: ABdhPJxXc679feoHAf2D/GisUYLrlv1MVhsVhMMqlkvsfBNlHHdqjK5/eafARXLQjX3HPF+NV1BKVh2veyAWJgShjls=
 X-Received: by 2002:a05:6512:1052:b0:479:1f92:13b4 with SMTP id
- c18-20020a056512105200b004791f9213b4mr27626523lfb.200.1655104604518; Mon, 13
- Jun 2022 00:16:44 -0700 (PDT)
+ c18-20020a056512105200b004791f9213b4mr27864941lfb.200.1655112316061; Mon, 13
+ Jun 2022 02:25:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-12-tmaimon77@gmail.com>
- <91549b70-08fc-ed6f-c48e-5bcb70ea63d0@linaro.org> <CAP6Zq1j2VZno4w4w0QCYwHnRaVqiM=DnNSmND1vOGDs_wfi2zw@mail.gmail.com>
- <8e02ad54-5dad-aee7-6fa8-70c72f93bf5e@linaro.org>
-In-Reply-To: <8e02ad54-5dad-aee7-6fa8-70c72f93bf5e@linaro.org>
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-13-tmaimon77@gmail.com>
+ <add025b6-c622-b204-d39e-67b31878d37f@linaro.org> <CAP6Zq1iDbB+X5QPE4Nsqk4nV41bZiVzQZExS1pQTuKEBz-iYew@mail.gmail.com>
+ <381ff739-e898-8812-d549-df7101f0eaa2@linaro.org>
+In-Reply-To: <381ff739-e898-8812-d549-df7101f0eaa2@linaro.org>
 From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Mon, 13 Jun 2022 10:16:33 +0300
-Message-ID: <CAP6Zq1j2FgMmX9NJRoDMCsRLnF0RTETSTuMv8rEhr3FGLvY7yw@mail.gmail.com>
-Subject: Re: [PATCH v2 11/20] reset: npcm: using syscon instead of device data
+Date:   Mon, 13 Jun 2022 12:25:05 +0300
+Message-ID: <CAP6Zq1j=x3OcOPSOjJJmOcze7ziM=oWcKdbYzoHhGnvZipu_UQ@mail.gmail.com>
+Subject: Re: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for NPCM8XX
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
@@ -104,36 +104,48 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 Hi Krzysztof,
 
-I will make sure to add backward compatibility in the reset driver in
-the next version.
+Thanks for your clarification.
 
-Thanks,
+We can remove the dt-binding file and use numbers in the DTS,
+appreciate if you can answer few additional questions:
+1. Do you suggest adding all NPCM reset values to the NPCM reset
+document or the reset values should describe in the module
+documentation that uses it?
+2. Some of the NPCM7XX document modules describe the reset value they
+use from the dt-binding for example:
+https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/iio/adc/nuvoton%2Cnpcm750-adc.yaml#L61
+If we remove the NPCM8XX dt-binding file should we describe the
+NPCM8XX values in the NPCM-ADC document file?
+
+Best regards,
 
 Tomer
 
-
-On Fri, 10 Jun 2022 at 12:53, Krzysztof Kozlowski
+On Fri, 10 Jun 2022 at 12:55, Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 09/06/2022 23:37, Tomer Maimon wrote:
-> > Hi Krzysztof
+> On 10/06/2022 00:05, Tomer Maimon wrote:
+> > Hi Krzysztof,
 > >
-> > Sorry but I didn't ignore your comment.
+> > Sorry, but I thought the fix is only to add an explanation to the
+> > dt-binding file as was done in V2.
 > >
-> > For not breaking exciting boards I add the following patch in V2
-> > https://lore.kernel.org/linux-arm-kernel/20220608095623.22327-11-tmaimon77@gmail.com/
+> > The NPCM8XX binding is done in the same way as the NPCM7XX and both
+> > use the same reset driver and use the same reset method in upstreamed
+> > NPCM reset driver.
+> >
+> > Can you please explain again what you suggest to do?
 >
-> No, it does not solve it.
-> 1. Patchset goes via separate trees (DTS are always separate), so it is
-> not bisectable. One of the branches/trees will have broken DTS.
+> If you want abstract IDs, they must be abstract, so not representing
+> hardware registers. Then they start at 1 and are incremented by 1.
 >
-> 2. All out of tree DTSes are broken. This is expressed as ABI and - with
-> some reasonable exceptions - you should not break it.
-> https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/devicetree/bindings/ABI.rst
+> Other option is to skip such IDs entirely and use register
+> offsets/addresses directly, like Arnd suggested in linked documents. I
+> think he expressed it clearly, so please read his answers which I linked
+> in previous discussion.
 >
-> You have to keep backwards compatibility, so parse/handle both versions
-> of DTS.
->
+> There is no single reason to store register addresses/values/offsets as
+> binding headers. These are not bindings.
 >
 > Best regards,
 > Krzysztof
