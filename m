@@ -2,150 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18675483A5
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jun 2022 11:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4E3549C16
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jun 2022 20:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240814AbiFMJZT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jun 2022 05:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S233163AbiFMSrt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jun 2022 14:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiFMJZS (ORCPT
+        with ESMTP id S245317AbiFMSr0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:25:18 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BEB12AC1;
-        Mon, 13 Jun 2022 02:25:17 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id a29so7885267lfk.2;
-        Mon, 13 Jun 2022 02:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xUYF6Y1hCqd5t8WxA/+uJZZHaISwa+qUcLkVEX3FDtY=;
-        b=OZRK4j4GfMvvujegmLuiiyQfatSbywM4kRdRc1tMAOzluF9+R3ROjAPU3l7ABr8vnN
-         jYtnDvoHI2bSR7Kn4LK8/ztorjpVQXZ2uSDdgpxBZhlEi2T9raelsgwGWpgrCmVTF1ng
-         +jtfpdHxAxBWbneZjvuPphDXeVMYqaI7GuHnfR/C9zsLfnkFjud27cobWdzB8VQCmmf7
-         CUqYCzZDZac86aaP53eZzM6opXQBwDLw0lkE/+JhAnd0rjVfdtJLXqWYI/7dX/nxVL7B
-         6oAE7Xd3AmopNE8kT4f8CY9HGoy/EEkLZuu4y4iGct6vRqeb8A+Agl+ljt2/6CRdvDGF
-         W5cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xUYF6Y1hCqd5t8WxA/+uJZZHaISwa+qUcLkVEX3FDtY=;
-        b=jCfGaR9EhmtmrGq19XLLS2LQymZPC9QkkvQwyzmTmszJ7aOvm04dsmUt/lYG2dpHDF
-         ACoqEZmr34IDvsexmDrvLt0IFTmKU12aCkskwF7w+ab1Tp2ABAhF3jmT21vcMZad66zu
-         BTKtg6PKcpm7U2jX/u9m1zl2MZ0EC+p3WdQvwn6HgnVEqazrn4kyse0+3CJfuw94cuFn
-         94bJtCYyimjNhfNtGDYUDiuhEGUibgSxFcIs6LymLtXtDDVb7r4lBTxJ867tku+5kSyP
-         h42E43hHXfoARWdpi8kDfRBMDnwYIrcMew6qqJX/yCMkEn0QBOOVINKkpY7XSbAmrL2l
-         u7Sw==
-X-Gm-Message-State: AOAM532FpcBbl+Rs6UmKKv1kfIhbruI1OqPMEM0+kMEePEU1icOV70wl
-        PgJC71w7jNMWxE+p2oim2X8pNgGCRzJ113vZx0o=
-X-Google-Smtp-Source: ABdhPJxXc679feoHAf2D/GisUYLrlv1MVhsVhMMqlkvsfBNlHHdqjK5/eafARXLQjX3HPF+NV1BKVh2veyAWJgShjls=
-X-Received: by 2002:a05:6512:1052:b0:479:1f92:13b4 with SMTP id
- c18-20020a056512105200b004791f9213b4mr27864941lfb.200.1655112316061; Mon, 13
- Jun 2022 02:25:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-13-tmaimon77@gmail.com>
- <add025b6-c622-b204-d39e-67b31878d37f@linaro.org> <CAP6Zq1iDbB+X5QPE4Nsqk4nV41bZiVzQZExS1pQTuKEBz-iYew@mail.gmail.com>
- <381ff739-e898-8812-d549-df7101f0eaa2@linaro.org>
-In-Reply-To: <381ff739-e898-8812-d549-df7101f0eaa2@linaro.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Mon, 13 Jun 2022 12:25:05 +0300
-Message-ID: <CAP6Zq1j=x3OcOPSOjJJmOcze7ziM=oWcKdbYzoHhGnvZipu_UQ@mail.gmail.com>
-Subject: Re: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for NPCM8XX
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 13 Jun 2022 14:47:26 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A35B2D8097;
+        Mon, 13 Jun 2022 08:06:00 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.91,297,1647270000"; 
+   d="scan'208";a="122769625"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 14 Jun 2022 00:05:59 +0900
+Received: from localhost.localdomain (unknown [10.226.93.20])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id B4B7D425F851;
+        Tue, 14 Jun 2022 00:05:56 +0900 (JST)
+From:   Phil Edworthy <phil.edworthy@renesas.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 0/2] arm64: renesas: Add RZ/V2M watchdog support
+Date:   Mon, 13 Jun 2022 16:05:48 +0100
+Message-Id: <20220613150550.70334-1-phil.edworthy@renesas.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Krzysztof,
+Hello all,
 
-Thanks for your clarification.
+This patch series adds support for the Watchdog Timer (WDT) in the
+RZ/V2M SoC.
 
-We can remove the dt-binding file and use numbers in the DTS,
-appreciate if you can answer few additional questions:
-1. Do you suggest adding all NPCM reset values to the NPCM reset
-document or the reset values should describe in the module
-documentation that uses it?
-2. Some of the NPCM7XX document modules describe the reset value they
-use from the dt-binding for example:
-https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/iio/adc/nuvoton%2Cnpcm750-adc.yaml#L61
-If we remove the NPCM8XX dt-binding file should we describe the
-NPCM8XX values in the NPCM-ADC document file?
+v2:
+ - dt-bindings: Added minItems for interrupt-names and clock-names
+ - driver: Replace use of parity error registers in restart
+ - driver: Commit msg modified to reflect different contents
 
-Best regards,
+Phil Edworthy (2):
+  dt-bindings: watchdog: renesas,wdt: Add r9a09g011 (RZ/V2M) support
+  watchdog: rzg2l_wdt: Add rzv2m support
 
-Tomer
+ .../bindings/watchdog/renesas,wdt.yaml        | 71 ++++++++++++-------
+ drivers/watchdog/rzg2l_wdt.c                  | 37 +++++++---
+ 2 files changed, 76 insertions(+), 32 deletions(-)
 
-On Fri, 10 Jun 2022 at 12:55, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 10/06/2022 00:05, Tomer Maimon wrote:
-> > Hi Krzysztof,
-> >
-> > Sorry, but I thought the fix is only to add an explanation to the
-> > dt-binding file as was done in V2.
-> >
-> > The NPCM8XX binding is done in the same way as the NPCM7XX and both
-> > use the same reset driver and use the same reset method in upstreamed
-> > NPCM reset driver.
-> >
-> > Can you please explain again what you suggest to do?
->
-> If you want abstract IDs, they must be abstract, so not representing
-> hardware registers. Then they start at 1 and are incremented by 1.
->
-> Other option is to skip such IDs entirely and use register
-> offsets/addresses directly, like Arnd suggested in linked documents. I
-> think he expressed it clearly, so please read his answers which I linked
-> in previous discussion.
->
-> There is no single reason to store register addresses/values/offsets as
-> binding headers. These are not bindings.
->
-> Best regards,
-> Krzysztof
+-- 
+2.34.1
+
