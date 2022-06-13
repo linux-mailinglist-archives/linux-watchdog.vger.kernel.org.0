@@ -2,58 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BECA548029
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jun 2022 09:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A90548079
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jun 2022 09:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239027AbiFMHPg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Jun 2022 03:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S237407AbiFMHQr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Jun 2022 03:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239061AbiFMHPb (ORCPT
+        with ESMTP id S231834AbiFMHQr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Jun 2022 03:15:31 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC891A3B4;
-        Mon, 13 Jun 2022 00:15:30 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id g25so5207942ljm.2;
-        Mon, 13 Jun 2022 00:15:30 -0700 (PDT)
+        Mon, 13 Jun 2022 03:16:47 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261D91A824;
+        Mon, 13 Jun 2022 00:16:46 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id a29so7429112lfk.2;
+        Mon, 13 Jun 2022 00:16:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5kDMrKjn7SCHPQD491sQRcFVfX76w23aBw8JLkLjVRw=;
-        b=Srj6D23H2EK6Wly58iQ/6pMCI5jMFeUy0YYc6wNBAJ1DayAFQ+5HvraX4qfPNpjsIu
-         GBoggQwERhEbqrl28la62ywOc2RiJGmAMuldFhf3r9387hgpCbOyv/BZz2Fy3GQFjFxf
-         yqKAUX4SMlnsqjiFTHGmpBu0ZuYnW7nt9ZeCN4cIxs+LRus8sZ48hE0o2avpuyr30gHk
-         vML4jOcS/dCzSiqfjAB+JSXgdPn7AmOohUjoGs9lgFekvEs9t3sJYDn+fDsIQG02LFKT
-         gRKci10Ty9tbl9o+ISKT8DErQ80qQ8EPVYdXGFR9TUEdbFMQ/fUlkuyJwlRFv6Q1DpNC
-         cSYQ==
+        bh=buxqDOApbU3iWiCJpKcyX6L2RFQXu0xedhgWabGDF/Y=;
+        b=GAKALYciW0y2QOTLFrqdt7PBg3TAA5HKJHXgZLsLCiOxWXd1xx2sO5wooqJdzGdLxd
+         HKLQByqKQf++zSSKLpVSQEHbxACET4DJIhjto+PQrW8MIGNBA1l22fAq8zAu5a0gYI42
+         x49q6Nj7VXy4LhTWhE87qw3gqinxJZ6SeTuKwP/cqPdBa3dpFnUp4r81VYTGKOYpPuPg
+         a/PybB/saG8GpU7r9IQn/Zod6zYdvwPBsGpMS6DLGdSV6xF6ihlk3w8KtUTvMITMPFUy
+         OvmOoDt4OXc2f1Gg1OoBM4Ad+/a/Pxpz3DN2+Jw+NY5Z/MY39gWzafDnmeFs+tOMGzK4
+         EZqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5kDMrKjn7SCHPQD491sQRcFVfX76w23aBw8JLkLjVRw=;
-        b=cCF9hPDDuorcj2KfYpIayRjkYfWuPE8kKeDMV4tNVUEZ+dKPcxAIegRVPyI/1qJFmT
-         d/1+rsNUfrzREdaYDHvsW7jIRO/FaxK2ydG9549rAFRVYxsazaZxjs8cGtlFZOCQgDzZ
-         RMiiiCaUfaOtjTesdjlcr65qFOZqLnml7kGwTCw2o4Thd3O75ZQ+k7AIu6YiM2dMATLB
-         07Gk83/R+29xnhT+Fpkq9ivwCudj8wR1EcoRFdUaGbxuaaOvZv5POs3RUJwvJ7vw1Su+
-         QJzoNN19L4wJgSQC4Y/+cLaaE5/dDg62xTIy1gYOr8Z4FyeQyvrrmnn4WVnhoXekec5y
-         3Tkg==
-X-Gm-Message-State: AOAM533tpYR7P6RFV35Pi3sUYkEs7ZrycEI8Sdkf+jobONZz73w5Ak7I
-        E/wOvyBqa34QPJoBQ/2ivpSj2l4sRhMX9Xzn3X0=
-X-Google-Smtp-Source: ABdhPJxMeAPZdjsh21T3CQmhRApXL+7ZnGLDleQGDR/hSUYszbzLKYdlJuCY6SHZXqdQTIYtuyFXaeFXeSI+aIcq30g=
-X-Received: by 2002:a2e:bf27:0:b0:246:7ed6:33b0 with SMTP id
- c39-20020a2ebf27000000b002467ed633b0mr69455983ljr.167.1655104528727; Mon, 13
- Jun 2022 00:15:28 -0700 (PDT)
+        bh=buxqDOApbU3iWiCJpKcyX6L2RFQXu0xedhgWabGDF/Y=;
+        b=a6y+3LnOsT+cNSzT80DC4NYBt9Qgnv9i9Kf0TaqJZ/606WzzKvcQAGpSXuUN+fQkOd
+         NfOPmrQEUOZDpIYEdrPp+yB7bpohI1Bo9xtA8CiuXMNZ6VUh0osGv2zEQqZby2IEszk+
+         N1e6QnmwtXMefPAMgmKyEBrUI0MOHNi+1FD0KIKt0F47+fBSiPqdFTrs/XD4sjGH4dna
+         9ooQRKXE7AxeJOLhhoA2ZPIxketHv7xvmmanpQ0HiJsUmZjv6dteyFkfY3ra2ZwCWAI8
+         XhmMjZaug1T26zLY4kpKcgGbOVbN3PtPmoXuB0KLnQQpz68lasOU0LnEJLAjqZSQ5Dda
+         p64Q==
+X-Gm-Message-State: AOAM531rFL5yycWp6xbcRS6R2e5VOHzCZX3lbD+hDydB+6vXsNx+SIaq
+        N67qFo4FaGrOsTu6tL7BVfv67ipIs3jh5jHt5SQ=
+X-Google-Smtp-Source: ABdhPJztUvaIJiyyz/qpSniEl7gEI70W2eqQCEj/oJAsctZd0PsOvAXKEMDSh3jw4ZyybkEAkZuB+NDScf1ujTsP6Jc=
+X-Received: by 2002:a05:6512:1052:b0:479:1f92:13b4 with SMTP id
+ c18-20020a056512105200b004791f9213b4mr27626523lfb.200.1655104604518; Mon, 13
+ Jun 2022 00:16:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-11-tmaimon77@gmail.com>
- <3aa70c91-d6d7-e2eb-9c45-a1fb0a5751ca@linaro.org> <CAP6Zq1iCJO3AzHnG7RSQ1pyVwayxs+X3iVM4U=6j2k0EgR7psg@mail.gmail.com>
- <80f9c2d5-52d9-b03d-c272-ac475ae8c69e@linaro.org>
-In-Reply-To: <80f9c2d5-52d9-b03d-c272-ac475ae8c69e@linaro.org>
+References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-12-tmaimon77@gmail.com>
+ <91549b70-08fc-ed6f-c48e-5bcb70ea63d0@linaro.org> <CAP6Zq1j2VZno4w4w0QCYwHnRaVqiM=DnNSmND1vOGDs_wfi2zw@mail.gmail.com>
+ <8e02ad54-5dad-aee7-6fa8-70c72f93bf5e@linaro.org>
+In-Reply-To: <8e02ad54-5dad-aee7-6fa8-70c72f93bf5e@linaro.org>
 From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Mon, 13 Jun 2022 10:15:17 +0300
-Message-ID: <CAP6Zq1g40QFSehUiTevaf6pw-Ti+Q-GU3z5pM_tn9X7eChU-hA@mail.gmail.com>
-Subject: Re: [PATCH v2 10/20] ARM: dts: nuvoton: add reset syscon property
+Date:   Mon, 13 Jun 2022 10:16:33 +0300
+Message-ID: <CAP6Zq1j2FgMmX9NJRoDMCsRLnF0RTETSTuMv8rEhr3FGLvY7yw@mail.gmail.com>
+Subject: Re: [PATCH v2 11/20] reset: npcm: using syscon instead of device data
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Avi Fishman <avifishman70@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
@@ -104,42 +104,35 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 Hi Krzysztof,
 
-Thanks for the clarifications, will update the next version.
+I will make sure to add backward compatibility in the reset driver in
+the next version.
 
-Best regards,
+Thanks,
 
 Tomer
 
-On Fri, 10 Jun 2022 at 12:51, Krzysztof Kozlowski
+
+On Fri, 10 Jun 2022 at 12:53, Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 09/06/2022 23:30, Tomer Maimon wrote:
-> > Hi Krzysztof,
+> On 09/06/2022 23:37, Tomer Maimon wrote:
+> > Hi Krzysztof
 > >
-> > Thanks for your comments
+> > Sorry but I didn't ignore your comment.
 > >
-> > On Wed, 8 Jun 2022 at 13:07, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 08/06/2022 11:56, Tomer Maimon wrote:
-> >>> Add nuvoton,sysgcr syscon property to the reset
-> >>> node to handle the general control registers.
-> >>
-> >> Wrong wrapping.
-> > it will be very helpful if you could point me what wrong wrapped in
-> > the commit message, is it the explanation or the header? or something
-> > else?
+> > For not breaking exciting boards I add the following patch in V2
+> > https://lore.kernel.org/linux-arm-kernel/20220608095623.22327-11-tmaimon77@gmail.com/
 >
-> I pointed you last time. I pointed the exact line, exact rule you need
-> to follow. I pointed it three times already and three times I said
-> wrapping is wrong:
-> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+> No, it does not solve it.
+> 1. Patchset goes via separate trees (DTS are always separate), so it is
+> not bisectable. One of the branches/trees will have broken DTS.
 >
-> "The body of the explanation, line wrapped at 75 columns, which will be
-> copied to the permanent changelog to describe this patch."
+> 2. All out of tree DTSes are broken. This is expressed as ABI and - with
+> some reasonable exceptions - you should not break it.
+> https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/devicetree/bindings/ABI.rst
 >
-> Your wrapping is not at 75 columns and it causes the commit to be less
-> readable, without any reason. Please follow Linux kernel coding style/rules.
+> You have to keep backwards compatibility, so parse/handle both versions
+> of DTS.
 >
 >
 > Best regards,
