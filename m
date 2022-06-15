@@ -2,144 +2,201 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E2054C4E5
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jun 2022 11:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4198354C6B6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jun 2022 13:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346907AbiFOJlJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 15 Jun 2022 05:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S1349239AbiFOLBC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 15 Jun 2022 07:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346980AbiFOJlE (ORCPT
+        with ESMTP id S1348682AbiFOK7T (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:41:04 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E36E40E6B;
-        Wed, 15 Jun 2022 02:41:01 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id o43so8440463qvo.4;
-        Wed, 15 Jun 2022 02:41:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=02+nsEsQLvBL/Q4dC+CUWcVtjKMjSdq60fs4gtgfor4=;
-        b=mblRgJdX375h/VzM5UWnwBcmUUnl2SRPVCzTAQjWeIKvXWHaUGuv+5tQOp4sQoewKS
-         5TCaSaUMyLojBFyD5euGBOffwqODT+mJ3vGeS0JELfsfypOv/TJt4mEgD3TFNK/jbLzX
-         iy+bTUnezMNkEb5prYcfYz/0K3lxfvbStUBv4V5b2OtXj/HjfSuZy2spgQ5eSMKzP3qE
-         gzc5/Oye8wBKkYEGZjB1qIlRoMhTwXSXDBEdCPQENjUMP8WvluBop8EvisdKbWZ/KclO
-         5nAd2FeziJ6PMDJ9eFCZgUOA943xG9h/jiaHsgwCM/u2Fx7F4glJMTis14ZZZCIwBARy
-         rhoQ==
-X-Gm-Message-State: AJIora/oPmtkPM2gXLQKvfCVcIY63gmoaz2gEzSPgJwbqLTGRovL1r+A
-        bxH34UPyme4lFSoKElLvDYa3ZRn8KlVhAw==
-X-Google-Smtp-Source: AGRyM1ur/k0gS6HNK4j1nVV5yZlYCT03L4YTfg4WYKeFFzkaGGLN6Y9O6eTEYw1pQd9/sicJQxI8TA==
-X-Received: by 2002:a05:6214:29ca:b0:46b:92c5:9f3b with SMTP id gh10-20020a05621429ca00b0046b92c59f3bmr7051234qvb.20.1655286060564;
-        Wed, 15 Jun 2022 02:41:00 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id x5-20020a05620a448500b006a6be577535sm13119959qkp.85.2022.06.15.02.40.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 02:41:00 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id h27so19563347ybj.4;
-        Wed, 15 Jun 2022 02:40:59 -0700 (PDT)
-X-Received: by 2002:a25:7307:0:b0:65c:b98a:f592 with SMTP id
- o7-20020a257307000000b0065cb98af592mr9245791ybc.380.1655286059740; Wed, 15
- Jun 2022 02:40:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220613150550.70334-1-phil.edworthy@renesas.com> <20220613150550.70334-3-phil.edworthy@renesas.com>
-In-Reply-To: <20220613150550.70334-3-phil.edworthy@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Jun 2022 11:40:48 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWhj8puZBBDS9256tW91z8Oh8-z_O_jbTgBsNtgeaS-pg@mail.gmail.com>
-Message-ID: <CAMuHMdWhj8puZBBDS9256tW91z8Oh8-z_O_jbTgBsNtgeaS-pg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] watchdog: rzg2l_wdt: Add rzv2m support
-To:     Phil Edworthy <phil.edworthy@renesas.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wed, 15 Jun 2022 06:59:19 -0400
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10045.outbound.protection.outlook.com [40.107.1.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0939351E56;
+        Wed, 15 Jun 2022 03:59:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fwoB/w3QKhV8md6qpvC6+5Nfb2l9vKsB+VuzP+lT9OpVCWudoaZ9FTTn1PtFdN7oHYcxMedLwWFQ09iJScOQ8/1O8WTEQYz9iG2TvPyLdPlQfPtTz9GRmqJjPrPNxmyoqAbqNC3qcejcpyThLu3XLeiAqzsgBiqMLTHXoLzCgxebEasZ5HFPtaRrQRL6YpuLUt6f932toYpPqJpaOFfPr+WZKdb6NxCXpIYB7YIE93qqgXqUN4yh8xoikuLyBd3rTzv9UVcey78n2HRBkBZoDQprcrQs828dNIIEuPysQRTI0BTDOx4YeTEILEQhPtlhiMpHBw5/P7p8YixxhfvSZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yodX5fD3JvTU/tfcp8JwhxT0yehhXXM/g1Wl3LHcr70=;
+ b=CRX++ILwsSOfhyT4c7rEIyQPFIyrjxqncIopzHbkHWKt+t7zJSpTxkj8Rjuuvt6HNHjYhLlw/Bt7ssu7RYB8KgltacStrHbFpdivIrBZmBS9JklqwfTt7/EzYeTRGrUnAGMHD26XEE4Y45sl8c7xpJRZpxGK4qJOWz1LJMl2JwXllSsbwI3cDyYG5pN7Xc7uJ4ClW2oHLOtilYsbgt2XD/BeQFJxdlT5wJpdK/cSTmjcvkxiq92fwAUdkhlgGhSpW+/c/GTcMpmT5RhI0Sgm5NcNNS9hjgfQ5jYD9dd4mY3irMElIem116cCuz/mkgLmTwy9xU2aJ9uD3CF/o/pDcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yodX5fD3JvTU/tfcp8JwhxT0yehhXXM/g1Wl3LHcr70=;
+ b=MlINUrxpqPT84NwPR92dnU2Zkn8lDZJwkNnnytqYjEpAc6Vq/AQB84b44EkcwO1hMb1uq3R5Y1i203pJwwn7caxdBYbuWALmWlIA95/WVEsKWlMUqW5kJmlcoJl+99ZsuL0zpCiF20UNgK/YRo0z4wGwyv8RUy+IPgCzoIT1Z8M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by AM0PR0402MB3939.eurprd04.prod.outlook.com (2603:10a6:208:11::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.23; Wed, 15 Jun
+ 2022 10:59:15 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::7505:2581:368f:5619]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::7505:2581:368f:5619%5]) with mapi id 15.20.5332.022; Wed, 15 Jun 2022
+ 10:59:15 +0000
+From:   Viorel Suman <viorel.suman@nxp.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Peng Fan <peng.fan@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
+        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     LnxNXP@nxp.com
+Subject: [PATCH v4 00/14] dt-bindings: arm: freescale: Switch fsl,scu from txt to yaml
+Date:   Wed, 15 Jun 2022 13:58:20 +0300
+Message-Id: <20220615105834.743045-1-viorel.suman@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR02CA0159.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28d::26) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: af110a09-b919-4a2f-4aec-08da4ebe161a
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3939:EE_
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-Microsoft-Antispam-PRVS: <AM0PR0402MB3939157971D1AE817BF6EE3992AD9@AM0PR0402MB3939.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IJpBFoQDYpeWFqauJosZovu61aJuutkPSLZo1s2w2oDqKas0p5nQUjrq1th41SVS9cQJ/3oxau6IJhA0HmsFSRMSp7mXaLZr3THuY+67SEP7X3gRrEiHDDnoRonZ01Dj4AKh7cU+HxHUCU4Ai0yIkmkRe+SruUWtF1KMng4oSLpbulWkQhYoajNJ72z0c6eGBo4PL8sOiz6+werYdRDY8YWHHN1nwAd8rHg8pgE9QJBqx2MJzlyVy/1k6qTmqfhaqoJ4abcdjjqOl5GGJS7dkTg/lu7cFtKyLhrEARcM6kymtx0Rultcwbcj5QHduNprmAowPETAEFXASrlTqmp/w9gpnNixH9MJ/3pC+PTm44GYz/8CYkq5KAEO/vOAxHJLmcmUvEDchpj/RnKC4PssNTnyLzdTqKAv1r6EgvpkJ01XgOEKbRijBdyi66D2rGjVI7jXwficgFSHym5qHfmCrXvB5po/I1cdn6izClbs0JAodvBnFqPAC15so5N4wznrleJWZcCRV7by9cZkK7qEkiuoIw3Ba/C3MjaFYpjpngVTg09aFH39/ZO6ovGGXT9oqhdGIVkev9gN+1+Q5LLtpG9CbxJ/Uy5l30wyOTz2Mzy8TWoMRIkFXtO9kasccbj9wOpzNqZJYflaNtHXxXO9rtC6nD/g4UzMqxtPOdw2GiP/h2YCFdLbNGAyaZAK31j/EtizBV69AyH0q0rTSr9av8r0dIixtTP94rCDo0d28HfigYW3SrM5wkUc0AFIyjw4RnGcmWSSXrt75byyjQuboQXuNC9YVaizV9COAHRwQCW9y4rkXbFK1bJx35Mk2vxg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(4326008)(66556008)(66476007)(66946007)(8676002)(316002)(1076003)(2616005)(8936002)(26005)(6486002)(38100700002)(966005)(6512007)(508600001)(6666004)(38350700002)(6506007)(52116002)(86362001)(5660300002)(83380400001)(110136005)(921005)(2906002)(7406005)(7416002)(186003)(44832011)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?ZpKWIVth82fWWYG2tC1dCrqkjX6oRE3ndM/1hPzz50gpGLKBWOyboNawmy?=
+ =?iso-8859-1?Q?mjX7jl5SPK7FNax66D61ivLY+PiM/0mg7JUeOJU9Roa6dU5OmUSmJxi87+?=
+ =?iso-8859-1?Q?z3vgiCRyQJAT7BQNTbnlmH2fHwhRme9Rtk4PJ4hpb3gMRCqdXch+eY2fTu?=
+ =?iso-8859-1?Q?cJPQCiAbvzwx/AGu8t5KtmCH6Xq+us8ydMw6RhpY+tpUpmBgEnV+j5am14?=
+ =?iso-8859-1?Q?zC0ZQOe6ad5vrYPCNqC8yEgF3GFVLE6lIzV2/3snu3Q32P6un2HvaG47Eu?=
+ =?iso-8859-1?Q?5gDQkkIHXeh2jtj59+609rdYZUhKVtrxl9N1uTLgmV9pR19u2L6OCXP9wA?=
+ =?iso-8859-1?Q?3c4o1MxhpT36e3XaFVBtw4dMzUICBHjLQPti/fvBSDgvn2dVdFSu2Sk1Am?=
+ =?iso-8859-1?Q?Oz/uO91esUQb6OoMlJNC/p0ygqsJLtH0K4sdu/SWEB30+PIBBHRp80zr2x?=
+ =?iso-8859-1?Q?7ZEbAvxJwUtSx+LiRAtZczTX090EOfLccIwwCIMYG2MvDWKQFRLEFjEhOp?=
+ =?iso-8859-1?Q?ot16E9p+diNfZ1KCMuGzZKUXHg6Jf7ixzPebrLlvPvjou2UsD8sAQL+CbJ?=
+ =?iso-8859-1?Q?qLlI0EgTlK3lAvQlGcLRlT6sbtMqEcMEls4DdKHnL3yApUmlqUy+/F7ldz?=
+ =?iso-8859-1?Q?K24hM0FQsyZWDqGV3B3kivMymAb+7L0OqIlVIEVh8M0gQCL3G7v6zpImt2?=
+ =?iso-8859-1?Q?GOeYgEprqTFLIox8CMaNdewzycAlHWUcVtLI8+v6QtIzLFBcQZdC6T9F9D?=
+ =?iso-8859-1?Q?3/q+DfXX2+D89qL4tCB7TDLnTd9DOwrfvr2Y/rEf1Xe+AyTQ4LILwpPop8?=
+ =?iso-8859-1?Q?qQZ7g4PAEhUfQdBeAXBieydYuaKjF+n6S+O6ZNUNsXy8Jlcb4dgkjtbkMD?=
+ =?iso-8859-1?Q?BiAMt4v+L/4LADyfWsmfpU8iEQvuErZqqBicwO6BtrWX2aRW3p0KHANE2N?=
+ =?iso-8859-1?Q?f4L9px6mYkuu6LrnhaRr2kr5CGrmgny7eYxXDXiVTgE5bv2HE872KjayOQ?=
+ =?iso-8859-1?Q?MeODsv2w22RQ3eYLweQgO02YZcW8eMVSKMEGZvrRAycy/mzXtiTKuA8+hU?=
+ =?iso-8859-1?Q?XAnFt21kbR6Me+uzUoM7jqKIcRGsBwiepQajUImOEY5rpx2zoEjEiLAHqD?=
+ =?iso-8859-1?Q?wxJvBKdPNyihfJ9er/Gifzh0IN8Ua9pKmy9cQvusK/nVpo7ySq51GgB+Cg?=
+ =?iso-8859-1?Q?LkMNziODGmc+g7y55Ea7+H2yWttYTbVYafQUbMWuJRq8ZiilYISKudj2m2?=
+ =?iso-8859-1?Q?UkGiukkZsP2YZRM5RYOZXQwoR+KqE21WVUQuLnR8vUkfSTAj5mDftKpa02?=
+ =?iso-8859-1?Q?HXxQ1cGdynb5QiQ41IPMsOz8J7CJlDT+oAFb9+af3SThk1luTUCSHuznBf?=
+ =?iso-8859-1?Q?hcH/LCMKfTPYBE3Rt+sUasdVrRfcdOUp4RvqhDBiYCl1kjD/zt50XwTvxV?=
+ =?iso-8859-1?Q?FwReH2cwiUDgxwladwXjEKAvJ2JzMLAgeYUezXKxkMQ5dOvDReD3znDmR2?=
+ =?iso-8859-1?Q?6rPiWCACHW/pjTJRVN8OIilKXcmEPv5IHJCk0l+1uwiq+jpU64OK2ciX35?=
+ =?iso-8859-1?Q?3xyJyg6F9Uar5rydZ5RluaslQinWuWW7D1j53KO9mk+OCUCd1rZm3yv6t/?=
+ =?iso-8859-1?Q?9QjN67/JbWrEttWsJMzFityweEUUMCzVS2RwzTyCZ3khSyGtOz6bgXQcYA?=
+ =?iso-8859-1?Q?OoJAgITiocEIWwRvf53Wj/wB24U1C9nK08YUNk51Bk7V6u39dyHwozkBAT?=
+ =?iso-8859-1?Q?Zd6ghgKm0ynsRn91zDeOP3LiAe9EFgVp/sYFZLONz6glAewLA2p1LpDtMq?=
+ =?iso-8859-1?Q?nbW1bJ9aKw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af110a09-b919-4a2f-4aec-08da4ebe161a
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 10:59:14.9952
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HobKTj9eu3Se+csxHA7+1JamPFEsE8qcH4x1lqDwjbyLwO5RRT10z15zh5anq1LT7tkUZIs53YMiFlinaEVViw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3939
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Phil,
+Here is the v3:
+  https://lore.kernel.org/lkml/20220609143423.2839186-1-abel.vesa@nxp.com/
 
-On Mon, Jun 13, 2022 at 5:06 PM Phil Edworthy <phil.edworthy@renesas.com> wrote:
-> The WDT on RZ/V2M devices is basically the same as RZ/G2L, but without
-> the parity error registers. This means the driver has to reset the
-> hardware plus set the minimum timeout in order to do a restart and has
-> a single interrupt.
->
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v2:
->  - Replace use of parity error registers in restart
->  - Commit msg modified to reflect different contents
+Changes since v3:
+  * Examples included
+  * Included Abel's patches fixing thermal zone, keys and power controller names.
 
-Thanks for the update!
+Abel Vesa (14):
+  arm64: dts: freescale: imx8qxp: Fix thermal zone name for cpu0
+  dt-bindings: clk: imx: Add fsl,scu-clk yaml file
+  dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
+  dt-bindings: input: Add fsl,scu-key yaml file
+  dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
+  dt-bindings: power: Add fsl,scu-pd yaml file
+  dt-bindings: rtc: Add fsl,scu-rtc yaml file
+  dt-bindings: thermal: Add fsl,scu-thermal yaml file
+  dt-bindings: watchdog: Add fsl,scu-wdt yaml file
+  dt-bindings: firmware: Add fsl,scu yaml file
+  arm64: dts: freescale: imx8: Fix power controller name
+  arm64: dts: freescale: imx8qxp: Add fallback compatible for clock
+    controller
+  arm64: dts: freescale: imx8qxp: Fix the keys node name
+  dt-bindings: arm: freescale: Remove fsl,scu txt file
 
-> --- a/drivers/watchdog/rzg2l_wdt.c
-> +++ b/drivers/watchdog/rzg2l_wdt.c
+ .../bindings/arm/freescale/fsl,scu.txt        | 271 ------------------
+ .../bindings/clock/fsl,scu-clk.yaml           |  58 ++++
+ .../devicetree/bindings/firmware/fsl,scu.yaml | 170 +++++++++++
+ .../bindings/input/fsl,scu-key.yaml           |  39 +++
+ .../bindings/nvmem/fsl,scu-ocotp.yaml         |  49 ++++
+ .../bindings/pinctrl/fsl,scu-pinctrl.yaml     |  47 +++
+ .../devicetree/bindings/power/fsl,scu-pd.yaml |  41 +++
+ .../devicetree/bindings/rtc/fsl,scu-rtc.yaml  |  28 ++
+ .../bindings/thermal/fsl,scu-thermal.yaml     |  38 +++
+ .../bindings/watchdog/fsl,scu-wdt.yaml        |  35 +++
+ arch/arm64/boot/dts/freescale/imx8qm.dtsi     |   2 +-
+ arch/arm64/boot/dts/freescale/imx8qxp.dtsi    |   8 +-
+ 12 files changed, 510 insertions(+), 276 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+ create mode 100644 Documentation/devicetree/bindings/input/fsl,scu-key.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml
 
-> @@ -139,14 +146,25 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
->  {
->         struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
->
-> -       clk_prepare_enable(priv->pclk);
-> -       clk_prepare_enable(priv->osc_clk);
-> +       if (priv->devtype == I2C_RZG2L) {
-> +               clk_prepare_enable(priv->pclk);
-> +               clk_prepare_enable(priv->osc_clk);
->
-> -       /* Generate Reset (WDTRSTB) Signal on parity error */
-> -       rzg2l_wdt_write(priv, 0, PECR);
-> +               /* Generate Reset (WDTRSTB) Signal on parity error */
-> +               rzg2l_wdt_write(priv, 0, PECR);
->
-> -       /* Force parity error */
-> -       rzg2l_wdt_write(priv, PEEN_FORCE, PEEN);
-> +               /* Force parity error */
-> +               rzg2l_wdt_write(priv, PEEN_FORCE, PEEN);
-> +       } else {
-> +               /* RZ/V2M doesn't have parity error registers */
-> +
-> +               wdev->timeout = 0;
-> +               rzg2l_wdt_start(wdev);
+-- 
+2.25.1
 
-This will call pm_runtime_get_sync(), which is not allowed in this
-context, cfr. commit e4cf89596c1f1e33 ("watchdog: rzg2l_wdt: Fix
-'BUG: Invalid wait context'").
-While you can call clk_prepare_enable() instead, that can only be
-used as a temporary workaround, until you have implemented RZ/V2M
-power domain support...
-
-> +
-> +               /* Wait 2 consecutive overflow cycles for reset */
-> +               udelay(DIV64_U64_ROUND_UP(2 * 0xFFFFF * 1000000ULL,
-> +                                         priv->osc_clk_rate));
-
-DIV64_U64_ROUND_UP() does a 64-by-64 division, while priv->osc_clk_rate
-is "unsigned long" (yes, that is 64-bit on RZ/G2L and RZ/V2M ;-)
-Unfortunately there is no rounding version of div64_ul() yet.
-
-However, there is no need to use a 64-bit dividend, as the resulting
-delay will be multiple ms anyway, so you can just use mdelay() instead:
-
-    mdelay(DIV_ROUNDUP(2 * 0xFFFFF * 1000, priv->osc_clk_rate));
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
