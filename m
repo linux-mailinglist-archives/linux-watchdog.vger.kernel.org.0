@@ -2,207 +2,240 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535D854E812
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jun 2022 18:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E4754E934
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jun 2022 20:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbiFPQs6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Jun 2022 12:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S229770AbiFPSQy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Jun 2022 14:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378477AbiFPQsb (ORCPT
+        with ESMTP id S229658AbiFPSQx (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:48:31 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70077.outbound.protection.outlook.com [40.107.7.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FC3483AC;
-        Thu, 16 Jun 2022 09:48:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X3pF1nFsL73cCnCNLKVqKC+FfUaS+7Dc1BQg9vVC9ufHN4Ha/zNNpsSujCldRwS99fNlxdOCXmFPQcdxEey2EViNT74Y5RelkFEeIxyCJsxlGVUNbZRWBUHZAQzEY9twChZqTTmGhO4uYmtIfZe+yQ3StdvmpDVneVzq9Mp4nYIM3bE8X6TBkq0ZMebn1EysudlQehz7CQSFZldL5Z7IRxZP/H/jSlo6LXNDKNrDhkmoZwDIaAEINw4aADBZGaVdX9diZ4q7kHVLrny44lYURYt3rimpyMykGvc48NeE5qCZzyscEiI0XQkkSAini0mYZF+vB/VxSYHFfz20SNQevw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X8GLwX1DMh9D0ebaKutVwV0uBbWg3yNF1zumBUrTZ2Y=;
- b=UtZR6VuONtouOR4r/bY2xOYxOBod20ZfaGnFlcMs5APuFb3NlFcASCDvspouKn0wEj72fAAJnzZPDhNuClG3VolfebxHp6i5GX9N73AdRZFm0bn9uKhmwRALwAGFh9aewvbf85eSQI9Z1KhFHAh40bzXhm8fXVzMePnyF0UOSvih+ASj8E6T1tcITHD/Ql8UgfhKR9+bpg6/BxEynmM4gSZ/s7cJD0AtpAgOGu78ppc+cbtT8n9P2y8dZjIVEHLT/xrDi2Zl3GktfMnTb7sGvyIVjTwzOz2x9dzr2rrmlgDs5/5pwLgMOGkrYeuztLvLPEDrynAoyIOsPN3cmIzRIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X8GLwX1DMh9D0ebaKutVwV0uBbWg3yNF1zumBUrTZ2Y=;
- b=CY3XOD3nBQYJQ30SmVKNz+NlsStYfM4t170NKPZ8JYgE5YjwR9UUZowWFZGbyWBbWs1HEmDqYjRKby5PVFGyxOwg7ASJLqobMhq8YPq8OORX2dbhiEJGV3rMWwlaeEoJGbBvEzizm1qeaYFjQSoYUavNOSwi16OILVvTd3ZsxqQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
- by AM8PR04MB7939.eurprd04.prod.outlook.com (2603:10a6:20b:241::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.22; Thu, 16 Jun
- 2022 16:48:25 +0000
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::7505:2581:368f:5619]) by VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::7505:2581:368f:5619%5]) with mapi id 15.20.5353.015; Thu, 16 Jun 2022
- 16:48:25 +0000
-Date:   Thu, 16 Jun 2022 19:48:13 +0300
-From:   Viorel Suman <viorel.suman@nxp.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Peng Fan <peng.fan@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     LnxNXP@nxp.com
-Subject: Re: [PATCH v4 00/14] dt-bindings: arm: freescale: Switch fsl,scu
- from txt to yaml
-Message-ID: <20220616164813.jf6og7d4wf25xx4w@fsr-ub1664-116>
-References: <20220615105834.743045-1-viorel.suman@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615105834.743045-1-viorel.suman@nxp.com>
-X-ClientProxiedBy: AM0PR03CA0098.eurprd03.prod.outlook.com
- (2603:10a6:208:69::39) To VI1PR04MB5005.eurprd04.prod.outlook.com
- (2603:10a6:803:57::30)
+        Thu, 16 Jun 2022 14:16:53 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3FD5007E
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jun 2022 11:16:52 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id a21-20020a9d4715000000b0060bfaac6899so1526313otf.12
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jun 2022 11:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Q6xTJMMpGFHSIv3KXqxDj+VQYOzJ4kigdSG7RfpA5PY=;
+        b=ZHsM2zO1wUN/oHSmrdOGjSrEKTeqkkCrg3vmMCM9bVNo2vPdhV8iSiCsgF6W4tK/bb
+         x/6kI81OrDF8zrOm8Hr93+e3f2DeEsnDxd2gDO2VF5kN0XHE31OnNTeFdEQlLXNZOtb9
+         wO6J7+9ZqBmRKis49YboWzvdtao4AQZbPWQa+NoD+Ke72F1PS/wcZsJBMcAWtSXV7psO
+         shTsykOJyoXmqVdK9nETZ13RcIHrB7Wi2F7AJqyi6ioj+DK0U3pFHKtv45WTdfeXWv/z
+         woLlfoTnz0tq1O0Pc/3lwmb5F4wsZEjeSSfV3xBU5BQk861vzUDp+HbVWbApra2FzEuu
+         onOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q6xTJMMpGFHSIv3KXqxDj+VQYOzJ4kigdSG7RfpA5PY=;
+        b=z1Il3Xig80dHXLBwo3Tf1ELD2xVHmtHctW5rsu+8MtoSeLL7zw5GeHSxMVuWSoWknF
+         Vd48BqSJ4NDrO2aTHbeaCr4jtlbGScgmcuRPNywGDw+P1LnNUwSQ7lxJ7W15Ol4ezVIz
+         XORRv/0KImhfinnKP1mSxnpTlE1BVje/A2x64mwXfwtrQVY70xfU+iryyx3KaPWJGNcA
+         +HWMiPI2Ns39y9SMSlHLwpOZncrWPlVSrAT4EuNwU+qTVGf7uZmi200pVIkNieaHNozX
+         xx29Cq2P3bTHAFdwEzgEhT33G7bRn4vsa6h7XihLTSZxpt22SopYlSQJtn2KD4riHDBm
+         WZAg==
+X-Gm-Message-State: AJIora9/E4iloCzAxyqyVycvr6LdDJEQe5HvhM3LNIuCLLQHvvSiShj3
+        6lN3FFQRHk7pxY6FJR7ugOU=
+X-Google-Smtp-Source: AGRyM1toyS2sM6AjINIAKE/6aox9TMnsb0mjT9x9yn+oPIKjzsoA3DevJ0o2EKpg6kTMhY6QoGUAKQ==
+X-Received: by 2002:a05:6830:19f1:b0:60c:3080:fcf8 with SMTP id t17-20020a05683019f100b0060c3080fcf8mr2571853ott.214.1655403411717;
+        Thu, 16 Jun 2022 11:16:51 -0700 (PDT)
+Received: from ?IPV6:2804:431:c7c6:ccc8:8e07:268b:a09:2834? ([2804:431:c7c6:ccc8:8e07:268b:a09:2834])
+        by smtp.gmail.com with ESMTPSA id eb10-20020a056870a88a00b000f5f4ad194bsm1183282oab.25.2022.06.16.11.16.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jun 2022 11:16:51 -0700 (PDT)
+Message-ID: <ba1d72d4-a1f3-17ae-bd75-7c1ede5d0103@gmail.com>
+Date:   Thu, 16 Jun 2022 15:16:47 -0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cd4a935e-9266-4210-f257-08da4fb807ca
-X-MS-TrafficTypeDiagnostic: AM8PR04MB7939:EE_
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-Microsoft-Antispam-PRVS: <AM8PR04MB793934D2FEDE7F3DD89A3BCD92AC9@AM8PR04MB7939.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iZhMPZyWJlyqkWiASHjXLA0cfVnaseDcGiafRe8C7RMoR+VODqWrdAZ4qNZAXFIZ4p9BIy1lg0wxUYeY0HKQhS3pMWRyLPFrxd/B8sxpKhjoQNkMktKdhi3CtrDWluMWW/dt1jq78IwxizYkLQXAy/yD8FjMk6XZl6nzog4IO1Yrob/tEOvDiSW6BGTsI1KCgznDIoOAHoCaGkK4hSzMCh57Bu33/72ylT+5AOLAEl9XQXW7tatdzwlLAoMr7pmu2xAD3d9IBN2CfCGvJj0odGkFwcICelLtfc7IJf0YNsTefQTZCWAdgbHVKKVgWgvgNW60dZtDR+66udBrRVQ1cdHwl/KA+E4qZcVUTU/TUgjmx91kI+V70jogUFTaCUogGlXjO4xO5x9sVbT1cusDvaqN9CjG0dHyi4mL5Oiax75ujW9rPJjENrbJ/bEg89akvVCHheJsutkxdMUv+EmLKxN797iYbpoPjJA0mi+3LDGsjbt6ZRBW08kyLevRD01/fPH4OfbZsqLx9wfZXSMomEY8HUGBrdAnfV0IFWvl26C0KLjrqosPuKUgroi0U7hZpptQ8TmGDIZXqbKxjcHGRAoBCphgCCKdqSyKRBeI89TbSe+wzbylR/3dYBecGYSGfRwOUGNJsOrfB8Uxr/zGuO18Uox+J3nHRVw6fBXTNKjvzFXYzViO7U3pVx1ii1GuAuksSTelUtwDGUIawmCDgaKLYXZcWDFEkfpRw1Tf355P2EYtF5g/gcyUJ+gYJT88BzfbipTBGkVYEJarXrwLUmie2n60DLj0iraF7ebBUvs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(366004)(38100700002)(186003)(38350700002)(1076003)(921005)(86362001)(33716001)(83380400001)(8936002)(316002)(8676002)(110136005)(66946007)(4326008)(66476007)(66556008)(26005)(6486002)(966005)(5660300002)(52116002)(6506007)(53546011)(6512007)(44832011)(508600001)(6666004)(9686003)(2906002)(7406005)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AzkXtBI48EgDzpE/JJvxYCzZM4sjGdzdBQ8hsgAbFfHYnIJEooLjqOle0xja?=
- =?us-ascii?Q?+OI/FLb3lUvB338I22+gq5LYZlLZBCUf1Hk2oorsXafGJZqhyopVKWjP0bET?=
- =?us-ascii?Q?WCOQHMzoh+1qmGU/dOPB+0VszgXqD1NJpibuctU3lVslS35EOJOFNwduRIgG?=
- =?us-ascii?Q?SRHVGX9mMnLVW30IHOz3MuUQ6s/S5zAFBtHjDouJ9/ZUqWU+vSw9wxtq0D+q?=
- =?us-ascii?Q?GIFJvCm4OaE7AB5tLiu2Smu9vu+Cg2ulQ7BQcQrjXw6gxFj1Y6tMic70WLzi?=
- =?us-ascii?Q?Dw90u6Zkc5Wf3aNOFVgGWGS9P/OUE8mB4NzywYHAjX6CS4jIv3YB82vsTgmS?=
- =?us-ascii?Q?ohbAtg9hDInm8z696/EILwky6IVQ/zKedVZUoKI8e03dqj5ZcvjT6dwrlVTL?=
- =?us-ascii?Q?d+enNyowkr1PEzZQntN4O/UX9X1CFLEfXNxgRolC1bqfMUEcanLv1kMCA7DV?=
- =?us-ascii?Q?WEYJ0dxpyvcoDa+4GBsnQoK+fibxh0afhSHIYPY+ydZTerhiaW6Tlo+v7R1i?=
- =?us-ascii?Q?HBFx7/BlzjlAe7H5x5qBat8SktNBJJjBlbs8mPAT958vqIugOOim+J1eYLwk?=
- =?us-ascii?Q?XX3VQ5eeJ79XIc6k8l1QDF5u8nKkZrWhRd5J6jZcFxLdlzzg2YYaKcj6bg3h?=
- =?us-ascii?Q?w5XY1C19OhcCTi3lMp3IgibJyfdGgOVaK+kmat11zJgzzRo7v+chU8PxdUTN?=
- =?us-ascii?Q?blOsWOsiVWV1TNKVOEDSUWBJjhmp4C8zZrNtGGg2YONlQuKy9YHeX4FziFeJ?=
- =?us-ascii?Q?c0nNv7NcksD0imi1bp5tpHqekKwMql85GCVZ3mbSK5YVcZU4VrJ9dez7GRn5?=
- =?us-ascii?Q?lnAKH353VxUcyf1gHa34++p0hQSEdPnzJQ2Nul+fM2gzQX+erYhmFvGeuGIy?=
- =?us-ascii?Q?h9MFQjX73Lz8DEGkreJSvb2Hxt2JN8sBHoLkTAzLz9/gTFgEIACg+wLcRbN+?=
- =?us-ascii?Q?kkIB7kkEZOccXtI/2uY1ok01VF8Nfnh+7Dzn+3jptpylWO26bLn04VGi+HWJ?=
- =?us-ascii?Q?LCEqD9x6CHT1quSSJwZOIOiuLVPouOA9kmQl5muC7WORMnrnKe3Fu8LmuTvU?=
- =?us-ascii?Q?/epKc3iWH/9+QI4JJv+eQwQANk7KJap5S6Vp6nkmYTLP5muV/dFnV8p4Tiit?=
- =?us-ascii?Q?Ux3weJ913JLG352FX9NnKYgV+taSyUMntx24PgD8OwHfXZ+uWWvplI4uTn1Z?=
- =?us-ascii?Q?NzRje0/IDkrOPlWcAmwuMCPkqf4TdB2/yfKzfBzt7FfTofgzDzl5BJKK2r3w?=
- =?us-ascii?Q?selfy+W1xQkLI0gvxJbVSy8BaUMF3LPUPpFl2lqSnfWWKAmw19INVhkmOh4C?=
- =?us-ascii?Q?wIUz19x2TxlRKeemHFvtrrQTgyvyKJyZlgaKs1nEYCV+WqEdhGV8Gou1Gtr/?=
- =?us-ascii?Q?DccPyqrmBI+Q89zFPXDqB5M3UkAl1Jtgv253K6XxkukbzVfW2iWr3yha9avB?=
- =?us-ascii?Q?I4RvF2M3PX5UzY6ph+ZO9Gwz4a2p7yRZ8LQrEI7fD7gJlCiu8i402r4dZy6o?=
- =?us-ascii?Q?9lkRWKpXAKusHrA4r41J4HInLFQA5lhD+V9Y9OdhSP4o/FG2ATF07ohnFlhf?=
- =?us-ascii?Q?3aWVxPgqXM0xMio+emf0obk842NtfArz0JQBvpaiPu6ssbzgOWTxhnPRA3no?=
- =?us-ascii?Q?s5hjO98OfGVGL38omcHd2IEDcHp8Xm517CrJY8U22eVXNOOnHFhrgx9cXyzt?=
- =?us-ascii?Q?zeGVpGpQvKuJGeKraqzdxpz9D7ZoQLPUs15kFL6ENUEM4/vo4ua8J4lArfbN?=
- =?us-ascii?Q?kue2f5uIRw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd4a935e-9266-4210-f257-08da4fb807ca
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 16:48:25.2632
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N6F8yQ9XSRHwbhApbCcRQ0p63k+fGOW8o/EKFbSIQ/HPEIEK6G7fz6rvCATbo2TF9Y+tDjRm77hgpryIi9+v2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7939
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/4] pseries-wdt: initial support for H_WATCHDOG-based
+ watchdog timers
+Content-Language: en-US
+To:     Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Scott Cheloha <cheloha@linux.ibm.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     nathanl@linux.ibm.com, wvoigt@us.ibm.com, aik@ozlabs.ru,
+        vaishnavi@linux.ibm.com, npiggin@gmail.com, tzungbi@kernel.org,
+        brking@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux@roeck-us.net
+References: <20220602175353.68942-1-cheloha@linux.ibm.com>
+ <74ac21a1-d56f-50fb-71c2-e800e943f340@gmail.com>
+ <e5d65186-8247-ac6e-d785-e560f380014a@linux.ibm.com>
+From:   Daniel Henrique Barboza <danielhb413@gmail.com>
+In-Reply-To: <e5d65186-8247-ac6e-d785-e560f380014a@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-All, please ignore this patchset. Sent V5 for review.
+
+
+On 6/16/22 13:44, Tyrel Datwyler wrote:
+> On 6/15/22 18:43, Daniel Henrique Barboza wrote:
+>> Hi,
+>>
+>> I tried this series out with mainline QEMU built with Alexey's patch [1]
+>> and I wasn't able to get it to work. I'm using a simple QEMU command line
+>> booting a fedora36 guest in a Power9 boston host:
+> 
+> I would assume the H_WATCHDOG hypercall is not implemented by the qemu pseries
+> machine type. It is a very new hypercall.
+
+Alexey implemented QEMU support for this hypercall here:
+
+"[qemu] ppc/spapr: Implement H_WATCHDOG"
+https://patchwork.ozlabs.org/project/qemu-ppc/patch/20220608030153.1862335-1-aik@ozlabs.ru/
+
+It is under review in the QEMU mailing list. I tried it out with this series
+and wasn't able to get it to work.
+
 
 Thanks,
-Viorel
 
-On 22-06-15 13:58:20, Viorel Suman wrote:
-> Here is the v3:
->   https://lore.kernel.org/lkml/20220609143423.2839186-1-abel.vesa@nxp.com/
+Daniel
+
+
 > 
-> Changes since v3:
->   * Examples included
->   * Included Abel's patches fixing thermal zone, keys and power controller names.
+> -Tyrel
 > 
-> Abel Vesa (14):
->   arm64: dts: freescale: imx8qxp: Fix thermal zone name for cpu0
->   dt-bindings: clk: imx: Add fsl,scu-clk yaml file
->   dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
->   dt-bindings: input: Add fsl,scu-key yaml file
->   dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
->   dt-bindings: power: Add fsl,scu-pd yaml file
->   dt-bindings: rtc: Add fsl,scu-rtc yaml file
->   dt-bindings: thermal: Add fsl,scu-thermal yaml file
->   dt-bindings: watchdog: Add fsl,scu-wdt yaml file
->   dt-bindings: firmware: Add fsl,scu yaml file
->   arm64: dts: freescale: imx8: Fix power controller name
->   arm64: dts: freescale: imx8qxp: Add fallback compatible for clock
->     controller
->   arm64: dts: freescale: imx8qxp: Fix the keys node name
->   dt-bindings: arm: freescale: Remove fsl,scu txt file
-> 
->  .../bindings/arm/freescale/fsl,scu.txt        | 271 ------------------
->  .../bindings/clock/fsl,scu-clk.yaml           |  58 ++++
->  .../devicetree/bindings/firmware/fsl,scu.yaml | 170 +++++++++++
->  .../bindings/input/fsl,scu-key.yaml           |  39 +++
->  .../bindings/nvmem/fsl,scu-ocotp.yaml         |  49 ++++
->  .../bindings/pinctrl/fsl,scu-pinctrl.yaml     |  47 +++
->  .../devicetree/bindings/power/fsl,scu-pd.yaml |  41 +++
->  .../devicetree/bindings/rtc/fsl,scu-rtc.yaml  |  28 ++
->  .../bindings/thermal/fsl,scu-thermal.yaml     |  38 +++
->  .../bindings/watchdog/fsl,scu-wdt.yaml        |  35 +++
->  arch/arm64/boot/dts/freescale/imx8qm.dtsi     |   2 +-
->  arch/arm64/boot/dts/freescale/imx8qxp.dtsi    |   8 +-
->  12 files changed, 510 insertions(+), 276 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
->  create mode 100644 Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
->  create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
->  create mode 100644 Documentation/devicetree/bindings/input/fsl,scu-key.yaml
->  create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
->  create mode 100644 Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
->  create mode 100644 Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
->  create mode 100644 Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml
->  create mode 100644 Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml
-> 
-> -- 
-> 2.25.1
+>>
+>> sudo  ./qemu-system-ppc64 \
+>> -M
+>> pseries,cap-cfpc=broken,cap-sbbc=broken,cap-ibs=broken,cap-ccf-assist=off,ic-mode=dual
+>> \
+>> -m 4G -accel kvm -cpu POWER9 -smp 1,maxcpus=1,threads=1,cores=1,sockets=1 \
+>> -device virtio-scsi-pci,id=scsi0,bus=pci.0,addr=0x2 \
+>> -drive
+>> file=/home/danielhb/fedora36.qcow2,if=none,id=drive-scsi0-0-0-0,format=qcow2,cache=none
+>> \
+>> -device
+>> scsi-hd,bus=scsi0.0,channel=0,scsi-id=0,lun=0,drive=drive-scsi0-0-0-0,id=scsi0-0-0-0,bootindex=2
+>> \
+>> -device qemu-xhci,id=usb,bus=pci.0,addr=0x4 -nographic -display none
+>>
+>>
+>> Guest is running v5.19-rc2 with this series applied. Kernel config consists of
+>> 'pseries_le_defconfig' plus the following 'watchdog' related changes:
+>>
+>> [root@fedora ~]# cat linux/.config | grep PSERIES_WDT
+>> CONFIG_PSERIES_WDT=y
+>>
+>> [root@fedora ~]# cat linux/.config | grep -i watchdog
+>> CONFIG_PPC_WATCHDOG=y
+>> CONFIG_HAVE_NMI_WATCHDOG=y
+>> CONFIG_WATCHDOG=y
+>> CONFIG_WATCHDOG_CORE=y
+>> CONFIG_WATCHDOG_NOWAYOUT=y
+>> CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED=y
+>> CONFIG_WATCHDOG_OPEN_TIMEOUT=0
+>> # CONFIG_WATCHDOG_SYSFS is not set
+>> # CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT is not set
+>> # Watchdog Pretimeout Governors
+>> # CONFIG_WATCHDOG_PRETIMEOUT_GOV is not set
+>> # Watchdog Device Drivers
+>> # CONFIG_SOFT_WATCHDOG is not set
+>> # CONFIG_XILINX_WATCHDOG is not set
+>> # CONFIG_ZIIRAVE_WATCHDOG is not set
+>> # CONFIG_CADENCE_WATCHDOG is not set
+>> # CONFIG_DW_WATCHDOG is not set
+>> # CONFIG_MAX63XX_WATCHDOG is not set
+>> CONFIG_WATCHDOG_RTAS=y
+>> # PCI-based Watchdog Cards
+>> # CONFIG_PCIPCWATCHDOG is not set
+>> # USB-based Watchdog Cards
+>> # CONFIG_USBPCWATCHDOG is not set
+>> # CONFIG_WQ_WATCHDOG is not set
+>> [root@fedora ~]#
+>>
+>>
+>>
+>> Kernel command line:
+>>
+>> [root@fedora ~]# cat /proc/cmdline
+>> BOOT_IMAGE=(ieee1275/disk,msdos2)/vmlinuz-5.19.0-rc2-00054-g12ede8ffb103 \
+>> root=/dev/mapper/fedora_fedora-root ro rd.lvm.lv=fedora_fedora/root \
+>> pseries-wdt.timeout=60 pseries-wdt.nowayout=1 pseries-wdt.action=2
+>>
+>>
+>> With all that, executing
+>>
+>> echo V > /dev/watchdog0
+>>
+>> Does nothing. dmesg is clean and the guest doesn't reboot after the 60 sec
+>> timeout.  I also tried with PSERIES_WDT being compiled as a module instead
+>> of built-in. Same results.
+>>
+>>
+>> What am I missing?
+>>
+>>
+>> [1]
+>> https://patchwork.ozlabs.org/project/qemu-ppc/patch/20220608030153.1862335-1-aik@ozlabs.ru/
+>>
+>>
+>>
+>>
+>> Thanks,
+>>
+>>
+>> Daniel
+>>
+>>
+>>
+>>
+>> On 6/2/22 14:53, Scott Cheloha wrote:
+>>> PAPR v2.12 defines a new hypercall, H_WATCHDOG.  This patch series
+>>> adds support for this hypercall to powerpc/pseries kernels and
+>>> introduces a new watchdog driver, "pseries-wdt", for the virtual
+>>> timers exposed by the hypercall.
+>>>
+>>> This series is preceded by the following:
+>>>
+>>> RFC v1:
+>>> https://lore.kernel.org/linux-watchdog/20220413165104.179144-1-cheloha@linux.ibm.com/
+>>>
+>>> RFC v2:
+>>> https://lore.kernel.org/linux-watchdog/20220509174357.5448-1-cheloha@linux.ibm.com/
+>>>
+>>> PATCH v1:
+>>> https://lore.kernel.org/linux-watchdog/20220520183552.33426-1-cheloha@linux.ibm.com/
+>>>
+>>>
+>>> Changes of note from PATCH v1:
+>>>
+>>> - Trim down the large comment documenting the H_WATCHDOG hypercall.
+>>>     The comment is likely to rot, so remove anything we aren't using
+>>>     and anything overly obvious.
+>>>
+>>> - Remove any preprocessor definitions not actually used in the module
+>>>     right now.  If we want to use other features offered by the hypercall
+>>>     we can add them in later.  They're just clutter until then.
+>>>
+>>> - Simplify the "action" module parameter.  The value is now an index
+>>>     into an array of possible timeoutAction values.  This design removes
+>>>     the need for the custom get/set methods used in PATCH v1.
+>>>
+>>>     Now we merely need to check that the "action" value is a valid
+>>>     index during pseries_wdt_probe().  Easy.
+>>>
+>>> - Make the timeoutAction a member of pseries_wdt, "action".  This
+>>>     eliminates the use of a global variable during pseries_wdt_start().
+>>>
+>>> - Use watchdog_init_timeout() idiomatically.  Check its return value
+>>>     and error out of pseries_wdt_probe() if it fails.
+>>>
+>>>
 > 
