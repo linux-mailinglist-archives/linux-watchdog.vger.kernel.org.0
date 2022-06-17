@@ -2,80 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FD554FA60
-	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jun 2022 17:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB09454FBE9
+	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jun 2022 19:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234564AbiFQPg1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 17 Jun 2022 11:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
+        id S1382754AbiFQRH3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Jun 2022 13:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiFQPg1 (ORCPT
+        with ESMTP id S1383115AbiFQRHZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 17 Jun 2022 11:36:27 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Jun 2022 08:36:26 PDT
-Received: from sv220.xserver.jp (sv220.xserver.jp [202.226.39.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F714D46;
-        Fri, 17 Jun 2022 08:36:26 -0700 (PDT)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw2.xserver.jp)
-Received: from webmail.xserver.ne.jp (webmail.xserver.ne.jp [210.188.201.183])
-        by sv220.xserver.jp (Postfix) with ESMTPA id 038CD12025F434;
-        Sat, 18 Jun 2022 00:16:31 +0900 (JST)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 17 Jun 2022 23:16:31 +0800
-From:   Steve Dibenedetto <y-kitsuya@bell-group.co.jp>
-To:     undisclosed-recipients:;
-Subject: THIS IS VERY CONFIDENTIAL
-Reply-To: stevedibenedetto17@gmail.com
-Mail-Reply-To: stevedibenedetto17@gmail.com
-Message-ID: <ec1bb68d0d72aa3e007bad8b0e72f08f@bell-group.co.jp>
-X-Sender: y-kitsuya@bell-group.co.jp
-User-Agent: Roundcube Webmail/1.2.0
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,ODD_FREEM_REPTO,
-        SPF_HELO_PASS,SPF_SOFTFAIL,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [stevedibenedetto17[at]gmail.com]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.6 ODD_FREEM_REPTO Has unusual reply-to header
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+        Fri, 17 Jun 2022 13:07:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9890F34B86;
+        Fri, 17 Jun 2022 10:07:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3547561E96;
+        Fri, 17 Jun 2022 17:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9DA1BC3411C;
+        Fri, 17 Jun 2022 17:07:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655485643;
+        bh=u6NH63xnCfzpONJQRj7RT7To28O0JLP0suIS1EqXWHs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=bUQf73+lYKSDMb2XGaJ/F+MUiwSCj1Hm/pjeNYXbPLzvuzQ+xV1WPGHciXwNEfNTg
+         giaj8JSWzMCV3XWufRSh2HrZhMyP57CbZeapYSu/4NzHuoLirp8xxDTszdEWe+jtPE
+         hkaTRlTD7CYfY7N0/HJHiJEwN9iuTCGVvwrxntDTrq1ftaSbJFihQMg9wnH1F7T7aO
+         6LIoIf2bOxsK2VZ17bTkeKx72y/DelDndeLlPzSTnSpoik7XgxfS+0A5YJUOmAhZEp
+         0OoJqqK+w1wFtvMPyuYgK4UmwG+Qjm0hfW7G63W0FirWDD3jHxHu6t7TGatCR8jCBu
+         zGyWwRniXgQ2g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 89A48FD99FF;
+        Fri, 17 Jun 2022 17:07:23 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v5.19-rc Fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220617104820.GA10498@www.linux-watchdog.org>
+References: <20220617104820.GA10498@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220617104820.GA10498@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.19-rc3
+X-PR-Tracked-Commit-Id: b6c8cd80ace30f308aeec0ecf946f55dec60cc68
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 7c2d03f15f52fb92d3a0602995fd1fb8fbffd475
+Message-Id: <165548564356.14433.12140944651151653516.pr-tracker-bot@kernel.org>
+Date:   Fri, 17 Jun 2022 17:07:23 +0000
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+The pull request you sent on Fri, 17 Jun 2022 12:48:20 +0200:
 
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.19-rc3
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/7c2d03f15f52fb92d3a0602995fd1fb8fbffd475
+
+Thank you!
 
 -- 
-Hello,
-
-My name is Steve Dibenedetto.I apologize to have contacted you this way
-without a direct relationship. There is an opportunity to collaborate
-with me in the sourcing of some materials needed by our company for
-production of the different medicines we are researching.
-
-I'm aware that this might be totally outside your professional
-specialization, but it will be a great source for generating extra
-revenue. I  discovered a manufacturer who can supply us at a lower rate
-than our company's previous purchases.
-I will give you more specific details when/if I receive feedback from
-you showing interest.
-
-Warm Regards
-Steve Dibenedetto
-Production & Control Manager,
-Green Field Laboratories
-Gothic House, Barker Gate,
-Nottingham, NG1 1JU,
-United Kingdom.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
