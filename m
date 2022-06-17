@@ -2,69 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B3D54F675
-	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jun 2022 13:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221D654F776
+	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Jun 2022 14:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382309AbiFQLLg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 17 Jun 2022 07:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S1382122AbiFQMZY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Jun 2022 08:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381058AbiFQLLf (ORCPT
+        with ESMTP id S1381190AbiFQMZX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 17 Jun 2022 07:11:35 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B0E6CA89
-        for <linux-watchdog@vger.kernel.org>; Fri, 17 Jun 2022 04:11:34 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id b7so4369914ljr.6
-        for <linux-watchdog@vger.kernel.org>; Fri, 17 Jun 2022 04:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Jh3M8LDovYWs/mBJiVJoI/DS8xun0EDDqspVSX/swmY=;
-        b=G/dSTlUqlH2258VvjhhJrMT0OtB618hVwgGDjs7n9i870J11YZQC2fCbflI0c5Dhdt
-         MUstXjNrYuDJp786lJze9KH9x/Y0MytV03GmEkcsrXGWTixlIxqKKsHLs8fM3m7lT1SU
-         89YBCRlP2MCkxqpMu/sb2Dbde1NCU2xJEZPznAvn3WR7ZEhpi0LXQ7rnU46F7lo1kEnI
-         cctspph/UXeMMqAbeEKJN3EuO1EfBCkhsI+ENGXXnmSS5PVmi6r+6BSb6mQnCD7kuQxk
-         nxxh5peOLJDNkIhYXY8VoAH4wDrMBcP9dL/D0SFFc2XGOFz/1Vd8kwTdKc2E+5ZF612y
-         iigg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Jh3M8LDovYWs/mBJiVJoI/DS8xun0EDDqspVSX/swmY=;
-        b=arHo+hJXNaD7unOA3zWXEbFQImbRr47G9LiG+e5sNNXsXx0CHkdMuuUHhLAWy2+cFC
-         fZKqvrvI9ZVuMpHgOhiNNJ5KZrOFnlrgvc52YkwNGEP0hw+z/TRh3ZV6DGllcDBp9G4H
-         RU6HHs7qFKJvhpPZWpocsQ/OKEvCEjKoOm7086c01lxWTPqsS9mzahnPSZ40nw2MEMgL
-         2FOpwTAV/8lFdsuBmH64N8mPqOat6FlVNjHZQNMZfxCJYRJc82OXYaiMlGirNTEgwyp0
-         wuR0HxnS3ZfWII8/foYZqYWL9GDHif/kCZwpmyYn2lLKguybtBYmVJN0RR8MykRRdwj7
-         hJ7A==
-X-Gm-Message-State: AJIora+Saors1TjIG1JT2IpgCZ2TuUVPNgEvUh0wuOW84MZr2QV9iUdq
-        sE91IbzRefxeE7NFrlfHe/UhjTFLb5hrdFNNVzM=
-X-Google-Smtp-Source: AGRyM1tYOIEK9rvirUG4+gF7NsJ6+6XoK4ub+ELWclsgzYPMHN5SGnpC2e4sFZaOT+SRNV3yoC5G5coTyj9avBBksv8=
-X-Received: by 2002:a05:651c:1549:b0:257:42aa:2421 with SMTP id
- y9-20020a05651c154900b0025742aa2421mr4762965ljp.151.1655464292704; Fri, 17
- Jun 2022 04:11:32 -0700 (PDT)
+        Fri, 17 Jun 2022 08:25:23 -0400
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70BEC52539;
+        Fri, 17 Jun 2022 05:25:22 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 9F58F40A00; Fri, 17 Jun 2022 12:48:20 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 9F58F40A00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1655462901;
+        bh=HXXTiuebscsk8opdJ/SRx0Re5yhwMY6rNsZHEejdWzc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QU/Xfrxvm+mpMjQBI4vC7qpQG/C3GGCheQP6iPX7OUuuXlubvSRx0Kv9XBEm5GyUz
+         I2fSHIzhqTSbW0lr9VM1eBV3nmpg13K8BrFQxLwIMp9BVKlYB6MZzIXLCKQRNhB+Of
+         Jd2gDffqtFgxOXrYbAU5Ob8QWJiCg64zXzCTn+Eg=
+Date:   Fri, 17 Jun 2022 12:48:20 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [GIT PULL REQUEST] watchdog - v5.19-rc Fixes
+Message-ID: <20220617104820.GA10498@www.linux-watchdog.org>
 MIME-Version: 1.0
-Received: by 2002:ab3:680f:0:0:0:0:0 with HTTP; Fri, 17 Jun 2022 04:11:32
- -0700 (PDT)
-Reply-To: sj7209917@gmail.com
-From:   Joseph smith <maelyskpeta@gmail.com>
-Date:   Fri, 17 Jun 2022 04:11:32 -0700
-Message-ID: <CACKGxpyoMOts=5RFmMf+deoWONaYxGf5U2n=xN33P+mpZvTx0g@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi   are you available to  speak now
-Thanks
+Hi Linus,
+
+Please pull following watchdog changes for the v5.19 release cycle.
+
+This series contains:
+* gxp: Add missing MODULE_LICENSE
+
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 6bfb56e93bcef41859c2d5ab234ffd80b691be35:
+
+  cert host tools: Stop complaining about deprecated OpenSSL functions (2022-06-08 13:18:39 -0700)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.19-rc3
+
+for you to fetch changes up to b6c8cd80ace30f308aeec0ecf946f55dec60cc68:
+
+  watchdog: gxp: Add missing MODULE_LICENSE (2022-06-09 12:20:34 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 5.19-rc3 tag
+
+----------------------------------------------------------------
+Guenter Roeck (1):
+      watchdog: gxp: Add missing MODULE_LICENSE
+
+ drivers/watchdog/gxp-wdt.c | 1 +
+ 1 file changed, 1 insertion(+)
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
