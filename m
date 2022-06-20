@@ -2,103 +2,137 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7369F5512B1
-	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Jun 2022 10:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61CE551346
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Jun 2022 10:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236984AbiFTI0q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 20 Jun 2022 04:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        id S240018AbiFTIth (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 Jun 2022 04:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238646AbiFTI0l (ORCPT
+        with ESMTP id S240019AbiFTItg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 20 Jun 2022 04:26:41 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0307812774
-        for <linux-watchdog@vger.kernel.org>; Mon, 20 Jun 2022 01:26:40 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cf14so4254855edb.8
-        for <linux-watchdog@vger.kernel.org>; Mon, 20 Jun 2022 01:26:39 -0700 (PDT)
+        Mon, 20 Jun 2022 04:49:36 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4014812D09;
+        Mon, 20 Jun 2022 01:49:35 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id w9so2074993lji.4;
+        Mon, 20 Jun 2022 01:49:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gYcJsXbtPe6Q4z2hXl+LOz24b35LyYtN2cxYQ4ReWvE=;
-        b=WvfiBerB2IA7VNRquJT6usEMj8OQGX7kp7+2ts7eKakktFr+bRs4aXDPCDEcPe1esr
-         4jYVZizxFGykJ2pt3UAfiRmcRAJpYeUtxmd8TE+kgTsO3Jr0NwQrLs8La27jwG//efrA
-         ykR7LJeCb/8PrBs341ZzTwzhA+GZHGB/5EC73Te4Kjah6wEus0rLqaRSbCDHpxVGGxu2
-         8QE2oznKGBKus/EOx/mMHqQw7yvHrF5g1Crn1hL3EHlTH463yzF/rHzV+lOU87SiUrTQ
-         2iwDsNWKS/IhRPUXvC6uN/Us16RYR31X4nf2BuLC2t1ncbMAbxApPdj5ZkHLu4WZhYro
-         +NhA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SlSfxRd2Xk2SeDc5uvX/PiiwHMy5mVFkHrE6RfQz+u0=;
+        b=d9Kcc342xMbGWPyrQMls4I1iCrtiOhC+X57JVG39P6uK14Bl2lRfSGdl6Y4Byhq0zH
+         nJTipKFc4tTkLhwmg9942xF4Cc40/tVepjCmlhj+mPAgjbmEyQH/A24l5A+jjH7+6H5M
+         ZyCHjcTohfdcVHiFHcxKy4fAE/+PKKEH0+gP5zegmf9/ChX3X11UVlTDk8/RfYWyV0HU
+         mBDgwqh4VTwrtUc9V0y2qQ5XG4B1RxECuQvlleWwXShfJWc2B2Khw8O1WPraYGvNI8To
+         XL5tGWKOF8vcw80e0Tgq/I4YyrmQkdw4bnFWt8CNgBTpOVG+1EctiKVfnee9iclMTovi
+         3bCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gYcJsXbtPe6Q4z2hXl+LOz24b35LyYtN2cxYQ4ReWvE=;
-        b=UP6KOAZVAUtR9qt15EqEZnf9yL483J4idCYgATqRIa7X+xzF4YpnFM3O2ijKFfE5LX
-         Utz+rQmxSe/BpSEZFWWVmyGod4GaBJBFafyGnbXUDHcF3QsbMTmY/SnSDhWrWKTaZcpa
-         hY4lhoUr5Bk+Vr8Bn/aaEjTFv/knhW1+3aoIDDR0WiqDYaYfTN9phz/JuNSowZqbbsYK
-         TQDFJWk2XEodhlfSnw2kZpeelQ6ugImx/XQI7p7FgcUUo/gsf20gi97BD/RmqYQ1d/PV
-         gLhlG7IyDVnxbiRNvzMs+qh+M687EOVHsxwn3bP4pOhSPKtOfOVf5ebsNrvAITuRd9B7
-         XKUA==
-X-Gm-Message-State: AJIora+2aveGLjJ0f+D1O6Imy2VSnbzmSuItwTLP3+4U6a8nXGXtHqoP
-        aHUTdnpNX9C5TYrrYHqmrxxm8Q==
-X-Google-Smtp-Source: AGRyM1vVfYItng0TrV1J56CleF0CESEd9s+Dap+GJz+/bi1koCvGM+SNOLDZS+2b7m9hb8OtYM1oRA==
-X-Received: by 2002:a05:6402:3807:b0:435:20fb:318d with SMTP id es7-20020a056402380700b0043520fb318dmr28306542edb.272.1655713598651;
-        Mon, 20 Jun 2022 01:26:38 -0700 (PDT)
-Received: from [192.168.0.207] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c10-20020a170906924a00b006ff045d7c9bsm5598629ejx.173.2022.06.20.01.26.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 01:26:38 -0700 (PDT)
-Message-ID: <0a1315f2-2b19-6c1f-a746-79d197ad67a5@linaro.org>
-Date:   Mon, 20 Jun 2022 10:26:36 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SlSfxRd2Xk2SeDc5uvX/PiiwHMy5mVFkHrE6RfQz+u0=;
+        b=O5oePGAxd0gZppbzyE5YeEM59nQHIcdzBkaVHcJh7fWj2qp7ifvnt7ci74+Rm1uRO0
+         wVHpWEpQ4HWs/89GrmvdAz2nWl0T50Ww1jMgjaaykfL1l6PW7bRDeq+NhIa/ASN0nAaN
+         1TbPb7TdFmYUT5LKLs1DnB+DSUJgiVo1NBuyazfXLaAzMjVx2SvBlz0QlyGUdU3Hh6a6
+         pkN4mOnWLJ3LktycWyngGAbubf+sUS3e4yRkXFlBW5+oU9pMwbRlH2Rgqj9eUAvOW2M3
+         QYw6uqfNKFmFnxCq0G3ESggrtBnaT7Z1anq4pU66tWSSyiNtQ4hixzP5AiPCtZrbWkJb
+         0/zw==
+X-Gm-Message-State: AJIora9YgfZp+3sZOg18ordJNS6w7ugVKb1k/SZQ/b7XKnVWfy54bV0K
+        RYv6At1TXTB0Lhfk9bWDBHDkE99Vx5ZblJVIMiLVKd4p
+X-Google-Smtp-Source: AGRyM1uxeEzp6Qa/xu2QrohXZxMWMEgcFsJzBfa65ZTYCS5D4yF+rdF2IA0ZatrTmNq8mu617DMiTP3ragMom0zLfBQ=
+X-Received: by 2002:a05:651c:506:b0:255:bc1f:80b5 with SMTP id
+ o6-20020a05651c050600b00255bc1f80b5mr11152798ljp.391.1655714973639; Mon, 20
+ Jun 2022 01:49:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 18/18] arm64: defconfig: Add Nuvoton NPCM family
- support
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220619151225.209029-1-tmaimon77@gmail.com>
- <20220619151225.209029-19-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220619151225.209029-19-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220619151225.209029-1-tmaimon77@gmail.com> <20220619151225.209029-8-tmaimon77@gmail.com>
+ <36b12f00-a7cb-9f94-d1c3-e04f7861b08e@linaro.org>
+In-Reply-To: <36b12f00-a7cb-9f94-d1c3-e04f7861b08e@linaro.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Mon, 20 Jun 2022 11:49:22 +0300
+Message-ID: <CAP6Zq1gaxdc6MHuVhQucr84GFtkO8c5k=fAmmJLHg9k8HiJ3pA@mail.gmail.com>
+Subject: Re: [PATCH v3 07/18] dt-bindings: reset: npcm: add GCR syscon property
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 19/06/2022 17:12, Tomer Maimon wrote:
-> Enable basic drivers for NPCM8XX booting up support: Architecture, Clock,
-> and WD.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+Hi Krzysztof,
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+On Mon, 20 Jun 2022 at 11:22, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 19/06/2022 17:12, Tomer Maimon wrote:
+> > Describe syscon property that handles general control registers (GCR) in
+> > Nuvoton BMC NPCM reset driver.
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  .../devicetree/bindings/reset/nuvoton,npcm750-reset.yaml     | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+> > index fa5e4ea6400e..7ba3a6ff82ed 100644
+> > --- a/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+> > +++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+> > @@ -19,6 +19,9 @@ properties:
+> >    '#reset-cells':
+> >      const: 2
+> >
+> > +  nuvoton,sysgcr:
+> > +    description: a phandle to access GCR registers.
+>
+> That's not valid. You miss here ref. My comment was to skip quotes and
+> you removed entire ref.
+Will add the ref next version.
+>
+> Best regards,
+> Krzysztof
 
 Best regards,
-Krzysztof
+
+Tomer
