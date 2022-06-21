@@ -2,152 +2,151 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985FA553617
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Jun 2022 17:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD04D553660
+	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Jun 2022 17:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbiFUPa6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 Jun 2022 11:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S1352996AbiFUPkO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 21 Jun 2022 11:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbiFUPa5 (ORCPT
+        with ESMTP id S1352971AbiFUPkM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:30:57 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39BB1E3F3
-        for <linux-watchdog@vger.kernel.org>; Tue, 21 Jun 2022 08:30:56 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LEpoSe012158;
-        Tue, 21 Jun 2022 15:30:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=RTT1Y8ES+3bjxSpfKROU/jDExd7CKEbmwwN/SK49wHY=;
- b=W5TR0sbmZqUheB9uwFzP17zoGFqh4p5mQ7x2Xj0NaI6o+CjEF5PTVrb6PAQpV08lXFIT
- Ex3MdcchPq04bv2kKVTooZAab6UNeN4QKJkcEGNRgv+JiYfxB5ORVj41gJWDH90PFHLL
- GZjC5u2dM2F5UiFJ+AaR9ppD/psqoG3HwXzMsss4SUcnvmp7bA1MjLDFDMi/JCakl8xj
- gxNQPhu3FDkEK+ZG/BZax+2WKVe1CXp7bCUOXNolBVcxgXwlNhoogunFRHBPIGZHu1go
- MK+60oZBWkUP6ZA4sb6hZIUn2XehGw0C7OvetJkLNoh/AQ/R9UGELVCXQEz2BRkME0vc mA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gug489755-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 15:30:37 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25LEqSBo013808;
-        Tue, 21 Jun 2022 15:30:37 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gug48974r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 15:30:36 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25LF5v3W023147;
-        Tue, 21 Jun 2022 15:30:36 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma02dal.us.ibm.com with ESMTP id 3gt0091u04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 15:30:36 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25LFUYGT22610292
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jun 2022 15:30:34 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B44D96A04F;
-        Tue, 21 Jun 2022 15:30:34 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91E276A047;
-        Tue, 21 Jun 2022 15:30:34 +0000 (GMT)
-Received: from localhost (unknown [9.211.80.5])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Jun 2022 15:30:34 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Scott Cheloha <cheloha@linux.ibm.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     wvoigt@us.ibm.com, aik@ozlabs.ru,
-        Scott Cheloha <cheloha@linux.ibm.com>, vaishnavi@linux.ibm.com,
-        npiggin@gmail.com, tzungbi@kernel.org, brking@linux.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, linux@roeck-us.net
-Subject: Re: [PATCH v2 3/4] powerpc/pseries: register pseries-wdt device
- with platform bus
-In-Reply-To: <20220602175353.68942-4-cheloha@linux.ibm.com>
-References: <20220602175353.68942-1-cheloha@linux.ibm.com>
- <20220602175353.68942-4-cheloha@linux.ibm.com>
-Date:   Tue, 21 Jun 2022 10:30:34 -0500
-Message-ID: <874k0enied.fsf@linux.ibm.com>
+        Tue, 21 Jun 2022 11:40:12 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D77C2C125
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Jun 2022 08:40:11 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id e40so7370303eda.2
+        for <linux-watchdog@vger.kernel.org>; Tue, 21 Jun 2022 08:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1sFbExhS+OPLRXtZhG6HHO16GCs3zpUEDAo1KtqwhuU=;
+        b=WQGkyOh69T3rIJ9GhJep6gi1zgBYkO0OBKsIaFlY+6AZisg0V3xR73aaPs3OW44eku
+         iZWOjwrf100p6yo3l8E8v5hOW+GH3yJA5uKRG4XDKXJ+gLTDhEUS8GfWWzYhJWGfA6VC
+         LS+o7CtrxuSbhvNrlgpEL29B7aE5ENttCeCVqDmoYneLkjLqd71jeTE0hgfqWqxBwRfR
+         PSvyjcKzNSC8TiGVclA7Cb+V8S6/yK6zy9koJlgPvyz+pARkqDykE0wSnEI9tFrq+PHm
+         karQv1IJcNPCk0k6N430IaWslTnkrtyrPzoYJVoUeQlHOLnf9TIddhVCsVKtMgMP64Qw
+         WP3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1sFbExhS+OPLRXtZhG6HHO16GCs3zpUEDAo1KtqwhuU=;
+        b=YABQarQqeO09/1HmyNVaE1CHh1OhTHBwmBhMvu0VUD/iFahXD0/StmyXAPZB1cOqKi
+         z/urcQoman5nMp/Xt1S04tLHQttLKwIEv9JyVaKPw7zqoRn57iPLP5CIjGUoPZiJ5DkN
+         MgKEnI/0yLmm7cSQSCTU9RZwPa3MswELYYEVJnnXC+ghLejWgs1M+toUVvY1W8+tqs4K
+         pT+lZlpaok4siw9hzaZ1n9wU0n0SmLlRxQwpwIA4ykiH4qk6qNqS9FVmOLS0TpwlTlOG
+         OV1kY1SVOSe5MxQleWRDTqwB8NNZyS3lu22m9j6lT6MRspTA3xXMP3KJdXnzUmvvdVG0
+         3vJg==
+X-Gm-Message-State: AJIora+lmml2QDFLRIMhd0GFey0+WnrLE4ZVD4+NSrbwlUmSPgcUVi89
+        l9B8Qtah6hH6MjJsfaejy/hRTA==
+X-Google-Smtp-Source: AGRyM1tgLH2e5nkg+AVdA2b8Jkx7KfBK6e+fSRsOTK0URy9oXzrHdA0RHNt8rt1JcY6ND0eqmpRGiw==
+X-Received: by 2002:a05:6402:51d3:b0:431:6c7b:28d with SMTP id r19-20020a05640251d300b004316c7b028dmr35227379edd.281.1655826009584;
+        Tue, 21 Jun 2022 08:40:09 -0700 (PDT)
+Received: from [192.168.0.221] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z6-20020a17090665c600b006feb6dee4absm7929479ejn.137.2022.06.21.08.40.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 08:40:09 -0700 (PDT)
+Message-ID: <5832f7f1-3c8f-d88d-3b72-99effc1e2e83@linaro.org>
+Date:   Tue, 21 Jun 2022 17:40:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: k9K7XvCCLRo-XJy3yGYER2beW5bVK6DQ
-X-Proofpoint-ORIG-GUID: xtw56Gn0FhImEExhwux94D5jC_nM_Ptz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-21_08,2022-06-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 bulkscore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=999 clxscore=1015 phishscore=0 adultscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206210065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 05/18] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220621131424.162355-1-tmaimon77@gmail.com>
+ <20220621131424.162355-6-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220621131424.162355-6-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Scott Cheloha <cheloha@linux.ibm.com> writes:
-> PAPR v2.12 defines a new hypercall, H_WATCHDOG.  The hypercall permits
-> guest control of one or more virtual watchdog timers.
->
-> These timers do not conform to PowerPC device conventions.  They are
-> not affixed to any extant bus, nor do they have full representation in
-> the device tree.
->
-> As a workaround we represent them as platform devices.
->
-> This patch registers a single platform device, "pseries-wdt", with the
-> platform bus if the FW_FEATURE_WATCHDOG flag is set.
->
-> A driver for this device, "pseries-wdt", will be introduced in a
-> subsequent patch.
->
-> Signed-off-by: Scott Cheloha <cheloha@linux.ibm.com>
+On 21/06/2022 15:14, Tomer Maimon wrote:
+> Add binding for the Arbel BMC NPCM8XX Clock controller.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  arch/powerpc/platforms/pseries/setup.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
-> index afb074269b42..233c64f59815 100644
-> --- a/arch/powerpc/platforms/pseries/setup.c
-> +++ b/arch/powerpc/platforms/pseries/setup.c
-> @@ -14,6 +14,7 @@
->  
->  #include <linux/cpu.h>
->  #include <linux/errno.h>
-> +#include <linux/platform_device.h>
->  #include <linux/sched.h>
->  #include <linux/kernel.h>
->  #include <linux/mm.h>
-> @@ -169,6 +170,22 @@ static void __init fwnmi_init(void)
->  #endif
->  }
->  
-> +/*
-> + * Affix a device for the first timer to the platform bus if
-> + * we have firmware support for the H_WATCHDOG hypercall.
-> + */
-> +static struct platform_device *pseries_wdt_pdev;
+>  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 49 +++++++++++++++++++
+>  .../dt-bindings/clock/nuvoton,npcm845-clk.h   | 49 +++++++++++++++++++
+>  2 files changed, 98 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>  create mode 100644 include/dt-bindings/clock/nuvoton,npcm845-clk.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> new file mode 100644
+> index 000000000000..3d4fddc090ca
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +static __init int pseries_wdt_init(void)
-> +{
-> +	if (!firmware_has_feature(FW_FEATURE_WATCHDOG))
-> +		return 0;
-> +	pseries_wdt_pdev = platform_device_register_simple("pseries-wdt",
-> +							   0, NULL, 0);
-> +	return 0;
-> +}
-> +machine_subsys_initcall(pseries, pseries_wdt_init);
+> +title: Nuvoton NPCM8XX Clock Controller Binding
 > +
+> +maintainers:
+> +  - Tomer Maimon <tmaimon77@gmail.com>
+> +
+> +description: |
+> +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
+> +  generates and supplies clocks to all modules within the BMC.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm845-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +    description:
+> +      See include/dt-bindings/clock/nuvoton,npcm8xx-clock.h for the full
+> +      list of NPCM8XX clock IDs.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
 
-Seems like we don't need pseries_wdt_pdev as it's unused elsewhere? But
-that's quite minor.
+You fixed one comment and ignore second. The same was with v3.
 
-Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>
+This is still no. Implement all the comments you received. I have to
+double check your patchsets every time because I cannot trust that you
+implemented what I asked for.
+
+
+Best regards,
+Krzysztof
