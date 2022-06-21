@@ -2,90 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7AD55368D
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Jun 2022 17:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94321553831
+	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Jun 2022 18:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352981AbiFUPpc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 Jun 2022 11:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
+        id S232469AbiFUQu3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 21 Jun 2022 12:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352963AbiFUPpa (ORCPT
+        with ESMTP id S230491AbiFUQu2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:45:30 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2899E2CDE2
-        for <linux-watchdog@vger.kernel.org>; Tue, 21 Jun 2022 08:45:28 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25LFfimF016343;
-        Tue, 21 Jun 2022 15:45:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=t4BS/CXC8SgSqa9hCz2Nb9gPQWdAlKzm70mXSSrwrFY=;
- b=TPULBdhSUCAXihv55Wb3rY0AZjS8LmLT0in+CDLA3MZmkoDgLuYBvfJGuRXx2CuuKHNq
- X2XSRs3oYurUYVlbflSufhayzLfSFMD9USkCSsiqXeRgFuDjRepBZyMROBX2W1ouv731
- HV0nykPzKeG941QF7I5M6jC61EHO8MTHlNdVqzLEGRVNig9edIKymHGMSSXZf90RNAOA
- m85O7ATLdoz2ggCYC3ZXXbZLO/2N5HCtPcLp5riIBW1J9wnRnWWohC9fjD556eDhus06
- rUF3T1t5ROVcz9PEDEtYB2zBfmgSgsuHCrnQ/LJfdGp+CuYohsfHAhi/HgWW/lWPQRPi 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gugus02rf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 15:45:09 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25LFhMQg024746;
-        Tue, 21 Jun 2022 15:45:09 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gugus02r3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 15:45:09 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25LFZwlO031845;
-        Tue, 21 Jun 2022 15:45:08 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 3gt0091wut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Jun 2022 15:45:08 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25LFj76D21103024
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jun 2022 15:45:07 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1032AC605A;
-        Tue, 21 Jun 2022 15:45:07 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DACF9C6055;
-        Tue, 21 Jun 2022 15:45:06 +0000 (GMT)
-Received: from localhost (unknown [9.211.80.5])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Jun 2022 15:45:06 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Scott Cheloha <cheloha@linux.ibm.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     linux@roeck-us.net, tzungbi@kernel.org, brking@linux.ibm.com,
-        aik@ozlabs.ru, npiggin@gmail.com, vaishnavi@linux.ibm.com,
-        wvoigt@us.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        Scott Cheloha <cheloha@linux.ibm.com>
-Subject: Re: [PATCH v2 4/4] watchdog/pseries-wdt: initial support for
- H_WATCHDOG-based watchdog timers
-In-Reply-To: <20220602175353.68942-5-cheloha@linux.ibm.com>
-References: <20220602175353.68942-1-cheloha@linux.ibm.com>
- <20220602175353.68942-5-cheloha@linux.ibm.com>
-Date:   Tue, 21 Jun 2022 10:45:06 -0500
-Message-ID: <871qvinhq5.fsf@linux.ibm.com>
+        Tue, 21 Jun 2022 12:50:28 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A115925E88;
+        Tue, 21 Jun 2022 09:50:27 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id s21so12817091lfs.13;
+        Tue, 21 Jun 2022 09:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TI9vr7TQPqxwZb2z/IMuFAGZ9nSwT2vz/9F9w7eTiWQ=;
+        b=TDZvDdbimBZ9N0fLFWDfy5OD6MDoKJOihMspOG15unZ0NEuqew7BxxnIchsQ+PhHgO
+         T6BOw+9I5o+nWV8GHYUlnmqC+25cRk2bRt31Sc+I1WeaCzEkH27k1pFQkjegG+u6RUbZ
+         NYshk6amV0oCvL+VLUH1aUrGk9ZXlGqO+qWVXg53sWiZVL5HWjoBFEeycbez/tIBgMXp
+         gPMQYSRgl1EKHv1J59+lDXS6L7p2YrxryNavQDhzbaRxJggnIGMpKyV34oEeJAKcBART
+         5POeFytTtnDoXGngY+PeLZdWFYmIpr54Nka/grGGjwy4k7+rI8Sb84PX+aE1vwNeKS/K
+         kzhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TI9vr7TQPqxwZb2z/IMuFAGZ9nSwT2vz/9F9w7eTiWQ=;
+        b=RtQve16AUsYx0IxlGUW/iDksdi9wQPUCq52Yrv7WK7eoucTTfJ6ZFruIzggg2Clp4a
+         w5XNfJrv0FeAr6yQyK8ZKE0PvJrpiqGOwHvfn/FVN/qdlSttWswOb1l8oC2vPVquKUpW
+         FAk9hcpEWXZp5X/QXJWbVYkX9G4CkomPB1woPApfJ2guEdkUfEaze/taqQdjV6lVQ2Dl
+         7pUCOYT4Uc24KX7yFB6wEU097gMggkK57TbZFH/prq+a6GJZNUO7XkjMwfbojBjwIkXr
+         xAZrt0iBKAAfGzOhvSh6GM3YwuwixbvLfuxQ0Kk+sdEiDacIrXgkzkpFNM4ZSR5kZ9x6
+         COhQ==
+X-Gm-Message-State: AJIora9Wu2TjHLm+kAotpNNmeP5PcKknxiBoa+1iJSL/Jprpck0+P/JE
+        b5jGhbKIlkGN53XzmIugepJX7/0vsLdPaxvBCLlN1agV2gSIlA==
+X-Google-Smtp-Source: AGRyM1skPQQLpMHGrrtCYFJIKwZltL1tW6qpkSB1j4XHK/bat+sYAi+niUvvWjRNyH+0E//6sHWS5YsdxF42Ge3teJA=
+X-Received: by 2002:a05:6512:3d1a:b0:47f:79df:2ea8 with SMTP id
+ d26-20020a0565123d1a00b0047f79df2ea8mr3853154lfv.610.1655830225857; Tue, 21
+ Jun 2022 09:50:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uGGgjjbPIFAGzcu50ccm2ACPaUAnR_cd
-X-Proofpoint-ORIG-GUID: Av9Q5_DE04ADXzQZ9UpFnF-02STZOY_p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-21_08,2022-06-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- adultscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 suspectscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206210066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+References: <20220621131424.162355-1-tmaimon77@gmail.com> <20220621131424.162355-6-tmaimon77@gmail.com>
+ <5832f7f1-3c8f-d88d-3b72-99effc1e2e83@linaro.org>
+In-Reply-To: <5832f7f1-3c8f-d88d-3b72-99effc1e2e83@linaro.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Tue, 21 Jun 2022 19:50:14 +0300
+Message-ID: <CAP6Zq1itHGFw9ZV9cMr-9Fhx8fqYVGYXhmTOiLbGVjoV7TQ5hA@mail.gmail.com>
+Subject: Re: [PATCH v4 05/18] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,20 +102,73 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Scott Cheloha <cheloha@linux.ibm.com> writes:
-> PAPR v2.12 defines a new hypercall, H_WATCHDOG.  The hypercall permits
-> guest control of one or more virtual watchdog timers.  The timers have
-> millisecond granularity.  The guest is terminated when a timer
-> expires.
->
-> This patch adds a watchdog driver for these timers, "pseries-wdt".
->
-> pseries_wdt_probe() currently assumes the existence of only one
-> platform device and always assigns it watchdogNumber 1.  If we ever
-> expose more than one timer to userspace we will need to devise a way
-> to assign a distinct watchdogNumber to each platform device at device
-> registration time.
->
-> Signed-off-by: Scott Cheloha <cheloha@linux.ibm.com>
+Hi Krzysztof,
 
-Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>
+On Tue, 21 Jun 2022 at 18:40, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/06/2022 15:14, Tomer Maimon wrote:
+> > Add binding for the Arbel BMC NPCM8XX Clock controller.
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 49 +++++++++++++++++++
+> >  .../dt-bindings/clock/nuvoton,npcm845-clk.h   | 49 +++++++++++++++++++
+> >  2 files changed, 98 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> >  create mode 100644 include/dt-bindings/clock/nuvoton,npcm845-clk.h
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > new file mode 100644
+> > index 000000000000..3d4fddc090ca
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > @@ -0,0 +1,49 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Nuvoton NPCM8XX Clock Controller Binding
+> > +
+> > +maintainers:
+> > +  - Tomer Maimon <tmaimon77@gmail.com>
+> > +
+> > +description: |
+> > +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
+> > +  generates and supplies clocks to all modules within the BMC.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - nuvoton,npcm845-clk
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#clock-cells':
+> > +    const: 1
+> > +    description:
+> > +      See include/dt-bindings/clock/nuvoton,npcm8xx-clock.h for the full
+> > +      list of NPCM8XX clock IDs.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - "#clock-cells"
+>
+> You fixed one comment and ignore second. The same was with v3.
+Sorry, I missed the quotes comment, will be addressed next version.
+>
+> This is still no. Implement all the comments you received. I have to
+> double check your patchsets every time because I cannot trust that you
+> implemented what I asked for.
+>
+>
+> Best regards,
+> Krzysztof
+
+Best regards,
+
+Tomer
