@@ -2,101 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC7055343A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Jun 2022 16:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF725534B4
+	for <lists+linux-watchdog@lfdr.de>; Tue, 21 Jun 2022 16:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiFUOLw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 21 Jun 2022 10:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S1351717AbiFUOjw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 21 Jun 2022 10:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiFUOLw (ORCPT
+        with ESMTP id S1351344AbiFUOjs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 21 Jun 2022 10:11:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECC620BCA
-        for <linux-watchdog@vger.kernel.org>; Tue, 21 Jun 2022 07:11:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A395D1F8A3;
-        Tue, 21 Jun 2022 14:10:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655820659; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tk5k4sRLNjbp8727oQkqZfzM5jsX5rgTmhDY+LkVAs4=;
-        b=IyoFydrJR5yF8Laf1PWvjn2049zV5jP/F9kA0HGWULEDKL4IzYoqAv4c1IObuD7io/5SDE
-        m7AJqUypeSpKg5u2eXgQJ/4BWj2z0MTSGDDhBAIJTZiDloyhjz+8vYo9gqdQqC8R6WVgJY
-        1arooDh/5/3UdxbUzhmj8U/WS60dS6A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655820659;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tk5k4sRLNjbp8727oQkqZfzM5jsX5rgTmhDY+LkVAs4=;
-        b=km8UCtILdrdrFYNvD1bvA85+dOwA06lMVt/17P6wtJgfYH1e+5vsekjtt5WhjVuX5K8lca
-        X6DnAIbr5lwH8XBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7AEC313638;
-        Tue, 21 Jun 2022 14:10:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PWBmHHPRsWIoRAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 21 Jun 2022 14:10:59 +0000
-Date:   Tue, 21 Jun 2022 16:10:57 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org,
-        Terry Bowman <terry.bowman@amd.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: Re: [PATCH] watchdog: sp5100_tco: Fix a memory leak of EFCH MMIO
- resource
-Message-ID: <20220621161057.75c9aa51@endymion.delvare>
-In-Reply-To: <20220621140825.GA3437760@roeck-us.net>
-References: <20220621152840.420a0f4c@endymion.delvare>
-        <20220621140825.GA3437760@roeck-us.net>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 21 Jun 2022 10:39:48 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDE224F3C;
+        Tue, 21 Jun 2022 07:39:47 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id w6so6125450pfw.5;
+        Tue, 21 Jun 2022 07:39:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B3jkGZmyYe5YTvNOcCYwotjMONtKG1bLgc+a9HS4wM4=;
+        b=HGEZK+RsjqtMuR/gMbFIRx8Oi5XKzWx+c5S5C8AsZJgbaE2iqGIodX8r1y2pCa6PLZ
+         6tKO6deQ34s8LrzXhEumFzAkyyNL/thYf1U0jovp2cGEuOENMhFuY9xHQFUMCveF+Tiu
+         T2SzXklrAnU87L+GAzyTMRi/BxowIHw2QTBq/Nvh/CRK2z6iOeF/hk47QG082iwb/KYg
+         K5KnYfucYHCWVmSmjepnuD3Hn8q0dMqZiEzxz7Kqp0irLMlprtGsbIfs3bUSltLcq+uN
+         5RuY30Lt235VNqB5bKc8cR6QUqIhgrQs+BvaSC70vPctZ4Z+6OKPwHbht+Z1gtptmF0y
+         hXVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B3jkGZmyYe5YTvNOcCYwotjMONtKG1bLgc+a9HS4wM4=;
+        b=HtXdamPojpIAX/ELiHJZ1mHn6Majov44DhXVCG1eq7lFpQET/Kvlpt746BJn4j2wxq
+         FiJm7QkXcYoo9mF5nr9rUFzKwKYXGWSHZa2/Iko530zp2oZpUB0V2Ml8JOazDFxFvAhp
+         vc6Lw25Qyn8WbE3b/2A3PHuxPAeAcs/7Kwp7vChD8OP9RLhpRRfjVI+k2W1mHzMfBH0w
+         OHJbaG0BdePbJhxX06nXbmkWuVZWPQQwlzEtya3Xr2NfzCF/6QA38jblnI5oYau88er9
+         hVMyOdIjTq6gUClGq+j7KlLb5o209k2Dc/MajsLUVHCbUi0XL+h/YEddyry8Olypy2yU
+         Yaow==
+X-Gm-Message-State: AJIora/EsJGqrX1np92H0ySMDcNxStEcXFBdApgT78pNIibaO/3BHdhv
+        RWjsenk3W5uvOaTBdzoScEU=
+X-Google-Smtp-Source: AGRyM1v+pmMMh1utCCrDbNZeJJtA0McVOhRstARshwPejkn3gsWR4071Z3vyVnWDb20Gj/Pk9UyrzQ==
+X-Received: by 2002:a05:6a00:2285:b0:525:387b:469c with SMTP id f5-20020a056a00228500b00525387b469cmr2731678pfe.62.1655822387169;
+        Tue, 21 Jun 2022 07:39:47 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 9-20020aa79149000000b00518424f8922sm11438750pfi.77.2022.06.21.07.39.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 07:39:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e597b6fd-e54e-6689-ffaf-8f7d9c14a1d5@roeck-us.net>
+Date:   Tue, 21 Jun 2022 07:39:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 04/18] dt-bindings: watchdog: npcm: Add npcm845
+ compatible string
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20220621131424.162355-1-tmaimon77@gmail.com>
+ <20220621131424.162355-5-tmaimon77@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220621131424.162355-5-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 21 Jun 2022 07:08:25 -0700, Guenter Roeck wrote:
-> On Tue, Jun 21, 2022 at 03:28:40PM +0200, Jean Delvare wrote:
-> > Unlike release_mem_region(), a call to release_resource() does not
-> > free the resource, so it has to be freed explicitly to avoid a memory
-> > leak.
-> > 
-> > Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> > Fixes: 0578fff4aae5 ("Watchdog: sp5100_tco: Add initialization using EFCH MMIO")
-> > Cc: Terry Bowman <terry.bowman@amd.com>
-> > Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>  
+On 6/21/22 06:14, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM845 watchdog.
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-> Unless I am missing something, it looks like every caller of
-> request_mem_region_muxed() has that problem.
+Not sure what the plan is here. For the time being, I'll assume
+that all patches will be included in a single pull request and
+not be submitted through maintainer trees.
 
-You are correct. Fixes have been sent for review already.
+Guenter
 
--- 
-Jean Delvare
-SUSE L3 Support
+> ---
+>   .../devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt          | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+> index 9059f54dc023..866a958b8a2b 100644
+> --- a/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/nuvoton,npcm-wdt.txt
+> @@ -6,7 +6,8 @@ expiry.
+>   
+>   Required properties:
+>   - compatible      : "nuvoton,npcm750-wdt" for NPCM750 (Poleg), or
+> -                    "nuvoton,wpcm450-wdt" for WPCM450 (Hermon).
+> +                    "nuvoton,wpcm450-wdt" for WPCM450 (Hermon), or
+> +                    "nuvoton,npcm845-wdt" for NPCM845 (Arbel).
+>   - reg             : Offset and length of the register set for the device.
+>   - interrupts      : Contain the timer interrupt with flags for
+>                       falling edge.
+
