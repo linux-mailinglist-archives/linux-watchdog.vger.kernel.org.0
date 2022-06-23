@@ -2,102 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6070557557
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jun 2022 10:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBED5557CC6
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jun 2022 15:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiFWIZC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 Jun 2022 04:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S231909AbiFWNSl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 Jun 2022 09:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiFWIZA (ORCPT
+        with ESMTP id S231684AbiFWNSj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:25:00 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182EF48897
-        for <linux-watchdog@vger.kernel.org>; Thu, 23 Jun 2022 01:24:59 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z11so21240880edp.9
-        for <linux-watchdog@vger.kernel.org>; Thu, 23 Jun 2022 01:24:59 -0700 (PDT)
+        Thu, 23 Jun 2022 09:18:39 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B250149B59
+        for <linux-watchdog@vger.kernel.org>; Thu, 23 Jun 2022 06:18:35 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id fd6so25717536edb.5
+        for <linux-watchdog@vger.kernel.org>; Thu, 23 Jun 2022 06:18:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iPEJUCFh/LGfN07qgp4D4vZfakFgeL5DubV5qPb1vuI=;
-        b=ZJXFZdn7LZ9vkXjzhqyS3/NebCycR1haecnHXNenUjrPneysJnD2YR/e9ZNLQDz064
-         ZnxEEXAeZzrxNmorE3GexHjrNHKd9Tel9VJ9xG87QnWe2DUzCIYWynWtnqzrKHMou0rr
-         oagI4DHcQuOK6XwhGa/8OG+s7b/D4PjProGstowCpjJuk20v7jeB/6KuwNmlSwfnY9Hr
-         CPECaGtaHN2p1/SDIVf6UBSAWbEHg5FY0cQ/wNnD3FTOzFETGOGyTaVhHXV8QVLjlfmN
-         SnMFTlfDJiCrLGUwLjn9Ue3OtwmUntqyz5qQvDGBVoIKDcdCiMqq7pD2apAFsuhCrgOR
-         vWhw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=nHpnMzERx9aJt2t+b2zBgncKthnSti8T0PSonzz1SaI=;
+        b=GYYiaf4fAQkZTMH/HfCSemRyMFZDoTiYkkf9zvu8EmyO+P8nVxLIRjSkVUT0ZWQAKi
+         UmyUu/Z+hP9sEl4USRCZbQb4X4u0l8gtoC42iq67ZmKEVjHBp3gabFGGDO7lFSvCof2P
+         7BcaVrRF0niLaxry342AHecdZ2GmmnM5psPyLPha2aD7KhW/QBqP5H5ib7dPhFdHW4XY
+         U0MrB/nfzE9XulzU4W6thucL77XVHS/gASdzLqa6QlydRiZ1XKAkivn4ER7+81+04pa1
+         XZKHcFpvz/6K8Ewlc02nBseVR00pKmSO8FjkJT1QgStVMMa6tUOpEHKI++kEMr+z4eO6
+         grfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iPEJUCFh/LGfN07qgp4D4vZfakFgeL5DubV5qPb1vuI=;
-        b=Pan615+00wM0uzHLOWhdgFgTmUx/8k+tSllee+6k5UxkZSmXmP3AUhTMAocdcCcc2z
-         kwOus1miGffbgvvOcuqxgcepUzsTE48Cspz18nj0k2BcFL2kGgelHfrQTXufUg7OWqjG
-         bjGVn/Rta3LPgp+8W8wOTGr5YYakZL3PL3dBG9V8Vt5r5XvI7KXsi+SmNBnSVTM03DCz
-         wCfmLnHv8vm/oyHWyP4XLIc2cpYyggt9qTdBkLzPvNLA1bFHp+yChh4TKkIBFJkzDdFH
-         ySbKJX/Ips3bT9PKLm+NpHO1jp7N3sIylIIqRP3w8rv93unXhpO9SkIDqtEQho662uSC
-         LjPg==
-X-Gm-Message-State: AJIora9vP2qn+bbC43Oy9y2Jh6RkeVRhD1CocMOSEIQdZYdIPYab1E+M
-        cj8XrUrPhh3VoW4y8LHSOnLNqQ==
-X-Google-Smtp-Source: AGRyM1uqdYHMnG6oMpB23aTJs+RrOabEGX9oUQaYpbmrnI/Ldu2XXFpkv22oD3TSMa+JwG0S4Zlf1w==
-X-Received: by 2002:a05:6402:1e95:b0:42a:c466:52ad with SMTP id f21-20020a0564021e9500b0042ac46652admr9170876edf.340.1655972697653;
-        Thu, 23 Jun 2022 01:24:57 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e19-20020a170906315300b00704cf66d415sm10599581eje.13.2022.06.23.01.24.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 01:24:57 -0700 (PDT)
-Message-ID: <cb4ee252-e1dc-1e23-79e4-ae06fb126692@linaro.org>
-Date:   Thu, 23 Jun 2022 10:24:55 +0200
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=nHpnMzERx9aJt2t+b2zBgncKthnSti8T0PSonzz1SaI=;
+        b=04V5rXLxBXNQwl9tyu4Odk7ajL9XUt34Gpag6Y7NNGiFWM6g6Xdt53gHX/cORglIB9
+         B6vyop8rOUn+nvucnMj6OfFCHc7kHQrao3N4wjprXIiV0oECqn8Qv6nIVz2KPY4PCmSx
+         /p4fRbb3mLBYgL1KbAFFj2kvOSR721URTJ60ReZ3K179h/gzP+22XP6DnkuAkMQ3uJxm
+         5Xgxm+cI52yn3u1qAl/IO+4wPeSfAOhF2ljgseM6oOQGmXs1ovXJIc8bVHnKDGtfIWhd
+         JgjSbqnTfusLFv/dwJ55mSGk/x/9476DdqGn/Fz3n993k1mGG0J035lYB4xwouDqe81v
+         4HCw==
+X-Gm-Message-State: AJIora+VUI89mQxN0ConfGucGdGtMqLdvi/vezm8MWGNnyS0vRxceO6S
+        5uE8wv2L52SAYQIQxY1SX9GD/aTHSdjA/w6SsAI=
+X-Google-Smtp-Source: AGRyM1uc3d5vgPbaxZc8fn4FAHuQ55ICgGUMHrckR639qCqUHuNA2DQpoD/Emnaism8KDxMKNkwbFkvZY6XEz4KoTW4=
+X-Received: by 2002:a50:fe15:0:b0:435:9155:f83b with SMTP id
+ f21-20020a50fe15000000b004359155f83bmr10603842edt.391.1655990314292; Thu, 23
+ Jun 2022 06:18:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 05/18] dt-binding: clk: npcm845: Add binding for
- Nuvoton NPCM8XX Clock
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220622132302.267010-1-tmaimon77@gmail.com>
- <20220622132302.267010-6-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220622132302.267010-6-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Received: by 2002:a54:36d2:0:0:0:0:0 with HTTP; Thu, 23 Jun 2022 06:18:33
+ -0700 (PDT)
+Reply-To: Rapidoprestamos2005@gmail.com
+From:   Angel Lopez <veronicaprestamoscompania@gmail.com>
+Date:   Thu, 23 Jun 2022 14:18:33 +0100
+Message-ID: <CA+WYSNPqL2TDYBa-j9Fw4sxE4PwFtFYW=9t+pKWGAOPWrgst4A@mail.gmail.com>
+Subject: KREDITANGEBOT JETZT BEWERBEN !!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 22/06/2022 15:22, Tomer Maimon wrote:
-> Add binding for the Arbel BMC NPCM8XX Clock controller.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+--=20
+Ben=C3=B6tigen Sie ein Bardarlehen, ein Gesch=C3=A4ftsdarlehen, ein Darlehe=
+n, um
+Schulden zu begleichen, ein Unternehmen zu gr=C3=BCnden oder zu
+finanzieren, ein Studentendarlehen oder ein
+Visa-Darlehen/Privatdarlehen?
+Senden Sie uns eine E-Mail an (Rapidoprestamos2005@gmail.com) und
+senden Sie uns Folgendes:
+Familien-oder Nachname:
+Geliehener Betrag:
+Zeitfenster:
+Danke sch=C3=B6n.
