@@ -2,33 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069C75574F3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jun 2022 10:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6070557557
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jun 2022 10:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiFWIJE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 Jun 2022 04:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S230043AbiFWIZC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 23 Jun 2022 04:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiFWII5 (ORCPT
+        with ESMTP id S229812AbiFWIZA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:08:57 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD68F4833C
-        for <linux-watchdog@vger.kernel.org>; Thu, 23 Jun 2022 01:08:46 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 4HtFoR1HLEMbD4HtFo9Fxz; Thu, 23 Jun 2022 10:08:44 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 23 Jun 2022 10:08:44 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <9a320833-e951-7a0f-e2bd-3f8deb7e705b@wanadoo.fr>
-Date:   Thu, 23 Jun 2022 10:08:36 +0200
+        Thu, 23 Jun 2022 04:25:00 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182EF48897
+        for <linux-watchdog@vger.kernel.org>; Thu, 23 Jun 2022 01:24:59 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z11so21240880edp.9
+        for <linux-watchdog@vger.kernel.org>; Thu, 23 Jun 2022 01:24:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iPEJUCFh/LGfN07qgp4D4vZfakFgeL5DubV5qPb1vuI=;
+        b=ZJXFZdn7LZ9vkXjzhqyS3/NebCycR1haecnHXNenUjrPneysJnD2YR/e9ZNLQDz064
+         ZnxEEXAeZzrxNmorE3GexHjrNHKd9Tel9VJ9xG87QnWe2DUzCIYWynWtnqzrKHMou0rr
+         oagI4DHcQuOK6XwhGa/8OG+s7b/D4PjProGstowCpjJuk20v7jeB/6KuwNmlSwfnY9Hr
+         CPECaGtaHN2p1/SDIVf6UBSAWbEHg5FY0cQ/wNnD3FTOzFETGOGyTaVhHXV8QVLjlfmN
+         SnMFTlfDJiCrLGUwLjn9Ue3OtwmUntqyz5qQvDGBVoIKDcdCiMqq7pD2apAFsuhCrgOR
+         vWhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iPEJUCFh/LGfN07qgp4D4vZfakFgeL5DubV5qPb1vuI=;
+        b=Pan615+00wM0uzHLOWhdgFgTmUx/8k+tSllee+6k5UxkZSmXmP3AUhTMAocdcCcc2z
+         kwOus1miGffbgvvOcuqxgcepUzsTE48Cspz18nj0k2BcFL2kGgelHfrQTXufUg7OWqjG
+         bjGVn/Rta3LPgp+8W8wOTGr5YYakZL3PL3dBG9V8Vt5r5XvI7KXsi+SmNBnSVTM03DCz
+         wCfmLnHv8vm/oyHWyP4XLIc2cpYyggt9qTdBkLzPvNLA1bFHp+yChh4TKkIBFJkzDdFH
+         ySbKJX/Ips3bT9PKLm+NpHO1jp7N3sIylIIqRP3w8rv93unXhpO9SkIDqtEQho662uSC
+         LjPg==
+X-Gm-Message-State: AJIora9vP2qn+bbC43Oy9y2Jh6RkeVRhD1CocMOSEIQdZYdIPYab1E+M
+        cj8XrUrPhh3VoW4y8LHSOnLNqQ==
+X-Google-Smtp-Source: AGRyM1uqdYHMnG6oMpB23aTJs+RrOabEGX9oUQaYpbmrnI/Ldu2XXFpkv22oD3TSMa+JwG0S4Zlf1w==
+X-Received: by 2002:a05:6402:1e95:b0:42a:c466:52ad with SMTP id f21-20020a0564021e9500b0042ac46652admr9170876edf.340.1655972697653;
+        Thu, 23 Jun 2022 01:24:57 -0700 (PDT)
+Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170906315300b00704cf66d415sm10599581eje.13.2022.06.23.01.24.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 01:24:57 -0700 (PDT)
+Message-ID: <cb4ee252-e1dc-1e23-79e4-ae06fb126692@linaro.org>
+Date:   Thu, 23 Jun 2022 10:24:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 06/18] clk: npcm8xx: add clock controller
-Content-Language: fr
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 05/18] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
+Content-Language: en-US
 To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
         tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
         yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
@@ -46,208 +74,30 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-References: <20220621131424.162355-1-tmaimon77@gmail.com>
- <20220621131424.162355-7-tmaimon77@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220621131424.162355-7-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220622132302.267010-1-tmaimon77@gmail.com>
+ <20220622132302.267010-6-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220622132302.267010-6-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Le 21/06/2022 à 15:14, Tomer Maimon a écrit :
-> Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller which
-> generates and supplies clocks to all modules within the BMC.
+On 22/06/2022 15:22, Tomer Maimon wrote:
+> Add binding for the Arbel BMC NPCM8XX Clock controller.
 > 
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->   drivers/clk/Kconfig       |   6 +
->   drivers/clk/Makefile      |   1 +
->   drivers/clk/clk-npcm8xx.c | 594 ++++++++++++++++++++++++++++++++++++++
->   3 files changed, 601 insertions(+)
->   create mode 100644 drivers/clk/clk-npcm8xx.c
-> 
 
-[...]
 
-> +static int npcm8xx_clk_probe(struct platform_device *pdev)
-> +{
-> +	struct clk_hw_onecell_data *npcm8xx_clk_data;
-> +	struct device *dev = &pdev->dev;
-> +	void __iomem *clk_base;
-> +	struct clk_hw *hw;
-> +	int i;
-> +
-> +	npcm8xx_clk_data = devm_kzalloc(dev, struct_size(npcm8xx_clk_data, hws,
-> +							 NPCM8XX_NUM_CLOCKS),
-> +					GFP_KERNEL);
-> +	if (!npcm8xx_clk_data)
-> +		return -ENOMEM;
-> +
-> +	clk_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(clk_base))
-> +		return PTR_ERR(clk_base);
-> +
-> +	npcm8xx_clk_data->num = NPCM8XX_NUM_CLOCKS;
-> +
-> +	for (i = 0; i < NPCM8XX_NUM_CLOCKS; i++)
-> +		npcm8xx_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
-> +
-> +	/* Reference 25MHz clock */
-> +	hw = clk_hw_register_fixed_rate(dev, "refclk", NULL, 0, NPCM8XX_REF_CLK);
-> +	if (IS_ERR(hw))
-> +		return PTR_ERR(hw);
-> +	npcm8xx_clk_data->hws[NPCM8XX_CLK_REFCLK] = hw;
-> +
-> +	/* Register plls */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_plls); i++) {
-> +		const struct npcm8xx_clk_pll_data *pll_data = &npcm8xx_plls[i];
-> +
-> +		hw = npcm8xx_clk_register_pll(dev, clk_base + pll_data->reg,
-> +					      pll_data->name,
-> +					      pll_data->parent_name,
-> +					      pll_data->flags);
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register pll\n");
-> +			goto unregister_refclk;
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-goto err_mux_clk?
 
-(so that we unregister what has already been registered in the loop ; 
-and unregister_refclk becomes useless)
-
-> +		}
-> +
-> +		if (pll_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[pll_data->onecell_idx] = hw;
-> +	}
-> +
-> +	/* Register fixed dividers */
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL1_DIV2,
-> +					       NPCM8XX_CLK_S_PLL1, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register fixed div\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL2_DIV2,
-> +					       NPCM8XX_CLK_S_PLL2, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register pll div2\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PRE_CLK,
-> +					       NPCM8XX_CLK_S_CPU_MUX, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register ckclk div2\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_AXI,
-> +					       NPCM8XX_CLK_S_TH, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register axi div2\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_ATB,
-> +					       NPCM8XX_CLK_S_AXI, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register atb div2\n");
-> +		goto unregister_refclk;
-> +	}
-> +
-> +	/* Register clock dividers specified in npcm8xx_divs */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_divs); i++) {
-> +		const struct npcm8xx_clk_div_data *div_data = &npcm8xx_divs[i];
-> +
-> +		hw = devm_clk_hw_register_divider(dev, div_data->name,
-> +						  div_data->parent_name,
-> +						  div_data->flags,
-> +						  clk_base + div_data->reg,
-> +						  div_data->shift,
-> +						  div_data->width,
-> +						  div_data->clk_divider_flags,
-> +						  &npcm8xx_clk_lock);
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register div table\n");
-> +			goto unregister_refclk;
-> +		}
-> +
-> +		if (div_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[div_data->onecell_idx] = hw;
-> +	}
-> +
-> +	/* Register muxes */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_muxes); i++) {
-> +		const struct npcm8xx_clk_mux_data *mux_data = &npcm8xx_muxes[i];
-> +
-> +		hw = clk_hw_register_mux_table(dev, mux_data->name,
-> +					       mux_data->parent_names,
-> +					       mux_data->num_parents,
-> +					       mux_data->flags,
-> +					       clk_base + NPCM8XX_CLKSEL,
-> +					       mux_data->shift,
-> +					       mux_data->mask, 0,
-> +					       mux_data->table,
-> +					       &npcm8xx_clk_lock);
-> +
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register mux\n");
-> +			goto err_mux_clk;
-> +		}
-> +
-> +		if (mux_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[mux_data->onecell_idx] = hw;
-> +	}
-> +
-> +	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-> +					   npcm8xx_clk_data);
-
-If this fails, I think we should also "goto err_mux_clk;"
-
-> +
-> +err_mux_clk:
-> +	while (i--) {
-> +		if (npcm8xx_muxes[i].onecell_idx >= 0)
-> +			clk_hw_unregister_mux(npcm8xx_clk_data->hws[npcm8xx_muxes[i].onecell_idx]);
-> +	}
-> +unregister_refclk:
-> +	clk_hw_unregister(npcm8xx_clk_data->hws[NPCM8XX_CLK_REFCLK]);
-> +	return PTR_ERR(hw);
-> +}
-
-Does a .remove() function is needed to match this error handling path? 
-(or use devm_add_action_or_reset())?
-
-CJ
-> +
-> +static const struct of_device_id npcm8xx_clk_dt_ids[] = {
-> +	{ .compatible = "nuvoton,npcm845-clk", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, npcm8xx_clk_dt_ids);
-> +
-> +static struct platform_driver npcm8xx_clk_driver = {
-> +	.probe  = npcm8xx_clk_probe,
-> +	.driver = {
-> +		.name = "npcm8xx_clk",
-> +		.of_match_table = npcm8xx_clk_dt_ids,
-> +	},
-> +};
-> +
-> +static int __init npcm8xx_clk_driver_init(void)
-> +{
-> +	return platform_driver_register(&npcm8xx_clk_driver);
-> +}
-> +arch_initcall(npcm8xx_clk_driver_init);
-> +
-
+Best regards,
+Krzysztof
