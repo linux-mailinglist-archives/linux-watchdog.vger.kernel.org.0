@@ -2,59 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E399A559748
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Jun 2022 12:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA3D559768
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Jun 2022 12:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiFXKFg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 24 Jun 2022 06:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
+        id S231192AbiFXKKC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 24 Jun 2022 06:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiFXKFf (ORCPT
+        with ESMTP id S230392AbiFXKKB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:05:35 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6130F6F4B0
-        for <linux-watchdog@vger.kernel.org>; Fri, 24 Jun 2022 03:05:32 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id o10so2773125edi.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 24 Jun 2022 03:05:32 -0700 (PDT)
+        Fri, 24 Jun 2022 06:10:01 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094EF7A6DB
+        for <linux-watchdog@vger.kernel.org>; Fri, 24 Jun 2022 03:09:59 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id mf9so3807769ejb.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 24 Jun 2022 03:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vT/m4Tsbd8efm3hJuxbD4cqK3IhssJw6vrlwpvAa4b0=;
-        b=UakZorhpkKl5ALlrNDpU9jBka/t7cECYvhFhzj+zFDtScfLk4YgEeyOfo8DFWO15pX
-         acdIkWuEWtfqRecdqSXnO6RuScer29NgRYGQi6w2b3AevrhtqGV4PyqFV7a7iCvnY+sz
-         II+sI7Sn35mv1L55DCt78FSqkyddA8r13goTTMrWr2P/zMq2OgymKpeV3LuqffvPPV0c
-         gxsfp8H+kd9rdXlBWi6P+ycPP0PrQm9hqjXMR9R6ZkONPE3AWNqGgVc8xBeaoZoOqwa/
-         m2oC2JqyOnyHMotqqqMJK9RbyXsMfJD8qnSgV+hHzIj49dnboun3MfivtpYLc97L4VwU
-         ge9Q==
+        bh=lorZHDjvGx5GD+gar7tqgB1Qj4XdO8WewdyIcYo1mvQ=;
+        b=Ti+fVnTmNKYwrAedrBvndCldoW4NlBmv0536IQ1k7OjvfHGtm0ly+8LwT7LHpGHzlz
+         LafqDygKvgifpswBtGLrtk9U7xuH7aey9fjumlhSjD2X+iwlgI3p2XPtC7usywyN7xGY
+         W2A8LzDsZUGZY5uV7/tcGbZ1zfr+6u4F5Xye6rZDK8hni7hRyauGtjHMj53vdiF4nE9N
+         yE03ZJQdZx2IMeDGIfYUqCYHP4GkOp77AX6oMkRLiGOFVczBaH/FqSkmXXaTLaqqI4aU
+         ZZfC0gnTBThlESIIWgvLVe41AgjoHBQKfZAsMM2f26Sz4jxuYocBYsA3qE3lyJ7g+E/6
+         4bfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=vT/m4Tsbd8efm3hJuxbD4cqK3IhssJw6vrlwpvAa4b0=;
-        b=Kzh7+/57oDupVKTcBXuaygZLbp0QhLlBCHu0JjWESPWKnI5dUMG3LdmqXrabmMAv43
-         cQzJMR1RM1nhggTf3OTVlRdAQWX6yYBVie1hP/AwhFrQpDXnFiGsJ1fmKmHfrzdleUQr
-         0HzH4nR1iqtsHl3T3Xse3H0RLo8yJuxXpOej/Y6eb2b6E3EfGEMoxJW0NA4dtvEGY0SR
-         kf10s3tSM01ri61ZCOKBOGFth8yfI9LTRVX6uOlX1pY2NqJocH4hHIR4FfBHReT0j9aR
-         7N03Ma9PRNiJ9Oz7JJoRzfbLAt9zF/xvglo4GIYLIfooJSpiG29numuSxgSysfeZNxK7
-         1nug==
-X-Gm-Message-State: AJIora+OO9JPdOsq7iH++ra3QiY9ia9KVODVb+85b42afOvxPCQwYdxw
-        pHU+AsnMzO456/l1Yci22CZYog==
-X-Google-Smtp-Source: AGRyM1uaOjXwhg5I8X289/Baaww5kJzfDpSLWW9kaNvjsU7L/qEOz6gkCuSWZSjiQSEuXlbmDZ+EFQ==
-X-Received: by 2002:a05:6402:11cb:b0:435:75ed:f12f with SMTP id j11-20020a05640211cb00b0043575edf12fmr16487090edw.305.1656065130928;
-        Fri, 24 Jun 2022 03:05:30 -0700 (PDT)
+        bh=lorZHDjvGx5GD+gar7tqgB1Qj4XdO8WewdyIcYo1mvQ=;
+        b=rDLtWw9W+J+u0NoqAlvNPqe3hu2VB2l/CQWIgzmNkJqLqCLtRql5BEZZ4YGPmHLIKm
+         UOVWAjYEuB76X5pHXusGN5ULNHJSWEbs4PaKNz/CaFwN238bVvb6AQVQhytc23vCkFGi
+         z4DDSK7XfzXYqBNUgyD9VpK9it+UWqvfuRzVc/CezxJljh7tzRPFWZxM8dBbhSpsUrOL
+         H01G8Bi/h+2PWAObOGelJ6SXsHWy9o6dKT2BzdxtcFZvyU6dUWPTKjr/qVNxaADWwA3Z
+         2DPoxD4Tjeh8TqgUrVfP/9TTshlrmZy9npjqje+zt7G/ruYxflwt7rcPiwnpMEoAtJQg
+         DKTg==
+X-Gm-Message-State: AJIora9LiAYyoJ4UcOLwMg0HAPNKDzc3wu9ZOERDKEeusVzWLiDlppZh
+        T0MNUuVnLiqrTSIz1QmwNoXX0Q==
+X-Google-Smtp-Source: AGRyM1uKgLP0q+F3EV/ZKpI4bKmuL8O9cSoJ6Y20J5j3QtItOyrNB6oS6chuuxpNORk9LaAzvkhBRg==
+X-Received: by 2002:a17:907:3f21:b0:722:ca29:7ec9 with SMTP id hq33-20020a1709073f2100b00722ca297ec9mr12231536ejc.417.1656065397338;
+        Fri, 24 Jun 2022 03:09:57 -0700 (PDT)
 Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm845519ejm.107.2022.06.24.03.05.29
+        by smtp.gmail.com with ESMTPSA id v10-20020a1709063bca00b006ffa19b7782sm841359ejf.74.2022.06.24.03.09.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 03:05:30 -0700 (PDT)
-Message-ID: <3db6ca83-1fa0-0a6d-5af9-4dd0ba38b9a6@linaro.org>
-Date:   Fri, 24 Jun 2022 12:05:28 +0200
+        Fri, 24 Jun 2022 03:09:56 -0700 (PDT)
+Message-ID: <3e8e2ad5-9a1c-44f3-cff9-50ad2124c9f9@linaro.org>
+Date:   Fri, 24 Jun 2022 12:09:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v5 02/14] dt-bindings: clk: imx: Add fsl,scu-clk yaml file
+Subject: Re: [PATCH v5 03/14] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
+ yaml file
 Content-Language: en-US
 To:     Viorel Suman <viorel.suman@nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -91,9 +92,9 @@ To:     Viorel Suman <viorel.suman@nxp.com>,
         linux-arm-kernel@lists.infradead.org
 Cc:     Abel Vesa <abel.vesa@nxp.com>
 References: <20220616164303.790379-1-viorel.suman@nxp.com>
- <20220616164303.790379-3-viorel.suman@nxp.com>
+ <20220616164303.790379-4-viorel.suman@nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220616164303.790379-3-viorel.suman@nxp.com>
+In-Reply-To: <20220616164303.790379-4-viorel.suman@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -111,88 +112,81 @@ On 16/06/2022 18:42, Viorel Suman wrote:
 > 
 > In order to replace the fsl,scu txt file from bindings/arm/freescale,
 > we need to split it between the right subsystems. This patch documents
-> separately the 'clock' child node of the SCU main node.
+> separately the 'iomux/pinctrl' child node of the SCU main node.
 > 
 > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 > Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
 > ---
->  .../bindings/clock/fsl,scu-clk.yaml           | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
+>  .../bindings/pinctrl/fsl,scu-pinctrl.yaml     | 47 +++++++++++++++++++
+
+Since this is a conversion, I expect removal of existing bindings. This
+applies to each other patch as well.
+
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml b/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
+> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
 > new file mode 100644
-> index 000000000000..8b59758eee4a
+> index 000000000000..7a08c60da66f
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
-> @@ -0,0 +1,58 @@
+> +++ b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+> @@ -0,0 +1,47 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/clock/fsl,scu-clk.yaml#
+> +$id: http://devicetree.org/schemas/pinctrl/fsl,scu-pinctrl.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: i.MX SCU Client Device Node - Clock bindings based on SCU Message Protocol
+> +title: i.MX SCU Client Device Node - Pinctrl bindings based on SCU Message Protocol
 > +
 > +maintainers:
-> +  - Abel Vesa <abel.vesa@nxp.com>
+> +  - Dong Aisheng <aisheng.dong@nxp.com>
 > +
 > +description: i.MX SCU Client Device Node
 > +  Client nodes are maintained as children of the relevant IMX-SCU device node.
-> +  This binding uses the common clock binding.
-> +  (Documentation/devicetree/bindings/clock/clock-bindings.txt)
-> +  The clock consumer should specify the desired clock by having the clock
-> +  ID in its "clocks" phandle cell.
-> +  See the full list of clock IDs from
-> +  include/dt-bindings/clock/imx8qxp-clock.h
+> +  This binding uses the i.MX common pinctrl binding.
+> +  (Documentation/devicetree/bindings/pinctrl/fsl,imx-pinctrl.txt)
 > +
 > +properties:
 > +  compatible:
 > +    items:
+
+You have only one item, so no items.
+
 > +      - enum:
-> +          - fsl,imx8dxl-clk
-> +          - fsl,imx8qm-clk
-> +          - fsl,imx8qxp-clk
-> +      - const: fsl,scu-clk
+> +          - fsl,imx8qm-iomuxc
+> +          - fsl,imx8qxp-iomuxc
+> +          - fsl,imx8dxl-iomuxc
 > +
-> +  '#clock-cells':
-> +    const: 2
-> +
-> +  clocks:
-> +    items:
-> +      - description: XTAL 32KHz
-> +      - description: XTAL 24MHz
-> +    minItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      enum:
-> +        - xtal_32KHz
-> +        - xtal_24Mhz
+> +patternProperties:
+> +  "grp$":
+> +    type: object
 
-No, this does not match your clocks property and allow any combination.
-Are you sure that hardware can have entirely different clocks connected?
+You need to describe the children and then additionalProperties:false.
+See other pinctrl bindings for example.
 
-> +    minItems: 1
-> +    maxItems: 2
 > +
 > +required:
 > +  - compatible
-> +  - '#clock-cells'
-
-Why the clocks are not required?
-
 > +
+
+Missing allOf referencing pinctrl.
+
 > +additionalProperties: false
 > +
 > +examples:
 > +  - |
-> +    clock-controller {
-> +           compatible = "fsl,imx8qxp-clk", "fsl,scu-clk";
-
-Wrong indentation. 4 spaces for DTS example.
-
-> +           #clock-cells = <2>;
+> +    #include <dt-bindings/pinctrl/pads-imx8qxp.h>
+> +
+> +    pinctrl {
+> +             compatible = "fsl,imx8qxp-iomuxc";
+> +
+> +             pinctrl_lpuart0: lpuart0grp {
+> +                    fsl,pins = <
+> +                            IMX8QXP_UART0_RX_ADMA_UART0_RX   0x06000020
+> +                            IMX8QXP_UART0_TX_ADMA_UART0_TX   0x06000020
+> +                    >;
+> +             };
 > +    };
 
 
