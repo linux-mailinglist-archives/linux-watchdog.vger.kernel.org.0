@@ -2,222 +2,171 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDCC55C1DB
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 14:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33A655C386
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 14:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236390AbiF0Nyb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 27 Jun 2022 09:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S236767AbiF0OKI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 27 Jun 2022 10:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235420AbiF0Ny2 (ORCPT
+        with ESMTP id S236778AbiF0OKH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:54:28 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C9CAE54;
-        Mon, 27 Jun 2022 06:54:26 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDhHuN001053;
-        Mon, 27 Jun 2022 13:53:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=+cawotrj/1dSxR3/0ou5PM5kym3DFbOzGlpY1H5jZs0=;
- b=aBtgLnVVPt3T06W/R216skhKYQ7e6PhZNANxjFA6Y8JG10CfCXhnrhmlKW+7hmOrnAhW
- /7/KFZhLDQcvzF6bKIvcsbDKS+QwZOKFZ3AQEANZzmm0SgbW1dYqNK9nYO+pQoQZtY0N
- jYLiDtX8ND1q8dBRci5Cf7lBMbbAs2j95Fbh6BMyYDDQS7prn6DVlDEjxC5D2ygpGMWs
- gPug2iLCSzDhFdznIJzxoxd4eyHhsn1SGmlVEP0iRtKwXY1NGj6nEFF2ppsMGMlOMRyp
- wBWrTG4j67zGxyzHtlMCixbvwNRyQj4vOIVyAg2CoElbW++xzco5ccAiskqra1GnJ0bm GQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gydpa08vr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 13:53:56 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25RDkKON015980;
-        Mon, 27 Jun 2022 13:53:56 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gydpa08us-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 13:53:56 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25RDoUlX004750;
-        Mon, 27 Jun 2022 13:53:54 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gwt08u13w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 13:53:53 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25RDroDO21496142
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jun 2022 13:53:50 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97B21AE053;
-        Mon, 27 Jun 2022 13:53:50 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 205FAAE04D;
-        Mon, 27 Jun 2022 13:53:50 +0000 (GMT)
-Received: from pomme.tlslab.ibm.com (unknown [9.101.4.33])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Jun 2022 13:53:50 +0000 (GMT)
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, nathanl@linux.ibm.com,
-        haren@linux.vnet.ibm.com, npiggin@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v3 4/4] pseries/mobility: set NMI watchdog factor during LPM
-Date:   Mon, 27 Jun 2022 15:53:47 +0200
-Message-Id: <20220627135347.32624-5-ldufour@linux.ibm.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627135347.32624-1-ldufour@linux.ibm.com>
-References: <20220627135347.32624-1-ldufour@linux.ibm.com>
+        Mon, 27 Jun 2022 10:10:07 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E9313D57;
+        Mon, 27 Jun 2022 07:10:02 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id c205so9134149pfc.7;
+        Mon, 27 Jun 2022 07:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=ST6/uI8tXZH7pQ+ernx/OpLdl4iQTKy4m9qi3OodjQ4=;
+        b=kIw8mhUiKbPeLo0As7uG2MNu5ap8qTeY/RACkMNYn8LsaVMPzOu/OJtP44qHEBcAkH
+         sYGcmzEWrS2vCmL0B88d5G5CvdLkqmU77kwt2LnIOsqYaXUAk0De06YlREObw7UPOH2T
+         NAPabwtB6pzztaY7esa3xh1SpwjTyxaK+5/TXIb/f2raXilEFSnH8Ycmbso/Wx6GaCbx
+         g0MwqdfXJTur9rvTRBdrybxRyRD4stI6otaX7/kwQwQ1Ln9voIFM3Yba9wdxtnvkxFF2
+         8GjtA210HW7ONZ9rU2KHEp8MVN17q5qhJ08UNJ1/Qv1efRsCrod7IWDleV0IIbAgAH/R
+         ZIbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=ST6/uI8tXZH7pQ+ernx/OpLdl4iQTKy4m9qi3OodjQ4=;
+        b=VcirpalS5CsHei2aaEuw1bk/Wo1RjfFD0dG0NOmQ03s8HHmPue8uP+vAo562Z9+uPn
+         vynJTrTP2oAlVq2fm4eLYdIS90wEe+y2FHLtU5Hn9jTsf0Hjc5ZTQDPwBn4ShsrAv8mU
+         nGiIU9mrnbc2rBZL6thG+060hMvp6kiCfYcv/Cn3kk1c2VDg7QIzDG7jDfoY6flZuSWU
+         Ynch1FidGVMh+O8R//M00Zf3cEs1OWn+jMMjEJtEn8Hp2dSjyQIejsV9Xv8nYrkJ48mW
+         fNPg3fCJpXvG9YvA6rSVzIIdL5eopuaTRtKxyFxPF5d+gpzRKjpwoUnEGpSqv2rUSFqm
+         TUkQ==
+X-Gm-Message-State: AJIora+8mBe3ILTDXZ2ONE6T4kJb+46LW7QIKGpjTD9E5YV8Z4mpcG+5
+        R6Jqg2oo1Cz89zY5LW7EeEA=
+X-Google-Smtp-Source: AGRyM1tBQeXN7XNGVt3OnoOjUNRnLyC6rpMTRKosrRaZA7d2TM4t51FfNE/Aa2S1l/R/utkVhVvSKg==
+X-Received: by 2002:a63:6e08:0:b0:40c:7557:c4aa with SMTP id j8-20020a636e08000000b0040c7557c4aamr13192976pgc.356.1656339001070;
+        Mon, 27 Jun 2022 07:10:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id em20-20020a17090b015400b001eae86cf683sm7390569pjb.42.2022.06.27.07.09.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 07:10:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a0c31814-43e9-bbe4-57d3-d97724e8ae60@roeck-us.net>
+Date:   Mon, 27 Jun 2022 07:09:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: L0pY_-q6hY9VfxBmu9shvaCyp9vOKJUH
-X-Proofpoint-GUID: 9qFYSrQaiwpP9SXFE4jv4aYNbhhYBRYg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 spamscore=0 impostorscore=0
- lowpriorityscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206270059
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220627111432.2625168-1-stephan.gerhold@kernkonzept.com>
+ <20220627111432.2625168-3-stephan.gerhold@kernkonzept.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 2/3] watchdog: pm8916_wdt: Report reboot reason
+In-Reply-To: <20220627111432.2625168-3-stephan.gerhold@kernkonzept.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-During a LPM, while the memory transfer is in progress on the arrival side,
-some latencies is generated when accessing not yet transferred pages on the
-arrival side. Thus, the NMI watchdog may be triggered too frequently, which
-increases the risk to hit a NMI interrupt in a bad place in the kernel,
-leading to a kernel panic.
+On 6/27/22 04:14, Stephan Gerhold wrote:
+> The PM8916 PMIC provides "power-off reason" (POFF_REASON) registers
+> to allow detecting why the board was powered off or rebooted. This
+> can be used to expose if a reset happened due to a watchdog timeout.
+> The watchdog API also provides status bits for overtemperature and
+> undervoltage which happen to be reported in the same PMIC register.
+> 
+> Make this information available as part of the watchdog device
+> so userspace can decide to handle the situation accordingly.
+> 
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+>   drivers/watchdog/pm8916_wdt.c | 25 ++++++++++++++++++++++++-
+>   1 file changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
+> index 670cd79f4cf9..3fc03fdae466 100644
+> --- a/drivers/watchdog/pm8916_wdt.c
+> +++ b/drivers/watchdog/pm8916_wdt.c
+> @@ -9,6 +9,12 @@
+>   #include <linux/regmap.h>
+>   #include <linux/watchdog.h>
+>   
+> +#define PON_POFF_REASON1		0x0c
+> +#define PON_POFF_REASON1_PMIC_WD	BIT(2)
+> +#define PON_POFF_REASON2		0x0d
+> +#define PON_POFF_REASON2_UVLO		BIT(5)
+> +#define PON_POFF_REASON2_OTST3		BIT(6)
+> +
+>   #define PON_INT_RT_STS			0x10
+>   #define PMIC_WD_BARK_STS_BIT		BIT(6)
+>   
+> @@ -110,12 +116,14 @@ static irqreturn_t pm8916_wdt_isr(int irq, void *arg)
+>   }
+>   
+>   static const struct watchdog_info pm8916_wdt_ident = {
+> -	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE |
+> +		   WDIOF_OVERHEAT | WDIOF_CARDRESET | WDIOF_POWERUNDER,
+>   	.identity = "QCOM PM8916 PON WDT",
+>   };
+>   
+>   static const struct watchdog_info pm8916_wdt_pt_ident = {
+>   	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE |
+> +		   WDIOF_OVERHEAT | WDIOF_CARDRESET | WDIOF_POWERUNDER |
+>   		   WDIOF_PRETIMEOUT,
+>   	.identity = "QCOM PM8916 PON WDT",
+>   };
+> @@ -135,6 +143,7 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
+>   	struct pm8916_wdt *wdt;
+>   	struct device *parent;
+>   	int err, irq;
+> +	u8 poff[2];
+>   
+>   	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>   	if (!wdt)
+> @@ -175,6 +184,20 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
+>   		wdt->wdev.info = &pm8916_wdt_ident;
+>   	}
+>   
+> +	err = regmap_bulk_read(wdt->regmap, wdt->baseaddr + PON_POFF_REASON1,
+> +			       &poff, ARRAY_SIZE(poff));
+> +	if (err == 0) {
+> +		dev_dbg(dev, "POFF reason: %#x %#x\n", poff[0], poff[1]);
+> +		if (poff[0] & PON_POFF_REASON1_PMIC_WD)
+> +			wdt->wdev.bootstatus |= WDIOF_CARDRESET;
+> +		if (poff[1] & PON_POFF_REASON2_UVLO)
+> +			wdt->wdev.bootstatus |= WDIOF_POWERUNDER;
+> +		if (poff[1] & PON_POFF_REASON2_OTST3)
+> +			wdt->wdev.bootstatus |= WDIOF_OVERHEAT;
+> +	} else {
+> +		dev_err(dev, "failed to read POFF reason: %d\n", err);
+> +	}
 
-Disabling the Hard Lockup Watchdog until the memory transfer could be a too
-strong work around, some users would want this timeout to be eventually
-triggered if the system is hanging even during LPM.
+Error handling first, please:
 
-Introduce a new sysctl variable nmi_watchdog_factor. It allows to apply
-a factor to the NMI watchdog timeout during a LPM. Just before the CPU are
-stopped for the switchover sequence, the NMI watchdog timer is set to
- watchdog_tresh + factor%
+	if (err) {
+	} else {
+	}
 
-A value of 0 has no effect. The default value is 200, meaning that the NMI
-watchdog is set to 30s during LPM (based on a 10s watchdog_tresh value).
-Once the memory transfer is achieved, the factor is reset to 0.
+Also, decide if this is indeed an error or not. If it is an error, abort
+probe. Otherwise use dev_warn() and explain why the problem is ignored /
+not fatal.
 
-Setting this value to a high number is like disabling the NMI watchdog
-during a LPM.
+Thanks,
+Guenter
 
-Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
----
- Documentation/admin-guide/sysctl/kernel.rst | 12 ++++++
- arch/powerpc/platforms/pseries/mobility.c   | 43 +++++++++++++++++++++
- 2 files changed, 55 insertions(+)
-
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index ddccd1077462..0bb0b7f27e96 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -592,6 +592,18 @@ to the guest kernel command line (see
- Documentation/admin-guide/kernel-parameters.rst).
- 
- 
-+nmi_watchdog_factor (PPC only)
-+==================================
-+
-+Factor apply to to the NMI watchdog timeout (only when ``nmi_watchdog`` is
-+set to 1). This factor represents the percentage added to
-+``watchdog_thresh`` when calculating the NMI watchdog timeout during a
-+LPM. The soft lockup timeout is not impacted.
-+
-+A value of 0 means no change. The default value is 200 meaning the NMI
-+watchdog is set to 30s (based on ``watchdog_thresh`` equal to 10).
-+
-+
- numa_balancing
- ==============
- 
-diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
-index 907a779074d6..649155faafc2 100644
---- a/arch/powerpc/platforms/pseries/mobility.c
-+++ b/arch/powerpc/platforms/pseries/mobility.c
-@@ -48,6 +48,39 @@ struct update_props_workarea {
- #define MIGRATION_SCOPE	(1)
- #define PRRN_SCOPE -2
- 
-+#ifdef CONFIG_PPC_WATCHDOG
-+static unsigned int nmi_wd_factor = 200;
-+
-+#ifdef CONFIG_SYSCTL
-+static struct ctl_table nmi_wd_factor_ctl_table[] = {
-+	{
-+		.procname	= "nmi_watchdog_factor",
-+		.data		= &nmi_wd_factor,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_douintvec_minmax,
-+	},
-+	{}
-+};
-+static struct ctl_table nmi_wd_factor_sysctl_root[] = {
-+	{
-+		.procname       = "kernel",
-+		.mode           = 0555,
-+		.child          = nmi_wd_factor_ctl_table,
-+	},
-+	{}
-+};
-+
-+static int __init register_nmi_wd_factor_sysctl(void)
-+{
-+	register_sysctl_table(nmi_wd_factor_sysctl_root);
-+
-+	return 0;
-+}
-+device_initcall(register_nmi_wd_factor_sysctl);
-+#endif /* CONFIG_SYSCTL */
-+#endif /* CONFIG_PPC_WATCHDOG */
-+
- static int mobility_rtas_call(int token, char *buf, s32 scope)
- {
- 	int rc;
-@@ -702,13 +735,20 @@ static int pseries_suspend(u64 handle)
- static int pseries_migrate_partition(u64 handle)
- {
- 	int ret;
-+	unsigned int factor = 0;
- 
-+#ifdef CONFIG_PPC_WATCHDOG
-+	factor = nmi_wd_factor;
-+#endif
- 	ret = wait_for_vasi_session_suspending(handle);
- 	if (ret)
- 		return ret;
- 
- 	vas_migration_handler(VAS_SUSPEND);
- 
-+	if (factor)
-+		watchdog_nmi_set_lpm_factor(factor);
-+
- 	ret = pseries_suspend(handle);
- 	if (ret == 0) {
- 		post_mobility_fixup();
-@@ -716,6 +756,9 @@ static int pseries_migrate_partition(u64 handle)
- 	} else
- 		pseries_cancel_migration(handle, ret);
- 
-+	if (factor)
-+		watchdog_nmi_set_lpm_factor(0);
-+
- 	vas_migration_handler(VAS_RESUME);
- 
- 	return ret;
--- 
-2.36.1
+> +
+>   	/* Configure watchdog to hard-reset mode */
+>   	err = regmap_write(wdt->regmap,
+>   			   wdt->baseaddr + PON_PMIC_WD_RESET_S2_CTL,
 
