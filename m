@@ -2,43 +2,43 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478C955C11E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 14:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE72555D744
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 15:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238615AbiF0Lxl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 27 Jun 2022 07:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55788 "EHLO
+        id S238655AbiF0Lxo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 27 Jun 2022 07:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239063AbiF0LxN (ORCPT
+        with ESMTP id S239049AbiF0LxI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:53:13 -0400
+        Mon, 27 Jun 2022 07:53:08 -0400
 Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05719BC2A
-        for <linux-watchdog@vger.kernel.org>; Mon, 27 Jun 2022 04:47:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84271BC1C
+        for <linux-watchdog@vger.kernel.org>; Mon, 27 Jun 2022 04:47:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:References
         :In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=K4NMIcLvgXEpj+bXVjTFu2L5k2WlTzyocNMqodrm3NU=; b=mvwfVneYzELaZXs+GlASrrPNJg
-        sgT6j7xpRcsSJNvyEBAxrBnM14nKQjvmt6mQvFRG5xT1bAl9OISdrGEiavFz27aYLNeZtrxaBxawR
-        c7xHi8/CnVQ6VNwSVVjBSTxHtMh09d3F/gqXwlhXcry4xrlPMiuoWjvyXJ8yiyjFBXPpI0TZcwby4
-        R52MUqBdkIyWsLnPbtjSJWlniernhUGX3CCo64kE9HF3yjpw2fen9fSndaEon/wQIjTUojCB2PyVK
-        HmtsKFfieyaeClIA/jRFFNLK2k7oX0S0IuCd6WJU8j7UL25LQfp3PWK160T36yw9kuYK3ItKfJGor
-        Wscpixxg==;
+        bh=P+6s8dWLOMqSqA0TNP/AuvKENjVv77kgcF6wzMFk6DI=; b=XGRlmOF0Kykcqg9giuV4lWfkkl
+        qErdnvYPAgdZ7sTzktBBvnhRCNq8N6k6K1dpBhL2/pJpf/8NKVx/aep9st1yImg+2Q2hkN1GwsrBh
+        3SueyG5/RrxHC60QCjKZvDWD2kDD4G7g99eKWH7OuezTtoauzanz7xKdI0/NXUgnlko+cD8sVGPqp
+        Jqfsy4UWD2j84i02Nowa7ykHen3uX5yDCBvsZ2PML7FvR8v2YfRc9byn7DO3HQV75YWkR2bc3Qc3g
+        BoxzgQmIj4og5wqZcqSnd2nQCp8Z4crjHAd6MPSE/ok966/Jy2IyOCptHbFQzzihQU+ls6vxz4+yB
+        ReACG8ew==;
 Received: from [10.22.3.24] (helo=kernkonzept.com)
         by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1o5mhm-006C6l-U5; Mon, 27 Jun 2022 13:14:58 +0200
+        id 1o5mhn-006C6l-Gp; Mon, 27 Jun 2022 13:14:59 +0200
 From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     Loic Poulain <loic.poulain@linaro.org>,
         linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Subject: [PATCH 1/3] watchdog: pm8916_wdt: Avoid read of write-only PET register
-Date:   Mon, 27 Jun 2022 13:14:30 +0200
-Message-Id: <20220627111432.2625168-2-stephan.gerhold@kernkonzept.com>
+Subject: [PATCH 2/3] watchdog: pm8916_wdt: Report reboot reason
+Date:   Mon, 27 Jun 2022 13:14:31 +0200
+Message-Id: <20220627111432.2625168-3-stephan.gerhold@kernkonzept.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220627111432.2625168-1-stephan.gerhold@kernkonzept.com>
 References: <20220627111432.2625168-1-stephan.gerhold@kernkonzept.com>
@@ -54,36 +54,82 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-PMIC_WD_RESET_PET is a write-only register that is used to ping
-the watchdog. It does not make sense to use read-modify-write
-for it: a register read will never return anything but zero.
-(And actually even if it did we would still want to write again
-to ensure the watchdog is pinged.)
+The PM8916 PMIC provides "power-off reason" (POFF_REASON) registers
+to allow detecting why the board was powered off or rebooted. This
+can be used to expose if a reset happened due to a watchdog timeout.
+The watchdog API also provides status bits for overtemperature and
+undervoltage which happen to be reported in the same PMIC register.
 
-Reduce the overhead for the watchdog ping a bit by using
-regmap_write() directly instead.
+Make this information available as part of the watchdog device
+so userspace can decide to handle the situation accordingly.
 
 Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 ---
- drivers/watchdog/pm8916_wdt.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/watchdog/pm8916_wdt.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
-index 0937b8d33104..670cd79f4cf9 100644
+index 670cd79f4cf9..3fc03fdae466 100644
 --- a/drivers/watchdog/pm8916_wdt.c
 +++ b/drivers/watchdog/pm8916_wdt.c
-@@ -58,9 +58,8 @@ static int pm8916_wdt_ping(struct watchdog_device *wdev)
- {
- 	struct pm8916_wdt *wdt = watchdog_get_drvdata(wdev);
+@@ -9,6 +9,12 @@
+ #include <linux/regmap.h>
+ #include <linux/watchdog.h>
  
--	return regmap_update_bits(wdt->regmap,
--				  wdt->baseaddr + PON_PMIC_WD_RESET_PET,
--				  WATCHDOG_PET_BIT, WATCHDOG_PET_BIT);
-+	return regmap_write(wdt->regmap, wdt->baseaddr + PON_PMIC_WD_RESET_PET,
-+			    WATCHDOG_PET_BIT);
++#define PON_POFF_REASON1		0x0c
++#define PON_POFF_REASON1_PMIC_WD	BIT(2)
++#define PON_POFF_REASON2		0x0d
++#define PON_POFF_REASON2_UVLO		BIT(5)
++#define PON_POFF_REASON2_OTST3		BIT(6)
++
+ #define PON_INT_RT_STS			0x10
+ #define PMIC_WD_BARK_STS_BIT		BIT(6)
+ 
+@@ -110,12 +116,14 @@ static irqreturn_t pm8916_wdt_isr(int irq, void *arg)
  }
  
- static int pm8916_wdt_configure_timers(struct watchdog_device *wdev)
+ static const struct watchdog_info pm8916_wdt_ident = {
+-	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
++	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE |
++		   WDIOF_OVERHEAT | WDIOF_CARDRESET | WDIOF_POWERUNDER,
+ 	.identity = "QCOM PM8916 PON WDT",
+ };
+ 
+ static const struct watchdog_info pm8916_wdt_pt_ident = {
+ 	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE |
++		   WDIOF_OVERHEAT | WDIOF_CARDRESET | WDIOF_POWERUNDER |
+ 		   WDIOF_PRETIMEOUT,
+ 	.identity = "QCOM PM8916 PON WDT",
+ };
+@@ -135,6 +143,7 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
+ 	struct pm8916_wdt *wdt;
+ 	struct device *parent;
+ 	int err, irq;
++	u8 poff[2];
+ 
+ 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+ 	if (!wdt)
+@@ -175,6 +184,20 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
+ 		wdt->wdev.info = &pm8916_wdt_ident;
+ 	}
+ 
++	err = regmap_bulk_read(wdt->regmap, wdt->baseaddr + PON_POFF_REASON1,
++			       &poff, ARRAY_SIZE(poff));
++	if (err == 0) {
++		dev_dbg(dev, "POFF reason: %#x %#x\n", poff[0], poff[1]);
++		if (poff[0] & PON_POFF_REASON1_PMIC_WD)
++			wdt->wdev.bootstatus |= WDIOF_CARDRESET;
++		if (poff[1] & PON_POFF_REASON2_UVLO)
++			wdt->wdev.bootstatus |= WDIOF_POWERUNDER;
++		if (poff[1] & PON_POFF_REASON2_OTST3)
++			wdt->wdev.bootstatus |= WDIOF_OVERHEAT;
++	} else {
++		dev_err(dev, "failed to read POFF reason: %d\n", err);
++	}
++
+ 	/* Configure watchdog to hard-reset mode */
+ 	err = regmap_write(wdt->regmap,
+ 			   wdt->baseaddr + PON_PMIC_WD_RESET_S2_CTL,
 -- 
 2.30.2
 
