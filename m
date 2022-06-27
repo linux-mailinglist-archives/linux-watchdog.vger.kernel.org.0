@@ -2,158 +2,141 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A67A55D105
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 15:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3733E55D756
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 15:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238061AbiF0MIW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 27 Jun 2022 08:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
+        id S236400AbiF0Nya (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 27 Jun 2022 09:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240458AbiF0MHo (ORCPT
+        with ESMTP id S235121AbiF0Ny2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:07:44 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820ADDEB2
-        for <linux-watchdog@vger.kernel.org>; Mon, 27 Jun 2022 05:06:23 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id s1so12724630wra.9
-        for <linux-watchdog@vger.kernel.org>; Mon, 27 Jun 2022 05:06:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/Vr70S1itQTBF/3bCew+jxqxaJK1aORpqchqJlIulN8=;
-        b=nj5oQcZi8JzRsGM3DFad9Xybe6hpa6FG+MoP8L51KifR9Vnx9eDEerY0sFLxcH32pP
-         yh2DJfqgWpq2zpXtrzs4dP+HhJVpTk5m0rTdKps26yOU5SUfkbzy/DhlLyYaSC+Ocq2j
-         H3cMckzKhtqrZnldgDo9v8nChVSAtAKLitLXMZObAYq0T3IoOVCt5uiwdmKFyMacY5kl
-         FdlOqE9NXg1fkkJPIyCBNCNntcZWm+sNt4zl5IY81kL60mqK4eJnz6Hpt6TLaEC137rb
-         exNw3wpIXASEHPhT6/6P7i5ajW9wGdM3C5LjbdfGViBQtJSbFlgSIPKIxOaBshjymIB6
-         ZoPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/Vr70S1itQTBF/3bCew+jxqxaJK1aORpqchqJlIulN8=;
-        b=60tn7aZoggZ/6HZNhZr9q41Qb+gHem9utj3/fAER83lDQiAPdySGG3k07jM3TXMY5y
-         qnCHXrO2Ls2onBAPnwYmua0ZDRgA4f8ODC5Reu9C0mZ5r2F492qCvp9RtH5xBFpfNtFV
-         KvRmXyPvFy4hXr2cHBAhRo9ijFqJbUtjilOX75UMpOFlZ+QiE9S0ne0re4tvElwIzvDM
-         ukn8vNMlHSZravcx+43aKClCSjLlz+WAy3lX2yI9EHGa9yIFopVHtrpEnygmXQIRROTL
-         BScEziLgV1nKQEqZ0D4sSp9tviSE1DbnGvda5U3y2LssTTY5NVgxzCQhfol1+ce7bmFd
-         AZAQ==
-X-Gm-Message-State: AJIora8fGxru2EpGhiDWxaBcP4ojgVkhdCgY7WnzLDS7VGecxt1vKRes
-        8gnvZjWroieYWJ3+TQvS7zpIqw==
-X-Google-Smtp-Source: AGRyM1v4mipmlBAmPoKRfrckMoNmVytCsUsuVXsuKFVR2SVoD35b+p0iU2bhx9v38CDsNf6vGT/67A==
-X-Received: by 2002:a5d:5c11:0:b0:21b:a9a2:7eec with SMTP id cc17-20020a5d5c11000000b0021ba9a27eecmr12101736wrb.579.1656331582103;
-        Mon, 27 Jun 2022 05:06:22 -0700 (PDT)
-Received: from [192.168.0.249] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f8-20020a1cc908000000b0039c99f61e5bsm16608790wmb.5.2022.06.27.05.06.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 05:06:21 -0700 (PDT)
-Message-ID: <dca6534e-2601-a943-b6a8-2593f7fc64eb@linaro.org>
-Date:   Mon, 27 Jun 2022 14:06:19 +0200
+        Mon, 27 Jun 2022 09:54:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5156631F;
+        Mon, 27 Jun 2022 06:54:27 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDN1Uh003946;
+        Mon, 27 Jun 2022 13:53:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=GAWoFxCNJhIvlMoWt/ylWRzzaBWADkUmC7Q0ZaAXQKw=;
+ b=C0ydIsLJo8x0/XnILLmB+DUZEBR5KX89h2JbxUzVNC6/KgG1neIl2vXdYCVInE2Li/c8
+ nuiA2CuFmQzyvXOxgYSSZnxlPvWVr6pr2LGCrp1g2SQgwew1o7KKGlCP54NS692fwiGh
+ o+Kf4WPsKd9moa4t6SCvS8V7bvScgy0N4319jWM0y2XuyczOSQyqfwssbSLHhZ11Pgms
+ xZyyiaIv4pRZTvM/RN5WLB7UhuLG0M/TCOH4d3qa6bripbGyddUftQhirwg7YKsw8FZX
+ Dk1q8o9yzRyQ4x8eNhyV0VAg/tJeaM2LPzNXTqxr/RWOyckxyg/ddpti8mKle1fPF+25 iQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gydcv8vq7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 13:53:56 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25RDaoDs024237;
+        Mon, 27 Jun 2022 13:53:56 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gydcv8vn1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 13:53:55 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25RDq9Bo028366;
+        Mon, 27 Jun 2022 13:53:51 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3gwt092age-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 13:53:51 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25RDrmtT23003544
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 13:53:48 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 581B4AE051;
+        Mon, 27 Jun 2022 13:53:48 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D0F45AE045;
+        Mon, 27 Jun 2022 13:53:47 +0000 (GMT)
+Received: from pomme.tlslab.ibm.com (unknown [9.101.4.33])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Jun 2022 13:53:47 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, nathanl@linux.ibm.com,
+        haren@linux.vnet.ibm.com, npiggin@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v3 0/4] Extending NMI watchdog during LPM
+Date:   Mon, 27 Jun 2022 15:53:43 +0200
+Message-Id: <20220627135347.32624-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.36.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 356kCkZtDT4EdcQIcQ430xVDqLe2qI9o
+X-Proofpoint-GUID: kkjhEORm_2eMvJi08KpG6Xk7BV_E4iDG
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 10/14] dt-bindings: firmware: Add fsl,scu yaml file
-Content-Language: en-US
-To:     Viorel Suman <viorel.suman@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
-References: <20220616164303.790379-1-viorel.suman@nxp.com>
- <20220616164303.790379-11-viorel.suman@nxp.com>
- <b653d7af-f846-abb2-d260-3ce615b070a4@linaro.org>
- <20220627114949.pg7az36fz4jrwebp@fsr-ub1664-116>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220627114949.pg7az36fz4jrwebp@fsr-ub1664-116>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015 phishscore=0
+ mlxlogscore=972 suspectscore=0 malwarescore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206270059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 27/06/2022 13:49, Viorel Suman wrote:
-> On 22-06-24 12:25:44, Krzysztof Kozlowski wrote:
->> On 16/06/2022 18:42, Viorel Suman wrote:
->>> From: Abel Vesa <abel.vesa@nxp.com>
->>>
->>> In order to replace the fsl,scu txt file from bindings/arm/freescale,
->>> we need to split it between the right subsystems. This patch adds the
->>> fsl,scu.yaml in the firmware bindings folder. This one is only for
->>> the main SCU node. The old txt file will be removed only after all
->>> the child nodes have been properly switch to yaml.
->>>
->>> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
->>> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
->>> ---
->>>  .../devicetree/bindings/firmware/fsl,scu.yaml | 170 ++++++++++++++++++
->>>  1 file changed, 170 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/firmware/fsl,scu.yaml b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
-> 
-> [...]
-> 
->>> +properties:
->>> +  $nodename:
->>> +    const: 'scu'
->>
->> Why enforcing node name? Second point is that node names should be
->> generic, so I wonder what "SCU" exactly means and whether it is generic?
->>
-> 
-> It stands for "System Control Unit" - looks generic to me.
+When a partition is transferred, once it arrives at the destination node,
+the partition is active but much of its memory must be transferred from the
+start node.
 
-Nope, it's specific, just like other scu - Snoop Control Unit. What's
-more, reusing the same acronym leads to confusions.
+It depends on the activity in the partition, but the more CPU the partition
+has, the more memory to be transferred is likely to be. This causes latency
+when accessing pages that need to be transferred, and often, for large
+partitions, it triggers the NMI watchdog.
 
-If it was generic, then I expect it to be present in several other
-places, but it's not (except the other SCU).
+The NMI watchdog causes the CPU stack to dump where it appears to be
+stuck. In this case, it does not bring much information since it can happen
+during any memory access of the kernel.
 
-Generic name is for example "system-controller".
+In addition, the NMI interrupt mechanism is not secure and can generate a
+dump system in the event that the interruption is taken while MSR[RI]=0.
 
-> I guess a reason to enforce it - need to check with Abel - might be
-> the need to group multiple SCU implementations under a common known name.
+Depending on the LPAR size and load, it may be interesting to extend the
+NMI watchdog timer during the LPM.
 
-Device bindings do not enforce the names, unless it's really needed, and
-I doubt there is a need here.  Just drop it and rename nodes in DTS to
-something generic.
+That's configurable through sysctl with the new introduced variable
+(specific to powerpc) nmi_watchdog_factor. This value represents the
+percentage added to watchdog_tresh to set the NMI watchdog timeout during a
+LPM.
 
+Changes in v3:
+ - don't export watchdog_mutex
+ - fix a comment in mobilty.c, wait_for_vasi_session_completed()
+ - fix a build issue when !CONFIG_PPC_WATCHDOG
+ - rework some printk and rename the sysctl variable.
 
-Best regards,
-Krzysztof
+v2:
+https://lore.kernel.org/all/20220614135414.37746-1-ldufour@linux.ibm.com/
+
+Laurent Dufour (4):
+  powerpc/mobility: wait for memory transfer to complete
+  watchdog: export lockup_detector_reconfigure
+  powerpc/watchdog: introduce a NMI watchdog's factor
+  pseries/mobility: set NMI watchdog factor during LPM
+
+ Documentation/admin-guide/sysctl/kernel.rst | 12 +++
+ arch/powerpc/include/asm/nmi.h              |  2 +
+ arch/powerpc/kernel/watchdog.c              | 21 ++++-
+ arch/powerpc/platforms/pseries/mobility.c   | 85 ++++++++++++++++++++-
+ include/linux/nmi.h                         |  2 +
+ kernel/watchdog.c                           | 21 +++--
+ 6 files changed, 135 insertions(+), 8 deletions(-)
+
+-- 
+2.36.1
+
