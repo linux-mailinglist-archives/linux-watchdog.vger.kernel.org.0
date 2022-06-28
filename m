@@ -2,71 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A2455EEF5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 22:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CD955EEFE
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 22:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiF1UNK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Jun 2022 16:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S230200AbiF1UOY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Jun 2022 16:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiF1UL5 (ORCPT
+        with ESMTP id S230013AbiF1UL5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
         Tue, 28 Jun 2022 16:11:57 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCA73B3C2;
-        Tue, 28 Jun 2022 13:03:26 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d5so12002576plo.12;
-        Tue, 28 Jun 2022 13:03:26 -0700 (PDT)
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFE613DC8;
+        Tue, 28 Jun 2022 13:03:36 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id a15so12932379pfv.13;
+        Tue, 28 Jun 2022 13:03:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=99fhhNvuvIbHAOoiSzGURisNVQReiX0ThP8Z5TEm4ms=;
-        b=VU+A5eJzI2U7m+mJYjyw7lpgRmpeTDwnTj4pLDu1aXawQqGrSR10KRTxvBoOHwXyf3
-         hW7JB4AhctcUtnswoLUq33aOUKlup2EgpV7bkEsq6IY1XdkvIBFgk+wG3pZn5M0ppHAG
-         6O9EZk9OROAb6ImOpgE8ImJwCf5FinYQuRq8zO6u6YCpRfXFZf4ErMS0JZqhxwN2VIdK
-         DCnmABcS/oT/8oXpggRZXNKAOIb92I9iOSFLTfN5bHf9aqXRQ1kX9K3UmuD9M5/Amcpm
-         vLm7jIsfC1aDb9sJ+B+XRd4FE9Qr+qhzIlgwmtwB+bjgc5s9TOfFyheyTqhr2VGci74d
-         4Ngw==
+        bh=O18BNoD4QYCw1F/lcnmrBO02etfQ8RJzYCuHpe3r1UU=;
+        b=WfoNeWhEisMXHw5gKjvS2MXabo67b3Z/nvM+Hu6P5rFQcz5RiovYr+SgXKFZCPAnu+
+         8SkXvBTBEMKOvbe7WIfHh9yQ9/kZ6t/pSmdnph97VMUZtsqCL4GqgZcoTMr6K0uhN8yX
+         XdNdBMYnw8MJ5S26JSmBevqE0LKT1uNeLPPektGhz41QbxTRPF5g/fuvVOLNwzfkTo1Z
+         J3zHD6GVk39F1Q+r72HGLxot8k8bkQ0eRpmtWimLlRVHTap4+2KfMYBzKU/57kLv1Gd1
+         ZORdMMbgko7I+rhIEiYd0zpEJ/laM5qNrBKxCvCS/oh/+7P/9doUelEEcnwZL02oxrGv
+         PS5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=99fhhNvuvIbHAOoiSzGURisNVQReiX0ThP8Z5TEm4ms=;
-        b=XtIUDozdWPoHZrNaITce4O1MK/N2ckGFgCLfAfB3eiFupIh5JXfOVuLHKuIxuNhn7G
-         AkJj/vm5c3X+CN4Z+7Wg0ZF2JqtTgNp6p3pndk0zBdvDgnnpfmQ4BQG9tKb/DVCcbhY8
-         LCS0A2nERWjxu7QoGo9QOalViU5j4M1Rc/VfwRSUCh6mXCq3PNtc0OJjdq2u8pjbg+2W
-         GvNmmuYqVcpWvwX3iQ+9luu4ZKZ7kacc7xgiE7uMZWsoRlUHUWvYE6PGPiYIBm7W5h5Y
-         5Z+VdB8weMnK4bwmZT1wsDi2RPmqdyNHRMMsAbhrAtkqOXyoj+l8OEhdzZ6PqgA2TrcO
-         S7jA==
-X-Gm-Message-State: AJIora8BjosLS2Cbr2cys+EM5ezcv4s2wGtSsqFLdQoWIuONCwfD9/BB
-        CMHq/RwdHi9g0poWF70fazM=
-X-Google-Smtp-Source: AGRyM1utJi2f0eWDb12GVb8yGIc2maVMddBIJD0klZ6MqKdwimi2DcqR9ljs1+MZ4t0cPjcx1cJsQA==
-X-Received: by 2002:a17:902:e889:b0:16a:6c64:aa50 with SMTP id w9-20020a170902e88900b0016a6c64aa50mr6481514plg.142.1656446606014;
-        Tue, 28 Jun 2022 13:03:26 -0700 (PDT)
+        bh=O18BNoD4QYCw1F/lcnmrBO02etfQ8RJzYCuHpe3r1UU=;
+        b=vvwHwx1yB69hOGuG/p21ohjle6FYpruc4gYbL/Mp7x9br+IGFPcizuSzJ9mXSf6wXH
+         5ZCQ925r6cV1uHBQCCsbM/4CjvJFTPDQqJ7zU64tkqhUKWHHonFBQUl9HNecUzXAd/Id
+         9G5yWF5fJurAKNhO/oWqgH5nBLpS4JtkVJp5IgWvc5Nuw+1CFEUQuGfaI7UeJnIOQTGx
+         2sT0vdF4czZhR1hAm8a212RqcwQHclfUFiRHjzenspKeDhD1/WQLHss/Sgg3zV/B3V/c
+         MH5+2GSjGccOVQUW9IdJmXhAejTn9xC4LWYA+SrxGmY24Rh6hD76HJQR+7EUim91hgTj
+         qx+w==
+X-Gm-Message-State: AJIora8q0P5cqd05scN3yrSGowcrherTeOA14J7Ibjsi3WBsi6fStfJq
+        8x6G8fc9V3oMzNRZWMP3cm/hkX3JDx0=
+X-Google-Smtp-Source: AGRyM1tOSUOdH1tsZ10Yv3CJ6SOKVD9V7qWVI5vrnJJSlqRo4SbPIpMFUDTGM28+dy/vfss5mPwWnQ==
+X-Received: by 2002:a63:91c1:0:b0:40d:33cb:3d57 with SMTP id l184-20020a6391c1000000b0040d33cb3d57mr19527523pge.10.1656446615765;
+        Tue, 28 Jun 2022 13:03:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t13-20020a17090340cd00b00166496ba268sm9604612pld.285.2022.06.28.13.03.24
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902b58b00b0015e8d4eb26esm9687241pls.184.2022.06.28.13.03.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:03:25 -0700 (PDT)
+        Tue, 28 Jun 2022 13:03:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 28 Jun 2022 13:03:24 -0700
+Date:   Tue, 28 Jun 2022 13:03:34 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 5/8] watchdog: sama5d4_wdt: Remove #ifdef guards for PM
+Subject: Re: [PATCH 6/8] watchdog: st_lpc_wdt: Remove #ifdef guards for PM
  related functions
-Message-ID: <20220628200324.GE3633970@roeck-us.net>
+Message-ID: <20220628200334.GF3633970@roeck-us.net>
 References: <20220628193449.160585-1-paul@crapouillou.net>
- <20220628193449.160585-6-paul@crapouillou.net>
+ <20220628193449.160585-7-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220628193449.160585-6-paul@crapouillou.net>
+In-Reply-To: <20220628193449.160585-7-paul@crapouillou.net>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -78,8 +76,8 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 08:34:46PM +0100, Paul Cercueil wrote:
-> Use the new LATE_SYSTEM_SLEEP_PM_OPS() and pm_sleep_ptr() macros to
+On Tue, Jun 28, 2022 at 08:34:47PM +0100, Paul Cercueil wrote:
+> Use the new DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros to
 > handle the .suspend/.resume callbacks.
 > 
 > These macros allow the suspend and resume functions to be automatically
@@ -89,51 +87,47 @@ On Tue, Jun 28, 2022 at 08:34:46PM +0100, Paul Cercueil wrote:
 > bugs and regressions are easier to catch.
 > 
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
 > Cc: linux-arm-kernel@lists.infradead.org
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/sama5d4_wdt.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+>  drivers/watchdog/st_lpc_wdt.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/watchdog/sama5d4_wdt.c b/drivers/watchdog/sama5d4_wdt.c
-> index ec20ad4e534f..aeee934ca51b 100644
-> --- a/drivers/watchdog/sama5d4_wdt.c
-> +++ b/drivers/watchdog/sama5d4_wdt.c
-> @@ -339,7 +339,6 @@ static const struct of_device_id sama5d4_wdt_of_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, sama5d4_wdt_of_match);
+> diff --git a/drivers/watchdog/st_lpc_wdt.c b/drivers/watchdog/st_lpc_wdt.c
+> index 14ab6559c748..39abecdb9dd1 100644
+> --- a/drivers/watchdog/st_lpc_wdt.c
+> +++ b/drivers/watchdog/st_lpc_wdt.c
+> @@ -248,7 +248,6 @@ static int st_wdog_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
 >  
 > -#ifdef CONFIG_PM_SLEEP
->  static int sama5d4_wdt_suspend_late(struct device *dev)
+>  static int st_wdog_suspend(struct device *dev)
 >  {
->  	struct sama5d4_wdt *wdt = dev_get_drvdata(dev);
-> @@ -366,18 +365,17 @@ static int sama5d4_wdt_resume_early(struct device *dev)
+>  	struct st_wdog *st_wdog = watchdog_get_drvdata(&st_wdog_dev);
+> @@ -285,16 +284,14 @@ static int st_wdog_resume(struct device *dev)
 >  
 >  	return 0;
 >  }
 > -#endif
 >  
->  static const struct dev_pm_ops sama5d4_wdt_pm_ops = {
-> -	SET_LATE_SYSTEM_SLEEP_PM_OPS(sama5d4_wdt_suspend_late,
-> -			sama5d4_wdt_resume_early)
-> +	LATE_SYSTEM_SLEEP_PM_OPS(sama5d4_wdt_suspend_late,
-> +				 sama5d4_wdt_resume_early)
->  };
+> -static SIMPLE_DEV_PM_OPS(st_wdog_pm_ops,
+> -			 st_wdog_suspend,
+> -			 st_wdog_resume);
+> +static DEFINE_SIMPLE_DEV_PM_OPS(st_wdog_pm_ops,
+> +				st_wdog_suspend, st_wdog_resume);
 >  
->  static struct platform_driver sama5d4_wdt_driver = {
->  	.probe		= sama5d4_wdt_probe,
->  	.driver		= {
->  		.name	= "sama5d4_wdt",
-> -		.pm	= &sama5d4_wdt_pm_ops,
-> +		.pm	= pm_sleep_ptr(&sama5d4_wdt_pm_ops),
->  		.of_match_table = sama5d4_wdt_of_match,
->  	}
->  };
+>  static struct platform_driver st_wdog_driver = {
+>  	.driver	= {
+>  		.name = "st-lpc-wdt",
+> -		.pm = &st_wdog_pm_ops,
+> +		.pm = pm_sleep_ptr(&st_wdog_pm_ops),
+>  		.of_match_table = st_wdog_match,
+>  	},
+>  	.probe = st_wdog_probe,
 > -- 
 > 2.35.1
 > 
