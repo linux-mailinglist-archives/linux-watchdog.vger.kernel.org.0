@@ -2,86 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352EB55CB82
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 15:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ADF55DB7D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Jun 2022 15:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240358AbiF0TIG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 27 Jun 2022 15:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
+        id S245043AbiF1Fpu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Jun 2022 01:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240352AbiF0THZ (ORCPT
+        with ESMTP id S243496AbiF1Fpu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:07:25 -0400
-X-Greylist: delayed 377 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Jun 2022 12:07:24 PDT
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA589271D
-        for <linux-watchdog@vger.kernel.org>; Mon, 27 Jun 2022 12:07:24 -0700 (PDT)
-Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 3A8F42EFBDC;
-        Mon, 27 Jun 2022 21:01:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1656356464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X/nk/AcDmx82xo8RzTdRHcXyQgpM8xWRgDJSooyf8KA=;
-        b=lXkikKT3QYWdAtg1FNl5bFN3FOKVw1Hl0xcjP5ham0WTgbyh0v/mVK/3kyFGr8ZqCGm6dd
-        ojkwMcq9sdaGQzK4Qfm7oYy0x8UxJrq2JfNqX7MpDYK2MKlPYMgdQeSlDNJk96Z1q/x/He
-        /UpR3cfOcx/+ajoo5s4dl9Uc8s7jxKd4Vjw0Pk2SifAW0BrgKoRfsdxdsC5ZseOd2rNI3Z
-        dLWuwzuifIBCEROuJCDVaECEEYDHMSWNNeL6T5L2e05hd5E/LKgenqwTrV5ZPe7oVqP6OU
-        vKXVXmByFnyL7tj+as8NEux7BjKf612cX5RCsBYq2+zAGZ2jSh4QduW6TC4Asw==
-From:   Sander Vanheule <sander@svanheule.net>
-To:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH 2/2] watchdog: realtek-otto: add RTL9310 support
-Date:   Mon, 27 Jun 2022 21:00:56 +0200
-Message-Id: <629e95e16c8dc812dc5a4ea34a2e2e1ff2faf88c.1656356377.git.sander@svanheule.net>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <84d873d7dd375cd2392f89fa6bd9e0fe5dda4e1c.1656356377.git.sander@svanheule.net>
-References: <84d873d7dd375cd2392f89fa6bd9e0fe5dda4e1c.1656356377.git.sander@svanheule.net>
+        Tue, 28 Jun 2022 01:45:50 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4C31EAC9;
+        Mon, 27 Jun 2022 22:45:49 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id v6so8929921qkh.2;
+        Mon, 27 Jun 2022 22:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bDB1yQIYsmDWYDrdv3aqDf3xld4an2jBw75K40efpKQ=;
+        b=AVlqRKA9fQpKhzMjJ/YjxARfBVbnVtbVvcoyN2TRyUdR+R0UJnLIyM1EvLINj00Iyn
+         B19+WAZx1kN4XiJ7ar1vu1h7DM6ZIbx9YdeGbJnda1Y4dgvOb5bZqCr7ULg6c+uckzop
+         2pVjy3AWDwVGyjoR5Uv0I4NKugIu+f3JuMzFHn4zFSYaL+m/gQAGiGbx8KuN2B4Aw5nl
+         JZKp4HC82Uyqq7CT+b3gSeeXTYUH6f33VsDU8+Ikeu4Ec6/74ZxGZRxldS1mPBi0I7NE
+         qseDenQecnLDBKPEOMh6QVK/e7MvdkW7Y8rHJbEjwip4vDa/Jf+rs0ZP/z/kRdWtdaao
+         YodA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bDB1yQIYsmDWYDrdv3aqDf3xld4an2jBw75K40efpKQ=;
+        b=KE7eXWUrFZ8HkE5AYdqgEwsMZokuzKvf16X75kIL36Kk9WFl9VT3aL9mQ2rFi60W40
+         M5ZNTbuztTbq1D7hqz7SKW6g0hqPM1ZjYsqzalhqx7RuIsgDN8zr9uCn7PNBXBwIF8lb
+         NTQUbmwjEKzm7u8dNO8H3fd7WN+MuzQp4YtdAAQouS5CYD7m3FYBqQwi2crKjdvOhuEj
+         k7y3IJ5WbeOUcxbzf7Jb15p1Z3H8rI1OzDlZH81Cf1QEioBxqII91+5Q3nl/3J3Uvgs5
+         rJTe05ZLXv8uHYtXpAaQa7pGMImkppe/Q2SouDZm+bRbbEsOEfXGBmsZaa7R19tTveBM
+         Bn1w==
+X-Gm-Message-State: AJIora9S/Le76p5OiZm3bStE8QF6ysHgn0CcwvnpdtQ7baaCxCJ9jHak
+        tAuVqmvwb3k9LlxYzNEKL1U=
+X-Google-Smtp-Source: AGRyM1tf5mJP+t3vGwsUjLUnw/w1HOD6eqfpDPcHaSfcs5FbCMA26VN8obCrZ2yZ+lIi9v7qYfZByw==
+X-Received: by 2002:a05:620a:4053:b0:6af:2d27:e791 with SMTP id i19-20020a05620a405300b006af2d27e791mr5244735qko.555.1656395148651;
+        Mon, 27 Jun 2022 22:45:48 -0700 (PDT)
+Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id x26-20020ae9e91a000000b006a6edbbca84sm9850143qkf.94.2022.06.27.22.45.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 Jun 2022 22:45:48 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhaohui.shi@horizon.ai, Schspa Shi <schspa@gmail.com>
+Subject: [PATCH] watchdog: dw_wdt: Fix buffer overflow when get timeout
+Date:   Tue, 28 Jun 2022 13:45:39 +0800
+Message-Id: <20220628054539.33187-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The RTL9310 SoC series has a watchdog timer identical to the already
-supported SoCs. The peripheral is memory mapped at 0x18003260 and driven
-by the Lexra bus clock.
+The top_val can be obtained from device-tree, if it is not configured
+correctly, there will be buffer overflow.
 
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
- drivers/watchdog/realtek_otto_wdt.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/watchdog/dw_wdt.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/watchdog/realtek_otto_wdt.c b/drivers/watchdog/realtek_otto_wdt.c
-index 60058a0c3ec4..2a5298c5e8e4 100644
---- a/drivers/watchdog/realtek_otto_wdt.c
-+++ b/drivers/watchdog/realtek_otto_wdt.c
-@@ -366,6 +366,7 @@ static const struct of_device_id otto_wdt_ids[] = {
- 	{ .compatible = "realtek,rtl8380-wdt" },
- 	{ .compatible = "realtek,rtl8390-wdt" },
- 	{ .compatible = "realtek,rtl9300-wdt" },
-+	{ .compatible = "realtek,rtl9310-wdt" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, otto_wdt_ids);
+diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+index cd578843277e..1f8605c0d712 100644
+--- a/drivers/watchdog/dw_wdt.c
++++ b/drivers/watchdog/dw_wdt.c
+@@ -155,6 +155,9 @@ static unsigned int dw_wdt_get_min_timeout(struct dw_wdt *dw_wdt)
+ 			break;
+ 	}
+ 
++	if (WARN_ON_ONCE(idx == DW_WDT_NUM_TOPS))
++		idx = DW_WDT_NUM_TOPS - 1;
++
+ 	return dw_wdt->timeouts[idx].sec;
+ }
+ 
+@@ -178,6 +181,9 @@ static unsigned int dw_wdt_get_timeout(struct dw_wdt *dw_wdt)
+ 			break;
+ 	}
+ 
++	if (WARN_ON_ONCE(idx == DW_WDT_NUM_TOPS))
++		idx = DW_WDT_NUM_TOPS - 1;
++
+ 	/*
+ 	 * In IRQ mode due to the two stages counter, the actual timeout is
+ 	 * twice greater than the TOP setting.
 -- 
-2.36.1
+2.29.0
 
