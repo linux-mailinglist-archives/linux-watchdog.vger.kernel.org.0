@@ -2,55 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3B65607E6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jun 2022 19:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C05B5607F3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jun 2022 19:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiF2R4Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jun 2022 13:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S230286AbiF2R4x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jun 2022 13:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiF2R4X (ORCPT
+        with ESMTP id S231801AbiF2R4v (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:56:23 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417DA248D2
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 10:56:21 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id h23so34050784ejj.12
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 10:56:21 -0700 (PDT)
+        Wed, 29 Jun 2022 13:56:51 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B5D28E30
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 10:56:49 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id fi2so34080145ejb.9
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 10:56:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=6oHj0nYfa4SdWnhe5zSLFghfdPLCAvgXfoVqQh8QTVE=;
-        b=nsTOhN6xKSZJcuBfvJC1mk65ikH2dB2tm/ab/aZSlL8OgyU/35GBQoppOW0XGAKNhW
-         GCoKc43S1AxiDGxyGH2NW8BHfHSDYMRuXvy4jU80meEZ8N7+MDCW8Zn3s895KNnB9dyI
-         hFro5VU050/c/2DG8On7F4uN2QCk3pckGxxh371CUv0AFdwgvcnB6LXy3EEWvpDELVEy
-         717QxY6Bk7UiIN3PFwZSNr3QkmaKya+vRgi6FSufbx3NeWcR5JqDrAdP/vIk/I1J+pbF
-         WQ8pfv2fQ6U/sjZz0mC9Ae4h9mY0oeD/rcDs5xnpKZJ62t7VTWhjfNHwk0xQw3IxvFR8
-         xxmw==
+        bh=QEpNBgWA7DRhjOO34rOQbdqFQ1nBsqCeu75uc4Igg6w=;
+        b=twqjMZOblDHbP5Z3l420BkFOUPMQlQUxyJNW+943GGuxU5Rwhv3m7bZt7UkROj/R2s
+         Sim9Usj6cVmIs3szgG4cgKxuOKetQ5jhQTFyalFnl8shkqFEvqNogG8Yv+cliT8IEGse
+         X8jIl7rUFww74t456+GoXbnLDN+08Uxda9Iv80Yyy2nIkLrVnejQI/AdIM9vRf5yWyPZ
+         ZJ3F5BWBtfLveytYxhDTcS9T6+afxqKyctpWBcdobNTM/PXy5DqYRMNGFZPYB8biVDVR
+         mPBsOJAFSTkLeyyDiW2Cc0cgx1Lp8YsBLAtoGwn4Ab5gulYdZ0rPrbbrcm2p+2dSY5Gm
+         uHRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=6oHj0nYfa4SdWnhe5zSLFghfdPLCAvgXfoVqQh8QTVE=;
-        b=W2AJB6CvKS5ok/MltbnKxWdXAKBlEBRwWBaAcHOEMwdpjLS4bDeMxTvYpWVOZ+ypo3
-         DiBEhu6LVaSPDvpEaHwZh8j3CdNaT/ZSid1aGKwQRa0/j8NbaYz6rg4ZJ/rBedO3Wi+w
-         W5BLNSbkDliCr3Qw5HA859vUdostBVEaFEcPDH8yOUm04t411qhSGrkRWMi3pVfdc9VG
-         URNbi/lSsHdpopMiNlbigLEUv2iqDz6Quq1L+aIg4NsUUT5tAj0kkBSAlPok/fSNEfZ6
-         mk7o5ctx+VE1U/VtANBbN1jH7NxFzddtZR7RTNJKr0bv0AllgLUQhs+G4MrJJlEkTMR9
-         Z+Zg==
-X-Gm-Message-State: AJIora9SvXoIVzZrjsrPM5ttRLKhMa6n1Zc6/Jbv7nwKh5TS6yTfT+Eq
-        Rw+lujP3CqYHgvOudFQr19lP9w==
-X-Google-Smtp-Source: AGRyM1s/T0RjbrVgdgRykZIcRKe/wPrgddPdqxDKeZuyxQfmK8nL3iIs+NQ1u0pA8nC/MKESVZ65kg==
-X-Received: by 2002:a17:906:a10e:b0:6f3:e70b:b572 with SMTP id t14-20020a170906a10e00b006f3e70bb572mr4605172ejy.546.1656525379833;
-        Wed, 29 Jun 2022 10:56:19 -0700 (PDT)
+        bh=QEpNBgWA7DRhjOO34rOQbdqFQ1nBsqCeu75uc4Igg6w=;
+        b=famxMLTeDUVElGDlhupEBVVQonLwv88BJltLgcErm2x1s3VuqJ1uGUthOFgOTyK6YO
+         GujPPx7BBHyCmo/xdDfXv8SyD+RhlIG0daUB1FMNIoifMo+rDMnU6WP0AhnSvc608tIF
+         lssWQbD7LwkJY7e+JPXJGcLfeJmhxC7Ur8KqC8NcAvamdDypqOUTksrE3/xpd3AA5sya
+         rkd88skT5ba+5N3z0wg5X+y/v+AKARgYpZ0vUKNfTJDNmnIdzBI9C1v6fb7A+49rEGf2
+         dSG3hBstt/+VJ3yW9EQ3PYP8FKVdHBrDL8HyiFrnbOpnEfmD4eEJvE+fPSXE0PoExRDz
+         pulA==
+X-Gm-Message-State: AJIora9YzBoESkgrAhVQu7nznGQF88aRm+kaSZmyONOUAnWFaA96vkI0
+        /hxMgMcvCGBrVvYWVLDPq49erQ==
+X-Google-Smtp-Source: AGRyM1vP4xkE/Wge4HBy97Ies2gvawYtrDpCJvhIS6J7ZdtVB01q/aC0J6BgLRHrMfDfp+UXXiUqiQ==
+X-Received: by 2002:a17:907:97c9:b0:726:b4f8:f675 with SMTP id js9-20020a17090797c900b00726b4f8f675mr4583269ejc.427.1656525408480;
+        Wed, 29 Jun 2022 10:56:48 -0700 (PDT)
 Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i21-20020a508715000000b004357558a243sm11822833edb.55.2022.06.29.10.56.17
+        by smtp.gmail.com with ESMTPSA id d25-20020a50fe99000000b004355998ec1asm11589476edt.14.2022.06.29.10.56.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 10:56:19 -0700 (PDT)
-Message-ID: <2ad286fb-b215-9c45-ab34-54354e3bb422@linaro.org>
-Date:   Wed, 29 Jun 2022 19:56:17 +0200
+        Wed, 29 Jun 2022 10:56:47 -0700 (PDT)
+Message-ID: <724de6df-d9a8-ad10-fbf8-860a6309513d@linaro.org>
+Date:   Wed, 29 Jun 2022 19:56:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
@@ -140,59 +140,11 @@ On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
 > +description: i.MX SCU Client Device Node
 > +  Client nodes are maintained as children of the relevant IMX-SCU device node.
 > +  Detailed bindings are described in bindings/nvmem/nvmem.txt
-
-Skip last sentence, does not make sense anymore.
-
 > +
 > +allOf:
 > +  - $ref: "nvmem.yaml#"
 
-Don't mix quotes. I mentioned it last time, although in other place.
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fsl,imx8qm-scu-ocotp
-> +      - fsl,imx8qxp-scu-ocotp
-> +
-> +patternProperties:
-> +  '^mac@[0-9a-f]*$':
-> +    type: object
-> +    description:
-> +      MAC address.
-> +
-> +    properties:
-> +      reg:
-> +        description:
-> +          Byte offset within OCOTP where the MAC address is stored
-> +        maxItems: 1
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    imx8qx-ocotp {
-
-Just "ocotp" (generic node naming).
-
-> +        compatible = "fsl,imx8qxp-scu-ocotp";
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        fec_mac0: mac@2c4 {
-> +            reg = <0x2c4 6>;
-> +        };
-> +    };
-
+Actually, you do not need the quotes here at all.
 
 Best regards,
 Krzysztof
