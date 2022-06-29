@@ -2,59 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAA2560854
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jun 2022 20:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B44B56086F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jun 2022 20:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiF2SCL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jun 2022 14:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
+        id S229622AbiF2SEu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jun 2022 14:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiF2SCH (ORCPT
+        with ESMTP id S232670AbiF2SDu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jun 2022 14:02:07 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8573AA4E
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 11:02:05 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id c13so23269952eds.10
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 11:02:05 -0700 (PDT)
+        Wed, 29 Jun 2022 14:03:50 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB99F38DA8
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 11:03:21 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id sb34so34081799ejc.11
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 11:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=Vy6YZpnkzYfP1Q8nBBgWLbumgUQv6/LinbPlxyazuoo=;
-        b=UCWvk7H+g0XiRFlK9hdJh9sPXIDO8O/ApGthzVO9MKQVTyKIFNiYrcYH4J7FI2vgQR
-         o8XmheSJxow3U7EVL9L23lr0fJZp+oU88zYGvq1ItRE3F0tcnjDCthkdGXi66xrrzVUt
-         Ydtua9WSucxWaQxzLmDaPxJ7/SpSUQoozGq7kUN4wYtrD408iEmlWQOsNm5imiuzoWwb
-         gLBWtosNGa2k2nSxi1pcht1Nn/xNnZnPnI9SAU1FVtVv5RiXoSV7lC8j0Lb+P550mvAg
-         WSmXXvNdeX6myqBugyWKQXSkH60/vsqBcq2JM46POrRpXbUFsP/JGBCn3xhPph8rL09n
-         e3GQ==
+        bh=EF+4vVSu0Ak1EZxpXNfRVufy8G3AP8/4t8MYyPUNltA=;
+        b=qNMlZFjto8WW4D+zIbCEQRp1WueqNb3qJL71sznhlSuk5jpwSgWjmvDD0kGh7UzKvP
+         KRPIYQ/bNOE2Pme8lPtKe5UdlMVFsoB6fADpqkY/Zq2yyQjN4HeZwaKleFSPP7LhdISh
+         q9Q+pv+euqXm6pMMJowrdAxJUB9P8Iwolkl0dxF/4cn2+GXjJICaMrwgkw5ccriOAGZF
+         p/QHmjJTvdWdcgyjNouAjp/+K8Ti6GImpz0LUZaVYh3OUkAixP6xYdoD4n4d8c7wpa1g
+         zxvD9t73cHnYCcWgU1TnGLZBeBb+pp67VMyy9lrDf27p2IaIeSslWNaeh4Y8xZ3j8OiG
+         7vqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Vy6YZpnkzYfP1Q8nBBgWLbumgUQv6/LinbPlxyazuoo=;
-        b=7fZTQsaGYXkxOHAjDMV29TBZTpLdycyUJU7TlWhuTWJ14Iongx4z6sXw2OGb/XgAIM
-         mjZjugDYi/TN7hUeMgXA1C9JgZVMaEk+A4LkTEcguuR+Xs0SxcO3fLsI1L7prB+p4Qd4
-         4cDtkmmrGkJt0XdJwMZOYdM1LNcpV/fkh60SzRRA7xZZzesaSyAdlePjmPAX0D/485uO
-         ezvdvh1rj9oJNfRqkNlDP1QU+GDkxIW1+r/IwVsJB8J2QSKsAAdqpeQEw0+QaLSMBXIZ
-         v8okVy/mKGA+JCubL90FZXKlnTfQaPZbGHNqLodkrg/DOGqwAi8zHJ68f0ucpC4+LaPf
-         A/CQ==
-X-Gm-Message-State: AJIora+gpvCVB7T/miokXRmIcSfHtCNG+163F1b1hRUBj+MMLR9pUoR3
-        mFYNleDpJAfDOAIcOAwFcYMfjQ==
-X-Google-Smtp-Source: AGRyM1tMjPgShNrBmV+R7vaqyVYgBWJyRtjHKG3YppCjb+zLtBpcofZ9J/j3kYUUSJryx95/wur18Q==
-X-Received: by 2002:a05:6402:f1f:b0:437:6c2d:677a with SMTP id i31-20020a0564020f1f00b004376c2d677amr5969545eda.269.1656525724486;
-        Wed, 29 Jun 2022 11:02:04 -0700 (PDT)
+        bh=EF+4vVSu0Ak1EZxpXNfRVufy8G3AP8/4t8MYyPUNltA=;
+        b=jELiDDTWWhz8DWghi0IHQQeEr/LtqCSxKBbPiaEtKsdlKLdpGcU+K8220bHFPURdYX
+         zgFM0f3LmN7DbXEGY5ujbx6EY0eQupe8UksRCb0Cx+9sFxndEg6SSECf//70aT38YwWh
+         4tRQlOxHo++ePq7oHdO6Hu27AFmYh8gjt4kmczvlCiVlxffVPrMFBtMf8+eh1R8TKZ/5
+         I3bWLmS1rgkvkVhRgva62CnPKiNeZSMNPAphr4yz/UEw4voIWrUUH+7FSXxp4japXmoq
+         zqVbXN60D3kZhqbRDvA5Htv828jaLDAqIrTErAVN/M2iNCqRUdwTIbzMgOGlrSsID1lU
+         j/xA==
+X-Gm-Message-State: AJIora/dvRcWmWiXW0G+8PdiuNwVXaRUugeJWAoicaH06dvFc0//Cs30
+        cRaskM6E4C9f7kkU1YpD9faH4A==
+X-Google-Smtp-Source: AGRyM1voypfDnC3goXLyoV1lstNYX1G0AB6nAChz47TdKqz6nnI934lH4zhYtOaEu8xtpGlXs4MNzw==
+X-Received: by 2002:a17:907:7f05:b0:726:9770:77d6 with SMTP id qf5-20020a1709077f0500b00726977077d6mr4580557ejc.464.1656525800225;
+        Wed, 29 Jun 2022 11:03:20 -0700 (PDT)
 Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f19-20020a170906825300b0071160715917sm7944933ejx.223.2022.06.29.11.02.02
+        by smtp.gmail.com with ESMTPSA id b12-20020a05640202cc00b004335e08d6c9sm11781609edx.33.2022.06.29.11.03.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 11:02:03 -0700 (PDT)
-Message-ID: <7fbb2d33-2dab-4350-0ec4-ca8c88896523@linaro.org>
-Date:   Wed, 29 Jun 2022 20:02:02 +0200
+        Wed, 29 Jun 2022 11:03:19 -0700 (PDT)
+Message-ID: <85b3fcbf-abe4-56b7-323b-f303eb458592@linaro.org>
+Date:   Wed, 29 Jun 2022 20:03:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v6 09/14] dt-bindings: firmware: Add fsl,scu yaml file
+Subject: Re: [PATCH v6 14/14] dt-bindings: arm: freescale: Remove fsl,scu txt
+ file
 Content-Language: en-US
 To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -91,9 +92,9 @@ To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-10-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-15-viorel.suman@oss.nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629164414.301813-10-viorel.suman@oss.nxp.com>
+In-Reply-To: <20220629164414.301813-15-viorel.suman@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -109,23 +110,21 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
 > From: Abel Vesa <abel.vesa@nxp.com>
 > 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch adds the
-> fsl,scu.yaml in the firmware bindings folder. This one is only for
-> the main SCU node. The old txt file will be removed only after all
-> the child nodes have been properly switch to yaml.
+> Now that all the child nodes have been properly documented in the
+> yaml files, within their proper subystems, we can drop the fsl,scu.txt.
 > 
 > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 > Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
 > ---
->  .../devicetree/bindings/firmware/fsl,scu.yaml | 160 ++++++++++++++++++
->  1 file changed, 160 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+>  .../bindings/arm/freescale/fsl,scu.txt        | 271 ------------------
+>  1 file changed, 271 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
 > 
 
-This depends on all other previous patches, so it cannot go
-independently. Therefore I expect that everything will be going through
-one tree thus removal of TXT hunks should happen gradually.
+This cannot be separate patch. Conversion is add+remove in one commit,
+so even if you remove everything in one patch, it should be then
+squashed into patch #9. Anyway, I think better approach is to remove
+gradually, so each piece is removed in each converted part.
 
 Best regards,
 Krzysztof
