@@ -2,59 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9AC5607DC
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jun 2022 19:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3B65607E6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jun 2022 19:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiF2Ry6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jun 2022 13:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S231166AbiF2R4Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Jun 2022 13:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbiF2Ryw (ORCPT
+        with ESMTP id S230254AbiF2R4X (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jun 2022 13:54:52 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA62222B33
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 10:54:50 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id e40so23295120eda.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 10:54:50 -0700 (PDT)
+        Wed, 29 Jun 2022 13:56:23 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417DA248D2
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 10:56:21 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id h23so34050784ejj.12
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Jun 2022 10:56:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=lL8EpxBr19NArvK4AEsRyIynXTspHW/eotdbJscrOhI=;
-        b=NY+vW52EuYiK7NXq+baMr5irPJc+p0bsNlTBNCiquzBZVewrkoC1hPbUVm8V92Wvxd
-         sfFdQv0QDqvGE47jx10nW06sCbCIqaonUvhd4twYf/AuXa86IlefyQcn2R0ENkxBTcch
-         K7eFIyX49uaEsR2YZJZlwOKzu4hpc6QyhjgJC1I2f2zTVxBIoiQihWRRvaMjSQXeI0zu
-         5WucY63Lf3nOVHTfQmVs4IUKhoHZYNxHB6hLr9orMBWtvsLx6tzFlBAWW0OCzsvn1LI8
-         rKMFX95Xbx5knuDtC38PhXG9AD9cdGZAsKUHObkjQyMSfJJ3E3GbqYgmSDpOdTMPpC5x
-         DrEQ==
+        bh=6oHj0nYfa4SdWnhe5zSLFghfdPLCAvgXfoVqQh8QTVE=;
+        b=nsTOhN6xKSZJcuBfvJC1mk65ikH2dB2tm/ab/aZSlL8OgyU/35GBQoppOW0XGAKNhW
+         GCoKc43S1AxiDGxyGH2NW8BHfHSDYMRuXvy4jU80meEZ8N7+MDCW8Zn3s895KNnB9dyI
+         hFro5VU050/c/2DG8On7F4uN2QCk3pckGxxh371CUv0AFdwgvcnB6LXy3EEWvpDELVEy
+         717QxY6Bk7UiIN3PFwZSNr3QkmaKya+vRgi6FSufbx3NeWcR5JqDrAdP/vIk/I1J+pbF
+         WQ8pfv2fQ6U/sjZz0mC9Ae4h9mY0oeD/rcDs5xnpKZJ62t7VTWhjfNHwk0xQw3IxvFR8
+         xxmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=lL8EpxBr19NArvK4AEsRyIynXTspHW/eotdbJscrOhI=;
-        b=bWixNMoOogV/JCaiv8g0ed6hAOwnpT67UYg1Yo5J1paoRzcGckQ7b5+5mP9UnKR+11
-         LhmBF/BUz+Ve9DQFBdZvcXeD4P1ZrBgr2oZnGvuE3/6aeDyTEpDLwZs627ilrxCLiNve
-         9j1vZ5vw6qPib8KwPa7/DwbPKA9QFPHxxog1NUGxJxa9m2jb0/f6G4C9en6YvEhCpoUh
-         8LhBawsZY1zrlBO1I0QS3of6srAeEyNz+iUbQij1XzNeEpKN3LIhBtuM3b/0/JziA34T
-         t5rHCoCv6sWg6C7SuEhxZKx+sCJ+F4R0gYjkKlALAemTjjYswEUxPOR+os7E7Fe+kHyS
-         YbkA==
-X-Gm-Message-State: AJIora85qwqOVam32y8wexwZuMOxyPnzRH5fnMHXABypWeHTorXKNpbV
-        scHexaDhAO1+BStQ/LlTm4PTcg==
-X-Google-Smtp-Source: AGRyM1tznzR5SLJwpDbAfB4r8bj4JU4rX7RmAZdnMd//ppTFcsHXaZB3z2MJgtXtPwjGqfy8yIMmsA==
-X-Received: by 2002:a05:6402:158e:b0:435:7d0f:ac85 with SMTP id c14-20020a056402158e00b004357d0fac85mr5788373edv.93.1656525289448;
-        Wed, 29 Jun 2022 10:54:49 -0700 (PDT)
+        bh=6oHj0nYfa4SdWnhe5zSLFghfdPLCAvgXfoVqQh8QTVE=;
+        b=W2AJB6CvKS5ok/MltbnKxWdXAKBlEBRwWBaAcHOEMwdpjLS4bDeMxTvYpWVOZ+ypo3
+         DiBEhu6LVaSPDvpEaHwZh8j3CdNaT/ZSid1aGKwQRa0/j8NbaYz6rg4ZJ/rBedO3Wi+w
+         W5BLNSbkDliCr3Qw5HA859vUdostBVEaFEcPDH8yOUm04t411qhSGrkRWMi3pVfdc9VG
+         URNbi/lSsHdpopMiNlbigLEUv2iqDz6Quq1L+aIg4NsUUT5tAj0kkBSAlPok/fSNEfZ6
+         mk7o5ctx+VE1U/VtANBbN1jH7NxFzddtZR7RTNJKr0bv0AllgLUQhs+G4MrJJlEkTMR9
+         Z+Zg==
+X-Gm-Message-State: AJIora9SvXoIVzZrjsrPM5ttRLKhMa6n1Zc6/Jbv7nwKh5TS6yTfT+Eq
+        Rw+lujP3CqYHgvOudFQr19lP9w==
+X-Google-Smtp-Source: AGRyM1s/T0RjbrVgdgRykZIcRKe/wPrgddPdqxDKeZuyxQfmK8nL3iIs+NQ1u0pA8nC/MKESVZ65kg==
+X-Received: by 2002:a17:906:a10e:b0:6f3:e70b:b572 with SMTP id t14-20020a170906a10e00b006f3e70bb572mr4605172ejy.546.1656525379833;
+        Wed, 29 Jun 2022 10:56:19 -0700 (PDT)
 Received: from [192.168.0.187] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z4-20020a1709060f0400b00722f069fd40sm7930242eji.159.2022.06.29.10.54.47
+        by smtp.gmail.com with ESMTPSA id i21-20020a508715000000b004357558a243sm11822833edb.55.2022.06.29.10.56.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jun 2022 10:54:48 -0700 (PDT)
-Message-ID: <745091fe-dcf7-cdde-3b81-f3ea516bd9fb@linaro.org>
-Date:   Wed, 29 Jun 2022 19:54:46 +0200
+        Wed, 29 Jun 2022 10:56:19 -0700 (PDT)
+Message-ID: <2ad286fb-b215-9c45-ab34-54354e3bb422@linaro.org>
+Date:   Wed, 29 Jun 2022 19:56:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v6 03/14] dt-bindings: input: Add fsl,scu-key yaml file
+Subject: Re: [PATCH v6 04/14] dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
 Content-Language: en-US
 To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -91,9 +91,9 @@ To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-4-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-5-viorel.suman@oss.nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220629164414.301813-4-viorel.suman@oss.nxp.com>
+In-Reply-To: <20220629164414.301813-5-viorel.suman@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -111,19 +111,87 @@ On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
 > 
 > In order to replace the fsl,scu txt file from bindings/arm/freescale,
 > we need to split it between the right subsystems. This patch documents
-> separately the 'keys' child node of the SCU main node.
+> separately the 'ocotp' child node of the SCU main node.
 > 
 > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 > Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
 > ---
->  .../bindings/input/fsl,scu-key.yaml           | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/fsl,scu-key.yaml
+>  .../bindings/nvmem/fsl,scu-ocotp.yaml         | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml b/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
+> new file mode 100644
+> index 000000000000..a8972acb1b01
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/nvmem/fsl,scu-ocotp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: i.MX SCU Client Device Node - OCOTP bindings based on SCU Message Protocol
+> +
+> +maintainers:
+> +  - Dong Aisheng <aisheng.dong@nxp.com>
+> +
+> +description: i.MX SCU Client Device Node
+> +  Client nodes are maintained as children of the relevant IMX-SCU device node.
+> +  Detailed bindings are described in bindings/nvmem/nvmem.txt
 
-Assuming all patches are taken independently:
+Skip last sentence, does not make sense anymore.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +
+> +allOf:
+> +  - $ref: "nvmem.yaml#"
+
+Don't mix quotes. I mentioned it last time, although in other place.
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,imx8qm-scu-ocotp
+> +      - fsl,imx8qxp-scu-ocotp
+> +
+> +patternProperties:
+> +  '^mac@[0-9a-f]*$':
+> +    type: object
+> +    description:
+> +      MAC address.
+> +
+> +    properties:
+> +      reg:
+> +        description:
+> +          Byte offset within OCOTP where the MAC address is stored
+> +        maxItems: 1
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    imx8qx-ocotp {
+
+Just "ocotp" (generic node naming).
+
+> +        compatible = "fsl,imx8qxp-scu-ocotp";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        fec_mac0: mac@2c4 {
+> +            reg = <0x2c4 6>;
+> +        };
+> +    };
 
 
 Best regards,
