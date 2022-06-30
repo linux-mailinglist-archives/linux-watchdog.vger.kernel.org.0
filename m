@@ -2,64 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE787562196
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Jun 2022 20:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6FC5621A9
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Jun 2022 20:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236527AbiF3SBx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 30 Jun 2022 14:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S236550AbiF3SDT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Jun 2022 14:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbiF3SBj (ORCPT
+        with ESMTP id S236407AbiF3SDO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 30 Jun 2022 14:01:39 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1803916C
-        for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 11:01:36 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id k20so6198015edj.13
-        for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 11:01:36 -0700 (PDT)
+        Thu, 30 Jun 2022 14:03:14 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2029EF587
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 11:03:11 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ge10so40518247ejb.7
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 11:03:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oP65LAT/fd0C6OnRp3Ub9OQHA8VbKhPvXbniEJ3nVeM=;
-        b=okhkRQ59JELGFs++y1bGscG5q+VXfKQlxDjG9RGRLYXwjDJN/mCw0UvDSDhJahe+lg
-         kpEd0AdWlbeQcdPmXaBpHZztPo5tSKlkHwcZ9Om/U7Iv0l2AKOHwf7gBjJfy8Jm3CDOg
-         8rdLIRAWUmria9z0tixF4TJb2UB/WJ0sL7nkFpkzp70XkHp0vtgpLLGmbUXSEbbQNsEl
-         Q5wxyUrRxovbmuzBYy895n3/qV3cjBv6E7TfaV47hI1ctNj4KUoHX0+ZgIi5gGadU72h
-         tVJ+P7eIPxKgVjTGnmuRJVRdvpAlvX4cLZhPcPpdaTE/srih/ygqYivQkaEXd87YGLnf
-         E17w==
+        bh=0uH+swHPlJ9RojSxikcvtTdTm2Ft6StJ5nSjXFZviuQ=;
+        b=mJyJ63L6G3LfrFNNOPQL+JCUsu4K66zLibFmLn6QDWgTUkWw45WcS1kbpltS66qyoC
+         h5dyEEH5b8qkX/57TOgz6MWYJlU6EmcnHvNQ6DICRXnrUNKfKv5z47oRruC40/ELf0Dq
+         8XBH+e/zPZeg/uRg51ZCSrbIo0A6ARJP5QT+yr+/eCNyC78bDz6Y9fl8xEt8sq4068vA
+         BkIx4SyM4HuXLLHPn66lSEjJ20PxaMzytdPjOo043SlTKNiiS7YtqXPfQBcSd2CF+Ur9
+         zsCmOjU11pUatUz+iJ3N3i96JGTxXGJSjWgv2RtcDCyiHbmZBjYYXeK8S+MRck82xk6H
+         O2Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=oP65LAT/fd0C6OnRp3Ub9OQHA8VbKhPvXbniEJ3nVeM=;
-        b=YlksZfFHpYI+SkKoAt1iuwHeZccUzcnZJOhugRs0UiuzGdSvFeMVcwp6r9v3c5eTXJ
-         MzyBBIIpbr4VQ0frkzug6hgyLAQbTrk/oIk5N3V5OAXabEDDNK5sSe1WmqN7YaX6H+tt
-         Okkc3m5ajGqb8VnCSurdbT044iSJlxRiKIkRLVWmTYJIINBJmJEc4xa4fcQpI5jLTZoU
-         n7D4Py5WE/AuToYTgodxFmjtC340LILE/CoGo4jSBq9zXqduNkhZCDCQk5LeOFR/D1N3
-         vZkKLnRKcuYVVswP0wTfcJdFiITz8KUFxVOVOFve2Vd7MLgXIolXH4vHSNi+wwwib4ad
-         u9+A==
-X-Gm-Message-State: AJIora886yYyUT6cUJRbRpf77MhRdMjoSdFv/lAf2G0xR7zPg6oYzVjU
-        0JhwqWgcXvFLuS+wSePjnqDOXw==
-X-Google-Smtp-Source: AGRyM1scmyht18TKC54qdhLFMpF/tV95/vYdn9nuKK0yCFXvLEMAhyAbNUUh6YAaGoMZvqq3eZSgKg==
-X-Received: by 2002:a05:6402:2c4:b0:435:8ce0:aef8 with SMTP id b4-20020a05640202c400b004358ce0aef8mr13310561edx.140.1656612095033;
-        Thu, 30 Jun 2022 11:01:35 -0700 (PDT)
+        bh=0uH+swHPlJ9RojSxikcvtTdTm2Ft6StJ5nSjXFZviuQ=;
+        b=SzqbcgKbgzPa5G52sL8Fym2M7Tj72sugj6edbVfHiQqrvHniVbW6yJuAdjSVHDymPP
+         97eGC5x/UKxrJwdmzA3yefXXr/P9xvlW9i2OlfPK3zj7yMEa2my80Io3RS7iuJNB7r9p
+         W602kKyTzQzaYYO77N2fxcChZN7g06tL1/9EU5NbcoVoLwzNq0I3BFepGkyp/YradSyj
+         33A3JWe0Fylwtkbr2Q8KNFfBiJOt/VmGS17jVY5+5IN0BBXPLoxhzjzqN63QHZq7C+S6
+         PcscgvnYKmiOygVLOhJuccsdSJUue8ussL22JmVHR0X/7vcqnk6kvjy4NXhg6V2aOsM/
+         m14Q==
+X-Gm-Message-State: AJIora/OcMAdp0M0Wp7DxYG6JfiOoRUTGnvSJ+PCQQhckFnzznfk3wqn
+        MTiyy7lkoa57H/RSOUDTiw1vBw==
+X-Google-Smtp-Source: AGRyM1tYnKg/a71RXO4vS6NNUZ8q1v3nVBYI/1+tx/313mwWo6s1xK6fPmKQRUx5yy1KucH3TezGwg==
+X-Received: by 2002:a17:906:749b:b0:722:d9ce:fac3 with SMTP id e27-20020a170906749b00b00722d9cefac3mr9698020ejl.699.1656612190144;
+        Thu, 30 Jun 2022 11:03:10 -0700 (PDT)
 Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kt26-20020a170906aada00b00726dbb18b59sm3626737ejb.130.2022.06.30.11.01.32
+        by smtp.gmail.com with ESMTPSA id k10-20020a170906970a00b006fea59ef3a5sm9427520ejx.32.2022.06.30.11.03.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 11:01:34 -0700 (PDT)
-Message-ID: <5d8b2044-5ca6-c90c-57b4-afbb2ae20dde@linaro.org>
-Date:   Thu, 30 Jun 2022 20:01:31 +0200
+        Thu, 30 Jun 2022 11:03:09 -0700 (PDT)
+Message-ID: <c4f26508-45bb-d553-36b9-27ace8bed71f@linaro.org>
+Date:   Thu, 30 Jun 2022 20:03:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v6 10/14] arm64: dts: freescale: imx8qxp: Remove
- unnecessary clock related entries
+Subject: Re: [PATCH v6 00/14] dt-bindings: arm: freescale: Switch fsl,scu from
+ txt to yaml
 Content-Language: en-US
-To:     Viorel Suman <viorel.suman@nxp.com>
-Cc:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -82,6 +81,7 @@ Cc:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>,
         Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
         Oliver Graute <oliver.graute@kococonnector.com>,
         Liu Ying <victor.liu@nxp.com>,
         Mirela Rabulea <mirela.rabulea@nxp.com>,
@@ -92,16 +92,15 @@ Cc:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
- <20220629164414.301813-11-viorel.suman@oss.nxp.com>
- <483d5115-4027-e811-8bce-15da6c7c660f@linaro.org>
- <20220630083636.2c7mclmbq3tjma2j@fsr-ub1664-116>
+ <0e515289-9d3c-9c61-950d-09c14b33c8c2@linaro.org>
+ <20220630121042.7kwomc4jc4zppoyw@fsr-ub1664-116>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220630083636.2c7mclmbq3tjma2j@fsr-ub1664-116>
+In-Reply-To: <20220630121042.7kwomc4jc4zppoyw@fsr-ub1664-116>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,66 +108,34 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 30/06/2022 10:36, Viorel Suman wrote:
-> On 22-06-29 20:04:43, Krzysztof Kozlowski wrote:
+On 30/06/2022 14:13, Viorel Suman (OSS) wrote:
+> On 22-06-29 19:51:06, Krzysztof Kozlowski wrote:
 >> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
 >>> From: Viorel Suman <viorel.suman@nxp.com>
 >>>
->>> "clocks" and "clock-names" are not used the driver, so
->>> remove them in order to match the yaml definition.
+>>> Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
+>>>   * Updated according to Krzysztof Kozlowski comments
+>>>
 >>
->> So this explains the unexpected change in the bindings... but actually
->> it does not explain whether it is correct or not. Just because driver
->> does not use it, is not a proof that clocks are not there. In different
->> OS/implementation this DTS might break stuff, so basically it is ABI
->> break. DTS should describe the hardware fully, so if the clocks are
->> there, should be in DTS regardless of the driver.
+>> My comment a about removal of each part of TXT bindings in each patch,
+>> was not addressed. Your approach makes it more difficult to read patches
+>> and makes sense only if each subsystem maintainer will take the patches
+>> (separately). If the patches are going through one tree, then better to
+>> remove the TXT gradually.
+>>
+>> So the question - who is going to take each of the patches?
 > 
 > Hi Krzysztof,
 > 
-> Both XTAL clocks - 24MHz and 32kHz - are still defined in DTSI files, see for instance in
-> arch/arm64/boot/dts/freescale/imx8qxp.dtsi :
-> ---------------
->         xtal32k: clock-xtal32k {
->                 compatible = "fixed-clock";
->                 #clock-cells = <0>;
->                 clock-frequency = <32768>;
->                 clock-output-names = "xtal_32KHz";
->         };
+> I just understood the context of your comment, will do it in the next version.
 > 
->         xtal24m: clock-xtal24m {
->                 compatible = "fixed-clock";
->                 #clock-cells = <0>;
->                 clock-frequency = <24000000>;
->                 clock-output-names = "xtal_24MHz";
->         };
-> ---------------
-> Both can be seen in /sys/kernel/debug/clk/clk_summary once boot is complete, both can be referenced
-> in any DTS node, so there is no ABI break.
+> Assuming TXT is removed from aggregating TXT - fsl,scu.txt - gradually, do you expect the
+> removed to be added into the aggregating YAML - fsl,scu.yaml - also gradually within the
+> same patch ?
 
-ABI break is not relevant to the fixed clocks being or not being defined
-in the DTS. You have a device which was taking the clock inputs, so the
-clocks stayed enabled.
-
-Now, you don't take these inputs, so for example the clocks are getting
-disabled as not used.
-
-> 
-> "DTS should describe the hardware fully" - this is true in case the OS is supposed to controll the
-> hardware fully. i.MX8 System Controller Unit concept implies resources being allocated and managed
-> by SCU, there is no direct OS access to some hardware. SCU actually defines the hardware environment
-> the OS is being able to see and run within. SCU is able to define several such isolated hardware
-> environments, each having its own OS running. So, in this particular case - i.MX8 SCU concept -
-> DTS should describe the hardware from the perspective of the hardware environment exposed by SCU to
-> OS.
-
-OK, that sounds good, but the question about these clocks remain - are
-they inputs to the SCU or not.
-
-Regardless whether they are actual input or not, you used not
-appropriate argument here - that Linux OS implementation does not use
-them. The proper argument is - whether the hardware environment has them
-connected or not.
+Each patch making the conversion should remove the piece being
+converted. Then finally the patch adding fsl,scu.yaml should remove the
+last pieces (remaining ones).
 
 Best regards,
 Krzysztof
