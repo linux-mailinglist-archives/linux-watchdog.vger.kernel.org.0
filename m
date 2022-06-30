@@ -2,87 +2,105 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1052F561E77
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Jun 2022 16:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE787562196
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Jun 2022 20:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235777AbiF3Oxx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 30 Jun 2022 10:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S236527AbiF3SBx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Jun 2022 14:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiF3Oxw (ORCPT
+        with ESMTP id S236536AbiF3SBj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:53:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73A21B798
-        for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 07:53:51 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6vXc-0002Re-Vr; Thu, 30 Jun 2022 16:53:13 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6vXO-003bqn-HG; Thu, 30 Jun 2022 16:53:02 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1o6vXR-000AqK-Co; Thu, 30 Jun 2022 16:53:01 +0200
-Message-ID: <c01103ae5582cda01708c25ddc3f9bb538c67ab0.camel@pengutronix.de>
-Subject: Re: [PATCH v6 08/17] reset: npcm: using syscon instead of device
- data
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
+        Thu, 30 Jun 2022 14:01:39 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1803916C
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 11:01:36 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id k20so6198015edj.13
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 11:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oP65LAT/fd0C6OnRp3Ub9OQHA8VbKhPvXbniEJ3nVeM=;
+        b=okhkRQ59JELGFs++y1bGscG5q+VXfKQlxDjG9RGRLYXwjDJN/mCw0UvDSDhJahe+lg
+         kpEd0AdWlbeQcdPmXaBpHZztPo5tSKlkHwcZ9Om/U7Iv0l2AKOHwf7gBjJfy8Jm3CDOg
+         8rdLIRAWUmria9z0tixF4TJb2UB/WJ0sL7nkFpkzp70XkHp0vtgpLLGmbUXSEbbQNsEl
+         Q5wxyUrRxovbmuzBYy895n3/qV3cjBv6E7TfaV47hI1ctNj4KUoHX0+ZgIi5gGadU72h
+         tVJ+P7eIPxKgVjTGnmuRJVRdvpAlvX4cLZhPcPpdaTE/srih/ygqYivQkaEXd87YGLnf
+         E17w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oP65LAT/fd0C6OnRp3Ub9OQHA8VbKhPvXbniEJ3nVeM=;
+        b=YlksZfFHpYI+SkKoAt1iuwHeZccUzcnZJOhugRs0UiuzGdSvFeMVcwp6r9v3c5eTXJ
+         MzyBBIIpbr4VQ0frkzug6hgyLAQbTrk/oIk5N3V5OAXabEDDNK5sSe1WmqN7YaX6H+tt
+         Okkc3m5ajGqb8VnCSurdbT044iSJlxRiKIkRLVWmTYJIINBJmJEc4xa4fcQpI5jLTZoU
+         n7D4Py5WE/AuToYTgodxFmjtC340LILE/CoGo4jSBq9zXqduNkhZCDCQk5LeOFR/D1N3
+         vZkKLnRKcuYVVswP0wTfcJdFiITz8KUFxVOVOFve2Vd7MLgXIolXH4vHSNi+wwwib4ad
+         u9+A==
+X-Gm-Message-State: AJIora886yYyUT6cUJRbRpf77MhRdMjoSdFv/lAf2G0xR7zPg6oYzVjU
+        0JhwqWgcXvFLuS+wSePjnqDOXw==
+X-Google-Smtp-Source: AGRyM1scmyht18TKC54qdhLFMpF/tV95/vYdn9nuKK0yCFXvLEMAhyAbNUUh6YAaGoMZvqq3eZSgKg==
+X-Received: by 2002:a05:6402:2c4:b0:435:8ce0:aef8 with SMTP id b4-20020a05640202c400b004358ce0aef8mr13310561edx.140.1656612095033;
+        Thu, 30 Jun 2022 11:01:35 -0700 (PDT)
+Received: from [192.168.0.190] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id kt26-20020a170906aada00b00726dbb18b59sm3626737ejb.130.2022.06.30.11.01.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 11:01:34 -0700 (PDT)
+Message-ID: <5d8b2044-5ca6-c90c-57b4-afbb2ae20dde@linaro.org>
+Date:   Thu, 30 Jun 2022 20:01:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 10/14] arm64: dts: freescale: imx8qxp: Remove
+ unnecessary clock related entries
+Content-Language: en-US
+To:     Viorel Suman <viorel.suman@nxp.com>
+Cc:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Date:   Thu, 30 Jun 2022 16:53:01 +0200
-In-Reply-To: <CAP6Zq1htXxpBR-=FW=8grzspGcLPDM5qiMUPNqh7wNiO=0=HAA@mail.gmail.com>
-References: <20220630103606.83261-1-tmaimon77@gmail.com>
-         <20220630103606.83261-9-tmaimon77@gmail.com>
-         <63f8d70ad9c657890669e9c32775632af4e36995.camel@pengutronix.de>
-         <CAP6Zq1htXxpBR-=FW=8grzspGcLPDM5qiMUPNqh7wNiO=0=HAA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-11-viorel.suman@oss.nxp.com>
+ <483d5115-4027-e811-8bce-15da6c7c660f@linaro.org>
+ <20220630083636.2c7mclmbq3tjma2j@fsr-ub1664-116>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220630083636.2c7mclmbq3tjma2j@fsr-ub1664-116>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,103 +109,66 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Do, 2022-06-30 at 14:20 +0300, Tomer Maimon wrote:
-> Hi Philipp,
+On 30/06/2022 10:36, Viorel Suman wrote:
+> On 22-06-29 20:04:43, Krzysztof Kozlowski wrote:
+>> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+>>> From: Viorel Suman <viorel.suman@nxp.com>
+>>>
+>>> "clocks" and "clock-names" are not used the driver, so
+>>> remove them in order to match the yaml definition.
+>>
+>> So this explains the unexpected change in the bindings... but actually
+>> it does not explain whether it is correct or not. Just because driver
+>> does not use it, is not a proof that clocks are not there. In different
+>> OS/implementation this DTS might break stuff, so basically it is ABI
+>> break. DTS should describe the hardware fully, so if the clocks are
+>> there, should be in DTS regardless of the driver.
 > 
-> Thanks for your comment.
+> Hi Krzysztof,
 > 
-> On Thu, 30 Jun 2022 at 13:59, Philipp Zabel <p.zabel@pengutronix.de> wrote:
-> > 
-> > Hi Tomer,
-> > 
-> > On Do, 2022-06-30 at 13:35 +0300, Tomer Maimon wrote:
-> > Using syscon device tree property instead of device data to handle the
-> > NPCM general control registers.
-> > 
-> > In case the syscon not found the code still search for nuvoton,npcm750-gcr
-> > to support DTS backward compatibility.
-> > 
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  drivers/reset/reset-npcm.c | 17 ++++++++---------
-> >  1 file changed, 8 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
-> > index 2ea4d3136e15..431ff2b602c5 100644
-> > --- a/drivers/reset/reset-npcm.c
-> > +++ b/drivers/reset/reset-npcm.c
-> > @@ -138,8 +138,7 @@ static int npcm_reset_xlate(struct reset_controller_dev *rcdev,
-> >  }
-> > 
-> > 
-> >  static const struct of_device_id npcm_rc_match[] = {
-> > -       { .compatible = "nuvoton,npcm750-reset",
-> > -               .data = (void *)"nuvoton,npcm750-gcr" },
-> > +       { .compatible = "nuvoton,npcm750-reset"},
-> > 
-> > Add a space.                                  ^^
-> Will modify in V7
-> > 
-> >         { }
-> >  };
-> > 
-> > 
-> > @@ -155,15 +154,15 @@ static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
-> >         u32 ipsrst1_bits = 0;
-> >         u32 ipsrst2_bits = NPCM_IPSRST2_USB_HOST;
-> >         u32 ipsrst3_bits = 0;
-> > -       const char *gcr_dt;
-> > 
-> > 
-> > -       gcr_dt = (const char *)
-> > -       of_match_device(dev->driver->of_match_table, dev)->data;
-> > -
-> > -       gcr_regmap = syscon_regmap_lookup_by_compatible(gcr_dt);
-> > +       gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "nuvoton,sysgcr");
-> >         if (IS_ERR(gcr_regmap)) {
-> > -               dev_err(&pdev->dev, "Failed to find %s\n", gcr_dt);
-> > -               return PTR_ERR(gcr_regmap);
-> > +               dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr search for nuvoton,npcm750-gcr for Poleg backward compatibility");
-> > 
-> > Is this warning useful to the user? Maybe add suggestion like "please
-> > update the device tree". Also there is no further message if
-> > nuvoton,npcm750-gcr is found and all is well.
+> Both XTAL clocks - 24MHz and 32kHz - are still defined in DTSI files, see for instance in
+> arch/arm64/boot/dts/freescale/imx8qxp.dtsi :
+> ---------------
+>         xtal32k: clock-xtal32k {
+>                 compatible = "fixed-clock";
+>                 #clock-cells = <0>;
+>                 clock-frequency = <32768>;
+>                 clock-output-names = "xtal_32KHz";
+>         };
 > 
-> O.K.
-> I think about two options:
-> 
-> 1. Modify the message "Failed to find nuvoton,sysgcr property, please
-> update the device tree\n Search for nuvoton,npcm750-gcr for Poleg
-> backward compatibility"
+>         xtal24m: clock-xtal24m {
+>                 compatible = "fixed-clock";
+>                 #clock-cells = <0>;
+>                 clock-frequency = <24000000>;
+>                 clock-output-names = "xtal_24MHz";
+>         };
+> ---------------
+> Both can be seen in /sys/kernel/debug/clk/clk_summary once boot is complete, both can be referenced
+> in any DTS node, so there is no ABI break.
 
-I would replace "Search for" with "Using"
-The second line probably should be dev_info() level.
+ABI break is not relevant to the fixed clocks being or not being defined
+in the DTS. You have a device which was taking the clock inputs, so the
+clocks stayed enabled.
 
-> OR
-> 
-> 2.
->         if (IS_ERR(rc->gcr_regmap)) {
->                 dev_warn(&pdev->dev, "Failed to find nuvoton,sysgcr
-> please update the device tree");
->                 rc->gcr_regmap =
-> syscon_regmap_lookup_by_compatible("nuvoton,npcm750-gcr");
->                 if (IS_ERR(rc->gcr_regmap)) {
->                         dev_err(&pdev->dev, "Failed to find
-> nuvoton,npcm750-gcr");
->                         return PTR_ERR(rc->gcr_regmap);
->                 }
->                  dev_info(&pdev->dev, "found nuvoton,npcm750-gcr for
-> Poleg backward compatibility");
->         }
-> 
-> The only problem that I have with option 2 is if our customers will
-> use the latest reset driver and they will not update their device tree
-> they will see all the time the dev_info message.
-> 
-> What do you think?
+Now, you don't take these inputs, so for example the clocks are getting
+disabled as not used.
 
-I'm fine with either. With the "please update DT" prompt it's clear how
-to get rid of the warning.
+> 
+> "DTS should describe the hardware fully" - this is true in case the OS is supposed to controll the
+> hardware fully. i.MX8 System Controller Unit concept implies resources being allocated and managed
+> by SCU, there is no direct OS access to some hardware. SCU actually defines the hardware environment
+> the OS is being able to see and run within. SCU is able to define several such isolated hardware
+> environments, each having its own OS running. So, in this particular case - i.MX8 SCU concept -
+> DTS should describe the hardware from the perspective of the hardware environment exposed by SCU to
+> OS.
 
-regards
-Philipp
+OK, that sounds good, but the question about these clocks remain - are
+they inputs to the SCU or not.
+
+Regardless whether they are actual input or not, you used not
+appropriate argument here - that Linux OS implementation does not use
+them. The proper argument is - whether the hardware environment has them
+connected or not.
+
+Best regards,
+Krzysztof
