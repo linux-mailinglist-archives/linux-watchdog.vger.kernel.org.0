@@ -2,126 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15232560BA4
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jun 2022 23:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4297056139D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Jun 2022 09:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiF2VUc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Jun 2022 17:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S233251AbiF3Hv4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Jun 2022 03:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiF2VU3 (ORCPT
+        with ESMTP id S233038AbiF3Hvz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Jun 2022 17:20:29 -0400
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99113F79;
-        Wed, 29 Jun 2022 14:20:28 -0700 (PDT)
-Received: from [37.161.29.0] (port=43545 helo=[192.168.131.30])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1o6f6m-000BzC-Qd;
-        Wed, 29 Jun 2022 23:20:25 +0200
-Message-ID: <d682fb60-c254-f89e-5d6d-cdf7aa752939@lucaceresoli.net>
-Date:   Wed, 29 Jun 2022 23:20:04 +0200
+        Thu, 30 Jun 2022 03:51:55 -0400
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24403D485
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 00:51:54 -0700 (PDT)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id CB74921AB6; Thu, 30 Jun 2022 09:51:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1656575483; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=tP5/GjwY6P3dJE5lktNiPX29qLYIu885gflloP3laj2y6pLINJfoJNX8OdkXM4k+L
+         v+/bz9qq0ZWPR6liT3NL3W+QQzARifBgulbaroWBQUkY/Q27AfSr0r1eRLHx8O81C7
+         N1ZXJdaEMQWou6MYuigsuhfkEKz8omim3kULlfdXecqn4EdoA6X0OWXbVpJuxo79IY
+         T4hhLNyqir9T5QHsBqjb64QF8yaHoxaYph3wK9nCnUcfVDDRBiSAxevkJx3yQyV7oe
+         OlUcikNOTuokPTfq5naBtQXXNHxa7/JIxhMz4ekqTPP3gpkDu19PDLrlJYx6JoBIPd
+         6Mqu9YfgvZJGA==
+Received: by mail.olerise.pl for <linux-watchdog@vger.kernel.org>; Thu, 30 Jun 2022 07:51:21 GMT
+Message-ID: <20220630084500-0.1.p.bbcl.0.d7fponfsve@olerise.pl>
+Date:   Thu, 30 Jun 2022 07:51:21 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@olerise.pl>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mediatek@lists.infradead.org
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-Content-Language: en-US
-In-Reply-To: <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+Dzie=C5=84 dobry,
 
-[keeping only individuals and lists in Cc to avoid bounces]
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-On 28/06/22 16:03, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <uwe@kleine-koenig.org>
-> 
-> The value returned by an i2c driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-For versaclock:
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
-> diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
-> index e7be3e54b9be..657493ecce4c 100644
-> --- a/drivers/clk/clk-versaclock5.c
-> +++ b/drivers/clk/clk-versaclock5.c
-> @@ -1138,7 +1138,7 @@ static int vc5_probe(struct i2c_client *client)
->  	return ret;
->  }
->  
-> -static int vc5_remove(struct i2c_client *client)
-> +static void vc5_remove(struct i2c_client *client)
->  {
->  	struct vc5_driver_data *vc5 = i2c_get_clientdata(client);
->  
-> @@ -1146,8 +1146,6 @@ static int vc5_remove(struct i2c_client *client)
->  
->  	if (vc5->chip_info->flags & VC5_HAS_INTERNAL_XTAL)
->  		clk_unregister_fixed_rate(vc5->pin_xin);
-> -
-> -	return 0;
->  }
->  
->  static int __maybe_unused vc5_suspend(struct device *dev)
 
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
--- 
-Luca
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
