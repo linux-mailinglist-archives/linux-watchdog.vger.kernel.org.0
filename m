@@ -2,60 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2881566008
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Jul 2022 02:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E5156604E
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Jul 2022 02:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiGEAM5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 4 Jul 2022 20:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
+        id S231523AbiGEAkJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 4 Jul 2022 20:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiGEAM5 (ORCPT
+        with ESMTP id S229734AbiGEAkI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 4 Jul 2022 20:12:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D90B4A6;
-        Mon,  4 Jul 2022 17:12:56 -0700 (PDT)
+        Mon, 4 Jul 2022 20:40:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9892BEA;
+        Mon,  4 Jul 2022 17:40:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B408DB815D5;
-        Tue,  5 Jul 2022 00:12:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2160FC341C7;
-        Tue,  5 Jul 2022 00:12:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25C4E616ED;
+        Tue,  5 Jul 2022 00:40:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD839C3411E;
+        Tue,  5 Jul 2022 00:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656979973;
-        bh=yqliNiCUKo7uqi6LYKqvM7rpzqhyuqPZ1aVCxRrSk9Q=;
+        s=k20201202; t=1656981606;
+        bh=SP8Jaem1tPIKC61mxYfgYhbEnJ0OUuIXySTXu0B8/J8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aqXPqrKWCYCvsMnkZ25um7Kp9aK1Bf3OxFBtJRICuOQP/C42gjbUpVpmlYrUTlWmz
-         BG1bxuyd5l5X8NDUt8h79XLkNDSNXRuK2RL4BRLdmY0H6T+qeUTmRK3+7B/4Ndb1S3
-         ZY+AfFUxjCzaddhniW9XYz64v8OiUj84uugvAsvgjxe3tDOpIDAmZPslupemaigH6v
-         iEeChM8nMEER9hQXqVeUVyIes6VQR8sl9Nl7A+wA1nJbCpggV9GJCoj37VBNHYyPTM
-         bzalkQQCMdVJnLy7Pn5J/mKTX0J+1Fw7AU6baZWKHMOvJTyxFaETuG6QzATELGfBiq
-         /rXQGsux25tPg==
-Received: by pali.im (Postfix)
-        id 62D7279F; Tue,  5 Jul 2022 02:12:49 +0200 (CEST)
-Date:   Tue, 5 Jul 2022 02:12:49 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Tzung-Bi Shih <tzungbi@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        b=IQ1EZQO59cjvnku9rPPMRRLGYX9sCwIw7GGDkayK1eKN9UzbL6bRbTbzz8DVm8fWZ
+         n1NDsUpT7LhXoKmX/ZTm8BDcsriryl3BG7moNtSmaPzmjytHc5GyDqxLQW2GWqXKd2
+         U1jiha42NBbsbbmdINYFFRlHogMTxwbJfxODx5IStmMQ4Qzvj9fSvDbl7h5cb3RpmK
+         FZgMbIV1GHxjpUFTvqUsiaQ0C/skH46cF2vN3/22l3wcoF8JdhgSDI0bFz/pGRee4C
+         WMAofjVrFJDp8pbwJB8H8dxlEwrhYIXTm4Xfy5giTfCuVifST8kNCUgbrnuxTGpqH5
+         nkM1TnJyy8BLA==
+Date:   Tue, 5 Jul 2022 08:39:55 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] watchdog: max63xx_wdt: Add support for specifying
- WDI logic via GPIO
-Message-ID: <20220705001249.3art3nadx7iyfg67@pali>
-References: <20220429131349.21229-1-pali@kernel.org>
- <20220429131349.21229-2-pali@kernel.org>
- <YnCoQUGQsXIfbowQ@google.com>
- <6f69677c-18d9-abd9-93d7-cf1f29603ed6@roeck-us.net>
- <20220503220550.3jczn2hzc5me34qj@pali>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 00/14] dt-bindings: arm: freescale: Switch fsl,scu
+ from txt to yaml
+Message-ID: <20220705003955.GO819983@dragon>
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <0e515289-9d3c-9c61-950d-09c14b33c8c2@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503220550.3jczn2hzc5me34qj@pali>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <0e515289-9d3c-9c61-950d-09c14b33c8c2@linaro.org>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,71 +87,22 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wednesday 04 May 2022 00:05:50 Pali Rohár wrote:
-> On Monday 02 May 2022 21:37:16 Guenter Roeck wrote:
-> > On 5/2/22 20:57, Tzung-Bi Shih wrote:
-> > > On Fri, Apr 29, 2022 at 03:13:49PM +0200, Pali Rohár wrote:
-> > > > @@ -27,6 +27,7 @@
-> > > >   #include <linux/io.h>
-> > > >   #include <linux/slab.h>
-> > > >   #include <linux/property.h>
-> > > > +#include <linux/gpio/consumer.h>
-> > > 
-> > > It would be better to keep them alphabetically.  Anyway, they aren't sorted
-> > > originally...
-> > > 
-> > > > +static void max63xx_gpio_ping(struct max63xx_wdt *wdt)
-> > > > +{
-> > > > +	spin_lock(&wdt->lock);
-> > > 
-> > > Does it really need to acquire the lock?  It looks like the lock is to prevent
-> > > concurrent accesses to the mmap in max63xx_mmap_ping() and max63xx_mmap_set().
-> > > 
+On Wed, Jun 29, 2022 at 07:51:06PM +0200, Krzysztof Kozlowski wrote:
+> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+> > From: Viorel Suman <viorel.suman@nxp.com>
 > > 
-> > Actually, that doesn't work at all. spin_lock() directly contradicts
-> > with gpiod_set_value_cansleep().
-> > 
-> > > > +	gpiod_set_value_cansleep(wdt->gpio_wdi, 1);
-> > > > +	udelay(1);
-> > > 
-> > > Doesn't it need to include <linux/delay.h> for udelay()?
-> > > 
-> > > > @@ -225,10 +240,19 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
-> > > >   		return -EINVAL;
-> > > >   	}
-> > > > +	wdt->gpio_wdi = devm_gpiod_get(dev, NULL, GPIOD_FLAGS_BIT_DIR_OUT);
-> > > > +	if (IS_ERR(wdt->gpio_wdi) && PTR_ERR(wdt->gpio_wdi) != -ENOENT)
-> > > 
-> > > Use devm_gpiod_get_optional() to make the intent clear.  Also, it gets rid of
-> > > the check for -ENOENT.
-> > > 
-> > > > +		return dev_err_probe(dev, PTR_ERR(wdt->gpio_wdi),
-> > > > +				     "unable to request gpio: %ld\n",
-> > > > +				     PTR_ERR(wdt->gpio_wdi));
-> > > 
-> > > It doesn't need to again print for PTR_ERR(wdt->gpio_wdi).  dev_err_probe()
-> > > prints the error.
-> > > 
-> > > >   	err = max63xx_mmap_init(pdev, wdt);
-> > > >   	if (err)
-> > > >   		return err;
-> > > > +	if (!IS_ERR(wdt->gpio_wdi))
-> > > > +		wdt->ping = max63xx_gpio_ping;
-> > > 
-> > > Thus, the max63xx_gpio_ping() overrides max63xx_mmap_ping() if the GPIO was
-> > > provided?  It would be better to mention the behavior in the commit message.
-> > > 
-> > > Also, could both the assignments of `wdt->gpio_wdi` and `wdt->ping` happen
-> > > after max63xx_mmap_init()?
+> > Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
+> >   * Updated according to Krzysztof Kozlowski comments
 > > 
 > 
-> Hello! I'm going to look at all these issues. Recently I sent max63
-> watchdog driver also into U-Boot and seems that I mixed DTS and driver
-> code between U-Boot and Kernel... and tested something mixed.
+> My comment a about removal of each part of TXT bindings in each patch,
+> was not addressed. Your approach makes it more difficult to read patches
+> and makes sense only if each subsystem maintainer will take the patches
+> (separately). If the patches are going through one tree, then better to
+> remove the TXT gradually.
 > 
-> I will do new testing again, and will check that I'm testing correct
-> code.
+> So the question - who is going to take each of the patches?
 
-Hello! Now I sent a new version V3. I have tested it on PowerPC P2020
-based board where watchdog registers are exported via CPLD and new V3
-version is working fine.
+I can take the series through IMX tree if that makes the most sense.
+
+Shawn
