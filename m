@@ -2,162 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5B0566827
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Jul 2022 12:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C975156710F
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Jul 2022 16:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbiGEKht (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 5 Jul 2022 06:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S230166AbiGEOaa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 5 Jul 2022 10:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbiGEKhc (ORCPT
+        with ESMTP id S229648AbiGEOaa (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 5 Jul 2022 06:37:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79E2B1D6
-        for <linux-watchdog@vger.kernel.org>; Tue,  5 Jul 2022 03:37:31 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o8fuq-0001LC-19; Tue, 05 Jul 2022 12:36:24 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o8fue-004XxA-J7; Tue, 05 Jul 2022 12:36:16 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o8fuh-0038F6-8t; Tue, 05 Jul 2022 12:36:15 +0200
-Date:   Tue, 5 Jul 2022 12:36:15 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Wolfram Sang <wsa@kernel.org>, Guenter Roeck <groeck@chromium.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, chrome-platform@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
-Message-ID: <20220705103615.ceeq7rku53x743ps@pengutronix.de>
-References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
- <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
- <20220705120852.049dc235@endymion.delvare>
+        Tue, 5 Jul 2022 10:30:30 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465E6113E
+        for <linux-watchdog@vger.kernel.org>; Tue,  5 Jul 2022 07:30:28 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id z12so8234080wrq.7
+        for <linux-watchdog@vger.kernel.org>; Tue, 05 Jul 2022 07:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9da/QeGRcCpJ3hrNNbUxLvYG+ekB8n1mPdVYqACHlDE=;
+        b=qJ1jQ4Djp+QCkJQZAfjaPN1oWlWpXMqSQ7m1QtXXjO1NjnA2KMKPRbfyFYbsGMc9Mk
+         ckvOYj5vSNE3GJ6eYUhFTR3DSG7OD25RC3cIfWY968lh20+Z8ssqVY+TrQ3mit9Ydnjs
+         y/3/Mm3p/Zpj/dO2+AIAYwmBUFsgRYpI7A/f+V6db+/I3sPm4De5fxXdPXdb9P+08iuZ
+         yMLSiPQ9zPhWjNvWAmDlt+LALLKMIWe3t/ifboqldxkOcF+ZASqx/E6P3LGhI+Zsvcxo
+         +5nEgBXHNbPVhc797wnVMsDM9bMjG5j4SsRA3x7dVK7UmHB+zRstrfjdnoW0W77tXULt
+         07Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9da/QeGRcCpJ3hrNNbUxLvYG+ekB8n1mPdVYqACHlDE=;
+        b=CPrfKvE0CNRZUgtL57ZItyww0hGGVJP/46+I2TbWTPJo8GikT86Gjkanum9XkIih8d
+         xms7J4h6PziX7MrCUHXJulWn9PXi1QVKKQuGz7jAkJtBko8x2N0YViFlmXa5GvpvpZEx
+         4r8D4cuQEw4D0yseNinExb9SzsCVjt9uUTeY9f1EVgxYDQs5Y3VLtDSYWyMl1N3Z0rxp
+         7awFzIggE8G9xHcGVkgg8HNcCOnabDB2UgbkliaN+lfo5BSquRxioIu4jI0Cbls3xz92
+         qpHMkgNj9snKDniu789ZxRKeuRIcKbd00wqO0OtEIGUWdT+wsWbx8iiYJCGfwjL+jMUU
+         7Xyw==
+X-Gm-Message-State: AJIora/G2oiXcNgUnBRoA2BofPckK/U271ZcbwFjxCieV5aWBJhlWga6
+        jJpa5ir/G12nHPuD4xq94zS9vg==
+X-Google-Smtp-Source: AGRyM1uIuR4D4oP9T7niGz4yUtI/9LS6rl4g2JOCPOUNle/hM11AhMMJzP+iEitvCALdmqMvJWVYig==
+X-Received: by 2002:a05:6000:1011:b0:21d:4212:854a with SMTP id a17-20020a056000101100b0021d4212854amr24909543wrx.179.1657031426855;
+        Tue, 05 Jul 2022 07:30:26 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id c8-20020a05600c0a4800b003a02f957245sm18525743wmq.26.2022.07.05.07.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 07:30:26 -0700 (PDT)
+From:   Philippe Boos <pboos@baylibre.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Philippe Boos <pboos@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] watchdog: meson: keep running if already active
+Date:   Tue,  5 Jul 2022 16:24:44 +0200
+Message-Id: <20220705142444.17063-1-pboos@baylibre.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gut2agzhpaayxotv"
-Content-Disposition: inline
-In-Reply-To: <20220705120852.049dc235@endymion.delvare>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+If the watchdog is already running (e.g.: started by bootloader) then
+the kernel driver should keep the watchdog active but the amlogic driver
+turns it off.
 
---gut2agzhpaayxotv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Let the driver fix the clock rate then restart the watchdog if it was
+previously active.
 
-On Tue, Jul 05, 2022 at 12:08:52PM +0200, Jean Delvare wrote:
-> On Tue, 28 Jun 2022 16:03:12 +0200, Uwe Kleine-K=F6nig wrote:
-> > From: Uwe Kleine-K=F6nig <uwe@kleine-koenig.org>
-> >=20
-> > The value returned by an i2c driver's remove function is mostly ignored.
-> > (Only an error message is printed if the value is non-zero that the
-> > error is ignored.)
-> >=20
-> > So change the prototype of the remove function to return no value. This
-> > way driver authors are not tempted to assume that passing an error to
-> > the upper layer is a good idea. All drivers are adapted accordingly.
-> > There is no intended change of behaviour, all callbacks were prepared to
-> > return 0 before.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
->=20
-> That's a huge change for a relatively small benefit, but if this is
-> approved by the I2C core maintainer then fine with me. For:
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Signed-off-by: Philippe Boos <pboos@baylibre.com>
+---
+ drivers/watchdog/meson_gxbb_wdt.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Agreed, it's huge. The benefit isn't really measureable, the motivation
-is to improve the situation for driver authors who with the change
-cannot make wrong assumptions about what to return in .remove(). During
-the preparation this uncovered a few bugs. See for example
-bbc126ae381cf0a27822c1f822d0aeed74cc40d9.
+diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
+index 5a9ca10fbcfa..8c2c6f7f3bb5 100644
+--- a/drivers/watchdog/meson_gxbb_wdt.c
++++ b/drivers/watchdog/meson_gxbb_wdt.c
+@@ -146,6 +146,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct meson_gxbb_wdt *data;
+ 	int ret;
++	u32 regval;
+ 
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -177,6 +178,8 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+ 	data->wdt_dev.timeout = DEFAULT_TIMEOUT;
+ 	watchdog_set_drvdata(&data->wdt_dev, data);
+ 
++	regval = readl(data->reg_base + GXBB_WDT_CTRL_REG);
++
+ 	/* Setup with 1ms timebase */
+ 	writel(((clk_get_rate(data->clk) / 1000) & GXBB_WDT_CTRL_DIV_MASK) |
+ 		GXBB_WDT_CTRL_EE_RESET |
+@@ -186,6 +189,13 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+ 
+ 	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
+ 
++	if ((regval & GXBB_WDT_CTRL_EN) != 0) {
++		ret = meson_gxbb_wdt_start(&data->wdt_dev);
++		if (ret)
++			return ret;
++		set_bit(WDOG_HW_RUNNING, &data->wdt_dev.status);
++	}
++
+ 	watchdog_stop_on_reboot(&data->wdt_dev);
+ 	return devm_watchdog_register_device(dev, &data->wdt_dev);
+ }
+-- 
+2.20.1
 
-> >  drivers/hwmon/adc128d818.c                                | 4 +---
-> >  drivers/hwmon/adt7470.c                                   | 3 +--
-> >  drivers/hwmon/asb100.c                                    | 6 ++----
-> >  drivers/hwmon/asc7621.c                                   | 4 +---
-> >  drivers/hwmon/dme1737.c                                   | 4 +---
-> >  drivers/hwmon/f75375s.c                                   | 5 ++---
-> >  drivers/hwmon/fschmd.c                                    | 6 ++----
-> >  drivers/hwmon/ftsteutates.c                               | 3 +--
-> >  drivers/hwmon/ina209.c                                    | 4 +---
-> >  drivers/hwmon/ina3221.c                                   | 4 +---
-> >  drivers/hwmon/jc42.c                                      | 3 +--
-> >  drivers/hwmon/mcp3021.c                                   | 4 +---
-> >  drivers/hwmon/occ/p8_i2c.c                                | 4 +---
-> >  drivers/hwmon/pcf8591.c                                   | 3 +--
-> >  drivers/hwmon/smm665.c                                    | 3 +--
-> >  drivers/hwmon/tps23861.c                                  | 4 +---
-> >  drivers/hwmon/w83781d.c                                   | 4 +---
-> >  drivers/hwmon/w83791d.c                                   | 6 ++----
-> >  drivers/hwmon/w83792d.c                                   | 6 ++----
-> >  drivers/hwmon/w83793.c                                    | 6 ++----
-> >  drivers/hwmon/w83795.c                                    | 4 +---
-> >  drivers/hwmon/w83l785ts.c                                 | 6 ++----
-> >  drivers/i2c/i2c-core-base.c                               | 6 +-----
-> >  drivers/i2c/i2c-slave-eeprom.c                            | 4 +---
-> >  drivers/i2c/i2c-slave-testunit.c                          | 3 +--
-> >  drivers/i2c/i2c-smbus.c                                   | 3 +--
-> >  drivers/i2c/muxes/i2c-mux-ltc4306.c                       | 4 +---
-> >  drivers/i2c/muxes/i2c-mux-pca9541.c                       | 3 +--
-> >  drivers/i2c/muxes/i2c-mux-pca954x.c                       | 3 +--
->=20
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---gut2agzhpaayxotv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLEFBwACgkQwfwUeK3K
-7AkavggAgLmynakXX/rOF4Jwy2OuBXH29kecKqPd6xj4yHsu3ggy8kd/hlU4jJib
-vV0H9ioq69hhMqjme5AHJJsueLFi/t/iwuQwuWUKluCBBlx0RXBsVx8qxV7A0uWa
-mdKU3ApPaN7y0cS1jccdN7ydsL3H2ayzIwfQuNqx1G3P/uqXfkusV0fjwQ/rQct3
-qs4t2/QiHUd0tStlGw2eSKxp1z5KRrDMstK17fiZSsw/SYoMyldV8Ame6+gaxx0X
-e93FqM5jj67ovjD3jJanfOwI5vesu4+szu4GK6vHRWvpsieHsSeyS+GNgfM5oLA7
-iguZ0rauzy0je3hrHuKgp1maJ59ibQ==
-=fYiS
------END PGP SIGNATURE-----
-
---gut2agzhpaayxotv--
