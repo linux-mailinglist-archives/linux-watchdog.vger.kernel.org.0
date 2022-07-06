@@ -2,145 +2,167 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405E85689EE
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jul 2022 15:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F18568AF6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jul 2022 16:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiGFNr5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 6 Jul 2022 09:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S233368AbiGFOMR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 6 Jul 2022 10:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiGFNr4 (ORCPT
+        with ESMTP id S233395AbiGFOMO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 6 Jul 2022 09:47:56 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10E71EC40
-        for <linux-watchdog@vger.kernel.org>; Wed,  6 Jul 2022 06:47:54 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so9041656wmi.0
-        for <linux-watchdog@vger.kernel.org>; Wed, 06 Jul 2022 06:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=oUwD/AXk3hn18jg9g8hVaPoJbhZdU+eC6asfRcw/JZ8=;
-        b=OV6NQ+wPRl2SEbWwcpJRPhyEuZ8cg8yTsJqgVyKnZOK2UthzIAwcDwB3+WLL18sjlb
-         /C16E768PD8WDWQUV6iOuuogcZaJTm3BQQsDxPgatCYJKd+jgAHy1Tif+KBTazTMIlG/
-         kxGvrZ0Tvh2dHNnjY8fuDHaK5o5kkwzA5t881UFs5Y/G0C1qj/QbDh/lehUdLme1OnUm
-         YpZ2RKUuGtPpgDS7hss+aISwdPO9egSp90BXGcvs1tYhm0cVrJ80C2ATmvjFYErITX1w
-         ajhAeUc+2+ukI2+7/Coim6NfRFcDUpiexL3hP8VSfhXG28L4D0jNDHs4VXRANYAZ2PQm
-         L6MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=oUwD/AXk3hn18jg9g8hVaPoJbhZdU+eC6asfRcw/JZ8=;
-        b=ZRGOaKi84o5I90MHua4sQ7/rYYWuiq+CIeElo4rCkE2HAs/Ry15YoHe0Rs1Eyz/zax
-         NO/kosBoK3USY5deQRWB7kGSzDH0k1Sjp6MMaHqggoQmkn8iKxaWzoBbVeFYzo7b8KlJ
-         pha9hY5slTIjt7sXbT7TS6TcEMTI6t1Hm5ayEDkhz3xc0lnJgdAeDWDJ5ZoBjN6W/l4c
-         qA/LPxbwMl14X+EuONy48QmWsnpe0CkzzxwSG0NZ+YHcrqPNI35dW/wAFSxAuy6m2D81
-         wCt3mX8UjWT7cYtS1xAwOMr2VfkUHQs7MRVpYmepMrrovOSz9WQk4NY8NezzP+uXquQK
-         2TNA==
-X-Gm-Message-State: AJIora9K2Ck+pyy6VVDZ6tEzn2eVrsSqUVsOWa1d305O/uPO91mI7zJf
-        CNhhOvDOFWqCbrgg0fk23v9xQA==
-X-Google-Smtp-Source: AGRyM1uUD5fUICbLUxi3NjNN7CjKDLK0xdLSPc5G0890T3qq/ARu1rv+irGhKla3vDPUN0DyFqatKQ==
-X-Received: by 2002:a7b:c413:0:b0:3a1:8f03:29d0 with SMTP id k19-20020a7bc413000000b003a18f0329d0mr29344119wmi.160.1657115273408;
-        Wed, 06 Jul 2022 06:47:53 -0700 (PDT)
-Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id v192-20020a1cacc9000000b003975c7058bfsm26068541wme.12.2022.07.06.06.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 06:47:53 -0700 (PDT)
-References: <20220705142444.17063-1-pboos@baylibre.com>
- <f756b2d5-56e7-6e52-2739-eca4bb33508b@baylibre.com>
- <1jmtdnwd7y.fsf@starbuckisacylon.baylibre.com>
- <20220706124139.GB492220@roeck-us.net>
-User-agent: mu4e 1.8.3; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Philippe Boos <pboos@baylibre.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] watchdog: meson: keep running if already active
-Date:   Wed, 06 Jul 2022 15:24:27 +0200
-In-reply-to: <20220706124139.GB492220@roeck-us.net>
-Message-ID: <1j8rp6z720.fsf@starbuckisacylon.baylibre.com>
+        Wed, 6 Jul 2022 10:12:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36FD1EADE;
+        Wed,  6 Jul 2022 07:12:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C689B81CF5;
+        Wed,  6 Jul 2022 14:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B556C341D7;
+        Wed,  6 Jul 2022 14:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657116730;
+        bh=RHN2bWFwgmerCCoeAvGKz0u+MaE/4SRrO+eiHhO2djg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Xh1v7g2+gyzwxF80Ws8Y+37Olx2A+p2HCNlUkanKraSVqF7fZ247SFEXqGjMbnoEA
+         W5jsicurP7E634gMHzCf4Fx19uHJe5JwCnxFUuYNFfhRmkmkMeF6E3bbYUytgq7Pfx
+         23rdkYtJr7jDxQuehVQj5ny1/Tw9GMgijmVosvIF+9tdlKgnPVvjK3icj62nw310/R
+         U7xIjKopbMYUq45nqjKZDFyaVFm6kp1UUeFRho8iRuR5wctpmGd/B7kID3w8a9gKu/
+         R2sCVVDhtv6hxFEXJGTneHyoO7iEiuYWEfN34+HsceWaof/93eeUABzTebZNRFiwFo
+         ipGYZ5e+9buGA==
+Received: by mail-vs1-f48.google.com with SMTP id i186so15177205vsc.9;
+        Wed, 06 Jul 2022 07:12:10 -0700 (PDT)
+X-Gm-Message-State: AJIora/QVmFEoF+T0JaXmmr6AqcmPtjgV8p72Xaj4/PpaGzluZ9BHNkR
+        B5xZL4JpfAV3inbzvDkq5nhAcgmCSDhKA0VgRw==
+X-Google-Smtp-Source: AGRyM1u1HWVn2082EJ5+ru4frCQnJcreiwhKLFDJAiH/WoWedcEtjm0QcNQR7mO+T3bYj9xAqY3u/BVr3918Yjxpxno=
+X-Received: by 2002:a67:d194:0:b0:357:8ea:5554 with SMTP id
+ w20-20020a67d194000000b0035708ea5554mr2766153vsi.0.1657116728785; Wed, 06 Jul
+ 2022 07:12:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-3-viorel.suman@oss.nxp.com> <f0634bf0-77e9-939e-693f-31d50af4768c@linaro.org>
+ <20220630123754.esbuac4pfktlseh2@fsr-ub1664-116> <78faf75d-80b7-7a0e-e306-6351dbe5133c@linaro.org>
+ <CAL_Jsq+0GJBTVkS12XTvUKphMH4XuQ5AS1-QHMw6ULgpWbZBQQ@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+0GJBTVkS12XTvUKphMH4XuQ5AS1-QHMw6ULgpWbZBQQ@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 6 Jul 2022 08:11:57 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq++FqUn3u56boHcoZhskx-6uUiduhJbUyWXbOH6dzExJg@mail.gmail.com>
+Message-ID: <CAL_Jsq++FqUn3u56boHcoZhskx-6uUiduhJbUyWXbOH6dzExJg@mail.gmail.com>
+Subject: Re: [PATCH v6 02/14] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
+ yaml file
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
-On Wed 06 Jul 2022 at 05:41, Guenter Roeck <linux@roeck-us.net> wrote:
-
-> On Tue, Jul 05, 2022 at 09:29:35PM +0200, Jerome Brunet wrote:
->> 
->> On Tue 05 Jul 2022 at 16:39, Neil Armstrong <narmstrong@baylibre.com> wrote:
->> 
->> > Hi,
->> >
->> > On 05/07/2022 16:24, Philippe Boos wrote:
->> >> If the watchdog is already running (e.g.: started by bootloader) then
->> >> the kernel driver should keep the watchdog active but the amlogic driver
->> >> turns it off.
->> >> Let the driver fix the clock rate then restart the watchdog if it was
->> >> previously active.
->> >> Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
->> >
->> > Please drop this review tag since it was done off-list
->> 
->> Indeed a review was done off-list.
->> 
->> Reviewed-by says a review has been done. I was not aware this applied to
->> public reviews only. I probably missed that, would you mind pointing me
->> to that rule please ?
->> 
+On Tue, Jul 5, 2022 at 12:33 PM Rob Herring <robh+dt@kernel.org> wrote:
 >
-> Public or not doesn't really matter. However, you can only apply a
-> Reviewed-by: tag (or any tag, really) if you explicitly received one.
-> The exchange seems to suggest that you did not receive that tag.
-
-Philippe did receive that Reviewed-by. I gave it to him.
-Doing his first public patches, he first requested a review off-list to
-try to get things right and not bother people too much (so much for that :/)
-
-> Please never add any tags on your own.
-
-He did not.
-
+> On Thu, Jun 30, 2022 at 12:33 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > On 30/06/2022 14:37, Viorel Suman (OSS) wrote:
+> > > On 22-06-29 19:53:51, Krzysztof Kozlowski wrote:
+> > >> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+> > >>> From: Abel Vesa <abel.vesa@nxp.com>
+> > >>>
+> > >>> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+> > >>> we need to split it between the right subsystems. This patch documents
+> > >>> separately the 'iomux/pinctrl' child node of the SCU main node.
+> > >>>
+> > >>> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> > >>> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> > >>> ---
+> > >>>  .../bindings/pinctrl/fsl,scu-pinctrl.yaml     | 68 +++++++++++++++++++
+> > >>>  1 file changed, 68 insertions(+)
+> > >>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+> > >>>
+> > >>> diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+> > >>> new file mode 100644
+> > >>> index 000000000000..76a2e7b28172
+> > >>> --- /dev/null
+> > >>> +++ b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+> > > [...]
+> > >>> +      fsl,pins:
+> > >>> +        description:
+> > >>> +          each entry consists of 3 integers and represents the pin ID, the mux value
+> > >>> +          and config setting for the pin. The first 2 integers - pin_id and mux_val - are
+> > >>> +          specified using a PIN_FUNC_ID macro, which can be found in
+> > >>> +          <include/dt-bindings/pinctrl/pads-imx8qxp.h>. The last integer CONFIG is
+> > >>> +          the pad setting value like pull-up on this pin. Please refer to the
+> > >>> +          appropriate i.MX8 Reference Manual for detailed CONFIG settings.
+> > >>> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > >>
+> > >> Look at fsl,imx8mq-pinctrl.yaml. Each item is described (items under items).
+> > >
+> > > Added them initially, but later dropped because of some logs like
+> > > "pinctrl@xxxxxxx: usdhc1grp:fsl,pins:0: [...] is too long" shown by
+> > > "make dt_binding_check dtbs_check DT_SCHEMA_FILES=[...]/fsl,scu-pinctrl.yaml"
+> > >
+> > > Same logs are shown for "fsl,imx8mq-pinctrl.yaml". Will add the items description in the next
+> > > version.
+> > >
+> >
+> > The fsl,imx8mq-pinctrl.yaml should be correct and I don't see the reason
+> > why dtschema complains in some of the entries. It's like one define was
+> > not correct... I'll take a look at this later, but anyway keep the same
+> > as fsl,imx8mq-pinctrl.yaml even if it complains.
 >
-> On the other side, if the reviewer did send a Reviewed-by: tag off list,
-> I would kindly ask the reviewer to not do that in the future to avoid
-> misunderstandings.
-
-No worries. That being said, I have gone over 
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst
-
-It just says that Reviewed-by sent on the list should be collected for
-the following version. Nothing against adding the tag if the job has
-been done, on or off list. Same goes for Suggested-by, Tested-by, etc.
-
-If I missed something or it is non-written rule, please let me know.
-
-> If you don't want your Reviewed-by: tag attached to
-> a patch, don't send one. Not everyone will even realize that you sent
-> your tag off-list, and no one can be expected to know that you didn't
-> really mean it when you sent your tag.
-
-I do want Philippe to add it. I would not have given it the first place
-if it was not the case.
-
+> The issue is that 'fsl,pins' is problematic for the new dtb decoding
+> because it has a variable definition in terms of matrix bounds as each
+> i.MX platform has its own length (typ 5 or 6). The tools try to work
+> around it by figuring out which size fits. That works until there are
+> multiple answers which seems to be what's happening here.
 >
-> Thanks,
-> Guenter
+> The easiest solution I think is to just strip the constraints in
+> occurances of this property. I'll look into that.
 
+This is now fixed in the dt-schema main branch.
+
+Rob
